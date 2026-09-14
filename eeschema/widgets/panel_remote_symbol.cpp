@@ -1049,10 +1049,6 @@ bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
     wxFileName outFile( symDir );
     outFile.SetFullName( nickname + wxS( ".kicad_sym" ) );
 
-    if( !EnsureRemoteLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, outFile, nickname,
-                                     settings->m_RemoteSymbol.add_to_global_table, true, aError ) )
-        return false;
-
     SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
 
     if( !adapter )
@@ -1075,24 +1071,11 @@ bool PANEL_REMOTE_SYMBOL::receiveSymbol( const nlohmann::json& aParams,
 
     ApplyFootprintLinks( *downloadedSymbol, aFootprintLinks );
 
-    if( adapter->SaveSymbol( nickname, downloadedSymbol.get(), true ) != SYMBOL_LIBRARY_ADAPTER::SAVE_OK )
+    if( !SaveRemoteSymbolToLibrary( *adapter, outFile, nickname, settings->m_RemoteSymbol.add_to_global_table,
+                                    std::move( downloadedSymbol ), aError ) )
     {
-        aError = _( "Unable to save the downloaded symbol." );
         return false;
     }
-
-    // Ownership transferred to the library cache on successful save
-    (void) downloadedSymbol.release();
-
-    const LIBRARY_TABLE_SCOPE scope = settings->m_RemoteSymbol.add_to_global_table
-                                              ? LIBRARY_TABLE_SCOPE::GLOBAL
-                                              : LIBRARY_TABLE_SCOPE::PROJECT;
-
-    // Reload the library entry to pick up the new file, then force a full load so the
-    // library reaches LOADED state. Without the LoadOne call the library stays in LOADING
-    // state and GetLibSymbol / the symbol chooser cannot see it.
-    Pgm().GetLibraryManager().ReloadLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, nickname, scope );
-    adapter->LoadOne( nickname );
 
     if( placeAfterDownload )
         return PlaceRemoteDownloadedSymbol( m_frame, nickname, libItemName, aError );
