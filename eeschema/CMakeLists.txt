@@ -425,6 +425,10 @@ set( EESCHEMA_SRCS
     connectivity/conn_bindings.cpp
     connectivity/conn_netchain_manager.cpp
     connectivity/conn_signals.cpp
+    connectivity/conn_publish.cpp
+    connectivity/conn_rows.cpp
+    connectivity/conn_indexes.cpp
+    connectivity/conn_auxiliary.cpp
     connectivity/conn_text.cpp
     connectivity/conn_keys.cpp
     connectivity/conn_claims.cpp
