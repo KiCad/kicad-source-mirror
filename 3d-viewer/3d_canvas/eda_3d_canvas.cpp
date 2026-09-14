@@ -1188,7 +1188,7 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent& event )
         // We send a message (by ExpressMail) to the board and schematic editor, but only
         // if the manager of this canvas is a EDA_3D_VIEWER_FRAME, because only this
         // kind of frame has ExpressMail stuff
-        if( EDA_3D_VIEWER_FRAME* frame = dynamic_cast<EDA_3D_VIEWER_FRAME*>( GetParent() ) )
+        if( EDA_3D_VIEWER_FRAME* frame = dynamic_cast<EDA_3D_VIEWER_FRAME*>( wxGetTopLevelParent( this ) ) )
         {
             kiapi::common::commands::SyncSelection sync;
 
