@@ -209,31 +209,6 @@ LIB_SYMBOL* LEGACY_SYMBOL_LIB::RemoveSymbol( LIB_SYMBOL* aEntry )
 }
 
 
-LIB_SYMBOL* LEGACY_SYMBOL_LIB::ReplaceSymbol( LIB_SYMBOL* aOldSymbol, LIB_SYMBOL* aNewSymbol )
-{
-    wxASSERT( aOldSymbol != nullptr );
-    wxASSERT( aNewSymbol != nullptr );
-
-    m_plugin->DeleteSymbol( fileName.GetFullPath(), aOldSymbol->GetName(), m_properties.get() );
-
-    std::unique_ptr<LIB_SYMBOL> clonedPart = std::make_unique<LIB_SYMBOL>( *aNewSymbol, this );
-
-    m_plugin->SaveSymbol( fileName.GetFullPath(), std::move( clonedPart ), m_properties.get() );
-
-    // If we are not buffering, the library file is updated immediately when the plugin
-    // SaveSymbol() function is called.
-    if( IsBuffering() )
-        isModified = true;
-
-    ++m_mod_hash;
-
-    // We cannot use the saved part after handing it to the plugin, we must borrow a new
-    // copy from the plugin cache.
-    LIB_SYMBOL* savedPart = m_plugin->LoadSymbol( fileName.GetFullPath(), aNewSymbol->GetName(), m_properties.get() );
-    return savedPart;
-}
-
-
 LEGACY_SYMBOL_LIB* LEGACY_SYMBOL_LIB::LoadSymbolLibrary( const wxString& aFileName )
 {
     std::unique_ptr<LEGACY_SYMBOL_LIB> lib = std::make_unique<LEGACY_SYMBOL_LIB>( SCH_LIB_TYPE::LT_EESCHEMA,

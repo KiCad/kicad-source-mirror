@@ -252,17 +252,6 @@ public:
     LIB_SYMBOL* RemoveSymbol( LIB_SYMBOL* aEntry );
 
     /**
-     * Replace an existing symbol entry in the library.
-     *
-     * @note A symbol can have an alias list so these aliases will be added in library and
-     *       previously existing alias removed.
-     *
-     * @param aOldSymbol is the symbol to replace.
-     * @param aNewSymbol is the new symbol.
-     */
-    LIB_SYMBOL* ReplaceSymbol( LIB_SYMBOL* aOldSymbol, LIB_SYMBOL* aNewSymbol );
-
-    /**
      * Return the file name without path or extension.
      *
      * @return the name of library file.
