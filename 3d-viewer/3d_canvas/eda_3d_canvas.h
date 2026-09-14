@@ -104,6 +104,11 @@ public:
     RENDER_3D_BASE* GetCurrentRender() const { return m_3d_render; }
 
     /**
+     * Rebuild the raytracing scene used for hover and click picking on the next repaint.
+     */
+    void RequestRaytracingHitTestReload() { m_reload_raytracing_hit_test = true; }
+
+    /**
      * Request to render the current view in Raytracing mode.
      */
     void RenderRaytracingRequest();
@@ -328,6 +333,7 @@ private:
 
     bool                   m_opengl_supports_raytracing = true;
     bool                   m_render_raytracing_was_requested = false;
+    bool                   m_reload_raytracing_hit_test = false;
 
     ACCELERATOR_3D*        m_accelerator3DShapes = nullptr;    // used for mouse over searching
 

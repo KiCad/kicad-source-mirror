@@ -529,7 +529,7 @@ void EDA_3D_CANVAS::DoRePaint()
             bool reloadRaytracingForCalculations = false;
 
             if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL
-                    && m_3d_render_opengl->IsReloadRequestPending() )
+                && ( m_3d_render_opengl->IsReloadRequestPending() || m_reload_raytracing_hit_test ) )
             {
                 reloadRaytracingForCalculations = true;
             }
@@ -545,7 +545,10 @@ void EDA_3D_CANVAS::DoRePaint()
             // reloading twice (maybe it's not too bad of an idea?) or doing a complicated
             // refactor.
             if( reloadRaytracingForCalculations )
+            {
+                m_reload_raytracing_hit_test = false;
                 m_3d_render_raytracing->Reload( nullptr, nullptr, true );
+            }
         }
         catch( std::runtime_error& )
         {
@@ -799,7 +802,7 @@ void EDA_3D_CANVAS::RenderToFrameBuffer( unsigned char* buffer, int width, int h
 
             bool reloadRaytracingForCalculations = false;
             if( m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL
-                && m_3d_render_opengl->IsReloadRequestPending() )
+                && ( m_3d_render_opengl->IsReloadRequestPending() || m_reload_raytracing_hit_test ) )
             {
                 reloadRaytracingForCalculations = true;
             }
@@ -807,7 +810,10 @@ void EDA_3D_CANVAS::RenderToFrameBuffer( unsigned char* buffer, int width, int h
             requested_redraw = m_3d_render->Redraw( false, nullptr, nullptr );
 
             if( reloadRaytracingForCalculations )
+            {
+                m_reload_raytracing_hit_test = false;
                 m_3d_render_raytracing->Reload( nullptr, nullptr, true );
+            }
         }
         catch( std::runtime_error& )
         {

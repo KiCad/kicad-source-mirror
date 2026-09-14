@@ -480,6 +480,7 @@ void APPEARANCE_CONTROLS_3D::OnLayerVisibilityChanged( int aLayer, bool isVisibl
     {
         RENDER_3D_OPENGL* renderer = static_cast<RENDER_3D_OPENGL*>( m_frame->GetCanvas()->GetCurrentRender() );
         renderer->Load3dModelsIfNeeded();
+        m_frame->GetCanvas()->RequestRaytracingHitTestReload();
         m_frame->GetCanvas()->Request_refresh();
     }
     else
