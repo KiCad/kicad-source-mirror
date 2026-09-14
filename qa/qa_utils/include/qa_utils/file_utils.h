@@ -23,6 +23,9 @@
 
 #include <wx/string.h>
 
+class PROJECT;
+class SETTINGS_MANAGER;
+
 
 namespace KI_TEST
 {
@@ -45,6 +48,34 @@ public:
 
 private:
     std::filesystem::path m_path;
+};
+
+
+/*
+ * A project loaded from its own temporary directory.
+ *
+ * The project is unloaded before the directory is removed so its lock file is released while the
+ * file still exists.  Declare it ahead of any SCHEMATIC that refers to the project.
+ */
+class SCOPED_TEMP_PROJECT
+{
+public:
+    SCOPED_TEMP_PROJECT( SETTINGS_MANAGER& aManager, const wxString& aPrefix, const wxString& aName );
+
+    ~SCOPED_TEMP_PROJECT();
+
+    SCOPED_TEMP_PROJECT( const SCOPED_TEMP_PROJECT& ) = delete;
+    SCOPED_TEMP_PROJECT& operator=( const SCOPED_TEMP_PROJECT& ) = delete;
+
+    PROJECT& Project() const { return *m_project; }
+
+    /// Get the path to the temporary directory as a wxString.
+    wxString DirStr() const { return m_dir.PathStr(); }
+
+private:
+    SCOPED_TEMP_DIR   m_dir;
+    SETTINGS_MANAGER& m_manager;
+    PROJECT*          m_project;
 };
 
 } // namespace KI_TEST

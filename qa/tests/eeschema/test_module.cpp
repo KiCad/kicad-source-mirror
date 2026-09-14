@@ -35,6 +35,7 @@
 #include <mock_pgm_base.h>
 
 #include <qa_utils/wx_utils/wx_assert.h>
+#include <qa_utils/wx_utils/wx_log.h>
 
 
 bool init_unit_test()
@@ -50,6 +51,7 @@ bool init_unit_test()
                             boost::unit_test::framework::master_test_suite().argv );
 
     wxSetAssertHandler( &KI_TEST::wxAssertThrower );
+    delete wxLog::SetActiveTarget( new KI_TEST::QUIET_LOG );
 
     Pgm().InitPgm( true, true );
     Pgm().GetSettingsManager().RegisterSettings( new KICAD_SETTINGS, false );

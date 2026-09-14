@@ -31,6 +31,7 @@
 #include <array>
 #include <set>
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <io/easyedapro/easyedapro_import_utils.h>
@@ -369,21 +370,15 @@ BOOST_AUTO_TEST_CASE( RawSymbolPartUnitsAndPinOrientationAreStable )
 
 BOOST_AUTO_TEST_CASE( PluginLoadProducesWireTextAndLabel )
 {
-    wxString tempDir = wxFileName::CreateTempFileName( "easyedapro_v3_import" );
+    KI_TEST::SCOPED_TEMP_PROJECT tempProject( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ),
+                                              wxS( "easyedapro_v3_test" ) );
 
-    BOOST_REQUIRE( wxFileExists( tempDir ) );
-    BOOST_REQUIRE( wxRemoveFile( tempDir ) );
-    BOOST_REQUIRE( wxMkdir( tempDir ) );
-
-    wxFileName projectFile( tempDir, "easyedapro_v3_test", "kicad_pro" );
-    wxFileName archiveFile( tempDir, "sample", "epro2" );
+    wxFileName archiveFile( tempProject.DirStr(), "sample", "epro2" );
 
     BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
 
-    Pgm().GetSettingsManager().LoadProject( projectFile.GetFullPath().ToStdString() );
-
     SCHEMATIC schematic( nullptr );
-    schematic.SetProject( &Pgm().GetSettingsManager().Prj() );
+    schematic.SetProject( &tempProject.Project() );
 
     IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
     BOOST_REQUIRE( plugin );
@@ -435,21 +430,15 @@ BOOST_AUTO_TEST_CASE( PluginLoadProducesWireTextAndLabel )
     BOOST_CHECK( wireCount > 0 );
     BOOST_CHECK( textCount > 0 );
     BOOST_CHECK( labelCount > 0 );
-
-    BOOST_CHECK( wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE ) );
 }
 
 
 BOOST_AUTO_TEST_CASE( PluginLoadPreservesWireNetLabelAlignment )
 {
-    wxString tempDir = wxFileName::CreateTempFileName( "easyedapro_v3_import" );
+    KI_TEST::SCOPED_TEMP_PROJECT tempProject( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ),
+                                              wxS( "easyedapro_v3_test" ) );
 
-    BOOST_REQUIRE( wxFileExists( tempDir ) );
-    BOOST_REQUIRE( wxRemoveFile( tempDir ) );
-    BOOST_REQUIRE( wxMkdir( tempDir ) );
-
-    wxFileName projectFile( tempDir, "easyedapro_v3_test", "kicad_pro" );
-    wxFileName archiveFile( tempDir, "sample", "epro2" );
+    wxFileName archiveFile( tempProject.DirStr(), "sample", "epro2" );
 
     BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
 
@@ -529,10 +518,8 @@ BOOST_AUTO_TEST_CASE( PluginLoadPreservesWireNetLabelAlignment )
     }
 
     // Load via the plugin and validate the resulting schematic keeps label spin style.
-    Pgm().GetSettingsManager().LoadProject( projectFile.GetFullPath().ToStdString() );
-
     SCHEMATIC schematic( nullptr );
-    schematic.SetProject( &Pgm().GetSettingsManager().Prj() );
+    schematic.SetProject( &tempProject.Project() );
 
     IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
     BOOST_REQUIRE( plugin );
@@ -572,21 +559,15 @@ BOOST_AUTO_TEST_CASE( PluginLoadPreservesWireNetLabelAlignment )
     BOOST_CHECK_EQUAL( foundCount, 1 );
     BOOST_CHECK_MESSAGE( hasExpectedSpinStyle,
                          wxString::Format( "Label '%s' spin style mismatch", selected.value ) );
-
-    BOOST_CHECK( wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE ) );
 }
 
 
 BOOST_AUTO_TEST_CASE( PluginLoadConvertsNetportsToGlobalLabels )
 {
-    wxString tempDir = wxFileName::CreateTempFileName( "easyedapro_v3_import" );
+    KI_TEST::SCOPED_TEMP_PROJECT tempProject( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ),
+                                              wxS( "easyedapro_v3_test" ) );
 
-    BOOST_REQUIRE( wxFileExists( tempDir ) );
-    BOOST_REQUIRE( wxRemoveFile( tempDir ) );
-    BOOST_REQUIRE( wxMkdir( tempDir ) );
-
-    wxFileName projectFile( tempDir, "easyedapro_v3_test", "kicad_pro" );
-    wxFileName archiveFile( tempDir, "sample", "epro2" );
+    wxFileName archiveFile( tempProject.DirStr(), "sample", "epro2" );
 
     BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
 
@@ -660,10 +641,8 @@ BOOST_AUTO_TEST_CASE( PluginLoadConvertsNetportsToGlobalLabels )
     BOOST_REQUIRE( !expectedNetportNames.empty() );
 
     // Load via the plugin and validate the resulting schematic contains global labels (not symbols).
-    Pgm().GetSettingsManager().LoadProject( projectFile.GetFullPath().ToStdString() );
-
     SCHEMATIC schematic( nullptr );
-    schematic.SetProject( &Pgm().GetSettingsManager().Prj() );
+    schematic.SetProject( &tempProject.Project() );
 
     IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
     BOOST_REQUIRE( plugin );
@@ -734,28 +713,20 @@ BOOST_AUTO_TEST_CASE( PluginLoadConvertsNetportsToGlobalLabels )
         BOOST_CHECK_MESSAGE( importedGlobalLabelNames.count( expected ) > 0,
                              wxString::Format( "Missing global label '%s'", expected ) );
     }
-
-    BOOST_CHECK( wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE ) );
 }
 
 
 BOOST_AUTO_TEST_CASE( PluginLoadKeepsSchematicVerticalOrderAndFootprints )
 {
-    wxString tempDir = wxFileName::CreateTempFileName( "easyedapro_v3_import" );
+    KI_TEST::SCOPED_TEMP_PROJECT tempProject( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ),
+                                              wxS( "easyedapro_v3_test" ) );
 
-    BOOST_REQUIRE( wxFileExists( tempDir ) );
-    BOOST_REQUIRE( wxRemoveFile( tempDir ) );
-    BOOST_REQUIRE( wxMkdir( tempDir ) );
-
-    wxFileName projectFile( tempDir, "easyedapro_v3_test", "kicad_pro" );
-    wxFileName archiveFile( tempDir, "sample", "epro2" );
+    wxFileName archiveFile( tempProject.DirStr(), "sample", "epro2" );
 
     BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
 
-    Pgm().GetSettingsManager().LoadProject( projectFile.GetFullPath().ToStdString() );
-
     SCHEMATIC schematic( nullptr );
-    schematic.SetProject( &Pgm().GetSettingsManager().Prj() );
+    schematic.SetProject( &tempProject.Project() );
 
     IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
     BOOST_REQUIRE( plugin );
@@ -808,28 +779,20 @@ BOOST_AUTO_TEST_CASE( PluginLoadKeepsSchematicVerticalOrderAndFootprints )
 
     BOOST_CHECK( !u1Footprint.IsEmpty() );
     BOOST_CHECK( u1Footprint.Contains( wxS( "BGA-286_17x17_12.0x12.0mm" ) ) );
-
-    BOOST_CHECK( wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE ) );
 }
 
 
 BOOST_AUTO_TEST_CASE( PluginLoadPowerSymbolsKeepValueAndVisibility )
 {
-    wxString tempDir = wxFileName::CreateTempFileName( "easyedapro_v3_import" );
+    KI_TEST::SCOPED_TEMP_PROJECT tempProject( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ),
+                                              wxS( "easyedapro_v3_test" ) );
 
-    BOOST_REQUIRE( wxFileExists( tempDir ) );
-    BOOST_REQUIRE( wxRemoveFile( tempDir ) );
-    BOOST_REQUIRE( wxMkdir( tempDir ) );
-
-    wxFileName projectFile( tempDir, "easyedapro_v3_test", "kicad_pro" );
-    wxFileName archiveFile( tempDir, "sample", "epro2" );
+    wxFileName archiveFile( tempProject.DirStr(), "sample", "epro2" );
 
     BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
 
-    Pgm().GetSettingsManager().LoadProject( projectFile.GetFullPath().ToStdString() );
-
     SCHEMATIC schematic( nullptr );
-    schematic.SetProject( &Pgm().GetSettingsManager().Prj() );
+    schematic.SetProject( &tempProject.Project() );
 
     IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
     BOOST_REQUIRE( plugin );
@@ -950,8 +913,6 @@ BOOST_AUTO_TEST_CASE( PluginLoadPowerSymbolsKeepValueAndVisibility )
 
     BOOST_CHECK( otherPowerValueCount > 0 );
     BOOST_CHECK_EQUAL( otherPowerShownCount, otherPowerValueCount );
-
-    BOOST_CHECK( wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE ) );
 }
 
 
@@ -961,18 +922,14 @@ BOOST_AUTO_TEST_CASE( PluginLoadPowerSymbolsKeepValueAndVisibility )
  */
 BOOST_AUTO_TEST_CASE( PluginLoadFillsRootSheetWithFirstPage )
 {
-    wxString tempDir = wxFileName::CreateTempFileName( "easyedapro_v3_import" );
-    BOOST_REQUIRE( wxRemoveFile( tempDir ) );
-    BOOST_REQUIRE( wxMkdir( tempDir ) );
+    KI_TEST::SCOPED_TEMP_PROJECT tempProject( Pgm().GetSettingsManager(), wxS( "easyedapro_v3_import" ),
+                                              wxS( "easyedapro_v3_test" ) );
 
-    wxFileName projectFile( tempDir, "easyedapro_v3_test", "kicad_pro" );
-    wxFileName archiveFile( tempDir, "sample", "epro2" );
+    wxFileName archiveFile( tempProject.DirStr(), "sample", "epro2" );
     BOOST_REQUIRE( wxCopyFile( getEasyEdaProV3ArchivePath(), archiveFile.GetFullPath() ) );
 
-    Pgm().GetSettingsManager().LoadProject( projectFile.GetFullPath().ToStdString() );
-
     SCHEMATIC schematic( nullptr );
-    schematic.SetProject( &Pgm().GetSettingsManager().Prj() );
+    schematic.SetProject( &tempProject.Project() );
 
     IO_RELEASER<SCH_IO> plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EASYEDAPRO_V3 ) );
     SCH_SHEET* rootSheet = plugin->LoadSchematicFile( archiveFile.GetFullPath(), &schematic );
@@ -987,8 +944,6 @@ BOOST_AUTO_TEST_CASE( PluginLoadFillsRootSheetWithFirstPage )
     // The root screen must carry real schematic content, not just sub-sheet links.
     BOOST_CHECK( rootSymbols > 0 );
     BOOST_CHECK( !rootSheet->GetScreen()->GetPageNumber().IsEmpty() );
-
-    BOOST_CHECK( wxFileName::Rmdir( tempDir, wxPATH_RMDIR_RECURSIVE ) );
 }
 
 

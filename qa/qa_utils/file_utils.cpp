@@ -27,6 +27,9 @@
 #include <wx/filename.h>
 #include <wx/log.h>
 
+#include <settings/settings_manager.h>
+#include <wildcards_and_files_ext.h>
+
 
 using namespace KI_TEST;
 
@@ -66,4 +69,29 @@ SCOPED_TEMP_DIR::~SCOPED_TEMP_DIR()
         wxLogError( wxT( "Cannot remove temporary directory '%s': %s" ), wxString::FromUTF8( m_path.string() ),
                     wxString::FromUTF8( e.what() ) );
     }
+}
+
+
+SCOPED_TEMP_PROJECT::SCOPED_TEMP_PROJECT( SETTINGS_MANAGER& aManager, const wxString& aPrefix,
+                                          const wxString& aName ) :
+        m_dir( aPrefix ),
+        m_manager( aManager ),
+        m_project( nullptr )
+{
+    wxFileName projectFile( m_dir.PathStr(), aName, FILEEXT::ProjectFileExtension );
+
+    m_manager.LoadProject( projectFile.GetFullPath() );
+    m_project = m_manager.GetProject( projectFile.GetFullPath() );
+
+    if( !m_project )
+    {
+        throw std::runtime_error( "Cannot load temporary project '"
+                                  + std::string( projectFile.GetFullPath().utf8_str() ) + "'" );
+    }
+}
+
+
+SCOPED_TEMP_PROJECT::~SCOPED_TEMP_PROJECT()
+{
+    m_manager.UnloadProject( m_project, false );
 }

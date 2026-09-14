@@ -63,6 +63,9 @@ struct NETCHAIN_HIER_ROUNDTRIP_FIXTURE
     {
         m_schematic.reset();
 
+        // Release the project lock while its file still exists
+        m_settingsManager.UnloadProject( m_project, false );
+
         for( const wxString& file : m_tempFiles )
         {
             if( wxFileExists( file ) )

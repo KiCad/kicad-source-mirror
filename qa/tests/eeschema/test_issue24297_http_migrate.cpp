@@ -36,6 +36,18 @@
 #include <sch_io/sch_io_mgr.h>
 
 
+namespace
+{
+
+void removeIfPresent( const wxFileName& aFile )
+{
+    if( aFile.FileExists() )
+        wxRemoveFile( aFile.GetFullPath() );
+}
+
+} // namespace
+
+
 BOOST_AUTO_TEST_SUITE( Issue24297HttpMigrate )
 
 
@@ -73,7 +85,7 @@ BOOST_AUTO_TEST_CASE( HttpLibraryRejectedByConvertLibrary )
 
     wxFileName outLib( settings );
     outLib.SetExt( "kicad_sym" );
-    wxRemoveFile( outLib.GetFullPath() );
+    removeIfPresent( outLib );
 
     // Previously this returned true and wrote an empty .kicad_sym, clobbering the table entry.
     BOOST_CHECK( !SCH_IO_MGR::ConvertLibrary( nullptr, settings.GetFullPath(),
@@ -83,7 +95,7 @@ BOOST_AUTO_TEST_CASE( HttpLibraryRejectedByConvertLibrary )
     BOOST_CHECK( !outLib.Exists() );
 
     wxRemoveFile( settings.GetFullPath() );
-    wxRemoveFile( outLib.GetFullPath() );
+    removeIfPresent( outLib );
 }
 
 
@@ -113,14 +125,14 @@ BOOST_AUTO_TEST_CASE( DatabaseLibraryRejectedByConvertLibrary )
 
     wxFileName outLib( settings );
     outLib.SetExt( "kicad_sym" );
-    wxRemoveFile( outLib.GetFullPath() );
+    removeIfPresent( outLib );
 
     BOOST_CHECK( !SCH_IO_MGR::ConvertLibrary( nullptr, settings.GetFullPath(),
                                               outLib.GetFullPath() ) );
     BOOST_CHECK( !outLib.Exists() );
 
     wxRemoveFile( settings.GetFullPath() );
-    wxRemoveFile( outLib.GetFullPath() );
+    removeIfPresent( outLib );
 }
 
 
@@ -147,13 +159,13 @@ BOOST_AUTO_TEST_CASE( NestedTableRejectedByConvertLibrary )
 
     wxFileName outLib( table );
     outLib.SetExt( "kicad_sym" );
-    wxRemoveFile( outLib.GetFullPath() );
+    removeIfPresent( outLib );
 
     BOOST_CHECK( !SCH_IO_MGR::ConvertLibrary( nullptr, table.GetFullPath(), outLib.GetFullPath() ) );
     BOOST_CHECK( !outLib.Exists() );
 
     wxRemoveFile( table.GetFullPath() );
-    wxRemoveFile( outLib.GetFullPath() );
+    removeIfPresent( outLib );
 }
 
 

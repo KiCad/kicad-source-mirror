@@ -19,6 +19,7 @@
 
 #include "io_utils.h"
 
+#include <wx/log.h>
 #include <wx/wfstream.h>
 #include <wx/txtstrm.h>
 
@@ -32,6 +33,8 @@ namespace IO_UTILS
 bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix,
                            bool aIgnoreWhitespace )
 {
+    // A probe answers false for a missing or unreadable file rather than logging an error
+    wxLogNull          noLog;
     wxFFileInputStream input( aFilePath );
 
     if( input.IsOk() && !input.Eof() )
@@ -57,6 +60,8 @@ bool fileStartsWithPrefix( const wxString& aFilePath, const wxString& aPrefix,
 bool fileHasBinaryHeader( const wxString& aFilePath, const std::vector<uint8_t>& aHeader,
     size_t aOffset )
 {
+    // A probe answers false for a missing or unreadable file rather than logging an error
+    wxLogNull          noLog;
     wxFFileInputStream input( aFilePath );
 
     if( input.IsOk() && !input.Eof() )

@@ -23,6 +23,7 @@
 #include <connection_graph.h>
 #include <erc/erc.h>
 #include <lib_id.h>
+#include <reporter.h>
 #include <schematic.h>
 #include <sch_io/altium/sch_io_altium.h>
 #include <sch_label.h>
@@ -44,7 +45,9 @@ namespace
 
 struct ALTIUM_SCH_IMPORT_FIXTURE
 {
-    ALTIUM_SCH_IMPORT_FIXTURE() : m_schematic( nullptr )
+    ALTIUM_SCH_IMPORT_FIXTURE() :
+            m_loadInfoScope( &NULL_REPORTER::GetInstance() ),
+            m_schematic( nullptr )
     {
         m_settingsManager.LoadProject( "" );
         m_schematic.SetProject( &m_settingsManager.Prj() );
@@ -88,8 +91,10 @@ struct ALTIUM_SCH_IMPORT_FIXTURE
                + aName;
     }
 
-    SETTINGS_MANAGER m_settingsManager;
-    SCHEMATIC        m_schematic;
+    // The fixture project has no symbol libraries, so every symbol link fails by design
+    LOAD_INFO_REPORTER_SCOPE m_loadInfoScope;
+    SETTINGS_MANAGER         m_settingsManager;
+    SCHEMATIC                m_schematic;
 };
 
 } // namespace
@@ -296,6 +301,9 @@ BOOST_AUTO_TEST_CASE( Ticket1303_MultiPageBlock )
 BOOST_AUTO_TEST_CASE( Issue24843_SymbolOrientationMatchesAltium )
 {
     SCH_IO_ALTIUM plugin;
+
+    // The source embeds images by absolute Windows paths that cannot resolve here
+    plugin.SetReporter( &NULL_REPORTER::GetInstance() );
 
     SCH_SHEET* rootSheet = plugin.LoadSchematicFile( eDPAdapterDataFile( "power.SchDoc" ),
                                                      &m_schematic );
