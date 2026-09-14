@@ -1025,7 +1025,9 @@ protected:
             }
             else if( aCol == COLUMN_NET_CHAIN_LENGTH )
             {
-                if( m_show_time_domain_details )
+                if( i->GetNetChainName().IsEmpty() )
+                    aOutValue = "";
+                else if( m_show_time_domain_details )
                     aOutValue = m_parent.formatDelay( i->GetNetChainDelay() );
                 else
                     aOutValue = m_parent.formatLength( i->GetNetChainLength() );

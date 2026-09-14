@@ -711,6 +711,32 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
 {
     std::vector<std::unique_ptr<LIST_ITEM>> results;
 
+    // A chain total needs every member net, so pull in the siblings.
+    std::vector<NETINFO_ITEM*> netCodes( aNetCodes );
+    std::set<wxString>         chains;
+
+    for( NETINFO_ITEM* net : netCodes )
+    {
+        if( !net->GetNetChain().IsEmpty() )
+            chains.insert( net->GetNetChain() );
+    }
+
+    if( !chains.empty() )
+    {
+        for( NETINFO_ITEM* net : m_board->GetNetInfo() )
+        {
+            if( chains.count( net->GetNetChain() ) )
+                netCodes.push_back( net );
+        }
+
+        std::sort( netCodes.begin(), netCodes.end(),
+                   []( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
+                   {
+                       return a->GetNetCode() < b->GetNetCode();
+                   } );
+        netCodes.erase( std::unique( netCodes.begin(), netCodes.end() ), netCodes.end() );
+    }
+
     LENGTH_DELAY_CALCULATION*   calc = m_board->GetLengthCalculation();
     const std::vector<CN_ITEM*> conItems = relevantConnectivityItems();
 
@@ -721,9 +747,9 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
     std::vector<NETINFO_ITEM*>                                          foundNets;
 
     auto itemItr = conItems.begin();
-    auto netCodeItr = aNetCodes.begin();
+    auto netCodeItr = netCodes.begin();
 
-    while( itemItr != conItems.end() && netCodeItr != aNetCodes.end() )
+    while( itemItr != conItems.end() && netCodeItr != netCodes.end() )
     {
         const int curNetCode = ( *netCodeItr )->GetNetCode();
         const int curItemNetCode = ( *itemItr )->Net();
@@ -747,7 +773,7 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
         else if( curItemNetCode > curNetCode )
         {
             // Fast-forward through required net codes
-            while( netCodeItr != aNetCodes.end() && curItemNetCode > ( *netCodeItr )->GetNetCode() )
+            while( netCodeItr != netCodes.end() && curItemNetCode > ( *netCodeItr )->GetNetCode() )
                 ++netCodeItr;
         }
     }
@@ -804,8 +830,6 @@ PCB_NET_INSPECTOR_PANEL::calculateNets( const std::vector<NETINFO_ITEM*>& aNetCo
                         new_item->SetLayerWireDelays( *lengthDetails.LayerDelays );
 
                     new_item->SetNetChainName( foundNets[i]->GetNetChain() );
-                    new_item->SetNetChainLength( lengthDetails.TotalLength() );
-                    new_item->SetNetChainDelay( lengthDetails.TotalDelay() );
 
                     std::scoped_lock lock( resultsMutex );
                     results.emplace_back( std::move( new_item ) );
