@@ -28,6 +28,7 @@
 #include "graphics_import_plugin.h"
 #include "graphics_importer_buffer.h"
 #include "wx/translation.h"
+#include <wx/arrstr.h>
 
 #include <dl_creationadapter.h>
 #include <dl_dxf.h>
@@ -201,6 +202,19 @@ enum class DXF_IMPORT_UNITS
     LIGHTYEARS = 19,
     PARSECS = 20
 };
+
+
+/**
+ * @return the translated names of the units offered for a DXF file without $INSUNITS, in the
+ *         order used by #DxfImportUnitFromChoice().
+ */
+wxArrayString GetDxfImportUnitChoices();
+
+/**
+ * @return the unit at \a aSelection in #GetDxfImportUnitChoices(), or DXF_IMPORT_UNITS::DEFAULT
+ *         when \a aSelection is wxNOT_FOUND or otherwise out of range.
+ */
+DXF_IMPORT_UNITS DxfImportUnitFromChoice( int aSelection );
 
 
 /**

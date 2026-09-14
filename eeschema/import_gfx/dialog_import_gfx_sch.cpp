@@ -24,8 +24,6 @@
 
 #include "dialog_import_gfx_sch.h"
 
-#include <map>
-
 #include <import_gfx/graphics_importer_lib_symbol.h>
 #include <import_gfx/graphics_importer_sch.h>
 #include <import_gfx/dxf_import_plugin.h>
@@ -55,15 +53,6 @@ bool   DIALOG_IMPORT_GFX_SCH::m_placementInteractive = true;
 double DIALOG_IMPORT_GFX_SCH::m_importScale          = 1.0;   // Do not change the imported items size
 
 
-const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
-    { DXF_IMPORT_UNITS::INCH, _( "Inches" ) },
-    { DXF_IMPORT_UNITS::MM,   _( "Millimeters" ) },
-    { DXF_IMPORT_UNITS::MILS, _( "Mils" ) },
-    { DXF_IMPORT_UNITS::CM,   _( "Centimeter" ) },
-    { DXF_IMPORT_UNITS::FEET, _( "Feet" ) },
-};
-
-
 DIALOG_IMPORT_GFX_SCH::DIALOG_IMPORT_GFX_SCH( SCH_BASE_FRAME* aParent ) :
         DIALOG_IMPORT_GFX_SCH_BASE( aParent ),
         m_parent( aParent ),
@@ -71,6 +60,7 @@ DIALOG_IMPORT_GFX_SCH::DIALOG_IMPORT_GFX_SCH( SCH_BASE_FRAME* aParent ) :
         m_yOrigin( aParent, m_yLabel, m_yCtrl, m_yUnits ),
         m_defaultLineWidth( aParent, m_lineWidthLabel, m_lineWidthCtrl, m_lineWidthUnits )
 {
+    m_choiceDxfUnits->Append( GetDxfImportUnitChoices() );
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
     if( SYMBOL_EDIT_FRAME* symFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( aParent ) )
@@ -201,14 +191,7 @@ bool DIALOG_IMPORT_GFX_SCH::TransferDataFromWindow()
     {
         if( DXF_IMPORT_PLUGIN* dxfPlugin = dynamic_cast<DXF_IMPORT_PLUGIN*>( plugin.get() ) )
         {
-            auto it = dxfUnitsMap.begin();
-            std::advance( it, m_choiceDxfUnits->GetSelection() );
-
-            if( it == dxfUnitsMap.end() )
-                dxfPlugin->SetUnit( DXF_IMPORT_UNITS::DEFAULT );
-            else
-                dxfPlugin->SetUnit( it->first );
-
+            dxfPlugin->SetUnit( DxfImportUnitFromChoice( m_choiceDxfUnits->GetSelection() ) );
             m_importer->SetLineWidthMM( schIUScale.IUTomm( m_defaultLineWidth.GetValue() ) );
         }
         else

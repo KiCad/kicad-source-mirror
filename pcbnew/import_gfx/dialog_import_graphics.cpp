@@ -33,22 +33,12 @@
 #include <wildcards_and_files_ext.h>
 #include <bitmaps.h>
 #include <widgets/std_bitmap_button.h>
-#include <map>
 #include <footprint.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <kiplatform/ui.h>
 
 #include <memory>
-
-
-const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
-    { DXF_IMPORT_UNITS::INCH, _( "Inches" ) },
-    { DXF_IMPORT_UNITS::MM,   _( "Millimeters" ) },
-    { DXF_IMPORT_UNITS::MILS, _( "Mils" ) },
-    { DXF_IMPORT_UNITS::CM,   _( "Centimeter" ) },
-    { DXF_IMPORT_UNITS::FEET, _( "Feet" ) },
-};
 
 
 DIALOG_IMPORT_GRAPHICS::DIALOG_IMPORT_GRAPHICS( PCB_BASE_FRAME* aParent ) :
@@ -72,8 +62,7 @@ DIALOG_IMPORT_GRAPHICS::DIALOG_IMPORT_GRAPHICS( PCB_BASE_FRAME* aParent ) :
     m_SelLayerBox->SetBoardFrame( m_parent );
     m_SelLayerBox->Resync();
 
-    for( const std::pair<const DXF_IMPORT_UNITS, wxString>& unitEntry : dxfUnitsMap )
-        m_dxfUnitsChoice->Append( unitEntry.second );
+    m_dxfUnitsChoice->Append( GetDxfImportUnitChoices() );
 
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
@@ -213,14 +202,7 @@ bool DIALOG_IMPORT_GRAPHICS::TransferDataFromWindow()
     {
         if( DXF_IMPORT_PLUGIN* dxfPlugin = dynamic_cast<DXF_IMPORT_PLUGIN*>( plugin.get() ) )
         {
-            auto it = dxfUnitsMap.begin();
-            std::advance( it, m_dxfUnitsChoice->GetSelection() );
-
-            if( it == dxfUnitsMap.end() )
-                dxfPlugin->SetUnit( DXF_IMPORT_UNITS::DEFAULT );
-            else
-                dxfPlugin->SetUnit( it->first );
-
+            dxfPlugin->SetUnit( DxfImportUnitFromChoice( m_dxfUnitsChoice->GetSelection() ) );
             m_importer->SetLineWidthMM( pcbIUScale.IUTomm( m_defaultLineWidth.GetIntValue() ) );
         }
         else
