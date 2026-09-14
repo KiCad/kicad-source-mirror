@@ -107,8 +107,10 @@ bool MEANDER_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     const BOARD_CONNECTED_ITEM* conItem = static_cast<BOARD_CONNECTED_ITEM*>( aStartItem->GetSourceItem() );
     m_netClass = conItem->GetEffectiveNetClass();
 
-    m_baselineLength = origPathLength();
+    m_startPathLength = origPathLength();
+    m_baselineLength = m_startPathLength;
     m_baselineDelay = m_settings.m_isTimeDomain ? origPathDelay() : 0;
+    m_hasBaseline = true;
 
     initChainExtras();
 

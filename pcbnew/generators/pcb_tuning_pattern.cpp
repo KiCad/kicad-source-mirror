@@ -2169,8 +2169,8 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
         EDA_DATA_TYPE unitType = m_settings.m_isTimeDomain ? EDA_DATA_TYPE::TIME : EDA_DATA_TYPE::DISTANCE;
         double netVal = m_settings.m_isTimeDomain ? static_cast<double>( placer->TuningDelayResult() )
                                                   : static_cast<double>( placer->TuningLengthResult() );
-        wxString netStr = wxString::Format( _( "Net: %s" ),
-                            aFrame->MessageTextFromValue( netVal, true, unitType ) );
+        wxString      netStr = wxString::Format( m_tuningMode == DIFF_PAIR_SKEW ? _( "Skew: %s" ) : _( "Net: %s" ),
+                                                 aFrame->MessageTextFromValue( netVal, true, unitType ) );
 
         // Chain total from board state (GetTrackLength for every net) plus live tuning delta.
         wxString sigStr;

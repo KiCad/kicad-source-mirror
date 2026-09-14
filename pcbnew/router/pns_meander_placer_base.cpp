@@ -87,7 +87,7 @@ long long int MEANDER_PLACER_BASE::chainNarrowingOffset() const
     if( !nets.empty() )
         tunedNetBoardLen = Router()->GetInterface()->GetNetBoardLength( nets[0] );
 
-    long long unmeasured = std::max( 0LL, tunedNetBoardLen - m_baselineLength );
+    long long unmeasured = std::max( 0LL, tunedNetBoardLen - m_startPathLength );
 
     return m_chainExtrasLength + unmeasured;
 }

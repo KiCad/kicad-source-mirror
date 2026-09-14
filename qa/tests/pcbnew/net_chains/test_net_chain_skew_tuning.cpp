@@ -191,4 +191,80 @@ BOOST_AUTO_TEST_CASE( SignalAggregateExcludesBothDiffPairLegs )
     BOOST_CHECK_EQUAL( extraLen, 7'000'000 + 2'000'000 ); // N + AUX (this is the buggy path)
 }
 
+
+// The skew baseline must be the initial skew, not the active leg's path length.
+namespace
+{
+
+struct SKEW_WORLD
+{
+    SKEW_WORLD( BOARD& aBoard, int aLenP, int aLenN )
+    {
+        NETINFO_ITEM* netP = new NETINFO_ITEM( &aBoard, wxS( "/DP_P" ), 1 );
+        aBoard.Add( netP );
+        NETINFO_ITEM* netN = new NETINFO_ITEM( &aBoard, wxS( "/DP_N" ), 2 );
+        aBoard.Add( netN );
+
+        auto addTrack = [&]( int netCode, int aY, int aLen ) -> PCB_TRACK*
+        {
+            PCB_TRACK* t = new PCB_TRACK( &aBoard );
+            t->SetNetCode( netCode );
+            t->SetStart( VECTOR2I( 0, aY ) );
+            t->SetEnd( VECTOR2I( aLen, aY ) );
+            t->SetWidth( 100000 );
+            aBoard.Add( t );
+            return t;
+        };
+
+        m_startTrack = addTrack( netP->GetNetCode(), 0, aLenP );
+        addTrack( netN->GetNetCode(), 1000000, aLenN );
+
+        m_iface.SetBoard( &aBoard );
+        m_router.SetInterface( &m_iface );
+        m_router.ClearWorld();
+        m_router.SyncWorld();
+    }
+
+    // The router must be destroyed before the iface, or branch nodes call a freed rule resolver.
+    PNS_KICAD_IFACE_BASE m_iface;
+    PNS::ROUTER          m_router;
+    PCB_TRACK*           m_startTrack;
+};
+
+} // namespace
+
+
+BOOST_AUTO_TEST_CASE( SkewBaselineDeltaIsZeroAfterStart )
+{
+    BOARD      board;
+    SKEW_WORLD world( board, 10 '000' 000, 12 '000' 000 );
+
+    PNS::ITEM* startItem = world.m_router.GetWorld()->FindItemByParent( world.m_startTrack );
+    BOOST_REQUIRE( startItem );
+
+    PNS::MEANDER_SKEW_PLACER placer( &world.m_router );
+    BOOST_REQUIRE( placer.Start( world.m_startTrack->GetStart(), startItem ) );
+
+    BOOST_CHECK_NE( placer.TuningLengthResult(), 0 );
+    BOOST_CHECK( placer.HasBaseline() );
+    BOOST_CHECK_EQUAL( placer.TuningLengthDelta(), 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( SkewBaselineSurvivesMatchedPair )
+{
+    BOARD      board;
+    SKEW_WORLD world( board, 10 '000' 000, 10 '000' 000 );
+
+    PNS::ITEM* startItem = world.m_router.GetWorld()->FindItemByParent( world.m_startTrack );
+    BOOST_REQUIRE( startItem );
+
+    PNS::MEANDER_SKEW_PLACER placer( &world.m_router );
+    BOOST_REQUIRE( placer.Start( world.m_startTrack->GetStart(), startItem ) );
+
+    BOOST_CHECK_EQUAL( placer.TuningLengthResult(), 0 );
+    BOOST_CHECK( placer.HasBaseline() );
+    BOOST_CHECK_EQUAL( placer.TuningLengthDelta(), 0 );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

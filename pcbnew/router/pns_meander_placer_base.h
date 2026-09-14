@@ -65,7 +65,7 @@ public:
      */
     virtual int64_t TuningDelayResult() const { return 0; };
 
-    bool HasBaseline() const { return m_baselineLength != 0 || m_baselineDelay != 0; }
+    bool HasBaseline() const { return m_hasBaseline; }
 
     long long int TuningLengthDelta() const { return TuningLengthResult() - m_baselineLength; }
     int64_t TuningDelayDelta() const { return TuningDelayResult() - m_baselineDelay; }
@@ -162,9 +162,13 @@ protected:
      */
     long long int chainNarrowingOffset() const;
 
-    ///< Original path length/delay captured at Start().
+    ///< The tuning results as they were at Start(). The deltas measure change from these.
     long long int m_baselineLength = 0;
     int64_t       m_baselineDelay = 0;
+    bool          m_hasBaseline = false;
+
+    ///< Active path length at Start().
+    long long int m_startPathLength = 0;
 
     ///< Aggregate length/delay of other nets in the same chain, cached at Start().
     ///< The non-edited members of a chain don't change during a tuning session, so we avoid
