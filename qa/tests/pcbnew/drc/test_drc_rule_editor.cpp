@@ -2592,6 +2592,32 @@ BOOST_AUTO_TEST_CASE( RoundTripLengthWithoutOpt )
 }
 
 
+// A commented out constraint must not appear in the body as active rule text.
+BOOST_AUTO_TEST_CASE( RuleBodyExcludesCommentLines )
+{
+    wxString ruleText = "(rule \"length_DDR_Byte0\"\n"
+                        "\t# byte lane 0\n"
+                        "\t# (constraint length (min 29.5mm) (max 30.5mm) (opt 30mm))\n"
+                        "(constraint length (min 210ps) (max 230ps) (opt 223ps))\n"
+                        "\t# tightened after bring-up\n"
+                        "\t(condition \"A.NetClass == 'DDR4_BYTE0'\"))";
+
+    wxString body = DRC_RULE_LOADER::extractRuleBody( ruleText );
+
+    BOOST_CHECK( body.StartsWith( wxS( "(constraint length (min 210ps)" ) ) );
+    BOOST_CHECK( !body.Contains( wxS( "29.5mm" ) ) );
+    BOOST_CHECK( !body.Contains( wxS( "byte lane" ) ) );
+    BOOST_CHECK( !body.Contains( wxS( "bring-up" ) ) );
+    BOOST_CHECK( body.Contains( wxS( "condition" ) ) );
+
+    wxString comment = DRC_RULE_LOADER::extractRuleComment( ruleText );
+
+    BOOST_CHECK( comment.Contains( wxS( "byte lane 0" ) ) );
+    BOOST_CHECK( comment.Contains( wxS( "29.5mm" ) ) );
+    BOOST_CHECK( comment.Contains( wxS( "bring-up" ) ) );
+}
+
+
 // The matched length pair panel still cannot hold time, so a ps skew stays as text.
 BOOST_AUTO_TEST_CASE( RuleLoaderTimeDomainSkewStillFallsBackToCustom )
 {

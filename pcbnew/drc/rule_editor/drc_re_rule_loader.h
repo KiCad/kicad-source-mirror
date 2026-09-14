@@ -78,6 +78,24 @@ public:
      */
     std::vector<DRC_RE_LOADED_PANEL_ENTRY> LoadFromString( const wxString& aRulesText );
 
+    /**
+     * Extract the body of a rule from its original text, stripping the
+     * (rule "name" ...) wrapper. Handles both quoted and unquoted rule names.
+     *
+     * @param aOriginalText The full original text of a single rule.
+     * @return The inner body (constraints, conditions) without the rule wrapper.
+     */
+    static wxString extractRuleBody( const wxString& aOriginalText );
+
+    /**
+     * Extract comment lines from a rule.
+     * Comments are lines starting with # inside the rule block.
+     *
+     * @param aOriginalText Rule text.
+     * @return Extracted comment text (empty if none).
+     */
+    static wxString extractRuleComment( const wxString& aOriginalText );
+
 private:
     /**
      * Create the appropriate constraint data object for a panel type.
@@ -114,24 +132,6 @@ private:
      * @return The complete rule text including (rule ...) wrapper, or empty if not found.
      */
     wxString extractRuleText( const wxString& aContent, const wxString& aRuleName );
-
-    /**
-     * Extract the body of a rule from its original text, stripping the
-     * (rule "name" ...) wrapper. Handles both quoted and unquoted rule names.
-     *
-     * @param aOriginalText The full original text of a single rule.
-     * @return The inner body (constraints, conditions) without the rule wrapper.
-     */
-    wxString extractRuleBody( const wxString& aOriginalText );
-
-    /**
-     * Extract comment lines from a rule.
-     * Comments are lines starting with # inside the rule block.
-     *
-     * @param aOriginalText Rule text.
-     * @return Extracted comment text (empty if none).
-     */
-    wxString extractRuleComment( const wxString& aOriginalText );
 
     /**
      * Convert internal time units to picoseconds.
