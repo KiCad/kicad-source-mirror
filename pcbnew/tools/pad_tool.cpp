@@ -718,16 +718,15 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
     }
     else if( selection.Size() == 1 && selection[0]->Type() == PCB_PAD_T )
     {
-        PCB_LAYER_ID layer;
         PAD*         pad = static_cast<PAD*>( selection[0] );
         BOARD_COMMIT commit( frame() );
 
         commit.Modify( pad );
-        explodePad( pad, &layer, commit );
+        explodePad( pad, commit );
         commit.Push( _( "Edit Pad" ) );
 
         m_toolMgr->RunAction( ACTIONS::selectionClear );
-        frame()->SetActiveLayer( layer );
+        frame()->SetActiveLayer( pad->GetPrincipalLayer() );
 
         settings->m_PadEditModePad = pad;
         enterPadEditMode();
@@ -842,28 +841,21 @@ void PAD_TOOL::ExitPadEditMode()
 }
 
 
-void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer, BOARD_COMMIT& aCommit )
+void PAD_TOOL::explodePad( PAD* aPad, BOARD_COMMIT& aCommit )
 {
-    if( aPad->IsOnLayer( F_Cu ) )
-        *aLayer = F_Cu;
-    else if( aPad->IsOnLayer( B_Cu ) )
-        *aLayer = B_Cu;
-    else
-        *aLayer = aPad->GetLayerSet().UIOrder().front();
-
-    aPad->Padstack().ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID layer )
+    auto explodePrimitives =
+            [&]( PCB_LAYER_ID padstackStorageLayer, PCB_LAYER_ID targetBoardLayer )
             {
-                if( aPad->GetShape( layer ) == PAD_SHAPE::CUSTOM )
+                if( aPad->GetShape( padstackStorageLayer ) == PAD_SHAPE::CUSTOM )
                 {
-                    for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives( layer ) )
+                    for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives( padstackStorageLayer ) )
                     {
                         PCB_SHAPE* shape = static_cast<PCB_SHAPE*>( primitive->Duplicate( true, &aCommit ) );
 
                         shape->SetParent( board()->GetFirstFootprint() );
                         shape->Rotate( VECTOR2I( 0, 0 ), aPad->GetOrientation() );
-                        shape->Move( aPad->ShapePos( layer ) );
-                        shape->SetLayer( layer );
+                        shape->Move( aPad->ShapePos( padstackStorageLayer ) );
+                        shape->SetLayer( targetBoardLayer );
 
                         if( shape->IsProxyItem() && shape->GetShape() == SHAPE_T::SEGMENT )
                         {
@@ -876,10 +868,23 @@ void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer, BOARD_COMMIT& aCommi
                         aCommit.Add( shape );
                     }
 
-                    aPad->SetShape( layer, aPad->GetAnchorPadShape( layer ) );
-                    aPad->DeletePrimitivesList( layer );
+                    aPad->SetShape( padstackStorageLayer, aPad->GetAnchorPadShape( padstackStorageLayer ) );
+                    aPad->DeletePrimitivesList( padstackStorageLayer );
                 }
-            } );
+            };
+
+    if( aPad->Padstack().Mode() == PADSTACK::MODE::NORMAL )
+    {
+        explodePrimitives( PADSTACK::ALL_LAYERS, aPad->GetPrincipalLayer() );
+    }
+    else
+    {
+        aPad->Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID layer )
+                {
+                    explodePrimitives( layer, layer );
+                } );
+    }
 
     aPad->SetFlags( ENTERED );
     m_editPad = aPad->m_Uuid;

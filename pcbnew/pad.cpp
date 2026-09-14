@@ -3182,43 +3182,48 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
 
     std::vector<PCB_SHAPE*> mergedShapes;
 
-    Padstack().ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID aLayer )
+    auto recombine =
+            [&]( PCB_LAYER_ID sourceBoardLayer, PCB_LAYER_ID padstackStorageLayer )
             {
-                PAD_SHAPE origShape = GetShape( aLayer );
+                PAD_SHAPE origShape = GetShape( sourceBoardLayer );
 
                 // If there are intersecting items to combine, we need to first make sure the pad is a
                 // custom-shape pad.
-                if( !aIsDryRun && findNext( aLayer ) && origShape != PAD_SHAPE::CUSTOM )
+                if( !aIsDryRun && findNext( sourceBoardLayer ) && origShape != PAD_SHAPE::CUSTOM )
                 {
                     if( origShape == PAD_SHAPE::CIRCLE || origShape == PAD_SHAPE::RECTANGLE )
                     {
                         // Use the existing pad as an anchor
-                        SetAnchorPadShape( aLayer, origShape );
-                        SetShape( aLayer, PAD_SHAPE::CUSTOM );
+                        SetAnchorPadShape( padstackStorageLayer, origShape );
+                        SetShape( padstackStorageLayer, PAD_SHAPE::CUSTOM );
                     }
                     else
                     {
                         // Create a new circular anchor and convert existing pad to a polygon primitive
                         SHAPE_POLY_SET existingOutline;
-                        TransformShapeToPolygon( existingOutline, aLayer, 0, maxError, ERROR_INSIDE );
+                        TransformShapeToPolygon( existingOutline, padstackStorageLayer, 0, maxError, ERROR_INSIDE );
 
-                        int minExtent = std::min( GetSize( aLayer ).x, GetSize( aLayer ).y );
-                        SetAnchorPadShape( aLayer, PAD_SHAPE::CIRCLE );
-                        SetSize( aLayer, VECTOR2I( minExtent, minExtent ) );
-                        SetShape( aLayer, PAD_SHAPE::CUSTOM );
+                        VECTOR2I      origin( ShapePos( padstackStorageLayer ) );
+                        VECTOR2I      nearestPoint, dummyPoint;
+                        SHAPE_SEGMENT originSeg( origin, origin );
+                        existingOutline.NearestPoints( &originSeg, nearestPoint, dummyPoint );
+                        int           radius = ( nearestPoint - origin ).EuclideanNorm();
+
+                        SetAnchorPadShape( padstackStorageLayer, PAD_SHAPE::CIRCLE );
+                        SetSize( padstackStorageLayer, VECTOR2I( radius * 2, radius * 2 ) );
+                        SetShape( padstackStorageLayer, PAD_SHAPE::CUSTOM );
 
                         PCB_SHAPE* shape = new PCB_SHAPE( nullptr, SHAPE_T::POLY );
                         shape->SetFilled( true );
                         shape->SetStroke( STROKE_PARAMS( 0, LINE_STYLE::SOLID ) );
                         shape->SetPolyShape( existingOutline );
-                        shape->Move( - ShapePos( aLayer ) );
+                        shape->Move( - ShapePos( padstackStorageLayer ) );
                         shape->Rotate( VECTOR2I( 0, 0 ), - GetOrientation() );
-                        AddPrimitive( aLayer, shape );
+                        AddPrimitive( padstackStorageLayer, shape );
                     }
                 }
 
-                while( PCB_SHAPE* fpShape = findNext( aLayer ) )
+                while( PCB_SHAPE* fpShape = findNext( sourceBoardLayer ) )
                 {
                     fpShape->SetFlags( SKIP_STRUCT );
 
@@ -3240,10 +3245,10 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
                         if( primitive->IsAnyFill() )
                             primitive->SetFillMode( FILL_T::FILLED_SHAPE );
 
-                        primitive->Move( - ShapePos( aLayer ) );
+                        primitive->Move( - ShapePos( padstackStorageLayer ) );
                         primitive->Rotate( VECTOR2I( 0, 0 ), - GetOrientation() );
 
-                        AddPrimitive( aLayer, primitive );
+                        AddPrimitive( padstackStorageLayer, primitive );
                     }
 
                     // See if there are other shapes that match and mark them for delete.  (KiCad won't
@@ -3254,7 +3259,20 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
                         mergedShapes.push_back( other );
                     }
                 }
-            } );
+            };
+
+    if( Padstack().Mode() == PADSTACK::MODE::NORMAL )
+    {
+        recombine( GetPrincipalLayer(), PADSTACK::ALL_LAYERS );
+    }
+    else
+    {
+        Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID aLayer )
+                {
+                    recombine( aLayer, aLayer );
+                } );
+    }
 
     for( BOARD_ITEM* item : footprint->GraphicalItems() )
         item->ClearFlags( SKIP_STRUCT );
