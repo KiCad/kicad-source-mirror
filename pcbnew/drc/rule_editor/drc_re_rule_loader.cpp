@@ -506,8 +506,24 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
     if( aRule.m_Condition )
         condition = aRule.m_Condition->GetExpression();
 
+    // The structured panels hold spatial values. A time domain rule does not fit, so
+    // keep it as text.
+    bool fitsStructuredPanels = true;
+
+    for( const DRC_CONSTRAINT& constraint : aRule.m_Constraints )
+    {
+        if( constraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
+        {
+            fitsStructuredPanels = false;
+            break;
+        }
+    }
+
     // Match the rule to panels
-    std::vector<DRC_PANEL_MATCH> matches = m_matcher.MatchRule( aRule );
+    std::vector<DRC_PANEL_MATCH> matches;
+
+    if( fitsStructuredPanels )
+        matches = m_matcher.MatchRule( aRule );
 
     for( DRC_PANEL_MATCH& match : matches )
     {
