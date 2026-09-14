@@ -1132,7 +1132,10 @@ void RENDER_3D_OPENGL::bgWorker( std::stop_token aStop )
     // (m_accelerator), which is not updated by the OpenGL scene build above.
     // Rebuild it here on the same worker thread once board layers are ready.
     if( !aStop.stop_requested() && m_canvas )
-        m_canvas->ReloadRaytracingForHitTesting( aStop );
+    {
+        m_hitTestDirty = true;
+        runHitTestRebuild( aStop );
+    }
 
     if( aStop.stop_requested() )
         return;
@@ -1151,6 +1154,9 @@ void RENDER_3D_OPENGL::startBgWorker()
 {
     wxLogTrace( m_logTrace, wxT( "RENDER_3D_OPENGL::startBgWorker" ) );
 
+    // Claim the flag before the thread runs so a rebuild cannot displace the load.
+    m_bgWorkerBusy = true;
+
     m_bgWorkerThread = std::jthread(
             [this]( std::stop_token aStopToken )
             {
@@ -1158,7 +1164,50 @@ void RENDER_3D_OPENGL::startBgWorker()
                 BS::this_thread::set_os_thread_priority( BS::os_thread_priority::below_normal );
 
                 bgWorker( aStopToken );
+
+                m_bgWorkerBusy = false;
             } );
+}
+
+
+void RENDER_3D_OPENGL::RebuildHitTestAsync()
+{
+    m_hitTestDirty = true;
+
+    // A running worker picks the request up before it releases the flag.
+    if( m_bgWorkerBusy.exchange( true ) )
+        return;
+
+    m_bgWorkerThread = std::jthread(
+            [this]( std::stop_token aStop )
+            {
+                BS::this_thread::set_os_thread_priority( BS::os_thread_priority::below_normal );
+
+                runHitTestRebuild( aStop );
+
+                m_bgWorkerBusy = false;
+            } );
+}
+
+
+void RENDER_3D_OPENGL::runHitTestRebuild( std::stop_token aStop )
+{
+    for( ;; )
+    {
+        while( m_hitTestDirty.exchange( false ) )
+        {
+            if( aStop.stop_requested() || !m_canvas )
+                return;
+
+            m_canvas->ReloadRaytracingForHitTesting( aStop );
+        }
+
+        m_bgWorkerBusy = false;
+
+        // Pick up a request that raced the release above.
+        if( !m_hitTestDirty || m_bgWorkerBusy.exchange( true ) )
+            return;
+    }
 }
 
 
@@ -1174,6 +1223,8 @@ void RENDER_3D_OPENGL::StopBgWorker()
         m_bgWorkerThread.request_stop();
         m_bgWorkerThread.join();
     }
+
+    m_bgWorkerBusy = false;
 }
 
 
