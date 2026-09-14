@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-11 15:51+0000\n"
+"PO-Revision-Date: 2026-09-14 13:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -9368,26 +9368,24 @@ msgid "Another git operation is in progress."
 msgstr "È in corso un'altra operazione git."
 
 #: common/git/libgit_backend.cpp:1632 common/git/libgit_backend.cpp:1685
-#, fuzzy
 msgid "Could not find the matching remote branch."
-msgstr "Impossibile trovare \"%s\" nella libreria importata."
+msgstr "Impossibile trovare la diramazione remota corrispondente."
 
 #: common/git/libgit_backend.cpp:1641 common/git/libgit_backend.cpp:1694
 msgid "Could not read the remote branch."
 msgstr "Impossibile leggere il ramo remoto."
 
 #: common/git/libgit_backend.cpp:1649
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reset to the remote branch: %s"
-msgstr "Impossibile fare push su remoto: %s"
+msgstr "Impossibile reimpostare alla diramazione remota: %s"
 
 #: common/git/libgit_backend.cpp:1676
-#, fuzzy
 msgid ""
 "Cannot rebase: you have unstaged changes.  Please commit or stash them first."
 msgstr ""
-"Impossibile fare il merge: sono presenti modifiche non ancora salvate. Si "
-"prega di eseguirne il commit o di archiviarle prima di estrarle."
+"Impossibile fare il rebase: sono presenti modifiche non ancora salvate. Si "
+"prega prima di eseguirne il commit o di archiviarle."
 
 #: common/git/libgit_backend.cpp:1734 common/git/libgit_backend.cpp:1745
 msgid ""
@@ -9829,9 +9827,8 @@ msgid "Eagle binary schematic has no drawing section."
 msgstr "Lo schema binario Eagle non ha una sezione disegni."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2627
-#, fuzzy
 msgid "Eagle binary file has no schematic section."
-msgstr "Il blocco progetto non ha uno schema da piazzare."
+msgstr "Il file binario Eagle non ha una sezione schema elettrico."
 
 #: common/io/eagle/eagle_parser.cpp:525
 #, c-format
@@ -9874,12 +9871,9 @@ msgid "Cannot read ZIP archive '%s'"
 msgstr "Impossibile leggere l'archivio ZIP '%s'"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid DOCHEAD in '%s' at line %d"
-msgstr ""
-"ID impronta non valido in\n"
-"file: '%s'\n"
-"riga: %d"
+msgstr "DOCHEAD non valido in '%s' alla riga %d"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:319
 #, c-format
@@ -9888,27 +9882,28 @@ msgstr "DOCCHEAD previsto in '%s' alla riga %d"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:347
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:422
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error in '%s' at line %d: %s"
-msgstr "Errore JSON leggendo '%s': %s"
+msgstr "Errore JSON in '%s' alla riga %d: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 project. Cannot "
 "find project2.json and .epru documents."
 msgstr ""
-"'%s' non sembra essere un file progetto o libreria EasyEDA (JLCEDA) Pro "
-"valido. Impossibile trovare project.json o device.json."
+"'%s' non sembra essere un progetto EasyEDA (JLCEDA) Pro v3 valido. "
+"Impossibile trovare i documenti project2.json e .epru."
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:588
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 library. Cannot "
 "find symbol2.json, footprint2.json or device2.json and .elibu documents."
 msgstr ""
-"'%s' non sembra essere un file progetto o libreria EasyEDA (JLCEDA) Pro "
-"valido. Impossibile trovare project.json o device.json."
+"'%s' non sembra essere una libreria EasyEDA (JLCEDA) Pro v3 valida. "
+"Impossibile trovare i documenti symbol2.json, footprint2.json o device2.json "
+"ed .elibu."
 
 #: common/io/io_base.cpp:139
 msgid "Loading file canceled by user."
@@ -9916,19 +9911,19 @@ msgstr "Caricamento file annullato dall'utente."
 
 #: common/io/pcad/s_expr_loader.cpp:194 common/io/pcad/s_expr_loader.cpp:199
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1301
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read file '%s'."
-msgstr "Impossibile aprire il file \"%s\"."
+msgstr "Impossibile leggere il file '%s'."
 
 #: common/io/pcad/s_expr_loader.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a P-CAD ASCII file."
-msgstr "'%s' non è un valore SPICE valido."
+msgstr "'%s' non è un file ASCII P-CAD."
 
 #: common/io/pcad/s_expr_loader.cpp:224 common/io/pcad/s_expr_loader.cpp:267
-#, fuzzy, c-format
+#, c-format
 msgid "Unbalanced parentheses in '%s'."
-msgstr "Impossibile analizzare \"%s\" in \"%s\""
+msgstr "Parentesi non bilanciate in '%s'."
 
 #: common/jobs/job.cpp:82
 msgid "Job Settings"
@@ -9947,9 +9942,8 @@ msgid "Schematic: Generate Bill of Materials"
 msgstr "Schema: Genera distinta materiali"
 
 #: common/jobs/job_export_bom.cpp:137
-#, fuzzy
 msgid "PCB: Generate Bill of Materials"
-msgstr "Genera distinta materiali..."
+msgstr "C.S.: Genera distinta materiali"
 
 #: common/jobs/job_export_pcb_3d.cpp:185
 msgid "3D model export"
@@ -10086,20 +10080,17 @@ msgstr "C.S.: Esporta PDF"
 
 #: common/jobs/job_export_pcb_png.cpp:37
 #: common/jobs/job_export_sch_plot.cpp:209 kicad/kicad_cli.cpp:210
-#, fuzzy
 msgid "Export PNG"
-msgstr "Esporta HPGL"
+msgstr "Esporta PNG"
 
 #: common/jobs/job_export_pcb_png.cpp:43
 #: common/jobs/job_export_sch_plot.cpp:215
-#, fuzzy
 msgid "Export PNG Job Settings"
-msgstr "Impostazioni lavoro Esporta PDF"
+msgstr "Impostazioni di lavoro Esporta PNG"
 
 #: common/jobs/job_export_pcb_png.cpp:47
-#, fuzzy
 msgid "PCB: Export PNG"
-msgstr "C.S.: Esporta HPGL"
+msgstr "C.S.: Esporta PNG"
 
 #: common/jobs/job_export_pcb_pos.cpp:123
 msgid "Export position data"
@@ -10126,14 +10117,12 @@ msgid "PCB: Export Postscript"
 msgstr "C.S.: esporta Postscript"
 
 #: common/jobs/job_export_pcb_stackup.cpp:66
-#, fuzzy
 msgid "Export board stackup table"
-msgstr "Esporta statistiche scheda"
+msgstr "Esporta tabella stackup scheda"
 
 #: common/jobs/job_export_pcb_stackup.cpp:72
-#, fuzzy
 msgid "Export Board Stackup Job Settings"
-msgstr "Impostazioni del lavoro di esportazione statistiche scheda"
+msgstr "Impostazioni di lavoro Esportazione stackup scheda"
 
 #: common/jobs/job_export_pcb_stackup.cpp:91
 #, fuzzy
