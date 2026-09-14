@@ -2635,4 +2635,41 @@ BOOST_AUTO_TEST_CASE( HasCustomPropertyHelperMatches )
     BOOST_CHECK( matches.front() == vendorFp );
 }
 
+
+// The structured panels only hold spatial values, so a time domain rule must fall back
+// to the text panel instead of being rewritten in mm.
+BOOST_AUTO_TEST_CASE( RuleLoaderTimeDomainLengthFallsBackToCustom )
+{
+    wxString ruleText = "(version 1)\n"
+                        "(rule \"clk_delay\"\n"
+                        "    (constraint length (min 210ps) (max 230ps))\n"
+                        ")";
+
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, CUSTOM_RULE );
+
+    auto customData = std::dynamic_pointer_cast<DRC_RE_CUSTOM_RULE_CONSTRAINT_DATA>( entries[0].constraintData );
+    BOOST_REQUIRE( customData );
+    BOOST_CHECK( customData->GetRuleText().Contains( wxS( "210ps" ) ) );
+    BOOST_CHECK( customData->GetRuleText().Contains( wxS( "230ps" ) ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( RuleLoaderSpatialLengthStaysStructured )
+{
+    wxString ruleText = "(version 1)\n"
+                        "(rule \"len_mm\"\n"
+                        "    (constraint length (min 30mm) (opt 40mm) (max 50mm))\n"
+                        ")";
+
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( ruleText );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+    BOOST_CHECK_EQUAL( entries[0].panelType, ABSOLUTE_LENGTH );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
