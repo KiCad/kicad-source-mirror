@@ -37,7 +37,7 @@ DIALOG_DRILL_GROUPS_BASE::DIALOG_DRILL_GROUPS_BASE( wxWindow* parent, wxWindowID
 	m_groupGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
 	// Grid
-	m_groupGrid->CreateGrid( 0, 7 );
+	m_groupGrid->CreateGrid( 0, 6 );
 	m_groupGrid->EnableEditing( true );
 	m_groupGrid->EnableGridLines( true );
 	m_groupGrid->SetGridLineColour( wxSystemSettings::GetColour( wxSYS_COLOUR_ACTIVEBORDER ) );
