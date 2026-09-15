@@ -160,6 +160,21 @@ message LibraryItemsResponse
   repeated kiapi.common.types.LibraryIdentifier items = 1;
 }
 
+// Requests the full content of items contained in a library or set of libraries
+// Returns GetItemsResponse
+// Since: 11.0
+message GetItemsFromLibrary
+{
+  // The type of library to query (symbol, footprint, design block).
+  kiapi.common.types.LibraryType type = 1;
+
+  // Which document context to use (to enable querying project-specific libraries)
+  kiapi.common.types.DocumentSpecifier document = 2;
+
+  // The items to retrieve.
+  repeated kiapi.common.types.LibraryIdentifier item_ids = 3;
+}
+
 // Requests items matching a search query in the given library scopes
 // Returns SearchLibrariesResponse
 // Since: 11.0

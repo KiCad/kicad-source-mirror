@@ -20,8 +20,13 @@
 
 #include <api/api_handler_fp_libraries.h>
 
+#include <footprint.h>
 #include <footprint_library_adapter.h>
+#include <pgm_base.h>
 #include <project_pcb.h>
+#include <settings/settings_manager.h>
+
+#include <api/board/board_types.pb.h>
 
 
 LIBRARY_MANAGER_ADAPTER* API_HANDLER_FP_LIBRARIES::adapterForProject( PROJECT& aProject ) const
@@ -34,4 +39,22 @@ std::vector<wxString> API_HANDLER_FP_LIBRARIES::getItemNames( LIBRARY_MANAGER_AD
                                                               const wxString& aNickname ) const
 {
     return static_cast<FOOTPRINT_LIBRARY_ADAPTER&>( aAdapter ).GetFootprintNames( aNickname, true );
+}
+
+
+bool API_HANDLER_FP_LIBRARIES::packLibraryItem( const LIB_ID& aId, google::protobuf::Any& aOutput ) const
+{
+    FOOTPRINT_LIBRARY_ADAPTER* adapter =
+            static_cast<FOOTPRINT_LIBRARY_ADAPTER*>( adapterForProject( Pgm().GetSettingsManager().Prj() ) );
+
+    std::unique_ptr<FOOTPRINT> footprint( adapter->LoadFootprint( aId, false ) );
+
+    if( !footprint )
+        return false;
+
+    kiapi::board::types::Footprint definition;
+    footprint->SerializeDefinition( &definition );
+
+    aOutput.PackFrom( definition );
+    return true;
 }

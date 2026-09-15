@@ -32,6 +32,8 @@ public:
 protected:
     LIBRARY_MANAGER_ADAPTER* adapterForProject( PROJECT& aProject ) const override;
 
+    bool packLibraryItem( const LIB_ID& aId, google::protobuf::Any& aOutput ) const override;
+
     std::vector<wxString> getItemNames( LIBRARY_MANAGER_ADAPTER& aAdapter,
                                         const wxString& aNickname ) const override;
 };

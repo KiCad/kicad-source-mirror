@@ -990,12 +990,6 @@ bool IFACE::handleOpenFootprint( const wxString& aProjectPath, const wxString& a
 
     m_openFpContext = std::move( newContext );
 
-    if( !m_apiHandlerFpLibs )
-    {
-        m_apiHandlerFpLibs = std::make_unique<API_HANDLER_FP_LIBRARIES>();
-        aServer->RegisterHandler( m_apiHandlerFpLibs.get() );
-    }
-
     m_openFpHandler = std::make_unique<API_HANDLER_FOOTPRINT>( m_openFpContext, nullptr );
     aServer->RegisterHandler( m_openFpHandler.get() );
 

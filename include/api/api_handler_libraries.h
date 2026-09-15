@@ -21,11 +21,16 @@
 #ifndef KICAD_API_HANDLER_LIBRARIES_H
 #define KICAD_API_HANDLER_LIBRARIES_H
 
+#include <functional>
+#include <vector>
+
 #include <api/api_handler.h>
+#include <api/common/commands/editor_commands.pb.h>
 #include <api/common/commands/library_commands.pb.h>
 #include <libraries/library_table.h>
 
 
+class LIB_ID;
 class LIBRARY_MANAGER_ADAPTER;
 class PROJECT;
 
@@ -52,6 +57,14 @@ protected:
 
     HANDLER_RESULT<kiapi::common::types::LibraryCommandStatus>
     handleReloadLibrary( const HANDLER_CONTEXT<kiapi::common::commands::ReloadLibrary>& aCtx );
+
+    HANDLER_RESULT<kiapi::common::commands::GetItemsResponse>
+    handleGetItemsFromLibrary( const HANDLER_CONTEXT<kiapi::common::commands::GetItemsFromLibrary>& aCtx );
+
+    virtual bool packLibraryItem( const LIB_ID& aId, google::protobuf::Any& aOutput ) const
+    {
+        return false;
+    }
 
     LIBRARY_TABLE_TYPE libraryType() const { return m_type; }
 

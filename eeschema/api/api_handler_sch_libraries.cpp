@@ -21,7 +21,9 @@
 #include <api/api_handler_sch_libraries.h>
 
 #include <libraries/symbol_library_adapter.h>
+#include <pgm_base.h>
 #include <project_sch.h>
+#include <settings/settings_manager.h>
 
 
 LIBRARY_MANAGER_ADAPTER* API_HANDLER_SCH_LIBRARIES::adapterForProject( PROJECT& aProject ) const
@@ -34,4 +36,19 @@ std::vector<wxString> API_HANDLER_SCH_LIBRARIES::getItemNames( LIBRARY_MANAGER_A
                                                                const wxString& aNickname ) const
 {
     return static_cast<SYMBOL_LIBRARY_ADAPTER&>( aAdapter ).GetSymbolNames( aNickname );
+}
+
+
+bool API_HANDLER_SCH_LIBRARIES::packLibraryItem( const LIB_ID& aId, google::protobuf::Any& aOutput ) const
+{
+    SYMBOL_LIBRARY_ADAPTER* adapter =
+            static_cast<SYMBOL_LIBRARY_ADAPTER*>( adapterForProject( Pgm().GetSettingsManager().Prj() ) );
+
+    LIB_SYMBOL* libSymbol = adapter->LoadSymbol( aId );
+
+    if( !libSymbol )
+        return false;
+
+    libSymbol->Serialize( aOutput );
+    return true;
 }

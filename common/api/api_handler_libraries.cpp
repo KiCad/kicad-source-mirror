@@ -28,6 +28,8 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 
+#include <api/common/types/base_types.pb.h>
+#include <api/common/commands/editor_commands.pb.h>
 #include <api/common/types/library_types.pb.h>
 
 #include <design_block_library_adapter.h>
@@ -46,6 +48,7 @@ API_HANDLER_LIBRARIES::API_HANDLER_LIBRARIES( LIBRARY_TABLE_TYPE aType ) :
     registerHandler<GetLibraryStatuses, LibraryStatusResponse>(
             &API_HANDLER_LIBRARIES::handleGetLibraryStatuses );
     registerHandler<ReloadLibrary, LibraryCommandStatus>( &API_HANDLER_LIBRARIES::handleReloadLibrary );
+    registerHandler<GetItemsFromLibrary, GetItemsResponse>( &API_HANDLER_LIBRARIES::handleGetItemsFromLibrary );
 }
 
 
@@ -300,4 +303,83 @@ API_HANDLER_LIBRARIES::handleReloadLibrary( const HANDLER_CONTEXT<ReloadLibrary>
     }
 
     return makeStatus( LibraryCommandStatus::LCS_OK );
+}
+
+
+HANDLER_RESULT<GetItemsResponse>
+API_HANDLER_LIBRARIES::handleGetItemsFromLibrary( const HANDLER_CONTEXT<GetItemsFromLibrary>& aCtx )
+{
+    if( aCtx.Request.type() != ToProtoEnum<LIBRARY_TABLE_TYPE, LibraryType>( m_type ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNHANDLED );
+        return tl::unexpected( e );
+    }
+
+    wxString projectPath = wxString::FromUTF8( aCtx.Request.document().project().path() );
+    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+    PROJECT* project = projectPath.IsEmpty() ? &mgr.Prj() : mgr.GetProjectForPath( projectPath );
+
+    if( !project )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "the requested project is not open" );
+        return tl::unexpected( e );
+    }
+
+    LIBRARY_MANAGER_ADAPTER* adapter = adapterForProject( *project );
+
+    if( !adapter )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "no library adapter is available for this library type" );
+        return tl::unexpected( e );
+    }
+
+    GetItemsResponse response;
+    response.mutable_header()->mutable_document()->CopyFrom( aCtx.Request.document() );
+    google::protobuf::Any any;
+
+    if( aCtx.Request.item_ids().empty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "specify at least one lib_id to retrieve" );
+        return tl::unexpected( e );
+    }
+
+    std::map<wxString, std::vector<wxString>> byNickname;
+
+    for( const kiapi::common::types::LibraryIdentifier& id : aCtx.Request.item_ids() )
+    {
+        byNickname[wxString::FromUTF8( id.library_nickname() )].emplace_back( wxString::FromUTF8( id.entry_name() ) );
+    }
+
+    for( auto& [nickname, entryNames] : byNickname )
+    {
+        // TODO(JE) decide whether or not to do blocking loads for explicit requests
+        adapter->LoadLibraryEntry( nickname );
+
+        for( const wxString& entryName : entryNames )
+        {
+            if( packLibraryItem( LIB_ID( nickname, entryName ), any ) )
+            {
+                any.Swap( response.add_items() );
+                any.Clear();
+            }
+        }
+    }
+
+    if( response.items().empty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "none of the requested items were found" );
+        return tl::unexpected( e );
+    }
+
+    response.set_status( kiapi::common::types::ItemRequestStatus::IRS_OK );
+    return response;
 }
