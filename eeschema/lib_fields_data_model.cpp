@@ -28,6 +28,7 @@
 #include <template_fieldnames.h>
 #include "string_utils.h"
 #include <trace_helpers.h>
+#include <validators.h>
 
 #include "lib_fields_data_model.h"
 
@@ -1021,7 +1022,16 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
 
             if( destField->GetId() == FIELD_T::REFERENCE )
             {
-                // Reference is not editable from this dialog
+                if( srcValue.IsEmpty() )
+                {
+                    // An empty reference on a derived symbol inherits from the parent.
+                    if( symbol->IsDerived() )
+                        destField->SetText( srcValue );
+                }
+                else if( GetFieldValidationErrorMessage( FIELD_T::REFERENCE, srcValue ).IsEmpty() )
+                {
+                    destField->SetText( srcValue );
+                }
             }
             else if( destField->GetId() == FIELD_T::VALUE )
             {
