@@ -43,6 +43,7 @@
 #include <footprint.h>
 #include <footprint_editor_settings.h>
 #include <footprint_library_adapter.h>
+#include <kiplatform/environment.h>
 #include <lset.h>
 #include <kiface_base.h>
 #include <pad.h>
@@ -1145,13 +1146,20 @@ void PCB_BASE_FRAME::setFPWatcher( FOOTPRINT* aFootprint )
 
     m_watcherLastModified = m_watcherFileName.GetModificationTime();
 
-    Bind( wxEVT_FSWATCHER, &PCB_BASE_FRAME::OnFPChange, this );
-    m_watcher = std::make_unique<wxFileSystemWatcher>();
-    m_watcher->SetOwner( this );
-
     wxFileName fn;
     fn.AssignDir( m_watcherFileName.GetPath() );
     fn.DontFollowLink();
+
+    // wxMSW frees a watch before SMB completes its pending read, which then corrupts the heap
+    if( KIPLATFORM::ENV::IsNetworkPath( fn.GetPath() ) )
+    {
+        wxLogTrace( traceLibWatch, "Network path, not watching: %s", fn.GetPath() );
+        return;
+    }
+
+    Bind( wxEVT_FSWATCHER, &PCB_BASE_FRAME::OnFPChange, this );
+    m_watcher = std::make_unique<wxFileSystemWatcher>();
+    m_watcher->SetOwner( this );
 
     wxLogTrace( traceLibWatch, "Add watch: %s", fn.GetPath() );
 
