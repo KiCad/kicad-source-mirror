@@ -119,6 +119,27 @@ BOOST_AUTO_TEST_CASE( ColorThemeNotRewrittenWhenUnchanged )
 }
 
 
+// History compare joins a native temp dir with "/" and then looked the project up by that spelling
+BOOST_AUTO_TEST_CASE( GetProjectMatchesAnySpellingOfTheLoadedPath )
+{
+    wxString projectPath = Path( "spelling.kicad_pro" );
+
+    {
+        std::ofstream out( projectPath.ToStdString() );
+        out << R"({"meta": {"filename": "spelling.kicad_pro", "version": 3}})";
+    }
+
+    SETTINGS_MANAGER mgr;
+    BOOST_REQUIRE( mgr.LoadProject( projectPath, false ) );
+
+    // A doubled separator is a second spelling on every platform, not only on Windows
+    PROJECT* project = mgr.GetProject( wxString( m_tempDir.string() ) + wxS( "//spelling.kicad_pro" ) );
+
+    BOOST_REQUIRE( project );
+    BOOST_CHECK_EQUAL( project->GetProjectFullName(), projectPath );
+}
+
+
 class TEST_KIWAY : public KIWAY
 {
 public:
