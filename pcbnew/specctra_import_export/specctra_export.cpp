@@ -1805,14 +1805,20 @@ void SPECCTRA_DB::exportNETCLASS( const NETCLASS* aNetClass, const BOARD* aBoard
     clazz->m_rules = new RULE( clazz, T_rule );
 
     // output the track width.
-    int trackWidth = aNetClass->GetTrackWidth();
-    std::snprintf( text, sizeof( text ), "(width %.6g)", scale( trackWidth ) );
-    clazz->m_rules->m_rules.push_back( text );
+    if( aNetClass->HasTrackWidth() )
+    {
+        int trackWidth = aNetClass->GetTrackWidth();
+        std::snprintf( text, sizeof( text ), "(width %.6g)", scale( trackWidth ) );
+        clazz->m_rules->m_rules.push_back( text );
+    }
 
     // output the clearance.
-    int clearance = aNetClass->GetClearance();
-    std::snprintf( text, sizeof( text ), "(clearance %.6g)", scale( clearance ) );
-    clazz->m_rules->m_rules.push_back( text );
+    if( aNetClass->HasClearance() )
+    {
+        int clearance = aNetClass->GetClearance();
+        std::snprintf( text, sizeof( text ), "(clearance %.6g)", scale( clearance ) );
+        clazz->m_rules->m_rules.push_back( text );
+    }
 
     // Freerouter creates a class named 'default' anyway, and if we try to use that we end up
     // with two 'default' via rules so use something else as the name of our default class.

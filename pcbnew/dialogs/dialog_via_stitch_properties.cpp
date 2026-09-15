@@ -434,7 +434,10 @@ int DIALOG_VIA_STITCH_PROPERTIES::buildGuardPreview( std::vector<VECTOR2I>& aSam
         NETINFO_ITEM* net = board->FindNet( selector->GetSelectedNetcode() );
 
         if( net && net->GetNetClass() )
-            clearance = std::max( clearance, net->GetNetClass()->GetClearance() );
+        {
+            if( net->GetNetClass()->HasClearance() )
+                clearance = std::max( clearance, net->GetNetClass()->GetClearance() );
+        }
     }
 
     const std::vector<VECTOR2I> corners = {

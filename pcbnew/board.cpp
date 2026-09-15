@@ -3420,9 +3420,21 @@ void BOARD::SynchronizeNetsAndNetClasses( bool aResetTrackAndViaSizes )
         bds.SetCustomTrackWidth( defaultNetClass->GetTrackWidth() );
         bds.SetCustomViaSize( defaultNetClass->GetViaDiameter() );
         bds.SetCustomViaDrill( defaultNetClass->GetViaDrill() );
-        bds.SetCustomDiffPairWidth( defaultNetClass->GetDiffPairWidth() );
-        bds.SetCustomDiffPairGap( defaultNetClass->GetDiffPairGap() );
-        bds.SetCustomDiffPairViaGap( defaultNetClass->GetDiffPairViaGap() );
+
+        if( defaultNetClass->HasDiffPairWidth() )
+            bds.SetCustomDiffPairWidth( defaultNetClass->GetDiffPairWidth() );
+        else
+            bds.SetCustomDiffPairWidth( defaultNetClass->GetTrackWidth() );
+
+        if( defaultNetClass->HasDiffPairGap() )
+            bds.SetCustomDiffPairGap( defaultNetClass->GetDiffPairGap() );
+        else
+            bds.SetCustomDiffPairGap( defaultNetClass->GetClearance() );
+
+        if( defaultNetClass->HasDiffPairViaGap() )
+            bds.SetCustomDiffPairViaGap( defaultNetClass->GetDiffPairViaGap() );
+        else
+            bds.SetCustomDiffPairViaGap( bds.GetCustomDiffPairGap() );
     }
 
     InvokeListeners( &BOARD_LISTENER::OnBoardNetSettingsChanged, *this );

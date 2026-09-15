@@ -1831,7 +1831,10 @@ int BOARD_DESIGN_SETTINGS::GetSmallestClearanceValue() const
     int clearance = m_NetSettings->GetDefaultNetclass()->GetClearance();
 
     for( const auto& [name, netclass] : m_NetSettings->GetNetclasses() )
-        clearance = std::min( clearance, netclass->GetClearance() );
+    {
+        if( netclass->HasClearance() )
+            clearance = std::min( clearance, netclass->GetClearance() );
+    }
 
     return clearance;
 }

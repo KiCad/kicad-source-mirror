@@ -445,7 +445,10 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
 
     // Search a smaller clearance in other net classes, if any.
     for( const auto& [name, netclass] : netSettings->GetNetclasses() )
-        minclearanceOuter = std::min( minclearanceOuter, netclass->GetClearance() );
+    {
+        if( netclass->HasClearance() )
+            minclearanceOuter = std::min( minclearanceOuter, netclass->GetClearance() );
+    }
 
     // job file knows different clearance types.
     // Kicad knows only one clearance for pads and tracks

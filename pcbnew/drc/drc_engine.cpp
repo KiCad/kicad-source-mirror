@@ -340,7 +340,7 @@ void DRC_ENGINE::loadImplicitRules()
                     netclassRule->AddConstraint( constraint );
 
                     // A narrower diffpair gap overrides the netclass min clearance
-                    if( nc->GetDiffPairGap() < nc->GetClearance() )
+                    if( nc->HasClearance() && nc->GetDiffPairGap() < nc->GetClearance() )
                     {
                         netclassRule = std::make_shared<DRC_RULE>();
                         netclassRule->m_Name = wxString::Format( _( "netclass '%s' diff pair" ),
@@ -525,7 +525,7 @@ void DRC_ENGINE::loadImplicitRules()
                 addRule( tuningRule2 );
 
                 // A narrower diffpair gap overrides the netclass min clearance
-                if( aLayerEntry.GetDiffPairGap() < aNetclass->GetClearance() )
+                if( aNetclass->HasClearance() && aLayerEntry.GetDiffPairGap() < aNetclass->GetClearance() )
                 {
                     std::shared_ptr<DRC_RULE> diffPairClearanceRule = std::make_shared<DRC_RULE>();
                     diffPairClearanceRule->m_Severity = bds.m_DRCSeverities[DRCE_TUNING_PROFILE_IMPLICIT_RULES];
