@@ -157,10 +157,13 @@ SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, FIELD_T aFieldId, const wxString& aName
             m_ordinal = static_cast<SCH_SYMBOL*>( aParent )->GetNextFieldOrdinal();
         else if( aParent->Type() == LIB_SYMBOL_T )
             m_ordinal = static_cast<LIB_SYMBOL*>( aParent )->GetNextFieldOrdinal();
-        else if( aParent->Type() == SCH_SHEET_T )
-            m_ordinal = static_cast<SCH_SHEET*>( aParent )->GetNextFieldOrdinal();
         else if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( aParent ) )
             m_ordinal = label->GetNextFieldOrdinal();
+    }
+    else if( aFieldId == FIELD_T::SHEET_USER && aParent )
+    {
+        if( aParent->Type() == SCH_SHEET_T )
+            m_ordinal = static_cast<SCH_SHEET*>( aParent )->GetNextFieldOrdinal();
     }
 }
 
