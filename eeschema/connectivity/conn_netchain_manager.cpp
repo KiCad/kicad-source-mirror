@@ -1210,7 +1210,7 @@ bool SCH_CONNECTIVITY::NETCHAIN_MANAGER::DeleteCommittedNetChain( const wxString
 
 bool SCH_CONNECTIVITY::NETCHAIN_MANAGER::RenameCommittedNetChain( const wxString& aOld, const wxString& aNew )
 {
-    if( aOld.IsEmpty() || aNew.IsEmpty() || aOld == aNew )
+    if( aOld.IsEmpty() || !SCH_NETCHAIN::IsValidName( aNew ) || aOld == aNew )
         return false;
 
     auto findByName = [&]( const wxString& aName ) -> SCH_NETCHAIN*

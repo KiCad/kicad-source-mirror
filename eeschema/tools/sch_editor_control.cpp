@@ -1577,6 +1577,12 @@ int SCH_EDITOR_CONTROL::NameNetChain( const TOOL_EVENT& aEvent )
         if( newName.IsEmpty() || newName == oldName )
             return 0;
 
+        if( !SCH_NETCHAIN::IsValidName( newName ) )
+        {
+            DisplayError( editFrame, _( "Chain name cannot contain spaces, quotes, or parentheses." ) );
+            return 0;
+        }
+
         if( !chains.RenameCommittedNetChain( oldName, newName ) )
         {
             DisplayError( editFrame, wxString::Format( _( "Unable to rename net chain '%s' to '%s'." ),
@@ -1617,6 +1623,17 @@ int SCH_EDITOR_CONTROL::CreateNetChainBetweenPins( const TOOL_EVENT& aEvent )
     {
         DisplayError( editFrame, _( "No potential net chain connects the selected pins." ) );
         return 0;
+    }
+
+    // Potentials are rebuilt regardless of commitment and GetNetChainForNet() returns the first owner
+    for( const wxString& net : potential->GetNets() )
+    {
+        if( SCH_NETCHAIN* owner = chains.GetNetChainForNet( net ) )
+        {
+            DisplayError( editFrame, wxString::Format( _( "The selected pins are already in net chain '%s'." ),
+                                                       owner->GetName() ) );
+            return 0;
+        }
     }
 
     // Build default suggestion name
@@ -1661,26 +1678,52 @@ int SCH_EDITOR_CONTROL::CreateNetChainBetweenPins( const TOOL_EVENT& aEvent )
         }
     }
 
+    const auto restoreHighlight =
+            [&]()
+            {
+                editFrame->SetHighlightedNetChain( prevHighlightedChain );
+                editFrame->SetHighlightedConnection( prevHighlightedConn );
+                UpdateNetHighlighting( dummy );
+                editFrame->UpdateNetHighlightStatus();
+            };
+
     wxString name = wxGetTextFromUser( msg, _( "Create Net Chain" ), suggestion, editFrame );
+
     if( name.IsEmpty() )
     {
-        // Restore previous highlight state
-        editFrame->SetHighlightedNetChain( prevHighlightedChain );
-        editFrame->SetHighlightedConnection( prevHighlightedConn );
-        UpdateNetHighlighting( dummy );
-        editFrame->UpdateNetHighlightStatus();
+        restoreHighlight();
         return 0; // cancelled
     }
 
-    if( chains.CreateNetChainFromPotential( potential, name ) )
+    if( !SCH_NETCHAIN::IsValidName( name ) )
     {
-        // Replace temporary highlight with new chain name
-        editFrame->SetHighlightedNetChain( name );
-        editFrame->SetHighlightedConnection( wxEmptyString );
-        UpdateNetHighlighting( dummy );
-        editFrame->UpdateNetHighlightStatus();
-        editFrame->Refresh();
+        restoreHighlight();
+        DisplayError( editFrame, _( "Chain name cannot contain spaces, quotes, or parentheses." ) );
+        return 0;
     }
+
+    if( chains.GetNetChainByName( name ) )
+    {
+        restoreHighlight();
+        DisplayError( editFrame, wxString::Format( _( "A net chain named '%s' already exists." ), name ) );
+        return 0;
+    }
+
+    if( !chains.CreateNetChainFromPotential( potential, name ) )
+    {
+        restoreHighlight();
+        DisplayError( editFrame, wxString::Format( _( "Unable to create net chain '%s'." ), name ) );
+        return 0;
+    }
+
+    editFrame->OnModify();
+
+    // Replace temporary highlight with new chain name
+    editFrame->SetHighlightedNetChain( name );
+    editFrame->SetHighlightedConnection( wxEmptyString );
+    UpdateNetHighlighting( dummy );
+    editFrame->UpdateNetHighlightStatus();
+    editFrame->Refresh();
 
     return 0;
 }

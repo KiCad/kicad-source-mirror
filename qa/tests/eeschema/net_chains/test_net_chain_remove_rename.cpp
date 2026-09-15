@@ -108,6 +108,7 @@ BOOST_FIXTURE_TEST_CASE( NetChain_RemoveRenameRoundTrip, NETCHAIN_RENAME_FIXTURE
     BOOST_CHECK( !graph->RenameCommittedNetChain( wxT( "FIRST" ), wxEmptyString ) );
     BOOST_CHECK( !graph->RenameCommittedNetChain( wxEmptyString, wxT( "X" ) ) );
     BOOST_CHECK( !graph->RenameCommittedNetChain( wxT( "FIRST" ), wxT( "FIRST" ) ) );
+    BOOST_CHECK( !graph->RenameCommittedNetChain( wxT( "FIRST" ), wxT( "BAD NAME" ) ) );
 
     // Successful rename.
     BOOST_CHECK( graph->RenameCommittedNetChain( wxT( "FIRST" ), wxT( "RENAMED" ) ) );

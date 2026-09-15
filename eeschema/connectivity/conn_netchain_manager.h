@@ -197,8 +197,8 @@ public:
     /**
      * Rename a committed net chain.  Re-keys override map entries and the project
      * chain-class assignment from the old name to the new one, and updates every
-     * member symbol's net-chain name marker.  Returns false when the new name is empty, the old chain does
-     * not exist, or another chain already uses the new name.
+     * member symbol's net-chain name marker.  Returns false when the new name fails
+     * SCH_NETCHAIN::IsValidName(), the old chain does not exist, or another chain already uses the new name.
      */
     bool RenameCommittedNetChain( const wxString& aOld, const wxString& aNew );
 
