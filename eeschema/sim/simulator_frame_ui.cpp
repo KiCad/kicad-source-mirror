@@ -2844,7 +2844,8 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                 if( tab_js.value( "smithMode", false ) )
                 {
                     plotTab->SetSmithMode( true );
-                    plotTab->SetSmithView( tab_js.value( "smithZoom", 1.0 ), tab_js.value( "smithPanX", 0.0 ),
+                    plotTab->SetSmithView( tab_js.value( "smithZoom", 1.0 ),
+                                           tab_js.value( "smithPanX", 0.0 ),
                                            tab_js.value( "smithPanY", 0.0 ) );
 
                     if( tab_js.contains( "smithStashedTraces" ) && tab_js["smithStashedTraces"].is_array() )
@@ -2857,8 +2858,9 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                             if( vector.IsEmpty() )
                                 continue;
 
-                            plotTab->SmithStashedTraces().push_back(
-                                    { vector, name.IsEmpty() ? vector : name, stash_js.value( "base_type", 0 ) } );
+                            plotTab->SmithStashedTraces().push_back( { vector,
+                                                                       name.IsEmpty() ? vector : name,
+                                                                       stash_js.value( "base_type", 0 ) } );
                         }
                     }
 
@@ -2872,34 +2874,38 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                             if( vector.IsEmpty() || ( id < 1 && id != -1 ) )
                                 continue;
 
-                            plotTab->SmithStashedCursors().push_back(
-                                    { id, vector, stash_js.value( "base_type", 0 ), stash_js.value( "sub_type", 0 ),
-                                      stash_js.value( "frequency", std::nan( "" ) ) } );
+                            plotTab->SmithStashedCursors().push_back( { id,
+                                                                        vector,
+                                                                        stash_js.value( "base_type", 0 ),
+                                                                        stash_js.value( "sub_type", 0 ),
+                                                                        stash_js.value( "frequency",
+                                                                        std::nan( "" ) ) } );
                         }
                     }
                 }
 
-                auto loadScale = [&]( const char* aKey, auto&& aSetter )
-                {
-                    if( !tab_js.contains( aKey ) )
-                        return;
+                auto loadScale =
+                        [&]( const char* aKey, auto&& aSetter )
+                        {
+                            if( !tab_js.contains( aKey ) )
+                                return;
 
-                    // older workbooks can hold null here (non-finite bounds saved as json null)
-                    nlohmann::json min_js = tab_js[aKey].value( "min", nlohmann::json() );
-                    nlohmann::json max_js = tab_js[aKey].value( "max", nlohmann::json() );
+                            // older workbooks can hold null here (non-finite bounds saved as json null)
+                            nlohmann::json min_js = tab_js[aKey].value( "min", nlohmann::json() );
+                            nlohmann::json max_js = tab_js[aKey].value( "max", nlohmann::json() );
 
-                    if( !min_js.is_number() || !max_js.is_number() )
-                        return;
+                            if( !min_js.is_number() || !max_js.is_number() )
+                                return;
 
-                    double min = min_js.get<double>();
-                    double max = max_js.get<double>();
+                            double min = min_js.get<double>();
+                            double max = max_js.get<double>();
 
-                    if( min < max )
-                    {
-                        aSetter( min, max );
-                        plotTab->GetPlotWin()->LockY( true );
-                    }
-                };
+                            if( min < max )
+                            {
+                                aSetter( min, max );
+                                plotTab->GetPlotWin()->LockY( true );
+                            }
+                        };
 
                 loadScale( "fixedY1scale",
                            [&]( double min, double max )
@@ -2930,9 +2936,10 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
                 if( tab_js.contains( "margins" ) )
                 {
                     const nlohmann::json& margins_js = tab_js[ "margins" ];
-                    plotTab->GetPlotWin()->SetMargins( margins_js.value( "top", 30 ), margins_js.value( "right", 70 ),
+                    plotTab->GetPlotWin()->SetMargins( margins_js.value( "top",    30 ),
+                                                       margins_js.value( "right",  70 ),
                                                        margins_js.value( "bottom", 45 ),
-                                                       margins_js.value( "left", 70 ) );
+                                                       margins_js.value( "left",   70 ) );
                 }
             }
         }
@@ -3021,7 +3028,8 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
 
                 if( trace )
                 {
-                    int yScaleIndex = trace_js.contains( "yScaleView" ) ? (int) trace_js["yScaleView"] : viewIndex;
+                    int yScaleIndex = trace_js.contains( "yScaleView" ) ? (int) trace_js["yScaleView"]
+                                                                        : viewIndex;
 
                     if( SIM_VIEW* yScaleView = plotTab->GetView( yScaleIndex ) )
                         trace->SetYScaleView( yScaleView );
@@ -3198,9 +3206,9 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
             {
                 nlohmann::json trace_js =
                         nlohmann::json( { { "trace_type", (int) trace->GetType() },
-                                          { "signal", findSignalName( trace->GetDisplayName() ) },
-                                          { "color", COLOR4D( trace->GetTraceColour() ).ToCSSString() },
-                                          { "view", plotTab->GetViewIndex( trace->GetView() ) },
+                                          { "signal",     findSignalName( trace->GetDisplayName() ) },
+                                          { "color",      COLOR4D( trace->GetTraceColour() ).ToCSSString() },
+                                          { "view",       plotTab->GetViewIndex( trace->GetView() ) },
                                           { "yScaleView", plotTab->GetViewIndex( trace->GetYScaleView() ) } } );
 
                 for( int ii = 1; ii <= m_customCursorsCnt; ii++ )
@@ -3241,8 +3249,8 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
 
                 for( const SMITH_STASHED_TRACE& stashed : plotTab->SmithStashedTraces() )
                 {
-                    stashedTraces_js.push_back( nlohmann::json( { { "vector", stashed.vectorName },
-                                                                  { "name", stashed.displayName },
+                    stashedTraces_js.push_back( nlohmann::json( { { "vector",    stashed.vectorName },
+                                                                  { "name",      stashed.displayName },
                                                                   { "base_type", stashed.baseType } } ) );
                 }
 
@@ -3253,10 +3261,10 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
 
                 for( const SMITH_STASHED_CURSOR& stashed : plotTab->SmithStashedCursors() )
                 {
-                    nlohmann::json cursor_js = nlohmann::json( { { "id", stashed.id },
-                                                                 { "vector", stashed.vectorName },
+                    nlohmann::json cursor_js = nlohmann::json( { { "id",        stashed.id },
+                                                                 { "vector",    stashed.vectorName },
                                                                  { "base_type", stashed.baseType },
-                                                                 { "sub_type", stashed.subType } } );
+                                                                 { "sub_type",  stashed.subType } } );
 
                     if( std::isfinite( stashed.frequency ) )
                         cursor_js["frequency"] = stashed.frequency;
@@ -3273,11 +3281,12 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
             double min, max;
 
             // json serializes a non-finite double as null, which would poison the load
-            auto saveScale = [&]( const char* aKey, double aMin, double aMax )
-            {
-                if( std::isfinite( aMin ) && std::isfinite( aMax ) )
-                    tab_js[aKey] = nlohmann::json( { { "min", aMin }, { "max", aMax } } );
-            };
+            auto saveScale =
+                    [&]( const char* aKey, double aMin, double aMax )
+                    {
+                        if( std::isfinite( aMin ) && std::isfinite( aMax ) )
+                            tab_js[aKey] = nlohmann::json( { { "min", aMin }, { "max", aMax } } );
+                    };
 
             if( plotTab->GetY1Scale( &min, &max ) )
                 saveScale( "fixedY1scale", min, max );
@@ -3314,7 +3323,7 @@ bool SIMULATOR_FRAME_UI::SaveWorkbook( const wxString& aPath )
     nlohmann::json js = nlohmann::json( { { "version",              8 },
                                           { "tabs",                 tabs_js },
                                           { "user_defined_signals", userDefinedSignals_js },
-                                          { "custom_cursors",        m_customCursorsCnt - 1 } } ); // Since we start +1 on init
+                                          { "custom_cursors",       m_customCursorsCnt - 1 } } ); // Since we start +1 on init
     // clang-format on
 
     // Store the value of any simulation command found on the schematic sheet in a SCH_TEXT
@@ -3503,15 +3512,16 @@ void SIMULATOR_FRAME_UI::ToggleSmithChart()
     }
 
     // a transmission S-parameter (S_i_j, i != j) is not an impedance, drop it from the chart
-    auto isReflection = []( const wxString& aName ) -> bool
-    {
-        long response, drive;
+    auto isReflection =
+            []( const wxString& aName ) -> bool
+            {
+                long response, drive;
 
-        if( SMITH_MATH::ParseSParamPorts( aName, &response, &drive ) )
-            return response == drive;
+                if( SMITH_MATH::ParseSParamPorts( aName, &response, &drive ) )
+                    return response == drive;
 
-        return true;
-    };
+                return true;
+            };
 
     std::vector<SMITH_STASHED_TRACE>&  stashedTraces = plotTab->SmithStashedTraces();
     std::vector<SMITH_STASHED_CURSOR>& stashedCursors = plotTab->SmithStashedCursors();
@@ -3605,38 +3615,39 @@ void SIMULATOR_FRAME_UI::ToggleSmithChart()
     }
     else
     {
-        auto findStashed = [&]( int aId, const wxString& aVectorName ) -> const SMITH_STASHED_CURSOR*
-        {
-            for( const SMITH_STASHED_CURSOR& stashed : stashedCursors )
-            {
-                if( stashed.id == aId && stashed.vectorName == aVectorName )
-                    return &stashed;
-            }
-
-            return nullptr;
-        };
-
-        auto restoreCursor = [&]( int aId, const wxString& aVectorName, int aBaseType, int aSubType,
-                                  double aFreq ) -> bool
-        {
-            int wantSubType = aSubType == SPT_AC_PHASE ? SPT_AC_PHASE : SPT_SP_AMP;
-
-            if( TRACE* trace = plotTab->GetTrace( aVectorName, aBaseType | wantSubType ) )
-            {
-                plotTab->EnableCursor( trace, aId, trace->GetName() );
-
-                // a stash entry without a usable frequency keeps the default placement
-                if( std::isfinite( aFreq ) )
+        auto findStashed =
+                [&]( int aId, const wxString& aVectorName ) -> const SMITH_STASHED_CURSOR*
                 {
-                    if( CURSOR* cursor = trace->GetCursor( aId ) )
-                        cursor->SetCoordX( aFreq );
-                }
+                    for( const SMITH_STASHED_CURSOR& stashed : stashedCursors )
+                    {
+                        if( stashed.id == aId && stashed.vectorName == aVectorName )
+                            return &stashed;
+                    }
 
-                return true;
-            }
+                    return nullptr;
+                };
 
-            return false;
-        };
+        auto restoreCursor =
+                [&]( int aId, const wxString& aVectorName, int aBaseType, int aSubType, double aFreq ) -> bool
+                {
+                    int wantSubType = aSubType == SPT_AC_PHASE ? SPT_AC_PHASE : SPT_SP_AMP;
+
+                    if( TRACE* trace = plotTab->GetTrace( aVectorName, aBaseType | wantSubType ) )
+                    {
+                        plotTab->EnableCursor( trace, aId, trace->GetName() );
+
+                        // a stash entry without a usable frequency keeps the default placement
+                        if( std::isfinite( aFreq ) )
+                        {
+                            if( CURSOR* cursor = trace->GetCursor( aId ) )
+                                cursor->SetCoordX( aFreq );
+                        }
+
+                        return true;
+                    }
+
+                    return false;
+                };
 
         std::vector<int> restoredIds;
 
@@ -3962,52 +3973,54 @@ void SIMULATOR_FRAME_UI::updatePlotCursors()
     wxString cursor2Name;
     wxString cursor2Units;
 
-    auto getUnitsY = [&]( TRACE* aTrace ) -> wxString
-    {
-        // a smith cursor's y is the reflection coefficient magnitude, unitless
-        if( aTrace->GetType() & SPT_SP_SMITH )
-            return wxString();
+    auto getUnitsY =
+            [&]( TRACE* aTrace ) -> wxString
+            {
+                // a smith cursor's y is the reflection coefficient magnitude, unitless
+                if( aTrace->GetType() & SPT_SP_SMITH )
+                    return wxString();
 
-        if( plotTab->GetSimType() == ST_AC )
-        {
-            if( aTrace->GetType() & SPT_AC_PHASE )
-                return plotTab->GetUnitsY2();
-            else
-                return plotTab->GetUnitsY1();
-        }
-        else
-        {
-            if( aTrace->GetType() & SPT_POWER )
-                return plotTab->GetUnitsY3();
-            else if( aTrace->GetType() & SPT_CURRENT )
-                return plotTab->GetUnitsY2();
-            else
-                return plotTab->GetUnitsY1();
-        }
-    };
+                if( plotTab->GetSimType() == ST_AC )
+                {
+                    if( aTrace->GetType() & SPT_AC_PHASE )
+                        return plotTab->GetUnitsY2();
+                    else
+                        return plotTab->GetUnitsY1();
+                }
+                else
+                {
+                    if( aTrace->GetType() & SPT_POWER )
+                        return plotTab->GetUnitsY3();
+                    else if( aTrace->GetType() & SPT_CURRENT )
+                        return plotTab->GetUnitsY2();
+                    else
+                        return plotTab->GetUnitsY1();
+                }
+            };
 
-    auto getNameY = [&]( TRACE* aTrace ) -> wxString
-    {
-        if( aTrace->GetType() & SPT_SP_SMITH )
-            return _( "Refl. Coeff." );
+    auto getNameY =
+            [&]( TRACE* aTrace ) -> wxString
+            {
+                if( aTrace->GetType() & SPT_SP_SMITH )
+                    return _( "Refl. Coeff." );
 
-        if( plotTab->GetSimType() == ST_AC )
-        {
-            if( aTrace->GetType() & SPT_AC_PHASE )
-                return plotTab->GetLabelY2();
-            else
-                return plotTab->GetLabelY1();
-        }
-        else
-        {
-            if( aTrace->GetType() & SPT_POWER )
-                return plotTab->GetLabelY3();
-            else if( aTrace->GetType() & SPT_CURRENT )
-                return plotTab->GetLabelY2();
-            else
-                return plotTab->GetLabelY1();
-        }
-    };
+                if( plotTab->GetSimType() == ST_AC )
+                {
+                    if( aTrace->GetType() & SPT_AC_PHASE )
+                        return plotTab->GetLabelY2();
+                    else
+                        return plotTab->GetLabelY1();
+                }
+                else
+                {
+                    if( aTrace->GetType() & SPT_POWER )
+                        return plotTab->GetLabelY3();
+                    else if( aTrace->GetType() & SPT_CURRENT )
+                        return plotTab->GetLabelY2();
+                    else
+                        return plotTab->GetLabelY1();
+                }
+            };
 
     auto formatValue =
             [this]( double aValue, int aCursorId, int aCol ) -> wxString
@@ -4592,31 +4605,32 @@ SIMULATOR_FRAME_UI::calculateMultiRunSteps( const std::vector<TUNER_SLIDER*>& aT
 
     std::vector<double> currentValues( aTuners.size(), 0.0 );
 
-    auto generate = [&]( auto&& self, size_t depth ) -> void
-    {
-        if( steps.size() >= static_cast<size_t>( limit ) )
-            return;
+    auto generate =
+            [&]( auto&& self, size_t depth ) -> void
+            {
+                if( steps.size() >= static_cast<size_t>( limit ) )
+                    return;
 
-        if( depth == aTuners.size() )
-        {
-            MULTI_RUN_STEP step;
+                if( depth == aTuners.size() )
+                {
+                    MULTI_RUN_STEP step;
 
-            for( size_t ii = 0; ii < aTuners.size(); ++ii )
-                step.overrides.emplace( aTuners[ii], currentValues[ii] );
+                    for( size_t ii = 0; ii < aTuners.size(); ++ii )
+                        step.overrides.emplace( aTuners[ii], currentValues[ii] );
 
-            steps.push_back( std::move( step ) );
-            return;
-        }
+                    steps.push_back( std::move( step ) );
+                    return;
+                }
 
-        for( double value : tunerValues[depth] )
-        {
-            currentValues[depth] = value;
-            self( self, depth + 1 );
+                for( double value : tunerValues[depth] )
+                {
+                    currentValues[depth] = value;
+                    self( self, depth + 1 );
 
-            if( steps.size() >= static_cast<size_t>( limit ) )
-                return;
-        }
-    };
+                    if( steps.size() >= static_cast<size_t>( limit ) )
+                        return;
+                }
+            };
 
     generate( generate, 0 );
 
