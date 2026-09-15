@@ -33,13 +33,14 @@
 # Deleted User <noreply+108163@weblate.org>, 2026.
 # temizinsan <temizinsan@protonmail.com>, 2026.
 # "H. Selim Serdar" <selimserdar2002@gmail.com>, 2026.
+# Mert Şişmanoğlu <me@mertsismanoglu.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-07-11 12:01+0000\n"
-"Last-Translator: \"H. Selim Serdar\" <selimserdar2002@gmail.com>\n"
+"PO-Revision-Date: 2026-09-16 07:51+0000\n"
+"Last-Translator: Mert Şişmanoğlu <me@mertsismanoglu.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
 "source/tr/>\n"
 "Language: tr\n"
@@ -47,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:54
 #: common/dialogs/panel_embedded_files.cpp:379
@@ -3709,7 +3710,7 @@ msgstr "Yol Bul"
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
 msgid "No git repository available."
-msgstr "Git reposu mevcut değil"
+msgstr "Git reposu mevcut değil."
 
 #: common/dialogs/dialog_git_mr_review.cpp:92
 #: common/dialogs/dialog_git_mr_review.cpp:103
@@ -21853,9 +21854,9 @@ msgstr ""
 "KiCad dışı şematik dosyaları için Dosya -> İçeri Aktar seçeneğini kullanın."
 
 #: eeschema/files-io.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a recognised schematic format."
-msgstr " tanınan bir matris türü değil."
+msgstr "'%s' tanınan bir şematik biçimi değil."
 
 #: eeschema/files-io.cpp:403
 msgid ""
@@ -58381,9 +58382,9 @@ msgid "Unknown Allegro file version %#010x (rev %d)"
 msgstr ""
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown board units %d"
-msgstr "Bilinmeyen kutup "
+msgstr "Bilinmeyen kart birimleri %d"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2691
 msgid "Parsing Allegro objects"
