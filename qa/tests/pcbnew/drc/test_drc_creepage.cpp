@@ -25,6 +25,7 @@
  * GND netclasses, but the actual surface distance is ~3.25mm.
  */
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 
@@ -160,9 +161,9 @@ BOOST_FIXTURE_TEST_CASE( CreepageMalformedEdge, DRC_CREEPAGE_TEST_FIXTURE )
  */
 BOOST_FIXTURE_TEST_CASE( CreepageIgnoresRuleAreas, DRC_CREEPAGE_TEST_FIXTURE )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tmpDir( "kicad_creepage_rule_area", "" );
+    KI_TEST::SCOPED_TEMP_DIR tmpDir( "kicad_creepage_rule_area" );
 
-    const std::filesystem::path rulePath = tmpDir.GetPath() / "creepage_rule_area.kicad_dru";
+    const std::filesystem::path rulePath = tmpDir.Path() / "creepage_rule_area.kicad_dru";
 
     {
         std::ofstream ruleFile( rulePath );

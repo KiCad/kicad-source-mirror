@@ -26,6 +26,7 @@
 #include <string>
 #include <thread>
 
+#include <qa_utils/file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -763,8 +764,8 @@ BOOST_AUTO_TEST_CASE( CopperThievingZone_RejectedInOldFileVersion )
 
 BOOST_AUTO_TEST_CASE( MalformedDimensionTextThrowsCleanly )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tempDir( "kicad_qa_malformed_dimension_text_", "" );
-    std::filesystem::path        tmpPath = tempDir.GetPath() / "malformed_dimension_text.kicad_pcb";
+    KI_TEST::SCOPED_TEMP_DIR     tempDir( "kicad_qa_malformed_dimension_text" );
+    std::filesystem::path        tmpPath = tempDir.Path() / "malformed_dimension_text.kicad_pcb";
     std::ofstream         out( tmpPath );
     out << "(kicad_pcb (version 20240108) (generator \"test\")"
         << " (general (thickness 1.6)) (paper \"A4\")"
@@ -829,8 +830,8 @@ BOOST_AUTO_TEST_CASE( CopperThievingZone_RejectsMalformedGeometry )
  */
 BOOST_AUTO_TEST_CASE( Issue24955_AppendDoesNotInheritSessionZoneDefaults )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tempDir( "kicad_qa_zone_defaults_append_", "" );
-    std::filesystem::path        tmpPath = tempDir.GetPath() / "thermal_zone_block.kicad_pcb";
+    KI_TEST::SCOPED_TEMP_DIR     tempDir( "kicad_qa_zone_defaults_append" );
+    std::filesystem::path        tmpPath = tempDir.Path() / "thermal_zone_block.kicad_pcb";
     std::ofstream                out( tmpPath );
 
     // Two zones, first with every omitted-when-default token left out (thermal, polygon

@@ -26,6 +26,7 @@
  * Test suite for import of EasyEDA Pro v3 PCB files
  */
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
@@ -115,11 +116,11 @@ BOOST_AUTO_TEST_CASE( FootprintLibraryEnumeratesAndLoadsElibz2 )
 BOOST_AUTO_TEST_CASE( BoardLoadImportsInnerLayers )
 {
     // Import from a private copy so a stray write lands here rather than in the shared test data
-    KI_TEST::TEMPORARY_DIRECTORY tempDir( "easyedapro_v3_board_load", "" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "easyedapro_v3_board_load" );
 
     const wxString archiveName = wxS( "ProProject_LS2K0300Core_2025-11-14.epro2" );
     wxString       sourceDir = wxString::FromUTF8( KI_TEST::GetPcbnewTestDataDir() + "plugins/easyedapro/" );
-    wxString       tempDirPath = wxString::FromUTF8( tempDir.GetPath().string() );
+    const wxString tempDirPath = tempDir.PathStr();
 
     wxFileName dataFile( tempDirPath, archiveName );
     BOOST_REQUIRE( wxCopyFile( sourceDir + archiveName, dataFile.GetFullPath() ) );

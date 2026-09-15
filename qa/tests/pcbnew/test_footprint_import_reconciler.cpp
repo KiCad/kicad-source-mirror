@@ -21,6 +21,7 @@
 #include <set>
 #include <vector>
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 
@@ -77,10 +78,10 @@ wxString stageProject( const wxString& aStem )
 /// The EasyEDA Pro v3 sample board, loaded from a private copy of the archive.
 struct IMPORTED_BOARD
 {
-    std::unique_ptr<PCB_IO_EASYEDAPRO_V3>   m_plugin;
-    std::unique_ptr<BOARD>                  m_board;
-    std::vector<std::unique_ptr<FOOTPRINT>> m_definitions;
-    std::unique_ptr<KI_TEST::TEMPORARY_DIRECTORY> m_sourceDir;
+    std::unique_ptr<PCB_IO_EASYEDAPRO_V3>         m_plugin;
+    std::unique_ptr<BOARD>                        m_board;
+    std::vector<std::unique_ptr<FOOTPRINT>>       m_definitions;
+    std::unique_ptr<KI_TEST::SCOPED_TEMP_DIR>     m_sourceDir;
 };
 
 
@@ -96,10 +97,9 @@ IMPORTED_BOARD importSampleBoard( PROJECT& aProject, const std::string& aTag )
     srcFn.SetFullName( archiveName );
     BOOST_REQUIRE_MESSAGE( srcFn.FileExists(), "Missing EasyEDA Pro v3 board fixture" );
 
-    sample.m_sourceDir = std::make_unique<KI_TEST::TEMPORARY_DIRECTORY>( aTag, "" );
+    sample.m_sourceDir = std::make_unique<KI_TEST::SCOPED_TEMP_DIR>( wxString::FromUTF8( aTag ) );
 
-    wxFileName importFn( wxString::FromUTF8( sample.m_sourceDir->GetPath().string() ),
-                         archiveName );
+    wxFileName importFn( sample.m_sourceDir->PathStr(), archiveName );
     BOOST_REQUIRE( wxCopyFile( srcFn.GetFullPath(), importFn.GetFullPath() ) );
 
     std::map<std::string, UTF8> properties;
@@ -338,8 +338,7 @@ BOOST_AUTO_TEST_CASE( EasyEdaProV3BoardResolvesToGeneratedCache )
     BOARD*         board = sample.m_board.get();
 
     // the importer must not have published anything of its own beside the archive
-    wxFileName srcDir( wxString::FromUTF8( sample.m_sourceDir->GetPath().string() ),
-                       wxEmptyString );
+    wxFileName srcDir( sample.m_sourceDir->PathStr(), wxEmptyString );
     wxFileName strayLib( srcDir.GetPath(),
                          EASYEDAPRO::ShortenLibName( wxS( "ProProject_LS2K0300Core_2025-11-14" ) ),
                          wxString( FILEEXT::KiCadFootprintLibPathExtension ) );

@@ -1,3 +1,4 @@
+#include <qa_utils/file_utils.h>
 #include <boost/test/unit_test.hpp>
 #include <footprint.h>
 #include <pcbnew_utils/board_file_utils.h>
@@ -23,8 +24,9 @@ BOOST_AUTO_TEST_CASE( FullRoundTrip )
     body.m_rotation = VECTOR3D( 10.0, 20.0, 45.0 );
     body.m_show = false;
 
-    KI_TEST::TEMPORARY_DIRECTORY tempLib( "kicad_qa_extruded_body_roundtrip", ".pretty" );
-    const auto savePath = tempLib.GetPath() / "extruded_body_roundtrip.kicad_mod";
+    KI_TEST::SCOPED_TEMP_DIR tempLib( "kicad_qa_extruded_body_roundtrip" );
+    const auto libPath = tempLib.CreateChildDir( "extruded_body_roundtrip.pretty" );
+    const auto savePath = libPath / "extruded_body_roundtrip.kicad_mod";
     KI_TEST::DumpFootprintToFile( footprint, savePath.string() );
 
     std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
@@ -64,8 +66,9 @@ BOOST_AUTO_TEST_CASE( DefaultsRoundTrip )
     body.m_height = pcbIUScale.mmToIU( 5.0 );
     // Leave everything else at defaults
 
-    KI_TEST::TEMPORARY_DIRECTORY tempLib( "kicad_qa_extruded_body_defaults_roundtrip", ".pretty" );
-    const auto savePath = tempLib.GetPath() / "extruded_body_defaults_roundtrip.kicad_mod";
+    KI_TEST::SCOPED_TEMP_DIR tempLib( "kicad_qa_extruded_body_defaults_roundtrip" );
+    const auto libPath = tempLib.CreateChildDir( "extruded_body_defaults_roundtrip.pretty" );
+    const auto savePath = libPath / "extruded_body_defaults_roundtrip.kicad_mod";
     KI_TEST::DumpFootprintToFile( footprint, savePath.string() );
 
     std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
@@ -98,8 +101,9 @@ BOOST_AUTO_TEST_CASE( NoExtrudedBodyRoundTrip )
 
     FOOTPRINT footprint( nullptr );
 
-    KI_TEST::TEMPORARY_DIRECTORY tempLib( "kicad_qa_extruded_body_none_roundtrip", ".pretty" );
-    const auto savePath = tempLib.GetPath() / "extruded_body_none_roundtrip.kicad_mod";
+    KI_TEST::SCOPED_TEMP_DIR tempLib( "kicad_qa_extruded_body_none_roundtrip" );
+    const auto libPath = tempLib.CreateChildDir( "extruded_body_none_roundtrip.pretty" );
+    const auto savePath = libPath / "extruded_body_none_roundtrip.kicad_mod";
     KI_TEST::DumpFootprintToFile( footprint, savePath.string() );
 
     std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );

@@ -19,6 +19,7 @@
 
 #include <filesystem>
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <boost/test/unit_test.hpp>
 
@@ -52,8 +53,8 @@ BOOST_AUTO_TEST_CASE( BarcodeWriteRead )
 
     board->Add( barcode, ADD_MODE::APPEND, true );
 
-    KI_TEST::TEMPORARY_DIRECTORY tempDir( "kicad_qa_barcode_roundtrip", "" );
-    const std::filesystem::path  savePath = tempDir.GetPath() / "barcode_roundtrip.kicad_pcb";
+    KI_TEST::SCOPED_TEMP_DIR    tempDir( "kicad_qa_barcode_roundtrip" );
+    const std::filesystem::path savePath = tempDir.Path() / "barcode_roundtrip.kicad_pcb";
 
     KI_TEST::DumpBoardToFile( *board, savePath.string() );
     std::unique_ptr<BOARD> board2 = KI_TEST::ReadBoardFromFileOrStream( savePath.string() );
@@ -93,8 +94,9 @@ BOOST_AUTO_TEST_CASE( BarcodeFootprintWriteRead )
 
     // Saving a footprint validates its whole containing directory as a library, so use a private
     // temp directory rather than littering (and reading stray files from) the system temp root.
-    KI_TEST::TEMPORARY_DIRECTORY tempLib( "kicad_qa_barcode_roundtrip", ".pretty" );
-    const std::filesystem::path  savePath = tempLib.GetPath() / "barcode_roundtrip.kicad_mod";
+    KI_TEST::SCOPED_TEMP_DIR    tempLib( "kicad_qa_barcode_roundtrip" );
+    const std::filesystem::path libPath = tempLib.CreateChildDir( "barcode_roundtrip.pretty" );
+    const std::filesystem::path savePath = libPath / "barcode_roundtrip.kicad_mod";
 
     KI_TEST::DumpFootprintToFile( footprint, savePath.string() );
     std::unique_ptr<FOOTPRINT> footprint2 = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
@@ -336,5 +338,3 @@ BOOST_AUTO_TEST_CASE( BarcodeCode39UndefinedVariable )
     // This is expected behavior - invalid characters cause encoding to fail
     BOOST_CHECK_EQUAL( barcode->GetSymbolPoly().OutlineCount(), 0 );
 }
-
-

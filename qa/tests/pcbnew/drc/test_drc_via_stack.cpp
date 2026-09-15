@@ -22,6 +22,7 @@
 
 #include <wx/filename.h>
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_file_utils.h>
 
@@ -59,14 +60,14 @@ struct VIA_STACK_DRC_FIXTURE
     wxFileName m_rulePath;
 
     // The temp dir has to outlive run(), so it is kept here rather than in each test.
-    std::unique_ptr<KI_TEST::TEMPORARY_DIRECTORY> m_ruleDir;
+    std::unique_ptr<KI_TEST::SCOPED_TEMP_DIR> m_ruleDir;
 
     // The limits these checks read come from rules, so a test states them the way a user would.
     void setRule( const std::string& aConstraint, const std::string& aCondition = "" )
     {
-        m_ruleDir = std::make_unique<KI_TEST::TEMPORARY_DIRECTORY>( "microvia_rule", "" );
+        m_ruleDir = std::make_unique<KI_TEST::SCOPED_TEMP_DIR>( "microvia_rule" );
 
-        wxFileName rulePath( m_ruleDir->GetPath().string(), "test.kicad_dru" );
+        wxFileName rulePath( m_ruleDir->PathStr(), "test.kicad_dru" );
 
         {
             std::ofstream dru( rulePath.GetFullPath().ToStdString() );

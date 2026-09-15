@@ -43,6 +43,7 @@
 #include <string>
 #include <vector>
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <board.h>
@@ -142,11 +143,11 @@ BOOST_AUTO_TEST_CASE( SaveScalesLinearlyWithGroupCount )
 {
     constexpr std::size_t kTotalShapes = 5000;
 
-    KI_TEST::TEMPORARY_DIRECTORY tempDir( "group_save_perf", "" );
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "group_save_perf" );
 
     // Warm up the save path (allocators, formatter, disk cache) so the first
     // measurement is not dominated by one-shot setup costs.
-    (void) saveBoardSeconds( tempDir.GetPath(), 10, 100 );
+    (void) saveBoardSeconds( tempDir.Path(), 10, 100 );
 
     // Take the best of two runs per configuration so a scheduler stall during
     // a single save cannot fail the test on a loaded CI machine.
@@ -157,7 +158,7 @@ BOOST_AUTO_TEST_CASE( SaveScalesLinearlyWithGroupCount )
 
                 for( int run = 0; run < 2; ++run )
                 {
-                    best = std::min( best, saveBoardSeconds( tempDir.GetPath(), aGroupCount,
+                    best = std::min( best, saveBoardSeconds( tempDir.Path(), aGroupCount,
                                                              kTotalShapes ) );
                 }
 

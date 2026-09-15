@@ -31,6 +31,7 @@
 #include <unistd.h>
 #endif
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 
@@ -143,13 +144,14 @@ BOOST_AUTO_TEST_CASE( SaveFootprintReadOnlyFilePropagatesError )
 
     // FootprintSave validates the whole containing directory as a library, so it needs a
     // private directory no unrelated .kicad_mod can pollute.
-    KI_TEST::TEMPORARY_DIRECTORY tmpLib( "kicad_qa_adapter_save_readonly", ".pretty" );
+    KI_TEST::SCOPED_TEMP_DIR    tmpLib( "kicad_qa_adapter_save_readonly" );
+    const std::filesystem::path libPath = tmpLib.CreateChildDir( "kicad_qa_adapter_save_readonly.pretty" );
 
     LIBRARY_MANAGER                manager;
     TEST_FOOTPRINT_LIBRARY_ADAPTER adapter( manager );
 
     const wxString nickname = wxS( "scratch" );
-    adapter.SeedLoadedLibrary( nickname, tmpLib.GetPath().string() );
+    adapter.SeedLoadedLibrary( nickname, libPath.string() );
 
     std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
 
@@ -159,11 +161,11 @@ BOOST_AUTO_TEST_CASE( SaveFootprintReadOnlyFilePropagatesError )
 
     BOOST_REQUIRE( adapter.SaveFootprint( nickname, fp ) == FOOTPRINT_LIBRARY_ADAPTER::SAVE_OK );
 
-    auto savedFile = tmpLib.GetPath() / "readonly_fp.kicad_mod";
+    std::filesystem::path savedFile = libPath / "readonly_fp.kicad_mod";
     BOOST_REQUIRE( std::filesystem::exists( savedFile ) );
 
     // Mark only the file read-only, mirroring the issue; the directory stays writable so the
-    // writability gate still passes and TEMPORARY_DIRECTORY can unlink it.
+    // writability gate still passes and the temporary directory can unlink it.
     std::filesystem::permissions( savedFile,
                                   std::filesystem::perms::owner_write | std::filesystem::perms::group_write
                                           | std::filesystem::perms::others_write,
@@ -178,20 +180,21 @@ BOOST_AUTO_TEST_CASE( SaveFootprintReadOnlyFilePropagatesError )
 BOOST_AUTO_TEST_CASE( ConcurrentPluginAccessIsSerialized )
 {
     // Writable copy so the writer can churn the library and force concurrent cache rebuilds.
-    KI_TEST::TEMPORARY_DIRECTORY tmpLib( "kicad_qa_adapter_concurrent", ".pretty" );
+    KI_TEST::SCOPED_TEMP_DIR    tmpLib( "kicad_qa_adapter_concurrent" );
+    const std::filesystem::path libPath = tmpLib.CreateChildDir( "kicad_qa_adapter_concurrent.pretty" );
 
     for( const auto& entry : std::filesystem::directory_iterator(
                  std::filesystem::path( getResistorLibPath().ToStdString() ) ) )
     {
         if( entry.is_regular_file() )
-            std::filesystem::copy_file( entry.path(), tmpLib.GetPath() / entry.path().filename() );
+            std::filesystem::copy_file( entry.path(), libPath / entry.path().filename() );
     }
 
     LIBRARY_MANAGER                manager;
     TEST_FOOTPRINT_LIBRARY_ADAPTER adapter( manager );
 
     const wxString nickname = wxS( "Resistor_SMD" );
-    adapter.SeedLoadedLibrary( nickname, tmpLib.GetPath().string() );
+    adapter.SeedLoadedLibrary( nickname, libPath.string() );
 
     // Readers probe this; the writer only writes scratch names, so it always resolves.
     const wxString stableFp = wxS( "R_0603_1608Metric" );
@@ -291,33 +294,35 @@ BOOST_AUTO_TEST_CASE( ConcurrentPluginAccessIsSerialized )
 
 BOOST_AUTO_TEST_CASE( RefreshChangedLibrariesPicksUpExternalAddition )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tmpLib( "kicad_qa_adapter_stale", ".pretty" );
-    KI_TEST::TEMPORARY_DIRECTORY tmpTable( "kicad_qa_adapter_stale_table", "" );
+    KI_TEST::SCOPED_TEMP_DIR tmpLib( "kicad_qa_adapter_stale" );
+    KI_TEST::SCOPED_TEMP_DIR tmpTable( "kicad_qa_adapter_stale_table" );
+
+    const std::filesystem::path libPath = tmpLib.CreateChildDir( "kicad_qa_adapter_stale.pretty" );
 
     const std::filesystem::path source =
             std::filesystem::path( getResistorLibPath().ToStdString() ) / "R_0402_1005Metric.kicad_mod";
 
-    std::filesystem::copy_file( source, tmpLib.GetPath() / "R_0402_1005Metric.kicad_mod" );
+    std::filesystem::copy_file( source, libPath / "R_0402_1005Metric.kicad_mod" );
 
     const wxString nickname = wxS( "StaleCheck" );
 
     {
-        std::ofstream table( tmpTable.GetPath() / "fp-lib-table" );
+        std::ofstream table( tmpTable.Path() / "fp-lib-table" );
         table << "(fp_lib_table\n  (version 7)\n";
         table << "  (lib (name \"" << nickname.ToStdString() << "\")(type \"KiCad\")(uri \""
-              << tmpLib.GetPath().string() << "\")(options \"\")(descr \"\"))\n)\n";
+              << libPath.string() << "\")(options \"\")(descr \"\"))\n)\n";
     }
 
     LIBRARY_MANAGER manager;
-    manager.LoadProjectTables( wxString( tmpTable.GetPath().string() ), { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+    manager.LoadProjectTables( tmpTable.PathStr(), { LIBRARY_TABLE_TYPE::FOOTPRINT } );
 
     TEST_FOOTPRINT_LIBRARY_ADAPTER adapter( manager );
-    adapter.SeedLoadedLibrary( nickname, tmpLib.GetPath().string() );
+    adapter.SeedLoadedLibrary( nickname, libPath.string() );
 
     adapter.RefreshLibraryIfChanged( nickname );
     BOOST_REQUIRE_EQUAL( adapter.GetFootprints( nickname, true ).size(), 1u );
 
-    std::filesystem::copy_file( source, tmpLib.GetPath() / "ZZ_PulledFootprint.kicad_mod" );
+    std::filesystem::copy_file( source, libPath / "ZZ_PulledFootprint.kicad_mod" );
 
     adapter.RefreshChangedLibraries();
 
@@ -335,38 +340,43 @@ BOOST_AUTO_TEST_CASE( RefreshChangedLibrariesPicksUpExternalAddition )
 
 BOOST_AUTO_TEST_CASE( RefreshChangedLibrariesSkipsUnchangedLibraries )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tmpA( "kicad_qa_adapter_skip_a", ".pretty" );
-    KI_TEST::TEMPORARY_DIRECTORY tmpB( "kicad_qa_adapter_skip_b", ".pretty" );
-    KI_TEST::TEMPORARY_DIRECTORY tmpTable( "kicad_qa_adapter_skip_table", "" );
+    KI_TEST::SCOPED_TEMP_DIR tmpA( "kicad_qa_adapter_skip_a" );
+    KI_TEST::SCOPED_TEMP_DIR tmpB( "kicad_qa_adapter_skip_b" );
+    KI_TEST::SCOPED_TEMP_DIR tmpTable( "kicad_qa_adapter_skip_table" );
+
+    const std::filesystem::path libPathA = tmpA.CreateChildDir( "kicad_qa_adapter_skip_a.pretty" );
+    const std::filesystem::path libPathB = tmpB.CreateChildDir( "kicad_qa_adapter_skip_b.pretty" );
 
     const std::filesystem::path source =
             std::filesystem::path( getResistorLibPath().ToStdString() ) / "R_0402_1005Metric.kicad_mod";
 
-    std::filesystem::copy_file( source, tmpA.GetPath() / "R_0402_1005Metric.kicad_mod" );
+    std::filesystem::copy_file( source, libPathA / "R_0402_1005Metric.kicad_mod" );
 
     for( int i = 0; i < 8; ++i )
     {
-        std::filesystem::copy_file( source, tmpB.GetPath() / ( "R_" + std::to_string( i ) + ".kicad_mod" ) );
+        std::filesystem::copy_file( source, libPathB / ( "R_" + std::to_string( i ) + ".kicad_mod" ) );
     }
 
     const wxString nickA = wxS( "SkipCheckA" );
     const wxString nickB = wxS( "SkipCheckB" );
 
+    const std::filesystem::path tablePath = tmpTable.Path() / "fp-lib-table";
+
     {
-        std::ofstream table( tmpTable.GetPath() / "fp-lib-table" );
+        std::ofstream table( tablePath );
         table << "(fp_lib_table\n  (version 7)\n";
-        table << "  (lib (name \"" << nickA.ToStdString() << "\")(type \"KiCad\")(uri \"" << tmpA.GetPath().string()
+        table << "  (lib (name \"" << nickA.ToStdString() << "\")(type \"KiCad\")(uri \"" << libPathA.string()
               << "\")(options \"\")(descr \"\"))\n";
-        table << "  (lib (name \"" << nickB.ToStdString() << "\")(type \"KiCad\")(uri \"" << tmpB.GetPath().string()
+        table << "  (lib (name \"" << nickB.ToStdString() << "\")(type \"KiCad\")(uri \"" << libPathB.string()
               << "\")(options \"\")(descr \"\"))\n)\n";
     }
 
     LIBRARY_MANAGER manager;
-    manager.LoadProjectTables( wxString( tmpTable.GetPath().string() ), { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+    manager.LoadProjectTables( tmpTable.PathStr(), { LIBRARY_TABLE_TYPE::FOOTPRINT } );
 
     TEST_FOOTPRINT_LIBRARY_ADAPTER adapter( manager );
-    adapter.SeedLoadedLibrary( nickA, tmpA.GetPath().string() );
-    adapter.SeedLoadedLibrary( nickB, tmpB.GetPath().string() );
+    adapter.SeedLoadedLibrary( nickA, libPathA.string() );
+    adapter.SeedLoadedLibrary( nickB, libPathB.string() );
 
     adapter.RefreshLibraryIfChanged( nickA );
     adapter.RefreshLibraryIfChanged( nickB );
@@ -378,7 +388,7 @@ BOOST_AUTO_TEST_CASE( RefreshChangedLibrariesSkipsUnchangedLibraries )
     // address could be reused by chance, a whole vector of them could not.
     std::vector<FOOTPRINT*> untouched = adapter.GetFootprints( nickB, true );
 
-    std::filesystem::copy_file( source, tmpA.GetPath() / "ZZ_Added.kicad_mod" );
+    std::filesystem::copy_file( source, libPathA / "ZZ_Added.kicad_mod" );
 
     adapter.RefreshChangedLibraries();
 
@@ -394,12 +404,14 @@ BOOST_AUTO_TEST_CASE( RefreshChangedLibrariesSkipsUnchangedLibraries )
  */
 BOOST_AUTO_TEST_CASE( EditorRoundTripKeepsFileUuids )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tmpLib( "kicad_qa_adapter_rt", ".pretty" );
-    KI_TEST::TEMPORARY_DIRECTORY tmpTable( "kicad_qa_adapter_rt_table", "" );
+    KI_TEST::SCOPED_TEMP_DIR tmpLib( "kicad_qa_adapter_rt" );
+    KI_TEST::SCOPED_TEMP_DIR tmpTable( "kicad_qa_adapter_rt_table" );
+
+    const std::filesystem::path libPath = tmpLib.CreateChildDir( "kicad_qa_adapter_rt.pretty" );
 
     const std::filesystem::path source =
             std::filesystem::path( getResistorLibPath().ToStdString() ) / "R_0402_1005Metric.kicad_mod";
-    const std::filesystem::path target = tmpLib.GetPath() / "R_0402_1005Metric.kicad_mod";
+    const std::filesystem::path target = libPath / "R_0402_1005Metric.kicad_mod";
 
     std::filesystem::copy_file( source, target );
 
@@ -407,10 +419,10 @@ BOOST_AUTO_TEST_CASE( EditorRoundTripKeepsFileUuids )
     const wxString fpName = wxS( "R_0402_1005Metric" );
 
     {
-        std::ofstream table( tmpTable.GetPath() / "fp-lib-table" );
+        std::ofstream table( tmpTable.Path() / "fp-lib-table" );
         table << "(fp_lib_table\n  (version 7)\n";
         table << "  (lib (name \"" << nickname.ToStdString() << "\")(type \"KiCad\")(uri \""
-              << tmpLib.GetPath().string() << "\")(options \"\")(descr \"\"))\n)\n";
+              << libPath.string() << "\")(options \"\")(descr \"\"))\n)\n";
     }
 
     auto fileUuids =
@@ -434,10 +446,10 @@ BOOST_AUTO_TEST_CASE( EditorRoundTripKeepsFileUuids )
     const std::set<std::string> before = fileUuids( target );
 
     LIBRARY_MANAGER manager;
-    manager.LoadProjectTables( wxString( tmpTable.GetPath().string() ), { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+    manager.LoadProjectTables( tmpTable.PathStr(), { LIBRARY_TABLE_TYPE::FOOTPRINT } );
 
     TEST_FOOTPRINT_LIBRARY_ADAPTER adapter( manager );
-    adapter.SeedLoadedLibrary( nickname, tmpLib.GetPath().string() );
+    adapter.SeedLoadedLibrary( nickname, libPath.string() );
 
     // Populates the preloaded-footprint cache the editor then loads through
     adapter.RefreshLibraryIfChanged( nickname );
