@@ -140,7 +140,13 @@ bool FOOTPRINT_EDIT_FRAME::BeginNewFootprint( const wxString& aLibrary )
 {
     // No tab strip or target library to key a tab on, so use the legacy single-board clear.
     if( aLibrary.IsEmpty() )
-        return Clear_Pcb( true );
+    {
+        if( !HandleUnsavedChanges( false ) )
+            return false;
+
+        Clear_Pcb();
+        return true;
+    }
 
     // The new footprint opens in its own tab. Only a dirty tab-less frame board needs saving.
     if( !activeBoardOwnedByTab() && IsContentModified() )

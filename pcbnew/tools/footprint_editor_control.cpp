@@ -265,19 +265,6 @@ int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
 {
     LIB_ID selected = m_frame->GetLibTree()->GetSelectedLibId();
 
-    if( m_frame->IsContentModified() )
-    {
-        if( !HandleUnsavedChanges( m_frame, _( "The current footprint has been modified.  "
-                                               "Save changes?" ),
-                                   [&]() -> bool
-                                   {
-                                       return m_frame->SaveFootprint( footprint() );
-                                   } ) )
-        {
-            return 0;
-        }
-    }
-
     if( KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_FOOTPRINT_WIZARD, true, m_frame ) )
     {
         FOOTPRINT_WIZARD_FRAME* wizard = static_cast<FOOTPRINT_WIZARD_FRAME*>( frame );
@@ -289,9 +276,7 @@ int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
 
             if( newFootprint )    // i.e. if create footprint command is OK
             {
-                // TODO: why are we clearing all the other tabs here?
-                // And we're doing it without asking user if they want to save changes....
-                m_frame->Clear_Pcb( false );
+                m_frame->BeginNewFootprint( selected.GetLibNickname() );
 
                 canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
                 //  Add the new object to board

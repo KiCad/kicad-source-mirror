@@ -104,36 +104,15 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges, bool aFinal )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges )
+void FOOTPRINT_EDIT_FRAME::Clear_Pcb()
 {
     if( GetBoard() == nullptr )
-        return false;
+        return;
 
-    bool is_last_fp_from_brd = IsCurrentFPFromBoard();
-
-    if( doAskAboutUnsavedChanges && IsContentModified() )
-    {
-        wxSafeYield( this, true );      // Allow frame to come to front before showing warning.
-
-        if( !HandleUnsavedChanges(
-                    this, _( "The current footprint has been modified.  Save changes?" ),
-                    [&]() -> bool
-                    {
-                        return SaveFootprint( GetBoard()->Footprints().front() );
-                    } ) )
-        {
-            return false;
-        }
-    }
-
-    if( is_last_fp_from_brd )
-        m_boardFootprintUuids.clear();
+    m_boardFootprintUuids.clear();
 
     // ClearUndoRedoList frees only the wrappers, leaking the tab history's transient item copies.
-    if( m_tabsPanel )
-        freeUndoRedoCommandsWithItems( m_undoList, m_redoList );
-    else
-        ClearUndoRedoList();
+    freeUndoRedoCommandsWithItems( m_undoList, m_redoList );
 
     GetScreen()->SetContentModified( false );
 
@@ -169,15 +148,8 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges )
         // clear filename, to avoid overwriting an old file
         newBoard->SetFileName( wxEmptyString );
 
-        if( m_tabsPanel )
-        {
-            // Install newBoard before freeing the tab-owned boards so nothing aliased is deleted.
-            detachTabsForFullClear( newBoard );
-        }
-        else
-        {
-            SetBoard( newBoard );
-        }
+        // Install newBoard before freeing the tab-owned boards so nothing aliased is deleted.
+        detachTabsForFullClear( newBoard );
 
         GetScreen()->InitDataPoints( GetPageSizeIU() );
     }
@@ -186,7 +158,4 @@ bool FOOTPRINT_EDIT_FRAME::Clear_Pcb( bool doAskAboutUnsavedChanges )
         if( m_toolManager )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     }
-
-
-    return true;
 }

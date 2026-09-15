@@ -355,16 +355,16 @@ int EDITOR_TABS_PANEL::AddTab( const wxString& aKey, const wxString& aLabel, boo
 }
 
 
-void EDITOR_TABS_PANEL::CloseTab( int aIdx )
+bool EDITOR_TABS_PANEL::CloseTab( int aIdx )
 {
-    closeTabInternal( aIdx );
+    return closeTabInternal( aIdx );
 }
 
 
-void EDITOR_TABS_PANEL::closeTabInternal( int aIdx )
+bool EDITOR_TABS_PANEL::closeTabInternal( int aIdx )
 {
     if( aIdx < 0 || aIdx >= static_cast<int>( m_pageWindows.size() ) )
-        return;
+        return true;
 
     // Remember the active tab as a key, not an index, since indices shift on removal.
     const int      activeBefore = GetActiveTab();
@@ -375,7 +375,7 @@ void EDITOR_TABS_PANEL::closeTabInternal( int aIdx )
 
     // Every close entry point funnels through here so the user is prompted exactly once.
     if( onCloseTabRequested && !onCloseTabRequested( aIdx ) )
-        return;
+        return false;
 
     const wxString key = m_model.Entries()[aIdx].key;
 
@@ -396,7 +396,7 @@ void EDITOR_TABS_PANEL::closeTabInternal( int aIdx )
     if( newCount <= 0 )
     {
         m_tabs->Refresh();
-        return;
+        return true;
     }
 
     if( m_suppressActivateOnClose )
@@ -424,6 +424,7 @@ void EDITOR_TABS_PANEL::closeTabInternal( int aIdx )
     }
 
     m_tabs->Refresh();
+    return true;
 }
 
 

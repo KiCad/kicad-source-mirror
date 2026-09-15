@@ -1561,9 +1561,8 @@ void PCB_EDIT_FRAME::ResolveDRCExclusions( bool aCreateMarkers )
 bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
-    if( KIPLATFORM::APP::SupportsShutdownBlockReason()
-            && aEvent.GetId() == wxEVT_QUERY_END_SESSION
-            && IsContentModified() )
+    if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+                                                       && IsContentModified() )
     {
         return false;
     }
@@ -1592,8 +1591,16 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         // Use C-style cast due to Mac's inability to dynamic cast between compile modules
         FOOTPRINT_EDIT_FRAME* fpEditor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
 
-        if( fpEditor && !fpEditor->Close() )   // Can close footprint editor?
-            return false;
+        if( fpEditor )
+        {
+            bool cancel = !fpEditor->Close();   // Can close footprint editor?
+
+            // If fp editor had unsaved changes it will have been fronted.  Bring board editor back to front.
+            Raise();
+
+            if( cancel )
+                return false;
+        }
 
         // Use C-style cast due to Mac's inability to dynamic cast between compile modules
         FOOTPRINT_VIEWER_FRAME* fpViewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_FOOTPRINT_VIEWER, false );
@@ -1606,9 +1613,14 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         // Use C-style cast due to Mac's inability to dynamic cast between compile modules
         FOOTPRINT_EDIT_FRAME* fpEditor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
 
-        if( fpEditor && fpEditor->IsCurrentFPFromBoard() )
+        if( fpEditor )
         {
-            if( !fpEditor->CanCloseFPFromBoard( true ) )
+            bool cancel = !fpEditor->HandleUnsavedChanges( true );
+
+            // If fp editor had unsaved changes it will have been fronted.  Bring board editor back to front.
+            Raise();
+
+            if( cancel )
                 return false;
         }
     }
@@ -1620,6 +1632,8 @@ bool PCB_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     {
         wxFileName fileName = GetBoard()->GetFileName();
         wxString msg = _( "Save changes to '%s' before closing?" );
+
+        wxSafeYield( this, true );      // Allow frame to come to front before showing "Save Changes?"
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, fileName.GetFullName() ),
                                    [&]() -> bool

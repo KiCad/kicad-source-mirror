@@ -123,7 +123,7 @@ public:
     void SetSuppressActivateOnClose( bool aSuppress ) { m_suppressActivateOnClose = aSuppress; }
 
     int  AddTab( const wxString& aKey, const wxString& aLabel, bool aAsPreview );
-    void CloseTab( int aIdx );
+    bool CloseTab( int aIdx );
     void CloseOthers( int aKeepIdx );
     void CloseToRight( int aIdx );
     void CloseAll();
@@ -167,7 +167,7 @@ private:
     /**
      * Close the tab at @p aIdx, prompting the host exactly once.
      */
-    void closeTabInternal( int aIdx );
+    bool closeTabInternal( int aIdx );
 
     /**
      * Activate the tab at @p aIdx without re-entering the change handler.
@@ -204,21 +204,22 @@ private:
 
     TAB_VISUAL_STATE visualStateForIndex( int aIdx ) const;
 
-    wxAuiNotebook*        m_tabs = nullptr;
-    EDA_DRAW_PANEL_GAL*   m_sharedCanvas = nullptr;
+private:
+    wxAuiNotebook*         m_tabs = nullptr;
+    EDA_DRAW_PANEL_GAL*    m_sharedCanvas = nullptr;
 
     /// The canvas's parent before it was borrowed, reparented back on destruction so it is not freed
     /// as a child of this panel.
-    wxWindow*            m_originalCanvasParent = nullptr;
+    wxWindow*              m_originalCanvasParent = nullptr;
 
-    wxBoxSizer*           m_sizer = nullptr;
-    EDITOR_TABS_MODEL     m_model;
+    wxBoxSizer*            m_sizer = nullptr;
+    EDITOR_TABS_MODEL      m_model;
 
     /// Guards activateTab() against re-entrancy from programmatic SetActivePage().
-    bool m_activating = false;
+    bool                   m_activating = false;
 
     /// When set, closeTabInternal selects the fallback page without firing onActivateTab.
-    bool m_suppressActivateOnClose = false;
+    bool                   m_suppressActivateOnClose = false;
 
     /// Hidden per-tab key windows; index-aligned with the model entries.
     std::vector<wxWindow*> m_pageWindows;
@@ -226,7 +227,7 @@ private:
     /// Most-recently-used key order for Ctrl+Tab cycling; front is most recent.
     std::vector<wxString>  m_mru;
 
-    int m_contextMenuIdx = -1;
+    int                    m_contextMenuIdx = -1;
 };
 
 #endif // EDITOR_TABS_PANEL_H
