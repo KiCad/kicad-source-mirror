@@ -406,13 +406,10 @@ std::vector<uint8_t> OleExtractEmbeddedEmf( const std::vector<uint8_t>& aWmf )
     {
         uint32_t sizeWords = readU32( aWmf.data() + offset );
 
-        if( sizeWords < 3 || sizeWords > std::numeric_limits<size_t>::max() / 2 )
+        if( sizeWords < 3 || sizeWords > ( aWmf.size() - offset ) / 2 )
             return {};
 
         size_t recordSize = static_cast<size_t>( sizeWords ) * 2;
-
-        if( recordSize > aWmf.size() - offset )
-            return {};
 
         uint16_t function = readU16( aWmf.data() + offset + 4 );
 
