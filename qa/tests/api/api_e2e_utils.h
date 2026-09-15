@@ -428,6 +428,8 @@ public:
             m_ready = false;
         }
 
+        BOOST_TEST_MESSAGE( "Starting API server with CLI path: " << aCliPath );
+
         if( !startServerProcess( aCliPath, aError ) )
             return false;
 

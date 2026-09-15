@@ -33,7 +33,10 @@ add_executable( qa_api
     ${QA_API_SRCS}
     )
 
-add_dependencies( qa_api pcbnew )
+add_dependencies( qa_api
+    pcbnew
+    kicad-cli
+    )
 
 target_link_libraries( qa_api
     kiapi
