@@ -21,16 +21,21 @@
  * Main file for the pcbnew tests to be compiled
  */
 #include <boost/test/unit_test.hpp>
-#include <kiplatform/app.h>
-#include <mock_pgm_base.h>
-#include <settings/settings_manager.h>
-#include <pcbnew_settings.h>
-#include <qa_utils/error_handlers.h>
-#include <pcbnew_utils/board_test_utils.h>
 
 #include <wx/image.h>
 #include <wx/init.h>
 #include <wx/app.h>
+
+#include <qa_utils/error_handlers.h>
+#include <qa_utils/file_utils.h>
+
+#include <kiplatform/app.h>
+#include <mock_pgm_base.h>
+#include <settings/settings_manager.h>
+
+#include <pcbnew_settings.h>
+#include <pcbnew_utils/board_test_utils.h>
+
 
 using KI_TEST::STALE_DRU_SIDECAR_FIXTURE;
 
@@ -68,6 +73,8 @@ bool init_unit_test()
 
 int main( int argc, char* argv[] )
 {
+    KI_TEST::SCOPED_PROCESS_TEMP_DIR scopedTempDir( "kicad_qa_pcbnew" );
+
     int ret = boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
 
     // This causes some glib warnings on GTK3 (http://trac.wxwidgets.org/ticket/18274)

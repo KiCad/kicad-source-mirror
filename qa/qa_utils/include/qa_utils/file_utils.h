@@ -31,7 +31,6 @@ class SETTINGS_MANAGER;
 
 namespace KI_TEST
 {
-
 /*
  * A uniquely-named temporary directory removed on destruction.
  */
@@ -106,9 +105,26 @@ public:
      */
     wxString CreateChildFileStr( const wxString& aName ) const;
 
+    /**
+     * Keep this directory after all
+     *
+     * It is nearly always wrong to use this in actual tests, but it can be
+     * helpful for debugging purposes (e.g. conditionally keeping the
+     * directory if a certain test fails).
+     *
+     * If a #SCOPED_PROCESS_TEMP_DIR is in use, the process-wide temporary
+     * directory is kept as well.
+     */
+    void Retain();
+
+    static bool AnyTempDirRetained() { return s_anyTempDirRetained; }
+
 private:
     std::filesystem::path m_path;
     bool                  m_keep = false;
+
+    // True if any temporary directory has been retained
+    static bool s_anyTempDirRetained;
 };
 
 
@@ -137,6 +153,40 @@ private:
     SCOPED_TEMP_DIR   m_dir;
     SETTINGS_MANAGER& m_manager;
     PROJECT*          m_project;
+};
+
+/**
+ * Install a temporary directory for the process to use for temporary files,
+ * which is (usually) removed on destruction.
+ *
+ * Declare this early in the test program, before any use of temporary directories.
+ *
+ * Both ends of its life can be outside the wx lifetime, so its constructor and
+ * destructor make no wx logging calls: messages about kept or undeletable
+ * directories go to stderr.
+ *
+ * The redirect applies to wxFileName and std::filesystem temp paths, but
+ * won't affect hardcoded paths (which should be avoided anyway).
+ *
+ * This will then automatically tidy up any files created by
+ * temp dir functions as in wxFileName and std::filesystem, even if
+ * not properly scoped in a #SCOPED_TEMP_DIR.
+ *
+ * The directory is kept whenever any temporary directory created by
+ * #SCOPED_TEMP_DIR is kept.
+ */
+class SCOPED_PROCESS_TEMP_DIR
+{
+public:
+    SCOPED_PROCESS_TEMP_DIR( const wxString& aPrefix );
+    ~SCOPED_PROCESS_TEMP_DIR();
+
+    // No copying: the destructor removes the directory
+    SCOPED_PROCESS_TEMP_DIR( const SCOPED_PROCESS_TEMP_DIR& ) = delete;
+    SCOPED_PROCESS_TEMP_DIR& operator=( const SCOPED_PROCESS_TEMP_DIR& ) = delete;
+
+private:
+    SCOPED_TEMP_DIR m_dir;
 };
 
 } // namespace KI_TEST

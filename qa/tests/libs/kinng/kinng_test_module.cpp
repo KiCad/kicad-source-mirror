@@ -20,3 +20,17 @@
 
 #define BOOST_TEST_MODULE KiNNG
 #include <boost/test/unit_test.hpp>
+
+#include <qa_utils/file_utils.h>
+
+
+namespace
+{
+struct PROCESS_TEMP_DIR_FIXTURE
+{
+    KI_TEST::SCOPED_PROCESS_TEMP_DIR m_dir{ "kicad_qa_kinng" };
+};
+
+} // namespace
+
+BOOST_GLOBAL_FIXTURE( PROCESS_TEMP_DIR_FIXTURE );

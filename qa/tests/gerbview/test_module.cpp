@@ -23,6 +23,7 @@
 #include <boost/test/unit_test.hpp>
 #include <kiplatform/app.h>
 #include <mock_pgm_base.h>
+#include <qa_utils/file_utils.h>
 
 #include <wx/init.h>
 
@@ -38,6 +39,8 @@ bool init_unit_test()
 
 int main( int argc, char* argv[] )
 {
+    KI_TEST::SCOPED_PROCESS_TEMP_DIR scopedTempDir( "kicad_qa_gerbview" );
+
     int ret = boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
 
     // This causes some glib warnings on GTK3 (http://trac.wxwidgets.org/ticket/18274)

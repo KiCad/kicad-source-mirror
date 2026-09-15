@@ -24,8 +24,8 @@
 #include <pcbnew_settings.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/wx_assert.h>
-#include <settings/settings_manager.h>
 #include <locale_io.h>
 
 bool init_unit_test()
@@ -60,5 +60,7 @@ bool init_unit_test()
 
 int main( int argc, char* argv[] )
 {
+    KI_TEST::SCOPED_PROCESS_TEMP_DIR scopedTempDir( "kicad_qa_api" );
+
     return boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
 }

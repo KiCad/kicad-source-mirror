@@ -19,6 +19,7 @@
 
 #include "qa_utils/file_utils.h"
 
+#include <cstdio>
 #include <filesystem>
 #include <stdexcept>
 #include <string>
@@ -26,7 +27,6 @@
 #include <wx/ffile.h>
 #include <wx/filefn.h>
 #include <wx/filename.h>
-#include <wx/log.h>
 #include <wx/tokenzr.h>
 #include <wx/utils.h>
 #include <wx_filename.h>
@@ -36,6 +36,18 @@
 
 
 using namespace KI_TEST;
+
+
+/**
+ * Report a message about a temporary directory.
+ *
+ * This cannot use wx logging as it can be called outside the WX
+ * Init/Uninit lifetime, so it goes to stderr.
+ */
+static void reportTempDir( const wxString& aMessage )
+{
+    fprintf( stderr, "%s\n", aMessage.utf8_string().c_str() );
+}
 
 
 static bool shouldKeepTemp( const std::filesystem::path& aPath, const wxString& aKeepEnvValue )
@@ -55,10 +67,10 @@ static bool shouldKeepTemp( const std::filesystem::path& aPath, const wxString& 
 
         if( token == aKeepEnvValue || token == wxT( "ALL" ) )
         {
-            // Probably do want to see this in the log, because if you are keeping the temp dirs,
-            // you may want to know which ones they are.
-            wxLogInfo( wxT( "Keeping temporary directory '%s' because %s is set to '%s'" ),
-                       wxString::FromUTF8( aPath.string() ), envVar, keepEnv );
+            // Probably do want to see this, because if you are keeping the temp dirs, you may
+            // want to know which ones they are.
+            reportTempDir( wxString::Format( wxT( "Keeping temporary directory '%s' because %s is set to '%s'" ),
+                                             wxString::FromUTF8( aPath.string() ), envVar, keepEnv ) );
             return true;
         }
     }
@@ -67,30 +79,60 @@ static bool shouldKeepTemp( const std::filesystem::path& aPath, const wxString& 
 }
 
 
-SCOPED_TEMP_DIR::SCOPED_TEMP_DIR( const wxString& aPrefix )
+static std::filesystem::path createTempDir( const wxString& aPrefix )
 {
-    wxString reservedName = wxFileName::CreateTempFileName( aPrefix + "_" );
+    wxString tempFile = wxFileName::CreateTempFileName( aPrefix + "_" );
 
-    if( reservedName.IsEmpty() )
-    {
+    if( tempFile.IsEmpty() )
         throw std::runtime_error( "Cannot create a temporary directory name with prefix '"
                                   + std::string( aPrefix.utf8_str() ) + "'" );
-    }
 
-    if( !wxRemoveFile( reservedName ) )
+    if( !wxRemoveFile( tempFile ) )
+        throw std::runtime_error( "Cannot reclaim temporary name '" + std::string( tempFile.utf8_str() ) + "'" );
+
+    if( !wxMkdir( tempFile ) )
+        throw std::runtime_error( "Cannot create temporary directory '" + std::string( tempFile.utf8_str() ) + "'" );
+
+    return std::filesystem::path( std::string( tempFile.utf8_str() ) );
+}
+
+
+bool SCOPED_TEMP_DIR::s_anyTempDirRetained = false;
+
+
+SCOPED_TEMP_DIR::SCOPED_TEMP_DIR( const wxString& aPrefix ) :
+        m_path( createTempDir( aPrefix ) ),
+        m_keep( shouldKeepTemp( m_path, aPrefix ) )
+{
+    if( m_keep )
+        s_anyTempDirRetained = true;
+}
+
+
+SCOPED_TEMP_DIR::~SCOPED_TEMP_DIR()
+{
+    if( m_keep )
+        return;
+
+    try
     {
-        throw std::runtime_error( "Cannot reclaim temporary name '" + std::string( reservedName.utf8_str() )
-                                  + "'" );
+        std::filesystem::remove_all( m_path );
     }
-
-    m_path = std::filesystem::path( std::string( reservedName.utf8_str() ) );
-
-    if( !std::filesystem::create_directory( m_path ) )
+    catch( const std::filesystem::filesystem_error& e )
     {
-        throw std::runtime_error( "Cannot create temporary directory '" + m_path.string() + "'" );
+        reportTempDir( wxString::Format( wxT( "Cannot remove temporary directory '%s': %s" ),
+                                         wxString::FromUTF8( m_path.string() ), wxString::FromUTF8( e.what() ) ) );
     }
+}
 
-    m_keep = shouldKeepTemp( m_path, aPrefix );
+
+void SCOPED_TEMP_DIR::Retain()
+{
+    m_keep = true;
+    s_anyTempDirRetained = true;
+
+    reportTempDir(
+            wxString::Format( wxT( "Keeping temporary directory '%s'" ), wxString::FromUTF8( m_path.string() ) ) );
 }
 
 
@@ -135,23 +177,6 @@ wxString SCOPED_TEMP_DIR::CreateChildFileStr( const wxString& aName ) const
 }
 
 
-SCOPED_TEMP_DIR::~SCOPED_TEMP_DIR()
-{
-    if( m_keep )
-        return;
-
-    try
-    {
-        std::filesystem::remove_all( m_path );
-    }
-    catch( const std::filesystem::filesystem_error& e )
-    {
-        wxLogError( wxT( "Cannot remove temporary directory '%s': %s" ), wxString::FromUTF8( m_path.string() ),
-                    wxString::FromUTF8( e.what() ) );
-    }
-}
-
-
 SCOPED_TEMP_PROJECT::SCOPED_TEMP_PROJECT( SETTINGS_MANAGER& aManager, const wxString& aPrefix,
                                           const wxString& aName ) :
         m_dir( aPrefix ),
@@ -174,4 +199,23 @@ SCOPED_TEMP_PROJECT::SCOPED_TEMP_PROJECT( SETTINGS_MANAGER& aManager, const wxSt
 SCOPED_TEMP_PROJECT::~SCOPED_TEMP_PROJECT()
 {
     m_manager.UnloadProject( m_project, false );
+}
+
+
+SCOPED_PROCESS_TEMP_DIR::SCOPED_PROCESS_TEMP_DIR( const wxString& aPrefix ) :
+        m_dir( aPrefix )
+{
+    const wxString envValue = m_dir.PathStr();
+
+    wxSetEnv( wxT( "TMPDIR" ), envValue ); // This is the POSIX one
+    wxSetEnv( wxT( "TEMP" ), envValue );
+    wxSetEnv( wxT( "TMP" ), envValue );
+}
+
+
+SCOPED_PROCESS_TEMP_DIR::~SCOPED_PROCESS_TEMP_DIR()
+{
+    // If any temporary directory has been retained, we must retain this one too
+    if( SCOPED_TEMP_DIR::AnyTempDirRetained() )
+        m_dir.Retain();
 }
