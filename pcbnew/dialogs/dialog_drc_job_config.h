@@ -20,11 +20,12 @@
 
 #include <dialogs/dialog_rc_job.h>
 #include <jobs/job_pcb_drc.h>
+#include <wx/arrstr.h>
 
 class DIALOG_DRC_JOB_CONFIG : public DIALOG_RC_JOB
 {
 public:
-    DIALOG_DRC_JOB_CONFIG( wxWindow* parent, JOB_PCB_DRC* aJob );
+    DIALOG_DRC_JOB_CONFIG( wxWindow* parent, JOB_PCB_DRC* aJob, const wxArrayString& aVariants );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

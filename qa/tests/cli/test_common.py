@@ -18,11 +18,13 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import pytest
-import utils
+import json
 import re
 import shutil
 from pathlib import Path
+
+import pytest
+import utils
 
 def test_version():
     command = [utils.kicad_cli(), "version"]
@@ -79,6 +81,38 @@ def test_jobset_run_relative_project_path(tmp_path):
     # A crash would manifest as a non-zero/negative exit code; the archive must also be produced.
     assert exitcode == 0
     assert (work_dir / "output" / "issue24474-gerber.zip").exists()
+
+
+def test_jobset_drc_uses_selected_variant(tmp_path):
+    source_dir = Path(__file__).resolve().parent.parent.parent / "data" / "pcbnew" / "issue24900"
+    work_dir = tmp_path / "issue24900"
+    shutil.copytree(source_dir, work_dir)
+
+    command = [
+        utils.kicad_cli(),
+        "jobset", "run",
+        "--file", "TestProject.kicad_jobset",
+        "--output", "f4454cb0-b93f-4f0c-bcdd-e3cd0a2dfc4a",
+        "TestProject.kicad_pro",
+    ]
+
+    stdout, stderr, exitcode = utils.run_and_capture(command, cwd=work_dir)
+
+    assert exitcode == 0, stdout + stderr
+
+    report_path = work_dir / "output" / "TestProject-Variant1-drc.json"
+
+    with report_path.open(encoding="utf-8") as report_file:
+        report = json.load(report_file)
+
+    parity_violations = report["schematic_parity"]
+    assert len(parity_violations) == 2
+
+    dnp_violation = next(v for v in parity_violations if "Do not populate" in v["description"])
+    assert any("R1" in item["description"] for item in dnp_violation["items"])
+
+    bom_violation = next(v for v in parity_violations if "bill of materials" in v["description"])
+    assert any("R2" in item["description"] for item in bom_violation["items"])
 
 
 def test_jobset_run_unknown_job_type(tmp_path):

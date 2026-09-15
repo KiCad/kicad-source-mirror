@@ -515,13 +515,15 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   return true;
               } );
     Register( "drc", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrc, this, std::placeholders::_1 ),
-              []( JOB* job, wxWindow* aParent ) -> bool
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
               {
                   JOB_PCB_DRC* drcJob = dynamic_cast<JOB_PCB_DRC*>( job );
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
 
-                  wxCHECK( drcJob, false );
+                  wxCHECK( drcJob && editFrame && editFrame->GetBoard(), false );
 
-                  DIALOG_DRC_JOB_CONFIG dlg( aParent, drcJob );
+                  DIALOG_DRC_JOB_CONFIG dlg( aParent, drcJob, editFrame->GetBoard()->GetVariantNamesForUI() );
                   return dlg.ShowModal() == wxID_OK;
               } );
     Register( "ipc2581", std::bind( &PCBNEW_JOBS_HANDLER::JobExportIpc2581, this, std::placeholders::_1 ),
@@ -2962,6 +2964,9 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
+    if( !drcJob->m_variant.IsEmpty() )
+        brd->SetCurrentVariant( drcJob->m_variant );
+
     // Running DRC requires libraries be loaded, so make sure they have been
     FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( brd->GetProject() );
     adapter->AsyncLoad();
@@ -3041,6 +3046,10 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         else
         {
             wxFileName schematicPath( drcJob->m_filename );
+
+            if( drcJob->m_filename.IsEmpty() )
+                schematicPath.Assign( brd->GetProject()->GetProjectFullName() );
+
             schematicPath.MakeAbsolute();
             schematicPath.SetExt( FILEEXT::KiCadSchematicFileExtension );
 

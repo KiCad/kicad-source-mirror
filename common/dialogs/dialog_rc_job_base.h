@@ -47,6 +47,8 @@ class KICOMMON_API DIALOG_RC_JOB_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbAllTrackViolations;
 		wxCheckBox* m_cbSchParity;
 		wxCheckBox* m_cbRefillZones;
+		wxStaticText* m_variantLabel;
+		wxChoice* m_variantChoice;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
@@ -62,4 +64,3 @@ class KICOMMON_API DIALOG_RC_JOB_BASE : public DIALOG_SHIM
 		~DIALOG_RC_JOB_BASE();
 
 };
-

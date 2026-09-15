@@ -27,6 +27,7 @@
 #include <footprint.h>
 #include <richio.h>
 #include <string_utils.h>
+#include <template_fieldnames.h>
 
 #include <algorithm>
 
@@ -158,6 +159,61 @@ void COMPONENT::AddVariant( const COMPONENT_VARIANT& aVariant )
     }
 
     m_variants.emplace( aVariant.m_name, aVariant );
+}
+
+
+wxString COMPONENT::GetValue( const wxString& aVariantName ) const
+{
+    if( const COMPONENT_VARIANT* variant = GetVariant( aVariantName ) )
+    {
+        auto it = variant->m_fields.find( GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) );
+
+        if( it != variant->m_fields.end() )
+            return it->second;
+    }
+
+    return m_value;
+}
+
+
+nlohmann::ordered_map<wxString, wxString> COMPONENT::GetFields( const wxString& aVariantName ) const
+{
+    nlohmann::ordered_map<wxString, wxString> fields = m_fields;
+
+    if( const COMPONENT_VARIANT* variant = GetVariant( aVariantName ) )
+    {
+        for( const auto& [name, value] : variant->m_fields )
+            fields[name] = value;
+    }
+
+    return fields;
+}
+
+
+std::map<wxString, wxString> COMPONENT::GetProperties( const wxString& aVariantName ) const
+{
+    std::map<wxString, wxString> properties = m_properties;
+
+    if( const COMPONENT_VARIANT* variant = GetVariant( aVariantName ) )
+    {
+        auto resolve = [&]( const wxString& aName, bool aHasValue, bool aValue )
+        {
+            if( !aHasValue )
+                return;
+
+            if( aValue )
+                properties[aName] = wxEmptyString;
+            else
+                properties.erase( aName );
+        };
+
+        resolve( wxT( "dnp" ), variant->m_hasDnp, variant->m_dnp );
+        resolve( wxT( "exclude_from_bom" ), variant->m_hasExcludedFromBOM, variant->m_excludedFromBOM );
+        resolve( wxT( "exclude_from_sim" ), variant->m_hasExcludedFromSim, variant->m_excludedFromSim );
+        resolve( wxT( "exclude_from_pos_files" ), variant->m_hasExcludedFromPosFiles, variant->m_excludedFromPosFiles );
+    }
+
+    return properties;
 }
 
 

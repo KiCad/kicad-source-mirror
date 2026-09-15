@@ -29,6 +29,9 @@
 #include <board.h>
 #include <board_commit.h>
 #include <core/mirror.h>
+#include <board_design_settings.h>
+#include <drc/drc_engine.h>
+#include <drc/drc_item.h>
 #include <footprint.h>
 #include <lib_id.h>
 #include <exporters/place_file_exporter.h>
@@ -1480,6 +1483,78 @@ BOOST_AUTO_TEST_CASE( ExchangeFootprintPreservesVariantsAndUnits )
     BOOST_REQUIRE_EQUAL( updated->GetUnitInfo().size(), 1u );
     BOOST_CHECK_EQUAL( updated->GetUnitInfo()[0].m_unitName, "A" );
     BOOST_CHECK_EQUAL( updated->GetUnitInfo()[0].m_pins.size(), 2u );
+}
+
+
+BOOST_AUTO_TEST_CASE( VariantUpdateLeavesSchematicParityClean )
+{
+    SETTINGS_MANAGER settingsManager;
+    settingsManager.LoadProject( "" );
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    board->SetProject( &settingsManager.Prj() );
+
+    LIB_ID fpid;
+    BOOST_REQUIRE_EQUAL( fpid.Parse( wxS( "TestLib:R_0603" ) ), -1 );
+
+    FOOTPRINT* footprint = new FOOTPRINT( board.get() );
+    footprint->SetReference( "R1" );
+    footprint->SetValue( "10K" );
+    footprint->SetFPID( fpid );
+    board->Add( footprint );
+
+    NETLIST netlist;
+    netlist.AddVariant( "Variant 1" );
+
+    COMPONENT* component = new COMPONENT( fpid, "R1", "10K", KIID_PATH(), std::vector<KIID>{ KIID() } );
+
+    COMPONENT_VARIANT variant( "Variant 1" );
+    variant.m_dnp = true;
+    variant.m_hasDnp = true;
+    variant.m_excludedFromBOM = true;
+    variant.m_hasExcludedFromBOM = true;
+    variant.m_fields[GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED )] = "22K";
+    variant.m_fields["Variant only"] = "fitted";
+    component->AddVariant( variant );
+    netlist.AddComponent( component );
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( board.get(), nullptr, nullptr, nullptr, nullptr );
+    toolMgr.RegisterTool( new KI_TEST::DUMMY_TOOL() );
+
+    BOARD_NETLIST_UPDATER updater( &toolMgr, board.get() );
+    updater.SetReplaceFootprints( false );
+    updater.SetDeleteUnusedFootprints( false );
+
+    BOOST_REQUIRE( updater.UpdateNetlist( netlist ) );
+    BOOST_CHECK( footprint->GetDNPForVariant( "Variant 1" ) );
+    BOOST_CHECK( footprint->GetExcludedFromBOMForVariant( "Variant 1" ) );
+    BOOST_CHECK_EQUAL( footprint->GetFieldValueForVariant( "Variant 1", "Variant only" ), "fitted" );
+
+    board->SetCurrentVariant( "Variant 1" );
+
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    bds.m_DRCEngine = std::make_shared<DRC_ENGINE>( board.get(), &bds );
+    bds.m_DRCEngine->InitEngine( wxFileName() );
+    bds.m_DRCEngine->SetSchematicNetlist( &netlist );
+
+    std::vector<DRC_ITEM> parityViolations;
+
+    bds.m_DRCEngine->SetViolationHandler(
+            [&]( const std::shared_ptr<DRC_ITEM>& aItem, const VECTOR2I&, int,
+                 const std::function<void( PCB_MARKER* )>& )
+            {
+                if( aItem->GetErrorCode() == DRCE_SCHEMATIC_PARITY
+                    || aItem->GetErrorCode() == DRCE_SCHEMATIC_FIELDS_PARITY )
+                {
+                    parityViolations.push_back( *aItem );
+                }
+            } );
+
+    bds.m_DRCEngine->RunTests( EDA_UNITS::MM, true, true );
+    bds.m_DRCEngine->ClearViolationHandler();
+
+    BOOST_CHECK( parityViolations.empty() );
 }
 
 

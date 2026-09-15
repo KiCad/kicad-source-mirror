@@ -19,13 +19,15 @@
  */
 
 #include <dialogs/dialog_drc_job_config.h>
+#include <string_utils.h>
 
-DIALOG_DRC_JOB_CONFIG::DIALOG_DRC_JOB_CONFIG( wxWindow* parent, JOB_PCB_DRC* aJob ) :
+DIALOG_DRC_JOB_CONFIG::DIALOG_DRC_JOB_CONFIG( wxWindow* parent, JOB_PCB_DRC* aJob, const wxArrayString& aVariants ) :
         DIALOG_RC_JOB( parent, aJob, _( "DRC Job Settings" ) ),
         m_drcJob( aJob )
 {
     SetTitle( aJob->GetSettingsDialogTitle() );
-	SetMinSize( GetBestSize() );
+    m_variantChoice->Append( aVariants );
+    SetMinSize( GetBestSize() );
 }
 
 
@@ -37,6 +39,9 @@ bool DIALOG_DRC_JOB_CONFIG::TransferDataToWindow()
     m_cbAllTrackViolations->SetValue( m_drcJob->m_reportAllTrackErrors );
     m_cbSchParity->SetValue( m_drcJob->m_parity );
     m_cbRefillZones->SetValue( m_drcJob->m_refillZones );
+
+    int selection = m_variantChoice->FindString( m_drcJob->m_variant, false );
+    m_variantChoice->SetSelection( selection == wxNOT_FOUND ? 0 : selection );
     return true;
 }
 
@@ -49,5 +54,11 @@ bool DIALOG_DRC_JOB_CONFIG::TransferDataFromWindow()
     m_drcJob->m_reportAllTrackErrors = m_cbAllTrackViolations->GetValue();
     m_drcJob->m_parity = m_cbSchParity->GetValue();
     m_drcJob->m_refillZones = m_cbRefillZones->GetValue();
+
+    m_drcJob->m_variant = m_variantChoice->GetStringSelection();
+
+    if( m_drcJob->m_variant.CmpNoCase( GetDefaultVariantName() ) == 0 )
+        m_drcJob->m_variant.Clear();
+
     return true;
 }

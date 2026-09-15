@@ -236,3 +236,29 @@ BOOST_FIXTURE_TEST_CASE( Issue25119_BoardNetlistKeepsBaseDesign, BOM_NETLIST_FIX
     BOOST_CHECK_MESSAGE( netlist.Contains( wxS( "(name \"Value\") \"10k\"" ) ),
                          "board netlist must still carry R1's variant override for pcbnew" );
 }
+
+
+BOOST_FIXTURE_TEST_CASE( Issue24900_BoardNetlistExportsVariantDnp, BOM_NETLIST_FIXTURE )
+{
+    WX_STRING_REPORTER     reporter;
+    NETLIST_EXPORTER_KICAD exporter( m_schematic );
+
+    BOOST_REQUIRE( exporter.WriteNetlist( m_netlistFile, 0, reporter ) );
+
+    wxFFile  file( m_netlistFile, wxS( "rb" ) );
+    wxString netlist;
+
+    BOOST_REQUIRE( file.IsOpened() );
+    BOOST_REQUIRE( file.ReadAll( &netlist ) );
+
+    size_t r2Start = netlist.find( wxS( "(ref \"R2\")" ) );
+    BOOST_REQUIRE( r2Start != wxString::npos );
+
+    size_t   nextComponent = netlist.find( wxS( "(comp" ), r2Start + 1 );
+    size_t   r2Length = nextComponent == wxString::npos ? wxString::npos : nextComponent - r2Start;
+    wxString r2Netlist = netlist.Mid( r2Start, r2Length );
+
+    BOOST_CHECK( r2Netlist.Contains( wxS( "(name \"H0\")" ) ) );
+    BOOST_CHECK( r2Netlist.Contains( wxS( "(name \"dnp\")" ) ) );
+    BOOST_CHECK( r2Netlist.Contains( wxS( "(value \"1\")" ) ) );
+}

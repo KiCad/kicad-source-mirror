@@ -34,4 +34,6 @@ public:
 
     bool m_refillZones;
     bool m_saveBoard;
+
+    wxString m_variant;
 };

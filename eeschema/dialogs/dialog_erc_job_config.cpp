@@ -28,6 +28,8 @@ DIALOG_ERC_JOB_CONFIG::DIALOG_ERC_JOB_CONFIG( wxWindow* parent, JOB_SCH_ERC* aJo
     m_cbAllTrackViolations->Hide();
     m_cbSchParity->Hide();
     m_cbRefillZones->Hide();
+    m_variantLabel->Hide();
+    m_variantChoice->Hide();
 
     Fit();
     Layout();

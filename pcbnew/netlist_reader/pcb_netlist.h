@@ -168,18 +168,21 @@ public:
 
     void SetValue( const wxString& aValue ) { m_value = aValue; }
     const wxString& GetValue() const { return m_value; }
+    wxString        GetValue( const wxString& aVariantName ) const;
 
     void SetFields( nlohmann::ordered_map<wxString, wxString> aFields )
     {
         m_fields = std::move( aFields );
     }
     const nlohmann::ordered_map<wxString, wxString>& GetFields() const { return m_fields; }
+    nlohmann::ordered_map<wxString, wxString>        GetFields( const wxString& aVariantName ) const;
 
     void SetProperties( std::map<wxString, wxString> aProps )
     {
         m_properties = std::move( aProps );
     }
     const std::map<wxString, wxString>& GetProperties() const { return m_properties; }
+    std::map<wxString, wxString>        GetProperties( const wxString& aVariantName ) const;
 
     void SetFPID( const LIB_ID& aFPID ) { m_fpid = aFPID;  }
     const LIB_ID& GetFPID() const { return m_fpid; }

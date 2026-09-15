@@ -1,0 +1,38 @@
+{
+  "jobs": [
+    {
+      "description": "Variant1 DRC parity",
+      "id": "1642b251-1232-47a1-960e-b9bbdd802245",
+      "settings": {
+        "description": "",
+        "fail_on_error": false,
+        "format": "json",
+        "output_filename": "TestProject-Variant1-drc.json",
+        "parity": true,
+        "refill_zones": false,
+        "report_all_track_errors": false,
+        "save_board": false,
+        "severity": 16,
+        "units": "mm",
+        "variant": "Variant1"
+      },
+      "type": "pcb_drc"
+    }
+  ],
+  "meta": {
+    "version": 1
+  },
+  "outputs": [
+    {
+      "description": "Variant1 DRC report",
+      "id": "f4454cb0-b93f-4f0c-bcdd-e3cd0a2dfc4a",
+      "only": [
+        "1642b251-1232-47a1-960e-b9bbdd802245"
+      ],
+      "settings": {
+        "output_path": "output/"
+      },
+      "type": "folder"
+    }
+  ]
+}

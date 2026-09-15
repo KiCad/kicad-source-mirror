@@ -87,6 +87,24 @@ DIALOG_RC_JOB_BASE::DIALOG_RC_JOB_BASE( wxWindow* parent, wxWindowID id, const w
 	bSizerBottom->Add( m_cbRefillZones, 0, wxBOTTOM|wxLEFT, 5 );
 
 
+	bSizerBottom->Add( 0, 3, 0, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizerVariant;
+	bSizerVariant = new wxBoxSizer( wxHORIZONTAL );
+
+	m_variantLabel = new wxStaticText( this, wxID_ANY, _("Design variant:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_variantLabel->Wrap( -1 );
+	bSizerVariant->Add( m_variantLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	wxArrayString m_variantChoiceChoices;
+	m_variantChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_variantChoiceChoices, 0 );
+	m_variantChoice->SetSelection( 0 );
+	bSizerVariant->Add( m_variantChoice, 1, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	bSizerBottom->Add( bSizerVariant, 0, wxBOTTOM|wxLEFT|wxEXPAND, 5 );
+
+
 	bSizerMain->Add( bSizerBottom, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
