@@ -33,6 +33,8 @@
 #include <sch_screen.h>
 #include <sch_symbol.h>
 #include <schematic.h>
+#include <advanced_config.h>
+#include <connectivity/conn_facade.h>
 #include <reporter.h>
 #include <richio.h>
 
@@ -78,6 +80,59 @@ void NETLIST_EXPORTER_BASE::rebuildConnectivity()
     m_exportItemNets.clear();
     m_schematic->RebuildConnectivity();
     m_exportSheets = m_schematic->Hierarchy();
+
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        auto& facade = m_schematic->Connectivity();
+        std::map<KIID_PATH, const SCH_SHEET_PATH*> paths;
+
+        for( const SCH_SHEET_PATH& path : m_exportSheets )
+            paths.emplace( path.Path(), &path );
+
+        for( const auto& [key, row] : facade.Published().Rows() )
+        {
+            const auto& path = facade.Keys().Instance( key.inst );
+            const auto view = facade.Connection( key.item, path );
+
+            if( !view )
+                THROW_IO_ERROR( _( "Connectivity changed while preparing the netlist." ) );
+
+            const auto sheet = paths.find( path );
+
+            if( sheet == paths.end() )
+                THROW_IO_ERROR( _( "Connectivity contains an unknown sheet instance." ) );
+
+            m_exportItemNets[*sheet->second].emplace( key.item, view->Name() );
+        }
+
+        for( const auto& group : facade.GetNetMap() )
+        {
+            EXPORT_NET result{ group.name, false, {} };
+
+            for( const auto& net : group.instances )
+            {
+                if( !net.IsNet() )
+                    continue;
+
+                const auto path = paths.find( net.Instance() );
+
+                if( path == paths.end() )
+                    THROW_IO_ERROR( _( "Connectivity contains an unknown sheet instance." ) );
+
+                for( SCH_ITEM* item : net.Items() )
+                {
+                    result.hasNoConnect |= item->Type() == SCH_NO_CONNECT_T;
+
+                    if( item->Type() == SCH_PIN_T )
+                        result.pins.emplace_back( static_cast<SCH_PIN*>( item ), *path->second );
+                }
+            }
+
+            m_exportNets.push_back( std::move( result ) );
+        }
+
+        return;
+    }
 
     for( const SCH_SHEET_PATH& path : m_exportSheets )
     {

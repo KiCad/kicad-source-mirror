@@ -357,6 +357,12 @@ public:
      */
     std::vector<int> ViewGetLayers() const override;
 
+    /**
+     * The view bounds of text that shows a net name must match the drawing, so this reads
+     * connectivity inside a SCH_CONNECTIVITY::RENDER_SCOPE.
+     */
+    const BOX2I ViewBBox() const override;
+
     int GetMaxError() const;
 
     /**

@@ -177,7 +177,7 @@ private:
                                       SCH_COMMIT* aCommit );
 
     void processNetNameChange( SCH_COMMIT* aCommit, const wxString& aRef, SCH_PIN* aPin,
-                               const SCH_CONNECTION* aConnection, const wxString& aOldName, const wxString& aNewName );
+                               const SCH_SHEET_PATH& aSheet, const wxString& aOldName, const wxString& aNewName );
 
 private:
     REPORTER&                    m_reporter;

@@ -18,6 +18,7 @@
  */
 
 #include <dialog_global_edit_text_and_graphics_base.h>
+#include <connectivity/conn_facade.h>
 #include <string_utils.h>
 #include <sch_symbol.h>
 #include <sch_connection.h>
@@ -297,12 +298,9 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
 {
     if( m_netFilterOpt->GetValue() && !m_netFilter->GetValue().IsEmpty() )
     {
-        SCH_CONNECTION* connection = aItem->Connection( &aSheetPath );
+        const std::optional<wxString> netName = aItem->GetConnectionName( &aSheetPath );
 
-        if( !connection )
-            return;
-
-        if( !WildCompareString( m_netFilter->GetValue(), connection->Name(), false ) )
+        if( !netName || !WildCompareString( m_netFilter->GetValue(), *netName, false ) )
             return;
     }
 
@@ -504,6 +502,9 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
     SCH_COMMIT     commit( m_parent );
 
+    // Each staged edit hides published nets on its screen; filter the rest by pre-edit nets
+    std::optional<SCH_CONNECTIVITY::PUBLICATION_HOLD> hold( std::in_place, m_parent->Schematic().Connectivity() );
+
     // Go through sheets
     for( const SCH_SHEET_PATH& sheetPath : m_parent->Schematic().Hierarchy() )
     {
@@ -517,6 +518,8 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
                 visitItem( &commit, sheetPath, item );
         }
     }
+
+    hold.reset();
 
     if( !commit.Empty() )
     {

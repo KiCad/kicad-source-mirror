@@ -23,10 +23,12 @@
 #include <wx/filefn.h>
 
 #include <connection_graph.h>
+#include <advanced_config.h>
 #include <eeschema_helpers.h>
 #include <pgm_base.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
+#include <scoped_set_reset.h>
 #include <schematic.h>
 #include <sch_screen.h>
 #include <sch_line.h>
@@ -123,59 +125,65 @@ BOOST_AUTO_TEST_CASE( LegacyHeadlessLoadUsesItsProjectLibraries )
     PROJECT* active = &Pgm().GetSettingsManager().Prj();
     const wxString activePath = active->GetProjectFullName();
     BOOST_REQUIRE( active != &settings.Prj() );
-    std::unique_ptr<SCHEMATIC> schematic( EESCHEMA_HELPERS::LoadSchematic(
-            directory.PathStr() + "/complex_hierarchy.sch", false, false, &settings.Prj() ) );
-    BOOST_REQUIRE( schematic );
-    BOOST_CHECK( &Pgm().GetSettingsManager().Prj() == active );
-    BOOST_CHECK_EQUAL( active->GetProjectFullName(), activePath );
-    BOOST_CHECK( &schematic->Project() == &settings.Prj() );
-    size_t aliases = 0;
-    SCH_SCREENS screens( schematic->Root() );
+    auto& enabled = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ).m_ConnectivityEngine;
 
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    for( bool engine : { false, true } )
     {
-        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
-        {
-            auto* symbol = static_cast<SCH_SYMBOL*>( item );
-            BOOST_REQUIRE( symbol->GetLibSymbolRef() );
+        SCOPED_SET_RESET backend( enabled, engine );
+        std::unique_ptr<SCHEMATIC> schematic( EESCHEMA_HELPERS::LoadSchematic(
+                directory.PathStr() + "/complex_hierarchy.sch", false, false, &settings.Prj() ) );
+        BOOST_REQUIRE( schematic );
+        BOOST_CHECK( &Pgm().GetSettingsManager().Prj() == active );
+        BOOST_CHECK_EQUAL( active->GetProjectFullName(), activePath );
+        BOOST_CHECK( &schematic->Project() == &settings.Prj() );
+        size_t aliases = 0;
+        SCH_SCREENS screens( schematic->Root() );
 
-            if( symbol->GetLibId().GetLibItemName() == UTF8( "LM358N" ) )
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        {
+            for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
             {
-                ++aliases;
-                BOOST_CHECK_EQUAL( symbol->GetLibSymbolRef()->GetUnitCount(), 2 );
-                BOOST_CHECK_EQUAL( symbol->GetAllLibPins().size(), 8 );
+                auto* symbol = static_cast<SCH_SYMBOL*>( item );
+                BOOST_REQUIRE( symbol->GetLibSymbolRef() );
+
+                if( symbol->GetLibId().GetLibItemName() == UTF8( "LM358N" ) )
+                {
+                    ++aliases;
+                    BOOST_CHECK_EQUAL( symbol->GetLibSymbolRef()->GetUnitCount(), 2 );
+                    BOOST_CHECK_EQUAL( symbol->GetAllLibPins().size(), 8 );
+                }
             }
         }
-    }
 
-    BOOST_CHECK_EQUAL( aliases, 2 );
+        BOOST_CHECK_EQUAL( aliases, 2 );
 
-    bool checkedOutput = false;
+        bool checkedOutput = false;
 
-    for( const SCH_SHEET_PATH& path : schematic->Hierarchy() )
-    {
-        for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        for( const SCH_SHEET_PATH& path : schematic->Hierarchy() )
         {
-            auto* symbol = static_cast<SCH_SYMBOL*>( item );
-
-            if( symbol->GetRef( &path ) == wxS( "U2" ) )
+            for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
             {
-                SCH_PIN* pin = symbol->GetPin( "1" );
-                BOOST_REQUIRE( pin );
-                const VECTOR2I pos = pin->GetPosition();
-                const auto wires = path.LastScreen()->GetBusesAndWires( pos, false );
-                BOOST_REQUIRE_EQUAL( wires.size(), 1 );
-                BOOST_CHECK_GT( wires.front()->GetPenWidth(), 0 );
+                auto* symbol = static_cast<SCH_SYMBOL*>( item );
 
-                const auto name = pin->GetConnectionName( &path );
-                BOOST_REQUIRE( name );
-                BOOST_CHECK_EQUAL( *name, wxString( "VCC" ) );
-                checkedOutput = true;
+                if( symbol->GetRef( &path ) == wxS( "U2" ) )
+                {
+                    SCH_PIN* pin = symbol->GetPin( "1" );
+                    BOOST_REQUIRE( pin );
+                    const VECTOR2I pos = pin->GetPosition();
+                    const auto wires = path.LastScreen()->GetBusesAndWires( pos, false );
+                    BOOST_REQUIRE_EQUAL( wires.size(), 1 );
+                    BOOST_CHECK_GT( wires.front()->GetPenWidth(), 0 );
+
+                    const auto name = pin->GetConnectionName( &path );
+                    BOOST_REQUIRE( name );
+                    BOOST_CHECK_EQUAL( *name, wxString( "VCC" ) );
+                    checkedOutput = true;
+                }
             }
         }
-    }
 
-    BOOST_CHECK( checkedOutput );
+        BOOST_CHECK( checkedOutput );
+    }
 }
 
 

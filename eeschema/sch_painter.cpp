@@ -65,6 +65,7 @@
 #include <kiface_base.h>
 #include <default_values.h>
 #include <advanced_config.h>
+#include <connectivity/conn_text.h>
 #include <settings/settings_manager.h>
 #include <stroke_params.h>
 #include <string_utils.h>
@@ -117,6 +118,8 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
     if( !item )
         return false;
 
+    // Staged items keep drawing their last published nets until the recalculation
+    SCH_CONNECTIVITY::RENDER_SCOPE renderScope;
     draw( item, aLayer, false );
 
     return false;

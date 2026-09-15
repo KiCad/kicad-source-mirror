@@ -124,7 +124,8 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
 
     delete helper;
 
-    RefreshConnectivity( true );
+    if( !ADVANCED_CFG::GetCfg().m_ConnectivityEngine || !res )
+        RefreshConnectivity( true );
 
     // If user provided a plugin command line, execute it.
     if( executeCommandLine && res && !m_netListerCommand.IsEmpty() )
@@ -251,6 +252,7 @@ void SCH_EDIT_FRAME::sendNetlistToCvpcb()
         // current sheet setting before sending expressmail
     }
 
-    RefreshConnectivity( true );
+    if( !ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+        RefreshConnectivity( true );
     Kiway().ExpressMail( FRAME_CVPCB, MAIL_EESCHEMA_NETLIST, packet, this );
 }

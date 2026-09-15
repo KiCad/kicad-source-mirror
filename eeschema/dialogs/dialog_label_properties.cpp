@@ -478,14 +478,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     if( !m_textSize.Validate( 0.01, 1000.0, EDA_UNITS::MM ) )
         return false;
 
-    SCH_COMMIT commit( m_Parent );
-    wxString   text;
-
-    /* save old text in undo list if not already in edit */
-    if( m_currentLabel->GetEditFlags() == 0 )
-        commit.Modify( m_currentLabel, m_Parent->GetScreen() );
-
-    m_Parent->GetCanvas()->Refresh();
+    wxString text;
 
     if( m_activeTextEntry )
     {
@@ -508,9 +501,20 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
             DisplayError( this, _( "Label can not be empty." ) );
             return false;
         }
-
-        m_currentLabel->SetText( text );
     }
+
+    // Stage only after validation, because a staged commit that is never pushed leaves the
+    // connectivity revision ahead of the published rows
+    SCH_COMMIT commit( m_Parent );
+
+    /* save old text in undo list if not already in edit */
+    if( m_currentLabel->GetEditFlags() == 0 )
+        commit.Modify( m_currentLabel, m_Parent->GetScreen() );
+
+    m_Parent->GetCanvas()->Refresh();
+
+    if( m_activeTextEntry )
+        m_currentLabel->SetText( text );
 
     // change all field positions from relative to absolute
     for( SCH_FIELD& field : *m_fields )

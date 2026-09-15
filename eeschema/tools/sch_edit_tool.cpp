@@ -31,6 +31,8 @@
 #include <tools/sch_drawing_tools.h>
 #include <confirm.h>
 #include <connection_graph.h>
+#include <advanced_config.h>
+#include <connectivity/conn_facade.h>
 #include <sch_actions.h>
 #include <sch_tool_utils.h>
 #include <increment.h>
@@ -1983,18 +1985,54 @@ int SCH_EDIT_TOOL::SwapPins( const TOOL_EVENT& aEvent )
 
 
 // Used by SwapPinLabels() and SwapUnitLabels() to find the single net label connected to a pin
-static SCH_LABEL_BASE* findSingleNetLabelForPin( SCH_PIN* aPin, CONNECTION_GRAPH* aGraph,
+static SCH_LABEL_BASE* findSingleNetLabelForPin( SCH_PIN* aPin, SCHEMATIC& aSchematic,
                                                  const SCH_SHEET_PATH& aSheetPath )
 {
-    if( !aGraph || !aPin )
+    if( !aPin )
         return nullptr;
 
-    CONNECTION_SUBGRAPH* sg = aGraph->GetSubgraphForItem( aPin );
+    const bool             usePublished = ADVANCED_CFG::GetCfg().m_ConnectivityEngine;
+    std::vector<SCH_ITEM*> items;
 
-    if( !sg )
-        return nullptr;
+    if( usePublished )
+    {
+        // Walk physical neighbors so the result matches the legacy subgraph rather than the whole net
+        std::set<SCH_ITEM*>    seen{ aPin };
+        std::vector<SCH_ITEM*> pending{ aPin };
 
-    const std::set<SCH_ITEM*>& items = sg->GetItems();
+        while( !pending.empty() )
+        {
+            SCH_ITEM* item = pending.back();
+            pending.pop_back();
+            items.push_back( item );
+
+            if( const auto connection = aSchematic.Connectivity().Connection( item->m_Uuid, aSheetPath.PathRef() ) )
+            {
+                for( SCH_ITEM* neighbor : connection->ConnectedItems() )
+                {
+                    if( seen.insert( neighbor ).second )
+                        pending.push_back( neighbor );
+                }
+            }
+        }
+    }
+    else if( CONNECTION_GRAPH* graph = aSchematic.ConnectionGraph() )
+    {
+        if( CONNECTION_SUBGRAPH* sg = graph->GetSubgraphForItem( aPin ) )
+            items.assign( sg->GetItems().begin(), sg->GetItems().end() );
+    }
+
+    const auto isNet = [&]( SCH_ITEM* aItem )
+    {
+        if( usePublished )
+        {
+            const auto connection = aSchematic.Connectivity().Connection( aItem->m_Uuid, aSheetPath.PathRef() );
+            return connection && connection->IsNet();
+        }
+
+        const SCH_CONNECTION* connection = aItem->Connection( &aSheetPath );
+        return connection && connection->IsNet();
+    };
 
     size_t          pinCount = 0;
     SCH_LABEL_BASE* label = nullptr;
@@ -2004,26 +2042,13 @@ static SCH_LABEL_BASE* findSingleNetLabelForPin( SCH_PIN* aPin, CONNECTION_GRAPH
         if( item->Type() == SCH_PIN_T )
             pinCount++;
 
-        switch( item->Type() )
-        {
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        {
-            SCH_CONNECTION* conn = item->Connection( &aSheetPath );
+        if( !item->IsType( { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T } ) || !isNet( item ) )
+            continue;
 
-            if( conn && conn->IsNet() )
-            {
-                if( label )
-                    return nullptr; // more than one label
+        if( label )
+            return nullptr; // more than one label
 
-                label = static_cast<SCH_LABEL_BASE*>( item );
-            }
-
-            break;
-        }
-        default: break;
-        }
+        label = static_cast<SCH_LABEL_BASE*>( item );
     }
 
     if( pinCount != 1 )
@@ -2041,8 +2066,6 @@ int SCH_EDIT_TOOL::SwapPinLabels( const TOOL_EVENT& aEvent )
     if( orderedPins.size() < 2 )
         return 0;
 
-    CONNECTION_GRAPH* connectionGraph = m_frame->Schematic().ConnectionGraph();
-
     const SCH_SHEET_PATH& sheetPath = m_frame->GetCurrentSheet();
 
     std::vector<SCH_LABEL_BASE*> labels;
@@ -2050,7 +2073,7 @@ int SCH_EDIT_TOOL::SwapPinLabels( const TOOL_EVENT& aEvent )
     for( EDA_ITEM* item : orderedPins )
     {
         SCH_PIN*        pin = static_cast<SCH_PIN*>( item );
-        SCH_LABEL_BASE* label = findSingleNetLabelForPin( pin, connectionGraph, sheetPath );
+        SCH_LABEL_BASE* label = findSingleNetLabelForPin( pin, m_frame->Schematic(), sheetPath );
 
         if( !label )
         {
@@ -2094,8 +2117,6 @@ int SCH_EDIT_TOOL::SwapUnitLabels( const TOOL_EVENT& aEvent )
     if( selectedUnits.size() < 2 )
         return 0;
 
-    CONNECTION_GRAPH* connectionGraph = m_frame->Schematic().ConnectionGraph();
-
     const SCH_SHEET_PATH& sheetPath = m_frame->GetCurrentSheet();
 
     // Build ordered label vectors (sorted by pin X/Y) for each selected unit
@@ -2107,7 +2128,7 @@ int SCH_EDIT_TOOL::SwapUnitLabels( const TOOL_EVENT& aEvent )
 
         for( SCH_PIN* pin : symbol->GetPins( &sheetPath ) )
         {
-            SCH_LABEL_BASE* label = findSingleNetLabelForPin( pin, connectionGraph, sheetPath );
+            SCH_LABEL_BASE* label = findSingleNetLabelForPin( pin, m_frame->Schematic(), sheetPath );
 
             if( !label )
             {
@@ -2413,15 +2434,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 {
     KICAD_T    parentType = aField->GetParent() ? aField->GetParent()->Type() : SCHEMATIC_T;
     SCH_COMMIT commit( m_toolMgr );
-
-    // Save old symbol in undo list if not already in edit, or moving.
-    if( aField->GetEditFlags() == 0 ) // i.e. not edited, or moved
-        commit.Modify( aField, m_frame->GetScreen() );
-
-    if( parentType == SCH_SYMBOL_T && aField->GetId() == FIELD_T::REFERENCE )
-        static_cast<SCH_ITEM*>( aField->GetParent() )->SetConnectivityDirty();
-
-    wxString caption;
+    wxString   caption;
 
     // Use title caps for mandatory fields.  "Edit Sheet name Field" looks dorky.
     if( aField->IsMandatory() )
@@ -2440,7 +2453,14 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
+    // The dialog changes nothing before OK, and staging bumps the connectivity revision
+    if( aField->GetEditFlags() == 0 ) // i.e. not edited, or moved
+        commit.Modify( aField, m_frame->GetScreen() );
+
     dlg.UpdateField( &commit, aField, &m_frame->GetCurrentSheet() );
+
+    if( parentType == SCH_SYMBOL_T && aField->GetId() == FIELD_T::REFERENCE )
+        static_cast<SCH_ITEM*>( aField->GetParent() )->SetConnectivityDirty();
 
     if( m_frame->eeconfig()->m_AutoplaceFields.enable || parentType == SCH_SHEET_T )
     {
@@ -3115,6 +3135,11 @@ void SCH_EDIT_TOOL::EditProperties( EDA_ITEM* aItem )
             sheet->GetScreen()->ClearAnnotation( &m_frame->GetCurrentSheet(), false );
         }
 
+        // Only a push republishes the staged sheet; a cancel, a file change and the annotation
+        // reset each leave the screen revision ahead of the last recalculation
+        if( !okPressed || !isUndoable || doClearAnnotation )
+            m_frame->RecalculateConnections( nullptr, NO_CLEANUP );
+
         if( okPressed )
             m_frame->GetCanvas()->Refresh();
 
@@ -3221,7 +3246,12 @@ void SCH_EDIT_TOOL::EditProperties( EDA_ITEM* aItem )
         wxFAIL_MSG( wxString( "Cannot edit schematic item type " ) + aItem->GetClass() );
     }
 
-    updateItem( aItem, true );
+    // A pushed commit already updated the R-tree, and a full screen update would bump the
+    // connectivity revision after that recalculation
+    updateItem( aItem, false );
+
+    if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( aItem ) )
+        m_frame->GetScreen()->UpdateDisplayBounds( schItem );
 }
 
 

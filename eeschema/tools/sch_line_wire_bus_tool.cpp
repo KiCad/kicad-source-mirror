@@ -35,6 +35,8 @@
 #include <layer_ids.h>
 #include <math/vector2d.h>
 #include <advanced_config.h>
+#include <connectivity/conn_bus.h>
+#include <connectivity/conn_facade.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view_controls.h>
 #include <tool/actions.h>
@@ -95,6 +97,81 @@ protected:
     }
 
 private:
+    struct MEMBER
+    {
+        wxString              name;
+        bool                  bus = false;
+        std::vector<wxString> members;
+    };
+
+    static std::vector<MEMBER> memberEntries( const SCH_LINE& aBus )
+    {
+        using SCH_CONNECTIVITY::BUS_SCHEMA;
+        std::vector<MEMBER> result;
+
+        if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+        {
+            SCHEMATIC* schematic = aBus.Schematic();
+
+            if( !schematic )
+                return result;
+
+            const auto connection = schematic->Connectivity().Connection( aBus.m_Uuid,
+                                                                           schematic->CurrentSheet().PathRef() );
+
+            if( !connection || !connection->IsBus() )
+                return result;
+
+            const SCH_CONNECTIVITY::BUS_MEMBERS members = connection->Members();
+
+            if( !members.tree || !members.schema )
+                return result;
+
+            const auto leafName = [&]( const BUS_SCHEMA::NODE& aNode )
+            {
+                const auto& leaves = members.schema->leaves;
+                return aNode.leaf && *aNode.leaf < leaves.size() ? leaves[*aNode.leaf].name : wxString();
+            };
+
+            // Leaf names carry their full group prefix; nested buses take the root group's prefix
+            const bool     namedGroup = members.tree->kind == BUS_SCHEMA::NODE::KIND::GROUP
+                                        && !members.tree->prefix.IsEmpty();
+            const wxString prefix = namedGroup ? members.tree->prefix + wxS( "." ) : wxString();
+
+            for( const BUS_SCHEMA::NODE& node : members.tree->members )
+            {
+                MEMBER& entry = result.emplace_back();
+                entry.bus = node.kind != BUS_SCHEMA::NODE::KIND::NET;
+                entry.name = entry.bus ? prefix + node.text : leafName( node );
+
+                for( const BUS_SCHEMA::NODE& sub : node.members )
+                {
+                    if( wxString name = leafName( sub ); !name.IsEmpty() )
+                        entry.members.push_back( std::move( name ) );
+                }
+            }
+
+            return result;
+        }
+
+        const SCH_CONNECTION* connection = aBus.Connection();
+
+        if( !connection || !connection->IsBus() )
+            return result;
+
+        for( const std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
+        {
+            MEMBER& entry = result.emplace_back();
+            entry.name = member->FullLocalName();
+            entry.bus = member->Type() == CONNECTION_TYPE::BUS;
+
+            for( const std::shared_ptr<SCH_CONNECTION>& sub : member->Members() )
+                entry.members.push_back( sub->FullLocalName() );
+        }
+
+        return result;
+    }
+
     void update() override
     {
         SCH_LINE* bus = m_busGetter();
@@ -109,9 +186,9 @@ private:
             return;
         }
 
-        SCH_CONNECTION* connection = bus->Connection();
+        const std::vector<MEMBER> members = memberEntries( *bus );
 
-        if( !connection || !connection->IsBus() || connection->Members().empty() )
+        if( members.empty() )
         {
             Append( ID_POPUP_SCH_UNFOLD_BUS, _( "Bus has no members" ), wxEmptyString );
             Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
@@ -128,17 +205,17 @@ private:
 
         std::unordered_map<wxString, ACTION_MENU*> diff_busses{};
 
-        for( const std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
+        for( const MEMBER& member : members )
         {
             int id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
-            wxString name = member->FullLocalName();
+            wxString name = member.name;
 
-            if( member->Type() == CONNECTION_TYPE::BUS )
+            if( member.bus )
             {
                 ACTION_MENU* submenu = nullptr;
                 // If we are building the menu for suffixed bus vectors, we need to do some more massaging
                 if( ( name.ends_with( '+' ) || name.ends_with( '-' ) || name.ends_with( 'P' ) || name.ends_with( 'N' ) )
-                    && member->Members().size() > 0 )
+                    && !member.members.empty() )
                 {
                     wxString submenu_name = name.substr( 0, name.length() - 1 );
                     auto     bus_submenu = diff_busses.find( submenu_name );
@@ -161,10 +238,10 @@ private:
                     AppendSubMenu( submenu, SCH_CONNECTION::PrintBusForUI( name ), name );
                 }
 
-                for( const std::shared_ptr<SCH_CONNECTION>& sub_member : member->Members() )
+                for( const wxString& subMemberName : member.members )
                 {
                     id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
-                    name = sub_member->FullLocalName();
+                    name = subMemberName;
 
                     if( ( name.ends_with( '+' ) || name.ends_with( '-' ) || name.ends_with( 'P' )
                           || name.ends_with( 'N' ) ) )

@@ -800,7 +800,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     CallAfter(
             [this]()
             {
-                if( m_netNavigator && m_netNavigator->IsEmpty() )
+                if( m_netNavigator && m_netNavigatorStale )
                 {
                     RefreshNetNavigator();
                 }
@@ -1699,7 +1699,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
         CallAfter(
                 [this]()
                 {
-                    if( m_netNavigator && m_netNavigator->IsEmpty() )
+                    if( m_netNavigator && m_netNavigatorStale )
                     {
                         RefreshNetNavigator();
                     }

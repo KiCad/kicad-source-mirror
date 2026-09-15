@@ -31,6 +31,7 @@
 #include <sch_netchain.h>
 #include <connectivity/conn_netchain_manager.h>
 #include <connectivity/conn_navigation.h>
+#include <connectivity/conn_facade.h>
 #include <eeschema_id.h>
 #include <symbol_edit_frame.h>
 #include <symbol_viewer_frame.h>
@@ -677,7 +678,7 @@ bool SCH_SELECTION_TOOL::Init()
                 if( !schItem->IsType( { SCH_ITEM_LOCATE_WIRE_T, SCH_ITEM_LOCATE_BUS_T } ) )
                     return false;
 
-                if( !schItem->Connection() )
+                if( !ADVANCED_CFG::GetCfg().m_ConnectivityEngine && !schItem->Connection() )
                     return false;
 
                 return true; // Allow menu; handlers will rebuild/validate as needed
@@ -3343,11 +3344,6 @@ SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
     if( m_isSymbolEditor || m_isSymbolViewer || !editFrame )
         return {};
 
-    CONNECTION_GRAPH* graph = editFrame->Schematic().ConnectionGraph();
-
-    if( !graph )
-        return {};
-
     SCH_SCREEN*            screen = m_frame->GetScreen();
     SCH_SHEET_PATH&        currentSheet = editFrame->GetCurrentSheet();
     std::vector<SCH_ITEM*> startItems;
@@ -3470,6 +3466,19 @@ SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
             enqueue( item );
     }
 
+    const bool usePublished = ADVANCED_CFG::GetCfg().m_ConnectivityEngine;
+    std::vector<SCH_ITEM*> publishedNeighbors;
+    const auto neighborsOf = [&]( SCH_ITEM* aItem ) -> const std::vector<SCH_ITEM*>&
+    {
+        if( !usePublished )
+            return aItem->ConnectedItems( currentSheet );
+
+        const auto connection = editFrame->Schematic().Connectivity().Connection(
+                aItem->m_Uuid, currentSheet.PathRef() );
+        publishedNeighbors = connection ? connection->ConnectedItems() : std::vector<SCH_ITEM*>();
+        return publishedNeighbors;
+    };
+
     while( !queue.empty() )
     {
         SCH_ITEM* item = queue.front();
@@ -3498,7 +3507,7 @@ SCH_SELECTION_TOOL::expandConnectionWithGraph( const SCH_SELECTION& aItems,
             }
         }
 
-        for( SCH_ITEM* neighbor : item->ConnectedItems( currentSheet ) )
+        for( SCH_ITEM* neighbor : neighborsOf( item ) )
         {
             if( !neighbor )
                 continue;
@@ -3600,6 +3609,14 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
             graphicalSelection.Add( item );
         else
             connectableSelection.Add( item );
+    }
+
+    if( !connectableSelection.Empty() && ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+        if( frame && !frame->RecalculateConnections( nullptr, NO_CLEANUP ) )
+            return 0;
     }
 
     // Repeated Ctrl+4 must advance to the next stop condition if the current stage did not pull

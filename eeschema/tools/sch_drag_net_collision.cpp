@@ -21,6 +21,8 @@
 #include "sch_drag_net_collision.h"
 
 #include <trace_helpers.h>
+#include <advanced_config.h>
+#include <connectivity/conn_preview.h>
 #include <schematic.h>
 #include <sch_line.h>
 
@@ -70,17 +72,24 @@ void SCH_DRAG_NET_COLLISION_MONITOR::Initialize( const SCH_SELECTION& aSelection
     m_sheetPath = m_frame->GetCurrentSheet();
     m_hasCollision = false;
 
-    const auto record = [&]( SCH_ITEM* item )
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
     {
-        recordItemNet( item );
-        item->RunOnChildren( [&]( SCH_ITEM* child ) { recordItemNet( child ); }, RECURSE_MODE::NO_RECURSE );
-    };
+        m_itemNetCodes = SCH_CONNECTIVITY::CapturePreviewNetCodes( m_frame->Schematic().Connectivity(), m_sheetPath );
+    }
+    else
+    {
+        const auto record = [&]( SCH_ITEM* item )
+        {
+            recordItemNet( item );
+            item->RunOnChildren( [&]( SCH_ITEM* child ) { recordItemNet( child ); }, RECURSE_MODE::NO_RECURSE );
+        };
 
-    for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
-        record( item );
+        for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
+            record( item );
 
-    for( EDA_ITEM* item : aSelection )
-        record( static_cast<SCH_ITEM*>( item ) );
+        for( EDA_ITEM* item : aSelection )
+            record( static_cast<SCH_ITEM*>( item ) );
+    }
 
     recordOriginalConnections( aSelection );
 }

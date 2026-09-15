@@ -45,6 +45,7 @@
 #include <connection_graph.h>
 #include <connectivity/conn_netchain_manager.h>
 #include <connectivity/conn_navigation.h>
+#include <connectivity/conn_facade.h>
 #include <design_block.h>
 #include <dialogs/dialog_symbol_fields_table.h>
 #include <dialogs/dialog_eeschema_page_settings.h>
@@ -761,6 +762,9 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
     if( wxWindow* blocking_win = sim_Frame->Kiway().GetBlockingDialog() )
         blocking_win->Close( true );
 
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine && !m_frame->RecalculateConnections( nullptr, NO_CLEANUP ) )
+        return 0;
+
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
 
@@ -1270,9 +1274,13 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
     SCHEMATIC&          schematic = m_frame->Schematic();
     const SCH_SHEET_PATH path = m_frame->GetCurrentSheet();
     SCH_SCREEN*         screen = path.LastScreen();
+    const bool usePublished = ADVANCED_CFG::GetCfg().m_ConnectivityEngine;
+
+    if( usePublished && !m_frame->RecalculateConnections( nullptr, NO_CLEANUP ) )
+        return 0;
 
     const auto getNetNamePattern =
-            []( const SCH_CONNECTION& aConn ) -> std::optional<wxString>
+            []( const auto& aConn ) -> std::optional<wxString>
             {
                 wxString netName = aConn.Name();
 
@@ -1298,12 +1306,27 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selectionTool->GetSelection() )
     {
-        const SCH_CONNECTION* connection = static_cast<SCH_ITEM*>( item )->Connection( &path );
+        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item );
+        std::optional<wxString> netNamePattern;
 
-        if( !connection )
-            continue;
+        if( usePublished )
+        {
+            const auto connection = schematic.Connectivity().Connection( schItem->m_Uuid, path.PathRef() );
 
-        std::optional<wxString> netNamePattern = getNetNamePattern( *connection );
+            if( !connection )
+                continue;
+
+            netNamePattern = getNetNamePattern( *connection );
+        }
+        else
+        {
+            const SCH_CONNECTION* connection = schItem->Connection( &path );
+
+            if( !connection )
+                continue;
+
+            netNamePattern = getNetNamePattern( *connection );
+        }
 
         if( !netNamePattern )
         {
@@ -1393,7 +1416,7 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
                                 RECURSE_MODE::NO_RECURSE );
 
                         if( flags & KIGFX::GEOMETRY )
-                            m_frame->GetScreen()->Update( item, false );   // Refresh RTree
+                            m_frame->GetScreen()->UpdateDisplayBounds( item );
                     }
 
                     return flags;
@@ -1413,20 +1436,32 @@ int SCH_EDITOR_CONTROL::FindNetInInspector( const TOOL_EVENT& aEvent )
         return 0;
 
     const SCH_SHEET_PATH path = m_frame->GetCurrentSheet();
+    const bool usePublished = ADVANCED_CFG::GetCfg().m_ConnectivityEngine;
+
+    if( usePublished && !m_frame->RecalculateConnections( nullptr, NO_CLEANUP ) )
+        return 0;
+
     wxString netName;
 
     for( EDA_ITEM* item : selectionTool->GetSelection() )
     {
         if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
         {
-            if( SCH_CONNECTION* conn = schItem->Connection( &path ) )
+            if( usePublished )
             {
-                if( !conn->GetNetName().IsEmpty() )
-                {
-                    netName = conn->GetNetName();
-                    break;
-                }
+                const auto connection = m_frame->Schematic().Connectivity().Connection(
+                        schItem->m_Uuid, path.PathRef() );
+
+                if( connection && !connection->IsUnconnected() )
+                    netName = connection->Name();
             }
+            else if( const SCH_CONNECTION* connection = schItem->Connection( &path ) )
+            {
+                netName = connection->GetNetName();
+            }
+
+            if( !netName.IsEmpty() )
+                break;
         }
     }
 
@@ -3028,7 +3063,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             // Pushing the commit will update the connectivity.
             commit.Push( _( "Paste" ) );
 
-            if( !sheetsPasted )
+            if( !sheetsPasted && !ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
                 m_frame->RefreshNetNavigator();
         }
         else

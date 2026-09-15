@@ -553,6 +553,13 @@ wxString SCH_ITEM::ResolveText( const wxString& aText, const SCH_SHEET_PATH* aPa
 }
 
 
+const BOX2I SCH_ITEM::ViewBBox() const
+{
+    SCH_CONNECTIVITY::RENDER_SCOPE renderScope;
+    return EDA_ITEM::ViewBBox();
+}
+
+
 std::vector<int> SCH_ITEM::ViewGetLayers() const
 {
     // Basic fallback

@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <advanced_config.h>
 #include <sch_shape.h>
 #include <algorithm>
 #include <cmath>
@@ -712,8 +713,14 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 
     refreshTraits();
 
-    if( !selection.Empty() )
+    const bool graphicsOnly = ADVANCED_CFG::GetCfg().m_ConnectivityEngine
+            && std::all_of( selection.begin(), selection.end(),
+                            []( EDA_ITEM* item )
+                            {
+                                return isGraphicItemForDrop( static_cast<SCH_ITEM*>( item ) );
+                            } );
 
+    if( !selection.Empty() && !graphicsOnly )
     {
         netCollisionMonitor = std::make_unique<SCH_DRAG_NET_COLLISION_MONITOR>( m_frame, m_view );
         netCollisionMonitor->Initialize( selection );

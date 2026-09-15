@@ -223,7 +223,10 @@ void DIALOG_MIGRATE_BUSES::onAcceptClicked( wxCommandEvent& aEvent )
     std::vector<SCH_ITEM*> labels =  m_items[sel].subgraph->GetVectorBusLabels();
 
     for( SCH_ITEM* label : labels )
+    {
         static_cast<SCH_LABEL_BASE*>( label )->SetText( m_items[sel].approved_label );
+        label->SetConnectivityDirty();
+    }
 
     m_migration_list->SetItem( sel, 2, m_items[sel].approved_label );
     m_migration_list->SetItem( sel, 3, _( "Updated" ) );

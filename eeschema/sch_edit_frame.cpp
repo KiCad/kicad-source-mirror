@@ -68,6 +68,7 @@
 #include <sch_rule_area.h>
 #include <settings/settings_manager.h>
 #include <advanced_config.h>
+#include <connectivity/conn_facade.h>
 #include <sim/simulator_frame.h>
 #include <tool/action_manager.h>
 #include <tool/action_toolbar.h>
@@ -453,6 +454,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_apiHandler = std::make_unique<API_HANDLER_SCH>( this );
     Pgm().GetApiServer().RegisterHandler( m_apiHandler.get() );
+    subscribeConnectivity();
 
     if( Kiface().IsSingle() )
     {
@@ -590,6 +592,8 @@ void SCH_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
+    m_connectivitySubscription.Reset();
+
     // Ensure that teardowns without doCloseWindow are fully unregistered
     if( m_schematic )
         Kiway().LocalHistory().UnregisterSaver( m_schematic );
@@ -1417,6 +1421,7 @@ void SCH_EDIT_FRAME::OnUpdatePCB()
 
 void SCH_EDIT_FRAME::UpdateHierarchyNavigator( bool aRefreshNetNavigator, bool aClear )
 {
+    m_netNavigatorStale = true;
     m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->CleanHistory();
     m_hierarchy->UpdateHierarchyTree( aClear );
 
@@ -1899,16 +1904,21 @@ void SCH_EDIT_FRAME::initScreenZoom()
 }
 
 
-void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
+bool SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
                                              PROGRESS_REPORTER* aProgressReporter, bool aCleanupDone )
 {
     wxString highlightedConn = GetHighlightedConnection();
     bool     hasHighlightedConn = !highlightedConn.IsEmpty();
+    bool     itemsChanged = false;
 
     std::function<void( SCH_ITEM* )> changeHandler =
             [&]( SCH_ITEM* aChangedItem ) -> void
             {
+                itemsChanged = true;
                 GetCanvas()->GetView()->Update( aChangedItem, KIGFX::REPAINT );
+
+                if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+                    return;
 
                 SCH_CONNECTION* connection = aChangedItem->Connection();
 
@@ -1928,16 +1938,38 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                 }
             };
 
-    Schematic().RecalculateConnections( aCommit, aCleanupFlags,
-                                        m_toolManager,
-                                        aProgressReporter,
-                                        GetCanvas()->GetView(),
-                                        &changeHandler,
-                                        m_undoList.m_CommandsList.empty() ? nullptr
-                                                                          : m_undoList.m_CommandsList.back(),
-                                        aCleanupDone );
+    try
+    {
+        Schematic().RecalculateConnections( aCommit, aCleanupFlags,
+                                            m_toolManager,
+                                            aProgressReporter,
+                                            GetCanvas()->GetView(),
+                                            &changeHandler,
+                                            m_undoList.m_CommandsList.empty() ? nullptr
+                                                                              : m_undoList.m_CommandsList.back(),
+                                            aCleanupDone );
+    }
+    catch( const std::exception& error )
+    {
+        if( !ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+            throw;
 
-    RefreshConnectivity();
+        // The engine clears its publication before rethrowing; an edit must not unwind the tool
+        wxLogTrace( wxS( "KICAD_CONNECTIVITY" ), wxS( "Connectivity recalculation failed: %s" ),
+                    wxString::FromUTF8( error.what() ) );
+        ShowInfoBarError( _( "Unable to rebuild schematic connectivity." ), true );
+        RefreshConnectivity( true );
+        return false;
+    }
+
+    // Dangling repairs notify even without a graph delta; text-only changes still need a refresh
+    if( !ADVANCED_CFG::GetCfg().m_ConnectivityEngine
+        || ( !itemsChanged && Schematic().Connectivity().Published().Changes().Empty() ) )
+    {
+        RefreshConnectivity();
+    }
+
+    return true;
 }
 
 
@@ -1949,16 +1981,53 @@ void SCH_EDIT_FRAME::PrepareForNetlist()
 }
 
 
-void SCH_EDIT_FRAME::RefreshConnectivity( bool aForce )
+void SCH_EDIT_FRAME::subscribeConnectivity()
+{
+    m_connectivitySubscription = Schematic().Connectivity().Subscribe(
+            [this]( const SCH_CONNECTIVITY::CHANGE_SET& changes )
+            {
+                if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine && Schematic().HasHierarchy() && GetScreen() )
+                {
+                    RefreshConnectivity( false, &changes );
+                    GetCanvas()->Refresh();
+                }
+            } );
+}
+
+
+void SCH_EDIT_FRAME::RefreshConnectivity( bool aForce, const SCH_CONNECTIVITY::CHANGE_SET* aChanges )
 {
     const wxString highlightedConn = GetHighlightedConnection();
+    const bool useEngine = ADVANCED_CFG::GetCfg().m_ConnectivityEngine;
+    std::set<KIID> repaintItems;
+    const auto* changes = aChanges;
+
+    if( useEngine )
+    {
+        const auto& facade = Schematic().Connectivity();
+
+        if( !changes )
+            changes = &facade.Published().Changes();
+
+        if( const auto instance = facade.Keys().FindInstance( GetCurrentSheet().PathRef() ) )
+        {
+            for( const auto* items : { &changes->changedItems, &changes->driverChangedItems } )
+            {
+                for( const auto& key : *items )
+                {
+                    if( key.inst == *instance )
+                        repaintItems.insert( key.item );
+                }
+            }
+        }
+    }
 
     GetCanvas()->GetView()->UpdateAllItemsConditionally(
             [&]( KIGFX::VIEW_ITEM* aItem ) -> int
             {
                 int             flags = aForce ? KIGFX::REPAINT : 0;
                 SCH_ITEM*       item = dynamic_cast<SCH_ITEM*>( aItem );
-                SCH_CONNECTION* connection = item ? item->Connection() : nullptr;
+                SCH_CONNECTION* connection = item && !useEngine ? item->Connection() : nullptr;
 
                 auto invalidateTextVars =
                         [&flags]( EDA_TEXT* text )
@@ -1977,6 +2046,9 @@ void SCH_EDIT_FRAME::RefreshConnectivity( bool aForce )
                     flags |= KIGFX::REPAINT;
                 }
 
+                if( item && repaintItems.contains( item->m_Uuid ) )
+                    flags |= KIGFX::REPAINT;
+
                 if( item )
                 {
                     item->RunOnChildren(
@@ -1988,7 +2060,7 @@ void SCH_EDIT_FRAME::RefreshConnectivity( bool aForce )
                             RECURSE_MODE::NO_RECURSE );
 
                     if( flags & KIGFX::GEOMETRY )
-                        GetScreen()->Update( item, false );     // Refresh RTree
+                        GetScreen()->UpdateDisplayBounds( item );
                 }
 
                 if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem ) )
@@ -1997,11 +2069,32 @@ void SCH_EDIT_FRAME::RefreshConnectivity( bool aForce )
                 return flags;
             } );
 
-    if( aForce || m_highlightedConnChanged
-        || !Schematic().ConnectionGraph()->FindFirstSubgraphByName( highlightedConn ) )
+    const bool changed = useEngine && !changes->Empty();
+    // Legacy never finds an empty name, so it refreshes the all-nets navigator on every pass
+    const bool exists = useEngine ? highlightedConn.IsEmpty()
+                                            || Schematic().Connectivity().NetByName( highlightedConn ).has_value()
+                                  : Schematic().ConnectionGraph()->FindFirstSubgraphByName( highlightedConn )
+                                            != nullptr;
+
+    if( aForce || changed || m_highlightedConnChanged || !exists )
     {
         GetToolManager()->RunAction( SCH_ACTIONS::updateNetHighlighting );
-        RefreshNetNavigator();
+
+        if( useEngine && !aForce && !m_highlightedConnChanged && exists )
+        {
+            const auto& facade = Schematic().Connectivity();
+            std::vector<wxString> names;
+
+            for( auto name : changes->netsChanged )
+                names.push_back( facade.Keys().Name( name ) );
+
+            RefreshNetNavigator( nullptr, &names );
+        }
+        else
+        {
+            RefreshNetNavigator();
+        }
+
         m_highlightedConnChanged = false;
     }
 }
@@ -2650,6 +2743,22 @@ wxWindow* SCH_EDIT_FRAME::createHighlightedNetNavigator()
 
     panel->SetSizer( sizer );
 
+    panel->Bind( wxEVT_SHOW,
+            [this]( wxShowEvent& event )
+            {
+                event.Skip();
+
+                if( event.IsShown() )
+                {
+                    CallAfter(
+                            [this]
+                            {
+                                if( m_netNavigatorStale )
+                                    RefreshNetNavigator();
+                            } );
+                }
+            } );
+
     m_netNavigatorFilter->Bind( wxEVT_COMMAND_TEXT_UPDATED, &SCH_EDIT_FRAME::onNetNavigatorFilterChanged, this );
     m_netNavigatorFilter->Bind( wxEVT_KEY_DOWN, &SCH_EDIT_FRAME::onNetNavigatorKey, this );
     m_netNavigator->Bind( wxEVT_KEY_DOWN, &SCH_EDIT_FRAME::onNetNavigatorKey, this );
@@ -3143,6 +3252,12 @@ void SCH_EDIT_FRAME::ToggleRemoteSymbolPanel()
 void SCH_EDIT_FRAME::SetSchematic( SCHEMATIC* aSchematic )
 {
     wxCHECK( aSchematic, /* void */ );
+    m_connectivitySubscription.Reset();
+    m_netNavigatorStale = true;
+    m_netNavigatorConnection.clear();
+
+    if( m_netNavigator )
+        m_netNavigator->DeleteAllItems();
 
     if( m_schematic )
     {
@@ -3168,6 +3283,7 @@ void SCH_EDIT_FRAME::SetSchematic( SCHEMATIC* aSchematic )
     static_cast<KIGFX::SCH_PAINTER*>( view->GetPainter() )->SetSchematic( m_schematic );
     m_toolManager->SetEnvironment( m_schematic, GetCanvas()->GetView(), GetCanvas()->GetViewControls(), config(),
                                    this );
+    subscribeConnectivity();
 }
 
 

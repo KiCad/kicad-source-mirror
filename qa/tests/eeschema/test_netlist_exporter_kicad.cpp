@@ -19,6 +19,8 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <eeschema_test_utils.h>
+#include <advanced_config.h>
+#include <scoped_set_reset.h>
 
 
 class TEST_NETLIST_EXPORTER_KICAD_FIXTURE : public TEST_NETLIST_EXPORTER_FIXTURE<NETLIST_EXPORTER_KICAD>
@@ -133,7 +135,17 @@ BOOST_AUTO_TEST_CASE( ComplexHierarchy )
 
 BOOST_AUTO_TEST_CASE( WeakVectorBusDisambiguation )
 {
-    TestNetlist( "weak_vector_bus_disambiguation" );
+    auto& enabled = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ).m_ConnectivityEngine;
+    SCOPED_SET_RESET restore( enabled, enabled );
+
+    for( bool useEngine : { false, true } )
+    {
+        BOOST_TEST_CONTEXT( "engine=" << useEngine )
+        {
+            enabled = useEngine;
+            TestNetlist( "weak_vector_bus_disambiguation" );
+        }
+    }
 }
 
 

@@ -38,6 +38,8 @@
 #include <sch_group.h>
 #include <common.h>
 #include <connection_graph.h>
+#include <connectivity/conn_facade.h>
+#include <advanced_config.h>
 #include <sch_commit.h>
 #include <string_utils.h>
 #include <sch_edit_frame.h>
@@ -1866,6 +1868,17 @@ API_HANDLER_SCH::handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schemat
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
+    const bool engine = ADVANCED_CFG::GetCfg().m_ConnectivityEngine;
+
+    // The engine rebuilds before answering, which an interactive tool must not observe
+    if( engine && m_frame && !m_frame->ToolStackIsEmpty() )
+    {
+        ApiResponseStatus status;
+        status.set_status( ApiStatusCode::AS_BUSY );
+        status.set_error_message( "Cannot rebuild connectivity during an interactive operation" );
+        return tl::unexpected( status );
+    }
+
     HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
 
     if( !documentValidation )
@@ -1894,8 +1907,71 @@ API_HANDLER_SCH::handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schemat
         return tl::unexpected( e );
     }
 
+    if( engine )
+    {
+        try
+        {
+            schematic()->RebuildConnectivity();
+        }
+        catch( const std::exception& error )
+        {
+            if( m_frame )
+            {
+                m_frame->ShowInfoBarError( _( "Unable to rebuild schematic connectivity." ), true );
+                frame()->RefreshConnectivity( true );
+            }
+
+            wxLogTrace( traceApi, wxS( "GetSchematicNetlist rebuild failed: %s" ),
+                        wxString::FromUTF8( error.what() ) );
+
+            ApiResponseStatus status;
+            status.set_status( ApiStatusCode::AS_UNKNOWN );
+            status.set_error_message( error.what() );
+            return tl::unexpected( status );
+        }
+    }
+
     kiapi::schematic::commands::SchematicNetlistResponse response;
     response.mutable_document()->CopyFrom( aCtx.Request.document() );
+
+    if( engine )
+    {
+        for( const auto& group : schematic()->Connectivity().GetNetMap() )
+        {
+            if( group.instances.empty() || !group.instances.front().IsNet()
+                || !group.instances.front().Driver() )
+            {
+                continue;
+            }
+
+            kiapi::schematic::types::SchematicNet* net = nullptr;
+
+            for( const auto& view : group.instances )
+            {
+                const auto physicalItems = view.Items();
+
+                if( physicalItems.empty() )
+                    continue;
+
+                if( !net )
+                {
+                    net = response.add_nets();
+                    net->set_name( group.name.ToUTF8() );
+                }
+
+                auto* sheet = net->add_sheets();
+                PackSheetPath( *sheet->mutable_path(), view.Instance() );
+
+                for( SCH_ITEM* item : physicalItems )
+                {
+                    if( !filterByType || typeFilter.contains( item->Type() ) )
+                        sheet->add_items()->set_value( item->m_Uuid.AsStdString() );
+                }
+            }
+        }
+
+        return response;
+    }
 
     for( const auto& [key, subgraphList] : connectionGraph->GetNetMap() )
     {

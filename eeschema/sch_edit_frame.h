@@ -40,6 +40,8 @@
 #include <math/box2.h>
 #include <sch_base_frame.h>
 #include <template_fieldnames.h>
+#include <map>
+#include <connectivity/conn_subscription.h>
 
 class SCH_ITEM;
 class EDA_ITEM;
@@ -817,15 +819,16 @@ public:
     /**
      * Generate the connection data for the entire schematic hierarchy.
      * @param aCleanupDone the commit already applied cleanup; flags still select the rebuild scope.
+     * @return false if recalculation failed; the frame has already reported the failure.
      */
-    void RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
+    bool RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
                                  PROGRESS_REPORTER* aProgressReporter = nullptr, bool aCleanupDone = false );
 
-    /** Commit source cleanup before the exporter's full connectivity rebuild. */
+    // Commit source cleanup before the exporter's full connectivity rebuild.
     void PrepareForNetlist();
 
-    /** Refresh connectivity-dependent display state after a model rebuild. */
-    void RefreshConnectivity( bool aForce = false );
+    // Refresh connectivity-dependent display state after a model rebuild.
+    void RefreshConnectivity( bool aForce = false, const SCH_CONNECTIVITY::CHANGE_SET* aChanges = nullptr );
 
     /**
      * Called after the preferences dialog is run.
@@ -935,7 +938,8 @@ public:
         return wxS( "NetNavigator" );
     }
 
-    void RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr );
+    void RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelection = nullptr,
+                              const std::vector<wxString>* aChangedNets = nullptr );
 
     void MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemId aParentId,
                                const NET_NAVIGATOR_ITEM_DATA* aSelection,
@@ -1109,6 +1113,8 @@ private:
         ID_NET_NAVIGATOR_SEARCH_REGEX
     };
 
+    void subscribeConnectivity();
+    SCH_CONNECTIVITY::SUBSCRIPTION m_connectivitySubscription;
     SCHEMATIC*                  m_schematic;          ///< The currently loaded schematic
     wxString                    m_highlightedConn;    ///< The highlighted net or bus or empty string.
     wxString                    m_highlightedNetChain;
@@ -1133,6 +1139,9 @@ private:
     BITMAP_BUTTON*              m_netNavigatorMenuButton;
     wxString                    m_netNavigatorFilterValue;
     wxString                    m_netNavigatorMenuNetName;
+    std::map<wxString, wxTreeItemId> m_netNavigatorNodes;
+    wxString                    m_netNavigatorConnection;
+    bool                        m_netNavigatorStale = true;
 
 	bool                        m_syncingPcbToSchSelection; // Recursion guard when synchronizing selection from PCB
     // Cross-probe flashing support

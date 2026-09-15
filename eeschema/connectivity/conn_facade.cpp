@@ -471,19 +471,39 @@ struct FACADE_STATE
         if( revision == revisions.end() )
             return nullptr;
 
-        return revision->second == screen->ConnectivityRevision() || publicationHolds > 0 ? screen : nullptr;
+        if( revision->second == screen->ConnectivityRevision() || publicationHolds > 0 )
+            return screen;
+
+        return RENDER_SCOPE::Active() ? screen : nullptr;
+    }
+
+    bool Current( const SCH_SCREEN& aScreen ) const
+    {
+        const auto& revisions = engine.Published().Auxiliary().ScreenRevisions();
+        const auto  revision = revisions.find( aScreen.ConnectivityId() );
+        return revision != revisions.end() && revision->second == aScreen.ConnectivityRevision();
     }
 
     const ITEM_RESULT* Row( const ITEM_KEY& aItem ) const
     {
         wxASSERT( wxThread::IsMain() );
 
-        if( !Screen( aItem.inst ) )
+        const SCH_SCREEN* screen = Screen( aItem.inst );
+
+        if( !screen )
             return nullptr;
 
         const auto& rows = engine.Published().Rows();
         const auto row = rows.find( aItem );
-        return row == rows.end() ? nullptr : &row->second;
+
+        if( row == rows.end() )
+            return nullptr;
+
+        // A canvas read of a changed screen must not revive the row of a deleted item
+        if( publicationHolds == 0 && !Current( *screen ) && !screen->GetConnectivityItem( aItem.item ) )
+            return nullptr;
+
+        return &row->second;
     }
 
     SCH_ITEM* Resolve( const ITEM_KEY& aItem ) const

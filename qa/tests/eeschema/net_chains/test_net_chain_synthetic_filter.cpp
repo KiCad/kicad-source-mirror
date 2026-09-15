@@ -20,6 +20,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <connection_graph.h>
+#include <advanced_config.h>
+#include <scoped_set_reset.h>
 #include <sch_symbol.h>
 #include <schematic_utils/schematic_file_util.h>
 #include <netlist_exporter_xml.h>
@@ -108,202 +110,212 @@ BOOST_FIXTURE_TEST_CASE( NetChainSyntheticNamesAreFilteredFromOutputs,
     LOCALE_IO dummy;
 
     const wxString chainName = wxT( "TEST_SYNTH_FILTER_CHAIN" );
-    KI_TEST::LoadSchematic( m_settingsManager, "net_chains_four_nets_labeled", m_schematic );
-    m_project = &m_schematic->Project();
-    auto& manager = m_schematic->NetChains();
-    BOOST_REQUIRE( !manager.GetPotentialNetChains().empty() );
-    BOOST_REQUIRE( !manager.GetPotentialNetChains().front()->GetSymbols().empty() );
-    SCH_SYMBOL* driver = *manager.GetPotentialNetChains().front()->GetSymbols().begin();
+    auto& enabled = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ).m_ConnectivityEngine;
+    SCOPED_SET_RESET restore( enabled, enabled );
 
-    for( const SCH_SHEET_PATH& path : m_schematic->Hierarchy() )
+    for( bool useEngine : { false, true } )
     {
-        for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
-            item->SetExcludedFromBoard( item != driver, &path );
-    }
-
-    m_schematic->RebuildConnectivity();
-    BOOST_REQUIRE_EQUAL( manager.GetPotentialNetChains().size(), 1u );
-    auto* potential = manager.GetPotentialNetChains().front().get();
-    potential->AddNet( wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) + wxString( "filter-test" ) );
-    std::vector<wxString> realNets;
-    std::vector<wxString> syntheticNets;
-
-    for( const wxString& net : potential->GetNets() )
-    {
-        if( net.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) )
-            syntheticNets.push_back( net );
-        else
-            realNets.push_back( net );
-    }
-
-    BOOST_REQUIRE_GE( realNets.size(), 2u );
-    BOOST_REQUIRE( !syntheticNets.empty() );
-    const wxString realNetA = realNets[0];
-    const wxString realNetB = realNets[1];
-    const wxString synthName = syntheticNets.front();
-    SCH_NETCHAIN* committed = manager.CreateNetChainFromPotential( potential, chainName );
-    BOOST_REQUIRE( committed );
-    BOOST_REQUIRE_EQUAL( committed->GetNets().count( synthName ), 1u );
-    SCH_SHEET* topSheet = m_schematic->GetTopLevelSheet();
-    SCH_SCREEN* topScreen = topSheet->GetScreen();
-    wxString rootFileName = PathInWorkDir( wxT( "synth_filter.kicad_sch" ) );
-    topSheet->SetFileName( wxT( "synth_filter.kicad_sch" ) );
-    topScreen->SetFileName( rootFileName );
-
-    // 1. XML netlist exporter (KiCad-internal flag emits <net_chains>).
-    wxFileName xmlFile( rootFileName );
-    xmlFile.SetName( xmlFile.GetName() + wxT( "_netlist" ) );
-    xmlFile.SetExt( wxT( "xml" ) );
-    m_tempFiles.push_back( xmlFile.GetFullPath() );
-
-    {
-        struct FILTER_EXPORTER : NETLIST_EXPORTER_XML
+        BOOST_TEST_CONTEXT( "engine=" << useEngine )
         {
-            using NETLIST_EXPORTER_XML::NETLIST_EXPORTER_XML;
-            wxString transient;
+            enabled = useEngine;
+            KI_TEST::LoadSchematic( m_settingsManager, "net_chains_four_nets_labeled", m_schematic );
+            m_project = &m_schematic->Project();
+            auto& manager = m_schematic->NetChains();
+            BOOST_REQUIRE( !manager.GetPotentialNetChains().empty() );
+            BOOST_REQUIRE( !manager.GetPotentialNetChains().front()->GetSymbols().empty() );
+            SCH_SYMBOL* driver = *manager.GetPotentialNetChains().front()->GetSymbols().begin();
 
-            bool writeNetlist( const wxString& aPath, unsigned aOptions, REPORTER& aReporter ) override
+            for( const SCH_SHEET_PATH& path : m_schematic->Hierarchy() )
             {
-                const auto& chains = m_schematic->NetChains().GetCommittedNetChains();
-
-                if( chains.size() != 1u )
-                    return false;
-
-                // Export preparation rebuilds the chain before this serializer runs.
-                chains.front()->AddNet( transient );
-                return NETLIST_EXPORTER_XML::writeNetlist( aPath, aOptions, aReporter );
+                for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+                    item->SetExcludedFromBoard( item != driver, &path );
             }
-        };
 
-        WX_STRING_REPORTER                    reporter;
-        std::unique_ptr<FILTER_EXPORTER> exporter =
-                std::make_unique<FILTER_EXPORTER>( m_schematic.get() );
-        exporter->transient = synthName;
+            m_schematic->RebuildConnectivity();
+            BOOST_REQUIRE_EQUAL( manager.GetPotentialNetChains().size(), 1u );
+            auto* potential = manager.GetPotentialNetChains().front().get();
+            potential->AddNet( wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) + wxString( "filter-test" ) );
+            std::vector<wxString> realNets;
+            std::vector<wxString> syntheticNets;
 
-        BOOST_REQUIRE( exporter->WriteNetlist( xmlFile.GetFullPath(), GNL_OPT_KICAD,
-                                               reporter ) );
-        BOOST_REQUIRE( reporter.GetMessages().IsEmpty() );
-    }
-
-    BOOST_REQUIRE( wxFileExists( xmlFile.GetFullPath() ) );
-
-    // Raw text scan catches the synthetic prefix anywhere in the document.
-    {
-        wxFFile rawXml( xmlFile.GetFullPath(), "rb" );
-        BOOST_REQUIRE( rawXml.IsOpened() );
-
-        wxString xmlText;
-        rawXml.ReadAll( &xmlText );
-        rawXml.Close();
-
-        BOOST_CHECK_MESSAGE(
-                xmlText.Find( wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) ) == wxNOT_FOUND,
-                "XML netlist must not contain synthetic __SG_* net names" );
-    }
-
-    // Structural check: real nets remain in the chain's <members>; synthetic name does not.
-    {
-        wxXmlDocument xdoc;
-        BOOST_REQUIRE( xdoc.Load( xmlFile.GetFullPath() ) );
-        BOOST_REQUIRE( xdoc.GetRoot() );
-
-        wxXmlNode* netChains = find_child( xdoc.GetRoot(), wxT( "net_chains" ) );
-        BOOST_REQUIRE( netChains );
-
-        wxXmlNode* targetChain = nullptr;
-
-        for( wxXmlNode* xchain = netChains->GetChildren(); xchain; xchain = xchain->GetNext() )
-        {
-            if( xchain->GetName() != wxT( "net_chain" ) )
-                continue;
-
-            if( xchain->GetAttribute( wxT( "name" ), wxEmptyString ) == chainName )
+            for( const wxString& net : potential->GetNets() )
             {
-                targetChain = xchain;
-                break;
+                if( net.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) )
+                    syntheticNets.push_back( net );
+                else
+                    realNets.push_back( net );
             }
-        }
 
-        BOOST_REQUIRE_MESSAGE( targetChain, "Committed chain missing from XML output" );
+            BOOST_REQUIRE_GE( realNets.size(), 2u );
+            BOOST_REQUIRE( !syntheticNets.empty() );
+            const wxString realNetA = realNets[0];
+            const wxString realNetB = realNets[1];
+            const wxString synthName = syntheticNets.front();
+            SCH_NETCHAIN* committed = manager.CreateNetChainFromPotential( potential, chainName );
+            BOOST_REQUIRE( committed );
+            BOOST_REQUIRE_EQUAL( committed->GetNets().count( synthName ), 1u );
+            SCH_SHEET* topSheet = m_schematic->GetTopLevelSheet();
+            SCH_SCREEN* topScreen = topSheet->GetScreen();
+            wxString rootFileName = PathInWorkDir( wxT( "synth_filter.kicad_sch" ) );
+            topSheet->SetFileName( wxT( "synth_filter.kicad_sch" ) );
+            topScreen->SetFileName( rootFileName );
 
-        wxXmlNode* members = find_child( targetChain, wxT( "members" ) );
-        BOOST_REQUIRE( members );
+            // 1. XML netlist exporter (KiCad-internal flag emits <net_chains>).
+            wxFileName xmlFile( rootFileName );
+            xmlFile.SetName( xmlFile.GetName() + wxT( "_netlist" ) );
+            xmlFile.SetExt( wxT( "xml" ) );
+            m_tempFiles.push_back( xmlFile.GetFullPath() );
 
-        std::set<wxString> emittedNets;
+            {
+                struct FILTER_EXPORTER : NETLIST_EXPORTER_XML
+                {
+                    using NETLIST_EXPORTER_XML::NETLIST_EXPORTER_XML;
+                    wxString transient;
 
-        for( wxXmlNode* xmem = members->GetChildren(); xmem; xmem = xmem->GetNext() )
-        {
-            if( xmem->GetName() != wxT( "member" ) )
-                continue;
+                    bool writeNetlist( const wxString& aPath, unsigned aOptions, REPORTER& aReporter ) override
+                    {
+                        const auto& chains = m_schematic->NetChains().GetCommittedNetChains();
 
-            emittedNets.insert( xmem->GetAttribute( wxT( "net" ), wxEmptyString ) );
-        }
+                        if( chains.size() != 1u )
+                            return false;
 
-        BOOST_CHECK( emittedNets.count( realNetA ) == 1u );
-        BOOST_CHECK( emittedNets.count( realNetB ) == 1u );
-        BOOST_CHECK_MESSAGE( emittedNets.count( synthName ) == 0u,
-                             "Synthetic net leaked into XML <member> list" );
-    }
+                        // Export preparation rebuilds the chain before this serializer runs.
+                        chains.front()->AddNet( transient );
+                        return NETLIST_EXPORTER_XML::writeNetlist( aPath, aOptions, aReporter );
+                    }
+                };
 
-    // 2. sexpr writer must already filter synthetic names; reloading the file must
-    //    yield a chain that resolves with the real members intact.
-    {
-        SCH_IO_KICAD_SEXPR saver;
-        BOOST_REQUIRE_NO_THROW( saver.SaveSchematicFile( rootFileName, topSheet,
-                                                        m_schematic.get() ) );
-        BOOST_REQUIRE( wxFileExists( rootFileName ) );
+                WX_STRING_REPORTER                    reporter;
+                std::unique_ptr<FILTER_EXPORTER> exporter =
+                        std::make_unique<FILTER_EXPORTER>( m_schematic.get() );
+                exporter->transient = synthName;
 
-        wxFFile rawSexpr( rootFileName, "rb" );
-        BOOST_REQUIRE( rawSexpr.IsOpened() );
+                BOOST_REQUIRE( exporter->WriteNetlist( xmlFile.GetFullPath(), GNL_OPT_KICAD,
+                                                       reporter ) );
+                BOOST_REQUIRE( reporter.GetMessages().IsEmpty() );
+            }
 
-        wxString sexprText;
-        rawSexpr.ReadAll( &sexprText );
-        rawSexpr.Close();
+            BOOST_REQUIRE( wxFileExists( xmlFile.GetFullPath() ) );
 
-        BOOST_CHECK_MESSAGE(
-                sexprText.Find( wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) ) == wxNOT_FOUND,
-                "kicad_sch must not contain synthetic __SG_* net names" );
+            // Raw text scan catches the synthetic prefix anywhere in the document.
+            {
+                wxFFile rawXml( xmlFile.GetFullPath(), "rb" );
+                BOOST_REQUIRE( rawXml.IsOpened() );
 
-        // Guard against the early-skip path in sch_io_kicad_sexpr.cpp: if terminal refs were
-        // missing the writer would emit no net_chain section and the synthetic-prefix check
-        // above would pass vacuously.
-        BOOST_CHECK_MESSAGE( sexprText.Find( wxT( "(net_chain" ) ) != wxNOT_FOUND,
-                             "kicad_sch must contain the committed net_chain section" );
-        BOOST_CHECK_MESSAGE( sexprText.Find( chainName ) != wxNOT_FOUND,
-                             "kicad_sch must reference the committed chain by name" );
-        BOOST_CHECK_MESSAGE( sexprText.Find( realNetA ) != wxNOT_FOUND,
-                             "kicad_sch must retain real net A in the chain's nets list" );
-        BOOST_CHECK_MESSAGE( sexprText.Find( realNetB ) != wxNOT_FOUND,
-                             "kicad_sch must retain real net B in the chain's nets list" );
-    }
+                wxString xmlText;
+                rawXml.ReadAll( &xmlText );
+                rawXml.Close();
 
-    // Check the persisted member list independently of connectivity reconstruction.
-    {
-        SCH_IO_KICAD_SEXPR loader;
-        SCHEMATIC          reloaded( nullptr );
+                BOOST_CHECK_MESSAGE(
+                        xmlText.Find( wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) ) == wxNOT_FOUND,
+                        "XML netlist must not contain synthetic __SG_* net names" );
+            }
 
-        reloaded.SetProject( m_project );
+            // Structural check: real nets remain in the chain's <members>; synthetic name does not.
+            {
+                wxXmlDocument xdoc;
+                BOOST_REQUIRE( xdoc.Load( xmlFile.GetFullPath() ) );
+                BOOST_REQUIRE( xdoc.GetRoot() );
 
-        SCH_SHEET* loadedRoot = nullptr;
-        BOOST_REQUIRE_NO_THROW(
-                loadedRoot = loader.LoadSchematicFile( rootFileName, &reloaded ) );
-        BOOST_REQUIRE( loadedRoot );
+                wxXmlNode* netChains = find_child( xdoc.GetRoot(), wxT( "net_chains" ) );
+                BOOST_REQUIRE( netChains );
 
-        const auto& overrides = reloaded.ConnectionGraph()->GetNetChainMemberNetOverrides();
-        auto        it = overrides.find( chainName );
-        BOOST_REQUIRE_MESSAGE( it != overrides.end(),
-                               "Reloaded schematic missing chain member-net override" );
+                wxXmlNode* targetChain = nullptr;
 
-        const std::set<wxString>& reloadedNets = it->second;
-        BOOST_CHECK( !reloadedNets.empty() );
-        BOOST_CHECK( reloadedNets.count( realNetA ) == 1u );
-        BOOST_CHECK( reloadedNets.count( realNetB ) == 1u );
+                for( wxXmlNode* xchain = netChains->GetChildren(); xchain; xchain = xchain->GetNext() )
+                {
+                    if( xchain->GetName() != wxT( "net_chain" ) )
+                        continue;
 
-        for( const wxString& n : reloadedNets )
-        {
-            BOOST_CHECK_MESSAGE(
-                    !n.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ),
-                    "Reloaded chain leaked a synthetic __SG_* member" );
+                    if( xchain->GetAttribute( wxT( "name" ), wxEmptyString ) == chainName )
+                    {
+                        targetChain = xchain;
+                        break;
+                    }
+                }
+
+                BOOST_REQUIRE_MESSAGE( targetChain, "Committed chain missing from XML output" );
+
+                wxXmlNode* members = find_child( targetChain, wxT( "members" ) );
+                BOOST_REQUIRE( members );
+
+                std::set<wxString> emittedNets;
+
+                for( wxXmlNode* xmem = members->GetChildren(); xmem; xmem = xmem->GetNext() )
+                {
+                    if( xmem->GetName() != wxT( "member" ) )
+                        continue;
+
+                    emittedNets.insert( xmem->GetAttribute( wxT( "net" ), wxEmptyString ) );
+                }
+
+                BOOST_CHECK( emittedNets.count( realNetA ) == 1u );
+                BOOST_CHECK( emittedNets.count( realNetB ) == 1u );
+                BOOST_CHECK_MESSAGE( emittedNets.count( synthName ) == 0u,
+                                     "Synthetic net leaked into XML <member> list" );
+            }
+
+            // 2. sexpr writer must already filter synthetic names; reloading the file must
+            //    yield a chain that resolves with the real members intact.
+            {
+                SCH_IO_KICAD_SEXPR saver;
+                BOOST_REQUIRE_NO_THROW( saver.SaveSchematicFile( rootFileName, topSheet,
+                                                                m_schematic.get() ) );
+                BOOST_REQUIRE( wxFileExists( rootFileName ) );
+
+                wxFFile rawSexpr( rootFileName, "rb" );
+                BOOST_REQUIRE( rawSexpr.IsOpened() );
+
+                wxString sexprText;
+                rawSexpr.ReadAll( &sexprText );
+                rawSexpr.Close();
+
+                BOOST_CHECK_MESSAGE(
+                        sexprText.Find( wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) ) == wxNOT_FOUND,
+                        "kicad_sch must not contain synthetic __SG_* net names" );
+
+                // Guard against the early-skip path in sch_io_kicad_sexpr.cpp: if terminal refs were
+                // missing the writer would emit no net_chain section and the synthetic-prefix check
+                // above would pass vacuously.
+                BOOST_CHECK_MESSAGE( sexprText.Find( wxT( "(net_chain" ) ) != wxNOT_FOUND,
+                                     "kicad_sch must contain the committed net_chain section" );
+                BOOST_CHECK_MESSAGE( sexprText.Find( chainName ) != wxNOT_FOUND,
+                                     "kicad_sch must reference the committed chain by name" );
+                BOOST_CHECK_MESSAGE( sexprText.Find( realNetA ) != wxNOT_FOUND,
+                                     "kicad_sch must retain real net A in the chain's nets list" );
+                BOOST_CHECK_MESSAGE( sexprText.Find( realNetB ) != wxNOT_FOUND,
+                                     "kicad_sch must retain real net B in the chain's nets list" );
+            }
+
+            // Check the persisted member list independently of connectivity reconstruction.
+            {
+                SCH_IO_KICAD_SEXPR loader;
+                SCHEMATIC          reloaded( nullptr );
+
+                reloaded.SetProject( m_project );
+
+                SCH_SHEET* loadedRoot = nullptr;
+                BOOST_REQUIRE_NO_THROW(
+                        loadedRoot = loader.LoadSchematicFile( rootFileName, &reloaded ) );
+                BOOST_REQUIRE( loadedRoot );
+
+                const auto& overrides = reloaded.ConnectionGraph()->GetNetChainMemberNetOverrides();
+                auto        it = overrides.find( chainName );
+                BOOST_REQUIRE_MESSAGE( it != overrides.end(),
+                                       "Reloaded schematic missing chain member-net override" );
+
+                const std::set<wxString>& reloadedNets = it->second;
+                BOOST_CHECK( !reloadedNets.empty() );
+                BOOST_CHECK( reloadedNets.count( realNetA ) == 1u );
+                BOOST_CHECK( reloadedNets.count( realNetB ) == 1u );
+
+                for( const wxString& n : reloadedNets )
+                {
+                    BOOST_CHECK_MESSAGE(
+                            !n.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ),
+                            "Reloaded chain leaked a synthetic __SG_* member" );
+                }
+            }
         }
     }
 }

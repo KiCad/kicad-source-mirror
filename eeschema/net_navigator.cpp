@@ -35,7 +35,9 @@
 #include <sch_sheet_pin.h>
 #include <string_utils.h>
 #include <trace_helpers.h>
+#include <advanced_config.h>
 #include <connectivity/conn_navigation.h>
+#include <connectivity/conn_facade.h>
 #include <widgets/wx_aui_utils.h>
 #include <tools/sch_actions.h>
 #include <mail_type.h>
@@ -277,12 +279,38 @@ void SCH_EDIT_FRAME::MakeNetNavigatorNode( const wxString& aNetName, wxTreeItemI
 }
 
 
-void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelection )
+void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelection,
+                                          const std::vector<wxString>* aChangedNets )
 {
     wxCHECK( m_netNavigator && m_schematic, /* void */ );
 
     if( !m_netNavigator->IsShownOnScreen() || !m_schematic->HasHierarchy() )
+    {
+        m_netNavigatorStale = true;
         return;
+    }
+
+    const bool incremental = aChangedNets && !m_netNavigatorStale && !m_netNavigator->IsEmpty()
+                             && m_netNavigatorConnection == m_highlightedConn;
+
+    if( !aSelection && !m_netNavigator->IsEmpty()
+        && ( incremental || ( !m_highlightedConn.IsEmpty()
+                              && m_netNavigatorConnection == m_highlightedConn ) ) )
+    {
+        const wxTreeItemId selected = m_netNavigator->GetSelection();
+
+        if( selected.IsOk() )
+            aSelection = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selected ) );
+    }
+
+    // Selection data can belong to the tree that is about to be deleted
+    NET_NAVIGATOR_ITEM_DATA selection;
+
+    if( aSelection )
+    {
+        selection = *aSelection;
+        aSelection = &selection;
+    }
 
     if( m_netNavigatorFilter )
         m_netNavigatorFilter->Enable( m_highlightedConn.IsEmpty() );
@@ -292,6 +320,52 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 
     wxWindowUpdateLocker updateLock( m_netNavigator );
     PROF_TIMER           timer;
+
+    if( !incremental )
+    {
+        m_netNavigatorNodes.clear();
+        m_netNavigator->DeleteAllItems();
+        m_netNavigatorConnection = m_highlightedConn;
+        m_netNavigatorStale = false;
+    }
+
+    const auto rebuildNode = [&]( const wxString& name, wxTreeItemId node )
+    {
+        wxTreeItemId selected = m_netNavigator->GetSelection();
+
+        while( selected.IsOk() && selected != node )
+            selected = m_netNavigator->GetItemParent( selected );
+
+        const bool restoreSelection = selected == node;
+        const bool expanded = m_netNavigator->IsExpanded( node );
+        std::set<KIID_PATH> expandedSheets;
+        wxTreeItemIdValue cookie;
+
+        for( wxTreeItemId sheet = m_netNavigator->GetFirstChild( node, cookie ); sheet.IsOk();
+             sheet = m_netNavigator->GetNextChild( node, cookie ) )
+        {
+            if( m_netNavigator->IsExpanded( sheet ) )
+            {
+                if( auto* data = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( sheet ) ) )
+                    expandedSheets.insert( data->GetSheetPath().PathRef() );
+            }
+        }
+
+        m_netNavigator->DeleteChildren( node );
+        MakeNetNavigatorNode( name, node, restoreSelection ? aSelection : nullptr, query );
+
+        for( wxTreeItemId sheet = m_netNavigator->GetFirstChild( node, cookie ); sheet.IsOk();
+             sheet = m_netNavigator->GetNextChild( node, cookie ) )
+        {
+            auto* data = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( sheet ) );
+
+            if( data && expandedSheets.contains( data->GetSheetPath().PathRef() ) )
+                m_netNavigator->Expand( sheet );
+        }
+
+        if( !expanded )
+            m_netNavigator->Collapse( node );
+    };
 
     wxString filter = m_highlightedConn.IsEmpty() ? m_netNavigatorFilterValue : wxString();
 
@@ -331,13 +405,31 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 
     if( m_highlightedConn.IsEmpty() )
     {
-        m_netNavigator->DeleteAllItems();
-
         // Create a tree of all nets in the schematic.
-        wxTreeItemId rootId = m_netNavigator->AddRoot( _( "Nets" ), 0 );
+        wxTreeItemId rootId = incremental ? m_netNavigator->GetRootItem()
+                                         : m_netNavigator->AddRoot( _( "Nets" ), 0 );
+        const auto names = incremental ? *aChangedNets : query.NetNames();
+        // Legacy names arrive sorted by escaped name, engine names in publication order
+        bool sortRoot = !incremental && ADVANCED_CFG::GetCfg().m_ConnectivityEngine;
 
-        for( const wxString& netName : query.NetNames() )
+        for( const wxString& netName : names )
         {
+            if( netName.IsEmpty() )
+                continue;
+
+            auto existing = m_netNavigatorNodes.find( netName );
+
+            if( incremental && !m_schematic->Connectivity().NetByName( netName ) )
+            {
+                if( existing != m_netNavigatorNodes.end() )
+                {
+                    m_netNavigator->Delete( existing->second );
+                    m_netNavigatorNodes.erase( existing );
+                }
+
+                continue;
+            }
+
             wxString displayName = UnescapeString( netName );
 
             // Apply filter based on mode
@@ -368,55 +460,40 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
             }
 
             nodeCnt++;
-            wxTreeItemId netId = m_netNavigator->AppendItem( rootId, displayName, -1, -1 );
-            MakeNetNavigatorNode( netName, netId, aSelection, query );
-        }        m_netNavigator->Expand( rootId );
-    }
-    else if( !m_netNavigator->IsEmpty() )
-    {
-        const wxString shownNetName = m_netNavigator->GetItemText( m_netNavigator->GetRootItem() );
 
-        if( shownNetName != m_highlightedConn )
-        {
-            m_netNavigator->DeleteAllItems();
-
-            nodeCnt++;
-
-            wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ) );
-
-            MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection, query );
-        }
-        else
-        {
-            NET_NAVIGATOR_ITEM_DATA* itemData = nullptr;
-            NET_NAVIGATOR_ITEM_DATA savedSelection;
-
-            wxTreeItemId selection = m_netNavigator->GetSelection();
-
-            if( selection.IsOk() )
-                itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
-
-            if( itemData )
+            if( existing != m_netNavigatorNodes.end() )
             {
-                savedSelection = *itemData;
-                itemData = &savedSelection;
+                rebuildNode( netName, existing->second );
             }
-
-            m_netNavigator->DeleteAllItems();
-            nodeCnt++;
-
-            wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ) );
-
-            MakeNetNavigatorNode( m_highlightedConn, rootId, itemData, query );
+            else
+            {
+                wxTreeItemId netId = m_netNavigator->AppendItem( rootId, displayName, -1, -1 );
+                m_netNavigatorNodes.emplace( netName, netId );
+                MakeNetNavigatorNode( netName, netId, incremental ? nullptr : aSelection, query );
+                sortRoot |= incremental;
+            }
         }
+
+        if( sortRoot )
+            m_netNavigator->SortChildren( rootId );
+
+        if( !incremental )
+            m_netNavigator->Expand( rootId );
     }
     else
     {
-        nodeCnt++;
-
-        wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ) );
-
-        MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection, query );
+        if( !incremental )
+        {
+            wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ) );
+            m_netNavigatorNodes.emplace( m_highlightedConn, rootId );
+            MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection, query );
+            nodeCnt++;
+        }
+        else if( std::ranges::find( *aChangedNets, m_highlightedConn ) != aChangedNets->end() )
+        {
+            rebuildNode( m_highlightedConn, m_netNavigator->GetRootItem() );
+            nodeCnt++;
+        }
     }
 
     timer.Stop();

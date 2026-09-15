@@ -449,6 +449,11 @@ int SCH_FIND_REPLACE_TOOL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
 
             commit.Push( wxS( "Find and Replace" ) );
         }
+        else if( SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+        {
+            // Nothing changed, but Modify() bumped the connectivity revision of the screen
+            editFrame->RecalculateConnections( nullptr, NO_CLEANUP );
+        }
 
         FindNext( ACTIONS::findNext.MakeEvent() );
     }
