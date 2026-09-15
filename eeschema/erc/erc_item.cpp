@@ -63,6 +63,10 @@ ERC_ITEM ERC_ITEM::duplicatePinError( ERCE_DUPLICATE_PIN_ERROR,
         _HKI( "Duplicate pins with different nets" ),
         wxT( "duplicate_pins" ) );
 
+ERC_ITEM ERC_ITEM::wiredImplicitPower( ERCE_WIRED_IMPLICIT_POWER,
+        _HKI( "Wired hidden power input pin also connects globally by name" ),
+        wxT( "wired_implicit_power" ) );
+
 ERC_ITEM ERC_ITEM::pinTableWarning( ERCE_PIN_TO_PIN_WARNING,
         _HKI( "Conflict problem between pins" ),
         wxT( "pin_to_pin" ) );
@@ -276,7 +280,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
           ERC_ITEM::isolatedPinLabel, ERC_ITEM::singleGlobalLabel, ERC_ITEM::sameLocalGlobalLabel,
           ERC_ITEM::sameLocalGlobalPower, ERC_ITEM::wireDangling, ERC_ITEM::busEntryNeeded, ERC_ITEM::endpointOffGrid,
           ERC_ITEM::fourWayJunction, ERC_ITEM::labelMultipleWires, ERC_ITEM::unconnectedWireEndpoint,
-          ERC_ITEM::emptyLabelName,
+          ERC_ITEM::emptyLabelName, ERC_ITEM::wiredImplicitPower,
 
           ERC_ITEM::heading_conflicts, ERC_ITEM::duplicateReference, ERC_ITEM::pinTableWarning,
           ERC_ITEM::differentUnitValue, ERC_ITEM::differentUnitFootprint, ERC_ITEM::differentUnitNet,
@@ -311,6 +315,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_PIN_NOT_CONNECTED:       return std::make_shared<ERC_ITEM>( pinNotConnected );
     case ERCE_PIN_NOT_DRIVEN:          return std::make_shared<ERC_ITEM>( pinNotDriven );
     case ERCE_POWERPIN_NOT_DRIVEN:     return std::make_shared<ERC_ITEM>( powerpinNotDriven );
+    case ERCE_WIRED_IMPLICIT_POWER:    return std::make_shared<ERC_ITEM>( wiredImplicitPower );
     case ERCE_DUPLICATE_PIN_ERROR:     return std::make_shared<ERC_ITEM>( duplicatePinError );
     case ERCE_PIN_TO_PIN_WARNING:      return std::make_shared<ERC_ITEM>( pinTableWarning );
     case ERCE_PIN_TO_PIN_ERROR:        return std::make_shared<ERC_ITEM>( pinTableError );

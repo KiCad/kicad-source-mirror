@@ -36,6 +36,11 @@
 #include <erc/erc_report.h>
 #include <settings/settings_manager.h>
 #include <locale_io.h>
+#include <advanced_config.h>
+#include <sch_symbol.h>
+#include <sch_pin.h>
+#include <sch_marker.h>
+#include <scoped_set_reset.h>
 
 
 struct ERC_GROUND_PIN_TEST_FIXTURE
@@ -47,6 +52,141 @@ struct ERC_GROUND_PIN_TEST_FIXTURE
     SETTINGS_MANAGER           m_settingsManager;
     std::unique_ptr<SCHEMATIC> m_schematic;
 };
+
+
+BOOST_FIXTURE_TEST_CASE( ERCGroundPinsUsePublishedNames, ERC_GROUND_PIN_TEST_FIXTURE )
+{
+    LOCALE_IO locale;
+    auto& enabled = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ).m_ConnectivityEngine;
+    SCOPED_SET_RESET restore( enabled, true );
+    const std::vector<std::pair<wxString, int>> cases = {
+        { "ground_pin_test_error", 1 },
+        { "ground_pin_test_mixed", 1 },
+        { "ground_pin_test_ok", 0 },
+        { "ground_pin_test_no_ground_net", 0 },
+        { "ground_pin_test_earth", 0 }
+    };
+
+    for( const auto& [fixture, expected] : cases )
+    {
+        BOOST_TEST_CONTEXT( fixture )
+        {
+            KI_TEST::LoadSchematic( m_settingsManager, fixture, m_schematic );
+            m_schematic->ErcSettings().m_ERCSeverities[ERCE_GROUND_PIN_NOT_GROUND] = RPT_SEVERITY_ERROR;
+            m_schematic->RebuildConnectivity();
+            m_schematic->ConnectionGraph()->Reset();
+            ERC_TESTER tester( m_schematic.get() );
+            BOOST_CHECK_EQUAL( tester.TestGroundPins(), expected );
+            SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
+            errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+            BOOST_CHECK_EQUAL( errors.GetCount(), expected );
+
+            for( int i = 0; i < errors.GetCount(); ++i )
+                BOOST_CHECK_EQUAL( errors.GetItem( i )->GetErrorCode(), ERCE_GROUND_PIN_NOT_GROUND );
+        }
+    }
+}
+
+
+BOOST_FIXTURE_TEST_CASE( ERCGroundPinsUseActiveSharedInstanceUnits, ERC_GROUND_PIN_TEST_FIXTURE )
+{
+    LOCALE_IO locale;
+    auto& enabled = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ).m_ConnectivityEngine;
+    SCOPED_SET_RESET restore( enabled, enabled );
+
+    for( bool backend : { false, true } )
+    {
+        enabled = backend;
+        KI_TEST::LoadSchematic( m_settingsManager, "legacy_hierarchy/legacy_hierarchy", m_schematic );
+        std::vector<SCH_SHEET_PATH> paths;
+
+        for( const SCH_SHEET_PATH& path : m_schematic->Hierarchy() )
+        {
+            if( path.LastScreen()->GetFileName().EndsWith( "ampli_ht.kicad_sch" ) )
+                paths.push_back( path );
+        }
+
+        BOOST_REQUIRE_EQUAL( paths.size(), 2 );
+        SCH_SCREEN* screen = paths[0].LastScreen();
+        BOOST_REQUIRE( screen == paths[1].LastScreen() );
+        SCH_SYMBOL* symbol = nullptr;
+        SCH_SYMBOL* ground = nullptr;
+        SCH_SYMBOL* supply = nullptr;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            auto* candidate = static_cast<SCH_SYMBOL*>( item );
+
+            if( !symbol && candidate->GetUnitCount() > 1 )
+                symbol = candidate;
+            else if( !ground && candidate->GetField( FIELD_T::VALUE )->GetText() == wxString( "GND" ) )
+                ground = candidate;
+            else if( !supply && candidate->GetField( FIELD_T::VALUE )->GetText() == wxString( "+12V" ) )
+                supply = candidate;
+        }
+
+        BOOST_REQUIRE( symbol );
+        BOOST_REQUIRE( ground );
+        BOOST_REQUIRE( supply );
+        symbol->SetUnitSelection( &paths[0], 1 );
+        symbol->SetUnitSelection( &paths[1], 2 );
+        symbol->Move( VECTOR2I( 100000000, 200000000 ) );
+        SCH_PIN* common = nullptr;
+        SCH_PIN* selected = nullptr;
+
+        for( const auto& pin : symbol->GetRawPins() )
+        {
+            if( pin->GetNumber() == wxString( "4" ) )
+                common = pin.get();
+            else if( pin->GetNumber() == wxString( "5" ) )
+                selected = pin.get();
+        }
+
+        BOOST_REQUIRE( common );
+        BOOST_REQUIRE( selected );
+        BOOST_REQUIRE_EQUAL( common->GetUnit(), 0 );
+        BOOST_REQUIRE_EQUAL( selected->GetUnit(), 2 );
+        auto* libraryPin = const_cast<SCH_PIN*>( selected->GetLibPin() );
+        BOOST_REQUIRE( libraryPin );
+        libraryPin->SetName( "GND" );
+        selected->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
+        BOOST_REQUIRE_EQUAL( selected->GetShownName(), wxString( "GND" ) );
+        BOOST_REQUIRE( selected->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN );
+        BOOST_REQUIRE_EQUAL( ground->GetPins( &paths[0] ).size(), 1 );
+        BOOST_REQUIRE_EQUAL( supply->GetPins( &paths[0] ).size(), 1 );
+        ground->Move( common->GetPosition() - ground->GetPins( &paths[0] ).front()->GetPosition() );
+        supply->Move( selected->GetPosition() - supply->GetPins( &paths[0] ).front()->GetPosition() );
+        screen->Update( symbol, false );
+        screen->Update( ground, false );
+        screen->Update( supply, false );
+        m_schematic->RebuildConnectivity();
+
+        if( backend )
+            m_schematic->ConnectionGraph()->Reset();
+
+        symbol->SetUnit( 1 );
+        m_schematic->SetCurrentSheet( paths[0] );
+        ERC_TESTER tester( m_schematic.get() );
+        tester.TestGroundPins();
+        size_t count = 0;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_MARKER_T ) )
+        {
+            const auto* marker = static_cast<SCH_MARKER*>( item );
+
+            if( marker->GetRCItem()->GetErrorCode() != ERCE_GROUND_PIN_NOT_GROUND
+                || marker->GetRCItem()->GetMainItemID() != selected->m_Uuid )
+                continue;
+
+            const auto error = std::static_pointer_cast<ERC_ITEM>( marker->GetRCItem() );
+            BOOST_CHECK( error->GetSpecificSheetPath().PathRef() == paths[1].PathRef() );
+            BOOST_CHECK( marker->GetPosition() == selected->GetPosition() );
+            ++count;
+        }
+
+        BOOST_CHECK_EQUAL( count, 1 );
+    }
+}
 
 
 /**

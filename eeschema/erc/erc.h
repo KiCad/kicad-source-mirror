@@ -44,28 +44,25 @@ extern const wxString CommentERC_H[];
 extern const wxString CommentERC_V[];
 
 
+namespace SCH_CONNECTIVITY
+{
+struct MULTI_UNIT_GROUP;
+}
+
 class ERC_TESTER
 {
 public:
 
-    ERC_TESTER( SCHEMATIC* aSchematic, bool aShowAllErrors = false ) :
-            m_schematic( aSchematic ),
-            m_settings( aSchematic->ErcSettings() ),
-            m_sheetList( aSchematic->BuildSheetListSortedByPageNumbers() ),
-            m_screens( aSchematic->Root() ),
-            m_nets( aSchematic->ConnectionGraph()->GetNetMap() ),
-            m_showAllErrors( aShowAllErrors )
-    {
-        m_sheetList.GetMultiUnitSymbols( m_refMap, SYMBOL_FILTER_ALL );
-    }
+    ERC_TESTER( SCHEMATIC* aSchematic, bool aShowAllErrors = false );
 
     /**
      * Inside a given sheet, one cannot have sheets with duplicate names (file
      * names can be duplicated).
      *
      * @return the error count
-     * @param aCreateMarker: true = create error markers in schematic,
-     *                       false = calculate error count only
+     * @param aCreateMarker True creates markers from captured connectivity when the new
+     * engine is enabled; call after rebuilding. False checks fresh model state without
+     * rebuilding, for export and highlight preflight. The legacy engine always reads live state.
      */
     int TestDuplicateSheetNames( bool aCreateMarker );
 
@@ -81,6 +78,8 @@ public:
 
     /**
      * Check for any unresolved text variable references.
+     * With the connectivity engine, aDrawingSheet enables drawing checks; page/title data comes from
+     * captured instances.
      */
     void TestTextVars( DS_PROXY_VIEW_ITEM* aDrawingSheet );
 
@@ -127,6 +126,9 @@ public:
      * @return the error count
      */
     int TestDuplicatePinNets();
+
+    // Report enabled checks over owned published connectivity without preparing symbol checks.
+    static int TestConnectivity( SCHEMATIC& aSchematic );
 
     /**
      * Checks for ground-labeled pins not on a ground net while another pin is.
@@ -203,11 +205,6 @@ public:
     int TestMissingNetclasses();
 
     /**
-     * Tests for rule area ERC issues
-     */
-    int RunRuleAreaERC();
-
-    /**
      * Test all variant symbol overrides for resolution and pin compatibility.
      *
      * Creates ERCE_VARIANT_SYMBOL_INVALID markers when a variant's symbol override
@@ -220,6 +217,8 @@ public:
                    KIFACE* aCvPcb, PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter );
 
 private:
+    std::vector<SCH_CONNECTIVITY::MULTI_UNIT_GROUP> multiUnitSources() const;
+
     SCHEMATIC*                   m_schematic;
     ERC_SETTINGS&                m_settings;
     SCH_SHEET_LIST               m_sheetList;

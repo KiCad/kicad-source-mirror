@@ -24,6 +24,8 @@
 #include <common.h>
 #include <inspectable_impl.h>
 #include <set>
+#include <tuple>
+#include <variant>
 #include <bus_alias.h>
 #include <commit.h>
 #include <connection_graph.h>
@@ -745,6 +747,281 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
     settings.m_ErcExclusionsLegacy.clear();
 
+    using GROUP_ANCHOR = std::variant<KIID, std::pair<int, int>>;
+    using GROUP_KEY = std::tuple<int, KIID_PATH, GROUP_ANCHOR>;
+    std::map<GROUP_KEY, SCH_MARKER*> groupMarkers;
+    using NC_GROUPS = std::map<std::pair<KIID_PATH, VECTOR2I>, SCH_CONNECTIVITY::NO_CONNECT_PIN_CONFLICT,
+                               SCH_CONNECTIVITY::SHEET_POSITION_LESS>;
+    std::optional<NC_GROUPS> ncGroups;
+    std::optional<std::map<GROUP_KEY, KIID>> ncFlagGroups;
+    std::optional<std::map<GROUP_KEY, KIID>> hierarchyGroups;
+    std::optional<std::vector<SCH_CONNECTIVITY::LABEL_WIRE_CONFLICT>> labelWireGroups;
+    std::optional<std::vector<SCH_CONNECTIVITY::FOUR_WAY_JUNCTION>> fourWayGroups;
+    const auto groupKey = [&]( const SCH_MARKER& aMarker ) -> std::optional<GROUP_KEY>
+    {
+        const auto error = std::static_pointer_cast<ERC_ITEM>( aMarker.GetRCItem() );
+
+        const bool ncPin = error->GetErrorCode() == ERCE_NOCONNECT_CONNECTED
+                           && !error->MainItemHasSheetPath() && !error->AuxItemHasSheetPath();
+
+        static const std::set<int> groupedCodes = { ERCE_WIRE_DANGLING, ERCE_BUS_TO_NET_CONFLICT,
+                                                    ERCE_BUS_TO_BUS_CONFLICT, ERCE_NOCONNECT_CONNECTED,
+                                                    ERCE_NOCONNECT_NOT_CONNECTED, ERCE_PIN_NOT_CONNECTED,
+                                                    ERCE_LABEL_MULTIPLE_WIRES, ERCE_FOUR_WAY_JUNCTION,
+                                                    ERCE_HIERACHICAL_LABEL };
+
+        if( !ADVANCED_CFG::GetCfg().m_ConnectivityEngine || !groupedCodes.contains( error->GetErrorCode() )
+            || !error->IsSheetSpecific() )
+        {
+            return std::nullopt;
+        }
+
+        if( error->GetErrorCode() == ERCE_FOUR_WAY_JUNCTION )
+        {
+            if( error->MainItemHasSheetPath() || error->AuxItemHasSheetPath() )
+                return std::nullopt;
+
+            if( !fourWayGroups )
+                fourWayGroups = m_connectivity->Engine().FourWayJunctions();
+
+            const KIID_PATH& path = error->GetSpecificSheetPath().PathRef();
+            const VECTOR2I position = aMarker.GetPosition();
+            const auto group = std::lower_bound( fourWayGroups->begin(), fourWayGroups->end(),
+                    std::tie( path, position.x, position.y ),
+                    []( const auto& junction, const auto& location )
+                    {
+                        return std::tie( junction.sheet, junction.position.x, junction.position.y ) < location;
+                    } );
+
+            if( group == fourWayGroups->end() || group->sheet != path || group->position != position )
+                return std::nullopt;
+
+            for( const KIID& id : error->GetIDs() )
+            {
+                if( !std::binary_search( group->equivalentItems.begin(), group->equivalentItems.end(), id ) )
+                    return std::nullopt;
+            }
+
+            return GROUP_KEY{ ERCE_FOUR_WAY_JUNCTION, path, std::pair{ position.x, position.y } };
+        }
+
+        const SCH_ITEM* main = ResolveItem( error->GetMainItemID(), nullptr, true );
+
+        if( !main || main->GetPosition() != aMarker.GetPosition() )
+            return std::nullopt;
+
+        if( error->GetErrorCode() == ERCE_PIN_NOT_CONNECTED )
+        {
+            if( main->Type() != SCH_PIN_T )
+                return std::nullopt;
+
+            // Power-symbol errors identify individual pins, not a canonical witness for an island
+            if( static_cast<const SCH_PIN*>( main )->GetParentSymbol()->IsPower() )
+                return std::nullopt;
+        }
+
+        const KIID_PATH& path = error->GetSpecificSheetPath().PathRef();
+        const auto instance = m_connectivity->Keys().FindInstance( path );
+
+        if( !instance )
+            return std::nullopt;
+
+        if( error->GetErrorCode() == ERCE_LABEL_MULTIPLE_WIRES )
+        {
+            if( ( main->Type() != SCH_LABEL_T && main->Type() != SCH_GLOBAL_LABEL_T
+                  && main->Type() != SCH_HIER_LABEL_T )
+                || error->MainItemHasSheetPath() || error->AuxItemHasSheetPath() )
+                return std::nullopt;
+
+            if( !labelWireGroups )
+                labelWireGroups = m_connectivity->Engine().LabelWireConflicts();
+
+            const auto group = std::find_if( labelWireGroups->begin(), labelWireGroups->end(),
+                    [&]( const auto& conflict )
+                    {
+                        return conflict.sheet == path && conflict.position == aMarker.GetPosition();
+                    } );
+
+            if( group == labelWireGroups->end() )
+                return std::nullopt;
+
+            for( const KIID& id : error->GetIDs() )
+            {
+                if( id != main->m_Uuid && !std::binary_search( group->wires.begin(), group->wires.end(), id ) )
+                    return std::nullopt;
+            }
+
+            return GROUP_KEY{ ERCE_LABEL_MULTIPLE_WIRES, path, group->label };
+        }
+
+        if( error->GetErrorCode() == ERCE_HIERACHICAL_LABEL )
+        {
+            if( !error->MainItemHasSheetPath() || error->AuxItemHasSheetPath()
+                || error->GetMainItemSheetPath().PathRef() != path )
+                return std::nullopt;
+
+            if( !hierarchyGroups )
+            {
+                hierarchyGroups.emplace();
+
+                for( const auto& diagnostic : m_connectivity->Engine().HierarchyErrors() )
+                {
+                    for( const KIID& id : diagnostic.equivalentItems )
+                        hierarchyGroups->emplace( GROUP_KEY{ ERCE_HIERACHICAL_LABEL, diagnostic.sheet, id },
+                                                  diagnostic.item );
+                }
+            }
+
+            const auto found = hierarchyGroups->find( { ERCE_HIERACHICAL_LABEL, path, main->m_Uuid } );
+
+            if( found == hierarchyGroups->end() )
+                return std::nullopt;
+
+            return GROUP_KEY{ ERCE_HIERACHICAL_LABEL, path, found->second };
+        }
+
+        if( ncPin )
+        {
+            if( !ncGroups )
+            {
+                ncGroups.emplace();
+
+                for( auto& group : m_connectivity->Engine().NoConnectPinConflicts() )
+                    ncGroups->emplace( std::make_pair( group.sheet, group.position ), std::move( group ) );
+            }
+
+            const auto found = ncGroups->find( { path, aMarker.GetPosition() } );
+
+            if( found == ncGroups->end() )
+                return std::nullopt;
+
+            const auto& group = found->second;
+            const auto isPin = [&]( const KIID& id )
+            {
+                return std::binary_search( group.pins.begin(), group.pins.end(), id );
+            };
+
+            if( !isPin( error->GetMainItemID() ) )
+                return std::nullopt;
+
+            for( const KIID& id : error->GetIDs() )
+            {
+                if( id == niluuid )
+                    continue;
+
+                if( !m_connectivity->GetSubgraphForItem( id, path )
+                    || ( !isPin( id ) && !std::binary_search( group.others.begin(), group.others.end(), id ) ) )
+                    return std::nullopt;
+            }
+
+            return GROUP_KEY{ error->GetErrorCode(), path, group.pins.front() };
+        }
+
+        if( error->GetErrorCode() == ERCE_NOCONNECT_CONNECTED
+            || error->GetErrorCode() == ERCE_NOCONNECT_NOT_CONNECTED )
+        {
+            if( !error->MainItemHasSheetPath() || error->AuxItemHasSheetPath()
+                || error->GetMainItemSheetPath().PathRef() != path )
+                return std::nullopt;
+
+            KIID flag = niluuid;
+
+            for( const KIID& id : error->GetIDs() )
+            {
+                const SCH_ITEM* item = ResolveItem( id, nullptr, true );
+
+                if( item && item->Type() == SCH_NO_CONNECT_T )
+                    flag = id;
+            }
+
+            const auto& islandOf = m_connectivity->Published().Auxiliary().IslandOf();
+            const auto flagIsland = islandOf.find( { flag, *instance } );
+
+            if( flagIsland == islandOf.end() )
+                return std::nullopt;
+
+            if( !ncFlagGroups )
+            {
+                ncFlagGroups.emplace();
+
+                for( const auto& diagnostic : m_connectivity->Engine().NoConnectFlagErrors() )
+                {
+                    const auto inst = m_connectivity->Keys().FindInstance( diagnostic.sheet );
+                    const auto record = inst ? islandOf.find( { diagnostic.flag, *inst } ) : islandOf.end();
+
+                    if( record == islandOf.end() )
+                        continue;
+
+                    const int code = diagnostic.connected ? ERCE_NOCONNECT_CONNECTED : ERCE_NOCONNECT_NOT_CONNECTED;
+                    ncFlagGroups->emplace( GROUP_KEY{ code, diagnostic.sheet, record->second.anchor },
+                                           diagnostic.flag );
+                }
+            }
+
+            const auto group = ncFlagGroups->find( { error->GetErrorCode(), path, flagIsland->second.anchor } );
+
+            if( group == ncFlagGroups->end() )
+                return std::nullopt;
+
+            const auto& rows = m_connectivity->Published().Rows();
+            const auto flagRow = rows.find( { flag, *instance } );
+
+            if( flagRow == rows.end() )
+                return std::nullopt;
+
+            for( const KIID& id : error->GetIDs() )
+            {
+                if( id == niluuid || id == flag )
+                    continue;
+
+                const SCH_ITEM* item = ResolveItem( id, nullptr, true );
+                const auto row = rows.find( { id, *instance } );
+
+                if( !item || item->Type() != SCH_PIN_T || row == rows.end()
+                    || row->second.component != flagRow->second.component
+                    || !m_connectivity->GetSubgraphForItem( id, path ) )
+                    return std::nullopt;
+            }
+
+            return GROUP_KEY{ error->GetErrorCode(), path, group->second };
+        }
+
+        const auto& islands = m_connectivity->Published().Auxiliary().IslandOf();
+        std::optional<GROUP_KEY> key;
+
+        for( const KIID& id : error->GetIDs() )
+        {
+            if( id == niluuid )
+                continue;
+
+            const auto island = islands.find( { id, *instance } );
+
+            if( !m_connectivity->GetSubgraphForItem( id, path ) || island == islands.end()
+                || ( key && std::get<2>( *key ) != GROUP_ANCHOR{ island->second.anchor } ) )
+                return std::nullopt;
+
+            key = GROUP_KEY{ error->GetErrorCode(), path, island->second.anchor };
+        }
+
+        return key;
+    };
+
+    std::set<ERC_EXCLUSION, ERC_EXCLUSION_COMPARE> legacyPathlessExclusions;
+    std::optional<std::vector<SCH_CONNECTIVITY::OFF_GRID_ENDPOINT>> offGridEndpoints;
+    const auto findPathless = [&]( const ERC_EXCLUSION& aLookup )
+    {
+        auto legacy = aLookup.ToProto();
+        legacy.mutable_marker()->clear_sheet_specific_path();
+        legacy.mutable_marker()->clear_main_item_sheet_path();
+        legacy.mutable_marker()->clear_aux_item_sheet_path();
+        auto found = settings.m_ErcExclusions.find( ERC_EXCLUSION::FromProto( legacy ) );
+
+        if( found != settings.m_ErcExclusions.end() )
+            legacyPathlessExclusions.insert( *found );
+
+        return found;
+    };
+
     for( const SCH_SHEET_PATH& sheet : sheetList )
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_MARKER_T ) )
@@ -753,13 +1030,132 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
             ERC_EXCLUSION lookup = ERC_EXCLUSION::FromMarker( *marker );
             auto          it = settings.m_ErcExclusions.find( lookup );
 
+            const auto error = std::static_pointer_cast<ERC_ITEM>( marker->GetRCItem() );
+
+            if( it == settings.m_ErcExclusions.end() && !settings.m_ErcExclusions.empty() && error->IsSheetSpecific()
+                && error->GetSpecificSheetPath().PathRef() == sheet.PathRef() )
+            {
+                const bool engine = ADVANCED_CFG::GetCfg().m_ConnectivityEngine;
+                const bool hasMain = error->MainItemHasSheetPath();
+                const bool hasAux = error->AuxItemHasSheetPath();
+                const bool mainHere = hasMain && error->GetMainItemSheetPath().PathRef() == sheet.PathRef();
+                const bool auxHere = hasAux && error->GetAuxItemSheetPath().PathRef() == sheet.PathRef();
+
+                switch( error->GetErrorCode() )
+                {
+                case ERCE_PIN_NOT_CONNECTED:
+                    if( engine && !hasMain && !hasAux && sheet.Last()->IsTopLevelSheet() )
+                    {
+                        const SCH_ITEM* source = ResolveItem( error->GetMainItemID(), nullptr, true );
+
+                        // Root-label exclusions predating instance-specific ERC omitted the sheet path
+                        if( source && source->Type() == SCH_HIER_LABEL_T )
+                            it = findPathless( lookup );
+                    }
+
+                    break;
+
+                case ERCE_GENERIC_WARNING:
+                case ERCE_GENERIC_ERROR:
+                case ERCE_UNRESOLVED_VARIABLE:
+                case ERCE_VARIANT_SYMBOL_INVALID:
+                case ERCE_VARIANT_SYMBOL_INCOMPATIBLE:
+                    if( !marker->IsExcluded() && mainHere && !hasAux )
+                    {
+                        // Older sheet-specific exclusions omitted the main item's sheet path
+                        auto previous = lookup.ToProto();
+                        previous.mutable_marker()->clear_main_item_sheet_path();
+                        it = settings.m_ErcExclusions.find( ERC_EXCLUSION::FromProto( previous ) );
+                    }
+
+                    break;
+
+                case ERCE_UNDEFINED_NETCLASS:
+                case ERCE_ENDPOINT_OFF_GRID:
+                case ERCE_FOOTPRINT_LINK_ISSUES:
+                case ERCE_LIB_SYMBOL_ISSUES:
+                case ERCE_LIB_SYMBOL_MISMATCH:
+                case ERCE_SIMULATION_MODEL:
+                case ERCE_FOOTPRINT_FILTERS:
+                case ERCE_PIN_MAP_UNMAPPED_PIN:
+                    // Older source diagnostics excluded the item across all of its sheet instances
+                    if( !marker->IsExcluded() && mainHere && !hasAux )
+                        it = findPathless( lookup );
+
+                    if( it == settings.m_ErcExclusions.end() && engine && mainHere && !hasAux
+                        && error->GetErrorCode() == ERCE_ENDPOINT_OFF_GRID )
+                    {
+                        if( !offGridEndpoints )
+                        {
+                            offGridEndpoints =
+                                    m_connectivity->Engine().OffGridEndpoints( Settings().m_ConnectionGridSize );
+                        }
+
+                        for( const auto& endpoint : *offGridEndpoints )
+                        {
+                            if( endpoint.sheet != sheet.PathRef() || endpoint.item != error->GetMainItemID()
+                                || endpoint.position != marker->GetPosition() )
+                                continue;
+
+                            for( const auto& [pin, position] : endpoint.equivalentPins )
+                            {
+                                auto alternate = ERC_ITEM::Create( ERCE_ENDPOINT_OFF_GRID );
+                                alternate->SetItems( std::vector<KIID>{ pin } );
+                                alternate->SetSheetSpecificPath( sheet );
+                                alternate->SetItemsSheetPaths( sheet );
+                                SCH_MARKER witness( std::move( alternate ), position );
+                                const auto candidate = ERC_EXCLUSION::FromMarker( witness );
+                                it = settings.m_ErcExclusions.find( candidate );
+
+                                if( it == settings.m_ErcExclusions.end() )
+                                    it = findPathless( candidate );
+
+                                if( it != settings.m_ErcExclusions.end() )
+                                    break;
+                            }
+
+                            break;
+                        }
+                    }
+
+                    break;
+
+                case ERCE_DUPLICATE_SHEET_NAME:
+                    // Older duplicate-sheet exclusions covered this pair in every parent instance
+                    if( !marker->IsExcluded() && mainHere && auxHere )
+                        it = findPathless( lookup );
+
+                    break;
+
+                case ERCE_DIFFERENT_UNIT_FP:
+                    // Older exclusions identified the unit pair without either sheet instance
+                    if( hasMain && auxHere )
+                        it = findPathless( lookup );
+
+                    break;
+
+                default:
+                    break;
+                }
+            }
+
             if( it != settings.m_ErcExclusions.end() )
             {
                 marker->SetExcluded( true, it->GetComment() );
-                settings.m_ErcExclusions.erase( it );
+
+                if( !legacyPathlessExclusions.contains( *it ) )
+                    settings.m_ErcExclusions.erase( it );
+            }
+            else if( !marker->IsExcluded() )
+            {
+                if( const auto key = groupKey( *marker ) )
+                    groupMarkers.emplace( *key, marker );
             }
         }
     }
+
+    for( const ERC_EXCLUSION& exclusion : legacyPathlessExclusions )
+        settings.m_ErcExclusions.erase( exclusion );
 
     std::vector<SCH_MARKER*> newMarkers;
 
@@ -769,6 +1165,26 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
         if( marker )
         {
+            // Canonical connectivity witnesses can change the marker anchor and reported IDs
+            if( const auto key = groupKey( *marker ) )
+            {
+                const auto current = groupMarkers.find( *key );
+                const auto itemCount = []( const SCH_MARKER& aMarker )
+                {
+                    const auto ids = aMarker.GetRCItem()->GetIDs();
+                    return std::count_if( ids.begin(), ids.end(), []( const KIID& id ) { return id != niluuid; } );
+                };
+
+                if( current != groupMarkers.end()
+                    && itemCount( *current->second ) == itemCount( *marker ) )
+                {
+                    current->second->SetExcluded( true, exclusion.GetComment() );
+                    groupMarkers.erase( current );
+                    delete marker;
+                    continue;
+                }
+            }
+
             marker->SetExcluded( true, exclusion.GetComment() );
             newMarkers.push_back( marker );
         }

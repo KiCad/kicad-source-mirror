@@ -63,6 +63,7 @@
 #include <thread_pool.h>
 #include <wx/log.h>
 
+#include <connectivity/conn_facade.h>
 #include <connectivity/conn_netchain_input.h>
 #include <advanced_config.h> // for realtime connectivity switch in release builds
 
@@ -1012,6 +1013,9 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
         recalc_time.Show();
 
     monitorTrans.Finish();
+
+    if( this == m_schematic->ConnectionGraph() && ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+        m_schematic->Connectivity().UpdateShadow( *m_schematic, aSheetList, aUnconditional );
 }
 
 
@@ -3926,6 +3930,9 @@ int CONNECTION_GRAPH::RunERC()
     int error_count = 0;
 
     wxCHECK_MSG( m_schematic, 0, wxS( "Null m_schematic in CONNECTION_GRAPH::RunERC" ) );
+
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+        return ERC_TESTER::TestConnectivity( *m_schematic );
 
     ERC_SETTINGS& settings = m_schematic->ErcSettings();
 

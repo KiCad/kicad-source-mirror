@@ -32,6 +32,7 @@
 #include <font/text_attributes.h>
 #include <template_fieldnames.h>
 #include <core/typeinfo.h>
+#include <jumper_group.h>
 #include <pin_type.h>
 #include <pin_map.h>
 #include <pin_comparison.h>
@@ -164,7 +165,7 @@ struct PIN_MAP_FACT
     PIN_MAP_SET                       maps;
     std::vector<ASSOCIATED_FOOTPRINT> footprints;
     std::set<wxString>                pinNumbers;
-    std::vector<std::set<wxString>>   jumperGroups;
+    JUMPER_GROUP_SET                  jumperGroups;
     bool                              operator==( const PIN_MAP_FACT& ) const = default;
 };
 

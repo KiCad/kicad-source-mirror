@@ -582,7 +582,7 @@ SCREEN_FACTS ExtractScreenFacts( const SCH_SCREEN& aScreen, std::shared_ptr<cons
 
             std::map<std::tuple<wxString, int, int>, size_t> groups;
             std::map<wxString, std::vector<size_t>> numbers;
-            const bool hasJumperGroups = library && !library->JumperPinGroups().empty();
+            const bool hasJumperGroups = library && !library->JumperPinGroups().IsEmpty();
 
             // Unjumpered duplicates join only when stacked, so ERC can report pins wired to different nets
             const bool joinApart = library && library->GetDuplicatePinNumbersAreJumpers();
@@ -653,11 +653,11 @@ SCREEN_FACTS ExtractScreenFacts( const SCH_SCREEN& aScreen, std::shared_ptr<cons
 
             if( hasJumperGroups )
             {
-                for( const std::set<wxString>& group : library->JumperPinGroups() )
+                for( const JUMPER_GROUP& group : library->JumperPinGroups().GetAll() )
                 {
                     std::vector<size_t> indices;
 
-                    for( const wxString& number : group )
+                    for( const wxString& number : group.GetNames() )
                     {
                         if( auto it = numbers.find( number ); it != numbers.end() )
                             indices.insert( indices.end(), it->second.begin(), it->second.end() );

@@ -20,7 +20,10 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <schematic_utils/schematic_file_util.h>
 
+#include <advanced_config.h>
 #include <connection_graph.h>
+#include <connectivity/conn_facade.h>
+#include <scoped_set_reset.h>
 #include <schematic.h>
 #include <erc/erc_settings.h>
 #include <erc/erc.h>
@@ -56,42 +59,58 @@ BOOST_FIXTURE_TEST_CASE( ERCBusMemberLabelLocalPins, ERC_BUS_MEMBER_LABEL_TEST_F
     // sheet that only connect to pins through the hierarchical bus to the Resolver sheet. All 5
     // should be flagged as unconnected.
 
-    KI_TEST::LoadSchematic( m_settingsManager, "issue19646/issue19646", m_schematic );
+    auto& enabled = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ).m_ConnectivityEngine;
+    SCOPED_SET_RESET restore( enabled, enabled );
 
-    ERC_SETTINGS&                settings = m_schematic->ErcSettings();
-    SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
-
-    settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
-    settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
-
-    m_schematic->ConnectionGraph()->RunERC();
-
-    ERC_TESTER tester( m_schematic.get() );
-    tester.TestMultUnitPinConflicts();
-    tester.TestMultiunitFootprints();
-    tester.TestNoConnectPins();
-    tester.TestPinToPin();
-    tester.TestSimilarLabels();
-    tester.TestTextVars( nullptr );
-
-    errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
-
-    ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
-
-    // Count ERCE_LABEL_NOT_CONNECTED errors specifically
-    int labelNotConnectedCount = 0;
-
-    for( int i = 0; i < errors.GetCount(); i++ )
+    for( bool useEngine : { false, true } )
     {
-        std::shared_ptr<ERC_ITEM> ercItem =
-                std::static_pointer_cast<ERC_ITEM>( errors.GetItem( i ) );
+        BOOST_TEST_CONTEXT( "engine=" << useEngine )
+        {
+            enabled = useEngine;
+            KI_TEST::LoadSchematic( m_settingsManager, "issue19646/issue19646", m_schematic );
 
-        if( ercItem->GetErrorCode() == ERCE_LABEL_NOT_CONNECTED )
-            labelNotConnectedCount++;
+            ERC_SETTINGS&                settings = m_schematic->ErcSettings();
+            SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
+
+            settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
+            settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
+
+            if( useEngine )
+            {
+                m_schematic->RebuildConnectivity();
+                m_schematic->Connectivity().PrepareTextChecks( *m_schematic );
+            }
+
+            m_schematic->ConnectionGraph()->RunERC();
+
+            ERC_TESTER tester( m_schematic.get() );
+            tester.TestMultUnitPinConflicts();
+            tester.TestMultiunitFootprints();
+            tester.TestNoConnectPins();
+            tester.TestPinToPin();
+            tester.TestSimilarLabels();
+            tester.TestTextVars( nullptr );
+
+            errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+
+            ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
+
+            // Count ERCE_LABEL_NOT_CONNECTED errors specifically
+            int labelNotConnectedCount = 0;
+
+            for( int i = 0; i < errors.GetCount(); i++ )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem =
+                        std::static_pointer_cast<ERC_ITEM>( errors.GetItem( i ) );
+
+                if( ercItem->GetErrorCode() == ERCE_LABEL_NOT_CONNECTED )
+                    labelNotConnectedCount++;
+            }
+
+            BOOST_CHECK_MESSAGE( labelNotConnectedCount == 5,
+                                 "Expected 5 ERCE_LABEL_NOT_CONNECTED errors for bus member labels "
+                                 "without local pin connections, but got " << labelNotConnectedCount
+                                 << "\n" << reportWriter.GetTextReport() );
+        }
     }
-
-    BOOST_CHECK_MESSAGE( labelNotConnectedCount == 5,
-                         "Expected 5 ERCE_LABEL_NOT_CONNECTED errors for bus member labels "
-                         "without local pin connections, but got " << labelNotConnectedCount
-                         << "\n" << reportWriter.GetTextReport() );
 }

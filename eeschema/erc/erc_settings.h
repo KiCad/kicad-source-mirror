@@ -101,8 +101,9 @@ enum ERCE_T
     ERCE_EMPTY_LABEL_NAME,                  ///< Label has an empty or whitespace-only name.
     ERCE_VARIANT_SYMBOL_INVALID,            ///< Variant symbol override LIB_ID cannot be resolved.
     ERCE_VARIANT_SYMBOL_INCOMPATIBLE,       ///< Variant symbol override fails pin compatibility.
+    ERCE_WIRED_IMPLICIT_POWER,              ///< Wired hidden power input also joins its global net by name.
 
-    ERCE_LAST = ERCE_VARIANT_SYMBOL_INCOMPATIBLE,
+    ERCE_LAST = ERCE_WIRED_IMPLICIT_POWER,
 
     ERCE_DUPLICATE_PIN_ERROR,
     ERCE_PIN_TO_PIN_WARNING, // pin connected to an other pin: warning level

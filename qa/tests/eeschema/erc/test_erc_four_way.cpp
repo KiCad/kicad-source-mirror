@@ -27,6 +27,10 @@
 #include <erc/erc_report.h>
 #include <settings/settings_manager.h>
 #include <locale_io.h>
+#include <advanced_config.h>
+#include <sch_screen.h>
+#include <sch_marker.h>
+#include <scoped_set_reset.h>
 
 struct ERC_REGRESSION_TEST_FIXTURE
 {
@@ -70,4 +74,56 @@ BOOST_FIXTURE_TEST_CASE( ERCFourWayJunctions, ERC_REGRESSION_TEST_FIXTURE )
                                          << reportWriter.GetTextReport() );
 
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( ERCFourWayExclusionsSurviveCanonicalWitnesses )
+{
+    LOCALE_IO locale;
+    auto& enabled = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ).m_ConnectivityEngine;
+    SCOPED_SET_RESET restore( enabled, false );
+    SETTINGS_MANAGER settings;
+    std::unique_ptr<SCHEMATIC> schematic;
+    KI_TEST::LoadSchematic( settings, "issue17870", schematic );
+    SCH_SCREEN* screen = schematic->RootScreen();
+    ERC_TESTER tester( schematic.get() );
+    BOOST_REQUIRE_EQUAL( tester.TestFourWayJunction(), 6 );
+    std::vector<SCH_ITEM*> markers;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_MARKER_T ) )
+    {
+        auto* marker = static_cast<SCH_MARKER*>( item );
+
+        if( marker->GetRCItem()->GetErrorCode() != ERCE_FOUR_WAY_JUNCTION )
+            continue;
+
+        marker->SetExcluded( true, "Retained junction" );
+        markers.push_back( item );
+    }
+
+    BOOST_REQUIRE_EQUAL( markers.size(), 6 );
+    schematic->RecordERCExclusions();
+
+    for( SCH_ITEM* item : markers )
+        screen->DeleteItem( item );
+
+    enabled = true;
+    schematic->RebuildConnectivity();
+    BOOST_REQUIRE_EQUAL( tester.TestFourWayJunction(), 6 );
+    schematic->ResolveERCExclusionsPostUpdate();
+    size_t count = 0;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_MARKER_T ) )
+    {
+        const auto* marker = static_cast<SCH_MARKER*>( item );
+
+        if( marker->GetRCItem()->GetErrorCode() != ERCE_FOUR_WAY_JUNCTION )
+            continue;
+
+        BOOST_CHECK( marker->IsExcluded() );
+        BOOST_CHECK_EQUAL( marker->GetComment(), wxString( "Retained junction" ) );
+        ++count;
+    }
+
+    BOOST_CHECK_EQUAL( count, 6 );
 }

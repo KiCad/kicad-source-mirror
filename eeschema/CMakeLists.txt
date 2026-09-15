@@ -426,6 +426,7 @@ set( EESCHEMA_SRCS
     connectivity/conn_facade.cpp
     connectivity/conn_netchain_manager.cpp
     connectivity/conn_engine.cpp
+    connectivity/conn_engine_erc.cpp
     connectivity/conn_preview.cpp
     connectivity/conn_signals.cpp
     connectivity/conn_publish.cpp

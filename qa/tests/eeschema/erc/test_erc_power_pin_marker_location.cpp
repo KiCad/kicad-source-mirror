@@ -44,6 +44,8 @@
 #include <erc/erc_report.h>
 #include <settings/settings_manager.h>
 #include <locale_io.h>
+#include <advanced_config.h>
+#include <scoped_set_reset.h>
 
 
 struct ERC_POWER_PIN_MARKER_FIXTURE
@@ -60,74 +62,83 @@ struct ERC_POWER_PIN_MARKER_FIXTURE
 BOOST_FIXTURE_TEST_CASE( ERCPowerPinNotDrivenMarkerOnPowerInputPin, ERC_POWER_PIN_MARKER_FIXTURE )
 {
     LOCALE_IO dummy;
+    auto& enabled = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ).m_ConnectivityEngine;
+    SCOPED_SET_RESET restore( enabled, enabled );
 
-    KI_TEST::LoadSchematic( m_settingsManager, wxS( "issue24328/issue24328" ), m_schematic );
-
-    ERC_SETTINGS&                settings = m_schematic->ErcSettings();
-    SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
-
-    settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
-    settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
-    settings.m_ERCSeverities[ERCE_UNANNOTATED] = RPT_SEVERITY_IGNORE;
-    settings.m_ERCSeverities[ERCE_POWERPIN_NOT_DRIVEN] = RPT_SEVERITY_ERROR;
-
-    m_schematic->ConnectionGraph()->RunERC();
-
-    ERC_TESTER tester( m_schematic.get() );
-    tester.TestPinToPin();
-
-    errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
-
-    ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
-
-    int                       powerPinErrors = 0;
-    bool                      allPowerInputAnchors = true;
-    std::vector<wxString>     anchorDescriptions;
-
-    for( int ii = 0; ii < errors.GetCount(); ++ii )
+    for( bool useEngine : { false, true } )
     {
-        std::shared_ptr<RC_ITEM> item = errors.GetItem( ii );
+        BOOST_TEST_CONTEXT( "engine=" << useEngine )
+        {
+            enabled = useEngine;
+            KI_TEST::LoadSchematic( m_settingsManager, wxS( "issue24328/issue24328" ), m_schematic );
 
-        if( item->GetErrorCode() != ERCE_POWERPIN_NOT_DRIVEN )
-            continue;
+            ERC_SETTINGS&                settings = m_schematic->ErcSettings();
+            SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
 
-        powerPinErrors++;
+            settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
+            settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
+            settings.m_ERCSeverities[ERCE_UNANNOTATED] = RPT_SEVERITY_IGNORE;
+            settings.m_ERCSeverities[ERCE_POWERPIN_NOT_DRIVEN] = RPT_SEVERITY_ERROR;
 
-        SCH_SHEET_PATH sheetPath;
-        SCH_ITEM*      mainItem = m_schematic->ResolveItem( item->GetMainItemID(),
-                                                            &sheetPath, true );
+            m_schematic->ConnectionGraph()->RunERC();
 
-        BOOST_REQUIRE_MESSAGE( mainItem,
-                               "ERCE_POWERPIN_NOT_DRIVEN marker has no main item" );
-        BOOST_REQUIRE_MESSAGE( mainItem->Type() == SCH_PIN_T,
-                               "ERCE_POWERPIN_NOT_DRIVEN marker main item is not a pin" );
+            ERC_TESTER tester( m_schematic.get() );
+            tester.TestPinToPin();
 
-        SCH_PIN* pin = static_cast<SCH_PIN*>( mainItem );
+            errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
 
-        anchorDescriptions.push_back(
-                wxString::Format( "ref=%s pin=%s type=%s",
-                                  pin->GetParentSymbol()->GetRef( &sheetPath ),
-                                  pin->GetNumber(),
-                                  ElectricalPinTypeGetText( pin->GetType() ) ) );
+            ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
 
-        if( pin->GetType() != ELECTRICAL_PINTYPE::PT_POWER_IN )
-            allPowerInputAnchors = false;
+            int                       powerPinErrors = 0;
+            bool                      allPowerInputAnchors = true;
+            std::vector<wxString>     anchorDescriptions;
+
+            for( int ii = 0; ii < errors.GetCount(); ++ii )
+            {
+                std::shared_ptr<RC_ITEM> item = errors.GetItem( ii );
+
+                if( item->GetErrorCode() != ERCE_POWERPIN_NOT_DRIVEN )
+                    continue;
+
+                powerPinErrors++;
+
+                SCH_SHEET_PATH sheetPath;
+                SCH_ITEM*      mainItem = m_schematic->ResolveItem( item->GetMainItemID(),
+                                                                    &sheetPath, true );
+
+                BOOST_REQUIRE_MESSAGE( mainItem,
+                                       "ERCE_POWERPIN_NOT_DRIVEN marker has no main item" );
+                BOOST_REQUIRE_MESSAGE( mainItem->Type() == SCH_PIN_T,
+                                       "ERCE_POWERPIN_NOT_DRIVEN marker main item is not a pin" );
+
+                SCH_PIN* pin = static_cast<SCH_PIN*>( mainItem );
+
+                anchorDescriptions.push_back(
+                        wxString::Format( "ref=%s pin=%s type=%s",
+                                          pin->GetParentSymbol()->GetRef( &sheetPath ),
+                                          pin->GetNumber(),
+                                          ElectricalPinTypeGetText( pin->GetType() ) ) );
+
+                if( pin->GetType() != ELECTRICAL_PINTYPE::PT_POWER_IN )
+                    allPowerInputAnchors = false;
+            }
+
+            wxString anchorDump;
+
+            for( const wxString& s : anchorDescriptions )
+                anchorDump << s << wxS( "\n" );
+
+            BOOST_CHECK_MESSAGE( powerPinErrors >= 1,
+                                 "Expected at least 1 ERCE_POWERPIN_NOT_DRIVEN error\n"
+                                 << reportWriter.GetTextReport() );
+
+            BOOST_CHECK_MESSAGE( allPowerInputAnchors,
+                                 "At least one ERCE_POWERPIN_NOT_DRIVEN marker was anchored on a "
+                                 "non-PT_POWER_IN pin. The marker should refer to the pin the "
+                                 "error message is about.\nAnchors seen:\n"
+                                 << anchorDump.ToStdString()
+                                 << "\n"
+                                 << reportWriter.GetTextReport() );
+        }
     }
-
-    wxString anchorDump;
-
-    for( const wxString& s : anchorDescriptions )
-        anchorDump << s << wxS( "\n" );
-
-    BOOST_CHECK_MESSAGE( powerPinErrors >= 1,
-                         "Expected at least 1 ERCE_POWERPIN_NOT_DRIVEN error\n"
-                         << reportWriter.GetTextReport() );
-
-    BOOST_CHECK_MESSAGE( allPowerInputAnchors,
-                         "At least one ERCE_POWERPIN_NOT_DRIVEN marker was anchored on a "
-                         "non-PT_POWER_IN pin. The marker should refer to the pin the "
-                         "error message is about.\nAnchors seen:\n"
-                         << anchorDump.ToStdString()
-                         << "\n"
-                         << reportWriter.GetTextReport() );
 }

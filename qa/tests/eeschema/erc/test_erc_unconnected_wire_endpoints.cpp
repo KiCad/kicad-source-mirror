@@ -27,6 +27,13 @@
 #include <erc/erc_report.h>
 #include <settings/settings_manager.h>
 #include <locale_io.h>
+#include <advanced_config.h>
+#include <sch_marker.h>
+#include <algorithm>
+#include <map>
+#include <tuple>
+#include <set>
+#include <scoped_set_reset.h>
 
 struct ERC_REGRESSION_TEST_FIXTURE
 {
@@ -35,6 +42,164 @@ struct ERC_REGRESSION_TEST_FIXTURE
     SETTINGS_MANAGER           m_settingsManager;
     std::unique_ptr<SCHEMATIC> m_schematic;
 };
+
+
+BOOST_FIXTURE_TEST_CASE( ERCWireEndpointsUsePublishedState, ERC_REGRESSION_TEST_FIXTURE )
+{
+    LOCALE_IO locale;
+    auto& enabled = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ).m_ConnectivityEngine;
+    SCOPED_SET_RESET restore( enabled, enabled );
+    using DIAGNOSTIC = std::tuple<KIID, KIID_PATH, int, int, wxString>;
+
+    for( const wxString& fixture : { wxString( "erc_wire_endpoints" ), wxString( "unconnected_bus_entry_qa" ) } )
+    {
+        BOOST_TEST_CONTEXT( fixture )
+        {
+            enabled = false;
+            KI_TEST::LoadSchematic( m_settingsManager, fixture, m_schematic );
+
+            for( auto& [code, severity] : m_schematic->ErcSettings().m_ERCSeverities )
+                severity = RPT_SEVERITY_IGNORE;
+
+            m_schematic->ErcSettings().m_ERCSeverities[ERCE_UNCONNECTED_WIRE_ENDPOINT] = RPT_SEVERITY_ERROR;
+            m_schematic->ConnectionGraph()->RunERC();
+            SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
+            const auto diagnostics = [&]( bool aRecordExclusions = false )
+            {
+                errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING | RPT_SEVERITY_EXCLUSION );
+                std::multiset<DIAGNOSTIC> result;
+                std::vector<std::pair<SCH_SCREEN*, SCH_MARKER*>> markers;
+
+                for( int i = 0; i < errors.GetCount(); ++i )
+                {
+                    const auto item = std::static_pointer_cast<ERC_ITEM>( errors.GetItem( i ) );
+                    auto* marker = static_cast<SCH_MARKER*>( item->GetParent() );
+
+                    if( aRecordExclusions )
+                        marker->SetExcluded( true, "Retained endpoint" );
+
+                    BOOST_CHECK( marker->IsExcluded() );
+                    BOOST_CHECK_EQUAL( marker->GetComment(), wxString( "Retained endpoint" ) );
+                    BOOST_CHECK_EQUAL( item->GetErrorCode(), ERCE_UNCONNECTED_WIRE_ENDPOINT );
+                    result.emplace( item->GetMainItemID(), item->GetSpecificSheetPath().PathRef(),
+                                    marker->GetPosition().x, marker->GetPosition().y, item->GetErrorMessage( false ) );
+                    markers.emplace_back( item->GetSpecificSheetPath().LastScreen(), marker );
+                }
+
+                if( aRecordExclusions )
+                    m_schematic->RecordERCExclusions();
+
+                for( const auto& [screen, marker] : markers )
+                    screen->DeleteItem( marker );
+
+                return result;
+            };
+            const auto expected = diagnostics( true );
+            BOOST_REQUIRE( !expected.empty() );
+            enabled = true;
+            m_schematic->RebuildConnectivity();
+            BOOST_CHECK_EQUAL( m_schematic->ConnectionGraph()->RunERC(), expected.size() );
+            std::set<SCH_SCREEN*> screens;
+            size_t markerCount = 0;
+
+            for( const SCH_SHEET_PATH& path : m_schematic->Hierarchy() )
+            {
+                if( screens.insert( path.LastScreen() ).second )
+                {
+                    for( SCH_ITEM* marker : path.LastScreen()->Items().OfType( SCH_MARKER_T ) )
+                        ++markerCount;
+                }
+            }
+
+            BOOST_CHECK_EQUAL( markerCount, expected.size() );
+            m_schematic->ResolveERCExclusionsPostUpdate();
+            BOOST_CHECK( diagnostics() == expected );
+        }
+    }
+}
+
+
+BOOST_FIXTURE_TEST_CASE( ERCFloatingWiresUsePublishedConnectivity, ERC_REGRESSION_TEST_FIXTURE )
+{
+    LOCALE_IO locale;
+    auto& enabled = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ).m_ConnectivityEngine;
+    SCOPED_SET_RESET restore( enabled, enabled );
+    using GROUP = std::pair<KIID_PATH, std::vector<KIID>>;
+
+    for( const wxString& fixture : { wxString( "erc_wire_endpoints" ), wxString( "unconnected_bus_entry_qa" ) } )
+    {
+        BOOST_TEST_CONTEXT( fixture )
+        {
+            enabled = false;
+            KI_TEST::LoadSchematic( m_settingsManager, fixture, m_schematic );
+
+            for( auto& [code, severity] : m_schematic->ErcSettings().m_ERCSeverities )
+                severity = RPT_SEVERITY_IGNORE;
+
+            m_schematic->ErcSettings().m_ERCSeverities[ERCE_WIRE_DANGLING] = RPT_SEVERITY_ERROR;
+            std::map<KIID, VECTOR2I> positions;
+
+            for( const SCH_SHEET_PATH& path : m_schematic->Hierarchy() )
+            {
+                for( SCH_ITEM* item : path.LastScreen()->Items() )
+                    positions.emplace( item->m_Uuid, item->GetPosition() );
+            }
+
+            SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
+            const auto diagnostics = [&]( bool aCanonical )
+            {
+                errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING | RPT_SEVERITY_EXCLUSION );
+                std::multiset<GROUP> result;
+                std::vector<std::pair<SCH_SCREEN*, SCH_MARKER*>> markers;
+
+                for( int i = 0; i < errors.GetCount(); ++i )
+                {
+                    const auto item = std::static_pointer_cast<ERC_ITEM>( errors.GetItem( i ) );
+                    auto* marker = static_cast<SCH_MARKER*>( item->GetParent() );
+                    BOOST_CHECK_EQUAL( item->GetErrorCode(), ERCE_WIRE_DANGLING );
+                    auto ids = item->GetIDs();
+                    std::erase( ids, niluuid );
+                    BOOST_REQUIRE( !ids.empty() );
+
+                    if( aCanonical )
+                    {
+                        BOOST_CHECK( std::is_sorted( ids.begin(), ids.end() ) );
+                        BOOST_CHECK( marker->GetPosition() == positions.at( ids.front() ) );
+                        BOOST_CHECK( marker->IsExcluded() );
+                        BOOST_CHECK_EQUAL( marker->GetComment(), wxString( "Retained floating wire" ) );
+                    }
+                    else
+                    {
+                        marker->SetExcluded( true, "Retained floating wire" );
+                    }
+
+                    std::sort( ids.begin(), ids.end() );
+                    result.emplace( item->GetSpecificSheetPath().PathRef(), std::move( ids ) );
+                    markers.emplace_back( item->GetSpecificSheetPath().LastScreen(), marker );
+                }
+
+                if( !aCanonical )
+                    m_schematic->RecordERCExclusions();
+
+                for( const auto& [screen, marker] : markers )
+                    screen->DeleteItem( marker );
+
+                return result;
+            };
+            m_schematic->ConnectionGraph()->RunERC();
+            const auto expected = diagnostics( false );
+            BOOST_REQUIRE( !expected.empty() );
+            enabled = true;
+            m_schematic->RebuildConnectivity();
+            m_schematic->ConnectionGraph()->Reset();
+            BOOST_CHECK_EQUAL( m_schematic->ConnectionGraph()->RunERC(), expected.size() );
+            m_schematic->ResolveERCExclusionsPostUpdate();
+            BOOST_CHECK( diagnostics( true ) == expected );
+            m_schematic->ErcSettings().m_ERCSeverities[ERCE_WIRE_DANGLING] = RPT_SEVERITY_IGNORE;
+            BOOST_CHECK_EQUAL( m_schematic->ConnectionGraph()->RunERC(), 0 );
+        }
+    }
+}
 
 
 BOOST_FIXTURE_TEST_CASE( ERCUnconnectedWireEndpoints, ERC_REGRESSION_TEST_FIXTURE )

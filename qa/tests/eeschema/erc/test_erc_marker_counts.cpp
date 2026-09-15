@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <connectivity/conn_facade.h>
+#include <advanced_config.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <schematic_utils/schematic_file_util.h>
 
@@ -51,6 +53,12 @@ BOOST_FIXTURE_TEST_CASE( ERCMarkerCountsExclusion, ERC_MARKER_COUNT_FIXTURE )
 
     settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
     settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
+
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        m_schematic->RebuildConnectivity();
+        m_schematic->Connectivity().PrepareTextChecks( *m_schematic );
+    }
 
     m_schematic->ConnectionGraph()->RunERC();
 

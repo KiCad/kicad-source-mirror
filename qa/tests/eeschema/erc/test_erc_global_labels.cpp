@@ -21,6 +21,8 @@
 #include <schematic_utils/schematic_file_util.h>
 
 #include <connection_graph.h>
+#include <advanced_config.h>
+#include <scoped_set_reset.h>
 #include <schematic.h>
 #include <erc/erc_settings.h>
 #include <erc/erc.h>
@@ -41,6 +43,8 @@ struct ERC_REGRESSION_TEST_FIXTURE
 BOOST_FIXTURE_TEST_CASE( ERCGlobalLabels, ERC_REGRESSION_TEST_FIXTURE )
 {
     LOCALE_IO dummy;
+    auto& enabled = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ).m_ConnectivityEngine;
+    SCOPED_SET_RESET restore( enabled, enabled );
 
     // Check for Errors when using global labels
     std::vector<std::pair<wxString, int>> tests =
@@ -48,40 +52,49 @@ BOOST_FIXTURE_TEST_CASE( ERCGlobalLabels, ERC_REGRESSION_TEST_FIXTURE )
         { "issue9367",                   13  }
     };
 
-    for( const std::pair<wxString, int>& test : tests )
+    for( bool useEngine : { false, true } )
     {
-        KI_TEST::LoadSchematic( m_settingsManager, test.first, m_schematic );
+        enabled = useEngine;
 
-        ERC_SETTINGS& settings = m_schematic->ErcSettings();
-        SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
+        for( const std::pair<wxString, int>& test : tests )
+        {
+            BOOST_TEST_CONTEXT( test.first.ToStdString() << " engine=" << useEngine )
+            {
+                KI_TEST::LoadSchematic( m_settingsManager, test.first, m_schematic );
 
-        // Skip the "Modified symbol" warning
-        settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
-        settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
+                ERC_SETTINGS& settings = m_schematic->ErcSettings();
+                SHEETLIST_ERC_ITEMS_PROVIDER errors( m_schematic.get() );
 
-        // Skip the unconnected wire endpoints warning
-        settings.m_ERCSeverities[ERCE_UNCONNECTED_WIRE_ENDPOINT] = RPT_SEVERITY_IGNORE;
+                // Skip the "Modified symbol" warning
+                settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
+                settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
 
-        SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
-        m_schematic->ConnectionGraph()->Recalculate( sheets, true );
-        m_schematic->ConnectionGraph()->RunERC();
+                // Skip the unconnected wire endpoints warning
+                settings.m_ERCSeverities[ERCE_UNCONNECTED_WIRE_ENDPOINT] = RPT_SEVERITY_IGNORE;
 
-        ERC_TESTER tester( m_schematic.get() );
-        tester.TestMultUnitPinConflicts();
-        tester.TestMultiunitFootprints();
-        tester.TestNoConnectPins();
-        tester.TestPinToPin();
-        tester.TestSimilarLabels();
+                SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+                m_schematic->ConnectionGraph()->Recalculate( sheets, true );
+                m_schematic->ConnectionGraph()->RunERC();
 
-        errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
+                ERC_TESTER tester( m_schematic.get() );
+                tester.TestMultUnitPinConflicts();
+                tester.TestMultiunitFootprints();
+                tester.TestNoConnectPins();
+                tester.TestPinToPin();
+                tester.TestSimilarLabels();
 
-        ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
+                errors.SetSeverities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING );
 
-        BOOST_CHECK_MESSAGE( errors.GetCount() == test.second,
-                             "Expected " << test.second << " errors in " << test.first.ToStdString()
-                                         << " but got " << errors.GetCount() << "\n"
-                                         << reportWriter.GetTextReport() );
+                ERC_REPORT reportWriter( m_schematic.get(), EDA_UNITS::MM );
 
+                BOOST_CHECK_MESSAGE( errors.GetCount() == test.second,
+                                     "Expected " << test.second << " errors in " << test.first.ToStdString()
+                                                 << " but got " << errors.GetCount() << "\n"
+                                                 << reportWriter.GetTextReport() );
+
+
+            }
+        }
     }
 }
 
