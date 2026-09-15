@@ -489,7 +489,7 @@ BOOST_AUTO_TEST_CASE( AtomicWriteFile_PreservesWindowsAttributes )
     BOOST_REQUIRE( attrs != INVALID_FILE_ATTRIBUTES );
     BOOST_REQUIRE( ( attrs & FILE_ATTRIBUTE_READONLY ) != 0 );
     BOOST_REQUIRE( ( attrs & FILE_ATTRIBUTE_HIDDEN ) != 0 );
-    BOOST_REQUIRE_EQUAL( KI_TEST::ReadFileToString( target ), payload );
+    BOOST_REQUIRE_EQUAL( KI_TEST::LoadStringData( target ), payload );
 
     // Clear READONLY so the SCOPED_TEMP_DIR teardown (std::filesystem::remove_all) can
     // delete the file on Windows, where remove() does not clear the attribute itself.
