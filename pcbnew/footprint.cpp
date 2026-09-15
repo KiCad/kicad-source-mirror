@@ -496,14 +496,7 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     else
         attrs->set_mounting_style( types::FootprintMountingStyle::FMS_UNSPECIFIED );
 
-    types::Footprint* def = footprint.mutable_definition();
-
-    kiapi::common::PackLibId( def->mutable_id(), GetFPID() );
-    // anchor?
-    def->mutable_attributes()->set_description( GetLibDescription().ToUTF8() );
-    def->mutable_attributes()->set_keywords( GetKeywords().ToUTF8() );
-
-    // TODO: serialize library mandatory fields
+    SerializeDefinition( footprint.mutable_definition() );
 
     types::FootprintDesignRuleOverrides* overrides = footprint.mutable_overrides();
 
@@ -521,75 +514,6 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
 
     overrides->set_zone_connection(
             ToProtoEnum<ZONE_CONNECTION, types::ZoneConnectionStyle>( GetLocalZoneConnection() ) );
-
-    for( const wxString& group : GetNetTiePadGroups() )
-    {
-        types::NetTieDefinition* netTie = def->add_net_ties();
-        wxStringTokenizer tokenizer( group, ", \t\r\n", wxTOKEN_STRTOK );
-
-        while( tokenizer.HasMoreTokens() )
-            netTie->add_pad_number( tokenizer.GetNextToken().ToUTF8() );
-    }
-
-    for( PCB_LAYER_ID layer : GetPrivateLayers().Seq() )
-        def->add_private_layers( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( layer ) );
-
-    types::JumperSettings* jumpers = def->mutable_jumpers();
-    jumpers->set_duplicate_names_are_jumpered( GetDuplicatePadNumbersAreJumpers() );
-
-    for( const std::set<wxString>& group : JumperPadGroups() )
-    {
-        types::JumperGroup* jumperGroup = jumpers->add_groups();
-
-        for( const wxString& padName : group )
-            jumperGroup->add_pad_names( padName.ToUTF8() );
-    }
-
-    for( const PCB_FIELD* item : m_fields )
-    {
-        if( item->IsMandatory() )
-            continue;
-
-        google::protobuf::Any* itemMsg = def->add_items();
-        item->Serialize( *itemMsg );
-    }
-
-    for( const PAD* item : Pads() )
-    {
-        google::protobuf::Any* itemMsg = def->add_items();
-        item->Serialize( *itemMsg );
-    }
-
-    for( const BOARD_ITEM* item : GraphicalItems() )
-    {
-        google::protobuf::Any* itemMsg = def->add_items();
-        item->Serialize( *itemMsg );
-    }
-
-    for( const PCB_POINT* item : Points() )
-    {
-        google::protobuf::Any* itemMsg = def->add_items();
-        item->Serialize( *itemMsg );
-    }
-
-    for( const ZONE* item : Zones() )
-    {
-        google::protobuf::Any* itemMsg = def->add_items();
-        item->Serialize( *itemMsg );
-    }
-
-    for( const FP_3DMODEL& model : Models() )
-    {
-        google::protobuf::Any* itemMsg = def->add_items();
-        types::Footprint3DModel modelMsg;
-        modelMsg.set_filename( model.m_Filename.ToUTF8() );
-        kiapi::common::PackVector3D( *modelMsg.mutable_scale(), model.m_Scale );
-        kiapi::common::PackVector3D( *modelMsg.mutable_rotation(), model.m_Rotation );
-        kiapi::common::PackVector3D( *modelMsg.mutable_offset(), model.m_Offset );
-        modelMsg.set_visible( model.m_Show );
-        modelMsg.set_opacity( model.m_Opacity );
-        itemMsg->PackFrom( modelMsg );
-    }
 
     kiapi::common::PackSheetPath( *footprint.mutable_symbol_path(), m_path );
 
@@ -618,6 +542,203 @@ void FOOTPRINT::Serialize( google::protobuf::Any &aContainer ) const
     }
 
     aContainer.PackFrom( footprint );
+}
+
+
+void FOOTPRINT::SerializeDefinition( kiapi::board::types::Footprint* aOutput ) const
+{
+    using namespace kiapi::board;
+
+    kiapi::common::PackLibId( aOutput->mutable_id(), GetFPID() );
+    // anchor?
+    aOutput->mutable_attributes()->set_description( GetLibDescription().ToUTF8() );
+    aOutput->mutable_attributes()->set_keywords( GetKeywords().ToUTF8() );
+
+    // TODO: serialize library mandatory fields
+
+    for( const wxString& group : GetNetTiePadGroups() )
+    {
+        types::NetTieDefinition* netTie = aOutput->add_net_ties();
+        wxStringTokenizer tokenizer( group, ", \t\r\n", wxTOKEN_STRTOK );
+
+        while( tokenizer.HasMoreTokens() )
+            netTie->add_pad_number( tokenizer.GetNextToken().ToUTF8() );
+    }
+
+    for( PCB_LAYER_ID layer : GetPrivateLayers().Seq() )
+        aOutput->add_private_layers( ToProtoEnum<PCB_LAYER_ID, types::BoardLayer>( layer ) );
+
+    types::JumperSettings* jumpers = aOutput->mutable_jumpers();
+    jumpers->set_duplicate_names_are_jumpered( GetDuplicatePadNumbersAreJumpers() );
+
+    for( const std::set<wxString>& group : JumperPadGroups() )
+    {
+        types::JumperGroup* jumperGroup = jumpers->add_groups();
+
+        for( const wxString& padName : group )
+            jumperGroup->add_pad_names( padName.ToUTF8() );
+    }
+
+    for( const PCB_FIELD* item : m_fields )
+    {
+        if( item->IsMandatory() )
+            continue;
+
+        google::protobuf::Any* itemMsg = aOutput->add_items();
+        item->Serialize( *itemMsg );
+    }
+
+    for( const PAD* item : Pads() )
+    {
+        google::protobuf::Any* itemMsg = aOutput->add_items();
+        item->Serialize( *itemMsg );
+    }
+
+    for( const BOARD_ITEM* item : GraphicalItems() )
+    {
+        google::protobuf::Any* itemMsg = aOutput->add_items();
+        item->Serialize( *itemMsg );
+    }
+
+    for( const PCB_POINT* item : Points() )
+    {
+        google::protobuf::Any* itemMsg = aOutput->add_items();
+        item->Serialize( *itemMsg );
+    }
+
+    for( const ZONE* item : Zones() )
+    {
+        google::protobuf::Any* itemMsg = aOutput->add_items();
+        item->Serialize( *itemMsg );
+    }
+
+    for( const FP_3DMODEL& model : Models() )
+    {
+        google::protobuf::Any* itemMsg = aOutput->add_items();
+        types::Footprint3DModel modelMsg;
+        modelMsg.set_filename( model.m_Filename.ToUTF8() );
+        kiapi::common::PackVector3D( *modelMsg.mutable_scale(), model.m_Scale );
+        kiapi::common::PackVector3D( *modelMsg.mutable_rotation(), model.m_Rotation );
+        kiapi::common::PackVector3D( *modelMsg.mutable_offset(), model.m_Offset );
+        modelMsg.set_visible( model.m_Show );
+        modelMsg.set_opacity( model.m_Opacity );
+        itemMsg->PackFrom( modelMsg );
+    }
+}
+
+
+bool FOOTPRINT::DeserializeDefinition( const kiapi::board::types::Footprint& aInput )
+{
+    using namespace kiapi::board;
+
+    SetFPID( kiapi::common::UnpackLibId( aInput.id() ) );
+    // TODO: how should anchor be handled?
+    SetLibDescription( aInput.attributes().description() );
+    SetKeywords( aInput.attributes().keywords() );
+
+    // TODO: deserialize library mandatory fields
+
+    m_netTiePadGroups.clear();
+
+    for( const types::NetTieDefinition& netTieMsg : aInput.net_ties() )
+    {
+        wxString group;
+
+        for( const std::string& pad : netTieMsg.pad_number() )
+            group.Append( wxString::Format( wxT( "%s, " ), pad ) );
+
+        group.Trim();
+        AddNetTiePadGroup( group.BeforeLast( ',' ) );
+    }
+
+    SetDuplicatePadNumbersAreJumpers( aInput.jumpers().duplicate_names_are_jumpered() );
+    JumperPadGroups().clear();
+
+    for( const types::JumperGroup& groupMsg : aInput.jumpers().groups() )
+    {
+        std::set<wxString> group;
+
+        for( const std::string& padName : groupMsg.pad_names() )
+            group.insert( wxString::FromUTF8( padName ) );
+
+        if( !group.empty() )
+            JumperPadGroups().push_back( std::move( group ) );
+    }
+
+    LSET privateLayers;
+
+    for( int layerMsg : aInput.private_layers() )
+    {
+        auto layer = FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( static_cast<types::BoardLayer>( layerMsg ) );
+
+        if( layer > UNDEFINED_LAYER )
+            privateLayers.set( layer );
+    }
+
+    SetPrivateLayers( privateLayers );
+
+    // Footprint items
+    for( PCB_FIELD* field : m_fields )
+    {
+        if( !field->IsMandatory() )
+            Remove( field );
+    }
+
+    // If this footprint is on a board, uncache all items before clearing
+    if( BOARD* board = GetBoard() )
+        board->UncacheChildrenById( this );
+
+    Pads().clear();
+    GraphicalItems().clear();
+    Zones().clear();
+    Groups().clear();
+    Constraints().clear();
+    Models().clear();
+    Points().clear();
+
+    for( const google::protobuf::Any& itemMsg : aInput.items() )
+    {
+        std::optional<KICAD_T> type = kiapi::common::TypeNameFromAny( itemMsg );
+
+        if( !type )
+        {
+            // Bit of a hack here, but eventually 3D models should be promoted to a first-class
+            // object, at which point they can get their own serialization
+            if( itemMsg.type_url() == "type.googleapis.com/kiapi.board.types.Footprint3DModel" )
+            {
+                types::Footprint3DModel modelMsg;
+
+                if( !itemMsg.UnpackTo( &modelMsg ) )
+                    continue;
+
+                FP_3DMODEL model;
+
+                model.m_Filename = wxString::FromUTF8( modelMsg.filename() );
+                model.m_Show = modelMsg.visible();
+                model.m_Opacity = modelMsg.opacity();
+                model.m_Scale = kiapi::common::UnpackVector3D( modelMsg.scale() );
+                model.m_Rotation = kiapi::common::UnpackVector3D( modelMsg.rotation() );
+                model.m_Offset = kiapi::common::UnpackVector3D( modelMsg.offset() );
+
+                Models().push_back( std::move( model ) );
+            }
+            else
+            {
+                wxLogTrace( traceApi, wxString::Format( wxS( "Attempting to unpack unknown type %s "
+                                                             "from footprint message, skipping" ),
+                                                        itemMsg.type_url() ) );
+            }
+
+            continue;
+        }
+
+        std::unique_ptr<BOARD_ITEM> item = CreateItemForType( *type, this );
+
+        if( item && item->Deserialize( itemMsg ) )
+            Add( item.release(), ADD_MODE::APPEND );
+    }
+
+    return true;
 }
 
 
@@ -695,10 +816,7 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
     SetAllowSolderMaskBridges( footprint.attributes().allow_soldermask_bridges() );
 
     // Definition
-    SetFPID( kiapi::common::UnpackLibId( footprint.definition().id() ) );
-    // TODO: how should anchor be handled?
-    SetLibDescription( footprint.definition().attributes().description() );
-    SetKeywords( footprint.definition().attributes().keywords() );
+    DeserializeDefinition( footprint.definition() );
 
     const types::FootprintDesignRuleOverrides& overrides = footprint.overrides();
 
@@ -729,110 +847,10 @@ bool FOOTPRINT::Deserialize( const google::protobuf::Any &aContainer )
 
     SetLocalZoneConnection( FromProtoEnum<ZONE_CONNECTION>( overrides.zone_connection() ) );
 
-    m_netTiePadGroups.clear();
-
-    for( const types::NetTieDefinition& netTieMsg : footprint.definition().net_ties() )
-    {
-        wxString group;
-
-        for( const std::string& pad : netTieMsg.pad_number() )
-            group.Append( wxString::Format( wxT( "%s, " ), pad ) );
-
-        group.Trim();
-        AddNetTiePadGroup( group.BeforeLast( ',' ) );
-    }
-
-    SetDuplicatePadNumbersAreJumpers( footprint.definition().jumpers().duplicate_names_are_jumpered() );
-    JumperPadGroups().clear();
-
-    for( const types::JumperGroup& groupMsg : footprint.definition().jumpers().groups() )
-    {
-        std::set<wxString> group;
-
-        for( const std::string& padName : groupMsg.pad_names() )
-            group.insert( wxString::FromUTF8( padName ) );
-
-        if( !group.empty() )
-            JumperPadGroups().push_back( std::move( group ) );
-    }
-
-    LSET privateLayers;
-
-    for( int layerMsg : footprint.definition().private_layers() )
-    {
-        auto layer = FromProtoEnum<PCB_LAYER_ID, types::BoardLayer>( static_cast<types::BoardLayer>( layerMsg ) );
-
-        if( layer > UNDEFINED_LAYER )
-            privateLayers.set( layer );
-    }
-
-    SetPrivateLayers( privateLayers );
-
     m_path = kiapi::common::UnpackSheetPath( footprint.symbol_path() );
     m_sheetname = wxString::FromUTF8( footprint.symbol_sheet_name() );
     m_sheetfile = wxString::FromUTF8( footprint.symbol_sheet_filename() );
     m_filters = wxString::FromUTF8( footprint.symbol_footprint_filters() );
-
-    // Footprint items
-    for( PCB_FIELD* field : m_fields )
-    {
-        if( !field->IsMandatory() )
-            Remove( field );
-    }
-
-    // If this footprint is on a board, uncache all items before clearing
-    if( BOARD* board = GetBoard() )
-        board->UncacheChildrenById( this );
-
-    Pads().clear();
-    GraphicalItems().clear();
-    Zones().clear();
-    Groups().clear();
-    Constraints().clear();
-    Models().clear();
-    Points().clear();
-
-    for( const google::protobuf::Any& itemMsg : footprint.definition().items() )
-    {
-        std::optional<KICAD_T> type = kiapi::common::TypeNameFromAny( itemMsg );
-
-        if( !type )
-        {
-            // Bit of a hack here, but eventually 3D models should be promoted to a first-class
-            // object, at which point they can get their own serialization
-            if( itemMsg.type_url() == "type.googleapis.com/kiapi.board.types.Footprint3DModel" )
-            {
-                types::Footprint3DModel modelMsg;
-
-                if( !itemMsg.UnpackTo( &modelMsg ) )
-                    continue;
-
-                FP_3DMODEL model;
-
-                model.m_Filename = wxString::FromUTF8( modelMsg.filename() );
-                model.m_Show = modelMsg.visible();
-                model.m_Opacity = modelMsg.opacity();
-                model.m_Scale = kiapi::common::UnpackVector3D( modelMsg.scale() );
-                model.m_Rotation = kiapi::common::UnpackVector3D( modelMsg.rotation() );
-                model.m_Offset = kiapi::common::UnpackVector3D( modelMsg.offset() );
-
-                Models().push_back( std::move( model ) );
-            }
-            else
-            {
-                wxLogTrace( traceApi, wxString::Format( wxS( "Attempting to unpack unknown type %s "
-                                                             "from footprint message, skipping" ),
-                                                        itemMsg.type_url() ) );
-            }
-
-            continue;
-        }
-
-        std::unique_ptr<BOARD_ITEM> item = CreateItemForType( *type, this );
-
-        if( item && item->Deserialize( itemMsg ) )
-            Add( item.release(), ADD_MODE::APPEND );
-    }
 
     kiapi::common::UnpackCustomProperties( footprint.custom_properties(), *this );
 

@@ -70,6 +70,11 @@ namespace KIFONT {
 class OUTLINE_FONT;
 }
 
+namespace kiapi::board::types
+{
+class Footprint;
+}
+
 /**
  * The set of attributes allowed within a FOOTPRINT, using FOOTPRINT::SetAttributes()
  * and FOOTPRINT::GetAttributes().  These are to be ORed together when calling
@@ -324,6 +329,9 @@ public:
 
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
+    void SerializeDefinition( kiapi::board::types::Footprint* aOutput ) const;
+    bool DeserializeDefinition( const kiapi::board::types::Footprint& aInput );
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
