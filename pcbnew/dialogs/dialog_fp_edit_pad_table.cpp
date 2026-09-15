@@ -105,11 +105,12 @@ static void SetPadTypeFromString( PAD& aPad, const wxString& aType )
 {
     // Heuristic for detecting pads that look like they mean to be
     // back-only pads.
-    const auto isBackOnlyPad = []( const PAD& pad ) -> bool
-    {
-        const LSET layers = pad.GetLayerSet();
-        return ( layers & LSET::BackMask() ).any() && ( layers & LSET::FrontMask() ).none();
-    };
+    const auto isBackOnlyPad =
+            []( const PAD& pad ) -> bool
+            {
+                const LSET layers = pad.GetLayerSet();
+                return ( layers & LSET::BackMask() ).any() && ( layers & LSET::FrontMask() ).none();
+            };
 
     if( MatchTranslationOrNative( aType, _HKI( "Through-hole" ), false ) )
     {
@@ -178,8 +179,8 @@ static void UpdateDrillCells( WX_GRID& aGrid, UNITS_PROVIDER& aUnitsProvider, in
                               bool aPreserveValues )
 {
     const bool     drillIsEditable = DrillsAreEditable( aPad );
-    const wxColour drillTextColour =
-            drillIsEditable ? aGrid.GetDefaultCellTextColour() : wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
+    const wxColour drillTextColour = drillIsEditable ? aGrid.GetDefaultCellTextColour()
+                                                     : wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT );
 
     aGrid.SetReadOnly( aRowId, COLS::COL_DRILL_X, !drillIsEditable );
     aGrid.SetReadOnly( aRowId, COLS::COL_DRILL_Y, !drillIsEditable );
@@ -190,10 +191,10 @@ static void UpdateDrillCells( WX_GRID& aGrid, UNITS_PROVIDER& aUnitsProvider, in
         return;
 
     const VECTOR2I drill = aPad.GetDrillSize();
-    aGrid.SetCellValue( aRowId, COLS::COL_DRILL_X,
-                        drill.x > 0 ? aUnitsProvider.StringFromValue( drill.x, true ) : wxString{} );
-    aGrid.SetCellValue( aRowId, COLS::COL_DRILL_Y,
-                        drill.y > 0 ? aUnitsProvider.StringFromValue( drill.y, true ) : wxString{} );
+    aGrid.SetCellValue( aRowId, COLS::COL_DRILL_X, drill.x > 0 ? aUnitsProvider.StringFromValue( drill.x, true )
+                                                               : wxString{} );
+    aGrid.SetCellValue( aRowId, COLS::COL_DRILL_Y, drill.y > 0 ? aUnitsProvider.StringFromValue( drill.y, true )
+                                                               : wxString{} );
 }
 
 
