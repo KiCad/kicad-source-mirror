@@ -124,9 +124,9 @@ public:
     {
         return IsMandatory() ? (int) m_id : m_ordinal;
     }
-    void SetOrdinal( int aOrdinal )
+    void SetOrdinal( int aOrdinal, FIELD_T aType )
     {
-        m_id = FIELD_T::USER;
+        m_id = aType;
         m_ordinal = aOrdinal;
     }
 

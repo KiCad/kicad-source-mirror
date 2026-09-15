@@ -421,7 +421,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
             field.SetName( _( "untitled" ) );
 
         if( !field.IsMandatory() )
-            field.SetOrdinal( ordinal++ );
+            field.SetOrdinal( ordinal++, FIELD_T::SHEET_USER );
 
         SCH_FIELD* existingField = m_sheet->GetField( fieldName );
         SCH_FIELD* tmp;

@@ -865,7 +865,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
             field.SetName( _( "untitled" ) );
 
         if( !field.IsMandatory() )
-            field.SetOrdinal( ordinal++ );
+            field.SetOrdinal( ordinal++, FIELD_T::USER );
 
         const SCH_FIELD* existingField = m_symbol->GetField( fieldName );
         SCH_FIELD* tmp;

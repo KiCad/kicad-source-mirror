@@ -1157,11 +1157,9 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
         // Assign a sort-order ordinal so the property editor and BOM see the fields in the
         // order declared in the .kicad_dbl file. Without this, all USER fields share the
         // same FIELD_T::USER id and fall through to value-based comparison in operator<.
-        // SetOrdinal forces m_id to FIELD_T::USER, so only apply it to non-mandatory fields
-        // - a DB mapping that lands on a mandatory field by name (e.g. Reference or
+        // NB: a DB mapping that lands on a mandatory field by name (e.g. Reference or
         // Description) must keep its FIELD_T identity for downstream lookups.
-        if( !field->IsMandatory() )
-            field->SetOrdinal( dbFieldOrdinal++ );
+        field->SetOrdinal( dbFieldOrdinal++, field->IsMandatory() ? field->GetId() : FIELD_T::USER );
 
         if( !mapping.inherit_properties || isNew )
         {

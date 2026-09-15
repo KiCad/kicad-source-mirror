@@ -599,7 +599,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
         }
 
         if( !field.IsMandatory() )
-            newField.SetOrdinal( ordinal++ );
+            newField.SetOrdinal( ordinal++, FIELD_T::USER );
     }
 
     std::vector<PCB_FIELD*> addedFields;

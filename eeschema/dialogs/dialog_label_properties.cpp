@@ -577,7 +577,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     for( SCH_FIELD& field : *m_fields )
     {
         if( !field.IsMandatory() )
-            field.SetOrdinal( ordinal++ );
+            field.SetOrdinal( ordinal++, FIELD_T::USER );
     }
 
     m_currentLabel->SetFields( *m_fields );

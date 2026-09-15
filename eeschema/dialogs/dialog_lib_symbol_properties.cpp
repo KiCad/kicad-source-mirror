@@ -672,7 +672,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         SCH_FIELD& field = m_fields->at( ii );
 
         if( !field.IsMandatory() )
-            field.SetOrdinal( ordinal++ );
+            field.SetOrdinal( ordinal++, FIELD_T::USER );
 
         wxString fieldName = field.GetUntranslatedName();
 

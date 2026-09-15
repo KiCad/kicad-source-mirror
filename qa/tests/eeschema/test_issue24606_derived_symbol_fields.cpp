@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE( UnmodifiedInheritedFieldDetection )
 
     SCH_FIELD row( *parentField );
     row.SetParent( &derived );
-    row.SetOrdinal( 42 );
+    row.SetOrdinal( 42, FIELD_T::USER );
 
     BOOST_CHECK( !( row == *parentField ) );
     BOOST_CHECK( row.HasSameContent( *parentField ) );
