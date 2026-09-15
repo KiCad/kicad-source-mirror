@@ -1656,7 +1656,9 @@ void BOARD::BulkRemoveStaleTeardrops( BOARD_COMMIT& aCommit )
         {
             UncacheItemById( zone->m_Uuid );
             m_zones.erase( m_zones.begin() + ii );
+            IncrementTimeStamp();
             m_connectivity->Remove( zone );
+
             aCommit.Removed( zone );
         }
     }
