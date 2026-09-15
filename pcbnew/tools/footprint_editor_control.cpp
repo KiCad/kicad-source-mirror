@@ -234,8 +234,8 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
         return 0;
 
     // Give the new footprint a resolvable identity so it opens in its own tab instead of
-    // overwriting the active one. The legacy single-board path leaves the nickname empty.
-    if( m_frame->GetTabsPanel() && !libraryName.IsEmpty() )
+    // overwriting the active one.
+    if( !libraryName.IsEmpty() )
         newFootprint->SetFPID( LIB_ID( libraryName, newFootprint->GetFPID().GetLibItemName() ) );
 
     canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
@@ -289,6 +289,8 @@ int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
 
             if( newFootprint )    // i.e. if create footprint command is OK
             {
+                // TODO: why are we clearing all the other tabs here?
+                // And we're doing it without asking user if they want to save changes....
                 m_frame->Clear_Pcb( false );
 
                 canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
@@ -580,12 +582,8 @@ int FOOTPRINT_EDITOR_CONTROL::DeleteFootprint( const TOOL_EVENT& aEvent )
 
     if( frame->DeleteFootprintFromLibrary( fpID, true ) )
     {
-        // Close only the deleted footprint's tab, leaving the others open. Without a tab strip, fall
-        // back to clearing the shared board when the deleted footprint is the one on screen.
-        if( frame->GetTabsPanel() )
-            frame->CloseFootprintTab( fpID );
-        else if( fpID == frame->GetLoadedFPID() )
-            frame->Clear_Pcb( false );
+        // Close only the deleted footprint's tab, leaving the others open.
+        frame->CloseFootprintTab( fpID );
 
         frame->SyncLibraryTree( true );
     }
@@ -597,11 +595,6 @@ int FOOTPRINT_EDITOR_CONTROL::DeleteFootprint( const TOOL_EVENT& aEvent )
 int FOOTPRINT_EDITOR_CONTROL::ImportFootprint( const TOOL_EVENT& aEvent )
 {
     bool is_last_fp_from_brd = m_frame->IsCurrentFPFromBoard();
-
-    // The import opens in its own tab, leaving the open documents alone; only the legacy single-board
-    // path has to clear first
-    if( !m_frame->GetTabsPanel() && !m_frame->Clear_Pcb( true ) )
-        return -1;                  // this command is aborted
 
     getViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
 
