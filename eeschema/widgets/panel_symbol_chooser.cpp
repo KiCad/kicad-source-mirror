@@ -783,6 +783,7 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
             m_fp_preview->SetStatusText( wxEmptyString );
 
         updateBodyStyleChoice( nullptr );
+        populateFootprintSelector( LIB_ID() );
     }
 }
 
