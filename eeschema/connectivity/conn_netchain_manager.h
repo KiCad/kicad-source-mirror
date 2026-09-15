@@ -110,12 +110,12 @@ public:
         return m_netChainTerminalRefOverrides;
     }
 
-    void SetNetChainColorOverrides( const std::map<wxString, COLOR4D>& aOverrides )
+    void SetNetChainColorOverrides( const std::map<wxString, KIGFX::COLOR4D>& aOverrides )
     {
         m_netChainColorOverrides = aOverrides;
     }
 
-    const std::map<wxString, COLOR4D>& GetNetChainColorOverrides() const
+    const std::map<wxString, KIGFX::COLOR4D>& GetNetChainColorOverrides() const
     {
         return m_netChainColorOverrides;
     }
@@ -305,7 +305,7 @@ private:
     std::vector<BRIDGE_EDGE>                   m_bridgeEdges;        ///< raw bridge edges from the last rebuild
     bool                                       m_netChainsBuilt = false;
     std::map<wxString, wxString>              m_netChainNetClassOverrides;
-    std::map<wxString, COLOR4D>               m_netChainColorOverrides;
+    std::map<wxString, KIGFX::COLOR4D>         m_netChainColorOverrides;
     std::map<wxString, CHAIN_TERMINAL_REFS>    m_netChainTerminalRefOverrides;
     std::map<wxString, std::set<wxString>>    m_netChainMemberNetOverrides;
 
