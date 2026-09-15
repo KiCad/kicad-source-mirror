@@ -27,6 +27,7 @@
 #include <tools/sch_tool_base.h>
 
 #include <lib_symbol.h>
+#include <advanced_config.h>
 
 #include <sch_group.h>
 #include <sch_screen.h>
@@ -75,6 +76,18 @@ COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN
                            RECURSE_MODE aRecurse )
 {
     wxCHECK( aItem, *this );
+
+    if( !m_isLibEditor )
+    {
+        SCH_ITEM*   item = dynamic_cast<SCH_ITEM*>( aItem );
+        SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( aScreen );
+
+        if( !screen && item )
+            screen = item->GetParentScreen();
+
+        if( screen && item && SCH_SCREEN::IsConnectivitySource( item ) )
+            screen->BumpConnectivityRevision( item->Type() );
+    }
 
     if( aRecurse == RECURSE_MODE::RECURSE )
     {
@@ -205,6 +218,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     std::vector<SCH_ITEM*> bulkRemovedItems;
     std::vector<SCH_ITEM*> itemsChanged;
     std::vector<std::unique_ptr<SCH_ITEM>> cleanupRemovedItems;
+    std::set<SCH_SCREEN*> connectivityScreens;
 
     auto notifyModel = [&]()
     {
@@ -233,17 +247,18 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     };
 
     auto updateConnectivityFlag =
-            [&]( SCH_ITEM* schItem )
+            [&]( SCH_ITEM* schItem, SCH_SCREEN* screen, bool fullSheetUpdate = true )
             {
                 if( schItem->IsConnectable() || ( schItem->Type() == SCH_RULE_AREA_T ) )
                 {
                     dirtyConnectivity = true;
+                    connectivityScreens.insert( screen );
 
                     // Do a local clean up if there are any connectable objects in the commit.
                     if( connectivityCleanUp == NO_CLEANUP )
                         connectivityCleanUp = LOCAL_CLEANUP;
 
-                    if( schItem->Type() == SCH_SHEET_T )
+                    if( schItem->Type() == SCH_SHEET_T && fullSheetUpdate )
                         connectivityCleanUp = GLOBAL_CLEANUP;
                 }
             };
@@ -307,7 +322,10 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             // Cleanup can replace a MODIFY with REMOVE. Keep its staging separate from processed
             // entries while retaining their undo records, so both phases form one user action.
             clear();
-            schematic->CleanUpConnections( this, connectivityCleanUp );
+            // Legacy cleanup stays schematic-wide; only the engine scopes it to the staged screens
+            schematic->CleanUpConnections( this, connectivityCleanUp,
+                                           ADVANCED_CFG::GetCfg().m_ConnectivityEngine ? connectivityScreens
+                                                                                       : std::set<SCH_SCREEN*>() );
 
             stageRemovedGroups();
             index = 0;
@@ -327,6 +345,10 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
         if( !schematic )
             schematic = schItem->Schematic();
+
+        // Staging invalidates captured sources even when the final connectivity is unchanged
+        if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine && SCH_SCREEN::IsConnectivitySource( schItem ) )
+            refreshConnectivity = true;
 
         if( schItem->IsSelected() )
         {
@@ -350,7 +372,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             if( enteredGroup && schItem->IsGroupableType() && !schItem->GetParentGroup() )
                 selTool->GetEnteredGroup()->AddItem( schItem );
 
-            updateConnectivityFlag( schItem );
+            updateConnectivityFlag( schItem, screen );
 
             if( !( aCommitFlags & SKIP_UNDO ) )
                 undoList.PushItem( ITEM_PICKER( screen, schItem, UNDO_REDO::NEWITEM ) );
@@ -379,7 +401,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
         case CHT_REMOVE:
         {
-            updateConnectivityFlag( schItem );
+            updateConnectivityFlag( schItem, screen );
 
             if( !( aCommitFlags & SKIP_UNDO ) )
             {
@@ -433,21 +455,33 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         {
             const SCH_ITEM* itemCopy = static_cast<const SCH_ITEM*>( entry.m_copy );
             SCH_SHEET_PATH  currentSheet;
+            bool           fullSheetUpdate = true;
 
             if( frame )
                 currentSheet = frame->GetCurrentSheet();
 
+            if( schItem->Type() == SCH_SHEET_T )
+            {
+                const auto* modifiedSheet = static_cast<const SCH_SHEET*>( schItem );
+                const auto* originalSheet = static_cast<const SCH_SHEET*>( itemCopy );
+                const bool hierarchyChanged = originalSheet->HasHierarchyChanges( *modifiedSheet );
+                refreshHierarchy |= hierarchyChanged;
+
+                // Stable ports are invalidated through their containing screen, including shared instances
+                fullSheetUpdate = !ADVANCED_CFG::GetCfg().m_ConnectivityEngine || hierarchyChanged
+                                  || originalSheet->HasPinIdentityChanges( *modifiedSheet );
+            }
+
             if( itemCopy->HasConnectivityChanges( schItem, &currentSheet )
                 || ( itemCopy->Type() == SCH_RULE_AREA_T ) )
             {
-                updateConnectivityFlag( schItem );
+                updateConnectivityFlag( schItem, screen, fullSheetUpdate );
             }
             else if( schItem->IsConnectable() && schItem->IsConnectivityDirty() )
             {
                 // Move previews can change dangling flags without changing the final geometry.
                 refreshConnectivity = true;
             }
-
 
             if( schItem->Type() == SCH_SYMBOL_T )
             {
@@ -480,16 +514,6 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 itemWrapper.SetLink( entry.m_copy );
                 entry.m_copy = nullptr;   // We've transferred ownership to the undo list
                 undoList.PushItem( itemWrapper );
-            }
-
-            if( schItem->Type() == SCH_SHEET_T )
-            {
-                const SCH_SHEET* modifiedSheet = static_cast<const SCH_SHEET*>( schItem );
-                const SCH_SHEET* originalSheet = static_cast<const SCH_SHEET*>( itemCopy );
-                wxCHECK2( modifiedSheet && originalSheet, continue );
-
-                if( originalSheet->HasHierarchyChanges( *modifiedSheet ) )
-                    refreshHierarchy = true;
             }
 
             if( frame && screen == currentScreen )

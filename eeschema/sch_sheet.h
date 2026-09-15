@@ -588,6 +588,8 @@ public:
 
     bool HasHierarchyChanges( const SCH_SHEET& aOther ) const;
 
+    bool HasPinIdentityChanges( const SCH_SHEET& aOther ) const;
+
     /**
      * Compare page numbers of schematic sheets.
      *
@@ -652,6 +654,9 @@ protected:
 
     bool getInstance( SCH_SHEET_INSTANCE& aInstance, const KIID_PATH& aSheetPath,
                       bool aTestFromEnd = false ) const;
+
+    void setVariantAttribute( bool aEnable, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName,
+                              bool SCH_SHEET::*aBase, bool SCH_SHEET_VARIANT::*aOverride );
 
     SCH_SHEET_INSTANCE* getInstance( const KIID_PATH& aPath );
     const SCH_SHEET_INSTANCE* getInstance( const KIID_PATH& aPath ) const;

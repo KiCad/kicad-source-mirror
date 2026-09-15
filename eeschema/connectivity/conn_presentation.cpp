@@ -20,6 +20,13 @@
 #include <connectivity/conn_presentation.h>
 #include <netclass.h>
 #include <sch_item.h>
+#include <connectivity/conn_facade.h>
+#include <advanced_config.h>
+#include <bus_alias.h>
+#include <schematic.h>
+#include <project/net_settings.h>
+#include <units_provider.h>
+#include <boost/algorithm/string/join.hpp>
 #include <wx/thread.h>
 #include <sch_connection.h>
 #include <string_utils.h>
@@ -30,15 +37,76 @@ std::optional<wxString> SCH_CONNECTIVITY::AppendConnectionInfo(
 {
     wxASSERT( wxThread::IsMain() );
     wxString name;
+    bool isBus;
 
-    const SCH_CONNECTION* connection = aItem.Connection( aPath );
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        SCHEMATIC* schematic = aItem.Schematic();
 
-    if( !connection )
-        return std::nullopt;
+        if( !schematic || !schematic->IsValid() )
+            return std::nullopt;
 
-    connection->AppendInfoToMsgPanel( aList );
-    name = connection->Name();
-    bool isBus = connection->IsBus();
+        const SCH_SHEET_PATH& path = aPath ? *aPath : schematic->CurrentSheet();
+        const auto connection = schematic->Connectivity().Connection( aItem.m_Uuid, path.PathRef() );
+
+        if( !connection )
+            return std::nullopt;
+
+        name = connection->Name();
+        isBus = connection->IsBus();
+        aList.emplace_back( _( "Connection Name" ), UnescapeString( name ) );
+
+        if( isBus )
+        {
+            auto appendAlias = [&]( const std::shared_ptr<BUS_ALIAS>& alias )
+            {
+                aList.emplace_back( wxString::Format( _( "Bus Alias %s Members" ), alias->GetName() ),
+                                    boost::algorithm::join( alias->Members(), " " ) );
+            };
+            const wxString localName = connection->Name( true );
+
+            if( const auto alias = schematic->GetBusAlias( localName ) )
+            {
+                appendAlias( alias );
+            }
+            else
+            {
+                wxString group;
+                std::vector<wxString> members;
+
+                if( NET_SETTINGS::ParseBusGroup( localName, &group, &members ) )
+                {
+                    for( const wxString& member : members )
+                    {
+                        if( const auto memberAlias = schematic->GetBusAlias( member ) )
+                            appendAlias( memberAlias );
+                    }
+                }
+            }
+        }
+
+#if defined(DEBUG)
+        aList.emplace_back( "Subgraph Code", wxString::Format( "%u", connection->SubgraphCode() ) );
+
+        if( SCH_ITEM* driver = connection->Driver() )
+        {
+            UNITS_PROVIDER units( schIUScale, EDA_UNITS::MM );
+            aList.emplace_back( "Connection Source", wxString::Format( "%s at %p",
+                                driver->GetItemDescription( &units, false ), driver ) );
+        }
+#endif
+    }
+    else
+    {
+        const SCH_CONNECTION* connection = aItem.Connection( aPath );
+
+        if( !connection )
+            return std::nullopt;
+
+        connection->AppendInfoToMsgPanel( aList );
+        name = connection->Name();
+        isBus = connection->IsBus();
+    }
 
     if( isBus )
         return std::nullopt;

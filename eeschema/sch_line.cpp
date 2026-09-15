@@ -604,7 +604,8 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
         SCH_LINE* ret = new SCH_LINE( *aLine );
         ret->SetStartPoint( leftmost_start );
         ret->SetEndPoint( leftmost_end );
-        ret->SetConnectivityDirty( true );
+        // Only insertion should invalidate the screen; junction queries also merge temporary copies
+        ret->m_connectivity_dirty = true;
 
         if( IsSelected() || aLine->IsSelected() )
             ret->SetSelected();
@@ -656,7 +657,8 @@ SCH_LINE* SCH_LINE::MergeOverlap( SCH_SCREEN* aScreen, SCH_LINE* aLine, bool aCh
     SCH_LINE* ret = new SCH_LINE( *aLine );
     ret->SetStartPoint( leftmost_start );
     ret->SetEndPoint( leftmost_end );
-    ret->SetConnectivityDirty( true );
+    // This result is not on the screen yet, even though its copy retains the parent
+    ret->m_connectivity_dirty = true;
 
     if( IsSelected() || aLine->IsSelected() )
         ret->SetSelected();
@@ -1063,11 +1065,8 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
         }
         else if( GetLayer() == LAYER_BUS )
         {
-            if( SCH_CONNECTION* connection = Connection() )
-            {
-                for( const std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
-                    properties.emplace_back( wxT( "!" ) + member->Name() );
-            }
+            for( const wxString& member : GetBusMemberNames() )
+                properties.emplace_back( wxT( "!" ) + member );
         }
 
         if( !properties.empty() )

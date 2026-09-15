@@ -19,6 +19,8 @@
 
 #include "conn_netchain_manager.h"
 #include "conn_netchain_input.h"
+#include "conn_facade.h"
+#include <advanced_config.h>
 #include <algorithm>
 #include <iterator>
 #include <queue>
@@ -599,7 +601,8 @@ void SCH_CONNECTIVITY::NETCHAIN_MANAGER::rebuild( const NETCHAIN_INPUT& aConnect
     }
 
     wxLogTrace( traceSchNetChain, "RebuildNetChains: screens=%zu (global build)", sheetSymbols.size() );
-    wxLogTrace( traceSchNetChain, "RebuildNetChains: debug start passes (pre-pass chains=%zu)", m_committedNetChains.size() );
+    wxLogTrace( traceSchNetChain, "RebuildNetChains: debug start passes (pre-pass chains=%zu)",
+                m_committedNetChains.size() );
 
     // Build net chains by scanning eligible 2-pin symbols on every sheet, using the original
     // parallel-wire passthrough heuristic. This is effectively the old pass 1 but repeated for
@@ -631,7 +634,15 @@ void SCH_CONNECTIVITY::NETCHAIN_MANAGER::rebuild( const NETCHAIN_INPUT& aConnect
             while( !q.empty() )
             {
                 wxString cur = q.front(); q.pop(); comp.push_back( cur );
-                for( const BRIDGE_NEIGHBOR& e : adjacency.at( cur ) ) if( !seen.contains( e.other ) ) { seen.insert( e.other ); q.push( e.other ); }
+
+                for( const BRIDGE_NEIGHBOR& e : adjacency.at( cur ) )
+                {
+                    if( !seen.contains( e.other ) )
+                    {
+                        seen.insert( e.other );
+                        q.push( e.other );
+                    }
+                }
             }
 
             wxLogTrace( traceSchNetChain, "  component size=%zu", comp.size() );
@@ -653,7 +664,11 @@ void SCH_CONNECTIVITY::NETCHAIN_MANAGER::rebuild( const NETCHAIN_INPUT& aConnect
             wxLogTrace( traceSchNetChain, "   candidates=%zu", candidates.size() );
 
             if( candidates.empty() ) continue;
-            std::sort( candidates.begin(), candidates.end(), []( const wxString& a, const wxString& b ){ return a.CmpNoCase( b ) < 0; } );
+            std::sort( candidates.begin(), candidates.end(),
+                       []( const wxString& a, const wxString& b )
+                       {
+                           return a.CmpNoCase( b ) < 0;
+                       } );
             size_t needPrune = comp.size() - 4; if( needPrune > candidates.size() ) needPrune = candidates.size();
 
             wxLogTrace( traceSchNetChain, "   pruning need=%zu", needPrune );
@@ -1318,7 +1333,8 @@ void SCH_CONNECTIVITY::NETCHAIN_MANAGER::refreshCommittedChainFromPotential( SCH
 }
 
 
-SCH_NETCHAIN* SCH_CONNECTIVITY::NETCHAIN_MANAGER::CreateNetChainFromPotential( SCH_NETCHAIN* aPotential, const wxString& aName )
+SCH_NETCHAIN* SCH_CONNECTIVITY::NETCHAIN_MANAGER::CreateNetChainFromPotential( SCH_NETCHAIN* aPotential,
+                                                                               const wxString& aName )
 {
     if( !aPotential )
         return nullptr;
@@ -1532,6 +1548,15 @@ SCH_NETCHAIN* SCH_CONNECTIVITY::NETCHAIN_MANAGER::GetNetChainByName( const wxStr
 
 wxString SCH_CONNECTIVITY::NETCHAIN_MANAGER::NetKeyForItem( const SCH_ITEM& aItem, const SCH_SHEET_PATH& aPath )
 {
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        if( SCHEMATIC* schematic = aItem.Schematic() )
+        {
+            const auto net = schematic->Connectivity().GetSubgraphForItem( aItem.m_Uuid, aPath.Path() );
+            return net ? SCH_NETCHAIN::MakeKey( net->Name(), net->Component() ) : wxString();
+        }
+    }
+
     const SCH_CONNECTION* net = aItem.Connection( &aPath );
     return net ? SCH_NETCHAIN::MakeKey( net->Name(), net->SubgraphCode() ) : wxString();
 }

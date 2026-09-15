@@ -215,20 +215,9 @@ public:
      *
      * @param aFields are the fields to set in this symbol.
      */
-    void SetFields( const std::vector<SCH_FIELD>& aFields )
-    {
-        m_fields = aFields;     // vector copying, length is changed possibly
-    }
-
-    void AddFields( const std::vector<SCH_FIELD>& aFields )
-    {
-        m_fields.insert( m_fields.end(), aFields.begin(), aFields.end() );
-    }
-
-    void AddField( const SCH_FIELD& aField )
-    {
-        m_fields.push_back( aField );
-    }
+    void SetFields( const std::vector<SCH_FIELD>& aFields );
+    void AddFields( const std::vector<SCH_FIELD>& aFields );
+    void AddField( const SCH_FIELD& aField );
 
     /**
      * Increment the label text if it ends with a number.

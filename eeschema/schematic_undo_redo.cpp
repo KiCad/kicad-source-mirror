@@ -19,6 +19,7 @@
  */
 
 #include <sch_actions.h>
+#include <advanced_config.h>
 #include <sch_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <schematic.h>
@@ -269,7 +270,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
         // Set connectable object connectivity status.
         auto propagateConnectivityDamage =
-                [&]( SCH_ITEM* schItem )
+                [&]( SCH_ITEM* schItem, bool fullSheetUpdate = true )
                 {
                     if( schItem->IsConnectable() )
                     {
@@ -290,15 +291,15 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                                 pin->SetConnectivityDirty();
                         }
 
-                        m_highlightedConnChanged = true;
+                        if( !ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+                            m_highlightedConnChanged = true;
                         dirtyConnectivity = true;
 
                         // Do a local clean up if there are any connectable objects in the commit
                         if( connectivityCleanUp == NO_CLEANUP )
                             connectivityCleanUp = LOCAL_CLEANUP;
 
-                        // Do a full rebauild of the connectivity if there is a sheet in the commit
-                        if( schItem->Type() == SCH_SHEET_T )
+                        if( schItem->Type() == SCH_SHEET_T && fullSheetUpdate )
                             connectivityCleanUp = GLOBAL_CLEANUP;
                     }
                     else if( schItem->Type() == SCH_RULE_AREA_T )
@@ -386,8 +387,23 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             wxCHECK2( itemCopy, continue );
 
+            bool fullSheetUpdate = true;
+
+            if( status == UNDO_REDO::CHANGED && schItem->Type() == SCH_SHEET_T )
+            {
+                const auto* originalSheet = static_cast<const SCH_SHEET*>( schItem );
+                const auto* modifiedSheet = static_cast<const SCH_SHEET*>( itemCopy );
+                const bool hierarchyChanged = originalSheet->HasHierarchyChanges( *modifiedSheet );
+                rebuildHierarchyNavigator |= hierarchyChanged;
+                refreshHierarchy |= hierarchyChanged;
+                // Local undo cleanup only visits the displayed screen
+                fullSheetUpdate = !ADVANCED_CFG::GetCfg().m_ConnectivityEngine || screen != GetScreen()
+                                  || hierarchyChanged
+                                  || originalSheet->HasPinIdentityChanges( *modifiedSheet );
+            }
+
             if( schItem->HasConnectivityChanges( itemCopy, &GetCurrentSheet() ) )
-                propagateConnectivityDamage( schItem );
+                propagateConnectivityDamage( schItem, fullSheetUpdate );
 
             // The root sheet is a pseudo object that owns the root screen object but is not on
             // the root screen so do not attempt to remove it from the screen it owns.
@@ -397,23 +413,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             switch( status )
             {
             case UNDO_REDO::CHANGED:
-                if( schItem->Type() == SCH_SHEET_T )
-                {
-                    const SCH_SHEET* origSheet = static_cast<const SCH_SHEET*>( schItem );
-                    const SCH_SHEET* copySheet = static_cast<const SCH_SHEET*>( itemCopy );
-
-                    wxCHECK2( origSheet && copySheet, continue );
-
-                    if( origSheet->HasHierarchyChanges( *copySheet ) )
-                    {
-                        rebuildHierarchyNavigator = true;
-                        refreshHierarchy = true;
-                    }
-
-                    updateVariantCtrl = true;
-                }
-
-                if( schItem->Type() == SCH_SYMBOL_T )
+                if( schItem->Type() == SCH_SHEET_T || schItem->Type() == SCH_SYMBOL_T )
                     updateVariantCtrl = true;
 
                 schItem->SwapItemData( itemCopy );

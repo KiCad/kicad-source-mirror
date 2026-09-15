@@ -42,6 +42,14 @@ class SCH_TOOL_BASE;
 // With SKIP_UNDO (implicit headless), transfer ownership of removed items to the commit.
 #define DELETE_REMOVED_ITEMS 0x0010
 
+/**
+ * Commit for the schematic and symbol editors.
+ *
+ * Outside the symbol editor, Stage() bumps the connectivity revision of the staged item's screen,
+ * and the connectivity facade stops serving that screen until the next recalculation.  A commit
+ * that staged an item must therefore end in Push() or Revert().  A caller that drops such a commit
+ * on purpose must request the recalculation itself.
+ */
 class SCH_COMMIT : public COMMIT
 {
 public:

@@ -71,9 +71,8 @@
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_io/sch_io.h>
 
+#include <connectivity/conn_facade.h>
 #include <wx/log.h>
-
-bool SCHEMATIC::m_IsSchematicExists = false;
 
 SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
         EDA_ITEM( nullptr, SCHEMATIC_T ),
@@ -84,7 +83,7 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
     m_currentSheet = new SCH_SHEET_PATH();
     m_netChains = std::make_unique<SCH_CONNECTIVITY::NETCHAIN_MANAGER>( this );
     m_connectionGraph = new CONNECTION_GRAPH( this, m_netChains.get() );
-    m_IsSchematicExists = true;
+    m_connectivity = std::make_unique<SCH_CONNECTIVITY::FACADE>();
 
     SetProject( aPrj );
 
@@ -162,12 +161,12 @@ SCHEMATIC::SCHEMATIC( PROJECT* aPrj ) :
 
 SCHEMATIC::~SCHEMATIC()
 {
+    m_connectivity->Clear();
     m_fieldListenerSubscription.reset();
 
     delete m_currentSheet;
     delete m_connectionGraph;
     delete m_rootSheet;
-    m_IsSchematicExists = false;
 }
 
 
@@ -175,6 +174,8 @@ void SCHEMATIC::Reset()
 {
     m_importNetMap.reset();
     m_unresolvedErcExclusions.clear();
+    m_connectivity->Clear();
+
     delete m_rootSheet;
 
     m_rootSheet = nullptr;
@@ -340,8 +341,13 @@ void SCHEMATIC::rebuildHierarchyState( bool aResetConnectionGraph )
 {
     RefreshHierarchy();
 
-    if( aResetConnectionGraph && m_project )
-        m_connectionGraph->Reset();
+    if( aResetConnectionGraph )
+    {
+        m_connectivity->Clear();
+
+        if( m_project )
+            m_connectionGraph->Reset();
+    }
 
     m_variantNames.clear();
 
@@ -451,6 +457,8 @@ void SCHEMATIC::AdoptContent( SCHEMATIC_CONTENT&& aContent ) noexcept
     // only coherent target is the virtual root whose container index is being replaced with it
     wxCHECK_RET( aContent.topLevelSheets.empty() || target == m_rootSheet,
                  wxS( "AdoptContent can only replace the top level sheets through the virtual root" ) );
+
+    m_connectivity->Clear();
 
     if( aContent.screen )
     {
@@ -892,6 +900,26 @@ void SCHEMATIC::updateProjectBusAliases()
 std::set<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
 {
     std::set<wxString> names;
+
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        for( const auto& group : Connectivity().GetNetMap() )
+        {
+            // A net without items, such as a member of an unplaced bus, has nothing to assign a netclass to
+            if( std::ranges::all_of( group.instances, []( const auto& net ) { return net.Items().empty(); } ) )
+                continue;
+
+            const auto& net = group.instances.front();
+
+            if( net.IsNet() && CONNECTION_SUBGRAPH::GetDriverPriority( net.Driver() )
+                                      >= CONNECTION_SUBGRAPH::PRIORITY::PIN )
+            {
+                names.insert( group.name );
+            }
+        }
+
+        return names;
+    }
 
     for( const auto& [key, subgraphList] : m_connectionGraph->GetNetMap() )
     {
@@ -2033,7 +2061,17 @@ void SCHEMATIC::RebuildConnectivity( std::function<void( SCH_ITEM* )>* aChangedI
     }
 
     SCH_RULE_AREA::UpdateRuleAreasInScreens( screens, aSchView );
-    ConnectionGraph()->Recalculate( Hierarchy(), true, aChangedItemHandler, aProgressReporter );
+
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        m_connectivity->Recalculate( *this, true,
+                                    aChangedItemHandler ? *aChangedItemHandler
+                                                        : std::function<void( SCH_ITEM* )>() );
+    }
+    else
+    {
+        ConnectionGraph()->Recalculate( Hierarchy(), true, aChangedItemHandler, aProgressReporter );
+    }
 }
 
 
@@ -2053,6 +2091,34 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
         CleanUpConnections( aCommit, aCleanupFlags );
 
     SCH_SHEET_LIST list = Hierarchy();
+
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity || aCleanupFlags == GLOBAL_CLEANUP )
+        {
+            if( !localCommit.Empty() )
+                localCommit.Push( _( "Schematic Cleanup" ), SKIP_CONNECTIVITY | DELETE_REMOVED_ITEMS );
+
+            RebuildConnectivity( aChangedItemHandler, aProgressReporter, aSchView );
+            return;
+        }
+
+        std::unordered_set<SCH_SCREEN*> screens;
+
+        for( const SCH_SHEET_PATH& path : list )
+            screens.insert( path.LastScreen() );
+
+        SCH_RULE_AREA::UpdateRuleAreasInScreens( screens, aSchView );
+
+        // Commit cleanup before callbacks, which may close or replace the schematic
+        if( !localCommit.Empty() )
+            localCommit.Push( _( "Schematic Cleanup" ), SKIP_CONNECTIVITY | DELETE_REMOVED_ITEMS );
+
+        m_connectivity->Recalculate( *this, false,
+                                    aChangedItemHandler ? *aChangedItemHandler
+                                                        : std::function<void( SCH_ITEM* )>() );
+        return;
+    }
 
     if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity || aCleanupFlags == GLOBAL_CLEANUP
         || aLastChangeList == nullptr || ConnectionGraph()->IsMinor() )
@@ -2314,7 +2380,6 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
 
         new_graph.Recalculate( list, false, aChangedItemHandler, aProgressReporter );
         ConnectionGraph()->Merge( new_graph );
-
     }
 
     if( !localCommit.Empty() )

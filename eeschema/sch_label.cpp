@@ -21,6 +21,9 @@
 
 #include <connectivity/conn_presentation.h>
 #include <advanced_config.h>
+#include <connectivity/conn_facade.h>
+#include <wx/thread.h>
+#include <connectivity/conn_text.h>
 #include <base_units.h>
 #include <increment.h>
 #include <pgm_base.h>
@@ -194,6 +197,30 @@ SCH_LABEL_BASE::SCH_LABEL_BASE( const SCH_LABEL_BASE& aLabel ) :
 }
 
 
+void SCH_LABEL_BASE::SetFields( const std::vector<SCH_FIELD>& aFields )
+{
+    m_fields = aFields;
+    invalidateConnectivity();
+}
+
+
+void SCH_LABEL_BASE::AddFields( const std::vector<SCH_FIELD>& aFields )
+{
+    if( aFields.empty() )
+        return;
+
+    m_fields.insert( m_fields.end(), aFields.begin(), aFields.end() );
+    invalidateConnectivity();
+}
+
+
+void SCH_LABEL_BASE::AddField( const SCH_FIELD& aField )
+{
+    m_fields.push_back( aField );
+    invalidateConnectivity();
+}
+
+
 SCH_LABEL_BASE& SCH_LABEL_BASE::operator=( const SCH_LABEL_BASE& aLabel )
 {
     SCH_TEXT::operator=( aLabel );
@@ -247,14 +274,32 @@ bool SCH_LABEL_BASE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
             return true;
     }
 
-    wxCHECK_MSG( Schematic(), false, wxT( "No parent SCHEMATIC set for SCH_LABEL!" ) );
+    SCHEMATIC* schematic = Schematic();
 
-    // Ensure m_connected_items for Schematic()->CurrentSheet() exists.
-    // Can be not the case when "this" is living in clipboard
-    if( m_connected_items.find( Schematic()->CurrentSheet() ) == m_connected_items.end() )
-        return false;
+    wxCHECK_MSG( schematic, false, wxT( "No parent SCHEMATIC set for SCH_LABEL!" ) );
 
-    const std::vector<SCH_ITEM*>& item_set = m_connected_items.at( Schematic()->CurrentSheet() );
+    std::vector<SCH_ITEM*>        publishedItems;
+    const std::vector<SCH_ITEM*>* connectedItems = &publishedItems;
+
+    // The engine never fills legacy connected items; its published adjacency replaces them
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine && wxThread::IsMain() )
+    {
+        if( const auto connection = schematic->Connectivity().Connection( m_Uuid, schematic->CurrentSheet().Path() ) )
+            publishedItems = connection->ConnectedItems();
+    }
+    else
+    {
+        // Ensure m_connected_items for the current sheet exists
+        // Can be not the case when "this" is living in clipboard
+        const auto found = m_connected_items.find( schematic->CurrentSheet() );
+
+        if( found == m_connected_items.end() )
+            return false;
+
+        connectedItems = &found->second;
+    }
+
+    const std::vector<SCH_ITEM*>& item_set = *connectedItems;
 
     for( KICAD_T scanType : aScanTypes )
     {
@@ -470,7 +515,12 @@ void SCH_LABEL_BASE::SetPosition( const VECTOR2I& aPosition )
 
 void SCH_LABEL_BASE::Move( const VECTOR2I& aMoveVector )
 {
+    if( aMoveVector == VECTOR2I() )
+        return;
+
     SCH_TEXT::Move( aMoveVector );
+
+    invalidateConnectivity();
 
     for( SCH_FIELD& field : m_fields )
         field.Offset( aMoveVector );
@@ -790,6 +840,18 @@ bool SCH_LABEL_BASE::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* toke
 
     wxString variant = schematic->GetCurrentVariant();
 
+    if( SCH_CONNECTIVITY::INPUT_TEXT_SCOPE::Active()
+        && ( operatingPoint.Matches( *token ) || token->IsSameAs( wxS( "NET_NAME" ) )
+             || token->IsSameAs( wxS( "SHORT_NET_NAME" ) ) || token->IsSameAs( wxS( "NET_CLASS" ) )
+             || ( Type() == SCH_DIRECTIVE_LABEL_T
+                  && ( token->IsSameAs( wxS( "EXCLUDE_FROM_BOM" ) )
+                       || token->IsSameAs( wxS( "EXCLUDE_FROM_BOARD" ) )
+                       || token->IsSameAs( wxS( "EXCLUDE_FROM_SIM" ) ) || token->IsSameAs( wxS( "DNP" ) ) ) ) ) )
+    {
+        token->clear();
+        return true;
+    }
+
     if( operatingPoint.Matches( *token ) )
     {
         int      precision = 3;
@@ -944,10 +1006,21 @@ const wxString& SCH_LABEL_BASE::GetCachedDriverName() const
 
 void SCH_LABEL_BASE::cacheShownText()
 {
+    // Detached labels cannot invalidate a screen, so loading and copies skip the comparison
+    const bool attached = GetParentScreen() != nullptr;
+    const wxString previousText = attached ? EDA_TEXT::GetShownText( FOR_NETNAME ) : wxString();
+    const std::vector<TEXT_VAR_REF_KEY> previousReferences = attached ? GetTextVarReferences()
+                                                                      : std::vector<TEXT_VAR_REF_KEY>();
     EDA_TEXT::cacheShownText();
 
     if( !HasTextVars() )
         m_cached_driver_name = EscapeString( EDA_TEXT::GetShownText( FOR_NETNAME ), CTX_NETNAME );
+
+    if( attached
+        && ( previousText != EDA_TEXT::GetShownText( FOR_NETNAME ) || previousReferences != GetTextVarReferences() ) )
+    {
+        invalidateConnectivity();
+    }
 }
 
 
@@ -990,36 +1063,10 @@ bool SCH_LABEL_BASE::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData
     }
 
     const SCH_SEARCH_DATA* searchData = dynamic_cast<const SCH_SEARCH_DATA*>( &aSearchData );
-    SCH_CONNECTION*        connection = nullptr;
     SCH_SHEET_PATH*        sheetPath = reinterpret_cast<SCH_SHEET_PATH*>( aAuxData );
 
-    if( searchData && searchData->searchNetNames && sheetPath && ( connection = Connection( sheetPath ) ) )
-    {
-        if( connection->IsBus() )
-        {
-            auto allMembers = connection->AllMembers();
-
-            std::set<wxString> netNames;
-
-            for( std::shared_ptr<SCH_CONNECTION> member : allMembers )
-                netNames.insert( member->GetNetName() );
-
-            for( const wxString& netName : netNames )
-            {
-                if( EDA_ITEM::Matches( netName, aSearchData ) )
-                    return true;
-            }
-
-            return false;
-        }
-
-        wxString netName = connection->GetNetName();
-
-        if( EDA_ITEM::Matches( netName, aSearchData ) )
-            return true;
-    }
-
-    return false;
+    return searchData && searchData->searchNetNames && sheetPath
+           && MatchesNetName( aSearchData, sheetPath );
 }
 
 
@@ -1420,8 +1467,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
 
     SCH_SHEET_PATH*  sheet = &Schematic()->CurrentSheet();
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
-    SCH_CONNECTION*  connection = Connection();
-    int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
+    int              layer = HasBusConnection( sheet ) ? LAYER_BUS : m_layer;
     COLOR4D          color = settings->GetLayerColor( layer );
     int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
     COLOR4D          bg = settings->GetBackgroundColor();
@@ -1536,12 +1582,12 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
         {
             std::vector<wxString> properties;
 
-            if( connection )
+            if( const auto netName = GetConnectionName( sheet ) )
             {
-                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Net" ), connection->Name() ) );
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Net" ), *netName ) );
 
                 properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Resolved netclass" ),
-                                                           GetEffectiveNetClass()->GetHumanReadableName() ) );
+                                                           GetEffectiveNetClass( sheet )->GetHumanReadableName() ) );
             }
 
             for( const SCH_FIELD& field : GetFields() )
@@ -1613,6 +1659,10 @@ template<typename LabelProto>
 bool unpackLabel( const LabelProto& aInput, SCH_LABEL_BASE& aLabel )
 {
     using namespace kiapi::schematic;
+
+    // Published rows and the item index hold this identity, so they must not outlive the change
+    if( SCH_SCREEN* screen = aLabel.GetParentScreen() )
+        screen->BumpConnectivityRevision();
 
     const_cast<KIID&>( aLabel.m_Uuid ) = KIID( aInput.id().value() );
     aLabel.SetLocked( aInput.locked() == kiapi::common::types::LockedState::LS_LOCKED );

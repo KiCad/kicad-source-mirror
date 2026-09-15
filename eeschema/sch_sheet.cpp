@@ -219,6 +219,9 @@ bool SCH_SHEET::Deserialize( const google::protobuf::Any& aContainer )
     if( !aContainer.UnpackTo( &sheet ) )
         return false;
 
+    if( SCH_SCREEN* screen = GetParentScreen() )
+        screen->BumpConnectivityRevision();
+
     const_cast<::KIID&>( m_Uuid ) = ::KIID( sheet.id().value() );
     SetPosition( UnpackVector2( sheet.position(), schIUScale ) );
     SetSize( UnpackVector2( sheet.size(), schIUScale ) );
@@ -688,6 +691,9 @@ void SCH_SHEET::SetFields( const std::vector<SCH_FIELD>& aFields )
 SCH_FIELD* SCH_SHEET::AddField( const SCH_FIELD& aField )
 {
     m_fields.emplace_back( aField );
+
+    invalidateConnectivity();
+
     return &m_fields.back();
 }
 
@@ -731,12 +737,21 @@ void SCH_SHEET::SetFieldText( const wxString& aFieldName, const wxString& aField
 
             wxCHECK( instance, /* void */ );
 
+            bool changed = false;
+
             if( instance->m_Variants.contains( aVariantName ) )
             {
+                auto& fields = instance->m_Variants[aVariantName].m_Fields;
+
                 if( aFieldText != defaultText )
-                    instance->m_Variants[aVariantName].m_Fields[aFieldName] = aFieldText;
+                {
+                    auto [entry, inserted] = fields.try_emplace( aFieldName, aFieldText );
+                    changed = inserted || std::exchange( entry->second, aFieldText ) != aFieldText;
+                }
                 else
-                    instance->m_Variants[aVariantName].m_Fields.erase( aFieldName );
+                {
+                    changed = fields.erase( aFieldName ) != 0;
+                }
             }
             else if( aFieldText != defaultText )
             {
@@ -745,7 +760,11 @@ void SCH_SHEET::SetFieldText( const wxString& aFieldName, const wxString& aField
                 newVariant.InitializeAttributes( *this );
                 newVariant.m_Fields[aFieldName] = aFieldText;
                 instance->m_Variants.insert( std::make_pair( aVariantName, newVariant ) );
+                changed = true;
             }
+
+            if( changed )
+                invalidateConnectivity();
         }
 
         break;
@@ -796,6 +815,9 @@ void SCH_SHEET::AddPin( SCH_SHEET_PIN* aSheetPin )
     wxASSERT( aSheetPin != nullptr );
     wxASSERT( aSheetPin->Type() == SCH_SHEET_PIN_T );
 
+    if( SCH_SCREEN* screen = GetParentScreen() )
+        screen->BumpConnectivityRevision();
+
     aSheetPin->SetParent( this );
     m_pins.push_back( aSheetPin );
     renumberPins();
@@ -811,6 +833,9 @@ void SCH_SHEET::RemovePin( const SCH_SHEET_PIN* aSheetPin )
     {
         if( *i == aSheetPin )
         {
+            if( SCH_SCREEN* screen = GetParentScreen() )
+                screen->BumpConnectivityRevision();
+
             m_pins.erase( i );
             renumberPins();
             return;
@@ -980,6 +1005,9 @@ int SCH_SHEET::GetMinHeight( bool aFromTop ) const
 
 void SCH_SHEET::CleanupSheet()
 {
+    if( SCH_SCREEN* screen = GetParentScreen() )
+        screen->BumpConnectivityRevision();
+
     std::vector<SCH_SHEET_PIN*> pins = m_pins;
 
     m_pins.clear();
@@ -1968,6 +1996,13 @@ bool SCH_SHEET::HasHierarchyChanges( const SCH_SHEET& aOther ) const
            || GetScreen() != aOther.GetScreen() || HasPageNumberChanges( aOther );
 }
 
+
+bool SCH_SHEET::HasPinIdentityChanges( const SCH_SHEET& aOther ) const
+{
+    return !std::ranges::equal( m_pins, aOther.m_pins, {}, &SCH_SHEET_PIN::m_Uuid, &SCH_SHEET_PIN::m_Uuid );
+}
+
+
 bool SCH_SHEET::HasPageNumberChanges( const SCH_SHEET& aOther ) const
 {
     // Avoid self comparison.
@@ -2126,7 +2161,8 @@ void SCH_SHEET::AddVariant( const SCH_SHEET_PATH& aInstance, const SCH_SHEET_VAR
     if( !instance )
         return;
 
-    instance->m_Variants.insert( std::make_pair( aVariant.m_Name, aVariant ) );
+    if( instance->m_Variants.insert( std::make_pair( aVariant.m_Name, aVariant ) ).second )
+        invalidateConnectivity();
 }
 
 
@@ -2139,6 +2175,8 @@ void SCH_SHEET::DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantN
         return;
 
     instance->m_Variants.erase( aVariantName );
+
+    invalidateConnectivity();
 }
 
 
@@ -2150,7 +2188,8 @@ void SCH_SHEET::ClearVariantField( const KIID_PATH& aPath, const wxString& aVari
     if( !instance || !instance->m_Variants.contains( aVariantName ) )
         return;
 
-    instance->m_Variants[aVariantName].m_Fields.erase( aFieldName );
+    if( instance->m_Variants[aVariantName].m_Fields.erase( aFieldName ) )
+        invalidateConnectivity();
 }
 
 
@@ -2160,7 +2199,7 @@ void SCH_SHEET::RenameVariant( const KIID_PATH& aPath, const wxString& aOldName,
     SCH_SHEET_INSTANCE* instance = getInstance( aPath );
 
     // The instance path must already exist and contain the old variant.
-    if( !instance || !instance->m_Variants.contains( aOldName ) )
+    if( aOldName == aNewName || !instance || !instance->m_Variants.contains( aOldName ) )
         return;
 
     // Get the variant data, update the name, and re-insert with new key
@@ -2168,6 +2207,8 @@ void SCH_SHEET::RenameVariant( const KIID_PATH& aPath, const wxString& aOldName,
     variant.m_Name = aNewName;
     instance->m_Variants.erase( aOldName );
     instance->m_Variants.insert( std::make_pair( aNewName, variant ) );
+
+    invalidateConnectivity();
 }
 
 
@@ -2183,43 +2224,53 @@ void SCH_SHEET::CopyVariant( const KIID_PATH& aPath, const wxString& aSourceVari
     // Copy the variant data with a new name
     SCH_SHEET_VARIANT variant = instance->m_Variants[aSourceVariant];
     variant.m_Name = aNewVariant;
-    instance->m_Variants.insert( std::make_pair( aNewVariant, variant ) );
+
+    if( instance->m_Variants.insert( std::make_pair( aNewVariant, variant ) ).second )
+        invalidateConnectivity();
+}
+
+
+void SCH_SHEET::setVariantAttribute( bool aEnable, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName,
+                                     bool SCH_SHEET::*aBase, bool SCH_SHEET_VARIANT::*aOverride )
+{
+    bool* attribute = &( this->*aBase );
+
+    if( aInstance && !aVariantName.IsEmpty() )
+    {
+        SCH_SHEET_INSTANCE* instance = getInstance( *aInstance );
+
+        wxCHECK_MSG( instance, /* void */,
+                     wxString::Format( wxS( "Cannot set attribute for invalid sheet path '%s'." ),
+                                       aInstance->PathHumanReadable() ) );
+
+        auto variant = instance->m_Variants.find( aVariantName );
+
+        if( variant == instance->m_Variants.end() )
+        {
+            if( aEnable == this->*aBase )
+                return;
+
+            SCH_SHEET_VARIANT newVariant( aVariantName );
+            newVariant.InitializeAttributes( *this );
+            newVariant.*aOverride = aEnable;
+            AddVariant( *aInstance, newVariant );
+            return;
+        }
+
+        attribute = &( variant->second.*aOverride );
+    }
+
+    if( *attribute == aEnable )
+        return;
+
+    *attribute = aEnable;
+    invalidateConnectivity();
 }
 
 
 void SCH_SHEET::SetDNP( bool aEnable, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
 {
-    if( !aInstance || aVariantName.IsEmpty() )
-    {
-        m_DNP = aEnable;
-        return;
-    }
-
-    SCH_SHEET_INSTANCE* instance = getInstance( *aInstance );
-
-    wxCHECK_MSG( instance, /* void */,
-                 wxString::Format( wxS( "Cannot get DNP attribute for invalid sheet path '%s'." ),
-                                   aInstance->PathHumanReadable() ) );
-
-    if( aVariantName.IsEmpty() )
-    {
-        m_DNP = aEnable;
-    }
-    else
-    {
-        if( instance->m_Variants.contains( aVariantName ) )
-        {
-            instance->m_Variants[aVariantName].m_DNP = aEnable;
-        }
-        else if( aEnable != m_DNP )
-        {
-            SCH_SHEET_VARIANT variant( aVariantName );
-
-            variant.InitializeAttributes( *this );
-            variant.m_DNP = aEnable;
-            AddVariant( *aInstance, variant );
-        }
-    }
+    setVariantAttribute( aEnable, aInstance, aVariantName, &SCH_SHEET::m_DNP, &SCH_SHEET_VARIANT::m_DNP );
 }
 
 
@@ -2255,37 +2306,8 @@ void SCH_SHEET::SetDNPProp( bool aEnable )
 
 void SCH_SHEET::SetExcludedFromSim( bool aEnable, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
 {
-    if( !aInstance || aVariantName.IsEmpty() )
-    {
-        m_excludedFromSim = aEnable;
-        return;
-    }
-
-    SCH_SHEET_INSTANCE* instance = getInstance( *aInstance );
-
-    wxCHECK_MSG( instance, /* void */,
-                 wxString::Format( wxS( "Cannot get m_excludedFromSim attribute for invalid sheet path '%s'." ),
-                                   aInstance->PathHumanReadable() ) );
-
-    if( aVariantName.IsEmpty() )
-    {
-        m_excludedFromSim = aEnable;
-    }
-    else
-    {
-        if( instance->m_Variants.contains( aVariantName ) )
-        {
-            instance->m_Variants[aVariantName].m_ExcludedFromSim = aEnable;
-        }
-        else if( aEnable != m_excludedFromSim )
-        {
-            SCH_SHEET_VARIANT variant( aVariantName );
-
-            variant.InitializeAttributes( *this );
-            variant.m_ExcludedFromSim = aEnable;
-            AddVariant( *aInstance, variant );
-        }
-    }
+    setVariantAttribute( aEnable, aInstance, aVariantName, &SCH_SHEET::m_excludedFromSim,
+                         &SCH_SHEET_VARIANT::m_ExcludedFromSim );
 }
 
 
@@ -2321,37 +2343,8 @@ void SCH_SHEET::SetExcludedFromSimProp( bool aEnable )
 
 void SCH_SHEET::SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH* aInstance, const wxString& aVariantName )
 {
-    if( !aInstance || aVariantName.IsEmpty() )
-    {
-        m_excludedFromBOM = aEnable;
-        return;
-    }
-
-    SCH_SHEET_INSTANCE* instance = getInstance( *aInstance );
-
-    wxCHECK_MSG( instance, /* void */,
-                 wxString::Format( wxS( "Cannot get m_excludedFromBOM attribute for invalid sheet path '%s'." ),
-                                   aInstance->PathHumanReadable() ) );
-
-    if( aVariantName.IsEmpty() )
-    {
-        m_excludedFromBOM = aEnable;
-    }
-    else
-    {
-        if( instance->m_Variants.contains( aVariantName ) )
-        {
-            instance->m_Variants[aVariantName].m_ExcludedFromBOM = aEnable;
-        }
-        else if( aEnable != m_excludedFromBOM )
-        {
-            SCH_SHEET_VARIANT variant( aVariantName );
-
-            variant.InitializeAttributes( *this );
-            variant.m_ExcludedFromBOM = aEnable;
-            AddVariant( *aInstance, variant );
-        }
-    }
+    setVariantAttribute( aEnable, aInstance, aVariantName, &SCH_SHEET::m_excludedFromBOM,
+                         &SCH_SHEET_VARIANT::m_ExcludedFromBOM );
 }
 
 

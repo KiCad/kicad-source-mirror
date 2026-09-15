@@ -590,9 +590,11 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             // GetRef() and GetUnitSelection() are O(1) via the symbol's instance path index.
-            symbol->GetField( FIELD_T::REFERENCE )->SetText( symbol->GetRef( this ) );
+            // Bypass SCH_FIELD::SetText so a display refresh does not invalidate connectivity
+            SCH_FIELD* reference = symbol->GetField( FIELD_T::REFERENCE );
+            reference->EDA_TEXT::SetText( symbol->GetRef( this ).Strip( wxString::both ) );
             symbol->SetUnit( symbol->GetUnitSelection( this ) );
-            LastScreen()->Update( item, false );
+            LastScreen()->UpdateDisplayBounds( item );
         }
         else if( item->Type() == SCH_GLOBAL_LABEL_T )
         {
@@ -608,7 +610,7 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
                     label->AutoplaceFields( LastScreen(), AUTOPLACE_AUTO );
 
                 intersheetRefs->SetVisible( label->Schematic()->Settings().m_IntersheetRefsShow );
-                LastScreen()->Update( intersheetRefs );
+                LastScreen()->UpdateDisplayBounds( intersheetRefs );
             }
         }
         else if( item->Type() == SCH_SHAPE_T )

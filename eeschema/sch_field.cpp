@@ -266,6 +266,7 @@ SCH_FIELD& SCH_FIELD::operator=( const SCH_FIELD& aField )
     m_lastResolvedColor = aField.m_lastResolvedColor;
 
     m_renderCache.reset();
+    invalidateConnectivity();
 
     return *this;
 }
@@ -1121,11 +1122,16 @@ void SCH_FIELD::DoHypertextAction( EDA_DRAW_FRAME* aFrame, const VECTOR2I& aMous
 
 void SCH_FIELD::SetName( const wxString& aName )
 {
+    const bool generated = ::IsGeneratedField( aName );
+    const bool changed = m_name != aName || ( generated && EDA_TEXT::GetText() != aName );
     m_name = aName;
-    m_isGeneratedField = ::IsGeneratedField( aName );
+    m_isGeneratedField = generated;
 
     if( m_isGeneratedField )
         EDA_TEXT::SetText( aName );
+
+    if( changed )
+        invalidateConnectivity();
 }
 
 
@@ -1136,10 +1142,12 @@ void SCH_FIELD::SetText( const wxString& aText )
         return;
 
     // Mandatory fields should not have leading or trailing whitespace.
-    if( IsMandatory() )
-        EDA_TEXT::SetText( aText.Strip( wxString::both ) );
-    else
-        EDA_TEXT::SetText( aText );
+    const wxString text = IsMandatory() ? aText.Strip( wxString::both ) : aText;
+    const bool changed = EDA_TEXT::GetText() != text;
+    EDA_TEXT::SetText( text );
+
+    if( changed )
+        invalidateConnectivity();
 }
 
 

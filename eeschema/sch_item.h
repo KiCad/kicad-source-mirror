@@ -567,11 +567,30 @@ public:
      */
     SCH_CONNECTION* Connection( const SCH_SHEET_PATH* aSheet = nullptr ) const;
 
-    // Return the connection name for this sheet instance, if connected.
+    /**
+     * Return the active connection name; absent for missing or stale published rows.
+     * aIgnoreSheet removes only the hierarchy prefix of the canonical name.
+     */
     std::optional<wxString> GetConnectionName( const SCH_SHEET_PATH* aSheet = nullptr,
                                               bool aLocal = false, bool aIgnoreSheet = false ) const;
 
+    // Missing or stale published connections are not buses.
     bool HasBusConnection( const SCH_SHEET_PATH* aSheet = nullptr ) const;
+
+    /**
+     * Names of the bus members of this item's connection, empty when it does not have a bus.
+     *
+     * The published connectivity gives the leaf names, so a nested bus is flattened here.
+     */
+    std::vector<wxString> GetBusMemberNames( const SCH_SHEET_PATH* aSheet = nullptr ) const;
+
+    /**
+     * Match \a aSearchData against the connection of this item on \a aSheet.
+     *
+     * A bus matches when one of its members matches.  An item without a connection never matches,
+     * which is also what a search finds while connectivity is out of date.
+     */
+    bool MatchesNetName( const EDA_SEARCH_DATA& aSearchData, const SCH_SHEET_PATH* aSheet ) const;
 
     /**
      * Retrieve the set of items connected to this item on the given sheet.

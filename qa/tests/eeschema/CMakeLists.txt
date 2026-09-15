@@ -106,9 +106,16 @@ set( QA_EESCHEMA_SRCS
     test_annotation_units_integration.cpp
     test_connectivity_algo.cpp
     test_connectivity_bus.cpp
+    test_connectivity_facade.cpp
+    test_connectivity_navigation.cpp
     test_connectivity_pin_name.cpp
     test_connectivity_claims.cpp
+    test_connectivity_dump.cpp
+    test_connectivity_facts.cpp
+    test_connectivity_text.cpp
+    test_connectivity_reference.cpp
     test_connectivity_loader.cpp
+    test_connectivity_revision.cpp
     test_bus_migration_gate.cpp
     test_bus_migration_precondition.cpp
     test_issue18119_bus_hierarchy.cpp

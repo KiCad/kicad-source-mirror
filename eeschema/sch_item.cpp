@@ -21,6 +21,10 @@
 #include <sch_render_settings.h>
 #include <plotters/plotter.h>
 #include <pgm_base.h>
+#include <connectivity/conn_text.h>
+#include <connectivity/conn_facade.h>
+#include <advanced_config.h>
+#include <wx/thread.h>
 #include <settings/settings_manager.h>
 #include <eeschema_settings.h>
 #include <eda_item.h>
@@ -364,6 +368,9 @@ bool SCH_ITEM::ResolveExcludedFromSim( const SCH_SHEET_PATH* aInstance,
     if( GetExcludedFromSim( aInstance, aVariantName ) )
         return true;
 
+    if( SCH_CONNECTIVITY::INPUT_TEXT_SCOPE::Active() )
+        return false;
+
     for( SCH_RULE_AREA* area : m_rule_areas_cache )
     {
         if( area->GetExcludedFromSim( aInstance, aVariantName ) )
@@ -379,6 +386,9 @@ bool SCH_ITEM::ResolveExcludedFromBOM( const SCH_SHEET_PATH* aInstance,
 {
     if( GetExcludedFromBOM( aInstance, aVariantName ) )
         return true;
+
+    if( SCH_CONNECTIVITY::INPUT_TEXT_SCOPE::Active() )
+        return false;
 
     for( SCH_RULE_AREA* area : m_rule_areas_cache )
     {
@@ -396,6 +406,9 @@ bool SCH_ITEM::ResolveExcludedFromBoard( const SCH_SHEET_PATH* aInstance,
     if( GetExcludedFromBoard( aInstance, aVariantName ) )
         return true;
 
+    if( SCH_CONNECTIVITY::INPUT_TEXT_SCOPE::Active() )
+        return false;
+
     for( SCH_RULE_AREA* area : m_rule_areas_cache )
     {
         if( area->GetExcludedFromBoard( aInstance, aVariantName ) )
@@ -412,6 +425,9 @@ bool SCH_ITEM::ResolveExcludedFromPosFiles( const SCH_SHEET_PATH* aInstance,
     if( GetExcludedFromPosFiles( aInstance, aVariantName ) )
         return true;
 
+    if( SCH_CONNECTIVITY::INPUT_TEXT_SCOPE::Active() )
+        return false;
+
     for( SCH_RULE_AREA* area : m_rule_areas_cache )
     {
         if( area->GetExcludedFromPosFiles( aInstance, aVariantName ) )
@@ -426,6 +442,9 @@ bool SCH_ITEM::ResolveDNP( const SCH_SHEET_PATH* aInstance, const wxString& aVar
 {
     if( GetDNP( aInstance, aVariantName ) )
         return true;
+
+    if( SCH_CONNECTIVITY::INPUT_TEXT_SCOPE::Active() )
+        return false;
 
     for( SCH_RULE_AREA* area : m_rule_areas_cache )
     {
@@ -586,9 +605,30 @@ void SCH_ITEM::SetConnectionGraph( CONNECTION_GRAPH* aGraph )
 }
 
 
+static std::optional<SCH_CONNECTIVITY::ITEM_VIEW> publishedConnection( const SCH_ITEM& aItem,
+                                                                        const SCH_SHEET_PATH* aSheet )
+{
+    SCHEMATIC* schematic = aItem.Schematic();
+
+    if( !schematic || !schematic->IsValid() )
+        return std::nullopt;
+
+    const SCH_SHEET_PATH& path = aSheet ? *aSheet : schematic->CurrentSheet();
+    return schematic->Connectivity().Connection( aItem.m_Uuid, path.PathRef() );
+}
+
+
 std::optional<wxString> SCH_ITEM::GetConnectionName( const SCH_SHEET_PATH* aSheet, bool aLocal,
                                                    bool aIgnoreSheet ) const
 {
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine && wxThread::IsMain() )
+    {
+        if( const auto connection = publishedConnection( *this, aSheet ) )
+            return aLocal ? connection->LocalName() : connection->Name( aIgnoreSheet );
+
+        return std::nullopt;
+    }
+
     if( const SCH_CONNECTION* connection = Connection( aSheet ) )
         return aLocal ? connection->LocalName() : connection->Name( aIgnoreSheet );
 
@@ -596,8 +636,87 @@ std::optional<wxString> SCH_ITEM::GetConnectionName( const SCH_SHEET_PATH* aShee
 }
 
 
+std::vector<wxString> SCH_ITEM::GetBusMemberNames( const SCH_SHEET_PATH* aSheet ) const
+{
+    std::vector<wxString> names;
+
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine && wxThread::IsMain() )
+    {
+        const auto connection = publishedConnection( *this, aSheet );
+
+        if( connection && connection->IsBus() )
+        {
+            for( const auto& member : connection->Members().leaves )
+                names.push_back( member.Name() );
+        }
+
+        return names;
+    }
+
+    const SCH_CONNECTION* connection = Connection( aSheet );
+
+    if( connection && connection->IsBus() )
+    {
+        for( const std::shared_ptr<SCH_CONNECTION>& member : connection->Members() )
+            names.push_back( member->Name() );
+    }
+
+    return names;
+}
+
+
+bool SCH_ITEM::MatchesNetName( const EDA_SEARCH_DATA& aSearchData, const SCH_SHEET_PATH* aSheet ) const
+{
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine && wxThread::IsMain() )
+    {
+        const auto connection = publishedConnection( *this, aSheet );
+
+        if( !connection )
+            return false;
+
+        if( !connection->IsBus() )
+            return EDA_ITEM::Matches( connection->Name(), aSearchData );
+
+        for( const auto& member : connection->Members().leaves )
+        {
+            if( EDA_ITEM::Matches( member.Name(), aSearchData ) )
+                return true;
+        }
+
+        return false;
+    }
+
+    const SCH_CONNECTION* connection = Connection( aSheet );
+
+    if( !connection )
+        return false;
+
+    if( !connection->IsBus() )
+        return EDA_ITEM::Matches( connection->GetNetName(), aSearchData );
+
+    std::set<wxString> netNames;
+
+    for( const std::shared_ptr<SCH_CONNECTION>& member : connection->AllMembers() )
+        netNames.insert( member->GetNetName() );
+
+    for( const wxString& netName : netNames )
+    {
+        if( EDA_ITEM::Matches( netName, aSearchData ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 bool SCH_ITEM::HasBusConnection( const SCH_SHEET_PATH* aSheet ) const
 {
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        const auto connection = wxThread::IsMain() ? publishedConnection( *this, aSheet ) : std::nullopt;
+        return connection && connection->IsBus();
+    }
+
     const SCH_CONNECTION* connection = Connection( aSheet );
     return connection && connection->IsBus();
 }

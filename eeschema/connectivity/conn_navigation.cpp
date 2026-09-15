@@ -18,7 +18,9 @@
  */
 
 #include "conn_navigation.h"
+#include "conn_facade.h"
 
+#include <advanced_config.h>
 #include <connection_graph.h>
 #include <schematic.h>
 #include <sch_item.h>
@@ -30,10 +32,40 @@ NAVIGATION_QUERY::NAVIGATION_QUERY( const SCHEMATIC& aSchematic ) : m_schematic(
 {}
 
 
+const NAVIGATION_QUERY::PATH_INDEX& NAVIGATION_QUERY::paths() const
+{
+    if( m_paths )
+        return *m_paths;
+
+    PATH_INDEX index;
+
+    if( m_schematic.IsValid() && m_schematic.HasHierarchy() )
+    {
+        for( SCH_SHEET_PATH& path : m_schematic.Hierarchy() )
+        {
+            if( path.LastScreen() )
+            {
+                KIID_PATH key = path.PathRef();
+                index.emplace( std::move( key ), std::move( path ) );
+            }
+        }
+    }
+
+    return m_paths.emplace( std::move( index ) );
+}
+
+
 std::vector<wxString> NAVIGATION_QUERY::NetNames() const
 {
     if( !m_schematic.IsValid() )
         return {};
+
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        auto names = m_schematic.Connectivity().NetNames();
+        std::erase( names, wxString() );
+        return names;
+    }
 
     std::set<wxString> names;
 
@@ -77,20 +109,41 @@ std::vector<wxString> NAVIGATION_QUERY::SignalNames( const wxString& aName ) con
 
     std::set<wxString> names;
 
-    for( const CONNECTION_SUBGRAPH* subgraph : m_schematic.ConnectionGraph()->GetAllSubgraphs( aName ) )
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
     {
-        const SCH_CONNECTION* connection = subgraph->GetDriverConnection();
+        const auto group = m_schematic.Connectivity().NetByName( aName );
 
-        if( !connection )
-            continue;
+        if( !group || group->instances.empty() )
+            return {};
 
-        if( connection->IsNet() )
-            names.insert( connection->Name() );
+        const auto& view = group->instances.front();
 
-        for( const auto& member : connection->AllMembers() )
+        if( view.IsNet() )
+            names.insert( group->name );
+
+        for( const auto& member : view.Members().leaves )
         {
-            if( member && member->IsNet() )
-                names.insert( member->Name() );
+            if( member.IsNet() )
+                names.insert( member.Name() );
+        }
+    }
+    else
+    {
+        for( const CONNECTION_SUBGRAPH* subgraph : m_schematic.ConnectionGraph()->GetAllSubgraphs( aName ) )
+        {
+            const SCH_CONNECTION* connection = subgraph->GetDriverConnection();
+
+            if( !connection )
+                continue;
+
+            if( connection->IsNet() )
+                names.insert( connection->Name() );
+
+            for( const auto& member : connection->AllMembers() )
+            {
+                if( member && member->IsNet() )
+                    names.insert( member->Name() );
+            }
         }
     }
 
@@ -153,8 +206,72 @@ std::set<const CONNECTION_SUBGRAPH*> NAVIGATION_QUERY::netSubgraphs( const wxStr
 }
 
 
+NET_ITEMS_BY_SHEET NAVIGATION_QUERY::netItemsByEngine( const wxString& aName, bool aIncludeBusParents,
+                                                       bool aIncludeBusMembers ) const
+{
+    NET_ITEMS_BY_SHEET result;
+    const auto& facade = m_schematic.Connectivity();
+    std::set<NODE_ID> visited;
+    std::vector<NET_GROUP> pending;
+    auto add = [&]( NET_GROUP group )
+    {
+        if( !group.instances.empty() && visited.insert( group.instances.front().Component() ).second )
+            pending.push_back( std::move( group ) );
+    };
+
+    if( auto group = facade.NetByName( aName ) )
+        add( std::move( *group ) );
+
+    if( aIncludeBusMembers )
+    {
+        for( auto& group : facade.BusWithMembers( aName ) )
+            add( std::move( group ) );
+    }
+
+    if( aIncludeBusParents )
+    {
+        for( const wxString& equivalent : facade.GetEquivalentBusNames( aName ) )
+        {
+            if( auto group = facade.NetByName( equivalent ) )
+                add( std::move( *group ) );
+        }
+
+        for( size_t i = 0; i < pending.size(); ++i )
+        {
+            for( auto& parent : facade.BundlesOf( pending[i].instances.front().Component() ) )
+                add( std::move( parent ) );
+        }
+    }
+
+    for( const NET_GROUP& group : pending )
+    {
+        for( const NET_VIEW& view : group.instances )
+        {
+            const auto items = view.Items();
+
+            if( items.empty() )
+                continue;
+
+            const auto& index = paths();
+            const auto path = index.find( view.Instance() );
+
+            if( path != index.end() )
+            {
+                auto& collected = result[path->second];
+                collected.insert( collected.end(), items.begin(), items.end() );
+            }
+        }
+    }
+
+    return result;
+}
+
+
 bool NAVIGATION_QUERY::HasNet( const wxString& aName ) const
 {
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+        return !netItemsByEngine( aName, false, false ).empty();
+
     return !netSubgraphs( aName, false, false ).empty();
 }
 
@@ -162,6 +279,14 @@ bool NAVIGATION_QUERY::HasNet( const wxString& aName ) const
 std::set<KIID_PATH> NAVIGATION_QUERY::NetSheets( const wxString& aName ) const
 {
     std::set<KIID_PATH> sheets;
+
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        for( const auto& [sheet, items] : netItemsByEngine( aName, false, false ) )
+            sheets.insert( sheet.PathRef() );
+
+        return sheets;
+    }
 
     for( const CONNECTION_SUBGRAPH* subgraph : netSubgraphs( aName, false, false ) )
         sheets.insert( subgraph->GetSheet().PathRef() );
@@ -175,10 +300,17 @@ NET_ITEMS_BY_SHEET NAVIGATION_QUERY::NetItems( const wxString& aName, bool aIncl
 {
     NET_ITEMS_BY_SHEET result;
 
-    for( const CONNECTION_SUBGRAPH* subgraph : netSubgraphs( aName, aIncludeBusParents, aIncludeBusMembers ) )
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
     {
-        auto& items = result[subgraph->GetSheet()];
-        items.insert( items.end(), subgraph->GetItems().begin(), subgraph->GetItems().end() );
+        result = netItemsByEngine( aName, aIncludeBusParents, aIncludeBusMembers );
+    }
+    else
+    {
+        for( const CONNECTION_SUBGRAPH* subgraph : netSubgraphs( aName, aIncludeBusParents, aIncludeBusMembers ) )
+        {
+            auto& items = result[subgraph->GetSheet()];
+            items.insert( items.end(), subgraph->GetItems().begin(), subgraph->GetItems().end() );
+        }
     }
 
     for( auto& [path, items] : result )
@@ -195,6 +327,17 @@ void NAVIGATION_QUERY::CollectNetItems( const wxString& aName, const SCH_SHEET_P
                                         std::unordered_set<SCH_ITEM*>& aItems, bool aIncludeBusParents,
                                         bool aIncludeBusMembers ) const
 {
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        NET_ITEMS_BY_SHEET result = netItemsByEngine( aName, aIncludeBusParents, aIncludeBusMembers );
+        auto it = result.find( aSheet );
+
+        if( it != result.end() )
+            aItems.insert( it->second.begin(), it->second.end() );
+
+        return;
+    }
+
     for( const CONNECTION_SUBGRAPH* subgraph : netSubgraphs( aName, aIncludeBusParents, aIncludeBusMembers ) )
     {
         if( subgraph->GetSheet() == aSheet )
