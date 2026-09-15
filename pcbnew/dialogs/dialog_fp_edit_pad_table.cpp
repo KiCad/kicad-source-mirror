@@ -1585,31 +1585,29 @@ void DIALOG_FP_EDIT_PAD_TABLE::OnAddRow( wxCommandEvent& aEvent )
     m_grid->OnAddRow(
             [&]() -> std::pair<int, int>
             {
-                std::unique_ptr<PAD> newPad;
+                PAD* newPad = nullptr;
 
-                // Copy the settings of the last pad onto the new pad and offset
-                // its position by the current grid so the copy is easy to find.
+                // Copy the settings of the last pad onto the new pad and offset its position
+                // by the current grid so the copy is easy to find.
                 if( !m_rowPads.empty() )
                 {
-                    PAD* last = m_rowPads.back();
-                    newPad = std::make_unique<PAD>( *last );
+                    newPad = static_cast<PAD*>( m_rowPads.back()->Duplicate( false, nullptr ) );
+                    newPad->Move( VECTOR2I( 0, KiROUND( canvas->GetGAL()->GetGridSize().y ) ) );
                 }
                 else
                 {
-                    newPad = std::make_unique<PAD>( m_footprint );
+                    newPad = new PAD( m_footprint );
                 }
 
-                PAD* pad = newPad.get();
-
                 if( view )
-                    view->Add( pad );
+                    view->Add( newPad );
 
-                m_rowPads.push_back( pad );
-                m_footprint->Add( newPad.release() );
+                m_rowPads.push_back( newPad );
+                m_footprint->Add( newPad );
 
                 int row = m_grid->GetNumberRows();
                 m_grid->AppendRows( 1 );
-                fillGridRow( row, pad );
+                fillGridRow( row, newPad );
                 updateSummary();
 
                 if( canvas )
