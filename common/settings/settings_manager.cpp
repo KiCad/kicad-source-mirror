@@ -1000,7 +1000,8 @@ bool SETTINGS_MANAGER::extractVersion( const std::string& aVersionString, int* a
 }
 
 
-bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
+// Every m_projects read and write goes through this so separator or extension variants share one slot
+static wxString projectKey( const wxString& aFullPath )
 {
     // Normalize path to current project extension. Users may open legacy .pro files,
     // or the OS may hand us a .kicad_sch/.kicad_pcb via file association or drag-and-drop.
@@ -1009,7 +1010,14 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     if( path.HasName() && path.GetExt() != FILEEXT::ProjectFileExtension )
         path.SetExt( FILEEXT::ProjectFileExtension );
 
-    wxString fullPath = path.GetFullPath();
+    return path.GetFullPath();
+}
+
+
+bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
+{
+    wxString   fullPath = projectKey( aFullPath );
+    wxFileName path( fullPath );
 
     // If already loaded, we are all set.  This might be called more than once over a project's
     // lifetime in case the project is first loaded by the KiCad manager and then Eeschema or
@@ -1257,10 +1265,9 @@ void SETTINGS_MANAGER::SyncGlobalFieldNameTemplatesToProjects()
 
 PROJECT* SETTINGS_MANAGER::GetProject( const wxString& aFullPath ) const
 {
-    if( m_projects.count( aFullPath ) )
-        return m_projects.at( aFullPath );
+    auto it = m_projects.find( projectKey( aFullPath ) );
 
-    return nullptr;
+    return it != m_projects.end() ? it->second : nullptr;
 }
 
 
@@ -1312,17 +1319,18 @@ void SETTINGS_MANAGER::SaveProjectAs( const wxString& aFullPath, PROJECT* aProje
         aProject = &Prj();
 
     wxString oldName = aProject->GetProjectFullName();
+    wxString newName = projectKey( aFullPath );
 
-    if( aFullPath.IsSameAs( oldName ) )
+    if( newName.IsSameAs( oldName ) )
     {
-        SaveProject( aFullPath, aProject );
+        SaveProject( oldName, aProject );
         return;
     }
 
     // Changing this will cause UnloadProject to not save over the "old" project when loading below
-    aProject->setProjectFullName( aFullPath );
+    aProject->setProjectFullName( newName );
 
-    wxFileName fn( aFullPath );
+    wxFileName fn( newName );
 
     PROJECT_FILE* project = m_project_files.at( oldName );
 
