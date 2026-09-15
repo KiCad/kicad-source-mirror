@@ -102,7 +102,8 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS aUnits )
 
             txt.Printf( wxT( "layer \"%s\" type \"%s\"%s" ),
                         item->FormatDielectricLayerName(),
-                        item->GetTypeName(), sublayer_text );
+                        item->GetTypeName(),
+                        sublayer_text );
         }
         else
         {
@@ -113,17 +114,17 @@ wxString BuildStackupReport( BOARD_STACKUP& aStackup, EDA_UNITS aUnits )
 
         report << txt;
 
-        if( item->IsColorEditable() )
-        {
-            txt.Printf( wxT( " Color \"%s\"" ), item->GetColor() );
-            report << txt;
-        }
-
         for( int idx = 0; idx < item->GetSublayersCount(); idx++ )
         {
             if( idx )    // not printed for the main (first) layer.
             {
                 txt.Printf( wxT( "\n  sublayer \"%d/%d\"" ), idx+1, item->GetSublayersCount() );
+                report << txt;
+            }
+
+            if( item->IsColorEditable() )
+            {
+                txt.Printf( wxT( " Color \"%s\"" ), item->GetColor( idx ) );
                 report << txt;
             }
 
