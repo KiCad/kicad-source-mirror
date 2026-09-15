@@ -2885,6 +2885,9 @@ void SIM_PLOT_TAB::ResetScales( bool aIncludeX )
             double lo = trace->GetMinY();
             double hi = trace->GetMaxY();
 
+            if( !std::isfinite( lo ) || !std::isfinite( hi ) )
+                continue;
+
             if( !haveRange )
             {
                 minV = lo;
