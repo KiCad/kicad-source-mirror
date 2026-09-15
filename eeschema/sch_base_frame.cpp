@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <advanced_config.h>
 #include <base_units.h>
+#include <kiplatform/environment.h>
 #include <kiplatform/io.h>
 #include <wildcards_and_files_ext.h>
 #include <background_jobs_monitor.h>
@@ -851,13 +852,20 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
     if( !wxEventLoopBase::GetActive() )
         return;
 
-    Bind( wxEVT_FSWATCHER, &SCH_BASE_FRAME::OnSymChange, this );
-    m_watcher = std::make_unique<wxFileSystemWatcher>();
-    m_watcher->SetOwner( this );
-
     wxFileName fn;
     fn.AssignDir( m_watcherFileName.GetPath() );
     fn.DontFollowLink();
+
+    // wxMSW frees a watch before SMB completes its pending read, which then corrupts the heap
+    if( KIPLATFORM::ENV::IsNetworkPath( fn.GetPath() ) )
+    {
+        wxLogTrace( traceLibWatch, "Network path, not watching: %s", fn.GetPath() );
+        return;
+    }
+
+    Bind( wxEVT_FSWATCHER, &SCH_BASE_FRAME::OnSymChange, this );
+    m_watcher = std::make_unique<wxFileSystemWatcher>();
+    m_watcher->SetOwner( this );
 
     {
         // Silence OS errors that come from the watcher

@@ -20,6 +20,7 @@
 
 #include "dialog_template_selector.h"
 #include <bitmaps.h>
+#include <kiplatform/environment.h>
 #include <kiplatform/ui.h>
 #include <pgm_base.h>
 #include <settings/kicad_settings.h>
@@ -1062,6 +1063,14 @@ void DIALOG_TEMPLATE_SELECTOR::SetupFileWatcher()
 
                 wxFileName dir;
                 dir.AssignDir( aPath );
+
+                // wxMSW frees a watch before SMB completes its pending read, which then corrupts the heap
+                if( KIPLATFORM::ENV::IsNetworkPath( dir.GetPath() ) )
+                {
+                    wxLogTrace( traceTemplateSelector, "Network path, not watching %s templates: %s", aLabel,
+                                aPath );
+                    return;
+                }
 
                 if( dir.DirExists() )
                 {
