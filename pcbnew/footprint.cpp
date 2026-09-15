@@ -934,34 +934,40 @@ void FOOTPRINT::GetFields( std::vector<PCB_FIELD*>& aVector, bool aVisibleOnly )
 void FOOTPRINT::UpdateFields( const std::vector<PCB_FIELD>& aFields, std::vector<PCB_FIELD*>& aAdded,
                               std::vector<PCB_FIELD*>& aDetached )
 {
-    std::deque<PCB_FIELD*> updated;
+    std::deque<PCB_FIELD*> updatedFieldSet;
+    std::vector<wxString>  assignedFields;
+
+    auto assignOrAdd =
+            [&]( PCB_FIELD* existingField, const PCB_FIELD& sourceField )
+            {
+                if( existingField )
+                {
+                    *existingField = sourceField;
+                    existingField->ClearEditFlags();
+                    existingField->SetParent( this );
+                    updatedFieldSet.push_back( existingField );
+                    assignedFields.push_back( sourceField.GetName() );
+                }
+                else
+                {
+                    PCB_FIELD* destField = sourceField.CloneField();
+                    aAdded.push_back( destField );
+                    updatedFieldSet.push_back( destField );
+                }
+            };
 
     for( const PCB_FIELD& field : aFields )
     {
-        PCB_FIELD* live = nullptr;
-
-        // The const overload reports a missing mandatory field instead of quietly creating one
+        // The const overload returns nullptr for a missing mandatory field instead of quietly creating one
         if( field.IsMandatory() )
-            live = const_cast<PCB_FIELD*>( std::as_const( *this ).GetField( field.GetId() ) );
-
-        if( live )
-        {
-            *live = field;
-            live->ClearEditFlags();
-            live->SetParent( this );
-        }
+            assignOrAdd( const_cast<PCB_FIELD*>( std::as_const( *this ).GetField( field.GetId() ) ), field );
         else
-        {
-            live = field.CloneField();
-            aAdded.push_back( live );
-        }
-
-        updated.push_back( live );
+            assignOrAdd( GetField( field.GetName() ), field );
     }
 
     for( PCB_FIELD* field : m_fields )
     {
-        if( !alg::contains( updated, field ) )
+        if( !field->IsMandatory() && !alg::contains( assignedFields, field->GetName() ) )
             aDetached.push_back( field );
     }
 
@@ -973,7 +979,7 @@ void FOOTPRINT::UpdateFields( const std::vector<PCB_FIELD>& aFields, std::vector
         Add( field );
 
     // Add() appends, so restore the order the caller asked for
-    m_fields = std::move( updated );
+    m_fields = std::move( updatedFieldSet );
 
     InvalidateGeometryCaches();
 }
@@ -1907,8 +1913,8 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 
                 m_fields.erase( it );
 
-                for( auto& variant : m_variants )
-                    variant.second.RemoveFieldValue( fieldName );
+                for( auto& [variantName, footprintVariant] : m_variants )
+                    footprintVariant.RemoveFieldValue( fieldName );
 
                 break;
             }
