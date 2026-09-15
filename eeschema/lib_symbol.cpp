@@ -31,6 +31,10 @@
 #include <sch_shape.h>
 #include <trace_helpers.h>
 #include <common.h>
+#include <api/api_enums.h>
+#include <api/api_sch_utils.h>
+#include <api/api_utils.h>
+
 #include <text_eval/text_eval_wrapper.h>
 
 // TODO(JE) remove m_library; shouldn't be needed with legacy remapping
@@ -45,6 +49,7 @@
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
+#include <api/schematic/schematic_types.pb.h>
 
 /**
  * Helper to safely get the root symbol, detecting and logging circular inheritance.
@@ -326,6 +331,270 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary, 
     m_pinCountCache = aSymbol.m_pinCountCache;
     m_shownDescriptionCache = aSymbol.m_shownDescriptionCache;
     m_chooserFieldsCache = aSymbol.m_chooserFieldsCache;
+}
+
+
+void LIB_SYMBOL::Serialize( kiapi::schematic::types::SchematicSymbol& aOutput, bool aSkipPins ) const
+{
+    using namespace kiapi::common;
+    using namespace kiapi::schematic::types;
+
+    SchematicSymbol& def = aOutput;
+    def.Clear();
+    PackLibId( def.mutable_id(), m_libId );
+
+    SchematicSymbolType symbolType = SchematicSymbolType::SST_NORMAL;
+
+    if( IsGlobalPower() )
+        symbolType = SchematicSymbolType::SST_GLOBAL_POWER;
+    else if( IsLocalPower() )
+        symbolType = SchematicSymbolType::SST_LOCAL_POWER;
+
+    def.set_type( symbolType );
+
+    SchematicSymbolAttributes* attributes = def.mutable_attributes();
+    attributes->set_exclude_from_simulation( GetExcludedFromSim() );
+    attributes->set_exclude_from_bill_of_materials( GetExcludedFromBOM() );
+    attributes->set_exclude_from_board( GetExcludedFromBoard() );
+    attributes->set_exclude_from_position_files( GetExcludedFromPosFiles() );
+    attributes->set_do_not_populate( GetDNP() );
+
+    GetField( FIELD_T::REFERENCE )->Serialize( *def.mutable_reference_field(), schIUScale );
+    GetField( FIELD_T::VALUE )->Serialize( *def.mutable_value_field(), schIUScale );
+    GetField( FIELD_T::FOOTPRINT )->Serialize( *def.mutable_footprint_field(), schIUScale );
+    GetField( FIELD_T::DATASHEET )->Serialize( *def.mutable_datasheet_field(), schIUScale );
+
+    for( const SCH_ITEM& drawItem : GetDrawItems() )
+    {
+        if( drawItem.Type() == SCH_FIELD_T && static_cast<const SCH_FIELD&>( drawItem ).IsMandatory() )
+            continue;
+
+        if( aSkipPins && drawItem.Type() == SCH_PIN_T )
+            continue;
+
+        SchematicSymbolChild* item = def.add_items();
+        item->mutable_unit()->set_unit( drawItem.GetUnit() );
+        item->mutable_body_style()->set_style( drawItem.GetBodyStyle() );
+        item->set_is_private( drawItem.IsPrivate() );
+        drawItem.Serialize( *item->mutable_item() );
+    }
+
+    def.set_unit_count( GetUnitCount() );
+
+    for( int bodyStyle = BODY_STYLE::BASE; bodyStyle <= GetBodyStyleCount(); ++bodyStyle )
+        def.add_body_style()->set_name( GetBodyStyleDescription( bodyStyle, false ).ToUTF8() );
+
+    def.set_keywords( GetKeyWords().ToUTF8() );
+
+    for( const wxString& filter : GetFPFilters() )
+        def.add_footprint_filters( filter.ToUTF8() );
+
+    JumperSettings* jumpers = def.mutable_jumpers();
+    jumpers->set_duplicate_names_are_jumpered( GetDuplicatePinNumbersAreJumpers() );
+
+    for( const std::set<wxString>& group : JumperPinGroups() )
+    {
+        JumperGroup* jumperGroup = jumpers->add_groups();
+
+        for( const wxString& pinNumber : group )
+            jumperGroup->add_pin_numbers( pinNumber.ToUTF8() );
+    }
+
+    def.set_units_locked( UnitsLocked() );
+    def.set_embedded_fonts( GetAreFontsEmbedded() );
+    def.set_show_pin_numbers( GetShowPinNumbers() );
+    def.set_show_pin_names( GetShowPinNames() );
+    PackDistance( *def.mutable_pin_name_offset(), GetPinNameOffset(), schIUScale );
+
+    for( const auto& [unit, displayName] : GetUnitDisplayNames() )
+    {
+        SchematicUnitDisplayName* protoName = def.add_unit_display_names();
+        protoName->set_unit( unit );
+        protoName->set_name( displayName.ToUTF8() );
+    }
+
+    SymbolPinMaps* pinMaps = def.mutable_pin_maps();
+
+    for( const ASSOCIATED_FOOTPRINT& assoc : GetEffectiveAssociatedFootprints() )
+    {
+        AssociatedFootprint* a = pinMaps->add_associated_footprints();
+        PackLibId( a->mutable_footprint(), assoc.m_FootprintLibId );
+        a->set_map_name( assoc.m_MapName.ToUTF8() );
+    }
+
+    for( const PIN_MAP& map : GetEffectivePinMaps().GetAll() )
+    {
+        PinMap* m = pinMaps->add_pin_maps();
+        m->set_name( map.GetName().ToUTF8() );
+
+        for( const PIN_MAP_ENTRY& entry : map.GetEntries() )
+        {
+            PinMapEntry* e = m->add_entries();
+            e->set_pin_number( entry.m_PinNumber.ToUTF8() );
+            e->set_pad_number( entry.m_PadNumber.ToUTF8() );
+        }
+    }
+}
+
+
+void LIB_SYMBOL::Serialize( google::protobuf::Any& aContainer ) const
+{
+    kiapi::schematic::types::SchematicSymbol def;
+    Serialize( def );
+    aContainer.PackFrom( def );
+}
+
+
+bool LIB_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbol& aInput )
+{
+    using namespace kiapi::common;
+    using namespace kiapi::common::types;
+    using namespace kiapi::schematic::types;
+
+    const SchematicSymbol& def = aInput;
+
+    LIB_ID libId = UnpackLibId( def.id() );
+    SetLibId( libId );
+
+    switch( def.type() )
+    {
+    case SchematicSymbolType::SST_GLOBAL_POWER: SetGlobalPower(); break;
+    case SchematicSymbolType::SST_LOCAL_POWER:  SetLocalPower();  break;
+    default: break;
+    }
+
+    if( def.has_attributes() )
+    {
+        SetExcludedFromSim( def.attributes().exclude_from_simulation() );
+        SetExcludedFromBOM( def.attributes().exclude_from_bill_of_materials() );
+        SetExcludedFromBoard( def.attributes().exclude_from_board() );
+        SetExcludedFromPosFiles( def.attributes().exclude_from_position_files() );
+        SetDNP( def.attributes().do_not_populate() );
+    }
+
+    GetField( FIELD_T::REFERENCE )->Deserialize( def.reference_field(), schIUScale );
+    GetField( FIELD_T::VALUE )->Deserialize( def.value_field(), schIUScale );
+    GetField( FIELD_T::FOOTPRINT )->Deserialize( def.footprint_field(), schIUScale );
+    GetField( FIELD_T::DATASHEET )->Deserialize( def.datasheet_field(), schIUScale );
+    GetField( FIELD_T::DESCRIPTION )->Deserialize( def.description_field(), schIUScale );
+
+    for( const SchematicSymbolChild& child : def.items() )
+    {
+        std::optional<KICAD_T> type = TypeNameFromAny( child.item() );
+
+        if( !type )
+            continue;
+
+        std::unique_ptr<EDA_ITEM> item = CreateItemForType( *type, this );
+
+        if( !item || !item->Deserialize( child.item() ) )
+            continue;
+
+        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item.release() );
+
+        if( child.has_unit() )
+            schItem->SetUnit( child.unit().unit() );
+
+        if( child.has_body_style() )
+            schItem->SetBodyStyle( child.body_style().style() );
+
+        schItem->SetLayer( LAYER_DEVICE );
+        schItem->SetPrivate( child.is_private() );
+        AddDrawItem( schItem, false );
+    }
+
+    if( def.unit_count() > 0 )
+        SetUnitCount( def.unit_count(), false );
+
+    if( def.body_style_size() > 0 )
+    {
+        std::vector<wxString> bodyStyleNames;
+
+        for( const SchematicBodyStyle& bodyStyle : def.body_style() )
+            bodyStyleNames.emplace_back( wxString::FromUTF8( bodyStyle.name() ) );
+
+        SetBodyStyleNames( bodyStyleNames );
+        SetBodyStyleCount( static_cast<int>( bodyStyleNames.size() ), false, false );
+    }
+
+    if( !def.keywords().empty() )
+        SetKeyWords( wxString::FromUTF8( def.keywords() ) );
+
+    if( def.footprint_filters_size() > 0 )
+    {
+        wxArrayString filters;
+
+        for( const std::string& filter : def.footprint_filters() )
+            filters.Add( wxString::FromUTF8( filter ) );
+
+        SetFPFilters( filters );
+    }
+
+    SetDuplicatePinNumbersAreJumpers( def.jumpers().duplicate_names_are_jumpered() );
+
+    for( const JumperGroup& group : def.jumpers().groups() )
+    {
+        std::set<wxString> pinNumbers;
+
+        for( const std::string& pinNumber : group.pin_numbers() )
+            pinNumbers.insert( wxString::FromUTF8( pinNumber ) );
+
+        if( !pinNumbers.empty() )
+            JumperPinGroups().push_back( std::move( pinNumbers ) );
+    }
+
+    LockUnits( def.units_locked() );
+    SetAreFontsEmbedded( def.embedded_fonts() );
+
+    for( const SchematicUnitDisplayName& displayName : def.unit_display_names() )
+        GetUnitDisplayNames()[displayName.unit()] = wxString::FromUTF8( displayName.name() );
+
+    SetShowPinNumbers( def.show_pin_numbers() );
+    SetShowPinNames( def.show_pin_names() );
+    SetPinNameOffset( UnpackDistance( def.pin_name_offset(), schIUScale ) );
+
+    if( def.has_pin_maps() )
+    {
+        PIN_MAP_SET pinMapSet;
+
+        for( const PinMap& map : def.pin_maps().pin_maps() )
+        {
+            PIN_MAP pinMap( wxString::FromUTF8( map.name() ) );
+
+            for( const PinMapEntry& entry : map.entries() )
+            {
+                pinMap.SetEntry( wxString::FromUTF8( entry.pin_number() ), wxString::FromUTF8( entry.pad_number() ) );
+            }
+
+            pinMapSet.AddOrReplace( std::move( pinMap ) );
+        }
+
+        std::vector<ASSOCIATED_FOOTPRINT> associatedFootprints;
+
+        for( const AssociatedFootprint& footprint : def.pin_maps().associated_footprints() )
+        {
+            ASSOCIATED_FOOTPRINT assoc;
+            assoc.m_FootprintLibId = UnpackLibId( footprint.footprint() );
+            assoc.m_MapName = wxString::FromUTF8( footprint.map_name() );
+            associatedFootprints.push_back( std::move( assoc ) );
+        }
+
+        SetPinMaps( pinMapSet );
+        SetAssociatedFootprints( std::move( associatedFootprints ) );
+    }
+
+    return true;
+}
+
+
+bool LIB_SYMBOL::Deserialize( const google::protobuf::Any& aContainer )
+{
+    kiapi::schematic::types::SchematicSymbol def;
+
+    if( !aContainer.UnpackTo( &def ) )
+        return false;
+
+    return Deserialize( def );
 }
 
 

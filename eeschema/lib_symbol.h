@@ -41,6 +41,11 @@ class LEGACY_SYMBOL_LIB;
 class LIB_SYMBOL;
 class TEST_LIB_SYMBOL_FIXTURE;
 
+namespace kiapi::schematic::types
+{
+class SchematicSymbol;
+}
+
 namespace KIFONT
 {
     class OUTLINE_FONT;
@@ -619,6 +624,12 @@ public:
 
     bool GetExcludedFromPosFilesProp() const { return GetExcludedFromPosFiles(); }
     void SetExcludedFromPosFilesProp( bool aExclude ) { SetExcludedFromPosFiles( aExclude ); }
+
+    void Serialize( kiapi::schematic::types::SchematicSymbol& aOutput, bool aSkipPins = false ) const;
+    bool Deserialize( const kiapi::schematic::types::SchematicSymbol& aInput );
+
+    void Serialize( google::protobuf::Any& aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any& aContainer ) override;
 
     std::set<KIFONT::OUTLINE_FONT*> GetFonts() const override;
 

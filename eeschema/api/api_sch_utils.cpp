@@ -208,31 +208,6 @@ bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, cons
         }
     }
 
-    if( const LIB_SYMBOL* lib = aInput->GetLibSymbolRef().get() )
-    {
-        kiapi::schematic::types::SymbolPinMaps* pinMaps = def->mutable_pin_maps();
-
-        for( const ASSOCIATED_FOOTPRINT& assoc : lib->GetEffectiveAssociatedFootprints() )
-        {
-            kiapi::schematic::types::AssociatedFootprint* a = pinMaps->add_associated_footprints();
-            PackLibId( a->mutable_footprint(), assoc.m_FootprintLibId );
-            a->set_map_name( assoc.m_MapName.ToUTF8() );
-        }
-
-        for( const PIN_MAP& map : lib->GetEffectivePinMaps().GetAll() )
-        {
-            kiapi::schematic::types::PinMap* m = pinMaps->add_pin_maps();
-            m->set_name( map.GetName().ToUTF8() );
-
-            for( const PIN_MAP_ENTRY& entry : map.GetEntries() )
-            {
-                kiapi::schematic::types::PinMapEntry* e = m->add_entries();
-                e->set_pin_number( entry.m_PinNumber.ToUTF8() );
-                e->set_pad_number( entry.m_PadNumber.ToUTF8() );
-            }
-        }
-    }
-
     PIN_MAP_INSTANCE_OVERRIDE override = aInput->GetPinMapOverride( &aPath );
 
     if( !override.IsDefault() )

@@ -777,9 +777,6 @@ void SCH_SYMBOL::Serialize( kiapi::schematic::types::SchematicSymbolInstance& aS
     if( GetBodyStyleCount() > 1 )
         aSymbol.mutable_body_style()->set_style( GetBodyStyle() );
 
-    SchematicSymbol* def = aSymbol.mutable_definition();
-    PackLibId( def->mutable_id(), m_lib_id );
-
     GetField( FIELD_T::REFERENCE )->Serialize( *aSymbol.mutable_reference_field(), schIUScale );
     GetField( FIELD_T::VALUE )->Serialize( *aSymbol.mutable_value_field(), schIUScale );
     GetField( FIELD_T::FOOTPRINT )->Serialize( *aSymbol.mutable_footprint_field(), schIUScale );
@@ -795,76 +792,7 @@ void SCH_SYMBOL::Serialize( kiapi::schematic::types::SchematicSymbolInstance& aS
     }
 
     if( m_part )
-    {
-        m_part->GetField( FIELD_T::REFERENCE )->Serialize( *def->mutable_reference_field(), schIUScale );
-        m_part->GetField( FIELD_T::VALUE )->Serialize( *def->mutable_value_field(), schIUScale );
-        m_part->GetField( FIELD_T::FOOTPRINT )->Serialize( *def->mutable_footprint_field(), schIUScale );
-        m_part->GetField( FIELD_T::DATASHEET )->Serialize( *def->mutable_datasheet_field(), schIUScale );
-        m_part->GetField( FIELD_T::DESCRIPTION )->Serialize( *def->mutable_description_field(), schIUScale );
-
-        for( const SCH_ITEM& drawItem : m_part->GetDrawItems() )
-        {
-            if( drawItem.Type() == SCH_FIELD_T && static_cast<const SCH_FIELD&>( drawItem ).IsMandatory() )
-                continue;
-
-            // pins in the definition are not serialized; we serialize them via PackSymbol
-            // with the sheet-specific information
-            if( drawItem.Type() == SCH_PIN_T )
-                continue;
-
-            SchematicSymbolChild* item = def->add_items();
-            item->mutable_unit()->set_unit( drawItem.GetUnit() );
-            item->mutable_body_style()->set_style( drawItem.GetBodyStyle() );
-            item->set_is_private( drawItem.IsPrivate() );
-            drawItem.Serialize( *item->mutable_item() );
-        }
-
-        SchematicSymbolType symbolType = SchematicSymbolType::SST_NORMAL;
-
-        if( m_part->IsGlobalPower() )
-            symbolType = SchematicSymbolType::SST_GLOBAL_POWER;
-        else if( m_part->IsLocalPower() )
-            symbolType = SchematicSymbolType::SST_LOCAL_POWER;
-
-        def->set_type( symbolType );
-        def->set_unit_count( m_part->GetUnitCount() );
-
-        for( int bodyStyle = BODY_STYLE::BASE; bodyStyle <= m_part->GetBodyStyleCount(); ++bodyStyle )
-        {
-            def->add_body_style()->set_name(
-                    m_part->GetBodyStyleDescription( bodyStyle, false ).ToUTF8() );
-        }
-
-        def->set_keywords( m_part->GetKeyWords().ToUTF8() );
-
-        for( const wxString& filter : m_part->GetFPFilters() )
-            def->add_footprint_filters( filter.ToUTF8() );
-
-        JumperSettings* jumpers = def->mutable_jumpers();
-        jumpers->set_duplicate_names_are_jumpered( m_part->GetDuplicatePinNumbersAreJumpers() );
-
-        for( const std::set<wxString>& group : m_part->JumperPinGroups() )
-        {
-            JumperGroup* jumperGroup = jumpers->add_groups();
-
-            for( const wxString& pinNumber : group )
-                jumperGroup->add_pin_numbers( pinNumber.ToUTF8() );
-        }
-
-        def->set_units_locked( m_part->UnitsLocked() );
-        def->set_embedded_fonts( m_part->GetAreFontsEmbedded() );
-
-        def->set_show_pin_numbers( m_part->GetShowPinNumbers() );
-        def->set_show_pin_names( m_part->GetShowPinNames() );
-        PackDistance( *def->mutable_pin_name_offset(), m_part->GetPinNameOffset(), schIUScale );
-
-        for( const auto& [unit, displayName] : m_part->GetUnitDisplayNames() )
-        {
-            SchematicUnitDisplayName* protoName = def->add_unit_display_names();
-            protoName->set_unit( unit );
-            protoName->set_name( displayName.ToUTF8() );
-        }
-    }
+        m_part->Serialize( *aSymbol.mutable_definition(), /* aSkipPins = */ true );
 
     aSymbol.set_show_pin_names( GetShowPinNames() );
     aSymbol.set_show_pin_numbers( GetShowPinNumbers() );
@@ -911,144 +839,25 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
     LIB_ID libId = UnpackLibId( def.id() );
     m_lib_id = libId;
 
-    LIB_SYMBOL* libSymbol = new LIB_SYMBOL( libId.GetLibItemName() );
-    libSymbol->SetLibId( libId );
-
-    if( def.type() == SchematicSymbolType::SST_GLOBAL_POWER )
-        libSymbol->SetGlobalPower();
-    else if( def.type() == SchematicSymbolType::SST_LOCAL_POWER )
-        libSymbol->SetLocalPower();
-
-    libSymbol->GetField( FIELD_T::REFERENCE )->Deserialize( def.reference_field(), schIUScale );
-    libSymbol->GetField( FIELD_T::VALUE )->Deserialize( def.value_field(), schIUScale );
-    libSymbol->GetField( FIELD_T::FOOTPRINT )->Deserialize( def.footprint_field(), schIUScale );
-    libSymbol->GetField( FIELD_T::DATASHEET )->Deserialize( def.datasheet_field(), schIUScale );
-    libSymbol->GetField( FIELD_T::DESCRIPTION )->Deserialize( def.description_field(), schIUScale );
-
     std::unordered_map<::KIID, wxString> pinAltMap;
 
     for( const SchematicSymbolChild& child : def.items() )
     {
-        std::optional<KICAD_T> type = TypeNameFromAny( child.item() );
-
-        if( !type )
+        if( TypeNameFromAny( child.item() ) != std::optional<KICAD_T>( SCH_PIN_T ) )
             continue;
 
-        std::unique_ptr<EDA_ITEM> item = CreateItemForType( *type, libSymbol );
+        SchematicPin pinProto;
 
-        if( !item || !item->Deserialize( child.item() ) )
-            continue;
-
-        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item.release() );
-
-        if( schItem->Type() == SCH_PIN_T )
-        {
-            SchematicPin pinProto;
-
-            if( child.item().UnpackTo( &pinProto ) )
-            {
-                if( pinProto.has_active_alternate() )
-                    pinAltMap[schItem->m_Uuid] = wxString::FromUTF8( pinProto.active_alternate() );
-            }
-        }
-
-        if( child.has_unit() )
-            schItem->SetUnit( child.unit().unit() );
-
-        if( child.has_body_style() )
-            schItem->SetBodyStyle( child.body_style().style() );
-
-        schItem->SetLayer( LAYER_DEVICE );
-        schItem->SetPrivate( child.is_private() );
-        libSymbol->AddDrawItem( schItem );
+        if( child.item().UnpackTo( &pinProto ) && pinProto.has_active_alternate() )
+            pinAltMap[::KIID( pinProto.id().value() )] = wxString::FromUTF8( pinProto.active_alternate() );
     }
 
-    if( def.unit_count() > 0 )
-        libSymbol->SetUnitCount( def.unit_count(), false );
+    LIB_SYMBOL* libSymbol = new LIB_SYMBOL( libId.GetLibItemName() );
 
-    if( def.body_style_size() > 0 )
+    if( !libSymbol->Deserialize( def ) )
     {
-        std::vector<wxString> bodyStyleNames;
-
-        for( const SchematicBodyStyle& bodyStyle : def.body_style() )
-            bodyStyleNames.emplace_back( wxString::FromUTF8( bodyStyle.name() ) );
-
-        libSymbol->SetBodyStyleNames( bodyStyleNames );
-        libSymbol->SetBodyStyleCount( static_cast<int>( bodyStyleNames.size() ), false, false );
-    }
-
-    if( !def.keywords().empty() )
-        libSymbol->SetKeyWords( wxString::FromUTF8( def.keywords() ) );
-
-    if( def.footprint_filters_size() > 0 )
-    {
-        wxArrayString filters;
-
-        for( const std::string& filter : def.footprint_filters() )
-            filters.Add( wxString::FromUTF8( filter ) );
-
-        libSymbol->SetFPFilters( filters );
-    }
-
-    libSymbol->SetDuplicatePinNumbersAreJumpers( def.jumpers().duplicate_names_are_jumpered() );
-
-    for( const JumperGroup& group : def.jumpers().groups() )
-    {
-        std::set<wxString> pinNumbers;
-
-        for( const std::string& pinNumber : group.pin_numbers() )
-            pinNumbers.insert( wxString::FromUTF8( pinNumber ) );
-
-        if( !pinNumbers.empty() )
-            libSymbol->JumperPinGroups().push_back( std::move( pinNumbers ) );
-    }
-
-    libSymbol->LockUnits( def.units_locked() );
-    libSymbol->SetAreFontsEmbedded( def.embedded_fonts() );
-
-    for( const SchematicUnitDisplayName& displayName : def.unit_display_names() )
-        libSymbol->GetUnitDisplayNames()[displayName.unit()] = wxString::FromUTF8( displayName.name() );
-
-    libSymbol->SetShowPinNumbers( def.show_pin_numbers() );
-    libSymbol->SetShowPinNames( def.show_pin_names() );
-    libSymbol->SetPinNameOffset( UnpackDistance( def.pin_name_offset(), schIUScale ) );
-
-    switch( def.type() )
-    {
-    case SchematicSymbolType::SST_GLOBAL_POWER: libSymbol->SetGlobalPower(); break;
-    case SchematicSymbolType::SST_LOCAL_POWER:  libSymbol->SetLocalPower();  break;
-    default: break;
-    }
-
-    if( def.has_pin_maps() )
-    {
-        PIN_MAP_SET pinMapSet;
-
-        for( const PinMap& map : def.pin_maps().pin_maps() )
-        {
-            PIN_MAP pinMap( wxString::FromUTF8( map.name() ) );
-
-            for( const PinMapEntry& entry : map.entries() )
-            {
-                pinMap.SetEntry( wxString::FromUTF8( entry.pin_number() ),
-                                 wxString::FromUTF8( entry.pad_number() ) );
-            }
-
-            pinMapSet.AddOrReplace( std::move( pinMap ) );
-        }
-
-        std::vector<ASSOCIATED_FOOTPRINT> associatedFootprints;
-
-        for( const AssociatedFootprint& footprint : def.pin_maps().associated_footprints() )
-        {
-            ASSOCIATED_FOOTPRINT assoc;
-            assoc.m_FootprintLibId = UnpackLibId( footprint.footprint() );
-            assoc.m_MapName        = wxString::FromUTF8( footprint.map_name() );
-            associatedFootprints.push_back( std::move( assoc ) );
-        }
-
-        libSymbol->SetPinMaps( pinMapSet );
-        libSymbol->SetAssociatedFootprints( std::move( associatedFootprints ) );
+        delete libSymbol;
+        return false;
     }
 
     SetLibSymbol( libSymbol );
