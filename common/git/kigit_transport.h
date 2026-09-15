@@ -229,10 +229,12 @@ public:
     int Check();
 
     /**
-     * Clone aUrl into aPath, with no working tree when aBare. The new repository is returned in aRepo for the
-     * caller to free
+     * Clone aUrl into aPath, with no working tree when aBare. aPrepare, when given, sets up the new repository
+     * before anything is checked out, and a code it returns fails the clone. The new repository is returned in
+     * aRepo for the caller to free
      */
-    int Clone( const wxString& aUrl, const wxString& aPath, git_repository** aRepo, bool aBare = false );
+    int Clone( const wxString& aUrl, const wxString& aPath, git_repository** aRepo, bool aBare = false,
+               const std::function<int( git_repository* )>& aPrepare = nullptr );
 
     /// libgit2's error for the last call that failed, read before anything else could replace it
     const KIGIT_ERROR_INFO& Error() const;

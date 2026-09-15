@@ -1447,13 +1447,20 @@ bool LIBGIT_BACKEND::GetConfigString( git_repository* aRepo, const wxString& aKe
 bool LIBGIT_BACKEND::SetConfigString( git_repository* aRepo, const wxString& aKey, const wxString& aValue )
 {
     git_config* config = nullptr;
+    git_config* local = nullptr;
 
     if( !aRepo || git_repository_config( &config, aRepo ) != GIT_OK )
         return false;
 
     KIGIT::GitConfigPtr configPtr( config );
 
-    return git_config_set_string( config, aKey.utf8_string().c_str(), aValue.utf8_string().c_str() ) == GIT_OK;
+    // A write goes to the highest level, which may be the long path file every repository shares
+    if( git_config_open_level( &local, config, GIT_CONFIG_LEVEL_LOCAL ) != GIT_OK )
+        return false;
+
+    KIGIT::GitConfigPtr localPtr( local );
+
+    return git_config_set_string( local, aKey.utf8_string().c_str(), aValue.utf8_string().c_str() ) == GIT_OK;
 }
 
 

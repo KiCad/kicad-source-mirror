@@ -1331,6 +1331,32 @@ BOOST_AUTO_TEST_CASE( CheckoutCommitUndoesTheTreeWhenHeadCannotMove )
 }
 
 
+// A level attached above the repository's own config is shared by every repository, so a setting stays out of it
+BOOST_AUTO_TEST_CASE( SetConfigStringWritesTheRepositorysOwnConfig )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    const wxString    app = tempBase() + wxFileName::GetPathSeparator() + wxS( "kicad-longpaths.gitconfig" );
+    const std::string longPaths = "[core]\n\tlongpaths = true\n";
+
+    std::ofstream( app.fn_str(), std::ios::binary ) << longPaths;
+
+    git_config* config = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config( &config, repo ), GIT_OK );
+    KIGIT::GitConfigPtr configPtr( config );
+
+    BOOST_REQUIRE_EQUAL( git_config_add_file_ondisk( config, app.utf8_str(), GIT_CONFIG_LEVEL_APP, repo, 0 ), GIT_OK );
+    BOOST_REQUIRE( GetGitBackend()->SetConfigString( repo, wxS( "kicad.copy" ), wxS( "acme-key" ) ) );
+
+    BOOST_CHECK( readBytes( app ) == longPaths );
+    BOOST_CHECK( readBytes( repoPath() + wxS( "/.git/config" ) ).find( "acme-key" ) != std::string::npos );
+}
+
+
 // An untracked directory where the incoming commit wants a file blocks the checkout, and the
 // rollback must not take the directory with it.
 BOOST_AUTO_TEST_CASE( PerformPull_RollbackKeepsAnUntrackedDirectoryItCannotIdentify )

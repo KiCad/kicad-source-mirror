@@ -1149,7 +1149,8 @@ int REMOTE_TRANSPORT::Check()
 }
 
 
-int REMOTE_TRANSPORT::Clone( const wxString& aUrl, const wxString& aPath, git_repository** aRepo, bool aBare )
+int REMOTE_TRANSPORT::Clone( const wxString& aUrl, const wxString& aPath, git_repository** aRepo, bool aBare,
+                             const std::function<int( git_repository* )>& aPrepare )
 {
     m_state->Begin();
 
@@ -1176,29 +1177,31 @@ int REMOTE_TRANSPORT::Clone( const wxString& aUrl, const wxString& aPath, git_re
     if( int rc = git_clone( aRepo, urlUtf8.c_str(), pathUtf8.c_str(), &options ) )
         return m_state->Fail( rc );
 
+    // As libgit2 does for a clone that fails, so a retry finds the folder as it was. An open handle keeps Windows
+    // from deleting it
+    auto abandon = [&]( int aRc )
+    {
+        int failed = m_state->Fail( aRc );
+
+        git_repository_free( *aRepo );
+        *aRepo = nullptr;
+        removeClone( aPath, existed );
+        return failed;
+    };
+
+    if( aPrepare )
+    {
+        if( int rc = aPrepare( *aRepo ) )
+            return abandon( rc );
+    }
+
     if( !aBare )
     {
         if( int rc = PROJECT_GIT_UTILS::AllowLongPaths( *aRepo ) )
-        {
-            int failed = m_state->Fail( rc );
-
-            // An open handle keeps Windows from deleting the folder
-            git_repository_free( *aRepo );
-            *aRepo = nullptr;
-            removeClone( aPath, existed );
-            return failed;
-        }
+            return abandon( rc );
 
         if( int rc = checkoutInBatches( *aRepo, *m_state ) )
-        {
-            int failed = m_state->Fail( rc );
-
-            // As libgit2 does for a clone that fails, so a retry finds the folder as it was
-            git_repository_free( *aRepo );
-            *aRepo = nullptr;
-            removeClone( aPath, existed );
-            return failed;
-        }
+            return abandon( rc );
     }
 
     m_state->session->RememberWorkingCredential();

@@ -1,0 +1,5 @@
+#define RC_VER_FILE_DESCRIPTION "KiCad MDW Git backend " KICAD_WIN32_RC_PRODVER_STR
+#define RC_VER_INTERNALNAME "kicad-mdw-git"
+#define RC_VER_ORIGINALFILENAME "kicad-mdw-git.exe"
+
+#include "kiwin32.rc"

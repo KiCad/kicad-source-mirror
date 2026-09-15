@@ -1,0 +1,8 @@
+{
+    "id": "org.kicad.mdw.git",
+    "name": "Git",
+    "executable": "kicad-mdw-git",
+    "capability_hints": [ "REVISIONS", "LOCKING", "SHARED_LIBRARIES", "LIFECYCLE" ],
+    "binding_fields": [],
+    "binding_source": "git_remote"
+}

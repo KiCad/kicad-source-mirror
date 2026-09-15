@@ -225,6 +225,7 @@ public:
     virtual wxString GetWorkingDirectory( GIT_STATUS_HANDLER* aHandler ) = 0;
 
     virtual bool GetConfigString( git_repository* aRepo, const wxString& aKey, wxString& aValue ) = 0;
+    /// Set aKey in aRepo's own config, never in a level shared with other repositories
     virtual bool SetConfigString( git_repository* aRepo, const wxString& aKey, const wxString& aValue ) = 0;
 
     virtual bool IsRepository( GIT_INIT_HANDLER* aHandler, const wxString& aPath ) = 0;

@@ -29,7 +29,9 @@ function( sign_kicad_bundle target signing_id use_secure_timestamp use_hardened_
 
     # add all the files in Contents/MacOS/
     # But we've gotta sign kicad-cli before signing kicad, at least on x86_64
+    file( GLOB mdw_backends "${target}/Contents/MacOS/kicad-mdw-*" )
     set( kicad_bins "${target}/Contents/MacOS/kicad-cli"
+            ${mdw_backends}
             "${target}/Contents/MacOS/kicad")
 
     if( use_sentry )

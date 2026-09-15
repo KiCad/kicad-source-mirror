@@ -10,3 +10,4 @@ include_directories(
 )
 
 add_subdirectory( 3d )
+add_subdirectory( mdw )
