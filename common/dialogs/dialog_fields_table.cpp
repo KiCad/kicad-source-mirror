@@ -839,8 +839,8 @@ void DIALOG_FIELDS_TABLE::OnSizeViewControlsGrid( wxSizeEvent& event )
     int             groupByColWidth = KIUI::GetTextSize( groupByColLabel, m_viewControlsGrid ).x + COLUMN_MARGIN;
     int             remainingWidth = m_viewControlsGrid->GetSize().GetX() - showColWidth - groupByColWidth;
 
-    m_viewControlsGrid->SetColSize( showColWidth, SHOW_FIELD_COLUMN );
-    m_viewControlsGrid->SetColSize( groupByColWidth, GROUP_BY_COLUMN );
+    m_viewControlsGrid->SetColSize( SHOW_FIELD_COLUMN, showColWidth );
+    m_viewControlsGrid->SetColSize( GROUP_BY_COLUMN, groupByColWidth );
 
     if( m_viewControlsGrid->IsColShown( DISPLAY_NAME_COLUMN ) && m_viewControlsGrid->IsColShown( LABEL_COLUMN ) )
     {
