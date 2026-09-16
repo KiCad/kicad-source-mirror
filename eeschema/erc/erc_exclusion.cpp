@@ -27,6 +27,7 @@
 #include <wx/arrstr.h>
 
 #include <erc/erc_exclusion.h>
+#include <erc/erc_settings.h>       // for ERCE_T enum
 #include <sch_marker.h>
 #include <sch_sheet_path.h>
 

@@ -24,6 +24,7 @@
 #include <pgm_base.h>
 #include <project_sch.h>
 #include <settings/settings_manager.h>
+#include <lib_symbol.h>
 
 
 LIBRARY_MANAGER_ADAPTER* API_HANDLER_SCH_LIBRARIES::adapterForProject( PROJECT& aProject ) const
