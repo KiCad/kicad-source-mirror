@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-16 13:56+0000\n"
+"PO-Revision-Date: 2026-09-16 15:34+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -115,7 +115,7 @@ msgstr "Yksinkertaista reikien muotoja"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1865
 msgid "Build BVH for holes and vias"
-msgstr "Rakenna BVH reikiä ja läpivientejä varten"
+msgstr "Luodaan BVH reikien ja läpivientien osalta"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:465
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:686
@@ -671,27 +671,27 @@ msgstr "Näytä piirilevyn runko"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Plated Barrels"
-msgstr "Pinnoitetut läpiviennit"
+msgstr "Metallisoidut reiän seinämät"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show barrels of plated through-holes and vias"
-msgstr "Näytä läpireikien ja läpivientien pinnoitetut seinämät"
+msgstr "Näytä metallisoitujen läpireikien ja läpivientien seinämät"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front copper / surface finish color"
-msgstr "Näytä etuosan kupari / pinnan viimeistelyväri"
+msgstr "Näytä etuosan kupari / pintakäsittelyn väri"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show back copper / surface finish color"
-msgstr "Näytä takaosan kupari / pintaviimestelyn väri"
+msgstr "Näytä takaosan kupari / pintakäsittelyn väri"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Adhesive"
-msgstr "Sidosaine"
+msgstr "Liima"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Show adhesive"
-msgstr "Näytä sidosaine"
+msgstr "Näytä liimakerrokset"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 #: pcbnew/tools/board_inspection_tool.cpp:1806
@@ -1426,7 +1426,7 @@ msgstr "pikseliä/mm"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:126
 msgid "Y resolution:"
-msgstr "Y resoluutio:"
+msgstr "Y-resoluutio:"
 
 #: 3d-viewer/dialogs/dialog_export_3d_image.cpp:326
 #, c-format
@@ -2198,7 +2198,7 @@ msgstr "hakemistoon '%s' ei voi kirjoittaa"
 
 #: common/api/api_plugin_manager.cpp:590
 msgid "could not launch plugin"
-msgstr "ei voitu avata laajennusta"
+msgstr "liitännäisen käynnistäminen epäonnistui"
 
 #: common/api/api_plugin_manager.cpp:777 common/api/api_plugin_manager.cpp:857
 #: common/api/api_plugin_manager.cpp:947
@@ -4410,7 +4410,7 @@ msgstr "Nykyisen laajennuksen tukemat vaihtoehdot"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
-msgstr "<<     Liitä Valittu Vaihtoehto"
+msgstr "<<     Liitä valittu vaihtoehto"
 
 #: common/dialogs/dialog_print_generic.cpp:97
 #: common/dialogs/dialog_print_generic.cpp:300
@@ -4424,7 +4424,7 @@ msgstr "Tulosta"
 #: common/dialogs/dialog_print_generic.cpp:240
 #: eeschema/printing/dialog_print.cpp:100
 msgid "Print Preview"
-msgstr "Tulostuksen Esikatselu"
+msgstr "Tulostuksen esikatselu"
 
 #: common/dialogs/dialog_print_generic.cpp:99
 #: common/dialogs/rule_editor_dialog_base.cpp:182
@@ -6681,7 +6681,7 @@ msgstr "Kytkentäkaavionjohdon paksuus"
 
 #: common/dialogs/panel_setup_netclasses.cpp:708
 msgid "Bus wire thickness"
-msgstr "Väyläjohdon paksuus"
+msgstr "Väyläjohtimen paksuus"
 
 #: common/dialogs/panel_setup_netclasses.cpp:709
 msgid "Schematic wire color"
@@ -7714,11 +7714,11 @@ msgstr "Liitännäiset"
 
 #: common/eda_base_frame.cpp:1665
 msgid "Realtime Renderer"
-msgstr "Realiaikainen Renderöinti"
+msgstr "Realiaikainen renderöinti"
 
 #: common/eda_base_frame.cpp:1666
 msgid "Raytracing Renderer"
-msgstr "Säteenseuranta Renderöinti"
+msgstr "Säteenseuranta renderöinti"
 
 #: common/eda_base_frame.cpp:1682 common/hotkey_store.cpp:77
 #: common/tool/common_tools.cpp:625 gerbview/gerbview_frame.cpp:664
@@ -7978,15 +7978,15 @@ msgstr "Liitoskohta"
 
 #: common/eda_item.cpp:474
 msgid "No-Connect Flag"
-msgstr "Ei-Yhteyttä Lippu"
+msgstr "Ei kytketty -merkki"
 
 #: common/eda_item.cpp:475
 msgid "Wire Entry"
-msgstr "Johdon Syöttö"
+msgstr "Johtimen sisääntulo"
 
 #: common/eda_item.cpp:476
 msgid "Bus Entry"
-msgstr "Väyläliitäntä"
+msgstr "Väylän sisääntulo"
 
 #: common/eda_item.cpp:478 eeschema/sch_bitmap.cpp:237
 msgid "Bitmap"
@@ -10313,7 +10313,7 @@ msgstr "Väylät"
 
 #: common/layer_id.cpp:74
 msgid "Bus junctions"
-msgstr "Väyläristeys"
+msgstr "Väylän risteyspisteet"
 
 #: common/layer_id.cpp:75
 msgid "Junctions"
@@ -14194,7 +14194,7 @@ msgstr "Kytkemätön johdon päätepiste"
 
 #: eeschema/connection_graph.cpp:5832
 msgid "Unconnected wire to bus entry"
-msgstr "Kytkemätön johto väyläliitäntään"
+msgstr "Kytkemätön johdin väylän sisääntulossa"
 
 #: eeschema/connection_graph.cpp:6229
 #, c-format
@@ -15830,11 +15830,11 @@ msgstr "Muut symbolikentät"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:39
 msgid "Wires && wire labels"
-msgstr "Johdot && johtotunnisteet"
+msgstr "Johtimet ja johdinnimet"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:42
 msgid "Buses && bus labels"
-msgstr "Väylät && Väylätunnisteet"
+msgstr "Väylät && väylänimet"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:51
 msgid "Label fields"
@@ -17218,8 +17218,7 @@ msgid ""
 "This schematic has one or more buses with more than one label.\n"
 "This was allowed in previous KiCad versions but is no longer permitted."
 msgstr ""
-"Tällä sivulla on yksi tai useampi väylä, jolla on useampi kuin yksi "
-"tunniste.\n"
+"Tällä sivulla on yksi tai useampi väylä, jolla on useampi kuin yksi nimike.\n"
 "Tämä oli sallittua aiemmissa KiCad-versioissa, mutta ei ole enää luvallista."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:23
@@ -17240,7 +17239,7 @@ msgstr "Hyväksy nimi"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.h:53
 msgid "Migrate Buses"
-msgstr "Siirrä Väylät"
+msgstr "Väylien siirto uuteen versioon"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:53
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
@@ -18009,7 +18008,7 @@ msgstr "Nettoluokat"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:75
 msgid "Bus alias definitions"
-msgstr "Väyläaliaksen määritelmät"
+msgstr "Väyläaliasten määritelmät"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:78
 msgid "Text variables"
@@ -18059,7 +18058,7 @@ msgstr "Verkkoluokat"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:136
 msgid "Bus Alias Definitions"
-msgstr "Väyläaliaksen Määritelmät"
+msgstr "Väyläaliasten määritelmät"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:143
 #: eeschema/dialogs/panel_setup_net_chains.cpp:88
@@ -19606,11 +19605,11 @@ msgstr "Käyttäjän määrittelemät signaalit"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:230
 msgid "Wire/Bus"
-msgstr "Johto/Väylä"
+msgstr "Johdin/Väylä"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:231
 msgid "Wires/Buses"
-msgstr "Johdot/Väylät"
+msgstr "Johtimet/Väylät"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:31
 msgid "Wire/bus width:"
@@ -19622,7 +19621,7 @@ msgstr "Aseta leveys 0 käyttääksesi verkkoluokkien johtimien/väyläleveyksi�
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.h:69
 msgid "Wire & Bus Properties"
-msgstr "Johdon & Väylän Ominaisuudet"
+msgstr "Johtimien & väylien ominaisuudet"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
 msgid "Bill of Materials Presets"
@@ -20139,7 +20138,7 @@ msgid ""
 "Percentage of the text size to offset labels above (or below) a wire, bus, "
 "or pin"
 msgstr ""
-"Prosenttiosuus tekstin koosta, jolla siirretään tunnisteita johdon, väylän "
+"Prosenttiosuus tekstin koosta, jolla siirretään tunnisteita johtimen, väylän "
 "tai nastan yläpuolelle (tai alapuolelle)"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:74
@@ -21594,7 +21593,7 @@ msgstr "Eri verkko on määritelty jaetulle nastalle toisessa yksikön symboliss
 
 #: eeschema/erc/erc_item.cpp:143
 msgid "Conflict between bus alias definitions across schematic sheets"
-msgstr "Ristiriita väyläalias-määritelmissä kytkentäkaavion arkeissa"
+msgstr "Ristiriita väyläaliasten määritelmissä kytkentäkaaviosivujen välillä"
 
 #: eeschema/erc/erc_item.cpp:147
 msgid "More than one name given to this bus or net"
@@ -21660,7 +21659,7 @@ msgstr "SPICE-malliongelma"
 
 #: eeschema/erc/erc_item.cpp:206
 msgid "Wires not connected to anything"
-msgstr "Johtoja ei ole kytketty mihinkään"
+msgstr "Johtimia ei ole kytketty mihinkään"
 
 #: eeschema/erc/erc_item.cpp:210
 msgid "Library symbol issue"
@@ -21712,7 +21711,7 @@ msgstr "Päällekkäiset viitteet"
 
 #: eeschema/erc/erc_item.cpp:258
 msgid "Bus Entry needed"
-msgstr "Väylämerkintä tarvitaan"
+msgstr "Tarvitaan väylän sisääntulo"
 
 #: eeschema/erc/erc_item.cpp:266
 msgid "Variant symbol not found in libraries"
@@ -22433,7 +22432,7 @@ msgstr "A&setukset"
 #: eeschema/net_navigator.cpp:65
 #, c-format
 msgid "Wire from (%s, %s) to (%s, %s)"
-msgstr "Johto kohteesta (%s,%s) kohteeseen (%s,%s)"
+msgstr "Johdin kohteesta (%s,%s) kohteeseen (%s,%s)"
 
 #: eeschema/net_navigator.cpp:73
 #, c-format
@@ -22482,12 +22481,12 @@ msgstr "Ei yhteyttä merkki kohdassa (%s, %s)"
 #: eeschema/net_navigator.cpp:169
 #, c-format
 msgid "Bus to wire entry from (%s, %s) to (%s, %s)"
-msgstr "Väylä johtoon kohdasta (%s, %s) kohteeseen (%s, %s)"
+msgstr "Väylän sisääntulo johtimeen pisteestä (%s,%s) pisteeseen (%s,%s)"
 
 #: eeschema/net_navigator.cpp:180
 #, c-format
 msgid "Bus to bus entry from (%s, %s) to (%s, %s)"
-msgstr "Väylä väyläliitäntään kohteesta (%s, %s) kohteeseen (%s, %s)"
+msgstr "Väylän sisääntulo väylään pisteestä (%s,%s) pisteeseen (%s,%s)"
 
 #: eeschema/net_navigator.cpp:191
 #, c-format
@@ -22970,16 +22969,16 @@ msgstr "Muunna Offset Y"
 
 #: eeschema/sch_bus_entry.cpp:477
 msgid "Bus to wire entry"
-msgstr "Väyläliitos johtimeen"
+msgstr "Väylän sisääntulo johtimeen"
 
 #: eeschema/sch_bus_entry.cpp:483
 msgid "Bus to bus entry"
-msgstr "Väylä väyläliitäntään"
+msgstr "Väylän sisääntulo väylään"
 
 #: eeschema/sch_bus_entry.cpp:565 eeschema/sch_line.cpp:231
 #: eeschema/sch_line.cpp:1090 eeschema/tools/sch_edit_tool.cpp:268
 msgid "Wire"
-msgstr "Johto"
+msgstr "Johdin"
 
 #: eeschema/sch_bus_entry.cpp:566 eeschema/sch_line.cpp:232
 #: eeschema/sch_line.cpp:1091
@@ -22988,7 +22987,7 @@ msgstr "Väylä"
 
 #: eeschema/sch_bus_entry.cpp:569
 msgid "Bus Entry Type"
-msgstr "Väylän Liitäntätyyppi"
+msgstr "Väylän sisääntulon tyyppi"
 
 #: eeschema/sch_bus_entry.cpp:581 eeschema/sch_junction.cpp:358
 #: eeschema/sch_label.cpp:1436 eeschema/sch_line.cpp:1115
@@ -23327,8 +23326,8 @@ msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
 msgstr ""
-"Tiedostonimi arkille %s on määrittämättä, tämä on mahdollisesti Altium "
-"signaalijohtosarja, joka on muutettu arkiksi."
+"Sivun %s tiedostonimeä ei ole määritetty; kyseessä on todennäköisesti Altium-"
+"signaalijohdinsarja (signal harness), joka on muunnettu sivuksi."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1601
 #, c-format
@@ -23870,7 +23869,7 @@ msgid ""
 "DipTrace import: invalid wire-net name for net index %d at offset 0x%06zX: "
 "%s."
 msgstr ""
-"DipTrace-tuonti: virheellinen johtoverkon nimi verkkoindeksille %d kohdassa "
+"DipTrace-tuonti: virheellinen johdinverkon nimi verkkoindeksille %d kohdassa "
 "0x%06zX: %s."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3751
@@ -23879,14 +23878,14 @@ msgid ""
 "DipTrace import: invalid wire-net pin count %d for net '%s' at offset "
 "0x%06zX."
 msgstr ""
-"DipTrace-tuonti: virheellinen johtoverkon nastamäärä %d verkolle '%s' "
+"DipTrace-tuonti: virheellinen johdinverkon nastamäärä %d verkolle '%s' "
 "kohdassa 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3763
 #, c-format
 msgid "DipTrace import: invalid wire count %d for net '%s' at offset 0x%06zX."
 msgstr ""
-"DipTrace-tuonti: virheellinen johtomäärä %d verkolle '%s' kohdassa 0x%06zX."
+"DipTrace-tuonti: virheellinen johdinmäärä %d verkolle '%s' kohdassa 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3795
 #, c-format
@@ -24961,7 +24960,7 @@ msgstr "Graafinen viiva"
 #: eeschema/sch_line.cpp:841
 #, c-format
 msgid "Vertical Wire, length %s"
-msgstr "Pystysuora Johto, pituus %s"
+msgstr "Pystysuora johdin, pituus %s"
 
 #: eeschema/sch_line.cpp:842
 #, c-format
@@ -24976,7 +24975,7 @@ msgstr "Pystysuuntainen graafinen viiva, pituus %s"
 #: eeschema/sch_line.cpp:850
 #, c-format
 msgid "Horizontal Wire, length %s"
-msgstr "Vaakasuora Johto, pituus %s"
+msgstr "Vaakasuora johdin, pituus %s"
 
 #: eeschema/sch_line.cpp:851
 #, c-format
@@ -24991,7 +24990,7 @@ msgstr "Vaakasuora graafinen viiva, pituus %s"
 #: eeschema/sch_line.cpp:859
 #, c-format
 msgid "Wire, length %s"
-msgstr "Johto, pituus %s"
+msgstr "Johdin, pituus %s"
 
 #: eeschema/sch_line.cpp:860
 #, c-format
@@ -29509,7 +29508,7 @@ msgstr "Aseta liittymiä"
 
 #: eeschema/tools/sch_actions.cpp:578
 msgid "Place Wire to Bus Entries"
-msgstr "Aseta johto väyläsisääntuloihin"
+msgstr "Sijoita johdin väylän sisääntuloihin"
 
 #: eeschema/tools/sch_actions.cpp:589
 msgid "Place Net Labels"
@@ -30296,7 +30295,7 @@ msgstr "Näytä vaihtoehtoisissa tiloissa olevien nastojen indikaattorikuvakkeet
 #: eeschema/tools/sch_actions.cpp:1478 eeschema/tools/sch_actions.cpp:1487
 #: eeschema/tools/sch_actions.cpp:1496 eeschema/tools/sch_actions.cpp:1506
 msgid "Line Mode for Wires and Buses"
-msgstr "Viivatila Johtimille ja Väylille"
+msgstr "Viivatila johtimille ja väylille"
 
 #: eeschema/tools/sch_actions.cpp:1479 pcbnew/tools/pcb_actions.cpp:1787
 msgid "Draw and drag at any angle"
@@ -30426,11 +30425,11 @@ msgstr "Piirrä väylät"
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:80
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:124
 msgid "Unfold from Bus"
-msgstr "Avautuu Väylästä"
+msgstr "Pura väylästä"
 
 #: eeschema/tools/sch_actions.cpp:1643
 msgid "Break a wire out of a bus"
-msgstr "Katkaise johto väylästä"
+msgstr "Pura johdin väylästä"
 
 #: eeschema/tools/sch_actions.cpp:1664 pcbnew/tools/pcb_actions.cpp:3000
 msgid "Undo Last Segment"
@@ -30781,7 +30780,7 @@ msgstr "Lisää Risteys"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1459
 msgid "Add Wire to Bus Entry"
-msgstr "Lisää Johto Väyläliitäntään"
+msgstr "Lisää johdin väylän sisääntuloon"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1535
 msgid "Remove No Connect Flag"
@@ -30789,7 +30788,7 @@ msgstr "Poista ”ei kytketty” -lippu"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1544
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr "Risteyksen sijainti ei sisällä liitettäviä johtoja ja/tai nastoja."
+msgstr "Liitoksen kohdalla ei ole yhdistettäviä johtimia ja/tai nastoja."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2055
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:172
@@ -31345,11 +31344,11 @@ msgstr "UUID"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:106
 msgid "No bus selected"
-msgstr "Ei väylää valittu"
+msgstr "Väylää ei ole valittu"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:115
 msgid "Bus has no members"
-msgstr "Busilla ei ole jäseniä"
+msgstr "Väylällä ei ole jäseniä"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:805
 msgid "Press <ESC> to cancel drawing."
@@ -31357,11 +31356,11 @@ msgstr "Paina <ESC> keskeyttääksesi piirtämisen."
 
 #: eeschema/tools/sch_move_tool.cpp:573
 msgid "Break Wire"
-msgstr "Katkaise Johto"
+msgstr "Katkaise johdin"
 
 #: eeschema/tools/sch_move_tool.cpp:574
 msgid "Slice Wire"
-msgstr "Halkaise Johto"
+msgstr "Halkaise johdin"
 
 #: eeschema/tools/sch_move_tool.cpp:962
 #: pagelayout_editor/tools/pl_edit_tool.cpp:231
@@ -31840,7 +31839,7 @@ msgstr "Komponenttilistan tiedot pitää määritellä kohteina."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1151
 msgid "Component entry was missing a type."
-msgstr "Komponenttitiedolle ei ole määritetty tyyppiä."
+msgstr "Komponenttitietueelta puuttui tyyppi."
 
 #: eeschema/widgets/panel_remote_symbol.cpp:1212
 #, c-format
@@ -32049,15 +32048,15 @@ msgstr "Älä päivitä kirjastotaulukoita"
 
 #: eeschema/widgets/symbol_library_save_as_filedlg_hook.h:44
 msgid "Update existing library table entry"
-msgstr "Päivitä olemassa oleva kirjastotaulukkoon"
+msgstr "Päivitä olemassa oleva kirjastotaulukon tietue"
 
 #: eeschema/widgets/symbol_library_save_as_filedlg_hook.h:45
 msgid "Add new global library table entry"
-msgstr "Lisää kirjasto yleiseen kirjastoluetteloon"
+msgstr "Lisää uusi globaali kirjastotaulukon tietue"
 
 #: eeschema/widgets/symbol_library_save_as_filedlg_hook.h:46
 msgid "Add new project library table entry"
-msgstr "Lisää uusi projektikirjastotaulukkomerkintä"
+msgstr "Lisää uusi projektikohtainen kirjastotaulukon tietue"
 
 #: eeschema/widgets/tuner_slider.cpp:65 eeschema/widgets/tuner_slider.cpp:133
 #, c-format
@@ -32992,7 +32991,7 @@ msgstr "DKoodi():"
 
 #: gerbview/toolbars_gerber.cpp:301 gerbview/toolbars_gerber.cpp:302
 msgid "Text info entry"
-msgstr "Tekstitietue"
+msgstr "Tekstitietorivi"
 
 #: gerbview/toolbars_gerber.cpp:305
 msgid "Component highlight"
@@ -58112,7 +58111,7 @@ msgstr "Laajennusviivan ylitys"
 
 #: pcbnew/pcb_dimension.cpp:2382
 msgid "Leader Length"
-msgstr "Johto-objektin pituus"
+msgstr "Viiteviivan pituus"
 
 #: pcbnew/pcb_dimension.cpp:2425
 msgid "Text Frame"
@@ -59434,7 +59433,7 @@ msgstr ""
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:1922
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
-msgstr "Ohitetaan johto, koska Eagle-kerrosta %s (%d) ei ole kartoitettu"
+msgstr "Ohitetaan johdin, koska Eagle-kerrosta %s (%d) ei ole kartoitettu"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2090
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:2093
@@ -64262,7 +64261,7 @@ msgstr "Piirrä ortogonaalisia mittoja"
 
 #: pcbnew/tools/pcb_actions.cpp:561
 msgid "Draw Leaders"
-msgstr "Piirrä johto-objektit"
+msgstr "Piirrä viiteviivat"
 
 #: pcbnew/tools/pcb_actions.cpp:575
 msgid "Draw Filled Zones"
