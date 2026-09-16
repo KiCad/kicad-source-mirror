@@ -304,11 +304,26 @@ void FIELDS_TABLE_DATA_MODEL_BASE::RenameColumn( int aCol, const wxString& newNa
 
     commitPendingGridChanges();
 
+    const wxString oldName = m_cols[aCol].m_fieldName;
+    bool           wasComputed = ColIsComputed( aCol );
+    bool           willBeComputed = IsGeneratedField( newName ) && !fieldIsItemProperty( newName );
+
     for( auto& [unused, fieldsStore] : m_dataStore )
     {
-        auto node = fieldsStore.extract( m_cols[aCol].m_fieldName );
+        auto node = fieldsStore.extract( oldName );
 
-        if( !node.empty() )
+        // Computed columns are virtual, their stored values are only placeholders for the
+        // generated field name. Don't copy that placeholder into an ordinary field, or
+        // keep ordinary per-item values when the destination is computed.
+        if( willBeComputed )
+        {
+            fieldsStore.insert_or_assign( newName, newName );
+        }
+        else if( wasComputed )
+        {
+            fieldsStore.insert_or_assign( newName, wxEmptyString );
+        }
+        else if( !node.empty() )
         {
             node.key() = newName;
             fieldsStore.insert( std::move( node ) );

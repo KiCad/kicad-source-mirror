@@ -181,4 +181,34 @@ BOOST_AUTO_TEST_CASE( ExcludeFromSimulationAttributeIsVariantAware )
 }
 
 
+BOOST_AUTO_TEST_CASE( RenameAcrossComputedBoundaryResetsStoredValue )
+{
+    const wxString ordinaryFieldName = wxS( "OrdinaryField" );
+    const wxString computedFieldName = wxS( "@{1+2}" );
+    PCB_FIELD*     field = new PCB_FIELD( m_footprint, FIELD_T::USER, ordinaryFieldName );
+
+    field->SetText( wxS( "Ordinary value" ) );
+    m_footprint->Add( field );
+    AddTestColumn( ordinaryFieldName );
+
+    m_model.RenameColumn( m_col, computedFieldName );
+
+    BOOST_REQUIRE( m_model.ColIsComputed( m_col ) );
+    BOOST_CHECK_EQUAL( m_model.GetValue( 0, m_col ), computedFieldName );
+    BOOST_CHECK_EQUAL( m_model.GetResolvedValue( 0, m_col ), wxString( wxS( "3" ) ) );
+
+    m_model.RenameColumn( m_col, ordinaryFieldName );
+
+    BOOST_REQUIRE( !m_model.ColIsComputed( m_col ) );
+    BOOST_CHECK( m_model.GetValue( 0, m_col ).IsEmpty() );
+
+    Apply();
+
+    field = m_footprint->GetField( ordinaryFieldName );
+    BOOST_REQUIRE( field );
+    BOOST_CHECK( field->GetText().IsEmpty() );
+    BOOST_CHECK( m_footprint->GetField( computedFieldName ) == nullptr );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
