@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-16 13:56+0000\n"
+"PO-Revision-Date: 2026-09-17 13:25+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -15456,11 +15456,10 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "Cambia l'importanza a Errore per tutte le violazioni \"%s\""
 
 #: eeschema/dialogs/dialog_erc.cpp:785 eeschema/dialogs/dialog_erc.cpp:792
-#, fuzzy
 msgid "Violation severities can also be edited in Schematic Setup"
 msgstr ""
-"L'importanza delle violazioni può essere modificata anche nella finestra di "
-"impostazioni schema"
+"L'importanza delle violazioni può essere modificata anche nelle impostazioni "
+"dello schema"
 
 #: eeschema/dialogs/dialog_erc.cpp:790 pcbnew/dialogs/dialog_drc.cpp:885
 #, c-format
@@ -15482,7 +15481,6 @@ msgstr "Modifica la mappa conflitti da-pin-a-pin..."
 
 #: eeschema/dialogs/dialog_erc.cpp:806 eeschema/dialogs/dialog_erc.cpp:812
 #: eeschema/dialogs/dialog_erc.cpp:819
-#, fuzzy
 msgid "Open the Schematic Setup dialog"
 msgstr "Apri la finestra impostazioni schema"
 
@@ -16738,9 +16736,8 @@ msgid "Related Symbols Only"
 msgstr "Solo simboli correlati"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:276
-#, fuzzy
 msgid "Symbol Names"
-msgstr "Nome simbolo"
+msgstr "Nomi simbolo"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:278
 #, c-format
@@ -16963,18 +16960,17 @@ msgid "Derived symbol must have a parent selected"
 msgstr "Un simbolo derivato deve avere un parente selezionato"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:551
-#, fuzzy, c-format
+#, c-format
 msgid "The unit name '%s' is already in use."
-msgstr "Il nome '%s' è già in uso."
+msgstr "Il nome dell'unità '%s' è già in uso."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:566
 msgid "Delete extra units from symbol?"
 msgstr "Cancellare le unità ulteriori dal simbolo?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "Il simbolo deve avere almeno 1 stile corpo"
+msgstr "Gli stili corpo personalizzati devono avere almeno 2 voci"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:600
 msgid "Delete extra body styles from symbol?"
@@ -17000,7 +16996,7 @@ msgstr "Modifica proprietà simbolo"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:816
 #, c-format
 msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
-msgstr ""
+msgstr "Il pin '%s' nel gruppo ponticelli %d non esiste in questo simbolo."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:859
 #, c-format
@@ -17269,9 +17265,8 @@ msgstr "Connessioni pin"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:563
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:340
 #: eeschema/widgets/sch_properties_panel.cpp:225
-#, fuzzy
 msgid "Pin Map"
-msgstr "Nome pin"
+msgstr "Mappa pin"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:576
 msgid "Edit Simulation Model..."
@@ -17284,58 +17279,50 @@ msgstr "Proprietà libreria di simboli"
 #: eeschema/dialogs/dialog_line_properties.cpp:45
 #: eeschema/dialogs/dialog_shape_properties.cpp:55
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1042
-#, fuzzy
 msgid "Start Shape:"
-msgstr "Comincia semplice:"
+msgstr "Comincia forma:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:55
 #: eeschema/dialogs/dialog_shape_properties.cpp:65
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1052
-#, fuzzy
 msgid "End Shape:"
-msgstr "Forma:"
+msgstr "Finisci forma:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:84
 #: eeschema/dialogs/dialog_shape_properties.cpp:94
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1081
-#, fuzzy
 msgid "Start Length:"
-msgstr "Lunghezza obiettivo:"
+msgstr "Lunghezza iniziale:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:85
 #: eeschema/dialogs/dialog_shape_properties.cpp:95
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1082
-#, fuzzy
 msgid "End Length:"
-msgstr "Lunghezza:"
+msgstr "Lunghezza finale:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:86
 #: eeschema/dialogs/dialog_shape_properties.cpp:96
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1083
-#, fuzzy
 msgid "Start Width:"
-msgstr "Larghezza separatori"
+msgstr "Larghezza iniziale:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:87
 #: eeschema/dialogs/dialog_shape_properties.cpp:97
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1084
-#, fuzzy
 msgid "End Width:"
-msgstr "Larghezza:"
+msgstr "Larghezza finale:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:88
 #: eeschema/dialogs/dialog_shape_properties.cpp:98
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1085
-#, fuzzy
 msgid "Start Stroke Width:"
-msgstr "Usa larghezza iniziale della pista"
+msgstr "Larghezza tratto iniziale:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:90
 #: eeschema/dialogs/dialog_shape_properties.cpp:100
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1087
-#, fuzzy
 msgid "End Stroke Width:"
-msgstr "Larghezza raggio:"
+msgstr "Larghezza tratto finale:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:162
 #: eeschema/dialogs/dialog_shape_properties.cpp:173
