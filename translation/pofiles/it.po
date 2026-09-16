@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 10:54-0700\n"
-"PO-Revision-Date: 2026-09-16 19:51+0000\n"
+"PO-Revision-Date: 2026-09-17 23:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -13837,11 +13837,10 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "Cambia l'importanza a Errore per tutte le violazioni \"%s\""
 
 #: eeschema/dialogs/dialog_erc.cpp:793 eeschema/dialogs/dialog_erc.cpp:800
-#, fuzzy
 msgid "Violation severities can also be edited in Schematic Setup"
 msgstr ""
-"L'importanza delle violazioni può essere modificata anche nella finestra di "
-"impostazioni schema"
+"L'importanza delle violazioni può essere modificata anche nelle impostazioni "
+"dello schema"
 
 #: eeschema/dialogs/dialog_erc.cpp:798 pcbnew/dialogs/dialog_drc.cpp:887
 #, c-format
@@ -13863,7 +13862,6 @@ msgstr "Modifica la mappa conflitti da-pin-a-pin..."
 
 #: eeschema/dialogs/dialog_erc.cpp:814 eeschema/dialogs/dialog_erc.cpp:820
 #: eeschema/dialogs/dialog_erc.cpp:827
-#, fuzzy
 msgid "Open the Schematic Setup dialog"
 msgstr "Apri la finestra impostazioni schema"
 
@@ -15397,18 +15395,17 @@ msgid "Derived symbol must have a parent selected"
 msgstr "Un simbolo derivato deve avere un parente selezionato"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:508
-#, fuzzy, c-format
+#, c-format
 msgid "The unit name '%s' is already in use."
-msgstr "Il nome '%s' è già in uso."
+msgstr "Il nome dell'unità '%s' è già in uso."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:523
 msgid "Delete extra units from symbol?"
 msgstr "Cancellare le unità ulteriori dal simbolo?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:551
-#, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "Il simbolo deve avere almeno 1 stile corpo"
+msgstr "Gli stili corpo personalizzati devono avere almeno 2 voci"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:557
 msgid "Delete extra body styles from symbol?"
@@ -15434,7 +15431,7 @@ msgstr "Modifica proprietà simbolo"
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:769
 #, c-format
 msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
-msgstr ""
+msgstr "Il pin '%s' nel gruppo ponticelli %d non esiste in questo simbolo."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:812
 #, c-format
