@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-16 07:52+0000\n"
+"PO-Revision-Date: 2026-09-16 13:56+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -11060,14 +11060,13 @@ msgid "Restore Failed"
 msgstr "Ripristino fallito"
 
 #: common/local_history.cpp:2330
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Reimposta all'angolo corrente dalla posizione di riferimento."
+msgstr "Recuperare il progetto alla versione da %s?"
 
 #: common/local_history.cpp:2332
-#, fuzzy
 msgid "Restore Version"
-msgstr "Recupero sessione"
+msgstr "Recupero Versione"
 
 #: common/local_history.cpp:2335
 msgid ""
@@ -11112,7 +11111,7 @@ msgstr ""
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:757
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
@@ -11431,9 +11430,9 @@ msgid "Failed to archive file '%s'."
 msgstr "Fallita archiviazione file \"%s\"."
 
 #: common/project/project_archiver.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s': %s"
-msgstr "Fallita archiviazione file \"%s\"."
+msgstr "Fallita archiviazione file '%s': %s"
 
 #: common/project/project_archiver.cpp:370
 #, c-format
@@ -11513,9 +11512,9 @@ msgstr ""
 "La convalida dello schema dei metadati del provider remoto non è riuscita: %s"
 
 #: common/remote_provider_metadata.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported provider capability '%s'."
-msgstr "Tipo componente non supportato '%s'."
+msgstr "Capacità provider non supportata '%s'."
 
 #: common/remote_provider_metadata.cpp:147
 #, c-format
@@ -11565,9 +11564,9 @@ msgid "Remote provider manifest failed schema validation: %s"
 msgstr "Convalida schema manifesto del provider remoto non riuscita: %s"
 
 #: common/remote_provider_models.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse remote provider manifest: %s"
-msgstr "Impossibile analizzare il repository: %s"
+msgstr "Impossibile analizzare il manifest del repository remoto: %s"
 
 #: common/remote_provider_utils.cpp:94
 #, c-format
@@ -11771,9 +11770,8 @@ msgid "Configuration"
 msgstr "Configurazione"
 
 #: common/table_io.cpp:40
-#, fuzzy
 msgid "Select data file"
-msgstr "Seleziona un file"
+msgstr "Seleziona file dati"
 
 #: common/tool/action_menu.cpp:220 common/tool/action_menu.cpp:225
 #, c-format
@@ -13225,23 +13223,20 @@ msgid "Overwrite existing design block?"
 msgstr "Sovrascrivere il blocco progetto esistente?"
 
 #: common/widgets/editor_tabs_panel.cpp:639
-#, fuzzy
 msgid "Close Tab"
-msgstr "Chiudi"
+msgstr "Chiudi scheda"
 
 #: common/widgets/editor_tabs_panel.cpp:640
-#, fuzzy
 msgid "Close Other Tabs"
-msgstr "Ignora altri magnetismi"
+msgstr "Chiudi le altre schede"
 
 #: common/widgets/editor_tabs_panel.cpp:641
 msgid "Close Tabs to the Right"
 msgstr "Chiudi le schede a destra"
 
 #: common/widgets/editor_tabs_panel.cpp:642
-#, fuzzy
 msgid "Close All Tabs"
-msgstr "Cancella tutti gli strati"
+msgstr "Chiudi tutte le schede"
 
 #: common/widgets/filter_combobox.cpp:68
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:1162
@@ -13289,28 +13284,25 @@ msgid "Select Path"
 msgstr "Seleziona percorso"
 
 #: common/widgets/kistatusbar.cpp:106
-#, fuzzy
 msgid "Additional information"
-msgstr "Informazioni mancanti"
+msgstr "Informazioni aggiuntive"
 
 #: common/widgets/kistatusbar.cpp:193
-#, fuzzy
 msgid "Clear Warnings"
-msgstr "Avvisi DRC"
+msgstr "Cancella avvisi"
 
 #: common/widgets/kistatusbar.cpp:360
 msgid "View load messages"
 msgstr "Visualizza messaggi di caricamento"
 
 #: common/widgets/kistatusbar.cpp:770
-#, fuzzy, c-format
+#, c-format
 msgid "View %zu message(s)"
-msgstr "Visualizza %zu messaggio(i) di caricamento"
+msgstr "Visualizza %zu messaggio(i)"
 
 #: common/widgets/kistatusbar.cpp:783
-#, fuzzy
 msgid "View messages"
-msgstr "Visualizza messaggi di caricamento"
+msgstr "Visualizza messaggi"
 
 #: common/widgets/lib_tree.cpp:95
 msgid "Sort by Best Match"
@@ -13486,18 +13478,18 @@ msgid "Restore Defaults"
 msgstr "Ripristina predefiniti"
 
 #: common/widgets/widget_hotkey_list.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Both bindings are kept, "
 "but only one runs per key press. Continue?"
 msgstr ""
-"\"%s\" è già assegnata a \"%s\" nella sezione \"%s\". Sicuro di voler "
-"cambiare l'assegnamento?"
+"'%s' è già assegnato a '%s' nella sezione '%s'. Entrambe le associazioni "
+"vengono mantenute, ma ne viene eseguita solo una per ogni pressione del "
+"tasto. Continuare?"
 
 #: common/widgets/widget_hotkey_list.cpp:512
-#, fuzzy
 msgid "Hotkey conflict"
-msgstr "Elenco tasti comando"
+msgstr "Conflitto tasti comando"
 
 #: common/widgets/widget_hotkey_list.cpp:525
 msgid "Command"
@@ -13628,9 +13620,8 @@ msgid "Eagle XML files"
 msgstr "File Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:304
-#, fuzzy
 msgid "P-CAD ASCII files"
-msgstr "File ASCII PADS"
+msgstr "File ASCII P-CAD"
 
 #: common/wildcards_and_files_ext.cpp:310
 msgid "PADS ASCII files"
@@ -13668,15 +13659,13 @@ msgid "EasyEDA (JLCEDA) Pro files"
 msgstr "File EasyEDA (JLCEDA) Pro"
 
 #: common/wildcards_and_files_ext.cpp:360
-#, fuzzy
 msgid "DipTrace files"
-msgstr "File zip"
+msgstr "File DipTrace"
 
 #: common/wildcards_and_files_ext.cpp:366
 #: eeschema/sch_io/orcad/sch_io_orcad.h:73
-#, fuzzy
 msgid "OrCAD Capture schematic files"
-msgstr "File schemi elettrici PADS Logic"
+msgstr "File schemi elettrici OrCAD"
 
 #: common/wildcards_and_files_ext.cpp:372
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:35
@@ -14987,9 +14976,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Aggiorna/reimposta attributi di fabbricazione"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:187
-#, fuzzy
 msgid "Update/reset pin map overrides"
-msgstr "Aggiorna/reimposta imposizioni clearance"
+msgstr "Aggiorna/reimposta imposizioni mappa pin"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:193
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:158
@@ -15014,9 +15002,8 @@ msgid "Chain created (%d total). Select another or close."
 msgstr "Catena creata (%d in totale). Selezionane un'altra o chiudi."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
-#, fuzzy
 msgid "Please select a chain from the list."
-msgstr "Selezionare almeno una opzione dall'elenco %s."
+msgstr "Selezionare una chain dall'elenco."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:142
 #: eeschema/dialogs/dialog_create_net_chain.cpp:162
@@ -15056,9 +15043,8 @@ msgid "Failed to create the manual net chain."
 msgstr "Fallita creazione della catena di net manuale."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
-#, fuzzy
 msgid "Please select both a From and To component."
-msgstr "Selezionare un file da importare."
+msgstr "Selezionare sia Da che A componente."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:314
 #: eeschema/dialogs/dialog_create_net_chain.cpp:321
@@ -15066,14 +15052,12 @@ msgstr "Selezionare un file da importare."
 #: eeschema/dialogs/dialog_create_net_chain.cpp:406
 #: eeschema/dialogs/dialog_create_net_chain.cpp:439
 #: eeschema/dialogs/dialog_create_net_chain.cpp:513
-#, fuzzy
 msgid "Find Path"
-msgstr "Trova il prossimo"
+msgstr "Trova il percorso"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:321
-#, fuzzy
 msgid "From and To must be different components."
-msgstr "Sorgente 1 e Sorgente 2 devono essere diverse."
+msgstr "Da e A devono essere componenti diversi."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:351
 #, c-format
@@ -15125,9 +15109,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:80
 #: eeschema/dialogs/panel_setup_net_chains.cpp:641
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:87
-#, fuzzy
 msgid "Member Nets"
-msgstr "Membri"
+msgstr "Net membri"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:794
 #, c-format
@@ -15141,9 +15124,9 @@ msgid "Member Nets — %s (%zu)"
 msgstr "Net membri — %s (%zu)"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1079
-#, fuzzy, c-format
+#, c-format
 msgid "net '%s'"
-msgstr "Testo '%s'"
+msgstr "net '%s'"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1084
 #: eeschema/dialogs/dialog_create_net_chain.cpp:1089
@@ -15168,9 +15151,8 @@ msgstr ""
 "catena di net."
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:53
-#, fuzzy
 msgid "Suggested Name"
-msgstr "Nome foglio"
+msgstr "Nome suggerito"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:54
 #: eeschema/net_navigator.cpp:391 pcbnew/board.cpp:2606
@@ -15196,9 +15178,8 @@ msgid "From:"
 msgstr "Da:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:113
-#, fuzzy
 msgid "To:"
-msgstr "Alto:"
+msgstr "A:"
 
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:121
 msgid "Find net chain path between the two components"
