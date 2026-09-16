@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-16 15:34+0000\n"
+"PO-Revision-Date: 2026-09-17 13:25+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -13852,7 +13852,7 @@ msgstr "Kytkentäkaavion määritys"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Cmp file assignment"
-msgstr "CMP-tiedoston määritys"
+msgstr "Cmp-tiedoston jalanjälkikohdistus"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.cpp:19
 msgid ""
@@ -23277,7 +23277,8 @@ msgstr "Näytä kentän nimi"
 #: eeschema/sch_footprint_field_reconciler.cpp:85
 #, c-format
 msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
-msgstr "Uudelleenlinkitettiin %d tuotua jalanjälkimääritystä kirjastoon '%s'."
+msgstr ""
+"Linkitettiin %d tuotua jalanjäljen määritystä uudelleen kirjastoon '%s'."
 
 #: eeschema/sch_group.cpp:399 pcbnew/pcb_group.cpp:458
 #, c-format
@@ -52775,7 +52776,7 @@ msgstr "Poista saarekkeet:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:356
 msgid "Choose what to do with unconnected copper islands"
-msgstr "Valitse mitä tehdä kytkemättömillä kuparisaarilla"
+msgstr "Valitse, mitä tehdään kytkemättömille kuparisaarekkeille"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:360 pcbnew/zone.cpp:2183
 msgid "Below area limit"
@@ -52787,7 +52788,7 @@ msgstr "Alueen raja:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:368
 msgid "Isolated islands smaller than this will be removed"
-msgstr "Tätä pienemmät yksittäiset saarekkeet poistetaan"
+msgstr "Tätä pienemmät eristetyt saarekkeet poistetaan"
 
 #: pcbnew/drc/drc_cache_generator.cpp:197
 msgid "Gathering copper items..."
@@ -54118,12 +54119,12 @@ msgstr "%s min paksuus eroaa."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:683
 #, c-format
 msgid "%s remove islands setting differs."
-msgstr "%s poista saarekkeet -asetus eroaa."
+msgstr "%s:n saarekkeiden poistoasetus eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:685
 #, c-format
 msgid "%s minimum island size setting differs."
-msgstr "%s saaren vähimmäiskoon asetus eroaa."
+msgstr "%s:n saarekkeen vähimmäiskokoasetus eroaa."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:688
 #, c-format
@@ -59102,10 +59103,11 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR-mallilla %s on erilaiset asetukset \"Säilytä kaadettu kupari - "
-"irti\" ja \"Säilytä kaadettu kupari - eristetty\". KiCad ei tee eroa näiden "
-"kahden asetuksen välillä. KiCad-vyöhykkeen vähimmäissaaren pinta-alana on "
-"käytetty irrotetun kuparin asetusta."
+"CADSTAR-mallipohjassa ’%s’ on eri asetukset kohdille ’Retain Poured Copper - "
+"Disjoint’ (Säilytä valettu kupari - Erillinen) ja ’Retain Poured Copper - "
+"Isolated’ (Säilytä valettu kupari - Eristetty). KiCad ei tee eroa näiden "
+"kahden asetuksen välillä. Erillisen kuparin (disjoint) asetusta on "
+"sovellettu KiCad-kuparitalueen (Zone) saarekkeen vähimmäispinta-alana."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2019
 #, c-format
@@ -67922,7 +67924,7 @@ msgstr "Poista saarekkeet"
 
 #: pcbnew/zone.cpp:2458
 msgid "Minimum Island Area"
-msgstr "Saaren vähimmäiskoko"
+msgstr "Saarekkeen vähimmäispinta-ala"
 
 #: pcbnew/zone.cpp:2475
 msgid "Minimum Width"
@@ -68139,7 +68141,7 @@ msgstr "pcbnew;PCB;Kytkentäkaavio; Asettelu;Suunnittelu;Editori;Jalanjälki;"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
-msgstr "KiCad Piirilevyeditori (Itsenäinen)"
+msgstr "KiCad piirilevyeditori (Itsenäinen)"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
@@ -68181,11 +68183,11 @@ msgstr ""
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:62
 msgid "KiCad PCB Layout Editor"
-msgstr "KiCad Piirilevyeditori"
+msgstr "KiCad piirilevyeditori"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:82
 msgid "The KiCad Developers"
-msgstr "KiCad:in Kehittäjät"
+msgstr "KiCad:in kehittäjät"
 
 #: resources/linux/mime/kicad-gerbers.xml.in:5
 msgid "Gerber file"
@@ -68201,7 +68203,7 @@ msgstr "KiCad Projekti"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
 msgid "KiCad Schematic"
-msgstr "KiCad Kytkentäkaavio"
+msgstr "KiCad kytkentäkaavio"
 
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
