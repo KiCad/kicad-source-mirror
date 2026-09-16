@@ -1849,13 +1849,16 @@ void DIALOG_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
         {
             wxString presetName = dlg.GetTextSelection();
             int      idx = m_cbBomPresets->FindString( presetName );
+            auto     presetIt = m_bomPresets.find( presetName );
 
-            if( idx != wxNOT_FOUND )
+            if( idx != wxNOT_FOUND && presetIt != m_bomPresets.end() )
             {
-                m_bomPresets.erase( presetName );
+                if( m_lastSelectedBomPreset == &presetIt->second )
+                    m_lastSelectedBomPreset = nullptr;
 
-                m_cbBomPresets->Delete( idx );
                 m_currentBomPreset = nullptr;
+                m_cbBomPresets->Delete( idx );
+                m_bomPresets.erase( presetIt );
             }
 
             if( m_bomPresetMRU.Index( presetName ) != wxNOT_FOUND )
@@ -2203,13 +2206,16 @@ void DIALOG_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
         {
             wxString presetName = dlg.GetTextSelection();
             int      idx = m_cbBomFmtPresets->FindString( presetName );
+            auto     presetIt = m_bomFmtPresets.find( presetName );
 
-            if( idx != wxNOT_FOUND )
+            if( idx != wxNOT_FOUND && presetIt != m_bomFmtPresets.end() )
             {
-                m_bomFmtPresets.erase( presetName );
+                if( m_lastSelectedBomFmtPreset == &presetIt->second )
+                    m_lastSelectedBomFmtPreset = nullptr;
 
-                m_cbBomFmtPresets->Delete( idx );
                 m_currentBomFmtPreset = nullptr;
+                m_cbBomFmtPresets->Delete( idx );
+                m_bomFmtPresets.erase( presetIt );
             }
 
             if( m_bomFmtPresetMRU.Index( presetName ) != wxNOT_FOUND )
