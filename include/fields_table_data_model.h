@@ -98,6 +98,22 @@ struct DATA_MODEL_COL
 };
 
 
+struct FIELD_VALUE_STATE
+{
+    wxString m_value;
+    wxString m_baseline;
+};
+
+
+struct FIELD_STORE_VALUE
+{
+    // Field existence is shared by every variant; an empty value is still a present field.
+    bool                                  m_present = false;
+    bool                                  m_baselinePresent = false;
+    std::map<wxString, FIELD_VALUE_STATE> m_variants;
+};
+
+
 template <typename ITEM_TYPE>
 struct DATA_MODEL_ROW
 {
@@ -233,15 +249,18 @@ public:
     virtual std::vector<KIID_PATH> GetRowItemKeys( int aRow ) const = 0;
 
     /**
-     * Set the current variant name for highlighting purposes.
+     * Select the displayed variant, retaining un-applied edits in every variant.
      *
-     * When a variant is set, cells that differ from the default (non-variant) value
-     * will be highlighted.
+     * Refresh live baselines without replacing staged edits to unchanged fields.
+     * Cells that differ from the default (non-variant) value will be highlighted.
      *
      * @param aVariantName The name of the current variant, or empty string for default.
      */
-    void            SetCurrentVariant( const wxString& aVariantName ) { m_currentVariant = aVariantName; }
+    virtual void    SetCurrentVariant( const wxString& aVariantName ) = 0;
     const wxString& GetCurrentVariant() const { return m_currentVariant; }
+
+    void RenameStoredVariant( const wxString& aOldName, const wxString& aNewName );
+    void DeleteStoredVariant( const wxString& aName );
 
     void SetVariantNames( const std::vector<wxString>& aVariantNames ) { m_variantNames = aVariantNames; }
     const std::vector<wxString>& GetVariantNames() const { return m_variantNames; }
@@ -264,6 +283,10 @@ protected:
     // that have properties that overlap with mandatory fields, like lib footprints having
     // a library description property as well as a mandatory description field
     virtual bool fieldIsItemProperty( const wxString& aFieldName ) const;
+
+    virtual bool fieldSupportsVariants( const wxString& aFieldName ) const { return false; }
+    wxString     fieldVariant( const wxString& aFieldName, const wxString& aVariantName ) const;
+    void         updateEditedState();
 
     // Helper function to translate named attribute values like ${DNP}.
     virtual wxString getAttributeResolvedValue( const wxString& aFieldName, bool aValue ) const;
@@ -318,14 +341,14 @@ protected:
     // and are rebuilt as the user changes grouping, sorting, filtering, etc.
     //
     // NOTE: be very careful about how you "read" this data store, you should
-    // use getDataStoreFieldValue() to read values from the data store.
+    // use getStoredFieldValue() to read values from the data store.
     //
-    // The map is used to distinguish between present-but-empty vs. not-present.
+    // Each field tracks shared presence and staged/baseline values for the visited variants.
     //
     // Use the get/set/clear/update/initialize functions to access the data store,
-    // rather than accessing it directly, as using [] can unintentionally create
-    // a present-but-empty field when you just want to check if it is present.
-    std::map<KIID_PATH, std::map<wxString, wxString>> m_dataStore;
+    // rather than accessing it directly, so that live baselines and field presence
+    // are initialized consistently.
+    std::map<KIID_PATH, std::map<wxString, FIELD_STORE_VALUE>> m_dataStore;
 };
 
 
@@ -357,6 +380,17 @@ template <typename ITEM_TYPE>
 class FIELDS_TABLE_DATA_MODEL : public FIELDS_TABLE_DATA_MODEL_BASE
 {
 public:
+    void SetCurrentVariant( const wxString& aVariantName ) override
+    {
+        commitPendingGridChanges();
+        m_currentVariant = aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 ? wxString() : aVariantName;
+
+        for( const ITEM_TYPE& item : getAllItems() )
+            refreshDataStoreItem( item );
+
+        updateEditedState();
+    }
+
     void AddColumn( const wxString& aFieldName, const wxString& aLabel,
                     bool aAddedByUser ) override
     {
@@ -481,19 +515,7 @@ public:
                 updateDataStoreItemFieldFromLive( item, col.m_fieldName );
         }
 
-        m_edited = false;
-
-        for( const ITEM_TYPE& item : getAllItems() )
-        {
-            for( const DATA_MODEL_COL& col : m_cols )
-            {
-                if( fieldIsModified( item, col.m_fieldName ) )
-                {
-                    m_edited = true;
-                    return;
-                }
-            }
-        }
+        updateEditedState();
     }
 
 
@@ -995,19 +1017,37 @@ protected:
      */
     virtual bool getLiveFieldValue( const ITEM_TYPE& aItem, const wxString& aFieldName, wxString& aValue ) = 0;
 
-    /**
-     * Returns all stored fields for an item without creating a data-store entry.
-     */
-    const std::map<wxString, wxString>& getStoredFields( const ITEM_TYPE& aItem ) const
+    virtual bool getLiveFieldValueForVariant( const ITEM_TYPE& aItem, const wxString& aFieldName,
+                                              const wxString& aVariant, wxString& aValue )
     {
-        static const std::map<wxString, wxString> emptyFields;
+        return getLiveFieldValue( aItem, aFieldName, aValue );
+    }
 
+    /**
+     * Returns the edited, present fields belonging to a variant without creating entries.
+     */
+    std::map<wxString, wxString> getStoredFields( const ITEM_TYPE& aItem, const wxString& aVariant ) const
+    {
+        std::map<wxString, wxString> fields;
         auto itemIt = m_dataStore.find( getDataStoreKey( aItem ) );
 
         if( itemIt == m_dataStore.end() )
-            return emptyFields;
+            return fields;
 
-        return itemIt->second;
+        for( const auto& [name, field] : itemIt->second )
+        {
+            auto valueIt = field.m_variants.find( aVariant );
+
+            if( !field.m_present || valueIt == field.m_variants.end() )
+                continue;
+
+            const FIELD_VALUE_STATE& value = valueIt->second;
+
+            if( !field.m_baselinePresent || value.m_value != value.m_baseline )
+                fields[name] = value.m_value;
+        }
+
+        return fields;
     }
 
     /**
@@ -1020,13 +1060,21 @@ protected:
     {
         aValue.clear();
 
-        const std::map<wxString, wxString>& fields = getStoredFields( aItem );
-        auto                                fieldIt = fields.find( aFieldName );
+        auto itemIt = m_dataStore.find( getDataStoreKey( aItem ) );
 
-        if( fieldIt == fields.end() )
+        if( itemIt == m_dataStore.end() )
             return false;
 
-        aValue = fieldIt->second;
+        auto fieldIt = itemIt->second.find( aFieldName );
+
+        if( fieldIt == itemIt->second.end() || !fieldIt->second.m_present )
+            return false;
+
+        auto valueIt = fieldIt->second.m_variants.find( fieldVariant( aFieldName, m_currentVariant ) );
+
+        if( valueIt != fieldIt->second.m_variants.end() )
+            aValue = valueIt->second.m_value;
+
         return true;
     }
 
@@ -1036,7 +1084,9 @@ protected:
     void setStoredFieldValue( const ITEM_TYPE& aItem, const wxString& aFieldName,
                               const wxString& aValue )
     {
-        m_dataStore[getDataStoreKey( aItem )][aFieldName] = aValue;
+        FIELD_STORE_VALUE& field = storedField( aItem, aFieldName );
+        field.m_present = true;
+        field.m_variants[fieldVariant( aFieldName, m_currentVariant )].m_value = aValue;
     }
 
     /**
@@ -1045,7 +1095,7 @@ protected:
      */
     void ensureStoredFieldPresent( const ITEM_TYPE& aItem, const wxString& aFieldName )
     {
-        m_dataStore[getDataStoreKey( aItem )].try_emplace( aFieldName, wxEmptyString );
+        storedField( aItem, aFieldName ).m_present = true;
     }
 
     /**
@@ -1053,10 +1103,11 @@ protected:
      */
     void clearStoredField( const ITEM_TYPE& aItem, const wxString& aFieldName )
     {
-        auto itemIt = m_dataStore.find( getDataStoreKey( aItem ) );
+        FIELD_STORE_VALUE& field = storedField( aItem, aFieldName );
+        field.m_present = false;
 
-        if( itemIt != m_dataStore.end() )
-            itemIt->second.erase( aFieldName );
+        for( auto& [variant, state] : field.m_variants )
+            state.m_value = state.m_baseline;
     }
 
     /**
@@ -1068,10 +1119,10 @@ protected:
     {
         wxString liveValue;
         wxString storedValue;
-        bool     liveFieldPresent = getLiveFieldValue( aItem, aFieldName, liveValue );
-        bool     storedFieldPresent = getStoredFieldValue( aItem, aFieldName, storedValue );
+        bool     livePresent = getLiveFieldValue( aItem, aFieldName, liveValue );
+        bool     storedPresent = getStoredFieldValue( aItem, aFieldName, storedValue );
 
-        return liveFieldPresent != storedFieldPresent || liveValue != storedValue;
+        return livePresent != storedPresent || liveValue != storedValue;
     }
 
 
@@ -1081,14 +1132,28 @@ protected:
      * If the field is not present on the item, it will be cleared from the data store rather than
      * set to empty.
      */
-    void updateDataStoreItemFieldFromLive( const ITEM_TYPE& aItem, const wxString& aFieldName )
+    void updateDataStoreItemFieldFromLive( const ITEM_TYPE& aItem, const wxString& aFieldName,
+                                           bool aAllVariants = false )
     {
-        wxString value;
+        FIELD_STORE_VALUE& field = storedField( aItem, aFieldName );
+        wxString           currentVariant = fieldVariant( aFieldName, m_currentVariant );
+        wxString           liveValue;
+        bool               livePresent = getLiveFieldValueForVariant( aItem, aFieldName, currentVariant, liveValue );
 
-        if( getLiveFieldValue( aItem, aFieldName, value ) )
-            setStoredFieldValue( aItem, aFieldName, value );
-        else
-            clearStoredField( aItem, aFieldName );
+        // Reverting a presence change affects every variant. Otherwise revert only the
+        // displayed variant; successful Apply explicitly accepts all cached variants.
+        bool allVariants = aAllVariants || field.m_present != livePresent;
+
+        for( auto& [variant, state] : field.m_variants )
+        {
+            if( allVariants || variant == currentVariant )
+            {
+                getLiveFieldValueForVariant( aItem, aFieldName, variant, state.m_value );
+                state.m_baseline = state.m_value;
+            }
+        }
+
+        field.m_present = field.m_baselinePresent = livePresent;
     }
 
     /**
@@ -1098,10 +1163,10 @@ protected:
      */
     void initializeDataStoreItemField( const ITEM_TYPE& aItem, const DATA_MODEL_COL& aCol )
     {
-        updateDataStoreItemFieldFromLive( aItem, aCol.m_fieldName );
+        FIELD_STORE_VALUE& field = storedField( aItem, aCol.m_fieldName );
 
         if( aCol.m_userAdded )
-            ensureStoredFieldPresent( aItem, aCol.m_fieldName );
+            field.m_present = true;
     }
 
     /**
@@ -1114,6 +1179,101 @@ protected:
     {
         for( const DATA_MODEL_COL& col : m_cols )
             initializeDataStoreItemField( aItem, col );
+    }
+
+    FIELD_STORE_VALUE& storedField( const ITEM_TYPE& aItem, const wxString& aFieldName )
+    {
+        auto& fields = m_dataStore[getDataStoreKey( aItem )];
+        auto [fieldIt, newField] = fields.try_emplace( aFieldName );
+        FIELD_STORE_VALUE& field = fieldIt->second;
+        wxString           variant = fieldVariant( aFieldName, m_currentVariant );
+        auto [valueIt, newVariant] = field.m_variants.try_emplace( variant );
+
+        if( newVariant )
+        {
+            FIELD_VALUE_STATE& state = valueIt->second;
+            bool               present = getLiveFieldValueForVariant( aItem, aFieldName, variant, state.m_baseline );
+            state.m_value = state.m_baseline;
+
+            if( newField )
+                field.m_present = field.m_baselinePresent = present;
+        }
+
+        return field;
+    }
+
+    void refreshDataStoreItem( const ITEM_TYPE& aItem )
+    {
+        commitPendingGridChanges();
+
+        for( const DATA_MODEL_COL& col : m_cols )
+        {
+            auto& fields = m_dataStore[getDataStoreKey( aItem )];
+
+            if( !fields.contains( col.m_fieldName ) )
+                initializeDataStoreItemField( aItem, col );
+            else
+                storedField( aItem, col.m_fieldName );
+        }
+
+        for( auto& [name, field] : m_dataStore[getDataStoreKey( aItem )] )
+        {
+            bool livePresent = field.m_baselinePresent;
+            bool liveChanged = false;
+
+            for( auto& [variant, state] : field.m_variants )
+            {
+                wxString live;
+                livePresent = getLiveFieldValueForVariant( aItem, name, variant, live );
+                bool changed = livePresent != field.m_baselinePresent || live != state.m_baseline;
+
+                // External changes to this field win; a move/rotation leaves staged edits alone.
+                if( changed || state.m_value == state.m_baseline )
+                    state.m_value = live;
+
+                state.m_baseline = live;
+                liveChanged |= changed;
+            }
+
+            if( liveChanged || field.m_present == field.m_baselinePresent )
+                field.m_present = livePresent;
+
+            field.m_baselinePresent = livePresent;
+        }
+    }
+
+    bool storedFieldIsRemoved( const ITEM_TYPE& aItem, const wxString& aName ) const
+    {
+        auto itemIt = m_dataStore.find( getDataStoreKey( aItem ) );
+
+        if( itemIt == m_dataStore.end() )
+            return false;
+
+        auto fieldIt = itemIt->second.find( aName );
+        return fieldIt != itemIt->second.end() && !fieldIt->second.m_present && fieldIt->second.m_baselinePresent;
+    }
+
+    std::set<wxString> storedVariants( const ITEM_TYPE& aItem ) const
+    {
+        std::set<wxString> variants;
+        auto               itemIt = m_dataStore.find( getDataStoreKey( aItem ) );
+
+        if( itemIt != m_dataStore.end() )
+        {
+            for( const auto& [name, field] : itemIt->second )
+            {
+                for( const auto& [variant, state] : field.m_variants )
+                    variants.insert( variant );
+            }
+        }
+
+        return variants;
+    }
+
+    void acceptDataStoreItem( const ITEM_TYPE& aItem )
+    {
+        for( auto& [name, field] : m_dataStore[getDataStoreKey( aItem )] )
+            updateDataStoreItemFieldFromLive( aItem, name, true );
     }
 
     virtual std::vector<ITEM_TYPE> getAllItems() const = 0;

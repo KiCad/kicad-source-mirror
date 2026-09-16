@@ -526,9 +526,8 @@ bool DIALOG_SYMBOL_FIELDS_TABLE::TransferDataFromWindow()
 
     SCH_COMMIT     commit( m_parent );
     SCH_SHEET_PATH currentSheet = m_parent->GetCurrentSheet();
-    wxString       currentVariant = m_parent->Schematic().GetCurrentVariant();
 
-    m_dataModel->ApplyData( commit, m_templateFieldNames, currentVariant );
+    m_dataModel->ApplyData( commit, m_templateFieldNames );
 
     if( !commit.Empty() )
     {
@@ -1098,6 +1097,9 @@ SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSheetSymbolReferences( SCH_SHE
 
 void DIALOG_SYMBOL_FIELDS_TABLE::onAddVariant( wxCommandEvent& aEvent )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     if( !m_parent->ShowAddVariantDialog( this ) )
         return;
 
@@ -1117,12 +1119,15 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onAddVariant( wxCommandEvent& aEvent )
     if( newSelection != wxNOT_FOUND )
         m_variantListBox->SetSelection( newSelection );
 
-    updateVariantButtonStates();
+    onVariantSelectionChange( aEvent );
 }
 
 
 void DIALOG_SYMBOL_FIELDS_TABLE::onDeleteVariant( wxCommandEvent& aEvent )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     int selection = m_variantListBox->GetSelection();
 
     // An empty or default selection cannot be deleted.
@@ -1134,6 +1139,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onDeleteVariant( wxCommandEvent& aEvent )
     }
 
     wxString variantName = m_variantListBox->GetString( selection );
+    m_dataModel->DeleteStoredVariant( variantName );
     m_variantListBox->Delete( selection );
 
     SCH_COMMIT commit( m_parent );
@@ -1223,6 +1229,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
         }
     }
 
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
+    m_dataModel->RenameStoredVariant( oldVariantName, newVariantName );
     m_parent->Schematic().RenameVariant( oldVariantName, newVariantName );
     m_parent->OnModify();
 
@@ -1280,6 +1290,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onCopyVariant( wxCommandEvent& aEvent )
         return;
     }
 
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     m_parent->Schematic().CopyVariant( sourceVariantName, newVariantName );
     m_parent->OnModify();
 
@@ -1293,7 +1306,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onCopyVariant( wxCommandEvent& aEvent )
     if( newSelection != wxNOT_FOUND )
         m_variantListBox->SetSelection( newSelection );
 
-    updateVariantButtonStates();
+    onVariantSelectionChange( aEvent );
     m_parent->UpdateVariantSelectionCtrl( m_parent->Schematic().GetVariantNamesForUI() );
 }
 
@@ -1348,65 +1361,26 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onEditVariantDescription( wxCommandEvent& aEven
 
 void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEvent )
 {
-    wxString currentVariant;
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     wxString selectedVariant = getSelectedVariant();
 
-    updateVariantButtonStates();
-
-    if( m_job )
-    {
-        m_grid->CommitPendingChanges( true );
-
-        if( m_parent )
-            m_parent->SetCurrentVariant( selectedVariant );
-
-        m_dataModel->SetCurrentVariant( selectedVariant );
-        m_dataModel->UpdateReferences( m_dataModel->GetReferenceList() );
-        m_dataModel->RebuildRows();
-
-        if( m_nbPages->GetSelection() == 1 )
-            PreviewRefresh();
-        else
-            m_grid->ForceRefresh();
-
-        syncBomFmtPresetSelection();
-        return;
-    }
+    // Activating a variant only selects its staged values. Apply writes all edited variants.
+    m_dataModel->SetCurrentVariant( selectedVariant );
 
     if( m_parent )
-    {
-        currentVariant = m_parent->Schematic().GetCurrentVariant();
+        m_parent->SetCurrentVariant( selectedVariant );
 
-        if( currentVariant != selectedVariant )
-            m_parent->SetCurrentVariant( selectedVariant );
-    }
+    m_dataModel->RebuildRows();
 
-    if( currentVariant != selectedVariant )
-    {
-        m_grid->CommitPendingChanges( true );
+    if( m_nbPages->GetSelection() == 1 )
+        PreviewRefresh();
+    else
+        m_grid->ForceRefresh();
 
-        SCH_COMMIT     commit( m_parent );
-
-        m_dataModel->ApplyData( commit, m_templateFieldNames, currentVariant );
-
-        if( !commit.Empty() )
-        {
-            commit.Push( wxS( "Symbol Fields Table Edit" ) );  // Push clears the commit buffer.
-            m_parent->OnModify();
-        }
-
-        // Update the data model's current variant for field highlighting
-        m_dataModel->SetCurrentVariant( selectedVariant );
-        m_dataModel->UpdateReferences( m_dataModel->GetReferenceList() );
-        m_dataModel->RebuildRows();
-
-        if( m_nbPages->GetSelection() == 1 )
-            PreviewRefresh();
-        else
-            m_grid->ForceRefresh();
-
-        syncBomFmtPresetSelection();
-    }
+    updateVariantButtonStates();
+    syncBomFmtPresetSelection();
 }
 
 

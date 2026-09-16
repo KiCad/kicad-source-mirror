@@ -127,13 +127,13 @@ struct ISSUE25112_FIXTURE
         return model;
     }
 
-    void Apply( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL& aModel, const wxString& aVariantName )
+    void Apply( SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL& aModel )
     {
         TOOL_MANAGER toolMgr;
         SCH_COMMIT   commit( &toolMgr );
         TEMPLATES    templates;
 
-        aModel.ApplyData( commit, templates, aVariantName );
+        aModel.ApplyData( commit, templates );
     }
 
     LOCALE_IO                  m_locale;
@@ -155,7 +155,7 @@ BOOST_FIXTURE_TEST_CASE( SheetScopedFieldEditSurvivesApply, ISSUE25112_FIXTURE )
     const wxString newFootprint = wxS( "Resistor_SMD:R_0603_1608Metric" );
 
     model->SetValue( m_row, m_col, newFootprint );
-    Apply( *model, wxEmptyString );
+    Apply( *model );
 
     BOOST_CHECK_EQUAL( m_symbol->GetField( FIELD_T::FOOTPRINT )->GetText(), newFootprint );
 }
@@ -182,7 +182,7 @@ BOOST_FIXTURE_TEST_CASE( SheetScopedFieldClearCanBeReverted, ISSUE25112_FIXTURE 
     BOOST_CHECK( !model->IsCellClear( m_row, m_col ) );
     BOOST_CHECK( !model->IsEdited() );
 
-    Apply( *model, wxEmptyString );
+    Apply( *model );
 
     const SCH_FIELD* appliedField = m_symbol->GetField( fieldName );
     BOOST_REQUIRE( appliedField );
@@ -268,7 +268,7 @@ BOOST_FIXTURE_TEST_CASE( SheetScopedVariantEditStaysOnItsPath, ISSUE25112_FIXTUR
     BOOST_REQUIRE( baseFootprint != newFootprint );
 
     model->SetValue( m_row, m_col, newFootprint );
-    Apply( *model, variant );
+    Apply( *model );
 
     BOOST_CHECK_EQUAL( m_symbol->GetField( FIELD_T::FOOTPRINT )->GetText( &m_scopePath, variant ), newFootprint );
     BOOST_CHECK_EQUAL( m_symbol->GetField( FIELD_T::FOOTPRINT )->GetText( &m_siblingPath, variant ), baseFootprint );
@@ -288,7 +288,7 @@ BOOST_FIXTURE_TEST_CASE( SheetScopedBoardExclusionSurvivesApply, ISSUE25112_FIXT
     BOOST_REQUIRE( !m_symbol->GetExcludedFromBoard() );
 
     model->SetValue( m_row, m_col, wxS( "1" ) );
-    Apply( *model, variant );
+    Apply( *model );
 
     BOOST_CHECK( m_symbol->GetExcludedFromBoard() );
 }
@@ -303,7 +303,7 @@ BOOST_FIXTURE_TEST_CASE( UntouchedMissingPresetFieldRemainsAbsent, ISSUE25112_FI
 
     BOOST_REQUIRE( model->IsCellClear( m_row, m_col ) );
 
-    Apply( *model, wxEmptyString );
+    Apply( *model );
 
     BOOST_CHECK( m_symbol->GetField( fieldName ) == nullptr );
 }
@@ -323,7 +323,7 @@ BOOST_FIXTURE_TEST_CASE( ExplicitEmptyValueCreatesField, ISSUE25112_FIXTURE )
     BOOST_REQUIRE( !model->IsCellClear( m_row, m_col ) );
     BOOST_REQUIRE( model->IsCellEdited( m_row, m_col ) );
 
-    Apply( *model, wxEmptyString );
+    Apply( *model );
 
     const SCH_FIELD* field = m_symbol->GetField( fieldName );
     BOOST_REQUIRE( field );
@@ -349,7 +349,7 @@ BOOST_FIXTURE_TEST_CASE( ExistingEmptyFieldCanBeCleared, ISSUE25112_FIXTURE )
     BOOST_REQUIRE( model->IsCellClear( m_row, m_col ) );
     BOOST_REQUIRE( model->IsCellEdited( m_row, m_col ) );
 
-    Apply( *model, wxEmptyString );
+    Apply( *model );
 
     BOOST_CHECK( m_symbol->GetField( fieldName ) == nullptr );
 }
@@ -365,7 +365,7 @@ BOOST_FIXTURE_TEST_CASE( UserAddedColumnCreatesEmptyField, ISSUE25112_FIXTURE )
     BOOST_REQUIRE( !model->IsCellClear( m_row, m_col ) );
     BOOST_REQUIRE( model->IsCellEdited( m_row, m_col ) );
 
-    Apply( *model, wxEmptyString );
+    Apply( *model );
 
     const SCH_FIELD* field = m_symbol->GetField( fieldName );
     BOOST_REQUIRE( field );
@@ -388,7 +388,153 @@ BOOST_FIXTURE_TEST_CASE( RevertingVariantFieldCreationRestoresAbsence, ISSUE2511
     BOOST_REQUIRE( model->IsCellClear( m_row, m_col ) );
     BOOST_REQUIRE( !model->IsEdited() );
 
-    Apply( *model, wxS( "Assembly" ) );
+    Apply( *model );
 
     BOOST_CHECK( m_symbol->GetField( fieldName ) == nullptr );
+}
+
+
+// Repose #2771: refresh every instance of a moved symbol without replacing pending fields.
+BOOST_FIXTURE_TEST_CASE( RefreshPreservesStagedFieldsAcrossSharedSheetPaths, ISSUE25112_FIXTURE )
+{
+    const wxString name = GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );
+    auto           model = MakeScopedModel( wxEmptyString, name );
+    m_symbol->GetField( FIELD_T::VALUE )->SetText( wxS( "base" ) );
+    model->UpdateReferences( m_refs );
+    model->SetValue( m_row, m_col, wxS( "staged" ) );
+
+    m_symbol->SetPosition( VECTOR2I( 100, 200 ) );
+    model->UpdateReferences( m_refs );
+    BOOST_CHECK_EQUAL( model->GetValue( m_row, m_col ), wxS( "staged" ) );
+    BOOST_CHECK( model->IsEdited() );
+    Apply( *model );
+    BOOST_CHECK_EQUAL( m_symbol->GetField( FIELD_T::VALUE )->GetText(), wxS( "staged" ) );
+    BOOST_CHECK( !model->IsEdited() );
+
+    model->SetValue( m_row, m_col, wxS( "another edit" ) );
+    m_symbol->GetField( FIELD_T::VALUE )->SetText( wxS( "external" ) );
+    model->UpdateReferences( m_refs );
+    BOOST_CHECK_EQUAL( model->GetValue( m_row, m_col ), wxS( "external" ) );
+    BOOST_CHECK( !model->IsEdited() );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( RefreshPreservesFieldPresenceEditsAcrossVariantsAndPaths, ISSUE25112_FIXTURE )
+{
+    const wxString name = wxS( "PresenceAcrossVariants" );
+    auto           model = MakeScopedModel( wxS( "A" ), name );
+    m_symbol->AddField( SCH_FIELD( m_symbol, FIELD_T::USER, name ) );
+    model->UpdateReferences( m_refs );
+    model->ClearCell( m_row, m_col );
+    model->SetCurrentVariant( wxS( "B" ) );
+    model->UpdateReferences( m_refs );
+    BOOST_CHECK( model->IsCellClear( m_row, m_col ) );
+    Apply( *model );
+    BOOST_CHECK( !m_symbol->GetField( name ) );
+
+    model->SetValue( m_row, m_col, wxEmptyString );
+    model->UpdateReferences( m_refs );
+    BOOST_CHECK( !model->IsCellClear( m_row, m_col ) );
+    Apply( *model );
+    BOOST_REQUIRE( m_symbol->GetField( name ) );
+    BOOST_CHECK( m_symbol->GetField( name )->GetText().IsEmpty() );
+}
+
+
+// Repose #1699 and #4001: Add Variant must activate fresh values while retaining old edits.
+BOOST_FIXTURE_TEST_CASE( NewlyAddedVariantDoesNotReceivePreviousVariantsValues, ISSUE25112_FIXTURE )
+{
+    const wxString name = GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );
+    m_schematic->AddVariant( wxS( "A" ) );
+    auto       model = MakeScopedModel( wxS( "A" ), name );
+    SCH_FIELD* field = m_symbol->GetField( FIELD_T::VALUE );
+    field->SetText( wxS( "base" ) );
+    field->SetText( wxS( "A live" ), &m_scopePath, wxS( "A" ) );
+    model->UpdateReferences( m_refs );
+    model->SetValue( m_row, m_col, wxS( "A staged" ) );
+
+    m_schematic->AddVariant( wxS( "New" ) );
+    m_schematic->SetCurrentVariant( wxS( "New" ) );
+    model->SetCurrentVariant( wxS( "New" ) );
+    BOOST_CHECK_EQUAL( model->GetValue( m_row, m_col ), wxS( "base" ) );
+    BOOST_CHECK_EQUAL( field->GetText( &m_scopePath, wxS( "A" ) ), wxS( "A live" ) );
+    BOOST_CHECK( model->IsEdited() );
+
+    Apply( *model );
+    BOOST_CHECK_EQUAL( field->GetText( &m_scopePath, wxS( "New" ) ), wxS( "base" ) );
+    BOOST_CHECK_EQUAL( field->GetText( &m_scopePath, wxS( "A" ) ), wxS( "A staged" ) );
+    BOOST_CHECK_EQUAL( field->GetText( &m_siblingPath, wxS( "A" ) ), wxS( "base" ) );
+    BOOST_CHECK( !model->IsEdited() );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( VariantRoundTripRetainsEditsAndCancelLeavesSchematicAlone, ISSUE25112_FIXTURE )
+{
+    const wxString name = GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );
+    auto           model = MakeScopedModel( wxEmptyString, name );
+    SCH_FIELD*     field = m_symbol->GetField( FIELD_T::VALUE );
+    field->SetText( wxS( "base" ) );
+    model->UpdateReferences( m_refs );
+    model->SetCurrentVariant( wxS( "A" ) );
+    model->SetValue( m_row, m_col, wxS( "A staged" ) );
+    model->SetCurrentVariant( wxS( "B" ) );
+    model->SetValue( m_row, m_col, wxS( "B staged" ) );
+    model->SetCurrentVariant( wxS( "A" ) );
+    BOOST_CHECK_EQUAL( model->GetValue( m_row, m_col ), wxS( "A staged" ) );
+    model->SetCurrentVariant( wxS( "B" ) );
+    BOOST_CHECK_EQUAL( model->GetValue( m_row, m_col ), wxS( "B staged" ) );
+    model.reset();
+    BOOST_CHECK_EQUAL( field->GetText( &m_scopePath, wxS( "A" ) ), wxS( "base" ) );
+    BOOST_CHECK_EQUAL( field->GetText( &m_scopePath, wxS( "B" ) ), wxS( "base" ) );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( RenamingAndDeletingVariantsRetargetsPendingEdits, ISSUE25112_FIXTURE )
+{
+    const wxString name = GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );
+    auto           model = MakeScopedModel( wxEmptyString, name );
+    SCH_FIELD*     field = m_symbol->GetField( FIELD_T::VALUE );
+    field->SetText( wxS( "base" ) );
+    model->UpdateReferences( m_refs );
+    m_schematic->AddVariant( wxS( "A" ) );
+    model->SetCurrentVariant( wxS( "A" ) );
+    model->SetValue( m_row, m_col, wxS( "A staged" ) );
+    model->RenameStoredVariant( wxS( "A" ), wxS( "Renamed" ) );
+    m_schematic->RenameVariant( wxS( "A" ), wxS( "Renamed" ) );
+    BOOST_CHECK_EQUAL( model->GetCurrentVariant(), wxS( "Renamed" ) );
+    BOOST_CHECK_EQUAL( model->GetValue( m_row, m_col ), wxS( "A staged" ) );
+
+    m_schematic->AddVariant( wxS( "Deleted" ) );
+    model->SetCurrentVariant( wxS( "Deleted" ) );
+    model->SetValue( m_row, m_col, wxS( "discarded" ) );
+    model->DeleteStoredVariant( wxS( "Deleted" ) );
+    m_schematic->DeleteVariant( wxS( "Deleted" ) );
+    model->SetCurrentVariant( wxS( "Renamed" ) );
+    Apply( *model );
+
+    BOOST_CHECK_EQUAL( field->GetText( &m_scopePath, wxS( "Renamed" ) ), wxS( "A staged" ) );
+    BOOST_CHECK_EQUAL( field->GetText( &m_scopePath, wxS( "Deleted" ) ), wxS( "base" ) );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( RevertingVariantKeepsBaseEditsConsistentAcrossPaths, ISSUE25112_FIXTURE )
+{
+    const wxString name = GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );
+    auto           model = MakeScopedModel( wxEmptyString, name );
+    SCH_FIELD*     field = m_symbol->GetField( FIELD_T::VALUE );
+    field->SetText( wxS( "base" ) );
+    model->UpdateReferences( m_refs );
+    model->SetValue( m_row, m_col, wxS( "staged base" ) );
+    model->SetCurrentVariant( wxS( "A" ) );
+    model->SetValue( m_row, m_col, wxS( "discarded variant edit" ) );
+    model->RevertRow( m_row );
+    BOOST_CHECK( model->IsEdited() );
+    model->SetCurrentVariant( wxEmptyString );
+    BOOST_CHECK_EQUAL( model->GetValue( m_row, m_col ), wxS( "staged base" ) );
+
+    Apply( *model );
+    BOOST_CHECK_EQUAL( field->GetText(), wxS( "staged base" ) );
+    BOOST_CHECK_EQUAL( field->GetText( &m_scopePath, wxS( "A" ) ), wxS( "staged base" ) );
+    BOOST_CHECK_EQUAL( field->GetText( &m_siblingPath, wxS( "A" ) ), wxS( "staged base" ) );
+    BOOST_CHECK( !model->IsEdited() );
 }

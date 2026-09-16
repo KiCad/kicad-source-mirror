@@ -804,8 +804,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
         if( symbolModified )
             symbolChangeHandler( symbol );
 
-        for( const DATA_MODEL_COL& col : m_cols )
-            updateDataStoreItemFieldFromLive( symbol, col.m_fieldName );
+        acceptDataStoreItem( symbol );
     }
 
     m_edited = false;
