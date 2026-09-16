@@ -32,7 +32,11 @@
 
 namespace SCH_CONNECTIVITY
 {
-// Main-thread extraction cache. Returned entries follow CACHE_TABLE's reference lifetime.
+/**
+ * Main-thread extraction cache. Returned entries follow CACHE_TABLE's reference lifetime.
+ *
+ * @see @ref schematic_connectivity
+ */
 class INPUT_STORE
 {
 public:
@@ -127,7 +131,11 @@ public:
     }
 
     void Retain( const std::set<SCREEN_ID>& aScreens, const std::set<INST_ID>& aInstances );
-    // Force fresh extraction and geometry, retaining primitive values only for change comparison.
+    /**
+     * Force fresh extraction and geometry, retaining primitive values only for change comparison.
+     *
+     * Retained values keep their versions when extraction produces an equal value.
+     */
     void Invalidate();
     void Clear();
 

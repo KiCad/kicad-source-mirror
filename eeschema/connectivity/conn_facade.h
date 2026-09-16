@@ -43,6 +43,7 @@ public:
     bool     IsBus() const;
     bool     IsNet() const;
     // Missing or stale rows are unconnected; Connection() rejects them when acquiring a view.
+    // Inside a RENDER_SCOPE, a stale row of a live item still counts (see sch_conn_revisions_render).
     bool      IsUnconnected() const;
     int       NetCode() const;
     uint32_t  SubgraphCode() const;
@@ -113,7 +114,11 @@ struct NET_GROUP
     std::vector<NET_VIEW> instances;
 };
 
-// Model-owned source resolver. Graph stages retain only keys and extracted values.
+/**
+ * Model-owned source resolver. Graph stages retain only keys and extracted values.
+ *
+ * @see @ref schematic_connectivity for the full update, modification and overlay flows.
+ */
 class FACADE
 {
 public:
@@ -171,6 +176,9 @@ public:
 private:
     friend class PUBLICATION_HOLD;
 
+    /**
+     * Capture the text context and advance the text epoch when it or an external source changed.
+     */
     void                          updateModel( SCHEMATIC& aSchematic, const SCH_SHEET_LIST& aPaths, bool aRebuild );
     std::shared_ptr<FACADE_STATE> m_state;
 };
@@ -179,6 +187,8 @@ private:
  * Keep the last publication readable while a batch stages edits before its single commit.
  * Staging bumps screen revisions, which otherwise hides every later query on that screen.
  * Release the hold before recalculating or pushing the commit.
+ *
+ * @see @ref sch_conn_modify
  */
 class PUBLICATION_HOLD
 {

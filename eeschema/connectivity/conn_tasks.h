@@ -63,7 +63,11 @@ private:
     std::vector<std::future<void>> m_tasks;
 };
 
-// Independent ordinal writes only; preparation and cache commits stay on the caller thread.
+/**
+ * Independent ordinal writes only; preparation and cache commits stay on the caller thread.
+ *
+ * Workers must not intern SESSION_KEYS or take CACHE_VERSIONS, because neither is synchronized.
+ */
 template <typename FUNCTION>
 void ParallelFor( size_t aCount, FUNCTION&& aFunction, thread_pool& aPool = GetKiCadThreadPool() )
 {

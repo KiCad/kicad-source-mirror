@@ -42,16 +42,22 @@ struct COMPONENT_CONTENT
     bool                    operator==( const COMPONENT_CONTENT& ) const = default;
 };
 
+/**
+ * One published net or bus with its identity. The content pointer stays the same while the
+ * component cache version of its node does not change.
+ */
 struct PUBLISHED_COMPONENT
 {
     std::shared_ptr<const COMPONENT_CONTENT> content;
-    std::optional<SLOT_KEY>                  nameSlot;
-    NAME_ID                                  baseName = INVALID_ID;
+    std::optional<SLOT_KEY>                  nameSlot; ///< Selected naming slot, lowest parent suffix first.
+    NAME_ID                                  baseName = INVALID_ID; ///< Name before the suffix.
+
+    /** Bucket for duplicate names. A vector bus uses its scope and prefix, all others the full base name. */
     NAME_ID                                  collisionBase = INVALID_ID;
-    NAME_ID                                  name = INVALID_ID;
-    uint32_t                                 suffix = 0;
-    int                                      netCode = 0;
-    uint32_t                                 subgraphCode = 0;
+    NAME_ID                                  name = INVALID_ID; ///< Unique name, invalid without a claim.
+    uint32_t                                 suffix = 0;        ///< Zero for the holder of the base name.
+    int                                      netCode = 0;       ///< Zero for a bus or without a claim.
+    uint32_t                                 subgraphCode = 0;  ///< Zero without a claim.
 
     bool operator==( const PUBLISHED_COMPONENT& aOther ) const
     {
@@ -62,8 +68,12 @@ struct PUBLISHED_COMPONENT
     }
 };
 
+/**
+ * Published connection of one item on one sheet instance.
+ */
 struct ITEM_RESULT
 {
+    /** Bus claim of an island that has the canonical shape but a different name. */
     struct BUS_SOURCE
     {
         ITEM_KEY                          source;
@@ -75,10 +85,10 @@ struct ITEM_RESULT
     NODE_ID                           component = INVALID_ID;
     KIND                              kind = KIND::SIGNAL;
     CONNECTION_TYPE                   itemType{};
-    NAME_ID                           name = INVALID_ID;
-    NAME_ID                           localName = INVALID_ID;
-    NAME_ID                           fullLocalName = INVALID_ID;
-    std::optional<ITEM_KEY>           driver;
+    NAME_ID                           name = INVALID_ID;          ///< Published name with its suffix.
+    NAME_ID                           localName = INVALID_ID;     ///< Best island claim, or the group winner.
+    NAME_ID                           fullLocalName = INVALID_ID; ///< localName with the component suffix.
+    std::optional<ITEM_KEY>           driver;                     ///< Source of the best component claim.
     int                               netCode = 0;
     uint32_t                          subgraphCode = 0;
     // Null denotes an empty class set; ownership does not retain component membership.
@@ -87,10 +97,19 @@ struct ITEM_RESULT
     bool operator==( const ITEM_RESULT& aOther ) const;
 };
 
-// If aSchema is provided, aName must be the exact text it was parsed from.
+/**
+ * Add "_N" to aName. A group bus with a prefix gets the suffix after the prefix, all other names at
+ * the end. A zero suffix returns aName. If aSchema is provided, aName must be the exact text it was
+ * parsed from.
+ */
 wxString ApplyNameSuffix( const wxString& aName, const BUS_SCHEMA* aSchema, uint32_t aSuffix );
 
-// Main-thread publication. Previous memberships provide suffix, code and succession continuity.
+/**
+ * Main-thread publication. Previous memberships provide suffix, code and succession continuity.
+ * Net and subgraph codes never repeat during the life of the publication, also across Clear().
+ *
+ * @see @ref schematic_connectivity
+ */
 class PUBLICATION
 {
 public:
@@ -132,10 +151,11 @@ private:
     using BUS_SIGNATURES = std::map<NODE_ID, EQUIVALENT_BUSES::iterator>;
     using SLOT_INPUTS = std::map<SLOT_KEY, const SLOT_INPUT*, KEY_LESS>;
 
+    /** Shared row of one island record. Kept while the record version and row values are equal. */
     struct ROW_INPUT
     {
-        uint64_t          version = 0;
-        ITEM_RESULT       connection;
+        uint64_t          version = 0; ///< Record version.
+        ITEM_RESULT       connection;  ///< Row of every island item except the driver override.
         std::vector<KIID> items;
 
         // An island driver keeps its own local name when a same-sheet merge renames its other items.
@@ -179,7 +199,7 @@ private:
     COMPONENTS                  m_components;
     std::map<NODE_ID, uint64_t> m_versions;
     CHANGE_SET                  m_changes;
-    int                         m_nextNetCode = 1;
-    uint32_t                    m_nextSubgraphCode = 1;
+    int                         m_nextNetCode = 1;      ///< Never reset, so codes do not repeat.
+    uint32_t                    m_nextSubgraphCode = 1; ///< Never reset, so codes do not repeat.
 };
 } // namespace SCH_CONNECTIVITY

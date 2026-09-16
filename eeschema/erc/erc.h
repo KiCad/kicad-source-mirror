@@ -49,6 +49,13 @@ namespace SCH_CONNECTIVITY
 struct MULTI_UNIT_GROUP;
 }
 
+/**
+ * Runs the electrical rules checks and adds a SCH_MARKER for each violation.
+ *
+ * With ADVANCED_CFG::m_ConnectivityEngine on, most checks read the published connectivity through
+ * SCHEMATIC::Connectivity() and the SCH_CONNECTIVITY::ENGINE diagnostic accessors, and some still read
+ * the live model. Otherwise the checks read CONNECTION_GRAPH and the live model.
+ */
 class ERC_TESTER
 {
 public:

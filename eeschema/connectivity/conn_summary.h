@@ -23,19 +23,24 @@
 
 namespace SCH_CONNECTIVITY
 {
+/**
+ * Fold state of one net. SUMMARY::Join() is associative and commutative.
+ */
 struct SUMMARY
 {
-    std::optional<CLAIM>                   best;
-    std::array<std::optional<ITEM_KEY>, 2> pinWitnesses;
-    std::optional<ITEM_KEY>                noConnect;
-    std::vector<NAME_ID>                   netclasses;
+    std::optional<CLAIM>                   best;         ///< Greatest claim by CLAIM_LESS.
+    std::array<std::optional<ITEM_KEY>, 2> pinWitnesses; ///< The two smallest witness pins.
+    std::optional<ITEM_KEY>                noConnect;    ///< The smallest no-connect marker.
+    std::vector<NAME_ID>                   netclasses;   ///< Sorted by name.
 
     bool operator==( const SUMMARY& ) const = default;
 
-    // Inputs are canonical folds from one source snapshot; each source has one claim.
+    /** Inputs are canonical folds from one source snapshot. Each source has one claim. */
     static SUMMARY Join( const SUMMARY& aLeft, const SUMMARY& aRight, const SESSION_KEYS& aKeys );
 };
 
-// Consumes a canonical BuildIslandRecord result; strong names and counts remain island ERC inputs.
+/**
+ * Consumes a canonical BuildIslandRecord() result. Strong names and counts remain island ERC inputs.
+ */
 SUMMARY MakeSummary( const RECORD_KEY& aKey, const ISLAND_RECORD& aRecord );
 } // namespace SCH_CONNECTIVITY

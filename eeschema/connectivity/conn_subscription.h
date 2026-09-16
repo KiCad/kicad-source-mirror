@@ -28,7 +28,10 @@ struct FACADE_STATE;
 struct CHANGE_SET;
 class FACADE;
 
-// Main-thread registration owner; resetting or destroying it disconnects the listener.
+/**
+ * Main-thread registration owner. Resetting or destroying it disconnects the listener. A listener
+ * can reset any subscription, and the facade skips a listener that was reset during a batch.
+ */
 class SUBSCRIPTION
 {
 public:

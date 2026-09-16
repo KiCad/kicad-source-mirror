@@ -54,9 +54,12 @@ struct SCREEN_GEOMETRY
 
 SCREEN_GEOMETRY GeometryOf( const SCREEN_FACTS& aFacts );
 
+/**
+ * The smallest set of items on one screen that the drawing connects.
+ */
 struct ISLAND
 {
-    KIID                               anchor = niluuid;
+    KIID                               anchor = niluuid; ///< The smallest KIID in items, which names the island.
     bool                               hasWire = false;
     bool                               hasBusLine = false;
     std::vector<KIID>                  vertices;
@@ -68,6 +71,7 @@ struct ISLAND
     bool                               operator==( const ISLAND& ) const = default;
 };
 
+/** The islands of one screen and unit signature, sorted by anchor. */
 struct SCREEN_ISLANDS
 {
     std::vector<ISLAND> islands;

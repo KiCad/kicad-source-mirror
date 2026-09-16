@@ -31,53 +31,87 @@
 #include <variant>
 #include <vector>
 
+/**
+ * Value keys and the key session of the schematic connectivity engine.
+ *
+ * @see @ref sch_conn_glossary
+ */
 namespace SCH_CONNECTIVITY
 {
-using INST_ID = uint32_t;
-using NAME_ID = uint32_t;
-using NODE_ID = uint32_t;
-using SCREEN_ID = uint64_t;
+using INST_ID = uint32_t;   ///< Session handle of a sheet instance KIID_PATH.
+using NAME_ID = uint32_t;   ///< Session handle of a name, ordered by UTF-8 value through NAME_LESS.
+using NODE_ID = uint32_t;   ///< Session handle of a NODE_KEY graph node.
+using SCREEN_ID = uint64_t; ///< Process-local SCH_SCREEN::ConnectivityId(), never a file UUID.
+
+/** Marks an unset handle. The session never gives this value to an interned key. */
 constexpr uint32_t INVALID_ID = std::numeric_limits<uint32_t>::max();
 
+/**
+ * The electrical type of a record or component.
+ *
+ * @see @ref sch_conn_glossary
+ */
 enum class KIND : uint8_t
 {
-    SIGNAL,
-    BUNDLE
-};
-enum class SCOPE : uint8_t
-{
-    SHEET,
-    GLOBAL,
-    PORT
+    SIGNAL, ///< A net.
+    BUNDLE  ///< A bus.
 };
 
+/**
+ * The namespace in which a NAME_KEY joins records.
+ */
+enum class SCOPE : uint8_t
+{
+    SHEET,  ///< Joins names in one instance only.
+    GLOBAL, ///< Joins names in all instances.
+    PORT    ///< Joins a sheet pin to the hierarchical labels of its child instance, for one kind.
+};
+
+/**
+ * One item or pin in one sheet instance.
+ *
+ * A shared screen has one key for each item in each instance. The key holds no model pointer, so it stays
+ * valid after the editor deletes the item.
+ */
 struct ITEM_KEY
 {
-    KIID    item = niluuid;
-    INST_ID inst = INVALID_ID;
+    KIID    item = niluuid;     ///< The item or pin KIID.
+    INST_ID inst = INVALID_ID;  ///< The sheet instance that shows the item.
     bool    operator==( const ITEM_KEY& ) const = default;
 };
 
+/**
+ * One island in one sheet instance.
+ */
 struct RECORD_KEY
 {
-    INST_ID inst = INVALID_ID;
-    KIID    anchor = niluuid;
+    INST_ID inst = INVALID_ID;  ///< The sheet instance of the record.
+    KIID    anchor = niluuid;   ///< ISLAND::anchor, the smallest item KIID in the island.
     bool    operator==( const RECORD_KEY& ) const = default;
 };
 
+/**
+ * The graph node of one island record.
+ */
 struct RECORD_NODE
 {
     RECORD_KEY record;
-    KIND       kind = KIND::SIGNAL;
+    KIND       kind = KIND::SIGNAL; ///< The kind of the record, which selects its stratum.
     bool       operator==( const RECORD_NODE& ) const = default;
 };
 
+/**
+ * The graph node of one name in one scope. Records that emit equal name keys join.
+ *
+ * Equality depends on the scope. GLOBAL ignores inst and kind. SHEET compares inst and ignores kind. PORT
+ * compares inst and kind. SESSION_KEYS::InternNode() normalizes the ignored fields before it interns a key.
+ */
 struct NAME_KEY
 {
     SCOPE   scope = SCOPE::SHEET;
-    INST_ID inst = INVALID_ID;
-    NAME_ID text = INVALID_ID;
-    KIND    kind = KIND::SIGNAL;
+    INST_ID inst = INVALID_ID;   ///< The sheet instance, or the child instance of a sheet pin for PORT.
+    NAME_ID text = INVALID_ID;   ///< The resolved name.
+    KIND    kind = KIND::SIGNAL; ///< The record kind. Only PORT compares it.
 
     bool operator==( const NAME_KEY& aOther ) const
     {
@@ -86,18 +120,27 @@ struct NAME_KEY
     }
 };
 
+/**
+ * One member position of a bus.
+ */
 struct SLOT_KEY
 {
-    ITEM_KEY bundleDriver;
-    uint32_t leaf = 0;
+    ITEM_KEY bundleDriver;  ///< The source item of the claim that defines the leaf order.
+    uint32_t leaf = 0;      ///< The index into BUS_SCHEMA::leaves of that claim.
     bool     operator==( const SLOT_KEY& ) const = default;
 };
 
+/**
+ * Any node of the union-find graph. Values sort first by variant index, so record nodes come first.
+ */
 using NODE_KEY = std::variant<RECORD_NODE, NAME_KEY, SLOT_KEY>;
 
 /**
  * Session IDs are dense handles, never a canonical ordering. Keys contain no model pointers.
  * Intern on the main thread before worker stages; values and their addresses remain stable.
+ *
+ * A table throws std::overflow_error instead of giving out INVALID_ID, and it then stays unchanged. The
+ * tables never release a value, so ENGINE::Clear() keeps every handle valid.
  */
 class SESSION_KEYS
 {
@@ -198,12 +241,16 @@ private:
     INTERN_TABLE<NODE_KEY, std::unordered_map<NODE_KEY, uint32_t, NODE_HASH>> m_nodes;
 };
 
+/** Orders name handles by UTF-8 value. */
 struct NAME_LESS
 {
     const SESSION_KEYS* keys;
     bool                operator()( NAME_ID aLeft, NAME_ID aRight ) const { return keys->NameLess( aLeft, aRight ); }
 };
 
+/**
+ * Orders keys by value through SESSION_KEYS::Less(). Use it wherever order is visible or affects a result.
+ */
 struct KEY_LESS
 {
     const SESSION_KEYS& keys;

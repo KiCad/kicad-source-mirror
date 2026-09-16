@@ -28,7 +28,11 @@
 
 namespace SCH_CONNECTIVITY
 {
-// One sequence for all cache tables for the lifetime of an engine session. Main thread only.
+/**
+ * One sequence for all cache tables for the lifetime of an engine session. Main thread only.
+ *
+ * Versions start at one and never repeat, so zero never names a cached value.
+ */
 class CACHE_VERSIONS
 {
 public:
@@ -49,6 +53,9 @@ private:
 };
 
 
+/**
+ * Versioned value table. Set() keeps the old version for an equal value, which stops change propagation.
+ */
 template <typename KEY, typename VALUE, typename LESS = std::less<KEY>>
 class CACHE_TABLE
 {
@@ -67,7 +74,9 @@ public:
     CACHE_TABLE( const CACHE_TABLE& ) = delete;
     CACHE_TABLE& operator=( const CACHE_TABLE& ) = delete;
 
-    // Entry references survive unchanged writes, but not replacement or erasure of their key.
+    /**
+     * Entry references survive unchanged writes, but not replacement or erasure of their key.
+     */
     const ENTRY* Find( const KEY& aKey ) const { return Find<KEY>( aKey ); }
 
     template <typename LOOKUP_KEY>

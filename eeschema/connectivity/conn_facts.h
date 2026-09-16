@@ -59,6 +59,11 @@ enum class PORT_KIND
     ENTRY_BUS
 };
 
+/**
+ * One connection point of an item.
+ *
+ * @see @ref sch_conn_glossary
+ */
 struct PORT_FACT
 {
     VECTOR2I  position;
@@ -87,11 +92,16 @@ struct PIN_FACT
     bool               operator==( const PIN_FACT& ) const = default;
 };
 
+/**
+ * A value copy of one connectable item, or of one group of pins that share a number and a position.
+ *
+ * @see @ref sch_conn_glossary
+ */
 struct ITEM_FACT
 {
-    KIID                   id = niluuid;
+    KIID                   id = niluuid;         ///< The item KIID, or the smallest member KIID of a pin group.
     KICAD_T                type = TYPE_NOT_INIT;
-    KIID                   owner = niluuid;
+    KIID                   owner = niluuid;      ///< The parent symbol or sheet, or niluuid.
     std::vector<PORT_FACT> ports;
     std::optional<SEG>     segment;
     int                    lineWidth = 0;
@@ -232,6 +242,11 @@ struct LIBRARY_SYMBOL_FACT
 LIBRARY_SYMBOL_FACT ExtractLibrarySymbolFact( const LIB_SYMBOL& aSymbol );
 using LIBRARY_SYMBOL_FACTS = std::vector<LIBRARY_SYMBOL_FACT>;
 
+/**
+ * The value copy of one screen. All instances of the screen share it.
+ *
+ * @see @ref sch_conn_glossary
+ */
 struct SCREEN_FACTS
 {
     std::shared_ptr<const LIBRARY_SYMBOL_FACTS> librarySymbols;
@@ -324,6 +339,11 @@ struct SIMULATION_MODEL_FACT
 std::vector<SIMULATION_MODEL_FACT> ExtractSimulationModelFacts( const SCH_SHEET_PATH& aPath,
                                                                const wxString& aVariantName );
 
+/**
+ * The text and unit data that one sheet instance resolves for the items of its screen.
+ *
+ * @see @ref sch_conn_glossary
+ */
 struct INSTANCE_FACTS
 {
     std::vector<std::pair<KIID, wxString>> footprints;

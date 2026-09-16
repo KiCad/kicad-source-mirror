@@ -629,6 +629,11 @@ public:
 
     bool IsConnectivityDirty() const { return m_connectivity_dirty; }
 
+    /**
+     * Set the dirty flag.  Setting it also bumps the parent screen revision for a connectivity
+     * source, so an edit outside SCH_COMMIT can use this call.  Clearing it does not bump.  The
+     * bump follows the draw list check of invalidateConnectivity().
+     */
     void SetConnectivityDirty( bool aDirty = true );
 
     /**
@@ -770,7 +775,9 @@ protected:
 
     /**
      * Bump the parent screen's connectivity revision when this item, or the item owning it as a
-     * child, is on its draw list.
+     * child, is on its draw list.  Call it from each setter that changes captured state.
+     *
+     * @param aChangedType is passed to SCH_SCREEN::BumpConnectivityRevision().
      */
     void invalidateConnectivity( KICAD_T aChangedType = TYPE_NOT_INIT );
 

@@ -24,17 +24,24 @@
 
 namespace SCH_CONNECTIVITY
 {
+/**
+ * Derived state of one net before publication.
+ */
 struct SIGNAL_RESULT
 {
     SUMMARY summary;
-    // Driverless components have no base name; publication assigns the empty name and code zero.
+
+    /**
+     * CLAIM::ncName for an unconnected pin net, else CLAIM::fullName. Driverless components have no
+     * base name. Publication assigns them the empty name and net code zero.
+     */
     NAME_ID                 baseName = INVALID_ID;
     std::vector<ITEM_KEY>   items;
     std::vector<SLOT_KEY>   slots;
-    std::optional<SLOT_KEY> nameSlot;
+    std::optional<SLOT_KEY> nameSlot; ///< Bus member slot that names the net. Ties take the smallest key.
 };
 
-// Fold current signal inputs and retain canonical membership for publication and succession.
+/** Fold current signal inputs and retain canonical membership for publication and succession. */
 SIGNAL_RESULT DeriveSignal( const PARTITION& aPartition, const RECORD_STORE::RECORD_CACHE& aRecords,
                             const SLOT_STORE::SLOT_CACHE& aSlots, const SESSION_KEYS& aKeys );
 } // namespace SCH_CONNECTIVITY

@@ -532,11 +532,13 @@ public:
     bool m_IncrementalConnectivity;
 
     /**
-     * Run experimental schematic connectivity shadow updates and migrated consumers.
+     * Use the schematic connectivity engine instead of CONNECTION_GRAPH.
+     *
+     * See @ref schematic_connectivity.
      *
      * Setting name: "ConnectivityEngine"
      * Valid values: 0 or 1
-     * Default value: 0
+     * Default value: 1
      */
     bool m_ConnectivityEngine;
 

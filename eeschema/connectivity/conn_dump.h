@@ -29,10 +29,11 @@ class FACADE;
 
 /**
  * Canonical, pointer-free connectivity rows for migration and rebuild comparisons.
- * Session-local net and subgraph codes are deliberately omitted. The legacy <NO NET>
+ * Session-local net and subgraph codes are deliberately omitted. The legacy `<NO NET>`
  * placeholder, including its sheet prefix, is normalized only for driverless connections.
  */
 std::string Dump( SCHEMATIC& aSchematic );
-// Same row format from a current facade publication, with isolated netclass resolution.
+
+/** Same row format from a current facade publication, with isolated netclass resolution. */
 std::string Dump( SCHEMATIC& aSchematic, const FACADE& aFacade );
 }

@@ -31,6 +31,9 @@ class FACADE;
 
 using PREVIEW_NET_CODES = std::unordered_map<const SCH_ITEM*, std::optional<int>>;
 
-// Owned local net assignments for advisory drag feedback; unavailable rows remain unknown.
+/**
+ * Owned local net assignments for advisory drag feedback; unavailable rows remain unknown.
+ * Call before the drag stages its first edit, because staging hides the screen's published rows.
+ */
 PREVIEW_NET_CODES CapturePreviewNetCodes( const FACADE& aFacade, const SCH_SHEET_PATH& aPath );
 } // namespace SCH_CONNECTIVITY

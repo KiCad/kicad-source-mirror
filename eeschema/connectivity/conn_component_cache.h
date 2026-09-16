@@ -30,7 +30,11 @@
 
 namespace SCH_CONNECTIVITY
 {
-// Cache current component evaluations by exact node/version identity, within one stratum and key session.
+/**
+ * Cache current component evaluations by exact node/version identity, within one stratum and key session.
+ *
+ * @see @ref sch_conn_modify
+ */
 template <typename VALUE>
 class COMPONENT_CACHE
 {

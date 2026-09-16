@@ -26,7 +26,10 @@ namespace SCH_CONNECTIVITY
 {
 using TEXT_ENVIRONMENT = TEXT_EVAL::ENVIRONMENT;
 
-// Excludes derived graph text and shares dynamic source values through nested resolvers.
+/**
+ * Excludes derived graph text and shares dynamic source values through nested resolvers.
+ * Model reads made while the scope is active must not depend on published connectivity.
+ */
 class INPUT_TEXT_SCOPE
 {
 public:
@@ -53,8 +56,6 @@ private:
  * until the next recalculation. Inside this scope, the facade still serves the last published row
  * of an item on a changed screen, if the screen is alive and still holds the item. Engine input
  * capture ignores the scope, and every read outside it stays strict.
- *
- * @see @ref sch_conn_revisions_render
  */
 class RENDER_SCOPE
 {

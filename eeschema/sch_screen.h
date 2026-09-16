@@ -174,11 +174,27 @@ public:
     void IncRefCount();
     int GetRefCount() const                                 { return m_refCount; }
 
+    /**
+     * The only change signal that the connectivity engine reads from this screen. Every change to
+     * captured state must increment it, or the engine serves stale connectivity.
+     */
     uint64_t ConnectivityRevision() const { return m_connectivityRevision; }
+
+    /** Changes with every bump except a wire-only bump, so wire edits keep cached text. */
     uint64_t ConnectivitySymbolRevision() const { return m_connectivitySymbolRevision; }
+
+    /**
+     * Increment the connectivity revisions of this screen.
+     *
+     * @param aChangedType is the type of the changed item.  Pass SCH_LINE_T only when no other item
+     *                     changed, because a wire bump keeps the symbol revision.
+     */
     void BumpConnectivityRevision( KICAD_T aChangedType = TYPE_NOT_INIT );
 
-    // Markers, bitmaps, plain shapes, graphic lines and groups carry nothing captured by connectivity.
+    /**
+     * Markers, bitmaps, plain shapes, graphic lines and groups carry nothing captured by connectivity.
+     * Changes to these items do not bump the revision.
+     */
     static bool IsConnectivitySource( const SCH_ITEM* aItem );
 
     /// Process-local lifetime identity; file UUIDs can be shared by distinct screens.
@@ -313,7 +329,10 @@ public:
      */
     void Update( SCH_ITEM* aItem, bool aUpdateLibSymbol = true );
 
-    // Refresh display bounds only; the item's source and membership must be unchanged.
+    /**
+     * Refresh display bounds only; the item's source and membership must be unchanged.
+     * This does not bump the connectivity revision.
+     */
     void UpdateDisplayBounds( SCH_ITEM* aItem );
 
     /**

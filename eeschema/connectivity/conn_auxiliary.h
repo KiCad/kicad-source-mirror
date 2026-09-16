@@ -44,14 +44,16 @@ struct RULE_AREA_RESULT
     bool                 operator==( const RULE_AREA_RESULT& ) const = default;
 };
 
-// Source-keyed publication independent of electrical component identity.
+/**
+ * Source-keyed publication independent of electrical component identity.
+ */
 class AUXILIARY
 {
 public:
     struct ISLAND_ENTRY
     {
-        uint64_t   islandVersion = 0;
-        uint64_t   recordVersion = 0;
+        uint64_t   islandVersion = 0; ///< Geometry version of the screen islands.
+        uint64_t   recordVersion = 0; ///< Version of the electrical record of the island.
         ISLAND_AUX value;
     };
     struct AREA_ENTRY
@@ -67,6 +69,12 @@ public:
     using NEIGHBOR_INDEX = std::map<ITEM_KEY, std::vector<KIID>, KEY_LESS>;
 
     explicit AUXILIARY( SESSION_KEYS& aKeys );
+
+    /**
+     * Publish the changed islands and rule areas. Add their items, the items of new instances and
+     * the items with changed sources or text to aChanges, then sort and deduplicate the item, island
+     * and rule area lists.
+     */
     void Update( std::span<const FRAME_INSTANCE> aFrame, const INPUT_STORE& aInputs,
                  const RECORD_STORE::RECORD_CACHE& aRecords, CHANGE_SET& aChanges );
     void Clear();

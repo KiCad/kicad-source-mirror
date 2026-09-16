@@ -24,6 +24,10 @@
 
 namespace SCH_CONNECTIVITY
 {
-// Main-thread node interning for one record stratum. Name vertices receive version zero.
+/**
+ * Main-thread node interning for one record stratum. Name vertices receive version zero.
+ *
+ * Names appear only as edge targets, so PARTITIONER::Build() assigns their zero version.
+ */
 std::vector<NODE_INPUT> RecordNodes( const RECORD_STORE::RECORD_CACHE& aRecords, KIND aKind, SESSION_KEYS& aKeys );
 } // namespace SCH_CONNECTIVITY

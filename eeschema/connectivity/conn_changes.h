@@ -23,28 +23,41 @@
 
 namespace SCH_CONNECTIVITY
 {
+/** Difference between the previous and the current net name to netclass map. */
 struct NETCLASS_DELTA
 {
+    /** Names whose netclass list is new or different, in name order, with the new list. */
     std::vector<std::pair<NAME_ID, std::vector<NAME_ID>>> assigned;
-    std::vector<NAME_ID>                                  removed;
+    std::vector<NAME_ID>                                  removed; ///< Names that no longer have netclasses.
     bool                                                  Empty() const { return assigned.empty() && removed.empty(); }
 };
 
+/**
+ * Difference between two publications. PUBLICATION::Update() makes a new change set on each
+ * update. FACADE::Recalculate() sends a copy to subscribers, with display state changes added to
+ * changedItems.
+ */
 struct CHANGE_SET
 {
+    /** Old and new name of each one to one succession group whose name changed. */
     std::vector<std::pair<NAME_ID, NAME_ID>>              renamedNets;
-    std::vector<std::pair<std::vector<NAME_ID>, NAME_ID>> mergedNets;
-    std::vector<std::pair<NAME_ID, std::vector<NAME_ID>>> splitNets;
-    std::vector<NAME_ID>                                  netsAdded;
-    std::vector<NAME_ID>                                  netsRemoved;
-    // Old and current names whose membership or presentation inputs changed.
+    std::vector<std::pair<std::vector<NAME_ID>, NAME_ID>> mergedNets; ///< Old names and the one new name.
+    std::vector<std::pair<NAME_ID, std::vector<NAME_ID>>> splitNets;  ///< One old name and the new names.
+    std::vector<NAME_ID>                                  netsAdded;  ///< New names of other succession groups.
+    std::vector<NAME_ID>                                  netsRemoved; ///< Old names of other succession groups.
+
+    /**
+     * Old and current names whose membership or presentation inputs changed, with their bus
+     * dependents. The net navigator rebuilds only these nodes.
+     */
     std::vector<NAME_ID>                                  netsChanged;
 
+    /** Items whose row, island, rule area, source or text changed. The facade adds display changes. */
     std::vector<ITEM_KEY>   changedItems;
-    std::vector<ITEM_KEY>   driverChangedItems;
+    std::vector<ITEM_KEY>   driverChangedItems; ///< Items whose ITEM_RESULT::driver changed or was removed.
     NETCLASS_DELTA          netclasses;
-    std::vector<RECORD_KEY> changedIslands;
-    std::vector<ITEM_KEY>   changedRuleAreas;
+    std::vector<RECORD_KEY> changedIslands;   ///< Removed, replaced and new island keys.
+    std::vector<ITEM_KEY>   changedRuleAreas; ///< Removed, replaced and new rule area keys.
 
     bool Empty() const
     {

@@ -31,6 +31,10 @@ struct NODE_INPUT
     std::vector<NODE_ID> edges;
 };
 
+/**
+ * Exact identity of one connected component. Edges are not part of it, because they change only
+ * membership, which the node list records. Evaluators must therefore read nodes and never edges.
+ */
 struct PARTITION
 {
     NODE_ID                                   anchor = INVALID_ID;
@@ -39,7 +43,11 @@ struct PARTITION
     bool                                      operator==( const PARTITION& ) const = default;
 };
 
-// Fresh connectivity for one stratum. Scratch arrays retain capacity, never old unions.
+/**
+ * Fresh connectivity for one stratum. Scratch arrays retain capacity, never old unions.
+ *
+ * @see @ref sch_conn_modify for why every update partitions all nodes.
+ */
 class PARTITIONER
 {
 public:

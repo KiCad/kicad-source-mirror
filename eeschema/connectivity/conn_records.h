@@ -24,7 +24,11 @@
 
 namespace SCH_CONNECTIVITY
 {
-// Main-thread island record preparation and cache writes. Record folding consumes only owned values.
+/**
+ * Main-thread island record preparation and cache writes. Record folding consumes only owned values.
+ *
+ * @see @ref schematic_connectivity
+ */
 class RECORD_STORE
 {
 public:
@@ -45,6 +49,7 @@ public:
     }
 
 private:
+    /** Input versions and scope that produced the current source claims of one instance. */
     struct PREPARED_INSTANCE
     {
         uint64_t                                      sourceVersion;
@@ -55,6 +60,7 @@ private:
         std::vector<KIID>                             items;
     };
 
+    /** Everything BuildIslandRecord() reads, as island flags and source claim versions. */
     struct RECORD_INPUT
     {
         bool                                   hasWire;
