@@ -105,7 +105,7 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::cellUsesResolvedTextRenderer( int aRow, int a
     wxCHECK( aCol >= 0 && aCol < GetNumberCols(), false );
 
     return !ColIsItemIdentifier( aCol ) && !ColIsQuantity( aCol ) && !ColIsItemNumber( aCol )
-           && IsGeneratedValue( GetValue( aRow, aCol ) );
+           && ( ColIsComputed( aCol ) || IsGeneratedValue( GetValue( aRow, aCol ) ) );
 }
 
 
@@ -163,7 +163,7 @@ wxGridCellAttr* FIELDS_TABLE_DATA_MODEL_BASE::cloneUrlEditorAttr()
 
 wxGridCellAttr* FIELDS_TABLE_DATA_MODEL_BASE::applyFieldPresenceRenderer( wxGridCellAttr* aAttr, int aRow, int aCol )
 {
-    if( !IsCellClear( aRow, aCol ) || ColIsAttribute( aCol ) )
+    if( !IsCellClear( aRow, aCol ) || ColIsAttribute( aCol ) || ColIsComputed( aCol ) )
         return aAttr;
 
     wxGridCellAttr* stripedAttr = aAttr ? aAttr->Clone() : new wxGridCellAttr;
