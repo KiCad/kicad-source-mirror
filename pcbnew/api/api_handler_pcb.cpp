@@ -70,7 +70,9 @@
 #include <jobs/job_export_pcb_ps.h>
 #include <jobs/job_export_pcb_stats.h>
 #include <jobs/job_export_pcb_svg.h>
+#include <jobs/job_export_pcb_png.h>
 #include <pcb_plot_params.h>
+#include <plotters/plotter_png.h>
 #include <jobs/job_pcb_render.h>
 #include <layer_ids.h>
 #include <netlist_reader/board_netlist_updater.h>
@@ -174,6 +176,8 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDI
             &API_HANDLER_PCB::handleRunBoardJobExportPdf );
     registerHandler<RunBoardJobExportPs, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportPs );
+    registerHandler<RunBoardJobExportPng, types::RunJobResponse>(
+            &API_HANDLER_PCB::handleRunBoardJobExportPng );
     registerHandler<RunBoardJobExportGerbers, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportGerbers );
     registerHandler<RunBoardJobExportDrill, types::RunJobResponse>(
@@ -2461,6 +2465,52 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportPs
     job.m_YScaleAdjust = aCtx.Request.y_scale_adjust();
     job.m_forceA4 = aCtx.Request.force_a4();
     job.m_useGlobalSettings = aCtx.Request.use_global_settings();
+
+    return ExecuteBoardJob( pcbContext(), job );
+}
+
+
+HANDLER_RESULT<types::RunJobResponse>
+API_HANDLER_PCB::handleRunBoardJobExportPng( const HANDLER_CONTEXT<RunBoardJobExportPng>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( HANDLER_RESULT<bool> validation = validateDocument( aCtx.Request.job_settings().document() ); !validation )
+        return tl::unexpected( validation.error() );
+
+    JOB_EXPORT_PCB_PNG job;
+    job.m_filename = pcbContext()->GetCurrentFileName();
+    job.SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
+
+    if( std::optional<ApiResponseStatus> err = ApplyBoardPlotSettings( aCtx.Request.plot_settings(), job ) )
+        return tl::unexpected( *err );
+
+    if( std::optional<ApiResponseStatus> paginationError =
+                ValidatePaginationModeForSingleOrPerFile( aCtx.Request.page_mode(), "RunBoardJobExportPng" ) )
+    {
+        return tl::unexpected( *paginationError );
+    }
+
+    job.m_genMode = FromProtoEnum<JOB_EXPORT_PCB_PNG::GEN_MODE>( aCtx.Request.page_mode() );
+
+    if( aCtx.Request.has_dpi() )
+    {
+        int dpi = aCtx.Request.dpi();
+
+        if( dpi < MIN_PNG_DPI || dpi > MAX_PNG_DPI )
+        {
+            ApiResponseStatus status;
+            status.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            status.set_error_message( fmt::format( "dpi must be between {} and {}", MIN_PNG_DPI, MAX_PNG_DPI ) );
+            return tl::unexpected( status );
+        }
+
+        job.m_dpi = dpi;
+    }
+
+    // Unknown -> default AA on
+    job.m_antialias = aCtx.Request.antialiasing() != types::AntialiasingMode::AAM_NONE;
 
     return ExecuteBoardJob( pcbContext(), job );
 }

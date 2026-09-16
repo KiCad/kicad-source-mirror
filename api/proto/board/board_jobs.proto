@@ -566,3 +566,20 @@ message RunBoardJobExportStats
     bool subtract_holes_from_board_area = 5;
     bool subtract_holes_from_copper_areas = 6;
 }
+
+// Plots board layers to a PNG file. Returns RunJobResponse.
+message RunBoardJobExportPng
+{
+    kiapi.common.types.RunJobSettings job_settings = 1;
+
+    BoardPlotSettings plot_settings = 2;
+
+    // Range 72-2400.  If unspecified, will use the GUI default resolution (300 DPI).
+    optional int32 dpi = 3;
+
+    // If unspecified, anti-aliasing will follow the GUI default (enabled)
+    kiapi.common.types.AntialiasingMode antialiasing = 4;
+
+    // Supports BJPM_ALL_LAYERS_ONE_PAGE and BJPM_EACH_LAYER_OWN_FILE.
+    BoardJobPaginationMode page_mode = 5;
+}

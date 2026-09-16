@@ -45,6 +45,7 @@
 #include <jobs/job_export_pcb_ps.h>
 #include <jobs/job_export_pcb_stats.h>
 #include <jobs/job_export_pcb_svg.h>
+#include <jobs/job_export_pcb_png.h>
 #include <jobs/job_pcb_render.h>
 #include <drc/drc_rule.h>
 #include <plotprint_opts.h>
@@ -1651,6 +1652,37 @@ JOB_EXPORT_PCB_PS::GEN_MODE FromProtoEnum( BoardJobPaginationMode aValue )
     case BoardJobPaginationMode::BJPM_EACH_LAYER_OWN_PAGE:
     default:
         return JOB_EXPORT_PCB_PS::GEN_MODE::SINGLE;
+    }
+}
+
+
+template<>
+BoardJobPaginationMode ToProtoEnum( JOB_EXPORT_PCB_PNG::GEN_MODE aValue )
+{
+    switch( aValue )
+    {
+    case JOB_EXPORT_PCB_PNG::GEN_MODE::SINGLE: return BoardJobPaginationMode::BJPM_ALL_LAYERS_ONE_PAGE;
+    case JOB_EXPORT_PCB_PNG::GEN_MODE::MULTI:  return BoardJobPaginationMode::BJPM_EACH_LAYER_OWN_FILE;
+    default:
+        wxCHECK_MSG( false, BoardJobPaginationMode::BJPM_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<JOB_EXPORT_PCB_PNG::GEN_MODE>" );
+    }
+}
+
+
+template<>
+JOB_EXPORT_PCB_PNG::GEN_MODE FromProtoEnum( BoardJobPaginationMode aValue )
+{
+    switch( aValue )
+    {
+    case BoardJobPaginationMode::BJPM_ALL_LAYERS_ONE_PAGE:
+        return JOB_EXPORT_PCB_PNG::GEN_MODE::SINGLE;
+    case BoardJobPaginationMode::BJPM_EACH_LAYER_OWN_FILE:
+        return JOB_EXPORT_PCB_PNG::GEN_MODE::MULTI;
+    case BoardJobPaginationMode::BJPM_UNKNOWN:
+    case BoardJobPaginationMode::BJPM_EACH_LAYER_OWN_PAGE:
+    default:
+        return JOB_EXPORT_PCB_PNG::GEN_MODE::MULTI;
     }
 }
 

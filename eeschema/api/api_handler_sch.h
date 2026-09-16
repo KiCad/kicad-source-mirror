@@ -150,6 +150,9 @@ private:
     HANDLER_RESULT<types::RunJobResponse>
     handleRunSchematicJobExportPs( const HANDLER_CONTEXT<kiapi::schematic::jobs::RunSchematicJobExportPs>& aCtx );
 
+    HANDLER_RESULT<types::RunJobResponse>
+    handleRunSchematicJobExportPng( const HANDLER_CONTEXT<kiapi::schematic::jobs::RunSchematicJobExportPng>& aCtx );
+
     HANDLER_RESULT<types::RunJobResponse> handleRunSchematicJobExportNetlist(
             const HANDLER_CONTEXT<kiapi::schematic::jobs::RunSchematicJobExportNetlist>& aCtx );
 

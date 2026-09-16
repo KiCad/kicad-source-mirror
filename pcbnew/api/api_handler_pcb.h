@@ -160,6 +160,9 @@ private:
     HANDLER_RESULT<types::RunJobResponse> handleRunBoardJobExportPs(
             const HANDLER_CONTEXT<RunBoardJobExportPs>& aCtx );
 
+    HANDLER_RESULT<types::RunJobResponse> handleRunBoardJobExportPng(
+            const HANDLER_CONTEXT<RunBoardJobExportPng>& aCtx );
+
     HANDLER_RESULT<types::RunJobResponse> handleRunBoardJobExportGerbers(
             const HANDLER_CONTEXT<RunBoardJobExportGerbers>& aCtx );
 

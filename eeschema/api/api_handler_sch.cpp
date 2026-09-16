@@ -33,6 +33,7 @@
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
 #include <kiway.h>
+#include <plotters/plotter_png.h>
 #include <sch_field.h>
 #include <sch_group.h>
 #include <common.h>
@@ -161,6 +162,8 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
             &API_HANDLER_SCH::handleRunSchematicJobExportPdf );
     registerHandler<RunSchematicJobExportPs, types::RunJobResponse>(
             &API_HANDLER_SCH::handleRunSchematicJobExportPs );
+    registerHandler<RunSchematicJobExportPng, types::RunJobResponse>(
+            &API_HANDLER_SCH::handleRunSchematicJobExportPng );
     registerHandler<RunSchematicJobExportNetlist, types::RunJobResponse>(
             &API_HANDLER_SCH::handleRunSchematicJobExportNetlist );
     registerHandler<RunSchematicJobExportBOM, types::RunJobResponse>(
@@ -1420,6 +1423,40 @@ void API_HANDLER_SCH::onModified()
 }
 
 
+static std::optional<ApiResponseStatus>
+applySchematicPlotSettings( const schematic::jobs::SchematicPlotSettings& aSettings, JOB_EXPORT_SCH_PLOT& aJob )
+{
+    aJob.m_drawingSheet = wxString::FromUTF8( aSettings.drawing_sheet() );
+    aJob.m_defaultFont = wxString::FromUTF8( aSettings.default_font() );
+    aJob.m_variant = wxString::FromUTF8( aSettings.variant() );
+    aJob.m_plotAll = aSettings.plot_all();
+    aJob.m_plotDrawingSheet = aSettings.plot_drawing_sheet();
+    aJob.m_show_hop_over = aSettings.show_hop_over();
+    aJob.m_blackAndWhite = aSettings.black_and_white();
+    aJob.m_useBackgroundColor = aSettings.use_background_color();
+    aJob.m_minPenWidth = aSettings.min_pen_width();
+    aJob.m_theme = wxString::FromUTF8( aSettings.theme() );
+
+    aJob.m_plotPages.clear();
+
+    for( const std::string& page : aSettings.plot_pages() )
+        aJob.m_plotPages.push_back( wxString::FromUTF8( page ) );
+
+    if( aSettings.page_size() != schematic::jobs::SchematicJobPageSize::SJPS_UNKNOWN )
+        aJob.m_pageSizeSelect = FromProtoEnum<JOB_PAGE_SIZE>( aSettings.page_size() );
+
+    switch( aSettings.sheet_mode() )
+    {
+    case schematic::jobs::SJSM_ALL_SHEETS:   aJob.m_plotAll = true;  break;
+    case schematic::jobs::SJSM_SINGLE_SHEET: aJob.m_plotAll = false; break;
+    case schematic::jobs::SJSM_UNKNOWN:
+    default: break;
+    }
+
+    return std::nullopt;
+}
+
+
 HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExportSvg(
         const HANDLER_CONTEXT<kiapi::schematic::jobs::RunSchematicJobExportSvg>& aCtx )
 {
@@ -1431,34 +1468,15 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    auto plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_SVG>();
+    auto plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_SVG>( aCtx.Request.plot_settings().sheet_mode()
+                                                              != schematic::jobs::SJSM_SINGLE_SHEET );
     plotJob->m_filename = m_context->GetCurrentFileName();
 
     if( !aCtx.Request.job_settings().output_path().empty() )
         plotJob->SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
-    const kiapi::schematic::jobs::SchematicPlotSettings& settings = aCtx.Request.plot_settings();
-
-    plotJob->m_drawingSheet = wxString::FromUTF8( settings.drawing_sheet() );
-    plotJob->m_defaultFont = wxString::FromUTF8( settings.default_font() );
-    plotJob->m_variant = wxString::FromUTF8( settings.variant() );
-    plotJob->m_plotAll = settings.plot_all();
-    plotJob->m_plotDrawingSheet = settings.plot_drawing_sheet();
-    plotJob->m_show_hop_over = settings.show_hop_over();
-    plotJob->m_blackAndWhite = settings.black_and_white();
-    plotJob->m_useBackgroundColor = settings.use_background_color();
-    plotJob->m_minPenWidth = settings.min_pen_width();
-    plotJob->m_theme = wxString::FromUTF8( settings.theme() );
-
-    plotJob->m_plotPages.clear();
-
-    for( const std::string& page : settings.plot_pages() )
-        plotJob->m_plotPages.push_back( wxString::FromUTF8( page ) );
-
-    if( aCtx.Request.plot_settings().page_size() != kiapi::schematic::jobs::SchematicJobPageSize::SJPS_UNKNOWN )
-    {
-        plotJob->m_pageSizeSelect = FromProtoEnum<JOB_PAGE_SIZE>( aCtx.Request.plot_settings().page_size() );
-    }
+    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings( aCtx.Request.plot_settings(), *plotJob ) )
+        return tl::unexpected( *err );
 
     return ExecuteSchematicJob( m_context->GetKiway(), *plotJob );
 }
@@ -1475,34 +1493,16 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    auto plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_DXF>();
+    auto plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_DXF>( aCtx.Request.plot_settings().sheet_mode()
+                                                              != schematic::jobs::SJSM_SINGLE_SHEET );
+
     plotJob->m_filename = m_context->GetCurrentFileName();
 
     if( !aCtx.Request.job_settings().output_path().empty() )
         plotJob->SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
-    const kiapi::schematic::jobs::SchematicPlotSettings& settings = aCtx.Request.plot_settings();
-
-    plotJob->m_drawingSheet = wxString::FromUTF8( settings.drawing_sheet() );
-    plotJob->m_defaultFont = wxString::FromUTF8( settings.default_font() );
-    plotJob->m_variant = wxString::FromUTF8( settings.variant() );
-    plotJob->m_plotAll = settings.plot_all();
-    plotJob->m_plotDrawingSheet = settings.plot_drawing_sheet();
-    plotJob->m_show_hop_over = settings.show_hop_over();
-    plotJob->m_blackAndWhite = settings.black_and_white();
-    plotJob->m_useBackgroundColor = settings.use_background_color();
-    plotJob->m_minPenWidth = settings.min_pen_width();
-    plotJob->m_theme = wxString::FromUTF8( settings.theme() );
-
-    plotJob->m_plotPages.clear();
-
-    for( const std::string& page : settings.plot_pages() )
-        plotJob->m_plotPages.push_back( wxString::FromUTF8( page ) );
-
-    if( aCtx.Request.plot_settings().page_size() != kiapi::schematic::jobs::SchematicJobPageSize::SJPS_UNKNOWN )
-    {
-        plotJob->m_pageSizeSelect = FromProtoEnum<JOB_PAGE_SIZE>( aCtx.Request.plot_settings().page_size() );
-    }
+    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings( aCtx.Request.plot_settings(), *plotJob ) )
+        return tl::unexpected( *err );
 
     return ExecuteSchematicJob( m_context->GetKiway(), *plotJob );
 }
@@ -1525,28 +1525,8 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     if( !aCtx.Request.job_settings().output_path().empty() )
         plotJob->SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
-    const kiapi::schematic::jobs::SchematicPlotSettings& settings = aCtx.Request.plot_settings();
-
-    plotJob->m_drawingSheet = wxString::FromUTF8( settings.drawing_sheet() );
-    plotJob->m_defaultFont = wxString::FromUTF8( settings.default_font() );
-    plotJob->m_variant = wxString::FromUTF8( settings.variant() );
-    plotJob->m_plotAll = settings.plot_all();
-    plotJob->m_plotDrawingSheet = settings.plot_drawing_sheet();
-    plotJob->m_show_hop_over = settings.show_hop_over();
-    plotJob->m_blackAndWhite = settings.black_and_white();
-    plotJob->m_useBackgroundColor = settings.use_background_color();
-    plotJob->m_minPenWidth = settings.min_pen_width();
-    plotJob->m_theme = wxString::FromUTF8( settings.theme() );
-
-    plotJob->m_plotPages.clear();
-
-    for( const std::string& page : settings.plot_pages() )
-        plotJob->m_plotPages.push_back( wxString::FromUTF8( page ) );
-
-    if( aCtx.Request.plot_settings().page_size() != kiapi::schematic::jobs::SchematicJobPageSize::SJPS_UNKNOWN )
-    {
-        plotJob->m_pageSizeSelect = FromProtoEnum<JOB_PAGE_SIZE>( aCtx.Request.plot_settings().page_size() );
-    }
+    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings( aCtx.Request.plot_settings(), *plotJob ) )
+        return tl::unexpected( *err );
 
     plotJob->m_PDFPropertyPopups = aCtx.Request.property_popups();
     plotJob->m_PDFHierarchicalLinks = aCtx.Request.hierarchical_links();
@@ -1567,34 +1547,57 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    auto plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_PS>();
+    auto plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_PS>( aCtx.Request.plot_settings().sheet_mode()
+                                                             != schematic::jobs::SJSM_SINGLE_SHEET );
     plotJob->m_filename = m_context->GetCurrentFileName();
 
     if( !aCtx.Request.job_settings().output_path().empty() )
         plotJob->SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
-    const kiapi::schematic::jobs::SchematicPlotSettings& settings = aCtx.Request.plot_settings();
+    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings( aCtx.Request.plot_settings(), *plotJob ) )
+        return tl::unexpected( *err );
 
-    plotJob->m_drawingSheet = wxString::FromUTF8( settings.drawing_sheet() );
-    plotJob->m_defaultFont = wxString::FromUTF8( settings.default_font() );
-    plotJob->m_variant = wxString::FromUTF8( settings.variant() );
-    plotJob->m_plotAll = settings.plot_all();
-    plotJob->m_plotDrawingSheet = settings.plot_drawing_sheet();
-    plotJob->m_show_hop_over = settings.show_hop_over();
-    plotJob->m_blackAndWhite = settings.black_and_white();
-    plotJob->m_useBackgroundColor = settings.use_background_color();
-    plotJob->m_minPenWidth = settings.min_pen_width();
-    plotJob->m_theme = wxString::FromUTF8( settings.theme() );
+    return ExecuteSchematicJob( m_context->GetKiway(), *plotJob );
+}
 
-    plotJob->m_plotPages.clear();
 
-    for( const std::string& page : settings.plot_pages() )
-        plotJob->m_plotPages.push_back( wxString::FromUTF8( page ) );
+HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExportPng(
+        const HANDLER_CONTEXT<schematic::jobs::RunSchematicJobExportPng>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
 
-    if( aCtx.Request.plot_settings().page_size() != kiapi::schematic::jobs::SchematicJobPageSize::SJPS_UNKNOWN )
+    if( HANDLER_RESULT<bool> validation = validateDocument( aCtx.Request.job_settings().document() ); !validation )
+        return tl::unexpected( validation.error() );
+
+    const schematic::jobs::SchematicJobSheetMode sheetMode = aCtx.Request.plot_settings().sheet_mode();
+
+    auto plotJob = std::make_unique<JOB_EXPORT_SCH_PLOT_PNG>( sheetMode != schematic::jobs::SJSM_SINGLE_SHEET );
+    plotJob->m_filename = m_context->GetCurrentFileName();
+
+    if( !aCtx.Request.job_settings().output_path().empty() )
+        plotJob->SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
+
+    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings( aCtx.Request.plot_settings(), *plotJob ) )
+        return tl::unexpected( *err );
+
+    if( aCtx.Request.has_dpi() )
     {
-        plotJob->m_pageSizeSelect = FromProtoEnum<JOB_PAGE_SIZE>( aCtx.Request.plot_settings().page_size() );
+        int dpi = aCtx.Request.dpi();
+
+        if( dpi < MIN_PNG_DPI || dpi > MAX_PNG_DPI )
+        {
+            ApiResponseStatus status;
+            status.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            status.set_error_message( fmt::format( "dpi must be between {} and {}", MIN_PNG_DPI, MAX_PNG_DPI ) );
+            return tl::unexpected( status );
+        }
+
+        plotJob->m_dpi = dpi;
     }
+
+    // Unknown -> default AA on
+    plotJob->m_antialias = aCtx.Request.antialiasing() != types::AntialiasingMode::AAM_NONE;
 
     return ExecuteSchematicJob( m_context->GetKiway(), *plotJob );
 }

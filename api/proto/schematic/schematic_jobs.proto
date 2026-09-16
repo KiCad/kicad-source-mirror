@@ -36,6 +36,18 @@ enum SchematicJobPageSize
 	SJPS_A = 3;
 }
 
+// Controls whether a schematic plot job exports all sheets to an output directory or a
+// single sheet to an output file
+enum SchematicJobSheetMode
+{
+	SJSM_UNKNOWN = 0;
+	// Export all sheets; the job settings output path is treated as a directory
+	SJSM_ALL_SHEETS = 1;
+	// Export a single sheet; the job settings output path is treated as a file name
+	SJSM_SINGLE_SHEET = 2;
+}
+
+
 // Shared plot options for schematic plot exports
 message SchematicPlotSettings
 {
@@ -53,6 +65,8 @@ message SchematicPlotSettings
 	bool use_background_color = 10;
 	int32 min_pen_width = 11;
 	string theme = 12;
+
+	SchematicJobSheetMode sheet_mode = 13;
 }
 
 // Plots a schematic to SVG. Returns RunJobResponse.
@@ -86,6 +100,20 @@ message RunSchematicJobExportPs
 	kiapi.common.types.RunJobSettings job_settings = 1;
 	SchematicPlotSettings plot_settings = 2;
 }
+
+// Plots a schematic to PNG. Returns RunJobResponse.
+message RunSchematicJobExportPng
+{
+	kiapi.common.types.RunJobSettings job_settings = 1;
+	SchematicPlotSettings plot_settings = 2;
+
+	// Range 72-2400.  If unspecified, will use the GUI default resolution (300 DPI).
+	optional int32 dpi = 3;
+
+	// If unspecified, anti-aliasing will follow the GUI default (enabled).
+	kiapi.common.types.AntialiasingMode antialiasing = 4;
+}
+
 
 // Netlist format for schematic netlist export.
 enum SchematicNetlistFormat

@@ -31,6 +31,16 @@ enum JobStatus
     JS_ERROR = 3;
 }
 
+// Anti-aliasing mode for raster plot outputs
+enum AntialiasingMode
+{
+    AAM_UNKNOWN = 0;
+    // No anti-aliasing
+    AAM_NONE = 1;
+    // Anti-aliasing (KiCad currently has only one AA mode)
+    AAM_STANDARD = 2;
+}
+
 message RunJobResponse
 {
     JobStatus status = 1;
