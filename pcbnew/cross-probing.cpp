@@ -306,7 +306,7 @@ void PCB_EDIT_FRAME::HandleRemoteNetHighlight( const std::vector<wxString>& aNet
     KIGFX::VIEW*            view = m_toolManager->GetView();
     KIGFX::RENDER_SETTINGS* renderSettings = view->GetPainter()->GetSettings();
 
-    if( aNetNames.empty() )
+    if( aNetNames.empty() || ( aNetNames.size() == 1 && aNetNames[0].empty() ) )
     {
         auto* pcbRender = dynamic_cast<KIGFX::PCB_RENDER_SETTINGS*>( renderSettings );
 
@@ -332,7 +332,7 @@ void PCB_EDIT_FRAME::HandleRemoteNetHighlight( const std::vector<wxString>& aNet
         return;
     }
 
-    if( aNetNames.size() == 1 && ( netinfo = pcb->FindNet( aNetNames[0] ) ) )
+    if( aNetNames.size() == 1 && ( netinfo = pcb->FindNet( aNetNames[0] ) ) != nullptr )
     {
         netcode = netinfo->GetNetCode();
 
