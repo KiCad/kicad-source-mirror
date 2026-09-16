@@ -210,6 +210,12 @@ protected:
             auto validator =
                     [&]( const wxString& aNewName ) -> bool
                     {
+                        if( aNewName.IsEmpty() )
+                        {
+                            wxMessageBox( _( "Symbol must have a name." ) );
+                            return false;
+                        }
+
                         return symbolNames.Index( UnescapeString( aNewName ), false ) == wxNOT_FOUND;
                     };
 
