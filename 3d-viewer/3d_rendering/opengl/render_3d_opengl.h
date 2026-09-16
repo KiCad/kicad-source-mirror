@@ -210,6 +210,9 @@ private:
     void renderExtrudedBodies();
 
     void renderOpaqueModels( const glm::mat4 &aCameraViewMatrix );
+
+    void renderExtrudedBodies( bool aTransparentPass );
+
     void renderTransparentModels( const glm::mat4 &aCameraViewMatrix );
 
     void renderModel( const glm::mat4 &aCameraViewMatrix, const MODELTORENDER &aModelToRender,

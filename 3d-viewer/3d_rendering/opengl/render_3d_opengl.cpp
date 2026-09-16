@@ -836,52 +836,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving )
             renderList->DrawAll();
         }
 
-        for( auto& [fp, renderListDef] : m_extrudedBodyLists )
-        {
-            const EXTRUDED_3D_BODY* body = fp->GetExtrudedBody();
-
-            if( !body )
-                continue;
-
-            if( !renderListDef )
-                continue;
-
-            std::shared_ptr<OPENGL_RENDER_LIST> renderList = renderListDef->MakeOrGet();
-
-            if( !renderList )
-                continue;
-
-            bool highlight = false;
-
-            if( m_boardAdapter.m_IsBoardView )
-            {
-                if( fp->IsSelected() )
-                    highlight = true;
-
-                if( extCfg.highlight_on_rollover && fp == m_currentRollOverItem )
-                    highlight = true;
-            }
-
-            KIGFX::COLOR4D c = body->m_color;
-
-            if( c == KIGFX::COLOR4D::UNSPECIFIED )
-                c = EXTRUDED_3D_BODY::GetDefaultColor( body->m_material );
-
-            SMATERIAL mat;
-
-            SFVEC3F                  diffuse( c.r, c.g, c.b );
-            EXTRUSION_MATERIAL_PROPS props = GetMaterialProps( body->m_material, diffuse );
-
-            mat.m_Diffuse = diffuse;
-            mat.m_Ambient = props.m_Ambient;
-            mat.m_Specular = props.m_Specular;
-            mat.m_Shininess = props.m_Shininess;
-            mat.m_Emissive = SFVEC3F( 0.0f );
-            mat.m_Transparency = 1.0f - c.a;
-
-            OglSetMaterial( mat, 1.0f, highlight, extSelColor );
-            renderList->DrawAll();
-        }
+        renderExtrudedBodies( false );
     }
 
     // Display board body
@@ -973,6 +928,13 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving )
 
     glDisable( GL_BLEND );
     OglResetTextureState();
+
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+    renderExtrudedBodies( true );
+
+    glDisable( GL_BLEND );
 
     glDepthMask( GL_TRUE );
 
@@ -1441,6 +1403,63 @@ void RENDER_3D_OPENGL::renderOpaqueModels( const glm::mat4 &aCameraViewMatrix )
     }
 
     glPopMatrix();
+}
+
+
+void RENDER_3D_OPENGL::renderExtrudedBodies( bool aTransparentPass )
+{
+    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& extCfg = m_boardAdapter.m_Cfg->m_Render;
+    const SFVEC3F                            extSelColor = m_boardAdapter.GetColor( extCfg.opengl_selection_color );
+
+    for( auto& [fp, renderListDef] : m_extrudedBodyLists )
+    {
+        const EXTRUDED_3D_BODY* body = fp->GetExtrudedBody();
+
+        if( !body )
+            continue;
+
+        if( !renderListDef )
+            continue;
+
+        std::shared_ptr<OPENGL_RENDER_LIST> renderList = renderListDef->MakeOrGet();
+
+        if( !renderList )
+            continue;
+
+        bool highlight = false;
+
+        if( m_boardAdapter.m_IsBoardView )
+        {
+            if( fp->IsSelected() )
+                highlight = true;
+
+            if( extCfg.highlight_on_rollover && fp == m_currentRollOverItem )
+                highlight = true;
+        }
+
+        KIGFX::COLOR4D c = body->m_color;
+
+        if( c == KIGFX::COLOR4D::UNSPECIFIED )
+            c = EXTRUDED_3D_BODY::GetDefaultColor( body->m_material );
+
+        if( ( c.a < 1.0 ) != aTransparentPass )
+            continue;
+
+        SMATERIAL mat;
+
+        SFVEC3F                  diffuse( c.r, c.g, c.b );
+        EXTRUSION_MATERIAL_PROPS props = GetMaterialProps( body->m_material, diffuse );
+
+        mat.m_Diffuse = diffuse;
+        mat.m_Ambient = props.m_Ambient;
+        mat.m_Specular = props.m_Specular;
+        mat.m_Shininess = props.m_Shininess;
+        mat.m_Emissive = SFVEC3F( 0.0f );
+        mat.m_Transparency = 1.0f - c.a;
+
+        OglSetMaterial( mat, 1.0f, highlight, extSelColor );
+        renderList->DrawAll();
+    }
 }
 
 
