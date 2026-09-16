@@ -1750,6 +1750,10 @@ bool LINE_PLACER::HasPlacedAnything() const
 
 bool LINE_PLACER::CommitPlacement()
 {
+    // AbortPlacement() already tore down every node, including the shove springback stack.
+    if( !m_lastNode && !m_currentNode )
+        return true;
+
     if( Settings().Mode() == PNS::RM_Shove )
     {
         m_shove->RewindToLastLockedNode();
@@ -2028,6 +2032,7 @@ bool LINE_PLACER::AbortPlacement()
 {
     m_world->KillChildren();
     m_lastNode = nullptr;
+    m_currentNode = nullptr;
     return true;
 }
 
