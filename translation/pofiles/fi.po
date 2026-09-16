@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-16 07:51+0000\n"
+"PO-Revision-Date: 2026-09-16 13:56+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -85,7 +85,7 @@ msgstr "Luo johdinraitoja ja läpivientejä"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1237
 msgid "Create zones"
-msgstr "Luo vyöhykkeitä"
+msgstr "Luo alueita"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1352
 msgid "Build Tech layers"
@@ -1619,8 +1619,8 @@ msgstr "Reunojenpehmennys (hidas)"
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
 msgstr ""
-"Käytä näyttöavaruuden varjostusta (SSAO) ja yleisen valaistuksen "
-"heijastuksia (hidas)"
+"Käytä näyttöavaruuden varjostusta ja yleisen valaistuksen heijastuksia "
+"(hidas)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:57
 msgid "Number of Samples"
@@ -58253,11 +58253,11 @@ msgstr "Ruudukon tyyppi"
 
 #: pcbnew/pcb_griditem.cpp:538
 msgid "Extent X"
-msgstr ""
+msgstr "Ulottuvuus X"
 
 #: pcbnew/pcb_griditem.cpp:542
 msgid "Extent Y"
-msgstr ""
+msgstr "Ulottuvuus Y"
 
 #: pcbnew/pcb_griditem.cpp:546
 msgid "Spacing X"
@@ -58277,7 +58277,7 @@ msgstr "Sädeväli"
 
 #: pcbnew/pcb_griditem.cpp:562
 msgid "Phi Extent"
-msgstr ""
+msgstr "Kulmaulottuvuus"
 
 #: pcbnew/pcb_griditem.cpp:567
 msgid "Phi Spacing"
@@ -58290,7 +58290,7 @@ msgstr "Tärkeysjärjestys"
 
 #: pcbnew/pcb_griditem.cpp:575
 msgid "Tick Interval"
-msgstr ""
+msgstr "Asteikkoväli"
 
 #: pcbnew/pcb_griditem.cpp:578
 msgid "Affects Cursor Snap"
@@ -58323,7 +58323,7 @@ msgstr "Muunnetaan jalanjälkiä"
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:187
 #, c-format
 msgid "Unknown Allegro file version %#010x (rev %d)"
-msgstr ""
+msgstr "Tuntematon Allegro-tiedoston versio %#010x (versio %d)"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:294
 #, c-format
@@ -58332,7 +58332,7 @@ msgstr "Tuntematon piirilevyn mittayksikkö %d"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2691
 msgid "Parsing Allegro objects"
-msgstr ""
+msgstr "Jäsennetään Allegro-objekteja"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2900
 #, c-format
@@ -58343,6 +58343,12 @@ msgid ""
 "To import this design, open it in Cadence Allegro PCB Editor version 16.0 or "
 "later and re-save, then import the resulting file."
 msgstr ""
+"Tämä tiedosto on luotu ohjelmalla %s, joka käyttää Allegro 16.0 -versiota "
+"vanhempaa binääriformaattia, eikä tämä tuontityökalu tue sitä.\n"
+"\n"
+"Tuodaksesi tämän suunnitelman, avaa se Cadence Allegro PCB Editor -ohjelman "
+"versiossa 16.0 tai uudemmassa ja tallenna se uudelleen, ja tuo sitten näin "
+"saatu tiedosto."
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:136
 #, c-format
@@ -58492,7 +58498,7 @@ msgstr "Ladataan verkkoja..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2506
 #, c-format
 msgid "Altium net %zu has no name; imported as '%s'."
-msgstr ""
+msgstr "Altium-verkolta %zu puuttuu nimi; se tuodaan nimellä '%s'."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2527
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2833
@@ -58505,6 +58511,8 @@ msgid ""
 "Polygon on layer '%s' has %d vertices outside the coordinate range; they "
 "were dropped."
 msgstr ""
+"Tason ”%s” monikulmio sisältää %d koordinaattialueen ulkopuolella olevaa "
+"kärkipistettä; ne poistettiin."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2577
 #, c-format
@@ -58521,6 +58529,8 @@ msgid ""
 "Altium rule '%s' applies to netclass '%s', which this board does not define. "
 "Its constraint is not imported."
 msgstr ""
+"Altium-sääntö ”%s” koskee verkkoluokkaa ”%s”, jota tämä piirilevy ei "
+"määrittele. Sen rajoitetta ei tuotu."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2813
 msgid "Loading board regions..."
@@ -58759,7 +58769,7 @@ msgstr "Ladataan suorakulmioita..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:5665
 msgid "Ignored a keep-out area with no restrictions."
-msgstr ""
+msgstr "Ohitettiin suoja-alue, jolla ei ole rajoituksia."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:34
 msgid "Altium Circuit Maker PCB files"
@@ -58799,19 +58809,19 @@ msgstr "Solidworks PCB-tiedostot"
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:75
 #, c-format
 msgid "Autotrax import, line %d: %s"
-msgstr ""
+msgstr "Autotrax-tuonti, rivi %d: %s"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:112
 msgid "insufficient track fields"
-msgstr ""
+msgstr "Johdinraidan kenttiä ei ole riittävästi"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:137
 msgid "insufficient arc fields"
-msgstr ""
+msgstr "Kaaren kenttiä ei ole riittävästi"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:162
 msgid "insufficient via fields"
-msgstr ""
+msgstr "Läpiviennin kenttiä ei ole riittävästi"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:187
 msgid "insufficient pad fields"
@@ -58819,7 +58829,7 @@ msgstr "Riittämättömät anturan kentät"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:219
 msgid "insufficient fill fields"
-msgstr ""
+msgstr "Täytön kenttiä ei ole riittävästi"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:243
 msgid "insufficient text fields"
@@ -58841,7 +58851,7 @@ msgstr "%s' ei ole kelvollinen Protel Autotrax -tiedosto."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.h:62
 msgid "Protel Autotrax / Easytrax PCB files"
-msgstr ""
+msgstr "Protel Autotrax- / Easytrax-piirilevytiedostot"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:94
 msgid ""
@@ -59273,20 +59283,20 @@ msgstr "CADSTAR PCB Arkistotiedostot"
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1069
 #, c-format
 msgid "DipTrace parse error at offset 0x%06zX: %s"
-msgstr ""
+msgstr "DipTrace-jäsennysvirhe kohdassa 0x%06zX: %s"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1153
 #, c-format
 msgid "DipTrace: invalid magic length %u (expected 7 or 11)"
-msgstr ""
+msgstr "DipTrace: virheellinen tunnistepituus %u (odotettiin 7 tai 11)"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1159
 msgid "DipTrace: not a valid .dip board file (bad magic)"
-msgstr ""
+msgstr "DipTrace: ei kelvollinen .dip-piirilevytiedosto (virheellinen tunniste)"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1175
 msgid "DipTrace: invalid legacy board version suffix"
-msgstr ""
+msgstr "DipTrace: virheellinen vanhan piirilevyversion pääte"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1218
 #, c-format
@@ -59302,51 +59312,55 @@ msgstr "DipTrace-tuonti: virheellinen kerrosmäärä %d."
 #, c-format
 msgid "DipTrace: invalid pattern-name group count %d at offset 0x%06zX"
 msgstr ""
+"DipTrace: virheellinen kuvion nimen ryhmälukumäärä %d siirtymässä 0x%06zX"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1365
 #, c-format
 msgid "DipTrace: invalid pattern-name block count %d"
-msgstr ""
+msgstr "DipTrace: virheellinen kuvion nimen lohkolukumäärä %d"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1380
 #, c-format
 msgid "DipTrace: invalid pattern-style group count %d at offset 0x%06zX"
 msgstr ""
+"DipTrace: virheellinen kuviotyyliryhmien lukumäärä %d siirtymässä 0x%06zX"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1400
 #, c-format
 msgid "DipTrace: invalid pattern-style entry count %d"
-msgstr ""
+msgstr "DipTrace: virheellinen kuviotyylimerkintöjen määrä %d"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1417
 #, c-format
 msgid "DipTrace: invalid implicit pattern-style entry count %d"
-msgstr ""
+msgstr "DipTrace: virheellinen implisiittisten kuviotyylimerkintöjen määrä %d"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1496
 #, c-format
 msgid "DipTrace: invalid design-rule extra count %d"
-msgstr ""
+msgstr "DipTrace: virheellinen suunnittelusäännön lisämerkintöjen määrä %d"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1521
 #, c-format
 msgid "DipTrace: invalid ruleset transition marker at 0x%06zX"
-msgstr ""
+msgstr "DipTrace: virheellinen sääntöjoukon siirtymämerkki kohdassa 0x%06zX"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:2085
 #, c-format
 msgid "DipTrace: invalid component flag byte %u at boundary 0x%06zX"
-msgstr ""
+msgstr "DipTrace: virheellinen komponentin lipputavu %u kohdassa 0x%06zX"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3314
 #, c-format
 msgid "DipTrace: text object [%d] parse error: %s"
-msgstr ""
+msgstr "DipTrace: tekstikohteen [%d] jäsennysvirhe: %s"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3393
 #, c-format
 msgid "DipTrace import: invalid net name for net index %d at offset 0x%06zX."
 msgstr ""
+"DipTrace-tuonti: virheellinen verkon nimi verkkoindeksille %d kohdassa "
+"0x%06zX."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3678
 #, c-format
@@ -59354,6 +59368,8 @@ msgid ""
 "DipTrace import: invalid route-chain node count %d for net '%s' at offset "
 "0x%06zX."
 msgstr ""
+"DipTrace-tuonti: virheellinen reititysketjun solmujen määrä %d verkolle ”%s” "
+"kohdassa 0x%06zX."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3696
 #, c-format
@@ -59361,6 +59377,8 @@ msgid ""
 "DipTrace import: route-chain node count %d for net '%s' overruns record at "
 "offset 0x%06zX."
 msgstr ""
+"DipTrace-tuonti: reittiketjun solmupistemäärä %d verkolle ’%s’ ylittää "
+"tietueen siirtymässä 0x%06zX."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:4422
 #, c-format
@@ -59368,6 +59386,8 @@ msgid ""
 "DipTrace import: invalid copper-pour zone header after font preamble at "
 "offset 0x%06zX."
 msgstr ""
+"DipTrace-tuonti: virheellinen kuparitäyttöalueen otsake fontin alustuksen "
+"jälkeen siirtymässä 0x%06zX."
 
 #: pcbnew/pcb_io/diptrace/pcb_io_diptrace.cpp:116
 #, c-format
@@ -59375,6 +59395,8 @@ msgid ""
 "DipTrace import: could not write design rules to '%s'; imported board is "
 "missing DipTrace-specific clearance rules."
 msgstr ""
+"DipTrace-tuonti: suunnittelusääntöjä ei voitu kirjoittaa kohteeseen ’%s’; "
+"tuodusta piirilevystä puuttuvat DipTrace-kohtaiset eristysvälisäännöt."
 
 #: pcbnew/pcb_io/diptrace/pcb_io_diptrace.h:39
 msgid "DipTrace PCB files"
@@ -59446,7 +59468,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.h:141
 msgid "Eagle PCB files (6.x XML and pre-v6 binary)"
-msgstr ""
+msgstr "Eagle-piirilevytiedostot (6.x XML ja versiota 6 edeltävä binaarimuoto)"
 
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.h:147
 msgid "Eagle ver. 6.x XML library files"
@@ -59649,6 +59671,8 @@ msgid ""
 "Pad '%s' has custom shape with per-layer geometry; custom primitives not "
 "supported in padstack mode."
 msgstr ""
+"Anturalla ’%s’ on mukautettu muoto tasokohtaisella geometrialla; "
+"mukautettuja primitiivejä ei tueta anturapinotilassa."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2873
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2902
@@ -59753,7 +59777,7 @@ msgstr ""
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:64
 msgid "gEDA / Lepton EDA PCB board file"
-msgstr ""
+msgstr "gEDA- / Lepton EDA -piirilevytiedosto"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:78
 msgid "gEDA / Lepton EDA PCB footprint file"
@@ -59765,7 +59789,7 @@ msgstr "gEDA / Lepton EDA PCB -jalanjälkikirjaston hakemisto"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:381
 msgid "Cannot produce this IPC-2581 data set."
-msgstr ""
+msgstr "Tämän IPC-2581-tietojoukon luominen epäonnistui."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:391
 msgid "No IPC-2581 content selected."
@@ -59773,11 +59797,11 @@ msgstr "Ei valittua IPC-2581-sisältöä."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:407
 msgid "Cannot export assembly data without outer copper layers."
-msgstr ""
+msgstr "Kokoonpanotietoja ei voida viedä ilman ulompia kuparitasoja."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:415
 msgid "Cannot export physical netlist without outer copper layers."
-msgstr ""
+msgstr "Fyysistä verkko-luetteloa ei voida viedä ilman ulompia kuparitasoja."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:448
 msgid ""
@@ -59798,7 +59822,7 @@ msgstr "IPC-2581 vienti peruttu"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1375
 msgid "Pad has unsupported type; it was skipped."
-msgstr ""
+msgstr "Anturan tyyppiä ei tueta; se ohitettiin."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1818
 msgid "Generating history section"
@@ -59818,7 +59842,7 @@ msgstr ""
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1925
 #, c-format
 msgid "Component \"%s\" missing OEM reference; BOM entry will be skipped."
-msgstr ""
+msgstr "Komponentilta ”%s” puuttuu OEM-viite;osaluettelon tietue ohitetaan."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2047
 msgid "Generating CAD data"
@@ -59836,6 +59860,8 @@ msgstr "Luodaan komponentit"
 msgid ""
 "Duplicate footprint pointers encountered; IPC-2581 output may be incorrect."
 msgstr ""
+"Havaittu kaksoiskappaleita komponenttikuvioiden osoittimissa; IPC-2581-"
+"tuloste saattaa olla virheellinen."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3870
 msgid "Generating logical netlist"
@@ -59853,16 +59879,18 @@ msgstr "Vietään kerrosta %s, verkko %s"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4232
 msgid "Via uses unsupported padstack; omitted from drill data."
 msgstr ""
+"Läpivienti käyttää tukematonta anturapinoa; jätetty pois poraustiedoista."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4259
 msgid "Pad uses unsupported padstack; hole was omitted from drill data."
 msgstr ""
+"Antura käyttää tukematonta anturapinoa; reikä jätettiin pois poraustiedoista."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4431
 msgid ""
 "Teardrops are not supported in IPC-2581 revision B; they were exported as "
 "zones."
-msgstr ""
+msgstr "IPC-2581-revisio B ei tue kupariviisteitä; ne vietiin alueina."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4742
 msgid "Generating vendor list"
@@ -60103,6 +60131,8 @@ msgid ""
 "One or more items were found on undefined layers (%s). Open the board in the "
 "PCB Editor to resolve."
 msgstr ""
+"Yksi tai useampi kohde löytyi määrittelemättömiltä tasoilta (%s). Avaa "
+"piirilevy PCB-editorissa ongelman ratkaisemiseksi."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1644
 #, c-format
@@ -60153,16 +60183,20 @@ msgstr ""
 #, c-format
 msgid "Invalid stackup in footprint: odd number of copper layers (%d)."
 msgstr ""
+"Komponenttikuvion tasopinossa on virhe: pariton määrä kuparitasoja (%d)."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6458
 msgid "Invalid stackup in footprint: copper layers are not contiguous."
 msgstr ""
+"Komponenttikuvion tasopinossa on virhe: kuparitasot eivät ole yhtenäisiä."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6463
 msgid ""
 "Invalid stackup in footprint: technology layers are implicit in footprints "
 "and should not be specified in the stackup."
 msgstr ""
+"Komponenttikuvion tasopinossa on virhe: teknologiatasot ovat implisiittisiä "
+"komponenttikuvioissa, eikä niitä pitäisi määrittää tasopinossa."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6776
 #, c-format
@@ -60234,6 +60268,8 @@ msgid ""
 "Component '%s' has non-ASCII characters in its designator; converted to '%s' "
 "for ODB++ export."
 msgstr ""
+"Komponentin ”%s” tunnuksessa on ASCII-merkistön ulkopuolisia merkkejä; "
+"tunnus muunnettiin muotoon ”%s” ODB++-vientiä varten."
 
 #: pcbnew/pcb_io/odbpp/odb_component.cpp:98
 #, c-format
@@ -60241,6 +60277,8 @@ msgid ""
 "Component '%s' has an ambiguous designator after conversion; renamed to '%s' "
 "for ODB++ export."
 msgstr ""
+"Komponentilla ”%s” on muunnoksen jälkeen epäselvä tunniste; nimettiin "
+"uudelleen muotoon ’%s’ ODB++-vientiä varten."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:97
 msgid "Creating ODB++ Structure"
@@ -60260,20 +60298,23 @@ msgid ""
 "The PADS file declares %d copper layers; KiCad supports %d, so the layers "
 "past that share the last inner layer."
 msgstr ""
+"PADS-tiedosto määrittää %d kuparikerrosta; KiCad tukee %d kerrosta, joten "
+"ylimääräiset kerrokset käyttävät viimeistä sisäkerrosta."
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:447
 #, c-format
 msgid "Text on unmapped layer %d assigned to Comments layer"
 msgstr ""
+"Määrittelemättömällä tasolla %d oleva teksti sijoitettiin Comments-tasolle"
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:527
 #, c-format
 msgid "Skipping keepout on unmapped layer %d"
-msgstr ""
+msgstr "Suoja-alue määrittelemättömällä tasolla %d ohitetaan"
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:552
 msgid "Skipping keepout with no valid layers"
-msgstr ""
+msgstr "Suoja-alue, jolla ei ole kelvollisia tasoja, ohitetaan"
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:765
 #, c-format
@@ -60281,6 +60322,8 @@ msgid ""
 "Skipped design rule for differential pair '%s'; a net name ends with a "
 "backslash."
 msgstr ""
+"Ohitettiin differentiaaliparin ”%s” suunnittelusääntö; verkon nimi päättyy "
+"kenoviivaan."
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:800
 #, c-format
@@ -60288,6 +60331,8 @@ msgid ""
 "Design rules for the imported differential pairs were not written; '%s' "
 "already exists."
 msgstr ""
+"Tuotujen differentiaaliparien suunnittelusääntöjä ei kirjoitettu; ”%s” on jo "
+"olemassa."
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:802
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:823
@@ -60299,10 +60344,12 @@ msgstr "Suunnittelusääntöjen kirjoittaminen kohteeseen ”%s” epäonnistui.
 #, c-format
 msgid "Imported %zu footprints, %d nets, %zu tracks, %zu vias, %zu zones"
 msgstr ""
+"Tuotu %zu jalanjälkeä,%d verkkoa,%zu johdinraitaa, %zu läpivientiä, %zu "
+"aluetta"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:122
 msgid "Starting PADS PCB import"
-msgstr ""
+msgstr "Aloitetaan PADS PCB -tuonti"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:519
 #, c-format
@@ -60312,7 +60359,7 @@ msgstr "Jalanjälkeä '%s' ei löytynyt decal-luettelosta, osa ohitettiin"
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1078
 #, c-format
 msgid "Skipping decal item on unmapped layer %d"
-msgstr ""
+msgstr "Ohitetaan kuviokohde määrittelemättömällä tasolla %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1408
 #, c-format
@@ -60328,11 +60375,11 @@ msgstr "Kuparikohteella on kartoittamaton kerros %d oletuksena käytetään F.Cu
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:1182
 #, c-format
 msgid "Skipping pour on unmapped layer %d"
-msgstr ""
+msgstr "Ohitetaan täyttö määrittelemättömällä tasolla %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:126
 msgid "Starting PADS binary PCB import"
-msgstr ""
+msgstr "Aloitetaan binäärimuotoisen PADS PCB -tiedoston tuonti"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:351
 #, c-format
@@ -60353,22 +60400,25 @@ msgstr "Ohitettiin reititys ei-kupari- tai yhdistämättömällä PADS-tasolla %
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:978
 #, c-format
 msgid "Skipped a non-positive-width route on PADS layer %d."
-msgstr ""
+msgstr "Ohitettiin nollalevyinen tai negatiivinen reitti PADS-tasolla %d."
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:1076
 #, c-format
 msgid "Skipped a via on net '%s' with an unusable PADS layer span %d,%d."
 msgstr ""
+"Ohitettiin läpivienti verkossa ’%s’, koska sen PADS-tasoväli %d, %d on "
+"käyttökelvoton."
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:1123
 #, c-format
 msgid "COPPER item on unmapped layer %d"
-msgstr ""
+msgstr "KUPARI-kohde määrittelemättömällä tasolla %d"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:91
 #, c-format
 msgid "Undefined P-CAD layer %u substituted with the drawings layer."
 msgstr ""
+"Määrittelemätön P-CAD-taso %u korvattu Drawings-tasolla (piirustustasolla)."
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:885
 msgid "KiCad only supports 32 signal layers."
@@ -60505,21 +60555,21 @@ msgstr "Liian monta objektia Sprint-Layout-tiedostossa"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:438
 msgid "Too many groups in Sprint Layout object"
-msgstr ""
+msgstr "Liian monta ryhmää Sprint Layout -objektissa"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:452
 msgid "Too many points in Sprint Layout object"
-msgstr ""
+msgstr "Liian monta pistettä Sprint Layout -objektissa"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:481
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:641
 #, c-format
 msgid "Unknown object type %d in Sprint Layout file"
-msgstr ""
+msgstr "Tuntematon objektityyppi %d Sprint Layout -tiedostossa"
 
 #: pcbnew/pcb_io/sprint_layout/sprint_layout_parser.cpp:617
 msgid "Too many text children in Sprint Layout object"
-msgstr ""
+msgstr "Liian monta tekstielementtiä Sprint Layout -objektissa"
 
 #: pcbnew/pcb_layer_box_selector.cpp:70
 msgid "(not activated)"
@@ -60912,6 +60962,310 @@ msgid ""
 "</ul>\n"
 "\n"
 msgstr ""
+"<table>\n"
+"    <tr>\n"
+"        <th>Merkintä</th>\n"
+"        <th></th>\n"
+"        <th>Tulos</th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>^{superscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sup>superscript</sup>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Driver Board^{Rev A}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Driver Board<sup>Rev A</sup></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>_{subscript}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><sub>subscript</sub>&nbsp;</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>D_{0} - D_{15}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>D<sub>0</sub> - D<sub>15</sub></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
+"samp></td>\n"
+"        <td></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${variable}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>variable_value</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${PROJECTNAME}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>MyBoard</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>PCB-muuttujat</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${FILENAME}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>board.kicad_pcb</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${FILEPATH}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>/path/to/board.kicad_pcb</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${LAYER}</samp> (teksteissä/taulukoissa)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>F.Cu, B.Cu, F.SilkS...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Piirilevykuvioiden ristiviittaukset</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> piirilevykuviosta <i>refdes</"
+"i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:REFERENCE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>U1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>STM32F407VGT6</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:FOOTPRINT_LIBRARY}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Package_QFP</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:FOOTPRINT_NAME}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>LQFP-100_14x14mm_P0.5mm</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Anturoiden/nastojen toiminnot</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:NET_NAME(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Anturaan yhdistetyn verkon nimi</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:NET_NAME(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>VCC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:SHORT_NET_NAME(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Lyhyt verkon nimi tai NC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:SHORT_NET_NAME(3)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>GND</samp> tai <samp>NC</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:NET_CLASS(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Anturan verkkoluokka</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${J1:NET_CLASS(1)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Power</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${refdes:PIN_NAME(pad)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Nastan toiminto/nimi</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:PIN_NAME(5)}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>USART1_TX</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Taulukkomuuttujat</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${ROW}</samp> (taulukoissa)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1, 2, 3...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${COL}</samp> (taulukoissa)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1, 2, 3...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${ADDR}</samp> (taulukoissa)</td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>A1, B2, C3...</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Matemaattiset lausekkeet</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{expression}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp><i>evaluated_result</i></samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{2 + 3}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>5</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{${ROW} - 1}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>3</samp> (kun ROW=4)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Merkkijonojen vertailu ja ehdollinen teksti</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{\"text\" == \"text\"}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{\"text\" != \"other\"}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>1</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Ehdollinen tekstin näyttö</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" == \"F.Cu\", \"TOP\", "
+"\"BOTTOM\")}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>TOP</samp> (etutasolla) tai <samp>BOTTOM</samp></"
+"td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Myös numeeriset vertailut toimivat</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Escapemerkit</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>\\${LITERAL}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>${LITERAL}</samp> (ei laajenneta)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>Price: \\$25.00</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Price: $25.00</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>\\@{x+y}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>@{x+y}</samp> (ei evaluoida)</td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <th>Sisäkkäiset muuttujat</th>\n"
+"        <th></th>\n"
+"        <th></th>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U1:NET_NAME(@{${ROW}-2})}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Dynaaminen verkon haku taulukoissa</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td>&nbsp;<br><samp>${U${ROW}:VALUE}</samp></td>\n"
+"        <td></td>\n"
+"        <td>&nbsp;<br><samp>Dynaaminen piirilevykuvion viite</samp></td>\n"
+"    </tr>\n"
+"    <tr>\n"
+"        <td><br></td>\n"
+"    </tr>\n"
+"</table>\n"
+"<p></p>\n"
+"<p></p>\n"
+"<i>Huomaa, että merkinnällä on etusija muuttujien laajennukseen nähden.</i>\n"
+"<p></p>\n"
+"<p><b>Piirilevykuvioiden ristiviittaukset:</b> Muiden piirilevykuvioiden "
+"viitekenttiä ja anturoita voidaan käyttää syntaksilla <samp>${refdes:field}</"
+"samp> tai <samp>${refdes:function(pad)}</samp>.</p>\n"
+"<p><b>Sisäkkäiset muuttujat:</b> Muuttujat voivat sisältää muita muuttujia. "
+"Sisäkkäiset muuttujat laajennetaan ensin. Sisäkkäisyyden enimmäissyvyys: 10 "
+"tasoa.</p>\n"
+"<p><b>Virheilmoitukset:</b></p>\n"
+"<ul>\n"
+"<li><samp>&lt;UNRESOLVED: token&gt;</samp> - Muuttujaa tai funktiota ei "
+"voida ratkaista</li>\n"
+"<li><samp>&lt;Unknown reference: U1&gt;</samp> - Piirilevykuviota ei löydy</"
+"li>\n"
+"</ul>\n"
+"\n"
 
 #: pcbnew/pcb_textbox.cpp:798
 #, c-format
@@ -66303,51 +66657,51 @@ msgstr "Suunnittelusäännöistä"
 
 #: pcbnew/via_protection_ui_mixin.h:115
 msgid "Type I-a (tented top)"
-msgstr ""
+msgstr "Tyyppi I-a (peitetty yläpuoli)"
 
 #: pcbnew/via_protection_ui_mixin.h:116
 msgid "Type I-b (tented both sides)"
-msgstr ""
+msgstr "Tyyppi I-b (peitetty molemmat puolet)"
 
 #: pcbnew/via_protection_ui_mixin.h:117
 msgid "Type I-a (tented bottom)"
-msgstr ""
+msgstr "Tyyppi I-a (peitetty alapuoli)"
 
 #: pcbnew/via_protection_ui_mixin.h:118
 msgid "Type II-a (covered and tented top)"
-msgstr ""
+msgstr "Tyyppi II-a (peitetty ja suojattu yläpuoli)"
 
 #: pcbnew/via_protection_ui_mixin.h:119
 msgid "Type II-b (covered and tented both sides)"
-msgstr ""
+msgstr "Tyyppi II-b (peitetty ja suojattu molemmat puolet)"
 
 #: pcbnew/via_protection_ui_mixin.h:120
 msgid "Type II-a (covered and tented bottom)"
-msgstr ""
+msgstr "Tyyppi II-a (peitetty ja suojattu alapuoli)"
 
 #: pcbnew/via_protection_ui_mixin.h:121
 msgid "Type III-a (plugged top)"
-msgstr ""
+msgstr "Tyyppi III-a (tulpattu yläpuoli)"
 
 #: pcbnew/via_protection_ui_mixin.h:122
 msgid "Type III-b (plugged both sides)"
-msgstr ""
+msgstr "Tyyppi III-b (tulpattu molemmat puolet)"
 
 #: pcbnew/via_protection_ui_mixin.h:123
 msgid "Type III-a (plugged bottom)"
-msgstr ""
+msgstr "Tyyppi III-a (tulpattu alapuoli)"
 
 #: pcbnew/via_protection_ui_mixin.h:124
 msgid "Type IV-a (plugged and tented top)"
-msgstr ""
+msgstr "Tyyppi IV-a (peitetty ja tulpattu yläpuoli)"
 
 #: pcbnew/via_protection_ui_mixin.h:125
 msgid "Type IV-b (plugged and tented both sides)"
-msgstr ""
+msgstr "Tyyppi IV-b (peitetty ja tulpattu molemmat puolet)"
 
 #: pcbnew/via_protection_ui_mixin.h:126
 msgid "Type IV-a (plugged and tented bottom)"
-msgstr ""
+msgstr "Tyyppi IV-a (peitetty ja tulpattu alapuoli)"
 
 #: pcbnew/via_protection_ui_mixin.h:127
 msgid "Type V (filled)"
@@ -66359,7 +66713,7 @@ msgstr "Tyyppi VI-a (täytetty ja peitetty ylhäältä)"
 
 #: pcbnew/via_protection_ui_mixin.h:129
 msgid "Type VI-b (filled and tented both sides)"
-msgstr ""
+msgstr "Tyyppi VI-b (peitetty ja täytetty molemmat puolet)"
 
 #: pcbnew/via_protection_ui_mixin.h:130
 msgid "Type VI-a (filled and tented bottom)"
@@ -67091,7 +67445,7 @@ msgstr "Kohde 2"
 #: pcbnew/widgets/constraint_list_view.cpp:75
 #, c-format
 msgid " (+%zu)"
-msgstr ""
+msgstr " (+%zu)"
 
 #: pcbnew/widgets/filedlg_hook_save_project.h:36
 msgid "Create a new project for this board"
