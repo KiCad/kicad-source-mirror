@@ -995,6 +995,17 @@ void DIALOG_FIELDS_TABLE::OnRemoveField( wxCommandEvent& aEvent )
                     }
                 }
 
+                wxString fieldName = m_viewControlsDataModel->GetUntranslatedFieldName( row );
+                int      col = getDataModel()->GetFieldNameCol( fieldName );
+
+                if( col != -1 && getDataModel()->ColIsItemIdentifier( col ) )
+                {
+                    DisplayError( this, wxString::Format( _( "The '%s' field cannot be removed." ),
+                                                          m_viewControlsDataModel->GetValue(
+                                                                  row, DISPLAY_NAME_COLUMN ) ) );
+                    return false;
+                }
+
                 return IsOK( this, wxString::Format( _( "Are you sure you want to remove the field '%s'?" ),
                                                      m_viewControlsDataModel->GetValue( row, DISPLAY_NAME_COLUMN ) ) );
             },
@@ -1042,6 +1053,13 @@ void DIALOG_FIELDS_TABLE::OnRenameField( wxCommandEvent& aEvent )
 
     int col = getDataModel()->GetFieldNameCol( fieldName );
     wxCHECK_RET( col != -1, wxS( "Existing field name missing from data model" ) );
+
+    if( getDataModel()->ColIsItemIdentifier( col ) )
+    {
+        DisplayError( this, wxString::Format( _( "The '%s' field cannot be renamed." ),
+                                              m_viewControlsDataModel->GetValue( row, DISPLAY_NAME_COLUMN ) ) );
+        return;
+    }
 
     wxTextEntryDialog dlg( this, _( "New field name:" ), _( "Rename Field" ), fieldName );
 
