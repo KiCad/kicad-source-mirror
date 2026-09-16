@@ -1,0 +1,674 @@
+{
+  "addedItems": [],
+  "board_hash": "D948A587C8B307F478BB68225CA778C2",
+  "events": [
+    {
+      "layer": 0,
+      "position": {
+        "x": 147750000,
+        "y": 99775000
+      },
+      "sizes": {
+        "diffPairGap": 250000,
+        "diffPairViaGap": 250000,
+        "diffPairWidth": 200000,
+        "layerBottom": 1,
+        "layerTop": 0,
+        "trackWidth": 200000,
+        "trackWidthIsExplicit": false,
+        "viaDiameter": 600000,
+        "viaDrill": 300000,
+        "viaType": 4
+      },
+      "type": 0,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "a9d25aab-a45f-4588-9301-bfc1000868d4"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 147750000,
+        "y": 99775000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "a9d25aab-a45f-4588-9301-bfc1000868d4"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 147880000,
+        "y": 99750000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 147980000,
+        "y": 99750000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 148140000,
+        "y": 99750000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 148390000,
+        "y": 99750000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 148630000,
+        "y": 99750000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 148880000,
+        "y": 99750000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 149720000,
+        "y": 99770000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 150670000,
+        "y": 99800000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 150840000,
+        "y": 99800000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151250000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151280000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151250000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151290000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151300000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151300000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151300000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151310000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151320000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151320000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151250000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151250000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151250000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151250000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 151250000,
+        "y": 99625000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "66eb6e3b-3d6a-4018-8083-16d8bfa4ae59"
+      ]
+    }
+  ],
+  "headItems": [
+    {
+      "kind": "line",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "/D+",
+      "shape": {
+        "points": [
+          {
+            "x": 147750000,
+            "y": 99775000
+          },
+          {
+            "x": 150913603,
+            "y": 99775000
+          },
+          {
+            "x": 151063603,
+            "y": 99625000
+          },
+          {
+            "x": 151250000,
+            "y": 99625000
+          }
+        ],
+        "type": "line_chain"
+      },
+      "width": 200000
+    },
+    {
+      "kind": "line",
+      "layers": [
+        0,
+        0
+      ],
+      "net": "/D-",
+      "shape": {
+        "points": [
+          {
+            "x": 147750000,
+            "y": 100225000
+          },
+          {
+            "x": 151100000,
+            "y": 100225000
+          },
+          {
+            "x": 151250000,
+            "y": 100075000
+          }
+        ],
+        "type": "line_chain"
+      },
+      "width": 200000
+    }
+  ],
+  "mode": 2,
+  "removedItems": [],
+  "test_case_type": 0
+}
+
