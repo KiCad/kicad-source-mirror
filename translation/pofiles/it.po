@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-14 13:51+0000\n"
+"PO-Revision-Date: 2026-09-16 07:52+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -10125,9 +10125,8 @@ msgid "Export Board Stackup Job Settings"
 msgstr "Impostazioni di lavoro Esportazione stackup scheda"
 
 #: common/jobs/job_export_pcb_stackup.cpp:91
-#, fuzzy
 msgid "PCB: Export Stackup Table"
-msgstr "Inserisci tabella stack-up scheda"
+msgstr "CS: esporta tabella stack-up"
 
 #: common/jobs/job_export_pcb_stats.cpp:53
 msgid "Export board statistics"
@@ -10189,76 +10188,66 @@ msgid "Schematic: Export PDF"
 msgstr "Schema: Esporta PDF"
 
 #: common/jobs/job_export_sch_plot.cpp:229
-#, fuzzy
 msgid "Schematic: Export PNG"
-msgstr "Schema: Esporta HPGL"
+msgstr "Schema: Esporta PNG"
 
 #: common/jobs/job_export_sch_pythonbom.cpp:35
 msgid "Schematic PythonBOM export"
 msgstr "Esporta PythonBOM schema"
 
 #: common/jobs/job_fp_diff.cpp:37
-#, fuzzy
 msgid "Diff two .pretty footprint libraries"
-msgstr "Esplora le librerie di impronte"
+msgstr "Diff tra due librerie di impronte .pretty"
 
 #: common/jobs/job_fp_diff.cpp:41
-#, fuzzy
 msgid "Footprint Library: Diff"
-msgstr "Librerie di impronte"
+msgstr "Libreria di impronte: Diff"
 
 #: common/jobs/job_gerber_diff.cpp:46
-#, fuzzy
 msgid "Gerber Diff"
-msgstr "File Gerber"
+msgstr "Diff Gerber"
 
 #: common/jobs/job_gerber_diff.cpp:52
-#, fuzzy
 msgid "Gerber Diff Job Settings"
-msgstr "Impostazioni lavoro Esporta Gerber"
+msgstr "Impostazioni di lavoro Diff Gerber"
 
 #: common/jobs/job_gerber_diff.cpp:56
-#, fuzzy
 msgid "Gerber: Diff"
-msgstr "File Gerber"
+msgstr "Gerber: Diff"
 
 #: common/jobs/job_gerber_export_png.cpp:52
 msgid "Gerber Export PNG"
 msgstr "Esportazione Gerber PNG"
 
 #: common/jobs/job_gerber_export_png.cpp:58
-#, fuzzy
 msgid "Gerber Export PNG Job Settings"
-msgstr "Impostazioni lavoro Esporta HPGL"
+msgstr "Impostazioni di lavoro Esporta PNG"
 
 #: common/jobs/job_gerber_export_png.cpp:62
 msgid "Gerber: Export PNG"
 msgstr "Gerber: Esporta PNG"
 
 #: common/jobs/job_gerber_info.cpp:39
-#, fuzzy
 msgid "Gerber Info"
-msgstr "File Gerber"
+msgstr "Info Gerber"
 
 #: common/jobs/job_gerber_info.cpp:45
-#, fuzzy
 msgid "Gerber Info Job Settings"
-msgstr "Impostazioni lavoro Esporta Gerber"
+msgstr "Impostazioni di lavoro Info Gerber"
 
 #: common/jobs/job_gerber_info.cpp:49
-#, fuzzy
 msgid "Gerber: Info"
-msgstr "File Gerber"
+msgstr "Gerber: Info"
 
 #: common/jobs/job_import_utils.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open layer map file '%s'"
-msgstr "Impossibile trovare il file di libreria '%s'"
+msgstr "Impossibile aprire il file di mappatura strati '%s'"
 
 #: common/jobs/job_import_utils.cpp:67
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read layer map file '%s'"
-msgstr "Impossibile leggere il file: %s"
+msgstr "Impossibile leggere il file di mappatura strati '%s'"
 
 #: common/jobs/job_import_utils.cpp:79
 #, c-format
@@ -10287,14 +10276,12 @@ msgid "Failed to write import report to '%s'\n"
 msgstr "Impossibile scrivere il report di importazione in '%s'\n"
 
 #: common/jobs/job_pcb_diff.cpp:37
-#, fuzzy
 msgid "Diff two PCB files"
-msgstr "File C.S. Solidworks"
+msgstr "Diff di due file CS"
 
 #: common/jobs/job_pcb_diff.cpp:41
-#, fuzzy
 msgid "PCB: Diff"
-msgstr "Diff"
+msgstr "CS: Diff"
 
 #: common/jobs/job_pcb_drc.cpp:42
 msgid "Perform DRC"
@@ -10334,9 +10321,8 @@ msgid "Diff two schematic files"
 msgstr "Diff di due file schema"
 
 #: common/jobs/job_sch_diff.cpp:41
-#, fuzzy
 msgid "Schematic: Diff"
-msgstr "Dimensioni dello schema"
+msgstr "Schema: Diff"
 
 #: common/jobs/job_sch_erc.cpp:33
 msgid "Perform ERC"
@@ -10351,7 +10337,6 @@ msgid "Schematic: Perform ERC"
 msgstr "Schema: Esegui CRE"
 
 #: common/jobs/job_sch_import.cpp:52
-#, fuzzy
 msgid "Import schematic"
 msgstr "Importa schema"
 
@@ -10360,9 +10345,8 @@ msgid "Schematic Import Job Settings"
 msgstr "Impostazioni lavori di importazione schema"
 
 #: common/jobs/job_special_archive.cpp:38
-#, fuzzy
 msgid "Special: Archive Project"
-msgstr "Archivia progetto..."
+msgstr "Speciale: Archivia progetto"
 
 #: common/jobs/job_special_copyfiles.cpp:46
 msgid "Special: Copy Files"
@@ -10373,14 +10357,12 @@ msgid "Special: Execute Command"
 msgstr "Speciale: esegui comando"
 
 #: common/jobs/job_sym_diff.cpp:37
-#, fuzzy
 msgid "Diff two .kicad_sym libraries"
-msgstr "cartella con file .kicad_sym"
+msgstr "Diff di due librerie .kicad_sym"
 
 #: common/jobs/job_sym_diff.cpp:41
-#, fuzzy
 msgid "Symbol Library: Diff"
-msgstr "Librerie di simboli"
+msgstr "Libreria di simboli: Diff"
 
 #: common/jobs/jobs_output_archive.cpp:127 common/jobs/jobset.cpp:47
 msgid "Archive"
@@ -10755,19 +10737,16 @@ msgid "DRC marker shadows"
 msgstr "Ombre marcatori DRC"
 
 #: common/layer_id.cpp:145
-#, fuzzy
 msgid "DRC highlighted"
-msgstr "Evidenziamento net"
+msgstr "Evidenziato DRC"
 
 #: common/layer_id.cpp:148
-#, fuzzy
 msgid "Grid items"
-msgstr "Elementi grafici"
+msgstr "Elementi griglia"
 
 #: common/layer_id.cpp:149
-#, fuzzy
 msgid "Via stitching"
-msgstr "Caching"
+msgstr "Stitching dei via"
 
 #: common/layer_id.cpp:155
 msgid "Grid axes"
@@ -10782,24 +10761,20 @@ msgid "Courtyard collision shadow"
 msgstr "Ombra collisione ingombri"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Constrained item shadow"
-msgstr "Ombra elementi bloccati"
+msgstr "Ombra elementi vincolati"
 
 #: common/layer_id.cpp:161
-#, fuzzy
 msgid "Under-constrained tint"
-msgstr "Illimitata"
+msgstr "Tinta sotto-vincolo"
 
 #: common/layer_id.cpp:162
-#, fuzzy
 msgid "Fully constrained tint"
-msgstr "Consenti scambi di pin senza vincoli"
+msgstr "Tinta completamente vincolato"
 
 #: common/layer_id.cpp:163
-#, fuzzy
 msgid "Over-constrained tint"
-msgstr "Illimitata"
+msgstr "Tinta supervincolato"
 
 #: common/layer_id.cpp:164
 msgid "Board outline area"
@@ -11038,9 +11013,8 @@ msgid "The library table path '%s' does not exist"
 msgstr "Il percorso della tabella della libreria '%s' non esiste"
 
 #: common/libraries/library_table.cpp:94
-#, fuzzy
 msgid "The library table is of wrong type"
-msgstr "Il percorso della tabella della libreria '%s' non esiste"
+msgstr "Tabella libreria di tipo sbagliato"
 
 #: common/libraries/library_table.cpp:309
 #, c-format
