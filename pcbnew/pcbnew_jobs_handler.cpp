@@ -1719,7 +1719,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPng( JOB* aJob )
         return CLI::EXIT_CODES::ERR_ARGS;
     }
 
-    if( pngJob->GetConfiguredOutputPath().IsEmpty() )
+    bool isSingle = pngJob->m_genMode == JOB_EXPORT_PCB_PNG::GEN_MODE::SINGLE;
+
+    if( isSingle && pngJob->GetConfiguredOutputPath().IsEmpty() )
     {
         wxFileName fn = brd->GetFileName();
         fn.SetName( fn.GetName() );
@@ -1735,7 +1737,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPng( JOB* aJob )
 
     PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
 
-    if( !PATHS::EnsurePathExists( outPath, false ) )
+    if( !PATHS::EnsurePathExists( outPath, isSingle ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1743,7 +1745,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPng( JOB* aJob )
 
     std::vector<wxString> outputPaths;
 
-    if( !pcbPlotter.Plot( outPath, pngJob->m_plotLayerSequence, pngJob->m_plotOnAllLayersSequence, false, false,
+    if( !pcbPlotter.Plot( outPath, pngJob->m_plotLayerSequence, pngJob->m_plotOnAllLayersSequence, false, isSingle,
                           std::nullopt, std::nullopt, std::nullopt, &outputPaths ) )
     {
         return CLI::EXIT_CODES::ERR_UNKNOWN;

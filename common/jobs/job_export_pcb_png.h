@@ -34,6 +34,14 @@ public:
     wxString GetDefaultDescription() const override;
     wxString GetSettingsDialogTitle() const override;
 
+    enum class GEN_MODE
+    {
+        SINGLE,
+        MULTI
+    };
+
+    GEN_MODE m_genMode;
+
     int  m_dpi;
     bool m_antialias;
 };

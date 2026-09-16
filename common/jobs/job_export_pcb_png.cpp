@@ -22,11 +22,19 @@
 #include <i18n_utility.h>
 #include <plotters/plotter_png.h>
 
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_PNG::GEN_MODE,
+                              {
+                                      { JOB_EXPORT_PCB_PNG::GEN_MODE::MULTI, "multi" },
+                                      { JOB_EXPORT_PCB_PNG::GEN_MODE::SINGLE, "single" },
+                              } )
+
 JOB_EXPORT_PCB_PNG::JOB_EXPORT_PCB_PNG() :
     JOB_EXPORT_PCB_PLOT( JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PNG, "png", false ),
+    m_genMode( GEN_MODE::MULTI ),
     m_dpi( DEFAULT_PNG_DPI ),
     m_antialias( true )
 {
+    m_params.emplace_back( new JOB_PARAM<GEN_MODE>( "gen_mode", &m_genMode, m_genMode ) );
     m_params.emplace_back( new JOB_PARAM<int>( "dpi", &m_dpi, m_dpi ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "antialias", &m_antialias, m_antialias ) );
 }

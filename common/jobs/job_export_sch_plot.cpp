@@ -123,8 +123,8 @@ wxString JOB_EXPORT_SCH_PLOT_PDF::GetSettingsDialogTitle() const
 }
 
 
-JOB_EXPORT_SCH_PLOT_DXF ::JOB_EXPORT_SCH_PLOT_DXF () :
-		JOB_EXPORT_SCH_PLOT( true )
+JOB_EXPORT_SCH_PLOT_DXF::JOB_EXPORT_SCH_PLOT_DXF( bool aOutputIsDirectory ) :
+        JOB_EXPORT_SCH_PLOT( aOutputIsDirectory )
 {
 	m_plotFormat = SCH_PLOT_FORMAT::DXF;
 }
@@ -142,8 +142,8 @@ wxString JOB_EXPORT_SCH_PLOT_DXF::GetSettingsDialogTitle() const
 }
 
 
-JOB_EXPORT_SCH_PLOT_SVG::JOB_EXPORT_SCH_PLOT_SVG() :
-		JOB_EXPORT_SCH_PLOT( true )
+JOB_EXPORT_SCH_PLOT_SVG::JOB_EXPORT_SCH_PLOT_SVG( bool aOutputIsDirectory ) :
+        JOB_EXPORT_SCH_PLOT( aOutputIsDirectory )
 {
 	m_plotFormat = SCH_PLOT_FORMAT::SVG;
 }
@@ -161,8 +161,8 @@ wxString JOB_EXPORT_SCH_PLOT_SVG::GetSettingsDialogTitle() const
 }
 
 
-JOB_EXPORT_SCH_PLOT_PS::JOB_EXPORT_SCH_PLOT_PS() :
-		JOB_EXPORT_SCH_PLOT( true )
+JOB_EXPORT_SCH_PLOT_PS::JOB_EXPORT_SCH_PLOT_PS( bool aOutputIsDirectory ) :
+        JOB_EXPORT_SCH_PLOT( aOutputIsDirectory )
 {
 	m_plotFormat = SCH_PLOT_FORMAT::POST;
 }
@@ -193,8 +193,8 @@ wxString JOB_EXPORT_SCH_PLOT_HPGL::GetDefaultDescription() const
 }
 
 
-JOB_EXPORT_SCH_PLOT_PNG::JOB_EXPORT_SCH_PLOT_PNG() :
-        JOB_EXPORT_SCH_PLOT( true ),
+JOB_EXPORT_SCH_PLOT_PNG::JOB_EXPORT_SCH_PLOT_PNG( bool aOutputIsDirectory ) :
+        JOB_EXPORT_SCH_PLOT( aOutputIsDirectory ),
         m_dpi( DEFAULT_PNG_DPI ),
         m_antialias( true )
 {
