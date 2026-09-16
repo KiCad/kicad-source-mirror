@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-16 07:51+0000\n"
+"PO-Revision-Date: 2026-09-16 13:56+0000\n"
 "Last-Translator: Mert Şişmanoğlu <me@mertsismanoglu.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
 "source/tr/>\n"
@@ -10966,9 +10966,9 @@ msgid "Restore Failed"
 msgstr "Geri Yükleme Başarısız"
 
 #: common/local_history.cpp:2330
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Uzak sürümüne sıfırla."
+msgstr "Projeyi %s sürümüne geri yüklemek istiyor musunuz?"
 
 #: common/local_history.cpp:2332
 #, fuzzy
@@ -54949,9 +54949,8 @@ msgstr ""
 "Onları ayrı noktalar olarak ele almak için noktalar arasındaki minimum mesafe"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:98
-#, fuzzy
 msgid "Minimum hole diameter"
-msgstr "Asgari delik çapı: "
+msgstr "Asgari delik çapı"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:110
 #, fuzzy
