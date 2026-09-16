@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/25112
+// Fields-table regressions, including https://gitlab.com/kicad/code/kicad/-/issues/25112.
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
@@ -25,6 +25,8 @@
 #include <set>
 
 #include <eeschema_helpers.h>
+#include <lib_fields_data_model.h>
+#include <lib_symbol.h>
 #include <symbol_fields_data_model.h>
 #include <locale_io.h>
 #include <sch_commit.h>
@@ -538,3 +540,97 @@ BOOST_FIXTURE_TEST_CASE( RevertingVariantKeepsBaseEditsConsistentAcrossPaths, IS
     BOOST_CHECK_EQUAL( field->GetText( &m_siblingPath, wxS( "A" ) ), wxS( "staged base" ) );
     BOOST_CHECK( !model->IsEdited() );
 }
+
+
+// Repose #2772: nested field references must use the staged values for this instance/variant.
+BOOST_FIXTURE_TEST_CASE( MixedVariablesResolveStagedVariantFieldsBeforeApply, ISSUE25112_FIXTURE )
+{
+    const wxString valueName = GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );
+    auto           model = MakeScopedModel( wxEmptyString, valueName );
+    int            valueCol = m_col;
+    SCH_FIELD*     field = m_symbol->GetField( FIELD_T::VALUE );
+    field->SetText( wxS( "live" ) );
+    model->UpdateReferences( m_refs );
+    model->AddColumn( wxS( "Nested" ), wxS( "Nested" ), true );
+    int nestedCol = model->GetFieldNameCol( wxS( "Nested" ) );
+    model->SetValue( m_row, nestedCol, wxS( "Value: ${vAlUe}" ) );
+    model->AddColumn( wxS( "Report" ), wxS( "Report" ), true );
+    int reportCol = model->GetFieldNameCol( wxS( "Report" ) );
+    model->SetShowColumn( reportCol, true );
+    model->SetValue( m_row, reportCol, wxS( "${REFERENCE}: ${NESTED}" ) );
+    model->SetValue( m_row, valueCol, wxS( "base staged" ) );
+    wxString prefix = m_symbol->GetRef( &m_scopePath, true ) + wxS( ": Value: " );
+    BOOST_CHECK_EQUAL( model->GetResolvedValue( m_row, reportCol ), prefix + wxS( "base staged" ) );
+    BOOST_CHECK( model->Export( BOM_FMT_PRESET() ).Contains( prefix + wxS( "base staged" ) ) );
+
+    model->SetCurrentVariant( wxS( "A" ) );
+    model->SetValue( m_row, nestedCol, wxS( "Value: ${VALUE}" ) );
+    model->SetValue( m_row, reportCol, wxS( "${REFERENCE}: ${Nested}" ) );
+    model->SetValue( m_row, valueCol, wxS( "A staged" ) );
+    BOOST_CHECK_EQUAL( model->GetResolvedValue( m_row, reportCol ), prefix + wxS( "A staged" ) );
+    model->SetCurrentVariant( wxEmptyString );
+    BOOST_CHECK_EQUAL( model->GetResolvedValue( m_row, reportCol ), prefix + wxS( "base staged" ) );
+    BOOST_CHECK_EQUAL( field->GetText(), wxS( "live" ) );
+    BOOST_CHECK_EQUAL( field->GetText( &m_siblingPath, wxS( "A" ) ), wxS( "live" ) );
+}
+
+
+struct LIB_FIELDS_TABLE_TEXT_VARS_FIXTURE
+{
+    LIB_FIELDS_TABLE_TEXT_VARS_FIXTURE() :
+            m_symbol( wxS( "Test" ) ),
+            m_model( { &m_symbol } )
+    {
+        m_symbol.GetValueField().SetText( wxS( "live" ) );
+        m_symbol.GetFootprintField().SetText( wxS( "Library:Package" ) );
+        SCH_FIELD* part = new SCH_FIELD( &m_symbol, FIELD_T::USER, wxS( "PartNumber" ) );
+        part->SetText( wxS( "old part" ) );
+        m_symbol.AddField( part );
+
+        for( const wxString& name :
+             { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME, GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ),
+               wxString( wxS( "PartNumber" ) ), wxString( wxS( "Report" ) ) } )
+        {
+            m_model.AddColumn( name, name, false );
+            m_model.SetShowColumn( m_model.GetFieldNameCol( name ), true );
+        }
+
+        m_model.RebuildRows();
+        BOOST_REQUIRE_EQUAL( m_model.GetNumberRows(), 1 );
+    }
+
+    LIB_SYMBOL                        m_symbol;
+    LIB_FIELDS_EDITOR_GRID_DATA_MODEL m_model;
+};
+
+
+BOOST_FIXTURE_TEST_SUITE( LibFieldsTableTextVars, LIB_FIELDS_TABLE_TEXT_VARS_FIXTURE )
+
+
+BOOST_AUTO_TEST_CASE( MixedVariablesResolveStagedFieldsAndLiveFallbacks )
+{
+    m_model.SetValue( 0, 1, wxS( "staged" ) );
+    m_model.SetValue( 0, 2, wxS( "Part ${vAlUe}" ) );
+    m_model.SetValue( 0, 3, wxS( "${PARTNUMBER}: ${FOOTPRINT_LIBRARY} ${Unknown}" ) );
+    const wxString expected = wxS( "Part staged: Library ${Unknown}" );
+
+    BOOST_CHECK_EQUAL( m_model.GetResolvedValue( 0, 3 ), expected );
+    BOOST_CHECK( m_model.Export( BOM_FMT_PRESET() ).Contains( expected ) );
+    BOOST_CHECK_EQUAL( m_symbol.GetValueField().GetText(), wxS( "live" ) );
+    BOOST_CHECK_EQUAL( m_symbol.GetField( wxS( "PartNumber" ) )->GetText(), wxS( "old part" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( StagedVariableCyclesRemainBounded )
+{
+    m_model.SetValue( 0, 1, wxS( "${PartNumber}" ) );
+    m_model.SetValue( 0, 2, wxS( "${VALUE}" ) );
+    m_model.SetValue( 0, 3, wxS( "Value: ${VALUE}" ) );
+    wxString resolved = m_model.GetResolvedValue( 0, 3 );
+    BOOST_CHECK( resolved == wxS( "Value: ${VALUE}" ) || resolved == wxS( "Value: ${PartNumber}" ) );
+    m_model.SetValue( 0, 1, wxS( "${VALUE}" ) );
+    BOOST_CHECK_EQUAL( m_model.GetResolvedValue( 0, 3 ), wxS( "Value: ${VALUE}" ) );
+}
+
+
+BOOST_AUTO_TEST_SUITE_END()

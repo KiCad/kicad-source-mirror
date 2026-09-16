@@ -1079,6 +1079,58 @@ protected:
     }
 
     /**
+     * Resolve an ordinary field token from the current variant's staged values. Return raw
+     * variable references so ResolveTextVars can expand nested fields with its depth limit.
+     * Tokens not tracked by the table must still be offered to the live item's resolver.
+     */
+    bool resolveStoredTextVar( const ITEM_TYPE& aItem, wxString* aToken, bool aCaseSensitive = false ) const
+    {
+        auto itemIt = m_dataStore.find( getDataStoreKey( aItem ) );
+
+        if( itemIt == m_dataStore.end() )
+            return false;
+
+        const auto& fields = itemIt->second;
+        auto        fieldIt = fields.find( *aToken );
+
+        if( fieldIt == fields.end() && !aCaseSensitive )
+        {
+            fieldIt = std::find_if( fields.begin(), fields.end(),
+                                    [&]( const auto& aEntry )
+                                    {
+                                        return aToken->IsSameAs( aEntry.first, false );
+                                    } );
+        }
+
+        if( fieldIt == fields.end() || IsGeneratedField( fieldIt->first ) )
+            return false;
+
+        const wxString& name = fieldIt->first;
+        int             col = GetFieldNameCol( name );
+
+        // Identifiers can have instance-specific formatting, such as multi-unit references.
+        if( col >= 0 && ColIsItemIdentifier( col ) )
+            return false;
+
+        const FIELD_STORE_VALUE& field = fieldIt->second;
+
+        if( !field.m_present )
+        {
+            if( !field.m_baselinePresent )
+                return false;
+
+            // A pending deletion must not fall back to the old live field value.
+            aToken->clear();
+            return true;
+        }
+
+        wxString value;
+        getStoredFieldValue( aItem, name, value );
+        *aToken = UnescapeString( value );
+        return true;
+    }
+
+    /**
      * Creates or updates a field in the data store. Always marks the field present as a result.
      */
     void setStoredFieldValue( const ITEM_TYPE& aItem, const wxString& aFieldName,

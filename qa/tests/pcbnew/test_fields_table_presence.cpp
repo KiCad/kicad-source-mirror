@@ -427,4 +427,58 @@ BOOST_AUTO_TEST_CASE( RevertingVariantRetainsOtherVariantsEdits )
 }
 
 
+// Repose #2772: display and export must resolve field references before Apply.
+BOOST_AUTO_TEST_CASE( MixedVariablesUseStagedFieldsForDisplayAndExport )
+{
+    m_footprint->SetValue( wxS( "10k" ) );
+    PCB_FIELD* nested = new PCB_FIELD( m_footprint, FIELD_T::USER, wxS( "Nested" ) );
+    nested->SetText( wxS( "Value: ${VALUE}" ) );
+    m_footprint->Add( nested );
+    PCB_FIELD* report = new PCB_FIELD( m_footprint, FIELD_T::USER, wxS( "Report" ) );
+    report->SetText( wxS( "${REFERENCE}: ${Nested} ${NESTED}" ) );
+    m_footprint->Add( report );
+    AddTestColumn( GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) );
+    int valueCol = m_col;
+    AddTestColumn( wxS( "Nested" ) );
+    AddTestColumn( wxS( "Report" ) );
+    m_model.SetCurrentVariant( wxS( "A" ) );
+    m_model.SetValue( 0, valueCol, wxS( "4.7k" ) );
+
+    // User field names remain case-sensitive, unlike the built-in VALUE alias.
+    const wxString expected = wxS( "U1: Value: 4.7k ${NESTED}" );
+    BOOST_CHECK_EQUAL( m_model.GetResolvedValue( 0, m_col ), expected );
+    BOOST_CHECK( m_model.Export( BOM_FMT_PRESET() ).Contains( expected ) );
+
+    m_model.SetCurrentVariant( wxS( "B" ) );
+    m_model.SetValue( 0, valueCol, wxS( "B staged" ) );
+    BOOST_CHECK_EQUAL( m_model.GetResolvedValue( 0, m_col ), wxS( "U1: Value: B staged ${NESTED}" ) );
+    m_model.SetCurrentVariant( wxS( "A" ) );
+    BOOST_CHECK_EQUAL( m_model.GetResolvedValue( 0, m_col ), expected );
+    BOOST_CHECK( m_board.GetCurrentVariant().IsEmpty() );
+    BOOST_CHECK_EQUAL( m_footprint->GetValue(), wxS( "10k" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( MixedVariablesRespectClearEmptyAndMissingFields )
+{
+    PCB_FIELD* field = new PCB_FIELD( m_footprint, FIELD_T::USER, wxS( "MPN" ) );
+    field->SetText( wxS( "live" ) );
+    m_footprint->Add( field );
+    AddTestColumn( wxS( "MPN" ) );
+    int fieldCol = m_col;
+    AddTestColumn( wxS( "Report" ), true );
+    m_model.SetValue( 0, m_col, wxS( "[${MPN}] ${Unknown}" ) );
+    m_model.ClearCell( 0, fieldCol );
+    BOOST_CHECK_EQUAL( m_model.GetResolvedValue( 0, m_col ), wxS( "[] ${Unknown}" ) );
+    m_model.SetValue( 0, fieldCol, wxEmptyString );
+    BOOST_CHECK_EQUAL( m_model.GetResolvedValue( 0, m_col ), wxS( "[] ${Unknown}" ) );
+    m_model.SetValue( 0, fieldCol, wxS( "staged" ) );
+    BOOST_CHECK_EQUAL( m_model.GetResolvedValue( 0, m_col ), wxS( "[staged] ${Unknown}" ) );
+    m_model.RemoveColumn( fieldCol );
+    int reportCol = m_model.GetFieldNameCol( wxS( "Report" ) );
+    BOOST_CHECK_EQUAL( m_model.GetResolvedValue( 0, reportCol ), wxS( "[] ${Unknown}" ) );
+    BOOST_CHECK_EQUAL( field->GetText(), wxS( "live" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -233,19 +233,24 @@ wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldResolvedLiveValue( con
 
 wxString FOOTPRINT_FIELDS_EDITOR_GRID_DATA_MODEL::resolveTextVars( const FOOTPRINT_REF& aRef, const wxString& aText )
 {
-    // TODO: this isn't technically correct, this should resolve against the
-    // data store's copy of variables whenever whenever possible,
-    // but currently it is resolving against the footprint's current values.
-    // For instance, if you have "My value is ${VALUE}" in the description field,
-    // ${VALUE} will be resolved against the footprint's live value, not the Value field
-    // stored in the data store.
+    int depth = 0;
+
     std::function<bool( wxString* )> footprintResolver =
             [&]( wxString* token ) -> bool
             {
-                return aRef.GetFootprint().ResolveTextVar( token, m_currentVariant );
+                // Footprint user field names are case-sensitive; VALUE is a built-in alias.
+                wxString fieldToken = *token == wxS( "VALUE" )
+                                              ? GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) : *token;
+
+                if( resolveStoredTextVar( aRef, &fieldToken, true ) )
+                {
+                    *token = fieldToken;
+                    return true;
+                }
+
+                return aRef.GetFootprint().ResolveTextVar( token, m_currentVariant, depth );
             };
 
-    int depth = 0;
     return ResolveTextVars( aText, &footprintResolver, depth );
 }
 

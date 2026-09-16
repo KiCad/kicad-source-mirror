@@ -369,19 +369,17 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getFieldResolvedLiveValue( const 
 
 wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::resolveTextVars( const SCH_REFERENCE& aRef, const wxString& aText )
 {
-    // TODO: this isn't technically correct, this should resolve against the
-    // data store's copy of variables whenever whenever possible,
-    // but currently it is resolving against the symbol's current values.
-    // For instance, if you have "My value is ${VALUE}" in the description field,
-    // ${VALUE} will be resolved against the symbol's live value, not the Value field
-    // stored in the data store.
+    int depth = 0;
+
     std::function<bool( wxString* )> symbolResolver =
             [&]( wxString* token ) -> bool
             {
-                return aRef.GetSymbol()->ResolveTextVar( &aRef.GetSheetPath(), token, m_currentVariant );
+                if( resolveStoredTextVar( aRef, token ) )
+                    return true;
+
+                return aRef.GetSymbol()->ResolveTextVar( &aRef.GetSheetPath(), token, m_currentVariant, depth );
             };
 
-    int depth = 0;
     return ResolveTextVars( aText, &symbolResolver, depth );
 }
 
