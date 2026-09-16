@@ -6447,9 +6447,10 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                     break;
 
                 case DSN_STRING:
-                    if( currentGroup )
-                        currentGroup->insert( FromUTF8() );
+                    if( !currentGroup )
+                        Expecting( "list of pin names" );
 
+                    currentGroup->insert( FromUTF8() );
                     break;
 
                 case T_RIGHT:

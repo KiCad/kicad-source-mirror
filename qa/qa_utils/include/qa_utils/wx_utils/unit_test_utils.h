@@ -134,6 +134,22 @@ std::ostream& boost_test_print_type( std::ostream& os, std::pair<K, V> const& aP
     return os;
 }
 
+/**
+ * Boost print helper for generic sets
+ */
+template <typename T>
+std::ostream& boost_test_print_type( std::ostream& os, std::set<T> const& aSet )
+{
+    os << "set size " << aSet.size() << " [";
+    for( const auto& i : aSet )
+    {
+        os << "\n    " << i;
+    }
+
+    os << "]";
+    return os;
+}
+
 } // namespace std
 
 

@@ -172,6 +172,7 @@ set( QA_EESCHEMA_SRCS
     test_symbol_import_reconciler.cpp
     test_easyedapro_v3_import.cpp
     test_easyedapro_v3_plugin.cpp
+    test_jumper_groups.cpp
     test_junction_helpers.cpp
     test_junction_place.cpp
     test_issue18346_junction_fixup.cpp

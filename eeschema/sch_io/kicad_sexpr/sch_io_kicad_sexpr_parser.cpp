@@ -468,6 +468,9 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
                     break;
 
                 case DSN_STRING:
+                    if( !currentGroup )
+                        Expecting( "list of pin names" );
+
                     currentGroup->insert( FromUTF8() );
                     break;
 
