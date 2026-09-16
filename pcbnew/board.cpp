@@ -2737,7 +2737,7 @@ BOX2I BOARD::ComputeBoundingBox( bool aBoardEdgesOnly, bool aPhysicalLayersOnly 
     // Check shapes, dimensions, texts, and fiducials
     for( BOARD_ITEM* item : m_drawings )
     {
-        if( aBoardEdgesOnly && ( item->GetLayer() != Edge_Cuts || item->Type() != PCB_SHAPE_T ) )
+        if( aBoardEdgesOnly && ( item->Type() != PCB_SHAPE_T || item->GetLayer() != Edge_Cuts ) )
             continue;
 
         if( ( item->GetLayerSet() & visible ).any() )
@@ -4187,7 +4187,8 @@ bool BOARD::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM
     if( aFirst->Type() != aSecond->Type() )
         return aFirst->Type() < aSecond->Type();
 
-    if( aFirst->GetLayer() != aSecond->GetLayer() )
+    // Layer-free drawings (grid items) assert in GetLayer(); they sort by uuid below.
+    if( IsSingleLayerType( aFirst->Type() ) && aFirst->GetLayer() != aSecond->GetLayer() )
         return aFirst->GetLayer() < aSecond->GetLayer();
 
     // Callers keep these in a std::set, so any branch reporting equality for two distinct items
