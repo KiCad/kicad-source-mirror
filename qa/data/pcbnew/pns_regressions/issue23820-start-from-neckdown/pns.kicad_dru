@@ -1,0 +1,85 @@
+(version 1)
+
+#(rule "In2 DIFF_IO Width/Gap"
+#	(layer "In2.Cu")
+#	(condition "A.NetClass == 'DIFF_IO' && (A.Type == 'Track') && (B.Type == 'Track')")
+#	(constraint diff_pair_gap (opt 0.15mm))
+#	(constraint track_width   (opt 0.1735mm))
+#)
+#(rule "In1 DIFF_IO Width/Gap"
+#	(layer "In5.Cu")
+#	(condition "A.NetClass == 'DIFF_IO' && (A.Type == 'Track') && (B.Type == 'Track')")
+#	(constraint diff_pair_gap (opt 0.15mm))
+#	(constraint track_width   (opt 0.1735mm))
+#)
+
+(rule "target length and skew"
+      (condition "A.hasNetclass('DIFF_IO')")
+      (constraint length (min 24.9mm) (opt 25mm) (max 25.1mm))
+      (constraint skew (max 0.1mm)))
+
+(rule "In2 DIFF_IO Clearance"
+	(layer "In2.Cu")
+	(condition "A.NetClass == 'DIFF_IO' && !A.isCoupledDiffPair()")
+	(constraint clearance (min 0.5mm))
+)
+
+(rule "In5 DIFF_IO Clearance"
+	(layer "In5.Cu")
+	(condition "A.NetClass == 'DIFF_IO' && !A.isCoupledDiffPair()")
+	(constraint clearance (min 0.5mm))
+)
+
+(rule "In2 IO"
+	(layer "In2.Cu")
+	(condition "A.NetClass == 'IO'")
+	(constraint track_width (opt 0.15mm))
+)
+
+(rule "In5 IO"
+	(layer "In5.Cu")
+	(condition "A.NetClass == 'IO'")
+	(constraint track_width (opt 0.15mm))
+)
+
+(rule "BGA track/via neckdown"
+    (constraint clearance (min 0.075mm))
+    (constraint track_width (min 0.1mm) (opt 0.1mm))
+	(constraint diff_pair_gap (min 0.1mm) (opt 0.147mm))
+	(constraint hole_clearance (min 0.2mm) (opt 0.28mm))
+    (condition "A.intersectsCourtyard('U1') && (A.Type != 'Zone' && B.Type != 'Zone')")
+)
+
+(rule "BGA Zone neckdown"
+    (constraint clearance (min 0.23mm))
+	(constraint hole_clearance (min 0.2mm) (opt 0.28mm))
+    (condition "A.intersectsCourtyard('U1') && (A.Type == 'Pad' || A.Type == 'Via') && (B.Type == 'Zone')")
+)
+
+(rule "U2 Zone neckdown"
+    (constraint clearance (min 0.23mm))
+	(constraint hole_clearance (min 0.2mm) (opt 0.28mm))
+    (condition "A.intersectsCourtyard('U2') && (A.Type == 'Pad' || A.Type == 'Via') && (B.Type == 'Zone')")
+)
+
+(rule xtal_clearance
+	(constraint clearance (min 0.13mm))
+	(condition "A.intersectsBackCourtyard('X1') && A.Type != 'Zone'"))
+
+(rule J1_neckdown
+    (constraint clearance (min 0.075mm))
+    (constraint track_width (min 0.075mm))
+	(constraint diff_pair_gap (min 0.075mm))
+	(condition "A.intersectsCourtyard('J1') && (A.Type == 'Track' || A.Type == 'Via' || A.Type == 'Pad')"))
+
+(rule "Distance between non-Via holes"
+	(constraint hole_to_hole (min 0.5mm))
+	(condition "A.Type != 'Via' || B.Type !='Via'"))
+
+(rule EXB_RN_clearance
+	(constraint clearance (min 0.13mm))
+	(condition "A.intersectsFrontCourtyard('RN2') && A.Type != 'Zone'"))
+
+(rule SON8_Pad_clearance
+	(constraint clearance (min 0.15mm))
+	(condition "A.intersectsFrontCourtyard('U9') && A.Type == 'Pad' && B.Type != 'Zone'" ))
