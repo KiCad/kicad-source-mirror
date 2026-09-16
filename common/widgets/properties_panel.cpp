@@ -80,7 +80,8 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
         wxPanel( aParent ),
         m_SuppressGridChangeEvents( 0 ),
         m_frame( aFrame ),
-        m_splitter_key_proportion( -1 )
+        m_splitter_key_proportion( -1 ),
+        m_deferredRebuildTimer( this )
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -202,6 +203,13 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
           } );
 
     m_frame->Bind( EDA_LANG_CHANGED, &PROPERTIES_PANEL::OnLanguageChanged, this );
+
+    Bind( wxEVT_TIMER,
+          [this]( wxTimerEvent& )
+          {
+              rebuildProperties( m_deferredSelection );
+          },
+          m_deferredRebuildTimer.GetId() );
 }
 
 
@@ -250,10 +258,8 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     if( static_cast<PROPERTIES_PANEL_GRID*>( m_grid )->IsProcessingWxPGEvent() )
     {
         hideCategoryButtons();
-        CallAfter( [this, aSelection]()
-                   {
-                       rebuildProperties( aSelection );
-                   } );
+        m_deferredSelection = aSelection;
+        m_deferredRebuildTimer.StartOnce( 1 );
         return;
     }
 

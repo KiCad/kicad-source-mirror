@@ -22,6 +22,9 @@
 
 #include <wx/panel.h>
 #include <wx/propgrid/propgrid.h>
+#include <wx/timer.h>
+
+#include <tool/selection.h>
 
 #include <bitmaps/bitmaps_list.h>
 #include <vector>
@@ -30,7 +33,6 @@
 
 class EDA_BASE_FRAME;
 class EDA_ITEM;
-class SELECTION;
 class PROPERTY_BASE;
 class BITMAP_BUTTON;
 class wxPropertyGridEvent;
@@ -173,6 +175,11 @@ protected:
 
     /// Proportion of the grid column splitter that is used for the key column (0.0 - 1.0)
     float m_splitter_key_proportion;
+
+    /// Not CallAfter(): on macOS the pending-event queue is drained from inside tool events,
+    /// where a deferred rebuild would only re-defer itself forever.
+    wxTimer   m_deferredRebuildTimer;
+    SELECTION m_deferredSelection;
 
     wxString m_editingOriginalLabel;
 
