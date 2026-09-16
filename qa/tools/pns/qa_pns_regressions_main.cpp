@@ -133,6 +133,15 @@ public:
                 BOOST_TEST_MESSAGE( "Test " << aTestData->m_name << " has no reference head geometry. Skipping head comparson" );
             }
 
+            BOOST_TEST_MESSAGE( "Reference has " << expected.m_addedItems.size() << " added items, "
+                                                 << expected.m_removedIds.size() << " removed items and "
+                                                 << expected.m_heads.size() << " head items." );
+
+            BOOST_TEST_MESSAGE( "Test result has " << cstate.m_addedItems.size() << " added items, "
+                                                 << cstate.m_removedIds.size() << " removed items and "
+                                                 << cstate.m_heads.size() << " head items." );
+
+
             bool pass = cstate.Compare( expected, !hasHeads );
             BOOST_REQUIRE( pass );
             return pass;
