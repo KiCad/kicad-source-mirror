@@ -714,7 +714,7 @@ void DP_GATEWAYS::BuildFromPrimitivePair( const DP_PRIMITIVE_PAIR& aPair, bool a
     const int gap = m_dims.Gap() + m_dims.Width();
     const SHAPE* shP = nullptr;
 
-    if( aPair.PrimP() == nullptr )
+    if( aPair.PrimP() == nullptr || aPair.PrimN() == nullptr )
     {
         BuildGeneric( aPair.AnchorP(), aPair.AnchorN(), 0, true );
         return;
