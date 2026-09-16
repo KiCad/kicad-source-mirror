@@ -1054,6 +1054,12 @@ void DIALOG_FIELDS_TABLE::OnRenameField( wxCommandEvent& aEvent )
     if( newFieldName == fieldName )
         return;
 
+    if( newFieldName.IsEmpty() )
+    {
+        DisplayError( this, _( "Field must have a name." ) );
+        return;
+    }
+
     // New field name already exists
     if( getDataModel()->GetFieldNameCol( newFieldName ) != -1 )
     {
