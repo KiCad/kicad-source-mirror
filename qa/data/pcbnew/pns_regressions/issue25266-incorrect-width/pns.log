@@ -1,0 +1,302 @@
+{
+  "addedItems": [],
+  "board_hash": "6007AE70989D13AFE977B8A580398778",
+  "events": [
+    {
+      "layer": 2,
+      "position": {
+        "x": 102108000,
+        "y": 88009000
+      },
+      "sizes": {
+        "diffPairGap": 400000,
+        "diffPairViaGap": 400000,
+        "diffPairWidth": 400000,
+        "layerBottom": 5,
+        "layerTop": 0,
+        "trackWidth": 200000,
+        "trackWidthIsExplicit": false,
+        "viaDiameter": 600000,
+        "viaDrill": 300000,
+        "viaType": 4
+      },
+      "type": 0,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "656714d5-0029-4476-8ab9-3d7429399864"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 102108000,
+        "y": 88009000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": [
+        "656714d5-0029-4476-8ab9-3d7429399864"
+      ]
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 102580000,
+        "y": 88070000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 102920000,
+        "y": 88070000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 103190000,
+        "y": 88040000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 103960000,
+        "y": 88000000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 104920000,
+        "y": 88000000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 105460000,
+        "y": 88000000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 106760000,
+        "y": 88000000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 107140000,
+        "y": 88000000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    },
+    {
+      "layer": 0,
+      "position": {
+        "x": 107170000,
+        "y": 88020000
+      },
+      "sizes": {
+        "diffPairGap": 180000,
+        "diffPairViaGap": 180000,
+        "diffPairWidth": 125000,
+        "layerBottom": 2,
+        "layerTop": 0,
+        "trackWidth": 155000,
+        "trackWidthIsExplicit": true,
+        "viaDiameter": 600000,
+        "viaDrill": 250000,
+        "viaType": 4
+      },
+      "type": 3,
+      "useConnectedTrackWidth": false,
+      "uuids": []
+    }
+  ],
+  "headItems": [
+    {
+      "kind": "line",
+      "layers": [
+        2,
+        2
+      ],
+      "net": "/MYNET_P",
+      "shape": {
+        "points": [
+          {
+            "x": 102108000,
+            "y": 88009000
+          },
+          {
+            "x": 107170000,
+            "y": 88009000
+          }
+        ],
+        "type": "line_chain"
+      },
+      "width": 400000
+    },
+    {
+      "kind": "line",
+      "layers": [
+        2,
+        2
+      ],
+      "net": "/MYNET_N",
+      "shape": {
+        "points": [
+          {
+            "x": 102108000,
+            "y": 88809000
+          },
+          {
+            "x": 107170000,
+            "y": 88809000
+          }
+        ],
+        "type": "line_chain"
+      },
+      "width": 400000
+    }
+  ],
+  "mode": 2,
+  "removedItems": [],
+  "test_case_type": 0
+}
+
