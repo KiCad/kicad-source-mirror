@@ -59,6 +59,9 @@ struct EMPTY_LABEL_ERC_FIXTURE
 
     int RunCheck()
     {
+        // ERC_TESTER::RunTests() always recalculates first, and the engine reads only published facts
+        m_schematic->RebuildConnectivity();
+
         ERC_TESTER tester( m_schematic.get() );
         return tester.TestEmptyLabelNames();
     }

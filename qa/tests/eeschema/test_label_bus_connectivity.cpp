@@ -29,7 +29,9 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <advanced_config.h>
 #include <connection_graph.h>
+#include <connectivity/conn_facade.h>
 #include <sch_commit.h>
 #include <schematic.h>
 #include <sch_label.h>
@@ -107,6 +109,16 @@ BOOST_FIXTURE_TEST_CASE( LabelNetToBusConnectivity, LABEL_BUS_CONNECTIVITY_FIXTU
     commit.Modify( label, m_screen );
     label->SetText( wxT( "test[0..7]" ) );
     commit.Push( "Change label to a bus", SKIP_UNDO );
+
+    // The push updates only the active engine, and the new engine publishes through the facade
+    if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine )
+    {
+        const auto view = m_schematic->Connectivity().Connection( busWire->m_Uuid, path.Path() );
+        BOOST_REQUIRE( view );
+        BOOST_CHECK( view->IsBus() );
+        BOOST_CHECK_EQUAL( view->Members().leaves.size(), 8 );
+        return;
+    }
 
     // Verify: bus wire should now have members from the bus label
     busConn = busWire->Connection( &path );

@@ -19,6 +19,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <schematic_utils/schematic_file_util.h>
+#include <connectivity/conn_facade.h>
 #include <connectivity/conn_facts.h>
 #include <locale_io.h>
 #include <project.h>
@@ -76,7 +77,8 @@ BOOST_AUTO_TEST_CASE( InputTextDoesNotReadThePreviousNet )
             }
         }
 
-        // Legacy is the reference for both engines
+        // Legacy is the reference for both engines; the hold keeps the engine row across the text bump
+        PUBLICATION_HOLD hold( schematic->Connectivity() );
         label->SetText( wxS( "${SHORT_NET_NAME}" ) );
         BOOST_CHECK_EQUAL( label->GetShownText( &path, FOR_NETNAME ), previous );
     }

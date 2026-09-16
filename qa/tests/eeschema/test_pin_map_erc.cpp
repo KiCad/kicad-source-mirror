@@ -79,7 +79,12 @@ struct PIN_MAP_ERC_FIXTURE
         m_schematic->RootScreen()->Append( sym );
     }
 
-    int runPinMapErc() { return ERC_TESTER( m_schematic.get() ).TestPinMap( nullptr, nullptr ); }
+    int runPinMapErc()
+    {
+        // ERC_TESTER::RunTests() always recalculates first, and the engine reads only published facts
+        m_schematic->RebuildConnectivity();
+        return ERC_TESTER( m_schematic.get() ).TestPinMap( nullptr, nullptr );
+    }
 
     SETTINGS_MANAGER            m_settingsManager;
     std::unique_ptr<SCHEMATIC>  m_schematic;
