@@ -612,6 +612,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     void PreloadLibraries( KIWAY* aKiway ) override;
     void ProjectChanged() override;
     void CancelPreload( bool aBlock = true ) override;
+    void RegisterLibraryHandlers( KICAD_API_SERVER* aServer ) override;
+    bool LoadAllLibraries() override;
+
 
 private:
     std::unique_ptr<PCBNEW_JOBS_HANDLER> m_jobHandler;
@@ -1333,4 +1336,28 @@ void IFACE::CancelPreload( bool aBlock )
         if( aBlock )
             m_libraryPreloadReturn.wait();
     }
+}
+
+
+void IFACE::RegisterLibraryHandlers( KICAD_API_SERVER* aServer )
+{
+    wxCHECK_RET( aServer, "no API server provided" );
+
+    if( !m_apiHandlerFpLibs )
+    {
+        m_apiHandlerFpLibs = std::make_unique<API_HANDLER_FP_LIBRARIES>();
+        aServer->RegisterHandler( m_apiHandlerFpLibs.get() );
+    }
+}
+
+
+bool IFACE::LoadAllLibraries()
+{
+    FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( &m_kiway->Prj() );
+
+    if( !adapter )
+        return false;
+
+    adapter->AsyncLoad();
+    return true;
 }

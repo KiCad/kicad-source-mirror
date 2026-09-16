@@ -20,11 +20,13 @@
 
 #include <api/api_handler_libraries.h>
 
+#include <magic_enum.hpp>
 #include <ranges>
 
 #include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <libraries/library_manager.h>
+#include <kiway.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 
@@ -40,7 +42,6 @@ using kiapi::common::types::LibraryLoadStatus;
 using kiapi::common::types::LibraryTableScope;
 using kiapi::common::types::LibraryType;
 
-
 API_HANDLER_LIBRARIES::API_HANDLER_LIBRARIES( LIBRARY_TABLE_TYPE aType ) :
         m_type( aType )
 {
@@ -49,7 +50,19 @@ API_HANDLER_LIBRARIES::API_HANDLER_LIBRARIES( LIBRARY_TABLE_TYPE aType ) :
             &API_HANDLER_LIBRARIES::handleGetLibraryStatuses );
     registerHandler<ReloadLibrary, LibraryCommandStatus>( &API_HANDLER_LIBRARIES::handleReloadLibrary );
     registerHandler<GetItemsFromLibrary, GetItemsResponse>( &API_HANDLER_LIBRARIES::handleGetItemsFromLibrary );
+
+    // Only the design-block instance registers LoadAllLibraries: it is the dispatcher that
+    // lazily loads the schematic and PCB kifaces and forwards to their per-type loads.  If
+    // the per-type (SYMBOL/FOOTPRINT) handlers registered it too, the server's handler set
+    // (ordered by pointer, not registration order) could route the command to an instance
+    // without a KIWAY, which would fail the request.
+    if( aType == LIBRARY_TABLE_TYPE::DESIGN_BLOCK )
+        registerHandler<LoadAllLibraries, LibraryCommandStatus>(
+                &API_HANDLER_LIBRARIES::handleLoadAllLibraries );
 }
+
+
+API_HANDLER_LIBRARIES::~API_HANDLER_LIBRARIES() = default;
 
 
 LIBRARY_MANAGER_ADAPTER* API_HANDLER_LIBRARIES::adapterForProject( PROJECT& aProject ) const
@@ -303,6 +316,111 @@ API_HANDLER_LIBRARIES::handleReloadLibrary( const HANDLER_CONTEXT<ReloadLibrary>
     }
 
     return makeStatus( LibraryCommandStatus::LCS_OK );
+}
+
+
+HANDLER_RESULT<LibraryCommandStatus>
+API_HANDLER_LIBRARIES::handleLoadAllLibraries( const HANDLER_CONTEXT<LoadAllLibraries>& aCtx )
+{
+    auto makeStatus = []( LibraryCommandStatus::Code aCode, const wxString& aMessage = wxEmptyString )
+    {
+        LibraryCommandStatus status;
+        status.set_code( aCode );
+
+        if( !aMessage.empty() )
+            status.set_error_message( aMessage.ToUTF8() );
+
+        return status;
+    };
+
+    if( Pgm().IsGUI() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNIMPLEMENTED );
+        e.set_error_message( "LoadAllLibraries is not available in GUI mode" );
+        return tl::unexpected( e );
+    }
+
+    std::map<LIBRARY_TABLE_TYPE, KIWAY::FACE_T> typesToLoad;
+
+    if( aCtx.Request.type_size() == 0 )
+    {
+        typesToLoad = { { LIBRARY_TABLE_TYPE::SYMBOL, KIWAY::FACE_SCH },
+                        { LIBRARY_TABLE_TYPE::FOOTPRINT, KIWAY::FACE_PCB },
+                        { LIBRARY_TABLE_TYPE::DESIGN_BLOCK, KIWAY::KIWAY_FACE_COUNT } };
+    }
+    else
+    {
+        for( int protoRaw : aCtx.Request.type() )
+        {
+            LibraryType protoType = static_cast<LibraryType>( protoRaw );
+            LIBRARY_TABLE_TYPE type =
+                    FromProtoEnum<LIBRARY_TABLE_TYPE, LibraryType>( static_cast<LibraryType>( protoType ) );
+
+            switch( type )
+            {
+            case LIBRARY_TABLE_TYPE::SYMBOL:        typesToLoad.emplace( type, KIWAY::FACE_SCH );         break;
+            case LIBRARY_TABLE_TYPE::FOOTPRINT:     typesToLoad.emplace( type, KIWAY::FACE_PCB );         break;
+            case LIBRARY_TABLE_TYPE::DESIGN_BLOCK:  typesToLoad.emplace( type, KIWAY::KIWAY_FACE_COUNT ); break;
+
+            default:
+            {
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                e.set_error_message(
+                        wxString::Format( "invalid library type %s", magic_enum::enum_name( protoType ) ).ToUTF8() );
+                return tl::unexpected( e );
+            }
+            }
+        }
+    }
+
+    // should always be set in this path
+    if( !m_kiway )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_NOT_READY );
+        e.set_error_message( "internal error while attempting to load all libraries" );
+        return tl::unexpected( e );
+    }
+
+    KIWAY& kiway = *m_kiway;
+
+    for( const auto& [type, face] : typesToLoad )
+    {
+        if( type == LIBRARY_TABLE_TYPE::DESIGN_BLOCK )
+        {
+            loadAllLibraries();
+            continue;
+        }
+
+        KIFACE* kiface = kiway.KiFACE( face );
+
+        wxCHECK2( kiface, continue );
+
+        if( m_handlerRegisterCallback )
+            m_handlerRegisterCallback( kiface );
+
+        kiface->LoadAllLibraries();
+    }
+
+    return makeStatus( LibraryCommandStatus::LCS_OK );
+}
+
+
+LibraryCommandStatus API_HANDLER_LIBRARIES::loadAllLibraries()
+{
+    // This base implementation handles design blocks
+    LIBRARY_MANAGER_ADAPTER* adapter = adapterForProject( Pgm().GetSettingsManager().Prj() );
+
+    LibraryCommandStatus status;
+
+    if( !adapter )
+        return status;
+
+    adapter->AsyncLoad();
+    status.set_code( LibraryCommandStatus::LCS_OK );
+    return status;
 }
 
 

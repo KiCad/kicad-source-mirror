@@ -477,6 +477,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
     void PreloadLibraries( KIWAY* aKiway ) override;
     void CancelPreload( bool aBlock = true ) override;
     void ProjectChanged() override;
+    void RegisterLibraryHandlers( KICAD_API_SERVER* aServer ) override;
+    bool LoadAllLibraries() override;
+
 
 private:
     std::unique_ptr<EESCHEMA_JOBS_HANDLER> m_jobHandler;
@@ -1091,5 +1094,29 @@ bool IFACE::HandleApiCloseDocument( const wxString& aSchFileName, KICAD_API_SERV
     }
 
     closeCurrentDocument( aServer );
+    return true;
+}
+
+
+void IFACE::RegisterLibraryHandlers( KICAD_API_SERVER* aServer )
+{
+    wxCHECK_RET( aServer, "no API server provided" );
+
+    if( !m_apiHandlerSchLibs )
+    {
+        m_apiHandlerSchLibs = std::make_unique<API_HANDLER_SCH_LIBRARIES>();
+        aServer->RegisterHandler( m_apiHandlerSchLibs.get() );
+    }
+}
+
+
+bool IFACE::LoadAllLibraries()
+{
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &m_kiway->Prj() );
+
+    if( !adapter )
+        return false;
+
+    adapter->AsyncLoad();
     return true;
 }

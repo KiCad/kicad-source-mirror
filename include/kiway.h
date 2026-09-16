@@ -292,6 +292,20 @@ struct KIFACE
     virtual void CancelPreload( bool aBlock = true ) {}
 
     virtual void ProjectChanged() {}
+
+    /**
+     * Register this face's library API handlers on the given server.  Called by the API
+     * server's library command handler after loading the kiface, so that library commands
+     * are available before any document is opened.  The kiface retains ownership.
+     */
+    virtual void RegisterLibraryHandlers( KICAD_API_SERVER* aServer ) {}
+
+    /**
+     * Starts a background load of all libraries of the type owned by this face.  Called by
+     * the API server's LoadAllLibraries handler after ensuring this kiface is loaded.
+     * Returns true if a load was started.
+     */
+    virtual bool LoadAllLibraries() { return false; }
 };
 
 

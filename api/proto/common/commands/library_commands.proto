@@ -138,6 +138,19 @@ message ReloadLibrary
   repeated string nickname = 3;
 }
 
+// Starts a background load of all libraries of the given types that are listed in the
+// library tables.  If no types are given, all library types are loaded.  The command
+// returns immediately and the load proceeds asynchronously; progress can be monitored
+// with GetLibraryStatuses.
+// In GUI mode this command is a no-op, because the GUI preloads libraries on its own.
+// Returns LibraryCommandStatus
+// Since: 11.0
+message LoadAllLibraries
+{
+  // Types of libraries to load; empty means all types
+  repeated kiapi.common.types.LibraryType type = 1;
+}
+
 /*
  * Library queries
  */

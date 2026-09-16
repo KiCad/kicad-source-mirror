@@ -22,6 +22,7 @@
 #define KICAD_API_HANDLER_LIBRARIES_H
 
 #include <functional>
+#include <map>
 #include <vector>
 
 #include <api/api_handler.h>
@@ -29,9 +30,10 @@
 #include <api/common/commands/library_commands.pb.h>
 #include <libraries/library_table.h>
 
-
 class LIB_ID;
 class LIBRARY_MANAGER_ADAPTER;
+class KIWAY;
+struct KIFACE;
 class PROJECT;
 
 /**
@@ -46,7 +48,16 @@ class API_HANDLER_LIBRARIES : public API_HANDLER
 public:
     API_HANDLER_LIBRARIES( LIBRARY_TABLE_TYPE aType = LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
 
-    ~API_HANDLER_LIBRARIES() override = default;
+    ~API_HANDLER_LIBRARIES() override;
+
+    void SetKiway( KIWAY* aKiway ) { m_kiway = aKiway; }
+
+    /// Set a callback to register the handler on the API server in headless mode
+    void SetLibraryHandlerRegistrar( std::function<void( KIFACE* )> aRegistrar )
+    {
+        m_handlerRegisterCallback = std::move( aRegistrar );
+    }
+
 
 protected:
     HANDLER_RESULT<kiapi::common::commands::LibraryItemsResponse>
@@ -57,6 +68,12 @@ protected:
 
     HANDLER_RESULT<kiapi::common::types::LibraryCommandStatus>
     handleReloadLibrary( const HANDLER_CONTEXT<kiapi::common::commands::ReloadLibrary>& aCtx );
+
+    HANDLER_RESULT<kiapi::common::types::LibraryCommandStatus>
+    handleLoadAllLibraries( const HANDLER_CONTEXT<kiapi::common::commands::LoadAllLibraries>& aCtx );
+
+    /// Starts a background load of all libraries of this handler's type.
+    kiapi::common::types::LibraryCommandStatus loadAllLibraries();
 
     HANDLER_RESULT<kiapi::common::commands::GetItemsResponse>
     handleGetItemsFromLibrary( const HANDLER_CONTEXT<kiapi::common::commands::GetItemsFromLibrary>& aCtx );
@@ -78,6 +95,12 @@ protected:
 
 private:
     LIBRARY_TABLE_TYPE m_type;
+
+    /// Used to lazily load kifaces for LoadAllLibraries in headless; null in GUI mode.
+    KIWAY* m_kiway = nullptr;
+
+    /// Invoked with a lazily-loaded KIFACE so its handlers can be registered on the server.
+    std::function<void( KIFACE* )> m_handlerRegisterCallback;
 };
 
 #endif //KICAD_API_HANDLER_LIBRARIES_H

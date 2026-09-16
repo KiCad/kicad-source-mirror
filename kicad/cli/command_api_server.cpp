@@ -76,6 +76,15 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
     API_HANDLER_COMMON                commonHandler;
     API_HANDLER_LIBRARIES             designBlockLibrariesHandler( LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
 
+    // The design block library handler handles LoadAllLibraries commands which need to be able
+    // to lazy-load the eeschema/pcbnew faces if they aren't loaded
+    designBlockLibrariesHandler.SetKiway( &aKiway );
+    designBlockLibrariesHandler.SetLibraryHandlerRegistrar(
+            [&server]( KIFACE* aKiface )
+            {
+                aKiface->RegisterLibraryHandlers( server.get() );
+            } );
+
     wxString socketPath = wxString::FromUTF8( m_argParser.get<std::string>( ARG_SOCKET ) );
 
     if( !socketPath.IsEmpty() )
