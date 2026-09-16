@@ -384,7 +384,8 @@ void DIALOG_LIB_FIELDS_TABLE::loadSymbols()
     {
         LIB_SYMBOL* canvasSymbol = m_parent->GetCurSymbol();
 
-        if( canvasSymbol && canvasSymbol->GetLibraryName() == libName && canvasSymbol->GetName() == symbolName )
+        if( canvasSymbol && canvasSymbol->GetLibraryName() == libName
+            && UnescapeString( canvasSymbol->GetName() ) == symbolName )
         {
             m_symbolsList.push_back( canvasSymbol );
         }
