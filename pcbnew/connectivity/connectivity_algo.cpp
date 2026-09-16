@@ -1133,11 +1133,11 @@ void CN_CONNECTIVITY_ALGO::updateJumperPads()
             }
         }
 
-        for( const std::set<wxString>& group : footprint->JumperPadGroups() )
+        for( const JUMPER_GROUP& group : footprint->JumperPadGroups().GetAll() )
         {
             std::vector<CN_ITEM*> toConnect;
 
-            for( const wxString& padNumber : group )
+            for( const wxString& padNumber : group.GetNames() )
                 std::ranges::copy( padsMap[padNumber], std::back_inserter( toConnect ) );
 
             for( size_t i = 0; i < toConnect.size(); ++i )

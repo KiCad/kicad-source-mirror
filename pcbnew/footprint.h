@@ -33,6 +33,7 @@
 #include <board_item_container.h>
 #include <board_item.h>
 #include <embedded_files.h>
+#include <jumper_group.h>
 #include <layer_ids.h> // ALL_LAYERS definition.
 #include <lset.h>
 #include <lib_id.h>
@@ -1236,11 +1237,8 @@ public:
      * Each jumper pad group is a set of pad numbers that should be treated as internally connected.
      * @return The list of jumper pad groups in this footprint
      */
-    std::vector<std::set<wxString>>& JumperPadGroups() { return m_jumperPadGroups; }
-    const std::vector<std::set<wxString>>& JumperPadGroups() const { return m_jumperPadGroups; }
-
-    /// Retrieves the jumper group containing the specified pad number, if one exists
-    std::optional<const std::set<wxString>> GetJumperPadGroup( const wxString& aPadNumber ) const;
+    JUMPER_GROUP_SET&       JumperPadGroups() { return m_jumperPadGroups; }
+    const JUMPER_GROUP_SET& JumperPadGroups() const { return m_jumperPadGroups; }
 
     /**
      * Position Reference and Value fields at the top and bottom of footprint's bounding box.
@@ -1526,7 +1524,7 @@ private:
 
     /// A list of jumper pad groups, each of which is a set of pad numbers that should be jumpered
     /// together (treated as internally connected for the purposes of connectivity)
-    std::vector<std::set<wxString>> m_jumperPadGroups;
+    JUMPER_GROUP_SET m_jumperPadGroups;
 
     /// Flag that this footprint should automatically treat sets of two or more pads with the same
     /// number as jumpered pin groups

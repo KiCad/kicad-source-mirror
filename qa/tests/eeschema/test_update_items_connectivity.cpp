@@ -20,6 +20,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <connection_graph.h>
+#include <jumper_group.h>
 #include <lib_symbol.h>
 #include <pin_type.h>
 
@@ -54,7 +55,7 @@ void boost_test_update_symbol_connectivity()
     LIB_SYMBOL lib( "TEST", nullptr );
     lib.SetGlobalPower();
     lib.SetDuplicatePinNumbersAreJumpers( true );
-    lib.JumperPinGroups().push_back( { wxString( "3" ), wxString( "4" ) } );
+    lib.JumperPinGroups().Add( JUMPER_GROUP::Make( { wxString( "3" ), wxString( "4" ) } ).value() );
 
     auto make_pin = [&]( const wxString& num, const wxString& name, ELECTRICAL_PINTYPE type, const VECTOR2I& pos )
     {

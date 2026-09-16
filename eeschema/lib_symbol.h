@@ -22,17 +22,21 @@
 
 #pragma once
 
+#include <set>
+#include <vector>
+
+#include <core/multivector.h>
+
 #include <base_units.h>
+#include <default_values.h>
 #include <embedded_files.h>
 #include <symbol.h>
 #include <sch_field.h>
 #include <sch_pin.h>
+#include <jumper_group.h>
 #include <lib_tree_item.h>
 #include <pin_map.h>
-#include <set>
-#include <vector>
-#include <core/multivector.h>
-#include <default_values.h>
+
 
 class LINE_READER;
 class OUTPUTFORMATTER;
@@ -880,11 +884,8 @@ public:
      * Each jumper pin group is a set of pin numbers that should be treated as internally connected.
      * @return The list of jumper pin groups in this symbols
      */
-    std::vector<std::set<wxString>>& JumperPinGroups() { return m_jumperPinGroups; }
-    const std::vector<std::set<wxString>>& JumperPinGroups() const { return m_jumperPinGroups; }
-
-    /// Retrieves the jumper group containing the specified pin number, if one exists
-    std::optional<const std::set<wxString>> GetJumperPinGroup( const wxString& aPinNumber ) const;
+    JUMPER_GROUP_SET&       JumperPinGroups() { return m_jumperPinGroups; }
+    const JUMPER_GROUP_SET& JumperPinGroups() const { return m_jumperPinGroups; }
 
     /**
      * @return true if the symbol has multiple units per symbol.
@@ -1062,7 +1063,7 @@ private:
 
     /// A list of jumper pin groups, each of which is a set of pin numbers that should be jumpered
     /// together (treated as internally connected for the purposes of connectivity)
-    std::vector<std::set<wxString> > m_jumperPinGroups;
+    JUMPER_GROUP_SET m_jumperPinGroups;
 
     /// Flag that this symbol should automatically treat sets of two or more pins with the same
     /// number as jumpered pin groups

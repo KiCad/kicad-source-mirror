@@ -390,11 +390,11 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     for( const SCH_PIN* pin : m_libEntry->GetGraphicalPins( 0, 0 ) )
         availablePins.insert( pin->GetNumber() );
 
-    for( const std::set<wxString>& group : m_libEntry->JumperPinGroups() )
+    for( const JUMPER_GROUP& group : m_libEntry->JumperPinGroups().GetAll() )
     {
         wxString groupTxt;
 
-        for( const wxString& pinNumber : group )
+        for( const wxString& pinNumber : group.GetNames() )
         {
             if( !groupTxt.IsEmpty() )
                 groupTxt << ", ";
@@ -803,13 +803,13 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     m_libEntry->SetDuplicatePinNumbersAreJumpers( m_cbDuplicatePinsAreJumpers->GetValue() );
 
-    std::vector<std::set<wxString>>& jumpers = m_libEntry->JumperPinGroups();
-    jumpers.clear();
+    JUMPER_GROUP_SET& jumpers = m_libEntry->JumperPinGroups();
+    jumpers.Clear();
 
     for( int ii = 0; ii < m_jumperGroupsGrid->GetNumberRows(); ++ii )
     {
-        wxStringTokenizer tokenizer( m_jumperGroupsGrid->GetCellValue( ii, 0 ), ", \t\r\n", wxTOKEN_STRTOK );
-        std::set<wxString>& group = jumpers.emplace_back();
+        wxStringTokenizer  tokenizer( m_jumperGroupsGrid->GetCellValue( ii, 0 ), ", \t\r\n", wxTOKEN_STRTOK );
+        std::set<wxString> names;
 
         while( tokenizer.HasMoreTokens() )
         {
@@ -827,8 +827,11 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
                 return false;
             }
 
-            group.insert( token );
+            names.insert( token );
         }
+
+        if( std::optional<JUMPER_GROUP> group = JUMPER_GROUP::Make( std::move( names ) ) )
+            jumpers.Add( std::move( *group ) );
     }
 
     if( !m_pinMapPanel->CommitPendingChanges() )

@@ -571,11 +571,11 @@ void FOOTPRINT::SerializeDefinition( kiapi::board::types::Footprint* aOutput ) c
     types::JumperSettings* jumpers = aOutput->mutable_jumpers();
     jumpers->set_duplicate_names_are_jumpered( GetDuplicatePadNumbersAreJumpers() );
 
-    for( const std::set<wxString>& group : JumperPadGroups() )
+    for( const JUMPER_GROUP& group : JumperPadGroups().GetAll() )
     {
         types::JumperGroup* jumperGroup = jumpers->add_groups();
 
-        for( const wxString& padName : group )
+        for( const wxString& padName : group.GetNames() )
             jumperGroup->add_pad_names( padName.ToUTF8() );
     }
 
@@ -652,17 +652,18 @@ bool FOOTPRINT::DeserializeDefinition( const kiapi::board::types::Footprint& aIn
     }
 
     SetDuplicatePadNumbersAreJumpers( aInput.jumpers().duplicate_names_are_jumpered() );
-    JumperPadGroups().clear();
+
+    JUMPER_GROUP_SET& jumperGroups = JumperPadGroups();
+    jumperGroups.Clear();
 
     for( const types::JumperGroup& groupMsg : aInput.jumpers().groups() )
     {
-        std::set<wxString> group;
+        std::set<wxString> padNames;
 
         for( const std::string& padName : groupMsg.pad_names() )
-            group.insert( wxString::FromUTF8( padName ) );
+            padNames.insert( wxString::FromUTF8( padName ) );
 
-        if( !group.empty() )
-            JumperPadGroups().push_back( std::move( group ) );
+        jumperGroups.Add( std::move( padNames ) );
     }
 
     LSET privateLayers;
@@ -3994,18 +3995,6 @@ wxString FOOTPRINT::GetNextPadNumber( const wxString& aLastPadNumber ) const
         num++;
 
     return wxString::Format( wxT( "%s%d" ), prefix, num );
-}
-
-
-std::optional<const std::set<wxString>> FOOTPRINT::GetJumperPadGroup( const wxString& aPadNumber ) const
-{
-    for( const std::set<wxString>& group : m_jumperPadGroups )
-    {
-        if( group.contains( aPadNumber ) )
-            return group;
-    }
-
-    return std::nullopt;
 }
 
 

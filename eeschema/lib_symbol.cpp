@@ -20,8 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <sch_render_settings.h>
+
+#include "lib_symbol.h"
+
+#include <algorithm>
+#include <functional>
+#include <memory>
+#include <unordered_map>
+#include <unordered_set>
+
+#include <advanced_config.h>
 #include <font/outline_font.h>
+#include <jumper_group.h>
 #include <sch_draw_panel.h>
 #include <plotters/plotter.h>
 #include <sch_screen.h>
@@ -29,28 +39,24 @@
 #include <transform.h>
 #include <settings/color_settings.h>
 #include <sch_pin.h>
+#include <sch_render_settings.h>
 #include <sch_shape.h>
 #include <trace_helpers.h>
 #include <common.h>
+
 #include <api/api_enums.h>
 #include <api/api_sch_utils.h>
 #include <api/api_utils.h>
+#include <api/schematic/schematic_types.pb.h>
 
 #include <text_eval/text_eval_wrapper.h>
 
 // TODO(JE) remove m_library; shouldn't be needed with legacy remapping
 #include <libraries/legacy_symbol_library.h>
 
-#include <algorithm>
-#include <functional>
-#include <memory>
-#include <unordered_map>
-#include <unordered_set>
-#include <advanced_config.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
-#include <api/schematic/schematic_types.pb.h>
 
 /**
  * Helper to safely get the root symbol, detecting and logging circular inheritance.
@@ -393,11 +399,11 @@ void LIB_SYMBOL::Serialize( kiapi::schematic::types::SchematicSymbol& aOutput, b
     JumperSettings* jumpers = def.mutable_jumpers();
     jumpers->set_duplicate_names_are_jumpered( GetDuplicatePinNumbersAreJumpers() );
 
-    for( const std::set<wxString>& group : JumperPinGroups() )
+    for( const JUMPER_GROUP& group : JumperPinGroups().GetAll() )
     {
         JumperGroup* jumperGroup = jumpers->add_groups();
 
-        for( const wxString& pinNumber : group )
+        for( const wxString& pinNumber : group.GetNames() )
             jumperGroup->add_pin_numbers( pinNumber.ToUTF8() );
     }
 
@@ -533,6 +539,9 @@ bool LIB_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbol& aI
 
     SetDuplicatePinNumbersAreJumpers( def.jumpers().duplicate_names_are_jumpered() );
 
+    JUMPER_GROUP_SET& jumperGroups = JumperPinGroups();
+    jumperGroups.Clear();
+
     for( const JumperGroup& group : def.jumpers().groups() )
     {
         std::set<wxString> pinNumbers;
@@ -540,8 +549,7 @@ bool LIB_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbol& aI
         for( const std::string& pinNumber : group.pin_numbers() )
             pinNumbers.insert( wxString::FromUTF8( pinNumber ) );
 
-        if( !pinNumbers.empty() )
-            JumperPinGroups().push_back( std::move( pinNumbers ) );
+        jumperGroups.Add( std::move( pinNumbers ) );
     }
 
     LockUnits( def.units_locked() );
@@ -3188,18 +3196,6 @@ void LIB_SYMBOL::EmbedFonts()
 
         file->type = EMBEDDED_FILES::EMBEDDED_FILE::FILE_TYPE::FONT;
     }
-}
-
-
-std::optional<const std::set<wxString>> LIB_SYMBOL::GetJumperPinGroup( const wxString& aPinNumber ) const
-{
-    for( const std::set<wxString>& group : m_jumperPinGroups )
-    {
-        if( group.contains( aPinNumber ) )
-            return group;
-    }
-
-    return std::nullopt;
 }
 
 static struct LIB_SYMBOL_DESC

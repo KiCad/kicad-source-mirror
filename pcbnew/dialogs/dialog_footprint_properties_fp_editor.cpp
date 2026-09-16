@@ -448,11 +448,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 
     m_cbDuplicatePadsAreJumpers->SetValue( m_footprint->GetDuplicatePadNumbersAreJumpers() );
 
-    for( const std::set<wxString>& group : m_footprint->JumperPadGroups() )
+    for( const JUMPER_GROUP& group : m_footprint->JumperPadGroups().GetAll() )
     {
         wxString groupTxt;
 
-        for( const wxString& pinNumber : group )
+        for( const wxString& pinNumber : group.GetNames() )
         {
             if( !groupTxt.IsEmpty() )
                 groupTxt << ", ";
@@ -858,12 +858,12 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     for( const PAD* pad : m_footprint->Pads() )
         availablePads.insert( pad->GetNumber() );
 
-    std::vector<std::set<wxString>> newJumpers;
+    JUMPER_GROUP_SET newJumpers;
 
     for( int ii = 0; ii < m_jumperGroupsGrid->GetNumberRows(); ++ii )
     {
-        wxStringTokenizer tokenizer( m_jumperGroupsGrid->GetCellValue( ii, 0 ), ", \t\r\n", wxTOKEN_STRTOK );
-        std::set<wxString>& group = newJumpers.emplace_back();
+        wxStringTokenizer  tokenizer( m_jumperGroupsGrid->GetCellValue( ii, 0 ), ", \t\r\n", wxTOKEN_STRTOK );
+        std::set<wxString> names;
 
         while( tokenizer.HasMoreTokens() )
         {
@@ -881,8 +881,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
                 return false;
             }
 
-            group.insert( token );
+            names.insert( token );
         }
+
+        if( std::optional<JUMPER_GROUP> group = JUMPER_GROUP::Make( std::move( names ) ) )
+            newJumpers.Add( std::move( *group ) );
     }
 
     m_footprint->JumperPadGroups() = std::move( newJumpers );

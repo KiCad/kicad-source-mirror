@@ -624,18 +624,18 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 if( part->GetDuplicatePinNumbersAreJumpers() )
                     xcomp->AddChild( node( wxT( "duplicate_pin_numbers_are_jumpers" ), wxT( "1" ) ) );
 
-                const std::vector<std::set<wxString>>& jumperGroups = part->JumperPinGroups();
+                const JUMPER_GROUP_SET& jumperGroups = part->JumperPinGroups();
 
-                if( !jumperGroups.empty() )
+                if( !jumperGroups.IsEmpty() )
                 {
                     XNODE* groupNode;
                     xcomp->AddChild( xproperty = node( wxT( "jumper_pin_groups" ) ) );
 
-                    for( const std::set<wxString>& group : jumperGroups )
+                    for( const JUMPER_GROUP& group : jumperGroups.GetAll() )
                     {
                         xproperty->AddChild( groupNode = node( wxT( "group" ) ) );
 
-                        for( const wxString& pinName : group )
+                        for( const wxString& pinName : group.GetNames() )
                             groupNode->AddChild( node( wxT( "pin" ), pinName ) );
                     }
                 }

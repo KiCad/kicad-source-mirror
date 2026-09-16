@@ -23,6 +23,7 @@
 #include <vector>
 
 #include <string_utils.h>
+#include <jumper_group.h>
 #include <lib_symbol.h>
 
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
@@ -32,17 +33,26 @@
 /**
  * Boost.Test print helper for jumper group collections.
  */
-std::ostream& boost_test_print_type( std::ostream& aStream, const std::vector<std::set<wxString>>& aGroups )
+std::ostream& boost_test_print_type( std::ostream& aStream, const JUMPER_GROUP_SET& aGroups )
 {
-    if( aGroups.empty() )
+    if( aGroups.IsEmpty() )
         return aStream << "<no groups>";
 
-    for( size_t ii = 0; ii < aGroups.size(); ++ii )
+
+    std::vector<JUMPER_GROUP> groups = aGroups.GetAll();
+
+    aStream << groups.size() << " group(s): ";
+    for( size_t ii = 0; ii < groups.size(); ++ii )
     {
         if( ii > 0 )
             aStream << " ";
 
-        aStream << "(" << AccumulateDescriptions( aGroups[ii] ) << ")";
+        aStream << "(";
+
+        for( const wxString& name : groups[ii].GetNames() )
+            aStream << "\"" << name << "\" ";
+
+        aStream << ")";
     }
 
     return aStream;
@@ -69,10 +79,15 @@ BOOST_AUTO_TEST_CASE( WellFormedJumperPinGroupsAreParsed )
                 {},
         },
         // Empty groups list
-        // {
-        //         "()",
-        //         {},
-        // },
+        {
+                "()",
+                {},
+        },
+        // A group whose only name is blank contributes nothing
+        {
+                "(\"\")",
+                {},
+        },
         // A single group with a single pin
         {
                 "(\"1\")",
@@ -107,10 +122,13 @@ BOOST_AUTO_TEST_CASE( WellFormedJumperPinGroupsAreParsed )
             LIB_SYMBOL* const symbol = loaded.front();
             BOOST_REQUIRE( symbol );
 
-            const std::vector<std::set<wxString>>& parsed_groups = symbol->JumperPinGroups();
+            // Build the expected groups from the test case data
+            JUMPER_GROUP_SET expected_groups;
+            for( const std::set<wxString>& groupNames : test_case.expected_groups )
+                expected_groups.Add( std::move( groupNames ) );
 
             // BOOST_TEST == doesn't print nicely
-            BOOST_CHECK_EQUAL( parsed_groups, test_case.expected_groups );
+            BOOST_CHECK_EQUAL( symbol->JumperPinGroups(), expected_groups );
         }
     }
 }

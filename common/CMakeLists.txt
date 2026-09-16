@@ -311,6 +311,7 @@ set( KICOMMON_SRCS
     increment.cpp
     json_conversions.cpp
     json_schema_validator.cpp
+    jumper_group.cpp
     kidialog.cpp
     kiid.cpp
     ki_error.cpp

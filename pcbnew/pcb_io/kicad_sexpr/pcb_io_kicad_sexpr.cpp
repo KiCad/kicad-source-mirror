@@ -1667,17 +1667,17 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
     KICAD_FORMAT::FormatBool( m_out, "duplicate_pad_numbers_are_jumpers",
                               aFootprint->GetDuplicatePadNumbersAreJumpers() );
 
-    const std::vector<std::set<wxString>>& jumperGroups = aFootprint->JumperPadGroups();
+    const JUMPER_GROUP_SET& jumperGroups = aFootprint->JumperPadGroups();
 
-    if( !jumperGroups.empty() )
+    if( !jumperGroups.IsEmpty() )
     {
         m_out->Print( "(jumper_pad_groups" );
 
-        for( const std::set<wxString>& group : jumperGroups )
+        for( const JUMPER_GROUP& group : jumperGroups.GetAll() )
         {
             m_out->Print( "(" );
 
-            for( const wxString& padName : group )
+            for( const wxString& padName : group.GetNames() )
                 m_out->Print( "%s ", m_out->Quotew( padName ).c_str() );
 
             m_out->Print( ")" );

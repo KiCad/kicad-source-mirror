@@ -450,17 +450,17 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
         KICAD_FORMAT::FormatBool( &aFormatter, "duplicate_pin_numbers_are_jumpers",
                                   aSymbol->GetDuplicatePinNumbersAreJumpers() );
 
-        const std::vector<std::set<wxString>>& jumperGroups = aSymbol->JumperPinGroups();
+        const JUMPER_GROUP_SET& jumperGroups = aSymbol->JumperPinGroups();
 
-        if( !jumperGroups.empty() )
+        if( !jumperGroups.IsEmpty() )
         {
             aFormatter.Print( "(jumper_pin_groups" );
 
-            for( const std::set<wxString>& group : jumperGroups )
+            for( const JUMPER_GROUP& group : jumperGroups.GetAll() )
             {
                 aFormatter.Print( "(" );
 
-                for( const wxString& padName : group )
+                for( const wxString& padName : group.GetNames() )
                     aFormatter.Print( "%s ", aFormatter.Quotew( padName ).c_str() );
 
                 aFormatter.Print( ")" );

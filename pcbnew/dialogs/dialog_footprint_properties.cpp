@@ -335,11 +335,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     if( m_footprint->GetDuplicatePadNumbersAreJumpers() )
         jumperGroups = _( "all pads with duplicate numbers" );
 
-    for( const std::set<wxString>& group : m_footprint->JumperPadGroups() )
+    for( const JUMPER_GROUP& group : m_footprint->JumperPadGroups().GetAll() )
     {
         wxString groupTxt;
 
-        for( const wxString& pinNumber : group )
+        for( const wxString& pinNumber : group.GetNames() )
         {
             if( !groupTxt.IsEmpty() )
                 groupTxt << ", ";

@@ -6434,27 +6434,34 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
         case T_jumper_pad_groups:
         {
-            // This should only be formatted if there is at least one group
-            std::vector<std::set<wxString>>& groups = footprint->JumperPadGroups();
-            std::set<wxString>* currentGroup = nullptr;
+            JUMPER_GROUP_SET&  groups = footprint->JumperPadGroups();
+            std::set<wxString> names;
+            bool               inGroup = false;
 
-            for( token = NextTok(); currentGroup || token != T_RIGHT; token = NextTok() )
+            for( token = NextTok(); inGroup || token != T_RIGHT; token = NextTok() )
             {
                 switch( static_cast<int>( token ) )
                 {
                 case T_LEFT:
-                    currentGroup = &groups.emplace_back();
+                    if( inGroup )
+                        Expecting( "list of pad names" );
+
+                    inGroup = true;
                     break;
 
                 case DSN_STRING:
-                    if( !currentGroup )
-                        Expecting( "list of pin names" );
+                    if( !inGroup )
+                        Expecting( "list of pad names" );
 
-                    currentGroup->insert( FromUTF8() );
+                    names.insert( FromUTF8() );
                     break;
 
                 case T_RIGHT:
-                    currentGroup = nullptr;
+                    if( std::optional<JUMPER_GROUP> group = JUMPER_GROUP::Make( std::move( names ) ) )
+                        groups.Add( std::move( *group ) );
+
+                    names.clear();
+                    inGroup = false;
                     break;
 
                 default:

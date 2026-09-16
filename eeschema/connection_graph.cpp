@@ -1371,11 +1371,11 @@ void CONNECTION_GRAPH::updateSymbolConnectivity( const SCH_SHEET_PATH& aSheet, S
                 linkPinsInVec( group );
         }
 
-        for( const std::set<wxString>& group : aSymbol->GetLibSymbolRef()->JumperPinGroups() )
+        for( const JUMPER_GROUP& group : aSymbol->GetLibSymbolRef()->JumperPinGroups().GetAll() )
         {
             std::vector<SCH_PIN*> pins;
 
-            for( const wxString& pinNumber : group )
+            for( const wxString& pinNumber : group.GetNames() )
             {
                 SCH_PIN* found = aSymbol->GetPin( pinNumber );
 

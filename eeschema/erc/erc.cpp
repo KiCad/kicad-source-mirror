@@ -245,13 +245,13 @@ int ERC_TESTER::TestPinMap( KIFACE* aCvPcb, PROJECT* aProject )
             for( const SCH_PIN* pin : lib->GetPins() )
                 pinNumbers.insert( pin->GetNumber() );
 
-            const std::vector<std::set<wxString>>& jumperGroups = lib->JumperPinGroups();
+            const JUMPER_GROUP_SET& jumperGroups = lib->JumperPinGroups();
 
             auto sharesJumperGroup = [&]( const wxString& aPinA, const wxString& aPinB )
             {
-                for( const std::set<wxString>& group : jumperGroups )
+                for( const JUMPER_GROUP& group : jumperGroups.GetAll() )
                 {
-                    if( group.count( aPinA ) && group.count( aPinB ) )
+                    if( group.Contains( aPinA ) && group.Contains( aPinB ) )
                         return true;
                 }
 

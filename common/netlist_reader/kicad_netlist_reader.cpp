@@ -326,8 +326,8 @@ void KICAD_NETLIST_PARSER::parseComponent()
     nlohmann::ordered_map<wxString, wxString> fields;
     std::unordered_set<wxString>              componentClasses;
 
-    bool duplicatePinsAreJumpers = false;
-    std::vector<std::set<wxString>> jumperPinGroups;
+    bool             duplicatePinsAreJumpers = false;
+    JUMPER_GROUP_SET jumperPinGroups;
 
     std::vector<COMPONENT::UNIT_INFO> parsedUnits;
 
@@ -602,9 +602,10 @@ void KICAD_NETLIST_PARSER::parseComponent()
 
         case T_jumper_pin_groups:
         {
-            std::set<wxString>* currentGroup = nullptr;
+            std::set<wxString> currentNames;
+            bool               inGroup = false;
 
-            for( token = NextTok(); currentGroup || token != T_RIGHT; token = NextTok() )
+            for( token = NextTok(); inGroup || token != T_RIGHT; token = NextTok() )
             {
                 if( token == T_LEFT )
                     token = NextTok();
@@ -612,7 +613,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
                 switch( token )
                 {
                 case T_group:
-                    currentGroup = &jumperPinGroups.emplace_back();
+                    inGroup = true;
                     break;
 
                 case T_pin:
@@ -620,13 +621,17 @@ void KICAD_NETLIST_PARSER::parseComponent()
                     NeedSYMBOLorNUMBER();
                     wxString padName = From_UTF8( CurText() );
                     NeedRIGHT();
-                    wxCHECK2( currentGroup, continue );
-                    currentGroup->insert( padName );
+                    wxCHECK2( inGroup, continue );
+                    currentNames.insert( padName );
                     break;
                 }
 
                 case T_RIGHT:
-                    currentGroup = nullptr;
+                    if( std::optional<JUMPER_GROUP> group = JUMPER_GROUP::Make( std::move( currentNames ) ) )
+                        jumperPinGroups.Add( std::move( *group ) );
+
+                    currentNames.clear();
+                    inGroup = false;
                     break;
 
                 default:
@@ -658,8 +663,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     component->SetHumanReadablePath( humanSheetPath );
     component->SetComponentClassNames( componentClasses );
     component->SetDuplicatePadNumbersAreJumpers( duplicatePinsAreJumpers );
-    std::ranges::copy( jumperPinGroups, std::inserter( component->JumperPadGroups(),
-                                                       component->JumperPadGroups().end() ) );
+    component->JumperPadGroups() = std::move( jumperPinGroups );
     component->SetUnitInfo( parsedUnits );
     m_netlist->AddComponent( component );
 }
