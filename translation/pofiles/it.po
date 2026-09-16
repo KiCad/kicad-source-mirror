@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 10:54-0700\n"
-"PO-Revision-Date: 2026-09-14 17:51+0000\n"
+"PO-Revision-Date: 2026-09-16 19:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -9670,9 +9670,8 @@ msgid "The library table path '%s' does not exist"
 msgstr "Il percorso della tabella della libreria '%s' non esiste"
 
 #: common/libraries/library_table.cpp:87
-#, fuzzy
 msgid "The library table is of wrong type"
-msgstr "Il percorso della tabella della libreria '%s' non esiste"
+msgstr "Tabella libreria di tipo sbagliato"
 
 #: common/libraries/library_table.cpp:302
 #, c-format
@@ -9718,14 +9717,13 @@ msgid "Restore Failed"
 msgstr "Ripristino fallito"
 
 #: common/local_history.cpp:2313
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "Reimposta all'angolo corrente dalla posizione di riferimento."
+msgstr "Recuperare il progetto alla versione da %s?"
 
 #: common/local_history.cpp:2315
-#, fuzzy
 msgid "Restore Version"
-msgstr "Recupero sessione"
+msgstr "Recupero Versione"
 
 #: common/local_history.cpp:2318
 msgid ""
@@ -9770,7 +9768,7 @@ msgstr ""
 
 #: common/netlist_reader/kicad_netlist_reader.cpp:765
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:959
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid lib_id ID in\n"
 "file: '%s'\n"
@@ -10088,9 +10086,9 @@ msgid "Failed to archive file '%s'."
 msgstr "Fallita archiviazione file \"%s\"."
 
 #: common/project/project_archiver.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s': %s"
-msgstr "Fallita archiviazione file \"%s\"."
+msgstr "Fallita archiviazione file '%s': %s"
 
 #: common/project/project_archiver.cpp:370
 #, c-format
@@ -10170,9 +10168,9 @@ msgstr ""
 "La convalida dello schema dei metadati del provider remoto non è riuscita: %s"
 
 #: common/remote_provider_metadata.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported provider capability '%s'."
-msgstr "Tipo componente non supportato '%s'."
+msgstr "Capacità provider non supportata '%s'."
 
 #: common/remote_provider_metadata.cpp:147
 #, c-format
@@ -10238,9 +10236,9 @@ msgid "assets[].download_url"
 msgstr ""
 
 #: common/remote_provider_models.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse remote provider manifest: %s"
-msgstr "Impossibile analizzare il repository: %s"
+msgstr "Impossibile analizzare il manifest del repository remoto: %s"
 
 #: common/remote_provider_utils.cpp:94
 #, c-format
@@ -11902,14 +11900,13 @@ msgid "View load messages"
 msgstr "Visualizza messaggi di caricamento"
 
 #: common/widgets/kistatusbar.cpp:538
-#, fuzzy, c-format
+#, c-format
 msgid "View %zu message(s)"
-msgstr "Visualizza %zu messaggio(i) di caricamento"
+msgstr "Visualizza %zu messaggio(i)"
 
 #: common/widgets/kistatusbar.cpp:551
-#, fuzzy
 msgid "View messages"
-msgstr "Visualizza messaggi di caricamento"
+msgstr "Visualizza messaggi"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
@@ -12093,18 +12090,18 @@ msgid "Restore Defaults"
 msgstr "Ripristina predefiniti"
 
 #: common/widgets/widget_hotkey_list.cpp:510
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Both bindings are kept, "
 "but only one runs per key press. Continue?"
 msgstr ""
-"\"%s\" è già assegnata a \"%s\" nella sezione \"%s\". Sicuro di voler "
-"cambiare l'assegnamento?"
+"'%s' è già assegnato a '%s' nella sezione '%s'. Entrambe le associazioni "
+"vengono mantenute, ma ne viene eseguita solo una per ogni pressione del "
+"tasto. Continuare?"
 
 #: common/widgets/widget_hotkey_list.cpp:516
-#, fuzzy
 msgid "Hotkey conflict"
-msgstr "Elenco tasti comando"
+msgstr "Conflitto tasti comando"
 
 #: common/widgets/widget_hotkey_list.cpp:529
 msgid "Command"
