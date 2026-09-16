@@ -368,6 +368,9 @@ DIALOG_SYMBOL_FIELDS_TABLE::~DIALOG_SYMBOL_FIELDS_TABLE()
     if( m_aborted )
         return;
 
+    if( !m_job )
+        m_parent->Schematic().RemoveListener( this );
+
     SavePanelLayout();
     SaveColumnWidths();
 
