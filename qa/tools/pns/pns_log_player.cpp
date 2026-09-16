@@ -120,7 +120,15 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
         if( items.size() && items[0] )
             ritem = m_router->GetWorld()->FindItemByParent( items[0] );
 
-        int routingLayer = ritem ? ritem->Layers().Start() : evt.layer;
+        int routingLayer = evt.layer;
+
+        if( ritem )
+        {
+            if( routingLayer < ritem->Layers().Start() )
+                routingLayer = ritem->Layers().Start();
+            if( routingLayer > ritem->Layers().End() )
+                routingLayer = ritem->Layers().End();
+        }
 
         for( BOARD_CONNECTED_ITEM* item : items )
         {
