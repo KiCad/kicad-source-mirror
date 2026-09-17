@@ -29,8 +29,10 @@
 #include <lib_symbol.h>
 #include <symbol_fields_data_model.h>
 #include <locale_io.h>
+#include <richio.h>
 #include <sch_commit.h>
 #include <sch_field.h>
+#include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_reference_list.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
@@ -605,6 +607,144 @@ struct LIB_FIELDS_TABLE_TEXT_VARS_FIXTURE
 
 
 BOOST_FIXTURE_TEST_SUITE( LibFieldsTableTextVars, LIB_FIELDS_TABLE_TEXT_VARS_FIXTURE )
+
+
+BOOST_AUTO_TEST_CASE( DerivedFieldsDisplayPendingInheritanceWithoutCreatingOverrides )
+{
+    m_symbol.SetKeyWords( wxS( "original keywords" ) );
+    m_symbol.GetDescriptionField().SetText( wxS( "Monostable" ) );
+    LIB_SYMBOL child( wxS( "Child" ) );
+    LIB_SYMBOL grandchild( wxS( "Grandchild" ) );
+    child.GetDescriptionField().SetText( wxS( "Monostable" ) );
+    child.GetValueField().SetText( wxS( "Child" ) );
+    child.SetParent( &m_symbol );
+    grandchild.SetParent( &child );
+    LIB_FIELDS_EDITOR_GRID_DATA_MODEL model( { &m_symbol, &child, &grandchild } );
+
+    const wxString footprint = GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED );
+    const wxString keywords = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_KEYWORDS;
+    model.AddColumn( footprint, footprint, false );
+    model.SetShowColumn( 0, true );
+    model.AddColumn( keywords, keywords, false );
+    model.SetShowColumn( 1, true );
+    model.AddColumn( wxS( "PartNumber" ), wxS( "PartNumber" ), false );
+    const wxString description = GetDefaultFieldName( FIELD_T::DESCRIPTION, UNTRANSLATED );
+    const wxString value = GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );
+    const wxString name = LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME;
+    model.AddColumn( description, description, false );
+    model.AddColumn( value, value, false );
+    model.AddColumn( name, name, false );
+    model.RebuildRows();
+
+    auto rowFor = [&]( const LIB_SYMBOL* aSymbol )
+    {
+        for( int row = 0; row < model.GetNumberRows(); ++row )
+        {
+            if( model.GetSymbolForRow( row ) == aSymbol )
+                return row;
+        }
+
+        return -1;
+    };
+
+    const int parentRow = rowFor( &m_symbol );
+    const int childRow = rowFor( &child );
+    const int grandchildRow = rowFor( &grandchild );
+    BOOST_REQUIRE( parentRow >= 0 && childRow >= 0 && grandchildRow >= 0 );
+
+    BOOST_CHECK( !model.CanUseParentValue( parentRow, 0 ) );
+    BOOST_CHECK( !model.CanUseParentValue( parentRow, 1 ) );
+    BOOST_CHECK( !model.CanUseParentValue( childRow, 0 ) );
+    BOOST_CHECK( !model.CanUseParentValue( childRow, 1 ) );
+    BOOST_CHECK( !model.CanUseParentValue( childRow, 2 ) ); // User field
+    BOOST_CHECK( model.CanUseParentValue( childRow, 3 ) );  // Explicit description matching parent
+    BOOST_CHECK( !model.CanUseParentValue( childRow, 4 ) ); // Value must remain non-empty
+    BOOST_CHECK( !model.CanUseParentValue( childRow, 5 ) ); // Symbol name is read-only
+    model.UseParentValue( parentRow, 0 );
+    model.UseParentValue( childRow, 4 );
+    BOOST_CHECK_EQUAL( model.GetValue( parentRow, 0 ), wxS( "Library:Package" ) );
+    BOOST_CHECK_EQUAL( model.GetValue( childRow, 4 ), wxS( "Child" ) );
+
+    BOOST_CHECK( model.GetValue( childRow, 1 ).IsEmpty() );
+    BOOST_CHECK_EQUAL( model.GetResolvedValue( grandchildRow, 1 ), wxS( "original keywords" ) );
+
+    int modified = 0;
+    model.ApplyData( [&]( LIB_SYMBOL* ) { ++modified; } );
+    BOOST_CHECK_EQUAL( modified, 0 );
+    BOOST_CHECK( child.GetRawKeyWords().IsEmpty() );
+    BOOST_CHECK( grandchild.GetRawKeyWords().IsEmpty() );
+
+    model.SetValue( parentRow, 0, wxS( "Package_DIP:DIP-16_W7.62mm" ) );
+    model.SetValue( parentRow, 1, wxS( "staged keywords" ) );
+    model.SetValue( parentRow, 3, wxS( "New description" ) );
+    BOOST_CHECK_EQUAL( model.GetResolvedValue( childRow, 3 ), wxS( "Monostable" ) );
+    BOOST_CHECK( model.GetValue( childRow, 0 ).IsEmpty() );
+    BOOST_CHECK_EQUAL( model.GetResolvedValue( childRow, 0 ), wxS( "Package_DIP:DIP-16_W7.62mm" ) );
+    BOOST_CHECK_EQUAL( model.GetResolvedValue( grandchildRow, 0 ), model.GetResolvedValue( childRow, 0 ) );
+    BOOST_CHECK_EQUAL( model.GetResolvedValue( grandchildRow, 1 ), wxS( "staged keywords" ) );
+
+    model.SetValue( childRow, 0, wxS( "Package_SO:SOIC-16" ) );
+    model.SetValue( childRow, 1, wxS( "child keywords" ) );
+    model.SetValue( parentRow, 0, wxS( "Package_DIP:DIP-16" ) );
+    model.SetValue( parentRow, 1, wxS( "new parent keywords" ) );
+    BOOST_CHECK_EQUAL( model.GetResolvedValue( grandchildRow, 0 ), wxS( "Package_SO:SOIC-16" ) );
+    BOOST_CHECK_EQUAL( model.GetResolvedValue( grandchildRow, 1 ), wxS( "child keywords" ) );
+
+    BOOST_CHECK( model.CanUseParentValue( childRow, 0 ) );
+    BOOST_CHECK( model.CanUseParentValue( childRow, 1 ) );
+    model.UseParentValue( childRow, 0 );
+    model.UseParentValue( childRow, 1 );
+    model.UseParentValue( childRow, 3 );
+    BOOST_CHECK( !model.CanUseParentValue( childRow, 3 ) );
+    BOOST_CHECK_EQUAL( model.GetResolvedValue( grandchildRow, 3 ), wxS( "New description" ) );
+    BOOST_CHECK_EQUAL( model.GetResolvedValue( grandchildRow, 0 ), wxS( "Package_DIP:DIP-16" ) );
+    BOOST_CHECK_EQUAL( model.GetResolvedValue( grandchildRow, 1 ), wxS( "new parent keywords" ) );
+    BOOST_CHECK( model.Export( BOM_FMT_PRESET() ).Contains( wxS( "Package_DIP:DIP-16" ) ) );
+    BOOST_CHECK( model.Export( BOM_FMT_PRESET() ).Contains( wxS( "new parent keywords" ) ) );
+
+    model.ApplyData( [&]( LIB_SYMBOL* ) { ++modified; } );
+    BOOST_CHECK_EQUAL( modified, 2 ); // Parent edits and the child's description override
+    BOOST_CHECK( child.GetFootprintField().GetText().IsEmpty() );
+    BOOST_CHECK( grandchild.GetFootprintField().GetText().IsEmpty() );
+    BOOST_CHECK( child.GetDescriptionField().GetText().IsEmpty() );
+    BOOST_CHECK_EQUAL( child.GetDescription(), wxS( "New description" ) );
+    BOOST_CHECK( child.GetRawKeyWords().IsEmpty() );
+    BOOST_CHECK( grandchild.GetRawKeyWords().IsEmpty() );
+    BOOST_CHECK_EQUAL( grandchild.GetKeyWords(), wxS( "new parent keywords" ) );
+    BOOST_CHECK_EQUAL( grandchild.Flatten()->GetFootprintField().GetText(), wxS( "Package_DIP:DIP-16" ) );
+    BOOST_CHECK_EQUAL( model.GetResolvedValue( grandchildRow, 0 ), wxS( "Package_DIP:DIP-16" ) );
+
+    // Saving the child must not turn its inherited keywords into a local override either.
+    STRING_FORMATTER formatter;
+    SCH_IO_KICAD_SEXPR::FormatLibSymbol( &grandchild, formatter );
+    BOOST_CHECK( formatter.GetString().find( "ki_keywords" ) == std::string::npos );
+
+    LIB_FIELDS_EDITOR_GRID_DATA_MODEL childOnlyModel( { &grandchild } );
+    childOnlyModel.AddColumn( keywords, keywords, false );
+    childOnlyModel.RebuildRows();
+    BOOST_CHECK_EQUAL( childOnlyModel.GetResolvedValue( 0, 0 ), wxS( "new parent keywords" ) );
+
+    // A grouped cell containing a root must not offer to clear its value.
+    model.SetValue( childRow, 1, wxS( "new parent keywords" ) );
+    model.SetValue( grandchildRow, 1, wxS( "new parent keywords" ) );
+    model.SetGroupingEnabled( true );
+    model.SetGroupColumn( 1, true );
+    model.RebuildRows();
+    BOOST_REQUIRE_EQUAL( model.GetNumberRows(), 1 );
+    BOOST_CHECK( !model.CanUseParentValue( 0, 1 ) );
+    model.UseParentValue( 0, 1 );
+    BOOST_CHECK_EQUAL( model.GetValue( 0, 1 ), wxS( "new parent keywords" ) );
+
+    // A group containing only derived symbols can discard all its local overrides.
+    model.SetFilter( wxS( "*child*" ) );
+    model.RebuildRows();
+    BOOST_REQUIRE_EQUAL( model.GetNumberRows(), 1 );
+    BOOST_REQUIRE_EQUAL( model.GetRowReferences( 0 ).size(), 2 );
+    BOOST_CHECK( model.CanUseParentValue( 0, 1 ) );
+    model.UseParentValue( 0, 1 );
+    BOOST_CHECK( model.GetValue( 0, 1 ).IsEmpty() );
+    BOOST_CHECK_EQUAL( model.GetResolvedValue( 0, 1 ), wxS( "new parent keywords" ) );
+}
 
 
 BOOST_AUTO_TEST_CASE( MixedVariablesResolveStagedFieldsAndLiveFallbacks )

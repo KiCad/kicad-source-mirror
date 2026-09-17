@@ -161,11 +161,13 @@ class TEXT_BUTTON_FP_CHOOSER : public wxComboCtrl
 {
 public:
     TEXT_BUTTON_FP_CHOOSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg,
-                            const std::function<wxString( int )>& aSymbolNetlistProvider, int& aRow ) :
+                            const std::function<wxString( int )>& aSymbolNetlistProvider,
+                            wxGrid*& aGrid, int& aRow ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 0, 0 ),
                          wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
             m_symbolNetlistProvider( aSymbolNetlistProvider ),
+            m_grid( aGrid ),
             m_row( aRow )
     {
         m_buttonFpChooserLock = false;
@@ -201,7 +203,14 @@ protected:
             symbolNetlist = m_symbolNetlistProvider( m_row );
 
         if( SelectFootprintFromChooser( m_dlg, fpid, symbolNetlist ) )
+        {
             SetValue( fpid );
+
+            // An accepted selection is a completed edit, just like the file browser below.
+            // Commit it now so cells depending on this value can refresh immediately.
+            if( WX_GRID* grid = dynamic_cast<WX_GRID*>( m_grid ) )
+                grid->CommitPendingChanges();
+        }
 
         m_buttonFpChooserLock = false;
     }
@@ -220,6 +229,7 @@ protected:
      *   fpFilter fpFilter...
      */
     std::function<wxString( int )> m_symbolNetlistProvider;
+    wxGrid*&                       m_grid;
     int&                           m_row;
 };
 
@@ -227,7 +237,7 @@ protected:
 void GRID_CELL_FPID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                     wxEvtHandler* aEventHandler )
 {
-    m_control = new TEXT_BUTTON_FP_CHOOSER( aParent, m_dlg, m_symbolNetlistProvider, m_row );
+    m_control = new TEXT_BUTTON_FP_CHOOSER( aParent, m_dlg, m_symbolNetlistProvider, m_grid, m_row );
     WX_GRID::CellEditorSetMargins( Combo() );
 
 #if wxUSE_VALIDATORS

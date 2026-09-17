@@ -578,11 +578,11 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol,
 {
     wxCHECK_RET( aSymbol, "Invalid LIB_SYMBOL pointer." );
 
-    if( !aSymbol->GetKeyWords().IsEmpty() )
+    if( !aSymbol->GetRawKeyWords().IsEmpty() )
     {
         SCH_FIELD keywords( nullptr, FIELD_T::USER, wxString( "ki_keywords" ) );
         keywords.SetVisible( false );
-        keywords.SetText( aSymbol->GetKeyWords() );
+        keywords.SetText( aSymbol->GetRawKeyWords() );
         saveField( &keywords, aFormatter );
     }
 

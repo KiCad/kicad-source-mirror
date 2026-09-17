@@ -105,6 +105,7 @@ enum
 {
     MYID_SELECT_FOOTPRINT = FIELDS_TABLE_GRID_TRICKS::FIRST_CLIENT_ID,
     MYID_SHOW_DATASHEET,
+    MYID_USE_PARENT_VALUE,
     MYID_CREATE_DERIVED_SYMBOL,
     MYID_INCLUDE_DNP,
     MYID_INCLUDE_EXCLUDED_FROM_BOM
@@ -136,6 +137,11 @@ protected:
     {
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();
+
+        wxMenuItem* useParentMenu = aMenu.Append( MYID_USE_PARENT_VALUE, _( "Use Parent Value" ),
+                                                  _( "Remove the local override and inherit the parent's value" ) );
+        useParentMenu->Enable( row >= 0 && col >= 0 && m_grid->IsEditable()
+                               && m_dataModel->CanUseParentValue( row, col ) );
 
         wxMenuItem* deriveMenu = aMenu.Append( MYID_CREATE_DERIVED_SYMBOL, _( "Create Derived Symbol" ),
                                                _( "Create a new symbol derived from the selected one" ) );
@@ -170,7 +176,19 @@ protected:
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();
 
-        if( aEvent.GetId() == MYID_SELECT_FOOTPRINT )
+        if( aEvent.GetId() == MYID_USE_PARENT_VALUE )
+        {
+            if( !m_grid->IsEditable() || !m_grid->CommitPendingChanges( false )
+                || !m_dataModel->CanUseParentValue( row, col ) )
+            {
+                return;
+            }
+
+            m_dataModel->UseParentValue( row, col );
+            m_dlg->OnModify();
+            m_grid->ForceRefresh();
+        }
+        else if( aEvent.GetId() == MYID_SELECT_FOOTPRINT )
         {
             if( !m_grid->IsEditable() )
                 return;
@@ -182,7 +200,13 @@ protected:
                     BuildFootprintChooserSymbolNetlist( m_dataModel->GetRowReferences( row ) );
 
             if( SelectFootprintFromChooser( m_dlg, fpid, symbolNetlist ) )
+            {
                 m_grid->SetCellValue( row, col, fpid );
+
+                wxGridEvent evt( m_grid->GetId(), wxEVT_GRID_CELL_CHANGED, m_grid, row, col );
+                m_grid->GetEventHandler()->ProcessEvent( evt );
+                m_dlg->OnModify();
+            }
         }
         else if( aEvent.GetId() == MYID_SHOW_DATASHEET )
         {

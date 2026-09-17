@@ -58,7 +58,7 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( LIB_SYMBOL* const& aS
     }
     else if( aFieldName == SYMBOL_KEYWORDS )
     {
-        aValue = aSymbol->GetKeyWords();
+        aValue = aSymbol->GetRawKeyWords();
         return true;
     }
     else if( aFieldName == SYMBOL_NAME )
@@ -68,6 +68,40 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getLiveFieldValue( LIB_SYMBOL* const& aS
     }
 
     return false;
+}
+
+
+void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::getEffectiveFieldValue( LIB_SYMBOL* const& aSymbol,
+                                                               const wxString& aFieldName,
+                                                               wxString& aValue ) const
+{
+    getStoredFieldValue( aSymbol, aFieldName, aValue );
+
+    const SCH_FIELD* field = aSymbol->GetField( aFieldName );
+    const bool       keywords = aFieldName == SYMBOL_KEYWORDS;
+
+    // Flatten() inherits empty mandatory fields and keywords. Keep that distinction in the data store:
+    // displaying a parent's value must not create an override in the derived symbol.
+    if( !aValue.IsEmpty() || ( !keywords && ( !field || !field->IsMandatory() ) ) )
+        return;
+
+    std::set<const LIB_SYMBOL*> visited{ aSymbol };
+    std::shared_ptr<LIB_SYMBOL> parent = aSymbol->GetParent().lock();
+
+    while( parent && visited.insert( parent.get() ).second )
+    {
+        if( m_dataStore.contains( getDataStoreKey( parent.get() ) ) )
+            getStoredFieldValue( parent.get(), aFieldName, aValue );
+        else if( keywords )
+            aValue = parent->GetRawKeyWords();
+        else if( const SCH_FIELD* parentField = parent->GetField( aFieldName ) )
+            aValue = parentField->GetText();
+
+        if( !aValue.IsEmpty() )
+            return;
+
+        parent = parent->GetParent().lock();
+    }
 }
 
 
@@ -126,6 +160,45 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxSt
 }
 
 
+bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::CanUseParentValue( int aRow, int aCol )
+{
+    wxCHECK( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), false );
+    wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
+
+    // Value must remain non-empty when applied to a library symbol.
+    if( IsCellReadOnly( aRow, aCol ) || ColIsValue( aCol ) )
+        return false;
+
+    const wxString& fieldName = m_cols[aCol].m_fieldName;
+    bool            hasOverride = false;
+
+    for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
+    {
+        // A grouped cell must not clear any root symbols along with the derived ones.
+        if( !symbol->IsDerived() )
+            return false;
+
+        const SCH_FIELD* field = symbol->GetField( fieldName );
+
+        if( fieldName != SYMBOL_KEYWORDS && ( !field || !field->IsMandatory() ) )
+            return false;
+
+        wxString value;
+        getStoredFieldValue( symbol, fieldName, value );
+        hasOverride |= !value.IsEmpty();
+    }
+
+    return hasOverride;
+}
+
+
+void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::UseParentValue( int aRow, int aCol )
+{
+    if( CanUseParentValue( aRow, aCol ) )
+        SetValue( aRow, aCol, wxEmptyString );
+}
+
+
 bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ColIsItemIdentifier( int aCol ) const
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false );
@@ -181,6 +254,17 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
     wxGridCellAttr* attr = wxGridTableBase::GetAttr( aRow, aCol, aKind );
     bool            needsUrlEditor = cellUsesUrlEditor( aRow, aCol );
     bool            needsResolvedTextRenderer = cellUsesResolvedTextRenderer( aRow, aCol );
+
+    for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
+    {
+        wxString storedValue;
+        wxString effectiveValue;
+        getStoredFieldValue( symbol, m_cols[aCol].m_fieldName, storedValue );
+        getEffectiveFieldValue( symbol, m_cols[aCol].m_fieldName, effectiveValue );
+
+        if( storedValue != effectiveValue )
+            needsResolvedTextRenderer = true;
+    }
 
     wxGridCellAttr* modelAttr = nullptr;
 
@@ -709,7 +793,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
 
             if( srcName == SYMBOL_KEYWORDS )
             {
-                if( symbol->GetKeyWords() != srcValue )
+                if( symbol->GetRawKeyWords() != srcValue )
                 {
                     symbol->SetKeyWords( srcValue );
                     symbolModified = true;

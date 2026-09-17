@@ -212,6 +212,9 @@ public:
 
     void SetKeyWords( const wxString& aKeyWords );
 
+    /// Return only this symbol's keywords, without inheriting from its parent.
+    const wxString& GetRawKeyWords() const { return m_keyWords; }
+
     wxString GetKeyWords() const override
     {
         if( m_keyWords.IsEmpty() && IsDerived() )

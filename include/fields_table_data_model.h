@@ -633,6 +633,9 @@ public:
                 wxString itemFieldValue;
                 getStoredFieldValue( item, m_cols[aCol].m_fieldName, itemFieldValue );
 
+                if( resolveVars )
+                    getEffectiveFieldValue( item, m_cols[aCol].m_fieldName, itemFieldValue );
+
                 // Show the effective state when a sheet forces it on, but do not change
                 // the stored value so the symbol is never stamped on apply.
                 if( ColIsAttribute( aCol ) && attributeForcedOnBySheet( item, m_cols[aCol].m_fieldName ) )
@@ -1326,6 +1329,13 @@ protected:
     {
         for( auto& [name, field] : m_dataStore[getDataStoreKey( aItem )] )
             updateDataStoreItemFieldFromLive( aItem, name, true );
+    }
+
+    // Display inherited values without turning them into locally stored overrides.
+    virtual void getEffectiveFieldValue( const ITEM_TYPE& aItem, const wxString& aFieldName,
+                                         wxString& aValue ) const
+    {
+        getStoredFieldValue( aItem, aFieldName, aValue );
     }
 
     virtual std::vector<ITEM_TYPE> getAllItems() const = 0;

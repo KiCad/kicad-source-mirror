@@ -58,6 +58,9 @@ public:
     wxString GetTypeName( int row, int col ) override;
     void     SetValue( int aRow, int aCol, const wxString& aValue ) override;
 
+    bool CanUseParentValue( int aRow, int aCol );
+    void UseParentValue( int aRow, int aCol );
+
     wxGridCellAttr* GetAttr( int row, int col, wxGridCellAttr::wxAttrKind kind ) override;
 
     bool ColIsItemIdentifier( int aCol ) const override;
@@ -134,6 +137,8 @@ private:
                                     const KIID& aNewSymbolUuid );
 
     bool getLiveFieldValue( LIB_SYMBOL* const& aSymbol, const wxString& aFieldName, wxString& aValue ) override;
+    void getEffectiveFieldValue( LIB_SYMBOL* const& aSymbol, const wxString& aFieldName,
+                                 wxString& aValue ) const override;
     std::vector<LIB_SYMBOL*> getAllItems() const override;
 
     KIID_PATH getDataStoreKey( LIB_SYMBOL* const& aItem ) const override;
