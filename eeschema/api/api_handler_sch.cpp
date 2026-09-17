@@ -1159,7 +1159,27 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item.get() );
 
             if( aCreate && !sheet->GetScreen() )
+            {
                 sheet->SetScreen( new SCH_SCREEN( schematic() ) );
+
+                if( wxString rawFilename = sheet->GetFileName(); !rawFilename.IsEmpty() )
+                {
+                    wxFileName fileName( ExpandTextVars( rawFilename, &schematic()->Project(), INTERNAL ) );
+
+                    if( !fileName.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS,
+                                             targetPath.LastScreen()->GetFileName() ) )
+                    {
+                        status.set_code( ItemStatusCode::ISC_INVALID_DATA );
+                        status.set_error_message( fmt::format( "could not resolve sheet filename '{}' for new sheet",
+                                                               rawFilename.ToStdString() ) );
+                        aItemHandler( status, anyItem );
+                        continue;
+                    }
+
+                    sheet->GetScreen()->SetFileName( fileName.GetFullPath() );
+                    sheet->GetScreen()->SetContentModified();
+                }
+            }
 
             SCH_SHEET_PATH parentPath;
 

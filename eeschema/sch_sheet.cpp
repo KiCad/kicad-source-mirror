@@ -269,8 +269,6 @@ bool SCH_SHEET::Deserialize( const google::protobuf::Any& aContainer )
         AddPin( pin.release() );
     }
 
-    SetScreen( nullptr );
-
     return true;
 }
 
