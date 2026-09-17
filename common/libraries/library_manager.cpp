@@ -385,6 +385,10 @@ private:
     void addRowIfNecessary( LIBRARY_TABLE* aTable, const wxFileName& aSource, ADD_MODE aMode,
                             int aExtensionLength )
     {
+        // No global table file yet (first run): nothing to auto-add.
+        if( !aTable )
+            return;
+
         wxString versionedPath = wxString::Format( wxS( "${%s}" ),
         ENV_VAR::GetVersionedEnvVarName( wxS( "3RD_PARTY" ) ) );
 
