@@ -34,6 +34,7 @@
 #include <kiplatform/app.h>
 #include <kiway_mail.h>
 #include <symbol_edit_frame.h>
+#include <sch_edit_frame.h>
 #include <lib_symbol_library_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <symbol_editor/symbol_editor_tab_context.h>
