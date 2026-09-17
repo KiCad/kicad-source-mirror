@@ -159,6 +159,8 @@ public:
 
     void DetachFields();
 
+    const std::vector<EMBEDDED_FILES*>& GetEmbeddedFilesStack() const { return m_filesStack; }
+
 protected:
     void initGrid( WX_GRID* aGrid );
 

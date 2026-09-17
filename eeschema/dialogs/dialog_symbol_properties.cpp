@@ -333,7 +333,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     m_fieldsGrid->SetTable( m_fields );
     m_fieldsGrid->OverrideMinSize( 1.0, 1.0 );
     m_fieldsGrid->PushEventHandler( new FIELDS_GRID_TRICKS( m_fieldsGrid, this,
-                                                            { &aParent->Schematic(), m_part },
+                                                            m_fields->GetEmbeddedFilesStack(),
                                                             [&]( wxCommandEvent& aEvent )
                                                             {
                                                                 OnAddField( aEvent );
