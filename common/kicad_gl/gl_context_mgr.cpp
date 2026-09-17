@@ -20,7 +20,9 @@
  */
 
 #include <kicad_gl/gl_context_mgr.h>
+#include <trace_helpers.h>
 #include <wx/debug.h>
+#include <wx/log.h>
 
 
 wxGLContext* GL_CONTEXT_MANAGER::CreateCtx( wxGLCanvas* aCanvas, const wxGLContext* aOther )
@@ -71,22 +73,31 @@ void GL_CONTEXT_MANAGER::DeleteAll()
 }
 
 
-void GL_CONTEXT_MANAGER::LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas )
+bool GL_CONTEXT_MANAGER::LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas )
 {
-    wxCHECK( aContext && m_glContexts.count( aContext ) > 0, /* void */ );
+    wxCHECK( aContext && m_glContexts.count( aContext ) > 0, false );
 
     m_glCtxMutex.lock();
     wxGLCanvas* canvas = aCanvas ? aCanvas : m_glContexts.at( aContext );
+    bool        current = false;
 
 #ifdef __WXGTK__
     // Prevent assertion failure in wxGLContext::SetCurrent during GAL teardown
     if( canvas->GTKGetDrawingWindow() )
 #endif // __WXGTK__
     {
-        canvas->SetCurrent( *aContext );
+        current = canvas->SetCurrent( *aContext );
+    }
+
+    if( !current )
+    {
+        wxLogTrace( traceGalContext, wxS( "Could not make GL context %p current on canvas %p" ),
+                    aContext, canvas );
     }
 
     m_glCtx = aContext;
+
+    return current;
 }
 
 

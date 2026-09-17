@@ -56,6 +56,7 @@ const wxChar* const traceEnvVars = wxT( "KICAD_ENV_VARS" );
 const wxChar* const traceSchDragNetCollision = wxT( "KICAD_SCH_DRAG_NET_COLLISION" );
 const wxChar* const traceCrossProbeFlash = wxT( "CROSS_PROBE_FLASH" );
 const wxChar* const traceGalProfile = wxT( "KICAD_GAL_PROFILE" );
+const wxChar* const traceGalContext = wxT( "KICAD_GAL_CONTEXT" );
 const wxChar* const traceStackedPins = wxT( "KICAD_STACKED_PINS" );
 const wxChar* const traceLibWatch = wxT( "KICAD_LIB_WATCH" );
 const wxChar* const traceKiCad2Step = wxT( "KICAD2STEP" );

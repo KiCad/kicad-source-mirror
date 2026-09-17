@@ -78,6 +78,17 @@ public:
     // @copydoc COMPOSITOR::Present()
     virtual void Present() override;
 
+    /**
+     * Give up ownership of the GL objects without deleting them.
+     *
+     * Used when the owning context can no longer be made current.  A delete would then be
+     * executed against whichever context is current, which may belong to another share group
+     * entirely - the 3D canvas creates unshared contexts - and would destroy an unrelated
+     * object that happens to carry the same name.  The names are released when the owning
+     * context is destroyed.
+     */
+    void Abandon();
+
     // Constant used by glBindFramebuffer to turn off rendering to framebuffers
     static const unsigned int DIRECT_RENDERING = 0;
 

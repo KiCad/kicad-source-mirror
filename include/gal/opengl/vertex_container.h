@@ -52,6 +52,15 @@ public:
     virtual bool IsCached() const = 0;
 
     /**
+     * Give up ownership of any GL objects without deleting them.
+     *
+     * Used when the owning context can no longer be made current, so a delete would be
+     * executed against whichever context is, possibly one from another share group.  The
+     * names are released when the owning context is destroyed.
+     */
+    virtual void Abandon() {}
+
+    /**
      * Prepare the container for vertices updates.
      */
     virtual void Map() {}

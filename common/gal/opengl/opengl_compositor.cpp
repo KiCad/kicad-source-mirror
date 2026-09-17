@@ -378,12 +378,11 @@ void OPENGL_COMPOSITOR::bindFb( unsigned int aFb )
     // Currently there are only 2 valid FBOs
     wxASSERT( aFb == DIRECT_RENDERING || aFb == m_mainFbo );
 
-    if( m_curFbo != aFb )
-    {
-        glBindFramebuffer( GL_FRAMEBUFFER, aFb );
-        checkGlError( "switching framebuffer", __FILE__, __LINE__ );
-        m_curFbo = aFb;
-    }
+    // Another canvas' teardown can run inside this context and rebind, so a cached value
+    // here can claim a binding that the context no longer has
+    glBindFramebuffer( GL_FRAMEBUFFER, aFb );
+    checkGlError( "switching framebuffer", __FILE__, __LINE__ );
+    m_curFbo = aFb;
 }
 
 
@@ -412,6 +411,17 @@ void OPENGL_COMPOSITOR::clean()
         m_differenceShaderInitialized = false;
     }
 
+    m_initialized = false;
+}
+
+
+void OPENGL_COMPOSITOR::Abandon()
+{
+    m_buffers.clear();
+    m_mainFbo = 0;
+    m_depthBuffer = 0;
+    m_differenceShader = 0;
+    m_differenceShaderInitialized = false;
     m_initialized = false;
 }
 

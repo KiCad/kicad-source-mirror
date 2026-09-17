@@ -1123,6 +1123,19 @@ public:
         return false;
     }
 
+    /**
+     * Check whether the locked context is actually the current one.
+     *
+     * A canvas whose native window is already gone cannot be made current.  GL commands issued
+     * while this is false land in whichever sibling context is still bound.
+     *
+     * @return True if GL commands may be issued.
+     */
+    virtual bool IsContextValid() const
+    {
+        return true;
+    }
+
 
     /// Use GAL_CONTEXT_LOCKER RAII object unless you know what you're doing.
     virtual void LockContext( int aClientCookie ) {}
@@ -1332,15 +1345,27 @@ class GAL_DRAWING_CONTEXT : public GAL_CONTEXT_LOCKER
 {
 public:
     GAL_DRAWING_CONTEXT( GAL* aGal ) :
-            GAL_CONTEXT_LOCKER( aGal )
+            GAL_CONTEXT_LOCKER( aGal ),
+            m_drawing( aGal->IsContextValid() )
     {
-        m_gal->BeginDrawing();
+        if( m_drawing )
+            m_gal->BeginDrawing();
     }
 
     ~GAL_DRAWING_CONTEXT() noexcept( false )
     {
-        m_gal->EndDrawing();
+        if( m_drawing )
+            m_gal->EndDrawing();
     }
+
+    /// @return False if the context could not be made current, so no drawing was started.
+    bool IsDrawing() const
+    {
+        return m_drawing;
+    }
+
+private:
+    bool m_drawing;
 };
 
 

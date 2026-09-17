@@ -78,6 +78,14 @@ CACHED_CONTAINER_GPU::CACHED_CONTAINER_GPU( unsigned int aSize ) :
 }
 
 
+void CACHED_CONTAINER_GPU::Abandon()
+{
+    // Name 0 is silently ignored by glDeleteBuffers, so the destructor becomes a no-op
+    m_isMapped = false;
+    m_glBufferHandle = 0;
+}
+
+
 CACHED_CONTAINER_GPU::~CACHED_CONTAINER_GPU()
 {
     if( m_isMapped )

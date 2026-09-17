@@ -320,6 +320,11 @@ public:
         return m_isContextLocked;
     }
 
+    bool IsContextValid() const override
+    {
+        return m_isContextValid;
+    }
+
     void LockContext( int aClientCookie ) override;
 
     void UnlockContext( int aClientCookie ) override;
@@ -388,6 +393,7 @@ private:
                                                         ///< done when the window is visible
     bool                    m_isGrouping;               ///< Was a group started?
     bool                    m_isContextLocked;          ///< Used for assertion checking
+    bool                    m_isContextValid;           ///< Did the last lock make us current?
     int                     m_lockClientCookie;
     GLint                   ufm_worldPixelSize;
     GLint                   ufm_screenPixelSize;

@@ -365,6 +365,9 @@ protected:
     /// Set after an OpenGL recovery attempt to prevent infinite retry loops
     bool                     m_glRecoveryAttempted;
 
+    /// Consecutive frames dropped because the GL context could not be made current
+    int                      m_contextBindFailures;
+
     /// Flag to indicate whether the panel should take focus at certain times (when moused over,
     /// and on various mouse/key events)
     bool                     m_stealsFocus;

@@ -56,6 +56,13 @@ public:
     VERTEX_MANAGER( bool aCached );
 
     /**
+     * Give up ownership of the container's GL objects without deleting them.
+     *
+     * @see VERTEX_CONTAINER::Abandon()
+     */
+    void Abandon();
+
+    /**
      * Map vertex buffer.
      */
     void Map();
