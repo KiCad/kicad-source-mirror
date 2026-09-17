@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-17 16:08+0000\n"
+"PO-Revision-Date: 2026-09-17 16:22+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -32676,11 +32676,11 @@ msgstr "Tekniset kerrokset"
 
 #: gerbview/files.cpp:241
 msgid "Top Pad Master"
-msgstr "Etuosan anturataso (PAD MASTER) (.GPT)|.GPT;*.gpt|"
+msgstr "Yläpuolen pääanturat (master)"
 
 #: gerbview/files.cpp:242
 msgid "Bottom Pad Master"
-msgstr "Takaosan anturataso (PAD MASTER) (.GPB)|.GPB;*.gpb|"
+msgstr "Alapuolen pääanturat (master)"
 
 #: gerbview/files.cpp:248
 msgid "Open Gerber File(s)"
