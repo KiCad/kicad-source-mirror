@@ -28,6 +28,8 @@
 #include <mock_pgm_base.h>
 #include <richio.h>
 #include <io/kicad/kicad_io_utils.h>
+#include <qa_utils/env_var_utils.h>
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <settings/settings_manager.h>
 #include <pegtl/contrib/analyze.hpp>
@@ -519,21 +521,15 @@ BOOST_AUTO_TEST_CASE( LibOverrideSettings )
  */
 BOOST_AUTO_TEST_CASE( StockTableReferenceURIHonorsExternalDefinition )
 {
-    const wxString   templateVar = ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) );
-    COMMON_SETTINGS* common = Pgm().GetCommonSettings();
-
-    BOOST_REQUIRE( common != nullptr );
-
-    ENV_VAR_MAP& vars = common->m_Env.vars;
+    const wxString templateVar = ENV_VAR::GetVersionedEnvVarName( wxS( "TEMPLATE_DIR" ) );
 
     // Preserve and restore the original entry so neighbouring tests are unaffected.
-    const bool         hadEntry = vars.count( templateVar ) > 0;
-    const ENV_VAR_ITEM savedEntry = hadEntry ? vars[templateVar] : ENV_VAR_ITEM();
+    KI_TEST::SCOPED_PGM_ENV_VAR envVarGuard( templateVar, wxEmptyString );
 
     for( LIBRARY_TABLE_TYPE type : { LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_TYPE::FOOTPRINT,
                                      LIBRARY_TABLE_TYPE::DESIGN_BLOCK } )
     {
-        ENV_VAR_ITEM& entry = vars[templateVar];
+        ENV_VAR_ITEM& entry = envVarGuard.GetItem();
 
         entry.SetDefinedExternally( false );
         BOOST_CHECK_EQUAL( LIBRARY_MANAGER::StockTableReferenceURI( type ),
@@ -543,11 +539,6 @@ BOOST_AUTO_TEST_CASE( StockTableReferenceURIHonorsExternalDefinition )
         BOOST_CHECK_EQUAL( LIBRARY_MANAGER::StockTableReferenceURI( type ),
                            LIBRARY_MANAGER::StockTableTokenizedURI( type ) );
     }
-
-    if( hadEntry )
-        vars[templateVar] = savedEntry;
-    else
-        vars.erase( templateVar );
 }
 
 
