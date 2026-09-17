@@ -1107,6 +1107,20 @@ void SCH_POINT_EDITOR::Reset( RESET_REASON aReason )
 {
     SCH_TOOL_BASE::Reset( aReason );
 
+    // ResetTools() skips DeactivateTool() for a REDRAW, so Main() exits without unwinding its
+    // drag; a REDRAW is also the only reason that leaves the item alive to clear the flag through
+    if( aReason == REDRAW && m_editPoints )
+    {
+        SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
+
+        if( shape && shape->HasFlag( IS_MOVING ) )
+        {
+            shape->ClearFlags( IS_MOVING );
+            shape->SetHatchingDirty();
+            shape->UpdateHatching();
+        }
+    }
+
     if( KIGFX::VIEW* view = getView() )
     {
         if( m_angleItem )
@@ -1462,7 +1476,22 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
                     grid = nullptr;
                 }
 
+                // Revert() keeps edit flags and, in the library editor, replaces the symbol and
+                // frees item, so drop the flag first and rehatch the reverted geometry after
+                if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( item ) )
+                    shape->ClearFlags( IS_MOVING );
+
                 commit.Revert();
+
+                if( m_editPoints )
+                {
+                    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( m_editPoints->GetParent() ) )
+                    {
+                        shape->SetHatchingDirty();
+                        shape->UpdateHatching();
+                    }
+                }
+
                 inDrag = false;
                 break;
             }
@@ -1489,11 +1518,16 @@ int SCH_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     m_inDrag = false;
 
-    if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( item ) )
+    // IS_MOVING is only still set if the loop broke mid-drag, and a null m_editPoints means
+    // Reset() ran while we were suspended and has already dealt with a parent we cannot reach
+    if( inDrag && m_editPoints )
     {
-        shape->ClearFlags( IS_MOVING );
-        shape->SetHatchingDirty();
-        shape->UpdateHatching();
+        if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( m_editPoints->GetParent() ) )
+        {
+            shape->ClearFlags( IS_MOVING );
+            shape->SetHatchingDirty();
+            shape->UpdateHatching();
+        }
     }
 
     controls->SetAutoPan( false );
