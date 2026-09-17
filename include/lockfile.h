@@ -17,13 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * File locking utilities
- * @file lockfile.h
- */
-
-#ifndef INCLUDE__LOCK_FILE_H_
-#define INCLUDE__LOCK_FILE_H_
+#pragma once
 
 #include <wx/wx.h>
 #include <wx/filefn.h>
@@ -217,23 +211,17 @@ public:
      * @return Current username.  If we own the lock, this is us.  Otherwise, this is the user
      *         that does own it.
      */
-    wxString GetUsername(){ return m_username; }
+    wxString GetUsername() { return m_username; }
 
     /**
      * @return Current hostname.  If we own the lock this is our computer.  Otherwise, this is
      *         the computer that does.
      */
-    wxString GetHostname(){ return m_hostname; }
+    wxString GetHostname() { return m_hostname; }
 
-    bool Locked() const
-    {
-        return m_owned;
-    }
+    bool Locked() const { return m_owned; }
 
-    bool Valid() const
-    {
-        return m_status;
-    }
+    bool Valid() const { return m_status; }
 
 private:
     // Only Inspect() builds a lock that holds nothing
@@ -298,7 +286,7 @@ private:
         if( !m_lock.ReadAll( contents ) )
             return false;
 
-        aRecord = nlohmann::json::parse( contents, nullptr, false );
+        aRecord = nlohmann::json::parse( contents, nullptr, false /* exceptions allowed */ );
 
         if( aRecord.is_discarded() )
         {
@@ -311,19 +299,24 @@ private:
 
     void readOwner()
     {
-        nlohmann::json record;
+        m_username = wxEmptyString;
+        m_hostname = wxEmptyString;
+        m_token = wxEmptyString;
 
-        if( readRecord( record ) )
+        try
         {
-            m_username = wxString( record.value( "username", std::string() ) );
-            m_hostname = wxString( record.value( "hostname", std::string() ) );
-            m_token = wxString( record.value( "token", std::string() ) );
+            nlohmann::json record;
+
+            if( readRecord( record ) )
+            {
+                m_username = wxString( record.value( "username", std::string() ) );
+                m_hostname = wxString( record.value( "hostname", std::string() ) );
+                m_token = wxString( record.value( "token", std::string() ) );
+            }
         }
-        else
+        catch(...)
         {
-            m_username = wxEmptyString;
-            m_hostname = wxEmptyString;
-            m_token = wxEmptyString;
+            // best efforts
         }
     }
 
@@ -333,19 +326,26 @@ private:
      */
     bool stillOwnLock()
     {
-        nlohmann::json record;
-
-        if( m_token.IsEmpty() || !readRecord( record ) )
+        if( m_token.IsEmpty() )
             return false;
 
-        if( m_token == wxString( record.value( "token", std::string() ) ) )
-            return true;
+        try
+        {
+            nlohmann::json record;
+
+            if( !readRecord( record ) )
+                return false;
+
+            if( m_token == wxString( record.value( "token", std::string() ) ) )
+                return true;
+        }
+        catch(...)
+        {
+            return false;
+        }
 
         wxLogTrace( traceLockFile, "Lock on %s is no longer ours", m_lockFilename );
 
         return false;
     }
 };
-
-
-#endif  // INCLUDE__LOCK_FILE_H_
