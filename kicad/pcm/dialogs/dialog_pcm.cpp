@@ -231,8 +231,7 @@ void DIALOG_PCM::OnUpdateEventButtons( wxUpdateUIEvent& event )
 void DIALOG_PCM::OnCloseClicked( wxCommandEvent& event )
 {
     if( m_pendingActions.size() == 0
-        || wxMessageBox( _( "Are you sure you want to close the package manager "
-                            "and discard pending changes?" ),
+        || wxMessageBox( _( "Are you sure you want to close the package manager and discard pending changes?" ),
                          _( "Plugin and Content Manager" ), wxICON_QUESTION | wxYES_NO, this )
                    == wxYES )
     {
@@ -298,7 +297,7 @@ void DIALOG_PCM::setRepositoryListFromPcm()
         {
             if( cfg->m_PcmLastSelectedRepoId == ALL_REPOSITORIES && repositories.size() > 1 )
             {
-                idx = repositories.size();
+                idx = (int) repositories.size();
             }
             else
             {
@@ -309,7 +308,7 @@ void DIALOG_PCM::setRepositoryListFromPcm()
                                         } );
 
                 if( it != repositories.end() )
-                    idx = std::distance( repositories.begin(), it );
+                    idx = (int) std::distance( repositories.begin(), it );
             }
         }
 
@@ -496,8 +495,8 @@ void DIALOG_PCM::renderPackageGrids( const std::unordered_map<wxString, PCM_PACK
 
     for( const auto& [pkg_id, best_pkg] : aPackages )
     {
-        wxString repo_id = aPackageRepoIds.at( pkg_id );
-        wxString repo_name = aPackageRepoNames.at( pkg_id );
+        const wxString& repo_id = aPackageRepoIds.at( pkg_id );
+        const wxString& repo_name = aPackageRepoNames.at( pkg_id );
 
         PACKAGE_VIEW_DATA package_data( best_pkg );
 
@@ -665,7 +664,7 @@ void DIALOG_PCM::OnDiscardChangesClicked( wxCommandEvent& event )
 {
     m_gridPendingActions->Freeze();
 
-    for( int i = m_pendingActions.size() - 1; i >= 0; i-- )
+    for( int i = (int) m_pendingActions.size() - 1; i >= 0; i-- )
         discardAction( i );
 
     updatePendingActionsTab();
