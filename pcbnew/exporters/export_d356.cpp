@@ -136,7 +136,9 @@ void IPC356D_WRITER::build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD
             rk.netname = pad->GetNetname();
             rk.pin = pad->GetNumber();
             rk.refdes = footprint->GetReference();
-            rk.midpoint = false; // XXX MAYBE need to be computed (how?)
+            // A named pad is a component terminal (end-net point); an unnamed copper
+            // feature is only reachable mid-net, so it is a midpoint per IPC-D-356A
+            rk.midpoint = rk.pin.IsEmpty();
             const VECTOR2I& drill = pad->GetDrillSize();
             rk.drill = std::min( drill.x, drill.y );
             rk.hole = (rk.drill != 0);
