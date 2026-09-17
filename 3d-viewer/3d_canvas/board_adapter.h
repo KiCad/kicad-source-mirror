@@ -200,6 +200,13 @@ public:
     float GetFootprintZPos( bool aIsFlipped ) const ;
 
     /**
+     * Build the transform from footprint-local model units to 3D world units.
+     *
+     * Model matrices from CalcModelMatrix() are applied after this one.
+     */
+    glm::mat4 GetFootprintMatrix( const FOOTPRINT& aFootprint ) const;
+
+    /**
      * Get the current polygon of the epoxy board.
      *
      * @return the shape polygon

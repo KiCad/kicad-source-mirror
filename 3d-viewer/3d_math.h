@@ -30,6 +30,18 @@
 #include "3d_fastmath.h"
 
 /**
+ * Build the model-to-footprint transform used by rendering and picking.
+ *
+ * Offsets are in millimetres, in the footprint's Y-up frame.  Scale is applied
+ * in the model's original axes, before rotation and translation.
+ *
+ * @param aRotation raw FP_3DMODEL::m_Rotation in degrees (the negation of the UI
+ *                  angles), applied about X, then Y, then Z before translation.
+ */
+glm::mat4 CalcModelMatrix( const SFVEC3F& aOffset, const SFVEC3F& aRotation, const SFVEC3F& aScale );
+
+
+/**
  * https://en.wikipedia.org/wiki/Spherical_coordinate_system
  *
  * @param aInclination θ ∈ [0, π]

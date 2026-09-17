@@ -1099,6 +1099,30 @@ float BOARD_ADAPTER::GetFootprintZPos( bool aIsFlipped ) const
 }
 
 
+glm::mat4 BOARD_ADAPTER::GetFootprintMatrix( const FOOTPRINT& aFootprint ) const
+{
+    const VECTOR2I pos = aFootprint.GetPosition();
+    glm::mat4      matrix( 1.0f );
+
+    matrix = glm::translate( matrix, SFVEC3F( pos.x * BiuTo3dUnits(), -pos.y * BiuTo3dUnits(),
+                                              GetFootprintZPos( aFootprint.IsFlipped() ) ) );
+
+    if( !aFootprint.GetOrientation().IsZero() )
+    {
+        matrix = glm::rotate( matrix, (float) aFootprint.GetOrientation().AsRadians(),
+                              SFVEC3F( 0.0f, 0.0f, 1.0f ) );
+    }
+
+    if( aFootprint.IsFlipped() )
+    {
+        matrix = glm::rotate( matrix, glm::pi<float>(), SFVEC3F( 0.0f, 1.0f, 0.0f ) );
+        matrix = glm::rotate( matrix, glm::pi<float>(), SFVEC3F( 0.0f, 0.0f, 1.0f ) );
+    }
+
+    return glm::scale( matrix, SFVEC3F( BiuTo3dUnits() * pcbIUScale.IU_PER_MM ) );
+}
+
+
 SFVEC4F BOARD_ADAPTER::GetLayerColor( int aLayerId ) const
 {
     if( aLayerId >= LAYER_3D_USER_1 && aLayerId <= LAYER_3D_USER_45 )

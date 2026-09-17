@@ -25,3 +25,18 @@
 
 
 #include "3d_math.h"
+
+#include <glm/gtc/matrix_transform.hpp>
+
+
+glm::mat4 CalcModelMatrix( const SFVEC3F& aOffset, const SFVEC3F& aRotation, const SFVEC3F& aScale )
+{
+    glm::mat4 matrix( 1.0f );
+
+    matrix = glm::translate( matrix, aOffset );
+    matrix = glm::rotate( matrix, glm::radians( -aRotation.z ), { 0.0f, 0.0f, 1.0f } );
+    matrix = glm::rotate( matrix, glm::radians( -aRotation.y ), { 0.0f, 1.0f, 0.0f } );
+    matrix = glm::rotate( matrix, glm::radians( -aRotation.x ), { 1.0f, 0.0f, 0.0f } );
+
+    return glm::scale( matrix, aScale );
+}

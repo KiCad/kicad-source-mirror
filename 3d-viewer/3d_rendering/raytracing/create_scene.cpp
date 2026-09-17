@@ -67,10 +67,6 @@ static float TransparencyControl( float aGrayColorValue, float aTransparency )
     return glm::max( glm::min( aGrayColorValue * ca + aaa, 1.0f ), 0.0f );
 }
 
-/**
- * Scale conversion from 3d model units to pcb units
- */
-#define UNITS3D_TO_UNITSPCB ( pcbIUScale.IU_PER_MM )
 
 
 void RENDER_3D_RAYTRACE_BASE::setupMaterials()
@@ -2261,36 +2257,7 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aS
 
         if( ( hasModels || showMissing ) && m_boardAdapter.IsFootprintShown( fp ) )
         {
-            double zpos = m_boardAdapter.GetFootprintZPos( fp->IsFlipped() );
-
-            VECTOR2I pos = fp->GetPosition();
-
-            glm::mat4 fpMatrix = glm::mat4( 1.0f );
-
-            fpMatrix = glm::translate( fpMatrix,
-                                       SFVEC3F( pos.x * m_boardAdapter.BiuTo3dUnits(),
-                                                -pos.y * m_boardAdapter.BiuTo3dUnits(),
-                                                zpos ) );
-
-            if( !fp->GetOrientation().IsZero() )
-            {
-                fpMatrix = glm::rotate( fpMatrix, (float) fp->GetOrientation().AsRadians(),
-                                        SFVEC3F( 0.0f, 0.0f, 1.0f ) );
-            }
-
-            if( fp->IsFlipped() )
-            {
-                fpMatrix = glm::rotate( fpMatrix, glm::pi<float>(), SFVEC3F( 0.0f, 1.0f, 0.0f ) );
-
-                fpMatrix = glm::rotate( fpMatrix, glm::pi<float>(), SFVEC3F( 0.0f, 0.0f, 1.0f ) );
-            }
-
-            const double modelunit_to_3d_units_factor =
-                    m_boardAdapter.BiuTo3dUnits() * UNITS3D_TO_UNITSPCB;
-
-            fpMatrix = glm::scale(
-                    fpMatrix, SFVEC3F( modelunit_to_3d_units_factor, modelunit_to_3d_units_factor,
-                                       modelunit_to_3d_units_factor ) );
+            const glm::mat4 fpMatrix = m_boardAdapter.GetFootprintMatrix( *fp );
 
             // Get the list of model files for this model
             S3D_CACHE* cacheMgr = m_boardAdapter.Get3dCacheManager();
@@ -2335,24 +2302,9 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aS
                 // only add it if the return is not NULL.
                 if( modelPtr )
                 {
-                    glm::mat4 modelMatrix = fpMatrix;
-
-                    modelMatrix = glm::translate( modelMatrix,
-                            SFVEC3F( model.m_Offset.x, model.m_Offset.y, model.m_Offset.z ) );
-
-                    modelMatrix = glm::rotate( modelMatrix,
-                            (float) -( model.m_Rotation.z / 180.0f ) * glm::pi<float>(),
-                            SFVEC3F( 0.0f, 0.0f, 1.0f ) );
-
-                    modelMatrix = glm::rotate( modelMatrix,
-                            (float) -( model.m_Rotation.y / 180.0f ) * glm::pi<float>(),
-                            SFVEC3F( 0.0f, 1.0f, 0.0f ) );
-
-                    modelMatrix = glm::rotate( modelMatrix,
-                            (float) -( model.m_Rotation.x / 180.0f ) * glm::pi<float>(),
-                            SFVEC3F( 1.0f, 0.0f, 0.0f ) );
-
-                    modelMatrix = glm::scale( modelMatrix,
+                    glm::mat4 modelMatrix = fpMatrix * CalcModelMatrix(
+                            SFVEC3F( model.m_Offset.x, model.m_Offset.y, model.m_Offset.z ),
+                            SFVEC3F( model.m_Rotation.x, model.m_Rotation.y, model.m_Rotation.z ),
                             SFVEC3F( model.m_Scale.x, model.m_Scale.y, model.m_Scale.z ) );
 
                     addModels( aDstContainer, modelPtr, modelMatrix, (float) model.m_Opacity,
