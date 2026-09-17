@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-17 15:06+0000\n"
+"PO-Revision-Date: 2026-09-17 15:10+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -10245,7 +10245,7 @@ msgstr "Kansio"
 #: common/json_schema_validator.cpp:42
 #, c-format
 msgid "schema file '%s' not found"
-msgstr "Kaaviotiedostoa '%s' ei löydy"
+msgstr "rakennetiedostoa '%s' ei löytynyt"
 
 #: common/json_schema_validator.cpp:47 common/json_schema_validator.cpp:61
 #, c-format
