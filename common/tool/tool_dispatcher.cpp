@@ -533,9 +533,10 @@ bool TOOL_DISPATCHER::ShouldDropAutoRepeat( int aKeyCode, wxLongLong aNowMs, boo
 }
 
 
+const int MAX_MOUSE_BUTTON = 0x04;
+
 bool TOOL_DISPATCHER::isStaleAutoRepeat( const wxKeyEvent& aKeyEvent )
 {
-    const int MAX_MOUSE_BUTTON = 0x04;
     int key = aKeyEvent.GetKeyCode();
 
     // wxGetKeyState answers reliably for letters, digits and the named WXK_ codes used as
@@ -564,7 +565,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     wxEventType type = aEvent.GetEventType();
 
-    if( m_lastKeyCode > 0 && !wxGetKeyState( static_cast<wxKeyCode>( m_lastKeyCode ) ) )
+    if( m_lastKeyCode > MAX_MOUSE_BUTTON && !wxGetKeyState( static_cast<wxKeyCode>( m_lastKeyCode ) ) )
         m_lastKeyCode = 0;
 
     // Sometimes there is no window that has the focus (it happens when another PCB_BASE_FRAME
