@@ -3412,18 +3412,10 @@ void EDA_SHAPE::endEdit( bool aClosed )
         SHAPE_LINE_CHAIN& poly = GetPolyShape().Outline( 0 );
 
         // do not include last point twice
-        if( poly.GetPointCount() > 2 )
-        {
-            if( poly.CPoint( poly.GetPointCount() - 2 ) == poly.CLastPoint() )
-            {
-                poly.SetClosed( aClosed );
-            }
-            else
-            {
-                poly.SetClosed( false );
-                poly.Remove( poly.GetPointCount() - 1 );
-            }
-        }
+        if( poly.GetPointCount() > 2 && poly.CPoint( (int) poly.GetPointCount() - 2 ) == poly.CLastPoint() )
+            poly.Remove( (int) poly.GetPointCount() - 1 );
+
+        poly.SetClosed( aClosed );
 
         break;
     }

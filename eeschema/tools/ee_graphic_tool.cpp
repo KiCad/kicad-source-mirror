@@ -304,12 +304,14 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
                           || evt->IsAction( &ACTIONS::finishInteractive ) ) )
         {
             bool finished = false;
+            bool doubleClick = false;
 
             if( evt->IsDblClick( BUT_LEFT )
                     || evt->IsAction( &ACTIONS::cursorDblClick )
                     || evt->IsAction( &ACTIONS::finishInteractive ) )
             {
                 finished = true;
+                doubleClick = true;
             }
             else
             {
@@ -318,7 +320,7 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
 
             if( finished )
             {
-                item->EndEdit();
+                item->EndEdit( doubleClick );
                 item->SetFlags( IS_NEW );
 
                 if( isTextBox )

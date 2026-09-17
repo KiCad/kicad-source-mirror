@@ -2773,30 +2773,31 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             bool             hasEndings = aShape->GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
                               || aShape->GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE;
 
-            auto drawOutlineBody = [&]( const SHAPE_LINE_CHAIN& aOutline, int aOutlineIdx )
-            {
-                if( aOutline.PointCount() < 2 )
-                    return;
+            auto drawOutlineBody =
+                    [&]( const SHAPE_LINE_CHAIN& aOutline, int aOutlineIdx )
+                    {
+                        if( aOutline.PointCount() < 2 )
+                            return;
 
-                if( hasEndings )
-                {
-                    std::vector<VECTOR2I> pts;
+                        if( hasEndings && !aOutline.IsClosed() )
+                        {
+                            std::vector<VECTOR2I> pts;
 
-                    if( !aShape->GetShortenedBodyPolyPoints( aOutline, aOutlineIdx, pts, thickness ) )
-                        return;
+                            if( !aShape->GetShortenedBodyPolyPoints( aOutline, aOutlineIdx, pts, thickness ) )
+                                return;
 
-                    SHAPE_LINE_CHAIN shortened;
+                            SHAPE_LINE_CHAIN shortened;
 
-                    for( const VECTOR2I& pt : pts )
-                        shortened.Append( pt );
+                            for( const VECTOR2I& pt : pts )
+                                shortened.Append( pt );
 
-                    shortened.SetClosed( aOutline.IsClosed() );
-                    m_gal->DrawSegmentChain( shortened, thickness );
-                    return;
-                }
+                            shortened.SetClosed( aOutline.IsClosed() );
+                            m_gal->DrawSegmentChain( shortened, thickness );
+                            return;
+                        }
 
-                m_gal->DrawSegmentChain( aOutline, thickness );
-            };
+                        m_gal->DrawSegmentChain( aOutline, thickness );
+                    };
 
             if( shape.OutlineCount() == 0 )
                 break;

@@ -1946,6 +1946,10 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
     auto drawShape =
             [&]( const SCH_SHAPE* shape )
             {
+                int  lineWidth = KiROUND( getLineWidth( shape, false ) );
+                bool hasEndings = shape->GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
+                                  || shape->GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE;
+
                 switch( shape->GetShape() )
                 {
                 case SHAPE_T::ARC:
@@ -1954,11 +1958,8 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
                     EDA_ANGLE startAngle = arc.GetStartAngle();
                     EDA_ANGLE arcAngle = arc.GetCentralAngle();
 
-                    if( shape->ShortenArcForEndings( startAngle, arcAngle, arc.GetRadius(),
-                                                     KiROUND( getLineWidth( shape, false ) ) ) )
-                    {
+                    if( shape->ShortenArcForEndings( startAngle, arcAngle, arc.GetRadius(), lineWidth ) )
                         m_gal->DrawArc( arc.GetCenter(), arc.GetRadius(), startAngle, arcAngle );
-                    }
 
                     break;
                 }
@@ -1992,29 +1993,45 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
                         break;
 
                     const SHAPE_LINE_CHAIN& outline = shape->GetPolyShape().COutline( 0 );
-                    std::vector<VECTOR2I>   pts;
+                    std::deque<VECTOR2D>    drawPts;
 
-                    if( !shape->GetShortenedBodyPolyPoints( outline, 0, pts, KiROUND( getLineWidth( shape, false ) ) ) )
+                    if( hasEndings && !shape->IsClosed() )
                     {
-                        break;
+                        std::vector<VECTOR2I> pts;
+
+                        if( shape->GetShortenedBodyPolyPoints( outline, 0, pts, lineWidth ) )
+                        {
+                            for( const VECTOR2I& pt : pts )
+                                drawPts.emplace_back( pt );
+                        }
+                    }
+                    else
+                    {
+                        for( const VECTOR2I& pt : outline.CPoints() )
+                            drawPts.emplace_back( pt );
+
+                        if( shape->IsClosed() )
+                            drawPts.emplace_back( outline.CPoint( 0 ) );
                     }
 
-                    std::deque<VECTOR2D> drawPts;
+                    if( drawPts.size() >= 2 )
+                        m_gal->DrawPolygon( drawPts );
 
-                    for( const VECTOR2I& pt : pts )
-                        drawPts.emplace_back( pt );
-
-                    m_gal->DrawPolygon( drawPts );
                     break;
                 }
 
                 case SHAPE_T::BEZIER:
                 {
-                    std::optional<BEZIER<double>> curve =
-                            shape->ShortenedBezierCurve( KiROUND( getLineWidth( shape, false ) ) );
-
-                    if( curve )
-                        m_gal->DrawCurve( curve->Start, curve->C1, curve->C2, curve->End, shape->GetMaxError() );
+                    if( hasEndings )
+                    {
+                        if( std::optional<BEZIER<double>> curve = shape->ShortenedBezierCurve( lineWidth ) )
+                            m_gal->DrawCurve( curve->Start, curve->C1, curve->C2, curve->End, shape->GetMaxError() );
+                    }
+                    else
+                    {
+                        m_gal->DrawCurve( shape->GetStart(), shape->GetBezierC1(), shape->GetBezierC2(),
+                                          shape->GetEnd() );
+                    }
 
                     break;
                 }
