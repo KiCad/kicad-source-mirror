@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-17 19:11+0000\n"
+"PO-Revision-Date: 2026-09-18 19:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -6983,9 +6983,8 @@ msgid "Snap Inference"
 msgstr "Obere Referenz"
 
 #: common/dialogs/panel_snapping_base.cpp:117
-#, fuzzy
 msgid "Object geometry"
-msgstr "Objekt A"
+msgstr "Objektgeometrie"
 
 #: common/dialogs/panel_snapping_base.cpp:118
 msgid "Snap to endpoints, midpoints, centres and edges of existing objects"
@@ -8429,55 +8428,47 @@ msgstr "Pfeil"
 #: common/eda_shape.cpp:4776 eeschema/dialogs/dialog_line_properties.cpp:117
 #: eeschema/dialogs/dialog_shape_properties.cpp:127 eeschema/sch_line.cpp:1379
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1114
-#, fuzzy
 msgid "Square"
-msgstr "Quadrate"
+msgstr "Quadrat"
 
 #: common/eda_shape.cpp:4777 eeschema/dialogs/dialog_line_properties.cpp:115
 #: eeschema/dialogs/dialog_shape_properties.cpp:125 eeschema/sch_line.cpp:1380
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1112
 #, fuzzy
 msgid "Open Arrow"
-msgstr "Trotzdem öffnen"
+msgstr "Offener Pfeil"
 
 #: common/eda_shape.cpp:4780 eeschema/sch_line.cpp:1461
 msgid "Start Shape"
 msgstr "Anfangsform"
 
 #: common/eda_shape.cpp:4785 eeschema/sch_line.cpp:1465
-#, fuzzy
 msgid "Start Length"
-msgstr "Ziellänge"
+msgstr "Anfangslänge"
 
 #: common/eda_shape.cpp:4790 eeschema/sch_line.cpp:1469
-#, fuzzy
 msgid "Start Width"
-msgstr "Verbindung zeichnen"
+msgstr "Anfangsbreite"
 
 #: common/eda_shape.cpp:4795 eeschema/sch_line.cpp:1473
-#, fuzzy
 msgid "Start Stroke Width"
-msgstr "Breite der verwendeten Leiterbahn verwenden"
+msgstr "Anfangsstrichbreite"
 
 #: common/eda_shape.cpp:4801 eeschema/sch_line.cpp:1478
-#, fuzzy
 msgid "End Shape"
-msgstr "Padform"
+msgstr "Endform"
 
 #: common/eda_shape.cpp:4806 eeschema/sch_line.cpp:1482
-#, fuzzy
 msgid "End Length"
-msgstr "Länge abstimmen"
+msgstr "Endlänge"
 
 #: common/eda_shape.cpp:4811 eeschema/sch_line.cpp:1486
-#, fuzzy
 msgid "End Width"
-msgstr "Min Breite"
+msgstr "Endbreite"
 
 #: common/eda_shape.cpp:4816 eeschema/sch_line.cpp:1490
-#, fuzzy
 msgid "End Stroke Width"
-msgstr "Min. Leiterbahnbreite"
+msgstr "Endstrichbreite"
 
 #: common/eda_text.cpp:1002 common/eda_text.cpp:1383
 #: eeschema/dialogs/dialog_field_properties_base.cpp:162
@@ -33453,7 +33444,7 @@ msgstr "Hebt alle Elemente hervor, die zu dem Symbol gehören"
 
 #: gerbview/toolbars_gerber.cpp:209 gerbview/toolbars_gerber.cpp:310
 msgid "Highlight items belonging to this net"
-msgstr "Hebt alle Elemente hervor die zu diesem Netz gehören"
+msgstr "Hebt alle Elemente hervor, die zu diesem Netz gehören"
 
 #: gerbview/toolbars_gerber.cpp:229 gerbview/toolbars_gerber.cpp:232
 msgid "Attr:"
