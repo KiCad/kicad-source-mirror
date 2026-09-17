@@ -346,6 +346,9 @@ protected:
     /// Consecutive frames dropped because the GL context could not be made current
     int                      m_contextBindFailures;
 
+    /// Set when a size change could not be applied because the GL context was unavailable
+    bool                     m_pendingResize;
+
     /// Flag to indicate whether the panel should take focus at certain times (when moused over,
     /// and on various mouse/key events)
     bool                     m_stealsFocus;

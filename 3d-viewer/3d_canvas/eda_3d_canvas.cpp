@@ -32,6 +32,10 @@
 
 #include "../common_ogl/ogl_utils.h"
 #include "eda_3d_canvas.h"
+
+#include <optional>
+
+#include <3d_rendering/orphaned_gl_objects.h>
 #include <eda_3d_viewer_frame.h>
 #include <3d_rendering/raytracing/render_3d_raytrace_gl.h>
 #include <3d_rendering/opengl/render_3d_opengl.h>
@@ -194,7 +198,12 @@ void EDA_3D_CANVAS::releaseOpenGL()
 
         if( gl_mgr )
         {
-            gl_mgr->LockCtx( m_glRC, this );
+            // wxGTK destroys the native window before this runs, and our context cannot be
+            // made current without it.  The renderers then have to come down without GL
+            std::optional<ORPHANED_GL_OBJECTS> orphaned;
+
+            if( !gl_mgr->LockCtx( m_glRC, this ) )
+                orphaned.emplace();
 
             delete m_3d_render_raytracing;
             m_3d_render_raytracing = nullptr;

@@ -33,6 +33,7 @@
 #include "3d_model.h"
 #include "../common_ogl/ogl_utils.h"
 #include "../3d_math.h"
+#include "../orphaned_gl_objects.h"
 #include <utility>
 #include <wx/debug.h>
 #include <wx/log.h>
@@ -559,7 +560,7 @@ void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMateria
 
 MODEL_3D::~MODEL_3D()
 {
-    if( glDeleteBuffers )
+    if( glDeleteBuffers && !ORPHANED_GL_OBJECTS::Active() )
     {
         glDeleteBuffers( 1, &m_vertex_buffer );
         glDeleteBuffers( 1, &m_index_buffer );
