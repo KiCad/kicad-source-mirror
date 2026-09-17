@@ -38,13 +38,14 @@
 class BOARD_ITEM;
 class FOOTPRINT;
 class NETINFO_ITEM;
+class PCB_TEXT;
 
 
 /**
  * Read-only importer for Protel Autotrax (.PCB, "PCB FILE 4") and Easytrax
  * (.PCB, "PCB FILE 5") layout files.
  *
- * Autotrax stores everything in mils with the Y axis pointing down. The plugin
+ * Autotrax stores everything in mils with the Y axis pointing up. The plugin
  * parses the file into an intermediate model, then builds a BOARD, flipping Y
  * about the board bounding box so the result lands in KiCad's coordinate frame.
  *
@@ -78,6 +79,9 @@ private:
 
     void buildComponent( const AUTOTRAX::COMPONENT& aComp );
 
+    /// Attach each NETDEF "refdes-pad" node to the matching imported pads.
+    void assignNets( const std::vector<AUTOTRAX::NET_NODE>& aNodes );
+
     void emitTrack( const AUTOTRAX::TRACK& aTrack, FOOTPRINT* aFootprint );
     void emitArc( const AUTOTRAX::ARC& aArc, FOOTPRINT* aFootprint );
     void emitVia( const AUTOTRAX::VIA& aVia, FOOTPRINT* aFootprint );
@@ -85,11 +89,20 @@ private:
     void emitFill( const AUTOTRAX::FILL& aFill, FOOTPRINT* aFootprint );
     void emitText( const AUTOTRAX::TEXT& aText, FOOTPRINT* aFootprint );
 
-    /// Map an Autotrax layer number to a KiCad layer. Returns false for layers
-    /// that have no KiCad equivalent or are intentionally dropped (0, 12).
-    bool mapLayer( int aLayer, PCB_LAYER_ID& aResult ) const;
+    /// Apply an Autotrax string record's placement, size, rotation and layer to @p aText.
+    /// Returns false when the record's layer has no KiCad equivalent.
+    bool applyText( const AUTOTRAX::TEXT& aText, PCB_TEXT* aTarget );
+
+    /// Map an Autotrax layer number to a KiCad layer for an item owned by @p aFootprint, or a free
+    /// item when it is null. Returns false for layers that have no KiCad equivalent (0).
+    bool mapLayer( int aLayer, const FOOTPRINT* aFootprint, PCB_LAYER_ID& aResult ) const;
 
     NETINFO_ITEM* getNet( const wxString& aNetName );
+
+    REPORTER& reporter() const;
+
+    /// Report what the import dropped or could not represent.
+    void reportGaps() const;
 
     /// Parent for a primitive: the owning footprint, or the board for free items.
     BOARD_ITEM* parentOf( FOOTPRINT* aFootprint ) const;
@@ -100,13 +113,23 @@ private:
     /// Convert a mil value to KiCad internal units (nm).
     static int toIU( double aMils ) { return KiROUND( aMils * 25400.0 ); }
 
-    /// Convert an Autotrax point (mils, Y-down) to a board point (nm, Y-up). The
+    /// Convert an Autotrax point (mils, Y-up) to a board point (nm, Y-down). The
     /// flip uses the parsed Y extent so all coordinates stay positive.
     VECTOR2I toBoard( double aX, double aY ) const { return VECTOR2I( toIU( aX ), m_maxY - toIU( aY ) ); }
 
     int m_maxY = 0; ///< board Y extent in IU, used to flip the Y axis
 
+    int m_targetPads = 0;    ///< pads with a crosshair or moire target shape
+    int m_offLayerPads = 0;  ///< pads on a layer KiCad cannot place them on
+    int m_planePads = 0;     ///< pads asking for a ground or power plane connection
+    int m_unmappedItems = 0; ///< items on a layer with no KiCad equivalent
+
+    bool         m_isNewLoad = true;
+    PCB_LAYER_ID m_keepoutLayer = User_1; ///< Edge_Cuts when the keepout outlines the board
+
     std::map<wxString, NETINFO_ITEM*> m_nets;
+
+    std::multimap<wxString, FOOTPRINT*> m_footprintsByRef; ///< footprints created by this load
 };
 
 #endif // PCB_IO_AUTOTRAX_H_

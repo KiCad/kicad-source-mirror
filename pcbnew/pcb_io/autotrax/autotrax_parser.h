@@ -82,6 +82,9 @@ private:
     bool parsePad( AUTOTRAX::PAD& aOut );
     bool parseFill( AUTOTRAX::FILL& aOut );
     bool parseText( AUTOTRAX::TEXT& aOut );
+
+    /// Parse the numeric line of a string record, which COMP headers reuse for label placement.
+    bool parseTextData( const wxString& aLine, AUTOTRAX::TEXT& aOut ) const;
     void parseComponent( AUTOTRAX::COMPONENT& aOut );
     void parseNetDef();
 

@@ -42,10 +42,12 @@
 #include <math/vector2d.h>
 
 #include <geometry/shape_line_chain.h>
+#include <math/box2.h>
 
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <set>
 #include <sstream>
 
 using AUTOTRAX::ARC;
@@ -132,17 +134,23 @@ void PCB_IO_AUTOTRAX::loadBoard( const wxString& aFileName, BOARD& aBoard, bool 
     m_board = &aBoard;
 
     m_nets.clear();
+    m_footprintsByRef.clear();
     m_maxY = 0;
+    m_isNewLoad = aIsNewLoad;
+    m_keepoutLayer = User_1;
+    m_targetPads = 0;
+    m_offLayerPads = 0;
+    m_planePads = 0;
+    m_unmappedItems = 0;
 
     wxString contents;
 
     if( !readFile( aFileName, contents ) )
         THROW_IO_ERRORF( _( "Could not read file '%s'." ), aFileName );
 
-    REPORTER&  reporter = m_reporter ? *m_reporter : NULL_REPORTER::GetInstance();
     BOARD_DATA data;
 
-    AUTOTRAX_PARSER parser( &reporter );
+    AUTOTRAX_PARSER parser( &reporter() );
 
     if( !parser.Parse( contents, data ) )
         THROW_IO_ERRORF( _( "'%s' is not a valid Protel Autotrax file." ), aFileName );
@@ -151,7 +159,7 @@ void PCB_IO_AUTOTRAX::loadBoard( const wxString& aFileName, BOARD& aBoard, bool 
 }
 
 
-bool PCB_IO_AUTOTRAX::mapLayer( int aLayer, PCB_LAYER_ID& aResult ) const
+bool PCB_IO_AUTOTRAX::mapLayer( int aLayer, const FOOTPRINT* aFootprint, PCB_LAYER_ID& aResult ) const
 {
     using namespace AUTOTRAX;
 
@@ -168,10 +176,51 @@ bool PCB_IO_AUTOTRAX::mapLayer( int aLayer, PCB_LAYER_ID& aResult ) const
     case LAYER_GND_PLANE: aResult = In5_Cu; return true;
     case LAYER_POWER_PLANE: aResult = In6_Cu; return true;
     case LAYER_BOARD: aResult = Edge_Cuts; return true;
+    case LAYER_KEEPOUT: aResult = aFootprint ? User_1 : m_keepoutLayer; return true;
     case LAYER_MULTI: aResult = F_Cu; return true; // through-all features
     default:
-        // 0 (unset) and 12 (keepout) have no KiCad target and are dropped.
+        // 0 (unset) has no KiCad target and is dropped.
         return false;
+    }
+}
+
+
+REPORTER& PCB_IO_AUTOTRAX::reporter() const
+{
+    return m_reporter ? *m_reporter : NULL_REPORTER::GetInstance();
+}
+
+
+void PCB_IO_AUTOTRAX::reportGaps() const
+{
+    if( m_targetPads )
+    {
+        reporter().Report( wxString::Format( _( "Autotrax import: %d pad(s) with a target shape were skipped." ),
+                                             m_targetPads ),
+                           RPT_SEVERITY_WARNING );
+    }
+
+    if( m_offLayerPads )
+    {
+        reporter().Report( wxString::Format( _( "Autotrax import: %d pad(s) on unsupported layers were skipped." ),
+                                             m_offLayerPads ),
+                           RPT_SEVERITY_WARNING );
+    }
+
+    if( m_planePads )
+    {
+        reporter().Report( wxString::Format( _( "Autotrax import: %d pad(s) ask for a ground or power plane "
+                                                "connection, which is not imported." ),
+                                             m_planePads ),
+                           RPT_SEVERITY_WARNING );
+    }
+
+    if( m_unmappedItems )
+    {
+        reporter().Report( wxString::Format( _( "Autotrax import: %d item(s) on a layer with no KiCad equivalent "
+                                                "were skipped." ),
+                                             m_unmappedItems ),
+                           RPT_SEVERITY_WARNING );
     }
 }
 
@@ -216,7 +265,17 @@ void PCB_IO_AUTOTRAX::addItem( BOARD_ITEM* aItem, FOOTPRINT* aFootprint )
 }
 
 
-/// One arc as a (start angle, signed sweep) pair in the file's native Y-down
+/// Bounding box of two points, in mils.
+static BOX2D spanBox( double aX1, double aY1, double aX2, double aY2 )
+{
+    BOX2D box;
+    box.Merge( VECTOR2D( aX1, aY1 ) );
+    box.Merge( VECTOR2D( aX2, aY2 ) );
+    return box;
+}
+
+
+/// One arc as a (start angle, counterclockwise sweep) pair in the file's native Y-up
 /// frame.
 struct ARC_SPAN
 {
@@ -226,28 +285,55 @@ struct ARC_SPAN
 
 
 /// Translate an Autotrax arc quadrant bitmask into the arc spans it represents.
-/// Most masks are a single contiguous run of quadrants, but masks 5 and 10
-/// encode two disjoint quadrants and therefore yield two arcs.
+/// Bits 0..3 select the upper right, upper left, lower left and lower right
+/// quadrants. Each contiguous run of set bits becomes one arc, so masks 5 and 10
+/// yield two.
 static std::vector<ARC_SPAN> arcSpansFromSegments( int aSegments )
 {
-    switch( aSegments )
+    if( aSegments <= 0 || aSegments >= 15 )
+        return { { 0.0, 360.0 } };
+
+    auto isSet = [&]( int aQuadrant )
     {
-    case 1: return { { 90.0, 90.0 } };                  // RU quadrant
-    case 2: return { { 0.0, 90.0 } };                   // LU quadrant
-    case 4: return { { 270.0, 90.0 } };                 // LL quadrant
-    case 8: return { { 180.0, 90.0 } };                 // RL quadrant
-    case 3: return { { 0.0, 180.0 } };                  // upper half
-    case 6: return { { 270.0, 180.0 } };                // left half
-    case 12: return { { 180.0, 180.0 } };               // lower half
-    case 9: return { { 90.0, 180.0 } };                 // right half
-    case 14: return { { 180.0, 270.0 } };               // not RU
-    case 13: return { { 90.0, 270.0 } };                // not LU
-    case 11: return { { 0.0, 270.0 } };                 // not LL
-    case 7: return { { 270.0, 270.0 } };                // not RL
-    case 5: return { { 270.0, 90.0 }, { 90.0, 90.0 } }; // RU + LL quadrants
-    case 10: return { { 180.0, 90.0 }, { 0.0, 90.0 } }; // LU + RL quadrants
-    default: return { { 0.0, 360.0 } };                 // full circle
+        return ( aSegments >> ( ( aQuadrant + 4 ) % 4 ) ) & 1;
+    };
+
+    std::vector<ARC_SPAN> spans;
+
+    for( int quadrant = 0; quadrant < 4; ++quadrant )
+    {
+        if( !isSet( quadrant ) || isSet( quadrant - 1 ) )
+            continue;
+
+        int length = 1;
+
+        while( isSet( quadrant + length ) )
+            ++length;
+
+        spans.push_back( { 90.0 * quadrant, 90.0 * length } );
     }
+
+    return spans;
+}
+
+
+/// Bounding box of an arc's drawn quadrants, in mils.
+static BOX2D arcBox( const ARC& aArc )
+{
+    BOX2D box;
+
+    for( const ARC_SPAN& span : arcSpansFromSegments( aArc.segments ) )
+    {
+        // Spans start and end on quadrant boundaries, so their extremes are among these points
+        for( double deg = span.startDeg; deg <= span.startDeg + span.deltaDeg; deg += 90.0 )
+        {
+            double rad = deg * M_PI / 180.0;
+            box.Merge( VECTOR2D( aArc.centerX + aArc.radius * std::cos( rad ),
+                                 aArc.centerY + aArc.radius * std::sin( rad ) ) );
+        }
+    }
+
+    return box;
 }
 
 
@@ -255,8 +341,11 @@ void PCB_IO_AUTOTRAX::emitTrack( const TRACK& aTrack, FOOTPRINT* aFootprint )
 {
     PCB_LAYER_ID layer;
 
-    if( !mapLayer( aTrack.layer, layer ) )
+    if( !mapLayer( aTrack.layer, aFootprint, layer ) )
+    {
+        m_unmappedItems++;
         return;
+    }
 
     // A free copper segment becomes a routed PCB_TRACK. Everything else, and any
     // segment owned by a footprint, becomes a graphic PCB_SHAPE so it stays with
@@ -285,14 +374,17 @@ void PCB_IO_AUTOTRAX::emitArc( const ARC& aArc, FOOTPRINT* aFootprint )
 {
     PCB_LAYER_ID layer;
 
-    if( !mapLayer( aArc.layer, layer ) )
+    if( !mapLayer( aArc.layer, aFootprint, layer ) )
+    {
+        m_unmappedItems++;
         return;
+    }
 
     int      r = toIU( aArc.radius );
     int      width = std::max( 1, toIU( aArc.width ) );
     VECTOR2I center = toBoard( aArc.centerX, aArc.centerY );
 
-    // A point on the circle for an angle in the Y-down file frame. toBoard()
+    // A point on the circle for an angle in the Y-up file frame. toBoard()
     // applies the Y flip so the resulting geometry lands in KiCad space.
     auto pointAt = [&]( double aDeg )
     {
@@ -358,21 +450,29 @@ void PCB_IO_AUTOTRAX::emitVia( const VIA& aVia, FOOTPRINT* aFootprint )
 
 void PCB_IO_AUTOTRAX::emitPad( const AUTOTRAX::PAD& aPad, FOOTPRINT* aFootprint )
 {
-    // Layer 11 ("board") pads and the unsupported target shapes are dropped.
-    if( aPad.layer == AUTOTRAX::LAYER_BOARD || aPad.shape == 5 || aPad.shape == 6 )
+    // Shapes 5 and 6 are crosshair and moire targets, which have no pad equivalent
+    if( aPad.shape == 5 || aPad.shape == 6 )
+    {
+        m_targetPads++;
         return;
+    }
+
+    // Plane connections only matter with a plane, and the plane layers import as plain copper
+    if( aPad.planeFlags > 1 )
+        m_planePads++;
 
     // Autotrax only places pads on the top (1), bottom (6) or multi/through (13)
     // layers; other pad layers are unsupported and dropped.
     if( aPad.layer != AUTOTRAX::LAYER_TOP_COPPER && aPad.layer != AUTOTRAX::LAYER_BOTTOM_COPPER
         && aPad.layer != AUTOTRAX::LAYER_MULTI )
     {
+        m_offLayerPads++;
         return;
     }
 
     PCB_LAYER_ID layer;
 
-    if( !mapLayer( aPad.layer, layer ) )
+    if( !mapLayer( aPad.layer, aFootprint, layer ) )
         return;
 
     // A free pad with no owning footprint still needs a footprint container so
@@ -443,8 +543,11 @@ void PCB_IO_AUTOTRAX::emitFill( const FILL& aFill, FOOTPRINT* aFootprint )
 {
     PCB_LAYER_ID layer;
 
-    if( !mapLayer( aFill.layer, layer ) )
+    if( !mapLayer( aFill.layer, aFootprint, layer ) )
+    {
+        m_unmappedItems++;
         return;
+    }
 
     VECTOR2I p1 = toBoard( aFill.x1, aFill.y1 );
     VECTOR2I p2 = toBoard( aFill.x2, aFill.y2 );
@@ -485,28 +588,43 @@ void PCB_IO_AUTOTRAX::emitFill( const FILL& aFill, FOOTPRINT* aFootprint )
 }
 
 
-void PCB_IO_AUTOTRAX::emitText( const TEXT& aText, FOOTPRINT* aFootprint )
+bool PCB_IO_AUTOTRAX::applyText( const TEXT& aText, PCB_TEXT* aTarget )
 {
     PCB_LAYER_ID layer;
 
-    if( !mapLayer( aText.layer, layer ) )
-        return;
+    if( !mapLayer( aText.layer, aTarget->GetParentFootprint(), layer ) )
+    {
+        m_unmappedItems++;
+        return false;
+    }
 
-    PCB_TEXT* text = new PCB_TEXT( parentOf( aFootprint ) );
-    text->SetText( aText.text );
-    text->SetLayer( layer );
-    text->SetPosition( toBoard( aText.x, aText.y ) );
+    aTarget->SetLayer( layer );
+    aTarget->SetPosition( toBoard( aText.x, aText.y ) );
 
     int height = std::max( 1, toIU( aText.height ) );
-    text->SetTextSize( VECTOR2I( height, height ) );
-    text->SetTextThickness( std::max( 1, toIU( aText.width ) ) );
+    aTarget->SetTextSize( VECTOR2I( height, height ) );
+    aTarget->SetTextThickness( std::max( 1, toIU( aText.width ) ) );
 
-    // Direction is 0..3 in 90 degree steps. The Y flip mirrors the rotation, so
-    // negate it to keep the text reading the same way it did in Autotrax.
-    text->SetTextAngle( EDA_ANGLE( -90.0 * aText.direction, DEGREES_T ) );
+    // Autotrax mirrors text after rotating it, so a mirrored string turns the other way
+    double angle = 90.0 * aText.direction;
 
-    if( layer == B_Cu || layer == B_SilkS )
-        text->SetMirrored( true );
+    aTarget->SetTextAngle( EDA_ANGLE( aText.mirrored ? -angle : angle, DEGREES_T ) );
+    aTarget->SetMirrored( aText.mirrored );
+    aTarget->SetKeepUpright( false );
+    return true;
+}
+
+
+void PCB_IO_AUTOTRAX::emitText( const TEXT& aText, FOOTPRINT* aFootprint )
+{
+    PCB_TEXT* text = new PCB_TEXT( parentOf( aFootprint ) );
+    text->SetText( aText.text );
+
+    if( !applyText( aText, text ) )
+    {
+        delete text;
+        return;
+    }
 
     addItem( text, aFootprint );
 }
@@ -525,6 +643,13 @@ void PCB_IO_AUTOTRAX::buildComponent( const AUTOTRAX::COMPONENT& aComp )
 
     if( !aComp.name.IsEmpty() )
         fp->SetFPID( LIB_ID( wxEmptyString, aComp.name ) );
+
+    // A label on a dropped layer is hidden rather than shown on the field's default layer
+    bool refdesPlaced = !aComp.refdesText || applyText( *aComp.refdesText, &fp->Reference() );
+    bool valuePlaced = !aComp.valueText || applyText( *aComp.valueText, &fp->Value() );
+
+    fp->Reference().SetVisible( aComp.refdesVisible && refdesPlaced );
+    fp->Value().SetVisible( aComp.valueVisible && valuePlaced );
 
     for( const TRACK& t : aComp.tracks )
         emitTrack( t, fp );
@@ -545,26 +670,87 @@ void PCB_IO_AUTOTRAX::buildComponent( const AUTOTRAX::COMPONENT& aComp )
         emitText( s, fp );
 
     m_board->Add( fp, ADD_MODE::APPEND );
+    m_footprintsByRef.emplace( aComp.refdes, fp );
+}
+
+
+void PCB_IO_AUTOTRAX::assignNets( const std::vector<NET_NODE>& aNodes )
+{
+    for( const NET_NODE& node : aNodes )
+    {
+        NETINFO_ITEM*        net = getNet( node.netName );
+        std::vector<::PAD*>  pads;
+        std::set<FOOTPRINT*> owners;
+
+        // Designators and pad names may both contain '-', so try every split
+        for( size_t dash = node.node.find( '-' ); dash != wxString::npos; dash = node.node.find( '-', dash + 1 ) )
+        {
+            wxString padName = node.node.Mid( dash + 1 );
+
+            if( padName.IsEmpty() )
+                continue;
+
+            auto [first, last] = m_footprintsByRef.equal_range( node.node.Left( dash ) );
+
+            for( auto it = first; it != last; ++it )
+            {
+                for( ::PAD* pad : it->second->Pads() )
+                {
+                    if( pad->GetNumber() == padName )
+                    {
+                        pads.push_back( pad );
+                        owners.insert( it->second );
+                    }
+                }
+            }
+        }
+
+        if( owners.size() == 1 )
+        {
+            for( ::PAD* pad : pads )
+                pad->SetNet( net );
+        }
+        else if( owners.empty() )
+        {
+            reporter().Report( wxString::Format( _( "Autotrax import: net '%s' node '%s' matches no pad." ),
+                                               node.netName, node.node ),
+                             RPT_SEVERITY_WARNING );
+        }
+        else
+        {
+            reporter().Report( wxString::Format( _( "Autotrax import: net '%s' node '%s' matches pads in more than "
+                                                  "one footprint and was not connected." ),
+                                               node.netName, node.node ),
+                             RPT_SEVERITY_WARNING );
+        }
+    }
 }
 
 
 void PCB_IO_AUTOTRAX::buildBoard( const BOARD_DATA& aData )
 {
-    // A single walk over every primitive (free and component-owned) collects two
-    // things needed before any item is emitted: the deepest inner copper layer
-    // referenced, and the Y extent of the data.
+    // A single walk over every primitive (free and component-owned) collects what
+    // is needed before any item is emitted: the deepest inner copper layer
+    // referenced, the Y extent of the data and where the keepout layer goes.
     //
     // mapLayer() places the four inner copper layers on In1..In4 and the GND and
     // Power planes on In5/In6, so the board must enable enough copper layers for
     // the deepest inner layer actually referenced (otherwise items land on a
     // disabled layer). A two-sided board keeps just F_Cu/B_Cu.
     //
-    // The Y extent drives the Y-down -> Y-up flip about the data bounding box
+    // The Y extent drives the Y-up -> Y-down flip about the data bounding box
     // so all coordinates stay positive.
     int    innerNeeded = 0;
     double maxYmils = 0.0;
 
-    auto noteLayer = [&]( int aLayer )
+    // Designers often draw the board edge on the keepout layer, which also bounds the autorouter
+    bool  boardLayerUsed = false;
+    bool  freeKeepoutUsed = false;
+    bool  componentKeepoutUsed = false;
+    BOX2D keepoutBox;
+    BOX2D drilledBox;
+
+    auto noteLayer = [&]( int aLayer, bool aFree )
     {
         switch( aLayer )
         {
@@ -574,56 +760,99 @@ void PCB_IO_AUTOTRAX::buildBoard( const BOARD_DATA& aData )
         case AUTOTRAX::LAYER_MID4: innerNeeded = std::max( innerNeeded, 4 ); break;
         case AUTOTRAX::LAYER_GND_PLANE: innerNeeded = std::max( innerNeeded, 5 ); break;
         case AUTOTRAX::LAYER_POWER_PLANE: innerNeeded = std::max( innerNeeded, 6 ); break;
+        case AUTOTRAX::LAYER_BOARD: boardLayerUsed = true; break;
+        case AUTOTRAX::LAYER_KEEPOUT: ( aFree ? freeKeepoutUsed : componentKeepoutUsed ) = true; break;
         default: break;
         }
     };
 
+    auto noteOutline = [&]( int aLayer, bool aFree, const BOX2D& aBox )
+    {
+        noteLayer( aLayer, aFree );
+
+        if( aFree && aLayer == AUTOTRAX::LAYER_KEEPOUT )
+            keepoutBox.Merge( aBox );
+    };
+
+    auto noteText = [&]( const TEXT& aText, bool aFree )
+    {
+        noteLayer( aText.layer, aFree );
+        maxYmils = std::max( maxYmils, aText.y );
+    };
+
     // BOARD_DATA and COMPONENT share the same six primitive members, so one
     // generic walk covers both the free primitives and each component's.
-    auto scan = [&]( const auto& aContainer )
+    auto scan = [&]( const auto& aContainer, bool aFree )
     {
         for( const TRACK& t : aContainer.tracks )
         {
-            noteLayer( t.layer );
+            noteOutline( t.layer, aFree, spanBox( t.x1, t.y1, t.x2, t.y2 ) );
             maxYmils = std::max( { maxYmils, t.y1, t.y2 } );
         }
 
         for( const ARC& a : aContainer.arcs )
         {
-            noteLayer( a.layer );
+            noteOutline( a.layer, aFree, arcBox( a ) );
             maxYmils = std::max( maxYmils, a.centerY + a.radius );
         }
 
         for( const VIA& v : aContainer.vias )
+        {
+            drilledBox.Merge( VECTOR2D( v.x, v.y ) );
             maxYmils = std::max( maxYmils, v.y );
+        }
 
+        // emitPad() keeps only top, bottom and multi layer pads, so their layer needs no note
         for( const AUTOTRAX::PAD& p : aContainer.pads )
         {
-            noteLayer( p.layer );
+            drilledBox.Merge( VECTOR2D( p.x, p.y ) );
             maxYmils = std::max( maxYmils, p.y );
         }
 
         for( const FILL& f : aContainer.fills )
         {
-            noteLayer( f.layer );
+            noteOutline( f.layer, aFree, spanBox( f.x1, f.y1, f.x2, f.y2 ) );
             maxYmils = std::max( { maxYmils, f.y1, f.y2 } );
         }
 
         for( const TEXT& s : aContainer.texts )
-            maxYmils = std::max( maxYmils, s.y );
+            noteText( s, aFree );
     };
 
-    scan( aData );
+    scan( aData, true );
 
     for( const AUTOTRAX::COMPONENT& c : aData.components )
-        scan( c );
+    {
+        scan( c, false );
+
+        for( const std::optional<TEXT>* label : { &c.refdesText, &c.valueText } )
+        {
+            if( *label )
+                noteText( **label, false );
+        }
+    }
 
     m_board->SetCopperLayerCount( 2 + innerNeeded );
     m_maxY = toIU( maxYmils );
 
-    // Pre-create nets so pads/tracks can reference them by name.
-    for( const NET_NODE& node : aData.netNodes )
-        getNet( node.netName );
+    // Only free outlines can be the board edge; footprint Edge_Cuts would join the board outline
+    bool keepoutIsEdge = keepoutBox.IsValid() && !boardLayerUsed
+                         && ( !drilledBox.IsValid() || keepoutBox.Contains( drilledBox ) );
+
+    m_keepoutLayer = keepoutIsEdge ? Edge_Cuts : User_1;
+
+    if( keepoutIsEdge )
+    {
+        reporter().Report( _( "Autotrax import: keepout layer used as the board outline." ), RPT_SEVERITY_INFO );
+    }
+
+    if( componentKeepoutUsed || ( freeKeepoutUsed && !keepoutIsEdge ) )
+    {
+        m_board->SetEnabledLayers( m_board->GetEnabledLayers() | LSET( { User_1 } ) );
+
+        if( m_isNewLoad )
+            m_board->SetLayerName( User_1, _( "Keepout" ) );
+    }
 
     for( const TRACK& t : aData.tracks )
         emitTrack( t, nullptr );
@@ -645,4 +874,7 @@ void PCB_IO_AUTOTRAX::buildBoard( const BOARD_DATA& aData )
 
     for( const AUTOTRAX::COMPONENT& c : aData.components )
         buildComponent( c );
+
+    assignNets( aData.netNodes );
+    reportGaps();
 }

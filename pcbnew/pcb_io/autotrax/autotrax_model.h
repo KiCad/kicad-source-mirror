@@ -25,6 +25,7 @@
 #ifndef AUTOTRAX_MODEL_H_
 #define AUTOTRAX_MODEL_H_
 
+#include <optional>
 #include <vector>
 
 #include <wx/string.h>
@@ -122,7 +123,8 @@ struct TEXT
     double      x = 0;
     double      y = 0;
     double      height = 0;
-    int         direction = 0; ///< 0..3, multiplied by 90 degrees
+    int         direction = 0; ///< 0..3, multiplied by 90 degrees counterclockwise
+    bool        mirrored = false;
     double      width = 0;
     int         layer = 0;
     wxString    text;
@@ -137,6 +139,11 @@ struct COMPONENT
     wxString    value;
     double      x = 0;
     double      y = 0;
+
+    std::optional<TEXT> refdesText; ///< designator placement, text unused
+    std::optional<TEXT> valueText;  ///< comment placement, text unused
+    bool                refdesVisible = true;
+    bool                valueVisible = true;
 
     std::vector<TRACK> tracks;
     std::vector<ARC>   arcs;

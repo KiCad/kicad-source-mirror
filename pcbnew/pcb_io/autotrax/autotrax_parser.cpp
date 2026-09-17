@@ -236,7 +236,20 @@ bool AUTOTRAX_PARSER::parseText( TEXT& aOut )
     if( !nextLine( line ) )
         return false;
 
-    wxArrayString tok = tokenize( line );
+    if( !parseTextData( line, aOut ) )
+        return false;
+
+    // The text string is on the following line; an empty line yields empty text.
+    if( nextLine( line ) )
+        aOut.text = line;
+
+    return true;
+}
+
+
+bool AUTOTRAX_PARSER::parseTextData( const wxString& aLine, TEXT& aOut ) const
+{
+    wxArrayString tok = tokenize( aLine );
 
     if( tok.GetCount() < 6 )
     {
@@ -247,14 +260,14 @@ bool AUTOTRAX_PARSER::parseText( TEXT& aOut )
     aOut.x = toDouble( tok[0] );
     aOut.y = toDouble( tok[1] );
     aOut.height = toDouble( tok[2] );
-    aOut.direction = toInt( tok[3] ) % 4; // mirroring bit ignored
+
+    // Rotation codes 16..19 are the mirrored forms of 0..3
+    int rotation = toInt( tok[3] );
+    aOut.direction = rotation & 3;
+    aOut.mirrored = ( rotation & 16 ) != 0;
+
     aOut.width = toDouble( tok[4] );
     aOut.layer = toInt( tok[5] );
-
-    // The text string is on the following line; an empty line yields empty text.
-    if( nextLine( line ) )
-        aOut.text = line;
-
     return true;
 }
 
@@ -273,11 +286,16 @@ void AUTOTRAX_PARSER::parseComponent( COMPONENT& aOut )
     if( nextLine( line ) )
         aOut.value = line;
 
-    // Two text-placement lines (refdes/value label positions) are ignored.
-    nextLine( line );
-    nextLine( line );
+    // The comment (value) placement precedes the designator placement
+    TEXT label;
 
-    // Component origin.
+    if( nextLine( line ) && parseTextData( line, label ) )
+        aOut.valueText = label;
+
+    if( nextLine( line ) && parseTextData( line, label ) )
+        aOut.refdesText = label;
+
+    // Component origin, then designator and comment status where 2 hides the label
     if( nextLine( line ) )
     {
         wxArrayString tok = tokenize( line );
@@ -286,6 +304,12 @@ void AUTOTRAX_PARSER::parseComponent( COMPONENT& aOut )
         {
             aOut.x = toDouble( tok[0] );
             aOut.y = toDouble( tok[1] );
+
+            if( tok.GetCount() >= 4 )
+            {
+                aOut.refdesVisible = toInt( tok[2] ) != 2;
+                aOut.valueVisible = toInt( tok[3] ) != 2;
+            }
         }
         else
         {
