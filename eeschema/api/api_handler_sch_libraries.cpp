@@ -19,6 +19,7 @@
  */
 
 #include <api/api_handler_sch_libraries.h>
+#include <api/api_utils.h>
 
 #include <libraries/symbol_library_adapter.h>
 #include <pgm_base.h>
@@ -50,6 +51,22 @@ bool API_HANDLER_SCH_LIBRARIES::packLibraryItem( const LIB_ID& aId, google::prot
     if( !libSymbol )
         return false;
 
-    libSymbol->Serialize( aOutput );
+    // Clients get the inherited drawings resolved, so derived symbols are reported flattened.
+    std::unique_ptr<LIB_SYMBOL> flattened;
+
+    if( libSymbol->IsDerived() )
+    {
+        flattened = libSymbol->Flatten();
+
+        if( flattened )
+            flattened->SetParentName( libSymbol->GetParentName() );
+    }
+    else if( !libSymbol->GetParentName().IsEmpty() )
+    {
+        wxLogTrace( traceApi, "Cannot resolve the parent of derived symbol '%s'", aId.Format().wx_str() );
+    }
+
+    ( flattened ? flattened.get() : libSymbol )->Serialize( aOutput );
+
     return true;
 }

@@ -593,6 +593,12 @@ message SchematicSymbol
 
   // Distance between the pin and its name text; 0 means the name is inside the body outline
   kiapi.common.types.Distance pin_name_offset = 21;
+
+  // If present, the library symbol that this symbol is derived from; the parent must live in the
+  // same library as the derived symbol.  Symbols retrieved from a library are reported flattened,
+  // so the items above already contain the inherited content and this field is informational.
+  // Definitions returned with a placed symbol instance are snapshots and never set this field.
+  optional kiapi.common.types.LibraryIdentifier extends = 22;
 }
 
 message SchematicSymbolTransform
