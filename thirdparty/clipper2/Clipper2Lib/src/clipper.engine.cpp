@@ -319,12 +319,19 @@ namespace Clipper2Lib {
     outrec->pts = nullptr;
   }
 
-
-  bool IntersectListSort(const IntersectNode& a, const IntersectNode& b)
+  
+  // N.B. this is a functor rather than a free function to allow std::sort to
+  // inline the comparison directly in the template rather than calling an
+  // external function
+  struct IntersectListSort
   {
-    //note different inequality tests ...
-    return (a.pt.y == b.pt.y) ? (a.pt.x < b.pt.x) : (a.pt.y > b.pt.y);
-  }
+    inline bool operator()(const IntersectNode& a, const IntersectNode& b)
+    {
+      
+      //note different inequality tests ...
+      return (a.pt.y == b.pt.y) ? (a.pt.x < b.pt.x) : (a.pt.y > b.pt.y);
+    }
+  };
 
 
   inline void SetSides(OutRec& outrec, Active& start_edge, Active& end_edge)
@@ -2620,7 +2627,7 @@ namespace Clipper2Lib {
     //crucial that intersections only occur between adjacent edges.
 
     //First we do a quicksort so intersections proceed in a bottom up order ...
-    std::sort(intersect_nodes_.begin(), intersect_nodes_.end(), IntersectListSort);
+    std::sort(intersect_nodes_.begin(), intersect_nodes_.end(), (IntersectListSort()));
     //Now as we process these intersections, we must sometimes adjust the order
     //to ensure that intersecting edges are always adjacent ...
 
