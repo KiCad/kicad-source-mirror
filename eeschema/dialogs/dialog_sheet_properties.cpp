@@ -582,7 +582,7 @@ void DIALOG_SHEET_PROPERTIES::OnAddField( wxCommandEvent& event )
                 // notify the grid
                 wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
                 m_grid->ProcessTableMessage( msg );
-                return { m_fields->size() - 1, FDC_NAME };
+                return { m_fields->GetNumberRows() - 1, FDC_NAME };
             } );
 }
 
@@ -603,7 +603,8 @@ void DIALOG_SHEET_PROPERTIES::OnDeleteField( wxCommandEvent& event )
             },
             [&]( int row )
             {
-                m_fields->erase( m_fields->begin() + row );
+                if( !m_fields->EraseRow( row ) )
+                    return;
 
                 // notify the grid
                 wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
@@ -621,7 +622,7 @@ void DIALOG_SHEET_PROPERTIES::OnMoveUp( wxCommandEvent& event )
             },
             [&]( int row )
             {
-                std::swap( *( m_fields->begin() + row ), *( m_fields->begin() + row - 1 ) );
+                m_fields->SwapRows( row, row - 1 );
                 m_grid->ForceRefresh();
             } );
 }
@@ -629,14 +630,14 @@ void DIALOG_SHEET_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 
 void DIALOG_SHEET_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 {
-    m_grid->OnMoveRowUp(
+    m_grid->OnMoveRowDown(
             [&]( int row )
             {
                 return row >= m_fields->GetMandatoryRowCount();
             },
             [&]( int row )
             {
-                std::swap( *( m_fields->begin() + row ), *( m_fields->begin() + row + 1 ) );
+                m_fields->SwapRows( row, row + 1 );
                 m_grid->ForceRefresh();
             } );
 }

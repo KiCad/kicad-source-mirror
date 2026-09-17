@@ -223,7 +223,7 @@ int FIELDS_GRID_TABLE::GetMandatoryRowCount() const
 
     for( const SCH_FIELD& field : *this )
     {
-        if( field.IsMandatory() )
+        if( field.IsMandatory() && ( !privateFieldsAreHidden() || !field.IsPrivate() ) )
             mandatoryRows++;
     }
 
@@ -451,10 +451,40 @@ int FIELDS_GRID_TABLE::getColumnCount() const
 }
 
 
+bool FIELDS_GRID_TABLE::privateFieldsAreHidden() const
+{
+    return m_frame->GetFrameType() == FRAME_SCH || m_frame->GetFrameType() == FRAME_SCH_VIEWER;
+}
+
+
+int FIELDS_GRID_TABLE::getFieldIndex( int aRow ) const
+{
+    wxCHECK_MSG( aRow >= 0 && aRow < getVisibleRowCount(), -1, wxT( "Invalid field row" ) );
+
+    if( !privateFieldsAreHidden() )
+        return aRow;
+
+    int visibleRow = 0;
+
+    for( int fieldIndex = 0; fieldIndex < static_cast<int>( size() ); ++fieldIndex )
+    {
+        if( at( fieldIndex ).IsPrivate() )
+            continue;
+
+        if( visibleRow == aRow )
+            return fieldIndex;
+
+        ++visibleRow;
+    }
+
+    wxFAIL_MSG( wxT( "Row index off end of visible row count" ) );
+    return -1;
+}
+
+
 int FIELDS_GRID_TABLE::getVisibleRowCount() const
 {
-    if( m_frame->GetFrameType() == FRAME_SCH
-        || m_frame->GetFrameType() == FRAME_SCH_VIEWER )
+    if( privateFieldsAreHidden() )
     {
         int visibleRows = 0;
 
@@ -473,26 +503,7 @@ int FIELDS_GRID_TABLE::getVisibleRowCount() const
 
 SCH_FIELD& FIELDS_GRID_TABLE::getField( int aRow )
 {
-    if( m_frame->GetFrameType() == FRAME_SCH
-        || m_frame->GetFrameType() == FRAME_SCH_VIEWER )
-    {
-        int visibleRow = 0;
-
-        for( SCH_FIELD& field : *this )
-        {
-            if( field.IsPrivate() )
-                continue;
-
-            if( visibleRow == aRow )
-                return field;
-
-            ++visibleRow;
-        }
-
-        wxFAIL_MSG( wxT( "Row index off end of visible row count" ) );
-    }
-
-    return this->at( aRow );
+    return at( getFieldIndex( aRow ) );
 }
 
 
@@ -1099,14 +1110,40 @@ SCH_FIELD* FIELDS_GRID_TABLE::GetField( FIELD_T aFieldId )
 
 int FIELDS_GRID_TABLE::GetFieldRow( FIELD_T aFieldId )
 {
-    for( int ii = 0; ii < (int) this->size(); ++ii )
+    int visibleRow = 0;
+
+    for( const SCH_FIELD& field : *this )
     {
-        if( this->at( ii ).GetId() == aFieldId )
-            return ii;
+        if( field.GetId() == aFieldId )
+            return privateFieldsAreHidden() && field.IsPrivate() ? -1 : visibleRow;
+
+        if( !privateFieldsAreHidden() || !field.IsPrivate() )
+            ++visibleRow;
     }
 
     return -1;
 }
+
+
+bool FIELDS_GRID_TABLE::IsInherited( size_t aRow ) const
+{
+    int fieldIndex = getFieldIndex( static_cast<int>( aRow ) );
+
+    if( fieldIndex < 0 || fieldIndex >= static_cast<int>( m_isInherited.size() )
+        || fieldIndex >= static_cast<int>( m_parentFields.size() ) )
+    {
+        return false;
+    }
+
+    return m_isInherited[fieldIndex] && m_parentFields[fieldIndex].GetText() == at( fieldIndex ).GetText();
+}
+
+
+const SCH_FIELD& FIELDS_GRID_TABLE::ParentField( size_t aRow ) const
+{
+    return m_parentFields.at( getFieldIndex( static_cast<int>( aRow ) ) );
+}
+
 
 void FIELDS_GRID_TABLE::AddInheritedField( const SCH_FIELD& aParent )
 {
@@ -1118,39 +1155,49 @@ void FIELDS_GRID_TABLE::AddInheritedField( const SCH_FIELD& aParent )
 
 bool FIELDS_GRID_TABLE::EraseRow( size_t aRow )
 {
-    if( m_isInherited.size() > aRow )
+    int fieldIndex = getFieldIndex( static_cast<int>( aRow ) );
+
+    if( fieldIndex < 0 )
+        return false;
+
+    if( m_isInherited.size() > static_cast<size_t>( fieldIndex ) )
     {
         // You can't erase inherited fields, but you can reset them to the parent value.
-        if( m_isInherited[aRow] )
+        if( m_isInherited[fieldIndex] )
         {
-            at( aRow ) = m_parentFields[aRow];
+            at( fieldIndex ) = m_parentFields[fieldIndex];
             return false;
         }
 
-        m_isInherited.erase( m_isInherited.begin() + aRow );
+        m_isInherited.erase( m_isInherited.begin() + fieldIndex );
     }
 
-    if( m_parentFields.size() > aRow )
-        m_parentFields.erase( m_parentFields.begin() + aRow );
+    if( m_parentFields.size() > static_cast<size_t>( fieldIndex ) )
+        m_parentFields.erase( m_parentFields.begin() + fieldIndex );
 
-    std::vector<SCH_FIELD>::erase( begin() + aRow );
+    std::vector<SCH_FIELD>::erase( begin() + fieldIndex );
     return true;
 }
 
 void FIELDS_GRID_TABLE::SwapRows( size_t a, size_t b )
 {
-    wxCHECK( a < this->size() && b < this->size(), /*void*/ );
-    wxCHECK( a < m_isInherited.size() && b < m_isInherited.size() && a < m_parentFields.size()
-                     && b < m_parentFields.size(),
+    int fieldIndexA = getFieldIndex( static_cast<int>( a ) );
+    int fieldIndexB = getFieldIndex( static_cast<int>( b ) );
+
+    wxCHECK( fieldIndexA >= 0 && fieldIndexB >= 0, /*void*/ );
+    wxCHECK( fieldIndexA < static_cast<int>( m_isInherited.size() )
+                     && fieldIndexB < static_cast<int>( m_isInherited.size() )
+                     && fieldIndexA < static_cast<int>( m_parentFields.size() )
+                     && fieldIndexB < static_cast<int>( m_parentFields.size() ),
              /*void*/ );
 
-    std::swap( at( a ), at( b ) );
+    std::swap( at( fieldIndexA ), at( fieldIndexB ) );
 
-    bool tmpInherited = m_isInherited[a];
-    m_isInherited[a] = m_isInherited[b];
-    m_isInherited[b] = tmpInherited;
+    bool inheritedA = m_isInherited[fieldIndexA];
+    m_isInherited[fieldIndexA] = m_isInherited[fieldIndexB];
+    m_isInherited[fieldIndexB] = inheritedA;
 
-    std::swap( m_parentFields[a], m_parentFields[b] );
+    std::swap( m_parentFields[fieldIndexA], m_parentFields[fieldIndexB] );
 }
 
 

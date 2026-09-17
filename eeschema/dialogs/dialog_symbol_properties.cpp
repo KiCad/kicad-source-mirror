@@ -1006,8 +1006,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 
 void DIALOG_SYMBOL_PROPERTIES::OnGridEditorShown( wxGridEvent& aEvent )
 {
-    if( m_fields->at( aEvent.GetRow() ).GetId() == FIELD_T::REFERENCE
-            && aEvent.GetCol() == FDC_VALUE )
+    if( m_fields->GetFieldRow( FIELD_T::REFERENCE ) == aEvent.GetRow() && aEvent.GetCol() == FDC_VALUE )
     {
         wxCommandEvent* evt = new wxCommandEvent( SYMBOL_DELAY_SELECTION );
         evt->SetClientData( new VECTOR2I( aEvent.GetRow(), aEvent.GetCol() ) );
@@ -1041,7 +1040,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
                 m_fieldsGrid->ProcessTableMessage( msg );
                 OnModify();
 
-                return { m_fields->size() - 1, FDC_NAME };
+                return { m_fields->GetNumberRows() - 1, FDC_NAME };
             } );
 }
 
@@ -1062,7 +1061,8 @@ void DIALOG_SYMBOL_PROPERTIES::OnDeleteField( wxCommandEvent& event )
             },
             [&]( int row )
             {
-                m_fields->erase( m_fields->begin() + row );
+                if( !m_fields->EraseRow( row ) )
+                    return;
 
                 // notify the grid
                 wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
@@ -1082,7 +1082,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
             },
             [&]( int row )
             {
-                std::swap( *( m_fields->begin() + row ), *( m_fields->begin() + row - 1 ) );
+                m_fields->SwapRows( row, row - 1 );
                 m_fieldsGrid->ForceRefresh();
                 OnModify();
             } );
@@ -1098,9 +1098,9 @@ void DIALOG_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
             },
             [&]( int row )
             {
-                    std::swap( *( m_fields->begin() + row ), *( m_fields->begin() + row + 1 ) );
-                    m_fieldsGrid->ForceRefresh();
-                    OnModify();
+                m_fields->SwapRows( row, row + 1 );
+                m_fieldsGrid->ForceRefresh();
+                OnModify();
             } );
 }
 
