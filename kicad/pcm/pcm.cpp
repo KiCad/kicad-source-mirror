@@ -814,7 +814,34 @@ void PLUGIN_CONTENT_MANAGER::DiscardRepositoryCache( const wxString& aRepository
     repo_cache.AppendDir( aRepositoryId );
 
     if( repo_cache.DirExists() )
-        repo_cache.Rmdir( wxPATH_RMDIR_RECURSIVE );
+    {
+        if( !repo_cache.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
+        {
+            // best efforts
+        }
+    }
+}
+
+
+void PLUGIN_CONTENT_MANAGER::DiscardAllRepositoryCaches()
+{
+    for( const auto& [repositoryId, cache] : m_repository_cache )
+    {
+        wxFileName repo_cache = wxFileName( PATHS::GetUserCachePath(), "" );
+        repo_cache.AppendDir( wxT( "pcm" ) );
+        repo_cache.AppendDir( repositoryId );
+
+        if( repo_cache.DirExists() )
+        {
+            if( !repo_cache.Rmdir( wxPATH_RMDIR_RECURSIVE ) )
+            {
+                // best efforts
+            }
+        }
+    }
+
+    m_repository_cache.clear();
+
 }
 
 

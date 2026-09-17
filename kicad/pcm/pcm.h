@@ -174,6 +174,7 @@ public:
      * @param aRepositoryId id of the repository
      */
     void DiscardRepositoryCache( const wxString& aRepositoryId );
+    void DiscardAllRepositoryCaches();
 
     /**
      * @brief Mark package as installed

@@ -45,6 +45,8 @@
 
 #define GRID_CELL_MARGIN 4
 
+#define ALL_REPOSITORIES wxT( "ALL_REPOSITORIES" )
+
 // Notes: These strings are static, so wxGetTranslation must be called to display the
 // transalted text
 static std::vector<std::pair<PCM_PACKAGE_TYPE, wxString>> PACKAGE_TYPE_LIST = {
@@ -286,7 +288,7 @@ void DIALOG_PCM::setRepositoryListFromPcm()
         m_choiceRepository->Append( url, new wxStringClientData( id ) );
 
     if( repositories.size() > 1 )
-        m_choiceRepository->Append( _( "-- All repositories --" ), new wxStringClientData( "ALL_REPOSITORIES" ) );
+        m_choiceRepository->Append( _( "-- All repositories --" ), new wxStringClientData( ALL_REPOSITORIES ) );
 
     if( repositories.size() > 0 )
     {
@@ -294,7 +296,7 @@ void DIALOG_PCM::setRepositoryListFromPcm()
 
         if( cfg && !cfg->m_PcmLastSelectedRepoId.IsEmpty() )
         {
-            if( cfg->m_PcmLastSelectedRepoId == "ALL_REPOSITORIES" && repositories.size() > 1 )
+            if( cfg->m_PcmLastSelectedRepoId == ALL_REPOSITORIES && repositories.size() > 1 )
             {
                 idx = repositories.size();
             }
@@ -314,7 +316,11 @@ void DIALOG_PCM::setRepositoryListFromPcm()
         m_choiceRepository->SetSelection( idx );
         wxStringClientData* data = static_cast<wxStringClientData*>( m_choiceRepository->GetClientObject( idx ) );
         m_selectedRepositoryId = data->GetData();
-        setRepositoryData( m_selectedRepositoryId );
+
+        if( m_selectedRepositoryId == ALL_REPOSITORIES )
+            setRepositoryDataMulti();
+        else
+            setRepositoryData( m_selectedRepositoryId );
     }
     else
     {
@@ -328,8 +334,17 @@ void DIALOG_PCM::setRepositoryListFromPcm()
 
 void DIALOG_PCM::OnRefreshClicked( wxCommandEvent& event )
 {
-    m_pcm->DiscardRepositoryCache( m_selectedRepositoryId );
-    setRepositoryData( m_selectedRepositoryId );
+    if( m_selectedRepositoryId == ALL_REPOSITORIES )
+    {
+        m_pcm->DiscardAllRepositoryCaches();
+        setRepositoryDataMulti();
+    }
+    else
+    {
+        m_pcm->DiscardRepositoryCache( m_selectedRepositoryId );
+        setRepositoryData( m_selectedRepositoryId );
+    }
+
     setInstalledPackages();
 }
 
@@ -351,7 +366,9 @@ void DIALOG_PCM::OnInstallFromFileClicked( wxCommandEvent& event )
 
     setInstalledPackages();
 
-    if( !m_selectedRepositoryId.IsEmpty() )
+    if( m_selectedRepositoryId == ALL_REPOSITORIES )
+        setRepositoryDataMulti();
+    else if( !m_selectedRepositoryId.IsEmpty() )
         setRepositoryData( m_selectedRepositoryId );
 }
 
@@ -363,7 +380,11 @@ void DIALOG_PCM::OnRepositoryChoice( wxCommandEvent& event )
 
     m_selectedRepositoryId = data->GetData();
 
-    setRepositoryData( m_selectedRepositoryId );
+    if( m_selectedRepositoryId == ALL_REPOSITORIES )
+        setRepositoryDataMulti();
+    else
+        setRepositoryData( m_selectedRepositoryId );
+
     setInstalledPackages();
 
     if( KICAD_SETTINGS* cfg = GetAppSettings<KICAD_SETTINGS>( "kicad" ) )
@@ -373,11 +394,7 @@ void DIALOG_PCM::OnRepositoryChoice( wxCommandEvent& event )
 
 void DIALOG_PCM::setRepositoryData( const wxString& aRepositoryId )
 {
-    if( aRepositoryId == "ALL_REPOSITORIES" )
-    {
-        setRepositoryDataMulti();
-        return;
-    }
+    wxCHECK2_MSG( aRepositoryId != ALL_REPOSITORIES, return, wxT( "should have been handled higher up" ) );
 
     m_dialogNotebook->Freeze();
 
@@ -621,8 +638,7 @@ void DIALOG_PCM::OnApplyChangesClicked( wxCommandEvent& event )
         else
         {
             bool isUpdate = action.action == PPA_UPDATE;
-            task_manager.DownloadAndInstall( action.package, action.version, action.repository_id,
-                                             isUpdate );
+            task_manager.DownloadAndInstall( action.package, action.version, action.repository_id, isUpdate );
         }
     }
 
@@ -638,7 +654,9 @@ void DIALOG_PCM::OnApplyChangesClicked( wxCommandEvent& event )
     wxCommandEvent dummy;
     OnDiscardChangesClicked( dummy );
 
-    if( !m_selectedRepositoryId.IsEmpty() )
+    if( m_selectedRepositoryId == ALL_REPOSITORIES )
+        setRepositoryDataMulti();
+    else if( !m_selectedRepositoryId.IsEmpty() )
         setRepositoryData( m_selectedRepositoryId );
 }
 
