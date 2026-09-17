@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-17 15:21+0000\n"
+"PO-Revision-Date: 2026-09-17 15:49+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -15578,7 +15578,7 @@ msgstr "Netlistin vienti vaatii täysin merkityn kytkentäkaavion."
 #: eeschema/dialogs/dialog_export_netlist.cpp:641
 #: eeschema/dialogs/dialog_export_netlist.cpp:680
 msgid "external simulator not found"
-msgstr "Ulkoista simulaattoria ei löydy"
+msgstr "ulkoista simulaattoria ei löydy"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:642
 #: eeschema/dialogs/dialog_export_netlist.cpp:681
@@ -15594,7 +15594,7 @@ msgstr "ulkoisella simulaattorilla on väärä muoto tai arkkitehtuuri"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:692
 msgid "permission denied"
-msgstr "Lupa evätty"
+msgstr "pääsy evätty"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:827
 msgid "This plugin already exists."
@@ -19637,7 +19637,7 @@ msgstr "Symboliyksikön merkintä:"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:37
 msgid ".A"
-msgstr "A."
+msgstr ".A"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:37
 msgid "-A"
@@ -21103,7 +21103,7 @@ msgstr "Yhden tai useamman kytkentäkaavion lataaminen epäonnistui.\n"
 #: eeschema/eeschema_jobs_handler.cpp:2164
 msgid "sch merge requires each input to have a single top-level sheet\n"
 msgstr ""
-"Kytkentäkaavioiden yhdistäminen vaatii, että jokaisella syötteellä on vain "
+"kytkentäkaavioiden yhdistäminen vaatii, että jokaisella syötteellä on vain "
 "yksi pääsivu.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2184 pcbnew/pcbnew_jobs_handler.cpp:3930
@@ -24183,7 +24183,7 @@ msgstr "Puuttuu 'EELAYER END'"
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:724
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:734
 msgid "unexpected end of file"
-msgstr "Odottamaton tiedoston loppu"
+msgstr "odottamaton tiedoston loppu"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:597
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_helpers.cpp:78
@@ -27263,7 +27263,7 @@ msgstr "Virhe ladattaessa työkirjaa: rivi %d: %s."
 
 #: eeschema/sim/legacy_workbook.cpp:131
 msgid "expecting version"
-msgstr "Odotettu versio"
+msgstr "odotettu versio"
 
 #: eeschema/sim/legacy_workbook.cpp:148
 msgid "expecting simulation tab count"
@@ -37491,7 +37491,7 @@ msgstr "Tekstit voivat sisältää avainsanoja."
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:683
 msgid "Keyword notation is ${keyword}"
-msgstr "Avainsanan merkintätapa on ${avainsana}"
+msgstr "Avainsanan merkintätapa on ${keyword}"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:684
 msgid "Each keyword is replaced by its value"
@@ -38155,7 +38155,7 @@ msgstr "..."
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:174
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:142
 msgid "ohm-meter"
-msgstr "Vastus-mittari"
+msgstr "vastusmittari"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:93
 msgid "Temperature Coefficient:"
@@ -38233,7 +38233,7 @@ msgstr "Johtimen tasavirtavastus"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:234
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:344
 msgid "ohm"
-msgstr "Ohm"
+msgstr "ohm"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:228
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:160
@@ -39555,7 +39555,7 @@ msgstr "Tulokset"
 #: pcb_calculator/calculator_panels/panel_wavelength.cpp:258
 #: pcb_calculator/transline_dlg_funct.cpp:47
 msgid "Relative Dielectric Constants"
-msgstr "Suhteelliset dielektriset vakiot"
+msgstr "Suhteelliset dielektrisyysvakiot"
 
 #: pcb_calculator/calculator_panels/panel_via_size.cpp:105
 msgid "Electrical Resistivity in Ohm*m"
@@ -40174,11 +40174,11 @@ msgstr ""
 
 #: pcb_calculator/transline_ident.cpp:102
 msgid "Substrate relative permittivity (dielectric constant)"
-msgstr "Substraatin suhteellinen permittiivisyys (dielektrisyysvakio)"
+msgstr "Alustan suhteellinen permittiivisyys (dielektrisyysvakio)"
 
 #: pcb_calculator/transline_ident.cpp:106
 msgid "Dielectric loss (dissipation factor)"
-msgstr "Dielektrinen häviö (hajoamistekijä)"
+msgstr "Eristehäviö (häviökerroin)"
 
 #: pcb_calculator/transline_ident.cpp:112
 msgid ""
@@ -40226,7 +40226,7 @@ msgstr "Johdinhäviöt:"
 #: pcb_calculator/transline_ident.cpp:407
 #: pcb_calculator/transline_ident.cpp:441
 msgid "Dielectric losses:"
-msgstr "Dielektriset häviöt:"
+msgstr "Eristehäviöt:"
 
 #: pcb_calculator/transline_ident.cpp:132
 #: pcb_calculator/transline_ident.cpp:175
@@ -40434,11 +40434,11 @@ msgstr "Johtimen häviöt (pariton):"
 
 #: pcb_calculator/transline_ident.cpp:321
 msgid "Dielectric losses (even):"
-msgstr "Dielektriset häviöt (parillinen):"
+msgstr "Eristehäviöt (parillinen):"
 
 #: pcb_calculator/transline_ident.cpp:322
 msgid "Dielectric losses (odd):"
-msgstr "Dielektriset häviöt (pariton):"
+msgstr "Eristehäviöt (pariton):"
 
 #: pcb_calculator/transline_ident.cpp:324
 #: pcb_calculator/transline_ident.cpp:367
@@ -40543,7 +40543,7 @@ msgstr "kHz (kilohertsi)"
 
 #: pcb_calculator/widgets/unit_selector.cpp:129
 msgid "rad"
-msgstr "Radiaani"
+msgstr "rad"
 
 #: pcb_calculator/widgets/unit_selector.cpp:212
 msgid "km"
@@ -40756,7 +40756,7 @@ msgstr "Odottamaton virhe tallennettaessa piirilevyä '%s': %s"
 #: pcbnew/board_stackup_manager/board_stackup.cpp:389
 #, c-format
 msgid "Dielectric %d"
-msgstr "Dielektrinen %d"
+msgstr "Eriste %d"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:766
 msgid "Top Silk Screen"
@@ -40823,7 +40823,7 @@ msgstr "Yleiset materiaalit:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.h:56
 msgid "Dielectric Material Characteristics"
-msgstr "Materiaalin dielektriset ominaisuudet"
+msgstr "Eristemateriaalin ominaisuudet"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:20
 msgid "Plated board edge"
@@ -40873,7 +40873,7 @@ msgstr "Piirilevyn odotettu paksuus (vähintään %s):"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:241
 msgid "Adjust Unlocked Dielectric Layers"
-msgstr "Säädä Lukitsemattomia dielektrisiä kerroksia"
+msgstr "Säädä lukitsemattomia eristekerroksia"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:250
 #, c-format
@@ -40882,7 +40882,7 @@ msgstr "Arvo liian pieni (pienin arvo %s)."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:260
 msgid "All dielectric  thickness layers are locked"
-msgstr "Kaikki dielektriset  paksuuskerrokset ovat lukittu"
+msgstr "Kaikki eristekerrosten  paksuudet on lukittu\""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:326
 #, c-format
@@ -40891,7 +40891,7 @@ msgstr "Kerros '%s' (alikerros %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:341
 msgid "Add Dielectric Layer"
-msgstr "Lisää Dielektrinen Kerros"
+msgstr "Lisää eristekerros"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:344
 #: pcbnew/dialogs/panel_setup_layers.cpp:1183
@@ -40905,7 +40905,7 @@ msgstr "Kerros '%s' alikerros %d/%d"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:399
 msgid "Remove Dielectric Layer"
-msgstr "Poista dielektrinen kerros"
+msgstr "Poista eristekerros"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:402
 msgid "Select layer to remove:"
@@ -41027,11 +41027,11 @@ msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:47
 msgid "Add Dielectric Layer..."
-msgstr "Lisää dielektrinen kerros..."
+msgstr "Lisää eristekerros..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:50
 msgid "Remove Dielectric Layer..."
-msgstr "Poista dielektrinen kerros..."
+msgstr "Poista eristekerros..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:79
 #: pcbnew/build_BOM_from_board.cpp:103
@@ -41044,7 +41044,7 @@ msgstr "Määritetty taajuus"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:121
 msgid "Dielectric Model"
-msgstr "Dielektrinen malli"
+msgstr "Eristemalli"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:148
 msgid "Board thickness from stackup:"
@@ -41052,7 +41052,7 @@ msgstr "Piirilevyn paksuus kerrosrakenteesta:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:158
 msgid "Adjust Dielectric Thickness"
-msgstr "Säädä Dielektristä Paksuutta"
+msgstr "Säädä eristeen paksuutta"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:34
 msgid "ENIG"
@@ -41450,7 +41450,7 @@ msgstr "Häviötangentti"
 
 #: pcbnew/board_tables/board_stackup_table.cpp:109
 msgid "Dielectric"
-msgstr "Dielektrinen"
+msgstr "Eriste"
 
 #: pcbnew/board_tables/board_stackup_table.cpp:114
 #, c-format
@@ -42603,7 +42603,7 @@ msgstr "&Yhdistä kolineaariset johtimet"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:58
 msgid "merge aligned track segments, and remove null segments"
-msgstr "Yhdistä kohdistetut johdinraita segmentit, ja poista tyhjät osiot"
+msgstr "yhdistä kohdistetut johdinraita segmentit, ja poista tyhjät osiot"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:62
 msgid "Delete tracks unconnected at one end"
@@ -43837,7 +43837,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:360
 msgid "packages"
-msgstr "Paketit"
+msgstr "paketit"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:361
 msgid "components"
@@ -43845,7 +43845,7 @@ msgstr "komponentit"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:362
 msgid "padstacks"
-msgstr "Liitospintarakenteet"
+msgstr "liitospintarakenteet"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:363
 msgid "stackup"
@@ -43853,7 +43853,7 @@ msgstr "kerrosrakenne"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:364
 msgid "board profile"
-msgstr "Piirilevyn profiili"
+msgstr "piirilevyn profiili"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:365
 msgid "solder mask"
@@ -43869,7 +43869,7 @@ msgstr "silkkipainatus"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:368
 msgid "drill and router"
-msgstr "Poraus ja jyrsintä"
+msgstr "poraus ja jyrsintä"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:369
 msgid "documentation"
@@ -43885,15 +43885,15 @@ msgstr "sisempi kupari"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:372
 msgid "dielectric"
-msgstr "Eriste"
+msgstr "eriste"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:373
 msgid "misc fab layers"
-msgstr "Muut valmistuskerrokset"
+msgstr "muut valmistuskerrokset"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:374
 msgid "logical netlist"
-msgstr "Looginen verkkolista"
+msgstr "looginen verkkolista"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:375
 msgid "physical netlist"
@@ -44046,7 +44046,7 @@ msgstr "Osaluettelon kentät..."
 
 #: pcbnew/dialogs/dialog_export_2581_bom.cpp:140
 msgid "manufacturer"
-msgstr "Valmistaja"
+msgstr "valmistaja"
 
 #: pcbnew/dialogs/dialog_export_2581_bom.cpp:144
 msgid "mfg"
@@ -44973,7 +44973,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:330
 msgid "all pads with duplicate numbers"
-msgstr "Kaikilla anturoilla, joilla on sama numero"
+msgstr "kaikilla anturoilla, joilla on sama numero"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:431
 #, c-format
@@ -48152,7 +48152,7 @@ msgstr "Johdinraidan välin on oltava suurempi kuin 0."
 #: pcbnew/router/pns_kicad_iface.cpp:1275
 #: pcbnew/router/pns_kicad_iface.cpp:1276
 msgid "user choice"
-msgstr "Käyttäjävalinta"
+msgstr "käyttäjävalinta"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 msgid "Track gap:"
@@ -52808,15 +52808,15 @@ msgstr "piirilevyasetukset rajoitusvyöhykkeen täyttöstrategialle"
 
 #: pcbnew/drc/drc_engine.cpp:201
 msgid "board setup constraints silk"
-msgstr "Piirilevyn rajoitusasetukset: silkkipaino"
+msgstr "piirilevyn rajoitusasetukset: silkkipaino"
 
 #: pcbnew/drc/drc_engine.cpp:207
 msgid "board setup constraints silk text height"
-msgstr "Piirilevyn rajoitusasetukset: silkkipainon tekstikorkeus"
+msgstr "piirilevyn rajoitusasetukset: silkkipainon tekstikorkeus"
 
 #: pcbnew/drc/drc_engine.cpp:214
 msgid "board setup constraints silk text thickness"
-msgstr "Piirilevyn rajoitusasetukset: silkkipainotekstin paksuus"
+msgstr "piirilevyn rajoitusasetukset: silkkipainotekstin paksuus"
 
 #: pcbnew/drc/drc_engine.cpp:221
 msgid "board setup constraints hole"
@@ -52824,7 +52824,7 @@ msgstr "levyn asennusrajoitukset reikä"
 
 #: pcbnew/drc/drc_engine.cpp:226
 msgid "board setup constraints edge"
-msgstr "Piirilevyn rajoitusasetukset: reuna"
+msgstr "piirilevyn rajoitusasetukset: reuna"
 
 #: pcbnew/drc/drc_engine.cpp:231
 msgid "board setup constraints courtyard"
@@ -52897,7 +52897,7 @@ msgstr "Verkkosidonta kohteessa %s; välys: 0."
 
 #: pcbnew/drc/drc_engine.cpp:1131
 msgid "net tie"
-msgstr "Verkkosolmu"
+msgstr "verkkosolmu"
 
 #: pcbnew/drc/drc_engine.cpp:1158 pcbnew/drc/drc_engine.cpp:1168
 #, c-format
@@ -52911,7 +52911,7 @@ msgstr "piirilevy minimi"
 #: pcbnew/drc/drc_engine.cpp:1186 pcbnew/drc/drc_engine.cpp:2072
 #, c-format
 msgid "Board minimum clearance: %s."
-msgstr "Piirilevyn pienin välys: %s."
+msgstr "Piirilevyn vähimmäiseristysväli: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1195
 msgid "board minimum hole"
@@ -52920,7 +52920,7 @@ msgstr "piirilevyn minimireikä"
 #: pcbnew/drc/drc_engine.cpp:1198
 #, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Piirilevyn pienin reikien välys: %s."
+msgstr "Piirilevyn reikien vähimmäiseristysväli: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1217
 #, c-format
@@ -56368,7 +56368,7 @@ msgstr "nykyinen vinous"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2069
 msgid "current delay"
-msgstr "Nykyinen signaaliviive"
+msgstr "nykyinen signaaliviive"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2071
 msgid "current length"
@@ -58813,7 +58813,7 @@ msgstr "Autotrax-tuonti, rivi %d: %s"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:112
 msgid "insufficient track fields"
-msgstr "Johdinraidan kenttiä ei ole riittävästi"
+msgstr "johdinraidan kenttiä ei ole riittävästi"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:137
 msgid "insufficient arc fields"
@@ -58821,15 +58821,15 @@ msgstr "Kaaren kenttiä ei ole riittävästi"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:162
 msgid "insufficient via fields"
-msgstr "Läpiviennin kenttiä ei ole riittävästi"
+msgstr "läpiviennin kenttiä ei ole riittävästi"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:187
 msgid "insufficient pad fields"
-msgstr "Riittämättömät anturan kentät"
+msgstr "riittämättömät anturan kentät"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:219
 msgid "insufficient fill fields"
-msgstr "Täytön kenttiä ei ole riittävästi"
+msgstr "täytön kenttiä ei ole riittävästi"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:243
 msgid "insufficient text fields"
@@ -61947,7 +61947,7 @@ msgstr "%.1f asteen tai sitä suurempia kaarevia johdinraitoja ei voi vetää."
 #: pcbnew/router/pns_kicad_iface.cpp:1226 pcbnew/router/router_tool.cpp:1008
 #: pcbnew/router/router_tool.cpp:1084
 msgid "board minimum clearance"
-msgstr "Piirilevyn pienin välys"
+msgstr "Piirilevyn vähimmäiseristysväli"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1145
 #: pcbnew/router/pns_kicad_iface.cpp:1225 pcbnew/router/router_tool.cpp:1034
@@ -61992,7 +61992,8 @@ msgstr ""
 
 #: pcbnew/router/pns_router.cpp:231
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "Difrentiaaliparin rako on pienempi, kuin piirilevyn pienin välys."
+msgstr ""
+"Differentiaaliparin väli on pienempi kuin piirilevyn vähimmäiseristysväli."
 
 #: pcbnew/router/pns_router.cpp:264
 msgid "Cannot start routing from a non-plated hole."
@@ -68060,7 +68061,7 @@ msgstr "kiinteä"
 
 #: pcbnew/zones.h:61
 msgid "thermal reliefs for PTH"
-msgstr "Lämpökevennykset PTH-anturoille"
+msgstr "lämpökevennykset PTH-anturoille"
 
 #: plugins/3d/vrml/vrml.cpp:235
 #, c-format
