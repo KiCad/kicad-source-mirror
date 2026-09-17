@@ -97,9 +97,11 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibrary( const SYMBOL_LIBRARY_FILTER
 }
 
 
-void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
+void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit, SCH_COMMIT* aCommit )
 {
-    SCH_COMMIT  commit( m_toolManager );
+    SCH_COMMIT  localCommit( m_toolManager );
+    SCH_COMMIT* commit = aCommit ? aCommit : &localCommit;
+    bool        staged = false;
     LIB_SYMBOL* symbol = GetLibSymbol( aSymbol->GetLibId() );
 
     if( !symbol )
@@ -154,7 +156,10 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
         SCH_SYMBOL* otherSymbol = otherSymbolRef->GetSymbol();
 
         if( !otherSymbol->GetEditFlags() )
-            commit.Modify( otherSymbol, otherSymbolRef->GetSheetPath().LastScreen() );
+        {
+            commit->Modify( otherSymbol, otherSymbolRef->GetSheetPath().LastScreen() );
+            staged = true;
+        }
 
         // Give that symbol the unit we used to have
         otherSymbol->SetUnitSelection( &otherSymbolRef->GetSheetPath(), currentUnit );
@@ -162,31 +167,37 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
     }
 
     if( !aSymbol->GetEditFlags() ) // No command in progress: save in undo list
-        commit.Modify( aSymbol, GetScreen() );
+    {
+        commit->Modify( aSymbol, GetScreen() );
+        staged = true;
+    }
 
     // Update the unit number.
     aSymbol->SetUnit( aUnit );
     aSymbol->SetUnitSelection( &sheetPath, aUnit );
 
-    if( !commit.Empty() )
+    if( !staged )
+        return;
+
+    if( eeconfig()->m_AutoplaceFields.enable )
     {
-        if( eeconfig()->m_AutoplaceFields.enable )
-        {
-            AUTOPLACE_ALGO fieldsAutoplaced = aSymbol->GetFieldsAutoplaced();
+        AUTOPLACE_ALGO fieldsAutoplaced = aSymbol->GetFieldsAutoplaced();
 
-            if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
-                aSymbol->AutoplaceFields( GetScreen(), fieldsAutoplaced );
-        }
-
-        if( swapWithOther )
-            commit.Push( _( "Swap Units" ) );
-        else
-            commit.Push( _( "Change Unit" ) );
+        if( fieldsAutoplaced == AUTOPLACE_AUTO || fieldsAutoplaced == AUTOPLACE_MANUAL )
+            aSymbol->AutoplaceFields( GetScreen(), fieldsAutoplaced );
     }
+
+    if( aCommit )
+        return;
+
+    if( swapWithOther )
+        localCommit.Push( _( "Swap Units" ) );
+    else
+        localCommit.Push( _( "Change Unit" ) );
 }
 
 
-void SCH_EDIT_FRAME::SelectBodyStyle( SCH_SYMBOL* aSymbol, int aBodyStyle )
+void SCH_EDIT_FRAME::SelectBodyStyle( SCH_SYMBOL* aSymbol, int aBodyStyle, SCH_COMMIT* aCommit )
 {
     if( !aSymbol || !aSymbol->GetLibSymbolRef() )
         return;
@@ -200,9 +211,12 @@ void SCH_EDIT_FRAME::SelectBodyStyle( SCH_SYMBOL* aSymbol, int aBodyStyle )
     if( aBodyStyle > bodyStyleCount )
         aBodyStyle = bodyStyleCount;
 
-    SCH_COMMIT commit( m_toolManager );
+    SCH_COMMIT  localCommit( m_toolManager );
+    SCH_COMMIT* commit = aCommit ? aCommit : &localCommit;
 
-    commit.Modify( aSymbol, GetScreen() );
+    // A symbol with edit flags was already staged by the command in progress
+    if( !aSymbol->GetEditFlags() )
+        commit->Modify( aSymbol, GetScreen() );
 
     aSymbol->SetBodyStyle( aBodyStyle );
 
@@ -210,7 +224,8 @@ void SCH_EDIT_FRAME::SelectBodyStyle( SCH_SYMBOL* aSymbol, int aBodyStyle )
     if( aSymbol->IsSelected() )
         m_toolManager->RunAction<EDA_ITEM*>( ACTIONS::selectItem, aSymbol );
 
-    commit.Push( _( "Change Body Style" ) );
+    if( !localCommit.Empty() )
+        localCommit.Push( _( "Change Body Style" ) );
 }
 
 

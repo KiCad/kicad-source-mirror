@@ -150,8 +150,12 @@ int SCH_TOOL_BASE<T>::Increment( const TOOL_EVENT& aEvent )
     const auto modifyItem =
             [&]( EDA_ITEM& aItem )
             {
+                // A preview item is not on a screen yet, and its placement records the undo step
                 if( aItem.IsNew() )
+                {
                     m_toolMgr->PostAction( ACTIONS::refreshPreview );
+                    return;
+                }
 
                 commit->Modify( &aItem, m_frame->GetScreen() );
             };
@@ -228,7 +232,9 @@ int SCH_TOOL_BASE<T>::Increment( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit->Push( _( "Increment" ) );
+    // A caller such as the move tool owns its commit and pushes it once the whole edit ends
+    if( !localCommit.Empty() )
+        localCommit.Push( _( "Increment" ) );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( ACTIONS::selectionClear );

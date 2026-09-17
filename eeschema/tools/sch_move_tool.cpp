@@ -1922,7 +1922,7 @@ bool SCH_MOVE_TOOL::handleMoveToolActions( const TOOL_EVENT* aEvent, SCH_COMMIT*
 
             if( symbol )
             {
-                m_frame->SelectUnit( symbol, unit );
+                m_frame->SelectUnit( symbol, unit, aCommit );
                 m_toolMgr->PostAction( ACTIONS::refreshPreview );
             }
         }
@@ -1934,7 +1934,7 @@ bool SCH_MOVE_TOOL::handleMoveToolActions( const TOOL_EVENT* aEvent, SCH_COMMIT*
 
             if( symbol && symbol->GetBodyStyle() != bodyStyle )
             {
-                m_frame->SelectBodyStyle( symbol, bodyStyle );
+                m_frame->SelectBodyStyle( symbol, bodyStyle, aCommit );
                 m_toolMgr->PostAction( ACTIONS::refreshPreview );
             }
         }

@@ -683,9 +683,21 @@ public:
 
     void UpdateHopOveredWires( SCH_ITEM* aItem );
 
-    void SelectUnit( SCH_SYMBOL* aSymbol, int aUnit );
+    /**
+     * Change the unit of \a aSymbol, swapping with another placed unit if the user asks.
+     *
+     * @param aCommit is the commit of an edit in progress, such as a move.  The changes are staged
+     *                there and not pushed.  Without it, a local commit is pushed.
+     */
+    void SelectUnit( SCH_SYMBOL* aSymbol, int aUnit, SCH_COMMIT* aCommit = nullptr );
 
-    void SelectBodyStyle( SCH_SYMBOL* aSymbol, int aBodyStyle );
+    /**
+     * Change the body style of \a aSymbol.
+     *
+     * @param aCommit is the commit of an edit in progress, such as a move.  The change is staged
+     *                there and not pushed.  Without it, a local commit is pushed.
+     */
+    void SelectBodyStyle( SCH_SYMBOL* aSymbol, int aBodyStyle, SCH_COMMIT* aCommit = nullptr );
 
     void SetAltPinFunction( SCH_PIN* aPin, const wxString& aFunction );
 
