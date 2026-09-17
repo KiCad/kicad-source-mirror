@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-17 16:22+0000\n"
+"PO-Revision-Date: 2026-09-17 19:11+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -14211,7 +14211,7 @@ msgstr "Sivunasta '%s' ei löydy vastaavaa hierarkkista nimiötä sivun sisält�
 #: eeschema/connection_graph.cpp:6312
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "Hierarkkiselle nimiölle '%s' ei löydy vastaavaa sivunastaa yläsivulta"
+msgstr "Hierarkkisella nimiöllä %s ei ole vastaavaa sivunastaa yläsivulla"
 
 #: eeschema/cross-probing.cpp:173
 #, c-format
@@ -16122,7 +16122,7 @@ msgstr "Globaalin verkkotunnisteen ominaisuudet"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:103
 msgid "Hierarchical Label Properties"
-msgstr "Hierarkisen verkkotunnisteen ominaisuudet"
+msgstr "Hierarkkisen nimiön ominaisuudet"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:104
 #: eeschema/dialogs/dialog_label_properties_base.h:123
@@ -18263,7 +18263,7 @@ msgstr "Tyyli"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:253
 msgid "Hierarchical path:"
-msgstr "Hierarkinen polku:"
+msgstr "Hierarkkinen polku:"
 
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:257
 #: kicad/dialogs/panel_jobset_base.cpp:191
@@ -21257,11 +21257,11 @@ msgstr ""
 
 #: eeschema/erc/erc.cpp:435 pcbnew/drc/drc_test_provider_misc.cpp:469
 msgid " (in drawing sheet)"
-msgstr " (piirustusarkissa)"
+msgstr " (piirustuspohjassa)"
 
 #: eeschema/erc/erc.cpp:659
 msgid "Unresolved text variable in drawing sheet"
-msgstr "Piirustusarkilla on tekstimuuttuja, jota ei ole määritelty"
+msgstr "Piirustuspohjassa on tekstimuuttuja, jota ei ole määritelty"
 
 #: eeschema/erc/erc.cpp:736 eeschema/erc/erc.cpp:764
 #, c-format
@@ -21503,7 +21503,7 @@ msgstr "Sekalaiset"
 
 #: eeschema/erc/erc_item.cpp:43
 msgid "Duplicate sheet names within a given sheet"
-msgstr "Arkin nimien kaksoiskappaleita määritetyn arkin sisällä"
+msgstr "Saman sivun sisällä on päällekkäisiä sivujen nimiä"
 
 #: eeschema/erc/erc_item.cpp:47
 msgid "Symbol pin or wire end off connection grid"
@@ -21790,7 +21790,7 @@ msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
 msgstr ""
-"Koko kytkentäkaaviota ei voitu ladata.  Hierarkisten sivujen lataamisessa "
+"Koko kytkentäkaaviota ei voitu ladata.  Hierarkkisten sivujen lataamisessa "
 "tapahtui virheitä."
 
 #: eeschema/files-io.cpp:411 eeschema/files-io.cpp:420
@@ -23032,7 +23032,7 @@ msgstr "Valitse kirjasto, johon haluat tallentaa suunnittelulohkon."
 #: eeschema/sch_design_block_utils.cpp:265
 #: eeschema/sch_design_block_utils.cpp:476
 msgid "Design blocks with nested sheets are not supported."
-msgstr "Sisäkkäisiä arkkeja sisältäviä suunnittelulohkoja ei tueta."
+msgstr "Sisäkkäisiä sivuja sisältäviä suunnittelulohkoja ei tueta."
 
 #: eeschema/sch_design_block_utils.cpp:122
 #: eeschema/sch_design_block_utils.cpp:205
@@ -23658,7 +23658,7 @@ msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
 msgstr ""
-"Symboli '%s' viittaa arkin tunnukseen '%s', jota ei ole mallissa. Symbolia "
+"Symboli '%s' viittaa sivun tunnukseen '%s', jota ei ole mallissa. Symbolia "
 "ei ladattu."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2260
@@ -24100,7 +24100,7 @@ msgstr "Hierarkkista lähdettä '%s' ei löytynyt, luodaan tyhjä sivu."
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4099
 #, c-format
 msgid "Circular hierarchy detected for '%s', skipping."
-msgstr "Kehärakenne havaittu kohteelle '%s', ohitetaan."
+msgstr "Kehähierarkia havaittu kohteelle '%s', ohitetaan."
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4448
 #, c-format
@@ -24479,11 +24479,11 @@ msgstr "Virheellinen otsikkolohkon kommenttinumero"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2873
 msgid "Invalid sheet pin name"
-msgstr "Virheellinen arkin nastan nimi"
+msgstr "Sivunastan nimi on virheellinen"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2881
 msgid "Empty sheet pin name"
-msgstr "Tyhjä arkin nastan nimi"
+msgstr "Sivunastan nimi on tyhjä"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3364
 msgid "Schematic polyline has too few points"
@@ -24505,11 +24505,11 @@ msgstr "Virheellinen symbolikirjaston tunniste (ID)"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4504
 msgid "Missing sheet name property"
-msgstr "Puuttuva arkin nimen argumentti"
+msgstr "Puuttuva sivun nimen ominaisuus"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:4510
 msgid "Missing sheet file property"
-msgstr "Puuttuva arkin nimen argumentti"
+msgstr "Sivun tiedostoasetus puuttuu"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5867
 msgid "Invalid table: no cells defined"
@@ -24881,7 +24881,7 @@ msgstr "Kolmitila"
 
 #: eeschema/sch_label.cpp:219
 msgid "Sheet References"
-msgstr "Arkin viitteet"
+msgstr "Sivujen viitteet"
 
 #: eeschema/sch_label.cpp:1395
 msgid "Hierarchical Sheet Pin"
@@ -25077,7 +25077,7 @@ msgstr "Nastan Nimi"
 
 #: eeschema/sch_plotter.cpp:114
 msgid "No sheets to plot."
-msgstr "Ei arkkeja plotattavaksi."
+msgstr "Ei tulostettavia sivuja."
 
 #: eeschema/sch_plotter.cpp:225 pcbnew/pcbnew_jobs_handler.cpp:1990
 #, c-format
@@ -25250,7 +25250,7 @@ msgstr "Täyttötila"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:59
 #: pcbnew/zone.cpp:2191
 msgid "Sheet Name"
-msgstr "Arkin nimi"
+msgstr "Sivun nimi"
 
 #: eeschema/sch_sheet.cpp:1124
 msgid "Hierarchical Path"
@@ -25307,7 +25307,7 @@ msgstr "(Poistettu kohde)"
 #: eeschema/sch_sheet_pin.cpp:391
 #, c-format
 msgid "Hierarchical Sheet Pin '%s'"
-msgstr "Hierarkisen arkin nasta '%s'"
+msgstr "Hierarkkinen sivunasta '%s"
 
 #: eeschema/sch_symbol.cpp:3326
 msgid "Power symbol"
@@ -26340,9 +26340,9 @@ msgid ""
 "against parent sheet schematic file path:\n"
 "'%s'."
 msgstr ""
-"Uuden arkin kytkentäkaavion tiedostopolkua:\n"
+"\"Uuden sivun kaaviotiedoston polun normalisointi epäonnistui:\n"
 "'%s'\n"
-"ei voitu normalisoida suhteessa ylemmän arkin tiedostopolkuun:\n"
+"emosivun kytkentäkaaviotiedoston polkua vasten:\n"
 "'%s'."
 
 #: eeschema/sheet.cpp:237 kicad/tools/kicad_manager_control.cpp:677
@@ -27651,8 +27651,8 @@ msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
 msgstr ""
-"Kytkentäkaavioarkin simulointikomentodirektiivi on muuttunut.  Haluatko "
-"päivittää simulaatiokomennon?"
+"Kytkentäkaaviosivun simulaatiokomento on muuttunut.  Haluatko päivittää "
+"simulaatiokomennon?"
 
 #: eeschema/sim/simulator_frame.cpp:541 eeschema/sim/simulator_frame.cpp:962
 msgid "Another simulation is already running."
@@ -28741,15 +28741,15 @@ msgstr "Lisää hierarkkiset nimiöt"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:37
 msgid "Delete Sheet Pins"
-msgstr "Poista arkin nastat"
+msgstr "Poista sivunastat"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:59
 msgid "Sheet name"
-msgstr "Arkin nimi"
+msgstr "Sivun nimi"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:69
 msgid "Add Sheet Pins"
-msgstr "Lisää arkin nastoja"
+msgstr "Lisää sivunastat"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:72
 msgid "Delete Hierarchical Labels"
@@ -28979,8 +28979,8 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is used by "
 "multiple sheet instances (%s)."
 msgstr ""
-"Komponentin ”%s” nastat %s ja %s vaihdettaisiin piirilevyä vastaaviksi, "
-"mutta symboli on käytössä useissa arkkiesiintymissä (%s)."
+"Komponentin %s nastat %s ja %s vaihdettaisiin piirilevyä vastaaviksi, mutta "
+"symboli on käytössä useissa sivuesiintymissä (%s)."
 
 #: eeschema/tools/backannotate.cpp:1302
 #, c-format
@@ -29481,7 +29481,7 @@ msgstr "Aseta suunnittelulohko"
 
 #: eeschema/tools/sch_actions.cpp:529
 msgid "Add selected design block to current sheet"
-msgstr "Lisää valittu suunnittelulohko nykyiselle arkkille"
+msgstr "Lisää valittu suunnittelulohko nykyiselle sivulle"
 
 #: eeschema/tools/sch_actions.cpp:537 pcbnew/tools/pcb_actions.cpp:728
 msgid "Place Linked Design Block"
@@ -29525,27 +29525,27 @@ msgstr "Sijoita hierarkkisia nimiöitä"
 
 #: eeschema/tools/sch_actions.cpp:617
 msgid "Draw Hierarchical Sheets"
-msgstr "Piirrä hierarkkisia arkkeja"
+msgstr "Piirrä hierarkkiset sivut"
 
 #: eeschema/tools/sch_actions.cpp:626
 msgid "Draw Sheet from File"
-msgstr "Piirrä arkki tiedostosta"
+msgstr "Piirrä sivu tiedostosta"
 
 #: eeschema/tools/sch_actions.cpp:627
 msgid "Copy sheet into project and draw on current sheet"
-msgstr "Kopioi arkki projektiin ja piirrä nykyiselle arkille"
+msgstr "Kopioi sivu alisivuksi nykyiselle sivulle"
 
 #: eeschema/tools/sch_actions.cpp:635
 msgid "Draw Sheet from Design Block"
-msgstr "Piirrä arkki suunnittelulohkosta"
+msgstr "Piirrä sivu suunnittelulohkosta"
 
 #: eeschema/tools/sch_actions.cpp:636
 msgid "Copy design block into project as a sheet on current sheet"
-msgstr "Kopioi suunnittelulohko projektiin arkkina nykyiselle arkille"
+msgstr "Kopioi suunnittelulohko projektiin alisivuksi nykyiselle sivulle"
 
 #: eeschema/tools/sch_actions.cpp:644
 msgid "Place Pins from Sheet"
-msgstr "Sijoita nastoja arkilta"
+msgstr "Sijoita nastat sivulta"
 
 #: eeschema/tools/sch_actions.cpp:645
 msgid "Add sheet pins from existing hierarchical labels found on that sheet"
@@ -29553,15 +29553,15 @@ msgstr "Lisää sivunastat kyseiseltä sivulta löytyvistä hierarkkisista nimi�
 
 #: eeschema/tools/sch_actions.cpp:653
 msgid "Autoplace All Sheet Pins"
-msgstr "Automaattisesti sijoita kaikki arkin nastat"
+msgstr "Sijoita kaikki sivunastat automaattisesti"
 
 #: eeschema/tools/sch_actions.cpp:654
 msgid "Imports and auto places all sheet pins"
-msgstr "Tuo ja sijoittaa kaikki arkin nastat"
+msgstr "Tuo ja sijoittaa kaikki sivunastat automaattisesti"
 
 #: eeschema/tools/sch_actions.cpp:659
 msgid "Sync Selected Sheet Pins..."
-msgstr "Synkronoi valitun arkin nastat..."
+msgstr "Synkronoi valitut sivunastat..."
 
 #: eeschema/tools/sch_actions.cpp:660
 msgid "Synchronize selected sheet pins and hierarchical labels"
@@ -29569,7 +29569,7 @@ msgstr "Synkronoi valitut sivunastat ja hierarkkiset nimiöt"
 
 #: eeschema/tools/sch_actions.cpp:667
 msgid "Sync All Sheet Pins..."
-msgstr "Synkronoi kaikki arkin nastat..."
+msgstr "Synkronoi kaikki sivunastat..."
 
 #: eeschema/tools/sch_actions.cpp:668
 msgid "Synchronize all sheet pins and hierarchical labels"
@@ -29577,11 +29577,11 @@ msgstr "Synkronoi kaikki sivunastat ja hierarkkiset nimiöt"
 
 #: eeschema/tools/sch_actions.cpp:675
 msgid "Import Sheet..."
-msgstr "Tuo arkki..."
+msgstr "Tuo sivu..."
 
 #: eeschema/tools/sch_actions.cpp:676
 msgid "Import sheet into project"
-msgstr "Tuo arkki projektiin"
+msgstr "Tuo sivu projektiin"
 
 #: eeschema/tools/sch_actions.cpp:686
 msgid "Place Global Labels"
@@ -29744,7 +29744,7 @@ msgstr "Sijoita Automaatisesti Kentät"
 msgid ""
 "Runs the automatic placement algorithm on the symbol's (or sheet's) fields"
 msgstr ""
-"Suorittaa automaattisen sijoittelualgoritmin symbolin (tai arkin) kentissä"
+"Suorittaa automaattisen sijoittelualgoritmin symbolin (tai sivun) kentille"
 
 #: eeschema/tools/sch_actions.cpp:949
 msgid "Change Symbols..."
@@ -29856,11 +29856,11 @@ msgstr "Muuta olemassa oleva kohde tekstiruutuun"
 
 #: eeschema/tools/sch_actions.cpp:1067 eeschema/tools/sch_edit_tool.cpp:3704
 msgid "Cleanup Sheet Pins"
-msgstr "Siivoa arkin nastat"
+msgstr "Siivoa sivunastat"
 
 #: eeschema/tools/sch_actions.cpp:1068
 msgid "Delete unreferenced sheet pins"
-msgstr "Poista viitauksettomat arkin nastat"
+msgstr "Poista viittaamattomat sivunastat"
 
 #: eeschema/tools/sch_actions.cpp:1073 pcbnew/tools/pcb_actions.cpp:1318
 msgid "Edit Text & Graphics Properties..."
@@ -30099,11 +30099,11 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1301
 msgid "Edit Sheet Page Number..."
-msgstr "Muokkaa arkin sivunumeroa..."
+msgstr "Muokkaa sivunumeroa..."
 
 #: eeschema/tools/sch_actions.cpp:1302
 msgid "Edit the page number of the current or selected sheet"
-msgstr "Muokkaa nykyisen tai valitun arkin sivunumeroa"
+msgstr "Muokkaa nykyisen tai valitun sivun sivunumeroa"
 
 #: eeschema/tools/sch_actions.cpp:1307
 msgid "Rescue Symbols..."
@@ -30147,7 +30147,7 @@ msgstr "Vie piirustus leikepöydälle"
 
 #: eeschema/tools/sch_actions.cpp:1336
 msgid "Export drawing of current sheet to clipboard"
-msgstr "Vie nykyisen arkin piirustus leikepöydälle"
+msgstr "Vie nykyisen sivun piirustus leikepöydälle"
 
 #: eeschema/tools/sch_actions.cpp:1344 pcbnew/tools/pcb_actions.cpp:641
 msgid "Import Graphics..."
@@ -30345,27 +30345,27 @@ msgstr "Avaa symbolin seuraava yksikkö"
 
 #: eeschema/tools/sch_actions.cpp:1541
 msgid "Change Sheet"
-msgstr "Vaihda arkkia"
+msgstr "Vaihda sivua"
 
 #: eeschema/tools/sch_actions.cpp:1542
 msgid "Change to provided sheet's contents in the schematic editor"
-msgstr "Vaihda toimitettujen arkkien sisältöön kytkentäkaavioeditorissa"
+msgstr "Vaihtaa annetun sivun sisältöön kytkentäkaavioeditorissa"
 
 #: eeschema/tools/sch_actions.cpp:1548
 msgid "Enter Sheet"
-msgstr "Siirry arkkiin"
+msgstr "Siirry sivulle"
 
 #: eeschema/tools/sch_actions.cpp:1549
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "Näytä valitun arkin sisältö kytkentäkaavioeditorissa"
+msgstr "Näyttää valitun sivun sisällön kytkentäkaavioeditorissa"
 
 #: eeschema/tools/sch_actions.cpp:1557
 msgid "Leave Sheet"
-msgstr "Poistu arkista"
+msgstr "Poistu sivulta"
 
 #: eeschema/tools/sch_actions.cpp:1558
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Näytä yläarkki kytkentäkaavioeditorissa"
+msgstr "Näyttää kantasivun kytkentäkaavioeditorissa"
 
 #: eeschema/tools/sch_actions.cpp:1565
 msgid "Navigate Up"
@@ -30377,7 +30377,7 @@ msgstr "Siirry Takaisin"
 
 #: eeschema/tools/sch_actions.cpp:1574
 msgid "Move backward in sheet navigation history"
-msgstr "Siirry taaksepäin arkin navigointihistoriassa"
+msgstr "Siirtyy taaksepäin sivujen selaushistoriassa"
 
 #: eeschema/tools/sch_actions.cpp:1581
 msgid "Navigate Forward"
@@ -30385,31 +30385,31 @@ msgstr "Siirry Eteenpäin"
 
 #: eeschema/tools/sch_actions.cpp:1582
 msgid "Move forward in sheet navigation history"
-msgstr "Siirry eteenpäin arkin navigointihistoriassa"
+msgstr "Siirtyy eteenpäin sivujen selaushistoriassa"
 
 #: eeschema/tools/sch_actions.cpp:1589
 msgid "Previous Sheet"
-msgstr "Edellinen arkki"
+msgstr "Edellinen sivu"
 
 #: eeschema/tools/sch_actions.cpp:1590
 msgid "Move to previous sheet by number"
-msgstr "Siirry numeron mukaan edelliselle arkille"
+msgstr "Siirtyy edelliselle sivulle numeron mukaan"
 
 #: eeschema/tools/sch_actions.cpp:1597
 msgid "Next Sheet"
-msgstr "Seuraava arkki"
+msgstr "Seuraava sivu"
 
 #: eeschema/tools/sch_actions.cpp:1598
 msgid "Move to next sheet by number"
-msgstr "Siirry numeron mukaan seuraavalle arkille"
+msgstr "Siirtyy seuraavalle sivulle numeron mukaan"
 
 #: eeschema/tools/sch_actions.cpp:1605
 msgid "Hierarchy Navigator"
-msgstr "Hierarkia-navigaattori"
+msgstr "Hierarkiaselain"
 
 #: eeschema/tools/sch_actions.cpp:1606
 msgid "Show/hide the schematic sheet hierarchy navigator"
-msgstr "Näytä/piilota kytkentäkaavion hierarkia-navigaattori"
+msgstr "Näytä/piilota kytkentäkaavion hierarkiaselain"
 
 #: eeschema/tools/sch_actions.cpp:1619
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:828
@@ -30527,7 +30527,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1757
 msgid "Save Current Sheet Copy As..."
-msgstr "Tallenna nykyisen arkin kopio nimellä..."
+msgstr "Tallenna nykyisen sivun kopio nimellä..."
 
 #: eeschema/tools/sch_actions.cpp:1758
 msgid "Save a copy of the current sheet to another location or name"
@@ -30812,7 +30812,7 @@ msgstr "Lisää nimiö"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2141
 msgid "Click over a sheet."
-msgstr "Napsauta arkin päällä."
+msgstr "Napsauta sivun päällä."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2162
 #: eeschema/tools/sch_drawing_tools.cpp:2255
@@ -30822,7 +30822,7 @@ msgstr "Uusia hierarkkisia nimiöitä ei löytynyt."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2173
 msgid "Add Sheet Pin"
-msgstr "Lisää arkin nasta"
+msgstr "Lisää sivunasta"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2692 pcbnew/tools/drawing_tool.cpp:1501
 msgid "Draw Table"
@@ -30830,11 +30830,11 @@ msgstr "Piirrä taulukko"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2904
 msgid "Press <ESC> to cancel sheet creation."
-msgstr "Paina <ESC> keskeyttääksesi arkin luonnin."
+msgstr "Paina <ESC> peruuttaaksesi sivun luomisen."
 
 #: eeschema/tools/sch_drawing_tools.cpp:3187
 msgid "Modify sheet pin"
-msgstr "Muokkaa arkin nastaa"
+msgstr "Muokkaa sivunastaa"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3193
 msgid "Modify schematic item"
@@ -30924,7 +30924,7 @@ msgid ""
 "the sheet to edit pins independently."
 msgstr ""
 "Nastojen vaihto ei ole käytössä symboleilla, jotka on jaettu muiden "
-"projektien kesken. Monista arkki muokataksesi nastoja vapaasti."
+"projektien kesken. Monista sivu muokataksesi nastoja vapaasti."
 
 #: eeschema/tools/sch_edit_tool.cpp:1894
 #, c-format
@@ -30933,7 +30933,7 @@ msgid ""
 "Duplicate the sheet to edit pins independently."
 msgstr ""
 "Nastojen vaihto ei ole käytössä symboleilla, jotka on jaettu muiden "
-"projektien (%s) kesken. Monista arkki muokataksesi nastoja vapaasti."
+"projektien (%s) kesken. Monista sivu muokataksesi nastoja vapaasti."
 
 #: eeschema/tools/sch_edit_tool.cpp:1904
 #, c-format
@@ -30942,14 +30942,14 @@ msgid ""
 "Duplicate the sheet to edit pins independently."
 msgstr ""
 "Nastojen vaihto ei ole käytössä symboleilla, joita käyttää useampi arkki-"
-"instanssi (%s). Monista arkki muokataksesi nastoja vapaasti."
+"instanssi (%s). Monista sivu muokataksesi nastoja vapaasti."
 
 #: eeschema/tools/sch_edit_tool.cpp:1911
 msgid ""
 "Pin swaps are disabled for shared symbols. Duplicate the sheet to edit pins "
 "independently."
 msgstr ""
-"Nastojen vaihto ei ole käytössä jaetuille symboleille. Monista arkki "
+"Nastojen vaihto ei ole käytössä jaetuille symboleille. Monista sivu "
 "muokataksesi nastoja vapaasti."
 
 #: eeschema/tools/sch_edit_tool.cpp:2055
@@ -31038,7 +31038,7 @@ msgstr "Näytä ominaisuuspaneeli"
 
 #: eeschema/tools/sch_edit_tool.cpp:3081
 msgid "Edit Sheet Properties"
-msgstr "Muokkaa arkin ominaisuuksia"
+msgstr "Muokkaa sivun ominaisuuksia"
 
 #: eeschema/tools/sch_edit_tool.cpp:3202
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:64
@@ -31056,12 +31056,12 @@ msgstr "Haluatko poistaa viittaamattomat nastat tältä arkilta?"
 #: eeschema/tools/sch_edit_tool.cpp:3756
 #, c-format
 msgid "Enter page number for sheet path%s"
-msgstr "Syötä arkin polun sivunumero %s"
+msgstr "Syötä sivunumero sivupolulle %s"
 
 #: eeschema/tools/sch_edit_tool.cpp:3759
 #: eeschema/widgets/hierarchy_pane.cpp:661
 msgid "Edit Sheet Page Number"
-msgstr "Muokkaa arkin sivunumeroa"
+msgstr "Muokkaa sivunumeroa"
 
 #: eeschema/tools/sch_edit_tool.cpp:3897 pcbnew/tools/edit_tool.cpp:1219
 msgid "Toggle Attribute"
@@ -31103,7 +31103,7 @@ msgstr "Päivitä kytkentäkaaviosymbolit linkittymään vietyihin symboleihin"
 
 #: eeschema/tools/sch_editor_control.cpp:1069
 msgid "Error: duplicate sub-sheet names found in current sheet."
-msgstr "Virhe: päällekkäiset aliarkkinimet löytyvät nykyiseltä arkilta."
+msgstr "Virhe: nykyisestä sivusta löytyi päällekkäisiä alisivujen nimiä."
 
 #: eeschema/tools/sch_editor_control.cpp:1382
 msgid "No nets selected."
@@ -31190,7 +31190,7 @@ msgstr "Saavutettu kaavamaisen loppu."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:385
 msgid "Reached end of sheet."
-msgstr "Saavutettu arkin pääty."
+msgstr "Saavutettiin sivun loppu."
 
 #: eeschema/tools/sch_find_replace_tool.cpp:394
 msgid "No matches found."
@@ -31331,7 +31331,7 @@ msgstr "Vertailu valittuun tilannevedokseen epäonnistui."
 #: eeschema/tools/sch_inspection_tool.cpp:1214
 #: eeschema/tools/sch_inspection_tool.cpp:1235
 msgid "Could not open this sheet for comparison."
-msgstr "Arkkia ei voitu avata vertailtavaksi."
+msgstr "Tätä sivua ei voitu avata vertailua varten."
 
 #: eeschema/tools/sch_inspection_tool.cpp:1358
 msgid "No datasheet defined."
@@ -31647,7 +31647,7 @@ msgstr "Älä kopioi aliarkkeja"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:41
 msgid "Copy internal subsheets only"
-msgstr "Kopioi vain sisäinen aliarkki"
+msgstr "Kopioi vain sisäiset alisivut"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:42
 msgid "Copy all subsheets"
@@ -31663,7 +31663,7 @@ msgstr "Nimeä uudelleen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:541
 msgid "Change name of this sheet"
-msgstr "Muuta tämän arkin nimi"
+msgstr "Muuta tämän sivun nimeä"
 
 #: eeschema/widgets/hierarchy_pane.cpp:546
 #: eeschema/widgets/hierarchy_pane.cpp:631
@@ -31711,11 +31711,11 @@ msgstr "Viimeistä ylimmän tason sivua ei voi poistaa."
 #: eeschema/widgets/hierarchy_pane.cpp:657
 #, c-format
 msgid "Enter page number for sheet path %s"
-msgstr "Anna sivunumero arkin polulle %s"
+msgstr "Syötä sivunumero sivupolulle %s"
 
 #: eeschema/widgets/hierarchy_pane.cpp:762
 msgid "Renaming sheet"
-msgstr "Arkin uudelleennimeäminen"
+msgstr "Muutetaan sivun nimeä"
 
 #: eeschema/widgets/hierarchy_pane.cpp:853
 #, c-format
@@ -33280,7 +33280,7 @@ msgstr "Näytä piirustusarkin reunus ja otsikkolohko"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:137
 msgid "Show drawing sheet page limits"
-msgstr "Näytä piirustusarkin sivurajat"
+msgstr "Näytä piirustuspohjan sivurajat"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:139
 msgid "PCB Background"
@@ -33469,8 +33469,8 @@ msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
 msgstr ""
-"Polku piirustusarkkiin, tämä ohittaa kaikki olemassa olevat projektin "
-"määrittämät arkit käytettäessä"
+"Polku piirustuspohjaan; tämä ohittaa käytettäessä kaikki projektissa "
+"määritetyt piirustuspohjat"
 
 #: kicad/cli/command.cpp:220
 msgid ""
@@ -34686,7 +34686,7 @@ msgstr "Sovita sivu piirilevyn kokoon"
 #: kicad/cli/command_pcb_export_svg.cpp:101
 #: kicad/cli/command_sch_export_plot.cpp:72
 msgid "No drawing sheet"
-msgstr "Ei piirustusarkkia"
+msgstr "Ei piirustuspohjaa"
 
 #: kicad/cli/command_pcb_import.cpp:42
 msgid "Import a non-KiCad PCB file to KiCad format"
@@ -35520,7 +35520,7 @@ msgid ""
 "Edit drawing sheet borders and title blocks for use in schematics and PCB "
 "designs"
 msgstr ""
-"Muokkaa piirustusarkin reunoja ja otsikkolohkoja käytettäväksi "
+"Muokkaa piirustuspohjan reunoja ja otsikkolohkoja käytettäväksi "
 "kytkentäkaaviossa ja piirilevymalleissa"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:184
@@ -37195,7 +37195,7 @@ msgstr "Muunna bittikarttakuvat kytkentäkaavioiksi tai piirilevykomponenteiksi"
 
 #: kicad/tools/kicad_manager_actions.cpp:175
 msgid "Edit drawing sheet borders and title block"
-msgstr "Muokkaa piirustusarkin reunusta ja otsikkolohkoa"
+msgstr "Muokkaa piirustuspohjan reunusta ja otsikkolohkoa"
 
 #: kicad/tools/kicad_manager_actions.cpp:184
 msgid "Run Plugin and Content Manager"
@@ -37471,11 +37471,11 @@ msgstr "Uusi kohde"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:232
 msgid "Print Drawing Sheet"
-msgstr "Tulosta piirustusarkki"
+msgstr "Tulosta piirustuspohja"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:237
 msgid "An error occurred attempting to print the drawing sheet."
-msgstr "Virhe yritettäessä tulostaa piirustusarkkia."
+msgstr "Virhe yritettäessä tulostaa piirustuspohjaa."
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:238
 msgid "Printing"
@@ -37503,11 +37503,11 @@ msgstr "Seuraavat sisäänrakennetut avainsanat ovat olemassa:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:689
 msgid "(sheet number)"
-msgstr "(arkin numero)"
+msgstr "(sivunumero)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:690
 msgid "(sheet count)"
-msgstr "(arkkien lukumäärä)"
+msgstr "(sivujen määrä)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:696
 msgid "(paper size)"
@@ -37649,7 +37649,7 @@ msgstr "Yleiset Asetukset"
 
 #: pagelayout_editor/files.cpp:62 pagelayout_editor/files.cpp:106
 msgid "The current drawing sheet has been modified. Save changes?"
-msgstr "Nykyistä piirustusarkkia on muutettu. Tallennetaako muutokset?"
+msgstr "Nykyistä piirustussivua on muokattu. Tallennetaanko muutokset?"
 
 #: pagelayout_editor/files.cpp:78
 #, c-format
@@ -37658,7 +37658,7 @@ msgstr "Tiedosto '%s' on ladattu"
 
 #: pagelayout_editor/files.cpp:128
 msgid "Append Existing Drawing Sheet"
-msgstr "Liitä olemassa oleva piirustusarkki"
+msgstr "Lisää olemassa oleva piirustuspohja"
 
 #: pagelayout_editor/files.cpp:141 pagelayout_editor/files.cpp:169
 #, c-format
@@ -37672,7 +37672,7 @@ msgstr "Tiedosto \"%s\" on lisätty"
 
 #: pagelayout_editor/files.cpp:157
 msgid "Open Drawing Sheet"
-msgstr "Avaa piirustusarkki"
+msgstr "Avaa piirustuspohja"
 
 #: pagelayout_editor/files.cpp:185 pcbnew/router/router_tool.cpp:789
 #: pcbnew/router/router_tool.cpp:850
@@ -37682,7 +37682,7 @@ msgstr "Ei voida kirjoittaa '%s'."
 
 #: pagelayout_editor/files.cpp:199
 msgid "Save Drawing Sheet As"
-msgstr "Tallenna piirustusarkki nimellä"
+msgstr "Tallenna piirustuspohja nimellä"
 
 #: pagelayout_editor/files.cpp:276
 msgid "Layout file is read only."
@@ -37702,7 +37702,7 @@ msgstr "Virhe asetettaessa tulostimen tietoja"
 
 #: pagelayout_editor/pl_editor_frame.cpp:577
 msgid "[no drawing sheet loaded]"
-msgstr "[ei piirustusarkkia ladattuna]"
+msgstr "[ei piirustuspohjaa ladattuna]"
 
 #: pagelayout_editor/pl_editor_frame.cpp:799
 #, c-format
@@ -37711,11 +37711,11 @@ msgstr "koordinaatin alkupiste: %s"
 
 #: pagelayout_editor/pl_editor_frame.cpp:928
 msgid "New drawing sheet file is unsaved"
-msgstr "Uusi piirustusarkkitiedosto on tallentamaton"
+msgstr "Uusi piirustuspohjatiedosto on tallentamatta"
 
 #: pagelayout_editor/pl_editor_frame.cpp:932
 msgid "Drawing sheet changes are unsaved"
-msgstr "Piirustusarkin muutokset ovat tallentamattomia"
+msgstr "Piirustuspohjan muutokset ovat tallentamatta"
 
 #: pagelayout_editor/pl_editor_frame.cpp:979
 msgid "Page Width"
@@ -37787,11 +37787,11 @@ msgstr "Aseta bittikartat"
 
 #: pagelayout_editor/tools/pl_actions.cpp:89
 msgid "Append Existing Drawing Sheet..."
-msgstr "Liitä olemassa oleva piirustusarkki..."
+msgstr "Lisää olemassa oleva piirustuspohja…"
 
 #: pagelayout_editor/tools/pl_actions.cpp:90
 msgid "Append an existing drawing sheet file to the current file"
-msgstr "Liitä olemassa oleva piirustusarkkitiedosto nykyiseen tiedostoon"
+msgstr "Lisää olemassa oleva piirustuspohjatiedosto nykyiseen tiedostoon"
 
 #: pagelayout_editor/tools/pl_actions.cpp:101
 msgid "Show Design Inspector"
@@ -43924,8 +43924,8 @@ msgid ""
 "Enter a filename if you do not want to use default file names\n"
 "Can be used only when printing the current sheet"
 msgstr ""
-"Syötä tiedostonimi, jos et halua käyttää oletusnimiä\n"
-"Käytettävissä vain tulostettaessa auki olevaa arkkia"
+"Anna tiedostonimi, jos et halua käyttää oletustiedostonimiä\n"
+"Voidaan käyttää vain tulostettaessa nykyistä sivua"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:70
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:75
@@ -44870,7 +44870,7 @@ msgstr "Symboli:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:88
 msgid "Sheet: "
-msgstr "Arkki: "
+msgstr "Sivu: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
 msgid "Library Association"
@@ -46855,7 +46855,7 @@ msgstr "Siirrä kohde"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:58
 msgid "Sheet Path"
-msgstr "Arkin tiedostopolku"
+msgstr "Sivupolku"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:87
 #: pcbnew/footprint.cpp:2419 pcbnew/footprint.cpp:5377 pcbnew/zone.cpp:2192
@@ -49342,7 +49342,7 @@ msgstr "Lisää jalanjäljen kenttäarvoehto"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:367
 msgid "Add Sheet Condition"
-msgstr "Lisää arkin sääntö"
+msgstr "Lisää sivukohtainen ehto"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:368
 msgid "Add Custom Expression Condition"
@@ -49423,7 +49423,7 @@ msgstr "Kentän arvo:"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:472
 msgid "Sheet name:"
-msgstr "Arkin nimi:"
+msgstr "Sivun nimi:"
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:41
 msgid "Use via color for normal through hole padstacks"
@@ -49607,7 +49607,7 @@ msgstr "Ratsnest viivanpaksuus:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:356
 msgid "Draw an outline to show the sheet size."
-msgstr "Piirtää ulkoviivan joka näyttää arkin koon."
+msgstr "Piirtää ääriviivat näyttääkseen sivun koon."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:360
 msgid "Show courtyard collisions when moving/dragging"
@@ -57064,22 +57064,22 @@ msgstr "Poistettu %s jalanjälkikenttä, joka ei ole symbolissa."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:736
 #, c-format
 msgid "Update %s sheetname to '%s'."
-msgstr "Päivitä %s arkin nimi kohteeseen '%s'."
+msgstr "Päivitä sivun %s nimeksi '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:743
 #, c-format
 msgid "Updated %s sheetname to '%s'."
-msgstr "Arkin %s nimi muutettiin '%s'."
+msgstr "Päivitetty sivun %s nimeksi '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:755
 #, c-format
 msgid "Update %s sheetfile to '%s'."
-msgstr "Päivitä %s arkkitiedosto kohteeksi '%s'."
+msgstr "Päivitetään %s-sivutiedostoksi ”%s”."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:762
 #, c-format
 msgid "Updated %s sheetfile to '%s'."
-msgstr "Päivitetty %s arkin tiedosto kohteeseen '%s'."
+msgstr "Päivitetty sivun %s tiedostoksi '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:774
 #, c-format
@@ -59935,7 +59935,7 @@ msgstr "Tiedostolla %s on tuntematon versio: %d."
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:788
 #, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "Tuntematon arkin tyyppi '%s' rivillä: %d."
+msgstr "Tuntematon sivutyyppi '%s' rivillä: %d."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1369
 #, c-format
@@ -61567,7 +61567,7 @@ msgstr "Puuttuva ryhmänimen argumentti %s:sta."
 #: pcbnew/pcbexpr_functions.cpp:1048
 #, c-format
 msgid "Missing sheet name argument to %s."
-msgstr "Puuttuva arkin nimen muuttuja %s."
+msgstr "Puuttuva sivun nimen argumentti komennolle %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1169
 #, c-format
@@ -63886,8 +63886,7 @@ msgid ""
 "or no hierarchical sheets, groups, or component classes."
 msgstr ""
 "Sijoitusalueita ei voi luoda automaattisesti, koska kytkentäkaaviossa on "
-"vain yksi, tai ei yhtään, hierarkkista arkkia, ryhmää tai komponentin "
-"luokkaa."
+"vain yksi, tai ei yhtään, hierarkkista sivua, ryhmää tai komponentin luokkaa."
 
 #: pcbnew/tools/multichannel_tool.cpp:2507
 msgid "Auto-generate placement rule areas"
@@ -65851,7 +65850,7 @@ msgstr "Valitsee kaikki jalanjäljet ja johtimet kytkentäkaaviosta"
 
 #: pcbnew/tools/pcb_actions.cpp:2785
 msgid "Items in Same Hierarchical Sheet"
-msgstr "Kohteita samassa hierarkkisessa arkissa"
+msgstr "Kohteet samassa hierarkkisessa sivussa"
 
 #: pcbnew/tools/pcb_actions.cpp:2786
 msgid "Selects all footprints and tracks in the same schematic sheet"
@@ -66853,7 +66852,7 @@ msgstr "Näytä piirilevyn alueen varjo"
 
 #: pcbnew/widgets/appearance_controls.cpp:363
 msgid "Show drawing sheet borders and title block"
-msgstr "Näytä piirustusarkin reunus ja otsikkolohko"
+msgstr "Näytä piirustuspohjan reunat ja otsikkolohko"
 
 #: pcbnew/widgets/appearance_controls.cpp:387
 msgid "No Layers"
