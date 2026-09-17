@@ -1232,6 +1232,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
     if( !m_grid->CommitPendingChanges() )
         return;
 
+    bool wasCurrent = m_parent->Schematic().GetCurrentVariant() == oldVariantName;
+
     m_dataModel->RenameStoredVariant( oldVariantName, newVariantName );
     m_parent->Schematic().RenameVariant( oldVariantName, newVariantName );
     m_parent->OnModify();
@@ -1249,6 +1251,9 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
 
     updateVariantButtonStates();
     m_parent->UpdateVariantSelectionCtrl( m_parent->Schematic().GetVariantNamesForUI() );
+
+    if( wasCurrent )
+        m_parent->SetCurrentVariant( newVariantName );
 }
 
 
@@ -1369,7 +1374,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onVariantSelectionChange( wxCommandEvent& aEven
     // Activating a variant only selects its staged values. Apply writes all edited variants.
     m_dataModel->SetCurrentVariant( selectedVariant );
 
-    if( m_parent )
+    if( !m_job && m_parent )
         m_parent->SetCurrentVariant( selectedVariant );
 
     m_dataModel->RebuildRows();
