@@ -81,6 +81,8 @@ public:
     void SetValueAsBool( int aRow, int aCol, bool aValue ) override;
     void SetValueAsLong( int aRow, int aCol, long aValue ) override;
 
+    bool DeleteRows( size_t aPos = 0, size_t aNumRows = 1 ) override;
+
 protected:
     void onUnitsChanged( wxCommandEvent& aEvent );
 

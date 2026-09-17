@@ -802,11 +802,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnDeleteField( wxCommandEvent&  )
             },
             [&]( int row )
             {
-                m_fields->erase( m_fields->begin() + row );
-
-                // notify the grid
-                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, row, 1 );
-                m_itemsGrid->ProcessTableMessage( msg );
+                m_fields->DeleteRows( row );
             } );
 
     OnModify();

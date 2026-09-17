@@ -439,3 +439,40 @@ void PCB_FIELDS_GRID_TABLE::SetValueAsLong( int aRow, int aCol, long aValue )
     m_dialog->OnModify();
 }
 
+
+// Keep the row deletion, and the cached expression evaluation in sync
+bool PCB_FIELDS_GRID_TABLE::DeleteRows( size_t aPos, size_t aNumRows )
+{
+    if( aPos >= size() || aNumRows > size() - aPos )
+        return false;
+
+    std::map<std::pair<int, int>, wxString> rebasedEvalOriginal;
+
+    for( const auto& [cell, expression] : m_evalOriginal )
+    {
+        // Just keep anything from before our deletion
+        if( cell.first < static_cast<int>( aPos ) )
+        {
+            rebasedEvalOriginal[cell] = expression;
+        }
+        // Move expressions after the deletion up by the number of deleted rows
+        else if( cell.first >= static_cast<int>( aPos + aNumRows ) )
+        {
+            rebasedEvalOriginal[{ cell.first - static_cast<int>( aNumRows ), cell.second }] = expression;
+        }
+        // No else because that is the deleted range, and those go away
+    }
+
+    // Replace cache with new cache with correct number of rows
+    m_evalOriginal.swap( rebasedEvalOriginal );
+    // Delete actual rows from grid
+    erase( begin() + aPos, begin() + aPos + aNumRows );
+
+    if( GetView() )
+    {
+        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aPos, aNumRows );
+        GetView()->ProcessTableMessage( msg );
+    }
+
+    return true;
+}
