@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-17 15:49+0000\n"
+"PO-Revision-Date: 2026-09-17 16:01+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -29131,11 +29131,11 @@ msgstr "Näytä/piilota etäsymbolipaneeli"
 
 #: eeschema/tools/sch_actions.cpp:147
 msgid "Save Current Sheet as Design Block..."
-msgstr "Tallenna nykyinen arkki suunnittelulohkona..."
+msgstr "Tallenna nykyinen sivu suunnittelulohkona..."
 
 #: eeschema/tools/sch_actions.cpp:148
 msgid "Create a new design block from the current sheet"
-msgstr "Luo uusi suunnittelulohko nykyisestä arkista"
+msgstr "Luo uusi suunnittelulohko nykyisestä sivusta"
 
 #: eeschema/tools/sch_actions.cpp:154 pcbnew/tools/pcb_actions.cpp:767
 msgid "Save Selection as Design Block..."
@@ -29151,7 +29151,7 @@ msgstr "Päivitä suunnittelulohko nykyiseltä lehdeltä"
 
 #: eeschema/tools/sch_actions.cpp:162
 msgid "Set design block schematic to current sheet"
-msgstr "Aseta suunnittelulohkon kytkentäkaavio nykyiselle arkille"
+msgstr "Aseta suunnittelulohkon kytkentäkaavio nykyiselle sivulle"
 
 #: eeschema/tools/sch_actions.cpp:168 pcbnew/tools/pcb_actions.cpp:781
 msgid "Update Design Block from Selection"
@@ -31973,7 +31973,7 @@ msgstr "Sijoita suunnittelulohko ryhmänä."
 
 #: eeschema/widgets/sch_design_block_pane.cpp:115
 msgid "Place the design block as a new sheet."
-msgstr "Aseta suunnittelulohko uutena arkkina."
+msgstr "Aseta suunnittelulohko uutena sivuna."
 
 #: eeschema/widgets/sch_design_block_pane.cpp:121
 msgid ""
@@ -35685,7 +35685,7 @@ msgstr "Pura zip.projekti '%s'\n"
 #: kicad/import_proj.cpp:440
 #, c-format
 msgid "Could not open gEDA / Lepton EDA project file '%s'."
-msgstr "gEDA- / Lepton EDA -projektitiedoston '%s' avaaminen epäonnistui."
+msgstr "Ei voitu avata gEDA- / Lepton EDA -projektitiedostoa '%s'."
 
 #: kicad/import_proj.cpp:556 kicad/import_proj.cpp:567
 msgid "Locate gEDA / Lepton EDA Schematic"
@@ -46731,7 +46731,7 @@ msgid ""
 msgstr ""
 "Kaikille pakollisille kerroksille (merkitty merkillä '*') on valittava "
 "vastine. Napsauta 'Kohdista kerrokset automaattisesti' asettaaksesi loput "
-"kerrokset paikoilleen."
+"kerrokset paikoilleen"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:434
 msgid "Auto-migrate 3D model references"
@@ -58817,7 +58817,7 @@ msgstr "johdinraidan kenttiä ei ole riittävästi"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:137
 msgid "insufficient arc fields"
-msgstr "Kaaren kenttiä ei ole riittävästi"
+msgstr "kaaren kenttiä ei ole riittävästi"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:162
 msgid "insufficient via fields"
@@ -58833,11 +58833,11 @@ msgstr "täytön kenttiä ei ole riittävästi"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:243
 msgid "insufficient text fields"
-msgstr "Liian vähän tekstikenttiä"
+msgstr "liian vähän tekstikenttiä"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:292
 msgid "insufficient component fields"
-msgstr "Riittämättömät komponenttikentät"
+msgstr "riittämättömät komponenttikentät"
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:147
 #, c-format
@@ -60432,7 +60432,7 @@ msgstr "Kirjasto-osiota ei löydy."
 #: pcbnew/pcb_io/pcad/pcad_via.cpp:104
 #, c-format
 msgid "Unable to find viaStyleDef %s."
-msgstr "viaStyleDef %s ei löydy."
+msgstr "Ei voitu löytää viaStyleDef-määritystä %s."
 
 #: pcbnew/pcb_io/pcad/pcb_io_pcad.h:40
 msgid "P-Cad 200x ASCII PCB files"
@@ -61591,7 +61591,7 @@ msgstr "Puuttuva kentän nimen argumentti %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1564
 msgid "Missing netclass name argument to hasNetclass()"
-msgstr "hasNetclass() Puuttuva verkkoluokkanimen argumentti"
+msgstr "Puuttuva verkkoluokkanimen argumentti hasNetclass()"
 
 #: pcbnew/pcbexpr_functions.cpp:1603
 msgid "Missing netclass name argument to hasExactNetclass()"
@@ -61858,7 +61858,7 @@ msgstr "Yhdistetyn %s:n tallentaminen epäonnistui:%s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:4089
 msgid "custom DRC rules"
-msgstr "Mukautetut DRC-säännöt"
+msgstr "mukautetut DRC-säännöt"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:4102
 msgid "footprint library table"
@@ -66297,7 +66297,7 @@ msgstr "Suunnittelulohkon piirilevytiedostoa ei voitu lukea"
 
 #: pcbnew/tools/pcb_control.cpp:1621
 msgid "the design block's board layout is empty"
-msgstr "Suunnittelulohkon asettelu on tyhjä"
+msgstr "suunnittelulohkon asettelu on tyhjä"
 
 #: pcbnew/tools/pcb_control.cpp:1672
 msgid "the group has no items"
