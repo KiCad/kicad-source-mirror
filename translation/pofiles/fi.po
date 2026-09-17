@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-17 16:01+0000\n"
+"PO-Revision-Date: 2026-09-17 16:08+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -33446,7 +33446,7 @@ msgstr "Syötetiedosto"
 
 #: kicad/cli/command.cpp:151
 msgid "Input directory"
-msgstr "lähdehakemisto"
+msgstr "Lähdehakemisto"
 
 #: kicad/cli/command.cpp:158
 msgid "Input file or directory"
@@ -60053,7 +60053,7 @@ msgstr "tuntematon läpiviennin tyyppi %d"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3359
 #, c-format
 msgid "unknown zone corner smoothing type %d"
-msgstr "Tuntematon tason kulman tasoitustyyppi %d"
+msgstr "tuntematon tason kulman tasoitustyyppi %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:3624
 msgid "This file does not contain a PCB."
@@ -61947,7 +61947,7 @@ msgstr "%.1f asteen tai sitä suurempia kaarevia johdinraitoja ei voi vetää."
 #: pcbnew/router/pns_kicad_iface.cpp:1226 pcbnew/router/router_tool.cpp:1008
 #: pcbnew/router/router_tool.cpp:1084
 msgid "board minimum clearance"
-msgstr "Piirilevyn vähimmäiseristysväli"
+msgstr "piirilevyn vähimmäiseristysväli"
 
 #: pcbnew/router/pns_kicad_iface.cpp:1145
 #: pcbnew/router/pns_kicad_iface.cpp:1225 pcbnew/router/router_tool.cpp:1034
@@ -66289,11 +66289,11 @@ msgstr "Sovelletaan suunnittelulohkojen asetteluja"
 
 #: pcbnew/tools/pcb_control.cpp:1563
 msgid "the design block has no saved board layout"
-msgstr "Suunnittelulohkossa ei ole tallennettua piirilevyn asettelua"
+msgstr "suunnittelulohkossa ei ole tallennettua piirilevyn asettelua"
 
 #: pcbnew/tools/pcb_control.cpp:1594
 msgid "the design block's board file could not be read"
-msgstr "Suunnittelulohkon piirilevytiedostoa ei voitu lukea"
+msgstr "suunnittelulohkon piirilevytiedostoa ei voitu lukea"
 
 #: pcbnew/tools/pcb_control.cpp:1621
 msgid "the design block's board layout is empty"
