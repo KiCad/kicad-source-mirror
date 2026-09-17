@@ -44,7 +44,7 @@ class BOARD;
 class RENDER_3D_RAYTRACE_GL;
 class RENDER_3D_OPENGL;
 class PAD;
-struct FP_3DMODEL;
+class FP_3DMODEL;
 
 
 // A custom event, used to call DoRePaint during an idle time
