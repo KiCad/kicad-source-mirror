@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -42,6 +43,7 @@
 #include <libraries/library_table.h>
 #include <libraries/library_table_parser.h>
 #include <libraries/library_table_grammar.h>
+#include <scoped_set_reset.h>
 #include <settings/kicad_settings.h>
 #include <startwizard/startwizard_provider_libraries.h>
 
@@ -166,6 +168,39 @@ BOOST_AUTO_TEST_CASE( Manager )
 
     BOOST_REQUIRE( manager.Rows( LIBRARY_TABLE_TYPE::SYMBOL ).size() == 3 );
     BOOST_REQUIRE( manager.Rows( LIBRARY_TABLE_TYPE::FOOTPRINT ).size() == 146 );
+}
+
+
+/*
+ * Regression test for PCM library auto-add scan.
+ *
+ * The PCM auto-add scan is triggered by the presence of PCM packages in the 3RD_PARTY directory.
+ * But when this happens, if there is no global design block table, this process shouldn't die.
+ *
+ * Sentry KICAD-17T5 was a startup crash when the design block table was missing.
+ */
+BOOST_AUTO_TEST_CASE( PcmScanWithoutDesignBlockTable )
+{
+    // Create a temporary directory with a PCM package containing a design block library
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxS( "pcm-scan" ) );
+
+    const bool dirsOk =
+            std::filesystem::create_directories( tempDir.Path() / "design_blocks" / "test" / "block.kicad_blocks" );
+    BOOST_REQUIRE( dirsOk );
+
+    // PCM auto-add must be on
+    bool& autoAddSetting = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>( "kicad" )->m_PcmLibAutoAdd;
+    SCOPED_SET_RESET<bool> autoAddSettingReset( autoAddSetting, true );
+
+    KI_TEST::SCOPED_PGM_ENV_VAR envVar( wxS( "KICAD10_3RD_PARTY" ), tempDir.PathStr() );
+
+    LIBRARY_MANAGER manager;
+
+    // Only the symbol table is loaded; the design block table is absent.
+    manager.LoadGlobalTables( { LIBRARY_TABLE_TYPE::SYMBOL } );
+
+    BOOST_REQUIRE( manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, LIBRARY_TABLE_SCOPE::GLOBAL ).has_value() );
+    BOOST_REQUIRE( !manager.Table( LIBRARY_TABLE_TYPE::DESIGN_BLOCK, LIBRARY_TABLE_SCOPE::GLOBAL ).has_value() );
 }
 
 
