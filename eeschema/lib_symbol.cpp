@@ -370,6 +370,7 @@ void LIB_SYMBOL::Serialize( kiapi::schematic::types::SchematicSymbol& aOutput, b
     GetField( FIELD_T::VALUE )->Serialize( *def.mutable_value_field(), schIUScale );
     GetField( FIELD_T::FOOTPRINT )->Serialize( *def.mutable_footprint_field(), schIUScale );
     GetField( FIELD_T::DATASHEET )->Serialize( *def.mutable_datasheet_field(), schIUScale );
+    GetField( FIELD_T::DESCRIPTION )->Serialize( *def.mutable_description_field(), schIUScale );
 
     for( const SCH_ITEM& drawItem : GetDrawItems() )
     {
