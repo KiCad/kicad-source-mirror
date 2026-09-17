@@ -136,6 +136,22 @@ bool VIA::PushoutForce( NODE* aNode, const ITEM* aOther, VECTOR2I& aForce )
             aForce = elementForce;
     }
 
+    // The vias hole clearance might be larger than the vias copper clearance
+    // So test against the holes clearance as well
+    if( m_hole )
+    {
+        int holeClearance = aNode->GetClearance( m_hole, aOther, false );
+
+        for( int layer : RelevantShapeLayers( aOther ) )
+        {
+            elementForce = VECTOR2I( 0, 0 );
+            aOther->Shape( layer )->Collide( m_hole->Shape( layer ), holeClearance, &elementForce );
+
+            if( elementForce.SquaredEuclideanNorm() > aForce.SquaredEuclideanNorm() )
+                aForce = elementForce;
+        }
+    }
+
     return ( aForce != VECTOR2I( 0, 0 ) );
 }
 
