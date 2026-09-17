@@ -126,7 +126,7 @@ bool BOM_PRESET::operator==( const BOM_PRESET& rhs ) const
 BOM_PRESET BOM_PRESET::DefaultEditing()
 {
     BOM_PRESET p{
-        _HKI( "Default Editing" ), true, {}, _( "Reference" ), true, "", BOM_FILTER_SCOPE::REFERENCE,
+        _HKI( "Default Editing" ), true, {}, wxS( "Reference" ), true, "", BOM_FILTER_SCOPE::REFERENCE,
         true, false, true
     };
 
@@ -150,7 +150,7 @@ BOM_PRESET BOM_PRESET::DefaultEditing()
 BOM_PRESET BOM_PRESET::GroupedByValue()
 {
     BOM_PRESET p{
-        _HKI( "Grouped By Value" ), true, {}, _( "Reference" ), true, "", BOM_FILTER_SCOPE::REFERENCE,
+        _HKI( "Grouped By Value" ), true, {}, wxS( "Reference" ), true, "", BOM_FILTER_SCOPE::REFERENCE,
         true, false, false
     };
 
@@ -170,7 +170,7 @@ BOM_PRESET BOM_PRESET::GroupedByValue()
 BOM_PRESET BOM_PRESET::GroupedByValueFootprint()
 {
     BOM_PRESET p{
-        _HKI( "Grouped By Value and Footprint" ), true, {}, _( "Reference" ), true, "",
+        _HKI( "Grouped By Value and Footprint" ), true, {}, wxS( "Reference" ), true, "",
         BOM_FILTER_SCOPE::REFERENCE, true, false, false
     };
 
@@ -190,7 +190,7 @@ BOM_PRESET BOM_PRESET::GroupedByValueFootprint()
 BOM_PRESET BOM_PRESET::Attributes()
 {
     BOM_PRESET p{
-        _HKI( "Attributes" ), true, {}, _( "Reference" ), true, "", BOM_FILTER_SCOPE::REFERENCE,
+        _HKI( "Attributes" ), true, {}, wxS( "Reference" ), true, "", BOM_FILTER_SCOPE::REFERENCE,
         true, false, true
     };
 

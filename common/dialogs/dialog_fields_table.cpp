@@ -60,6 +60,29 @@
 
 namespace
 {
+template <typename PRESET>
+int findPresetIndexByPointer( const wxChoice* aChoice, const PRESET* aPreset )
+{
+    for( unsigned i = 0; i < aChoice->GetCount(); ++i )
+    {
+        if( aChoice->GetClientData( i ) == static_cast<const void*>( aPreset ) )
+            return static_cast<int>( i );
+    }
+
+    return wxNOT_FOUND;
+}
+
+
+template <typename PRESET>
+int findPresetIndexByName( const wxChoice* aChoice, const std::map<wxString, PRESET>& aPresets,
+                           const wxString& aName )
+{
+    auto presetIt = aPresets.find( aName );
+
+    return presetIt == aPresets.end() ? wxNOT_FOUND : findPresetIndexByPointer( aChoice, &presetIt->second );
+}
+
+
 enum
 {
     MYID_REVERT_ROW = GRIDTRICKS_FIRST_CLIENT_ID,
@@ -1614,7 +1637,8 @@ void DIALOG_FIELDS_TABLE::rebuildBomPresetsWidget()
 
     for( const auto& [presetName, preset] : m_bomPresets )
     {
-        m_cbBomPresets->Append( wxGetTranslation( presetName ), (void*) &preset );
+        wxString label = preset.readOnly ? wxGetTranslation( presetName ) : presetName;
+        m_cbBomPresets->Append( label, (void*) &preset );
 
         if( presetName == BOM_PRESET::DefaultEditing().name )
             default_idx = idx;
@@ -1682,13 +1706,7 @@ void DIALOG_FIELDS_TABLE::syncBomPresetSelection()
                     return false;
                 }
 
-                // We should compare preset.name and current.name.  Unfortunately current.name is
-                // empty because m_dataModel->GetBomSettings() does not store the .name member.
-                // So use sortField member as a (not very efficient) auxiliary filter.
-                // As a further complication, sortField can be translated in m_bomPresets list, so
-                // current.sortField needs to be translated.
-                // Probably this not efficient and error prone test should be removed (JPC).
-                if( preset.sortField != wxGetTranslation( current.sortField ) )
+                if( preset.sortField != current.sortField )
                     return false;
 
                 // Only compare shown or grouped fields
@@ -1711,11 +1729,7 @@ void DIALOG_FIELDS_TABLE::syncBomPresetSelection()
 
     if( it != m_bomPresets.end() )
     {
-        // Select the right m_cbBomPresets item.
-        // but these items are translated if they are predefined items.
-        bool     do_translate = it->second.readOnly;
-        wxString text = do_translate ? wxGetTranslation( it->first ) : it->first;
-        m_cbBomPresets->SetStringSelection( text );
+        m_cbBomPresets->SetSelection( findPresetIndexByPointer( m_cbBomPresets, &it->second ) );
     }
     else
     {
@@ -1728,23 +1742,7 @@ void DIALOG_FIELDS_TABLE::syncBomPresetSelection()
 
 void DIALOG_FIELDS_TABLE::updateBomPresetSelection( const wxString& aName )
 {
-    // Look at m_userBomPresets to know if aName is a read only preset, or a user preset.
-    // Read-only presets have translated names in UI, so we have to use a translated name
-    // in UI selection.  But for a user preset name we search for the untranslated aName.
-    wxString ui_label = aName;
-
-    for( const auto& [presetName, preset] : m_bomPresets )
-    {
-        if( presetName == aName )
-        {
-            if( preset.readOnly == true )
-                ui_label = wxGetTranslation( aName );
-
-            break;
-        }
-    }
-
-    int idx = m_cbBomPresets->FindString( ui_label );
+    int idx = findPresetIndexByName( m_cbBomPresets, m_bomPresets, aName );
 
     if( idx >= 0 && m_cbBomPresets->GetSelection() != idx )
     {
@@ -1766,10 +1764,12 @@ void DIALOG_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
     auto resetSelection =
             [&]()
             {
-                if( m_currentBomPreset )
-                    m_cbBomPresets->SetStringSelection( m_currentBomPreset->name );
-                else
+                int presetIndex = findPresetIndexByPointer( m_cbBomPresets, m_currentBomPreset );
+
+                if( presetIndex == wxNOT_FOUND )
                     m_cbBomPresets->SetSelection( presetDashDashDashIndex( m_cbBomPresets->GetCount() ) );
+                else
+                    m_cbBomPresets->SetSelection( presetIndex );
             };
 
     if( index == presetDashDashDashIndex( count ) )
@@ -1829,7 +1829,7 @@ void DIALOG_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
             *preset = getDataModelBomPreset();
             preset->name = name;
 
-            index = m_cbBomPresets->FindString( name );
+            index = findPresetIndexByPointer( m_cbBomPresets, preset );
 
             if( m_bomPresetMRU.Index( name ) != wxNOT_FOUND )
                 m_bomPresetMRU.Remove( name );
@@ -1865,8 +1865,8 @@ void DIALOG_FIELDS_TABLE::onBomPresetChanged( wxCommandEvent& aEvent )
         if( dlg.ShowModal() == wxID_OK )
         {
             wxString presetName = dlg.GetTextSelection();
-            int      idx = m_cbBomPresets->FindString( presetName );
             auto     presetIt = m_bomPresets.find( presetName );
+            int      idx = findPresetIndexByName( m_cbBomPresets, m_bomPresets, presetName );
 
             if( idx != wxNOT_FOUND && presetIt != m_bomPresets.end() )
             {
@@ -1912,7 +1912,16 @@ BOM_FMT_PRESET DIALOG_FIELDS_TABLE::GetCurrentBomFmtSettings()
 {
     BOM_FMT_PRESET current;
 
-    current.name = m_cbBomFmtPresets->GetStringSelection();
+    int selection = m_cbBomFmtPresets->GetSelection();
+
+    if( selection != wxNOT_FOUND )
+    {
+        if( auto* preset = static_cast<BOM_FMT_PRESET*>( m_cbBomFmtPresets->GetClientData( selection ) ) )
+            current.name = preset->name;
+        else
+            current.name = m_cbBomFmtPresets->GetString( selection );
+    }
+
     current.fieldDelimiter = m_textFieldDelimiter->GetValue();
     current.stringDelimiter = m_textStringDelimiter->GetValue();
     current.refDelimiter = m_textRefDelimiter->GetValue();
@@ -2024,7 +2033,8 @@ void DIALOG_FIELDS_TABLE::rebuildBomFmtPresetsWidget()
 
     for( const auto& [presetName, preset] : m_bomFmtPresets )
     {
-        m_cbBomFmtPresets->Append( wxGetTranslation( presetName ), (void*) &preset );
+        wxString label = preset.readOnly ? wxGetTranslation( presetName ) : presetName;
+        m_cbBomFmtPresets->Append( label, (void*) &preset );
 
         if( presetName == BOM_FMT_PRESET::CSV().name )
             default_idx = idx;
@@ -2066,12 +2076,7 @@ void DIALOG_FIELDS_TABLE::syncBomFmtPresetSelection()
 
     if( it != m_bomFmtPresets.end() )
     {
-        // Select the right m_cbBomFmtPresets item.
-        // but these items are translated if they are predefined items.
-        bool     do_translate = it->second.readOnly;
-        wxString text = do_translate ? wxGetTranslation( it->first ) : it->first;
-
-        m_cbBomFmtPresets->SetStringSelection( text );
+        m_cbBomFmtPresets->SetSelection( findPresetIndexByPointer( m_cbBomFmtPresets, &it->second ) );
     }
     else
     {
@@ -2085,23 +2090,7 @@ void DIALOG_FIELDS_TABLE::syncBomFmtPresetSelection()
 
 void DIALOG_FIELDS_TABLE::updateBomFmtPresetSelection( const wxString& aName )
 {
-    // look at m_userBomFmtPresets to know if aName is a read only preset, or a user preset.
-    // Read only presets have translated names in UI, so we have to use a translated name in UI selection.
-    // But for a user preset name we should search for aName (not translated)
-    wxString ui_label = aName;
-
-    for( const auto& [presetName, preset] : m_bomFmtPresets )
-    {
-        if( presetName == aName )
-        {
-            if( preset.readOnly )
-                ui_label = wxGetTranslation( aName );
-
-            break;
-        }
-    }
-
-    int idx = m_cbBomFmtPresets->FindString( ui_label );
+    int idx = findPresetIndexByName( m_cbBomFmtPresets, m_bomFmtPresets, aName );
 
     if( idx >= 0 && m_cbBomFmtPresets->GetSelection() != idx )
     {
@@ -2123,10 +2112,12 @@ void DIALOG_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
     auto resetSelection =
             [&]()
             {
-                if( m_currentBomFmtPreset )
-                    m_cbBomFmtPresets->SetStringSelection( m_currentBomFmtPreset->name );
-                else
+                int presetIndex = findPresetIndexByPointer( m_cbBomFmtPresets, m_currentBomFmtPreset );
+
+                if( presetIndex == wxNOT_FOUND )
                     m_cbBomFmtPresets->SetSelection( presetDashDashDashIndex( m_cbBomFmtPresets->GetCount() ) );
+                else
+                    m_cbBomFmtPresets->SetSelection( presetIndex );
             };
 
     if( index == presetDashDashDashIndex( count ) )
@@ -2186,7 +2177,7 @@ void DIALOG_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
             *preset = GetCurrentBomFmtSettings();
             preset->name = name;
 
-            index = m_cbBomFmtPresets->FindString( name );
+            index = findPresetIndexByPointer( m_cbBomFmtPresets, preset );
 
             if( m_bomFmtPresetMRU.Index( name ) != wxNOT_FOUND )
                 m_bomFmtPresetMRU.Remove( name );
@@ -2222,8 +2213,8 @@ void DIALOG_FIELDS_TABLE::onBomFmtPresetChanged( wxCommandEvent& aEvent )
         if( dlg.ShowModal() == wxID_OK )
         {
             wxString presetName = dlg.GetTextSelection();
-            int      idx = m_cbBomFmtPresets->FindString( presetName );
             auto     presetIt = m_bomFmtPresets.find( presetName );
+            int      idx = findPresetIndexByName( m_cbBomFmtPresets, m_bomFmtPresets, presetName );
 
             if( idx != wxNOT_FOUND && presetIt != m_bomFmtPresets.end() )
             {
