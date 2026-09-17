@@ -1,0 +1,119 @@
+(kicad_symbol_lib
+	(version 20241209)
+	(generator "kicad_symbol_editor")
+	(generator_version "10.99")
+	(symbol "CONN_2"
+				(pin_names
+					(offset 1.016)
+					(hide yes)
+				)
+				(exclude_from_sim no)
+				(in_bom yes)
+				(on_board yes)
+				(in_pos_files yes)
+				(duplicate_pin_numbers_are_jumpers no)
+				(property "Reference" "P"
+					(at -1.27 0 90)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.016 1.016)
+						)
+					)
+				)
+				(property "Value" "CONN_2"
+					(at 1.27 0 90)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.016 1.016)
+						)
+					)
+				)
+				(property "Footprint" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.524 1.524)
+						)
+					)
+				)
+				(property "Datasheet" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(effects
+						(font
+							(size 1.524 1.524)
+						)
+					)
+				)
+				(property "Description" ""
+					(at 0 0 0)
+					(show_name no)
+					(do_not_autoplace no)
+					(hide yes)
+					(effects
+						(font
+							(size 1.27 1.27)
+						)
+					)
+				)
+				(symbol "CONN_2_0_1"
+					(rectangle
+						(start -2.54 3.81)
+						(end 2.54 -3.81)
+						(stroke
+							(width 0)
+							(type default)
+						)
+						(fill
+							(type none)
+						)
+					)
+				)
+				(symbol "CONN_2_1_1"
+					(pin passive inverted
+						(at -8.89 2.54 0)
+						(length 6.35)
+						(name "P1"
+							(effects
+								(font
+									(size 1.524 1.524)
+								)
+							)
+						)
+						(number "1"
+							(effects
+								(font
+									(size 1.524 1.524)
+								)
+							)
+						)
+					)
+					(pin passive inverted
+						(at -8.89 -2.54 0)
+						(length 6.35)
+						(name "PM"
+							(effects
+								(font
+									(size 1.524 1.524)
+								)
+							)
+						)
+						(number "2"
+							(effects
+								(font
+									(size 1.524 1.524)
+								)
+							)
+						)
+					)
+				)
+				(embedded_fonts no)
+			)
+)
