@@ -295,6 +295,19 @@ public:
     void Update( SCH_ITEM* aItem, bool aUpdateLibSymbol = true );
 
     /**
+     * Remove the library symbol cached under \a aName if no symbol on this screen still
+     * references that name.
+     *
+     * Callers that change a symbol's library link must use this with the *previous* link name;
+     * the screen's normal Remove/Append maintenance only examines the link name the symbol has
+     * after the change.
+     *
+     * @param aName Library symbol name previously used by a symbol on this screen.
+     * @return True if an entry was found under \a aName and it had no remaining users.
+     */
+    bool PruneUnusedLibSymbol( const wxString& aName );
+
+    /**
      * Remove \a aItem from the linked list and deletes the object.
      *
      * If \a aItem is a schematic sheet label, it is removed from the screen associated with

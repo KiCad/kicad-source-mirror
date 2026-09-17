@@ -343,32 +343,31 @@ bool SCH_SCREEN::Remove( SCH_ITEM* aItem, bool aUpdateLibSymbol )
     {
         SCH_SYMBOL* removedSymbol = static_cast<SCH_SYMBOL*>( aItem );
 
-        bool removeUnusedLibSymbol = true;
-
-        for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
-        {
-            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-
-            if( removedSymbol->GetSchSymbolLibraryName() == symbol->GetSchSymbolLibraryName() )
-            {
-                removeUnusedLibSymbol = false;
-                break;
-            }
-        }
-
-        if( removeUnusedLibSymbol )
-        {
-            auto it = m_libSymbols.find( removedSymbol->GetSchSymbolLibraryName() );
-
-            if( it != m_libSymbols.end() )
-            {
-                delete it->second;
-                m_libSymbols.erase( it );
-            }
-        }
+        PruneUnusedLibSymbol( removedSymbol->GetSchSymbolLibraryName() );
     }
 
     return retv;
+}
+
+
+bool SCH_SCREEN::PruneUnusedLibSymbol( const wxString& aName )
+{
+    for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+        if( symbol->GetSchSymbolLibraryName() == aName )
+            return false;
+    }
+
+    if( auto it = m_libSymbols.find( aName ); it != m_libSymbols.end() )
+    {
+        delete it->second;
+        m_libSymbols.erase( it );
+        return true;
+    }
+
+    return false;
 }
 
 

@@ -921,33 +921,41 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
     SetMirrorX( aSymbol.transform().mirror_x() );
     SetMirrorY( aSymbol.transform().mirror_y() );
 
-    const SchematicSymbol& def = aSymbol.definition();
-
-    LIB_ID libId = UnpackLibId( def.id() );
-    m_lib_id = libId;
+    // Generally clients should not send symbols without definitions, but if they do as an update for
+    // an existing symbol, it's better to skip deserialization than delete the existing definition,
+    // especially since definitions are cached separately
+    const bool haveDefinition = aSymbol.has_definition();
 
     std::unordered_map<::KIID, wxString> pinAltMap;
 
-    for( const SchematicSymbolChild& child : def.items() )
+    if( haveDefinition )
     {
-        if( TypeNameFromAny( child.item() ) != std::optional<KICAD_T>( SCH_PIN_T ) )
-            continue;
+        const SchematicSymbol& def = aSymbol.definition();
 
-        SchematicPin pinProto;
+        LIB_ID libId = UnpackLibId( def.id() );
+        m_lib_id = libId;
 
-        if( child.item().UnpackTo( &pinProto ) && pinProto.has_active_alternate() )
-            pinAltMap[::KIID( pinProto.id().value() )] = wxString::FromUTF8( pinProto.active_alternate() );
+        for( const SchematicSymbolChild& child : def.items() )
+        {
+            if( TypeNameFromAny( child.item() ) != std::optional<KICAD_T>( SCH_PIN_T ) )
+                continue;
+
+            SchematicPin pinProto;
+
+            if( child.item().UnpackTo( &pinProto ) && pinProto.has_active_alternate() )
+                pinAltMap[::KIID( pinProto.id().value() )] = wxString::FromUTF8( pinProto.active_alternate() );
+        }
+
+        LIB_SYMBOL* libSymbol = new LIB_SYMBOL( libId.GetLibItemName() );
+
+        if( !libSymbol->Deserialize( def ) )
+        {
+            delete libSymbol;
+            return false;
+        }
+
+        SetLibSymbol( libSymbol );
     }
-
-    LIB_SYMBOL* libSymbol = new LIB_SYMBOL( libId.GetLibItemName() );
-
-    if( !libSymbol->Deserialize( def ) )
-    {
-        delete libSymbol;
-        return false;
-    }
-
-    SetLibSymbol( libSymbol );
 
     if( aSymbol.has_body_style() )
         SetBodyStyle( aSymbol.body_style().style() );
@@ -970,6 +978,7 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
             continue;
 
         incoming.insert( name );
+
         if( existing )
             existing->Deserialize( fieldProto, schIUScale );
         else
@@ -1002,21 +1011,24 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
     // so we have to set them up in advance so that UpdatePins links them up with the
     // lib pins, and then we need to set the alternates for pins if applicable
 
-    m_pins.clear();
-
-    for( SCH_PIN* pin : GetAllLibPins() )
+    if( haveDefinition )
     {
-        m_pins.emplace_back( std::make_unique<SCH_PIN>( *pin ) );
-        m_pins.back()->SetParent( this );
-        const_cast<::KIID&>( m_pins.back() ->m_Uuid ) = pin->m_Uuid;
-    }
+        m_pins.clear();
 
-    UpdatePins();
+        for( SCH_PIN* pin : GetAllLibPins() )
+        {
+            m_pins.emplace_back( std::make_unique<SCH_PIN>( *pin ) );
+            m_pins.back()->SetParent( this );
+            const_cast<::KIID&>( m_pins.back() ->m_Uuid ) = pin->m_Uuid;
+        }
 
-    for( SCH_PIN* pin : GetPins() )
-    {
-        if( pinAltMap.contains( pin->m_Uuid ) )
-            pin->SetAlt( pinAltMap.at( pin->m_Uuid ) );
+        UpdatePins();
+
+        for( SCH_PIN* pin : GetPins() )
+        {
+            if( pinAltMap.contains( pin->m_Uuid ) )
+                pin->SetAlt( pinAltMap.at( pin->m_Uuid ) );
+        }
     }
 
     return true;

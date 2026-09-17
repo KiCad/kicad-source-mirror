@@ -168,6 +168,8 @@ BOOST_AUTO_TEST_CASE( SymbolFieldTakesPrecedenceOverCustomProperty )
     symbol.mutable_id()->set_value( "f8688bac-2fcb-4184-ab0e-0cf46a139c43" );
     symbol.mutable_transform()->set_orientation( schematic::types::SchematicSymbolOrientation::SSO_0 );
 
+    symbol.mutable_definition()->mutable_id()->set_entry_name( "R" );
+
     schematic::types::SchematicField* field = symbol.add_user_fields();
     field->set_name( "MPN" );
     field->mutable_text()->set_text( "123" );

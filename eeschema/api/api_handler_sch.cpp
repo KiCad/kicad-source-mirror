@@ -1154,6 +1154,48 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
             }
         }
 
+        if( *type == SCH_SYMBOL_T )
+        {
+            if( symbolProto.has_definition() )
+            {
+                if( symbolProto.definition().id().entry_name().empty() )
+                {
+                    status.set_code( ItemStatusCode::ISC_INVALID_DATA );
+                    status.set_error_message( "symbol definition is missing an entry name" );
+                    aItemHandler( status, anyItem );
+                    continue;
+                }
+            }
+            else if( aCreate )
+            {
+                status.set_code( ItemStatusCode::ISC_INVALID_DATA );
+                status.set_error_message( "a symbol definition is required" );
+                aItemHandler( status, anyItem );
+                continue;
+            }
+            else
+            {
+                // Definition-less update: re-point the temporary at the existing symbol's
+                // library identity so the swap below keeps the library link
+                SCH_SYMBOL* existingSymbol = static_cast<SCH_SYMBOL*>( existingItem );
+                SCH_SYMBOL* tempSymbol = static_cast<SCH_SYMBOL*>( item.get() );
+
+                tempSymbol->SetLibId( existingSymbol->GetLibId() );
+                tempSymbol->SetSchSymbolLibraryName( existingSymbol->UseLibIdLookup()
+                                                             ? wxString( wxEmptyString )
+                                                             : existingSymbol->GetSchSymbolLibraryName() );
+
+                for( const std::unique_ptr<SCH_PIN>& pin : existingSymbol->GetRawPins() )
+                {
+                    tempSymbol->GetRawPins().emplace_back( std::make_unique<SCH_PIN>( *pin ) );
+                    tempSymbol->GetRawPins().back()->SetParent( tempSymbol );
+                }
+
+                if( existingSymbol->GetLibSymbolRef() )
+                    tempSymbol->SetLibSymbol( new LIB_SYMBOL( *existingSymbol->GetLibSymbolRef() ) );
+            }
+        }
+
         if( *type == SCH_SHEET_T )
         {
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item.get() );

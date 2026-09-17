@@ -456,6 +456,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
                 if( origSymbol->GetPins().size() != modSymbol->GetPins().size() )
                     connectivityCleanUp = GLOBAL_CLEANUP;
+
+                if( origSymbol->GetSchSymbolLibraryName() != modSymbol->GetSchSymbolLibraryName() )
+                    screen->PruneUnusedLibSymbol( origSymbol->GetSchSymbolLibraryName() );
             }
 
             if( !( aCommitFlags & SKIP_UNDO ) )
@@ -765,11 +768,15 @@ void SCH_COMMIT::Revert()
             if( item->Type() == SCH_SYMBOL_T )
             {
                 SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+                SCH_SYMBOL* symbolCopy = static_cast<SCH_SYMBOL*>( copy );
+
                 symbol->UpdatePins();
+
+                if( symbol->GetSchSymbolLibraryName() != symbolCopy->GetSchSymbolLibraryName() )
+                    screen->PruneUnusedLibSymbol( symbolCopy->GetSchSymbolLibraryName() );
 
                 CONNECTION_GRAPH* graph = schematic->ConnectionGraph();
 
-                SCH_SYMBOL* symbolCopy = static_cast<SCH_SYMBOL*>( copy );
                 graph->RemoveItem( symbolCopy );
 
                 for( SCH_PIN* pin : symbolCopy->GetPins() )
