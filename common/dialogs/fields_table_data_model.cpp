@@ -477,24 +477,11 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsComputed( int aCol ) const
 }
 
 
-bool FIELDS_TABLE_DATA_MODEL_BASE::IsExpanderColumn( int aCol ) const
-{
-    // Check if aCol is the first visible column
-    for( int col = 0; col < aCol; ++col )
-    {
-        if( m_cols[col].m_show )
-            return false;
-    }
-
-    return true;
-}
-
-
 bool FIELDS_TABLE_DATA_MODEL_BASE::ColIsReadOnly( int aCol ) const
 {
     wxCHECK( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), true );
 
-    return ColIsItemIdentifier( aCol ) || IsExpanderColumn( aCol ) || ColIsComputed( aCol );
+    return ColIsItemIdentifier( aCol ) || ColIsComputed( aCol );
 }
 
 

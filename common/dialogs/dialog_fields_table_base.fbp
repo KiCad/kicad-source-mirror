@@ -2338,7 +2338,7 @@
                                     <property name="pos"></property>
                                     <property name="resize">Resizable</property>
                                     <property name="row_label_horiz_alignment">wxALIGN_CENTER</property>
-                                    <property name="row_label_size">0</property>
+                                    <property name="row_label_size">24</property>
                                     <property name="row_label_values"></property>
                                     <property name="row_label_vert_alignment">wxALIGN_CENTER</property>
                                     <property name="row_sizes"></property>
@@ -2352,9 +2352,8 @@
                                     <property name="window_name"></property>
                                     <property name="window_style"></property>
                                     <event name="OnGridCellChange">OnTableValueChanged</event>
-                                    <event name="OnGridCellLeftClick">OnTableCellClick</event>
-                                    <event name="OnGridCellLeftDClick">OnTableCellClick</event>
                                     <event name="OnGridColSize">OnTableColSize</event>
+                                    <event name="OnGridLabelLeftClick">OnTableLabelClick</event>
                                   </object>
                                 </object>
                               </object>

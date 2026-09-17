@@ -189,7 +189,7 @@ public:
     virtual bool ColIsItemIdentifier( int aCol ) const { return ColIsReference( aCol ); }
 
     virtual bool ColIsReadOnly( int aCol ) const;
-    bool IsExpanderColumn( int aCol ) const override;
+    bool         HasRowLabelExpanders() const override { return true; }
     virtual bool IsCellReadOnly( int aRow, int aCol );
 
     void SetSorting( int aCol, bool aAscending );

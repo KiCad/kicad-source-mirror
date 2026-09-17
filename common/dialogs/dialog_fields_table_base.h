@@ -135,8 +135,8 @@ class KICOMMON_API DIALOG_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnRegroupSymbols( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMenu( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTableValueChanged( wxGridEvent& event ) { event.Skip(); }
-		virtual void OnTableCellClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnTableColSize( wxGridSizeEvent& event ) { event.Skip(); }
+		virtual void OnTableLabelClick( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnPreviewRefresh( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOutputFileBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSidebarToggle( wxCommandEvent& event ) { event.Skip(); }

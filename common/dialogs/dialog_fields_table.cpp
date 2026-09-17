@@ -254,6 +254,7 @@ DIALOG_FIELDS_TABLE::DIALOG_FIELDS_TABLE( wxWindow* aParent, FIELDS_TABLE_SETTIN
 
     m_filter->SetDescriptiveText( _( "Filter" ) );
 
+    m_expanderWidth = m_grid->GetRowLabelSize();
     m_grid->EnableCursorRowColumnHighlight();
     m_grid->GetGridWindow()->Bind( wxEVT_MOUSEWHEEL, &DIALOG_FIELDS_TABLE::OnGridMouseWheel, this );
 }
@@ -660,14 +661,14 @@ void DIALOG_FIELDS_TABLE::SetupColumnProperties( int aCol )
     if( getDataModel()->ColIsItemIdentifier( aCol ) )
     {
         attr->SetReadOnly();
-        attr->SetRenderer( new GRID_CELL_TEXT_RENDERER() );
+        attr->SetRenderer( new wxGridCellStringRenderer() );
         getDataModel()->SetColAttr( attr, aCol );
     }
     else if( getDataModel()->ColIsReference( aCol ) )
     {
         // Keep this after item identifiers so Reference remains read-only in tables where it
         // identifies the item.
-        attr->SetRenderer( new GRID_CELL_TEXT_RENDERER() );
+        attr->SetRenderer( new wxGridCellStringRenderer() );
         attr->SetEditor( createReferenceEditor() );
         getDataModel()->SetColAttr( attr, aCol );
     }
@@ -703,7 +704,7 @@ void DIALOG_FIELDS_TABLE::SetupColumnProperties( int aCol )
     }
     else
     {
-        attr->SetRenderer( new GRID_CELL_TEXT_RENDERER() );
+        attr->SetRenderer( new wxGridCellStringRenderer() );
         attr->SetEditor( m_grid->GetDefaultEditor() );
         getDataModel()->SetColAttr( attr, aCol );
     }
@@ -712,6 +713,8 @@ void DIALOG_FIELDS_TABLE::SetupColumnProperties( int aCol )
 
 void DIALOG_FIELDS_TABLE::SetupAllColumnProperties()
 {
+    updateExpanderColumn();
+
     wxSize defaultDlgSize = GetDefaultDialogSize();
 
     // Restore column sorting order and widths
@@ -770,6 +773,12 @@ void DIALOG_FIELDS_TABLE::SetupAllColumnProperties()
 }
 
 
+void DIALOG_FIELDS_TABLE::updateExpanderColumn()
+{
+    m_grid->SetRowLabelSize( getDataModel()->GetGroupingEnabled() ? m_grid->FromDIP( m_expanderWidth ) : 0 );
+}
+
+
 void DIALOG_FIELDS_TABLE::setSideBarButtonLook( bool aIsLeftPanelCollapsed )
 {
     // Set bitmap and tooltip according to left panel visibility
@@ -806,22 +815,6 @@ void DIALOG_FIELDS_TABLE::OnSidebarToggle( wxCommandEvent& event )
 }
 
 
-void DIALOG_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
-{
-    if( getDataModel()->IsExpanderColumn( event.GetCol() ) )
-    {
-        m_grid->ClearSelection();
-
-        getDataModel()->ExpandCollapseRow( event.GetRow() );
-        m_grid->SetGridCursor( event.GetRow(), event.GetCol() );
-    }
-    else
-    {
-        event.Skip();
-    }
-}
-
-
 void DIALOG_FIELDS_TABLE::OnTableValueChanged( wxGridEvent& aEvent )
 {
     m_grid->ForceRefresh();
@@ -832,6 +825,40 @@ void DIALOG_FIELDS_TABLE::OnTableColSize( wxGridSizeEvent& aEvent )
 {
     aEvent.Skip();
 
+    m_grid->ForceRefresh();
+}
+
+
+void DIALOG_FIELDS_TABLE::OnTableLabelClick( wxGridEvent& aEvent )
+{
+    int row = aEvent.GetRow();
+
+    // Column headers and the corner retain their normal sorting/selection behavior.
+    if( aEvent.GetCol() != -1 || row < 0 || row >= getDataModel()->GetNumberRows() )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    ROW_STATE state = getDataModel()->GetRowState( row );
+
+    if( state != ROW_STATE::COLLAPSED && state != ROW_STATE::EXPANDED_PARENT )
+    {
+        aEvent.Skip();
+        return;
+    }
+
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
+    int col = m_grid->GetGridCursorCol();
+    m_grid->ClearSelection();
+    getDataModel()->ExpandCollapseRow( row );
+
+    if( col >= 0 && col < m_grid->GetNumberCols() )
+        m_grid->SetGridCursor( row, col );
+
+    // Refresh the parent arrow as well as the inserted/deleted child rows.
     m_grid->ForceRefresh();
 }
 
@@ -1156,6 +1183,7 @@ void DIALOG_FIELDS_TABLE::OnFilterScope( wxCommandEvent& aEvent )
 void DIALOG_FIELDS_TABLE::OnGroupSymbolsToggled( wxCommandEvent& aEvent )
 {
     getDataModel()->SetGroupingEnabled( m_groupSymbolsBox->GetValue() );
+    updateExpanderColumn();
     getDataModel()->RebuildRows();
     m_grid->ForceRefresh();
 

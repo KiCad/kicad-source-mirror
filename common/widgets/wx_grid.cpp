@@ -690,6 +690,34 @@ void WX_GRID::DrawRowLabel( wxDC& dc, int row )
 
     rend.DrawBorder( *this, dc, rect );
 
+    if( auto* table = dynamic_cast<WX_GRID_TABLE_BASE*>( GetTable() ); table && table->HasRowLabelExpanders() )
+    {
+        ROW_STATE state = table->GetRowState( row );
+
+        if( state == ROW_STATE::COLLAPSED || state == ROW_STATE::EXPANDED_PARENT )
+        {
+            wxBitmap bitmap = m_rowIconProvider->GetIndicatorIcon(
+                    state == ROW_STATE::COLLAPSED ? ROW_ICON_PROVIDER::CLOSED : ROW_ICON_PROVIDER::OPEN );
+            bitmap.SetScaleFactor( KIPLATFORM::UI::GetPixelScaleFactor( this ) );
+
+            dc.DrawBitmap( bitmap, rect.GetLeft() + ( rect.GetWidth() - bitmap.GetLogicalWidth() ) / 2,
+                           rect.GetTop() + ( rect.GetHeight() - bitmap.GetLogicalHeight() ) / 2, true );
+        }
+        else if( state == ROW_STATE::EXPANDED_CHILD )
+        {
+            // Keep the hierarchy in the gutter so all field text stays aligned.
+            wxDCPenChanger setPen( dc, wxPen( GetLabelTextColour(), FromDIP( 1 ) ) );
+            wxPoint        center( rect.GetLeft() + rect.GetWidth() / 2, rect.GetTop() + rect.GetHeight() / 2 );
+            bool           moreChildren = row + 1 < GetNumberRows()
+                                          && table->GetRowState( row + 1 ) == ROW_STATE::EXPANDED_CHILD;
+
+            dc.DrawLine( center.x, rect.GetTop(), center.x, moreChildren ? rect.GetBottom() + 1 : center.y );
+            dc.DrawLine( center.x, center.y, rect.GetRight() - FromDIP( 4 ), center.y );
+        }
+
+        return;
+    }
+
     // Make sure fonts get scaled correctly on GTK HiDPI monitors
     dc.SetFont( GetLabelFont() );
 

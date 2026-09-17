@@ -52,22 +52,6 @@ protected:
 
 
 /**
- * A general-purpose text renderer for WX_GRIDs backed by WX_GRID_TABLE_BASE tables that can handle
- * drawing expand/collapse controls.
- */
-class KICOMMON_API GRID_CELL_TEXT_RENDERER : public wxGridCellStringRenderer
-{
-public:
-    GRID_CELL_TEXT_RENDERER();
-
-    void Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC& aDC, const wxRect& aRect, int aRow,
-               int aCol, bool isSelected ) override;
-
-    wxSize GetBestSize( wxGrid& grid, wxGridCellAttr& attr, wxDC& dc, int row, int col ) override;
-};
-
-
-/**
  * A text renderer that can unescape text for display
  * This is useful where it's desired to keep the underlying storage escaped.
  */

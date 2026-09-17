@@ -128,6 +128,7 @@ protected:
 
     void SetupColumnProperties( int aCol );
     void SetupAllColumnProperties();
+    void updateExpanderColumn();
 
     virtual wxGridCellEditor* createReferenceEditor();
     virtual wxGridCellEditor* createFootprintEditor();
@@ -137,9 +138,9 @@ protected:
     // Set bitmap and tooltip according to left panel visibility
     void setSideBarButtonLook( bool aIsLeftPanelCollapsed );
 
-    void OnTableCellClick( wxGridEvent& event ) override;
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableColSize( wxGridSizeEvent& event ) override;
+    void OnTableLabelClick( wxGridEvent& event ) override;
     virtual void OnTableSelectionChanged( const std::set<int>& aRows ) = 0;
     void OnSizeViewControlsGrid( wxSizeEvent& event ) override;
     void OnViewControlsCellChanged( wxGridEvent& aEvent ) override;
@@ -198,6 +199,7 @@ protected:
 
     VIEW_CONTROLS_GRID_DATA_MODEL* m_viewControlsDataModel = nullptr;
     int                            m_gridWheelRotation = 0;
+    int                            m_expanderWidth = 0; // wxFormBuilder width, in DIP
 
     // Index in the fields list control for each MANDATORY_FIELD type
     std::map<FIELD_T, int> m_mandatoryFieldListIndexes;

@@ -257,7 +257,7 @@ DIALOG_FIELDS_TABLE_BASE::DIALOG_FIELDS_TABLE_BASE( wxWindow* parent, wxWindowID
 
 	// Rows
 	m_grid->EnableDragRowSize( false );
-	m_grid->SetRowLabelSize( 0 );
+	m_grid->SetRowLabelSize( 24 );
 	m_grid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Label Appearance
@@ -462,9 +462,8 @@ DIALOG_FIELDS_TABLE_BASE::DIALOG_FIELDS_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_bRefresh->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnRegroupSymbols ), NULL, this );
 	m_bMenu->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnMenu ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FIELDS_TABLE_BASE::OnTableValueChanged ), NULL, this );
-	m_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FIELDS_TABLE_BASE::OnTableCellClick ), NULL, this );
-	m_grid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_FIELDS_TABLE_BASE::OnTableCellClick ), NULL, this );
 	m_grid->Connect( wxEVT_GRID_COL_SIZE, wxGridSizeEventHandler( DIALOG_FIELDS_TABLE_BASE::OnTableColSize ), NULL, this );
+	m_grid->Connect( wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEventHandler( DIALOG_FIELDS_TABLE_BASE::OnTableLabelClick ), NULL, this );
 	m_textFieldDelimiter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_textStringDelimiter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_textRefDelimiter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
@@ -505,9 +504,8 @@ DIALOG_FIELDS_TABLE_BASE::~DIALOG_FIELDS_TABLE_BASE()
 	m_bRefresh->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnRegroupSymbols ), NULL, this );
 	m_bMenu->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnMenu ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FIELDS_TABLE_BASE::OnTableValueChanged ), NULL, this );
-	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( DIALOG_FIELDS_TABLE_BASE::OnTableCellClick ), NULL, this );
-	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_FIELDS_TABLE_BASE::OnTableCellClick ), NULL, this );
 	m_grid->Disconnect( wxEVT_GRID_COL_SIZE, wxGridSizeEventHandler( DIALOG_FIELDS_TABLE_BASE::OnTableColSize ), NULL, this );
+	m_grid->Disconnect( wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEventHandler( DIALOG_FIELDS_TABLE_BASE::OnTableLabelClick ), NULL, this );
 	m_textFieldDelimiter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_textStringDelimiter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );
 	m_textRefDelimiter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FIELDS_TABLE_BASE::OnPreviewRefresh ), NULL, this );

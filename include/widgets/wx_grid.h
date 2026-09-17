@@ -80,7 +80,8 @@ public:
         return enhanceAttr( nullptr, aRow, aCol, aKind );
     }
 
-    virtual bool IsExpanderColumn( int aCol ) const { return false; }
+    /// Show grouping controls in the row headers instead of row numbers.
+    virtual bool      HasRowLabelExpanders() const { return false; }
     virtual ROW_STATE GetRowState( int aRow ) const { return ROW_STATE::NON_EXPANDABLE; }
 
     /**
