@@ -3847,21 +3847,29 @@ BOARD_ITEM* FOOTPRINT::DuplicateItem( bool addToParentGroup, BOARD_COMMIT* aComm
     }
 
     case PCB_FIELD_T:
+    {
+        PCB_FIELD* new_field = new PCB_FIELD( *static_cast<const PCB_FIELD*>( aItem ) );
+        new_field->ResetUuidDirect();
+
+        switch( static_cast<const PCB_FIELD*>( aItem )->GetId() )
+        {
+        case FIELD_T::REFERENCE: new_field->SetText( wxT( "${REFERENCE}" ) ); break;
+        case FIELD_T::VALUE:     new_field->SetText( wxT( "${VALUE}" ) );     break;
+        case FIELD_T::DATASHEET: new_field->SetText( wxT( "${DATASHEET}" ) ); break;
+        default:                                                              break;
+        }
+
+        if( addToFootprint )
+            Add( new_field );
+
+        new_item = new_field;
+        break;
+    }
+
     case PCB_TEXT_T:
     {
         PCB_TEXT* new_text = new PCB_TEXT( *static_cast<const PCB_TEXT*>( aItem ) );
         new_text->ResetUuidDirect();
-
-        if( aItem->Type() == PCB_FIELD_T )
-        {
-            switch( static_cast<const PCB_FIELD*>( aItem )->GetId() )
-            {
-            case FIELD_T::REFERENCE: new_text->SetText( wxT( "${REFERENCE}" ) ); break;
-            case FIELD_T::VALUE:     new_text->SetText( wxT( "${VALUE}" ) );     break;
-            case FIELD_T::DATASHEET: new_text->SetText( wxT( "${DATASHEET}" ) ); break;
-            default:                                                             break;
-            }
-        }
 
         if( addToFootprint )
             Add( new_text );
