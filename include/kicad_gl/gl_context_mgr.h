@@ -76,8 +76,11 @@ public:
      * @param aContext is the GL context to be bound.
      * @param aCanvas (optional) allows caller to bind the context to a non-parent canvas
      *                (e.g. when a few canvases share a single GL context).
+     * @return true if the context was made current.  When this returns false the caller must
+     *         not issue any GL command, because the commands would be executed against
+     *         whichever sibling context is still bound.
      */
-    void LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas );
+    bool LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas );
 
     /**
      * Allow other canvases to bind an OpenGL context.

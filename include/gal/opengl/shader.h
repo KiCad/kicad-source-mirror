@@ -82,6 +82,14 @@ public:
     virtual ~SHADER();
 
     /**
+     * Give up ownership of the program and shader objects without deleting them.
+     *
+     * Used when the owning context can no longer be made current.  The names are released
+     * when that context is destroyed.
+     */
+    void Abandon();
+
+    /**
      * Add a shader and compile the shader sources.
      *
      * @param aArgs is the list of strings (std::string or convertible to const char*) which

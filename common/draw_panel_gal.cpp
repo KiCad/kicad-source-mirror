@@ -51,6 +51,8 @@
 
 #include <kiplatform/ui.h>
 
+#include <stdexcept>
+
 #include <core/profile.h>
 
 #include <wx/display.h>
@@ -86,6 +88,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_eventDispatcher( nullptr ),
         m_lostFocus( false ),
         m_glRecoveryAttempted( false ),
+        m_contextBindFailures( 0 ),
         m_stealsFocus( true ),
         m_statusPopup( nullptr )
 {
@@ -250,6 +253,10 @@ bool EDA_DRAW_PANEL_GAL::recoverFromGalError( const std::exception& aError )
 }
 
 
+/// Frames to drop before giving up on the GL context and letting the backend recover
+static constexpr int MAX_CONTEXT_BIND_RETRIES = 2;
+
+
 bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 {
     if( !m_refreshMutex.try_lock() )
@@ -360,6 +367,18 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
             KIGFX::GAL_DRAWING_CONTEXT ctx( m_gal );
             cntCtx.Stop();
 
+            if( !ctx.IsDrawing() )
+            {
+                // A canvas being torn down never reaches here; DoRePaint returns above once
+                // the window stops being visible.  So repeated failures mean a live canvas
+                // whose context is gone for good, and retrying forever would leave it blank
+                if( ++m_contextBindFailures > MAX_CONTEXT_BIND_RETRIES )
+                    throw std::runtime_error( "Could not make the OpenGL context current" );
+
+                RequestRefresh();
+                return false;
+            }
+
             if( m_view->IsTargetDirty( KIGFX::TARGET_OVERLAY )
                 && !m_gal->HasTarget( KIGFX::TARGET_OVERLAY ) )
             {
@@ -406,6 +425,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 
         // OpenGL frame completed successfully, allow future recovery attempts
         m_glRecoveryAttempted = false;
+        m_contextBindFailures = 0;
     }
     catch( std::exception& err )
     {
@@ -452,7 +472,12 @@ void EDA_DRAW_PANEL_GAL::ResizeGal( bool aForce )
         return;
 
     KIGFX::GAL_CONTEXT_LOCKER locker( m_gal );
-    wxSize                    clientSize = GetClientSize();
+
+    // Resizing reallocates the framebuffer, which only exists in this canvas' own context
+    if( !m_gal->IsContextValid() )
+        return;
+
+    wxSize      clientSize = GetClientSize();
     WX_INFOBAR* infobar = GetParentEDAFrame() ? GetParentEDAFrame()->GetInfoBar() : nullptr;
 
     if( !aForce && ToVECTOR2I( clientSize ) == m_gal->GetScreenPixelSize() )
@@ -623,6 +648,8 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
     // Prevent refreshing canvas during backend switch
     StopDrawing();
+
+    m_contextBindFailures = 0;
 
     KIGFX::GAL* new_gal = nullptr;
 

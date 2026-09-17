@@ -51,6 +51,9 @@ public:
         return m_isMapped;
     }
 
+    ///< @copydoc VERTEX_CONTAINER::Abandon()
+    void Abandon() override;
+
     ///< @copydoc VERTEX_CONTAINER::Map()
     void Map() override;
 

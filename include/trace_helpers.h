@@ -256,6 +256,13 @@ extern KICOMMON_API const wxChar* const traceEnvVars;
 extern KICOMMON_API const wxChar* const traceGalProfile;
 
 /**
+ * Flag to enable debug output of GAL context binding.
+ *
+ * Use "KICAD_GAL_CONTEXT" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceGalContext;
+
+/**
  * Flag to enable KiCad2Step debug tracing.
  *
  * Use "KICAD2STEP" to enable.

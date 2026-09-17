@@ -52,6 +52,14 @@ SHADER::SHADER() :
 }
 
 
+void SHADER::Abandon()
+{
+    active = false;
+    isProgramCreated = false;
+    shaderNumbers.clear();
+}
+
+
 SHADER::~SHADER()
 {
     if( active )

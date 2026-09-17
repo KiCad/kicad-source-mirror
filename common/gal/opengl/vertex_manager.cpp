@@ -64,6 +64,12 @@ VERTEX_MANAGER::VERTEX_MANAGER( bool aCached ) :
 }
 
 
+void VERTEX_MANAGER::Abandon()
+{
+    m_container->Abandon();
+}
+
+
 void VERTEX_MANAGER::Map()
 {
     m_container->Map();
