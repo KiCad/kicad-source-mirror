@@ -19,8 +19,10 @@
 
 
 #define BOOST_TEST_NO_MAIN
-#include <boost/test/unit_test.hpp>
+#include <qa_utils/wx_utils/unit_test_utils.h>
+
 #include <string_utils.h>
+
 
 BOOST_AUTO_TEST_SUITE( StringUtilsTests )
 
@@ -315,5 +317,43 @@ BOOST_AUTO_TEST_CASE( StackedPinNotation_EmptyIsSinglePin )
     BOOST_REQUIRE_EQUAL( expanded.size(), 1u );
     BOOST_TEST( expanded[0] == wxEmptyString );
 }
+
+
+struct STRING_ESCAPE_TEST_CASE
+{
+    ESCAPE_CONTEXT Context;
+    wxString       Input;
+    wxString       Expected;
+};
+
+
+BOOST_AUTO_TEST_CASE( StringEscape )
+{
+    // clang-format off
+    const std::vector<STRING_ESCAPE_TEST_CASE> testStrings = {
+        { CTX_NETNAME, wxS( "" ), wxS( "" ) },
+        { CTX_NETNAME, wxS( "abc" ), wxS( "abc" ) },
+        { CTX_NETNAME, wxS( "a/,b" ), wxS( "a{slash},b" ) },
+        { CTX_NETNAME, wxS( "a{b}c" ), wxS( "a{b}c" ) },
+        { CTX_NETNAME, wxS( "a{bc" ), wxS( "a{bc" ) },
+        { CTX_NETNAME, wxS( "abc}" ), wxS( "abc}" ) },
+    };
+    // clang-format on
+
+    for( const auto& testString : testStrings )
+    {
+        BOOST_TEST_INFO( "Testing EscapeString with input: " << testString.Input );
+
+        const wxString actual = EscapeString( testString.Input, testString.Context );
+
+        BOOST_TEST( actual == testString.Expected );
+
+        // Test the round-trip.
+        const wxString unescaped = UnescapeString( actual );
+
+        BOOST_TEST( unescaped == testString.Input );
+    }
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

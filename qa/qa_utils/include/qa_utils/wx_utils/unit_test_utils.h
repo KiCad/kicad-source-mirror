@@ -185,6 +185,19 @@ std::ostream& boost_test_print_type( std::ostream& os, const wchar_t ( &ws )[N] 
 }
 
 
+namespace boost { namespace unit_test
+{
+/**
+ * wxString looks like a container to Boost.Test because it has begin()/end().
+ *
+ * But we actually want to treat it NOT like a container so that it prints the
+ * value in constructions like BOOST_TEST( strA == strB )
+ */
+template<> struct is_forward_iterable<wxString> : public mpl::false_ {};
+
+}} // namespace boost::unit_test
+
+
 namespace boost { namespace test_tools { namespace tt_detail {
 
 template<std::size_t N>
