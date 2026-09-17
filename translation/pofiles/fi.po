@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-17 13:25+0000\n"
+"PO-Revision-Date: 2026-09-17 15:06+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -23805,8 +23805,8 @@ msgstr "DipTrace-tuonti: virheellinen väylämäärä %d."
 #, c-format
 msgid "DipTrace import: failed to parse component %zu at offset 0x%06zX: %s"
 msgstr ""
-"DipTrace tuonti: komponentin %zy jäsentely epäonnistui poikkeamassa 0x%06zX:"
-"%s"
+"DipTrace tuonti: komponentin %zu jäsentely epäonnistui poikkeamassa "
+"0x%06zX:%s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:689
 #, c-format
