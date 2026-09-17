@@ -97,6 +97,7 @@ private:
     FIELD_VALIDATOR m_nonUrlValidator;
 
     wxGridCellAttr* m_readOnlyAttr;
+    wxGridCellAttr* m_fieldNameAttr;
     wxGridCellAttr* m_boolColAttr;
     wxGridCellAttr* m_orientationColAttr;
     wxGridCellAttr* m_layerColAttr;

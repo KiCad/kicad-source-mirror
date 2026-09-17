@@ -67,6 +67,7 @@ private:
     void ChangeFootprint( wxCommandEvent&  ) override;
     void OnAddField( wxCommandEvent&  ) override;
     void OnDeleteField( wxCommandEvent&  ) override;
+    void OnGridCellChanging( wxGridEvent& aEvent );
     void OnUpdateUI( wxUpdateUIEvent&  ) override;
     void OnPageChanging( wxNotebookEvent& event ) override;
     void OnCombobox( wxCommandEvent& event ) override;

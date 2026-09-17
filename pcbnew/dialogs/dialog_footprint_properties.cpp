@@ -41,6 +41,7 @@
 #include <widgets/text_ctrl_eval.h>
 #include <widgets/std_bitmap_button.h>
 #include <settings/settings_manager.h>
+#include <template_fieldnames.h>
 #include <panel_embedded_files.h>
 #include <panel_fp_properties_3d_model.h>
 #include <dialogs/panel_preview_3d_model.h>
@@ -96,6 +97,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_itemsGrid->SetTable( m_fields );
     m_itemsGrid->OverrideMinSize( 1.0, 1.0 );
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
+    m_itemsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &DIALOG_FOOTPRINT_PROPERTIES::OnGridCellChanging, this );
     m_itemsGrid->SetupColumnAutosizer( PFC_VALUE );
     m_itemsGrid->ShowHideColumns( "0 1 2 3 4 5 7" );
 
@@ -180,6 +182,8 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
 
 DIALOG_FOOTPRINT_PROPERTIES::~DIALOG_FOOTPRINT_PROPERTIES()
 {
+    m_itemsGrid->Unbind( wxEVT_GRID_CELL_CHANGING, &DIALOG_FOOTPRINT_PROPERTIES::OnGridCellChanging, this );
+
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_fields );
 
@@ -806,6 +810,43 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnDeleteField( wxCommandEvent&  )
             } );
 
     OnModify();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES::OnGridCellChanging( wxGridEvent& aEvent )
+{
+    wxGridCellEditor* editor = m_itemsGrid->GetCellEditor( aEvent.GetRow(), aEvent.GetCol() );
+    wxControl*        control = editor->GetControl();
+
+    if( control && control->GetValidator() && !control->GetValidator()->Validate( control ) )
+    {
+        aEvent.Veto();
+        m_delayedFocusGrid = m_itemsGrid;
+        m_delayedFocusRow = aEvent.GetRow();
+        m_delayedFocusColumn = aEvent.GetCol();
+    }
+    else if( aEvent.GetCol() == PFC_NAME )
+    {
+        wxString newName = aEvent.GetString();
+
+        for( int row = 0; row < m_itemsGrid->GetNumberRows(); ++row )
+        {
+            if( row == aEvent.GetRow() )
+                continue;
+
+            if( FieldNamesAreDuplicates( newName, m_itemsGrid->GetCellValue( row, PFC_NAME ) ) )
+            {
+                aEvent.Veto();
+                m_delayedFocusGrid = m_itemsGrid;
+                m_delayedFocusRow = aEvent.GetRow();
+                m_delayedFocusColumn = aEvent.GetCol();
+                m_delayedErrorMessage = wxString::Format( _( "Field name '%s' already in use." ), newName );
+                break;
+            }
+        }
+    }
+
+    editor->DecRef();
 }
 
 

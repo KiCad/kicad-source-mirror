@@ -68,6 +68,7 @@ private:
     void OnRemoveNettieGroup( wxCommandEvent& event ) override;
     void OnAddJumperGroup( wxCommandEvent& event ) override;
     void OnRemoveJumperGroup( wxCommandEvent& event ) override;
+    void OnGridCellChanging( wxGridEvent& aEvent );
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnPageChanging( wxNotebookEvent& event ) override;
     void OnText( wxCommandEvent& event ) override;

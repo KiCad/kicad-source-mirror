@@ -58,6 +58,11 @@ PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHI
     m_readOnlyAttr = new wxGridCellAttr;
     m_readOnlyAttr->SetReadOnly( true );
 
+    m_fieldNameAttr = new wxGridCellAttr;
+    GRID_CELL_TEXT_EDITOR* nameEditor = new GRID_CELL_TEXT_EDITOR();
+    nameEditor->SetValidator( m_fieldNameValidator );
+    m_fieldNameAttr->SetEditor( nameEditor );
+
     m_boolColAttr = new wxGridCellAttr;
     m_boolColAttr->SetRenderer( new wxGridCellBoolRenderer() );
     m_boolColAttr->SetEditor( new wxGridCellBoolEditor() );
@@ -102,6 +107,7 @@ PCB_FIELDS_GRID_TABLE::PCB_FIELDS_GRID_TABLE( PCB_BASE_FRAME* aFrame, DIALOG_SHI
 PCB_FIELDS_GRID_TABLE::~PCB_FIELDS_GRID_TABLE()
 {
     m_readOnlyAttr->DecRef();
+    m_fieldNameAttr->DecRef();
     m_boolColAttr->DecRef();
     m_orientationColAttr->DecRef();
     m_layerColAttr->DecRef();
@@ -210,7 +216,8 @@ wxGridCellAttr* PCB_FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol,
             return enhanceAttr( m_readOnlyAttr, aRow, aCol, aKind );
         }
 
-        return enhanceAttr( nullptr, aRow, aCol, aKind );
+        m_fieldNameAttr->IncRef();
+        return enhanceAttr( m_fieldNameAttr, aRow, aCol, aKind );
 
     case PFC_VALUE:
         if( field.GetId() == FIELD_T::REFERENCE )

@@ -49,6 +49,7 @@
 #include <panel_fp_properties_3d_model.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
+#include <template_fieldnames.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
@@ -205,6 +206,7 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
     m_customUserLayersGrid->SetTable( m_customUserLayers );
 
     m_itemsGrid->PushEventHandler( new GRID_TRICKS( m_itemsGrid ) );
+    m_itemsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridCellChanging, this );
     m_privateLayersGrid->PushEventHandler( new GRID_TRICKS( m_privateLayersGrid,
                                                             [this]( wxCommandEvent& aEvent )
                                                             {
@@ -295,6 +297,8 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR( FO
 
 DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR()
 {
+    m_itemsGrid->Unbind( wxEVT_GRID_CELL_CHANGING, &DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridCellChanging, this );
+
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_fields );
     m_privateLayersGrid->DestroyTable( m_privateLayers );
@@ -1073,6 +1077,45 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::onRemoveGroup( WX_GRID* aGrid )
             } );
 
     OnModify();
+}
+
+
+void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnGridCellChanging( wxGridEvent& aEvent )
+{
+    wxGridCellEditor* editor = m_itemsGrid->GetCellEditor( aEvent.GetRow(), aEvent.GetCol() );
+    wxControl*        control = editor->GetControl();
+
+    if( control && control->GetValidator() && !control->GetValidator()->Validate( control ) )
+    {
+        aEvent.Veto();
+        m_delayedFocusGrid = m_itemsGrid;
+        m_delayedFocusRow = aEvent.GetRow();
+        m_delayedFocusColumn = aEvent.GetCol();
+        m_delayedFocusPage = NOTEBOOK_PAGES::PAGE_GENERAL;
+    }
+    else if( aEvent.GetCol() == PFC_NAME )
+    {
+        wxString newName = aEvent.GetString();
+
+        for( int row = 0; row < m_itemsGrid->GetNumberRows(); ++row )
+        {
+            if( row == aEvent.GetRow() )
+                continue;
+
+            if( FieldNamesAreDuplicates( newName, m_itemsGrid->GetCellValue( row, PFC_NAME ) ) )
+            {
+                aEvent.Veto();
+                m_delayedFocusGrid = m_itemsGrid;
+                m_delayedFocusRow = aEvent.GetRow();
+                m_delayedFocusColumn = aEvent.GetCol();
+                m_delayedFocusPage = NOTEBOOK_PAGES::PAGE_GENERAL;
+                m_delayedErrorMessage = wxString::Format( _( "Field name '%s' already in use." ), newName );
+                break;
+            }
+        }
+    }
+
+    editor->DecRef();
 }
 
 
