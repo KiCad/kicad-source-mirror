@@ -1009,6 +1009,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( SCH_ACTIONS::drawEllipseArc );
     CURRENT_TOOL( SCH_ACTIONS::drawArc );
     CURRENT_TOOL( SCH_ACTIONS::drawBezier );
+    CURRENT_TOOL( SCH_ACTIONS::drawPolygon );
     CURRENT_TOOL( SCH_ACTIONS::drawLines );
     CURRENT_TOOL( SCH_ACTIONS::placeSchematicText );
     CURRENT_TOOL( SCH_ACTIONS::drawTextBox );
