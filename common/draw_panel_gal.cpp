@@ -86,6 +86,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_lostFocus( false ),
         m_glRecoveryAttempted( false ),
         m_contextBindFailures( 0 ),
+        m_pendingResize( false ),
         m_stealsFocus( true ),
         m_statusPopup( nullptr )
 {
@@ -268,6 +269,10 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 
     if( m_drawing )
         return false;
+
+    // The context may have become current since the size change was deferred
+    if( m_pendingResize )
+        ResizeGal();
 
     m_lastRepaintStart = std::chrono::steady_clock::now();
 
@@ -495,7 +500,15 @@ void EDA_DRAW_PANEL_GAL::ResizeGal( bool aForce )
 
     // Resizing reallocates the framebuffer, which only exists in this canvas' own context
     if( !m_gal->IsContextValid() )
+    {
+        // wx reports a given size once, so dropping it here would leave the canvas stuck at
+        // whatever size the GAL was built with until something else resizes the window
+        m_pendingResize = true;
+        RequestRefresh();
         return;
+    }
+
+    m_pendingResize = false;
 
     wxSize clientSize = GetClientSize();
 
@@ -675,6 +688,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     StopDrawing();
 
     m_contextBindFailures = 0;
+    m_pendingResize = false;
 
     KIGFX::GAL* new_gal = nullptr;
 

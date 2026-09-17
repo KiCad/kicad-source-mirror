@@ -28,6 +28,7 @@
 #include <kicad_gl/gl_context_mgr.h>
 
 #include <iostream>
+#include <optional>
 #include <wx/dcclient.h>
 
 #include <base_units.h>
@@ -39,6 +40,7 @@
 #include <settings/common_settings.h>
 
 #include "3d_rendering/opengl/3d_model.h"
+#include "3d_rendering/orphaned_gl_objects.h"
 #include "3d_rendering/opengl/opengl_utils.h"
 #include "3d_cache/3d_cache.h"
 #include "eda_3d_model_viewer.h"
@@ -114,7 +116,12 @@ EDA_3D_MODEL_VIEWER::~EDA_3D_MODEL_VIEWER()
 
     if( m_glRC && gl_mgr )
     {
-        gl_mgr->LockCtx( m_glRC, this );
+        // Without the native window our context cannot be made current, and the model's
+        // buffers must not be deleted against whichever context is
+        std::optional<ORPHANED_GL_OBJECTS> orphaned;
+
+        if( !gl_mgr->LockCtx( m_glRC, this ) )
+            orphaned.emplace();
 
         delete m_ogl_3dmodel;
         m_ogl_3dmodel = nullptr;

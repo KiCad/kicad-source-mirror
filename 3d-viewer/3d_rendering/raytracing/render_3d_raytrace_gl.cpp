@@ -29,6 +29,7 @@
 #include <wx/log.h>
 
 #include "render_3d_raytrace_gl.h"
+#include "../orphaned_gl_objects.h"
 #include "../common_ogl/ogl_utils.h"
 
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
@@ -58,7 +59,7 @@ void RENDER_3D_RAYTRACE_GL::deletePbo()
     // Delete PBO if it was created
     if( m_openglSupportsVertexBufferObjects )
     {
-        if( glIsBuffer( m_pboId ) )
+        if( !ORPHANED_GL_OBJECTS::Active() && glIsBuffer( m_pboId ) )
             glDeleteBuffers( 1, &m_pboId );
 
         m_pboId = GL_NONE;
