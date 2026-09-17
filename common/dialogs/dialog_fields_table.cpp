@@ -1206,9 +1206,8 @@ void DIALOG_FIELDS_TABLE::OnColMove( wxGridEvent& aEvent )
                 SetupAllColumnProperties();
 
                 m_grid->ForceRefresh();
+                syncBomPresetSelection();
             } );
-
-    syncBomPresetSelection();
 }
 
 
