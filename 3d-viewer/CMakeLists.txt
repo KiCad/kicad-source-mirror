@@ -94,6 +94,7 @@ set(3D-VIEWER_SRCS
     common_ogl/ogl_utils.cpp
     3d_fastmath.cpp
     3d_math.cpp
+    3d_model_align.cpp
     dialogs/appearance_controls_3D.cpp
     dialogs/appearance_controls_3D_base.cpp
     dialogs/dialog_select_3d_model_base.cpp
@@ -131,6 +132,7 @@ target_link_libraries( 3d-viewer
         core
         common
         nlohmann_json
+        eigen
         Boost::headers
         ${wxWidgets_LIBRARIES}
         ${OPENGL_LIBRARIES}

@@ -1132,7 +1132,15 @@ void DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
     if( static_cast<int>( m_delayedFocusPage ) >= 0 )
     {
         if( m_NoteBook->GetSelection() != static_cast<int>( m_delayedFocusPage ) )
-            m_NoteBook->ChangeSelection( static_cast<int>( m_delayedFocusPage ) );
+        {
+            const int newPage = static_cast<int>( m_delayedFocusPage );
+            const int oldPage = m_NoteBook->ChangeSelection( newPage );
+
+            // Notify page tools without rerunning the validation that requested this switch.
+            wxBookCtrlEvent changed( wxEVT_NOTEBOOK_PAGE_CHANGED, m_NoteBook->GetId(), newPage, oldPage );
+            changed.SetEventObject( m_NoteBook );
+            m_NoteBook->GetEventHandler()->ProcessEvent( changed );
+        }
 
         m_delayedFocusPage = NOTEBOOK_PAGES::PAGE_UNKNOWN;
     }

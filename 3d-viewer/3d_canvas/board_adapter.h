@@ -23,6 +23,7 @@
 #define BOARD_ADAPTER_H
 
 #include <array>
+#include <optional>
 #include <vector>
 #include "../3d_rendering/raytracing/accelerators/container_2d.h"
 #include "../3d_rendering/raytracing/accelerators/container_3d.h"
@@ -116,6 +117,12 @@ public:
     std::bitset<LAYER_3D_END> GetVisibleLayers() const;
     std::bitset<LAYER_3D_END> GetDefaultVisibleLayers() const;
     void SetVisibleLayers( const std::bitset<LAYER_3D_END>& aLayers );
+
+    /** Temporarily override preview visibility without changing the saved render settings. */
+    void SetVisibilityOverride( const std::optional<std::bitset<LAYER_3D_END>>& aLayers )
+    {
+        m_visibilityOverride = aLayers;
+    }
 
     bool GetUseBoardEditorCopperLayerColors() const;
 
@@ -556,6 +563,8 @@ public:
 private:
     BOARD*                  m_board;
     S3D_CACHE*              m_3dModelManager;
+
+    std::optional<std::bitset<LAYER_3D_END>> m_visibilityOverride;
 
     VECTOR2I                m_boardPos;             ///< Board center position in board internal units.
     VECTOR2I                m_boardSize;            ///< Board size in board internal units.

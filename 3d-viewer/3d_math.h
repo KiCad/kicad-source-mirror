@@ -40,6 +40,25 @@
  */
 glm::mat4 CalcModelMatrix( const SFVEC3F& aOffset, const SFVEC3F& aRotation, const SFVEC3F& aScale );
 
+/**
+ * Recover the FP_3DMODEL angles that CalcModelMatrix() would turn into @a aRotation.
+ *
+ * @param aRotation an orthonormal rotation matrix.
+ * @return the raw FP_3DMODEL::m_Rotation degrees.
+ */
+SFVEC3F CalcModelRotation( const glm::mat3& aRotation );
+
+/**
+ * Interpolate between two model orientations along the shortest arc.
+ *
+ * Both angle triplets are raw FP_3DMODEL::m_Rotation degrees.  Interpolating the
+ * angles directly would tumble through gimbal lock, so the ends are converted to
+ * quaternions and the result is decomposed back.
+ *
+ * @param aT the interpolation parameter, clamped to [0, 1].
+ */
+SFVEC3F InterpolateModelRotation( const SFVEC3F& aStart, const SFVEC3F& aEnd, float aT );
+
 
 /**
  * https://en.wikipedia.org/wiki/Spherical_coordinate_system

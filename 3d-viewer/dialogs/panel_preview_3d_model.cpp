@@ -38,6 +38,18 @@
 #include <common_ogl/ogl_attr_list.h>
 #include <dpi_scaling_common.h>
 #include <footprint.h>
+#include <pad.h>
+#include <3d_math.h>
+#include <core/profile.h>
+#include <geometry/shape_poly_set.h>
+#include <widgets/text_ctrl_eval.h>
+#include <libraries/library_manager.h>
+#include <footprint_library_adapter.h>
+#include <scoped_set_reset.h>
+#include <wildcards_and_files_ext.h>
+#include <wx/filename.h>
+#include <cmath>
+#include <limits>
 #include <lset.h>
 #include <pgm_base.h>
 #include <project_pcb.h>
@@ -53,6 +65,11 @@
 #else
 #include <3d_navlib/nl_footprint_properties_plugin.h>
 #endif
+
+/// Duration and frame interval of the slide from the old placement to the aligned one.
+static constexpr double ALIGN_ANIMATION_SECONDS = 1.0;
+static constexpr int    ALIGN_ANIMATION_INTERVAL_MS = 16;
+
 
 static wxString evaluateTextCtrl( const wxString& aValue )
 {
@@ -110,6 +127,7 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
         m_parentFrame( aFrame ),
         m_previewPane( nullptr ),
         m_infobar( nullptr ),
+        m_alignmentInfoBar( nullptr ),
         m_boardAdapter(),
         m_currentCamera( m_trackBallCamera ),
         m_trackBallCamera( 2 * RANGE_SCALE_3D )
@@ -251,8 +269,10 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
 
     m_infobar = new WX_INFOBAR( this );
     m_previewPane->SetInfoBar( m_infobar );
+    m_alignmentInfoBar = new WX_INFOBAR( this );
 
     m_SizerPanelView->Add( m_infobar, 0, wxEXPAND, 0 );
+    m_SizerPanelView->Add( m_alignmentInfoBar, 0, wxEXPAND, 0 );
     m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND, 5 );
 
     for( wxEventType eventType : { wxEVT_MENU_OPEN, wxEVT_MENU_CLOSE, wxEVT_MENU_HIGHLIGHT } )
@@ -262,11 +282,21 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
                      nullptr, this );
 
     Bind( wxCUSTOM_PANEL_SHOWN_EVENT, &PANEL_PREVIEW_3D_MODEL::onPanelShownEvent, this );
+    Bind( wxEVT_CHAR_HOOK, &PANEL_PREVIEW_3D_MODEL::onAlignKey, this );
+    m_previewPane->Bind( wxEVT_CHAR_HOOK, &PANEL_PREVIEW_3D_MODEL::onAlignKey, this );
+
+    m_alignAnimTimer.SetOwner( this );
+    Bind( wxEVT_TIMER, &PANEL_PREVIEW_3D_MODEL::onAlignAnimation, this, m_alignAnimTimer.GetId() );
 }
 
 
 PANEL_PREVIEW_3D_MODEL::~PANEL_PREVIEW_3D_MODEL()
 {
+    m_alignAnimTimer.Stop();
+    m_previewPane->SetPickHandler( {} );
+    m_previewPane->SetHoverHandler( {} );
+    restoreAlignmentView();
+
     // Shutdown all running tools
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
@@ -345,8 +375,592 @@ wxString PANEL_PREVIEW_3D_MODEL::formatOffsetValue( double aValue )
 }
 
 
+bool PANEL_PREVIEW_3D_MODEL::canAlign() const
+{
+    if( m_extrudedBody || !m_parentModelList || m_selected < 0
+        || m_selected >= (int) m_parentModelList->size() )
+    {
+        return false;
+    }
+
+    const FP_3DMODEL& model = m_parentModelList->at( m_selected );
+    const std::string extension = wxFileName( model.m_Filename ).GetExt().utf8_string();
+
+    return model.m_Show
+           && compareFileExtensions( extension, { FILEEXT::StepFileExtension, FILEEXT::StepFileAbrvExtension,
+                                                  FILEEXT::StepZFileAbrvExtension } )
+           && std::isfinite( model.m_Scale.x ) && model.m_Scale.x != 0.0
+           && std::isfinite( model.m_Scale.y ) && model.m_Scale.y != 0.0
+           && std::isfinite( model.m_Scale.z ) && model.m_Scale.z != 0.0;
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::onAlignUpdateUI( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( canAlign() );
+}
+
+
+const S3DMODEL* PANEL_PREVIEW_3D_MODEL::alignmentModel()
+{
+    if( !canAlign() )
+        return nullptr;
+
+    wxString basePath;
+
+    try
+    {
+        auto row = PROJECT_PCB::FootprintLibAdapter( m_dummyBoard->GetProject() )
+                           ->GetRow( m_dummyFootprint->GetFPID().GetLibNickname() );
+
+        if( row )
+            basePath = LIBRARY_MANAGER::GetFullURI( *row, true );
+    }
+    catch( const IO_ERROR& )
+    {
+        // Models may have absolute paths even when the footprint library is unavailable.
+    }
+
+    syncLocalEmbeddedFiles();
+    return m_boardAdapter.Get3dCacheManager()->GetModel(
+            m_parentModelList->at( m_selected ).m_Filename, basePath,
+            { m_dummyFootprint->GetEmbeddedFiles(), m_dummyBoard->GetEmbeddedFiles() } );
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::refreshAlignmentView()
+{
+    SCOPED_SET_RESET<bool> updating( m_alignUpdating, true );
+    UpdateDummyFootprint( true );
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::restoreAlignmentView()
+{
+    m_previewPane->JoinBgWorker();
+
+    if( m_alignBodyShown )
+    {
+        if( EXTRUDED_3D_BODY* body = m_dummyFootprint->GetExtrudedBody() )
+            body->m_show = *m_alignBodyShown;
+
+        m_alignBodyShown.reset();
+    }
+
+    m_boardAdapter.SetVisibilityOverride( std::nullopt );
+    m_alignLayers.reset();
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::stopPicking()
+{
+    m_previewPane->SetPickHandler( {} );
+    m_previewPane->SetHoverHandler( {} );
+    restoreAlignmentView();
+    m_alignButton->SetLabel( _( "Align" ) );
+    Layout();
+    refreshAlignmentView();
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::dismissAlignmentInfoBar()
+{
+    if( !m_alignmentInfoBar->IsShown() )
+        return;
+
+    // Dismiss() does not hide the bar when its notebook page is already hidden.
+    if( m_alignmentInfoBar->IsShownOnScreen() )
+        m_alignmentInfoBar->Dismiss();
+    else
+        m_alignmentInfoBar->Hide();
+
+    Layout();
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::cancelAlignment()
+{
+    dismissAlignmentInfoBar();
+
+    if( m_alignAnimating || !m_alignFaceTriangles.empty() )
+    {
+        stopAlignmentAnimation();
+        m_alignFaceTriangles.clear();
+        m_alignHoverRegion.reset();
+        m_alignHoverPad = nullptr;
+        updateAlignmentOverlays();
+    }
+
+    if( m_alignState == ALIGN_STATE::IDLE )
+        return;
+
+    const bool picking = m_alignState != ALIGN_STATE::SOLVED;
+    m_alignState = ALIGN_STATE::IDLE;
+    m_alignRegions.clear();
+    m_alignTriangleRegions.clear();
+    m_alignSolutions.clear();
+    m_alignGeometry = nullptr;
+
+    if( picking )
+        stopPicking();
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::onAlignKey( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_ESCAPE
+        && ( m_alignState == ALIGN_STATE::PICK_MODEL || m_alignState == ALIGN_STATE::PICK_FOOTPRINT ) )
+    {
+        cancelAlignment();
+        return;
+    }
+
+    aEvent.Skip();
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::onAlign( wxCommandEvent& aEvent )
+{
+    if( m_alignState == ALIGN_STATE::PICK_MODEL || m_alignState == ALIGN_STATE::PICK_FOOTPRINT )
+    {
+        cancelAlignment();
+        return;
+    }
+
+    if( !canAlign() )
+        return;
+
+    if( m_alignState == ALIGN_STATE::SOLVED && !m_alignSolutions.empty() )
+    {
+        m_alignSolution = ( m_alignSolution + 1 ) % m_alignSolutions.size();
+        applyAlignment();
+        return;
+    }
+
+    const S3DMODEL* geometry = alignmentModel();
+
+    if( !geometry )
+        return;
+
+    const auto& scale = m_parentModelList->at( m_selected ).m_Scale;
+    m_alignRegions = MODEL_ALIGN::BuildRegions( *geometry, glm::dvec3( scale.x, scale.y, scale.z ) );
+
+    if( m_alignRegions.empty() )
+        return;
+
+    m_alignGeometry = geometry;
+    m_alignTriangleRegions.clear();
+
+    for( size_t i = 0; i < m_alignRegions.size(); ++i )
+    {
+        for( const std::array<unsigned int, 2>& source : m_alignRegions[i].sourceTriangles )
+            m_alignTriangleRegions.emplace( source, i );
+    }
+
+    if( EXTRUDED_3D_BODY* body = m_dummyFootprint->GetExtrudedBody() )
+    {
+        m_alignBodyShown = body->m_show;
+        body->m_show = false;
+    }
+
+    m_alignLayers = m_boardAdapter.GetVisibleLayers();
+    auto layers = *m_alignLayers;
+
+    for( int layer : { LAYER_3D_COPPER_TOP, LAYER_3D_COPPER_BOTTOM, LAYER_3D_PLATED_BARRELS, LAYER_3D_SOLDERPASTE,
+                      LAYER_3D_SOLDERMASK_TOP, LAYER_3D_SOLDERMASK_BOTTOM, LAYER_3D_BOARD } )
+    {
+        layers.reset( layer );
+    }
+
+    m_boardAdapter.SetVisibilityOverride( layers );
+    m_alignState = ALIGN_STATE::PICK_MODEL;
+    m_alignButton->SetLabel( _( "Cancel alignment" ) );
+    Layout();
+    m_previewPane->SetPickHandler( [this]( const RAY& aRay ) { return pickAlignment( aRay ); } );
+    m_previewPane->SetHoverHandler( [this]( const std::optional<RAY>& aRay ) { hoverAlignment( aRay ); } );
+    m_alignmentInfoBar->ShowMessage( _( "Click the model face that sits on the board. Press Esc to cancel." ),
+                                     wxICON_INFORMATION );
+    refreshAlignmentView();
+}
+
+
+bool PANEL_PREVIEW_3D_MODEL::pickAlignment( const RAY& aRay )
+{
+    m_previewPane->JoinBgWorker();
+
+    if( !canAlign() )
+    {
+        cancelAlignment();
+        return true;
+    }
+
+    if( m_alignState == ALIGN_STATE::PICK_MODEL )
+    {
+        std::optional<size_t> region = alignmentRegionAt( aRay );
+
+        if( !region )
+            return true;
+
+        m_alignSeed = *region;
+        m_alignFaceTriangles = alignmentRegionTriangles( m_alignSeed );
+        m_alignHoverRegion.reset();
+        m_alignState = ALIGN_STATE::PICK_FOOTPRINT;
+        auto layers = *m_alignLayers;
+        layers.set( LAYER_3D_COPPER_TOP );
+        layers.reset( LAYER_3D_COPPER_BOTTOM );
+        layers.reset( LAYER_3D_SOLDERMASK_TOP );
+        layers.reset( LAYER_3D_SOLDERPASTE );
+        m_boardAdapter.SetVisibilityOverride( layers );
+        m_alignmentInfoBar->ShowMessage( _( "Click the footprint pad for that contact. Press Esc to cancel." ),
+                                         wxICON_INFORMATION );
+        m_previewPane->SetView3D( VIEW3D_TYPE::VIEW3D_TOP );
+        refreshAlignmentView();
+        updateAlignmentOverlays();
+        return true;
+    }
+
+    if( m_alignState != ALIGN_STATE::PICK_FOOTPRINT )
+        return false;
+
+    PAD* clicked = m_previewPane->PickFootprintPad( aRay, *m_dummyFootprint );
+
+    if( !clicked || ( clicked->GetAttribute() != PAD_ATTRIB::SMD
+                     && clicked->GetAttribute() != PAD_ATTRIB::PTH ) )
+    {
+        return true;
+    }
+
+    std::vector<MODEL_ALIGN::PAD> pads;
+    size_t clickedIndex = 0;
+    const VECTOR2I origin = m_dummyFootprint->GetPosition();
+
+    for( const PAD* pad : m_dummyFootprint->Pads() )
+    {
+        if( pad == clicked )
+            clickedIndex = pads.size();
+
+        const VECTOR2I pos = pad->GetPosition() - origin;
+        const VECTOR2I size = pad->GetSize( F_Cu );
+        const VECTOR2I drill = pad->GetDrillSize();
+        MODEL_ALIGN::PAD item;
+        item.number = pad->GetNumber().utf8_string();
+        item.position = glm::dvec2( pos.x, -pos.y ) / pcbIUScale.IU_PER_MM;
+        item.size = glm::dvec2( size.x, size.y ) / pcbIUScale.IU_PER_MM;
+        item.drill = glm::dvec2( drill.x, drill.y ) / pcbIUScale.IU_PER_MM;
+        item.rotation = pad->GetOrientationDegrees();
+        item.attribute = pad->GetAttribute() == PAD_ATTRIB::SMD ? MODEL_ALIGN::PAD_ATTRIBUTE::SMD
+                         : pad->GetAttribute() == PAD_ATTRIB::PTH ? MODEL_ALIGN::PAD_ATTRIBUTE::THROUGH_HOLE
+                                                                : MODEL_ALIGN::PAD_ATTRIBUTE::OTHER;
+        pads.push_back( std::move( item ) );
+    }
+
+    const auto& rotation = m_parentModelList->at( m_selected ).m_Rotation;
+    m_alignSolutions = MODEL_ALIGN::SolveAlignment(
+            m_alignRegions, m_alignSeed, MODEL_ALIGN::BuildPadGroup( pads, clickedIndex ), pads,
+            glm::dvec3( -rotation.x, -rotation.y, -rotation.z ) );
+
+    if( m_alignSolutions.empty() )
+    {
+        cancelAlignment();
+        return true;
+    }
+
+    m_alignState = ALIGN_STATE::SOLVED;
+    m_alignSolution = 0;
+    m_alignHoverPad = nullptr;
+    stopPicking();
+    applyAlignment();
+
+    if( m_alignSolutions.size() == 1 )
+    {
+        // Nothing to cycle through, so leave the session behind and keep the result.
+        m_alignState = ALIGN_STATE::IDLE;
+        m_alignRegions.clear();
+        m_alignTriangleRegions.clear();
+        m_alignSolutions.clear();
+        m_alignGeometry = nullptr;
+    }
+
+    return true;
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::applyAlignment()
+{
+    const MODEL_ALIGN::ALIGN_SOLUTION& solution = m_alignSolutions.at( m_alignSolution );
+    const FP_3DMODEL&                  model = m_parentModelList->at( m_selected );
+    const VECTOR3D                     fromRotation = model.m_Rotation;
+    const VECTOR3D                     fromOffset = model.m_Offset;
+
+    xrot->ChangeValue( formatRotationValue( normalizeRotation( solution.rotation.x ) ) );
+    yrot->ChangeValue( formatRotationValue( normalizeRotation( solution.rotation.y ) ) );
+    zrot->ChangeValue( formatRotationValue( normalizeRotation( solution.rotation.z ) ) );
+    xoff->ChangeValue( formatOffsetValue( solution.offset.x ) );
+    yoff->ChangeValue( formatOffsetValue( solution.offset.y ) );
+    zoff->ChangeValue( formatOffsetValue( solution.offset.z ) );
+
+    {
+        SCOPED_SET_RESET<bool> updating( m_alignUpdating, true );
+        wxCommandEvent         event;
+        updateOrientation( event );
+    }
+
+    if( m_alignSeed < m_alignRegions.size() )
+        m_alignFaceTriangles = alignmentRegionTriangles( m_alignSeed );
+
+    startAlignmentAnimation( fromRotation, fromOffset );
+
+    if( m_alignSolutions.size() > 1 )
+    {
+        m_alignmentInfoBar->ShowMessage( wxString::Format( _( "Solution %d of %d, press Align to cycle." ),
+                                                          (int) m_alignSolution + 1,
+                                                          (int) m_alignSolutions.size() ),
+                                         wxICON_INFORMATION );
+    }
+    else
+    {
+        dismissAlignmentInfoBar();
+    }
+}
+
+
+glm::mat4 PANEL_PREVIEW_3D_MODEL::alignmentModelMatrix() const
+{
+    const FP_3DMODEL& model = m_parentModelList->at( m_selected );
+    const VECTOR3D&   rotation = m_alignAnimating ? m_alignAnimRotation : model.m_Rotation;
+    const VECTOR3D&   offset = m_alignAnimating ? m_alignAnimOffset : model.m_Offset;
+
+    // The region vertices already carry the model scale.
+    return m_boardAdapter.GetFootprintMatrix( *m_dummyFootprint )
+           * CalcModelMatrix( SFVEC3F( offset.x, offset.y, offset.z ),
+                              SFVEC3F( rotation.x, rotation.y, rotation.z ), SFVEC3F( 1.0f ) );
+}
+
+
+std::vector<SFVEC3F> PANEL_PREVIEW_3D_MODEL::alignmentRegionTriangles( size_t aRegion ) const
+{
+    const MODEL_ALIGN::REGION& region = m_alignRegions.at( aRegion );
+    std::vector<SFVEC3F>       triangles;
+
+    triangles.reserve( region.triangles.size() * 3 );
+
+    for( const std::array<unsigned int, 3>& triangle : region.triangles )
+    {
+        for( unsigned int index : triangle )
+        {
+            const glm::dvec3& vertex = region.vertices[index];
+            triangles.emplace_back( vertex.x, vertex.y, vertex.z );
+        }
+    }
+
+    return triangles;
+}
+
+
+std::vector<SFVEC3F> PANEL_PREVIEW_3D_MODEL::alignmentPadTriangles( const PAD& aPad ) const
+{
+    const PCB_LAYER_ID layer = m_dummyFootprint->IsFlipped() ? B_Cu : F_Cu;
+    const float        units = m_boardAdapter.BiuTo3dUnits();
+    const float        z = m_boardAdapter.GetFootprintZPos( m_dummyFootprint->IsFlipped() );
+    SHAPE_POLY_SET       outline = *aPad.GetEffectivePolygon( layer, ERROR_INSIDE );
+    std::vector<SFVEC3F> triangles;
+
+    outline.CacheTriangulation( false );
+
+    for( unsigned int i = 0; i < outline.TriangulatedPolyCount(); ++i )
+    {
+        const SHAPE_POLY_SET::TRIANGULATED_POLYGON* polygon = outline.TriangulatedPolygon( i );
+
+        for( size_t j = 0; j < polygon->GetTriangleCount(); ++j )
+        {
+            VECTOR2I a;
+            VECTOR2I b;
+            VECTOR2I c;
+            polygon->GetTriangle( (int) j, a, b, c );
+
+            for( const VECTOR2I& point : { a, b, c } )
+                triangles.emplace_back( point.x * units, -point.y * units, z );
+        }
+    }
+
+    return triangles;
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::updateAlignmentOverlays()
+{
+    std::vector<EDA_3D_CANVAS::OVERLAY> overlays;
+
+    if( !m_parentModelList || m_selected < 0 || m_selected >= (int) m_parentModelList->size() )
+    {
+        m_previewPane->SetOverlays( {} );
+        m_previewPane->Request_refresh();
+        return;
+    }
+
+    if( !m_alignFaceTriangles.empty() )
+    {
+        EDA_3D_CANVAS::OVERLAY overlay;
+        overlay.transform = alignmentModelMatrix();
+        overlay.vertices = m_alignFaceTriangles;
+        overlay.color = SFVEC4F( 0.05f, 0.85f, 0.25f, 0.35f );
+        overlay.alwaysVisible = true;
+        overlays.push_back( std::move( overlay ) );
+    }
+
+    if( m_alignHoverRegion && m_alignState == ALIGN_STATE::PICK_MODEL )
+    {
+        EDA_3D_CANVAS::OVERLAY overlay;
+        overlay.transform = alignmentModelMatrix();
+        overlay.vertices = alignmentRegionTriangles( *m_alignHoverRegion );
+        overlay.color = SFVEC4F( 0.35f, 1.0f, 0.45f, 0.30f );
+        overlays.push_back( std::move( overlay ) );
+    }
+
+    if( m_alignHoverPad && m_alignState == ALIGN_STATE::PICK_FOOTPRINT )
+    {
+        EDA_3D_CANVAS::OVERLAY overlay;
+        overlay.vertices = alignmentPadTriangles( *m_alignHoverPad );
+        overlay.color = SFVEC4F( 0.35f, 1.0f, 0.45f, 0.45f );
+        overlay.alwaysVisible = true;
+        overlays.push_back( std::move( overlay ) );
+    }
+
+    m_previewPane->SetOverlays( std::move( overlays ) );
+    m_previewPane->Request_refresh();
+}
+
+
+std::optional<size_t> PANEL_PREVIEW_3D_MODEL::alignmentRegionAt( const RAY& aRay )
+{
+    if( !m_alignGeometry || !canAlign() )
+        return std::nullopt;
+
+    std::optional<EDA_3D_CANVAS::MODEL_HIT> hit =
+            m_previewPane->PickModel( aRay, *m_alignGeometry, m_parentModelList->at( m_selected ),
+                                      *m_dummyFootprint );
+
+    if( !hit )
+        return std::nullopt;
+
+    auto region = m_alignTriangleRegions.find( { hit->mesh, hit->triangle / 3 } );
+
+    if( region == m_alignTriangleRegions.end() )
+        return std::nullopt;
+
+    return region->second;
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::hoverAlignment( const std::optional<RAY>& aRay )
+{
+    std::optional<size_t> region;
+    const PAD*            pad = nullptr;
+
+    if( aRay && canAlign() )
+    {
+        if( m_alignState == ALIGN_STATE::PICK_MODEL )
+            region = alignmentRegionAt( *aRay );
+        else if( m_alignState == ALIGN_STATE::PICK_FOOTPRINT )
+            pad = m_previewPane->PickFootprintPad( *aRay, *m_dummyFootprint );
+    }
+
+    if( pad && pad->GetAttribute() != PAD_ATTRIB::SMD && pad->GetAttribute() != PAD_ATTRIB::PTH )
+        pad = nullptr;
+
+    if( region == m_alignHoverRegion && pad == m_alignHoverPad )
+        return;
+
+    m_alignHoverRegion = region;
+    m_alignHoverPad = pad;
+    updateAlignmentOverlays();
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::startAlignmentAnimation( const VECTOR3D& aRotation, const VECTOR3D& aOffset )
+{
+    const FP_3DMODEL& model = m_parentModelList->at( m_selected );
+
+    m_alignAnimFromRotation = aRotation;
+    m_alignAnimFromOffset = aOffset;
+    m_alignAnimRotation = aRotation;
+    m_alignAnimOffset = aOffset;
+
+    if( !m_previewPane->GetAnimationEnabled()
+        || ( aRotation == model.m_Rotation && aOffset == model.m_Offset ) )
+    {
+        m_alignFaceTriangles.clear();
+        updateAlignmentOverlays();
+        return;
+    }
+
+    m_alignAnimating = true;
+    m_alignAnimStart = GetRunningMicroSecs();
+    m_alignAnimTimer.Start( ALIGN_ANIMATION_INTERVAL_MS, wxTIMER_CONTINUOUS );
+    tickAlignmentAnimation();
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::stopAlignmentAnimation()
+{
+    m_alignAnimTimer.Stop();
+    m_alignAnimating = false;
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::onAlignAnimation( wxTimerEvent& aEvent )
+{
+    tickAlignmentAnimation();
+}
+
+
+void PANEL_PREVIEW_3D_MODEL::tickAlignmentAnimation()
+{
+    if( !m_alignAnimating )
+        return;
+
+    const FP_3DMODEL& model = m_parentModelList->at( m_selected );
+    const double      elapsed = ( GetRunningMicroSecs() - m_alignAnimStart ) / 1e6;
+    const double      t = std::clamp( elapsed / ALIGN_ANIMATION_SECONDS, 0.0, 1.0 );
+    const float       eased = (float) ( t * t * ( 3.0 - 2.0 * t ) );
+
+    const SFVEC3F rotation = InterpolateModelRotation(
+            SFVEC3F( m_alignAnimFromRotation.x, m_alignAnimFromRotation.y, m_alignAnimFromRotation.z ),
+            SFVEC3F( model.m_Rotation.x, model.m_Rotation.y, model.m_Rotation.z ), eased );
+
+    m_alignAnimRotation = VECTOR3D( rotation.x, rotation.y, rotation.z );
+    m_alignAnimOffset = VECTOR3D( std::lerp( m_alignAnimFromOffset.x, model.m_Offset.x, (double) eased ),
+                                  std::lerp( m_alignAnimFromOffset.y, model.m_Offset.y, (double) eased ),
+                                  std::lerp( m_alignAnimFromOffset.z, model.m_Offset.z, (double) eased ) );
+
+    if( t >= 1.0 )
+    {
+        // Land on the stored angles rather than on a re-decomposed equivalent of them.
+        m_alignAnimRotation = model.m_Rotation;
+        m_alignAnimOffset = model.m_Offset;
+    }
+
+    if( m_dummySelectedModel < m_dummyFootprint->Models().size() )
+    {
+        FP_3DMODEL& preview = m_dummyFootprint->Models()[m_dummySelectedModel];
+        preview.m_Rotation = m_alignAnimRotation;
+        preview.m_Offset = m_alignAnimOffset;
+    }
+
+    if( t >= 1.0 )
+    {
+        stopAlignmentAnimation();
+        m_alignFaceTriangles.clear();
+    }
+
+    updateAlignmentOverlays();
+}
+
+
 void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
 {
+    cancelAlignment();
+
     if( m_parentModelList && idx >= 0 && idx < (int) m_parentModelList->size() )
     {
         m_selected = idx;
@@ -393,6 +1007,7 @@ void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
 
 void PANEL_PREVIEW_3D_MODEL::SetExtrusionTransformMode( EXTRUDED_3D_BODY* aBody )
 {
+    cancelAlignment();
     m_extrudedBody = aBody;
 
     if( aBody )
@@ -451,6 +1066,9 @@ void PANEL_PREVIEW_3D_MODEL::updateOrientation( wxCommandEvent &event )
     {
         // Write settings back to the parent
         FP_3DMODEL* modelInfo = &m_parentModelList->at( (unsigned) m_selected );
+        const VECTOR3D previousScale = modelInfo->m_Scale;
+        const VECTOR3D previousRotation = modelInfo->m_Rotation;
+        const VECTOR3D previousOffset = modelInfo->m_Offset;
 
         modelInfo->m_Scale.x = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::UNSCALED,
                                                                           evaluateTextCtrl( xscale->GetValue() ) );
@@ -474,6 +1092,12 @@ void PANEL_PREVIEW_3D_MODEL::updateOrientation( wxCommandEvent &event )
         modelInfo->m_Offset.z = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
                                                                            evaluateTextCtrl( zoff->GetValue() ) )
                                 / pcbIUScale.IU_PER_MM;
+
+        if( previousScale == modelInfo->m_Scale && previousRotation == modelInfo->m_Rotation
+            && previousOffset == modelInfo->m_Offset )
+        {
+            return;
+        }
 
         // Update the dummy footprint for the preview
         UpdateDummyFootprint( false );
@@ -500,6 +1124,8 @@ void PANEL_PREVIEW_3D_MODEL::onOpacitySlider( wxCommandEvent& event )
 
 void PANEL_PREVIEW_3D_MODEL::setBodyStyleView( wxCommandEvent& event )
 {
+    cancelAlignment();
+
     // turn ON or OFF options to show the board body if OFF, solder paste, soldermask
     // and board body are hidden, to allows a good view of the 3D model and its pads.
     EDA_3D_VIEWER_SETTINGS* cfg = m_boardAdapter.m_Cfg;
@@ -729,6 +1355,9 @@ void PANEL_PREVIEW_3D_MODEL::onUnitsChanged( wxCommandEvent& aEvent )
 
 void PANEL_PREVIEW_3D_MODEL::onPanelShownEvent( wxCommandEvent& aEvent )
 {
+    if( !aEvent.GetInt() )
+        cancelAlignment();
+
     if( m_spaceMouse )
     {
         m_spaceMouse->SetFocus( static_cast<bool>( aEvent.GetInt() ) );
@@ -740,12 +1369,31 @@ void PANEL_PREVIEW_3D_MODEL::onPanelShownEvent( wxCommandEvent& aEvent )
 
 void PANEL_PREVIEW_3D_MODEL::UpdateDummyFootprint( bool aReloadRequired )
 {
+    // The background hit-test rebuild reads the same footprint and embedded files.
+    m_previewPane->JoinBgWorker();
+
+    if( !m_alignUpdating )
+        cancelAlignment();
+
     m_dummyFootprint->Models().clear();
+    m_dummySelectedModel = std::numeric_limits<size_t>::max();
 
     for( FP_3DMODEL& model : *m_parentModelList )
     {
+        if( m_alignState == ALIGN_STATE::PICK_FOOTPRINT
+            || ( m_alignState == ALIGN_STATE::PICK_MODEL
+                 && &model != &m_parentModelList->at( m_selected ) ) )
+        {
+            continue;
+        }
+
         if( model.m_Show )
+        {
+            if( m_selected >= 0 && &model == &m_parentModelList->at( m_selected ) )
+                m_dummySelectedModel = m_dummyFootprint->Models().size();
+
             m_dummyFootprint->Models().push_back( model );
+        }
     }
 
     syncLocalEmbeddedFiles();
@@ -762,6 +1410,7 @@ void PANEL_PREVIEW_3D_MODEL::UpdateDummyFootprint( bool aReloadRequired )
 
 void PANEL_PREVIEW_3D_MODEL::SetEmbeddedFilesDelegate( EMBEDDED_FILES* aDelegate )
 {
+    cancelAlignment();
     m_localEmbeddedFiles = aDelegate;
     syncLocalEmbeddedFiles();
 }
@@ -769,6 +1418,7 @@ void PANEL_PREVIEW_3D_MODEL::SetEmbeddedFilesDelegate( EMBEDDED_FILES* aDelegate
 
 void PANEL_PREVIEW_3D_MODEL::syncLocalEmbeddedFiles()
 {
+    m_previewPane->JoinBgWorker();
     m_dummyFootprint->ClearEmbeddedFiles();
 
     if( m_localEmbeddedFiles )

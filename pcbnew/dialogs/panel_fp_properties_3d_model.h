@@ -28,6 +28,7 @@ class DIALOG_SHIM;
 class PANEL_EMBEDDED_FILES;
 class PANEL_PREVIEW_3D_MODEL;
 class PCB_BASE_EDIT_FRAME;
+class wxBookCtrlEvent;
 
 enum class MODEL_VALIDATE_ERRORS
 {
@@ -85,6 +86,16 @@ private:
 
     virtual void onDialogActivateEvent( wxActivateEvent& aEvent );
     virtual void onShowEvent( wxShowEvent& aEvent );
+    void onSize( wxSizeEvent& aEvent );
+
+    /**
+     * Split the page so the model list shows its rows, never fewer than three and never
+     * more than a third of the page, and the preview takes everything left over.
+     *
+     * Does nothing once the split has been set, so a sash the user dragged survives.
+     */
+    void setDefaultSashPosition();
+    void onNotebookPageChanged( wxBookCtrlEvent& aEvent );
 
     // Wrapper on creating and posting custom event
     void postCustomPanelShownEventWithPredicate( bool predicate );
@@ -95,6 +106,7 @@ private:
     FOOTPRINT*              m_footprint;
 
     std::vector<FP_3DMODEL> m_shapes3D_list;
+    bool                    m_sashPositioned = false;
     PANEL_PREVIEW_3D_MODEL* m_previewPane;
     PANEL_EMBEDDED_FILES*   m_filesPanel;
 

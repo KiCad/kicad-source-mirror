@@ -55,6 +55,7 @@
 #include <wx/defs.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+#include <wx/notebook.h>
 
 enum MODELS_TABLE_COLUMNS
 {
@@ -150,6 +151,8 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
 
     m_modelsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &PANEL_FP_PROPERTIES_3D_MODEL::on3DModelCellChanging, this );
     Bind( wxEVT_SHOW, &PANEL_FP_PROPERTIES_3D_MODEL::onShowEvent, this );
+    Bind( wxEVT_SIZE, &PANEL_FP_PROPERTIES_3D_MODEL::onSize, this );
+    aParent->Bind( wxEVT_NOTEBOOK_PAGE_CHANGED, &PANEL_FP_PROPERTIES_3D_MODEL::onNotebookPageChanged, this );
     m_parentDialog->Bind( wxEVT_ACTIVATE, &PANEL_FP_PROPERTIES_3D_MODEL::onDialogActivateEvent, this );
 
     // Bind extrusion control events to update the 3D preview
@@ -170,6 +173,8 @@ PANEL_FP_PROPERTIES_3D_MODEL::~PANEL_FP_PROPERTIES_3D_MODEL()
     m_modelsGrid->Unbind( wxEVT_GRID_CELL_CHANGING, &PANEL_FP_PROPERTIES_3D_MODEL::on3DModelCellChanging, this );
     // Unbind OnShowEvent to prevent unnecessary event handling.
     Unbind( wxEVT_SHOW, &PANEL_FP_PROPERTIES_3D_MODEL::onShowEvent, this );
+    Unbind( wxEVT_SIZE, &PANEL_FP_PROPERTIES_3D_MODEL::onSize, this );
+    GetParent()->Unbind( wxEVT_NOTEBOOK_PAGE_CHANGED, &PANEL_FP_PROPERTIES_3D_MODEL::onNotebookPageChanged, this );
 
     m_componentHeightCtrl->Unbind( wxEVT_TEXT, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionControlChanged, this );
     m_standoffHeightCtrl->Unbind( wxEVT_TEXT, &PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionControlChanged, this );
@@ -767,9 +772,59 @@ void PANEL_FP_PROPERTIES_3D_MODEL::onShowEvent( wxShowEvent& aEvent )
 }
 
 
+void PANEL_FP_PROPERTIES_3D_MODEL::onSize( wxSizeEvent& aEvent )
+{
+    aEvent.Skip();
+    setDefaultSashPosition();
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::setDefaultSashPosition()
+{
+    const int page = GetSize().y;
+
+    if( m_sashPositioned || page <= 0 || !m_splitter1->IsSplit() )
+        return;
+
+    const int rowHeight = m_modelsGrid->GetDefaultRowSize();
+    const int chrome = m_modelsGrid->GetColLabelSize() + 4;
+    const int minGrid = 3 * rowHeight + chrome;
+    const int maxGrid = std::max( minGrid, page / 3 );
+    const int grid = std::clamp( m_modelsGrid->GetNumberRows() * rowHeight + chrome, minGrid, maxGrid );
+
+    // Everything else in the upper pane is fixed height, so the sash is that plus the grid.
+    m_modelsGrid->SetMinSize( wxSize( -1, minGrid ) );
+    const int sash = m_upperPanel->GetSizer()->GetMinSize().y - minGrid + grid;
+
+    // An early layout pass reports a page far shorter than the final one.  Wait for a size
+    // that leaves the preview a usable pane before locking the split in.
+    if( page - sash < m_splitter1->GetMinimumPaneSize() )
+        return;
+
+    m_splitter1->SetSashPosition( sash );
+    m_sashPositioned = true;
+}
+
+
 void PANEL_FP_PROPERTIES_3D_MODEL::onDialogActivateEvent( wxActivateEvent& aEvent )
 {
     postCustomPanelShownEventWithPredicate( aEvent.GetActive() && m_previewPane->IsShownOnScreen() );
+    aEvent.Skip();
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::onNotebookPageChanged( wxBookCtrlEvent& aEvent )
+{
+    wxNotebook* notebook = dynamic_cast<wxNotebook*>( aEvent.GetEventObject() );
+
+    if( notebook && notebook == GetParent() )
+    {
+        // Native notebooks do not consistently emit show events when hiding their pages.
+        const int selected = aEvent.GetSelection();
+        postCustomPanelShownEventWithPredicate( selected >= 0
+                && selected < (int) notebook->GetPageCount() && notebook->GetPage( selected ) == this );
+    }
+
     aEvent.Skip();
 }
 

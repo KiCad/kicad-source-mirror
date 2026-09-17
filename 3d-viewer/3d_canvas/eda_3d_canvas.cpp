@@ -31,11 +31,15 @@
 
 #include "../common_ogl/ogl_utils.h"
 #include "eda_3d_canvas.h"
+#include <3d_math.h>
+#include <glm/gtc/type_ptr.hpp>
+#include <plugins/3dapi/c3dmodel.h>
 #include <eda_3d_viewer_frame.h>
 #include <3d_rendering/raytracing/render_3d_raytrace_gl.h>
 #include <3d_rendering/opengl/render_3d_opengl.h>
 #include <3d_viewer_id.h>
 #include <advanced_config.h>
+#include <math/util.h>
 #include <build_version.h>
 #include <settings/color_settings.h>
 #include <board.h>
@@ -59,6 +63,8 @@
 #include <widgets/wx_busy_indicator.h>
 #include <zone.h>
 #include <chrono>
+#include <cmath>
+#include <limits>
 #include <ratio>
 
 
@@ -88,6 +94,7 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, HIDPI_GL_3D_CANVAS )
     EVT_RIGHT_UP( EDA_3D_CANVAS::OnRightUp )
     EVT_MOUSEWHEEL( EDA_3D_CANVAS::OnMouseWheel )
     EVT_MOTION( EDA_3D_CANVAS::OnMouseMove )
+    EVT_LEAVE_WINDOW( EDA_3D_CANVAS::OnMouseLeave )
     EVT_MAGNIFY( EDA_3D_CANVAS::OnMagnify )
 
     // touch gesture events
@@ -590,6 +597,8 @@ void EDA_3D_CANVAS::DoRePaint()
         }
     }
 
+    render_overlays();
+
     if( m_render_pivot )
     {
         const float scale = glm::min( m_camera.GetZoom(), 1.0f );
@@ -1013,6 +1022,15 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
         // OnMiddleUp() will do it at the end of mouse drag/move command
     }
 
+    // A pick handler owns the cursor: report the hover to it instead of rolling over board items.
+    if( m_hoverHandler )
+    {
+        if( !event.Dragging() )
+            m_hoverHandler( getRayAtCurrentMousePosition() );
+
+        return;
+    }
+
     if( !event.Dragging() && m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL )
     {
         STATUSBAR_REPORTER reporter( m_parentStatusBar, EDA_3D_VIEWER_STATUSBAR::HOVERED_ITEM );
@@ -1110,6 +1128,15 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
 }
 
 
+void EDA_3D_CANVAS::OnMouseLeave( wxMouseEvent& event )
+{
+    if( m_hoverHandler )
+        m_hoverHandler( std::nullopt );
+
+    event.Skip();
+}
+
+
 void EDA_3D_CANVAS::OnLeftDown( wxMouseEvent& event )
 {
     SetFocus();
@@ -1160,6 +1187,18 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent& event )
         m_3d_render_opengl->updateGizmoSelection( m_camera.GetRotationMatrix() );
 
         gizmoClicked = m_3d_render_opengl->getSelectedGizmoSphere() != SPHERES_GIZMO::GizmoSphereSelection::None;
+    }
+
+    if( !wasRotating && !gizmoClicked && m_pickHandler )
+    {
+        // A completed pick can clear or replace the canvas handler.
+        auto handler = m_pickHandler;
+
+        if( handler( getRayAtCurrentMousePosition() ) )
+        {
+            Refresh();
+            return;
+        }
     }
 
     // A plain click that missed the orientation gizmo: cross-probe the clicked footprint,
@@ -1482,6 +1521,151 @@ void EDA_3D_CANVAS::RenderEngineChanged()
     m_mouse_was_moved = false;
 
     Request_refresh();
+}
+
+
+void EDA_3D_CANVAS::render_overlays()
+{
+    if( m_overlays.empty() )
+        return;
+
+    glMatrixMode( GL_PROJECTION );
+    glLoadMatrixf( glm::value_ptr( m_camera.GetProjectionMatrix() ) );
+
+    glMatrixMode( GL_MODELVIEW );
+    glLoadMatrixf( glm::value_ptr( m_camera.GetViewMatrix() ) );
+
+    glDisable( GL_LIGHTING );
+    glDisable( GL_CULL_FACE );
+    glEnable( GL_COLOR_MATERIAL );
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    glDepthMask( GL_FALSE );
+    glEnable( GL_POLYGON_OFFSET_FILL );
+    glPolygonOffset( -2.0f, -2.0f );
+
+    glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+    glDisableClientState( GL_COLOR_ARRAY );
+    glDisableClientState( GL_NORMAL_ARRAY );
+    glEnableClientState( GL_VERTEX_ARRAY );
+
+    // The raytracer paints a textured quad and leaves no usable depth buffer.
+    const bool depthUsable = m_boardAdapter.m_Cfg->m_Render.engine == RENDER_ENGINE::OPENGL;
+
+    for( const OVERLAY& overlay : m_overlays )
+    {
+        if( overlay.vertices.empty() )
+            continue;
+
+        if( depthUsable && !overlay.alwaysVisible )
+            glEnable( GL_DEPTH_TEST );
+        else
+            glDisable( GL_DEPTH_TEST );
+
+        glPushMatrix();
+        glMultMatrixf( glm::value_ptr( overlay.transform ) );
+        glColor4f( overlay.color.r, overlay.color.g, overlay.color.b, overlay.color.a );
+        glVertexPointer( 3, GL_FLOAT, 0, overlay.vertices.data() );
+        glDrawArrays( GL_TRIANGLES, 0, (GLsizei) overlay.vertices.size() );
+        glPopMatrix();
+    }
+
+    glDisableClientState( GL_VERTEX_ARRAY );
+    glDisable( GL_POLYGON_OFFSET_FILL );
+    glDepthMask( GL_TRUE );
+    glDisable( GL_BLEND );
+    glEnable( GL_DEPTH_TEST );
+}
+
+
+std::optional<EDA_3D_CANVAS::MODEL_HIT> EDA_3D_CANVAS::PickModel(
+        const RAY& aRay, const S3DMODEL& aGeometry, const FP_3DMODEL& aModel,
+        const FOOTPRINT& aFootprint ) const
+{
+    glm::mat4 world = m_boardAdapter.GetFootprintMatrix( aFootprint ) * CalcModelMatrix(
+            SFVEC3F( aModel.m_Offset.x, aModel.m_Offset.y, aModel.m_Offset.z ),
+            SFVEC3F( aModel.m_Rotation.x, aModel.m_Rotation.y, aModel.m_Rotation.z ),
+            SFVEC3F( aModel.m_Scale.x, aModel.m_Scale.y, aModel.m_Scale.z ) );
+    const double determinant = glm::determinant( glm::dmat4( world ) );
+
+    if( !aGeometry.m_Meshes || !std::isfinite( determinant ) || determinant == 0.0 )
+        return std::nullopt;
+
+    const glm::dmat4 inverse = glm::inverse( glm::dmat4( world ) );
+    const glm::dvec3 origin( inverse * glm::dvec4( aRay.m_Origin, 1.0 ) );
+    const glm::dvec3 direction( inverse * glm::dvec4( aRay.m_Dir, 0.0 ) );
+    double nearest = std::numeric_limits<double>::infinity();
+    std::optional<MODEL_HIT> hit;
+
+    for( unsigned int i = 0; i < aGeometry.m_MeshesSize; ++i )
+    {
+        const SMESH& mesh = aGeometry.m_Meshes[i];
+
+        if( !mesh.m_Positions || !mesh.m_FaceIdx )
+            continue;
+
+        for( unsigned int j = 0; j + 2 < mesh.m_FaceIdxSize; j += 3 )
+        {
+            if( !IsTriangleInRange( mesh.m_FaceIdx, j, mesh.m_VertexSize ) )
+                continue;
+
+            const glm::dvec3 a( mesh.m_Positions[mesh.m_FaceIdx[j]] );
+            const glm::dvec3 edge1 = glm::dvec3( mesh.m_Positions[mesh.m_FaceIdx[j + 1]] ) - a;
+            const glm::dvec3 edge2 = glm::dvec3( mesh.m_Positions[mesh.m_FaceIdx[j + 2]] ) - a;
+            const glm::dvec3 p = glm::cross( direction, edge2 );
+            const double det = glm::dot( edge1, p );
+            const double tolerance = 1e-12 * glm::length( edge1 ) * glm::length( p );
+
+            if( !std::isfinite( det ) || std::abs( det ) <= tolerance )
+                continue;
+
+            const glm::dvec3 delta = origin - a;
+            const double u = glm::dot( delta, p ) / det;
+            const glm::dvec3 q = glm::cross( delta, edge1 );
+            const double v = glm::dot( direction, q ) / det;
+            const double distance = glm::dot( edge2, q ) / det;
+
+            if( u >= 0.0 && v >= 0.0 && u + v <= 1.0 && distance >= 0.0 && distance < nearest )
+            {
+                nearest = distance;
+                hit = MODEL_HIT{ i, j };
+            }
+        }
+    }
+
+    return hit;
+}
+
+
+PAD* EDA_3D_CANVAS::PickFootprintPad( const RAY& aRay, const FOOTPRINT& aFootprint ) const
+{
+    const double units = m_boardAdapter.BiuTo3dUnits();
+
+    if( units <= 0.0 || std::abs( aRay.m_Dir.z ) < 1e-9 )
+        return nullptr;
+
+    const double z = m_boardAdapter.GetFootprintZPos( aFootprint.IsFlipped() );
+    const double distance = ( z - aRay.m_Origin.z ) / aRay.m_Dir.z;
+    const double x = ( aRay.m_Origin.x + distance * aRay.m_Dir.x ) / units;
+    const double y = -( aRay.m_Origin.y + distance * aRay.m_Dir.y ) / units;
+
+    if( distance < 0.0 || !std::isfinite( x ) || !std::isfinite( y )
+        || std::abs( x ) > std::numeric_limits<int>::max()
+        || std::abs( y ) > std::numeric_limits<int>::max() )
+    {
+        return nullptr;
+    }
+
+    const VECTOR2I point( KiROUND( x ), KiROUND( y ) );
+    const PCB_LAYER_ID copper = aFootprint.IsFlipped() ? B_Cu : F_Cu;
+
+    for( PAD* pad : aFootprint.Pads() )
+    {
+        if( pad->HitTest( point, 0, copper ) )
+            return pad;
+    }
+
+    return nullptr;
 }
 
 

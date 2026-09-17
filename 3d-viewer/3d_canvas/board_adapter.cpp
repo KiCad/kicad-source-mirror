@@ -833,16 +833,22 @@ void BOARD_ADAPTER::SetVisibleLayers( const std::bitset<LAYER_3D_END>& aLayers )
 
 std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
 {
+    if( m_visibilityOverride )
+        return *m_visibilityOverride;
+
     std::bitset<LAYER_3D_END> ret;
 
     if( m_IsPreviewer )
     {
+        // The preview has one board-body button and no layer controls, so it cannot follow
+        // the per-layer flags the 3D viewer's appearance panel writes: a mask switched off
+        // there would leave the preview showing bare substrate with no way back.
         if( m_Cfg->m_Render.preview_show_board_body )
         {
-            ret.set( LAYER_3D_BOARD,             m_Cfg->m_Render.show_board_body );
-            ret.set( LAYER_3D_SOLDERMASK_TOP,    m_Cfg->m_Render.show_soldermask_top );
-            ret.set( LAYER_3D_SOLDERMASK_BOTTOM, m_Cfg->m_Render.show_soldermask_bottom );
-            ret.set( LAYER_3D_SOLDERPASTE,       m_Cfg->m_Render.show_solderpaste );
+            ret.set( LAYER_3D_BOARD,             true );
+            ret.set( LAYER_3D_SOLDERMASK_TOP,    true );
+            ret.set( LAYER_3D_SOLDERMASK_BOTTOM, true );
+            ret.set( LAYER_3D_SOLDERPASTE,       true );
             ret.set( LAYER_3D_ADHESIVE,          m_Cfg->m_Render.show_adhesive );
         }
 

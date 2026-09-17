@@ -182,13 +182,18 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 
 	bSizer6->Add( m_previewLabel, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
+	m_alignButton = new wxButton( this, wxID_ANY, _("Align"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_alignButton->SetToolTip( _("Align a STEP model face to a footprint pad") );
+
+	bSizer6->Add( m_alignButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
 
 	bSizerRight->Add( bSizer6, 0, wxEXPAND, 5 );
 
 	m_SizerPanelView = new wxBoxSizer( wxVERTICAL );
 
 
-	bSizerRight->Add( m_SizerPanelView, 1, wxBOTTOM|wxEXPAND, 5 );
+	bSizerRight->Add( m_SizerPanelView, 1, wxEXPAND, 5 );
 
 
 	bSizermain->Add( bSizerRight, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -299,6 +304,8 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	m_spinZoffset->Connect( wxEVT_SCROLL_LINEDOWN, wxSpinEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onDecrementOffset ), NULL, this );
 	m_spinZoffset->Connect( wxEVT_SCROLL_LINEUP, wxSpinEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onIncrementOffset ), NULL, this );
 	m_opacity->Connect( wxEVT_SLIDER, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onOpacitySlider ), NULL, this );
+	m_alignButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onAlign ), NULL, this );
+	m_alignButton->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onAlignUpdateUI ), NULL, this );
 	m_bpvISO->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::View3DISO ), NULL, this );
 	m_bpvBodyStyle->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::setBodyStyleView ), NULL, this );
 	m_bpvLeft->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::View3DLeft ), NULL, this );
@@ -351,6 +358,8 @@ PANEL_PREVIEW_3D_MODEL_BASE::~PANEL_PREVIEW_3D_MODEL_BASE()
 	m_spinZoffset->Disconnect( wxEVT_SCROLL_LINEDOWN, wxSpinEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onDecrementOffset ), NULL, this );
 	m_spinZoffset->Disconnect( wxEVT_SCROLL_LINEUP, wxSpinEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onIncrementOffset ), NULL, this );
 	m_opacity->Disconnect( wxEVT_SLIDER, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onOpacitySlider ), NULL, this );
+	m_alignButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onAlign ), NULL, this );
+	m_alignButton->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::onAlignUpdateUI ), NULL, this );
 	m_bpvISO->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::View3DISO ), NULL, this );
 	m_bpvBodyStyle->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::setBodyStyleView ), NULL, this );
 	m_bpvLeft->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL_BASE::View3DLeft ), NULL, this );

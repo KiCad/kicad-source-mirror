@@ -30,6 +30,8 @@
 #include <wx/image.h>
 #include <wx/timer.h>
 #include <memory>
+#include <functional>
+#include <optional>
 #include <stop_token>
 
 
@@ -41,6 +43,8 @@ class SYNC_REPORTER;
 class BOARD;
 class RENDER_3D_RAYTRACE_GL;
 class RENDER_3D_OPENGL;
+class PAD;
+struct FP_3DMODEL;
 
 
 // A custom event, used to call DoRePaint during an idle time
@@ -87,6 +91,50 @@ public:
     {
         m_parentInfoBar = aInfoBar;
     }
+
+    /** Consume plain canvas clicks before the normal selection handler. */
+    void SetPickHandler( std::function<bool( const RAY& )> aHandler )
+    {
+        m_pickHandler = std::move( aHandler );
+    }
+
+    /**
+     * Report the mouse position while a pick handler is installed.
+     *
+     * The handler is called with the ray under the cursor, or with nothing when the
+     * cursor leaves the canvas.  Board item roll-over is suspended while it is set.
+     */
+    void SetHoverHandler( std::function<void( const std::optional<RAY>& )> aHandler )
+    {
+        m_hoverHandler = std::move( aHandler );
+    }
+
+    /** A translucent triangle soup drawn over the scene. */
+    struct OVERLAY
+    {
+        glm::mat4            transform{ 1.0f };
+        std::vector<SFVEC3F> vertices; ///< Triangle list in the transform's space.
+        SFVEC4F              color{ 0.0f, 1.0f, 0.0f, 0.5f };
+        bool                 alwaysVisible = false; ///< Draw through whatever is in front of it.
+    };
+
+    void SetOverlays( std::vector<OVERLAY> aOverlays )
+    {
+        m_overlays = std::move( aOverlays );
+    }
+
+    struct MODEL_HIT
+    {
+        unsigned int mesh;
+        unsigned int triangle; ///< Offset into SMESH::m_FaceIdx.
+    };
+
+    /** Pick current mesh geometry; independent of the renderer's cached hit-test scene. */
+    std::optional<MODEL_HIT> PickModel( const RAY& aRay, const S3DMODEL& aGeometry,
+                                       const FP_3DMODEL& aModel, const FOOTPRINT& aFootprint ) const;
+
+    /** Project onto the footprint's seating plane and hit-test copper pads. */
+    PAD* PickFootprintPad( const RAY& aRay, const FOOTPRINT& aFootprint ) const;
 
     void ReloadRequest( BOARD* aBoard = nullptr, S3D_CACHE* aCachePointer = nullptr );
 
@@ -256,6 +304,7 @@ private:
 
     void OnMagnify( wxMouseEvent& event );
     void OnMouseMove( wxMouseEvent& event );
+    void OnMouseLeave( wxMouseEvent& event );
     void OnLeftDown( wxMouseEvent& event );
     void OnLeftUp( wxMouseEvent& event );
     void OnMiddleUp( wxMouseEvent& event );
@@ -312,6 +361,11 @@ private:
     void render3dmousePivot( float aScale );
 
     /**
+     * Draw the translucent overlays over the rendered scene.
+     */
+    void render_overlays();
+
+    /**
      * @return true if OpenGL initialization succeeded.
      */
     bool initializeOpenGL();
@@ -324,6 +378,10 @@ private:
     RAY getRayAtCurrentMousePosition();
 
 private:
+    std::function<bool( const RAY& )>                m_pickHandler;
+    std::function<void( const std::optional<RAY>& )> m_hoverHandler;
+    std::vector<OVERLAY>                             m_overlays;
+
     TOOL_DISPATCHER*       m_eventDispatcher = nullptr;
     wxStatusBar*           m_parentStatusBar = nullptr;         // Parent statusbar to report progress
     WX_INFOBAR*            m_parentInfoBar = nullptr;
