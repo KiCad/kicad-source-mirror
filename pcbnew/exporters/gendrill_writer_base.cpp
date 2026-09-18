@@ -41,7 +41,6 @@
 #include <set>
 
 #include <drill/drill_enumerator.h>
-#include <drill_legacy_adapter.h>
 #include <gendrill_writer_base.h>
 
 
@@ -52,26 +51,26 @@
  * then by attribute type (vias, pad, mechanical)
  * then by X then Y position
  */
-static bool cmpHoleSorting( const HOLE_INFO& a, const HOLE_INFO& b )
+static bool cmpHoleSorting( const DRILL_OPERATION& a, const DRILL_OPERATION& b )
 {
-    if( a.m_Hole_NotPlated != b.m_Hole_NotPlated )
-        return b.m_Hole_NotPlated;
+    if( a.m_NotPlated != b.m_NotPlated )
+        return b.m_NotPlated;
 
-    if( a.m_Hole_Diameter != b.m_Hole_Diameter )
-        return a.m_Hole_Diameter < b.m_Hole_Diameter;
+    if( a.m_Diameter != b.m_Diameter )
+        return a.m_Diameter < b.m_Diameter;
 
     // At this point (same diameter, same plated type), group by attribute
     // type (via, pad, mechanical, although currently only not plated pads are mechanical)
-    if( a.m_HoleAttribute != b.m_HoleAttribute )
-        return a.m_HoleAttribute < b.m_HoleAttribute;
+    if( a.m_Attribute != b.m_Attribute )
+        return a.m_Attribute < b.m_Attribute;
 
     // At this point (same diameter, same type), sort by X then Y position.
     // This is optimal for drilling and make the file reproducible as long as holes
     // have not changed, even if the data order has changed.
-    if( a.m_Hole_Pos.x != b.m_Hole_Pos.x )
-        return a.m_Hole_Pos.x < b.m_Hole_Pos.x;
+    if( a.m_Position.x != b.m_Position.x )
+        return a.m_Position.x < b.m_Position.x;
 
-    return a.m_Hole_Pos.y < b.m_Hole_Pos.y;
+    return a.m_Position.y < b.m_Position.y;
 }
 
 
@@ -79,20 +78,20 @@ void GENDRILL_WRITER_BASE::buildHolesList( const DRILL_SPAN& aSpan, bool aGenera
 {
     m_holeListBuffer.clear();
     m_toolListBuffer.clear();
+    m_holeToolReferences.clear();
 
     DRILL_QUERY query;
     query.m_Span = aSpan;
     query.m_NonPlatedOnly = aGenerateNPTH_list;
     query.m_MergePTHNPTH = m_merge_PTH_NPTH;
 
-    m_holeListBuffer = ToLegacyHoleList( EnumerateDrillOperations( *m_pcb, query ) );
+    m_holeListBuffer = EnumerateDrillOperations( *m_pcb, query );
 
-    // Sort holes per increasing diameter value (and for each dimater, by position)
     sort( m_holeListBuffer.begin(), m_holeListBuffer.end(), cmpHoleSorting );
 
-    // build the tool list
-    int last_hole = -1;     // Set to not initialized (this is a value not used
-                            // for m_holeListBuffer[ii].m_Hole_Diameter)
+    m_holeToolReferences.resize( m_holeListBuffer.size(), -1 );
+
+    int last_hole = -1;
     bool last_notplated_opt = false;
     HOLE_ATTRIBUTE last_attribute = HOLE_ATTRIBUTE::HOLE_UNKNOWN;
 
@@ -101,16 +100,18 @@ void GENDRILL_WRITER_BASE::buildHolesList( const DRILL_SPAN& aSpan, bool aGenera
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
-        if( m_holeListBuffer[ii].m_Hole_Diameter != last_hole
-            || m_holeListBuffer[ii].m_Hole_NotPlated != last_notplated_opt
+        const DRILL_OPERATION& hole = m_holeListBuffer[ii];
+
+        if( hole.m_Diameter != last_hole
+            || hole.m_NotPlated != last_notplated_opt
 #if USE_ATTRIB_FOR_HOLES
-            || m_holeListBuffer[ii].m_HoleAttribute != last_attribute
+            || hole.m_Attribute != last_attribute
 #endif
             )
         {
-            new_tool.m_Diameter = m_holeListBuffer[ii].m_Hole_Diameter;
-            new_tool.m_Hole_NotPlated = m_holeListBuffer[ii].m_Hole_NotPlated;
-            new_tool.m_HoleAttribute = m_holeListBuffer[ii].m_HoleAttribute;
+            new_tool.m_Diameter = hole.m_Diameter;
+            new_tool.m_Hole_NotPlated = hole.m_NotPlated;
+            new_tool.m_HoleAttribute = hole.m_Attribute;
             m_toolListBuffer.push_back( new_tool );
             last_hole = new_tool.m_Diameter;
             last_notplated_opt = new_tool.m_Hole_NotPlated;
@@ -122,20 +123,20 @@ void GENDRILL_WRITER_BASE::buildHolesList( const DRILL_SPAN& aSpan, bool aGenera
         if( jj == 0 )
             continue;                                        // Should not occurs
 
-        m_holeListBuffer[ii].m_Tool_Reference = jj;          // Tool value Initialized (value >= 1)
+        m_holeToolReferences[ii] = jj;
 
         m_toolListBuffer.back().m_TotalCount++;
 
-        if( m_holeListBuffer[ii].m_Hole_Shape )
+        if( hole.m_IsSlot )
             m_toolListBuffer.back().m_OvalCount++;
 
-        if( m_holeListBuffer[ii].m_IsBackdrill )
+        if( hole.IsBackdrill() )
         {
             m_toolListBuffer.back().m_IsBackdrill = true;
 
-            if( m_holeListBuffer[ii].m_StubLength.has_value() )
+            if( hole.m_StubLength.has_value() )
             {
-                int stub = *m_holeListBuffer[ii].m_StubLength;
+                int stub = *hole.m_StubLength;
 
                 if( !m_toolListBuffer.back().m_MinStubLength.has_value()
                         || stub < *m_toolListBuffer.back().m_MinStubLength )
@@ -151,11 +152,11 @@ void GENDRILL_WRITER_BASE::buildHolesList( const DRILL_SPAN& aSpan, bool aGenera
             }
         }
 
-        if( m_holeListBuffer[ii].m_FrontPostMachining == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE
-            || m_holeListBuffer[ii].m_FrontPostMachining == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK
-            || m_holeListBuffer[ii].m_BackPostMachining == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE
-            || m_holeListBuffer[ii].m_BackPostMachining == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK
-            || m_holeListBuffer[ii].m_IsBackdrill )
+        if( hole.m_FrontPostMachining.m_Mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE
+            || hole.m_FrontPostMachining.m_Mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK
+            || hole.m_BackPostMachining.m_Mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE
+            || hole.m_BackPostMachining.m_Mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK
+            || hole.IsBackdrill() )
             m_toolListBuffer.back().m_HasPostMachining = true;
     }
 }
@@ -486,9 +487,9 @@ const wxString GENDRILL_WRITER_BASE::BuildFileFunctionAttributeString( const DRI
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
-        const HOLE_INFO& hole_descr = m_holeListBuffer[ii];
+        const DRILL_OPERATION& hole_descr = m_holeListBuffer[ii];
 
-        if( hole_descr.m_Hole_Shape )   // m_Hole_Shape not 0 is an oblong hole)
+        if( hole_descr.m_IsSlot )
             hasOblong = true;
         else
             hasDrill = true;
@@ -1047,17 +1048,17 @@ bool GENDRILL_WRITER_BASE::plotDrillMarks( PLOTTER* aPlotter )
     // Plot the drill map:
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
-        const HOLE_INFO& hole = m_holeListBuffer[ii];
+        const DRILL_OPERATION& hole = m_holeListBuffer[ii];
 
         // Gives a good line thickness to have a good marker shape:
-        aPlotter->SetCurrentLineWidth( getMarkerBestPenSize( hole.m_Hole_Diameter ) );
+        aPlotter->SetCurrentLineWidth( getMarkerBestPenSize( hole.m_Diameter ) );
 
         // Always plot the drill symbol (for slots identifies the needed cutter!
-        aPlotter->Marker( hole.m_Hole_Pos, hole.m_Hole_Diameter, hole.m_Tool_Reference - 1 );
+        aPlotter->Marker( hole.m_Position, hole.m_Diameter, m_holeToolReferences[ii] - 1 );
 
-        if( hole.m_Hole_Shape != 0 )
+        if( hole.m_IsSlot )
         {
-            aPlotter->ThickOval( hole.m_Hole_Pos, hole.m_Hole_Size, hole.m_Hole_Orient, getSketchOvalBestPenSize(),
+            aPlotter->ThickOval( hole.m_Position, hole.m_SizeXY, hole.m_Orientation, getSketchOvalBestPenSize(),
                                  nullptr );
         }
     }

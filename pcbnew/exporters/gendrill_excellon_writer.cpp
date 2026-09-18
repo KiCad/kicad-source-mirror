@@ -305,19 +305,19 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, const DRILL_SPAN& aSpan,
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
-        HOLE_INFO& hole_descr = m_holeListBuffer[ii];
+        const DRILL_OPERATION& hole_descr = m_holeListBuffer[ii];
 
-        if( hole_descr.m_Hole_Shape )
+        if( hole_descr.m_IsSlot )
             continue;  // oblong holes will be created later
 
-        if( tool_reference != hole_descr.m_Tool_Reference )
+        if( tool_reference != m_holeToolReferences[ii] )
         {
-            tool_reference = hole_descr.m_Tool_Reference;
+            tool_reference = m_holeToolReferences[ii];
             fmt::print( m_file, "T{}\n", tool_reference );
         }
 
-        x0 = hole_descr.m_Hole_Pos.x - m_offset.x;
-        y0 = hole_descr.m_Hole_Pos.y - m_offset.y;
+        x0 = hole_descr.m_Position.x - m_offset.x;
+        y0 = hole_descr.m_Position.y - m_offset.y;
 
         if( !m_mirror )
             y0 *= -1;
@@ -334,46 +334,46 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, const DRILL_SPAN& aSpan,
     /* Read the hole list and generate data for oblong holes
      */
     tool_reference = -2;    // set to a value not used for
-                            // m_holeListBuffer[ii].m_Tool_Reference
+                            // m_holeToolReferences[ii]
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
-        HOLE_INFO& hole_descr = m_holeListBuffer[ii];
+        const DRILL_OPERATION& hole_descr = m_holeListBuffer[ii];
 
-        if( hole_descr.m_Hole_Shape == 0 )
+        if( !hole_descr.m_IsSlot )
             continue;  // wait for oblong holes
 
-        if( tool_reference != hole_descr.m_Tool_Reference )
+        if( tool_reference != m_holeToolReferences[ii] )
         {
-            tool_reference = hole_descr.m_Tool_Reference;
+            tool_reference = m_holeToolReferences[ii];
             fmt::print( m_file, "T{}\n", tool_reference );
         }
 
-        diam = std::min( hole_descr.m_Hole_Size.x, hole_descr.m_Hole_Size.y );
+        diam = std::min( hole_descr.m_SizeXY.x, hole_descr.m_SizeXY.y );
 
         if( diam == 0 )
             continue;
 
         /* Compute the hole coordinates: */
-        xc = x0 = xf = hole_descr.m_Hole_Pos.x - m_offset.x;
-        yc = y0 = yf = hole_descr.m_Hole_Pos.y - m_offset.y;
+        xc = x0 = xf = hole_descr.m_Position.x - m_offset.x;
+        yc = y0 = yf = hole_descr.m_Position.y - m_offset.y;
 
         /* Compute the start and end coordinates for the shape */
-        if( hole_descr.m_Hole_Size.x < hole_descr.m_Hole_Size.y )
+        if( hole_descr.m_SizeXY.x < hole_descr.m_SizeXY.y )
         {
-            int delta = ( hole_descr.m_Hole_Size.y - hole_descr.m_Hole_Size.x ) / 2;
+            int delta = ( hole_descr.m_SizeXY.y - hole_descr.m_SizeXY.x ) / 2;
             y0 -= delta;
             yf += delta;
         }
         else
         {
-            int delta = ( hole_descr.m_Hole_Size.x - hole_descr.m_Hole_Size.y ) / 2;
+            int delta = ( hole_descr.m_SizeXY.x - hole_descr.m_SizeXY.y ) / 2;
             x0 -= delta;
             xf += delta;
         }
 
-        RotatePoint( &x0, &y0, xc, yc, hole_descr.m_Hole_Orient );
-        RotatePoint( &xf, &yf, xc, yc, hole_descr.m_Hole_Orient );
+        RotatePoint( &x0, &y0, xc, yc, hole_descr.m_Orientation );
+        RotatePoint( &xf, &yf, xc, yc, hole_descr.m_Orientation );
 
         if( !m_mirror )
         {
@@ -715,17 +715,17 @@ bool EXCELLON_WRITER::writeBackdrillLayerPairFile( const wxString& aPlotDirector
     return true;
 }
 
-void EXCELLON_WRITER::writeHoleComments( const HOLE_INFO& aHole, bool aTagBackdrillHit )
+void EXCELLON_WRITER::writeHoleComments( const DRILL_OPERATION& aHole, bool aTagBackdrillHit )
 {
-    if( aTagBackdrillHit && aHole.m_IsBackdrill )
+    if( aTagBackdrillHit && aHole.IsBackdrill() )
         fmt::print( m_file, "{}", "; backdrill\n" );
 
-    writePostMachiningComment( aHole.m_FrontPostMachining, aHole.m_FrontPostMachiningSize,
-                               aHole.m_FrontPostMachiningDepth, aHole.m_FrontPostMachiningAngle,
+    writePostMachiningComment( aHole.m_FrontPostMachining.m_Mode, aHole.m_FrontPostMachining.m_Size,
+                               aHole.m_FrontPostMachining.m_Depth, aHole.m_FrontPostMachining.m_Angle,
                                wxT( "front" ) );
 
-    writePostMachiningComment( aHole.m_BackPostMachining, aHole.m_BackPostMachiningSize,
-                               aHole.m_BackPostMachiningDepth, aHole.m_BackPostMachiningAngle,
+    writePostMachiningComment( aHole.m_BackPostMachining.m_Mode, aHole.m_BackPostMachining.m_Size,
+                               aHole.m_BackPostMachining.m_Depth, aHole.m_BackPostMachining.m_Angle,
                                wxT( "back" ) );
 }
 

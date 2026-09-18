@@ -260,44 +260,44 @@ int GERBER_WRITER::createProtectionFile( const wxString& aFullFilename, IPC4761_
 
     for( auto& hole_descr : m_holeListBuffer )
     {
-        if( !dyn_cast<const PCB_VIA*>( hole_descr.m_ItemParent ) )
+        if( !dyn_cast<const PCB_VIA*>( hole_descr.m_SourceItem ) )
         {
             continue;
         }
 
-        const PCB_VIA* via = dyn_cast<const PCB_VIA*>( hole_descr.m_ItemParent );
+        const PCB_VIA* via = dyn_cast<const PCB_VIA*>( hole_descr.m_SourceItem );
 
         bool cont = false;
-        int  diameter = hole_descr.m_Hole_Diameter;
+        int  diameter = hole_descr.m_Diameter;
         // clang-format off: suggestion is inconsitent
         switch( aFeature )
         {
         case IPC4761_FEATURES::FILLED:
-            cont = ! hole_descr.m_Hole_Filled;
+            cont = ! hole_descr.m_Filled;
             break;
         case IPC4761_FEATURES::CAPPED:
-            cont = ! hole_descr.m_Hole_Capped;
+            cont = ! hole_descr.m_Capped;
             break;
         case IPC4761_FEATURES::COVERED_BACK:
-            cont = !hole_descr.m_Hole_Bot_Covered;
+            cont = !hole_descr.m_BottomCovered;
             diameter = via->GetWidth( via->BottomLayer() );
             break;
         case IPC4761_FEATURES::COVERED_FRONT:
-            cont = ! hole_descr.m_Hole_Top_Covered;
+            cont = ! hole_descr.m_TopCovered;
             diameter = via->GetWidth( via->TopLayer() );
             break;
         case IPC4761_FEATURES::PLUGGED_BACK:
-            cont = !hole_descr.m_Hole_Bot_Plugged;
+            cont = !hole_descr.m_BottomPlugged;
             break;
         case IPC4761_FEATURES::PLUGGED_FRONT:
-            cont = ! hole_descr.m_Hole_Top_Plugged;
+            cont = ! hole_descr.m_TopPlugged;
             break;
         case IPC4761_FEATURES::TENTED_BACK:
-            cont = ! hole_descr.m_Hole_Bot_Tented;
+            cont = ! hole_descr.m_BottomTented;
             diameter = via->GetWidth( via->BottomLayer() );
             break;
         case IPC4761_FEATURES::TENTED_FRONT:
-            cont = ! hole_descr.m_Hole_Top_Tented;
+            cont = ! hole_descr.m_TopTented;
             diameter = via->GetWidth( via->TopLayer() );
             break;
         }
@@ -310,7 +310,7 @@ int GERBER_WRITER::createProtectionFile( const wxString& aFullFilename, IPC4761_
 
         gbr_metadata.SetApertureAttrib( attrib );
 
-        plotter.FlashPadCircle( hole_descr.m_Hole_Pos, diameter, &gbr_metadata );
+        plotter.FlashPadCircle( hole_descr.m_Position, diameter, &gbr_metadata );
 
         holes_count++;
     }
@@ -365,8 +365,8 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
     for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
     {
-        HOLE_INFO& hole_descr = m_holeListBuffer[ii];
-        hole_pos = hole_descr.m_Hole_Pos;
+        const DRILL_OPERATION& hole_descr = m_holeListBuffer[ii];
+        hole_pos = hole_descr.m_Position;
 
         // Manage the aperture attributes: in drill files 3 attributes can be used:
         // "ViaDrill", only for vias, not pads
@@ -374,9 +374,9 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
         // "Slot" for oblong holes;
         GBR_METADATA gbr_metadata;
 
-        if( dyn_cast<const PCB_VIA*>( hole_descr.m_ItemParent ) )
+        if( dyn_cast<const PCB_VIA*>( hole_descr.m_SourceItem ) )
         {
-            if( hole_descr.m_IsBackdrill )
+            if( hole_descr.IsBackdrill() )
                 gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_BACKDRILL );
             else
                 gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_VIADRILL );
@@ -389,10 +389,10 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
             last_item_is_via = true;
         }
-        else if( dyn_cast<const PAD*>( hole_descr.m_ItemParent ) )
+        else if( dyn_cast<const PAD*>( hole_descr.m_SourceItem ) )
         {
             last_item_is_via = false;
-            const PAD* pad = dyn_cast<const PAD*>( hole_descr.m_ItemParent );
+            const PAD* pad = dyn_cast<const PAD*>( hole_descr.m_SourceItem );
 
             if( pad->GetProperty() == PAD_PROP::CASTELLATED )
             {
@@ -408,7 +408,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
             {
                 // Good practice of oblong pad holes (slots) is to use a specific aperture for
                 // routing, not used in drill commands.
-                if( hole_descr.m_Hole_Shape )
+                if( hole_descr.m_IsSlot )
                 {
                     gbr_metadata.SetApertureAttrib(
                             GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL );
@@ -427,17 +427,17 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
             gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
         }
 
-        if( hole_descr.m_Hole_Shape )
+        if( hole_descr.m_IsSlot )
         {
 #if FLASH_OVAL_HOLE     // set to 1 to use flashed oblong holes,
                         // 0 to draw them as a line.
-            plotter.FlashPadOval( hole_pos, hole_descr.m_Hole_Size, hole_descr.m_Hole_Orient,
+            plotter.FlashPadOval( hole_pos, hole_descr.m_SizeXY, hole_descr.m_Orientation,
                                   &gbr_metadata );
 #else
             // Use routing for oblong hole (Slots)
             VECTOR2I start, end;
-            convertOblong2Segment( hole_descr.m_Hole_Size, hole_descr.m_Hole_Orient, start, end );
-            int width = std::min( hole_descr.m_Hole_Size.x, hole_descr.m_Hole_Size.y );
+            convertOblong2Segment( hole_descr.m_SizeXY, hole_descr.m_Orientation, start, end );
+            int width = std::min( hole_descr.m_SizeXY.x, hole_descr.m_SizeXY.y );
 
             if ( width == 0 )
                 continue;
@@ -447,7 +447,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
         }
         else
         {
-            int diam = std::min( hole_descr.m_Hole_Size.x, hole_descr.m_Hole_Size.y );
+            int diam = std::min( hole_descr.m_SizeXY.x, hole_descr.m_SizeXY.y );
             plotter.FlashPadCircle( hole_pos, diam, &gbr_metadata );
         }
 
@@ -558,7 +558,7 @@ bool GERBER_WRITER::hasViaType( IPC4761_FEATURES aFeature )
 {
     for( auto& hole_descr : m_holeListBuffer )
     {
-        if( !dyn_cast<const PCB_VIA*>( hole_descr.m_ItemParent ) )
+        if( !dyn_cast<const PCB_VIA*>( hole_descr.m_SourceItem ) )
         {
             continue;
         }
@@ -566,42 +566,42 @@ bool GERBER_WRITER::hasViaType( IPC4761_FEATURES aFeature )
         switch( aFeature )
         {
         case IPC4761_FEATURES::FILLED:
-            if( hole_descr.m_Hole_Filled )
+            if( hole_descr.m_Filled )
                 return true;
             break;
 
         case IPC4761_FEATURES::CAPPED:
-            if( hole_descr.m_Hole_Capped )
+            if( hole_descr.m_Capped )
                 return true;
             break;
 
         case IPC4761_FEATURES::COVERED_BACK:
-            if( hole_descr.m_Hole_Bot_Covered )
+            if( hole_descr.m_BottomCovered )
                 return true;
             break;
 
         case IPC4761_FEATURES::COVERED_FRONT:
-            if( hole_descr.m_Hole_Top_Covered )
+            if( hole_descr.m_TopCovered )
                 return true;
             break;
 
         case IPC4761_FEATURES::PLUGGED_BACK:
-            if( hole_descr.m_Hole_Bot_Plugged )
+            if( hole_descr.m_BottomPlugged )
                 return true;
             break;
 
         case IPC4761_FEATURES::PLUGGED_FRONT:
-            if( hole_descr.m_Hole_Top_Plugged )
+            if( hole_descr.m_TopPlugged )
                 return true;
             break;
 
         case IPC4761_FEATURES::TENTED_BACK:
-            if( hole_descr.m_Hole_Bot_Tented )
+            if( hole_descr.m_BottomTented )
                 return true;
             break;
 
         case IPC4761_FEATURES::TENTED_FRONT:
-            if( hole_descr.m_Hole_Top_Tented )
+            if( hole_descr.m_TopTented )
                 return true;
             break;
         }

@@ -154,7 +154,7 @@ private:
     wxFileName getBackdrillLayerPairFileName( const DRILL_SPAN& aSpan ) const;
     bool       writeBackdrillLayerPairFile( const wxString& aPlotDirectory,
                                             REPORTER* aReporter, const DRILL_SPAN& aSpan );
-    void       writeHoleComments( const HOLE_INFO& aHole, bool aTagBackdrillHit );
+    void       writeHoleComments( const DRILL_OPERATION& aHole, bool aTagBackdrillHit );
     void       writePostMachiningComment( PAD_DRILL_POST_MACHINING_MODE aMode, int aSizeIU,
                                           int aDepthIU, int aAngleDeciDegree,
                                           const wxString& aSideLabel );

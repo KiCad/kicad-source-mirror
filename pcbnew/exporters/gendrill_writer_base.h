@@ -35,7 +35,7 @@
 #include <string>
 #include <vector>
 
-#include <drill/drill_span.h>
+#include <drill/drill_operation.h>
 #include <layer_ids.h>
 #include <plotters/plotter.h>
 #include <padstack.h>
@@ -87,89 +87,6 @@ public:
         m_IsBackdrill    = false;
         m_HasPostMachining = false;
     }
-};
-
-
-/**
- * Handle hole which must be drilled (diameter, position and layers).
- *
- * For buried or micro vias, the hole is not on all layers.  So we must generate a drill file
- * for each layer pair (adjacent layers).  Not plated holes are always through holes, and must
- * be output on a specific drill file because they are drilled after the PCB process is finished.
- */
-class HOLE_INFO
-{
-public:
-    HOLE_INFO()
-    {
-        m_ItemParent = nullptr;
-        m_Hole_NotPlated = false;
-        m_Hole_Diameter = 0;
-        m_Tool_Reference = 0;
-        m_Hole_Orient = ANGLE_0;
-        m_Hole_Shape = 0;
-        m_Hole_Bottom_Layer = B_Cu;
-        m_Hole_Top_Layer = F_Cu;
-        m_HoleAttribute = HOLE_ATTRIBUTE::HOLE_UNKNOWN;
-        m_Hole_Filled = false;
-        m_Hole_Capped = false;
-        m_Hole_Top_Covered = false;
-        m_Hole_Bot_Covered = false;
-        m_Hole_Top_Plugged = false;
-        m_Hole_Bot_Plugged = false;
-        m_Hole_Top_Tented = false;
-        m_Hole_Bot_Tented = false;
-        m_IsBackdrill = false;
-        m_FrontPostMachining = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
-        m_FrontPostMachiningSize = 0;
-        m_FrontPostMachiningDepth = 0;
-        m_FrontPostMachiningAngle = 0;
-        m_BackPostMachining = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
-        m_BackPostMachiningSize = 0;
-        m_BackPostMachiningDepth = 0;
-        m_BackPostMachiningAngle = 0;
-        m_DrillStart = UNDEFINED_LAYER;
-        m_DrillEnd = UNDEFINED_LAYER;
-    }
-
-public:
-    BOARD_ITEM*  m_ItemParent;           // The pad or via parent of this hole
-    int          m_Hole_Diameter;        // hole value, and for oblong: min(hole size x, hole
-                                         // size y).
-    int          m_Tool_Reference;       // Tool reference for this hole = 1 ... n (values <=0
-                                         // must not be used).
-    VECTOR2I     m_Hole_Size;            // hole size for oblong holes
-    EDA_ANGLE    m_Hole_Orient;          // Hole rotation (= pad rotation) for oblong holes
-    int          m_Hole_Shape;           // hole shape: round (0) or oval (1)
-    VECTOR2I     m_Hole_Pos;             // hole position
-    PCB_LAYER_ID m_Hole_Bottom_Layer;    // physically lowest layer reached by the hole
-    PCB_LAYER_ID m_Hole_Top_Layer;       // physically highest layer reached by the hole
-    bool         m_Hole_NotPlated;       // hole not plated. Must be in a specific drill file or
-                                         // section.
-    HOLE_ATTRIBUTE m_HoleAttribute;      // Attribute, used in Excellon drill file and to sort holes
-                                         // by type.
-    bool         m_Hole_Filled;          // True if the hole is filled
-    bool         m_Hole_Capped;          // True if the hole is capped
-    bool         m_Hole_Top_Covered;     // True if the hole is covered on the top layer
-    bool         m_Hole_Bot_Covered;     // True if the hole is covered on the bottom layer
-    bool         m_Hole_Top_Plugged;     // True if the hole is plugged on the top layer
-    bool         m_Hole_Bot_Plugged;     // True if the hole is plugged on the bottom layer
-    bool         m_Hole_Top_Tented;      // True if the hole is tented on the top layer
-    bool         m_Hole_Bot_Tented;      // True if the hole is tented on the bottom layer
-    bool         m_IsBackdrill;          // True if the hole is a backdrill
-    PAD_DRILL_POST_MACHINING_MODE m_FrontPostMachining; // Post-machining mode
-    int          m_FrontPostMachiningSize;    // Post-machining size
-    int          m_FrontPostMachiningDepth;   // Post-machining depth
-    int          m_FrontPostMachiningAngle;   // Post-machining angle
-    PAD_DRILL_POST_MACHINING_MODE m_BackPostMachining; // Post-machining mode
-    int          m_BackPostMachiningSize;    // Post-machining size
-    int          m_BackPostMachiningDepth;   // Post-machining depth
-    int          m_BackPostMachiningAngle;   // Post-machining angle
-    PCB_LAYER_ID m_DrillStart;           // Start layer for backdrills
-    PCB_LAYER_ID m_DrillEnd;             // End layer for backdrills
-    std::optional<int> m_StubLength;     // Stub length for backdrills
-
-
 };
 
 
@@ -463,7 +380,10 @@ protected:
                                                         // inches or mm)
     VECTOR2I                 m_offset;                  // Drill offset coordinates
     bool                     m_merge_PTH_NPTH;          // True to generate only one drill file
-    std::vector<HOLE_INFO>   m_holeListBuffer;          // Buffer containing holes
+    std::vector<DRILL_OPERATION> m_holeListBuffer;
+
+    // One-based tool numbers, indexed by the sorted operation list.
+    std::vector<int>         m_holeToolReferences;
     std::vector<DRILL_TOOL>  m_toolListBuffer;          // Buffer containing tools
 
     PLOT_FORMAT m_mapFileFmt;                           // the format of the map drill file,

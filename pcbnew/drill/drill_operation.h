@@ -72,9 +72,9 @@ struct DRILL_POST_MACHINING
 /**
  * One machining action, which is also one NC hit and one tool assignment.
  *
- * Post-machining is not a kind of its own. It rides on the record that made the hole, the
- * way HOLE_INFO does, so one operation projects onto exactly one HOLE_INFO. A consumer that
- * wants a countersink on a row of its own expands the front and back fields itself.
+ * Post-machining rides on the operation that made the hole. A consumer that wants a
+ * countersink on a row of its own expands the front and back fields itself. Tool numbers
+ * belong to the writer, since each output file can group and order operations differently.
  */
 struct DRILL_OPERATION
 {
