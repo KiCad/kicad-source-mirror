@@ -275,6 +275,11 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
     // Disconnect board, which is owned by FOOTPRINT_PREVIEW_PANEL.
     m_pcb = nullptr;
 
+    // The 3D canvas holds references to m_boardAdapter and m_trackBallCamera, and wx would not
+    // destroy this grandchild window until well after those members are gone
+    delete m_preview3DCanvas;
+    m_preview3DCanvas = nullptr;
+
     // clang-format off
     // Disconnect Events
     m_toggleDescription->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
