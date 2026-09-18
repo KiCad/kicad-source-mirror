@@ -203,10 +203,15 @@ SVG_IMAGE parseSvgText( const std::string& aBody )
         FONT_CONFIG config( FcConfigCreate(), FcConfigDestroy );
         BOOST_REQUIRE( config );
 
+#ifdef QA_SRC_ROOT
+        wxString fontDir = wxString::FromUTF8( QA_SRC_ROOT ) + wxS( "/thirdparty/libwmf/fonts" );
+#else
+        wxString fontDir = PATHS::GetStockDataPath() + wxS( "/libwmf/fonts" );
+#endif
+
         for( const char* file : { "NimbusSans-Regular.t1", "NimbusSans-Bold.t1", "NimbusSans-Italic.t1" } )
         {
-            wxCharBuffer path = ( PATHS::GetStockDataPath() + wxS( "/libwmf/fonts/" )
-                                  + wxString::FromUTF8( file ) ).utf8_str();
+            wxCharBuffer path = ( fontDir + wxS( "/" ) + wxString::FromUTF8( file ) ).utf8_str();
             BOOST_REQUIRE( FcConfigAppFontAddFile( config.get(), reinterpret_cast<const FcChar8*>( path.data() ) ) );
         }
 

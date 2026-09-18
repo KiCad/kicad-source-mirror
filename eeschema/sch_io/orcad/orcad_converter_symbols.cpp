@@ -49,7 +49,8 @@
 #include <lib_symbol.h>
 #include <math/util.h>
 #include <pin_type.h>
-#include <paths.h>
+#include <sch_io/ole_image.h>
+
 #include <sch_field.h>
 #include <sch_no_connect.h>
 #include <sch_pin.h>
@@ -3899,8 +3900,8 @@ void ORCAD_CONVERTER::applyFont( EDA_TEXT* aText, int aFontIdx, bool aTemplateFo
         if( face.CmpNoCase( wxS( "Elephant" ) ) == 0 )
         {
             face = wxS( "KiCad OrCAD Elephant" );
-            wxFileName fontFile( PATHS::GetStockDataPath()
-                                 + wxS( "/libwmf/fonts/KiCadOrCADElephant-Black.ttf" ) );
+            wxFileName fontFile( OleLibWmfFontDirectory()
+                                 + wxS( "/KiCadOrCADElephant-Black.ttf" ) );
             EMBEDDED_FILES* files = m_schematic->GetEmbeddedFiles();
 
             if( files->AddFile( fontFile, false ) )

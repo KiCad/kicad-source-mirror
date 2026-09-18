@@ -30,7 +30,6 @@
 #include <fontconfig/fontconfig.h>
 #include <nanosvg.h>
 #include <nanosvgrast.h>
-#include <paths.h>
 #include <wx/filename.h>
 #include <wx/image.h>
 #include <wx/log.h>
@@ -50,7 +49,7 @@ FONT_CONFIG emfFontConfig()
     if( !config )
         return config;
 
-    wxString directory = PATHS::GetStockDataPath() + wxS( "/libwmf/fonts" );
+    wxString directory = OleLibWmfFontDirectory();
 
     const char* aliases = R"(<fontconfig>
 <cachedir prefix="xdg">fontconfig</cachedir>

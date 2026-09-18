@@ -73,6 +73,10 @@ std::vector<uint8_t> OleExtractCiImage( const std::vector<uint8_t>& aPayload );
 /** Include leading bytes when the payload format is unknown. */
 wxString OleDescribeImagePayload( const std::vector<uint8_t>& aPayload );
 
+/// Locate the bundled libwmf fonts directory, falling back to a search above the
+/// executable so running from a build directory works even on macOS
+wxString OleLibWmfFontDirectory();
+
 bool OleMakeBmpFromDib( const std::vector<uint8_t>& aDib, wxMemoryBuffer& aOut );
 
 bool OleRenderWmf( const std::vector<uint8_t>& aWmf, int aMaxWidth, int aMaxHeight, wxImage& aImage,

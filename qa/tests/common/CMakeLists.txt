@@ -260,7 +260,7 @@ include_directories(
 )
 
 set_source_files_properties( test_remote_provider_metadata.cpp test_remote_provider_client.cpp
-        test_translation_format_strings.cpp test_json_schema_validator.cpp PROPERTIES
+        test_translation_format_strings.cpp test_json_schema_validator.cpp test_svg_import.cpp PROPERTIES
         COMPILE_DEFINITIONS "QA_SRC_ROOT=(\"${CMAKE_SOURCE_DIR}\")"
         )
 
