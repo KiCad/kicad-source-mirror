@@ -547,9 +547,8 @@ void RN_NET::RemoveInvalidRefs()
                           return !edge.GetSourceNode() || !edge.GetTargetNode();
                       };
 
-    m_rnEdges.erase( std::remove_if( m_rnEdges.begin(), m_rnEdges.end(), is_invalid ), m_rnEdges.end() );
-    m_boardEdges.erase( std::remove_if( m_boardEdges.begin(), m_boardEdges.end(), is_invalid ),
-                        m_boardEdges.end() );
+    std::erase_if( m_rnEdges, is_invalid );
+    std::erase_if( m_boardEdges, is_invalid );
 }
 
 

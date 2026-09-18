@@ -171,12 +171,11 @@ static std::vector<PROPERTY_DELTA> pcbAddedRemovedProperties( const BOARD_ITEM* 
 {
     std::vector<PROPERTY_DELTA> deltas = ItemProperties( aItem, aAsAfter );
 
-    deltas.erase( std::remove_if( deltas.begin(), deltas.end(),
-                                  [&]( const PROPERTY_DELTA& d )
-                                  {
-                                      return pcbLibraryMetadataNoise( d.name );
-                                  } ),
-                  deltas.end() );
+    std::erase_if( deltas,
+                   [&]( const PROPERTY_DELTA& d )
+                   {
+                       return pcbLibraryMetadataNoise( d.name );
+                   } );
 
     return deltas;
 }
@@ -188,12 +187,11 @@ std::vector<PROPERTY_DELTA> PCB_DIFFER::diffProperties( const BOARD_ITEM* aBefor
 
     const bool insideFootprint = aBefore && aBefore->GetParent() && aBefore->GetParent()->Type() == PCB_FOOTPRINT_T;
 
-    deltas.erase( std::remove_if( deltas.begin(), deltas.end(),
-                                  [&]( const PROPERTY_DELTA& d )
-                                  {
-                                      return pcbDiffPropertyIsNoise( d.name, insideFootprint );
-                                  } ),
-                  deltas.end() );
+    std::erase_if( deltas,
+                   [&]( const PROPERTY_DELTA& d )
+                   {
+                       return pcbDiffPropertyIsNoise( d.name, insideFootprint );
+                   } );
 
     if( auto zoneA = dynamic_cast<const ZONE*>( aBefore ) )
     {

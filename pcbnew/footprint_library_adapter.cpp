@@ -448,12 +448,11 @@ FOOTPRINT_LIBRARY_ADAPTER::SAVE_T FOOTPRINT_LIBRARY_ADAPTER::SaveFootprint( cons
                 if( aOverwrite )
                 {
                     auto& footprints = it->second;
-                    footprints.erase( std::remove_if( footprints.begin(), footprints.end(),
-                                                      [&fpName]( const std::unique_ptr<FOOTPRINT>& fp )
-                                                      {
-                                                          return fp->GetFPID().GetLibItemName().wx_str() == fpName;
-                                                      } ),
-                                      footprints.end() );
+                    std::erase_if( footprints,
+                                   [&fpName]( const std::unique_ptr<FOOTPRINT>& fp )
+                                   {
+                                       return fp->GetFPID().GetLibItemName().wx_str() == fpName;
+                                   } );
                 }
 
                 // Must match what FootprintSave() just wrote, UUIDs included
@@ -503,12 +502,11 @@ void FOOTPRINT_LIBRARY_ADAPTER::DeleteFootprint( const wxString& aNickname, cons
             if( it != PreloadedFootprints.Get().end() )
             {
                 auto& footprints = it->second;
-                footprints.erase( std::remove_if( footprints.begin(), footprints.end(),
-                                                  [&aFootprintName]( const std::unique_ptr<FOOTPRINT>& fp )
-                                                  {
-                                                      return fp->GetFPID().GetLibItemName().wx_str() == aFootprintName;
-                                                  } ),
-                                  footprints.end() );
+                std::erase_if( footprints,
+                               [&aFootprintName]( const std::unique_ptr<FOOTPRINT>& fp )
+                               {
+                                   return fp->GetFPID().GetLibItemName().wx_str() == aFootprintName;
+                               } );
             }
         }
     }

@@ -1493,12 +1493,11 @@ std::vector<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( std::initializer_list<BO
                 RECURSE_MODE::RECURSE );
     }
 
-    items.erase( std::remove_if( items.begin(), items.end(),
-                                 [&]( BOARD_ITEM* aItem )
-                                 {
-                                     return skippedItems.contains( aItem );
-                                 } ),
-                 items.end() );
+    std::erase_if( items,
+                   [&]( BOARD_ITEM* aItem )
+                   {
+                       return skippedItems.contains( aItem );
+                   } );
 
     return items;
 }
