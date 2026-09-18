@@ -172,8 +172,16 @@ void NET_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
     wxASSERT( static_cast<size_t>( aRow ) < m_nets.size() );
     wxASSERT( aCol == COL_VISIBILITY );
 
-    m_nets[aRow].visible = aValue;
+    SetVisibilityState( aRow, aValue );
     updateNetVisibility( m_nets[aRow] );
+}
+
+
+void NET_GRID_TABLE::SetVisibilityState( int aRow, bool aVisible )
+{
+    wxASSERT( static_cast<size_t>( aRow ) < m_nets.size() );
+
+    m_nets[aRow].visible = aVisible;
 }
 
 
@@ -1128,7 +1136,7 @@ void APPEARANCE_CONTROLS::OnNetVisibilityChanged( int aNetCode, bool aVisibility
 
     if( row >= 0 )
     {
-        m_netsTable->SetValueAsBool( row, NET_GRID_TABLE::COL_VISIBILITY, aVisibility );
+        m_netsTable->SetVisibilityState( row, aVisibility );
         m_netsGrid->ForceRefresh();
     }
 }
@@ -3349,7 +3357,7 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
             int row = m_netsTable->GetRowByNetcode( net->GetNetCode() );
 
             if( row >= 0 )
-                m_netsTable->SetValueAsBool( row, NET_GRID_TABLE::COL_VISIBILITY, aShow );
+                m_netsTable->SetVisibilityState( row, aShow );
         }
     }
 

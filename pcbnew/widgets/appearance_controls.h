@@ -110,6 +110,9 @@ public:
 
     void SetValueAsBool( int aRow, int aCol, bool aValue ) override;
 
+    /// Update cached visibility without dispatching a ratsnest action.
+    void SetVisibilityState( int aRow, bool aVisible );
+
     void* GetValueAsCustom( int aRow, int aCol, const wxString& aTypeName ) override;
 
     void SetValueAsCustom( int aRow, int aCol, const wxString& aTypeName, void* aValue ) override;
