@@ -60,6 +60,8 @@ public:
 
     bool SaveBoard() override;
 
+    bool SaveBoardAs( const wxString& aFileName ) override;
+
     bool SavePcbCopy( const wxString& aFileName, bool aCreateProject, bool aHeadless ) override;
 
     bool ReadNetlistFromFile( const wxString& aFilename, NETLIST& aNetlist, REPORTER& aReporter ) override;

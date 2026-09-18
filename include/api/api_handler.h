@@ -36,6 +36,8 @@
 #include <api/common/envelope.pb.h>
 #include <core/typeinfo.h>
 
+class KICAD_API_SERVER;
+
 using kiapi::common::ApiRequest, kiapi::common::ApiResponse;
 using kiapi::common::ApiResponseStatus, kiapi::common::ApiStatusCode;
 
@@ -82,6 +84,10 @@ public:
         m_notifyNetSettings = false;
         return pending;
     }
+
+    /// Set by KICAD_API_SERVER::RegisterHandler; null when the handler is not registered.
+    void setApiServer( KICAD_API_SERVER* aServer ) { m_apiServer = aServer; }
+    KICAD_API_SERVER* apiServer() const { return m_apiServer; }
 
 protected:
     /**
@@ -144,6 +150,9 @@ protected:
     std::map<std::string, REQUEST_HANDLER> m_handlers;
 
     bool m_notifyNetSettings = false;
+
+    KICAD_API_SERVER* m_apiServer = nullptr;
+
     static const wxString m_defaultCommitMessage;
 
 private:

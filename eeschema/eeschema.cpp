@@ -593,6 +593,9 @@ void IFACE::Reset()
 {
     if( m_jobHandler )
         m_jobHandler->ClearCachedSchematic();
+
+    closeSchematic( nullptr );
+    closeSymbol( nullptr );
 }
 
 
@@ -910,7 +913,8 @@ void IFACE::closeSchematic( KICAD_API_SERVER* aServer )
 
     // The jobs handler caches the last-loaded schematic. Clear it so the next job
     // uses the schematic from the newly opened document rather than a stale copy.
-    m_jobHandler->ClearCachedSchematic();
+    if( m_jobHandler )
+        m_jobHandler->ClearCachedSchematic();
 }
 
 

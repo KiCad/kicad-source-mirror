@@ -50,6 +50,16 @@ bool SaveSchematic( SCHEMATIC& aSchematic, PROJECT& aProject );
 bool SaveSchematicCopy( SCHEMATIC& aSchematic, PROJECT& aProject, const wxString& aFileName,
                         bool aCreateProject );
 
+/**
+ * Save the schematic to @a aFileName and adopt it: the root sheet and screen are re-homed to
+ * the new path, the whole hierarchy is written, and the project is re-targeted to the new
+ * location (creating a project file if none exists there).  Used by the headless IPC API
+ * SaveDocumentAs handler; there is no frame, so no lock or file history is updated.
+ *
+ * @return true if the schematic was saved and the project re-targeted.
+ */
+bool SaveSchematicAs( SCHEMATIC& aSchematic, PROJECT& aProject, const wxString& aFileName );
+
 } // namespace SCH_API_SAVE
 
 #endif

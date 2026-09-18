@@ -20,6 +20,7 @@
 #include <api/sch_api_save.h>
 
 #include <base_screen.h>
+#include <common.h>
 #include <kiplatform/io.h>
 #include <pgm_base.h>
 #include <project.h>
@@ -226,6 +227,34 @@ bool SaveSchematicCopy( SCHEMATIC& aSchematic, PROJECT& aProject, const wxString
                 return false;
         }
     }
+
+    return true;
+}
+
+
+bool SaveSchematicAs( SCHEMATIC& aSchematic, PROJECT& aProject, const wxString& aFileName )
+{
+    wxFileName schematicFileName( EnsureFileExtension( aFileName, FILEEXT::KiCadSchematicFileExtension ) );
+    schematicFileName.MakeAbsolute();
+
+    if( !schematicFileName.IsOk() || schematicFileName.GetName().IsEmpty() )
+        return false;
+
+    if( ( !schematicFileName.DirExists() && !schematicFileName.Mkdir() ) || !schematicFileName.IsDirWritable() )
+        return false;
+
+    aSchematic.Root().SetFileName( schematicFileName.GetFullName() );
+    aSchematic.RootScreen()->SetFileName( schematicFileName.GetFullPath() );
+
+    if( !SaveSchematic( aSchematic, aProject ) )
+        return false;
+
+    aProject.SetReadOnly( false );
+
+    wxFileName projectFile( schematicFileName );
+    projectFile.SetExt( FILEEXT::ProjectFileExtension );
+
+    Pgm().GetSettingsManager().SaveProjectAs( projectFile.GetFullPath(), &aProject );
 
     return true;
 }

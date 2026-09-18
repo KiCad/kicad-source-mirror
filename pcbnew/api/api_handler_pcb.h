@@ -51,6 +51,7 @@ private:
             const HANDLER_CONTEXT<commands::GetOpenDocuments>& aCtx );
 
     HANDLER_RESULT<Empty> handleSaveDocument( const HANDLER_CONTEXT<commands::SaveDocument>& aCtx );
+    HANDLER_RESULT<Empty> handleSaveDocumentAs( const HANDLER_CONTEXT<commands::SaveDocumentAs>& aCtx );
 
     HANDLER_RESULT<Empty> handleSaveCopyOfDocument(
             const HANDLER_CONTEXT<commands::SaveCopyOfDocument>& aCtx );

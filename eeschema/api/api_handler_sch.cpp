@@ -22,6 +22,7 @@
 #include <api/api_enums.h>
 #include <api/api_sch_utils.h>
 #include <api/api_utils.h>
+#include <api/api_server.h>
 #include <api/cross_probe_client.h>
 #include <api/sch_context.h>
 #include <fmt.h>
@@ -46,6 +47,7 @@
 #include <sch_edit_frame.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <ki_error.h>
+#include <pgm_base.h>
 #include <richio.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 
@@ -145,6 +147,7 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
     registerHandler<SaveCopyOfDocument, google::protobuf::Empty>(
             &API_HANDLER_SCH::handleSaveCopyOfDocument );
     registerHandler<RevertDocument, google::protobuf::Empty>( &API_HANDLER_SCH::handleRevertDocument );
+    registerHandler<SaveDocumentAs, google::protobuf::Empty>( &API_HANDLER_SCH::handleSaveDocumentAs );
 
     registerHandler<commands::SaveDocumentToString, commands::SavedDocumentResponse>(
             &API_HANDLER_SCH::handleSaveDocumentToString );
@@ -326,13 +329,19 @@ API_HANDLER_SCH::validateDocumentInternal( const DocumentSpecifier& aDocument ) 
 
 HANDLER_RESULT<google::protobuf::Empty> API_HANDLER_SCH::handleSaveDocument( const HANDLER_CONTEXT<SaveDocument>& aCtx )
 {
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
-
-    if( !documentValidation )
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
+
+    if( project().IsNullProject() || schematic()->GetFileName().IsEmpty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "the schematic is untitled; use SaveDocumentAs to save it to a new file" );
+        return tl::unexpected( e );
+    }
 
     if( !context()->SaveSchematic() )
     {
@@ -340,6 +349,60 @@ HANDLER_RESULT<google::protobuf::Empty> API_HANDLER_SCH::handleSaveDocument( con
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
         e.set_error_message( "failed to save schematic" );
         return tl::unexpected( e );
+    }
+
+    return google::protobuf::Empty();
+}
+
+
+HANDLER_RESULT<google::protobuf::Empty>
+API_HANDLER_SCH::handleSaveDocumentAs( const HANDLER_CONTEXT<SaveDocumentAs>& aCtx )
+{
+    // In GUI mode a project change may require closing other editor frames, which the API is
+    // not allowed to do; headless mode has no other frames, so it is safe there
+    if( Pgm().IsGUI() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNIMPLEMENTED );
+        e.set_error_message( "SaveDocumentAs is not available in GUI mode" );
+        return tl::unexpected( e );
+    }
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+
+    if( !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    wxString pathStr = wxString::FromUTF8( aCtx.Request.path() );
+
+    if( pathStr.IsEmpty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "path is required" );
+        return tl::unexpected( e );
+    }
+
+    wxFileName oldSchematicFile( m_context->GetCurrentFileName() );
+
+    if( !context()->SaveSchematicAs( pathStr ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "failed to save schematic to '{}'", pathStr.ToStdString() ) );
+        return tl::unexpected( e );
+    }
+
+    if( KICAD_API_SERVER* server = apiServer() )
+    {
+        wxFileName newSchematicFile( pathStr );
+        newSchematicFile.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+        server->NotifyDocumentRenamed( thisDocumentType(), oldSchematicFile.GetFullPath(),
+                                       newSchematicFile.GetFullPath() );
     }
 
     return google::protobuf::Empty();

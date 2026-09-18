@@ -57,6 +57,8 @@ public:
 
     bool SaveSchematic() override;
 
+    bool SaveSchematicAs( const wxString& aFileName ) override;
+
     bool SaveSchematicCopy( const wxString& aFileName, bool aCreateProject ) override;
 
     bool RevertToSaved() override;

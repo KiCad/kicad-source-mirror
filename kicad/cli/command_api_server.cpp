@@ -615,6 +615,32 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
     commonHandler.SetCloseDocumentHandler( closeDocument );
     commonHandler.SetCloseAllDocumentsHandler( closeAllDocuments );
 
+    server->SetRenameListener(
+            [&]( types::DocumentType aType, const wxString& aOldPath, const wxString& aNewPath )
+            {
+                auto it = std::ranges::find_if( openDocuments,
+                                                [&]( const OPEN_DOCUMENT& d )
+                                                {
+                                                    return d.type == aType && d.specPath == aOldPath;
+                                                } );
+
+                if( it == openDocuments.end() )
+                    return;
+
+                wxFileName newFile( aNewPath );
+                newFile.MakeAbsolute();
+
+                it->fileName = newFile.GetFullName();
+                it->specPath = newFile.GetFullPath();
+
+                if( openProjectPath )
+                {
+                    wxFileName newProject( newFile );
+                    newProject.SetExt( FILEEXT::ProjectFileExtension );
+                    openProjectPath = newProject;
+                }
+            } );
+
     server->RegisterHandler( &commonHandler );
     server->RegisterHandler( &designBlockLibrariesHandler );
     server->Start();

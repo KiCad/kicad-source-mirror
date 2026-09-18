@@ -158,6 +158,9 @@ message CloseAllDocuments
 }
 
 
+// Saves the given document to its existing file path.
+// Returns an error if the document is untitled (it has never been saved to disk); use
+// SaveDocumentAs to save an untitled document to an explicit path.
 message SaveDocument
 {
   kiapi.common.types.DocumentSpecifier document = 1;

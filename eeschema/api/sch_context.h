@@ -56,6 +56,11 @@ public:
 
     virtual bool SaveSchematic() = 0;
 
+    /**
+     * Save the schematic to a new path and change the active schematic/project.  Headless-only.
+     */
+    virtual bool SaveSchematicAs( const wxString& aFileName ) = 0;
+
     virtual bool SaveSchematicCopy( const wxString& aFileName, bool aCreateProject ) = 0;
 
     // Reload the document from disk, discarding unsaved changes; returns false if there is no

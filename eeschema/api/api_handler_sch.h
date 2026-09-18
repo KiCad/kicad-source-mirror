@@ -104,6 +104,8 @@ protected:
 private:
     HANDLER_RESULT<google::protobuf::Empty> handleSaveDocument(
             const HANDLER_CONTEXT<commands::SaveDocument>& aCtx );
+    HANDLER_RESULT<google::protobuf::Empty> handleSaveDocumentAs(
+            const HANDLER_CONTEXT<commands::SaveDocumentAs>& aCtx );
 
     HANDLER_RESULT<google::protobuf::Empty> handleSaveCopyOfDocument(
             const HANDLER_CONTEXT<commands::SaveCopyOfDocument>& aCtx );

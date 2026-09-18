@@ -202,12 +202,17 @@ bool KICAD_API_SERVER::Running() const
 void KICAD_API_SERVER::RegisterHandler( API_HANDLER* aHandler )
 {
     wxCHECK( aHandler, /* void */ );
+
+    aHandler->setApiServer( this );
     m_handlers.insert( aHandler );
 }
 
 
 void KICAD_API_SERVER::DeregisterHandler( API_HANDLER* aHandler )
 {
+    if( aHandler )
+        aHandler->setApiServer( nullptr );
+
     m_handlers.erase( aHandler );
 }
 
@@ -216,6 +221,14 @@ void KICAD_API_SERVER::NotifyNetSettingsChanged()
 {
     for( API_HANDLER* handler : m_handlers )
         handler->onNetSettingsChanged();
+}
+
+
+void KICAD_API_SERVER::NotifyDocumentRenamed( kiapi::common::types::DocumentType aType,
+                                              const wxString& aOldPath, const wxString& aNewPath )
+{
+    if( m_renameListener )
+        m_renameListener( aType, aOldPath, aNewPath );
 }
 
 

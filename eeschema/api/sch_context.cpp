@@ -75,9 +75,15 @@ public:
         return SCH_API_SAVE::SaveSchematic( m_frame->Schematic(), m_frame->Prj() );
     }
 
+    bool SaveSchematicAs( const wxString& aFileName ) override
+    {
+        return false;
+    }
+
     bool SaveSchematicCopy( const wxString& aFileName, bool aCreateProject ) override
     {
-        return SCH_API_SAVE::SaveSchematicCopy( m_frame->Schematic(), m_frame->Prj(), aFileName, aCreateProject );
+        return SCH_API_SAVE::SaveSchematicCopy( m_frame->Schematic(), m_frame->Prj(), aFileName,
+                                                aCreateProject );
     }
 
     bool RevertToSaved() override

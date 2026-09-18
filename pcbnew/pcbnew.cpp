@@ -805,6 +805,8 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 
 void IFACE::Reset()
 {
+    closeBoard( nullptr );
+    closeFootprint( nullptr );
 }
 
 
@@ -972,7 +974,8 @@ void IFACE::closeBoard( KICAD_API_SERVER* aServer )
 
     // The jobs handler caches the last-loaded board. Clear it so the next job
     // uses the board from the newly opened document rather than a stale copy.
-    m_jobHandler->ClearCachedBoard();
+    if( m_jobHandler )
+        m_jobHandler->ClearCachedBoard();
 }
 
 

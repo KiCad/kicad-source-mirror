@@ -21,6 +21,7 @@
 #include <api/headless_pcb_context.h>
 #include <board.h>
 #include <board_loader.h>
+#include <common.h>
 #include <component_classes/component_class_manager.h>
 #include <drc/drc_engine.h>
 #include <footprint.h>
@@ -118,6 +119,37 @@ bool HEADLESS_PCB_CONTEXT::SaveBoard()
     }
 
     return success;
+}
+
+
+bool HEADLESS_PCB_CONTEXT::SaveBoardAs( const wxString& aFileName )
+{
+    if( !m_board || aFileName.IsEmpty() )
+        return false;
+
+    wxFileName boardPath( EnsureFileExtension( aFileName, FILEEXT::KiCadPcbFileExtension ) );
+    boardPath.MakeAbsolute();
+
+    if( boardPath.GetName().IsEmpty() )
+        return false;
+
+    if( ( !boardPath.DirExists() && !boardPath.Mkdir() ) || !boardPath.IsDirWritable() )
+        return false;
+
+    wxString outPath = boardPath.GetFullPath();
+
+    if( !BOARD_LOADER::SaveBoard( outPath, *m_board ) )
+        return false;
+
+    m_board->SetFileName( outPath );
+    m_contentModified = false;
+
+    wxFileName pro( boardPath );
+    pro.SetExt( FILEEXT::ProjectFileExtension );
+
+    Pgm().GetSettingsManager().SaveProjectAs( pro.GetFullPath(), m_board->GetProject() );
+
+    return true;
 }
 
 

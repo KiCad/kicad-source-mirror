@@ -20,6 +20,7 @@
 
 #include <magic_enum.hpp>
 #include <memory>
+#include <pgm_base.h>
 #include <properties/property.h>
 #include <ranges>
 
@@ -28,6 +29,7 @@
 #include <api/api_handler_pcb.h>
 #include <api/api_pcb_utils.h>
 #include <api/api_enums.h>
+#include <api/api_server.h>
 #include <api/api_utils.h>
 #include <api/common/commands/library_commands.pb.h>
 #include <api/cross_probe_client.h>
@@ -121,6 +123,7 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDI
     registerHandler<GetOpenDocuments, GetOpenDocumentsResponse>(
             &API_HANDLER_PCB::handleGetOpenDocuments );
     registerHandler<SaveDocument, Empty>( &API_HANDLER_PCB::handleSaveDocument );
+    registerHandler<SaveDocumentAs, Empty>( &API_HANDLER_PCB::handleSaveDocumentAs );
     registerHandler<SaveCopyOfDocument, Empty>( &API_HANDLER_PCB::handleSaveCopyOfDocument );
     registerHandler<RevertDocument, Empty>( &API_HANDLER_PCB::handleRevertDocument );
 
@@ -254,12 +257,68 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSaveDocument(
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
+    if( board()->GetFileName().IsEmpty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "the board is untitled; use SaveDocumentAs to save it to a new file" );
+        return tl::unexpected( e );
+    }
+
     if( !pcbContext()->SaveBoard() )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
         e.set_error_message( "board could not be saved" );
         return tl::unexpected( e );
+    }
+
+    return Empty();
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSaveDocumentAs( const HANDLER_CONTEXT<SaveDocumentAs>& aCtx )
+{
+    if( Pgm().IsGUI() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_UNIMPLEMENTED );
+        e.set_error_message( "SaveDocumentAs is not available in GUI mode" );
+        return tl::unexpected( e );
+    }
+
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    wxString pathStr = wxString::FromUTF8( aCtx.Request.path() );
+
+    if( pathStr.IsEmpty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "path is required" );
+        return tl::unexpected( e );
+    }
+
+    wxFileName oldBoardFile( pcbContext()->GetCurrentFileName() );
+
+    if( !pcbContext()->SaveBoardAs( pathStr ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "failed to save board to '{}'", pathStr.ToStdString() ) );
+        return tl::unexpected( e );
+    }
+
+    if( KICAD_API_SERVER* server = apiServer() )
+    {
+        wxFileName newBoardFile( pathStr );
+        newBoardFile.SetExt( FILEEXT::KiCadPcbFileExtension );
+
+        server->NotifyDocumentRenamed( thisDocumentType(), oldBoardFile.GetFullPath(), newBoardFile.GetFullPath() );
     }
 
     return Empty();

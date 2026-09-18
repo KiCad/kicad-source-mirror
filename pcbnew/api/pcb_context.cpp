@@ -81,6 +81,11 @@ public:
         return m_frame->SaveBoard();
     }
 
+    bool SaveBoardAs( const wxString& aFileName ) override
+    {
+        return false;
+    }
+
     bool SavePcbCopy( const wxString& aFileName, bool aCreateProject, bool aHeadless ) override
     {
         return m_frame->SavePcbCopy( aFileName, aCreateProject, aHeadless );

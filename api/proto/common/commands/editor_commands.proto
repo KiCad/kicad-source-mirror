@@ -72,15 +72,16 @@ message GetDocumentModifiedStateResponse
   DocumentModifiedState state = 1;
 }
 
-// Saves the given document to a new location and opens the new copy
-// Note, this is not going to be implemented anytime soon as we don't currently
-// want to allow API access to changing which project is open
-//message SaveDocumentAs
-//{
-//  kiapi.common.types.DocumentSpecifier document = 1;
-//
-//  string path = 2;
-//}
+// Saves the given document (and its project) to a new location and switches to the new project.
+// Only available in headless mode; in GUI mode a project change may require closing other editor
+// frames, which the API is not allowed to do.
+// Since: 11.0
+message SaveDocumentAs
+{
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  string path = 2;
+}
 
 message SaveOptions
 {

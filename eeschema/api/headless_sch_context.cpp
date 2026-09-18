@@ -84,6 +84,13 @@ bool HEADLESS_SCH_CONTEXT::SaveSchematic()
 }
 
 
+bool HEADLESS_SCH_CONTEXT::SaveSchematicAs( const wxString& aFileName )
+{
+    wxCHECK( *m_schematicSlot && m_project, false );
+    return SCH_API_SAVE::SaveSchematicAs( **m_schematicSlot, *m_project, aFileName );
+}
+
+
 bool HEADLESS_SCH_CONTEXT::SaveSchematicCopy( const wxString& aFileName, bool aCreateProject )
 {
     wxCHECK( *m_schematicSlot && m_project, false );
