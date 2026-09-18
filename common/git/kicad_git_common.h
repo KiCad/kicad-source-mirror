@@ -244,6 +244,15 @@ namespace KIGIT
 {
 
 /**
+ * Report whether an SSH private key is protected by a passphrase.
+ *
+ * @p aKeyText is the whole contents of the private key file. Anything not
+ * recognised as a private key is reported as unencrypted.
+ */
+APIEXPORT bool IsPrivateKeyEncrypted( const wxString& aKeyText );
+
+
+/**
  * Resolve a string ref (branch name, short OID, full OID, tag) to its tree.
  *
  * Runs git_revparse_single followed by git_object_peel( GIT_OBJECT_TREE ), so a

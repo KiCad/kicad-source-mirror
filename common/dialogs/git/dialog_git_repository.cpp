@@ -377,13 +377,13 @@ void DIALOG_GIT_REPOSITORY::OnFileUpdated( wxFileDirPickerEvent& aEvent )
         return;
     }
 
-    std::string line;
-    std::getline( ifs, line );
+    std::string keyText( ( std::istreambuf_iterator<char>( ifs ) ), std::istreambuf_iterator<char>() );
 
-    bool isValid = ( line.find( "PRIVATE KEY" ) != std::string::npos );
-    bool isEncrypted = ( line.find( "ENCRYPTED" ) != std::string::npos );
+    ifs.close();
 
-    if( !isValid )
+    wxString key = wxString::FromUTF8( keyText );
+
+    if( !key.BeforeFirst( '\n' ).Contains( wxS( "PRIVATE KEY" ) ) )
     {
         DisplayErrorMessage( this, _( "Invalid SSH Key" ),
                              _( "The selected file is not a valid SSH private key" ) );
@@ -391,19 +391,7 @@ void DIALOG_GIT_REPOSITORY::OnFileUpdated( wxFileDirPickerEvent& aEvent )
         return;
     }
 
-    if( isEncrypted )
-    {
-        m_txtPassword->Enable();
-        m_txtPassword->SetToolTip( _( "Enter the password for the SSH key" ) );
-    }
-    else
-    {
-        m_txtPassword->SetValue( wxEmptyString );
-        m_txtPassword->SetToolTip( wxEmptyString );
-        m_txtPassword->Disable();
-    }
-
-    ifs.close();
+    SetEncrypted( KIGIT::IsPrivateKeyEncrypted( key ) );
 
     wxString      pubFile = file + wxS( ".pub" );
     std::ifstream pubIfs( pubFile.fn_str() );
