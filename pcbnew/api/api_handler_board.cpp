@@ -397,6 +397,9 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
         status.set_code( ItemStatusCode::ISC_OK );
         google::protobuf::Any newItem;
 
+        if( item->Type() == PCB_GROUP_T )
+            static_cast<PCB_GROUP*>( item.get() )->FinalizeGroupDeserialization();
+
         if( aCreate )
         {
             if( item->Type() == PCB_TABLECELL_T )

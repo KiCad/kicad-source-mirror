@@ -85,6 +85,8 @@ bool SCH_GROUP::Deserialize( const google::protobuf::Any& aContainer )
 }
 
 
+// Note: this only records the group members in m_deserializedItems.  A proper AddItem() must
+// be done in a second pass (FinalizeGroupDeserialization()).
 bool SCH_GROUP::DeserializeGroup( const google::protobuf::Any& aContainer, COMMIT* aCommit )
 {
     using namespace kiapi::schematic::types;
@@ -100,6 +102,7 @@ bool SCH_GROUP::DeserializeGroup( const google::protobuf::Any& aContainer, COMMI
     kiapi::common::UnpackCustomProperties( group.custom_properties(), *this );
 
     m_items.clear();
+    m_deserializedItems.clear();
 
     SCHEMATIC* schematic = Schematic();
 
@@ -115,7 +118,7 @@ bool SCH_GROUP::DeserializeGroup( const google::protobuf::Any& aContainer, COMMI
             item = aCommit->ResolveItem( id );
 
         if( item )
-            AddItem( item );
+            m_deserializedItems.insert( item );
     }
 
     return true;

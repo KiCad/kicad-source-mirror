@@ -52,11 +52,25 @@ public:
      * in the board or schematic. When necessary, items in the provided commit are used when
      * populating the items contained in the group.
      *
+     * NB: this routine only adds members to the group's m_deserializedItems list.  They must
+     * be  added to the proper members list (m_items) by FinalizeGroupDeserialization() once
+     * the group has passed all the sanity checks and will be kept).  Otherwise we can end up
+     * with dangling parentGroup pointers in the member items if the group ends up being thrown
+     * away.
+     *
      * @param aContainer is a protobuf message to be unpacked and deserialized.
      * @param aCommit is an active commit which may contain new items that belong in the group.
      * @return true if unpacking and deserialization succeeded.
      */
     virtual bool DeserializeGroup( const google::protobuf::Any& aContainer, COMMIT* aCommit ) = 0;
+    virtual void FinalizeGroupDeserialization()
+    {
+        for( EDA_ITEM* item : m_deserializedItems )
+            AddItem( item );
+
+        m_deserializedItems.clear();
+    }
+
 
     wxString GetName() const { return m_name; }
     void     SetName( const wxString& aName ) { m_name = aName; }
@@ -91,6 +105,8 @@ protected:
     std::unordered_set<EDA_ITEM*> m_items;             // Members of the group (no ownership)
     wxString                      m_name;              // Optional group name
     LIB_ID                        m_designBlockLibId;  // Optional link to a design block
+
+    std::unordered_set<EDA_ITEM*> m_deserializedItems;
 };
 
 #endif // CLASS_PCB_GROUP_H_

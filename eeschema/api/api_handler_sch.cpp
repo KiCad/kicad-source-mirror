@@ -1253,17 +1253,20 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
         status.set_code( ItemStatusCode::ISC_OK );
         google::protobuf::Any newItem;
 
+        if( aCreate && !item.get() )
+        {
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( "could not add the requested item to its parent container" );
+            return tl::unexpected( e );
+        }
+
+        if( item->Type() == SCH_GROUP_T )
+            static_cast<SCH_GROUP*>( item.get() )->FinalizeGroupDeserialization();
+
         if( aCreate )
         {
             SCH_ITEM* createdItem = static_cast<SCH_ITEM*>( item.release() );
             commit->Add( createdItem, targetScreen );
-
-            if( !createdItem )
-            {
-                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-                e.set_error_message( "could not add the requested item to its parent container" );
-                return tl::unexpected( e );
-            }
 
             if( createdItem->Type() == SCH_SYMBOL_T )
             {
