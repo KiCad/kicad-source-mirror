@@ -146,6 +146,9 @@ void testProtoFromKiCadObject( KiCadClass* aInput, Factory&& aCreateOutput )
         BOOST_REQUIRE_NO_THROW( deserializeResult = output->Deserialize( any ) );
         BOOST_REQUIRE_MESSAGE( deserializeResult, "Deserialize failed" );
 
+        if constexpr( isGroup )
+            output->FinalizeGroupDeserialization();
+
         google::protobuf::Any outputAny;
         BOOST_REQUIRE_NO_THROW( output->Serialize( outputAny ) );
 
