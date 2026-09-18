@@ -24,6 +24,7 @@
 #include <vector>
 #include <algorithm>
 #include <map>
+#include <span>
 
 #include <widgets/wx_grid.h>
 #include <widgets/ui_common.h>
@@ -124,8 +125,16 @@ struct DATA_MODEL_ROW
         m_state = aGroupingState;
     }
 
-    int                    m_itemNumber;
-    ROW_STATE              m_state;
+    /// Items displayed and edited by this row, excluding descendants of a real parent.
+    std::span<const ITEM_TYPE> GetCellItems() const
+    {
+        std::span<const ITEM_TYPE> items( m_items );
+        return IsParentRow( m_state ) ? items.first( 1 ) : items;
+    }
+
+    int                   m_itemNumber;
+    ROW_STATE             m_state;
+    // All group members; real-parent states require the parent to remain first.
     std::vector<ITEM_TYPE> m_items;
 };
 
@@ -429,7 +438,7 @@ public:
 
         const wxString& fieldName = m_cols[aCol].m_fieldName;
 
-        for( const ITEM_TYPE& item : m_rows[aRow].m_items )
+        for( const ITEM_TYPE& item : m_rows[aRow].GetCellItems() )
             clearStoredField( item, fieldName );
 
         m_edited = true;
@@ -445,7 +454,7 @@ public:
         wxCHECK_MSG( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), false, "Invalid Row Number" );
         wxCHECK_MSG( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false, "Invalid Column Number" );
 
-        for( const ITEM_TYPE& item : m_rows[aRow].m_items )
+        for( const ITEM_TYPE& item : m_rows[aRow].GetCellItems() )
         {
             wxString unused;
 
@@ -466,7 +475,7 @@ public:
         wxCHECK_MSG( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), false, "Invalid Row Number" );
         wxCHECK_MSG( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), false, "Invalid Column Number" );
 
-        for( const ITEM_TYPE& item : m_rows[aRow].m_items )
+        for( const ITEM_TYPE& item : m_rows[aRow].GetCellItems() )
         {
             if( fieldIsModified( item, m_cols[aCol].m_fieldName ) )
                 return true;
@@ -486,7 +495,7 @@ public:
 
         std::vector<KIID_PATH> keys;
 
-        for( const ITEM_TYPE& item : m_rows[aRow].m_items )
+        for( const ITEM_TYPE& item : m_rows[aRow].GetCellItems() )
             keys.push_back( getDataStoreKey( item ) );
 
         return keys;
@@ -496,7 +505,8 @@ public:
     std::vector<ITEM_TYPE> GetRowReferences( int aRow ) const
     {
         wxCHECK( aRow >= 0 && aRow < (int) m_rows.size(), std::vector<ITEM_TYPE>() );
-        return m_rows[aRow].m_items;
+        std::span<const ITEM_TYPE> items = m_rows[aRow].GetCellItems();
+        return { items.begin(), items.end() };
     }
 
 
@@ -509,7 +519,7 @@ public:
     {
         wxCHECK_RET( aRow >= 0 && aRow < static_cast<int>( m_rows.size() ), "Invalid Row Number" );
 
-        for( const ITEM_TYPE& item : m_rows[aRow].m_items )
+        for( const ITEM_TYPE& item : m_rows[aRow].GetCellItems() )
         {
             for( const DATA_MODEL_COL& col : m_cols )
                 updateDataStoreItemFieldFromLive( item, col.m_fieldName );
@@ -522,8 +532,10 @@ public:
     void ExpandRow( int aRow )
     {
         std::vector<DATA_MODEL_ROW<ITEM_TYPE>> children;
+        bool                                   isParent = IsParentRow( m_rows[aRow].m_state );
+        std::span<const ITEM_TYPE>             items( m_rows[aRow].m_items );
 
-        for( ITEM_TYPE& ref : m_rows[aRow].m_items )
+        for( const ITEM_TYPE& ref : items.subspan( isParent ? 1 : 0 ) )
         {
             bool matchFound = false;
 
@@ -544,7 +556,7 @@ public:
                 children.emplace_back( ref, ROW_STATE::EXPANDED_CHILD );
         }
 
-        if( children.size() < 2 )
+        if( children.empty() || ( !isParent && children.size() < 2 ) )
             return;
 
         std::sort( children.begin(), children.end(),
@@ -554,11 +566,14 @@ public:
                        return cmpRows( lhs, rhs, m_sortColumn, m_sortAscending );
                    } );
 
-        m_rows[aRow].m_state = ROW_STATE::EXPANDED_PARENT;
+        m_rows[aRow].m_state = isParent ? ROW_STATE::PARENT_EXPANDED : ROW_STATE::GROUP_EXPANDED;
         m_rows.insert( m_rows.begin() + aRow + 1, children.begin(), children.end() );
 
-        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aRow + 1, children.size() );
-        GetView()->ProcessTableMessage( msg );
+        if( GetView() )
+        {
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_INSERTED, aRow + 1, children.size() );
+            GetView()->ProcessTableMessage( msg );
+        }
     }
 
 
@@ -574,19 +589,23 @@ public:
             afterLastChild++;
         }
 
-        m_rows[aRow].m_state = ROW_STATE::COLLAPSED;
+        m_rows[aRow].m_state =
+                IsParentRow( m_rows[aRow].m_state ) ? ROW_STATE::PARENT_COLLAPSED : ROW_STATE::GROUP_COLLAPSED;
         m_rows.erase( firstChild, afterLastChild );
 
-        wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aRow + 1, deleted );
-        GetView()->ProcessTableMessage( msg );
+        if( GetView() )
+        {
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, aRow + 1, deleted );
+            GetView()->ProcessTableMessage( msg );
+        }
     }
 
 
     void ExpandCollapseRow( int aRow ) override
     {
-        if( m_rows[aRow].m_state == ROW_STATE::COLLAPSED )
+        if( IsRowCollapsed( m_rows[aRow].m_state ) )
             ExpandRow( aRow );
-        else if( m_rows[aRow].m_state == ROW_STATE::EXPANDED_PARENT )
+        else if( IsRowExpanded( m_rows[aRow].m_state ) )
             CollapseRow( aRow );
     }
 
@@ -595,10 +614,11 @@ public:
     {
         for( size_t i = 0; i < m_rows.size(); ++i )
         {
-            if( m_rows[i].m_state == ROW_STATE::EXPANDED_PARENT )
+            if( IsRowExpanded( m_rows[i].m_state ) )
             {
                 CollapseRow( i );
-                m_rows[i].m_state = ROW_STATE::COLLAPSED_DURING_SORT;
+                m_rows[i].m_state = IsParentRow( m_rows[i].m_state ) ? ROW_STATE::PARENT_COLLAPSED_DURING_SORT
+                                                                     : ROW_STATE::GROUP_COLLAPSED_DURING_SORT;
             }
         }
     }
@@ -608,21 +628,26 @@ public:
     {
         for( size_t i = 0; i < m_rows.size(); ++i )
         {
-            if( m_rows[i].m_state == ROW_STATE::COLLAPSED_DURING_SORT )
+            if( m_rows[i].m_state == ROW_STATE::GROUP_COLLAPSED_DURING_SORT
+                || m_rows[i].m_state == ROW_STATE::PARENT_COLLAPSED_DURING_SORT )
                 ExpandRow( i );
         }
     }
 
     wxString GetGroupedValue( const DATA_MODEL_ROW<ITEM_TYPE>& aRow, int aCol,
                               const wxString& refDelimiter = wxT( ", " ),
-                              const wxString& refRangeDelimiter = wxT( "-" ),
-                              bool resolveVars = false, bool listMixedValues = false )
+                              const wxString& refRangeDelimiter = wxT( "-" ), bool resolveVars = false,
+                              bool forExport = false )
     {
         std::vector<ITEM_TYPE> items;
         std::set<wxString>     mixedValues;
         wxString               fieldValue;
 
-        for( const ITEM_TYPE& item : aRow.m_items )
+        // Export always aggregates the full group, even when the grid displays its real parent.
+        std::span<const ITEM_TYPE> rowItems =
+                forExport ? std::span<const ITEM_TYPE>( aRow.m_items ) : aRow.GetCellItems();
+
+        for( const ITEM_TYPE& item : rowItems )
         {
             if( ColIsItemIdentifier( aCol ) || ColIsQuantity( aCol ) || ColIsItemNumber( aCol ) )
             {
@@ -663,16 +688,16 @@ public:
                     }
                 }
 
-                if( listMixedValues )
+                if( forExport )
                     mixedValues.insert( itemFieldValue );
-                else if( &item == &aRow.m_items.front() )
+                else if( &item == &rowItems.front() )
                     fieldValue = itemFieldValue;
                 else if( fieldValue != itemFieldValue )
                     return INDETERMINATE_STATE;
             }
         }
 
-        if( listMixedValues )
+        if( forExport )
         {
             fieldValue = wxEmptyString;
 
@@ -846,7 +871,7 @@ protected:
 
         // Lock the cell only when every symbol in the row inherits it, so a mixed group
         // stays editable and shows the indeterminate state.
-        for( const ITEM_TYPE& item : aRow.m_items )
+        for( const ITEM_TYPE& item : aRow.GetCellItems() )
         {
             if( !attributeForcedOnBySheet( item, m_cols[aCol].m_fieldName ) )
                 return false;
@@ -983,15 +1008,14 @@ protected:
     {
         CollapseForSort();
 
-        // We're going to sort the rows based on their first item, so the first item identifier had
-        // better be the lowest one.
+        // Aggregate rows use their lowest item identifier; real parents must remain first.
         for( DATA_MODEL_ROW<ITEM_TYPE>& row : m_rows )
         {
-            std::sort( row.m_items.begin(), row.m_items.end(),
-                    [this]( const ITEM_TYPE& lhs, const ITEM_TYPE& rhs ) -> bool
-                    {
-                        return cmpRowItems( lhs, rhs );
-                    } );
+            std::sort( row.m_items.begin() + ( IsParentRow( row.m_state ) ? 1 : 0 ), row.m_items.end(),
+                       [this]( const ITEM_TYPE& lhs, const ITEM_TYPE& rhs ) -> bool
+                       {
+                           return cmpRowItems( lhs, rhs );
+                       } );
         }
 
         std::sort( m_rows.begin(), m_rows.end(),

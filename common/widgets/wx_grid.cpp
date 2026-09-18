@@ -694,10 +694,10 @@ void WX_GRID::DrawRowLabel( wxDC& dc, int row )
     {
         ROW_STATE state = table->GetRowState( row );
 
-        if( state == ROW_STATE::COLLAPSED || state == ROW_STATE::EXPANDED_PARENT )
+        if( IsRowCollapsed( state ) || IsRowExpanded( state ) )
         {
-            wxBitmap bitmap = m_rowIconProvider->GetIndicatorIcon(
-                    state == ROW_STATE::COLLAPSED ? ROW_ICON_PROVIDER::CLOSED : ROW_ICON_PROVIDER::OPEN );
+            wxBitmap bitmap = m_rowIconProvider->GetIndicatorIcon( IsRowCollapsed( state ) ? ROW_ICON_PROVIDER::CLOSED
+                                                                                           : ROW_ICON_PROVIDER::OPEN );
             bitmap.SetScaleFactor( KIPLATFORM::UI::GetPixelScaleFactor( this ) );
 
             dc.DrawBitmap( bitmap, rect.GetLeft() + ( rect.GetWidth() - bitmap.GetLogicalWidth() ) / 2,

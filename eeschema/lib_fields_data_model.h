@@ -112,8 +112,7 @@ public:
     bool IsRowSingleSymbol( int aRow )
     {
         wxCHECK_MSG( aRow >= 0 && aRow < (int) m_rows.size(), false, "Invalid Row Number" );
-        return m_rows[aRow].m_state == ROW_STATE::NON_EXPANDABLE
-               || m_rows[aRow].m_state == ROW_STATE::EXPANDED_CHILD;
+        return m_rows[aRow].GetCellItems().size() == 1;
     }
 
     bool IsCellReadOnly( int aRow, int aCol ) override;

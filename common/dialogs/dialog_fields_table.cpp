@@ -842,7 +842,7 @@ void DIALOG_FIELDS_TABLE::OnTableLabelClick( wxGridEvent& aEvent )
 
     ROW_STATE state = getDataModel()->GetRowState( row );
 
-    if( state != ROW_STATE::COLLAPSED && state != ROW_STATE::EXPANDED_PARENT )
+    if( !IsRowCollapsed( state ) && !IsRowExpanded( state ) )
     {
         aEvent.Skip();
         return;

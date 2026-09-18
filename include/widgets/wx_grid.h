@@ -47,11 +47,35 @@ enum class KICOMMON_API ROW_STATE
     // independently editable for units of one symbol, so the row DATA_MODEL_ROW
     // will contain multiple references but not be expandable to multiple child items
     NON_EXPANDABLE,
-    COLLAPSED,
-    COLLAPSED_DURING_SORT,
-    EXPANDED_PARENT,
+    // Synthetic headers display and edit every member of the group.
+    GROUP_COLLAPSED,
+    GROUP_COLLAPSED_DURING_SORT,
+    GROUP_EXPANDED,
+    // Real parent headers display and edit only the first member, above its descendants.
+    PARENT_COLLAPSED,
+    PARENT_COLLAPSED_DURING_SORT,
+    PARENT_EXPANDED,
     EXPANDED_CHILD
 };
+
+
+inline bool IsParentRow( ROW_STATE aState )
+{
+    return aState == ROW_STATE::PARENT_COLLAPSED || aState == ROW_STATE::PARENT_COLLAPSED_DURING_SORT
+           || aState == ROW_STATE::PARENT_EXPANDED;
+}
+
+
+inline bool IsRowCollapsed( ROW_STATE aState )
+{
+    return aState == ROW_STATE::GROUP_COLLAPSED || aState == ROW_STATE::PARENT_COLLAPSED;
+}
+
+
+inline bool IsRowExpanded( ROW_STATE aState )
+{
+    return aState == ROW_STATE::GROUP_EXPANDED || aState == ROW_STATE::PARENT_EXPANDED;
+}
 
 
 class KICOMMON_API WX_GRID_TABLE_BASE : public wxGridTableBase

@@ -648,7 +648,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
             {
                 matchFound = true;
                 row.m_items.push_back( ref );
-                row.m_state = ROW_STATE::COLLAPSED;
+                row.m_state = ROW_STATE::GROUP_COLLAPSED;
                 break;
             }
         }

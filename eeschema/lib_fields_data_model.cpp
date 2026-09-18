@@ -127,7 +127,7 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxSt
     LIB_FIELDS_TABLE_DATA_MODEL_ROW& rowGroup = m_rows[aRow];
     const wxString&                  fieldName = m_cols[aCol].m_fieldName;
 
-    for( LIB_SYMBOL* symbol : rowGroup.m_items )
+    for( LIB_SYMBOL* symbol : rowGroup.GetCellItems() )
     {
         if( fieldName == SYMBOL_IS_POWER )
         {
@@ -174,7 +174,7 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::CanUseParentValue( int aRow, int aCol )
     const wxString& fieldName = m_cols[aCol].m_fieldName;
     bool            hasOverride = false;
 
-    for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
+    for( LIB_SYMBOL* symbol : m_rows[aRow].GetCellItems() )
     {
         // A grouped cell must not clear any root symbols along with the derived ones.
         if( !symbol->IsDerived() )
@@ -229,7 +229,7 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::IsCellReadOnly( int aRow, int aCol )
 
     if( m_cols[aCol].m_fieldName == SYMBOL_IS_LOCAL_POWER )
     {
-        for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
+        for( LIB_SYMBOL* symbol : m_rows[aRow].GetCellItems() )
         {
             if( getStoredPowerSymbolValue( symbol ) )
                 return false;
@@ -241,7 +241,7 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::IsCellReadOnly( int aRow, int aCol )
     if( !isPowerSymbolControlledField( m_cols[aCol].m_fieldName ) )
         return false;
 
-    for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
+    for( LIB_SYMBOL* symbol : m_rows[aRow].GetCellItems() )
     {
         if( !getStoredPowerSymbolValue( symbol ) )
             return false;
@@ -257,7 +257,7 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
     bool            needsUrlEditor = cellUsesUrlEditor( aRow, aCol );
     bool            needsResolvedTextRenderer = cellUsesResolvedTextRenderer( aRow, aCol );
 
-    for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
+    for( LIB_SYMBOL* symbol : m_rows[aRow].GetCellItems() )
     {
         wxString storedValue;
         wxString effectiveValue;
@@ -307,7 +307,7 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
 
     const wxString& fieldName = m_cols[aCol].m_fieldName;
 
-    for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
+    for( LIB_SYMBOL* symbol : m_rows[aRow].GetCellItems() )
     {
         wxString liveValue;
         wxString storedValue;
@@ -346,7 +346,7 @@ wxGridCellAttr* LIB_FIELDS_EDITOR_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, 
     {
         attr->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
-        for( LIB_SYMBOL* symbol : m_rows[aRow].m_items )
+        for( LIB_SYMBOL* symbol : m_rows[aRow].GetCellItems() )
         {
             wxString liveValue;
             wxString storedValue;
@@ -608,6 +608,16 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
     wxLogTrace( traceLibFieldTable, "RebuildRows: About to process %zu symbols", m_symbolsList.size() );
 
     EDA_COMBINED_MATCHER matcher( m_filter.Lower(), CTX_SEARCH );
+    int                  parentCol = GetFieldNameCol( SYMBOL_PARENT );
+    bool                 groupByParent = parentCol >= 0 && GetGroupColumn( parentCol );
+    int                  rootCol = GetFieldNameCol( SYMBOL_ROOT );
+    bool                 groupByRootOnly = m_groupingEnabled && rootCol >= 0 && GetGroupColumn( rootCol );
+
+    for( const DATA_MODEL_COL& col : m_cols )
+    {
+        if( col.m_group && col.m_fieldName != SYMBOL_ROOT )
+            groupByRootOnly = false;
+    }
 
     for( LIB_SYMBOL* symbol : m_symbolsList )
     {
@@ -633,8 +643,9 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
 
         bool matchFound = false;
 
-        // Performance optimization for ungrouped case to skip the N^2 for loop
-        if( !m_groupingEnabled )
+        // Keep unrelated roots separate instead of grouping their empty parent values together.
+        // Also skip the N^2 grouping loop entirely when grouping is disabled.
+        if( !m_groupingEnabled || ( groupByParent && symbol->IsRoot() ) )
         {
             m_rows.emplace_back( LIB_FIELDS_TABLE_DATA_MODEL_ROW( symbol, ROW_STATE::NON_EXPANDABLE ) );
             continue;
@@ -650,13 +661,49 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::RebuildRows()
             {
                 matchFound = true;
                 row.m_items.push_back( symbol );
-                row.m_state = ROW_STATE::COLLAPSED;
+                row.m_state = ROW_STATE::GROUP_COLLAPSED;
                 break;
             }
         }
 
         if( !matchFound )
             m_rows.emplace_back( LIB_FIELDS_TABLE_DATA_MODEL_ROW( symbol, ROW_STATE::NON_EXPANDABLE ) );
+    }
+
+    if( groupByRootOnly )
+    {
+        // We're going to break m_rows into potentially more rows, which we collect
+        // into this, then we'll swap it all out when we're done.
+        std::vector<LIB_FIELDS_TABLE_DATA_MODEL_ROW> families;
+
+        for( LIB_FIELDS_TABLE_DATA_MODEL_ROW& row : m_rows )
+        {
+            auto root = std::find_if( row.m_items.begin(), row.m_items.end(),
+                                      []( LIB_SYMBOL* aSymbol )
+                                      {
+                                          return aSymbol->IsRoot();
+                                      } );
+
+            if( root == row.m_items.end() )
+            {
+                // Do not reintroduce a root excluded by the filter or scope. Matching
+                // descendants remain individually editable instead of becoming an aggregate.
+                for( LIB_SYMBOL* symbol : row.m_items )
+                    families.emplace_back( symbol, ROW_STATE::NON_EXPANDABLE );
+
+                continue;
+            }
+
+            // Root must go first so when we find it, put it at the beginning
+            std::iter_swap( row.m_items.begin(), root );
+
+            if( row.m_items.size() > 1 )
+                row.m_state = ROW_STATE::PARENT_COLLAPSED;
+
+            families.push_back( row );
+        }
+
+        m_rows.swap( families );
     }
 
     if( GetView() )
