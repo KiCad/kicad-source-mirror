@@ -3036,55 +3036,15 @@ void CREEPAGE_GRAPH::GeneratePaths( double aMaxWeight, PCB_LAYER_ID aLayer,
 }
 
 
-void CREEPAGE_GRAPH::Trim( double aWeightLimit )
-{
-    std::vector<std::shared_ptr<GRAPH_CONNECTION>> toRemove;
-
-    // Collect connections to remove
-    for( std::shared_ptr<GRAPH_CONNECTION>& gc : m_connections )
-    {
-        if( gc && ( gc->m_path.weight > aWeightLimit ) )
-            toRemove.push_back( gc );
-    }
-
-    // Remove collected connections
-    for( const std::shared_ptr<GRAPH_CONNECTION>& gc : toRemove )
-        RemoveConnection( gc );
-}
-
-
-void CREEPAGE_GRAPH::RemoveConnection( const std::shared_ptr<GRAPH_CONNECTION>& aGc, bool aDelete )
+void CREEPAGE_GRAPH::detachConnection( const std::shared_ptr<GRAPH_CONNECTION>& aGc )
 {
     if( !aGc )
         return;
 
-    for( std::shared_ptr<GRAPH_NODE> gn : { aGc->n1, aGc->n2 } )
+    for( const std::shared_ptr<GRAPH_NODE>& gn : { aGc->n1, aGc->n2 } )
     {
         if( gn )
-        {
             gn->m_node_conns.erase( aGc );
-
-            if( gn->m_node_conns.empty() && aDelete )
-            {
-                auto it = std::find_if( m_nodes.begin(), m_nodes.end(),
-                                        [&gn]( const std::shared_ptr<GRAPH_NODE>& node )
-                                        {
-                                            return node.get() == gn.get();
-                                        } );
-
-                if( it != m_nodes.end() )
-                    m_nodes.erase( it );
-
-                m_nodeset.erase( gn );
-            }
-        }
-    }
-
-    if( aDelete )
-    {
-        // Remove the connection from the graph's connections
-        m_connections.erase( std::remove( m_connections.begin(), m_connections.end(), aGc ),
-                             m_connections.end() );
     }
 }
 
@@ -3095,7 +3055,7 @@ void CREEPAGE_GRAPH::TruncateToPrefix( size_t aNodeCount, size_t aConnectionCoun
 
     // Detach each connection from its endpoints' lists; the bulk resize drops them in one shot
     for( size_t i = aConnectionCount; i < vectorSize; i++ )
-        RemoveConnection( m_connections[i], false );
+        detachConnection( m_connections[i] );
 
     m_connections.resize( aConnectionCount, nullptr );
     m_nodes.resize( aNodeCount, nullptr );

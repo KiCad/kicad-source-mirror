@@ -857,10 +857,6 @@ public:
     std::shared_ptr<GRAPH_NODE> FindNode( GRAPH_NODE::TYPE aType, CREEP_SHAPE* aParent,
                                           const VECTOR2I& aPos );
 
-    void RemoveConnection( const std::shared_ptr<GRAPH_CONNECTION>&, bool aDelete = false );
-
-    void Trim( double aWeightLimit );
-
     void Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>& aConnectTo,
                    BOARD_ITEM* aParent = nullptr );
 
@@ -923,6 +919,8 @@ public:
     int m_minGrooveWidth;
 
 private:
+    void detachConnection( const std::shared_ptr<GRAPH_CONNECTION>& aGc );
+
     double m_creepageTarget;
     double m_creepageTargetSquared;
 };
