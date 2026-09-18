@@ -45,7 +45,6 @@ public:
     int UpdateDesignBlockFromSelection( const TOOL_EVENT& aEvent );
 
 private:
-    LIB_ID getSelectedLibId();
     ///< Set up handlers for various events.
     void setTransitions() override;
 

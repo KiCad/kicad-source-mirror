@@ -161,14 +161,6 @@ void PCB_DESIGN_BLOCK_CONTROL::setTransitions()
 }
 
 
-LIB_ID PCB_DESIGN_BLOCK_CONTROL::getSelectedLibId()
-{
-    getDesignBlockPane()->GetSelectedLibId();
-
-    return LIB_ID();
-}
-
-
 DESIGN_BLOCK_PANE* PCB_DESIGN_BLOCK_CONTROL::getDesignBlockPane()
 {
     return m_editFrame->GetDesignBlockPane();

@@ -184,14 +184,6 @@ void DESIGN_BLOCK_CONTROL::setTransitions()
 }
 
 
-LIB_ID DESIGN_BLOCK_CONTROL::getSelectedLibId()
-{
-    getDesignBlockPane()->GetSelectedLibId();
-
-    return LIB_ID();
-}
-
-
 LIB_TREE_NODE* DESIGN_BLOCK_CONTROL::getCurrentTreeNode()
 {
     LIB_TREE* libTree = getDesignBlockPane()->GetDesignBlockPanel()->GetLibTree();
