@@ -920,7 +920,6 @@ void GENCAD_EXPORTER::createSignalsSection()
 
     wxString      msg;
     NETINFO_ITEM* net;
-    int           NbNoConn = 1;
 
     fmt::print( m_file, "$SIGNALS\n" );
 
@@ -930,11 +929,6 @@ void GENCAD_EXPORTER::createSignalsSection()
 
         if( net )
         {
-            if( net->GetNetname() == wxEmptyString ) // dummy netlist (no connection)
-            {
-                msg.Printf( wxT( "NoConnection%d" ), NbNoConn++ );
-            }
-
             if( net->GetNetCode() <= 0 )  // dummy netlist (no connection)
                 continue;
 
