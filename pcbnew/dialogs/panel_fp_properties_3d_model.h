@@ -75,6 +75,7 @@ private:
 
     void updateExtrusionControls();
     void updateExtrusionPreview();
+    bool readExtrusionHeights( const wxString& aTitle, double& aHeight, double& aStandoff );
     void updateValidateStatus( int aRow );
     void cleanupFilename( wxString* aFilename );
 

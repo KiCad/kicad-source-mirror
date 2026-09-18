@@ -259,10 +259,11 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
 
     if( m_enableExtrusionCheckbox->GetValue() )
     {
-        double compHeight = 0.0;
-        double standoff = 0.0;
-        m_componentHeightCtrl->GetValue().ToDouble( &compHeight );
-        m_standoffHeightCtrl->GetValue().ToDouble( &standoff );
+        double compHeight;
+        double standoff;
+
+        if( !readExtrusionHeights( _( "Extruded 3D Body" ), compHeight, standoff ) )
+            return false;
 
         if( compHeight <= 0.0 )
         {
@@ -888,6 +889,31 @@ void PANEL_FP_PROPERTIES_3D_MODEL::updateExtrusionControls()
 }
 
 
+bool PANEL_FP_PROPERTIES_3D_MODEL::readExtrusionHeights( const wxString& aTitle, double& aHeight, double& aStandoff )
+{
+    wxString heightText = m_componentHeightCtrl->GetValue();
+    wxString standoffText = m_standoffHeightCtrl->GetValue();
+
+    // An empty field reads as zero.
+    aHeight = 0.0;
+    aStandoff = 0.0;
+
+    if( !heightText.IsEmpty() && !heightText.ToDouble( &aHeight ) )
+    {
+        wxMessageBox( _( "Overall height is not a valid number." ), aTitle, wxOK | wxICON_WARNING, this );
+        return false;
+    }
+
+    if( !standoffText.IsEmpty() && !standoffText.ToDouble( &aStandoff ) )
+    {
+        wxMessageBox( _( "Standoff height is not a valid number." ), aTitle, wxOK | wxICON_WARNING, this );
+        return false;
+    }
+
+    return true;
+}
+
+
 void PANEL_FP_PROPERTIES_3D_MODEL::updateExtrusionPreview()
 {
     FOOTPRINT* dummyFp = m_previewPane->GetDummyFootprint();
@@ -936,10 +962,11 @@ void PANEL_FP_PROPERTIES_3D_MODEL::onExtrusionMaterialChanged( wxCommandEvent& e
 
 void PANEL_FP_PROPERTIES_3D_MODEL::OnExportExtrudedModel( wxCommandEvent& event )
 {
-    double height = 0.0;
-    double standoff = 0.0;
-    m_componentHeightCtrl->GetValue().ToDouble( &height );
-    m_standoffHeightCtrl->GetValue().ToDouble( &standoff );
+    double height;
+    double standoff;
+
+    if( !readExtrusionHeights( _( "Export Extruded Body" ), height, standoff ) )
+        return;
 
     if( height <= 0.0 )
     {
