@@ -198,7 +198,7 @@ void NET_GRID_TABLE::SetValueAsCustom( int aRow, int aCol, const wxString& aType
 }
 
 
-NET_GRID_ENTRY& NET_GRID_TABLE::GetEntry( int aRow )
+const NET_GRID_ENTRY& NET_GRID_TABLE::GetEntry( int aRow ) const
 {
     wxASSERT( static_cast<size_t>( aRow ) < m_nets.size() );
     return m_nets[aRow];
@@ -207,16 +207,8 @@ NET_GRID_ENTRY& NET_GRID_TABLE::GetEntry( int aRow )
 
 int NET_GRID_TABLE::GetRowByNetcode( int aCode ) const
 {
-    auto it = std::find_if( m_nets.cbegin(), m_nets.cend(),
-            [aCode]( const NET_GRID_ENTRY& aEntry )
-            {
-                return aEntry.code == aCode;
-            } );
-
-    if( it == m_nets.cend() )
-        return -1;
-
-    return std::distance( m_nets.cbegin(), it );
+    auto it = m_netcodeToRow.find( aCode );
+    return it != m_netcodeToRow.end() ? it->second : -1;
 }
 
 
@@ -236,6 +228,7 @@ void NET_GRID_TABLE::Rebuild()
 
     int deleted = (int) m_nets.size();
     m_nets.clear();
+    m_netcodeToRow.clear();
 
     if( GetView() )
     {
@@ -264,6 +257,13 @@ void NET_GRID_TABLE::Rebuild()
                {
                  return a.name < b.name;
                } );
+
+    m_netcodeToRow.reserve( m_nets.size() );
+
+    for( size_t row = 0; row < m_nets.size(); ++row )
+    {
+        m_netcodeToRow.emplace( m_nets[row].code, static_cast<int>( row ) );
+    }
 
     if( GetView() )
     {
@@ -996,7 +996,7 @@ void APPEARANCE_CONTROLS::OnNetGridMouseEvent( wxMouseEvent& aEvent )
 
         m_hoveredCell = cell;
 
-        NET_GRID_ENTRY& net = m_netsTable->GetEntry( cell.GetRow() );
+        const NET_GRID_ENTRY& net = m_netsTable->GetEntry( cell.GetRow() );
 
         wxString name = net.name;
         wxString showOrHide = net.visible ? _( "Click to hide ratsnest for %s" )
@@ -3266,7 +3266,7 @@ void APPEARANCE_CONTROLS::onNetContextMenu( wxCommandEvent& aEvent )
     wxASSERT( m_netsGrid->GetSelectedRows().size() == 1 );
 
     int row = m_netsGrid->GetSelectedRows()[0];
-    NET_GRID_ENTRY& net = m_netsTable->GetEntry( row );
+    const NET_GRID_ENTRY& net = m_netsTable->GetEntry( row );
 
     m_netsGrid->ClearSelection();
 

@@ -21,6 +21,7 @@
 #ifndef _APPEARANCE_CONTROLS_H
 #define _APPEARANCE_CONTROLS_H
 
+#include <unordered_map>
 #include <vector>
 
 #include <board.h>
@@ -113,7 +114,7 @@ public:
 
     void SetValueAsCustom( int aRow, int aCol, const wxString& aTypeName, void* aValue ) override;
 
-    NET_GRID_ENTRY& GetEntry( int aRow );
+    const NET_GRID_ENTRY& GetEntry( int aRow ) const;
 
     int GetRowByNetcode( int aCode ) const;
 
@@ -132,6 +133,7 @@ private:
     PCB_BASE_FRAME* m_frame;
 
     std::vector<NET_GRID_ENTRY> m_nets;
+    std::unordered_map<int, int> m_netcodeToRow;
 
     wxGridCellAttr* m_defaultAttr;
     wxGridCellAttr* m_labelAttr;
