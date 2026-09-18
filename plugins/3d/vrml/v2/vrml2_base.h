@@ -43,11 +43,14 @@
 #include <list>
 #include <string>
 #include <map>
+#include <cstdint>
 
 #include "vrml2_node.h"
+#include <plugins/3dapi/model_import.h>
 
 class SGNODE;
 class WRL2INLINE;
+struct MODEL_IMPORT_STATUS;
 
 /**
  * The top node of a VRML2 model.
@@ -67,6 +70,8 @@ public:
     // when true, coordinates are multiplied by 2.54 (legacy KiCad 0.1 inch units)
     bool GetApplyUnitConversion( void ) const;
     void SetApplyUnitConversion( bool apply );
+    void SetImportOptions( const S3D::MODEL_IMPORT_OPTIONS& aOptions, MODEL_IMPORT_STATUS* aStatus );
+    bool HadIncompleteInline() const { return m_incompleteInline; }
 
     // function to manipulate Inline{} objects
     SGNODE* GetInlineData( const std::string& aName );
@@ -107,6 +112,9 @@ private:
 
     bool m_useInline;
     bool m_applyUnitConversion;  // if true, multiply coords by 2.54 (legacy mode)
+    bool                           m_incompleteInline = false;
+    S3D::MODEL_IMPORT_OPTIONS      m_options;
+    MODEL_IMPORT_STATUS*           m_status = nullptr;
     std::string m_dir;  // parent directory of the file
     std::map< std::string, SGNODE* > m_inlineModels;
 };

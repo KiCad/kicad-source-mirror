@@ -23,6 +23,7 @@
 #include <cstring>
 #include <iostream>
 #include <sstream>
+#include <atomic>
 #include <wx/log.h>
 
 #include "3d_cache/sg/sg_node.h"
@@ -43,7 +44,7 @@ static const std::string node_names[S3D::SGTYPE_END + 1] = {
 };
 
 
-static unsigned int node_counts[S3D::SGTYPE_END] = { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+static std::atomic_uint node_counts[S3D::SGTYPE_END] = { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
 
 char const* S3D::GetNodeTypeName( S3D::SGTYPES aType ) noexcept
@@ -60,8 +61,7 @@ static void getNodeName( S3D::SGTYPES nodeType, std::string& aName )
         return;
     }
 
-    unsigned int seqNum = node_counts[nodeType];
-    ++node_counts[nodeType];
+    unsigned int seqNum = node_counts[nodeType].fetch_add( 1, std::memory_order_relaxed );
 
     std::ostringstream ostr;
     ostr << node_names[nodeType] << "_" << seqNum;
@@ -234,7 +234,7 @@ void SGNODE::DisassociateWrapper( SGNODE** aWrapperRef ) noexcept
 void SGNODE::ResetNodeIndex( void ) noexcept
 {
     for( int i = 0; i < (int)S3D::SGTYPE_END; ++i )
-        node_counts[i] = 1;
+        node_counts[i].store( 1, std::memory_order_relaxed );
 }
 
 

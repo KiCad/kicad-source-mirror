@@ -189,7 +189,7 @@ void EDA_3D_MODEL_VIEWER::Clear3DModel()
 }
 
 
-void EDA_3D_MODEL_VIEWER::ogl_initialize()
+bool EDA_3D_MODEL_VIEWER::ogl_initialize()
 {
     SetOpenGLBackendInfo( GL_UTILS::DetectGLBackend( this ) );
 
@@ -197,13 +197,12 @@ void EDA_3D_MODEL_VIEWER::ogl_initialize()
 
     if( glVersion == 0 )
     {
-        wxLogMessage( wxT( "Failed to load OpenGL via loader" ) );
+        wxLogTrace( m_logTrace, wxT( "Failed to load OpenGL via loader" ) );
+        return false;
     }
-    else
-    {
-        wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::ogl_initialize Using OpenGL version %s" ),
-                    From_UTF8( (char*) glGetString( GL_VERSION ) ) );
-    }
+
+    wxLogTrace( m_logTrace, wxT( "EDA_3D_MODEL_VIEWER::ogl_initialize Using OpenGL version %s" ),
+                From_UTF8( (char*) glGetString( GL_VERSION ) ) );
 
     SetOpenGLInfo( (const char*) glGetString( GL_VENDOR ), (const char*) glGetString( GL_RENDERER ),
                    (const char*) glGetString( GL_VERSION ) );
@@ -235,6 +234,8 @@ void EDA_3D_MODEL_VIEWER::ogl_initialize()
     glLightfv( GL_LIGHT0, GL_SPECULAR, specular );
     glLightfv( GL_LIGHT0, GL_POSITION, position );
     glLightModelfv( GL_LIGHT_MODEL_AMBIENT, lmodel_ambient );
+
+    return true;
 }
 
 
@@ -253,6 +254,10 @@ void EDA_3D_MODEL_VIEWER::ogl_set_arrow_material()
 void EDA_3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
 {
     event.Skip( false );
+    wxPaintDC dc( this );
+
+    if( m_ogl_init_failed )
+        return;
 
     // SwapBuffer requires the window to be shown before calling
     if( !IsShownOnScreen() )
@@ -291,8 +296,14 @@ void EDA_3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
 
     if( !m_ogl_initialized )
     {
-        m_ogl_initialized = true;
-        ogl_initialize();
+        m_ogl_initialized = ogl_initialize();
+
+        if( !m_ogl_initialized )
+        {
+            m_ogl_init_failed = true;
+            gl_mgr->UnlockCtx( m_glRC );
+            return;
+        }
     }
 
     if( m_reload_is_needed )

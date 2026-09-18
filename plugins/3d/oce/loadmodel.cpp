@@ -28,6 +28,7 @@
 #include <cstring>
 #include <map>
 #include <vector>
+#include <atomic>
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/stdpaths.h>
@@ -36,16 +37,16 @@
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 
-#include <advanced_config.h>
-#include <decompress.hpp>
+#include <plugins/3dapi/model_import.h>
+#include "loadmodel.h"
+#include "../model_import_internal.h"
 
 #include <TDocStd_Document.hxx>
 #include <TopoDS.hxx>
 #include <TopoDS_Shape.hxx>
 #include <Quantity_Color.hxx>
+#include <Quantity_ColorRGBA.hxx>
 #include <XCAFApp_Application.hxx>
-
-#include <AIS_Shape.hxx>
 
 #include <IGESControl_Reader.hxx>
 #include <IGESCAFControl_Reader.hxx>
@@ -108,6 +109,7 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent,
 
 struct DATA
 {
+    Handle( XCAFApp_Application ) m_app;
     Handle( TDocStd_Document ) m_doc;
     Handle( XCAFDoc_ColorTool ) m_color;
     Handle( XCAFDoc_ShapeTool ) m_assy;
@@ -119,6 +121,21 @@ struct DATA
     FACEMAP  faces;     // SGSHAPE items representing a TopoDS_FACE
     bool renderBoth;    // set TRUE if we're processing IGES
     bool hasSolid;      // set TRUE if there is no parent SOLID
+    S3D::MODEL_IMPORT_OPTIONS options;
+    MODEL_IMPORT_STATUS*      status = nullptr;
+
+    bool IsCanceled()
+    {
+        if( options.IsCanceled() )
+        {
+            if( status )
+                status->Set( S3D::MODEL_IMPORT_ERROR::CANCELED, "Model import canceled" );
+
+            return true;
+        }
+
+        return false;
+    }
 
     DATA()
     {
@@ -196,6 +213,9 @@ struct DATA
 
         if( scene )
             S3D::DestroyNode(scene);
+
+        if( !m_app.IsNull() && !m_doc.IsNull() && m_app->CanClose( m_doc ) == CDM_CCS_OK )
+            m_app->Close( m_doc );
     }
 
     // find collection of tagged nodes
@@ -286,8 +306,9 @@ FormatType fileType( const char* aFileName )
     if( !ifile.IsOk() )
         return FMT_NONE;
 
-    if( fname.GetExt().MakeUpper().EndsWith( wxT( "STPZ" ) )
-            || fname.GetExt().MakeUpper().EndsWith( wxT( "GZ" ) ) )
+    wxString extension = fname.GetExt().MakeUpper();
+
+    if( extension == wxT( "STPZ" ) || extension == wxT( "STEPZ" ) || extension.EndsWith( wxT( "GZ" ) ) )
     {
         return FMT_STPZ;
     }
@@ -559,27 +580,17 @@ bool readIGES( Handle( TDocStd_Document ) & m_doc, const char* fname )
     reader.SetLayerMode(false); // ignore LAYER data
 
     if( !reader.Transfer( m_doc ) )
-    {
-        if( m_doc->CanClose() == CDM_CCS_OK )
-            m_doc->Close();
-
         return false;
-    }
 
     // are there any shapes to translate?
     if( reader.NbShapes() < 1 )
-    {
-        if( m_doc->CanClose() == CDM_CCS_OK )
-            m_doc->Close();
-
         return false;
-    }
 
     return true;
 }
 
 
-bool readSTEP( Handle(TDocStd_Document)& m_doc, const char* fname )
+bool readSTEP( Handle( TDocStd_Document ) & m_doc, const char* fname, double aLinearDeflection )
 {
     wxLogTrace( MASK_OCE, wxT( "Reading step file %s" ), fname );
 
@@ -594,7 +605,7 @@ bool readSTEP( Handle(TDocStd_Document)& m_doc, const char* fname )
         return false;
 
     // Set the shape conversion precision (default 0.0001 has too many triangles)
-    if( !Interface_Static::SetRVal( "read.precision.val", ADVANCED_CFG::GetCfg().m_OcePluginLinearDeflection ) )
+    if( !Interface_Static::SetRVal( "read.precision.val", aLinearDeflection ) )
         return false;
 
     // set other translation options
@@ -603,41 +614,42 @@ bool readSTEP( Handle(TDocStd_Document)& m_doc, const char* fname )
     reader.SetLayerMode( false ); // ignore LAYER data
 
     if( !reader.Transfer( m_doc ) )
-    {
-        if( m_doc->CanClose() == CDM_CCS_OK )
-            m_doc->Close();
-
         return false;
-    }
 
     // are there any shapes to translate?
     if( reader.NbRootsForTransfer() < 1 )
-    {
-        if( m_doc->CanClose() == CDM_CCS_OK )
-            m_doc->Close();
-
         return false;
-    }
 
     return true;
 }
 
 
-bool readSTEPZ( Handle(TDocStd_Document)& m_doc, const char* aFileName )
+bool readSTEPZ( Handle( TDocStd_Document ) & m_doc, const char* aFileName, const S3D::MODEL_IMPORT_OPTIONS& aOptions,
+                MODEL_IMPORT_STATUS* aStatus )
 {
     wxFileName fname( wxString::FromUTF8Unchecked( aFileName ) );
     wxFFileInputStream ifile( fname.GetFullPath() );
 
-    wxFileName outFile( fname );
+    wxString   tempPath = CreateModelImportTempFileName( wxS( "kicad-step-" ) );
+    wxFileName outFile( tempPath );
 
-    outFile.SetPath( wxStandardPaths::Get().GetTempDir() );
-    outFile.SetExt( wxT( "STEP" ) );
+    MODEL_IMPORT_TEMP_FILE cleanup{ tempPath };
+
+    if( tempPath.empty() || !ifile.IsOk() )
+        return false;
 
     wxFileOffset size = ifile.GetLength();
-    wxBusyCursor busycursor;
-
     if( size == wxInvalidOffset )
         return false;
+
+    if( static_cast<std::uint64_t>( size ) > aOptions.maxCompressedBytes
+        || static_cast<std::uint64_t>( size ) > std::numeric_limits<std::size_t>::max() )
+    {
+        if( aStatus )
+            aStatus->Set( S3D::MODEL_IMPORT_ERROR::TOO_LARGE, "Compressed STEP exceeds the configured limit" );
+
+        return false;
+    }
 
     {
         bool success = false;
@@ -646,21 +658,36 @@ bool readSTEPZ( Handle(TDocStd_Document)& m_doc, const char* aFileName )
         if( !ofile.IsOk() )
             return false;
 
-        char *buffer = new char[size];
+        std::vector<char> buffer( static_cast<size_t>( size ) );
 
-        ifile.Read( buffer, size);
-        std::string expanded;
+        ifile.Read( buffer.data(), size );
 
-        try
+        if( ifile.LastRead() != static_cast<size_t>( size ) )
+            return false;
+
+        std::string                    expanded;
+        const MODEL_IMPORT_GZIP_RESULT gzipResult = DecompressBoundedModel(
+                buffer.data(), static_cast<size_t>( size ), aOptions.maxExpandedBytes, expanded );
+
+        if( gzipResult == MODEL_IMPORT_GZIP_RESULT::TOO_LARGE )
         {
-            expanded = gzip::decompress( buffer, size );
-            success = true;
+            if( aStatus )
+                aStatus->Set( S3D::MODEL_IMPORT_ERROR::TOO_LARGE, "Expanded STEP exceeds the configured limit" );
+
+            return false;
         }
-        catch(...)
-        {}
 
-        if( expanded.empty() )
+        // A .stpz may be a plain zip rather than a gzip stream, so fall back before rejecting it.
+        if( gzipResult == MODEL_IMPORT_GZIP_RESULT::CORRUPT )
         {
+            if( buffer.size() < 4 || buffer[0] != 'P' || buffer[1] != 'K' || buffer[2] != 3 || buffer[3] != 4 )
+            {
+                if( aStatus )
+                    aStatus->Set( S3D::MODEL_IMPORT_ERROR::INVALID, "Compressed STEP archive is corrupt" );
+
+                return false;
+            }
+
             ifile.Reset();
             ifile.SeekI( 0 );
             wxZipInputStream izipfile( ifile );
@@ -668,38 +695,68 @@ bool readSTEPZ( Handle(TDocStd_Document)& m_doc, const char* aFileName )
 
             if( zip_file && !zip_file->IsDir() && izipfile.CanRead() )
             {
-                izipfile.Read( ofile );
+                char          chunk[65536];
+                std::uint64_t written = 0;
+
+                while( izipfile.CanRead() )
+                {
+                    izipfile.Read( chunk, sizeof( chunk ) );
+                    size_t count = izipfile.LastRead();
+
+                    if( count > aOptions.maxExpandedBytes - written )
+                    {
+                        if( aStatus )
+                            aStatus->Set( S3D::MODEL_IMPORT_ERROR::TOO_LARGE,
+                                          "Expanded STEP exceeds the configured limit" );
+
+                        return false;
+                    }
+
+                    ofile.Write( chunk, count );
+
+                    if( ofile.LastWrite() != count )
+                        return false;
+
+                    written += count;
+                }
+
                 success = true;
             }
         }
         else
         {
             ofile.Write( expanded.data(), expanded.size() );
+            success = ofile.LastWrite() == expanded.size();
         }
 
-        delete[] buffer;
-        ofile.Close();
+        success = ofile.Close() && success;
 
         if( !success )
             return false;
     }
 
-    bool retval = readSTEP( m_doc, outFile.GetFullPath().mb_str() );
-
-    // Cleanup our temporary file
-    wxRemoveFile( outFile.GetFullPath() );
+    bool retval = readSTEP( m_doc, outFile.GetFullPath().mb_str(), aOptions.stepLinearDeflection );
 
     return retval;
 }
 
 
-SCENEGRAPH* LoadModel( char const* filename )
+SCENEGRAPH* LoadModel( char const* filename, const S3D::MODEL_IMPORT_OPTIONS* aOptions, MODEL_IMPORT_STATUS* aStatus )
 {
     DATA data;
 
-    Handle(XCAFApp_Application) m_app = XCAFApp_Application::GetApplication();
-    m_app->NewDocument( "MDTV-XCAF", data.m_doc );
+    if( aOptions )
+        data.options = *aOptions;
+
+    data.status = aStatus;
+
+    data.m_app = XCAFApp_Application::GetApplication();
+    data.m_app->NewDocument( "MDTV-XCAF", data.m_doc );
     FormatType modelFmt = fileType( filename );
+
+    if( ( data.options.format == S3D::MODEL_IMPORT_FORMAT::STEP && modelFmt != FMT_STEP && modelFmt != FMT_STPZ )
+        || ( data.options.format == S3D::MODEL_IMPORT_FORMAT::IGES && modelFmt != FMT_IGES ) )
+        return nullptr;
 
     switch( modelFmt )
     {
@@ -712,24 +769,20 @@ SCENEGRAPH* LoadModel( char const* filename )
         break;
 
     case FMT_STEP:
-        if( !readSTEP( data.m_doc, filename ) )
+        if( !readSTEP( data.m_doc, filename, data.options.stepLinearDeflection ) )
             return nullptr;
 
         break;
 
     case FMT_STPZ:
-        if( !readSTEPZ( data.m_doc, filename ) )
+        if( !readSTEPZ( data.m_doc, filename, data.options, aStatus ) )
             return nullptr;
 
         break;
 
 
     default:
-        if( m_app->CanClose( data.m_doc ) == CDM_CCS_OK )
-            m_app->Close( data.m_doc );
-
         return nullptr;
-        break;
     }
 
     data.m_assy = XCAFDoc_DocumentTool::ShapeTool( data.m_doc->Main() );
@@ -745,6 +798,9 @@ SCENEGRAPH* LoadModel( char const* filename )
     NCollection_Sequence<TDF_Label> frshapes;
     data.m_assy->GetFreeShapes( frshapes );
 
+    if( data.IsCanceled() )
+        return nullptr;
+
     bool ret = false;
 
     // create the top level SG node
@@ -753,6 +809,9 @@ SCENEGRAPH* LoadModel( char const* filename )
 
     for( int i = 1; i <= frshapes.Length(); i++ )
     {
+        if( data.IsCanceled() )
+            return nullptr;
+
         const TDF_Label& label = frshapes.Value( i );
 
         if( data.m_color->IsVisible( label ) )
@@ -764,9 +823,6 @@ SCENEGRAPH* LoadModel( char const* filename )
 
     if( !ret )
     {
-        if( m_app->CanClose( data.m_doc ) == CDM_CCS_OK )
-            m_app->Close( data.m_doc );
-
         return nullptr;
     }
 
@@ -793,9 +849,6 @@ SCENEGRAPH* LoadModel( char const* filename )
     // set to NULL to prevent automatic destruction of the scene data
     data.scene = nullptr;
 
-    if( m_app->CanClose( data.m_doc ) == CDM_CCS_OK )
-        m_app->Close( data.m_doc );
-
     return scene;
 }
 
@@ -809,6 +862,9 @@ bool processShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
     wxLogTrace( MASK_OCE, wxT( "Processing shell" ) );
     for( it.Initialize( shape, false, false ); it.More(); it.Next() )
     {
+        if( data.IsCanceled() )
+            return false;
+
         const TopoDS_Face& face = TopoDS::Face( it.Value() );
 
         if( processFace( face, data, parent, items, color ) )
@@ -834,9 +890,9 @@ bool processSolidOrShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
     // Search the whole model first to make sure something exists (may or may not have color)
     if( !data.m_assy->Search( shape, label ) )
     {
-        static int i = 0;
+        static std::atomic_int i{ 0 };
         std::ostringstream ostr;
-        ostr << "KMISC_" << i++;
+        ostr << "KMISC_" << i.fetch_add( 1, std::memory_order_relaxed );
         partID = ostr.str();
     }
     else
@@ -947,6 +1003,9 @@ bool processSolidOrShell( const TopoDS_Shape& shape, DATA& data, SGNODE* parent,
 bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
                    std::vector<SGNODE*>* aItems )
 {
+    if( aData.IsCanceled() )
+        return false;
+
     std::string labelTag;
 
     if( wxLog::IsAllowedTraceMask( MASK_OCE ) )
@@ -1019,7 +1078,7 @@ bool processLabel( const TDF_Label& aLabel, DATA& aData, SGNODE* aParent,
     case TopAbs_COMPOUND:
         {
             // assemblies will report a shape type of compound which isn't what we are after
-            // we will still process the children of assemblies but they should just be label references to the actual shapes
+        // We still process assembly children, but they should only be label references to the actual shapes.
             if( !aData.m_assy->IsAssembly( shapeLabel ) )
             {
                 TopExp_Explorer xp;
@@ -1144,7 +1203,7 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
     TopLoc_Location loc;
     bool isTessellate (false);
     Handle( Poly_Triangulation ) triangulation = BRep_Tool::Triangulation( face, loc );
-    const double linDeflection = ADVANCED_CFG::GetCfg().m_OcePluginLinearDeflection;
+    const double linDeflection = data.options.stepLinearDeflection;
 
     if( triangulation.IsNull() || triangulation->Deflection() > linDeflection + Precision::Confusion() )
         isTessellate = true;
@@ -1152,9 +1211,12 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
     if( isTessellate )
     {
         BRepMesh_IncrementalMesh IM(face, linDeflection, false,
-                                     glm::radians(ADVANCED_CFG::GetCfg().m_OcePluginAngularDeflection) );
+                                     glm::radians( data.options.stepAngularDeflectionDegrees ) );
         triangulation = BRep_Tool::Triangulation( face, loc );
     }
+
+    if( data.IsCanceled() )
+        return false;
 
     if( triangulation.IsNull() == true )
         return false;
@@ -1169,20 +1231,6 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
         color = &lcolor;
     }
 
-    SGNODE* ocolor = data.GetColor( color );
-
-    // create a SHAPE and attach the color and data,
-    // then attach the shape to the parent and return TRUE
-    IFSG_SHAPE vshape( true );
-    IFSG_FACESET vface( vshape );
-    IFSG_COORDS vcoords( vface );
-    IFSG_COORDINDEX coordIdx( vface );
-
-    if( nullptr == S3D::GetSGNodeParent( ocolor ) )
-        S3D::AddSGNodeChild( vshape.GetRawPtr(), ocolor );
-    else
-        S3D::AddSGNodeRef( vshape.GetRawPtr(), ocolor );
-
     std::vector< SGPOINT > vertices;
     std::vector< int > indices;
     std::vector< int > indices2;
@@ -1194,6 +1242,8 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
 
     for( int i = 1; i <= triangulation->NbNodes(); i++ )
     {
+        if( ( i & 0x3FF ) == 0 && data.IsCanceled() )
+            return false;
         gp_XYZ v = applyTransform ? triangulation->Node( i ).Transformed( tx ).Coord()
                                   : triangulation->Node( i ).Coord();
         vertices.emplace_back( v.X(), v.Y(), v.Z() );
@@ -1201,6 +1251,9 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
 
     for( int i = 1; i <= triangulation->NbTriangles(); i++ )
     {
+        if( ( i & 0x3FF ) == 0 && data.IsCanceled() )
+            return false;
+
         int a, b, c;
         triangulation->Triangle(i).Get(a, b, c);
         a--;
@@ -1229,8 +1282,25 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
         }
     }
 
-    vcoords.SetCoordsList( vertices.size(), &vertices[0] );
-    coordIdx.SetIndices( indices.size(), &indices[0] );
+    if( vertices.empty() || indices.empty() )
+        return false;
+
+    SGNODE* ocolor = data.GetColor( color );
+
+    // create a SHAPE and attach the color and data,
+    // then attach the shape to the parent and return TRUE
+    IFSG_SHAPE vshape( true );
+    IFSG_FACESET vface( vshape );
+    IFSG_COORDS vcoords( vface );
+    IFSG_COORDINDEX coordIdx( vface );
+
+    if( nullptr == S3D::GetSGNodeParent( ocolor ) )
+        S3D::AddSGNodeChild( vshape.GetRawPtr(), ocolor );
+    else
+        S3D::AddSGNodeRef( vshape.GetRawPtr(), ocolor );
+
+    vcoords.SetCoordsList( vertices.size(), vertices.data() );
+    coordIdx.SetIndices( indices.size(), indices.data() );
     vface.CalcNormals( nullptr );
     vshape.SetParent( parent );
 
@@ -1249,8 +1319,8 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
         IFSG_COORDINDEX coordIdx2( vface2 );
         S3D::AddSGNodeRef( vshape2.GetRawPtr(), ocolor );
 
-        vcoords2.SetCoordsList( vertices.size(), &vertices[0] );
-        coordIdx2.SetIndices( indices2.size(), &indices2[0] );
+        vcoords2.SetCoordsList( vertices.size(), vertices.data() );
+        coordIdx2.SetIndices( indices2.size(), indices2.data() );
         vface2.CalcNormals( nullptr );
         vshape2.SetParent( parent );
 
@@ -1259,4 +1329,25 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
     }
 
     return true;
+}
+
+
+SCENEGRAPH* LoadModel( const char* aFileName, const S3D::MODEL_IMPORT_OPTIONS* aOptions )
+{
+    S3D::MODEL_IMPORT_LOCK      lock;
+    MODEL_IMPORT_NUMERIC_LOCALE locale;
+    MODEL_IMPORT_STATUS         status;
+
+    try
+    {
+        if( SCENEGRAPH* scene = LoadModel( aFileName, aOptions, &status ) )
+            return scene;
+    }
+    catch( ... )
+    {
+        return nullptr;
+    }
+
+    wxLogTrace( MASK_OCE, wxT( "Model import failed: %s" ), status.diagnostic.c_str() );
+    return nullptr;
 }

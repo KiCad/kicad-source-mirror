@@ -101,6 +101,13 @@ extern KICOMMON_API const wxChar* const kicadTraceCoroutineStack;
 extern KICOMMON_API const wxChar* const traceAutoSave;
 
 /**
+ * Flag to enable native operating-system model preview debug output.
+ *
+ * Use "KICAD_MODEL_PREVIEW" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceModelPreview;
+
+/**
  * Flag to enable schematic library memory deletion debug output.
  *
  * Use "KICAD_SCH_LIB_MEM" to enable.

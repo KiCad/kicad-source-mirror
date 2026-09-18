@@ -41,9 +41,9 @@
 #include "vrml2_switch.h"
 #include "vrml2_inline.h"
 #include "plugins/3dapi/ifsg_all.h"
+#include "../loadmodel.h"
 
 
-SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline, bool applyUnitConversion );
 
 
 WRL2BASE::WRL2BASE() : WRL2NODE()
@@ -98,6 +98,13 @@ void WRL2BASE::SetApplyUnitConversion( bool apply )
 }
 
 
+void WRL2BASE::SetImportOptions( const S3D::MODEL_IMPORT_OPTIONS& aOptions, MODEL_IMPORT_STATUS* aStatus )
+{
+    m_options = aOptions;
+    m_status = aStatus;
+}
+
+
 bool WRL2BASE::GetEnableInline( void )
 {
     return  m_useInline;
@@ -148,10 +155,15 @@ SGNODE* WRL2BASE::GetInlineData( const std::string& aName )
     // This ensures that submodels referenced via Inline{} nodes in PCBnew-exported VRML
     // files (which have top-level scale and disabled unit conversion) are also loaded
     // without unit conversion.
-    SCENEGRAPH* sp = LoadVRML( fn.GetFullPath(), false, m_applyUnitConversion );
+    S3D::MODEL_IMPORT_OPTIONS inlineOptions = m_options;
+    inlineOptions.vrmlApplyLegacyUnitConversion = m_applyUnitConversion;
+    inlineOptions.vrmlEnableInline = m_useInline;
+
+    SCENEGRAPH* sp = LoadVRML( fn.GetFullPath(), inlineOptions, m_status );
 
     if( nullptr == sp )
     {
+        m_incompleteInline = true;
         m_inlineModels.emplace( aName, nullptr );
         return nullptr;
     }
@@ -896,6 +908,8 @@ bool WRL2BASE::readInline( WRLPROC& proc, WRL2NODE* aParent, WRL2NODE** aNode )
 
     if( !m_useInline )
     {
+        m_incompleteInline = true;
+
         if( !proc.DiscardNode() )
         {
             wxLogTrace( traceVrmlPlugin, wxT( " * [INFO] failed to discard in line node %s." ),

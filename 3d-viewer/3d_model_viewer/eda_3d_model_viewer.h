@@ -74,7 +74,7 @@ public:
     void Clear3DModel();
 
 private:
-    void ogl_initialize();
+    bool ogl_initialize();
     void ogl_set_arrow_material();
 
     void OnPaint( wxPaintEvent& event );
@@ -118,6 +118,7 @@ private:
 
     /// Flag if open gl was initialized
     bool m_ogl_initialized;
+    bool m_ogl_init_failed = false;
 
     /// factor to convert the model or any other items to keep it in relation to
     /// the +/-RANGE_SCALE_3D

@@ -42,6 +42,29 @@ namespace S3D
     SGLIB_API void GetLibVersion( unsigned char* Major, unsigned char* Minor,
                                   unsigned char* Patch, unsigned char* Revision ) noexcept;
 
+    /**
+     * Serialize parser and scene-name operations.
+     *
+     * Ordinary callers use MODEL_IMPORT_LOCK rather than these raw entry points.  A caller
+     * performing a ResetNodeIndex/RenameNodes/write sequence must hold this recursive lock
+     * across the entire sequence.
+     */
+    SGLIB_API void LockModelImport() noexcept;
+    SGLIB_API void UnlockModelImport() noexcept;
+
+    /**
+     * Scoped holder for the recursive model import lock.
+     */
+    class MODEL_IMPORT_LOCK
+    {
+    public:
+        MODEL_IMPORT_LOCK() noexcept { LockModelImport(); }
+        ~MODEL_IMPORT_LOCK() { UnlockModelImport(); }
+
+        MODEL_IMPORT_LOCK( const MODEL_IMPORT_LOCK& ) = delete;
+        MODEL_IMPORT_LOCK& operator=( const MODEL_IMPORT_LOCK& ) = delete;
+    };
+
     // functions to extract information from SGNODE pointers
     SGLIB_API S3D::SGTYPES GetSGNodeType( SGNODE* aNode );
     SGLIB_API SGNODE* GetSGNodeParent( SGNODE* aNode );
@@ -175,6 +198,6 @@ namespace S3D
      * Create and initialize an #SMESH structure.
      */
     SGLIB_API void Init3DMesh( SMESH& aMesh );
-}
+} // namespace S3D
 
 #endif  // IFSG_API_H

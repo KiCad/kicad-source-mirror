@@ -209,6 +209,8 @@ set( KICOMMON_SRCS
     libraries/library_table.cpp
     libraries/library_table_parser.cpp
 
+    model_preview_manager.cpp
+
     settings/app_settings.cpp
     settings/aui_settings.cpp
     settings/bom_settings.cpp

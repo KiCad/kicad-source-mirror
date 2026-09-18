@@ -31,13 +31,14 @@
 #include <string>
 #include <vector>
 
-#include "richio.h"
 #include "wrltypes.h"
+
+class VRML_LINE_READER;
 
 class WRLPROC
 {
 public:
-    WRLPROC( LINE_READER* aLineReader );
+    WRLPROC( VRML_LINE_READER* aLineReader );
     ~WRLPROC();
 
     bool eof( void );
@@ -101,7 +102,7 @@ public:
     bool getRawLine( void );
 
 private:
-    LINE_READER* m_file;
+    VRML_LINE_READER* m_file;
     std::string m_buf;          // string being parsed
     bool m_eof;
     unsigned int m_fileline;

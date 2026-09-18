@@ -15,6 +15,18 @@
 
 namespace gzip {
 
+class decompression_error : public std::runtime_error
+{
+public:
+    using std::runtime_error::runtime_error;
+};
+
+class limit_error : public decompression_error
+{
+public:
+    using decompression_error::decompression_error;
+};
+
 inline void decompress(const char* data,
                        std::size_t size,
                        std::string& output,
@@ -43,13 +55,14 @@ inline void decompress(const char* data,
     constexpr int window_bits = 15 + 32; // auto with windowbits of 15
 
     constexpr unsigned int max_uint = std::numeric_limits<unsigned int>::max();
+
+    if( size > max_uint )
+        throw decompression_error( "compressed input too large" );
+
     const unsigned int size_step = buffering_size > max_uint ? max_uint : static_cast<unsigned int>(buffering_size);
-        if( max_uncompressed_size != 0 && size_step > max_uncompressed_size )
-        {
-            throw std::runtime_error(
-                    "buffer size used during decompression of gzip will use more memory then allowed, "
-                    "either increase the limit or reduce the buffer size" );
-        }
+
+    if( max_uncompressed_size != 0 && size_step > max_uncompressed_size )
+        throw limit_error( "decompression buffer is larger than the permitted output size" );
 
 #ifdef __GNUC__
 #pragma GCC diagnostic push
@@ -57,7 +70,7 @@ inline void decompress(const char* data,
 #endif
     if (inflateInit2(&inflate_s, window_bits) != Z_OK)
     {
-        throw std::runtime_error("inflate init failed");
+        throw decompression_error( "inflate init failed" );
     }
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
@@ -72,21 +85,21 @@ inline void decompress(const char* data,
         const int ret = inflate(&inflate_s, Z_FINISH);
         if (ret != Z_STREAM_END && ret != Z_OK && ret != Z_BUF_ERROR)
         {
-            std::string error_msg = inflate_s.msg;
+            std::string error_msg = inflate_s.msg ? inflate_s.msg : "inflate failed";
             inflateEnd(&inflate_s);
-            throw std::runtime_error(error_msg);
+            throw decompression_error( error_msg );
         }
         if (max_uncompressed_size != 0 && (output.size() + size_step - inflate_s.avail_out) > max_uncompressed_size)
         {
             inflateEnd(&inflate_s);
-            throw std::runtime_error("size of output string will use more memory then intended when decompressing");
+            throw limit_error( "size of output string will use more memory then intended when decompressing" );
         }
         output.append(buffer, 0, size_step - inflate_s.avail_out);
     } while (inflate_s.avail_out == 0);
     const int ret2 = inflateEnd(&inflate_s);
     if (ret2 != Z_OK)
     {
-        throw std::runtime_error("Unexpected gzip decompression error, state of stream was inconsistent");
+        throw decompression_error( "Unexpected gzip decompression error, state of stream was inconsistent" );
     }
 }
 

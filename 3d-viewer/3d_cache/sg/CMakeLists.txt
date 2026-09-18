@@ -35,6 +35,15 @@ endif( MINGW )
 
 add_library( kicad_3dsg SHARED ${SG_FILES} )
 
+# kicad_3dsg is loaded by out-of-process preview hosts, so it links only wxWidgets base.  Probe
+# it in a child scope so the narrow library list does not replace the parent's wxWidgets_LIBRARIES.
+function( kicad_find_3dsg_wx_libraries output_variable )
+    find_package( wxWidgets 3.2.0 COMPONENTS base REQUIRED )
+    set( ${output_variable} ${wxWidgets_LIBRARIES} PARENT_SCOPE )
+endfunction()
+
+kicad_find_3dsg_wx_libraries( KICAD_3DSG_WX_LIBRARIES )
+
 if( APPLE )
     # puts library into the main kicad.app bundle in build tree
     set_target_properties( kicad_3dsg PROPERTIES
@@ -93,7 +102,7 @@ unset( S3DSG_VERSION_FILE CACHE )
 # Define a flag to expose the appropriate EXPORT macro at build time
 target_compile_definitions( kicad_3dsg PRIVATE COMPILE_SGLIB )
 
-target_link_libraries( kicad_3dsg ${wxWidgets_LIBRARIES} )
+target_link_libraries( kicad_3dsg ${KICAD_3DSG_WX_LIBRARIES} )
 
 # Don't specify the ARCHIVE DESTINATION parameter to prevent
 # the install of the import library on Windows

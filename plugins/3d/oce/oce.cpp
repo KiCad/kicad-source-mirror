@@ -25,11 +25,11 @@
 #include <wx/filename.h>
 #include "plugins/3d/3d_plugin.h"
 #include "plugins/3dapi/ifsg_all.h"
+#include "loadmodel.h"
+#include <advanced_config.h>
 
 #include <string>
 #include <vector>
-
-SCENEGRAPH* LoadModel( char const* filename );
 
 #define PLUGIN_OCE_MAJOR 1
 #define PLUGIN_OCE_MINOR 4
@@ -139,5 +139,9 @@ SCENEGRAPH* Load( char const* aFileName )
     if( !wxFileName::FileExists( fname ) )
         return nullptr;
 
-    return LoadModel( aFileName );
+    S3D::MODEL_IMPORT_OPTIONS options;
+    options.stepLinearDeflection = ADVANCED_CFG::GetCfg().m_OcePluginLinearDeflection;
+    options.stepAngularDeflectionDegrees = ADVANCED_CFG::GetCfg().m_OcePluginAngularDeflection;
+
+    return LoadModel( aFileName, &options );
 }
