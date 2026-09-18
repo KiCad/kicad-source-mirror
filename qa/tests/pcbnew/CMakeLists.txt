@@ -67,6 +67,7 @@ set( QA_PCBNEW_SRCS
     test_issue24967.cpp
     test_issue25010.cpp
     test_issue25110_bezier_line_style.cpp
+    test_issue25521.cpp
     test_fp_lib_load_save.cpp
     test_io_mgr.cpp
     test_active_layer_update.cpp

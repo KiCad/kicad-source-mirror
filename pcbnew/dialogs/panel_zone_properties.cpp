@@ -432,7 +432,7 @@ bool PANEL_ZONE_PROPERTIES::AcceptOptions( bool aUseExportableSetupOnly )
     m_settings->m_Name = m_tcZoneName->GetValue();
 
     if( BOARD* board = m_frame->GetBoard() )
-        m_settings->m_Name = board->GetUniqueZoneName( m_settings->m_Name, m_zone );
+        m_settings->m_Name = m_zonesSettingsBag.GetUniqueZoneName( *board, m_settings->m_Name, m_zone );
 
     m_settings->m_FillMode = m_cbHatched->GetValue() ? ZONE_FILL_MODE::HATCH_PATTERN : ZONE_FILL_MODE::POLYGONS;
     m_settings->m_HatchOrientation = m_gridStyleRotation.GetAngleValue();
