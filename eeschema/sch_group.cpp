@@ -37,17 +37,23 @@
 #include <properties/property.h>
 #include <properties/property_mgr.h>
 
-SCH_GROUP::SCH_GROUP() : SCH_ITEM( nullptr, SCH_GROUP_T )
+
+SCH_GROUP::SCH_GROUP() :
+        SCH_ITEM( nullptr, SCH_GROUP_T )
 {
     SetLayer( LAYER_GROUP );
 }
 
-SCH_GROUP::SCH_GROUP( SCH_ITEM* aParent ) : SCH_ITEM( aParent, SCH_GROUP_T )
+
+SCH_GROUP::SCH_GROUP( SCH_ITEM* aParent ) :
+        SCH_ITEM( aParent, SCH_GROUP_T )
 {
     SetLayer( LAYER_GROUP );
 }
 
-SCH_GROUP::SCH_GROUP( SCH_SCREEN* aParent ) : SCH_ITEM( aParent, SCH_GROUP_T )
+
+SCH_GROUP::SCH_GROUP( SCH_SCREEN* aParent ) :
+        SCH_ITEM( aParent, SCH_GROUP_T )
 {
     SetLayer( LAYER_GROUP );
 }
@@ -77,6 +83,7 @@ bool SCH_GROUP::Deserialize( const google::protobuf::Any& aContainer )
 {
     return DeserializeGroup( aContainer, nullptr );
 }
+
 
 bool SCH_GROUP::DeserializeGroup( const google::protobuf::Any& aContainer, COMMIT* aCommit )
 {
@@ -113,6 +120,7 @@ bool SCH_GROUP::DeserializeGroup( const google::protobuf::Any& aContainer, COMMI
 
     return true;
 }
+
 
 std::unordered_set<SCH_ITEM*> SCH_GROUP::GetSchItems() const
 {

@@ -275,18 +275,16 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             if( !container )
             {
                 e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-                e.set_error_message( fmt::format(
-                        "The requested container {} is not a valid board item container",
-                        containerId.AsStdString() ) );
+                e.set_error_message( fmt::format( "The requested container {} is not a valid board item container",
+                                                  containerId.AsStdString() ) );
                 return tl::unexpected( e );
             }
         }
         else
         {
             e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-            e.set_error_message( fmt::format(
-                    "The requested container {} does not exist in this document",
-                    containerId.AsStdString() ) );
+            e.set_error_message( fmt::format( "The requested container {} does not exist in this document",
+                                              containerId.AsStdString() ) );
             return tl::unexpected( e );
         }
     }
@@ -323,8 +321,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             }
         }
 
-        HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>> creationResult =
-                createItemForType( *type, container );
+        HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>> creationResult = createItemForType( *type, container );
 
         if( !creationResult )
         {
@@ -360,9 +357,10 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
                 };
 
             status.set_code( ItemStatusCode::ISC_INVALID_DATA );
-            status.set_error_message( fmt::format(
-                    "Invalid custom properties for item {}: property name(s) '{}' already in use",
-                    item->m_Uuid.AsStdString(), fmt::join( std::views::transform( removed, as_str ), ", " ) ) );
+            status.set_error_message( fmt::format( "Invalid custom properties for item {}: property name(s) '{}' "
+                                                   "already in use",
+                                                   item->m_Uuid.AsStdString(),
+                                                   fmt::join( std::views::transform( removed, as_str ), ", " ) ) );
 
             aItemHandler( status, anyItem );
             continue;
@@ -391,8 +389,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             && !item->FitsEnabledLayers( board->GetEnabledLayers(), board->GetCopperLayerCount() ) )
         {
             status.set_code( ItemStatusCode::ISC_INVALID_DATA );
-            status.set_error_message(
-                "attempted to add item with no overlapping layers with the board" );
+            status.set_error_message( "attempted to add item with no overlapping layers with the board" );
             aItemHandler( status, anyItem );
             continue;
         }
