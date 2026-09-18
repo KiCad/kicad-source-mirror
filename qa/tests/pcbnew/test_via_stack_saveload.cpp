@@ -577,6 +577,34 @@ BOOST_AUTO_TEST_CASE( DuplicatePresetNamesAreDropped )
 }
 
 
+// A dimension outside the internal unit range is not a size we can honour. Zero hands the
+// stack to the board defaults, which is what a missing dimension already does.
+BOOST_AUTO_TEST_CASE( OutOfRangePresetDimensionsFallBackToDefaults )
+{
+    BOARD_DESIGN_SETTINGS bds( nullptr, "board.design_settings" );
+
+    nlohmann::json entries = nlohmann::json::array();
+
+    // The realistic way to get here is writing 0.3 mm in internal units.
+    entries.push_back( { { "name", "wrong unit" }, { "via_size", 300000.0 }, { "via_drill", 150000.0 } } );
+    entries.push_back( { { "name", "negative" }, { "via_size", -5000.0 }, { "via_drill", -5000.0 } } );
+    entries.push_back( { { "name", "sane" }, { "via_size", 0.3 }, { "via_drill", 0.15 } } );
+
+    bds.Set( "via_stack_presets", entries );
+    bds.Load();
+
+    BOOST_REQUIRE_EQUAL( bds.m_ViaStackPresets.size(), 3u );
+
+    BOOST_CHECK_EQUAL( bds.m_ViaStackPresets[0].m_ViaSize, 0 );
+    BOOST_CHECK_EQUAL( bds.m_ViaStackPresets[0].m_ViaDrill, 0 );
+    BOOST_CHECK_EQUAL( bds.m_ViaStackPresets[1].m_ViaSize, 0 );
+    BOOST_CHECK_EQUAL( bds.m_ViaStackPresets[1].m_ViaDrill, 0 );
+
+    BOOST_CHECK_EQUAL( bds.m_ViaStackPresets[2].m_ViaSize, pcbIUScale.mmToIU( 0.3 ) );
+    BOOST_CHECK_EQUAL( bds.m_ViaStackPresets[2].m_ViaDrill, pcbIUScale.mmToIU( 0.15 ) );
+}
+
+
 // Capping is an IPC-4761 attribute that reaches the fab, so grouping loose vias must not drop it.
 // Only a hop touching an outer layer carries it, and that hop is the last one on a stack anchored
 // at the back.

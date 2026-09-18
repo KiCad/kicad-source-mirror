@@ -21,6 +21,7 @@
 #include <pcb_dimension.h>
 #include <pcb_track.h>
 #include <algorithm>
+#include <limits>
 #include <cmath>
 #include <layer_ids.h>
 #include <lset.h>
@@ -549,9 +550,15 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
                 auto mmOr = []( const nlohmann::json& aEntry, const char* aKey )
                 {
-                    return aEntry.contains( aKey ) && aEntry[aKey].is_number()
-                                   ? pcbIUScale.mmToIU( aEntry[aKey].get<double>() )
-                                   : 0;
+                    if( !aEntry.contains( aKey ) || !aEntry[aKey].is_number() )
+                        return 0;
+
+                    double mm = aEntry[aKey].get<double>();
+
+                    if( mm < 0.0 || mm > pcbIUScale.IUTomm( std::numeric_limits<int>::max() ) )
+                        return 0;
+
+                    return pcbIUScale.mmToIU( mm );
                 };
 
                 // Bound in mm, before the conversion to IU, because an absurd hand-edited
