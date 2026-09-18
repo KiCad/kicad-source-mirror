@@ -19,8 +19,12 @@
  */
 
 #include <fmt/format.h>
-#include <mock_pgm_base.h>
+
+#include <memory>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <qa_utils/env_var_utils.h>
+
+#include <mock_pgm_base.h>
 #include <pgm_base.h>
 #include "eeschema_test_utils.h"
 
@@ -66,14 +70,11 @@ protected:
     /// Ensure KICAD9_SYMBOL_DIR points at the QA data libraries so the global
     /// sym-lib-table's ${KICAD9_SYMBOL_DIR}/Device.kicad_sym URI resolves.
     /// Only needed by tests that load a global library before any project is open.
-    void EnsureGlobalSymbolDir()
+    std::unique_ptr<KI_TEST::SCOPED_PROCESS_ENV_VAR> EnsureGlobalSymbolDir()
     {
-        if( !wxGetEnv( wxT( "KICAD9_SYMBOL_DIR" ), nullptr ) )
-        {
-            wxString path( KI_TEST::GetTestDataRootDir() );
-            path += wxT( "/libraries" );
-            wxSetEnv( wxT( "KICAD9_SYMBOL_DIR" ), path );
-        }
+        wxString path( KI_TEST::GetTestDataRootDir() );
+        path += wxT( "/libraries" );
+        return std::make_unique<KI_TEST::SCOPED_PROCESS_ENV_VAR>( wxT( "KICAD9_SYMBOL_DIR" ), path );
     }
 };
 
@@ -319,7 +320,7 @@ BOOST_AUTO_TEST_CASE( ProjectReloadPreservesShadowing )
         return;
     }
 
-    EnsureGlobalSymbolDir();
+    std::unique_ptr<KI_TEST::SCOPED_PROCESS_ENV_VAR> scopedSymDirEnvVar = EnsureGlobalSymbolDir();
 
     LIBRARY_MANAGER manager;
 
@@ -386,7 +387,7 @@ BOOST_AUTO_TEST_CASE( ProjectReloadReleasesRemovedShadow )
         return;
     }
 
-    EnsureGlobalSymbolDir();
+    std::unique_ptr<KI_TEST::SCOPED_PROCESS_ENV_VAR> scopedSymDirEnvVar = EnsureGlobalSymbolDir();
 
     LIBRARY_MANAGER manager;
 
@@ -509,32 +510,12 @@ BOOST_AUTO_TEST_CASE( MissingLibraryReportsErrorOnEveryLoad )
 // AsyncLoad skip path deterministically without a network dependency.
 BOOST_AUTO_TEST_CASE( AsyncLoadSkipsDisabledRows )
 {
-    // Restores the env var on scope exit even if an assertion aborts the test.
-    struct SCOPED_ENV
-    {
-        SCOPED_ENV( const wxString& aName, const wxString& aValue ) :
-                m_name( aName ), m_hadPrev( wxGetEnv( aName, &m_prev ) )
-        {
-            wxSetEnv( aName, aValue );
-        }
-
-        ~SCOPED_ENV()
-        {
-            if( m_hadPrev )
-                wxSetEnv( m_name, m_prev );
-            else
-                wxUnsetEnv( m_name );
-        }
-
-        wxString m_name;
-        wxString m_prev;
-        bool     m_hadPrev;
-    };
-
     wxFileName deviceDir( KI_TEST::GetTestDataRootDir(), wxEmptyString );
     deviceDir.AppendDir( "libraries" );
     deviceDir.AppendDir( "test_project" );
-    SCOPED_ENV env( wxT( "QA_ISSUE24855_DIR" ), deviceDir.GetPath() );
+
+    // Inject the resolved test-data path to find the library
+    KI_TEST::SCOPED_PROCESS_ENV_VAR env( wxT( "QA_ISSUE24855_DIR" ), deviceDir.GetPath() );
 
     wxFileName fixtureDir( KI_TEST::GetTestDataRootDir(), wxEmptyString );
     fixtureDir.AppendDir( "libraries" );

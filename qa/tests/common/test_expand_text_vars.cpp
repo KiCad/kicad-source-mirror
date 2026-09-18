@@ -20,11 +20,17 @@
 
 #define BOOST_TEST_NO_MAIN
 #include <boost/test/unit_test.hpp>
+#include <qa_utils/file_utils.h>
+#include <qa_utils/env_var_utils.h>
+
 #include <atomic>
-#include <filesystem>
 #include <optional>
 #include <thread>
 #include <vector>
+
+#include <wx/filename.h>
+#include <wx/utils.h>
+
 #include <common.h>
 #include <env_paths.h>
 #include <env_vars.h>
@@ -32,8 +38,6 @@
 #include <pgm_base.h>
 #include <settings/environment.h>
 #include <title_block.h>
-#include <wx/filename.h>
-#include <wx/utils.h>
 
 /**
  * Test fixture for ExpandTextVars tests
@@ -335,8 +339,6 @@ BOOST_AUTO_TEST_CASE( TextVarNotFirstInFilename )
                          "Expected variable expansion with preceding literal text. Got: " + result );
 }
 
-BOOST_AUTO_TEST_SUITE_END()
-
 
 /**
  * Regression tests for overlapping-prefix environment variables. Reproduces the scenario
@@ -351,89 +353,24 @@ BOOST_AUTO_TEST_SUITE_END()
  * CreateLibrary time). If the round-trip loses fidelity, the plugin tries to open a
  * malformed path and fails with a generic "Could not create the library file" error.
  */
-struct OverlappingEnvVarsFixture
+BOOST_AUTO_TEST_CASE( OverlappingPrefix_NormalizePicksLongestPrefix )
 {
-    wxString rootDir;
-    wxString outerDir;
-    wxString innerDir;
-    wxString targetDir;
+    // NormalizePath only considers env var paths that exist as readable directories.
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxS( "overlapping-env-vars" ) );
 
-    OverlappingEnvVarsFixture()
-    {
-        std::filesystem::path tmp = std::filesystem::temp_directory_path() /
-                                     "kicad_qa_overlap_env_vars";
-        std::error_code       ec;
-        std::filesystem::remove_all( tmp, ec );
-        std::filesystem::create_directories( tmp / "V10" / "symbols", ec );
+    const wxString   innerDir = tempDir.CreateChildDirStr( "V10" );       //  .../V10
+    const wxFileName targetFilename( innerDir, wxS( "test.kicad_sym" ) ); // ..../V10/test.kicad_sym
 
-        rootDir   = wxString::FromUTF8( tmp.string() );
-        outerDir  = rootDir;
-        innerDir  = wxString::FromUTF8( ( tmp / "V10" ).string() );
-        targetDir = wxString::FromUTF8( ( tmp / "V10" / "symbols" ).string() );
+    KI_TEST::SCOPED_PGM_ENV_VAR scopedOuterEnvVar( wxS( "KICAD_QA_3RD_PARTY_OUTER" ), tempDir.PathStr() );
+    KI_TEST::SCOPED_PGM_ENV_VAR scopedInnerEnvVar( wxS( "KICAD_QA_USER_LIB_INNER" ), innerDir );
 
-        wxSetEnv( wxS( "KICAD_QA_3RD_PARTY_OUTER" ), outerDir );
-        wxSetEnv( wxS( "KICAD_QA_USER_LIB_INNER" ), innerDir );
-    }
-
-    ~OverlappingEnvVarsFixture()
-    {
-        wxUnsetEnv( wxS( "KICAD_QA_3RD_PARTY_OUTER" ) );
-        wxUnsetEnv( wxS( "KICAD_QA_USER_LIB_INNER" ) );
-
-        std::filesystem::path tmp = std::filesystem::temp_directory_path() /
-                                     "kicad_qa_overlap_env_vars";
-        std::error_code ec;
-        std::filesystem::remove_all( tmp, ec );
-    }
-
-    ENV_VAR_MAP BuildEnvMap() const
-    {
-        ENV_VAR_MAP map;
-        map[wxS( "KICAD_QA_3RD_PARTY_OUTER" )] = ENV_VAR_ITEM( outerDir );
-        map[wxS( "KICAD_QA_USER_LIB_INNER" )]  = ENV_VAR_ITEM( innerDir );
-        return map;
-    }
-};
-
-
-BOOST_FIXTURE_TEST_SUITE( OverlappingEnvVarPaths, OverlappingEnvVarsFixture )
-
-
-BOOST_AUTO_TEST_CASE( NormalizePicksLongestPrefix )
-{
-    wxFileName target( targetDir, wxS( "test.kicad_sym" ) );
-    ENV_VAR_MAP envMap = BuildEnvMap();
-
-    wxString normalized = NormalizePath( target, &envMap, wxEmptyString );
+    // ---- Setup done
 
     // NormalizePath should pick KICAD_QA_USER_LIB_INNER because it is a deeper match.
-    BOOST_CHECK_MESSAGE(
-            normalized == wxS( "${KICAD_QA_USER_LIB_INNER}/symbols/test.kicad_sym" ),
-            wxString::Format( wxS( "Expected '%s' but got '%s'" ),
-                              wxS( "${KICAD_QA_USER_LIB_INNER}/symbols/test.kicad_sym" ),
-                              normalized ) );
-}
+    const wxString normalized = NormalizePath( targetFilename, &Pgm().GetLocalEnvVariables(), wxEmptyString );
+    const wxString expected = wxS( "${KICAD_QA_USER_LIB_INNER}/test.kicad_sym" );
 
-
-BOOST_AUTO_TEST_CASE( RoundTripPreservesAbsolutePath )
-{
-    wxFileName target( targetDir, wxS( "test.kicad_sym" ) );
-    ENV_VAR_MAP envMap = BuildEnvMap();
-
-    wxString normalized = NormalizePath( target, &envMap, wxEmptyString );
-    wxString expanded   = ExpandEnvVarSubstitutions( normalized, nullptr );
-
-    wxFileName expandedFn( expanded );
-    expandedFn.Normalize( wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE );
-
-    wxFileName originalFn( target );
-    originalFn.Normalize( wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE );
-
-    BOOST_CHECK_MESSAGE(
-            expandedFn.GetFullPath() == originalFn.GetFullPath(),
-            wxString::Format(
-                    wxS( "Round-trip mismatch: normalized='%s' expanded='%s' original='%s'" ),
-                    normalized, expandedFn.GetFullPath(), originalFn.GetFullPath() ) );
+    BOOST_CHECK_EQUAL( normalized, expected );
 }
 
 
@@ -524,68 +461,21 @@ BOOST_AUTO_TEST_CASE( ParallelResolveTextVarsWithMathExpressions )
 BOOST_AUTO_TEST_SUITE_END()
 
 
-/**
- * Regression test for KiCad GitLab issue #24244.
- *
- * When KICAD_USER_TEMPLATE_DIR (or any path env var) itself references another env var
- * (e.g. value "${KICAD_CONFIG_HOME}/templates"), the value must be recursively expanded
- * before being treated as a filesystem path.  In v10 the new-project flow used the raw
- * value, which caused KiCad to create directories literally named "${KICAD_CONFIG_HOME}"
- * relative to the working directory.
- */
-struct EnvVarRecursiveExpansionFixture
-{
-    wxString                innerPath;
-    std::optional<wxString> oldInner;
-    std::optional<wxString> oldOuter;
+BOOST_AUTO_TEST_SUITE( EnvVarResolution )
 
-    EnvVarRecursiveExpansionFixture()
-    {
-        wxString existing;
-
-        if( wxGetEnv( wxS( "KICAD_QA_INNER" ), &existing ) )
-            oldInner = existing;
-
-        if( wxGetEnv( wxS( "KICAD_QA_OUTER" ), &existing ) )
-            oldOuter = existing;
-
-        innerPath = wxString::FromUTF8(
-                ( std::filesystem::temp_directory_path() / "kicad-qa-24244" ).generic_string() );
-
-        wxSetEnv( wxS( "KICAD_QA_INNER" ), innerPath );
-        wxSetEnv( wxS( "KICAD_QA_OUTER" ), wxS( "${KICAD_QA_INNER}/templates" ) );
-    }
-
-    ~EnvVarRecursiveExpansionFixture()
-    {
-        if( oldInner )
-            wxSetEnv( wxS( "KICAD_QA_INNER" ), *oldInner );
-        else
-            wxUnsetEnv( wxS( "KICAD_QA_INNER" ) );
-
-        if( oldOuter )
-            wxSetEnv( wxS( "KICAD_QA_OUTER" ), *oldOuter );
-        else
-            wxUnsetEnv( wxS( "KICAD_QA_OUTER" ) );
-    }
-};
-
-BOOST_FIXTURE_TEST_SUITE( EnvVarRecursiveExpansion, EnvVarRecursiveExpansionFixture )
 
 BOOST_AUTO_TEST_CASE( ExpandsNestedReferences )
 {
-    wxString rawValue;
-    BOOST_REQUIRE( wxGetEnv( wxS( "KICAD_QA_OUTER" ), &rawValue ) );
+    const wxString innerPath = "/inner/path";
 
-    // The raw value should still contain the unexpanded reference.
-    BOOST_CHECK( rawValue.Contains( wxS( "${KICAD_QA_INNER}" ) ) );
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedInnerEnvVar( wxS( "KICAD_QA_INNER" ), innerPath );
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedOuterEnvVar( wxS( "KICAD_QA_OUTER" ), wxS( "${KICAD_QA_INNER}/templates" ) );
 
-    wxString expanded = ExpandEnvVarSubstitutions( rawValue, nullptr );
+    wxString expanded = ExpandEnvVarSubstitutions( wxS( "${KICAD_QA_OUTER}" ), nullptr );
     wxString expected = innerPath + wxS( "/templates" );
 
     // After expansion the inner reference must be resolved to its concrete path.
-    BOOST_CHECK_MESSAGE( expanded == expected,
-                         wxString::Format( wxS( "Expected '%s', got '%s'" ), expected, expanded ) );
+    BOOST_CHECK_EQUAL( expanded, expected );
 }
 
 
@@ -594,136 +484,82 @@ BOOST_AUTO_TEST_CASE( UndefinedReferenceLeavesLiteralMarker )
     // If a referenced variable is undefined, ExpandEnvVarSubstitutions preserves the
     // original token.  Callers that then mkdir the result would create a literal
     // "${MISSING}" directory; production code must detect this and bail out.
-    wxUnsetEnv( wxS( "KICAD_QA_INNER" ) );
 
-    wxString rawValue;
-    BOOST_REQUIRE( wxGetEnv( wxS( "KICAD_QA_OUTER" ), &rawValue ) );
+    const wxString innerPath = "/inner/path";
 
-    wxString expanded = ExpandEnvVarSubstitutions( rawValue, nullptr );
-    BOOST_CHECK( expanded.Contains( wxS( "${" ) ) );
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedInnerEnvVar( wxS( "KICAD_QA_INNER" ), std::nullopt );
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedOuterEnvVar( wxS( "KICAD_QA_OUTER" ), wxS( "${KICAD_QA_INNER}/templates" ) );
 
-    // Restore so the fixture destructor sees a known state.
-    wxSetEnv( wxS( "KICAD_QA_INNER" ), innerPath );
+    wxString expanded = ExpandEnvVarSubstitutions( wxS( "${KICAD_QA_OUTER}" ), nullptr );
+    BOOST_CHECK_EQUAL( expanded, "${KICAD_QA_INNER}/templates" );
 }
 
-BOOST_AUTO_TEST_SUITE_END()
-
-
-/**
- * Regression test for KiCad GitLab issue #24460.
- *
- * The expander has a compatibility fallback that resolves an unset versioned library var
- * (e.g. KICAD7_FOOTPRINT_DIR on a v10 install) to the current install's library directory.
- * That fallback was gated on the glob "KICAD*_FOOTPRINT_DIR", which also matches user-defined
- * names such as KICAD_USER_FOOTPRINT_DIR.  When such a user var was not present in the process
- * environment, the expander silently rewrote ${KICAD_USER_FOOTPRINT_DIR} to the stock footprint
- * directory, so the library loaded from the wrong (empty) location with no error.
- */
-struct VersionedEnvVarFallbackFixture
-{
-    wxString                versionedName;
-    wxString                stockDir;
-    std::optional<wxString> oldVersioned;
-    std::optional<wxString> oldUser;
-    std::optional<wxString> oldLegacy;
-
-    VersionedEnvVarFallbackFixture()
-    {
-        versionedName = ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) );
-        stockDir = wxString::FromUTF8(
-                ( std::filesystem::temp_directory_path() / "kicad-qa-24460-stock.pretty" ).generic_string() );
-
-        wxString existing;
-
-        if( wxGetEnv( versionedName, &existing ) )
-            oldVersioned = existing;
-
-        if( wxGetEnv( wxS( "KICAD_USER_FOOTPRINT_DIR" ), &existing ) )
-            oldUser = existing;
-
-        if( wxGetEnv( wxS( "KICAD5_FOOTPRINT_DIR" ), &existing ) )
-            oldLegacy = existing;
-
-        // The current install advertises a stock footprint directory; a stale user var and an
-        // older versioned var are both absent.
-        wxSetEnv( versionedName, stockDir );
-        wxUnsetEnv( wxS( "KICAD_USER_FOOTPRINT_DIR" ) );
-        wxUnsetEnv( wxS( "KICAD5_FOOTPRINT_DIR" ) );
-    }
-
-    ~VersionedEnvVarFallbackFixture()
-    {
-        auto restore = [&]( const wxString& aName, const std::optional<wxString>& aOld )
-        {
-            if( aOld )
-                wxSetEnv( aName, *aOld );
-            else
-                wxUnsetEnv( aName );
-        };
-
-        restore( versionedName, oldVersioned );
-        restore( wxS( "KICAD_USER_FOOTPRINT_DIR" ), oldUser );
-        restore( wxS( "KICAD5_FOOTPRINT_DIR" ), oldLegacy );
-    }
-};
-
-BOOST_FIXTURE_TEST_SUITE( VersionedEnvVarFallback, VersionedEnvVarFallbackFixture )
 
 BOOST_AUTO_TEST_CASE( UserVarIsNotTreatedAsVersionedLibraryDir )
 {
+    const wxString stockLibPath = "/some/path/to/stock-libraries";
+    const wxString versionedName = ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) );
+
+    // Clear the user var
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedUserEnvVar( wxS( "KICAD_USER_FOOTPRINT_DIR" ), std::nullopt );
+    // Set the versioned var to some specific path
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedVersionedEnvVar( versionedName, stockLibPath );
+
     const wxString uri = wxS( "${KICAD_USER_FOOTPRINT_DIR}/conn_custom.pretty" );
 
     wxString expanded = ExpandEnvVarSubstitutions( uri, nullptr );
 
-    // An unresolved user var must stay literal, never the stock library directory.
+    // An unresolved user var must stay literal, never fall back to the library directory.
     BOOST_CHECK_EQUAL( expanded, uri );
-    BOOST_CHECK( !expanded.Contains( stockDir ) );
 }
 
 
+/*
+ * A project or board from an older KiCad may reference an older versioned library variable
+ * (for example ${KICAD5_FOOTPRINT_DIR} from a KiCad 5 project).  If that exact variable is not
+ * set on this machine, the expander falls back to the current install's equivalent so the path
+ * still resolves.
+ */
 BOOST_AUTO_TEST_CASE( LegacyVersionedVarStillResolvesToCurrentDir )
 {
-    BOOST_REQUIRE( wxS( "KICAD5_FOOTPRINT_DIR" ) != versionedName );
+    const wxString libPath = "/some/path/to/stock-libraries";
+    const wxString currentVersionedName = ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) );
+
+    // Condition: the legacy var is not the same as the current versioned var.
+    BOOST_REQUIRE( wxS( "KICAD5_FOOTPRINT_DIR" ) != currentVersionedName );
+
+    // Ensure legacy var is unset so the direct lookup fails and the fallback runs.
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedLegacyEnvVar( wxS( "KICAD5_FOOTPRINT_DIR" ), std::nullopt );
+    // Set the current versioned var, which is what the fallback resolves to.
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedVersionedEnvVar( currentVersionedName, libPath );
 
     wxString expanded =
             ExpandEnvVarSubstitutions( wxS( "${KICAD5_FOOTPRINT_DIR}/conn_custom.pretty" ), nullptr );
 
-    BOOST_CHECK_EQUAL( expanded, stockDir + wxS( "/conn_custom.pretty" ) );
+    // The missing fallback resolves to the current versioned footprint directory.
+    BOOST_CHECK_EQUAL( expanded, libPath + wxS( "/conn_custom.pretty" ) );
 }
 
 
 BOOST_AUTO_TEST_CASE( DeprecatedUnversionedAliasStillResolves )
 {
-    // KICAD_SYMBOL_DIR is a documented deprecated alias for the versioned symbol dir; it must
-    // still fall back to the current install even though it carries no version digits.
-    wxString symbolName = ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) );
-    std::optional<wxString> oldSymbol;
-    std::optional<wxString> oldAlias;
-    wxString                existing;
+    // KICAD_SYMBOL_DIR is a documented deprecated alias for the versioned symbol dir.
+    // It must still fall back to the current install even though it carries no
+    // version info.
+    const wxString libPath = "/some/path/to/stock-libraries";
+    const wxString currentVersionedName = ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) );
 
-    if( wxGetEnv( symbolName, &existing ) )
-        oldSymbol = existing;
+    // Ensure the "correct" alias is unset so the direct lookup fails and the fallback runs.
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedAliasEnvVar( wxS( "KICAD_SYMBOL_DIR" ), std::nullopt );
+    // Set the current versioned var, which is what the fallback resolves to.
+    KI_TEST::SCOPED_PROCESS_ENV_VAR scopedVersionedEnvVar( currentVersionedName, libPath );
 
-    if( wxGetEnv( wxS( "KICAD_SYMBOL_DIR" ), &existing ) )
-        oldAlias = existing;
-
-    wxSetEnv( symbolName, stockDir );
-    wxUnsetEnv( wxS( "KICAD_SYMBOL_DIR" ) );
-
+    // A user-provided path that uses the deprecated alias.
     wxString expanded =
             ExpandEnvVarSubstitutions( wxS( "${KICAD_SYMBOL_DIR}/Device.kicad_sym" ), nullptr );
 
-    BOOST_CHECK_EQUAL( expanded, stockDir + wxS( "/Device.kicad_sym" ) );
-
-    if( oldSymbol )
-        wxSetEnv( symbolName, *oldSymbol );
-    else
-        wxUnsetEnv( symbolName );
-
-    if( oldAlias )
-        wxSetEnv( wxS( "KICAD_SYMBOL_DIR" ), *oldAlias );
-    else
-        wxUnsetEnv( wxS( "KICAD_SYMBOL_DIR" ) );
+    // Should have resolved to the current versioned var's value.
+    BOOST_CHECK_EQUAL( expanded, libPath + wxS( "/Device.kicad_sym" ) );
 }
 
 

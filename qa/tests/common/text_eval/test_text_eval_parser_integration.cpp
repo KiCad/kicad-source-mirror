@@ -22,6 +22,7 @@
  * Integration tests for text_eval_parser functionality including real-world scenarios
  */
 
+#include <qa_utils/env_var_utils.h>
 #include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
@@ -207,11 +208,16 @@ BOOST_AUTO_TEST_CASE( EnvironmentFrameCapturesDynamicSources )
         BOOST_CHECK( *sources.time == time );
 
         const wxString envName = wxS( "KICAD_QA_TEXT_EVAL_SOURCE" );
-        wxSetEnv( envName, wxS( "captured" ) );
-        BOOST_CHECK_EQUAL( ExpandEnvVarSubstitutions( wxS( "${KICAD_QA_TEXT_EVAL_SOURCE}" ), nullptr ),
-                           wxString( wxS( "captured" ) ) );
-        wxUnsetEnv( envName );
-        BOOST_CHECK( sources.environmentVariables[envName] == wxString( wxS( "captured" ) ) );
+
+        {
+            KI_TEST::SCOPED_PROCESS_ENV_VAR scoped( envName, wxS( "captured" ) );
+            const wxString expanded = ExpandEnvVarSubstitutions( wxS( "${KICAD_QA_TEXT_EVAL_SOURCE}" ), nullptr );
+
+            BOOST_CHECK_EQUAL( expanded, wxS( "captured" ) );
+
+            scoped.ClearValue();
+            BOOST_CHECK( sources.environmentVariables[envName] == wxString( wxS( "captured" ) ) );
+        }
     }
 
     BOOST_CHECK( TEXT_EVAL::ENVIRONMENT::Current() == nullptr );

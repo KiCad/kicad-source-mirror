@@ -18,6 +18,8 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <qa_utils/file_utils.h>
+#include <qa_utils/env_var_utils.h>
 
 #include <ui_events.h>
 #include <build_version.h>
@@ -31,19 +33,25 @@ BOOST_AUTO_TEST_SUITE( Notifications )
 
 BOOST_AUTO_TEST_CASE( CreateAndPersist )
 {
-    wxFileName tmpDir( wxFileName::GetTempDir(), "" );
-    wxString envPath = tmpDir.GetFullPath();
+    KI_TEST::SCOPED_TEMP_DIR        tempDir( "notifications_manager_test" );
+    KI_TEST::SCOPED_PROCESS_ENV_VAR env( wxS( "KICAD_CACHE_HOME" ), tempDir.PathStr() );
 
-    wxSetEnv( wxS("KICAD_CACHE_HOME"), envPath );
-    wxFileName::Mkdir( PATHS::GetUserCachePath(), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+    const wxString userCachePath = PATHS::GetUserCachePath();
+
+    // Make srue this is in the temp dir so we don't pollute anything
+    BOOST_REQUIRE_MESSAGE( userCachePath.StartsWith( tempDir.PathStr() ),
+                           "KICAD_CACHE_HOME must be in a temp dir for this test" );
+
+    wxFileName::Mkdir( userCachePath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
     NOTIFICATIONS_MANAGER mgr;
-    mgr.CreateOrUpdate( wxS("key"), wxS("Title"), wxS("Desc") );
+    mgr.CreateOrUpdate( wxS( "key" ), wxS( "Title" ), wxS( "Desc" ) );
     mgr.Save();
 
-    wxFileName fn( PATHS::GetUserCachePath(), wxS("notifications.json") );
+    wxFileName fn( userCachePath, wxS( "notifications.json" ) );
     BOOST_CHECK( fn.FileExists() );
 }
+
 
 class TEST_HANDLER : public wxEvtHandler
 {
@@ -62,4 +70,3 @@ BOOST_AUTO_TEST_CASE( EventDispatch )
 }
 
 BOOST_AUTO_TEST_SUITE_END()
-
