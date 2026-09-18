@@ -57,11 +57,6 @@ PCB_DESIGN_BLOCK_PREVIEW_WIDGET::PCB_DESIGN_BLOCK_PREVIEW_WIDGET( wxWindow* aPar
     m_preview->SetStealsFocus( false );
     m_preview->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
     m_preview->GetGAL()->SetAxesEnabled( false );
-
-    // Do not display the grid: the look is not good for a small canvas area.
-    // But mainly, due to some strange bug I (JPC) was unable to fix, the grid creates
-    // strange artifacts on Windows when Pcb is run from KiCad manager (but not in
-    // stand alone...).
     m_preview->GetGAL()->SetGridVisibility( true );
 
     // Early initialization of the canvas background color,
