@@ -28,7 +28,7 @@
     "height": -1,
     "keep_annotations": false,
     "lib_tree": {
-      "column_widths": null
+      "column_widths": {}
     },
     "place_as_group": true,
     "place_as_sheet": false,
@@ -62,7 +62,7 @@
   },
   "layer_presets": [],
   "lib_tree": {
-    "column_widths": null,
+    "column_widths": {},
     "columns": [],
     "open_libs": []
   },
@@ -153,6 +153,8 @@
     "raytrace_spread_refractions": 0.02500000037252903,
     "raytrace_spread_shadows": 0.05000000074505806,
     "show_adhesive": true,
+    "show_b_courtyard": false,
+    "show_b_fab": false,
     "show_board_body": true,
     "show_comments": true,
     "show_copper_bottom": true,
@@ -160,6 +162,8 @@
     "show_drawings": true,
     "show_eco1": true,
     "show_eco2": true,
+    "show_f_courtyard": false,
+    "show_f_fab": false,
     "show_footprints_dnp": false,
     "show_footprints_insert": true,
     "show_footprints_normal": true,

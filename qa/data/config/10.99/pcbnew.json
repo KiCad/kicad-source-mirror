@@ -43,7 +43,7 @@
     "height": -1,
     "keep_annotations": false,
     "lib_tree": {
-      "column_widths": null
+      "column_widths": {}
     },
     "place_as_group": true,
     "place_as_sheet": false,
@@ -62,6 +62,7 @@
   "editing": {
     "allow_free_pads": false,
     "arc_edit_mode": 0,
+    "auto_constraints": true,
     "auto_fill_zones": false,
     "ctrl_click_highlight": false,
     "esc_clears_net_highlight": true,
@@ -74,10 +75,21 @@
     "polar_coords": false,
     "rotation_angle": 900,
     "show_courtyard_collisions": true,
+    "snap_alignment_distribution": false,
+    "snap_construction_extensions": true,
+    "snap_object_geometry": true,
+    "snap_tangent_normal": false,
     "track_drag_action": 1
   },
   "export_d356": {
     "doNotExportUnconnectedPads": false
+  },
+  "field_editor": {
+    "field_widths": {},
+    "sash_pos": 400,
+    "selection_mode": 0,
+    "sidebar_collapsed": false,
+    "variant_sash_pos": 500
   },
   "find_replace": {
     "find_history": [],
@@ -451,7 +463,7 @@
     "keep_kicad_layer_names": false
   },
   "lib_tree": {
-    "column_widths": null,
+    "column_widths": {},
     "columns": [],
     "open_libs": []
   },
@@ -476,11 +488,32 @@
     "ratsnest_footprint": true,
     "ratsnest_global": true,
     "ratsnest_thickness": 0.5,
+    "show_constraints": false,
     "show_page_borders": true,
     "text_fill": true,
     "track_clearance_mode": 2,
     "track_fill": true,
     "via_fill": true
+  },
+  "pcb_editing": {
+    "match_properties": [
+      "common/Bold",
+      "common/Font",
+      "common/Italic",
+      "common/Layer",
+      "common/Line Width",
+      "common/Soldermask",
+      "common/Soldermask Margin Override",
+      "common/Text Height",
+      "common/Text Thickness",
+      "common/Text Width",
+      "shape/Fill",
+      "shape/Line Style",
+      "table/Border Style",
+      "via/Diameter",
+      "via/Hole",
+      "zone/Fill Mode"
+    ]
   },
   "plugins": {
     "actions": []

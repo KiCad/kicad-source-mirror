@@ -115,7 +115,7 @@
     "height": -1,
     "keep_annotations": false,
     "lib_tree": {
-      "column_widths": null
+      "column_widths": {}
     },
     "place_as_group": true,
     "place_as_sheet": false,
@@ -154,7 +154,11 @@
     "text_offset_ratio": 0.08
   },
   "editing": {
-    "arc_edit_mode": 0
+    "arc_edit_mode": 0,
+    "snap_alignment_distribution": false,
+    "snap_construction_extensions": true,
+    "snap_object_geometry": true,
+    "snap_tangent_normal": false
   },
   "field_editor": {
     "export_filename": "",
@@ -187,7 +191,7 @@
     "esc_clears_net_highlight": true
   },
   "lib_tree": {
-    "column_widths": null,
+    "column_widths": {},
     "columns": [],
     "open_libs": []
   },
@@ -281,7 +285,7 @@
     }
   },
   "meta": {
-    "version": 3
+    "version": 4
   },
   "netlist": {
     "plugins": []
@@ -340,6 +344,7 @@
     "highlight_netclass_colors_alpha": 0.6,
     "highlight_netclass_colors_thickness": 15,
     "highlight_thickness": 2,
+    "select_pin_selects_symbol": false,
     "thickness": 3
   },
   "simulator": {
@@ -355,6 +360,7 @@
     "plot_panel_height": 0,
     "plot_panel_width": 0,
     "signal_panel_height": 0,
+    "smith_cursor_columns": "",
     "white_background": false,
     "window": {
       "aui_state": null,

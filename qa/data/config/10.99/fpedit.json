@@ -25,7 +25,7 @@
     "height": -1,
     "keep_annotations": false,
     "lib_tree": {
-      "column_widths": null
+      "column_widths": {}
     },
     "place_as_group": true,
     "place_as_sheet": false,
@@ -89,6 +89,7 @@
     "user_layer_count": 4
   },
   "editing": {
+    "auto_constraints": true,
     "fp_angle_snap_mode": 1,
     "magnetic_all_layers": false,
     "magnetic_graphics": true,
@@ -108,7 +109,11 @@
       "tracks": true,
       "vias": true,
       "zones": true
-    }
+    },
+    "snap_alignment_distribution": false,
+    "snap_construction_extensions": true,
+    "snap_object_geometry": true,
+    "snap_tangent_normal": false
   },
   "find_replace": {
     "find_history": [],
@@ -123,8 +128,38 @@
     "highlight_factor": 0.5,
     "select_factor": 0.75
   },
+  "lib_field_editor": {
+    "bom_export_filename": "${PROJECTNAME}.csv",
+    "bom_fmt_presets": [],
+    "bom_fmt_settings": {
+      "field_delimiter": ",",
+      "include_byte_order_mark": false,
+      "keep_line_breaks": false,
+      "keep_tabs": false,
+      "name": "CSV",
+      "ref_delimiter": ",",
+      "ref_range_delimiter": "",
+      "string_delimiter": "\""
+    },
+    "bom_presets": [],
+    "bom_settings": {
+      "exclude_dnp": false,
+      "filter_scope": "reference",
+      "filter_string": "",
+      "group_symbols": false,
+      "include_excluded_from_bom": false,
+      "name": "",
+      "sort_asc": true,
+      "sort_field": ""
+    },
+    "field_widths": {},
+    "sash_pos": 400,
+    "selection_mode": 0,
+    "sidebar_collapsed": false,
+    "variant_sash_pos": 500
+  },
   "lib_tree": {
-    "column_widths": null,
+    "column_widths": {},
     "columns": [],
     "open_libs": []
   },
@@ -143,6 +178,26 @@
     "pad_fill": true,
     "pad_numbers": true,
     "text_fill": true
+  },
+  "pcb_editing": {
+    "match_properties": [
+      "common/Bold",
+      "common/Font",
+      "common/Italic",
+      "common/Layer",
+      "common/Line Width",
+      "common/Soldermask",
+      "common/Soldermask Margin Override",
+      "common/Text Height",
+      "common/Text Thickness",
+      "common/Text Width",
+      "shape/Fill",
+      "shape/Line Style",
+      "table/Border Style",
+      "via/Diameter",
+      "via/Hole",
+      "zone/Fill Mode"
+    ]
   },
   "plugins": {
     "actions": []
