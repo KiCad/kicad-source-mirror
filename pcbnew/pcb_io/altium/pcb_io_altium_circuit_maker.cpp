@@ -28,16 +28,8 @@
 #include <pcb_io_altium_circuit_maker.h>
 #include <pcb_io_altium_designer.h>
 #include <altium_pcb.h>
-#include <altium_pcb_compound_file.h>
-#include <io/altium/altium_binary_parser.h>
-#include <io/altium/altium_project_variants.h>
 #include <pcb_io/pcb_io.h>
 #include <reporter.h>
-
-#include <board.h>
-
-#include <compoundfilereader.h>
-#include <utf.h>
 
 PCB_IO_ALTIUM_CIRCUIT_MAKER::PCB_IO_ALTIUM_CIRCUIT_MAKER() :
         PCB_IO( wxS( "Altium Circuit Maker" ) )
@@ -94,29 +86,6 @@ void PCB_IO_ALTIUM_CIRCUIT_MAKER::loadBoard( const wxString& aFileName, BOARD& a
     };
     // clang-format on
 
-    ALTIUM_PCB_COMPOUND_FILE altiumPcbFile( aFileName );
-
-    try
-    {
-        // Parse File
-        ALTIUM_PCB pcb( m_board, m_progressReporter, m_layer_mapping_handler, m_reporter );
-        pcb.Parse( altiumPcbFile, mapping, m_props );
-    }
-    catch( CFB::CFBException& exception )
-    {
-        THROW_IO_ERROR( exception.what() );
-    }
-
-    if( m_props && m_props->count( "project_file" ) )
-    {
-        const wxString& projectFile = m_props->at( "project_file" );
-
-        auto variants = ParseAltiumProjectVariants( projectFile );
-
-        if( !variants.empty() )
-            ApplyAltiumProjectVariantsToBoard( m_board, variants );
-
-        ApplyAltiumProjectParametersToProject( aProject,
-                                               ParseAltiumProjectParameters( projectFile ) );
-    }
+    LoadAltiumBoard( aFileName, m_board, mapping, m_props, aProject,
+                     m_progressReporter, m_layer_mapping_handler, m_reporter );
 }

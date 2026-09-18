@@ -165,6 +165,40 @@ void ApplyAltiumProjectParametersToProject( PROJECT* aProject,
 }
 
 
+void LoadAltiumBoard( const wxString& aFileName, BOARD* aBoard,
+                      const std::map<ALTIUM_PCB_DIR, std::string>& aMapping,
+                      const std::map<std::string, UTF8>* aProperties, PROJECT* aProject,
+                      PROGRESS_REPORTER* aProgressReporter, LAYER_MAPPING_HANDLER& aLayerMappingHandler,
+                      REPORTER* aReporter )
+{
+    // The compound-file constructor already translates CFB errors to IO_ERROR.
+    ALTIUM_PCB_COMPOUND_FILE altiumPcbFile( aFileName );
+
+    try
+    {
+        ALTIUM_PCB pcb( aBoard, aProgressReporter, aLayerMappingHandler, aReporter );
+        pcb.Parse( altiumPcbFile, aMapping, aProperties );
+    }
+    catch( CFB::CFBException& exception )
+    {
+        THROW_IO_ERROR( exception.what() );
+    }
+
+    if( aProperties && aProperties->count( "project_file" ) )
+    {
+        const wxString& projectFile = aProperties->at( "project_file" );
+
+        auto variants = ParseAltiumProjectVariants( projectFile );
+
+        if( !variants.empty() )
+            ApplyAltiumProjectVariantsToBoard( aBoard, variants );
+
+        ApplyAltiumProjectParametersToProject( aProject,
+                                               ParseAltiumProjectParameters( projectFile ) );
+    }
+}
+
+
 PCB_IO_ALTIUM_DESIGNER::PCB_IO_ALTIUM_DESIGNER() :
         PCB_IO( wxS( "Altium Designer" ) )
 {
@@ -254,31 +288,8 @@ void PCB_IO_ALTIUM_DESIGNER::loadBoard( const wxString& aFileName, BOARD& aBoard
     };
     // clang-format on
 
-    ALTIUM_PCB_COMPOUND_FILE altiumPcbFile( aFileName );
-
-    try
-    {
-        // Parse File
-        ALTIUM_PCB pcb( m_board, m_progressReporter, m_layer_mapping_handler, m_reporter );
-        pcb.Parse( altiumPcbFile, mapping, m_props );
-    }
-    catch( CFB::CFBException& exception )
-    {
-        THROW_IO_ERROR( exception.what() );
-    }
-
-    if( m_props && m_props->count( "project_file" ) )
-    {
-        const wxString& projectFile = m_props->at( "project_file" );
-
-        auto variants = ParseAltiumProjectVariants( projectFile );
-
-        if( !variants.empty() )
-            ApplyAltiumProjectVariantsToBoard( m_board, variants );
-
-        ApplyAltiumProjectParametersToProject( aProject,
-                                               ParseAltiumProjectParameters( projectFile ) );
-    }
+    LoadAltiumBoard( aFileName, m_board, mapping, m_props, aProject,
+                     m_progressReporter, m_layer_mapping_handler, m_reporter );
 }
 
 
