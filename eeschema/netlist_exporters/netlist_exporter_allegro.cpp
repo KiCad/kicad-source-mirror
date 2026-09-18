@@ -539,9 +539,9 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatText( wxString aString )
         return wxEmptyString;
 
     // Replace 'µ' ("\u00b5") by 'u' to keep ASCII7 constraint
-    wxString mu = "µ";      // also could be "\u03BC" (grec symbol mu);
+    wxString mu( wxUniChar( 0x00B5 ) );
     aString.Replace( mu, "u" );
-    mu = "\u03BC";          // grec mu
+    mu = wxUniChar( 0x03BC );
     aString.Replace( mu, "u" );
 
     std::regex reg( "[!']|[^ -~]" );
