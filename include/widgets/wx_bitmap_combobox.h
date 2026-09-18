@@ -25,6 +25,7 @@
 #define WX_BITMAP_COMBOBOX_H
 
 #include <wx/bmpcbox.h>
+#include <wx/weakref.h>
 
 class WX_BITMAP_COMBOBOX : public wxBitmapComboBox
 {
@@ -36,6 +37,25 @@ public:
                         const wxString& name = wxASCII_STR( wxBitmapComboBoxNameStr ) );
 
     wxSize DoGetBestSize() const override;
+
+#ifdef __WXMAC__
+protected:
+    void DoShowPopup( const wxRect& aRect, int aFlags ) override;
+
+private:
+    /**
+     * Stop wxPopupTransientWindow from releasing the drop-down list's mouse capture.
+     *
+     * The popup is never the key window, so macOS hands its mouse-moved events to the controls it
+     * covers and the list tracks the pointer only while it holds the capture.  Releasing it, as
+     * wxPopupTransientWindow does from idle once the pointer is inside, freezes the highlight.
+     *
+     * Called from DoShowPopup() because the popup window does not exist yet at dropdown time.
+     */
+    void holdPopupMouseCapture();
+
+    wxWindowRef m_hookedPopupWindow;
+#endif
 };
 
 

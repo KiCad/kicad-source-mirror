@@ -22,6 +22,7 @@
  */
 
 #include <widgets/wx_bitmap_combobox.h>
+#include <wx/odcombo.h>
 #include <wx/textctrl.h>
 
 WX_BITMAP_COMBOBOX::WX_BITMAP_COMBOBOX( wxWindow* parent, wxWindowID id, const wxString& value,
@@ -31,6 +32,38 @@ WX_BITMAP_COMBOBOX::WX_BITMAP_COMBOBOX( wxWindow* parent, wxWindowID id, const w
         wxBitmapComboBox( parent, id, value, pos, size, n, choices, style, validator, name )
 {
 }
+
+
+#ifdef __WXMAC__
+void WX_BITMAP_COMBOBOX::DoShowPopup( const wxRect& aRect, int aFlags )
+{
+    wxBitmapComboBox::DoShowPopup( aRect, aFlags );
+    holdPopupMouseCapture();
+}
+
+
+void WX_BITMAP_COMBOBOX::holdPopupMouseCapture()
+{
+    wxComboPopup* popup = GetPopupControl();
+    wxWindow*     list = popup ? popup->GetControl() : nullptr;
+    wxWindow*     popupWindow = GetPopupWindow();
+
+    if( !list || !popupWindow || popupWindow == m_hookedPopupWindow )
+        return;
+
+    m_hookedPopupWindow = popupWindow;
+
+    // Deliberately not skipped, so that wxPopupTransientWindow's own idle handler never runs
+    popupWindow->Bind( wxEVT_IDLE,
+                       [list]( wxIdleEvent& )
+                       {
+                           // CaptureMouse() asserts on anything already in the capture stack, so
+                           // test the stack rather than just the top of it
+                           if( list->IsShownOnScreen() && !wxWindow::GetCapture() )
+                               list->CaptureMouse();
+                       } );
+}
+#endif
 
 
 wxSize WX_BITMAP_COMBOBOX::DoGetBestSize() const
