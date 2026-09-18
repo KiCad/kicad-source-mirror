@@ -151,6 +151,7 @@ void SCH_DESIGN_BLOCK_PANE::UpdateCheckboxes()
 
 void SCH_DESIGN_BLOCK_PANE::ProjectChanged()
 {
+    m_chooserPanel->RefreshLibs();
     // Project change will blow up the default project; re-create any active preview canvas
     m_chooserPanel->GetPreviewWidget()->DisplayDesignBlock( GetSelectedDesignBlock( true, true ) );
 }
