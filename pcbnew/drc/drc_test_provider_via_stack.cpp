@@ -134,7 +134,11 @@ void DRC_TEST_PROVIDER_VIA_STACK::checkSpan( PCB_VIA_STACK* aStack, int aCopperL
                 break;
             }
 
-            covered.insert( std::min( top->second, bot->second ) );
+            if( !covered.insert( std::min( top->second, bot->second ) ).second )
+            {
+                broken = true;
+                break;
+            }
         }
 
         if( broken || (int) covered.size() != spanLen - 1 )

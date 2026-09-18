@@ -222,6 +222,28 @@ BOOST_FIXTURE_TEST_CASE( StackNotTilingItsSpanReported, VIA_STACK_DRC_FIXTURE )
 }
 
 
+BOOST_FIXTURE_TEST_CASE( DuplicateHopReported, VIA_STACK_DRC_FIXTURE )
+{
+    m_board = std::make_unique<BOARD>();
+    m_board->SetCopperLayerCount( 4 );
+    m_board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
+
+    VECTOR2I pos( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) );
+
+    PCB_VIA_STACK* stack = makeStack( m_board.get(), F_Cu, In2_Cu );
+    stack->SetViaSize( pcbIUScale.mmToIU( 0.3 ) );
+    stack->SetViaDrill( pcbIUScale.mmToIU( 0.15 ) );
+    stack->SetPosition( pos );
+    stack->Regenerate( m_board.get(), nullptr );
+
+    stack->AddItem( makeMicrovia( m_board.get(), pos, F_Cu, In1_Cu, true ) );
+
+    run();
+
+    BOOST_CHECK_EQUAL( m_malformedSpans, 1 );
+}
+
+
 BOOST_FIXTURE_TEST_CASE( UnfilledInnerHopReported, VIA_STACK_DRC_FIXTURE )
 {
     loadBoard();
