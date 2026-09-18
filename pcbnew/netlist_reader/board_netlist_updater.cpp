@@ -39,6 +39,7 @@
 #include <pcb_track.h>
 #include <zone.h>
 #include <string_utils.h>
+#include <algorithm>
 #include <limits>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
@@ -1364,25 +1365,11 @@ bool BOARD_NETLIST_UPDATER::updateComponentUnits( FOOTPRINT* aFootprint, COMPONE
 
     const std::vector<FOOTPRINT::FP_UNIT_INFO>& curUnits = aFootprint->GetUnitInfo();
 
-    auto unitsEqual = []( const std::vector<FOOTPRINT::FP_UNIT_INFO>& a,
-                          const std::vector<FOOTPRINT::FP_UNIT_INFO>& b )
-        {
-            if( a.size() != b.size() )
-                return false;
-
-            for( size_t i = 0; i < a.size(); ++i )
+    if( std::ranges::equal( curUnits, newUnits,
+            []( const auto& a, const auto& b )
             {
-                if( a[i].m_unitName != b[i].m_unitName )
-                    return false;
-
-                if( a[i].m_pins != b[i].m_pins )
-                    return false;
-            }
-
-            return true;
-        };
-
-    if( unitsEqual( curUnits, newUnits ) )
+                return a.m_unitName == b.m_unitName && a.m_pins == b.m_pins;
+            } ) )
         return false;
 
     wxString msg;

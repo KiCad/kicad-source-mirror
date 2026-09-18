@@ -2706,32 +2706,16 @@ PCB_LAYER_ID FOOTPRINT::GetSide() const
 
 bool FOOTPRINT::IsOnLayer( PCB_LAYER_ID aLayer ) const
 {
-    // If we have any pads, fall back on normal checking
-    for( PAD* pad : m_pads )
-    {
-        if( pad->IsOnLayer( aLayer ) )
-            return true;
-    }
+    auto isOnLayer =
+            [aLayer]( const BOARD_ITEM* aItem )
+            {
+                return aItem->IsOnLayer( aLayer );
+            };
 
-    for( ZONE* zone : m_zones )
-    {
-        if( zone->IsOnLayer( aLayer ) )
-            return true;
-    }
-
-    for( PCB_FIELD* field : m_fields )
-    {
-        if( field->IsOnLayer( aLayer ) )
-            return true;
-    }
-
-    for( BOARD_ITEM* item : m_drawings )
-    {
-        if( item->IsOnLayer( aLayer ) )
-            return true;
-    }
-
-    return false;
+    return std::ranges::any_of( m_pads, isOnLayer )
+           || std::ranges::any_of( m_zones, isOnLayer )
+           || std::ranges::any_of( m_fields, isOnLayer )
+           || std::ranges::any_of( m_drawings, isOnLayer );
 }
 
 

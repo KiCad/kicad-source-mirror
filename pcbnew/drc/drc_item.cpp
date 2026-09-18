@@ -693,18 +693,12 @@ int DRC_ITEMS_PROVIDER::GetCount( int aSeverity ) const
     if( aSeverity < 0 )
         return (int) m_filteredMarkers.size();
 
-    int count = 0;
-
-    for( PCB_MARKER* marker : m_board->Markers() )
-    {
-        if( alg::contains( m_markerTypes, marker->GetMarkerType() )
-                && ( marker->GetSeverity() & aSeverity ) > 0 )
-        {
-            count++;
-        }
-    }
-
-    return count;
+    return static_cast<int>( std::ranges::count_if( m_board->Markers(),
+            [&]( const PCB_MARKER* marker )
+            {
+                return alg::contains( m_markerTypes, marker->GetMarkerType() )
+                       && ( marker->GetSeverity() & aSeverity ) > 0;
+            } ) );
 }
 
 

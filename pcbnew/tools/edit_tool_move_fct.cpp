@@ -255,19 +255,11 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
         selectedPads.insert( pads[i] );
     }
 
-    // If all nets are the same, nothing to do
-    bool allSame = true;
-
-    for( size_t i = 1; i < padsCount; ++i )
-    {
-        if( originalNets[i] != originalNets[0] )
-        {
-            allSame = false;
-            break;
-        }
-    }
-
-    if( allSame )
+    if( std::ranges::all_of( originalNets,
+                             [&]( int net )
+                             {
+                                 return net == originalNets.front();
+                             } ) )
         return 0;
 
     // Desired new nets are a cyclic rotation of original nets (like Swap positions)
@@ -537,24 +529,11 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
         }
     }
 
-    // If all unit nets match across positions, nothing to do
-    bool allSame = true;
-
-    for( size_t pi = 0; pi < pinCount && allSame; ++pi )
-    {
-        int refNet = unitNets[0][pi];
-
-        for( size_t ui = 1; ui < unitCount; ++ui )
-        {
-            if( unitNets[ui][pi] != refNet )
-            {
-                allSame = false;
-                break;
-            }
-        }
-    }
-
-    if( allSame )
+    if( std::ranges::all_of( unitNets,
+                             [&]( const auto& nets )
+                             {
+                                 return nets == unitNets.front();
+                             } ) )
     {
         frame()->ShowInfoBarError( _( "Gate swapping has no effect: all selected gates have identical nets." ) );
         return 0;
