@@ -674,6 +674,17 @@ void EDA_DRAW_PANEL_GAL::SetTopLayer( int aLayer )
 }
 
 
+EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_PANEL_GAL::ResolveStoredCanvasType( int aStoredCanvasType )
+{
+    if( aStoredCanvasType == GAL_TYPE_CAIRO )
+        return GAL_TYPE_CAIRO;
+
+    // The retired wxDC canvas, and any value another KiCad version may have written, leave the
+    // user with the accelerated canvas rather than the do-nothing stub GAL
+    return GAL_TYPE_OPENGL;
+}
+
+
 bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 {
     // Do not do anything if the currently used GAL is correct

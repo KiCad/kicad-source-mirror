@@ -265,7 +265,7 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
     gal_opts = std::make_unique<GAL_DISPLAY_OPTIONS_IMPL>();
     gal_opts->ReadConfig( *commonSettings, cfg->m_Window, aParent );
 
-    auto galType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( commonSettings->m_Graphics.canvas_type );
+    auto galType = EDA_DRAW_PANEL_GAL::ResolveStoredCanvasType( commonSettings->m_Graphics.canvas_type );
     FOOTPRINT_PREVIEW_PANEL* panel = new FOOTPRINT_PREVIEW_PANEL( aKiway, aParent, aUnitsProvider,
                                                                   std::move( gal_opts ), galType );
 

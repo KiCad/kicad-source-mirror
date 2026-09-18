@@ -281,7 +281,8 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
 
     m_antialiasing->SetSelection( aSettings.m_Graphics.aa_mode );
 
-    if( aSettings.m_Graphics.canvas_type == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
+    if( EDA_DRAW_PANEL_GAL::ResolveStoredCanvasType( aSettings.m_Graphics.canvas_type )
+            == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
         m_rbAccelerated->SetValue( true );
     else
         m_rbFallback->SetValue( true );

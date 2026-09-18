@@ -944,22 +944,10 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::loadCanvasTypeSetting()
     return EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
 #endif
 
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
 
-    if( cfg )
-        canvasType = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( cfg->m_Graphics.canvas_type );
-
-    if( canvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
-            || canvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
-    {
-        wxASSERT( false );
-        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    }
-
-    // Legacy canvas no longer supported.  Switch to OpenGL, falls back to Cairo on failure
-    if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
-        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+    if( COMMON_SETTINGS* cfg = Pgm().GetCommonSettings() )
+        canvasType = EDA_DRAW_PANEL_GAL::ResolveStoredCanvasType( cfg->m_Graphics.canvas_type );
 
     wxString envCanvasType;
 

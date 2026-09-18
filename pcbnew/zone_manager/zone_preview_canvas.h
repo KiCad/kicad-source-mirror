@@ -35,9 +35,7 @@ class ZONE_PREVIEW_CANVAS : public PCB_DRAW_PANEL_GAL
 {
 public:
     ZONE_PREVIEW_CANVAS( BOARD* aPcb, std::unique_ptr<ZONE> aZone, PCB_LAYER_ID aLayer, wxWindow* aParentWindow,
-                         KIGFX::GAL_DISPLAY_OPTIONS& aOptions, wxWindowID aWindowId = 0,
-                         const wxPoint& aPosition = wxDefaultPosition, const wxSize& aSize = wxDefaultSize,
-                         GAL_TYPE aGalType = GAL_TYPE_OPENGL );
+                         KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType );
     ~ZONE_PREVIEW_CANVAS() override = default;
 
     const wxSize GetPageSizeIU() const;

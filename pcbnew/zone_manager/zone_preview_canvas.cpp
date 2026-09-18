@@ -99,9 +99,8 @@ public:
 
 ZONE_PREVIEW_CANVAS::ZONE_PREVIEW_CANVAS( BOARD* aPcb, std::unique_ptr<ZONE> aZone, PCB_LAYER_ID aLayer,
                                           wxWindow* aParentWindow, KIGFX::GAL_DISPLAY_OPTIONS& aOptions,
-                                          wxWindowID aWindowId, const wxPoint& aPosition, const wxSize& aSize,
                                           GAL_TYPE aGalType ) :
-        PCB_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType ),
+        PCB_DRAW_PANEL_GAL( aParentWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, aOptions, aGalType ),
         m_pcb( aPcb ),
         m_pcb_bounding_box( std::make_unique<BOARD_EDGES_BOUNDING_ITEM>( aPcb->GetBoardEdgesBoundingBox() ) ),
         m_zone( std::move( aZone ) ),
