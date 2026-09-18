@@ -113,6 +113,10 @@ const VIA_STACK_PRESET* MatchPendingStackExpansion( PCB_VIA* aVia, const std::se
 
     for( const PENDING_STACK_EXPANSION& exp : aPending )
     {
+        // Net and span alone cannot tell the drop's via from any other the route left behind.
+        if( !exp.m_Pos || *exp.m_Pos != aVia->GetPosition() )
+            continue;
+
         if( aVia->GetNetCode() != exp.m_Net )
             continue;
 
@@ -1302,7 +1306,8 @@ int ROUTER_TOOL::onViaStackCommand( const TOOL_EVENT& aEvent )
         m_preRouteExpandableVias = PCB_VIA_STACK::CollectExpandableMicrovias( board() );
     }
 
-    m_pendingStackedExpansions.push_back( { currentLayer, targetLayer, net, preset } );
+    m_pendingStackedExpansions.push_back( { currentLayer, targetLayer, net, preset, std::nullopt } );
+    m_stackDropAwaitingVia = true;
 
     PNS::SIZES_SETTINGS sizes = m_router->Sizes();
     sizes.ClearLayerPairs();
@@ -1326,6 +1331,26 @@ int ROUTER_TOOL::onViaStackCommand( const TOOL_EVENT& aEvent )
 
     UpdateMessagePanel();
     return 0;
+}
+
+
+void ROUTER_TOOL::recordPendingStackViaPos()
+{
+    if( !m_stackDropAwaitingVia || !m_router->IsPlacingVia() )
+        return;
+
+    const PNS::ITEM_SET traces = m_router->Placer()->Traces();
+
+    if( traces.Size() == 0 )
+        return;
+
+    // The via lands where the placer's trace ends, which is not where the cursor is once
+    // the router has walked around or shoved.
+    if( PNS::LINE* line = dynamic_cast<PNS::LINE*>( traces[0] ) )
+    {
+        if( line->EndsWithVia() )
+            m_pendingStackedExpansions.back().m_Pos = line->Via().Pos();
+    }
 }
 
 
@@ -1760,6 +1785,8 @@ bool ROUTER_TOOL::finishInteractive()
 {
     m_router->StopRouting();
 
+    m_stackDropAwaitingVia = false;
+
     if( !m_pendingStackedExpansions.empty() )
     {
         BOARD_COMMIT commit( frame() );
@@ -1936,8 +1963,13 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
             bool needLayerSwitch = m_router->IsPlacingVia();
             bool forceCommit = false;
 
+            recordPendingStackViaPos();
+
             if( m_router->FixRoute( m_endSnapPoint, m_endItem, false, forceCommit ) )
                 break;
+
+            if( !m_router->IsPlacingVia() )
+                m_stackDropAwaitingVia = false;
 
             if( needLayerSwitch )
             {
