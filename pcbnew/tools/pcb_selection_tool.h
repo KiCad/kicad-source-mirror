@@ -45,6 +45,7 @@
 class PCB_BASE_FRAME;
 class BOARD_ITEM;
 class GENERAL_COLLECTOR;
+class PAD;
 class PCB_TABLE;
 class PCB_TABLECELL;
 
@@ -161,6 +162,25 @@ public:
      * @return true if an item fulfills conditions to be selected.
      */
     bool Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly = false ) const;
+
+    /**
+     * Return the layers of @a aVisibleLayers which are actually shown.
+     *
+     * BOARD::GetVisibleLayers() keeps its bits for layers the board does not enable, so a layer
+     * the Appearance panel never offered still reads back as visible.  Masking with the enabled
+     * layers gives the same answer BOARD::IsLayerVisible() gives for a single layer.
+     *
+     * @param aVisibleLayers is the raw visible layer set.
+     * @param aEnabledLayers is the set of layers enabled on the board.
+     */
+    static LSET resolveVisibleLayers( const LSET& aVisibleLayers, const LSET& aEnabledLayers );
+
+    /**
+     * @return true if @a aPad is drawn on at least one shown layer.
+     *
+     * @param aVisibleLayers is the shown layer set, as returned by resolveVisibleLayers().
+     */
+    static bool isPadVisible( const PAD& aPad, const LSET& aVisibleLayers );
 
     /**
      * Select all items with the given net code.
