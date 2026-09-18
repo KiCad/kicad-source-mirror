@@ -210,7 +210,7 @@ public:
         m_libShape = aShape;
     }
 
-    void SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
+    void SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd ) override;
 
     void SetBezierC1( const VECTOR2I& aPt ) override;
     void SetBezierC2( const VECTOR2I& aPt ) override;

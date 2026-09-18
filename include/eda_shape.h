@@ -472,7 +472,7 @@ public:
      * NB: these are NOT what's currently stored, so we have to do some calculations behind
      * the scenes.  However, they are what SHOULD be stored.
      */
-    void SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
+    virtual void SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd );
 
     /**
      * Set the data used for mid point caching.
