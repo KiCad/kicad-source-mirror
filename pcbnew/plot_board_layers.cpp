@@ -132,15 +132,22 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
     if( !aBoard || !aPlotter || aLayers.empty() )
         return;
 
+    PCB_PLOT_PARAMS plotOptions = aPlotOptions;
+
+    // Gerber carries no colour, so a drill mark lands as ink instead of knocking out its pad
+    // The plot dialog forces them off for gerber but API and CLI callers arrive here directly
+    if( aPlotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+        plotOptions.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
+
     for( PCB_LAYER_ID layer : aLayers )
-        PlotOneBoardLayer( aBoard, aPlotter, layer, aPlotOptions, layer == aLayers[0] );
+        PlotOneBoardLayer( aBoard, aPlotter, layer, plotOptions, layer == aLayers[0] );
 
     // Drill marks are plotted in white to knockout the pad if any layers of the pad are
     // being plotted, and in black if the pad is not being plotted. For the former, this
     // must happen after all other layers are plotted.
-    if( aPlotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE )
+    if( plotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE )
     {
-        BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOptions );
+        BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, plotOptions );
         itemplotter.SetLayerSet( aLayers );
         itemplotter.PlotDrillMarks();
     }
