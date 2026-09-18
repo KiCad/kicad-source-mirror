@@ -1445,9 +1445,6 @@ void BOARD::FixupEmbeddedData()
 
 wxString BOARD::GetUniqueZoneName( const wxString& aBaseName, const ZONE* aExclude ) const
 {
-    if( aBaseName.IsEmpty() )
-        return aBaseName;
-
     auto inUse = [&]( const wxString& aName )
     {
         for( const ZONE* zone : m_zones )
@@ -1459,7 +1456,13 @@ wxString BOARD::GetUniqueZoneName( const wxString& aBaseName, const ZONE* aExclu
         return false;
     };
 
-    if( !inUse( aBaseName ) )
+    return MakeUniqueZoneName( aBaseName, inUse );
+}
+
+
+wxString BOARD::MakeUniqueZoneName( const wxString& aBaseName, const std::function<bool( const wxString& )>& aInUse )
+{
+    if( aBaseName.IsEmpty() || !aInUse( aBaseName ) )
         return aBaseName;
 
     // Strip a trailing _<number> so repeated copies increment the root (foo_1 -> foo_2),
@@ -1488,7 +1491,7 @@ wxString BOARD::GetUniqueZoneName( const wxString& aBaseName, const ZONE* aExclu
     {
         wxString candidate = wxString::Format( wxT( "%s_%d" ), root, i );
 
-        if( !inUse( candidate ) )
+        if( !aInUse( candidate ) )
             return candidate;
     }
 }

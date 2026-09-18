@@ -22,6 +22,7 @@
 #define CLASS_BOARD_H_
 
 #include <atomic>
+#include <functional>
 #include <board_item_container.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <core/mirror.h>
@@ -472,6 +473,13 @@ public:
      * during the search, used when renaming an existing zone so it does not collide with itself.
      */
     wxString GetUniqueZoneName( const wxString& aBaseName, const ZONE* aExclude = nullptr ) const;
+
+    /**
+     * Return a name based on aBaseName for which aInUse returns false, adding or incrementing a
+     * _<number> suffix as needed. An empty name is returned unchanged.
+     */
+    static wxString MakeUniqueZoneName( const wxString&                               aBaseName,
+                                        const std::function<bool( const wxString& )>& aInUse );
 
     const GENERATORS& Generators() const { return m_generators; }
 

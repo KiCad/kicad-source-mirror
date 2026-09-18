@@ -37,6 +37,13 @@ void MODEL_ZONES_OVERVIEW::SortFilteredZones()
     std::sort( m_filteredZones.begin(), m_filteredZones.end(),
                [&]( ZONE* const& l, ZONE* const& r )
                {
+                   // Reordering only updates the bag, the clones keep their priority until apply
+                   unsigned lPriority = m_zoneSettingsBag.GetZonePriority( l );
+                   unsigned rPriority = m_zoneSettingsBag.GetZonePriority( r );
+
+                   if( lPriority != rPriority )
+                       return lPriority > rPriority;
+
                    return l->HigherPriority( r );
                } );
 }

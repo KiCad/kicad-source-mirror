@@ -43,6 +43,12 @@ public:
     void SwapPriority( ZONE* aZOne, ZONE* otherZone );
 
     /**
+     * Return a name based on aBaseName that no other zone on aBoard uses. Zones cloned into this
+     * bag are checked by their working name, so a clone never collides with its own original.
+     */
+    wxString GetUniqueZoneName( const BOARD& aBoard, const wxString& aBaseName, const ZONE* aZone ) const;
+
+    /**
      * Update the tracked priority for a cloned zone. This keeps both the
      * m_zonePriorities pair and the ZONE_SETTINGS m_ZonePriority in sync
      * so that UpdateClonedZones() will not revert auto-assigned values.
