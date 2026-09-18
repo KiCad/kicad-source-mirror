@@ -31,6 +31,7 @@
 #include <macros.h>
 #include <hash_eda.h>
 #include <set>
+#include <unordered_map>
 #include <fmt.h>
 
 
@@ -918,6 +919,17 @@ void GENCAD_EXPORTER::createSignalsSection()
     // Emit the netlist (which is actually the thing for which GenCAD is used these
     // days!); tracks are handled later
 
+    std::unordered_map<int, std::vector<std::pair<FOOTPRINT*, PAD*>>> padsByNet;
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( pad->GetNetCode() > 0 )
+                padsByNet[pad->GetNetCode()].emplace_back( footprint, pad );
+        }
+    }
+
     wxString      msg;
     NETINFO_ITEM* net;
 
@@ -937,20 +949,19 @@ void GENCAD_EXPORTER::createSignalsSection()
             fmt::print( m_file, "{}", TO_UTF8( msg ) );
             fmt::print( m_file, "\n" );
 
-            for( FOOTPRINT* footprint : m_board->Footprints() )
+            auto pads = padsByNet.find( net->GetNetCode() );
+
+            if( pads == padsByNet.end() )
+                continue;
+
+            for( const auto& [footprint, pad] : pads->second )
             {
-                for( PAD* pad : footprint->Pads() )
-                {
-                    if( pad->GetNetCode() != net->GetNetCode() )
-                        continue;
+                msg.Printf( wxT( "NODE \"%s\" \"%s\"" ),
+                            escapeString( footprint->GetReference() ),
+                            escapeString( pad->GetNumber() ) );
 
-                    msg.Printf( wxT( "NODE \"%s\" \"%s\"" ),
-                                escapeString( footprint->GetReference() ),
-                                escapeString( pad->GetNumber() ) );
-
-                    fmt::print( m_file, "{}", TO_UTF8( msg ) );
-                    fmt::print( m_file, "\n" );
-                }
+                fmt::print( m_file, "{}", TO_UTF8( msg ) );
+                fmt::print( m_file, "\n" );
             }
         }
     }
