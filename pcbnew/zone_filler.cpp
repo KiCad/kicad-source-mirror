@@ -532,7 +532,8 @@ bool ZONE_FILLER::mayHoldOutOfBoardCopper( const ZONE* aZone ) const
 
 BOX2I ZONE_FILLER::zoneKnockoutQueryBox( const ZONE* aZone ) const
 {
-    // The candidate corner radius is unknown here, so use the board maximum.
+    // Dependency discovery requires this box to cover every indexed zone that can pass
+    // zoneKnockoutMayInteract().  Bound the unknown candidate radius by the board maximum.
     int reach = m_worstClearance + m_zoneKnockoutSlack + aZone->GetMinThickness();
 
     if( m_board->GetDesignSettings().m_ZoneKeepExternalFillets )
@@ -1036,29 +1037,70 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                 for( size_t i = 0; i < count; ++i )
                     inDegree[i].store( 0, std::memory_order_relaxed );
 
-                // Skip the O(N²) dependency scan when the caller guarantees no deps.
+                // Skip dependency discovery when the caller guarantees no deps.
                 if( aAnyDependencies )
                 {
-                    // Two items can only depend on each other on a shared layer.
-                    std::map<PCB_LAYER_ID, std::vector<size_t>> byLayer;
+                    struct LAYER_FILL_ITEMS
+                    {
+                        std::unordered_map<ZONE*, std::vector<size_t>> indices;
+                        std::unordered_set<ZONE*> indexed;
+                        std::vector<size_t> unindexed;
+                    };
+
+                    std::unordered_map<PCB_LAYER_ID, LAYER_FILL_ITEMS> fillItemsByLayer;
+
+                    // Fill() also accepts zones outside the index, including omitted layers.
+                    for( const auto& [layer, index] : m_zoneIndex )
+                    {
+                        auto& indexed = fillItemsByLayer[layer].indexed;
+
+                        for( const INDEXED_ITEM& item : index )
+                            indexed.insert( static_cast<ZONE*>( item.m_item ) );
+                    }
 
                     for( size_t i = 0; i < count; ++i )
-                        byLayer[aFillItems[i].second].push_back( i );
-
-                    for( const auto& [layer, items] : byLayer )
                     {
-                        for( size_t i : items )
-                        {
-                            for( size_t j : items )
-                            {
-                                if( i == j )
-                                    continue;
+                        const auto& [zone, layer] = aFillItems[i];
+                        LAYER_FILL_ITEMS& items = fillItemsByLayer[layer];
+                        items.indices[zone].push_back( i );
 
-                                if( aHasDependency( aFillItems[j], aFillItems[i] ) )
-                                {
-                                    successors[i].push_back( j );
-                                    inDegree[j].fetch_add( 1, std::memory_order_relaxed );
-                                }
+                        if( !items.indexed.contains( zone ) )
+                            items.unindexed.push_back( i );
+                    }
+
+                    std::vector<INDEXED_ITEM> hits;
+                    std::vector<size_t> candidates;
+
+                    // Waiters stay in fill order so each successor list keeps its original order.
+                    for( size_t j = 0; j < count; ++j )
+                    {
+                        const auto& [zone, layer] = aFillItems[j];
+                        const LAYER_FILL_ITEMS& layerItems = fillItemsByLayer.at( layer );
+                        candidates = layerItems.unindexed;
+
+                        if( auto index = m_zoneIndex.find( layer ); index != m_zoneIndex.end() )
+                        {
+                            queryIndex( index->second, zoneKnockoutQueryBox( zone ), hits );
+
+                            for( const INDEXED_ITEM& hit : hits )
+                            {
+                                auto items = layerItems.indices.find( static_cast<ZONE*>( hit.m_item ) );
+
+                                if( items != layerItems.indices.end() )
+                                    candidates.insert( candidates.end(), items->second.begin(), items->second.end() );
+                            }
+                        }
+
+                        // A zone can have several fill entries; deduplicate indices, not zones.
+                        std::sort( candidates.begin(), candidates.end() );
+                        candidates.erase( std::unique( candidates.begin(), candidates.end() ), candidates.end() );
+
+                        for( size_t i : candidates )
+                        {
+                            if( i != j && aHasDependency( aFillItems[j], aFillItems[i] ) )
+                            {
+                                successors[i].push_back( j );
+                                inDegree[j].fetch_add( 1, std::memory_order_relaxed );
                             }
                         }
                     }
