@@ -405,8 +405,11 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
 
     m_checkApplyToAllParts->SetToolTip( commonUnitsToolTip );
 
-    for( const std::pair<const wxString, SCH_PIN::ALT>& alt : m_pin->GetAlternates() )
-        m_alternatesDataModel->AppendRow( alt.second );
+    if( !m_pin->GetParentSymbol()->IsMultiBodyStyle() )
+    {
+        for( const std::pair<const wxString, SCH_PIN::ALT>& alt : m_pin->GetAlternates() )
+            m_alternatesDataModel->AppendRow( alt.second );
+    }
 
     // We can call FinishDialogSettings() now all widgets have the size fixed.
     finishDialogSettings();
