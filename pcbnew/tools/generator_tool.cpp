@@ -225,11 +225,18 @@ int GENERATOR_TOOL::MakeViaStackFromSelection( const TOOL_EVENT& aEvent )
     }
 
     std::vector<BOARD_ITEM*> members;
-    PCB_VIA_STACK*           stack = PCB_VIA_STACK::CreateFromItems( items, board(), &members );
+    wxString                 error;
+    PCB_VIA_STACK*           stack = PCB_VIA_STACK::CreateFromItems( items, board(), &members, &error );
 
     if( !stack )
     {
-        frame()->ShowInfoBarWarning( _( "Selection does not form a contiguous microvia stack on one net." ) );
+        if( error.IsEmpty() )
+        {
+            error = _( "A microvia stack needs two or more microvias on the same net, each spanning "
+                       "one layer step, with no gap between them." );
+        }
+
+        frame()->ShowInfoBarWarning( error );
         return 0;
     }
 

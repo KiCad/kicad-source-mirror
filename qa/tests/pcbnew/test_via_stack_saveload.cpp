@@ -702,6 +702,38 @@ BOOST_AUTO_TEST_CASE( CreateFromItemsRejectsMixedNets )
 }
 
 
+// A stack carries one size for every hop, so mixed vias must be rejected too.
+BOOST_AUTO_TEST_CASE( CreateFromItemsRejectsMixedDimensions )
+{
+    auto board = std::make_unique<BOARD>();
+    board->SetCopperLayerCount( 4 );
+    board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
+
+    VECTOR2I pos( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) );
+
+    PCB_VIA* upper = makeMicrovia( board.get(), pos, F_Cu, In1_Cu );
+    PCB_VIA* lower = makeMicrovia( board.get(), pos, In1_Cu, In2_Cu );
+
+    std::vector<BOARD_ITEM*> items = { upper, lower };
+    wxString                 error;
+
+    lower->SetDrill( pcbIUScale.mmToIU( 0.10 ) );
+    BOOST_CHECK( PCB_VIA_STACK::CreateFromItems( items, board.get(), nullptr, &error ) == nullptr );
+    BOOST_CHECK( !error.IsEmpty() );
+
+    lower->SetDrill( upper->GetDrillValue() );
+    lower->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.25 ) );
+    BOOST_CHECK( PCB_VIA_STACK::CreateFromItems( items, board.get() ) == nullptr );
+
+    // Matching again, so the factory still builds one.
+    lower->SetWidth( PADSTACK::ALL_LAYERS, upper->GetWidth( PADSTACK::ALL_LAYERS ) );
+
+    std::unique_ptr<PCB_VIA_STACK> stack( PCB_VIA_STACK::CreateFromItems( items, board.get() ) );
+
+    BOOST_CHECK( stack );
+}
+
+
 // A layer name a hand-edited file got wrong must not resolve to a real layer, or the stack
 // loads as a plausible span nobody asked for.
 BOOST_AUTO_TEST_CASE( AnUnknownLayerNameLeavesTheSpanAlone )

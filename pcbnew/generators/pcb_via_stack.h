@@ -162,10 +162,11 @@ public:
      * the items as members. When aMembers is given it receives the items that belong in
      * the stack: the vias plus only those traces that connect hop positions on a shared
      * landing layer. Other selected traces must stay loose or the next regenerate would
-     * delete them.
+     * delete them. When aError is given it receives the reason for a refusal the caller
+     * can show, and is left alone when there is nothing specific to say.
      */
     static PCB_VIA_STACK* CreateFromItems( const std::vector<BOARD_ITEM*>& aItems, BOARD* aBoard,
-                                           std::vector<BOARD_ITEM*>* aMembers = nullptr );
+                                           std::vector<BOARD_ITEM*>* aMembers = nullptr, wxString* aError = nullptr );
 
     /**
      * True when both span ends are copper layers within the board's copper layer count.

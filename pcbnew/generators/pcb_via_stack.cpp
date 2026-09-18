@@ -592,7 +592,7 @@ static void layerOrder( BOARD* aBoard, std::vector<PCB_LAYER_ID>& aOrder, std::m
 
 
 PCB_VIA_STACK* PCB_VIA_STACK::CreateFromItems( const std::vector<BOARD_ITEM*>& aItems, BOARD* aBoard,
-                                               std::vector<BOARD_ITEM*>* aMembers )
+                                               std::vector<BOARD_ITEM*>* aMembers, wxString* aError )
 {
     std::vector<PCB_VIA*>   vias;
     std::vector<PCB_TRACK*> traces;
@@ -611,6 +611,21 @@ PCB_VIA_STACK* PCB_VIA_STACK::CreateFromItems( const std::vector<BOARD_ITEM*>& a
 
             if( !vias.empty() && via->GetNetCode() != vias.front()->GetNetCode() )
                 return nullptr;
+
+            // A stack carries one size for every hop, so a mixed selection would be resized
+            // by the next regeneration.
+            if( !vias.empty()
+                && ( via->GetWidth( PADSTACK::ALL_LAYERS ) != vias.front()->GetWidth( PADSTACK::ALL_LAYERS )
+                     || via->GetDrillValue() != vias.front()->GetDrillValue() ) )
+            {
+                if( aError )
+                {
+                    *aError = _( "The selected microvias have different diameters or hole sizes. A "
+                                 "microvia stack uses one size for every hop." );
+                }
+
+                return nullptr;
+            }
 
             vias.push_back( via );
         }
