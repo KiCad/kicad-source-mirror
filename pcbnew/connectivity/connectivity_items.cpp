@@ -132,13 +132,7 @@ bool CN_ZONE_LAYER::HasSingleConnection()
 
 void CN_ITEM::RemoveInvalidRefs()
 {
-    for( auto it = m_connected.begin(); it != m_connected.end(); /* increment in loop */ )
-    {
-        if( !(*it)->Valid() )
-            it = m_connected.erase( it );
-        else
-            ++it;
-    }
+    std::erase_if( m_connected, []( const CN_ITEM* item ) { return !item->Valid(); } );
 }
 
 
