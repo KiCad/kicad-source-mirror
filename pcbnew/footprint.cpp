@@ -4913,32 +4913,20 @@ bool FOOTPRINT::operator==( const BOARD_ITEM& aOther ) const
 
 bool FOOTPRINT::operator==( const FOOTPRINT& aOther ) const
 {
-    if( m_pads.size() != aOther.m_pads.size() )
+    auto equalItems =
+            []( const auto* aLeft, const auto* aRight )
+            {
+                return *aLeft == *aRight;
+            };
+
+    if( !std::ranges::equal( m_pads, aOther.m_pads, equalItems ) )
         return false;
 
-    for( size_t ii = 0; ii < m_pads.size(); ++ii )
-    {
-        if( !( *m_pads[ii] == *aOther.m_pads[ii] ) )
-            return false;
-    }
-
-    if( m_drawings.size() != aOther.m_drawings.size() )
+    if( !std::ranges::equal( m_drawings, aOther.m_drawings, equalItems ) )
         return false;
 
-    for( size_t ii = 0; ii < m_drawings.size(); ++ii )
-    {
-        if( !( *m_drawings[ii] == *aOther.m_drawings[ii] ) )
-            return false;
-    }
-
-    if( m_zones.size() != aOther.m_zones.size() )
+    if( !std::ranges::equal( m_zones, aOther.m_zones, equalItems ) )
         return false;
-
-    for( size_t ii = 0; ii < m_zones.size(); ++ii )
-    {
-        if( !( *m_zones[ii] == *aOther.m_zones[ii] ) )
-            return false;
-    }
 
     if( m_points.size() != aOther.m_points.size() )
         return false;
