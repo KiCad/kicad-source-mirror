@@ -210,6 +210,7 @@ set( KICOMMON_SRCS
     libraries/library_table_parser.cpp
 
     model_preview_manager.cpp
+    model_preview_manager_windows_classifier.cpp
 
     settings/app_settings.cpp
     settings/aui_settings.cpp

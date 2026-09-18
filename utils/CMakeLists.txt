@@ -7,3 +7,10 @@ endif()
 if( KICAD_IDF_TOOLS )
     add_subdirectory( idftools )
 endif()
+
+if( WIN32 AND KICAD_BUILD_NATIVE_MODEL_PREVIEW )
+    target_sources( kicommon PRIVATE
+        ${CMAKE_SOURCE_DIR}/3d-viewer/dialogs/model_preview_manager_windows.cpp )
+    target_link_libraries( kicommon Version )
+    add_subdirectory( preview_handlers )
+endif()
