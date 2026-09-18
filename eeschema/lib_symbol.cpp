@@ -1241,6 +1241,18 @@ bool LIB_SYMBOL::ResolveTextVar( wxString* token, int aDepth ) const
         *token = m_libId.GetUniStringLibItemName();
         return true;
     }
+    else if( token->IsSameAs( wxT( "SYMBOL_PARENT" ) ) )
+    {
+        std::shared_ptr<LIB_SYMBOL> parent = GetParent().lock();
+        *token = parent ? parent->GetName() : wxString();
+        return true;
+    }
+    else if( token->IsSameAs( wxT( "SYMBOL_ROOT" ) ) )
+    {
+        std::shared_ptr<LIB_SYMBOL> root = GetRootSymbol();
+        *token = root ? root->GetName() : GetName();
+        return true;
+    }
     else if( token->IsSameAs( wxT( "SYMBOL_DESCRIPTION" ) ) )
     {
         *token = GetShownDescription( INTERNAL, aDepth + 1 );

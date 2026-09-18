@@ -647,6 +647,8 @@ void DIALOG_LIB_FIELDS_TABLE::LoadFieldNames()
             };
 
     AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME, _( "Symbol Name" ), true, false );
+    AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_PARENT, _( "Parent Symbol" ), false, false );
+    AddField( LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_ROOT, _( "Root Symbol" ), false, false );
 
     // Add mandatory fields first            show   groupBy
     addMandatoryField( FIELD_T::REFERENCE,   false,  false  );
@@ -835,6 +837,8 @@ std::vector<BOM_PRESET> DIALOG_LIB_FIELDS_TABLE::getBuiltInBomPresets() const
             preset.groupSymbols = false;
             preset.fieldsOrdered = {
                 { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_NAME, wxS( "Symbol Name" ), true, false },
+                { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_PARENT, wxS( "Parent Symbol" ), false, false },
+                { LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SYMBOL_ROOT, wxS( "Root Symbol" ), false, false },
                 { GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ), wxS( "Reference" ), false, false },
                 { GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ), wxS( "Value" ), true, false },
                 { GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ), wxS( "Footprint" ), true, false },
