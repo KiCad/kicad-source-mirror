@@ -3163,15 +3163,7 @@ void DRC_ENGINE::InvalidateClearanceCache( const KIID& aUuid )
     }
     else
     {
-        auto it = m_ownClearanceCache.begin();
-
-        while( it != m_ownClearanceCache.end() )
-        {
-            if( it->first.m_uuid == aUuid )
-                it = m_ownClearanceCache.erase( it );
-            else
-                ++it;
-        }
+        std::erase_if( m_ownClearanceCache, [&aUuid]( const auto& entry ) { return entry.first.m_uuid == aUuid; } );
     }
 }
 

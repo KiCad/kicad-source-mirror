@@ -65,6 +65,7 @@
 #include <wx/log.h>
 
 #include <memory>
+#include <unordered_map>
 #include <unordered_set>
 
 #include <advanced_config.h>
@@ -798,21 +799,17 @@ void PNS_PCBNEW_RULE_RESOLVER::ClearCacheForItems( std::vector<const PNS::ITEM*>
 
     std::unordered_set<const PNS::ITEM*> dirtyItems( aItems.begin(), aItems.end() );
 
-    for( auto it = m_clearanceCache.begin(); it != m_clearanceCache.end(); )
-    {
-        if( dirtyItems.contains( it->first.A ) || dirtyItems.contains( it->first.B ) )
-            it = m_clearanceCache.erase( it );
-        else
-            ++it;
-    }
+    std::erase_if( m_clearanceCache,
+                   [&dirtyItems]( const auto& entry )
+                   {
+                       return dirtyItems.contains( entry.first.A ) || dirtyItems.contains( entry.first.B );
+                   } );
 
-    for( auto it = m_hullCache.begin(); it != m_hullCache.end(); )
-    {
-        if( dirtyItems.contains( it->first.item ) )
-            it = m_hullCache.erase( it );
-        else
-            ++it;
-    }
+    std::erase_if( m_hullCache,
+                   [&dirtyItems]( const auto& entry )
+                   {
+                       return dirtyItems.contains( entry.first.item );
+                   } );
 }
 
 

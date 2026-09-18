@@ -23,6 +23,7 @@
 
 #include <iterator>
 #include <algorithm>
+#include <unordered_map>
 
 #include <wx/log.h>
 #include <wx/filename.h>
@@ -2387,13 +2388,7 @@ void BOARD::UncacheItemByPtr( const BOARD_ITEM* aItem )
         return;
     }
 
-    for( auto it = m_itemByIdCache.begin(); it != m_itemByIdCache.end(); )
-    {
-        if( it->second == aItem )
-            it = m_itemByIdCache.erase( it );
-        else
-            ++it;
-    }
+    std::erase_if( m_itemByIdCache, [aItem]( const auto& entry ) { return entry.second == aItem; } );
 }
 
 

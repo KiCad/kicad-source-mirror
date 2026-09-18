@@ -3862,13 +3862,7 @@ BOARD_CONSTRAINT_DIAGNOSTICS BOARD_CONSTRAINT_DIAGNOSER::Diagnose( BOARD* aBoard
 
     // Drop cache entries for clusters no longer present so a stale result can never leak into a
     // later pass that happens to rebuild the same key
-    for( auto it = m_cache.begin(); it != m_cache.end(); )
-    {
-        if( seenKeys.contains( it->first ) )
-            ++it;
-        else
-            it = m_cache.erase( it );
-    }
+    std::erase_if( m_cache, [&seenKeys]( const auto& entry ) { return !seenKeys.contains( entry.first ); } );
 
     dedupErrored( result );
 
