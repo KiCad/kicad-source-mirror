@@ -728,6 +728,9 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
                 {
                     // We're well and truly banjaxed if we get here without a fallback.
                     DisplayInfoMessage( m_parent, _( "Could not use OpenGL" ), errormsg );
+                    new_gal = new KIGFX::GAL( m_options );
+                    aGalType = GAL_TYPE_NONE;
+                    result = false;
                 }
             }
 
