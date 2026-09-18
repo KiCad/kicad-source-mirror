@@ -251,6 +251,8 @@ set( PCBNEW_DIALOGS
     dialogs/panel_setup_zones_base.cpp
     dialogs/panel_setup_zone_hatch_offsets.cpp
     dialogs/panel_setup_zone_hatch_offsets_base.cpp
+    dialogs/panel_zone_conversion.cpp
+    dialogs/panel_zone_conversion_base.cpp
     dialogs/panel_zone_properties.cpp
     dialogs/panel_zone_properties_base.cpp
     footprint_wizard.cpp

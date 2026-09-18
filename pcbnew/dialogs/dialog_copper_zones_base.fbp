@@ -60,7 +60,6 @@
       <property name="window_name"></property>
       <property name="window_style"></property>
       <event name="OnClose">OnClose</event>
-      <event name="OnUpdateUI">OnUpdateUI</event>
       <object class="wxBoxSizer" expanded="true">
         <property name="minimum_size"></property>
         <property name="name">m_MainBoxSizer</property>
