@@ -129,8 +129,15 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
     if( !aBoard || !aPlotter || aLayers.empty() )
         return;
 
+    PCB_PLOT_PARAMS plotOptions = aPlotOptions;
+
+    // Gerber carries no colour, so a drill mark lands as ink instead of knocking out its pad
+    // The plot dialog forces them off for gerber but API and CLI callers arrive here directly
+    if( aPlotter->GetPlotterType() == PLOT_FORMAT::GERBER )
+        plotOptions.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
+
     for( PCB_LAYER_ID layer : aLayers )
-        PlotOneBoardLayer( aBoard, aPlotter, layer, aPlotOptions, layer == aLayers[0] );
+        PlotOneBoardLayer( aBoard, aPlotter, layer, plotOptions, layer == aLayers[0] );
 
     // Drill symbols go after the normal layers but before the physical marks, so a symbol is
     // never sitting under a knockout
@@ -138,7 +145,7 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
 
     if( mapLayers.any() )
     {
-        BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOptions );
+        BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, plotOptions );
         itemplotter.SetLayerSet( aLayers );
 
         for( PCB_LAYER_ID layer : mapLayers.Seq() )
@@ -151,9 +158,9 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
 
     // One global knockout pass, so a plotted layer carrying a map skips them rather than
     // punching through the symbols they would annotate
-    if( aPlotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE && !mapLayers.any() )
+    if( plotOptions.GetDrillMarksType() != DRILL_MARKS::NO_DRILL_SHAPE && !mapLayers.any() )
     {
-        BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOptions );
+        BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, plotOptions );
         itemplotter.SetLayerSet( aLayers );
         itemplotter.PlotDrillMarks();
     }

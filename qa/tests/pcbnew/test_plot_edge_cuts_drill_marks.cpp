@@ -151,4 +151,59 @@ BOOST_AUTO_TEST_CASE( DrillMarksPlottedOnEdgeCutsSvg )
     BOOST_CHECK_MESSAGE( circles >= 1, "Edge_Cuts SVG is missing the drill-mark circle (#24867)" );
 }
 
+// Regression for #25532. A gerber plot driven from the API or CLI can carry the board's stored
+// drill mark setting, which then flashes ink into the middle of an NPTH hole.
+BOOST_AUTO_TEST_CASE( NoDrillMarksOnGerberFromStoredOptions )
+{
+    const int drill = pcbIUScale.mmToIU( 3.2 );
+
+    BOARD                      board;
+    std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( &board );
+    footprint->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 50.0 ), pcbIUScale.mmToIU( 50.0 ) ) );
+
+    // An NPTH mounting hole plots no copper of its own, so any flash in the file is the drill mark
+    PAD* pad = new PAD( footprint.get() );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+    pad->SetAttribute( PAD_ATTRIB::NPTH );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( drill, drill ) );
+    pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
+    pad->SetDrillSize( VECTOR2I( drill, drill ) );
+    pad->SetLayerSet( PAD::UnplatedHoleMask() );
+    pad->SetPosition( footprint->GetPosition() );
+    footprint->Add( pad );
+    board.Add( footprint.release() );
+
+    GERBER_PLOTTER         plotter;
+    SIMPLE_RENDER_SETTINGS renderSettings;
+    plotter.SetRenderSettings( &renderSettings );
+
+    wxString gbrPath = wxFileName::CreateTempFileName( wxT( "kicad_gbr_25532" ) );
+    BOOST_REQUIRE( !gbrPath.IsEmpty() );
+    BOOST_REQUIRE( plotter.OpenFile( gbrPath ) );
+    plotter.SetViewport( VECTOR2I( 0, 0 ), pcbIUScale.IU_PER_MILS / 10, 1.0, false );
+    BOOST_REQUIRE( plotter.StartPlot( wxT( "1" ) ) );
+
+    PCB_PLOT_PARAMS plotOpts;
+    plotOpts.SetFormat( PLOT_FORMAT::GERBER );
+    plotOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); // what boards store by default
+
+    PlotBoardLayers( &board, &plotter, LSEQ{ F_Cu }, plotOpts );
+    BOOST_REQUIRE( plotter.EndPlot() );
+
+    wxFFile file( gbrPath, wxT( "rb" ) );
+    BOOST_REQUIRE( file.IsOpened() );
+    wxString contents;
+    BOOST_REQUIRE( file.ReadAll( &contents ) );
+    file.Close();
+    wxRemoveFile( gbrPath );
+
+    std::string buf = contents.ToStdString();
+    std::regex  flashRe( R"(D0*3\*)" ); // D03 = flash a pad/aperture
+    long flashes = std::distance( std::sregex_iterator( buf.begin(), buf.end(), flashRe ), std::sregex_iterator() );
+
+    BOOST_CHECK_MESSAGE( flashes == 0,
+                         "F_Cu gerber unexpectedly contains " << flashes << " drill-mark flash(es) (#25532)" );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
