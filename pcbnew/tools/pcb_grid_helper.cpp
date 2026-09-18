@@ -1445,6 +1445,11 @@ std::vector<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( std::initializer_list<BO
 
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( viewItem );
 
+        // DRC markers annotate the board rather than being part of it, and every edit tool
+        // already refuses to operate on them
+        if( boardItem->Type() == PCB_MARKER_T )
+            continue;
+
         if( inFootprintEditor )
         {
             // If we are in the footprint editor, don't use the footprint itself
@@ -2241,7 +2246,6 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
         break;
 
-    case PCB_MARKER_T:
     case PCB_TARGET_T:
         addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem, POINT_TYPE::PT_CENTER );
         break;
