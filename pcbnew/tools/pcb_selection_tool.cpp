@@ -4062,6 +4062,26 @@ void PCB_SELECTION_TOOL::RebuildSelection()
 }
 
 
+LSET PCB_SELECTION_TOOL::resolveVisibleLayers( const LSET& aVisibleLayers,
+                                               const LSET& aEnabledLayers )
+{
+    return aVisibleLayers & aEnabledLayers;
+}
+
+
+bool PCB_SELECTION_TOOL::isPadVisible( const PAD& aPad, const LSET& aVisibleLayers )
+{
+    if( aPad.GetAttribute() == PAD_ATTRIB::PTH || aPad.GetAttribute() == PAD_ATTRIB::NPTH )
+    {
+        // A hole is drawn on every layer the pad itself is drawn on plus many it is not, so
+        // any visible physical layer shows it
+        return ( aVisibleLayers & LSET::PhysicalLayersMask() ).any();
+    }
+
+    return ( aPad.GetLayerSet() & aVisibleLayers ).any();
+}
+
+
 bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
@@ -4081,7 +4101,8 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
                 }
                 else
                 {
-                    return board()->GetVisibleLayers();
+                    return resolveVisibleLayers( board()->GetVisibleLayers(),
+                                                 board()->GetEnabledLayers() );
                 }
             };
 
@@ -4340,18 +4361,8 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
         pad = static_cast<const PAD*>( aItem );
 
-        if( pad->GetAttribute() == PAD_ATTRIB::PTH || pad->GetAttribute() == PAD_ATTRIB::NPTH )
-        {
-            // A pad's hole is visible on every layer the pad is visible on plus many layers the
-            // pad is not visible on -- so we only need to check for any visible hole layers.
-            if( !( visibleLayers() & LSET::PhysicalLayersMask() ).any() )
-                return false;
-        }
-        else
-        {
-            if( !( pad->GetLayerSet() & visibleLayers() ).any() )
-                return false;
-        }
+        if( !isPadVisible( *pad, visibleLayers() ) )
+            return false;
 
         break;
 
@@ -5351,6 +5362,8 @@ void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aColle
                 }
                 else
                 {
+                    // Unlike Selectable() this stays unmasked, since it only prunes candidates
+                    // and a pad hole is drawn whenever any physical layer shows
                     return board()->GetVisibleLayers();
                 }
             };
