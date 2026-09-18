@@ -32,7 +32,6 @@
 #include <wx/treectrl.h>
 #include <wx/utils.h>
 #include <wx/filename.h>
-#include <wx/generic/treectlg.h>
 
 #include <core/typeinfo.h>
 #include <eda_base_frame.h>
@@ -40,6 +39,7 @@
 #include <math/box2.h>
 #include <sch_base_frame.h>
 #include <template_fieldnames.h>
+#include <widgets/net_navigator_tree.h>
 #include <map>
 #include <connectivity/conn_subscription.h>
 
@@ -1096,6 +1096,7 @@ private:
 
     wxWindow* createHighlightedNetNavigator();
 
+    void onNetNavigatorDPIChanged( wxDPIChangedEvent& aEvent );
     void onNetNavigatorFilterChanged( wxCommandEvent& aEvent );
     void onNetNavigatorKey( wxKeyEvent& aEvent );
     void onNetNavigatorItemMenu( wxTreeEvent& aEvent );
@@ -1146,7 +1147,7 @@ private:
     DIALOG_SCHEMATIC_SETUP*     m_schematicSetupDialog;
 
 
-    wxGenericTreeCtrl*          m_netNavigator;
+    NET_NAVIGATOR_TREE*         m_netNavigator;
     wxSearchCtrl*               m_netNavigatorFilter;
     BITMAP_BUTTON*              m_netNavigatorMenuButton;
     wxString                    m_netNavigatorFilterValue;

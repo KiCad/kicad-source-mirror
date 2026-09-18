@@ -650,6 +650,39 @@ const SCH_ITEM* SCH_EDIT_FRAME::GetSelectedNetNavigatorItem() const
 }
 
 
+void SCH_EDIT_FRAME::onNetNavigatorDPIChanged( wxDPIChangedEvent& aEvent )
+{
+    aEvent.Skip();
+
+    // wxMSW rescales the control font without the virtual SetFont() that would recompute the
+    // generic tree's row height, and the per-item text extents only rebuild with the items
+    CallAfter(
+            [this]
+            {
+                wxCHECK( m_netNavigator, /* void */ );
+
+                NET_NAVIGATOR_ITEM_DATA  selection;
+                NET_NAVIGATOR_ITEM_DATA* selected = nullptr;
+                wxTreeItemId             id = m_netNavigator->GetSelection();
+
+                // RefreshNetNavigator() only carries the selection across a rebuild by itself
+                // while a connection is highlighted
+                if( id.IsOk() )
+                {
+                    if( auto* data = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( id ) ) )
+                    {
+                        selection = *data;
+                        selected = &selection;
+                    }
+                }
+
+                m_netNavigator->RecalculateRowHeight();
+                m_netNavigatorStale = true;
+                RefreshNetNavigator( selected );
+            } );
+}
+
+
 void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
 {
     if( !m_netNavigator || m_netNavigator->IsFrozen() )
