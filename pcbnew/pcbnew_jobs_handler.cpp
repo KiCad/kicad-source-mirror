@@ -1400,6 +1400,82 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
 }
 
 
+bool PCBNEW_JOBS_HANDLER::preparePlotLayers( JOB_EXPORT_PCB_PLOT* aJob, BOARD* aBoard,
+                                            TOOL_MANAGER* aToolManager )
+{
+    if( aJob->m_checkZonesBeforePlot )
+    {
+        if( !aToolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
+            aToolManager->RegisterTool( new ZONE_FILLER_TOOL );
+
+        aToolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
+    }
+
+    if( aJob->m_argLayers )
+        aJob->m_plotLayerSequence = convertLayerArg( aJob->m_argLayers.value(), aBoard );
+
+    if( aJob->m_argCommonLayers )
+        aJob->m_plotOnAllLayersSequence = convertLayerArg( aJob->m_argCommonLayers.value(), aBoard );
+
+    if( aJob->m_plotLayerSequence.empty() )
+    {
+        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
+        return false;
+    }
+
+    return true;
+}
+
+
+wxString PCBNEW_JOBS_HANDLER::resolvePlotOutputPath( JOB_EXPORT_PCB_PLOT* aJob, BOARD* aBoard,
+                                                     PLOT_FORMAT aFormat, bool aSingleOutput )
+{
+    if( aSingleOutput && aJob->GetConfiguredOutputPath().IsEmpty() )
+    {
+        wxFileName fn = aBoard->GetFileName();
+        fn.SetExt( GetDefaultPlotExtension( aFormat ) );
+        aJob->SetWorkingOutputPath( fn.GetFullName() );
+    }
+
+    return resolveJobOutputPath( aJob, aBoard, &aJob->m_drawingSheet );
+}
+
+
+// PDF single-document output need not use overrides; PNG never uses them.
+static int plotJob( JOB_EXPORT_PCB_PLOT* aJob, PCB_PLOTTER& aPlotter, const wxString& aOutPath,
+                    bool aSingleOutput, bool aUseOverrides )
+{
+    std::optional<wxString> layerName;
+    std::optional<wxString> sheetName;
+    std::optional<wxString> sheetPath;
+
+    if( aUseOverrides )
+    {
+        if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
+            layerName = aJob->GetVarOverrides().at( wxT( "LAYER" ) );
+
+        if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
+            sheetName = aJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
+
+        if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
+            sheetPath = aJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
+    }
+
+    std::vector<wxString> outputPaths;
+
+    if( !aPlotter.Plot( aOutPath, aJob->m_plotLayerSequence, aJob->m_plotOnAllLayersSequence, false,
+                        aSingleOutput, layerName, sheetName, sheetPath, &outputPaths ) )
+    {
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    for( const wxString& outputPath : outputPaths )
+        aJob->AddOutput( outputPath );
+
+    return CLI::EXIT_CODES::OK;
+}
+
+
 int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
 {
     JOB_EXPORT_PCB_SVG* aSvgJob = dynamic_cast<JOB_EXPORT_PCB_SVG*>( aJob );
@@ -1416,79 +1492,25 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     if( !aSvgJob->m_variant.IsEmpty() )
         brd->SetCurrentVariant( aSvgJob->m_variant );
 
-    if( aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE )
-    {
-        if( aSvgJob->GetConfiguredOutputPath().IsEmpty() )
-        {
-            wxFileName fn = brd->GetFileName();
-            fn.SetName( fn.GetName() );
-            fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::SVG ) );
+    const bool isSingle = aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE;
 
-            aSvgJob->SetWorkingOutputPath( fn.GetFullName() );
-        }
-    }
+    wxString outPath = resolvePlotOutputPath( aSvgJob, brd, PLOT_FORMAT::SVG, isSingle );
 
-    wxString outPath = resolveJobOutputPath( aJob, brd, &aSvgJob->m_drawingSheet );
-
-    if( !PATHS::EnsurePathExists( outPath, aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE ) )
+    if( !PATHS::EnsurePathExists( outPath, isSingle ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    if( aSvgJob->m_checkZonesBeforePlot )
-    {
-        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
-            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
-
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
-    }
-
-    if( aSvgJob->m_argLayers )
-        aSvgJob->m_plotLayerSequence = convertLayerArg( aSvgJob->m_argLayers.value(), brd );
-
-    if( aSvgJob->m_argCommonLayers )
-        aSvgJob->m_plotOnAllLayersSequence = convertLayerArg( aSvgJob->m_argCommonLayers.value(), brd );
-
-    if( aSvgJob->m_plotLayerSequence.size() < 1 )
-    {
-        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
+    if( !preparePlotLayers( aSvgJob, brd, toolManager ) )
         return CLI::EXIT_CODES::ERR_ARGS;
-    }
 
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob, *m_reporter );
 
     PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
 
-    std::optional<wxString> layerName;
-    std::optional<wxString> sheetName;
-    std::optional<wxString> sheetPath;
-    std::vector<wxString>   outputPaths;
-
-    if( aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE )
-    {
-        if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
-            layerName = aSvgJob->GetVarOverrides().at( wxT( "LAYER" ) );
-
-        if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
-            sheetName = aSvgJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
-
-        if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
-            sheetPath = aSvgJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
-    }
-
-    if( !plotter.Plot( outPath, aSvgJob->m_plotLayerSequence, aSvgJob->m_plotOnAllLayersSequence, false,
-                       aSvgJob->m_genMode == JOB_EXPORT_PCB_SVG::GEN_MODE::SINGLE, layerName, sheetName, sheetPath,
-                       &outputPaths ) )
-    {
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
-    }
-
-    for( const wxString& outputPath : outputPaths )
-        aSvgJob->AddOutput( outputPath );
-
-    return CLI::EXIT_CODES::OK;
+    return plotJob( aSvgJob, plotter, outPath, isSingle, isSingle );
 }
 
 
@@ -1509,41 +1531,14 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
-    if( aDxfJob->m_checkZonesBeforePlot )
-    {
-        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
-            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
-
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
-    }
-
-    if( aDxfJob->m_argLayers )
-        aDxfJob->m_plotLayerSequence = convertLayerArg( aDxfJob->m_argLayers.value(), brd );
-
-    if( aDxfJob->m_argCommonLayers )
-        aDxfJob->m_plotOnAllLayersSequence = convertLayerArg( aDxfJob->m_argCommonLayers.value(), brd );
-
-    if( aDxfJob->m_plotLayerSequence.size() < 1 )
-    {
-        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
+    if( !preparePlotLayers( aDxfJob, brd, toolManager ) )
         return CLI::EXIT_CODES::ERR_ARGS;
-    }
 
-    if( aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE )
-    {
-        if( aDxfJob->GetConfiguredOutputPath().IsEmpty() )
-        {
-            wxFileName fn = brd->GetFileName();
-            fn.SetName( fn.GetName() );
-            fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::DXF ) );
+    const bool isSingle = aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE;
 
-            aDxfJob->SetWorkingOutputPath( fn.GetFullName() );
-        }
-    }
+    wxString outPath = resolvePlotOutputPath( aDxfJob, brd, PLOT_FORMAT::DXF, isSingle );
 
-    wxString outPath = resolveJobOutputPath( aJob, brd, &aDxfJob->m_drawingSheet );
-
-    if( !PATHS::EnsurePathExists( outPath, aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE ) )
+    if( !PATHS::EnsurePathExists( outPath, isSingle ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
@@ -1554,35 +1549,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
 
     PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
 
-    std::optional<wxString> layerName;
-    std::optional<wxString> sheetName;
-    std::optional<wxString> sheetPath;
-
-    if( aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE )
-    {
-        if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
-            layerName = aDxfJob->GetVarOverrides().at( wxT( "LAYER" ) );
-
-        if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
-            sheetName = aDxfJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
-
-        if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
-            sheetPath = aDxfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
-    }
-
-    std::vector<wxString> outputPaths;
-
-    if( !plotter.Plot( outPath, aDxfJob->m_plotLayerSequence, aDxfJob->m_plotOnAllLayersSequence, false,
-                       aDxfJob->m_genMode == JOB_EXPORT_PCB_DXF::GEN_MODE::SINGLE, layerName, sheetName, sheetPath,
-                       &outputPaths ) )
-    {
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
-    }
-
-    for( const wxString& outputPath : outputPaths )
-        aJob->AddOutput( outputPath );
-
-    return CLI::EXIT_CODES::OK;
+    return plotJob( aDxfJob, plotter, outPath, isSingle, isSingle );
 }
 
 
@@ -1604,41 +1571,15 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
-    if( pdfJob->m_checkZonesBeforePlot )
-    {
-        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
-            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
-
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
-    }
-
-    if( pdfJob->m_argLayers )
-        pdfJob->m_plotLayerSequence = convertLayerArg( pdfJob->m_argLayers.value(), brd );
-
-    if( pdfJob->m_argCommonLayers )
-        pdfJob->m_plotOnAllLayersSequence = convertLayerArg( pdfJob->m_argCommonLayers.value(), brd );
+    if( !preparePlotLayers( pdfJob, brd, toolManager ) )
+        return CLI::EXIT_CODES::ERR_ARGS;
 
     if( pdfJob->m_pdfGenMode == JOB_EXPORT_PCB_PDF::GEN_MODE::ALL_LAYERS_ONE_FILE )
         plotAllLayersOneFile = true;
 
-    if( pdfJob->m_plotLayerSequence.size() < 1 )
-    {
-        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
-        return CLI::EXIT_CODES::ERR_ARGS;
-    }
-
     const bool outputIsSingle = plotAllLayersOneFile || pdfJob->m_pdfSingle;
 
-    if( outputIsSingle && pdfJob->GetConfiguredOutputPath().IsEmpty() )
-    {
-        wxFileName fn = brd->GetFileName();
-        fn.SetName( fn.GetName() );
-        fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PDF ) );
-
-        pdfJob->SetWorkingOutputPath( fn.GetFullName() );
-    }
-
-    wxString outPath = resolveJobOutputPath( pdfJob, brd, &pdfJob->m_drawingSheet );
+    wxString outPath = resolvePlotOutputPath( pdfJob, brd, PLOT_FORMAT::PDF, outputIsSingle );
 
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, pdfJob, *m_reporter );
@@ -1651,34 +1592,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    std::optional<wxString> layerName;
-    std::optional<wxString> sheetName;
-    std::optional<wxString> sheetPath;
-
-    if( plotAllLayersOneFile )
-    {
-        if( pdfJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
-            layerName = pdfJob->GetVarOverrides().at( wxT( "LAYER" ) );
-
-        if( pdfJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
-            sheetName = pdfJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
-
-        if( pdfJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
-            sheetPath = pdfJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
-    }
-
-    std::vector<wxString> outputPaths;
-
-    if( !pcbPlotter.Plot( outPath, pdfJob->m_plotLayerSequence, pdfJob->m_plotOnAllLayersSequence, false,
-                          outputIsSingle, layerName, sheetName, sheetPath, &outputPaths ) )
-    {
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
-    }
-
-    for( const wxString& outputPath : outputPaths )
-        aJob->AddOutput( outputPath );
-
-    return CLI::EXIT_CODES::OK;
+    return plotJob( pdfJob, pcbPlotter, outPath, outputIsSingle, plotAllLayersOneFile );
 }
 
 
@@ -1699,38 +1613,12 @@ int PCBNEW_JOBS_HANDLER::JobExportPng( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
-    if( pngJob->m_checkZonesBeforePlot )
-    {
-        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
-            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
-
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
-    }
-
-    if( pngJob->m_argLayers )
-        pngJob->m_plotLayerSequence = convertLayerArg( pngJob->m_argLayers.value(), brd );
-
-    if( pngJob->m_argCommonLayers )
-        pngJob->m_plotOnAllLayersSequence = convertLayerArg( pngJob->m_argCommonLayers.value(), brd );
-
-    if( pngJob->m_plotLayerSequence.size() < 1 )
-    {
-        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
+    if( !preparePlotLayers( pngJob, brd, toolManager ) )
         return CLI::EXIT_CODES::ERR_ARGS;
-    }
 
     bool isSingle = pngJob->m_genMode == JOB_EXPORT_PCB_PNG::GEN_MODE::SINGLE;
 
-    if( isSingle && pngJob->GetConfiguredOutputPath().IsEmpty() )
-    {
-        wxFileName fn = brd->GetFileName();
-        fn.SetName( fn.GetName() );
-        fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::PNG ) );
-
-        pngJob->SetWorkingOutputPath( fn.GetFullName() );
-    }
-
-    wxString outPath = resolveJobOutputPath( pngJob, brd, &pngJob->m_drawingSheet );
+    wxString outPath = resolvePlotOutputPath( pngJob, brd, PLOT_FORMAT::PNG, isSingle );
 
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, pngJob, *m_reporter );
@@ -1743,18 +1631,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPng( JOB* aJob )
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    std::vector<wxString> outputPaths;
-
-    if( !pcbPlotter.Plot( outPath, pngJob->m_plotLayerSequence, pngJob->m_plotOnAllLayersSequence, false, isSingle,
-                          std::nullopt, std::nullopt, std::nullopt, &outputPaths ) )
-    {
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
-    }
-
-    for( const wxString& outputPath : outputPaths )
-        aJob->AddOutput( outputPath );
-
-    return CLI::EXIT_CODES::OK;
+    return plotJob( pngJob, pcbPlotter, outPath, isSingle, false );
 }
 
 
@@ -1775,41 +1652,12 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
 
     TOOL_MANAGER* toolManager = getToolManager( brd );
 
-    if( psJob->m_checkZonesBeforePlot )
-    {
-        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
-            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
-
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
-    }
-
-    if( psJob->m_argLayers )
-        psJob->m_plotLayerSequence = convertLayerArg( psJob->m_argLayers.value(), brd );
-
-    if( psJob->m_argCommonLayers )
-        psJob->m_plotOnAllLayersSequence = convertLayerArg( psJob->m_argCommonLayers.value(), brd );
-
-    if( psJob->m_plotLayerSequence.size() < 1 )
-    {
-        m_reporter->Report( _( "At least one layer must be specified\n" ), RPT_SEVERITY_ERROR );
+    if( !preparePlotLayers( psJob, brd, toolManager ) )
         return CLI::EXIT_CODES::ERR_ARGS;
-    }
 
     bool isSingle = psJob->m_genMode == JOB_EXPORT_PCB_PS::GEN_MODE::SINGLE;
 
-    if( isSingle )
-    {
-        if( psJob->GetConfiguredOutputPath().IsEmpty() )
-        {
-            wxFileName fn = brd->GetFileName();
-            fn.SetName( fn.GetName() );
-            fn.SetExt( GetDefaultPlotExtension( PLOT_FORMAT::POST ) );
-
-            psJob->SetWorkingOutputPath( fn.GetFullName() );
-        }
-    }
-
-    wxString outPath = resolveJobOutputPath( psJob, brd, &psJob->m_drawingSheet );
+    wxString outPath = resolvePlotOutputPath( psJob, brd, PLOT_FORMAT::POST, isSingle );
 
     if( !PATHS::EnsurePathExists( outPath, isSingle ) )
     {
@@ -1822,34 +1670,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
 
     PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
 
-    std::optional<wxString> layerName;
-    std::optional<wxString> sheetName;
-    std::optional<wxString> sheetPath;
-
-    if( isSingle )
-    {
-        if( aJob->GetVarOverrides().contains( wxT( "LAYER" ) ) )
-            layerName = psJob->GetVarOverrides().at( wxT( "LAYER" ) );
-
-        if( aJob->GetVarOverrides().contains( wxT( "SHEETNAME" ) ) )
-            sheetName = psJob->GetVarOverrides().at( wxT( "SHEETNAME" ) );
-
-        if( aJob->GetVarOverrides().contains( wxT( "SHEETPATH" ) ) )
-            sheetPath = psJob->GetVarOverrides().at( wxT( "SHEETPATH" ) );
-    }
-
-    std::vector<wxString> outputPaths;
-
-    if( !pcbPlotter.Plot( outPath, psJob->m_plotLayerSequence, psJob->m_plotOnAllLayersSequence, false, isSingle,
-                          layerName, sheetName, sheetPath, &outputPaths ) )
-    {
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
-    }
-
-    for( const wxString& outputPath : outputPaths )
-        aJob->AddOutput( outputPath );
-
-    return CLI::EXIT_CODES::OK;
+    return plotJob( psJob, pcbPlotter, outPath, isSingle, isSingle );
 }
 
 
