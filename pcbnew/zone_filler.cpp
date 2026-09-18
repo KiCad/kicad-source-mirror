@@ -1068,40 +1068,52 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                             items.unindexed.push_back( i );
                     }
 
-                    std::vector<INDEXED_ITEM> hits;
-                    std::vector<size_t> candidates;
+                    std::vector<size_t> lastSeen( count, count );
 
-                    // Waiters stay in fill order so each successor list keeps its original order.
+                    // Only waiter order determines successor order; spatial hit order is irrelevant.
                     for( size_t j = 0; j < count; ++j )
                     {
                         const auto& [zone, layer] = aFillItems[j];
                         const LAYER_FILL_ITEMS& layerItems = fillItemsByLayer.at( layer );
-                        candidates = layerItems.unindexed;
+                        auto addDependency =
+                                [&]( size_t i )
+                                {
+                                    // Keep distinct fill entries even if a zone gains multiple index entries.
+                                    if( i == j || lastSeen[i] == j )
+                                        return;
+
+                                    lastSeen[i] = j;
+
+                                    if( aHasDependency( aFillItems[j], aFillItems[i] ) )
+                                    {
+                                        successors[i].push_back( j );
+                                        inDegree[j].fetch_add( 1, std::memory_order_relaxed );
+                                    }
+                                };
+
+                        for( size_t i : layerItems.unindexed )
+                            addDependency( i );
 
                         if( auto index = m_zoneIndex.find( layer ); index != m_zoneIndex.end() )
                         {
-                            queryIndex( index->second, zoneKnockoutQueryBox( zone ), hits );
+                            const BOX2I box = zoneKnockoutQueryBox( zone );
+                            const int min[2] = { box.GetLeft(), box.GetTop() };
+                            const int max[2] = { box.GetRight(), box.GetBottom() };
+                            auto visitor =
+                                    [&]( const INDEXED_ITEM& hit )
+                                    {
+                                        auto items = layerItems.indices.find( static_cast<ZONE*>( hit.m_item ) );
 
-                            for( const INDEXED_ITEM& hit : hits )
-                            {
-                                auto items = layerItems.indices.find( static_cast<ZONE*>( hit.m_item ) );
+                                        if( items != layerItems.indices.end() )
+                                        {
+                                            for( size_t i : items->second )
+                                                addDependency( i );
+                                        }
 
-                                if( items != layerItems.indices.end() )
-                                    candidates.insert( candidates.end(), items->second.begin(), items->second.end() );
-                            }
-                        }
+                                        return true;
+                                    };
 
-                        // A zone can have several fill entries; deduplicate indices, not zones.
-                        std::sort( candidates.begin(), candidates.end() );
-                        candidates.erase( std::unique( candidates.begin(), candidates.end() ), candidates.end() );
-
-                        for( size_t i : candidates )
-                        {
-                            if( i != j && aHasDependency( aFillItems[j], aFillItems[i] ) )
-                            {
-                                successors[i].push_back( j );
-                                inDegree[j].fetch_add( 1, std::memory_order_relaxed );
-                            }
+                            index->second.Search( min, max, visitor );
                         }
                     }
                 }
