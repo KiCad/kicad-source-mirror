@@ -29,7 +29,12 @@ add_executable( qa_mdw_git
     test_mdw_disconnect_here.cpp
     test_mdw_framework_lifecycle.cpp
     test_mdw_git_auth.cpp
+    test_mdw_git_baseline.cpp
+    test_mdw_git_claims.cpp
     test_mdw_git_credentials.cpp
+    test_mdw_git_permissions.cpp
+    test_mdw_git_release.cpp
+    test_mdw_reply_checks.cpp
     ${CMAKE_SOURCE_DIR}/plugins/mdw/git/mdw_git_checkouts.cpp
     ${CMAKE_SOURCE_DIR}/plugins/mdw/git/mdw_git_remote.cpp
     ${CMAKE_SOURCE_DIR}/plugins/mdw/git/mdw_git_repo.cpp
