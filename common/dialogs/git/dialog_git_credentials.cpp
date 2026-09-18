@@ -60,8 +60,6 @@ void DIALOG_GIT_CREDENTIALS::updateFieldsForConnType()
 {
     bool ssh = ( m_authChoice->GetSelection() == 1 );
 
-    m_passLabel->Enable( !ssh );
-    m_passCtrl->Enable( !ssh );
     m_keyLabel->Enable( ssh );
     m_keyPicker->Enable( ssh );
 
