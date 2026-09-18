@@ -29,6 +29,50 @@
 namespace KI_TEST
 {
 /**
+ * RAII helper that sets a process-level environment variable for the
+ * lifetime of the object. On destruction, it restores the previous
+ * entry, or removes the entry if it did not previously exist.
+ *
+ * Note that this affects the process-level environment, so it will
+ * affect code that uses wxGetEnv() directly, but if variables have
+ * already been read into the KiCad program-level environment variable
+ * map, those will not be affected. If you want to affect the program-level
+ * environment variable map, use #SCOPED_PGM_ENV_VAR
+ */
+class SCOPED_PROCESS_ENV_VAR
+{
+public:
+    SCOPED_PROCESS_ENV_VAR( const wxString& aName, const std::optional<wxString>& aValue );
+    ~SCOPED_PROCESS_ENV_VAR();
+
+    // No copying, or the destructor will restore multiple times.
+    SCOPED_PROCESS_ENV_VAR( const SCOPED_PROCESS_ENV_VAR& ) = delete;
+    SCOPED_PROCESS_ENV_VAR& operator=( const SCOPED_PROCESS_ENV_VAR& ) = delete;
+
+    /**
+     * Set a new value for the environment variable (which will still only
+     * be in effect for the lifetime of this object).
+     */
+    void SetValue( const wxString& aValue );
+
+    /**
+     * Get the current value of the environment variable, if it exists.
+     */
+    std::optional<wxString> GetValue() const;
+
+    /**
+     * Clear the environment variable for the lifetime of this object.
+     * if it was previously set, it will be restored on destruction.
+     */
+    void ClearValue();
+
+private:
+    wxString                m_name;
+    std::optional<wxString> m_oldValue;
+};
+
+
+/**
  * RAII helper that sets a KiCad program-level environment variable
  * for the lifetime of the object. On destruction, it restores the
  * previous entry, or removes the entry if it did not previously exist.

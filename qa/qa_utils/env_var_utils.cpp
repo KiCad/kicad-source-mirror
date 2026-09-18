@@ -19,7 +19,57 @@
 
 #include "qa_utils/env_var_utils.h"
 
+#include <wx/utils.h>
+
 #include <pgm_base.h>
+
+
+KI_TEST::SCOPED_PROCESS_ENV_VAR::SCOPED_PROCESS_ENV_VAR( const wxString&                aName,
+                                                         const std::optional<wxString>& aValue ) :
+        m_name( aName )
+{
+    // Store the old value if it exists
+    wxString oldValue;
+    if( wxGetEnv( aName, &oldValue ) )
+        m_oldValue = oldValue;
+
+    // Set/remove the variable for the lifetime of this object
+    if( aValue )
+        wxSetEnv( aName, *aValue );
+    else
+        wxUnsetEnv( aName );
+}
+
+
+KI_TEST::SCOPED_PROCESS_ENV_VAR::~SCOPED_PROCESS_ENV_VAR()
+{
+    if( m_oldValue )
+        wxSetEnv( m_name, *m_oldValue );
+    else
+        wxUnsetEnv( m_name );
+}
+
+
+void KI_TEST::SCOPED_PROCESS_ENV_VAR::SetValue( const wxString& aValue )
+{
+    wxSetEnv( m_name, aValue );
+}
+
+
+std::optional<wxString> KI_TEST::SCOPED_PROCESS_ENV_VAR::GetValue() const
+{
+    wxString value;
+    if( wxGetEnv( m_name, &value ) )
+        return value;
+    else
+        return std::nullopt;
+}
+
+
+void KI_TEST::SCOPED_PROCESS_ENV_VAR::ClearValue()
+{
+    wxUnsetEnv( m_name );
+}
 
 
 KI_TEST::SCOPED_PGM_ENV_VAR::SCOPED_PGM_ENV_VAR( const wxString& aName, const std::optional<wxString>& aValue ) :
