@@ -40,6 +40,73 @@
 namespace
 {
 
+// Throwaway keys, generated for these tests and used nowhere else.
+
+const char* c_opensshEncrypted = "-----BEGIN OPENSSH PRIVATE KEY-----\n"
+                                 "b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABAxS2G8mY\n"
+                                 "+85LKkVcFtJi1GAAAAGAAAAAEAAAAzAAAAC3NzaC1lZDI1NTE5AAAAIKB0oSTjiyvxC+qh\n"
+                                 "cJ2zEnPDzZWArHcl90v2Se1SkmoGAAAAkKKrIYipMtR+JUEsuoYSmnfD0b/ng57Fq2uj25\n"
+                                 "oHDRqrDyPKS0xqQJa9+IQvPeM+E3G1fAGvsOYTQXsLJzXuQDiLX3vceEuN9AmJkA9Naea4\n"
+                                 "qAPy8CTlBx/ktdd4YgnYXBETi6Ab1f/h7LAVlLJTOc9Ta9HilKzO8Vl5p3EUS1PWkfGGqe\n"
+                                 "QLo1/ryfJjC3ZZbA==\n"
+                                 "-----END OPENSSH PRIVATE KEY-----\n";
+
+
+const char* c_opensshPlain = "-----BEGIN OPENSSH PRIVATE KEY-----\n"
+                             "b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW\n"
+                             "QyNTUxOQAAACD4Xd9qfxjO+vpBXO94Otoa0kg/p5H8kMYhN6eFe7v8MgAAAIjYZhWO2GYV\n"
+                             "jgAAAAtzc2gtZWQyNTUxOQAAACD4Xd9qfxjO+vpBXO94Otoa0kg/p5H8kMYhN6eFe7v8Mg\n"
+                             "AAAEBNlyz61Kiufy1a3WO6i2I7vB+7W2iQc8R81H0qrBheSfhd32p/GM76+kFc73g62hrS\n"
+                             "SD+nkfyQxiE3p4V7u/wyAAAAAXQBAgME\n"
+                             "-----END OPENSSH PRIVATE KEY-----\n";
+
+
+const char* c_opensshTruncated = "-----BEGIN OPENSSH PRIVATE KEY-----\n"
+                                 "b3BlbnNzaC1r\n"
+                                 "-----END OPENSSH PRIVATE KEY-----\n";
+
+
+const char* c_pemEncrypted = "-----BEGIN EC PRIVATE KEY-----\n"
+                             "Proc-Type: 4,ENCRYPTED\n"
+                             "DEK-Info: AES-128-CBC,10297828DB5031A5C22276D18E077B61\n"
+                             "\n"
+                             "rHfBqMZtByvcsRb7zgNtkSjhFgnRY3jpyyagjM8jxNoEDRaSSHNSugON80psxytE\n"
+                             "HBTGShcJbDXOC7EER7QZOTjM/d+3DB+FEL4EwnJxgnVfWN/5p9hP3CoJLgeItkQV\n"
+                             "POqt3mQ1V8AnJibunyn13YrczHM39IFruBB9JvNKKG+i/7yf4Jy4jCB9nicH7TC+\n"
+                             "hQCu/mOMde02ziwULJiWIU3EALSYo6JhDJxTRIqUr7TDGXEAPcxpQEvMDz+HAgzY\n"
+                             "9zTU6LC/CSbHQNjHYSvgDY4zRDFWxeHgNeQVfqrlOPGGE8NC5HCeo5i1r+rSVPn+\n"
+                             "kzqXcGpwN682lM/oJV4ix3her0jf59RnAPKYwyWXfhUwYFtzFwroOoquFi6+HHVT\n"
+                             "LlzJacbVVj/GTBOdHBSsu8cfiVLymHhEEzQCyIYY05DeHFe8GiSwDDdvMCPppX38\n"
+                             "/R3PnNaEYwOEUK4o50nsWEfPHQw8kZaUkiUcX7uIyV4=\n"
+                             "-----END EC PRIVATE KEY-----\n";
+
+
+const char* c_pemPlain = "-----BEGIN EC PRIVATE KEY-----\n"
+                         "MIIBaAIBAQQgGuajOowPzHaTJKkj1W+RQS0p87K8bEkZbgbw5pmVArmggfowgfcC\n"
+                         "AQEwLAYHKoZIzj0BAQIhAP////8AAAABAAAAAAAAAAAAAAAA////////////////\n"
+                         "MFsEIP////8AAAABAAAAAAAAAAAAAAAA///////////////8BCBaxjXYqjqT57Pr\n"
+                         "vVV2mIa8ZR0GsMxTsPY7zjw+J9JgSwMVAMSdNgiG5wSTamZ44ROdJreBn36QBEEE\n"
+                         "axfR8uEsQkf4vOblY6RA8ncDfYEt6zOg9KE5RdiYwpZP40Li/hp/m47n60p8D54W\n"
+                         "K84zV2sxXs7LtkBoN79R9QIhAP////8AAAAA//////////+85vqtpxeehPO5ysL8\n"
+                         "YyVRAgEBoUQDQgAELhPMgsc2xVYFBrKzqXq8CBRS8t9BBCnznM96FcZFv1MvdbIK\n"
+                         "yn1nix57Bwq0VoyooErjaZ3SpXl47JlJpIsm4A==\n"
+                         "-----END EC PRIVATE KEY-----\n";
+
+
+const char* c_pkcs8Encrypted = "-----BEGIN ENCRYPTED PRIVATE KEY-----\n"
+                               "MIIBzzBJBgkqhkiG9w0BBQ0wPDAbBgkqhkiG9w0BBQwwDgQImaRUWsA/SFECAggA\n"
+                               "MB0GCWCGSAFlAwQBAgQQiywEwYp7En3NzOemv0ek9QSCAYAIh56t3GB2r1S/B7Cy\n"
+                               "UFS4qn1DvGDuhubEl6cw3n8Y1PnWj6ryq6O9Pw/DKdnKonzVN+PVaofXg26ZPLdR\n"
+                               "q+J7fmcMPIEC0DqV/6T+oGqWp2iaiTZ11BBOoyBkd8ev59c/TxngOWlbJvvmGhEF\n"
+                               "mOiCwXKoKjzU8kSVbmL+vFe1thZjrCaihL79JsZE6Ws5bd7yAn6grPBPI8sBexNi\n"
+                               "fERG81T9Nu2mxCEd7zkNAoK0cZBnUwFvxDama18wMvXRYzEHETCUCWevoNFdcwo/\n"
+                               "IkGgLciMxtSBBOXyWiVvAzTloSGHa5wafptTsgyTc1HKZBTR0ZTNvBX37aziggWE\n"
+                               "u4fMHcHlAJwP4UXgCACtgcfktVhjohgNQdBm5RB95qEUdNAQDQSe4Ro27HfT0YyR\n"
+                               "AHZYNXziRjZHsO6wqGarcxdZkH1Cy8Ca9FJr3uRWWr+8CWIjE9nDEkFbXUyQGOPq\n"
+                               "sTAC7FpnQHVczHcaa45jXYaPmU/iNFnPkO2DzxWADe/1xIg=\n"
+                               "-----END ENCRYPTED PRIVATE KEY-----\n";
+
+
 struct GitInitGuard
 {
     GitInitGuard()  { git_libgit2_init(); }
@@ -448,6 +515,45 @@ BOOST_AUTO_TEST_CASE( GetDifferentFilesReportsOnlyTouchedFilesWhenAhead )
     BOOST_CHECK_MESSAGE( local.find( wxS( "untouched.txt" ) ) == local.end(),
                          "untouched.txt should NOT be reported as AHEAD - this was the "
                          "regression in issue 21576" );
+}
+
+
+BOOST_AUTO_TEST_CASE( PrivateKeyEncryptionOpenSSHFormat )
+{
+    BOOST_CHECK_MESSAGE( KIGIT::IsPrivateKeyEncrypted( c_opensshEncrypted ),
+                         "A passphrase-protected OpenSSH key must be reported as encrypted" );
+
+    BOOST_CHECK_MESSAGE( !KIGIT::IsPrivateKeyEncrypted( c_opensshPlain ),
+                         "An OpenSSH key with cipher \"none\" must be reported as unencrypted" );
+
+    BOOST_CHECK_MESSAGE( !KIGIT::IsPrivateKeyEncrypted( c_opensshTruncated ),
+                         "An OpenSSH key with an unreadable body must not be reported as encrypted" );
+}
+
+
+BOOST_AUTO_TEST_CASE( PrivateKeyEncryptionClassicPEMFormat )
+{
+    BOOST_CHECK_MESSAGE( KIGIT::IsPrivateKeyEncrypted( c_pemEncrypted ),
+                         "A PEM key with Proc-Type: 4,ENCRYPTED must be reported as encrypted" );
+
+    BOOST_CHECK_MESSAGE( !KIGIT::IsPrivateKeyEncrypted( c_pemPlain ),
+                         "A PEM key with no Proc-Type must be reported as unencrypted" );
+}
+
+
+BOOST_AUTO_TEST_CASE( PrivateKeyEncryptionPKCS8Format )
+{
+    BOOST_CHECK_MESSAGE( KIGIT::IsPrivateKeyEncrypted( c_pkcs8Encrypted ),
+                         "A PKCS#8 key headed ENCRYPTED PRIVATE KEY must be reported as encrypted" );
+}
+
+
+BOOST_AUTO_TEST_CASE( PrivateKeyEncryptionRejectsNonKeys )
+{
+    BOOST_CHECK( !KIGIT::IsPrivateKeyEncrypted( wxEmptyString ) );
+
+    BOOST_CHECK_MESSAGE( !KIGIT::IsPrivateKeyEncrypted( "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKB0 t\n" ),
+                         "A public key is not an encrypted private key" );
 }
 
 
