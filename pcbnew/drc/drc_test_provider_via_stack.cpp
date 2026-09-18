@@ -160,7 +160,8 @@ void DRC_TEST_PROVIDER_VIA_STACK::checkColumn( const std::vector<PCB_VIA*>& aCol
     DRC_CONSTRAINT depthConstraint =
             m_drcEngine->EvalRules( MICROVIA_STACK_DEPTH_CONSTRAINT, top, nullptr, top->GetLayer() );
 
-    if( depthConstraint.GetValue().HasMax() && (int) aColumn.size() > depthConstraint.GetValue().Max()
+    if( depthConstraint.GetSeverity() != RPT_SEVERITY_IGNORE && depthConstraint.GetValue().HasMax()
+        && (int) aColumn.size() > depthConstraint.GetValue().Max()
         && !m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_STACK_DEPTH ) )
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MICROVIA_STACK_DEPTH );
@@ -300,7 +301,7 @@ void DRC_TEST_PROVIDER_VIA_STACK::checkAspectRatio( BOARD* aBoard )
         DRC_CONSTRAINT ratioConstraint =
                 m_drcEngine->EvalRules( MICROVIA_ASPECT_RATIO_CONSTRAINT, via, nullptr, via->GetLayer() );
 
-        if( !ratioConstraint.GetValue().HasMax() )
+        if( ratioConstraint.GetSeverity() == RPT_SEVERITY_IGNORE || !ratioConstraint.GetValue().HasMax() )
             continue;
 
         // Ratios are parsed to three decimals, so the stored maximum is scaled by 1000.
