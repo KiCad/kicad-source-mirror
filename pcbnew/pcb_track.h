@@ -48,6 +48,11 @@ class MSG_PANEL_ITEM;
 class SHAPE_POLY_SET;
 class SHAPE_ARC;
 
+namespace kiapi::board::types
+{
+class Via;
+}
+
 
 // Used for tracks and vias for algorithmic safety, not to enforce constraints
 #define GEOMETRY_MIN_SIZE (int) ( 0.001 * pcbIUScale.IU_PER_MM )
@@ -858,6 +863,9 @@ public:
 
     void Serialize( google::protobuf::Any &aContainer ) const override;
     bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
+    void Serialize( kiapi::board::types::Via& aVia ) const;
+    bool Deserialize( const kiapi::board::types::Via& aVia );
 
     wxString LayerMaskDescribe() const override;
 

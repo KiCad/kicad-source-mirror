@@ -559,30 +559,36 @@ bool PCB_ARC::Deserialize( const google::protobuf::Any &aContainer )
 void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
 {
     kiapi::board::types::Via via;
+    Serialize( via );
+    aContainer.PackFrom( via );
+}
 
-    via.mutable_id()->set_value( m_Uuid.AsStdString() );
-    via.mutable_position()->set_x_nm( GetPosition().x );
-    via.mutable_position()->set_y_nm( GetPosition().y );
+
+void PCB_VIA::Serialize( kiapi::board::types::Via& aVia ) const
+{
+    aVia.mutable_id()->set_value( m_Uuid.AsStdString() );
+    aVia.mutable_position()->set_x_nm( GetPosition().x );
+    aVia.mutable_position()->set_y_nm( GetPosition().y );
 
     PADSTACK padstack = Padstack();
 
-    padstack.Serialize( *via.mutable_pad_stack() );
+    padstack.Serialize( *aVia.mutable_pad_stack() );
 
     // PADSTACK::m_layerSet is not used by vias
-    via.mutable_pad_stack()->clear_layers();
-    kiapi::board::PackLayerSet( *via.mutable_pad_stack()->mutable_layers(), GetLayerSet() );
+    aVia.mutable_pad_stack()->clear_layers();
+    kiapi::board::PackLayerSet( *aVia.mutable_pad_stack()->mutable_layers(), GetLayerSet() );
 
-    via.set_type( ToProtoEnum<VIATYPE, kiapi::board::types::ViaType>( GetViaType() ) );
-    via.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
+    aVia.set_type( ToProtoEnum<VIATYPE, kiapi::board::types::ViaType>( GetViaType() ) );
+    aVia.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
-    PackNet( via.mutable_net() );
+    PackNet( aVia.mutable_net() );
 
     if( const BOARD* board = GetBoard() )
-        via.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+        aVia.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
 
-    kiapi::board::PackTeardropSettings( *via.mutable_teardrop(), GetTeardropParams() );
+    kiapi::board::PackTeardropSettings( *aVia.mutable_teardrop(), GetTeardropParams() );
 
-    via.set_is_free( GetIsFree() );
+    aVia.set_is_free( GetIsFree() );
 
     {
         // Pack drops ZLO_NONE, so walking every copper layer emits only the overridden ones
@@ -591,11 +597,10 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
         for( PCB_LAYER_ID layer : LAYER_RANGE( F_Cu, B_Cu, MAX_CU_LAYERS ) )
             overrides[layer] = GetZoneLayerOverride( layer );
 
-        kiapi::board::PackZoneLayerOverrides( via.mutable_zone_layer_overrides(), overrides );
+        kiapi::board::PackZoneLayerOverrides( aVia.mutable_zone_layer_overrides(), overrides );
     }
 
-    kiapi::common::PackCustomProperties( via.mutable_custom_properties(), *this );
-    aContainer.PackFrom( via );
+    kiapi::common::PackCustomProperties( aVia.mutable_custom_properties(), *this );
 }
 
 
@@ -606,12 +611,18 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
     if( !aContainer.UnpackTo( &via ) )
         return false;
 
-    SetUuidDirect( KIID( via.id().value() ) );
-    SetStart( VECTOR2I( via.position().x_nm(), via.position().y_nm() ) );
+    return Deserialize( via );
+}
+
+
+bool PCB_VIA::Deserialize( const kiapi::board::types::Via& aVia )
+{
+    SetUuidDirect( KIID( aVia.id().value() ) );
+    SetStart( VECTOR2I( aVia.position().x_nm(), aVia.position().y_nm() ) );
     SetEnd( GetStart() );
 
     google::protobuf::Any padStackWrapper;
-    padStackWrapper.PackFrom( via.pad_stack() );
+    padStackWrapper.PackFrom( aVia.pad_stack() );
 
     if( !m_padStack.Deserialize( padStackWrapper ) )
         return false;
@@ -619,23 +630,23 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
     // PADSTACK::m_layerSet is not used by vias
     m_padStack.LayerSet().reset();
 
-    SetViaType( FromProtoEnum<VIATYPE>( via.type() ) );
-    UnpackNet( via.net() );
-    SetLocked( via.locked() == kiapi::common::types::LockedState::LS_LOCKED );
-    kiapi::common::UnpackCustomProperties( via.custom_properties(), *this );
+    SetViaType( FromProtoEnum<VIATYPE>( aVia.type() ) );
+    UnpackNet( aVia.net() );
+    SetLocked( aVia.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( aVia.custom_properties(), *this );
 
-    if( via.has_teardrop() )
-        kiapi::board::UnpackTeardropSettings( GetTeardropParams(), via.teardrop() );
+    if( aVia.has_teardrop() )
+        kiapi::board::UnpackTeardropSettings( GetTeardropParams(), aVia.teardrop() );
     else
         SetTeardropsEnabled( false );
 
-    SetIsFree( via.is_free() );
+    SetIsFree( aVia.is_free() );
 
     ClearZoneLayerOverrides();
 
     {
         std::map<PCB_LAYER_ID, ZONE_LAYER_OVERRIDE> overrides;
-        kiapi::board::UnpackZoneLayerOverrides( overrides, via.zone_layer_overrides() );
+        kiapi::board::UnpackZoneLayerOverrides( overrides, aVia.zone_layer_overrides() );
 
         for( const auto& [layer, value] : overrides )
             SetZoneLayerOverride( layer, value );
