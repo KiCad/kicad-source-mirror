@@ -60,6 +60,9 @@ public:
     bool                  m_plotDrawingSheet;
     std::vector<wxString> m_plotPages;
 
+    // KIID path of the sheet to plot in single-sheet mode; empty means the current sheet
+    wxString              m_sheetPath;
+
     bool                  m_show_hop_over;
     bool                  m_blackAndWhite;
     JOB_PAGE_SIZE         m_pageSizeSelect;

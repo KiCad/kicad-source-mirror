@@ -67,6 +67,9 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aOutputIsDirectory ) :
     m_params.emplace_back( new JOB_PARAM<bool>( "plot_all",
             &m_plotAll, m_plotAll ) );
 
+    m_params.emplace_back( new JOB_PARAM<wxString>( "sheet_path",
+            &m_sheetPath, m_sheetPath ) );
+
     m_params.emplace_back( new JOB_PARAM<bool>( "plot_drawing_sheet",
             &m_plotDrawingSheet, m_plotDrawingSheet ) );
 

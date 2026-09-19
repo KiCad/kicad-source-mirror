@@ -29,6 +29,7 @@
 #include <page_info.h>
 #include <sch_render_settings.h>
 #include <sch_sheet_path.h>
+#include <optional>
 #include <plotters/plotter.h>
 #include <plotters/plotter_png.h>
 
@@ -54,6 +55,9 @@ struct SCH_PLOT_OPTS
     bool                  m_plotAll;
     bool                  m_plotDrawingSheet;
     std::vector<wxString> m_plotPages;
+
+    // Sheet to plot in single-sheet mode; unset plots the schematic's current sheet
+    std::optional<SCH_SHEET_PATH> m_sheetPath;
 
     bool           m_plotHopOver;
     bool           m_blackAndWhite;

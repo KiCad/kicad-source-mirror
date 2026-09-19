@@ -111,7 +111,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_OPTS& aPlotOpts,
     else
     {
         // in Eeschema, this prints the current page
-        sheetList.push_back( m_schematic->CurrentSheet() );
+        sheetList.push_back( aPlotOpts.m_sheetPath.value_or( m_schematic->CurrentSheet() ) );
     }
 
     if( sheetList.empty() )
@@ -339,7 +339,7 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_OPTS& aPlotOpts,
     }
     else
     {
-        sheetList.push_back( m_schematic->CurrentSheet() );
+        sheetList.push_back( aPlotOpts.m_sheetPath.value_or( m_schematic->CurrentSheet() ) );
     }
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
@@ -533,7 +533,7 @@ void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_OPTS& aPlotOpts,
     else
     {
         // in Eeschema, this prints the current page
-        sheetList.push_back( m_schematic->CurrentSheet() );
+        sheetList.push_back( aPlotOpts.m_sheetPath.value_or( m_schematic->CurrentSheet() ) );
     }
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
@@ -726,7 +726,7 @@ void SCH_PLOTTER::createPNGFiles( const SCH_PLOT_OPTS& aPlotOpts,
     }
     else
     {
-        sheetList.push_back( m_schematic->CurrentSheet() );
+        sheetList.push_back( aPlotOpts.m_sheetPath.value_or( m_schematic->CurrentSheet() ) );
     }
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
@@ -926,7 +926,7 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_OPTS& aPlotOpts,
     else
     {
         // in Eeschema, this prints the current page
-        sheetList.push_back( m_schematic->CurrentSheet() );
+        sheetList.push_back( aPlotOpts.m_sheetPath.value_or( m_schematic->CurrentSheet() ) );
     }
 
     for( unsigned i = 0; i < sheetList.size(); i++ )

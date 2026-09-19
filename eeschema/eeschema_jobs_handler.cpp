@@ -429,6 +429,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     plotOpts.m_plotAll = aPlotJob->m_plotAll;
     plotOpts.m_plotDrawingSheet = aPlotJob->m_plotDrawingSheet;
     plotOpts.m_plotPages = aPlotJob->m_plotPages;
+
+    if( !aPlotJob->m_sheetPath.IsEmpty() )
+        plotOpts.m_sheetPath = sch->Hierarchy().GetSheetPathByKIIDPath( KIID_PATH( aPlotJob->m_sheetPath ) );
+
     plotOpts.m_theme = aPlotJob->m_theme;
     plotOpts.m_useBackgroundColor = aPlotJob->m_useBackgroundColor;
     plotOpts.m_plotHopOver = aPlotJob->m_show_hop_over;

@@ -1492,7 +1492,8 @@ void API_HANDLER_SCH::onModified()
 
 
 static std::optional<ApiResponseStatus>
-applySchematicPlotSettings( const schematic::jobs::SchematicPlotSettings& aSettings, JOB_EXPORT_SCH_PLOT& aJob )
+applySchematicPlotSettings( const schematic::jobs::SchematicPlotSettings& aSettings,
+                            const types::DocumentSpecifier& aDocument, JOB_EXPORT_SCH_PLOT& aJob )
 {
     aJob.m_drawingSheet = wxString::FromUTF8( aSettings.drawing_sheet() );
     aJob.m_defaultFont = wxString::FromUTF8( aSettings.default_font() );
@@ -1518,8 +1519,11 @@ applySchematicPlotSettings( const schematic::jobs::SchematicPlotSettings& aSetti
     case schematic::jobs::SJSM_ALL_SHEETS:   aJob.m_plotAll = true;  break;
     case schematic::jobs::SJSM_SINGLE_SHEET: aJob.m_plotAll = false; break;
     case schematic::jobs::SJSM_UNKNOWN:
-    default: break;
+    default:                                 aJob.m_plotAll = false; break;
     }
+
+    if( aDocument.has_sheet_path() )
+        aJob.m_sheetPath = UnpackSheetPath( aDocument.sheet_path() ).AsString();
 
     return std::nullopt;
 }
@@ -1543,8 +1547,11 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     if( !aCtx.Request.job_settings().output_path().empty() )
         plotJob->SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
-    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings( aCtx.Request.plot_settings(), *plotJob ) )
+    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings(
+                aCtx.Request.plot_settings(), aCtx.Request.job_settings().document(), *plotJob ) )
+    {
         return tl::unexpected( *err );
+    }
 
     return ExecuteSchematicJob( m_context->GetKiway(), *plotJob );
 }
@@ -1569,8 +1576,11 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     if( !aCtx.Request.job_settings().output_path().empty() )
         plotJob->SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
-    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings( aCtx.Request.plot_settings(), *plotJob ) )
+    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings(
+                aCtx.Request.plot_settings(), aCtx.Request.job_settings().document(), *plotJob ) )
+    {
         return tl::unexpected( *err );
+    }
 
     return ExecuteSchematicJob( m_context->GetKiway(), *plotJob );
 }
@@ -1593,8 +1603,11 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     if( !aCtx.Request.job_settings().output_path().empty() )
         plotJob->SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
-    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings( aCtx.Request.plot_settings(), *plotJob ) )
+    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings(
+                aCtx.Request.plot_settings(), aCtx.Request.job_settings().document(), *plotJob ) )
+    {
         return tl::unexpected( *err );
+    }
 
     plotJob->m_PDFPropertyPopups = aCtx.Request.property_popups();
     plotJob->m_PDFHierarchicalLinks = aCtx.Request.hierarchical_links();
@@ -1622,8 +1635,11 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     if( !aCtx.Request.job_settings().output_path().empty() )
         plotJob->SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
-    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings( aCtx.Request.plot_settings(), *plotJob ) )
+    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings(
+                aCtx.Request.plot_settings(), aCtx.Request.job_settings().document(), *plotJob ) )
+    {
         return tl::unexpected( *err );
+    }
 
     return ExecuteSchematicJob( m_context->GetKiway(), *plotJob );
 }
@@ -1646,8 +1662,11 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     if( !aCtx.Request.job_settings().output_path().empty() )
         plotJob->SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
-    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings( aCtx.Request.plot_settings(), *plotJob ) )
+    if( std::optional<ApiResponseStatus> err = applySchematicPlotSettings(
+                aCtx.Request.plot_settings(), aCtx.Request.job_settings().document(), *plotJob ) )
+    {
         return tl::unexpected( *err );
+    }
 
     if( aCtx.Request.has_dpi() )
     {
