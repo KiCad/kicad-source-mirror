@@ -983,7 +983,7 @@ void SYMBOL_EDIT_FRAME::updateInfoBar()
                 if( m_symbol )
                 {
                     symbolName = m_symbol->GetName();
-                    libName = UnescapeString( m_symbol->GetLibId().GetLibNickname() );
+                    libName = m_symbol->GetLibId().GetLibNickname();
                 }
 
                 if( IsSymbolFromSchematic() )
