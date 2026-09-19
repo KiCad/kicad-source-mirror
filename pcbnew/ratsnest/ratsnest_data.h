@@ -117,6 +117,14 @@ public:
         return m_rnEdges;
     }
 
+    /**
+     * Return the ratsnest edges in no particular order.
+     *
+     * Unlike GetEdges(), this does not sort, so it is cheap to call repeatedly.  Use it wherever
+     * the order of the edges cannot be observed, such as drawing them.
+     */
+    const std::vector<CN_EDGE>& GetUnsortedEdges() const { return m_rnEdges; }
+
     bool NearestBicoloredPair( RN_NET* aOtherNet, VECTOR2I& aPos1, VECTOR2I& aPos2 ) const;
 
 protected:

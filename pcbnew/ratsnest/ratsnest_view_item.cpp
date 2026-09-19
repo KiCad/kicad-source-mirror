@@ -43,10 +43,62 @@
 #include <utility>
 
 
+// A zero length connection is drawn as a fixed size cross
+static constexpr int CROSS_SIZE = 200000;
+
+// How far a curved line's control point sits off the chord, as a fraction of the span
+static constexpr double CURVE_BOW = 0.1;
+
+
+// A cross on an anchor near the coordinate limit overflows an int, so keep it in doubles
+static void drawCross( KIGFX::GAL* aGal, const VECTOR2D& aPos )
+{
+    aGal->DrawLine( aPos + VECTOR2D( -CROSS_SIZE, -CROSS_SIZE ),
+                    aPos + VECTOR2D( CROSS_SIZE, CROSS_SIZE ) );
+    aGal->DrawLine( aPos + VECTOR2D( -CROSS_SIZE, CROSS_SIZE ),
+                    aPos + VECTOR2D( CROSS_SIZE, -CROSS_SIZE ) );
+}
+
+
 RATSNEST_VIEW_ITEM::RATSNEST_VIEW_ITEM( std::shared_ptr<CONNECTIVITY_DATA> aData ) :
         EDA_ITEM( NOT_USED ),
         m_data( std::move( aData ) )
 {
+}
+
+
+VECTOR2D RATSNEST_VIEW_ITEM::CurveControlPoint( const VECTOR2D& aSource, const VECTOR2D& aTarget )
+{
+    // Doubles throughout because the span between two board corners overflows an int
+    VECTOR2D span = aTarget - aSource;
+
+    return aSource + VECTOR2D( 0.5 * span.x - CURVE_BOW * span.y,
+                               0.5 * span.y + CURVE_BOW * span.x );
+}
+
+
+bool RATSNEST_VIEW_ITEM::LineInViewport( const VECTOR2I& aSource, const VECTOR2I& aTarget,
+                                         const BOX2D& aViewport, bool aCurved )
+{
+    VECTOR2D source( aSource );
+    VECTOR2D target( aTarget );
+    BOX2D    bounds( source );
+
+    if( aSource == aTarget )
+    {
+        bounds.Inflate( CROSS_SIZE );
+    }
+    else
+    {
+        bounds.Merge( target );
+
+        // A cubic stays inside the hull of its endpoints and its control points, which are both
+        // the same point here
+        if( aCurved )
+            bounds.Merge( CurveControlPoint( source, target ) );
+    }
+
+    return aViewport.Intersects( bounds );
 }
 
 
@@ -66,8 +118,6 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
     if( !lock )
         return;
-
-    constexpr int CROSS_SIZE = 200000;
 
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 
@@ -128,10 +178,17 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // produces far fewer segments without any visible faceting.
     const double curveFilter = curved_ratsnest ? ( gal->GetLineWidth() / 4.0 ) : 0.0;
 
+    // Lines are stroked, so one just off screen still reaches back into the viewport
+    BOX2D viewport = aView->GetViewport();
+    viewport.Inflate( gal->GetLineWidth() );
+
     // Draw the "dynamic" ratsnest (i.e. for objects that may be currently being moved)
     for( const RN_DYNAMIC_LINE& l : m_data->GetLocalRatsnest() )
     {
         if( hiddenNets.count( l.netCode ) )
+            continue;
+
+        if( !LineInViewport( l.a, l.b, viewport, curved_ratsnest ) )
             continue;
 
         const NETCLASS*     nc = nullptr;
@@ -159,19 +216,13 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         if( l.a == l.b )
         {
-            gal->DrawLine( VECTOR2I( l.a.x - CROSS_SIZE, l.a.y - CROSS_SIZE ),
-                           VECTOR2I( l.b.x + CROSS_SIZE, l.b.y + CROSS_SIZE ) );
-            gal->DrawLine( VECTOR2I( l.a.x - CROSS_SIZE, l.a.y + CROSS_SIZE ),
-                           VECTOR2I( l.b.x + CROSS_SIZE, l.b.y - CROSS_SIZE ) );
+            drawCross( gal, l.a );
         }
         else
         {
             if( curved_ratsnest )
             {
-                int dx = l.b.x - l.a.x;
-                int dy = l.b.y - l.a.y;
-                const VECTOR2I center = VECTOR2I( l.a.x + 0.5 * dx - 0.1 * dy,
-                                                  l.a.y + 0.5 * dy + 0.1 * dx );
+                const VECTOR2D center = CurveControlPoint( l.a, l.b );
                 gal->DrawCurve( l.a, center, center, l.b, curveFilter );
             }
             else
@@ -221,7 +272,9 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         else
             gal->SetStrokeColor( color );  // using the default ratsnest color for not highlighted
 
-        for( const CN_EDGE& edge : net->GetEdges() )
+        // Every line of a net is stroked in one colour on one layer, so their order is not
+        // observable and the sort in GetEdges() would be paid on every frame
+        for( const CN_EDGE& edge : net->GetUnsortedEdges() )
         {
             if( !edge.IsVisible() )
                 continue;
@@ -234,6 +287,9 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
             const VECTOR2I source( sourceNode->Pos() );
             const VECTOR2I target( targetNode->Pos() );
+
+            if( !LineInViewport( source, target, viewport, curved_ratsnest ) )
+                continue;
 
             bool enable =  !sourceNode->GetNoLine() && !targetNode->GetNoLine();
             bool show;
@@ -269,19 +325,13 @@ void RATSNEST_VIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             {
                 if ( source == target )
                 {
-                    gal->DrawLine( VECTOR2I( source.x - CROSS_SIZE, source.y - CROSS_SIZE ),
-                                   VECTOR2I( source.x + CROSS_SIZE, source.y + CROSS_SIZE ) );
-                    gal->DrawLine( VECTOR2I( source.x - CROSS_SIZE, source.y + CROSS_SIZE ),
-                                   VECTOR2I( source.x + CROSS_SIZE, source.y - CROSS_SIZE ) );
+                    drawCross( gal, source );
                 }
                 else
                 {
                     if( curved_ratsnest )
                     {
-                        int dx = target.x - source.x;
-                        int dy = target.y - source.y;
-                        const VECTOR2I center = VECTOR2I( source.x + 0.5 * dx - 0.1 * dy,
-                                                          source.y + 0.5 * dy + 0.1 * dx );
+                        const VECTOR2D center = CurveControlPoint( source, target );
                         gal->DrawCurve( source, center, center, target, curveFilter );
                     }
                     else
