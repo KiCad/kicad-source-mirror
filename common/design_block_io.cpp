@@ -238,7 +238,7 @@ bool DESIGN_BLOCK_IO::DeleteLibrary( const wxString&                    aLibrary
         {
             wxFileName tmp = dirs[i];
 
-            if( tmp.GetExt() != FILEEXT::KiCadDesignBlockLibPathExtension )
+            if( tmp.GetExt() != FILEEXT::KiCadDesignBlockPathExtension )
             {
                 THROW_IO_ERRORF( _( "Unexpected folder '%s' found in library path '%s'." ),
                                  dirs[i].GetData(),
