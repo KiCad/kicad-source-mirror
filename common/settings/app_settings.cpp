@@ -100,6 +100,9 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM<bool>( "design_block_chooser.keep_annotations",
             &m_DesignBlockChooserPanel.keep_annotations, false ) );
 
+    m_params.emplace_back( new PARAM_LIST<wxString>( "design_block_chooser.lib_tree.columns",
+                                                     &m_DesignBlockChooserPanel.tree.columns, {} ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "design_block_chooser.lib_tree.column_widths",
             [&]() -> nlohmann::json
@@ -130,6 +133,9 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
 
     // Let the save drop widths for columns that no longer exist
     m_params.back()->SetClearUnknownKeys();
+
+    m_params.emplace_back( new PARAM_LIST<wxString>( "design_block_chooser.lib_tree.open_libs",
+                                                     &m_DesignBlockChooserPanel.tree.open_libs, {} ) );
 
     m_params.emplace_back( new PARAM<float>( "graphics.highlight_factor",
             &m_Graphics.highlight_factor, 0.5f, 0.0, 1.0f ) );

@@ -316,7 +316,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::onCloseTimer( wxTimerEvent& aEvent )
 void PANEL_DESIGN_BLOCK_CHOOSER::onOpenLibsTimer( wxTimerEvent& aEvent )
 {
     if( APP_SETTINGS_BASE* cfg = m_frame->config() )
-        m_adapter->OpenLibs( cfg->m_LibTree.open_libs );
+        m_adapter->OpenLibs( cfg->m_DesignBlockChooserPanel.tree.open_libs );
 
     // Bind this now se we don't spam the event queue with EVT_LIBITEM_SELECTED events during
     // the initial load.
