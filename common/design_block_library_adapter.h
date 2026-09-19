@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 
 #ifndef DESIGN_BLOCK_LIBRARY_ADAPTER_H
 #define DESIGN_BLOCK_LIBRARY_ADAPTER_H
@@ -48,6 +48,7 @@ public:
     std::optional<LIB_STATUS> LoadOne( const wxString& nickname );
 
     /// @return all the design blocks in the given library, if it exists and is loaded (or an empty list)
+    /// Vector of design blocks is allocated, caller responsible for lifetime
     std::vector<DESIGN_BLOCK*> GetDesignBlocks( const wxString& aNickname );
 
     /// @return all the names of design blocks in the given library, if it exists and is loaded (or an empty list)

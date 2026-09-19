@@ -91,6 +91,7 @@ public:
 
     bool IsLibraryWritable( const wxString& aLibraryPath ) override;
 
+    // Allocates, caller responsible for design block lifetime
     DESIGN_BLOCK* DesignBlockLoad( const wxString& aLibraryPath, const wxString& aDesignBlockName,
                                    bool                               aKeepUUID = false,
                                    const std::map<std::string, UTF8>* aProperties = nullptr );

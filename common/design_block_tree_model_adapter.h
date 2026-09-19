@@ -51,6 +51,7 @@ protected:
                                      APP_SETTINGS_BASE::LIB_TREE& aSettings,
                                      TOOL_INTERACTIVE* aContextMenuTool );
 
+    // Allocates the design blocks stored in the lib tree item, caller responsible for lifetime
     std::vector<LIB_TREE_ITEM*> getDesignBlocks( EDA_BASE_FRAME* aParent, const wxString& aLibName );
 
     PROJECT::LIB_TYPE_T getLibType() override { return PROJECT::LIB_TYPE_T::DESIGN_BLOCK_LIB; }
