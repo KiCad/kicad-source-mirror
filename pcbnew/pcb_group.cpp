@@ -206,12 +206,11 @@ void PCB_GROUP::SetLocked( bool aLockState )
 {
     BOARD_ITEM::SetLocked( aLockState );
 
-    RunOnChildren(
-            [&]( BOARD_ITEM* child )
-            {
-                child->SetLocked( aLockState );
-            },
-            RECURSE_MODE::NO_RECURSE );
+    // Don't set locked flag on children.  BOARD_ITEM::IsLocked() checks the parent group for current
+    // lock status before exmaining its own flag.
+    //
+    // Setting the child flag just leands to endless problems when members get added-to/removed-from
+    // locked groups.
 }
 
 
