@@ -309,7 +309,12 @@ bool DESIGN_BLOCK_PANE::DeleteDesignBlockLibrary( const wxString& aLibName, bool
 
     try
     {
-        m_frame->Prj().DesignBlockLibs()->DeleteLibrary( aLibName );
+        if( !m_frame->Prj().DesignBlockLibs()->DeleteLibrary( aLibName ) )
+        {
+            msg.Printf( _( "Design block library '%s' could not be deleted." ), aLibName.GetData() );
+            DisplayError( m_frame, msg );
+            return false;
+        }
     }
     catch( const IO_ERROR& ioe )
     {
