@@ -21,6 +21,7 @@
 #define SYMBOL_EDITOR_TAB_CONTEXT_H
 
 #include <wx/string.h>
+#include <wx/translation.h>
 
 #include <kiid.h>
 #include <widgets/editor_tab_context.h>
