@@ -154,7 +154,7 @@ void DIALOG_DESIGN_BLOCK_PROPERTIES::OnMoveFieldUp( wxCommandEvent& event )
 
 void DIALOG_DESIGN_BLOCK_PROPERTIES::OnMoveFieldDown( wxCommandEvent& event )
 {
-    m_fieldsGrid->OnMoveRowUp(
+    m_fieldsGrid->OnMoveRowDown(
             [&]( int row )
             {
                 m_fieldsGrid->SwapRows( row, row + 1 );
