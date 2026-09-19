@@ -1534,6 +1534,13 @@ void API_HANDLER_SCH::onModified()
 }
 
 
+void API_HANDLER_SCH::onNetSettingsChanged()
+{
+    if( m_frame )
+        frame()->Refresh();
+}
+
+
 static std::optional<ApiResponseStatus>
 applySchematicPlotSettings( const schematic::jobs::SchematicPlotSettings& aSettings,
                             const types::DocumentSpecifier& aDocument, JOB_EXPORT_SCH_PLOT& aJob )

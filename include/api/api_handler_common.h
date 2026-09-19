@@ -30,6 +30,7 @@
 #include <api/common/commands/project_commands.pb.h>
 
 using namespace kiapi::common;
+using kiapi::common::types::ProjectSpecifier;
 using google::protobuf::Empty;
 
 class API_HANDLER_COMMON : public API_HANDLER
@@ -85,6 +86,12 @@ private:
     HANDLER_RESULT<Empty> handleSetNetClasses(
         const HANDLER_CONTEXT<commands::SetNetClasses>& aCtx );
 
+    HANDLER_RESULT<commands::NetClassAssignmentsResponse> handleGetNetClassAssignments(
+        const HANDLER_CONTEXT<commands::GetNetClassAssignments>& aCtx );
+
+    HANDLER_RESULT<Empty> handleSetNetClassAssignments(
+        const HANDLER_CONTEXT<commands::SetNetClassAssignments>& aCtx );
+
     HANDLER_RESULT<Empty> handlePing( const HANDLER_CONTEXT<commands::Ping>& aCtx );
 
     HANDLER_RESULT<types::Box2> handleGetTextExtents(
@@ -118,6 +125,9 @@ private:
         const HANDLER_CONTEXT<commands::CloseAllDocuments>& aCtx );
 
 private:
+    static tl::expected<bool, ApiResponseStatus> validateProject( const ProjectSpecifier& aProject,
+                                                                  bool aAllowEmpty = false );
+
     OPEN_DOCUMENT_HANDLER m_openDocumentHandler;
     CLOSE_ALL_DOCUMENTS_HANDLER m_closeAllDocumentsHandler;
     CLOSE_DOCUMENT_HANDLER m_closeDocumentHandler;

@@ -18,7 +18,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <optional>
 #include <ranges>
+#include <set>
 #include <tuple>
 
 #include <api/api_handler_common.h>
@@ -51,6 +53,9 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
     registerHandler<GetPaths, GetPathsResponse>( &API_HANDLER_COMMON::handleGetPaths );
     registerHandler<GetNetClasses, NetClassesResponse>( &API_HANDLER_COMMON::handleGetNetClasses );
     registerHandler<SetNetClasses, Empty>( &API_HANDLER_COMMON::handleSetNetClasses );
+    registerHandler<GetNetClassAssignments, NetClassAssignmentsResponse>(
+            &API_HANDLER_COMMON::handleGetNetClassAssignments );
+    registerHandler<SetNetClassAssignments, Empty>( &API_HANDLER_COMMON::handleSetNetClassAssignments );
     registerHandler<Ping, Empty>( &API_HANDLER_COMMON::handlePing );
     registerHandler<GetTextExtents, types::Box2>( &API_HANDLER_COMMON::handleGetTextExtents );
     registerHandler<GetTextAsShapes, GetTextAsShapesResponse>(
@@ -105,9 +110,45 @@ HANDLER_RESULT<PathResponse> API_HANDLER_COMMON::handleGetKiCadBinaryPath(
 }
 
 
-HANDLER_RESULT<NetClassesResponse> API_HANDLER_COMMON::handleGetNetClasses(
-        const HANDLER_CONTEXT<GetNetClasses>& aCtx )
+tl::expected<bool, ApiResponseStatus> API_HANDLER_COMMON::validateProject( const ProjectSpecifier& aProject,
+                                                                           bool aAllowEmpty )
 {
+    if( !aAllowEmpty && ( aProject.name().empty() || aProject.path().empty() ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "a project name and path must be specified" );
+        return tl::unexpected( e );
+    }
+
+    const PROJECT& prj = Pgm().GetSettingsManager().Prj();
+
+    if( aProject.name().compare( prj.GetProjectName().ToUTF8() ) != 0 )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "the requested project {} is not open", aProject.name() ) );
+        return tl::unexpected( e );
+    }
+
+    if( aProject.path().compare( prj.GetProjectPath().ToUTF8() ) != 0 )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "the requested project {} is not open at path {}", aProject.name(),
+                                          aProject.path() ) );
+        return tl::unexpected( e );
+    }
+
+    return true;
+}
+
+
+HANDLER_RESULT<NetClassesResponse> API_HANDLER_COMMON::handleGetNetClasses( const HANDLER_CONTEXT<GetNetClasses>& aCtx )
+{
+    if( tl::expected<bool, ApiResponseStatus> result = validateProject( aCtx.Request.project(), true ); !result )
+        return tl::unexpected( result.error() );
+
     NetClassesResponse reply;
 
     std::shared_ptr<NET_SETTINGS>& netSettings =
@@ -128,9 +169,11 @@ HANDLER_RESULT<NetClassesResponse> API_HANDLER_COMMON::handleGetNetClasses(
 }
 
 
-HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleSetNetClasses(
-        const HANDLER_CONTEXT<SetNetClasses>& aCtx )
+HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleSetNetClasses( const HANDLER_CONTEXT<SetNetClasses>& aCtx )
 {
+    if( tl::expected<bool, ApiResponseStatus> result = validateProject( aCtx.Request.project(), true ); !result )
+        return tl::unexpected( result.error() );
+
     std::shared_ptr<NET_SETTINGS>& netSettings =
             Pgm().GetSettingsManager().Prj().GetProjectFile().m_NetSettings;
 
@@ -169,6 +212,135 @@ HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleSetNetClasses(
     }
 
     netSettings->SetNetclasses( netClasses );
+    requestNetSettingsNotification();
+
+    return Empty();
+}
+
+
+HANDLER_RESULT<NetClassAssignmentsResponse>
+API_HANDLER_COMMON::handleGetNetClassAssignments( const HANDLER_CONTEXT<GetNetClassAssignments>& aCtx )
+{
+    if( tl::expected<bool, ApiResponseStatus> result = validateProject( aCtx.Request.project() ); !result )
+        return tl::unexpected( result.error() );
+
+    std::shared_ptr<NET_SETTINGS>& netSettings = Pgm().GetSettingsManager().Prj().GetProjectFile().m_NetSettings;
+
+    NetClassAssignmentsResponse reply;
+
+    for( const auto& [netName, netclassNames] : netSettings->GetNetclassLabelAssignments() )
+    {
+        project::NetClassAssignment* assignment = reply.add_assignments();
+        assignment->set_net( netName.ToUTF8() );
+
+        for( const wxString& netclassName : netclassNames )
+            assignment->add_netclasses( netclassName.ToUTF8() );
+    }
+
+    for( const auto& [matcher, netclassName] : netSettings->GetNetclassPatternAssignments() )
+    {
+        project::NetClassPatternAssignment* pattern = reply.add_pattern_assignments();
+        pattern->set_pattern( matcher->GetPattern().ToUTF8() );
+        pattern->set_netclass( netclassName.ToUTF8() );
+    }
+
+    return reply;
+}
+
+
+HANDLER_RESULT<Empty>
+API_HANDLER_COMMON::handleSetNetClassAssignments( const HANDLER_CONTEXT<SetNetClassAssignments>& aCtx )
+{
+    if( tl::expected<bool, ApiResponseStatus> result = validateProject( aCtx.Request.project() ); !result )
+        return tl::unexpected( result.error() );
+
+    std::shared_ptr<NET_SETTINGS>& netSettings = Pgm().GetSettingsManager().Prj().GetProjectFile().m_NetSettings;
+
+    std::set<wxString, std::less<>> knownNetclasses;
+    knownNetclasses.insert( NETCLASS::Default );
+
+    for( const wxString& name : netSettings->GetNetclasses() | std::views::keys )
+        knownNetclasses.insert( name );
+
+    auto checkNetclassName = [&]( const std::string& aName, const char* aKind ) -> std::optional<ApiResponseStatus>
+    {
+        if( knownNetclasses.contains( wxString::FromUTF8( aName ) ) )
+            return std::nullopt;
+
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( fmt::format( "unknown netclass '{}' in {} assignment", aName, aKind ) );
+        return e;
+    };
+
+    if( aCtx.Request.merge_mode() == MapMergeMode::MMM_REPLACE )
+    {
+        netSettings->ClearNetclassLabelAssignments();
+        netSettings->ClearNetclassPatternAssignments();
+    }
+
+    for( const project::NetClassAssignment& assignment : aCtx.Request.assignments() )
+    {
+        if( assignment.net().empty() )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( "net name cannot be empty in a netclass assignment" );
+            return tl::unexpected( e );
+        }
+
+        for( const std::string& netclassName : assignment.netclasses() )
+        {
+            if( std::optional<ApiResponseStatus> err = checkNetclassName( netclassName, "net" ) )
+                return tl::unexpected( *err );
+        }
+
+        std::set<wxString> netclasses;
+
+        for( const std::string& netclassName : assignment.netclasses() )
+            netclasses.insert( wxString::FromUTF8( netclassName ) );
+
+        if( netclasses.empty() )
+            netSettings->ClearNetclassLabelAssignment( wxString::FromUTF8( assignment.net() ) );
+        else
+            netSettings->SetNetclassLabelAssignment( wxString::FromUTF8( assignment.net() ), netclasses );
+    }
+
+    for( const project::NetClassPatternAssignment& pattern : aCtx.Request.pattern_assignments() )
+    {
+        if( pattern.pattern().empty() )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( "pattern cannot be empty in a netclass pattern assignment" );
+            return tl::unexpected( e );
+        }
+
+        if( !pattern.netclass().empty() )
+        {
+            if( std::optional<ApiResponseStatus> err = checkNetclassName( pattern.netclass(), "pattern" ) )
+                return tl::unexpected( *err );
+        }
+
+        std::vector<std::pair<std::unique_ptr<EDA_COMBINED_MATCHER>, wxString>> kept;
+
+        for( auto& existing : netSettings->GetNetclassPatternAssignments() )
+        {
+            if( existing.first->GetPattern() != wxString::FromUTF8( pattern.pattern() ) )
+                kept.emplace_back( std::move( existing ) );
+        }
+
+        netSettings->SetNetclassPatternAssignments( std::move( kept ) );
+
+        if( !pattern.netclass().empty() )
+        {
+            netSettings->SetNetclassPatternAssignment( wxString::FromUTF8( pattern.pattern() ),
+                                                       wxString::FromUTF8( pattern.netclass() ) );
+        }
+    }
+
+    netSettings->ClearAllCaches();
+    requestNetSettingsNotification();
 
     return Empty();
 }

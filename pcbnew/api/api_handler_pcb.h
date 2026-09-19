@@ -216,6 +216,8 @@ protected:
 
     void onModified() override;
 
+    void onNetSettingsChanged() override;
+
     HANDLER_RESULT<commands::GetDocumentModifiedStateResponse>
     handleGetDocumentModifiedState( const HANDLER_CONTEXT<commands::GetDocumentModifiedState>& aCtx ) override;
 

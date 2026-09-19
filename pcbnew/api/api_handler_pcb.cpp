@@ -1447,6 +1447,23 @@ void API_HANDLER_PCB::onModified()
 }
 
 
+void API_HANDLER_PCB::onNetSettingsChanged()
+{
+    if( BOARD* brd = board() )
+        brd->SynchronizeNetsAndNetClasses( false );
+
+    // Refresh UI that depends on netclasses, such as the properties panel
+    if( TOOL_MANAGER* mgr = toolManager() )
+        mgr->ProcessEvent( EVENTS::SelectedItemsModified );
+
+    if( frame() )
+    {
+        frame()->Refresh();
+        frame()->UpdateUserInterface();
+    }
+}
+
+
 HANDLER_RESULT<GetDocumentModifiedStateResponse>
 API_HANDLER_PCB::handleGetDocumentModifiedState( const HANDLER_CONTEXT<GetDocumentModifiedState>& aCtx )
 {

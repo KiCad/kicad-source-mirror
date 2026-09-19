@@ -212,6 +212,13 @@ void KICAD_API_SERVER::DeregisterHandler( API_HANDLER* aHandler )
 }
 
 
+void KICAD_API_SERVER::NotifyNetSettingsChanged()
+{
+    for( API_HANDLER* handler : m_handlers )
+        handler->onNetSettingsChanged();
+}
+
+
 std::string KICAD_API_SERVER::SocketPath() const
 {
     return m_server ? m_server->SocketPath() : "";
@@ -285,16 +292,21 @@ void KICAD_API_SERVER::handleApiRequestString( std::string& aRequestString )
     }
 
     API_RESULT result;
+    bool notifyNetSettings = false;
 
     for( API_HANDLER* handler : m_handlers )
     {
         result = handler->Handle( request );
+        notifyNetSettings |= handler->clearNetSettingsNotification();
 
         if( result.has_value() )
             break;
         else if( result.error().status() != ApiStatusCode::AS_UNHANDLED )
             break;
     }
+
+    if( notifyNetSettings )
+        NotifyNetSettingsChanged();
 
     // Note: at the point we call Reply(), we no longer own requestString.
 

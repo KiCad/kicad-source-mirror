@@ -93,6 +93,8 @@ protected:
 
     void onModified() override;
 
+    void onNetSettingsChanged() override;
+
     SCH_CONTEXT* context() const { return m_context.get(); }
 
     TOOL_MANAGER* toolManager() const { return context()->GetToolManager(); }

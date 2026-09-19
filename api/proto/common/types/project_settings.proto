@@ -88,6 +88,29 @@ message NetClass
   repeated string constituents = 6;
 }
 
+// A direct assignment of netclasses to a net, equivalent to the assignments
+// created by netclass labels in a schematic.
+message NetClassAssignment
+{
+  // Full net path (e.g. "/sheet1/net1"). May refer to a net that does not exist yet.
+  string net = 1;
+
+  // Names of netclasses assigned to the net.
+  // In MMM_MERGE mode, an empty list removes all assignments for this net.
+  repeated string netclasses = 2;
+}
+
+// A pattern-based netclass assignment, matching net names by wildcard.
+message NetClassPatternAssignment
+{
+  // Wildcard pattern matched against full net paths (e.g. "/power/*").
+  string pattern = 1;
+
+  // Name of the netclass assigned to matching nets.
+  // In MMM_MERGE mode, an empty string removes the pattern.
+  string netclass = 2;
+}
+
 message TextVariables
 {
   map<string, string> variables = 1;
