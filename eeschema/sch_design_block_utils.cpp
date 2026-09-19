@@ -258,14 +258,13 @@ bool SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
             SCH_SHEET_PATH curPath = GetCurrentSheet();
 
             curPath.push_back( sheet );
-            SaveSheetAsDesignBlock( aLibraryName, curPath );
+            return SaveSheetAsDesignBlock( aLibraryName, curPath );
         }
         else
         {
             DisplayErrorMessage( this, _( "Design blocks with nested sheets are not supported." ) );
+            return false;
         }
-
-        return false;
     }
 
     DESIGN_BLOCK blk;
@@ -469,14 +468,13 @@ bool SCH_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
             SCH_SHEET_PATH curPath = GetCurrentSheet();
 
             curPath.push_back( sheet );
-            UpdateDesignBlockFromSheet( aLibId, curPath );
+            return UpdateDesignBlockFromSheet( aLibId, curPath );
         }
         else
         {
             DisplayErrorMessage( this, _( "Design blocks with nested sheets are not supported." ) );
+            return false;
         }
-
-        return false;
     }
 
     // If the selection is a single group, or contains this block's linked group plus extra items,

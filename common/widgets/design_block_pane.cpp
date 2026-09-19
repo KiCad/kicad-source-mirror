@@ -280,7 +280,7 @@ bool DESIGN_BLOCK_PANE::AddDesignBlockLibrary( const wxString& aDialogTitle, con
         SelectLibId( libID );
     }
 
-    return true;
+    return success;
 }
 
 

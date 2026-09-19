@@ -356,7 +356,7 @@ DESIGN_BLOCK_LIBRARY_ADAPTER::SAVE_T DESIGN_BLOCK_LIBRARY_ADAPTER::SaveDesignBlo
         dbplugin( lib )->DesignBlockSave( getUri( lib->row ), aDesignBlock, &options );
     }
 
-    return SAVE_OK;
+    return SAVE_SKIPPED;
 }
 
 
