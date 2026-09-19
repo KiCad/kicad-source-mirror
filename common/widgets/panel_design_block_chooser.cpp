@@ -150,8 +150,8 @@ void PANEL_DESIGN_BLOCK_CHOOSER::SaveSettings()
         // Save any changes to column widths, etc.
         m_adapter->SaveSettings();
 
-        cfg->m_DesignBlockChooserPanel.width = GetParent()->GetSize().x;
-        cfg->m_DesignBlockChooserPanel.height = GetParent()->GetSize().y;
+        cfg->m_DesignBlockChooserPanel.width = GetParent()->ToDIP( GetParent()->GetSize().x );
+        cfg->m_DesignBlockChooserPanel.height = GetParent()->ToDIP( GetParent()->GetSize().y );
         cfg->m_DesignBlockChooserPanel.sash_pos_v = m_vsplitter->GetSashPosition();
         cfg->m_DesignBlockChooserPanel.sort_mode = m_tree->GetSortMode();
     }
