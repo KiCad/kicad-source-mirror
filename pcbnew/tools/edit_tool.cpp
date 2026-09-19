@@ -2511,7 +2511,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     sTool->FilterCollectorForLockedItems( aCollector );
             } );
 
-    m_selectionTool->ReportFilteredLockedItems();
+    if( m_selectionTool->ReportFilteredLockedItems() )
+        return 0;
 
     if( selection.Empty() )
         return 0;
@@ -2527,7 +2528,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     // RequestSelection() as we need the reference point when a pad is the selection front.
     if( !m_isFootprintEditor && !frame()->GetPcbNewSettings()->m_AllowFreePads )
     {
-        selection = m_selectionTool->RequestSelection(
+        PCB_SELECTION& filtered = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
                     sTool->FilterCollectorForMarkers( aCollector );
@@ -2537,7 +2538,10 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     sTool->FilterCollectorForLockedItems( aCollector );
                 } );
 
-        m_selectionTool->ReportFilteredLockedItems();
+        if( m_selectionTool->ReportFilteredLockedItems() )
+            return 0;
+
+        selection = filtered;
     }
 
     // Did we filter everything out?  If so, don't try to operate further
