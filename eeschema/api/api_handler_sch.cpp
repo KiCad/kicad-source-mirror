@@ -29,6 +29,7 @@
 #include <wx/log.h>
 #include <magic_enum.hpp>
 #include <base_screen.h>
+#include <base_units.h>
 #include <jobs/job_export_bom.h>
 #include <jobs/job_export_sch_netlist.h>
 #include <jobs/job_export_sch_plot.h>
@@ -56,6 +57,7 @@
 #include <sch_symbol.h>
 #include <schematic.h>
 #include <tool/actions.h>
+#include <tool/common_tools.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
@@ -155,6 +157,7 @@ API_HANDLER_SCH::API_HANDLER_SCH( std::shared_ptr<SCH_CONTEXT> aContext,
     registerHandler<AddToSelection, SelectionResponse>( &API_HANDLER_SCH::handleAddToSelection );
     registerHandler<RemoveFromSelection, SelectionResponse>(
             &API_HANDLER_SCH::handleRemoveFromSelection );
+    registerHandler<FocusOnItems, Empty>( &API_HANDLER_SCH::handleFocusOnItems );
 
     registerHandler<RunSchematicJobExportSvg, types::RunJobResponse>(
             &API_HANDLER_SCH::handleRunSchematicJobExportSvg );
@@ -918,6 +921,46 @@ API_HANDLER_SCH::handleRemoveFromSelection( const HANDLER_CONTEXT<RemoveFromSele
     }
 
     return response;
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_SCH::handleFocusOnItems( const HANDLER_CONTEXT<FocusOnItems>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "FocusOnItems" ) )
+        return tl::unexpected( *headless );
+
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    std::vector<KIID> ids;
+
+    for( const types::KIID& id : aCtx.Request.items() )
+        ids.emplace_back( id.value() );
+
+    std::optional<KIID_PATH> sheetPath;
+
+    if( aCtx.Request.document().has_sheet_path() )
+        sheetPath = UnpackSheetPath( aCtx.Request.document().sheet_path() );
+
+    tl::expected<SCH_FOCUS_TARGET, ApiResponseStatus> target = ResolveFocusItems( *schematic(), ids, sheetPath );
+
+    if( !target )
+        return tl::unexpected( target.error() );
+
+    if( m_context->GetCurrentSheet().value_or( SCH_SHEET_PATH() ) != target->Sheet )
+        m_context->GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &target->Sheet );
+
+    BOX2I bbox = target->BBox;
+
+    if( aCtx.Request.has_margin() )
+        bbox.Inflate( UnpackDistance( aCtx.Request.margin(), schIUScale ) );
+
+    m_context->GetToolManager()->GetTool<COMMON_TOOLS>()->ZoomFitBox( bbox );
+
+    return Empty();
 }
 
 

@@ -401,6 +401,22 @@ message ClearSelection
   kiapi.common.types.ItemHeader header = 1;
 }
 
+// Ensures the given items are visible and zooms to fit them.
+// The bounding box of all given items will be expanded by `margin` if present.
+// Returns an error if any of the given `items` are not in `document`.
+// Available only in interactive mode and when the editor in question is idle.
+// Returns Empty
+message FocusOnItems
+{
+  // For schematics, a document with a sheet path focuses that sheet's placement of the items
+  kiapi.common.types.DocumentSpecifier document = 1;
+
+  // The items to fit in the view.  Schematic items must all be on one sheet.
+  repeated kiapi.common.types.KIID items = 2;
+
+  optional kiapi.common.types.Distance margin = 3;
+}
+
 // Tests if a certain point falls within tolerance of an item's geometry
 message HitTest
 {

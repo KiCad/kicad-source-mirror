@@ -47,6 +47,10 @@
 
 #include "api_sch_utils.h"
 
+#include <fmt/format.h>
+#include <fmt/ranges.h>
+#include <schematic.h>
+
 #include <api/api_utils.h>
 #include <api/api_enums.h>
 
@@ -561,4 +565,68 @@ void PackSheetPath( types::SheetPath& aOutput, const SCH_SHEET_PATH& aInput )
 {
     PackSheetPath( aOutput, aInput.Path() );
     aOutput.set_path_human_readable( aInput.PathHumanReadable().ToUTF8() );
+}
+
+
+tl::expected<SCH_FOCUS_TARGET, ApiResponseStatus>
+ResolveFocusItems( SCHEMATIC& aSchematic, const std::vector<KIID>& aIds, const std::optional<KIID_PATH>& aSheetPath )
+{
+    if( aIds.empty() )
+        return tl::unexpected( MakeResponseStatus( AS_BAD_REQUEST, "no items were given to focus on" ) );
+
+    if( !aSchematic.HasHierarchy() )
+        aSchematic.RefreshHierarchy();
+
+    std::optional<SCH_SHEET_PATH> sheet;
+
+    if( aSheetPath )
+    {
+        sheet = aSchematic.Hierarchy().GetSheetPathByKIIDPath( *aSheetPath );
+
+        if( !sheet )
+        {
+            return tl::unexpected(
+                    MakeResponseStatus( AS_BAD_REQUEST, "the requested sheet path is not valid for this schematic" ) );
+        }
+    }
+
+    std::optional<BOX2I>     bbox;
+    std::vector<std::string> missing;
+
+    for( const KIID& id : aIds )
+    {
+        SCH_SHEET_PATH itemSheet;
+        SCH_ITEM*      item = aSheetPath ? sheet->ResolveItem( id ) : aSchematic.ResolveItem( id, &itemSheet, true );
+
+        if( !item )
+        {
+            missing.push_back( id.AsStdString() );
+            continue;
+        }
+
+        if( !sheet )
+        {
+            sheet = itemSheet;
+        }
+        else if( !aSheetPath && itemSheet != *sheet )
+        {
+            return tl::unexpected( MakeResponseStatus(
+                    AS_BAD_REQUEST, "the items are not all on one sheet; set the document's sheet path to choose "
+                                    "the sheet to focus" ) );
+        }
+
+        if( bbox )
+            bbox->Merge( item->GetBoundingBox() );
+        else
+            bbox = item->GetBoundingBox();
+    }
+
+    if( !missing.empty() )
+    {
+        return tl::unexpected(
+                MakeResponseStatus( AS_BAD_REQUEST, fmt::format( "the items {} are not in the requested document",
+                                                                 fmt::join( missing, ", " ) ) ) );
+    }
+
+    return SCH_FOCUS_TARGET{ *sheet, *bbox };
 }

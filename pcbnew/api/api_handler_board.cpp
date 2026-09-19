@@ -42,6 +42,7 @@
 
 #include <layer_ids.h>
 #include <project.h>
+#include <tool/common_tools.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
@@ -72,6 +73,7 @@ API_HANDLER_BOARD::API_HANDLER_BOARD( std::shared_ptr<BOARD_CONTEXT> aContext,
     registerHandler<AddToSelection, SelectionResponse>( &API_HANDLER_BOARD::handleAddToSelection );
     registerHandler<RemoveFromSelection, SelectionResponse>(
             &API_HANDLER_BOARD::handleRemoveFromSelection );
+    registerHandler<FocusOnItems, Empty>( &API_HANDLER_BOARD::handleFocusOnItems );
 
     registerHandler<GetBoardStackup, BoardStackupResponse>( &API_HANDLER_BOARD::handleGetStackup );
     registerHandler<GetBoardEnabledLayers, BoardEnabledLayersResponse>(
@@ -661,6 +663,55 @@ HANDLER_RESULT<SelectionResponse> API_HANDLER_BOARD::handleAddToSelection(
         item->Serialize( *response.add_items() );
 
     return response;
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_BOARD::handleFocusOnItems( const HANDLER_CONTEXT<FocusOnItems>& aCtx )
+{
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "FocusOnItems" ) )
+        return tl::unexpected( *headless );
+
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    if( aCtx.Request.items().empty() )
+        return tl::unexpected( MakeResponseStatus( AS_BAD_REQUEST, "no items were given to focus on" ) );
+
+    std::optional<BOX2I>     bbox;
+    std::vector<std::string> missing;
+
+    for( const types::KIID& idMsg : aCtx.Request.items() )
+    {
+        std::optional<BOARD_ITEM*> item = getItemById( KIID( idMsg.value() ) );
+
+        if( !item )
+        {
+            missing.push_back( idMsg.value() );
+            continue;
+        }
+
+        if( bbox )
+            bbox->Merge( ( *item )->GetBoundingBox() );
+        else
+            bbox = ( *item )->GetBoundingBox();
+    }
+
+    if( !missing.empty() )
+    {
+        return tl::unexpected(
+                MakeResponseStatus( AS_BAD_REQUEST, fmt::format( "the items {} are not in the requested document",
+                                                                 fmt::join( missing, ", " ) ) ) );
+    }
+
+    if( aCtx.Request.has_margin() )
+        bbox->Inflate( UnpackDistance( aCtx.Request.margin() ) );
+
+    toolManager()->GetTool<COMMON_TOOLS>()->ZoomFitBox( *bbox );
+
+    return Empty();
 }
 
 

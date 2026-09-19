@@ -479,4 +479,78 @@ BOOST_AUTO_TEST_CASE( SheetVariantManagement )
     BOOST_CHECK( m_schematic->GetVariantNames().count( variantName ) );
 }
 
+BOOST_AUTO_TEST_CASE( FocusItemsResolution )
+{
+    wxFileName fn( KI_TEST::GetEeschemaTestDataDir() );
+    fn.AppendDir( wxS( "variants" ) );
+    fn.SetName( wxS( "variants" ) );
+    fn.SetExt( wxS( "kicad_sch" ) );
+    LoadSchematic( fn );
+
+    SCH_SHEET_LIST hierarchy = m_schematic->Hierarchy();
+    BOOST_REQUIRE_GE( hierarchy.size(), 2u );
+
+    SCH_SHEET_PATH rootPath = hierarchy[0];
+    SCH_SHEET_PATH subPath;
+
+    for( const SCH_SHEET_PATH& path : hierarchy )
+    {
+        if( path.size() > 1 )
+        {
+            subPath = path;
+            break;
+        }
+    }
+
+    BOOST_REQUIRE_GT( subPath.size(), 1u );
+
+    std::vector<SCH_ITEM*> subSymbols;
+
+    for( SCH_ITEM* item : subPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        subSymbols.push_back( item );
+
+    BOOST_REQUIRE_GE( subSymbols.size(), 2u );
+
+    SCH_ITEM* rootSheet = nullptr;
+
+    for( SCH_ITEM* item : rootPath.LastScreen()->Items().OfType( SCH_SHEET_T ) )
+    {
+        rootSheet = item;
+        break;
+    }
+
+    BOOST_REQUIRE( rootSheet );
+
+    // Items on one sheet resolve to that sheet and their merged box
+    {
+        auto target = ResolveFocusItems( *m_schematic, { subSymbols[0]->m_Uuid, subSymbols[1]->m_Uuid }, std::nullopt );
+        BOOST_REQUIRE_MESSAGE( target.has_value(), ( target ? std::string() : target.error().error_message() ) );
+        BOOST_CHECK( target->Sheet == subPath );
+
+        BOX2I expected = subSymbols[0]->GetBoundingBox();
+        expected.Merge( subSymbols[1]->GetBoundingBox() );
+        BOOST_CHECK( target->BBox == expected );
+    }
+
+    // Items spread over sheets need a sheet path to pick one
+    {
+        auto target = ResolveFocusItems( *m_schematic, { rootSheet->m_Uuid, subSymbols[0]->m_Uuid }, std::nullopt );
+        BOOST_CHECK( !target );
+    }
+
+    // A sheet path pins the placement and rejects items that are not on that sheet
+    {
+        auto target = ResolveFocusItems( *m_schematic, { subSymbols[0]->m_Uuid }, subPath.Path() );
+        BOOST_REQUIRE_MESSAGE( target.has_value(), ( target ? std::string() : target.error().error_message() ) );
+        BOOST_CHECK( target->Sheet == subPath );
+
+        auto offSheet = ResolveFocusItems( *m_schematic, { subSymbols[0]->m_Uuid }, rootPath.Path() );
+        BOOST_CHECK( !offSheet );
+    }
+
+    // Unknown items and empty requests are rejected
+    BOOST_CHECK( !ResolveFocusItems( *m_schematic, { KIID() }, std::nullopt ) );
+    BOOST_CHECK( !ResolveFocusItems( *m_schematic, {}, std::nullopt ) );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

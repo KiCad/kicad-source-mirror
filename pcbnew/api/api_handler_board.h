@@ -112,6 +112,8 @@ private:
     HANDLER_RESULT<commands::SelectionResponse> handleRemoveFromSelection(
             const HANDLER_CONTEXT<commands::RemoveFromSelection>& aCtx );
 
+    HANDLER_RESULT<Empty> handleFocusOnItems( const HANDLER_CONTEXT<commands::FocusOnItems>& aCtx );
+
     HANDLER_RESULT<BoardStackupResponse> handleGetStackup(
             const HANDLER_CONTEXT<GetBoardStackup>& aCtx );
 

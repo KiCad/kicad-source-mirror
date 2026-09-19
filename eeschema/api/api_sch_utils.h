@@ -22,16 +22,20 @@
 #define KICAD_API_SCH_UTILS_H
 
 #include <memory>
+#include <optional>
+#include <vector>
 #include <tl/expected.hpp>
 #include <core/typeinfo.h>
 #include <api/common/envelope.pb.h>
 #include <api/schematic/schematic_types.pb.h>
 #include <pin_map.h>
+#include <kiid.h>
+#include <math/box2.h>
+#include <sch_sheet_path.h>
 
 class EDA_ITEM;
 class SCH_SYMBOL;
 class SCH_SHEET;
-class SCH_SHEET_PATH;
 class SCHEMATIC;
 
 std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer );
@@ -82,5 +86,19 @@ void ApplySheetInstance( SCH_SHEET* aSheet, const kiapi::schematic::types::Sheet
 
 /// Specialization of PackSheetPath that includes the human-readable path
 void PackSheetPath( kiapi::common::types::SheetPath& aOutput, const SCH_SHEET_PATH& aInput );
+
+struct SCH_FOCUS_TARGET
+{
+    SCH_SHEET_PATH Sheet;
+    BOX2I          BBox;
+};
+
+/**
+ * Resolve the items of a FocusOnItems request to the sheet that shows them and their combined
+ * bounding box.  Every item must be on one sheet: aSheetPath when given, otherwise the first
+ * sheet the items resolve to.  Unknown or off-sheet items and an empty list are bad requests.
+ */
+tl::expected<SCH_FOCUS_TARGET, kiapi::common::ApiResponseStatus>
+ResolveFocusItems( SCHEMATIC& aSchematic, const std::vector<KIID>& aIds, const std::optional<KIID_PATH>& aSheetPath );
 
 #endif //KICAD_API_SCH_UTILS_H

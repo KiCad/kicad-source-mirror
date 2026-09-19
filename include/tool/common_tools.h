@@ -23,6 +23,9 @@
 #ifndef _COMMON_TOOLS_H
 #define _COMMON_TOOLS_H
 
+#include <optional>
+
+#include <math/box2.h>
 #include <tool/tool_interactive.h>
 
 class EDA_DRAW_FRAME;
@@ -54,6 +57,15 @@ public:
 
     int CenterContents( const TOOL_EVENT& aEvent );
     int CenterSelection( const TOOL_EVENT& aEvent );
+
+    /**
+     * Zoom and center the view so that aBox fills it, keeping the same margin the
+     * "Zoom to Selection" action leaves clear of the infobar.  A box with no extent
+     * on either axis falls back to the canvas's default view.
+     *
+     * @param aMarginScale replaces the default margin factor when given.
+     */
+    int ZoomFitBox( const BOX2I& aBox, std::optional<double> aMarginScale = std::nullopt );
 
     int PanControl( const TOOL_EVENT& aEvent );
 
