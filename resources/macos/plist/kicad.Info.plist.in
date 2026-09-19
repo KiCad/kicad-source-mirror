@@ -28,7 +28,7 @@
     <key>CFBundleExecutable</key>                   <string>kicad</string>
     <key>CFBundleGetInfoString</key>                <string></string>
     <key>CFBundleIconFile</key>                     <string>kicad.icns</string>
-    <key>CFBundleIdentifier</key>                   <string>org.kicad.kicad</string>
+    <key>CFBundleIdentifier</key>                   <string>@KICAD_BUNDLE_ID@</string>
     <key>CFBundleInfoDictionaryVersion</key>        <string>6.0</string>
     <key>CFBundleLongVersionString</key>            <string>@KICAD_VERSION_FULL@</string>
     <key>CFBundleName</key>                         <string>KiCad</string>
@@ -40,5 +40,42 @@
     <key>LSRequiresCarbon</key>                     <true/>
     <key>NSHumanReadableCopyright</key>             <string>Copyright The KiCad Developers</string>
     <key>NSHighResolutionCapable</key>              <true/>
+    <key>UTImportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+            </array>
+            <key>UTTypeDescription</key>            <string>STEP 3D model</string>
+            <key>UTTypeIdentifier</key>             <string>org.kicad.step</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>step</string>
+                    <string>stp</string>
+                </array>
+                <key>public.mime-type</key>          <string>model/step</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+            </array>
+            <key>UTTypeDescription</key>            <string>VRML 3D model</string>
+            <key>UTTypeIdentifier</key>             <string>org.kicad.vrml</string>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>wrl</string>
+                    <string>vrml</string>
+                </array>
+                <key>public.mime-type</key>          <string>model/vrml</string>
+            </dict>
+        </dict>
+    </array>
 </dict>
 </plist>

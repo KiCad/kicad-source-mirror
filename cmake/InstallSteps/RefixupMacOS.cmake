@@ -16,10 +16,53 @@ function( refix_kicad_bundle target )
     string( TIMESTAMP start_time )
 
     file( GLOB_RECURSE items ${target}/*.dylib ${target}/*.so ${target}/*.kiface )
+    file( GLOB appex_binaries ${target}/Contents/PlugIns/*.appex/Contents/MacOS/* )
+    file( GLOB framework_directories ${target}/Contents/Frameworks/*.framework )
+    set( framework_binaries )
+
+    foreach( framework ${framework_directories} )
+        get_filename_component( framework_name "${framework}" NAME_WE )
+        file( GLOB framework_executable "${framework}/Versions/*/${framework_name}" )
+
+        foreach( executable ${framework_executable} )
+            file( REAL_PATH "${executable}" real_executable )
+            list( APPEND framework_binaries "${real_executable}" )
+        endforeach()
+    endforeach()
+
+    list( REMOVE_DUPLICATES framework_binaries )
+
+    list( APPEND items ${framework_binaries} )
 
     foreach( item ${items} )
         message( "Refixing prereqs for '${item}'" )
         refix_prereqs( ${item} )
+
+        if( "${item}" MATCHES "/Contents/Frameworks/[^/]+\\.dylib$" )
+            delete_all_rpaths( ${item} )
+            add_loader_rpath( ${item} )
+        elseif( "${item}" MATCHES "/Contents/PlugIns/3d/[^/]+\\.so$" )
+            delete_all_rpaths( ${item} )
+            refix_rpaths( ${item} "@loader_path" )
+        endif()
+    endforeach( )
+
+    foreach( binary ${appex_binaries} )
+        if( NOT IS_DIRECTORY "${binary}" )
+            message( "Refixing nested component '${binary}'" )
+            refix_prereqs( ${binary} )
+            delete_all_rpaths( ${binary} )
+            refix_rpaths( ${binary} )
+        endif()
+    endforeach()
+
+    foreach( binary ${framework_binaries} )
+        if( NOT IS_DIRECTORY "${binary}" )
+            message( "Refixing nested framework '${binary}'" )
+            refix_prereqs( ${binary} )
+            delete_all_rpaths( ${binary} )
+            refix_rpaths( ${binary} "@loader_path" )
+        endif()
     endforeach( )
 
     # For binaries, we need to fix the prereqs and the rpaths
@@ -96,13 +139,31 @@ function( delete_all_rpaths BINARY_PATH )
     endforeach()
 endfunction()
 
+function( add_loader_rpath binary )
+    execute_process(
+            COMMAND install_name_tool -add_rpath "@loader_path" "${binary}"
+            RESULT_VARIABLE add_rpath_rv
+            ERROR_VARIABLE add_rpath_ev
+    )
+
+    if( NOT add_rpath_rv STREQUAL "0" )
+        message( FATAL_ERROR "adding loader rpath failed: ${add_rpath_rv}\n${add_rpath_ev}" )
+    endif()
+endfunction()
+
 function( refix_rpaths binary )
     get_filename_component( executable_path ${binary} DIRECTORY )
+
+    set( rpath_base "@executable_path" )
+
+    if( ARGC GREATER 1 )
+        set( rpath_base "${ARGV1}" )
+    endif()
 
     set( desired_rpaths )
     file( RELATIVE_PATH relative_kicad_framework_path ${executable_path} ${target}/Contents/Frameworks )
     string( REGEX REPLACE "/+$" "" relative_kicad_framework_path "${relative_kicad_framework_path}" ) # remove trailing slash
-    list( APPEND desired_rpaths "@executable_path/${relative_kicad_framework_path}" )
+    list( APPEND desired_rpaths "${rpath_base}/${relative_kicad_framework_path}" )
 
     foreach( desired_rpath ${desired_rpaths} )
         execute_process(
@@ -163,15 +224,10 @@ function( refix_prereqs target )
     set( otool_regex "^\t([^\t]+) \\(compatibility version ([0-9]+.[0-9]+.[0-9]+), current version ([0-9]+.[0-9]+.[0-9]+)\\)${eol_char}$" )
 
     foreach( candidate ${candidates} )
-        if( "${candidate}" MATCHES "${gp_regex}" )
+        if( "${candidate}" MATCHES "${otool_regex}" )
             string( REGEX REPLACE "${otool_regex}" "\\1" raw_prereq "${candidate}" )
 
             message( DEBUG "processing ${raw_prereq}")
-            if( raw_prereq MATCHES "^@rpath.*" )
-                message( DEBUG "    already an rpath; skipping" )
-                continue()
-            endif()
-
             get_filename_component( prereq_name ${raw_prereq} NAME )
             message( DEBUG "    prereq name: ${prereq_name}" )
             set( changed_prereq "" )
@@ -192,8 +248,27 @@ function( refix_prereqs target )
                 endif()
             endforeach()
 
+            # install_runtime_deps excludes Python, so it is never among the bundled items and
+            # must not be treated as an unresolved dependency here either
+            if( prereq_name STREQUAL "Python" )
+                message( DEBUG "    Python is provided by the host; left as is" )
+                continue()
+            endif()
+
+            if( raw_prereq MATCHES "^@rpath.*" )
+                if( "${changed_prereq}" STREQUAL "" )
+                    message( FATAL_ERROR "Unresolved @rpath dependency '${raw_prereq}' in '${target}'" )
+                endif()
+
+                continue()
+            endif()
+
             if( "${changed_prereq}" STREQUAL "" )
-                message( DEBUG "    not found in items; assumed to be system lib" )
+                if( raw_prereq MATCHES "^/" AND NOT raw_prereq MATCHES "^/(System/Library|usr/lib)/" )
+                    message( FATAL_ERROR "Unresolved non-system dependency '${raw_prereq}' in '${target}'" )
+                endif()
+
+                message( DEBUG "    not found in bundle; assumed to be a system library" )
                 continue()
             endif()
 

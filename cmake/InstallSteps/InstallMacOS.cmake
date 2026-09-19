@@ -1,3 +1,20 @@
+# Copies a dependency once under its real filename and preserves the requested
+# basename as a bundle-local alias.
+function( install_runtime_file file dest )
+    file( REAL_PATH "${file}" _real_file )
+    get_filename_component( _real_name "${_real_file}" NAME )
+    get_filename_component( _file_name "${file}" NAME )
+    file( MAKE_DIRECTORY "${dest}" )
+    file( COPY_FILE "${_real_file}" "${dest}/${_real_name}" ONLY_IF_DIFFERENT )
+    file( CHMOD "${dest}/${_real_name}"
+          PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE )
+
+    if( NOT _file_name STREQUAL _real_name )
+        file( REMOVE "${dest}/${_file_name}" )
+        file( CREATE_LINK "${_real_name}" "${dest}/${_file_name}" SYMBOLIC )
+    endif()
+endfunction()
+
 # Copies the runtime dependencies for a given target into the bundle
 
 function( install_runtime_deps exe libs dest )
@@ -19,12 +36,7 @@ function( install_runtime_deps exe libs dest )
 
     foreach( _file ${_r_deps} )
         message( DEBUG ".... install dep ${_file}" )
-        file(INSTALL
-            DESTINATION "${dest}"
-            TYPE SHARED_LIBRARY
-            FOLLOW_SYMLINK_CHAIN
-            FILES "${_file}"
-        )
+        install_runtime_file( "${_file}" "${dest}" )
     endforeach()
 
 #    list(LENGTH _u_deps _u_length)

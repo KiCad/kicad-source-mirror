@@ -123,7 +123,7 @@ if( APPLE )
         MACOSX_PACKAGE_LOCATION Resources
         )
     set( MACOSX_BUNDLE_ICON_FILE kicad.icns )
-    set( MACOSX_BUNDLE_GUI_IDENTIFIER org.kicad.kicad )
+    set( MACOSX_BUNDLE_GUI_IDENTIFIER ${KICAD_BUNDLE_ID} )
     set( MACOSX_BUNDLE_NAME kicad )
 endif()
 
@@ -301,13 +301,6 @@ if( APPLE )
             file( REMOVE_RECURSE ${KICAD_BIN}/bin )
             file( REMOVE_RECURSE ${KICAD_BIN}/lib )
         endif()
-
-        cmake_policy( SET CMP0012 NEW )
-        if ( ${KICAD_APPLE_MAKE_RELOCATEABLE_BUNDLE} )
-            message( STATUS \"Making the finished bundle relocateable...\" )
-            include( ${KICAD_CMAKE_MODULE_PATH}/InstallSteps/RefixupMacOS.cmake )
-            refix_kicad_bundle( ${OSX_BUNDLE_INSTALL_DIR} )
-        endif( )
 
         " COMPONENT Runtime
         )

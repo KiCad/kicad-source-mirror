@@ -1,5 +1,6 @@
 
-function( sign_kicad_bundle target signing_id use_secure_timestamp use_hardened_runtime entitlements_file use_sentry)
+function( sign_kicad_bundle target signing_id use_secure_timestamp use_hardened_runtime entitlements_file use_sentry
+          native_model_preview_enabled preview_entitlements thumbnail_entitlements )
 
     # If the signing ID wasn't passed in, use - which means adhoc signing
     if ( NOT signing_id )
@@ -20,8 +21,9 @@ function( sign_kicad_bundle target signing_id use_secure_timestamp use_hardened_
     # add all the dylibs from contents/frameworks
     file( GLOB framework_dylibs "${target}/Contents/Frameworks/*.dylib" )
 
-    # add all the files in Contents/PlugIns
+    # Add ordinary plug-ins. App extensions are signed separately as bundles.
     file( GLOB_RECURSE plugins "${target}/Contents/PlugIns/*" )
+    list( FILTER plugins EXCLUDE REGEX "\\.appex(/|$)" )
 
     file( GLOB_RECURSE translations "${target}/Contents/SharedSupport/internat/*.mo" )
 
@@ -38,7 +40,7 @@ function( sign_kicad_bundle target signing_id use_secure_timestamp use_hardened_
         set( sign_list ${sign_list} "${target}/Contents/MacOS/crashpad_handler" )
     endif()
 
-    set( sign_list ${sign_list} ${framework_dylibs} ${plugins} ${translations} ${kicad_bins} ) # do i need to quote this differently?
+    set( sign_list ${sign_list} ${plugins} ${translations} ${kicad_bins} )
 
     # add kicad.app!
     set( sign_list ${sign_list} "${target}" )
@@ -58,6 +60,76 @@ function( sign_kicad_bundle target signing_id use_secure_timestamp use_hardened_
         set( command ${command} --options runtime )
     endif( )
 
+    file( GLOB nested_frameworks "${target}/Contents/Frameworks/*.framework" )
+
+    foreach( item ${framework_dylibs} )
+        execute_process( COMMAND ${command} "${item}" RESULT_VARIABLE codesign_result )
+
+        if( NOT codesign_result EQUAL 0 )
+            message( FATAL_ERROR "macOS bundled library signing failed for ${item}" )
+        endif()
+    endforeach()
+
+    foreach( framework ${nested_frameworks} )
+        get_filename_component( framework_name "${framework}" NAME_WE )
+        file( GLOB framework_executables "${framework}/Versions/*/${framework_name}" )
+
+        set( canonical_framework_executables )
+
+        foreach( item ${framework_executables} )
+            file( REAL_PATH "${item}" canonical_item )
+            list( APPEND canonical_framework_executables "${canonical_item}" )
+        endforeach()
+
+        list( REMOVE_DUPLICATES canonical_framework_executables )
+
+        foreach( item ${canonical_framework_executables} )
+            execute_process( COMMAND ${command} "${item}" RESULT_VARIABLE codesign_result )
+
+            if( NOT codesign_result EQUAL 0 )
+                message( FATAL_ERROR "macOS nested framework signing failed for ${item}" )
+            endif()
+        endforeach()
+    endforeach()
+
+    foreach( item ${nested_frameworks} )
+        execute_process( COMMAND ${command} "${item}" RESULT_VARIABLE codesign_result )
+
+        if( NOT codesign_result EQUAL 0 )
+            message( FATAL_ERROR "macOS nested framework signing failed for ${item}" )
+        endif()
+    endforeach()
+
+    set( preview_extension "${target}/Contents/PlugIns/KiCadModelPreview.appex" )
+    set( thumbnail_extension "${target}/Contents/PlugIns/KiCadModelThumbnail.appex" )
+
+    foreach( extension "${preview_extension}" "${thumbnail_extension}" )
+        if( "${extension}" STREQUAL "${preview_extension}" )
+            set( extension_entitlements "${preview_entitlements}" )
+        else()
+            set( extension_entitlements "${thumbnail_entitlements}" )
+        endif()
+
+        if( native_model_preview_enabled AND NOT EXISTS "${extension}" )
+            message( FATAL_ERROR "Required macOS app extension is missing: ${extension}" )
+        endif()
+
+        if( native_model_preview_enabled )
+            if( NOT extension_entitlements OR NOT EXISTS "${extension_entitlements}" )
+                message( FATAL_ERROR "Required macOS app extension entitlements are missing: ${extension_entitlements}" )
+            endif()
+
+            set( extension_command ${command} )
+            list( APPEND extension_command --entitlements "${extension_entitlements}" )
+
+            execute_process( COMMAND ${extension_command} "${extension}" RESULT_VARIABLE codesign_result )
+
+            if( NOT codesign_result EQUAL 0 )
+                message( FATAL_ERROR "macOS app extension signing failed for ${extension}" )
+            endif()
+        endif()
+    endforeach()
+
     if( entitlements_file )
         set( command ${command} --entitlements "${entitlements_file}" )
     endif( )
@@ -70,7 +142,7 @@ function( sign_kicad_bundle target signing_id use_secure_timestamp use_hardened_
                 RESULT_VARIABLE codesign_result)
 
         if( NOT codesign_result EQUAL 0 )
-            message( WARNING "macOS signing failed; ${cmd} returned ${codesign_result}" )
+            message( FATAL_ERROR "macOS signing failed; ${cmd} returned ${codesign_result}" )
         endif( )
     endforeach( )
 endfunction()

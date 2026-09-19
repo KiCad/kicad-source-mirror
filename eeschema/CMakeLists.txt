@@ -812,11 +812,17 @@ if( APPLE )
     get_filename_component( ABS_LIBNGSPICE ${NGSPICE_LIBRARY} ABSOLUTE )
     get_filename_component( LIBNGSPICE_PATH ${ABS_LIBNGSPICE} DIRECTORY )
 
-    install( DIRECTORY "${LIBNGSPICE_PATH}/"
-            DESTINATION "${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim"
-            FILES_MATCHING PATTERN "*.dylib")
-    install( DIRECTORY "${LIBNGSPICE_PATH}/ngspice"
+    file( REAL_PATH "${LIBNGSPICE_PATH}/ngspice" REAL_NGSPICE_CODEMODELS )
+    install( DIRECTORY "${REAL_NGSPICE_CODEMODELS}"
              DESTINATION "${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim" )
+
+    install( CODE "
+        include( \"${KICAD_CMAKE_MODULE_PATH}/InstallSteps/InstallMacOS.cmake\" )
+        install_runtime_file( \"${ABS_LIBNGSPICE}\"
+            \"${OSX_BUNDLE_INSTALL_LIB_DIR}\" )
+        install_runtime_deps( \"\" \"${ABS_LIBNGSPICE}\"
+            \"${OSX_BUNDLE_INSTALL_LIB_DIR}\" )
+    " )
 
     install( CODE [[
         include( ${KICAD_CMAKE_MODULE_PATH}/InstallSteps/InstallMacOS.cmake )
