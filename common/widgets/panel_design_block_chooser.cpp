@@ -207,10 +207,17 @@ void PANEL_DESIGN_BLOCK_CHOOSER::FinishSetup()
                     return GetParent()->ConvertDialogToPixels( sz ).x;
                 };
 
+        auto vertPixelsFromDU =
+                [&]( int y ) -> int
+                {
+                    wxSize sz( 0, y );
+                    return GetParent()->ConvertDialogToPixels( sz ).y;
+                };
+
         APP_SETTINGS_BASE::PANEL_DESIGN_BLOCK_CHOOSER& panelCfg = cfg->m_DesignBlockChooserPanel;
 
         int w = panelCfg.width > 40 ? panelCfg.width : horizPixelsFromDU( 440 );
-        int h = panelCfg.height > 40 ? panelCfg.height : horizPixelsFromDU( 340 );
+        int h = panelCfg.height > 40 ? panelCfg.height : vertPixelsFromDU( 340 );
 
         GetParent()->SetSize( wxSize( w, h ) );
         GetParent()->Layout();
@@ -222,7 +229,7 @@ void PANEL_DESIGN_BLOCK_CHOOSER::FinishSetup()
             panelCfg.sash_pos_h = horizPixelsFromDU( 220 );
 
         if( panelCfg.sash_pos_v < 0 )
-            panelCfg.sash_pos_v = horizPixelsFromDU( 230 );
+            panelCfg.sash_pos_v = vertPixelsFromDU( 230 );
 
         if( m_vsplitter )
             m_vsplitter->SetSashPosition( panelCfg.sash_pos_v );
