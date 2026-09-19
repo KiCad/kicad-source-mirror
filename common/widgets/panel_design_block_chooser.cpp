@@ -274,7 +274,11 @@ void PANEL_DESIGN_BLOCK_CHOOSER::RefreshLibs( bool aProgress )
 
 void PANEL_DESIGN_BLOCK_CHOOSER::SetPreselect( const LIB_ID& aPreselect )
 {
+    m_preselect = aPreselect;
     m_adapter->SetPreselectNode( aPreselect, 0 );
+
+    if( m_tree && aPreselect.IsValid() )
+        m_tree->SelectLibId( aPreselect );
 }
 
 
@@ -321,6 +325,9 @@ void PANEL_DESIGN_BLOCK_CHOOSER::onOpenLibsTimer( wxTimerEvent& aEvent )
     // Bind this now se we don't spam the event queue with EVT_LIBITEM_SELECTED events during
     // the initial load.
     Bind( EVT_LIBITEM_SELECTED, &PANEL_DESIGN_BLOCK_CHOOSER::onDesignBlockSelected, this );
+
+    if( m_preselect.IsValid() )
+        SelectLibId( m_preselect );
 }
 
 
