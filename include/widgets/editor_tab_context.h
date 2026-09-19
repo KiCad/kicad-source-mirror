@@ -51,7 +51,7 @@ public:
     /**
      * Short label shown on the tab.
      */
-    virtual wxString GetDisplayName() const = 0;
+    virtual wxString GetDisplayName( bool aShortForm = false ) const = 0;
 
     virtual bool IsModified() const = 0;
 

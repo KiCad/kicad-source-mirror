@@ -455,10 +455,7 @@ SYMBOL_EDIT_FRAME::findOrCreateSymbolInstanceTab( LIB_SYMBOL* aSymbol, SCH_SCREE
         existing->SetUnit( unit );
         existing->SetBodyStyle( bodyStyle );
 
-        if( m_tabsPanel )
-            m_tabsPanel->AddTab( key, existing->GetReference() + wxS( " " ) + _( "[from schematic]" ), false );
-        else
-            activateSymbolTab( existing );
+        activateSymbolTab( existing );
 
         return existing;
     }
@@ -471,7 +468,7 @@ SYMBOL_EDIT_FRAME::findOrCreateSymbolInstanceTab( LIB_SYMBOL* aSymbol, SCH_SCREE
     ctx->SetBodyStyle( bodyStyle );
 
     if( m_tabsPanel )
-        m_tabsPanel->AddTab( key, aReference + wxS( " " ) + _( "[from schematic]" ), false );
+        m_tabsPanel->AddTab( key, ctx->GetDisplayName(), false );
     else
         activateSymbolTab( ctx );
 
@@ -488,8 +485,7 @@ bool SYMBOL_EDIT_FRAME::promptAndCloseSymbolTab( int aIdx )
 
     if( ctx->IsModified() && !m_silentSymbolTabClose )
     {
-        wxString msg = wxString::Format( _( "Save changes to '%s' before closing?" ),
-                                         ctx->GetDisplayName() );
+        wxString msg = wxString::Format( _( "Save changes to '%s' before closing?" ), ctx->GetDisplayName( true ) );
 
         KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxCANCEL | wxICON_WARNING );
         dlg.SetYesNoCancelLabels( _( "Save" ), _( "Discard Changes" ), _( "Cancel" ) );

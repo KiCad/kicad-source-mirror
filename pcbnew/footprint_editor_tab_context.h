@@ -108,7 +108,7 @@ public:
         }
     }
 
-    wxString GetDisplayName() const override;
+    wxString GetDisplayName( bool aShortForm = false ) const override;
 
     /**
      * Give an imported footprint the library identity a save-as just assigned it.

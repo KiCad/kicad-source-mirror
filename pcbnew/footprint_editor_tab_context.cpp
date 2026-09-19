@@ -65,16 +65,22 @@ FOOTPRINT_EDITOR_TAB_CONTEXT::MakeUnsaved( std::unique_ptr<BOARD> aBoard )
 }
 
 
-wxString FOOTPRINT_EDITOR_TAB_CONTEXT::GetDisplayName() const
+wxString FOOTPRINT_EDITOR_TAB_CONTEXT::GetDisplayName( bool aShortForm ) const
 {
     switch( m_kind )
     {
-    case KIND::BOARD_INSTANCE: return m_reference;
+    case KIND::BOARD_INSTANCE:
+        if( aShortForm )
+            return m_reference;
+        else
+            return m_reference + wxS( " " ) + _( "[from board]" );
 
     // The imported name is not an identity the editor can save to, so the tab reads as unnamed
-    case KIND::UNSAVED:        return _( "<unnamed>" );
+    case KIND::UNSAVED:
+        return _( "<unnamed>" );
 
-    default:                   return m_name;
+    default:
+        return m_name;
     }
 }
 

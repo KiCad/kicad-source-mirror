@@ -80,7 +80,20 @@ public:
                                : MakeTabKey( m_lib, m_name );
     }
 
-    wxString GetDisplayName() const override { return m_fromSchematic ? m_reference : m_name; }
+    wxString GetDisplayName( bool aShortForm = false ) const override
+    {
+        if( m_fromSchematic )
+        {
+            if( aShortForm )
+                return m_reference;
+            else
+                return m_reference + wxS( " " ) + _( "[from schematic]" );
+        }
+        else
+        {
+            return m_name;
+        }
+    }
 
     /**
      * True for an instance (schematic) tab, which is session-only and never persisted.

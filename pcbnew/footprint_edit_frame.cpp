@@ -1202,10 +1202,7 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanc
 
     // Re-editing the same placed footprint focuses the live tab rather than duplicating it.
     if( int existing = m_tabsPanel->FindTab( key ); existing >= 0 )
-    {
-        m_tabsPanel->AddTab( key, reference + wxS( " " ) + _( "[from board]" ), false );
         return m_tabContexts[existing].get();
-    }
 
     std::unique_ptr<BOARD> board = makeFpHolderBoard();
     board->GetDesignSettings().m_DRCSeverities[DRCE_MISSING_COURTYARD] = RPT_SEVERITY_WARNING;
@@ -1269,7 +1266,7 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanc
 
     // Index-aligned with the panel model; the context is at its final index before AddTab fires
     // onActivateTab.
-    m_tabsPanel->AddTab( key, reference + wxS( " " ) + _( "[from board]" ), false );
+    m_tabsPanel->AddTab( key, m_tabContexts.back()->GetDisplayName(), false );
 
     return raw;
 }
@@ -1281,20 +1278,18 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::createUnsavedFootprintTab()
             FOOTPRINT_EDITOR_TAB_CONTEXT::MakeUnsaved( makeFpHolderBoard() );
 
     const wxString                key = ctx->GetTabKey();
-    const wxString                label = ctx->GetDisplayName();
     FOOTPRINT_EDITOR_TAB_CONTEXT* raw = ctx.get();
 
     m_tabContexts.push_back( std::move( ctx ) );
 
     // At its final index before AddTab fires onActivateTab, which makes the new tab active
-    m_tabsPanel->AddTab( key, label, false );
+    m_tabsPanel->AddTab( key, m_tabContexts.back()->GetDisplayName(), false );
 
     return raw;
 }
 
 
-void FOOTPRINT_EDIT_FRAME::freeUndoRedoCommandsWithItems( UNDO_REDO_CONTAINER& aUndo,
-                                                          UNDO_REDO_CONTAINER& aRedo )
+void FOOTPRINT_EDIT_FRAME::freeUndoRedoCommandsWithItems( UNDO_REDO_CONTAINER& aUndo, UNDO_REDO_CONTAINER& aRedo )
 {
     // Free the UR_TRANSIENT board items each command owns and the command wrappers. The frame's own
     // ClearUndoRedoList() and the bare container destructor delete only the wrappers and leak the
@@ -1334,8 +1329,7 @@ bool FOOTPRINT_EDIT_FRAME::promptAndCloseFootprintTab( int aIdx )
     if( ctx->IsModified() && !m_silentFootprintTabClose )
     {
         // Prompt while the closing tab is still fully live so a save reads its real board.
-        wxString msg = wxString::Format( _( "Save changes to '%s' before closing?" ),
-                                         ctx->GetDisplayName() );
+        wxString msg = wxString::Format( _( "Save changes to '%s' before closing?" ), ctx->GetDisplayName( true ) );
 
         KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxCANCEL | wxICON_WARNING );
         dlg.SetYesNoCancelLabels( _( "Save" ), _( "Discard Changes" ), _( "Cancel" ) );
@@ -1449,6 +1443,11 @@ void FOOTPRINT_EDIT_FRAME::RenameFootprintTab( const LIB_ID& aOldId, const LIB_I
 
         return;
     }
+
+    // A board footprint's tab is named from the board instance's reference, not any properties of the
+    // edited copy.
+    if( m_activeTab && m_activeTab->IsFromBoard() )
+        return;
 
     const wxString oldLib = aOldId.GetLibNickname();
     const wxString oldName = aOldId.GetLibItemName();
