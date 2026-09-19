@@ -284,7 +284,7 @@ void DESIGN_BLOCK_IO::DesignBlockEnumerate( wxArrayString&  aDesignBlockNames,
 
     while( cont )
     {
-        aDesignBlockNames.Add( dirname.Before( wxT( '.' ) ) );
+        aDesignBlockNames.Add( dirname.BeforeLast( wxT( '.' ) ) );
         cont = dir.GetNext( &dirname );
     }
 }
