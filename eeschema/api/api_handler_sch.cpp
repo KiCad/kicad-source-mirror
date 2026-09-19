@@ -1797,6 +1797,14 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
     bomJob.m_sortField = wxString::FromUTF8( aCtx.Request.fields().sort_field() );
     bomJob.m_filterString = wxString::FromUTF8( aCtx.Request.fields().filter() );
 
+    if( bomJob.m_bomPresetName.IsEmpty() && aCtx.Request.fields().fields().empty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "A list of fields fields or a fields preset are required" );
+        return tl::unexpected( e );
+    }
+
     switch( aCtx.Request.fields().filter_scope() )
     {
     case kiapi::schematic::jobs::BOMFilterScope::BFS_VISIBLE:
