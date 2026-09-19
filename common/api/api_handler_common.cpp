@@ -145,16 +145,26 @@ HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleSetNetClasses(
         any.PackFrom( ncProto );
         wxString name = wxString::FromUTF8( ncProto.name() );
 
+        bool deserialized = false;
+
         if( name == wxT( "Default" ) )
         {
-            netSettings->GetDefaultNetclass()->Deserialize( any );
+            deserialized = netSettings->GetDefaultNetclass()->Deserialize( any );
         }
         else
         {
             if( !netClasses.contains( name ) )
                 netClasses.insert( { name, std::make_shared<NETCLASS>( name, false ) } );
 
-            netClasses[name]->Deserialize( any );
+            deserialized = netClasses[name]->Deserialize( any );
+        }
+
+        if( !deserialized )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( fmt::format( "could not unpack netclass '{}'", name.ToUTF8().data() ) );
+            return tl::unexpected( e );
         }
     }
 
