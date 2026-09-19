@@ -27,6 +27,9 @@
 #include <router/pns_kicad_iface.h>
 #include <router/pns_solid.h>
 #include <router/pns_router.h>
+#include <pcbnew_settings.h>
+#include <settings/settings_manager.h>
+#include <settings/snap_settings.h>
 
 
 class PNS_KICAD_IFACE_GENERATOR : public PNS_KICAD_IFACE
@@ -50,6 +53,49 @@ public:
         m_changes.clear();
         m_changes.emplace_back();
         m_createdItems.clear();
+    }
+
+    // The base implementations build ROUTER_PREVIEW_ITEMs and touch the GAL view, which do
+    // not exist in headless sessions; skip display entirely there.
+    void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false,
+                      int aFlags = 0 ) override
+    {
+        if( !m_view )
+            return;
+
+        PNS_KICAD_IFACE::DisplayItem( aItem, aClearance, aEdit, aFlags );
+    }
+
+    void EraseView() override
+    {
+        if( !m_view )
+            return;
+
+        PNS_KICAD_IFACE::EraseView();
+    }
+
+    void HideItem( PNS::ITEM* aItem ) override
+    {
+        if( !m_view )
+            return;
+
+        PNS_KICAD_IFACE::HideItem( aItem );
+    }
+
+    void DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImportance ) override
+    {
+        if( !m_view )
+            return;
+
+        PNS_KICAD_IFACE::DisplayPathLine( aLine, aImportance );
+    }
+
+    void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, PNS::NET_HANDLE aNet ) override
+    {
+        if( !m_view )
+            return;
+
+        PNS_KICAD_IFACE::DisplayRatline( aRatline, aNet );
     }
 
     void AddItem( PNS::ITEM* aItem ) override
@@ -156,12 +202,19 @@ void GENERATOR_TOOL_PNS_PROXY::Reset( RESET_REASON aReason )
 
     m_router->UpdateSizes( m_savedSizes );
 
-    PCBNEW_SETTINGS* settings = frame()->GetPcbNewSettings();
+    // Headless sessions (kicad-cli api-server) have no frame; fall back to the global
+    // settings store and default magnetic settings.
+    PCBNEW_SETTINGS* settings = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
 
     if( !settings->m_PnsSettings )
         settings->m_PnsSettings = std::make_unique<PNS::ROUTING_SETTINGS>( settings, "tools.pns" );
 
     m_router->LoadSettings( settings->m_PnsSettings.get() );
 
-    m_gridHelper = new PCB_GRID_HELPER( m_toolMgr, frame()->GetMagneticItemsSettings() );
+    // Only build the grid helper in GUI mode where a view exists
+    if( getView() )
+    {
+        static MAGNETIC_SETTINGS defaultMagnetic;
+        m_gridHelper = new PCB_GRID_HELPER( m_toolMgr, &defaultMagnetic );
+    }
 }
