@@ -661,6 +661,8 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
 {
     LIB_TREE_NODE* node = m_tree->GetCurrentTreeNode();
 
+    m_field_edits.clear();
+
     if( node && node->m_LibId.IsValid() )
     {
         m_symbol_preview->DisplaySymbol( node->m_LibId, node->m_Unit );
