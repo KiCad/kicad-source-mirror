@@ -229,6 +229,10 @@ protected:
 
             DESIGN_BLOCK_IO_MGR::DESIGN_BLOCK_FILE_T pi_type = DESIGN_BLOCK_IO_MGR::EnumFromStr( row.Type() );
             IO_RELEASER<DESIGN_BLOCK_IO> pi( DESIGN_BLOCK_IO_MGR::FindPlugin( pi_type ) );
+
+            if( !pi )
+                return;
+
             pi->GetLibraryOptions( &choices );
 
             DIALOG_PLUGIN_OPTIONS dlg( wxGetTopLevelParent( m_grid ), row.Nickname(), choices, options, &result );
