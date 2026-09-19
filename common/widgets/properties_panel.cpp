@@ -582,6 +582,9 @@ bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection, 
         if( property->IsHiddenFromPropertiesManager() )
             return false;
 
+        if( property->IgnoreValue() )
+            continue;
+
         wxPGChoices choices = property->GetChoices( item );
 
         if( first )
@@ -606,9 +609,6 @@ bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection, 
 
         if( getItemValue( item, property, value ) )
         {
-            if( property->IgnoreValue() )
-                continue;
-
             // Null value indicates different property values between items
             if( !different && !aValue.IsNull() && value != aValue )
             {
