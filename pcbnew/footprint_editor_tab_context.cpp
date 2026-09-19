@@ -87,6 +87,9 @@ void FOOTPRINT_EDITOR_TAB_CONTEXT::PromoteToLibrary( const wxString& aLib, const
     m_lib = aLib;
     m_name = aName;
     m_footprintNameWhenLoaded = aName;
+
+    if( m_originalFootprintCopy )
+        m_originalFootprintCopy->SetFPID( LIB_ID( aLib, aName ) );
 }
 
 
