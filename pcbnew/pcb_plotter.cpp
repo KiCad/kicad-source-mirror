@@ -308,8 +308,10 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
                 plotter = nullptr;
 
                 if( m_reporter )
+                {
                     m_reporter->Report( wxString::Format( _( "Plotted to '%s'." ), fn.GetFullPath() ),
                                         RPT_SEVERITY_ACTION );
+                }
 
                 if( aOutputFiles )
                     aOutputFiles->push_back( fn.GetFullPath() );
@@ -318,8 +320,10 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
         else
         {
             if( m_reporter )
+            {
                 m_reporter->Report( wxString::Format( _( "Failed to create file '%s'." ), fn.GetFullPath() ),
                                     RPT_SEVERITY_ERROR );
+            }
 
             success = false;
         }
