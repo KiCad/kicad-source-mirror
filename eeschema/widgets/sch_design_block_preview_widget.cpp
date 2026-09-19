@@ -171,6 +171,11 @@ void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::fitOnDrawArea()
 
     // Calculate the drawing area size, in internal units, for a scaling factor = 1.0
     view->SetScale( 1.0 );
+    view->SetCenter( m_itemBBox.Centre() );
+
+    if( m_itemBBox.GetWidth() == 0 || m_itemBBox.GetHeight() == 0 )
+        return;
+
     VECTOR2D clientSize = view->ToWorld( ToVECTOR2D( m_preview->GetClientSize() ), false );
     // Calculate the draw scale to fit the drawing area
     double scale =
@@ -181,7 +186,6 @@ void SCH_DESIGN_BLOCK_PREVIEW_WIDGET::fitOnDrawArea()
 
     // Now fix the best scale
     view->SetScale( scale );
-    view->SetCenter( m_itemBBox.Centre() );
 }
 
 
