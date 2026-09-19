@@ -47,6 +47,10 @@
 #include <view/view.h>
 #include <zone.h>
 #include <pad.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/board/board_types.pb.h>
+#include <google/protobuf/any.pb.h>
 
 #include <pcb_track.h>
 #include <board.h>
@@ -688,6 +692,149 @@ void PCB_VIA_STITCH::SetProperties( const STRING_ANY_MAP& aProps )
         outline->SetClosed( true );
         m_outline.AddOutline( *outline );
     }
+}
+
+
+void PCB_VIA_STITCH::Serialize( google::protobuf::Any& aContainer ) const
+{
+    using namespace kiapi::board::types;
+    using namespace kiapi::common::types;
+
+    ViaStitchArea stitch;
+
+    stitch.mutable_id()->set_value( m_Uuid.AsStdString() );
+    stitch.set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( GetLayer() ) );
+    kiapi::common::PackPolySet( *stitch.mutable_outline(), m_outline );
+    stitch.mutable_pitch()->set_value_nm( pcbIUScale.IUToNm( m_pitch ) );
+    stitch.set_layout( ToProtoEnum<PCB_VIA_STITCH_LAYOUT, ViaStitchLayout>( m_layout ) );
+    stitch.set_mode( ToProtoEnum<PCB_VIA_STITCH_MODE, ViaStitchMode>( m_mode ) );
+
+    if( m_mode == PCB_VIA_STITCH_MODE::GUARD )
+    {
+        ViaStitchGuardSettings* guard = stitch.mutable_guard_settings();
+
+        if( !m_lastGuardedNetName.empty() )
+            guard->mutable_guarded_net()->set_name( m_lastGuardedNetName.ToUTF8() );
+    }
+    else
+    {
+        ViaStitchGridSettings* grid = stitch.mutable_grid_settings();
+        grid->mutable_origin_offset()->set_x_nm( pcbIUScale.IUToNm( m_originOffset.x ) );
+        grid->mutable_origin_offset()->set_y_nm( pcbIUScale.IUToNm( m_originOffset.y ) );
+        grid->set_seed( m_seed );
+
+        for( const VECTOR2I& cell : m_excludedCells )
+        {
+            GridCell* gridCell = grid->add_excluded_cells();
+            gridCell->set_i( cell.x );
+            gridCell->set_j( cell.y );
+        }
+    }
+
+    if( !m_lastNetName.empty() )
+        stitch.mutable_net()->set_name( m_lastNetName.ToUTF8() );
+
+    for( const VECTOR2I& pos : m_excludedPositions )
+        kiapi::common::PackVector2( *stitch.add_excluded_positions(), pos );
+
+    if( const PCB_VIA* viaTemplate = ViaTemplate() )
+        viaTemplate->Serialize( *stitch.mutable_via_template() );
+
+    stitch.set_locked( IsLocked() ? LockedState::LS_LOCKED : LockedState::LS_UNLOCKED );
+
+    if( const BOARD* board = GetBoard() )
+        stitch.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
+    for( EDA_ITEM* member : GetItems() )
+        stitch.add_members()->set_value( member->m_Uuid.AsStdString() );
+
+    kiapi::common::PackCustomProperties( stitch.mutable_custom_properties(), *this );
+    aContainer.PackFrom( stitch );
+}
+
+
+bool PCB_VIA_STITCH::Deserialize( const google::protobuf::Any& aContainer )
+{
+    using namespace kiapi::board::types;
+    using namespace kiapi::common::types;
+
+    ViaStitchArea stitch;
+
+    if( !aContainer.UnpackTo( &stitch ) )
+        return false;
+
+    SetUuidDirect( ::KIID( stitch.id().value() ) );
+    SetLayer( FromProtoEnum<PCB_LAYER_ID>( stitch.layer() ) );
+    m_outline = kiapi::common::UnpackPolySet( stitch.outline() );
+    m_pitch = pcbIUScale.NmToIU( stitch.pitch().value_nm() );
+    m_layout = FromProtoEnum<PCB_VIA_STITCH_LAYOUT>( stitch.layout() );
+    m_mode = FromProtoEnum<PCB_VIA_STITCH_MODE>( stitch.mode() );
+
+    m_lastNetName = wxString( stitch.net().name().c_str(), wxConvUTF8 );
+    m_lastGuardedNetName.clear();
+    m_netCode = 0;
+    m_guardedNetCode = 0;
+
+    m_excludedCells.clear();
+    m_excludedPositions.clear();
+
+    switch( stitch.mode_specific_settings_case() )
+    {
+    case ViaStitchArea::kGridSettings:
+    {
+        const ViaStitchGridSettings& grid = stitch.grid_settings();
+        m_originOffset.x = pcbIUScale.NmToIU( grid.origin_offset().x_nm() );
+        m_originOffset.y = pcbIUScale.NmToIU( grid.origin_offset().y_nm() );
+        m_seed = grid.seed();
+
+        for( const GridCell& cell : grid.excluded_cells() )
+            m_excludedCells.insert( VECTOR2I( cell.i(), cell.j() ) );
+
+        break;
+    }
+
+    case ViaStitchArea::kGuardSettings:
+        m_lastGuardedNetName = wxString( stitch.guard_settings().guarded_net().name().c_str(), wxConvUTF8 );
+        break;
+
+    case ViaStitchArea::MODE_SPECIFIC_SETTINGS_NOT_SET: break;
+    }
+
+    for( const kiapi::common::types::Vector2& pos : stitch.excluded_positions() )
+        m_excludedPositions.insert( kiapi::common::UnpackVector2( pos ) );
+
+    if( stitch.has_via_template() )
+    {
+        std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( this );
+
+        if( !via->Deserialize( stitch.via_template() ) )
+            return false;
+
+        via->SetParent( this );
+        via->SetIsFree( true );
+        m_viaTemplate = std::move( via );
+    }
+
+    SetLocked( stitch.locked() == LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( stitch.custom_properties(), *this );
+
+    m_items.clear();
+    m_deserializedItems.clear();
+
+    BOARD* board = GetBoard();
+
+    if( !board )
+        return false;
+
+    for( const kiapi::common::types::KIID& memberId : stitch.members() )
+    {
+        if( EDA_ITEM* item = board->ResolveItem( ::KIID( memberId.value() ), true ) )
+            m_deserializedItems.insert( item );
+    }
+
+    m_childGridConfig = GRID_CONFIG{ m_layout, m_mode, m_pitch };
+
+    return true;
 }
 
 

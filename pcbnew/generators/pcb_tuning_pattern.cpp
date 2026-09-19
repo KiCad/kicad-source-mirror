@@ -41,6 +41,10 @@
 #include <scoped_set_reset.h>
 #include <core/mirror.h>
 #include <string_utils.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/board/board_types.pb.h>
+#include <google/protobuf/any.pb.h>
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -1336,34 +1340,14 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     m_tuningStatus = placer->TuningStatus();
     m_tuningLength = placer->TuningLengthResult();
 
-    wxString statusMessage;
-
-    switch( m_tuningStatus )
-    {
-    case PNS::MEANDER_PLACER_BASE::TOO_LONG:  statusMessage = _( "too long" );  break;
-    case PNS::MEANDER_PLACER_BASE::TOO_SHORT: statusMessage = _( "too short" ); break;
-    case PNS::MEANDER_PLACER_BASE::TUNED:     statusMessage = _( "tuned" );     break;
-    default:                                  statusMessage = _( "unknown" );   break;
-    }
-
-    wxString  result;
-    EDA_UNITS userUnits = EDA_UNITS::MM;
-
-    if( aTool->GetManager()->GetSettings() )
-        userUnits = static_cast<EDA_UNITS>( aTool->GetManager()->GetSettings()->m_System.units );
-
-    if( m_settings.m_isTimeDomain )
-    {
-        result = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, EDA_UNITS::PS,
-                                                           (double) m_tuningLength );
-    }
-    else
-    {
-        result = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, userUnits,
-                                                           (double) m_tuningLength );
-    }
-
-    m_tuningInfo.Printf( wxS( "%s (%s)" ), result, statusMessage );
+    // Take the display units from the board, which tracks the frame's user units; time-domain
+    // tuning always displays in picoseconds.
+    EDA_UNITS units = m_settings.m_isTimeDomain ? EDA_UNITS::PS
+                                                : ( aBoard ? aBoard->GetUserUnits() : EDA_UNITS::MM );
+    m_tuningInfo.Printf( wxS( "%s (%s)" ),
+                         EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units,
+                                                                   (double) m_tuningLength ),
+                         StatusMessage( m_tuningStatus ) );
 
     return true;
 }
@@ -1919,25 +1903,268 @@ void PCB_TUNING_PATTERN::SetProperties( const STRING_ANY_MAP& aProps )
     if( auto baseLineCoupled = aProps.get_opt<SHAPE_LINE_CHAIN>( "base_line_coupled" ) )
         m_baseLineCoupled = *baseLineCoupled;
 
-    // Reconstruct m_tuningInfo from loaded length and status
-    if( m_tuningLength != 0 )
+    rebuildTuningInfo();
+}
+
+
+wxString PCB_TUNING_PATTERN::StatusMessage( PNS::MEANDER_PLACER_BASE::TUNING_STATUS aStatus )
+{
+    switch( aStatus )
     {
-        wxString statusMessage;
-
-        switch( m_tuningStatus )
-        {
-        case PNS::MEANDER_PLACER_BASE::TOO_LONG:  statusMessage = _( "too long" );  break;
-        case PNS::MEANDER_PLACER_BASE::TOO_SHORT: statusMessage = _( "too short" ); break;
-        case PNS::MEANDER_PLACER_BASE::TUNED:     statusMessage = _( "tuned" );     break;
-        default:                                  statusMessage = _( "unknown" );   break;
-        }
-
-        EDA_UNITS units = m_settings.m_isTimeDomain ? EDA_UNITS::PS : EDA_UNITS::MM;
-        wxString  lengthStr = EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units,
-                                                                        (double) m_tuningLength );
-
-        m_tuningInfo.Printf( wxS( "%s (%s)" ), lengthStr, statusMessage );
+    case PNS::MEANDER_PLACER_BASE::TOO_LONG:  return _( "too long" );
+    case PNS::MEANDER_PLACER_BASE::TOO_SHORT: return _( "too short" );
+    case PNS::MEANDER_PLACER_BASE::TUNED:     return _( "tuned" );
+    default:                                  return _( "unknown" );
     }
+}
+
+
+void PCB_TUNING_PATTERN::rebuildTuningInfo()
+{
+    if( m_tuningLength == 0 )
+        return;
+
+    EDA_UNITS units = m_settings.m_isTimeDomain ? EDA_UNITS::PS : EDA_UNITS::MM;
+
+    m_tuningInfo.Printf( wxS( "%s (%s)" ),
+                         EDA_UNIT_UTILS::UI::MessageTextFromValue( pcbIUScale, units,
+                                                                   static_cast<double>( m_tuningLength ) ),
+                         StatusMessage( m_tuningStatus ) );
+}
+
+
+void PCB_TUNING_PATTERN::Serialize( google::protobuf::Any& aContainer ) const
+{
+    using namespace kiapi::board::types;
+    using namespace kiapi::common::types;
+
+    TuningPattern pattern;
+
+    pattern.mutable_id()->set_value( m_Uuid.AsStdString() );
+    pattern.set_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( GetLayer() ) );
+    kiapi::common::PackVector2( *pattern.mutable_origin(), GetPosition() );
+    kiapi::common::PackVector2( *pattern.mutable_end(), m_end );
+    pattern.set_mode( ToProtoEnum<LENGTH_TUNING_MODE, TuningPatternMode>( m_tuningMode ) );
+
+    TuningPatternSettings* settings = pattern.mutable_settings();
+    settings->set_initial_side( ToProtoEnum<PNS::MEANDER_SIDE, TuningPatternMeanderSide>( m_settings.m_initialSide ) );
+    settings->set_corner_style( ToProtoEnum<PNS::MEANDER_STYLE, TuningPatternCornerStyle>( m_settings.m_cornerStyle ) );
+    settings->set_corner_radius_percent( m_settings.m_cornerRadiusPercentage );
+    settings->set_single_sided( m_settings.m_singleSided );
+    settings->mutable_max_amplitude()->set_value_nm( pcbIUScale.IUToNm( m_settings.m_maxAmplitude ) );
+    settings->mutable_min_amplitude()->set_value_nm( pcbIUScale.IUToNm( m_settings.m_minAmplitude ) );
+    settings->mutable_min_spacing()->set_value_nm( pcbIUScale.IUToNm( m_settings.m_spacing ) );
+
+    pattern.set_target_mode( m_settings.m_isTimeDomain ? TuningPatternTargetMode::TPTM_TIME_DOMAIN
+                                                       : TuningPatternTargetMode::TPTM_LENGTH );
+
+    pattern.set_override_custom_rules( m_settings.m_overrideCustomRules );
+
+    if( m_tuningMode == LENGTH_TUNING_MODE::DIFF_PAIR_SKEW )
+    {
+        if( m_settings.m_isTimeDomain )
+        {
+            TimeRange* range = pattern.mutable_target_skew_delay();
+
+            if( m_settings.m_targetSkewDelay.HasMin() )
+                range->set_min_as( m_settings.m_targetSkewDelay.Min() );
+
+            if( m_settings.m_targetSkewDelay.HasOpt() )
+                range->set_opt_as( m_settings.m_targetSkewDelay.Opt() );
+
+            if( m_settings.m_targetSkewDelay.HasMax() )
+                range->set_max_as( m_settings.m_targetSkewDelay.Max() );
+        }
+        else
+        {
+            kiapi::common::types::MinOptMax* range = pattern.mutable_target_skew();
+
+            if( m_settings.m_targetSkew.HasMin() )
+                range->set_min( m_settings.m_targetSkew.Min() );
+
+            if( m_settings.m_targetSkew.HasOpt() )
+                range->set_opt( m_settings.m_targetSkew.Opt() );
+
+            if( m_settings.m_targetSkew.HasMax() )
+                range->set_max( m_settings.m_targetSkew.Max() );
+        }
+    }
+    else if( m_settings.m_isTimeDomain )
+    {
+        TimeRange* range = pattern.mutable_target_delay();
+
+        if( m_settings.m_targetLengthDelay.HasMin() )
+            range->set_min_as( m_settings.m_targetLengthDelay.Min() );
+
+        if( m_settings.m_targetLengthDelay.HasOpt() )
+            range->set_opt_as( m_settings.m_targetLengthDelay.Opt() );
+
+        if( m_settings.m_targetLengthDelay.HasMax() )
+            range->set_max_as( m_settings.m_targetLengthDelay.Max() );
+    }
+    else
+    {
+        kiapi::common::types::MinOptMax* range = pattern.mutable_target_length();
+
+        if( m_settings.m_targetLength.HasMin() )
+            range->set_min( m_settings.m_targetLength.Min() );
+
+        if( m_settings.m_targetLength.HasOpt() )
+            range->set_opt( m_settings.m_targetLength.Opt() );
+
+        if( m_settings.m_targetLength.HasMax() )
+            range->set_max( m_settings.m_targetLength.Max() );
+    }
+
+    TuningPatternState* state = pattern.mutable_state();
+    state->set_status( ToProtoEnum<PNS::MEANDER_PLACER_BASE::TUNING_STATUS, TuningPatternStatus>( m_tuningStatus ) );
+
+    if( m_tuningLength != 0 )
+        state->set_tuning_value( m_tuningLength );
+
+    pattern.set_locked( IsLocked() ? LockedState::LS_LOCKED : LockedState::LS_UNLOCKED );
+
+    if( const BOARD* board = GetBoard() )
+        pattern.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
+    for( EDA_ITEM* member : GetItems() )
+        pattern.add_members()->set_value( member->m_Uuid.AsStdString() );
+
+    kiapi::common::PackCustomProperties( pattern.mutable_custom_properties(), *this );
+    aContainer.PackFrom( pattern );
+}
+
+
+bool PCB_TUNING_PATTERN::Deserialize( const google::protobuf::Any& aContainer )
+{
+    using namespace kiapi::board::types;
+    using namespace kiapi::common::types;
+
+    TuningPattern pattern;
+
+    if( !aContainer.UnpackTo( &pattern ) )
+        return false;
+
+    BOARD* board = GetBoard();
+
+    if( !board )
+        return false;
+
+    SetUuidDirect( ::KIID( pattern.id().value() ) );
+    SetLayer( FromProtoEnum<PCB_LAYER_ID>( pattern.layer() ) );
+    SetPosition( kiapi::common::UnpackVector2( pattern.origin() ) );
+    m_end = kiapi::common::UnpackVector2( pattern.end() );
+    m_tuningMode = FromProtoEnum<LENGTH_TUNING_MODE>( pattern.mode() );
+
+    const TuningPatternSettings& settings = pattern.settings();
+    m_settings.m_initialSide = FromProtoEnum<PNS::MEANDER_SIDE>( settings.initial_side() );
+    m_settings.m_cornerStyle = FromProtoEnum<PNS::MEANDER_STYLE>( settings.corner_style() );
+    m_settings.m_cornerRadiusPercentage = settings.corner_radius_percent();
+    m_settings.m_singleSided = settings.single_sided();
+    m_settings.m_maxAmplitude = pcbIUScale.NmToIU( settings.max_amplitude().value_nm() );
+    m_settings.m_minAmplitude = pcbIUScale.NmToIU( settings.min_amplitude().value_nm() );
+    m_settings.m_spacing = pcbIUScale.NmToIU( settings.min_spacing().value_nm() );
+    m_settings.m_overrideCustomRules = pattern.override_custom_rules();
+
+    switch( pattern.target_case() )
+    {
+    case TuningPattern::kTargetLength:
+    {
+        const kiapi::common::types::MinOptMax& range = pattern.target_length();
+
+        m_settings.m_isTimeDomain = false;
+
+        if( range.has_opt() )
+            m_settings.SetTargetLength( range.opt() );
+
+        if( range.has_min() )
+            m_settings.m_targetLength.SetMin( range.min() );
+
+        if( range.has_max() )
+            m_settings.m_targetLength.SetMax( range.max() );
+
+        break;
+    }
+
+    case TuningPattern::kTargetDelay:
+    {
+        const TimeRange& range = pattern.target_delay();
+
+        m_settings.m_isTimeDomain = true;
+
+        if( range.has_opt_as() )
+            m_settings.SetTargetLengthDelay( range.opt_as() );
+
+        if( range.has_min_as() )
+            m_settings.m_targetLengthDelay.SetMin( range.min_as() );
+
+        if( range.has_max_as() )
+            m_settings.m_targetLengthDelay.SetMax( range.max_as() );
+
+        break;
+    }
+
+    case TuningPattern::kTargetSkew:
+    {
+        const kiapi::common::types::MinOptMax& range = pattern.target_skew();
+
+        m_settings.m_isTimeDomain = false;
+
+        if( range.has_opt() )
+            m_settings.SetTargetSkew( range.opt() );
+
+        if( range.has_min() )
+            m_settings.m_targetSkew.SetMin( range.min() );
+
+        if( range.has_max() )
+            m_settings.m_targetSkew.SetMax( range.max() );
+
+        break;
+    }
+
+    case TuningPattern::kTargetSkewDelay:
+    {
+        const TimeRange& range = pattern.target_skew_delay();
+
+        m_settings.m_isTimeDomain = true;
+
+        if( range.has_opt_as() )
+            m_settings.SetTargetSkewDelay( range.opt_as() );
+
+        if( range.has_min_as() )
+            m_settings.m_targetSkewDelay.SetMin( range.min_as() );
+
+        if( range.has_max_as() )
+            m_settings.m_targetSkewDelay.SetMax( range.max_as() );
+
+        break;
+    }
+
+    case TuningPattern::TARGET_NOT_SET: break;
+    }
+
+    if( pattern.has_state() )
+    {
+        const TuningPatternState& state = pattern.state();
+        m_tuningStatus = FromProtoEnum<PNS::MEANDER_PLACER_BASE::TUNING_STATUS>( state.status() );
+        m_tuningLength = state.tuning_value();
+    }
+
+    SetLocked( pattern.locked() == LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( pattern.custom_properties(), *this );
+
+    m_items.clear();
+    m_deserializedItems.clear();
+
+    for( const kiapi::common::types::KIID& memberId : pattern.members() )
+    {
+        if( EDA_ITEM* item = board->ResolveItem( ::KIID( memberId.value() ), true ) )
+            m_deserializedItems.insert( item );
+    }
+
+    rebuildTuningInfo();
+
+    return true;
 }
 
 

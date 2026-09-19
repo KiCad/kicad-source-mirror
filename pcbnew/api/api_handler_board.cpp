@@ -36,6 +36,7 @@
 #include <pcb_base_edit_frame.h>
 #include <pcb_field.h>
 #include <pcb_group.h>
+#include <tools/generator_tool.h>
 #include <pcb_track.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
@@ -223,10 +224,76 @@ void API_HANDLER_BOARD::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>&
     COMMIT* commit = getCurrentCommit( aClientName );
 
     for( BOARD_ITEM* item : validatedItems )
-        commit->Remove( item );
+    {
+        if( item->Type() == PCB_GENERATOR_T )
+        {
+            TOOL_MANAGER* mgr = toolManager();
+
+            if( ensureGeneratorTool() )
+            {
+                mgr->RunSynchronousAction<PCB_GENERATOR*>( PCB_ACTIONS::genRemove, commit,
+                                                           static_cast<PCB_GENERATOR*>( item ) );
+            }
+            else
+            {
+                commit->Remove( item );
+            }
+        }
+        else
+        {
+            commit->Remove( item );
+        }
+    }
 
     if( !m_activeClients.count( aClientName ) )
         pushCurrentCommit( aClientName, _( "Deleted items via API" ) );
+}
+
+
+GENERATOR_TOOL* API_HANDLER_BOARD::ensureGeneratorTool() const
+{
+    TOOL_MANAGER* mgr = toolManager();
+
+    if( !mgr->FindTool( GENERATOR_TOOL_NAME ) )
+    {
+        mgr->RegisterTool( new GENERATOR_TOOL );
+        mgr->ResetTools( TOOL_BASE::RUN );
+    }
+
+    return mgr->GetTool<GENERATOR_TOOL>();
+}
+
+
+void API_HANDLER_BOARD::regenerateGenerators( GENERATOR_TOOL* aTool, BOARD_COMMIT* aCommit,
+                                              const std::vector<PCB_GENERATOR*>& aGenerators,
+                                              std::function<void( const KIID&, ItemStatus )> aResultHandler ) const
+{
+    BOARD* board = this->board();
+
+    for( PCB_GENERATOR* generator : aGenerators )
+    {
+        ItemStatus status;
+
+        try
+        {
+            generator->EditStart( aTool, board, aCommit );
+            bool ok = generator->Update( aTool, board, aCommit );
+            generator->EditFinish( aTool, board, aCommit );
+
+            status.set_code( ok ? ItemStatusCode::ISC_OK : ItemStatusCode::ISC_INVALID_DATA );
+
+            if( !ok )
+                status.set_error_message( "the generator reported an update failure" );
+        }
+        catch( const std::exception& exc )
+        {
+            status.set_code( ItemStatusCode::ISC_INVALID_DATA );
+            status.set_error_message( fmt::format( "regeneration exception: {}", exc.what() ) );
+        }
+
+        if( aResultHandler )
+            aResultHandler( generator->m_Uuid, status );
+    }
 }
 
 
@@ -323,13 +390,50 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             }
         }
 
-        HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>> creationResult = createItemForType( *type, container );
-
-        if( !creationResult )
+        HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>> creationResult =
+                [&]() -> HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>>
         {
-            status.set_code( ItemStatusCode::ISC_INVALID_TYPE );
-            status.set_error_message( creationResult.error().error_message() );
-            aItemHandler( status, anyItem );
+            if( *type == PCB_GENERATOR_T )
+            {
+                std::optional<wxString> generatorType = GeneratorTypeFromAny( anyItem );
+
+                if( !generatorType )
+                {
+                    ItemStatus genStatus;
+                    genStatus.set_code( ItemStatusCode::ISC_INVALID_TYPE );
+                    genStatus.set_error_message(
+                            fmt::format( "could not decode a generator from {}", anyItem.type_url() ) );
+                    aItemHandler( genStatus, anyItem );
+                    return HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>>( std::unique_ptr<BOARD_ITEM>() );
+                }
+
+                std::unique_ptr<BOARD_ITEM> genItem = CreateGeneratorForType( *generatorType, container );
+
+                if( !genItem )
+                {
+                    ItemStatus genStatus;
+                    genStatus.set_code( ItemStatusCode::ISC_INVALID_TYPE );
+                    genStatus.set_error_message( fmt::format( "generator type {} is not registered",
+                                                              generatorType->ToStdString() ) );
+                    aItemHandler( genStatus, anyItem );
+                    return HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>>( std::unique_ptr<BOARD_ITEM>() );
+                }
+
+                return HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>>( std::move( genItem ) );
+            }
+
+            return createItemForType( *type, container );
+        }();
+
+        if( !creationResult || !creationResult.value() )
+        {
+            if( !creationResult )
+            {
+                status.set_code( ItemStatusCode::ISC_INVALID_TYPE );
+                status.set_error_message( creationResult.error().error_message() );
+                aItemHandler( status, anyItem );
+            }
+
             continue;
         }
 
@@ -337,7 +441,9 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
 
         bool unpacked = false;
 
-        if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item.get() ) )
+        if( item->Type() == PCB_GENERATOR_T )
+            unpacked = item->Deserialize( anyItem );
+        else if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item.get() ) )
             unpacked = group->DeserializeGroup( anyItem, commit );
         else
             unpacked = item->Deserialize( anyItem );
@@ -435,13 +541,36 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
                             RECURSE );
                 }
 
+                BOARD_ITEM* newBoardItem = item.get();
                 item->Serialize( newItem );
                 commit->Add( item.release() );
+
+                if( newBoardItem->Type() == PCB_GENERATOR_T )
+                {
+                    if( GENERATOR_TOOL* genTool = ensureGeneratorTool() )
+                        regenerateGenerators( genTool, commit, { static_cast<PCB_GENERATOR*>( newBoardItem ) }, {} );
+
+                    // The regeneration may have added members
+                    newBoardItem->Serialize( newItem );
+                }
             }
         }
         else
         {
             BOARD_ITEM* boardItem = *optItem;
+
+            if( boardItem->Type() == PCB_GENERATOR_T )
+            {
+                commit->Modify( boardItem );
+                boardItem->Deserialize( anyItem );
+
+                static_cast<PCB_GROUP*>( boardItem )->FinalizeGroupDeserialization();
+
+                if( GENERATOR_TOOL* genTool = ensureGeneratorTool() )
+                    regenerateGenerators( genTool, commit, { static_cast<PCB_GENERATOR*>( boardItem ) }, {} );
+
+                boardItem->Serialize( newItem );
+            }
 
             // Footprints can't be modified by CopyFrom at the moment because the commit system
             // doesn't currently know what to do with a footprint that has had its children
@@ -449,7 +578,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             // cached geometry for footprint children updated when you move a footprint around.
             // And also, groups are special because they can contain any item type, so we
             // can't use CopyFrom on them either.
-            if( boardItem->Type() == PCB_FOOTPRINT_T  || boardItem->Type() == PCB_GROUP_T )
+            else if( boardItem->Type() == PCB_FOOTPRINT_T  || boardItem->Type() == PCB_GROUP_T )
             {
                 // Save group membership before removal, since Remove() severs the relationship
                 PCB_GROUP* parentGroup = dynamic_cast<PCB_GROUP*>( boardItem->GetParentGroup() );

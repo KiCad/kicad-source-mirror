@@ -33,6 +33,8 @@
 #include <lset.h>
 #include <pad.h>
 #include <pcb_group.h>
+#include <pcb_generator.h>
+#include <generators_mgr.h>
 #include <constraints/pcb_constraint.h>
 #include <mmh3_hash.h>
 #include <pcb_barcode.h>
@@ -49,6 +51,20 @@
 #include <pcb_table.h>
 #include <pcb_dimension.h>
 #include <zone.h>
+
+
+std::unique_ptr<BOARD_ITEM> CreateGeneratorForType( const wxString& aGeneratorType, BOARD_ITEM_CONTAINER* aContainer )
+{
+    PCB_GENERATOR* generator = GENERATORS_MGR::Instance().CreateFromType( aGeneratorType );
+
+    if( !generator )
+        return nullptr;
+
+    if( aContainer )
+        generator->SetParent( aContainer );
+
+    return std::unique_ptr<BOARD_ITEM>( generator );
+}
 
 
 std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAINER* aContainer )
@@ -77,6 +93,7 @@ std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAIN
     case PCB_BARCODE_T:         return std::make_unique<PCB_BARCODE>( aContainer );
     case PCB_ZONE_T:            return std::make_unique<ZONE>( aContainer );
     case PCB_GROUP_T:           return std::make_unique<PCB_GROUP>( aContainer );
+    case PCB_GENERATOR_T:       return nullptr;  // must be created via CreateGeneratorForType
     case PCB_CONSTRAINT_T:      return std::make_unique<PCB_CONSTRAINT>( aContainer );
     case PCB_REFERENCE_IMAGE_T: return std::make_unique<PCB_REFERENCE_IMAGE>( aContainer );
     case PCB_GRID_ITEM_T:        return std::make_unique<PCB_GRID_ITEM>( aContainer );

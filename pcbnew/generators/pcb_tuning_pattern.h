@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <eda_item.h>
+#include <pcb_generator.h>
 #include <geometry/geometry_utils.h>
 #include <pcb_base_edit_frame.h>
 #include <router/pns_meander.h>
@@ -543,6 +543,14 @@ public:
 
     const STRING_ANY_MAP GetProperties() const override;
     void SetProperties( const STRING_ANY_MAP& aProps ) override;
+
+    void Serialize( google::protobuf::Any& aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any& aContainer ) override;
+
+    void rebuildTuningInfo();
+
+    // @return the user-facing status string for a tuning result ("too long", "tuned", ...)
+    static wxString StatusMessage( PNS::MEANDER_PLACER_BASE::TUNING_STATUS aStatus );
 
     void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) override;
 

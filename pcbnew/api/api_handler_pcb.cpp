@@ -21,6 +21,7 @@
 #include <magic_enum.hpp>
 #include <memory>
 #include <properties/property.h>
+#include <ranges>
 
 #include <common.h>
 #include <fmt.h>
@@ -84,6 +85,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/pcb_selection_tool.h>
 #include <tools/zone_filler_tool.h>
+#include <tools/generator_tool.h>
 #include <zone.h>
 #include <zone_filler.h>
 
@@ -389,6 +391,7 @@ static const std::vector<KICAD_T> s_allowedBoardTypes = {
     PCB_DIMENSION_T,
     PCB_ZONE_T,
     PCB_GROUP_T,
+    PCB_GENERATOR_T,
     PCB_BARCODE_T,
     PCB_CONSTRAINT_T,
     PCB_GRID_ITEM_T,
@@ -546,6 +549,14 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_
             handledAnything = true;
             std::copy( board->Points().begin(), board->Points().end(), std::back_inserter( items ) );
             typesInserted.insert( PCB_POINT_T );
+            break;
+        }
+
+        case PCB_GENERATOR_T:
+        {
+            handledAnything = true;
+            std::ranges::copy( board->Generators(), std::back_inserter( items ) );
+            typesInserted.insert( PCB_GENERATOR_T );
             break;
         }
 

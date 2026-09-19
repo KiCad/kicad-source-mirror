@@ -88,6 +88,9 @@ KICOMMON_API std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any
         { "type.googleapis.com/kiapi.board.types.ReferencePoint", PCB_POINT_T },
         { "type.googleapis.com/kiapi.board.types.GridItem", PCB_GRID_ITEM_T },
         { "type.googleapis.com/kiapi.board.types.Group", PCB_GROUP_T },
+        { "type.googleapis.com/kiapi.board.types.TuningPattern", PCB_GENERATOR_T },
+        { "type.googleapis.com/kiapi.board.types.ViaStitchArea", PCB_GENERATOR_T },
+        { "type.googleapis.com/kiapi.board.types.ViaStack", PCB_GENERATOR_T },
         { "type.googleapis.com/kiapi.board.types.Constraint", PCB_CONSTRAINT_T },
         { "type.googleapis.com/kiapi.board.types.Field", PCB_FIELD_T },
         { "type.googleapis.com/kiapi.board.types.FootprintInstance", PCB_FOOTPRINT_T },
@@ -120,6 +123,23 @@ KICOMMON_API std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any
 
     wxLogTrace( traceApi, wxString::Format( wxS( "Any message type %s is not known" ),
                                             aMessage.type_url() ) );
+
+    return std::nullopt;
+}
+
+
+KICOMMON_API std::optional<wxString> GeneratorTypeFromAny( const google::protobuf::Any& aMessage )
+{
+    static const std::map<std::string, wxString> s_generatorTypes = {
+        { "type.googleapis.com/kiapi.board.types.TuningPattern",    wxS( "tuning_pattern" ) },
+        { "type.googleapis.com/kiapi.board.types.ViaStitchArea",    wxS( "via_stitch" ) },
+        { "type.googleapis.com/kiapi.board.types.ViaStack",         wxS( "via_stack" ) },
+    };
+
+    auto it = s_generatorTypes.find( aMessage.type_url() );
+
+    if( it != s_generatorTypes.end() )
+        return it->second;
 
     return std::nullopt;
 }

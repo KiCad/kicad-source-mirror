@@ -52,6 +52,9 @@
 #include <zones.h>
 #include <zone_settings.h>
 #include <project/board_project_settings.h>
+#include <generators/pcb_tuning_pattern.h>
+#include <generators/pcb_via_stack.h>
+#include <generators/pcb_via_stitch.h>
 
 // Adding something new here?  Add it to test_api_enums.cpp!
 
@@ -2431,6 +2434,237 @@ CONSTRAINT_ANCHOR FromProtoEnum( types::ConstraintAnchor aValue )
         wxCHECK_MSG( false, CONSTRAINT_ANCHOR::WHOLE,
                      "Unhandled case in FromProtoEnum<types::ConstraintAnchor>" );
     }
+}
+
+
+template<>
+types::TuningPatternMode ToProtoEnum( LENGTH_TUNING_MODE aValue )
+{
+    switch( aValue )
+    {
+    case LENGTH_TUNING_MODE::SINGLE:         return types::TuningPatternMode::TPM_SINGLE;
+    case LENGTH_TUNING_MODE::DIFF_PAIR:      return types::TuningPatternMode::TPM_DIFF_PAIR;
+    case LENGTH_TUNING_MODE::DIFF_PAIR_SKEW: return types::TuningPatternMode::TPM_DIFF_PAIR_SKEW;
+
+    default:
+        wxCHECK_MSG( false, types::TuningPatternMode::TPM_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<LENGTH_TUNING_MODE>" );
+    }
+}
+
+
+template<>
+LENGTH_TUNING_MODE FromProtoEnum( types::TuningPatternMode aValue )
+{
+    switch( aValue )
+    {
+    case types::TuningPatternMode::TPM_SINGLE:         return LENGTH_TUNING_MODE::SINGLE;
+    case types::TuningPatternMode::TPM_DIFF_PAIR:      return LENGTH_TUNING_MODE::DIFF_PAIR;
+    case types::TuningPatternMode::TPM_DIFF_PAIR_SKEW: return LENGTH_TUNING_MODE::DIFF_PAIR_SKEW;
+
+    default:
+    case types::TuningPatternMode::TPM_UNKNOWN:        return LENGTH_TUNING_MODE::SINGLE;
+    }
+
+    wxCHECK_MSG( false, LENGTH_TUNING_MODE::SINGLE,
+                 "Unhandled case in FromProtoEnum<types::TuningPatternMode>" );
+}
+
+
+
+template<>
+types::TuningPatternMeanderSide ToProtoEnum( PNS::MEANDER_SIDE aValue )
+{
+    switch( aValue )
+    {
+    case PNS::MEANDER_SIDE_DEFAULT: return types::TuningPatternMeanderSide::TPMS_DEFAULT;
+    case PNS::MEANDER_SIDE_LEFT:    return types::TuningPatternMeanderSide::TPMS_LEFT;
+    case PNS::MEANDER_SIDE_RIGHT:   return types::TuningPatternMeanderSide::TPMS_RIGHT;
+
+    default:
+        wxCHECK_MSG( false, types::TuningPatternMeanderSide::TPMS_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<PNS::MEANDER_SIDE>" );
+    }
+}
+
+
+template<>
+PNS::MEANDER_SIDE FromProtoEnum( types::TuningPatternMeanderSide aValue )
+{
+    switch( aValue )
+    {
+    case types::TuningPatternMeanderSide::TPMS_DEFAULT: return PNS::MEANDER_SIDE_DEFAULT;
+    case types::TuningPatternMeanderSide::TPMS_LEFT:    return PNS::MEANDER_SIDE_LEFT;
+    case types::TuningPatternMeanderSide::TPMS_RIGHT:   return PNS::MEANDER_SIDE_RIGHT;
+
+    default:
+    case types::TuningPatternMeanderSide::TPMS_UNKNOWN: return PNS::MEANDER_SIDE_DEFAULT;
+    }
+
+    wxCHECK_MSG( false, PNS::MEANDER_SIDE_DEFAULT,
+                 "Unhandled case in FromProtoEnum<types::TuningPatternMeanderSide>" );
+}
+
+template<>
+types::TuningPatternCornerStyle ToProtoEnum( PNS::MEANDER_STYLE aValue )
+{
+    switch( aValue )
+    {
+    case PNS::MEANDER_STYLE_CHAMFER: return types::TuningPatternCornerStyle::TPCS_CHAMFERED;
+    case PNS::MEANDER_STYLE_ROUND:   return types::TuningPatternCornerStyle::TPCS_ROUNDED;
+
+    default:
+        wxCHECK_MSG( false, types::TuningPatternCornerStyle::TPCS_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<PNS::MEANDER_STYLE>" );
+    }
+}
+
+
+template<>
+PNS::MEANDER_STYLE FromProtoEnum( types::TuningPatternCornerStyle aValue )
+{
+    switch( aValue )
+    {
+    case types::TuningPatternCornerStyle::TPCS_CHAMFERED: return PNS::MEANDER_STYLE_CHAMFER;
+    case types::TuningPatternCornerStyle::TPCS_ROUNDED:   return PNS::MEANDER_STYLE_ROUND;
+
+    default:
+    case types::TuningPatternCornerStyle::TPCS_UNKNOWN:   return PNS::MEANDER_STYLE_CHAMFER;
+    }
+
+    wxCHECK_MSG( false, PNS::MEANDER_STYLE_CHAMFER,
+                 "Unhandled case in FromProtoEnum<types::TuningPatternCornerStyle>" );
+}
+
+template<>
+types::TuningPatternStatus ToProtoEnum( PNS::MEANDER_PLACER_BASE::TUNING_STATUS aValue )
+{
+    switch( aValue )
+    {
+    case PNS::MEANDER_PLACER_BASE::TOO_SHORT: return types::TuningPatternStatus::TPS_TOO_SHORT;
+    case PNS::MEANDER_PLACER_BASE::TOO_LONG:  return types::TuningPatternStatus::TPS_TOO_LONG;
+    case PNS::MEANDER_PLACER_BASE::TUNED:     return types::TuningPatternStatus::TPS_TUNED;
+
+    default:
+        wxCHECK_MSG( false, types::TuningPatternStatus::TPS_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<TUNING_STATUS>" );
+    }
+}
+
+
+template<>
+PNS::MEANDER_PLACER_BASE::TUNING_STATUS FromProtoEnum( types::TuningPatternStatus aValue )
+{
+    switch( aValue )
+    {
+    case types::TuningPatternStatus::TPS_TOO_SHORT: return PNS::MEANDER_PLACER_BASE::TOO_SHORT;
+    case types::TuningPatternStatus::TPS_TOO_LONG:  return PNS::MEANDER_PLACER_BASE::TOO_LONG;
+    case types::TuningPatternStatus::TPS_TUNED:     return PNS::MEANDER_PLACER_BASE::TUNED;
+
+    default:
+    case types::TuningPatternStatus::TPS_UNKNOWN:   return PNS::MEANDER_PLACER_BASE::TUNED;
+    }
+
+    wxCHECK_MSG( false, PNS::MEANDER_PLACER_BASE::TUNED,
+                 "Unhandled case in FromProtoEnum<types::TuningPatternStatus>" );
+}
+
+
+template<>
+types::ViaStitchLayout ToProtoEnum( PCB_VIA_STITCH_LAYOUT aValue )
+{
+    switch( aValue )
+    {
+    case PCB_VIA_STITCH_LAYOUT::PLAIN:     return types::ViaStitchLayout::VSL_PLAIN;
+    case PCB_VIA_STITCH_LAYOUT::STAGGERED: return types::ViaStitchLayout::VSL_STAGGERED;
+    case PCB_VIA_STITCH_LAYOUT::POISSON:   return types::ViaStitchLayout::VSL_POISSON;
+
+    default:
+        wxCHECK_MSG( false, types::ViaStitchLayout::VSL_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<PCB_VIA_STITCH_LAYOUT>" );
+    }
+}
+
+
+template<>
+PCB_VIA_STITCH_LAYOUT FromProtoEnum( types::ViaStitchLayout aValue )
+{
+    switch( aValue )
+    {
+    case types::ViaStitchLayout::VSL_PLAIN:     return PCB_VIA_STITCH_LAYOUT::PLAIN;
+    case types::ViaStitchLayout::VSL_STAGGERED: return PCB_VIA_STITCH_LAYOUT::STAGGERED;
+    case types::ViaStitchLayout::VSL_POISSON:   return PCB_VIA_STITCH_LAYOUT::POISSON;
+
+    default:
+    case types::ViaStitchLayout::VSL_UNKNOWN:   return PCB_VIA_STITCH_LAYOUT::PLAIN;
+    }
+
+    wxCHECK_MSG( false, PCB_VIA_STITCH_LAYOUT::PLAIN,
+                 "Unhandled case in FromProtoEnum<types::ViaStitchLayout>" );
+}
+
+
+template<>
+types::ViaStitchMode ToProtoEnum( PCB_VIA_STITCH_MODE aValue )
+{
+    switch( aValue )
+    {
+    case PCB_VIA_STITCH_MODE::STITCH: return types::ViaStitchMode::VSM_STITCH;
+    case PCB_VIA_STITCH_MODE::GUARD:  return types::ViaStitchMode::VSM_GUARD;
+
+    default:
+        wxCHECK_MSG( false, types::ViaStitchMode::VSM_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<PCB_VIA_STITCH_MODE>" );
+    }
+}
+
+
+template<>
+PCB_VIA_STITCH_MODE FromProtoEnum( types::ViaStitchMode aValue )
+{
+    switch( aValue )
+    {
+    case types::ViaStitchMode::VSM_STITCH: return PCB_VIA_STITCH_MODE::STITCH;
+    case types::ViaStitchMode::VSM_GUARD:  return PCB_VIA_STITCH_MODE::GUARD;
+
+    default:
+    case types::ViaStitchMode::VSM_UNKNOWN: return PCB_VIA_STITCH_MODE::STITCH;
+    }
+
+    wxCHECK_MSG( false, PCB_VIA_STITCH_MODE::STITCH,
+                 "Unhandled case in FromProtoEnum<types::ViaStitchMode>" );
+}
+
+
+template<>
+types::ViaStackStyle ToProtoEnum( VIA_STACK_STYLE aValue )
+{
+    switch( aValue )
+    {
+    case VIA_STACK_STYLE::STACKED:   return types::ViaStackStyle::VSK_STACKED;
+    case VIA_STACK_STYLE::STAGGERED: return types::ViaStackStyle::VSK_STAGGERED;
+
+    default:
+        wxCHECK_MSG( false, types::ViaStackStyle::VSK_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<VIA_STACK_STYLE>" );
+    }
+}
+
+
+template<>
+VIA_STACK_STYLE FromProtoEnum( types::ViaStackStyle aValue )
+{
+    switch( aValue )
+    {
+    case types::ViaStackStyle::VSK_STACKED:   return VIA_STACK_STYLE::STACKED;
+    case types::ViaStackStyle::VSK_STAGGERED: return VIA_STACK_STYLE::STAGGERED;
+
+    default:
+    case types::ViaStackStyle::VSK_UNKNOWN:   return VIA_STACK_STYLE::STACKED;
+    }
+
+    wxCHECK_MSG( false, VIA_STACK_STYLE::STACKED,
+                 "Unhandled case in FromProtoEnum<types::ViaStackStyle>" );
 }
 
 

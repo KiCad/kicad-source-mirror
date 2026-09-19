@@ -49,6 +49,10 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <trigo.h>
 #include <view/view_controls.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/board/board_types.pb.h>
+#include <google/protobuf/any.pb.h>
 
 #include <properties/property.h>
 #include <properties/property_mgr.h>
@@ -970,6 +974,102 @@ void PCB_VIA_STACK::SetProperties( const STRING_ANY_MAP& aProps )
 
     if( auto hops = aProps.get_opt<SHAPE_LINE_CHAIN>( "hops" ) )
         m_hops = *hops;
+}
+
+
+void PCB_VIA_STACK::Serialize( google::protobuf::Any& aContainer ) const
+{
+    using namespace kiapi::board::types;
+    using namespace kiapi::common::types;
+
+    ViaStack stack;
+
+    stack.mutable_id()->set_value( m_Uuid.AsStdString() );
+    stack.set_start_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( m_startLayer ) );
+    stack.set_end_layer( ToProtoEnum<PCB_LAYER_ID, BoardLayer>( m_endLayer ) );
+    stack.set_style( ToProtoEnum<VIA_STACK_STYLE, ViaStackStyle>( m_style ) );
+    stack.mutable_pitch()->set_value_nm( pcbIUScale.IUToNm( m_pitch ) );
+    stack.set_filled( m_filled );
+    stack.set_capped( m_capped );
+    stack.mutable_via_size()->set_value_nm( pcbIUScale.IUToNm( m_viaSize ) );
+    stack.mutable_via_drill()->set_value_nm( pcbIUScale.IUToNm( m_viaDrill ) );
+    stack.set_use_netclass( m_useNetclass );
+
+    if( !m_presetName.empty() )
+        stack.set_preset_name( m_presetName.ToUTF8() );
+
+    if( m_hops )
+        kiapi::common::PackPolyLine( *stack.mutable_hops(), *m_hops );
+
+    if( GetNetCode() != 0 && GetBoard() )
+    {
+        if( NETINFO_ITEM* net = GetBoard()->FindNet( GetNetCode() ) )
+            stack.mutable_net()->set_name( net->GetNetname().ToUTF8() );
+    }
+
+    stack.set_locked( IsLocked() ? LockedState::LS_LOCKED : LockedState::LS_UNLOCKED );
+
+    if( const BOARD* board = GetBoard() )
+        stack.mutable_parent()->set_value( board->m_Uuid.AsStdString() );
+
+    for( EDA_ITEM* member : GetItems() )
+        stack.add_members()->set_value( member->m_Uuid.AsStdString() );
+
+    kiapi::common::PackCustomProperties( stack.mutable_custom_properties(), *this );
+    aContainer.PackFrom( stack );
+}
+
+
+bool PCB_VIA_STACK::Deserialize( const google::protobuf::Any& aContainer )
+{
+    using namespace kiapi::board::types;
+    using namespace kiapi::common::types;
+
+    kiapi::board::types::ViaStack stack;
+
+    if( !aContainer.UnpackTo( &stack ) )
+        return false;
+
+    SetUuidDirect( ::KIID( stack.id().value() ) );
+    SetStartLayer( FromProtoEnum<PCB_LAYER_ID>( stack.start_layer() ) );
+    SetEndLayer( FromProtoEnum<PCB_LAYER_ID>( stack.end_layer() ) );
+    m_style = FromProtoEnum<VIA_STACK_STYLE>( stack.style() );
+    m_pitch = pcbIUScale.NmToIU( stack.pitch().value_nm() );
+    m_filled = stack.filled();
+    m_capped = stack.capped();
+    m_useNetclass = stack.use_netclass();
+
+    if( stack.has_preset_name() )
+        m_presetName = wxString( stack.preset_name().c_str(), wxConvUTF8 );
+    else
+        m_presetName.clear();
+
+    if( stack.has_hops() )
+        m_hops = kiapi::common::UnpackPolyLine( stack.hops() );
+    else
+        m_hops.reset();
+
+    if( stack.net().name().empty() )
+        m_netCode = 0;
+
+    SetLocked( stack.locked() == LockedState::LS_LOCKED );
+    kiapi::common::UnpackCustomProperties( stack.custom_properties(), *this );
+
+    m_items.clear();
+    m_deserializedItems.clear();
+
+    BOARD* board = GetBoard();
+
+    if( !board )
+        return false;
+
+    for( const kiapi::common::types::KIID& memberId : stack.members() )
+    {
+        if( EDA_ITEM* item = board->ResolveItem( ::KIID( memberId.value() ), true ) )
+            m_deserializedItems.insert( item );
+    }
+
+    return true;
 }
 
 

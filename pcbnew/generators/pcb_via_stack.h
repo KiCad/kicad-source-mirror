@@ -150,6 +150,9 @@ public:
     const STRING_ANY_MAP GetProperties() const override;
     void                 SetProperties( const STRING_ANY_MAP& aProps ) override;
 
+    void Serialize( google::protobuf::Any& aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any& aContainer ) override;
+
     void ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame ) override;
 
     void             ApplyPreset( const VIA_STACK_PRESET& aPreset );

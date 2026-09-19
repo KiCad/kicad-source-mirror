@@ -41,6 +41,8 @@ class TEARDROP_PARAMETERS;
 
 std::unique_ptr<BOARD_ITEM> CreateItemForType( KICAD_T aType, BOARD_ITEM_CONTAINER* aContainer );
 
+std::unique_ptr<BOARD_ITEM> CreateGeneratorForType( const wxString& aGeneratorType, BOARD_ITEM_CONTAINER* aContainer );
+
 namespace kiapi::board
 {
 

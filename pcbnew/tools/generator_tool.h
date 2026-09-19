@@ -31,6 +31,7 @@ class PCB_EDIT_FRAME;
 class PROGRESS_REPORTER;
 class WX_PROGRESS_REPORTER;
 
+#define GENERATOR_TOOL_NAME "pcbnew.Generators"
 
 /**
  * Handle actions specific to filling copper zones.

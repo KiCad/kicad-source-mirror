@@ -326,6 +326,17 @@ void PCB_TUNING_PATTERN::SetProperties( const STRING_ANY_MAP& aProps )
 }
 
 
+void PCB_TUNING_PATTERN::Serialize( google::protobuf::Any& aContainer ) const
+{
+}
+
+
+bool PCB_TUNING_PATTERN::Deserialize( const google::protobuf::Any& aContainer )
+{
+    return false;
+}
+
+
 void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
 {
 }

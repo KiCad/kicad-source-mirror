@@ -33,7 +33,7 @@
 
 
 GENERATOR_TOOL::GENERATOR_TOOL() :
-        GENERATOR_TOOL_PNS_PROXY( "pcbnew.Generators" ),
+        GENERATOR_TOOL_PNS_PROXY( GENERATOR_TOOL_NAME ),
         m_mgrDialog( nullptr )
 {
     m_boardItemListener = PROPERTY_MANAGER::Instance().RegisterListener(
