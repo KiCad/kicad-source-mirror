@@ -2240,7 +2240,8 @@ static struct ZONE_DESC
             rapstMap.Undefined( PLACEMENT_SOURCE_T::SHEETNAME );
             rapstMap.Map( PLACEMENT_SOURCE_T::SHEETNAME,       _HKI( "Sheet Name" ) )
                     .Map( PLACEMENT_SOURCE_T::COMPONENT_CLASS, _HKI( "Component Class" ) )
-                    .Map( PLACEMENT_SOURCE_T::GROUP_PLACEMENT, _HKI( "Group" ) );
+                    .Map( PLACEMENT_SOURCE_T::GROUP_PLACEMENT, _HKI( "Group" ) )
+                    .Map( PLACEMENT_SOURCE_T::DESIGN_BLOCK,    _HKI( "Design Block" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
