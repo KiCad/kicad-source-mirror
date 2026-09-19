@@ -738,6 +738,8 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
 {
     LIB_TREE_NODE* node = m_tree->GetCurrentTreeNode();
 
+    m_field_edits.clear();
+
     if( node && node->m_LibId.IsValid() )
     {
         LIB_SYMBOL* symbol = m_frame->GetLibSymbol( node->m_LibId );
