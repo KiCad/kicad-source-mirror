@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-17 13:25+0000\n"
+"PO-Revision-Date: 2026-09-20 16:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -17329,7 +17329,7 @@ msgstr "Larghezza tratto finale:"
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1377
 #, c-format
 msgid "Shape sizes of 0 = auto (%g× line width)."
-msgstr ""
+msgstr "Dimensioni forma pari a 0 = auto (%g × larghezza linea)."
 
 #: eeschema/dialogs/dialog_line_properties.cpp:418
 msgid "Edit Line"
@@ -17604,7 +17604,7 @@ msgstr "DXF"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:54
 #: pcbnew/dialogs/dialog_plot_base.cpp:41
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:69
 msgid "Page size:"
@@ -17709,20 +17709,18 @@ msgstr "Esporta unità:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:177
 #: pcbnew/dialogs/dialog_plot_base.cpp:451
-#, fuzzy
 msgid "PNG Options"
-msgstr "Opzioni HPGL"
+msgstr "Opzioni PNG"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:184
 #: pcbnew/dialogs/dialog_plot_base.cpp:458
 msgid "DPI:"
-msgstr ""
+msgstr "DPI:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:191
 #: pcbnew/dialogs/dialog_plot_base.cpp:465
-#, fuzzy
 msgid "Anti-alias"
-msgstr "Anti-aliasing"
+msgstr "Anti-alias"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:201
 #: pcbnew/dialogs/dialog_export_step_base.cpp:248
