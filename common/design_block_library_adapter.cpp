@@ -280,6 +280,9 @@ DESIGN_BLOCK* DESIGN_BLOCK_LIBRARY_ADAPTER::LoadDesignBlock( const wxString& aNi
     if( std::optional<const LIB_DATA*> maybeLib = fetchIfLoaded( aNickname ) )
     {
         const LIB_DATA* lib = *maybeLib;
+
+        std::lock_guard pluginGuard( pluginMutex( aNickname ) );
+
         std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
         try
@@ -317,6 +320,9 @@ bool DESIGN_BLOCK_LIBRARY_ADAPTER::DesignBlockExists( const wxString& aNickname,
     if( std::optional<const LIB_DATA*> maybeLib = fetchIfLoaded( aNickname ) )
     {
         const LIB_DATA* lib = *maybeLib;
+
+        std::lock_guard pluginGuard( pluginMutex( aNickname ) );
+
         std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
 
         return dbplugin( lib )->DesignBlockExists( getUri( lib->row ), aDesignBlockName, &options );
@@ -396,10 +402,8 @@ DESIGN_BLOCK* DESIGN_BLOCK_LIBRARY_ADAPTER::DesignBlockLoadWithOptionalNickname(
     // nickname is empty, sequentially search (alphabetically) all libs/nicks for first match:
     for( const wxString& library : GetLibraryNames() )
     {
-        // DesignBlockLoad() returns NULL on not found, does not throw exception
-        // unless there's an IO_ERROR.
-        if( DESIGN_BLOCK* ret = LoadDesignBlock( library, DesignBlockname, aKeepUUID ) )
-            return ret;
+        if( DesignBlockExists( library, DesignBlockname ) )
+            return LoadDesignBlock( library, DesignBlockname, aKeepUUID, aErrorMsg );
     }
 
     if( aErrorMsg )
