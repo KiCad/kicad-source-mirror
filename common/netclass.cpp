@@ -140,7 +140,7 @@ void NETCLASS::Serialize( kiapi::common::project::NetClass& nc ) const
     nc.set_name( m_Name.ToUTF8() );
     nc.set_priority( m_Priority );
 
-    nc.set_type( m_constituents.empty() ? project::NCT_EXPLICIT : project::NCT_IMPLICIT );
+    nc.set_type( m_constituents.size() <= 1 ? project::NCT_EXPLICIT : project::NCT_IMPLICIT );
 
     for( NETCLASS* member : m_constituents )
         nc.add_constituents( member->GetName() );
@@ -223,7 +223,7 @@ bool NETCLASS::Deserialize( const kiapi::common::project::NetClass& nc )
     if( nc.type() == project::NCT_IMPLICIT )
         return false;
 
-    SetConstituentNetclasses( {} );
+    SetConstituentNetclasses( { this } );
 
     if( nc.board().has_clearance() )
         m_Clearance = nc.board().clearance().value_nm();
