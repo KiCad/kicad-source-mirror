@@ -371,20 +371,7 @@ public:
         return 0;
     }
 
-    void SetNetCode( int aNetCode )
-    {
-        if( BOARD* board = GetBoard() )
-        {
-            if( NETINFO_ITEM* net = board->FindNet( aNetCode ) )
-                m_lastNetName = net->GetNetname();
-            else
-                m_lastNetName.clear();
-        }
-
-        for( BOARD_ITEM* item : GetBoardItems() )
-            if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
-                bci->SetNetCode( aNetCode );
-    }
+    void SetNetCode( int aNetCode );
 
     bool HasSolderMask() const
     {
