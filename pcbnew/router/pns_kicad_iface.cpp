@@ -472,7 +472,18 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsDrilledHole( const PNS::ITEM* aItem )
     BOARD_ITEM* parent = aItem->Parent();
 
     if( !parent && aItem->ParentPadVia() )
-        parent = aItem->ParentPadVia()->Parent();
+    {
+        const PNS::ITEM* padVia = aItem->ParentPadVia();
+        parent = padVia->Parent();
+
+        // A via the router is still placing has no board item yet; its hole is drilled all the
+        // same, otherwise it only ever gets hole-to-copper clearance against other holes.
+        if( !parent && padVia->OfKind( PNS::ITEM::VIA_T ) )
+        {
+            VIATYPE type = static_cast<const PNS::VIA*>( padVia )->ViaType();
+            return type == VIATYPE::THROUGH || type == VIATYPE::BLIND || type == VIATYPE::BURIED;
+        }
+    }
 
     return parent && parent->HasDrilledHole();
 }
