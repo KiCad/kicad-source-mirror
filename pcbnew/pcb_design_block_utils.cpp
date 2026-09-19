@@ -357,6 +357,7 @@ bool PCB_EDIT_FRAME::saveSelectionToDesignBlock( const wxString& aNickname, PCB_
 
     // Clean up the temporary file
     wxRemoveFile( tempFile );
+    delete tempBoard;
 
     m_designBlocksPane->RefreshLibs();
     m_designBlocksPane->SelectLibId( aBlock.GetLibId() );
