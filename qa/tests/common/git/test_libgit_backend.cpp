@@ -1331,6 +1331,25 @@ BOOST_AUTO_TEST_CASE( CheckoutCommitUndoesTheTreeWhenHeadCannotMove )
 }
 
 
+static const std::string LONG_PATHS = "[core]\n\tlongpaths = true\n";
+
+
+/// Attach a file in aDir above every other level, as the long path config is on Windows, and return its path
+static wxString attachSharedLevel( git_repository* aRepo, const wxString& aDir )
+{
+    const wxString app = aDir + wxFileName::GetPathSeparator() + wxS( "kicad-longpaths.gitconfig" );
+
+    std::ofstream( app.fn_str(), std::ios::binary ) << LONG_PATHS;
+
+    git_config* config = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config( &config, aRepo ), GIT_OK );
+    KIGIT::GitConfigPtr configPtr( config );
+
+    BOOST_REQUIRE_EQUAL( git_config_add_file_ondisk( config, app.utf8_str(), GIT_CONFIG_LEVEL_APP, aRepo, 0 ), GIT_OK );
+    return app;
+}
+
+
 // A level attached above the repository's own config is shared by every repository, so a setting stays out of it
 BOOST_AUTO_TEST_CASE( SetConfigStringWritesTheRepositorysOwnConfig )
 {
@@ -1340,20 +1359,30 @@ BOOST_AUTO_TEST_CASE( SetConfigStringWritesTheRepositorysOwnConfig )
     BOOST_TEST_REQUIRE( repo );
     KIGIT::GitRepositoryPtr repoPtr( repo );
 
-    const wxString    app = tempBase() + wxFileName::GetPathSeparator() + wxS( "kicad-longpaths.gitconfig" );
-    const std::string longPaths = "[core]\n\tlongpaths = true\n";
+    const wxString app = attachSharedLevel( repo, tempBase() );
 
-    std::ofstream( app.fn_str(), std::ios::binary ) << longPaths;
-
-    git_config* config = nullptr;
-    BOOST_REQUIRE_EQUAL( git_repository_config( &config, repo ), GIT_OK );
-    KIGIT::GitConfigPtr configPtr( config );
-
-    BOOST_REQUIRE_EQUAL( git_config_add_file_ondisk( config, app.utf8_str(), GIT_CONFIG_LEVEL_APP, repo, 0 ), GIT_OK );
     BOOST_REQUIRE( GetGitBackend()->SetConfigString( repo, wxS( "kicad.copy" ), wxS( "acme-key" ) ) );
 
-    BOOST_CHECK( readBytes( app ) == longPaths );
+    BOOST_CHECK( readBytes( app ) == LONG_PATHS );
     BOOST_CHECK( readBytes( repoPath() + wxS( "/.git/config" ) ).find( "acme-key" ) != std::string::npos );
+}
+
+
+// Set Author names the author of this repository's commits, never of every repository the shared level reaches
+BOOST_AUTO_TEST_CASE( SetUserConfigWritesTheRepositorysOwnConfig )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    const wxString app = attachSharedLevel( repo, tempBase() );
+
+    BOOST_REQUIRE( GetGitBackend()->SetUserConfig( repo, wxS( "Ada Author" ), wxS( "ada@kicad.example" ) ) );
+
+    BOOST_CHECK( readBytes( app ) == LONG_PATHS );
+    BOOST_CHECK( readBytes( repoPath() + wxS( "/.git/config" ) ).find( "ada@kicad.example" ) != std::string::npos );
 }
 
 

@@ -3215,19 +3215,7 @@ bool LIBGIT_BACKEND::RemoveRemote( git_repository* aRepo, const wxString& aName 
 
 bool LIBGIT_BACKEND::SetUserConfig( git_repository* aRepo, const wxString& aName, const wxString& aEmail )
 {
-    if( !aRepo )
-        return false;
-
-    git_config* config = nullptr;
-
-    if( git_repository_config( &config, aRepo ) != GIT_OK )
-        return false;
-
-    KIGIT::GitConfigPtr configPtr( config );
-
-    bool ok = git_config_set_string( config, "user.name", aName.utf8_string().c_str() ) == GIT_OK;
-    ok = ok && git_config_set_string( config, "user.email", aEmail.utf8_string().c_str() ) == GIT_OK;
-    return ok;
+    return SetConfigString( aRepo, wxS( "user.name" ), aName ) && SetConfigString( aRepo, wxS( "user.email" ), aEmail );
 }
 
 

@@ -145,9 +145,8 @@ static wxString resolveKicadCliPath()
 }
 
 
-// Set a string config key, but only if not already present so the user's
-// custom config is never stomped. Returns true if anything was written.
-static bool setConfigIfMissing( git_config* aConfig, const char* aKey, const wxString& aValue )
+// Write aKey to aTarget only when aConfig lacks it, so a user's own setting is never replaced
+static bool setConfigIfMissing( git_config* aConfig, git_config* aTarget, const char* aKey, const wxString& aValue )
 {
     git_config_entry* entry = nullptr;
     int               result = git_config_get_entry( &entry, aConfig, aKey );
@@ -161,7 +160,7 @@ static bool setConfigIfMissing( git_config* aConfig, const char* aKey, const wxS
 
     std::string val( aValue.ToUTF8() );
 
-    if( git_config_set_string( aConfig, aKey, val.c_str() ) != 0 )
+    if( git_config_set_string( aTarget, aKey, val.c_str() ) != 0 )
     {
         wxLogTrace( traceGit, "git_config_set_string('%s') failed: %s",
                     aKey, KIGIT_COMMON::GetLastGitError() );
@@ -199,6 +198,16 @@ static void ensureMergeDriverConfig( git_repository* aRepo )
     }
 
     KIGIT::GitConfigPtr configPtr( config );
+    git_config*         local = nullptr;
+
+    // Command-line git reads only the repository's own file, never a level attached in-process
+    if( git_config_open_level( &local, config, GIT_CONFIG_LEVEL_LOCAL ) != 0 )
+    {
+        wxLogTrace( traceGit, "Cannot open the repository config: %s", KIGIT_COMMON::GetLastGitError() );
+        return;
+    }
+
+    KIGIT::GitConfigPtr localPtr( local );
 
     // Per-format merge driver entries. Command-line `git merge` invokes the
     // configured driver command for paths tagged `merge=kicad-*` in
@@ -232,10 +241,10 @@ static void ensureMergeDriverConfig( git_repository* aRepo )
 
     for( const DRIVER_ENTRY& d : drivers )
     {
-        setConfigIfMissing( config, d.nameKey, wxString::FromUTF8( d.humanName ) );
+        setConfigIfMissing( config, local, d.nameKey, wxString::FromUTF8( d.humanName ) );
 
         wxString cmd = wxT( "\"" ) + cliPath + wxT( "\" " ) + wxString::FromUTF8( d.cliCommand );
-        setConfigIfMissing( config, d.driverKey, cmd );
+        setConfigIfMissing( config, local, d.driverKey, cmd );
     }
 
     // `git mergetool --tool=kicad` entry. Variables expanded by git:
@@ -244,12 +253,12 @@ static void ensureMergeDriverConfig( git_repository* aRepo )
     wxString mergetoolCmd = wxT( "\"" ) + cliPath + wxT( "\" mergetool "
                                                           "\"$BASE\" \"$LOCAL\" \"$REMOTE\" "
                                                           "--output \"$MERGED\"" );
-    setConfigIfMissing( config, "mergetool.kicad.cmd", mergetoolCmd );
-    setConfigIfMissing( config, "mergetool.kicad.trustExitCode", wxT( "true" ) );
+    setConfigIfMissing( config, local, "mergetool.kicad.cmd", mergetoolCmd );
+    setConfigIfMissing( config, local, "mergetool.kicad.trustExitCode", wxT( "true" ) );
 
     // merge.tool — only opt in when the user hasn't already picked a tool,
     // so existing meld/kdiff3/etc. setups stay untouched.
-    setConfigIfMissing( config, "merge.tool", wxT( "kicad" ) );
+    setConfigIfMissing( config, local, "merge.tool", wxT( "kicad" ) );
 }
 
 
