@@ -48,6 +48,11 @@ KICOMMON_API wxString WorkspaceCheckoutPath( const wxString& aProjectDir, const 
 KICOMMON_API wxString WorkspaceCheckinPath( const std::map<wxString, wxString>& aRecorded, const wxString& aProjectDir,
                                             const MDW_ITEM_INFO& aItem );
 
+/// The files Save Copy must never replace for aItem. The first is the file the user edits, the one a check in uploads
+/// or else where a check out writes, then where a check out writes when a rename on the server has moved it
+KICOMMON_API std::vector<wxString> WorkspaceWorkingFiles( const std::map<wxString, wxString>& aRecorded,
+                                                          const wxString& aProjectDir, const MDW_ITEM_INFO& aItem );
+
 /// The display path of aFolder below the folder named aParentName, which is empty for a root
 KICOMMON_API wxString WorkspaceFolderName( const wxString& aParentName, const MDW_FOLDER& aFolder );
 
@@ -76,5 +81,14 @@ KICOMMON_API wxString WorkspaceCheckinReport( const MDW_ITEM_INFO& aItem, const 
 
 /// Where Keep Both saves aPath beside itself, as <name>.<ext>.mine, numbered past any file already there.
 KICOMMON_API wxString WorkspaceKeepBothPath( const wxString& aPath );
+
+/// The file name Save Copy suggests for aRevision of aFileName, as <name>-<label>.<ext>. The name is aMemberName
+/// when it is set, and the revision id's first 7 characters stand in for a label the revision lacks.
+KICOMMON_API wxString MdwRevisionCopyName( const wxString& aFileName, const wxString& aMemberName,
+                                           const MDW_REVISION& aRevision );
+
+/// Why a copy may not be written to aTarget, or empty when it may. aWorkingFiles are the files it must not replace,
+/// matched by the file an existing path opens rather than by its spelling. A path that cannot be checked is refused.
+KICOMMON_API wxString MdwCopyTargetRefusal( const wxString& aTarget, const std::vector<wxString>& aWorkingFiles );
 
 #endif // WORKSPACE_ITEM_FILES_H

@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <dialogs/git/workspace_item_files.h>
@@ -26,6 +27,9 @@
 #include <wx/filefn.h>
 #include <wx/filename.h>
 #include <wx/utils.h>
+
+#include <filesystem>
+#include <fstream>
 
 
 BOOST_AUTO_TEST_SUITE( WorkspaceItemFiles )
@@ -176,6 +180,144 @@ BOOST_AUTO_TEST_CASE( VersionLabelNamesTheFile )
 
     BOOST_CHECK_EQUAL( MdwVersionSideLabel( item, revision ), wxT( "amp-board.kicad_sch Rev 3" ) );
 }
+
+
+// A copy of an old revision is named for the file and the revision, so it never lands on the working file
+BOOST_AUTO_TEST_CASE( CopyNameCarriesTheRevisionLabel )
+{
+    MDW_REVISION rev;
+    rev.label = wxS( "Baseline 3" );
+    BOOST_CHECK_EQUAL( MdwRevisionCopyName( wxS( "board.kicad_pcb" ), wxEmptyString, rev ),
+                       wxS( "board-Baseline_3.kicad_pcb" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( CopyNameOfAMemberUsesTheMember )
+{
+    MDW_REVISION rev;
+    rev.label = wxS( "3" );
+    BOOST_CHECK_EQUAL( MdwRevisionCopyName( wxS( "opamps.kicad_sym" ), wxS( "LM358" ), rev ),
+                       wxS( "LM358-3.kicad_sym" ) );
+
+    // A member name is backend text, so a separator must not name another folder
+    BOOST_CHECK_EQUAL( MdwRevisionCopyName( wxS( "opamps.kicad_sym" ), wxS( "OPA/B" ), rev ),
+                       wxS( "OPA_B-3.kicad_sym" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( CopyNameWithoutALabelUsesTheShortId )
+{
+    MDW_REVISION rev;
+    rev.revision_id = wxS( "a1b2c3d4e5f6" );
+    BOOST_CHECK_EQUAL( MdwRevisionCopyName( wxS( "board.kicad_pcb" ), wxEmptyString, rev ),
+                       wxS( "board-a1b2c3d.kicad_pcb" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( LabelWithPathCharactersStaysOneName )
+{
+    MDW_REVISION rev;
+    rev.label = wxS( "A/1: x" );
+    BOOST_CHECK_EQUAL( MdwRevisionCopyName( wxS( "board.kicad_pcb" ), wxEmptyString, rev ),
+                       wxS( "board-A_1__x.kicad_pcb" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( CopyOntoTheCheckoutIsRefused )
+{
+    KI_TEST::SCOPED_TEMP_DIR temp( wxS( "mdw-copy" ) );
+    const wxString           checkout = temp.ChildPathStr( wxS( "board.kicad_pcb" ) );
+
+    BOOST_CHECK( !MdwCopyTargetRefusal( checkout, { checkout } ).IsEmpty() );
+    BOOST_CHECK( !MdwCopyTargetRefusal( temp.PathStr() + wxS( "/./board.kicad_pcb" ), { checkout } ).IsEmpty() );
+    BOOST_CHECK( MdwCopyTargetRefusal( temp.ChildPathStr( wxS( "board-3.kicad_pcb" ) ), { checkout } ).IsEmpty() );
+}
+
+
+// After a rename on the server the user still edits the file recorded at check out, which Check In uploads
+BOOST_AUTO_TEST_CASE( CopyOntoTheRecordedCheckoutIsRefused )
+{
+    KI_TEST::SCOPED_TEMP_DIR temp( wxS( "mdw-copy" ) );
+
+    MDW_ITEM_INFO item;
+    item.item_id = wxS( "1841/amp-board.kicad_sch" );
+    item.relative_path = wxS( "amp-board-rev-b.kicad_sch" );
+
+    const std::map<wxString, wxString> recorded = { { wxS( "amp-board.kicad_sch" ), item.item_id } };
+    const std::vector<wxString>        working = WorkspaceWorkingFiles( recorded, temp.PathStr(), item );
+
+    const wxString edited = temp.ChildPathStr( wxS( "amp-board.kicad_sch" ) );
+
+    // Compare lists the edited file as the Working copy
+    BOOST_REQUIRE( !working.empty() );
+    BOOST_CHECK( wxFileName( working.front() ).SameAs( wxFileName( edited ) ) );
+
+    BOOST_CHECK( !MdwCopyTargetRefusal( edited, working ).IsEmpty() );
+    BOOST_CHECK( !MdwCopyTargetRefusal( temp.ChildPathStr( wxS( "amp-board-rev-b.kicad_sch" ) ), working ).IsEmpty() );
+    BOOST_CHECK( MdwCopyTargetRefusal( temp.ChildPathStr( wxS( "amp-board-v2.kicad_sch" ) ), working ).IsEmpty() );
+}
+
+
+// The check must name the file the writer opens, which follows the link before or after ".." as the platform does
+BOOST_AUTO_TEST_CASE( CopyThroughASymlinkedFolderIsRefused )
+{
+    KI_TEST::SCOPED_TEMP_DIR temp( wxS( "mdw-copy" ) );
+    const std::filesystem::path project = temp.Path() / "project";
+    const std::filesystem::path exports = temp.Path() / "exports";
+    std::error_code             ec;
+
+    std::filesystem::create_directories( project / "sub" );
+    std::filesystem::create_directories( exports );
+    std::ofstream( project / "board.kicad_pcb" ) << "mine";
+
+#ifdef _WIN32
+    // Win32 drops "link\.." before following the link, so only a path through the link reaches the checkout
+    std::filesystem::create_directory_symlink( project, exports / "link", ec );
+    const wxString target = FromFsPath( exports / "link" / "board.kicad_pcb" );
+#else
+    std::filesystem::create_directory_symlink( project / "sub", exports / "link", ec );
+    const wxString target = FromFsPath( exports / "link" ) + wxS( "/../board.kicad_pcb" );
+#endif
+
+    // Windows needs a privilege to make symbolic links
+    if( ec )
+    {
+        BOOST_TEST_MESSAGE( "No symbolic link, skipped: " << ec.message() );
+        return;
+    }
+
+    BOOST_CHECK( !MdwCopyTargetRefusal( target, { FromFsPath( project / "board.kicad_pcb" ) } ).IsEmpty() );
+}
+
+
+#ifndef _WIN32
+// A folder that cannot be searched says nothing about the file in it, so the copy must not go ahead
+BOOST_AUTO_TEST_CASE( CopyThatCannotBeCheckedIsRefused )
+{
+    KI_TEST::SCOPED_TEMP_DIR    temp( wxS( "mdw-copy" ) );
+    const std::filesystem::path locked = temp.Path() / "locked";
+
+    std::filesystem::create_directories( locked );
+    std::ofstream( temp.Path() / "board.kicad_pcb" ) << "mine";
+    std::filesystem::permissions( locked, std::filesystem::perms::none );
+
+    std::error_code ec;
+    const bool      searchable = std::filesystem::exists( locked / "board.kicad_pcb", ec ) || !ec;
+    const wxString  refusal = MdwCopyTargetRefusal( FromFsPath( locked / "board.kicad_pcb" ),
+                                                    { temp.ChildPathStr( wxS( "board.kicad_pcb" ) ) } );
+
+    std::filesystem::permissions( locked, std::filesystem::perms::owner_all );
+
+    // Root searches any folder, so there is no error to refuse on
+    if( searchable )
+    {
+        BOOST_TEST_MESSAGE( "Folder still searchable, skipped" );
+        return;
+    }
+
+    BOOST_CHECK( !refusal.IsEmpty() );
+}
+#endif
 
 
 BOOST_AUTO_TEST_SUITE_END()

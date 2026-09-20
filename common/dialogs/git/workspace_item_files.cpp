@@ -21,6 +21,7 @@
 
 #include <mdw/client/mdw_lifecycle.h>
 
+#include <gestfich.h>
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
 
@@ -29,6 +30,7 @@
 #include <wx/intl.h>
 
 #include <algorithm>
+#include <filesystem>
 
 
 wxString WorkspaceCheckoutPath( const wxString& aProjectDir, const MDW_ITEM_INFO& aItem )
@@ -72,6 +74,24 @@ wxString WorkspaceCheckinPath( const std::map<wxString, wxString>& aRecorded, co
     }
 
     return fallback;
+}
+
+
+std::vector<wxString> WorkspaceWorkingFiles( const std::map<wxString, wxString>& aRecorded,
+                                             const wxString& aProjectDir, const MDW_ITEM_INFO& aItem )
+{
+    const wxString checkout = WorkspaceCheckoutPath( aProjectDir, aItem );
+    const wxString checkin = WorkspaceCheckinPath( aRecorded, aProjectDir, aItem );
+
+    std::vector<wxString> files;
+
+    if( !checkin.IsEmpty() )
+        files.push_back( checkin );
+
+    if( !checkout.IsEmpty() && checkout != checkin )
+        files.push_back( checkout );
+
+    return files;
 }
 
 
@@ -185,4 +205,79 @@ wxString WorkspaceKeepBothPath( const wxString& aPath )
         path = wxString::Format( wxS( "%s.%d" ), mine, ii );
 
     return path;
+}
+
+
+wxString MdwRevisionCopyName( const wxString& aFileName, const wxString& aMemberName, const MDW_REVISION& aRevision )
+{
+    const wxFileName file( aFileName );
+    const wxString   label = aRevision.label.IsEmpty() ? aRevision.revision_id.Left( 7 ) : aRevision.label;
+
+    // Backend text, so a separator in it would name another folder
+    auto safe = []( const wxString& aText )
+    {
+        const wxString reserved = wxS( "\\/:*?\"<>|" );
+        wxString       text;
+
+        for( const wxUniChar c : aText )
+            text << ( reserved.Find( c ) != wxNOT_FOUND || wxIsspace( c ) ? wxUniChar( '_' ) : c );
+
+        return text;
+    };
+
+    wxString name = ( aMemberName.IsEmpty() ? file.GetName() : safe( aMemberName ) ) + wxS( "-" ) + safe( label );
+
+    if( !file.GetExt().IsEmpty() )
+        name << wxS( "." ) << file.GetExt();
+
+    return name;
+}
+
+
+wxString MdwCopyTargetRefusal( const wxString& aTarget, const std::vector<wxString>& aWorkingFiles )
+{
+    namespace fs = std::filesystem;
+
+    const fs::path target = ToFsPath( aTarget );
+    const wxString unknown = _( "Could not check whether that is your working file. Choose another file." );
+
+    for( const wxString& working : aWorkingFiles )
+    {
+        if( working.IsEmpty() )
+            continue;
+
+        const fs::path  checkout = ToFsPath( working );
+        std::error_code ec;
+
+        // An error is no answer, and treating it as absence would let the copy replace the working file
+        const bool targetExists = fs::exists( target, ec );
+
+        if( ec )
+            return unknown;
+
+        const bool checkoutExists = fs::exists( checkout, ec );
+
+        if( ec )
+            return unknown;
+
+        bool same = false;
+
+        // Unnormalized, since dropping ".." after a symlinked folder names another file than the writer opens
+        if( targetExists && checkoutExists )
+        {
+            same = fs::equivalent( target, checkout, ec );
+
+            if( ec )
+                return unknown;
+        }
+        else
+        {
+            same = wxFileName( aTarget ).SameAs( wxFileName( working ) );
+        }
+
+        if( same )
+            return _( "That is the file you are working on. Choose another name to keep both." );
+    }
+
+    return wxString();
 }
