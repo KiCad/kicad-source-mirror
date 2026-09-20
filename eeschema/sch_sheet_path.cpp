@@ -1356,6 +1356,9 @@ SCH_ITEM* SCH_SHEET_LIST::ResolveItem( const KIID& aID, SCH_SHEET_PATH* aPathOut
 
 SCH_ITEM* SCH_SHEET_PATH::ResolveItem( const KIID& aID ) const
 {
+    if( !LastScreen() )
+        return nullptr;
+
     for( SCH_ITEM* aItem : LastScreen()->Items() )
     {
         if( aItem->m_Uuid == aID )
