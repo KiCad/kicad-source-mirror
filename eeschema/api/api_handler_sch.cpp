@@ -2682,6 +2682,8 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleAddVariant( const HANDLER_CONTEXT<A
     if( aCtx.Request.has_description() )
         schematic->SetVariantDescription( name, wxString::FromUTF8( aCtx.Request.description() ) );
 
+    onModified();
+
     if( m_frame )
         frame()->UpdateVariantSelectionCtrl( frame()->Schematic().GetVariantNamesForUI() );
 

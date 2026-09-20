@@ -678,14 +678,8 @@ HANDLER_RESULT<BoardEnabledLayersResponse> API_HANDLER_PCB::handleSetBoardEnable
             modified |= board->RemoveAllItemsOnLayer( layer_id );
     }
 
-    if( frame() )
-    {
-        if( enabled != previousEnabled )
-            frame()->UpdateUserInterface();
-
-        if( modified )
-            frame()->OnModify();
-    }
+    if( enabled != previousEnabled || modified )
+        onModified();
 
     BoardEnabledLayersResponse response;
 
@@ -1082,11 +1076,7 @@ HANDLER_RESULT<BoardDesignRulesResponse> API_HANDLER_PCB::handleSetBoardDesignRu
 
     board()->SetDesignSettings( newSettings );
 
-    if( frame() )
-    {
-        frame()->OnModify();
-        frame()->UpdateUserInterface();
-    }
+    onModified();
 
     HANDLER_CONTEXT<GetBoardDesignRules> getCtx = { aCtx.ClientName, GetBoardDesignRules() };
     *getCtx.Request.mutable_board() = aCtx.Request.board();
@@ -1354,6 +1344,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardOrigin(
         else
         {
             board()->GetDesignSettings().SetGridOrigin( origin );
+            pcbContext()->SetContentModified();
         }
 
         break;
@@ -1376,6 +1367,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardOrigin(
         else
         {
             board()->GetDesignSettings().SetAuxOrigin( origin );
+            pcbContext()->SetContentModified();
         }
 
         break;
@@ -3033,6 +3025,8 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleAddVariant( const HANDLER_CONTEXT<A
     if( aCtx.Request.has_description() )
         board->SetVariantDescription( name, wxString::FromUTF8( aCtx.Request.description() ) );
 
+    onModified();
+
     if( frame() )
         frame()->UpdateVariantSelectionCtrl();
 
@@ -3072,6 +3066,8 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleDeleteVariant( const HANDLER_CONTEX
     }
 
     board->DeleteVariant( name );
+
+    onModified();
 
     if( frame() )
         frame()->UpdateVariantSelectionCtrl();
@@ -3129,6 +3125,8 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRenameVariant( const HANDLER_CONTEX
     }
 
     board->RenameVariant( oldName, newName );
+
+    onModified();
 
     if( frame() )
         frame()->UpdateVariantSelectionCtrl();
@@ -3189,6 +3187,8 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleCopyVariant( const HANDLER_CONTEXT<
                         aCtx.Request.has_new_description() ? wxString::FromUTF8( aCtx.Request.new_description() )
                                                            : wxString() );
 
+    onModified();
+
     if( frame() )
         frame()->UpdateVariantSelectionCtrl();
 
@@ -3220,6 +3220,8 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetVariantDescription( const HANDLE
     }
 
     board->SetVariantDescription( name, wxString::FromUTF8( aCtx.Request.description() ) );
+
+    onModified();
 
     return Empty();
 }
