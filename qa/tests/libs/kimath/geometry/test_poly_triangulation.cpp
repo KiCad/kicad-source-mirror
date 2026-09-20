@@ -13,18 +13,23 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/polygon_triangulation.h>
 #include <geometry/geometry_predicates.h>
+#include <advanced_config.h>
 #include <trigo.h>
 #include <thread>
 #include <chrono>
 #include <future>
 #include <filesystem>
 #include <fstream>
+#include <array>
+
+#include <wx/log.h>
 
 #include <qa_utils/geometry/geometry.h>
 #include <qa_utils/numeric.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include "geom_test_utils.h"
+#include <geometry/fracture_edge_index_utils.h>
 
 BOOST_AUTO_TEST_SUITE( PolygonTriangulation )
 
@@ -39,6 +44,104 @@ struct POLYGON_TRIANGULATION_TEST_ACCESS
 };
 
 namespace fs = std::filesystem;
+
+class TRACE_LOG : public wxLog
+{
+public:
+    bool Contains( const wxString& aText ) const { return m_text.Contains( aText ); }
+
+protected:
+    void DoLogTextAtLevel( wxLogLevel, const wxString& aText ) override { m_text += aText; }
+
+private:
+    wxString m_text;
+};
+
+class SCOPED_TRACE_CAPTURE
+{
+public:
+    explicit SCOPED_TRACE_CAPTURE( const wxString& aMask ) :
+            m_log( new TRACE_LOG ),
+            m_chain( m_log ),
+            m_mask( aMask ),
+            m_maskWasAllowed( wxLog::IsAllowedTraceMask( aMask ) )
+    {
+        m_chain.PassMessages( false );
+
+        if( !m_maskWasAllowed )
+            wxLog::AddTraceMask( m_mask );
+    }
+
+    ~SCOPED_TRACE_CAPTURE()
+    {
+        if( !m_maskWasAllowed )
+            wxLog::RemoveTraceMask( m_mask );
+    }
+
+    bool Contains( const wxString& aText ) const { return m_log->Contains( aText ); }
+
+private:
+    TRACE_LOG* m_log;
+    wxLogChain m_chain;
+    wxString   m_mask;
+    bool       m_maskWasAllowed;
+};
+
+BOOST_AUTO_TEST_CASE( FractureIndexMappingAndCapacity )
+{
+    using namespace KIGEOM::FRACTURE_INDEX;
+
+    BOOST_CHECK_EQUAL( StripeCountFor( 0 ), 1 );
+    BOOST_CHECK_EQUAL( StripeCountFor( 81 ), 9 );
+    BOOST_CHECK_EQUAL( StripeCountFor( std::numeric_limits<size_t>::max() ), MAX_STRIPES );
+
+    BOOST_CHECK_EQUAL( MapYToStripe( 42, 42, 42, 8 ), 0 );
+    BOOST_CHECK_EQUAL( MapYToStripe( -100, -100, 99, 10 ), 0 );
+    BOOST_CHECK_EQUAL( MapYToStripe( 99, -100, 99, 10 ), 9 );
+    BOOST_CHECK_EQUAL( MapYToStripe( -101, -100, 99, 10 ), 0 );
+    BOOST_CHECK_EQUAL( MapYToStripe( 100, -100, 99, 10 ), 9 );
+
+    uint32_t previous = 0;
+
+    for( int y = -100; y <= 99; ++y )
+    {
+        uint32_t stripe = MapYToStripe( y, -100, 99, 10 );
+        BOOST_TEST( stripe >= previous );
+        previous = stripe;
+    }
+
+    const std::array<std::pair<int, int>, 4> spans = { std::pair{ -100, -100 }, std::pair{ -50, 50 },
+                                                       std::pair{ 99, 99 }, std::pair{ 75, -75 } };
+    size_t                                   memberships = 0;
+
+    for( const auto& [y1, y2] : spans )
+    {
+        const auto [first, last] = StripeSpan( y1, y2, -100, 99, 10 );
+        BOOST_TEST( first <= last );
+        memberships += last - first + 1;
+
+        for( int y = std::min( y1, y2 ); y <= std::max( y1, y2 ); ++y )
+        {
+            const uint32_t stripe = MapYToStripe( y, -100, 99, 10 );
+            BOOST_TEST( stripe >= first );
+            BOOST_TEST( stripe <= last );
+        }
+    }
+
+    BOOST_CHECK_EQUAL( memberships, 16 );
+    BOOST_TEST( CapacityFits( 100, 2, 16, 8, 2 * sizeof( uint32_t ) ) );
+    BOOST_TEST( !CapacityFits( MAX_CAPACITY_BYTES / sizeof( uint32_t ), 0, 1, 0, 2 * sizeof( uint32_t ) ) );
+    size_t actual_bytes = 0;
+    BOOST_TEST( ActualCapacityFits( 100, 2, 17, 16, 17, 80, 2 * sizeof( uint32_t ), &actual_bytes ) );
+    BOOST_CHECK_EQUAL( actual_bytes, 1248 );
+    BOOST_TEST( !ActualCapacityFits( MAX_CAPACITY_BYTES / sizeof( uint32_t ), 0, 2, 1, 2, 0, 2 * sizeof( uint32_t ) ) );
+
+    size_t total = std::numeric_limits<size_t>::max() - 1;
+    BOOST_TEST( !CheckedAdd( total, 1, 2 ) );
+    total = 5;
+    BOOST_TEST( CheckedAdd( total, std::numeric_limits<size_t>::max(), 0 ) );
+    BOOST_CHECK_EQUAL( total, 5 );
+}
 
 // Helper class to properly manage TRIANGULATED_POLYGON lifecycle
 class TRIANGULATION_TEST_FIXTURE
@@ -235,6 +338,93 @@ bool parsePolyFileForTest( const fs::path& aPath, std::vector<SHAPE_POLY_SET>& a
 
     return !aZones.empty();
 }
+
+// Forces the fracture implementation under test regardless of the developer's kicad_advanced
+class SCOPED_FRACTURE_CFG
+{
+public:
+    explicit SCOPED_FRACTURE_CFG( bool aUseIndex ) :
+            m_cfg( const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() ) ),
+            m_cacheFriendly( m_cfg.m_EnableCacheFriendlyFracture ),
+            m_edgeIndex( m_cfg.m_EnableFractureEdgeIndex )
+    {
+        m_cfg.m_EnableCacheFriendlyFracture = true;
+        m_cfg.m_EnableFractureEdgeIndex = aUseIndex;
+    }
+
+    ~SCOPED_FRACTURE_CFG()
+    {
+        m_cfg.m_EnableCacheFriendlyFracture = m_cacheFriendly;
+        m_cfg.m_EnableFractureEdgeIndex = m_edgeIndex;
+    }
+
+private:
+    ADVANCED_CFG& m_cfg;
+    bool          m_cacheFriendly;
+    bool          m_edgeIndex;
+};
+
+
+BOOST_AUTO_TEST_CASE( FractureEdgeIndexMatchesLinearScan )
+{
+#if !defined( __MINGW32__ )
+    const fs::path              polyPath = KI_TEST::GetTestDataRootDir() + "triangulation/vme-wren.kicad_polys";
+    std::vector<SHAPE_POLY_SET> zones;
+
+    BOOST_REQUIRE( parsePolyFileForTest( polyPath, zones ) );
+
+    int deepest = 0;
+
+    for( SHAPE_POLY_SET& zone : zones )
+    {
+        zone.Unfracture();
+
+        for( int polygon = 0; polygon < zone.OutlineCount(); ++polygon )
+            deepest = std::max( deepest, zone.HoleCount( polygon ) );
+    }
+
+    // The index only engages past its hole and visit thresholds, so a fixture that shrank would
+    // leave this comparing two linear runs
+    BOOST_REQUIRE_GE( deepest, 100 );
+
+    std::vector<SHAPE_POLY_SET> linear = zones;
+    std::vector<SHAPE_POLY_SET> indexed = zones;
+
+    {
+        SCOPED_FRACTURE_CFG cfg( false );
+
+        for( SHAPE_POLY_SET& zone : linear )
+            zone.Fracture( false );
+    }
+
+    SCOPED_TRACE_CAPTURE trace( wxS( "KICAD_FRACTURE_INDEX" ) );
+
+    {
+        SCOPED_FRACTURE_CFG cfg( true );
+
+        for( SHAPE_POLY_SET& zone : indexed )
+            zone.Fracture( false );
+    }
+
+    BOOST_REQUIRE( trace.Contains( wxS( "Using fracture edge index" ) ) );
+
+    for( size_t zone = 0; zone < linear.size(); ++zone )
+    {
+        BOOST_REQUIRE_EQUAL( indexed[zone].OutlineCount(), linear[zone].OutlineCount() );
+
+        for( int polygon = 0; polygon < linear[zone].OutlineCount(); ++polygon )
+        {
+            const SHAPE_LINE_CHAIN& a = linear[zone].COutline( polygon );
+            const SHAPE_LINE_CHAIN& b = indexed[zone].COutline( polygon );
+            BOOST_REQUIRE_EQUAL( a.PointCount(), b.PointCount() );
+
+            for( int point = 0; point < a.PointCount(); ++point )
+                BOOST_CHECK_EQUAL( a.CPoint( point ), b.CPoint( point ) );
+        }
+    }
+#endif
+}
+
 
 double computeBoardSpikeyRatio( const fs::path& aPath )
 {

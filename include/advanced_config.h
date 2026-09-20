@@ -680,6 +680,16 @@ public:
     bool m_EnableCacheFriendlyFracture;
 
     /**
+     * Index fracture edges by y stripe instead of rescanning every earlier edge for each hole.
+     * Disable to fall back on the linear scan when bisecting a suspected fracture fault.
+     *
+     * Setting name: "EnableFractureEdgeIndex"
+     * Valid values: 0 or 1
+     * Default value: 1
+     */
+    bool m_EnableFractureEdgeIndex;
+
+    /**
      * Refine each triangulation toward the constrained Delaunay triangulation with a
      * boundary-preserving edge-flip post-pass, trading a little triangulation time for far fewer
      * sliver triangles.

@@ -114,6 +114,7 @@ static const wxChar OcePluginAngularDeflection[] = wxT( "OcePluginAngularDeflect
 static const wxChar TriangulateSimplificationLevel[] = wxT( "TriangulateSimplificationLevel" );
 static const wxChar TriangulateMinimumArea[] = wxT( "TriangulateMinimumArea" );
 static const wxChar EnableCacheFriendlyFracture[] = wxT( "EnableCacheFriendlyFracture" );
+static const wxChar EnableFractureEdgeIndex[] = wxT( "EnableFractureEdgeIndex" );
 static const wxChar TriangulateDelaunayRefine[] = wxT( "TriangulateDelaunayRefine" );
 static const wxChar EnableAPILogging[] = wxT( "EnableAPILogging" );
 static const wxChar MaxFileSystemWatchers[] = wxT( "MaxFileSystemWatchers" );
@@ -309,6 +310,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_TriangulateMinimumArea = 1000;
 
     m_EnableCacheFriendlyFracture = true;
+    m_EnableFractureEdgeIndex = true;
     m_TriangulateDelaunayRefine = true;
 
     m_MaxFilesystemWatchers = 16384;
@@ -589,6 +591,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableCacheFriendlyFracture,
                 &m_EnableCacheFriendlyFracture, m_EnableCacheFriendlyFracture ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableFractureEdgeIndex,
+                &m_EnableFractureEdgeIndex, m_EnableFractureEdgeIndex ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::TriangulateDelaunayRefine,
                 &m_TriangulateDelaunayRefine, m_TriangulateDelaunayRefine ) );

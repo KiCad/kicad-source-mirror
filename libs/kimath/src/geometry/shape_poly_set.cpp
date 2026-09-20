@@ -56,6 +56,7 @@
 #include <mmh3_hash.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
+#include <geometry/fracture_edge_index_utils.h>
 
 #include <wx/log.h>
 
@@ -64,9 +65,11 @@
 #if defined( __MINGW32__ )
     #define TRIANGULATESIMPLIFICATIONLEVEL 50
     #define ENABLECACHEFRIENDLYFRACTURE true
+    #define ENABLEFRACTUREEDGEINDEX true
 #else
     #define TRIANGULATESIMPLIFICATIONLEVEL ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel
     #define ENABLECACHEFRIENDLYFRACTURE ADVANCED_CFG::GetCfg().m_EnableCacheFriendlyFracture
+    #define ENABLEFRACTUREEDGEINDEX ADVANCED_CFG::GetCfg().m_EnableFractureEdgeIndex
 #endif
 
 SHAPE_POLY_SET::SHAPE_POLY_SET() :
@@ -1230,8 +1233,221 @@ struct FractureEdge
 typedef std::vector<FractureEdge> FractureEdgeSet;
 
 
+class FRACTURE_EDGE_INDEX
+{
+public:
+    using Index = FractureEdge::Index;
+
+    struct NODE
+    {
+        uint32_t edge;
+        uint32_t next;
+    };
+
+    template <typename Originals>
+    FRACTURE_EDGE_INDEX( FractureEdgeSet& aEdges, Originals&& aOriginals, int aMinY, int aMaxY,
+                         uint32_t aStripeCount, size_t aHoleCount ) :
+            m_edges( aEdges ),
+            m_minY( aMinY ),
+            m_maxY( aMaxY ),
+            m_stripeCount( aStripeCount ),
+            m_maxNodes( ( KIGEOM::FRACTURE_INDEX::MAX_BUCKET_SPAN + 2 ) * aHoleCount )
+    {
+        std::vector<uint32_t> counts( m_stripeCount );
+        size_t                bucketIds = 0;
+        size_t                longIds = 0;
+
+        aOriginals(
+                [&]( uint32_t, uint32_t aFirst, uint32_t aLast )
+                {
+                    if( aLast - aFirst + 1 > KIGEOM::FRACTURE_INDEX::MAX_BUCKET_SPAN )
+                    {
+                        ++longIds;
+                    }
+                    else
+                    {
+                        bucketIds += aLast - aFirst + 1;
+
+                        for( uint32_t stripe = aFirst; stripe <= aLast; ++stripe )
+                            ++counts[stripe];
+                    }
+                } );
+
+        if( !KIGEOM::FRACTURE_INDEX::CapacityFits( bucketIds, longIds, m_stripeCount, aHoleCount, sizeof( NODE ) ) )
+        {
+            return;
+        }
+
+        m_offsets.resize( m_stripeCount + 1 );
+
+        for( uint32_t stripe = 0; stripe < m_stripeCount; ++stripe )
+            m_offsets[stripe + 1] = m_offsets[stripe] + counts[stripe];
+
+        m_bucketIds.resize( bucketIds );
+        m_longIds.reserve( longIds );
+
+        std::copy( m_offsets.begin(), m_offsets.end() - 1, counts.begin() );
+
+        aOriginals(
+                [&]( uint32_t aEdge, uint32_t aFirst, uint32_t aLast )
+                {
+                    if( aLast - aFirst + 1 > KIGEOM::FRACTURE_INDEX::MAX_BUCKET_SPAN )
+                    {
+                        m_longIds.push_back( aEdge );
+                    }
+                    else
+                    {
+                        for( uint32_t stripe = aFirst; stripe <= aLast; ++stripe )
+                            m_bucketIds[counts[stripe]++] = aEdge;
+                    }
+                } );
+
+        m_heads.assign( m_stripeCount + 1, INVALID );
+        m_nodes.reserve( m_maxNodes );
+
+        // The ascending order the Query breaks rely on, asserted once rather than per visit
+#ifndef NDEBUG
+        for( uint32_t stripe = 0; stripe < m_stripeCount; ++stripe )
+        {
+            for( uint32_t pos = m_offsets[stripe] + 1; pos < m_offsets[stripe + 1]; ++pos )
+                assert( m_bucketIds[pos] >= m_bucketIds[pos - 1] );
+        }
+
+        for( size_t pos = 1; pos < m_longIds.size(); ++pos )
+            assert( m_longIds[pos] >= m_longIds[pos - 1] );
+#endif
+
+        // The estimate prevents an over-budget allocation; this check catches allocator over-capacity.
+        size_t allocated_bytes = 0;
+
+        if( !KIGEOM::FRACTURE_INDEX::ActualCapacityFits( m_bucketIds.capacity(), m_longIds.capacity(),
+                                                         m_offsets.capacity(), counts.capacity(), m_heads.capacity(),
+                                                         m_nodes.capacity(), sizeof( NODE ), &allocated_bytes ) )
+        {
+            return;
+        }
+
+        m_valid = true;
+        logAccepted( aEdges.size(), aHoleCount, m_stripeCount, allocated_bytes );
+    }
+
+    bool IsValid() const { return m_valid; }
+
+    template <typename Visitor>
+    void Query( int aY, Index aProvokingIndex, Visitor&& aVisitor ) const
+    {
+        const uint32_t stripe = map( aY );
+
+        // Buckets and the long list are ascending, so the first out-of-range id ends the scan
+        for( uint32_t pos = m_offsets[stripe]; pos < m_offsets[stripe + 1]; ++pos )
+        {
+            const uint32_t edge = m_bucketIds[pos];
+
+            if( edge >= static_cast<uint32_t>( aProvokingIndex ) )
+                break;
+
+            aVisitor( static_cast<Index>( edge ) );
+        }
+
+        for( uint32_t edge : m_longIds )
+        {
+            if( edge >= static_cast<uint32_t>( aProvokingIndex ) )
+                break;
+
+            aVisitor( static_cast<Index>( edge ) );
+        }
+
+        visitOverflow( m_heads[stripe], aProvokingIndex, aVisitor );
+        visitOverflow( m_heads[m_stripeCount], aProvokingIndex, aVisitor );
+    }
+
+    void InsertBridges( Index aFirst )
+    {
+        for( Index edge = aFirst; edge < aFirst + 3; ++edge )
+        {
+            const auto [first, last] = span( m_edges[edge] );
+
+            if( last - first + 1 > KIGEOM::FRACTURE_INDEX::MAX_BUCKET_SPAN )
+            {
+                insert( static_cast<uint32_t>( edge ), m_stripeCount );
+            }
+            else
+            {
+                for( uint32_t stripe = first; stripe <= last; ++stripe )
+                    insert( static_cast<uint32_t>( edge ), stripe );
+            }
+        }
+    }
+
+private:
+    static constexpr uint32_t INVALID = std::numeric_limits<uint32_t>::max();
+
+    uint32_t map( int aY ) const { return KIGEOM::FRACTURE_INDEX::MapYToStripe( aY, m_minY, m_maxY, m_stripeCount ); }
+
+    std::pair<uint32_t, uint32_t> span( const FractureEdge& aEdge ) const
+    {
+        return KIGEOM::FRACTURE_INDEX::StripeSpan( aEdge.m_p1.y, aEdge.m_p2.y, m_minY, m_maxY, m_stripeCount );
+    }
+
+    template <typename Visitor>
+    void visitOverflow( uint32_t aNode, Index aProvokingIndex, Visitor&& aVisitor ) const
+    {
+        // Bridges are only ever inserted for already processed holes, so the assert should hold,
+        // but the filter keeps the release build honest if that ordering ever changes
+        while( aNode != INVALID )
+        {
+            const NODE& node = m_nodes[aNode];
+            assert( node.edge < static_cast<uint32_t>( aProvokingIndex ) );
+
+            if( node.edge < static_cast<uint32_t>( aProvokingIndex ) )
+                aVisitor( static_cast<Index>( node.edge ) );
+
+            aNode = node.next;
+        }
+    }
+
+    void insert( uint32_t aEdge, uint32_t aHead )
+    {
+        assert( m_nodes.size() < m_maxNodes );
+        m_nodes.push_back( { aEdge, m_heads[aHead] } );
+        m_heads[aHead] = static_cast<uint32_t>( m_nodes.size() - 1 );
+    }
+
+    static void logAccepted( size_t aEdges, size_t aHoles, uint32_t aStripes, size_t aBytes )
+    {
+        wxLogTrace( wxS( "KICAD_FRACTURE_INDEX" ),
+                    wxS( "Using fracture edge index: edges=%zu, holes=%zu, stripes=%u, allocated=%zu bytes" ),
+                    aEdges, aHoles, aStripes, aBytes );
+    }
+
+    FractureEdgeSet&      m_edges;
+    int                   m_minY;
+    int                   m_maxY;
+    uint32_t              m_stripeCount;
+    size_t                m_maxNodes;
+    bool                  m_valid = false;
+    std::vector<uint32_t> m_offsets;
+    std::vector<uint32_t> m_bucketIds;
+    std::vector<uint32_t> m_longIds;
+    std::vector<uint32_t> m_heads;
+    std::vector<NODE>     m_nodes;
+};
+
+
+// Where a horizontal ray at aY crosses aEdge, valid only when aEdge.matches( aY )
+static inline int fractureIntersectX( const FractureEdge& aEdge, int aY )
+{
+    if( aEdge.m_p1.y == aEdge.m_p2.y )
+        return std::max( aEdge.m_p1.x, aEdge.m_p2.x );
+
+    return aEdge.m_p1.x
+           + rescale( aEdge.m_p2.x - aEdge.m_p1.x, aY - aEdge.m_p1.y, aEdge.m_p2.y - aEdge.m_p1.y );
+}
+
+
 static FractureEdge* processHole( FractureEdgeSet& edges, FractureEdge::Index provokingIndex,
-                                  FractureEdge::Index edgeIndex, FractureEdge::Index bridgeIndex )
+                                  FractureEdge::Index edgeIndex, FractureEdge::Index bridgeIndex,
+                                  FRACTURE_EDGE_INDEX* aIndex )
 {
     FractureEdge& edge = edges[edgeIndex];
     int           x = edge.m_p1.x;
@@ -1244,32 +1460,53 @@ static FractureEdge* processHole( FractureEdgeSet& edges, FractureEdge::Index pr
     // Since this function is run for all holes left to right, no need to
     // check for any edge beyond the provoking one because they will always be
     // further to the right, and unconnected to the outline anyway.
-    for( FractureEdge::Index i = 0; i < provokingIndex; i++ )
+    if( aIndex )
     {
-        FractureEdge& e = edges[i];
-        // Don't consider this edge if it can't be bridged to, or faces left.
-        if( !e.matches( y ) )
-            continue;
+        FractureEdge::Index nearest_index = -1;
 
-        int x_intersect;
-
-        if( e.m_p1.y == e.m_p2.y ) // horizontal edge
+        auto consider = [&]( FractureEdge::Index aCandidateIndex )
         {
-            x_intersect = std::max( e.m_p1.x, e.m_p2.x );
-        }
-        else
-        {
-            x_intersect =
-                    e.m_p1.x + rescale( e.m_p2.x - e.m_p1.x, y - e.m_p1.y, e.m_p2.y - e.m_p1.y );
-        }
+            FractureEdge& candidate = edges[aCandidateIndex];
 
-        int dist = ( x - x_intersect );
+            if( !candidate.matches( y ) )
+                return;
 
-        if( dist >= 0 && dist < min_dist )
+            int x_intersect = fractureIntersectX( candidate, y );
+            int dist = x - x_intersect;
+
+            if( dist >= 0
+                && ( dist < min_dist
+                     || ( nearest_index >= 0 && dist == min_dist && aCandidateIndex < nearest_index ) ) )
+            {
+                min_dist = dist;
+                x_nearest = x_intersect;
+                nearest_index = aCandidateIndex;
+            }
+        };
+
+        aIndex->Query( y, provokingIndex, consider );
+
+        if( nearest_index >= 0 )
+            e_nearest = &edges[nearest_index];
+    }
+    else
+    {
+        for( FractureEdge::Index i = 0; i < provokingIndex; ++i )
         {
-            min_dist = dist;
-            x_nearest = x_intersect;
-            e_nearest = &e;
+            FractureEdge& candidate = edges[i];
+
+            if( !candidate.matches( y ) )
+                continue;
+
+            int x_intersect = fractureIntersectX( candidate, y );
+            int dist = x - x_intersect;
+
+            if( dist >= 0 && dist < min_dist )
+            {
+                min_dist = dist;
+                x_nearest = x_intersect;
+                e_nearest = &candidate;
+            }
         }
     }
 
@@ -1288,6 +1525,8 @@ static FractureEdge* processHole( FractureEdgeSet& edges, FractureEdge::Index pr
                 FractureEdge( VECTOR2I( x_nearest, y ), e_nearest->m_p2, e_nearest->m_next );
 
         // Perform the actual outline edge split
+        // Existing stripe membership remains conservative because the selected y is inside the
+        // edge's current interval, while newly initialized bridge edges are inserted below.
         e_nearest->m_p2 = VECTOR2I( x_nearest, y );
         e_nearest->m_next = outline2hole_index;
 
@@ -1295,6 +1534,9 @@ static FractureEdge* processHole( FractureEdgeSet& edges, FractureEdge::Index pr
         for( ; last->m_next != edgeIndex; last = &edges[last->m_next] )
             ;
         last->m_next = hole2outline_index;
+
+        if( aIndex )
+            aIndex->InsertBridges( bridgeIndex );
     }
 
     return e_nearest;
@@ -1408,10 +1650,71 @@ static void fractureSingleCacheFriendly( SHAPE_POLY_SET::POLYGON& paths )
         outline = false; // first path is always the outline
     }
 
+    assert( edges.size() == total_point_count + 3 * ( paths.size() - 1 ) );
+#ifndef NDEBUG
+    FractureEdge::Index expected_edge = paths[0].PointCount();
+
+    for( auto it = sorted_paths.begin() + 1; it != sorted_paths.end(); ++it )
+    {
+        assert( it->path_or_provoking_index == expected_edge );
+        expected_edge = it->y_or_bridge + 3;
+    }
+
+    assert( expected_edge == static_cast<FractureEdge::Index>( edges.size() ) );
+#endif
+
+    uint64_t estimated_visits = 0;
+
+    for( auto it = sorted_paths.begin() + 1; it != sorted_paths.end(); ++it )
+        estimated_visits += static_cast<uint64_t>( it->path_or_provoking_index );
+
+    std::unique_ptr<FRACTURE_EDGE_INDEX> index;
+
+    if( ENABLEFRACTUREEDGEINDEX && KIGEOM::FRACTURE_INDEX::ShouldIndex( estimated_visits, paths.size() - 1 ) )
+    {
+        int            min_y = std::numeric_limits<int>::max();
+        int            max_y = std::numeric_limits<int>::min();
+        const uint32_t stripe_count = KIGEOM::FRACTURE_INDEX::StripeCountFor( edges.size() );
+
+        for( const SHAPE_LINE_CHAIN& path : paths )
+        {
+            for( const VECTOR2I& point : path.CPoints() )
+            {
+                min_y = std::min( min_y, point.y );
+                max_y = std::max( max_y, point.y );
+            }
+        }
+
+        auto visitOriginals = [&]( auto&& aVisitor )
+        {
+            auto visitRange = [&]( FractureEdge::Index aBegin, FractureEdge::Index aEnd )
+            {
+                for( FractureEdge::Index edge = aBegin; edge < aEnd; ++edge )
+                {
+                    const FractureEdge& original = edges[edge];
+                    const auto [first, last] = KIGEOM::FRACTURE_INDEX::StripeSpan( original.m_p1.y, original.m_p2.y,
+                                                                                   min_y, max_y, stripe_count );
+                    aVisitor( static_cast<uint32_t>( edge ), first, last );
+                }
+            };
+
+            visitRange( 0, paths[0].PointCount() );
+
+            for( auto it = sorted_paths.begin() + 1; it != sorted_paths.end(); ++it )
+                visitRange( it->path_or_provoking_index, it->y_or_bridge );
+        };
+
+        index = std::make_unique<FRACTURE_EDGE_INDEX>( edges, visitOriginals, min_y, max_y, stripe_count,
+                                                       paths.size() - 1 );
+
+        if( !index->IsValid() )
+            index.reset();
+    }
+
     for( auto it = sorted_paths.begin() + 1; it != sorted_paths.end(); it++ )
     {
-        auto edge = processHole( edges, it->path_or_provoking_index,
-                                 it->path_or_provoking_index + it->leftmost, it->y_or_bridge );
+        auto edge = processHole( edges, it->path_or_provoking_index, it->path_or_provoking_index + it->leftmost,
+                                 it->y_or_bridge, index.get() );
 
         // If we can't handle the hole, the zone is broken (maybe)
         if( !edge )
