@@ -2014,15 +2014,31 @@ API_HANDLER_SCH::handleGetSchematicNetlist( const HANDLER_CONTEXT<kiapi::schemat
     std::vector<KICAD_T> types = parseRequestedItemTypes( aCtx.Request.types() );
     const bool filterByType = aCtx.Request.types_size() > 0;
 
-    if( filterByType && types.empty() )
+    static const std::set<KICAD_T> s_netlistTypes = {
+        SCH_PIN_T,
+        SCH_SHEET_PIN_T,
+        SCH_LINE_T,
+        SCH_BUS_WIRE_ENTRY_T,
+        SCH_BUS_BUS_ENTRY_T,
+        SCH_JUNCTION_T,
+        SCH_NO_CONNECT_T,
+        SCH_LABEL_T,
+        SCH_GLOBAL_LABEL_T,
+        SCH_HIER_LABEL_T,
+        SCH_DIRECTIVE_LABEL_T,
+        SCH_SYMBOL_T,
+    };
+
+    std::set<KICAD_T> typeFilter( types.begin(), types.end() );
+    std::erase_if( typeFilter, []( KICAD_T aType ) { return !s_netlistTypes.contains( aType ); } );
+
+    if( filterByType && typeFilter.empty() )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-        e.set_error_message( "none of the requested types are valid for a Schematic object" );
+        e.set_error_message( "none of the requested types are valid for a netlist object" );
         return tl::unexpected( e );
     }
-
-    std::set<KICAD_T> typeFilter( types.begin(), types.end() );
 
     CONNECTION_GRAPH* connectionGraph = schematic()->ConnectionGraph();
 
