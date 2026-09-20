@@ -78,8 +78,8 @@
 #endif
 
 
-LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIBRARY_ADAPTER* aLibMgr,
-                             LEGACY_SYMBOL_LIB* aCacheLib, wxWindow* aParent, bool aShowErrorMsg )
+LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIBRARY_ADAPTER* aLibMgr, LEGACY_SYMBOL_LIB* aCacheLib,
+                             wxWindow* aParent, bool aShowErrorMsg )
 {
     wxCHECK_MSG( aLibMgr, nullptr, wxS( "Invalid symbol library manager adapter." ) );
 
@@ -113,11 +113,10 @@ LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIBRARY_ADAPTER* aLibM
 }
 
 
-SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindowType,
-                                const wxString& aTitle, const wxPoint& aPosition,
-                                const wxSize& aSize, long aStyle, const wxString& aFrameName ) :
-        EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle,
-                        aFrameName, schIUScale ),
+SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindowType, const wxString& aTitle,
+                                const wxPoint& aPosition, const wxSize& aSize, long aStyle,
+                                const wxString& aFrameName ) :
+        EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle, aFrameName, schIUScale ),
         m_selectionFilterPanel( nullptr ),
         m_findReplaceDialog( nullptr ),
         m_base_frame_defaults( nullptr, "base_Frame_defaults" ),
@@ -277,14 +276,12 @@ void SCH_BASE_FRAME::UpdateStatusBar()
 }
 
 
-LIB_SYMBOL* SCH_BASE_FRAME::GetLibSymbol( const LIB_ID& aLibId, bool aUseCacheLib,
-                                          bool aShowErrorMsg )
+LIB_SYMBOL* SCH_BASE_FRAME::GetLibSymbol( const LIB_ID& aLibId, bool aUseCacheLib, bool aShowErrorMsg )
 {
-    LEGACY_SYMBOL_LIB* cache =
-            ( aUseCacheLib ) ? PROJECT_SCH::LegacySchLibs( &Prj() )->GetCacheLibrary() : nullptr;
+    LEGACY_SYMBOL_LIB* cache = aUseCacheLib ? PROJECT_SCH::LegacySchLibs( &Prj() )->GetCacheLibrary()
+                                            : nullptr;
 
-    return SchGetLibSymbol( aLibId, PROJECT_SCH::SymbolLibAdapter( &Prj() ), cache, this,
-                            aShowErrorMsg );
+    return SchGetLibSymbol( aLibId, PROJECT_SCH::SymbolLibAdapter( &Prj() ), cache, this, aShowErrorMsg );
 }
 
 
@@ -331,8 +328,8 @@ void SCH_BASE_FRAME::createCanvas()
 {
     m_canvasType = loadCanvasTypeSetting();
 
-    SetCanvas( new SCH_DRAW_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), m_frameSize,
-                                   GetGalDisplayOptions(), m_canvasType ) );
+    SetCanvas( new SCH_DRAW_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), m_frameSize, GetGalDisplayOptions(),
+                                   m_canvasType ) );
     ActivateGalCanvas();
 }
 
@@ -361,8 +358,7 @@ void SCH_BASE_FRAME::ActivateGalCanvas()
     }
     catch( ... )
     {
-        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ),
-                    wxT( "Unknown exception during SpaceMouse initialization" ) );
+        wxLogTrace( wxT( "KI_TRACE_NAVLIB" ), wxT( "Unknown exception during SpaceMouse initialization" ) );
     }
 }
 
@@ -813,13 +809,11 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
         return;
 
     LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
-    std::optional<wxString> uri = manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL,
-                                                      aID->GetLibNickname() );
+    std::optional<wxString> uri = manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, aID->GetLibNickname() );
 
     if( !uri )
     {
-        wxLogTrace( traceLibWatch, "Could not get URI for library %s",
-                    wxString( aID->GetLibNickname().c_str() ) );
+        wxLogTrace( traceLibWatch, "Could not get URI for library %s", wxString( aID->GetLibNickname().c_str() ) );
         return;
     }
 
@@ -831,9 +825,8 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
     {
         m_watcherFileName.AssignDir( tmp );
         m_watcherIsDir = true;
-        m_watcherTimestamp = KIPLATFORM::IO::TimestampDir(
-                m_watcherFileName.GetPath(),
-                wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension ) );
+        m_watcherTimestamp = KIPLATFORM::IO::TimestampDir( m_watcherFileName.GetPath(),
+                                                           wxS( "*." + FILEEXT::KiCadSymbolLibFileExtension ) );
     }
     else
     {
@@ -948,9 +941,8 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
 
     if( m_watcherIsDir )
     {
-        currentTimestamp = KIPLATFORM::IO::TimestampDir(
-                m_watcherFileName.GetPath(),
-                wxS( "*." ) + wxString( FILEEXT::KiCadSymbolLibFileExtension ) );
+        currentTimestamp = KIPLATFORM::IO::TimestampDir( m_watcherFileName.GetPath(),
+                                                         wxS( "*." + FILEEXT::KiCadSymbolLibFileExtension ) );
     }
     else
     {
@@ -971,16 +963,15 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
     m_inSymChangeTimerEvent = true;
 
     if( !GetScreen()->IsContentModified()
-      || IsOK( this, _( "The library containing the current symbol has changed.\n"
-                        "Do you want to reload the library?" ) ) )
+          || IsOK( this, _( "The library containing the current symbol has changed.\n"
+                            "Do you want to reload the library?" ) ) )
     {
         wxLogTrace( traceLibWatch, "Sending refresh symbol mail" );
 
         // For directory libraries, GetFullPath() appends a trailing separator which
         // won't match the library table URI. Use GetPath() for directories instead.
-        std::string libName = m_watcherIsDir
-                ? m_watcherFileName.GetPath().ToStdString()
-                : m_watcherFileName.GetFullPath().ToStdString();
+        std::string libName = m_watcherIsDir ? m_watcherFileName.GetPath().ToStdString()
+                                             : m_watcherFileName.GetFullPath().ToStdString();
 
         Kiway().ExpressMail( FRAME_SCH_VIEWER, MAIL_REFRESH_SYMBOL, libName );
         Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_REFRESH_SYMBOL, libName );

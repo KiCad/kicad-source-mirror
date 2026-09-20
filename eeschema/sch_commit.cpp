@@ -220,31 +220,28 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     std::vector<std::unique_ptr<SCH_ITEM>> cleanupRemovedItems;
     std::set<SCH_SCREEN*> connectivityScreens;
 
-    auto notifyModel = [&]()
-    {
-        if( !schematic )
-            return;
+    auto notifyModel =
+            [&]()
+            {
+                if( !schematic )
+                    return;
 
+                if( !bulkAddedItems.empty() )
+                    schematic->OnItemsAdded( bulkAddedItems );
 
-        if( !bulkAddedItems.empty() )
-            schematic->OnItemsAdded( bulkAddedItems );
+                if( !bulkRemovedItems.empty() )
+                    schematic->OnItemsRemoved( bulkRemovedItems );
 
+                if( !itemsChanged.empty() )
+                    schematic->OnItemsChanged( itemsChanged );
 
-        if( !bulkRemovedItems.empty() )
-            schematic->OnItemsRemoved( bulkRemovedItems );
+                if( refreshHierarchy )
+                    schematic->RefreshHierarchy();
 
-
-        if( !itemsChanged.empty() )
-            schematic->OnItemsChanged( itemsChanged );
-
-
-        if( refreshHierarchy )
-            schematic->RefreshHierarchy();
-
-        bulkAddedItems.clear();
-        bulkRemovedItems.clear();
-        itemsChanged.clear();
-    };
+                bulkAddedItems.clear();
+                bulkRemovedItems.clear();
+                itemsChanged.clear();
+            };
 
     auto updateConnectivityFlag =
             [&]( SCH_ITEM* schItem, SCH_SCREEN* screen, bool fullSheetUpdate = true )
@@ -285,26 +282,27 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         }
     }
 
+    auto stageRemovedGroups =
+            [&]()
+            {
+                // Modify() appends to m_entries, so collect before staging group changes.
+                std::vector<std::pair<EDA_GROUP*, BASE_SCREEN*>> removedItemGroups;
 
-    auto stageRemovedGroups = [&]()
-    {
-        // Modify() appends to m_entries, so collect before staging group changes.
-        std::vector<std::pair<EDA_GROUP*, BASE_SCREEN*>> removedItemGroups;
+                for( COMMIT_LINE& entry : m_entries )
+                {
+                    SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( entry.m_item );
+                    int       changeType = entry.m_type & CHT_TYPE;
 
-        for( COMMIT_LINE& entry : m_entries )
-        {
-            SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( entry.m_item );
-            int       changeType = entry.m_type & CHT_TYPE;
+                    wxCHECK2( schItem, continue );
 
-            wxCHECK2( schItem, continue );
+                    if( changeType == CHT_REMOVE && schItem->GetParentGroup() )
+                        removedItemGroups.emplace_back( schItem->GetParentGroup(), entry.m_screen );
+                }
 
-            if( changeType == CHT_REMOVE && schItem->GetParentGroup() )
-                removedItemGroups.emplace_back( schItem->GetParentGroup(), entry.m_screen );
-        }
+                for( const auto& [group, screen] : removedItemGroups )
+                    Modify( group->AsEdaItem(), screen );
+            };
 
-        for( const auto& [group, screen] : removedItemGroups )
-            Modify( group->AsEdaItem(), screen );
-    };
     stageRemovedGroups();
     bool cleanupPending = true;
     std::set<SCH_SCREEN*> touchedScreens;
@@ -333,10 +331,10 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         }
 
         COMMIT_LINE& entry = m_entries[index++];
-        int         changeType = entry.m_type & CHT_TYPE;
-        int         changeFlags = entry.m_type & CHT_FLAGS;
-        SCH_ITEM*   schItem = dynamic_cast<SCH_ITEM*>( entry.m_item );
-        SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( entry.m_screen );
+        int          changeType = entry.m_type & CHT_TYPE;
+        int          changeFlags = entry.m_type & CHT_FLAGS;
+        SCH_ITEM*    schItem = dynamic_cast<SCH_ITEM*>( entry.m_item );
+        SCH_SCREEN*  screen = dynamic_cast<SCH_SCREEN*>( entry.m_screen );
 
         wxCHECK2( schItem, continue );
         wxCHECK2( screen, continue );
@@ -455,7 +453,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         {
             const SCH_ITEM* itemCopy = static_cast<const SCH_ITEM*>( entry.m_copy );
             SCH_SHEET_PATH  currentSheet;
-            bool           fullSheetUpdate = true;
+            bool            fullSheetUpdate = true;
 
             if( frame )
                 currentSheet = frame->GetCurrentSheet();
@@ -468,8 +466,9 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 refreshHierarchy |= hierarchyChanged;
 
                 // Stable ports are invalidated through their containing screen, including shared instances
-                fullSheetUpdate = !ADVANCED_CFG::GetCfg().m_ConnectivityEngine || hierarchyChanged
-                                  || originalSheet->HasPinIdentityChanges( *modifiedSheet );
+                fullSheetUpdate = !ADVANCED_CFG::GetCfg().m_ConnectivityEngine
+                                      || hierarchyChanged
+                                      || originalSheet->HasPinIdentityChanges( *modifiedSheet );
             }
 
             if( itemCopy->HasConnectivityChanges( schItem, &currentSheet )
@@ -566,21 +565,22 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
     if( ( dirtyConnectivity || refreshConnectivity ) && !( aCommitFlags & SKIP_CONNECTIVITY ) )
     {
-        wxLogTrace( wxS( "CONN_PROFILE" ),
-                    wxS( "SCH_COMMIT::pushSchEdit() connectivity refresh, cleanup=%d." ),
+        wxLogTrace( wxS( "CONN_PROFILE" ), wxS( "SCH_COMMIT::pushSchEdit() connectivity refresh, cleanup=%d." ),
                     static_cast<int>( connectivityCleanUp ) );
 
         if( frame )
+        {
             frame->RecalculateConnections( this, connectivityCleanUp, nullptr, true );
+        }
         else if( schematic )
+        {
             schematic->RecalculateConnections( this, connectivityCleanUp, m_toolMgr,
                                                nullptr, nullptr, nullptr, nullptr, true );
+        }
     }
-
 
     if( refreshHierarchy && frame )
         frame->UpdateHierarchyNavigator();
-
 
     m_toolMgr->PostEvent( { TC_MESSAGE, TA_MODEL_CHANGE, AS_GLOBAL } );
 
@@ -589,7 +589,6 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
     if( selectedModified )
         m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
-
 }
 
 
