@@ -483,8 +483,6 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( const bool rebuildColumns )
 
     m_netsList->Freeze();
 
-    m_dataModel->SetIsTimeDomain( m_showTimeDomainDetails );
-
     PROJECT_LOCAL_SETTINGS& localSettings = Pgm().GetSettingsManager().Prj().GetLocalSettings();
     PANEL_NET_INSPECTOR_SETTINGS* cfg = &localSettings.m_NetInspectorPanel;
 
@@ -496,6 +494,9 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( const bool rebuildColumns )
     m_groupByNetclass = cfg->group_by_netclass;
     m_groupByNetChain = cfg->group_by_net_chain;
     m_groupByConstraint = cfg->group_by_constraint;
+
+    // Must follow the settings load so the model reflects this board's mode, not the previous one
+    m_dataModel->SetIsTimeDomain( m_showTimeDomainDetails );
 
     // Attempt to keep any expanded groups open
     if( m_boardLoaded && !m_boardLoading )
@@ -995,11 +996,15 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardChanged()
 
     const PROJECT_LOCAL_SETTINGS& localSettings = Pgm().GetSettingsManager().Prj().GetLocalSettings();
     auto&                   cfg = localSettings.m_NetInspectorPanel;
-    m_searchCtrl->SetValue( cfg.filter_text );
+    // ChangeValue avoids the wxEVT_TEXT that SetValue fires, which doubled buildNetsList() below
+    m_searchCtrl->ChangeValue( cfg.filter_text );
 
-    buildNetsList( true );
-
-    m_boardLoading = false;
+    // Skip the full net solve while hidden; OnShowPanel() rebuilds from scratch when revealed
+    if( IsShown() )
+    {
+        buildNetsList( true );
+        m_boardLoading = false;
+    }
 }
 
 
@@ -1227,7 +1232,17 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardHighlightNetChanged( BOARD& aBoard )
 
 void PCB_NET_INSPECTOR_PANEL::OnShowPanel()
 {
-    buildNetsList();
+    // A board loaded while hidden still owes its first full build, columns included
+    if( m_boardLoading )
+    {
+        buildNetsList( true );
+        m_boardLoading = false;
+    }
+    else
+    {
+        buildNetsList();
+    }
+
     OnBoardHighlightNetChanged( *m_board );
 }
 
