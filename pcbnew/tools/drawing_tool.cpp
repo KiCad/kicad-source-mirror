@@ -3907,19 +3907,19 @@ static bool ItemHasDRCViolation( BOARD_CONNECTED_ITEM* aItem, BOARD_ITEM* aOther
                 return zoneOutline->Collide( aItem->GetEffectiveShape().get() );
 
             bool hit = false;
+            LSET common = via->GetLayerSet() & zone->GetLayerSet();
 
-            via->Padstack().ForEachUniqueLayer(
-                    [&]( PCB_LAYER_ID aLayer )
-                    {
-                        if( hit )
-                            return;
+            for( PCB_LAYER_ID layer : common )
+            {
+                if( !IsCopperLayer( layer ) )
+                    continue;
 
-                        if( via->IsGhostLayer( aLayer ) )
-                            return;
-
-                        if( zoneOutline->Collide( via->GetPosition(), via->GetWidth( aLayer ) / 2 ) )
-                            hit = true;
-                    } );
+                if( zoneOutline->Collide( via->GetPosition(), via->GetWidth( layer ) / 2 ) )
+                {
+                    hit = true;
+                    break;
+                }
+            }
 
             return hit;
         }
