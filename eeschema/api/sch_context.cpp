@@ -84,6 +84,9 @@ public:
     {
         wxFileName fn = m_frame->Prj().AbsolutePath( m_frame->Schematic().GetFileName() );
 
+        if( fn.GetFullPath().IsEmpty() || !wxFileExists( fn.GetFullPath() ) )
+            return false;
+
         if( m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root() )
         {
             SCH_SHEET_PATH rootSheetPath = m_frame->Schematic().Hierarchy().at( 0 );
@@ -96,9 +99,7 @@ public:
             screen->SetContentModified( false );
 
         m_frame->ReleaseFile();
-        m_frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
-
-        return true;
+        return m_frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
     }
 
 private:

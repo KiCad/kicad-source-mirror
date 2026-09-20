@@ -106,11 +106,12 @@ public:
     {
         wxFileName fn = m_frame->Prj().AbsolutePath( m_frame->GetBoard()->GetFileName() );
 
+        if( fn.GetFullPath().IsEmpty() || !wxFileExists( fn.GetFullPath() ) )
+            return false;
+
         m_frame->GetScreen()->SetContentModified( false );
         m_frame->ReleaseFile();
-        m_frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
-
-        return true;
+        return m_frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
     }
 
 private:
