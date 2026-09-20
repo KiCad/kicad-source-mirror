@@ -1254,7 +1254,17 @@ int ROUTER_TOOL::onViaStackCommand( const TOOL_EVENT& aEvent )
         // The router cannot route through a staggered stack (lateral walk + connecting traces).
         // Fix the track here and REMEMBER the stack, but build it only after routing tears down.
         // Committing to the board while the PNS world is live invalidates its nodes (crash).
-        VECTOR2I head = m_endSnapPoint;
+        VECTOR2I            head = m_endSnapPoint;
+        const PNS::ITEM_SET traces = m_router->Placer()->Traces();
+
+        if( traces.Size() > 0 )
+        {
+            if( PNS::LINE* line = dynamic_cast<PNS::LINE*>( traces[0] ) )
+            {
+                if( line->PointCount() > 0 )
+                    head = line->CLine().CLastPoint();
+            }
+        }
 
         if( !m_router->FixRoute( head, m_endItem, true, false ) )
         {
