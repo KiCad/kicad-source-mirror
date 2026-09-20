@@ -160,9 +160,19 @@ long PYTHON_MANAGER::Execute( const std::vector<wxString>& aArgs,
     }
     else
     {
-        wxLogTrace( traceApi, wxString::Format( "Execute sync: %s %s", m_interpreterPath, argsStr ) );
+        wxString interpreter = m_interpreterPath;
+        QuoteString( interpreter );
+
+        for( const wxString& arg : aArgs )
+        {
+            wxString quoted = arg;
+            QuoteString( quoted );
+            argsStr << quoted << " ";
+        }
+
+        wxLogTrace( traceApi, wxString::Format( "Execute sync: %s %s", interpreter, argsStr ) );
         wxArrayString out, err;
-        wxString cmd = wxString::Format( "%s %s", m_interpreterPath, argsStr );
+        wxString cmd = wxString::Format( "%s %s", interpreter, argsStr );
         long ret = wxExecute( cmd, out, err, wxEXEC_BLOCK, aEnv );
 
         wxString strOut, strErr;
@@ -186,12 +196,19 @@ long PYTHON_MANAGER::ExecuteSync( const std::vector<wxString>& aArgs,
 {
     wxString argsStr;
 
-    for( const wxString& arg : aArgs )
-        argsStr << arg << " ";
+    wxString interpreter = m_interpreterPath;
+    QuoteString( interpreter );
 
-    wxLogTrace( traceApi, wxString::Format( "Execute sync: %s %s", m_interpreterPath, argsStr ) );
+    for( const wxString& arg : aArgs )
+    {
+        wxString quoted = arg;
+        QuoteString( quoted );
+        argsStr << quoted << " ";
+    }
+
+    wxLogTrace( traceApi, wxString::Format( "Execute sync: %s %s", interpreter, argsStr ) );
     wxArrayString out, err;
-    wxString cmd = wxString::Format( "%s %s", m_interpreterPath, argsStr );
+    wxString cmd = wxString::Format( "%s %s", interpreter, argsStr );
     long ret = wxExecute( cmd, out, err, wxEXEC_BLOCK, aEnv );
 
     wxString strOut, strErr;
