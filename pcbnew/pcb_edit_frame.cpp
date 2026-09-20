@@ -2212,8 +2212,24 @@ void PCB_EDIT_FRAME::OnBoardLoaded()
     // Display the loaded board:
     Zoom_Automatique( false );
 
-    // Invalidate painting as loading the DRC engine will cause clearances to become valid
-    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    // The DRC engine above makes clearances computable, so only the items that draw a
+    // clearance outline are stale; marking every item re-tessellates the whole board
+    {
+        KIGFX::VIEW* view = GetCanvas()->GetView();
+        const auto&  opts = GetPcbNewSettings()->m_Display;
+
+        for( FOOTPRINT* footprint : GetBoard()->Footprints() )
+        {
+            for( PAD* pad : footprint->Pads() )
+                view->Update( pad, KIGFX::REPAINT );
+        }
+
+        if( opts.m_TrackClearance == SHOW_WITH_VIA_ALWAYS )
+        {
+            for( PCB_TRACK* track : GetBoard()->Tracks() )
+                view->Update( track, KIGFX::REPAINT );
+        }
+    }
 
     Refresh();
 
