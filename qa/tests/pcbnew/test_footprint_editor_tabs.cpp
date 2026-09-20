@@ -181,7 +181,7 @@ BOOST_AUTO_TEST_CASE( ContextIdentityAndDirty )
     FOOTPRINT_EDITOR_TAB_CONTEXT ctx( wxS( "Resistors" ), wxS( "R_0402" ), std::move( board ) );
 
     BOOST_CHECK_EQUAL( ctx.GetTabKey(), wxS( "Resistors:R_0402" ) );
-    BOOST_CHECK_EQUAL( ctx.GetDisplayName(), wxS( "R_0402" ) );
+    BOOST_CHECK_EQUAL( ctx.GetDisplayName( true ), wxS( "R_0402" ) );
 
     BOOST_CHECK_EQUAL( ctx.GetBoard(), raw );
 
@@ -222,7 +222,7 @@ BOOST_AUTO_TEST_CASE( InstanceTabContextIsTransientAndKeyedByUuid )
     BOOST_CHECK_EQUAL( ctx.GetReference(), wxS( "R5" ) );
     BOOST_CHECK_EQUAL( ctx.GetSourceUuid().AsString(), sourceUuid.AsString() );
     BOOST_CHECK_EQUAL( ctx.GetBoard(), raw );
-    BOOST_CHECK_EQUAL( ctx.GetDisplayName(), wxS( "R5" ) );
+    BOOST_CHECK_EQUAL( ctx.GetDisplayName( true ), wxS( "R5" ) );
 
     BOOST_CHECK_EQUAL( ctx.GetTabKey(),
                        FOOTPRINT_EDITOR_TAB_CONTEXT::MakeInstanceTabKey( sourceUuid ) );
