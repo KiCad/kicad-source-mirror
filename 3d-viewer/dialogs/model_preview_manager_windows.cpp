@@ -22,6 +22,7 @@
 #include <model_preview_manager_windows_internal.h>
 
 #include <wx/filename.h>
+#include <wx/stdpaths.h>
 
 #include <windows.h>
 #include <winver.h>
@@ -82,14 +83,24 @@ READ_RESULT ReadClassString( const wxString& aKey, const wchar_t* aValueName, wx
 
 wxString BundledHandlerPath()
 {
-    std::array<wchar_t, 32768> path;
-    DWORD                      length = GetModuleFileNameW( nullptr, path.data(), static_cast<DWORD>( path.size() ) );
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        wxFileName fn( wxStandardPaths::Get().GetExecutablePath() );
+        fn.AppendDir( wxS( ".." ) );
+        fn.AppendDir( wxS( "utils" ) );
+        fn.AppendDir( wxS( "preview_handlers" ) );
+        fn.AppendDir( wxS( "kicad_3d_model_preview_handler" ) );
+        fn.SetFullName( HANDLER_NAME );
 
-    if( length == 0 || length == path.size() )
-        return {};
+        return fn.GetFullPath();
+    }
+    else
+    {
+        wxFileName fn( wxStandardPaths::Get().GetExecutablePath() );
+        fn.SetFullName( HANDLER_NAME );
 
-    wxFileName executable( path.data() );
-    return wxFileName( executable.GetPath(), HANDLER_NAME ).GetFullPath();
+        return fn.GetFullPath();
+    }
 }
 
 wxString ExpandRegistryPath( const wxString& aPath )
