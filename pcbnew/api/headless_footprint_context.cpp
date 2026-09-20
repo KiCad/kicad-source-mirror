@@ -49,7 +49,11 @@ HEADLESS_FOOTPRINT_CONTEXT::HEADLESS_FOOTPRINT_CONTEXT( std::unique_ptr<FOOTPRIN
 }
 
 
-HEADLESS_FOOTPRINT_CONTEXT::~HEADLESS_FOOTPRINT_CONTEXT() = default;
+HEADLESS_FOOTPRINT_CONTEXT::~HEADLESS_FOOTPRINT_CONTEXT()
+{
+    if( m_board )
+        m_board->ClearProject();
+}
 
 
 BOARD* HEADLESS_FOOTPRINT_CONTEXT::GetBoard() const
@@ -109,10 +113,17 @@ bool HEADLESS_FOOTPRINT_CONTEXT::SaveFootprintInLibrary( FOOTPRINT* aFootprint,
                 RECURSE_MODE::RECURSE );
 
         FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( m_project );
-        adapter->SaveFootprint( aLibraryName, aFootprint );
+
+        if( adapter->SaveFootprint( aLibraryName, aFootprint ) != FOOTPRINT_LIBRARY_ADAPTER::SAVE_OK )
+        {
+            aFootprint->SetFPID( LIB_ID( aLibraryName, aFootprint->GetFPID().GetLibItemName() ) );
+            return false;
+        }
 
         aFootprint->SetFPID( LIB_ID( aLibraryName, aFootprint->GetFPID().GetLibItemName() ) );
-        m_fpid = aFootprint->GetFPID();
+
+        if( aFootprint == m_board->GetFirstFootprint() )
+            m_fpid = aFootprint->GetFPID();
 
         return true;
     }
