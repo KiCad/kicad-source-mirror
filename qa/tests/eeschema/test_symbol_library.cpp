@@ -554,4 +554,46 @@ BOOST_AUTO_TEST_CASE( AsyncLoadSkipsDisabledRows )
 }
 
 
+/**
+ * A project row that has never been loaded must shadow a same-named LOADED global library.
+ */
+BOOST_AUTO_TEST_CASE( UnloadedProjectRowShadowsLoadedGlobal )
+{
+    if( !wxGetEnv( wxT( "KICAD_CONFIG_HOME_IS_QA" ), nullptr ) )
+    {
+        BOOST_TEST_MESSAGE( "QA test is running using unknown config home; skipping" );
+        return;
+    }
+
+    std::unique_ptr<KI_TEST::SCOPED_PROCESS_ENV_VAR> scopedSymDirEnvVar = EnsureGlobalSymbolDir();
+
+    LIBRARY_MANAGER manager;
+    SYMBOL_LIBRARY_ADAPTER* adapter = RegisterSymbolAdapter( manager );
+
+    manager.LoadGlobalTables();
+
+    adapter->LoadOne( kDeviceLibNickname );
+    BOOST_REQUIRE( adapter->IsLibraryLoaded( kDeviceLibNickname ) );
+
+    // The project sym-lib-table defines its own Device row that shadows the global one
+    LoadSchematic( GetTestProjectSchPath().GetFullPath() );
+    PROJECT& project = SettingsManager().Prj();
+    manager.LoadProjectTables( project.GetProjectDirectory() );
+
+    BOOST_REQUIRE( adapter->GetRow( kDeviceLibNickname, LIBRARY_TABLE_SCOPE::PROJECT ).has_value() );
+
+    // The project row exists but was never loaded: the global entry must not leak
+    // through as the answer for the shared nickname.
+    BOOST_CHECK_MESSAGE( !adapter->HasLibrary( kDeviceLibNickname ),
+                         "an unloaded project library must shadow a loaded global library "
+                         "of the same nickname" );
+    BOOST_CHECK_MESSAGE( adapter->GetLibraryNames().empty(),
+                         "GetLibraryNames must not list the global library for a nickname "
+                         "shadowed by an unloaded project row" );
+    BOOST_CHECK_MESSAGE( !adapter->GetLibraryDescription( kDeviceLibNickname ).has_value(),
+                         "GetLibraryDescription must not return the global library's "
+                         "description for an unloaded project nickname" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -1700,6 +1700,9 @@ std::optional<const LIB_DATA*> LIBRARY_MANAGER_ADAPTER::fetchIfLoaded( const wxS
         }
     }
 
+    if( m_manager.GetRow( Type(), aNickname, LIBRARY_TABLE_SCOPE::PROJECT ) )
+        return std::nullopt; // project row exists but is not loaded
+
     {
         std::shared_lock lock( globalLibsMutex() );
 
@@ -1729,6 +1732,9 @@ std::optional<LIB_DATA*> LIBRARY_MANAGER_ADAPTER::fetchIfLoaded( const wxString&
             return std::nullopt;
         }
     }
+
+    if( m_manager.GetRow( Type(), aNickname, LIBRARY_TABLE_SCOPE::PROJECT ) )
+        return std::nullopt; // project row exists but is not loaded
 
     {
         std::shared_lock lock( globalLibsMutex() );
