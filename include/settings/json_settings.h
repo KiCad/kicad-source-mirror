@@ -303,6 +303,18 @@ protected:
     bool fromLegacyColor( wxConfigBase* aConfig, const std::string& aKey,
                           const std::string& aDest );
 
+    /**
+     * Flushes nested settings and parameters into the JSON store.
+     * @return true if the store holds changes not yet written to the file
+     */
+    bool flushToStore();
+
+    /**
+     * Overlays the current store on the original file contents. May throw a JSON exception.
+     * @return the serialized bytes in the on-disk format
+     */
+    std::string formatFileContents();
+
     virtual wxString getFileExt() const
     {
         return wxT( "json" );
