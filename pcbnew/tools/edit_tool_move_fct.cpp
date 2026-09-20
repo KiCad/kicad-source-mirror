@@ -1612,6 +1612,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     originalPos = nextItem->GetPosition();
                     m_selectionTool->AddItemToSel( nextItem );
                     selection.SetReferencePoint( originalPos );
+
                     if( angleSnapMode != LEADER_MODE::DIRECT )
                         grid.SetSnapLineOrigin( selection.GetReferencePoint() );
 
@@ -1669,11 +1670,15 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
             else
                 m_toolMgr->RunSynchronousAction( ACTIONS::increment, aCommit, ACTIONS::INCREMENT { 1, 0 } );
         }
-        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt ) || evt->IsAction( &PCB_ACTIONS::moveExact )
-                 || evt->IsAction( &PCB_ACTIONS::moveWithReference ) || evt->IsAction( &PCB_ACTIONS::copyWithReference )
+        else if( ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+                 || evt->IsAction( &PCB_ACTIONS::moveExact )
+                 || evt->IsAction( &PCB_ACTIONS::moveWithReference )
+                 || evt->IsAction( &PCB_ACTIONS::copyWithReference )
                  || evt->IsAction( &PCB_ACTIONS::positionRelative )
-                 || evt->IsAction( &PCB_ACTIONS::interactiveOffsetTool ) || evt->IsAction( &ACTIONS::find )
-                 || evt->IsAction( &ACTIONS::findNext ) || evt->IsAction( &ACTIONS::findPrevious )
+                 || evt->IsAction( &PCB_ACTIONS::interactiveOffsetTool )
+                 || evt->IsAction( &ACTIONS::find )
+                 || evt->IsAction( &ACTIONS::findNext )
+                 || evt->IsAction( &ACTIONS::findPrevious )
                  || evt->IsAction( &ACTIONS::redo ) )
         {
             wxBell();
