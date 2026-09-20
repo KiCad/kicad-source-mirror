@@ -130,10 +130,13 @@ API_PLUGIN_CONFIG::API_PLUGIN_CONFIG( API_PLUGIN& aParent, const wxFileName& aCo
     LOGGING_ERROR_HANDLER handler;
     aValidator.Validate( js, handler, nlohmann::json_uri( "#/definitions/Plugin" ) );
 
-    if( !handler.HasError() )
-        wxLogTrace( traceApi, "Plugin: schema validation successful" );
-    else
+    if( handler.HasError() )
+    {
         error_message = handler.ErrorMessage();
+        return;
+    }
+
+    wxLogTrace( traceApi, "Plugin: schema validation successful" );
 
     // All of these are required; any exceptions here leave us with valid == false
     try
