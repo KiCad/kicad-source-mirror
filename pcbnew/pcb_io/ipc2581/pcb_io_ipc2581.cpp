@@ -4460,13 +4460,52 @@ void PCB_IO_IPC2581::generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aL
             {
                 std::optional<PCB_SHAPE> maskShape;
 
-                if( IsSolderMaskLayer( aLayer ) && shape->HasSolderMask()
-                    && IsExternalCopperLayer( shape->GetLayer() ) )
+                if( IsSolderMaskLayer( aLayer )
+                    && shape->HasSolderMask()
+                    && IsExternalCopperLayer( shape->GetLayer() )
+                    && shape->GetSolderMaskExpansion() )
                 {
-                    // The mask-layer copy of an exposed copper shape grows its stroke width
-                    // by the solder mask expansion, matching BRDITEMS_PLOTTER::PlotShape().
                     maskShape.emplace( *shape );
-                    maskShape->SetWidth( std::max( shape->GetWidth() + 2 * shape->GetSolderMaskExpansion(), 0 ) );
+
+                    int expansion = shape->GetSolderMaskExpansion();
+                    int thickness = shape->GetWidth() + 2 * expansion;
+
+                    // Increase/decrease thickness of shape's edge to account for solder mask expansion
+                    maskShape->SetWidth( std::max( thickness, 0 ) );
+
+                    // If we run out of thickness due to a negative solder mask expansion, then we've got
+                    // more work to do for closed shapes.
+                    if( thickness < 0 )
+                    {
+                        int excess = - thickness;
+
+                        switch( shape->GetShape() )
+                        {
+                        case SHAPE_T::CIRCLE:
+                            maskShape->SetRadius( std::max( shape->GetRadius() - excess, 1 ) );
+                            break;
+
+                        case SHAPE_T::RECTANGLE:
+                            maskShape->SetRectangleWidth( shape->GetRectangleWidth() - ( excess * 2 ) );
+                            maskShape->SetRectangleHeight( shape->GetRectangleHeight() - ( excess * 2 ) );
+                            maskShape->SetCornerRadius( std::max( shape->GetCornerRadius() - excess, 0 ) );
+                            break;
+
+                        case SHAPE_T::POLY:
+                            if( shape->IsPolyShapeValid() )
+                            {
+                                SHAPE_POLY_SET& poly = maskShape->GetPolyShape();
+                                poly.Fracture();
+                                poly.Deflate( excess, CORNER_STRATEGY::ROUND_ALL_CORNERS, shape->GetMaxError() );
+                            }
+
+                            break;
+
+                        default:
+                            break;
+                        }
+                    }
+
                     shape = &maskShape.value();
                 }
 
