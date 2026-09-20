@@ -78,16 +78,17 @@ enum class ARC_EDIT_MODE
 };
 
 /**
-* Store the window positioning/state.
-*/
+ * Store the window positioning/state.
+ * Initialized to invalid values so that failed restoration doesn't try to parse uninitialized memory
+ */
 struct KICOMMON_API WINDOW_STATE
 {
-    bool maximized;
-    int size_x;
-    int size_y;
-    int pos_x;
-    int pos_y;
-    unsigned int display;
+    bool maximized = true;
+    int size_x = 0;
+    int size_y = 0;
+    int pos_x = 0;
+    int pos_y = 0;
+    unsigned int display = UINT_MAX;
 };
 
 /**

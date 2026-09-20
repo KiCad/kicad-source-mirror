@@ -34,7 +34,7 @@ class PROJECT;
 struct KICOMMON_API PROJECT_FILE_STATE
 {
     wxString fileName;
-    bool open;
+    bool open = false;
     struct WINDOW_STATE window;
 };
 
