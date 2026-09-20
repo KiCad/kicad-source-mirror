@@ -748,7 +748,7 @@ void DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aIt
         if( !testClearance && !testHoles )
             return;
 
-        DRC_RTREE*     zoneRTree = m_board->m_CopperZoneRTreeCache[ zone ].get();
+        DRC_RTREE*     zoneRTree = m_board->GetCopperZoneRTree( zone );
         DRC_CONSTRAINT constraint;
         bool           colliding;
         int            clearance = -1;

@@ -129,7 +129,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     areaPoly.Fracture();
                     areaPoly.Deflate( epsilon, CORNER_STRATEGY::ALLOW_ACUTE_CORNERS, ARC_LOW_DEF );
 
-                    DRC_RTREE* zoneRTree = board->m_CopperZoneRTreeCache[ copperZone ].get();
+                    DRC_RTREE* zoneRTree = board->GetCopperZoneRTree( copperZone );
 
                     if( zoneRTree )
                     {

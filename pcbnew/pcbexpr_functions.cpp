@@ -661,7 +661,7 @@ bool collidesWithArea( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, PCBEXPR_CONTEXT* 
             if( !zone->IsFilled() )
                 return false;
 
-            if( DRC_RTREE* zoneRTree = board->m_CopperZoneRTreeCache[ zone ].get() )
+            if( DRC_RTREE* zoneRTree = board->GetCopperZoneRTree( zone ) )
             {
                 if( zoneRTree->QueryColliding( areaBBox, &areaOutline, aLayer ) )
                     return true;

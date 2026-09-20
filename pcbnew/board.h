@@ -1868,6 +1868,17 @@ public:
     ZONE*                 m_SolderMaskBridges;  // A container to build bridges on solder mask layers
     std::map<ZONE*, std::map<PCB_LAYER_ID, ISOLATED_ISLANDS>> m_ZoneIsolatedIslandsMap;
 
+    /**
+     * Look up a zone's filled-copper R-tree.  DRC reads this cache from many threads at once, so
+     * never reach for it with operator[], which inserts (and can rehash) on a miss.
+     */
+    DRC_RTREE* GetCopperZoneRTree( ZONE* aZone ) const
+    {
+        auto it = m_CopperZoneRTreeCache.find( aZone );
+
+        return it != m_CopperZoneRTreeCache.end() ? it->second.get() : nullptr;
+    }
+
 private:
     // The default copy constructor & operator= are inadequate,
     // either write one or do not use it at all

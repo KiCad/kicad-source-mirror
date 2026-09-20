@@ -245,6 +245,7 @@ set( QA_PCBNEW_SRCS
     drc/test_drc_issue23868.cpp
     drc/test_drc_issue24211.cpp
     drc/test_drc_physical_clearance.cpp
+    drc/test_drc_prepared_candidates.cpp
     drc/test_drc_rule_editor.cpp
     drc/test_drc_violation_layers_issue24941.cpp
     drc/test_drc_net_chain_tuning_profiles.cpp

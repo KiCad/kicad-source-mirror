@@ -833,7 +833,7 @@ bool CONNECTIVITY_DATA::TestTrackEndpointDangling( PCB_TRACK* aTrack, bool aIgno
                 continue;
 
             if( zone )
-                rtree = zone->GetBoard()->m_CopperZoneRTreeCache[ zone ].get();
+                rtree = zone->GetBoard()->GetCopperZoneRTree( zone );
 
             if( rtree )
             {
