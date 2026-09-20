@@ -452,6 +452,14 @@ API_HANDLER_SCH::handleSaveDocumentToString( const HANDLER_CONTEXT<commands::Sav
 
     SCH_SHEET* topLevelSheet = schematic()->GetTopLevelSheet( 0 );
 
+    if( aCtx.Request.document().has_sheet_path() )
+    {
+        KIID_PATH kiidPath = UnpackSheetPath( aCtx.Request.document().sheet_path() );
+
+        if( std::optional<SCH_SHEET_PATH> resolvedPath = schematic()->Hierarchy().GetSheetPathByKIIDPath( kiidPath ) )
+            topLevelSheet = resolvedPath->Last();
+    }
+
     if( !topLevelSheet || !topLevelSheet->GetScreen() )
     {
         ApiResponseStatus e;
@@ -1070,6 +1078,22 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
     SCH_COMMIT* commit = static_cast<SCH_COMMIT*>( getCurrentCommit( aClientName ) );
     bool connectivityChanged = false;   // an in-place symbol update invalidated the net graph
 
+    EDA_ITEM* container = targetScreen;
+
+    if( containerResult->has_value() )
+    {
+        SCH_ITEM* containerItem = hierarchy.ResolveItem( **containerResult, nullptr, true );
+
+        if( !containerItem )
+        {
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( "the requested container does not exist in this document" );
+            return tl::unexpected( e );
+        }
+
+        container = containerItem;
+    }
+
     for( const google::protobuf::Any& anyItem : aItems )
     {
         ItemStatus status;
@@ -1083,8 +1107,6 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
             aItemHandler( status, anyItem );
             continue;
         }
-
-        EDA_ITEM* container = targetScreen;
 
         HANDLER_RESULT<std::unique_ptr<EDA_ITEM>> creationResult = createItemForType( *type, container );
 
