@@ -231,9 +231,7 @@ bool SaveRemoteSymbolToLibrary( SYMBOL_LIBRARY_ADAPTER& aAdapter, const wxFileNa
 
     const LIBRARY_TABLE_SCOPE scope = aGlobalTable ? LIBRARY_TABLE_SCOPE::GLOBAL : LIBRARY_TABLE_SCOPE::PROJECT;
 
-    // Without the load the library stays in LOADING state and placement cannot see the symbol
     Pgm().GetLibraryManager().ReloadLibraryEntry( LIBRARY_TABLE_TYPE::SYMBOL, aNickname, scope );
-    aAdapter.LoadOne( aNickname );
 
     return true;
 }

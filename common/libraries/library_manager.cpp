@@ -1610,7 +1610,11 @@ void LIBRARY_MANAGER_ADAPTER::ReloadLibraryEntry( const wxString& aNickname, LIB
                 {
                     LIBRARY_RESULT<LIB_DATA*> result = loadFromScope( aNickname, aScopeToReload, aTarget, aMutex );
 
-                    if( !result.has_value() )
+                    if( result.has_value() && *result )
+                    {
+                        LoadOne( *result );
+                    }
+                    else if( !result.has_value() )
                     {
                         wxLogTrace( traceLibraries, "ReloadLibraryEntry: failed to reload %s (%s): %s",
                                     aNickname, magic_enum::enum_name( aScopeToReload ),

@@ -309,11 +309,7 @@ API_HANDLER_LIBRARIES::handleReloadLibrary( const HANDLER_CONTEXT<ReloadLibrary>
     }
 
     for( const wxString& nickname : nicknames )
-    {
         manager.ReloadLibraryEntry( tableType, nickname, scope );
-        // Sync reload
-        manager.LoadLibraryEntry( tableType, nickname );
-    }
 
     return makeStatus( LibraryCommandStatus::LCS_OK );
 }

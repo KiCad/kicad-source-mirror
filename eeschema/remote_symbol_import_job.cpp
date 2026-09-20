@@ -193,7 +193,6 @@ bool REMOTE_SYMBOL_IMPORT_JOB::Import( const REMOTE_PROVIDER_METADATA& aProvider
 
             LIBRARY_MANAGER& libMgr = Pgm().GetLibraryManager();
             libMgr.ReloadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, nickname, scope );
-            libMgr.LoadLibraryEntry( LIBRARY_TABLE_TYPE::FOOTPRINT, nickname );
         }
 
         footprintLinks.push_back( fpLibId );

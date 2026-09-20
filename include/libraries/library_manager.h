@@ -180,6 +180,7 @@ public:
     /// Returns all library load errors as newline-separated strings for display
     std::vector<KI_ERROR> GetLibraryLoadErrors() const;
 
+    /// Synchronously recreates the plugin for and reloads the given library
     void ReloadLibraryEntry( const wxString& aNickname,
                              LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH );
 
@@ -380,6 +381,7 @@ public:
     std::optional<LIBRARY_TABLE_ROW*> FindRowByURI( LIBRARY_TABLE_TYPE aType, const wxString &aUri,
                                                     LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH ) const;
 
+    /// Synchronously recreates the plugin for and reloads the given library
     void ReloadLibraryEntry( LIBRARY_TABLE_TYPE aType, const wxString& aNickname,
                              LIBRARY_TABLE_SCOPE aScope = LIBRARY_TABLE_SCOPE::BOTH );
 
