@@ -115,6 +115,11 @@ struct EDA_IU_SCALE
         double iu = static_cast<double>( nm ) * IU_PER_MM / 1000000.0;
         return static_cast<int>( iu < 0 ? iu - 0.5 : iu + 0.5 );
     }
+
+    constexpr inline double NmToIUD( int64_t nm ) const
+    {
+        return static_cast<double>( nm ) * IU_PER_MM / 1000000.0;
+    }
 };
 
 constexpr EDA_IU_SCALE gerbIUScale = EDA_IU_SCALE( GERB_IU_PER_MM );

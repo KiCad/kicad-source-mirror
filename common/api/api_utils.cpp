@@ -167,7 +167,8 @@ KICOMMON_API void PackVector2( types::Vector2& aOutput, const VECTOR2I& aInput, 
 
 KICOMMON_API VECTOR2I UnpackVector2( const types::Vector2& aInput, const EDA_IU_SCALE& aScale )
 {
-    return VECTOR2I( aScale.NmToIU( aInput.x_nm() ), aScale.NmToIU( aInput.y_nm() ) );
+    return VECTOR2I( KiROUND( aScale.NmToIUD( aInput.x_nm() ) ),
+                     KiROUND( aScale.NmToIUD( aInput.y_nm() ) ) );
 }
 
 
@@ -206,7 +207,7 @@ KICOMMON_API void PackDistance( types::Distance& aOutput, int aInput, const EDA_
 
 KICOMMON_API int UnpackDistance( const types::Distance& aInput, const EDA_IU_SCALE& aScale )
 {
-    return aScale.NmToIU( aInput.value_nm() );
+    return KiROUND( aScale.NmToIUD( aInput.value_nm() ) );
 }
 
 
