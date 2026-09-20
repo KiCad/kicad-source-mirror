@@ -394,17 +394,20 @@ void SCH_IO_KICAD_SEXPR::SaveSchematicFile( const wxString& aFileName, SCH_SHEET
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
 
-    wxString sanityResult = aSheet->GetScreen()->GroupsSanityCheck();
-
-    if( sanityResult != wxEmptyString && m_queryUserCallback )
+    if( aSheet->GetScreen() )
     {
-        if( !m_queryUserCallback( _( "Internal Group Data Error" ), wxICON_ERROR,
-                                  wxString::Format( _( "Please report this bug.  Error validating group "
-                                                       "structure: %s\n\nSave anyway?" ),
-                                                    sanityResult ),
-                                  _( "Save Anyway" ) ) )
+        wxString sanityResult = aSheet->GetScreen()->GroupsSanityCheck();
+
+        if( sanityResult != wxEmptyString && m_queryUserCallback )
         {
-            return;
+            if( !m_queryUserCallback( _( "Internal Group Data Error" ), wxICON_ERROR,
+                                      wxString::Format( _( "Please report this bug.  Error validating group "
+                                                           "structure: %s\n\nSave anyway?" ),
+                                                        sanityResult ),
+                                      _( "Save Anyway" ) ) )
+            {
+                return;
+            }
         }
     }
 
