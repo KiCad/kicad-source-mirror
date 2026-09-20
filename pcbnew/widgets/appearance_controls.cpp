@@ -2588,6 +2588,8 @@ void APPEARANCE_CONTROLS::rebuildNets()
 
     const std::set<wxString>& hiddenClasses = m_frame->Prj().GetLocalSettings().m_HiddenNetclasses;
 
+    m_netclassSettings.clear();
+    m_netclassSettingsMap.clear();
     m_netclassOuterSizer->Clear( true );
 
     auto appendNetclass =
@@ -2801,8 +2803,13 @@ void APPEARANCE_CONTROLS::syncLayerPresetSelection()
     auto it = std::find_if( m_layerPresets.begin(), m_layerPresets.end(),
                             [&]( const std::pair<const wxString, LAYER_PRESET>& aPair )
                             {
+                                // see onLayerPresetChanged logic for built-in presets
+                                const GAL_SET& presetObjects = aPair.second.readOnly
+                                        ? m_lastBuiltinPreset.renderLayers
+                                        : aPair.second.renderLayers;
+
                                 return ( aPair.second.layers == visibleLayers
-                                         && aPair.second.renderLayers == visibleObjects
+                                         && presetObjects == visibleObjects
                                          && aPair.second.flipBoard == flipBoard );
                             } );
 
@@ -2964,10 +2971,13 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 
             if( idx != wxNOT_FOUND )
             {
-                m_layerPresets.erase( presetName );
+                if( m_lastSelectedUserPreset && m_lastSelectedUserPreset->name == presetName )
+                    m_lastSelectedUserPreset = nullptr;
+
+                if( m_currentPreset && m_currentPreset->name == presetName )
+                    m_currentPreset = nullptr;
 
                 m_cbLayerPresets->Delete( idx );
-                m_currentPreset = nullptr;
             }
 
             if( m_presetMRU.Index( presetName ) != wxNOT_FOUND )
@@ -3184,6 +3194,9 @@ void APPEARANCE_CONTROLS::onViewportChanged( wxCommandEvent& aEvent )
 
             if( idx != wxNOT_FOUND )
             {
+                if( m_lastSelectedViewport && m_lastSelectedViewport->name == viewportName )
+                    m_lastSelectedViewport = nullptr;
+
                 m_viewports.erase( viewportName );
                 m_cbViewports->Delete( idx );
             }
@@ -3546,23 +3559,16 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
         {
             if( !m_contextMenuNetclass.IsEmpty() )
             {
+                board->ResetNetHighLight();
+                rs->SetHighlight( false );
+
                 runOnNetsOfClass( m_contextMenuNetclass,
-                        [&]( NETINFO_ITEM* aItem )
+                        [&]( const NETINFO_ITEM* aItem )
                         {
-                            static bool first = true;
                             int code = aItem->GetNetCode();
 
-                            if( first )
-                            {
-                                board->SetHighLightNet( code );
-                                rs->SetHighlight( true, code );
-                                first = false;
-                            }
-                            else
-                            {
-                                board->SetHighLightNet( code, true );
-                                rs->SetHighlight( true, code, true );
-                            }
+                            board->SetHighLightNet( code, true );
+                            rs->SetHighlight( true, code, true );
                         } );
 
                 view->UpdateAllLayersColor();
