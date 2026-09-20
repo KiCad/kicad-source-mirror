@@ -2691,6 +2691,19 @@ API_HANDLER_SCH::handleExpandTextVariables( const HANDLER_CONTEXT<ExpandTextVari
 }
 
 
+// Variant names are stored and compared exactly, but SCHEMATIC::HasVariant matches case-insensitively
+static std::optional<wxString> findVariantNoCase( const SCHEMATIC* aSchematic, const wxString& aName )
+{
+    for( const wxString& variantName : aSchematic->GetVariantNames() )
+    {
+        if( variantName.CmpNoCase( aName ) == 0 )
+            return variantName;
+    }
+
+    return std::nullopt;
+}
+
+
 HANDLER_RESULT<VariantsResponse> API_HANDLER_SCH::handleGetVariants( const HANDLER_CONTEXT<GetVariants>& aCtx )
 {
     if( aCtx.Request.document().type() != DocumentType::DOCTYPE_SCHEMATIC )
@@ -2739,6 +2752,9 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleAddVariant( const HANDLER_CONTEXT<A
         return tl::unexpected( e );
     }
 
+    if( std::optional<wxString> canonical = findVariantNoCase( schematic, name ) )
+        name = *canonical;
+
     schematic->AddVariant( name );
 
     if( aCtx.Request.has_description() )
@@ -2785,7 +2801,15 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleDeleteVariant( const HANDLER_CONTEX
         return tl::unexpected( e );
     }
 
+    if( std::optional<wxString> canonical = findVariantNoCase( schematic, name ) )
+        name = *canonical;
+
     schematic->DeleteVariant( name, &commit );
+
+    if( !commit.Empty() )
+        commit.Push( wxString::Format( _( "Delete variant '%s'" ), name ) );
+
+    onModified();
 
     if( m_frame )
     {
@@ -2849,7 +2873,15 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleRenameVariant( const HANDLER_CONTEX
         return tl::unexpected( e );
     }
 
+    if( std::optional<wxString> canonicalOld = findVariantNoCase( schematic, oldName ) )
+        oldName = *canonicalOld;
+
     schematic->RenameVariant( oldName, newName, &commit );
+
+    if( !commit.Empty() )
+        commit.Push( wxString::Format( _( "Rename variant '%s' to '%s'" ), oldName, newName ) );
+
+    onModified();
 
     if( m_frame )
         frame()->UpdateVariantSelectionCtrl( frame()->Schematic().GetVariantNamesForUI() );
@@ -2907,7 +2939,18 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleCopyVariant( const HANDLER_CONTEXT<
         return tl::unexpected( e );
     }
 
+    if( std::optional<wxString> canonicalOld = findVariantNoCase( schematic, oldName ) )
+        oldName = *canonicalOld;
+
     schematic->CopyVariant( oldName, newName, &commit );
+
+    if( aCtx.Request.has_new_description() )
+        schematic->SetVariantDescription( newName, wxString::FromUTF8( aCtx.Request.new_description() ) );
+
+    if( !commit.Empty() )
+        commit.Push( wxString::Format( _( "Copy variant '%s' to '%s'" ), oldName, newName ) );
+
+    onModified();
 
     if( m_frame )
         frame()->UpdateVariantSelectionCtrl( frame()->Schematic().GetVariantNamesForUI() );
@@ -2937,6 +2980,9 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleSetVariantDescription( const HANDLE
         e.set_error_message( fmt::format( "no variant named '{}' exists", aCtx.Request.name() ) );
         return tl::unexpected( e );
     }
+
+    if( std::optional<wxString> canonical = findVariantNoCase( schematic, name ) )
+        name = *canonical;
 
     schematic->SetVariantDescription( name, wxString::FromUTF8( aCtx.Request.description() ) );
 
@@ -2969,6 +3015,9 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleSetCurrentVariant( const HANDLER_CO
     }
 
     wxString name = aCtx.Request.has_name() ? wxString::FromUTF8( aCtx.Request.name() ) : wxString();
+
+    if( std::optional<wxString> canonical = findVariantNoCase( schematic, name ) )
+        name = *canonical;
 
     if( m_frame )
         frame()->SetCurrentVariant( name );
