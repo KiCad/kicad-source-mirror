@@ -133,14 +133,9 @@ std::optional<LIB_STATUS> FOOTPRINT_LIBRARY_ADAPTER::LoadOne( LIB_DATA* aLib )
 {
     aLib->status.load_status = LOAD_STATUS::LOADING;
 
-    std::map<std::string, UTF8> options = aLib->row->GetOptionsMap();
-
     try
     {
-        std::lock_guard pluginGuard( pluginMutex( aLib->row->Nickname() ) );
-
-        wxArrayString dummyList;
-        pcbplugin( aLib )->FootprintEnumerate( dummyList, getUri( aLib->row ), false, &options );
+        enumerateLibrary( aLib, getUri( aLib->row ) );
         aLib->status.load_status = LOAD_STATUS::LOADED;
     }
     catch( IO_ERROR& e )
@@ -203,11 +198,14 @@ std::vector<wxString> FOOTPRINT_LIBRARY_ADAPTER::GetFootprintNames( const wxStri
         {
             std::lock_guard pluginGuard( pluginMutex( aNickname ) );
 
-            pcbplugin( lib )->FootprintEnumerate( namesAS, getUri( lib->row ), true, &options );
+            pcbplugin( lib )->FootprintEnumerate( namesAS, getUri( lib->row ), aBestEfforts, &options );
         }
         catch( IO_ERROR& e )
         {
             wxLogTrace( traceLibraries, "FP: Exception enumerating library %s: %s", lib->row->Nickname(), e.What() );
+
+            if( !aBestEfforts )
+                throw;
         }
     }
 
@@ -276,7 +274,17 @@ void FOOTPRINT_LIBRARY_ADAPTER::RefreshLibraryIfChanged( const wxString& aNickna
         wxLogTrace( traceLibraries, "FP: %s changed on disk, re-enumerating", aNickname );
     }
 
-    enumerateLibrary( lib, uri );
+    try
+    {
+        enumerateLibrary( lib, uri );
+    }
+    catch( IO_ERROR& e )
+    {
+        std::unique_lock lock( PreloadedFootprintsMutex );
+        PreloadedFootprints.Get().erase( aNickname );
+        PreloadedTimestamps.Get().erase( aNickname );
+        throw;
+    }
 }
 
 
@@ -317,6 +325,7 @@ FOOTPRINT* FOOTPRINT_LIBRARY_ADAPTER::LoadFootprint( const wxString& aNickname, 
 {
     // First check if the footprint is in PreloadedFootprints and clone from there.
     // This avoids re-parsing the file and keeps FP_CACHE from being repopulated.
+    if( fetchIfLoaded( aNickname ) )
     {
         std::shared_lock lock( PreloadedFootprintsMutex );
         auto libIt = PreloadedFootprints.Get().find( aNickname );
@@ -492,7 +501,7 @@ void FOOTPRINT_LIBRARY_ADAPTER::DeleteFootprint( const wxString& aNickname, cons
         {
             wxLogTrace( traceLibraries, "DeleteFootprint: error deleting %s:%s: %s", aNickname,
                         aFootprintName, e.What() );
-            return;
+            throw;
         }
 
         {

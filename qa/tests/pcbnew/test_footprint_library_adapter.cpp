@@ -473,4 +473,55 @@ BOOST_AUTO_TEST_CASE( EditorRoundTripKeepsFileUuids )
 }
 
 
+/**
+ * A preloaded footprint cache entry must not keep serving stale content after the library unloads.
+ */
+BOOST_AUTO_TEST_CASE( RemovedLibraryStopsServingPreloadedFootprints )
+{
+    KI_TEST::SCOPED_TEMP_DIR tmpLib( "kicad_qa_adapter_removed_lib" );
+    KI_TEST::SCOPED_TEMP_DIR tmpTable( "kicad_qa_adapter_removed_lib_table" );
+
+    const std::filesystem::path libPath = tmpLib.CreateChildDir( "kicad_qa_adapter_removed_lib.pretty" );
+
+    const std::filesystem::path source =
+            std::filesystem::path( getResistorLibPath().ToStdString() ) / "R_0402_1005Metric.kicad_mod";
+
+    std::filesystem::copy_file( source, libPath / "R_0402_1005Metric.kicad_mod" );
+
+    const wxString nickname = wxS( "RemovedCheck" );
+
+    {
+        std::ofstream table( tmpTable.Path() / "fp-lib-table" );
+        table << "(fp_lib_table\n  (version 7)\n";
+        table << "  (lib (name \"" << nickname.ToStdString() << "\")(type \"KiCad\")(uri \"" << libPath.string()
+              << "\")(options \"\")(descr \"\"))\n)\n";
+    }
+
+    LIBRARY_MANAGER manager;
+    manager.LoadProjectTables( tmpTable.PathStr(), { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+
+    manager.RegisterAdapter( LIBRARY_TABLE_TYPE::FOOTPRINT,
+                             std::make_unique<TEST_FOOTPRINT_LIBRARY_ADAPTER>( manager ) );
+
+    std::optional<LIBRARY_MANAGER_ADAPTER*> adapterOpt = manager.Adapter( LIBRARY_TABLE_TYPE::FOOTPRINT );
+    BOOST_REQUIRE( adapterOpt.has_value() );
+    TEST_FOOTPRINT_LIBRARY_ADAPTER& adapter = *static_cast<TEST_FOOTPRINT_LIBRARY_ADAPTER*>( *adapterOpt );
+
+    adapter.SeedLoadedLibrary( nickname, libPath.string() );
+    adapter.RefreshLibraryIfChanged( nickname );
+    BOOST_REQUIRE_EQUAL( adapter.GetFootprints( nickname, true ).size(), 1u );
+
+    // Now remove the library from the table and reload the project tables.
+    {
+        std::ofstream table( tmpTable.Path() / "fp-lib-table" );
+        table << "(fp_lib_table\n  (version 7)\n)\n";
+    }
+
+    manager.LoadProjectTables( tmpTable.PathStr(), { LIBRARY_TABLE_TYPE::FOOTPRINT } );
+
+    FOOTPRINT* fp = adapter.LoadFootprint( nickname, wxS( "R_0402_1005Metric" ), false );
+    BOOST_CHECK_MESSAGE( !fp, "a library removed from the table must not keep serving preloaded "
+                              "footprints" );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
