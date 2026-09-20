@@ -309,8 +309,7 @@ BOOST_AUTO_TEST_CASE( SplitFirstFracturePartitionProducesMultipleLeaves )
 
 BOOST_AUTO_TEST_CASE( EarLookaheadImprovesBadTriangulationCase )
 {
-    fs::path polyPath = fs::path( __FILE__ ).parent_path().parent_path().parent_path().parent_path()
-                        .parent_path() / "data/triangulation/bad_triangulation_case.kicad_polys";
+    fs::path polyPath = KI_TEST::GetTestDataRootDir() + "triangulation/bad_triangulation_case.kicad_polys";
 
     BOOST_TEST( fs::exists( polyPath ) );
     BOOST_TEST( computeBoardSpikeyRatio( polyPath ) < 0.47 );
