@@ -345,7 +345,20 @@ SYMBOL_LIBRARY_ADAPTER::SAVE_T SYMBOL_LIBRARY_ADAPTER::SaveSymbol( const wxStrin
 
 void SYMBOL_LIBRARY_ADAPTER::DeleteSymbol( const wxString& aNickname, const wxString& aSymbolName )
 {
-    wxCHECK_MSG( false, /* void */, "Unimplemented!" );
+    LIBRARY_RESULT<LIB_DATA*> libResult = loadIfNeeded( aNickname );
+
+    if( !libResult.has_value() || !*libResult )
+    {
+        wxLogTrace( traceLibraries, "DeleteSymbol: unable to load library %s", aNickname );
+        return;
+    }
+
+    LIB_DATA* lib = *libResult;
+
+    std::lock_guard lock( pluginMutex( aNickname ) );
+
+    std::map<std::string, UTF8> options = lib->row->GetOptionsMap();
+    schplugin( lib )->DeleteSymbol( getUri( lib->row ), aSymbolName, &options );
 }
 
 
