@@ -581,8 +581,8 @@ int EE_GRAPHIC_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
     const auto makeNewBezier =
             [&]()
             {
-                std::unique_ptr<SCH_SHAPE> bezier = std::make_unique<SCH_SHAPE>(
-                    SHAPE_T::BEZIER, shapeLayer, 0, m_lastFillStyle );
+                std::unique_ptr<SCH_SHAPE> bezier = std::make_unique<SCH_SHAPE>( SHAPE_T::BEZIER, shapeLayer, 0,
+                                                                                 m_lastFillStyle );
                 bezier->SetStroke( m_lastStroke );
                 bezier->SetFillColor( m_lastFillColor );
                 bezier->SetParent( parent );
@@ -646,8 +646,7 @@ int EE_GRAPHIC_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
 }
 
 
-SHAPE_DRAW_RESULT EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool,
-                                                     std::unique_ptr<SCH_SHAPE>& aShape,
+SHAPE_DRAW_RESULT EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<SCH_SHAPE>& aShape,
                                                      SHAPE_DRAW_BEHAVIOR& aBehavior,
                                                      const std::vector<VECTOR2D>& aInitialPts )
 {
@@ -751,7 +750,8 @@ SHAPE_DRAW_RESULT EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool,
             cancelled = true;
             break;
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorClick ) )
         {
             if( !started )
             {
