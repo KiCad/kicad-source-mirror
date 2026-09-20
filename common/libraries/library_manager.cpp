@@ -159,7 +159,7 @@ void LIBRARY_MANAGER::loadNestedTables( LIBRARY_TABLE& aRootTable )
                 {
                     if( row.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
                     {
-                        wxFileName file( ExpandURI( row.URI(), Project() ) );
+                        wxFileName file( ExpandEnvVarSubstitutions( row.URI(), &Project() ) );
 
                         // URI may be relative to parent
                         file.MakeAbsolute( wxFileName( aTable.Path() ).GetPath() );
@@ -935,7 +935,16 @@ void LIBRARY_MANAGER::LoadProjectTables( const wxString& aProjectPath,
             m_rowCache.clear();
         }
 
-        m_projectTables.clear();
+        if( aTablesToLoad.size() == 0 )
+        {
+            m_projectTables.clear();
+        }
+        else
+        {
+            for( LIBRARY_TABLE_TYPE type : aTablesToLoad )
+                m_projectTables.erase( type );
+        }
+
         wxLogTrace( traceLibraries, "New project path %s is not readable, not loading project tables", aProjectPath );
     }
 
@@ -1319,7 +1328,7 @@ std::optional<wxString> LIBRARY_MANAGER_ADAPTER::FindLibraryByURI( const wxStrin
 {
     for( const LIBRARY_TABLE_ROW* row : m_manager.Rows( Type() ) )
     {
-        if( LIBRARY_MANAGER::UrisAreEquivalent( row->URI(), aURI ) )
+        if( LIBRARY_MANAGER::UrisAreEquivalent( LIBRARY_MANAGER::GetFullURI( row, true, &m_manager.Project() ), aURI ) )
             return row->Nickname();
     }
 
@@ -1917,7 +1926,7 @@ void LIBRARY_MANAGER_ADAPTER::AsyncLoad()
             continue;
         }
 
-        if( check( nickname, globalLibs(), globalLibsMutex() ) )
+        if( check( nickname, globalLibs(), globalLibsMutex() ) && scope != LIBRARY_TABLE_SCOPE::PROJECT )
         {
             m_loadTotal.fetch_sub( 1 );
             continue;
