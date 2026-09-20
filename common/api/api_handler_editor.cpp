@@ -205,7 +205,7 @@ HANDLER_RESULT<std::optional<KIID>> API_HANDLER_EDITOR::validateItemHeaderDocume
     if( tl::expected<bool, ApiResponseStatus> result = validateDocumentInternal( aHeader.document() ); !result )
         return tl::unexpected( result.error() );
 
-    if( aHeader.has_container() )
+    if( aHeader.has_container() && !aHeader.container().value().empty() )
     {
         return KIID( aHeader.container().value() );
     }
@@ -240,9 +240,16 @@ HANDLER_RESULT<CreateItemsResponse> API_HANDLER_EDITOR::handleCreateItems(
 
     CreateItemsResponse response;
 
+    // The dedicated CreateItems.container field (when set) overrides any container in the header
+    types::ItemHeader header;
+    header.CopyFrom( aCtx.Request.header() );
+
+    if( aCtx.Request.container().value().length() )
+        *header.mutable_container() = aCtx.Request.container();
+
     HANDLER_RESULT<ItemRequestStatus> result = handleCreateUpdateItemsInternal( true,
             aCtx.ClientName,
-            aCtx.Request.header(), aCtx.Request.items(),
+            header, aCtx.Request.items(),
             [&]( const ItemStatus& aStatus, const google::protobuf::Any& aItem )
             {
                 ItemCreationResult itemResult;
