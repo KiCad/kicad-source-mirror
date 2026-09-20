@@ -3205,13 +3205,13 @@ int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths, S
                         {
                             commit.Modify( pin->GetParent(), aPath.LastScreen() );
                             aModify();
-                            commit.Push( _( "Modify sheet pin" ) );
+                            commit.Push( _( "Modify Sheet Pin" ) );
                         }
                         else
                         {
                             commit.Modify( aItem, aPath.LastScreen() );
                             aModify();
-                            commit.Push( _( "Modify schematic item" ) );
+                            commit.Push( _( "Modify Schematic Item" ) );
                         }
 
                         // The push already updated the R-tree and republished connectivity

@@ -2807,7 +2807,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleDeleteVariant( const HANDLER_CONTEX
     schematic->DeleteVariant( name, &commit );
 
     if( !commit.Empty() )
-        commit.Push( wxString::Format( _( "Delete variant '%s'" ), name ) );
+        commit.Push( _( "Delete Variant" ) );
 
     onModified();
 
@@ -2879,7 +2879,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleRenameVariant( const HANDLER_CONTEX
     schematic->RenameVariant( oldName, newName, &commit );
 
     if( !commit.Empty() )
-        commit.Push( wxString::Format( _( "Rename variant '%s' to '%s'" ), oldName, newName ) );
+        commit.Push( _( "Rename Variant" ) );
 
     onModified();
 
@@ -2948,7 +2948,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleCopyVariant( const HANDLER_CONTEXT<
         schematic->SetVariantDescription( newName, wxString::FromUTF8( aCtx.Request.new_description() ) );
 
     if( !commit.Empty() )
-        commit.Push( wxString::Format( _( "Copy variant '%s' to '%s'" ), oldName, newName ) );
+        commit.Push( _( "Copy Variant" ) );
 
     onModified();
 

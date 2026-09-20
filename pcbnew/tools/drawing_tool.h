@@ -270,7 +270,7 @@ public:
     /**
      * Place a grid item on the board.
      */
-    int PlaceGridItem( const TOOL_EVENT& aEvent );
+    int PlaceSubGrid( const TOOL_EVENT& aEvent );
 
     ///< Set up handlers for various events.
     void setTransitions() override;

@@ -2529,7 +2529,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
+int DRAWING_TOOL::PlaceSubGrid( const TOOL_EVENT& aEvent )
 {
     if( !m_frame->GetModel() )
         return 0;
@@ -2622,7 +2622,7 @@ int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
 
                 BOARD_COMMIT commit( m_frame );
                 commit.Add( griditem );
-                commit.Push( _( "Place a local grid item" ) );
+                commit.Push( _( "Place Sub-grid" ) );
 
                 griditem = nullptr;
                 step = SET_CENTER;
@@ -4755,6 +4755,6 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneSingleTrack.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneDiffPair.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneSkew.MakeEvent() );
-    Go( &DRAWING_TOOL::PlaceGridItem,         PCB_ACTIONS::placeGridItem.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceSubGrid,          PCB_ACTIONS::placeSubGrid.MakeEvent() );
     // clang-format on
 }

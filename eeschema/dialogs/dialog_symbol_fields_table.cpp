@@ -1147,7 +1147,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onDeleteVariant( wxCommandEvent& aEvent )
     m_parent->Schematic().DeleteVariant( variantName, &commit );
 
     if( !commit.Empty() )
-        commit.Push( wxString::Format( wxS( "Delete Variant '%s'" ), variantName ) );
+        commit.Push( _( "Delete Variant" ) );
 
     m_parent->OnModify();
 

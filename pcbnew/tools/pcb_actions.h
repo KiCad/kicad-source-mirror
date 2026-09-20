@@ -707,7 +707,7 @@ public:
     static TOOL_ACTION showDiffPhaseSkew;
 
     /// Grid Item
-    static TOOL_ACTION placeGridItem;
+    static TOOL_ACTION placeSubGrid;
 };
 
 class PCB_EVENTS

@@ -1175,147 +1175,152 @@ int SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins( const TOOL_EVENT& aEvent )
 
     // Sort pins for consistent ordering - handle arbitrary pin number formats
     std::sort( pinsToConvert.begin(), pinsToConvert.end(),
-        []( SCH_PIN* a, SCH_PIN* b )
-        {
-            wxString numA = a->GetNumber();
-            wxString numB = b->GetNumber();
+            []( SCH_PIN* a, SCH_PIN* b )
+            {
+                wxString numA = a->GetNumber();
+                wxString numB = b->GetNumber();
 
-            // Try to convert to integers for proper numeric sorting
-            long longA, longB;
-            bool aIsNumeric = numA.ToLong( &longA );
-            bool bIsNumeric = numB.ToLong( &longB );
+                // Try to convert to integers for proper numeric sorting
+                long longA, longB;
+                bool aIsNumeric = numA.ToLong( &longA );
+                bool bIsNumeric = numB.ToLong( &longB );
 
-            // Both are purely numeric - sort numerically
-            if( aIsNumeric && bIsNumeric )
-                return longA < longB;
+                // Both are purely numeric - sort numerically
+                if( aIsNumeric && bIsNumeric )
+                    return longA < longB;
 
-            // Mixed numeric/non-numeric - numeric pins come first
-            if( aIsNumeric && !bIsNumeric )
-                return true;
-            if( !aIsNumeric && bIsNumeric )
-                return false;
+                // Mixed numeric/non-numeric - numeric pins come first
+                if( aIsNumeric && !bIsNumeric )
+                    return true;
+                if( !aIsNumeric && bIsNumeric )
+                    return false;
 
-            // Both non-numeric or mixed alphanumeric - use lexicographic sorting
-            return numA < numB;
-        });
+                // Both non-numeric or mixed alphanumeric - use lexicographic sorting
+                return numA < numB;
+            });
 
     // Build the stacked notation string with range collapsing
     wxString stackedNotation = wxT("[");
 
     // Helper function to collapse consecutive numbers into ranges - handles arbitrary pin formats
-    auto collapseRanges = [&]() -> wxString
-    {
-        if( pinsToConvert.empty() )
-            return wxT("");
-
-        wxString result;
-
-        // Group pins by their alphanumeric prefix for range collapsing
-        std::map<wxString, std::vector<long>> prefixGroups;
-        std::vector<wxString> nonNumericPins;
-
-        // Parse each pin number to separate prefix from numeric suffix
-        for( SCH_PIN* pin : pinsToConvert )
-        {
-            wxString pinNumber = pin->GetNumber();
-
-            // Skip empty pin numbers (shouldn't happen, but be defensive)
-            if( pinNumber.IsEmpty() )
+    auto collapseRanges =
+            [&]() -> wxString
             {
-                nonNumericPins.push_back( wxT("(empty)") );
-                continue;
-            }
+                if( pinsToConvert.empty() )
+                    return wxT("");
 
-            wxString prefix;
-            wxString numericPart;
+                wxString result;
 
-            // Find where numeric part starts (scan from end)
-            size_t numStart = pinNumber.length();
-            for( int i = pinNumber.length() - 1; i >= 0; i-- )
-            {
-                if( !wxIsdigit( pinNumber[i] ) )
+                // Group pins by their alphanumeric prefix for range collapsing
+                std::map<wxString, std::vector<long>> prefixGroups;
+                std::vector<wxString> nonNumericPins;
+
+                // Parse each pin number to separate prefix from numeric suffix
+                for( SCH_PIN* pin : pinsToConvert )
                 {
-                    numStart = i + 1;
-                    break;
-                }
-                if( i == 0 )  // All digits
-                    numStart = 0;
-            }
+                    wxString pinNumber = pin->GetNumber();
 
-            if( numStart < pinNumber.length() )  // Has numeric suffix
-            {
-                prefix = pinNumber.Left( numStart );
-                numericPart = pinNumber.Mid( numStart );
+                    // Skip empty pin numbers (shouldn't happen, but be defensive)
+                    if( pinNumber.IsEmpty() )
+                    {
+                        nonNumericPins.push_back( wxT("(empty)") );
+                        continue;
+                    }
 
-                long numValue;
-                if( numericPart.ToLong( &numValue ) && numValue >= 0 )  // Valid non-negative number
-                {
-                    prefixGroups[prefix].push_back( numValue );
-                }
-                else
-                {
-                    // Numeric part couldn't be parsed or is negative - treat as non-numeric
-                    nonNumericPins.push_back( pinNumber );
-                }
-            }
-            else  // No numeric suffix - consolidate as individual value
-            {
-                nonNumericPins.push_back( pinNumber );
-            }
-        }
+                    wxString prefix;
+                    wxString numericPart;
 
-        // Process each prefix group
-        for( auto& [prefix, numbers] : prefixGroups )
-        {
-            if( !result.IsEmpty() )
-                result += wxT(",");
+                    // Find where numeric part starts (scan from end)
+                    size_t numStart = pinNumber.length();
+                    for( int i = pinNumber.length() - 1; i >= 0; i-- )
+                    {
+                        if( !wxIsdigit( pinNumber[i] ) )
+                        {
+                            numStart = i + 1;
+                            break;
+                        }
 
-            // The prefix may contain characters that are structural in stacked notation (e.g. a pin
-            // numbered "foo,bar3"); escape it so it round-trips as a single pin number.
-            wxString escPrefix = EscapeStackedPinItem( prefix );
+                        if( i == 0 )  // All digits
+                            numStart = 0;
+                    }
 
-            // Sort numeric values for this prefix
-            std::sort( numbers.begin(), numbers.end() );
+                    if( numStart < pinNumber.length() )  // Has numeric suffix
+                    {
+                        prefix = pinNumber.Left( numStart );
+                        numericPart = pinNumber.Mid( numStart );
 
-            // Collapse consecutive ranges within this prefix
-            size_t i = 0;
-            while( i < numbers.size() )
-            {
-                if( i > 0 )  // Not first number in this prefix group
-                    result += wxT(",");
+                        long numValue;
 
-                long start = numbers[i];
-                long end = start;
-
-                // Find the end of consecutive sequence
-                while( i + 1 < numbers.size() && numbers[i + 1] == numbers[i] + 1 )
-                {
-                    i++;
-                    end = numbers[i];
+                        if( numericPart.ToLong( &numValue ) && numValue >= 0 )  // Valid non-negative number
+                        {
+                            prefixGroups[prefix].push_back( numValue );
+                        }
+                        else
+                        {
+                            // Numeric part couldn't be parsed or is negative - treat as non-numeric
+                            nonNumericPins.push_back( pinNumber );
+                        }
+                    }
+                    else  // No numeric suffix - consolidate as individual value
+                    {
+                        nonNumericPins.push_back( pinNumber );
+                    }
                 }
 
-                // Add range or single number with prefix
-                if( end > start + 1 )  // Range of 3+ numbers
-                    result += wxString::Format( wxT("%s%ld-%s%ld"), escPrefix, start, escPrefix, end );
-                else if( end == start + 1 )  // Two consecutive numbers
-                    result += wxString::Format( wxT("%s%ld,%s%ld"), escPrefix, start, escPrefix, end );
-                else  // Single number
-                    result += wxString::Format( wxT("%s%ld"), escPrefix, start );
+                // Process each prefix group
+                for( auto& [prefix, numbers] : prefixGroups )
+                {
+                    if( !result.IsEmpty() )
+                        result += wxT(",");
 
-                i++;
-            }
-        }
+                    // The prefix may contain characters that are structural in stacked notation (e.g. a pin
+                    // numbered "foo,bar3"); escape it so it round-trips as a single pin number.
+                    wxString escPrefix = EscapeStackedPinItem( prefix );
 
-        // Add non-numeric pin numbers as individual comma-separated values
-        for( const wxString& nonNum : nonNumericPins )
-        {
-            if( !result.IsEmpty() )
-                result += wxT(",");
-            result += EscapeStackedPinItem( nonNum );
-        }
+                    // Sort numeric values for this prefix
+                    std::sort( numbers.begin(), numbers.end() );
 
-        return result;
-    };
+                    // Collapse consecutive ranges within this prefix
+                    size_t i = 0;
+
+                    while( i < numbers.size() )
+                    {
+                        if( i > 0 )  // Not first number in this prefix group
+                            result += wxT(",");
+
+                        long start = numbers[i];
+                        long end = start;
+
+                        // Find the end of consecutive sequence
+                        while( i + 1 < numbers.size() && numbers[i + 1] == numbers[i] + 1 )
+                        {
+                            i++;
+                            end = numbers[i];
+                        }
+
+                        // Add range or single number with prefix
+                        if( end > start + 1 )  // Range of 3+ numbers
+                            result += wxString::Format( wxT("%s%ld-%s%ld"), escPrefix, start, escPrefix, end );
+                        else if( end == start + 1 )  // Two consecutive numbers
+                            result += wxString::Format( wxT("%s%ld,%s%ld"), escPrefix, start, escPrefix, end );
+                        else  // Single number
+                            result += wxString::Format( wxT("%s%ld"), escPrefix, start );
+
+                        i++;
+                    }
+                }
+
+                // Add non-numeric pin numbers as individual comma-separated values
+                for( const wxString& nonNum : nonNumericPins )
+                {
+                    if( !result.IsEmpty() )
+                        result += wxT(",");
+
+                    result += EscapeStackedPinItem( nonNum );
+                }
+
+                return result;
+            };
 
     stackedNotation += collapseRanges();
     stackedNotation += wxT("]");
@@ -1325,9 +1330,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins( const TOOL_EVENT& aEvent )
     masterPin->SetNumber( stackedNotation );
 
     // Log information about pins being removed before we remove them
-    wxLogTrace( traceStackedPins,
-               wxString::Format( "Converting %zu pins to stacked notation '%s'",
-                               pinsToConvert.size(), stackedNotation ) );
+    wxLogTrace( traceStackedPins, wxString::Format( wxT( "Converting %zu pins to stacked notation '%s'" ),
+                                                    pinsToConvert.size(), stackedNotation ) );
 
     // Remove all other pins from the symbol that were consolidated into the stacked notation
     // Collect pins to remove first, then remove them all at once like the Delete command
@@ -1337,11 +1341,10 @@ int SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins( const TOOL_EVENT& aEvent )
         SCH_PIN* pinToRemove = pinsToConvert[i];
 
         // Log the pin before removing it
-    wxLogTrace( traceStackedPins,
-           wxString::Format( "Will remove pin '%s' at position (%d, %d)",
-                   pinToRemove->GetNumber(),
-                   pinToRemove->GetPosition().x,
-                   pinToRemove->GetPosition().y ) );
+        wxLogTrace( traceStackedPins, wxString::Format( wxT( "Will remove pin '%s' at position (%d, %d)" ),
+                                                        pinToRemove->GetNumber(),
+                                                        pinToRemove->GetPosition().x,
+                                                        pinToRemove->GetPosition().y ) );
 
         pinsToRemove.push_back( pinToRemove );
     }
@@ -1352,8 +1355,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins( const TOOL_EVENT& aEvent )
         symbol->RemoveDrawItem( pin );
     }
 
-    commit.Push( wxString::Format( _( "Convert %zu Stacked Pins to '%s'" ),
-                                  pinsToConvert.size(), stackedNotation ) );
+    commit.Push( _( "Convert Stacked Pins" ) );
     m_frame->RebuildView();
     return 0;
 }

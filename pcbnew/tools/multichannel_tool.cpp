@@ -985,7 +985,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
     }
 
     if( !aExternalCommit )
-        commit.Push( _( "Repeat layout" ) );
+        commit.Push( _( "Repeat Layout" ) );
 
     return 0;
 }
@@ -1047,7 +1047,7 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
         }
     }
 
-    commit.Push( _( "Repeat layout" ) );
+    commit.Push( _( "Repeat Layout" ) );
 
     if( Pgm().IsGUI() )
         frame()->ShowInfoBarMsg( wxString::Format( _( "Copied to %d Rule Areas." ), totalCopied ), true );
@@ -2515,7 +2515,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "Auto-generate placement rule areas" ) );
+    commit.Push( _( "Auto-generate Placement Rule Areas" ) );
 
     return true;
 }

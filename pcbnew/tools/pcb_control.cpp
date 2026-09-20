@@ -1771,7 +1771,7 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
 
     if( applied > 0 )
     {
-        sharedCommit.Push( wxString::Format( _( "Apply design block layout to %d group(s)" ), applied ) );
+        sharedCommit.Push( _( "Apply Design Block Layout" ) );
 
         if( netlessCopperPlaced )
             m_frame->ShowInfoBarMsg( _( "Copied copper has no net assigned. Assign nets to connect it." ), true );

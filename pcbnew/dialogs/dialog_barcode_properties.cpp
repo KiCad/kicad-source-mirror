@@ -248,7 +248,7 @@ bool DIALOG_BARCODE_PROPERTIES::TransferDataFromWindow()
 
     m_parent->GetCanvas()->Refresh();
 
-    commit.Push( _( "Modify barcode" ) );
+    commit.Push( _( "Modify Barcode" ) );
 
     return true;
 }

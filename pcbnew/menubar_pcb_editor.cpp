@@ -371,7 +371,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( ACTIONS::gridSetOrigin );
     placeMenu->Add( ACTIONS::gridResetOrigin );
     placeMenu->AppendSeparator();
-    placeMenu->Add( PCB_ACTIONS::placeGridItem );
+    placeMenu->Add( PCB_ACTIONS::placeSubGrid );
     placeMenu->AppendSeparator();
     ACTION_MENU* autoplaceSubmenu = new ACTION_MENU( false, selTool );
     autoplaceSubmenu->SetTitle( _( "Auto-Place Footprints" ) );

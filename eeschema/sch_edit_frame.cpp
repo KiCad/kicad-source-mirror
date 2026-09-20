@@ -3398,7 +3398,7 @@ void SCH_EDIT_FRAME::RemoveVariant()
 
     if( !commit.Empty() )
     {
-        commit.Push( wxString::Format( wxS( "Delete variant '%s'" ), variantName ) );
+        commit.Push( _( "Delete Variant" ) );
         OnModify();
     }
 
@@ -3490,7 +3490,7 @@ void SCH_EDIT_FRAME::RenameVariant()
     Schematic().RenameVariant( oldName, newName, &commit );
 
     if( !commit.Empty() )
-        commit.Push( wxString::Format( _( "Rename variant '%s' to '%s'" ), oldName, newName ) );
+        commit.Push( _( "Rename Variant" ) );
 
     // The registry entry changes even when no symbol carries an override, so always mark dirty.
     OnModify();
@@ -3548,7 +3548,7 @@ void SCH_EDIT_FRAME::CopyVariant()
     Schematic().CopyVariant( sourceName, newName, &commit );
 
     if( !commit.Empty() )
-        commit.Push( wxString::Format( _( "Copy variant '%s' to '%s'" ), sourceName, newName ) );
+        commit.Push( _( "Copy Variant" ) );
 
     // The new registry entry changes project state even when no symbol carries an override.
     OnModify();

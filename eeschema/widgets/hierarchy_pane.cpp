@@ -691,7 +691,7 @@ void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
                 }
             }
 
-            commit.Push( wxS( "Change sheet page number." ) );
+            commit.Push( _( "Change Page Number" ) );
 
             UpdateLabelsHierarchyTree();
         }
@@ -759,7 +759,7 @@ void HIERARCHY_PANE::onTreeEditFinished( wxTreeEvent& event )
                     renameIdenticalSheets( data->m_SheetPath, newName, &commit );
 
                     if( !commit.Empty() )
-                        commit.Push( _( "Renaming sheet" ) );
+                        commit.Push( _( "Rename Sheet" ) );
 
                     if( data->m_SheetPath == m_frame->GetCurrentSheet() )
                     {
