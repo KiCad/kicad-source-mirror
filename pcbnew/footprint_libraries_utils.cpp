@@ -295,20 +295,23 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
 
         pcb_io.Format( aFootprint );
 
-        FILE* fp = wxFopen( dlg.GetPath(), wxT( "wt" ) );
+        FILE* fp = wxFopen( fn.GetFullPath(), wxT( "wt" ) );
 
         if( fp == nullptr )
         {
             DisplayErrorMessage( this, wxString::Format( _( "Insufficient permissions to write file '%s'." ),
-                                                         dlg.GetPath() ) );
+                                                         fn.GetFullPath() ) );
             return;
         }
 
         std::string prettyData = pcb_io.GetStringOutput( false );
         KICAD_FORMAT::Prettify( prettyData, KICAD_FORMAT::FORMAT_MODE::NORMAL );
 
-        fprintf( fp, "%s", prettyData.c_str() );
-        fclose( fp );
+        if( fprintf( fp, "%s", prettyData.c_str() ) < 0 || fclose( fp ) != 0 )
+        {
+            DisplayErrorMessage( this, wxString::Format( _( "Error writing file '%s'." ), fn.GetFullPath() ) );
+            return;
+        }
     }
     catch( const IO_ERROR& ioe )
     {
@@ -316,7 +319,7 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
         return;
     }
 
-    wxString msg = wxString::Format( _( "Footprint exported to file '%s'." ), dlg.GetPath() );
+    wxString msg = wxString::Format( _( "Footprint exported to file '%s'." ), fn.GetFullPath() );
     DisplayInfoMessage( this, msg );
 }
 
@@ -429,8 +432,8 @@ wxString PCB_BASE_EDIT_FRAME::createNewLibrary( const wxString& aDialogTitle, co
         return wxEmptyString;
     }
 
-    if( doAdd )
-        AddLibrary( aDialogTitle, libPath, aScope );
+    if( doAdd && !AddLibrary( aDialogTitle, libPath, aScope ) )
+        return wxEmptyString;
 
     return libPath;
 }
@@ -486,8 +489,11 @@ wxString PCB_BASE_EDIT_FRAME::SelectLibrary( const wxString& aDialogTitle, const
             wxFileName fn = CreateNewLibrary( _( "New Footprint Library" ),
                                               Prj().GetRString( PROJECT::PCB_LIB_PATH ) );
 
-            Prj().SetRString( PROJECT::PCB_LIB_PATH, fn.GetPath() );
-            Prj().SetRString( PROJECT::PCB_LIB_NICKNAME, fn.GetName() );
+            if( !fn.GetFullPath().IsEmpty() )
+            {
+                Prj().SetRString( PROJECT::PCB_LIB_PATH, fn.GetPath() );
+                Prj().SetRString( PROJECT::PCB_LIB_NICKNAME, fn.GetName() );
+            }
             break;
         }
 
@@ -583,7 +589,7 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aDialogTitle, const wxStri
     if( success )
     {
         manager.ReloadTables( aScope.value(), { LIBRARY_TABLE_TYPE::FOOTPRINT } );
-        adapter->LoadOne( fn.GetName() );
+        adapter->LoadOne( libName );
 
         // Don't use dynamic_cast; it will fail across compile units on MacOS
         if( FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_FOOTPRINT_EDITOR, false ) )
@@ -674,13 +680,45 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
 
     bool     map = false;
     PROJECT& prj = Prj();
-    wxString nickname = SelectLibrary( _( "Export Footprints" ), _( "Export footprints to library:" ),
-                                       { { _( "Update board footprints to link to exported footprints" ), &map } } );
+    wxString nickname;
 
-    if( !nickname )     // Aborted
-        return;
+    if( aStoreInNewLib )
+    {
+        wxFileName fn = CreateNewLibrary( _( "New Footprint Library" ), Prj().GetRString( PROJECT::PCB_LIB_PATH ) );
+
+        if( fn.GetFullPath().IsEmpty() )
+            return;
+
+        Prj().SetRString( PROJECT::PCB_LIB_PATH, fn.GetPath() );
+        nickname = fn.GetName();
+        map = IsOK( this, _( "Update footprints on board to refer to new library?" ) );
+    }
+    else
+    {
+        nickname = SelectLibrary( _( "Export Footprints" ), _( "Export footprints to library:" ),
+                                  { { _( "Update board footprints to link to exported footprints" ), &map } } );
+
+        if( !nickname ) // Aborted
+            return;
+    }
+
+    if( !aLibName.IsEmpty() )
+        nickname = aLibName; // non-interactive callers
 
     prj.SetRString( PROJECT::PCB_LIB_NICKNAME, nickname );
+
+    if( aLibPath )
+    {
+        if( std::optional<wxString> optUri =
+                    Pgm().GetLibraryManager().GetFullURI( LIBRARY_TABLE_TYPE::FOOTPRINT, nickname ) )
+        {
+            *aLibPath = *optUri;
+        }
+        else
+        {
+            *aLibPath = nickname;
+        }
+    }
 
     for( FOOTPRINT* footprint : GetBoard()->Footprints() )
     {
@@ -703,8 +741,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
                 for( ZONE* zone : fpCopy->Zones() )
                     zone->Move( -fpCopy->GetPosition() );
 
-                adapter->SaveFootprint( nickname, fpCopy.get(), true );
-                saved = true;
+                saved = adapter->SaveFootprint( nickname, fpCopy.get(), true ) == FOOTPRINT_LIBRARY_ADAPTER::SAVE_OK;
             }
         }
         catch( const IO_ERROR& ioe )
@@ -1195,6 +1232,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
             wxFileName fn = CreateNewLibrary( _( "New Footprint Library" ),
                                               Prj().GetRString( PROJECT::PCB_LIB_PATH ) );
 
+            if( fn.GetFullPath().IsEmpty() )
+                continue;
+
             Prj().SetRString( PROJECT::PCB_LIB_PATH, fn.GetPath() );
             Prj().SetRString( PROJECT::PCB_LIB_NICKNAME, fn.GetName() );
             libraryName = fn.GetName();
@@ -1208,6 +1248,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
 
     if( !SaveFootprintInLibrary( aFootprint, libraryName ) )
         return false;
+
+    m_footprintNameWhenLoaded = aFootprint->GetFPID().GetUniStringLibItemName();
 
     // Once saved-as a board footprint is no longer a board footprint
     aFootprint->SetLink( niluuid );
@@ -1320,7 +1362,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wx
         footprint->Reference().SetVisible( settings.m_DefaultFPTextItems[0].m_Visible );
     }
 
-    txt_layer = settings.m_DefaultFPTextItems[0].m_Layer;
+    txt_layer = settings.m_DefaultFPTextItems.size() > 0 ? settings.m_DefaultFPTextItems[0].m_Layer : F_SilkS;
     footprint->Reference().SetLayer( txt_layer );
     default_pos.y -= settings.GetTextSize( txt_layer ).y / 2;
     footprint->Reference().SetPosition( default_pos );
@@ -1332,7 +1374,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( wxString aFootprintName, const wx
         footprint->Value().SetVisible( settings.m_DefaultFPTextItems[1].m_Visible );
     }
 
-    txt_layer = settings.m_DefaultFPTextItems[1].m_Layer;
+    txt_layer = settings.m_DefaultFPTextItems.size() > 1 ? settings.m_DefaultFPTextItems[1].m_Layer : F_Fab;
     footprint->Value().SetLayer( txt_layer );
     default_pos.y += settings.GetTextSize( txt_layer ).y / 2;
     footprint->Value().SetPosition( default_pos );
