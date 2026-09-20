@@ -1959,7 +1959,13 @@ void PAD::SetLayerSet( const LSET& aLayers )
 
     // In theory m_layer should never be read, but set it just to be safe.
     if( m_layer == UNDEFINED_LAYER || !aLayers.test( m_layer ) )
-        m_layer = aLayers.Seq().front();
+    {
+        auto seq = aLayers.Seq();
+        if( !seq.empty() )
+            m_layer = seq.front();
+        else
+            m_layer = UNDEFINED_LAYER;
+    }
 
     if( !( GetFlags() & ROUTER_TRANSIENT ) )
     {
