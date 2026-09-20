@@ -41,6 +41,7 @@ set( QA_KIMATH_SRCS
     geometry/test_triangulation_benchmark.cpp
     geometry/test_poly_ystripes_index.cpp
     geometry/test_segment.cpp
+    geometry/test_segment_index.cpp
     geometry/test_shape_compound_collision.cpp
     geometry/test_shape_arc.cpp
     geometry/test_shape_ellipse.cpp

@@ -19,10 +19,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 
 #include <geometry/seg.h>                         // for SEG
+#include <geometry/segment_index.h>
 #include <geometry/shape.h>
 #include <geometry/shape_arc.h>
 #include <geometry/shape_line_chain.h>
@@ -391,34 +393,236 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
             }
         }
 
-        auto seg_sort = []( const SEG& a, const SEG& b )
+        // Index gates below are measured crossovers rather than correctness requirements, and the
+        // dense checks bound index build cost where nearly every pair is a candidate anyway
+        const bool    need_output = aActual || aLocation;
+        const int64_t pair_count = static_cast<int64_t>( a_segs.size() ) * b_segs.size();
+        auto dense_candidates = [&]( const std::vector<SEG>& aQueries,
+                                     const std::vector<SEG>& aIndexed )
         {
-            return a.A.x < b.A.x || ( a.A.x == b.A.x && a.A.y < b.A.y );
+            int indexed_min_x = std::numeric_limits<int>::max();
+            int indexed_min_y = std::numeric_limits<int>::max();
+            int indexed_max_x = std::numeric_limits<int>::min();
+            int indexed_max_y = std::numeric_limits<int>::min();
+
+            for( const SEG& segment : aIndexed )
+            {
+                indexed_min_x = std::min( { indexed_min_x, segment.A.x, segment.B.x } );
+                indexed_min_y = std::min( { indexed_min_y, segment.A.y, segment.B.y } );
+                indexed_max_x = std::max( { indexed_max_x, segment.A.x, segment.B.x } );
+                indexed_max_y = std::max( { indexed_max_y, segment.A.y, segment.B.y } );
+            }
+
+            const SEG&    query = aQueries.front();
+            const int64_t min_x = static_cast<int64_t>( std::min( query.A.x, query.B.x ) ) - aClearance;
+            const int64_t min_y = static_cast<int64_t>( std::min( query.A.y, query.B.y ) ) - aClearance;
+            const int64_t max_x = static_cast<int64_t>( std::max( query.A.x, query.B.x ) ) + aClearance;
+            const int64_t max_y = static_cast<int64_t>( std::max( query.A.y, query.B.y ) ) + aClearance;
+            return min_x <= indexed_min_x && min_y <= indexed_min_y && max_x >= indexed_max_x
+                   && max_y >= indexed_max_y;
         };
 
-        std::sort( a_segs.begin(), a_segs.end(), seg_sort );
-        std::sort( b_segs.begin(), b_segs.end(), seg_sort );
-
-        for( const SEG& a_seg : a_segs )
+        if( !need_output )
         {
-            for( const SEG& b_seg : b_segs )
-            {
-                int dist = 0;
+            bool use_index = aClearance >= 0 && std::min( a_segs.size(), b_segs.size() ) >= 64
+                             && pair_count >= 4096;
 
-                if( a_seg.Collide( b_seg, aClearance, aActual || aLocation ? &dist : nullptr ) )
+            if( use_index )
+            {
+                const std::vector<SEG>& queries = b_segs.size() >= a_segs.size() ? a_segs : b_segs;
+                const std::vector<SEG>& indexed = b_segs.size() >= a_segs.size() ? b_segs : a_segs;
+                use_index = !dense_candidates( queries, indexed );
+            }
+
+            if( use_index )
+            {
+                // Bounded probe answers the common early hit without paying for index construction
+                const size_t probe_a_count = std::min<size_t>( a_segs.size(), 4 );
+                const size_t probe_b_count = std::min<size_t>( b_segs.size(), 8 );
+                bool         early_collision = false;
+
+                for( size_t i = 0; i < probe_a_count && !early_collision; ++i )
                 {
+                    for( size_t j = 0; j < probe_b_count; ++j )
+                    {
+                        if( a_segs[i].Collide( b_segs[j], aClearance ) )
+                        {
+                            early_collision = true;
+                            break;
+                        }
+                    }
+                }
+
+                if( early_collision )
+                {
+                    return true;
+                }
+                else if( b_segs.size() >= a_segs.size() )
+                {
+                    SEGMENT_INDEX index( std::move( b_segs ) );
+
+                    for( const SEG& a_seg : a_segs )
+                    {
+                        bool found = false;
+                        auto visitor = [&]( int aIndex )
+                        {
+                            if( a_seg.Collide( index.Segment( aIndex ), aClearance ) )
+                            {
+                                found = true;
+                                return false;
+                            }
+
+                            return true;
+                        };
+                        index.VisitCandidates( a_seg, aClearance, visitor );
+
+                        if( found )
+                            return true;
+                    }
+                }
+                else
+                {
+                    SEGMENT_INDEX index( std::move( a_segs ) );
+
+                    for( const SEG& b_seg : b_segs )
+                    {
+                        bool found = false;
+                        auto visitor = [&]( int aIndex )
+                        {
+                            if( index.Segment( aIndex ).Collide( b_seg, aClearance ) )
+                            {
+                                found = true;
+                                return false;
+                            }
+
+                            return true;
+                        };
+                        index.VisitCandidates( b_seg, aClearance, visitor );
+
+                        if( found )
+                            return true;
+                    }
+                }
+            }
+            else if( aClearance >= 0 )
+            {
+                for( const SEG& a_seg : a_segs )
+                {
+                    for( const SEG& b_seg : b_segs )
+                    {
+                        if( a_seg.Collide( b_seg, aClearance ) )
+                            return true;
+                    }
+                }
+            }
+        }
+        else
+        {
+            auto seg_sort = []( const SEG& a, const SEG& b )
+            {
+                return a.A.x < b.A.x || ( a.A.x == b.A.x && a.A.y < b.A.y );
+            };
+
+            std::sort( a_segs.begin(), a_segs.end(), seg_sort );
+            std::sort( b_segs.begin(), b_segs.end(), seg_sort );
+
+            const bool use_index = aClearance >= 0 && a_segs.size() >= 32 && b_segs.size() >= 64
+                                   && pair_count >= 4096 && !dense_candidates( a_segs, b_segs );
+
+            if( use_index )
+            {
+                SEGMENT_INDEX    index( std::move( b_segs ) );
+                std::vector<int> candidates;
+                bool             scan_direct = false;
+
+                enum class COLLISION_RESULT
+                {
+                    NONE,
+                    FOUND,
+                    EXACT
+                };
+
+                auto collide_pair = [&]( const SEG& aASeg, const SEG& aBSeg )
+                {
+                    int dist = 0;
+
+                    if( !aASeg.Collide( aBSeg, aClearance, &dist ) )
+                        return COLLISION_RESULT::NONE;
+
                     if( dist < closest_dist )
                     {
-                        nearest = a_seg.NearestPoint( b_seg );
+                        nearest = aASeg.NearestPoint( aBSeg );
                         closest_dist = dist;
                     }
 
-                    if( closest_dist == 0 )
-                        break;
+                    return closest_dist == 0 ? COLLISION_RESULT::EXACT : COLLISION_RESULT::FOUND;
+                };
 
-                    // If we're not looking for aActual then any collision will do
-                    if( !aActual )
-                        break;
+                for( const SEG& a_seg : a_segs )
+                {
+                    if( !scan_direct )
+                    {
+                        candidates.clear();
+                        auto visitor = [&]( int aIndex )
+                        {
+                            candidates.push_back( aIndex );
+                            return true;
+                        };
+                        index.VisitCandidates( a_seg, aClearance, visitor );
+                        // Candidates pruning less than half the index cost more than a direct scan
+                        scan_direct = candidates.size() * 2 >= index.size();
+                    }
+
+                    // Candidate IDs restore the legacy order that determines tied witness locations
+                    if( !scan_direct )
+                        std::sort( candidates.begin(), candidates.end() );
+
+                    const size_t candidate_count = scan_direct ? index.size() : candidates.size();
+
+                    for( size_t i = 0; i < candidate_count; ++i )
+                    {
+                        const int              b_index = scan_direct ? static_cast<int>( i ) : candidates[i];
+                        const COLLISION_RESULT result = collide_pair( a_seg, index.Segment( b_index ) );
+
+                        if( result == COLLISION_RESULT::EXACT )
+                        {
+                            if( aLocation )
+                                *aLocation = nearest;
+
+                            if( aActual )
+                                *aActual = closest_dist;
+
+                            return true;
+                        }
+
+                        if( result == COLLISION_RESULT::FOUND && !aActual )
+                            break;
+                    }
+                }
+            }
+            else if( aClearance >= 0 )
+            {
+                for( const SEG& a_seg : a_segs )
+                {
+                    for( const SEG& b_seg : b_segs )
+                    {
+                        int dist = 0;
+
+                        if( a_seg.Collide( b_seg, aClearance, &dist ) )
+                        {
+                            if( dist < closest_dist )
+                            {
+                                nearest = a_seg.NearestPoint( b_seg );
+                                closest_dist = dist;
+                            }
+
+                            if( closest_dist == 0 )
+                                break;
+
+                            if( !aActual )
+                                break;
+                        }
+                    }
                 }
             }
         }
