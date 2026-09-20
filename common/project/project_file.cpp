@@ -858,6 +858,26 @@ bool PROJECT_FILE::SaveToFile( const wxString& aDirectory, bool aForce )
 }
 
 
+std::string PROJECT_FILE::SerializeToString()
+{
+    wxASSERT( m_project );
+
+    Set( "meta.filename", m_project->GetProjectName() + "." + FILEEXT::ProjectFileExtension );
+
+    m_modified |= flushToStore();
+
+    try
+    {
+        return formatFileContents();
+    }
+    catch( ... )
+    {
+        wxLogTrace( traceSettings, wxT( "Error: could not serialize %s" ), GetFullFilename() );
+        return std::string();
+    }
+}
+
+
 bool PROJECT_FILE::SaveAs( const wxString& aDirectory, const wxString& aFile )
 {
     wxFileName oldFilename( GetFilename() );

@@ -486,7 +486,14 @@ void PROJECT::SaveToHistory( const wxString& aProjectPath, std::vector<HISTORY_F
 
     HISTORY_FILE_DATA proEntry;
     proEntry.relativePath = projectFn.GetFullName();
-    proEntry.sourcePath = projectFile;
+
+    // Board Setup edits live only in RAM until a real save, so snapshot the live state.
+    if( m_projectFile )
+        proEntry.content = m_projectFile->SerializeToString();
+
+    if( proEntry.content.empty() )
+        proEntry.sourcePath = projectFile;
+
     aFileData.push_back( std::move( proEntry ) );
 
     wxFileName prlFile( projectFn.GetPath(), projectFn.GetName(),

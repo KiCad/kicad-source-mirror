@@ -110,6 +110,12 @@ public:
 
     bool SaveToFile( const wxString& aDirectory = "", bool aForce = false ) override;
 
+    /**
+     * Serialize to the bytes SaveToFile would write, without touching the file.
+     * @return the document, or an empty string on error
+     */
+    std::string SerializeToString();
+
     bool SaveAs( const wxString& aDirectory, const wxString& aFile );
 
     void SetProject( PROJECT* aProject )
