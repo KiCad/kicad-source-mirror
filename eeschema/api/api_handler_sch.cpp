@@ -1342,6 +1342,20 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
 
         if( aCreate )
         {
+            if( item->Type() == SCH_SYMBOL_T )
+            {
+                for( const std::unique_ptr<SCH_PIN>& pin : static_cast<SCH_SYMBOL*>( item.get() )->GetRawPins() )
+                    const_cast<KIID&>( pin->m_Uuid ) = KIID();
+            }
+            else if( item->Type() == SCH_SHEET_T )
+            {
+                for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item.get() )->GetPins() )
+                    const_cast<KIID&>( pin->m_Uuid ) = KIID();
+            }
+        }
+
+        if( aCreate )
+        {
             SCH_ITEM* createdItem = static_cast<SCH_ITEM*>( item.release() );
             commit->Add( createdItem, targetScreen );
 
