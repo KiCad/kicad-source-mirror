@@ -1334,7 +1334,7 @@ BOOST_AUTO_TEST_CASE( CheckoutCommitUndoesTheTreeWhenHeadCannotMove )
 static const std::string LONG_PATHS = "[core]\n\tlongpaths = true\n";
 
 
-/// Attach a file in aDir above every other level, as the long path config is on Windows, and return its path
+/// Attach a writable file in aDir above every other level and return its path
 static wxString attachSharedLevel( git_repository* aRepo, const wxString& aDir )
 {
     const wxString app = aDir + wxFileName::GetPathSeparator() + wxS( "kicad-longpaths.gitconfig" );
@@ -1383,6 +1383,50 @@ BOOST_AUTO_TEST_CASE( SetUserConfigWritesTheRepositorysOwnConfig )
 
     BOOST_CHECK( readBytes( app ) == LONG_PATHS );
     BOOST_CHECK( readBytes( repoPath() + wxS( "/.git/config" ) ).find( "ada@kicad.example" ) != std::string::npos );
+}
+
+
+// libgit2 writes to the highest level that takes writes, so the long path level must take none
+BOOST_AUTO_TEST_CASE( LongPathsLevelLeavesWritesToTheRepositorysOwnConfig )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    BOOST_REQUIRE_EQUAL( KIGIT::PROJECT_GIT_UTILS::AddLongPathsLevel( repo ), GIT_OK );
+
+    git_config* config = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config( &config, repo ), GIT_OK );
+    KIGIT::GitConfigPtr configPtr( config );
+
+    git_config* snapshot = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config_snapshot( &snapshot, repo ), GIT_OK );
+    KIGIT::GitConfigPtr snapshotPtr( snapshot );
+
+    int allowed = 0;
+    int snapshotAllowed = 0;
+
+    BOOST_CHECK_EQUAL( git_config_get_bool( &allowed, config, "core.longpaths" ), GIT_OK );
+    BOOST_CHECK_EQUAL( git_config_get_bool( &snapshotAllowed, snapshot, "core.longpaths" ), GIT_OK );
+    BOOST_CHECK( allowed && snapshotAllowed );
+
+    git_remote* remote = nullptr;
+    BOOST_REQUIRE_EQUAL( git_remote_create( &remote, repo, "origin", remotePath().utf8_str() ), GIT_OK );
+    KIGIT::GitRemotePtr remotePtr( remote );
+
+    BOOST_REQUIRE_EQUAL( git_config_set_string( config, "kicad.copy", "acme-key" ), GIT_OK );
+
+    git_strarray remotes = {};
+    BOOST_REQUIRE_EQUAL( git_remote_list( &remotes, repo ), GIT_OK );
+    KIGIT::GitStrArrayPtr remotesPtr( &remotes );
+    BOOST_CHECK_EQUAL( remotes.count, 1u );
+
+    const std::string own = readBytes( repoPath() + wxS( "/.git/config" ) );
+
+    BOOST_CHECK( own.find( "[remote \"origin\"]" ) != std::string::npos );
+    BOOST_CHECK( own.find( "acme-key" ) != std::string::npos );
 }
 
 
@@ -2995,65 +3039,6 @@ BOOST_AUTO_TEST_CASE( OpenedCloneChecksOutLongMemberPath )
         BOOST_CHECK_MESSAGE( git_config_get_bool( &allowed, own, "core.longpaths" ) == GIT_ENOTFOUND,
                              "opening a copy must leave core.longpaths out of its own config" );
     }
-}
-
-
-// A planted long path config must be replaced before it is attached
-BOOST_AUTO_TEST_CASE( TamperedLongPathConfigIsRestoredOnOpen )
-{
-    const wxString target = KIGIT::PROJECT_GIT_UTILS::LongPathsConfigPath();
-    wxFileName     dir( target );
-
-    BOOST_REQUIRE( dir.DirExists() || dir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
-
-    // The file is the user's own, so a failed check must not leave the tampered one behind
-    struct RESTORE
-    {
-        wxString                   path;
-        std::optional<std::string> bytes;
-
-        ~RESTORE()
-        {
-            if( bytes )
-                std::ofstream( path.fn_str(), std::ios::binary | std::ios::trunc ) << *bytes;
-            else
-                wxRemoveFile( path );
-        }
-    } restore{ target, wxFileExists( target ) ? std::optional<std::string>( readBytes( target ) ) : std::nullopt };
-
-    const std::string expected = "[core]\n\tlongpaths = true\n";
-
-    {
-        wxFile planted( target, wxFile::write );
-        const std::string tampered = expected + "[url \"x\"]\n\tinsteadOf = y\n";
-
-        BOOST_REQUIRE( planted.IsOpened() );
-        BOOST_REQUIRE_EQUAL( planted.Write( tampered.data(), tampered.size() ), tampered.size() );
-    }
-
-    wxString repoDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "tamper_repo" );
-    BOOST_REQUIRE( wxFileName::Mkdir( repoDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
-
-    git_repository* init = nullptr;
-    BOOST_REQUIRE_EQUAL( git_repository_init( &init, repoDir.utf8_str(), 0 ), GIT_OK );
-    git_repository_free( init );
-
-    git_repository* opened = GetGitBackend()->OpenRepositoryAt( repoDir.utf8_string() );
-    BOOST_REQUIRE( opened );
-    KIGIT::GitRepositoryPtr openedPtr( opened );
-
-    BOOST_CHECK_EQUAL( readBytes( target ), expected );
-
-    git_config* config = nullptr;
-    BOOST_REQUIRE_EQUAL( git_repository_config( &config, opened ), GIT_OK );
-    KIGIT::GitConfigPtr configPtr( config );
-
-    git_config_entry* entry = nullptr;
-    BOOST_CHECK_MESSAGE( git_config_get_entry( &entry, config, "url.x.insteadof" ) == GIT_ENOTFOUND,
-                         "the opened handle must not see a planted url setting" );
-
-    if( entry )
-        git_config_entry_free( entry );
 }
 #endif
 

@@ -33,14 +33,216 @@
 #include <wx/string.h>
 #include <wx/intl.h>
 
+#include <cstring>
+#include <new>
 #include <string>
 
-#ifdef __WINDOWS__
-#include <shlobj.h>
-#else
+#include <git2/sys/config.h>
+
+#ifndef __WINDOWS__
 #include <climits>
 #include <cstdlib>
 #endif
+
+namespace
+{
+
+#if KIGIT_HAS_CONFIG_BACKEND_ENTRY
+using LEVEL_ENTRY = git_config_backend_entry;
+
+git_config_entry& baseEntry( LEVEL_ENTRY& aEntry )
+{
+    return aEntry.entry;
+}
+#else
+using LEVEL_ENTRY = git_config_entry;
+
+git_config_entry& baseEntry( LEVEL_ENTRY& aEntry )
+{
+    return aEntry;
+}
+#endif
+
+
+struct LONG_PATHS_LEVEL
+{
+    git_config_backend parent;
+    git_config_level_t level;
+};
+
+
+struct LONG_PATHS_ITERATOR
+{
+    git_config_iterator parent;
+    LEVEL_ENTRY         entry;
+    bool                done;
+};
+
+
+LONG_PATHS_LEVEL* levelOf( git_config_backend* aBackend )
+{
+    return reinterpret_cast<LONG_PATHS_LEVEL*>( aBackend );
+}
+
+
+int outOfMemory()
+{
+    git_error_set_str( GIT_ERROR_NOMEMORY, "out of memory" );
+    return -1;
+}
+
+
+int refuseWrite()
+{
+    git_error_set_str( GIT_ERROR_CONFIG, "the long path config level is read-only" );
+    return -1;
+}
+
+
+// The literals outlive the entry, as git_config_get_string returns the value after freeing it
+void fillEntry( LEVEL_ENTRY& aEntry, git_config_level_t aLevel, void ( *aFree )( LEVEL_ENTRY* ) )
+{
+    git_config_entry& entry = baseEntry( aEntry );
+
+    entry.name = "core.longpaths";
+    entry.value = "true";
+    entry.level = aLevel;
+    aEntry.free = aFree;
+}
+
+
+int levelGet( git_config_backend* aBackend, const char* aKey, LEVEL_ENTRY** aOut )
+{
+    *aOut = nullptr;
+
+    if( strcmp( aKey, "core.longpaths" ) != 0 )
+        return GIT_ENOTFOUND;
+
+    LEVEL_ENTRY* entry = new( std::nothrow ) LEVEL_ENTRY{};
+
+    if( !entry )
+        return outOfMemory();
+
+    fillEntry( *entry, levelOf( aBackend )->level,
+               []( LEVEL_ENTRY* aEntry )
+               {
+                   delete aEntry;
+               } );
+
+    *aOut = entry;
+    return 0;
+}
+
+
+int levelIterator( git_config_iterator** aOut, git_config_backend* aBackend )
+{
+    *aOut = nullptr;
+
+    LONG_PATHS_ITERATOR* iter = new( std::nothrow ) LONG_PATHS_ITERATOR{};
+
+    if( !iter )
+        return outOfMemory();
+
+    iter->parent.backend = aBackend;
+
+    iter->parent.next = []( LEVEL_ENTRY** aEntry, git_config_iterator* aIter )
+    {
+        LONG_PATHS_ITERATOR* self = reinterpret_cast<LONG_PATHS_ITERATOR*>( aIter );
+
+        if( self->done )
+            return static_cast<int>( GIT_ITEROVER );
+
+        self->done = true;
+        *aEntry = &self->entry;
+        return 0;
+    };
+
+    iter->parent.free = []( git_config_iterator* aIter )
+    {
+        delete reinterpret_cast<LONG_PATHS_ITERATOR*>( aIter );
+    };
+
+    // The iterator owns the entry it hands out
+    fillEntry( iter->entry, levelOf( aBackend )->level,
+               []( LEVEL_ENTRY* )
+               {
+               } );
+
+    *aOut = &iter->parent;
+    return 0;
+}
+
+
+git_config_backend* newLongPathsLevel()
+{
+    LONG_PATHS_LEVEL* level = new( std::nothrow ) LONG_PATHS_LEVEL{};
+
+    if( !level )
+        return nullptr;
+
+    git_config_backend& backend = level->parent;
+
+    backend.version = GIT_CONFIG_BACKEND_VERSION;
+
+    // libgit2 writes to the highest level that is not read-only
+    backend.readonly = 1;
+
+    backend.open = []( git_config_backend* aBackend, git_config_level_t aLevel, const git_repository* )
+    {
+        levelOf( aBackend )->level = aLevel;
+        return 0;
+    };
+
+    backend.get = levelGet;
+    backend.iterator = levelIterator;
+
+    backend.snapshot = []( git_config_backend** aOut, git_config_backend* )
+    {
+        *aOut = newLongPathsLevel();
+        return *aOut ? 0 : outOfMemory();
+    };
+
+    backend.set = []( git_config_backend*, const char*, const char* )
+    {
+        return refuseWrite();
+    };
+
+    backend.set_multivar = []( git_config_backend*, const char*, const char*, const char* )
+    {
+        return refuseWrite();
+    };
+
+    backend.del = []( git_config_backend*, const char* )
+    {
+        return refuseWrite();
+    };
+
+    backend.del_multivar = []( git_config_backend*, const char*, const char* )
+    {
+        return refuseWrite();
+    };
+
+    // Before libgit2 1.8 a composite git_config_lock locks this level, so lock the LOCAL level instead
+    backend.lock = []( git_config_backend* )
+    {
+        return refuseWrite();
+    };
+
+    backend.unlock = []( git_config_backend*, int )
+    {
+        return refuseWrite();
+    };
+
+    backend.free = []( git_config_backend* aBackend )
+    {
+        delete levelOf( aBackend );
+    };
+
+    return &backend;
+}
+
+} // namespace
+
 
 namespace KIGIT
 {
@@ -78,109 +280,40 @@ int PROJECT_GIT_UTILS::AllowLongPaths( git_repository* aRepo )
 }
 
 
-wxString PROJECT_GIT_UTILS::LongPathsConfigPath()
+int PROJECT_GIT_UTILS::AttachLongPaths( git_repository* aRepo )
 {
 #ifdef __WINDOWS__
-    // The backend has no wxApp, which wxStandardPaths needs. The shell answers for the account, where an
-    // environment variable can be redirected
-    PWSTR    known = nullptr;
-    wxString base;
-
-    if( SHGetKnownFolderPath( FOLDERID_LocalAppData, KF_FLAG_DEFAULT, nullptr, &known ) == S_OK )
-        base = wxString( known );
-
-    CoTaskMemFree( known );
-
-    if( base.IsEmpty() )
-        return wxEmptyString;
-
-    wxFileName file( base, wxS( "kicad-longpaths.gitconfig" ) );
-    file.AppendDir( wxS( "kicad" ) );
-    return file.GetFullPath();
+    return AddLongPathsLevel( aRepo );
 #else
-    return wxEmptyString;
+    return GIT_OK;
 #endif
 }
 
 
-int PROJECT_GIT_UTILS::AttachLongPaths( git_repository* aRepo )
+int PROJECT_GIT_UTILS::AddLongPathsLevel( git_repository* aRepo )
 {
-#ifdef __WINDOWS__
-    static const std::string expected = "[core]\n\tlongpaths = true\n";
-    const wxString           path = LongPathsConfigPath();
-
-    if( path.IsEmpty() )
-    {
-        wxLogTrace( traceKigit, "No per-user folder for the long path config" );
-        return GIT_ERROR;
-    }
-
-    // libgit2 honours include and url settings from this file, so only the exact content is ever attached
-    auto matches = [&]()
-    {
-        wxFile in( path );
-        std::string content( expected.size() + 1, '\0' );
-
-        return in.IsOpened() && in.Length() == static_cast<wxFileOffset>( expected.size() )
-               && in.Read( content.data(), content.size() ) == static_cast<wxFileOffset>( expected.size() )
-               && content.compare( 0, expected.size(), expected ) == 0;
-    };
-
-    if( !matches() )
-    {
-        wxFileName dir( path );
-
-        if( !dir.DirExists() && !dir.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-        {
-            wxLogTrace( traceKigit, "Cannot make the folder for the long path config %s", path );
-            return GIT_ERROR;
-        }
-
-        const wxString temp =
-                wxFileName::CreateTempFileName( dir.GetPath() + wxFileName::GetPathSeparator() + wxS( "lp" ) );
-
-        if( temp.IsEmpty() )
-        {
-            wxLogTrace( traceKigit, "Cannot stage the long path config for %s", path );
-            return GIT_ERROR;
-        }
-
-        wxFile out( temp, wxFile::write );
-        bool   written = out.IsOpened() && out.Write( expected.data(), expected.size() ) == expected.size();
-
-        out.Close();
-
-        if( !written || !wxRenameFile( temp, path, true ) )
-        {
-            wxRemoveFile( temp );
-            wxLogTrace( traceKigit, "Cannot write the long path config %s", path );
-            return GIT_ERROR;
-        }
-
-        if( !matches() )
-        {
-            wxLogTrace( traceKigit, "The long path config %s changed after it was written", path );
-            return GIT_ERROR;
-        }
-    }
-
     git_config* config = nullptr;
 
     if( int rc = git_repository_config( &config, aRepo ) )
         return rc;
 
-    GitConfigPtr configPtr( config );
+    GitConfigPtr        configPtr( config );
+    git_config_backend* level = newLongPathsLevel();
+
+    if( !level )
+        return outOfMemory();
 
     // Adding a level does not clear libgit2's cached settings, so this must come before any lookup
-    int rc = git_config_add_file_ondisk( config, path.utf8_str(), GIT_CONFIG_LEVEL_APP, aRepo, 0 );
+    int rc = git_config_add_backend( config, level, GIT_CONFIG_LEVEL_APP, aRepo, 0 );
+
+    // The config owns the level only once it is added
+    if( rc != GIT_OK )
+        level->free( level );
 
     if( rc != GIT_OK && rc != GIT_EEXISTS )
         wxLogTrace( traceKigit, "Cannot attach the long path config: %s", KIGIT_COMMON::GetLastGitError() );
 
     return rc == GIT_EEXISTS ? GIT_OK : rc;
-#else
-    return GIT_OK;
-#endif
 }
 
 

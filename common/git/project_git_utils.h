@@ -53,12 +53,12 @@ public:
     // Windows only
     static int AllowLongPaths( git_repository* aRepo );
 
-    // Gives a handle core.longpaths from a separate config file, leaving the repository's own config alone.
+    // Gives a handle core.longpaths from a level above its own config, leaving that config alone.
     // Windows only
     static int AttachLongPaths( git_repository* aRepo );
 
-    // The file AttachLongPaths keeps its setting in
-    static wxString LongPathsConfigPath();
+    // Adds the read-only level AttachLongPaths uses, which libgit2 never picks for a write
+    static int AddLongPathsLevel( git_repository* aRepo );
 
     /**
      * Create a new branch based on HEAD.

@@ -44,4 +44,7 @@
 // libgit2 1.8 added GIT_CONFIG_LEVEL_WORKTREE and started reading config.worktree
 #define KIGIT_HAS_WORKTREE_CONFIG ( LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 8 ) )
 
+// libgit2 1.9 wraps the entries a config backend returns in git_config_backend_entry
+#define KIGIT_HAS_CONFIG_BACKEND_ENTRY ( LIBGIT2_VER_MAJOR > 1 || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 9 ) )
+
 #endif // KICAD_GIT_COMPAT_H_

@@ -1454,7 +1454,7 @@ bool LIBGIT_BACKEND::SetConfigString( git_repository* aRepo, const wxString& aKe
 
     KIGIT::GitConfigPtr configPtr( config );
 
-    // A write goes to the highest level, which may be the long path file every repository shares
+    // A write goes to the highest writable level, which need not be this repository's own
     if( git_config_open_level( &local, config, GIT_CONFIG_LEVEL_LOCAL ) != GIT_OK )
         return false;
 
