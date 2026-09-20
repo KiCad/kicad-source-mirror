@@ -446,8 +446,8 @@ int API_PLUGIN_MANAGER::doInvokeAction( const wxString& aIdentifier, std::vector
         }
 
         [[maybe_unused]] long pid = manager.Execute( pyArgs,
-                [aReporter, action]( int aRetVal, const wxString& aOutput,
-                                         const wxString& aError )
+                [aReporter, actionName = action->name]( int aRetVal, const wxString& aOutput,
+                                                        const wxString& aError )
                 {
                     wxLogTrace( traceApi,
                                 wxString::Format( "Manager: action exited with code %d", aRetVal ) );
@@ -455,7 +455,7 @@ int API_PLUGIN_MANAGER::doInvokeAction( const wxString& aIdentifier, std::vector
                     if( !aError.IsEmpty() )
                         wxLogTrace( traceApi, wxString::Format( "Manager: action stderr: %s", aError ) );
 
-                    reportPluginActionResult( aReporter.get(), action->name, aRetVal, aError );
+                    reportPluginActionResult( aReporter.get(), actionName, aRetVal, aError );
                 },
                 &env, true );
 
@@ -531,6 +531,9 @@ int API_PLUGIN_MANAGER::doInvokeAction( const wxString& aIdentifier, std::vector
             for( const wxString& arg : action->args )
                 cmd << " " << arg;
 
+            for( const wxString& arg : aExtraArgs )
+                cmd << " " << arg;
+
             wxArrayString out, err;
 
             pidOrRetCode = wxExecute( cmd, out, err, wxEXEC_BLOCK, &env );
@@ -555,8 +558,8 @@ int API_PLUGIN_MANAGER::doInvokeAction( const wxString& aIdentifier, std::vector
         else
         {
             ACTION_PROCESS* process = new ACTION_PROCESS(
-                    [aReporter, action]( int aRetVal, const wxString& aOutput,
-                                             const wxString& aError )
+                    [aReporter, actionName = action->name]( int aRetVal, const wxString& aOutput,
+                                                            const wxString& aError )
                     {
                         wxLogTrace( traceApi,
                                     wxString::Format( "Manager: action exited with code %d", aRetVal ) );
@@ -565,13 +568,16 @@ int API_PLUGIN_MANAGER::doInvokeAction( const wxString& aIdentifier, std::vector
                             wxLogTrace( traceApi,
                                         wxString::Format( "Manager: action stderr: %s", aError ) );
 
-                        reportPluginActionResult( aReporter.get(), action->name, aRetVal, aError );
+                        reportPluginActionResult( aReporter.get(), actionName, aRetVal, aError );
                     } );
 
             process->Redirect();
             args.emplace_back( pluginPath.wc_str() );
 
             for( const wxString& arg : action->args )
+                args.emplace_back( arg.wc_str() );
+
+            for( const wxString& arg : aExtraArgs )
                 args.emplace_back( arg.wc_str() );
 
             args.emplace_back( nullptr );
@@ -803,6 +809,10 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
 
             reportPluginLoadMessage( m_reloadReporter.get(), pluginName( job.identifier ),
                                      _( "Missing plugin environment" ), debug );
+
+            m_busyPlugins.erase( job.identifier );
+            wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxID_ANY );
+            QueueEvent( evt );
         }
         else
         {
@@ -886,6 +896,8 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
 
             reportPluginLoadMessage( m_reloadReporter.get(), pluginName( job.identifier ),
                                      _( "Missing plugin environment" ), debug );
+
+            m_busyPlugins.erase( job.identifier );
         }
         else if( !reqs.IsFileReadable() )
         {
@@ -896,6 +908,13 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
 
             reportPluginLoadMessage( m_reloadReporter.get(), pluginName( job.identifier ),
                                      _( "requirements.txt could not be read" ), debug );
+
+            // No requirements to install; the plugin is complete.
+            m_readyPlugins.insert( job.identifier );
+            m_busyPlugins.erase( job.identifier );
+
+            wxCommandEvent* availabilityEvt = new wxCommandEvent( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, wxID_ANY );
+            wxTheApp->QueueEvent( availabilityEvt );
         }
         else
         {
