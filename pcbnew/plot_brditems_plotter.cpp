@@ -1032,8 +1032,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             }
             else
             {
-                m_plotter->ThickCircle( aShape->GetStart(), aShape->GetRadius() * 2, thickness,
-                                        getMetadata() );
+                m_plotter->ThickCircle( aShape->GetStart(), aShape->GetRadius() * 2, thickness, getMetadata() );
             }
 
             break;
@@ -1044,8 +1043,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             // but it is a circle
             if( std::abs( aShape->GetArcAngle().AsDegrees() ) == 360.0 )
             {
-                m_plotter->ThickCircle( aShape->GetCenter(), aShape->GetRadius() * 2, thickness,
-                                        getMetadata() );
+                m_plotter->ThickCircle( aShape->GetCenter(), aShape->GetRadius() * 2, thickness, getMetadata() );
             }
             else if( aShape->GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
                      || aShape->GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE )
@@ -1083,9 +1081,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                 std::vector<VECTOR2D> pts = aShape->ShortenedBezierPolyline( thickness );
 
                 for( size_t i = 0; i + 1 < pts.size(); i++ )
-                {
                     m_plotter->ThickSegment( VECTOR2I( pts[i] ), VECTOR2I( pts[i + 1] ), thickness, getMetadata() );
-                }
             }
 
             break;
@@ -1097,30 +1093,31 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                 bool hasEndings = aShape->GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
                                   || aShape->GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE;
 
-                auto plotStrokeOutline = [&]( const SHAPE_LINE_CHAIN& aOutline, int aOutlineIdx )
-                {
-                    if( aOutline.PointCount() < 2 )
-                        return;
+                auto plotStrokeOutline =
+                        [&]( const SHAPE_LINE_CHAIN& aOutline, int aOutlineIdx )
+                        {
+                            if( aOutline.PointCount() < 2 )
+                                return;
 
-                    if( hasEndings )
-                    {
-                        std::vector<VECTOR2I> pts;
+                            if( hasEndings )
+                            {
+                                std::vector<VECTOR2I> pts;
 
-                        if( !aShape->GetShortenedBodyPolyPoints( aOutline, aOutlineIdx, pts, thickness ) )
-                            return;
+                                if( !aShape->GetShortenedBodyPolyPoints( aOutline, aOutlineIdx, pts, thickness ) )
+                                    return;
 
-                        SHAPE_LINE_CHAIN shortened;
+                                SHAPE_LINE_CHAIN shortened;
 
-                        for( const VECTOR2I& pt : pts )
-                            shortened.Append( pt );
+                                for( const VECTOR2I& pt : pts )
+                                    shortened.Append( pt );
 
-                        shortened.SetClosed( aOutline.IsClosed() );
-                        m_plotter->PlotPoly( shortened, FILL_T::NO_FILL, thickness, getMetadata() );
-                        return;
-                    }
+                                shortened.SetClosed( aOutline.IsClosed() );
+                                m_plotter->PlotPoly( shortened, FILL_T::NO_FILL, thickness, getMetadata() );
+                                return;
+                            }
 
-                    m_plotter->PlotPoly( aOutline, FILL_T::NO_FILL, thickness, getMetadata() );
-                };
+                            m_plotter->PlotPoly( aOutline, FILL_T::NO_FILL, thickness, getMetadata() );
+                        };
 
                 if( !hasEndings && m_plotter->GetPlotterType() == PLOT_FORMAT::DXF && GetDXFPlotMode() == SKETCH )
                 {
@@ -1161,8 +1158,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
                         if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
                         {
                             GERBER_PLOTTER* gbr_plotter = static_cast<GERBER_PLOTTER*>( m_plotter );
-                            gbr_plotter->PlotPolyAsRegion( poly, FILL_T::FILLED_SHAPE, 0,
-                                                           &gbr_metadata );
+                            gbr_plotter->PlotPolyAsRegion( poly, FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
                         }
                         else
                         {
@@ -1298,13 +1294,12 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
             if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
             {
                 GERBER_PLOTTER* gbr_plotter = static_cast<GERBER_PLOTTER*>( m_plotter );
-                gbr_plotter->PlotPolyAsRegion( aShape->GetHatching().Outline( ii ),
-                                               FILL_T::FILLED_SHAPE, 0, &gbr_metadata );
+                gbr_plotter->PlotPolyAsRegion( aShape->GetHatching().Outline( ii ), FILL_T::FILLED_SHAPE, 0,
+                                               &gbr_metadata );
             }
             else
             {
-                m_plotter->PlotPoly( aShape->GetHatching().Outline( ii ), FILL_T::FILLED_SHAPE,
-                                     0, getMetadata() );
+                m_plotter->PlotPoly( aShape->GetHatching().Outline( ii ), FILL_T::FILLED_SHAPE, 0, getMetadata() );
             }
         }
     }
