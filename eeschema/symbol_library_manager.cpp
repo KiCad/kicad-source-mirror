@@ -526,20 +526,20 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateSymbolAfterRename( LIB_SYMBOL* aSymbol, const
 }
 
 
-LIB_ID SYMBOL_LIBRARY_MANAGER::RevertSymbol( const wxString& aSymbolName, const wxString& aLibrary )
+LIB_ID SYMBOL_LIBRARY_MANAGER::RevertSymbol( const LIB_ID& aIdToRevert )
 {
-    auto it = m_libs.find( aLibrary );
+    auto it = m_libs.find( aIdToRevert.GetLibNickname() );
 
     if( it == m_libs.end() )    // no items to flush
-        return LIB_ID( aLibrary, aSymbolName );
+        return aIdToRevert;
 
-    std::shared_ptr<SYMBOL_BUFFER> symbolBuf = it->second.GetBuffer( aSymbolName );
-    wxCHECK( symbolBuf, LIB_ID( aLibrary, aSymbolName ) );
+    std::shared_ptr<SYMBOL_BUFFER> symbolBuf = it->second.GetBuffer( aIdToRevert.GetLibItemName() );
+    wxCHECK( symbolBuf, aIdToRevert );
     LIB_SYMBOL original( symbolBuf->GetOriginal() );
 
-    if( original.GetName() != aSymbolName )
+    if( original.GetName() != aIdToRevert.GetLibItemName().wx_str() )
     {
-        UpdateSymbolAfterRename( &original, aSymbolName, aLibrary );
+        UpdateSymbolAfterRename( &original, aIdToRevert.GetLibItemName(), aIdToRevert.GetLibNickname() );
     }
     else
     {
@@ -548,7 +548,7 @@ LIB_ID SYMBOL_LIBRARY_MANAGER::RevertSymbol( const wxString& aSymbolName, const 
         OnDataChanged();
     }
 
-    return LIB_ID( aLibrary, original.GetName() );
+    return LIB_ID( aIdToRevert.GetLibNickname(), original.GetName() );
 }
 
 
@@ -584,7 +584,7 @@ bool SYMBOL_LIBRARY_MANAGER::RevertAll()
             if( !buffer->IsModified() )
                 continue;
 
-            RevertSymbol( lib.first, buffer->GetOriginal().GetName() );
+            RevertSymbol( LIB_ID(  lib.first, buffer->GetOriginal().GetName() ) );
         }
     }
 

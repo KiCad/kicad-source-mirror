@@ -1449,7 +1449,7 @@ void SYMBOL_EDIT_FRAME::Revert( bool aConfirm )
     }
     else
     {
-        libId = m_libMgr->RevertSymbol( libId.GetLibItemName(), libId.GetLibNickname() );
+        libId = m_libMgr->RevertSymbol( libId );
 
         m_treePane->GetLibTree()->SelectLibId( libId );
         m_libMgr->ClearSymbolModified( libId.GetLibItemName(), libId.GetLibNickname() );

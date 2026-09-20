@@ -347,7 +347,7 @@ public:
      * @return The LIB_ID of the reverted symbol (which may be different in the case
      * of a rename)
      */
-    LIB_ID RevertSymbol( const wxString& aSymbolName, const wxString& aLibrary );
+    LIB_ID RevertSymbol( const LIB_ID& aIdToRevert );
 
     /**
      * Revert unsaved changes for a symbol library.
