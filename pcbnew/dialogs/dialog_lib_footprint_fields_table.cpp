@@ -230,7 +230,18 @@ void DIALOG_LIB_FOOTPRINT_FIELDS_TABLE::loadFootprints()
 
     FOOTPRINT_LIBRARY_ADAPTER* libMgr = PROJECT_PCB::FootprintLibAdapter( &Prj() );
     wxString                   libName = m_parent->GetTargetFPID().GetLibNickname();
-    std::vector<wxString>      footprintNames = libMgr->GetFootprintNames( libName );
+    std::vector<wxString>      footprintNames;
+
+    try
+    {
+        footprintNames = libMgr->GetFootprintNames( libName );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxMessageBox( wxString::Format( _( "Error loading footprints from library '%s': %s" ),
+                                        libName, ioe.What() ) );
+        return;
+    }
 
     if( footprintNames.empty() )
     {
