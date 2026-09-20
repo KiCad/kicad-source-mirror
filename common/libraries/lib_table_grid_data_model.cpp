@@ -120,7 +120,7 @@ wxString LIB_TABLE_GRID_DATA_MODEL::GetValue( int aRow, int aCol )
         if( !r.IsOk() )
             return r.ErrorDescription();
 
-        if( m_adapter->SupportsConfigurationDialog( r.Nickname() ) )
+        if( m_adapter && m_adapter->SupportsConfigurationDialog( r.Nickname() ) )
             return _( "Edit settings" );
         else if( r.Type() == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
             return _( "Open library table" );
@@ -175,7 +175,7 @@ wxGridCellAttr* LIB_TABLE_GRID_DATA_MODEL::GetAttr( int aRow, int aCol, wxGridCe
             return enhanceAttr( m_warningAttr, aRow, aCol, aKind );
         }
 
-        if( m_adapter->SupportsConfigurationDialog( tableRow.Nickname() ) )
+        if( m_adapter && m_adapter->SupportsConfigurationDialog( tableRow.Nickname() ) )
         {
             m_editSettingsAttr->IncRef();
             return enhanceAttr( m_editSettingsAttr, aRow, aCol, aKind );
@@ -299,10 +299,10 @@ bool LIB_TABLE_GRID_DATA_MODEL::InsertRows( size_t aPos, size_t aNumRows  )
     if( m_readOnly )
         return false;
 
-    if( aPos < size() )
+    if( aPos <= size() )
     {
         for( size_t i = 0; i < aNumRows; i++ )
-            insert( begin() + i, makeNewRow() );
+            insert( begin() + aPos + i, makeNewRow() );
 
         // use the (wxGridStringTable) source Luke.
         if( GetView() )
@@ -350,7 +350,7 @@ bool LIB_TABLE_GRID_DATA_MODEL::DeleteRows( size_t aPos, size_t aNumRows )
 
     // aPos may be a large positive, e.g. size_t(-1), and the sum of
     // aPos+aNumRows may wrap here, so both ends of the range are tested.
-    if( aPos < size() && aPos + aNumRows <= size() )
+    if( aPos < size() && aNumRows <= size() - aPos )
     {
         LIBRARY_TABLE_ROWS_ITER start = begin() + aPos;
         erase( start, start + aNumRows );
