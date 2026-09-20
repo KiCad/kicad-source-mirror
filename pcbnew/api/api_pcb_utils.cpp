@@ -297,8 +297,10 @@ bool UnpackEmbeddedFiles( EMBEDDED_FILES& aOutput, const common::types::Embedded
         files.AddFile( file );
     }
 
+    bool embedFonts = aOutput.GetAreFontsEmbedded();
     aOutput.ClearEmbeddedFiles();
     aOutput = files;
+    aOutput.SetAreFontsEmbedded( embedFonts );
 
     return true;
 }
