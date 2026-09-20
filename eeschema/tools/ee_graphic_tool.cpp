@@ -440,7 +440,8 @@ int EE_GRAPHIC_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     const auto makeNewArc =
             [&]()
             {
-                std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, shapeLayer, 0, m_lastFillStyle );
+                std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, shapeLayer, 0,
+                                                                              m_lastFillStyle );
                 arc->SetStroke( m_lastStroke );
                 arc->SetFillColor( m_lastFillColor );
                 arc->SetParent( parent );
@@ -787,7 +788,7 @@ SHAPE_DRAW_RESULT EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, st
             aBehavior.RemoveLastPoint();
             grid.FullReset();
         }
-        else if( evt->IsMotion() )
+        else if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             aBehavior.SetCursorPosition( cursorPos );
         }
