@@ -636,6 +636,9 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_SCH::handleGetItems( const HANDLER_
         {
             const SCH_SCREEN* aScreen = aPath.LastScreen();
 
+            if( !aScreen )
+                return;
+
             for( SCH_ITEM* aItem : aScreen->Items() )
             {
                 itemMap[ aItem->Type() ].emplace_back( aItem, aPath );
@@ -1186,6 +1189,15 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
             continue;
         }
 
+        if( !aCreate && existingItem->Type() != *type )
+        {
+            status.set_code( ItemStatusCode::ISC_INVALID_DATA );
+            status.set_error_message( fmt::format( "item {} is not of the requested type",
+                                                   item->m_Uuid.AsStdString() ) );
+            aItemHandler( status, anyItem );
+            continue;
+        }
+
         if( !aCreate )
         {
             SCH_SCREEN* itemScreen = existingPath.LastScreen();
@@ -1466,10 +1478,8 @@ SCH_SCREEN* API_HANDLER_SCH::resolveScreenFromDocument( const DocumentSpecifier&
     if( std::optional<SCH_SHEET_PATH> current = m_context->GetCurrentSheet() )
         return current->LastScreen();
 
-    // Headless mode has no current sheet; the root sheet is the implicit target.
-    SCH_SHEET_PATH path;
-    path.push_back( &schematic()->Root() );
-    return path.LastScreen();
+    // Headless mode has no current sheet; the first top-level sheet is the implicit target.
+    return schematic()->RootScreen();
 }
 
 
@@ -2166,7 +2176,7 @@ bool findSymbolsAndPins( const SCH_SHEET_LIST& aSchematicSheetList, const SCH_SH
 
             for( SCH_PIN* pin : pinsOnSheet )
             {
-                int pinUnit = pin->GetLibPin()->GetUnit();
+                int pinUnit = pin->GetLibPin() ? pin->GetLibPin()->GetUnit() : 0;
 
                 if( pinUnit > 0 && pinUnit != schRef.GetUnit() )
                     continue;
