@@ -3852,30 +3852,39 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 return false;
             }
 
+            bool skipCopper = false;
+
             if( connectedItem )
             {
                 int connectedItemNet = connectedItem->GetNetCode();
 
-                if( connectedItemNet == 0 || connectedItemNet == aVia->GetNetCode() )
+                if( connectedItemNet != 0 && connectedItemNet == aVia->GetNetCode() )
                     return false;
+
+                // A netless item can take the via's net, but its hole still keeps the via out.
+                if( connectedItemNet == 0 )
+                    skipCopper = true;
             }
 
-            for( PCB_LAYER_ID layer : aOther->GetLayerSet() )
+            if( !skipCopper )
             {
-                // Reference images are "on" a copper layer but are not actually part of it
-                if( !IsCopperLayer( layer ) || aOther->Type() == PCB_REFERENCE_IMAGE_T )
-                    continue;
-
-                constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aVia,  aOther, layer );
-                clearance = constraint.GetValue().Min();
-
-                if( clearance >= 0 )
+                for( PCB_LAYER_ID layer : aOther->GetLayerSet() )
                 {
-                    std::shared_ptr<SHAPE> viaShape = aVia->GetEffectiveShape( layer );
-                    std::shared_ptr<SHAPE> otherShape = aOther->GetEffectiveShape( layer );
+                    // Reference images are "on" a copper layer but are not actually part of it
+                    if( !IsCopperLayer( layer ) || aOther->Type() == PCB_REFERENCE_IMAGE_T )
+                        continue;
 
-                    if( viaShape->Collide( otherShape.get(), sub_e( clearance ) ) )
-                        return true;
+                    constraint = m_drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aVia,  aOther, layer );
+                    clearance = constraint.GetValue().Min();
+
+                    if( clearance >= 0 )
+                    {
+                        std::shared_ptr<SHAPE> viaShape = aVia->GetEffectiveShape( layer );
+                        std::shared_ptr<SHAPE> otherShape = aOther->GetEffectiveShape( layer );
+
+                        if( viaShape->Collide( otherShape.get(), sub_e( clearance ) ) )
+                            return true;
+                    }
                 }
             }
 
