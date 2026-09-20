@@ -49,6 +49,9 @@
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
+#if defined( KICAD_NATIVE_MODEL_PREVIEW ) && defined( __WINDOWS__ )
+#include <model_preview_manager.h>
+#endif
 
 #include <git/git_backend.h>
 #include <git/libgit_backend.h>
@@ -466,6 +469,10 @@ bool PGM_KICAD::OnPgmInit()
     {
         frame->Show( true );
         frame->Raise();
+
+#if defined( KICAD_NATIVE_MODEL_PREVIEW ) && defined( __WINDOWS__ )
+        frame->CallAfter( [frame] { MaybeShowModelPreviewSetupPrompt( frame ); } );
+#endif
     }
 
     if( m_api_server )

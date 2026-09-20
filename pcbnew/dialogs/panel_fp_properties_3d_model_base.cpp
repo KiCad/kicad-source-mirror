@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -73,6 +73,14 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 
 
 	bSizer3DButtons->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	wxString m_configuredPathChoiceChoices[] = { _("Automatic") };
+	int m_configuredPathChoiceNChoices = sizeof( m_configuredPathChoiceChoices ) / sizeof( wxString );
+	m_configuredPathChoice = new wxChoice( m_upperPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_configuredPathChoiceNChoices, m_configuredPathChoiceChoices, 0 );
+	m_configuredPathChoice->SetSelection( 0 );
+	m_configuredPathChoice->SetToolTip( _("Choose the folder used when opening the 3D model picker") );
+
+	bSizer3DButtons->Add( m_configuredPathChoice, 0, wxALL, 5 );
 
 	m_buttonConfig3DPaths = new wxButton( m_upperPanel, wxID_ANY, _("Configure Paths..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3DButtons->Add( m_buttonConfig3DPaths, 0, wxALL, 5 );

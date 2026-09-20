@@ -90,6 +90,9 @@
 
 #include <dialogs/panel_toolbar_customization.h>
 #include <3d_viewer/toolbars_3d.h>
+#if defined( KICAD_NATIVE_MODEL_PREVIEW ) && defined( __WXGTK3__ )
+#include <dialogs/native_model_file_picker_gtk.h>
+#endif
 #include <toolbars_footprint_editor.h>
 #include <toolbars_pcb_editor.h>
 
@@ -728,6 +731,10 @@ void IFACE::Reset()
 
 void IFACE::OnKifaceEnd()
 {
+#if defined( KICAD_NATIVE_MODEL_PREVIEW ) && defined( __WXGTK3__ )
+    ShutdownNativeModelFilePickerGtk();
+#endif
+
     if( m_apiHandlerFpLibs )
     {
         if( Pgm().ApiServerOrNull() )

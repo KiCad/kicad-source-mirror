@@ -22,6 +22,16 @@
 
 #include <algorithm>
 
+#if defined( KICAD_NATIVE_MODEL_PREVIEW ) && defined( __WINDOWS__ )
+#include <confirm.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
+#include <settings/settings_manager.h>
+#include <trace_helpers.h>
+
+#include <wx/log.h>
+#include <wx/msgdlg.h>
+#endif
 
 namespace
 {
@@ -70,3 +80,47 @@ void DeclineModelPreviewRequirement( const wxString& aRequirement, std::vector<w
     aDeclinedRequirements.push_back( requirement );
 }
 
+
+#if defined( KICAD_NATIVE_MODEL_PREVIEW ) && defined( __WINDOWS__ )
+void MaybeShowModelPreviewSetupPrompt( wxWindow* aParent )
+{
+    static bool asked = false;
+
+    if( asked )
+        return;
+
+    asked = true;
+
+    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
+
+    if( !settings )
+        return;
+
+    const MODEL_PREVIEW_STATUS status = GetPlatformModelPreviewStatus();
+
+    if( !ShouldPromptForModelPreviewSetup( status, settings->m_DeclinedModelPreviewRequirements ) )
+    {
+        wxLogTrace( traceModelPreview, wxS( "No setup prompt: %s" ), status.detail );
+        return;
+    }
+
+    wxMessageDialog dialog( aParent, _( "3D model previews require setup for this KiCad version." ),
+                            _( "3D Model Previews" ), wxYES_NO | wxICON_INFORMATION );
+    dialog.SetYesNoLabels( _( "Set Up Previews" ), _( "Skip This Version" ) );
+
+    if( dialog.ShowModal() != wxID_YES )
+    {
+        DeclineModelPreviewRequirement( status.requirementId, settings->m_DeclinedModelPreviewRequirements );
+        Pgm().GetSettingsManager().Save( settings );
+        return;
+    }
+
+    wxString error;
+
+    if( !RepairPlatformModelPreviewRegistration( error ) )
+    {
+        wxLogTrace( traceModelPreview, wxS( "Registration failed: %s" ), error );
+        DisplayErrorMessage( aParent, _( "Could not set up 3D model previews." ), error );
+    }
+}
+#endif

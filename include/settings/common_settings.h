@@ -288,5 +288,8 @@ public:
     /// the 3D model migration dialog.  Persists across sessions.
     std::vector<wxString> m_Extra3DSearchDirs;
 
+    /// Preview-component requirements explicitly dismissed by the user.
+    std::vector<wxString> m_DeclinedModelPreviewRequirements;
+
     std::unique_ptr<COMMON_SETTINGS_INTERNALS> m_csInternals;
 };

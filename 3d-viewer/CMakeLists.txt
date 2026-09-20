@@ -97,8 +97,6 @@ set(3D-VIEWER_SRCS
     3d_model_align.cpp
     dialogs/appearance_controls_3D.cpp
     dialogs/appearance_controls_3D_base.cpp
-    dialogs/dialog_select_3d_model_base.cpp
-    dialogs/dialog_select_3d_model.cpp
     dialogs/native_model_file_picker.cpp
     dialogs/panel_preview_3d_model_base.cpp
     dialogs/panel_preview_3d_model.cpp

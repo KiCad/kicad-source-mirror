@@ -78,6 +78,9 @@ private:
     bool readExtrusionHeights( const wxString& aTitle, double& aHeight, double& aStandoff );
     void updateValidateStatus( int aRow );
     void cleanupFilename( wxString* aFilename );
+    bool pick3DModel( const wxString& aCurrentValue, FP_3DMODEL& aModel );
+    void set3DModelRow( int aRow, const FP_3DMODEL& aModel );
+    void updateConfiguredPathChoices();
 
     MODEL_VALIDATE_ERRORS validateModelExists( const wxString& aFilename );
 

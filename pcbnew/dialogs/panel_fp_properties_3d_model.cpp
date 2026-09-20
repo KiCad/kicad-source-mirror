@@ -41,8 +41,9 @@
 #include <pgm_base.h>
 #include <kiplatform/ui.h>
 #include <dialogs/panel_preview_3d_model.h>
-#include <dialogs/dialog_select_3d_model.h>
+#include <dialogs/native_model_file_picker.h>
 #include <dialogs/panel_embedded_files.h>
+#include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <project_pcb.h>
 #include <widgets/color_swatch.h>
@@ -107,24 +108,25 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
     // Filename
     attr = new wxGridCellAttr;
 
-    if( cfg )
-    {
-        attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parentDialog, m_modelsGrid, &cfg->m_LastFootprint3dDir,
-                                                    wxT( "*.*" ), true, m_frame->Prj().GetProjectPath(),
-                [this]( const wxString& aFile ) -> wxString
+    attr->SetEditor( new GRID_CELL_RUN_FUNCTION_EDITOR(
+                m_parentDialog,
+                [this]( int aRow, int )
                 {
-                    EMBEDDED_FILES::EMBEDDED_FILE* result = m_filesPanel->AddEmbeddedFile( aFile );
+                    if( aRow < 0 || aRow >= static_cast<int>( m_shapes3D_list.size() ) )
+                        return;
 
-                    if( !result )
+                    FP_3DMODEL model = m_shapes3D_list[aRow];
+
+                    if( pick3DModel( m_modelsGrid->GetCellValue( aRow, COL_FILENAME ), model ) )
                     {
-                        wxString msg = wxString::Format( _( "Error adding 3D model" ) );
-                        wxMessageBox( msg, _( "Error" ), wxICON_ERROR | wxOK, this );
-                        return wxString();
+                        m_modelsGrid->CallAfter(
+                                [this, aRow, model]
+                                {
+                                    m_modelsGrid->DisableCellEditControl();
+                                    set3DModelRow( aRow, model );
+                                } );
                     }
-
-                    return result->GetLink();
                 } ) );
-    }
 
     m_modelsGrid->SetColAttr( COL_FILENAME, attr );
 
@@ -148,6 +150,8 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME*
     m_button3DShapeAdd->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
     m_button3DShapeBrowse->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
     m_button3DShapeRemove->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+    updateConfiguredPathChoices();
+    KIPLATFORM::UI::EllipsizeChoiceBox( m_configuredPathChoice );
 
     m_modelsGrid->Bind( wxEVT_GRID_CELL_CHANGING, &PANEL_FP_PROPERTIES_3D_MODEL::on3DModelCellChanging, this );
     Bind( wxEVT_SHOW, &PANEL_FP_PROPERTIES_3D_MODEL::onShowEvent, this );
@@ -516,48 +520,211 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnRemove3DModel( wxCommandEvent&  )
 }
 
 
+bool PANEL_FP_PROPERTIES_3D_MODEL::pick3DModel( const wxString& aCurrentValue, FP_3DMODEL& aModel )
+{
+    PROJECT&           project = m_frame->Prj();
+    S3D_CACHE*         cache = PROJECT_PCB::Get3DCacheManager( &project );
+    FILENAME_RESOLVER* resolver = cache->GetResolver();
+    wxString           directory;
+    wxString           filename;
+
+    const wxString embeddedPrefix = wxString::FromUTF8( FILEEXT::KiCadUriPrefix ) + wxS( "://" );
+
+    if( !aCurrentValue.IsEmpty() && !aCurrentValue.StartsWith( embeddedPrefix ) )
+    {
+        wxString libraryBasePath;
+
+        if( std::optional<LIBRARY_TABLE_ROW*> row =
+                    PROJECT_PCB::FootprintLibAdapter( &project )->GetRow( m_footprint->GetFPID().GetLibNickname() ) )
+        {
+            libraryBasePath = LIBRARY_MANAGER::GetFullURI( *row, true );
+        }
+
+        wxString resolved = resolver->ResolvePath( aCurrentValue, libraryBasePath,
+                                       { m_filesPanel->GetLocalFiles(), m_frame->GetBoard()->GetEmbeddedFiles() } );
+        wxFileName currentFile( resolved );
+
+        if( currentFile.FileExists() )
+        {
+            directory = currentFile.GetPath();
+            filename = currentFile.GetFullName();
+        }
+    }
+
+    if( directory.IsEmpty() && m_configuredPathChoice->GetSelection() > 0 )
+        directory = m_configuredPathChoice->GetStringSelection();
+
+    if( directory.IsEmpty() )
+        directory = project.GetRString( PROJECT::VIEWER_3D_PATH );
+
+    PCBNEW_SETTINGS* settings = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" );
+
+    if( directory.IsEmpty() && settings )
+        directory = settings->m_LastFootprint3dDir;
+
+    if( directory.IsEmpty() )
+        wxGetEnv( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ), &directory );
+
+    if( directory.IsEmpty() )
+        directory = project.GetProjectPath();
+
+    wxString wildcard;
+    wxString extensions;
+    int      filterCount = 0;
+
+    if( const std::list<wxString>* filters = cache->GetFileFilters() )
+    {
+        for( const wxString& filter : *filters )
+        {
+            ++filterCount;
+
+            if( !wildcard.IsEmpty() )
+                wildcard += '|';
+
+            wildcard += filter;
+            wxString extension = filter.AfterLast( '|' );
+
+            if( extension != wxS( "*.*" ) )
+            {
+                if( !extensions.IsEmpty() )
+                    extensions += ';';
+
+                extensions += extension;
+            }
+        }
+    }
+
+    if( !extensions.IsEmpty() )
+    {
+        wxString fullFilter = wxString::Format( _( "All supported files (%s)" ), extensions );
+        fullFilter << '|' << extensions << '|' << wildcard;
+        wildcard = fullFilter;
+        ++filterCount;
+    }
+
+    if( wildcard.IsEmpty() )
+        wildcard = wxFileSelectorDefaultWildcardStr;
+
+    COMMON_SETTINGS*                 commonSettings = Pgm().GetCommonSettings();
+    NATIVE_MODEL_FILE_PICKER_OPTIONS options;
+    options.parent = m_parentDialog;
+    options.title = _( "Select 3D Model" );
+    options.directory = directory;
+    options.filename = filename;
+    options.wildcard = wildcard;
+    options.style = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
+    options.embedFile = commonSettings && commonSettings->m_EmbedFileDefaults.model_3d;
+
+    long filterIndex = 0;
+    project.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX ).ToLong( &filterIndex );
+    options.filterIndex = filterCount > 0
+                                  ? static_cast<int>( std::clamp( filterIndex, 0L,
+                                                                  static_cast<long>( filterCount - 1 ) ) )
+                                  : 0;
+
+    NATIVE_MODEL_FILE_PICKER_RESULT selected;
+
+    struct MODAL_SCOPE
+    {
+        explicit MODAL_SCOPE( DIALOG_SHIM* aDialog ) : dialog( aDialog ) { dialog->PrepareForModalSubDialog(); }
+        ~MODAL_SCOPE() { dialog->CleanupAfterModalSubDialog(); }
+        DIALOG_SHIM* dialog;
+    };
+
+    {
+        MODAL_SCOPE modalScope( m_parentDialog );
+        selected = ShowNativeModelFilePicker( options );
+    }
+
+    if( !selected.accepted )
+        return false;
+
+    if( commonSettings )
+        commonSettings->m_EmbedFileDefaults.model_3d = selected.embedFile;
+
+    wxFileName selectedFile( selected.path );
+    selectedFile.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+    project.SetRString( PROJECT::VIEWER_3D_PATH, selectedFile.GetPath() );
+    project.SetRString( PROJECT::VIEWER_3D_FILTER_INDEX, wxString::Format( wxS( "%d" ), selected.filterIndex ) );
+
+    if( settings )
+        settings->m_LastFootprint3dDir = selectedFile.GetPath();
+
+    if( selected.embedFile )
+    {
+        if( EMBEDDED_FILES::EMBEDDED_FILE* embedded = m_filesPanel->AddEmbeddedFile( selected.path ) )
+            aModel.m_Filename = embedded->GetLink();
+        else
+        {
+            wxMessageBox( _( "Error adding 3D model" ), _( "Error" ), wxICON_ERROR | wxOK, this );
+            return false;
+        }
+    }
+    else
+    {
+        aModel.m_Filename = resolver->ShortenPath( selectedFile.GetFullPath() );
+    }
+
+    return true;
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::set3DModelRow( int aRow, const FP_3DMODEL& aModel )
+{
+    wxCHECK_RET( aRow >= 0 && aRow < static_cast<int>( m_shapes3D_list.size() ),
+                 wxS( "invalid 3D model row" ) );
+
+    m_shapes3D_list[aRow] = aModel;
+    wxString displayName = aModel.m_Filename;
+    wxString alias;
+    wxString shortPath;
+
+    if( FILENAME_RESOLVER* resolver = PROJECT_PCB::Get3DCacheManager( &m_frame->Prj() )->GetResolver();
+        resolver && resolver->SplitAlias( displayName, alias, shortPath ) )
+    {
+        displayName = alias + wxS( ":" ) + shortPath;
+    }
+
+    m_modelsGrid->SetCellValue( aRow, COL_FILENAME, displayName );
+    m_modelsGrid->SetCellValue( aRow, COL_SHOWN, aModel.m_Show ? wxS( "1" ) : wxS( "0" ) );
+    select3DModel( aRow );
+    updateValidateStatus( aRow );
+    m_previewPane->UpdateDummyFootprint();
+    onModify();
+}
+
+
+void PANEL_FP_PROPERTIES_3D_MODEL::updateConfiguredPathChoices()
+{
+    const wxString previous = m_configuredPathChoice->GetStringSelection();
+    m_configuredPathChoice->Clear();
+    m_configuredPathChoice->Append( _( "Automatic" ) );
+
+    FILENAME_RESOLVER* resolver = PROJECT_PCB::Get3DCacheManager( &m_frame->Prj() )->GetResolver();
+
+    if( const std::list<SEARCH_PATH>* paths = resolver->GetPaths() )
+    {
+        for( const SEARCH_PATH& path : *paths )
+        {
+            if( !path.m_Pathexp.IsEmpty() && m_configuredPathChoice->FindString( path.m_Pathexp ) == wxNOT_FOUND )
+                m_configuredPathChoice->Append( path.m_Pathexp );
+        }
+    }
+
+    const int previousIndex = m_configuredPathChoice->FindString( previous );
+    m_configuredPathChoice->SetSelection( previousIndex == wxNOT_FOUND ? 0 : previousIndex );
+}
+
+
 void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
 {
     if( !m_modelsGrid->CommitPendingChanges() )
         return;
 
-    int selected = m_modelsGrid->GetGridCursorRow();
+    const int  selected = m_modelsGrid->GetGridCursorRow();
+    FP_3DMODEL model;
 
-    PROJECT&           prj = m_frame->Prj();
-    FP_3DMODEL         model;
-    S3D_CACHE*         cache = PROJECT_PCB::Get3DCacheManager( &prj );
-    FILENAME_RESOLVER* res = cache->GetResolver();
-
-    wxString initialpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
-    wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );
-    int      filter = 0;
-
-    // If the PROJECT::VIEWER_3D_PATH hasn't been set yet, use the 3DMODEL_DIR environment
-    // variable and fall back to the project path if necessary.
-    if( initialpath.IsEmpty() )
-    {
-        if( !wxGetEnv( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ), &initialpath )
-            || initialpath.IsEmpty() )
-        {
-            initialpath = prj.GetProjectPath();
-        }
-    }
-
-    if( !sidx.empty() )
-    {
-        long tmp;
-        sidx.ToLong( &tmp );
-
-        if( tmp > 0 && tmp <= INT_MAX )
-            filter = (int) tmp;
-    }
-
-    DIALOG_SELECT_3DMODEL dm( m_parentDialog, cache, &model, initialpath, filter );
-
-    // Use QuasiModal so that Configure3DPaths (and its help window) will work
-    int retval = dm.ShowQuasiModal();
-
-    if( retval != wxID_OK || model.m_Filename.empty() )
+    if( !pick3DModel( wxEmptyString, model ) )
     {
         if( selected >= 0 )
         {
@@ -568,65 +735,11 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnAdd3DModel( wxCommandEvent&  )
         return;
     }
 
-    if( dm.IsEmbedded3DModel() )
-    {
-        wxString libraryName = m_footprint->GetFPID().GetLibNickname();
-        wxString footprintBasePath = wxEmptyString;
-
-        std::optional<LIBRARY_TABLE_ROW*> fpRow =
-                            PROJECT_PCB::FootprintLibAdapter( &m_frame->Prj() )->GetRow( libraryName );
-        if( fpRow )
-            footprintBasePath = LIBRARY_MANAGER::GetFullURI( *fpRow, true );
-
-        std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
-        embeddedFilesStack.push_back( m_filesPanel->GetLocalFiles() );
-        embeddedFilesStack.push_back( m_frame->GetBoard()->GetEmbeddedFiles() );
-
-        wxString   fullPath = res->ResolvePath( model.m_Filename, footprintBasePath, std::move( embeddedFilesStack ) );
-        wxFileName fname( fullPath );
-
-        EMBEDDED_FILES::EMBEDDED_FILE* result = m_filesPanel->AddEmbeddedFile( fname.GetFullPath() );                                                                               ;
-
-        if( !result )
-        {
-
-            wxString msg = wxString::Format( _( "Error adding 3D model" ) );
-            wxMessageBox( msg, _( "Error" ), wxICON_ERROR | wxOK, this );
-            return;
-        }
-
-        model.m_Filename = result->GetLink();
-    }
-
-    prj.SetRString( PROJECT::VIEWER_3D_PATH, initialpath );
-    sidx = wxString::Format( wxT( "%i" ), filter );
-    prj.SetRString( PROJECT::VIEWER_3D_FILTER_INDEX, sidx );
-
-    wxString alias;
-    wxString shortPath;
-    wxString filename = model.m_Filename;
-
-    if( res && res->SplitAlias( filename, alias, shortPath ) )
-        filename = alias + wxT( ":" ) + shortPath;
-
-#ifdef __WINDOWS__
-    // In KiCad files, filenames and paths are stored using Unix notation
-    model.m_Filename.Replace( wxT( "\\" ), wxT( "/" ) );
-#endif
-
+    const int row = m_modelsGrid->GetNumberRows();
     model.m_Show = true;
     m_shapes3D_list.push_back( model );
-
-    int idx = m_modelsGrid->GetNumberRows();
     m_modelsGrid->AppendRows( 1 );
-    m_modelsGrid->SetCellValue( idx, COL_FILENAME, filename );
-    m_modelsGrid->SetCellValue( idx, COL_SHOWN, wxT( "1" ) );
-
-    select3DModel( idx );
-    updateValidateStatus( idx );
-
-    m_previewPane->UpdateDummyFootprint();
-    onModify();
+    set3DModelRow( row, model );
 }
 
 
@@ -749,7 +862,10 @@ void PANEL_FP_PROPERTIES_3D_MODEL::Cfg3DPath( wxCommandEvent& event )
     DIALOG_CONFIGURE_PATHS dlg( this );
 
     if( dlg.ShowQuasiModal() == wxID_OK )
+    {
+        updateConfiguredPathChoices();
         m_previewPane->UpdateDummyFootprint();
+    }
 }
 
 
