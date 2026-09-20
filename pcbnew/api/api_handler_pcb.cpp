@@ -628,11 +628,11 @@ HANDLER_RESULT<BoardEnabledLayersResponse> API_HANDLER_PCB::handleSetBoardEnable
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    if( aCtx.Request.copper_layer_count() % 2 != 0 )
+    if( aCtx.Request.copper_layer_count() < 2 || aCtx.Request.copper_layer_count() % 2 != 0 )
     {
         ApiResponseStatus e;
         e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-        e.set_error_message( "copper_layer_count must be an even number" );
+        e.set_error_message( "copper_layer_count must be an even number of at least 2" );
         return tl::unexpected( e );
     }
 
@@ -999,6 +999,14 @@ HANDLER_RESULT<BoardDesignRulesResponse> API_HANDLER_PCB::handleSetBoardDesignRu
 
             TARGET_TD target = FromProtoEnum<TARGET_TD, kiapi::board::TeardropTarget>(
                     entry.target() );
+
+            if( target == TARGET_UNKNOWN )
+            {
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                e.set_error_message( "unknown teardrop target" );
+                return tl::unexpected( e );
+            }
 
             TEARDROP_PARAMETERS* params = newSettings.m_TeardropParamsList.GetParameters( target );
 
@@ -2121,7 +2129,9 @@ HANDLER_RESULT<InjectDrcErrorResponse> API_HANDLER_PCB::handleInjectDrcError(
 
     COMMIT* commit = getCurrentCommit( aCtx.ClientName );
     commit->Add( marker );
-    commit->Push( wxS( "API injected DRC marker" ) );
+
+    if( !m_activeClients.count( aCtx.ClientName ) )
+        pushCurrentCommit( aCtx.ClientName, _( "API injected DRC marker" ) );
 
     InjectDrcErrorResponse response;
     response.mutable_marker()->set_value( marker->GetUUID().AsStdString() );
@@ -2173,7 +2183,7 @@ std::optional<ApiResponseStatus> ApplyBoardPlotSettings( const BoardPlotSettings
         PCB_LAYER_ID layerId = FromProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>(
                 static_cast<board::types::BoardLayer>( layer ) );
 
-        if( layerId == PCB_LAYER_ID::UNDEFINED_LAYER )
+        if( !IsPcbLayer( static_cast<int>( layerId ) ) )
         {
             ApiResponseStatus e;
             e.set_status( ApiStatusCode::AS_BAD_REQUEST );
@@ -2189,7 +2199,7 @@ std::optional<ApiResponseStatus> ApplyBoardPlotSettings( const BoardPlotSettings
         PCB_LAYER_ID layerId = FromProtoEnum<PCB_LAYER_ID, board::types::BoardLayer>(
                 static_cast<board::types::BoardLayer>( layer ) );
 
-        if( layerId == PCB_LAYER_ID::UNDEFINED_LAYER )
+        if( !IsPcbLayer( static_cast<int>( layerId ) ) )
         {
             ApiResponseStatus e;
             e.set_status( ApiStatusCode::AS_BAD_REQUEST );
