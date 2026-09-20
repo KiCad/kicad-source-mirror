@@ -480,6 +480,7 @@ PROPERTY_COMMIT_HANDLER::PROPERTY_COMMIT_HANDLER( COMMIT* aCommit )
                   return, wxT( "Can't have more than one managed commit at a time!" ) );
 
     PROPERTY_MANAGER::Instance().m_managedCommit = aCommit;
+    m_ownsCommit = true;
 }
 
 
@@ -488,7 +489,8 @@ PROPERTY_COMMIT_HANDLER::~PROPERTY_COMMIT_HANDLER()
     wxASSERT_MSG( PROPERTY_MANAGER::Instance().m_managedCommit != nullptr,
                   wxT( "Something went wrong: m_managedCommit already null!" ) );
 
-    PROPERTY_MANAGER::Instance().m_managedCommit = nullptr;
+    if( m_ownsCommit )
+        PROPERTY_MANAGER::Instance().m_managedCommit = nullptr;
 }
 
 

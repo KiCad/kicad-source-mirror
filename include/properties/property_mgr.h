@@ -59,6 +59,9 @@ public:
     PROPERTY_COMMIT_HANDLER( COMMIT* aCommit );
 
     ~PROPERTY_COMMIT_HANDLER();
+
+private:
+    bool m_ownsCommit = false;
 };
 
 /**
