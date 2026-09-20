@@ -153,7 +153,9 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
 
-        if( evt->IsAction( &PL_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
+        if( evt->IsAction( &PL_ACTIONS::move )
+            || evt->IsMotion()
+            || evt->IsDrag( BUT_LEFT )
             || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             //------------------------------------------------------------------------
@@ -280,7 +282,7 @@ int PL_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         //------------------------------------------------------------------------
         // Handle drop
         //
-        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorClick ) )
         {
             break; // Finish
         }

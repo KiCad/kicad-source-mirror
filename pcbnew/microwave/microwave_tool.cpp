@@ -172,7 +172,9 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
             break;
         }
         // A click or drag starts
-        else if( !originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) ) )
+        else if( !originSet && (   evt->IsClick( BUT_LEFT )
+                                || evt->IsAction( &ACTIONS::cursorClick )
+                                || evt->IsDrag( BUT_LEFT ) ) )
         {
             tpGeomMgr.SetOrigin( cursorPos );
             tpGeomMgr.SetEnd( cursorPos );
@@ -183,7 +185,9 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
         }
         // another click after origin set is the end
         // left up is also the end, as you'll only get that after a drag
-        else if( originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
+        else if( originSet && (   evt->IsClick( BUT_LEFT )
+                               || evt->IsAction( &ACTIONS::cursorClick )
+                               || evt->IsMouseUp( BUT_LEFT ) ) )
         {
             // second click, we're done:
             // delegate to the point-to-point inductor creator function
@@ -197,9 +201,10 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
             view.SetVisible( &previewRect, false );
             view.Update( &previewRect, KIGFX::GEOMETRY );
         }
-        // any move or drag once the origin was set updates
-        // the end point
-        else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
+        // any move or drag once the origin was set updates the end point
+        else if( originSet && (   evt->IsMotion()
+                               || evt->IsAction( &ACTIONS::refreshPreview )
+                               || evt->IsDrag( BUT_LEFT ) ) )
         {
             tpGeomMgr.SetAngleSnap( GetAngleSnapMode() );
             tpGeomMgr.SetEnd( cursorPos );

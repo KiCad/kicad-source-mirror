@@ -1895,7 +1895,7 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
 
         handleCommonEvents( *evt );
 
-        if( evt->IsMotion() )
+        if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
@@ -1966,6 +1966,7 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
             }
         }
         else if( evt->IsClick( BUT_LEFT )
+                     || evt->IsAction( &ACTIONS::cursorClick )
                      || evt->IsDrag( BUT_LEFT )
                      || evt->IsAction( &PCB_ACTIONS::routeSingleTrack ) )
         {
@@ -2027,7 +2028,9 @@ void ROUTER_TOOL::performRouting( VECTOR2D aStartPosition )
             setCursor();
             UpdateMessagePanel();
         }
-        else if( evt->IsAction( &ACTIONS::finishInteractive ) || evt->IsDblClick( BUT_LEFT )  )
+        else if( evt->IsAction( &ACTIONS::finishInteractive )
+                    || evt->IsDblClick( BUT_LEFT )
+                    || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             // Stop current routing:
             bool forceFinish = true;
@@ -2494,7 +2497,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
         {
             m_router->SyncWorld();
         }
-        else if( evt->IsMotion() )
+        else if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             updateStartItem( *evt );
         }
@@ -2515,6 +2518,7 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
             evt->SetPassEvent( false );
         }
         else if( evt->IsClick( BUT_LEFT )
+              || evt->IsAction( &ACTIONS::cursorClick )
               || evt->IsAction( &PCB_ACTIONS::routeSingleTrack )
               || evt->IsAction( &PCB_ACTIONS::routeDiffPair ) )
         {
@@ -2609,7 +2613,7 @@ void ROUTER_TOOL::performDragging( int aMode )
 
         ctls->ForceCursorPosition( false );
 
-        if( evt->IsMotion() )
+        if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
@@ -2637,7 +2641,7 @@ void ROUTER_TOOL::performDragging( int aMode )
                 }
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorClick ) )
         {
             bool forceFinish = false;
             bool forceCommit = evt->Modifier( MD_CTRL );
@@ -3112,7 +3116,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
             break;
         }
-        else if( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
+        else if( evt->IsMotion()
+                || evt->IsAction( &ACTIONS::refreshPreview )
+                || evt->IsDrag( BUT_LEFT ) )
         {
             hasMouseMoved = true;
             updateEndItem( *evt );
@@ -3203,7 +3209,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( hasMouseMoved && ( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
+        else if( hasMouseMoved && (   evt->IsMouseUp( BUT_LEFT )
+                                   || evt->IsClick( BUT_LEFT )
+                                   || evt->IsAction( &ACTIONS::cursorClick ) ) )
         {
             bool forceFinish = false;
             bool forceCommit = evt->Modifier( MD_CTRL );

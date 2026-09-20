@@ -913,7 +913,9 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
         // Handle click:
         //
         else if( evt->IsClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorClick )
                 || ( segment && evt->IsDblClick( BUT_LEFT ) )
+                || ( segment && evt->IsAction( &ACTIONS::cursorDblClick ) )
                 || isSyntheticClick )
         {
             // First click when unfolding places the label and wire-to-bus entry
@@ -971,7 +973,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const TOOL_EVENT& aTool, SCH_COMMIT&
                 }
             }
 
-            if( evt->IsDblClick( BUT_LEFT ) && segment )
+            if( segment && (   evt->IsDblClick( BUT_LEFT )
+                            || evt->IsAction( &ACTIONS::cursorDblClick ) ) )
             {
                 if( twoSegments && m_wires.size() >= 2 )
                     computeBreakPoint( { m_wires[m_wires.size() - 2], segment }, cursorPos, currentMode, posture );

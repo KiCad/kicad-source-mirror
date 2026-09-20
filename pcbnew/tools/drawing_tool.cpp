@@ -953,7 +953,8 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
 
             break;
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                    || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             if( !image )
             {
@@ -1239,7 +1240,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
             m_menu->ShowContextMenu( selection() );
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorClick ) )
         {
             bool placing = text != nullptr;
 
@@ -1349,9 +1350,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
             selection().SetReferencePoint( cursorPos );
             m_view->Update( &selection() );
         }
-        else if( text
-                 && ( ZONE_FILLER_TOOL::IsZoneFillAction( evt )
-                      || evt->IsAction( &ACTIONS::redo ) ) )
+        else if( text && (   ZONE_FILLER_TOOL::IsZoneFillAction( evt )
+                          || evt->IsAction( &ACTIONS::redo ) ) )
         {
             wxBell();
         }
@@ -1479,7 +1479,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
 
             m_menu->ShowContextMenu( selection() );
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorClick ) )
         {
             if( !table )
             {
@@ -1708,7 +1708,7 @@ int DRAWING_TOOL::DrawBarcode( const TOOL_EVENT& aEvent )
 
             m_menu->ShowContextMenu( selection() );
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorClick ) )
         {
             m_toolMgr->RunAction( ACTIONS::selectionClear );
 
@@ -1921,7 +1921,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
             m_menu->ShowContextMenu( selection() );
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                    || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             switch( step )
             {
@@ -2045,12 +2046,12 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 m_controls->SetAutoPan( false );
                 m_controls->CaptureCursor( false );
             }
-            else if( evt->IsDblClick( BUT_LEFT ) )
+            else if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
             {
                 m_toolMgr->PostAction( PCB_ACTIONS::cursorClick );
             }
         }
-        else if( evt->IsMotion() )
+        else if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             switch( step )
             {
@@ -2402,7 +2403,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
             break;
         }
-        else if( evt->IsMotion() )
+        else if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             delta = cursorPos - preview.GetTopLeftItem()->GetPosition();
 
@@ -2415,7 +2416,8 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         {
             m_menu->ShowContextMenu( selection() );
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                    || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             // Place the imported drawings
             for( BOARD_ITEM* item : newItems )
@@ -2490,7 +2492,8 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         VECTOR2I cursorPos = grid.ResolveSnap( m_controls->GetMousePosition(), LSET::AllLayersMask() ).position;
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             FOOTPRINT*   footprint = (FOOTPRINT*) m_frame->GetModel();
             BOARD_COMMIT commit( m_frame );
@@ -2591,7 +2594,8 @@ int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
         VECTOR2I cursorPos = grid.ResolveSnap( m_controls->GetMousePosition(), LSET::AllLayersMask() ).position;
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             if( step == SET_CENTER )
             {
@@ -2645,7 +2649,8 @@ int DRAWING_TOOL::PlaceGridItem( const TOOL_EVENT& aEvent )
             else
                 break;
         }
-        else if( griditem && evt->IsMotion() )
+        else if( griditem && (   evt->IsMotion()
+                              || evt->IsAction( &ACTIONS::refreshPreview ) ) )
         {
             sizeToCursor( cursorPos );
             view()->Update( griditem );
@@ -2833,7 +2838,9 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
 
         // Drawing rectangles and circles ignore the snap behavior by default, but constrains
         // when the modifier key is pressed
-        if( shape == SHAPE_T::RECTANGLE || shape == SHAPE_T::CIRCLE || shape == SHAPE_T::ELLIPSE
+        if( shape == SHAPE_T::RECTANGLE
+            || shape == SHAPE_T::CIRCLE
+            || shape == SHAPE_T::ELLIPSE
             || shape == SHAPE_T::ELLIPSE_ARC )
         {
             if( evt->Modifier( MD_CTRL ) )
@@ -2841,7 +2848,8 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
             else
                 angleSnap = LEADER_MODE::DIRECT;
         }
-        else {
+        else
+        {
             // All other drawing uses the snap mode, except that is disabled with the modifier key
             if( evt->Modifier( MD_CTRL ) )
                 angleSnap = LEADER_MODE::DIRECT;
@@ -2931,7 +2939,8 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
 
             m_menu->ShowContextMenu( selection() );
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                    || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             if( !graphic )
                 break;
@@ -3037,7 +3046,9 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
 
                         graphic = nullptr;
                     }
-                    else if( twoPointMgr.IsEmpty() || evt->IsDblClick( BUT_LEFT ) )
+                    else if( twoPointMgr.IsEmpty()
+                            || evt->IsDblClick( BUT_LEFT )
+                            || evt->IsAction( &ACTIONS::cursorDblClick ) )
                     {
                         // User has clicked twice in the same spot, meaning we're finished
                         delete graphic;
@@ -3052,7 +3063,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
 
             twoPointMgr.SetEnd( GetClampedCoords( cursorPos ) );
         }
-        else if( evt->IsMotion() )
+        else if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             if( multiPhase )
             {
@@ -3350,7 +3361,7 @@ SHAPE_DRAW_RESULT DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::
             cancelled = true;
             break;
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorClick ) )
         {
             if( !started )
             {
@@ -3395,7 +3406,7 @@ SHAPE_DRAW_RESULT DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::
             grid.FullReset();
             aBehavior.RemoveLastPoint();
         }
-        else if( evt->IsMotion() )
+        else if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             // set angle snap
             aBehavior.SetAngleSnap( angleSnap != LEADER_MODE::DIRECT );
@@ -3733,11 +3744,14 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         }
         // events that lock in nodes
         else if( evt->IsClick( BUT_LEFT )
+                 || evt->IsAction( &ACTIONS::cursorClick )
                  || evt->IsDblClick( BUT_LEFT )
+                 || evt->IsAction( &ACTIONS::cursorDblClick )
                  || evt->IsAction( &PCB_ACTIONS::closeOutline ) )
         {
             // Check if it is double click / closing line (so we have to finish the zone)
             const bool endPolygon = evt->IsDblClick( BUT_LEFT )
+                                    || evt->IsAction( &PCB_ACTIONS::cursorDblClick )
                                     || evt->IsAction( &PCB_ACTIONS::closeOutline )
                                     || polyGeomMgr.NewPointClosesOutline( cursorPos );
 
@@ -3788,6 +3802,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
             }
         }
         else if( started && (   evt->IsMotion()
+                             || evt->IsAction( &ACTIONS::refreshPreview )
                              || evt->IsDrag( BUT_LEFT ) ) )
         {
             polyGeomMgr.SetCursorPosition( cursorPos );

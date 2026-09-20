@@ -877,7 +877,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
         // Single click? Select single object
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorClick ) )
         {
             // If the timer has stopped, then we have already run the disambiguate routine
             // and we don't want to register an extra click here
@@ -1020,7 +1020,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( !selCancelled )
                 m_menu->ShowContextMenu( m_selection );
         }
-        else if( evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             m_disambiguateTimer.Stop();
 

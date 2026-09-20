@@ -127,7 +127,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
             break;
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorClick ) )
         {
             bool getNext = false;
 
@@ -156,7 +156,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 setControls();
             }
         }
-        else if( evt->IsMotion() )
+        else if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             if( m_motionHandler )
             {
@@ -169,7 +169,9 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( evt->IsDblClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) )
+        else if( evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorDblClick )
+                || evt->IsDrag( BUT_LEFT ) )
         {
             // Not currently used, but we don't want to pass them either
         }

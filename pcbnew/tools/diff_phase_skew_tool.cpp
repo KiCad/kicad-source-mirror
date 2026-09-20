@@ -173,7 +173,7 @@ int DIFF_PHASE_SKEW_TOOL::ShowDiffPhaseSkew( const TOOL_EVENT& aEvent )
             }
         }
 
-        if( evt->IsMotion() )
+        if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             if( GetMode() == MODE::HOVER )
             {
@@ -195,7 +195,9 @@ int DIFF_PHASE_SKEW_TOOL::ShowDiffPhaseSkew( const TOOL_EVENT& aEvent )
                 updateMessagePanel();
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) && GetMode() == MODE::HOVER && m_pickerItemFirst )
+        else if( ( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorClick ) )
+                && GetMode() == MODE::HOVER
+                && m_pickerItemFirst )
         {
             m_originFirst = m_cursorPos;
 
@@ -211,7 +213,9 @@ int DIFF_PHASE_SKEW_TOOL::ShowDiffPhaseSkew( const TOOL_EVENT& aEvent )
 
             updateMessagePanel();
         }
-        else if( evt->IsClick( BUT_LEFT ) && GetMode() == MODE::SELECTED_FIRST && m_pickerItemSecond )
+        else if( ( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorClick ) )
+                && GetMode() == MODE::SELECTED_FIRST
+                && m_pickerItemSecond )
         {
             // First click to select the diff pair for inspection
             SetMode( MODE::FIXED_MODE );

@@ -380,7 +380,8 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
             break;
         }
-        else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( item && (   evt->IsAction( &ACTIONS::refreshPreview )
+                          || evt->IsMotion() ) )
         {
             item->CalcEdit( cursorPos );
             m_view->ClearPreview();
@@ -388,7 +389,8 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
 
             frame()->SetMsgPanel( item.get() );
         }
-        else if( evt->IsDblClick( BUT_LEFT ) && !item )
+        else if( !item && (   evt->IsDblClick( BUT_LEFT )
+                           || evt->IsAction( &ACTIONS::cursorDblClick ) ) )
         {
             m_toolMgr->RunAction( SCH_ACTIONS::properties );
         }
@@ -751,8 +753,7 @@ SHAPE_DRAW_RESULT EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, st
             cancelled = true;
             break;
         }
-        else if( evt->IsClick( BUT_LEFT )
-                || evt->IsAction( &ACTIONS::cursorClick ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorClick ) )
         {
             if( !started )
             {
@@ -998,7 +999,7 @@ int EE_GRAPHIC_TOOL::ImportGraphics( const TOOL_EVENT& aEvent )
 
             break;
         }
-        else if( evt->IsMotion() )
+        else if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             delta = cursorPos - currentOffset;
 

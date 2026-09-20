@@ -395,7 +395,9 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
         //
         else if( evt->IsMouseUp( BUT_LEFT )
                 || evt->IsClick( BUT_LEFT )
-                || evt->IsDblClick( BUT_LEFT ) )
+                || evt->IsAction( &ACTIONS::cursorClick )
+                || evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             if( selection.GetSize() == 1 && selection.Front()->Type() == SCH_PIN_T )
             {

@@ -193,7 +193,8 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
 
             break;
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                    || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             if( !newItem )
             {
@@ -282,7 +283,8 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,
                 evt->SetPassEvent();
             }
         }
-        else if( newItem && evt->IsMotion() )
+        else if( newItem && (   evt->IsMotion()
+                             || evt->IsAction( &ACTIONS::refreshPreview ) ) )
         {
             // track the cursor
             newItem->SetPosition( cursorPos );

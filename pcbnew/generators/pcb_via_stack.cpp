@@ -1441,7 +1441,8 @@ int DRAWING_TOOL::PlaceMicroviaStack( const TOOL_EVENT& aEvent )
         {
             break;
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorClick ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             // The tool stays active for repeated placement, Esc leaves. Rapid clicks
             // arrive as double clicks and must place hops too.
@@ -1510,7 +1511,7 @@ int DRAWING_TOOL::PlaceMicroviaStack( const TOOL_EVENT& aEvent )
             m_toolMgr->VetoContextMenuMouseWarp();
             m_menu->ShowContextMenu( selection() );
         }
-        else if( evt->IsMotion() )
+        else if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             updatePreview( cursorPos );
         }

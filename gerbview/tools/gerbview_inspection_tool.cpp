@@ -257,7 +257,9 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
             break;
         }
-        else if( !originSet && ( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) ) )
+        else if( !originSet && (   evt->IsDrag( BUT_LEFT )
+                                || evt->IsClick( BUT_LEFT )
+                                || evt->IsAction( &ACTIONS::cursorClick ) ) )
         {
             // click or drag starts
             twoPtMgr.SetOrigin( cursorPos );
@@ -268,7 +270,9 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
             originSet = true;
         }
-        else if( originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
+        else if( originSet && (    evt->IsClick( BUT_LEFT )
+                                || evt->IsAction( &ACTIONS::cursorClick )
+                                || evt->IsMouseUp( BUT_LEFT ) ) )
         {
             // second click or mouse up after drag ends
             originSet = false;
@@ -276,7 +280,9 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             controls.SetAutoPan( false );
             controls.CaptureCursor( false );
         }
-        else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
+        else if( originSet && (    evt->IsMotion()
+                                || evt->IsAction( &ACTIONS::refreshPreview )
+                                || evt->IsDrag( BUT_LEFT ) ) )
         {
             // move or drag when origin set updates rules
             twoPtMgr.SetAngleSnap( evt->Modifier( MD_SHIFT ) ? LEADER_MODE::DEG45

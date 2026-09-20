@@ -557,7 +557,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     m_menu->ShowContextMenu( m_selection );
             }
         }
-        else if( evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             m_disambiguateTimer.Stop();
 

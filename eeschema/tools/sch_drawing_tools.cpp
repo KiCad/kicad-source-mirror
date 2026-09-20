@@ -1585,8 +1585,12 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
                 }
             }
 
-            if( evt->IsDblClick( BUT_LEFT ) || type == SCH_SHEET_PIN_T )  // Finish tool.
+            if( evt->IsDblClick( BUT_LEFT )
+                || evt->IsAction( &ACTIONS::cursorDblClick )
+                || type == SCH_SHEET_PIN_T )  // Finish tool.
+            {
                 break;
+            }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -2538,7 +2542,9 @@ int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
                 cleanup();
             }
         }
-        else if( started && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
+        else if( started && (   evt->IsMotion()
+                             || evt->IsAction( &ACTIONS::refreshPreview )
+                             || evt->IsDrag( BUT_LEFT ) ) )
         {
             polyGeomMgr.SetCursorPosition( cursorPos );
         }
@@ -2757,7 +2763,8 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
             m_view->AddToPreview( table->Clone() );
             m_frame->SetMsgPanel( table );
         }
-        else if( evt->IsDblClick( BUT_LEFT ) && !table )
+        else if( !table && (   evt->IsDblClick( BUT_LEFT )
+                            || evt->IsAction( &ACTIONS::cursorDblClick ) ) )
         {
             m_toolMgr->RunAction( SCH_ACTIONS::properties );
         }
@@ -3129,8 +3136,9 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
             break;
         }
-        else if( sheet
-                    && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
+        else if( sheet && (   evt->IsAction( &ACTIONS::refreshPreview )
+                           || evt->IsMotion()
+                           || evt->IsDrag( BUT_LEFT ) ) )
         {
             sizeSheet( sheet, cursorPos );
             m_view->ClearPreview();

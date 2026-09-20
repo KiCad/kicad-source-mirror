@@ -539,7 +539,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( evt->IsDblClick( BUT_LEFT ) )
+        else if( evt->IsDblClick( BUT_LEFT ) || evt->IsAction( &ACTIONS::cursorDblClick ) )
         {
             commit.Push( _( "Renumber Pads" ) );
             break;
