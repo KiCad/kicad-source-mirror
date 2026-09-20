@@ -1251,6 +1251,9 @@ int ROUTER_TOOL::onViaStackCommand( const TOOL_EVENT& aEvent )
 
     if( preset.m_Staggered )
     {
+        if( m_router->IsPlacingVia() )
+            m_router->ToggleViaPlacement();
+
         // The router cannot route through a staggered stack (lateral walk + connecting traces).
         // Fix the track here and REMEMBER the stack, but build it only after routing tears down.
         // Committing to the board while the PNS world is live invalidates its nodes (crash).
