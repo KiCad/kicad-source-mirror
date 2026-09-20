@@ -137,7 +137,9 @@ std::unique_ptr<COMMIT> API_HANDLER_BOARD::createCommit()
     if( m_frame )
         return std::make_unique<BOARD_COMMIT>( static_cast<EDA_DRAW_FRAME*>( m_frame ) );
 
-    return std::make_unique<BOARD_COMMIT>( toolManager(), true, false );
+    bool isFootprintEditor = thisDocumentType() == kiapi::common::types::DOCTYPE_FOOTPRINT;
+
+    return std::make_unique<BOARD_COMMIT>( toolManager(), !isFootprintEditor, isFootprintEditor );
 }
 
 
@@ -178,6 +180,25 @@ HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>> API_HANDLER_BOARD::createItemForType
         e.set_error_message( fmt::format( "Tried to create a footprint in {}, which is not a board",
                                           aContainer->GetFriendlyName().ToStdString() ) );
         return tl::unexpected( e );
+    }
+
+    if( dynamic_cast<FOOTPRINT*>( aContainer ) )
+    {
+        static const std::set<KICAD_T> s_footprintItemTypes = {
+            PCB_FIELD_T, PCB_BARCODE_T, PCB_TEXT_T, PCB_TEXTBOX_T, PCB_SHAPE_T,
+            PCB_REFERENCE_IMAGE_T, PCB_TABLE_T, PCB_PAD_T, PCB_ZONE_T, PCB_GROUP_T,
+            PCB_CONSTRAINT_T, PCB_POINT_T, PCB_DIM_ALIGNED_T, PCB_DIM_LEADER_T,
+            PCB_DIM_CENTER_T, PCB_DIM_RADIAL_T, PCB_DIM_ORTHOGONAL_T
+        };
+
+        if( !s_footprintItemTypes.contains( aType ) )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( fmt::format( "items of type {} cannot be created in a footprint",
+                                              magic_enum::enum_name( aType ) ) );
+            return tl::unexpected( e );
+        }
     }
 
     std::unique_ptr<BOARD_ITEM> created = CreateItemForType( aType, aContainer );
@@ -225,7 +246,17 @@ void API_HANDLER_BOARD::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>&
 
     for( BOARD_ITEM* item : validatedItems )
     {
-        if( item->Type() == PCB_GENERATOR_T )
+        if( item->Type() == PCB_TABLECELL_T )
+        {
+            // Cells are owned by their table; the commit removal path doesn't handle them.
+            // Match the GUI delete: clear the cell contents (drill-chart cells have no user text).
+            if( item->GetParent() && item->GetParent()->Type() == PCB_DRILL_CHART_T )
+                continue;
+
+            commit->Modify( item );
+            static_cast<PCB_TABLECELL*>( item )->SetText( wxEmptyString );
+        }
+        else if( item->Type() == PCB_GENERATOR_T )
         {
             TOOL_MANAGER* mgr = toolManager();
 
@@ -493,6 +524,17 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             continue;
         }
 
+        if( !aCreate && ( *optItem )->Type() != item->Type() )
+        {
+            status.set_code( ItemStatusCode::ISC_INVALID_TYPE );
+            status.set_error_message( fmt::format( "item {} is of type {}, not {}",
+                                                   item->m_Uuid.AsStdString(),
+                                                   magic_enum::enum_name( ( *optItem )->Type() ),
+                                                   magic_enum::enum_name( item->Type() ) ) );
+            aItemHandler( status, anyItem );
+            continue;
+        }
+
         if( aCreate
             && !item->FitsEnabledLayers( board->GetEnabledLayers(), board->GetCopperLayerCount() ) )
         {
@@ -595,8 +637,18 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             }
             else
             {
+                EDA_GROUP*  parentGroup = boardItem->GetParentGroup();
+                BOARD_ITEM* parent = boardItem->GetParent();
+
                 commit->Modify( boardItem );
                 boardItem->CopyFrom( item.get() );
+
+                if( parentGroup )
+                    boardItem->SetParentGroup( parentGroup );
+
+                if( parent )
+                    boardItem->SetParent( parent );
+
                 boardItem->Serialize( newItem );
             }
         }
@@ -713,7 +765,18 @@ HANDLER_RESULT<SelectionResponse> API_HANDLER_BOARD::handleGetSelection(
     std::set<KICAD_T> filter;
 
     for( KICAD_T type : parseRequestedItemTypes( aCtx.Request.types() ) )
+    {
         filter.insert( type );
+
+        if( type == PCB_DIMENSION_T )
+        {
+            filter.insert( PCB_DIM_ALIGNED_T );
+            filter.insert( PCB_DIM_ORTHOGONAL_T );
+            filter.insert( PCB_DIM_RADIAL_T );
+            filter.insert( PCB_DIM_LEADER_T );
+            filter.insert( PCB_DIM_CENTER_T );
+        }
+    }
 
     TOOL_MANAGER* mgr = toolManager();
     PCB_SELECTION_TOOL* selectionTool = mgr->GetTool<PCB_SELECTION_TOOL>();
@@ -1061,7 +1124,14 @@ HANDLER_RESULT<PadstackPresenceResponse> API_HANDLER_BOARD::handleCheckPadstackP
     LSET layers;
 
     for( const int layer : aCtx.Request.layers() )
-        layers.set( FromProtoEnum<PCB_LAYER_ID, BoardLayer>( static_cast<BoardLayer>( layer ) ) );
+    {
+        PCB_LAYER_ID pcbLayer = FromProtoEnum<PCB_LAYER_ID, BoardLayer>( static_cast<BoardLayer>( layer ) );
+
+        if( pcbLayer < 0 || pcbLayer >= PCB_LAYER_ID_COUNT )
+            continue;
+
+        layers.set( pcbLayer );
+    }
 
     for( const types::KIID& padRequest : aCtx.Request.items() )
     {
@@ -1343,7 +1413,7 @@ HANDLER_RESULT<SavedSelectionResponse> API_HANDLER_BOARD::handleSaveSelectionToS
         } );
 
     io.SetBoard( board() );
-    io.SaveSelection( selection, false );
+    io.SaveSelection( selection, thisDocumentType() == kiapi::common::types::DOCTYPE_FOOTPRINT );
 
     return response;
 }
