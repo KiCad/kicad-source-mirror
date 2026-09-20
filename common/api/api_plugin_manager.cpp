@@ -431,8 +431,9 @@ int API_PLUGIN_MANAGER::doInvokeAction( const wxString& aIdentifier, std::vector
         if( pythonHome )
             env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
 
-        std::vector<wxString> pyArgs( aExtraArgs );
-        pyArgs.insert( pyArgs.begin(), pluginFile.GetFullPath() );
+        std::vector<wxString> pyArgs( action->args );
+        pyArgs.emplace_back( pluginFile.GetFullPath() );
+        pyArgs.insert( pyArgs.end(), aExtraArgs.begin(), aExtraArgs.end() );
 
         if( aSync )
         {

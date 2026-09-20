@@ -87,6 +87,13 @@
                 "type": "string",
                 "description": "The way KiCad should launch this action (for example, the name of a Python script)"
               },
+              "args": {
+                "type": "array",
+                "description": "A list of fixed arguments to pass to the entrypoint before any arguments added by KiCad for the specific invocation",
+                "items": {
+                  "type": "string"
+                }
+              },
               "icons-light": {
                 "type": "array",
                 "description": "A list of one or more paths to PNG files (use multiple files for high DPI support) to be shown in light mode",
