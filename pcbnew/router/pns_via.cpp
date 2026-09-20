@@ -275,7 +275,7 @@ VIA* VIA::Clone() const
     v->m_secondaryDrill = m_secondaryDrill;
     v->m_primaryPostMachining = m_primaryPostMachining;
     v->m_secondaryPostMachining = m_secondaryPostMachining;
-    v->SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2, PNS_LAYER_RANGE() ) );
+    v->SetHole( HOLE::MakeCircularHole( m_pos, m_drill / 2, m_holeLayers ) );
     v->m_rank = m_rank;
     v->m_marker = m_marker;
     v->m_routable = m_routable;
