@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_CASE( SymbolTabContextOwnsWorkingCopy )
     SYMBOL_EDITOR_TAB_CONTEXT ctx( wxS( "Device" ), wxS( "R" ), buf.get() );
 
     BOOST_CHECK_EQUAL( ctx.GetTabKey(), wxS( "Device:R" ) );
-    BOOST_CHECK_EQUAL( ctx.GetDisplayName(), wxS( "R" ) );
+    BOOST_CHECK_EQUAL( ctx.GetDisplayName( true ), wxS( "R" ) );
 
     BOOST_REQUIRE( ctx.GetSymbol() != nullptr );
     BOOST_REQUIRE( ctx.GetScreen() != nullptr );
@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE( InstanceTabContextIsTransientAndKeyedByUuid )
     BOOST_CHECK( ctx.IsFromSchematic() );
     BOOST_CHECK_EQUAL( ctx.GetReference(), reference );
     BOOST_CHECK_EQUAL( ctx.GetSchematicSymbolUUID().AsString(), sourceUuid.AsString() );
-    BOOST_CHECK_EQUAL( ctx.GetDisplayName(), reference );
+    BOOST_CHECK_EQUAL( ctx.GetDisplayName( true ), reference );
 
     BOOST_CHECK_EQUAL( ctx.GetTabKey(),
                        SYMBOL_EDITOR_TAB_CONTEXT::MakeInstanceTabKey( sourceUuid ) );
