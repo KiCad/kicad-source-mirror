@@ -598,6 +598,12 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     if( m_schematic )
         Kiway().LocalHistory().UnregisterSaver( m_schematic );
 
+    if( Kiface().IsSingle() )
+    {
+        Pgm().GetApiServer().DeregisterHandler( m_apiHandlerCommon.get() );
+        Pgm().GetApiServer().DeregisterHandler( m_apiLibrariesHandler.get() );
+    }
+
     // A forced teardown (wx deletes every top level window at session end) skips doCloseWindow,
     // leaving live tools.  When we SetScreen(nullptr), we dispatch another tool call, potentially
     // crashing when the frame is gone
