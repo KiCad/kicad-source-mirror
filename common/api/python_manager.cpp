@@ -90,6 +90,25 @@ PYTHON_MANAGER::PYTHON_MANAGER( const wxString& aInterpreterPath )
 }
 
 
+static wxString readAllFromStream( wxInputStream* aStream )
+{
+    wxString result;
+
+    if( aStream )
+    {
+        char buffer[4096];
+
+        while( aStream->CanRead() )
+        {
+            aStream->Read( buffer, sizeof( buffer ) );
+            result.Append( buffer, aStream->LastRead() );
+        }
+    }
+
+    return result;
+};
+
+
 long PYTHON_MANAGER::Execute( const std::vector<wxString>& aArgs,
         const std::function<void(int, const wxString&, const wxString&)>& aCallback,
         const wxExecuteEnv* aEnv, bool aSaveOutput )
@@ -160,30 +179,29 @@ long PYTHON_MANAGER::Execute( const std::vector<wxString>& aArgs,
     }
     else
     {
-        wxString interpreter = m_interpreterPath;
-        QuoteString( interpreter );
+        wxWCharBuffer interpreterBuf = m_interpreterPath.wc_str();
+        std::vector<wxWCharBuffer> argBufs;
+        argBufs.reserve( aArgs.size() );
 
         for( const wxString& arg : aArgs )
-        {
-            wxString quoted = arg;
-            QuoteString( quoted );
-            argsStr << quoted << " ";
-        }
+            argBufs.emplace_back( arg.wc_str() );
 
-        wxLogTrace( traceApi, wxString::Format( "Execute sync: %s %s", interpreter, argsStr ) );
-        wxArrayString out, err;
-        wxString cmd = wxString::Format( "%s %s", interpreter, argsStr );
-        long ret = wxExecute( cmd, out, err, wxEXEC_BLOCK, aEnv );
+        std::vector<const wchar_t*> syncArgs = { interpreterBuf.data() };
 
-        wxString strOut, strErr;
+        for( const wxWCharBuffer& buf : argBufs )
+            syncArgs.emplace_back( buf.data() );
 
-        for( const wxString& line : out )
-            strOut << line << "\n";
+        syncArgs.emplace_back( nullptr );
 
-        for( const wxString& line : err )
-            strErr << line << "\n";
+        wxLogTrace( traceApi, wxString::Format( "Execute sync: %s %s", m_interpreterPath, argsStr ) );
 
-        aCallback( ret, strOut, strErr );
+        wxProcess syncProcess;
+        syncProcess.Redirect();
+
+        long ret = wxExecute( syncArgs.data(), wxEXEC_BLOCK, &syncProcess, aEnv );
+
+        aCallback( static_cast<int>( ret ), readAllFromStream( syncProcess.GetInputStream() ),
+                   readAllFromStream( syncProcess.GetErrorStream() ) );
 
         return ret;
     }
@@ -194,36 +212,37 @@ long PYTHON_MANAGER::ExecuteSync( const std::vector<wxString>& aArgs,
                                   wxString* aStdout, wxString* aStderr,
                                   const wxExecuteEnv* aEnv )
 {
-    wxString argsStr;
-
-    wxString interpreter = m_interpreterPath;
-    QuoteString( interpreter );
+    wxWCharBuffer interpreterBuf = m_interpreterPath.wc_str();
+    std::vector<wxWCharBuffer> argBufs;
+    argBufs.reserve( aArgs.size() );
 
     for( const wxString& arg : aArgs )
-    {
-        wxString quoted = arg;
-        QuoteString( quoted );
-        argsStr << quoted << " ";
-    }
+        argBufs.emplace_back( arg.wc_str() );
 
-    wxLogTrace( traceApi, wxString::Format( "Execute sync: %s %s", interpreter, argsStr ) );
-    wxArrayString out, err;
-    wxString cmd = wxString::Format( "%s %s", interpreter, argsStr );
-    long ret = wxExecute( cmd, out, err, wxEXEC_BLOCK, aEnv );
+    std::vector<const wchar_t*> args = { interpreterBuf.data() };
 
-    wxString strOut, strErr;
+    for( const wxWCharBuffer& buf : argBufs )
+        args.emplace_back( buf.data() );
+
+    args.emplace_back( nullptr );
+
+    wxString argsStr;
+
+    for( const wxString& arg : aArgs )
+        argsStr << arg << " ";
+
+    wxLogTrace( traceApi, wxString::Format( "Execute sync: %s %s", m_interpreterPath, argsStr ) );
+
+    wxProcess process;
+    process.Redirect();
+
+    long ret = wxExecute( args.data(), wxEXEC_BLOCK, &process, aEnv );
 
     if( aStdout )
-    {
-        for( const wxString& line : out )
-            *aStdout << line << "\n";
-    }
+        *aStdout = readAllFromStream( process.GetInputStream() );
 
     if( aStderr )
-    {
-        for( const wxString& line : err )
-            *aStderr << line << "\n";
-    }
+        *aStderr = readAllFromStream( process.GetErrorStream() );
 
     return ret;
 }

@@ -141,7 +141,7 @@ tl::expected<FOOTPRINT*, wxString> FOOTPRINT_WIZARD_MANAGER::Generate( FOOTPRINT
     if( !google::protobuf::util::MessageToJsonString( params, &paramsJson ).ok() )
         return tl::unexpected( _( "Unexpected error with footprint wizard" ) );
 
-    args.emplace_back( wxString::Format( wxS( "'%s'" ), paramsJson ) );
+    args.emplace_back( wxString::FromUTF8( paramsJson ) );
 
     wxString out, err;
     int ret = manager.InvokeActionSync( aWizard->Identifier(), args, &out, &err );
