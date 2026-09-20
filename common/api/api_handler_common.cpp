@@ -426,7 +426,7 @@ HANDLER_RESULT<GetTextAsShapesResponse> API_HANDLER_COMMON::handleGetTextAsShape
             any.UnpackTo( shapeMsg );
         }
 
-        if( textMsg.has_textbox() )
+        if( textMsg.has_textbox() && textMsg.textbox().border_enabled() )
         {
             GraphicShape* border = entry->mutable_shapes()->add_shapes();
             int width = textMsg.textbox().attributes().stroke_width().value_nm();
@@ -536,6 +536,12 @@ HANDLER_RESULT<project::TextVariables> API_HANDLER_COMMON::handleGetTextVariable
         return tl::unexpected( e );
     }
 
+    if( tl::expected<bool, ApiResponseStatus> result = validateProject( aCtx.Request.document().project() );
+        !result )
+    {
+        return tl::unexpected( result.error() );
+    }
+
     const PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     if( project.IsNullProject() )
@@ -569,6 +575,12 @@ HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleSetTextVariables(
         return tl::unexpected( e );
     }
 
+    if( tl::expected<bool, ApiResponseStatus> result = validateProject( aCtx.Request.document().project() );
+        !result )
+    {
+        return tl::unexpected( result.error() );
+    }
+
     PROJECT& project = Pgm().GetSettingsManager().Prj();
 
     if( project.IsNullProject() )
@@ -588,7 +600,13 @@ HANDLER_RESULT<Empty> API_HANDLER_COMMON::handleSetTextVariables(
     for( const auto& [key, value] : newVars.variables() )
         vars[wxString::FromUTF8( key )] = wxString::FromUTF8( value );
 
-    Pgm().GetSettingsManager().SaveProject();
+    if( !Pgm().GetSettingsManager().SaveProject() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
+        e.set_error_message( "failed to save project text variables" );
+        return tl::unexpected( e );
+    }
 
     return Empty();
 }
