@@ -195,6 +195,24 @@ void PCB_VIA_STACK::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirecti
 }
 
 
+std::vector<int> PCB_VIA_STACK::ViewGetLayers() const
+{
+    std::vector<int> layers = { LAYER_ANCHOR };
+    LSET             cuMask = LSET::AllCuMask();
+
+    if( const BOARD* board = GetBoard() )
+        cuMask &= board->GetEnabledLayers();
+
+    for( PCB_LAYER_ID layer : LAYER_RANGE( m_startLayer, m_endLayer, MAX_CU_LAYERS ) )
+    {
+        if( cuMask.Contains( layer ) )
+            layers.push_back( layer );
+    }
+
+    return layers;
+}
+
+
 void PCB_VIA_STACK::addMember( BOARD* aBoard, BOARD_COMMIT* aCommit, BOARD_ITEM* aItem )
 {
     if( aCommit )

@@ -73,9 +73,10 @@ public:
     const BOX2I GetBoundingBox() const override { return PCB_GROUP::GetBoundingBox(); }
     const BOX2I ViewBBox() const override { return GetBoundingBox(); }
 
-    // The group base registers only on LAYER_ANCHOR, which VIEW::Query skips, so box
-    // select and select-all would never see the stack. Register on the copper layer too.
-    std::vector<int> ViewGetLayers() const override { return { LAYER_ANCHOR, GetLayer() }; }
+    // The group base registers only on LAYER_ANCHOR, which VIEW::Query skips, so box select
+    // and select-all would never see the stack. Register on every layer it spans, or hiding
+    // one of them takes the stack out of the view index.
+    std::vector<int> ViewGetLayers() const override;
 
     // Generator members are not selectable on their own, the selection tool expects the
     // generator itself to hit test. Delegate to the members.

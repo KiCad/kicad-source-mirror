@@ -139,6 +139,29 @@ BOOST_AUTO_TEST_CASE( PropertiesAndMembersRoundTrip )
 }
 
 
+BOOST_AUTO_TEST_CASE( ViewLayersCoverTheWholeSpan )
+{
+    auto board = std::make_unique<BOARD>();
+    board->SetCopperLayerCount( 4 );
+    board->SetEnabledLayers( LSET::AllCuMask( 4 ) | LSET::AllTechMask() );
+
+    PCB_VIA_STACK* stack = new PCB_VIA_STACK( board.get(), F_Cu );
+    stack->SetStartLayer( F_Cu );
+    stack->SetEndLayer( In2_Cu );
+    board->Add( stack );
+
+    std::vector<int> layers = stack->ViewGetLayers();
+
+    for( PCB_LAYER_ID layer : { F_Cu, In1_Cu, In2_Cu } )
+    {
+        BOOST_CHECK_MESSAGE( alg::contains( layers, layer ),
+                             "span layer " << LSET::Name( layer ).ToStdString() << " is not registered" );
+    }
+
+    BOOST_CHECK( !alg::contains( layers, (int) B_Cu ) );
+}
+
+
 // A stacked stack materializes one coaxial microvia per adjacent copper pair, no traces.
 BOOST_AUTO_TEST_CASE( StackedGeometry )
 {
