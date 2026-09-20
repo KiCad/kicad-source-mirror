@@ -3927,30 +3927,39 @@ static bool ItemHasDRCViolation( BOARD_CONNECTED_ITEM* aItem, BOARD_ITEM* aOther
         return false;
     }
 
+    bool skipCopper = false;
+
     if( connectedItem )
     {
         int connectedItemNet = connectedItem->GetNetCode();
 
-        if( connectedItemNet == 0 || connectedItemNet == aItem->GetNetCode() )
+        if( connectedItemNet != 0 && connectedItemNet == aItem->GetNetCode() )
             return false;
+
+        // A netless item can take the via's net, but its hole still keeps the via out.
+        if( connectedItemNet == 0 )
+            skipCopper = true;
     }
 
-    for( PCB_LAYER_ID layer : aOther->GetLayerSet() )
+    if( !skipCopper )
     {
-        // Reference images are "on" a copper layer but are not actually part of it
-        if( !IsCopperLayer( layer ) || aOther->Type() == PCB_REFERENCE_IMAGE_T )
-            continue;
-
-        constraint = aEngine->EvalRules( CLEARANCE_CONSTRAINT, aItem, aOther, layer );
-        clearance = constraint.GetValue().Min();
-
-        if( clearance >= 0 )
+        for( PCB_LAYER_ID layer : aOther->GetLayerSet() )
         {
-            std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( layer );
-            std::shared_ptr<SHAPE> otherShape = aOther->GetEffectiveShape( layer );
+            // Reference images are "on" a copper layer but are not actually part of it
+            if( !IsCopperLayer( layer ) || aOther->Type() == PCB_REFERENCE_IMAGE_T )
+                continue;
 
-            if( itemShape->Collide( otherShape.get(), sub_e( clearance ) ) )
-                return true;
+            constraint = aEngine->EvalRules( CLEARANCE_CONSTRAINT, aItem, aOther, layer );
+            clearance = constraint.GetValue().Min();
+
+            if( clearance >= 0 )
+            {
+                std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( layer );
+                std::shared_ptr<SHAPE> otherShape = aOther->GetEffectiveShape( layer );
+
+                if( itemShape->Collide( otherShape.get(), sub_e( clearance ) ) )
+                    return true;
+            }
         }
     }
 
