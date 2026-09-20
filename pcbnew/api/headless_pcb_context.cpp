@@ -24,6 +24,7 @@
 #include <component_classes/component_class_manager.h>
 #include <drc/drc_engine.h>
 #include <footprint.h>
+#include <gestfich.h>
 #include <netlist_reader/board_netlist_updater.h>
 #include <netlist_reader/netlist_reader.h>
 #include <netlist_reader/pcb_netlist_utils.h>
@@ -125,17 +126,32 @@ bool HEADLESS_PCB_CONTEXT::SavePcbCopy( const wxString& aFileName, bool aCreateP
     if( !m_board || aFileName.IsEmpty() )
         return false;
 
+    wxFileName pro = aFileName;
+    pro.SetExt( FILEEXT::ProjectFileExtension );
+    pro.MakeAbsolute();
+
+    if( aCreateProject && pro.FileExists() )
+        return false;
+
+    wxFileName currentRules( m_board->GetDesignRulesPath() );
+    wxFileName rulesFile = aFileName;
+    rulesFile.SetExt( FILEEXT::DesignRulesFileExtension );
+    rulesFile.MakeAbsolute();
+
+    if( currentRules.FileExists() && rulesFile.FileExists() )
+        return false;
+
     wxString outPath = aFileName;
 
     bool success = BOARD_LOADER::SaveBoard( outPath, *m_board );
 
     if( success && aCreateProject )
-    {
-        wxFileName pro = aFileName;
-        pro.SetExt( FILEEXT::ProjectFileExtension );
-        pro.MakeAbsolute();
+        Pgm().GetSettingsManager().SaveProjectCopy( pro.GetFullPath(), m_board->GetProject() );
 
-        Pgm().GetSettingsManager().SaveProjectAs( pro.GetFullPath(), m_board->GetProject() );
+    if( currentRules.FileExists() )
+    {
+        wxString msg;
+        KiCopyFile( currentRules.GetFullPath(), rulesFile.GetFullPath(), msg );
     }
 
     return success;
@@ -208,6 +224,8 @@ void HEADLESS_PCB_CONTEXT::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater )
     SpreadFootprints( &newFootprints, { 0, 0 }, true );
 
     board->CompileRatsnest();
+
+    SetContentModified();
 }
 
 
