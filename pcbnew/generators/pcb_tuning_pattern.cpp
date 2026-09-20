@@ -3095,22 +3095,6 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_TUNING_PATTERN::SetNetCode( int aNetCode )
-{
-    if( BOARD* board = GetBoard() )
-    {
-        if( NETINFO_ITEM* net = board->FindNet( aNetCode ) )
-            m_lastNetName = net->GetNetname();
-        else
-            m_lastNetName.clear();
-    }
-
-    for( BOARD_ITEM* item : GetBoardItems() )
-        if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
-            bci->SetNetCode( aNetCode );
-}
-
-
 static struct PCB_TUNING_PATTERN_DESC
 {
     PCB_TUNING_PATTERN_DESC()
