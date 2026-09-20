@@ -1940,8 +1940,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 processConstraint( rule );
         }
 
-        // DIFF_PAIR_GAP_CONSTRAINT must also respect CLEARANCE_CONSTRAINTs.
-        if( aConstraintType == DIFF_PAIR_GAP_CONSTRAINT )
+        // DIFF_PAIR_GAP_CONSTRAINT must also respect CLEARANCE_CONSTRAINTs when called with two items
+        if( aConstraintType == DIFF_PAIR_GAP_CONSTRAINT && b != nullptr )
         {
             DRC_CONSTRAINT clearanceConstraint = EvalRules( CLEARANCE_CONSTRAINT, a, b, aLayer, nullptr );
 
