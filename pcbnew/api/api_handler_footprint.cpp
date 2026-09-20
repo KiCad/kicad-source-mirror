@@ -114,16 +114,15 @@ tl::expected<bool, ApiResponseStatus> API_HANDLER_FOOTPRINT::validateDocumentInt
     return true;
 }
 
+
 HANDLER_RESULT<FOOTPRINT*> API_HANDLER_FOOTPRINT::validateAndGetFootprint(
         const DocumentSpecifier& aDocument )
 {
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aDocument ); !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
-
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aDocument );
-
-    if( !documentValidation )
-        return tl::unexpected( documentValidation.error() );
 
     FOOTPRINT* editorFootprint = board()->GetFirstFootprint();
 
@@ -138,9 +137,13 @@ HANDLER_RESULT<FOOTPRINT*> API_HANDLER_FOOTPRINT::validateAndGetFootprint(
     return editorFootprint;
 }
 
+
 HANDLER_RESULT<Empty> API_HANDLER_FOOTPRINT::handleOpenLibraryItem(
     const HANDLER_CONTEXT<OpenLibraryItem>& aCtx )
 {
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "OpenLibraryItem" ) )
+        return tl::unexpected( *headless );
+
     if( aCtx.Request.type() != DocumentType::DOCTYPE_FOOTPRINT )
     {
         ApiResponseStatus e;
@@ -180,6 +183,7 @@ HANDLER_RESULT<Empty> API_HANDLER_FOOTPRINT::handleOpenLibraryItem(
     frame()->LoadFootprintFromLibrary( fpid );
     return Empty();
 }
+
 
 HANDLER_RESULT<GetOpenDocumentsResponse> API_HANDLER_FOOTPRINT::handleGetOpenDocuments(
         const HANDLER_CONTEXT<GetOpenDocuments>& aCtx )
@@ -282,16 +286,16 @@ HANDLER_RESULT<Empty> API_HANDLER_FOOTPRINT::handleSaveCopyOfDocument(
 HANDLER_RESULT<Empty> API_HANDLER_FOOTPRINT::handleRevertDocument(
         const HANDLER_CONTEXT<RevertDocument>& aCtx )
 {
+    if( std::optional<ApiResponseStatus> headless = checkForHeadless( "RevertDocument" ) )
+        return tl::unexpected( *headless );
+
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
         return tl::unexpected( *busy );
 
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
-
-    if( !documentValidation )
-        return tl::unexpected( documentValidation.error() );
-
-    frame()->GetScreen()->SetContentModified( false );
-    frame()->RevertFootprint(); // dialog is suppressed by ^
+    frame()->RevertFootprint( /* aSkipConfirmation = */ true );
 
     return Empty();
 }
@@ -316,9 +320,6 @@ static const std::vector<KICAD_T> s_allowedFootprintTypes = {
 HANDLER_RESULT<GetItemsResponse> API_HANDLER_FOOTPRINT::handleGetItems(
         const HANDLER_CONTEXT<GetItems>& aCtx )
 {
-    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
-        return tl::unexpected( *busy );
-
     if( !validateItemHeaderDocument( aCtx.Request.header() ) )
     {
         ApiResponseStatus e;
@@ -326,6 +327,9 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_FOOTPRINT::handleGetItems(
         e.set_status( ApiStatusCode::AS_UNHANDLED );
         return tl::unexpected( e );
     }
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
 
     GetItemsResponse response;
 

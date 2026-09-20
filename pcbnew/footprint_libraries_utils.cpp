@@ -1224,14 +1224,14 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
+bool FOOTPRINT_EDIT_FRAME::RevertFootprint( bool aSkipConfirmation )
 {
     if( GetScreen()->IsContentModified() && m_originalFootprintCopy )
     {
         wxString msg = wxString::Format( _( "Revert '%s' to last version saved?" ),
                                          GetLoadedFPID().GetLibItemName().wx_str() );
 
-        if( ConfirmRevertDialog( this, msg ) )
+        if( aSkipConfirmation || ConfirmRevertDialog( this, msg ) )
         {
             // Clone the baseline up front; a full clear drops the frame's copy of it
             std::unique_ptr<FOOTPRINT> restored( static_cast<FOOTPRINT*>( m_originalFootprintCopy->Clone() ) );

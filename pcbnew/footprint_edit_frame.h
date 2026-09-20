@@ -240,7 +240,7 @@ public:
     bool SaveFootprintAs( FOOTPRINT* aFootprint );
     bool SaveFootprintToBoard( bool aAddNew );
     bool SaveFootprintInLibrary( FOOTPRINT* aFootprint, const wxString& aLibraryName );
-    bool RevertFootprint();
+    bool RevertFootprint( bool aSkipConfirmation = false );
 
     /**
      * Must be called after a footprint change in order to set the "modify" flag of the
