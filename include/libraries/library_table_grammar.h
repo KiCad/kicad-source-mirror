@@ -57,7 +57,8 @@ struct RPAREN : TAO_PEGTL_STRING( ")" ) {};
 // An s-expression identifier token
 struct TOKEN : plus< not_one< '(', ')', ' ', '\t', '\n', '\r' > > {};
 
-struct QUOTED_TEXT : if_must< one< '"' >, until< one< '"' > > > {};
+struct ESCAPE : seq< one< '\\' >, any > {};
+struct QUOTED_TEXT : if_must< one< '"' >, until< one< '"' >, sor< ESCAPE, any > > > {};
 
 // Inner expression
 struct SEXPR_CONTENT : star<

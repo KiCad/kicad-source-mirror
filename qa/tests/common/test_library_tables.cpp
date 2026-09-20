@@ -769,4 +769,48 @@ BOOST_AUTO_TEST_CASE( MigrateBuiltInLibraries_ChainedRowMigratedInPlace )
 }
 
 
+/**
+ * Regression test: quoted table values must round-trip through the writer's escaping.
+ *
+ * LIBRARY_TABLE::Format emits descriptions through OUTPUTFORMATTER::Quotes, which
+ * escapes backslash, quote, newline and carriage return. The grammar used to terminate
+ * a quoted string at the first quote with no escape handling, and the parser action
+ * stripped the quotes without unescaping, so a description containing a quote (or a
+ * newline) was written correctly but could never be read back.
+ */
+BOOST_AUTO_TEST_CASE( QuotedTextRoundTripsEscapes )
+{
+    LIBRARY_TABLE_PARSER parser;
+
+    const std::string escaped =
+            "(sym_lib_table (lib (name \"x\") (descr \"say \\\"hi\\\"\\\\line1\\nline2\\r\")))";
+
+    tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> result = parser.ParseBuffer( escaped );
+    BOOST_REQUIRE( result.has_value() );
+    BOOST_REQUIRE_EQUAL( result->rows.size(), 1 );
+    BOOST_CHECK_EQUAL( result->rows[0].description, "say \"hi\"\\line1\nline2\r" );
+
+    // Round-trip: format the parsed value back out and parse it again.
+    LIBRARY_TABLE table( true, wxEmptyString, LIBRARY_TABLE_SCOPE::GLOBAL );
+    table.SetType( LIBRARY_TABLE_TYPE::SYMBOL );
+
+    LIBRARY_TABLE_ROW& row = table.InsertRow();
+    row.SetNickname( wxS( "x" ) );
+    row.SetType( wxS( "KiCad" ) );
+    row.SetURI( wxS( "${KIPRJMOD}/x.kicad_sym" ) );
+    row.SetDescription( wxS( "say \"hi\"\\line1\nline2\r" ) );
+
+    STRING_FORMATTER formatter;
+    table.Format( &formatter );
+
+    tl::expected<LIBRARY_TABLE_IR, LIBRARY_PARSE_ERROR> reparsed =
+            parser.ParseBuffer( formatter.GetString() );
+    BOOST_REQUIRE_MESSAGE( reparsed.has_value(),
+                           "a formatted table containing escaped quotes/newlines must re-parse" );
+
+    if( reparsed.has_value() && !reparsed->rows.empty() )
+        BOOST_CHECK_EQUAL( reparsed->rows[0].description, row.Description() );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

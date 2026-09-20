@@ -100,7 +100,30 @@ struct LIBRARY_TABLE_PARSER_ACTION<QUOTED_TEXT>
     {
         wxCHECK2( s.target_string, return );
         wxCHECK2( in.string().size() >= 2, return );
-        *s.target_string = in.string().substr( 1, in.string().size() - 2 );
+        std::string inner = in.string().substr( 1, in.string().size() - 2 );
+        std::string unescaped;
+        unescaped.reserve( inner.size() );
+
+        for( size_t ii = 0; ii < inner.size(); ++ii )
+        {
+            if( inner[ii] != '\\' || ii + 1 == inner.size() )
+            {
+                unescaped += inner[ii];
+            }
+            else
+            {
+                switch( inner[++ii] )
+                {
+                case 'n':  unescaped += '\n';  break;
+                case 'r':  unescaped += '\r';  break;
+                case '\\': unescaped += '\\';  break;
+                case '"':  unescaped += '"';   break;
+                default:   unescaped += '\\'; unescaped += inner[ii]; break;
+                }
+            }
+        }
+
+        *s.target_string = std::move( unescaped );
     }
 };
 
