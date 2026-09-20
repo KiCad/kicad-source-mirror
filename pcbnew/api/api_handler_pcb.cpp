@@ -253,7 +253,14 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSaveDocument(
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    pcbContext()->SaveBoard();
+    if( !pcbContext()->SaveBoard() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
+        e.set_error_message( "board could not be saved" );
+        return tl::unexpected( e );
+    }
+
     return Empty();
 }
 
@@ -303,7 +310,14 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSaveCopyOfDocument(
 
     if( board->GetFileName().Matches( boardPath.GetFullPath() ) )
     {
-        pcbContext()->SaveBoard();
+        if( !pcbContext()->SaveBoard() )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
+            e.set_error_message( "board could not be saved" );
+            return tl::unexpected( e );
+        }
+
         return Empty();
     }
 
@@ -312,7 +326,14 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSaveCopyOfDocument(
     if( aCtx.Request.has_options() )
         includeProject = aCtx.Request.options().include_project();
 
-    pcbContext()->SavePcbCopy( boardPath.GetFullPath(), includeProject, /* aHeadless = */ true );
+    if( !pcbContext()->SavePcbCopy( boardPath.GetFullPath(), includeProject, /* aHeadless = */ true ) )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
+        e.set_error_message( fmt::format( "board could not be saved to '{}'",
+                                          boardPath.GetFullPath().ToStdString() ) );
+        return tl::unexpected( e );
+    }
 
     return Empty();
 }
