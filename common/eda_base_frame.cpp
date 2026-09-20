@@ -26,6 +26,7 @@
 #include <nlohmann/json.hpp>
 
 #include <advanced_config.h>
+#include <api/api_plugin_manager.h>
 #include <api/api_server.h>
 #include <bitmaps.h>
 #include <bitmap_store.h>
@@ -958,9 +959,14 @@ void EDA_BASE_FRAME::CommonSettingsChanged( int aFlags )
     bool running = Pgm().GetApiServer().Running();
 
     if( running && !settings->m_Api.enable_server )
+    {
         Pgm().GetApiServer().Stop();
+    }
     else if( !running && settings->m_Api.enable_server )
+    {
         Pgm().GetApiServer().Start();
+        Pgm().GetPluginManager().ReloadPlugins();
+    }
 
     if( m_fileHistory )
     {
