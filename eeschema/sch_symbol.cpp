@@ -4094,12 +4094,15 @@ std::vector<VECTOR2I> SCH_SYMBOL::GetConnectionPoints() const
 
 SCH_ITEM* SCH_SYMBOL::GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType )
 {
-    if( m_part )
+    const SCH_SHEET_PATH* sheet = Schematic() ? &Schematic()->CurrentSheet() : nullptr;
+    LIB_SYMBOL*           effectiveSymbol = const_cast<LIB_SYMBOL*>( GetEffectiveLibSymbol( sheet ) );
+
+    if( effectiveSymbol )
     {
         // Calculate the position relative to the symbol.
         VECTOR2I libPosition = aPosition - m_pos;
 
-        return m_part->LocateDrawItem( m_unit, m_bodyStyle, aType, libPosition, m_transform );
+        return effectiveSymbol->LocateDrawItem( m_unit, m_bodyStyle, aType, libPosition, m_transform );
     }
 
     return nullptr;
