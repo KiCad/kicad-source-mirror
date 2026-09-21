@@ -849,6 +849,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                 EDA_ITEMS newItems;
                 bool      keepAnnotations = cfg->m_DesignBlockChooserPanel.keep_annotations;
                 bool      placeAsGroup = cfg->m_DesignBlockChooserPanel.place_as_group;
+                bool      screenWasModified = screen->IsContentModified();
 
                 selectionTool->ClearSelection();
 
@@ -1012,6 +1013,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                 else
                 {
                     commit.Revert();
+                    screen->SetContentModified( screenWasModified );
                 }
 
                 selectionTool->RebuildSelection();
