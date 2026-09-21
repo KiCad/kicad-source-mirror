@@ -419,6 +419,15 @@ BOOST_AUTO_TEST_CASE( FactoryOverwrite )
     BOOST_CHECK_EQUAL( parsedRules[0]->GetRuleName(), "Test_2" );
 }
 
+// A pair with both ends negative is an error, not an empty pair.
+BOOST_AUTO_TEST_CASE( ValidateViaStyleBothNegative )
+{
+    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, 0, "BothNegative", -0.5, -0.2, 0.2, 0.4 );
+
+    BOOST_CHECK( !data.Validate().isValid );
+}
+
+
 BOOST_AUTO_TEST_CASE( ValidateAbsLengthTwoValid )
 {
     // Valid: min < opt < max, all positive

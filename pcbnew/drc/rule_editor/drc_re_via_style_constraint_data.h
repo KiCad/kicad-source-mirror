@@ -82,8 +82,8 @@ public:
     {
         VALIDATION_RESULT result;
 
-        bool hasDiameter = m_minViaDiameter > 0 || m_maxViaDiameter > 0;
-        bool hasHoleSize = m_minViaHoleSize > 0 || m_maxViaHoleSize > 0;
+        bool hasDiameter = m_minViaDiameter != 0 || m_maxViaDiameter != 0;
+        bool hasHoleSize = m_minViaHoleSize != 0 || m_maxViaHoleSize != 0;
 
         if( hasDiameter )
         {
