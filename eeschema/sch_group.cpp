@@ -503,14 +503,26 @@ double SCH_GROUP::Similarity( const SCH_ITEM& aOther ) const
 
     const SCH_GROUP& other = static_cast<const SCH_GROUP&>( aOther );
 
+    if( m_items.empty() )
+        return 0.0;
+
     double similarity = 0.0;
 
     for( EDA_ITEM* item : m_items )
     {
+        double maxSimilarity = 0.0;
+
         for( EDA_ITEM* otherItem : other.m_items )
         {
-            similarity += static_cast<SCH_ITEM*>( item )->Similarity( *static_cast<SCH_ITEM*>( otherItem ) );
+            double itemSimilarity = static_cast<SCH_ITEM*>( item )->Similarity( *static_cast<SCH_ITEM*>( otherItem ) );
+
+            maxSimilarity = std::max( maxSimilarity, itemSimilarity );
+
+            if( maxSimilarity == 1.0 )
+                break;
         }
+
+        similarity += maxSimilarity;
     }
 
     return similarity / m_items.size();
