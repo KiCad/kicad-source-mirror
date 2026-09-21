@@ -73,6 +73,14 @@ function( kicad_add_quicklook_extension target bundle_name plist entitlements )
         )
 
     set_property( TARGET ${target} PROPERTY KIQL_ENTITLEMENTS "${entitlements}" )
+
+    # macOS finds Quick Look extensions inside the host bundle, so running from the build tree
+    # needs them there; the install stages its own copy from this directory.
+    add_custom_command( TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "$<TARGET_BUNDLE_DIR:${target}>"
+            "${OSX_BUNDLE_BUILD_PLUGIN_DIR}/${bundle_name}.appex"
+        )
 endfunction()
 
 kicad_add_quicklook_extension( kicad_model_preview_appex KiCadModelPreview
