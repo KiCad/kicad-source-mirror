@@ -361,6 +361,23 @@ BOOST_AUTO_TEST_CASE( ValidateViaStyleInvalidNegativeValues )
     BOOST_CHECK( foundNegativeError );
 }
 
+// A negative optimum is an error, not an absent field.
+BOOST_AUTO_TEST_CASE( ValidateDiffPairRejectsNegativeOptimums )
+{
+    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA negWidth( 0, 0, "NegWidth", -0.2, 0.0, 0.2, 0.02, 0.0 );
+
+    BOOST_CHECK( !negWidth.Validate().isValid );
+
+    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA negGap( 0, 0, "NegGap", 0.2, 0.02, -0.2, 0.0, 0.0 );
+
+    BOOST_CHECK( !negGap.Validate().isValid );
+
+    // Zero still means the field was left empty.
+    DRC_RE_ROUTING_DIFF_PAIR_CONSTRAINT_DATA gapOnly( 0, 0, "GapOnly", 0.0, 0.0, 0.2, 0.02, 0.0 );
+
+    BOOST_CHECK( gapOnly.Validate().isValid );
+}
+
 BOOST_AUTO_TEST_CASE( FactoryOverwrite )
 {
     // Register a parser
