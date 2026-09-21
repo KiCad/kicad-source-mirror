@@ -539,6 +539,23 @@ BOOST_AUTO_TEST_CASE( PropertyParentFallback )
 }
 
 
+// A bool property must be readable in a rule.
+BOOST_AUTO_TEST_CASE( BoolPropertyEvaluation )
+{
+    PROPERTY_MANAGER::Instance().Rebuild();
+
+    BOARD brd;
+
+    FOOTPRINT fp( &brd );
+
+    testEvalExpr( wxT( "A.Do_not_Populate == 0" ), VAL( 1.0 ), false, &fp, &fp );
+
+    fp.SetDNP( true );
+
+    testEvalExpr( wxT( "A.Do_not_Populate == 1" ), VAL( 1.0 ), false, &fp, &fp );
+}
+
+
 // Reference resolves as a property with the fallback above, so the query normalizer
 // must leave it alone. getField() has no such fallback.
 BOOST_AUTO_TEST_CASE( FieldAliasNormalization )

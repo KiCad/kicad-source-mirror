@@ -431,7 +431,12 @@ protected:
 
         // We don't currently have a bool type, so change it to a numeric
         if( a.CheckType<bool>() )
+        {
+            if constexpr( std::is_same_v<T, bool> )
+                return a.RawAs<bool>();
+
             a = a.RawAs<bool>() ? 1 : 0;
+        }
 
         if ( !( std::is_enum<T>::value && a.CheckType<int>() ) && !a.CheckType<T>() )
             throw std::invalid_argument( "Invalid requested type" );
