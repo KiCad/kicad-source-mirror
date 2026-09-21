@@ -718,6 +718,9 @@ std::vector<DRC_RE_LOADED_PANEL_ENTRY> DRC_RULE_LOADER::LoadRule( const DRC_RULE
         entries.push_back( std::move( entry ) );
     }
 
+    for( DRC_RE_LOADED_PANEL_ENTRY& entry : entries )
+        entry.originalEntryCount = static_cast<int>( entries.size() );
+
     return entries;
 }
 

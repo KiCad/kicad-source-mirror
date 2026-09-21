@@ -50,6 +50,7 @@ struct DRC_RE_LOADED_PANEL_ENTRY
 
     wxString originalRuleText;
     bool     wasEdited = false;
+    int      originalEntryCount = 1;
 
     DRC_RE_LOADED_PANEL_ENTRY() = default;
 
