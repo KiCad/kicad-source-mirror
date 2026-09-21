@@ -202,12 +202,18 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
         {
             data->SetMinViaDiameter( toMM( viaDia->GetValue().Min() ) );
             data->SetMaxViaDiameter( toMM( viaDia->GetValue().Max() ) );
+
+            if( viaDia->GetValue().HasOpt() )
+                data->SetOptViaDiameter( toMM( viaDia->GetValue().Opt() ) );
         }
 
         if( holeSize )
         {
             data->SetMinViaHoleSize( toMM( holeSize->GetValue().Min() ) );
             data->SetMaxViaHoleSize( toMM( holeSize->GetValue().Max() ) );
+
+            if( holeSize->GetValue().HasOpt() )
+                data->SetOptViaHoleSize( toMM( holeSize->GetValue().Opt() ) );
         }
 
         if( aRule.m_Condition )

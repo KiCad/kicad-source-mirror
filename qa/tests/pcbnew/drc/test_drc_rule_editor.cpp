@@ -443,6 +443,32 @@ BOOST_AUTO_TEST_CASE( FactoryOverwrite )
     BOOST_CHECK_EQUAL( parsedRules[0]->GetRuleName(), "Test_2" );
 }
 
+// Editing a via style rule must not delete the optimum the panel cannot show.
+BOOST_AUTO_TEST_CASE( EditedViaStyleRuleKeepsOptimums )
+{
+    wxString rules = wxS( "(version 1)\n"
+                          "(rule ViaOpt\n"
+                          "  (constraint via_diameter (min 0.4mm) (opt 0.8mm) (max 1.2mm))\n"
+                          "  (constraint hole_size (min 0.2mm) (opt 0.4mm) (max 0.6mm)))\n" );
+
+    DRC_RULE_LOADER loader;
+
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( rules );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 1 );
+
+    entries[0].wasEdited = true;
+
+    DRC_RULE_SAVER saver;
+    wxString       saved = saver.GenerateRulesText( entries, nullptr );
+
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "(opt 0.8mm)" ) ) != wxString::npos,
+                         "the via diameter optimum was dropped: " << saved.ToStdString() );
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "(opt 0.4mm)" ) ) != wxString::npos,
+                         "the hole size optimum was dropped: " << saved.ToStdString() );
+}
+
+
 BOOST_AUTO_TEST_CASE( ValidateAbsLengthTwoValid )
 {
     // Valid: min < opt < max, all positive
