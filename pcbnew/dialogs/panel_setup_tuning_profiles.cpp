@@ -189,3 +189,27 @@ std::vector<wxString> PANEL_SETUP_TUNING_PROFILES::GetDelayProfileNames() const
 
     return names;
 }
+
+
+std::map<wxString, wxString> PANEL_SETUP_TUNING_PROFILES::TakeProfileRenames()
+{
+    std::map<wxString, wxString> renames;
+
+    for( size_t i = 0; i < m_tuningProfiles->GetPageCount(); ++i )
+    {
+        auto* panel = static_cast<PANEL_SETUP_TUNING_PROFILE_INFO*>( m_tuningProfiles->GetPage( i ) );
+
+        const wxString lastSyncedName = panel->GetLastSyncedName();
+        const wxString currentName = panel->GetProfileName();
+
+        if( currentName.IsEmpty() )
+            continue;
+
+        if( !lastSyncedName.IsEmpty() && lastSyncedName != currentName )
+            renames[lastSyncedName] = currentName;
+
+        panel->SetLastSyncedName( currentName );
+    }
+
+    return renames;
+}

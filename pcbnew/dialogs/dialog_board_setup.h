@@ -50,6 +50,8 @@ protected:
     void onPageChanged( wxBookCtrlEvent& aEvent ) override;
     void onAuxiliaryAction( wxCommandEvent& aEvent ) override;
 
+    bool TransferDataFromWindow() override;
+
     PCB_EDIT_FRAME*                     m_frame;
     PANEL_SETUP_LAYERS*                 m_layers;
     PANEL_SETUP_BOARD_FINISH*           m_boardFinish;

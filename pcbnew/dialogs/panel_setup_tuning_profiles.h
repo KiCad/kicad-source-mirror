@@ -54,6 +54,9 @@ public:
     /// Returns all configured tuning profile names. Used by the netclass setup panel
     std::vector<wxString> GetDelayProfileNames() const;
 
+    /// Returns profile renames since the last call. Used to update netclass references
+    std::map<wxString, wxString> TakeProfileRenames();
+
     /// Load configuration from the given settings object
     void ImportSettingsFrom( const std::shared_ptr<TUNING_PROFILES>& aOtherParameters );
 

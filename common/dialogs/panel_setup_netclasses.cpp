@@ -1009,3 +1009,17 @@ void PANEL_SETUP_NETCLASSES::UpdateDelayProfileNames( const std::vector<wxString
     attr->SetEditor( new wxGridCellChoiceEditor( profileNames, false ) );
     m_netclassGrid->SetColAttr( GRID_DELAY_PROFILE, attr );
 }
+
+
+void PANEL_SETUP_NETCLASSES::RemapDelayProfileNames( const std::map<wxString, wxString>& aRenames ) const
+{
+    for( int row = 0; row < m_netclassGrid->GetNumberRows(); ++row )
+    {
+        const wxString profileName = m_netclassGrid->GetCellValue( row, GRID_DELAY_PROFILE );
+
+        auto it = aRenames.find( profileName );
+
+        if( it != aRenames.end() )
+            m_netclassGrid->SetCellValue( row, GRID_DELAY_PROFILE, it->second );
+    }
+}

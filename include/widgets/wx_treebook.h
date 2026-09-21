@@ -37,6 +37,8 @@ public:
                          const wxString& text, bool bSelect = false, int imageId = NO_IMAGE );
 
     wxWindow* ResolvePage( size_t aPage );
+
+    wxWindow* GetResolvedPage( size_t aPage );
 };
 
 
