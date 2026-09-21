@@ -72,6 +72,12 @@ public:
     {
         VALIDATION_RESULT result;
 
+        if( m_optWidth < 0 )
+            result.AddError( _( "Optimum Width must be greater than or equal to 0" ) );
+
+        if( m_optGap < 0 )
+            result.AddError( _( "Optimum Gap must be greater than or equal to 0" ) );
+
         bool hasWidth = m_optWidth > 0;
 
         if( hasWidth )
