@@ -342,7 +342,9 @@ void FIELDS_TABLE_DATA_MODEL_BASE::RenameColumn( int aCol, const wxString& newNa
 void FIELDS_TABLE_DATA_MODEL_BASE::SetColLabelValue( int aCol, const wxString& aLabel )
 {
     wxCHECK_RET( aCol >= 0 && aCol < static_cast<int>( m_cols.size() ), "Invalid Column Number" );
+
     m_cols[aCol].m_label = aLabel;
+    FinalizeTextVarExpansion( m_cols[aCol].m_label, FOR_GUI );
 }
 
 

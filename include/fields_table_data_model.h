@@ -410,6 +410,7 @@ public:
         commitPendingGridChanges();
 
         m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false } );
+        FinalizeTextVarExpansion( m_cols.back().m_label, FOR_GUI );
 
         for( const ITEM_TYPE& item : getAllItems() )
             initializeDataStoreItemField( item, m_cols.back() );
