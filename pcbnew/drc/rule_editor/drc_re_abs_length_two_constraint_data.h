@@ -92,8 +92,8 @@ public:
 
         if( result.isValid )
         {
-            if( GetMinimumLength() <= 0 )
-                result.AddError( _( "Tolerance is too large: resulting minimum length is not positive" ) );
+            if( GetMinimumLength() < 0 )
+                result.AddError( _( "Tolerance is too large: resulting minimum length is negative" ) );
         }
 
         return result;
