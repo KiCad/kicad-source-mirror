@@ -28,11 +28,10 @@
 class PSEUDO_ACTION : public TOOL_ACTION
 {
 public:
-    PSEUDO_ACTION( const wxString& aLabel, int aHotKey, int aHotKeyAlt = 0 )
+    PSEUDO_ACTION( const wxString& aLabel, int aHotKey, int aHotKeyAlt = 0 ) :
+            TOOL_ACTION( aHotKey, aHotKeyAlt )
     {
         m_friendlyName = aLabel;
-        m_hotKey = aHotKey;
-        m_hotKeyAlt = aHotKeyAlt;
     }
 };
 

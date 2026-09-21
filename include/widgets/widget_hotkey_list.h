@@ -79,6 +79,8 @@ public:
      */
     static long MapKeypressToKeycode( const wxKeyEvent& aEvent );
 
+    bool IsReservedHotkey( long aKey, wxString* aKeyName = nullptr ) const;
+
 protected:
     /**
      * Prompt the user for a new hotkey given a list item.

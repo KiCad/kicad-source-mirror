@@ -370,14 +370,18 @@ void ACTION_MANAGER::processHotKey( TOOL_ACTION*                                
                                     const std::map<std::string, int>&                 aLegacyMap,
                                     const std::map<std::string, std::pair<int, int>>& aHotKeyMap )
 {
-    aAction->m_hotKey = aAction->m_defaultHotKey;
+    int hotkey = aAction->m_defaultHotKey;
+    int alternate = aAction->m_defaultHotKeyAlt;
 
     if( !aAction->m_legacyName.empty() && aLegacyMap.count( aAction->m_legacyName ) )
-        aAction->SetHotKey( aLegacyMap.at( aAction->m_legacyName ) );
+        hotkey = aLegacyMap.at( aAction->m_legacyName );
 
     if( aHotKeyMap.count( aAction->m_name ) )
     {
         std::pair<int, int> keys = aHotKeyMap.at( aAction->m_name );
-        aAction->SetHotKey( keys.first, keys.second );
+        hotkey = keys.first;
+        alternate = keys.second;
     }
+
+    aAction->SetHotKey( hotkey, alternate );
 }

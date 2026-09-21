@@ -65,6 +65,18 @@ TOOL_ACTION::TOOL_ACTION() :
 }
 
 
+TOOL_ACTION::TOOL_ACTION( int aDefaultHotKey, int aDefaultHotKeyAlt ) :
+        m_scope( AS_GLOBAL ),
+        m_group( std::nullopt ),
+        m_defaultHotKey( aDefaultHotKey ),
+        m_defaultHotKeyAlt( aDefaultHotKeyAlt ),
+        m_id( -1 ),
+        m_flags( AF_NONE )
+{
+    SetHotKey( aDefaultHotKey, aDefaultHotKeyAlt );
+}
+
+
 TOOL_ACTION::TOOL_ACTION( const TOOL_ACTION_ARGS& aArgs ) :
         m_name( aArgs.m_name.value_or( "" ) ),
         m_scope( aArgs.m_scope.value_or( AS_CONTEXT ) ),

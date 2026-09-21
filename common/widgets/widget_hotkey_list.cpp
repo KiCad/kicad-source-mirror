@@ -339,20 +339,37 @@ void WIDGET_HOTKEY_LIST::updateFromClientData()
 
 void WIDGET_HOTKEY_LIST::changeHotkey( HOTKEY& aHotkey, long aKey, bool alternate )
 {
+    int& keycode = alternate ? aHotkey.m_EditKeycodeAlt : aHotkey.m_EditKeycode;
+
+    if( keycode == aKey )
+        return;
+
+    if( aKey == 0 )
+    {
+        keycode = 0;
+        return;
+    }
+
     // See if this key code is handled in hotkeys names list
     bool exists;
     KeyNameFromKeyCode( aKey, &exists );
 
-    if( exists && aHotkey.m_EditKeycode != aKey )
-    {
-        if( aKey == 0 || resolveKeyConflicts( aHotkey.m_Actions[ 0 ], aKey ) )
-        {
-            if( alternate )
-                aHotkey.m_EditKeycodeAlt = aKey;
-            else
-                aHotkey.m_EditKeycode = aKey;
-        }
-    }
+    if( exists && resolveKeyConflicts( aHotkey.m_Actions[0], aKey ) )
+        keycode = aKey;
+}
+
+
+bool WIDGET_HOTKEY_LIST::IsReservedHotkey( long aKey, wxString* aKeyName ) const
+{
+    auto it = m_reservedHotkeys.find( aKey );
+
+    if( it == m_reservedHotkeys.end() )
+        return false;
+
+    if( aKeyName )
+        *aKeyName = it->second;
+
+    return true;
 }
 
 
@@ -372,13 +389,13 @@ void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem, int aEditId )
     // An empty optional means don't change the key
     if( key.has_value() )
     {
-        auto it = m_reservedHotkeys.find( key.value() );
+        wxString reservedKeyName;
 
-        if( it != m_reservedHotkeys.end() )
+        if( IsReservedHotkey( key.value(), &reservedKeyName ) )
         {
             wxString msg = wxString::Format( _( "'%s' is a reserved hotkey in KiCad and cannot "
                                                 "be assigned." ),
-                                             it->second );
+                                             reservedKeyName );
 
             DisplayErrorMessage( this, msg );
             return;
@@ -402,7 +419,7 @@ void WIDGET_HOTKEY_LIST::resetItem( wxTreeListItem aItem, int aResetId )
     if( aResetId == ID_RESET )
     {
         changeHotkey( changed_hk, changed_hk.m_Actions[0]->GetHotKey(), false );
-        changeHotkey( changed_hk, changed_hk.m_Actions[0]->GetHotKey(), true );
+        changeHotkey( changed_hk, changed_hk.m_Actions[0]->GetHotKeyAlt(), true );
     }
     else if( aResetId == ID_CLEAR )
     {

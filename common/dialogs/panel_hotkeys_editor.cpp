@@ -18,6 +18,7 @@
  */
 
 #include <advanced_config.h>
+#include <confirm.h>
 #include <gestfich.h>
 #include <hotkeys_basic.h>
 #include <kiway_player.h>
@@ -31,6 +32,8 @@
 #include <wx/srchctrl.h>
 #include <wx/txtstrm.h>
 #include <wx/wfstream.h>
+
+#include <set>
 
 
 /**
@@ -206,16 +209,47 @@ void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
     m_frame->SetMruPath( wxFileName( filename ).GetPath() );
 
     // Overlay the imported hotkeys onto the hotkey store
+    std::set<wxString> ignoredReservedKeys;
+
     for( HOTKEY_SECTION& section: m_hotkeyStore.GetSections() )
     {
         for( HOTKEY& hotkey: section.m_HotKeys )
         {
-            if( importedHotKeys.count( hotkey.m_Actions[ 0 ]->GetName() ) )
+            auto imported = importedHotKeys.find( hotkey.m_Actions[0]->GetName() );
+
+            if( imported != importedHotKeys.end() )
             {
-                hotkey.m_EditKeycode    = importedHotKeys[ hotkey.m_Actions[ 0 ]->GetName() ].first;
-                hotkey.m_EditKeycodeAlt = importedHotKeys[ hotkey.m_Actions[ 0 ]->GetName() ].second;
+                auto importKey = [&]( int aKey, int& aDestination )
+                {
+                    wxString reservedKeyName;
+
+                    if( m_hotkeyListCtrl->IsReservedHotkey( aKey, &reservedKeyName ) )
+                        ignoredReservedKeys.insert( reservedKeyName );
+                    else
+                        aDestination = aKey;
+                };
+
+                importKey( imported->second.first, hotkey.m_EditKeycode );
+                importKey( imported->second.second, hotkey.m_EditKeycodeAlt );
             }
         }
+    }
+
+    if( !ignoredReservedKeys.empty() )
+    {
+        wxString keyNames;
+
+        for( const wxString& keyName : ignoredReservedKeys )
+        {
+            if( !keyNames.IsEmpty() )
+                keyNames += wxS( ", " );
+
+            keyNames += keyName;
+        }
+
+        DisplayErrorMessage( this, wxString::Format( _( "The imported file assigned reserved hotkeys "
+                                                        "(%s). These assignments were ignored." ),
+                                                     keyNames ) );
     }
 
     m_hotkeyListCtrl->TransferDataToControl();

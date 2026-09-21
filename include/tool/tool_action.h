@@ -482,6 +482,7 @@ public:
 
 protected:
     TOOL_ACTION();
+    TOOL_ACTION( int aDefaultHotKey, int aDefaultHotKeyAlt );
 
     friend class ACTION_MANAGER;
 
