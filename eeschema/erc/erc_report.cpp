@@ -158,7 +158,7 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 {
     std::ofstream jsonFileStream( aFullFileName.fn_str() );
 
-    UNITS_PROVIDER            unitsProvider( pcbIUScale, m_reportUnits );
+    UNITS_PROVIDER            unitsProvider( schIUScale, m_reportUnits );
     std::map<KIID, EDA_ITEM*> itemMap;
 
     RC_JSON::ERC_REPORT reportHead;
