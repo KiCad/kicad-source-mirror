@@ -252,7 +252,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 solderMaskDirty = true;
             }
 
-            if( boardItem->GetLayer() == Edge_Cuts )
+            BOARD_ITEM* preEditItem = nullptr;
+
+            if( entry.m_copy && entry.m_copy->IsBOARD_ITEM() )
+                preEditItem = static_cast<BOARD_ITEM*>( entry.m_copy );
+
+            if( boardItem->GetLayer() == Edge_Cuts || ( preEditItem && preEditItem->GetLayer() == Edge_Cuts ) )
             {
                 updateBoardBoundingBox = true;
             }
