@@ -293,6 +293,7 @@ void DIALOG_DRC_RULE_EDITOR::LoadExistingRules()
             ruleData->SetParentId( parentId );
             ruleData->SetOriginalRuleText( entry.originalRuleText );
             ruleData->SetWasEdited( entry.wasEdited );
+            ruleData->SetOriginalEntryCount( entry.originalEntryCount );
             ruleData->SetLayerSource( entry.layerSource );
 
             if( !entry.layerSource.IsEmpty() )
@@ -1340,6 +1341,7 @@ void DIALOG_DRC_RULE_EDITOR::SaveRulesToFile()
         entry.condition = data->GetRuleCondition();
         entry.originalRuleText = data->GetOriginalRuleText();
         entry.wasEdited = data->WasEdited();
+        entry.originalEntryCount = data->GetOriginalEntryCount();
         entry.severity = data->GetSeverity();
         entry.layerCondition = LSET( data->GetLayers() );
         entry.layerSource = data->GetLayerSource();

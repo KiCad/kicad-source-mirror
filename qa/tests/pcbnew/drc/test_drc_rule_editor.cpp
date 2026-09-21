@@ -337,6 +337,46 @@ BOOST_AUTO_TEST_CASE( ValidateViaStyleInvalidNegativeValues )
     BOOST_CHECK( foundNegativeError );
 }
 
+// Deleting one entry of a rule the loader split must not bring it back on save.
+BOOST_AUTO_TEST_CASE( DeletedSplitEntryStaysDeleted )
+{
+    wxString rules = wxS( "(version 1)\n"
+                          "(rule \"Combo\"\n"
+                          "  (condition \"A.NetClass == 'HV'\")\n"
+                          "  (constraint clearance (min 0.5mm))\n"
+                          "  (constraint track_width (opt 0.3mm)))\n" );
+
+    DRC_RULE_LOADER loader;
+
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFromString( rules );
+
+    BOOST_REQUIRE_EQUAL( entries.size(), 2 );
+
+    // The user deletes the sibling that does not hold the original rule text.
+    auto deleted = std::find_if( entries.begin(), entries.end(),
+                                 []( const DRC_RE_LOADED_PANEL_ENTRY& aEntry )
+                                 {
+                                     return aEntry.originalRuleText.IsEmpty();
+                                 } );
+
+    BOOST_REQUIRE( deleted != entries.end() );
+    entries.erase( deleted );
+
+    DRC_RULE_SAVER saver;
+    wxString       saved = saver.GenerateRulesText( entries, nullptr );
+
+    int constraints = 0;
+
+    for( size_t pos = saved.find( wxS( "(constraint" ) ); pos != wxString::npos;
+         pos = saved.find( wxS( "(constraint" ), pos + 1 ) )
+    {
+        constraints++;
+    }
+
+    BOOST_CHECK_EQUAL( constraints, 1 );
+}
+
+
 // A negative optimum is an error, not an absent field.
 BOOST_AUTO_TEST_CASE( ValidateDiffPairRejectsNegativeOptimums )
 {
