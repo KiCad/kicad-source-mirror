@@ -136,26 +136,6 @@ BOOST_AUTO_TEST_CASE( InverseApplyRoundTrip )
 }
 
 
-BOOST_AUTO_TEST_CASE( InvertExactWhenUniformOrAxisAligned )
-{
-    // Invert is exact only for uniform scale or zero rotation.
-    const std::vector<TRANSFORM_TRS> exactlyInvertible = {
-        TRANSFORM_TRS( VECTOR2I( 100, 200 ), EDA_ANGLE( 30.0, DEGREES_T ), 2.0, 2.0 ),
-        TRANSFORM_TRS( VECTOR2I( -50, 75 ), ANGLE_0, 2.0, 0.5 ),
-        TRANSFORM_TRS( VECTOR2I( 0, 0 ), EDA_ANGLE( 45.0, DEGREES_T ), 1.0, 1.0 ),
-    };
-
-    const VECTOR2I probe( 250, -125 );
-
-    for( const TRANSFORM_TRS& t : exactlyInvertible )
-    {
-        TRANSFORM_TRS inv = t.Invert();
-        VECTOR2I round = inv.Apply( t.Apply( probe ) );
-        CHECK_VEC_NEAR( round, probe, IUNIT_TOL );
-    }
-}
-
-
 BOOST_AUTO_TEST_CASE( ComposeWithTranslateOnlyOuter )
 {
     TRANSFORM_TRS inner( VECTOR2I( 100, 50 ), EDA_ANGLE( 30.0, DEGREES_T ), 2.0, 0.5 );

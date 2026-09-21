@@ -3812,8 +3812,8 @@ SHAPE_LINE_CHAIN BOARD_BUILDER::buildSegmentChain( uint32_t aStartKey, const TRA
 
             if( start == end )
             {
-                center = aXform.Apply( center );
-                start = aXform.Apply( start );
+                center = aXform.InverseApply( center );
+                start = aXform.InverseApply( start );
 
                 SHAPE_ARC shapeArc( center, start, ANGLE_360 );
                 outline.Append( shapeArc );
@@ -3838,9 +3838,9 @@ SHAPE_LINE_CHAIN BOARD_BUILDER::buildSegmentChain( uint32_t aStartKey, const TRA
                 VECTOR2I mid = start;
                 RotatePoint( mid, center, -arcAngle / 2.0 );
 
-                start = aXform.Apply( start );
-                mid = aXform.Apply( mid );
-                end = aXform.Apply( end );
+                start = aXform.InverseApply( start );
+                mid = aXform.InverseApply( mid );
+                end = aXform.InverseApply( end );
 
                 SHAPE_ARC shapeArc( start, mid, end, 0 );
                 outline.Append( shapeArc );
@@ -3854,12 +3854,12 @@ SHAPE_LINE_CHAIN BOARD_BUILDER::buildSegmentChain( uint32_t aStartKey, const TRA
         case 0x17:
         {
             const auto& seg = BlockDataAs<BLK_0x15_16_17_SEGMENT>( *block );
-            VECTOR2I    start = aXform.Apply( scale( { seg.m_StartX, seg.m_StartY } ) );
+            VECTOR2I    start = aXform.InverseApply( scale( { seg.m_StartX, seg.m_StartY } ) );
 
             if( outline.PointCount() == 0 || outline.CLastPoint() != start )
                 outline.Append( start );
 
-            VECTOR2I end = aXform.Apply( scale( { seg.m_EndX, seg.m_EndY } ) );
+            VECTOR2I end = aXform.InverseApply( scale( { seg.m_EndX, seg.m_EndY } ) );
             outline.Append( end );
             currentKey = seg.m_Next;
             break;
@@ -3892,7 +3892,7 @@ SHAPE_LINE_CHAIN BOARD_BUILDER::buildOutline( const BLK_0x0E_RECT& aRect, const 
     outline.Rotate( angle, topLeft );
 
     for( int i = 0; i < outline.PointCount(); i++ )
-        outline.SetPoint( i, aXform.Apply( outline.CPoint( i ) ) );
+        outline.SetPoint( i, aXform.InverseApply( outline.CPoint( i ) ) );
 
     return outline;
 }
@@ -3916,7 +3916,7 @@ SHAPE_LINE_CHAIN BOARD_BUILDER::buildOutline( const BLK_0x24_RECT& aRect, const 
     outline.Rotate( angle, topLeft );
 
     for( int i = 0; i < outline.PointCount(); i++ )
-        outline.SetPoint( i, aXform.Apply( outline.CPoint( i ) ) );
+        outline.SetPoint( i, aXform.InverseApply( outline.CPoint( i ) ) );
 
     return outline;
 }
@@ -4060,11 +4060,11 @@ std::unique_ptr<ZONE> BOARD_BUILDER::buildZone( const BLOCK_BASE&               
     }
 
     // Allegro area geometry is board-absolute. Footprint zones store local outlines,
-    // so invert the parent footprint transform when one is present.
+    // so undo the parent footprint transform when one is present.
     TRANSFORM_TRS xform;
 
     if( FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( &aParent ) )
-        xform = fp->GetTransform().Invert();
+        xform = fp->GetTransform();
 
     SHAPE_POLY_SET zoneShape = tryBuildZoneShape( aBoundaryBlock, xform );
 
