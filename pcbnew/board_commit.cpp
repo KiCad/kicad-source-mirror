@@ -489,11 +489,15 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                     if( m_isFootprintEditor && boardItem->Type() != PCB_MARKER_T )
                     {
                         if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
+                        {
                             parentFP->Remove( boardItem );
+                            connectivity->Remove( boardItem );
+                        }
                     }
                     else if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
                     {
                         parentFP->Remove( boardItem );
+                        connectivity->Remove( boardItem );
                     }
                     else
                     {
@@ -914,11 +918,15 @@ void BOARD_COMMIT::Revert()
             if( m_isFootprintEditor )
             {
                 if( FOOTPRINT* parentFP = board->GetFirstFootprint() )
+                {
                     parentFP->Add( boardItem, ADD_MODE::INSERT );
+                    connectivity->Add( boardItem );
+                }
             }
             else if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
             {
                 parentFP->Add( boardItem, ADD_MODE::INSERT );
+                connectivity->Add( boardItem );
             }
             else
             {
