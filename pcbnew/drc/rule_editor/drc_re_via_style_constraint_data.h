@@ -83,8 +83,8 @@ public:
     {
         VALIDATION_RESULT result;
 
-        bool hasDiameter = m_minViaDiameter > 0 || m_maxViaDiameter > 0;
-        bool hasHoleSize = m_minViaHoleSize > 0 || m_maxViaHoleSize > 0;
+        bool hasDiameter = m_minViaDiameter != 0 || m_maxViaDiameter != 0;
+        bool hasHoleSize = m_minViaHoleSize != 0 || m_maxViaHoleSize != 0;
 
         if( hasDiameter )
         {
@@ -113,18 +113,6 @@ public:
         if( !hasDiameter && !hasHoleSize )
             result.AddError( _( "At least one constraint must be specified" ) );
 
-        if( m_optViaDiameter > 0 && ( m_optViaDiameter < m_minViaDiameter || m_optViaDiameter > m_maxViaDiameter ) )
-        {
-            result.AddError( wxString::Format( _( "The rule's optimum via diameter (%smm) is outside the new limits" ),
-                                               formatDouble( m_optViaDiameter ) ) );
-        }
-
-        if( m_optViaHoleSize > 0 && ( m_optViaHoleSize < m_minViaHoleSize || m_optViaHoleSize > m_maxViaHoleSize ) )
-        {
-            result.AddError( wxString::Format( _( "The rule's optimum via hole size (%smm) is outside the new limits" ),
-                                               formatDouble( m_optViaHoleSize ) ) );
-        }
-
         return result;
     }
 
@@ -139,7 +127,7 @@ public:
 
         if( m_minViaDiameter > 0 && m_maxViaDiameter > 0 )
         {
-            if( m_optViaDiameter > 0 )
+            if( m_optViaDiameter >= m_minViaDiameter && m_optViaDiameter <= m_maxViaDiameter )
             {
                 clauses.push_back( wxString::Format( wxS( "(constraint via_diameter (min %s) (opt %s) (max %s))" ),
                                                      formatDimension( m_minViaDiameter ),
@@ -156,7 +144,7 @@ public:
 
         if( m_minViaHoleSize > 0 && m_maxViaHoleSize > 0 )
         {
-            if( m_optViaHoleSize > 0 )
+            if( m_optViaHoleSize >= m_minViaHoleSize && m_optViaHoleSize <= m_maxViaHoleSize )
             {
                 clauses.push_back( wxString::Format(
                         wxS( "(constraint hole_size (min %s) (opt %s) (max %s))" ), formatDimension( m_minViaHoleSize ),

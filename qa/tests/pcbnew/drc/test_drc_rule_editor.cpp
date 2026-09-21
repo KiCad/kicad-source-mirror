@@ -466,6 +466,29 @@ BOOST_AUTO_TEST_CASE( EditedViaStyleRuleKeepsOptimums )
                          "the via diameter optimum was dropped: " << saved.ToStdString() );
     BOOST_CHECK_MESSAGE( saved.find( wxS( "(opt 0.4mm)" ) ) != wxString::npos,
                          "the hole size optimum was dropped: " << saved.ToStdString() );
+
+    auto data = std::dynamic_pointer_cast<DRC_RE_VIA_STYLE_CONSTRAINT_DATA>( entries[0].constraintData );
+
+    BOOST_REQUIRE( data );
+    data->SetMinViaDiameter( 0.9 );
+
+    BOOST_CHECK( data->Validate().isValid );
+
+    saved = saver.GenerateRulesText( entries, nullptr );
+
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "(constraint via_diameter (min 0.9mm) (max 1.2mm))" ) ) != wxString::npos,
+                         "the voided optimum was not dropped from the clause: " << saved.ToStdString() );
+    BOOST_CHECK_MESSAGE( saved.find( wxS( "(opt 0.4mm)" ) ) != wxString::npos,
+                         "the untouched hole size optimum must survive: " << saved.ToStdString() );
+}
+
+
+// A pair with both ends negative is an error, not an empty pair.
+BOOST_AUTO_TEST_CASE( ValidateViaStyleBothNegative )
+{
+    DRC_RE_VIA_STYLE_CONSTRAINT_DATA data( 0, 0, "BothNegative", -0.5, -0.2, 0.2, 0.4 );
+
+    BOOST_CHECK( !data.Validate().isValid );
 }
 
 
