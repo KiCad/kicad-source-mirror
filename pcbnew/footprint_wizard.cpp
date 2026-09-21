@@ -147,7 +147,17 @@ tl::expected<FOOTPRINT*, wxString> FOOTPRINT_WIZARD_MANAGER::Generate( FOOTPRINT
     int ret = manager.InvokeActionSync( aWizard->Identifier(), args, &out, &err );
 
     if( ret != 0 )
-        return tl::unexpected( wxString::Format( _( "Could not launch footprint wizard '%s'" ), aWizard->Info().meta.name ) );
+    {
+        wxString error = wxString::Format( _( "Could not launch footprint wizard '%s'" ), aWizard->Info().meta.name );
+
+        err.Trim();
+        err.Trim( false );
+
+        if( !err.IsEmpty() )
+            error << wxS( "\n\n" ) << err;
+
+        return tl::unexpected( error );
+    }
 
     kiapi::common::types::WizardGeneratedContent response;
 
