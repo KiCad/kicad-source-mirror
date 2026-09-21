@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-07-29 22:08+0000\n"
+"PO-Revision-Date: 2026-09-22 00:37+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
 "source/cs/>\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -174,9 +174,9 @@ msgid "Loading 3D models..."
 msgstr "Načítání 3D modelů..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1145
-#, fuzzy, c-format
+#, c-format
 msgid "Load completed in %.3f s"
-msgstr "Dokončeno za %s"
+msgstr "Načítání dokončeno za %.3f s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1172
 #, fuzzy
@@ -2131,9 +2131,8 @@ msgid "invalid plugin runtime: %s"
 msgstr "Neplatné jméno vývodu"
 
 #: common/api/api_plugin.cpp:105
-#, fuzzy
 msgid "could not read plugin configuration file"
-msgstr "Nelze získat přístup ke konfiguraci repozitáře"
+msgstr "nelze načíst konfigurační soubor pluginu"
 
 #: common/api/api_plugin.cpp:125
 #, c-format
@@ -2166,9 +2165,9 @@ msgid "Plugin '%s': %s"
 msgstr "Plugin '%s': %s"
 
 #: common/api/api_plugin_manager.cpp:121
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading plugin '%s'"
-msgstr "Chyba při načítání knihovny '%s'"
+msgstr "Chyba při načítání pluginu '%s'"
 
 #: common/api/api_plugin_manager.cpp:143
 #, fuzzy, c-format
@@ -2205,9 +2204,9 @@ msgstr "nelze spustit plugin"
 
 #: common/api/api_plugin_manager.cpp:777 common/api/api_plugin_manager.cpp:857
 #: common/api/api_plugin_manager.cpp:947
-#, fuzzy, c-format
+#, c-format
 msgid "error code %d"
-msgstr "Kód chyby: %d"
+msgstr "chybový kód %d"
 
 #: common/api/api_plugin_manager.cpp:780 common/api/api_plugin_manager.cpp:860
 #: common/api/api_plugin_manager.cpp:950
@@ -2545,9 +2544,9 @@ msgid "Configured design block libraries:"
 msgstr "Načítání knihoven návrhových bloků"
 
 #: common/design_block_library_adapter.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "and %d more"
-msgstr "%s, %s a %d více"
+msgstr "a %d dalších"
 
 #: common/design_block_library_adapter.cpp:247
 msgid "project"
