@@ -342,8 +342,9 @@ bool isExprIdentChar( wxChar aCh )
 
 std::set<wxString> getQueryableFootprintFieldNames( const std::vector<PROPERTY_ROW_DATA>& aRows )
 {
-    std::set<wxString> fieldNames = { _HKI( "Reference" ), _HKI( "Value" ), _HKI( "Datasheet" ),
-                                      _HKI( "Description" ) };
+    // Reference must stay a property lookup so A.Reference still matches R1's pads.
+    // getField() only answers on the footprint itself.
+    std::set<wxString> fieldNames = { _HKI( "Value" ), _HKI( "Datasheet" ), _HKI( "Description" ) };
 
     for( const PROPERTY_ROW_DATA& row : aRows )
     {
@@ -373,6 +374,9 @@ bool matchAliasAt( const wxString& aExpression, size_t aPos, const wxString& aAl
 
     return true;
 }
+
+
+} // namespace
 
 
 wxString normalizeQueryFieldAliases( const wxString& aExpression, const std::vector<PROPERTY_ROW_DATA>& aRows )
@@ -444,6 +448,9 @@ wxString normalizeQueryFieldAliases( const wxString& aExpression, const std::vec
     return normalized;
 }
 
+
+namespace
+{
 
 bool queryUsesUnsupportedPairwiseSyntax( const wxString& aExpression )
 {

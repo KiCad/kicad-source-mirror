@@ -42,6 +42,7 @@
 #include <project/net_settings.h>
 #include <properties/property.h>
 #include <properties/property_mgr.h>
+#include <dialogs/dialog_find_by_properties.h>
 
 BOOST_AUTO_TEST_SUITE( Libeval_Compiler )
 
@@ -517,6 +518,47 @@ BOOST_AUTO_TEST_CASE( ParentNavigation )
     expectCompileError( wxT( "A.Parent.bogusProperty" ) );
     expectCompileError( wxT( "A.bogus.Reference == 'J1'" ) );
     expectCompileError( wxT( "L.Parent.Type == 'Footprint'" ) );
+}
+
+
+// A property missing on a child item resolves against its parent footprint.
+BOOST_AUTO_TEST_CASE( PropertyParentFallback )
+{
+    PROPERTY_MANAGER::Instance().Rebuild();
+
+    BOARD brd;
+
+    FOOTPRINT fp( &brd );
+    fp.SetReference( wxT( "J1" ) );
+
+    PCB_TEXT* text = new PCB_TEXT( &fp );
+    fp.Add( text );
+
+    testEvalExpr( wxT( "A.Reference == 'J1'" ), VAL( 1.0 ), false, text, text );
+    testEvalExpr( wxT( "A.Reference == 'J2'" ), VAL( 0.0 ), false, text, text );
+}
+
+
+// Reference resolves as a property with the fallback above, so the query normalizer
+// must leave it alone. getField() has no such fallback.
+BOOST_AUTO_TEST_CASE( FieldAliasNormalization )
+{
+    std::vector<PROPERTY_ROW_DATA> rows;
+
+    BOOST_CHECK_EQUAL( normalizeQueryFieldAliases( wxS( "A.Reference == 'R1'" ), rows ), wxS( "A.Reference == 'R1'" ) );
+
+    // A field with no property behind it needs the rewrite to resolve at all.
+    BOOST_CHECK_EQUAL( normalizeQueryFieldAliases( wxS( "A.Value == 'X'" ), rows ),
+                       wxS( "A.getField('Value') == 'X'" ) );
+
+    PROPERTY_ROW_DATA customField;
+    customField.propertyName = wxS( "My Field" );
+    customField.property = nullptr;
+    customField.matchMode = PROPERTY_MATCH_MODE::MATCHING;
+    customField.isMixed = false;
+
+    BOOST_CHECK_EQUAL( normalizeQueryFieldAliases( wxS( "A.My_Field == 'X'" ), { customField } ),
+                       wxS( "A.getField('My Field') == 'X'" ) );
 }
 
 

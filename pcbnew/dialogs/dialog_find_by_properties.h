@@ -38,6 +38,8 @@ struct PROPERTY_ROW_DATA
     bool                isMixed;
 };
 
+wxString normalizeQueryFieldAliases( const wxString& aExpression, const std::vector<PROPERTY_ROW_DATA>& aRows );
+
 class DIALOG_FIND_BY_PROPERTIES : public DIALOG_FIND_BY_PROPERTIES_BASE
 {
 public:
