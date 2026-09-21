@@ -3672,6 +3672,9 @@ void SCH_PAINTER::draw( const SCH_MARKER* aMarker, int aLayer )
 
 void SCH_PAINTER::draw( const SCH_GROUP* aGroup, int aLayer )
 {
+    if( m_schSettings.IsPrinting() )
+        return;
+
     const bool drawingShadows = false;
 
     if( aLayer == LAYER_SCHEMATIC_ANCHOR )
