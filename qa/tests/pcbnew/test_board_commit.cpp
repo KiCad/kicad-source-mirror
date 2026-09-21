@@ -29,6 +29,7 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_group.h>
+#include <pcb_board_outline.h>
 #include <lset.h>
 #include <generators/pcb_via_stack.h>
 #include <pcb_view.h>
@@ -198,6 +199,32 @@ BOOST_AUTO_TEST_CASE( RemoveFootprintPrunesSelectedChildren )
 
     // With SKIP_UNDO the removed footprint is ours to free
     delete fp;
+}
+
+// Moving a shape off Edge.Cuts must rebuild the board outline (issue 25551).
+BOOST_AUTO_TEST_CASE( LayerChangeOffEdgeCutsUpdatesBoardOutline )
+{
+    // view must outlive board so board items unregister from a live view at teardown.
+    KIGFX::PCB_VIEW view;
+    BOARD           board;
+    TOOL_MANAGER    mgr;
+    mgr.SetEnvironment( &board, &view, nullptr, nullptr, nullptr );
+
+    PCB_SHAPE* rect = new PCB_SHAPE( &board, SHAPE_T::RECTANGLE );
+    rect->SetLayer( Edge_Cuts );
+    rect->SetStart( VECTOR2I( 0, 0 ) );
+    rect->SetEnd( VECTOR2I( 10000000, 10000000 ) );
+    board.Add( rect );
+    board.UpdateBoardOutline();
+
+    BOOST_REQUIRE_GT( board.BoardOutline()->GetOutline().OutlineCount(), 0 );
+
+    BOARD_COMMIT commit( &mgr, true, false );
+    commit.Modify( rect );
+    rect->SetLayer( Cmts_User );
+    commit.Push( wxT( "Change layer" ), SKIP_UNDO );
+
+    BOOST_CHECK_EQUAL( board.BoardOutline()->GetOutline().OutlineCount(), 0 );
 }
 
 // Undo after a drag must put the hops back with the stack.
