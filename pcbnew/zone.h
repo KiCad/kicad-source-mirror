@@ -712,6 +712,24 @@ public:
      * Create a list of triangles that "fill" the solid areas used for instance to draw
      * these solid areas on OpenGL.
      */
+    /**
+     * Return the layers that actually carry a fill.
+     *
+     * Not the same thing as the zone's layer set.  The file format stores each filled_polygon's
+     * layer independently of the zone's declared layers, so a board can name a fill on a layer
+     * the zone itself does not claim.
+     */
+    std::vector<PCB_LAYER_ID> GetFilledLayers() const;
+
+    /**
+     * Triangulate the zone outline only.
+     *
+     * The per-layer fills are handled by CacheTriangulation(); the outline is a few hundred
+     * points and is kept separate so a caller fanning the fills out across threads can still
+     * get the outline done exactly once.
+     */
+    void CacheOutlineTriangulation();
+
     void CacheTriangulation( PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                              const SHAPE_POLY_SET::TASK_SUBMITTER& aSubmitter = {} );
 

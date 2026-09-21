@@ -1368,10 +1368,7 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
     if( aReporter )
         aReporter->Report( _( "Tessellating copper zones..." ) );
 
-    thread_pool&                     tp = GetKiCadThreadPool();
-    std::vector<std::future<size_t>> returns;
-
-    returns.reserve( zones.size() );
+    thread_pool& tp = GetKiCadThreadPool();
 
     SHAPE_POLY_SET::TASK_SUBMITTER submitter =
             [&tp]( std::function<void()> aTask )
@@ -1379,26 +1376,36 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
                 tp.detach_task( std::move( aTask ) );
             };
 
-    auto cache_zones =
-            [aReporter, &submitter]( ZONE* aZone ) -> size_t
-            {
-                if( aReporter && aReporter->IsCancelled() )
-                    return 0;
-
-                aZone->CacheTriangulation( UNDEFINED_LAYER, submitter );
-
-                if( aReporter )
-                    aReporter->AdvanceProgress();
-
-                return 1;
-            };
+    // Per layer, not per zone; a plane repeated across inner layers is otherwise one thread
+    std::vector<std::pair<ZONE*, PCB_LAYER_ID>> work;
 
     for( ZONE* zone : zones )
+    {
+        // The format stores each fill's layer independently, so the layer set can miss one
+        for( PCB_LAYER_ID layer : zone->GetFilledLayers() )
+            work.emplace_back( zone, layer );
+    }
+
+    std::vector<std::future<size_t>> returns;
+
+    returns.reserve( work.size() );
+
+    for( const std::pair<ZONE*, PCB_LAYER_ID>& item : work )
+    {
+        ZONE*        zone = item.first;
+        PCB_LAYER_ID layer = item.second;
+
         returns.emplace_back( tp.submit_task(
-                [cache_zones, zone]
+                [aReporter, &submitter, zone, layer]() -> size_t
                 {
-                    return cache_zones( zone );
+                    if( aReporter && aReporter->IsCancelled() )
+                        return 0;
+
+                    zone->CacheTriangulation( layer, submitter );
+
+                    return 1;
                 } ) );
+    }
 
     // Finalize the triangulation threads
     for( const std::future<size_t>& ret : returns )
@@ -1412,6 +1419,18 @@ void BOARD::CacheTriangulation( PROGRESS_REPORTER* aReporter, const std::vector<
 
             status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
+    }
+
+    // A few hundred points board-wide, so not worth a task
+    for( ZONE* zone : zones )
+    {
+        if( aReporter && aReporter->IsCancelled() )
+            break;
+
+        zone->CacheOutlineTriangulation();
+
+        if( aReporter )
+            aReporter->AdvanceProgress();
     }
 }
 

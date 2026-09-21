@@ -1634,6 +1634,27 @@ void ZONE::swapData( BOARD_ITEM* aImage )
 }
 
 
+std::vector<PCB_LAYER_ID> ZONE::GetFilledLayers() const
+{
+    std::lock_guard<std::mutex> lock( m_filledPolysListMutex );
+
+    std::vector<PCB_LAYER_ID> layers;
+
+    layers.reserve( m_FilledPolysList.size() );
+
+    for( const auto& [ layer, poly ] : m_FilledPolysList )
+        layers.push_back( layer );
+
+    return layers;
+}
+
+
+void ZONE::CacheOutlineTriangulation()
+{
+    m_Poly->CacheTriangulation();
+}
+
+
 void ZONE::CacheTriangulation( PCB_LAYER_ID aLayer, const SHAPE_POLY_SET::TASK_SUBMITTER& aSubmitter )
 {
     if( aLayer == UNDEFINED_LAYER )
