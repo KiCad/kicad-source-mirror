@@ -22,6 +22,8 @@
 #include <pcbnew_utils/board_test_utils.h>
 #include <board.h>
 #include <board_commit.h>
+#include <connectivity/connectivity_data.h>
+#include <netinfo.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_shape.h>
@@ -52,6 +54,40 @@ BOOST_AUTO_TEST_CASE( RecursesThroughGroups )
     BOOST_CHECK_EQUAL( commit.GetStatus( &s1 ), CHT_MODIFY );
     BOOST_CHECK_EQUAL( commit.GetStatus( &s2 ), CHT_MODIFY );
 }
+
+// Deleting a footprint child must drop it from connectivity, like a board level item.
+BOOST_AUTO_TEST_CASE( RemovedFootprintChildLeavesConnectivity )
+{
+    BOARD        board;
+    TOOL_MANAGER mgr;
+    mgr.SetEnvironment( &board, nullptr, nullptr, nullptr, nullptr );
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    mgr.RegisterTool( dummyTool );
+
+    board.Add( new NETINFO_ITEM( &board, wxT( "N1" ), 1 ) );
+
+    FOOTPRINT* fp = new FOOTPRINT( &board );
+    PAD*       pad = new PAD( fp );
+    fp->Add( pad );
+    board.Add( fp );
+    pad->SetNetCode( 1 );
+
+    board.BuildConnectivity();
+
+    auto netPads = [&]()
+    {
+        return board.GetConnectivity()->GetNetItems( 1, { PCB_PAD_T } ).size();
+    };
+
+    BOOST_REQUIRE_EQUAL( netPads(), 1u );
+
+    BOARD_COMMIT commit( dummyTool );
+    commit.Remove( pad );
+    commit.Push( wxT( "Delete Pad" ) );
+
+    BOOST_CHECK_EQUAL( netPads(), 0u );
+}
+
 
 BOOST_AUTO_TEST_CASE( MakeImageCreatesTransientCopy )
 {
