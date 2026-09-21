@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-20 16:51+0000\n"
+"PO-Revision-Date: 2026-09-22 00:37+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -14947,7 +14947,7 @@ msgstr "Aggiorna/reimposta visibilità campi"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:143
 msgid "Update/reset field text sizes and styles"
-msgstr "Aggiorna/reimposta campi stili e dimensioni testo"
+msgstr "Aggiorna/reimposta stili e dimensioni testo campi"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:146
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:84
@@ -14973,7 +14973,7 @@ msgstr "Aggiorna/reimposta visibilità numero/nome pin"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:184
 msgid "Update/reset symbol attributes"
-msgstr "Aggiorna/reimposta attributi di fabbricazione"
+msgstr "Aggiorna/reimposta attributi simbolo"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:187
 msgid "Update/reset pin map overrides"
@@ -17744,51 +17744,45 @@ msgid "Remote Symbol Settings"
 msgstr "Impostazioni dei simboli remoti"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:66
-#, fuzzy
 msgid ""
 "Configure remote symbol providers and where downloaded libraries are stored."
 msgstr ""
-"Configurare dove vengono archiviate le librerie remote scaricate e come "
-"vengono denominate."
+"Configura i provider di simboli remoti e la posizione in cui vengono "
+"archiviate le librerie scaricate."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:70
 msgid "Providers"
-msgstr ""
+msgstr "Fornitori"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:78
-#, fuzzy
 msgid "Add / Update"
-msgstr "Aggiorna"
+msgstr "Aggiungi / Aggiorna"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:80
-#, fuzzy
 msgid "Refresh Metadata"
-msgstr "Cerca metadati"
+msgstr "Ricarica metadati"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:81
 msgid "Sign Out"
-msgstr ""
+msgstr "Disconnetti"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:91
 msgid "Metadata URL:"
 msgstr "URL metadati:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:95
-#, fuzzy
 msgid "Display name:"
-msgstr "Nome file:"
+msgstr "Mostra nome:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:99
-#, fuzzy
 msgid "Last account:"
-msgstr "Conteggio piazzole:"
+msgstr "Ultimo account:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:101
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:462
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:471
-#, fuzzy
 msgid "Not signed in"
-msgstr "Non specificato"
+msgstr "Non connesso"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:103
 msgid "Auth status:"
@@ -17796,9 +17790,8 @@ msgstr "Stato autenticazione:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:105
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:463
-#, fuzzy
 msgid "Not configured"
-msgstr "Non coperto"
+msgstr "Non configurato"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:114
 msgid "Destination directory:"
@@ -17863,11 +17856,11 @@ msgstr "Seleziona la cartella di destinazione"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:313
 msgid "Enter a provider metadata URL first."
-msgstr ""
+msgstr "Inserire prima l'URL dei metadati del fornitore."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:384
 msgid "Provider metadata refreshed."
-msgstr ""
+msgstr "Metadati fornitore ricaricati."
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:474
 #: eeschema/generate_alias_info.cpp:124 kicad/pcm/pcm.cpp:847
@@ -17969,23 +17962,24 @@ msgid ""
 "%zu symbols have user fields whose names differ only in case. Choose how to "
 "resolve each before opening the table."
 msgstr ""
+"%zu simboli presentano campi utente i cui nomi differiscono solo per le "
+"maiuscole/minuscole. Scegli come risolvere ciascuno di essi prima di aprire "
+"la tabella."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:45
-#, fuzzy
 msgid "Apply and Continue"
-msgstr "Applica e chiudi"
+msgstr "Applica e continua"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:75
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:78
-#, fuzzy
 msgid "(empty)"
-msgstr "<vuoto>"
+msgstr "(vuoto)"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:85
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Keep '%s'"
-msgstr "Testo '%s'"
+msgstr "Mantieni '%s'"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:87
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:137
@@ -17993,36 +17987,39 @@ msgid "Join values"
 msgstr "Valori giunzione"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts.cpp:215
-#, fuzzy
 msgid "Resolve duplicate field names"
-msgstr "Rimuovi piste duplicate"
+msgstr "Risolvi nomi campo duplicati"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:19
 msgid ""
 "Some symbols have user fields whose names differ only in case. Choose how to "
 "resolve each before opening the table."
 msgstr ""
+"Alcuni simboli presentano campi utente i cui nomi differiscono solo per "
+"l'uso di maiuscole e minuscole. Scegli come risolvere ciascun caso prima di "
+"aprire la tabella."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:64
 msgid "Apply same choice to all conflicts of the same field name"
 msgstr ""
+"Applica la stessa scelta a tutti i conflitti relativi allo stesso nome campo"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:71
 msgid "Join separator:"
 msgstr "Separatore giunzione:"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:75
+#, fuzzy
 msgid "; "
-msgstr ""
+msgstr "; "
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:84
 msgid "String inserted between values when the \"Join\" action is selected."
-msgstr ""
+msgstr "Stringa inserita tra i valori quando si seleziona l'azione \"Unisci\"."
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.h:57
-#, fuzzy
 msgid "Resolve Field Name Conflicts"
-msgstr "Risolvi i conflitti di importazione"
+msgstr "Risolvi i conflitti tra nomi campo"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:31
 msgid "&Search for:"
@@ -18148,9 +18145,8 @@ msgid "BOM format presets"
 msgstr "Preimpostazioni formato DIBA"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:63
-#, fuzzy
 msgid "Compare symbol with library settings"
-msgstr "Confronta simbolo a libreria"
+msgstr "Confronta simbolo alle impostazioni di libreria"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:66
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:93
@@ -19067,18 +19063,16 @@ msgid "Model"
 msgstr "Modello"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:247
-#, fuzzy
 msgid "Decomposition:"
-msgstr "Posizione X:"
+msgstr "Scomposizione:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:251
 msgid "Whole device"
-msgstr ""
+msgstr "Dispositivo intero"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:251
-#, fuzzy
 msgid "Repeat per unit"
-msgstr "Conteggio ripetizione"
+msgstr "Ripeti per unità"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:257
 msgid "Shared model pins:"
@@ -19136,16 +19130,14 @@ msgstr " (%d elementi caricati)"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:149
 #: eeschema/dialogs/dialog_symbol_properties.cpp:419
 #: eeschema/tools/sch_actions.cpp:977
-#, fuzzy
 msgid "Set Variant Symbol..."
-msgstr "Modifica simbolo..."
+msgstr "Imposta simbolo variante..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:156
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:259
 #: eeschema/tools/sch_actions.cpp:984 eeschema/tools/sch_edit_tool.cpp:2782
-#, fuzzy
 msgid "Clear Variant Symbol"
-msgstr "Crea simbolo derivato"
+msgstr "Cancella simbolo variante"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:313
 msgid "Symbol Fields Table"
@@ -19232,9 +19224,8 @@ msgid "Copy Design Variant"
 msgstr "Copia variante progetto"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1305
-#, fuzzy
 msgid "Cannot edit the default variant description."
-msgstr "Impossibile eliminare la variante predefinita."
+msgstr "Impossibile modificare la descrizione variante predefinita."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1313
 #: eeschema/sch_edit_frame.cpp:3167
@@ -19336,18 +19327,16 @@ msgstr ""
 "file di posizionamento esportati utilizzati per le macchine pick and place"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:231
-#, fuzzy
 msgid "Passthrough"
 msgstr "Passante"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:235
-#, fuzzy
 msgid "Block"
-msgstr "Clock"
+msgstr "Blocco"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:235
 msgid "Force"
-msgstr ""
+msgstr "Forza"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:253
 #: eeschema/sch_edit_frame.cpp:2469
@@ -19927,9 +19916,8 @@ msgid "S&how hidden pins"
 msgstr "M&ostra piedini nascosti"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
-#, fuzzy
 msgid "Show original pin numbers when remapped"
-msgstr "Mostrare o nascondere il numero del piedino"
+msgstr "Mostra i numeri dei pin originali se rimappati"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:117
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:38
@@ -20112,9 +20100,8 @@ msgid "Sheet background:"
 msgstr "Sfondo foglio:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:119
-#, fuzzy
 msgid "Power symbols:"
-msgstr "Simboli di alimentazione"
+msgstr "Simboli di potenza:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:123
 #: eeschema/widgets/search_handlers.cpp:479
@@ -20135,9 +20122,8 @@ msgstr ""
 "Locale convertirà i nuovi simboli di potenza in simboli di potenza locali."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:161
-#, fuzzy
 msgid "Clicking on a pin selects the symbol"
-msgstr "Assegna impronta al simbolo selezionato"
+msgstr "Facendo clic su un pin si seleziona il simbolo"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 msgid ""
@@ -20545,13 +20531,12 @@ msgid "PA"
 msgstr "PA"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:48
-#, fuzzy
 msgid "Committed"
-msgstr "C&ommit"
+msgstr "Commit-tato"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:49
 msgid "Potential"
-msgstr ""
+msgstr "Potenziale"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:87
 #, c-format
@@ -20566,7 +20551,7 @@ msgstr "%d catena(e) di net"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:243
 #, c-format
 msgid "%zu nets"
-msgstr ""
+msgstr "%zu net"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:348
 #, c-format
@@ -20586,7 +20571,7 @@ msgstr "Nome catena di net duplicato '%s' alla riga %zu."
 #: eeschema/dialogs/panel_setup_net_chains.cpp:378
 #, c-format
 msgid "Class on row %zu cannot have an empty name."
-msgstr ""
+msgstr "La classe alla riga %zu non può avere un nome vuoto."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:379
 #: eeschema/dialogs/panel_setup_net_chains.cpp:386
@@ -20611,7 +20596,7 @@ msgstr "Elimina catena di net"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:647
 #, c-format
 msgid "Member Nets (%zu)"
-msgstr ""
+msgstr "Net membri (%zu)"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:668
 msgid "New net chain class name:"
@@ -20619,15 +20604,13 @@ msgstr "Nuovo nome della classe catena di net:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:668
 #: eeschema/dialogs/panel_setup_net_chains.cpp:677
-#, fuzzy
 msgid "Add Class"
-msgstr "Classe"
+msgstr "Aggiungi classe"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:677
 #: eeschema/dialogs/panel_setup_net_chains.cpp:710
-#, fuzzy
 msgid "That class name is empty or already in use."
-msgstr "Nome netclass già in uso."
+msgstr "Nome classe è vuoto o già in uso."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:701
 msgid "Rename net chain class:"
@@ -20635,9 +20618,8 @@ msgstr "Rinomina classe catena di net:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:701
 #: eeschema/dialogs/panel_setup_net_chains.cpp:710
-#, fuzzy
 msgid "Rename Class"
-msgstr "Rinomina i file"
+msgstr "Rinomina classe"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:739
 #, c-format
@@ -20648,9 +20630,8 @@ msgstr ""
 "non classificate."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:742
-#, fuzzy
 msgid "Delete Class"
-msgstr "Cancella colonne"
+msgstr "Cancella classe"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:59
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:157
@@ -20663,39 +20644,36 @@ msgid "Net Chain Class"
 msgstr "Classe catena di net"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:62
-#, fuzzy
 msgid "Colour"
 msgstr "Colore"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:105
-#, fuzzy
 msgid "Delete the selected committed net chain"
-msgstr "Cancella associazioni delle impronte selezionate"
+msgstr "Elimina la catena net commit-tata selezionata"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:116
 msgid "Chains"
-msgstr ""
+msgstr "Catene"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:124
 msgid ""
 "Group net chains under a class label so DRC rules can target the whole group "
 "via "
 msgstr ""
+"Raggruppa le catene di net sotto un'etichetta di classe in modo che le "
+"regole DRC possano indirizzare l'intero gruppo di via "
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:128
-#, fuzzy
 msgid "inNetChainClass('name')"
-msgstr "Classi catene di net"
+msgstr "inNetChainClass('name')"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:132
-#, fuzzy
 msgid "."
-msgstr ".A"
+msgstr "."
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:156
-#, fuzzy
 msgid "Class Name"
-msgstr "Nome base"
+msgstr "Nome classe"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:178
 msgid "Add a new net chain class"
@@ -20704,10 +20682,11 @@ msgstr "Aggiungi una nuova classe catena di net"
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:183
 msgid "Rename the selected class (updates every chain that uses it)"
 msgstr ""
+"Rinomina la classe selezionata (aggiorna tutte le catene che la utilizzano)"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:191
 msgid "Delete the selected class (chains revert to no class)"
-msgstr ""
+msgstr "Elimina la classe selezionata (le catene tornano a essere senza classe)"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:224
 msgid "No error or warning"
@@ -20722,64 +20701,52 @@ msgid "Generate error"
 msgstr "Genera errori"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:32
-#, fuzzy
 msgid "Check for missing fields"
-msgstr "Controllo profili di regolazione mancanti..."
+msgstr "Controlla campi mancanti"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:36
-#, fuzzy
 msgid "Check for extra fields"
-msgstr "Controllo aggiornamenti"
+msgstr "Controlla campi extra"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:39
-#, fuzzy
 msgid "Compare non-reference field text"
-msgstr "Aggiorna/reimposta testo campi"
+msgstr "Confronta il testo del campo non di riferimento"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:42
-#, fuzzy
 msgid "Compare field visibilities"
-msgstr "Aggiorna visibilità campi"
+msgstr "Confronta visibilità campi"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:45
-#, fuzzy
 msgid "Compare field text sizes and styles"
-msgstr "Aggiorna/reimposta campi stili e dimensioni testo"
+msgstr "Confronta stili e dimensioni testo campi"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:48
-#, fuzzy
 msgid "Compare field positions"
-msgstr "Aggiorna posizioni campi"
+msgstr "Confronta posizioni campi"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:69
-#, fuzzy
 msgid "Compare pin name/number visibilities"
-msgstr "Aggiorna visibilità numeri/nomi pin"
+msgstr "Confronta visibilità numeri/nomi pin"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:72
-#, fuzzy
 msgid "Compare alternate pin functions"
-msgstr "Reimposta funzioni alternative pin"
+msgstr "Confronta funzioni alternative pin"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:94
-#, fuzzy
 msgid "Compare exclude from board flags"
-msgstr "Cancella l'attributo di esclusione dalla scheda"
+msgstr "Confronta attributi di esclusione dalla scheda"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:98
-#, fuzzy
 msgid "Compare do not populate flags"
-msgstr "Cancella l'attributo non popolare"
+msgstr "Confronta attributi di non popolare"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:101
-#, fuzzy
 msgid "Compare exlucde from bill of materials flags"
-msgstr "Cancella l'attributo escludi dalla distinta materiali"
+msgstr "Confronta attributi esclusione dalla distinta materiali"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:104
-#, fuzzy
 msgid "Compare exclude from position file flags"
-msgstr "Escludi dai file di posizione"
+msgstr "Confronta attributi di esclusione dal file posizioni"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:41
 #: eeschema/dialogs/panel_simulator_preferences.cpp:62
@@ -20971,69 +20938,61 @@ msgid "Reset Libraries"
 msgstr "Reimposta librerie"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:77
-#, fuzzy
 msgid "Rename Map..."
-msgstr "Rinomina file..."
+msgstr "Rinomina mappa..."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:79
-#, fuzzy, c-format
+#, c-format
 msgid "Reset '%s' to 1:1"
-msgstr "Reimposta %s ai predefiniti"
+msgstr "Reimposta '%s' a 1:1"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:95
 msgid "Copy From..."
-msgstr ""
+msgstr "Copia da..."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:479
-#, fuzzy
 msgid "Map name:"
-msgstr "Nome area:"
+msgstr "Nome mappa:"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:479
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:491
-#, fuzzy
 msgid "Rename Map"
-msgstr "Rinomina"
+msgstr "Rinomina mappa"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "A pin map named '%s' already exists."
-msgstr "Una catena di net con nome '%s' esiste già."
+msgstr "Una mappa con nome '%s' esiste già."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:536
-#, fuzzy
 msgid "Invalid footprint identifier."
-msgstr "Impronta specificata non valida"
+msgstr "Identificatore impronta non valido."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:545
-#, fuzzy
 msgid "That footprint is already assigned to another pin map."
-msgstr ""
-"Questa posizione risulta già occupata da un altro piedino, nell'unità %d."
+msgstr "Quell'impronta è già assegnata a un'altra mappa pin."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:703
 msgid "Click a pin map column to choose which map to remove."
 msgstr ""
+"Fare clic su una colonna della mappa pin per scegliere quale mappa rimuovere."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:703
-#, fuzzy
 msgid "Remove Pin Map"
-msgstr "Rimuovi file"
+msgstr "Rimuovi mappa pin"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Remove pin map '%s' and its footprint association?"
-msgstr "Cancella tutte le associazioni impronte"
+msgstr "Rimuovere la mappa pin '%s' e la sua associazione con l'impronta?"
 
 #: eeschema/dialogs/panel_symbol_pin_map_base.cpp:52
-#, fuzzy
 msgid "Add pin map"
-msgstr "Aggiungi bitmap"
+msgstr "Aggiungi mappa pin"
 
 #: eeschema/dialogs/panel_symbol_pin_map_base.cpp:57
-#, fuzzy
 msgid "Remove pin map"
-msgstr "Rimuovi file"
+msgstr "Rimuovi mappa pin"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:42
 msgid "Project Field Name Templates"
@@ -21087,9 +21046,9 @@ msgstr ""
 "foglio radice."
 
 #: eeschema/eeschema_config.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save drawing sheet '%s': %s"
-msgstr "Impossibile caricare la pagina '%s': %s"
+msgstr "Impossibile salvare il foglio di disegno '%s': %s"
 
 #: eeschema/eeschema_helpers.cpp:203 eeschema/files-io.cpp:382
 #: eeschema/picksymbol.cpp:130
@@ -21260,11 +21219,11 @@ msgstr "File d'ingresso non trovato: '%s'\n"
 #: eeschema/eeschema_jobs_handler.cpp:1503
 #, c-format
 msgid "No schematic importer recognizes the file format of '%s'\n"
-msgstr ""
+msgstr "Nessun importatore schemi riconosce il formato file '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1544 pcbnew/pcbnew_jobs_handler.cpp:3517
 msgid "Could not establish a project for the import\n"
-msgstr ""
+msgstr "Impossibile impostare un progetto per l'importazione\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1578 pcbnew/pcbnew_jobs_handler.cpp:3559
 #, c-format
@@ -21288,9 +21247,9 @@ msgid "Error saving imported schematic: %s\n"
 msgstr "Errore salvando lo schema importato: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1695
-#, fuzzy, c-format
+#, c-format
 msgid "Successfully saved imported schematic to '%s'\n"
-msgstr "Salvataggio riuscito della scheda importata in '%s'\n"
+msgstr "Salvataggio riuscito dello schema importato su '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1818
 #: eeschema/eeschema_jobs_handler.cpp:1824
@@ -21315,33 +21274,39 @@ msgstr "Impossibile caricare %s: %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2098 pcbnew/pcbnew_jobs_handler.cpp:4429
 msgid "Unsupported document kind for this dispatcher.\n"
-msgstr ""
+msgstr "Tipo di documento non supportato per questo dispatcher.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2149
-#, fuzzy
 msgid "Failed to load one or more input schematics\n"
-msgstr "Fallito caricamento schema\n"
+msgstr "Impossibile caricare uno o più schemi in ingresso\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2164
 msgid "sch merge requires each input to have a single top-level sheet\n"
 msgstr ""
+"la fusione di schemi richiede che ogni ingresso abbia un unico foglio "
+"principale\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2184 pcbnew/pcbnew_jobs_handler.cpp:3930
 msgid ""
 "--interactive requires a GUI KiCad process; the console kicad-cli cannot "
 "open dialogs.\n"
 msgstr ""
+"--interactive richiede un processo KiCad con interfaccia grafica; "
+"l'eseguibile da riga di comando kicad-cli non può aprire finestre di "
+"dialogo.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2219
-#, fuzzy
 msgid "Merge applier failed to produce a schematic\n"
-msgstr "Fallito caricamento schema\n"
+msgstr ""
+"L'applicazione dell'unione (merge) non è riuscita a generare uno schema\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2228
 msgid ""
 "Merge contains hierarchical sheet structure changes that sch merge cannot "
 "apply\n"
 msgstr ""
+"La fusione (merge) contiene modifiche alla struttura gerarchica del foglio "
+"che la fusione di schemi non può eseguire\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2270
 #, c-format
@@ -43600,9 +43565,8 @@ msgid "Update/reset text sizes and styles"
 msgstr "Aggiorna/reimposta stili e dimensioni testo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:118
-#, fuzzy
 msgid "Update/reset text position and rotation"
-msgstr "Aggiorna/reimposta posizioni testo"
+msgstr "Aggiorna/reimposta posizioni e rotazione testo"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:121
 msgid "Update/reset text content"
