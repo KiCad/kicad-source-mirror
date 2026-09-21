@@ -49,6 +49,16 @@ target_link_libraries(kicad_3d_model_previewer
     Version
 )
 
+# The shell loads this handler into its own surrogate process, whose application directory is
+# System32, so LOAD_WITH_ALTERED_SEARCH_PATH can only resolve KiCad's own DLLs from the directory
+# holding the handler.  An install puts them all in one bin directory; the build tree does not.
+add_custom_command(TARGET kicad_3d_model_previewer POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "$<TARGET_FILE:kicad_3d_import>" "$<TARGET_FILE_DIR:kicad_3d_model_previewer>"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "$<TARGET_FILE:kicad_3dsg>" "$<TARGET_FILE_DIR:kicad_3d_model_previewer>"
+)
+
 install(TARGETS kicad_3d_model_previewer
     RUNTIME_DEPENDENCY_SET kicad_3d_preview_runtime_deps
     RUNTIME DESTINATION ${KICAD_BIN}

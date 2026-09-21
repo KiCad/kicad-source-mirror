@@ -22,8 +22,19 @@
 #define KICAD_3D_MODEL_TO_OCC_H
 
 #include <AIS_InteractiveContext.hxx>
+#include <AIS_Triangulation.hxx>
 
 struct S3DMODEL;
+struct SMESH;
+
+/**
+ * Convert one mesh of @p aModel into a presentation carrying its geometry and appearance.
+ *
+ * @param aModel Model owning @p aMesh, consulted for the material @p aMesh indexes.
+ * @param aMesh  Mesh to convert.
+ * @return the presentation, or a null handle when the mesh holds no usable triangle.
+ */
+Handle( AIS_Triangulation ) BuildS3DMeshPresentation( const S3DMODEL& aModel, const SMESH& aMesh );
 
 bool DisplayS3DModel( const S3DMODEL& aModel, const Handle( AIS_InteractiveContext ) & aContext );
 
