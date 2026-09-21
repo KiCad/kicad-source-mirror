@@ -556,6 +556,34 @@ BOOST_AUTO_TEST_CASE( BoolPropertyEvaluation )
 }
 
 
+// Queries read flags and fields through the current assembly variant.
+BOOST_AUTO_TEST_CASE( VariantAwareEvaluation )
+{
+    PROPERTY_MANAGER::Instance().Rebuild();
+
+    BOARD brd;
+
+    FOOTPRINT fp( &brd );
+    fp.SetValue( wxT( "BaseVal" ) );
+
+    FOOTPRINT_VARIANT* variant = fp.AddVariant( wxT( "V1" ) );
+    variant->SetDNP( true );
+    variant->SetFieldValue( wxT( "Value" ), wxT( "VariantVal" ) );
+
+    brd.AddVariant( wxT( "V1" ) );
+    brd.SetCurrentVariant( wxT( "V1" ) );
+
+    testEvalExpr( wxT( "A.Do_not_Populate == 1" ), VAL( 1.0 ), false, &fp, &fp );
+    testEvalExpr( wxT( "A.getField('Value') == 'VariantVal'" ), VAL( 1.0 ), false, &fp, &fp );
+
+    // Without a current variant the base values apply.
+    brd.SetCurrentVariant( wxEmptyString );
+
+    testEvalExpr( wxT( "A.Do_not_Populate == 0" ), VAL( 1.0 ), false, &fp, &fp );
+    testEvalExpr( wxT( "A.getField('Value') == 'BaseVal'" ), VAL( 1.0 ), false, &fp, &fp );
+}
+
+
 // Reference resolves as a property with the fallback above, so the query normalizer
 // must leave it alone. getField() has no such fallback.
 BOOST_AUTO_TEST_CASE( FieldAliasNormalization )

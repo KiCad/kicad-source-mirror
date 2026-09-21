@@ -1655,8 +1655,18 @@ static void getFieldFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                     BOARD*          board = fp->GetBoard();
                     const wxString& fieldName = arg->AsString();
 
-                    // getField only depends on the item, so memoize the resolved text per
-                    // (item, field) to avoid the linear field-name search on every repeat.
+                    if( board )
+                    {
+                        const wxString variantName = board->GetCurrentVariant();
+
+                        if( const FOOTPRINT_VARIANT* variant = fp->GetVariant( variantName );
+                            variant && variant->HasFieldValue( fieldName ) )
+                        {
+                            return variant->GetFieldValue( fieldName );
+                        }
+                    }
+
+                    // Only base values go in the cache.
                     ITEM_FIELD_CACHE_KEY key{ item, std::hash<wxString>{}( fieldName ) };
                     wxString             cached;
 

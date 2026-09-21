@@ -508,6 +508,27 @@ LIBEVAL::VALUE* PCBEXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
             return new LIBEVAL::VALUE();
         }
 
+        if( item->Type() == PCB_FOOTPRINT_T && item->GetBoard() )
+        {
+            const wxString variant = item->GetBoard()->GetCurrentVariant();
+
+            if( !variant.IsEmpty() )
+            {
+                FOOTPRINT*      fp = static_cast<FOOTPRINT*>( item );
+                const wxString& name = it->second.property->Name();
+
+                if( name == wxT( "Do not Populate" ) )
+                    return new LIBEVAL::VALUE( static_cast<double>( fp->GetDNPForVariant( variant ) ) );
+                else if( name == wxT( "Exclude From Bill of Materials" ) )
+                    return new LIBEVAL::VALUE( static_cast<double>( fp->GetExcludedFromBOMForVariant( variant ) ) );
+                else if( name == wxT( "Exclude From Simulation" ) )
+                    return new LIBEVAL::VALUE( static_cast<double>( fp->GetExcludedFromSimForVariant( variant ) ) );
+                else if( name == wxT( "Exclude From Position Files" ) )
+                    return new LIBEVAL::VALUE(
+                            static_cast<double>( fp->GetExcludedFromPosFilesForVariant( variant ) ) );
+            }
+        }
+
         switch( it->second.kind )
         {
         case PCBEXPR_PROPERTY_KIND::INT_KIND:
