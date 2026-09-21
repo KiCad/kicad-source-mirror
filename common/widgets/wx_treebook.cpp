@@ -57,6 +57,8 @@ public:
         return m_contents;
     }
 
+    wxWindow* Contents() const { return m_contents; }
+
     bool Show( bool show ) override
     {
         if( show )
@@ -106,6 +108,17 @@ wxWindow* WX_TREEBOOK::ResolvePage( size_t aPage )
 
     if( LAZY_PAGE* lazyPage = dynamic_cast<LAZY_PAGE*>( page ) )
         return lazyPage->Resolve();
+
+    return page;
+}
+
+
+wxWindow* WX_TREEBOOK::GetResolvedPage( size_t aPage )
+{
+    wxWindow* page = GetPage( aPage );
+
+    if( LAZY_PAGE* lazyPage = dynamic_cast<LAZY_PAGE*>( page ) )
+        return lazyPage->Contents();
 
     return page;
 }

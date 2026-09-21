@@ -160,6 +160,7 @@ void PANEL_SETUP_TUNING_PROFILE_INFO::LoadProfile( const TUNING_PROFILE& aProfil
     BOARD* board = m_parentPanel->m_board;
 
     m_name->SetValue( aProfile.m_ProfileName );
+    m_lastSyncedName = aProfile.m_ProfileName;
     m_type->SetSelection( static_cast<int>( aProfile.m_Type ) );
     onChangeProfileType( aProfile.m_Type );
     m_targetImpedance->SetValue( wxString::FromDouble( aProfile.m_TargetImpedance ) );

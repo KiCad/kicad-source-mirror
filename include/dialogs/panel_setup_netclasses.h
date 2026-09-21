@@ -50,6 +50,8 @@ public:
 
     void UpdateDelayProfileNames( const std::vector<wxString>& aNames ) const;
 
+    void RemapDelayProfileNames( const std::map<wxString, wxString>& aRenames ) const;
+
 private:
     void OnAddNetclassClick( wxCommandEvent& event ) override;
     void OnRemoveNetclassClick( wxCommandEvent& event ) override;

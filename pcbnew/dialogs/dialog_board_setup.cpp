@@ -44,6 +44,7 @@
 #include <panel_text_variables.h>
 #include <project.h>
 #include <project/project_file.h>
+#include <project/net_settings.h>
 #include <settings/settings_manager.h>
 #include <widgets/resettable_panel.h>
 #include <widgets/wx_progress_reporters.h>
@@ -285,6 +286,44 @@ DIALOG_BOARD_SETUP::~DIALOG_BOARD_SETUP()
 }
 
 
+bool DIALOG_BOARD_SETUP::TransferDataFromWindow()
+{
+    if( !PAGED_DIALOG::TransferDataFromWindow() )
+        return false;
+
+    // References to renamed profiles can only be fixed up after all pages have saved
+    auto* tuningProfiles =
+            static_cast<PANEL_SETUP_TUNING_PROFILES*>( m_treebook->GetResolvedPage( m_tuningProfilesPage ) );
+
+    if( tuningProfiles )
+    {
+        const std::map<wxString, wxString> renames = tuningProfiles->TakeProfileRenames();
+
+        if( !renames.empty() )
+        {
+            std::shared_ptr<NET_SETTINGS>& netSettings = m_frame->Prj().GetProjectFile().NetSettings();
+
+            auto remapProfile = [&renames]( const std::shared_ptr<NETCLASS>& aNetclass )
+            {
+                auto it = renames.find( aNetclass->GetTuningProfile() );
+
+                if( it != renames.end() )
+                    aNetclass->SetTuningProfile( it->second );
+            };
+
+            remapProfile( netSettings->GetDefaultNetclass() );
+
+            for( const auto& [name, netclass] : netSettings->GetNetclasses() )
+                remapProfile( netclass );
+
+            netSettings->ClearAllCaches();
+        }
+    }
+
+    return true;
+}
+
+
 void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
 {
     PAGED_DIALOG::onPageChanged( aEvent );
@@ -318,6 +357,7 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
         }
         else if( page == m_netclassesPage || m_currentPage == m_tuningProfilesPage )
         {
+            m_netClasses->RemapDelayProfileNames( m_tuningProfiles->TakeProfileRenames() );
             m_netClasses->UpdateDelayProfileNames( m_tuningProfiles->GetDelayProfileNames() );
         }
         else if( page == m_tuningProfilesPage )

@@ -73,6 +73,12 @@ public:
     /// Gets the name of this profile
     wxString GetProfileName() const;
 
+    /// Gets the profile name as of the last rename sync
+    const wxString& GetLastSyncedName() const { return m_lastSyncedName; }
+
+    /// Marks the current profile name as synced
+    void SetLastSyncedName( const wxString& aName ) { m_lastSyncedName = aName; }
+
     /// Validate this panel's data
     bool ValidateProfile( size_t aPageIndex );
 
@@ -213,6 +219,9 @@ private:
 
     /// The parent setup panel
     PANEL_SETUP_TUNING_PROFILES* m_parentPanel;
+
+    /// The profile name as of the last rename sync
+    wxString m_lastSyncedName;
 
     /// Units for global via propagation unit delay
     UNIT_BINDER m_viaPropagationUnits;
