@@ -833,6 +833,21 @@ bool PANEL_SETUP_TUNING_PROFILE_INFO::ValidateProfile( const size_t aPageIndex )
         return false;
     }
 
+    for( size_t i = 0; i < m_parentPanel->m_tuningProfiles->GetPageCount(); ++i )
+    {
+        const auto* otherProfile =
+                static_cast<PANEL_SETUP_TUNING_PROFILE_INFO*>( m_parentPanel->m_tuningProfiles->GetPage( i ) );
+
+        if( otherProfile != this && otherProfile->GetProfileName() == m_name->GetValue() )
+        {
+            m_parentPanel->m_tuningProfiles->SetSelection( aPageIndex );
+
+            const wxString msg = _( "Tuning profile name already in use" );
+            PAGED_DIALOG::GetDialog( m_parentPanel )->SetError( msg, this, m_name );
+            return false;
+        }
+    }
+
     std::set<wxString> layerNames;
 
     for( int i = 0; i < m_trackPropagationGrid->GetNumberRows(); ++i )
