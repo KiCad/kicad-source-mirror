@@ -613,6 +613,57 @@ BOOST_AUTO_TEST_CASE( PerformPull_NoUpstreamConfig_FallbackSucceedsAndWritesUpst
 
 
 /**
+ * With pull.rebase set, a pull over diverged history must replay the local commit onto the
+ * remote one and leave no rebase in progress.
+ */
+BOOST_AUTO_TEST_CASE( PerformPull_RebaseConfigReplaysLocalCommit )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    addOrigin( repo );
+    setUpstreamConfig( repo, wxT( "master" ) );
+
+    git_object* initial = nullptr;
+    BOOST_TEST_REQUIRE( git_revparse_single( &initial, repo, "HEAD" ) == 0 );
+
+    KIGIT_COMMON common( repo );
+    git_oid      remoteOid = createCommit( repo, wxT( "remote.txt" ), wxT( "remote\n" ), wxT( "Remote commit" ) );
+
+    {
+        GIT_PUSH_HANDLER pushHandler( &common );
+        BOOST_TEST_REQUIRE( static_cast<int>( pushHandler.PerformPush() ) == static_cast<int>( PushResult::Success ) );
+    }
+
+    BOOST_TEST_REQUIRE( git_reset( repo, initial, GIT_RESET_HARD, nullptr ) == 0 );
+    git_object_free( initial );
+
+    createCommit( repo, wxT( "local.txt" ), wxT( "local\n" ), wxT( "Local commit" ) );
+
+    git_config* cfg = nullptr;
+    BOOST_TEST_REQUIRE( git_repository_config( &cfg, repo ) == 0 );
+    git_config_set_bool( cfg, "pull.rebase", 1 );
+    git_config_free( cfg );
+
+    GIT_PULL_HANDLER handler( &common );
+    PullResult       result = handler.PerformPull();
+
+    BOOST_CHECK_MESSAGE( result == PullResult::Success,
+                         "Rebase pull failed: " + handler.GetErrorString().ToStdString() );
+    BOOST_CHECK_EQUAL( git_repository_state( repo ), static_cast<int>( GIT_REPOSITORY_STATE_NONE ) );
+
+    git_commit* head = nullptr;
+    BOOST_TEST_REQUIRE( git_revparse_single( (git_object**) &head, repo, "HEAD" ) == 0 );
+    BOOST_CHECK( git_oid_equal( git_commit_parent_id( head, 0 ), &remoteOid ) );
+    git_commit_free( head );
+
+    git_repository_free( repo );
+}
+
+
+/**
  * Push -u behavior: after the first successful push from a branch with no
  * upstream configured, branch.<name>.merge and .remote should be populated so
  * subsequent pull/push hit the FETCH_HEAD path instead of the fallback.
