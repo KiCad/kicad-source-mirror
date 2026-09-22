@@ -3826,6 +3826,29 @@ CONNECTION_SUBGRAPH* CONNECTION_GRAPH::GetSubgraphForItem( SCH_ITEM* aItem ) con
 }
 
 
+CONNECTION_SUBGRAPH* CONNECTION_GRAPH::GetSubgraphForItemOnSheet( SCH_ITEM*             aItem,
+                                                                  const SCH_SHEET_PATH& aSheetPath ) const
+{
+    auto it = m_item_to_subgraph_map.find( aItem );
+
+    if( it == m_item_to_subgraph_map.end() )
+        return nullptr;
+
+    for( auto rit = it->second.rbegin(); rit != it->second.rend(); ++rit )
+    {
+        CONNECTION_SUBGRAPH* subgraph = *rit;
+
+        while( subgraph && subgraph->m_absorbed )
+            subgraph = subgraph->m_absorbed_by;
+
+        if( subgraph && subgraph->m_sheet == aSheetPath )
+            return subgraph;
+    }
+
+    return nullptr;
+}
+
+
 const std::vector<CONNECTION_SUBGRAPH*>&
 CONNECTION_GRAPH::GetAllSubgraphs( const wxString& aNetName ) const
 {

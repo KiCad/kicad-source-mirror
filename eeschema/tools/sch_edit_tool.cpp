@@ -2019,7 +2019,7 @@ static SCH_LABEL_BASE* findSingleNetLabelForPin( SCH_PIN* aPin, SCHEMATIC& aSche
     }
     else if( CONNECTION_GRAPH* graph = aSchematic.ConnectionGraph() )
     {
-        if( CONNECTION_SUBGRAPH* sg = graph->GetSubgraphForItem( aPin ) )
+        if( CONNECTION_SUBGRAPH* sg = graph->GetSubgraphForItemOnSheet( aPin, aSheetPath ) )
             items.assign( sg->GetItems().begin(), sg->GetItems().end() );
     }
 

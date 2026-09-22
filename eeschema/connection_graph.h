@@ -536,6 +536,13 @@ public:
 
     CONNECTION_SUBGRAPH* GetSubgraphForItem( SCH_ITEM* aItem ) const;
 
+    /**
+     * Return the subgraph containing an item on a specific sheet path.
+     *
+     * Items on shared screens can belong to a different subgraph for each instantiating path.
+     */
+    CONNECTION_SUBGRAPH* GetSubgraphForItemOnSheet( SCH_ITEM* aItem, const SCH_SHEET_PATH& aSheetPath ) const;
+
     const std::vector<CONNECTION_SUBGRAPH*>& GetAllSubgraphs( const wxString& aNetName ) const;
 
     /**
