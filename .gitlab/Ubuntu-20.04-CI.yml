@@ -47,6 +47,7 @@
       - build/linux/libwmf/fonts/
       - build/linux/pcbnew/_pcbnew.kiface
       - build/linux/pcbnew/_pcbnew.so
+      - build/linux/plugins/3d/
       - build/linux/qa/
       - build/linux/compilation_log.txt
     exclude:
