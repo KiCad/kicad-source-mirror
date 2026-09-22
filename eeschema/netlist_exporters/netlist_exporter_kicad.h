@@ -33,8 +33,8 @@ class OUTPUTFORMATTER;
 class NETLIST_EXPORTER_KICAD : public NETLIST_EXPORTER_XML
 {
 public:
-    NETLIST_EXPORTER_KICAD( SCHEMATIC* aSchematic ) :
-            NETLIST_EXPORTER_XML( aSchematic )
+    NETLIST_EXPORTER_KICAD( SCHEMATIC* aSchematic, KIWAY* aKiway ) :
+            NETLIST_EXPORTER_XML( aSchematic, aKiway )
     {}
 
     /**

@@ -44,15 +44,14 @@ struct ISSUE24330_FIXTURE
 
 
 template <typename Exporter>
-static wxString writeAndReadNetlist( SCHEMATIC* aSch, const wxString& aSuffix,
-                                     const wxString& aExt )
+static wxString writeAndReadNetlist( SCHEMATIC* aSch, const wxString& aSuffix, const wxString& aExt )
 {
     wxFileName netFile = aSch->Project().GetProjectFullName();
     netFile.SetName( netFile.GetName() + aSuffix );
     netFile.SetExt( aExt );
 
     WX_STRING_REPORTER       reporter;
-    std::unique_ptr<Exporter> exporter = std::make_unique<Exporter>( aSch );
+    std::unique_ptr<Exporter> exporter = std::make_unique<Exporter>( aSch, nullptr );
 
     BOOST_REQUIRE( exporter->WriteNetlist( netFile.GetFullPath(), 0, reporter ) );
     BOOST_REQUIRE( reporter.GetMessages().IsEmpty() );

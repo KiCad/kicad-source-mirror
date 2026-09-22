@@ -185,13 +185,12 @@ BOOST_FIXTURE_TEST_CASE( NetChainSyntheticNamesAreFilteredFromOutputs,
                     }
                 };
 
-                WX_STRING_REPORTER                    reporter;
-                std::unique_ptr<FILTER_EXPORTER> exporter =
-                        std::make_unique<FILTER_EXPORTER>( m_schematic.get() );
+                WX_STRING_REPORTER               reporter;
+                std::unique_ptr<FILTER_EXPORTER> exporter = std::make_unique<FILTER_EXPORTER>( m_schematic.get(),
+                                                                                               nullptr );
                 exporter->transient = synthName;
 
-                BOOST_REQUIRE( exporter->WriteNetlist( xmlFile.GetFullPath(), GNL_OPT_KICAD,
-                                                       reporter ) );
+                BOOST_REQUIRE( exporter->WriteNetlist( xmlFile.GetFullPath(), GNL_OPT_KICAD, reporter ) );
                 BOOST_REQUIRE( reporter.GetMessages().IsEmpty() );
             }
 
@@ -206,9 +205,8 @@ BOOST_FIXTURE_TEST_CASE( NetChainSyntheticNamesAreFilteredFromOutputs,
                 rawXml.ReadAll( &xmlText );
                 rawXml.Close();
 
-                BOOST_CHECK_MESSAGE(
-                        xmlText.Find( wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) ) == wxNOT_FOUND,
-                        "XML netlist must not contain synthetic __SG_* net names" );
+                BOOST_CHECK_MESSAGE( xmlText.Find( wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) ) == wxNOT_FOUND,
+                                     "XML netlist must not contain synthetic __SG_* net names" );
             }
 
             // Structural check: real nets remain in the chain's <members>; synthetic name does not.
@@ -259,8 +257,7 @@ BOOST_FIXTURE_TEST_CASE( NetChainSyntheticNamesAreFilteredFromOutputs,
             //    yield a chain that resolves with the real members intact.
             {
                 SCH_IO_KICAD_SEXPR saver;
-                BOOST_REQUIRE_NO_THROW( saver.SaveSchematicFile( rootFileName, topSheet,
-                                                                m_schematic.get() ) );
+                BOOST_REQUIRE_NO_THROW( saver.SaveSchematicFile( rootFileName, topSheet, m_schematic.get() ) );
                 BOOST_REQUIRE( wxFileExists( rootFileName ) );
 
                 wxFFile rawSexpr( rootFileName, "rb" );
@@ -270,9 +267,8 @@ BOOST_FIXTURE_TEST_CASE( NetChainSyntheticNamesAreFilteredFromOutputs,
                 rawSexpr.ReadAll( &sexprText );
                 rawSexpr.Close();
 
-                BOOST_CHECK_MESSAGE(
-                        sexprText.Find( wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) ) == wxNOT_FOUND,
-                        "kicad_sch must not contain synthetic __SG_* net names" );
+                BOOST_CHECK_MESSAGE( sexprText.Find( wxString( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ) ) == wxNOT_FOUND,
+                                     "kicad_sch must not contain synthetic __SG_* net names" );
 
                 // Guard against the early-skip path in sch_io_kicad_sexpr.cpp: if terminal refs were
                 // missing the writer would emit no net_chain section and the synthetic-prefix check
@@ -311,9 +307,8 @@ BOOST_FIXTURE_TEST_CASE( NetChainSyntheticNamesAreFilteredFromOutputs,
 
                 for( const wxString& n : reloadedNets )
                 {
-                    BOOST_CHECK_MESSAGE(
-                            !n.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ),
-                            "Reloaded chain leaked a synthetic __SG_* member" );
+                    BOOST_CHECK_MESSAGE( !n.StartsWith( SCH_NETCHAIN::SYNTHETIC_NET_PREFIX ),
+                                         "Reloaded chain leaked a synthetic __SG_* member" );
                 }
             }
         }

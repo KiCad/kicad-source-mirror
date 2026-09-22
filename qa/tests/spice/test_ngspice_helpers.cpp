@@ -40,7 +40,7 @@ class TEST_NGSPICE_HELPERS
 public:
     TEST_NGSPICE_HELPERS() :
             m_schematic( nullptr ),
-            m_exporter( &m_schematic )
+            m_exporter( &m_schematic, nullptr )
     {
         m_manager.LoadProject( "" );
         m_schematic.SetProject( &m_manager.Prj() );

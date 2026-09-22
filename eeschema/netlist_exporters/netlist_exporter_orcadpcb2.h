@@ -30,8 +30,8 @@
 class NETLIST_EXPORTER_ORCADPCB2 : public NETLIST_EXPORTER_BASE
 {
 public:
-    NETLIST_EXPORTER_ORCADPCB2( SCHEMATIC* aSchematic ) :
-            NETLIST_EXPORTER_BASE( aSchematic )
+    NETLIST_EXPORTER_ORCADPCB2( SCHEMATIC* aSchematic, KIWAY* aKiway ) :
+            NETLIST_EXPORTER_BASE( aSchematic, aKiway )
     {
     }
 

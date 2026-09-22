@@ -106,8 +106,8 @@ BOOST_AUTO_TEST_CASE( XmlExportClassMatchesNetSettings )
         wxRemoveFile( netFile.GetFullPath() );
 
     WX_STRING_REPORTER                    reporter;
-    std::unique_ptr<NETLIST_EXPORTER_XML> exporter =
-            std::make_unique<NETLIST_EXPORTER_XML>( m_schematic.get() );
+    std::unique_ptr<NETLIST_EXPORTER_XML> exporter = std::make_unique<NETLIST_EXPORTER_XML>( m_schematic.get(),
+                                                                                             nullptr );
 
     bool success = exporter->WriteNetlist( netFile.GetFullPath(), 0, reporter );
     BOOST_REQUIRE( success );

@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE( CurrentSheetExportPreservesFullInstancePaths )
             } );
     BOOST_REQUIRE( selected != hierarchy.end() );
     schematic->SetCurrentSheet( *selected );
-    EXPORTER exporter( schematic.get() );
+    EXPORTER exporter( schematic.get(), nullptr );
 
     for( bool published : { false, true } )
     {
@@ -167,7 +167,7 @@ BOOST_AUTO_TEST_CASE( SpiceGroundNamesIgnorePowerScope )
                     else
                         power->GetLibSymbolRef()->SetGlobalPower();
 
-                    NETLIST_EXPORTER_SPICE exporter( schematic.get() );
+                    NETLIST_EXPORTER_SPICE exporter( schematic.get(), nullptr );
                     WX_STRING_REPORTER reporter;
                     BOOST_REQUIRE_MESSAGE( exporter.ReadSchematicAndLibraries( 0, reporter ), reporter.GetMessages() );
                     const auto nets = exporter.GetNets();
@@ -204,7 +204,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( UsesPublishedNetsWithoutLegacyGraph, EXPORTER, PU
                 KI_TEST::SCOPED_TEMP_DIR directory( "connectivity-published-export" );
                 const wxString path = directory.PathStr() + "/netlist.net";
                 WX_STRING_REPORTER reporter;
-                EXPORTER exporter( schematic.get() );
+                EXPORTER exporter( schematic.get(), nullptr );
                 BOOST_REQUIRE_MESSAGE( exporter.WriteNetlist( path, 0, reporter ), reporter.GetMessages() );
                 wxFFile file( path, "r" );
                 BOOST_REQUIRE( file.IsOpened() );
@@ -254,7 +254,7 @@ BOOST_AUTO_TEST_CASE( AllegroUsesPublishedNetsAndPreservesDeviceFiles )
                 KI_TEST::SCOPED_TEMP_DIR temp( "connectivity-allegro" );
                 const wxString directory = temp.PathStr();
                 WX_STRING_REPORTER reporter;
-                NETLIST_EXPORTER_ALLEGRO exporter( schematic.get() );
+                NETLIST_EXPORTER_ALLEGRO exporter( schematic.get(), nullptr );
                 BOOST_REQUIRE_MESSAGE( exporter.WriteNetlist( directory + "/netlist.net", 0, reporter ),
                                        reporter.GetMessages() );
                 wxArrayString paths;
@@ -333,7 +333,7 @@ BOOST_AUTO_TEST_CASE( PcbFormattingAndFileExportRebuildUnnotifiedSourceChanges )
     const auto revision = screen.ConnectivityRevision();
     label->EDA_TEXT::SetText( "EXPORT_FORMAT_FRESH" );
     BOOST_REQUIRE_EQUAL( screen.ConnectivityRevision(), revision );
-    NETLIST_EXPORTER_KICAD exporter( schematic.get() );
+    NETLIST_EXPORTER_KICAD exporter( schematic.get(), nullptr );
     STRING_FORMATTER formatter;
     BOOST_REQUIRE_NO_THROW( exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD ) );
     BOOST_CHECK( formatter.GetString().find( "EXPORT_FORMAT_FRESH" ) != std::string::npos );
@@ -398,7 +398,7 @@ BOOST_AUTO_TEST_CASE( ExportRefreshesSymbolRuleAreaMembership )
             const wxString reference = symbol->GetRef( &sheet );
             KI_TEST::SCOPED_TEMP_DIR directory( "connectivity-export-areas" );
             const wxString path = directory.PathStr() + "/netlist.xml";
-            NETLIST_EXPORTER_XML exporter( schematic.get() );
+            NETLIST_EXPORTER_XML exporter( schematic.get(), nullptr );
             auto exportDnp = [&]()
             {
                 WX_STRING_REPORTER reporter;
@@ -459,7 +459,7 @@ BOOST_AUTO_TEST_CASE( FormattingFailureAllowsExporterReuse )
             SETTINGS_MANAGER settings;
             std::unique_ptr<SCHEMATIC> schematic;
             KI_TEST::LoadSchematic( settings, "issue7203", schematic );
-            NETLIST_EXPORTER_KICAD exporter( schematic.get() );
+            NETLIST_EXPORTER_KICAD exporter( schematic.get(), nullptr );
             BOOST_CHECK_EXCEPTION( exporter.Format( &failing, GNL_ALL | GNL_OPT_KICAD ), IO_ERROR,
                                   []( const IO_ERROR& error )
                                   {
@@ -515,7 +515,7 @@ BOOST_AUTO_TEST_CASE( ExportRefreshesCommittedChainAfterNetRename )
         BOOST_TEST_CONTEXT( "published=" << usePublished )
         {
             enabled = usePublished;
-            NETLIST_EXPORTER_XML exporter( schematic.get() );
+            NETLIST_EXPORTER_XML exporter( schematic.get(), nullptr );
             WX_STRING_REPORTER reporter;
             KI_TEST::SCOPED_TEMP_DIR directory( "connectivity-chain-export" );
             const wxString file = directory.PathStr() + "/netlist.xml";

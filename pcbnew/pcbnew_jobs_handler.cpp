@@ -2842,10 +2842,10 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
             }
             else
             {
-                typedef bool ( *NETLIST_FN_PTR )( const wxString&, std::string& );
+                typedef bool ( *NETLIST_FN_PTR )( const wxString&, std::string&, KIWAY* );
                 KIFACE*        eeschema = m_kiway->KiFACE( KIWAY::FACE_SCH );
                 NETLIST_FN_PTR netlister = (NETLIST_FN_PTR) eeschema->IfaceOrAddress( KIFACE_NETLIST_SCHEMATIC );
-                ( *netlister )( schematicPath.GetFullPath(), netlist_str );
+                ( *netlister )( schematicPath.GetFullPath(), netlist_str, m_kiway );
             }
         }
 

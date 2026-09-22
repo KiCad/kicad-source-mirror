@@ -33,8 +33,8 @@
 class NETLIST_EXPORTER_ALLEGRO : public NETLIST_EXPORTER_BASE
 {
 public:
-    NETLIST_EXPORTER_ALLEGRO( SCHEMATIC* aSchematic ) :
-        NETLIST_EXPORTER_BASE( aSchematic ),
+    NETLIST_EXPORTER_ALLEGRO( SCHEMATIC* aSchematic, KIWAY* aKiway ) :
+        NETLIST_EXPORTER_BASE( aSchematic, aKiway ),
         m_f( nullptr )
     {
     }

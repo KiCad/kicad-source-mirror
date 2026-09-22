@@ -49,7 +49,9 @@ LIB_ID makeFp( const wxString& aLibNick, const wxString& aName )
 class TEST_NETLIST_EXPORTER : public NETLIST_EXPORTER_BASE
 {
 public:
-    explicit TEST_NETLIST_EXPORTER( SCHEMATIC* aSchematic ) : NETLIST_EXPORTER_BASE( aSchematic ) {}
+    explicit TEST_NETLIST_EXPORTER( SCHEMATIC* aSchematic ) :
+            NETLIST_EXPORTER_BASE( aSchematic, nullptr )
+    {}
 
     std::vector<PIN_INFO> Pins( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aPath )
     {

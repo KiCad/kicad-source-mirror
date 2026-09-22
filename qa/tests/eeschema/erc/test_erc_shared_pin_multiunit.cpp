@@ -154,7 +154,7 @@ BOOST_AUTO_TEST_CASE( Issue1768_NetlistPreferUserNet )
             }
 
             BOOST_REQUIRE_EQUAL( units.size(), 4u );
-            EXPORTER exporter( schematic.get() );
+            EXPORTER exporter( schematic.get(), nullptr );
             EXPORTER::CONNECTIVITY_SCOPE connectivity( exporter );
             size_t sharedPins = 0;
 

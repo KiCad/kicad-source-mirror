@@ -1153,7 +1153,7 @@ wxPGProperty* DIALOG_SIM_MODEL<T>::newParamProperty( SIM_MODEL* aModel, int aPar
 
             if( SCH_EDIT_FRAME* schEditFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
             {
-                SPICE_CIRCUIT_MODEL circuit( &schEditFrame->Schematic() );
+                SPICE_CIRCUIT_MODEL circuit( &schEditFrame->Schematic(), &schEditFrame->Kiway() );
                 NULL_REPORTER       devNul;
 
                 circuit.ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS, devNul );

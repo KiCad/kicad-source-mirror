@@ -67,8 +67,7 @@ static bool writeAndLoad( SCHEMATIC* aSch, const wxString& aSuffix, unsigned aOp
         wxRemoveFile( netFile.GetFullPath() );
 
     WX_STRING_REPORTER                    reporter;
-    std::unique_ptr<NETLIST_EXPORTER_XML> exporter =
-            std::make_unique<NETLIST_EXPORTER_XML>( aSch );
+    std::unique_ptr<NETLIST_EXPORTER_XML> exporter = std::make_unique<NETLIST_EXPORTER_XML>( aSch, nullptr );
 
     bool ok = exporter->WriteNetlist( netFile.GetFullPath(), aOptions, reporter )
               && reporter.GetMessages().IsEmpty();

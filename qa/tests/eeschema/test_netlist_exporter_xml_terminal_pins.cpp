@@ -95,8 +95,8 @@ BOOST_FIXTURE_TEST_CASE( NetlistExporterXML_NetChainTerminalPinsRoundTrip,
         wxRemoveFile( netFile.GetFullPath() );
 
     WX_STRING_REPORTER                    reporter;
-    std::unique_ptr<NETLIST_EXPORTER_XML> exporter =
-            std::make_unique<NETLIST_EXPORTER_XML>( m_schematic.get() );
+    std::unique_ptr<NETLIST_EXPORTER_XML> exporter = std::make_unique<NETLIST_EXPORTER_XML>( m_schematic.get(),
+                                                                                             nullptr );
 
     // Net chains are gated behind the KiCad-internal flag, so the public XML format
     // does not leak them to schema-validating consumers.

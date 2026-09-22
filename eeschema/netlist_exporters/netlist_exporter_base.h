@@ -95,15 +95,14 @@ struct PIN_INFO
 class NETLIST_EXPORTER_BASE
 {
 public:
-    NETLIST_EXPORTER_BASE( SCHEMATIC* aSchematic ) :
-        m_schematic( aSchematic )
+    NETLIST_EXPORTER_BASE( SCHEMATIC* aSchematic, KIWAY* aKiway ) :
+        m_schematic( aSchematic ),
+        m_kiway( aKiway )
     {
         wxASSERT( aSchematic );
     }
 
     virtual ~NETLIST_EXPORTER_BASE() = default;
-
-    void SetKiway( KIWAY* aKiway ) { m_kiway = aKiway; }
 
     /**
      * Write to specified output file.

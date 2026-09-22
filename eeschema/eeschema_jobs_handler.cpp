@@ -520,43 +520,43 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
     {
     case JOB_EXPORT_SCH_NETLIST::FORMAT::KICADSEXPR:
         fileExt = FILEEXT::NetlistFileExtension;
-        helper = std::make_unique<NETLIST_EXPORTER_KICAD>( sch );
+        helper = std::make_unique<NETLIST_EXPORTER_KICAD>( sch, m_kiway );
         break;
 
     case JOB_EXPORT_SCH_NETLIST::FORMAT::ORCADPCB2:
         fileExt = FILEEXT::OrCadPcb2NetlistFileExtension;
-        helper = std::make_unique<NETLIST_EXPORTER_ORCADPCB2>( sch );
+        helper = std::make_unique<NETLIST_EXPORTER_ORCADPCB2>( sch, m_kiway );
         break;
 
     case JOB_EXPORT_SCH_NETLIST::FORMAT::CADSTAR:
         fileExt = FILEEXT::CadstarNetlistFileExtension;
-        helper = std::make_unique<NETLIST_EXPORTER_CADSTAR>( sch );
+        helper = std::make_unique<NETLIST_EXPORTER_CADSTAR>( sch, m_kiway );
         break;
 
     case JOB_EXPORT_SCH_NETLIST::FORMAT::SPICE:
         fileExt = FILEEXT::SpiceFileExtension;
         netlistOption = NETLIST_EXPORTER_SPICE::OPTION_SIM_COMMAND;
-        helper = std::make_unique<NETLIST_EXPORTER_SPICE>( sch );
+        helper = std::make_unique<NETLIST_EXPORTER_SPICE>( sch, m_kiway );
         break;
 
     case JOB_EXPORT_SCH_NETLIST::FORMAT::SPICEMODEL:
         fileExt = FILEEXT::SpiceFileExtension;
-        helper = std::make_unique<NETLIST_EXPORTER_SPICE_MODEL>( sch );
+        helper = std::make_unique<NETLIST_EXPORTER_SPICE_MODEL>( sch, m_kiway );
         break;
 
     case JOB_EXPORT_SCH_NETLIST::FORMAT::KICADXML:
         fileExt = wxS( "xml" );
-        helper = std::make_unique<NETLIST_EXPORTER_XML>( sch );
+        helper = std::make_unique<NETLIST_EXPORTER_XML>( sch, m_kiway );
         break;
 
     case JOB_EXPORT_SCH_NETLIST::FORMAT::PADS:
         fileExt = wxS( "asc" );
-        helper = std::make_unique<NETLIST_EXPORTER_PADS>( sch );
+        helper = std::make_unique<NETLIST_EXPORTER_PADS>( sch, m_kiway );
         break;
 
     case JOB_EXPORT_SCH_NETLIST::FORMAT::ALLEGRO:
         fileExt = wxS( "txt" );
-        helper = std::make_unique<NETLIST_EXPORTER_ALLEGRO>( sch );
+        helper = std::make_unique<NETLIST_EXPORTER_ALLEGRO>( sch, m_kiway );
         break;
 
     default:
@@ -580,8 +580,6 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
-
-    helper->SetKiway( m_kiway );
 
     bool res = helper->WriteNetlist( outPath, netlistOption, *m_reporter );
 
@@ -998,7 +996,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
     if( erc.TestDuplicateSheetNames( false ) > 0 )
         m_reporter->Report( _( "Warning: duplicate sheet names.\n" ), RPT_SEVERITY_WARNING );
 
-    std::unique_ptr<NETLIST_EXPORTER_XML> xmlNetlist = std::make_unique<NETLIST_EXPORTER_XML>( sch );
+    std::unique_ptr<NETLIST_EXPORTER_XML> xmlNetlist = std::make_unique<NETLIST_EXPORTER_XML>( sch, m_kiway );
 
     if( aNetJob->GetConfiguredOutputPath().IsEmpty() )
     {

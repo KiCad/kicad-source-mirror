@@ -585,10 +585,9 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         PrepareForNetlist();
 
-        NETLIST_EXPORTER_KICAD exporter( &Schematic() );
+        NETLIST_EXPORTER_KICAD exporter( &Schematic(), &Kiway() );
         STRING_FORMATTER formatter;
 
-        exporter.SetKiway( &Kiway() );
         exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
 
         RefreshConnectivity( true );

@@ -121,9 +121,9 @@ BOOST_FIXTURE_TEST_CASE( NetlistExporterXML_StackedPinNomenclature, XML_STACKED_
     if( wxFileExists( netFile.GetFullPath() ) )
         wxRemoveFile( netFile.GetFullPath() );
 
-    WX_STRING_REPORTER reporter;
-    std::unique_ptr<NETLIST_EXPORTER_XML> exporter =
-            std::make_unique<NETLIST_EXPORTER_XML>( m_schematic.get() );
+    WX_STRING_REPORTER                    reporter;
+    std::unique_ptr<NETLIST_EXPORTER_XML> exporter = std::make_unique<NETLIST_EXPORTER_XML>( m_schematic.get(),
+                                                                                             nullptr );
 
     bool success = exporter->WriteNetlist( netFile.GetFullPath(), 0, reporter );
     BOOST_REQUIRE( success && reporter.GetMessages().IsEmpty() );
@@ -201,7 +201,8 @@ BOOST_FIXTURE_TEST_CASE( NetlistExporterXML_UsesPerUnitResolvedLibraryMetadata, 
         wxRemoveFile( netFile.GetFullPath() );
 
     WX_STRING_REPORTER                    reporter;
-    std::unique_ptr<NETLIST_EXPORTER_XML> exporter = std::make_unique<NETLIST_EXPORTER_XML>( m_schematic.get() );
+    std::unique_ptr<NETLIST_EXPORTER_XML> exporter = std::make_unique<NETLIST_EXPORTER_XML>( m_schematic.get(),
+                                                                                             nullptr );
 
     bool success = exporter->WriteNetlist( netFile.GetFullPath(), 0, reporter );
     BOOST_REQUIRE( success && reporter.GetMessages().IsEmpty() );

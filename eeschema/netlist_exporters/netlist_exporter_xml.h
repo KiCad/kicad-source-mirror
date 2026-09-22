@@ -54,8 +54,8 @@ enum GNL_T
 class NETLIST_EXPORTER_XML : public NETLIST_EXPORTER_BASE
 {
 public:
-    NETLIST_EXPORTER_XML( SCHEMATIC* aSchematic ) :
-            NETLIST_EXPORTER_BASE( aSchematic ),
+    NETLIST_EXPORTER_XML( SCHEMATIC* aSchematic, KIWAY* aKiway ) :
+            NETLIST_EXPORTER_BASE( aSchematic, aKiway ),
             m_resolveTextVars( RESOLVED )
     {}
 

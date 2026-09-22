@@ -158,7 +158,7 @@ void TEST_NETLIST_EXPORTER_FIXTURE<Exporter>::WriteNetlist()
         wxRemoveFile( netlistPath );
 
     WX_STRING_REPORTER        reporter;
-    std::unique_ptr<Exporter> exporter = std::make_unique<Exporter>( m_schematic.get() );
+    std::unique_ptr<Exporter> exporter = std::make_unique<Exporter>( m_schematic.get(), nullptr );
 
     bool success = exporter->WriteNetlist( netlistPath, GetNetlistOptions(), reporter );
 

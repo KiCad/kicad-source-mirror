@@ -172,7 +172,8 @@ SIMULATOR_FRAME::SIMULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_simulator->SetReporter( m_consoleReporter );
     m_simulator->SetSimStateListener( m_stateListener );
 
-    m_circuitModel = std::make_shared<SPICE_CIRCUIT_MODEL>( &m_schematicFrame->Schematic() );
+    m_circuitModel = std::make_shared<SPICE_CIRCUIT_MODEL>( &m_schematicFrame->Schematic(),
+                                                            &m_schematicFrame->Kiway() );
 
     setupTools();
     setupUIConditions();

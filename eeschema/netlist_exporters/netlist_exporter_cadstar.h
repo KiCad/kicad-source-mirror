@@ -31,8 +31,8 @@
 class NETLIST_EXPORTER_CADSTAR : public NETLIST_EXPORTER_BASE
 {
 public:
-    NETLIST_EXPORTER_CADSTAR( SCHEMATIC* aSchematic ) :
-            NETLIST_EXPORTER_BASE( aSchematic )
+    NETLIST_EXPORTER_CADSTAR( SCHEMATIC* aSchematic, KIWAY* aKiway ) :
+            NETLIST_EXPORTER_BASE( aSchematic, aKiway )
     {
     }
 

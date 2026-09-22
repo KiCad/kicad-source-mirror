@@ -129,7 +129,7 @@ struct BOM_NETLIST_FIXTURE
     void WriteBomNetlist( wxXmlDocument& aDoc )
     {
         WX_STRING_REPORTER   reporter;
-        NETLIST_EXPORTER_XML exporter( m_schematic );
+        NETLIST_EXPORTER_XML exporter( m_schematic, nullptr );
 
         BOOST_REQUIRE( exporter.WriteNetlist( m_netlistFile, GNL_OPT_BOM, reporter ) );
         BOOST_REQUIRE( aDoc.Load( m_netlistFile ) );
@@ -219,7 +219,7 @@ BOOST_FIXTURE_TEST_CASE( Issue25119_BoardNetlistKeepsBaseDesign, BOM_NETLIST_FIX
     BOOST_REQUIRE_EQUAL( m_schematic->GetCurrentVariant(), wxS( "H0" ) );
 
     WX_STRING_REPORTER     reporter;
-    NETLIST_EXPORTER_KICAD exporter( m_schematic );
+    NETLIST_EXPORTER_KICAD exporter( m_schematic, nullptr );
 
     BOOST_REQUIRE( exporter.WriteNetlist( m_netlistFile, 0, reporter ) );
 

@@ -73,7 +73,8 @@ BOOST_FIXTURE_TEST_CASE( NetlistExporterXML_NestedGroupMembershipPreserved, XML_
         wxRemoveFile( netFile.GetFullPath() );
 
     WX_STRING_REPORTER                    reporter;
-    std::unique_ptr<NETLIST_EXPORTER_XML> exporter = std::make_unique<NETLIST_EXPORTER_XML>( m_schematic.get() );
+    std::unique_ptr<NETLIST_EXPORTER_XML> exporter = std::make_unique<NETLIST_EXPORTER_XML>( m_schematic.get(),
+                                                                                             nullptr );
 
     // Groups are only emitted for the KiCad-internal netlist.
     BOOST_REQUIRE( exporter->WriteNetlist( netFile.GetFullPath(), GNL_OPT_KICAD, reporter ) );

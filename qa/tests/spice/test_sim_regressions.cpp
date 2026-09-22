@@ -239,7 +239,7 @@ BOOST_FIXTURE_TEST_CASE( FFTCommandNotBareInNetlist, TEST_SIM_REGRESSIONS_FIXTUR
 
     LoadSchematic( SchematicQAPath( wxS( "issue13591" ) ) );
 
-    SPICE_CIRCUIT_MODEL model( m_schematic.get() );
+    SPICE_CIRCUIT_MODEL model( m_schematic.get(), nullptr );
     STRING_FORMATTER    formatter;
 
     const wxString fftCommand = wxS( "linearize v(/out)\nfft v(/out)" );
@@ -255,12 +255,18 @@ BOOST_FIXTURE_TEST_CASE( FFTCommandNotBareInNetlist, TEST_SIM_REGRESSIONS_FIXTUR
         wxString line = lines.GetNextToken().Trim( false ).Trim( true ).Lower();
 
         if( line.IsSameAs( wxS( ".control" ) ) )
+        {
             inControl = true;
+        }
         else if( line.IsSameAs( wxS( ".endc" ) ) )
+        {
             inControl = false;
+        }
         else if( !inControl )
+        {
             BOOST_CHECK_MESSAGE( !line.StartsWith( wxS( "linearize" ) ) && !line.StartsWith( wxS( "fft" ) ),
                                  "Bare control command leaked into netlist: " << line );
+        }
     }
 }
 
@@ -277,8 +283,7 @@ BOOST_AUTO_TEST_CASE( RawSpiceModelSuppliesLibraryInclude )
 
     model.SetParamValue( "lib", "device.lib" );
 
-    std::vector<wxString> includes = model.GetSpiceIncludes( item, nullptr,
-                                                             NULL_REPORTER::GetInstance() );
+    std::vector<wxString> includes = model.GetSpiceIncludes( item, nullptr, NULL_REPORTER::GetInstance() );
 
     BOOST_REQUIRE_EQUAL( includes.size(), 1u );
     BOOST_CHECK_EQUAL( includes.front(), wxString( wxS( "device.lib" ) ) );
