@@ -31,10 +31,44 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
 #include <view/view_group.h>
 
 using namespace KIGFX;
+
+namespace
+{
+class HIDDEN_GAL : public GAL
+{
+public:
+    HIDDEN_GAL( GAL_DISPLAY_OPTIONS& aOptions ) :
+            GAL( aOptions )
+    {
+    }
+
+    bool IsVisible() const override { return false; }
+};
+
+
+class REORDER_TEST_ITEM : public VIEW_ITEM
+{
+public:
+    REORDER_TEST_ITEM( int aLayer ) :
+            m_layer( aLayer )
+    {
+    }
+
+    wxString GetClass() const override { return wxT( "REORDER_TEST_ITEM" ); }
+
+    const BOX2I ViewBBox() const override { return BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) ); }
+
+    std::vector<int> ViewGetLayers() const override { return { m_layer }; }
+
+private:
+    int m_layer;
+};
+} // namespace
 
 
 BOOST_AUTO_TEST_SUITE( ViewNullSafety )
@@ -69,6 +103,35 @@ BOOST_AUTO_TEST_CASE( ViewGroupRejectsNullItem )
 
     // Without the guard this iterated m_groupItems[0] on a null item and crashed.
     group.ViewBBox();
+}
+
+
+BOOST_AUTO_TEST_CASE( ReorderLayerDataNonPermutationKeepsLayerTrees )
+{
+    GAL_DISPLAY_OPTIONS options;
+    HIDDEN_GAL          gal( options );
+    VIEW                view;
+
+    view.SetGAL( &gal );
+    view.ReorderLayerData( { { 11, 10 }, { 12, 11 } } );
+
+    REORDER_TEST_ITEM item( 12 );
+    view.Add( &item );
+
+    std::vector<VIEW::LAYER_ITEM_PAIR> found;
+    view.Query( BOX2I( VECTOR2I( -1, -1 ), VECTOR2I( 200, 200 ) ), found );
+
+    bool itemFound = false;
+
+    for( const VIEW::LAYER_ITEM_PAIR& pair : found )
+    {
+        if( pair.first == &item )
+            itemFound = true;
+    }
+
+    BOOST_TEST( itemFound );
+
+    view.Remove( &item );
 }
 
 
