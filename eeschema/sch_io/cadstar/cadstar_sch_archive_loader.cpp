@@ -1984,7 +1984,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
                                                                  LIB_SYMBOL* aSymbol, int aGateNumber,
                                                                  int aLineThickness, LINE_STYLE aLineStyle )
 {
-    const VERTEX* prev = &aCadstarVertices.at( 0 );
+    const VERTEX* prev = aCadstarVertices.empty() ? nullptr : &aCadstarVertices.at( 0 );
     const VERTEX* cur;
 
     wxASSERT_MSG( prev->Type == VERTEX_TYPE::VT_POINT, "First vertex should always be a point." );
