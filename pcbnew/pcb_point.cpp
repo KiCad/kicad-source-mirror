@@ -269,7 +269,7 @@ double PCB_POINT::Similarity( const BOARD_ITEM& aOther ) const
 
     double similarity = 1.0;
 
-    if( m_pos == other.m_pos )
+    if( m_pos != other.m_pos )
         similarity *= 0.9;
 
     if( m_size != other.m_size )
