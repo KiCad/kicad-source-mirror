@@ -766,21 +766,45 @@ void VIEW::SortLayers( std::vector<int>& aLayers ) const
 void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
 {
     std::map<int,VIEW_LAYER> new_map;
+    std::vector<VIEW_LAYER*> displaced;
 
-    for( auto& [_, layer] : m_layers )
+    // Moved layers take their new slots first
+    for( auto& [id, layer] : m_layers )
     {
-        auto reorder_it = aReorderMap.find( layer.id );
+        auto reorder_it = aReorderMap.find( id );
 
-        // If the layer is not in the reorder map or if it is mapped to itself,
-        // just copy the layer to the new map.
-        if( reorder_it == aReorderMap.end() || reorder_it->second == layer.id )
-        {
-            new_map.emplace( layer.id, layer );
+        if( reorder_it == aReorderMap.end() || reorder_it->second == id )
             continue;
-        }
 
-        auto [new_it,__] = new_map.emplace( reorder_it->second, layer );
-        new_it->second.id = reorder_it->second;
+        layer.id = reorder_it->second;
+
+        if( !new_map.emplace( layer.id, layer ).second )
+            displaced.push_back( &layer );
+    }
+
+    // Unmoved layers keep their slots where still free
+    for( auto& [id, layer] : m_layers )
+    {
+        auto reorder_it = aReorderMap.find( id );
+
+        if( reorder_it != aReorderMap.end() && reorder_it->second != id )
+            continue;
+
+        if( !new_map.emplace( id, layer ).second )
+            displaced.push_back( &layer );
+    }
+
+    for( auto& [id, layer] : m_layers )
+    {
+        if( displaced.empty() )
+            break;
+
+        if( new_map.find( id ) == new_map.end() )
+        {
+            displaced.back()->id = id;
+            new_map.emplace( id, *displaced.back() );
+            displaced.pop_back();
+        }
     }
 
     // Transfer reordered data (using the copy assignment operator ):
