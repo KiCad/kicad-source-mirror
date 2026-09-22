@@ -107,7 +107,11 @@ void PLUGINS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         if( std::optional<const PLUGIN_ACTION*> action = mgr.GetAction( id );
             action && ( *action )->plugin.Runtime().type == PLUGIN_RUNTIME_TYPE::PYTHON )
         {
-            mgr.RecreatePluginEnvironment( ( *action )->plugin.Identifier() );
+            if( mgr.RecreatePluginEnvironment( ( *action )->plugin.Identifier() ) )
+            {
+                wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxID_ANY );
+                mgr.QueueEvent( evt );
+            }
         }
 #endif
     }

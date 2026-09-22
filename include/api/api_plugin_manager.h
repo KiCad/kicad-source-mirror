@@ -31,8 +31,8 @@
 class REPORTER;
 class wxTimer;
 
-/// Internal event used for handling async tasks
-wxDECLARE_EVENT( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxCommandEvent );
+/// Event used for marking async plugin setup tasks as done
+extern const KICOMMON_API wxEventTypeTag<wxCommandEvent> EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED;
 
 /// Notifies other parts of KiCad when plugin availability changes
 extern const KICOMMON_API wxEventTypeTag<wxCommandEvent> EDA_EVT_PLUGIN_AVAILABILITY_CHANGED;
@@ -54,7 +54,14 @@ public:
     void ReloadPlugins( std::optional<wxString> aDirectoryToScan = std::nullopt,
                         std::shared_ptr<REPORTER> aReporter = nullptr );
 
-    void RecreatePluginEnvironment( const wxString& aIdentifier );
+    /**
+     * Removes the given plugin's virtual environment (if any) and schedules a new one to be
+     * created with the currently-configured interpreter.
+     * @return true if the environment was removed and recreation was scheduled
+     */
+    bool RecreatePluginEnvironment( const wxString& aIdentifier );
+
+    void HandlePythonInterpreterChanged();
 
     void InvokeAction( const wxString& aIdentifier,
                        std::shared_ptr<REPORTER> aReporter = nullptr );
@@ -73,6 +80,10 @@ private:
     void processPluginDependencies();
 
     void processNextJob( wxCommandEvent& aEvent );
+
+    bool cancelPluginJobs( const wxString& aIdentifier );
+
+    void recreateCancelledPlugin( const wxString& aIdentifier );
 
     wxEvtHandler* m_parent;
 
@@ -101,6 +112,12 @@ private:
         SETUP_ENV,
         INSTALL_REQUIREMENTS
     };
+
+    /// Map of plugin identifier to the pid of its currently-running setup process, if any
+    std::map<wxString, long> m_runningPids;
+
+    /// Plugins whose setup jobs were cancelled and need their environment recreated
+    std::set<wxString> m_cancelledPlugins;
 
     struct JOB
     {
