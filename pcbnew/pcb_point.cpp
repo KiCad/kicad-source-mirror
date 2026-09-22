@@ -326,7 +326,7 @@ double PCB_POINT::Similarity( const BOARD_ITEM& aOther ) const
 
     double similarity = 1.0;
 
-    if( GetPosition() == other.GetPosition() )
+    if( GetPosition() != other.GetPosition() )
         similarity *= 0.9;
 
     if( m_size != other.m_size )
