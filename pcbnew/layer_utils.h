@@ -69,6 +69,9 @@ LSET GetAllFootprintLayers( const FOOTPRINT& aFootprint );
  * Compute the set of footprint-used layers that would be orphaned if the footprint's
  * allowed layer set is restricted to aCustomUserLayers (plus the tech and user masks).
  *
+ * A through-hole pad is stored as the "*.Cu" wildcard, naming no individual copper layer,
+ * so it can never be orphaned by a copper layer being removed.
+ *
  * The Rescue pseudo-layer is intentionally excluded. It is an internal fallback for
  * items referencing unknown layer names at load time and is not surfaced in any
  * layer-selection UI. Orphans on Rescue must be addressed through the library-parity
