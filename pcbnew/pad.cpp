@@ -183,7 +183,7 @@ static VECTOR2I derivePadLibSize( const VECTOR2I& aBoardSize, PAD_SHAPE aShape, 
 
 /// Circular drills use a uniform mean so they stay circular.
 static VECTOR2I derivePadBoardDrill( const VECTOR2I& aLibDrill, PAD_DRILL_SHAPE aDrillShape,
-                                     const TRANSFORM_TRS& aXform )
+                                     const TRANSFORM_TRS& aXform, const EDA_ANGLE& aRelOrient )
 {
     const double sx = std::abs( aXform.GetScaleX() );
     const double sy = std::abs( aXform.GetScaleY() );
@@ -194,13 +194,16 @@ static VECTOR2I derivePadBoardDrill( const VECTOR2I& aLibDrill, PAD_DRILL_SHAPE 
         return { scaleLength( aLibDrill.x, uniform ), scaleLength( aLibDrill.y, uniform ) };
     }
 
-    return { scaleLength( aLibDrill.x, sx ), scaleLength( aLibDrill.y, sy ) };
+
+    double localSx, localSy;
+    scaleInChildFrame( sx, sy, aRelOrient, localSx, localSy );
+    return { scaleLength( aLibDrill.x, localSx ), scaleLength( aLibDrill.y, localSy ) };
 }
 
 
 /// Inverse of derivePadBoardDrill.
 static VECTOR2I derivePadLibDrill( const VECTOR2I& aBoardDrill, PAD_DRILL_SHAPE aDrillShape,
-                                   const TRANSFORM_TRS& aXform )
+                                   const TRANSFORM_TRS& aXform, const EDA_ANGLE& aRelOrient )
 {
     const double sx = std::abs( aXform.GetScaleX() );
     const double sy = std::abs( aXform.GetScaleY() );
@@ -211,22 +214,29 @@ static VECTOR2I derivePadLibDrill( const VECTOR2I& aBoardDrill, PAD_DRILL_SHAPE 
         return { scaleLength( aBoardDrill.x, 1.0 / uniform ), scaleLength( aBoardDrill.y, 1.0 / uniform ) };
     }
 
-    return { scaleLength( aBoardDrill.x, 1.0 / sx ), scaleLength( aBoardDrill.y, 1.0 / sy ) };
+    double localSx, localSy;
+    scaleInChildFrame( sx, sy, aRelOrient, localSx, localSy );
+    return { scaleLength( aBoardDrill.x, 1.0 / localSx ), scaleLength( aBoardDrill.y, 1.0 / localSy ) };
 }
 
 
-static VECTOR2I derivePadBoardOffset( const VECTOR2I& aLibOffset, const TRANSFORM_TRS& aXform )
+/// The offset is a pad-frame vector, so conjugate the footprint scale by the pad orientation.
+static VECTOR2I derivePadBoardOffset( const VECTOR2I& aLibOffset, const TRANSFORM_TRS& aXform,
+                                      const EDA_ANGLE& aRelOrient )
 {
-    return { scaleLength( aLibOffset.x, std::abs( aXform.GetScaleX() ) ),
-             scaleLength( aLibOffset.y, std::abs( aXform.GetScaleY() ) ) };
+    double localSx, localSy;
+    scaleInChildFrame( std::abs( aXform.GetScaleX() ), std::abs( aXform.GetScaleY() ), aRelOrient, localSx, localSy );
+    return { scaleLength( aLibOffset.x, localSx ), scaleLength( aLibOffset.y, localSy ) };
 }
 
 
 /// Inverse of derivePadBoardOffset.
-static VECTOR2I derivePadLibOffset( const VECTOR2I& aBoardOffset, const TRANSFORM_TRS& aXform )
+static VECTOR2I derivePadLibOffset( const VECTOR2I& aBoardOffset, const TRANSFORM_TRS& aXform,
+                                    const EDA_ANGLE& aRelOrient )
 {
-    return { scaleLength( aBoardOffset.x, 1.0 / std::abs( aXform.GetScaleX() ) ),
-             scaleLength( aBoardOffset.y, 1.0 / std::abs( aXform.GetScaleY() ) ) };
+    double localSx, localSy;
+    scaleInChildFrame( std::abs( aXform.GetScaleX() ), std::abs( aXform.GetScaleY() ), aRelOrient, localSx, localSy );
+    return { scaleLength( aBoardOffset.x, 1.0 / localSx ), scaleLength( aBoardOffset.y, 1.0 / localSy ) };
 }
 
 } // namespace
@@ -763,7 +773,8 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
 void PAD::SetPrimaryDrillSize( const VECTOR2I& aSize )
 {
     if( const FOOTPRINT* fp = GetParentFootprint() )
-        m_padStack.Drill().size = derivePadLibDrill( aSize, GetPrimaryDrillShape(), fp->GetTransform() );
+        m_padStack.Drill().size =
+                derivePadLibDrill( aSize, GetPrimaryDrillShape(), fp->GetTransform(), GetFPRelativeOrientation() );
     else
         m_padStack.Drill().size = aSize;
 
@@ -774,7 +785,8 @@ void PAD::SetPrimaryDrillSize( const VECTOR2I& aSize )
 VECTOR2I PAD::GetPrimaryDrillSize() const
 {
     if( const FOOTPRINT* fp = GetParentFootprint() )
-        return derivePadBoardDrill( m_padStack.Drill().size, GetPrimaryDrillShape(), fp->GetTransform() );
+        return derivePadBoardDrill( m_padStack.Drill().size, GetPrimaryDrillShape(), fp->GetTransform(),
+                                    GetFPRelativeOrientation() );
 
     return m_padStack.Drill().size;
 }
@@ -815,7 +827,7 @@ void PAD::SetDrillSizeY( const int aY )
 void PAD::SetOffset( PCB_LAYER_ID aLayer, const VECTOR2I& aOffset )
 {
     if( const FOOTPRINT* fp = GetParentFootprint() )
-        m_padStack.Offset( aLayer ) = derivePadLibOffset( aOffset, fp->GetTransform() );
+        m_padStack.Offset( aLayer ) = derivePadLibOffset( aOffset, fp->GetTransform(), GetFPRelativeOrientation() );
     else
         m_padStack.Offset( aLayer ) = aOffset;
 
@@ -826,7 +838,7 @@ void PAD::SetOffset( PCB_LAYER_ID aLayer, const VECTOR2I& aOffset )
 VECTOR2I PAD::GetOffset( PCB_LAYER_ID aLayer ) const
 {
     if( const FOOTPRINT* fp = GetParentFootprint() )
-        return derivePadBoardOffset( m_padStack.Offset( aLayer ), fp->GetTransform() );
+        return derivePadBoardOffset( m_padStack.Offset( aLayer ), fp->GetTransform(), GetFPRelativeOrientation() );
 
     return m_padStack.Offset( aLayer );
 }
