@@ -1558,6 +1558,79 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
 }
 
 
+static PullResult rebaseOnto( GIT_PULL_HANDLER* aHandler, git_repository* aRepo, const git_annotated_commit* aOnto )
+{
+    git_signature* signature = nullptr;
+
+    if( git_signature_default( &signature, aRepo ) != GIT_OK )
+    {
+        aHandler->AddErrorString( _( "Could not create a commit signature.  Set user.name and user.email in your "
+                                     "git configuration." ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitSignaturePtr signaturePtr( signature );
+    git_rebase_options     rebase_opts;
+    git_rebase_init_options( &rebase_opts, GIT_REBASE_OPTIONS_VERSION );
+    git_rebase* rebase = nullptr;
+
+    if( git_rebase_init( &rebase, aRepo, nullptr, aOnto, nullptr, &rebase_opts ) != GIT_OK )
+    {
+        aHandler->AddErrorString( wxString::Format( _( "Rebase failed to start: %s" ),
+                                                    KIGIT_COMMON::GetLastGitError() ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitRebasePtr   rebasePtr( rebase );
+    git_rebase_operation* op = nullptr;
+    int                   nextResult = GIT_OK;
+
+    while( ( nextResult = git_rebase_next( &op, rebase ) ) == GIT_OK )
+    {
+        git_oid commit_oid;
+        int     commitResult = git_rebase_commit( &commit_oid, rebase, nullptr, signature, nullptr, nullptr );
+
+        // Upstream already has this change, so replaying it would be an empty commit
+        if( commitResult == GIT_EAPPLIED )
+            continue;
+
+        if( commitResult != GIT_OK )
+        {
+            wxString gitError = KIGIT_COMMON::GetLastGitError();
+            git_rebase_abort( rebase );
+
+            if( commitResult == GIT_EUNMERGED )
+            {
+                aHandler->AddErrorString( _( "The rebase ran into conflicts.  This is best resolved from a "
+                                             "git command line." ) );
+                return PullResult::Conflict;
+            }
+
+            aHandler->AddErrorString( wxString::Format( _( "Rebase commit failed: %s" ), gitError ) );
+            return PullResult::Error;
+        }
+    }
+
+    if( nextResult != GIT_ITEROVER )
+    {
+        wxString gitError = KIGIT_COMMON::GetLastGitError();
+        git_rebase_abort( rebase );
+        aHandler->AddErrorString( wxString::Format( _( "Rebase failed: %s" ), gitError ) );
+        return PullResult::Error;
+    }
+
+    if( git_rebase_finish( rebase, signature ) != GIT_OK )
+    {
+        wxString gitError = KIGIT_COMMON::GetLastGitError();
+        git_rebase_abort( rebase );
+        aHandler->AddErrorString( wxString::Format( _( "Rebase finish failed: %s" ), gitError ) );
+        return PullResult::Error;
+    }
+
+    return PullResult::Success;
+}
+
+
 PullResult LIBGIT_BACKEND::handleRebase( GIT_PULL_HANDLER* aHandler, const git_annotated_commit** aMergeHeads,
                                          size_t aMergeHeadsCount )
 {
@@ -1569,43 +1642,7 @@ PullResult LIBGIT_BACKEND::handleRebase( GIT_PULL_HANDLER* aHandler, const git_a
         return PullResult::DirtyWorkdir;
     }
 
-    git_rebase_options rebase_opts;
-    git_rebase_init_options( &rebase_opts, GIT_REBASE_OPTIONS_VERSION );
-
-    git_rebase* rebase = nullptr;
-
-    if( git_rebase_init( &rebase, aHandler->GetRepo(), nullptr, aMergeHeads[0], nullptr, &rebase_opts ) )
-    {
-        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
-        aHandler->AddErrorString( wxString::Format( _( "Rebase failed to start: %s" ), errorMsg ) );
-        return PullResult::MergeFailed;
-    }
-
-    KIGIT::GitRebasePtr rebasePtr( rebase );
-
-    while( true )
-    {
-        git_rebase_operation* op = nullptr;
-
-        if( git_rebase_next( &op, rebase ) != 0 )
-            break;
-
-        if( git_rebase_commit( nullptr, rebase, nullptr, nullptr, nullptr, nullptr ) )
-        {
-            wxString errorMsg = KIGIT_COMMON::GetLastGitError();
-            aHandler->AddErrorString( wxString::Format( _( "Rebase commit failed: %s" ), errorMsg ) );
-            return PullResult::MergeFailed;
-        }
-    }
-
-    if( git_rebase_finish( rebase, nullptr ) )
-    {
-        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
-        aHandler->AddErrorString( wxString::Format( _( "Rebase finish failed: %s" ), errorMsg ) );
-        return PullResult::MergeFailed;
-    }
-
-    return PullResult::Success;
+    return rebaseOnto( aHandler, aHandler->GetRepo(), aMergeHeads[0] );
 }
 
 
@@ -1713,67 +1750,8 @@ PullResult LIBGIT_BACKEND::RebaseOntoUpstream( GIT_PULL_HANDLER* aHandler )
     }
 
     KIGIT::GitAnnotatedCommitPtr ontoPtr( onto );
-    git_signature*               signature = nullptr;
 
-    if( git_signature_default( &signature, repo ) != GIT_OK )
-    {
-        aHandler->AddErrorString( _( "Could not create a commit signature.  Set user.name and user.email in your "
-                                     "git configuration." ) );
-        return PullResult::Error;
-    }
-
-    KIGIT::GitSignaturePtr signaturePtr( signature );
-    git_rebase_options     rebase_opts;
-    git_rebase_init_options( &rebase_opts, GIT_REBASE_OPTIONS_VERSION );
-    git_rebase* rebase = nullptr;
-
-    if( git_rebase_init( &rebase, repo, nullptr, onto, nullptr, &rebase_opts ) != GIT_OK )
-    {
-        aHandler->AddErrorString( wxString::Format( _( "Rebase failed to start: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
-        return PullResult::Error;
-    }
-
-    KIGIT::GitRebasePtr   rebasePtr( rebase );
-    git_rebase_operation* op = nullptr;
-
-    while( git_rebase_next( &op, rebase ) == GIT_OK )
-    {
-        git_index* index = nullptr;
-
-        if( git_repository_index( &index, repo ) == GIT_OK )
-        {
-            KIGIT::GitIndexPtr indexPtr( index );
-
-            if( git_index_has_conflicts( index ) )
-            {
-                git_rebase_abort( rebase );
-                aHandler->AddErrorString( _( "The rebase ran into conflicts.  This is best resolved from a "
-                                             "git command line." ) );
-                return PullResult::Conflict;
-            }
-        }
-
-        git_oid commit_oid;
-
-        if( git_rebase_commit( &commit_oid, rebase, nullptr, signature, nullptr, nullptr ) != GIT_OK )
-        {
-            git_rebase_abort( rebase );
-            aHandler->AddErrorString( _( "The rebase ran into conflicts.  This is best resolved from a git "
-                                         "command line." ) );
-            return PullResult::Conflict;
-        }
-    }
-
-    if( git_rebase_finish( rebase, signature ) != GIT_OK )
-    {
-        git_rebase_abort( rebase );
-        aHandler->AddErrorString( wxString::Format( _( "Rebase finish failed: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
-        return PullResult::Error;
-    }
-
-    return PullResult::Success;
+    return rebaseOnto( aHandler, repo, onto );
 }
 
 
