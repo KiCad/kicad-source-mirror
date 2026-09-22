@@ -22,7 +22,7 @@
 
 #include <sch_sheet_path.h>
 #include <sch_label.h>
-#include <sch_io/sch_io.h>
+#include <connection_graph.h>
 #include <project/net_settings.h>
 #include <project/project_file.h>
 

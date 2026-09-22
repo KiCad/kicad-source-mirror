@@ -517,6 +517,7 @@ set( EESCHEMA_SRCS
     symbol.cpp
     symbol_checker.cpp
     symbol_chooser_frame.cpp
+    variant_proxy_undo_item.cpp
     variant_symbol_utils.cpp
     symbol_import_manager.cpp
     symbol_import_reconciler.cpp

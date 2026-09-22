@@ -32,6 +32,7 @@
 #include <kiface_base.h>
 #include <sch_edit_frame.h>
 #include <sch_group.h>
+#include <variant_proxy_undo_item.h>
 #include <widgets/wx_infobar.h>
 #include <sch_reference_list.h>
 #include <tools/sch_editor_control.h>
@@ -1133,8 +1134,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onDeleteVariant( wxCommandEvent& aEvent )
     // An empty or default selection cannot be deleted.
     if( ( selection == wxNOT_FOUND ) || ( selection == 0 ) )
     {
-        m_parent->GetInfoBar()->ShowMessageFor( _( "Cannot delete the default variant." ),
-                                                 10000, wxICON_ERROR );
+        m_parent->GetInfoBar()->ShowMessageFor( _( "Cannot delete the default variant." ), 10000, wxICON_ERROR );
         return;
     }
 
@@ -1142,12 +1142,25 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onDeleteVariant( wxCommandEvent& aEvent )
     m_dataModel->DeleteStoredVariant( variantName );
     m_variantListBox->Delete( selection );
 
-    SCH_COMMIT commit( m_parent );
+    VARIANT_PROXY_UNDO_ITEM* undoItem = new VARIANT_PROXY_UNDO_ITEM( &m_parent->Schematic() );
+    SCH_COMMIT               commit( m_parent );
+    PICKED_ITEMS_LIST*       undoCmd = nullptr;
 
     m_parent->Schematic().DeleteVariant( variantName, &commit );
 
     if( !commit.Empty() )
-        commit.Push( _( "Delete Variant" ) );
+    {
+        commit.Push();
+        undoCmd = m_parent->PopCommandFromUndoList();
+    }
+    else
+    {
+        undoCmd = new PICKED_ITEMS_LIST();
+    }
+
+    undoCmd->PushItem( ITEM_PICKER( m_parent->GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
+    undoCmd->SetDescription( _( "Delete Variant" ) );
+    m_parent->PushCommandToUndoList( undoCmd );
 
     m_parent->OnModify();
 
@@ -1181,53 +1194,26 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
     // An empty or default selection cannot be renamed.
     if( ( selection == wxNOT_FOUND ) || ( selection == 0 ) )
     {
-        m_parent->GetInfoBar()->ShowMessageFor( _( "Cannot rename the default variant." ),
-                                                 10000, wxICON_ERROR );
+        m_parent->GetInfoBar()->ShowMessageFor( _( "Cannot rename the default variant." ), 10000, wxICON_ERROR );
         return;
     }
 
     wxString oldVariantName = m_variantListBox->GetString( selection );
 
-    wxTextEntryDialog dlg( this, _( "Enter new variant name:" ), _( "Rename Design Variant" ),
-                           oldVariantName, wxOK | wxCANCEL | wxCENTER );
+    wxTextEntryDialog dlg( this, _( "Enter new variant name:" ), _( "Rename Design Variant" ), oldVariantName,
+                           wxOK | wxCANCEL | wxCENTER );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
     wxString newVariantName = dlg.GetValue().Trim().Trim( false );
 
-    // Empty name is not allowed.
-    if( newVariantName.IsEmpty() )
-    {
-        m_parent->GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ), 10000, wxICON_ERROR );
-        return;
-    }
-
-    // Reserved name is not allowed (case-insensitive).
-    if( newVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
-    {
-        m_parent->GetInfoBar()->ShowMessageFor( wxString::Format( _( "'%s' is a reserved variant name." ),
-                                                                  GetDefaultVariantName() ),
-                                                10000, wxICON_ERROR );
-        return;
-    }
-
     // Same name (exact match) - nothing to do
     if( newVariantName == oldVariantName )
         return;
 
-    // Duplicate name is not allowed (case-insensitive).
-    for( const wxString& existingName : m_parent->Schematic().GetVariantNames() )
-    {
-        if( existingName.CmpNoCase( newVariantName ) == 0
-            && existingName.CmpNoCase( oldVariantName ) != 0 )
-        {
-            m_parent->GetInfoBar()->ShowMessageFor( wxString::Format( _( "Variant '%s' already exists." ),
-                                                                      existingName ),
-                                                    0000, wxICON_ERROR );
-            return;
-        }
-    }
+    if( !m_parent->ValidateNewVariantName( newVariantName, oldVariantName ) )
+        return;
 
     if( !m_grid->CommitPendingChanges() )
         return;
@@ -1235,7 +1221,27 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
     bool wasCurrent = m_parent->Schematic().GetCurrentVariant() == oldVariantName;
 
     m_dataModel->RenameStoredVariant( oldVariantName, newVariantName );
-    m_parent->Schematic().RenameVariant( oldVariantName, newVariantName );
+
+    VARIANT_PROXY_UNDO_ITEM* undoItem = new VARIANT_PROXY_UNDO_ITEM( &m_parent->Schematic() );
+    SCH_COMMIT               commit( m_parent );
+    PICKED_ITEMS_LIST*       undoCmd = nullptr;
+
+    m_parent->Schematic().RenameVariant( oldVariantName, newVariantName, &commit );
+
+    if( !commit.Empty() )
+    {
+        commit.Push();
+        undoCmd = m_parent->PopCommandFromUndoList();
+    }
+    else
+    {
+        undoCmd = new PICKED_ITEMS_LIST();
+    }
+
+    undoCmd->PushItem( ITEM_PICKER( m_parent->GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
+    undoCmd->SetDescription( _( "Rename Variant" ) );
+    m_parent->PushCommandToUndoList( undoCmd );
+
     m_parent->OnModify();
 
     wxArrayString ctrlContents = m_variantListBox->GetStrings();

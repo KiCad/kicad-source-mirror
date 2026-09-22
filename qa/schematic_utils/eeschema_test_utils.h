@@ -17,8 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef QA_EESCHEMA_EESCHEMA_TEST_UTILS__H
-#define QA_EESCHEMA_EESCHEMA_TEST_UTILS__H
+#pragma once
 
 #include <memory>
 #include <schematic.h>
@@ -26,16 +25,12 @@
 #include <sch_io/sch_io_mgr.h>
 #include <wx/filename.h>
 
-#include <connection_graph.h>
 #include <netlist_exporter_kicad.h>
 #include <netlist_exporter_spice.h>
 #include <netlist_reader/netlist_reader.h>
 #include <netlist_reader/netlist.h>
-#include <project.h>
-#include <sch_sheet.h>
 #include <schematic.h>
 #include <settings/settings_manager.h>
-#include <wildcards_and_files_ext.h>
 
 namespace KI_TEST
 {
@@ -47,16 +42,17 @@ class SCHEMATIC_TEST_FIXTURE
 public:
     SCHEMATIC_TEST_FIXTURE();
 
-    ~SCHEMATIC_TEST_FIXTURE();
+    virtual ~SCHEMATIC_TEST_FIXTURE();
 
 protected:
     virtual void LoadSchematic( const wxFileName& aFn );
     virtual wxFileName SchematicQAPath( const wxString& aBaseName );
+
     SETTINGS_MANAGER& SettingsManager() { return m_manager; }
 
-    std::unique_ptr<SCHEMATIC>    m_schematic;
-    IO_RELEASER<SCH_IO> m_pi;
-    SETTINGS_MANAGER    m_manager;
+    std::unique_ptr<SCHEMATIC> m_schematic;
+    IO_RELEASER<SCH_IO>        m_pi;
+    SETTINGS_MANAGER           m_manager;
 };
 
 
@@ -78,5 +74,3 @@ public:
 
     void TestNetlist( const wxString& aBaseName );
 };
-
-#endif // QA_EESCHEMA_EESCHEMA_TEST_UTILS__H

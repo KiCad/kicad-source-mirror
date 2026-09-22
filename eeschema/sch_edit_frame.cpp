@@ -29,6 +29,7 @@
 #include <dialogs/dialog_erc.h>
 #include <dialogs/dialog_book_reporter.h>
 #include <dialogs/dialog_symbol_fields_table.h>
+#include <dialogs/dialog_change_symbols.h>
 #include <widgets/sch_design_block_pane.h>
 #include <widgets/panel_remote_symbol.h>
 #include <wx/srchctrl.h>
@@ -66,6 +67,7 @@
 #include <sch_sheet_pin.h>
 #include <sch_commit.h>
 #include <sch_rule_area.h>
+#include <variant_proxy_undo_item.h>
 #include <settings/settings_manager.h>
 #include <advanced_config.h>
 #include <connectivity/conn_facade.h>
@@ -125,9 +127,6 @@
 #include <wx/choicdlg.h>
 #include <wx/textdlg.h>
 #include <wx/generic/treectlg.h>
-
-
-#include <dialog_change_symbols.h>
 
 
 #define DIFF_SYMBOLS_DIALOG_NAME wxT( "DiffSymbolsDialog" )
@@ -3344,8 +3343,8 @@ void SCH_EDIT_FRAME::EditVariantDescription()
 
     mainSizer->AddSpacer( 3 );
 
-    wxTextCtrl* descCtrl =
-            new wxTextCtrl( &dlg, wxID_ANY, currentDesc, wxDefaultPosition, wxSize( 300, 60 ), wxTE_MULTILINE );
+    wxTextCtrl* descCtrl = new wxTextCtrl( &dlg, wxID_ANY, currentDesc, wxDefaultPosition, wxSize( 400, 60 ),
+                                           wxTE_MULTILINE );
     mainSizer->Add( descCtrl, 1, wxLEFT | wxRIGHT | wxBOTTOM | wxEXPAND, 10 );
 
     wxStdDialogButtonSizer* btnSizer = new wxStdDialogButtonSizer();
@@ -3393,14 +3392,27 @@ void SCH_EDIT_FRAME::RemoveVariant()
     if( variantName.IsEmpty() )
         return;
 
-    SCH_COMMIT commit( this );
+    VARIANT_PROXY_UNDO_ITEM* undoItem = new VARIANT_PROXY_UNDO_ITEM( &Schematic() );
+    SCH_COMMIT               commit( this );
+    PICKED_ITEMS_LIST*       undoCmd = nullptr;
+
     Schematic().DeleteVariant( variantName, &commit );
 
     if( !commit.Empty() )
     {
-        commit.Push( _( "Delete Variant" ) );
-        OnModify();
+        commit.Push();
+        undoCmd = PopCommandFromUndoList();
     }
+    else
+    {
+        undoCmd = new PICKED_ITEMS_LIST();
+    }
+
+    undoCmd->PushItem( ITEM_PICKER( GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
+    undoCmd->SetDescription( _( "Delete Variant" ) );
+    PushCommandToUndoList( undoCmd );
+
+    OnModify();
 
     if( Schematic().GetCurrentVariant() == variantName )
         SetCurrentVariant( wxEmptyString );
@@ -3411,7 +3423,7 @@ void SCH_EDIT_FRAME::RemoveVariant()
 }
 
 
-bool SCH_EDIT_FRAME::validateNewVariantName( const wxString& aName, const wxString& aExcludeName )
+bool SCH_EDIT_FRAME::ValidateNewVariantName( const wxString& aName, const wxString& aExcludeName )
 {
     if( aName.IsEmpty() )
     {
@@ -3454,8 +3466,7 @@ void SCH_EDIT_FRAME::RenameVariant()
         return;
     }
 
-    wxSingleChoiceDialog selDlg( this,
-                                 _( "Select variant to rename:" ) + wxS( "                " ),
+    wxSingleChoiceDialog selDlg( this, _( "Select variant to rename:" ) + wxS( "                " ),
                                  _( "Rename Design Variant" ), choices );
     selDlg.Layout();
 
@@ -3467,9 +3478,8 @@ void SCH_EDIT_FRAME::RenameVariant()
     if( oldName.IsEmpty() )
         return;
 
-    wxTextEntryDialog nameDlg( this, _( "Enter new variant name:" ),
-                               _( "Rename Design Variant" ), oldName,
-                               wxOK | wxCANCEL | wxCENTER );
+    wxTextEntryDialog nameDlg( this, _( "Enter new variant name:" ), _( "Rename Design Variant" ),
+                               oldName, wxOK | wxCANCEL | wxCENTER );
 
     if( nameDlg.ShowModal() == wxID_CANCEL )
         return;
@@ -3479,18 +3489,32 @@ void SCH_EDIT_FRAME::RenameVariant()
     if( newName == oldName )
         return;
 
-    if( !validateNewVariantName( newName, oldName ) )
+    if( !ValidateNewVariantName( newName, oldName ) )
         return;
 
     // The model retargets the current variant to the new name, so capture whether the toolbar was
     // showing the variant being renamed before the rename runs.
     bool wasCurrent = Schematic().GetCurrentVariant() == oldName;
 
-    SCH_COMMIT commit( this );
+    VARIANT_PROXY_UNDO_ITEM* undoItem = new VARIANT_PROXY_UNDO_ITEM( &Schematic() );
+    SCH_COMMIT               commit( this );
+    PICKED_ITEMS_LIST*       undoCmd = nullptr;
+
     Schematic().RenameVariant( oldName, newName, &commit );
 
     if( !commit.Empty() )
-        commit.Push( _( "Rename Variant" ) );
+    {
+        commit.Push();
+        undoCmd = PopCommandFromUndoList();
+    }
+    else
+    {
+        undoCmd = new PICKED_ITEMS_LIST();
+    }
+
+    undoCmd->PushItem( ITEM_PICKER( GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
+    undoCmd->SetDescription( _( "Rename Variant" ) );
+    PushCommandToUndoList( undoCmd );
 
     // The registry entry changes even when no symbol carries an override, so always mark dirty.
     OnModify();
@@ -3518,8 +3542,7 @@ void SCH_EDIT_FRAME::CopyVariant()
         return;
     }
 
-    wxSingleChoiceDialog selDlg( this,
-                                 _( "Select variant to copy:" ) + wxS( "                " ),
+    wxSingleChoiceDialog selDlg( this, _( "Select variant to copy:" ) + wxS( "                " ),
                                  _( "Copy Design Variant" ), choices );
     selDlg.Layout();
 
@@ -3531,24 +3554,36 @@ void SCH_EDIT_FRAME::CopyVariant()
     if( sourceName.IsEmpty() )
         return;
 
-    wxTextEntryDialog nameDlg( this, _( "Enter name for the copied variant:" ),
-                               _( "Copy Design Variant" ),
-                               sourceName + wxS( "_copy" ),
-                               wxOK | wxCANCEL | wxCENTER );
+    wxTextEntryDialog nameDlg( this, _( "Enter name for the copied variant:" ), _( "Copy Design Variant" ),
+                               sourceName + wxS( "_copy" ), wxOK | wxCANCEL | wxCENTER );
 
     if( nameDlg.ShowModal() == wxID_CANCEL )
         return;
 
     wxString newName = nameDlg.GetValue().Trim().Trim( false );
 
-    if( !validateNewVariantName( newName, wxEmptyString ) )
+    if( !ValidateNewVariantName( newName, wxEmptyString ) )
         return;
 
-    SCH_COMMIT commit( this );
+    VARIANT_PROXY_UNDO_ITEM* undoItem = new VARIANT_PROXY_UNDO_ITEM( &Schematic() );
+    SCH_COMMIT               commit( this );
+    PICKED_ITEMS_LIST*       undoCmd = nullptr;
+
     Schematic().CopyVariant( sourceName, newName, &commit );
 
     if( !commit.Empty() )
-        commit.Push( _( "Copy Variant" ) );
+    {
+        commit.Push();
+        undoCmd = PopCommandFromUndoList();
+    }
+    else
+    {
+        undoCmd = new PICKED_ITEMS_LIST();
+    }
+
+    undoCmd->PushItem( ITEM_PICKER( GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
+    undoCmd->SetDescription( _( "Copy Variant" ) );
+    PushCommandToUndoList( undoCmd );
 
     // The new registry entry changes project state even when no symbol carries an override.
     OnModify();

@@ -973,6 +973,15 @@ public:
 
     void StartCrossProbeFlash( const std::vector<SCH_ITEM*>& aItems );
 
+    /**
+     * Validate a user-entered variant name for the rename/copy dialogs.
+     *
+     * Shows an info-bar error and returns false when the name is empty, matches the reserved
+     * default name, or collides (case-insensitively) with an existing variant.  @p aExcludeName
+     * lets a rename keep its own slot (e.g. a case-only rename of the same variant).
+     */
+    bool ValidateNewVariantName( const wxString& aName, const wxString& aExcludeName );
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -1017,15 +1026,6 @@ protected:
     void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
 
 private:
-    /**
-     * Validate a user-entered variant name for the rename/copy dialogs.
-     *
-     * Shows an info-bar error and returns false when the name is empty, matches the reserved
-     * default name, or collides (case-insensitively) with an existing variant.  @p aExcludeName
-     * lets a rename keep its own slot (e.g. a case-only rename of the same variant).
-     */
-    bool validateNewVariantName( const wxString& aName, const wxString& aExcludeName );
-
     // Called when resizing the Hierarchy Navigator panel
     void OnResizeHierarchyNavigator( wxSizeEvent& aEvent );
 

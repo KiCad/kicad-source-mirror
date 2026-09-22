@@ -3091,11 +3091,14 @@ void SCHEMATIC::AddVariant( const wxString& aVariantName )
 
 void SCHEMATIC::DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit )
 {
-    wxCHECK( m_rootSheet, /* void */ );
+    if( aCommit )
+    {
+        wxCHECK( m_rootSheet, /* void */ );
 
-    SCH_SCREENS allScreens( m_rootSheet );
+        SCH_SCREENS allScreens( m_rootSheet );
 
-    allScreens.DeleteVariant( aVariantName, aCommit );
+        allScreens.DeleteVariant( aVariantName, aCommit );
+    }
 
     if( m_currentVariant == aVariantName )
         SetCurrentVariant( wxEmptyString );
@@ -3105,8 +3108,7 @@ void SCHEMATIC::DeleteVariant( const wxString& aVariantName, SCH_COMMIT* aCommit
 }
 
 
-void SCHEMATIC::RenameVariant( const wxString& aOldName, const wxString& aNewName,
-                               SCH_COMMIT* aCommit )
+void SCHEMATIC::RenameVariant( const wxString& aOldName, const wxString& aNewName, SCH_COMMIT* aCommit )
 {
     wxCHECK( m_rootSheet, /* void */ );
     wxCHECK( !aOldName.IsEmpty() && !aNewName.IsEmpty(), /* void */ );

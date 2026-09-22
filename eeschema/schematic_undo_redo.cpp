@@ -30,6 +30,7 @@
 #include <sch_line.h>
 #include <sch_sheet_pin.h>
 #include <sch_table.h>
+#include <variant_proxy_undo_item.h>
 #include <tools/sch_selection_tool.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <tool/actions.h>
@@ -217,6 +218,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UN
         case UNDO_REDO::DELETED:
         case UNDO_REDO::PAGESETTINGS:
         case UNDO_REDO::REPEAT_ITEM:
+        case UNDO_REDO::VARIANTS:
             break;
 
         default:
@@ -380,6 +382,16 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     refreshHierarchy = true;
                 }
             }
+        }
+        else if( status == UNDO_REDO::VARIANTS )
+        {
+            // swap current settings with stored settings
+            VARIANT_PROXY_UNDO_ITEM  alt_item( &Schematic() );
+            VARIANT_PROXY_UNDO_ITEM* item = static_cast<VARIANT_PROXY_UNDO_ITEM*>( eda_item );
+            item->Restore( &Schematic() );
+            *item = std::move( alt_item );
+
+            UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );
         }
         else if( schItem )
         {

@@ -24,6 +24,7 @@
 #include <api/api_plugin_manager.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
+#include <variant_proxy_undo_item.h>
 #include <kiface_base.h>
 #include <bitmaps.h>
 #include <eeschema_id.h>
@@ -422,39 +423,22 @@ bool SCH_EDIT_FRAME::ShowAddVariantDialog( wxWindow* aParent )
     wxString variantName = nameCtrl->GetValue().Trim().Trim( false );
     wxString variantDesc = descCtrl->GetValue().Trim().Trim( false );
 
-    // Empty strings, reserved names, and duplicate variant names are not allowed.
-    if( variantName.IsEmpty() )
-    {
-        GetInfoBar()->ShowMessageFor( _( "Variant name cannot be empty." ), 10000, wxICON_ERROR );
+    if( !ValidateNewVariantName( variantName, wxEmptyString ) )
         return false;
-    }
-
-    // Check for reserved name (case-insensitive)
-    if( variantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
-    {
-        GetInfoBar()->ShowMessageFor( wxString::Format( _( "'%s' is a reserved variant name." ),
-                                                         GetDefaultVariantName() ),
-                                      10000, wxICON_ERROR );
-        return false;
-    }
-
-    // Check for duplicate variant names (case-insensitive)
-    for( const wxString& existingName : Schematic().GetVariantNames() )
-    {
-        if( existingName.CmpNoCase( variantName ) == 0 )
-        {
-            GetInfoBar()->ShowMessageFor( wxString::Format( _( "Variant '%s' already exists." ),
-                                                            existingName ),
-                                          10000, wxICON_ERROR );
-            return false;
-        }
-    }
 
     // Add variant to the schematic
+
+    VARIANT_PROXY_UNDO_ITEM* undoItem = new VARIANT_PROXY_UNDO_ITEM( &Schematic() );
+    PICKED_ITEMS_LIST*       undoCmd = new PICKED_ITEMS_LIST();
+
     Schematic().AddVariant( variantName );
 
     if( !variantDesc.IsEmpty() )
         Schematic().SetVariantDescription( variantName, variantDesc );
+
+    undoCmd->PushItem( ITEM_PICKER( GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
+    undoCmd->SetDescription( _( "Add Variant" ) );
+    PushCommandToUndoList( undoCmd );
 
     // Update the variant selector and select the new variant
     UpdateVariantSelectionCtrl( Schematic().GetVariantNamesForUI() );

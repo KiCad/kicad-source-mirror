@@ -17,11 +17,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- * @file
- * Test suite for SCH_SYMBOL object.
- */
-
 #include <settings/settings_manager.h>
 #include <sch_screen.h>
 #include <schematic.h>
@@ -29,16 +24,17 @@
 #include <schematic_utils/schematic_file_util.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include "eeschema_test_utils.h"
-
-// Code under test
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>
+#include <sch_commit.h>
 #include <wildcards_and_files_ext.h>
 #include <lib_symbol.h>
 #include <eda_search_data.h>
 #include <sim/sim_lib_mgr.h>
 #include <sim/sim_model.h>
 #include <reporter.h>
+
+#include "tool/tool_manager.h"
 
 
 class TEST_SCH_SYMBOL_FIXTURE : public KI_TEST::SCHEMATIC_TEST_FIXTURE
@@ -964,7 +960,10 @@ BOOST_AUTO_TEST_CASE( VariantDeletionCascade )
     BOOST_CHECK( variant.has_value() );
 
     // Delete the variant
-    m_schematic->DeleteVariant( variantName );
+    TOOL_MANAGER manager;
+    manager.SetEnvironment( m_schematic.get(), nullptr, nullptr, nullptr, nullptr );
+    SCH_COMMIT commit( &manager );
+    m_schematic->DeleteVariant( variantName, &commit );
 
     // Variant should no longer exist at schematic level
     BOOST_CHECK( !m_schematic->GetVariantNames().contains( variantName ) );
