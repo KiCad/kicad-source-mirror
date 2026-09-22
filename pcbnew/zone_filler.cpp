@@ -2787,7 +2787,12 @@ void ZONE_FILLER::postKnockoutMinWidthPrune( const ZONE* aZone, SHAPE_POLY_SET& 
     SHAPE_POLY_SET preDeflate = aFillPolys.CloneDropTriangulation();
 
     if( aSameNetApron.OutlineCount() > 0 )
-        aFillPolys.BooleanAdd( aSameNetApron );
+    {
+        // Overlap rather than abut the fill, or a rounding slit along the shared edge opens into a notch
+        SHAPE_POLY_SET apron = aSameNetApron.CloneDropTriangulation();
+        apron.Inflate( epsilon, CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
+        aFillPolys.BooleanAdd( apron );
+    }
 
     aFillPolys.Deflate( half_min_width - epsilon, CORNER_STRATEGY::CHAMFER_ALL_CORNERS,
                         m_maxError );

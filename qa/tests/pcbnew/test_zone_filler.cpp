@@ -3825,3 +3825,55 @@ BOOST_FIXTURE_TEST_CASE( SameNetBorderIdenticalAcrossFillModes, ZONE_FILL_TEST_F
                            wxString::Format( "Expected at least three zones sharing a same-net "
                                              "border, found %d.", checkedZones ) );
 }
+
+
+// Issue 23790: a different-net knockout elsewhere in a zone must not notch the corner where it
+// abuts a same-net zone along a shared edge
+BOOST_FIXTURE_TEST_CASE( RegressionSameNetTouchingZonesCorner, ZONE_FILL_TEST_FIXTURE )
+{
+    ADVANCED_CFG& cfg = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+
+    struct ScopeGuard
+    {
+        bool& ref;
+        bool  orig;
+        ~ScopeGuard() { ref = orig; }
+    } guard{ cfg.m_ZoneFillIterativeRefill, cfg.m_ZoneFillIterativeRefill };
+
+    cfg.m_ZoneFillIterativeRefill = true;
+
+    KI_TEST::LoadBoard( m_settingsManager, "issue23790/touching_zones", m_board );
+    KI_TEST::FillZones( m_board.get() );
+
+    std::vector<ZONE*> rails;
+
+    for( ZONE* zone : m_board->Zones() )
+    {
+        if( zone->GetNetname() == wxS( "gate_drv_rail" ) )
+            rails.push_back( zone );
+    }
+
+    BOOST_REQUIRE_EQUAL( rails.size(), 2 );
+
+    const PCB_LAYER_ID layer = F_Cu;
+    const int          reach = rails[0]->GetMinThickness();
+
+    // The band either side of the shared edge, within the combined outline
+    SHAPE_POLY_SET nearA = *rails[0]->Outline();
+    SHAPE_POLY_SET nearB = *rails[1]->Outline();
+    nearA.Inflate( reach, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+    nearB.Inflate( reach, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_HIGH_DEF );
+
+    SHAPE_POLY_SET seam = *rails[0]->Outline();
+    seam.BooleanAdd( *rails[1]->Outline() );
+    seam.BooleanIntersection( nearA );
+    seam.BooleanIntersection( nearB );
+
+    seam.BooleanSubtract( *rails[0]->GetFilledPolysList( layer ) );
+    seam.BooleanSubtract( *rails[1]->GetFilledPolysList( layer ) );
+
+    double uncovered = seam.Area() / ( pcbIUScale.IU_PER_MM * (double) pcbIUScale.IU_PER_MM );
+
+    BOOST_CHECK_MESSAGE( uncovered < 0.01,
+                         wxString::Format( "%.4f mm^2 unfilled at the shared edge", uncovered ) );
+}
