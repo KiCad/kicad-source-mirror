@@ -2066,6 +2066,17 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
 
     int unit = getKiCadUnitNumberFromGate( aCadstarSymbol.GateID );
 
+    if( m_sheetMap.find( aCadstarSymbol.LayerID ) == m_sheetMap.end() )
+    {
+        m_reporter->Report( wxString::Format( _( "Symbol '%s' references sheet ID '%s' which does not exist "
+                                                 "in the design. The symbol was not loaded." ),
+                                              aCadstarSymbol.ComponentRef.Designator,
+                                              aCadstarSymbol.LayerID ),
+                            RPT_SEVERITY_ERROR );
+
+        return nullptr;
+    }
+
     SCH_SHEET_PATH sheetpath;
     SCH_SHEET* kiSheet = m_sheetMap.at( aCadstarSymbol.LayerID );
     m_rootSheet->LocatePathOfScreen( kiSheet->GetScreen(), &sheetpath );
@@ -2103,18 +2114,6 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
     }
 
     symbol->SetOrientation( compOrientation );
-
-    if( m_sheetMap.find( aCadstarSymbol.LayerID ) == m_sheetMap.end() )
-    {
-        m_reporter->Report( wxString::Format( _( "Symbol '%s' references sheet ID '%s' which does not exist "
-                                                 "in the design. The symbol was not loaded." ),
-                                              aCadstarSymbol.ComponentRef.Designator,
-                                              aCadstarSymbol.LayerID ),
-                            RPT_SEVERITY_ERROR );
-
-        delete symbol;
-        return nullptr;
-    }
 
     wxString gate = ( aCadstarSymbol.GateID.IsEmpty() ) ? wxString( wxT( "A" ) ) : aCadstarSymbol.GateID;
     wxString partGateIndex = aCadstarSymbol.PartRef.RefID + gate;
