@@ -2407,6 +2407,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
 
             SCH_SHAPE* arcShape = new SCH_SHAPE( SHAPE_T::ARC, LAYER_NOTES, lineWidth );
             arcShape->SetArcGeometry( tempArc.GetP0(), tempArc.GetArcMid(), tempArc.GetP1() );
+            arcShape->SetLineStyle( lineStyle );
 
             loadItemOntoKiCadSheet( aCadstarSheetID, arcShape );
             break;
