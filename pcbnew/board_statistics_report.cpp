@@ -194,32 +194,32 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
 
     for( PCB_TRACK* track : aBoard->Tracks() )
     {
-        if( track->Type() == PCB_TRACE_T )
+        if( track->Type() == PCB_TRACE_T || track->Type() == PCB_ARC_T )
             aData.minTrackWidth = std::min( aData.minTrackWidth, track->GetWidth() );
 
         if( !track->IsType( trackTypes ) )
             continue;
 
-        PCB_LAYER_ID layer = track->GetLayer();
-        auto         trackShapeA = track->GetEffectiveShape( layer );
-
         for( PCB_TRACK* otherTrack : aBoard->Tracks() )
         {
-            if( layer != otherTrack->GetLayer() )
-                continue;
-
             if( track->GetNetCode() == otherTrack->GetNetCode() )
                 continue;
 
             if( !otherTrack->IsType( trackTypes ) )
                 continue;
 
-            int  actual = 0;
-            auto trackShapeB = otherTrack->GetEffectiveShape( layer );
-            bool collide = trackShapeA->Collide( trackShapeB.get(), aData.minClearanceTrackToTrack, &actual );
+            LSET commonLayers = track->GetLayerSet() & otherTrack->GetLayerSet() & LSET::AllCuMask();
 
-            if( collide )
-                aData.minClearanceTrackToTrack = std::min( aData.minClearanceTrackToTrack, actual );
+            for( PCB_LAYER_ID layer : commonLayers.CuStack() )
+            {
+                int  actual = 0;
+                auto trackShapeA = track->GetEffectiveShape( layer );
+                auto trackShapeB = otherTrack->GetEffectiveShape( layer );
+                bool collide = trackShapeA->Collide( trackShapeB.get(), aData.minClearanceTrackToTrack, &actual );
+
+                if( collide )
+                    aData.minClearanceTrackToTrack = std::min( aData.minClearanceTrackToTrack, actual );
+            }
         }
 
         if( track->Type() == PCB_VIA_T )
@@ -271,36 +271,39 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
             {
                 for( int j = 0; j < polySet.HoleCount( i ); ++j )
                     aData.boardArea -= polySet.Hole( i, j ).Area();
+            }
+        }
 
-                for( FOOTPRINT* footprint : aBoard->Footprints() )
+        if( aOptions.subtractHolesFromBoardArea )
+        {
+            for( FOOTPRINT* footprint : aBoard->Footprints() )
+            {
+                for( PAD* pad : footprint->Pads() )
                 {
-                    for( PAD* pad : footprint->Pads() )
-                    {
-                        if( !pad->HasHole() )
-                            continue;
+                    if( !pad->HasHole() )
+                        continue;
 
-                        std::shared_ptr<SHAPE_SEGMENT> hole = pad->GetEffectiveHoleShape();
+                    std::shared_ptr<SHAPE_SEGMENT> hole = pad->GetEffectiveHoleShape();
 
-                        if( !hole )
-                            continue;
+                    if( !hole )
+                        continue;
 
-                        const SEG& seg = hole->GetSeg();
-                        double     width = hole->GetWidth();
-                        double     area = seg.Length() * width;
+                    const SEG& seg = hole->GetSeg();
+                    double     width = hole->GetWidth();
+                    double     area = seg.Length() * width;
 
-                        area += M_PI * 0.25 * width * width;
-                        aData.boardArea -= area;
-                    }
+                    area += M_PI * 0.25 * width * width;
+                    aData.boardArea -= area;
                 }
+            }
 
-                for( PCB_TRACK* track : aBoard->Tracks() )
+            for( PCB_TRACK* track : aBoard->Tracks() )
+            {
+                if( track->Type() == PCB_VIA_T )
                 {
-                    if( track->Type() == PCB_VIA_T )
-                    {
-                        PCB_VIA* via = static_cast<PCB_VIA*>( track );
-                        double   drill = via->GetDrillValue();
-                        aData.boardArea -= M_PI * 0.25 * drill * drill;
-                    }
+                    PCB_VIA* via = static_cast<PCB_VIA*>( track );
+                    double   drill = via->GetDrillValue();
+                    aData.boardArea -= M_PI * 0.25 * drill * drill;
                 }
             }
         }
@@ -415,6 +418,9 @@ void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOpt
                 }
             },
             RECURSE_MODE::RECURSE );
+
+    frontCopper.Simplify();
+    backCopper.Simplify();
 
     if( aOptions.subtractHolesFromCopperAreas )
     {
