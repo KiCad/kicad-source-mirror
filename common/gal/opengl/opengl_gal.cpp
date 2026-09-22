@@ -594,12 +594,11 @@ bool OPENGL_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 {
     GAL_CONTEXT_LOCKER lock( this );
 
-    if( !m_isContextValid )
-        return false;
-
     bool refresh = false;
 
-    if( m_options.antialiasing_mode != m_compositor->GetAntialiasingMode() )
+    // Options arrive before the canvas is realized, so the context is not current yet.  Only
+    // the compositor needs it; BeginDrawing reconciles the mode once we can bind
+    if( m_isContextValid && m_options.antialiasing_mode != m_compositor->GetAntialiasingMode() )
     {
         m_compositor->SetAntialiasingMode( m_options.antialiasing_mode );
         m_isFramebufferInitialized = false;
@@ -654,6 +653,13 @@ void OPENGL_GAL::BeginDrawing()
     // Create the screen transformation (Do the RH-LH conversion here)
     glOrtho( 0, (GLint) m_screenSize.x, (GLsizei) m_screenSize.y, 0,
              -m_depthRange.x, -m_depthRange.y );
+
+    // An antialiasing change that arrived without a current context never reached the compositor
+    if( m_options.antialiasing_mode != m_compositor->GetAntialiasingMode() )
+    {
+        m_compositor->SetAntialiasingMode( m_options.antialiasing_mode );
+        m_isFramebufferInitialized = false;
+    }
 
     if( !m_isFramebufferInitialized )
     {
