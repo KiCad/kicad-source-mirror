@@ -249,6 +249,7 @@ private:
      * @param aCadstarShape
      * @param aCadstarLayerID KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
+     * @param aLineStyle Line style of the line (solid, dash, etc.)
      * @param aShapeName for reporting warnings/errors to the user
      * @param aContainer to draw on (e.g. m_board)
      * @param aCadstarGroupID to add the shape to
@@ -259,7 +260,7 @@ private:
      * @param aMirrorInvert if true, mirrors the shapes
      */
     void drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_ID& aKiCadLayer,
-                           int aLineThickness, const wxString& aShapeName,
+                           int aLineThickness, LINE_STYLE aLineStyle, const wxString& aShapeName,
                            BOARD_ITEM_CONTAINER* aContainer,
                            const GROUP_ID& aCadstarGroupID = wxEmptyString,
                            const VECTOR2I& aMoveVector = { 0, 0 },
@@ -280,9 +281,8 @@ private:
      * @param aTransformCentre around which all transforms are applied (KiCad coordinates)
      * @param aMirrorInvert if true, mirrors the shapes
      */
-    void drawCadstarCutoutsAsShapes( const std::vector<CUTOUT>& aCutouts,
-                                     const PCB_LAYER_ID& aKiCadLayer, int aLineThickness,
-                                     BOARD_ITEM_CONTAINER* aContainer,
+    void drawCadstarCutoutsAsShapes( const std::vector<CUTOUT>& aCutouts, const PCB_LAYER_ID& aKiCadLayer,
+                                     int aLineThickness, BOARD_ITEM_CONTAINER* aContainer,
                                      const GROUP_ID& aCadstarGroupID = wxEmptyString,
                                      const VECTOR2I& aMoveVector = { 0, 0 },
                                      double aRotationAngle = 0.0,
@@ -305,7 +305,8 @@ private:
      * @param aCadstarGroupID to add the shape to
      */
     void drawCadstarVerticesAsShapes( const std::vector<VERTEX>& aCadstarVertices,
-                                      const PCB_LAYER_ID& aKiCadLayer, int aLineThickness,
+                                      const PCB_LAYER_ID& aKiCadLayer,
+                                      int aLineThickness, LINE_STYLE aLineStyle,
                                       BOARD_ITEM_CONTAINER* aContainer,
                                       const GROUP_ID& aCadstarGroupID = wxEmptyString,
                                       const VECTOR2I& aMoveVector = { 0, 0 },
@@ -440,6 +441,7 @@ private:
 
     //Helper Functions for obtaining CADSTAR elements in the parsed structures
     int        getLineThickness( const LINECODE_ID& aCadstarLineCodeID );
+    LINE_STYLE getLineStyle( const LINECODE_ID& aCadstarLineCodeID );
     COPPERCODE getCopperCode( const COPPERCODE_ID& aCadstaCopperCodeID );
     HATCHCODE  getHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
     LAYERPAIR  getLayerPair( const LAYERPAIR_ID& aCadstarLayerPairID );

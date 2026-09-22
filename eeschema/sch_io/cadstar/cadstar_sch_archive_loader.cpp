@@ -1626,20 +1626,18 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
 
         if( fig.Shape.Type == SHAPE_TYPE::OPENSHAPE )
         {
-            loadLibrarySymbolShapeVertices( fig.Shape.Vertices, csSym.Origin, kiSym.get(),
-                                            gateNumber,
-                                            lineThickness );
+            loadLibrarySymbolShapeVertices( fig.Shape.Vertices, csSym.Origin, kiSym.get(), gateNumber,
+                                            lineThickness, linestyle );
         }
         else
         {
             SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
 
-            shape->SetPolyShape( fig.Shape.ConvertToPolySet(
-                    [&]( const VECTOR2I& aPt )
-                    {
-                        return getKiCadLibraryPoint( aPt, csSym.Origin );
-                    },
-                    ARC_ACCURACY ) );
+            shape->SetPolyShape( fig.Shape.ConvertToPolySet( [&]( const VECTOR2I& aPt )
+                                                             {
+                                                                 return getKiCadLibraryPoint( aPt, csSym.Origin );
+                                                             },
+                                                             ARC_ACCURACY ) );
 
             shape->SetUnit( gateNumber );
 
@@ -1983,9 +1981,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::setFootprintOnSymbol( LIB_SYMBOL* aKiCadSymbol,
 
 void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
                                                                  const VECTOR2I& aSymbolOrigin,
-                                                                 LIB_SYMBOL* aSymbol,
-                                                                 int aGateNumber,
-                                                                 int aLineThickness )
+                                                                 LIB_SYMBOL* aSymbol, int aGateNumber,
+                                                                 int aLineThickness, LINE_STYLE aLineStyle )
 {
     const VERTEX* prev = &aCadstarVertices.at( 0 );
     const VERTEX* cur;
@@ -2002,16 +1999,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
         VECTOR2I   endPoint   = getKiCadLibraryPoint( cur->End, aSymbolOrigin );
         VECTOR2I   centerPoint;
 
-        if( cur->Type == VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE
-                || cur->Type == VERTEX_TYPE::CLOCKWISE_SEMICIRCLE )
-        {
+        if( cur->Type == VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE || cur->Type == VERTEX_TYPE::CLOCKWISE_SEMICIRCLE )
             centerPoint = ( startPoint + endPoint ) / 2;
-        }
         else
-        {
             centerPoint = getKiCadLibraryPoint( cur->Center, aSymbolOrigin );
-        }
-
 
         switch( cur->Type )
         {
@@ -2047,7 +2038,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
         }
 
         shape->SetUnit( aGateNumber );
-        shape->SetStroke( STROKE_PARAMS( aLineThickness, LINE_STYLE::SOLID ) );
+        shape->SetStroke( STROKE_PARAMS( aLineThickness, aLineStyle ) );
         aSymbol->AddDrawItem( shape, false );
 
         prev = cur;
@@ -2739,8 +2730,7 @@ bool CADSTAR_SCH_ARCHIVE_LOADER::isAttributeVisible( const ATTRIBUTE_ID& aCadsta
 
 int CADSTAR_SCH_ARCHIVE_LOADER::getLineThickness( const LINECODE_ID& aCadstarLineCodeID )
 {
-    wxCHECK( Assignments.Codedefs.LineCodes.find( aCadstarLineCodeID )
-                     != Assignments.Codedefs.LineCodes.end(),
+    wxCHECK( Assignments.Codedefs.LineCodes.find( aCadstarLineCodeID ) != Assignments.Codedefs.LineCodes.end(),
              schIUScale.MilsToIU( DEFAULT_WIRE_WIDTH_MILS ) );
 
     return getKiCadLength( Assignments.Codedefs.LineCodes.at( aCadstarLineCodeID ).Width );

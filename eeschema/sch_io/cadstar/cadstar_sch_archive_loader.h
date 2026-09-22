@@ -200,7 +200,7 @@ private:
 
     void loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
                                          const VECTOR2I& aSymbolOrigin, LIB_SYMBOL* aSymbol,
-                                         int aGateNumber, int aLineThickness );
+                                         int aGateNumber, int aLineThickness, LINE_STYLE aLineStyle );
 
     void applyToLibraryFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
                                        const VECTOR2I& aSymbolOrigin, SCH_FIELD* aKiCadField );
