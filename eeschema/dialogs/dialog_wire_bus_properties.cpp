@@ -209,21 +209,25 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
                     static_cast<SCH_BUS_ENTRY_BASE*>( item )->SetLineStyle( lineStyle );
             }
 
-            COLOR4D color = m_colorSwatch->GetSwatchColor();
+            if( m_colorSwatch->GetSwatchColor() != COLOR4D::UNSPECIFIED )
+            {
+                COLOR4D color = m_colorSwatch->GetSwatchColor();
 
-            if( item->Type() == SCH_LINE_T )
-                static_cast<SCH_LINE*>( item )->SetLineColor( color );
-            else if( dynamic_cast<SCH_BUS_ENTRY_BASE*>( item ) )
-                static_cast<SCH_BUS_ENTRY_BASE*>( item )->SetBusEntryColor( color );
+                if( item->Type() == SCH_LINE_T )
+                    static_cast<SCH_LINE*>( item )->SetLineColor( color );
+                else if( dynamic_cast<SCH_BUS_ENTRY_BASE*>( item ) )
+                    static_cast<SCH_BUS_ENTRY_BASE*>( item )->SetBusEntryColor( color );
+            }
         }
         else
         {
             SCH_JUNCTION* junction = static_cast<SCH_JUNCTION*>( item );
 
-            junction->SetColor( m_colorSwatch->GetSwatchColor() );
+            if( m_colorSwatch->GetSwatchColor() != COLOR4D::UNSPECIFIED )
+                junction->SetColor( m_colorSwatch->GetSwatchColor() );
 
             if( !m_junctionSize.IsIndeterminate() )
-                junction->SetDiameter( m_junctionSize.GetValue() );
+                junction->SetDiameter( m_junctionSize.GetIntValue() );
         }
     }
 
