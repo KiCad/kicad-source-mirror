@@ -625,8 +625,7 @@ struct APP_KICAD : public wxApp
             }
         }
 
-        aEvent.Skip();
-        return false;
+        return wxApp::ProcessEvent( aEvent );
     }
 
     /**

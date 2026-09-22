@@ -686,12 +686,11 @@ struct APP_KICAD_CLI : public wxAppConsole
 
             if( keyEvent )
             {
-                wxLogTrace( kicadTraceKeyEvent, "APP_KICAD::ProcessEvent %s", dump( *keyEvent ) );
+                wxLogTrace( kicadTraceKeyEvent, "APP_KICAD_CLI::ProcessEvent %s", dump( *keyEvent ) );
             }
         }
 
-        aEvent.Skip();
-        return false;
+        return wxAppConsole::ProcessEvent( aEvent );
     }
 
     /**
