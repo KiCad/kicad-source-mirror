@@ -1301,6 +1301,42 @@ BOOST_AUTO_TEST_CASE( ViewsDirectoryIgnoresStaleStoredFolders )
 }
 
 
+BOOST_AUTO_TEST_CASE( ShortFramedPackagePinsKeepTheirSlots )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path dsn = findCorpusDesign( corpusEnv, "1822A.DSN" );
+
+    if( dsn.empty() )
+        return;
+
+    std::unique_ptr<SCHEMATIC> schematic( new SCHEMATIC( nullptr ) );
+    SETTINGS_MANAGER           manager;
+    manager.LoadProject( "" );
+    schematic->SetProject( &manager.Prj() );
+    schematic->CurrentSheet().clear();
+    schematic->CurrentSheet().push_back( &schematic->Root() );
+
+    SCH_IO_ORCAD plugin;
+    plugin.LoadSchematicFile( dsn.string(), schematic.get() );
+
+    SCH_SYMBOL* connector = nullptr;
+
+    for( const SCH_SHEET_PATH& path : schematic->BuildSheetListSortedByPageNumbers() )
+    {
+        if( !connector )
+            connector = findConvertedSymbol( *path.LastScreen(), path, wxS( "J7" ) );
+    }
+
+    // Without pin slots the default definition misses an empty slot and a duplicate variant wins
+    BOOST_REQUIRE( connector );
+    BOOST_CHECK_EQUAL( connector->GetLibId().GetLibItemName().wx_str(), wxS( "Connex_112404_gnd2_0_pins2" ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( OccurrenceFlatNetConnectsAcrossPagesWithoutOffpageSymbols )
 {
     const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );

@@ -23,10 +23,13 @@
 #include <sch_io/orcad/orcad_cache.h>
 
 #include <algorithm>
+#include <cstdlib>
 #include <utility>
 #include <set>
 
 #include <ki_exception.h>
+
+#include <sch_io/orcad/orcad_orient.h>
 
 
 namespace
@@ -569,31 +572,63 @@ ORCAD_DRAWN_INSTANCE OrcadReadDrawnInstance( ORCAD_STRUCT_READER& aReader, const
             pinInsts.push_back( std::move( *pin ) );
     }
 
+    block.pins = OrcadResolveBlockPins( orientation, x1, y1, nested, pinInsts );
+
+    return block;
+}
+
+
+std::vector<ORCAD_BLOCK_PIN> OrcadResolveBlockPins( int aOrient, int aX1, int aY1, const ORCAD_SYMBOL_DEF& aDefinition,
+                                                    const std::vector<ORCAD_PIN_INST>& aPlaced )
+{
+    ORCAD_BBOX                    box = aDefinition.bbox.value_or( ORCAD_BBOX() );
     std::set<std::pair<int, int>> placedPoints;
     std::set<std::pair<int, int>> definitionPoints;
 
-    for( const ORCAD_PIN_INST& pin : pinInsts )
+    for( const ORCAD_PIN_INST& pin : aPlaced )
         placedPoints.emplace( pin.x, pin.y );
 
-    for( const ORCAD_SYMBOL_PIN& pin : nested.pins )
+    for( const ORCAD_SYMBOL_PIN& pin : aDefinition.pins )
         definitionPoints.emplace( pin.hotptX, pin.hotptY );
 
     bool useDefinitionGeometry = placedPoints.size() <= 1 && definitionPoints.size() > 1;
 
-    for( size_t i = 0; i < pinInsts.size() && i < nested.pins.size(); i++ )
-    {
-        const ORCAD_SYMBOL_PIN& pin = nested.pins[i];
+    std::vector<ORCAD_BLOCK_PIN> pins;
 
-        ORCAD_BLOCK_PIN blockPin;
-        blockPin.name = pin.name;
-        blockPin.portType = pin.portType;
-        blockPin.x = useDefinitionGeometry ? x1 + pin.hotptX - bbox.x1 : pinInsts[i].x;
-        blockPin.y = useDefinitionGeometry ? y1 + pin.hotptY - bbox.y1 : pinInsts[i].y;
-        blockPin.noConnect = pinInsts[i].IsNoConnect();
-        block.pins.push_back( std::move( blockPin ) );
+    for( size_t i = 0; i < aPlaced.size(); i++ )
+    {
+        const ORCAD_PIN_INST& placed = aPlaced[i];
+        int                   slot = placed.pinIndex ? std::abs( placed.pinIndex ) - 1 : static_cast<int>( i );
+
+        // Definition pins are stored in ascending slot order
+        auto definition = std::lower_bound( aDefinition.pins.begin(), aDefinition.pins.end(), slot,
+                                            []( const ORCAD_SYMBOL_PIN& aPin, int aSlot )
+                                            {
+                                                return aPin.position < aSlot;
+                                            } );
+
+        if( definition == aDefinition.pins.end() || definition->position != slot )
+            continue;
+
+        ORCAD_BLOCK_PIN pin;
+        pin.name = definition->name;
+        pin.portType = definition->portType;
+        pin.x = placed.x;
+        pin.y = placed.y;
+        pin.noConnect = placed.IsNoConnect();
+
+        if( useDefinitionGeometry )
+        {
+            VECTOR2I pos = OrcadTransformPoint( aOrient, box.x2 - box.x1, box.y2 - box.y1, aX1, aY1,
+                                                definition->hotptX - box.x1, definition->hotptY - box.y1 );
+            pin.x = pos.x;
+            pin.y = pos.y;
+        }
+
+        pins.push_back( std::move( pin ) );
     }
 
-    return block;
+    return pins;
 }
 
 

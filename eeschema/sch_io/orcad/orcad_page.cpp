@@ -24,7 +24,6 @@
 
 #include <algorithm>
 #include <utility>
-#include <set>
 
 #include <ki_exception.h>
 #include <wx/translation.h>
@@ -860,6 +859,7 @@ static ORCAD_SYMBOL_DEF v2LibSymbolDef( ORCAD_STREAM& aStream, const std::vector
     for( uint16_t i = 0; i < pinCount; i++ )
     {
         ORCAD_SYMBOL_PIN pin;
+        pin.position = i;
 
         if( v2SymbolPin( aStream, aStrings, pin ) )
             def.pins.push_back( std::move( pin ) );
@@ -1047,27 +1047,7 @@ static ORCAD_DRAWN_INSTANCE v2DrawnInstance( ORCAD_STREAM& aStream, const std::v
     for( uint16_t i = 0; i < pinCount; i++ )
         pinInsts.push_back( v2PinInst( aStream, aStrings ) );
 
-    std::set<std::pair<int, int>> placedPoints;
-    std::set<std::pair<int, int>> definitionPoints;
-
-    for( const ORCAD_PIN_INST& pin : pinInsts )
-        placedPoints.emplace( pin.x, pin.y );
-
-    for( const ORCAD_SYMBOL_PIN& pin : nested.pins )
-        definitionPoints.emplace( pin.hotptX, pin.hotptY );
-
-    bool useDefinitionGeometry = placedPoints.size() <= 1 && definitionPoints.size() > 1;
-
-    for( size_t i = 0; i < pinInsts.size() && i < nested.pins.size(); i++ )
-    {
-        ORCAD_BLOCK_PIN pin;
-        pin.name = nested.pins[i].name;
-        pin.portType = nested.pins[i].portType;
-        pin.x = useDefinitionGeometry ? block.x1 + nested.pins[i].hotptX - bbox.x1 : pinInsts[i].x;
-        pin.y = useDefinitionGeometry ? block.y1 + nested.pins[i].hotptY - bbox.y1 : pinInsts[i].y;
-        pin.noConnect = pinInsts[i].IsNoConnect();
-        block.pins.push_back( std::move( pin ) );
-    }
+    block.pins = OrcadResolveBlockPins( orientation, block.x1, block.y1, nested, pinInsts );
 
     return block;
 }

@@ -76,6 +76,11 @@ ORCAD_SYMBOL_DEF OrcadReadSymbolDef( ORCAD_STRUCT_READER& aReader,
 ORCAD_DRAWN_INSTANCE OrcadReadDrawnInstance( ORCAD_STRUCT_READER& aReader,
                                              const ORCAD_PREFIXES& aPrefixes );
 
+/** Pair placed pin records with the inline definition by pin index. When every placed pin sits on
+ * one point, the definition pins are placed through the block orientation instead. */
+std::vector<ORCAD_BLOCK_PIN> OrcadResolveBlockPins( int aOrient, int aX1, int aY1, const ORCAD_SYMBOL_DEF& aDefinition,
+                                                    const std::vector<ORCAD_PIN_INST>& aPlaced );
+
 
 ORCAD_DEVICE OrcadReadDevice( ORCAD_STRUCT_READER& aReader );
 
