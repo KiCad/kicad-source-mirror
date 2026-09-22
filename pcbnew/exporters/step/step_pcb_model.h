@@ -234,15 +234,17 @@ public:
                           const wxString& aRefDes );
 
     /**
-     * Add metallic pin extrusions for through-hole pads.
-     * Pins run from the opposite board surface (with 1mm protrusion) to the standoff height.
-     * @param aFootprint the footprint whose THT pads to extrude.
+     * Add pin extrusions for pad holes. Plated holes get metal pins and NPTH holes get pegs
+     * in the body material. The pins shift with the body Z offset.
+     * @param aFootprint the footprint whose pad holes to extrude.
+     * @param aBody supplies the pin transform, may be null.
      * @param aBottom true if the footprint is on the bottom side.
-     * @param aStandoff is the standoff height in mm.
+     * @param aStandoff is the standoff height plus the body Z offset in mm.
      * @param aOrigin is the coordinate origin.
      * @return true if any pins were created.
      */
-    bool AddExtrudedPins( const FOOTPRINT* aFootprint, bool aBottom, double aStandoff, const VECTOR2D& aOrigin );
+    bool AddExtrudedPins( const FOOTPRINT* aFootprint, const EXTRUDED_3D_BODY* aBody, bool aBottom, double aStandoff,
+                          const VECTOR2D& aOrigin );
 
     /**
      * Make a segment shape based on start and end point. If they're too close, make a cylinder.

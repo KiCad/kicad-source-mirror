@@ -1782,8 +1782,8 @@ bool STEP_PCB_MODEL::AddExtrudedBody( const SHAPE_POLY_SET& aOutline, bool aBott
 }
 
 
-bool STEP_PCB_MODEL::AddExtrudedPins( const FOOTPRINT* aFootprint, bool aBottom, double aStandoff,
-                                      const VECTOR2D& aOrigin )
+bool STEP_PCB_MODEL::AddExtrudedPins( const FOOTPRINT* aFootprint, const EXTRUDED_3D_BODY* aBody, bool aBottom,
+                                      double aStandoff, const VECTOR2D& aOrigin )
 {
     if( aStandoff <= 0.0 )
         return false;
@@ -1794,13 +1794,11 @@ bool STEP_PCB_MODEL::AddExtrudedPins( const FOOTPRINT* aFootprint, bool aBottom,
     if( !GetExtrusionPinOutlines( aFootprint, pinPoly, pegPoly ) )
         return false;
 
-    const EXTRUDED_3D_BODY* body = aFootprint->GetExtrudedBody();
-
-    if( body )
+    if( aBody )
     {
         VECTOR2I fpPos = aFootprint->GetPosition();
-        ApplyExtrusionTransform( pinPoly, body, fpPos );
-        ApplyExtrusionTransform( pegPoly, body, fpPos );
+        ApplyExtrusionTransform( pinPoly, aBody, fpPos );
+        ApplyExtrusionTransform( pegPoly, aBody, fpPos );
     }
 
     double f_pos, f_thickness;
@@ -1813,7 +1811,7 @@ bool STEP_PCB_MODEL::AddExtrudedPins( const FOOTPRINT* aFootprint, bool aBottom,
 
     static const double c_protrusion = 1.0; // 1mm below opposite side
 
-    double zOffset = body ? body->m_offset.z : 0.0;
+    double zOffset = aBody ? aBody->m_offset.z : 0.0;
 
     double pinZBot, pinHeight;
 

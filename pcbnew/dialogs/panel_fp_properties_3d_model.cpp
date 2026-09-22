@@ -1115,6 +1115,20 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnExportExtrudedModel( wxCommandEvent& event 
     bool     bottom = m_footprint->IsFlipped();
     VECTOR2D origin( m_footprint->GetPosition().x, m_footprint->GetPosition().y );
 
+    FOOTPRINT*              dummyFp = m_previewPane->GetDummyFootprint();
+    const EXTRUDED_3D_BODY* body = dummyFp ? dummyFp->GetExtrudedBody() : nullptr;
+
+    double bodyStandoff = standoff;
+
+    if( body )
+    {
+        ApplyExtrusionTransform( outline, body, m_footprint->GetPosition() );
+
+        double bodyThickness = ( height - standoff ) * body->m_scale.z;
+        bodyStandoff = standoff + body->m_offset.z;
+        height = bodyStandoff + bodyThickness;
+    }
+
     EXTRUSION_MATERIAL material = static_cast<EXTRUSION_MATERIAL>( m_extrusionMaterialChoice->GetSelection() );
 
     KIGFX::COLOR4D c = m_extrusionColorSwatch->GetSwatchColor();
@@ -1127,7 +1141,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnExportExtrudedModel( wxCommandEvent& event 
     NULL_REPORTER  reporter;
     STEP_PCB_MODEL model( wxT( "extruded_body" ), &reporter );
 
-    if( !model.AddExtrudedBody( outline, bottom, standoff, height, origin, colorKey, material,
+    if( !model.AddExtrudedBody( outline, bottom, bodyStandoff, height, origin, colorKey, material,
                                 m_footprint->GetReference() ) )
     {
         wxMessageBox( _( "Failed to create extruded body geometry." ), _( "Export Extruded Body" ), wxOK | wxICON_ERROR,
@@ -1136,7 +1150,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnExportExtrudedModel( wxCommandEvent& event 
     }
 
     if( standoff > 0.0 )
-        model.AddExtrudedPins( m_footprint, bottom, standoff, origin );
+        model.AddExtrudedPins( m_footprint, body, bottom, bodyStandoff, origin );
 
     SHAPE_POLY_SET boardOutline( outline );
     model.CreatePCB( boardOutline, origin, false );

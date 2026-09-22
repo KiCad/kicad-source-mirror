@@ -697,7 +697,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
             {
                 try
                 {
-                    m_pcbModel->AddExtrudedPins( aFootprint, bottomSide, standoff, aOrigin );
+                    m_pcbModel->AddExtrudedPins( aFootprint, body, bottomSide, standoff, aOrigin );
                 }
                 catch( const Standard_Failure& e )
                 {
