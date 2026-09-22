@@ -1852,6 +1852,7 @@ int SCH_EDIT_TOOL::SwapPins( const TOOL_EVENT& aEvent )
         return 0;
 
     SCH_SELECTION&         selection = m_selectionTool->RequestSelection( { SCH_PIN_T } );
+    m_selectionTool->FilterSelectionForLockedItems();
     std::vector<EDA_ITEM*> sorted = selection.GetItemsSortedBySelectionOrder();
 
     if( selection.Size() < 2 )
