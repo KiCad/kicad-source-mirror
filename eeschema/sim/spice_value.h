@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SPICE_VALUE_H
-#define SPICE_VALUE_H
+#pragma once
 
 #include <wx/string.h>
 #include <wx/valtext.h>
@@ -65,22 +64,28 @@ public:
         PFX_TERA    = 12
     };
 
-    SPICE_VALUE()
-        : m_base( 0 ), m_prefix( PFX_NONE ), m_spiceStr( false )
+    SPICE_VALUE() :
+            m_base( 0 ),
+            m_prefix( PFX_NONE ),
+    m_spiceStr( false )
     {
     }
 
     ///< Parses the string to create a Spice value (e.g. 100n)
     SPICE_VALUE( const wxString& aString );
 
-    SPICE_VALUE( int aInt, UNIT_PREFIX aPrefix = PFX_NONE )
-        : m_base( aInt ), m_prefix( aPrefix ), m_spiceStr( false )
+    SPICE_VALUE( int aInt, UNIT_PREFIX aPrefix = PFX_NONE ) :
+            m_base( aInt ),
+            m_prefix( aPrefix ),
+            m_spiceStr( false )
     {
         Normalize();
     }
 
-    SPICE_VALUE( double aDouble, UNIT_PREFIX aPrefix = PFX_NONE )
-        : m_base( aDouble ), m_prefix( aPrefix ), m_spiceStr( false )
+    SPICE_VALUE( double aDouble, UNIT_PREFIX aPrefix = PFX_NONE ) :
+            m_base( aDouble ),
+            m_prefix( aPrefix ),
+            m_spiceStr( false )
     {
         Normalize();
     }
@@ -176,8 +181,8 @@ private:
 class SPICE_VALIDATOR : public wxTextValidator
 {
 public:
-    SPICE_VALIDATOR( bool aEmptyAllowed = false )
-        : m_emptyAllowed( aEmptyAllowed )
+    SPICE_VALIDATOR( bool aEmptyAllowed = false ) :
+            m_emptyAllowed( aEmptyAllowed )
     {
     }
 
@@ -192,5 +197,3 @@ private:
     ///< Is it valid to get an empty value?
     bool m_emptyAllowed;
 };
-
-#endif /* SPICE_VALUE_H */

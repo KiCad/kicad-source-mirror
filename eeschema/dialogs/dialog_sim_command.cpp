@@ -765,7 +765,7 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         SPICE_VALUE pts;
         SPICE_VALUE fStart;
         SPICE_VALUE fStop;
-        bool        saveAll;
+        bool        saveAll = false;
 
         m_circuitModel->ParseNoiseCommand( aCommand, &output, &ref, &source, &scale, &pts,
                                            &fStart, &fStop, &saveAll );
