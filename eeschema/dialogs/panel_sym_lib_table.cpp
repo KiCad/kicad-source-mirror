@@ -169,16 +169,18 @@ protected:
     {
         LIB_TABLE_GRID_DATA_MODEL* tbl = static_cast<LIB_TABLE_GRID_DATA_MODEL*>( m_grid->GetTable() );
 
-        if( tbl->GetNumberRows() > aRow )
+        if( aRow < tbl->GetNumberRows() )
         {
-            LIBRARY_TABLE_ROW& row = tbl->At( static_cast<size_t>( aRow ) );
-            const wxString&    options = row.Options();
-            wxString           result = options;
+            LIBRARY_TABLE_ROW&          row = tbl->At( static_cast<size_t>( aRow ) );
+            const wxString&             options = row.Options();
+            wxString                    result = options;
             std::map<std::string, UTF8> choices;
 
             SCH_IO_MGR::SCH_FILE_T pi_type = SCH_IO_MGR::EnumFromStr( row.Type() );
-            IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( pi_type ) );
-            pi->GetLibraryOptions( &choices );
+            IO_RELEASER<SCH_IO>    pi( SCH_IO_MGR::FindPlugin( pi_type ) );
+
+            if( pi )
+                pi->GetLibraryOptions( &choices );
 
             DIALOG_PLUGIN_OPTIONS dlg( wxGetTopLevelParent( m_grid ), row.Nickname(), choices, options, &result );
             dlg.ShowModal();
