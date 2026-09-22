@@ -105,7 +105,6 @@ private:
 
 private:
     SCH_SYMBOL*               m_symbol;
-    LIB_SYMBOL*               m_part;
 
     wxSize                    m_pinsSize;
     wxSize                    m_lastRequestedPinsSize;

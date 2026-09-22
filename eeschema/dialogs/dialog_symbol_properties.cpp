@@ -313,7 +313,6 @@ protected:
 DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SYMBOL* aSymbol ) :
         DIALOG_SYMBOL_PROPERTIES_BASE( aParent ),
         m_symbol( nullptr ),
-        m_part( nullptr ),
         m_lastRequestedPinsSize( 0, 0 ),
         m_editorShown( false ),
         m_fields( nullptr ),
@@ -322,7 +321,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
         m_pinMapPanel( nullptr )
 {
     m_symbol = aSymbol;
-    m_part = m_symbol->GetLibSymbolRef().get();
+    LIB_SYMBOL* libSymbol = m_symbol->GetLibSymbolRef().get();
 
     // GetLibSymbolRef() now points to the cached part in the schematic, which should always be
     // there for usual cases, but can be null when opening old schematics not storing the part
@@ -368,7 +367,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     m_pinMapPanel = new PANEL_SYMBOL_PIN_MAP( m_pinMapPage );
     bPinMapPageSizer->Add( m_pinMapPanel, 1, wxEXPAND, 5 );
 
-    if( m_part && m_part->IsMultiBodyStyle() )
+    if( libSymbol && libSymbol->IsMultiBodyStyle() )
     {
         wxSizer* altPinDefsSizer = m_pinGrid->GetContainingSizer();
 
@@ -397,7 +396,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
         m_pinGrid->SetTable( m_dataModel );
     }
 
-    if( m_part && m_part->IsPower() )
+    if( libSymbol && libSymbol->IsPower() )
         m_spiceFieldsButton->Hide();
 
     m_pinGrid->PushEventHandler( new GRID_TRICKS( m_pinGrid ) );
@@ -500,10 +499,12 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
         return false;
 
     const SCHEMATIC& schematic = GetParent()->Schematic();
-    SCH_SHEET_PATH& sheetPath = schematic.CurrentSheet();
-    wxString variantName = schematic.GetCurrentVariant();
+    SCH_SHEET_PATH&  sheetPath = schematic.CurrentSheet();
+    wxString         variantName = schematic.GetCurrentVariant();
+
+    LIB_SYMBOL*                       libSymbol = m_symbol->GetLibSymbolRef().get();
     std::optional<SCH_SYMBOL_VARIANT> variant = m_symbol->GetVariant( sheetPath, variantName );
-    std::set<wxString> defined;
+    std::set<wxString>                defined;
 
     std::vector<SCH_FIELD*> orderedFields;
     m_symbol->GetFields( orderedFields, false );
@@ -557,22 +558,22 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
         m_unitChoice->Enable( false );
     }
 
-    if( m_part && m_part->IsMultiBodyStyle() )
+    if( libSymbol && libSymbol->IsMultiBodyStyle() )
     {
-        if( m_part->HasDeMorganBodyStyles() )
+        if( libSymbol->HasDeMorganBodyStyles() )
         {
             m_bodyStyleChoice->Append( _( "Standard" ) );
             m_bodyStyleChoice->Append( _( "Alternate" ) );
         }
         else
         {
-            wxASSERT( (int)m_part->GetBodyStyleNames().size() == m_part->GetBodyStyleCount() );
+            wxASSERT( (int) libSymbol->GetBodyStyleNames().size() == libSymbol->GetBodyStyleCount() );
 
-            for( int ii = 0; ii < m_part->GetBodyStyleCount(); ii++ )
+            for( int ii = 0; ii < libSymbol->GetBodyStyleCount(); ii++ )
             {
                 try
                 {
-                    m_bodyStyleChoice->Append( m_part->GetBodyStyleNames().at( ii ) );
+                    m_bodyStyleChoice->Append( libSymbol->GetBodyStyleNames().at( ii ) );
                 }
                 catch( ... )
                 {
@@ -624,10 +625,10 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     case SCH_SYMBOL::PASSTHROUGH_MODE::FORCE:   m_choicePassthrough->SetSelection( 2 ); break;
     }
 
-    if( m_part )
+    if( libSymbol )
     {
-        m_ShowPinNumButt->SetValue( m_part->GetShowPinNumbers() );
-        m_ShowPinNameButt->SetValue( m_part->GetShowPinNames() );
+        m_ShowPinNumButt->SetValue( libSymbol->GetShowPinNumbers() );
+        m_ShowPinNameButt->SetValue( libSymbol->GetShowPinNames() );
     }
 
     // Set the symbol's library name.
@@ -636,7 +637,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     if( m_embeddedFiles && !m_embeddedFiles->TransferDataToWindow() )
         return false;
 
-    m_pinMapPanel->SetSymbol( m_part );
+    m_pinMapPanel->SetSymbol( libSymbol );
     m_pinMapPanel->TransferDataToWindow();
 
     m_fieldsGrid->Layout();
@@ -810,10 +811,10 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
         commit.Modify( m_symbol, currentScreen );
 
     // Apply pin-map edits after the undo snapshot so undo restores them (issue #2282).
-    if( m_part )
+    if( LIB_SYMBOL* libSymbol = m_symbol->GetLibSymbolRef().get() )
     {
-        m_pinMapPanel->ApplyToSymbol( m_part );
-        GetParent()->Schematic().SyncLibSymbolPinMaps( m_symbol->GetSchSymbolLibraryName(), *m_part, &commit );
+        m_pinMapPanel->ApplyToSymbol( libSymbol );
+        GetParent()->Schematic().SyncLibSymbolPinMaps( m_symbol->GetSchSymbolLibraryName(), *libSymbol, &commit );
     }
 
     // Save current flags which could be modified by next change settings
