@@ -679,24 +679,33 @@ bool zoneNeedsUpdate( const ZONE* a, const ZONE* b, REPORTER* aReporter )
     TEST( a->Outline()->TotalVertices(), b->Outline()->TotalVertices(),
           wxString::Format( _( "%s outline corner count differs." ), ITEM_DESC( a ) ) );
 
-    bool cornersDiffer = false;
+    bool cornersDiffer = a->Outline()->OutlineCount() != b->Outline()->OutlineCount();
 
-    for( int poly = 0; poly < static_cast<int>( a->Outline()->CPolygons().size() ); poly++ )
+    for( int poly = 0; !cornersDiffer && poly < a->Outline()->OutlineCount(); poly++ )
     {
-        const SHAPE_POLY_SET::POLYGON aPolygon = a->Outline()->CPolygon( poly );
-        const SHAPE_POLY_SET::POLYGON bPolygon = b->Outline()->CPolygon( poly );
+        const SHAPE_POLY_SET::POLYGON& aPolygon = a->Outline()->CPolygon( poly );
+        const SHAPE_POLY_SET::POLYGON& bPolygon = b->Outline()->CPolygon( poly );
 
-        if( aPolygon.size() == 0 || bPolygon.size() == 0
-            || !aPolygon[0].CompareGeometry( bPolygon[0], true, EPSILON ) )
+        if( aPolygon.size() != bPolygon.size() )
         {
-            diff = true;
             cornersDiffer = true;
             break;
         }
+
+        for( size_t contour = 0; contour < aPolygon.size() && !cornersDiffer; contour++ )
+        {
+            if( !aPolygon[contour].CompareGeometry( bPolygon[contour], true, EPSILON ) )
+                cornersDiffer = true;
+        }
     }
 
-    if( cornersDiffer && aReporter )
-        aReporter->Report( wxString::Format( _( "%s corners differ." ), ITEM_DESC( a ) ) );
+    if( cornersDiffer )
+    {
+        diff = true;
+
+        if( aReporter )
+            aReporter->Report( wxString::Format( _( "%s corners differ." ), ITEM_DESC( a ) ) );
+    }
 
     return diff;
 }
