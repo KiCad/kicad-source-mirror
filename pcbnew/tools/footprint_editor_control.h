@@ -44,7 +44,7 @@ public:
     bool Init() override;
 
     int NewFootprint( const TOOL_EVENT& aEvent );
-    int CreateFootprint( const TOOL_EVENT& aEvent );
+    int CreateFootprintFromWizard( const TOOL_EVENT& aEvent );
 
     int Save( const TOOL_EVENT& aEvent );
     int SaveAs( const TOOL_EVENT& aEvent );

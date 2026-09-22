@@ -261,9 +261,9 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
 }
 
 
-int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
+int FOOTPRINT_EDITOR_CONTROL::CreateFootprintFromWizard( const TOOL_EVENT& aEvent )
 {
-    LIB_ID selected = m_frame->GetLibTree()->GetSelectedLibId();
+    const LIB_ID selected = m_frame->GetTargetFPID();
 
     if( KIWAY_PLAYER* frame = m_frame->Kiway().Player( FRAME_FOOTPRINT_WIZARD, true, m_frame ) )
     {
@@ -276,7 +276,15 @@ int FOOTPRINT_EDITOR_CONTROL::CreateFootprint( const TOOL_EVENT& aEvent )
 
             if( newFootprint )    // i.e. if create footprint command is OK
             {
-                m_frame->BeginNewFootprint( selected.GetLibNickname() );
+                if( !m_frame->BeginNewFootprint( selected.GetLibNickname() ) )
+                {
+                    delete newFootprint;
+                    wizard->Destroy();
+                    return 0;
+                }
+
+                newFootprint->SetParent( nullptr );
+                m_frame->CreateUnsavedFootprintTab();
 
                 canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
                 //  Add the new object to board
@@ -1195,7 +1203,8 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
 {
     // clang-format off
     Go( &FOOTPRINT_EDITOR_CONTROL::NewFootprint,         PCB_ACTIONS::newFootprint.MakeEvent() );
-    Go( &FOOTPRINT_EDITOR_CONTROL::CreateFootprint,      PCB_ACTIONS::createFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::CreateFootprintFromWizard,
+        PCB_ACTIONS::createFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::Save,                 ACTIONS::save.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::SaveAs,               ACTIONS::saveAs.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::Revert,               ACTIONS::revert.MakeEvent() );

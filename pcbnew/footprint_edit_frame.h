@@ -209,6 +209,15 @@ public:
     void CloseFootprintTab( const LIB_ID& aFPID );
 
     /**
+     * Open a session-only tab over a fresh fp-holder board and make it the active tab.
+     *
+     * For footprints with no library identity yet, e.g. a wizard export or a file import: the tab
+     * reads as unnamed and is never de-duplicated against another tab; RenameFootprintTab() promotes
+     * it once a save-as names it.
+     */
+    FOOTPRINT_EDITOR_TAB_CONTEXT* CreateUnsavedFootprintTab();
+
+    /**
      * Update the open tab for aOldId, if any, to the renamed footprint aNewId so its label and key
      * track the rename.
      */
@@ -458,15 +467,6 @@ private:
      * the caller retains ownership of @p aBoardFootprint.
      */
     FOOTPRINT_EDITOR_TAB_CONTEXT* findOrCreateFootprintInstanceTab( FOOTPRINT* aBoardFootprint );
-
-    /**
-     * Open a session-only tab for an imported footprint over a fresh fp-holder board and make it the
-     * active tab.
-     *
-     * An import carries no library identity, so the tab reads as unnamed and is never de-duplicated
-     * against another tab; RenameFootprintTab() promotes it once a save-as names it.
-     */
-    FOOTPRINT_EDITOR_TAB_CONTEXT* createUnsavedFootprintTab();
 
     /**
      * Replace the active board's footprint with aFootprint and re-point the file watcher at it.

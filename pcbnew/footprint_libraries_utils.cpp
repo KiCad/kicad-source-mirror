@@ -224,7 +224,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
     // The plugin's own board does not survive the tab switch; ReloadFootprint reparents the
     // footprint to the incoming board
     footprint->SetParent( nullptr );
-    createUnsavedFootprintTab();
+    CreateUnsavedFootprintTab();
 
     // AddFootprintToBoard takes ownership of the footprint from here on
     FOOTPRINT* fp = footprint.get();

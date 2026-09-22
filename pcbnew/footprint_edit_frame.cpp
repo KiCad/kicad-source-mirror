@@ -1272,7 +1272,7 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanc
 }
 
 
-FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::createUnsavedFootprintTab()
+FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::CreateUnsavedFootprintTab()
 {
     std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT> ctx =
             FOOTPRINT_EDITOR_TAB_CONTEXT::MakeUnsaved( makeFpHolderBoard() );
