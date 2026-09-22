@@ -23,6 +23,7 @@
 
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
+#include <wx/utils.h>
 
 #include <windows.h>
 #include <winver.h>
