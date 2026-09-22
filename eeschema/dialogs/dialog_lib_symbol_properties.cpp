@@ -803,8 +803,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     m_libEntry->SetDuplicatePinNumbersAreJumpers( m_cbDuplicatePinsAreJumpers->GetValue() );
 
-    JUMPER_GROUP_SET& jumpers = m_libEntry->JumperPinGroups();
-    jumpers.Clear();
+    JUMPER_GROUP_SET jumpers;
 
     for( int ii = 0; ii < m_jumperGroupsGrid->GetNumberRows(); ++ii )
     {
@@ -833,6 +832,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         if( std::optional<JUMPER_GROUP> group = JUMPER_GROUP::Make( std::move( names ) ) )
             jumpers.Add( std::move( *group ) );
     }
+
+    m_libEntry->JumperPinGroups() = jumpers;
 
     if( !m_pinMapPanel->CommitPendingChanges() )
         return false;
