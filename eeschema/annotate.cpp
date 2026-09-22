@@ -370,16 +370,16 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
         currentSheet.GetSymbols( references, aSymbolFilter );
 
         if( aRecursive )
-            subSheets.GetSymbolsWithinPath( references, currentSheet, aSymbolFilter, true );
+            subSheets.GetSymbolsWithinPath( references, currentSheet, aSymbolFilter );
 
         break;
 
     case ANNOTATE_SELECTION:
         for( SCH_SYMBOL* symbol : selectedSymbols )
-            currentSheet.AppendSymbol( references, symbol, aSymbolFilter, true );
+            currentSheet.AppendSymbol( references, symbol, aSymbolFilter );
 
         if( aRecursive )
-            selectedSheets.GetSymbolsWithinPath( references, currentSheet, aSymbolFilter, true );
+            selectedSheets.GetSymbolsWithinPath( references, currentSheet, aSymbolFilter );
 
         break;
     }
@@ -517,11 +517,11 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler, ANNOT
     switch( aAnnotateScope )
     {
     case ANNOTATE_ALL:
-        sheets.GetSymbols( referenceList, aSymbolFilter );
+        sheets.GetSymbols( referenceList, aSymbolFilter, true );
         break;
 
     case ANNOTATE_CURRENT_SHEET:
-        GetCurrentSheet().GetSymbols( referenceList, aSymbolFilter );
+        GetCurrentSheet().GetSymbols( referenceList, aSymbolFilter, true );
 
         if( aRecursive )
         {
@@ -539,7 +539,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler, ANNOT
             }
 
             for( const SCH_SHEET_PATH& sheet : subSheets )
-                sheet.GetSymbols( referenceList, aSymbolFilter );
+                sheet.GetSymbols( referenceList, aSymbolFilter, true );
         }
 
         break;
@@ -567,7 +567,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler, ANNOT
             }
 
             for( SCH_SHEET_PATH sheet : selectedSheets )
-                sheet.GetSymbols( referenceList, aSymbolFilter );
+                sheet.GetSymbols( referenceList, aSymbolFilter, true );
         }
 
         break;

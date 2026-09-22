@@ -324,6 +324,58 @@ BOOST_AUTO_TEST_CASE( ReferenceListDoesNotMutateEmptyValue )
 }
 
 
+BOOST_AUTO_TEST_CASE( CheckAnnotationHandlesOrphanSymbol )
+{
+    loadTestCase( "test_multiunit_reannotate", {} );
+
+    SCH_SHEET_PATH sheetPath = m_schematic->CurrentSheet();
+    SCH_SYMBOL*    symbol = nullptr;
+
+    for( SCH_ITEM* item : sheetPath.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+    {
+        symbol = static_cast<SCH_SYMBOL*>( item );
+        break;
+    }
+
+    BOOST_REQUIRE( symbol != nullptr );
+
+    symbol->SetLibSymbol( nullptr );
+
+    SCH_REFERENCE_LIST refs;
+    sheetPath.AppendSymbol( refs, symbol, SYMBOL_FILTER_ALL );
+    BOOST_CHECK_EQUAL( refs.GetCount(), 0u );
+
+    sheetPath.AppendSymbol( refs, symbol, SYMBOL_FILTER_ALL, true );
+    BOOST_REQUIRE_EQUAL( refs.GetCount(), 1u );
+
+    int handlerCalls = 0;
+    int errors = refs.CheckAnnotation(
+            [&]( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
+            {
+                ++handlerCalls;
+            } );
+
+    BOOST_CHECK_EQUAL( errors, 0 );
+    BOOST_CHECK_EQUAL( handlerCalls, 0 );
+
+    symbol->SetRef( &sheetPath, wxT( "U?" ) );
+    refs.Clear();
+    sheetPath.AppendSymbol( refs, symbol, SYMBOL_FILTER_ALL, true );
+
+    ERCE_T errorType = ERCE_T( 0 );
+    errors = refs.CheckAnnotation(
+            [&]( ERCE_T aType, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
+            {
+                errorType = aType;
+                ++handlerCalls;
+            } );
+
+    BOOST_CHECK_EQUAL( errors, 1 );
+    BOOST_CHECK_EQUAL( handlerCalls, 1 );
+    BOOST_CHECK_EQUAL( errorType, ERCE_UNANNOTATED );
+}
+
+
 /**
  * Test for issue #23183: multi-unit symbols with the same value should maintain
  * unit grouping when reannotated with reset. When annotations are cleared before
