@@ -826,7 +826,7 @@ void SCH_BASE_FRAME::setSymWatcher( const LIB_ID* aID )
         m_watcherFileName.AssignDir( tmp );
         m_watcherIsDir = true;
         m_watcherTimestamp = KIPLATFORM::IO::TimestampDir( m_watcherFileName.GetPath(),
-                                                           wxS( "*." + FILEEXT::KiCadSymbolLibFileExtension ) );
+                                                           std::string( "*." ) + FILEEXT::KiCadSymbolLibFileExtension );
     }
     else
     {
@@ -942,7 +942,7 @@ void SCH_BASE_FRAME::OnSymChangeDebounceTimer( wxTimerEvent& aEvent )
     if( m_watcherIsDir )
     {
         currentTimestamp = KIPLATFORM::IO::TimestampDir( m_watcherFileName.GetPath(),
-                                                         wxS( "*." + FILEEXT::KiCadSymbolLibFileExtension ) );
+                                                         std::string( "*." ) + FILEEXT::KiCadSymbolLibFileExtension );
     }
     else
     {

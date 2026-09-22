@@ -18,6 +18,7 @@
  * http://www.gnu.org/licenses/old-licenses/gpl-3.0.html
  */
 
+#include <wx/event.h>
 #include "native_model_file_picker.h"
 
 #if defined( KICAD_NATIVE_MODEL_PREVIEW ) && defined( __WXGTK3__ )

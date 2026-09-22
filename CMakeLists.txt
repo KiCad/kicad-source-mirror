@@ -122,8 +122,9 @@ option( KICAD_UPDATE_CHECK
     "Build in update check"
     ON )
 
-option( KICAD_BUILD_NATIVE_MODEL_PREVIEW
+cmake_dependent_option( KICAD_BUILD_NATIVE_MODEL_PREVIEW
     "Build native operating-system 3D model preview components"
+    OFF "MINGW"
     ON )
 
 if( KICAD_BUILD_NATIVE_MODEL_PREVIEW )
