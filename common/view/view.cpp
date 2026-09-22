@@ -40,6 +40,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/painter.h>
 #include <algorithm>
+#include <unordered_set>
 
 #include <core/profile.h>
 
