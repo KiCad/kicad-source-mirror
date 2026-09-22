@@ -109,9 +109,6 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     m_resetTransform->SetValue(          m_updateMode ? false : true );
     m_matchPadPositions->SetValue(       true );
 
-    if( m_updateMode )
-        m_resetTransform->Show( false );
-
     // initialize match-mode
     if( m_updateMode )
         m_matchMode = selectedMode ? &g_matchModeForUpdateSelected : &g_matchModeForUpdate;
