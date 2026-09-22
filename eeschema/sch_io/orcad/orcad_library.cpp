@@ -28,20 +28,6 @@
 #include <ki_exception.h>
 
 
-namespace
-{
-
-int32_t i32At( const std::vector<uint8_t>& aBytes, size_t aOffset )
-{
-    return static_cast<int32_t>( static_cast<uint32_t>( aBytes[aOffset] )
-                                 | static_cast<uint32_t>( aBytes[aOffset + 1] ) << 8
-                                 | static_cast<uint32_t>( aBytes[aOffset + 2] ) << 16
-                                 | static_cast<uint32_t>( aBytes[aOffset + 3] ) << 24 );
-}
-
-} // namespace
-
-
 ORCAD_PAGE_SETTINGS OrcadParsePageSettings( ORCAD_STREAM& aStream )
 {
     ORCAD_PAGE_SETTINGS settings;
@@ -108,64 +94,43 @@ ORCAD_LIBRARY_INFO OrcadParseLibrary( const std::vector<char>& aData )
     for( int i = 0; i < fontCount - 1; i++ )
     {
         // 60-byte LOGFONTA; numeric fields through lfWeight, flags, then lfFaceName char[32].
-        std::vector<uint8_t> rec = stream.ReadBytes( 60 );
-
         ORCAD_FONT font;
-        font.height = i32At( rec, 0 );
-        font.width = i32At( rec, 4 );
-        font.escapement = i32At( rec, 8 );
-        font.orientation = i32At( rec, 12 );
-        font.italic = rec[20] != 0;
-        font.bold = i32At( rec, 16 ) >= 600;
-        font.pitchAndFamily = rec[27];
+        font.height = stream.ReadI32();
+        font.width = stream.ReadI32();
+        font.escapement = stream.ReadI32();
+        font.orientation = stream.ReadI32();
+        font.bold = stream.ReadI32() >= 600;
+        font.italic = stream.ReadU8() != 0;
+        stream.Skip( 6 ); // underline, strikeout, charset and precision bytes
+        font.pitchAndFamily = stream.ReadU8();
 
-        size_t faceLen = 0;
+        std::vector<uint8_t> face = stream.ReadBytes( 32 );
+        size_t               faceLen = 0;
 
-        while( faceLen < 32 && rec[28 + faceLen] != 0 )
+        while( faceLen < face.size() && face[faceLen] != 0 )
             faceLen++;
 
-        font.face.assign( reinterpret_cast<const char*>( rec.data() + 28 ), faceLen );
+        font.face.assign( reinterpret_cast<const char*>( face.data() ), faceLen );
 
         lib.fonts.push_back( std::move( font ) );
     }
 
-    if( lib.versionMajor >= 2 )
+    // Design Template font indices, then reserved slots and flags; v1.x has 17 slots and no count
+    uint16_t templateFontCount = lib.versionMajor >= 2 ? stream.ReadU16() : 17;
+    lib.templateFonts.resize( templateFontCount );
+
+    for( uint16_t i = 0; i < templateFontCount; ++i )
     {
-        // Design Template font indices followed by reserved slots and flags.
-        uint16_t someLen = stream.ReadU16();
-        lib.templateFonts.resize( someLen );
+        int fontIdx = stream.ReadU16();
+        lib.templateFonts[i] = fontIdx;
 
-        for( uint16_t i = 0; i < someLen; ++i )
-        {
-            int fontIdx = stream.ReadU16();
-            lib.templateFonts[i] = fontIdx;
-
-            if( i == 10 && fontIdx > 0 )
-                lib.pinNameFont = i;
-            else if( i == 11 && fontIdx > 0 )
-                lib.pinNumberFont = i;
-        }
-
-        stream.Skip( 8 );
+        if( i == 10 && fontIdx > 0 )
+            lib.pinNameFont = i;
+        else if( i == 11 && fontIdx > 0 )
+            lib.pinNumberFont = i;
     }
-    else
-    {
-        // v1.x has the same first 17 slots without a count field.
-        lib.templateFonts.resize( 17 );
 
-        for( int i = 0; i < 17; ++i )
-        {
-            int fontIdx = stream.ReadU16();
-            lib.templateFonts[i] = fontIdx;
-
-            if( i == 10 && fontIdx > 0 )
-                lib.pinNameFont = i;
-            else if( i == 11 && fontIdx > 0 )
-                lib.pinNumberFont = i;
-        }
-
-        stream.Skip( 8 );
-    }
+    stream.Skip( 8 );
 
     // 8 named part fields (Part Reference, Value, ...)
     for( int i = 0; i < 8; i++ )

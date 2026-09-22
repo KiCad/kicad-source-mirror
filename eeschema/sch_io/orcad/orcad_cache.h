@@ -73,10 +73,6 @@ ORCAD_SYMBOL_DEF OrcadReadSymbolDef( ORCAD_STRUCT_READER& aReader,
                                      const ORCAD_PREFIXES& aPrefixes, bool aWithPins );
 
 
-ORCAD_SYMBOL_DEF OrcadReadSthInPages0( ORCAD_STRUCT_READER& aReader,
-                                       const ORCAD_PREFIXES& aPrefixes );
-
-
 ORCAD_DRAWN_INSTANCE OrcadReadDrawnInstance( ORCAD_STRUCT_READER& aReader,
                                              const ORCAD_PREFIXES& aPrefixes );
 

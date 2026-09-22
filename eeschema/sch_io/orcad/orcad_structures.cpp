@@ -28,6 +28,7 @@
 #include <variant>
 
 #include <ki_exception.h>
+#include <wx/log.h>
 
 #include <sch_io/orcad/orcad_cache.h>
 
@@ -253,8 +254,9 @@ ORCAD_READ_RESULT ORCAD_STRUCT_READER::ReadStructure()
 
         case ORCAD_ST_PLACED_INSTANCE: result.record = OrcadReadPlacedInstance( *this, pfx ); break;
 
-        case ORCAD_ST_PORT: result.record = OrcadReadPort( *this, pfx ); break;
-
+        case ORCAD_ST_PORT:
+        case ORCAD_ST_TITLEBLOCK:
+        case ORCAD_ST_ERC_OBJECT:
         case ORCAD_ST_GLOBAL:
         case ORCAD_ST_OFFPAGE_CONNECTOR:
         case ORCAD_ST_GRAPHIC_BOX_INST:
@@ -268,20 +270,16 @@ ORCAD_READ_RESULT ORCAD_STRUCT_READER::ReadStructure()
         case ORCAD_ST_GRAPHIC_BEZIER_INST:
         case ORCAD_ST_GRAPHIC_OLE_INST: result.record = OrcadReadGraphicInst( *this, pfx ); break;
 
-        case ORCAD_ST_TITLEBLOCK: result.record = OrcadReadTitleBlock( *this, pfx ); break;
-
-        case ORCAD_ST_ERC_OBJECT: result.record = OrcadReadErcObject( *this, pfx ); break;
-
-        case ORCAD_ST_BUS_ENTRY: result.record = OrcadReadBusEntry( *this, pfx ); break;
+        case ORCAD_ST_BUS_ENTRY: result.record = OrcadReadBusEntryBody( m_stream ); break;
 
         case ORCAD_ST_T0X10:
         case ORCAD_ST_T0X11: result.record = OrcadReadPinInst( *this, pfx ); break;
 
-        case ORCAD_ST_STH_IN_PAGES0: result.record = OrcadReadSthInPages0( *this, pfx ); break;
+        case ORCAD_ST_STH_IN_PAGES0: result.record = OrcadReadSymbolDef( *this, pfx, false ); break;
 
         case ORCAD_ST_DRAWN_INSTANCE: result.record = OrcadReadDrawnInstance( *this, pfx ); break;
 
-        default: SkipStructure( pfx, wxString::Format( wxS( "type %d" ), pfx.typeId ) ); break;
+        default: break;
         }
     }
     catch( const IO_ERROR& e )
@@ -297,6 +295,18 @@ ORCAD_READ_RESULT ORCAD_STRUCT_READER::ReadStructure()
         }
 
         throw;
+    }
+
+    // Port, title-block and ERC trailers and pin padding sit inside the frame undecoded
+    if( m_stream.GetOffset() < pfx.end )
+    {
+        if( !std::holds_alternative<std::monostate>( result.record ) )
+        {
+            wxLogTrace( wxS( "KICAD_ORCAD_IO" ), wxS( "OrCAD structure type %d at 0x%zx: %zu bytes not decoded" ),
+                        pfx.typeId, start, pfx.end - m_stream.GetOffset() );
+        }
+
+        m_stream.Seek( pfx.end );
     }
 
     return result;
@@ -497,37 +507,7 @@ ORCAD_GRAPHIC_INST OrcadReadGraphicInst( ORCAD_STRUCT_READER& aReader, const ORC
 }
 
 
-ORCAD_GRAPHIC_INST OrcadReadPort( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes )
-{
-    ORCAD_GRAPHIC_INST inst = OrcadReadGraphicInst( aReader, aPrefixes );
-    aReader.Stream().Skip( 9 );
-
-    return inst;
-}
-
-
-ORCAD_GRAPHIC_INST OrcadReadTitleBlock( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes )
-{
-    ORCAD_GRAPHIC_INST inst = OrcadReadGraphicInst( aReader, aPrefixes );
-    aReader.Stream().Skip( 12 );
-
-    return inst;
-}
-
-
-ORCAD_GRAPHIC_INST OrcadReadErcObject( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes )
-{
-    ORCAD_GRAPHIC_INST inst = OrcadReadGraphicInst( aReader, aPrefixes );
-
-    aReader.Stream().ReadLzt();
-    aReader.Stream().ReadLzt();
-    aReader.Stream().ReadLzt();
-
-    return inst;
-}
-
-
-ORCAD_PIN_INST OrcadReadPinInst( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes )
+ORCAD_PIN_INST OrcadReadPinInst( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& /* aPrefixes */ )
 {
     ORCAD_STREAM&  ds = aReader.Stream();
     ORCAD_PIN_INST pin;
@@ -538,10 +518,6 @@ ORCAD_PIN_INST OrcadReadPinInst( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFI
     pin.wordA = ds.ReadU32();
     pin.wordB = ds.ReadU32();
     pin.displayProps = OrcadReadDisplayPropList( aReader );
-
-    // Remaining body bytes padding; record ends at outer stop.
-    if( aPrefixes.end != 0 && aPrefixes.end > ds.GetOffset() )
-        ds.Seek( aPrefixes.end );
 
     return pin;
 }
@@ -559,12 +535,6 @@ ORCAD_BUS_ENTRY OrcadReadBusEntryBody( ORCAD_STREAM& aStream )
     aStream.Skip( 8 );
 
     return entry;
-}
-
-
-ORCAD_BUS_ENTRY OrcadReadBusEntry( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& /* aPrefixes */ )
-{
-    return OrcadReadBusEntryBody( aReader.Stream() );
 }
 
 

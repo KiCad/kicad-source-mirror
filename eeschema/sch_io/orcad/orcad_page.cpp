@@ -79,22 +79,7 @@ ORCAD_RAW_PAGE OrcadParsePage( const std::vector<char>& aData, const std::vector
     page.name = stream.ReadLzt();
     page.pageSize = stream.ReadLzt();
 
-    ORCAD_PAGE_SETTINGS settings = OrcadParsePageSettings( stream );
-    page.width = settings.width;
-    page.height = settings.height;
-    page.isMetric = settings.isMetric;
-    page.horizontalCount = settings.horizontalCount;
-    page.verticalCount = settings.verticalCount;
-    page.horizontalWidth = settings.horizontalWidth;
-    page.verticalWidth = settings.verticalWidth;
-    page.horizontalChar = settings.horizontalChar;
-    page.horizontalAscending = settings.horizontalAscending;
-    page.verticalChar = settings.verticalChar;
-    page.verticalAscending = settings.verticalAscending;
-    page.borderPrinted = settings.borderPrinted;
-    page.gridRefPrinted = settings.gridRefPrinted;
-    page.createTimestamp = settings.createTimestamp;
-    page.modifyTimestamp = settings.modifyTimestamp;
+    page.settings = OrcadParsePageSettings( stream );
 
     readStructureList( reader, page.titleBlocks );
 
@@ -890,7 +875,7 @@ static ORCAD_SYMBOL_DEF v2LibSymbolDef( ORCAD_STREAM& aStream, const std::vector
 }
 
 
-static void v2LibraryPartTail( ORCAD_STREAM& aStream, ORCAD_SYMBOL_DEF& aDef )
+static std::string v2LibraryPartTail( ORCAD_STREAM& aStream, ORCAD_SYMBOL_DEF& aDef )
 {
     std::string implementationPath = aStream.ReadLzt();
 
@@ -898,9 +883,11 @@ static void v2LibraryPartTail( ORCAD_STREAM& aStream, ORCAD_SYMBOL_DEF& aDef )
         aDef.props["Implementation Path"] = std::move( implementationPath );
 
     aStream.ReadLzt(); // implementation (PSpice model)
-    aStream.ReadLzt(); // reference prefix
+    std::string refDesPrefix = aStream.ReadLzt();
     aStream.ReadLzt(); // part value
     aDef.generalFlags = aStream.ReadU16();
+
+    return refDesPrefix;
 }
 
 
@@ -943,16 +930,7 @@ static V2_PART_CELL v2PartCell( ORCAD_STREAM& aStream, const std::vector<std::st
         for( const auto& [name, value] : symbolProps )
             def.props[name] = value;
 
-        std::string implementationPath = aStream.ReadLzt();
-
-        if( !implementationPath.empty() )
-            def.props["Implementation Path"] = std::move( implementationPath );
-
-        aStream.ReadLzt(); // implementation (PSpice model)
-        cell.refDesPrefix = aStream.ReadLzt();
-        aStream.ReadLzt();                    // part value
-        def.generalFlags = aStream.ReadU16(); // pin number/name visibility bits
-
+        cell.refDesPrefix = v2LibraryPartTail( aStream, def );
         cell.symbols.push_back( std::move( def ) );
     }
 
@@ -1110,22 +1088,7 @@ ORCAD_RAW_PAGE OrcadParsePageV2( const std::vector<char>& aData, const std::vect
     page.name = stream.ReadLzt();
     page.pageSize = stream.ReadLzt();
 
-    ORCAD_PAGE_SETTINGS settings = OrcadParsePageSettings( stream );
-    page.width = settings.width;
-    page.height = settings.height;
-    page.isMetric = settings.isMetric;
-    page.horizontalCount = settings.horizontalCount;
-    page.verticalCount = settings.verticalCount;
-    page.horizontalWidth = settings.horizontalWidth;
-    page.verticalWidth = settings.verticalWidth;
-    page.horizontalChar = settings.horizontalChar;
-    page.horizontalAscending = settings.horizontalAscending;
-    page.verticalChar = settings.verticalChar;
-    page.verticalAscending = settings.verticalAscending;
-    page.borderPrinted = settings.borderPrinted;
-    page.gridRefPrinted = settings.gridRefPrinted;
-    page.createTimestamp = settings.createTimestamp;
-    page.modifyTimestamp = settings.modifyTimestamp;
+    page.settings = OrcadParsePageSettings( stream );
 
     uint16_t titleBlockCount = stream.ReadU16();
 
@@ -1253,15 +1216,8 @@ void OrcadParseOlbSymbolStreamV2( const std::vector<char>& aData, const std::vec
     if( stream.Remaining() != 0 )
         THROW_IO_ERROR( wxS( "v2 symbol stream: trailing bytes" ) );
 
-    if( def.name.empty() )
-        return;
-
-    auto existing = aSymbols.find( def.name );
-
-    if( existing == aSymbols.end() )
-        aSymbols.emplace( def.name, std::move( def ) );
-    else
-        existing->second.variants.push_back( std::move( def ) );
+    if( !def.name.empty() )
+        OrcadAddOrVariant( aSymbols, std::move( def ) );
 }
 
 
@@ -1334,13 +1290,7 @@ void OrcadParseCacheV2( const std::vector<char>& aData, const std::vector<std::s
                     }
                     else if( typeId == ORCAD_ST_PACKAGE )
                     {
-                        ORCAD_PACKAGE pkg = v2Package( stream, aStrings );
-                        auto          existing = aPackages.find( pkg.name );
-
-                        if( existing == aPackages.end() )
-                            aPackages.emplace( pkg.name, std::move( pkg ) );
-                        else
-                            existing->second.variants.push_back( std::move( pkg ) );
+                        OrcadAddOrVariant( aPackages, v2Package( stream, aStrings ) );
                     }
                     else
                     {
@@ -1356,19 +1306,11 @@ void OrcadParseCacheV2( const std::vector<char>& aData, const std::vector<std::s
 
                         if( !def.name.empty() )
                         {
-                            auto existing = aSymbols.find( def.name );
+                            int               flags = def.generalFlags;
+                            ORCAD_SYMBOL_DEF& stored = OrcadAddOrVariant( aSymbols, std::move( def ) );
 
-                            if( existing == aSymbols.end() )
-                            {
-                                aSymbols.emplace( def.name, std::move( def ) );
-                            }
-                            else
-                            {
-                                if( existing->second.generalFlags < 0 && def.generalFlags >= 0 )
-                                    existing->second.generalFlags = def.generalFlags;
-
-                                existing->second.variants.push_back( std::move( def ) );
-                            }
+                            if( stored.generalFlags < 0 && flags >= 0 )
+                                stored.generalFlags = flags;
                         }
                     }
                 }
@@ -1412,34 +1354,20 @@ void OrcadParseOlbPackageStreamV2( const std::vector<char>& aData, const std::ve
         THROW_IO_ERROR( wxS( "v2 package stream: trailing bytes" ) );
 
     // Inline symbol keyed by view name ("7400.Normal"); view suffix later stripped to part base.
-    for( const V2_PART_CELL& cell : cells )
+    for( V2_PART_CELL& cell : cells )
     {
-        for( const ORCAD_SYMBOL_DEF& def : cell.symbols )
+        for( ORCAD_SYMBOL_DEF& def : cell.symbols )
         {
-            if( def.name.empty() )
-                continue;
-
-            auto existing = aSymbols.find( def.name );
-
-            if( existing == aSymbols.end() )
-                aSymbols.emplace( def.name, def );
-            else
-                existing->second.variants.push_back( def );
+            if( !def.name.empty() )
+                OrcadAddOrVariant( aSymbols, std::move( def ) );
         }
 
         if( pkg.refDes.empty() && !cell.refDesPrefix.empty() )
             pkg.refDes = cell.refDesPrefix;
     }
 
-    if( pkg.name.empty() )
-        return;
-
-    auto it = aPackages.find( pkg.name );
-
-    if( it == aPackages.end() )
-        aPackages.emplace( pkg.name, std::move( pkg ) );
-    else
-        it->second.variants.push_back( std::move( pkg ) );
+    if( !pkg.name.empty() )
+        OrcadAddOrVariant( aPackages, std::move( pkg ) );
 }
 
 

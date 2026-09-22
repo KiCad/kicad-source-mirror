@@ -130,14 +130,12 @@ bool isLongFramedPackageStream( const std::vector<char>& aData )
     if( aData.size() < 11 )
         return false;
 
-    auto byte = [&]( size_t aOffset )
-    {
-        return static_cast<uint8_t>( aData[aOffset] );
-    };
-    uint32_t bodyLength = byte( 3 ) | static_cast<uint32_t>( byte( 4 ) ) << 8 | static_cast<uint32_t>( byte( 5 ) ) << 16
-                          | static_cast<uint32_t>( byte( 6 ) ) << 24;
+    ORCAD_STREAM stream( aData );
+    stream.Skip( 3 );
 
-    return byte( 7 ) == 0 && byte( 8 ) == 0 && byte( 9 ) == 0 && byte( 10 ) == 0 && bodyLength <= aData.size() - 11;
+    uint32_t bodyLength = stream.ReadU32();
+
+    return stream.ReadU32() == 0 && bodyLength <= aData.size() - 11;
 }
 
 

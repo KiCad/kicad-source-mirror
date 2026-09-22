@@ -93,7 +93,7 @@ public:
     /** Throws IO_ERROR if the end is unknown or behind the cursor. */
     void SkipStructure( const ORCAD_PREFIXES& aPrefixes, const wxString& aWhat );
 
-    /** Skip unknown bodies. After a body error, resume at the prefix end when possible. */
+    /** Always resumes at the prefix end, skipping unknown bodies and undecoded trailers. */
     ORCAD_READ_RESULT ReadStructure();
 
     /** Report a recoverable problem to the warning sink (no-op when none was given). */
@@ -120,20 +120,9 @@ ORCAD_PLACED_INSTANCE OrcadReadPlacedInstance( ORCAD_STRUCT_READER& aReader, con
 /** Common body of Port/Global/OffPageConnector/TitleBlock/ERCObject/Graphic*Inst. */
 ORCAD_GRAPHIC_INST OrcadReadGraphicInst( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes );
 
-/** GraphicInst body followed by a 9-byte trailer. */
-ORCAD_GRAPHIC_INST OrcadReadPort( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes );
-
-/** GraphicInst body followed by a 12-byte trailer. */
-ORCAD_GRAPHIC_INST OrcadReadTitleBlock( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes );
-
-/** GraphicInst body followed by 3 lzt strings. */
-ORCAD_GRAPHIC_INST OrcadReadErcObject( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes );
-
 ORCAD_PIN_INST OrcadReadPinInst( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes );
 
 ORCAD_BUS_ENTRY OrcadReadBusEntryBody( ORCAD_STREAM& aStream );
-
-ORCAD_BUS_ENTRY OrcadReadBusEntry( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes );
 
 /** Keep only display properties that ReadStructure decodes. */
 std::vector<ORCAD_DISPLAY_PROP> OrcadReadDisplayPropList( ORCAD_STRUCT_READER& aReader );

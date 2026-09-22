@@ -497,12 +497,6 @@ ORCAD_SYMBOL_DEF OrcadReadSymbolDef( ORCAD_STRUCT_READER& aReader, const ORCAD_P
 }
 
 
-ORCAD_SYMBOL_DEF OrcadReadSthInPages0( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes )
-{
-    return OrcadReadSymbolDef( aReader, aPrefixes, false );
-}
-
-
 ORCAD_DRAWN_INSTANCE OrcadReadDrawnInstance( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes )
 {
     ORCAD_STREAM& stream = aReader.Stream();
@@ -599,9 +593,6 @@ ORCAD_DRAWN_INSTANCE OrcadReadDrawnInstance( ORCAD_STRUCT_READER& aReader, const
         block.pins.push_back( std::move( blockPin ) );
     }
 
-    if( aPrefixes.end != 0 && aPrefixes.end > stream.GetOffset() )
-        stream.Seek( aPrefixes.end );
-
     return block;
 }
 
@@ -678,33 +669,11 @@ static void storeFramedRecord( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXE
 
     if( isSymbolType( aPrefixes.typeId ) )
     {
-        ORCAD_SYMBOL_DEF symbol = OrcadReadSymbolDef( aReader, aPrefixes, true );
-        auto             existing = aSymbols.find( symbol.name );
-
-        if( existing == aSymbols.end() )
-        {
-            std::string key = symbol.name;
-            aSymbols.emplace( std::move( key ), std::move( symbol ) );
-        }
-        else
-        {
-            existing->second.variants.push_back( std::move( symbol ) );
-        }
+        OrcadAddOrVariant( aSymbols, OrcadReadSymbolDef( aReader, aPrefixes, true ) );
     }
     else if( aPrefixes.typeId == ORCAD_ST_PACKAGE )
     {
-        ORCAD_PACKAGE package = OrcadReadPackage( aReader, aPrefixes );
-        auto          existing = aPackages.find( package.name );
-
-        if( existing == aPackages.end() )
-        {
-            std::string key = package.name;
-            aPackages.emplace( std::move( key ), std::move( package ) );
-        }
-        else
-        {
-            existing->second.variants.push_back( std::move( package ) );
-        }
+        OrcadAddOrVariant( aPackages, OrcadReadPackage( aReader, aPrefixes ) );
     }
     else
     {
@@ -873,17 +842,7 @@ void OrcadParsePackageStream( const std::vector<char>& aData, const std::vector<
             for( const auto& [name, value] : cellProps )
                 symbol.props.try_emplace( name, value );
 
-            auto existing = aSymbols.find( symbol.name );
-
-            if( existing == aSymbols.end() )
-            {
-                std::string key = symbol.name;
-                aSymbols.emplace( std::move( key ), std::move( symbol ) );
-            }
-            else
-            {
-                existing->second.variants.push_back( std::move( symbol ) );
-            }
+            OrcadAddOrVariant( aSymbols, std::move( symbol ) );
         }
     }
 
@@ -893,17 +852,7 @@ void OrcadParsePackageStream( const std::vector<char>& aData, const std::vector<
     if( stream.Remaining() != 0 )
         THROW_IO_ERROR( wxS( "OrCAD package stream: trailing bytes" ) );
 
-    auto existing = aPackages.find( package.name );
-
-    if( existing == aPackages.end() )
-    {
-        std::string key = package.name;
-        aPackages.emplace( std::move( key ), std::move( package ) );
-    }
-    else
-    {
-        existing->second.variants.push_back( std::move( package ) );
-    }
+    OrcadAddOrVariant( aPackages, std::move( package ) );
 }
 
 

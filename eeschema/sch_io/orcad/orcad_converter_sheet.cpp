@@ -4239,11 +4239,13 @@ void ORCAD_CONVERTER::convertPage( ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen, c
 
 void ORCAD_CONVERTER::placePageFrame( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen )
 {
-    if( !aPage.borderPrinted && !aPage.gridRefPrinted )
+    const ORCAD_PAGE_SETTINGS& settings = aPage.settings;
+
+    if( !settings.borderPrinted && !settings.gridRefPrinted )
         return;
 
-    int widthDbu = KiROUND( aPage.isMetric ? aPage.width / 254.0 : aPage.width / 10.0 );
-    int heightDbu = KiROUND( aPage.isMetric ? aPage.height / 254.0 : aPage.height / 10.0 );
+    int widthDbu = KiROUND( settings.isMetric ? settings.width / 254.0 : settings.width / 10.0 );
+    int heightDbu = KiROUND( settings.isMetric ? settings.height / 254.0 : settings.height / 10.0 );
 
     if( widthDbu <= 0 || heightDbu <= 0 )
         return;
@@ -4266,12 +4268,12 @@ void ORCAD_CONVERTER::placePageFrame( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* a
 
     addLine( { { 0, 0 }, { widthDbu, 0 }, { widthDbu, heightDbu }, { 0, heightDbu }, { 0, 0 } } );
 
-    if( !aPage.gridRefPrinted )
+    if( !settings.gridRefPrinted )
         return;
 
-    int horizontalBand = KiROUND( aPage.isMetric ? aPage.horizontalWidth / 254.0
-                                                  : aPage.horizontalWidth / 10.0 );
-    int verticalBand = KiROUND( aPage.isMetric ? aPage.verticalWidth / 254.0 : aPage.verticalWidth / 10.0 );
+    int horizontalBand = KiROUND( settings.isMetric ? settings.horizontalWidth / 254.0
+                                                    : settings.horizontalWidth / 10.0 );
+    int verticalBand = KiROUND( settings.isMetric ? settings.verticalWidth / 254.0 : settings.verticalWidth / 10.0 );
     horizontalBand = std::clamp( horizontalBand, 0, heightDbu / 2 );
     verticalBand = std::clamp( verticalBand, 0, widthDbu / 2 );
 
@@ -4294,13 +4296,13 @@ void ORCAD_CONVERTER::placePageFrame( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* a
         appendPageItem( aScreen, label );
     };
 
-    for( int i = 0; i < aPage.horizontalCount; ++i )
+    for( int i = 0; i < settings.horizontalCount; ++i )
     {
-        int left = KiROUND( static_cast<double>( widthDbu ) * i / aPage.horizontalCount );
-        int right = KiROUND( static_cast<double>( widthDbu ) * ( i + 1 ) / aPage.horizontalCount );
-        int value = aPage.horizontalAscending ? i : aPage.horizontalCount - i - 1;
-        wxString label = aPage.horizontalChar ? wxString( static_cast<wxUniChar>( 'A' + value ) )
-                                              : wxString::Format( wxS( "%d" ), value + 1 );
+        int left = KiROUND( static_cast<double>( widthDbu ) * i / settings.horizontalCount );
+        int right = KiROUND( static_cast<double>( widthDbu ) * ( i + 1 ) / settings.horizontalCount );
+        int value = settings.horizontalAscending ? i : settings.horizontalCount - i - 1;
+        wxString label = settings.horizontalChar ? wxString( static_cast<wxUniChar>( 'A' + value ) )
+                                                 : wxString::Format( wxS( "%d" ), value + 1 );
 
         if( i > 0 )
         {
@@ -4312,13 +4314,13 @@ void ORCAD_CONVERTER::placePageFrame( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* a
         addLabel( label, ( left + right ) / 2, heightDbu - horizontalBand / 2 );
     }
 
-    for( int i = 0; i < aPage.verticalCount; ++i )
+    for( int i = 0; i < settings.verticalCount; ++i )
     {
-        int top = KiROUND( static_cast<double>( heightDbu ) * i / aPage.verticalCount );
-        int bottom = KiROUND( static_cast<double>( heightDbu ) * ( i + 1 ) / aPage.verticalCount );
-        int value = aPage.verticalAscending ? i : aPage.verticalCount - i - 1;
-        wxString label = aPage.verticalChar ? wxString( static_cast<wxUniChar>( 'A' + value ) )
-                                            : wxString::Format( wxS( "%d" ), value + 1 );
+        int top = KiROUND( static_cast<double>( heightDbu ) * i / settings.verticalCount );
+        int bottom = KiROUND( static_cast<double>( heightDbu ) * ( i + 1 ) / settings.verticalCount );
+        int value = settings.verticalAscending ? i : settings.verticalCount - i - 1;
+        wxString label = settings.verticalChar ? wxString( static_cast<wxUniChar>( 'A' + value ) )
+                                               : wxString::Format( wxS( "%d" ), value + 1 );
 
         if( i > 0 )
         {
@@ -4372,10 +4374,12 @@ wxString ORCAD_CONVERTER::SanitizeFileName( const std::string& aName )
 
 void ORCAD_CONVERTER::applyPageSettings( ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen )
 {
-    if( aPage.width > 0 && aPage.height > 0 )
+    const ORCAD_PAGE_SETTINGS& settings = aPage.settings;
+
+    if( settings.width > 0 && settings.height > 0 )
     {
-        double widthMils = aPage.isMetric ? aPage.width / 25.4 : aPage.width;
-        double heightMils = aPage.isMetric ? aPage.height / 25.4 : aPage.height;
+        double widthMils = settings.isMetric ? settings.width / 25.4 : settings.width;
+        double heightMils = settings.isMetric ? settings.height / 25.4 : settings.height;
 
         PAGE_INFO::SetCustomWidthMils( widthMils );
         PAGE_INFO::SetCustomHeightMils( heightMils );
@@ -4389,9 +4393,9 @@ void ORCAD_CONVERTER::applyPageSettings( ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScr
     BOX2I extent = pageExtentDbu( aPage );
 
     // Nominal paper from stored page size; mils, or micrometres when metric.
-    double k = aPage.isMetric ? 0.001 : 0.0254;
-    double nominalWmm = aPage.width * k;
-    double nominalHmm = aPage.height * k;
+    double k = settings.isMetric ? 0.001 : 0.0254;
+    double nominalWmm = settings.width * k;
+    double nominalHmm = settings.height * k;
 
     // The clearance shift below pushes a full-page drawing past its own paper, so a
     // named size only survives while the content stays at source coordinates
@@ -4752,15 +4756,15 @@ void ORCAD_CONVERTER::applyTitleBlock( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* 
                 return aPage.pageSize == "Custom" ? "N/A" : aPage.pageSize;
 
             if( ( aKey == "Page Modify Date" || aKey == "Schematic Modify Date" )
-                && aPage.modifyTimestamp != 0 )
-                return calendarDate( aPage.modifyTimestamp );
+                && aPage.settings.modifyTimestamp != 0 )
+                return calendarDate( aPage.settings.modifyTimestamp );
 
             if( aKey == "Design Modify Date" && m_design.library.modifyTimestamp != 0 )
                 return calendarDate( m_design.library.modifyTimestamp );
 
             if( ( aKey == "Page Create Date" || aKey == "Schematic Create Date" )
-                && aPage.createTimestamp != 0 )
-                return calendarDate( aPage.createTimestamp );
+                && aPage.settings.createTimestamp != 0 )
+                return calendarDate( aPage.settings.createTimestamp );
 
             if( aKey == "Design Create Date" && m_design.library.createTimestamp != 0 )
                 return calendarDate( m_design.library.createTimestamp );
@@ -4781,7 +4785,7 @@ void ORCAD_CONVERTER::applyTitleBlock( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* 
             }
 
             if( aKey == "Page Modify Date" )
-                return calendarDate( aPage.modifyTimestamp );
+                return calendarDate( aPage.settings.modifyTimestamp );
 
             return {};
         };
