@@ -24,6 +24,7 @@
 #include <units_provider.h>
 #include <pcb_track_types.h>
 
+#include <string>
 #include <vector>
 
 class BOARD;
@@ -37,32 +38,36 @@ struct BOARD_STATISTICS_OPTIONS
 
 struct BOARD_STATISTICS_FP_ENTRY
 {
-    BOARD_STATISTICS_FP_ENTRY( int aMask, int aValue, const wxString& aTitle ) :
+    BOARD_STATISTICS_FP_ENTRY( int aMask, int aValue, const wxString& aTitle, const std::string& aJsonKey ) :
             attributeMask( aMask ),
             attributeValue( aValue ),
-            title( aTitle )
+            title( aTitle ),
+            jsonKey( aJsonKey )
     {
     }
 
-    int      attributeMask;
-    int      attributeValue;
-    wxString title;
-    int      frontCount = 0;
-    int      backCount = 0;
+    int         attributeMask;
+    int         attributeValue;
+    wxString    title;
+    std::string jsonKey;
+    int         frontCount = 0;
+    int         backCount = 0;
 };
 
 template <typename T>
 struct BOARD_STATISTICS_INFO_ENTRY
 {
-    BOARD_STATISTICS_INFO_ENTRY( T aAttribute, const wxString& aTitle ) :
+    BOARD_STATISTICS_INFO_ENTRY( T aAttribute, const wxString& aTitle, const std::string& aJsonKey ) :
             attribute( aAttribute ),
-            title( aTitle )
+            title( aTitle ),
+            jsonKey( aJsonKey )
     {
     }
 
-    T        attribute;
-    wxString title;
-    int      quantity = 0;
+    T           attribute;
+    wxString    title;
+    std::string jsonKey;
+    int         quantity = 0;
 };
 
 struct BOARD_STATISTICS_DATA
