@@ -218,7 +218,7 @@ bool SPICE_CIRCUIT_MODEL::ParseNoiseCommand( const wxString& aCmd, wxString* aOu
 
     if( token.Lower() == "dec" || token.Lower() == "oct" || token.Lower() == "lin" )
     {
-        *aScale = token;
+        *aScale = token.Lower();
         token = tokens.GetNextToken();
     }
 
