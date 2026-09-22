@@ -42,6 +42,10 @@ find_library( OCC_OPENGL_LIBRARY TKOpenGl HINTS "${OCC_LIBRARY_DIR}" NO_DEFAULT_
 
 set_target_properties(kicad_3d_model_previewer PROPERTIES LINK_FLAGS "/DEF:${CMAKE_SOURCE_DIR}/utils/preview_handlers/kicad_3d_model_preview_handler/exports.def")
 
+# The .rc pulls in the generated kicad_build_version.h, which only a full build happened to
+# produce first
+add_dependencies(kicad_3d_model_previewer version_header)
+
 target_link_libraries(kicad_3d_model_previewer
     kicad_3d_import
     ${OCC_LIBRARIES}
