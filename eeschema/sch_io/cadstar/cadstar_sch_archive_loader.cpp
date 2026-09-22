@@ -1919,7 +1919,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolGateAndPartFields( const SYMDEF_ID& a
         SCH_FIELD* attrField = addNewFieldToSymbol( attrName, aSymbol );
 
         wxASSERT( attrField->GetName() == attrName );
-        attrField->SetText( aAttributeVal.Value );
+        attrField->SetText( attributeValue );
         attrField->SetUnit( gateNumber );
 
         const ATTRIBUTE_ID& attrid = aAttributeVal.AttributeID;
@@ -1928,14 +1928,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolGateAndPartFields( const SYMDEF_ID& a
         if( aAttributeVal.HasLocation )
         {
             // Check if the part itself defined a location for the field
-            applyToLibraryFieldAttribute( aAttributeVal.AttributeLocation, symDefOrigin,
-                                          attrField );
+            applyToLibraryFieldAttribute( aAttributeVal.AttributeLocation, symDefOrigin, attrField );
         }
         else if( attrIsNew )
         {
             attrField->SetVisible( false );
-            applyTextSettings( attrField, wxT( "TC1" ), ALIGNMENT::NO_ALIGNMENT,
-                               JUSTIFICATION::LEFT, false, true );
+            applyTextSettings( attrField, wxT( "TC1" ), ALIGNMENT::NO_ALIGNMENT, JUSTIFICATION::LEFT, false, true );
         }
     };
 
