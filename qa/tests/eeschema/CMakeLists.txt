@@ -148,6 +148,7 @@ set( QA_EESCHEMA_SRCS
     test_issue24403_directive_label_i18n.cpp
     test_issue24297_http_migrate.cpp
     test_issue24606_derived_symbol_fields.cpp
+    test_issue25606_derived_symbol_footprint.cpp
     test_issue23687_sim_value_field.cpp
     test_nc_pin_connectivity.cpp
     test_crossing_label.cpp

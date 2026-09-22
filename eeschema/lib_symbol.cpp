@@ -569,10 +569,20 @@ void LIB_SYMBOL::SetParent( LIB_SYMBOL* aParent )
 
 wxString LIB_SYMBOL::GetFootprint()
 {
-    if( !GetField( FIELD_T::FOOTPRINT ) )
+    SCH_FIELD* field = GetField( FIELD_T::FOOTPRINT );
+
+    if( !field )
         return wxEmptyString;
 
-    return GetFootprintField().GetShownText( false );
+    // Placing a derived symbol inherits the parent's footprint the same way the description,
+    // keywords and filters do, so reporting none here disagrees with what lands on the schematic
+    if( field->GetText().IsEmpty() && IsDerived() )
+    {
+        if( std::shared_ptr<LIB_SYMBOL> parent = m_parent.lock() )
+            return parent->GetFootprint();
+    }
+
+    return field->GetShownText( false );
 }
 
 
