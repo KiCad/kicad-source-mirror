@@ -60,7 +60,7 @@ void PCAD_PAD::Parse( XNODE* aNode, const wxString& aDefaultUnits,
     XNODE*          lNode;
     XNODE*          cNode;
     long            num;
-    wxString        propValue, str, emsg;
+    wxString        propValue, str;
     PCAD_PAD_SHAPE* padShape;
 
     m_Rotation = ANGLE_0;

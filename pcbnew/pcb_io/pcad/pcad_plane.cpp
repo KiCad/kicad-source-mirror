@@ -43,7 +43,7 @@ bool PCAD_PLANE::Parse( XNODE* aNode, const wxString& aDefaultUnits,
                         const wxString& aActualConversion )
 {
     XNODE*          lNode;
-    wxString        pourType, str, propValue;
+    wxString        propValue;
 
     lNode = FindNode( aNode, wxT( "netNameRef" ) );
 

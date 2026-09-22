@@ -824,9 +824,6 @@ void DIFF_PHASE_SKEW_TOOL::drawDiffOverlay() const
         m_viewOverlay->Segment( segment.Start, segment.End, segment.Width );
     }
 
-    std::vector<MSG_PANEL_ITEM> items;
-    wxString                    description, value;
-
     updateOverlay();
 }
 

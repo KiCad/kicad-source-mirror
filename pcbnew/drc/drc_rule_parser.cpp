@@ -172,7 +172,6 @@ wxString DRC_RULES_PARSER::parseExpression()
 void DRC_RULES_PARSER::Parse( std::vector<std::shared_ptr<DRC_RULE>>& aRules, REPORTER* aReporter )
 {
     bool     haveVersion = false;
-    wxString msg;
 
     m_reporter = aReporter;
 
@@ -241,7 +240,6 @@ void DRC_RULES_PARSER::ParseComponentClassAssignmentRules(
         std::vector<std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE>>& aRules, REPORTER* aReporter )
 {
     bool     haveVersion = false;
-    wxString msg;
 
     m_reporter = aReporter;
 
@@ -311,7 +309,6 @@ std::shared_ptr<DRC_RULE> DRC_RULES_PARSER::parseDRC_RULE()
     std::string             conditionSource;
 
     T        token = NextTok();
-    wxString msg;
 
     if( !IsSymbol( token ) )
         reportError( _( "Missing rule name." ) );
@@ -418,7 +415,6 @@ std::shared_ptr<COMPONENT_CLASS_ASSIGNMENT_RULE> DRC_RULES_PARSER::parseComponen
     std::shared_ptr<DRC_RULE_CONDITION> condition;
 
     T        token = NextTok();
-    wxString msg;
 
     if( !IsSymbol( token ) )
         reportError( _( "Missing component class name." ) );
@@ -978,7 +974,6 @@ LSET DRC_RULES_PARSER::parseLayer( wxString* aSource )
 SEVERITY DRC_RULES_PARSER::parseSeverity()
 {
     SEVERITY retVal = RPT_SEVERITY_UNDEFINED;
-    wxString msg;
 
     T token = NextTok();
 

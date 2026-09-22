@@ -456,7 +456,6 @@ bool COMPILER::lexDefault( T_TOKEN& aToken )
     T_TOKEN  retval;
     wxString current;
     int      convertFrom;
-    wxString msg;
 
     retval.value.str = nullptr;
     retval.value.num = 0.0;
