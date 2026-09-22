@@ -2175,7 +2175,7 @@ bool RENDER_3D_RAYTRACE_BASE::addExtrudedBodyToRaytracer( CONTAINER_3D& aDstCont
         aDstContainer.Add( layerItem );
     }
 
-    // Create pin extrusions for pad holes (from opposite board side to standoff height)
+    // Create pin extrusions for pad holes (they move with the body, so the Z offset shifts them whole)
     if( standoff3d > 0.0f )
     {
         SHAPE_POLY_SET pinPoly;
@@ -2189,13 +2189,13 @@ bool RENDER_3D_RAYTRACE_BASE::addExtrudedBodyToRaytracer( CONTAINER_3D& aDstCont
 
             if( !isBack )
             {
-                pinZBot = oppositeSurfaceZ - protrusion;
-                pinZTop = boardSurfaceZ + standoff3d;
+                pinZBot = oppositeSurfaceZ - protrusion + zOffset3d;
+                pinZTop = boardSurfaceZ + standoff3d + zOffset3d;
             }
             else
             {
-                pinZTop = oppositeSurfaceZ + protrusion;
-                pinZBot = boardSurfaceZ - standoff3d;
+                pinZTop = oppositeSurfaceZ + protrusion - zOffset3d;
+                pinZBot = boardSurfaceZ - standoff3d - zOffset3d;
             }
 
             auto addPinObjects =

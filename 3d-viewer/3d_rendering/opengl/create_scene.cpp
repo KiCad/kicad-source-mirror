@@ -743,7 +743,7 @@ void RENDER_3D_OPENGL::renderExtrudedBodies()
         assignRenderMap( m_extrudedBodyLists, fp, renderList );
 
         // Create pin extrusions for pad holes
-        // Start from opposite board side to standoff height
+        // The pins move with the body, so the Z offset shifts them whole
         if( standoff3d > 0.0f )
         {
             SHAPE_POLY_SET pinPoly;
@@ -757,13 +757,13 @@ void RENDER_3D_OPENGL::renderExtrudedBodies()
 
                 if( !isBack )
                 {
-                    pinZBot = oppositeSurfaceZ - protrusion;
-                    pinZTop = boardSurfaceZ + standoff3d;
+                    pinZBot = oppositeSurfaceZ - protrusion + zOffset3d;
+                    pinZTop = boardSurfaceZ + standoff3d + zOffset3d;
                 }
                 else
                 {
-                    pinZTop = oppositeSurfaceZ + protrusion;
-                    pinZBot = boardSurfaceZ - standoff3d;
+                    pinZTop = oppositeSurfaceZ + protrusion - zOffset3d;
+                    pinZBot = boardSurfaceZ - standoff3d - zOffset3d;
                 }
 
                 auto buildPinList = [&]( SHAPE_POLY_SET& aPoly, auto& aDstMap )

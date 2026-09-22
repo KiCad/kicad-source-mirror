@@ -693,7 +693,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
             }
 
             // Add metallic pin extrusions for through-hole pads
-            if( standoff > 0.0 )
+            if( body->m_standoff > 0 )
             {
                 try
                 {

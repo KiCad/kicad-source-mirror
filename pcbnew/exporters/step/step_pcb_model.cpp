@@ -1813,16 +1813,18 @@ bool STEP_PCB_MODEL::AddExtrudedPins( const FOOTPRINT* aFootprint, bool aBottom,
 
     static const double c_protrusion = 1.0; // 1mm below opposite side
 
+    double zOffset = body ? body->m_offset.z : 0.0;
+
     double pinZBot, pinHeight;
 
     if( !aBottom )
     {
-        pinZBot = boardBotZ - c_protrusion;
+        pinZBot = boardBotZ - c_protrusion + zOffset;
         pinHeight = ( boardTopZ + aStandoff ) - pinZBot;
     }
     else
     {
-        double pinZTop = boardTopZ + c_protrusion;
+        double pinZTop = boardTopZ + c_protrusion - zOffset;
         pinZBot = boardBotZ - aStandoff;
         pinHeight = pinZTop - pinZBot;
     }
