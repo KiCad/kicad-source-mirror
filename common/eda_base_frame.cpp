@@ -1424,6 +1424,8 @@ void EDA_BASE_FRAME::RestoreAuiLayout()
 void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton,
                                        INFOBAR_MESSAGE_TYPE aType )
 {
+    wxCHECK( m_infoBar, /* void */ );
+
     m_infoBar->RemoveAllButtons();
 
     if( aShowCloseButton )
@@ -1436,6 +1438,8 @@ void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg, bool aShowClos
 void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton,
                                        std::function<void(void)> aCallback )
 {
+    wxCHECK( m_infoBar, /* void */ );
+
     m_infoBar->RemoveAllButtons();
 
     if( aShowCloseButton )
@@ -1450,6 +1454,8 @@ void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg, bool aShowClos
 
 void EDA_BASE_FRAME::ShowInfoBarWarning( const wxString& aWarningMsg, bool aShowCloseButton )
 {
+    wxCHECK( m_infoBar, /* void */ );
+
     m_infoBar->RemoveAllButtons();
 
     if( aShowCloseButton )
@@ -1461,6 +1467,8 @@ void EDA_BASE_FRAME::ShowInfoBarWarning( const wxString& aWarningMsg, bool aShow
 
 void EDA_BASE_FRAME::ShowInfoBarMsg( const wxString& aMsg, bool aShowCloseButton )
 {
+    wxCHECK( m_infoBar, /* void */ );
+
     m_infoBar->RemoveAllButtons();
 
     if( aShowCloseButton )

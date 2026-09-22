@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <memory>
+
 #include <wx/debug.h>
 #include <wx/filedlg.h>
 #include <wx/wfstream.h>
@@ -450,10 +452,6 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
     int      firstLoadedLayer = NO_AVAILABLE_LAYERS;
     LSET     visibility = GetVisibleLayers();
 
-    // Extract the path of aFullFileName. We use it to store temporary files
-    wxFileName fn( aFullFileName );
-    wxString   unzipDir = fn.GetPath();
-
     wxFFileInputStream zipFile( aFullFileName );
 
     if( !zipFile.IsOk() )
@@ -470,22 +468,29 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
     // Update the list of recent zip files.
     UpdateFileHistory( aFullFileName, &m_zipFileHistory );
 
-    // The unzipped file in only a temporary file. Give it a filename
-    // which cannot conflict with an usual filename.
+    // The archive may live somewhere unwritable, such as a read-only network share, so unzip
+    // to the system temp dir rather than next to the archive
     // TODO: make Read_GERBER_File() and Read_EXCELLON_File() able to
     // accept a stream, and avoid using a temp file.
-    wxFileName temp_fn( "$tempfile.tmp" );
-    temp_fn.MakeAbsolute( unzipDir );
-    wxString unzipped_tempfile = temp_fn.GetFullPath();
+    wxString unzipped_tempfile = wxFileName::CreateTempFileName( wxS( "gerbview" ) );
 
+    if( unzipped_tempfile.IsEmpty() )
+    {
+        if( aReporter )
+        {
+            msg.Printf( _( "Unable to create a temporary file to unzip '%s'." ), aFullFileName );
+            aReporter->Report( msg, RPT_SEVERITY_ERROR );
+        }
+
+        return false;
+    }
 
     bool             success = true;
     wxZipInputStream zipArchive( zipFile );
-    wxZipEntry*      entry;
     bool             reported_no_more_layer = false;
     KIGFX::VIEW*     view = GetCanvas()->GetView();
 
-    while( ( entry = zipArchive.GetNextEntry() ) != nullptr )
+    while( std::unique_ptr<wxZipEntry> entry{ zipArchive.GetNextEntry() } )
     {
         if( entry->IsDir() )
             continue;
@@ -531,7 +536,6 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
                 aReporter->Report( msg, RPT_SEVERITY_ERROR );
             }
 
-            delete entry;
             continue;
         }
 
@@ -541,9 +545,7 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
         {
             wxFFileOutputStream temporary_ofile( unzipped_tempfile );
 
-            if( temporary_ofile.Ok() )
-                temporary_ofile.Write( zipArchive );
-            else
+            if( !temporary_ofile.Ok() )
             {
                 success = false;
 
@@ -553,6 +555,30 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
                                 unzipped_tempfile );
                     aReporter->Report( msg, RPT_SEVERITY_ERROR );
                 }
+
+                // Parsing the temp file now would read whatever the previous entry left in it
+                continue;
+            }
+
+            temporary_ofile.Write( zipArchive );
+
+            // IsOk() reports a closed stream as not-ok, so capture the write result first. A short
+            // write leaves a truncated file that TestFileIsRS274() still accepts as valid artwork
+            const bool writeOk = temporary_ofile.IsOk();
+            const bool closeOk = temporary_ofile.Close();
+
+            if( !writeOk || !closeOk )
+            {
+                success = false;
+
+                if( aReporter )
+                {
+                    msg.Printf( _( "<b>Unable to write temporary file '%s'.</b>" ),
+                                unzipped_tempfile );
+                    aReporter->Report( msg, RPT_SEVERITY_ERROR );
+                }
+
+                continue;
             }
         }
 
@@ -602,11 +628,6 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             firstLoadedLayer = layer;
         }
 
-        delete entry;
-
-        // The unzipped file is only a temporary file, delete it.
-        wxRemoveFile( unzipped_tempfile );
-
         if( !read_ok )
         {
             success = false;
@@ -633,6 +654,8 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             SetActiveLayer( layer, false );
         }
     }
+
+    wxRemoveFile( unzipped_tempfile );
 
     if( foundX2Gerbers )
         SortLayersByX2Attributes();
