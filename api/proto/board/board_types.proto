@@ -576,6 +576,27 @@ message BoardGraphicShape
 
   // Since: 11.0
   repeated kiapi.common.types.CustomProperty custom_properties = 8;
+
+  // Options that only apply to custom shape (primitive) items within a pad's padstack.
+  // This field must not be set for other board shapes.
+  // Since: 11.0
+  PadCustomShapeOptions pad_custom_shape_options = 9;
+}
+
+// Options for shapes that have a special role in custom-shape pads
+// Since: 11.0
+message PadCustomShapeOptions
+{
+  oneof role
+  {
+    // A rectangle in which the pad number and net name are drawn.  Only valid on rectangle
+    // shapes.  At most one number box is currently supported per pad (the first one found).
+    bool is_number_box = 1;
+
+    // A segment defining a custom thermal spoke template for zone filling.  Only valid on
+    // segment shapes.  Multiple spoke templates may exist per pad.
+    bool is_thermal_spoke_template = 2;
+  }
 }
 
 enum BarcodeKind

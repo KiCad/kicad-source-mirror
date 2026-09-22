@@ -231,6 +231,18 @@ void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
 
     EDA_SHAPE::Serialize( *msg.mutable_shape(), pcbIUScale );
 
+    if( IsProxyItem() )
+    {
+        PadCustomShapeOptions* options = msg.mutable_pad_custom_shape_options();
+
+        switch( GetShape() )
+        {
+        case SHAPE_T::RECTANGLE: options->set_is_number_box( true );                 break;
+        case SHAPE_T::SEGMENT:   options->set_is_thermal_spoke_template( true );     break;
+        default:                 wxFAIL_MSG( wxT( "Unexpected proxy shape type" ) ); break;
+        }
+    }
+
     if( FOOTPRINT* parent = GetParentFootprint() )
         msg.mutable_parent()->set_value( parent->m_Uuid.AsStdString() );
     else if( const BOARD* board = GetBoard() )
@@ -279,6 +291,27 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
     kiapi::common::UnpackCustomProperties( msg.custom_properties(), *this );
 
     EDA_SHAPE::Deserialize( msg.shape(), pcbIUScale );
+
+    if( msg.has_pad_custom_shape_options() )
+    {
+        switch( msg.pad_custom_shape_options().role_case() )
+        {
+        case PadCustomShapeOptions::kIsNumberBox:
+            if( GetShape() == SHAPE_T::RECTANGLE )
+                m_proxyItem = true;
+
+            break;
+
+        case PadCustomShapeOptions::kIsThermalSpokeTemplate:
+            if( GetShape() == SHAPE_T::SEGMENT )
+                m_proxyItem = true;
+
+            break;
+
+        case PadCustomShapeOptions::ROLE_NOT_SET:
+            break;
+        }
+    }
 
     if( msg.has_solder_mask() )
     {

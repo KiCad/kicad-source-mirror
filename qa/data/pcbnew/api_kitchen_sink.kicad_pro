@@ -406,7 +406,7 @@
   },
   "meta": {
     "filename": "api_kitchen_sink.kicad_pro",
-    "version": 3
+    "version": 4
   },
   "net_settings": {
     "classes": [
@@ -457,7 +457,7 @@
     "page_layout_descr_file": ""
   },
   "schematic": {
-    "bus_aliases": {},
+    "bus_aliases": null,
     "drawing": {
       "field_names": []
     },

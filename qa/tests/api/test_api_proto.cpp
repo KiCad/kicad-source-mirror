@@ -38,6 +38,7 @@
 #include <pcb_drill_chart.h>
 #include <pcb_drill_map.h>
 #include <pcb_grid_item.h>
+#include <pad.h>
 #include <pcb_reference_image.h>
 #include <pcb_shape.h>
 #include <pcb_table.h>
@@ -414,6 +415,62 @@ BOOST_AUTO_TEST_CASE( GridItems )
     BOOST_CHECK_EQUAL( roundTripped->GetAffectsRouting(), true );
     BOOST_CHECK_EQUAL( roundTripped->GetAffectsPlacement(), false );
     BOOST_CHECK_EQUAL( roundTripped->IsLocked(), false );
+}
+
+
+BOOST_AUTO_TEST_CASE( PadCustomShapeProxyItems )
+{
+    BOARD     board;
+    FOOTPRINT footprint( &board );
+    PAD       pad( &footprint );
+
+    auto numberBox = std::make_shared<PCB_SHAPE>( &pad, SHAPE_T::RECTANGLE );
+    numberBox->SetIsProxyItem();
+
+    auto spokeTemplate = std::make_shared<PCB_SHAPE>( &pad, SHAPE_T::SEGMENT );
+    spokeTemplate->SetIsProxyItem();
+
+    auto plainShape = std::make_shared<PCB_SHAPE>( &pad, SHAPE_T::SEGMENT );
+
+    google::protobuf::Any numberBoxAny;
+    numberBox->Serialize( numberBoxAny );
+
+    kiapi::board::types::BoardGraphicShape numberBoxProto;
+    BOOST_REQUIRE( numberBoxAny.UnpackTo( &numberBoxProto ) );
+    BOOST_REQUIRE( numberBoxProto.has_pad_custom_shape_options() );
+    BOOST_CHECK( numberBoxProto.pad_custom_shape_options().is_number_box() );
+
+    google::protobuf::Any spokeAny;
+    spokeTemplate->Serialize( spokeAny );
+
+    kiapi::board::types::BoardGraphicShape spokeProto;
+    BOOST_REQUIRE( spokeAny.UnpackTo( &spokeProto ) );
+    BOOST_REQUIRE( spokeProto.has_pad_custom_shape_options() );
+    BOOST_CHECK( spokeProto.pad_custom_shape_options().is_thermal_spoke_template() );
+
+    google::protobuf::Any plainAny;
+    plainShape->Serialize( plainAny );
+
+    kiapi::board::types::BoardGraphicShape plainProto;
+    BOOST_REQUIRE( plainAny.UnpackTo( &plainProto ) );
+    BOOST_CHECK( !plainProto.has_pad_custom_shape_options() );
+
+    // A role arriving on a mismatched shape type is ignored
+    google::protobuf::Any mismatchedAny;
+    spokeTemplate->Serialize( mismatchedAny );
+
+    kiapi::board::types::BoardGraphicShape mismatchedProto;
+    BOOST_REQUIRE( mismatchedAny.UnpackTo( &mismatchedProto ) );
+    mismatchedProto.clear_shape();
+    mismatchedProto.mutable_shape()->mutable_rectangle()->mutable_top_left()->set_x_nm( 0 );
+    mismatchedProto.mutable_shape()->mutable_rectangle()->mutable_top_left()->set_y_nm( 0 );
+    mismatchedProto.mutable_shape()->mutable_rectangle()->mutable_bottom_right()->set_x_nm( 1 );
+    mismatchedProto.mutable_shape()->mutable_rectangle()->mutable_bottom_right()->set_y_nm( 1 );
+    mismatchedAny.PackFrom( mismatchedProto );
+
+    PCB_SHAPE mismatched( &pad, SHAPE_T::RECTANGLE );
+    BOOST_REQUIRE( mismatched.Deserialize( mismatchedAny ) );
+    BOOST_CHECK( !mismatched.IsProxyItem() );
 }
 
 

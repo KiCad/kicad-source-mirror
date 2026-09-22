@@ -421,6 +421,22 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             }
         }
 
+
+        if( *type == PCB_SHAPE_T )
+        {
+            board::types::BoardGraphicShape shape;
+            anyItem.UnpackTo( &shape );
+
+            if( shape.has_pad_custom_shape_options() )
+            {
+                status.set_code( ItemStatusCode::ISC_INVALID_DATA );
+                status.set_error_message( "pad_custom_shape_options are only valid on shapes inside a pad's "
+                                          "padstack custom shapes" );
+                aItemHandler( status, anyItem );
+                continue;
+            }
+        }
+
         HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>> creationResult =
                 [&]() -> HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>>
         {
