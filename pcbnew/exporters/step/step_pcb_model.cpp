@@ -1789,8 +1789,9 @@ bool STEP_PCB_MODEL::AddExtrudedPins( const FOOTPRINT* aFootprint, bool aBottom,
         return false;
 
     SHAPE_POLY_SET pinPoly;
+    SHAPE_POLY_SET pegPoly;
 
-    if( !GetExtrusionPinOutline( aFootprint, pinPoly ) )
+    if( !GetExtrusionPinOutlines( aFootprint, pinPoly, pegPoly ) )
         return false;
 
     const EXTRUDED_3D_BODY* body = aFootprint->GetExtrudedBody();
@@ -1799,6 +1800,7 @@ bool STEP_PCB_MODEL::AddExtrudedPins( const FOOTPRINT* aFootprint, bool aBottom,
     {
         VECTOR2I fpPos = aFootprint->GetPosition();
         ApplyExtrusionTransform( pinPoly, body, fpPos );
+        ApplyExtrusionTransform( pegPoly, body, fpPos );
     }
 
     double f_pos, f_thickness;
@@ -1828,7 +1830,17 @@ bool STEP_PCB_MODEL::AddExtrudedPins( const FOOTPRINT* aFootprint, bool aBottom,
     if( m_extruded_bodies.empty() )
         return false;
 
-    return MakeShapes( m_extruded_bodies.back().pinShapes, pinPoly, m_simplifyShapes, pinHeight, pinZBot, aOrigin );
+    bool success = true;
+
+    if( pinPoly.OutlineCount() > 0 )
+        success &= MakeShapes( m_extruded_bodies.back().pinShapes, pinPoly, m_simplifyShapes, pinHeight, pinZBot,
+                               aOrigin );
+
+    if( pegPoly.OutlineCount() > 0 )
+        success &= MakeShapes( m_extruded_bodies.back().bodyShapes, pegPoly, m_simplifyShapes, pinHeight, pinZBot,
+                               aOrigin );
+
+    return success;
 }
 
 

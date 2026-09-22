@@ -346,23 +346,29 @@ bool GetExtrusionOutline( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aOutline,
     return false;
 }
 
-bool GetExtrusionPinOutline( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aPinPoly )
+bool GetExtrusionPinOutlines( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aPinPoly, SHAPE_POLY_SET& aPegPoly )
 {
     aPinPoly.RemoveAllContours();
+    aPegPoly.RemoveAllContours();
 
     for( PAD* pad : aFootprint->Pads() )
     {
-        if( pad->HasHole() )
-        {
-            int shrink = -pad->GetDrillSize().x / 20; // ~90% of hole diameter
+        if( !pad->HasHole() )
+            continue;
+
+        int shrink = -pad->GetDrillSize().x / 20; // ~90% of hole diameter
+
+        if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
+            pad->TransformHoleToPolygon( aPegPoly, shrink, ARC_HIGH_DEF, ERROR_INSIDE );
+        else
             pad->TransformHoleToPolygon( aPinPoly, shrink, ARC_HIGH_DEF, ERROR_INSIDE );
-        }
     }
 
-    if( aPinPoly.OutlineCount() == 0 )
+    if( aPinPoly.OutlineCount() == 0 && aPegPoly.OutlineCount() == 0 )
         return false;
 
     aPinPoly.Simplify();
+    aPegPoly.Simplify();
     return true;
 }
 

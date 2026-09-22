@@ -2175,15 +2175,14 @@ bool RENDER_3D_RAYTRACE_BASE::addExtrudedBodyToRaytracer( CONTAINER_3D& aDstCont
         aDstContainer.Add( layerItem );
     }
 
-    // Create metallic pin extrusions for THT pads (from opposite board side to standoff height)
+    // Create pin extrusions for pad holes (from opposite board side to standoff height)
     if( standoff3d > 0.0f )
     {
         SHAPE_POLY_SET pinPoly;
+        SHAPE_POLY_SET pegPoly;
 
-        if( GetExtrusionPinOutline( aFootprint, pinPoly ) )
+        if( GetExtrusionPinOutlines( aFootprint, pinPoly, pegPoly ) )
         {
-            ApplyExtrusionTransform( pinPoly, body, fpPos );
-
             float oppositeSurfaceZ = m_boardAdapter.GetFootprintZPos( !isBack );
             float protrusion = 1.0f * pcbIUScale.IU_PER_MM * biuTo3d;
             float pinZBot, pinZTop;
@@ -2199,26 +2198,37 @@ bool RENDER_3D_RAYTRACE_BASE::addExtrudedBodyToRaytracer( CONTAINER_3D& aDstCont
                 pinZBot = boardSurfaceZ - standoff3d;
             }
 
+            auto addPinObjects =
+                    [&]( SHAPE_POLY_SET& aPoly, const MATERIAL* aMaterial, const SFVEC3F& aColor, float aTransparency )
+            {
+                if( aPoly.OutlineCount() == 0 )
+                    return;
+
+                ApplyExtrusionTransform( aPoly, body, fpPos );
+                aPoly.Fracture();
+
+                size_t prevPinCount = objList.size();
+
+                addOutlineToRaytracerObjects( m_containerWithObjectsToDelete, aPoly, biuTo3d, *aFootprint );
+
+                auto pinIt = objList.begin();
+                std::advance( pinIt, prevPinCount );
+
+                for( ; pinIt != objList.end(); ++pinIt )
+                {
+                    LAYER_ITEM* layerItem = new LAYER_ITEM( *pinIt, pinZBot, pinZTop );
+                    layerItem->SetBoardItem( const_cast<FOOTPRINT*>( aFootprint ) );
+                    layerItem->SetMaterial( aMaterial );
+                    layerItem->SetColor( aColor );
+                    layerItem->SetModelTransparency( aTransparency );
+                    aDstContainer.Add( layerItem );
+                }
+            };
+
             SFVEC3F metalColor = ConvertSRGBToLinear( SFVEC3F( 0.75f, 0.75f, 0.75f ) );
 
-            pinPoly.Fracture();
-
-            size_t prevPinCount = objList.size();
-
-            addOutlineToRaytracerObjects( m_containerWithObjectsToDelete, pinPoly, biuTo3d, *aFootprint );
-
-            // Wrap pin objects with material and Z extents
-            auto pinIt = objList.begin();
-            std::advance( pinIt, prevPinCount );
-
-            for( ; pinIt != objList.end(); ++pinIt )
-            {
-                LAYER_ITEM* layerItem = new LAYER_ITEM( *pinIt, pinZBot, pinZTop );
-                layerItem->SetBoardItem( const_cast<FOOTPRINT*>( aFootprint ) );
-                layerItem->SetMaterial( &m_materials.m_Copper );
-                layerItem->SetColor( metalColor );
-                aDstContainer.Add( layerItem );
-            }
+            addPinObjects( pinPoly, &m_materials.m_Copper, metalColor, 0.0f );
+            addPinObjects( pegPoly, bodyMaterial, objColor, 1.0f - (float) c.a );
         }
     }
 

@@ -365,6 +365,7 @@ private:
 
     std::map<const FOOTPRINT*, std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED>> m_extrudedBodyLists;
     std::map<const FOOTPRINT*, std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED>> m_extrudedPadLists;
+    std::map<const FOOTPRINT*, std::shared_ptr<OPENGL_RENDER_LIST_DEFERRED>> m_extrudedPegLists;
 };
 
 #endif // RENDER_3D_OPENGL_H

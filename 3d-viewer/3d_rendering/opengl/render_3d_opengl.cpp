@@ -1076,6 +1076,7 @@ void RENDER_3D_OPENGL::freeAllLists()
 
     DELETE_AND_FREE_MAP( m_extrudedBodyLists )
     DELETE_AND_FREE_MAP( m_extrudedPadLists )
+    DELETE_AND_FREE_MAP( m_extrudedPegLists )
 }
 
 
@@ -1405,6 +1406,14 @@ void RENDER_3D_OPENGL::renderExtrudedBodies( bool aTransparentPass )
 
         OglSetMaterial( mat, 1.0f, highlight, extSelColor );
         renderList->DrawAll();
+
+        auto pegIt = m_extrudedPegLists.find( fp );
+
+        if( pegIt != m_extrudedPegLists.end() && pegIt->second )
+        {
+            if( std::shared_ptr<OPENGL_RENDER_LIST> pegList = pegIt->second->MakeOrGet() )
+                pegList->DrawAll();
+        }
     }
 }
 

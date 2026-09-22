@@ -57,14 +57,15 @@ bool GetExtrusionOutline( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aOutline,
                           PCB_LAYER_ID aLayerOverride = UNDEFINED_LAYER );
 
 /**
- * Get the pin outline polygons for extruded THT pin rendering.
+ * Get the hole outline polygons for extruded pin rendering.
  *
  * Collects drill hole shapes from all pads with holes, shrunk to ~90% of the
- * drill diameter so pins sit inside the hole.
+ * drill diameter so pins sit inside the hole. Plated holes go to aPinPoly and
+ * NPTH holes go to aPegPoly.
  *
  * @return true if at least one hole polygon was generated.
  */
-bool GetExtrusionPinOutline( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aPinPoly );
+bool GetExtrusionPinOutlines( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aPinPoly, SHAPE_POLY_SET& aPegPoly );
 
 EXTRUSION_MATERIAL_PROPS GetMaterialProps( EXTRUSION_MATERIAL aMaterial, const SFVEC3F& aDiffuse );
 
