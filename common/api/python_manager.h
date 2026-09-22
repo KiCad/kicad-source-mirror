@@ -65,6 +65,22 @@ public:
     /// Returns a full path to the python binary in a venv, if it exists
     static std::optional<wxString> GetVirtualPython( const wxString& aNamespace );
 
+    /**
+     * Returns the path of the interpreter that was used to create the venv in the given
+     * environment directory according to its config file.  May return nullopt if the venv
+     * is invalid but also if it was created with an older Python version (venv only started
+     * recording the executable path in Python 3.11)
+     */
+    static std::optional<wxString> GetVenvInterpreter( const wxString& aEnvPath );
+
+    static bool IsVenvUsable( const wxString& aEnvPath );
+
+    /**
+     * Returns true if the venv at aEnvPath was created by an interpreter other than
+     * aConfiguredInterpreter.
+     */
+    static bool IsVenvStale( const wxString& aEnvPath, const wxString& aConfiguredInterpreter );
+
 private:
     wxString m_interpreterPath;
 };
