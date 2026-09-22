@@ -25,6 +25,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/bimap.hpp>
 #include <google/protobuf/any.pb.h>
+#include <google/protobuf/util/message_differencer.h>
 #include <memory>
 #include <set>
 #include <magic_enum.hpp>
@@ -152,10 +153,14 @@ void testProtoFromKiCadObject( KiCadClass* aInput, Factory&& aCreateOutput )
         google::protobuf::Any outputAny;
         BOOST_REQUIRE_NO_THROW( output->Serialize( outputAny ) );
 
-        if( !( outputAny.SerializeAsString() == any.SerializeAsString() ) )
+        ProtoClass outputProto;
+        BOOST_REQUIRE_MESSAGE( outputAny.UnpackTo( &outputProto ),
+                               "Round-tripped Any message did not unpack into the requested type" );
+
+        if( !google::protobuf::util::MessageDifferencer::Equals( proto, outputProto ) )
         {
-            BOOST_TEST_MESSAGE( "Input: " << any.Utf8DebugString() );
-            BOOST_TEST_MESSAGE( "Output: " << outputAny.Utf8DebugString() );
+            BOOST_TEST_MESSAGE( "Input: " << proto.Utf8DebugString() );
+            BOOST_TEST_MESSAGE( "Output: " << outputProto.Utf8DebugString() );
             BOOST_TEST_FAIL( "Round-tripped protobuf does not match" );
         }
 

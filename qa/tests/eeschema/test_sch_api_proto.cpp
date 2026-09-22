@@ -238,7 +238,7 @@ BOOST_AUTO_TEST_CASE( KitchenSink )
                 BOOST_REQUIRE_NO_THROW( result = PackSymbol( &outputProto, output.get(), path ) );
                 BOOST_REQUIRE_MESSAGE( result, "Second serialization failed" );
 
-                if( !( outputProto.SerializeAsString() == symbolProto.SerializeAsString() ) )
+                if( !google::protobuf::util::MessageDifferencer::Equals( symbolProto, outputProto ) )
                 {
                     BOOST_TEST_MESSAGE( "Input: " << symbolProto.Utf8DebugString() );
                     BOOST_TEST_MESSAGE( "Output: " << outputProto.Utf8DebugString() );
