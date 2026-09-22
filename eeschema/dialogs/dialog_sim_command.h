@@ -93,8 +93,8 @@ private:
     void refreshUIControls()
     {
         wxQueueEvent( m_dcEnable2, new wxCommandEvent( wxEVT_CHECKBOX ) );
-        wxQueueEvent( m_dcSourceType1, new wxCommandEvent( wxEVT_RADIOBOX ) );
-        wxQueueEvent( m_dcSourceType2, new wxCommandEvent( wxEVT_RADIOBOX ) );
+        wxQueueEvent( m_dcSourceType1, new wxCommandEvent( wxEVT_CHOICE ) );
+        wxQueueEvent( m_dcSourceType2, new wxCommandEvent( wxEVT_CHOICE ) );
         wxQueueEvent( m_inputSignalsFilter, new wxCommandEvent( wxEVT_TEXT ) );
     }
 
