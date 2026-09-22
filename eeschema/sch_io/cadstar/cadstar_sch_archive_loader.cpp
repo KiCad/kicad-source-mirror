@@ -2650,18 +2650,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadItemOntoKiCadSheet( const LAYER_ID& aCadsta
 
     if( aCadstarSheetID == "ALL_SHEETS" )
     {
-        SCH_ITEM* duplicateItem = nullptr;
-
         for( std::pair<LAYER_ID, SHEET_NAME> sheetPair : Sheets.SheetNames )
         {
             LAYER_ID sheetID = sheetPair.first;
-            duplicateItem    = aItem->Duplicate( IGNORE_PARENT_GROUP );
             m_sheetMap.at( sheetID )->GetScreen()->Append( aItem->Duplicate( IGNORE_PARENT_GROUP ) );
         }
 
-        //Get rid of the extra copy:
         delete aItem;
-        aItem = duplicateItem;
     }
     else if( aCadstarSheetID == "NO_SHEET" )
     {
