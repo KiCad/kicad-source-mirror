@@ -458,6 +458,14 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( !m_textSize.Validate( 0.01, 1000.0, EDA_UNITS::MM ) )
         return false;
 
+    if( !EDA_TEXT::ValidateHyperlink( m_hyperlinkCombo->GetValue() ) )
+    {
+        DisplayError( this, _( "Invalid hyperlink destination. Please enter either a valid URL "
+                               "(e.g. file:// or http(s)://) or \"#<page number>\" to create "
+                               "a hyperlink to a page in this schematic." ) );
+        return false;
+    }
+
     SCH_COMMIT commit( m_frame );
 
     /* save old text in undo list if not already in edit */
@@ -499,17 +507,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
             m_currentItem->SetBodyStyle( 0 );
     }
 
-    if( !EDA_TEXT::ValidateHyperlink( m_hyperlinkCombo->GetValue() ) )
-    {
-        DisplayError( this, _( "Invalid hyperlink destination. Please enter either a valid URL "
-                               "(e.g. file:// or http(s)://) or \"#<page number>\" to create "
-                               "a hyperlink to a page in this schematic." ) );
-        return false;
-    }
-    else
-    {
-        m_currentText->SetHyperlink( m_hyperlinkCombo->GetValue() );
-    }
+    m_currentText->SetHyperlink( m_hyperlinkCombo->GetValue() );
 
     if( m_currentText->GetTextWidth() != m_textSize.GetValue() )
         m_currentText->SetTextSize( VECTOR2I( m_textSize.GetIntValue(), m_textSize.GetIntValue() ) );
