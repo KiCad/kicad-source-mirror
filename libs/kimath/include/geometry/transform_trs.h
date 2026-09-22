@@ -52,8 +52,6 @@ public:
     VECTOR2D InverseApply( const VECTOR2D& aPoint ) const;
 
 
-    TRANSFORM_TRS Compose( const TRANSFORM_TRS& aOuter ) const;
-
     TRANSFORM_TRS RescaleAround( const VECTOR2I& aFixedPoint, double aSx, double aSy ) const;
 
     bool IsIdentity() const;

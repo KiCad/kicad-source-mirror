@@ -51,17 +51,6 @@ VECTOR2I TRANSFORM_TRS::InverseApply( const VECTOR2I& aPoint ) const
 }
 
 
-TRANSFORM_TRS TRANSFORM_TRS::Compose( const TRANSFORM_TRS& aOuter ) const
-{
-    TRANSFORM_TRS result;
-    result.m_scaleX = m_scaleX * aOuter.m_scaleX;
-    result.m_scaleY = m_scaleY * aOuter.m_scaleY;
-    result.m_rotate = m_rotate + aOuter.m_rotate;
-    result.m_translate = aOuter.Apply( m_translate );
-    return result;
-}
-
-
 TRANSFORM_TRS TRANSFORM_TRS::RescaleAround( const VECTOR2I& aFixedPoint,
                                             double aSx, double aSy ) const
 {
