@@ -2754,29 +2754,25 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getLineThickness( const LINECODE_ID& aCadstarLin
 
 LINE_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getLineStyle( const LINECODE_ID& aCadstarLineCodeID )
 {
-    wxCHECK( Assignments.Codedefs.LineCodes.find( aCadstarLineCodeID )
-                     != Assignments.Codedefs.LineCodes.end(),
+    wxCHECK( Assignments.Codedefs.LineCodes.find( aCadstarLineCodeID ) != Assignments.Codedefs.LineCodes.end(),
              LINE_STYLE::SOLID );
 
-    // clang-format off
     switch( Assignments.Codedefs.LineCodes.at( aCadstarLineCodeID ).Style )
     {
     case LINESTYLE::DASH:       return LINE_STYLE::DASH;
     case LINESTYLE::DASHDOT:    return LINE_STYLE::DASHDOT;
-    case LINESTYLE::DASHDOTDOT: return LINE_STYLE::DASHDOT; //TODO: update in future
+    case LINESTYLE::DASHDOTDOT: return LINE_STYLE::DASHDOTDOT;
     case LINESTYLE::DOT:        return LINE_STYLE::DOT;
     case LINESTYLE::SOLID:      return LINE_STYLE::SOLID;
     default:                    return LINE_STYLE::DEFAULT;
     }
-    // clang-format on
 }
 
 
 CADSTAR_SCH_ARCHIVE_LOADER::TEXTCODE
 CADSTAR_SCH_ARCHIVE_LOADER::getTextCode( const TEXTCODE_ID& aCadstarTextCodeID )
 {
-    wxCHECK( Assignments.Codedefs.TextCodes.find( aCadstarTextCodeID )
-                     != Assignments.Codedefs.TextCodes.end(),
+    wxCHECK( Assignments.Codedefs.TextCodes.find( aCadstarTextCodeID ) != Assignments.Codedefs.TextCodes.end(),
              TEXTCODE() );
 
     return Assignments.Codedefs.TextCodes.at( aCadstarTextCodeID );
@@ -2813,8 +2809,7 @@ CADSTAR_SCH_ARCHIVE_LOADER::getPart( const PART_ID& aCadstarPartID )
 CADSTAR_SCH_ARCHIVE_LOADER::ROUTECODE
 CADSTAR_SCH_ARCHIVE_LOADER::getRouteCode( const ROUTECODE_ID& aCadstarRouteCodeID )
 {
-    wxCHECK( Assignments.Codedefs.RouteCodes.find( aCadstarRouteCodeID )
-                     != Assignments.Codedefs.RouteCodes.end(),
+    wxCHECK( Assignments.Codedefs.RouteCodes.find( aCadstarRouteCodeID ) != Assignments.Codedefs.RouteCodes.end(),
              ROUTECODE() );
 
     return Assignments.Codedefs.RouteCodes.at( aCadstarRouteCodeID );
@@ -2843,7 +2838,7 @@ ELECTRICAL_PINTYPE CADSTAR_SCH_ARCHIVE_LOADER::getKiCadPinType( const CADSTAR_PI
     switch( aPinType )
     {
     case CADSTAR_PIN_TYPE::UNCOMMITTED:        return ELECTRICAL_PINTYPE::PT_PASSIVE;
-    case CADSTAR_PIN_TYPE::PIN_INPUT:              return ELECTRICAL_PINTYPE::PT_INPUT;
+    case CADSTAR_PIN_TYPE::PIN_INPUT:          return ELECTRICAL_PINTYPE::PT_INPUT;
     case CADSTAR_PIN_TYPE::OUTPUT_OR:          return ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR;
     case CADSTAR_PIN_TYPE::OUTPUT_NOT_OR:      return ELECTRICAL_PINTYPE::PT_OUTPUT;
     case CADSTAR_PIN_TYPE::OUTPUT_NOT_NORM_OR: return ELECTRICAL_PINTYPE::PT_OUTPUT;
@@ -2866,8 +2861,7 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getKiCadUnitNumberFromGate( const GATE_ID& aCads
 }
 
 
-SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyle( const long long& aCadstarOrientation,
-                                                     bool aMirror )
+SPIN_STYLE CADSTAR_SCH_ARCHIVE_LOADER::getSpinStyle( const long long& aCadstarOrientation, bool aMirror )
 {
     EDA_ANGLE  orientation = getAngle( aCadstarOrientation );
     SPIN_STYLE spinStyle   = getSpinStyle( orientation );
