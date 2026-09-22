@@ -22,7 +22,7 @@
 
 
 #include <algorithm>
-#include <future>
+#include <chrono>
 #include <limits>
 #include <mutex>
 #include <ranges>
@@ -576,41 +576,39 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
     // Generate RTrees for CN_ZONE_LAYER items (in parallel)
     //
     thread_pool& tp = GetKiCadThreadPool();
-    std::vector<std::future<size_t>> returns( zitems.size() );
-
-    auto cache_zones =
-            [aReporter]( CN_ZONE_LAYER* aZoneLayer ) -> size_t
+    // Extra blocks let the pool balance islands with different fill sizes
+    auto returns = tp.submit_loop( size_t( 0 ), zitems.size(),
+            [aReporter, &zitems]( const size_t ii )
             {
-                if( aReporter && aReporter->IsCancelled() )
-                    return 0;
+                try
+                {
+                    if( aReporter && aReporter->IsCancelled() )
+                        return;
 
-                aZoneLayer->BuildRTree();
+                    zitems[ii]->BuildRTree();
 
-                if( aReporter )
-                    aReporter->AdvanceProgress();
+                    if( aReporter )
+                        aReporter->AdvanceProgress();
+                }
+                catch( ... )
+                {
+                    // Preserve per-island failure isolation within a shared task
+                }
+            }, 4 * tp.get_thread_count() );
 
-                return 1;
-            };
-
-    for( size_t ii = 0; ii < zitems.size(); ++ii )
+    try
     {
-        CN_ZONE_LAYER* ptr = zitems[ii];
-        returns[ii] = tp.submit_task(
-            [cache_zones, ptr] { return cache_zones( ptr ); } );
-    }
-
-    for( const std::future<size_t>& ret : returns )
-    {
-        std::future_status status = ret.wait_for( std::chrono::milliseconds( 250 ) );
-
-        while( status != std::future_status::ready )
+        while( !returns.wait_for( std::chrono::milliseconds( 250 ) ) )
         {
             if( aReporter )
                 aReporter->KeepRefreshing();
-
-            status = ret.wait_for( std::chrono::milliseconds( 250 ) );
         }
-
+    }
+    catch( ... )
+    {
+        // Workers must release zitems before this frame unwinds
+        returns.wait();
+        throw;
     }
 
     // Add CN_ZONE_LAYERS, tracks, and pads to connectivity
