@@ -606,10 +606,12 @@ std::vector<PATH_CONNECTION> BE_SHAPE_CIRCLE::Paths( const BE_SHAPE_CIRCLE& aS2,
 }
 
 
-void CREEPAGE_GRAPH::TransformCreepShapesToNodes( std::vector<CREEP_SHAPE*>& aShapes )
+void CREEPAGE_GRAPH::TransformCreepShapesToNodes( const std::vector<std::unique_ptr<CREEP_SHAPE>>& aShapes )
 {
-    for( CREEP_SHAPE* p1 : aShapes )
+    for( const std::unique_ptr<CREEP_SHAPE>& shape : aShapes )
     {
+        CREEP_SHAPE* p1 = shape.get();
+
         if( !p1 )
             continue;
 
@@ -625,32 +627,27 @@ void CREEPAGE_GRAPH::TransformCreepShapesToNodes( std::vector<CREEP_SHAPE*>& aSh
 
 void CREEPAGE_GRAPH::RemoveDuplicatedShapes()
 {
-    // Sort the vector
-    sort( m_shapeCollection.begin(), m_shapeCollection.end(), compareShapes );
-    std::vector<CREEP_SHAPE*> newVector;
+    std::sort( m_shapeCollection.begin(), m_shapeCollection.end(),
+               []( const auto& a, const auto& b ) { return compareShapes( a.get(), b.get() ); } );
+    size_t kept = 0;
 
-    size_t i = 0;
-
-    for( i = 0; i < m_shapeCollection.size() - 1; i++ )
+    for( size_t i = 0; i < m_shapeCollection.size(); ++i )
     {
-        if( m_shapeCollection[i] == nullptr )
+        if( !m_shapeCollection[i] )
             continue;
 
-        if( areEquivalent( m_shapeCollection[i], m_shapeCollection[i + 1] ) )
-        {
-            delete m_shapeCollection[i];
-            m_shapeCollection[i] = nullptr;
-        }
-        else
-        {
-            newVector.push_back( m_shapeCollection[i] );
-        }
+        // Keep the last equivalent shape: its parent metadata may differ from earlier shapes.
+        if( i + 1 < m_shapeCollection.size()
+            && areEquivalent( m_shapeCollection[i].get(), m_shapeCollection[i + 1].get() ) )
+            continue;
+
+        if( kept != i )
+            m_shapeCollection[kept] = std::move( m_shapeCollection[i] );
+
+        ++kept;
     }
 
-    if( m_shapeCollection[i] )
-        newVector.push_back( m_shapeCollection[i] );
-
-    std::swap( m_shapeCollection, newVector );
+    m_shapeCollection.resize( kept );
 }
 
 void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
@@ -694,12 +691,12 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
         {
         case SHAPE_T::SEGMENT:
         {
-            BE_SHAPE_POINT* a = new BE_SHAPE_POINT( d->GetStart() );
+            auto a = std::make_unique<BE_SHAPE_POINT>( d->GetStart() );
             a->SetParent( d );
-            m_shapeCollection.push_back( a );
-            a = new BE_SHAPE_POINT( d->GetEnd() );
+            m_shapeCollection.push_back( std::move( a ) );
+            a = std::make_unique<BE_SHAPE_POINT>( d->GetEnd() );
             a->SetParent( d );
-            m_shapeCollection.push_back( a );
+            m_shapeCollection.push_back( std::move( a ) );
             break;
         }
 
@@ -728,10 +725,10 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
                     while( endAngle < startAngle )
                         endAngle += ANGLE_360;
 
-                    BE_SHAPE_ARC* arc = new BE_SHAPE_ARC( center, r, startAngle, endAngle,
-                                                         startPt, endPt );
+                    auto arc = std::make_unique<BE_SHAPE_ARC>( center, r, startAngle, endAngle,
+                                                               startPt, endPt );
                     arc->SetParent( d );
-                    m_shapeCollection.push_back( arc );
+                    m_shapeCollection.push_back( std::move( arc ) );
                 };
 
                 if( h == 2 * r )
@@ -759,18 +756,18 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
             }
             else
             {
-                BE_SHAPE_POINT* a = new BE_SHAPE_POINT( d->GetStart() );
+                auto a = std::make_unique<BE_SHAPE_POINT>( d->GetStart() );
                 a->SetParent( d );
-                m_shapeCollection.push_back( a );
-                a = new BE_SHAPE_POINT( d->GetEnd() );
+                m_shapeCollection.push_back( std::move( a ) );
+                a = std::make_unique<BE_SHAPE_POINT>( d->GetEnd() );
                 a->SetParent( d );
-                m_shapeCollection.push_back( a );
-                a = new BE_SHAPE_POINT( VECTOR2I( d->GetEnd().x, d->GetStart().y ) );
+                m_shapeCollection.push_back( std::move( a ) );
+                a = std::make_unique<BE_SHAPE_POINT>( VECTOR2I( d->GetEnd().x, d->GetStart().y ) );
                 a->SetParent( d );
-                m_shapeCollection.push_back( a );
-                a = new BE_SHAPE_POINT( VECTOR2I( d->GetStart().x, d->GetEnd().y ) );
+                m_shapeCollection.push_back( std::move( a ) );
+                a = std::make_unique<BE_SHAPE_POINT>( VECTOR2I( d->GetStart().x, d->GetEnd().y ) );
                 a->SetParent( d );
-                m_shapeCollection.push_back( a );
+                m_shapeCollection.push_back( std::move( a ) );
             }
 
             break;
@@ -779,18 +776,18 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
         case SHAPE_T::POLY:
             for( const VECTOR2I& p : d->GetPolyPoints() )
             {
-                BE_SHAPE_POINT* a = new BE_SHAPE_POINT( p );
+                auto a = std::make_unique<BE_SHAPE_POINT>( p );
                 a->SetParent( d );
-                m_shapeCollection.push_back( a );
+                m_shapeCollection.push_back( std::move( a ) );
             }
 
             break;
 
         case SHAPE_T::CIRCLE:
         {
-            BE_SHAPE_CIRCLE* a = new BE_SHAPE_CIRCLE( d->GetCenter(), d->GetRadius() );
+            auto a = std::make_unique<BE_SHAPE_CIRCLE>( d->GetCenter(), d->GetRadius() );
             a->SetParent( d );
-            m_shapeCollection.push_back( a );
+            m_shapeCollection.push_back( std::move( a ) );
             break;
         }
 
@@ -805,11 +802,11 @@ void CREEPAGE_GRAPH::TransformEdgeToCreepShapes()
 
             EDA_ANGLE alpha, beta;
             d->CalcArcAngles( alpha, beta );
-            BE_SHAPE_ARC* a = new BE_SHAPE_ARC( d->GetCenter(), d->GetRadius(), alpha, beta,
-                                                d->GetStart(), d->GetEnd() );
+            auto a = std::make_unique<BE_SHAPE_ARC>( d->GetCenter(), d->GetRadius(), alpha, beta,
+                                                     d->GetStart(), d->GetEnd() );
             a->SetParent( d );
 
-            m_shapeCollection.push_back( a );
+            m_shapeCollection.push_back( std::move( a ) );
             break;
         }
 
@@ -2473,7 +2470,7 @@ double CREEPAGE_GRAPH::Solve( std::shared_ptr<GRAPH_NODE>& aFrom, std::shared_pt
 void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>& aConnectTo,
                                BOARD_ITEM* aParent )
 {
-    CREEP_SHAPE* newshape = nullptr;
+    std::unique_ptr<CREEP_SHAPE> newshape;
 
     if( !aConnectTo )
         return;
@@ -2483,17 +2480,15 @@ void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>&
     case SH_SEGMENT:
     {
         const SHAPE_SEGMENT& segment = dynamic_cast<const SHAPE_SEGMENT&>( aShape );
-        CU_SHAPE_SEGMENT*    cuseg = new CU_SHAPE_SEGMENT( segment.GetSeg().A, segment.GetSeg().B,
-                                                           segment.GetWidth() );
-        newshape = dynamic_cast<CREEP_SHAPE*>( cuseg );
+        newshape = std::make_unique<CU_SHAPE_SEGMENT>( segment.GetSeg().A, segment.GetSeg().B,
+                                                       segment.GetWidth() );
         break;
     }
 
     case SH_CIRCLE:
     {
         const SHAPE_CIRCLE& circle = dynamic_cast<const SHAPE_CIRCLE&>( aShape );
-        CU_SHAPE_CIRCLE* cucircle = new CU_SHAPE_CIRCLE( circle.GetCenter(), circle.GetRadius() );
-        newshape = dynamic_cast<CREEP_SHAPE*>( cucircle );
+        newshape = std::make_unique<CU_SHAPE_CIRCLE>( circle.GetCenter(), circle.GetRadius() );
         break;
     }
 
@@ -2520,10 +2515,10 @@ void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>&
 
         edaArc.CalcArcAngles( alpha, beta );
 
-        CU_SHAPE_ARC* cuarc = new CU_SHAPE_ARC( edaArc.getCenter(), edaArc.GetRadius(), alpha, beta,
-                                                arc.GetP0(), arc.GetP1() );
+        auto cuarc = std::make_unique<CU_SHAPE_ARC>( edaArc.getCenter(), edaArc.GetRadius(), alpha, beta,
+                                                     arc.GetP0(), arc.GetP1() );
         cuarc->SetWidth( arc.GetWidth() );
-        newshape = dynamic_cast<CREEP_SHAPE*>( cuarc );
+        newshape = std::move( cuarc );
         break;
     }
 
@@ -2626,25 +2621,20 @@ void CREEPAGE_GRAPH::Addshape( const SHAPE& aShape, std::shared_ptr<GRAPH_NODE>&
 
     switch( aShape.Type() )
     {
-    case SH_SEGMENT: gnShape = AddNode( GRAPH_NODE::SEGMENT, newshape, newshape->GetPos() ); break;
-    case SH_CIRCLE:  gnShape = AddNode( GRAPH_NODE::CIRCLE, newshape, newshape->GetPos() );  break;
-    case SH_ARC:     gnShape = AddNode( GRAPH_NODE::ARC, newshape, newshape->GetPos() );     break;
-    default:                                                                                 break;
+    case SH_SEGMENT: gnShape = AddNode( GRAPH_NODE::SEGMENT, newshape.get(), newshape->GetPos() ); break;
+    case SH_CIRCLE:  gnShape = AddNode( GRAPH_NODE::CIRCLE, newshape.get(), newshape->GetPos() );  break;
+    case SH_ARC:     gnShape = AddNode( GRAPH_NODE::ARC, newshape.get(), newshape->GetPos() );     break;
+    default:                                                                                       break;
     }
 
     if( gnShape )
     {
-        m_shapeCollection.push_back( newshape );
+        m_shapeCollection.push_back( std::move( newshape ) );
         gnShape->m_net = aConnectTo->m_net;
         std::shared_ptr<GRAPH_CONNECTION> gc = AddConnection( gnShape, aConnectTo );
 
         if( gc )
             gc->m_path.m_show = false;
-    }
-    else
-    {
-        delete newshape;
-        newshape = nullptr;
     }
 }
 

@@ -111,10 +111,10 @@ BOOST_AUTO_TEST_CASE( CreepageStadiumCapsArcOutward )
 
     std::vector<CREEP_SHAPE*> arcs;
 
-    for( CREEP_SHAPE* shape : graph.m_shapeCollection )
+    for( const std::unique_ptr<CREEP_SHAPE>& shape : graph.m_shapeCollection )
     {
         if( shape && shape->GetType() == CREEP_SHAPE::TYPE::ARC )
-            arcs.push_back( shape );
+            arcs.push_back( shape.get() );
     }
 
     BOOST_REQUIRE_EQUAL( arcs.size(), 2u );

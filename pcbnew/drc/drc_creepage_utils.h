@@ -811,14 +811,7 @@ public:
 
     ~CREEPAGE_GRAPH()
     {
-        for( CREEP_SHAPE* cs : m_shapeCollection )
-        {
-            if( cs )
-            {
-                delete cs;
-                cs = nullptr;
-            }
-        }
+        m_shapeCollection.clear();
 
         // Clear out the circular shared pointer references
         for( std::shared_ptr<GRAPH_NODE>& n : m_nodes )
@@ -838,7 +831,7 @@ public:
     };
 
     void TransformEdgeToCreepShapes();
-    void TransformCreepShapesToNodes(std::vector<CREEP_SHAPE*>& aShapes);
+    void TransformCreepShapesToNodes( const std::vector<std::unique_ptr<CREEP_SHAPE>>& aShapes );
     void RemoveDuplicatedShapes();
 
     // Add a node to the graph. If an equivalent node exists, returns the pointer of the existing node instead
@@ -911,7 +904,7 @@ public:
     bool                                           m_hasOverlappingCutouts = false;
     std::vector<std::shared_ptr<GRAPH_NODE>>       m_nodes;
     std::vector<std::shared_ptr<GRAPH_CONNECTION>> m_connections;
-    std::vector<CREEP_SHAPE*>                      m_shapeCollection;
+    std::vector<std::unique_ptr<CREEP_SHAPE>>      m_shapeCollection;
 
     // This is a duplicate of m_nodes, but it is used to quickly find a node rather than iterating through m_nodes
     std::unordered_set<std::shared_ptr<GRAPH_NODE>, GraphNodeHash, GraphNodeEqual> m_nodeset;
