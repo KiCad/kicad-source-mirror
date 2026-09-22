@@ -19,6 +19,8 @@
 
 #include "layer_utils.h"
 
+#include <pad.h>
+
 
 wxString LAYER_UTILS::AccumulateNames( const LSEQ& aLayers, const BOARD* aBoard )
 {
@@ -55,7 +57,34 @@ LSET LAYER_UTILS::GetAllFootprintLayers( const FOOTPRINT& aFootprint )
 LSET LAYER_UTILS::GetOrphanedFootprintLayers( const FOOTPRINT& aFootprint,
                                               const LSET&      aCustomUserLayers )
 {
-    LSET usedLayers = GetAllFootprintLayers( aFootprint );
+    LSET usedLayers{};
+
+    aFootprint.RunOnChildren(
+            [&]( BOARD_ITEM* aSubItem )
+            {
+                wxCHECK2( aSubItem, /*void*/ );
+
+                LSET itemLayers = aSubItem->GetLayerSet();
+
+                // *.Cu wildcard pins no copper layer, an explicit padstack layer still does
+                if( aSubItem->Type() == PCB_PAD_T )
+                {
+                    const PAD* pad = static_cast<const PAD*>( aSubItem );
+                    LSET       copper = itemLayers & LSET::AllCuMask();
+
+                    if( copper.count() > 1 )
+                    {
+                        for( PCB_LAYER_ID layer : copper )
+                        {
+                            if( !pad->HasExplicitDefinitionForLayer( layer ) )
+                                itemLayers.reset( layer );
+                        }
+                    }
+                }
+
+                usedLayers |= itemLayers;
+            },
+            RECURSE_MODE::RECURSE );
 
     usedLayers &= ~aCustomUserLayers;
     usedLayers &= ~LSET::AllTechMask();

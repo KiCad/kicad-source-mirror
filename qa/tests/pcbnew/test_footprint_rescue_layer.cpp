@@ -162,4 +162,25 @@ BOOST_AUTO_TEST_CASE( Issue24045Footprint )
 }
 
 
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/25608
+BOOST_AUTO_TEST_CASE( Issue25608ThroughHoleFootprint )
+{
+    const std::string fpPath = KI_TEST::GetPcbnewTestDataDir() + "prettifier/Reverb_BTDR-1V.kicad_mod";
+
+    std::unique_ptr<FOOTPRINT> fp = KI_TEST::ReadFootprintFromFileOrStream( fpPath );
+    BOOST_REQUIRE( fp );
+
+    LSET allLayers = LAYER_UTILS::GetAllFootprintLayers( *fp );
+    BOOST_TEST( ( allLayers & LSET::AllCuMask() ) == LSET::AllCuMask(),
+                "Issue footprint must have through-hole pads spanning every copper layer" );
+
+    // What the dialog builds when "Custom Layers" is ticked to add a single user layer
+    const LSET customLayers = LSET::AllCuMask( 2 ) | LSET{ User_1 };
+
+    LSET orphans = LAYER_UTILS::GetOrphanedFootprintLayers( *fp, customLayers );
+    BOOST_TEST( orphans.none(),
+                "Adding a user layer to a through-hole footprint must not orphan inner copper" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
