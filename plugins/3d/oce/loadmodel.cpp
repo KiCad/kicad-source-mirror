@@ -87,7 +87,7 @@
 #define MASK_OCE wxT( "PLUGIN_OCE" )
 #define MASK_OCE_EXTRA wxT( "PLUGIN_OCE_EXTRA" )
 
-typedef std::map<std::size_t, SGNODE*>               COLORMAP;
+typedef std::map<std::size_t, IFSG_APPEARANCE>       COLORMAP;
 typedef std::map<std::string, SGNODE*>               FACEMAP;
 typedef std::map<std::string, std::vector<SGNODE*>>  NODEMAP;
 typedef std::pair<std::string, std::vector<SGNODE*>> NODEITEM;
@@ -114,7 +114,10 @@ struct DATA
     Handle( XCAFDoc_ColorTool ) m_color;
     Handle( XCAFDoc_ShapeTool ) m_assy;
     SGNODE* scene;
-    SGNODE* defaultColor;
+
+    /// Wrapper so the node clears it if a shape that took ownership is destroyed first
+    IFSG_APPEARANCE defaultColor{ false };
+
     Quantity_Color refColor;
     NODEMAP  shapes;    // SGNODE lists representing a TopoDS_SOLID / COMPOUND
     COLORMAP colors;    // SGAPPEARANCE nodes
@@ -140,7 +143,6 @@ struct DATA
     DATA()
     {
         scene = nullptr;
-        defaultColor = nullptr;
         refColor.SetValues( Quantity_NOC_BLACK );
         renderBoth = false;
         hasSolid = false;
@@ -156,8 +158,11 @@ struct DATA
 
             while( sC != eC )
             {
-                if( nullptr == S3D::GetSGNodeParent( sC->second ) )
-                    S3D::DestroyNode( sC->second );
+                // A null raw pointer means a shape that owned the node already destroyed it
+                SGNODE* color = sC->second.GetRawPtr();
+
+                if( color && nullptr == S3D::GetSGNodeParent( color ) )
+                    S3D::DestroyNode( color );
 
                 ++sC;
             }
@@ -165,8 +170,10 @@ struct DATA
             colors.clear();
         }
 
-        if( defaultColor && nullptr == S3D::GetSGNodeParent( defaultColor ) )
-            S3D::DestroyNode(defaultColor);
+        SGNODE* rawDefaultColor = defaultColor.GetRawPtr();
+
+        if( rawDefaultColor && nullptr == S3D::GetSGNodeParent( rawDefaultColor ) )
+            S3D::DestroyNode( rawDefaultColor );
 
         // destroy any faces with no parent
         if( !faces.empty() )
@@ -249,17 +256,16 @@ struct DATA
     {
         if( nullptr == colorObj )
         {
-            if( defaultColor )
-                return defaultColor;
+            if( SGNODE* cached = defaultColor.GetRawPtr() )
+                return cached;
 
-            IFSG_APPEARANCE app( true );
-            app.SetShininess( 0.05f );
-            app.SetSpecular( 0.04f, 0.04f, 0.04f );
-            app.SetAmbient( 0.1f, 0.1f, 0.1f );
-            app.SetDiffuse( 0.6f, 0.6f, 0.6f );
+            defaultColor.NewNode( nullptr );
+            defaultColor.SetShininess( 0.05f );
+            defaultColor.SetSpecular( 0.04f, 0.04f, 0.04f );
+            defaultColor.SetAmbient( 0.1f, 0.1f, 0.1f );
+            defaultColor.SetDiffuse( 0.6f, 0.6f, 0.6f );
 
-            defaultColor = app.GetRawPtr();
-            return defaultColor;
+            return defaultColor.GetRawPtr();
         }
 
         Quantity_Color colorRgb = colorObj->GetRGB();
@@ -270,19 +276,19 @@ struct DATA
         std::size_t hash = std::hash<double>{}( colorRgb.Distance( refColor ) )
                            ^ ( std::hash<float>{}( colorObj->Alpha() ) << 1 );
 
-        std::map<std::size_t, SGNODE*>::iterator item;
-        item = colors.find( hash );
+        // The wrapper lives in the map so the node can clear it, which turns a cache entry
+        // whose owning shape was destroyed into a miss rather than a dangling pointer
+        IFSG_APPEARANCE& app = colors.try_emplace( hash, false ).first->second;
 
-        if( item != colors.end() )
-            return item->second;
+        if( SGNODE* cached = app.GetRawPtr() )
+            return cached;
 
-        IFSG_APPEARANCE app( true );
+        app.NewNode( nullptr );
         app.SetShininess( 0.1f );
         app.SetSpecular( 0.12f, 0.12f, 0.12f );
         app.SetAmbient( 0.1f, 0.1f, 0.1f );
         app.SetDiffuse( r, g, b );
         app.SetTransparency( 1.0f - colorObj->Alpha() );
-        colors.emplace( hash, app.GetRawPtr() );
 
         return app.GetRawPtr();
     }
