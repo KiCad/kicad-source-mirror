@@ -623,6 +623,8 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
         msg.Empty();
         tmp.Empty();
 
+        LIB_SYMBOL* libSymbol = m_flatList[ii].GetLibPart();
+
         if( m_flatList[ii].m_isNew )    // Not yet annotated
         {
             if( m_flatList[ii].m_numRef >= 0 )
@@ -631,7 +633,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
                 tmp = wxT( "?" );
 
             if( ( m_flatList[ii].m_unit > 0 ) && ( m_flatList[ii].m_unit < 0x7FFFFFFF )
-                && m_flatList[ii].GetLibPart()->GetUnitCount() > 1 )
+                && libSymbol && libSymbol->GetUnitCount() > 1 )
             {
                 msg.Printf( _( "Item not annotated: %s%s (unit %d)" ),
                             m_flatList[ii].GetRef(),
@@ -651,7 +653,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
         // Error if unit number selected does not exist (greater than the  number of units in
         // the symbol).  This can happen if a symbol has changed in a library after a
         // previous annotation.
-        if( std::max( m_flatList[ii].GetLibPart()->GetUnitCount(), 1 ) < m_flatList[ii].m_unit )
+        if( libSymbol && std::max( libSymbol->GetUnitCount(), 1 ) < m_flatList[ii].m_unit )
         {
             if( m_flatList[ii].m_numRef >= 0 )
                 tmp << m_flatList[ii].m_numRefStr;
@@ -663,7 +665,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
                         tmp,
                         m_flatList[ii].GetSymbol()->SubReference( m_flatList[ii].GetUnit() ),
                         m_flatList[ii].m_unit,
-                        m_flatList[ii].GetLibPart()->GetUnitCount() );
+                        libSymbol->GetUnitCount() );
 
             aHandler( ERCE_EXTRA_UNITS, msg, &m_flatList[ii], nullptr );
             error++;
@@ -700,8 +702,9 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
             msg.Printf( _( "Duplicate items %s%s%s\n" ),
                         first.GetRef(),
                         tmp,
-                        first.GetLibPart()->GetUnitCount() > 1 ? first.GetSymbol()->SubReference( first.GetUnit() )
-                                                               : wxString( wxT( "" ) ) );
+                        first.GetLibPart() && first.GetLibPart()->GetUnitCount() > 1
+                                ? first.GetSymbol()->SubReference( first.GetUnit() )
+                                : wxString( wxT( "" ) ) );
 
             aHandler( ERCE_DUPLICATE_REFERENCE, msg, &first, &m_flatList[ii+1] );
             error++;
@@ -710,7 +713,8 @@ int SCH_REFERENCE_LIST::CheckAnnotation( ANNOTATION_ERROR_HANDLER aHandler )
 
         /* Test error if units are different but number of parts per package
          * too high (ex U3 ( 1 part) and we find U3B this is an error) */
-        if( first.GetLibPart()->GetUnitCount() != second.GetLibPart()->GetUnitCount() )
+        if( first.GetLibPart() && second.GetLibPart()
+            && first.GetLibPart()->GetUnitCount() != second.GetLibPart()->GetUnitCount() )
         {
             if( first.m_numRef >= 0 )
                 tmp << first.m_numRefStr;
