@@ -151,17 +151,14 @@ private:
      *
      * @param aReorderMap is the mapping of old to new layer ids
      */
-    void reorderGroups( std::unordered_map<int, int> aReorderMap )
+    void reorderGroups( const std::unordered_map<int, int>& aReorderMap )
     {
         for( int i = 0; i < m_groupsSize; ++i )
         {
-            int orig_layer = m_groups[i].first;
-            int new_layer = orig_layer;
+            auto it = aReorderMap.find( m_groups[i].first );
 
-            if( aReorderMap.count( orig_layer ) )
-                new_layer = aReorderMap.at( orig_layer );
-
-            m_groups[i].first = new_layer;
+            if( it != aReorderMap.end() )
+                m_groups[i].first = it->second;
         }
     }
 
@@ -765,50 +762,49 @@ void VIEW::SortLayers( std::vector<int>& aLayers ) const
 
 void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
 {
-    std::map<int,VIEW_LAYER> new_map;
-    std::vector<VIEW_LAYER*> displaced;
+    // GerbView's remapping is not a permutation once an image is deleted, so permute in place.
+    // Rebuilding the map can drop an id, and m_layers[] then default-constructs a null R-tree
+    std::map<int, VIEW_LAYER> moved;
+    std::unordered_set<int>   destinations;
 
-    // Moved layers take their new slots first
-    for( auto& [id, layer] : m_layers )
+    for( const auto& [from, to] : aReorderMap )
     {
-        auto reorder_it = aReorderMap.find( id );
-
-        if( reorder_it == aReorderMap.end() || reorder_it->second == id )
+        if( from == to )
             continue;
 
-        layer.id = reorder_it->second;
+        auto source = m_layers.find( from );
 
-        if( !new_map.emplace( layer.id, layer ).second )
-            displaced.push_back( &layer );
-    }
-
-    // Unmoved layers keep their slots where still free
-    for( auto& [id, layer] : m_layers )
-    {
-        auto reorder_it = aReorderMap.find( id );
-
-        if( reorder_it != aReorderMap.end() && reorder_it->second != id )
+        if( source == m_layers.end() || !m_layers.count( to ) )
             continue;
 
-        if( !new_map.emplace( id, layer ).second )
-            displaced.push_back( &layer );
-    }
-
-    for( auto& [id, layer] : m_layers )
-    {
-        if( displaced.empty() )
-            break;
-
-        if( new_map.find( id ) == new_map.end() )
+        // Every caller permutes or compacts, so two sources landing on one destination means the
+        // caller built a bad map and the loser's items are about to be discarded
+        if( destinations.count( to ) )
         {
-            displaced.back()->id = id;
-            new_map.emplace( id, *displaced.back() );
-            displaced.pop_back();
+            wxLogDebug( wxT( "VIEW::ReorderLayerData: layer %d also maps to %d, which already "
+                             "takes a layer; its items will be lost" ), from, to );
         }
+
+        moved.emplace( from, source->second );
+        destinations.insert( to );
     }
 
-    // Transfer reordered data (using the copy assignment operator ):
-    m_layers = new_map;
+    // Every mover was copied before any of them was overwritten, so these can run in any order
+    for( const auto& [from, layer] : moved )
+    {
+        auto destination = m_layers.find( aReorderMap.at( from ) );
+
+        destination->second = layer;
+        destination->second.id = destination->first;
+    }
+
+    // A source nothing moves onto keeps its settings but must own an empty tree rather than the
+    // one it just handed to its destination
+    for( const auto& [from, _] : moved )
+    {
+        if( !destinations.count( from ) )
+            m_layers.find( from )->second.items = std::make_shared<VIEW_RTREE>();
+    }
 
     SortOrderedLayers();
 

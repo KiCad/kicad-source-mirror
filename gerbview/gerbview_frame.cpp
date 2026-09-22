@@ -543,8 +543,13 @@ void GERBVIEW_FRAME::RemapLayers( const std::unordered_map<int, int>& remapping 
 
     for( const std::pair<const int, int>& entry : remapping )
     {
-        view_remapping[ GERBER_DRAW_LAYER( entry.first ) ] = GERBER_DRAW_LAYER( entry.second );
-        view_remapping[ GERBER_DCODE_LAYER( entry.first ) ] = GERBER_DCODE_LAYER( entry.second );
+        // GERBER_DCODE_LAYER() takes a draw layer id, not a graphic layer index, the same way
+        // GERBER_DRAW_ITEM::ViewGetLayers() builds it
+        int from = GERBER_DRAW_LAYER( entry.first );
+        int to = GERBER_DRAW_LAYER( entry.second );
+
+        view_remapping[from] = to;
+        view_remapping[GERBER_DCODE_LAYER( from )] = GERBER_DCODE_LAYER( to );
     }
 
     GetCanvas()->GetView()->ReorderLayerData( view_remapping );
