@@ -127,11 +127,11 @@ wxString BuildFootprintChooserSymbolNetlist( const std::vector<LIB_SYMBOL*>& aSy
 }
 
 
-FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid, LIB_SYMBOL* aSymbol,
-                                      std::vector<EMBEDDED_FILES*> aFilesStack ) :
+FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
+                                      LIB_SYMBOL* aSymbol, std::vector<EMBEDDED_FILES*> aFilesStack ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
-        m_parentType( SCH_SYMBOL_T ),
+        m_parentType( LIB_SYMBOL_T ),
         m_part( aSymbol ),
         m_filesStack( aFilesStack ),
         m_symbolNetlist( BuildFootprintChooserSymbolNetlist( aSymbol ) ),
