@@ -63,6 +63,12 @@ public:
 
     bool TransferDataFromWindow() override;
     bool TransferDataToWindow() override;
+
+    bool CommitPendingChanges()
+    {
+        return m_files_grid->CommitPendingChanges();
+    }
+
     bool GetEmbedFonts() const { return m_cbEmbedFonts->GetValue(); }
 
     EMBEDDED_FILES* GetLocalFiles() { return m_localFiles; }
@@ -76,8 +82,8 @@ protected:
     void onExportFiles( wxCommandEvent& event ) override;
 
 private:
-    EMBEDDED_FILES* m_files;
-    EMBEDDED_FILES* m_localFiles;
+    EMBEDDED_FILES*                    m_files;
+    EMBEDDED_FILES*                    m_localFiles;
     std::vector<const EMBEDDED_FILES*> m_inheritedFiles;
     std::set<wxString>                 m_inheritedFileNames;
 };

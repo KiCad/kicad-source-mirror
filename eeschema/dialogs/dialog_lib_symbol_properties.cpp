@@ -622,7 +622,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
             || !m_unitNamesGrid->CommitPendingChanges()
             || !m_bodyStyleNamesGrid->CommitPendingChanges()
             || !m_jumperGroupsGrid->CommitPendingChanges()
-            || !m_embeddedFiles->TransferDataFromWindow() )
+            || !m_pinMapPanel->CommitPendingChanges()
+            || !m_embeddedFiles->CommitPendingChanges() )
     {
         return false;
     }
@@ -835,10 +836,9 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     m_libEntry->JumperPinGroups() = jumpers;
 
-    if( !m_pinMapPanel->CommitPendingChanges() )
-        return false;
-
     m_pinMapPanel->ApplyToSymbol( m_libEntry );
+
+    (void) m_embeddedFiles->TransferDataFromWindow();
 
     if( editingCurrentSymbol )
         m_Parent->UpdateAfterSymbolProperties( &oldName );

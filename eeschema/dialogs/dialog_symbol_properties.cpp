@@ -781,7 +781,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
         return false;
 
-    if( m_embeddedFiles && !m_embeddedFiles->TransferDataFromWindow() )
+    if( m_embeddedFiles && !m_embeddedFiles->CommitPendingChanges() )
         return false;
 
     if( !m_fieldsGrid->CommitPendingChanges() )
@@ -957,6 +957,9 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     // Keep fields other than the reference, include/exclude flags, and alternate pin assignements
     // in sync in multi-unit parts.
     m_symbol->SyncOtherUnits( currentSheet, commit, nullptr, currentVariant );
+
+    if( m_embeddedFiles )
+        (void) m_embeddedFiles->TransferDataFromWindow();
 
     if( replaceOnCurrentScreen )
         currentScreen->Append( m_symbol );

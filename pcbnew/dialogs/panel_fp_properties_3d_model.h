@@ -24,6 +24,8 @@
 #include <panel_fp_properties_3d_model_base.h>
 #include <vector>
 
+#include "widgets/wx_grid.h"
+
 class DIALOG_SHIM;
 class PANEL_EMBEDDED_FILES;
 class PANEL_PREVIEW_3D_MODEL;
@@ -51,6 +53,9 @@ public:
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    bool Validate() override;
+    bool CommitPendingChanges();
 
     void ReloadModelsFromFootprint();
 
@@ -105,14 +110,14 @@ private:
     void postCustomPanelShownEventWithPredicate( bool predicate );
 
 private:
-    DIALOG_SHIM*            m_parentDialog;
-    PCB_BASE_EDIT_FRAME*    m_frame;
-    FOOTPRINT*              m_footprint;
+    DIALOG_SHIM*              m_parentDialog;
+    PCB_BASE_EDIT_FRAME*      m_frame;
+    FOOTPRINT*                m_footprint;
 
-    std::vector<FP_3DMODEL> m_shapes3D_list;
-    bool                    m_sashPositioned = false;
-    PANEL_PREVIEW_3D_MODEL* m_previewPane;
-    PANEL_EMBEDDED_FILES*   m_filesPanel;
+    std::vector<FP_3DMODEL>   m_shapes3D_list;
+    bool                      m_sashPositioned = false;
+    PANEL_PREVIEW_3D_MODEL*   m_previewPane;
+    PANEL_EMBEDDED_FILES*     m_filesPanel;
 
     bool                      m_inSelect;
     bool                      m_userSetExtrusionColor;

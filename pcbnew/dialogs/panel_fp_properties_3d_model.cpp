@@ -256,11 +256,17 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataToWindow()
 }
 
 
-bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
+bool PANEL_FP_PROPERTIES_3D_MODEL::CommitPendingChanges()
 {
     if( !m_modelsGrid->CommitPendingChanges() )
         return false;
 
+    return m_filesPanel->CommitPendingChanges();
+}
+
+
+bool PANEL_FP_PROPERTIES_3D_MODEL::Validate()
+{
     if( m_enableExtrusionCheckbox->GetValue() )
     {
         double compHeight;
@@ -285,6 +291,20 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
                           wxOK | wxICON_WARNING, this );
             return false;
         }
+    }
+
+    return true;
+}
+
+
+bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
+{
+    if( m_enableExtrusionCheckbox->GetValue() )
+    {
+        double compHeight;
+        double standoff;
+
+        (void) readExtrusionHeights( _( "Extruded 3D Body" ), compHeight, standoff );
 
         int sel = m_extrusionLayerChoice->GetSelection();
 

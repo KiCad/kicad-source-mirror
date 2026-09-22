@@ -320,6 +320,18 @@ DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::~DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR()
 
 bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
 {
+    if( !wxDialog::TransferDataToWindow() )
+        return false;
+
+    if( !m_embeddedFiles->CommitPendingChanges() )
+        return false;
+
+    if( !m_PanelGeneral->TransferDataToWindow() )
+        return false;
+
+    if( !m_3dPanel->Validate() )
+        return false;
+
     LIB_ID   fpID          = m_footprint->GetFPID();
     wxString footprintName = fpID.GetLibItemName();
 
@@ -328,18 +340,10 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     m_DocCtrl->SetValue( EscapeString( m_footprint->GetLibDescription(), CTX_LINE ) );
     m_KeywordCtrl->SetValue( m_footprint->GetKeywords() );
 
-    if( !wxDialog::TransferDataToWindow() )
-        return false;
-
-    if( !m_PanelGeneral->TransferDataToWindow() )
-        return false;
-
     // Add the models to the panel
-    if( !m_3dPanel->TransferDataToWindow() )
-        return false;
+    (void) m_3dPanel->TransferDataToWindow();
 
-    if( !m_embeddedFiles->TransferDataToWindow() )
-        return false;
+    (void) m_embeddedFiles->TransferDataToWindow();
 
     // Footprint Fields
     for( PCB_FIELD* field : m_footprint->GetFields() )

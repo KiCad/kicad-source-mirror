@@ -513,7 +513,13 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     if( !Validate() )
         return false;
 
-    if( !m_itemsGrid->CommitPendingChanges() )
+    if( !m_itemsGrid->CommitPendingChanges()
+        || !m_embeddedFiles->CommitPendingChanges() )
+    {
+        return false;
+    }
+
+    if( !m_3dPanel->Validate() )
         return false;
 
     KIGFX::PCB_VIEW*    view = m_frame->GetCanvas()->GetView();
@@ -522,11 +528,9 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     commit.Modify( m_footprint );
 
     // Make sure this happens inside a commit to capture any changed files
-    if( !m_3dPanel->TransferDataFromWindow() )
-        return false;
+    (void) m_3dPanel->TransferDataFromWindow();
 
-    if( !m_embeddedFiles->TransferDataFromWindow() )
-        return false;
+    (void) m_embeddedFiles->TransferDataFromWindow();
 
     // Clear out embedded files that are no longer in use
     std::set<wxString> files;
