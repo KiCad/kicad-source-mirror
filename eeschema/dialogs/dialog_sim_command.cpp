@@ -798,22 +798,24 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         m_transStep->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
         m_transFinal->SetValue( SPICE_VALUE( tokenizer.GetNextToken() ).ToSpiceString() );
 
-        // Initial time is an optional field
+        // Initial time, max step, and "uic" are optional fields
         token = tokenizer.GetNextToken();
 
-        if( !token.IsEmpty() )
+        if( token.IsSameAs( wxS( "uic" ), false ) )
+            m_useInitialConditions->SetValue( true );
+        else if( !token.IsEmpty() )
             m_transInitial->SetValue( SPICE_VALUE( token ).ToSpiceString() );
 
-        // Max step is an optional field
         token = tokenizer.GetNextToken();
 
-        if( !token.IsEmpty() )
+        if( token.IsSameAs( wxS( "uic" ), false ) )
+            m_useInitialConditions->SetValue( true );
+        else if( !token.IsEmpty() )
             m_transMaxStep->SetValue( SPICE_VALUE( token ).ToSpiceString() );
 
-        // uic is an optional field
         token = tokenizer.GetNextToken();
 
-        if( token.IsSameAs( wxS( "uic" ) ) )
+        if( token.IsSameAs( wxS( "uic" ), false ) )
             m_useInitialConditions->SetValue( true );
 
         break;
@@ -823,14 +825,12 @@ void DIALOG_SIM_COMMAND::parseCommand( const wxString& aCommand )
         break;
 
     case ST_FFT:
-    {
         m_simPages->SetSelection( m_simPages->FindPage( m_pgFFT ) );
 
         while( tokenizer.HasMoreTokens() )
             m_fftInputSignals.insert( tokenizer.GetNextToken() );
 
         break;
-    }
 
     default:
         m_simPages->SetSelection( m_simPages->FindPage( m_pgCustom ) );
