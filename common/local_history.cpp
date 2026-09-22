@@ -91,6 +91,98 @@ static wxString joinHistoryDestination( const wxString& aHistoryRoot,
 static const wxString AUTOSAVE_PREFIX = wxS( "_autosave-" );
 
 
+static bool readFileContent( const wxString& aPath, std::string& aContent )
+{
+    wxFFile file( aPath, wxS( "rb" ) );
+
+    if( !file.IsOpened() )
+        return false;
+
+    wxFileOffset length = file.Length();
+
+    if( length < 0 )
+        return false;
+
+    size_t len = static_cast<size_t>( length );
+    aContent.assign( len, '\0' );
+
+    return file.Read( aContent.data(), len ) == len;
+}
+
+
+// Older versions staged autosaves through a copy of each file beside .git.  Nothing reads those
+// copies, and they count against the size limit
+static void removeLegacyWorkingCopies( git_repository* aRepo, const wxString& aHistoryRoot )
+{
+    wxDir    histDir( aHistoryRoot );
+    wxString name;
+    bool     hasCopies = false;
+    bool     cont = histDir.IsOpened()
+                    && histDir.GetFirst( &name, wxEmptyString, wxDIR_FILES | wxDIR_DIRS | wxDIR_HIDDEN );
+
+    // Runs on every autosave, so skip the tree walk once nothing but our own files remain
+    while( cont && !hasCopies )
+    {
+        hasCopies = name != wxS( ".git" ) && name != wxS( ".gitignore" ) && name != wxS( "README.txt" );
+        cont = histDir.GetNext( &name );
+    }
+
+    if( !hasCopies )
+        return;
+
+    git_oid     headOid;
+    git_commit* head = nullptr;
+    git_tree*   tree = nullptr;
+
+    if( git_reference_name_to_id( &headOid, aRepo, "HEAD" ) != 0 || git_commit_lookup( &head, aRepo, &headOid ) != 0 )
+        return;
+
+    if( git_commit_tree( &tree, head ) == 0 )
+    {
+        struct WALK_STATE
+        {
+            wxString              root;
+            std::vector<wxString> dirs;
+        } state{ aHistoryRoot, {} };
+
+        git_tree_walk(
+                tree, GIT_TREEWALK_POST,
+                []( const char* aDir, const git_tree_entry* aEntry, void* aPayload ) -> int
+                {
+                    auto*    walkState = static_cast<WALK_STATE*>( aPayload );
+                    wxString rel = wxString::FromUTF8( aDir ) + wxString::FromUTF8( git_tree_entry_name( aEntry ) );
+
+                    if( rel.Contains( wxS( ".." ) ) )
+                        return 0;
+
+                    wxString path = joinHistoryDestination( walkState->root, rel );
+
+                    if( git_tree_entry_type( aEntry ) == GIT_OBJECT_TREE )
+                        walkState->dirs.push_back( path );
+                    else if( wxFileExists( path ) )
+                        wxRemoveFile( path );
+
+                    return 0;
+                },
+                &state );
+
+        // Post-order walk lists children first, so nested dirs empty out before their parents.
+        // A dir still holding user files fails to delete, which must not raise an error dialog
+        wxLogNull suppressRmdirErrors;
+
+        for( const wxString& dir : state.dirs )
+        {
+            if( wxDirExists( dir ) )
+                wxRmdir( dir );
+        }
+
+        git_tree_free( tree );
+    }
+
+    git_commit_free( head );
+}
+
+
 // Compare two files byte-for-byte.
 static bool filesContentEqual( const wxString& aPathA, const wxString& aPathB )
 {
@@ -364,7 +456,7 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
     }
 
     // Reject entries with an empty or absolute relativePath; the saver contract requires
-    // a project-relative path so we can dispatch to either the .history mirror or the
+    // a project-relative path so we can stage it into the index or write it under the
     // autosave-files root without ambiguity.
     fileData.erase( std::remove_if( fileData.begin(), fileData.end(),
             []( const HISTORY_FILE_DATA& entry )
@@ -392,13 +484,15 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
             [this, projectPath = aProjectPath, title = aTitle, tagFileType = aTagFileType,
              data = std::move( fileData )]() mutable -> bool
             {
-                bool result = commitInBackground( projectPath, title, data, !tagFileType.IsEmpty() );
+                SNAPSHOT_COMMIT_RESULT result = commitInBackground( projectPath, title, data,
+                                                                    !tagFileType.IsEmpty() );
 
-                if( !tagFileType.IsEmpty() )
+                // A save with nothing new still anchors Last_Save at HEAD, but a failed one must not
+                if( !tagFileType.IsEmpty() && result != SNAPSHOT_COMMIT_RESULT::Error )
                     TagSave( projectPath, tagFileType );
 
                 m_saveInProgress.store( false, std::memory_order_release );
-                return result;
+                return result == SNAPSHOT_COMMIT_RESULT::Committed;
             } );
 
     // Manual save must complete (commit + tag)
@@ -678,8 +772,9 @@ void LOCAL_HISTORY::RemoveAutosaveFiles( const wxString& aProjectPath,
 }
 
 
-bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxString& aTitle,
-                                        const std::vector<HISTORY_FILE_DATA>& aFileData, bool aIsManualSave )
+SNAPSHOT_COMMIT_RESULT LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxString& aTitle,
+                                                          const std::vector<HISTORY_FILE_DATA>& aFileData,
+                                                          bool aIsManualSave )
 {
     wxLogTrace( traceAutoSave, wxS( "[history] background: writing %zu entries for '%s'" ),
                 aFileData.size(), aProjectPath );
@@ -689,46 +784,40 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
     if( !PATHS::EnsurePathExists( hist ) )
     {
         wxLogTrace( traceAutoSave, wxS( "[history] background: cannot create history root '%s'" ), hist );
-        return false;
+        return SNAPSHOT_COMMIT_RESULT::Error;
     }
+
+    struct STAGED_FILE
+    {
+        wxString    relativePath;
+        std::string content;
+    };
+
+    std::vector<STAGED_FILE> staged;
 
     for( const HISTORY_FILE_DATA& entry : aFileData )
     {
-        wxString dst = joinHistoryDestination( hist, entry.relativePath );
-        wxFileName dstFn( dst );
-        wxString   parent = dstFn.GetPath();
-
-        if( !parent.IsEmpty() && !PATHS::EnsurePathExists( parent ) )
-        {
-            wxLogTrace( traceAutoSave, wxS( "[history] background: cannot create dir '%s'" ), parent );
-            continue;
-        }
+        STAGED_FILE file{ entry.relativePath, std::string() };
 
         if( !entry.content.empty() )
         {
-            std::string buf = entry.content;
+            file.content = entry.content;
 
             if( entry.prettify )
-                KICAD_FORMAT::Prettify( buf, entry.formatMode );
-
-            wxFFile fp( dst, wxS( "wb" ) );
-
-            if( fp.IsOpened() )
-            {
-                fp.Write( buf.data(), buf.size() );
-                fp.Close();
-                wxLogTrace( traceAutoSave, wxS( "[history] background: wrote %zu bytes to '%s'" ), buf.size(), dst );
-            }
-            else
-            {
-                wxLogTrace( traceAutoSave, wxS( "[history] background: failed to open '%s' for writing" ), dst );
-            }
+                KICAD_FORMAT::Prettify( file.content, entry.formatMode );
         }
-        else if( !entry.sourcePath.IsEmpty() )
+        else if( entry.sourcePath.IsEmpty() )
         {
-            wxCopyFile( entry.sourcePath, dst, true );
-            wxLogTrace( traceAutoSave, wxS( "[history] background: copied '%s' -> '%s'" ), entry.sourcePath, dst );
+            continue;
         }
+        else if( !readFileContent( entry.sourcePath, file.content ) )
+        {
+            // Committing the rest would record a snapshot that silently lacks this file
+            wxLogTrace( traceAutoSave, wxS( "[history] background: cannot read '%s'" ), entry.sourcePath );
+            return SNAPSHOT_COMMIT_RESULT::Error;
+        }
+
+        staged.push_back( std::move( file ) );
     }
 
     // Acquire locks using hybrid locking strategy
@@ -737,27 +826,32 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
     if( !lock.IsLocked() )
     {
         wxLogTrace( traceAutoSave, wxS( "[history] background: failed to acquire lock: %s" ), lock.GetLockError() );
-        return false;
+        return SNAPSHOT_COMMIT_RESULT::Error;
     }
 
     git_repository* repo = lock.GetRepository();
     git_index* index = lock.GetIndex();
 
-    git_repository_set_workdir( repo, hist.mb_str().data(), false );
+    removeLegacyWorkingCopies( repo, hist );
 
-    // Stage all written files using their project-relative paths.  libgit2 needs forward
-    // slashes on every platform, so normalize before adding to the index.
-    for( const HISTORY_FILE_DATA& entry : aFileData )
+    // Stage from memory.  A copy on disk would sit beside .git and count against the size limit
+    for( const STAGED_FILE& file : staged )
     {
-        wxString rel = entry.relativePath;
+        wxString rel = file.relativePath;
         rel.Replace( wxS( "\\" ), wxS( "/" ) );
 
-        wxString abs = joinHistoryDestination( hist, entry.relativePath );
+        std::string     path = rel.utf8_string();
+        git_index_entry indexEntry = {};
+        indexEntry.mode = GIT_FILEMODE_BLOB;
+        indexEntry.path = path.c_str();
 
-        if( !wxFileExists( abs ) )
-            continue;
-
-        git_index_add_bypath( index, rel.ToStdString().c_str() );
+        if( git_index_add_from_buffer( index, &indexEntry, file.content.data(), file.content.size() ) != 0 )
+        {
+            // Leave the index as HEAD had it rather than commit the old content under a new snapshot
+            wxLogTrace( traceAutoSave, wxS( "[history] background: failed to stage '%s'" ), rel );
+            git_index_read( index, true );
+            return SNAPSHOT_COMMIT_RESULT::Error;
+        }
     }
 
     // Compare index to HEAD; if no diff -> abort to avoid empty commit.
@@ -781,7 +875,7 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
             git_commit_free( head_commit );
 
         wxLogTrace( traceAutoSave, wxS("[history] background: failed to write index tree" ) );
-        return false;
+        return SNAPSHOT_COMMIT_RESULT::Error;
     }
 
     git_tree_lookup( &rawIndexTree, repo, &index_tree_oid );
@@ -807,33 +901,12 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
         // project doesn't leave an untagged HEAD that triggers a no-op restore prompt.
         bool stagedMatchesDisk = true;
 
-        for( const HISTORY_FILE_DATA& entry : aFileData )
+        for( const STAGED_FILE& file : staged )
         {
-            wxString diskPath = aProjectPath + wxFileName::GetPathSeparator() + entry.relativePath;
-            wxString histPath = joinHistoryDestination( hist, entry.relativePath );
+            wxString    diskPath = aProjectPath + wxFileName::GetPathSeparator() + file.relativePath;
+            std::string diskContent;
 
-            if( !wxFileExists( diskPath ) || !wxFileExists( histPath ) )
-            {
-                stagedMatchesDisk = false;
-                break;
-            }
-
-            wxFFile diskFile( diskPath, wxT( "rb" ) );
-            wxFFile histFile( histPath, wxT( "rb" ) );
-
-            if( !diskFile.IsOpened() || !histFile.IsOpened() || diskFile.Length() != histFile.Length() )
-            {
-                stagedMatchesDisk = false;
-                break;
-            }
-
-            size_t      len = static_cast<size_t>( diskFile.Length() );
-            std::string diskBuf( len, '\0' );
-            std::string histBuf( len, '\0' );
-
-            if( diskFile.Read( diskBuf.data(), len ) != len
-                    || histFile.Read( histBuf.data(), len ) != len
-                    || diskBuf != histBuf )
+            if( !readFileContent( diskPath, diskContent ) || diskContent != file.content )
             {
                 stagedMatchesDisk = false;
                 break;
@@ -890,7 +963,7 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
             }
         }
 
-        return false; // Nothing new; skip commit.
+        return SNAPSHOT_COMMIT_RESULT::NoChanges;
     }
 
     git_signature* rawSig = nullptr;
@@ -929,7 +1002,7 @@ bool LOCAL_HISTORY::commitInBackground( const wxString& aProjectPath, const wxSt
         git_commit_free( parent );
 
     git_index_write( index );
-    return rc == 0;
+    return rc == 0 ? SNAPSHOT_COMMIT_RESULT::Committed : SNAPSHOT_COMMIT_RESULT::Error;
 }
 
 
@@ -1023,12 +1096,6 @@ bool LOCAL_HISTORY::Init( const wxString& aProjectPath )
 
 
 // Helper function to commit files using an already-acquired lock
-enum class SNAPSHOT_COMMIT_RESULT
-{
-    Error,
-    NoChanges,
-    Committed
-};
 
 
 static SNAPSHOT_COMMIT_RESULT commitSnapshotWithLock( git_repository* repo, git_index* index,
@@ -1688,6 +1755,12 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
 
     if( !repo )
         return false;
+
+    removeLegacyWorkingCopies( repo, hist );
+    current = dirSizeRecursive( hist );
+
+    if( current <= aMaxBytes )
+        return true;
 
     if( aReporter )
         aReporter->Report( _( "Compacting local history..." ) );

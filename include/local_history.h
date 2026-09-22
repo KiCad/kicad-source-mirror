@@ -38,6 +38,13 @@
 
 class PROGRESS_REPORTER;
 
+enum class SNAPSHOT_COMMIT_RESULT
+{
+    Error,
+    NoChanges,
+    Committed
+};
+
 
 /**
  * Data produced by a registered saver on the UI thread, consumed by either the background
@@ -238,8 +245,9 @@ private:
     std::vector<LOCAL_HISTORY_SNAPSHOT_INFO> LoadSnapshots( const wxString& aProjectPath );
 
     /** Execute file writes and git commit on a background thread. */
-    bool commitInBackground( const wxString& aProjectPath, const wxString& aTitle,
-                             const std::vector<HISTORY_FILE_DATA>& aFileData, bool aIsManualSave );
+    SNAPSHOT_COMMIT_RESULT commitInBackground( const wxString& aProjectPath, const wxString& aTitle,
+                                               const std::vector<HISTORY_FILE_DATA>& aFileData,
+                                               bool aIsManualSave );
 
     /** Drop tracked savers whose owning document has been freed, before any saver runs. */
     void pruneExpiredSavers();
