@@ -961,6 +961,9 @@ void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
 {
     cancelAlignment();
 
+    m_extrudedBody = nullptr;
+    m_opacity->Enable( true );
+
     if( m_parentModelList && idx >= 0 && idx < (int) m_parentModelList->size() )
     {
         m_selected = idx;
@@ -1029,7 +1032,7 @@ void PANEL_PREVIEW_3D_MODEL::SetExtrusionTransformMode( EXTRUDED_3D_BODY* aBody 
     }
     else
     {
-        m_opacity->Enable( true );
+        SetSelectedModel( m_selected );
     }
 }
 

@@ -1037,26 +1037,20 @@ void PANEL_FP_PROPERTIES_3D_MODEL::updateExtrusionPreview()
     if( !dummyFp || m_extrusionLayers.empty() )
         return;
 
-    if( m_enableExtrusionCheckbox->GetValue() && m_showExtrusionCheckbox->GetValue() )
-    {
-        double compHeight = 0.0;
-        double standoff = 0.0;
-        m_componentHeightCtrl->GetValue().ToDouble( &compHeight );
-        m_standoffHeightCtrl->GetValue().ToDouble( &standoff );
+    double compHeight = 0.0;
+    double standoff = 0.0;
+    m_componentHeightCtrl->GetValue().ToDouble( &compHeight );
+    m_standoffHeightCtrl->GetValue().ToDouble( &standoff );
 
-        int sel = m_extrusionLayerChoice->GetSelection();
+    int sel = m_extrusionLayerChoice->GetSelection();
 
-        EXTRUDED_3D_BODY& body = dummyFp->EnsureExtrudedBody();
-        body.m_height = pcbIUScale.mmToIU( compHeight );
-        body.m_standoff = pcbIUScale.mmToIU( standoff );
-        body.m_layer = m_extrusionLayers[sel];
-        body.m_color = m_userSetExtrusionColor ? m_extrusionColorSwatch->GetSwatchColor() : KIGFX::COLOR4D::UNSPECIFIED;
-        body.m_material = static_cast<EXTRUSION_MATERIAL>( m_extrusionMaterialChoice->GetSelection() );
-    }
-    else
-    {
-        dummyFp->ClearExtrudedBody();
-    }
+    EXTRUDED_3D_BODY& body = dummyFp->EnsureExtrudedBody();
+    body.m_height = pcbIUScale.mmToIU( compHeight );
+    body.m_standoff = pcbIUScale.mmToIU( standoff );
+    body.m_layer = m_extrusionLayers[sel];
+    body.m_color = m_userSetExtrusionColor ? m_extrusionColorSwatch->GetSwatchColor() : KIGFX::COLOR4D::UNSPECIFIED;
+    body.m_material = static_cast<EXTRUSION_MATERIAL>( m_extrusionMaterialChoice->GetSelection() );
+    body.m_show = m_enableExtrusionCheckbox->GetValue() && m_showExtrusionCheckbox->GetValue();
 
     m_previewPane->UpdateDummyFootprint( true );
 }
