@@ -42,6 +42,7 @@
 #include <geometry/point_types.h>
 #include <geometry/shape_utils.h>
 #include <pcb_painter.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <api/board/board_types.pb.h>
 #include <api/api_enums.h>
 #include <api/api_utils.h>
@@ -1212,11 +1213,29 @@ void PCB_SHAPE::rebakeFromTransform( const TRANSFORM_TRS& xform )
             m_shape = SHAPE_T::POLY;
             SHAPE_POLY_SET& poly = GetPolyShape();
             poly.RemoveAllContours();
-            poly.NewOutline();
-            poly.Append( c1 );
-            poly.Append( c2 );
-            poly.Append( c3 );
-            poly.Append( c4 );
+
+            if( m_cornerRadius > 0 )
+            {
+                SHAPE_POLY_SET rounded;
+                VECTOR2I       libCenter = ( m_libStart + m_libEnd ) / 2;
+                VECTOR2I       libSize( std::abs( m_libEnd.x - m_libStart.x ), std::abs( m_libEnd.y - m_libStart.y ) );
+
+                TransformRoundChamferedRectToPolygon( rounded, libCenter, libSize, ANGLE_0, m_cornerRadius, 0.0, 0, 0,
+                                                      getMaxError(), ERROR_INSIDE );
+
+                poly.NewOutline();
+
+                for( int ii = 0; ii < rounded.Outline( 0 ).PointCount(); ++ii )
+                    poly.Append( xform.Apply( rounded.Outline( 0 ).CPoint( ii ) ) );
+            }
+            else
+            {
+                poly.NewOutline();
+                poly.Append( c1 );
+                poly.Append( c2 );
+                poly.Append( c3 );
+                poly.Append( c4 );
+            }
 
             EDA_SHAPE::SetStart( c1 );
             EDA_SHAPE::SetEnd( c3 );
