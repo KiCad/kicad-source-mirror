@@ -110,7 +110,13 @@ int PCB_GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent )
                             elem = elem->GetParent();
                     }
 
-                    m_propertiesDialog->DoAddMember( elem );
+                    wxString errorMsg;
+
+                    if( canGroupItem( elem, errorMsg ) )
+                        m_propertiesDialog->DoAddMember( elem );
+                    else
+                        m_frame->ShowInfoBarWarning( errorMsg );
+
                     m_propertiesDialog->Show( true );
                 }
 
