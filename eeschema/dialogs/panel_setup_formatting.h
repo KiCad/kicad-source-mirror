@@ -39,6 +39,7 @@ public:
     void ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings );
 
 protected:
+    void transferSettingsToWindow( SCHEMATIC_SETTINGS& aSettings );
     void onCheckBoxIref( wxCommandEvent& event ) override;
 
 private:
