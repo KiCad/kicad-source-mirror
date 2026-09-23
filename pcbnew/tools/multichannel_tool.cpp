@@ -1525,6 +1525,9 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( RULE_AREA* aRefArea, RULE_AREA* aT
         // Remove the target's existing generators so the copy replaces them.
         for( PCB_GENERATOR* gen : targetGenerators )
         {
+            if( gen->IsLocked() && !aOpts.m_includeLockedItems )
+                continue;
+
             gen->RunOnChildren(
                     [&]( BOARD_ITEM* child )
                     {

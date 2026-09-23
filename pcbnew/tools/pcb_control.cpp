@@ -1490,14 +1490,15 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
 
         for( PCB_GROUP* g : linkedGroups )
         {
-            for( EDA_ITEM* item : g->GetItems() )
-            {
-                if( item->Type() == PCB_FOOTPRINT_T && static_cast<FOOTPRINT*>( item )->IsLocked() )
-                {
-                    hasLocked = true;
-                    break;
-                }
-            }
+            hasLocked = g->IsLocked();
+
+            g->RunOnChildren(
+                    [&]( BOARD_ITEM* item )
+                    {
+                        if( item->IsLocked() )
+                            hasLocked = true;
+                    },
+                    RECURSE_MODE::RECURSE );
 
             if( hasLocked )
                 break;
