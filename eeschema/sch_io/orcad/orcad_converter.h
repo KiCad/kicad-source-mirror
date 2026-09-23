@@ -26,6 +26,7 @@
 #define ORCAD_CONVERTER_H_
 
 #include <cstdint>
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
@@ -52,6 +53,7 @@ class EDA_TEXT;
 class PROGRESS_REPORTER;
 class REPORTER;
 class SCHEMATIC;
+class SCH_FIELD;
 class SCH_ITEM;
 class SCH_LABEL_BASE;
 class SCH_LABEL;
@@ -61,6 +63,7 @@ class SCH_SHEET_PIN;
 class SCH_SHEET_PATH;
 class SCH_SYMBOL;
 class SCH_TEXT;
+class SPIN_STYLE;
 class wxMemoryBuffer;
 
 
@@ -89,6 +92,28 @@ wxString       OrcadPinNameMarkup( const wxString& aName );
 inline VECTOR2I OrcadDbuToIu( int aX, int aY )
 {
     return VECTOR2I( aX * ORCAD_IU_PER_DBU, aY * ORCAD_IU_PER_DBU );
+}
+
+
+/** Map the point members of a primitive: points, arc start and arc end. The box corners are left alone. */
+void OrcadTransformPrimitivePoints( ORCAD_PRIMITIVE&                                        aPrim,
+                                    const std::function<ORCAD_POINT( const ORCAD_POINT& )>& aMap );
+
+/** Translate a primitive, box included. Group children are relative to the group and need no shift. */
+void OrcadOffsetPrimitive( ORCAD_PRIMITIVE& aPrim, int aDx, int aDy );
+
+/** Visit every non-group primitive in drawing order with the accumulated offset of its enclosing groups. */
+void OrcadForEachLeafPrimitive( const std::vector<ORCAD_PRIMITIVE>&                            aPrimitives,
+                                const std::function<void( const ORCAD_PRIMITIVE&, int, int )>& aVisit );
+
+
+/** Undo the orientation matrix of OrcadTransformPoint. Its determinant is +/-1, so the division is exact. */
+inline ORCAD_POINT OrcadInverseOrient( int aOrient, int aX, int aY )
+{
+    const ORCAD_ORIENT_ENTRY& e = ORCAD_ORIENT_TABLE[aOrient & 7];
+    int                       det = e.a * e.d - e.b * e.c;
+
+    return { ( e.d * aX - e.b * aY ) / det, ( -e.c * aX + e.a * aY ) / det };
 }
 
 
@@ -243,10 +268,29 @@ private:
                        int aOffsetY = 0 );
 
 
-    void addSymbolPin( LIB_SYMBOL* aSymbol, const ORCAD_SYMBOL_PIN& aPin, const wxString& aNumber, int aUnit,
-                       bool aPower, const std::string& aNameOverride, bool aNameVisible, bool aShowPinNumbers,
-                       bool aNumberVisible, const BOX2I& aBodyBox, bool aHidden = false,
-                       bool aExplicitNet = false );
+    /** Per-pin choices kicadSymbolFor() makes before emitting a pin. */
+    struct PIN_EMIT
+    {
+        wxString    number;
+        int         unit = 1;
+        bool        power = false;
+        std::string nameOverride;
+        bool        nameVisible = false;
+        bool        showPinNumbers = false;
+        bool        numberVisible = true;
+        bool        hidden = false;
+        bool        explicitNet = false;
+    };
+
+    void addSymbolPin( LIB_SYMBOL* aSymbol, const ORCAD_SYMBOL_PIN& aPin, const BOX2I& aBodyBox, PIN_EMIT aEmit );
+
+    /** aBase, or aBase_pinsN for the first N >= 2 whose existing entry is absent or passes aReusable. */
+    std::string uniqueLibName( const std::string&                             aBase,
+                               const std::function<bool( const LIB_ENTRY& )>& aReusable ) const;
+
+    /** New placement of a library symbol, oriented by an OrCAD orientation code. */
+    SCH_SYMBOL* instantiateSymbol( const LIB_SYMBOL& aLibSymbol, const std::string& aLibName, int aUnit, int aOrient,
+                                   const VECTOR2I& aPos, const SCH_SHEET_PATH& aSheetPath ) const;
 
 
     void placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_INSTANCE& aInst, SCH_SCREEN* aScreen,
@@ -277,6 +321,13 @@ private:
 
     int displayFontId( const ORCAD_DISPLAY_PROP& aProp ) const;
     bool displayUsesTemplateFont( const ORCAD_DISPLAY_PROP& aProp ) const;
+
+    /** Capture's display-property origin sits on the font baseline; return the KiCad text origin. */
+    VECTOR2I displayPropPosition( const ORCAD_DISPLAY_PROP& aDisplay, const VECTOR2I& aAnchorIu ) const;
+
+    /** Style a field from a display property. aSymbolFlips compensates the parent symbol transform. */
+    void applyDisplayProp( SCH_FIELD& aField, const ORCAD_DISPLAY_PROP& aDisplay, const VECTOR2I& aAnchorIu,
+                           bool aSymbolFlips, bool aApplyVisibility = true ) const;
     int wireAliasFontId( const ORCAD_ALIAS& aAlias ) const;
     int textBaselineOffset( int aTextSize, int aFontIdx, bool aTemplateFont = true ) const;
 
@@ -379,6 +430,14 @@ private:
 
 
     void placePorts( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen, bool aHierarchical );
+
+    /** Point an interface label at aPosDbu away from the wire that ends there. */
+    SPIN_STYLE spinAwayFromWire( const VECTOR2I& aPosDbu ) const;
+
+    /** Style a port or off-page label from its source graphic, draw its stored IREF text and add it.
+     *  Returns the Name display property, or nullptr. */
+    const ORCAD_DISPLAY_PROP* finishInterfaceLabel( const ORCAD_GRAPHIC_INST& aGraphic, SCH_LABEL_BASE* aLabel,
+                                                    const std::vector<SEG>& aSourceWires, SCH_SCREEN* aScreen );
 
 
     void placeGraphics( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen );
