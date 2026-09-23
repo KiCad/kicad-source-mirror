@@ -122,6 +122,35 @@ static bool ScheduleNetSwap( BOARD_CONNECTED_ITEM* aItem, int aNewNet,
 }
 
 
+// Make sure everything we're trying to swap is unlocked or we're overriding
+static bool ValidateNetSwapLocks( PCB_BASE_EDIT_FRAME* aFrame,
+                                  const std::unordered_map<BOARD_CONNECTED_ITEM*, int>& aItemNewNets,
+                                  const std::unordered_set<PAD*>& aSwapPads, bool aIncludeConnectedPads )
+{
+    if( aFrame->GetOverrideLocks() )
+        return true;
+
+    for( const auto& [item, newNet] : aItemNewNets )
+    {
+        if( item->GetNetCode() == newNet )
+            continue;
+
+        if( item->Type() == PCB_PAD_T && !aIncludeConnectedPads
+            && !aSwapPads.count( static_cast<PAD*>( item ) ) )
+            continue;
+
+        if( item->IsLocked() )
+        {
+            aFrame->ShowInfoBarError( _( "Cannot swap nets of locked pads or connected copper unless "
+                                         "Override Locks is enabled." ) );
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 {
     if( isRouterActive() )
@@ -356,6 +385,9 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
     bool includeConnectedPads = true;
 
     if( !PromptConnectedPadDecision( frame(), nonSelectedPadsToChange, _( "Swap Pad Nets" ), includeConnectedPads ) )
+        return 0;
+
+    if( !ValidateNetSwapLocks( frame(), itemNewNets, selectedPads, includeConnectedPads ) )
         return 0;
 
     // Apply changes
@@ -674,6 +706,9 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
     {
         return 0;
     }
+
+    if( !ValidateNetSwapLocks( frame(), itemNewNets, swapPads, includeConnectedPads ) )
+        return 0;
 
     // Apply pad net swaps: rotate per position
     for( size_t pi = 0; pi < pinCount; ++pi )
