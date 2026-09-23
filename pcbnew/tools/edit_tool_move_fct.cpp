@@ -104,6 +104,24 @@ static bool PromptConnectedPadDecision( PCB_BASE_EDIT_FRAME* aFrame, const std::
 }
 
 
+// Makes sure we don't try to assign two different new nets to an item. Assigning
+// the same net to the item multiples times is fine.
+static bool ScheduleNetSwap( BOARD_CONNECTED_ITEM* aItem, int aNewNet,
+                             std::unordered_map<BOARD_CONNECTED_ITEM*, int>& aItemNewNets,
+                             wxString& aError )
+{
+    auto [it, inserted] = aItemNewNets.emplace( aItem, aNewNet );
+
+    if( !inserted && it->second != aNewNet )
+    {
+        aError = _( "Cannot swap nets: connected items would receive conflicting nets." );
+        return false;
+    }
+
+    return true;
+}
+
+
 int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )
 {
     if( isRouterActive() )
@@ -282,6 +300,17 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
     // Accumulate changes: for each item, assign the resulting new net
     std::unordered_map<BOARD_CONNECTED_ITEM*, int> itemNewNets;
     std::vector<PAD*>                              nonSelectedPadsToChange;
+    wxString                                       error;
+
+    // Include the direct pad changes so connectivity cannot assign them a conflicting net.
+    for( size_t i = 0; i < padsCount; ++i )
+    {
+        if( !ScheduleNetSwap( pads[i], newNetForIndex( i ), itemNewNets, error ) )
+        {
+            frame()->ShowInfoBarError( error );
+            return 0;
+        }
+    }
 
     for( size_t i = 0; i < padsCount; ++i )
     {
@@ -308,8 +337,11 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
             if( ci->GetNetCode() != fromNet )
                 continue;
 
-            // Track conflicts: if already assigned a different new net, just overwrite (last wins)
-            itemNewNets[ci] = toNet;
+            if( !ScheduleNetSwap( ci, toNet, itemNewNets, error ) )
+            {
+                frame()->ShowInfoBarError( error );
+                return 0;
+            }
 
             if( ci->Type() == PCB_PAD_T )
             {
@@ -330,6 +362,9 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
     // 1) Selected pads get their new nets directly
     for( size_t i = 0; i < padsCount; ++i )
     {
+        if( pads[i]->GetNetCode() == newNetForIndex( i ) )
+            continue;
+
         commit->Modify( pads[i] );
         pads[i]->SetNetCode( newNetForIndex( i ) );
     }
@@ -350,6 +385,9 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
             if( !includeConnectedPads )
                 continue; // skip non-selected pads if requested
         }
+
+        if( item->GetNetCode() == newNet )
+            continue;
 
         commit->Modify( item );
         item->SetNetCode( newNet );
@@ -552,6 +590,7 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
     // Accumulate changes: item -> new net
     std::unordered_map<BOARD_CONNECTED_ITEM*, int> itemNewNets;
     std::vector<PAD*>                              nonSelectedPadsToChange;
+    wxString                                       error;
 
     // Selected pads in the swap (for suppressing re-adding in connected pad handling)
     std::unordered_set<PAD*> swapPads;
@@ -559,10 +598,24 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
     for( const auto& v : unitPads )
         swapPads.insert( v.begin(), v.end() );
 
-    // Schedule net swaps for connectivity-attached items
-    auto scheduleForPad = [&]( PAD* pad, int fromNet, int toNet )
+    for( size_t pi = 0; pi < pinCount; ++pi )
+    {
+        for( size_t ui = 0; ui < unitCount; ++ui )
         {
-            for( BOARD_CONNECTED_ITEM* ci : connectivity->GetConnectedItems( pad, 0 ) )
+            size_t toIdx = ( ui + 1 ) % unitCount;
+
+            if( !ScheduleNetSwap( unitPads[ui][pi], unitNets[toIdx][pi], itemNewNets, error ) )
+            {
+                frame()->ShowInfoBarError( error );
+                return 0;
+            }
+        }
+    }
+
+    // Schedule net swaps for connectivity-attached items
+    auto scheduleForPad = [&]( PAD* pad, int fromNet, int toNet ) -> bool
+        {
+            for( BOARD_CONNECTED_ITEM* ci : connectivity->GetConnectedItems( pad, EXCLUDE_ZONES ) )
             {
                 switch( ci->Type() )
                 {
@@ -580,7 +633,8 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
                 if( ci->GetNetCode() != fromNet )
                     continue;
 
-                itemNewNets[ ci ] = toNet;
+                if( !ScheduleNetSwap( ci, toNet, itemNewNets, error ) )
+                    return false;
 
                 if( ci->Type() == PCB_PAD_T )
                 {
@@ -590,6 +644,8 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
                         nonSelectedPadsToChange.push_back( other );
                 }
             }
+
+            return true;
         };
 
     // For each position, rotate nets among units forward
@@ -604,7 +660,11 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
             int  fromNet = unitNets[fromIdx][pi];
             int  toNet = unitNets[toIdx][pi];
 
-            scheduleForPad( padFrom, fromNet, toNet );
+            if( !scheduleForPad( padFrom, fromNet, toNet ) )
+            {
+                frame()->ShowInfoBarError( error );
+                return 0;
+            }
         }
     }
 
@@ -624,6 +684,9 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
             size_t toIdx = ( ui + 1 ) % unitCount;
             PAD*   pad = unitPads[ui][pi];
             int    newNet = unitNets[toIdx][pi];
+
+            if( pad->GetNetCode() == newNet )
+                continue;
 
             commit->Modify( pad );
             pad->SetNetCode( newNet );
@@ -646,6 +709,9 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
             if( !includeConnectedPads )
                 continue;
         }
+
+        if( item->GetNetCode() == newNet )
+            continue;
 
         commit->Modify( item );
         item->SetNetCode( newNet );
