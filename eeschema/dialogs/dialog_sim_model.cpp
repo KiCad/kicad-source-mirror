@@ -991,7 +991,7 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
         modelNames.Add( name );
         m_modelListBoxEntryToLibraryIdx[name] = m_modelListBoxEntryToLibraryIdx.size();
 
-        if( name == modelName )
+        if( wxString( name ).IsSameAs( modelName, false ) )
             modelNameExists = true;
     }
 
