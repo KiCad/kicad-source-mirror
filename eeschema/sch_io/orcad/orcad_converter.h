@@ -187,6 +187,35 @@ private:
      * (lib name, unit number). */
     using PKG_KEY = std::tuple<std::string, std::string, int, std::string>;
 
+    /** Occurrence context of the page being converted. A reused child schematic converts once per scope. */
+    struct PAGE_SCOPE
+    {
+        const ORCAD_OCC_SCOPE*             occ = nullptr; ///< null when the page has no occurrence
+        std::string                        flatNetSuffix;
+        bool                               namedFlatNets = false;
+        bool                               generatedFlatNets = false;
+        std::map<std::string, std::string> unconnectedInterfaceNetNames;
+        std::map<std::string, std::string> interfaceNetAliases;
+        std::map<std::string, std::string> occurrenceNetAliases;
+        std::set<std::string>              connectorInterfaceNetAliases;
+        std::map<std::string, size_t>      electricalKeyCounts;
+    };
+
+    /** Lookups for the page and scope being converted, rebuilt by buildNetLookup(). */
+    struct PAGE_NET_INDEX
+    {
+        const ORCAD_RAW_PAGE*                                          page = nullptr;
+        std::map<std::pair<int, int>, std::vector<const ORCAD_WIRE*>> wireEndpoints;
+        std::map<const ORCAD_PIN_INST*, std::set<uint32_t>>           pinNets;
+        std::vector<VECTOR2I>                                          junctions;
+
+        /** Scope occurrence nets owned by a page net through a wire or part object id. */
+        std::map<uint32_t, std::set<const std::string*>> occurrenceNamesByNetId;
+
+        /** powerNet() depends on the scope, so the memo lives only as long as this index. */
+        mutable std::map<const ORCAD_GRAPHIC_INST*, std::string> powerNets;
+    };
+
     struct PLACED_PACKAGE_UNIT
     {
         SCH_SYMBOL*    symbol;
@@ -225,6 +254,9 @@ private:
     std::string canonicalGlobalNetKey( const std::string& aName ) const;
 
     std::string effectiveInterfaceNetName( const std::string& aName ) const;
+
+    void        enterScope( PAGE_SCOPE aScope );
+    std::string occurrenceBaseNetName( const std::string& aName ) const;
     std::string occurrenceElectricalNetName( uint32_t aOccurrenceId, const std::string& aName ) const;
     bool        isPowerNetName( const std::string& aName ) const;
     bool        isOffpageNetName( const std::string& aName ) const;
@@ -361,6 +393,23 @@ private:
     void recordNetNameMap();
     void convertUnreferencedPages();
 
+    /** Visit root pages, then child-folder pages, then unreferenced folder pages if asked. */
+    void forEachDesignPage( const std::function<void( const ORCAD_RAW_PAGE& )>& aVisit,
+                            bool aUnreferenced = false ) const;
+
+    /** aBase, or "aBase (N)" for the first N >= 2 not already used by a sibling sheet. */
+    wxString uniqueSheetName( const wxString& aBase );
+
+    /** Occurrence nets in aScopeNets that a block pin on aPage reaches by name or by wire object id.
+     *  aSourceKeys receives the pin's own name keys and those of the wires under it. */
+    std::set<const std::string*> pinOccurrenceTargets( const ORCAD_RAW_PAGE& aPage, const ORCAD_BLOCK_PIN& aPin,
+                                                       const std::map<uint32_t, std::string>& aScopeNets,
+                                                       bool aSkipGenerated,
+                                                       std::set<std::string>* aSourceKeys = nullptr ) const;
+
+    /** The hierarchy path ending at a top-level sheet, numbered aPageNumber. */
+    SCH_SHEET_PATH topLevelPath( SCH_SHEET* aSheet, size_t aPageNumber ) const;
+
     KIID deterministicUuid( const std::string& aRole, size_t aOrdinal ) const;
     void appendPageItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem );
     void assignPageItemUuids( size_t aPageOrdinal );
@@ -381,14 +430,19 @@ private:
 
     void applyTitleBlock( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen );
 
-    /** Rebuild m_wireEndpoints for a page (both endpoints of every wire). */
+    /** Rebuild m_netIndex for a page in the current scope. */
     void buildNetLookup( const ORCAD_RAW_PAGE& aPage );
+
+    /** Page nets a placed pin joins through its net id, its wire object id or a wire under it. */
+    const std::set<uint32_t>& pinNetIds( const ORCAD_PIN_INST& aPin ) const;
 
     /** Prefer endpoint nets, then intersecting wires, then endpoint aliases. */
     std::string netAt( const ORCAD_RAW_PAGE& aPage, int aX, int aY ) const;
 
 
+    /** Memoized resolvePowerNet() for the indexed page. */
     std::string powerNet( const ORCAD_RAW_PAGE& aPage, const ORCAD_GRAPHIC_INST& aInst ) const;
+    std::string resolvePowerNet( const ORCAD_RAW_PAGE& aPage, const ORCAD_GRAPHIC_INST& aInst ) const;
 
     /** Use the transformed cache pin position, or the instance anchor if no pin is available. */
     VECTOR2I graphicPinPos( const ORCAD_GRAPHIC_INST& aInst ) const;
@@ -489,18 +543,7 @@ private:
     SCH_SCREEN*                                    m_pageItemScreen = nullptr;
     std::vector<SCH_ITEM*>                         m_pageItems;
 
-    /** Per-page occurrence references distinguish repeated child schematics. Null means no occurrence tree. */
-    const std::map<uint32_t, std::string>*                    m_currentOccRefs = nullptr;
-    const std::map<uint32_t, std::string>*                    m_currentOccUnitRefs = nullptr;
-    const std::map<uint32_t, std::map<std::string, std::string>>* m_currentOccProps = nullptr;
-    const std::map<uint32_t, std::string>*                    m_currentOccNetNames = nullptr;
-    std::string                                               m_currentFlatNetSuffix;
-    bool                                                      m_scopeNamedFlatNets = false;
-    bool                                                      m_scopeGeneratedFlatNets = false;
-    std::map<std::string, std::string>                         m_currentUnconnectedInterfaceNetNames;
-    std::map<std::string, std::string>                         m_currentInterfaceNetAliases;
-    std::map<std::string, std::string>                         m_currentOccurrenceNetAliases;
-    std::set<std::string>                                      m_currentConnectorInterfaceNetAliases;
+    PAGE_SCOPE                                                m_scope;
     std::set<const ORCAD_PIN_INST*>                            m_currentImplicitPowerPins;
     std::map<std::string, std::map<std::string, std::string>> m_hierBusNamesByScreen;
 
@@ -544,8 +587,7 @@ private:
     /** Lower-cased sheet names already emitted, to keep sibling sheet names unique. */
     std::set<wxString> m_usedSheetNames;
 
-    /** Per-page wire lookup: endpoint -> wires ending there.  Rebuilt by buildNetLookup(). */
-    std::map<std::pair<int, int>, std::vector<const ORCAD_WIRE*>> m_wireEndpoints;
+    PAGE_NET_INDEX m_netIndex;
 };
 
 #endif // ORCAD_CONVERTER_H_

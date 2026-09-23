@@ -618,20 +618,12 @@ void ORCAD_CONVERTER::prepareSymbols()
     // not root page list.
     std::vector<const ORCAD_RAW_PAGE*> allPages;
 
-    for( const ORCAD_RAW_PAGE& page : m_design.pages )
-        allPages.push_back( &page );
-
-    for( const auto& [folder, pages] : m_design.childFolderPages )
-    {
-        for( const ORCAD_RAW_PAGE& page : pages )
-            allPages.push_back( &page );
-    }
-
-    for( const auto& [folder, pages] : m_design.unreferencedFolderPages )
-    {
-        for( const ORCAD_RAW_PAGE& page : pages )
-            allPages.push_back( &page );
-    }
+    forEachDesignPage(
+            [&]( const ORCAD_RAW_PAGE& aPage )
+            {
+                allPages.push_back( &aPage );
+            },
+            true );
 
     for( const ORCAD_RAW_PAGE* page : allPages )
     {
@@ -1416,11 +1408,11 @@ std::map<std::string, std::string> ORCAD_CONVERTER::effectiveProps( const ORCAD_
 
     overlay( aInst.props, true );
 
-    if( m_currentOccProps )
+    if( m_scope.occ )
     {
-        auto occurrence = m_currentOccProps->find( aInst.dbId );
+        auto occurrence = m_scope.occ->partProps.find( aInst.dbId );
 
-        if( occurrence != m_currentOccProps->end() )
+        if( occurrence != m_scope.occ->partProps.end() )
             overlay( occurrence->second, true );
     }
 
@@ -1500,11 +1492,11 @@ std::pair<std::string, int> ORCAD_CONVERTER::libForInstance( const ORCAD_PLACED_
 
     size_t unitIndex = aInst.unitIndex;
 
-    if( m_currentOccUnitRefs )
+    if( m_scope.occ )
     {
-        auto unitRefIt = m_currentOccUnitRefs->find( aInst.dbId );
+        auto unitRefIt = m_scope.occ->partUnitRefs.find( aInst.dbId );
 
-        if( unitRefIt != m_currentOccUnitRefs->end() )
+        if( unitRefIt != m_scope.occ->partUnitRefs.end() )
             letter = unitRefIt->second;
     }
 
@@ -2891,12 +2883,12 @@ void ORCAD_CONVERTER::placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_I
 
     auto occurrenceProperty = [&]( const char* aName ) -> const std::string*
     {
-        if( !m_currentOccProps )
+        if( !m_scope.occ )
             return nullptr;
 
-        auto occurrence = m_currentOccProps->find( aInst.dbId );
+        auto occurrence = m_scope.occ->partProps.find( aInst.dbId );
 
-        if( occurrence == m_currentOccProps->end() )
+        if( occurrence == m_scope.occ->partProps.end() )
             return nullptr;
 
         auto property = std::find_if( occurrence->second.begin(), occurrence->second.end(),
@@ -2975,7 +2967,7 @@ void ORCAD_CONVERTER::placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_I
                                         {
                                             return m_currentImplicitPowerPins.count( &aPin );
                                         } );
-        const void* scope = m_currentOccRefs ? static_cast<const void*>( m_currentOccRefs ) : aScreen;
+        const void* scope = m_scope.occ ? static_cast<const void*>( &m_scope.occ->partRefs ) : aScreen;
         m_placedPackageUnits.push_back( { symbol, scope, reference, sourceUnit, uinfo } );
 
         if( nativePower )
@@ -3034,11 +3026,11 @@ wxString ORCAD_CONVERTER::resolveReference( const ORCAD_PLACED_INSTANCE& aInst )
 
     // Hierarchy stream carries the authoritative per-occurrence designator; the
     // placed record remains the reusable page template's reference.
-    if( m_currentOccRefs )
+    if( m_scope.occ )
     {
-        auto it = m_currentOccRefs->find( aInst.dbId );
+        auto it = m_scope.occ->partRefs.find( aInst.dbId );
 
-        if( it != m_currentOccRefs->end() )
+        if( it != m_scope.occ->partRefs.end() )
         {
             wxString occurrence = FromOrcadString( it->second );
 
@@ -3394,11 +3386,11 @@ void ORCAD_CONVERTER::placeSymbolFields( SCH_SYMBOL* aSymbol, const ORCAD_PLACED
     {
         std::string unitDesignator;
 
-        if( m_currentOccUnitRefs )
+        if( m_scope.occ )
         {
-            auto unitRef = m_currentOccUnitRefs->find( aInst.dbId );
+            auto unitRef = m_scope.occ->partUnitRefs.find( aInst.dbId );
 
-            if( unitRef != m_currentOccUnitRefs->end() )
+            if( unitRef != m_scope.occ->partUnitRefs.end() )
                 unitDesignator = unitRef->second;
         }
 
