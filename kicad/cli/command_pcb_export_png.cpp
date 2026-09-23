@@ -106,7 +106,7 @@ CLI::PCB_EXPORT_PNG_COMMAND::PCB_EXPORT_PNG_COMMAND() :
             .default_value( DEFAULT_PNG_DPI )
             .metavar( "DPI" );
 
-    m_argParser.add_argument( ARG_NO_BACKGROUND_COLOR )
+    m_argParser.add_argument( ARG_BACKGROUND_COLOR )
             .help( UTF8STDSTR( _( "Use the color theme background color instead of a transparent background" ) ) )
             .flag();
 
@@ -151,7 +151,7 @@ int CLI::PCB_EXPORT_PNG_COMMAND::doPerform( KIWAY& aKiway )
 
     pngJob->m_dpi = dpi;
     pngJob->m_antialias = !m_argParser.get<bool>( ARG_NO_ANTIALIAS );
-    pngJob->m_useBackgroundColor = m_argParser.get<bool>( ARG_NO_BACKGROUND_COLOR );
+    pngJob->m_useBackgroundColor = m_argParser.get<bool>( ARG_BACKGROUND_COLOR );
 
     pngJob->m_filename = m_argInput;
     pngJob->SetConfiguredOutputPath( m_argOutput );
