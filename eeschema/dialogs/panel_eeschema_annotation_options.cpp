@@ -81,7 +81,7 @@ void PANEL_EESCHEMA_ANNOTATION_OPTIONS::loadEEschemaSettings( SCHEMATIC_SETTINGS
         }
     }
 
-    m_checkReuseRefdes->SetValue( aCfg->m_refDesTracker->GetReuseRefDes() );
+    m_checkReuseRefdes->SetValue( aCfg->m_refDesTracker ? aCfg->m_refDesTracker->GetReuseRefDes() : false );
 }
 
 
