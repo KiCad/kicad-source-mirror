@@ -154,10 +154,10 @@ private:
 /** Use an 8-bit fallback if Windows-1252 decoding fails. */
 wxString FromOrcadString( const std::string& aText );
 
-/** Case-fold a raw OrCAD name with std::tolower, byte by byte. */
+/** Fold ASCII letters only. Names stay raw Windows-1252 bytes, and the locale must not change the result. */
 std::string OrcadLower( std::string_view aText );
 
-/** Byte-wise case-insensitive comparison with the folding of OrcadLower. */
+/** Case-insensitive comparison with the folding of OrcadLower. */
 bool OrcadIEquals( std::string_view aLeft, std::string_view aRight );
 
 #endif // ORCAD_STREAM_H_

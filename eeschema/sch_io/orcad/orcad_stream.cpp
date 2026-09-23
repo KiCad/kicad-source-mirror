@@ -23,7 +23,6 @@
 #include <sch_io/orcad/orcad_stream.h>
 
 #include <algorithm>
-#include <cctype>
 #include <cstring>
 
 #include <ki_exception.h>
@@ -298,13 +297,16 @@ wxString FromOrcadString( const std::string& aText )
 }
 
 
+static char orcadFold( char aChar )
+{
+    return aChar >= 'A' && aChar <= 'Z' ? static_cast<char>( aChar - 'A' + 'a' ) : aChar;
+}
+
+
 std::string OrcadLower( std::string_view aText )
 {
     std::string out( aText );
-
-    for( char& c : out )
-        c = static_cast<char>( std::tolower( static_cast<unsigned char>( c ) ) );
-
+    std::transform( out.begin(), out.end(), out.begin(), orcadFold );
     return out;
 }
 
@@ -313,8 +315,8 @@ bool OrcadIEquals( std::string_view aLeft, std::string_view aRight )
 {
     return aLeft.size() == aRight.size()
            && std::equal( aLeft.begin(), aLeft.end(), aRight.begin(),
-                          []( unsigned char a, unsigned char b )
+                          []( char a, char b )
                           {
-                              return std::tolower( a ) == std::tolower( b );
+                              return orcadFold( a ) == orcadFold( b );
                           } );
 }

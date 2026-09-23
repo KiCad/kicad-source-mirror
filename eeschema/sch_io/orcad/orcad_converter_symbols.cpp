@@ -1645,8 +1645,7 @@ std::pair<std::string, int> ORCAD_CONVERTER::libForInstance( const ORCAD_PLACED_
             int position = sym->pins[pi].position >= 0 ? sym->pins[pi].position : static_cast<int>( pi );
 
             if( position < 0 || static_cast<size_t>( position ) >= pinNumbers.size()
-                || wxString::FromUTF8( pinNumbers[position] ).CmpNoCase( wxString::FromUTF8( sym->pins[pi].name ) )
-                           != 0 )
+                || !OrcadIEquals( pinNumbers[position], sym->pins[pi].name ) )
             {
                 packageUsesLogicalPinNames = false;
                 break;
@@ -2952,8 +2951,7 @@ void ORCAD_CONVERTER::placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_I
                                    {
                                        return isInstalledPropertyName( aProperty.first );
                                    } );
-    bool notInstalled =
-            installed != props.end() && wxString::FromUTF8( installed->second ).CmpNoCase( wxS( "NI" ) ) == 0;
+    bool notInstalled = installed != props.end() && OrcadIEquals( installed->second, "NI" );
 
     const std::string* occurrenceFootprint = occurrenceProperty( "PCB Footprint" );
     std::string        footprint = occurrenceFootprint ? *occurrenceFootprint : std::string();
@@ -3087,7 +3085,7 @@ void ORCAD_CONVERTER::placePowerSymbol( ORCAD_RAW_PAGE& aPage, const ORCAD_GRAPH
     std::string net = canonicalGlobalNetName( aNet );
 
     // Capture power names ignore case; occurrence-specific names must still remain distinct.
-    if( FromOrcadString( net ).CmpNoCase( FromOrcadString( aNet ) ) != 0 )
+    if( !OrcadIEquals( net, aNet ) )
         net = aNet;
 
     std::string libname = powerLibFor( aInst.name, net );

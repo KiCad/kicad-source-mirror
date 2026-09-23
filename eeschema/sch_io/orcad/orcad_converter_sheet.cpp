@@ -1633,8 +1633,7 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
         POWER_ALIAS_EVIDENCE& evidence = aCandidates[OrcadLower( aSourceName )];
         ++evidence.placements;
 
-        if( !isPowerNetName( aElectricalName )
-            || wxString::FromUTF8( aSourceName ).CmpNoCase( wxString::FromUTF8( aElectricalName ) ) == 0 )
+        if( !isPowerNetName( aElectricalName ) || OrcadIEquals( aSourceName, aElectricalName ) )
         {
             return;
         }
@@ -5007,9 +5006,7 @@ std::string ORCAD_CONVERTER::powerNet( const ORCAD_RAW_PAGE& aPage, const ORCAD_
 
             for( const auto& [occurrenceId, occurrenceName] : *m_currentOccNetNames )
             {
-                if( wxString::FromUTF8( kicadOccurrenceNetName( occurrenceName ) )
-                            .CmpNoCase( wxString::FromUTF8( logicalName ) )
-                    == 0 )
+                if( OrcadIEquals( kicadOccurrenceNetName( occurrenceName ), logicalName ) )
                 {
                     matchingNames.insert( &occurrenceName );
                 }
@@ -5113,7 +5110,7 @@ std::string ORCAD_CONVERTER::powerNet( const ORCAD_RAW_PAGE& aPage, const ORCAD_
 
             for( const auto& [occurrenceId, occurrenceName] : *m_currentOccNetNames )
             {
-                if( wxString::FromUTF8( pageNet->second ).CmpNoCase( wxString::FromUTF8( occurrenceName ) ) == 0 )
+                if( OrcadIEquals( pageNet->second, occurrenceName ) )
                     occurrenceNets.insert( &occurrenceName );
             }
         }
@@ -5168,7 +5165,7 @@ std::string ORCAD_CONVERTER::powerNet( const ORCAD_RAW_PAGE& aPage, const ORCAD_
 
         for( const auto& [netId, pageName] : aPage.netmap )
         {
-            bool matches = wxString::FromUTF8( pageName ).CmpNoCase( wxString::FromUTF8( sourceName ) ) == 0;
+            bool matches = OrcadIEquals( pageName, sourceName );
             auto aliases = aPage.netAliases.find( netId );
 
             if( aliases != aPage.netAliases.end() )
@@ -5177,9 +5174,7 @@ std::string ORCAD_CONVERTER::powerNet( const ORCAD_RAW_PAGE& aPage, const ORCAD_
                           || std::any_of( aliases->second.begin(), aliases->second.end(),
                                           [&]( const std::string& aAlias )
                                           {
-                                              return wxString::FromUTF8( aAlias ).CmpNoCase(
-                                                             wxString::FromUTF8( sourceName ) )
-                                                     == 0;
+                                              return OrcadIEquals( aAlias, sourceName );
                                           } );
             }
 
@@ -5231,8 +5226,7 @@ std::string ORCAD_CONVERTER::powerNet( const ORCAD_RAW_PAGE& aPage, const ORCAD_
                         {
                             for( const auto& [occurrenceId, occurrenceName] : *m_currentOccNetNames )
                             {
-                                if( wxString::FromUTF8( sourceName ).CmpNoCase( wxString::FromUTF8( occurrenceName ) )
-                                    == 0 )
+                                if( OrcadIEquals( sourceName, occurrenceName ) )
                                 {
                                     occurrenceNames.insert( occurrenceName );
                                 }
@@ -5251,11 +5245,6 @@ std::string ORCAD_CONVERTER::powerNet( const ORCAD_RAW_PAGE& aPage, const ORCAD_
         if( pinNetNames.size() == 1 )
             net = *pinNetNames.begin();
     }
-
-    auto        namesEqual = []( const std::string& aLeft, const std::string& aRight )
-    {
-        return wxString::FromUTF8( aLeft ).CmpNoCase( wxString::FromUTF8( aRight ) ) == 0;
-    };
 
     std::string physicalName = !propertyName.empty() ? propertyName : logicalName;
 
@@ -5286,7 +5275,9 @@ std::string ORCAD_CONVERTER::powerNet( const ORCAD_RAW_PAGE& aPage, const ORCAD_
 
             bool hasPhysicalName = std::any_of( names.begin(), names.end(),
                                                 [&]( const std::string& aName )
-                                                { return namesEqual( aName, physicalName ); } );
+                                                {
+                                                    return OrcadIEquals( aName, physicalName );
+                                                } );
 
             if( ( !m_currentOccNetNames || m_currentOccNetNames->empty() ) && distinctNames.size() > 1
                 && hasPhysicalName )
@@ -5322,7 +5313,7 @@ std::string ORCAD_CONVERTER::powerNet( const ORCAD_RAW_PAGE& aPage, const ORCAD_
             {
                 for( const auto& [occurrenceId, occurrenceName] : *m_currentOccNetNames )
                 {
-                    if( wxString::FromUTF8( alias ).CmpNoCase( wxString::FromUTF8( occurrenceName ) ) == 0 )
+                    if( OrcadIEquals( alias, occurrenceName ) )
                         occurrenceAliases.insert( &occurrenceName );
                 }
             }
@@ -5462,11 +5453,6 @@ VECTOR2I ORCAD_CONVERTER::powerPinPos( const ORCAD_RAW_PAGE& aPage, const ORCAD_
             powerName = trimmed( property->second );
     }
 
-    auto namesEqual = []( const std::string& aLeft, const std::string& aRight )
-    {
-        return wxString::FromUTF8( aLeft ).CmpNoCase( wxString::FromUTF8( aRight ) ) == 0;
-    };
-
     for( const ORCAD_PLACED_INSTANCE& instance : aPage.instances )
     {
         for( const ORCAD_PIN_INST& pin : instance.pins )
@@ -5489,7 +5475,7 @@ VECTOR2I ORCAD_CONVERTER::powerPinPos( const ORCAD_RAW_PAGE& aPage, const ORCAD_
                 && std::none_of( pinNetNames.begin(), pinNetNames.end(),
                                  [&]( const std::string& aName )
                                  {
-                                     return namesEqual( aName, powerName );
+                                     return OrcadIEquals( aName, powerName );
                                  } ) )
             {
                 continue;
@@ -5671,7 +5657,7 @@ std::vector<ORCAD_CONVERTER::OFFPAGE_NET> ORCAD_CONVERTER::offpageNets( const OR
 
         for( const auto& [netId, pageName] : aPage.netmap )
         {
-            bool matches = wxString::FromUTF8( pageName ).CmpNoCase( wxString::FromUTF8( conn.logicalName ) ) == 0;
+            bool matches = OrcadIEquals( pageName, conn.logicalName );
             auto aliases = aPage.netAliases.find( netId );
 
             if( aliases != aPage.netAliases.end() )
@@ -5680,9 +5666,7 @@ std::vector<ORCAD_CONVERTER::OFFPAGE_NET> ORCAD_CONVERTER::offpageNets( const OR
                           || std::any_of( aliases->second.begin(), aliases->second.end(),
                                           [&]( const std::string& aAlias )
                                           {
-                                              return wxString::FromUTF8( aAlias ).CmpNoCase(
-                                                             wxString::FromUTF8( conn.logicalName ) )
-                                                     == 0;
+                                              return OrcadIEquals( aAlias, conn.logicalName );
                                           } );
             }
 
@@ -5721,8 +5705,7 @@ std::vector<ORCAD_CONVERTER::OFFPAGE_NET> ORCAD_CONVERTER::offpageNets( const OR
                                       && std::any_of( m_currentOccNetNames->begin(), m_currentOccNetNames->end(),
                                                       [&]( const auto& occurrence )
                                                       {
-                                                          return FromOrcadString( occurrence.second ).CmpNoCase(
-                                                                         FromOrcadString( conn.logicalName ) ) == 0;
+                                                          return OrcadIEquals( occurrence.second, conn.logicalName );
                                                       } );
 
             // Capture can retain an obsolete instance-derived occurrence after off-page connectors
@@ -5862,9 +5845,7 @@ static std::optional<std::vector<SEG>> eligibleSourceConnectivityWires(
             return std::any_of( aNames.begin(), aNames.end(),
                                 [&]( const std::string& aCandidate )
                                 {
-                                    return !aCandidate.empty()
-                                           && FromOrcadString( aName ).CmpNoCase(
-                                                      FromOrcadString( aCandidate ) ) == 0;
+                                    return !aCandidate.empty() && OrcadIEquals( aName, aCandidate );
                                 } );
         };
         auto name = aPage.netmap.find( wire.id );
@@ -6328,10 +6309,8 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
                                                 [&]( const auto& aPageNet )
                                                 {
                                                     return aPageNet.first != netId
-                                                           && wxString::FromUTF8(
-                                                                      kicadElectricalNetName( aPageNet.second ) )
-                                                                      .CmpNoCase( wxString::FromUTF8( electricalName ) )
-                                                                      == 0;
+                                                           && OrcadIEquals( kicadElectricalNetName( aPageNet.second ),
+                                                                            electricalName );
                                                 } );
 
             if( !collides )
