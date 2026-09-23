@@ -530,8 +530,9 @@ void PANEL_SYMBOL_PIN_MAP::applyColumnFootprint( int aCol, const wxString& aFoot
     fpid.Trim().Trim( false );
 
     LIB_ID fpId;
+    fpId.Parse( fpid );
 
-    if( !fpid.IsEmpty() && fpId.Parse( fpid ) >= 0 )
+    if( !fpId.IsValid() )
     {
         wxMessageBox( _( "Invalid footprint identifier." ), _( "Assign Footprint" ), wxOK | wxICON_ERROR, this );
         m_grid->SetCellValue( 0, aCol, currentFootprint() );
