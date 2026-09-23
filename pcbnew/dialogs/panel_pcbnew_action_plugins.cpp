@@ -21,6 +21,7 @@
 #include <action_plugin.h>
 #include <api/api_plugin.h>
 #include <bitmaps.h>
+#include <bitmap_store.h>
 #include <dialog_footprint_wizard_list.h>
 #include <grid_tricks.h>
 #include <kiface_base.h>
@@ -332,10 +333,22 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 #ifdef KICAD_IPC_API
             auto action = std::get<const PLUGIN_ACTION*>( orderedPlugins[row] );
 
-            const wxBitmapBundle& icon = KIPLATFORM::UI::IsDarkTheme() && action->icon_dark.IsOk() ? action->icon_dark
-                                                                                                   : action->icon_light;
+            const std::vector<wxImage>& images = KIPLATFORM::UI::IsDarkTheme() && !action->icon_dark.empty()
+                                                         ? action->icon_dark
+                                                         : action->icon_light;
 
-            // Icon
+            wxBitmapBundle icon;
+
+            if( !images.empty() )
+            {
+                wxVector<wxBitmap> bitmaps;
+
+                for( const wxImage& img : images )
+                    bitmaps.push_back( wxBitmap( img ) );
+
+                icon = BITMAP_STORE::MakeBitmapBundleDef( bitmaps, size );
+            }
+
             m_grid->SetCellRenderer( row, COLUMN_ACTION_NAME, new GRID_CELL_ICON_TEXT_RENDERER(
                                      icon.IsOk() ? icon : m_genericIcon, iconSize ) );
             m_grid->SetCellValue( row, COLUMN_ACTION_NAME, action->name );

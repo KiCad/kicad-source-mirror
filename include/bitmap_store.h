@@ -95,6 +95,13 @@ public:
     wxBitmapBundle GetDisabledBitmapBundleDef( BITMAPS aBitmapId, int aDefHeight );
 
     /**
+     * Constructs a bitmap bundle from the given bitmaps
+     * @param aBitmaps are the source bitmaps, in any order.
+     * @param aDefHeight is the desired height of the default bitmap in the bundle.
+     */
+    static wxBitmapBundle MakeBitmapBundleDef( const wxVector<wxBitmap>& aBitmaps, int aDefHeight );
+
+    /**
      * Retrieves a bitmap from the given bitmap id, scaled to a given factor.
      *
      * This factor is for legacy reasons divided by 4, so a scale factor of 4 will return the
