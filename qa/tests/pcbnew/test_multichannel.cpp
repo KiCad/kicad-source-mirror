@@ -3340,6 +3340,56 @@ BOOST_FIXTURE_TEST_CASE( MultichannelNestedGroupChannels, MULTICHANNEL_TEST_FIXT
 }
 
 
+BOOST_FIXTURE_TEST_CASE( RuleAreaGroupSourcesWithWildcardsAndApostrophes, MULTICHANNEL_TEST_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "multichannel_nested", m_board );
+
+    PCB_GROUP* first = nullptr;
+    PCB_GROUP* second = nullptr;
+
+    for( PCB_GROUP* group : m_board->Groups() )
+    {
+        if( group->GetName() == wxT( "FirstChannel" ) )
+            first = group;
+        else if( group->GetName() == wxT( "SecondChannel" ) )
+            second = group;
+    }
+
+    BOOST_REQUIRE( first && second );
+
+    first->SetName( wxT( "Channel'*" ) );
+    second->SetName( wxT( "Channel'Other" ) );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+    toolMgr.SetEnvironment( m_board.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->GeneratePotentialRuleAreas();
+
+    RULE_AREA* candidate = findGroupRuleAreaByName( mtTool, wxT( "Channel'*" ) );
+    BOOST_REQUIRE( candidate );
+    BOOST_REQUIRE_EQUAL( candidate->m_components.size(), 64 );
+
+    std::set<FOOTPRINT*> expected = candidate->m_components;
+    candidate->m_generateEnabled = true;
+
+    mtTool->AutogenerateRuleAreas( TOOL_EVENT() );
+    mtTool->FindExistingRuleAreas();
+
+    RULE_AREA* area = findRuleAreaByPlacementGroup( mtTool, wxT( "Channel'*" ) );
+    BOOST_REQUIRE( area && area->m_zone );
+    BOOST_CHECK( area->m_components == expected );
+
+    BOX2I outlineBounds = area->m_zone->Outline()->BBox();
+
+    for( FOOTPRINT* fp : expected )
+        BOOST_CHECK( outlineBounds.Contains( fp->GetPosition() ) );
+}
+
+
 // Sheet-level Repeat Layout with "group items" enabled must still reproduce tuning meanders
 // as generators in the target, not flatten them to loose tracks.
 BOOST_FIXTURE_TEST_CASE( RepeatLayoutSheetCopiesMeandersWhole, MULTICHANNEL_TEST_FIXTURE )

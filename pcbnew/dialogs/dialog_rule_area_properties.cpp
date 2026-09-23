@@ -283,8 +283,11 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
         {
             sheetNames.insert( fp->GetSheetname() );
 
-            if( fp->GetParentGroup() && !fp->GetParentGroup()->GetName().IsEmpty() )
-                groupNames.insert( fp->GetParentGroup()->GetName() );
+            for( EDA_GROUP* group = fp->GetParentGroup(); group; group = group->AsEdaItem()->GetParentGroup() )
+            {
+                if( !group->GetName().IsEmpty() )
+                    groupNames.insert( group->GetName() );
+            }
         }
 
         for( const wxString& sourceName : sheetNames )

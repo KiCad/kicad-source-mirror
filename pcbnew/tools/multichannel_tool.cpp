@@ -206,18 +206,21 @@ bool MULTICHANNEL_TOOL::findComponentsInRuleArea( RULE_AREA*            aRuleAre
 
     wxLogTrace( traceMultichannelTool, wxT( "rule area '%s'" ), aRuleArea->m_zone->GetZoneName() );
 
+    wxString sourceName = aRuleArea->m_zone->GetPlacementAreaSource();
+    sourceName.Replace( wxT( "'" ), wxT( "\\'" ) );
+
     wxString ruleText;
 
     switch( aRuleArea->m_zone->GetPlacementAreaSourceType() )
     {
     case PLACEMENT_SOURCE_T::SHEETNAME:
-        ruleText = wxT( "A.memberOfSheetOrChildren('" ) + aRuleArea->m_zone->GetPlacementAreaSource() + wxT( "')" );
+        ruleText = wxT( "A.memberOfSheetOrChildren('" ) + sourceName + wxT( "')" );
         break;
     case PLACEMENT_SOURCE_T::COMPONENT_CLASS:
-        ruleText = wxT( "A.hasComponentClass('" ) + aRuleArea->m_zone->GetPlacementAreaSource() + wxT( "')" );
+        ruleText = wxT( "A.hasComponentClass('" ) + sourceName + wxT( "')" );
         break;
     case PLACEMENT_SOURCE_T::GROUP_PLACEMENT:
-        ruleText = wxT( "A.memberOfGroup('" ) + aRuleArea->m_zone->GetPlacementAreaSource() + wxT( "')" );
+        ruleText = wxT( "A.memberOfGroup('" ) + sourceName + wxT( "')" );
         break;
     case PLACEMENT_SOURCE_T::DESIGN_BLOCK:
         // For design blocks, handled above outside the rules system
@@ -446,7 +449,7 @@ std::set<FOOTPRINT*> MULTICHANNEL_TOOL::queryComponentsInGroup( const wxString& 
 
     for( PCB_GROUP* group : board()->Groups() )
     {
-        if( group->GetName() == aGroupName )
+        if( group->GetName().Matches( aGroupName ) )
             collectGroupFootprints( group, rv );
     }
 
@@ -460,7 +463,7 @@ std::set<BOARD_ITEM*> MULTICHANNEL_TOOL::queryBoardItemsInGroup( const wxString&
 
     for( PCB_GROUP* group : board()->Groups() )
     {
-        if( group->GetName() != aGroupName )
+        if( !group->GetName().Matches( aGroupName ) )
             continue;
 
         for( EDA_ITEM* item : group->GetItems() )
