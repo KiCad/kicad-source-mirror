@@ -274,6 +274,10 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
                 m_cbKnockout->Set3StateValue( wxCHK_UNDETERMINED );
         }
 
+        m_hAlignLeft->Check( false );
+        m_hAlignCenter->Check( false );
+        m_hAlignRight->Check( false );
+
         switch( hAlign )
         {
         case GR_TEXT_H_ALIGN_LEFT:          m_hAlignLeft->Check();   break;
@@ -281,6 +285,10 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         case GR_TEXT_H_ALIGN_RIGHT:         m_hAlignRight->Check();  break;
         case GR_TEXT_H_ALIGN_INDETERMINATE:                          break;
         }
+
+        m_vAlignTop->Check( false );
+        m_vAlignCenter->Check( false );
+        m_vAlignBottom->Check( false );
 
         switch( vAlign )
         {
