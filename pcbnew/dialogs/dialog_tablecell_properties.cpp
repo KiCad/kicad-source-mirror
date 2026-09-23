@@ -182,7 +182,13 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
     {
         if( firstCell )
         {
-            m_cellTextCtrl->SetValue( cell->GetText() );
+            wxString text = cell->GetText();
+
+            // show text variable cross-references in a human-readable format
+            if( BOARD* board = cell->GetBoard() )
+                text = board->ConvertKIIDsToCrossReferences( text );
+
+            m_cellTextCtrl->SetValue( text );
 
             m_fontCtrl->SetFontSelection( cell->GetFont() );
             m_textWidth.SetValue( cell->GetTextWidth() );
@@ -210,7 +216,13 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         }
         else
         {
-            if( cell->GetText() != m_cellTextCtrl->GetValue() )
+            wxString text = cell->GetText();
+
+            // show text variable cross-references in a human-readable format
+            if( BOARD* board = cell->GetBoard() )
+                text = board->ConvertKIIDsToCrossReferences( text );
+
+            if( text != m_cellTextCtrl->GetValue() )
                 m_cellTextCtrl->SetValue( INDETERMINATE_STATE );
 
             if( cell->GetFont() != m_fontCtrl->GetFontSelection( cell->IsBold(), cell->IsItalic() ) )
@@ -264,18 +276,18 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 
         switch( hAlign )
         {
-        case GR_TEXT_H_ALIGN_LEFT: m_hAlignLeft->Check(); break;
-        case GR_TEXT_H_ALIGN_CENTER: m_hAlignCenter->Check(); break;
-        case GR_TEXT_H_ALIGN_RIGHT: m_hAlignRight->Check(); break;
-        case GR_TEXT_H_ALIGN_INDETERMINATE: break;
+        case GR_TEXT_H_ALIGN_LEFT:          m_hAlignLeft->Check();   break;
+        case GR_TEXT_H_ALIGN_CENTER:        m_hAlignCenter->Check(); break;
+        case GR_TEXT_H_ALIGN_RIGHT:         m_hAlignRight->Check();  break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE:                          break;
         }
 
         switch( vAlign )
         {
-        case GR_TEXT_V_ALIGN_TOP: m_vAlignTop->Check(); break;
-        case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check(); break;
-        case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check(); break;
-        case GR_TEXT_V_ALIGN_INDETERMINATE: break;
+        case GR_TEXT_V_ALIGN_TOP:           m_vAlignTop->Check();    break;
+        case GR_TEXT_V_ALIGN_CENTER:        m_vAlignCenter->Check(); break;
+        case GR_TEXT_V_ALIGN_BOTTOM:        m_vAlignBottom->Check(); break;
+        case GR_TEXT_V_ALIGN_INDETERMINATE:                          break;
         }
     }
 
@@ -385,6 +397,10 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
         if( !m_cellTextIsGenerated && m_cellTextCtrl->GetValue() != INDETERMINATE_STATE )
         {
             wxString txt = m_cellTextCtrl->GetValue();
+
+            // convert any text variable cross-references to their UUIDs
+            if( BOARD* board = cell->GetBoard() )
+                txt = board->ConvertCrossReferencesToKIIDs( txt );
 
 #ifdef __WXMAC__
             // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting.
