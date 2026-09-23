@@ -230,8 +230,8 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
             m_libraryPathText->ChangeValue( libraryFilename );
             m_curModelType = SIM_MODEL::ReadTypeFromFields( m_fields, true, 0, reporter );
 
-            m_libraryModelsMgr.CreateModel( nullptr, SIM_MODEL::PinNumbers( m_sortedPartPins ),
-                                             m_fields, true, 0, reporter );
+            m_libraryModelsMgr.CreateModel( nullptr, SIM_MODEL::PinNumbers( m_sortedPartPins ), m_fields, true, 0,
+                                            reporter );
 
             m_modelListBox->Clear();
             m_modelListBox->Append( _( "<unknown>" ) );
@@ -244,8 +244,7 @@ bool DIALOG_SIM_MODEL<T>::TransferDataToWindow()
 
             if( modelIdx == wxNOT_FOUND )
             {
-                m_infoBar->ShowMessage( wxString::Format( _( "No model named '%s' in library." ),
-                                                          modelName ) );
+                m_infoBar->ShowMessage( wxString::Format( _( "No model named '%s' in library." ), modelName ) );
 
                 // Default to first item in library if any exist
                 if( m_modelListBox->GetCount() > 0 )
@@ -977,8 +976,7 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
     for( const auto& [baseModelName, baseModel] : library()->GetModels() )
     {
         if( baseModelName == modelName )
-            m_libraryModelsMgr.CreateModel( &baseModel, partPinNumbers,
-                                             m_fields, true, 0, aReporter );
+            m_libraryModelsMgr.CreateModel( &baseModel, partPinNumbers, m_fields, true, 0, aReporter );
         else
             m_libraryModelsMgr.CreateModel( &baseModel, partPinNumbers, aReporter );
     }
@@ -1022,7 +1020,11 @@ bool DIALOG_SIM_MODEL<T>::loadLibrary( const wxString& aLibraryPath, REPORTER& a
     m_modelListBox->SetStringSelection( modelName );
 
     if( m_modelListBox->GetSelection() < 0 && m_modelListBox->GetCount() > 0 )
-        m_modelListBox->SetSelection( 0 );
+    {
+        m_modelListBox->SetSelection( 0 );  // WARNING: SetSelection() does NOT fire events
+        wxCommandEvent dummy;
+        onModelNameChoice( dummy );
+    }
 
     m_curModelType = curModel().GetType();
 
@@ -1468,7 +1470,9 @@ void DIALOG_SIM_MODEL<T>::onFilterCharHook( wxKeyEvent& aKeyStroke )
         return;
     }
 
-    m_modelListBox->SetSelection( sel );
+    m_modelListBox->SetSelection( sel );  // WARNING: SetSelection() does NOT fire events
+    wxCommandEvent dummy;
+    onModelNameChoice( dummy );
 }
 
 
@@ -1498,7 +1502,11 @@ void DIALOG_SIM_MODEL<T>::onModelFilter( wxCommandEvent& aEvent )
     if( m_modelListBox->GetCount() > 0 )
     {
         if( !m_modelListBox->SetStringSelection( current ) )
-            m_modelListBox->SetSelection( 0 );
+        {
+            m_modelListBox->SetSelection( 0 );  // WARNING: SetSelection() does NOT fire events
+            wxCommandEvent dummy;
+            onModelNameChoice( dummy );
+        }
     }
 }
 
