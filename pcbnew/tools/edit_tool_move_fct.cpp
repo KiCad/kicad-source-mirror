@@ -290,7 +290,8 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
         int  toNet = newNetForIndex( i );
 
         // For each connected item, if it matches fromNet, schedule it for toNet
-        for( BOARD_CONNECTED_ITEM* ci : connectivity->GetConnectedItems( pad, 0 ) )
+        // Exclude zones, user probably doesn't want to change zone nets
+        for( BOARD_CONNECTED_ITEM* ci : connectivity->GetConnectedItems( pad, EXCLUDE_ZONES ) )
         {
             switch( ci->Type() )
             {
@@ -298,8 +299,8 @@ int EDIT_TOOL::SwapPadNets( const TOOL_EVENT& aEvent )
             case PCB_ARC_T:
             case PCB_VIA_T:
             case PCB_PAD_T:
+            case PCB_SHAPE_T:
                 break;
-            // Exclude zones, user probably doesn't want to change zone nets
             default:
                 continue;
             }
@@ -569,6 +570,7 @@ int EDIT_TOOL::SwapGateNets( const TOOL_EVENT& aEvent )
                 case PCB_ARC_T:
                 case PCB_VIA_T:
                 case PCB_PAD_T:
+                case PCB_SHAPE_T:
                     break;
 
                 default:
