@@ -839,6 +839,7 @@ void KISTATUSBAR::openWarningList()
     m_warningList = new STATUSBAR_WARNING_LIST( this, GetParent() );
     PositionWarningPanel();
     m_warningList->Show();
+    KIPLATFORM::UI::ReparentModal( m_warningList );
     KIPLATFORM::UI::ForceFocus( m_warningList );
 }
 

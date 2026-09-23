@@ -22,6 +22,7 @@
 #include <api/api_utils.h>
 #include <footprint.h>
 #include <pgm_base.h>
+#include <reporter.h>
 #include <wx/log.h>
 
 #include <google/protobuf/util/json_util.h>
@@ -36,7 +37,7 @@ void FOOTPRINT_WIZARD::ResetParameters()
 }
 
 
-void FOOTPRINT_WIZARD_MANAGER::ReloadWizards()
+void FOOTPRINT_WIZARD_MANAGER::ReloadWizards( std::shared_ptr<REPORTER> aReporter )
 {
     m_wizards.clear();
 
@@ -48,7 +49,7 @@ void FOOTPRINT_WIZARD_MANAGER::ReloadWizards()
         std::unique_ptr<FOOTPRINT_WIZARD> wizard = std::make_unique<FOOTPRINT_WIZARD>();
         wizard->SetIdentifier( action->identifier );
 
-        if( RefreshInfo( wizard.get() ) )
+        if( RefreshInfo( wizard.get(), aReporter ) )
             m_wizards[wizard->Identifier()] = std::move( wizard );
     }
 }
@@ -84,7 +85,7 @@ std::optional<FOOTPRINT_WIZARD*> FOOTPRINT_WIZARD_MANAGER::GetWizard( const wxSt
 }
 
 
-bool FOOTPRINT_WIZARD_MANAGER::RefreshInfo( FOOTPRINT_WIZARD* aWizard )
+bool FOOTPRINT_WIZARD_MANAGER::RefreshInfo( FOOTPRINT_WIZARD* aWizard, std::shared_ptr<REPORTER> aReporter )
 {
     wxCHECK( aWizard, false );
 
@@ -99,7 +100,7 @@ bool FOOTPRINT_WIZARD_MANAGER::RefreshInfo( FOOTPRINT_WIZARD* aWizard )
     };
 
     wxString out, err;
-    int ret = manager.InvokeActionSync( aWizard->Identifier(), args, &out, &err );
+    int ret = manager.InvokeActionSync( aWizard->Identifier(), args, &out, &err, aReporter );
 
     if( ret != 0 )
         return false;
@@ -110,7 +111,17 @@ bool FOOTPRINT_WIZARD_MANAGER::RefreshInfo( FOOTPRINT_WIZARD* aWizard )
     options.ignore_unknown_fields = true;
 
     if( !google::protobuf::util::JsonStringToMessage( out.ToStdString(), &info, options ).ok() )
+    {
+        if( aReporter )
+        {
+            KI_ERROR error( RPT_SEVERITY_ERROR );
+            error.SetTitle( wxString::Format( _( "Plugin action '%s'" ), aWizard->Identifier() ) );
+            error.SetDescription( _( "could not parse wizard info" ) );
+            aReporter->Report( error );
+        }
+
         return false;
+    }
 
     aWizard->Info().FromProto( info );
     return true;

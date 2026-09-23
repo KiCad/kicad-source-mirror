@@ -98,8 +98,10 @@ static void reportPluginActionMessage( REPORTER* aReporter, const wxString& aAct
     if( !aReporter || aMessage.IsEmpty() )
         return;
 
-    aReporter->Report( wxString::Format( _( "Plugin action '%s': %s" ), aActionName, aMessage ),
-                       RPT_SEVERITY_ERROR );
+    KI_ERROR error( RPT_SEVERITY_ERROR );
+    error.SetTitle( wxString::Format( _( "Plugin action '%s'" ), aActionName ) );
+    error.SetDescription( aMessage );
+    aReporter->Report( error );
 }
 
 
@@ -142,12 +144,20 @@ static void reportPluginActionResult( REPORTER* aReporter, const wxString& aActi
 
     if( aRetVal != 0 )
     {
-        reportPluginActionMessage( aReporter, aActionName,
-                                   wxString::Format( _( "exited with code %d" ), aRetVal ) );
-    }
+        KI_ERROR error( RPT_SEVERITY_ERROR );
+        error.SetTitle( wxString::Format( _( "Plugin action '%s'" ), aActionName ) );
+        error.SetDescription( wxString::Format( _( "exited with code %d" ), aRetVal ) );
 
-    if( !trimmedError.IsEmpty() )
+        if( !trimmedError.IsEmpty() )
+            error.SetDebugText( trimmedError );
+
+        if( aReporter )
+            aReporter->Report( error );
+    }
+    else if( !trimmedError.IsEmpty() )
+    {
         reportPluginActionMessage( aReporter, aActionName, trimmedError );
+    }
 }
 
 

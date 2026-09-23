@@ -22,10 +22,12 @@
 
 #include <api/api_plugin_manager.h>
 #include <pgm_base.h>
+#include <reporter.h>
 #include <string_utils.h>
 #include <kiface_base.h>
 #include <dialog_footprint_wizard_list.h>
 #include <footprint_wizard_frame.h>
+#include <widgets/kistatusbar.h>
 
 
 enum FPGeneratorRowNames
@@ -64,7 +66,12 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::initLists()
 
     if( wizards.empty() )
     {
-        manager->ReloadWizards();
+        std::shared_ptr<REPORTER> reporter;
+
+        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( ParentFrame()->GetStatusBar() ) )
+            reporter = std::make_shared<STATUSBAR_WARNING_REPORTER>( statusBar, wxS( "plugin" ) );
+
+        manager->ReloadWizards( reporter );
         wizards = manager->Wizards();
     }
 

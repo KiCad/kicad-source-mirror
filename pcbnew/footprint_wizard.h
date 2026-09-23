@@ -28,6 +28,7 @@
 #include <api/common/types/wizards.pb.h>
 
 class FOOTPRINT;
+class REPORTER;
 
 
 
@@ -183,10 +184,13 @@ public:
     /**
      * Goes through the list of IPC API plugins that provide wizard actions and
      * attempts to refresh the info of each one, placing the ones that work in to
-     * the internal list returned by Wizards().  Note that doing so clears the existing
-     * list and invalidates any existing pointers to wizards.
+     * the internal list returned by Wizards().  Wizards that fail to load are reported
+     * to aReporter, if one is provided.  Note that doing so clears the existing list
+     * and invalidates any existing pointers to wizards.
+     *
+     * @param aReporter is an optional reporter to receive wizard failure messages
      */
-    void ReloadWizards();
+    void ReloadWizards( std::shared_ptr<REPORTER> aReporter = nullptr );
 
     std::optional<FOOTPRINT_WIZARD*> GetWizard( const wxString& aIdentifier );
 
@@ -195,9 +199,12 @@ public:
     /**
      * Runs a wizard plugin with the --get-info argument, which should result in the plugin
      * dumping a WizardInfo protobuf message in JSON format to stdout.
+     *
+     * @param aWizard is the wizard to refresh
+     * @param aReporter is an optional reporter to receive failure messages
      * @return true if the call succeeded
      */
-    static bool RefreshInfo( FOOTPRINT_WIZARD* aWizard );
+    static bool RefreshInfo( FOOTPRINT_WIZARD* aWizard, std::shared_ptr<REPORTER> aReporter = nullptr );
 
     /**
      * Generates a footprint using a given wizard
