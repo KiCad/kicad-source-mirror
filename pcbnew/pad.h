@@ -379,6 +379,10 @@ public:
 
     void Flip( const VECTOR2I& VECTOR2I, FLIP_DIRECTION aFlipDirection ) override;
 
+    void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
+
+    void Mirror( const SEG& aAxis ) override;
+
     /**
      * Flip (mirror) the primitives left to right or top to bottom, around the anchor position
      * in custom pads.
@@ -1110,6 +1114,9 @@ private:
 
     // Scale a primitive's runtime geometry to the current footprint scale, in the pad frame.
     void rebakePrimitiveToFootprint( PCB_SHAPE* aPrimitive ) const;
+
+    // Move the chamfered-rectangle corner flags across for a mirror in the given direction.
+    void mirrorChamferPositions( FLIP_DIRECTION aFlipDirection );
 
     struct PAD_DRAW_CACHE_DATA
     {

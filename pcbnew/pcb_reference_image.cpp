@@ -256,6 +256,13 @@ void PCB_REFERENCE_IMAGE::Mirror( const VECTOR2I& aMirrorRef, FLIP_DIRECTION aFl
 }
 
 
+void PCB_REFERENCE_IMAGE::Mirror( const SEG& aAxis )
+{
+    // Mirror the content about aAxis without changing layers.
+    m_referenceImage.Mirror( aAxis );
+}
+
+
 #if defined( DEBUG )
 void PCB_REFERENCE_IMAGE::Show( int nestLevel, std::ostream& os ) const
 {

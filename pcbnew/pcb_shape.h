@@ -196,6 +196,8 @@ public:
 
     virtual void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
+    virtual void Mirror( const SEG& aAxis ) override;
+
     void SetStart( const VECTOR2I& aStart ) override;
     void SetEnd( const VECTOR2I& aEnd ) override;
     void SetCenter( const VECTOR2I& aCenter ) override;

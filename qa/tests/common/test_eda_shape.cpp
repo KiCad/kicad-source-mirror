@@ -38,6 +38,10 @@ class EDA_SHAPE_MOCK : public EDA_SHAPE
 {
 public:
     EDA_SHAPE_MOCK( SHAPE_T aShapeType ) : EDA_SHAPE( aShapeType, 0, FILL_T::NO_FILL ){};
+
+    void Mirror( const SEG& aAxis ) { mirror( aAxis ); }
+
+    BOX2I BBox() const { return getBoundingBox(); }
 };
 
 

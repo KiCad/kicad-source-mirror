@@ -1243,6 +1243,8 @@ void PCB_EDIT_FRAME::setupUIConditions()
                         ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( hasElements ) );
     mgr->SetConditions( PCB_ACTIONS::mirrorV,
                         ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( hasElements ) );
+    mgr->SetConditions( PCB_ACTIONS::mirrorInteractive,
+                        ENABLE( SELECTION_CONDITIONS::NotEmpty ).HotkeyEnable( hasElements ) );
 
     static const std::vector<KICAD_T> groupTypes = { PCB_GROUP_T, PCB_GENERATOR_T };
 

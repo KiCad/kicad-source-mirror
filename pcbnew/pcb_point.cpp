@@ -178,6 +178,18 @@ void PCB_POINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 }
 
 
+void PCB_POINT::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
+{
+    Mirror( MIRROR_AXIS( aCentre, aFlipDirection ) );
+}
+
+
+void PCB_POINT::Mirror( const SEG& aAxis )
+{
+    SetPosition( aAxis.ReflectPoint( GetPosition() ) );
+}
+
+
 void PCB_POINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     if( const FOOTPRINT* fp = GetParentFootprint() )

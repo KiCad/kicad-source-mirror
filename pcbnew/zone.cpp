@@ -1432,18 +1432,39 @@ void ZONE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
 void ZONE::Mirror( const VECTOR2I& aMirrorRef, FLIP_DIRECTION aFlipDirection )
 {
-    VECTOR2I outlineRef = aMirrorRef;
+    Mirror( MIRROR_AXIS( aMirrorRef, aFlipDirection ) );
+}
+
+
+void ZONE::Mirror( const SEG& aAxis )
+{
+    const EDA_ANGLE axisAngle = -EDA_ANGLE( aAxis.B - aAxis.A );
+
+    SetHatchOrientation( GetHatchOrientation().Reflect( axisAngle ).Normalized() );
+    SetThievingOrientation( GetThievingOrientation().Reflect( axisAngle ).Normalized() );
 
     if( const FOOTPRINT* fp = GetParentFootprint() )
-        outlineRef = fp->GetTransform().InverseApply( aMirrorRef );
+    {
+        // Footprints are only ever flipped, never mirrored, so this is reached only from Flip(),
+        // which always passes a cardinal axis.
+        // (Handy, because otherwise we have to handle the footprint transform!)
+        const FLIP_DIRECTION flipDirection =
+                ( aAxis.A.x == aAxis.B.x ) ? FLIP_DIRECTION::LEFT_RIGHT : FLIP_DIRECTION::TOP_BOTTOM;
 
-    m_Poly->Mirror( outlineRef, aFlipDirection );
+        const VECTOR2I flipAxisStart = fp->GetTransform().InverseApply( aAxis.A );
+        m_Poly->Mirror( flipAxisStart, flipDirection );
+    }
+    else
+    {
+        m_Poly->Mirror( aAxis );
+    }
+
     invalidateBoundingBoxCache();
 
     HatchBorder();
 
     for( std::pair<const PCB_LAYER_ID, std::shared_ptr<SHAPE_POLY_SET>>& pair : m_FilledPolysList )
-        pair.second->Mirror( aMirrorRef, aFlipDirection );
+        pair.second->Mirror( aAxis );
 }
 
 

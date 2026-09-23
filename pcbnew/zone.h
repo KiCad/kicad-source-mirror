@@ -603,6 +603,8 @@ public:
      */
     void Mirror( const VECTOR2I& aMirrorRef, FLIP_DIRECTION aFlipDirection ) override;
 
+    void Mirror( const SEG& aAxis ) override;
+
     /**
      * @return the class name.
      */

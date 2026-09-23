@@ -26,6 +26,7 @@
 #include <bezier_curves.h>
 #include <core/mirror.h>
 #include <geometry/ellipse.h>
+#include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/approximation.h>
 #include <geometry/shape_ellipse.h>
@@ -683,6 +684,7 @@ protected:
     void move( const VECTOR2I& aMoveVector );
     void rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle );
     void flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
+    void mirror( const SEG& aAxis );
     void scale( double aScale );
 
     virtual EDA_ANGLE getDrawRotation() const { return ANGLE_0; }
@@ -786,4 +788,3 @@ DECLARE_ENUM_TO_WXANY( SHAPE_T );
 DECLARE_ENUM_TO_WXANY( LINE_STYLE );
 DECLARE_ENUM_TO_WXANY( LINE_ENDING_STYLE );
 DECLARE_ENUM_TO_WXANY( UI_FILL_MODE );
-

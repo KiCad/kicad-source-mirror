@@ -1072,6 +1072,12 @@ TOOL_ACTION PCB_ACTIONS::mirrorV( TOOL_ACTION_ARGS()
         .Tooltip( _( "Mirrors selected item(s) across the X axis" ) )
         .Icon( BITMAPS::mirror_v ) );
 
+TOOL_ACTION PCB_ACTIONS::mirrorInteractive( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.mirrorInteractive" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Mirror Interactive" ) )
+        .Tooltip( _( "Mirrors selected item(s) interactively" ) ) );
+
 TOOL_ACTION PCB_ACTIONS::swap( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.swap" )
         .Scope( AS_GLOBAL )

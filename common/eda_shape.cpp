@@ -1209,6 +1209,79 @@ void EDA_SHAPE::flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 }
 
 
+void EDA_SHAPE::mirror( const SEG& aAxis )
+{
+    switch( m_shape )
+    {
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::CIRCLE:
+        m_start = aAxis.ReflectPoint( m_start );
+        m_end = aAxis.ReflectPoint( m_end );
+        break;
+
+    case SHAPE_T::RECTANGLE:
+        if( aAxis.A.x == aAxis.B.x || aAxis.A.y == aAxis.B.y )
+        {
+            // An axis-aligned rectangle stays a rectangle.
+            m_start = aAxis.ReflectPoint( m_start );
+            m_end = aAxis.ReflectPoint( m_end );
+        }
+        else
+        {
+            // Convert non-cardinally-mirrored rect to a polygon.
+            ROUNDRECT rr( SHAPE_RECT( GetStart(), GetRectangleWidth(), GetRectangleHeight() ), m_cornerRadius );
+            SetShape( SHAPE_T::POLY );
+            rr.TransformToPolygon( GetPolyShape(), getMaxError() );
+            GetPolyShape().Mirror( aAxis );
+        }
+
+        break;
+
+    case SHAPE_T::ARC:
+        SetArcGeometry( aAxis.ReflectPoint( m_start ), aAxis.ReflectPoint( GetArcMid() ),
+                        aAxis.ReflectPoint( m_end ) );
+        break;
+
+    case SHAPE_T::POLY:
+        GetPolyShape().Mirror( aAxis );
+        break;
+
+    case SHAPE_T::BEZIER:
+        m_start = aAxis.ReflectPoint( m_start );
+        m_end = aAxis.ReflectPoint( m_end );
+        m_bezierC1 = aAxis.ReflectPoint( m_bezierC1 );
+        m_bezierC2 = aAxis.ReflectPoint( m_bezierC2 );
+
+        RebuildBezierToSegmentsPointsList( getMaxError() );
+        break;
+
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
+    {
+        const EDA_ANGLE axisAngle = EDA_ANGLE( aAxis.B - aAxis.A );
+        const EDA_ANGLE oldStart = m_ellipse.StartAngle;
+
+        m_ellipse.Center = aAxis.ReflectPoint( m_ellipse.Center );
+        m_ellipse.Rotation = m_ellipse.Rotation.Reflect( axisAngle );
+        m_ellipse.Rotation.Normalize();
+
+        // The mirrored parameterisation runs the other way round.
+        m_ellipse.StartAngle = -m_ellipse.EndAngle;
+        m_ellipse.EndAngle = -oldStart;
+
+        recalcEllipseArcEndpoints();
+        break;
+    }
+
+    default:
+        UNIMPLEMENTED_FOR( SHAPE_T_asString() );
+        break;
+    }
+
+    m_hatchingDirty = true;
+}
+
+
 void EDA_SHAPE::RebuildBezierToSegmentsPointsList( int aMaxError )
 {
     // Has meaning only for SHAPE_T::BEZIER

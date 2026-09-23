@@ -95,6 +95,11 @@ public:
      */
     int Mirror( const TOOL_EVENT& aEvent );
 
+    /**
+     * Mirror the current selection interactively (around some user-defined axis)
+     */
+    int MirrorInteractive( const TOOL_EVENT& aEvent );
+
     static const std::vector<KICAD_T> MirrorableItems;
 
     /**

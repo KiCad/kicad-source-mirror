@@ -1147,6 +1147,13 @@ public:
     void Mirror( const VECTOR2I& aRef, FLIP_DIRECTION aFlipDirection );
 
     /**
+     * Mirror the line points about an arbitrary axis.
+     *
+     * @param aAxis is the axis to mirror about.
+     */
+    void Mirror( const SEG& aAxis );
+
+    /**
      * Rotate all vertices by a given angle.
      *
      * @param aCenter is the rotation center.

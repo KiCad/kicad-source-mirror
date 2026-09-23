@@ -127,6 +127,7 @@ public:
     /// Mirroring of selected items
     static TOOL_ACTION mirrorH;
     static TOOL_ACTION mirrorV;
+    static TOOL_ACTION mirrorInteractive;
 
     /// Swapping of selected items
     static TOOL_ACTION swap;

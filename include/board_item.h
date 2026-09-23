@@ -25,6 +25,7 @@
 #include <core/mirror.h>
 #include <eda_item.h>
 #include <geometry/approximation.h>
+#include <geometry/seg.h>
 #include <layer_ids.h>
 #include <properties/property.h>
 #include <lseq.h>
@@ -75,6 +76,18 @@ enum ZONE_LAYER_OVERRIDE
     ZLO_FORCE_FLASHED,
     ZLO_FORCE_NO_ZONE_CONNECTION
 };
+
+/**
+ * @return the axis an axis-aligned mirror about aCentre in aFlipDirection uses, as the infinite
+ *         line through the two points of the returned segment.
+ */
+inline SEG MIRROR_AXIS( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
+{
+    if( aFlipDirection == FLIP_DIRECTION::LEFT_RIGHT )
+        return SEG( aCentre, aCentre + VECTOR2I( 0, 1 ) );
+
+    return SEG( aCentre, aCentre + VECTOR2I( 1, 0 ) );
+}
 
 /**
  * A base class for any item which can be embedded within the #BOARD container class, and
@@ -491,6 +504,14 @@ public:
      * @param aFlipDirection mirror across X axis instead of Y (the default).
      */
     virtual void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
+
+    /**
+     * Mirror this object about an arbitrary axis, without changing its layer or side.
+     *
+     * @param aAxis defines the axis. The item is reflected over the (infinite) line
+     *              through the two axis points.
+     */
+    virtual void Mirror( const SEG& aAxis );
 
     /**
      * Perform any normalization required after a user rotate and/or flip.

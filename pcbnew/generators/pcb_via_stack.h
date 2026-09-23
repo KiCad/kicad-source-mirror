@@ -149,6 +149,8 @@ public:
     void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
     void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
+    void Mirror( const SEG& aAxis ) override;
+
     const STRING_ANY_MAP GetProperties() const override;
     void                 SetProperties( const STRING_ANY_MAP& aProps ) override;
 

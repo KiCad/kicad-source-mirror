@@ -594,22 +594,32 @@ void PCB_TEXT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
 void PCB_TEXT::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
+    Mirror( MIRROR_AXIS( aCentre, aFlipDirection ) );
+}
+
+
+void PCB_TEXT::Mirror( const SEG& aAxis )
+{
     // the position and justification are mirrored, but not the text itself
 
-    if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
-    {
-        if( GetTextAngle() == ANGLE_VERTICAL )
-            SetHorizJustify( (GR_TEXT_H_ALIGN_T) -GetHorizJustify() );
+    const VECTOR2I newPos = aAxis.ReflectPoint( GetTextPos() );
 
-        SetTextY( MIRRORVAL( GetTextPos().y, aCentre.y ) );
-    }
+    if( const FOOTPRINT* fp = GetParentFootprint() )
+        SetLibTextPos( fp->GetTransform().InverseApply( newPos ) );
     else
-    {
-        if( GetTextAngle() == ANGLE_HORIZONTAL )
-            SetHorizJustify( (GR_TEXT_H_ALIGN_T) -GetHorizJustify() );
+        SetTextPos( newPos );
 
-        SetTextX( MIRRORVAL( GetTextPos().x, aCentre.x ) );
+    const EDA_ANGLE axisAngle = -EDA_ANGLE( aAxis.B - aAxis.A );
+    EDA_ANGLE       newAngle = GetTextAngle().Reflect( axisAngle ).Normalized();
+
+    // If we're mirroring "left-right-ish", swap the justification and fix the text orientation.
+    if( newAngle > ANGLE_90 && newAngle <= ANGLE_270 )
+    {
+        newAngle -= ANGLE_180;
+        SetHorizJustify( (GR_TEXT_H_ALIGN_T) -GetHorizJustify() );
     }
+
+    SetTextAngle( newAngle );
 }
 
 

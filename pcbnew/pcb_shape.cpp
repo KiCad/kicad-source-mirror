@@ -1580,7 +1580,14 @@ void PCB_SHAPE::syncLibCoords()
 
 void PCB_SHAPE::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    flip( aCentre, aFlipDirection );
+    Mirror( MIRROR_AXIS( aCentre, aFlipDirection ) );
+}
+
+
+void PCB_SHAPE::Mirror( const SEG& aAxis )
+{
+    EDA_SHAPE::mirror( aAxis );
+    syncLibCoords();
 }
 
 

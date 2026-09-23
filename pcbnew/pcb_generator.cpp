@@ -122,12 +122,22 @@ void PCB_GENERATOR::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirecti
     PCB_GROUP::Mirror( aCentre, aFlipDirection );
 }
 
+void PCB_GENERATOR::Mirror( const SEG& aAxis )
+{
+    baseMirror( aAxis );
+
+    PCB_GROUP::Mirror( aAxis );
+}
+
 void PCB_GENERATOR::baseMirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    if( aFlipDirection == FLIP_DIRECTION::TOP_BOTTOM )
-        MIRROR( m_origin.y, aCentre.y );
-    else
-        MIRROR( m_origin.x, aCentre.x );
+    const SEG mirrorAxis( MIRROR_AXIS( aCentre, aFlipDirection ) );
+    baseMirror( mirrorAxis );
+}
+
+void PCB_GENERATOR::baseMirror( const SEG& aAxis )
+{
+    m_origin = aAxis.ReflectPoint( m_origin );
 }
 
 LSET PCB_GENERATOR::GetLayerSet() const

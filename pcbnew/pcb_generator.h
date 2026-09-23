@@ -124,6 +124,8 @@ public:
 
     void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aMirrorDirection ) override;
 
+    void Mirror( const SEG& aAxis ) override;
+
     LSET GetLayerSet() const override;
 
     PCB_LAYER_ID GetLayer() const override { return m_layer; }
@@ -201,6 +203,8 @@ protected:
     friend class GENERATORS_MGR;
 
     void baseMirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
+
+    void baseMirror( const SEG& aAxis );
 };
 
 class PCB_GENERATOR_POLY : public PCB_GENERATOR
@@ -241,6 +245,13 @@ public:
     {
         m_outline.Mirror( aCentre, aMirrorDirection );
         PCB_GENERATOR::Mirror( aCentre, aMirrorDirection );
+        MarkDirty();
+    }
+
+    void Mirror( const SEG& aAxis ) override
+    {
+        m_outline.Mirror( aAxis );
+        PCB_GENERATOR::Mirror( aAxis );
         MarkDirty();
     }
 

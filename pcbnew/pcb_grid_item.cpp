@@ -221,6 +221,19 @@ void PCB_GRID_ITEM::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection
 }
 
 
+void PCB_GRID_ITEM::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
+{
+    Mirror( MIRROR_AXIS( aCentre, aFlipDirection ) );
+}
+
+
+void PCB_GRID_ITEM::Mirror( const SEG& aAxis )
+{
+    m_pos = aAxis.ReflectPoint( m_pos );
+    m_orientation = m_orientation.Reflect( -EDA_ANGLE( aAxis.B - aAxis.A ) );
+}
+
+
 bool PCB_GRID_ITEM::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // Use the rotated shape (rect/wedge) rather than the axis-aligned bounding box.

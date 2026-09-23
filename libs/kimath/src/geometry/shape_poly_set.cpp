@@ -3189,6 +3189,19 @@ void SHAPE_POLY_SET::Mirror( const VECTOR2I& aRef, FLIP_DIRECTION aFlipDirection
 }
 
 
+void SHAPE_POLY_SET::Mirror( const SEG& aAxis )
+{
+    for( POLYGON& poly : m_polys )
+    {
+        for( SHAPE_LINE_CHAIN& path : poly )
+            path.Mirror( aAxis );
+    }
+
+    if( m_triangulationValid )
+        CacheTriangulation();
+}
+
+
 void SHAPE_POLY_SET::Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter )
 {
     for( POLYGON& poly : m_polys )

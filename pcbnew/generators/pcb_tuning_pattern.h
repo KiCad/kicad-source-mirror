@@ -210,11 +210,16 @@ public:
 
     void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override
     {
+        Mirror( MIRROR_AXIS( aCentre, aFlipDirection ) );
+    }
+
+    void Mirror( const SEG& aAxis ) override
+    {
         if( !this->HasFlag( IN_EDIT ) )
         {
-            PCB_GENERATOR::Mirror( aCentre, aFlipDirection );
+            PCB_GENERATOR::Mirror( aAxis );
 
-            baseMirror( aCentre, aFlipDirection );
+            baseMirror( aAxis );
         }
     }
 
@@ -623,17 +628,22 @@ protected:
 
     void baseMirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     {
-        PCB_GENERATOR::baseMirror( aCentre, aFlipDirection );
+        baseMirror( MIRROR_AXIS( aCentre, aFlipDirection ) );
+    }
+
+    void baseMirror( const SEG& aAxis )
+    {
+        PCB_GENERATOR::baseMirror( aAxis );
 
         if( m_baseLine )
         {
-            m_baseLine->Mirror( aCentre, aFlipDirection );
+            m_baseLine->Mirror( aAxis );
             m_origin = m_baseLine->CPoint( 0 );
             m_end = m_baseLine->CLastPoint();
         }
 
         if( m_baseLineCoupled )
-            m_baseLineCoupled->Mirror( aCentre, aFlipDirection );
+            m_baseLineCoupled->Mirror( aAxis );
 
         if( m_settings.m_initialSide == PNS::MEANDER_SIDE_RIGHT )
             m_settings.m_initialSide = PNS::MEANDER_SIDE_LEFT;

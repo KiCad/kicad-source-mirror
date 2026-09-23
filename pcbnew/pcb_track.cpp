@@ -1304,16 +1304,28 @@ void PCB_ARC::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
 
 void PCB_TRACK::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    MIRROR( m_Start, aCentre, aFlipDirection );
-    MIRROR( m_End, aCentre, aFlipDirection );
+    Mirror( MIRROR_AXIS( aCentre, aFlipDirection ) );
+}
+
+
+void PCB_TRACK::Mirror( const SEG& aAxis )
+{
+    m_Start = aAxis.ReflectPoint( m_Start );
+    m_End = aAxis.ReflectPoint( m_End );
 }
 
 
 void PCB_ARC::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    MIRROR( m_Start, aCentre, aFlipDirection );
-    MIRROR( m_End, aCentre, aFlipDirection );
-    MIRROR( m_Mid, aCentre, aFlipDirection );
+    Mirror( MIRROR_AXIS( aCentre, aFlipDirection ) );
+}
+
+
+void PCB_ARC::Mirror( const SEG& aAxis )
+{
+    m_Start = aAxis.ReflectPoint( m_Start );
+    m_End = aAxis.ReflectPoint( m_End );
+    m_Mid = aAxis.ReflectPoint( m_Mid );
 }
 
 

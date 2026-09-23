@@ -185,6 +185,9 @@ public:
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
     void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
+    void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
+    void Mirror( const SEG& aAxis ) override;
+
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 

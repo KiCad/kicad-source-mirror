@@ -185,6 +185,8 @@ public:
     /// @copydoc BOARD_ITEM::Mirror
     void Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
 
+    void Mirror( const SEG& aAxis ) override;
+
     /// @copydoc EDA_ITEM::GetItemDescription
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
