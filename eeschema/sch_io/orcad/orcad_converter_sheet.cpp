@@ -1347,13 +1347,26 @@ SCH_SHEET_PATH ORCAD_CONVERTER::topLevelPath( SCH_SHEET* aSheet, size_t aPageNum
 }
 
 
-SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
+static SHEET_SIDE nearestSheetSide( const ORCAD_BLOCK_PIN& aPin, const ORCAD_DRAWN_INSTANCE& aBlock )
 {
-    m_rootSheet = aRootSheet;
+    std::array<std::pair<int, SHEET_SIDE>, 4> sides = {
+        std::pair{ std::abs( aPin.x - aBlock.x1 ), SHEET_SIDE::LEFT },
+        std::pair{ std::abs( aPin.x - aBlock.x1 - aBlock.w ), SHEET_SIDE::RIGHT },
+        std::pair{ std::abs( aPin.y - aBlock.y1 ), SHEET_SIDE::TOP },
+        std::pair{ std::abs( aPin.y - aBlock.y1 - aBlock.h ), SHEET_SIDE::BOTTOM }
+    };
 
-    prepareGlobalNetNames();
-    prepareSymbols();
+    return std::min_element( sides.begin(), sides.end(),
+                             []( const auto& a, const auto& b )
+                             {
+                                 return a.first < b.first;
+                             } )
+            ->second;
+}
 
+
+void ORCAD_CONVERTER::prepareOccurrenceNets()
+{
     struct SLASH_NAMES
     {
         bool                  leading = false;
@@ -1389,31 +1402,12 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
 
     forEachDesignPage( collectPageSlashNames );
 
-    std::map<std::string, std::string> baseOccurrenceNetAliases;
-
     for( const auto& [key, names] : slashNames )
     {
         if( names.leading && names.embedded.size() == 1 )
-            baseOccurrenceNetAliases[key] = *names.embedded.begin();
+            m_baseOccurrenceNetAliases[key] = *names.embedded.begin();
     }
 
-    std::map<const std::map<uint32_t, std::string>*, std::map<std::string, std::string>> occurrenceAliasesByScope;
-
-    auto occurrenceScope = [&]( const ORCAD_OCC_SCOPE& aOcc )
-    {
-        PAGE_SCOPE scope;
-        scope.occ = &aOcc;
-        scope.occurrenceNetAliases = baseOccurrenceNetAliases;
-        auto aliases = occurrenceAliasesByScope.find( &aOcc.netNames );
-
-        if( aliases != occurrenceAliasesByScope.end() )
-            scope.occurrenceNetAliases.insert( aliases->second.begin(), aliases->second.end() );
-
-        return scope;
-    };
-
-    m_occurrenceNetNameScopeCounts.clear();
-    m_occurrenceNetNameMinDepth.clear();
     std::function<void( const ORCAD_OCC_SCOPE&, size_t )> countOccurrenceNetNameScopes =
             [&]( const ORCAD_OCC_SCOPE& aScope, size_t aDepth )
     {
@@ -1435,30 +1429,15 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
             ++m_occurrenceNetNameScopeCounts[name];
 
         for( const ORCAD_OCC_BLOCK& block : aScope.blocks )
+        {
+            ++m_occurrenceFolderCounts[OrcadLower( block.childFolder )];
             countOccurrenceNetNameScopes( block.scope, aDepth + 1 );
+        }
     };
     countOccurrenceNetNameScopes( m_design.occurrenceRoot, 0 );
 
-    SCH_SCREEN* rootScreen = aRootSheet->GetScreen();
-
-    SCH_SHEET_PATH rootPath;
-    rootPath.push_back( aRootSheet );
-    rootPath.SetPageNumber( wxS( "1" ) );
-
-    std::map<std::string, size_t>                 occurrenceFolderCounts;
-    std::function<void( const ORCAD_OCC_SCOPE& )> countOccurrenceFolders = [&]( const ORCAD_OCC_SCOPE& aScope )
-    {
-        for( const ORCAD_OCC_BLOCK& block : aScope.blocks )
-        {
-            std::string key = OrcadLower( block.childFolder );
-            ++occurrenceFolderCounts[key];
-            countOccurrenceFolders( block.scope );
-        }
-    };
-    countOccurrenceFolders( m_design.occurrenceRoot );
-
     std::set<std::string> rootChildFolders;
-    bool                  simpleRepeatedLeafDesign = !m_design.occurrenceRoot.blocks.empty();
+    m_simpleRepeatedLeafDesign = !m_design.occurrenceRoot.blocks.empty();
 
     for( const ORCAD_OCC_BLOCK& block : m_design.occurrenceRoot.blocks )
     {
@@ -1473,345 +1452,479 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
                                  return aPage.blocks.empty();
                              } ) )
         {
-            simpleRepeatedLeafDesign = false;
+            m_simpleRepeatedLeafDesign = false;
         }
     }
 
-    simpleRepeatedLeafDesign &= rootChildFolders.size() == 1 && m_design.occurrenceRoot.blocks.size() > 1;
+    m_simpleRepeatedLeafDesign &= rootChildFolders.size() == 1 && m_design.occurrenceRoot.blocks.size() > 1;
 
-    m_connectedBlockInterfaceNames.clear();
-    auto collectConnectedBlockInterfaceNames = [&]( const ORCAD_RAW_PAGE& aPage )
-    {
-        for( const ORCAD_DRAWN_INSTANCE& block : aPage.blocks )
-        {
-            for( const ORCAD_BLOCK_PIN& pin : block.pins )
+    forEachDesignPage(
+            [&]( const ORCAD_RAW_PAGE& aPage )
             {
-                if( pin.noConnect || pin.name.empty() )
-                    continue;
-
-                std::string pinName = canonicalGlobalNetKey( pin.name );
-
-                for( const ORCAD_WIRE& wire : aPage.wires )
+                for( const ORCAD_DRAWN_INSTANCE& block : aPage.blocks )
                 {
-                    if( wire.isBus || !rawPointOnSegment( pin.x, pin.y, wire ) )
-                        continue;
+                    for( const ORCAD_BLOCK_PIN& pin : block.pins )
+                    {
+                        if( pin.noConnect || pin.name.empty() )
+                            continue;
 
-                    auto netName = aPage.netmap.find( wire.id );
+                        std::string pinName = canonicalGlobalNetKey( pin.name );
 
-                    if( netName == aPage.netmap.end() )
-                        continue;
+                        for( const ORCAD_WIRE& wire : aPage.wires )
+                        {
+                            if( wire.isBus || !rawPointOnSegment( pin.x, pin.y, wire ) )
+                                continue;
 
-                    std::string wireName = canonicalGlobalNetKey( netName->second );
+                            auto netName = aPage.netmap.find( wire.id );
 
-                    if( wireName == pinName )
-                        m_connectedBlockInterfaceNames.insert( pinName );
+                            if( netName != aPage.netmap.end() && canonicalGlobalNetKey( netName->second ) == pinName )
+                                m_connectedBlockInterfaceNames.insert( pinName );
+                        }
+                    }
                 }
-            }
-        }
-    };
+            } );
+}
 
-    forEachDesignPage( collectConnectedBlockInterfaceNames );
 
-    auto unconnectedInterfaceNetNames = [&]( const ORCAD_DRAWN_INSTANCE& aDrawn, const std::string& aFlatNetSuffix )
+ORCAD_CONVERTER::PAGE_SCOPE ORCAD_CONVERTER::occurrenceScope( const ORCAD_OCC_SCOPE& aOcc ) const
+{
+    PAGE_SCOPE scope;
+    scope.occ = &aOcc;
+    scope.occurrenceNetAliases = m_baseOccurrenceNetAliases;
+    auto aliases = m_occurrenceAliasesByScope.find( &aOcc.netNames );
+
+    if( aliases != m_occurrenceAliasesByScope.end() )
+        scope.occurrenceNetAliases.insert( aliases->second.begin(), aliases->second.end() );
+
+    return scope;
+}
+
+
+std::map<std::string, std::string>
+ORCAD_CONVERTER::unconnectedInterfaceNetNames( const ORCAD_DRAWN_INSTANCE& aBlock,
+                                               const std::string&          aFlatNetSuffix ) const
+{
+    std::map<std::string, std::string> result;
+
+    for( const ORCAD_BLOCK_PIN& pin : aBlock.pins )
     {
-        std::map<std::string, std::string> result;
+        if( !pin.noConnect || pin.name.empty() || aFlatNetSuffix.empty() )
+            continue;
 
-        for( const ORCAD_BLOCK_PIN& pin : aDrawn.pins )
+        std::string localName = canonicalGlobalNetName( pin.name );
+        std::string localKey = OrcadLower( localName );
+
+        if( !m_connectedBlockInterfaceNames.count( localKey ) )
+            continue;
+
+        result.emplace( std::move( localKey ), localName + "_" + aFlatNetSuffix );
+    }
+
+    return result;
+}
+
+
+SCH_SHEET* ORCAD_CONVERTER::createBlockSheet( SCH_SHEET* aParentSheet, const ORCAD_RAW_PAGE& aParentPage,
+                                              const ORCAD_DRAWN_INSTANCE& aBlock, const ORCAD_OCC_BLOCK& aOccurrence,
+                                              const wxString& aName, const std::string& aFilePageName,
+                                              int aPageIndex )
+{
+    SCH_SCREEN* parentScreen = aParentSheet->GetScreen();
+    SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
+    const_cast<KIID&>( screen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
+    SCH_SHEET* sheet = new SCH_SHEET( aParentSheet, OrcadDbuToIu( aBlock.x1, aBlock.y1 ),
+                                      OrcadDbuToIu( aBlock.w, aBlock.h ) );
+    wxString   fileName = MakePageFileName( aPageIndex, aFilePageName );
+    const_cast<KIID&>( sheet->m_Uuid ) = deterministicUuid( "sheet", aPageIndex );
+    sheet->GetField( FIELD_T::SHEET_NAME )->SetText( aName );
+    sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fileName );
+    placeHierarchicalBlockFields( sheet, aBlock, aOccurrence.childFolder );
+    sheet->SetScreen( screen );
+    screen->SetFileName( m_schematic->Project().GetProjectPath() + fileName );
+
+    auto implementation = aBlock.props.find( "Implementation" );
+
+    if( implementation != aBlock.props.end() && !implementation->second.empty()
+        && FromOrcadString( implementation->second ).CmpNoCase( FromOrcadString( aOccurrence.childFolder ) ) != 0 )
+    {
+        sheet->SetExcludedFromBoard( true );
+    }
+
+    for( size_t pinIndex = 0; pinIndex < aBlock.pins.size(); ++pinIndex )
+    {
+        const ORCAD_BLOCK_PIN& sourcePin = aBlock.pins[pinIndex];
+        VECTOR2I               position = OrcadDbuToIu( sourcePin.x, sourcePin.y );
+        std::string            sourceName = canonicalGlobalNetName( sourcePin.name );
+        uint32_t               busNetId = busNetAt( aParentPage, sourcePin );
+        std::string            pinName = busNetId ? connectedBusName( aParentPage, sourcePin, sourceName )
+                                                  : scopedHierBusName( sourceName, aOccurrence.targetDbId );
+
+        if( busNetId && pinName != sourceName )
         {
-            if( !pin.noConnect || pin.name.empty() || aFlatNetSuffix.empty() )
-                continue;
+            auto parentBusNames = m_hierBusNamesByScreen.find( parentScreen->GetUuid().AsStdString() );
 
-            std::string localName = canonicalGlobalNetName( pin.name );
-            std::string localKey = OrcadLower( localName );
-
-            if( !m_connectedBlockInterfaceNames.count( localKey ) )
-                continue;
-
-            result.emplace( std::move( localKey ), localName + "_" + aFlatNetSuffix );
+            if( parentBusNames != m_hierBusNamesByScreen.end() )
+                pinName = scopedHierBusRange( pinName, parentBusNames->second );
         }
 
-        return result;
-    };
+        if( pinName != sourceName )
+            m_hierBusNamesByScreen[screen->GetUuid().AsStdString()][sourceName] = pinName;
 
-    std::function<bool( const ORCAD_RAW_PAGE&, const ORCAD_OCC_SCOPE& )> canBuildHierarchy =
-            [&]( const ORCAD_RAW_PAGE& aPage, const ORCAD_OCC_SCOPE& aScope )
+        SCH_SHEET_PIN* pin = new SCH_SHEET_PIN( sheet, position, FromOrcadString( pinName ) );
+        const_cast<KIID&>( pin->m_Uuid ) =
+                deterministicUuid( "sheet-pin:" + screen->GetUuid().AsStdString(), pinIndex );
+        pin->SetSide( nearestSheetSide( sourcePin, aBlock ) );
+        pin->SetPosition( position );
+        pin->SetShape( hierarchicalPinShape( sourcePin.portType ) );
+        sheet->AddPin( pin );
+        placeHierarchicalBlockPinFill( parentScreen, pin );
+    }
+
+    parentScreen->Append( sheet );
+    return sheet;
+}
+
+
+std::vector<SCH_SHEET*>
+ORCAD_CONVERTER::createTopLevelSheets( const std::vector<std::pair<wxString, wxString>>& aNamesAndFiles,
+                                       bool aReuseRoot, bool aOrdinalSheetUuids )
+{
+    std::vector<SCH_SHEET*> topSheets;
+
+    if( !aReuseRoot )
+        topSheets = m_schematic->GetTopLevelSheets();
+
+    size_t first = topSheets.size();
+
+    for( size_t i = 0; i < aNamesAndFiles.size(); ++i )
     {
-        if( aPage.blocks.size() != aScope.blocks.size() )
+        SCH_SHEET* sheet = m_rootSheet;
+
+        if( !aReuseRoot || i > 0 )
+        {
+            SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
+            const_cast<KIID&>( screen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
+            sheet = new SCH_SHEET( m_schematic );
+            sheet->SetScreen( screen );
+
+            if( aOrdinalSheetUuids )
+                const_cast<KIID&>( sheet->m_Uuid ) = deterministicUuid( "sheet", i + 1 );
+            else
+                sheet->SyncUuidToScreen();
+        }
+
+        const auto& [name, fileName] = aNamesAndFiles[i];
+        sheet->GetField( FIELD_T::SHEET_NAME )->SetText( name );
+        sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fileName );
+        sheet->GetScreen()->SetFileName( m_schematic->Project().GetProjectPath() + fileName );
+        topSheets.push_back( sheet );
+    }
+
+    m_schematic->SetTopLevelSheets( topSheets );
+    return std::vector<SCH_SHEET*>( topSheets.begin() + first, topSheets.end() );
+}
+
+
+void ORCAD_CONVERTER::recordPowerAlias( std::map<std::string, POWER_ALIAS_EVIDENCE>& aCandidates,
+                                        const std::string& aSourceName, const std::string& aElectricalName ) const
+{
+    if( aSourceName.empty() || aElectricalName.empty() )
+        return;
+
+    POWER_ALIAS_EVIDENCE& evidence = aCandidates[OrcadLower( aSourceName )];
+    ++evidence.placements;
+
+    if( !isPowerNetName( aElectricalName ) || OrcadIEquals( aSourceName, aElectricalName ) )
+        return;
+
+    auto& target = evidence.targets[OrcadLower( aElectricalName )];
+    target.first = aElectricalName;
+    ++target.second;
+}
+
+
+void ORCAD_CONVERTER::acceptPowerAliases( const std::map<std::string, POWER_ALIAS_EVIDENCE>& aCandidates )
+{
+    for( const auto& [sourceName, evidence] : aCandidates )
+    {
+        if( evidence.targets.size() != 1 )
+            continue;
+
+        const auto& target = evidence.targets.begin()->second;
+
+        if( target.second * 2 > evidence.placements )
+            m_globalNetAliases[sourceName] = target.first;
+    }
+}
+
+
+SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
+{
+    m_rootSheet = aRootSheet;
+
+    prepareGlobalNetNames();
+    prepareSymbols();
+    prepareOccurrenceNets();
+
+    SCH_SHEET_PATH rootPath;
+    rootPath.push_back( aRootSheet );
+    rootPath.SetPageNumber( wxS( "1" ) );
+
+    bool hasBlocks = !m_design.occurrenceRoot.blocks.empty();
+
+    if( hasBlocks && canBuildFolderHierarchy( m_design.pages, m_design.occurrenceRoot ) )
+    {
+        bool native = m_design.pages.size() == 1
+                      && canBuildNativeHierarchy( m_design.pages.front(), m_design.occurrenceRoot );
+        convertFolderHierarchy( rootPath, native );
+    }
+    else
+    {
+        convertFlatPages( rootPath );
+    }
+
+    m_scope = PAGE_SCOPE();
+    finishConversion();
+    return aRootSheet;
+}
+
+
+bool ORCAD_CONVERTER::canBuildNativeHierarchy( const ORCAD_RAW_PAGE& aPage, const ORCAD_OCC_SCOPE& aScope ) const
+{
+    if( aPage.blocks.size() != aScope.blocks.size() )
+        return false;
+
+    std::set<uint32_t> matchedBlocks;
+
+    for( const ORCAD_OCC_BLOCK& occurrence : aScope.blocks )
+    {
+        auto pages = m_design.childFolderPages.find( OrcadLower( occurrence.childFolder ) );
+
+        if( !matchedBlocks.insert( occurrence.targetDbId ).second
+            || !findDrawnBlock( aPage, occurrence.targetDbId )
+            || pages == m_design.childFolderPages.end() || pages->second.size() != 1
+            || !canBuildNativeHierarchy( pages->second.front(), occurrence.scope ) )
+        {
             return false;
-
-        std::set<uint32_t> matchedBlocks;
-
-        for( const ORCAD_OCC_BLOCK& occurrence : aScope.blocks )
-        {
-            std::string key = OrcadLower( occurrence.childFolder );
-
-            auto pages = m_design.childFolderPages.find( key );
-
-            if( !matchedBlocks.insert( occurrence.targetDbId ).second
-                || !findDrawnBlock( aPage, occurrence.targetDbId )
-                || pages == m_design.childFolderPages.end() || pages->second.size() != 1
-                || !canBuildHierarchy( pages->second.front(), occurrence.scope ) )
-            {
-                return false;
-            }
         }
-
-        return true;
-    };
-
-    bool nativeHierarchy = m_design.pages.size() == 1 && !m_design.occurrenceRoot.blocks.empty()
-                           && canBuildHierarchy( m_design.pages.front(), m_design.occurrenceRoot );
-
-    if( nativeHierarchy )
-    {
-        ORCAD_RAW_PAGE& rootPage = m_design.pages.front();
-
-        pollProgress( m_progressReporter, rootPage.name );
-        enterScope( occurrenceScope( m_design.occurrenceRoot ) );
-        applyPageSettings( rootPage, rootScreen );
-        convertPage( rootPage, rootScreen, rootPath );
-
-        int pageIndex = 1;
-
-        std::function<void( ORCAD_RAW_PAGE&, const ORCAD_OCC_SCOPE&, SCH_SHEET*, const SCH_SHEET_PATH& )>
-                placeChildren = [&]( ORCAD_RAW_PAGE& aParentPage, const ORCAD_OCC_SCOPE& aScope,
-                                     SCH_SHEET* aParentSheet, const SCH_SHEET_PATH& aParentPath )
-        {
-            for( const ORCAD_OCC_BLOCK* occurrencePtr : sortedOccurrences( aScope ) )
-            {
-                const ORCAD_OCC_BLOCK&      occurrence = *occurrencePtr;
-                const ORCAD_DRAWN_INSTANCE* drawn = findDrawnBlock( aParentPage, occurrence.targetDbId );
-
-                std::string key = OrcadLower( occurrence.childFolder );
-
-                ORCAD_RAW_PAGE& childPage = m_design.childFolderPages.at( key ).front();
-                SCH_SCREEN*     childScreen = new SCH_SCREEN( m_schematic );
-                const_cast<KIID&>( childScreen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
-                SCH_SHEET* childSheet = new SCH_SHEET( aParentSheet, OrcadDbuToIu( drawn->x1, drawn->y1 ),
-                                                       OrcadDbuToIu( drawn->w, drawn->h ) );
-                wxString   sheetName = uniqueSheetName(
-                        FromOrcadString( drawn->reference.empty() ? childPage.name : drawn->reference ) );
-                wxString   fileName = MakePageFileName( ++pageIndex, childPage.name );
-                const_cast<KIID&>( childSheet->m_Uuid ) = deterministicUuid( "sheet", pageIndex );
-                childSheet->GetField( FIELD_T::SHEET_NAME )->SetText( sheetName );
-                childSheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fileName );
-                placeHierarchicalBlockFields( childSheet, *drawn, occurrence.childFolder );
-                childSheet->SetScreen( childScreen );
-                childScreen->SetFileName( m_schematic->Project().GetProjectPath() + fileName );
-
-                auto implementation = drawn->props.find( "Implementation" );
-
-                if( implementation != drawn->props.end() && !implementation->second.empty()
-                    && FromOrcadString( implementation->second )
-                                       .CmpNoCase( FromOrcadString( occurrence.childFolder ) )
-                               != 0 )
-                {
-                    childSheet->SetExcludedFromBoard( true );
-                }
-
-                size_t pinOrdinal = 0;
-
-                for( const ORCAD_BLOCK_PIN& sourcePin : drawn->pins )
-                {
-                    VECTOR2I    position = OrcadDbuToIu( sourcePin.x, sourcePin.y );
-                    std::string sourceName = canonicalGlobalNetName( sourcePin.name );
-                    uint32_t    busNetId = busNetAt( aParentPage, sourcePin );
-                    std::string pinName = busNetId ? connectedBusName( aParentPage, sourcePin, sourceName )
-                                                   : scopedHierBusName( sourceName, occurrence.targetDbId );
-
-                    if( busNetId && pinName != sourceName )
-                    {
-                        auto parentBusNames =
-                                m_hierBusNamesByScreen.find( aParentSheet->GetScreen()->GetUuid().AsStdString() );
-
-                        if( parentBusNames != m_hierBusNamesByScreen.end() )
-                            pinName = scopedHierBusRange( pinName, parentBusNames->second );
-                    }
-
-                    if( pinName != sourceName )
-                        m_hierBusNamesByScreen[childScreen->GetUuid().AsStdString()][sourceName] = pinName;
-
-                    SCH_SHEET_PIN* pin = new SCH_SHEET_PIN( childSheet, position, FromOrcadString( pinName ) );
-                    const_cast<KIID&>( pin->m_Uuid ) =
-                            deterministicUuid( "sheet-pin:" + childScreen->GetUuid().AsStdString(), pinOrdinal++ );
-                    std::array<std::pair<int, SHEET_SIDE>, 4> sides = {
-                        std::pair{ std::abs( sourcePin.x - drawn->x1 ), SHEET_SIDE::LEFT },
-                        std::pair{ std::abs( sourcePin.x - drawn->x1 - drawn->w ), SHEET_SIDE::RIGHT },
-                        std::pair{ std::abs( sourcePin.y - drawn->y1 ), SHEET_SIDE::TOP },
-                        std::pair{ std::abs( sourcePin.y - drawn->y1 - drawn->h ), SHEET_SIDE::BOTTOM }
-                    };
-
-                    pin->SetSide( std::min_element( sides.begin(), sides.end(),
-                                                    []( const auto& a, const auto& b )
-                                                    {
-                                                        return a.first < b.first;
-                                                    } )
-                                          ->second );
-                    pin->SetPosition( position );
-
-                    pin->SetShape( hierarchicalPinShape( sourcePin.portType ) );
-
-                    childSheet->AddPin( pin );
-                    placeHierarchicalBlockPinFill( aParentSheet->GetScreen(), pin );
-                }
-
-                aParentSheet->GetScreen()->Append( childSheet );
-
-                SCH_SHEET_PATH childPath = aParentPath;
-                childPath.push_back( childSheet );
-                childPath.SetPageNumber( wxString::Format( wxS( "%d" ), pageIndex ) );
-
-                std::map<std::string, std::string> childInterfaceAliases;
-
-                for( const ORCAD_BLOCK_PIN& sourcePin : drawn->pins )
-                {
-                    std::set<const std::string*> targets =
-                            pinOccurrenceTargets( aParentPage, sourcePin, aScope.netNames, false );
-
-                    if( targets.size() == 1 )
-                    {
-                        childInterfaceAliases[canonicalGlobalNetKey( sourcePin.name )] =
-                                canonicalGlobalNetName( **targets.begin() );
-                    }
-                }
-
-                pollProgress( m_progressReporter, childPage.name );
-                PAGE_SCOPE scope = occurrenceScope( occurrence.scope );
-                scope.flatNetSuffix = simpleRepeatedLeafDesign ? flatNetSuffix( *drawn ) : std::string();
-                scope.namedFlatNets = simpleRepeatedLeafDesign;
-                scope.generatedFlatNets = occurrenceFolderCounts[key] > 1;
-                scope.unconnectedInterfaceNetNames = unconnectedInterfaceNetNames( *drawn, scope.flatNetSuffix );
-                scope.interfaceNetAliases = std::move( childInterfaceAliases );
-                enterScope( std::move( scope ) );
-                applyPageSettings( childPage, childScreen );
-                convertPage( childPage, childScreen, childPath, true, drawn->pins.empty() );
-                placeChildren( childPage, occurrence.scope, childSheet, childPath );
-            }
-        };
-
-        placeChildren( rootPage, m_design.occurrenceRoot, aRootSheet, rootPath );
-        m_scope = PAGE_SCOPE();
-        finishConversion();
-        return aRootSheet;
     }
 
-    std::function<bool( const std::vector<ORCAD_RAW_PAGE>&, const ORCAD_OCC_SCOPE& )> canBuildFolderHierarchy =
-            [&]( const std::vector<ORCAD_RAW_PAGE>& aPages, const ORCAD_OCC_SCOPE& aScope )
+    return true;
+}
+
+
+bool ORCAD_CONVERTER::canBuildFolderHierarchy( const std::vector<ORCAD_RAW_PAGE>& aPages,
+                                               const ORCAD_OCC_SCOPE&             aScope ) const
+{
+    size_t blockCount = 0;
+
+    for( const ORCAD_RAW_PAGE& page : aPages )
+        blockCount += page.blocks.size();
+
+    if( blockCount != aScope.blocks.size() )
+        return false;
+
+    std::set<uint32_t> matchedBlocks;
+
+    for( const ORCAD_OCC_BLOCK& occurrence : aScope.blocks )
     {
-        size_t blockCount = 0;
+        size_t matches = 0;
 
         for( const ORCAD_RAW_PAGE& page : aPages )
-            blockCount += page.blocks.size();
+        {
+            matches += std::count_if( page.blocks.begin(), page.blocks.end(),
+                                      [&]( const ORCAD_DRAWN_INSTANCE& aBlock )
+                                      {
+                                          return aBlock.dbId == occurrence.targetDbId;
+                                      } );
+        }
 
-        if( blockCount != aScope.blocks.size() )
+        auto pages = m_design.childFolderPages.find( OrcadLower( occurrence.childFolder ) );
+
+        if( matches != 1 || !matchedBlocks.insert( occurrence.targetDbId ).second
+            || pages == m_design.childFolderPages.end() || pages->second.empty()
+            || !canBuildFolderHierarchy( pages->second, occurrence.scope ) )
+        {
             return false;
+        }
+    }
 
-        std::set<uint32_t> matchedBlocks;
+    return true;
+}
+
+
+void ORCAD_CONVERTER::addChildOccurrenceAliases( const ORCAD_RAW_PAGE& aParentPage, const ORCAD_OCC_SCOPE& aParentScope,
+                                                 const ORCAD_DRAWN_INSTANCE& aDrawn,
+                                                 const ORCAD_OCC_SCOPE&      aChildScope )
+{
+    auto& childAliases = m_occurrenceAliasesByScope[&aChildScope.netNames];
+
+    for( const ORCAD_BLOCK_PIN& pin : aDrawn.pins )
+    {
+        std::set<const std::string*> targets = pinOccurrenceTargets( aParentPage, pin, aParentScope.netNames, true );
+
+        if( targets.size() == 1 )
+        {
+            std::string sourceName = OrcadLower( kicadOccurrenceNetName( pin.name ) );
+            std::string targetName = kicadOccurrenceNetName( **targets.begin() );
+
+            if( sourceName != OrcadLower( targetName ) )
+                childAliases[std::move( sourceName )] = std::move( targetName );
+        }
+    }
+}
+
+
+void ORCAD_CONVERTER::collectFolderPowerAliases( std::map<std::string, POWER_ALIAS_EVIDENCE>& aCandidates,
+                                                 std::vector<ORCAD_RAW_PAGE>& aPages, const ORCAD_OCC_SCOPE& aScope )
+{
+    enterScope( occurrenceScope( aScope ) );
+
+    for( ORCAD_RAW_PAGE& page : aPages )
+    {
+        buildNetLookup( page );
+
+        for( const ORCAD_GRAPHIC_INST& global : page.globals )
+            recordPowerAlias( aCandidates, trimmed( global.logicalName ), powerNet( page, global ) );
+    }
+
+    for( const ORCAD_OCC_BLOCK& occurrence : aScope.blocks )
+    {
+        auto [drawn, parentPage] = findDrawnBlock( aPages, occurrence.targetDbId );
+        auto childPages = m_design.childFolderPages.find( OrcadLower( occurrence.childFolder ) );
+
+        if( parentPage && drawn && childPages != m_design.childFolderPages.end() )
+        {
+            addChildOccurrenceAliases( *parentPage, aScope, *drawn, occurrence.scope );
+            collectFolderPowerAliases( aCandidates, childPages->second, occurrence.scope );
+        }
+    }
+}
+
+
+void ORCAD_CONVERTER::convertFolderHierarchy( const SCH_SHEET_PATH& aRootPath, bool aNative )
+{
+    std::function<size_t( const std::vector<ORCAD_RAW_PAGE>&, const ORCAD_OCC_SCOPE& )> countSourcePages =
+            [&]( const std::vector<ORCAD_RAW_PAGE>& aPages, const ORCAD_OCC_SCOPE& aScope )
+    {
+        size_t count = aPages.size();
 
         for( const ORCAD_OCC_BLOCK& occurrence : aScope.blocks )
         {
-            size_t matches = 0;
-
-            for( const ORCAD_RAW_PAGE& page : aPages )
+            if( auto pages = m_design.childFolderPages.find( OrcadLower( occurrence.childFolder ) );
+                pages != m_design.childFolderPages.end() )
             {
-                matches += std::count_if( page.blocks.begin(), page.blocks.end(),
-                                          [&]( const ORCAD_DRAWN_INSTANCE& aBlock )
-                                          {
-                                              return aBlock.dbId == occurrence.targetDbId;
-                                          } );
-            }
-
-            std::string key = OrcadLower( occurrence.childFolder );
-
-            auto pages = m_design.childFolderPages.find( key );
-
-            if( matches != 1 || !matchedBlocks.insert( occurrence.targetDbId ).second
-                || pages == m_design.childFolderPages.end() || pages->second.empty()
-                || !canBuildFolderHierarchy( pages->second, occurrence.scope ) )
-            {
-                return false;
+                count += countSourcePages( pages->second, occurrence.scope );
             }
         }
 
-        return true;
+        return count;
     };
 
-    bool folderHierarchy = !m_design.occurrenceRoot.blocks.empty()
-                           && canBuildFolderHierarchy( m_design.pages, m_design.occurrenceRoot );
+    FOLDER_WALK walk;
 
-    struct POWER_ALIAS_EVIDENCE
+    if( aNative )
     {
-        size_t                                                  placements = 0;
-        std::map<std::string, std::pair<std::string, size_t>> targets;
+        walk.numberSourcePages = false;
+        walk.occurrenceAliases = false;
+        walk.interfaceAliases = true;
+        walk.nestedFlatSuffix = false;
+        walk.folderSheetNames = false;
+        walk.rootSharedFolderPage = false;
+    }
+
+    if( walk.occurrenceAliases )
+    {
+        std::map<std::string, POWER_ALIAS_EVIDENCE> powerAliasCandidates;
+        collectFolderPowerAliases( powerAliasCandidates, m_design.pages, m_design.occurrenceRoot );
+        acceptPowerAliases( powerAliasCandidates );
+        m_scope = PAGE_SCOPE();
+    }
+
+    walk.sourcePageCount = countSourcePages( m_design.pages, m_design.occurrenceRoot );
+    placeFolder( walk, m_design.pages, m_design.occurrenceRoot, m_rootSheet, aRootPath, {}, false, {}, {} );
+}
+
+
+void ORCAD_CONVERTER::placeFolder( FOLDER_WALK& aWalk, std::vector<ORCAD_RAW_PAGE>& aPages,
+                                   const ORCAD_OCC_SCOPE& aScope, SCH_SHEET* aFolderSheet,
+                                   const SCH_SHEET_PATH& aFolderPath, const std::string& aOccurrenceSuffix,
+                                   bool                                      aRepeatedFolder,
+                                   const std::map<std::string, std::string>& aUnconnectedInterfaceNetNames,
+                                   std::map<std::string, std::string>        aInterfaceNetAliases )
+{
+    struct PAGE_PLACEMENT
+    {
+        ORCAD_RAW_PAGE* page;
+        SCH_SHEET*      sheet;
+        SCH_SHEET_PATH  path;
     };
 
-    auto recordPowerAlias = [&]( std::map<std::string, POWER_ALIAS_EVIDENCE>& aCandidates,
-                                 const std::string& aSourceName, const std::string& aElectricalName )
+    auto numberSourcePage = [&]( ORCAD_RAW_PAGE& aPage )
     {
-        if( aSourceName.empty() || aElectricalName.empty() )
+        if( !aWalk.numberSourcePages )
             return;
 
-        POWER_ALIAS_EVIDENCE& evidence = aCandidates[OrcadLower( aSourceName )];
-        ++evidence.placements;
-
-        if( !isPowerNetName( aElectricalName ) || OrcadIEquals( aSourceName, aElectricalName ) )
-        {
-            return;
-        }
-
-        auto& target = evidence.targets[OrcadLower( aElectricalName )];
-        target.first = aElectricalName;
-        ++target.second;
+        aPage.sourcePageNumber = ++aWalk.sourcePageIndex;
+        aPage.sourcePageCount = aWalk.sourcePageCount;
     };
 
-    auto acceptPowerAliases = [&]( const std::map<std::string, POWER_ALIAS_EVIDENCE>& aCandidates )
+    auto folderSheetName = [&]( const std::string& aName )
     {
-        for( const auto& [sourceName, evidence] : aCandidates )
-        {
-            if( evidence.targets.size() != 1 )
-                continue;
-
-            const auto& target = evidence.targets.begin()->second;
-
-            if( target.second * 2 > evidence.placements )
-                m_globalNetAliases[sourceName] = target.first;
-        }
+        wxString name = FromOrcadString( aName );
+        return uniqueSheetName( name.IsEmpty() ? wxString( wxS( "PAGE" ) ) : name );
     };
 
-    if( folderHierarchy )
+    std::vector<PAGE_PLACEMENT> placements;
+    bool                        leafFolder = std::all_of( aPages.begin(), aPages.end(),
+                                                          []( const ORCAD_RAW_PAGE& aPage )
+                                                          {
+                                                              return aPage.blocks.empty();
+                                                          } );
+    PAGE_SCOPE scope = occurrenceScope( aScope );
+    scope.flatNetSuffix = aOccurrenceSuffix;
+    scope.namedFlatNets = m_simpleRepeatedLeafDesign && leafFolder;
+    scope.generatedFlatNets = aRepeatedFolder;
+
+    scope.interfaceNetAliases = std::move( aInterfaceNetAliases );
+
+    if( leafFolder )
+        scope.unconnectedInterfaceNetNames = aUnconnectedInterfaceNetNames;
+
+    enterScope( std::move( scope ) );
+
+    auto convertFolderPage = [&]( ORCAD_RAW_PAGE& aPage, SCH_SHEET* aSheet, const SCH_SHEET_PATH& aPath,
+                                  bool aContainerPage, bool aSharedFolderPage )
     {
-        int    pageIndex = 1;
-        size_t sourcePageIndex = 0;
+        pollProgress( m_progressReporter, aPage.name );
+        numberSourcePage( aPage );
+        applyPageSettings( aPage, aSheet->GetScreen() );
+        convertPage( aPage, aSheet->GetScreen(), aPath, aContainerPage, aSharedFolderPage );
+        placements.push_back( { &aPage, aSheet, aPath } );
+    };
 
-        std::function<size_t( const std::vector<ORCAD_RAW_PAGE>&, const ORCAD_OCC_SCOPE& )> countSourcePages =
-                [&]( const std::vector<ORCAD_RAW_PAGE>& aPages, const ORCAD_OCC_SCOPE& aScope )
-        {
-            size_t count = aPages.size();
+    if( aPages.size() == 1 )
+    {
+        bool root = aFolderSheet == m_rootSheet;
+        convertFolderPage( aPages.front(), aFolderSheet, aFolderPath, !root,
+                           aFolderSheet->GetPins().empty() && ( !root || aWalk.rootSharedFolderPage ) );
+    }
+    else if( aFolderSheet == m_rootSheet )
+    {
+        std::vector<std::pair<wxString, wxString>> names;
 
-            for( const ORCAD_OCC_BLOCK& occurrence : aScope.blocks )
-            {
-                std::string key = OrcadLower( occurrence.childFolder );
+        for( size_t i = 0; i < aPages.size(); ++i )
+            names.emplace_back( folderSheetName( aPages[i].name ),
+                                MakePageFileName( static_cast<int>( i + 1 ), aPages[i].name ) );
 
-                if( auto pages = m_design.childFolderPages.find( key ); pages != m_design.childFolderPages.end() )
-                    count += countSourcePages( pages->second, occurrence.scope );
-            }
+        std::vector<SCH_SHEET*> topSheets = createTopLevelSheets( names, true, true );
+        aWalk.pageIndex = static_cast<int>( aPages.size() );
 
-            return count;
-        };
-
-        size_t sourcePageCount = countSourcePages( m_design.pages, m_design.occurrenceRoot );
-        auto   numberSourcePage = [&]( ORCAD_RAW_PAGE& aPage )
-        {
-            aPage.sourcePageNumber = ++sourcePageIndex;
-            aPage.sourcePageCount = sourcePageCount;
-        };
-
-        auto folderSheetName = [&]( const std::string& aName )
-        {
-            wxString name = FromOrcadString( aName );
-            return uniqueSheetName( name.IsEmpty() ? wxString( wxS( "PAGE" ) ) : name );
-        };
-
+        for( size_t i = 0; i < aPages.size(); ++i )
+            convertFolderPage( aPages[i], topSheets[i], topLevelPath( topSheets[i], i + 1 ), false, true );
+    }
+    else
+    {
         auto interfaceNames = [&]( const ORCAD_RAW_PAGE& aPage )
         {
             std::vector<std::string> names;
@@ -1848,333 +1961,150 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
             appendPageItem( aScreen, label );
         };
 
-        auto addChildOccurrenceAliases = [&]( const ORCAD_RAW_PAGE& aParentPage, const ORCAD_OCC_SCOPE& aParentScope,
-                                              const ORCAD_DRAWN_INSTANCE& aDrawn, const ORCAD_OCC_SCOPE& aChildScope )
+        SCH_SCREEN* container = aFolderSheet->GetScreen();
+        container->SetPageSettings( PAGE_INFO( PAGE_SIZE_TYPE::A4 ) );
+        size_t outerOrdinal = 0;
+        auto   folderBusNames = m_hierBusNamesByScreen.find( container->GetUuid().AsStdString() );
+
+        for( const SCH_SHEET_PIN* pin : aFolderSheet->GetPins() )
         {
-            auto& childAliases = occurrenceAliasesByScope[&aChildScope.netNames];
+            VECTOR2I position( schIUScale.mmToIU( 20 ),
+                               schIUScale.mmToIU( 20 + 5 * static_cast<int>( outerOrdinal++ ) ) );
+            addContainerLabel( container, pin->GetText(), position, true );
+        }
 
-            for( const ORCAD_BLOCK_PIN& pin : aDrawn.pins )
-            {
-                std::set<const std::string*> targets =
-                        pinOccurrenceTargets( aParentPage, pin, aParentScope.netNames, true );
-
-                if( targets.size() == 1 )
-                {
-                    std::string sourceName = OrcadLower( kicadOccurrenceNetName( pin.name ) );
-                    std::string targetName = kicadOccurrenceNetName( **targets.begin() );
-
-                    if( sourceName != OrcadLower( targetName ) )
-                        childAliases[std::move( sourceName )] = std::move( targetName );
-                }
-            }
-        };
-
-        std::function<void( std::vector<ORCAD_RAW_PAGE>&, const ORCAD_OCC_SCOPE&, SCH_SHEET*, const SCH_SHEET_PATH&,
-                            const std::string&, bool, const std::map<std::string, std::string>& )>
-                placeFolder;
-
-        placeFolder = [&]( std::vector<ORCAD_RAW_PAGE>& aPages, const ORCAD_OCC_SCOPE& aScope, SCH_SHEET* aFolderSheet,
-                           const SCH_SHEET_PATH& aFolderPath, const std::string& aOccurrenceSuffix,
-                           bool                                      aRepeatedFolder,
-                           const std::map<std::string, std::string>& aUnconnectedInterfaceNetNames )
+        for( size_t i = 0; i < aPages.size(); ++i )
         {
-            struct PAGE_PLACEMENT
+            ORCAD_RAW_PAGE&          page = aPages[i];
+            int                      column = static_cast<int>( i % 3 );
+            int                      row = static_cast<int>( i / 3 );
+            std::vector<std::string> names = interfaceNames( page );
+
+            if( folderBusNames != m_hierBusNamesByScreen.end() )
             {
-                ORCAD_RAW_PAGE* page;
-                SCH_SHEET*      sheet;
-                SCH_SCREEN*     screen;
-                SCH_SHEET_PATH  path;
-            };
-
-            std::vector<PAGE_PLACEMENT> placements;
-            bool                        leafFolder = std::all_of( aPages.begin(), aPages.end(),
-                                                                  []( const ORCAD_RAW_PAGE& aPage )
-                                                                  {
-                                               return aPage.blocks.empty();
-                                           } );
-            PAGE_SCOPE scope = occurrenceScope( aScope );
-            scope.flatNetSuffix = aOccurrenceSuffix;
-            scope.namedFlatNets = simpleRepeatedLeafDesign && leafFolder;
-            scope.generatedFlatNets = aRepeatedFolder;
-
-            if( leafFolder )
-                scope.unconnectedInterfaceNetNames = aUnconnectedInterfaceNetNames;
-
-            enterScope( std::move( scope ) );
-
-            if( aPages.size() == 1 )
-            {
-                ORCAD_RAW_PAGE& page = aPages.front();
-                pollProgress( m_progressReporter, page.name );
-                numberSourcePage( page );
-                applyPageSettings( page, aFolderSheet->GetScreen() );
-                convertPage( page, aFolderSheet->GetScreen(), aFolderPath, aFolderSheet != aRootSheet,
-                             aFolderSheet->GetPins().empty() );
-                placements.push_back( { &page, aFolderSheet, aFolderSheet->GetScreen(), aFolderPath } );
-            }
-            else if( aFolderSheet == aRootSheet )
-            {
-                std::vector<SCH_SHEET*>  topSheets;
-                std::vector<SCH_SCREEN*> topScreens;
-
-                for( size_t i = 0; i < aPages.size(); ++i )
+                for( std::string& name : names )
                 {
-                    ORCAD_RAW_PAGE& page = aPages[i];
-                    SCH_SHEET*      pageSheet = i == 0 ? aRootSheet : new SCH_SHEET( m_schematic );
-                    SCH_SCREEN*     pageScreen = i == 0 ? aRootSheet->GetScreen() : new SCH_SCREEN( m_schematic );
-                    int             currentPage = static_cast<int>( i + 1 );
+                    auto renamed = folderBusNames->second.find( name );
 
-                    if( i != 0 )
-                    {
-                        const_cast<KIID&>( pageScreen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
-                        const_cast<KIID&>( pageSheet->m_Uuid ) = deterministicUuid( "sheet", currentPage );
-                        pageSheet->SetScreen( pageScreen );
-                    }
-
-                    wxString fileName = MakePageFileName( currentPage, page.name );
-                    pageSheet->GetField( FIELD_T::SHEET_NAME )->SetText( folderSheetName( page.name ) );
-                    pageSheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fileName );
-                    pageScreen->SetFileName( m_schematic->Project().GetProjectPath() + fileName );
-                    topSheets.push_back( pageSheet );
-                    topScreens.push_back( pageScreen );
-                }
-
-                m_schematic->SetTopLevelSheets( topSheets );
-                pageIndex = static_cast<int>( aPages.size() );
-
-                for( size_t i = 0; i < aPages.size(); ++i )
-                {
-                    ORCAD_RAW_PAGE& page = aPages[i];
-                    SCH_SHEET_PATH  pagePath = topLevelPath( topSheets[i], i + 1 );
-                    pollProgress( m_progressReporter, page.name );
-                    numberSourcePage( page );
-                    applyPageSettings( page, topScreens[i] );
-                    convertPage( page, topScreens[i], pagePath, false, true );
-                    placements.push_back( { &page, topSheets[i], topScreens[i], pagePath } );
-                }
-            }
-            else
-            {
-                SCH_SCREEN* container = aFolderSheet->GetScreen();
-                container->SetPageSettings( PAGE_INFO( PAGE_SIZE_TYPE::A4 ) );
-                size_t outerOrdinal = 0;
-                auto   folderBusNames = m_hierBusNamesByScreen.find( container->GetUuid().AsStdString() );
-
-                for( const SCH_SHEET_PIN* pin : aFolderSheet->GetPins() )
-                {
-                    VECTOR2I position( schIUScale.mmToIU( 20 ),
-                                       schIUScale.mmToIU( 20 + 5 * static_cast<int>( outerOrdinal++ ) ) );
-                    addContainerLabel( container, pin->GetText(), position, true );
-                }
-
-                for( size_t i = 0; i < aPages.size(); ++i )
-                {
-                    ORCAD_RAW_PAGE&          page = aPages[i];
-                    int                      column = static_cast<int>( i % 3 );
-                    int                      row = static_cast<int>( i / 3 );
-                    std::vector<std::string> names = interfaceNames( page );
-
-                    if( folderBusNames != m_hierBusNamesByScreen.end() )
-                    {
-                        for( std::string& name : names )
-                        {
-                            auto renamed = folderBusNames->second.find( name );
-
-                            if( renamed != folderBusNames->second.end() )
-                                name = renamed->second;
-                        }
-                    }
-
-                    int         heightMm = std::max( 25, 10 + 5 * static_cast<int>( names.size() ) );
-                    VECTOR2I    position( schIUScale.mmToIU( 55 + column * 70 ), schIUScale.mmToIU( 15 + row * 70 ) );
-                    VECTOR2I    size( schIUScale.mmToIU( 55 ), schIUScale.mmToIU( heightMm ) );
-                    SCH_SCREEN* pageScreen = new SCH_SCREEN( m_schematic );
-                    const_cast<KIID&>( pageScreen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
-
-                    if( folderBusNames != m_hierBusNamesByScreen.end() )
-                        m_hierBusNamesByScreen[pageScreen->GetUuid().AsStdString()] = folderBusNames->second;
-
-                    SCH_SHEET* pageSheet = new SCH_SHEET( aFolderSheet, position, size );
-                    int        currentPage = ++pageIndex;
-                    const_cast<KIID&>( pageSheet->m_Uuid ) = deterministicUuid( "sheet", currentPage );
-                    wxString fileName = MakePageFileName( currentPage, page.name );
-                    pageSheet->GetField( FIELD_T::SHEET_NAME )->SetText( folderSheetName( page.name ) );
-                    pageSheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fileName );
-                    pageSheet->SetScreen( pageScreen );
-                    pageScreen->SetFileName( m_schematic->Project().GetProjectPath() + fileName );
-
-                    for( size_t pinIndex = 0; pinIndex < names.size(); ++pinIndex )
-                    {
-                        VECTOR2I       pinPosition( position.x,
-                                                    position.y + schIUScale.mmToIU( 5 + 5 * static_cast<int>( pinIndex ) ) );
-                        wxString       name = FromOrcadString( names[pinIndex] );
-                        SCH_SHEET_PIN* pin = new SCH_SHEET_PIN( pageSheet, pinPosition, name );
-                        const_cast<KIID&>( pin->m_Uuid ) =
-                                deterministicUuid( "container-pin:" + pageScreen->GetUuid().AsStdString(), pinIndex );
-                        pin->SetSide( SHEET_SIDE::LEFT );
-                        pin->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
-                        pageSheet->AddPin( pin );
-                        addContainerLabel( container, name, pinPosition, false );
-                    }
-
-                    container->Append( pageSheet );
-                    SCH_SHEET_PATH pagePath = aFolderPath;
-                    pagePath.push_back( pageSheet );
-                    pagePath.SetPageNumber( wxString::Format( wxS( "%d" ), currentPage ) );
-                    pollProgress( m_progressReporter, page.name );
-                    numberSourcePage( page );
-                    applyPageSettings( page, pageScreen );
-                    convertPage( page, pageScreen, pagePath, true, true );
-                    placements.push_back( { &page, pageSheet, pageScreen, pagePath } );
+                    if( renamed != folderBusNames->second.end() )
+                        name = renamed->second;
                 }
             }
 
-            for( const ORCAD_OCC_BLOCK* occurrencePtr : sortedOccurrences( aScope ) )
+            int         heightMm = std::max( 25, 10 + 5 * static_cast<int>( names.size() ) );
+            VECTOR2I    position( schIUScale.mmToIU( 55 + column * 70 ), schIUScale.mmToIU( 15 + row * 70 ) );
+            VECTOR2I    size( schIUScale.mmToIU( 55 ), schIUScale.mmToIU( heightMm ) );
+            SCH_SCREEN* pageScreen = new SCH_SCREEN( m_schematic );
+            const_cast<KIID&>( pageScreen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
+
+            if( folderBusNames != m_hierBusNamesByScreen.end() )
+                m_hierBusNamesByScreen[pageScreen->GetUuid().AsStdString()] = folderBusNames->second;
+
+            SCH_SHEET* pageSheet = new SCH_SHEET( aFolderSheet, position, size );
+            int        currentPage = ++aWalk.pageIndex;
+            const_cast<KIID&>( pageSheet->m_Uuid ) = deterministicUuid( "sheet", currentPage );
+            wxString fileName = MakePageFileName( currentPage, page.name );
+            pageSheet->GetField( FIELD_T::SHEET_NAME )->SetText( folderSheetName( page.name ) );
+            pageSheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fileName );
+            pageSheet->SetScreen( pageScreen );
+            pageScreen->SetFileName( m_schematic->Project().GetProjectPath() + fileName );
+
+            for( size_t pinIndex = 0; pinIndex < names.size(); ++pinIndex )
             {
-                const ORCAD_OCC_BLOCK&      occurrence = *occurrencePtr;
-                PAGE_PLACEMENT*             parent = nullptr;
-                const ORCAD_DRAWN_INSTANCE* drawn = nullptr;
-
-                for( PAGE_PLACEMENT& placement : placements )
-                {
-                    drawn = findDrawnBlock( *placement.page, occurrence.targetDbId );
-
-                    if( drawn )
-                    {
-                        parent = &placement;
-                        break;
-                    }
-                }
-
-                if( !parent || !drawn )
-                    continue;
-
-                std::string                  key = OrcadLower( occurrence.childFolder );
-                std::vector<ORCAD_RAW_PAGE>& childPages = m_design.childFolderPages.at( key );
-                SCH_SCREEN*                  childScreen = new SCH_SCREEN( m_schematic );
-                const_cast<KIID&>( childScreen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
-                SCH_SHEET* childSheet = new SCH_SHEET( parent->sheet, OrcadDbuToIu( drawn->x1, drawn->y1 ),
-                                                       OrcadDbuToIu( drawn->w, drawn->h ) );
-                int        currentPage = ++pageIndex;
-                const_cast<KIID&>( childSheet->m_Uuid ) = deterministicUuid( "sheet", currentPage );
-                wxString fileName =
-                        MakePageFileName( currentPage, childPages.size() == 1 ? childPages.front().name
-                                                                              : occurrence.childFolder + " container" );
-                childSheet->GetField( FIELD_T::SHEET_NAME )
-                        ->SetText( folderSheetName( drawn->reference.empty() ? occurrence.childFolder
-                                                                             : drawn->reference ) );
-                childSheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fileName );
-                placeHierarchicalBlockFields( childSheet, *drawn, occurrence.childFolder );
-                childSheet->SetScreen( childScreen );
-                childScreen->SetFileName( m_schematic->Project().GetProjectPath() + fileName );
-
-                auto implementation = drawn->props.find( "Implementation" );
-
-                if( implementation != drawn->props.end() && !implementation->second.empty()
-                    && FromOrcadString( implementation->second )
-                                       .CmpNoCase( FromOrcadString( occurrence.childFolder ) )
-                               != 0 )
-                {
-                    childSheet->SetExcludedFromBoard( true );
-                }
-
-                for( size_t pinIndex = 0; pinIndex < drawn->pins.size(); ++pinIndex )
-                {
-                    const ORCAD_BLOCK_PIN& sourcePin = drawn->pins[pinIndex];
-                    VECTOR2I               position = OrcadDbuToIu( sourcePin.x, sourcePin.y );
-                    std::string            sourceName = canonicalGlobalNetName( sourcePin.name );
-                    uint32_t               busNetId = busNetAt( *parent->page, sourcePin );
-                    std::string            pinName = busNetId ? connectedBusName( *parent->page, sourcePin, sourceName )
-                                                              : scopedHierBusName( sourceName, occurrence.targetDbId );
-
-                    if( busNetId && pinName != sourceName )
-                    {
-                        auto parentBusNames = m_hierBusNamesByScreen.find( parent->screen->GetUuid().AsStdString() );
-
-                        if( parentBusNames != m_hierBusNamesByScreen.end() )
-                            pinName = scopedHierBusRange( pinName, parentBusNames->second );
-                    }
-
-                    if( pinName != sourceName )
-                        m_hierBusNamesByScreen[childScreen->GetUuid().AsStdString()][sourceName] = pinName;
-
-                    SCH_SHEET_PIN* pin = new SCH_SHEET_PIN( childSheet, position, FromOrcadString( pinName ) );
-                    const_cast<KIID&>( pin->m_Uuid ) =
-                            deterministicUuid( "sheet-pin:" + childScreen->GetUuid().AsStdString(), pinIndex );
-                    std::array<std::pair<int, SHEET_SIDE>, 4> sides = {
-                        std::pair{ std::abs( sourcePin.x - drawn->x1 ), SHEET_SIDE::LEFT },
-                        std::pair{ std::abs( sourcePin.x - drawn->x1 - drawn->w ), SHEET_SIDE::RIGHT },
-                        std::pair{ std::abs( sourcePin.y - drawn->y1 ), SHEET_SIDE::TOP },
-                        std::pair{ std::abs( sourcePin.y - drawn->y1 - drawn->h ), SHEET_SIDE::BOTTOM }
-                    };
-                    pin->SetSide( std::min_element( sides.begin(), sides.end(),
-                                                    []( const auto& a, const auto& b )
-                                                    {
-                                                        return a.first < b.first;
-                                                    } )
-                                          ->second );
-                    pin->SetPosition( position );
-                    pin->SetShape( hierarchicalPinShape( sourcePin.portType ) );
-                    childSheet->AddPin( pin );
-                    placeHierarchicalBlockPinFill( parent->screen, pin );
-                }
-
-                parent->screen->Append( childSheet );
-                SCH_SHEET_PATH childPath = parent->path;
-                childPath.push_back( childSheet );
-                childPath.SetPageNumber( wxString::Format( wxS( "%d" ), currentPage ) );
-                std::string childSuffix = appendOccurrenceSuffix( aOccurrenceSuffix, *drawn );
-                std::string childKey = OrcadLower( occurrence.childFolder );
-
-                auto unconnectedNames = unconnectedInterfaceNetNames( *drawn, childSuffix );
-                addChildOccurrenceAliases( *parent->page, aScope, *drawn, occurrence.scope );
-                placeFolder( childPages, occurrence.scope, childSheet, childPath, childSuffix,
-                             occurrenceFolderCounts[childKey] > 1, unconnectedNames );
-            }
-        };
-
-        std::map<std::string, POWER_ALIAS_EVIDENCE> powerAliasCandidates;
-        std::function<void( std::vector<ORCAD_RAW_PAGE>&, const ORCAD_OCC_SCOPE& )> collectPowerAliases =
-                [&]( std::vector<ORCAD_RAW_PAGE>& aPages, const ORCAD_OCC_SCOPE& aScope )
-        {
-            enterScope( occurrenceScope( aScope ) );
-
-            for( ORCAD_RAW_PAGE& page : aPages )
-            {
-                buildNetLookup( page );
-
-                for( const ORCAD_GRAPHIC_INST& global : page.globals )
-                {
-                    std::string sourceName = trimmed( global.logicalName );
-                    std::string electricalName = powerNet( page, global );
-                    recordPowerAlias( powerAliasCandidates, sourceName, electricalName );
-                }
+                VECTOR2I       pinPosition( position.x,
+                                            position.y + schIUScale.mmToIU( 5 + 5 * static_cast<int>( pinIndex ) ) );
+                wxString       name = FromOrcadString( names[pinIndex] );
+                SCH_SHEET_PIN* pin = new SCH_SHEET_PIN( pageSheet, pinPosition, name );
+                const_cast<KIID&>( pin->m_Uuid ) =
+                        deterministicUuid( "container-pin:" + pageScreen->GetUuid().AsStdString(), pinIndex );
+                pin->SetSide( SHEET_SIDE::LEFT );
+                pin->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
+                pageSheet->AddPin( pin );
+                addContainerLabel( container, name, pinPosition, false );
             }
 
-            for( const ORCAD_OCC_BLOCK& occurrence : aScope.blocks )
-            {
-                auto [drawn, parentPage] = findDrawnBlock( aPages, occurrence.targetDbId );
-                std::string key = OrcadLower( occurrence.childFolder );
-                auto        childPages = m_design.childFolderPages.find( key );
-
-                if( parentPage && drawn && childPages != m_design.childFolderPages.end() )
-                {
-                    addChildOccurrenceAliases( *parentPage, aScope, *drawn, occurrence.scope );
-                    collectPowerAliases( childPages->second, occurrence.scope );
-                }
-            }
-        };
-
-        collectPowerAliases( m_design.pages, m_design.occurrenceRoot );
-        acceptPowerAliases( powerAliasCandidates );
-        m_scope = PAGE_SCOPE();
-
-        placeFolder( m_design.pages, m_design.occurrenceRoot, aRootSheet, rootPath, {}, false, {} );
-        m_scope = PAGE_SCOPE();
-        finishConversion();
-        return aRootSheet;
+            container->Append( pageSheet );
+            SCH_SHEET_PATH pagePath = aFolderPath;
+            pagePath.push_back( pageSheet );
+            pagePath.SetPageNumber( wxString::Format( wxS( "%d" ), currentPage ) );
+            convertFolderPage( page, pageSheet, pagePath, true, true );
+        }
     }
 
+    for( const ORCAD_OCC_BLOCK* occurrencePtr : sortedOccurrences( aScope ) )
+    {
+        const ORCAD_OCC_BLOCK&      occurrence = *occurrencePtr;
+        PAGE_PLACEMENT*             parent = nullptr;
+        const ORCAD_DRAWN_INSTANCE* drawn = nullptr;
+
+        for( PAGE_PLACEMENT& placement : placements )
+        {
+            drawn = findDrawnBlock( *placement.page, occurrence.targetDbId );
+
+            if( drawn )
+            {
+                parent = &placement;
+                break;
+            }
+        }
+
+        if( !parent || !drawn )
+            continue;
+
+        std::string                  childKey = OrcadLower( occurrence.childFolder );
+        std::vector<ORCAD_RAW_PAGE>& childPages = m_design.childFolderPages.at( childKey );
+        std::string filePageName =
+                childPages.size() == 1 ? childPages.front().name : occurrence.childFolder + " container";
+        wxString    sheetName;
+
+        if( aWalk.folderSheetNames )
+        {
+            sheetName = folderSheetName( drawn->reference.empty() ? occurrence.childFolder : drawn->reference );
+        }
+        else
+        {
+            sheetName = uniqueSheetName(
+                    FromOrcadString( drawn->reference.empty() ? filePageName : drawn->reference ) );
+        }
+
+        SCH_SHEET* childSheet = createBlockSheet( parent->sheet, *parent->page, *drawn, occurrence, sheetName,
+                                                  filePageName, ++aWalk.pageIndex );
+
+        SCH_SHEET_PATH childPath = parent->path;
+        childPath.push_back( childSheet );
+        childPath.SetPageNumber( wxString::Format( wxS( "%d" ), aWalk.pageIndex ) );
+        std::string childSuffix;
+
+        if( aWalk.nestedFlatSuffix || m_simpleRepeatedLeafDesign )
+            childSuffix = appendOccurrenceSuffix( aOccurrenceSuffix, *drawn );
+
+        std::map<std::string, std::string> interfaceAliases;
+
+        if( aWalk.interfaceAliases )
+        {
+            for( const ORCAD_BLOCK_PIN& pin : drawn->pins )
+            {
+                std::set<const std::string*> targets =
+                        pinOccurrenceTargets( *parent->page, pin, aScope.netNames, false );
+
+                if( targets.size() == 1 )
+                    interfaceAliases[canonicalGlobalNetKey( pin.name )] = canonicalGlobalNetName( **targets.begin() );
+            }
+        }
+
+        auto unconnectedNames = unconnectedInterfaceNetNames( *drawn, childSuffix );
+
+        if( aWalk.occurrenceAliases )
+            addChildOccurrenceAliases( *parent->page, aScope, *drawn, occurrence.scope );
+
+        placeFolder( aWalk, childPages, occurrence.scope, childSheet, childPath, childSuffix,
+                     m_occurrenceFolderCounts[childKey] > 1, unconnectedNames, std::move( interfaceAliases ) );
+    }
+}
+
+
+void ORCAD_CONVERTER::convertFlatPages( const SCH_SHEET_PATH& aRootPath )
+{
     // Page list = root pages + each block occurrence's child pages, tagged w/ scope refs.
     // Child schematic reused N times yields N jobs, each w/ own designators.
     struct PAGE_JOB
@@ -2231,8 +2161,8 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
 
                 PAGE_SCOPE scope = occurrenceScope( block.scope );
                 scope.flatNetSuffix = leafFolder ? occurrenceSuffix : std::string();
-                scope.namedFlatNets = simpleRepeatedLeafDesign && leafFolder;
-                scope.generatedFlatNets = leafFolder && occurrenceFolderCounts[key] > 1;
+                scope.namedFlatNets = m_simpleRepeatedLeafDesign && leafFolder;
+                scope.generatedFlatNets = leafFolder && m_occurrenceFolderCounts[key] > 1;
                 scope.unconnectedInterfaceNetNames = std::move( unconnectedNames );
 
                 for( ORCAD_RAW_PAGE& childPage : it->second )
@@ -2643,8 +2573,8 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
 
         pollProgress( m_progressReporter, job.page->name );
         enterScope( jobScope( job ) );
-        applyPageSettings( *job.page, rootScreen );
-        convertPage( *job.page, rootScreen, rootPath );
+        applyPageSettings( *job.page, m_rootSheet->GetScreen() );
+        convertPage( *job.page, m_rootSheet->GetScreen(), aRootPath );
         m_scope = PAGE_SCOPE();
     }
     else
@@ -2707,43 +2637,15 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
             }
         }
 
-        std::vector<SCH_SHEET*>  topSheets;
-        std::vector<SCH_SCREEN*> topScreens;
+        std::vector<std::pair<wxString, wxString>> names;
 
         for( size_t i = 0; i < sheetJobs.size(); ++i )
         {
-            SHEET_JOB& sj = sheetJobs[i];
-
-            SCH_SHEET*  sheet;
-            SCH_SCREEN* screen;
-
-            if( i == 0 )
-            {
-                // Reuse sheet the loader created for first page
-                sheet = aRootSheet;
-                screen = rootScreen;
-            }
-            else
-            {
-                screen = new SCH_SCREEN( m_schematic );
-                const_cast<KIID&>( screen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
-                sheet = new SCH_SHEET( m_schematic );
-                sheet->SetScreen( screen );
-                sheet->SyncUuidToScreen();
-            }
-
-            sj.name = uniqueSheetName( sj.name );
-            wxString fileName = MakePageFileName( static_cast<int>( i + 1 ), sj.job.page->name );
-
-            sheet->GetField( FIELD_T::SHEET_NAME )->SetText( sj.name );
-            sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fileName );
-            screen->SetFileName( m_schematic->Project().GetProjectPath() + fileName );
-
-            topSheets.push_back( sheet );
-            topScreens.push_back( screen );
+            names.emplace_back( uniqueSheetName( sheetJobs[i].name ),
+                                MakePageFileName( static_cast<int>( i + 1 ), sheetJobs[i].job.page->name ) );
         }
 
-        m_schematic->SetTopLevelSheets( topSheets );
+        std::vector<SCH_SHEET*> topSheets = createTopLevelSheets( names, true, false );
 
         for( size_t i = 0; i < sheetJobs.size(); ++i )
         {
@@ -2751,14 +2653,11 @@ SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
             SCH_SHEET_PATH pagePath = topLevelPath( topSheets[i], i + 1 );
             pollProgress( m_progressReporter, sj.job.page->name );
             enterScope( jobScope( sj.job ) );
-            applyPageSettings( *sj.job.page, topScreens[i] );
-            convertPage( *sj.job.page, topScreens[i], pagePath );
+            applyPageSettings( *sj.job.page, topSheets[i]->GetScreen() );
+            convertPage( *sj.job.page, topSheets[i]->GetScreen(), pagePath );
             m_scope = PAGE_SCOPE();
         }
     }
-
-    finishConversion();
-    return aRootSheet;
 }
 
 
@@ -2780,31 +2679,15 @@ void ORCAD_CONVERTER::convertUnreferencedPages()
             usedFileNames.insert( wxFileName( path.LastScreen()->GetFileName() ).GetFullName().Lower() );
     }
 
-    size_t fileIndex = topSheets.size() + 1;
+    size_t                                     fileIndex = topSheets.size() + 1;
+    std::vector<ORCAD_RAW_PAGE*>               pages;
+    std::vector<std::pair<wxString, wxString>> names;
 
-    struct PAGE_SHEET
+    for( auto& [folder, folderPages] : m_design.unreferencedFolderPages )
     {
-        ORCAD_RAW_PAGE* page;
-        SCH_SHEET*      sheet;
-        SCH_SCREEN*     screen;
-        size_t          pageNumber;
-    };
-
-    std::vector<PAGE_SHEET> pageSheets;
-
-    for( auto& [folder, pages] : m_design.unreferencedFolderPages )
-    {
-        for( ORCAD_RAW_PAGE& page : pages )
+        for( ORCAD_RAW_PAGE& page : folderPages )
         {
-            SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
-            const_cast<KIID&>( screen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
-            SCH_SHEET* sheet = new SCH_SHEET( m_schematic );
-            sheet->SetScreen( screen );
-            const_cast<KIID&>( sheet->m_Uuid ) = screen->GetUuid();
-            sheet->SetExcludedFromBoard( true );
-
             wxString name = uniqueSheetName( FromOrcadString( page.name ) );
-            size_t   pageNumber = topSheets.size() + 1;
             wxString fileName;
 
             do
@@ -2812,26 +2695,26 @@ void ORCAD_CONVERTER::convertUnreferencedPages()
                 fileName = MakePageFileName( static_cast<int>( fileIndex++ ), page.name );
             } while( !usedFileNames.insert( fileName.Lower() ).second );
 
-            sheet->GetField( FIELD_T::SHEET_NAME )->SetText( name );
-            sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( fileName );
-            screen->SetFileName( m_schematic->Project().GetProjectPath() + fileName );
-            topSheets.push_back( sheet );
-            pageSheets.push_back( { &page, sheet, screen, pageNumber } );
+            pages.push_back( &page );
+            names.emplace_back( name, fileName );
         }
     }
 
-    m_schematic->SetTopLevelSheets( topSheets );
+    std::vector<SCH_SHEET*> sheets = createTopLevelSheets( names, false, false );
     m_scope = PAGE_SCOPE();
 
-    for( PAGE_SHEET& pageSheet : pageSheets )
+    for( size_t i = 0; i < pages.size(); ++i )
     {
-        SCH_SHEET_PATH path = topLevelPath( pageSheet.sheet, pageSheet.pageNumber );
-        pollProgress( m_progressReporter, pageSheet.page->name );
-        applyPageSettings( *pageSheet.page, pageSheet.screen );
-        convertPage( *pageSheet.page, pageSheet.screen, path );
+        SCH_SCREEN*    screen = sheets[i]->GetScreen();
+        SCH_SHEET_PATH path = topLevelPath( sheets[i], topSheets.size() + i + 1 );
+
+        sheets[i]->SetExcludedFromBoard( true );
+        pollProgress( m_progressReporter, pages[i]->name );
+        applyPageSettings( *pages[i], screen );
+        convertPage( *pages[i], screen, path );
 
         // Top-level sheet attributes are not serialized in schematic files.
-        for( SCH_ITEM* item : pageSheet.screen->Items().OfType( SCH_SYMBOL_T ) )
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
             static_cast<SCH_SYMBOL*>( item )->SetExcludedFromBoard( true );
     }
 }

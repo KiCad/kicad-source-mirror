@@ -216,6 +216,28 @@ private:
         mutable std::map<const ORCAD_GRAPHIC_INST*, std::string> powerNets;
     };
 
+    /** Placements of a power symbol name and the power nets they resolved to. */
+    struct POWER_ALIAS_EVIDENCE
+    {
+        size_t                                                placements = 0;
+        std::map<std::string, std::pair<std::string, size_t>> targets;
+    };
+
+    /** Page counters and rules threaded through a folder hierarchy walk. The defaults are the folder rules. A
+     *  design whose every block opens a single-page child keeps the rules it was first imported with. */
+    struct FOLDER_WALK
+    {
+        int    pageIndex = 1;
+        size_t sourcePageIndex = 0;
+        size_t sourcePageCount = 0;
+        bool   numberSourcePages = true;    ///< fill title-block page numbers from the walk order
+        bool   occurrenceAliases = true;    ///< learn power and child occurrence aliases before placing pages
+        bool   interfaceAliases = false;    ///< alias a child's interface nets to the parent occurrence net
+        bool   nestedFlatSuffix = true;     ///< suffix by block path; else only in simple repeated leaf designs
+        bool   folderSheetNames = true;     ///< name an unreferenced block after its folder, else its page
+        bool   rootSharedFolderPage = true; ///< convert the root page as a shared folder page
+    };
+
     struct PLACED_PACKAGE_UNIT
     {
         SCH_SYMBOL*    symbol;
@@ -393,6 +415,53 @@ private:
     void recordNetNameMap();
     void convertUnreferencedPages();
 
+    /** -- hierarchy [orcad_converter_sheet.cpp] ----------------------------------------- */
+
+    /** Collect the occurrence facts every hierarchy strategy reads. */
+    void prepareOccurrenceNets();
+
+    /** A scope for aOcc carrying the occurrence aliases known so far. */
+    PAGE_SCOPE occurrenceScope( const ORCAD_OCC_SCOPE& aOcc ) const;
+
+    /** No-connect block pins whose names are wired elsewhere become per-occurrence nets. */
+    std::map<std::string, std::string> unconnectedInterfaceNetNames( const ORCAD_DRAWN_INSTANCE& aBlock,
+                                                                     const std::string& aFlatNetSuffix ) const;
+
+    /** The child sheet for a hierarchical block, with its pins, appended to aParentSheet's screen. */
+    SCH_SHEET* createBlockSheet( SCH_SHEET* aParentSheet, const ORCAD_RAW_PAGE& aParentPage,
+                                 const ORCAD_DRAWN_INSTANCE& aBlock, const ORCAD_OCC_BLOCK& aOccurrence,
+                                 const wxString& aName, const std::string& aFilePageName, int aPageIndex );
+
+    /** Top-level sheets named by aNamesAndFiles. With aReuseRoot the first is the root sheet and the list
+     *  replaces the top level; otherwise the sheets are appended. Returns only the listed sheets. */
+    std::vector<SCH_SHEET*> createTopLevelSheets( const std::vector<std::pair<wxString, wxString>>& aNamesAndFiles,
+                                                  bool aReuseRoot, bool aOrdinalSheetUuids );
+
+    void recordPowerAlias( std::map<std::string, POWER_ALIAS_EVIDENCE>& aCandidates, const std::string& aSourceName,
+                           const std::string& aElectricalName ) const;
+
+    /** Rename a power symbol to the net most of its placements resolve to. */
+    void acceptPowerAliases( const std::map<std::string, POWER_ALIAS_EVIDENCE>& aCandidates );
+
+    /** One root page whose every block opens a single-page child. */
+    bool canBuildNativeHierarchy( const ORCAD_RAW_PAGE& aPage, const ORCAD_OCC_SCOPE& aScope ) const;
+
+    /** Every occurrence block is drawn exactly once on its parent folder's pages. */
+    bool canBuildFolderHierarchy( const std::vector<ORCAD_RAW_PAGE>& aPages, const ORCAD_OCC_SCOPE& aScope ) const;
+    void convertFolderHierarchy( const SCH_SHEET_PATH& aRootPath, bool aNative );
+    void addChildOccurrenceAliases( const ORCAD_RAW_PAGE& aParentPage, const ORCAD_OCC_SCOPE& aParentScope,
+                                    const ORCAD_DRAWN_INSTANCE& aDrawn, const ORCAD_OCC_SCOPE& aChildScope );
+    void collectFolderPowerAliases( std::map<std::string, POWER_ALIAS_EVIDENCE>& aCandidates,
+                                    std::vector<ORCAD_RAW_PAGE>& aPages, const ORCAD_OCC_SCOPE& aScope );
+    void placeFolder( FOLDER_WALK& aWalk, std::vector<ORCAD_RAW_PAGE>& aPages, const ORCAD_OCC_SCOPE& aScope,
+                      SCH_SHEET* aFolderSheet, const SCH_SHEET_PATH& aFolderPath,
+                      const std::string& aOccurrenceSuffix, bool aRepeatedFolder,
+                      const std::map<std::string, std::string>& aUnconnectedInterfaceNetNames,
+                      std::map<std::string, std::string>        aInterfaceNetAliases );
+
+    /** Every page, each child occurrence expanded, becomes a top-level sheet. */
+    void convertFlatPages( const SCH_SHEET_PATH& aRootPath );
+
     /** Visit root pages, then child-folder pages, then unreferenced folder pages if asked. */
     void forEachDesignPage( const std::function<void( const ORCAD_RAW_PAGE& )>& aVisit,
                             bool aUnreferenced = false ) const;
@@ -536,6 +605,12 @@ private:
     std::set<std::string>                          m_connectedBlockInterfaceNames;
     std::map<std::string, size_t>                  m_occurrenceNetNameScopeCounts;
     std::map<std::string, size_t>                  m_occurrenceNetNameMinDepth;
+    std::map<std::string, size_t>                  m_occurrenceFolderCounts;
+    bool                                           m_simpleRepeatedLeafDesign = false;
+
+    /** Occurrence net aliases shared by every scope, then those a parent block adds per child scope. */
+    std::map<std::string, std::string>                                                   m_baseOccurrenceNetAliases;
+    std::map<const std::map<uint32_t, std::string>*, std::map<std::string, std::string>> m_occurrenceAliasesByScope;
     int                                            m_powerCount;      ///< "#PWR%04d" counter
     int                                            m_fontBaselineDbu; ///< dominant text height; 0 = none
     size_t                                         m_pageOrdinal = 0;
