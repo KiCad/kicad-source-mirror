@@ -238,6 +238,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createSwatches()
 
 void PANEL_EESCHEMA_COLOR_SETTINGS::onNewThemeSelected()
 {
+    updateAllowedSwatches();
     updatePreview();
 }
 
