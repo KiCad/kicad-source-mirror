@@ -265,7 +265,6 @@ struct ORCAD_GRAPHIC_INST
     double                             textScaleY = 1.0;
     bool                               useGenericTextBaseline = false;
     bool                               useSymbolLineWidths = false;
-    std::string                        textFaceOverride;
 };
 
 

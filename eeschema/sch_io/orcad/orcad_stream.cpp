@@ -22,6 +22,8 @@
 
 #include <sch_io/orcad/orcad_stream.h>
 
+#include <algorithm>
+#include <cctype>
 #include <cstring>
 
 #include <ki_exception.h>
@@ -106,12 +108,6 @@ uint8_t ORCAD_STREAM::ReadU8()
 {
     requireBytes( 1 );
     return m_data[m_offset++];
-}
-
-
-int8_t ORCAD_STREAM::ReadI8()
-{
-    return static_cast<int8_t>( ReadU8() );
 }
 
 
@@ -299,4 +295,26 @@ wxString FromOrcadString( const std::string& aText )
     converted.Replace( wxS( "\r" ), wxS( "\n" ) );
 
     return converted;
+}
+
+
+std::string OrcadLower( std::string_view aText )
+{
+    std::string out( aText );
+
+    for( char& c : out )
+        c = static_cast<char>( std::tolower( static_cast<unsigned char>( c ) ) );
+
+    return out;
+}
+
+
+bool OrcadIEquals( std::string_view aLeft, std::string_view aRight )
+{
+    return aLeft.size() == aRight.size()
+           && std::equal( aLeft.begin(), aLeft.end(), aRight.begin(),
+                          []( unsigned char a, unsigned char b )
+                          {
+                              return std::tolower( a ) == std::tolower( b );
+                          } );
 }

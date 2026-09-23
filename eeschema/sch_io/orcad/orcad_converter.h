@@ -195,6 +195,10 @@ private:
 
     /** Return the design-wide spelling selected by prepareGlobalNetNames(). */
     std::string canonicalGlobalNetName( const std::string& aName ) const;
+
+    /** Case-folded canonicalGlobalNetName() for use as a map key. */
+    std::string canonicalGlobalNetKey( const std::string& aName ) const;
+
     std::string effectiveInterfaceNetName( const std::string& aName ) const;
     std::string occurrenceElectricalNetName( uint32_t aOccurrenceId, const std::string& aName ) const;
     bool        isPowerNetName( const std::string& aName ) const;
@@ -241,7 +245,7 @@ private:
 
     void addSymbolPin( LIB_SYMBOL* aSymbol, const ORCAD_SYMBOL_PIN& aPin, const wxString& aNumber, int aUnit,
                        bool aPower, const std::string& aNameOverride, bool aNameVisible, bool aShowPinNumbers,
-                       bool aNumberVisible, const BOX2I* aBodyBox, bool aHidden = false,
+                       bool aNumberVisible, const BOX2I& aBodyBox, bool aHidden = false,
                        bool aExplicitNet = false );
 
 
@@ -388,8 +392,7 @@ private:
 
     void placeDefinitionVectors( const ORCAD_SYMBOL_DEF& aDefinition, int aBaseX, int aBaseY, int aOrient,
                                  SCH_SCREEN* aScreen, double aTextScaleX = 1.0, double aTextScaleY = 1.0,
-                                 bool aUseGenericTextBaseline = false,
-                                 const std::string& aTextFaceOverride = {} );
+                                 bool aUseGenericTextBaseline = false );
 
     /** Closest point (DBU) on a wire segment to (aX, aY); exact for H/V wires. */
     static VECTOR2I snapToWire( int aX, int aY, const ORCAD_WIRE& aWire );

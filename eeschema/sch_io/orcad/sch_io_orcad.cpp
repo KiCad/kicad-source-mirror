@@ -58,6 +58,7 @@
 #include <sch_io/orcad/orcad_library.h>
 #include <sch_io/orcad/orcad_page.h>
 #include <sch_io/orcad/orcad_records.h>
+#include <sch_io/orcad/orcad_stream.h>
 
 
 std::string OrcadNormalizeCfbName( const std::string& aName )
@@ -155,20 +156,6 @@ enumChildren( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FILE_ENTRY*
 
                           return 0;
                       } );
-
-    return out;
-}
-
-
-std::string lowerCopy( const std::string& aText )
-{
-    std::string out = aText;
-
-    std::transform( out.begin(), out.end(), out.begin(),
-                    []( unsigned char c )
-                    {
-                        return static_cast<char>( std::tolower( c ) );
-                    } );
 
     return out;
 }
@@ -643,13 +630,13 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         // Root folder = folder matching Library schematic name (any case); others are
         // hierarchical children, skipped here
         std::string rootFolder;
-        std::string schematicName = lowerCopy( design.library.schematicName );
+        std::string schematicName = OrcadLower( design.library.schematicName );
 
         if( !schematicName.empty() )
         {
             for( const std::string& folder : folders )
             {
-                if( lowerCopy( folder ) == schematicName )
+                if( OrcadLower( folder ) == schematicName )
                 {
                     rootFolder = folder;
                     break;
@@ -797,13 +784,13 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         std::map<std::string, std::string> folderByLowerName;
 
         for( const auto& folderEntry : folderEntries )
-            folderByLowerName.emplace( lowerCopy( folderEntry.first ), folderEntry.first );
+            folderByLowerName.emplace( OrcadLower( folderEntry.first ), folderEntry.first );
 
         for( const auto& [dbId, childName] : hierarchyLinks )
         {
-            std::string key = lowerCopy( childName );
+            std::string key = OrcadLower( childName );
 
-            if( key == lowerCopy( rootFolder ) || design.childFolderPages.count( key ) )
+            if( key == OrcadLower( rootFolder ) || design.childFolderPages.count( key ) )
                 continue;
 
             auto childIt = folderByLowerName.find( key );
@@ -814,9 +801,9 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
         for( const std::string& folder : folders )
         {
-            std::string key = lowerCopy( folder );
+            std::string key = OrcadLower( folder );
 
-            if( key == lowerCopy( rootFolder ) || design.childFolderPages.count( key ) )
+            if( key == OrcadLower( rootFolder ) || design.childFolderPages.count( key ) )
                 continue;
 
             std::vector<ORCAD_RAW_PAGE>& pages = design.unreferencedFolderPages[key];

@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include <wx/string.h>
@@ -79,7 +80,6 @@ public:
     /** -- scalars (little-endian, bounds-checked, throw IO_ERROR on overrun) ------- */
 
     uint8_t  ReadU8();
-    int8_t   ReadI8();
     uint16_t ReadU16();
     int16_t  ReadI16();
     uint32_t ReadU32();
@@ -153,5 +153,11 @@ private:
 
 /** Use an 8-bit fallback if Windows-1252 decoding fails. */
 wxString FromOrcadString( const std::string& aText );
+
+/** Case-fold a raw OrCAD name with std::tolower, byte by byte. */
+std::string OrcadLower( std::string_view aText );
+
+/** Byte-wise case-insensitive comparison with the folding of OrcadLower. */
+bool OrcadIEquals( std::string_view aLeft, std::string_view aRight );
 
 #endif // ORCAD_STREAM_H_
