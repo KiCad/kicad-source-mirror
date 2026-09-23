@@ -1782,6 +1782,7 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_SCH::handleRunSchematicJobExpo
 
     // Unknown -> default AA on
     plotJob->m_antialias = aCtx.Request.antialiasing() != types::AntialiasingMode::AAM_NONE;
+    plotJob->m_useBackgroundColor = aCtx.Request.plot_background_color();
 
     return ExecuteSchematicJob( m_context->GetKiway(), *plotJob );
 }

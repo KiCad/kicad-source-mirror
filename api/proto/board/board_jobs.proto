@@ -582,4 +582,8 @@ message RunBoardJobExportPng
 
     // Supports BJPM_ALL_LAYERS_ONE_PAGE and BJPM_EACH_LAYER_OWN_FILE.
     BoardJobPaginationMode page_mode = 5;
+
+    // If true, will plot using the background color from the theme specified in
+    // plot_settings.  If false or absent, will plot with a transparent background.
+    optional bool plot_background_color = 6;
 }

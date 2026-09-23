@@ -197,15 +197,15 @@ public:
     PCB_LAYER_ID GetLayer() const { return m_layer; }
     void         SetLayer( PCB_LAYER_ID aLayer ) { m_layer = aLayer; }
 
-    void        SetPDFBackgroundColor( const COLOR4D& aColor ) { m_PDFBackgroundColor = aColor; }
-    COLOR4D     GetPDFBackgroundColor() const { return m_PDFBackgroundColor; }
+    void        SetBackgroundColor( const COLOR4D& aColor ) { m_backgroundColor = aColor; }
+    COLOR4D     GetBackgroundColor() const { return m_backgroundColor; }
 
 public:
     bool        m_PDFFrontFPPropertyPopups;   ///< Generate PDF property popup menus for footprints
     bool        m_PDFBackFPPropertyPopups;    ///<   on front and/or back of board
     bool        m_PDFMetadata;                ///< Generate PDF metadata for SUBJECT and AUTHOR
     bool        m_PDFSingle;                  ///< Generate a single PDF file for all layers
-    COLOR4D     m_PDFBackgroundColor;         ///< Background color to use if m_PDFUseBackgroundColor is true
+    COLOR4D     m_backgroundColor;            ///< Background color to use for PNG and PDF plotting
 
 private:
     friend class PCB_PLOT_PARAMS_PARSER;

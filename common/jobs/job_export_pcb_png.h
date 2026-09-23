@@ -44,6 +44,7 @@ public:
 
     int  m_dpi;
     bool m_antialias;
+    bool m_useBackgroundColor;
 };
 
 #endif // JOB_EXPORT_PCB_PNG_H

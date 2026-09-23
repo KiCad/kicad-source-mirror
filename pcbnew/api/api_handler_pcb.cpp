@@ -2562,6 +2562,7 @@ API_HANDLER_PCB::handleRunBoardJobExportPng( const HANDLER_CONTEXT<RunBoardJobEx
 
     // Unknown -> default AA on
     job.m_antialias = aCtx.Request.antialiasing() != types::AntialiasingMode::AAM_NONE;
+    job.m_useBackgroundColor = aCtx.Request.plot_background_color();
 
     return ExecuteBoardJob( pcbContext(), job );
 }

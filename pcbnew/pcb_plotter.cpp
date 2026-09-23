@@ -475,7 +475,7 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
         aOpts.m_PDFBackFPPropertyPopups = pdfJob->m_pdfBackFPPropertyPopups;
         aOpts.m_PDFMetadata = pdfJob->m_pdfMetadata;
         aOpts.m_PDFSingle = pdfJob->m_pdfSingle;
-        aOpts.m_PDFBackgroundColor = COLOR4D( pdfJob->m_pdfBackgroundColor );
+        aOpts.m_backgroundColor = COLOR4D( pdfJob->m_pdfBackgroundColor );
     }
 
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::POST )
@@ -487,11 +487,32 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
         aOpts.SetA4Output( psJob->m_forceA4 );
     }
 
+    wxString theme = aJob->m_colorTheme;
+
+    // Theme may be empty when running from a job in GUI context, so use the GUI settings.
+    if( theme.IsEmpty() )
+    {
+        if( PCBNEW_SETTINGS* pcbSettings = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
+            theme = pcbSettings->m_ColorTheme;
+    }
+
+    COLOR_SETTINGS* colors = ::GetColorSettings( theme );
+
+    if( colors->GetFilename() != theme && !aOpts.GetBlackAndWhite() )
+    {
+        aReporter.Report( wxString::Format( _( "Color theme '%s' not found, will use theme from PCB Editor.\n" ),
+                                            theme ),
+                          RPT_SEVERITY_WARNING );
+    }
+
     if( aJob->m_plotFormat == JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PNG )
     {
         JOB_EXPORT_PCB_PNG* pngJob = static_cast<JOB_EXPORT_PCB_PNG*>( aJob );
         aOpts.SetPngDPI( pngJob->m_dpi );
         aOpts.SetPngAntialias( pngJob->m_antialias );
+
+        if( pngJob->m_useBackgroundColor )
+            aOpts.SetBackgroundColor( colors->GetColor( LAYER_PCB_BACKGROUND ) );
     }
 
     aOpts.SetUseAuxOrigin( aJob->m_useDrillOrigin );
@@ -522,24 +543,6 @@ void PCB_PLOTTER::PlotJobToPlotOpts( PCB_PLOT_PARAMS& aOpts, JOB_EXPORT_PCB_PLOT
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::HPGL:   /* no longer supported */               break;
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PDF:    aOpts.SetFormat( PLOT_FORMAT::PDF );    break;
     case JOB_EXPORT_PCB_PLOT::PLOT_FORMAT::PNG:    aOpts.SetFormat( PLOT_FORMAT::PNG );    break;
-    }
-
-    wxString theme = aJob->m_colorTheme;
-
-    // Theme may be empty when running from a job in GUI context, so use the GUI settings.
-    if( theme.IsEmpty() )
-    {
-        if( PCBNEW_SETTINGS* pcbSettings = GetAppSettings<PCBNEW_SETTINGS>( "pcbnew" ) )
-            theme = pcbSettings->m_ColorTheme;
-    }
-
-    COLOR_SETTINGS* colors = ::GetColorSettings( theme );
-
-    if( colors->GetFilename() != theme && !aOpts.GetBlackAndWhite() )
-    {
-        aReporter.Report( wxString::Format( _( "Color theme '%s' not found, will use theme from PCB Editor.\n" ),
-                                            theme ),
-                          RPT_SEVERITY_WARNING );
     }
 
     aOpts.SetColorSettings( colors );

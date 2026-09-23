@@ -1284,7 +1284,7 @@ static void FillNegativeKnockout( PLOTTER *aPlotter, const BOX2I &aBbbox )
 }
 
 
-static void plotPdfBackground( BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts, PLOTTER* aPlotter )
+static void plotBackgroundColor( BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts, PLOTTER* aPlotter )
 {
     const PAGE_INFO& pageInfo = aPlotter->PageSettings();
     const VECTOR2I   plotOffset = aPlotter->GetPlotOffsetUserUnits();
@@ -1292,9 +1292,9 @@ static void plotPdfBackground( BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts, 
                                  pageInfo.GetHeightIU( pcbIUScale.IU_PER_MILS ) );
 
     if( aPlotter->GetColorMode()
-        && aPlotOpts->GetPDFBackgroundColor() != COLOR4D::UNSPECIFIED )
+        && aPlotOpts->GetBackgroundColor() != COLOR4D::UNSPECIFIED )
     {
-        aPlotter->SetColor( aPlotOpts->GetPDFBackgroundColor() );
+        aPlotter->SetColor( aPlotOpts->GetBackgroundColor() );
 
         // Use plotter page size and offset so background matches the plotted output.
         VECTOR2I end = plotOffset + pageSizeIU;
@@ -1448,8 +1448,11 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, const PCB_PLOT_PARAMS *aPlotOpts, int aL
 
         if( startPlotSuccess )
         {
-            if( aPlotOpts->GetFormat() == PLOT_FORMAT::PDF )
-                plotPdfBackground( aBoard, aPlotOpts, plotter );
+            if( aPlotOpts->GetFormat() == PLOT_FORMAT::PDF
+                || aPlotOpts->GetFormat() == PLOT_FORMAT::PNG )
+            {
+                plotBackgroundColor( aBoard, aPlotOpts, plotter );
+            }
 
             // Plot the frame reference if requested
             if( aPlotOpts->GetPlotFrameRef() )
@@ -1490,7 +1493,7 @@ void setupPlotterNewPDFPage( PLOTTER* aPlotter, BOARD* aBoard, PCB_PLOT_PARAMS* 
                              const wxString& aSheetPath, const wxString& aPageNumber,
                              int aPageCount )
 {
-    plotPdfBackground( aBoard, aPlotOpts, aPlotter );
+    plotBackgroundColor( aBoard, aPlotOpts, aPlotter );
 
     aPlotter->RenderSettings()->SetLayerName( aLayerName );
 
