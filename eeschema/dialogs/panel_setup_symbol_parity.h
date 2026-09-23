@@ -24,6 +24,7 @@
 
 class SCH_EDIT_FRAME;
 class SCHEMATIC_SETTINGS;
+class SYMBOL_PARITY_SETTINGS;
 
 
 class PANEL_SETUP_SYMBOL_PARITY : public PANEL_SETUP_SYMBOL_PARITY_BASE
@@ -35,6 +36,9 @@ public:
     bool TransferDataFromWindow() override;
 
     void ImportSettingsFrom( SYMBOL_PARITY_SETTINGS& aSettings );
+
+private:
+    void transferSettingsToWindow( SYMBOL_PARITY_SETTINGS& aSettings );
 
 private:
     SCH_EDIT_FRAME*    m_frame;

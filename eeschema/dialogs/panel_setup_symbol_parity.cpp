@@ -30,24 +30,30 @@ PANEL_SETUP_SYMBOL_PARITY::PANEL_SETUP_SYMBOL_PARITY( wxWindow* aWindow, SCH_EDI
 }
 
 
+void PANEL_SETUP_SYMBOL_PARITY::transferSettingsToWindow( SYMBOL_PARITY_SETTINGS& aSettings )
+{
+    m_missingFields->SetValue( aSettings.m_MissingFields );
+    m_extraFields->SetValue( aSettings.m_ExtraFields );
+    m_fieldTextOpt->SetValue( aSettings.m_FieldTexts );
+    m_fieldVisibilitiesOpt->SetValue( aSettings.m_FieldVisibilities );
+    m_fieldStyleOpt->SetValue( aSettings.m_FieldStyles );
+    m_fieldPositionsOpt->SetValue( aSettings.m_FieldPositions );
+
+    m_pinVisibilitiesOpt->SetValue( aSettings.m_PinVisibilities );
+    m_altPinFunctionsOpt->SetValue( aSettings.m_PinAltFunctions );
+
+    m_excludeFromBoardOpt->SetValue( aSettings.m_ExcludeFromBoardFlags );
+    m_DNPOpt->SetValue( aSettings.m_DNPFlags );
+    m_excludeFromBOMOpt->SetValue( aSettings.m_ExcludeFromBOMFlags);
+    m_excludeFromPosFilesOpt->SetValue( aSettings.m_ExcludeFromPosFileFlags );
+}
+
+
 bool PANEL_SETUP_SYMBOL_PARITY::TransferDataToWindow()
 {
     SYMBOL_PARITY_SETTINGS& settings = m_frame->Schematic().Settings().m_SymbolParity;
 
-    m_missingFields->SetValue( settings.m_MissingFields );
-    m_extraFields->SetValue( settings.m_ExtraFields );
-    m_fieldTextOpt->SetValue( settings.m_FieldTexts );
-    m_fieldVisibilitiesOpt->SetValue( settings.m_FieldVisibilities );
-    m_fieldStyleOpt->SetValue( settings.m_FieldStyles );
-    m_fieldPositionsOpt->SetValue( settings.m_FieldPositions );
-
-    m_pinVisibilitiesOpt->SetValue( settings.m_PinVisibilities );
-    m_altPinFunctionsOpt->SetValue( settings.m_PinAltFunctions );
-
-    m_excludeFromBoardOpt->SetValue( settings.m_ExcludeFromBoardFlags );
-    m_DNPOpt->SetValue( settings.m_DNPFlags );
-    m_excludeFromBOMOpt->SetValue( settings.m_ExcludeFromBOMFlags );
-    m_excludeFromPosFilesOpt->SetValue( settings.m_ExcludeFromPosFileFlags );
+    transferSettingsToWindow( settings );
 
     return true;
 }
@@ -78,18 +84,5 @@ bool PANEL_SETUP_SYMBOL_PARITY::TransferDataFromWindow()
 
 void PANEL_SETUP_SYMBOL_PARITY::ImportSettingsFrom( SYMBOL_PARITY_SETTINGS& aSettings )
 {
-    m_missingFields->SetValue( aSettings.m_MissingFields );
-    m_extraFields->SetValue( aSettings.m_ExtraFields );
-    m_fieldTextOpt->SetValue( aSettings.m_FieldTexts );
-    m_fieldVisibilitiesOpt->SetValue( aSettings.m_FieldVisibilities );
-    m_fieldStyleOpt->SetValue( aSettings.m_FieldStyles );
-    m_fieldPositionsOpt->SetValue( aSettings.m_FieldPositions );
-
-    m_pinVisibilitiesOpt->SetValue( aSettings.m_PinVisibilities );
-    m_altPinFunctionsOpt->SetValue( aSettings.m_PinAltFunctions );
-
-    m_excludeFromBoardOpt->SetValue( aSettings.m_ExcludeFromBoardFlags );
-    m_DNPOpt->SetValue( aSettings.m_DNPFlags );
-    m_excludeFromBOMOpt->SetValue( aSettings.m_ExcludeFromBOMFlags);
-    m_excludeFromPosFilesOpt->SetValue( aSettings.m_ExcludeFromPosFileFlags );
+    transferSettingsToWindow( aSettings );
 }
