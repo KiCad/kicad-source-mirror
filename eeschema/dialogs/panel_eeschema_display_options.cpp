@@ -51,6 +51,7 @@ void PANEL_EESCHEMA_DISPLAY_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* cf
     m_checkShowHiddenPins->SetValue( cfg->m_Appearance.show_hidden_pins );
     m_checkShowRemappedPinNumbers->SetValue( cfg->m_Appearance.show_remapped_pin_numbers );
     m_checkShowHiddenFields->SetValue( cfg->m_Appearance.show_hidden_fields );
+    m_checkShowDirectiveLabels->SetValue( cfg->m_Appearance.show_directive_labels );
     m_checkShowERCErrors->SetValue( cfg->m_Appearance.show_erc_errors );
     m_checkShowERCWarnings->SetValue( cfg->m_Appearance.show_erc_warnings );
     m_checkShowERCExclusions->SetValue( cfg->m_Appearance.show_erc_exclusions );
@@ -90,12 +91,14 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     if( EESCHEMA_SETTINGS* cfg = GetAppSettings<EESCHEMA_SETTINGS>( "eeschema" ) )
     {
         cfg->m_Appearance.default_font = m_defaultFontCtrl->GetSelection() <= 0
-                                         // This is a keyword. Do not translate.
-                                         ? wxString( KICAD_FONT_NAME )
-                                         : m_defaultFontCtrl->GetStringSelection();
+                                                                         // This is a keyword. Do not translate.
+                                                                         ? wxString( KICAD_FONT_NAME )
+                                                                         : m_defaultFontCtrl->GetStringSelection();
+
         cfg->m_Appearance.show_hidden_pins = m_checkShowHiddenPins->GetValue();
         cfg->m_Appearance.show_remapped_pin_numbers = m_checkShowRemappedPinNumbers->GetValue();
         cfg->m_Appearance.show_hidden_fields = m_checkShowHiddenFields->GetValue();
+        cfg->m_Appearance.show_directive_labels = m_checkShowDirectiveLabels->GetValue();
         cfg->m_Appearance.show_erc_warnings = m_checkShowERCWarnings->GetValue();
         cfg->m_Appearance.show_erc_errors = m_checkShowERCErrors->GetValue();
         cfg->m_Appearance.show_erc_exclusions = m_checkShowERCExclusions->GetValue();
@@ -118,7 +121,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
         cfg->m_CrossProbing.center_on_items = m_checkCrossProbeCenter->GetValue();
         cfg->m_CrossProbing.zoom_to_fit = m_checkCrossProbeZoom->GetValue();
         cfg->m_CrossProbing.auto_highlight = m_checkCrossProbeAutoHighlight->GetValue();
-    cfg->m_CrossProbing.flash_selection = m_checkCrossProbeFlash->GetValue();
+        cfg->m_CrossProbing.flash_selection = m_checkCrossProbeFlash->GetValue();
     }
 
     m_galOptsPanel->TransferDataFromWindow();
