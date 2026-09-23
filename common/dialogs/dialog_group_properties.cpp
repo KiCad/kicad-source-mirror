@@ -82,6 +82,16 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 {
+    LIB_ID libId;
+
+    if( !m_libraryLink->GetValue().IsEmpty() && libId.Parse( m_libraryLink->GetValue(), true ) >= 0 )
+    {
+        wxString error;
+        error.Printf( _( "Invalid library link: '%s'" ), m_libraryLink->GetValue() );
+        wxMessageBox( error, _( "Error" ), wxOK | wxICON_ERROR, m_frame );
+        return false;
+    }
+
     m_commit->Modify( m_group->AsEdaItem(), m_frame->GetScreen(), RECURSE_MODE::RECURSE );
 
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
@@ -100,25 +110,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 
     m_group->SetName( m_nameCtrl->GetValue() );
     m_group->AsEdaItem()->SetLocked( m_locked->GetValue() );
-
-    if( !m_libraryLink->GetValue().IsEmpty() )
-    {
-        LIB_ID libId;
-
-        if( libId.Parse( m_libraryLink->GetValue(), true ) >= 0 )
-        {
-            wxString error;
-            error.Printf( _( "Invalid library link: '%s'" ), m_libraryLink->GetValue() );
-            wxMessageBox( error, _( "Error" ), wxOK | wxICON_ERROR, m_frame );
-            return false;
-        }
-
-        m_group->SetDesignBlockLibId( libId );
-    }
-    else
-    {
-        m_group->SetDesignBlockLibId( LIB_ID() );
-    }
+    m_group->SetDesignBlockLibId( libId );
 
     m_toolMgr->RunAction( ACTIONS::selectionClear );
     m_group->RemoveAll();
