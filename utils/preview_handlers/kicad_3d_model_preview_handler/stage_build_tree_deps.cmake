@@ -4,6 +4,11 @@
 # whatever those pull in of their own is missing.  kicad_3d_import wants wxWidgets and its
 # transitive expat/pcre2, none of which the handler itself imports.
 
+# Normalize dependency paths before matching the Windows system DLL exclusion regex.
+if( POLICY CMP0207 )
+    cmake_policy( SET CMP0207 NEW )
+endif()
+
 file( MAKE_DIRECTORY "${DEST}" )
 
 foreach( lib IN LISTS KICAD_LIBS )
