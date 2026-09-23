@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 10:54-0700\n"
-"PO-Revision-Date: 2026-09-17 23:51+0000\n"
+"PO-Revision-Date: 2026-09-23 08:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -52748,7 +52748,7 @@ msgstr "Erstelle Leiterbahnen"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4769
 msgid "Converting footprints"
-msgstr "Footprints konvertieren"
+msgstr "Konvertiere Footprints"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2561
 msgid "Parsing Allegro objects"
@@ -52874,7 +52874,7 @@ msgid ""
 "be imported."
 msgstr ""
 "Mehr als eine Altium-Netzklasse unter dem Namen \"%s\" gefunden. Nur die "
-"erste wird importiert."
+"Erste wird importiert."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1533
 msgid "Loading components..."
