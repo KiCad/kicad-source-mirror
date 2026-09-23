@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-22 00:37+0000\n"
+"PO-Revision-Date: 2026-09-23 08:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -317,7 +317,7 @@ msgstr "Caricamento..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:442
 msgid "Building hit-test scene..."
-msgstr ""
+msgstr "Creazione scena hit-test..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:444
 msgid "Load Raytracing: board"
@@ -325,7 +325,7 @@ msgstr "Carica raytracing: scheda"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:678
 msgid "Building hit-test scene: layers..."
-msgstr ""
+msgstr "Creazione scena hit-test: strati..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:680
 msgid "Load Raytracing: layers"
@@ -333,12 +333,12 @@ msgstr "Carica raytracing: strati"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:916
 msgid "Building hit-test scene: 3D models..."
-msgstr ""
+msgstr "Creazione scena hit-test: modelli 3D..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1113
 #, c-format
 msgid "Hit-test scene ready in %.3f s"
-msgstr ""
+msgstr "Scena hit-test pronta in %.3f s"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1117
 #, c-format
@@ -18009,7 +18009,6 @@ msgid "Join separator:"
 msgstr "Separatore giunzione:"
 
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:75
-#, fuzzy
 msgid "; "
 msgstr "; "
 
@@ -21311,7 +21310,7 @@ msgstr ""
 #: eeschema/eeschema_jobs_handler.cpp:2270
 #, c-format
 msgid "Cannot flatten sub-sheets with duplicate basename '%s'\n"
-msgstr ""
+msgstr "Impossibile appiattire i sottofogli con nome base duplicato '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2327
 #, c-format
@@ -21326,7 +21325,7 @@ msgstr "Impossibile salvare file progetto unito: %s\n"
 #: eeschema/eeschema_jobs_handler.cpp:2392 pcbnew/pcbnew_jobs_handler.cpp:4131
 #, c-format
 msgid "Merge completed with %zu unresolved conflict(s) in %s\n"
-msgstr ""
+msgstr "Fusione (merge) completata con %zu conflitto/i irrisolto/i in %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2415 kicad/cli/command_mergetool.cpp:117
 #: pcbnew/pcbnew_jobs_handler.cpp:4456
@@ -21342,6 +21341,8 @@ msgstr "Impossibile salvare libreria simboli unita: %s\n"
 #, c-format
 msgid "Symbol library merge completed with %zu unresolved conflict(s) in %s\n"
 msgstr ""
+"Fusione (merge) della libreria di simboli completata con %zu conflitto/i "
+"irrisolto/i in %s\n"
 
 #: eeschema/eeschema_settings.cpp:69 eeschema/tools/sch_actions.cpp:1198
 msgid "Net Navigator"
@@ -21416,22 +21417,24 @@ msgstr "Non connesso"
 #: eeschema/erc/erc.cpp:264
 #, c-format
 msgid "Pin map '%s' references unknown symbol pin '%s'"
-msgstr ""
+msgstr "La mappa pin '%s' fa riferimento a un pin simbolo sconosciuto '%s'"
 
 #: eeschema/erc/erc.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol pins '%s' and '%s' both map to pad '%s'"
-msgstr "Il simbolo '%s' mappa il pin '%s' sia su '%s' che su '%s'."
+msgstr "I pin del simbolo '%s' e '%s' mappati entrambi sulla piazzola '%s'"
 
 #: eeschema/erc/erc.cpp:326
 #, c-format
 msgid "Pin map '%s' references pad '%s' not present on footprint '%s'"
 msgstr ""
+"La mappa pin '%s' fa riferimento alla piazzola '%s' non presente "
+"nell'impronta '%s'"
 
 #: eeschema/erc/erc.cpp:376
-#, fuzzy, c-format
+#, c-format
 msgid "Pin '%s' is connected but maps to no pad on footprint '%s'"
-msgstr "Il pin %s è connesso sia a %s che a %s"
+msgstr "Il pin %s è connesso ma non mappa su una piazzola sull'impronta '%s'"
 
 #: eeschema/erc/erc.cpp:435 pcbnew/drc/drc_test_provider_misc.cpp:469
 msgid " (in drawing sheet)"
@@ -21579,23 +21582,22 @@ msgid "Assigned footprint (%s) doesn't match footprint filters (%s)"
 msgstr "L'impronta assegnata (%s) non corrisponde ai filtri impronta (%s)"
 
 #: eeschema/erc/erc.cpp:2647
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s': symbol '%s' not found in libraries"
-msgstr "Simbolo '%s' non trovato nelle librerie gEDA."
+msgstr "Variante '%s': simbolo '%s' non trovato nelle librerie"
 
 #: eeschema/erc/erc.cpp:2669
-#, fuzzy, c-format
+#, c-format
 msgid "Variant '%s', alternate '%s': %s"
-msgstr "La variante '%s' esiste già."
+msgstr "Variante '%s', alternativa '%s': %s"
 
 #: eeschema/erc/erc.cpp:2693
 msgid "Checking sheet names..."
 msgstr "Controllo nomi fogli..."
 
 #: eeschema/erc/erc.cpp:2703
-#, fuzzy
 msgid "Checking pin maps..."
-msgstr "Controllo pin..."
+msgstr "Controllo mappe pin..."
 
 #: eeschema/erc/erc.cpp:2710
 msgid "Checking conflicts..."
@@ -21631,9 +21633,8 @@ msgid "Checking field names..."
 msgstr "Controllo nomi campi..."
 
 #: eeschema/erc/erc.cpp:2807
-#, fuzzy
 msgid "Checking for empty label names..."
-msgstr "Controllo nomi campi..."
+msgstr "Controllo nomi etichette vuoti..."
 
 #: eeschema/erc/erc.cpp:2815
 msgid "Checking SPICE models..."
@@ -21672,9 +21673,8 @@ msgid "Checking for undefined netclasses..."
 msgstr "Controllo netclass non definite..."
 
 #: eeschema/erc/erc.cpp:2889
-#, fuzzy
 msgid "Checking variant symbols..."
-msgstr "Controllo fori via..."
+msgstr "Controllo varianti simboli..."
 
 #: eeschema/erc/erc_item.cpp:39 pcbnew/dialogs/panel_edit_options_base.cpp:340
 #: pcbnew/drc/drc_item.cpp:45
@@ -21764,9 +21764,8 @@ msgid "Local and global labels have same name"
 msgstr "Le etichette locali e globali hanno lo stesso nome"
 
 #: eeschema/erc/erc_item.cpp:131
-#, fuzzy
 msgid "Local and global power symbols have same name"
-msgstr "Le etichette locali e globali hanno lo stesso nome"
+msgstr "I simboli di potenza locali e globali hanno lo stesso nome"
 
 #: eeschema/erc/erc_item.cpp:135
 msgid "Different footprint assigned in another unit of the symbol"
@@ -21813,25 +21812,25 @@ msgid "Field name has leading or trailing whitespace"
 msgstr "Il nome del campo contiene spazi bianchi iniziali e/o finali"
 
 #: eeschema/erc/erc_item.cpp:174
-#, fuzzy
 msgid "Label has an empty name"
-msgstr "L'etichetta non può essere vuota."
+msgstr "L'etichetta ha nome vuoto"
 
 #: eeschema/erc/erc_item.cpp:178
 msgid "Pin map references a pad that does not exist on the footprint"
-msgstr ""
+msgstr "La mappa pin fa riferimento a una piazzola inesistente nell'impronta"
 
 #: eeschema/erc/erc_item.cpp:182
 msgid "Connected pin is not mapped to any footprint pad"
-msgstr ""
+msgstr "Il pin collegato non è mappato su alcuna piazzola dell'impronta"
 
 #: eeschema/erc/erc_item.cpp:186
 msgid "Two symbol pins are mapped to the same footprint pad"
-msgstr ""
+msgstr "Due pin del simbolo mappati sulla stessa piazzola dell'impronta"
 
 #: eeschema/erc/erc_item.cpp:190
 msgid "Pin map references a pin number that no longer exists on the symbol"
 msgstr ""
+"La mappa pin fa riferimento a un numero di pin che non esiste più nel simbolo"
 
 #: eeschema/erc/erc_item.cpp:194 pcbnew/drc/drc_item.cpp:217
 #: pcbnew/drc/drc_rule_parser.cpp:99
@@ -21903,14 +21902,12 @@ msgid "Bus Entry needed"
 msgstr "Serve voce bus"
 
 #: eeschema/erc/erc_item.cpp:266
-#, fuzzy
 msgid "Variant symbol not found in libraries"
-msgstr "Impronta non trovata nelle librerie"
+msgstr "Simbolo variante non trovato nelle librerie"
 
 #: eeschema/erc/erc_item.cpp:270
-#, fuzzy
 msgid "Variant symbol is not pin-compatible"
-msgstr "Simbolo non annotato"
+msgstr "Simbolo variante non pin-compatibile"
 
 #: eeschema/fields_grid_table.cpp:306 eeschema/files-io.cpp:1206
 #: eeschema/tools/sch_editor_control.cpp:427
@@ -21972,9 +21969,9 @@ msgstr ""
 "Usare File -> Importa per i file schema non KiCad."
 
 #: eeschema/files-io.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a recognised schematic format."
-msgstr " non è un tipo di matrice riconosciuto."
+msgstr "'%s' non è un formato schema conosciuto."
 
 #: eeschema/files-io.cpp:403
 msgid ""
@@ -22233,9 +22230,8 @@ msgstr "Nessun file selezionato!"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:187
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:246
-#, fuzzy
 msgid "Import scale must be a positive number."
-msgstr "La scala deve essere un numero positivo."
+msgstr "La scala di importazione deve essere un numero positivo."
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:230
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:326
@@ -22312,19 +22308,16 @@ msgid "Unit %s"
 msgstr "Unità %s"
 
 #: eeschema/lib_symbol.cpp:2264
-#, fuzzy
 msgid "Name differs."
-msgstr "%s nome diverso."
+msgstr "Nome diverso."
 
 #: eeschema/lib_symbol.cpp:2273
-#, fuzzy
 msgid "Library ID differs."
-msgstr "Editor delle librerie"
+msgstr "ID libreria diverso."
 
 #: eeschema/lib_symbol.cpp:2286
-#, fuzzy
 msgid "Symbol parent differs."
-msgstr "Gli scostamenti nome pin simbolo differiscono."
+msgstr "Genitore pin diverso."
 
 #: eeschema/lib_symbol.cpp:2296
 msgid "Power flag differs."
@@ -22370,39 +22363,39 @@ msgid "Field '%s' differs: %s; %s."
 msgstr "Il campo '%s' è diverso: %s; %s."
 
 #: eeschema/lib_symbol.cpp:2447
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' fonts differ."
-msgstr "Il campo '%s' è diverso: %s; %s."
+msgstr "Font campo '%s' diverso."
 
 #: eeschema/lib_symbol.cpp:2460
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' text sizes differ."
-msgstr "dimensione testo %s diversa."
+msgstr "Dimensione testo campo %s diversa."
 
 #: eeschema/lib_symbol.cpp:2469
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' text styles differ."
-msgstr "dimensione testo %s diversa."
+msgstr "Stile testo campo '%s' diverso."
 
 #: eeschema/lib_symbol.cpp:2481
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' visibility flags differ."
-msgstr "'%s' impostazioni diverse."
+msgstr "Flag visibilità campo '%s' diversa."
 
 #: eeschema/lib_symbol.cpp:2490
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' name shown flags differ."
-msgstr "'%s' impostazioni diverse."
+msgstr "Flag di visualizzazione del nome campo '%s' diversi."
 
 #: eeschema/lib_symbol.cpp:2500
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' privacy flags differ."
-msgstr "Il campo '%s' è diverso: %s; %s."
+msgstr "Flag privacy campo '%s' diversi."
 
 #: eeschema/lib_symbol.cpp:2516
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' positions differ."
-msgstr "%s posizione diversa."
+msgstr "Campo %s in posizione diversa."
 
 #: eeschema/lib_symbol.cpp:2539
 #, c-format
@@ -22418,24 +22411,20 @@ msgid "Footprint filters differ."
 msgstr "I filtri impronte differiscono."
 
 #: eeschema/lib_symbol.cpp:2573
-#, fuzzy
 msgid "Pin map count differs."
-msgstr "Conteggio pin diverso."
+msgstr "Conteggio mappa pin diverso."
 
 #: eeschema/lib_symbol.cpp:2581
-#, fuzzy
 msgid "Pin maps differ."
-msgstr "Conteggio pin diverso."
+msgstr "Mappe pin diverse."
 
 #: eeschema/lib_symbol.cpp:2590
-#, fuzzy
 msgid "Associated footprint count differs."
-msgstr "Il conteggio dei filtri di impronta è diverso."
+msgstr "Il conteggio delle impronte associate è diverso."
 
 #: eeschema/lib_symbol.cpp:2598
-#, fuzzy
 msgid "Associated footprints differ."
-msgstr "Tipi impronte diversi."
+msgstr "Impronte associate diverse."
 
 #: eeschema/lib_symbol.cpp:2607
 msgid "Symbol keywords differ."
@@ -22466,9 +22455,8 @@ msgid "Exclude from board settings differ."
 msgstr "Le impostazioni escludi dalla scheda differiscono."
 
 #: eeschema/lib_symbol.cpp:2684
-#, fuzzy
 msgid "Do not populate settings differ."
-msgstr "Le impostazioni mostra nomi pin differiscono."
+msgstr "Le impostazioni di non popolazione differiscono."
 
 #: eeschema/lib_symbol.cpp:2696
 msgid "Exclude from position files settings differ."
@@ -22547,9 +22535,9 @@ msgid "Library '%s': %s"
 msgstr "Libreria '%s': %s"
 
 #: eeschema/libraries/legacy_cache_reconcile.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' could not be loaded."
-msgstr "Il file '%s' non può essere creato."
+msgstr "La libreria '%s' non può essere caricata."
 
 #: eeschema/libraries/legacy_symbol_library.cpp:579
 #, c-format
@@ -22597,6 +22585,8 @@ msgstr "Pannelli"
 msgid ""
 "Search signed-in remote symbol providers and download verified libraries."
 msgstr ""
+"Cerca tra i fornitori di simboli remoti a cui hai effettuato l'accesso e "
+"scarica le librerie verificate."
 
 #: eeschema/menubar.cpp:344
 msgid "Variants"
@@ -22728,6 +22718,8 @@ msgid ""
 "Symbol '%s' uses repeat-per-unit decomposition, which requires a named "
 "subcircuit model."
 msgstr ""
+"Il simbolo '%s' utilizza una scomposizione di tipo \"repeat-per-unit\", che "
+"richiede un modello di sottocircuito con nome."
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:764
 #, c-format
@@ -22947,54 +22939,58 @@ msgstr "Le seguenti librerie non sono state trovate:"
 
 #: eeschema/remote_symbol_download_manager.cpp:35
 msgid "Remote asset URL"
-msgstr ""
+msgstr "URL della risorsa remota"
 
 #: eeschema/remote_symbol_download_manager.cpp:49
 msgid "Remote asset URL origin must match the selected provider."
 msgstr ""
+"L'origine dell'URL della risorsa remota deve corrispondere al fornitore "
+"selezionato."
 
 #: eeschema/remote_symbol_download_manager.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to set download URL '%s'."
-msgstr "Fallita lettura di '%s'."
+msgstr "Impossibile impostare l'URL di scaricamento '%s'."
 
 #: eeschema/remote_symbol_download_manager.cpp:124
 msgid "Remote asset manifest declared an invalid size."
 msgstr ""
+"Il manifest della risorsa remota ha dichiarato una dimensione non valida."
 
 #: eeschema/remote_symbol_download_manager.cpp:130
 msgid "Remote asset manifest must declare sha256 for URL-based downloads."
 msgstr ""
+"Il manifest delle risorse remote deve dichiarare l'hash SHA-256 per gli "
+"scaricamenti basati su URL."
 
 #: eeschema/remote_symbol_download_manager.cpp:139
 msgid "Remote asset exceeds the provider download limit."
-msgstr ""
+msgstr "La risorsa remota supera il limite di download del provider."
 
 #: eeschema/remote_symbol_download_manager.cpp:150
 #, c-format
 msgid "Remote download failed with HTTP %d."
-msgstr ""
+msgstr "Scaricamento remoto non riuscito con HTTP %d."
 
 #: eeschema/remote_symbol_download_manager.cpp:156
 msgid "Remote asset content type did not match the manifest."
-msgstr ""
+msgstr "Tipo contenuto risorsa remota non corrispondente al manifest."
 
 #: eeschema/remote_symbol_download_manager.cpp:162
 msgid "Remote asset size did not match the manifest."
-msgstr ""
+msgstr "Dimensione risorsa remota non corrispondente al manifest."
 
 #: eeschema/remote_symbol_download_manager.cpp:168
 msgid "Remote asset exceeds the remaining download limit."
-msgstr ""
+msgstr "La risorsa remota supera il limite di scaricamento rimanente."
 
 #: eeschema/remote_symbol_download_manager.cpp:174
 msgid "Remote asset digest did not match the manifest."
-msgstr ""
+msgstr "Digest risorsa remota non corrispondente al manifest."
 
 #: eeschema/remote_symbol_import_job.cpp:52
-#, fuzzy
 msgid "Downloaded symbol payload was empty."
-msgstr "Contenuto simbolo vuoto."
+msgstr "Il payload simboli scaricato era vuoto."
 
 #: eeschema/remote_symbol_import_job.cpp:60
 #, fuzzy
@@ -23393,34 +23389,30 @@ msgid "Remove Design Variant"
 msgstr "Rimuovi variante progetto"
 
 #: eeschema/sch_edit_frame.cpp:3283
-#, fuzzy
 msgid "No variants to rename."
-msgstr "Aggiungi una nuova variante progetto allo schema."
+msgstr "Nessuna variante da rinominare."
 
 #: eeschema/sch_edit_frame.cpp:3288
-#, fuzzy
 msgid "Select variant to rename:"
-msgstr "Seleziona nome variante da rimuovere:"
+msgstr "Seleziona la variante da rinominare:"
 
 #: eeschema/sch_edit_frame.cpp:3323
-#, fuzzy, c-format
+#, c-format
 msgid "Rename variant '%s' to '%s'"
-msgstr "Rinomina %s a %s"
+msgstr "Rinomina variante '%s' a '%s'"
 
 #: eeschema/sch_edit_frame.cpp:3347
-#, fuzzy
 msgid "No variants to copy."
-msgstr "Aggiungi una nuova variante progetto allo schema."
+msgstr "Nessuna variante da copiare."
 
 #: eeschema/sch_edit_frame.cpp:3352
-#, fuzzy
 msgid "Select variant to copy:"
-msgstr "Seleziona nome variante da rimuovere:"
+msgstr "Seleziona la variante da copiare:"
 
 #: eeschema/sch_edit_frame.cpp:3381
-#, fuzzy, c-format
+#, c-format
 msgid "Copy variant '%s' to '%s'"
-msgstr "Impronta \"%s\" aggiunta a \"%s\""
+msgstr "Copia variante'%s' a '%s'"
 
 #: eeschema/sch_field.cpp:1004
 #, c-format
@@ -23507,16 +23499,16 @@ msgstr "<senza nome>"
 msgid ""
 "Invalid binary file hex data size. Chars expected: %d, hex string length: %d"
 msgstr ""
+"Dimensione dei dati esadecimali del file binario non valida. Numero di "
+"caratteri previsto: %d, lunghezza della stringa esadecimale: %d"
 
 #: eeschema/sch_io/altium/altium_parser_sch.cpp:140
-#, fuzzy
 msgid "Storage stream was not parsed correctly"
-msgstr "'%s' non analizzato correttamente."
+msgstr "Stream storage '%s' non analizzato correttamente"
 
 #: eeschema/sch_io/altium/altium_parser_sch.cpp:152
-#, fuzzy
 msgid "Additional stream was not parsed correctly"
-msgstr "'%s' non analizzato correttamente."
+msgstr "Stream aggiuntivo non analizzato correttamente"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1345
 #, c-format
@@ -23615,9 +23607,9 @@ msgid "Port %s has no connections."
 msgstr "La porta %s non ha connessioni."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4986
-#, fuzzy, c-format
+#, c-format
 msgid "Embedded file '%s' not found in storage."
-msgstr "File incorporato \"%s\" non trovato nel magazzino."
+msgstr "File incorporato '%s' non trovato nello storage."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5009
 #, fuzzy, c-format
@@ -23647,9 +23639,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5615
-#, fuzzy, c-format
+#, c-format
 msgid "Converting symbol '%s'"
-msgstr "Installazione pacchetto '%s'."
+msgstr "Conversione simbolo '%s'"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5878
 #, c-format
@@ -23950,9 +23942,9 @@ msgstr ""
 "database %s (%s)"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:951
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing pin map for database symbol '%s': %s"
-msgstr "Errore leggendo la tabella database %s: %s"
+msgstr "Errore analizzando la mappa pin del simbolo di database '%s': %s"
 
 #: eeschema/sch_io/database/sch_io_database.h:60
 msgid "KiCad database library files"
@@ -23966,12 +23958,13 @@ msgstr "Formato schema DipTrace versione %d non supportato."
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:280
 #, c-format
 msgid "DipTrace import: unexpected error at offset 0x%06zX: %s"
-msgstr ""
+msgstr "Importazione DipTrace: errore imprevisto all'offset 0x%06zX: %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:293
 #, c-format
 msgid "Invalid DipTrace schematic magic length: %d (expected 7 or 11)."
 msgstr ""
+"Lunghezza \"magic\" dello schema DipTrace non valida: %d (previsti 7 o 11)."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:299
 msgid "Invalid DipTrace schematic file: bad magic header."
@@ -23979,12 +23972,12 @@ msgstr "File schema DipTrace non valido: magic header non corretto."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:313
 msgid "Invalid DipTrace schematic file: bad legacy version suffix."
-msgstr ""
+msgstr "File schema DipTrace non valido: suffisso di versione legacy errato."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:327
 #, c-format
 msgid "Invalid DipTrace schematic sheet count: %d."
-msgstr ""
+msgstr "Numero di fogli dello schema DipTrace non valido: %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:387
 #, c-format
@@ -23992,15 +23985,15 @@ msgid "Invalid text style count: %d."
 msgstr "Conteggio stili di testo non valido: %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:443
-#, fuzzy, c-format
+#, c-format
 msgid "DipTrace import: invalid component count %d."
-msgstr "Conteggio totale componenti: %d."
+msgstr "Importazione DipTrace: numero di componenti non valido %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:468
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2182
 #, c-format
 msgid "DipTrace import: invalid bus count %d."
-msgstr ""
+msgstr "Importazione DipTrace: numero di bus non valido %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:682
 #, c-format
@@ -24013,6 +24006,8 @@ msgstr ""
 #, c-format
 msgid "DipTrace import: found %zu components, but the file header declares %d."
 msgstr ""
+"Importazione DipTrace: trovati %zu componenti, ma l'intestazione del file ne "
+"dichiara %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:946
 #, c-format
