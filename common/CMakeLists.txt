@@ -687,6 +687,7 @@ set( COMMON_WIDGET_SRCS
     widgets/wx_busy_indicator.cpp
     widgets/wx_combobox.cpp
     widgets/wx_dataviewctrl.cpp
+    widgets/wx_debounced_action.cpp
     widgets/wx_ellipsized_static_text.cpp
     widgets/wx_listbox.cpp
     widgets/wx_panel.cpp

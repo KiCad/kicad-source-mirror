@@ -27,6 +27,7 @@
 #include <wx/timer.h>
 
 #include <dialog_lib_symbol_properties_base.h>
+#include <widgets/wx_debounced_action.h>
 
 class KIWAY;
 class FP_FILTER_MATCHER;
@@ -98,6 +99,10 @@ private:
      */
     void showFpFilterMatchLoadIndication( bool aShow, float aProgress = 0.0f );
     void onFpFilterMatchLoadTimer( wxTimerEvent& aEvent );
+
+    /// Preview the filter text typed in the Add/Edit dialog, once typing pauses.
+    void onFilterPreviewText( wxCommandEvent& aEvent );
+
     void onMatchingFootprintDoubleClick( wxListEvent& aEvent );
     void onMatchingFootprintContextMenu( wxListEvent& aEvent );
     void onMatchingFootprintKeyDown( wxKeyEvent& aEvent );
@@ -123,4 +128,7 @@ private:
 
     bool    m_matchLibrariesReady = false;
     wxTimer m_matchLoadTimer;
+
+    /// Debounces the preview of the filter being type to avoid spamming queries.
+    WX_DEBOUNCED_ACTION m_filterPreviewDebounce;
 };

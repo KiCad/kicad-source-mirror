@@ -163,7 +163,13 @@ PANEL_FOOTPRINT_FILTERS::PANEL_FOOTPRINT_FILTERS( wxWindow* aParent, KIWAY& aKiw
         m_kiway( aKiway ),
         m_fpFilterTricks( std::make_unique<LISTBOX_TRICKS>( *this, *m_FootprintFilterListBox ) ),
         m_fpMatcher( std::make_unique<FP_FILTER_MATCHER>( aKiway ) ),
-        m_matchLoadTimer( this )
+        m_matchLoadTimer( this ),
+        m_filterPreviewDebounce(
+                [this]()
+                {
+                    updateMatchingFootprints();
+                },
+                WX_DEBOUNCED_ACTION::TEXT_INPUT_DEBOUNCE_MS )
 {
     // Configure button logos
     m_addFilterButton->SetBitmap( KiBitmapBundle( BITMAPS::small_plus ) );
@@ -241,6 +247,7 @@ PANEL_FOOTPRINT_FILTERS::~PANEL_FOOTPRINT_FILTERS()
 {
     m_matchLoadTimer.Stop();
     Unbind( wxEVT_TIMER, &PANEL_FOOTPRINT_FILTERS::onFpFilterMatchLoadTimer, this, m_matchLoadTimer.GetId() );
+
     GetParent()->Unbind( wxEVT_NOTEBOOK_PAGE_CHANGED, &PANEL_FOOTPRINT_FILTERS::onNotebookPageChanged, this );
 }
 
@@ -428,6 +435,13 @@ void PANEL_FOOTPRINT_FILTERS::onFpFilterMatchLoadTimer( wxTimerEvent& aEvent )
 }
 
 
+void PANEL_FOOTPRINT_FILTERS::onFilterPreviewText( wxCommandEvent& aEvent )
+{
+    m_fpFilterPreview = SanitizeFpFilter( aEvent.GetString() );
+    m_filterPreviewDebounce.Restart();
+}
+
+
 wxString PANEL_FOOTPRINT_FILTERS::matchingFootprintName( long aItem ) const
 {
     // Events can have, wxNOT_FOUND as the index.
@@ -540,14 +554,12 @@ void PANEL_FOOTPRINT_FILTERS::OnAddFootprintFilter( wxCommandEvent& event )
     WX_TEXT_ENTRY_DIALOG dlg( this, _( "Filter:" ), _( "Add Footprint Filter" ), filterLine );
 
     // Let the matches list preview what is being typed.
-    dlg.Bind( wxEVT_TEXT,
-              [this]( wxCommandEvent& aEvent )
-              {
-                  m_fpFilterPreview = SanitizeFpFilter( aEvent.GetString() );
-                  updateMatchingFootprints();
-              } );
+    dlg.Bind( wxEVT_TEXT, &PANEL_FOOTPRINT_FILTERS::onFilterPreviewText, this );
 
     int modalResult = dlg.ShowModal();
+
+    // The preview is over, so a pending debounce must not fire after it.
+    m_filterPreviewDebounce.Cancel();
     m_fpFilterPreview.clear();
 
     if( modalResult == wxID_CANCEL || dlg.GetValue().IsEmpty() )
@@ -581,14 +593,12 @@ void PANEL_FOOTPRINT_FILTERS::OnEditFootprintFilter( wxCommandEvent& event )
         WX_TEXT_ENTRY_DIALOG dlg( this, _( "Filter:" ), _( "Edit Footprint Filter" ), filter );
 
         // Let the matches list preview what is being typed.
-        dlg.Bind( wxEVT_TEXT,
-                  [this]( wxCommandEvent& aEvent )
-                  {
-                      m_fpFilterPreview = SanitizeFpFilter( aEvent.GetString() );
-                      updateMatchingFootprints();
-                  } );
+        dlg.Bind( wxEVT_TEXT, &PANEL_FOOTPRINT_FILTERS::onFilterPreviewText, this );
 
         int modalResult = dlg.ShowModal();
+
+        // The preview is over, so a pending debounce must not fire after it.
+        m_filterPreviewDebounce.Cancel();
         m_fpFilterPreview.clear();
 
         if( modalResult == wxID_OK && !dlg.GetValue().IsEmpty() )
