@@ -53,6 +53,8 @@ public:
 
     /// A typical debounce period for text input events, in milliseconds.
     constexpr static int TEXT_INPUT_DEBOUNCE_MS = 200;
+    /// A typical debounce period for hover preview events, in milliseconds.
+    constexpr static int HOVER_PREVIEW_DEBOUNCE_MS = 400;
 
 protected:
     void Notify() override;

@@ -23,16 +23,14 @@
 
 #include <wx/panel.h>
 #include <wx/sizer.h>
-#include <wx/timer.h>
 #include <lib_tree_model_adapter.h>
 #include <widgets/html_window.h>
 #include <widgets/wx_dataviewctrl.h>
+#include <widgets/wx_debounced_action.h>
 
 class wxTextCtrl;
 class wxHtmlLinkEvent;
 class wxSearchCtrl;
-class wxTimer;
-class wxTimerEvent;
 class wxPopupWindow;
 class BITMAP_BUTTON;
 class STD_BITMAP_BUTTON;
@@ -110,7 +108,7 @@ public:
 
     /**
      * Retrieve a list of pointers to selected tree nodes for trees that allow multi-selection.
-     * 
+     *
      * @param aSelection will be filled with a list of pointers of selected tree nodes.
      * @return the number of selected items.
      */
@@ -245,14 +243,17 @@ protected:
     void onTreeCharHook( wxKeyEvent& aEvent );
 
     void onIdle( wxIdleEvent& aEvent );
-    void onHoverTimer( wxTimerEvent& aEvent );
 
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
     void onPreselect( wxCommandEvent& aEvent );
     void onItemContextMenu( wxDataViewEvent& aEvent );
     void onHeaderContextMenu( wxDataViewEvent& aEvent );
 
-    void onDebounceTimer( wxTimerEvent& aEvent );
+    /// Regenerate the tree from the search text once typing pauses.
+    void onQueryDebounce();
+
+    /// Show the hovered item's preview once the mouse stops moving.
+    void onHoverPreview();
 
 protected:
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
@@ -261,7 +262,6 @@ protected:
     BITMAP_BUTTON*     m_sort_ctrl;
     WX_DATAVIEWCTRL*   m_tree_ctrl;
     HTML_WINDOW*       m_details_ctrl;
-    wxTimer*           m_debounceTimer;
     bool               m_inTimerEvent;
 
     wxString           m_recentSearchesKey;
@@ -273,7 +273,13 @@ protected:
     wxPoint            m_hoverPos;
     wxDataViewItem     m_hoverItem;
     wxRect             m_hoverItemRect;
-    wxTimer            m_hoverTimer;
+
+    /// Debounces the query typed in the search control.
+    WX_DEBOUNCED_ACTION m_queryDebounce;
+
+    /// Debounces the item preview shown on hover.
+    WX_DEBOUNCED_ACTION m_hoverDebounce;
+
     wxDataViewItem     m_previewItem;
     wxRect             m_previewItemRect;
     wxPopupWindow*     m_previewWindow;

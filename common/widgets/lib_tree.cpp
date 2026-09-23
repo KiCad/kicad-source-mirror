@@ -20,6 +20,7 @@
 
 #include <widgets/lib_tree.h>
 #include <widgets/bitmap_button.h>
+#include <widgets/wx_debounced_action.h>
 #include <core/kicad_algo.h>
 #include <algorithm>
 #include <macros.h>
@@ -59,13 +60,22 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey,
         m_recentSearchesKey( aRecentSearchesKey ),
         m_filtersSizer( nullptr ),
         m_skipNextRightClick( false ),
+        m_queryDebounce(
+                [this]()
+                {
+                    onQueryDebounce();
+                },
+                WX_DEBOUNCED_ACTION::TEXT_INPUT_DEBOUNCE_MS ),
+        m_hoverDebounce(
+                [this]()
+                {
+                    onHoverPreview();
+                },
+                WX_DEBOUNCED_ACTION::HOVER_PREVIEW_DEBOUNCE_MS ),
         m_previewWindow( nullptr ),
         m_previewDisabled( false )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-
-    m_hoverTimer.SetOwner( this );
-    Bind( wxEVT_TIMER, &LIB_TREE::onHoverTimer, this, m_hoverTimer.GetId() );
 
     // Search text control
     if( aFlags & SEARCH )
@@ -75,8 +85,6 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey,
         m_query_ctrl = new wxSearchCtrl( this, wxID_ANY );
 
         m_query_ctrl->ShowCancelButton( true );
-
-        m_debounceTimer = new wxTimer( this );
 
         search_sizer->Add( m_query_ctrl, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
 
@@ -154,8 +162,6 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey,
                         m_query_ctrl->SetValue( g_recentSearches[ m_recentSearchesKey ][idx] );
                 },
                 1, RECENT_SEARCHES_MAX );
-
-        Bind( wxEVT_TIMER, &LIB_TREE::onDebounceTimer, this, m_debounceTimer->GetId() );
     }
 
     if( aFlags & FILTERS )
@@ -245,8 +251,6 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey,
 
 LIB_TREE::~LIB_TREE()
 {
-    Unbind( wxEVT_TIMER, &LIB_TREE::onHoverTimer, this, m_hoverTimer.GetId() );
-
     m_tree_ctrl->Unbind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &LIB_TREE::onTreeActivate, this );
     m_tree_ctrl->Unbind( wxEVT_DATAVIEW_SELECTION_CHANGED, &LIB_TREE::onTreeSelect, this );
     m_tree_ctrl->Unbind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onItemContextMenu, this );
@@ -266,23 +270,18 @@ LIB_TREE::~LIB_TREE()
         m_query_ctrl->Unbind( wxEVT_MOTION, &LIB_TREE::onQueryMouseMoved, this );
     }
 
-    // Stop the timer during destruction early to avoid potential race conditions (that do happen)]
-    if( m_debounceTimer )
-    {
-        m_debounceTimer->Stop();
-        Unbind( wxEVT_TIMER, &LIB_TREE::onDebounceTimer, this, m_debounceTimer->GetId() );
-    }
-
     if( m_details_ctrl )
         m_details_ctrl->Unbind( wxEVT_HTML_LINK_CLICKED, &LIB_TREE::onDetailsLink, this );
 
-    m_hoverTimer.Stop();
+    // Drop pending debounces before the tree starts tearing down.
+    m_queryDebounce.Cancel();
+    m_hoverDebounce.Cancel();
 }
 
 
 void LIB_TREE::ShutdownPreviews()
 {
-    m_hoverTimer.Stop();
+    m_hoverDebounce.Cancel();
     m_previewDisabled = true;
 
     if( m_previewWindow )
@@ -650,7 +649,7 @@ void LIB_TREE::setState( const STATE& aState )
 
 void LIB_TREE::onQueryText( wxCommandEvent& aEvent )
 {
-    m_debounceTimer->StartOnce( 200 );
+    m_queryDebounce.Restart();
 
     // Required to avoid interaction with SetHint()
     // See documentation for wxTextEntry::SetHint
@@ -658,7 +657,7 @@ void LIB_TREE::onQueryText( wxCommandEvent& aEvent )
 }
 
 
-void LIB_TREE::onDebounceTimer( wxTimerEvent& aEvent )
+void LIB_TREE::onQueryDebounce()
 {
     m_inTimerEvent = true;
     Regenerate( false );
@@ -785,7 +784,6 @@ void LIB_TREE::onQueryMouseMoved( wxMouseEvent& aEvent )
 
 
 #define PREVIEW_SIZE wxSize( 240, 200 )
-#define HOVER_TIMER_MILLIS 400
 
 
 void LIB_TREE::showPreview( wxDataViewItem aItem )
@@ -840,7 +838,7 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
 
     if( m_previewDisabled || topLevelFocus != topLevelParent || !mouseOverWindow )
     {
-        m_hoverTimer.Stop();
+        m_hoverDebounce.Cancel();
         hidePreview();
         return;
     }
@@ -871,12 +869,12 @@ void LIB_TREE::onIdle( wxIdleEvent& aEvent )
         m_hoverPos = clientPos;
         m_hoverItem = item;
         m_hoverItemRect = m_tree_ctrl->GetItemRect( m_hoverItem );
-        m_hoverTimer.StartOnce( HOVER_TIMER_MILLIS );
+        m_hoverDebounce.Restart();
     }
 }
 
 
-void LIB_TREE::onHoverTimer( wxTimerEvent& aEvent )
+void LIB_TREE::onHoverPreview()
 {
     hidePreview();
 
@@ -896,7 +894,7 @@ void LIB_TREE::onHoverTimer( wxTimerEvent& aEvent )
     {
         m_hoverItem = item;
         m_hoverItemRect = m_tree_ctrl->GetItemRect( m_hoverItem );
-        m_hoverTimer.StartOnce( HOVER_TIMER_MILLIS );
+        m_hoverDebounce.Restart();
     }
 }
 
