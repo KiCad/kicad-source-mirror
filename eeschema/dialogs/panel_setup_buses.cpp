@@ -329,6 +329,8 @@ void PANEL_SETUP_BUSES::OnMemberGridCellChanged( wxGridEvent& event )
 
 void PANEL_SETUP_BUSES::doReloadMembersGrid()
 {
+    m_membersGrid->ClearRows();
+
     if( m_lastAlias >= 0 && m_lastAlias < m_aliasesGrid->GetNumberRows() )
     {
         const std::shared_ptr<BUS_ALIAS>& alias = m_aliases[ m_lastAlias ];
@@ -340,7 +342,6 @@ void PANEL_SETUP_BUSES::doReloadMembersGrid()
         m_source->SetLabel( source );
         m_membersLabel->SetLabel( membersLabel );
 
-        m_membersGrid->ClearRows();
         m_membersGrid->AppendRows( alias->Members().size() );
 
         int ii = 0;
@@ -459,8 +460,7 @@ void PANEL_SETUP_BUSES::ImportSettingsFrom( const std::map<wxString, std::vector
 {
     m_aliases.clear();
 
-    std::vector<std::pair<wxString, std::vector<wxString>>> aliasList( aAliases.begin(),
-                                                                      aAliases.end() );
+    std::vector<std::pair<wxString, std::vector<wxString>>> aliasList( aAliases.begin(), aAliases.end() );
 
     std::sort( aliasList.begin(), aliasList.end(),
             []( const std::pair<wxString, std::vector<wxString>>& a,
@@ -487,6 +487,10 @@ void PANEL_SETUP_BUSES::ImportSettingsFrom( const std::map<wxString, std::vector
     for( const std::shared_ptr<BUS_ALIAS>& alias : m_aliases )
         m_aliasesGrid->SetCellValue( ii++, 0, alias->GetName() );
 
+    // Clear members grid
+    m_lastAlias = -1;
+    m_lastAliasName = wxEmptyString;
+    doReloadMembersGrid();
     m_membersBook->SetSelection( 1 );
 }
 
