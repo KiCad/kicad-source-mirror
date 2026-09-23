@@ -1011,12 +1011,20 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
     if( !m_transferGroups )
         return false;
 
+    KIID       newGroupKIID = aNetlistComponent->GetGroup() ? aNetlistComponent->GetGroup()->uuid : 0;
+    PCB_GROUP* existingGroup = static_cast<PCB_GROUP*>( aPcbFootprint->GetParentGroup() );
+    KIID       existingGroupKIID = existingGroup ? existingGroup->m_Uuid : 0;
+
+    // No changes, nothing to do
+    if( newGroupKIID == existingGroupKIID )
+        return false;
+
     wxString msg;
 
     // Create a copy only if the footprint has not been added during this update
     FOOTPRINT* copy = nullptr;
 
-    if( !m_commit.GetStatus( aPcbFootprint ) )
+    if( !m_isDryRun && !m_commit.GetStatus( aPcbFootprint ) )
     {
         copy = static_cast<FOOTPRINT*>( aPcbFootprint->Clone() );
         copy->SetParentGroup( nullptr );
@@ -1024,14 +1032,9 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
 
     bool changed = false;
 
-    // These hold the info for group and group KIID coming from the netlist
     // newGroup may point to an existing group on the board if we find an
     // incoming group UUID that matches an existing group
     PCB_GROUP* newGroup = nullptr;
-    KIID       newGroupKIID = aNetlistComponent->GetGroup() ? aNetlistComponent->GetGroup()->uuid : 0;
-
-    PCB_GROUP* existingGroup = static_cast<PCB_GROUP*>( aPcbFootprint->GetParentGroup() );
-    KIID       existingGroupKIID = existingGroup ? existingGroup->m_Uuid : 0;
 
     // Find existing group based on matching UUIDs
     auto it = std::find_if( m_board->Groups().begin(), m_board->Groups().end(),
@@ -1042,10 +1045,6 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
     // If we find a group with the same UUID, use it
     if( it != m_board->Groups().end() )
         newGroup = *it;
-
-    // No changes, nothing to do
-    if( newGroupKIID == existingGroupKIID )
-        return changed;
 
     // Remove from existing group
     if( existingGroupKIID != 0 )
