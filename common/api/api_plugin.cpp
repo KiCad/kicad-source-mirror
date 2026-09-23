@@ -354,12 +354,10 @@ std::optional<PLUGIN_ACTION> API_PLUGIN::createActionFromJson( const nlohmann::j
     }
 
     auto handleBitmap =
-            [&]( const std::string& aKey, wxBitmapBundle& aDest )
+            [&]( const std::string& aKey, std::vector<wxImage>& aDest )
             {
                 if( aJson.contains( aKey ) && aJson.at( aKey ).is_array() )
                 {
-                    wxVector<wxBitmap> bitmaps;
-
                     for( const nlohmann::json& iconJs : aJson.at( aKey ) )
                     {
                         wxFileName iconFile;
@@ -386,17 +384,15 @@ std::optional<PLUGIN_ACTION> API_PLUGIN::createActionFromJson( const nlohmann::j
                             continue;
                         }
 
-                        wxBitmap bmp;
+                        wxImage img;
                         // TODO: If necessary; support types other than PNG
-                        bmp.LoadFile( iconFile.GetFullPath(), wxBITMAP_TYPE_PNG );
+                        img.LoadFile( iconFile.GetFullPath(), wxBITMAP_TYPE_PNG );
 
-                        if( bmp.IsOk() )
-                            bitmaps.push_back( bmp );
+                        if( img.IsOk() )
+                            aDest.push_back( img );
                         else
                             wxLogTrace( traceApi, "Plugin: icon file not a valid bitmap" );
                     }
-
-                    aDest = wxBitmapBundle::FromBitmaps( bitmaps );
                 }
             };
 

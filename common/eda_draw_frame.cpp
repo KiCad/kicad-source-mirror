@@ -22,6 +22,7 @@
 #include <api/api_plugin_manager.h>
 #include <base_screen.h>
 #include <bitmaps.h>
+#include <bitmap_store.h>
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <core/kicad_algo.h>
@@ -1471,13 +1472,29 @@ void EDA_DRAW_FRAME::AddApiPluginTools( ACTION_TOOLBAR* aToolbar )
 
     std::vector<const PLUGIN_ACTION*> actions = GetOrderedPluginActions( PluginActionScope(), config() );
 
+    int iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
+
     for( const PLUGIN_ACTION* action : actions )
     {
         if( !IsPluginActionButtonVisible( *action, config() ) )
             continue;
 
-        const wxBitmapBundle& icon = KIPLATFORM::UI::IsDarkTheme() && action->icon_dark.IsOk() ? action->icon_dark
-                                                                                               : action->icon_light;
+        const std::vector<wxImage>& images = KIPLATFORM::UI::IsDarkTheme() && !action->icon_dark.empty()
+                                                ? action->icon_dark
+                                                : action->icon_light;
+
+        if( images.empty() )
+            continue;
+
+        wxVector<wxBitmap> bitmaps;
+
+        for( const wxImage& img : images )
+            bitmaps.push_back( wxBitmap( img ) );
+
+        wxBitmapBundle icon = BITMAP_STORE::MakeBitmapBundleDef( bitmaps, iconSize );
+
+        if( !icon.IsOk() )
+            continue;
 
         wxAuiToolBarItem* button = aToolbar->AddTool( wxID_ANY, wxEmptyString, icon, action->name );
 

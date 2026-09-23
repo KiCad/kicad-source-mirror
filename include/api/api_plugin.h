@@ -24,11 +24,13 @@
 #include <memory>
 #include <optional>
 #include <set>
+#include <vector>
 #include <nlohmann/json_fwd.hpp>
 #include <nlohmann/json-schema.hpp>
 #include <tl/expected.hpp>
 #include <wx/bmpbndl.h>
 #include <wx/filename.h>
+#include <wx/image.h>
 #include <wx/string.h>
 
 #include <api/plugin_action_scope.h>
@@ -81,8 +83,8 @@ struct PLUGIN_ACTION
     wxString entrypoint;
     std::set<PLUGIN_ACTION_SCOPE> scopes;
     std::vector<wxString> args;
-    wxBitmapBundle icon_light;
-    wxBitmapBundle icon_dark;
+    std::vector<wxImage> icon_light;
+    std::vector<wxImage> icon_dark;
 
     const API_PLUGIN& plugin;
 };

@@ -18,6 +18,7 @@
  */
 
 #include <limits>
+#include <set>
 
 #include <wx/bitmap.h>
 #include <wx/filename.h>
@@ -215,6 +216,51 @@ wxBitmapBundle BITMAP_STORE::GetBitmapBundleDef( BITMAPS aBitmapId, int aDefHeig
         largestImage = resampleImage( wxImage( is, wxBITMAP_TYPE_PNG ), aDefHeight, aDefHeight );
         bmps.push_back( wxBitmap( largestImage ) );
     }
+
+#ifdef __WXOSX__
+    // OSX doesn't align text in trees properly when 2x bitmaps are not provided, apparently
+    int size2x = aDefHeight * 2;
+
+    if( !sizes.contains( size2x ) && largestImage.IsOk() )
+        bmps.push_back( wxBitmap( resampleImage( largestImage, size2x, size2x ) ) );
+#endif
+
+    return wxBitmapBundle::FromBitmaps( bmps );
+}
+
+
+wxBitmapBundle BITMAP_STORE::MakeBitmapBundleDef( const wxVector<wxBitmap>& aBitmaps, int aDefHeight )
+{
+    wxVector<wxBitmap> bmps;
+    std::set<int>      sizes;
+    int                largestHeight = 0;
+    wxImage            largestImage;
+
+    for( const wxBitmap& bmp : aBitmaps )
+    {
+        wxImage img = bmp.ConvertToImage();
+
+        if( !img.IsOk() )
+            continue;
+
+        if( img.GetHeight() > largestHeight )
+        {
+            largestHeight = img.GetHeight();
+            largestImage = img;
+        }
+
+        if( img.GetHeight() >= aDefHeight )
+        {
+            sizes.emplace( img.GetHeight() );
+            bmps.push_back( wxBitmap( img ) );
+        }
+    }
+
+    if( !sizes.contains( aDefHeight ) && largestImage.IsOk() )
+        bmps.push_back( wxBitmap( resampleImage( largestImage, aDefHeight, aDefHeight ) ) );
+
+    if( bmps.empty() )
+        return wxBitmapBundle();
 
 #ifdef __WXOSX__
     // OSX doesn't align text in trees properly when 2x bitmaps are not provided, apparently
