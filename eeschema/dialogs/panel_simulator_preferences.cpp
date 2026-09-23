@@ -36,7 +36,7 @@ PANEL_SIMULATOR_PREFERENCES::PANEL_SIMULATOR_PREFERENCES( wxWindow* aParent ) :
     // Populate the wxChoice items programmatically here instead of via the form builder
     // to ease maintenance.
 
-    static const wxString verticalChoiceItems[] =
+    const wxString verticalChoiceItems[] =
     {
         _( "No action" ),
         _( "Pan left/right" ),
@@ -53,19 +53,18 @@ PANEL_SIMULATOR_PREFERENCES::PANEL_SIMULATOR_PREFERENCES( wxWindow* aParent ) :
                    "verticalChoiceItems size does not match VERTICAL_SCROLL_ACTION::COUNT" );
 
     m_choiceVScrollUnmodified->Set( ACTION_COUNT, verticalChoiceItems );
-    m_choiceVScrollCtrl      ->Set( ACTION_COUNT, verticalChoiceItems );
-    m_choiceVScrollShift     ->Set( ACTION_COUNT, verticalChoiceItems );
-    m_choiceVScrollAlt       ->Set( ACTION_COUNT, verticalChoiceItems );
+    m_choiceVScrollCtrl->Set( ACTION_COUNT, verticalChoiceItems );
+    m_choiceVScrollShift->Set( ACTION_COUNT, verticalChoiceItems );
+    m_choiceVScrollAlt->Set( ACTION_COUNT, verticalChoiceItems );
 
-    static const wxString horizontalChoiceItems[] =
+    const wxString horizontalChoiceItems[] =
     {
         _( "No action" ),
         _( "Pan left/right" ),
         _( "Zoom horizontally" )
     };
 
-    m_choiceHScroll->Set( std::extent<decltype(horizontalChoiceItems)>::value,
-                          horizontalChoiceItems );
+    m_choiceHScroll->Set( std::extent<decltype(horizontalChoiceItems)>::value, horizontalChoiceItems );
 }
 
 
@@ -152,8 +151,7 @@ int PANEL_SIMULATOR_PREFERENCES::actionToHorizontalScrollSelection( SIM_MOUSE_WH
 }
 
 
-void PANEL_SIMULATOR_PREFERENCES::applyMouseScrollActionsToPanel(
-        const SIM_MOUSE_WHEEL_ACTION_SET& anActionSet )
+void PANEL_SIMULATOR_PREFERENCES::applyMouseScrollActionsToPanel( const SIM_MOUSE_WHEEL_ACTION_SET& anActionSet )
 {
     static constexpr auto setSelection =
             []( wxChoice* aChoice, auto action )
