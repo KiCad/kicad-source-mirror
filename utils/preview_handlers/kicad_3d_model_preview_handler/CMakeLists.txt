@@ -68,16 +68,13 @@ add_custom_command(TARGET kicad_3d_model_previewer POST_BUILD
     VERBATIM
 )
 
+# The packager deploys the vcpkg DLLs and the MSVC runtime.  Resolving them here instead fails
+# the install on any host that cannot find one, such as a builder without VCRUNTIME140_1.dll
 install(TARGETS kicad_3d_model_previewer
-    RUNTIME_DEPENDENCY_SET kicad_3d_preview_runtime_deps
     RUNTIME DESTINATION ${KICAD_BIN}
     COMPONENT binary
 )
 
-install( RUNTIME_DEPENDENCY_SET kicad_3d_preview_runtime_deps
-    DIRECTORIES "$<TARGET_FILE_DIR:kicad_3d_model_previewer>"
-    PRE_EXCLUDE_REGEXES "api-ms-.*" "ext-ms-.*"
-    POST_EXCLUDE_REGEXES ".*[Ww][Ii][Nn][Dd][Oo][Ww][Ss][/\\\\][Ss][Yy][Ss][Tt][Ee][Mm]32[/\\\\].*"
-    RUNTIME DESTINATION ${KICAD_BIN}
-    COMPONENT binary
-)
+if( KICAD_WIN32_INSTALL_PDBS )
+    install( FILES $<TARGET_PDB_FILE:kicad_3d_model_previewer> DESTINATION ${KICAD_BIN} )
+endif()
