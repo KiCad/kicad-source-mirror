@@ -45,6 +45,7 @@ public:
     {
         m_model->m_autoUpdateKiCad = m_cbAutoUpdateKiCad->GetValue();
         m_model->m_autoUpdatePCM   = m_cbAutoUpdatePCM->GetValue();
+        m_model->m_enableApi       = m_cbApi->GetValue();
 
 #ifdef KICAD_USE_SENTRY
         m_model->m_enableSentry    = m_cbDataCollection->GetValue();
@@ -59,6 +60,7 @@ public:
     {
         m_cbAutoUpdateKiCad->SetValue( m_model->m_autoUpdateKiCad );
         m_cbAutoUpdatePCM->SetValue( m_model->m_autoUpdatePCM );
+        m_cbApi->SetValue( m_model->m_enableApi );
 
 #ifdef KICAD_USE_SENTRY
         m_cbDataCollection->SetValue( m_model->m_enableSentry );
@@ -102,6 +104,7 @@ void STARTWIZARD_PROVIDER_PRIVACY::Finish()
     settings->m_KiCadUpdateCheck = m_model->m_autoUpdateKiCad;
     settings->m_PcmUpdateCheck   = m_model->m_autoUpdatePCM;
     commonSettings->m_DoNotShowAgain.update_check_prompt = true;
+    commonSettings->m_Api.enable_server = m_model->m_enableApi;
 
     APP_MONITOR::SENTRY::Instance()->SetSentryOptIn( m_model->m_enableSentry );
     commonSettings->m_DoNotShowAgain.data_collection_prompt = true;
@@ -121,6 +124,7 @@ void STARTWIZARD_PROVIDER_PRIVACY::ApplyDefaults()
 
     commonSettings->m_DoNotShowAgain.update_check_prompt = true;
     commonSettings->m_DoNotShowAgain.data_collection_prompt = true;
+    commonSettings->m_Api.enable_server = true;
 
     Pgm().SaveCommonSettings();
 }

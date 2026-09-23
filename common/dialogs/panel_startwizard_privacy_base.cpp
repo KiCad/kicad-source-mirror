@@ -45,6 +45,19 @@ PANEL_STARTWIZARD_PRIVACY_BASE::PANEL_STARTWIZARD_PRIVACY_BASE( wxWindow* parent
 
 	bSizer8->Add( m_sizerDataCollection, 0, wxEXPAND|wxTOP, 5 );
 
+	wxStaticBoxSizer* sbSizer3;
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("API") ), wxVERTICAL );
+
+	m_stApiIntro = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("The KiCad API allows plugins and third-party software on your computer to access KiCad."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stApiIntro->Wrap( -1 );
+	sbSizer3->Add( m_stApiIntro, 0, wxALL, 5 );
+
+	m_cbApi = new wxCheckBox( sbSizer3->GetStaticBox(), wxID_ANY, _("Enable KiCad API"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer3->Add( m_cbApi, 0, wxALL, 5 );
+
+
+	bSizer8->Add( sbSizer3, 0, wxEXPAND|wxTOP, 5 );
+
 
 	bPanelSizer->Add( bSizer8, 1, wxEXPAND, 5 );
 

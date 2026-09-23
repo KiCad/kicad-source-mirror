@@ -37,6 +37,8 @@ class PANEL_STARTWIZARD_PRIVACY_BASE : public wxPanel
 		wxStaticBoxSizer* m_sizerDataCollection;
 		wxStaticText* m_stIntroDataCollection;
 		wxCheckBox* m_cbDataCollection;
+		wxStaticText* m_stApiIntro;
+		wxCheckBox* m_cbApi;
 
 	public:
 
