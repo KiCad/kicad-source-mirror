@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 10:54-0700\n"
-"PO-Revision-Date: 2026-09-22 00:37+0000\n"
+"PO-Revision-Date: 2026-09-23 08:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -20150,9 +20150,8 @@ msgstr "Nessun file selezionato!"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:191
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:197
-#, fuzzy
 msgid "Import scale must be a positive number."
-msgstr "La scala deve essere un numero positivo."
+msgstr "La scala di importazione deve essere un numero positivo."
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:234
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:252
@@ -20449,6 +20448,8 @@ msgstr "Pannelli"
 msgid ""
 "Search signed-in remote symbol providers and download verified libraries."
 msgstr ""
+"Cerca tra i fornitori di simboli remoti a cui hai effettuato l'accesso e "
+"scarica le librerie verificate."
 
 #: eeschema/menubar.cpp:327
 msgid "Variants"
@@ -20804,54 +20805,58 @@ msgstr "Le seguenti librerie non sono state trovate:"
 
 #: eeschema/remote_symbol_download_manager.cpp:35
 msgid "Remote asset URL"
-msgstr ""
+msgstr "URL della risorsa remota"
 
 #: eeschema/remote_symbol_download_manager.cpp:49
 msgid "Remote asset URL origin must match the selected provider."
 msgstr ""
+"L'origine dell'URL della risorsa remota deve corrispondere al fornitore "
+"selezionato."
 
 #: eeschema/remote_symbol_download_manager.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to set download URL '%s'."
-msgstr "Fallita lettura di '%s'."
+msgstr "Impossibile impostare l'URL di scaricamento '%s'."
 
 #: eeschema/remote_symbol_download_manager.cpp:124
 msgid "Remote asset manifest declared an invalid size."
 msgstr ""
+"Il manifest della risorsa remota ha dichiarato una dimensione non valida."
 
 #: eeschema/remote_symbol_download_manager.cpp:130
 msgid "Remote asset manifest must declare sha256 for URL-based downloads."
 msgstr ""
+"Il manifest delle risorse remote deve dichiarare l'hash SHA-256 per gli "
+"scaricamenti basati su URL."
 
 #: eeschema/remote_symbol_download_manager.cpp:139
 msgid "Remote asset exceeds the provider download limit."
-msgstr ""
+msgstr "La risorsa remota supera il limite di download del provider."
 
 #: eeschema/remote_symbol_download_manager.cpp:150
 #, c-format
 msgid "Remote download failed with HTTP %d."
-msgstr ""
+msgstr "Scaricamento remoto non riuscito con HTTP %d."
 
 #: eeschema/remote_symbol_download_manager.cpp:156
 msgid "Remote asset content type did not match the manifest."
-msgstr ""
+msgstr "Tipo contenuto risorsa remota non corrispondente al manifest."
 
 #: eeschema/remote_symbol_download_manager.cpp:162
 msgid "Remote asset size did not match the manifest."
-msgstr ""
+msgstr "Dimensione risorsa remota non corrispondente al manifest."
 
 #: eeschema/remote_symbol_download_manager.cpp:168
 msgid "Remote asset exceeds the remaining download limit."
-msgstr ""
+msgstr "La risorsa remota supera il limite di scaricamento rimanente."
 
 #: eeschema/remote_symbol_download_manager.cpp:174
 msgid "Remote asset digest did not match the manifest."
-msgstr ""
+msgstr "Digest risorsa remota non corrispondente al manifest."
 
 #: eeschema/remote_symbol_import_job.cpp:52
-#, fuzzy
 msgid "Downloaded symbol payload was empty."
-msgstr "Contenuto simbolo vuoto."
+msgstr "Il payload simboli scaricato era vuoto."
 
 #: eeschema/remote_symbol_import_job.cpp:60
 #, fuzzy
