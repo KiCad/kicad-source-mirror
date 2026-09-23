@@ -1830,7 +1830,7 @@ types:
         doc: Legacy wire property records, consumed in full.
 
   framed_structure_v2:
-    doc: A legacy structure whose body this schema does not model; see v2Structure.
+    doc: A legacy structure whose body this schema does not model; see ORCAD_STRUCT_READER::ReadStructure.
     seq:
       - id: prefix
         type: short_prefix_v2
@@ -1988,9 +1988,10 @@ types:
 
   library_part_v2:
     doc: |
-      A legacy LibraryPart body, opaque here.  Its production lives in v2LibSymbolDef and
-      v2LibraryPartTail (orcad_page.cpp) and differs from the modern symbol_def in more than
-      framing, so it is not the modern body behind a short prefix.
+      A legacy LibraryPart body, opaque here.  OrcadReadSymbolDef reads it in the legacy
+      dialect and readLegacyLibraryPartTail reads its tail (orcad_cache.cpp).  The bounding box
+      follows the primitives directly and the tail follows the property list, so it is not the
+      modern body behind a short prefix.
     seq:
       - id: prefix
         type: short_prefix_v2
@@ -2041,8 +2042,8 @@ types:
 
   symbol_def_v2:
     doc: |
-      Legacy nested symbol body, opaque here.  Its production is v2SymbolDef in orcad_page.cpp;
-      legacy primitives drop the doubled type byte and the byteLength envelope, so the modern
+      Legacy nested symbol body, opaque here.  OrcadReadSymbolDef reads it in the legacy dialect
+      (orcad_cache.cpp); legacy primitives drop the doubled type byte and the byteLength envelope, so the modern
       primitive type does not describe them.
     seq:
       - id: prefix

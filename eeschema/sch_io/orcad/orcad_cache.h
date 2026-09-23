@@ -52,7 +52,7 @@
 
 /** Consumes one primitive and its optional preamble. Throws IO_ERROR for invalid framing or length.
  * Returns nullopt for a recognized body that is not supported. */
-std::optional<ORCAD_PRIMITIVE> OrcadReadPrimitive( ORCAD_STREAM& aStream );
+std::optional<ORCAD_PRIMITIVE> OrcadReadPrimitive( ORCAD_STRUCT_READER& aReader );
 
 /** A zero byte marks an empty pin slot and returns nullopt. */
 std::optional<ORCAD_SYMBOL_PIN> OrcadReadSymbolPin( ORCAD_STRUCT_READER& aReader );
@@ -87,53 +87,20 @@ ORCAD_DEVICE OrcadReadDevice( ORCAD_STRUCT_READER& aReader );
 
 ORCAD_PACKAGE OrcadReadPackage( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes );
 
-/**
- * Given the absolute position of a preamble magic, backtrack to find a valid
- * prefix chain ending right before it.  Tries short-prefix shapes with 0..39
- * property pairs (also accepting the i16 -1 marker with no pairs), requires the
- * type byte to be in the known-structure whitelist, counts same-type long
- * prefixes (u8 type, u32 len, u32 zero pad) going backwards, validates the chain
- * with TryReadPrefixes(), and rejects chains whose claimed stop offsets run past
- * the stream end.
- *
- * @return the chain start offset, or std::nullopt when no valid chain ends at
- *         this preamble.
- */
-std::optional<size_t> OrcadFindStructureStart( const ORCAD_STREAM& aStream,
-                                               size_t aPreamblePos );
-
-/**
- * Scan a Cache-framed stream (the 'Cache' stream itself, or any 'Packages/\<name\>'
- * stream — they share the framing) and collect symbol definitions and packages.
- *
- * Walk: find each preamble, backtrack via OrcadFindStructureStart(), parse symbol
- * types (24, 33, 34, 35, 64, 75, 76, 98) with OrcadReadSymbolDef() and type 31
- * with OrcadReadPackage(); everything else is passed over.  The cache may hold
- * several stale library versions of one symbol name: the FIRST entry wins as the
- * default and later same-name entries are appended to its variants list (see
- * ORCAD_SYMBOL_DEF::variants).  Packages: a later same-name entry replaces the
- * earlier one.  A parse failure
- * inside one structure is warned and recovery continues at the structure's prefix
- * end (or past the preamble when unknown).
- *
- * @param aData
- * @param aStrings
- * @param aWarn
- * @param aSymbols  filled in-place, keyed by cache symbol name.
- * @param aPackages filled in-place, keyed by package name.
- */
+/** The first entry is the default; later entries become variants. A modern body error preserves
+ * earlier entries and resumes at the declared structure end; a legacy one ends the walk. */
 void OrcadParseCache( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
                       const ORCAD_WARN_FN& aWarn, std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols,
-                      std::map<std::string, ORCAD_PACKAGE>& aPackages );
+                      std::map<std::string, ORCAD_PACKAGE>& aPackages, ORCAD_DIALECT aDialect = {} );
 
 /** Throws IO_ERROR for invalid framing or trailing bytes. */
 void OrcadParseSymbolStream( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
-                             std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols );
+                             std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols, ORCAD_DIALECT aDialect = {} );
 
 /** Package streams contain counted PartCells and LibraryParts, followed by one Package. */
 void OrcadParsePackageStream( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
                               std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols,
-                              std::map<std::string, ORCAD_PACKAGE>& aPackages );
+                              std::map<std::string, ORCAD_PACKAGE>& aPackages, ORCAD_DIALECT aDialect = {} );
 
 /**
  * Merge the results of a 'Packages/\<name\>' stream (locally modified parts) into

@@ -30,45 +30,23 @@
 #include <vector>
 
 #include <sch_io/orcad/orcad_records.h>
+#include <sch_io/orcad/orcad_structures.h>
 
-/** A body failure skips that structure. Invalid page framing throws IO_ERROR. */
+/** A modern body failure skips that structure. Invalid page framing, and any legacy body failure,
+ * throws IO_ERROR. */
 ORCAD_RAW_PAGE OrcadParsePage( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
-                               const ORCAD_WARN_FN& aWarn );
+                               const ORCAD_WARN_FN& aWarn, ORCAD_DIALECT aDialect = {} );
 
 /** Returns display order. The caller must reconcile these names with available page streams. */
-std::vector<std::string> OrcadParsePageOrder( const std::vector<char>& aData );
-
-/** Returns display order; throws IO_ERROR for invalid legacy framing. */
-std::vector<std::string> OrcadParsePageOrderV2( const std::vector<char>&        aData,
-                                                const std::vector<std::string>& aStrings );
+std::vector<std::string> OrcadParsePageOrder( const std::vector<char>& aData, ORCAD_DIALECT aDialect = {} );
 
 /** Unlisted Views storages can be stale. Import them only if a hierarchy occurrence refers to them. */
 std::vector<std::string> OrcadParseSchematicFolderOrder( const std::vector<char>& aData );
 
-/** Returns occurrence references and child scopes. Parse errors return an empty scope. */
+/** Returns occurrence references and child scopes. Modern parse errors return an empty scope; legacy
+ * ones throw IO_ERROR. */
 ORCAD_OCC_SCOPE OrcadReadOccurrenceTree( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
-                                         const ORCAD_WARN_FN& aWarn );
-
-/** Parse a short-prefix-only v2.0 Hierarchy stream without scan recovery. */
-ORCAD_OCC_SCOPE OrcadReadOccurrenceTreeV2( const std::vector<char>& aData, const std::vector<std::string>& aStrings );
-
-/** Legacy records have no stop offsets. A framing error throws IO_ERROR and discards the page. */
-ORCAD_RAW_PAGE OrcadParsePageV2( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
-                                 const ORCAD_WARN_FN& aWarn, bool aShortDisplayProp = false );
-
-/** Keep decoded entries if a framing error ends the legacy cache. */
-void OrcadParseCacheV2( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
-                        const ORCAD_WARN_FN& aWarn, std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols,
-                        std::map<std::string, ORCAD_PACKAGE>& aPackages );
-
-/** aShortDisplayProp selects the version 1 display-property layout. */
-void OrcadParseOlbSymbolStreamV2( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
-                                  std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols, bool aShortDisplayProp = false );
-
-/** aShortDisplayProp selects the version 1 display-property layout. */
-void OrcadParseOlbPackageStreamV2( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
-                                   std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols,
-                                   std::map<std::string, ORCAD_PACKAGE>& aPackages, bool aShortDisplayProp = false );
+                                         const ORCAD_WARN_FN& aWarn, ORCAD_DIALECT aDialect = {} );
 
 /** True when the page contains hierarchical block instances (DrawnInstance, type 12). */
 inline bool OrcadPageHasHierarchyBlocks( const ORCAD_RAW_PAGE& aPage )

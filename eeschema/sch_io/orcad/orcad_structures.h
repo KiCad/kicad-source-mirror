@@ -70,24 +70,42 @@ struct ORCAD_READ_RESULT
 std::optional<size_t> OrcadLongPrefixCount( int aTypeId );
 
 
+/** Legacy (pre-v3) files have short prefixes only, u16 string indices with a 0xFFFF sentinel and
+ * nested records in place. Version 1 files also use a shorter display-property body. */
+struct ORCAD_DIALECT
+{
+    bool legacy = false;
+    bool shortDisplayProp = false;
+};
+
+
 /** ReadStructure can recover from a body error when the prefix supplies a valid end offset. */
 class ORCAD_STRUCT_READER
 {
 public:
     ORCAD_STRUCT_READER( ORCAD_STREAM& aStream, const std::vector<std::string>* aStrings = nullptr,
-                         ORCAD_WARN_FN aWarn = nullptr );
+                         ORCAD_WARN_FN aWarn = nullptr, ORCAD_DIALECT aDialect = {} );
 
     ORCAD_STREAM& Stream() { return m_stream; }
 
+    const ORCAD_DIALECT& Dialect() const { return m_dialect; }
+
     /** aLongPrefixCount overrides the type depth; aEnclosingEnd bounds all stops.
-     * Invalid or inconsistent prefixes throw IO_ERROR. */
+     * Invalid or inconsistent prefixes throw IO_ERROR. Legacy prefixes leave the end unknown. */
     ORCAD_PREFIXES ReadPrefixes( int aExpectedType = -1, size_t aEnclosingEnd = ORCAD_STREAM::npos,
                                  size_t aLongPrefixCount = ORCAD_STREAM::npos );
 
-    /** String-table lookup; returns "" for out-of-range indices. */
+    /** A string-table index in the dialect's width. */
+    uint32_t ReadStrIdx();
+
+    /** A u16 list count. Nothing bounds a legacy record, so a legacy count that cannot fit the
+     * remaining bytes throws rather than driving a runaway read. */
+    uint16_t ReadCount();
+
+    /** String-table lookup; returns "" for out-of-range indices and the legacy sentinel. */
     std::string Resolve( uint32_t aIndex ) const;
 
-    /** Resolve the short-prefix (nameIdx, valueIdx) pairs; empty names are dropped. */
+    /** Resolve the short-prefix (nameIdx, valueIdx) pairs. Modern files drop empty names. */
     std::map<std::string, std::string> PropsDict( const ORCAD_PREFIXES& aPrefixes ) const;
 
     /** Throws IO_ERROR if the end is unknown or behind the cursor. */
@@ -100,9 +118,12 @@ public:
     void Warn( const wxString& aMsg ) const;
 
 private:
+    ORCAD_PREFIXES readLegacyPrefix( int aExpectedType );
+
     ORCAD_STREAM&                   m_stream;
     const std::vector<std::string>* m_strings;
     ORCAD_WARN_FN                   m_warn;
+    ORCAD_DIALECT                   m_dialect;
 };
 
 

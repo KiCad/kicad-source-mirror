@@ -28,6 +28,7 @@
 #include <set>
 
 #include <ki_exception.h>
+#include <wx/translation.h>
 
 #include <sch_io/orcad/orcad_orient.h>
 
@@ -131,6 +132,103 @@ std::optional<ORCAD_PRIMITIVE> readSymbolVector( ORCAD_STREAM& aStream )
     return group;
 }
 
+// Field layout shared by modern and legacy primitives; false for types with their own framing
+bool readPrimitiveFields( ORCAD_STREAM& aStream, int aType, ORCAD_PRIMITIVE& aPrim )
+{
+    switch( aType )
+    {
+    case ORCAD_PRIM_RECT:
+    case ORCAD_PRIM_ELLIPSE:
+        aPrim.kind = aType == ORCAD_PRIM_RECT ? ORCAD_PRIM_KIND::RECTANGLE : ORCAD_PRIM_KIND::ELLIPSE;
+        aPrim.x1 = aStream.ReadI32();
+        aPrim.y1 = aStream.ReadI32();
+        aPrim.x2 = aStream.ReadI32();
+        aPrim.y2 = aStream.ReadI32();
+        aPrim.lineStyle = aStream.ReadU32();
+        aPrim.lineWidth = aStream.ReadU32();
+        aPrim.fillStyle = aStream.ReadU32();
+        aPrim.hatchStyle = aStream.ReadU32();
+        return true;
+
+    case ORCAD_PRIM_LINE:
+        aPrim.kind = ORCAD_PRIM_KIND::LINE;
+        aPrim.x1 = aStream.ReadI32();
+        aPrim.y1 = aStream.ReadI32();
+        aPrim.x2 = aStream.ReadI32();
+        aPrim.y2 = aStream.ReadI32();
+        aPrim.lineStyle = aStream.ReadU32();
+        aPrim.lineWidth = aStream.ReadU32();
+        return true;
+
+    case ORCAD_PRIM_ARC:
+        aPrim.kind = ORCAD_PRIM_KIND::ARC;
+        aPrim.x1 = aStream.ReadI32();
+        aPrim.y1 = aStream.ReadI32();
+        aPrim.x2 = aStream.ReadI32();
+        aPrim.y2 = aStream.ReadI32();
+        aPrim.start = ORCAD_POINT{ aStream.ReadI32(), aStream.ReadI32() };
+        aPrim.end = ORCAD_POINT{ aStream.ReadI32(), aStream.ReadI32() };
+        aPrim.lineStyle = aStream.ReadU32();
+        aPrim.lineWidth = aStream.ReadU32();
+        return true;
+
+    case ORCAD_PRIM_POLYGON:
+    case ORCAD_PRIM_POLYLINE:
+    case ORCAD_PRIM_BEZIER:
+    {
+        aPrim.kind = aType == ORCAD_PRIM_POLYGON  ? ORCAD_PRIM_KIND::POLYGON
+                     : aType == ORCAD_PRIM_BEZIER ? ORCAD_PRIM_KIND::BEZIER
+                                                  : ORCAD_PRIM_KIND::POLYLINE;
+        aPrim.lineStyle = aStream.ReadU32();
+        aPrim.lineWidth = aStream.ReadU32();
+
+        if( aType == ORCAD_PRIM_POLYGON )
+        {
+            aPrim.fillStyle = aStream.ReadU32();
+            aPrim.hatchStyle = aStream.ReadU32();
+        }
+
+        uint16_t pointCount = aStream.ReadU16();
+
+        for( uint16_t i = 0; i < pointCount; i++ )
+        {
+            ORCAD_POINT pt;
+            pt.y = aStream.ReadI16();
+            pt.x = aStream.ReadI16();
+            aPrim.points.push_back( pt );
+        }
+
+        return true;
+    }
+
+    case ORCAD_PRIM_COMMENT_TEXT:
+        aPrim.kind = ORCAD_PRIM_KIND::TEXT;
+        aPrim.x1 = aStream.ReadI32();
+        aPrim.y1 = aStream.ReadI32();
+        aPrim.x2 = aStream.ReadI32();
+        aPrim.y2 = aStream.ReadI32();
+        aPrim.textBoundsStart = ORCAD_POINT{ aStream.ReadI32(), aStream.ReadI32() };
+        aPrim.fontIdx = aStream.ReadU16();
+        aStream.Skip( 2 );
+        aPrim.text = aStream.ReadLzt();
+        return true;
+
+    case ORCAD_PRIM_BITMAP:
+        aPrim.kind = ORCAD_PRIM_KIND::IMAGE;
+        aPrim.x1 = aStream.ReadI32();
+        aPrim.y1 = aStream.ReadI32();
+        aPrim.x2 = aStream.ReadI32();
+        aPrim.y2 = aStream.ReadI32();
+        aStream.Skip( 8 ); // x1, y1 duplicate corner
+        aStream.Skip( 8 ); // pixel width/height
+        aPrim.data = aStream.ReadBytes( aStream.ReadU32() );
+        return true;
+
+    default: return false;
+    }
+}
+
+
 std::optional<ORCAD_PRIMITIVE> readPrimitiveBody( ORCAD_STREAM& aStream, int t1 )
 {
     size_t start = aStream.GetOffset();
@@ -155,120 +253,10 @@ std::optional<ORCAD_PRIMITIVE> readPrimitiveBody( ORCAD_STREAM& aStream, int t1 
         static const uint8_t pad[4] = { 0x00, 0x00, 0x00, 0x00 };
         aStream.Expect( pad, 4, wxS( "primitive pad" ) );
 
-        if( t1 == ORCAD_PRIM_RECT || t1 == ORCAD_PRIM_ELLIPSE )
+        ORCAD_PRIMITIVE p;
+
+        if( t1 == ORCAD_PRIM_OLE_IMAGE )
         {
-            ORCAD_PRIMITIVE p;
-            p.kind = t1 == ORCAD_PRIM_RECT ? ORCAD_PRIM_KIND::RECTANGLE : ORCAD_PRIM_KIND::ELLIPSE;
-            p.x1 = aStream.ReadI32();
-            p.y1 = aStream.ReadI32();
-            p.x2 = aStream.ReadI32();
-            p.y2 = aStream.ReadI32();
-            p.lineStyle = aStream.ReadU32();
-            p.lineWidth = aStream.ReadU32();
-            p.fillStyle = aStream.ReadU32();
-            p.hatchStyle = aStream.ReadU32();
-            prim = std::move( p );
-        }
-        else if( t1 == ORCAD_PRIM_LINE )
-        {
-            ORCAD_PRIMITIVE p;
-            p.kind = ORCAD_PRIM_KIND::LINE;
-            p.x1 = aStream.ReadI32();
-            p.y1 = aStream.ReadI32();
-            p.x2 = aStream.ReadI32();
-            p.y2 = aStream.ReadI32();
-            p.lineStyle = aStream.ReadU32();
-            p.lineWidth = aStream.ReadU32();
-            prim = std::move( p );
-        }
-        else if( t1 == ORCAD_PRIM_ARC )
-        {
-            ORCAD_PRIMITIVE p;
-            p.kind = ORCAD_PRIM_KIND::ARC;
-            p.x1 = aStream.ReadI32();
-            p.y1 = aStream.ReadI32();
-            p.x2 = aStream.ReadI32();
-            p.y2 = aStream.ReadI32();
-
-            ORCAD_POINT arcStart;
-            arcStart.x = aStream.ReadI32();
-            arcStart.y = aStream.ReadI32();
-
-            ORCAD_POINT arcEnd;
-            arcEnd.x = aStream.ReadI32();
-            arcEnd.y = aStream.ReadI32();
-
-            p.start = arcStart;
-            p.end = arcEnd;
-            p.lineStyle = aStream.ReadU32();
-            p.lineWidth = aStream.ReadU32();
-            prim = std::move( p );
-        }
-        else if( t1 == ORCAD_PRIM_POLYGON || t1 == ORCAD_PRIM_POLYLINE || t1 == ORCAD_PRIM_BEZIER )
-        {
-            ORCAD_PRIMITIVE p;
-            p.lineStyle = aStream.ReadU32();
-            p.lineWidth = aStream.ReadU32();
-
-            if( t1 == ORCAD_PRIM_POLYGON )
-            {
-                p.kind = ORCAD_PRIM_KIND::POLYGON;
-                p.fillStyle = aStream.ReadU32();
-                p.hatchStyle = aStream.ReadU32();
-            }
-            else if( t1 == ORCAD_PRIM_POLYLINE )
-            {
-                p.kind = ORCAD_PRIM_KIND::POLYLINE;
-            }
-            else
-            {
-                p.kind = ORCAD_PRIM_KIND::BEZIER;
-            }
-
-            uint16_t pointCount = aStream.ReadU16();
-
-            for( uint16_t i = 0; i < pointCount; i++ )
-            {
-                ORCAD_POINT pt;
-                pt.y = aStream.ReadI16();
-                pt.x = aStream.ReadI16();
-                p.points.push_back( pt );
-            }
-
-            prim = std::move( p );
-        }
-        else if( t1 == ORCAD_PRIM_COMMENT_TEXT )
-        {
-            ORCAD_PRIMITIVE p;
-            p.kind = ORCAD_PRIM_KIND::TEXT;
-            p.x1 = aStream.ReadI32();
-            p.y1 = aStream.ReadI32();
-            p.x2 = aStream.ReadI32();
-            p.y2 = aStream.ReadI32();
-            p.textBoundsStart = ORCAD_POINT{ aStream.ReadI32(), aStream.ReadI32() };
-            p.fontIdx = aStream.ReadU16();
-            aStream.Skip( 2 );
-            p.text = aStream.ReadLzt();
-            prim = std::move( p );
-        }
-        else if( t1 == ORCAD_PRIM_BITMAP )
-        {
-            ORCAD_PRIMITIVE p;
-            p.kind = ORCAD_PRIM_KIND::IMAGE;
-            p.x1 = aStream.ReadI32();
-            p.y1 = aStream.ReadI32();
-            p.x2 = aStream.ReadI32();
-            p.y2 = aStream.ReadI32();
-            aStream.Skip( 8 ); // x1, y1 duplicate corner
-            aStream.Skip( 8 ); // pixel width/height
-
-            uint32_t dataSize = aStream.ReadU32();
-            p.data = aStream.ReadBytes( dataSize );
-            prim = std::move( p );
-        }
-        else if( t1 == ORCAD_PRIM_OLE_IMAGE )
-        {
-            ORCAD_PRIMITIVE p;
             p.kind = ORCAD_PRIM_KIND::IMAGE;
             p.x1 = aStream.ReadI32();
             p.y1 = aStream.ReadI32();
@@ -287,6 +275,10 @@ std::optional<ORCAD_PRIMITIVE> readPrimitiveBody( ORCAD_STREAM& aStream, int t1 
                 p.data.assign( aStream.Data() + from, aStream.Data() + to );
 
             aStream.Seek( to );
+            prim = std::move( p );
+        }
+        else if( readPrimitiveFields( aStream, t1, p ) )
+        {
             prim = std::move( p );
         }
 
@@ -313,25 +305,81 @@ std::optional<ORCAD_PRIMITIVE> readPrimitiveBody( ORCAD_STREAM& aStream, int t1 
     return prim;
 }
 
+
+ORCAD_PRIMITIVE readLegacyPrimitive( ORCAD_STRUCT_READER& aReader, int aType );
+
+
+// Legacy vectors frame their children in place: a short prefix, the origin, then padded primitives
+ORCAD_PRIMITIVE readLegacySymbolVector( ORCAD_STRUCT_READER& aReader )
+{
+    ORCAD_STREAM&            stream = aReader.Stream();
+    ORCAD_STREAM::NEST_GUARD guard( stream, wxS( "legacy symbol vector" ) );
+
+    stream.ExpectByte( ORCAD_PRIM_SYMBOL_VECTOR, wxS( "legacy symbol vector pair" ) );
+
+    int16_t propertyCount = stream.ReadI16();
+    stream.Skip( 4 * std::max<int>( propertyCount, 0 ) );
+
+    ORCAD_PRIMITIVE group;
+    group.kind = ORCAD_PRIM_KIND::GROUP_PRIM;
+    group.x1 = stream.ReadI16();
+    group.y1 = stream.ReadI16();
+
+    uint16_t count = aReader.ReadCount();
+
+    for( uint16_t i = 0; i < count; i++ )
+    {
+        int type = stream.ReadU8();
+        stream.ExpectByte( 0x00, wxS( "legacy vector prim pad" ) );
+        group.children.push_back( readLegacyPrimitive( aReader, type ) );
+    }
+
+    stream.ReadLzt(); // vector name
+
+    return group;
+}
+
+
+// Legacy primitives carry one type byte and no size envelope
+ORCAD_PRIMITIVE readLegacyPrimitive( ORCAD_STRUCT_READER& aReader, int aType )
+{
+    if( aType == ORCAD_PRIM_SYMBOL_VECTOR )
+        return readLegacySymbolVector( aReader );
+
+    ORCAD_PRIMITIVE prim;
+
+    if( !readPrimitiveFields( aReader.Stream(), aType, prim ) )
+    {
+        THROW_IO_ERRORF( wxS( "OrCAD legacy primitive: unhandled type %d at 0x%zx" ), aType,
+                         aReader.Stream().GetOffset() );
+    }
+
+    return prim;
+}
+
 } // namespace
 
 
-std::optional<ORCAD_PRIMITIVE> OrcadReadPrimitive( ORCAD_STREAM& aStream )
+std::optional<ORCAD_PRIMITIVE> OrcadReadPrimitive( ORCAD_STRUCT_READER& aReader )
 {
-    int t1 = aStream.ReadU8();
+    ORCAD_STREAM& stream = aReader.Stream();
+    int           t1 = stream.ReadU8();
+
+    if( aReader.Dialect().legacy )
+        return readLegacyPrimitive( aReader, t1 );
 
     if( !isPrimType( t1 ) )
-        THROW_IO_ERRORF( wxS( "bad primitive type %d at 0x%zx" ), t1, aStream.GetOffset() - 1 );
+        THROW_IO_ERRORF( wxS( "bad primitive type %d at 0x%zx" ), t1, stream.GetOffset() - 1 );
 
     if( t1 == ORCAD_PRIM_SYMBOL_VECTOR )
-        return readSymbolVector( aStream );
+        return readSymbolVector( stream );
 
-    int t2 = aStream.ReadU8();
+    int t2 = stream.ReadU8();
 
     if( t1 != t2 )
-        THROW_IO_ERRORF( wxS( "bad primitive prefix %d/%d at 0x%zx" ), t1, t2, aStream.GetOffset() - 2 );
+        THROW_IO_ERRORF( wxS( "bad primitive prefix %d/%d at 0x%zx" ), t1, t2, stream.GetOffset() - 2 );
 
-    return readPrimitiveBody( aStream, t1 );
+    return readPrimitiveBody( stream, t1 );
 }
 
 
@@ -363,7 +411,9 @@ std::optional<ORCAD_SYMBOL_PIN> OrcadReadSymbolPin( ORCAD_STRUCT_READER& aReader
     uint32_t portType = stream.ReadU32();
     pin.portType = portType <= 7 ? static_cast<ORCAD_PORT_TYPE>( portType ) : ORCAD_PORT_TYPE::PASSIVE;
 
-    if( pfx.end != 0 && pfx.end >= stream.GetOffset() + 6 && stream.PeekU8() == pfx.typeId )
+    // Legacy pins always carry the type echo and display properties
+    if( aReader.Dialect().legacy
+        || ( pfx.end != 0 && pfx.end >= stream.GetOffset() + 6 && stream.PeekU8() == pfx.typeId ) )
     {
         stream.ExpectByte( static_cast<uint8_t>( pfx.typeId ), wxS( "symbol pin type echo" ) );
         stream.Skip( 3 );
@@ -392,11 +442,11 @@ ORCAD_SYMBOL_DEF OrcadReadSymbolDef( ORCAD_STRUCT_READER& aReader, const ORCAD_P
 
     sym.color = static_cast<int>( stream.ReadU32() );
 
-    uint16_t primCount = stream.ReadU16();
+    uint16_t primCount = aReader.ReadCount();
 
     for( uint16_t i = 0; i < primCount; i++ )
     {
-        std::optional<ORCAD_PRIMITIVE> prim = OrcadReadPrimitive( stream );
+        std::optional<ORCAD_PRIMITIVE> prim = OrcadReadPrimitive( aReader );
 
         if( prim )
             sym.primitives.push_back( std::move( *prim ) );
@@ -411,7 +461,20 @@ ORCAD_SYMBOL_DEF OrcadReadSymbolDef( ORCAD_STRUCT_READER& aReader, const ORCAD_P
     // Bbox = last 8 bytes before next checkpoint (gap 8, or 16 w/ 8 legacy-trailer bytes), as 4x i16.
     auto nextStopIt = std::upper_bound( stops.begin(), stops.end(), stream.GetOffset() );
 
-    if( nextStopIt != stops.end() )
+    if( aReader.Dialect().legacy )
+    {
+        // Legacy boxes follow the primitives directly; version 1 page symbols have none
+        if( aWithPins || !aReader.Dialect().shortDisplayProp )
+        {
+            ORCAD_BBOX box;
+            box.x1 = stream.ReadI16();
+            box.y1 = stream.ReadI16();
+            box.x2 = stream.ReadI16();
+            box.y2 = stream.ReadI16();
+            sym.bbox = box;
+        }
+    }
+    else if( nextStopIt != stops.end() )
     {
         size_t nextStop = *nextStopIt;
         size_t gap = nextStop - stream.GetOffset();
@@ -443,7 +506,7 @@ ORCAD_SYMBOL_DEF OrcadReadSymbolDef( ORCAD_STRUCT_READER& aReader, const ORCAD_P
 
     if( aWithPins )
     {
-        uint16_t pinCount = stream.ReadU16();
+        uint16_t pinCount = aReader.ReadCount();
 
         for( uint16_t i = 0; i < pinCount; i++ )
         {
@@ -456,7 +519,7 @@ ORCAD_SYMBOL_DEF OrcadReadSymbolDef( ORCAD_STRUCT_READER& aReader, const ORCAD_P
             }
         }
 
-        uint16_t propCount = stream.ReadU16();
+        uint16_t propCount = aReader.ReadCount();
 
         for( uint16_t i = 0; i < propCount; i++ )
             aReader.ReadStructure();
@@ -503,9 +566,14 @@ ORCAD_SYMBOL_DEF OrcadReadSymbolDef( ORCAD_STRUCT_READER& aReader, const ORCAD_P
 ORCAD_DRAWN_INSTANCE OrcadReadDrawnInstance( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aPrefixes )
 {
     ORCAD_STREAM& stream = aReader.Stream();
+    bool          legacy = aReader.Dialect().legacy;
 
-    uint32_t nameIdx = stream.ReadU32();
-    stream.ReadU32(); // source library string index
+    uint32_t nameIdx = aReader.ReadStrIdx();
+    aReader.ReadStrIdx(); // source library string index
+
+    if( legacy )
+        stream.Skip( 4 ); // uninitialized
+
     stream.ReadLzt(); // name
 
     uint32_t dbId = stream.ReadU32();
@@ -549,18 +617,34 @@ ORCAD_DRAWN_INSTANCE OrcadReadDrawnInstance( ORCAD_STRUCT_READER& aReader, const
     block.h = quarterTurn ? bbox.x2 - bbox.x1 : bbox.y2 - bbox.y1;
     block.displayProps = std::move( displayProps );
 
-    // Block reference starts at second-to-last prefix checkpoint.
-    std::vector<size_t> stops = aPrefixes.stops;
-    std::sort( stops.begin(), stops.end() );
+    if( legacy )
+    {
+        block.props.insert( nested.props.begin(), nested.props.end() );
+        stream.Skip( 14 );
+        block.reference = stream.ReadLzt();
 
-    if( stops.size() >= 2 && stops[stops.size() - 2] >= stream.GetOffset() )
-        stream.Seek( stops[stops.size() - 2] );
+        uint32_t valueIdx = aReader.ReadStrIdx();
+        aReader.ReadStrIdx();
+        uint32_t implementationIdx = aReader.ReadStrIdx();
+        aReader.ReadStrIdx();
+        block.props["Value"] = aReader.Resolve( valueIdx );
+        block.props["Implementation"] = aReader.Resolve( implementationIdx );
+    }
+    else
+    {
+        // Block reference starts at second-to-last prefix checkpoint.
+        std::vector<size_t> stops = aPrefixes.stops;
+        std::sort( stops.begin(), stops.end() );
 
-    block.reference = stream.ReadLzt();
-    stream.Skip( 14 );
+        if( stops.size() >= 2 && stops[stops.size() - 2] >= stream.GetOffset() )
+            stream.Seek( stops[stops.size() - 2] );
+
+        block.reference = stream.ReadLzt();
+        stream.Skip( 14 );
+    }
 
     // Framed T0x10 structs carry absolute pin page positions, in inline LibraryPart pin order.
-    uint16_t pinCount = stream.ReadU16();
+    uint16_t pinCount = aReader.ReadCount();
 
     std::vector<ORCAD_PIN_INST> pinInsts;
 
@@ -641,7 +725,7 @@ ORCAD_DEVICE OrcadReadDevice( ORCAD_STRUCT_READER& aReader )
     device.unitRef = stream.ReadLzt();
     device.refDes = stream.ReadLzt();
 
-    uint16_t pinCount = stream.ReadU16();
+    uint16_t pinCount = aReader.ReadCount();
 
     for( uint16_t i = 0; i < pinCount; i++ )
     {
@@ -680,7 +764,7 @@ ORCAD_PACKAGE OrcadReadPackage( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIX
     stream.ReadLzt(); // unknown
     pkg.pcbFootprint = stream.ReadLzt();
 
-    uint16_t deviceCount = stream.ReadU16();
+    uint16_t deviceCount = aReader.ReadCount();
 
     for( uint16_t i = 0; i < deviceCount; i++ )
         pkg.devices.push_back( OrcadReadDevice( aReader ) );
@@ -733,12 +817,70 @@ static bool cacheSectionAcceptsType( int aSection, int aTypeId )
 }
 
 
+// Legacy LibraryParts end with this tail; framed ones carry it inside their last prefix stop
+static std::string readLegacyLibraryPartTail( ORCAD_STREAM& aStream, ORCAD_SYMBOL_DEF& aDef )
+{
+    std::string implementationPath = aStream.ReadLzt();
+
+    if( !implementationPath.empty() )
+        aDef.props["Implementation Path"] = std::move( implementationPath );
+
+    aStream.ReadLzt(); // implementation (PSpice model)
+    std::string refDesPrefix = aStream.ReadLzt();
+    aStream.ReadLzt(); // part value
+    aDef.generalFlags = aStream.ReadU16();
+
+    return refDesPrefix;
+}
+
+
+// Nothing frames a legacy Cache entry, so each body must be read in full to find the next
+static void storeLegacyCacheRecord( ORCAD_STRUCT_READER& aReader, int aTypeId,
+                                    std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols,
+                                    std::map<std::string, ORCAD_PACKAGE>&    aPackages )
+{
+    ORCAD_STREAM&  stream = aReader.Stream();
+    ORCAD_PREFIXES prefixes = aReader.ReadPrefixes();
+
+    if( aTypeId == ORCAD_ST_PART_CELL )
+    {
+        stream.ReadLzt(); // part cell name
+        stream.ReadLzt(); // source library
+
+        uint16_t viewCount = aReader.ReadCount();
+
+        for( uint16_t i = 0; i < viewCount; ++i )
+            stream.ReadLzt();
+    }
+    else if( aTypeId == ORCAD_ST_PACKAGE )
+    {
+        OrcadAddOrVariant( aPackages, OrcadReadPackage( aReader, prefixes ) );
+    }
+    else
+    {
+        ORCAD_SYMBOL_DEF def = OrcadReadSymbolDef( aReader, prefixes, true );
+
+        if( aTypeId == ORCAD_ST_LIBRARY_PART )
+            readLegacyLibraryPartTail( stream, def );
+
+        if( !def.name.empty() )
+        {
+            int               flags = def.generalFlags;
+            ORCAD_SYMBOL_DEF& stored = OrcadAddOrVariant( aSymbols, std::move( def ) );
+
+            if( stored.generalFlags < 0 && flags >= 0 )
+                stored.generalFlags = flags;
+        }
+    }
+}
+
+
 void OrcadParseCache( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
                       const ORCAD_WARN_FN& aWarn, std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols,
-                      std::map<std::string, ORCAD_PACKAGE>& aPackages )
+                      std::map<std::string, ORCAD_PACKAGE>& aPackages, ORCAD_DIALECT aDialect )
 {
     ORCAD_STREAM        stream( aData );
-    ORCAD_STRUCT_READER reader( stream, &aStrings, aWarn );
+    ORCAD_STRUCT_READER reader( stream, &aStrings, aWarn, aDialect );
 
     // Keep decoded symbols if the cache fails. The remaining parts use placeholders.
     try
@@ -750,12 +892,12 @@ void OrcadParseCache( const std::vector<char>& aData, const std::vector<std::str
         // cache is the marker plus four zero counts, which is the ten-byte stream in the wild.
         for( int section = 0; section < 4; ++section )
         {
-            uint16_t groupCount = stream.ReadU16();
+            uint16_t groupCount = reader.ReadCount();
 
             for( uint16_t group = 0; group < groupCount; ++group )
             {
                 stream.ReadLzt(); // group name
-                uint16_t variantCount = stream.ReadU16();
+                uint16_t variantCount = reader.ReadCount();
 
                 for( uint16_t variant = 0; variant < variantCount; ++variant )
                 {
@@ -766,6 +908,12 @@ void OrcadParseCache( const std::vector<char>& aData, const std::vector<std::str
                     int typeId = stream.ReadU8();
 
                     stream.ExpectByte( 0, wxS( "Cache entry pad" ) );
+
+                    if( aDialect.legacy )
+                    {
+                        storeLegacyCacheRecord( reader, typeId, aSymbols, aPackages );
+                        continue;
+                    }
 
                     if( !cacheSectionAcceptsType( section, typeId ) )
                     {
@@ -803,7 +951,13 @@ void OrcadParseCache( const std::vector<char>& aData, const std::vector<std::str
     }
     catch( const IO_ERROR& e )
     {
-        if( aWarn )
+        if( aWarn && aDialect.legacy )
+        {
+            aWarn( wxString::Format( _( "The legacy design cache could not be read past 0x%zx (%s); the "
+                                        "remaining symbols fall back to placeholders." ),
+                                     stream.GetOffset(), e.What() ) );
+        }
+        else if( aWarn )
         {
             aWarn( wxString::Format( wxS( "OrCAD Cache: stopped at 0x%zx (%s); symbols after this point fall "
                                           "back to synthesized placeholders" ),
@@ -814,11 +968,27 @@ void OrcadParseCache( const std::vector<char>& aData, const std::vector<std::str
 
 
 void OrcadParseSymbolStream( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
-                             std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols )
+                             std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols, ORCAD_DIALECT aDialect )
 {
     ORCAD_STREAM        stream( aData );
-    ORCAD_STRUCT_READER reader( stream, &aStrings );
+    ORCAD_STRUCT_READER reader( stream, &aStrings, nullptr, aDialect );
     ORCAD_PREFIXES      prefixes = reader.ReadPrefixes();
+
+    if( aDialect.legacy )
+    {
+        ORCAD_SYMBOL_DEF def = OrcadReadSymbolDef( reader, prefixes, true );
+
+        if( def.typeId == ORCAD_ST_LIBRARY_PART && stream.Remaining() != 0 )
+            readLegacyLibraryPartTail( stream, def );
+
+        if( stream.Remaining() != 0 )
+            THROW_IO_ERROR( wxS( "OrCAD symbol stream: trailing bytes" ) );
+
+        if( !def.name.empty() )
+            OrcadAddOrVariant( aSymbols, std::move( def ) );
+
+        return;
+    }
 
     if( !isSymbolType( prefixes.typeId ) )
         THROW_IO_ERRORF( wxS( "OrCAD symbol stream: expected a symbol structure, got type %d" ), prefixes.typeId );
@@ -833,12 +1003,13 @@ void OrcadParseSymbolStream( const std::vector<char>& aData, const std::vector<s
 
 void OrcadParsePackageStream( const std::vector<char>& aData, const std::vector<std::string>& aStrings,
                               std::map<std::string, ORCAD_SYMBOL_DEF>& aSymbols,
-                              std::map<std::string, ORCAD_PACKAGE>& aPackages )
+                              std::map<std::string, ORCAD_PACKAGE>& aPackages, ORCAD_DIALECT aDialect )
 {
     ORCAD_STREAM        stream( aData );
-    ORCAD_STRUCT_READER reader( stream, &aStrings );
+    ORCAD_STRUCT_READER reader( stream, &aStrings, nullptr, aDialect );
+    std::string         refDesPrefix;
 
-    uint16_t partCellCount = stream.ReadU16();
+    uint16_t partCellCount = reader.ReadCount();
 
     if( partCellCount > 1000 )
         THROW_IO_ERROR( wxS( "OrCAD package stream: implausible PartCell count" ) );
@@ -851,7 +1022,7 @@ void OrcadParsePackageStream( const std::vector<char>& aData, const std::vector<
         stream.ReadLzt(); // PartCell name
         stream.ReadLzt(); // source library
 
-        uint16_t viewCount = stream.ReadU16();
+        uint16_t viewCount = reader.ReadCount();
 
         if( viewCount > 1000 )
             THROW_IO_ERROR( wxS( "OrCAD package stream: implausible view count" ) );
@@ -859,26 +1030,38 @@ void OrcadParsePackageStream( const std::vector<char>& aData, const std::vector<
         for( uint16_t view = 0; view < viewCount; ++view )
             stream.ReadLzt();
 
-        if( cellPfx.end == 0 || stream.GetOffset() > cellPfx.end )
-            THROW_IO_ERROR( wxS( "OrCAD package stream: PartCell exceeds its frame" ) );
+        if( !aDialect.legacy )
+        {
+            if( cellPfx.end == 0 || stream.GetOffset() > cellPfx.end )
+                THROW_IO_ERROR( wxS( "OrCAD package stream: PartCell exceeds its frame" ) );
 
-        stream.Seek( cellPfx.end );
+            stream.Seek( cellPfx.end );
+        }
 
-        uint16_t symbolCount = stream.ReadU16();
+        uint16_t symbolCount = reader.ReadCount();
 
         if( symbolCount > 1000 )
             THROW_IO_ERROR( wxS( "OrCAD package stream: implausible LibraryPart count" ) );
+
+        std::string cellRefDesPrefix;
 
         for( uint16_t symbolIndex = 0; symbolIndex < symbolCount; ++symbolIndex )
         {
             ORCAD_PREFIXES   symbolPfx = reader.ReadPrefixes( ORCAD_ST_LIBRARY_PART );
             ORCAD_SYMBOL_DEF symbol = OrcadReadSymbolDef( reader, symbolPfx, true );
 
+            if( aDialect.legacy )
+                cellRefDesPrefix = readLegacyLibraryPartTail( stream, symbol );
+
             for( const auto& [name, value] : cellProps )
                 symbol.props.try_emplace( name, value );
 
-            OrcadAddOrVariant( aSymbols, std::move( symbol ) );
+            if( !aDialect.legacy || !symbol.name.empty() )
+                OrcadAddOrVariant( aSymbols, std::move( symbol ) );
         }
+
+        if( refDesPrefix.empty() )
+            refDesPrefix = cellRefDesPrefix;
     }
 
     ORCAD_PREFIXES packagePfx = reader.ReadPrefixes( ORCAD_ST_PACKAGE );
@@ -887,7 +1070,11 @@ void OrcadParsePackageStream( const std::vector<char>& aData, const std::vector<
     if( stream.Remaining() != 0 )
         THROW_IO_ERROR( wxS( "OrCAD package stream: trailing bytes" ) );
 
-    OrcadAddOrVariant( aPackages, std::move( package ) );
+    if( package.refDes.empty() )
+        package.refDes = refDesPrefix;
+
+    if( !aDialect.legacy || !package.name.empty() )
+        OrcadAddOrVariant( aPackages, std::move( package ) );
 }
 
 

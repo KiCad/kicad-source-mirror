@@ -34,10 +34,11 @@
 
 
 ORCAD_STRUCT_READER::ORCAD_STRUCT_READER( ORCAD_STREAM& aStream, const std::vector<std::string>* aStrings,
-                                          ORCAD_WARN_FN aWarn ) :
+                                          ORCAD_WARN_FN aWarn, ORCAD_DIALECT aDialect ) :
         m_stream( aStream ),
         m_strings( aStrings ),
-        m_warn( std::move( aWarn ) )
+        m_warn( std::move( aWarn ) ),
+        m_dialect( aDialect )
 {
 }
 
@@ -109,8 +110,38 @@ std::optional<size_t> OrcadLongPrefixCount( int aTypeId )
 }
 
 
+ORCAD_PREFIXES ORCAD_STRUCT_READER::readLegacyPrefix( int aExpectedType )
+{
+    ORCAD_PREFIXES pfx;
+    pfx.start = m_stream.GetOffset();
+    pfx.typeId = m_stream.ReadU8();
+
+    if( aExpectedType >= 0 && pfx.typeId != aExpectedType )
+        THROW_IO_ERRORF( wxS( "OrCAD structure: expected type %d, got %d" ), aExpectedType, pfx.typeId );
+
+    int16_t propertyCount = m_stream.ReadI16();
+
+    if( propertyCount > 1000 )
+        THROW_IO_ERRORF( wxS( "OrCAD legacy prefix: absurd property count %d" ), propertyCount );
+
+    for( int i = 0; i < propertyCount; ++i )
+    {
+        uint32_t nameIdx = m_stream.ReadU16();
+        uint32_t valueIdx = m_stream.ReadU16();
+        pfx.props.emplace_back( nameIdx, valueIdx );
+    }
+
+    pfx.bodyStart = m_stream.GetOffset();
+
+    return pfx;
+}
+
+
 ORCAD_PREFIXES ORCAD_STRUCT_READER::ReadPrefixes( int aExpectedType, size_t aEnclosingEnd, size_t aLongPrefixCount )
 {
+    if( m_dialect.legacy )
+        return readLegacyPrefix( aExpectedType );
+
     ORCAD_PREFIXES pfx;
     pfx.start = m_stream.GetOffset();
 
@@ -191,8 +222,31 @@ ORCAD_PREFIXES ORCAD_STRUCT_READER::ReadPrefixes( int aExpectedType, size_t aEnc
 }
 
 
+uint32_t ORCAD_STRUCT_READER::ReadStrIdx()
+{
+    return m_dialect.legacy ? m_stream.ReadU16() : m_stream.ReadU32();
+}
+
+
+uint16_t ORCAD_STRUCT_READER::ReadCount()
+{
+    uint16_t count = m_stream.ReadU16();
+
+    if( m_dialect.legacy && ( count > 30000 || count > m_stream.Remaining() ) )
+    {
+        THROW_IO_ERRORF( wxS( "OrCAD legacy repeat count %u exceeds the sane bound (%zu bytes remain)" ), count,
+                         m_stream.Remaining() );
+    }
+
+    return count;
+}
+
+
 std::string ORCAD_STRUCT_READER::Resolve( uint32_t aIndex ) const
 {
+    if( m_dialect.legacy && aIndex == 0xFFFF )
+        return std::string();
+
     if( m_strings && aIndex < m_strings->size() )
         return ( *m_strings )[aIndex];
 
@@ -208,7 +262,8 @@ std::map<std::string, std::string> ORCAD_STRUCT_READER::PropsDict( const ORCAD_P
     {
         std::string name = Resolve( prop.first );
 
-        if( !name.empty() )
+        // Legacy imports have always kept empty-named properties
+        if( !name.empty() || m_dialect.legacy )
             out[name] = Resolve( prop.second );
     }
 
@@ -241,7 +296,7 @@ ORCAD_READ_RESULT ORCAD_STRUCT_READER::ReadStructure()
 
     try
     {
-        ORCAD_STREAM::LIMIT_GUARD limit( m_stream, pfx.end );
+        ORCAD_STREAM::LIMIT_GUARD limit( m_stream, pfx.end ? pfx.end : m_stream.Size() );
 
         switch( pfx.typeId )
         {
@@ -257,6 +312,22 @@ ORCAD_READ_RESULT ORCAD_STRUCT_READER::ReadStructure()
         case ORCAD_ST_PORT:
         case ORCAD_ST_TITLEBLOCK:
         case ORCAD_ST_ERC_OBJECT:
+            result.record = OrcadReadGraphicInst( *this, pfx );
+
+            // The seek below skips these trailers in modern records; legacy ones have no end to seek to
+            if( m_dialect.legacy && pfx.typeId == ORCAD_ST_ERC_OBJECT )
+            {
+                m_stream.ReadLzt();
+                m_stream.ReadLzt();
+                m_stream.ReadLzt();
+            }
+            else if( m_dialect.legacy )
+            {
+                m_stream.Skip( pfx.typeId == ORCAD_ST_PORT ? 9 : 12 );
+            }
+
+            break;
+
         case ORCAD_ST_GLOBAL:
         case ORCAD_ST_OFFPAGE_CONNECTOR:
         case ORCAD_ST_GRAPHIC_BOX_INST:
@@ -279,7 +350,12 @@ ORCAD_READ_RESULT ORCAD_STRUCT_READER::ReadStructure()
 
         case ORCAD_ST_DRAWN_INSTANCE: result.record = OrcadReadDrawnInstance( *this, pfx ); break;
 
-        default: break;
+        default:
+            // Nothing bounds a legacy record, so an unknown one cannot be skipped
+            if( m_dialect.legacy )
+                THROW_IO_ERRORF( wxS( "OrCAD legacy structure: unhandled type %d" ), pfx.typeId );
+
+            break;
         }
     }
     catch( const IO_ERROR& e )
@@ -321,7 +397,7 @@ ORCAD_DISPLAY_PROP OrcadReadDisplayProp( ORCAD_STRUCT_READER& aReader, const ORC
     ORCAD_STREAM&      ds = aReader.Stream();
     ORCAD_DISPLAY_PROP prop;
 
-    prop.nameIdx = ds.ReadU32();
+    prop.nameIdx = aReader.ReadStrIdx();
     prop.name = aReader.Resolve( prop.nameIdx );
     prop.x = ds.ReadI16();
     prop.y = ds.ReadI16();
@@ -331,9 +407,19 @@ ORCAD_DISPLAY_PROP OrcadReadDisplayProp( ORCAD_STRUCT_READER& aReader, const ORC
     prop.fontIdx = rotFont & 0x3FFF;
     prop.rotation = ( rotFont >> 14 ) & 0x3;
 
-    prop.color = ds.ReadU8();
-    prop.dispMode = ds.ReadU16();
-    ds.ExpectByte( 0x00, wxS( "display prop tail" ) );
+    // Version 1 bodies store no display mode; 0x100 shows the value
+    if( aReader.Dialect().shortDisplayProp )
+    {
+        ds.ReadU8();
+        prop.color = ds.ReadU8();
+        prop.dispMode = 0x100;
+    }
+    else
+    {
+        prop.color = ds.ReadU8();
+        prop.dispMode = ds.ReadU16();
+        ds.ExpectByte( 0x00, wxS( "display prop tail" ) );
+    }
 
     return prop;
 }
@@ -347,7 +433,7 @@ ORCAD_ALIAS OrcadReadAlias( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& 
     alias.x = ds.ReadI32();
     alias.y = ds.ReadI32();
     alias.color = static_cast<int>( ds.ReadU32() );
-    alias.rotation = static_cast<int>( ds.ReadU32() );
+    alias.rotation = static_cast<int>( ds.ReadU32() & 0x3 );
     alias.fontIdx = static_cast<int>( ds.ReadU32() );
     alias.name = ds.ReadLzt();
 
@@ -384,8 +470,11 @@ ORCAD_WIRE OrcadReadWire( ORCAD_STRUCT_READER& aReader, const ORCAD_PREFIXES& aP
     for( int i = 0; i < propCount; i++ )
         aReader.ReadStructure();
 
-    wire.lineWidth = static_cast<int>( ds.ReadU32() );
-    wire.lineStyle = static_cast<int>( ds.ReadU32() );
+    if( !aReader.Dialect().legacy )
+    {
+        wire.lineWidth = static_cast<int>( ds.ReadU32() );
+        wire.lineStyle = static_cast<int>( ds.ReadU32() );
+    }
 
     wire.isBus = ( aPrefixes.typeId == ORCAD_ST_WIRE_BUS );
 
@@ -398,10 +487,13 @@ ORCAD_PLACED_INSTANCE OrcadReadPlacedInstance( ORCAD_STRUCT_READER& aReader, con
     ORCAD_STREAM&         ds = aReader.Stream();
     ORCAD_PLACED_INSTANCE inst;
 
-    ds.ReadU32();
-    uint32_t headerWordB = ds.ReadU32();
+    aReader.ReadStrIdx();
+    inst.sourceLibrary = aReader.Resolve( aReader.ReadStrIdx() );
+
+    if( aReader.Dialect().legacy )
+        ds.Skip( 4 ); // uninitialized
+
     inst.pkgName = ds.ReadLzt();
-    inst.sourceLibrary = aReader.Resolve( headerWordB );
     inst.dbId = ds.ReadU32();
 
     // Placed bbox stored y-first; includes displayed text.
@@ -431,10 +523,9 @@ ORCAD_PLACED_INSTANCE OrcadReadPlacedInstance( ORCAD_STRUCT_READER& aReader, con
     ds.Skip( 1 );
     inst.reference = ds.ReadLzt();
 
-    // Part Value = u32 string-table index after reference; next 10 bytes unknown.
-    uint32_t valueIdx = ds.ReadU32();
-    inst.value = aReader.Resolve( valueIdx );
-    ds.Skip( 10 );
+    // Part Value = string-table index after reference; next 10 bytes (legacy 6) unknown
+    inst.value = aReader.Resolve( aReader.ReadStrIdx() );
+    ds.Skip( aReader.Dialect().legacy ? 6 : 10 );
 
     uint16_t pinCount = ds.ReadU16();
 
@@ -460,8 +551,12 @@ ORCAD_GRAPHIC_INST OrcadReadGraphicInst( ORCAD_STRUCT_READER& aReader, const ORC
     ORCAD_STREAM&      ds = aReader.Stream();
     ORCAD_GRAPHIC_INST inst;
 
-    uint32_t nameIdx = ds.ReadU32(); // logical net/port name string index (ports)
-    ds.ReadU32();                    // source library string index
+    uint32_t nameIdx = aReader.ReadStrIdx(); // logical net/port name string index (ports)
+    uint32_t sourceLibraryIdx = aReader.ReadStrIdx();
+
+    if( aReader.Dialect().legacy )
+        ds.Skip( 4 ); // uninitialized
+
     inst.name = ds.ReadLzt();
     inst.dbId = ds.ReadU32();
 
@@ -503,6 +598,13 @@ ORCAD_GRAPHIC_INST OrcadReadGraphicInst( ORCAD_STRUCT_READER& aReader, const ORC
     inst.props = aReader.PropsDict( aPrefixes );
     inst.logicalName = aReader.Resolve( nameIdx );
 
+    // Only the legacy reader ever kept the source library
+    if( std::string sourceLibrary = aReader.Resolve( sourceLibraryIdx );
+        aReader.Dialect().legacy && !sourceLibrary.empty() )
+    {
+        inst.props["Source Library"] = std::move( sourceLibrary );
+    }
+
     return inst;
 }
 
@@ -542,7 +644,7 @@ std::vector<ORCAD_DISPLAY_PROP> OrcadReadDisplayPropList( ORCAD_STRUCT_READER& a
 {
     std::vector<ORCAD_DISPLAY_PROP> out;
 
-    uint16_t count = aReader.Stream().ReadU16();
+    uint16_t count = aReader.ReadCount();
 
     for( int i = 0; i < count; i++ )
     {

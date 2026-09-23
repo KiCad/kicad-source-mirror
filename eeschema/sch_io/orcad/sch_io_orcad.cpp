@@ -533,23 +533,16 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
         design.library = OrcadParseLibrary( readStream( cfbFile, libraryEntry ) );
 
-        // Pre-2003 designs use pre-preamble framing; pages and the symbol cache each need
-        // their own reader
-        bool isV2 = design.library.versionMajor < 3;
+        // Pre-2003 designs use pre-preamble framing, read as the legacy dialect
+        bool          isV2 = design.library.versionMajor < 3;
+        ORCAD_DIALECT dialect{ isV2, design.library.versionMajor < 2 };
 
-        // 'Cache' stream: symbol defs and package pin maps
+        // 'Cache' stream: symbol defs and package pin maps. The legacy cache has only ever been read
+        // with the long display-property layout
         if( const CFB::COMPOUND_FILE_ENTRY* cacheEntry = cfbFile.FindStreamSingleLevel( root, "Cache", true ) )
         {
-            if( isV2 )
-            {
-                OrcadParseCacheV2( readStream( cfbFile, cacheEntry ), design.library.strings, warnFn, design.symbols,
-                                   design.packages );
-            }
-            else
-            {
-                OrcadParseCache( readStream( cfbFile, cacheEntry ), design.library.strings, warnFn, design.symbols,
-                                 design.packages );
-            }
+            OrcadParseCache( readStream( cfbFile, cacheEntry ), design.library.strings, warnFn, design.symbols,
+                             design.packages, ORCAD_DIALECT{ isV2, false } );
         }
         else
         {
@@ -570,15 +563,12 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
                 {
                     std::vector<char> data = readStream( cfbFile, entry );
 
-                    if( isV2 || !isLongFramedPackageStream( data ) )
-                    {
-                        OrcadParseOlbPackageStreamV2( data, design.library.strings, extraSymbols, extraPackages,
-                                                      design.library.versionMajor < 2 );
-                    }
-                    else
-                    {
-                        OrcadParsePackageStream( data, design.library.strings, extraSymbols, extraPackages );
-                    }
+                    // Modern designs can also hold short-framed package streams
+                    ORCAD_DIALECT packageDialect{ isV2 || !isLongFramedPackageStream( data ),
+                                                  dialect.shortDisplayProp };
+
+                    OrcadParsePackageStream( data, design.library.strings, extraSymbols, extraPackages,
+                                             packageDialect );
                 }
                 catch( const IO_ERROR& e )
                 {
@@ -720,8 +710,7 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
                 {
                     std::vector<char> orderData = readStream( cfbFile, orderEntry );
 
-                    for( const std::string& pageName : isV2 ? OrcadParsePageOrderV2( orderData, design.library.strings )
-                                                            : OrcadParsePageOrder( orderData ) )
+                    for( const std::string& pageName : OrcadParsePageOrder( orderData, dialect ) )
                     {
                         if( pageEntries.count( pageName )
                             && std::find( ordered.begin(), ordered.end(), pageName ) == ordered.end() )
@@ -762,9 +751,7 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
                 try
                 {
                     std::vector<char> pageData = readStream( cfbFile, pageEntries[pageName] );
-                    ORCAD_RAW_PAGE   page = isV2 ? OrcadParsePageV2( pageData, design.library.strings, warnFn,
-                                                                     design.library.versionMajor < 2 )
-                                                       : OrcadParsePage( pageData, design.library.strings, warnFn );
+                    ORCAD_RAW_PAGE    page = OrcadParsePage( pageData, design.library.strings, warnFn, dialect );
                     page.sourcePageNumber = pageIndex + 1;
                     page.sourcePageCount = ordered.size();
                     aOutPages.push_back( std::move( page ) );
@@ -786,8 +773,7 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
         {
             std::vector<char> hierarchyData = readStream( cfbFile, hierarchyEntry );
 
-            design.occurrenceRoot = isV2 ? OrcadReadOccurrenceTreeV2( hierarchyData, design.library.strings )
-                                         : OrcadReadOccurrenceTree( hierarchyData, design.library.strings, warnFn );
+            design.occurrenceRoot = OrcadReadOccurrenceTree( hierarchyData, design.library.strings, warnFn, dialect );
 
             // Block instance dbId -> child folder name, from occurrence tree
             std::function<void( const ORCAD_OCC_SCOPE& )> collectLinks = [&]( const ORCAD_OCC_SCOPE& aScope )
@@ -909,11 +895,11 @@ const std::vector<std::unique_ptr<LIB_SYMBOL>>& SCH_IO_ORCAD::loadOlbSymbols( co
 
         design.library = OrcadParseLibrary( readStream( cfbFile, libraryEntry ) );
 
-        bool isV2 = design.library.versionMajor < 3;
+        bool          isV2 = design.library.versionMajor < 3;
+        ORCAD_DIALECT dialect{ isV2, design.library.versionMajor < 2 };
 
         // Parse one stream, tolerating a single bad/oversized stream without aborting the
         // library. Modern streams use preamble-framed cache reader; v2.0 uses short-prefix readers
-        bool shortDisplayProp = design.library.versionMajor < 2;
 
         auto parseStream = [&]( const CFB::COMPOUND_FILE_ENTRY* aEntry, const std::string& aStreamName,
                                 bool aIsPackage, bool aIsCache = false )
@@ -925,26 +911,21 @@ const std::vector<std::unique_ptr<LIB_SYMBOL>>& SCH_IO_ORCAD::loadOlbSymbols( co
             {
                 std::vector<char> data = readStream( cfbFile, aEntry );
 
-                if( aIsPackage && ( isV2 || !isLongFramedPackageStream( data ) ) )
+                if( aIsPackage )
                 {
-                    OrcadParseOlbPackageStreamV2( data, design.library.strings, extraSymbols, extraPackages,
-                                                  shortDisplayProp );
-                }
-                else if( isV2 )
-                {
-                    OrcadParseOlbSymbolStreamV2( data, design.library.strings, extraSymbols, shortDisplayProp );
+                    ORCAD_DIALECT packageDialect{ isV2 || !isLongFramedPackageStream( data ),
+                                                  dialect.shortDisplayProp };
+
+                    OrcadParsePackageStream( data, design.library.strings, extraSymbols, extraPackages,
+                                             packageDialect );
                 }
                 else if( aIsCache )
                 {
                     OrcadParseCache( data, design.library.strings, warnFn, extraSymbols, extraPackages );
                 }
-                else if( aIsPackage )
-                {
-                    OrcadParsePackageStream( data, design.library.strings, extraSymbols, extraPackages );
-                }
                 else
                 {
-                    OrcadParseSymbolStream( data, design.library.strings, extraSymbols );
+                    OrcadParseSymbolStream( data, design.library.strings, extraSymbols, dialect );
                 }
             }
             catch( const std::exception& e )
