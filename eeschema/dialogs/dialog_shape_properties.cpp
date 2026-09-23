@@ -33,14 +33,6 @@
 #include <line_ending.h>
 
 
-// Mapping between wxChoice index and LINE_ENDING_STYLE enum.
-// Dropdown order: None, Arrow, Open Arrow, Circle, Square
-static bool isOpenShape( SHAPE_T aShape )
-{
-    return aShape == SHAPE_T::ARC || aShape == SHAPE_T::BEZIER || aShape == SHAPE_T::POLY || aShape == SHAPE_T::SEGMENT;
-}
-
-
 void DIALOG_SHAPE_PROPERTIES::createLineEndingControls( SCH_BASE_FRAME* aParent )
 {
     wxSizer* mainSizer = GetSizer();
@@ -195,7 +187,7 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_S
     m_ruleAreaSizer->Show( dynamic_cast<SCH_RULE_AREA*>( aShape ) != nullptr );
 
     // Only show line ending controls for open shapes
-    m_endingsSizer->Show( isOpenShape( aShape->GetShape() ) );
+    m_endingsSizer->Show( !aShape->IsClosed() );
 
     SetInitialFocus( m_borderWidthCtrl );
 
@@ -331,7 +323,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     m_fillColorSwatch->Enable( m_fillCtrl->GetSelection() != UI_FILL_MODE::NONE );
 
     // Line endings (only populated for open shapes)
-    if( isOpenShape( m_shape->GetShape() ) )
+    if( !m_shape->IsClosed() )
     {
         m_startShapeChoice->SetSelection( LINE_ENDING::StyleToChoiceIndex( m_shape->GetStartEndingStyle() ) );
         m_endShapeChoice->SetSelection( LINE_ENDING::StyleToChoiceIndex( m_shape->GetEndEndingStyle() ) );
@@ -511,7 +503,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     }
 
     // Line endings (only for open shapes)
-    if( isOpenShape( m_shape->GetShape() ) )
+    if( !m_shape->IsClosed() )
     {
         int startSel = m_startShapeChoice->GetSelection();
 

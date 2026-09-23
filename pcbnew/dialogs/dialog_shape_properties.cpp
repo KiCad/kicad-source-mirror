@@ -47,14 +47,6 @@
 #include <widgets/line_ending_bitmap.h>
 
 
-// Mapping between wxChoice index and LINE_ENDING_STYLE enum.
-// Dropdown order: None, Arrow, Open Arrow, Circle, Square
-static bool isOpenShape( SHAPE_T aShape )
-{
-    return aShape == SHAPE_T::ARC || aShape == SHAPE_T::BEZIER || aShape == SHAPE_T::SEGMENT;
-}
-
-
 /**
  * A class that operates over a list of BOUND_CONTROLs
  * and keeps them in sync with a PCB_SHAPE. Exactly how that is done
@@ -1371,7 +1363,7 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     }
 
     // Only show line ending controls for open shapes
-    m_endingsSizer->Show( isOpenShape( m_item->GetShape() ) );
+    m_endingsSizer->Show( !m_item->IsClosed() );
 
     m_endingsHelpLabel->SetFont( KIUI::GetSmallInfoFont( this ).Italic() );
     m_endingsHelpLabel->SetLabel( wxString::Format( _( "Shape sizes of 0 = auto (%g\u00d7 line width)." ),
@@ -1492,7 +1484,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
     enableTechLayers();
 
     // Line endings (only for open shapes)
-    if( isOpenShape( m_item->GetShape() ) )
+    if( !m_item->IsClosed() )
     {
         m_startShapeChoice->SetSelection( LINE_ENDING::StyleToChoiceIndex( m_item->GetStartEndingStyle() ) );
         m_endShapeChoice->SetSelection( LINE_ENDING::StyleToChoiceIndex( m_item->GetEndEndingStyle() ) );
@@ -1558,7 +1550,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
         m_item->SetLocalSolderMaskMargin( m_solderMaskMargin.GetIntValue() );
 
     // Line endings (only for open shapes)
-    if( isOpenShape( m_item->GetShape() ) )
+    if( !m_item->IsClosed() )
     {
         int startSel = m_startShapeChoice->GetSelection();
 
