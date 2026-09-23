@@ -386,8 +386,10 @@ void SHEETLIST_ERC_ITEMS_PROVIDER::visitMarkers( std::function<void( SCH_MARKER*
                 continue;
 
             const VECTOR2I& position = marker->GetPosition();
-            orderedMarkers.emplace( std::make_tuple( position.x, position.y,
-                                                    ERC_EXCLUSION::FromMarker( *marker ).GetSortKey() ), marker );
+            orderedMarkers.emplace( std::make_tuple( position.x,
+                                                     position.y,
+                                                     ERC_EXCLUSION::FromMarker( *marker ).GetSortKey() ),
+                                    marker );
         }
 
         for( const auto& [key, marker] : orderedMarkers )
