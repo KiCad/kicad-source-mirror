@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-18 19:51+0000\n"
+"PO-Revision-Date: 2026-09-23 08:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -28146,9 +28146,8 @@ msgstr "Plotten"
 
 #: eeschema/sim/simulator_frame_ui.cpp:771
 #: eeschema/sim/simulator_frame_ui_base.cpp:114
-#, fuzzy
 msgid "Y Scale"
-msgstr "Skalierung"
+msgstr "Y-Skalierung"
 
 #: eeschema/sim/simulator_frame_ui.cpp:773
 #: eeschema/sim/simulator_frame_ui_base.cpp:116
@@ -58983,22 +58982,20 @@ msgid "Generator Properties"
 msgstr "Generator-Eigenschaften"
 
 #: pcbnew/pcb_griditem.cpp:328 pcbnew/pcb_griditem.cpp:346
-#, fuzzy
 msgid "Grid Item"
-msgstr "Element suchen"
+msgstr "Rasterelement"
 
 #: pcbnew/pcb_griditem.cpp:531
-#, fuzzy
 msgid "Grid Type"
-msgstr "Padtyp"
+msgstr "Rastertyp"
 
 #: pcbnew/pcb_griditem.cpp:538
 msgid "Extent X"
-msgstr ""
+msgstr "X-Ausdehnung"
 
 #: pcbnew/pcb_griditem.cpp:542
 msgid "Extent Y"
-msgstr ""
+msgstr "Y-Ausdehnung"
 
 #: pcbnew/pcb_griditem.cpp:546
 msgid "Spacing X"
@@ -59009,23 +59006,20 @@ msgid "Spacing Y"
 msgstr "Y-Abstand"
 
 #: pcbnew/pcb_griditem.cpp:554
-#, fuzzy
 msgid "Radius Extent"
-msgstr "Radius"
+msgstr "Radiusausdehnung"
 
 #: pcbnew/pcb_griditem.cpp:558
-#, fuzzy
 msgid "Radius Spacing"
-msgstr "Min. Abstand"
+msgstr "Radiusabstand"
 
 #: pcbnew/pcb_griditem.cpp:562
 msgid "Phi Extent"
-msgstr ""
+msgstr "Phi-Ausdehnung"
 
 #: pcbnew/pcb_griditem.cpp:567
-#, fuzzy
 msgid "Phi Spacing"
-msgstr "Min. Abstand"
+msgstr "Phi-Abstand"
 
 #: pcbnew/pcb_griditem.cpp:572 pcbnew/widgets/search_handlers.cpp:229
 #: pcbnew/zone.cpp:1122 pcbnew/zone.cpp:2300
@@ -59034,22 +59028,19 @@ msgstr "Priorität"
 
 #: pcbnew/pcb_griditem.cpp:575
 msgid "Tick Interval"
-msgstr ""
+msgstr "Tick-Intervall"
 
 #: pcbnew/pcb_griditem.cpp:578
-#, fuzzy
 msgid "Affects Cursor Snap"
-msgstr "Cursorform"
+msgstr "Beeinflusst Cursorfangen"
 
 #: pcbnew/pcb_griditem.cpp:581
-#, fuzzy
 msgid "Affects Routing"
-msgstr "Route Leiterbahn"
+msgstr "Beeinflusst Leiterbahnführung"
 
 #: pcbnew/pcb_griditem.cpp:584
-#, fuzzy
 msgid "Affects Placement"
-msgstr "Platzierung"
+msgstr "Beeinflusst Platzierung"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4600
 msgid "Constructing caches"
@@ -59065,12 +59056,12 @@ msgstr "Erstelle Leiterbahnen"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4663
 msgid "Converting footprints"
-msgstr "Footprints konvertieren"
+msgstr "Konvertiere Footprints"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:187
 #, c-format
 msgid "Unknown Allegro file version %#010x (rev %d)"
-msgstr ""
+msgstr "Unbekannte Allegro-Dateiversion %#010x (Rev. %d)"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:294
 #, c-format
@@ -59162,6 +59153,8 @@ msgid ""
 "Board outline has %d vertices outside the coordinate range; they were "
 "dropped."
 msgstr ""
+"Platinenumriss hat %d Eckpunkte außerhalb des Koordinatenbereichs; sie "
+"wurden verworfen."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1483
 #, c-format
@@ -59179,7 +59172,7 @@ msgid ""
 "be imported."
 msgstr ""
 "Mehr als eine Altium-Netzklasse unter dem Namen \"%s\" gefunden. Nur die "
-"erste wird importiert."
+"Erste wird importiert."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1688
 msgid "Loading components..."
