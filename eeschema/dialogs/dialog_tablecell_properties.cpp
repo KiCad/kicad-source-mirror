@@ -186,6 +186,10 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
     {
         wxString text = cell->GetText();
 
+        // show text variable cross-references in a human-readable format
+        if( SCHEMATIC* schematic = cell->Schematic() )
+            text = schematic->ConvertKIIDsToRefs( text );
+
         m_cellText->SetValue( text );
         m_cellText->EmptyUndoBuffer();
 
@@ -349,6 +353,10 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
     for( SCH_TABLECELL* cell : m_cells )
     {
         wxString text = m_cellTextCtrl->GetValue();
+
+        // convert any text variable cross-references to their UUIDs
+        if( SCHEMATIC* schematic = cell->Schematic() )
+            text = schematic->ConvertRefsToKIIDs( text );
 
 #ifdef __WXMAC__
         // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
