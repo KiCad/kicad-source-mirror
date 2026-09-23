@@ -2151,6 +2151,15 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
     // Close repos before swapping directories to avoid file locking issues
     git_repository_free( newRepo );
 
+    // The swap replaces the whole directory, so carry over the user's ignore rules
+    for( const wxString& name : { wxString( wxS( ".gitignore" ) ), wxString( wxS( "README.txt" ) ) } )
+    {
+        wxFileName src( hist, name );
+
+        if( src.FileExists() && !wxCopyFile( src.GetFullPath(), wxFileName( trimPath, name ).GetFullPath(), true ) )
+            return false;
+    }
+
     lock.ReleaseRepository();
 
     // Replace old history dir with trimmed one
