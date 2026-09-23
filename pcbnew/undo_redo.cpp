@@ -757,7 +757,13 @@ void PCB_BASE_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aIt
 
     if( aItemCount < 0 )
     {
-        list.ClearCommandList();
+        for( PICKED_ITEMS_LIST* cmd : list.m_CommandsList )
+        {
+            ClearListAndDeleteItems( cmd );
+            delete cmd;
+        }
+
+        list.m_CommandsList.clear();
     }
     else
     {

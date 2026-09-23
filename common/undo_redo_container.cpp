@@ -311,8 +311,16 @@ UNDO_REDO_CONTAINER::~UNDO_REDO_CONTAINER()
 
 void UNDO_REDO_CONTAINER::ClearCommandList()
 {
-    for( unsigned ii = 0; ii < m_CommandsList.size(); ii++ )
-        delete m_CommandsList[ii];
+    for( PICKED_ITEMS_LIST* cmd : m_CommandsList )
+    {
+        cmd->ClearListAndDeleteItems(
+                []( EDA_ITEM* item )
+                {
+                    delete item;
+                } );
+
+        delete cmd;
+    }
 
     m_CommandsList.clear();
 }
