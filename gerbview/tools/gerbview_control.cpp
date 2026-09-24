@@ -470,6 +470,7 @@ int GERBVIEW_CONTROL::ReloadAllLayers( const TOOL_EVENT& aEvent )
     struct SAVED_LAYER
     {
         wxString  fileName;
+        wxString  archiveFileName;
         VECTOR2I  displayOffset;
         EDA_ANGLE displayRotation;
         bool      visible;
@@ -479,6 +480,8 @@ int GERBVIEW_CONTROL::ReloadAllLayers( const TOOL_EVENT& aEvent )
     // Store filenames and display settings before clearing the images.
     wxArrayString                listOfGerberFiles;
     std::vector<int>             fileType;
+    wxArrayString                archiveFiles;
+    std::vector<wxArrayString>   archiveMembers;
     std::vector<SAVED_LAYER>     savedLayers;
     GERBER_FILE_IMAGE_LIST*      list = m_frame->GetImagesList();
     LSET                         oldVisibility = m_frame->GetVisibleLayers();
@@ -490,8 +493,23 @@ int GERBVIEW_CONTROL::ReloadAllLayers( const TOOL_EVENT& aEvent )
         if( !image || !image->m_InUse )
             continue;
 
-        savedLayers.push_back( { image->m_FileName, image->m_DisplayOffset,
+        savedLayers.push_back( { image->m_FileName, image->m_ArchiveFileName, image->m_DisplayOffset,
                                  image->m_DisplayRotation, oldVisibility[i] } );
+
+        if( !image->m_ArchiveFileName.IsEmpty() )
+        {
+            int archiveIndex = archiveFiles.Index( image->m_ArchiveFileName );
+
+            if( archiveIndex == wxNOT_FOUND )
+            {
+                archiveIndex = archiveFiles.GetCount();
+                archiveFiles.Add( image->m_ArchiveFileName );
+                archiveMembers.emplace_back();
+            }
+
+            archiveMembers[archiveIndex].Add( image->m_FileName );
+            continue;
+        }
 
         EXCELLON_IMAGE* drill_file = dynamic_cast<EXCELLON_IMAGE*>( image );
 
@@ -509,7 +527,11 @@ int GERBVIEW_CONTROL::ReloadAllLayers( const TOOL_EVENT& aEvent )
 
     // Load the layers from stored paths
     wxBusyCursor wait;
-    m_frame->LoadListOfGerberAndDrillFiles( wxEmptyString, listOfGerberFiles, &fileType );
+    if( !listOfGerberFiles.IsEmpty() )
+        m_frame->LoadListOfGerberAndDrillFiles( wxEmptyString, listOfGerberFiles, &fileType );
+
+    for( unsigned i = 0; i < archiveFiles.GetCount(); i++ )
+        m_frame->LoadZipArchiveFile( archiveFiles[i], &archiveMembers[i] );
 
     // Loading and sorting may assign a file to a different layer number.
     LSET restoredVisibility = m_frame->GetVisibleLayers();
@@ -523,7 +545,8 @@ int GERBVIEW_CONTROL::ReloadAllLayers( const TOOL_EVENT& aEvent )
 
         for( SAVED_LAYER& saved : savedLayers )
         {
-            if( saved.restored || saved.fileName != image->m_FileName )
+            if( saved.restored || saved.fileName != image->m_FileName
+                || saved.archiveFileName != image->m_ArchiveFileName )
             {
                 continue;
             }

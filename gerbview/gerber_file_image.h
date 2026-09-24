@@ -386,6 +386,7 @@ public:
                                   ///< false if it must be not drawn
     COLOR4D  m_PositiveDrawColor; ///< The color used to draw positive items
     wxString m_FileName;          ///< Full File Name for this layer
+    wxString m_ArchiveFileName;   ///< Archive containing this layer, if loaded from a ZIP file
     wxString m_ImageName;         ///< Image name, from IN \<name\>* command
 
     bool                       m_IsX2_file;    ///< True if a X2 gerber attribute was found in file

@@ -184,6 +184,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_InUse = false;
     m_GBRLayerParams.ResetDefaultValues();
     m_FileName.Empty();
+    m_ArchiveFileName.Empty();
     m_ImageName = wxEmptyString; // Image name from the IN command (deprecated)
     m_ImageNegative = false;     // true = Negative image
     m_IsX2_file = false;         // true only if a %TF, %TA or %TD command

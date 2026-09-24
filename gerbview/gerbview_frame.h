@@ -257,9 +257,11 @@ public:
      *
      * @param aFullFileName is the full filename of the zip archive
      * @param aReporter a REPORTER to collect warning and error messages
+     * @param aMembers optional list of archive members to load
      * @return true if OK, false if a file cannot be readable
      */
-    bool unarchiveFiles( const wxString& aFullFileName, REPORTER* aReporter = nullptr );
+    bool unarchiveFiles( const wxString& aFullFileName, REPORTER* aReporter = nullptr,
+                         const wxArrayString* aMembers = nullptr );
 
     /**
      * Load a given file or selected file(s), if the filename is empty.
@@ -299,9 +301,10 @@ public:
      * @param aFileName - void string or file name with full path to open or empty string to
      *                    open a new file.
      *                    if empty string: user will be prompted for filename(s)
+     * @param aMembers optional list of archive members to load
      * @return true if file was opened successfully.
      */
-    bool LoadZipArchiveFile( const wxString& aFileName );
+    bool LoadZipArchiveFile( const wxString& aFileName, const wxArrayString* aMembers = nullptr );
 
     /**
      * Remove all files from the file history.
