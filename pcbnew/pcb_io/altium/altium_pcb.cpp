@@ -774,6 +774,9 @@ void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&              altiumPcbFi
         zone.second->SetAssignedPriority( 0 );
 
     // Simplify and fracture zone fills in case we constructed them from tracks (hatched fill)
+    thread_pool&           tp = GetKiCadThreadPool();
+    BS::multi_future<void> fractureFutures;
+
     for( ZONE* zone : m_polygons )
     {
         if( !zone )
@@ -784,9 +787,18 @@ void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&              altiumPcbFi
             if( !zone->HasFilledPolysForLayer( layer ) )
                 continue;
 
-            zone->GetFilledPolysList( layer )->Fracture();
+            // A hatched plane unions thousands of track outlines, so fills fracture concurrently
+            fractureFutures.push_back( tp.submit_task(
+                    [fill = zone->GetFilledPolysList( layer )]()
+                    {
+                        fill->Fracture();
+                    } ) );
         }
     }
+
+    // Wait for every task before rethrowing so none outlives the parse
+    fractureFutures.wait();
+    fractureFutures.get();
 
     // Altium doesn't appear to store either the dimension value nor the dimensioned object in
     // the dimension record.  (Yes, there is a REFERENCE0OBJECTID, but it doesn't point to the
