@@ -29,7 +29,6 @@
 
 
 #define ARG_DPI "--dpi"
-#define ARG_BACKGROUND_COLOR "--background-color"
 #define ARG_NO_ANTIALIAS "--no-antialias"
 
 CLI::PCB_EXPORT_PNG_COMMAND::PCB_EXPORT_PNG_COMMAND() :
