@@ -27,6 +27,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
+#include <sch_sheet_pin.h>
 
 
 SCHEMATIC_TEXT_VAR_ADAPTER::SCHEMATIC_TEXT_VAR_ADAPTER( SCHEMATIC& aSchematic ) :
@@ -34,7 +35,9 @@ SCHEMATIC_TEXT_VAR_ADAPTER::SCHEMATIC_TEXT_VAR_ADAPTER( SCHEMATIC& aSchematic ) 
 {
     m_tracker.SetSourceKeyExtractor(
             [this]( EDA_ITEM* aItem ) -> std::vector<TEXT_VAR_REF_KEY>
-            { return ExtractSourceKeys( aItem ); } );
+            {
+                return ExtractSourceKeys( aItem );
+            } );
 }
 
 
@@ -53,13 +56,18 @@ void SCHEMATIC_TEXT_VAR_ADAPTER::registerItem( SCH_ITEM* aItem )
         return;
     }
 
-    // SCH_SHEET: its fields (sheet name, file name) can carry text vars.
-    // Sheet pins are separate sch items and flow through the listener on
-    // their own when added/removed.
+    // SCH_SHEET: its fields (sheet name, file name) and pins can carry text
+    // vars.
+    // While sheet pins are separate SCH_ITEMs, they are NOT found in the
+    // SCH_SCREEN: their life-cycle must be fully managed by their parent
+    // SCH_SHEET.
     if( SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( aItem ) )
     {
         for( SCH_FIELD& field : sheet->GetFields() )
             registerItem( &field );
+
+        for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+            registerItem( pin );
 
         return;
     }
@@ -89,6 +97,9 @@ void SCHEMATIC_TEXT_VAR_ADAPTER::unregisterItem( SCH_ITEM* aItem )
     {
         for( SCH_FIELD& field : sheet->GetFields() )
             m_tracker.UnregisterItem( &field );
+
+        for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+            m_tracker.UnregisterItem( pin );
     }
 }
 
@@ -99,7 +110,7 @@ void SCHEMATIC_TEXT_VAR_ADAPTER::handleItemChanged( SCH_ITEM* aItem )
         return;
 
     // A SCH_SYMBOL change covers both "its fields were edited" (re-register
-    // each field) and "this symbol's values source cross-refs" (fan out
+    // each field) and "this symbol's values cross-ref sources" (fan out
     // ${REFDES:FIELD} keys).
     if( SCH_SYMBOL* sym = dynamic_cast<SCH_SYMBOL*>( aItem ) )
     {
@@ -113,6 +124,13 @@ void SCHEMATIC_TEXT_VAR_ADAPTER::handleItemChanged( SCH_ITEM* aItem )
         return;
     }
 
+    // A SCH_SHEET change covers both "its fields were edited" (re-register
+    // each field), and "its pins were eidted" (re-register each pin).
+    // While the pins can't be edited through the sheet properties per se,
+    // the pins are NOT found in the SCH_SCREEN on their own, and must be
+    // fully life-cycle-manged by their parent.
+    // A SCH_SHEET can't be cross-referenced, so no HandleItemChanged()
+    // fan out is required.
     if( SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( aItem ) )
     {
         for( SCH_FIELD& field : sheet->GetFields() )
@@ -121,7 +139,12 @@ void SCHEMATIC_TEXT_VAR_ADAPTER::handleItemChanged( SCH_ITEM* aItem )
             m_tracker.RegisterItem( &field, refs );
         }
 
-        m_tracker.HandleItemChanged( aItem, {} );
+        for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+        {
+            std::vector<TEXT_VAR_REF_KEY> refs = FilterTrackable( pin->GetTextVarReferences() );
+            m_tracker.RegisterItem( pin, refs );
+        }
+
         return;
     }
 
@@ -133,24 +156,21 @@ void SCHEMATIC_TEXT_VAR_ADAPTER::handleItemChanged( SCH_ITEM* aItem )
 }
 
 
-void SCHEMATIC_TEXT_VAR_ADAPTER::OnSchItemsAdded( SCHEMATIC&,
-                                                 std::vector<SCH_ITEM*>& aItems )
+void SCHEMATIC_TEXT_VAR_ADAPTER::OnSchItemsAdded( SCHEMATIC&, std::vector<SCH_ITEM*>& aItems )
 {
     for( SCH_ITEM* item : aItems )
         registerItem( item );
 }
 
 
-void SCHEMATIC_TEXT_VAR_ADAPTER::OnSchItemsRemoved( SCHEMATIC&,
-                                                   std::vector<SCH_ITEM*>& aItems )
+void SCHEMATIC_TEXT_VAR_ADAPTER::OnSchItemsRemoved( SCHEMATIC&, std::vector<SCH_ITEM*>& aItems )
 {
     for( SCH_ITEM* item : aItems )
         unregisterItem( item );
 }
 
 
-void SCHEMATIC_TEXT_VAR_ADAPTER::OnSchItemsChanged( SCHEMATIC&,
-                                                   std::vector<SCH_ITEM*>& aItems )
+void SCHEMATIC_TEXT_VAR_ADAPTER::OnSchItemsChanged( SCHEMATIC&, std::vector<SCH_ITEM*>& aItems )
 {
     for( SCH_ITEM* item : aItems )
         handleItemChanged( item );
