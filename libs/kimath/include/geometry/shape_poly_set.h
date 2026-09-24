@@ -1551,6 +1551,18 @@ private:
                     const SHAPE_POLY_SET& aOtherShape );
 
     /**
+     * Append the rings left after cutting the fracture bridges out of \a aChain.  Clipper2
+     * resolves every bridge with a pass over the whole output, which is quadratic on a fractured
+     * hatch plane.  Dropping a pair of coincident opposite edges changes no winding number, so a
+     * NonZero boolean sees the same region.
+     *
+     * @return false, leaving \a aPaths untouched, when \a aChain holds no bridges.
+     */
+    static bool appendBridgeFreePaths( const SHAPE_LINE_CHAIN& aChain, Clipper2Lib::Paths64& aPaths,
+                                       std::vector<CLIPPER_Z_VALUE>& aZValues,
+                                       std::vector<SHAPE_ARC>& aArcBuffer );
+
+    /**
      * Check whether the point \a aP is inside the \a aSubpolyIndex-th polygon of the polyset. If
      * the points lies on an edge, the polygon is considered to contain it.
      *

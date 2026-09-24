@@ -34,6 +34,7 @@
 #include <memory>
 #include <set>
 #include <string> // for char_traits, operator!=
+#include <unordered_map>
 #include <unordered_set>
 #include <thread>
 #include <utility> // for swap, move
@@ -759,6 +760,154 @@ void SHAPE_POLY_SET::booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SE
 }
 
 
+/**
+ * Split a closed ring into the rings left once pairs of coincident opposite edges are removed.
+ * Fracture() joins holes to their outline through such pairs.
+ *
+ * @return false, leaving \a aRings empty, when the ring holds no pair.
+ */
+static bool splitAtBridges( const SHAPE_LINE_CHAIN& aChain, std::vector<SHAPE_LINE_CHAIN>& aRings )
+{
+    struct DIRECTED_EDGE
+    {
+        VECTOR2I from;
+        VECTOR2I to;
+
+        bool operator==( const DIRECTED_EDGE& aOther ) const
+        {
+            return from == aOther.from && to == aOther.to;
+        }
+    };
+
+    struct DIRECTED_EDGE_HASH
+    {
+        std::size_t operator()( const DIRECTED_EDGE& aEdge ) const
+        {
+            std::size_t seed = 0x51ed27a3;
+            hash_combine( seed, aEdge.from.x, aEdge.from.y, aEdge.to.x, aEdge.to.y );
+            return seed;
+        }
+    };
+
+    const std::vector<VECTOR2I>& pts = aChain.CPoints();
+    const int                    count = static_cast<int>( pts.size() );
+
+    // A bucket per directed edge so repeated bridges along one line all find a partner
+    std::unordered_map<DIRECTED_EDGE, std::vector<int>, DIRECTED_EDGE_HASH> unpaired;
+    std::vector<int> partner( count, -1 );
+    bool             hasBridge = false;
+
+    unpaired.reserve( count );
+
+    for( int ii = 0; ii < count; ++ii )
+    {
+        const VECTOR2I& a = pts[ii];
+        const VECTOR2I& b = pts[( ii + 1 ) % count];
+
+        if( a == b )
+            continue;
+
+        auto twin = unpaired.find( { b, a } );
+
+        if( twin != unpaired.end() )
+        {
+            const int jj = twin->second.back();
+
+            twin->second.pop_back();
+
+            if( twin->second.empty() )
+                unpaired.erase( twin );
+
+            partner[ii] = jj;
+            partner[jj] = ii;
+            hasBridge = true;
+        }
+        else
+        {
+            unpaired[{ a, b }].push_back( ii );
+        }
+    }
+
+    if( !hasBridge )
+        return false;
+
+    // The edge that continues from the end of aEdge once bridge pairs are skipped
+    auto nextEdge =
+            [&]( int aEdge ) -> int
+            {
+                int next = ( aEdge + 1 ) % count;
+
+                for( int guard = 0; partner[next] >= 0; ++guard )
+                {
+                    if( guard > count )
+                        return -1;
+
+                    next = ( partner[next] + 1 ) % count;
+                }
+
+                return next;
+            };
+
+    std::vector<bool> visited( count, false );
+
+    for( int start = 0; start < count; ++start )
+    {
+        if( visited[start] || partner[start] >= 0 )
+            continue;
+
+        SHAPE_LINE_CHAIN ring;
+        int              edge = start;
+
+        do
+        {
+            if( edge < 0 || visited[edge] )
+            {
+                aRings.clear();
+                return false;
+            }
+
+            visited[edge] = true;
+            ring.Append( pts[edge], true );
+            edge = nextEdge( edge );
+        } while( edge != start );
+
+        if( ring.PointCount() >= 3 )
+        {
+            ring.SetClosed( true );
+            aRings.push_back( std::move( ring ) );
+        }
+    }
+
+    return true;
+}
+
+
+bool SHAPE_POLY_SET::appendBridgeFreePaths( const SHAPE_LINE_CHAIN& aChain, Clipper2Lib::Paths64& aPaths,
+                                            std::vector<CLIPPER_Z_VALUE>& aZValues,
+                                            std::vector<SHAPE_ARC>& aArcBuffer )
+{
+    // Small rings are cheap for Clipper and dominate the boolean call count
+    constexpr int kMinPoints = 1024;
+
+    if( aChain.PointCount() < kMinPoints || aChain.ArcCount() > 0 )
+        return false;
+
+    std::vector<SHAPE_LINE_CHAIN> rings;
+
+    if( !splitAtBridges( aChain, rings ) )
+        return false;
+
+    // convertToClipper2() orients an outline by reversing the whole ring, so every piece of the
+    // ring follows the same flip to keep its winding relative to the others
+    const bool flip = aChain.Area( false ) < 0;
+
+    for( const SHAPE_LINE_CHAIN& ring : rings )
+        aPaths.push_back( ring.convertToClipper2( ( ring.Area( false ) >= 0 ) != flip, aZValues, aArcBuffer ) );
+
+    return true;
+}
+
+
 void SHAPE_POLY_SET::booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SET& aShape,
                                 const SHAPE_POLY_SET& aOtherShape )
 {
@@ -780,6 +929,9 @@ void SHAPE_POLY_SET::booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SE
 
     for( const POLYGON& poly : aShape.m_polys )
     {
+        if( poly.size() == 1 && appendBridgeFreePaths( poly[0], paths, zValues, arcBuffer ) )
+            continue;
+
         for( size_t i = 0; i < poly.size(); i++ )
         {
             paths.push_back( poly[i].convertToClipper2( i == 0, zValues, arcBuffer ) );
@@ -788,6 +940,9 @@ void SHAPE_POLY_SET::booleanOp( Clipper2Lib::ClipType aType, const SHAPE_POLY_SE
 
     for( const POLYGON& poly : aOtherShape.m_polys )
     {
+        if( poly.size() == 1 && appendBridgeFreePaths( poly[0], clips, zValues, arcBuffer ) )
+            continue;
+
         for( size_t i = 0; i < poly.size(); i++ )
         {
             clips.push_back( poly[i].convertToClipper2( i == 0, zValues, arcBuffer ) );
@@ -1984,166 +2139,28 @@ void SHAPE_POLY_SET::unfractureSingle( SHAPE_POLY_SET::POLYGON& aPoly )
 {
     assert( aPoly.size() == 1 );
 
-    struct EDGE
-    {
-        int m_index = 0;
-        SHAPE_LINE_CHAIN* m_poly = nullptr;
-        bool m_duplicate = false;
-
-        EDGE( SHAPE_LINE_CHAIN* aPolygon, int aIndex ) :
-            m_index( aIndex ),
-            m_poly( aPolygon )
-        {}
-
-        bool compareSegs( const SEG& s1, const SEG& s2 ) const
-        {
-            return (s1.A == s2.B && s1.B == s2.A);
-        }
-
-        bool operator==( const EDGE& aOther ) const
-        {
-            return compareSegs( m_poly->CSegment( m_index ),
-                                aOther.m_poly->CSegment( aOther.m_index ) );
-        }
-
-        bool operator!=( const EDGE& aOther ) const
-        {
-            return !compareSegs( m_poly->CSegment( m_index ),
-                                 aOther.m_poly->CSegment( aOther.m_index ) );
-        }
-
-        struct HASH
-        {
-            std::size_t operator()(  const EDGE& aEdge ) const
-            {
-                const SEG& a = aEdge.m_poly->CSegment( aEdge.m_index );
-                std::size_t seed = 0xa82de1c0;
-                hash_combine( seed, a.A.x, a.B.x, a.A.y, a.B.y );
-                return seed;
-            }
-        };
-    };
-
-    struct EDGE_LIST_ENTRY
-    {
-        int              index;
-        EDGE_LIST_ENTRY* next;
-    };
-
-    std::unordered_set<EDGE, EDGE::HASH> uniqueEdges;
-
     SHAPE_LINE_CHAIN lc = aPoly[0];
     lc.Simplify();
 
-    auto edgeList = std::make_unique<EDGE_LIST_ENTRY[]>( lc.SegmentCount() );
+    // Rings are rebuilt from bare vertices, so arcs never survive unfracturing
+    lc = SHAPE_LINE_CHAIN( lc.CPoints(), true );
 
-    for( int i = 0; i < lc.SegmentCount(); i++ )
+    std::vector<SHAPE_LINE_CHAIN> rings;
+
+    if( !splitAtBridges( lc, rings ) || rings.empty() )
     {
-        edgeList[i].index   = i;
-        edgeList[i].next    = &edgeList[ (i != lc.SegmentCount() - 1) ? i + 1 : 0 ];
+        aPoly[0] = std::move( lc );
+        return;
     }
 
-    std::unordered_set<EDGE_LIST_ENTRY*> queue;
+    auto outline = std::max_element( rings.begin(), rings.end(),
+                                     []( const SHAPE_LINE_CHAIN& aA, const SHAPE_LINE_CHAIN& aB )
+                                     {
+                                         return std::fabs( aA.Area() ) < std::fabs( aB.Area() );
+                                     } );
 
-    for( int i = 0; i < lc.SegmentCount(); i++ )
-    {
-        EDGE e( &lc, i );
-        uniqueEdges.insert( e );
-    }
-
-    for( int i = 0; i < lc.SegmentCount(); i++ )
-    {
-        EDGE    e( &lc, i );
-        auto    it = uniqueEdges.find( e );
-
-        if( it != uniqueEdges.end() && it->m_index != i )
-        {
-            int e1  = it->m_index;
-            int e2  = i;
-
-            if( e1 > e2 )
-                std::swap( e1, e2 );
-
-            int e1_prev = e1 - 1;
-
-            if( e1_prev < 0 )
-                e1_prev = lc.SegmentCount() - 1;
-
-            int e2_prev = e2 - 1;
-
-            if( e2_prev < 0 )
-                e2_prev = lc.SegmentCount() - 1;
-
-            int e1_next = e1 + 1;
-
-            if( e1_next == lc.SegmentCount() )
-                e1_next = 0;
-
-            int e2_next = e2 + 1;
-
-            if( e2_next == lc.SegmentCount() )
-                e2_next = 0;
-
-            edgeList[e1_prev].next  = &edgeList[ e2_next ];
-            edgeList[e2_prev].next  = &edgeList[ e1_next ];
-            edgeList[i].next = nullptr;
-            edgeList[it->m_index].next = nullptr;
-        }
-    }
-
-    for( int i = 0; i < lc.SegmentCount(); i++ )
-    {
-        if( edgeList[i].next )
-            queue.insert( &edgeList[i] );
-    }
-
-    auto edgeBuf = std::make_unique<EDGE_LIST_ENTRY* []>( lc.SegmentCount() );
-
-    int n = 0;
-    int outline = -1;
-
-    POLYGON result;
-    double max_poly = 0.0;
-
-    while( queue.size() )
-    {
-        EDGE_LIST_ENTRY* e_first = *queue.begin();
-        EDGE_LIST_ENTRY* e = e_first;
-        int              cnt = 0;
-
-        do
-        {
-            edgeBuf[cnt++] = e;
-            e = e->next;
-        } while( e && e != e_first );
-
-        SHAPE_LINE_CHAIN outl;
-
-        for( int i = 0; i < cnt; i++ )
-        {
-            VECTOR2I p = lc.CPoint( edgeBuf[i]->index );
-            outl.Append( p );
-            queue.erase( edgeBuf[i] );
-        }
-
-        outl.SetClosed( true );
-
-        double area = std::fabs( outl.Area() );
-
-        if( area > max_poly )
-        {
-            outline = n;
-            max_poly = area;
-        }
-
-        result.push_back( outl );
-        n++;
-    }
-
-    if( outline > 0 )
-        std::swap( result[0], result[outline] );
-
-    aPoly = std::move( result );
+    std::iter_swap( rings.begin(), outline );
+    aPoly = std::move( rings );
 }
 
 
