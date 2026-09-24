@@ -52,6 +52,18 @@ class UNDO_REDO_CONTAINER;
 
 
 /**
+ * Types of KiCad symbol library save actions.
+ */
+enum class SAVE_LIBRARY_AS
+{
+    ORIGINAL,              ///< Save to the original symbol library format.
+    NEW,                   ///< Save to a new library in the original symbol library format.
+    PACKED,                ///< Save an unpacked symbol library to the packed format.
+    UNPACKED               ///< Save a packed symbol library to the unpacked format.
+};
+
+
+/**
  * The symbol library editor main window.
  */
 class SYMBOL_EDIT_FRAME : public SCH_BASE_FRAME
@@ -194,7 +206,7 @@ public:
     /**
      * Save the currently selected library to a new file.
      */
-    void SaveLibraryAs();
+    void SaveLibraryAs( SAVE_LIBRARY_AS aSaveType = SAVE_LIBRARY_AS::NEW );
 
     /**
      * Save all modified symbols and libraries.
@@ -494,10 +506,10 @@ private:
      * changes made to the library are saved.
      *
      * @param aLibrary is the library name.
-     * @param aNewFile Ask for a new file name to save the library.
+     * @param aSaveType is the type library save to perform. @see LIBRARY_SAVE_AS
      * @return True if the library was successfully saved.
      */
-    bool saveLibrary( const wxString& aLibrary, bool aNewFile );
+    bool saveLibrary( const wxString& aLibrary,  SAVE_LIBRARY_AS aSaveType = SAVE_LIBRARY_AS::ORIGINAL );
 
     /**
      * Load a symbol from a library, optionally setting the selected unit and body style.
@@ -522,19 +534,30 @@ private:
      */
     bool LoadOneLibrarySymbol( LIB_SYMBOL* aLibEntry, const wxString& aLibrary, int aUnit, int aBodyStyle );
 
-    ///< Create a backup copy of a file with requested extension.
-    bool backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt );
+    /**
+     * Create a backup copy of a symbol library.
+     *
+     * For packed symbol libraries, a copy is made of the original file name with extension is set to .bak.
+     * For unpacked symbol libraries, a zip archive is created containing all of the symbol library files
+     * (.kicad_sym) is created using the last file path name + "_backup.zip".
+     *
+     * @param aOriginalFile contains the library path and/or file name.
+     * @param[out] aErrorMsg will contain an error message if the backup fails.
+     * @retval true if the backup succeeded.
+     * @retval false if the backup failed.
+     */
+    bool backupLibrary( const wxFileName& aOriginalFile, wxString& aErrorMsg );
 
-    ///< Return currently edited symbol.
+    /// Return currently edited symbol.
     LIB_SYMBOL* getTargetSymbol() const;
 
-    ///< Return either the library selected in the symbol tree, if context menu is active or
-    ///< the library that is currently modified.
+    /// Return either the library selected in the symbol tree, if context menu is active or
+    /// the library that is currently modified.
     wxString getTargetLib() const;
 
     void centerItemIdleHandler( wxIdleEvent& aEvent );
 
-    /*
+    /**
      * Return true when the operation has succeeded (all requested libraries have been saved
      * or none was selected and confirmed by OK).
      *
@@ -542,10 +565,10 @@ private:
      */
     bool saveAllLibraries( bool aRequireConfirmation );
 
-    ///< Save the current symbol.
+    /// Save the current symbol.
     bool saveCurrentSymbol();
 
-    ///< Rename LIB_SYMBOL aliases to avoid conflicts before adding a symbol to a library.
+    /// Rename LIB_SYMBOL aliases to avoid conflicts before adding a symbol to a library.
     void ensureUniqueName( LIB_SYMBOL* aSymbol, const wxString& aLibrary );
 
     /**
@@ -707,32 +730,32 @@ private:
     // AddTab() activates synchronously.
     bool m_loadingSymbolTab = false;
 
-    // While true, promptAndCloseSymbolTab() skips the unsaved-changes dialog.
+    /// While true, promptAndCloseSymbolTab() skips the unsaved-changes dialog.
     bool m_silentSymbolTabClose = false;
 
     LIB_ID                      m_centerItemOnIdle;
 
-    // The unit number to edit and show
+    /// The unit number to edit and show
     int         m_unit;
 
-    // Show the normal shape (m_bodyStyle <= 1) or the DeMorgan converted shape (m_bodyStyle > 1)
+    /// Show the normal shape (m_bodyStyle <= 1) or the DeMorgan converted shape (m_bodyStyle > 1)
     int         m_bodyStyle;
 
-    // When editing a symbol: only apply new graphic items to the current unit.
+    /// When editing a symbol: only apply new graphic items to the current unit.
     bool        m_drawSpecificUnit;
 
-    // When editing a symbol: only apply new graphic items to the current body style.
+    /// When editing a symbol: only apply new graphic items to the current body style.
     bool        m_drawSpecificBodyStyle;
 
-    ///< Flag if the symbol being edited was loaded directly from a schematic.
+    /// Flag if the symbol being edited was loaded directly from a schematic.
     bool        m_isSymbolFromSchematic;
 
-    ///< True while a schematic-edit auto-hide of the library tree still needs restoring on save.
+    /// True while a schematic-edit auto-hide of the library tree still needs restoring on save.
     bool        m_libTreeAutoHiddenForSchematicEdit;
 
     KIID        m_schematicSymbolUUID;
 
-     ///< RefDes of the symbol (only valid if symbol was loaded from schematic)
+    /// RefDes of the symbol (only valid if symbol was loaded from schematic)
     wxString    m_reference;
 
     // True to force DeMorgan/normal tools selection enabled.

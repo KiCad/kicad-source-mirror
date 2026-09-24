@@ -194,6 +194,20 @@ TOOL_ACTION SCH_ACTIONS::saveLibraryAs( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Save Library As..." ) )
         .Tooltip( _( "Save the current library to a new file" ) ) );
 
+TOOL_ACTION SCH_ACTIONS::saveLibraryAsPacked( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.saveLibraryAsPacked" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Save As Packed" )
+        .FriendlyName( _( "Save Library As Packed..." ) )
+        .Tooltip( _( "Save the current unpacked library to a new packed library file" ) ) );
+
+TOOL_ACTION SCH_ACTIONS::saveLibraryAsUnpacked( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.saveLibraryAsUnpacked" )
+        .Scope( AS_GLOBAL )
+        .LegacyHotkeyName( "Save As Unpacked" )
+        .FriendlyName( _( "Save Library As Unpacked..." ) )
+        .Tooltip( _( "Save the current packed library to a new unpacked library folder" ) ) );
+
 TOOL_ACTION SCH_ACTIONS::compareLibraryWithFile( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.CompareLibraryWithFile" )
         .Scope( AS_GLOBAL )

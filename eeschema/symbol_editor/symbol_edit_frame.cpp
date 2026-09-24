@@ -32,6 +32,7 @@
 #include <kidialog.h>
 #include <kiface_base.h>
 #include <kiplatform/app.h>
+#include <kiplatform/io.h>
 #include <kiway_mail.h>
 #include <symbol_edit_frame.h>
 #include <sch_edit_frame.h>
@@ -87,13 +88,46 @@
 #include <panel_sym_lib_table.h>
 #include <string_utils.h>
 #include <libraries/symbol_library_adapter.h>
+#include <wx/dir.h>
 #include <wx/msgdlg.h>
 #include <wx/combobox.h>
 #include <wx/log.h>
+#include <wx/wfstream.h>
+#include <wx/zipstrm.h>
 #include <trace_helpers.h>
 
 
 bool SYMBOL_EDIT_FRAME::m_showDeMorgan = false;
+
+
+/**
+ * A wxDirTraverser to filter out symbol (.kicad_sym) files in an unpacked symbol library.
+ */
+class UNPACKED_SYMBOL_LIBRARY_DIR_TRAVERSER : public wxDirTraverser
+{
+public:
+    UNPACKED_SYMBOL_LIBRARY_DIR_TRAVERSER( std::vector<wxString>& aFiles ) :
+        m_files( aFiles) { }
+
+    virtual wxDirTraverseResult OnFile( const wxString& aFilename ) override
+    {
+        wxFileName fn( aFilename );
+        wxString   ext( FILEEXT::KiCadSymbolLibFileExtension );
+
+        if( ext.CmpNoCase( fn.GetExt() ) == 0 )
+            m_files.push_back( aFilename );
+
+        return wxDIR_CONTINUE;
+    }
+
+    virtual wxDirTraverseResult OnDir( const wxString& WXUNUSED( aDirname ) ) override
+    {
+        return wxDIR_CONTINUE;
+    }
+
+private:
+    std::vector<wxString>& m_files;
+};
 
 
 BEGIN_EVENT_TABLE( SYMBOL_EDIT_FRAME, SCH_BASE_FRAME )
@@ -1542,20 +1576,121 @@ void SYMBOL_EDIT_FRAME::UpdateLibraryTree( const wxDataViewItem& aTreeItem, LIB_
 }
 
 
-bool SYMBOL_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt )
+bool SYMBOL_EDIT_FRAME::backupLibrary( const wxFileName& aOriginalFile, wxString& aErrorMsg )
 {
-    if( aOriginalFile.FileExists() )
+    wxFileName backupFileName;
+
+    if( !aOriginalFile.IsDir() && aOriginalFile.FileExists() )
     {
-        wxFileName backupFileName( aOriginalFile );
-        backupFileName.SetExt( aBackupExt );
+        backupFileName = aOriginalFile;
+        backupFileName.SetExt( wxT( "bak" ) );
 
         if( backupFileName.FileExists() )
-            wxRemoveFile( backupFileName.GetFullPath() );
+        {
+            if( !wxRemoveFile( backupFileName.GetFullPath() ) )
+            {
+                aErrorMsg.Printf( _( "Failed to remove existing library backup file '%s'." ),
+                                  backupFileName.GetFullPath() );
+                return false;
+            }
+        }
 
         if( !wxCopyFile( aOriginalFile.GetFullPath(), backupFileName.GetFullPath() ) )
         {
-            DisplayError( this, wxString::Format( _( "Failed to save backup to '%s'." ),
-                                                  backupFileName.GetFullPath() ) );
+            aErrorMsg.Printf( _( "Failed to save backup to '%s'." ), backupFileName.GetFullPath() );
+            return false;
+        }
+    }
+    else if( aOriginalFile.IsDir() && aOriginalFile.DirExists() )
+    {
+        backupFileName.SetPath( aOriginalFile.GetPath() );
+        backupFileName.SetName( backupFileName.GetDirs().Last() + wxString( "_backup" ) );
+        backupFileName.SetExt( "zip" );
+
+        std::vector<wxString> libFiles;
+        wxDir libDir( aOriginalFile.GetPath() );
+        UNPACKED_SYMBOL_LIBRARY_DIR_TRAVERSER libTraverser( libFiles );
+
+        if( backupFileName.FileExists() )
+        {
+            if( !wxRemoveFile( backupFileName.GetFullPath() ) )
+            {
+                aErrorMsg.Printf( _( "Failed to remove existing library backup file '%s'." ),
+                                  backupFileName.GetFullPath() );
+                return false;
+            }
+        }
+
+        if( !libDir.IsOpened() )
+        {
+            aErrorMsg.Printf( _( "Error opening unpacked library directory: '%s'." ), aOriginalFile.GetPath() );
+            return false;
+        }
+
+        libDir.Traverse( libTraverser, wxEmptyString, wxDIR_FILES );
+
+        wxFFileOutputStream ostream( backupFileName.GetFullPath() );
+
+        if( !ostream.IsOk() )
+        {
+            aErrorMsg.Printf( _( "Failed to create library backup file '%s'." ), backupFileName.GetFullPath() );
+            return false;
+        }
+
+        // Use a large I/O buffer to improve compatibility with cloud-synced folders.
+        if( FILE* fp = ostream.GetFile()->fp() )
+            setvbuf( fp, nullptr, _IOFBF, KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE );
+
+        wxZipOutputStream zipstream( ostream, -1, wxConvUTF8 );
+
+        for( const wxString& fileName : libFiles )
+        {
+            wxFileName fn( fileName );
+            wxFileSystem fsFile;
+
+            fn.MakeRelativeTo( aOriginalFile.GetPath() );
+
+            wxString relativeFn = fn.GetFullPath();
+
+            // Read input file and add it to the zip file:
+            wxFSFile* infile = nullptr;
+            wxString  sysError;
+
+            {
+                // Failures are reported through an error dialog, prevent wx from popping its own dialog.
+                wxLogNull suppressSysErrorPopups;
+                infile = fsFile.OpenFile( fileName );
+
+                if( !infile )
+                {
+                    if( unsigned long code = wxSysErrorCode() )
+                        sysError = wxSysErrorMsgStr( code );
+                }
+            }
+
+            if( infile )
+            {
+                zipstream.PutNextEntry( relativeFn, infile->GetModificationTime() );
+                infile->GetStream()->Read( zipstream );
+                zipstream.CloseEntry();
+
+                delete infile;
+            }
+            else
+            {
+                if( sysError.IsEmpty() )
+                    aErrorMsg.Printf( _( "Failed to archive file '%s'." ), relativeFn );
+                else
+                    aErrorMsg.Printf( _( "Failed to archive file '%s': %s" ), relativeFn, sysError );
+
+                zipstream.Close();
+                return false;
+            }
+        }
+
+        if( !zipstream.Close() )
+        {
+            aErrorMsg.Printf( _( "Failed to create file '%s'." ), backupFileName.GetFullPath() );
             return false;
         }
     }

@@ -91,11 +91,11 @@ bool SYMBOL_EDIT_FRAME::saveCurrentSymbol()
                 wxString msg2 = _( "You must save to a different location." );
 
                 if( OKOrCancelDialog( this, _( "Warning" ), msg, msg2 ) == wxID_OK )
-                    return saveLibrary( libName, true );
+                    return saveLibrary( libName, SAVE_LIBRARY_AS::NEW );
             }
             else
             {
-                return saveLibrary( libName, false );
+                return saveLibrary( libName, SAVE_LIBRARY_AS::ORIGINAL );
             }
         }
     }
@@ -396,11 +396,11 @@ void SYMBOL_EDIT_FRAME::Save()
         wxString msg2 = _( "You must save to a different location." );
 
         if( OKOrCancelDialog( this, _( "Warning" ), msg, msg2 ) == wxID_OK )
-            saveLibrary( libName, true );
+            saveLibrary( libName, SAVE_LIBRARY_AS::NEW );
     }
     else
     {
-        saveLibrary( libName, false );
+        saveLibrary( libName, SAVE_LIBRARY_AS::ORIGINAL );
     }
 
     if( IsLibraryTreeShown() )
@@ -408,13 +408,13 @@ void SYMBOL_EDIT_FRAME::Save()
 }
 
 
-void SYMBOL_EDIT_FRAME::SaveLibraryAs()
+void SYMBOL_EDIT_FRAME::SaveLibraryAs( SAVE_LIBRARY_AS aSaveAsType )
 {
     const wxString& libName = GetTargetLibId().GetLibNickname();
 
     if( !libName.IsEmpty() )
     {
-        saveLibrary( libName, true );
+        saveLibrary( libName, aSaveAsType );
         m_treePane->GetLibTree()->RefreshLibTree();
     }
 }
@@ -1505,7 +1505,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbol( const wxString& aAlias, const wxString& aLib
 }
 
 
-bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
+bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, SAVE_LIBRARY_AS aSaveType )
 {
     wxFileName fn;
     wxString   msg;
@@ -1517,13 +1517,21 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
     m_toolManager->RunAction( ACTIONS::cancelInteractive );
 
-    if( !aNewFile && ( aLibrary.empty() || !adapter->HasLibrary( aLibrary ) ) )
+    wxCHECK( adapter, false );
+
+    if( ( aSaveType == SAVE_LIBRARY_AS::ORIGINAL ) && ( aLibrary.empty() || !adapter->HasLibrary( aLibrary ) ) )
     {
         ShowInfoBarError( _( "No library specified." ) );
         return false;
     }
 
-    if( aNewFile )
+    bool newPackedLibrary = ( ( aSaveType == SAVE_LIBRARY_AS::ORIGINAL ) && wxFileName::FileExists( aLibrary ) ) ||
+                            ( aSaveType == SAVE_LIBRARY_AS::PACKED );
+
+    bool newUnpackedLibrary = ( ( aSaveType == SAVE_LIBRARY_AS::ORIGINAL ) && wxFileName::DirExists( aLibrary ) ) ||
+                              ( aSaveType == SAVE_LIBRARY_AS::UNPACKED );
+
+    if( newPackedLibrary )
     {
         SEARCH_STACK* search = PROJECT_SCH::SchSearchS( &prj );
 
@@ -1537,9 +1545,15 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         fn.SetExt( FILEEXT::KiCadSymbolLibFileExtension );
 
         wxString wildcards = FILEEXT::KiCadSymbolLibFileWildcard();
+        wxString dlgPrompt;
 
-        wxFileDialog dlg( this, wxString::Format( _( "Save Library '%s' As..." ), aLibrary ), default_path,
-                          fn.GetFullName(), wildcards, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+        if( aSaveType == SAVE_LIBRARY_AS::ORIGINAL )
+            dlgPrompt.Printf( _( "Save Library '%s' As..." ), aLibrary );
+        else
+            dlgPrompt.Printf( _( "Save Library '%s' As Packed Library..." ), aLibrary );
+
+        wxFileDialog dlg( this, dlgPrompt, default_path, fn.GetFullName(), wildcards,
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
         SYMBOL_LIBRARY_SAVE_AS_FILEDLG_HOOK saveAsHook( type );
         dlg.SetCustomizeHook( saveAsHook );
@@ -1558,27 +1572,71 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
         type = saveAsHook.GetOption();
     }
+    else if( newUnpackedLibrary )
+    {
+        SEARCH_STACK* search = PROJECT_SCH::SchSearchS( &prj );
+
+        // Get a new name for the library
+        wxString default_path = prj.GetRString( PROJECT::SCH_LIB_PATH );
+
+        if( !default_path )
+            default_path = search->LastVisitedPath();
+
+        wxString dlgPrompt;
+
+        if( aSaveType == SAVE_LIBRARY_AS::ORIGINAL )
+            dlgPrompt.Printf( _( "Save Library '%s' As..." ), aLibrary );
+        else
+            dlgPrompt.Printf( _( "Save Library '%s' As Unpacked Library..." ), aLibrary );
+
+        wxDirDialog dlg( this, dlgPrompt, default_path );
+
+        KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+
+        fn.SetPath( dlg.GetPath() );
+    }
     else
     {
         std::optional<LIBRARY_TABLE_ROW*> optRow = adapter->GetRow( aLibrary );
         wxCHECK( optRow, false );
 
-        fn = LIBRARY_MANAGER::GetFullURI( *optRow, true );
-        fileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
+        wxString libFileName = LIBRARY_MANAGER::GetFullURI( *optRow, true );
+
+        // wxFileName will parse any string with a dot(.) followed by any characters as a file extension.
+        // By default KiCad uses paths suffixed with .kicad_symdir which is interpreted as a file rather
+        // than a path.  Checking if the library is a file (packed) or a folder (unpacked) is required to
+        // ensure the correct save type is used.
+        if( wxFileName::DirExists( libFileName ) )
+            fn.SetPath( libFileName );
+        else
+            fn = libFileName;
+
+        fileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( libFileName );
 
         if( fileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
             fileType = SCH_IO_MGR::SCH_KICAD;
     }
 
     // Verify the user has write privileges before attempting to save the library file.
-    if( !aNewFile && m_libMgr->IsLibraryReadOnly( aLibrary ) )
+    if( ( aSaveType == SAVE_LIBRARY_AS::ORIGINAL ) && m_libMgr->IsLibraryReadOnly( aLibrary ) )
         return false;
 
     ClearMsgPanel();
 
-    // Copy .kicad_symb file to .bak.
-    if( !backupFile( fn, "bak" ) )
-        return false;
+    // Only make a backup when saving to the original library.
+    if( aSaveType == SAVE_LIBRARY_AS::ORIGINAL )
+    {
+        wxString errMsg;
+
+        // Copy .kicad_symb file to .bak.
+        if( !backupLibrary( fn, errMsg ) )
+        {
+            return false;
+        }
+    }
 
     if( !m_libMgr->SaveLibrary( aLibrary, fn.GetFullPath(), fileType ) )
     {
@@ -1588,7 +1646,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
         return false;
     }
 
-    if( !aNewFile )
+    if( aSaveType == SAVE_LIBRARY_AS::ORIGINAL )
     {
         m_libMgr->ClearLibraryModified( aLibrary );
 
@@ -1711,12 +1769,12 @@ bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
                         continue;
                     }
                 }
-                else if( saveLibrary( libNickname, false ) )
+                else if( saveLibrary( libNickname, SAVE_LIBRARY_AS::ORIGINAL ) )
                 {
                     continue;
                 }
 
-                if( !saveLibrary( libNickname, true ) )
+                if( !saveLibrary( libNickname, SAVE_LIBRARY_AS::NEW ) )
                     retv = false;
             }
         }

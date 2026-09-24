@@ -32,8 +32,9 @@
 #include <kiway.h>
 #include <launch_ext.h> // To default when file manager setting is empty
 #include <lib_symbol_library_manager.h>
-#include <libraries/library_manager.h>
+#include <libraries/symbol_library_adapter.h>
 #include <pgm_base.h>
+#include <project_sch.h>
 #include <sch_painter.h>
 #include <string_utils.h>
 #include <symbol_edit_frame.h>
@@ -202,6 +203,55 @@ bool SYMBOL_EDITOR_CONTROL::Init()
                     return false;
                 };
 
+        auto isPackedLibraryCondition =
+                [this]( const SELECTION& aSel )
+                {
+                    // The option is shown if the lib has no current edits
+                    if( SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>() )
+                    {
+                        wxString                          libName = editFrame->GetTargetLibId().GetLibNickname();
+                        SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &editFrame->Prj() );
+
+                        if( !adapter )
+                            return false;
+
+                        std::optional<LIBRARY_TABLE_ROW*> row = adapter->GetRow( libName );
+
+                        if( !row )
+                            return false;
+
+                        wxString uri = LIBRARY_MANAGER::ExpandURI( row.value()->URI(), editFrame->Prj() );
+
+                        return wxFileName::FileExists( uri );
+                    }
+
+                    return false;
+                };
+
+        auto isUnpackedLibraryCondition =
+                [this]( const SELECTION& aSel )
+                {
+                    // The option is shown if the lib has no current edits
+                    if( SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>() )
+                    {
+                        wxString                          libName = editFrame->GetTargetLibId().GetLibNickname();
+                        SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &editFrame->Prj() );
+
+                        if( !adapter )
+                            return false;
+
+                        std::optional<LIBRARY_TABLE_ROW*> row = adapter->GetRow( libName );
+
+                        if( !row )
+                            return false;
+
+                        wxString uri = LIBRARY_MANAGER::ExpandURI( row.value()->URI(), editFrame->Prj() );
+
+                        return wxFileName::DirExists( uri );
+                    }
+
+                    return false;
+                };
 
 // clang-format off
         ctxMenu.AddItem( SCH_ACTIONS::newSymbol,                libInferredCondition, 10 );
@@ -210,6 +260,8 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddSeparator( 10 );
         ctxMenu.AddItem( ACTIONS::save,                         symbolSelectedCondition || libInferredCondition, 10 );
         ctxMenu.AddItem( SCH_ACTIONS::saveLibraryAs,            libSelectedCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::saveLibraryAsPacked,      isUnpackedLibraryCondition, 10 );
+        ctxMenu.AddItem( SCH_ACTIONS::saveLibraryAsUnpacked,    isPackedLibraryCondition, 10 );
         ctxMenu.AddItem( SCH_ACTIONS::saveSymbolAs,             symbolSelectedCondition, 10 );
         ctxMenu.AddItem( SCH_ACTIONS::saveSymbolCopyAs,         symbolSelectedCondition, 10 );
         ctxMenu.AddItem( ACTIONS::revert,                       symbolSelectedCondition || libInferredCondition, 10 );
@@ -371,7 +423,11 @@ int SYMBOL_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvt )
     if( aEvt.IsAction( &SCH_ACTIONS::save ) )
         editFrame->Save();
     else if( aEvt.IsAction( &SCH_ACTIONS::saveLibraryAs ) )
-        editFrame->SaveLibraryAs();
+        editFrame->SaveLibraryAs( SAVE_LIBRARY_AS::NEW );
+    else if( aEvt.IsAction( &SCH_ACTIONS::saveLibraryAsPacked ) )
+        editFrame->SaveLibraryAs( SAVE_LIBRARY_AS::PACKED );
+    else if( aEvt.IsAction( &SCH_ACTIONS::saveLibraryAsUnpacked ) )
+        editFrame->SaveLibraryAs( SAVE_LIBRARY_AS::UNPACKED );
     else if( aEvt.IsAction( &SCH_ACTIONS::saveSymbolAs ) )
         editFrame->SaveSymbolCopyAs( true );
     else if( aEvt.IsAction( &SCH_ACTIONS::saveSymbolCopyAs ) )
@@ -1210,6 +1266,8 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  SCH_ACTIONS::saveLibraryAs.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  SCH_ACTIONS::saveSymbolAs.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::Save,                  SCH_ACTIONS::saveLibraryAsPacked.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::Save,                  SCH_ACTIONS::saveLibraryAsUnpacked.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  SCH_ACTIONS::saveSymbolCopyAs.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::saveAll.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
