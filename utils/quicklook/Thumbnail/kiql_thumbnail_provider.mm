@@ -77,7 +77,7 @@
                                                                     drawingBlock:^BOOL( CGContextRef aContext )
                 {
                     CGContextSetInterpolationQuality( aContext, kCGInterpolationHigh );
-                    CGContextDrawImage( aContext, CGRectMake( 0, 0, replySize.width, replySize.height ),
+                    CGContextDrawImage( aContext, CGContextGetClipBoundingBox( aContext ),
                                         (__bridge CGImageRef) retainedImage );
 
                     return YES;
