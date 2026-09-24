@@ -4382,7 +4382,7 @@ bool STEP_PCB_MODEL::WritePDF( const wxString& aFileName )
 
     plotter->SetColorMode( true );
     plotter->Set3DExport( true );
-    plotter->SetCreator( wxT( "Mark's awesome 3d exporter" ) );
+    plotter->SetCreator( wxString::Format( "KiCad %s", GetMajorMinorPatchVersion() ) );
     KIGFX::PCB_RENDER_SETTINGS renderSettings;
     plotter->SetRenderSettings( &renderSettings );
 
