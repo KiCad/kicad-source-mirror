@@ -416,8 +416,10 @@ void PAGED_DIALOG::onPageChanged( wxBookCtrlEvent& event )
             && page + 1 < m_treebook->GetPageCount()
             && m_treebook->IsNodeExpanded( page ) )
     {
-        m_treebook->ChangeSelection( ++page );
+        m_treebook->ChangeSelection( page + 1 );
     }
+
+    page = m_treebook->GetSelection();
 
     UpdateResetButton( page );
 
