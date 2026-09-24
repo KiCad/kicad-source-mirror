@@ -18,8 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _PANEL_SETUP_PINMAP_H_
-#define _PANEL_SETUP_PINMAP_H_
+#pragma once
 
 #include <sch_pin.h>        // For PINTYPE_COUNT definition
 #include <erc/erc_settings.h>
@@ -44,6 +43,7 @@ public:
 
     void OnMouseEnter( wxMouseEvent& aEvent );
     void OnMouseLeave( wxMouseEvent& aEvent );
+
 private:
     void changeErrorLevel( wxCommandEvent& event );
     void reBuildMatrixPanel();
@@ -51,6 +51,7 @@ private:
 
     DECLARE_EVENT_TABLE()
 
+private:
     SCH_EDIT_FRAME*  m_parent;
     SCHEMATIC*       m_schematic;
     wxColour         m_btnBackground;
@@ -58,5 +59,3 @@ private:
     bool             m_initialized;
 };
 
-
-#endif    // _PANEL_SETUP_PINMAP_H_
