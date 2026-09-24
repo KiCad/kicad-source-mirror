@@ -20,13 +20,11 @@
 #include <sch_edit_frame.h>
 #include <kiface_base.h>
 #include <bitmaps.h>
-#include <wildcards_and_files_ext.h>
 #include <schematic.h>
 #include <connection_graph.h>
 #include <tool/tool_manager.h>
 #include <panel_setup_pinmap.h>
 #include <erc/erc.h>
-#include <id.h>
 #include <wx/bmpbuttn.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
@@ -56,7 +54,11 @@ PANEL_SETUP_PINMAP::PANEL_SETUP_PINMAP( wxWindow* aWindow, SCH_EDIT_FRAME* paren
     m_schematic = &parent->Schematic();
     m_btnBackground = wxSystemSettings::GetColour( wxSystemColour::wxSYS_COLOUR_WINDOW );
 
-    reBuildMatrixPanel();
+    for( int row = 0; row < PINMAP_TYPE_COUNT; row++ )
+    {
+        for( int col = 0; col <= row; col++ )
+            m_buttonStateList[row][col] = PIN_ERROR::OK;
+    }
 }
 
 
@@ -65,12 +67,12 @@ PANEL_SETUP_PINMAP::~PANEL_SETUP_PINMAP()
 #ifndef __WXMAC__
     if( m_initialized )
     {
-        for( int ii = 0; ii < PINMAP_TYPE_COUNT; ii++ )
+        for( int row = 0; row < PINMAP_TYPE_COUNT; row++ )
         {
-            for( int jj = 0; jj <= ii; jj++ )
+            for( int col = 0; col <= row; col++ )
             {
-                m_buttonList[ii][jj]->Unbind( wxEVT_ENTER_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
-                m_buttonList[ii][jj]->Unbind( wxEVT_LEAVE_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
+                m_buttonList[row][col]->Unbind( wxEVT_ENTER_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
+                m_buttonList[row][col]->Unbind( wxEVT_LEAVE_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
             }
         }
     }
@@ -153,29 +155,27 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
         pos = m_buttonList[0][0]->GetPosition();
     }
 
-    for( int ii = 0; ii < PINMAP_TYPE_COUNT; ii++ )
+    for( int row = 0; row < PINMAP_TYPE_COUNT; row++ )
     {
-        int y = pos.y + (ii * ( bitmapSize.y + text_padding.y ) );
+        int y = pos.y + (row * ( bitmapSize.y + text_padding.y ) );
 
-        for( int jj = 0; jj <= ii; jj++ )
+        for( int col = 0; col <= row; col++ )
         {
             // Add column labels (only once)
-            PIN_ERROR diag = m_schematic->ErcSettings().GetPinMapValue( ii, jj );
+            PIN_ERROR pin_error_type = m_schematic->ErcSettings().GetPinMapValue( row, col );
 
-            int x = pos.x + ( jj * ( bitmapSize.x + text_padding.x ) );
+            int x = pos.x + ( col * ( bitmapSize.x + text_padding.x ) );
 
-            if( ( ii == jj ) && !m_initialized )
+            if( ( row == col ) && !m_initialized )
             {
-                wxPoint textPos( x + KiROUND( bitmapSize.x / 2.0 ),
-                                 y - charSize.y * 2 );
-                new wxStaticText( m_matrixPanel, wxID_ANY, CommentERC_V[ii], textPos );
+                wxPoint textPos( x + KiROUND( bitmapSize.x / 2.0 ),  y - charSize.y * 2 );
+                new wxStaticText( m_matrixPanel, wxID_ANY, CommentERC_V[row], textPos );
 
-                wxPoint calloutPos( x + KiROUND( bitmapSize.x / 2.0 ),
-                                    y - charSize.y );
+                wxPoint calloutPos( x + KiROUND( bitmapSize.x / 2.0 ), y - charSize.y );
                 new wxStaticText( m_matrixPanel, wxID_ANY, "|", calloutPos );
             }
 
-            int id = ID_MATRIX_0 + ii + ( jj * PINMAP_TYPE_COUNT );
+            int id = ID_MATRIX_0 + row * PINMAP_TYPE_COUNT + col;
             BITMAPS bitmap_butt = BITMAPS::erc_green;
 
 #ifdef __WXMAC__
@@ -184,8 +184,8 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 #else
             if( m_initialized )
             {
-                m_buttonList[ii][jj]->Unbind( wxEVT_ENTER_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
-                m_buttonList[ii][jj]->Unbind( wxEVT_LEAVE_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
+                m_buttonList[row][col]->Unbind( wxEVT_ENTER_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
+                m_buttonList[row][col]->Unbind( wxEVT_LEAVE_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
             }
 
             wxBitmapButton* btn = new wxBitmapButton( m_matrixPanel, id, KiBitmapBundle( bitmap_butt ),
@@ -195,9 +195,10 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 #endif
             btn->SetSize( btn->GetSize() + text_padding );
 
-            delete m_buttonList[ii][jj];
-            m_buttonList[ii][jj] = btn;
-            setDRCMatrixButtonState( m_buttonList[ii][jj], diag );
+            delete m_buttonList[row][col];
+            m_buttonList[row][col] = btn;
+            setDRCMatrixButtonState( m_buttonList[row][col], pin_error_type );
+            m_buttonStateList[row][col] = pin_error_type;
         }
     }
 
@@ -245,28 +246,49 @@ void PANEL_SETUP_PINMAP::setDRCMatrixButtonState( wxWindow *aButton, PIN_ERROR a
 
 void PANEL_SETUP_PINMAP::changeErrorLevel( wxCommandEvent& event )
 {
-    int id = event.GetId();
-    int ii = id - ID_MATRIX_0;
-    ELECTRICAL_PINTYPE x = static_cast<ELECTRICAL_PINTYPE>( ii / PINMAP_TYPE_COUNT );
-    ELECTRICAL_PINTYPE y = static_cast<ELECTRICAL_PINTYPE>( ii % PINMAP_TYPE_COUNT );
-    wxWindow* butt = static_cast<wxWindow*>( event.GetEventObject() );
+    int       ii = event.GetId() - ID_MATRIX_0;
+    int       row = ii / PINMAP_TYPE_COUNT;
+    int       col = ii % PINMAP_TYPE_COUNT;
+    PIN_ERROR level = static_cast<PIN_ERROR>( ( (int) m_buttonStateList[row][col] + 1 ) % 3 );
 
-    int level = static_cast<int>( m_schematic->ErcSettings().GetPinMapValue( y, x ) );
-    level     = ( level + 1 ) % 3;
+    setDRCMatrixButtonState( m_buttonList[row][col], level );
+    m_buttonStateList[row][col] = level;
+}
 
-    setDRCMatrixButtonState( butt, static_cast<PIN_ERROR>( level ) );
 
-    m_schematic->ErcSettings().SetPinMapValue( y, x, static_cast<PIN_ERROR>( level ) );
-    m_schematic->ErcSettings().SetPinMapValue( x, y, static_cast<PIN_ERROR>( level ) );
+bool PANEL_SETUP_PINMAP::TransferDataToWindow()
+{
+    reBuildMatrixPanel();
+    return true;
+}
+
+
+bool PANEL_SETUP_PINMAP::TransferDataFromWindow()
+{
+    ERC_SETTINGS& settings = m_schematic->ErcSettings();
+
+    for( int row = 0; row < PINMAP_TYPE_COUNT; ++row )
+    {
+        for( int col = 0; col <= row; ++col )
+        {
+            settings.SetPinMapValue( row, col, m_buttonStateList[row][col] );
+            settings.SetPinMapValue( col, row, settings.GetPinMapValue( row, col ) );
+        }
+    }
+
+    return true;
 }
 
 
 void PANEL_SETUP_PINMAP::ImportSettingsFrom( PIN_ERROR aPinMap[][ELECTRICAL_PINTYPES_TOTAL] )
 {
-    for( int ii = 0; ii < PINMAP_TYPE_COUNT; ii++ )
+    for( int row = 0; row < PINMAP_TYPE_COUNT; row++ )
     {
-        for( int jj = 0; jj <= ii; jj++ )
-            setDRCMatrixButtonState( m_buttonList[ii][jj], aPinMap[ii][jj] );
+        for( int col = 0; col <= row; col++ )
+        {
+            setDRCMatrixButtonState( m_buttonList[row][col], aPinMap[row][col] );
+            m_buttonStateList[row][col] = aPinMap[row][col];
+        }
     }
 }
 

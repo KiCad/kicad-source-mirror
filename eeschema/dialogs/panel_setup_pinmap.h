@@ -41,6 +41,9 @@ public:
 
     void ResetPanel() override;
 
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
     void OnMouseEnter( wxMouseEvent& aEvent );
     void OnMouseLeave( wxMouseEvent& aEvent );
 
@@ -56,6 +59,7 @@ private:
     SCHEMATIC*       m_schematic;
     wxColour         m_btnBackground;
     wxWindow*        m_buttonList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
+    PIN_ERROR        m_buttonStateList[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
     bool             m_initialized;
 };
 
