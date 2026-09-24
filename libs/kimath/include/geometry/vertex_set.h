@@ -170,6 +170,9 @@ class VERTEX
 
         for( VERTEX* elem : queue )
         {
+            // A cached ear blocker is only valid while it shares this z-order list
+            elem->m_earBlocker = nullptr;
+
             if( prev_elem )
                 prev_elem->nextZ = elem;
 
@@ -244,6 +247,9 @@ class VERTEX
     VERTEX* nextZ = nullptr;
 
     void* m_userData = nullptr;
+
+    // Last vertex found inside this vertex's ear, rechecked before rescanning the z-order list
+    mutable VERTEX* m_earBlocker = nullptr;
 };
 
 class VERTEX_SET

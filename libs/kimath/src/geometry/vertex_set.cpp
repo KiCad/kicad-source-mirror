@@ -280,6 +280,19 @@ bool VERTEX::isEar( bool aMatchUserData ) const
     if( parent->area( a, b, c ) >= 0 )
         return false;
 
+    auto blocksEar =
+            [&]( VERTEX* p )
+            {
+                return ( !aMatchUserData || p->GetUserData() == m_userData )
+                       && p != a && p != c
+                       && p->inTriangle( *a, *b, *c )
+                       && parent->area( p->prev, p, p->next ) >= 0;
+            };
+
+    // Earcut revisits a rejected vertex on every lap of the ring, usually for the same blocker
+    if( m_earBlocker && m_earBlocker->next && blocksEar( m_earBlocker ) )
+        return false;
+
     // triangle bbox
     const double minTX = std::min( a->x, std::min( b->x, c->x ) );
     const double minTY = std::min( a->y, std::min( b->y, c->y ) );
@@ -295,11 +308,11 @@ bool VERTEX::isEar( bool aMatchUserData ) const
 
     while( p && p->z <= maxZ )
     {
-        if( ( !aMatchUserData || p->GetUserData() == m_userData )
-                && p != a && p != c
-                && p->inTriangle( *a, *b, *c )
-                && parent->area( p->prev, p, p->next ) >= 0 )
+        if( blocksEar( p ) )
+        {
+            m_earBlocker = p;
             return false;
+        }
 
         p = p->nextZ;
     }
@@ -309,11 +322,11 @@ bool VERTEX::isEar( bool aMatchUserData ) const
 
     while( p && p->z >= minZ )
     {
-        if( ( !aMatchUserData || p->GetUserData() == m_userData )
-                && p != a && p != c
-                && p->inTriangle( *a, *b, *c )
-                && parent->area( p->prev, p, p->next ) >= 0 )
+        if( blocksEar( p ) )
+        {
+            m_earBlocker = p;
             return false;
+        }
 
         p = p->prevZ;
     }
