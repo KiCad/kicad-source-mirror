@@ -440,6 +440,61 @@ KIID ORCAD_CONVERTER::deterministicUuid( const std::string& aRole, size_t aOrdin
 }
 
 
+SCH_SCREEN* ORCAD_CONVERTER::newScreen()
+{
+    SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
+    const_cast<KIID&>( screen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
+    m_importedScreens.insert( screen );
+    return screen;
+}
+
+
+void ORCAD_CONVERTER::assignRemainingUuids()
+{
+    SCH_SHEET_LIST sheets = m_schematic->BuildSheetListSortedByPageNumbers();
+
+    // A sheet loaded from a file is not yet part of the schematic it is loaded into
+    if( !sheets.ContainsSheet( m_rootSheet ) )
+    {
+        SCH_SHEET_LIST detached( m_rootSheet );
+        sheets.insert( sheets.end(), detached.begin(), detached.end() );
+        sheets.SortByPageNumbers();
+    }
+
+    std::set<SCH_SCREEN*> visited;
+    size_t                screenOrdinal = 0;
+
+    for( const SCH_SHEET_PATH& path : sheets )
+    {
+        SCH_SCREEN* screen = path.LastScreen();
+
+        if( !m_importedScreens.count( screen ) || !visited.insert( screen ).second )
+            continue;
+
+        std::map<std::string, size_t> ordinals;
+
+        for( SCH_ITEM* item : screen->Items() )
+        {
+            std::string uuid = item->m_Uuid.AsStdString();
+
+            // Name-based (version 5) UUIDs were assigned during conversion
+            if( ( uuid.size() > 14 && uuid[14] == '5' ) || m_preExistingItems.count( item ) )
+                continue;
+
+            VECTOR2I    position = item->GetPosition();
+            std::string role = std::to_string( static_cast<int>( item->Type() ) ) + ":" + std::to_string( position.x )
+                               + ":" + std::to_string( position.y );
+            size_t      ordinal = ordinals[role]++;
+            const_cast<KIID&>( item->m_Uuid ) =
+                    KIID::FromName( "orcad-import:" + m_design.sourceId + ":post:" + std::to_string( screenOrdinal )
+                                    + ":" + role + ":" + std::to_string( ordinal ) );
+        }
+
+        ++screenOrdinal;
+    }
+}
+
+
 void ORCAD_CONVERTER::appendPageItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem )
 {
     if( aScreen == m_pageItemScreen )
@@ -1530,8 +1585,7 @@ SCH_SHEET* ORCAD_CONVERTER::createBlockSheet( SCH_SHEET* aParentSheet, const ORC
                                               int aPageIndex )
 {
     SCH_SCREEN* parentScreen = aParentSheet->GetScreen();
-    SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
-    const_cast<KIID&>( screen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
+    SCH_SCREEN* screen = newScreen();
     SCH_SHEET* sheet = new SCH_SHEET( aParentSheet, OrcadDbuToIu( aBlock.x1, aBlock.y1 ),
                                       OrcadDbuToIu( aBlock.w, aBlock.h ) );
     wxString   fileName = MakePageFileName( aPageIndex, aFilePageName );
@@ -1602,8 +1656,7 @@ ORCAD_CONVERTER::createTopLevelSheets( const std::vector<std::pair<wxString, wxS
 
         if( !aReuseRoot || i > 0 )
         {
-            SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
-            const_cast<KIID&>( screen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
+            SCH_SCREEN* screen = newScreen();
             sheet = new SCH_SHEET( m_schematic );
             sheet->SetScreen( screen );
 
@@ -1661,6 +1714,10 @@ void ORCAD_CONVERTER::acceptPowerAliases( const std::map<std::string, POWER_ALIA
 SCH_SHEET* ORCAD_CONVERTER::Convert( SCH_SHEET* aRootSheet )
 {
     m_rootSheet = aRootSheet;
+    m_importedScreens.insert( aRootSheet->GetScreen() );
+
+    for( SCH_ITEM* item : aRootSheet->GetScreen()->Items() )
+        m_preExistingItems.insert( item );
 
     prepareGlobalNetNames();
     prepareSymbols();
@@ -1994,8 +2051,7 @@ void ORCAD_CONVERTER::placeFolder( FOLDER_WALK& aWalk, std::vector<ORCAD_RAW_PAG
             int         heightMm = std::max( 25, 10 + 5 * static_cast<int>( names.size() ) );
             VECTOR2I    position( schIUScale.mmToIU( 55 + column * 70 ), schIUScale.mmToIU( 15 + row * 70 ) );
             VECTOR2I    size( schIUScale.mmToIU( 55 ), schIUScale.mmToIU( heightMm ) );
-            SCH_SCREEN* pageScreen = new SCH_SCREEN( m_schematic );
-            const_cast<KIID&>( pageScreen->GetUuid() ) = deterministicUuid( "screen", m_screenOrdinal++ );
+            SCH_SCREEN* pageScreen = newScreen();
 
             if( folderBusNames != m_hierBusNamesByScreen.end() )
                 m_hierBusNamesByScreen[pageScreen->GetUuid().AsStdString()] = folderBusNames->second;
@@ -3570,6 +3626,7 @@ void ORCAD_CONVERTER::finishConversion()
     convertUnreferencedPages();
     finalizeNativePowerPackages();
     finalizeNetNames();
+    assignRemainingUuids();
 }
 
 

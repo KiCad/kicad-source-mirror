@@ -480,6 +480,13 @@ private:
     SCH_SHEET_PATH topLevelPath( SCH_SHEET* aSheet, size_t aPageNumber ) const;
 
     KIID deterministicUuid( const std::string& aRole, size_t aOrdinal ) const;
+
+    /** A new screen with the next deterministic screen UUID, recorded as created by this import. */
+    SCH_SCREEN* newScreen();
+
+    /** Give items created after page conversion, such as moved labels and cleanup junctions, UUIDs derived from
+     *  their type and position. Only screens this import created are touched. */
+    void assignRemainingUuids();
     void appendPageItem( SCH_SCREEN* aScreen, SCH_ITEM* aItem );
     void assignPageItemUuids( size_t aPageOrdinal );
 
@@ -617,6 +624,8 @@ private:
     size_t                                         m_screenOrdinal = 1;
     SCH_SCREEN*                                    m_pageItemScreen = nullptr;
     std::vector<SCH_ITEM*>                         m_pageItems;
+    std::set<SCH_SCREEN*>                          m_importedScreens;
+    std::set<const SCH_ITEM*>                      m_preExistingItems; ///< already on the root screen
 
     PAGE_SCOPE                                                m_scope;
     std::set<const ORCAD_PIN_INST*>                            m_currentImplicitPowerPins;

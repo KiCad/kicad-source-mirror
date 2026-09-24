@@ -47,6 +47,7 @@
 #include <geometry/shape_compound.h>
 #include <reporter.h>
 #include <settings/settings_manager.h>
+#include <schematic_utils/schematic_file_util.h>
 #include <bitmap_base.h>
 
 #include <wx/filename.h>
@@ -1525,6 +1526,57 @@ BOOST_AUTO_TEST_CASE( RepeatedImportHasDeterministicUuids )
             BOOST_CHECK_EQUAL_COLLECTIONS( values.begin(), values.end(), found->second.begin(), found->second.end() );
         }
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( SheetLoadKeepsExistingItemUuids )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+    {
+        BOOST_TEST_MESSAGE( "KICAD_ORCAD_CORPUS not set; skipping OrCAD sheet-load UUID check." );
+        return;
+    }
+
+    std::filesystem::path dsn = findCorpusDesign( corpusEnv, "mc33163.dsn" );
+
+    if( dsn.empty() )
+    {
+        BOOST_TEST_MESSAGE( "mc33163.dsn not present in corpus; skipping OrCAD sheet-load UUID check." );
+        return;
+    }
+
+    SETTINGS_MANAGER           settings;
+    std::unique_ptr<SCHEMATIC> schematic;
+    KI_TEST::LoadSchematic( settings, wxS( "netlists/complex_hierarchy_shared/complex_hierarchy" ), schematic );
+
+    auto existingUuids = [&]()
+    {
+        std::vector<std::string> uuids;
+
+        for( const SCH_SHEET_PATH& path : schematic->Hierarchy() )
+        {
+            for( SCH_ITEM* item : path.LastScreen()->Items() )
+                uuids.push_back( item->m_Uuid.AsStdString() );
+        }
+
+        std::sort( uuids.begin(), uuids.end() );
+        return uuids;
+    };
+
+    const std::vector<std::string> before = existingUuids();
+    BOOST_REQUIRE( !before.empty() );
+
+    // SCH_EDIT_FRAME::LoadSheetFromFile loads into a sheet that is not yet in the hierarchy
+    SCH_SHEET sheet( schematic.get() );
+    sheet.SetFileName( dsn.string() );
+    m_plugin.LoadSchematicFile( dsn.string(), schematic.get(), &sheet );
+
+    BOOST_REQUIRE( sheet.GetScreen() && !sheet.GetScreen()->Items().empty() );
+
+    const std::vector<std::string> after = existingUuids();
+    BOOST_CHECK_EQUAL_COLLECTIONS( before.begin(), before.end(), after.begin(), after.end() );
 }
 
 

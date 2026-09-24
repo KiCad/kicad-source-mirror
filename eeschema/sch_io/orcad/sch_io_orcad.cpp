@@ -29,7 +29,6 @@
 #include <cstdint>
 #include <map>
 #include <optional>
-#include <set>
 #include <string>
 #include <utility>
 #include <vector>
@@ -50,7 +49,6 @@
 #include <schematic.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
-#include <sch_sheet_path.h>
 
 #include <sch_io/orcad/orcad_cache.h>
 #include <sch_io/orcad/orcad_cis.h>
@@ -72,40 +70,6 @@ std::string OrcadNormalizeCfbName( const std::string& aName )
 
 namespace
 {
-
-void assignPostImportUuids( SCHEMATIC* aSchematic, const std::string& aSourceId )
-{
-    std::set<SCH_SCREEN*> screens;
-    size_t                screenOrdinal = 0;
-
-    for( const SCH_SHEET_PATH& path : aSchematic->BuildSheetListSortedByPageNumbers() )
-    {
-        SCH_SCREEN* screen = path.LastScreen();
-
-        if( !screen || !screens.insert( screen ).second )
-            continue;
-
-        std::map<std::string, size_t> ordinals;
-
-        for( SCH_ITEM* item : screen->Items() )
-        {
-            std::string uuid = item->m_Uuid.AsStdString();
-
-            if( uuid.size() > 14 && uuid[14] == '5' )
-                continue;
-
-            VECTOR2I    position = item->GetPosition();
-            std::string role = std::to_string( static_cast<int>( item->Type() ) ) + ":" + std::to_string( position.x )
-                               + ":" + std::to_string( position.y );
-            size_t ordinal = ordinals[role]++;
-            const_cast<KIID&>( item->m_Uuid ) =
-                    KIID::FromName( "orcad-import:" + aSourceId + ":post:" + std::to_string( screenOrdinal ) + ":"
-                                    + role + ":" + std::to_string( ordinal ) );
-        }
-
-        ++screenOrdinal;
-    }
-}
 
 std::vector<char> readStream( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
@@ -849,7 +813,6 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 
 
     aSchematic->CurrentSheet().UpdateAllScreenReferences();
-    assignPostImportUuids( aSchematic, sourceId );
 
     return rootSheet;
 }
