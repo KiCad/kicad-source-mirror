@@ -111,10 +111,10 @@ BOOST_AUTO_TEST_CASE( RetextReRegisters )
     sheet.AddPin( pin );
     pin->SetText( wxT( "${OLD}" ) );
 
-    SCH_TABLE table;
-    SCH_TABLECELL cell;
-    table.AddCell( &cell );
-    cell.SetText( wxT( "${OLD}" ) );
+    SCH_TABLE      table;
+    SCH_TABLECELL* cell = new SCH_TABLECELL();
+    table.AddCell( cell );
+    cell->SetText( wxT( "${OLD}" ) );
 
     std::vector<SCH_ITEM*> items{ &text, &sheet, &table };
     std::vector<SCH_ITEM*> just_text{ &text };
@@ -143,7 +143,7 @@ BOOST_AUTO_TEST_CASE( RetextReRegisters )
 
     // Edit the cell text and fire a change notification — the adapter must drop
     // the old edge and register the new one.
-    cell.SetText( wxT( "${NEW}" ) );
+    cell->SetText( wxT( "${NEW}" ) );
     sch.GetTextVarAdapter()->OnSchItemsChanged( sch, just_table );
 
     BOOST_CHECK_EQUAL( index.DependentCount( TEXT_VAR_REF_KEY::FromToken( wxT( "OLD" ) ) ), 0u );
