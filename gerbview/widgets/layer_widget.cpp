@@ -765,18 +765,15 @@ COLOR4D LAYER_WIDGET::GetLayerColor( int aLayer ) const
 
 COLOR4D LAYER_WIDGET::GetRenderColor( int aRow ) const
 {
-    int row = aRow;
-
-    if( row >= 0 )
+    if( aRow >= 0 )
     {
         const int col = 0;    // bitmap button (swatch) is column 0
-        auto swatch = static_cast<COLOR_SWATCH*>( getRenderComp( row, col ) );
-        wxASSERT( swatch );
 
-        return swatch->GetSwatchColor();
+        if( COLOR_SWATCH* swatch = dynamic_cast<COLOR_SWATCH*>( getRenderComp( aRow, col ) ) )
+            return swatch->GetSwatchColor();
     }
 
-    return COLOR4D::UNSPECIFIED;   // it's caller fault, gave me a bad layer
+    return COLOR4D::UNSPECIFIED;
 }
 
 

@@ -631,11 +631,16 @@ void GERBER_DRAW_ITEM::ConvertSegmentToPolygon()
 void GERBER_DRAW_ITEM::PrintGerberPoly( wxDC* aDC, const COLOR4D& aColor, const VECTOR2I& aOffset,
                                         bool aFilledShape )
 {
-    std::vector<VECTOR2I> points;
+    if( m_ShapeAsPolygon.OutlineCount() == 0 )
+        return;
+
     SHAPE_LINE_CHAIN& poly = m_ShapeAsPolygon.Outline( 0 );
     int pointCount = poly.PointCount() - 1;
 
-    points.reserve( pointCount );
+    if( pointCount <= 0 )
+        return;
+
+    std::vector<VECTOR2I> points( pointCount );
 
     for( int ii = 0; ii < pointCount; ii++ )
     {

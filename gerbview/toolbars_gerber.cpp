@@ -327,6 +327,9 @@ ACTION_TOOLBAR_CONTROL GERBVIEW_ACTION_TOOLBAR_CONTROLS::dcodeSelector( "control
 
 void GERBVIEW_FRAME::updateDCodeSelectBox()
 {
+    if( !m_DCodeSelector )
+        return;
+
     m_DCodeSelector->Clear();
 
     // Add an empty string to deselect net highlight
