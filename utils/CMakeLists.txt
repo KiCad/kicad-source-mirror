@@ -38,7 +38,7 @@ if( KICAD_BUILD_QUICKLOOK )
         DESTINATION "${OSX_BUNDLE_INSTALL_DIR}/Contents/PlugIns"
         USE_SOURCE_PERMISSIONS
         COMPONENT Runtime )
-    install( FILES
+    install( PROGRAMS
         "$<TARGET_FILE:kicad_3d_import>"
         "$<TARGET_FILE:kicad_3dsg>"
         DESTINATION "${OSX_BUNDLE_INSTALL_DIR}/Contents/Frameworks"
