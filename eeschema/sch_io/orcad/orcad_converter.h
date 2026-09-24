@@ -481,6 +481,9 @@ private:
 
     KIID deterministicUuid( const std::string& aRole, size_t aOrdinal ) const;
 
+    /** Name-based UUIDs for a symbol's raw pins, derived from aRole and each pin's number, name and position. */
+    void assignPinUuids( SCH_SYMBOL* aSymbol, const std::string& aRole ) const;
+
     /** A new screen with the next deterministic screen UUID, recorded as created by this import. */
     SCH_SCREEN* newScreen();
 
@@ -653,7 +656,7 @@ private:
 
     std::vector<INTERFACE_LABEL_SOURCE> m_interfaceLabelSources;
     std::vector<NET_LABEL_INTENT> m_netLabelIntents;
-    std::map<SCH_LABEL_BASE*, std::pair<SCH_SCREEN*, uint32_t>> m_labelSourceNets;
+    std::vector<std::pair<SCH_LABEL_BASE*, std::pair<SCH_SCREEN*, uint32_t>>> m_labelSourceNets;
     std::map<SCH_SCREEN*, const ORCAD_RAW_PAGE*> m_sourcePages;
     std::map<std::pair<SCH_SCREEN*, uint32_t>, std::vector<SCH_ITEM*>> m_sourceNetItems;
     std::map<std::pair<SCH_SCREEN*, uint32_t>, std::set<std::string>> m_sourceNetNames;

@@ -440,6 +440,28 @@ KIID ORCAD_CONVERTER::deterministicUuid( const std::string& aRole, size_t aOrdin
 }
 
 
+void ORCAD_CONVERTER::assignPinUuids( SCH_SYMBOL* aSymbol, const std::string& aRole ) const
+{
+    std::map<std::string, size_t> pinOrdinals;
+
+    for( const std::unique_ptr<SCH_PIN>& ownedPin : aSymbol->GetRawPins() )
+    {
+        SCH_PIN*    pin = ownedPin.get();
+        VECTOR2I    position = pin->GetPosition();
+        std::string pinRole = std::string( pin->GetNumber().ToUTF8() ) + ":" + std::string( pin->GetName().ToUTF8() )
+                              + ":" + std::to_string( position.x ) + ":" + std::to_string( position.y );
+        size_t pinOrdinal = pinOrdinals[pinRole]++;
+        const_cast<KIID&>( pin->m_Uuid ) = deterministicUuid( aRole + ":pin:" + pinRole, pinOrdinal );
+    }
+
+    std::sort( aSymbol->GetRawPins().begin(), aSymbol->GetRawPins().end(),
+               []( const std::unique_ptr<SCH_PIN>& a, const std::unique_ptr<SCH_PIN>& b )
+               {
+                   return a->m_Uuid < b->m_Uuid;
+               } );
+}
+
+
 SCH_SCREEN* ORCAD_CONVERTER::newScreen()
 {
     SCH_SCREEN* screen = new SCH_SCREEN( m_schematic );
@@ -476,6 +498,21 @@ void ORCAD_CONVERTER::assignRemainingUuids()
         for( SCH_ITEM* item : screen->Items() )
         {
             std::string uuid = item->m_Uuid.AsStdString();
+
+            // Assembling a native power package replaces a placed symbol's pins after page conversion
+            if( item->Type() == SCH_SYMBOL_T && !m_preExistingItems.count( item ) )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+                if( std::any_of( symbol->GetRawPins().begin(), symbol->GetRawPins().end(),
+                                 []( const std::unique_ptr<SCH_PIN>& aPin )
+                                 {
+                                     return aPin->m_Uuid.AsStdString()[14] != '5';
+                                 } ) )
+                {
+                    assignPinUuids( symbol, "post-pin:" + uuid );
+                }
+            }
 
             // Name-based (version 5) UUIDs were assigned during conversion
             if( ( uuid.size() > 14 && uuid[14] == '5' ) || m_preExistingItems.count( item ) )
@@ -519,28 +556,7 @@ void ORCAD_CONVERTER::assignPageItemUuids( size_t aPageOrdinal )
         const_cast<KIID&>( item->m_Uuid ) = deterministicUuid( role, ordinal );
 
         if( item->Type() == SCH_SYMBOL_T )
-        {
-            SCH_SYMBOL*                   symbol = static_cast<SCH_SYMBOL*>( item );
-            std::map<std::string, size_t> pinOrdinals;
-
-            for( const std::unique_ptr<SCH_PIN>& ownedPin : symbol->GetRawPins() )
-            {
-                SCH_PIN*    pin = ownedPin.get();
-                VECTOR2I    position = pin->GetPosition();
-                std::string pinRole = std::string( pin->GetNumber().ToUTF8() ) + ":"
-                                      + std::string( pin->GetName().ToUTF8() ) + ":" + std::to_string( position.x )
-                                      + ":" + std::to_string( position.y );
-                size_t pinOrdinal = pinOrdinals[pinRole]++;
-                const_cast<KIID&>( pin->m_Uuid ) =
-                        deterministicUuid( role + ":" + std::to_string( ordinal ) + ":pin:" + pinRole, pinOrdinal );
-            }
-
-            std::sort( symbol->GetRawPins().begin(), symbol->GetRawPins().end(),
-                       []( const std::unique_ptr<SCH_PIN>& a, const std::unique_ptr<SCH_PIN>& b )
-                       {
-                           return a->m_Uuid < b->m_Uuid;
-                       } );
-        }
+            assignPinUuids( static_cast<SCH_SYMBOL*>( item ), role + ":" + std::to_string( ordinal ) );
     }
 }
 
@@ -2820,7 +2836,7 @@ void ORCAD_CONVERTER::appendNetIntent( SCH_SCREEN* aScreen, SCH_LABEL* aLabel, b
     m_netLabelIntents.push_back( { aScreen, aLabel, aExplicitName } );
 
     if( aNetId )
-        m_labelSourceNets[aLabel] = { aScreen, aNetId };
+        m_labelSourceNets.push_back( { aLabel, { aScreen, aNetId } } );
 }
 
 
@@ -2935,12 +2951,12 @@ void ORCAD_CONVERTER::minimizeNetLabels()
             for( MEMBER& member : partition.members )
                 keyed.emplace_back( itemKey( member.second ), std::move( member ) );
 
+            // Order sheets by UUID path, not by sheet address, so naming does not vary run to run
             std::sort( keyed.begin(), keyed.end(),
                        []( const auto& left, const auto& right )
                        {
-                           return left.second.first == right.second.first
-                                          ? left.first < right.first
-                                          : left.second.first < right.second.first;
+                           int sheetOrder = left.second.first.Cmp( right.second.first );
+                           return sheetOrder == 0 ? left.first < right.first : sheetOrder < 0;
                        } );
 
             for( size_t i = 0; i < keyed.size(); ++i )
@@ -3040,7 +3056,12 @@ void ORCAD_CONVERTER::minimizeNetLabels()
     for( size_t index = 0; index < partitions.size(); ++index )
     {
         SOURCE_PARTITION& partition = partitions[index];
-        std::map<SCH_SHEET_PATH, std::map<COMPONENT, std::vector<MEMBER>>> bySheet;
+        auto sheetLess = []( const SCH_SHEET_PATH& aLeft, const SCH_SHEET_PATH& aRight )
+        {
+            return aLeft.Cmp( aRight ) < 0;
+        };
+
+        std::map<SCH_SHEET_PATH, std::map<COMPONENT, std::vector<MEMBER>>, decltype( sheetLess )> bySheet( sheetLess );
         bool hasExplicitDriver = false;
         bool needsDriver = false;
         wxString name;
@@ -3133,8 +3154,21 @@ void ORCAD_CONVERTER::minimizeNetLabels()
             if( components.size() < 2 && !needsName )
                 continue;
 
+            // Components are keyed by subgraph address; add their labels in member order instead
+            std::vector<const std::vector<MEMBER>*> ordered;
+
             for( const auto& [key, members] : components )
+                ordered.push_back( &members );
+
+            std::sort( ordered.begin(), ordered.end(),
+                       [&]( const std::vector<MEMBER>* aLeft, const std::vector<MEMBER>* aRight )
+                       {
+                           return itemKey( aLeft->front().second ) < itemKey( aRight->front().second );
+                       } );
+
+            for( const std::vector<MEMBER>* componentMembers : ordered )
             {
+                const std::vector<MEMBER>& members = *componentMembers;
                 bool alreadyNamed = std::any_of( members.begin(), members.end(),
                         [&]( const MEMBER& member )
                         {
@@ -6628,7 +6662,7 @@ void ORCAD_CONVERTER::placeWires( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScre
                 applyFont( label, fontId );
                 label->SetTextColor( OrcadColor( alias.color ) );
                 appendPageItem( aScreen, label );
-                m_labelSourceNets[label] = { aScreen, wire.id };
+                m_labelSourceNets.push_back( { label, { aScreen, wire.id } } );
             }
             else
             {
