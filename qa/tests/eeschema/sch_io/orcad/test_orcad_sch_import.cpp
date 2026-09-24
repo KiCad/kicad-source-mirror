@@ -1580,6 +1580,38 @@ BOOST_AUTO_TEST_CASE( SheetLoadKeepsExistingItemUuids )
 }
 
 
+BOOST_AUTO_TEST_CASE( HierarchicalSheetLoadIsRefused )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+    {
+        BOOST_TEST_MESSAGE( "KICAD_ORCAD_CORPUS not set; skipping OrCAD hierarchical sheet refusal check." );
+        return;
+    }
+
+    std::filesystem::path dsn = findCorpusDesign( corpusEnv, "mc33163.dsn" );
+
+    if( dsn.empty() )
+    {
+        BOOST_TEST_MESSAGE( "mc33163.dsn not present in corpus; skipping OrCAD hierarchical sheet refusal check." );
+        return;
+    }
+
+    SETTINGS_MANAGER           settings;
+    std::unique_ptr<SCHEMATIC> schematic;
+    KI_TEST::LoadSchematic( settings, wxS( "netlists/complex_hierarchy_shared/complex_hierarchy" ), schematic );
+
+    const std::vector<SCH_SHEET*> topLevel = schematic->GetTopLevelSheets();
+
+    // SCH_EDIT_FRAME::LoadSheetFromFile passes the live schematic with this property
+    std::map<std::string, UTF8> props = { { "hierarchical_sheet_load", "1" } };
+
+    BOOST_CHECK_THROW( m_plugin.LoadSchematicFile( dsn.string(), schematic.get(), nullptr, &props ), IO_ERROR );
+    BOOST_CHECK( schematic->GetTopLevelSheets() == topLevel );
+}
+
+
 BOOST_AUTO_TEST_CASE( PowerSymbolAttachesAtPlacedVariantPin )
 {
     const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );

@@ -417,6 +417,15 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
 {
     wxASSERT( !aFileName.IsEmpty() && aSchematic );
 
+    // A Capture design is a whole document whose load replaces the live top-level sheets and settings
+    if( aProperties && aProperties->count( "hierarchical_sheet_load" ) )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "'%s' contains a complete OrCAD Capture design and cannot be "
+                                             "loaded as a hierarchical sheet. Use File > Import > "
+                                             "Non-KiCad Schematic... instead." ),
+                                          aFileName ) );
+    }
+
     std::optional<wxString> sourceHash = IO_UTILS::fileHashMMH3( aFileName );
 
     if( !sourceHash )
