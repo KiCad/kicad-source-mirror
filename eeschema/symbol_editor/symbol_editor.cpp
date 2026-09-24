@@ -42,6 +42,7 @@
 #include <eda_list_dialog.h>
 #include <set>
 #include <wx/clipbrd.h>
+#include <wx/dirdlg.h>
 #include <wx/filedlg.h>
 #include <wx/log.h>
 #include <project_sch.h>
