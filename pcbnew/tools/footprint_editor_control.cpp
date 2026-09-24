@@ -524,9 +524,10 @@ int FOOTPRINT_EDITOR_CONTROL::RenameFootprint( const TOOL_EVENT& aEvent )
                 if( footprint->GetValue() == oldName )
                     footprint->SetValue( newName );
 
-                m_frame->SaveFootprintInLibrary( footprint, libraryName );
-
+                // Both names are one file on a case-insensitive filesystem.
                 adapter->DeleteFootprint( libraryName, oldName );
+
+                m_frame->SaveFootprintInLibrary( footprint, libraryName );
             }
             catch( const IO_ERROR& ioe )
             {
