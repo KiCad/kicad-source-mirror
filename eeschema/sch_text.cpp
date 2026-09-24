@@ -568,7 +568,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
             attrs.m_Angle = ANGLE_VERTICAL;
 
         bool origHoriz = ( GetTextAngle() == ANGLE_HORIZONTAL );
-        bool screenHoriz = ( attrs.m_Angle == ANGLE_HORIZONTAL );
+        bool screenHoriz = ( attrs.m_Angle.GetAngle() == ANGLE_HORIZONTAL );
 
         // Check if the text reading direction is reversed by the transform
         // Flip H alignment when reversed

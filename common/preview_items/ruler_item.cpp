@@ -201,8 +201,8 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
         labelAttrs.m_Angle = labelAngle;
 
         // Adjust the text position of the shadow shape:
-        labelOffset.x -= shadowXoffset * labelAttrs.m_Angle.Cos();
-        labelOffset.y += shadowXoffset * labelAttrs.m_Angle.Sin();
+        labelOffset.x -= shadowXoffset * labelAttrs.m_Angle.GetAngle().Cos();
+        labelOffset.y += shadowXoffset * labelAttrs.m_Angle.GetAngle().Sin();
     }
     else
     {
@@ -210,8 +210,8 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
         labelAttrs.m_Angle = labelAngle + ANGLE_180;
 
         // Adjust the text position of the shadow shape:
-        labelOffset.x += shadowXoffset * labelAttrs.m_Angle.Cos();
-        labelOffset.y -= shadowXoffset * labelAttrs.m_Angle.Sin();
+        labelOffset.x += shadowXoffset * labelAttrs.m_Angle.GetAngle().Cos();
+        labelOffset.y -= shadowXoffset * labelAttrs.m_Angle.GetAngle().Sin();
     }
 
     BOX2D viewportD = aView->GetViewport();

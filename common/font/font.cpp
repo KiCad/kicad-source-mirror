@@ -257,7 +257,7 @@ void FONT::Draw( KIGFX::GAL* aGal, const wxString& aText, const VECTOR2I& aPosit
 
     for( size_t i = 0; i < strings_list.GetCount(); i++ )
     {
-        drawSingleLineText( aGal, nullptr, strings_list[i], positions[i], aAttrs.m_Size, aAttrs.m_Angle,
+        drawSingleLineText( aGal, nullptr, strings_list[i], positions[i], aAttrs.m_Size, aAttrs.m_Angle.GetAngle(),
                             aAttrs.m_Mirrored, aPosition, aAttrs.m_Italic, aAttrs.m_Underlined, aAttrs.m_Hover,
                             aFontMetrics, aMousePos, aActiveUrl );
     }
@@ -699,5 +699,3 @@ void FONT::LinebreakText( wxString& aText, int aColumnWidth, const VECTOR2I& aSi
             aText += '\n';
     }
 }
-
-

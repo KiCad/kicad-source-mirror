@@ -124,13 +124,9 @@ public:
      * Text angle in the parent footprint's lib frame, or absolute when not
      * in a footprint.
      */
-    const EDA_ANGLE& GetLibTextAngle() const { return m_libTextAngle; }
+    EDA_ANGLE GetLibTextAngle() const { return m_libTextAngle.GetAngle(); }
 
-    void SetLibTextAngle( const EDA_ANGLE& aAngle )
-    {
-        m_libTextAngle = aAngle;
-        m_libTextAngle.Normalize();
-    }
+    void SetLibTextAngle( const EDA_ANGLE& aAngle ) { m_libTextAngle = aAngle; }
 
     void Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle ) override;
 
@@ -243,5 +239,5 @@ protected:
 private:
     mutable std::unique_ptr<PCB_TEXT_KNOCKOUT_CACHE_DATA> m_knockout_cache;
 
-    EDA_ANGLE m_libTextAngle; // Text angle in parent footprint's lib frame
+    EDA_ORIENTATION m_libTextAngle; // Text angle in parent footprint's lib frame
 };

@@ -2149,7 +2149,7 @@ void DXF_PLOTTER::plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor
                 " 11\n{}\n 21\n{}\n 31\n0\n"
                 "100\nAcDbText\n"
                 " 73\n{}\n",
-                aAttributes.m_Angle.AsDegrees(),
+                aAttributes.m_Angle.GetAngle().AsDegrees(),
                 formatCoord( fabs( size_dev.x / size_dev.y ) ),
                 aAttributes.m_Italic ? DXF_OBLIQUE_ANGLE : 0,
                 textStyle,

@@ -129,7 +129,7 @@ public:
     KIFONT::FONT*     m_Font;
     GR_TEXT_H_ALIGN_T m_Halign;
     GR_TEXT_V_ALIGN_T m_Valign;
-    EDA_ANGLE         m_Angle;
+    EDA_ORIENTATION   m_Angle;
     double            m_LineSpacing;
     int               m_StrokeWidth;
     bool              m_Italic;
@@ -156,7 +156,7 @@ struct std::hash<TEXT_ATTRIBUTES>
     std::size_t operator()( const TEXT_ATTRIBUTES& aAttributes ) const
     {
         return hash_val( aAttributes.m_Font, aAttributes.m_Halign, aAttributes.m_Valign,
-                         aAttributes.m_Angle.AsDegrees(), aAttributes.m_LineSpacing,
+                         aAttributes.m_Angle.GetAngle().AsDegrees(), aAttributes.m_LineSpacing,
                          aAttributes.m_StrokeWidth, aAttributes.m_Italic, aAttributes.m_Bold,
                          aAttributes.m_Underlined, aAttributes.m_Color, aAttributes.m_Mirrored,
                          aAttributes.m_Multiline, aAttributes.m_Size.x, aAttributes.m_Size.y );

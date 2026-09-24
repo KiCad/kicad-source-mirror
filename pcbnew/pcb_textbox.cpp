@@ -136,7 +136,7 @@ bool PCB_TEXTBOX::Deserialize( const kiapi::board::types::BoardTextBox& boardTex
         SetAttributes( attrs );
 
         // Handles setting shape to rectangle or polygon
-        SetTextAngle( attrs.m_Angle );
+        SetTextAngle( attrs.m_Angle.GetAngle() );
     }
 
     if( text.has_margin_left() )
@@ -343,9 +343,12 @@ void PCB_TEXTBOX::SetRight( int aVal )
 EDA_ANGLE PCB_TEXTBOX::GetTextAngle() const
 {
     if( const FOOTPRINT* fp = GetParentFootprint() )
-        return m_libTextAngle + fp->GetOrientation();
+    {
+        EDA_ANGLE angle = m_libTextAngle.GetAngle() + fp->GetOrientation();
+        return angle.Normalized();
+    }
 
-    return m_libTextAngle;
+    return m_libTextAngle.GetAngle();
 }
 
 
@@ -653,8 +656,6 @@ void PCB_TEXTBOX::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
         m_libTextAngle = newAbs - fp->GetOrientation();
     else
         m_libTextAngle = newAbs;
-
-    m_libTextAngle.Normalize();
 }
 
 
@@ -668,7 +669,6 @@ void PCB_TEXTBOX::Mirror( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection
     else
         m_libTextAngle = -m_libTextAngle;
 
-    m_libTextAngle.Normalize();
     EDA_TEXT::SetTextAngle( GetTextAngle() );
 }
 
@@ -682,7 +682,6 @@ void PCB_TEXTBOX::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     else
         m_libTextAngle = ANGLE_180 - m_libTextAngle;
 
-    m_libTextAngle.Normalize();
     EDA_TEXT::SetTextAngle( GetTextAngle() );
 
     if( IsSideSpecific() )

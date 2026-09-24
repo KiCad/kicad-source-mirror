@@ -36,7 +36,7 @@ void PackTextAttributes( types::TextAttributes& aOutput, const TEXT_ATTRIBUTES& 
 
     aOutput.set_horizontal_alignment( ToProtoEnum<GR_TEXT_H_ALIGN_T, types::HorizontalAlignment>( aInput.m_Halign ) );
     aOutput.set_vertical_alignment( ToProtoEnum<GR_TEXT_V_ALIGN_T, types::VerticalAlignment>( aInput.m_Valign ) );
-    aOutput.mutable_angle()->set_value_degrees( aInput.m_Angle.AsDegrees() );
+    aOutput.mutable_angle()->set_value_degrees( aInput.m_Angle.GetAngle().AsDegrees() );
     aOutput.set_line_spacing( aInput.m_LineSpacing );
     PackDistance( *aOutput.mutable_stroke_width(), aInput.m_StrokeWidth, aScale );
     aOutput.set_italic( aInput.m_Italic );

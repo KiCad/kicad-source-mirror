@@ -175,14 +175,14 @@ public:
     int GetEffectiveTextPenWidth( int aDefaultPenWidth = 0 ) const;
 
     virtual void      SetTextAngle( const EDA_ANGLE& aAngle );
-    virtual EDA_ANGLE GetTextAngle() const { return m_attributes.m_Angle; }
+    virtual EDA_ANGLE GetTextAngle() const { return m_attributes.m_Angle.GetAngle(); }
 
     // For property system:
     void SetTextAngleDegrees( double aOrientation )
     {
         SetTextAngle( EDA_ANGLE( aOrientation, DEGREES_T ) );
     }
-    double GetTextAngleDegrees() const          { return m_attributes.m_Angle.AsDegrees(); }
+    double GetTextAngleDegrees() const          { return m_attributes.m_Angle.GetAngle().AsDegrees(); }
 
     /**
      * Set the text to be italic - this will also update the font if needed.

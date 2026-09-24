@@ -560,9 +560,12 @@ void PCB_TEXT::SetLibTextThickness( int aWidth )
 EDA_ANGLE PCB_TEXT::GetTextAngle() const
 {
     if( const FOOTPRINT* fp = GetParentFootprint() )
-        return m_libTextAngle + fp->GetOrientation();
+    {
+        EDA_ANGLE angle = m_libTextAngle.GetAngle() + fp->GetOrientation();
+        return angle.Normalize();
+    }
 
-    return m_libTextAngle;
+    return m_libTextAngle.GetAngle();
 }
 
 
@@ -573,7 +576,6 @@ void PCB_TEXT::SetTextAngle( const EDA_ANGLE& aAngle )
     else
         m_libTextAngle = aAngle;
 
-    m_libTextAngle.Normalize();
     EDA_TEXT::SetTextAngle( aAngle );
 }
 
@@ -655,7 +657,6 @@ void PCB_TEXT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     else
         m_libTextAngle = ANGLE_180 - m_libTextAngle;
 
-    m_libTextAngle.Normalize();
     EDA_TEXT::SetTextAngle( GetTextAngle() );
 
     SetLayer( GetBoard()->FlipLayer( GetLayer() ) );

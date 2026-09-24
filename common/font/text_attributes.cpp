@@ -66,8 +66,8 @@ int TEXT_ATTRIBUTES::Compare( const TEXT_ATTRIBUTES& aRhs ) const
     if( m_StrokeWidth != aRhs.m_StrokeWidth )
         return m_StrokeWidth - aRhs.m_StrokeWidth;
 
-    if( m_Angle.AsDegrees() != aRhs.m_Angle.AsDegrees() )
-        return m_Angle.AsDegrees() < aRhs.m_Angle.AsDegrees() ? -1 : 1;
+    if( m_Angle != aRhs.m_Angle )
+        return m_Angle.GetAngle() < aRhs.m_Angle.GetAngle() ? -1 : 1;
 
     if( m_LineSpacing != aRhs.m_LineSpacing )
         return m_LineSpacing < aRhs.m_LineSpacing ? -1 : 1;

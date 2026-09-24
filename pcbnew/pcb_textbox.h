@@ -119,12 +119,8 @@ public:
      * Text angle in the parent footprint's lib frame, or absolute when not
      * in a footprint.
      */
-    const EDA_ANGLE& GetLibTextAngle() const { return m_libTextAngle; }
-    void             SetLibTextAngle( const EDA_ANGLE& aAngle )
-    {
-        m_libTextAngle = aAngle;
-        m_libTextAngle.Normalize();
-    }
+    EDA_ANGLE GetLibTextAngle() const { return m_libTextAngle.GetAngle(); }
+    void      SetLibTextAngle( const EDA_ANGLE& aAngle ) { m_libTextAngle = aAngle; }
 
     wxString GetShownText( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override;
 
@@ -226,11 +222,11 @@ protected:
     bool m_borderEnabled; ///< Controls drawing the border (as defined by the stroke members)
 
 private:
-    int       m_marginLeft;
-    int       m_marginTop;
-    int       m_marginRight;
-    int       m_marginBottom;
-    EDA_ANGLE m_libTextAngle; // Text angle in parent footprint's lib frame
+    int             m_marginLeft;
+    int             m_marginTop;
+    int             m_marginRight;
+    int             m_marginBottom;
+    EDA_ORIENTATION m_libTextAngle; // Text angle in parent footprint's lib frame
 };
 
 #endif  // #define PCB_TEXTBOX_H

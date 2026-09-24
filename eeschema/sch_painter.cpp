@@ -635,7 +635,7 @@ static void bitmapText( KIGFX::GAL& aGal, const wxString& aText, const VECTOR2D&
     aGal.SetHorizontalJustify( aAttrs.m_Halign );
     aGal.SetVerticalJustify( aAttrs.m_Valign );
 
-    aGal.BitmapText( aText, aPosition, aAttrs.m_Angle );
+    aGal.BitmapText( aText, aPosition, aAttrs.m_Angle.GetAngle() );
 }
 
 
@@ -1183,7 +1183,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
         VECTOR2D p5 = aBottom;
 
         // Apply brace offset based on text orientation
-        if( aAttrs.m_Angle == ANGLE_VERTICAL )
+        if( aAttrs.m_Angle.GetAngle() == ANGLE_VERTICAL )
         {
             // For vertical text, braces extend in the Y direction
             // "Left" brace is actually towards negative Y, "right" towards positive Y
@@ -1241,7 +1241,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
         int textHeight = aAttrs.m_Size.y;
         int extraHeight = textHeight / 3; // Extend braces by 1/3 of text height beyond text
 
-        if( aAttrs.m_Angle == ANGLE_VERTICAL )
+        if( aAttrs.m_Angle.GetAngle() == ANGLE_VERTICAL )
         {
             // For vertical text, lines are spaced horizontally and braces are horizontal
             braceEnd.x += ( (int) aLines.size() - 1 ) * aLineSpacing;
@@ -1318,7 +1318,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 
                 int textHalfHeight = aAttrs.m_Size.y / 2;
 
-                if( aAttrs.m_Angle == ANGLE_VERTICAL )
+                if( aAttrs.m_Angle.GetAngle() == ANGLE_VERTICAL )
                 {
                     // For vertical text, lines are spaced horizontally
                     braceEnd.x += ( (int) aLines.size() - 1 ) * aLineSpacing;
@@ -1389,7 +1389,7 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                         // Calculate positioning based on text alignment and rotation
                         VECTOR2D startPos = aPosition;
 
-                        if( aAttrs.m_Angle == ANGLE_VERTICAL )
+                        if( aAttrs.m_Angle.GetAngle() == ANGLE_VERTICAL )
                         {
                             // For vertical text, lines are spaced horizontally
                             // Adjust start position based on horizontal alignment
@@ -2272,7 +2272,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
         // offset by shadowWidth/2 to be drawn at the same place as normal text.
         double shadowOffset = 0.0;
 
-        if( attrs.m_Angle == ANGLE_VERTICAL )
+        if( attrs.m_Angle.GetAngle() == ANGLE_VERTICAL )
         {
             switch( attrs.m_Halign )
             {
