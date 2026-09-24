@@ -60,17 +60,15 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const VECTOR2I& pos, const wxSt
 }
 
 
-void SCH_SHEET_PIN::Serialize( kiapi::schematic::types::SheetPin& pin,
-                               const EDA_IU_SCALE& aScale ) const
+void SCH_SHEET_PIN::Serialize( kiapi::schematic::types::SheetPin& pin, const EDA_IU_SCALE& aScale ) const
 {
     using namespace kiapi::schematic::types;
 
 
     pin.mutable_id()->set_value( m_Uuid.AsStdString() );
     kiapi::common::PackVector2( *pin.mutable_position(), GetPosition(), schIUScale );
-    pin.set_spin_style(
-            ToProtoEnum<SPIN_STYLE::SPIN, SchematicLabelSpinStyle>(
-                    static_cast<SPIN_STYLE::SPIN>( static_cast<int>( GetSpinStyle() ) ) ) );
+    pin.set_spin_style( ToProtoEnum<SPIN_STYLE::SPIN,
+                        SchematicLabelSpinStyle>( static_cast<SPIN_STYLE::SPIN>( (int) GetSpinStyle() ) ) );
     pin.set_shape( ToProtoEnum<LABEL_FLAG_SHAPE, SchematicLabelShape>( GetShape() ) );
     pin.set_side( ToProtoEnum<SHEET_SIDE, SheetSide>( GetSide() ) );
     pin.set_locked( SCH_ITEM::IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
@@ -88,12 +86,9 @@ void SCH_SHEET_PIN::Serialize( google::protobuf::Any& aContainer ) const
 }
 
 
-bool SCH_SHEET_PIN::Deserialize( const kiapi::schematic::types::SheetPin& pin,
-                                 const EDA_IU_SCALE& aScale )
+bool SCH_SHEET_PIN::Deserialize( const kiapi::schematic::types::SheetPin& pin, const EDA_IU_SCALE& aScale )
 {
     using namespace kiapi::schematic::types;
-
-
 
     const_cast<KIID&>( m_Uuid ) = KIID( pin.id().value() );
 
@@ -130,8 +125,7 @@ void SCH_SHEET_PIN::swapData( SCH_ITEM* aItem )
     SCH_HIERLABEL::swapData( aItem );
 
     wxCHECK_RET( aItem->Type() == SCH_SHEET_PIN_T,
-                 wxString::Format( "SCH_SHEET_PIN object cannot swap data with %s object.",
-                                   aItem->GetClass() ) );
+                 wxString::Format( "SCH_SHEET_PIN object cannot swap data with %s object.", aItem->GetClass() ) );
 
     SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( aItem );
 
@@ -357,8 +351,8 @@ void SCH_SHEET_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 }
 
 
-void SCH_SHEET_PIN::CreateGraphicShape( const RENDER_SETTINGS* aSettings,
-                                        std::vector<VECTOR2I>& aPoints, const VECTOR2I& aPos ) const
+void SCH_SHEET_PIN::CreateGraphicShape( const RENDER_SETTINGS* aSettings, std::vector<VECTOR2I>& aPoints,
+                                        const VECTOR2I& aPos ) const
 {
     /*
      * These are the same icon shapes as SCH_HIERLABEL but the graphic icon is slightly
