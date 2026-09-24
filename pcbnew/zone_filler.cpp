@@ -54,6 +54,7 @@
 #include <geometry/shape_poly_set.h>
 #include <geometry/convex_hull.h>
 #include <geometry/geometry_utils.h>
+#include <geometry/shape_utils.h>
 #include <geometry/vertex_set.h>
 #include <geometry/poly_ystripes_index.h>
 #include <kidialog.h>
@@ -1709,6 +1710,27 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow*
                         if( island_area < minArea )
                             continue;
 
+                        // Clipping a fractured hatch plane against the outline takes minutes, so
+                        // settle the test from the bounding box whenever its area bounds suffice
+                        const BOX2I    bbox = test_poly.BBox();
+                        SHAPE_POLY_SET bboxInBoard;
+
+                        bboxInBoard.BooleanIntersection( m_boardOutline,
+                                                         SHAPE_POLY_SET( KIGEOM::BoxToLineChain( bbox ) ) );
+
+                        const double inBoardArea = bboxInBoard.Area();
+                        const double bboxArea = static_cast<double>( bbox.GetWidth() )
+                                                * static_cast<double>( bbox.GetHeight() );
+                        const double outOfBoardArea = bboxArea - inBoardArea;
+
+                        if( outOfBoardArea < island_area / 2.0 )
+                            continue;
+
+                        if( inBoardArea < island_area / 2.0 )
+                        {
+                            retval.emplace_back( poly, jj );
+                            continue;
+                        }
 
                         island.AddOutline( test_poly );
                         intersection.BooleanIntersection( m_boardOutline, island );
