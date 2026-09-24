@@ -131,6 +131,15 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+static bool startsWithCoordinate( const char* aText )
+{
+    if( *aText == '+' || *aText == '-' )
+        ++aText;
+
+    return isdigit( *aText ) || ( *aText == '.' && isdigit( aText[1] ) );
+}
+
+
 bool GERBER_FILE_IMAGE::TestFileIsRS274( const wxString& aFullFileName )
 {
     char* letter    = nullptr;
@@ -186,13 +195,13 @@ bool GERBER_FILE_IMAGE::TestFileIsRS274( const wxString& aFullFileName )
             /* look for X<number> or Y<number> */
             if( ( letter = strstr( line, "X" ) ) != nullptr )
             {
-                if( isdigit( letter[1] ) )
+                if( startsWithCoordinate( letter + 1 ) )
                     foundX = true;
             }
 
             if( ( letter = strstr( line, "Y" ) ) != nullptr )
             {
-                if( isdigit( letter[1] ) )
+                if( startsWithCoordinate( letter + 1 ) )
                     foundY = true;
             }
         }
