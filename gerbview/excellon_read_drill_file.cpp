@@ -756,6 +756,10 @@ void EXCELLON_IMAGE::readFileFormat( char*& aText )
 
     mantissaDigits = *aText - '0';
 
+    // The coordinate scale table supports at most eight fractional digits.
+    if( mantissaDigits > 8 )
+        return;
+
     m_hasFormat = true;
     m_FmtLen.x = m_FmtLen.y = characteristicDigits + mantissaDigits;
     m_FmtScale.x = m_FmtScale.y = mantissaDigits;
