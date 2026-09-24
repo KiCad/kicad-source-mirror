@@ -293,10 +293,34 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
     {
         m_frame->SetElementVisibility( LAYER_DCODES, !cfg->m_Appearance.show_dcodes );
     }
-    else if( aEvent.IsAction( &ACTIONS::highContrastMode )
-             || aEvent.IsAction( &ACTIONS::highContrastModeCycle ) )
+    else if( aEvent.IsAction( &ACTIONS::highContrastMode ) )
     {
-        cfg->m_Display.m_HighContrastMode = !cfg->m_Display.m_HighContrastMode;
+        GBR_INACTIVE_LAYER_MODE& mode = cfg->m_Display.m_InactiveLayerMode;
+        mode = mode == GBR_INACTIVE_LAYER_MODE::NORMAL ? GBR_INACTIVE_LAYER_MODE::DIMMED
+                                                       : GBR_INACTIVE_LAYER_MODE::NORMAL;
+    }
+    else if( aEvent.IsAction( &ACTIONS::highContrastModeCycle ) )
+    {
+        GBR_INACTIVE_LAYER_MODE& mode = cfg->m_Display.m_InactiveLayerMode;
+
+        switch( mode )
+        {
+        case GBR_INACTIVE_LAYER_MODE::NORMAL: mode = GBR_INACTIVE_LAYER_MODE::DIMMED; break;
+        case GBR_INACTIVE_LAYER_MODE::DIMMED: mode = GBR_INACTIVE_LAYER_MODE::HIDDEN; break;
+        case GBR_INACTIVE_LAYER_MODE::HIDDEN: mode = GBR_INACTIVE_LAYER_MODE::NORMAL; break;
+        }
+    }
+    else if( aEvent.IsAction( &GERBVIEW_ACTIONS::showInactiveLayers ) )
+    {
+        cfg->m_Display.m_InactiveLayerMode = GBR_INACTIVE_LAYER_MODE::NORMAL;
+    }
+    else if( aEvent.IsAction( &GERBVIEW_ACTIONS::dimInactiveLayers ) )
+    {
+        cfg->m_Display.m_InactiveLayerMode = GBR_INACTIVE_LAYER_MODE::DIMMED;
+    }
+    else if( aEvent.IsAction( &GERBVIEW_ACTIONS::hideInactiveLayers ) )
+    {
+        cfg->m_Display.m_InactiveLayerMode = GBR_INACTIVE_LAYER_MODE::HIDDEN;
     }
     else if( aEvent.IsAction( &GERBVIEW_ACTIONS::toggleForceOpacityMode ) )
     {
@@ -322,9 +346,40 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
         view->SetMirror( cfg->m_Display.m_FlipGerberView, false );
     }
 
+    bool contrastModeChanged = aEvent.IsAction( &ACTIONS::highContrastMode )
+                               || aEvent.IsAction( &ACTIONS::highContrastModeCycle )
+                               || aEvent.IsAction( &GERBVIEW_ACTIONS::showInactiveLayers )
+                               || aEvent.IsAction( &GERBVIEW_ACTIONS::dimInactiveLayers )
+                               || aEvent.IsAction( &GERBVIEW_ACTIONS::hideInactiveLayers );
+
+    if( contrastModeChanged )
+    {
+        switch( cfg->m_Display.m_InactiveLayerMode )
+        {
+        case GBR_INACTIVE_LAYER_MODE::NORMAL:
+            m_frame->SelectToolbarAction( GERBVIEW_ACTIONS::showInactiveLayers );
+            break;
+
+        case GBR_INACTIVE_LAYER_MODE::DIMMED:
+            m_frame->SelectToolbarAction( GERBVIEW_ACTIONS::dimInactiveLayers );
+            break;
+
+        case GBR_INACTIVE_LAYER_MODE::HIDDEN:
+            m_frame->SelectToolbarAction( GERBVIEW_ACTIONS::hideInactiveLayers );
+            break;
+        }
+    }
+
     m_frame->ApplyDisplaySettingsToGAL();
 
-    view->UpdateAllItems( KIGFX::COLOR );
+    if( contrastModeChanged )
+    {
+        view->UpdateAllItems( KIGFX::REPAINT );
+    }
+    else
+    {
+        view->UpdateAllItems( KIGFX::COLOR );
+    }
     m_frame->GetCanvas()->Refresh();
 
     return 0;
@@ -540,6 +595,9 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::dcodeDisplay.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     ACTIONS::highContrastMode.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     ACTIONS::highContrastModeCycle.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::showInactiveLayers.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::dimInactiveLayers.MakeEvent() );
+    Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::hideInactiveLayers.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::toggleForceOpacityMode.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::toggleXORMode.MakeEvent() );
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::flipGerberView.MakeEvent() );

@@ -74,8 +74,11 @@ std::optional<TOOLBAR_CONFIGURATION> GERBVIEW_TOOLBAR_SETTINGS::DefaultToolbarCo
         config.AppendSeparator()
               .AppendAction( GERBVIEW_ACTIONS::toggleForceOpacityMode )
               .AppendAction( GERBVIEW_ACTIONS::toggleXORMode )
-              .AppendAction( ACTIONS::highContrastMode )
-              .AppendAction( GERBVIEW_ACTIONS::flipGerberView );
+              .AppendAction( GERBVIEW_ACTIONS::flipGerberView )
+              .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Inactive Layer View Mode" ) )
+                            .AddAction( GERBVIEW_ACTIONS::showInactiveLayers )
+                            .AddAction( GERBVIEW_ACTIONS::dimInactiveLayers )
+                            .AddAction( GERBVIEW_ACTIONS::hideInactiveLayers ) );
 
         config.AppendSeparator()
               .AppendAction( GERBVIEW_ACTIONS::toggleLayerManager );

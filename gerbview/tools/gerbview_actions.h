@@ -50,6 +50,9 @@ public:
     static TOOL_ACTION toggleForceOpacityMode;
     static TOOL_ACTION toggleXORMode;
     static TOOL_ACTION flipGerberView;
+    static TOOL_ACTION showInactiveLayers;
+    static TOOL_ACTION dimInactiveLayers;
+    static TOOL_ACTION hideInactiveLayers;
 
     // Layer control
     static TOOL_ACTION layerPrev;

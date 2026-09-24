@@ -106,6 +106,12 @@ COLOR4D GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer )
     if( item && item->Type() == GERBER_DRAW_ITEM_T )
         gbrItem = static_cast<const GERBER_DRAW_ITEM*>( item );
 
+    if( gbrItem && m_contrastMode == GBR_INACTIVE_LAYER_MODE::HIDDEN
+        && !GetLayerIsHighContrast( aLayer ) )
+    {
+        return transparent;
+    }
+
     // All DCODE layers stored under a single color setting
     if( IsDCodeLayer( aLayer ) )
     {
@@ -223,6 +229,12 @@ bool GERBVIEW_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 // Probably that can be refactored in GERBER_DRAW_ITEM to allow const here.
 void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
 {
+    if( m_gerbviewSettings.GetContrastMode() == GBR_INACTIVE_LAYER_MODE::HIDDEN
+        && !m_gerbviewSettings.GetLayerIsHighContrast( aLayer ) )
+    {
+        return;
+    }
+
     VECTOR2D start( aItem->GetABPosition( aItem->m_Start ) );   // TODO(JE) Getter
     VECTOR2D end( aItem->GetABPosition( aItem->m_End ) );       // TODO(JE) Getter
     int      width = aItem->m_Size.x;   // TODO(JE) Getter

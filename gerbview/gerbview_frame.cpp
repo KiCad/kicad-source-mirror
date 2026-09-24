@@ -460,7 +460,7 @@ void GERBVIEW_FRAME::ApplyDisplaySettingsToGAL()
 {
     auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
     KIGFX::GERBVIEW_RENDER_SETTINGS* settings = painter->GetSettings();
-    settings->SetHighContrast( gvconfig()->m_Display.m_HighContrastMode );
+    settings->SetContrastMode( gvconfig()->m_Display.m_InactiveLayerMode );
     settings->LoadColors( GetColorSettings() );
 
     GetCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
@@ -1174,7 +1174,25 @@ void GERBVIEW_FRAME::setupUIConditions()
     auto highContrastModeCond =
         [this] ( const SELECTION& )
         {
-            return gvconfig()->m_Display.m_HighContrastMode;
+            return gvconfig()->m_Display.m_InactiveLayerMode != GBR_INACTIVE_LAYER_MODE::NORMAL;
+        };
+
+    auto showInactiveLayersCond =
+        [this] ( const SELECTION& )
+        {
+            return gvconfig()->m_Display.m_InactiveLayerMode == GBR_INACTIVE_LAYER_MODE::NORMAL;
+        };
+
+    auto dimInactiveLayersCond =
+        [this] ( const SELECTION& )
+        {
+            return gvconfig()->m_Display.m_InactiveLayerMode == GBR_INACTIVE_LAYER_MODE::DIMMED;
+        };
+
+    auto hideInactiveLayersCond =
+        [this] ( const SELECTION& )
+        {
+            return gvconfig()->m_Display.m_InactiveLayerMode == GBR_INACTIVE_LAYER_MODE::HIDDEN;
         };
 
     auto flipGerberCond =
@@ -1198,6 +1216,9 @@ void GERBVIEW_FRAME::setupUIConditions()
     mgr->SetConditions( GERBVIEW_ACTIONS::toggleXORMode,           CHECK( xorModeCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::flipGerberView,          CHECK( flipGerberCond ) );
     mgr->SetConditions( ACTIONS::highContrastMode,                 CHECK( highContrastModeCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::showInactiveLayers,      CHECK( showInactiveLayersCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::dimInactiveLayers,       CHECK( dimInactiveLayersCond ) );
+    mgr->SetConditions( GERBVIEW_ACTIONS::hideInactiveLayers,      CHECK( hideInactiveLayersCond ) );
     mgr->SetConditions( GERBVIEW_ACTIONS::toggleLayerManager,      CHECK( layersManagerShownCondition ) );
 
 #undef CHECK

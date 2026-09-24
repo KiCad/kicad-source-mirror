@@ -96,6 +96,14 @@ public:
 
     bool GetShowPageLimits() const override;
 
+    void SetContrastMode( GBR_INACTIVE_LAYER_MODE aMode )
+    {
+        m_contrastMode = aMode;
+        SetHighContrast( aMode != GBR_INACTIVE_LAYER_MODE::NORMAL );
+    }
+
+    GBR_INACTIVE_LAYER_MODE GetContrastMode() const { return m_contrastMode; }
+
     /// Clear all highlight selections (dcode, net, component, attribute selection)
     void ClearHighlightSelections();
 
@@ -113,6 +121,8 @@ public:
     int m_dcodeHighlightValue;
 
 protected:
+    GBR_INACTIVE_LAYER_MODE m_contrastMode = GBR_INACTIVE_LAYER_MODE::NORMAL;
+
     /// Maximum font size for D-Codes and other strings
     static const double MAX_FONT_SIZE;
 };

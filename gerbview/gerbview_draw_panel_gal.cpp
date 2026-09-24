@@ -76,7 +76,7 @@ GERBVIEW_DRAW_PANEL_GAL::~GERBVIEW_DRAW_PANEL_GAL()
 void GERBVIEW_DRAW_PANEL_GAL::SetHighContrastLayer( int aLayer )
 {
     // Set display settings for high contrast mode
-    KIGFX::RENDER_SETTINGS* rSettings = m_view->GetPainter()->GetSettings();
+    auto rSettings = static_cast<KIGFX::GERBVIEW_RENDER_SETTINGS*>( m_view->GetPainter()->GetSettings() );
 
     SetTopLayer( aLayer );
 
@@ -84,7 +84,10 @@ void GERBVIEW_DRAW_PANEL_GAL::SetHighContrastLayer( int aLayer )
     rSettings->SetLayerIsHighContrast( aLayer );
     rSettings->SetLayerIsHighContrast( GERBER_DCODE_LAYER( aLayer ) );
 
-    m_view->UpdateAllLayersColor();
+    if( rSettings->GetContrastMode() == GBR_INACTIVE_LAYER_MODE::HIDDEN )
+        m_view->UpdateAllItems( KIGFX::REPAINT );
+    else
+        m_view->UpdateAllLayersColor();
 }
 
 
