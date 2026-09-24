@@ -409,12 +409,13 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 rebuildHierarchyNavigator |= hierarchyChanged;
                 refreshHierarchy |= hierarchyChanged;
                 // Local undo cleanup only visits the displayed screen
-                fullSheetUpdate = !ADVANCED_CFG::GetCfg().m_ConnectivityEngine || screen != GetScreen()
-                                  || hierarchyChanged
-                                  || originalSheet->HasPinIdentityChanges( *modifiedSheet );
+                fullSheetUpdate = !ADVANCED_CFG::GetCfg().m_ConnectivityEngine
+                                      || screen != GetScreen()
+                                      || hierarchyChanged
+                                      || originalSheet->HasPinIdentityChanges( *modifiedSheet );
             }
 
-            if( schItem->HasConnectivityChanges( itemCopy, &GetCurrentSheet() ) )
+            if( schItem->HasConnectivityChanges( itemCopy, &undoSheet ) )
                 propagateConnectivityDamage( schItem, fullSheetUpdate );
 
             // The root sheet is a pseudo object that owns the root screen object but is not on
