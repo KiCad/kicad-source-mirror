@@ -356,11 +356,11 @@ int GERBVIEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 int GERBVIEW_CONTROL::MoveLayerUp( const TOOL_EVENT& aEvent )
 {
     int layer = m_frame->GetActiveLayer();
+    GERBER_FILE_IMAGE_LIST& list = GERBER_FILE_IMAGE_LIST::GetImagesList();
 
-    if( layer > 0 )
+    if( layer > 0 && list.GetGbrImage( layer ) && list.GetGbrImage( layer - 1 ) )
     {
-        m_frame->RemapLayers(
-                GERBER_FILE_IMAGE_LIST::GetImagesList().SwapImages( layer, layer - 1 ) );
+        m_frame->RemapLayers( list.SwapImages( layer, layer - 1 ) );
         m_frame->SetActiveLayer( layer - 1 );
     }
 
@@ -373,7 +373,8 @@ int GERBVIEW_CONTROL::MoveLayerDown( const TOOL_EVENT& aEvent )
     int                     layer = m_frame->GetActiveLayer();
     GERBER_FILE_IMAGE_LIST& list = GERBER_FILE_IMAGE_LIST::GetImagesList();
 
-    if( layer < ( (int) list.GetLoadedImageCount() - 1 ) )
+    if( layer < ( (int) list.GetLoadedImageCount() - 1 )
+        && list.GetGbrImage( layer ) && list.GetGbrImage( layer + 1 ) )
     {
         m_frame->RemapLayers( list.SwapImages( layer, layer + 1 ) );
         m_frame->SetActiveLayer( layer + 1 );
