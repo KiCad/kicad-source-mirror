@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 10:54-0700\n"
-"PO-Revision-Date: 2026-09-01 19:51+0000\n"
+"PO-Revision-Date: 2026-09-25 11:51+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -9910,9 +9910,9 @@ msgid "Failed to archive file '%s'."
 msgstr "Zlyhalo zálohovanie súboru '%s'."
 
 #: common/project/project_archiver.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s': %s"
-msgstr "Zlyhalo zálohovanie súboru '%s'."
+msgstr "Zlyhalo archivovanie súboru '%s': %s"
 
 #: common/project/project_archiver.cpp:370
 #, c-format
@@ -15206,9 +15206,8 @@ msgid "Delete extra units from symbol?"
 msgstr "Zmazať navyše jednotky zo súčiastky?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:551
-#, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "Symbol musí mať minimálne 1 štýl tela"
+msgstr "Vlastné štýly tela musia mať aspoň 2 záznamy"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:557
 msgid "Delete extra body styles from symbol?"
@@ -18465,7 +18464,7 @@ msgstr "Názov aliasu '%s' sa už používa."
 
 #: eeschema/dialogs/panel_setup_buses.cpp:307
 msgid "Member net/alias name cannot be empty."
-msgstr "Názov člena spoja/aliasu nemôže byť prázdny."
+msgstr "Názov začleneného spoja/aliasu nemôže byť prázdny."
 
 #: eeschema/dialogs/panel_setup_buses_base.cpp:24
 msgid "Bus Definitions"
@@ -20960,7 +20959,7 @@ msgstr "Uložiť symbol do schémy"
 
 #: eeschema/sch_edit_frame.cpp:2415 eeschema/tools/sch_actions.cpp:64
 msgid "Compare Symbol with Library"
-msgstr "Porovnať symbol s knižnicou"
+msgstr "Porovnanie symbolu s knižnicou"
 
 #: eeschema/sch_edit_frame.cpp:2529 pcbnew/widgets/appearance_controls.cpp:477
 msgid "Filter nets"
@@ -24319,7 +24318,7 @@ msgstr "Chýbajúci argument v [Pin]"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2748
 msgid "Wrong number of columns for pin mapping."
-msgstr "Chybný počet stĺpcov pre mapovanie vývodov."
+msgstr "Nesprávny počet stĺpcov pre mapovanie vývodov."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2789
 msgid "Incorrect diff pin name"
@@ -29264,7 +29263,7 @@ msgstr "Horná spájkovacia pasta"
 
 #: gerbview/files.cpp:240
 msgid "Keep-out layer"
-msgstr "Keep-out vrstva"
+msgstr "Vrstva zakázaných oblastí"
 
 #: gerbview/files.cpp:241
 msgid "Mechanical layers"
@@ -50374,7 +50373,7 @@ msgstr "Naroutovaná dĺžka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2087
 msgid "Routed Delays"
-msgstr "Smerované oneskorenia"
+msgstr "Naroutované oneskorenia"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2096 pcbnew/pcb_track.cpp:2388
 msgid "Routed Length"
