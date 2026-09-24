@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 10:54-0700\n"
-"PO-Revision-Date: 2026-09-23 08:51+0000\n"
+"PO-Revision-Date: 2026-09-25 11:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -20859,9 +20859,8 @@ msgid "Downloaded symbol payload was empty."
 msgstr "Il payload simboli scaricato era vuoto."
 
 #: eeschema/remote_symbol_import_job.cpp:60
-#, fuzzy
 msgid "Downloaded symbol payload was not a KiCad symbol library."
-msgstr "Simbolo %s non trovato nella tabella librerie di simboli."
+msgstr "Il payload del simbolo scaricato non era una libreria di simboli KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:70
 #, c-format
@@ -20891,9 +20890,8 @@ msgid "Unable to save the downloaded symbol: %s"
 msgstr "Impossibile salvare il simbolo scaricato: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
-#, fuzzy
 msgid "No symbol asset was available to place."
-msgstr "Non è disponibile alcun editor di schemi per il posizionamento."
+msgstr "Non era disponibile alcuna risorsa simbolo da posizionare."
 
 #: eeschema/remote_symbol_import_utils.cpp:79
 msgid "Payload was empty."
@@ -20924,23 +20922,20 @@ msgid "Unable to create directory '%s'."
 msgstr "Fallita creazione cartella '%s'."
 
 #: eeschema/remote_symbol_import_utils.cpp:161
-#, fuzzy
 msgid "Unable to access the library table."
-msgstr "Fallito accesso alla tabella librerie dei simboli."
+msgstr "Fallito accesso alla tabella librerie."
 
 #: eeschema/remote_symbol_import_utils.cpp:181
-#, fuzzy
 msgid "Failed to update the library table."
-msgstr "Fallito aggiornamento tabella librerie dei simboli."
+msgstr "Fallito aggiornamento tabella librerie."
 
 #: eeschema/remote_symbol_import_utils.cpp:195
 msgid "Remote download"
 msgstr "Scaricamento remoto"
 
 #: eeschema/remote_symbol_import_utils.cpp:200
-#, fuzzy
 msgid "Failed to save the library table."
-msgstr "Fallito salvataggio tabella librerie dei simboli."
+msgstr "Fallito salvataggio tabella librerie."
 
 #: eeschema/remote_symbol_import_utils.cpp:213
 msgid "No schematic editor is available for placement."
@@ -21060,9 +21055,8 @@ msgid "Resolved Netclass"
 msgstr "Netclass risolta"
 
 #: eeschema/sch_bus_entry.cpp:652 eeschema/sch_line.cpp:1286
-#, fuzzy
 msgid "Wire Style"
-msgstr "Stile linea"
+msgstr "Stile filo"
 
 #: eeschema/sch_connection.cpp:480
 msgid "Connection Name"
@@ -21221,19 +21215,16 @@ msgid "Find in Net Inspector"
 msgstr "Trova in ispettore collegamenti"
 
 #: eeschema/sch_edit_frame.cpp:3081
-#, fuzzy
 msgid "No design variants to edit."
-msgstr "Aggiungi una nuova variante progetto allo schema."
+msgstr "Nessuna variante progetto da modificare."
 
 #: eeschema/sch_edit_frame.cpp:3085
-#, fuzzy
 msgid "Select variant to edit description:"
-msgstr "Seleziona nome variante da rimuovere:"
+msgstr "Seleziona la variante per modificarne la descrizione:"
 
 #: eeschema/sch_edit_frame.cpp:3086
-#, fuzzy
 msgid "Edit Variant Description"
-msgstr "Modifica descrizione lavoro"
+msgstr "Modifica descrizione variante"
 
 #: eeschema/sch_edit_frame.cpp:3146
 msgid "Select variant name to remove:"
