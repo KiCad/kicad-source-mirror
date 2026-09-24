@@ -402,10 +402,10 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_Drawing.new_power_symbols, POWER_SYMBOLS::DEFAULT, POWER_SYMBOLS::DEFAULT, POWER_SYMBOLS::LOCAL ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.junction_size_choice",
-            &m_Drawing.junction_size_choice, 3 ) );
+            &m_Drawing.junction_size_choice, 3, 0, 5 ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.hop_over_size_choice",
-            &m_Drawing.hop_over_size_choice, 0 ) );
+            &m_Drawing.hop_over_size_choice, 0, 0, 5 ) );
 
     m_params.emplace_back( new PARAM<bool>( "find_replace.search_all_fields",
             &m_FindReplaceExtra.search_all_fields, false ) );

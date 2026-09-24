@@ -165,10 +165,10 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
 
     // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc )
     m_params.emplace_back( new PARAM<int>( "drawing.junction_size_choice",
-            &m_JunctionSizeChoice, defaultJunctionSizeChoice ) );
+            &m_JunctionSizeChoice, defaultJunctionSizeChoice, 0, 5 ) );
 
     m_params.emplace_back( new PARAM<int>( "drawing.hop_over_size_choice",
-            &m_HopOverSizeChoice, defaultHopOverSizeChoice ) );
+            &m_HopOverSizeChoice, defaultHopOverSizeChoice, 0, 5 ) );
 
     m_params.emplace_back( new PARAM<bool>( "compare_symbols.missing_fields",
             &m_SymbolParity.m_MissingFields, true ) );
