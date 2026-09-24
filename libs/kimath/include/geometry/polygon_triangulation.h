@@ -1410,7 +1410,39 @@ private:
         } while( origPoly != start );
 
         wxLogTrace( TRIANGULATE_TRACE, "Could not find a valid split point" );
-        return false;
+        return clipRemainingEars( start );
+    }
+
+    /**
+     * Last resort for a ring that can be neither ear clipped nor split, typically a hatch
+     * sliver whose ears were all rejected by isTooSmall().  Those ears are still valid, and
+     * clipping them beats failing the whole polygon over a few square nanometres.
+     */
+    bool clipRemainingEars( VERTEX* aStart )
+    {
+        VERTEX* p = aStart;
+        VERTEX* stop = aStart;
+
+        while( p->prev != p->next )
+        {
+            if( p->isEar() )
+            {
+                VERTEX* next = p->next;
+
+                m_result.AddTriangle( p->prev->i, p->i, next->i );
+                p->remove();
+                p = next;
+                stop = next;
+                continue;
+            }
+
+            p = p->next;
+
+            if( p == stop )
+                return false;
+        }
+
+        return true;
     }
 
     /**
