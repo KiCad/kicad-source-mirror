@@ -29,6 +29,8 @@
 #include <sch_symbol.h>
 #include <sch_sheet_pin.h>
 
+#include "sch_table.h"
+
 
 SCHEMATIC_TEXT_VAR_ADAPTER::SCHEMATIC_TEXT_VAR_ADAPTER( SCHEMATIC& aSchematic ) :
         m_schematic( aSchematic )
@@ -72,6 +74,12 @@ void SCHEMATIC_TEXT_VAR_ADAPTER::registerItem( SCH_ITEM* aItem )
         return;
     }
 
+    if( SCH_TABLE* table = dynamic_cast<SCH_TABLE*>( aItem ) )
+    {
+        for( SCH_TABLECELL* cell : table->GetCells() )
+            registerItem( cell );
+    }
+
     EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem );
 
     if( !text )
@@ -100,6 +108,11 @@ void SCHEMATIC_TEXT_VAR_ADAPTER::unregisterItem( SCH_ITEM* aItem )
 
         for( SCH_SHEET_PIN* pin : sheet->GetPins() )
             m_tracker.UnregisterItem( pin );
+    }
+    else if( SCH_TABLE* table = dynamic_cast<SCH_TABLE*>( aItem ) )
+    {
+        for( SCH_TABLECELL* cell : table->GetCells() )
+            m_tracker.UnregisterItem( cell );
     }
 }
 
@@ -146,6 +159,12 @@ void SCHEMATIC_TEXT_VAR_ADAPTER::handleItemChanged( SCH_ITEM* aItem )
         }
 
         return;
+    }
+
+    if( SCH_TABLE* table = dynamic_cast<SCH_TABLE*>( aItem ) )
+    {
+        for( SCH_TABLECELL* cell : table->GetCells() )
+            handleItemChanged( cell );
     }
 
     if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aItem ) )
