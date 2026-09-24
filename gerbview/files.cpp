@@ -55,7 +55,13 @@ void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
 
 void GERBVIEW_FRAME::OnClearGbrFileHistory( wxCommandEvent& aEvent )
 {
-    ClearFileHistory();
+    GetFileHistory().ClearFileHistory();
+
+    if( GetMenuBar() )
+    {
+        ReCreateMenuBar();
+        GetMenuBar()->Refresh();
+    }
 }
 
 

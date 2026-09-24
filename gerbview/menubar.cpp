@@ -90,7 +90,7 @@ void GERBVIEW_FRAME::doReCreateMenuBar()
     }
 
     // Ensure the title is up to date after changing language
-    openRecentGbrMenu->SetTitle( _( "Open Recent Gerber File" ) );
+    openRecentDrlMenu->SetTitle( _( "Open Recent Drill File" ) );
     m_drillFileHistory.UpdateClearText( openRecentDrlMenu, _( "Clear Recent Drill Files" ) );
 
     fileMenu->Add( GERBVIEW_ACTIONS::openDrillFile );
