@@ -46,12 +46,12 @@
 #include <google/protobuf/any.pb.h>
 
 PCB_GRID_ITEM::PCB_GRID_ITEM( BOARD_ITEM* aParent ) :
-        BOARD_ITEM( aParent, PCB_GRID_ITEM_T )
+        BOARD_ITEM( aParent, PCB_GRID_ITEM_T ),
+        m_orientation( ANGLE_0 )
 {
     m_type = PCB_GRID_TYPE::CARTESIAN;
     m_extent = VECTOR2I( pcbIUScale.mmToIU( 5 ), pcbIUScale.mmToIU( 5 ) );
     m_spacing = VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) );
-    m_orientation = ANGLE_0;
     m_phiExtent = EDA_ANGLE( 360, DEGREES_T );
     m_phiSpacing = EDA_ANGLE( 10, DEGREES_T );
 }
@@ -61,7 +61,7 @@ GRID_GEOMETRY PCB_GRID_ITEM::AsGridGeometry() const
 {
     GRID_GEOMETRY g;
     g.origin = VECTOR2D( m_pos );
-    g.orientation = m_orientation.AsRadians();
+    g.orientation = m_orientation.GetAngle().AsRadians();
     g.priority = m_priority;
 
     switch( m_type )
@@ -94,7 +94,7 @@ void PCB_GRID_ITEM::Serialize( google::protobuf::Any& aContainer ) const
     grid.mutable_id()->set_value( m_Uuid.AsStdString() );
 
     kiapi::common::PackVector2( *grid.mutable_position(), m_pos );
-    grid.mutable_orientation()->set_value_degrees( m_orientation.AsDegrees() );
+    grid.mutable_orientation()->set_value_degrees( m_orientation.GetAngle().AsDegrees() );
 
     switch( m_type )
     {
@@ -206,7 +206,6 @@ void PCB_GRID_ITEM::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle 
 {
     RotatePoint( m_pos, aRotCentre, aAngle );
     m_orientation += aAngle;
-    m_orientation.Normalize();
 }
 
 
@@ -222,8 +221,6 @@ void PCB_GRID_ITEM::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection
         m_pos.y = aCentre.y - ( m_pos.y - aCentre.y );
         m_orientation = -m_orientation;
     }
-
-    m_orientation.Normalize();
 }
 
 
@@ -237,7 +234,7 @@ bool PCB_GRID_ITEM::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 EDA_ANGLE PCB_GRID_ITEM::GetOrientationAt( const VECTOR2I& aPos ) const
 {
     if( m_type != PCB_GRID_TYPE::POLAR )
-        return m_orientation;
+        return m_orientation.GetAngle();
 
     // Polar: local-X is the radial spoke from this grid's centre through aPos.  The
     // grid's own rotation maps spokes onto spokes, so the world radial does not
@@ -245,7 +242,7 @@ EDA_ANGLE PCB_GRID_ITEM::GetOrientationAt( const VECTOR2I& aPos ) const
     VECTOR2I local = aPos - m_pos;
 
     if( local.x == 0 && local.y == 0 )
-        return m_orientation;
+        return m_orientation.GetAngle();
 
     // std::atan2 is math-CCW (y-up); EDA_ANGLE is screen-CCW (y-down) — negate.
     return EDA_ANGLE( -std::atan2( (double) local.y, (double) local.x ), RADIANS_T );
@@ -258,7 +255,7 @@ SHAPE_LINE_CHAIN PCB_GRID_ITEM::buildOutlineWorld() const
 
     auto pushWorld = [&]( VECTOR2I aLocal )
     {
-        RotatePoint( aLocal, m_orientation );
+        RotatePoint( aLocal, m_orientation.GetAngle() );
         outline.Append( m_pos + aLocal );
     };
 

@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
+
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <geometry/eda_angle.h>
@@ -129,6 +131,39 @@ BOOST_AUTO_TEST_CASE( Snapped )
     BOOST_CHECK_EQUAL( residual( 30, ANGLE_90 ), 30.0 );
     BOOST_CHECK_EQUAL( residual( 135, ANGLE_90 ), -45.0 );
     BOOST_CHECK_EQUAL( residual( 0, ANGLE_90 ), 0.0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( Orientation )
+{
+    auto deg = []( double d ) { return EDA_ANGLE( d, DEGREES_T ); };
+    auto orientation = [&]( double d ) { return EDA_ORIENTATION( deg( d ) ); };
+
+    // Construction normalizes into [0, 360), and equality compares canonical values.
+    BOOST_CHECK_EQUAL( orientation( 370 ).GetAngle().AsDegrees(), 10.0 );
+    BOOST_CHECK_EQUAL( orientation( -90 ).GetAngle().AsDegrees(), 270.0 );
+    BOOST_CHECK( orientation( 370 ) == orientation( 10 ) );
+
+    // Addition and subtraction wrap in every form.
+    EDA_ORIENTATION turn = orientation( 350 );
+    BOOST_CHECK_EQUAL( ( turn + deg( 30 ) ).GetAngle().AsDegrees(), 20.0 );
+    BOOST_CHECK_EQUAL( ( deg( 30 ) + turn ).GetAngle().AsDegrees(), 20.0 );
+    BOOST_CHECK_EQUAL( ( turn += deg( 30 ) ).GetAngle().AsDegrees(), 20.0 );
+    BOOST_CHECK_EQUAL( ( turn -= deg( 30 ) ).GetAngle().AsDegrees(), 350.0 );
+
+    // Negation and subtraction
+    BOOST_CHECK_EQUAL( ( -orientation( 45 ) ).GetAngle().AsDegrees(), 315.0 );
+    // Wrapping subtraction
+    BOOST_CHECK_EQUAL( ( ANGLE_180 - orientation( 270 ) ).GetAngle().AsDegrees(), 270.0 );
+    // Orientation minus angle, with wrapping
+    BOOST_CHECK_EQUAL( ( orientation( 10 ) - deg( 350 ) ).GetAngle().AsDegrees(), 20.0 );
+
+    // A difference of orientations -> signed rotation amount (EDA_ANGLE, not EDA_ORIENTATION)
+    EDA_ANGLE diff = orientation( 10 ) - orientation( 350 );
+    BOOST_CHECK_EQUAL( diff.AsDegrees(), -340.0 );
+
+    // -0 becomes 0
+    BOOST_CHECK( !std::signbit( ( -orientation( 0 ) ).GetAngle().AsDegrees() ) );
 }
 
 

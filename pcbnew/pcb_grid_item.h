@@ -25,11 +25,10 @@
 #define PCB_GRIDITEM_H
 
 #include <board_item.h>
+#include <gal/color4d.h>
+#include <geometry/eda_angle.h>
 #include <geometry/grid_geometry.h>
-
-
-class EDA_ANGLE;
-class SHAPE_LINE_CHAIN;
+#include <geometry/shape_line_chain.h>
 
 
 enum class PCB_GRID_TYPE
@@ -78,9 +77,9 @@ public:
     void     SetPosition( const VECTOR2I& aPos ) override { m_pos = aPos; }
     VECTOR2I GetPosition() const override { return m_pos; }
 
-    EDA_ANGLE GetOrientation() const { return m_orientation; }
+    EDA_ANGLE GetOrientation() const { return m_orientation.GetAngle(); }
     void      SetOrientation( const EDA_ANGLE& aAngle ) { m_orientation = aAngle; }
-    double    GetOrientationDegrees() const { return m_orientation.AsDegrees(); }
+    double    GetOrientationDegrees() const { return m_orientation.GetAngle().AsDegrees(); }
     void      SetOrientationDegrees( double aDeg ) { m_orientation = EDA_ANGLE( aDeg, DEGREES_T ); }
 
     /**
@@ -226,7 +225,9 @@ private:
     VECTOR2I         m_pos;
     VECTOR2I         m_extent;  // cartesian half (x, y); polar (rMax, unused)
     VECTOR2I         m_spacing; // cartesian (dx, dy);    polar (dr,   unused)
-    EDA_ANGLE        m_orientation;
+
+    EDA_ORIENTATION  m_orientation;
+
     EDA_ANGLE        m_phiExtent;  // polar only
     EDA_ANGLE        m_phiSpacing; // polar only
 
