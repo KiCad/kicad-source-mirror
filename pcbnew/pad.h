@@ -1115,8 +1115,8 @@ private:
     wxString          m_pinFunction;        // Pin name in schematic
     wxString          m_pinType;            // Pin electrical type in schematic
 
-    VECTOR2I  m_libPos;         // Pad position in parent footprint's library frame
-    EDA_ANGLE m_libOrientation; // Pad orientation in parent footprint's library frame
+    VECTOR2I          m_libPos;             // Pad position in parent footprint's library frame
+    EDA_ORIENTATION   m_libOrientation;     // Pad orientation in parent footprint's library frame
 
     PADSTACK          m_padStack;
 

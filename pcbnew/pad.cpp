@@ -1736,7 +1736,6 @@ void PAD::SetOrientation( const EDA_ANGLE& aAngle )
     else
         m_libOrientation = aAngle;
 
-    m_libOrientation.Normalize();
     m_padStack.SetOrientation( aAngle );
     SetDirty();
 }
@@ -1745,7 +1744,6 @@ void PAD::SetOrientation( const EDA_ANGLE& aAngle )
 void PAD::SetFPRelativeOrientation( const EDA_ANGLE& aAngle )
 {
     m_libOrientation = aAngle;
-    m_libOrientation.Normalize();
 
     if( const FOOTPRINT* parentFP = GetParentFootprint() )
         m_padStack.SetOrientation( aAngle + parentFP->GetOrientation() );
@@ -1759,15 +1757,18 @@ void PAD::SetFPRelativeOrientation( const EDA_ANGLE& aAngle )
 EDA_ANGLE PAD::GetOrientation() const
 {
     if( const FOOTPRINT* parentFP = GetParentFootprint() )
-        return m_libOrientation + parentFP->GetOrientation();
+    {
+        EDA_ANGLE angle = m_libOrientation.GetAngle() + parentFP->GetOrientation();
+        return angle.Normalized();
+    }
 
-    return m_libOrientation;
+    return m_libOrientation.GetAngle();
 }
 
 
 EDA_ANGLE PAD::GetFPRelativeOrientation() const
 {
-    return m_libOrientation;
+    return m_libOrientation.GetAngle();
 }
 
 
