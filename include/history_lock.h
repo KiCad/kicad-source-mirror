@@ -69,6 +69,12 @@ public:
     HISTORY_LOCK_MANAGER( const wxString& aProjectPath, int aStaleTimeoutSec = 0 );
 
     /**
+     * As above, with the history directory already resolved.  Background work must use this, since
+     * resolving reads the settings manager's project list, which the UI thread changes on load
+     */
+    HISTORY_LOCK_MANAGER( const wxString& aProjectPath, const wxString& aHistoryPath, int aStaleTimeoutSec = 0 );
+
+    /**
      * Destructor releases all locks and closes git repository.
      */
     ~HISTORY_LOCK_MANAGER();

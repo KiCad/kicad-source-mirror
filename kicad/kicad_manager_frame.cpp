@@ -834,7 +834,11 @@ bool KICAD_MANAGER_FRAME::CloseProject( bool aSave )
         {
             unsigned long long int limit = Pgm().GetCommonSettings()->m_Backup.limit_total_size;
 
-            if( limit > 0 )
+            if( limit > 0 && Kiway().LocalHistory().IsCompacting() )
+            {
+                Kiway().LocalHistory().EnforceSizeLimitInBackground( Prj().GetProjectPath(), (size_t) limit );
+            }
+            else if( limit > 0 )
             {
                 WX_PROGRESS_REPORTER reporter( this, _( "Local History" ), 3, PR_NO_ABORT );
                 Kiway().LocalHistory().EnforceSizeLimit( Prj().GetProjectPath(), (size_t) limit, &reporter );

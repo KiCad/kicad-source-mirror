@@ -36,6 +36,7 @@
 #include <kiplatform/io.h>
 
 #include <git2.h>
+#include <git2/sys/odb_backend.h>
 #include <gestfich.h>
 #include <wx/filename.h>
 #include <wx/filefn.h>
@@ -44,6 +45,7 @@
 #include <wx/datetime.h>
 #include <wx/log.h>
 #include <wx/msgdlg.h>
+#include <wx/utils.h>
 
 #include <vector>
 #include <string>
@@ -52,6 +54,7 @@
 #include <set>
 #include <map>
 #include <functional>
+#include <chrono>
 #include <cstring>
 
 // Resolve the local-history storage directory for @p aProjectPath, honoring the
@@ -89,6 +92,9 @@ static wxString joinHistoryDestination( const wxString& aHistoryRoot,
 
 
 static const wxString AUTOSAVE_PREFIX = wxS( "_autosave-" );
+
+// Loose bytes that trigger a background compaction when the history has no size limit
+static const size_t UNLIMITED_HISTORY_LOOSE_BYTES = 25 * 1024 * 1024;
 
 
 static bool readFileContent( const wxString& aPath, std::string& aContent )
@@ -329,6 +335,13 @@ LOCAL_HISTORY::LOCAL_HISTORY()
 
 LOCAL_HISTORY::~LOCAL_HISTORY()
 {
+    // Some libgit2 releases ignore the cancel from the progress callback, so this can still wait
+    // for the pack write to finish
+    m_cancelCompaction.store( true );
+
+    if( m_compactFuture.valid() )
+        m_compactFuture.wait();
+
     WaitForPendingSave();
 }
 
@@ -497,7 +510,15 @@ bool LOCAL_HISTORY::RunRegisteredSaversAndCommit( const wxString& aProjectPath, 
 
     // Manual save must complete (commit + tag)
     if( !aTagFileType.IsEmpty() )
+    {
         WaitForPendingSave();
+    }
+    else
+    {
+        // Pack long before the close-time size check would, so closing rarely has anything to do
+        unsigned long long limit = Pgm().GetCommonSettings()->m_Backup.limit_total_size;
+        scheduleCompaction( aProjectPath, limit > 0 ? (size_t) ( limit / 4 ) : UNLIMITED_HISTORY_LOOSE_BYTES );
+    }
 
     return true;
 }
@@ -1593,12 +1614,10 @@ static size_t dirSizeRecursive( const wxString& path )
     return total;
 }
 
-static std::vector<wxString> listPackFiles( git_repository* aRepo )
+static std::vector<wxString> listPackFiles( const wxString& aPackDir )
 {
     std::vector<wxString> packs;
-    wxString packPath = wxString::FromUTF8( git_repository_path( aRepo ) ) + wxS( "objects" )
-                        + wxFileName::GetPathSeparator() + wxS( "pack" );
-    wxDir packDir( packPath );
+    wxDir                 packDir( aPackDir );
 
     if( !packDir.IsOpened() )
         return packs;
@@ -1609,34 +1628,46 @@ static std::vector<wxString> listPackFiles( git_repository* aRepo )
     while( cont )
     {
         if( name.EndsWith( wxS( ".pack" ) ) || name.EndsWith( wxS( ".idx" ) ) )
-            packs.push_back( packPath + wxFileName::GetPathSeparator() + name );
+            packs.push_back( aPackDir + wxFileName::GetPathSeparator() + name );
 
         cont = packDir.GetNext( &name );
     }
 
+    std::sort( packs.begin(), packs.end() );
     return packs;
 }
 
 
-static bool writePack( git_packbuilder* aPb, const wxString& aPackDir, PROGRESS_REPORTER* aReporter )
+static bool writePack( git_packbuilder* aPb, const wxString& aPackDir, PROGRESS_REPORTER* aReporter,
+                       const std::atomic<bool>* aCancel = nullptr )
 {
+    struct PROGRESS_STATE
+    {
+        PROGRESS_REPORTER*       reporter;
+        const std::atomic<bool>* cancel;
+    } state{ aReporter, aCancel };
+
     // Leave libgit2 single threaded.  Its threads split the one long delta chain a KiCad history
     // holds per file, so each split starts from a full copy and the pack grows several times over
-    if( aReporter )
+    if( aReporter || aCancel )
     {
         git_packbuilder_set_callbacks(
                 aPb,
                 []( int aStage, uint32_t aCurrent, uint32_t aTotal, void* aPayload )
                 {
-                    auto* reporter = static_cast<PROGRESS_REPORTER*>( aPayload );
+                    auto* progress = static_cast<PROGRESS_STATE*>( aPayload );
 
-                    if( aTotal > 0 )
-                        reporter->SetCurrentProgress( (double) aCurrent / aTotal );
+                    if( progress->reporter )
+                    {
+                        if( aTotal > 0 )
+                            progress->reporter->SetCurrentProgress( (double) aCurrent / aTotal );
 
-                    reporter->KeepRefreshing();
-                    return 0;
+                        progress->reporter->KeepRefreshing();
+                    }
+
+                    return progress->cancel && progress->cancel->load() ? -1 : 0;
                 },
-                aReporter );
+                &state );
     }
 
     std::string packDir = aPackDir.utf8_string();
@@ -1645,105 +1676,168 @@ static bool writePack( git_packbuilder* aPb, const wxString& aPackDir, PROGRESS_
 }
 
 
-// Compact loose objects into a packfile and remove the originals.
-// Equivalent to git gc
-// Prior packs are reported via aSupersededPacks, not deleted, since libgit2 keeps them open
-static bool compactRepository( git_repository* aRepo, PROGRESS_REPORTER* aReporter = nullptr,
-                               std::vector<wxString>* aSupersededPacks = nullptr )
+// Loose objects outside the new pack are only deleted once this much older than the walk.  Writing
+// an object that already exists refreshes its mtime, so anything a commit still needs is newer
+static const time_t UNREACHABLE_LOOSE_EXPIRY_SECONDS = 24 * 60 * 60;
+
+
+// Delete the loose objects the pack at aPackIndex holds, plus expired unreachable ones.  Checking
+// membership instead of clearing every loose dir keeps objects a concurrent commit wrote after the walk
+static void pruneLooseObjects( const wxString& aObjectsPath, const wxString& aPackIndex, time_t aWalkStart )
+{
+    git_odb*         packOdb = nullptr;
+    git_odb_backend* backend = nullptr;
+
+    if( git_odb_new( &packOdb ) != 0 )
+        return;
+
+    if( git_odb_backend_one_pack( &backend, aPackIndex.utf8_string().c_str() ) != 0 )
+    {
+        git_odb_free( packOdb );
+        return;
+    }
+
+    if( git_odb_add_backend( packOdb, backend, 1 ) != 0 )
+    {
+        backend->free( backend );
+        git_odb_free( packOdb );
+        return;
+    }
+
+    wxLogNull suppressRmdirErrors;
+    wxDir     objDir( aObjectsPath );
+    wxString  fanout;
+    bool      contDir = objDir.IsOpened() && objDir.GetFirst( &fanout, wxEmptyString, wxDIR_DIRS );
+
+    while( contDir )
+    {
+        wxString fanoutPath = aObjectsPath + wxFileName::GetPathSeparator() + fanout;
+        wxDir    looseDir( fanoutPath );
+        wxString rest;
+        bool     contFile = fanout.length() == 2 && looseDir.IsOpened()
+                            && looseDir.GetFirst( &rest, wxEmptyString, wxDIR_FILES );
+
+        while( contFile )
+        {
+            git_oid  oid;
+            wxString loosePath = fanoutPath + wxFileName::GetPathSeparator() + rest;
+
+            if( git_oid_fromstr( &oid, ( fanout + rest ).utf8_string().c_str() ) == 0
+                && ( git_odb_exists( packOdb, &oid )
+                     || wxFileModificationTime( loosePath ) < aWalkStart - UNREACHABLE_LOOSE_EXPIRY_SECONDS ) )
+            {
+                wxRemoveFile( loosePath );
+            }
+
+            contFile = looseDir.GetNext( &rest );
+        }
+
+        if( fanout.length() == 2 && !wxDir( fanoutPath ).HasFiles() )
+            wxRmdir( fanoutPath );
+
+        contDir = objDir.GetNext( &fanout );
+    }
+
+    git_odb_free( packOdb );
+}
+
+
+// Pack every object reachable from the refs into aPackDir, or the repository's own pack dir when
+// empty.  Returns the new pack's file stem, or an empty string on failure
+static wxString buildPack( git_repository* aRepo, const wxString& aPackDir, PROGRESS_REPORTER* aReporter,
+                           const std::atomic<bool>* aCancel )
 {
     git_packbuilder* pb = nullptr;
+    git_revwalk*     walk = nullptr;
 
     if( git_packbuilder_new( &pb, aRepo ) != 0 )
-        return false;
-
-    git_revwalk* walk = nullptr;
+        return wxEmptyString;
 
     if( git_revwalk_new( &walk, aRepo ) != 0 )
     {
         git_packbuilder_free( pb );
-        return false;
+        return wxEmptyString;
     }
 
     // Walk every ref so pruning cannot drop objects only a Save_/Last_Save_ tag still holds
-    git_revwalk_push_glob( walk, "refs/*" );
-    git_revwalk_push_head( walk );
+    bool    ok = git_revwalk_push_glob( walk, "refs/*" ) == 0 && git_revwalk_push_head( walk ) == 0;
+    int     rc = 0;
     git_oid oid;
 
-    while( git_revwalk_next( &oid, walk ) == 0 )
-    {
-        if( git_packbuilder_insert_commit( pb, &oid ) != 0 )
-        {
-            git_revwalk_free( walk );
-            git_packbuilder_free( pb );
-            return false;
-        }
-    }
+    while( ok && ( rc = git_revwalk_next( &oid, walk ) ) == 0 )
+        ok = git_packbuilder_insert_commit( pb, &oid ) == 0;
 
     git_revwalk_free( walk );
 
-    if( !writePack( pb, wxEmptyString, aReporter ) )
-    {
-        git_packbuilder_free( pb );
-        return false;
-    }
+    // A walk cut short by an error would write a partial pack that then supersedes complete ones
+    wxString stem;
 
-    // Pack names are content addressed, so an unchanged repo rewrites the same file; exclude it
-    const char* newPackName = git_packbuilder_name( pb );
-
-    if( aSupersededPacks && newPackName )
-    {
-        wxString newPackStem = wxS( "pack-" ) + wxString::FromUTF8( newPackName );
-
-        for( const wxString& pack : listPackFiles( aRepo ) )
-        {
-            if( wxFileName( pack ).GetName() != newPackStem )
-                aSupersededPacks->push_back( pack );
-        }
-    }
+    if( ok && rc == GIT_ITEROVER && writePack( pb, aPackDir, aReporter, aCancel ) && git_packbuilder_name( pb ) )
+        stem = wxS( "pack-" ) + wxString::FromUTF8( git_packbuilder_name( pb ) );
 
     git_packbuilder_free( pb );
+    return stem;
+}
 
-    wxString objPath = wxString::FromUTF8( git_repository_path( aRepo ) ) + wxS( "objects" );
-    wxDir    objDir( objPath );
 
-    if( objDir.IsOpened() )
+// Pack names are content addressed, so an unchanged repo rewrites the same file; exclude it
+static std::vector<wxString> supersededBy( const std::vector<wxString>& aPriorPacks, const wxString& aNewStem )
+{
+    std::vector<wxString> superseded;
+
+    for( const wxString& pack : aPriorPacks )
     {
-        wxArrayString toRemove;
-        wxString      name;
-        bool          cont = objDir.GetFirst( &name, wxEmptyString, wxDIR_DIRS );
-
-        while( cont )
-        {
-            if( name.length() == 2 )
-                toRemove.Add( objPath + wxFileName::GetPathSeparator() + name );
-
-            cont = objDir.GetNext( &name );
-        }
-
-        for( const wxString& dir : toRemove )
-            wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+        if( wxFileName( pack ).GetName() != aNewStem )
+            superseded.push_back( pack );
     }
 
+    return superseded;
+}
+
+
+// Pack loose objects and prune them, like git gc, under the caller's history lock.  Superseded packs
+// are returned for the caller to delete once it drops the repo, since libgit2 keeps them open
+static bool compactRepository( git_repository* aRepo, PROGRESS_REPORTER* aReporter,
+                               std::vector<wxString>* aSupersededPacks )
+{
+    wxString sep = wxFileName::GetPathSeparator();
+    wxString objPath = wxString::FromUTF8( git_repository_path( aRepo ) ) + wxS( "objects" );
+    wxString packDir = objPath + sep + wxS( "pack" );
+
+    std::vector<wxString> priorPacks = listPackFiles( packDir );
+    time_t                walkStart = wxDateTime::Now().GetTicks();
+    wxString              stem = buildPack( aRepo, wxEmptyString, aReporter, nullptr );
+
+    if( stem.IsEmpty() )
+        return false;
+
+    *aSupersededPacks = supersededBy( priorPacks, stem );
+    pruneLooseObjects( objPath, packDir + sep + stem + wxS( ".idx" ), walkStart );
     return true;
 }
 
 
 bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxBytes, PROGRESS_REPORTER* aReporter )
 {
+    return enforceSizeLimit( aProjectPath, historyPath( aProjectPath ), aMaxBytes, aReporter );
+}
+
+
+bool LOCAL_HISTORY::enforceSizeLimit( const wxString& aProjectPath, const wxString& aHistoryPath, size_t aMaxBytes,
+                                      PROGRESS_REPORTER* aReporter )
+{
     if( aMaxBytes == 0 )
         return false;
 
-    wxString hist = historyPath( aProjectPath );
-
-    if( !wxDirExists( hist ) )
+    if( !wxDirExists( aHistoryPath ) )
         return false;
 
-    size_t current = dirSizeRecursive( hist );
+    size_t current = dirSizeRecursive( aHistoryPath );
 
     if( current <= aMaxBytes )
         return true; // within limit
 
-    HISTORY_LOCK_MANAGER lock( aProjectPath );
+    HISTORY_LOCK_MANAGER lock( aProjectPath, aHistoryPath );
 
     if( !lock.IsLocked() )
     {
@@ -1756,8 +1850,8 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
     if( !repo )
         return false;
 
-    removeLegacyWorkingCopies( repo, hist );
-    current = dirSizeRecursive( hist );
+    removeLegacyWorkingCopies( repo, aHistoryPath );
+    current = dirSizeRecursive( aHistoryPath );
 
     if( current <= aMaxBytes )
         return true;
@@ -1773,9 +1867,12 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
     lock.ReleaseRepository();
 
     for( const wxString& pack : supersededPacks )
-        wxRemoveFile( pack );
+    {
+        if( !wxRemoveFile( pack ) )
+            wxLogTrace( traceAutoSave, wxS( "[history] could not remove %s" ), pack );
+    }
 
-    current = dirSizeRecursive( hist );
+    current = dirSizeRecursive( aHistoryPath );
 
     // Settle below the limit so the following sessions do not each pay for another full repack
     const size_t target = aMaxBytes / 4 * 3;
@@ -1947,7 +2044,7 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
     }
 
     // Rebuild trimmed repo in temp dir
-    wxFileName trimFn( hist + wxS("_trim"), wxEmptyString );
+    wxFileName trimFn( aHistoryPath + wxS("_trim"), wxEmptyString );
     wxString trimPath = trimFn.GetPath();
 
     if( wxDirExists( trimPath ) )
@@ -2154,7 +2251,7 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
     // The swap replaces the whole directory, so carry over the user's ignore rules
     for( const wxString& name : { wxString( wxS( ".gitignore" ) ), wxString( wxS( "README.txt" ) ) } )
     {
-        wxFileName src( hist, name );
+        wxFileName src( aHistoryPath, name );
 
         if( src.FileExists() && !wxCopyFile( src.GetFullPath(), wxFileName( trimPath, name ).GetFullPath(), true ) )
             return false;
@@ -2163,19 +2260,19 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
     lock.ReleaseRepository();
 
     // Replace old history dir with trimmed one
-    wxString backupOld = hist + wxS( "_old_" ) + KIID().AsString();
+    wxString backupOld = aHistoryPath + wxS( "_old_" ) + KIID().AsString();
 
     if( wxFileExists( backupOld ) || wxDirExists( backupOld ) )
         return false;
 
-    if( !wxRenameFile( hist, backupOld, false ) )
+    if( !wxRenameFile( aHistoryPath, backupOld, false ) )
         return false;
 
-    if( !wxRenameFile( trimPath, hist, false ) )
+    if( !wxRenameFile( trimPath, aHistoryPath, false ) )
     {
-        if( !wxRenameFile( backupOld, hist, false ) )
+        if( !wxRenameFile( backupOld, aHistoryPath, false ) )
             wxLogError( _( "Could not restore local history '%s'. The previous history is preserved at '%s'." ),
-                        hist, backupOld );
+                        aHistoryPath, backupOld );
 
         return false;
     }
@@ -2186,6 +2283,195 @@ bool LOCAL_HISTORY::EnforceSizeLimit( const wxString& aProjectPath, size_t aMaxB
 
     return true;
 }
+
+// Background compactions write their pack here first, one dir per process
+static const wxString STAGE_DIR_PREFIX = wxS( "kicad-compact-" );
+
+
+// A crash mid-compaction leaves its stage dir behind inside .git, where it counts against the limit
+static void removeStaleStageDirs( const wxString& aGitDir )
+{
+    wxDir                 gitDir( aGitDir );
+    wxString              name;
+    std::vector<wxString> stale;
+    bool                  cont = gitDir.IsOpened()
+                                 && gitDir.GetFirst( &name, STAGE_DIR_PREFIX + wxS( "*" ), wxDIR_DIRS );
+    time_t                expiry = wxDateTime::Now().GetTicks() - UNREACHABLE_LOOSE_EXPIRY_SECONDS;
+
+    while( cont )
+    {
+        if( wxFileModificationTime( aGitDir + name ) < expiry )
+            stale.push_back( aGitDir + name );
+
+        cont = gitDir.GetNext( &name );
+    }
+
+    for( const wxString& dir : stale )
+        wxFileName::Rmdir( dir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// Every ref with the commit it resolves to, HEAD included, as sorted "name oid" strings
+static std::vector<std::string> refTargets( git_repository* aRepo )
+{
+    std::vector<std::string> targets;
+    git_reference_iterator*  iter = nullptr;
+    git_reference*           ref = nullptr;
+    git_oid                  oid;
+
+    if( git_reference_name_to_id( &oid, aRepo, "HEAD" ) == 0 )
+        targets.push_back( std::string( "HEAD " ) + git_oid_tostr_s( &oid ) );
+
+    if( git_reference_iterator_new( &iter, aRepo ) != 0 )
+        return targets;
+
+    while( git_reference_next( &ref, iter ) == 0 )
+    {
+        git_reference* resolved = nullptr;
+
+        if( git_reference_resolve( &resolved, ref ) == 0 )
+        {
+            targets.push_back( std::string( git_reference_name( ref ) ) + " "
+                               + git_oid_tostr_s( git_reference_target( resolved ) ) );
+            git_reference_free( resolved );
+        }
+
+        git_reference_free( ref );
+    }
+
+    git_reference_iterator_free( iter );
+    std::sort( targets.begin(), targets.end() );
+    return targets;
+}
+
+
+static size_t looseObjectBytes( const wxString& aObjectsPath )
+{
+    size_t   total = 0;
+    wxDir    objDir( aObjectsPath );
+    wxString fanout;
+    bool     cont = objDir.IsOpened() && objDir.GetFirst( &fanout, wxEmptyString, wxDIR_DIRS );
+
+    while( cont )
+    {
+        if( fanout.length() == 2 )
+            total += dirSizeRecursive( aObjectsPath + wxFileName::GetPathSeparator() + fanout );
+
+        cont = objDir.GetNext( &fanout );
+    }
+
+    return total;
+}
+
+
+void LOCAL_HISTORY::scheduleCompaction( const wxString& aProjectPath, size_t aLooseLimit )
+{
+    if( IsCompacting() )
+        return;
+
+    m_cancelCompaction.store( false );
+
+    // A dedicated thread rather than the shared pool, which a pack write would tie up for seconds.
+    // Packing runs unlocked so saves are never refused meanwhile; the lock covers only the install
+    m_compactFuture = std::async( std::launch::async,
+            [this, projectPath = aProjectPath, hist = historyPath( aProjectPath ), aLooseLimit]()
+            {
+                git_repository* repo = nullptr;
+
+                if( git_repository_open( &repo, hist.mb_str().data() ) != 0 )
+                    return;
+
+                wxString sep = wxFileName::GetPathSeparator();
+                wxString gitDir = wxString::FromUTF8( git_repository_path( repo ) );
+                wxString objPath = gitDir + wxS( "objects" );
+                wxString packDir = objPath + sep + wxS( "pack" );
+                wxString stageDir = gitDir + STAGE_DIR_PREFIX + wxString::Format( wxS( "%lu" ), wxGetProcessId() );
+
+                if( looseObjectBytes( objPath ) < aLooseLimit )
+                {
+                    git_repository_free( repo );
+                    return;
+                }
+
+                removeStaleStageDirs( gitDir );
+
+                std::vector<wxString>    priorPacks = listPackFiles( packDir );
+                std::vector<std::string> priorRefs = refTargets( repo );
+                time_t                   walkStart = wxDateTime::Now().GetTicks();
+
+                wxFileName::Rmdir( stageDir, wxPATH_RMDIR_RECURSIVE );
+                wxMkdir( stageDir );
+
+                wxString stem = buildPack( repo, stageDir, nullptr, &m_cancelCompaction );
+                git_repository_free( repo );
+
+                HISTORY_LOCK_MANAGER lock( projectPath, hist );
+
+                // Another KiCad's trim swaps in new packs, and a commit meanwhile may reuse an object only
+                // a superseded pack holds, so install only into the repository exactly as the walk saw it
+                bool unchanged = !stem.IsEmpty() && lock.IsLocked() && listPackFiles( packDir ) == priorPacks
+                                 && refTargets( lock.GetRepository() ) == priorRefs;
+
+                if( unchanged )
+                {
+                    lock.ReleaseRepository();
+
+                    wxString staged = stageDir + sep + stem;
+                    wxString target = packDir + sep + stem;
+
+                    // The index goes last since its presence is what makes a pack visible.  Either file
+                    // may already be in place from an identical earlier pack or a half-finished install
+                    bool packReady = wxFileExists( target + wxS( ".pack" ) )
+                                     || wxRenameFile( staged + wxS( ".pack" ), target + wxS( ".pack" ), false );
+                    bool installed = packReady
+                                     && ( wxFileExists( target + wxS( ".idx" ) )
+                                          || wxRenameFile( staged + wxS( ".idx" ), target + wxS( ".idx" ), false ) );
+
+                    if( installed )
+                    {
+                        pruneLooseObjects( objPath, target + wxS( ".idx" ), walkStart );
+
+                        // Windows refuses while another handle maps the pack; the next compaction retries
+                        for( const wxString& pack : supersededBy( priorPacks, stem ) )
+                        {
+                            if( !wxRemoveFile( pack ) )
+                                wxLogTrace( traceAutoSave, wxS( "[history] could not remove %s" ), pack );
+                        }
+                    }
+                    else
+                    {
+                        wxLogTrace( traceAutoSave, wxS( "[history] could not install %s" ), target );
+                    }
+                }
+
+                wxFileName::Rmdir( stageDir, wxPATH_RMDIR_RECURSIVE );
+            } );
+}
+
+
+void LOCAL_HISTORY::EnforceSizeLimitInBackground( const wxString& aProjectPath, size_t aMaxBytes )
+{
+    // Queue behind any running compaction rather than race it for the lock
+    m_compactFuture = std::async( std::launch::async,
+            [this, previous = std::move( m_compactFuture ), projectPath = aProjectPath,
+             hist = historyPath( aProjectPath ), aMaxBytes]() mutable
+            {
+                if( previous.valid() )
+                    previous.wait();
+
+                // Quitting skips the trim rather than block exit on it; the next close enforces the limit
+                if( !m_cancelCompaction.load() )
+                    enforceSizeLimit( projectPath, hist, aMaxBytes, nullptr );
+            } );
+}
+
+
+bool LOCAL_HISTORY::IsCompacting() const
+{
+    return m_compactFuture.valid()
+           && m_compactFuture.wait_for( std::chrono::seconds( 0 ) ) != std::future_status::ready;
+}
+
 
 wxString LOCAL_HISTORY::GetHeadHash( const wxString& aProjectPath )
 {

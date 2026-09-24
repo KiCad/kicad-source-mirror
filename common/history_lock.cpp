@@ -47,8 +47,15 @@ static wxString historyLockPath( const wxString& aProjectPath )
 
 
 HISTORY_LOCK_MANAGER::HISTORY_LOCK_MANAGER( const wxString& aProjectPath, int aStaleTimeoutSec ) :
+        HISTORY_LOCK_MANAGER( aProjectPath, historyPath( aProjectPath ), aStaleTimeoutSec )
+{
+}
+
+
+HISTORY_LOCK_MANAGER::HISTORY_LOCK_MANAGER( const wxString& aProjectPath, const wxString& aHistoryPath,
+                                            int aStaleTimeoutSec ) :
         m_projectPath( aProjectPath ),
-        m_historyPath( historyPath( aProjectPath ) ),
+        m_historyPath( aHistoryPath ),
         m_repo( nullptr ),
         m_index( nullptr ),
         m_repoOwned( false ),
@@ -143,7 +150,7 @@ bool HISTORY_LOCK_MANAGER::acquireFileLock()
         }
     }
 
-    m_fileLock = std::make_unique<LOCKFILE>( historyLockPath( m_projectPath ), true );
+    m_fileLock = std::make_unique<LOCKFILE>( m_historyPath + wxS( ".repo" ), true );
 
     if( !m_fileLock->Locked() )
     {

@@ -241,13 +241,28 @@ public:
      *  autosave can't leave the close path with a stale view of HEAD. */
     void WaitForPendingSave();
 
+    /** True while a background compaction started by autosave is still running. */
+    bool IsCompacting() const;
+
+    /** Run EnforceSizeLimit without a reporter on a background thread, after any running
+     *  compaction.  Compaction only packs, so it never trims history down to the limit. */
+    void EnforceSizeLimitInBackground( const wxString& aProjectPath, size_t aMaxBytes );
+
 private:
     std::vector<LOCAL_HISTORY_SNAPSHOT_INFO> LoadSnapshots( const wxString& aProjectPath );
+
+    /** EnforceSizeLimit with the history directory already resolved, so it can run off the UI thread. */
+    bool enforceSizeLimit( const wxString& aProjectPath, const wxString& aHistoryPath, size_t aMaxBytes,
+                           PROGRESS_REPORTER* aReporter );
 
     /** Execute file writes and git commit on a background thread. */
     SNAPSHOT_COMMIT_RESULT commitInBackground( const wxString& aProjectPath, const wxString& aTitle,
                                                const std::vector<HISTORY_FILE_DATA>& aFileData,
                                                bool aIsManualSave );
+
+    /** Start packing loose history objects on a background thread once they exceed @p aLooseLimit
+     *  bytes, so the close-time size check rarely finds anything to do. */
+    void scheduleCompaction( const wxString& aProjectPath, size_t aLooseLimit );
 
     /** Drop tracked savers whose owning document has been freed, before any saver runs. */
     void pruneExpiredSavers();
@@ -267,5 +282,8 @@ private:
 
     std::atomic<bool> m_saveInProgress{ false };
     std::future<bool> m_pendingFuture;
+
+    std::atomic<bool> m_cancelCompaction{ false };
+    std::future<void> m_compactFuture;
 };
 
