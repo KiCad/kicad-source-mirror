@@ -121,6 +121,7 @@ void SCHEMATIC_TEXT_VAR_ADAPTER::handleItemChanged( SCH_ITEM* aItem )
             m_tracker.RegisterItem( &field, refs );
         }
 
+        m_tracker.HandleItemChanged( aItem, {} );
         return;
     }
 
