@@ -646,7 +646,7 @@ BOOST_AUTO_TEST_CASE( CopperThievingZone_RoundTrip )
     thieving.gap        = pcbIUScale.mmToIU( 1.27 );
     thieving.line_width   = pcbIUScale.mmToIU( 0.35 );
     thieving.stagger      = true;
-    thieving.orientation     = EDA_ANGLE( 30.0, DEGREES_T );
+    thieving.orientation.SetAngle( EDA_ANGLE( 30.0, DEGREES_T ) );
     zone->SetThievingSettings( thieving );
 
     writeBoard->Add( zone );
@@ -674,7 +674,7 @@ BOOST_AUTO_TEST_CASE( CopperThievingZone_RoundTrip )
     BOOST_CHECK_EQUAL( loadedSettings.gap, thieving.gap );
     BOOST_CHECK_EQUAL( loadedSettings.line_width, thieving.line_width );
     BOOST_CHECK_EQUAL( loadedSettings.stagger, true );
-    BOOST_CHECK( loadedSettings.orientation == EDA_ANGLE( 30.0, DEGREES_T ) );
+    BOOST_CHECK( loadedSettings.orientation.GetAngle() == EDA_ANGLE( 30.0, DEGREES_T ) );
 
     std::filesystem::remove( tmpPath );
 }

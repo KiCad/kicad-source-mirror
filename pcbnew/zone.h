@@ -328,8 +328,8 @@ public:
     int GetHatchGap() const { return m_hatchGap; }
     void SetHatchGap( int aStep ) { m_hatchGap = aStep; }
 
-    EDA_ANGLE GetHatchOrientation() const { return m_hatchOrientation; }
-    void SetHatchOrientation( const EDA_ANGLE& aStep ) { m_hatchOrientation = aStep; }
+    EDA_ANGLE GetHatchOrientation() const { return m_hatchOrientation.GetAngle(); }
+    void      SetHatchOrientation( const EDA_ANGLE& aStep ) { m_hatchOrientation = aStep; }
 
     int GetHatchSmoothingLevel() const { return m_hatchSmoothingLevel; }
     void SetHatchSmoothingLevel( int aLevel ) { m_hatchSmoothingLevel = aLevel; }
@@ -402,13 +402,16 @@ public:
         m_thievingSettings.stagger = aStagger;
     }
 
-    EDA_ANGLE GetThievingOrientation() const { return m_thievingSettings.orientation; }
+    EDA_ANGLE GetThievingOrientation() const { return m_thievingSettings.orientation.GetAngle(); }
+
     void SetThievingOrientation( const EDA_ANGLE& aOrientation )
     {
-        if( m_thievingSettings.orientation != aOrientation )
+        EDA_ORIENTATION normalizedOrientation( aOrientation );
+
+        if( m_thievingSettings.orientation != normalizedOrientation )
             SetNeedRefill( true );
 
-        m_thievingSettings.orientation = aOrientation;
+        m_thievingSettings.orientation = normalizedOrientation;
     }
 
     ///
@@ -1018,7 +1021,7 @@ protected:
     ZONE_FILL_MODE   m_fillMode;                // fill with POLYGONS vs HATCH_PATTERN
     int              m_hatchThickness;          // thickness of lines (if 0 -> solid shape)
     int              m_hatchGap;                // gap between lines (0 -> solid shape
-    EDA_ANGLE        m_hatchOrientation;        // orientation of grid lines
+    EDA_ORIENTATION  m_hatchOrientation;        // orientation of grid lines
     int              m_hatchSmoothingLevel;     // 0 = no smoothing
                                                 // 1 = fillet
                                                 // 2 = arc low def

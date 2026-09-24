@@ -3650,7 +3650,7 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone ) const
                       formatInternalUnits( thieving.gap ).c_str(),
                       formatInternalUnits( thieving.line_width ).c_str(),
                       thieving.stagger ? "yes" : "no",
-                      FormatDouble2Str( thieving.orientation.AsDegrees() ).c_str() );
+                      FormatDouble2Str( thieving.orientation.GetAngle().AsDegrees() ).c_str() );
     }
 
     m_out->Print( ")" );

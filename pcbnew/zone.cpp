@@ -314,7 +314,7 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
         types::HatchFillSettings* hatch = cu->mutable_hatch_settings();
         hatch->mutable_thickness()->set_value_nm( m_hatchThickness );
         hatch->mutable_gap()->set_value_nm( m_hatchGap );
-        hatch->mutable_orientation()->set_value_degrees( m_hatchOrientation.AsDegrees() );
+        hatch->mutable_orientation()->set_value_degrees( m_hatchOrientation.GetAngle().AsDegrees() );
         hatch->set_hatch_smoothing_ratio( m_hatchSmoothingValue );
         hatch->set_hatch_hole_min_area_ratio( m_hatchHoleMinArea );
 
@@ -336,8 +336,7 @@ void ZONE::Serialize( google::protobuf::Any& aContainer ) const
         thieving->mutable_gap()->set_value_nm( m_thievingSettings.gap );
         thieving->mutable_line_width()->set_value_nm( m_thievingSettings.line_width );
         thieving->set_stagger( m_thievingSettings.stagger );
-        thieving->mutable_orientation()->set_value_degrees(
-                m_thievingSettings.orientation.AsDegrees() );
+        thieving->mutable_orientation()->set_value_degrees( m_thievingSettings.orientation.GetAngle().AsDegrees() );
     }
 
     for( const auto& [layer, shape] : m_FilledPolysList )

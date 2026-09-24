@@ -4208,8 +4208,8 @@ bool ZONE_FILLER::addCopperThievingPattern( const ZONE* aZone, PCB_LAYER_ID aLay
 
     // Rotate the clip region into the pattern's local frame so the grid iterates
     // axis-aligned; the resulting stamps get rotated back into the zone's frame below.
-    if( !settings.orientation.IsZero() )
-        filledRegion.Rotate( -settings.orientation );
+    if( !settings.orientation.GetAngle().IsZero() )
+        filledRegion.Rotate( -settings.orientation.GetAngle() );
 
     // BBox() over all outlines — the post-clearance fill region may be split
     // into several pieces (e.g. by a track cutting across the zone) and the
@@ -4229,8 +4229,8 @@ bool ZONE_FILLER::addCopperThievingPattern( const ZONE* aZone, PCB_LAYER_ID aLay
     if( localOffsets.contains( aLayer ) && localOffsets.at( aLayer ).hatching_offset.has_value() )
         offset = localOffsets.at( aLayer ).hatching_offset.value();
 
-    if( !settings.orientation.IsZero() )
-        RotatePoint( offset, -settings.orientation );
+    if( !settings.orientation.GetAngle().IsZero() )
+        RotatePoint( offset, -settings.orientation.GetAngle() );
 
     // Gap is edge-to-edge; grid stride is element_size + gap (dots/squares) or
     // line_width + gap (crosshatch).
@@ -4312,8 +4312,8 @@ bool ZONE_FILLER::addCopperThievingPattern( const ZONE* aZone, PCB_LAYER_ID aLay
             }
         }
 
-        if( !settings.orientation.IsZero() )
-            voids.Rotate( settings.orientation );
+        if( !settings.orientation.GetAngle().IsZero() )
+            voids.Rotate( settings.orientation.GetAngle() );
 
         // Clip voids to interior so the perimeter border survives the
         // subtraction.  Without this clamp, voids on the edge punch through
@@ -4373,8 +4373,8 @@ bool ZONE_FILLER::addCopperThievingPattern( const ZONE* aZone, PCB_LAYER_ID aLay
         ++rowIndex;
     }
 
-    if( !settings.orientation.IsZero() )
-        stamps.Rotate( settings.orientation );
+    if( !settings.orientation.GetAngle().IsZero() )
+        stamps.Rotate( settings.orientation.GetAngle() );
 
     aFillPolys = stamps;
     return true;

@@ -361,7 +361,7 @@ BOOST_FIXTURE_TEST_CASE( CopperThievingZoneRoundTrip, PROTO_TEST_FIXTURE )
     BOOST_CHECK_EQUAL( loaded.gap, thieving.gap );
     BOOST_CHECK_EQUAL( loaded.line_width, thieving.line_width );
     BOOST_CHECK_EQUAL( loaded.stagger, true );
-    BOOST_CHECK( loaded.orientation == EDA_ANGLE( 15.0, DEGREES_T ) );
+    BOOST_CHECK( loaded.orientation.GetAngle() == EDA_ANGLE( 15.0, DEGREES_T ) );
 }
 
 

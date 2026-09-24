@@ -75,7 +75,7 @@ struct THIEVING_SETTINGS
                                        // (or between crosshatch lines)
     int              line_width = 0;   // line width for crosshatch only
     bool             stagger = false;  // offset alternating rows by half the stride
-    EDA_ANGLE        orientation = ANGLE_0;
+    EDA_ORIENTATION  orientation{ ANGLE_0 };
 
     bool operator==( const THIEVING_SETTINGS& aOther ) const
     {
