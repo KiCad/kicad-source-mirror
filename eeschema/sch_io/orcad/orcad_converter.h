@@ -520,6 +520,9 @@ private:
     std::string powerNet( const ORCAD_RAW_PAGE& aPage, const ORCAD_GRAPHIC_INST& aInst ) const;
     std::string resolvePowerNet( const ORCAD_RAW_PAGE& aPage, const ORCAD_GRAPHIC_INST& aInst ) const;
 
+    /** The cached variant a page graphic uses: its Source Library first, then its placed bounds, else the first. */
+    const ORCAD_SYMBOL_DEF* graphicDefinition( const ORCAD_GRAPHIC_INST& aInst ) const;
+
     /** Use the transformed cache pin position, or the instance anchor if no pin is available. */
     VECTOR2I graphicPinPos( const ORCAD_GRAPHIC_INST& aInst ) const;
 

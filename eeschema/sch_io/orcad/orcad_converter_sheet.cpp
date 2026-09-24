@@ -4182,80 +4182,89 @@ void ORCAD_CONVERTER::offsetPage( ORCAD_RAW_PAGE& aPage, int aDx, int aDy )
 }
 
 
+const ORCAD_SYMBOL_DEF* ORCAD_CONVERTER::graphicDefinition( const ORCAD_GRAPHIC_INST& aInst ) const
+{
+    auto symbolIt = m_design.symbols.find( aInst.name );
+
+    if( symbolIt == m_design.symbols.end() )
+        return nullptr;
+
+    const ORCAD_SYMBOL_DEF* symbolDef = &symbolIt->second;
+
+    auto normalizedPath = []( std::string aPath )
+    {
+        std::transform( aPath.begin(), aPath.end(), aPath.begin(),
+                        []( unsigned char aChar )
+                        {
+                            return aChar == '\\' ? '/' : static_cast<char>( std::tolower( aChar ) );
+                        } );
+        return aPath;
+    };
+
+    bool sourceMatched = false;
+
+    if( auto source = aInst.props.find( "Source Library" );
+        source != aInst.props.end() && !source->second.empty() )
+    {
+        std::string sourceKey = normalizedPath( source->second );
+
+        if( normalizedPath( symbolDef->sourceLib ) == sourceKey )
+        {
+            sourceMatched = true;
+        }
+        else
+        {
+            for( const ORCAD_SYMBOL_DEF& variant : symbolIt->second.variants )
+            {
+                if( normalizedPath( variant.sourceLib ) == sourceKey )
+                {
+                    symbolDef = &variant;
+                    sourceMatched = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    bool dimensionsEncoded = aInst.bbox.x2 < aInst.bbox.x1 || aInst.bbox.y2 < aInst.bbox.y1;
+    int  placedWidth = std::abs( dimensionsEncoded ? aInst.bbox.x2 : aInst.bbox.x2 - aInst.bbox.x1 );
+    int  placedHeight = std::abs( dimensionsEncoded ? aInst.bbox.y2 : aInst.bbox.y2 - aInst.bbox.y1 );
+
+    auto matchesPlacedBounds = [&]( const ORCAD_SYMBOL_DEF& aDefinition )
+    {
+        if( !aDefinition.bbox )
+            return false;
+
+        int width = std::abs( aDefinition.bbox->x2 - aDefinition.bbox->x1 );
+        int height = std::abs( aDefinition.bbox->y2 - aDefinition.bbox->y1 );
+
+        if( aInst.rotation & 1 )
+            std::swap( width, height );
+
+        return width == placedWidth && height == placedHeight;
+    };
+
+    if( !sourceMatched && !matchesPlacedBounds( *symbolDef ) )
+    {
+        for( const ORCAD_SYMBOL_DEF& variant : symbolIt->second.variants )
+        {
+            if( matchesPlacedBounds( variant ) )
+            {
+                symbolDef = &variant;
+                break;
+            }
+        }
+    }
+
+    return symbolDef;
+}
+
+
 void ORCAD_CONVERTER::applyTitleBlock( const ORCAD_RAW_PAGE& aPage, SCH_SCREEN* aScreen )
 {
     for( const ORCAD_GRAPHIC_INST& tbInst : aPage.titleBlocks )
     {
-        auto symbolIt = m_design.symbols.find( tbInst.name );
-        const ORCAD_SYMBOL_DEF* symbolDef = symbolIt != m_design.symbols.end() ? &symbolIt->second : nullptr;
-
-        if( symbolDef )
-        {
-            auto normalizedPath = []( std::string aPath )
-            {
-                std::transform( aPath.begin(), aPath.end(), aPath.begin(),
-                                []( unsigned char aChar )
-                                {
-                                    return aChar == '\\' ? '/' : static_cast<char>( std::tolower( aChar ) );
-                                } );
-                return aPath;
-            };
-
-            bool sourceMatched = false;
-
-            if( auto source = tbInst.props.find( "Source Library" );
-                source != tbInst.props.end() && !source->second.empty() )
-            {
-                std::string sourceKey = normalizedPath( source->second );
-
-                if( normalizedPath( symbolDef->sourceLib ) == sourceKey )
-                {
-                    sourceMatched = true;
-                }
-                else
-                {
-                    for( const ORCAD_SYMBOL_DEF& variant : symbolIt->second.variants )
-                    {
-                        if( normalizedPath( variant.sourceLib ) == sourceKey )
-                        {
-                            symbolDef = &variant;
-                            sourceMatched = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            bool dimensionsEncoded = tbInst.bbox.x2 < tbInst.bbox.x1 || tbInst.bbox.y2 < tbInst.bbox.y1;
-            int  placedWidth = std::abs( dimensionsEncoded ? tbInst.bbox.x2 : tbInst.bbox.x2 - tbInst.bbox.x1 );
-            int  placedHeight = std::abs( dimensionsEncoded ? tbInst.bbox.y2 : tbInst.bbox.y2 - tbInst.bbox.y1 );
-
-            auto matchesPlacedBounds = [&]( const ORCAD_SYMBOL_DEF& aDefinition )
-            {
-                if( !aDefinition.bbox )
-                    return false;
-
-                int width = std::abs( aDefinition.bbox->x2 - aDefinition.bbox->x1 );
-                int height = std::abs( aDefinition.bbox->y2 - aDefinition.bbox->y1 );
-
-                if( tbInst.rotation & 1 )
-                    std::swap( width, height );
-
-                return width == placedWidth && height == placedHeight;
-            };
-
-            if( !sourceMatched && !matchesPlacedBounds( *symbolDef ) )
-            {
-                for( const ORCAD_SYMBOL_DEF& variant : symbolIt->second.variants )
-                {
-                    if( matchesPlacedBounds( variant ) )
-                    {
-                        symbolDef = &variant;
-                        break;
-                    }
-                }
-            }
-        }
+        const ORCAD_SYMBOL_DEF* symbolDef = graphicDefinition( tbInst );
 
         auto calendarDate = [&]( uint32_t aTimestamp )
         {
@@ -5008,12 +5017,12 @@ std::string ORCAD_CONVERTER::resolvePowerNet( const ORCAD_RAW_PAGE& aPage, const
 
 VECTOR2I ORCAD_CONVERTER::graphicPinPos( const ORCAD_GRAPHIC_INST& aInst ) const
 {
-    auto symIt = m_design.symbols.find( aInst.name );
+    const ORCAD_SYMBOL_DEF* definition = graphicDefinition( aInst );
 
-    if( symIt == m_design.symbols.end() || symIt->second.pins.empty() )
+    if( !definition || definition->pins.empty() )
         return VECTOR2I( aInst.x, aInst.y );
 
-    const ORCAD_SYMBOL_DEF& sym = symIt->second;
+    const ORCAD_SYMBOL_DEF& sym = *definition;
     int                     baseX = std::min( aInst.bbox.x1, aInst.bbox.x2 );
     int                     baseY = std::min( aInst.bbox.y1, aInst.bbox.y2 );
 
