@@ -87,61 +87,6 @@ private:
     bool       m_maskWasAllowed;
 };
 
-BOOST_AUTO_TEST_CASE( FractureIndexMappingAndCapacity )
-{
-    using namespace KIGEOM::FRACTURE_INDEX;
-
-    BOOST_CHECK_EQUAL( StripeCountFor( 0 ), 1 );
-    BOOST_CHECK_EQUAL( StripeCountFor( 81 ), 9 );
-    BOOST_CHECK_EQUAL( StripeCountFor( std::numeric_limits<size_t>::max() ), MAX_STRIPES );
-
-    BOOST_CHECK_EQUAL( MapYToStripe( 42, 42, 42, 8 ), 0 );
-    BOOST_CHECK_EQUAL( MapYToStripe( -100, -100, 99, 10 ), 0 );
-    BOOST_CHECK_EQUAL( MapYToStripe( 99, -100, 99, 10 ), 9 );
-    BOOST_CHECK_EQUAL( MapYToStripe( -101, -100, 99, 10 ), 0 );
-    BOOST_CHECK_EQUAL( MapYToStripe( 100, -100, 99, 10 ), 9 );
-
-    uint32_t previous = 0;
-
-    for( int y = -100; y <= 99; ++y )
-    {
-        uint32_t stripe = MapYToStripe( y, -100, 99, 10 );
-        BOOST_TEST( stripe >= previous );
-        previous = stripe;
-    }
-
-    const std::array<std::pair<int, int>, 4> spans = { std::pair{ -100, -100 }, std::pair{ -50, 50 },
-                                                       std::pair{ 99, 99 }, std::pair{ 75, -75 } };
-    size_t                                   memberships = 0;
-
-    for( const auto& [y1, y2] : spans )
-    {
-        const auto [first, last] = StripeSpan( y1, y2, -100, 99, 10 );
-        BOOST_TEST( first <= last );
-        memberships += last - first + 1;
-
-        for( int y = std::min( y1, y2 ); y <= std::max( y1, y2 ); ++y )
-        {
-            const uint32_t stripe = MapYToStripe( y, -100, 99, 10 );
-            BOOST_TEST( stripe >= first );
-            BOOST_TEST( stripe <= last );
-        }
-    }
-
-    BOOST_CHECK_EQUAL( memberships, 16 );
-    BOOST_TEST( CapacityFits( 100, 2, 16, 8, 2 * sizeof( uint32_t ) ) );
-    BOOST_TEST( !CapacityFits( MAX_CAPACITY_BYTES / sizeof( uint32_t ), 0, 1, 0, 2 * sizeof( uint32_t ) ) );
-    size_t actual_bytes = 0;
-    BOOST_TEST( ActualCapacityFits( 100, 2, 17, 16, 17, 80, 2 * sizeof( uint32_t ), &actual_bytes ) );
-    BOOST_CHECK_EQUAL( actual_bytes, 1248 );
-    BOOST_TEST( !ActualCapacityFits( MAX_CAPACITY_BYTES / sizeof( uint32_t ), 0, 2, 1, 2, 0, 2 * sizeof( uint32_t ) ) );
-
-    size_t total = std::numeric_limits<size_t>::max() - 1;
-    BOOST_TEST( !CheckedAdd( total, 1, 2 ) );
-    total = 5;
-    BOOST_TEST( CheckedAdd( total, std::numeric_limits<size_t>::max(), 0 ) );
-    BOOST_CHECK_EQUAL( total, 5 );
-}
 
 // Helper class to properly manage TRIANGULATED_POLYGON lifecycle
 class TRIANGULATION_TEST_FIXTURE

@@ -1251,7 +1251,8 @@ public:
             m_minY( aMinY ),
             m_maxY( aMaxY ),
             m_stripeCount( aStripeCount ),
-            m_maxNodes( ( KIGEOM::FRACTURE_INDEX::MAX_BUCKET_SPAN + 2 ) * aHoleCount )
+            m_maxNodes( ( KIGEOM::FRACTURE_INDEX::MAX_BUCKET_SPAN + 2 ) * aHoleCount ),
+            m_budget( KIGEOM::FRACTURE_INDEX::CapacityBudget( aEdges.size(), sizeof( FractureEdge ) ) )
     {
         std::vector<uint32_t> counts( m_stripeCount );
         size_t                bucketIds = 0;
@@ -1273,7 +1274,8 @@ public:
                     }
                 } );
 
-        if( !KIGEOM::FRACTURE_INDEX::CapacityFits( bucketIds, longIds, m_stripeCount, aHoleCount, sizeof( NODE ) ) )
+        if( !KIGEOM::FRACTURE_INDEX::CapacityFits( bucketIds, longIds, m_stripeCount, aHoleCount, sizeof( NODE ),
+                                                   m_budget ) )
         {
             return;
         }
@@ -1322,7 +1324,8 @@ public:
 
         if( !KIGEOM::FRACTURE_INDEX::ActualCapacityFits( m_bucketIds.capacity(), m_longIds.capacity(),
                                                          m_offsets.capacity(), counts.capacity(), m_heads.capacity(),
-                                                         m_nodes.capacity(), sizeof( NODE ), &allocated_bytes ) )
+                                                         m_nodes.capacity(), sizeof( NODE ), m_budget,
+                                                         &allocated_bytes ) )
         {
             return;
         }
@@ -1425,6 +1428,7 @@ private:
     int                   m_maxY;
     uint32_t              m_stripeCount;
     size_t                m_maxNodes;
+    size_t                m_budget;
     bool                  m_valid = false;
     std::vector<uint32_t> m_offsets;
     std::vector<uint32_t> m_bucketIds;

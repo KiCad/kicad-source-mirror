@@ -31,9 +31,9 @@ namespace KIGEOM::FRACTURE_INDEX
 {
 constexpr uint32_t MAX_STRIPES = 65536;
 constexpr uint32_t MAX_BUCKET_SPAN = 8;
-// Polygons needing a larger index fall back to the linear scan, trading the worst case on the
-// very largest polygons for a bounded zone fill footprint
-constexpr size_t   MAX_CAPACITY_BYTES = size_t( 8 ) * 1024 * 1024;
+// The index is at most ~1.6x the edge set it serves, so a budget proportional to the edge set
+// bounds the footprint without dropping the index on the large planes that need it most
+constexpr size_t   EDGE_SET_BUDGET_MULTIPLE = 2;
 constexpr uint64_t MIN_EDGE_VISITS = 32768;
 constexpr size_t   MIN_HOLE_COUNT = 8;
 
@@ -74,7 +74,21 @@ inline bool CheckedAdd( size_t& aTotal, size_t aCount, size_t aElementSize )
     return true;
 }
 
-inline bool CapacityFits( size_t aBucketIds, size_t aLongIds, size_t aStripeCount, size_t aHoleCount, size_t aNodeSize )
+inline size_t CapacityBudget( size_t aEdgeCount, size_t aEdgeSize )
+{
+    size_t budget = 0;
+
+    for( size_t ii = 0; ii < EDGE_SET_BUDGET_MULTIPLE; ++ii )
+    {
+        if( !CheckedAdd( budget, aEdgeCount, aEdgeSize ) )
+            return std::numeric_limits<size_t>::max();
+    }
+
+    return budget;
+}
+
+inline bool CapacityFits( size_t aBucketIds, size_t aLongIds, size_t aStripeCount, size_t aHoleCount, size_t aNodeSize,
+                          size_t aBudget )
 {
     size_t bytes = 0;
 
@@ -82,11 +96,11 @@ inline bool CapacityFits( size_t aBucketIds, size_t aLongIds, size_t aStripeCoun
            && CheckedAdd( bytes, aStripeCount + 1, sizeof( uint32_t ) )
            && CheckedAdd( bytes, aStripeCount, sizeof( uint32_t ) )
            && CheckedAdd( bytes, aStripeCount + 1, sizeof( uint32_t ) )
-           && CheckedAdd( bytes, ( MAX_BUCKET_SPAN + 2 ) * aHoleCount, aNodeSize ) && bytes <= MAX_CAPACITY_BYTES;
+           && CheckedAdd( bytes, ( MAX_BUCKET_SPAN + 2 ) * aHoleCount, aNodeSize ) && bytes <= aBudget;
 }
 
 inline bool ActualCapacityFits( size_t aBucketIds, size_t aLongIds, size_t aOffsets, size_t aScratch, size_t aHeads,
-                                size_t aNodes, size_t aNodeSize, size_t* aBytes = nullptr )
+                                size_t aNodes, size_t aNodeSize, size_t aBudget, size_t* aBytes = nullptr )
 {
     size_t bytes = 0;
 
@@ -99,7 +113,7 @@ inline bool ActualCapacityFits( size_t aBucketIds, size_t aLongIds, size_t aOffs
     if( aBytes )
         *aBytes = valid ? bytes : 0;
 
-    return valid && bytes <= MAX_CAPACITY_BYTES;
+    return valid && bytes <= aBudget;
 }
 
 inline bool ShouldIndex( uint64_t aEstimatedVisits, size_t aHoleCount )
