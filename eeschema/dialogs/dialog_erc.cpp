@@ -1064,7 +1064,7 @@ void DIALOG_ERC::ExcludeMarker( SCH_MARKER* aMarker )
 
     RC_TREE_NODE* node = nullptr;
 
-    if( m_notebook->GetSelection() == 0 )
+    if( !marker && m_notebook->GetSelection() == 0 )
     {
         node = RC_TREE_MODEL::ToNode( m_markerDataView->GetCurrentItem() );
 
