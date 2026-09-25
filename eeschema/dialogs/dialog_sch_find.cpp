@@ -408,7 +408,7 @@ void DIALOG_SCH_FIND::SetReplaceEntries( const wxArrayString& aEntries )
 
     while( m_comboReplace->GetCount() > 10 )
     {
-        m_frame->GetFindHistoryList().pop_back();
+        m_frame->GetReplaceHistoryList().pop_back();
         m_comboReplace->Delete( m_comboReplace->GetCount() - 1 );
     }
 

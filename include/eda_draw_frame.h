@@ -104,6 +104,7 @@ public:
 
     EDA_SEARCH_DATA& GetFindReplaceData();
     wxArrayString& GetFindHistoryList() { return m_findStringHistoryList; }
+    wxArrayString& GetReplaceHistoryList() { return m_replaceStringHistoryList; }
 
     virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) = 0;
     virtual const PAGE_INFO& GetPageSettings() const = 0;
