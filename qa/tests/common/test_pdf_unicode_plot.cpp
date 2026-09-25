@@ -909,8 +909,7 @@ BOOST_AUTO_TEST_CASE( StrokeFontSuperSubMatchesFontMetrics )
         BLOCK_COUNT
     };
 
-    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_supersub" );
-    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
+    wxString pdfPath = getTempPdfPath( "kicad_pdf_supersub" );
 
     PDF_PLOTTER            plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;
@@ -994,6 +993,8 @@ BOOST_AUTO_TEST_CASE( StrokeFontSuperSubMatchesFontMetrics )
     BOOST_CHECK_MESSAGE( std::abs( measuredSpan - expectedSpan ) < sizeIU * 0.001,
                          "Superscript sits " << measuredSpan << " IU from the subscript, font says " << expectedSpan
                                              << " IU" );
+
+    MaybeRemoveFile( pdfPath );
 }
 
 
@@ -1012,8 +1013,7 @@ BOOST_AUTO_TEST_CASE( StrokeFontSubscriptRightAlignEndsOnMargin )
         BLOCK_COUNT
     };
 
-    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_supersub_ralign" );
-    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
+    wxString pdfPath = getTempPdfPath( "kicad_pdf_supersub_ralign" );
 
     PDF_PLOTTER            plotter;
     SIMPLE_RENDER_SETTINGS renderSettings;
@@ -1073,6 +1073,8 @@ BOOST_AUTO_TEST_CASE( StrokeFontSubscriptRightAlignEndsOnMargin )
     BOOST_CHECK_MESSAGE( std::abs( shortfallIU ) < sizeIU * 0.001,
                          "Right aligned line containing a subscript ends "
                                  << shortfallIU << " IU short of the margin the plain line reaches" );
+
+    MaybeRemoveFile( pdfPath );
 }
 
 
