@@ -50,13 +50,12 @@ std::string OrcadNormalizeCfbName( const std::string& aName );
  * design to ORCAD_CONVERTER.
  *
  * Supported: the modern stream framing (Library version 3 and later, i.e.
- * OrCAD 10.x/2003 onward) and the pre-2003 v2.0 framing (parsed with the v2 page
- * reader; its legacy symbol cache is not decoded, so v2 symbol graphics are
- * synthesized placeholders).  Unambiguous hierarchical block designs are recreated
- * as KiCad hierarchical sheets.  Designs with incomplete or ambiguous block
- * mappings fall back to separate top-level sheets, materialized once per block
- * occurrence with that occurrence's reference designators.  OLE-embedded pictures
- * are skipped with a warning.
+ * OrCAD 10.x/2003 onward) and the pre-2003 framing, both read by the same structure
+ * readers.  Hierarchical block designs are recreated as KiCad hierarchical sheets.
+ * Designs with incomplete or ambiguous block mappings fall back to separate top-level
+ * sheets, with each child folder's pages materialized once per block occurrence
+ * using that occurrence's reference designators.
+ * Embedded pictures that cannot be decoded are skipped with a warning.
  */
 class SCH_IO_ORCAD : public SCH_IO
 {

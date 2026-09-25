@@ -26,13 +26,10 @@
  * Parsers for the DSN 'Cache' stream and the 'Packages/\<name\>' streams: symbol
  * definitions with graphics and pins, plus package/device pin-number maps.
  *
- * The cache stream interleaves entry metadata (names, source library, dates) with
- * prefix-framed structures.  Rather than fragile sequential parsing, the walker
- * scans for structure starts: every structure of interest begins with a chain of
- * long prefixes (u8 type, u32 len, u32 zero) repeated with the same type byte,
- * then a short prefix and the preamble magic FF E4 5C 39.  Symbol and package
- * structures embed their own name and source library, so the inter-structure
- * metadata can be skipped entirely.
+ * The cache stream holds four counted sections (loose symbols, LibraryParts, PartCells
+ * and Packages).  Each group carries a name and a variant count, and each variant its
+ * source library and dates, followed by one prefix-framed structure read through
+ * ORCAD_STRUCT_READER.  The legacy dialect uses the same walk with short prefixes.
  *
  * Implemented in orcad_cache.cpp.
  */
@@ -64,8 +61,8 @@ std::optional<ORCAD_SYMBOL_PIN> OrcadReadSymbolPin( ORCAD_STRUCT_READER& aReader
  * LAST 8 bytes before the next prefix stop (as 4 x i16), accepted only when
  * x1 <= x2, y1 <= y2 and both spans are <= 4000 DBU.
  *
- * @param aReader it the parser object.
- * @param aPrefixes
+ * @param aReader is the structure reader positioned at the body.
+ * @param aPrefixes are the prefixes already read for this structure.
  * @param aWithPins read the trailing u16 pin-count pin list and u16 property list
  *                  (true for cache symbols, false for nested SthInPages0 bodies).
  */

@@ -126,7 +126,7 @@ public:
      *                insertion), so it must outlive the converter.
      * @param aSchematic is KiCad schematic to load into.
      * @param aReporter is an optional #REPORTER object to write status information.
-     * @param aProgressReporter is and option progress dialog to show coversion progress.
+     * @param aProgressReporter is an optional progress dialog to show conversion progress.
      *
      * [orcad_converter_sheet.cpp]
      */
