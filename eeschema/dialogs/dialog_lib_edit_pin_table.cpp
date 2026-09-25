@@ -971,6 +971,10 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
 
     if( !parent->IsSymbolGraphicallyEditable() )
     {
+        // Export is OK, but Import is just going to produce frustration
+        m_btnImportFromClipboard->Enable( false );
+        m_btnImportFromFile->Enable( false );
+
         m_ButtonsCancel->SetDefault();
         m_ButtonsOK->SetLabel( _( "Read Only" ) );
         m_ButtonsOK->Enable( false );
@@ -1584,7 +1588,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
 
     int retval = wxID_CANCEL;
 
-    if( m_dataModel->IsEdited() )
+    if( m_dataModel->IsEdited() && m_ButtonsOK->IsEnabled() )
     {
         if( HandleUnsavedChanges( this, _( "Save changes?" ),
                                   [&]() -> bool
