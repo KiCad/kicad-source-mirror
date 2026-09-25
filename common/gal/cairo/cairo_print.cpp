@@ -91,17 +91,17 @@ CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC )
     if( !gctx )
         throw std::runtime_error( "Could not get the Graphics Context" );
 
+// A better resolution could be 4800 DPI (at 600 DPI, we still have minor
+// but visible artifacts, for instance with arcs, but not at 4800 DPI)
+#define KICAD_PRINTER_DPI 4800.0
+
 #ifdef __WXGTK__
     m_ctx = static_cast<cairo_t*>( gctx->GetNativeContext() );
     m_surface = cairo_get_target( m_ctx );
 
 // On linux, cairo printers have 72 DPI by default.
-// This is an unusable resolution for us.
-// A better resolution could be 4800 DPI (at 600 DPI, we still have minor
-// but visible artifacts, for instance with arcs, but not at 4800 DPI)
-// so modify the default:
+// This is an unusable resolution for us, so modify the default:
 #define DEFAULT_DPI 72.0
-#define KICAD_PRINTER_DPI 4800.0
 
     // our device scale is DEFAULT_DPI / KICAD_PRINTER_DPI
     cairo_surface_set_device_scale( m_surface, DEFAULT_DPI / KICAD_PRINTER_DPI,
@@ -128,6 +128,13 @@ CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC )
     m_ctx = cairo_create( m_surface );
     wxASSERT( aDC->GetPPI().x == aDC->GetPPI().y );
     m_dpi = aDC->GetPPI().x;
+
+    // Printer PPI is typically 300 and the GAL snaps geometry to whole device units
+    if( dynamic_cast<wxPrinterDC*>( aDC ) )
+    {
+        cairo_surface_set_device_scale( m_surface, m_dpi / KICAD_PRINTER_DPI, m_dpi / KICAD_PRINTER_DPI );
+        m_dpi = KICAD_PRINTER_DPI;
+    }
 #endif /* __WXMAC__ */
 
     if( !m_ctx || cairo_status( m_ctx ) != CAIRO_STATUS_SUCCESS )
