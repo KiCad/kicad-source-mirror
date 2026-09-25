@@ -69,6 +69,67 @@
 static const wxChar traceDrawPanel[] = wxT( "KICAD_DRAW_PANEL" );
 
 
+namespace
+{
+/// Why DoRePaint drew or returned early; reported under KICAD_GAL_CONTEXT when it changes
+enum PAINT_STATE
+{
+    PAINT_DREW = 0,
+    PAINT_MUTEX_HELD,
+    PAINT_DRAWING_DISABLED,
+    PAINT_NOT_VISIBLE,
+    PAINT_CONTEXT_LOCKED,
+    PAINT_REENTRANT,
+    PAINT_CONTEXT_BIND_FAILED
+};
+
+const wxChar* paintStateName( int aState )
+{
+    switch( aState )
+    {
+    case PAINT_DREW:                return wxS( "drew" );
+    case PAINT_MUTEX_HELD:          return wxS( "skipped, refresh mutex held" );
+    case PAINT_DRAWING_DISABLED:    return wxS( "skipped, drawing disabled" );
+    case PAINT_NOT_VISIBLE:         return wxS( "skipped, GAL not initialized or not visible" );
+    case PAINT_CONTEXT_LOCKED:      return wxS( "skipped, context locked" );
+    case PAINT_REENTRANT:           return wxS( "skipped, already drawing" );
+    case PAINT_CONTEXT_BIND_FAILED: return wxS( "skipped, context could not be made current" );
+    default:                        return wxS( "none yet" );
+    }
+}
+
+/// Describe why a window is not shown on screen, naming the first hidden ancestor
+wxString visibilityDetail( wxWindow* aWindow )
+{
+    if( !aWindow )
+        return wxS( "no window" );
+
+    wxRect   rect = aWindow->GetClientRect();
+    wxString hidden = wxS( "none" );
+
+    for( wxWindow* w = aWindow; w; w = w->GetParent() )
+    {
+        if( !w->IsShown() )
+        {
+            hidden = wxString::Format( wxS( "%s '%s' %p" ), w->GetClassInfo()->GetClassName(), w->GetName(), w );
+            break;
+        }
+
+        if( w->IsTopLevel() )
+            break;
+    }
+
+    wxTopLevelWindow* tlw = dynamic_cast<wxTopLevelWindow*>( wxGetTopLevelParent( aWindow ) );
+
+    return wxString::Format( wxS( "shownOnScreen %d client %dx%d hiddenAncestor %s tlwShown %d tlwIconized %d "
+                                  "tlwEnabled %d" ),
+                             aWindow->IsShownOnScreen(), rect.width, rect.height, hidden,
+                             tlw ? (int) tlw->IsShown() : -1, tlw ? (int) tlw->IsIconized() : -1,
+                             tlw ? (int) tlw->IsEnabled() : -1 );
+}
+} // namespace
+
+
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
                                         KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
@@ -90,6 +151,9 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_glRecoveryAttempted( false ),
         m_contextBindFailures( 0 ),
         m_pendingResize( false ),
+        m_tracedPaintState( -1 ),
+        m_tracedPaintRepeats( 0 ),
+        m_enableRetries( 0 ),
         m_stealsFocus( true ),
         m_statusPopup( nullptr )
 {
@@ -171,11 +235,16 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
              wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), nullptr, this );
 
     Connect( wxEVT_SHOW, wxShowEventHandler( EDA_DRAW_PANEL_GAL::onShowEvent ), nullptr, this );
+
+    wxLogTrace( traceGalContext, wxS( "Canvas %s created, backend %d" ), traceName(), (int) m_backend );
 }
 
 
 EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
 {
+    // The owning frame may already be half destroyed, so only the pointer is safe to report
+    wxLogTrace( traceGalContext, wxS( "Canvas %p destroyed" ), this );
+
     // Ensure EDA_DRAW_PANEL_GAL::onShowEvent is not fired during Dtor process
     Disconnect( wxEVT_SHOW, wxShowEventHandler( EDA_DRAW_PANEL_GAL::onShowEvent ) );
     StopDrawing();
@@ -261,18 +330,36 @@ static constexpr int MAX_CONTEXT_BIND_RETRIES = 2;
 bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 {
     if( !m_refreshMutex.try_lock() )
+    {
+        tracePaintState( PAINT_MUTEX_HELD );
         return false;
+    }
 
     std::lock_guard<std::mutex> lock( m_refreshMutex, std::adopt_lock );
 
     if( !m_drawingEnabled )
+    {
+        tracePaintState( PAINT_DRAWING_DISABLED );
         return false;
+    }
 
-    if( !m_gal->IsInitialized() || !m_gal->IsVisible() || m_gal->IsContextLocked() )
+    if( !m_gal->IsInitialized() || !m_gal->IsVisible() )
+    {
+        tracePaintState( PAINT_NOT_VISIBLE );
         return false;
+    }
+
+    if( m_gal->IsContextLocked() )
+    {
+        tracePaintState( PAINT_CONTEXT_LOCKED );
+        return false;
+    }
 
     if( m_drawing )
+    {
+        tracePaintState( PAINT_REENTRANT );
         return false;
+    }
 
     // The context may have become current since the size change was deferred
     if( m_pendingResize )
@@ -377,6 +464,8 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
                 // A canvas being torn down never reaches here; DoRePaint returns above once
                 // the window stops being visible.  So repeated failures mean a live canvas
                 // whose context is gone for good, and retrying forever would leave it blank
+                tracePaintState( PAINT_CONTEXT_BIND_FAILED );
+
                 if( ++m_contextBindFailures > MAX_CONTEXT_BIND_RETRIES )
                     throw std::runtime_error( "Could not make the OpenGL context current" );
 
@@ -431,6 +520,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
         // OpenGL frame completed successfully, allow future recovery attempts
         m_glRecoveryAttempted = false;
         m_contextBindFailures = 0;
+        tracePaintState( PAINT_DREW );
     }
     catch( std::exception& err )
     {
@@ -579,9 +669,20 @@ void EDA_DRAW_PANEL_GAL::ForceRefresh()
             Connect( wxEVT_IDLE, wxIdleEventHandler( EDA_DRAW_PANEL_GAL::onIdle ), nullptr, this );
 
             m_drawingEnabled = true;
+
+            wxLogTrace( traceGalContext, wxS( "Canvas %s drawing enabled after %d retries" ), traceName(),
+                        m_enableRetries );
+            m_enableRetries = 0;
         }
         else
         {
+            // A canvas that never paints keeps retrying here, so report the first and then every 50th
+            if( m_enableRetries++ % 50 == 0 )
+            {
+                wxLogTrace( traceGalContext, wxS( "Canvas %s waiting for GAL, retry %d: %s" ), traceName(),
+                            m_enableRetries, visibilityDetail( dynamic_cast<wxWindow*>( m_gal ) ) );
+            }
+
             // Try again soon
             m_refreshTimer.StartOnce( 100 );
             return;
@@ -611,6 +712,8 @@ void EDA_DRAW_PANEL_GAL::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
 
 void EDA_DRAW_PANEL_GAL::StartDrawing()
 {
+    wxLogTrace( traceGalContext, wxS( "Canvas %s StartDrawing" ), traceName() );
+
     // Start querying GAL if it is ready
     m_refreshTimer.StartOnce( 100 );
 }
@@ -618,6 +721,8 @@ void EDA_DRAW_PANEL_GAL::StartDrawing()
 
 void EDA_DRAW_PANEL_GAL::StopDrawing()
 {
+    wxLogTrace( traceGalContext, wxS( "Canvas %p StopDrawing, was enabled %d" ), this, m_drawingEnabled );
+
     m_refreshTimer.Stop();
     m_drawingEnabled = false;
 
@@ -756,6 +861,9 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
     m_backend = aGalType;
 
+    wxLogTrace( traceGalContext, wxS( "Canvas %s switched to backend %d, result %d" ), traceName(),
+                (int) aGalType, result );
+
     return result;
 }
 
@@ -830,10 +938,50 @@ void EDA_DRAW_PANEL_GAL::onRefreshTimer( wxTimerEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::onShowEvent( wxShowEvent& aEvent )
 {
+    wxLogTrace( traceGalContext, wxS( "Canvas %s show event %d: %s" ), traceName(), aEvent.IsShown(),
+                visibilityDetail( dynamic_cast<wxWindow*>( m_gal ) ) );
+
     if( m_gal && m_gal->IsInitialized() && m_gal->IsVisible() )
     {
         OnShow();
     }
+}
+
+
+void EDA_DRAW_PANEL_GAL::tracePaintState( int aState )
+{
+    if( aState == m_tracedPaintState )
+    {
+        // A canvas stuck behind one guard would otherwise go silent, so keep a slow heartbeat
+        if( aState != PAINT_DREW && ++m_tracedPaintRepeats % 200 == 0 )
+        {
+            wxLogTrace( traceGalContext, wxS( "Canvas %s still %s (%d times)" ), traceName(),
+                        paintStateName( aState ), m_tracedPaintRepeats );
+        }
+
+        return;
+    }
+
+    wxString detail;
+
+    if( aState == PAINT_NOT_VISIBLE )
+        detail = wxS( ": " ) + visibilityDetail( dynamic_cast<wxWindow*>( m_gal ) );
+
+    wxLogTrace( traceGalContext, wxS( "Canvas %s %s -> %s after %d repeats%s" ), traceName(),
+                paintStateName( m_tracedPaintState ), paintStateName( aState ), m_tracedPaintRepeats, detail );
+
+    m_tracedPaintState = aState;
+    m_tracedPaintRepeats = 0;
+}
+
+
+wxString EDA_DRAW_PANEL_GAL::traceName() const
+{
+    wxTopLevelWindow* tlw =
+            dynamic_cast<wxTopLevelWindow*>( wxGetTopLevelParent( const_cast<EDA_DRAW_PANEL_GAL*>( this ) ) );
+
+    return wxString::Format( wxS( "%p [%s%s]" ), this, IsDialogPreview() ? wxS( "preview in " ) : wxS( "" ),
+                             tlw ? tlw->GetTitle() : wxString( wxS( "no frame" ) ) );
 }
 
 

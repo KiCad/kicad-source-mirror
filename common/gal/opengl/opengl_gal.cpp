@@ -382,6 +382,9 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
     m_shader = new SHADER();
     ++m_instanceCounter;
 
+    wxLogTrace( traceGalContext, wxS( "OPENGL_GAL %p created, context %p, main %p, instances %d" ), this,
+                m_glPrivContext, m_glMainContext, m_instanceCounter );
+
     m_bitmapCache = std::make_unique<GL_BITMAP_CACHE>();
 
     m_compositor = new OPENGL_COMPOSITOR;
@@ -467,6 +470,10 @@ OPENGL_GAL::~OPENGL_GAL()
 
         --m_instanceCounter;
 
+        wxLogTrace( traceGalContext, wxS( "OPENGL_GAL %p destroyed, context %p valid %d initialized %d, "
+                                          "instances left %d" ),
+                    this, m_glPrivContext, m_isContextValid, m_isInitialized, m_instanceCounter );
+
         if( !m_isContextValid )
         {
             // Whichever context is still current may belong to another share group, so every
@@ -523,6 +530,10 @@ OPENGL_GAL::~OPENGL_GAL()
 
             gl_mgr->UnlockCtx( m_glMainContext );
             gl_mgr->DestroyCtx( m_glMainContext );
+
+            wxLogTrace( traceGalContext, wxS( "Main GL context %p destroyed with the last OPENGL_GAL" ),
+                        m_glMainContext );
+
             m_glMainContext = nullptr;
         }
     }

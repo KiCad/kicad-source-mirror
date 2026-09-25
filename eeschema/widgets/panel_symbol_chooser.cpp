@@ -39,6 +39,7 @@
 #include <eeschema_settings.h>
 #include <symbol_editor_settings.h>
 #include <symbol_library_common.h>         // For SYMBOL_LIBRARY_FILTER
+#include <trace_helpers.h>
 #include <algorithm>
 #include <wx/button.h>
 #include <wx/clipbrd.h>
@@ -500,6 +501,9 @@ LIB_ID PANEL_SYMBOL_CHOOSER::GetSelectedLibId( int* aUnit ) const
 
 void PANEL_SYMBOL_CHOOSER::ShutdownCanvases()
 {
+    wxLogTrace( traceGalContext, wxS( "Symbol chooser shutting down preview canvas %p" ),
+                m_symbol_preview->GetCanvas() );
+
     m_symbol_preview->GetCanvas()->SetEvtHandlerEnabled( false );
     m_symbol_preview->GetCanvas()->StopDrawing();
 
