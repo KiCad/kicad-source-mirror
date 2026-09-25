@@ -241,6 +241,9 @@ void SELECTION_TOOL::onDisambiguationExpire( wxTimerEvent& aEvent )
         return;
 
     m_toolMgr->ProcessEvent( EVENTS::DisambiguatePoint );
+
+    // Timer events bypass EDA_DRAW_PANEL_GAL::OnEvent, which is what normally repaints the selection
+    getEditFrame<EDA_DRAW_FRAME>()->GetCanvas()->Refresh();
 }
 
 
