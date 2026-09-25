@@ -654,6 +654,9 @@ const BOX2I PCB_TABLE::GetBoundingBox() const
     for( PCB_TABLECELL* cell : m_cells )
         bbox.Merge( cell->GetBoundingBox() );
 
+    if( m_strokeExternal )
+        bbox.Inflate( m_borderStroke.GetWidth() / 2 );
+
     return bbox;
 }
 

@@ -364,6 +364,9 @@ const BOX2I SCH_TABLE::GetBoundingBox() const
 
     bbox.Merge( m_cells[m_cells.size() - 1]->GetBoundingBox() );
 
+    if( m_strokeExternal )
+        bbox.Inflate( m_borderStroke.GetWidth() / 2 );
+
     return bbox;
 }
 
