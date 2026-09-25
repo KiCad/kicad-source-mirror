@@ -286,15 +286,32 @@ bool UnpackSymbol( SCH_SYMBOL* aOutput, const kiapi::schematic::types::Schematic
 }
 
 
+// Variant names are stored and compared exactly, but SCHEMATIC::HasVariant matches case-insensitively
+static std::optional<wxString> FindVariantNoCase( const SCHEMATIC* aSchematic, const wxString& aName )
+{
+    for( const wxString& variantName : aSchematic->GetVariantNames() )
+    {
+        if( variantName.CmpNoCase( aName ) == 0 )
+            return variantName;
+    }
+
+    return std::nullopt;
+}
+
+
 /// Make the schematic aware of a variant a request named.  Accepts either variant message.
 template <typename VariantProto>
-static void registerVariant( SCHEMATIC* aSchematic, const wxString& aName,
-                             const VariantProto& aInput )
+static void registerVariant( SCHEMATIC* aSchematic, const wxString& aName, const VariantProto& aInput )
 {
     if( !aSchematic )
         return;
 
-    aSchematic->AddVariant( aName );
+    wxString name( aName );
+
+    if( std::optional<wxString> canonical = FindVariantNoCase( aSchematic, name ) )
+        name = *canonical;
+
+    aSchematic->AddVariant( name );
 
     // An empty description clears the one the variant has, so honour presence rather than text.
     if( aInput.has_description() )

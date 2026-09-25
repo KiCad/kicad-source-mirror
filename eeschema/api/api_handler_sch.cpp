@@ -2696,19 +2696,6 @@ API_HANDLER_SCH::handleExpandTextVariables( const HANDLER_CONTEXT<ExpandTextVari
 }
 
 
-// Variant names are stored and compared exactly, but SCHEMATIC::HasVariant matches case-insensitively
-static std::optional<wxString> findVariantNoCase( const SCHEMATIC* aSchematic, const wxString& aName )
-{
-    for( const wxString& variantName : aSchematic->GetVariantNames() )
-    {
-        if( variantName.CmpNoCase( aName ) == 0 )
-            return variantName;
-    }
-
-    return std::nullopt;
-}
-
-
 HANDLER_RESULT<VariantsResponse> API_HANDLER_SCH::handleGetVariants( const HANDLER_CONTEXT<GetVariants>& aCtx )
 {
     if( aCtx.Request.document().type() != DocumentType::DOCTYPE_SCHEMATIC )
@@ -2759,7 +2746,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleAddVariant( const HANDLER_CONTEXT<A
 
     VARIANT_PROXY_UNDO_ITEM* undoItem = m_frame ? new VARIANT_PROXY_UNDO_ITEM( schematic ) : nullptr;
 
-    if( std::optional<wxString> canonical = findVariantNoCase( schematic, name ) )
+    if( std::optional<wxString> canonical = FindVariantNoCase( schematic, name ) )
         name = *canonical;
 
     schematic->AddVariant( name );

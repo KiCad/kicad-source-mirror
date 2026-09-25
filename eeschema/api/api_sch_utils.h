@@ -72,7 +72,8 @@ bool PackSheet( kiapi::schematic::types::SheetSymbol* aOutput, const SCH_SHEET* 
 /**
  * Unpack the every placement data from the input. Placement data is applied separately by #ApplySheetInstance.
  */
-tl::expected<bool, kiapi::common::ApiResponseStatus> UnpackSheet( SCH_SHEET* aOutput, const kiapi::schematic::types::SheetSymbol& aInput );
+tl::expected<bool, kiapi::common::ApiResponseStatus> UnpackSheet( SCH_SHEET* aOutput,
+                                                                  const kiapi::schematic::types::SheetSymbol& aInput );
 
 /**
  * Apply the placement data in a sheet message to @a aSheet: page number and the variants the
@@ -100,5 +101,10 @@ struct SCH_FOCUS_TARGET
  */
 tl::expected<SCH_FOCUS_TARGET, kiapi::common::ApiResponseStatus>
 ResolveFocusItems( SCHEMATIC& aSchematic, const std::vector<KIID>& aIds, const std::optional<KIID_PATH>& aSheetPath );
+
+/**
+ * Variant names are stored and compared exactly, but SCHEMATIC::HasVariant matches case-insensitively
+ */
+static std::optional<wxString> FindVariantNoCase( const SCHEMATIC* aSchematic, const wxString& aName );
 
 #endif //KICAD_API_SCH_UTILS_H
