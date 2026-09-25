@@ -72,12 +72,14 @@ bool DIALOG_SCH_IMPORT_SETTINGS::TransferDataFromWindow()
 void DIALOG_SCH_IMPORT_SETTINGS::OnSelectAll( wxCommandEvent& event )
 {
     m_FormattingOpt->SetValue( true );
+    m_annotationOpt->SetValue( true );
     m_FieldNameTemplatesOpt->SetValue( true );
     m_PinMapOpt->SetValue( true );
     m_SeveritiesOpt->SetValue( true );
     m_NetClassesOpt->SetValue( true );
     m_BomPresetsOpt->SetValue( true );
     m_BomFmtPresetsOpt->SetValue( true );
+    m_SymbolParityOpt->SetValue( true );
     m_BusAliasesOpt->SetValue( true );
     m_TextVarsOpt->SetValue( true );
 }
