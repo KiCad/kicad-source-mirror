@@ -1309,6 +1309,9 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnFilterChoice( wxCommandEvent& event )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnImportButtonClick( wxCommandEvent& event )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     bool fromFile = event.GetEventObject() == m_btnImportFromFile;
     bool replaceAll = m_rbReplaceAll->GetValue();
 
@@ -1316,20 +1319,23 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnImportButtonClick( wxCommandEvent& event )
 
     PIN_INFO_FORMATTER fmt( *m_editFrame, false, PIN_INFO_FORMATTER::BOOL_FORMAT::TRUE_FALSE, reporter );
 
-    auto updateFn = [&]( SCH_PIN& aPin, const wxString& aVal, COL_ORDER aCol )
-    {
-        fmt.UpdatePin( aPin, aVal, aCol, *m_symbol );
-    };
+    auto updateFn =
+            [&]( SCH_PIN& aPin, const wxString& aVal, COL_ORDER aCol )
+            {
+                fmt.UpdatePin( aPin, aVal, aCol, *m_symbol );
+            };
 
-    auto createFn = []( LIB_SYMBOL& aSym )
-    {
-        return std::make_unique<SCH_PIN>( &aSym );
-    };
+    auto createFn =
+            []( LIB_SYMBOL& aSym )
+            {
+                return std::make_unique<SCH_PIN>( &aSym );
+            };
 
-    auto colLabelToEnumFn = []( const wxString& aStr ) -> COL_ORDER
-    {
-        return GetColTypeForString( aStr );
-    };
+    auto colLabelToEnumFn =
+            []( const wxString& aStr ) -> COL_ORDER
+            {
+                return GetColTypeForString( aStr );
+            };
 
     std::optional<std::vector<std::vector<wxString>>> csvData = ReadTableFromFileOrClipboard( *m_editFrame, fromFile );
 
@@ -1409,6 +1415,9 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnImportButtonClick( wxCommandEvent& event )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnExportButtonClick( wxCommandEvent& event )
 {
+    if( !m_grid->CommitPendingChanges() )
+        return;
+
     bool toFile = event.GetEventObject() == m_btnExportToFile;
     bool onlyShown = m_rbExportOnlyShownPins->GetValue();
 
