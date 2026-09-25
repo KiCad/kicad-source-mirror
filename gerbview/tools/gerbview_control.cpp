@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <base_units.h>
 #include <confirm.h>
 #include <common.h>
 #include <dialogs/dialog_map_gerber_layers_to_pcb.h>
@@ -466,27 +467,40 @@ int GERBVIEW_CONTROL::ClearAllLayers( const TOOL_EVENT& aEvent )
 
 int GERBVIEW_CONTROL::ReloadAllLayers( const TOOL_EVENT& aEvent )
 {
-    // Store filenames
-    wxArrayString           listOfGerberFiles;
-    std::vector<int>        fileType;
-    GERBER_FILE_IMAGE_LIST* list = m_frame->GetImagesList();
+    struct SAVED_LAYER
+    {
+        wxString  fileName;
+        VECTOR2I  displayOffset;
+        EDA_ANGLE displayRotation;
+        bool      visible;
+        bool      restored = false;
+    };
+
+    // Store filenames and display settings before clearing the images.
+    wxArrayString                listOfGerberFiles;
+    std::vector<int>             fileType;
+    std::vector<SAVED_LAYER>     savedLayers;
+    GERBER_FILE_IMAGE_LIST*      list = m_frame->GetImagesList();
+    LSET                         oldVisibility = m_frame->GetVisibleLayers();
 
     for( unsigned i = 0; i < list->ImagesMaxCount(); i++ )
     {
-        if( list->GetGbrImage( i ) == nullptr )
+        GERBER_FILE_IMAGE* image = list->GetGbrImage( i );
+
+        if( !image || !image->m_InUse )
             continue;
 
-        if( !list->GetGbrImage( i )->m_InUse )
-            continue;
+        savedLayers.push_back( { image->m_FileName, image->m_DisplayOffset,
+                                 image->m_DisplayRotation, oldVisibility[i] } );
 
-        EXCELLON_IMAGE* drill_file = dynamic_cast<EXCELLON_IMAGE*>( list->GetGbrImage( i ) );
+        EXCELLON_IMAGE* drill_file = dynamic_cast<EXCELLON_IMAGE*>( image );
 
         if( drill_file )
             fileType.push_back( 1 );
         else
             fileType.push_back( 0 );
 
-        listOfGerberFiles.Add( list->GetGbrImage( i )->m_FileName );
+        listOfGerberFiles.Add( image->m_FileName );
     }
 
     // Clear all layers
@@ -496,6 +510,41 @@ int GERBVIEW_CONTROL::ReloadAllLayers( const TOOL_EVENT& aEvent )
     // Load the layers from stored paths
     wxBusyCursor wait;
     m_frame->LoadListOfGerberAndDrillFiles( wxEmptyString, listOfGerberFiles, &fileType );
+
+    // Loading and sorting may assign a file to a different layer number.
+    LSET restoredVisibility = m_frame->GetVisibleLayers();
+
+    for( unsigned i = 0; i < list->ImagesMaxCount(); i++ )
+    {
+        GERBER_FILE_IMAGE* image = list->GetGbrImage( i );
+
+        if( !image || !image->m_InUse )
+            continue;
+
+        for( SAVED_LAYER& saved : savedLayers )
+        {
+            if( saved.restored || saved.fileName != image->m_FileName )
+            {
+                continue;
+            }
+
+            image->SetDrawOffetAndRotation( VECTOR2D( saved.displayOffset.x / gerbIUScale.IU_PER_MM,
+                                                      saved.displayOffset.y / gerbIUScale.IU_PER_MM ),
+                                            saved.displayRotation );
+            restoredVisibility[i] = saved.visible;
+            saved.restored = true;
+            break;
+        }
+    }
+
+    m_frame->SetVisibleLayers( restoredVisibility );
+    m_frame->ReFillLayerWidget();
+
+    KIGFX::VIEW* view = getView();
+    view->RecacheAllItems();
+    view->MarkDirty();
+    view->UpdateAllItems( KIGFX::ALL );
+    canvas()->Refresh();
 
     return 0;
 }
