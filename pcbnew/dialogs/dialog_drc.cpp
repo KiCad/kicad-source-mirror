@@ -1103,6 +1103,10 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     case ID_EDIT_SEVERITIES:
         m_frame->ShowBoardSetupDialog( _( "Violation Severity" ), this );
+
+        // Rebuild model and view
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, getSeverities() );
+        updateDisplayedCounts();
         break;
     }
 

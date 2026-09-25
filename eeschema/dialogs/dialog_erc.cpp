@@ -956,10 +956,18 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
     case ID_EDIT_PIN_CONFLICT_MAP:
         m_parent->ShowSchematicSetupDialog( _( "Pin Conflicts Map" ) );
+
+        // Rebuild model and view
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, getSeverities() );
+        updateDisplayedCounts();
         break;
 
     case ID_EDIT_SEVERITIES:
         m_parent->ShowSchematicSetupDialog( _( "Violation Severity" ) );
+
+        // Rebuild model and view
+        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markerProvider, getSeverities() );
+        updateDisplayedCounts();
         break;
 
     case ID_EDIT_CONNECTION_GRID:
