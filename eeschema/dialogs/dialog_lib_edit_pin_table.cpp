@@ -198,19 +198,19 @@ public:
 
         case COL_TYPE:
             if( PinTypeNames().Index( aValue, false ) != wxNOT_FOUND )
-                aPin.SetType( (ELECTRICAL_PINTYPE) PinTypeNames().Index( aValue ) );
+                aPin.SetType( (ELECTRICAL_PINTYPE) PinTypeNames().Index( aValue, false ) );
 
             break;
 
         case COL_SHAPE:
             if( PinShapeNames().Index( aValue, false ) != wxNOT_FOUND )
-                aPin.SetShape( (GRAPHIC_PINSHAPE) PinShapeNames().Index( aValue ) );
+                aPin.SetShape( (GRAPHIC_PINSHAPE) PinShapeNames().Index( aValue, false ) );
 
             break;
 
         case COL_ORIENTATION:
             if( PinOrientationNames().Index( aValue, false ) != wxNOT_FOUND )
-                aPin.SetOrientation( (PIN_ORIENTATION) PinOrientationNames().Index( aValue ) );
+                aPin.SetOrientation( (PIN_ORIENTATION) PinOrientationNames().Index( aValue, false ) );
 
             break;
 
