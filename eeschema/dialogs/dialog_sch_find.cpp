@@ -415,6 +415,6 @@ void DIALOG_SCH_FIND::SetReplaceEntries( const wxArrayString& aEntries )
     if( m_comboReplace->GetCount() )
     {
         m_comboReplace->SetSelection( 0 );
-        m_comboFind->SelectAll();
+        m_comboReplace->SelectAll();
     }
 }
