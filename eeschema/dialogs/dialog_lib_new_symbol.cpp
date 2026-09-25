@@ -101,8 +101,9 @@ bool DIALOG_LIB_NEW_SYMBOL::TransferDataToWindow()
     CallAfter(
             [&]()
             {
-                /* The combo box `m_comboInheritanceSelect` must first process an update event before the string can be read again.
-                 * The CallAfter() method ensures that the string is available when onParentSymbolSelect() reads it again.
+                /* The combo box `m_comboInheritanceSelect` must first process an update event before the
+                 * string can be read again.  The CallAfter() method ensures that the string is available
+                 * when onParentSymbolSelect() reads it again.
                  */
                 wxCommandEvent dummyEvent;
 
@@ -146,41 +147,25 @@ void DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect( wxCommandEvent& aEvent )
         m_nameIsDefaulted = true;
     }
 
-    syncControls( !parent.IsEmpty() );
+    syncControls();
 
     /* The banner changes the size of the dialog box, so it needs to be adjusted. */
     Fit();
 }
 
 
-void DIALOG_LIB_NEW_SYMBOL::syncControls( bool aIsDerivedPart )
+void DIALOG_LIB_NEW_SYMBOL::syncControls()
 {
-    m_staticTextDes->Enable( !aIsDerivedPart );
-    m_textReference->Enable( !aIsDerivedPart );
-    m_staticTextUnits->Enable( !aIsDerivedPart );
-    m_spinPartCount->Enable( !aIsDerivedPart );
-    m_checkUnitsInterchangeable->Enable( !aIsDerivedPart );
-    m_checkHasAlternateBodyStyle->Enable( !aIsDerivedPart );
-    m_checkIsPowerSymbol->Enable( !aIsDerivedPart );
-    m_excludeFromBomCheckBox->Enable( !aIsDerivedPart );
-    m_excludeFromBoardCheckBox->Enable( !aIsDerivedPart );
-    m_staticPinTextPositionLabel->Enable( !aIsDerivedPart );
-    m_textPinTextPosition->Enable( !aIsDerivedPart );
-    m_staticPinTextPositionUnits->Enable( !aIsDerivedPart );
+    bool isDerivedPart = !m_comboInheritanceSelect->GetValue().IsEmpty();
 
-    m_checkShowPinNumber->Enable( !aIsDerivedPart );
-    m_checkShowPinName->Enable( !aIsDerivedPart );
-    m_checkShowPinNameInside->Enable( !aIsDerivedPart );
+    m_staticTextDes->Enable( !isDerivedPart );
+    m_textReference->Enable( !isDerivedPart );
+    m_staticTextUnits->Enable( !isDerivedPart );
+    m_spinPartCount->Enable( !isDerivedPart );
+    m_checkUnitsInterchangeable->Enable( !isDerivedPart );
+    m_checkHasAlternateBodyStyle->Enable( !isDerivedPart );
+    m_checkIsPowerSymbol->Enable( !isDerivedPart );
 
-    m_checkKeepDatasheet->Enable( aIsDerivedPart );
-    m_checkKeepFootprint->Enable( aIsDerivedPart );
-    m_checkTransferUserFields->Enable( aIsDerivedPart );
-    m_checkKeepContentUserFields->Enable( aIsDerivedPart );
-}
-
-
-void DIALOG_LIB_NEW_SYMBOL::onPowerCheckBox( wxCommandEvent& aEvent )
-{
     if( m_checkIsPowerSymbol->IsChecked() )
     {
         m_excludeFromBomCheckBox->SetValue( true );
@@ -190,14 +175,33 @@ void DIALOG_LIB_NEW_SYMBOL::onPowerCheckBox( wxCommandEvent& aEvent )
     }
     else
     {
-        m_excludeFromBomCheckBox->Enable( true );
-        m_excludeFromBoardCheckBox->Enable( true );
+        m_excludeFromBomCheckBox->Enable( !isDerivedPart );
+        m_excludeFromBoardCheckBox->Enable( !isDerivedPart );
     }
+
+    m_staticPinTextPositionLabel->Enable( !isDerivedPart );
+    m_textPinTextPosition->Enable( !isDerivedPart );
+    m_staticPinTextPositionUnits->Enable( !isDerivedPart );
+
+    m_checkShowPinNumber->Enable( !isDerivedPart );
+    m_checkShowPinName->Enable( !isDerivedPart );
+    m_checkShowPinNameInside->Enable( !isDerivedPart );
+
+    m_checkKeepDatasheet->Enable( isDerivedPart );
+    m_checkKeepFootprint->Enable( isDerivedPart );
+
+    m_checkTransferUserFields->Enable( isDerivedPart );
+    m_checkKeepContentUserFields->Enable( isDerivedPart && m_checkTransferUserFields->IsChecked() );
+}
+
+
+void DIALOG_LIB_NEW_SYMBOL::onPowerCheckBox( wxCommandEvent& aEvent )
+{
+    syncControls();
 }
 
 
 void DIALOG_LIB_NEW_SYMBOL::onCheckTransferUserFields( wxCommandEvent& aEvent )
 {
-    bool checked = m_checkTransferUserFields->IsChecked();
-    m_checkKeepContentUserFields->Enable( checked );
+    syncControls();
 }
