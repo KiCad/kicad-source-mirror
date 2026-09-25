@@ -344,7 +344,37 @@ bool SCH_TABLE::operator<( const SCH_ITEM& aItem ) const
     if( GetPosition().y != other.GetPosition().y )
         return GetPosition().y < other.GetPosition().y;
 
-    return m_cells[0] < other.m_cells[0];
+    if( m_strokeExternal != other.m_strokeExternal )
+        return m_strokeExternal;
+
+    if( m_StrokeHeaderSeparator != other.m_StrokeHeaderSeparator )
+        return m_StrokeHeaderSeparator;
+
+    if( m_borderStroke != other.m_borderStroke )
+        return m_borderStroke < other.m_borderStroke;
+
+    if( m_strokeRows != other.m_strokeRows )
+        return m_strokeRows;
+
+    if( m_strokeColumns != other.m_strokeColumns )
+        return m_strokeColumns;
+
+    if( m_separatorsStroke != other.m_separatorsStroke )
+        return m_separatorsStroke < other.m_separatorsStroke;
+
+    if( m_colWidths != other.m_colWidths )
+        return false;
+
+    if( m_rowHeights != other.m_rowHeights )
+        return false;
+
+    for( int ii = 0; ii < (int) m_cells.size(); ++ii )
+    {
+        if( m_cells[ii] != other.m_cells[ii] )
+            return m_cells[ii] < other.m_cells[ii];
+    }
+
+    return false;
 }
 
 

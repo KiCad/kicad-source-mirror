@@ -113,6 +113,8 @@ public:
 
     bool operator!=( const STROKE_PARAMS& aOther ) const { return !( *this == aOther ); }
 
+    bool operator<( const STROKE_PARAMS& aOther ) const;
+
     void Format( OUTPUTFORMATTER* out, const EDA_IU_SCALE& aIuScale ) const;
 
     void GetMsgPanelInfo( UNITS_PROVIDER* aUnitsProvider, std::vector<MSG_PANEL_ITEM>& aList,
