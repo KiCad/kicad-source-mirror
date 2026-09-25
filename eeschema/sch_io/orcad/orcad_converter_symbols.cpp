@@ -604,6 +604,48 @@ ORCAD_SYMBOL_DEF symbolVariantForPlacedPins( const ORCAD_SYMBOL_DEF& aSymbol, co
     return fitted;
 }
 
+
+/// Split "<base><unit>.<view>", e.g. "74LS00A.Normal" over base "74LS00", into unit and view
+std::pair<std::string, std::string> splitCacheName( const std::string& aName, const std::string& aBase )
+{
+    std::string tail = aName.compare( 0, aBase.size(), aBase ) == 0 ? aName.substr( aBase.size() ) : aName;
+    size_t      dot = tail.find( '.' );
+
+    return { tail.substr( 0, dot ), dot == std::string::npos ? std::string() : tail.substr( dot + 1 ) };
+}
+
+
+/// A "#" index keeps unnamed units of a multi-device package distinct and sortable
+std::string packageUnitLetter( const ORCAD_PACKAGE& aPackage, size_t aIndex )
+{
+    if( aIndex < aPackage.devices.size() && !aPackage.devices[aIndex].unitRef.empty() )
+        return aPackage.devices[aIndex].unitRef;
+
+    if( aPackage.devices.size() < 2 )
+        return {};
+
+    std::string index = std::to_string( aIndex );
+    return "#" + std::string( 10 - std::min<size_t>( 10, index.size() ), '0' ) + index;
+}
+
+
+std::vector<bool> nonblankPinNumbers( const std::vector<std::string>& aNumbers )
+{
+    std::vector<bool> visible;
+    visible.reserve( aNumbers.size() );
+
+    for( const std::string& number : aNumbers )
+        visible.push_back( !number.empty() );
+
+    return visible;
+}
+
+
+bool unitLetterLess( const std::string& aLeft, const std::string& aRight )
+{
+    return StrNumCmp( wxString::FromUTF8( aLeft ), wxString::FromUTF8( aRight ) ) < 0;
+}
+
 } // namespace
 
 
@@ -783,46 +825,110 @@ void ORCAD_CONVERTER::prepareSymbols()
 }
 
 
-std::vector<LIB_SYMBOL*> ORCAD_CONVERTER::BuildSymbolLibrary()
+ORCAD_CONVERTER::LIB_ENTRY ORCAD_CONVERTER::buildPackageEntry( const ORCAD_PACKAGE& aPackage ) const
 {
-    // .OLB has same Library/Cache/Packages streams but no pages, so lib entries built
-    // directly from cache defs (grouped by base name, Normal view) w/ package data.
-    auto stripView = []( const std::string& aName ) -> std::string
+    LIB_ENTRY entry;
+    entry.name = SymbolId( aPackage.name );
+    entry.refPrefix = aPackage.refDes.empty() ? "U" : aPackage.refDes;
+    entry.footprint = aPackage.pcbFootprint;
+
+    // Heterogeneous units are cached as "<package><unit>.<view>", homogeneous ones share "<package>.<view>"
+    auto view = [&]( const std::string& aUnit, const char* aView ) -> const ORCAD_SYMBOL_DEF*
     {
-        size_t dot = aName.rfind( '.' );
-
-        if( dot != std::string::npos )
+        for( const std::string& name : { aPackage.name + aUnit + "." + aView, aPackage.name + "." + aView } )
         {
-            std::string view = aName.substr( dot + 1 );
+            auto it = m_design.symbols.find( name );
 
-            if( view == "Normal" || view == "Convert" )
-                return aName.substr( 0, dot );
+            if( it != m_design.symbols.end() && it->second.typeId == ORCAD_ST_LIBRARY_PART )
+                return &it->second;
         }
 
-        return aName;
+        return nullptr;
     };
 
-    for( auto& [cacheName, def] : m_design.symbols )
+    for( size_t i = 0; i < aPackage.devices.size(); ++i )
     {
-        // Only drawable library parts and power symbols become library items
-        if( def.typeId != ORCAD_ST_LIBRARY_PART && def.typeId != ORCAD_ST_GLOBAL_SYMBOL )
+        const ORCAD_DEVICE&     device = aPackage.devices[i];
+        const ORCAD_SYMBOL_DEF* normal = view( device.unitRef, "Normal" );
+        const ORCAD_SYMBOL_DEF* convert = view( device.unitRef, "Convert" );
+        std::string             letter = packageUnitLetter( aPackage, i );
+
+        if( !normal )
+            std::swap( normal, convert );
+
+        if( !normal || std::any_of( entry.units.begin(), entry.units.end(),
+                                    [&]( const UNIT_INFO& aUnit )
+                                    {
+                                        return aUnit.letter == letter;
+                                    } ) )
+        {
+            continue;
+        }
+
+        UNIT_INFO unit;
+        unit.letter = letter;
+        unit.symbol = normal;
+        unit.convert = convert;
+        unit.pinNumbers = device.pinNumbers;
+        unit.pinNumberVisible = nonblankPinNumbers( device.pinNumbers );
+        unit.pinIgnore = device.pinIgnore;
+        entry.units.push_back( std::move( unit ) );
+    }
+
+    std::stable_sort( entry.units.begin(), entry.units.end(),
+                      []( const UNIT_INFO& a, const UNIT_INFO& b )
+                      {
+                          return unitLetterLess( a.letter, b.letter );
+                      } );
+
+    return entry;
+}
+
+
+std::vector<LIB_SYMBOL*> ORCAD_CONVERTER::BuildSymbolLibrary()
+{
+    std::set<const ORCAD_SYMBOL_DEF*> packaged;
+
+    for( const auto& [name, package] : m_design.packages )
+    {
+        LIB_ENTRY entry = buildPackageEntry( package );
+
+        if( entry.units.empty() || m_libSymbols.count( entry.name ) )
             continue;
 
-        bool        convertView = cacheName.size() > 8 && cacheName.compare( cacheName.size() - 8, 8, ".Convert" ) == 0;
-        std::string base = stripView( cacheName );
+        for( const UNIT_INFO& unit : entry.units )
+            packaged.insert( { unit.symbol, unit.convert } );
+
+        m_libSymbols.emplace( entry.name, std::move( entry ) );
+    }
+
+    // Power symbols and parts without a package become single-unit items
+    for( const auto& [cacheName, def] : m_design.symbols )
+    {
+        if( packaged.count( &def )
+            || ( def.typeId != ORCAD_ST_LIBRARY_PART && def.typeId != ORCAD_ST_GLOBAL_SYMBOL ) )
+        {
+            continue;
+        }
+
+        size_t      dot = cacheName.rfind( '.' );
+        std::string view = dot == std::string::npos ? std::string() : cacheName.substr( dot + 1 );
+        std::string base = view == "Normal" || view == "Convert" ? cacheName.substr( 0, dot ) : cacheName;
+        auto        normal = m_design.symbols.find( base + ".Normal" );
+        auto        convert = m_design.symbols.find( base + ".Convert" );
+
+        if( view == "Convert" && normal != m_design.symbols.end() && !packaged.count( &normal->second ) )
+            continue;
+
         std::string libname = SymbolId( base );
 
-        LIB_ENTRY& ls = m_libSymbols[libname];
-
-        // First (Normal) view wins; .Convert is DeMorgan alternate sharing pin map,
-        // not separate item.
-        if( !ls.name.empty() )
+        if( m_libSymbols.count( libname ) )
+        {
+            warn( wxString::Format( _( "The symbol '%s' duplicates the name of another library item and was "
+                                       "left out of the library." ),
+                                    FromOrcadString( cacheName ) ) );
             continue;
-
-        if( convertView && m_design.symbols.count( base + ".Normal" ) )
-            continue;
-
-        ls.name = libname;
+        }
 
         std::string          bare = base.substr( 0, base.find( '.' ) );
         const ORCAD_PACKAGE* pkg = nullptr;
@@ -838,6 +944,8 @@ std::vector<LIB_SYMBOL*> ORCAD_CONVERTER::BuildSymbolLibrary()
             }
         }
 
+        LIB_ENTRY& ls = m_libSymbols[libname];
+        ls.name = libname;
         ls.isPower = def.typeId == ORCAD_ST_GLOBAL_SYMBOL;
         ls.refPrefix = ( pkg && !pkg->refDes.empty() ) ? pkg->refDes : ( ls.isPower ? "#PWR" : "U" );
         ls.footprint = pkg ? pkg->pcbFootprint : "";
@@ -845,22 +953,21 @@ std::vector<LIB_SYMBOL*> ORCAD_CONVERTER::BuildSymbolLibrary()
         if( ls.isPower )
             ls.powerNet = base; // power value = net name (symbol base)
 
-        std::vector<std::string> pinNumbers;
-        std::vector<bool>        pinNumberVisible;
-        std::vector<bool>        pinIgnore;
+        UNIT_INFO unit;
+        unit.letter = "A";
+        unit.symbol = &def;
+
+        if( view == "Normal" && convert != m_design.symbols.end() && convert->second.typeId == def.typeId )
+            unit.convert = &convert->second;
 
         if( pkg && !pkg->devices.empty() )
         {
-            pinNumbers = pkg->devices.front().pinNumbers;
-            pinNumberVisible.reserve( pinNumbers.size() );
-
-            for( const std::string& number : pinNumbers )
-                pinNumberVisible.push_back( !number.empty() );
-
-            pinIgnore = pkg->devices.front().pinIgnore;
+            unit.pinNumbers = pkg->devices.front().pinNumbers;
+            unit.pinNumberVisible = nonblankPinNumbers( unit.pinNumbers );
+            unit.pinIgnore = pkg->devices.front().pinIgnore;
         }
 
-        ls.units.push_back( { "A", &def, pinNumbers, pinNumberVisible, pinIgnore, {}, {} } );
+        ls.units.push_back( std::move( unit ) );
     }
 
     computeFontBaseline();
@@ -1151,11 +1258,7 @@ std::string ORCAD_CONVERTER::unitLetter( const ORCAD_PLACED_INSTANCE& aInst ) co
                        : !aInst.sourcePackage.empty()                                         ? aInst.sourcePackage
                                                       : v.substr( 0, v.find( '.' ) );
 
-    std::string tail = ( v.compare( 0, base.size(), base ) == 0 ) ? v.substr( base.size() ) : v;
-
-    size_t      dot = tail.find( '.' );
-    std::string unit = tail.substr( 0, dot );
-    std::string view = dot == std::string::npos ? std::string() : tail.substr( dot + 1 );
+    auto [unit, view] = splitCacheName( v, base );
 
     if( !view.empty() )
     {
@@ -1500,14 +1603,8 @@ std::pair<std::string, int> ORCAD_CONVERTER::libForInstance( const ORCAD_PLACED_
             letter = unitRefIt->second;
     }
 
-    if( letter.empty() && pkg && unitIndex < pkg->devices.size() )
-        letter = pkg->devices[unitIndex].unitRef;
-
-    if( letter.empty() && pkg && pkg->devices.size() > 1 )
-    {
-        std::string index = std::to_string( unitIndex );
-        letter = "#" + std::string( 10 - std::min<size_t>( 10, index.size() ), '0' ) + index;
-    }
+    if( letter.empty() && pkg )
+        letter = packageUnitLetter( *pkg, unitIndex );
 
     // The placed instance selects the package device.  Occurrence hierarchy can
     // reassign its displayed unit letter without changing the physical pin map.
@@ -1642,11 +1739,7 @@ std::pair<std::string, int> ORCAD_CONVERTER::libForInstance( const ORCAD_PLACED_
                                            {
                                                return aNumber.empty();
                                            } );
-    std::vector<bool> pinNumberVisible;
-    pinNumberVisible.reserve( pinNumbers.size() );
-
-    for( const std::string& number : pinNumbers )
-        pinNumberVisible.push_back( !number.empty() );
+    std::vector<bool> pinNumberVisible = nonblankPinNumbers( pinNumbers );
 
     bool dualRowConnector =
             sym->synthesized && pinNumbers.size() == sym->pins.size() && pinNumbers.size() % 2 == 0
@@ -1835,7 +1928,7 @@ std::pair<std::string, int> ORCAD_CONVERTER::libForInstance( const ORCAD_PLACED_
         std::stable_sort( ls.units.begin(), ls.units.end(),
                           []( const UNIT_INFO& a, const UNIT_INFO& b )
                           {
-                              return StrNumCmp( wxString::FromUTF8( a.letter ), wxString::FromUTF8( b.letter ) ) < 0;
+                              return unitLetterLess( a.letter, b.letter );
                           } );
 
         for( size_t i = 0; i < ls.units.size(); ++i )
@@ -1984,6 +2077,15 @@ LIB_SYMBOL* ORCAD_CONVERTER::kicadSymbolFor( const std::string& aLibName )
     if( entry.isPower )
         symbol->SetGlobalPower();
 
+    if( std::any_of( entry.units.begin(), entry.units.end(),
+                     []( const UNIT_INFO& aUnit )
+                     {
+                         return aUnit.convert != nullptr;
+                     } ) )
+    {
+        symbol->SetHasDeMorganBodyStyles( true );
+    }
+
     if( (int) entry.units.size() > 1 )
     {
         symbol->SetUnitCount( (int) entry.units.size(), false );
@@ -2027,6 +2129,16 @@ LIB_SYMBOL* ORCAD_CONVERTER::kicadSymbolFor( const std::string& aLibName )
     symbol->GetFootprintField().SetVisible( false );
     symbol->GetDatasheetField().SetVisible( false );
 
+    // Items stay common to both body styles unless their unit has a Convert view
+    auto stampBodyStyle = [&]( int aUnit, int aBodyStyle )
+    {
+        for( SCH_ITEM& item : symbol->GetDrawItems() )
+        {
+            if( item.Type() != SCH_FIELD_T && item.GetUnit() == aUnit && item.GetBodyStyle() == 0 )
+                item.SetBodyStyle( aBodyStyle );
+        }
+    };
+
     for( size_t ui = 0; ui < entry.units.size(); ++ui )
     {
         const UNIT_INFO& unit = entry.units[ui];
@@ -2035,53 +2147,67 @@ LIB_SYMBOL* ORCAD_CONVERTER::kicadSymbolFor( const std::string& aLibName )
         if( !unit.symbol )
             continue;
 
-        for( size_t primitiveIndex = 0; primitiveIndex < unit.symbol->primitives.size(); ++primitiveIndex )
+        const int bodyStyles = unit.convert ? 2 : 1;
+
+        for( int bodyStyle = 1; bodyStyle <= bodyStyles; ++bodyStyle )
         {
-            const ORCAD_PRIMITIVE& primitive = unit.symbol->primitives[primitiveIndex];
+            const ORCAD_SYMBOL_DEF& view = bodyStyle == 1 ? *unit.symbol : *unit.convert;
+            const int               stamp = unit.convert ? bodyStyle : 0;
 
-            if( laterRectangleOccludesTextUnderscores( unit.symbol->primitives, primitiveIndex ) )
+            for( size_t primitiveIndex = 0; primitiveIndex < view.primitives.size(); ++primitiveIndex )
             {
-                ORCAD_PRIMITIVE visible = primitive;
-                std::replace( visible.text.begin(), visible.text.end(), '_', ' ' );
-                addSymbolPrimitive( symbol.get(), visible, unitNo, unit.symbol->color );
+                const ORCAD_PRIMITIVE& primitive = view.primitives[primitiveIndex];
+
+                if( laterRectangleOccludesTextUnderscores( view.primitives, primitiveIndex ) )
+                {
+                    ORCAD_PRIMITIVE visible = primitive;
+                    std::replace( visible.text.begin(), visible.text.end(), '_', ' ' );
+                    addSymbolPrimitive( symbol.get(), visible, unitNo, view.color );
+                }
+                else
+                {
+                    addSymbolPrimitive( symbol.get(), primitive, unitNo, view.color );
+                }
             }
-            else
+
+            if( stamp )
+                stampBodyStyle( unitNo, stamp );
+
+            BOX2I bodyBox = symbol->GetBodyBoundingBox( unitNo, stamp, false, false );
+
+            for( size_t pi = 0; pi < view.pins.size(); ++pi )
             {
-                addSymbolPrimitive( symbol.get(), primitive, unitNo, unit.symbol->color );
+                ORCAD_SYMBOL_PIN sourcePin = view.pins[pi];
+                int              position = view.pins[pi].position >= 0 ? view.pins[pi].position
+                                                                        : static_cast<int>( pi );
+
+                if( position < static_cast<int>( unit.pinIgnore.size() ) && unit.pinIgnore[position] )
+                    continue;
+
+                wxString number = position < static_cast<int>( unit.pinNumbers.size() )
+                                          ? FromOrcadString( unit.pinNumbers[position] )
+                                          : wxString::Format( wxS( "%d" ), (int) pi + 1 );
+
+                int pinOffset = pi < unit.pinOffsets.size() ? unit.pinOffsets[pi] : 0;
+                sourcePin.hotptX += pinOffset;
+                sourcePin.startX += pinOffset;
+
+                PIN_EMIT emit;
+                emit.number = number;
+                emit.unit = unitNo;
+                emit.power = entry.isPower;
+                emit.nameOverride = entry.isPower ? entry.powerNet : std::string();
+                emit.nameVisible = defaultShowPinNames;
+                emit.showPinNumbers = defaultShowPinNumbers;
+                emit.numberVisible = position >= static_cast<int>( unit.pinNumberVisible.size() )
+                                     || unit.pinNumberVisible[position];
+                emit.hidden = pinOffset != 0;
+                emit.explicitNet = pi < unit.explicitPinNets.size() && unit.explicitPinNets[pi];
+                addSymbolPin( symbol.get(), sourcePin, bodyBox, std::move( emit ) );
             }
-        }
 
-        BOX2I bodyBox = symbol->GetBodyBoundingBox( unitNo, 0, false, false );
-
-        for( size_t pi = 0; pi < unit.symbol->pins.size(); ++pi )
-        {
-            ORCAD_SYMBOL_PIN sourcePin = unit.symbol->pins[pi];
-            int                     position =
-                    unit.symbol->pins[pi].position >= 0 ? unit.symbol->pins[pi].position : static_cast<int>( pi );
-
-            if( position < static_cast<int>( unit.pinIgnore.size() ) && unit.pinIgnore[position] )
-                continue;
-
-            wxString number = position < static_cast<int>( unit.pinNumbers.size() )
-                                      ? FromOrcadString( unit.pinNumbers[position] )
-                                      : wxString::Format( wxS( "%d" ), (int) pi + 1 );
-
-            int pinOffset = pi < unit.pinOffsets.size() ? unit.pinOffsets[pi] : 0;
-            sourcePin.hotptX += pinOffset;
-            sourcePin.startX += pinOffset;
-
-            PIN_EMIT emit;
-            emit.number = number;
-            emit.unit = unitNo;
-            emit.power = entry.isPower;
-            emit.nameOverride = entry.isPower ? entry.powerNet : std::string();
-            emit.nameVisible = defaultShowPinNames;
-            emit.showPinNumbers = defaultShowPinNumbers;
-            emit.numberVisible =
-                    position >= static_cast<int>( unit.pinNumberVisible.size() ) || unit.pinNumberVisible[position];
-            emit.hidden = pinOffset != 0;
-            emit.explicitNet = pi < unit.explicitPinNets.size() && unit.explicitPinNets[pi];
-            addSymbolPin( symbol.get(), sourcePin, bodyBox, std::move( emit ) );
+            if( stamp )
+                stampBodyStyle( unitNo, stamp );
         }
     }
 

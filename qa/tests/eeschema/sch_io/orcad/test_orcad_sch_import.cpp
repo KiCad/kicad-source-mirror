@@ -5827,6 +5827,40 @@ BOOST_AUTO_TEST_CASE( OlbLibraryImport )
 }
 
 
+// A library package becomes one symbol with a unit per device and a DeMorgan body per Convert view
+BOOST_AUTO_TEST_CASE( OlbPackageKeepsEveryUnitAndView )
+{
+    const char* corpusEnv = std::getenv( "KICAD_ORCAD_CORPUS" );
+
+    if( !corpusEnv || !*corpusEnv )
+        return;
+
+    std::filesystem::path olb = findCorpusDesign( corpusEnv, "LT8550-UKG.OLB" );
+
+    // No corpus OLB has a Convert view, so read one from a design cache through the library loader
+    std::filesystem::path dsn = findCorpusDesign( corpusEnv, "BeagleBoard-xM_ORCAD.DSN" );
+
+    if( olb.empty() || dsn.empty() )
+        return;
+
+    SCH_IO_ORCAD plugin;
+    LIB_SYMBOL*  symbol = plugin.LoadSymbol( olb.string(), wxS( "LT8550-UKG" ) );
+
+    BOOST_REQUIRE( symbol );
+    BOOST_CHECK_EQUAL( symbol->GetUnitCount(), 3 );
+
+    std::set<wxString> numbers;
+
+    for( const SCH_PIN* pin : symbol->GetGraphicalPins() )
+        BOOST_CHECK_MESSAGE( numbers.insert( pin->GetNumber() ).second, "duplicate pin " << pin->GetNumber() );
+
+    LIB_SYMBOL* demorgan = plugin.LoadSymbol( dsn.string(), wxS( "SN65C3221EPW" ) );
+
+    BOOST_REQUIRE( demorgan );
+    BOOST_CHECK( demorgan->HasDeMorganBodyStyles() );
+}
+
+
 // CutiePi (3 pages) imports as three sibling top-level sheets; off-page connectors keep own
 // names; reference/value fields honor source display positions.
 BOOST_AUTO_TEST_CASE( MultiPageFlatImport )

@@ -153,6 +153,7 @@ private:
     {
         std::string              letter; ///< unit discriminator, e.g. "A", "-16", "B:Convert"
         const ORCAD_SYMBOL_DEF*  symbol = nullptr;
+        const ORCAD_SYMBOL_DEF*  convert = nullptr; ///< DeMorgan view sharing this unit's pin map
         std::vector<std::string> pinNumbers; ///< device pin-number map for this unit
         std::vector<bool>        pinNumberVisible; ///< nonblank source package pin numbers
         std::vector<bool>        pinIgnore;  ///< package pins suppressed for this unit
@@ -285,6 +286,9 @@ private:
 
 
     void prepareSymbols();
+
+    /** One unit per package device; a Convert view becomes the unit's DeMorgan body. */
+    LIB_ENTRY buildPackageEntry( const ORCAD_PACKAGE& aPackage ) const;
 
     /** Use placed pin positions to keep uncached symbols connected. */
     ORCAD_SYMBOL_DEF synthesizeSymbol( const std::string&                               aPkgName,
