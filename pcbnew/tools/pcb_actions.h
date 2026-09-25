@@ -549,6 +549,7 @@ public:
     static TOOL_ACTION padTable;
 
     static TOOL_ACTION checkFootprint;
+    static TOOL_ACTION showFootprintUsers;
 
     static TOOL_ACTION loadFpFromBoard;
     static TOOL_ACTION saveFpToBoard;

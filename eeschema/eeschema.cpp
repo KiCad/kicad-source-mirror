@@ -44,6 +44,7 @@
 #include "git/kigit_sym_lib_merge.h"
 #include <git/kigit_driver_registry.h>
 #include <eeschema_settings.h>
+#include <footprint_filter.h>
 #include <sch_edit_frame.h>
 #include <libraries/symbol_library_adapter.h>
 #include <symbol_edit_frame.h>
@@ -65,6 +66,7 @@
 #include <trace_helpers.h>
 #include <thread_pool.h>
 #include <kiface_ids.h>
+#include <symbol_library_query.h>
 #include <widgets/kistatusbar.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
 #include <wx/ffile.h>
@@ -197,6 +199,309 @@ bool generateSchematicNetlist( const wxString& aFilename, std::string& aNetlist,
     aNetlist = formatter.GetString();
 
     return true;
+}
+
+
+/**
+ * Return the project whose symbol libraries the kiface-level symbol services work with.
+ */
+static PROJECT* symbolLibraryProject()
+{
+    PROJECT* project = nullptr;
+
+    if( wxTheApp )
+    {
+        wxWindow* focus = wxWindow::FindFocus();
+        wxWindow* top = focus ? wxGetTopLevelParent( focus ) : wxTheApp->GetTopWindow();
+
+        if( top )
+        {
+            if( KIWAY_HOLDER* holder = dynamic_cast<KIWAY_HOLDER*>( top ) )
+                project = &holder->Prj();
+        }
+    }
+
+    if( !project )
+        project = &Pgm().GetSettingsManager().Prj();
+
+    return project;
+}
+
+
+/**
+ * Whether a footprint reference names @a aFootprint.
+ *
+ * The library item names must agree:
+ *
+ * If both sides have a nickname it must match.
+ * If the reference has no nickname it matches any footprint nickname.
+ *
+ * Matching is case-insensitive, like the rest of the library item name comparisons.
+ */
+static bool footprintReferenceMatches( const LIB_ID& aReference, const LIB_ID& aFootprint )
+{
+    if( !aReference.GetUniStringLibItemName().IsSameAs( aFootprint.GetUniStringLibItemName(), false ) )
+        return false;
+
+    if( !aReference.GetLibNickname().empty() && !aFootprint.GetLibNickname().empty()
+        && !aReference.GetUniStringLibNickname().IsSameAs( aFootprint.GetUniStringLibNickname(), false ) )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
+/**
+ * Whether any footprint filter of a symbol selects a given footprint.
+ *
+ * If it does, the matching filter is stored in @a aMatch.
+ */
+static bool symbolFilterMatchesFootprint( const LIB_SYMBOL& aSymbol, const LIB_ID& aFootprint,
+                                          FOOTPRINT_USER_MATCH& aMatch )
+{
+    for( const wxString& filter : aSymbol.GetFPFilters() )
+    {
+        if( filter.IsEmpty() )
+            continue;
+
+        EDA_PATTERN_MATCH_WILDCARD_ANCHORED matcher;
+        matcher.SetPattern( filter.Lower() );
+
+        if( FootprintFilterMatchesName( matcher, aFootprint.GetUniStringLibNickname(),
+                                        aFootprint.GetUniStringLibItemName() ) )
+        {
+            aMatch.m_MatchedFilter = filter;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+/**
+ * Return the footprint field text in effect for a symbol.
+ *
+ * As in LIB_SYMBOL::Flatten(), the nearest non-empty footprint field in the inheritance
+ * chain wins.
+ */
+static wxString effectiveFootprintText( const LIB_SYMBOL& aSymbol )
+{
+    if( const SCH_FIELD* field = aSymbol.GetField( FIELD_T::FOOTPRINT ) )
+    {
+        if( !field->GetText().IsEmpty() )
+            return field->GetText();
+    }
+
+    if( std::shared_ptr<LIB_SYMBOL> parent = aSymbol.GetParent().lock() )
+        return effectiveFootprintText( *parent );
+
+    return wxEmptyString;
+}
+
+
+/**
+ * Whether one of the pin maps of @a aSymbol is bound to @a aFootprint; collects the names of
+ * the bound maps in @a aMatch.
+ *
+ * The pin maps and the associated footprints are a coupled bundle: each association pairs a
+ * footprint with the named map that resolves the symbol's pins onto its pads.  A symbol that
+ * binds a map to the footprint uses that footprint even when its footprint field names
+ * something else, or nothing at all.
+ */
+static bool symbolPinMapsBindFootprint( const LIB_SYMBOL& aSymbol, const LIB_ID& aFootprint,
+                                        FOOTPRINT_USER_MATCH& aMatch )
+{
+    for( const ASSOCIATED_FOOTPRINT& associated : aSymbol.GetEffectiveAssociatedFootprints() )
+    {
+        // A symbol can bind several maps, to the same footprint or to different ones.
+        if( footprintReferenceMatches( associated.m_FootprintLibId, aFootprint ) )
+            aMatch.m_MatchedPinMaps.push_back( associated.m_MapName );
+    }
+
+    return !aMatch.m_MatchedPinMaps.empty();
+}
+
+
+/**
+ * Whether the footprint field of @a aSymbol names @a aFootprint; sets the footprint field flag
+ * in @a aMatch.
+ */
+static bool symbolFootprintFieldNamesFootprint( const LIB_SYMBOL& aSymbol, const LIB_ID& aFootprint,
+                                                FOOTPRINT_USER_MATCH& aMatch )
+{
+    LIB_ID fieldId;
+
+    if( fieldId.Parse( effectiveFootprintText( aSymbol ) ) == -1
+        && footprintReferenceMatches( fieldId, aFootprint ) )
+    {
+        aMatch.m_MatchesFootprintField = true;
+        return true;
+    }
+
+    return false;
+}
+
+
+/**
+ * Return how @a aSymbol uses @a aFootprint, or nothing when it doesn't.
+ *
+ * A symbol can use a footprint in three independent ways: a footprint filter selects it, its
+ * footprint field names it, or one of its pin maps is bound to it.  The match reports every
+ * way that applies, so that the caller can list a symbol for one of them and still say which
+ * others it has.
+ */
+static std::optional<FOOTPRINT_USER_MATCH> symbolUsesFootprint( const LIB_SYMBOL& aSymbol,
+                                                                const LIB_ID& aFootprint )
+{
+    FOOTPRINT_USER_MATCH match;
+    match.m_Symbol = aSymbol.GetLibId();
+
+    // Every predicate is evaluated: the match feeds the filter and the two flags alike.
+    const bool byFilter = symbolFilterMatchesFootprint( aSymbol, aFootprint, match );
+    const bool byField = symbolFootprintFieldNamesFootprint( aSymbol, aFootprint, match );
+    const bool byPinMap = symbolPinMapsBindFootprint( aSymbol, aFootprint, match );
+
+    if( !byFilter && !byField && !byPinMap )
+        return std::nullopt;
+
+    match.m_PinCount = aSymbol.GetPinCount();
+    match.m_IsDerived = aSymbol.IsDerived();
+
+    return match;
+}
+
+
+/**
+ * Find the symbols that select a given footprint somehow (but FP field,
+ * filters or pin maps)
+ *
+ * Input JSON format: the object written by FOOTPRINT_USERS_QUERY::ToJsonStr()
+ *
+ * Output JSON format: the object written by FOOTPRINT_USERS_RESULT::ToJsonStr()
+ *
+ * Refer to #FOOTPRINT_USERS_QUERY and #FOOTPRINT_USERS_RESULT for semantics of
+ * the query and result fields.
+ *
+ * @param aQueryJson JSON string with the query parameters
+ * @return JSON string describing the matching symbol LIB_IDs
+ */
+static wxString filterFootprintUsers( const wxString& aQueryJson )
+{
+    FOOTPRINT_USERS_RESULT result;
+    result.m_Success = false;
+
+    try
+    {
+        const FOOTPRINT_USERS_QUERY query = FOOTPRINT_USERS_QUERY::FromJsonStr( aQueryJson );
+
+        // A footprint with no item name cannot be referred to by a filter, field or
+        // association, so the query is a successful, empty one.
+        if( query.m_Footprint.GetLibItemName().empty() )
+        {
+            result.m_Success = true;
+            return result.ToJsonStr();
+        }
+
+        // No enabled way of using the footprint can match anything, so the query is a
+        // successful, empty one.
+        if( !query.m_MatchFilters && !query.m_MatchFootprintField && !query.m_MatchPinMaps )
+        {
+            result.m_Success = true;
+            return result.ToJsonStr();
+        }
+
+        SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( symbolLibraryProject() );
+
+        if( !adapter )
+            return result.ToJsonStr();
+
+        adapter->AsyncLoad();
+        adapter->BlockUntilLoaded();
+
+        for( const wxString& nickname : adapter->GetLibraryNames() )
+        {
+            for( LIB_SYMBOL* symbol : adapter->GetSymbols( nickname ) )
+            {
+                if( !symbol )
+                    continue;
+
+                std::optional<FOOTPRINT_USER_MATCH> match = symbolUsesFootprint( *symbol, query.m_Footprint );
+
+                if( !match )
+                    continue;
+
+                const bool byFilter = query.m_MatchFilters && !match->m_MatchedFilter.IsEmpty();
+                const bool byField = query.m_MatchFootprintField && match->m_MatchesFootprintField;
+                const bool byPinMap = query.m_MatchPinMaps && !match->m_MatchedPinMaps.empty();
+
+                if( !byFilter && !byField && !byPinMap )
+                    continue;
+
+                if( query.m_MaxResults > 0 && static_cast<int>( result.m_Matches.size() ) >= query.m_MaxResults )
+                {
+                    result.m_IsLimited = true;
+                    break;
+                }
+
+                result.m_Matches.push_back( std::move( *match ) );
+            }
+
+            if( result.m_IsLimited )
+                break;
+        }
+
+        result.m_Success = true;
+
+        return result.ToJsonStr();
+    }
+    catch( const std::exception& )
+    {
+        // A failure carries no matches, even if the scan had already collected some.
+        result.m_Matches.clear();
+        result.m_Success = false;
+        return result.ToJsonStr();
+    }
+}
+
+
+/**
+ * Start loading the symbol libraries in the background. Never blocks.
+ */
+static bool startSymbolLibraryLoad()
+{
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( symbolLibraryProject() );
+
+    if( adapter )
+    {
+        adapter->AsyncLoad();
+        return true;
+    }
+
+    return false;
+}
+
+
+/**
+ * Return how far a background load has got.
+ *
+ * Never blocks: callers can poll this while showing a loading indication, and only run
+ * #filterFootprintUsers() (which does wait for the load) after it returns 1.0.
+ */
+static float symbolLibraryLoadProgress()
+{
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( symbolLibraryProject() );
+
+    if( !adapter )
+        return 1.0f;
+
+    // Nothing to report means there is nothing to wait for.
+    if( std::optional<float> progress = adapter->AsyncLoadProgress() )
+        return *progress;
+
+    return 1.0f;
 }
 
 
@@ -441,6 +746,15 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         {
             case KIFACE_NETLIST_SCHEMATIC:
                 return (void*) generateSchematicNetlist;
+
+            case KIFACE_FILTER_FOOTPRINT_USERS:
+                return reinterpret_cast<void*>( &filterFootprintUsers );
+
+            case KIFACE_TRIGGER_SYMBOLS_LOAD:
+                return reinterpret_cast<void*>( &startSymbolLibraryLoad );
+
+            case KIFACE_SYMBOLS_LOAD_PROGRESS:
+                return reinterpret_cast<void*>( &symbolLibraryLoadProgress );
 
             case KIFACE_MERGE_DOCUMENT:
                 return reinterpret_cast<void*>( &eeschemaMergeExport );

@@ -27,6 +27,22 @@
 
 
 /**
+ * Whether a given footprint matches a specified filter.
+ *
+ * A filter containing ':' is matched against "library:footprint". Any other filter
+ * against the footprint name alone. Matching ignores case.
+
+ * @param aFilter the pattern match filter. This must be lower-cased.
+ * @param aLibNickname the nickname of the library containing the footprint.
+ * @param aFootprintName the name of the footprint to check against the filter.
+ *
+ * @return true if the footprint matches the filter, false otherwise.
+ */
+bool FootprintFilterMatchesName( const EDA_PATTERN_MATCH& aFilter, const wxString& aLibNickname,
+                                 const wxString& aFootprintName );
+
+
+/**
  * Footprint display filter. Takes a list of footprints and filtering settings,
  * and provides an iterable view of the filtered data.
  */

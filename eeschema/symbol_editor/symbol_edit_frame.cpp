@@ -2057,6 +2057,20 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         break;
 
+    case MAIL_SCH_EDIT_LIBID:
+    {
+        LIB_ID libId;
+        const int badPos = libId.Parse( wxString::FromUTF8( payload ) );
+
+        if( badPos == -1 && libId.IsValid() )
+        {
+            LoadSymbol( libId, 1, BODY_STYLE::BASE );
+            Raise();
+        }
+
+        break;
+    }
+
     case MAIL_RELOAD_LIB:
     {
         wxLogTrace( wxT( "KICAD_TABS_DBG" ), wxT( "SYMBOL_EDIT_FRAME::KiwayMailIn MAIL_RELOAD_LIB -> SyncLibraries" ) );

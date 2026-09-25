@@ -44,6 +44,21 @@ enum KIFACE_ADDR_ID : int
     /// processed so far, or 1.0 when there is nothing to wait for. Never blocks.
     KIFACE_FOOTPRINTS_LOAD_PROGRESS,
 
+    /// Function pointer type: wxString (*)(const wxString& aQueryJson)
+    /// Input JSON: the object written by FOOTPRINT_USERS_QUERY::ToJsonStr()
+    /// Output JSON: the object written by FOOTPRINT_USERS_RESULT::ToJsonStr()
+    KIFACE_FILTER_FOOTPRINT_USERS,
+
+    /// Function pointer type: bool (*)()
+    /// Starts loading the symbol libraries in the background. Never blocks.
+    /// Returns true if a load was started, false if a load is already running, or if something failed.
+    KIFACE_TRIGGER_SYMBOLS_LOAD,
+
+    /// Function pointer type: float (*)()
+    /// Returns how far the library loader has gotten as a fraction of the queued libraries
+    /// processed so far, or 1.0 when there is nothing to wait for. Never blocks.
+    KIFACE_SYMBOLS_LOAD_PROGRESS,
+
     KIFACE_LOAD_SCHEMATIC,
     KIFACE_NETLIST_SCHEMATIC,
 

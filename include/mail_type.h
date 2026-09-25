@@ -51,6 +51,7 @@ enum MAIL_T
     MAIL_LIB_EDIT,
     MAIL_FP_EDIT,               // SCH->FP_EDITOR open the footprint with the given file path
     MAIL_FP_EDIT_LIBID,         // SCH->FP_EDITOR open the footprint with this LIB_ID
+    MAIL_SCH_EDIT_LIBID,        // PCB->SYMBOL_EDITOR open the symbol with this LIB_ID
     MAIL_RELOAD_LIB,            // Reload Library List if one was added
     MAIL_RELOAD_PLUGINS,        // Reload python plugins
     MAIL_REFRESH_SYMBOL,        // Refresh symbol in symbol viewer

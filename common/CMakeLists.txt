@@ -892,6 +892,7 @@ set( COMMON_SRCS
     render_settings.cpp
     render_utils.cpp
     status_popup.cpp
+    symbol_library_query.cpp
     line_ending.cpp
     stroke_params.cpp
     table_io.cpp

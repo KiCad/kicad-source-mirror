@@ -53,6 +53,7 @@
 #include <dialogs/dialog_cleanup_graphics.h>
 #include <dialogs/dialog_footprint_checker.h>
 #include <dialogs/dialog_footprint_properties_fp_editor.h>
+#include <dialogs/dialog_footprint_users.h>
 #include <dialogs/dialog_lib_footprint_fields_table.h>
 #include <footprint_wizard_frame.h>
 #include <kiway.h>
@@ -1053,6 +1054,20 @@ int FOOTPRINT_EDITOR_CONTROL::CheckFootprint( const TOOL_EVENT& aEvent )
 }
 
 
+int FOOTPRINT_EDITOR_CONTROL::ShowFootprintUsers( const TOOL_EVENT& aEvent )
+{
+    const FOOTPRINT* footprint = m_frame->GetBoard()->GetFirstFootprint();
+
+    if( !footprint )
+        return 0;
+
+    DIALOG_FOOTPRINT_USERS dlg( m_frame, m_frame->Kiway(), m_frame->GetLoadedFPID(), footprint->GetPinCount() );
+
+    dlg.ShowModal();
+    return 0;
+}
+
+
 void FOOTPRINT_EDITOR_CONTROL::CrossProbe( const PCB_MARKER* aMarker )
 {
     if( !m_checkerDialog )
@@ -1243,6 +1258,7 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
     Go( &FOOTPRINT_EDITOR_CONTROL::CleanupGraphics,      PCB_ACTIONS::cleanupGraphics.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_CONTROL::CheckFootprint,       PCB_ACTIONS::checkFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::ShowFootprintUsers,   PCB_ACTIONS::showFootprintUsers.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::RepairFootprint,      PCB_ACTIONS::repairFootprint.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_CONTROL::NextTab,              PCB_ACTIONS::nextFootprintTab.MakeEvent() );

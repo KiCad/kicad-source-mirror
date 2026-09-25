@@ -227,6 +227,7 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
 
     inspectMenu->AppendSeparator();
     inspectMenu->Add( PCB_ACTIONS::checkFootprint );
+    inspectMenu->Add( PCB_ACTIONS::showFootprintUsers );
 
     inspectMenu->AppendSeparator();
     inspectMenu->Add( PCB_ACTIONS::showDatasheet );

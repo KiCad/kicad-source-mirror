@@ -79,6 +79,8 @@ public:
     void CrossProbe( const PCB_MARKER* aMarker );
     void DestroyCheckerDialog();
 
+    int ShowFootprintUsers( const TOOL_EVENT& aEvent );
+
     int CleanupGraphics( const TOOL_EVENT& aEvent );
     int RepairFootprint( const TOOL_EVENT& aEvent );
 

@@ -123,25 +123,30 @@ FOOTPRINT_INFO& FOOTPRINT_FILTER_IT::dereference() const
 }
 
 
+bool FootprintFilterMatchesName( const EDA_PATTERN_MATCH& aFilter, const wxString& aLibNickname,
+                                 const wxString& aFootprintName )
+{
+    wxString candidate;
+
+    // If the filter contains a ':' character, include the library nickname in the match
+    // string.
+    if( aFilter.GetPattern().Contains( wxS( ":" ) ) )
+        candidate = aLibNickname.Lower() + wxS( ":" );
+
+    candidate += aFootprintName.Lower();
+
+    return aFilter.Find( candidate ).valid();
+}
+
+
 bool FOOTPRINT_FILTER_IT::FootprintFilterMatch( FOOTPRINT_INFO& aItem )
 {
     if( m_filter->m_footprint_filters.empty() )
         return true;
 
-    // The matching is case insensitive
-    wxString name;
-
     for( const std::unique_ptr<EDA_PATTERN_MATCH>& each_filter : m_filter->m_footprint_filters )
     {
-        name.Empty();
-
-        // If the filter contains a ':' character, include the library name in the pattern
-        if( each_filter->GetPattern().Contains( wxS( ":" ) ) )
-            name = aItem.GetLibNickname().Lower() + wxS( ":" );
-
-        name += aItem.GetFootprintName().Lower();
-
-        if( each_filter->Find( name ) )
+        if( FootprintFilterMatchesName( *each_filter, aItem.GetLibNickname(), aItem.GetFootprintName() ) )
             return true;
     }
 

@@ -1372,6 +1372,13 @@ TOOL_ACTION PCB_ACTIONS::checkFootprint( TOOL_ACTION_ARGS()
         .Tooltip( _( "Show the footprint checker window" ) )
         .Icon( BITMAPS::erc ) );
 
+TOOL_ACTION PCB_ACTIONS::showFootprintUsers( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.showFootprintUsers" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Footprint Users" ) )
+        .Tooltip( _( "Show the symbols that use this footprint" ) )
+        .Icon( BITMAPS::module_filtered_list ) );
+
 TOOL_ACTION PCB_ACTIONS::loadFpFromBoard( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.loadFootprintFromBoard" )
         .Scope( AS_GLOBAL )
