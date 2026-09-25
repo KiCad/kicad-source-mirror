@@ -72,6 +72,18 @@ public:
      */
     double GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const override;
 
+    double GetSuperSubSizeMultiplier() const override { return m_superSubSize; }
+
+    double GetSuperSubBaselineOffset( TEXT_STYLE_FLAGS aTextStyle ) const override
+    {
+        if( IsSubscript( aTextStyle ) )
+            return m_subscriptBaselineOffset;
+        else if( IsSuperscript( aTextStyle ) )
+            return m_superscriptBaselineOffset;
+
+        return 0.0;
+    }
+
     VECTOR2I GetTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                               const wxString& aText, const VECTOR2I& aSize,
                               const VECTOR2I& aPosition, const EDA_ANGLE& aAngle, bool aMirror,
@@ -93,6 +105,10 @@ private:
     void loadNewStrokeFont( const char* const aNewStrokeFont[], int aNewStrokeFontSize );
 
 private:
+    static constexpr double m_superSubSize = 0.8;
+    static constexpr double m_subscriptBaselineOffset = 0.15;
+    static constexpr double m_superscriptBaselineOffset = -0.35;
+
     const std::vector<std::shared_ptr<GLYPH>>* m_glyphs;
     const std::vector<BOX2D>*                  m_glyphBoundingBoxes;
     double                                     m_maxGlyphWidth;

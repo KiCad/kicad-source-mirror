@@ -178,6 +178,17 @@ public:
     virtual double GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const = 0;
 
     /**
+     * Return the factor the text size is multiplied by for a superscript or subscript run.
+     */
+    virtual double GetSuperSubSizeMultiplier() const = 0;
+
+    /**
+     * Return the baseline shift of a superscript or subscript run, as a downwards fraction of
+     * the reduced glyph height. Zero for any other run.
+     */
+    virtual double GetSuperSubBaselineOffset( TEXT_STYLE_FLAGS aTextStyle ) const = 0;
+
+    /**
      * Convert text string to an array of GLYPHs.
      *
      * @param aBBox pointer to a BOX2I that will set to the bounding box, or nullptr

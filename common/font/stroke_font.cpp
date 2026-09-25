@@ -207,9 +207,6 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 {
     constexpr int    TAB_WIDTH = 4;
     constexpr double INTER_CHAR = 0.2;
-    constexpr double SUPER_SUB_SIZE_MULTIPLIER = 0.8;
-    constexpr double SUPER_HEIGHT_OFFSET = 0.35;
-    constexpr double SUB_HEIGHT_OFFSET = 0.15;
 
     VECTOR2I cursor( aPosition );
     VECTOR2D glyphSize( aSize );
@@ -219,12 +216,8 @@ VECTOR2I STROKE_FONT::GetTextAsGlyphs( BOX2I* aBBox, std::vector<std::unique_ptr
 
     if( aTextStyle & TEXT_STYLE::SUBSCRIPT || aTextStyle & TEXT_STYLE::SUPERSCRIPT )
     {
-        glyphSize = glyphSize * SUPER_SUB_SIZE_MULTIPLIER;
-
-        if( aTextStyle & TEXT_STYLE::SUBSCRIPT )
-            cursor.y += glyphSize.y * SUB_HEIGHT_OFFSET;
-        else
-            cursor.y -= glyphSize.y * SUPER_HEIGHT_OFFSET;
+        glyphSize = glyphSize * GetSuperSubSizeMultiplier();
+        cursor.y += glyphSize.y * GetSuperSubBaselineOffset( aTextStyle );
     }
 
     for( wxUniChar c : aText )

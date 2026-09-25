@@ -2437,13 +2437,23 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
         return aPosition + positionedAdvance( aWord );
     }
 
+    VECTOR2I inkPos( aPosition );
+
+    if( aTextStyle & ( TEXT_STYLE::SUPERSCRIPT | TEXT_STYLE::SUBSCRIPT ) )
+    {
+        VECTOR2I offset( 0, KiROUND( aSize.y * aFont->GetSuperSubBaselineOffset( aTextStyle ) ) );
+
+        RotatePoint( offset, aOrient );
+        inkPos += offset;
+    }
+
     // Compute transformation parameters for this word
     double ctm_a, ctm_b, ctm_c, ctm_d, ctm_e, ctm_f;
     double wideningFactor, heightFactor;
 
-    computeTextParameters( aPosition, aWord, aOrient, aSize, aTextMirrored, GR_TEXT_H_ALIGN_LEFT,
-                           GR_TEXT_V_ALIGN_BOTTOM, aWidth, aItalic, aBold, &wideningFactor,
-                           &ctm_a, &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f, &heightFactor );
+    computeTextParameters( inkPos, aWord, aOrient, aSize, aTextMirrored, GR_TEXT_H_ALIGN_LEFT, GR_TEXT_V_ALIGN_BOTTOM,
+                           aWidth, aItalic, aBold, &wideningFactor, &ctm_a, &ctm_b, &ctm_c, &ctm_d, &ctm_e, &ctm_f,
+                           &heightFactor );
 
     VECTOR2I bbox( cursorAdvanceX( aWord ), 0 );
 
@@ -2452,30 +2462,6 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
 
     RotatePoint( bbox, aOrient );
     VECTOR2I nextPos = aPosition + bbox;
-
-    // Apply vertical offset for subscript/superscript
-    // Stroke font positioning (baseline) already correct per user feedback.
-    // Outline fonts need: superscript +1 full font height higher; subscript +1 full font height higher
-    if( aTextStyle & TEXT_STYLE::SUPERSCRIPT )
-    {
-        double factor = aFont->IsOutline() ? 0.050 : 0.030; // stroke original ~0.40, outline needs +1.0
-        VECTOR2I offset( 0, static_cast<int>( std::lround( aSize.y * factor ) ) );
-        RotatePoint( offset, aOrient );
-        ctm_e -= offset.x;
-        ctm_f += offset.y; // Note: PDF Y increases upward
-    }
-    else if( aTextStyle & TEXT_STYLE::SUBSCRIPT )
-    {
-        // For outline fonts raise by one font height versus stroke (which shifts downward slightly)
-        VECTOR2I offset( 0, 0 );
-
-        if( aFont->IsStroke() )
-            offset.y = static_cast<int>( std::lround( aSize.y * 0.01 ) );
-
-        RotatePoint( offset, aOrient );
-        ctm_e += offset.x;
-        ctm_f -= offset.y; // Note: PDF Y increases upward
-    }
 
     // Render the word using existing outline font logic
     if( aFont->IsOutline() )
@@ -2502,7 +2488,12 @@ VECTOR2I PDF_PLOTTER::renderWord( const wxString& aWord, const VECTOR2I& aPositi
                 alignment_multiplier = 4.0;
 
             VECTOR2D font_size_dev = userToDeviceSize( aSize );
-            double baseline_adjustment = font_size_dev.y * baseline_factor * alignment_multiplier;
+            double   lineHeight = font_size_dev.y;
+
+            if( aTextStyle & ( TEXT_STYLE::SUPERSCRIPT | TEXT_STYLE::SUBSCRIPT ) )
+                lineHeight /= aFont->GetSuperSubSizeMultiplier();
+
+            double baseline_adjustment = lineHeight * baseline_factor * alignment_multiplier;
 
             double adjusted_ctm_e = ctm_e;
             double adjusted_ctm_f = ctm_f;
@@ -2734,17 +2725,13 @@ VECTOR2I PDF_PLOTTER::renderMarkupNode( const MARKUP::NODE* aNode, const VECTOR2
     // Handle markup node types
     if( !aNode->is_root() )
     {
-        if( aNode->isSubscript() )
+        if( aNode->isSubscript() || aNode->isSuperscript() )
         {
-            currentStyle |= TEXT_STYLE::SUBSCRIPT;
-            // Subscript: smaller size and lower position
-            currentSize = VECTOR2I( aBaseSize.x * 0.5, aBaseSize.y * 0.6 );
-        }
-        else if( aNode->isSuperscript() )
-        {
-            currentStyle |= TEXT_STYLE::SUPERSCRIPT;
-            // Superscript: smaller size and higher position
-            currentSize = VECTOR2I( aBaseSize.x * 0.5, aBaseSize.y * 0.6 );
+            currentStyle |= aNode->isSubscript() ? TEXT_STYLE::SUBSCRIPT : TEXT_STYLE::SUPERSCRIPT;
+
+            double scale = aFont->GetSuperSubSizeMultiplier();
+
+            currentSize = VECTOR2I( KiROUND( aBaseSize.x * scale ), KiROUND( aBaseSize.y * scale ) );
         }
 
         if( aNode->isOverbar() )
