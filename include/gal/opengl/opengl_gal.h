@@ -33,10 +33,12 @@
 #include <gal/opengl/vertex_manager.h>
 #include <gal/opengl/vertex_item.h>
 #include <gal/opengl/cached_container.h>
+#include <gal/opengl/gl_reset_budget.h>
 #include <gal/opengl/noncached_container.h>
 #include <gal/opengl/opengl_compositor.h>
 #include <gal/hidpi_gl_canvas.h>
 
+#include <set>
 #include <unordered_map>
 #include <memory>
 #include <wx/event.h>
@@ -106,7 +108,8 @@ public:
 
     bool IsVisible() const override
     {
-        return IsShownOnScreen() && !GetClientRect().IsEmpty();
+        // VIEW skips cached item updates for invisible canvases, which a lost context cannot take
+        return GetContextLoss() == GAL_CONTEXT_LOSS::NONE && IsShownOnScreen() && !GetClientRect().IsEmpty();
     }
 
     void SetMinLineWidth( float aLineWidth ) override;
@@ -320,6 +323,10 @@ public:
         return m_isContextValid;
     }
 
+    GAL_CONTEXT_LOSS GetContextLoss() const override;
+
+    bool IsResetSettled() override;
+
     void LockContext( int aClientCookie ) override;
 
     void UnlockContext( int aClientCookie ) override;
@@ -350,6 +357,17 @@ private:
     wxGLContext*            m_glPrivContext;    ///< Canvas-specific OpenGL context
     int                     m_swapInterval;     ///< Used to store swap interval information
     static int              m_instanceCounter;  ///< GL GAL instance counter
+    static int              m_contextGroupId;   ///< Changes each time a reset kills the shared group
+    static bool             m_resetBudgetExhausted; ///< Resets came too often to keep using OpenGL
+    static GL_RESET_BUDGET  m_resetBudget;      ///< Rate of resets tolerated before falling back
+    static bool             m_glLoaded;         ///< GL entry points are loaded, so resets can be queried
+    static std::set<OPENGL_GAL*> m_instances;   ///< Canvases to repaint after a reset
+    static bool             m_resetSettled;     ///< Driver finished the last reset
+
+    /// When the last reset was detected, to stop waiting on a driver that never reports completion
+    static GL_RESET_BUDGET::CLOCK::time_point m_resetDetectedAt;
+
+    int                     m_ownContextGroupId; ///< Group this canvas' contexts were created in
     wxEvtHandler*           m_mouseListener;
     wxEvtHandler*           m_paintListener;
 
@@ -634,6 +652,12 @@ private:
      * @throw std::runtime_error if any of the OpenGL feature checks failed
      */
     void init();
+
+    /// @return true if the current context reports a GPU reset.
+    bool detectContextReset();
+
+    /// Abandon the shared context group so the next canvas created starts a fresh one.
+    void orphanContextGroup();
 };
 } // namespace KIGFX
 

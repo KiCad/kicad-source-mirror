@@ -156,6 +156,7 @@ static const wxChar DiffSkewCosThetaParallelTestValue[] = wxT( "DiffSkewCosTheta
 static const wxChar DiffSkewColourInterpolationLogStrength[] = wxT( "DiffSkewColourInterpolationLogStrength" );
 static const wxChar DiffSkewTargetDiffSegmentSize[] = wxT( "DiffSkewTargetDiffSegmentSize" );
 static const wxChar EagleImportFieldsCanAutoplace[] = wxT( "EagleImportFieldsCanAutoplace" );
+static const wxChar EnableGLResetRecovery[] = wxT( "EnableGLResetRecovery" );
 
 
 } // namespace AC_KEYS
@@ -312,6 +313,8 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_EnableCacheFriendlyFracture = true;
     m_EnableFractureEdgeIndex = true;
     m_TriangulateDelaunayRefine = true;
+
+    m_EnableGLResetRecovery = true;
 
     m_MaxFilesystemWatchers = 16384;
 
@@ -597,6 +600,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::TriangulateDelaunayRefine,
                 &m_TriangulateDelaunayRefine, m_TriangulateDelaunayRefine ) );
+
+    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::EnableGLResetRecovery,
+                &m_EnableGLResetRecovery, m_EnableGLResetRecovery ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_INT>( true, AC_KEYS::MaxFileSystemWatchers,
                 &m_MaxFilesystemWatchers, m_MaxFilesystemWatchers, 0, 2147483647 ) );

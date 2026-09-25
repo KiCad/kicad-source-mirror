@@ -452,6 +452,11 @@ public:
     virtual void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
     /**
+     * Keep every frame on the fallback canvas for this session without changing the saved preference.
+     */
+    static void SetOpenGLFailureOccurred() { m_openGLFailureOccured = true; }
+
+    /**
      * Return a pointer to GAL-based canvas of given EDA draw frame.
      *
      * @return Pointer to GAL-based canvas.

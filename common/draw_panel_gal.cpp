@@ -86,6 +86,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_lostFocus( false ),
         m_glRecoveryAttempted( false ),
         m_contextBindFailures( 0 ),
+        m_rebuiltAfterReset( false ),
         m_pendingResize( false ),
         m_stealsFocus( true ),
         m_statusPopup( nullptr )
@@ -207,6 +208,14 @@ bool EDA_DRAW_PANEL_GAL::recoverFromGalError( const std::exception& aError )
 
     try
     {
+        // Reset detection only runs inside LockContext, and this frame's lock came before the reset
+        if( m_gal && !m_gal->IsContextLocked() )
+            KIGFX::GAL_CONTEXT_LOCKER probe( m_gal );
+
+        // A reset seen mid-frame surfaces as a GL error; rebuild rather than spend the one-shot recovery
+        if( handleContextLoss() )
+            return true;
+
         // Sleep/wake and GPU resets can invalidate the entire GL context.
         // Try a full reinit of the current backend before falling back.
         if( !gpuOutOfMemory && !m_glRecoveryAttempted )
@@ -227,26 +236,111 @@ bool EDA_DRAW_PANEL_GAL::recoverFromGalError( const std::exception& aError )
             m_glRecoveryAttempted = false;
             SwitchBackend( GAL_FALLBACK );
 
-            DisplayInfoMessage( m_parent, _( "Could not use OpenGL, falling back to software rendering" ),
-                                wxString( aError.what() ) );
+            if( m_rebuiltAfterReset )
+            {
+                // Some drivers refuse new framebuffers to a process for the rest of its life after a reset
+                m_rebuiltAfterReset = false;
+                EDA_DRAW_FRAME::SetOpenGLFailureOccurred();
+                showMessageLater( _( "The graphics driver was reset and OpenGL could not be restored" ),
+                                  _( "Restart KiCad to use accelerated graphics again." ), false );
+            }
+            else
+            {
+                showMessageLater( _( "Could not use OpenGL, falling back to software rendering" ),
+                                  wxString( aError.what() ), false );
+            }
 
             StartDrawing();
             return true;
         }
 
-        DisplayErrorMessage( m_parent, _( "Graphics error" ), wxString( aError.what() ) );
+        showMessageLater( _( "Graphics error" ), wxString( aError.what() ), true );
     }
     catch( std::exception& recoveryErr )
     {
-        DisplayErrorMessage( m_parent, _( "Graphics error during recovery" ), wxString( recoveryErr.what() ) );
+        showMessageLater( _( "Graphics error during recovery" ), wxString( recoveryErr.what() ), true );
     }
     catch( ... )
     {
-        DisplayErrorMessage( m_parent, _( "Graphics error during recovery" ),
-                             _( "Unknown exception during backend switch" ) );
+        showMessageLater( _( "Graphics error during recovery" ), _( "Unknown exception during backend switch" ),
+                          true );
     }
 
     return false;
+}
+
+
+bool EDA_DRAW_PANEL_GAL::handleContextLoss()
+{
+    KIGFX::GAL_CONTEXT_LOSS loss = m_gal ? m_gal->GetContextLoss() : KIGFX::GAL_CONTEXT_LOSS::NONE;
+
+    if( loss == KIGFX::GAL_CONTEXT_LOSS::NONE )
+        return false;
+
+    // Deleting a GAL that someone still holds locked would leave them unlocking freed memory
+    if( m_gal->IsContextLocked() )
+        return true;
+
+    // Hidden canvases rebuild when next shown, since a new GAL cannot initialize off screen
+    if( !IsShownOnScreen() )
+        return true;
+
+    // Rebuilding while the driver is still resetting can fail or hang, so poll until it finishes
+    if( !m_gal->IsResetSettled() )
+    {
+        m_refreshTimer.StartOnce( 20 );
+        return true;
+    }
+
+    wxLogTrace( traceGalContext, wxS( "Rebuilding canvas %p after GPU reset, repeated %d" ), this,
+                loss == KIGFX::GAL_CONTEXT_LOSS::REPEATED ? 1 : 0 );
+
+    bool rebuilt = false;
+
+    if( loss == KIGFX::GAL_CONTEXT_LOSS::RECOVERABLE || !GAL_FALLBACK_AVAILABLE )
+    {
+        GAL_TYPE backend = m_backend;
+
+        // Forces SwitchBackend to build a new GAL of the same type
+        m_backend = GAL_TYPE_NONE;
+        rebuilt = SwitchBackend( backend );
+        m_rebuiltAfterReset = rebuilt;
+    }
+
+    // SwitchBackend already reported a failed rebuild, so only a repeated loss needs the notice
+    if( !rebuilt && GAL_FALLBACK_AVAILABLE )
+    {
+        static bool s_notified = false;
+
+        wxLogTrace( traceGalContext, wxS( "Canvas %p falling back to software rendering" ), this );
+        EDA_DRAW_FRAME::SetOpenGLFailureOccurred();
+        SwitchBackend( GAL_FALLBACK );
+
+        if( loss == KIGFX::GAL_CONTEXT_LOSS::REPEATED && !s_notified )
+        {
+            s_notified = true;
+            showMessageLater( _( "The graphics driver keeps resetting, falling back to software rendering" ),
+                              wxEmptyString, false );
+        }
+    }
+
+    StartDrawing();
+    return true;
+}
+
+
+void EDA_DRAW_PANEL_GAL::showMessageLater( const wxString& aTitle, const wxString& aDetail, bool aError )
+{
+    wxWindow* parent = m_parent;
+
+    CallAfter(
+            [parent, aTitle, aDetail, aError]()
+            {
+                if( aError )
+                    DisplayErrorMessage( parent, aTitle, aDetail );
+                else
+                    DisplayInfoMessage( parent, aTitle, aDetail );
+            } );
 }
 
 
@@ -262,6 +356,9 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
     std::lock_guard<std::mutex> lock( m_refreshMutex, std::adopt_lock );
 
     if( !m_drawingEnabled )
+        return false;
+
+    if( handleContextLoss() )
         return false;
 
     if( !m_gal->IsInitialized() || !m_gal->IsVisible() || m_gal->IsContextLocked() )
@@ -443,6 +540,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
         // OpenGL frame completed successfully, allow future recovery attempts
         m_glRecoveryAttempted = false;
         m_contextBindFailures = 0;
+        m_rebuiltAfterReset = false;
     }
     catch( std::exception& err )
     {
@@ -455,7 +553,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
     }
     catch( ... )
     {
-        DisplayErrorMessage( m_parent, _( "Graphics error" ), _( "Unknown exception" ) );
+        showMessageLater( _( "Graphics error" ), _( "Unknown exception" ), true );
         StopDrawing();
     }
 
@@ -625,6 +723,10 @@ bool EDA_DRAW_PANEL_GAL::GetScreenshot( wxImage& aDstImage )
 
     DoRePaint( false );
 
+    // The repaint may have replaced a GAL lost to a GPU reset
+    if( m_backend != GAL_TYPE_OPENGL || !m_gal )
+        return false;
+
     return static_cast<KIGFX::OPENGL_GAL*>( m_gal )->GetScreenshot( aDstImage );
 }
 
@@ -720,14 +822,14 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
                 if( GAL_FALLBACK != aGalType )
                 {
                     aGalType = GAL_FALLBACK;
-                    DisplayInfoMessage( m_parent, _( "Could not use OpenGL, falling back to software rendering" ),
-                                        errormsg );
+                    showMessageLater( _( "Could not use OpenGL, falling back to software rendering" ), errormsg,
+                                      false );
                     new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
                 }
                 else
                 {
                     // We're well and truly banjaxed if we get here without a fallback.
-                    DisplayInfoMessage( m_parent, _( "Could not use OpenGL" ), errormsg );
+                    showMessageLater( _( "Could not use OpenGL" ), errormsg, false );
                     new_gal = new KIGFX::GAL( m_options );
                     aGalType = GAL_TYPE_NONE;
                     result = false;
@@ -755,11 +857,31 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     }
     catch( std::runtime_error& err )
     {
-        // Create a dummy GAL
-        new_gal = new KIGFX::GAL( m_options );
-        aGalType = GAL_TYPE_NONE;
-        DisplayErrorMessage( m_parent, _( "Error switching GAL backend" ), wxString( err.what() ) );
-        result = false;
+        // A context the driver refuses to create would otherwise leave every frame on the blank stub
+        if( aGalType == GAL_TYPE_OPENGL && GAL_FALLBACK_AVAILABLE )
+        {
+            try
+            {
+                new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
+                aGalType = GAL_FALLBACK;
+                EDA_DRAW_FRAME::SetOpenGLFailureOccurred();
+                showMessageLater( _( "Could not use OpenGL, falling back to software rendering" ),
+                                  wxString( err.what() ), false );
+            }
+            catch( std::runtime_error& )
+            {
+                new_gal = nullptr;
+            }
+        }
+
+        if( !new_gal )
+        {
+            // Create a dummy GAL
+            new_gal = new KIGFX::GAL( m_options );
+            aGalType = GAL_TYPE_NONE;
+            showMessageLater( _( "Error switching GAL backend" ), wxString( err.what() ), true );
+            result = false;
+        }
     }
 
     // trigger update of the gal options in case they differ from the defaults

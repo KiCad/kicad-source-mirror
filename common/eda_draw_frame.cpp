@@ -1353,10 +1353,13 @@ void EDA_DRAW_FRAME::resolveCanvasType()
 
     if( m_canvasType != GetCanvas()->GetBackend() )
     {
-        // Try to switch (will automatically fallback if necessary)
-        SwitchCanvas( m_canvasType );
+        // SwitchCanvas overwrites m_canvasType with whatever backend it ended up on
+        EDA_DRAW_PANEL_GAL::GAL_TYPE requested = m_canvasType;
 
-        if( GetCanvas()->GetBackend() != m_canvasType )
+        // Try to switch (will automatically fallback if necessary)
+        SwitchCanvas( requested );
+
+        if( GetCanvas()->GetBackend() != requested )
         {
             m_canvasType = GetCanvas()->GetBackend();
             m_openGLFailureOccured = true; // Store failure for other EDA_DRAW_FRAMEs

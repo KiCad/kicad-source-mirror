@@ -96,6 +96,15 @@ int          OPENGL_GAL::m_instanceCounter = 0;
 GLuint       OPENGL_GAL::g_fontTexture = 0;
 bool         OPENGL_GAL::m_isBitmapFontLoaded = false;
 
+int                   OPENGL_GAL::m_contextGroupId = 0;
+bool                  OPENGL_GAL::m_resetBudgetExhausted = false;
+bool                  OPENGL_GAL::m_glLoaded = false;
+GL_RESET_BUDGET       OPENGL_GAL::m_resetBudget( 3, std::chrono::seconds( 60 ) );
+std::set<OPENGL_GAL*> OPENGL_GAL::m_instances;
+bool                  OPENGL_GAL::m_resetSettled = true;
+
+GL_RESET_BUDGET::CLOCK::time_point OPENGL_GAL::m_resetDetectedAt;
+
 namespace KIGFX
 {
 class GL_BITMAP_CACHE
@@ -355,6 +364,7 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
         HIDPI_GL_CANVAS( aVcSettings, aParent, getGLAttribs(), wxID_ANY, wxDefaultPosition,
                          wxDefaultSize,
                          wxEXPAND, aName ),
+        m_ownContextGroupId( m_contextGroupId ),
         m_mouseListener( aMouseListener ),
         m_paintListener( aPaintListener ),
         m_currentManager( nullptr ),
@@ -388,6 +398,7 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
 
     m_shader = new SHADER();
     ++m_instanceCounter;
+    m_instances.insert( this );
 
     m_bitmapCache = std::make_unique<GL_BITMAP_CACHE>();
 
@@ -472,7 +483,12 @@ OPENGL_GAL::~OPENGL_GAL()
         // can already be gone and the teardown below would run against a sibling's context
         m_isContextValid = gl_mgr->LockCtx( m_glPrivContext, this );
 
+        // A reset already destroyed our objects, and some drivers report every call as out of memory
+        if( GetContextLoss() != GAL_CONTEXT_LOSS::NONE )
+            m_isContextValid = false;
+
         --m_instanceCounter;
+        m_instances.erase( this );
 
         if( !m_isContextValid )
         {
@@ -500,6 +516,9 @@ OPENGL_GAL::~OPENGL_GAL()
         if( m_isContextValid )
             ClearCache();
 
+        // Groups free their vertices through the cached manager, so they must go before it does
+        m_groups.clear();
+
         delete m_compositor;
 
         if( m_isInitialized )
@@ -520,7 +539,7 @@ OPENGL_GAL::~OPENGL_GAL()
         delete m_shader;
 
         // Are we destroying the last GAL instance?
-        if( m_instanceCounter == 0 )
+        if( m_instanceCounter == 0 && m_glMainContext )
         {
             if( gl_mgr->LockCtx( m_glMainContext, this ) && m_isBitmapFontLoaded )
             {
@@ -875,7 +894,8 @@ void OPENGL_GAL::EndDrawing()
 
 bool OPENGL_GAL::GetScreenshot( wxImage& aDstImage )
 {
-    if( !IsInitialized() || !m_compositor )
+    // A canvas that has never drawn has no compositor buffers to read
+    if( !IsInitialized() || !m_isInitialized || !m_compositor )
         return false;
 
     GAL_CONTEXT_LOCKER locker( this );
@@ -942,6 +962,107 @@ void OPENGL_GAL::LockContext( int aClientCookie )
         return;
 
     m_isContextValid = mgr->LockCtx( m_glPrivContext, this );
+
+    // Entry points are process wide, so a canvas that has not drawn yet can still be polled
+    if( m_isContextValid && m_glLoaded && GetContextLoss() == GAL_CONTEXT_LOSS::NONE && detectContextReset() )
+    {
+        orphanContextGroup();
+    }
+
+    // A lost context accepts commands but ignores them, so treat it as unusable
+    if( GetContextLoss() != GAL_CONTEXT_LOSS::NONE )
+        m_isContextValid = false;
+}
+
+
+GAL_CONTEXT_LOSS OPENGL_GAL::GetContextLoss() const
+{
+    if( m_ownContextGroupId == m_contextGroupId )
+        return GAL_CONTEXT_LOSS::NONE;
+
+    return m_resetBudgetExhausted ? GAL_CONTEXT_LOSS::REPEATED : GAL_CONTEXT_LOSS::RECOVERABLE;
+}
+
+
+static GLenum queryResetStatus()
+{
+    if( glGetGraphicsResetStatus )
+        return glGetGraphicsResetStatus();
+
+    if( glGetGraphicsResetStatusARB )
+        return glGetGraphicsResetStatusARB();
+
+    return GL_NO_ERROR;
+}
+
+
+bool OPENGL_GAL::detectContextReset()
+{
+    // Only contexts created with the lose-on-reset strategy ever report a reset
+    GLenum status = queryResetStatus();
+
+    if( status != GL_NO_ERROR )
+        wxLogTrace( traceGalContext, wxS( "GL context %p reset, status 0x%x" ), m_glPrivContext, status );
+
+    return status != GL_NO_ERROR;
+}
+
+
+void OPENGL_GAL::orphanContextGroup()
+{
+    ++m_contextGroupId;
+    m_resetDetectedAt = GL_RESET_BUDGET::CLOCK::now();
+    m_resetSettled = false;
+    m_resetBudgetExhausted = !m_resetBudget.RecordReset( m_resetDetectedAt );
+
+    wxLogTrace( traceGalContext, wxS( "Orphaned GL context group, now %d, budget exhausted %d" ), m_contextGroupId,
+                m_resetBudgetExhausted ? 1 : 0 );
+
+    bool mainOwned = false;
+
+    for( OPENGL_GAL* gal : m_instances )
+    {
+        if( gal->m_glPrivContext == m_glMainContext )
+            mainOwned = true;
+    }
+
+    // A live owner destroys the old main context itself; an ownerless one would otherwise leak
+    if( !mainOwned && m_glMainContext )
+        Pgm().GetGLContextManager()->DestroyCtx( m_glMainContext );
+
+    // The dead group still owns these; the next canvas created starts a new group
+    m_glMainContext = nullptr;
+    g_fontTexture = 0;
+    m_isBitmapFontLoaded = false;
+
+    for( OPENGL_GAL* gal : m_instances )
+        gal->Refresh();
+}
+
+
+bool OPENGL_GAL::IsResetSettled()
+{
+    GL_CONTEXT_MANAGER* mgr = Pgm().GetGLContextManager();
+
+    if( m_resetSettled || !mgr )
+        return true;
+
+    if( GL_RESET_BUDGET::CLOCK::now() - m_resetDetectedAt >= std::chrono::seconds( 2 ) )
+    {
+        wxLogTrace( traceGalContext, wxS( "GL reset did not report completion, rebuilding anyway" ) );
+        m_resetSettled = true;
+        return true;
+    }
+
+    // The lost context keeps reporting the reset until the hardware has finished it
+    if( mgr->LockCtx( m_glPrivContext, this ) && queryResetStatus() == GL_NO_ERROR )
+    {
+        wxLogTrace( traceGalContext, wxS( "GL reset completed" ) );
+        m_resetSettled = true;
+    }
+
+    mgr->UnlockCtx( m_glPrivContext );
+    return m_resetSettled;
 }
 
 
@@ -2725,6 +2846,10 @@ void OPENGL_GAL::DeleteGroup( int aGroupNumber )
 
 void OPENGL_GAL::ClearCache()
 {
+    // Runs unlocked from VIEW::Clear, so deleting a lost group's texture names could hit another group's
+    if( GetContextLoss() != GAL_CONTEXT_LOSS::NONE )
+        m_bitmapCache->Abandon();
+
     m_bitmapCache = std::make_unique<GL_BITMAP_CACHE>();
 
     m_groups.clear();
@@ -3471,6 +3596,8 @@ void OPENGL_GAL::init()
     if( glVersion == 0 )
         throw std::runtime_error( "Failed to load OpenGL via loader" );
 
+    m_glLoaded = true;
+
     const char* vendor = (const char*) glGetString( GL_VENDOR );
     const char* renderer = (const char*) glGetString( GL_RENDERER );
     const char* version = (const char*) glGetString( GL_VERSION );
@@ -3483,6 +3610,13 @@ void OPENGL_GAL::init()
     wxLogTrace( traceGalContext, wxS( "GL context %p ready on canvas %p: %s | %s | %s" ),
                 m_glPrivContext, this, wxString::FromUTF8( vendor ),
                 wxString::FromUTF8( renderer ), wxString::FromUTF8( version ) );
+
+    GLint resetStrategy = 0;
+
+    if( GLAD_GL_VERSION_4_5 || GLAD_GL_ARB_robustness || GLAD_GL_KHR_robustness )
+        glGetIntegerv( GL_RESET_NOTIFICATION_STRATEGY, &resetStrategy );
+
+    wxLogTrace( traceGalContext, wxS( "GL context %p reset strategy 0x%x" ), m_glPrivContext, resetStrategy );
 
     // Check the OpenGL version (minimum 2.1 is required)
     if( !GLAD_GL_VERSION_2_1 )

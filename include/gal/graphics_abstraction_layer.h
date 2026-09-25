@@ -97,6 +97,15 @@ constexpr double GRID_EDGE_DARKEN = 0.75;
 constexpr double GRID_SELECTED_BRIGHTEN = 0.5;
 
 
+/// State of a canvas' rendering context after a GPU reset
+enum class GAL_CONTEXT_LOSS
+{
+    NONE,         ///< Context is usable
+    RECOVERABLE,  ///< Context was lost; rebuild the canvas
+    REPEATED      ///< Contexts keep being lost; stop using this backend
+};
+
+
 /**
  * Abstract interface for drawing on a 2D-surface.
  *
@@ -1135,6 +1144,26 @@ public:
         return true;
     }
 
+    /**
+     * Check whether a GPU reset destroyed this canvas' rendering context.
+     *
+     * A lost canvas cannot draw or update cached items until its owner rebuilds it.
+     */
+    virtual GAL_CONTEXT_LOSS GetContextLoss() const
+    {
+        return GAL_CONTEXT_LOSS::NONE;
+    }
+
+    /**
+     * Check whether the driver has finished the reset that destroyed this canvas' context.
+     *
+     * Rebuilding before then can fail or hang in the driver.
+     */
+    virtual bool IsResetSettled()
+    {
+        return true;
+    }
+
 
     /// Use GAL_CONTEXT_LOCKER RAII object unless you know what you're doing.
     virtual void LockContext( int aClientCookie ) {}
@@ -1328,15 +1357,27 @@ class GAL_UPDATE_CONTEXT : public GAL_CONTEXT_LOCKER
 {
 public:
     GAL_UPDATE_CONTEXT( GAL* aGal ) :
-            GAL_CONTEXT_LOCKER( aGal )
+            GAL_CONTEXT_LOCKER( aGal ),
+            m_updating( aGal->IsContextValid() )
     {
-        m_gal->beginUpdate();
+        if( m_updating )
+            m_gal->beginUpdate();
     }
 
     ~GAL_UPDATE_CONTEXT()
     {
-        m_gal->endUpdate();
+        if( m_updating )
+            m_gal->endUpdate();
     }
+
+    /// @return False if the context could not be made current, so cached items must not be touched.
+    bool IsUpdating() const
+    {
+        return m_updating;
+    }
+
+private:
+    bool m_updating;
 };
 
 

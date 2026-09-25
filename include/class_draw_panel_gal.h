@@ -334,6 +334,21 @@ protected:
 
     bool recoverFromGalError( const std::exception& aErr );
 
+    /**
+     * Replace a GAL whose context was destroyed by a GPU reset.
+     *
+     * @return true if the GAL was replaced, so the current repaint must stop.
+     */
+    bool handleContextLoss();
+
+    /**
+     * Show a recovery message once the current event finishes.
+     *
+     * Recovery runs inside a repaint, where a modal dialog would stop every canvas from painting
+     * until it was closed.
+     */
+    void showMessageLater( const wxString& aTitle, const wxString& aDetail, bool aError );
+
     wxWindow*                m_parent;           ///< Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)
 
@@ -383,6 +398,9 @@ protected:
 
     /// Consecutive frames dropped because the GL context could not be made current
     int                      m_contextBindFailures;
+
+    /// The GAL was rebuilt after a GPU reset and has not completed a frame yet
+    bool                     m_rebuiltAfterReset;
 
     /// Set when a size change could not be applied because the GL context was unavailable
     bool                     m_pendingResize;

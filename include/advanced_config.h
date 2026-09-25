@@ -1097,6 +1097,16 @@ public:
      */
     bool m_EagleImportFieldsCanAutoplace;
 
+    /**
+     * Create OpenGL contexts that report GPU resets so the canvases can rebuild themselves
+     * instead of freezing.
+     *
+     * Setting name: "EnableGLResetRecovery"
+     * Valid values: true or false
+     * Default value: true
+     */
+    bool m_EnableGLResetRecovery;
+
     wxString m_traceMasks; ///< Trace masks for wxLogTrace, loaded from the config file.
     ///@}
 

@@ -30,6 +30,7 @@
 
 #include <mutex>
 #include <map>
+#include <set>
 
 class KICOMMON_API GL_CONTEXT_MANAGER
 {
@@ -42,6 +43,9 @@ public:
      *
      * It is assured that the created context is freed upon exit.  See wxGLContext
      * documentation for the parameters description.
+     *
+     * The reset strategy is chosen here; with \a aOther it follows that context's strategy and
+     * returns nullptr rather than create a context whose strategy does not match.
      *
      * @return Created OpenGL context.
      */
@@ -108,6 +112,15 @@ public:
     }
 
     /**
+     * @return true if \a aContext was created to report GPU resets.  Contexts sharing objects
+     *         with it must be created the same way.
+     */
+    bool IsLoseOnReset( const wxGLContext* aContext ) const
+    {
+        return m_loseOnResetContexts.count( aContext ) > 0;
+    }
+
+    /**
      * Run the given function first releasing the GL context lock, then restoring it.
      *
      * @param aFunction is the function to be executed.
@@ -140,6 +153,9 @@ private:
 
     /// Currently bound GL context.
     wxGLContext* m_glCtx;
+
+    /// Contexts created with the lose-on-reset notification strategy.
+    std::set<const wxGLContext*> m_loseOnResetContexts;
 
     /// Lock to prevent unexpected GL context switching.
     std::mutex m_glCtxMutex;

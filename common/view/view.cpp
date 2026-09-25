@@ -871,9 +871,12 @@ void VIEW::UpdateLayerColor( int aLayer )
     {
         GAL_UPDATE_CONTEXT ctx( m_gal );
 
-        UPDATE_COLOR_VISITOR visitor( aLayer, m_painter, m_gal );
-        m_layers[aLayer].items->Query( r, visitor );
-        MarkTargetDirty( m_layers[aLayer].target );
+        if( ctx.IsUpdating() )
+        {
+            UPDATE_COLOR_VISITOR visitor( aLayer, m_painter, m_gal );
+            m_layers[aLayer].items->Query( r, visitor );
+            MarkTargetDirty( m_layers[aLayer].target );
+        }
     }
 }
 
@@ -884,22 +887,25 @@ void VIEW::UpdateAllLayersColor()
     {
         GAL_UPDATE_CONTEXT ctx( m_gal );
 
-        for( VIEW_ITEM* item : *m_allItems )
+        if( ctx.IsUpdating() )
         {
-            if( !item )
-                continue;
-
-            VIEW_ITEM_DATA* viewData = item->viewPrivData();
-
-            if( !viewData )
-                continue;
-
-            for( int layer : viewData->m_layers )
+            for( VIEW_ITEM* item : *m_allItems )
             {
-                int group = viewData->getGroup( layer );
+                if( !item )
+                    continue;
 
-                if( group >= 0 )
-                    recolorGroup( item, layer, group );
+                VIEW_ITEM_DATA* viewData = item->viewPrivData();
+
+                if( !viewData )
+                    continue;
+
+                for( int layer : viewData->m_layers )
+                {
+                    int group = viewData->getGroup( layer );
+
+                    if( group >= 0 )
+                        recolorGroup( item, layer, group );
+                }
             }
         }
     }
@@ -1016,22 +1022,25 @@ void VIEW::UpdateAllLayersOrder()
     {
         GAL_UPDATE_CONTEXT ctx( m_gal );
 
-        for( VIEW_ITEM* item : *m_allItems )
+        if( ctx.IsUpdating() )
         {
-            if( !item )
-                continue;
-
-            VIEW_ITEM_DATA* viewData = item->viewPrivData();
-
-            if( !viewData )
-                continue;
-
-            for( int layer : viewData->m_layers )
+            for( VIEW_ITEM* item : *m_allItems )
             {
-                int group = viewData->getGroup( layer );
+                if( !item )
+                    continue;
 
-                if( group >= 0 )
-                    m_gal->ChangeGroupDepth( group, m_layers[layer].renderingOrder );
+                VIEW_ITEM_DATA* viewData = item->viewPrivData();
+
+                if( !viewData )
+                    continue;
+
+                for( int layer : viewData->m_layers )
+                {
+                    int group = viewData->getGroup( layer );
+
+                    if( group >= 0 )
+                        m_gal->ChangeGroupDepth( group, m_layers[layer].renderingOrder );
+                }
             }
         }
     }
@@ -1696,17 +1705,28 @@ void VIEW::UpdateItems()
         }
     }
 
+    // Skipping the loop below leaves m_requiredUpdate and m_hasPendingItemUpdates set so the
+    // work is redone once the canvas has a valid context again
+    bool updatesProcessed = true;
+
     if( anyUpdated )
     {
         GAL_UPDATE_CONTEXT ctx( m_gal );
 
-        for( VIEW_ITEM* item : *m_allItems.get() )
+        if( ctx.IsUpdating() )
         {
-            if( item && item->viewPrivData() && item->viewPrivData()->m_requiredUpdate != NONE )
+            for( VIEW_ITEM* item : *m_allItems.get() )
             {
-                invalidateItem( item, item->viewPrivData()->m_requiredUpdate );
-                item->viewPrivData()->m_requiredUpdate = NONE;
+                if( item && item->viewPrivData() && item->viewPrivData()->m_requiredUpdate != NONE )
+                {
+                    invalidateItem( item, item->viewPrivData()->m_requiredUpdate );
+                    item->viewPrivData()->m_requiredUpdate = NONE;
+                }
             }
+        }
+        else
+        {
+            updatesProcessed = false;
         }
     }
 
@@ -1715,7 +1735,8 @@ void VIEW::UpdateItems()
               cntTotal, cntGeomUpdate, (unsigned) anyUpdated );
 #endif
 
-    m_hasPendingItemUpdates = false;
+    if( updatesProcessed )
+        m_hasPendingItemUpdates = false;
 }
 
 
