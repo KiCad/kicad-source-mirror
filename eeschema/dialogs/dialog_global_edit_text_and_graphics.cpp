@@ -398,14 +398,17 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
 
         if( m_sheetBorders->GetValue() )
         {
-            if( !m_lineWidth.IsIndeterminate() )
-                sheet->SetBorderWidth( m_lineWidth.GetIntValue() );
+            if( !m_selectedFilterOpt->GetValue() || sheet->IsSelected() )
+            {
+                if( !m_lineWidth.IsIndeterminate() )
+                    sheet->SetBorderWidth( m_lineWidth.GetIntValue() );
 
-            if( m_setColor->GetValue() )
-                sheet->SetBorderColor( m_colorSwatch->GetSwatchColor() );
+                if( m_setColor->GetValue() )
+                    sheet->SetBorderColor( m_colorSwatch->GetSwatchColor() );
 
-            if( m_setFillColor->GetValue() )
-                sheet->SetBackgroundColor( m_fillColorSwatch->GetSwatchColor() );
+                if( m_setFillColor->GetValue() )
+                    sheet->SetBackgroundColor( m_fillColorSwatch->GetSwatchColor() );
+            }
         }
 
         if( m_sheetPins->GetValue() )
