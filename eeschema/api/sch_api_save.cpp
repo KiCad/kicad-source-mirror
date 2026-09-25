@@ -221,7 +221,10 @@ bool SaveSchematicCopy( SCHEMATIC& aSchematic, PROJECT& aProject, const wxString
         projectFile.SetExt( FILEEXT::ProjectFileExtension );
 
         if( !projectFile.FileExists() )
-            Pgm().GetSettingsManager().SaveProjectCopy( projectFile.GetFullPath() );
+        {
+            if( !Pgm().GetSettingsManager().SaveProjectCopy( projectFile.GetFullPath() ) )
+                return false;
+        }
     }
 
     return true;
