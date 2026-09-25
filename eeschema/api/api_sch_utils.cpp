@@ -287,7 +287,7 @@ bool UnpackSymbol( SCH_SYMBOL* aOutput, const kiapi::schematic::types::Schematic
 
 
 // Variant names are stored and compared exactly, but SCHEMATIC::HasVariant matches case-insensitively
-static std::optional<wxString> FindVariantNoCase( const SCHEMATIC* aSchematic, const wxString& aName )
+std::optional<wxString> FindVariantNoCase( const SCHEMATIC* aSchematic, const wxString& aName )
 {
     for( const wxString& variantName : aSchematic->GetVariantNames() )
     {

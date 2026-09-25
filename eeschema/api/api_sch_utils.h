@@ -18,8 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_API_SCH_UTILS_H
-#define KICAD_API_SCH_UTILS_H
+#pragma once
 
 #include <memory>
 #include <optional>
@@ -105,6 +104,4 @@ ResolveFocusItems( SCHEMATIC& aSchematic, const std::vector<KIID>& aIds, const s
 /**
  * Variant names are stored and compared exactly, but SCHEMATIC::HasVariant matches case-insensitively
  */
-static std::optional<wxString> FindVariantNoCase( const SCHEMATIC* aSchematic, const wxString& aName );
-
-#endif //KICAD_API_SCH_UTILS_H
+std::optional<wxString> FindVariantNoCase( const SCHEMATIC* aSchematic, const wxString& aName );

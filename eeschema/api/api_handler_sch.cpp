@@ -2805,7 +2805,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleDeleteVariant( const HANDLER_CONTEX
     SCH_COMMIT               commit( m_frame ? frame()->GetToolManager() : toolManager() );
     bool                     pushedCommit = false;
 
-    if( std::optional<wxString> canonical = findVariantNoCase( schematic, name ) )
+    if( std::optional<wxString> canonical = FindVariantNoCase( schematic, name ) )
         name = *canonical;
 
     schematic->DeleteVariant( name, &commit );
@@ -2889,7 +2889,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleRenameVariant( const HANDLER_CONTEX
     SCH_COMMIT               commit( m_frame ? frame()->GetToolManager() : toolManager() );
     bool                     pushedCommit = false;
 
-    if( std::optional<wxString> canonicalOld = findVariantNoCase( schematic, oldName ) )
+    if( std::optional<wxString> canonicalOld = FindVariantNoCase( schematic, oldName ) )
         oldName = *canonicalOld;
 
     schematic->RenameVariant( oldName, newName, &commit );
@@ -2969,7 +2969,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleCopyVariant( const HANDLER_CONTEXT<
     SCH_COMMIT               commit( m_frame ? frame()->GetToolManager() : toolManager() );
     bool                     pushedCommit = false;
 
-    if( std::optional<wxString> canonicalOld = findVariantNoCase( schematic, oldName ) )
+    if( std::optional<wxString> canonicalOld = FindVariantNoCase( schematic, oldName ) )
         oldName = *canonicalOld;
 
     schematic->CopyVariant( oldName, newName, &commit );
@@ -3025,7 +3025,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleSetVariantDescription( const HANDLE
 
     VARIANT_PROXY_UNDO_ITEM* undoItem = m_frame ? new VARIANT_PROXY_UNDO_ITEM( schematic ) : nullptr;
 
-    if( std::optional<wxString> canonical = findVariantNoCase( schematic, name ) )
+    if( std::optional<wxString> canonical = FindVariantNoCase( schematic, name ) )
         name = *canonical;
 
     schematic->SetVariantDescription( name, wxString::FromUTF8( aCtx.Request.description() ) );
@@ -3069,7 +3069,7 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleSetCurrentVariant( const HANDLER_CO
 
     wxString name = aCtx.Request.has_name() ? wxString::FromUTF8( aCtx.Request.name() ) : wxString();
 
-    if( std::optional<wxString> canonical = findVariantNoCase( schematic, name ) )
+    if( std::optional<wxString> canonical = FindVariantNoCase( schematic, name ) )
         name = *canonical;
 
     if( m_frame )
