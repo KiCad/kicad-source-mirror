@@ -46,6 +46,17 @@
 #include <wx/ffile.h>
 #include <scoped_set_reset.h>
 
+
+struct GlobalConfig
+{
+    GlobalConfig()
+    {
+        boost::unit_test::unit_test_log.set_threshold_level(boost::unit_test::log_test_units);
+    }
+};
+
+BOOST_GLOBAL_FIXTURE( GlobalConfig );
+
 BOOST_AUTO_TEST_SUITE( ConnectivityExport )
 
 BOOST_AUTO_TEST_CASE( CurrentSheetExportPreservesFullInstancePaths )
