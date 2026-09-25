@@ -411,7 +411,7 @@ bool SCH_TEXTBOX::operator<( const SCH_ITEM& aItem ) const
         return GetMarginBottom() < other->GetMarginBottom();
 
     if( GetExcludedFromSim() != other->GetExcludedFromSim() )
-        return GetExcludedFromSim() - other->GetExcludedFromSim();
+        return GetExcludedFromSim();
 
     return GetText() < other->GetText();
 }

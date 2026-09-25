@@ -298,7 +298,7 @@ bool SCH_TEXT::operator<( const SCH_ITEM& aItem ) const
         return GetPosition().y < other->GetPosition().y;
 
     if( GetExcludedFromSim() != other->GetExcludedFromSim() )
-        return GetExcludedFromSim() - other->GetExcludedFromSim();
+        return GetExcludedFromSim();
 
     return GetText() < other->GetText();
 }
