@@ -136,7 +136,7 @@ void SCH_SHEET_PIN::swapData( SCH_ITEM* aItem )
 
 bool SCH_SHEET_PIN::operator==( const SCH_SHEET_PIN* aPin ) const
 {
-    return aPin == this;
+    return operator==( *aPin );
 }
 
 
@@ -410,8 +410,13 @@ bool SCH_SHEET_PIN::operator==( const SCH_ITEM& aOther ) const
 
     const SCH_SHEET_PIN* other = static_cast<const SCH_SHEET_PIN*>( &aOther );
 
-    return m_edge == other->m_edge && m_number == other->m_number
-           && SCH_HIERLABEL::operator==( aOther );
+    if( GetNumber() != other->GetNumber() )
+        return false;
+
+    if( GetSide() != other->GetSide() )
+        return false;
+
+    return SCH_HIERLABEL::operator==( *other );
 }
 
 
@@ -436,8 +441,7 @@ double SCH_SHEET_PIN::Similarity( const SCH_ITEM& aOther ) const
 }
 
 
-bool SCH_SHEET_PIN::HasConnectivityChanges( const SCH_ITEM* aItem,
-                                            const SCH_SHEET_PATH* aInstance ) const
+bool SCH_SHEET_PIN::HasConnectivityChanges( const SCH_ITEM* aItem, const SCH_SHEET_PATH* aInstance ) const
 {
     // Do not compare to ourself.
     if( aItem == this )

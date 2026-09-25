@@ -2150,7 +2150,7 @@ bool SCH_SHEET::operator==( const SCH_ITEM& aOther ) const
 
     for( size_t ii = 0; ii < GetPins().size(); ++ii )
     {
-        if( GetPins()[ii] != other->GetPins()[ii] )
+        if( !GetPins()[ii]->operator==( other->GetPins()[ii] ) )
             return false;
     }
 
