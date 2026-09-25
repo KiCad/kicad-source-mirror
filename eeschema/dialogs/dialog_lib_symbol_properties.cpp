@@ -253,33 +253,38 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::addInheritedFields( const std::shared_ptr<LIB
     if( std::shared_ptr<LIB_SYMBOL> ancestor = aParent->GetParent().lock() )
         addInheritedFields( ancestor );
 
+    wxString                source = UnescapeString( aParent->GetName() );
     std::vector<SCH_FIELD*> parentFields;
     aParent->GetFields( parentFields );
 
     for( SCH_FIELD* parentField : parentFields )
     {
-        bool found = false;
+        // Flatten() only passes down a mandatory field the ancestor actually sets
+        if( parentField->IsMandatory() && parentField->GetText().IsEmpty() )
+            continue;
 
-        if( parentField->IsMandatory() )
-            continue; // Don't inherit mandatory fields
+        bool found = false;
 
         for( size_t ii = 0; ii < m_fields->size(); ++ii )
         {
             SCH_FIELD& field = m_fields->at( ii );
+            bool       match = false;
 
-            if( field.IsMandatory() )
-                continue; // Don't inherit mandatory fields
+            if( parentField->IsMandatory() )
+                match = field.GetId() == parentField->GetId();
+            else if( !field.IsMandatory() )
+                match = field.GetUntranslatedName() == parentField->GetUntranslatedName();
 
-            if( field.GetUntranslatedName() == parentField->GetUntranslatedName() )
+            if( match )
             {
-                m_fields->SetFieldInherited( ii, *parentField );
+                m_fields->SetFieldInherited( ii, *parentField, source );
                 found = true;
                 break;
             }
         }
 
-        if( !found )
-            m_fields->AddInheritedField( *parentField );
+        if( !found && !parentField->IsMandatory() )
+            m_fields->AddInheritedField( *parentField, source );
     }
 }
 
@@ -316,7 +321,24 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     m_SymbolNameCtrl->ChangeValue( UnescapeString( m_libEntry->GetName() ) );
 
-    m_KeywordCtrl->ChangeValue( m_libEntry->GetKeyWords() );
+    // GetKeyWords() resolves through the parent, so saving it would turn inheritance into an override
+    m_KeywordCtrl->ChangeValue( m_libEntry->GetRawKeyWords() );
+
+    // Keywords are not a field, so the inherited value is shown as a hint
+    std::shared_ptr<LIB_SYMBOL> source = m_libEntry->GetParent().lock();
+    std::set<LIB_SYMBOL*>       visited;
+
+    while( source && source->GetRawKeyWords().IsEmpty() && visited.insert( source.get() ).second )
+        source = source->GetParent().lock();
+
+    if( source && !source->GetRawKeyWords().IsEmpty() )
+    {
+        m_keywordsSource = UnescapeString( source->GetName() );
+        m_KeywordCtrl->SetHint( source->GetRawKeyWords() );
+    }
+
+    syncKeywordsToolTip();
+
     m_unitSpinCtrl->SetValue( m_libEntry->GetUnitCount() );
     m_OptionPartsInterchangeable->SetValue( !m_libEntry->UnitsLocked() || m_libEntry->GetUnitCount() == 1 );
 
@@ -674,12 +696,16 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         wxString fieldName = field.GetUntranslatedName();
 
         // Writing an unmodified inherited row into the derived symbol would stop it from
-        // tracking the parent field.  Fields the symbol already owns (transferred user
-        // fields) are kept even when they match the parent.  operator== is owner-sensitive,
-        // so compare content.
-        if( m_fields->IsInherited( ii ) && !m_libEntry->GetField( fieldName )
-                && field.HasSameContent( m_fields->ParentField( ii ) ) )
+        // tracking the parent field, and an empty mandatory field is how the symbol inherits it
+        if( m_fields->IsInherited( ii ) )
         {
+            if( field.IsMandatory() )
+            {
+                SCH_FIELD emptyField( *m_libEntry->GetField( field.GetId() ) );
+                emptyField.SetText( wxEmptyString );
+                fieldsToSave.push_back( emptyField );
+            }
+
             continue;
         }
 
@@ -884,8 +910,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridMotion( wxMouseEvent& aEvent )
         return;
     }
 
-    m_grid->SetToolTip( wxString::Format( _( "This field is inherited from '%s'." ),
-                                          m_fields->ParentField( row ).GetName() ) );
+    m_grid->SetToolTip( wxString::Format( _( "This field is inherited from '%s'." ), m_fields->InheritedFrom( row ) ) );
 }
 
 
@@ -1152,7 +1177,10 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
         if( !found )
         {
             m_grid->ClearSelection();
-            m_fields->erase( m_fields->begin() + ii );
+
+            // An inherited row resets to the ancestor's value instead of disappearing
+            if( !m_fields->EraseRow( ii ) )
+                continue;
 
             wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, ii, 1 );
             m_grid->ProcessTableMessage( msg );
@@ -1332,8 +1360,20 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::onPowerCheckBox( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_LIB_SYMBOL_PROPERTIES::syncKeywordsToolTip()
+{
+    if( !m_keywordsSource.IsEmpty() && m_KeywordCtrl->IsEmpty() )
+        m_KeywordCtrl->SetToolTip( wxString::Format( _( "This field is inherited from '%s'." ), m_keywordsSource ) );
+    else
+        m_KeywordCtrl->UnsetToolTip();
+}
+
+
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnText( wxCommandEvent& event )
 {
+    if( event.GetEventObject() == m_KeywordCtrl )
+        syncKeywordsToolTip();
+
     OnModify();
 }
 

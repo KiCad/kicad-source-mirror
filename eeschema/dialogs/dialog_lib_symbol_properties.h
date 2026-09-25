@@ -85,6 +85,7 @@ private:
     void syncControlStates( bool aIsAlias );
     void syncBodyStyleControls();
     void addInheritedFields( const std::shared_ptr<LIB_SYMBOL>& aParent );
+    void syncKeywordsToolTip();
 
     /// @return true when a footprint can be assigned to the symbol's Footprint field: the
     /// field must exist and not be read-only (a power symbol has no footprint).
@@ -119,6 +120,9 @@ private:
     /// When set by SelectPinMapPage(), TransferDataToWindow opens the Pin Map page instead of the
     /// remembered last page (issue #2282).
     bool m_forcePinMapPage = false;
+
+    /// Ancestor supplying the keywords while the symbol leaves them empty.
+    wxString m_keywordsSource;
 
     enum class LAST_LAYOUT {
         NONE,

@@ -236,8 +236,7 @@ void FIELDS_GRID_TABLE::push_back( const SCH_FIELD& aField )
 {
     std::vector<SCH_FIELD>::push_back( aField );
 
-    m_isInherited.resize( size() );
-    m_parentFields.resize( size() );
+    m_inheritance.resize( size() );
 }
 
 
@@ -422,8 +421,8 @@ FIELDS_GRID_TABLE::~FIELDS_GRID_TABLE()
     m_fontAttr->DecRef();
     m_colorAttr->DecRef();
 
-    for( SCH_FIELD& field : m_parentFields )
-        field.SetParent( nullptr );
+    for( INHERITANCE& inheritance : m_inheritance )
+        inheritance.m_parentField.SetParent( nullptr );
 
     m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &FIELDS_GRID_TABLE::onUnitsChanged, this );
 }
@@ -1130,29 +1129,57 @@ bool FIELDS_GRID_TABLE::IsInherited( size_t aRow ) const
 {
     int fieldIndex = getFieldIndex( static_cast<int>( aRow ) );
 
-    if( fieldIndex < 0 || fieldIndex >= static_cast<int>( m_isInherited.size() )
-        || fieldIndex >= static_cast<int>( m_parentFields.size() ) )
-    {
+    if( fieldIndex < 0 || fieldIndex >= static_cast<int>( m_inheritance.size() ) )
         return false;
-    }
 
-    return m_isInherited[fieldIndex] && m_parentFields[fieldIndex].GetText() == at( fieldIndex ).GetText();
+    const INHERITANCE& inheritance = m_inheritance[fieldIndex];
+
+    // Any edit, including position or visibility, turns the row into an override
+    return inheritance.m_derived && at( fieldIndex ).HasSameContent( inheritance.m_parentField );
 }
 
 
 const SCH_FIELD& FIELDS_GRID_TABLE::ParentField( size_t aRow ) const
 {
-    return m_parentFields.at( getFieldIndex( static_cast<int>( aRow ) ) );
+    return m_inheritance.at( getFieldIndex( static_cast<int>( aRow ) ) ).m_parentField;
 }
 
 
-void FIELDS_GRID_TABLE::AddInheritedField( const SCH_FIELD& aParent )
+const wxString& FIELDS_GRID_TABLE::InheritedFrom( size_t aRow ) const
+{
+    return m_inheritance.at( getFieldIndex( static_cast<int>( aRow ) ) ).m_source;
+}
+
+
+void FIELDS_GRID_TABLE::AddInheritedField( const SCH_FIELD& aParent, const wxString& aSource )
 {
     push_back( aParent );
     back().SetParent( m_part );
-    m_isInherited.back() = true;
-    m_parentFields.back() = aParent;
+    m_inheritance.back().m_derived = true;
+    SetFieldInherited( size() - 1, aParent, aSource );
 }
+
+
+void FIELDS_GRID_TABLE::SetFieldInherited( size_t aFieldIndex, const SCH_FIELD& aParent, const wxString& aSource )
+{
+    wxCHECK( aFieldIndex < size() && aFieldIndex < m_inheritance.size(), /*void*/ );
+
+    INHERITANCE& inheritance = m_inheritance[aFieldIndex];
+    SCH_FIELD&   field = at( aFieldIndex );
+
+    // Flatten() gives an empty mandatory field the ancestor's value, but any user field the symbol owns wins
+    if( inheritance.m_derived || ( field.IsMandatory() && field.GetText().IsEmpty() ) )
+    {
+        field = aParent;
+        inheritance.m_derived = true;
+    }
+
+    inheritance.m_parentField = aParent;
+    inheritance.m_parentField.SetParent( nullptr );
+    inheritance.m_source = aSource;
+    inheritance.m_hasParent = true;
+}
+
 
 bool FIELDS_GRID_TABLE::EraseRow( size_t aRow )
 {
@@ -1161,20 +1188,20 @@ bool FIELDS_GRID_TABLE::EraseRow( size_t aRow )
     if( fieldIndex < 0 )
         return false;
 
-    if( m_isInherited.size() > static_cast<size_t>( fieldIndex ) )
+    if( m_inheritance.size() > static_cast<size_t>( fieldIndex ) )
     {
+        INHERITANCE& inheritance = m_inheritance[fieldIndex];
+
         // You can't erase inherited fields, but you can reset them to the parent value.
-        if( m_isInherited[fieldIndex] )
+        if( inheritance.m_hasParent )
         {
-            at( fieldIndex ) = m_parentFields[fieldIndex];
+            at( fieldIndex ) = inheritance.m_parentField;
+            inheritance.m_derived = true;
             return false;
         }
 
-        m_isInherited.erase( m_isInherited.begin() + fieldIndex );
+        m_inheritance.erase( m_inheritance.begin() + fieldIndex );
     }
-
-    if( m_parentFields.size() > static_cast<size_t>( fieldIndex ) )
-        m_parentFields.erase( m_parentFields.begin() + fieldIndex );
 
     std::vector<SCH_FIELD>::erase( begin() + fieldIndex );
     return true;
@@ -1186,19 +1213,12 @@ void FIELDS_GRID_TABLE::SwapRows( size_t a, size_t b )
     int fieldIndexB = getFieldIndex( static_cast<int>( b ) );
 
     wxCHECK( fieldIndexA >= 0 && fieldIndexB >= 0, /*void*/ );
-    wxCHECK( fieldIndexA < static_cast<int>( m_isInherited.size() )
-                     && fieldIndexB < static_cast<int>( m_isInherited.size() )
-                     && fieldIndexA < static_cast<int>( m_parentFields.size() )
-                     && fieldIndexB < static_cast<int>( m_parentFields.size() ),
+    wxCHECK( fieldIndexA < static_cast<int>( m_inheritance.size() )
+                     && fieldIndexB < static_cast<int>( m_inheritance.size() ),
              /*void*/ );
 
     std::swap( at( fieldIndexA ), at( fieldIndexB ) );
-
-    bool inheritedA = m_isInherited[fieldIndexA];
-    m_isInherited[fieldIndexA] = m_isInherited[fieldIndexB];
-    m_isInherited[fieldIndexB] = inheritedA;
-
-    std::swap( m_parentFields[fieldIndexA], m_parentFields[fieldIndexB] );
+    std::swap( m_inheritance[fieldIndexA], m_inheritance[fieldIndexB] );
 }
 
 
@@ -1207,8 +1227,8 @@ void FIELDS_GRID_TABLE::DetachFields()
     for( SCH_FIELD& field : *this )
         field.SetParent( nullptr );
 
-    for( SCH_FIELD& field : m_parentFields )
-        field.SetParent( nullptr );
+    for( INHERITANCE& inheritance : m_inheritance )
+        inheritance.m_parentField.SetParent( nullptr );
 }
 
 

@@ -126,23 +126,29 @@ public:
     SCH_FIELD* GetField( FIELD_T aFieldId );
     int GetFieldRow( FIELD_T aFieldId );
 
-    void AddInheritedField( const SCH_FIELD& aParent );
+    /**
+     * Append a row for an ancestor field the symbol does not define.
+     */
+    void AddInheritedField( const SCH_FIELD& aParent, const wxString& aSource );
 
-    void SetFieldInherited( size_t aRow, const SCH_FIELD& aParent )
-    {
-        if( m_isInherited.size() <= aRow )
-            m_isInherited.resize( aRow + 1, false );
+    /**
+     * Record the ancestor field that \a aFieldIndex resolves against.  A field the symbol does
+     * not override (an empty mandatory field or a row already showing an ancestor's value)
+     * takes on the ancestor's content so the grid shows what the symbol resolves to.
+     */
+    void SetFieldInherited( size_t aFieldIndex, const SCH_FIELD& aParent, const wxString& aSource );
 
-        if( m_parentFields.size() <= aRow )
-            m_parentFields.resize( aRow + 1 );
-
-        m_parentFields[aRow] = aParent;
-        m_isInherited[aRow] = true;
-    }
-
+    /**
+     * @return true if the row still shows its ancestor's value rather than an override.
+     */
     bool IsInherited( size_t aRow ) const;
 
     const SCH_FIELD& ParentField( size_t aRow ) const;
+
+    /**
+     * @return the name of the ancestor symbol the row inherits from.
+     */
+    const wxString& InheritedFrom( size_t aRow ) const;
 
     void push_back( const SCH_FIELD& field );
     // For std::vector compatibility, but we don't use it directly.
@@ -204,8 +210,15 @@ private:
     wxGridCellAttr*   m_fontAttr;
     wxGridCellAttr*   m_colorAttr;
 
-    std::vector<bool>      m_isInherited;
-    std::vector<SCH_FIELD> m_parentFields;
+    struct INHERITANCE
+    {
+        SCH_FIELD m_parentField;
+        wxString  m_source;
+        bool      m_hasParent = false;
+        bool      m_derived = false; ///< Row shows the ancestor's value instead of owning one
+    };
+
+    std::vector<INHERITANCE> m_inheritance;
 
     std::unique_ptr<NUMERIC_EVALUATOR>        m_eval;
     std::map< std::pair<int, int>, wxString > m_evalOriginal;
