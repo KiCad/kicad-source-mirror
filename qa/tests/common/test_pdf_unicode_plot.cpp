@@ -834,6 +834,232 @@ BOOST_AUTO_TEST_CASE( StrokeFontWordSpacingMatchesGlyphAdvance )
                                  << "); the renderWord cursor fix appears inactive." );
 }
 
+struct STROKE_TEXT_BLOCK
+{
+    double m_OriginX;
+    double m_OriginY;
+    double m_Size;
+};
+
+
+// The stroke plotter emits one block per rendered word, in stream order.
+static std::vector<STROKE_TEXT_BLOCK> ExtractStrokeTextBlocks( const std::string& aBuffer )
+{
+    std::vector<STROKE_TEXT_BLOCK> blocks;
+    std::string::size_type         pos = 0;
+
+    while( ( pos = aBuffer.find( "cm BT", pos ) ) != std::string::npos )
+    {
+        std::string::size_type lineStart = aBuffer.rfind( '\n', pos );
+        lineStart = ( lineStart == std::string::npos ) ? 0 : lineStart + 1;
+
+        double a, b, c, d, e, f;
+
+        if( sscanf( aBuffer.c_str() + lineStart, "q %lf %lf %lf %lf %lf %lf cm BT", &a, &b, &c, &d, &e, &f ) == 6 )
+        {
+            std::string::size_type blockEnd = aBuffer.find( " ET", pos );
+            std::string::size_type tf = aBuffer.find( " Tf", pos );
+
+            if( tf != std::string::npos && ( blockEnd == std::string::npos || tf < blockEnd ) )
+            {
+                std::string::size_type numStart = aBuffer.find_last_of( " \n", tf - 1 );
+
+                blocks.push_back( { e, f, std::stod( aBuffer.substr( numStart + 1, tf - numStart - 1 ) ) } );
+            }
+        }
+
+        pos += 5;
+    }
+
+    return blocks;
+}
+
+
+// Regression test for https://gitlab.com/kicad/code/kicad/-/issues/25281
+// The PDF plotter sized and shifted super and subscript runs with its own constants rather than
+// the font's, so the plot did not match the canvas.
+BOOST_AUTO_TEST_CASE( StrokeFontSuperSubMatchesFontMetrics )
+{
+    enum BLOCK
+    {
+        REF_X0,
+        REF_X1,
+        REF_Y1,
+        V1,
+        SUB,
+        V2,
+        SUPER,
+        TAIL,
+        BLOCK_COUNT
+    };
+
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_supersub" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
+
+    PDF_PLOTTER            plotter;
+    SIMPLE_RENDER_SETTINGS renderSettings;
+
+    plotter.SetRenderSettings( &renderSettings );
+    BOOST_REQUIRE( plotter.OpenFile( pdfPath ) );
+    plotter.SetViewport( VECTOR2I( 0, 0 ), 1.0, 1.0, false );
+    BOOST_REQUIRE( plotter.StartPlot( wxT( "1" ), wxT( "SuperSubTest" ) ) );
+
+    const int sizeIU = 1270000; // 1.27 mm, the reporter's text size
+    const int refX0 = 20000000;
+    const int refX1 = 60000000;
+    const int refY0 = 80000000;
+    const int refY1 = 40000000;
+
+    TEXT_ATTRIBUTES attrs = BuildTextAttributes( sizeIU, sizeIU / 10, false, false );
+    attrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
+    attrs.m_Valign = GR_TEXT_V_ALIGN_BOTTOM;
+
+    auto                  strokeFont = LoadStrokeFontUnique();
+    const KIFONT::METRICS metrics;
+
+    auto plot = [&]( int aX, int aY, const wxString& aText )
+    {
+        plotter.PlotText( VECTOR2I( aX, aY ), COLOR4D( 0, 0, 0, 1 ), aText, attrs, strokeFont.get(), metrics );
+    };
+
+    plot( refX0, refY0, wxT( "M" ) );
+    plot( refX1, refY0, wxT( "M" ) );
+    plot( refX0, refY1, wxT( "M" ) );
+    plot( refX0, 60000000, wxT( "V_{ab}V^{ab}X" ) );
+    plotter.EndPlot();
+
+    std::string buffer;
+    BOOST_REQUIRE( ReadPdfWithDecompressedStreams( pdfPath, buffer ) );
+
+    std::vector<STROKE_TEXT_BLOCK> blocks = ExtractStrokeTextBlocks( buffer );
+    BOOST_REQUIRE_EQUAL( blocks.size(), (size_t) BLOCK_COUNT );
+
+    const double xScale = ( blocks[REF_X1].m_OriginX - blocks[REF_X0].m_OriginX ) / (double) ( refX1 - refX0 );
+    const double yScale = ( blocks[REF_Y1].m_OriginY - blocks[REF_X0].m_OriginY ) / (double) ( refY1 - refY0 );
+
+    BOOST_REQUIRE( std::abs( xScale ) > 0.0 );
+    BOOST_REQUIRE( std::abs( yScale ) > 0.0 );
+
+    const VECTOR2I size( sizeIU, sizeIU );
+
+    auto advanceIU = [&]( const wxString& aText, TEXT_STYLE_FLAGS aStyle )
+    {
+        return (double) strokeFont
+                ->GetTextAsGlyphs( nullptr, nullptr, aText, size, VECTOR2I(), ANGLE_0, false, VECTOR2I(), aStyle )
+                .x;
+    };
+
+    const double multiplier = strokeFont->GetSuperSubSizeMultiplier();
+
+    BOOST_CHECK_CLOSE( blocks[SUB].m_Size / blocks[V1].m_Size, multiplier, 0.5 );
+    BOOST_CHECK_CLOSE( blocks[SUPER].m_Size / blocks[V2].m_Size, multiplier, 0.5 );
+
+    // The Type3 glyph X offset is cancelled in proportion to a block's own size, so a run is
+    // measured between the full size blocks bracketing it.
+    auto checkAdvance = [&]( BLOCK aFrom, BLOCK aTo, TEXT_STYLE_FLAGS aStyle, const char* aLabel )
+    {
+        const double measured =
+                ( blocks[aTo].m_OriginX - blocks[aFrom].m_OriginX ) / xScale - advanceIU( wxT( "V" ), 0 );
+        const double expected = advanceIU( wxT( "ab" ), aStyle );
+
+        BOOST_CHECK_MESSAGE( std::abs( measured - expected ) < sizeIU * 0.001,
+                             aLabel << " run advances " << measured << " IU, font says " << expected << " IU" );
+    };
+
+    checkAdvance( V1, V2, TEXT_STYLE::SUBSCRIPT, "Subscript" );
+    checkAdvance( V2, TAIL, TEXT_STYLE::SUPERSCRIPT, "Superscript" );
+
+    // Both runs share a size, so their baseline difference is free of every size dependent term.
+    const double measuredSpan = ( blocks[SUPER].m_OriginY - blocks[SUB].m_OriginY ) / yScale;
+    const double expectedSpan = ( strokeFont->GetSuperSubBaselineOffset( TEXT_STYLE::SUPERSCRIPT )
+                                  - strokeFont->GetSuperSubBaselineOffset( TEXT_STYLE::SUBSCRIPT ) )
+                                * multiplier * sizeIU;
+
+    BOOST_CHECK_MESSAGE( std::abs( measuredSpan - expectedSpan ) < sizeIU * 0.001,
+                         "Superscript sits " << measuredSpan << " IU from the subscript, font says " << expectedSpan
+                                             << " IU" );
+}
+
+
+// Companion to the above, checking the reported symptom. Both lines are right aligned on one
+// anchor and close with the same full size character, so their ink must end on the same margin.
+BOOST_AUTO_TEST_CASE( StrokeFontSubscriptRightAlignEndsOnMargin )
+{
+    enum BLOCK
+    {
+        REF_X0,
+        REF_X1,
+        PLAIN,
+        V,
+        SUB,
+        TAIL,
+        BLOCK_COUNT
+    };
+
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "kicad_pdf_supersub_ralign" );
+    const wxString           pdfPath = tempDir.CreateChildFileStr( "output.pdf" );
+
+    PDF_PLOTTER            plotter;
+    SIMPLE_RENDER_SETTINGS renderSettings;
+
+    plotter.SetRenderSettings( &renderSettings );
+    BOOST_REQUIRE( plotter.OpenFile( pdfPath ) );
+    plotter.SetViewport( VECTOR2I( 0, 0 ), 1.0, 1.0, false );
+    BOOST_REQUIRE( plotter.StartPlot( wxT( "1" ), wxT( "RightAlignTest" ) ) );
+
+    const int sizeIU = 1270000;
+    const int anchorX = 80000000;
+    const int refX0 = 20000000;
+    const int refX1 = 60000000;
+
+    TEXT_ATTRIBUTES attrs = BuildTextAttributes( sizeIU, sizeIU / 10, false, false );
+    attrs.m_Valign = GR_TEXT_V_ALIGN_BOTTOM;
+
+    auto                  strokeFont = LoadStrokeFontUnique();
+    const KIFONT::METRICS metrics;
+
+    auto plot = [&]( int aX, int aY, const wxString& aText )
+    {
+        plotter.PlotText( VECTOR2I( aX, aY ), COLOR4D( 0, 0, 0, 1 ), aText, attrs, strokeFont.get(), metrics );
+    };
+
+    attrs.m_Halign = GR_TEXT_H_ALIGN_LEFT;
+    plot( refX0, 80000000, wxT( "M" ) );
+    plot( refX1, 80000000, wxT( "M" ) );
+
+    attrs.m_Halign = GR_TEXT_H_ALIGN_RIGHT;
+    plot( anchorX, 60000000, wxT( "sawtoothX" ) );
+    plot( anchorX, 40000000, wxT( "V_{synchronization}X" ) );
+    plotter.EndPlot();
+
+    std::string buffer;
+    BOOST_REQUIRE( ReadPdfWithDecompressedStreams( pdfPath, buffer ) );
+
+    std::vector<STROKE_TEXT_BLOCK> blocks = ExtractStrokeTextBlocks( buffer );
+    BOOST_REQUIRE_EQUAL( blocks.size(), (size_t) BLOCK_COUNT );
+
+    const double xScale = ( blocks[REF_X1].m_OriginX - blocks[REF_X0].m_OriginX ) / (double) ( refX1 - refX0 );
+    BOOST_REQUIRE( std::abs( xScale ) > 0.0 );
+
+    const VECTOR2I size( sizeIU, sizeIU );
+
+    auto advanceIU = [&]( const wxString& aText )
+    {
+        return (double) strokeFont
+                ->GetTextAsGlyphs( nullptr, nullptr, aText, size, VECTOR2I(), ANGLE_0, false, VECTOR2I(), 0 )
+                .x;
+    };
+
+    const double plainEnd = blocks[PLAIN].m_OriginX + xScale * advanceIU( wxT( "sawtoothX" ) );
+    const double markupEnd = blocks[TAIL].m_OriginX + xScale * advanceIU( wxT( "X" ) );
+    const double shortfallIU = ( plainEnd - markupEnd ) / xScale;
+
+    BOOST_CHECK_MESSAGE( std::abs( shortfallIU ) < sizeIU * 0.001,
+                         "Right aligned line containing a subscript ends "
+                                 << shortfallIU << " IU short of the margin the plain line reaches" );
+}
+
+
 // Regression test for https://gitlab.com/kicad/code/kicad/-/issues/23843
 // A border-less filled shape with a dashed/dotted stroke is plotted with a zero pen width.
 // PDF_PLOTTER::SetDash then computed every dash element from that zero width, emitting an

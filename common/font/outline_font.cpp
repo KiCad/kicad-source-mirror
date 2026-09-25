@@ -487,6 +487,11 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox, std::vector<std::u
     VECTOR2D scaleFactor( glyphSize.x / faceSize(), -glyphSize.y / faceSize() );
     scaleFactor = scaleFactor * m_outlineFontSizeCompensation;
 
+    VECTOR2D origin( aPosition );
+
+    if( supersub )
+        origin.y += glyphSize.y * GetSuperSubSizeMultiplier() * GetSuperSubBaselineOffset( aTextStyle );
+
     VECTOR2I cursor( 0, 0 );
 
     if( aGlyphs )
@@ -549,13 +554,8 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox, std::vector<std::u
                 {
                     VECTOR2D pt( v + cursor );
 
-                    if( IsSubscript( aTextStyle ) )
-                        pt.y += m_subscriptVerticalOffset * scaler;
-                    else if( IsSuperscript( aTextStyle ) )
-                        pt.y += m_superscriptVerticalOffset * scaler;
-
                     pt *= scaleFactor;
-                    pt += aPosition;
+                    pt += origin;
 
                     if( aMirror )
                         pt.x = aOrigin.x - ( pt.x - aOrigin.x );

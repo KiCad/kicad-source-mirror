@@ -106,6 +106,21 @@ public:
      */
     double GetInterline( double aGlyphHeight, const METRICS& aFontMetrics ) const override;
 
+    double GetSuperSubSizeMultiplier() const override { return m_subscriptSuperscriptSize; }
+
+    double GetSuperSubBaselineOffset( TEXT_STYLE_FLAGS aTextStyle ) const override
+    {
+        double offset = 0.0;
+
+        if( IsSubscript( aTextStyle ) )
+            offset = m_subscriptVerticalOffset;
+        else if( IsSuperscript( aTextStyle ) )
+            offset = m_superscriptVerticalOffset;
+
+        // The stored offsets are y-up face units carrying the size compensation.
+        return -offset * m_outlineFontSizeCompensation;
+    }
+
     VECTOR2I GetTextAsGlyphs( BOX2I* aBoundingBox, std::vector<std::unique_ptr<GLYPH>>* aGlyphs,
                               const wxString& aText, const VECTOR2I& aSize,
                               const VECTOR2I& aPosition, const EDA_ANGLE& aAngle, bool aMirror,
