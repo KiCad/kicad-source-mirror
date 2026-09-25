@@ -127,8 +127,9 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
+    SCHEMATIC&     schematic = m_frame->Schematic();
     SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
-    wxString variantName = m_frame->Schematic().GetCurrentVariant();
+    wxString       variantName = m_frame->Schematic().GetCurrentVariant();
 
     std::vector<SCH_FIELD*> orderedFields;
 
@@ -141,7 +142,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
                           return lhs->GetOrdinal() < rhs->GetOrdinal();
                       } );
 
-    // Push a copy of each field into m_updateFields
+    // Push a copy of each field into m_fields
     for( SCH_FIELD* field : orderedFields )
     {
         SCH_FIELD field_copy( *field );
@@ -157,7 +158,10 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
 #endif
 
         if( !field_copy.IsMandatory() )
-            field_copy.SetText( m_sheet->GetFieldText( field->GetName(), &instance, variantName ) );
+        {
+            field_copy.SetText( schematic.ConvertKIIDsToRefs( m_sheet->GetFieldText( field->GetName(), &instance,
+                                                                                     variantName ) ) );
+        }
 
         // change offset to be symbol-relative
         field_copy.Offset( -m_sheet->GetPosition() );
