@@ -276,6 +276,8 @@ void SCH_TEXT::swapData( SCH_ITEM* aItem )
 {
     SCH_TEXT* item = static_cast<SCH_TEXT*>( aItem );
 
+    std::swap( m_excludedFromSim, item->m_excludedFromSim );
+
     SwapText( *item );
     SwapAttributes( *item );
 }
