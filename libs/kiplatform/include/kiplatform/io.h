@@ -283,10 +283,11 @@ namespace IO
                                      wxString* aTempPathOut, wxString* aError = nullptr );
 
     /**
-     * If @p aPath is a symlink on POSIX, returns the canonical path of its referent so
+     * If @p aPath is a symlink, returns the canonical path of its referent so
      * atomic-save operations replace the underlying file rather than the link itself.
-     * On Windows and when @p aPath is not a symlink (or does not yet exist) the input
-     * is returned unchanged.
+     * When @p aPath is not a symlink (or does not yet exist) the input is returned
+     * unchanged. On Windows other reparse points such as junctions and cloud
+     * placeholders are left alone.
      */
     wxString ResolveSymlinkTarget( const wxString& aPath );
 

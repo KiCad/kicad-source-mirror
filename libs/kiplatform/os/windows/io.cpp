@@ -266,11 +266,44 @@ FILE* KIPLATFORM::IO::OpenUniqueSiblingTempFile( const wxString& aTargetPath,
 
 wxString KIPLATFORM::IO::ResolveSymlinkTarget( const wxString& aPath )
 {
-    // Windows reparse points are semantically richer than POSIX symlinks (junctions,
-    // mount points, symlinks). The pre-atomic save code used wxFopen which opened
-    // through symlinks; MoveFileExW with MOVEFILE_REPLACE_EXISTING also follows
-    // reparse points for the target, so no pre-resolution is needed here.
-    return aPath;
+    // MoveFileExW replaces a symlink rather than writing through it. Only the symlink tag
+    // is resolved, so cloud placeholders and other reparse points are never opened.
+    WIN32_FIND_DATAW findData;
+    HANDLE           find = FindFirstFileW( aPath.wc_str(), &findData );
+
+    if( find == INVALID_HANDLE_VALUE )
+        return aPath;
+
+    FindClose( find );
+
+    if( !( findData.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT )
+        || findData.dwReserved0 != IO_REPARSE_TAG_SYMLINK )
+    {
+        return aPath;
+    }
+
+    HANDLE file = CreateFileW( aPath.wc_str(), 0, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                               nullptr, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, nullptr );
+
+    if( file == INVALID_HANDLE_VALUE )
+        return aPath;
+
+    std::vector<wchar_t> buffer( 32768 );
+    DWORD                length = GetFinalPathNameByHandleW( file, buffer.data(), static_cast<DWORD>( buffer.size() ),
+                                                             FILE_NAME_NORMALIZED | VOLUME_NAME_DOS );
+    CloseHandle( file );
+
+    if( length == 0 || length >= buffer.size() )
+        return aPath;
+
+    wxString resolved( buffer.data(), length );
+
+    if( resolved.StartsWith( wxT( "\\\\?\\UNC\\" ) ) )
+        resolved = wxT( "\\\\" ) + resolved.Mid( 8 );
+    else if( resolved.StartsWith( wxT( "\\\\?\\" ) ) )
+        resolved = resolved.Mid( 4 );
+
+    return resolved;
 }
 
 
