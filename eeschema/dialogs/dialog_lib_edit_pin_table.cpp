@@ -765,6 +765,8 @@ public:
             wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, 1 );
             GetView()->ProcessTableMessage( msg );
         }
+
+        m_edited = true;
     }
 
     std::vector<SCH_PIN*> RemoveRow( int aRow )
@@ -779,6 +781,7 @@ public:
             GetView()->ProcessTableMessage( msg );
         }
 
+        m_edited = true;
         return removedRow;
     }
 
@@ -1412,6 +1415,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnImportButtonClick( wxCommandEvent& event )
 
     m_cbGroup->SetValue( false );
     m_dataModel->RebuildRows( m_pins, false, false );
+    m_modified = true;
 
     updateSummary();
 }
@@ -1588,7 +1592,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
 
     int retval = wxID_CANCEL;
 
-    if( m_dataModel->IsEdited() && m_ButtonsOK->IsEnabled() )
+    if( ( m_modified || m_dataModel->IsEdited() ) && m_ButtonsOK->IsEnabled() )
     {
         if( HandleUnsavedChanges( this, _( "Save changes?" ),
                                   [&]() -> bool
