@@ -261,6 +261,12 @@ void DIALOG_SCH_FIND::OnReplaceWithEnter( wxCommandEvent& aEvent )
 
 void DIALOG_SCH_FIND::OnOptions( wxCommandEvent& aEvent )
 {
+    if( aEvent.GetEventObject() == m_checkRegexMatch )
+    {
+        m_checkWholeWord->SetValue( false );
+        m_checkMatchCase->SetValue( false );
+    }
+
     updateFlags();
     m_findDirty = true;
 }
@@ -268,11 +274,11 @@ void DIALOG_SCH_FIND::OnOptions( wxCommandEvent& aEvent )
 void DIALOG_SCH_FIND::updateFlags()
 {
     // Rebuild the search flags in m_findReplaceData from dialog settings
-    m_findReplaceData->matchCase                = m_checkMatchCase->GetValue();
-    m_findReplaceData->searchAllFields          = m_cbSearchHiddenFields->GetValue();
-    m_findReplaceData->searchAllPins = m_cbSearchPins->GetValue();
-    m_findReplaceData->replaceReferences        = m_cbReplaceReferences->GetValue();
-    m_findReplaceData->searchNetNames           = m_cbSearchNetNames->GetValue();
+    m_findReplaceData->matchCase         = m_checkMatchCase->GetValue();
+    m_findReplaceData->searchAllFields   = m_cbSearchHiddenFields->GetValue();
+    m_findReplaceData->searchAllPins     = m_cbSearchPins->GetValue();
+    m_findReplaceData->replaceReferences = m_cbReplaceReferences->GetValue();
+    m_findReplaceData->searchNetNames    = m_cbSearchNetNames->GetValue();
 
     // Only read the current-sheet-only widget when the user can actually toggle it.
     // While selection-only forces it on, its value doesn't reflect user intent.
