@@ -320,9 +320,7 @@ int BOARD_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
 
     m_frame->ReleaseFile();
 
-    m_frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
-
-    return 0;
+    return m_frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ), KICTL_REVERT );
 }
 
 
