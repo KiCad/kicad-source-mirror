@@ -448,6 +448,26 @@ BOOST_AUTO_TEST_CASE( AtomicWriteFile_PreservesPosixMode )
 }
 
 
+BOOST_AUTO_TEST_CASE( AtomicWriteFile_NewTargetHonoursUmask )
+{
+    KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad-atomicsave-umask" ) );
+    const wxString target = tempDir.PathStr() + wxFileName::GetPathSeparator() + wxT( "target" );
+    const std::string payload = "fresh\n";
+    const mode_t      previousMask = umask( 022 );
+    wxString          err;
+
+    const bool written = KIPLATFORM::IO::AtomicWriteFile( target, payload.data(), payload.size(), &err );
+
+    umask( previousMask );
+
+    BOOST_REQUIRE_MESSAGE( written, err );
+
+    struct stat st;
+    BOOST_REQUIRE_EQUAL( stat( target.fn_str(), &st ), 0 );
+    BOOST_CHECK_EQUAL( st.st_mode & 0777, 0644 );
+}
+
+
 BOOST_AUTO_TEST_CASE( AtomicWriteFile_FollowsSymlinkTarget )
 {
     // Regression: pre-atomic saves opened the referent via wxFopen so the symlink
