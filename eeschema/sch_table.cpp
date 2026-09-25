@@ -579,6 +579,24 @@ bool SCH_TABLE::operator==( const SCH_ITEM& aOther ) const
     if( m_cells.size() != other.m_cells.size() )
         return false;
 
+    if( m_strokeExternal != other.m_strokeExternal )
+        return false;
+
+    if( m_StrokeHeaderSeparator != other.m_StrokeHeaderSeparator )
+        return false;
+
+    if( m_borderStroke != other.m_borderStroke )
+        return false;
+
+    if( m_strokeRows != other.m_strokeRows )
+        return false;
+
+    if( m_strokeColumns != other.m_strokeColumns )
+        return false;
+
+    if( m_separatorsStroke != other.m_separatorsStroke )
+        return false;
+
     if( m_colWidths != other.m_colWidths )
         return false;
 
