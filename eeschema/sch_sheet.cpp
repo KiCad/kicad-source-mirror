@@ -264,7 +264,7 @@ bool SCH_SHEET::Deserialize( const google::protobuf::Any& aContainer )
 
     for( const auto& pinProto : sheet.pins() )
     {
-        auto pin = std::make_unique<SCH_SHEET_PIN>( this );
+        std::unique_ptr<SCH_SHEET_PIN> pin = std::make_unique<SCH_SHEET_PIN>( this );
 
         if( !pin->Deserialize( pinProto, schIUScale ) )
             return false;
@@ -1784,8 +1784,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 SCH_SHEET& SCH_SHEET::operator=( const SCH_ITEM& aItem )
 {
     wxCHECK_MSG( Type() == aItem.Type(), *this,
-                 wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +
-                 GetClass() );
+                 wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) + GetClass() );
 
     if( &aItem != this )
     {
@@ -1797,11 +1796,22 @@ SCH_SHEET& SCH_SHEET::operator=( const SCH_ITEM& aItem )
         m_size = sheet->m_size;
         m_fields = sheet->m_fields;
 
+        // Reparent fields after assignment to new sheet.
+        for( SCH_FIELD& field : m_fields )
+            field.SetParent( this );
+
+        for( SCH_SHEET_PIN* pin : m_pins )
+            delete pin;
+
+        m_pins.clear();
+
         for( SCH_SHEET_PIN* pin : sheet->m_pins )
         {
             m_pins.emplace_back( new SCH_SHEET_PIN( *pin ) );
             m_pins.back()->SetParent( this );
         }
+
+        m_instances.clear();
 
         for( const SCH_SHEET_INSTANCE& instance : sheet->m_instances )
             m_instances.emplace_back( instance );
