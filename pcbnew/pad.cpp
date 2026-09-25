@@ -3025,6 +3025,22 @@ bool PAD::TransformHoleToPolygon( SHAPE_POLY_SET& aBuffer, int aClearance, int a
 }
 
 
+double PAD::GetCoverageArea( int aTextMargin ) const
+{
+    SHAPE_POLY_SET poly;
+
+    Padstack().ForEachUniqueLayer(
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                SHAPE_POLY_SET layerPoly;
+                TransformShapeToPolygon( layerPoly, aLayer, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+                poly.BooleanAdd( layerPoly );
+            } );
+
+    return polygonArea( poly );
+}
+
+
 void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                    int aMaxError, ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
 {

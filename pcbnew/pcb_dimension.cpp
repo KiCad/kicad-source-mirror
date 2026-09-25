@@ -1017,6 +1017,13 @@ double PCB_DIMENSION_BASE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) co
 }
 
 
+double PCB_DIMENSION_BASE::GetCoverageArea( int aTextMargin ) const
+{
+    // A dimension covers its whole drawing, not only the value text it inherits from
+    return BOARD_ITEM::GetCoverageArea( aTextMargin );
+}
+
+
 void PCB_DIMENSION_BASE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
                                                   int aClearance, int aError, ERROR_LOC aErrorLoc,
                                                   bool aIgnoreLineWidth ) const

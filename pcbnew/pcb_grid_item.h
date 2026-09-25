@@ -162,7 +162,7 @@ public:
      */
     GRID_GEOMETRY AsGridGeometry() const;
 
-    double GetCoverageArea() const { return AsGridGeometry().Area(); }
+    double GetCoverageArea( int aTextMargin ) const override { return AsGridGeometry().Area(); }
 
     /**
      * @return true if aPos is within aTolerance of this grid's coverage region.

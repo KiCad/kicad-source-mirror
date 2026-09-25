@@ -176,6 +176,8 @@ public:
     void TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aMaxError,
                                  ERROR_LOC aErrorLoc ) const;
 
+    double GetCoverageArea( int aTextMargin ) const override;
+
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                   int aMaxError, ERROR_LOC aErrorLoc,
                                   bool aIgnoreLineWidth = false ) const override;

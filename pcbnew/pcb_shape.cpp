@@ -1789,6 +1789,34 @@ bool PCB_SHAPE::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
 }
 
 
+double PCB_SHAPE::GetCoverageArea( int aTextMargin ) const
+{
+    // Approximate "linear" shapes with just their width squared, as we don't want to consider
+    // a linear shape as being much bigger than another for purposes of selection filtering
+    // just because it happens to be really long.
+    const double width = GetWidth();
+
+    switch( GetShape() )
+    {
+    case SHAPE_T::SEGMENT:
+    case SHAPE_T::ARC:
+    case SHAPE_T::BEZIER:
+        return width * width;
+
+    case SHAPE_T::RECTANGLE:
+    case SHAPE_T::CIRCLE:
+    case SHAPE_T::POLY:
+        if( !IsAnyFill() )
+            return width * width;
+
+        KI_FALLTHROUGH;
+
+    default:
+        return BOARD_ITEM::GetCoverageArea( aTextMargin );
+    }
+}
+
+
 void PCB_SHAPE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
                                          int aClearance, int aError, ERROR_LOC aErrorLoc,
                                          bool ignoreLineWidth ) const

@@ -5001,7 +5001,7 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         {
             try
             {
-                area = FOOTPRINT::GetCoverageArea( item, aCollector );
+                area = item->GetCoverageArea( aCollector.GetGuide()->Accuracy() );
             }
             catch( const std::exception& e )
             {

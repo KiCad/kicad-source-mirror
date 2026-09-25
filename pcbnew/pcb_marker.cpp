@@ -348,6 +348,14 @@ std::shared_ptr<SHAPE> PCB_MARKER::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASH
 }
 
 
+double PCB_MARKER::GetCoverageArea( int aTextMargin ) const
+{
+    SHAPE_LINE_CHAIN markerShape;
+    ShapeToPolygon( markerShape );
+    return markerShape.Area();
+}
+
+
 void PCB_MARKER::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                           int aError, ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const
 {

@@ -104,6 +104,8 @@ public:
                                               FLASHING aFlash = FLASHING::DEFAULT,
                                               DRC_CONSTRAINT_T aUsage = NULL_CONSTRAINT ) const override;
 
+    double GetCoverageArea( int aTextMargin ) const override;
+
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                   int aError, ERROR_LOC aErrorLoc, bool ignoreLineWidth ) const override;
 

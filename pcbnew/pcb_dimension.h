@@ -342,6 +342,8 @@ public:
 
     void ClearRenderCache() override;
 
+    double GetCoverageArea( int aTextMargin ) const override;
+
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                   int aError, ERROR_LOC aErrorLoc,
                                   bool aIgnoreLineWidth = false ) const override;

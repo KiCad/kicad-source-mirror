@@ -159,6 +159,8 @@ public:
      * @param ignoreLineWidth is used for edge cut items where the line width is only for
      *                        visualization
      */
+    double GetCoverageArea( int aTextMargin ) const override;
+
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                   int aError, ERROR_LOC aErrorLoc,
                                   bool ignoreLineWidth = false ) const override;
@@ -586,6 +588,8 @@ public:
     void SetPosition( const VECTOR2I& aPoint ) override { m_Start = aPoint;  m_End = aPoint; }
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
+
+    double GetCoverageArea( int aTextMargin ) const override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;

@@ -2850,6 +2850,14 @@ wxString PCB_VIA::LayerMaskDescribe() const
 }
 
 
+double PCB_TRACK::GetCoverageArea( int aTextMargin ) const
+{
+    // Width squared, so a long track does not outrank a short one it happens to cross
+    const double width = GetWidth();
+    return width * width;
+}
+
+
 bool PCB_TRACK::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     return TestSegmentHit( aPosition, m_Start, m_End, aAccuracy + ( m_width / 2 ) );
@@ -2888,6 +2896,13 @@ bool PCB_ARC::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
         return arc_hittest >= ANGLE_360 + arc_angle;
 
     return arc_hittest <= arc_angle;
+}
+
+
+double PCB_VIA::GetCoverageArea( int aTextMargin ) const
+{
+    // A via covers its pad, so the width rule it inherits from tracks does not apply
+    return BOARD_ITEM::GetCoverageArea( aTextMargin );
 }
 
 

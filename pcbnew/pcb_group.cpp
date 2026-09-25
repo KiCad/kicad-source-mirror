@@ -329,6 +329,17 @@ void PCB_GROUP::swapChildOwnership( PCB_GROUP* aImage )
 }
 
 
+double PCB_GROUP::GetCoverageArea( int aTextMargin ) const
+{
+    double area = 0.0;
+
+    for( BOARD_ITEM* member : GetBoardItems() )
+        area += member->GetCoverageArea( aTextMargin );
+
+    return area;
+}
+
+
 bool PCB_GROUP::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // Groups are selected by promoting a selection of one of their children

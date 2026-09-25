@@ -377,6 +377,28 @@ void BOARD_ITEM::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID 
 }
 
 
+double BOARD_ITEM::GetCoverageArea( int aTextMargin ) const
+{
+    SHAPE_POLY_SET poly;
+    TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, ARC_LOW_DEF, ERROR_OUTSIDE );
+    return polygonArea( poly );
+}
+
+
+double BOARD_ITEM::polygonArea( SHAPE_POLY_SET& aPolySet )
+{
+    for( int ii = 0; ii < aPolySet.OutlineCount(); ii++ )
+    {
+        aPolySet.Outline( ii ).SetClosed( true );
+
+        for( int jj = 0; jj < aPolySet.HoleCount( ii ); jj++ )
+            aPolySet.Hole( ii, jj ).SetClosed( true );
+    }
+
+    return aPolySet.Area();
+}
+
+
 bool BOARD_ITEM::ptr_cmp::operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b ) const
 {
     if( a->Type() != b->Type() )

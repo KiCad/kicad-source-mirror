@@ -897,6 +897,14 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearanc
 }
 
 
+double PCB_TEXTBOX::GetCoverageArea( int aTextMargin ) const
+{
+    SHAPE_POLY_SET poly;
+    TransformTextToPolySet( poly, aTextMargin, ARC_LOW_DEF, ERROR_INSIDE );
+    return polygonArea( poly );
+}
+
+
 void PCB_TEXTBOX::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance, int aMaxError,
                                            ERROR_LOC aErrorLoc, bool aIgnoreLineWidth ) const
 {

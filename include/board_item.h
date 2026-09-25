@@ -546,6 +546,14 @@ public:
         TransformShapeToPolygon( aBuffer, aLayer, aClearance, aError, aErrorLoc );
     }
 
+    /**
+     * Return the board area this item covers, used to rank candidates under the cursor so a
+     * click on a small item inside a large one selects the small one.
+     *
+     * @param aTextMargin the margin added around text, normally the hit-test accuracy.
+     */
+    virtual double GetCoverageArea( int aTextMargin ) const;
+
     const std::vector<wxString>* GetEmbeddedFonts() override;
 
     /**
@@ -566,6 +574,9 @@ public:
 
 protected:
     virtual void swapData( BOARD_ITEM* aImage );
+
+    /// Area of \a aPolySet with every contour closed first, holes subtracted.
+    static double polygonArea( SHAPE_POLY_SET& aPolySet );
 
 protected:
     PCB_LAYER_ID    m_layer;

@@ -1974,6 +1974,44 @@ std::shared_ptr<SHAPE> ZONE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING, D
 }
 
 
+double ZONE::GetCoverageArea( int aTextMargin ) const
+{
+    if( !GetIsRuleArea() )
+    {
+        // Unioning the layer fills stalls selection on a hatched plane.  The largest layer is
+        // exact for a single layer and bounds the union for the rest, which is enough to rank
+        bool   filled = false;
+        double largest = 0.0;
+
+        for( PCB_LAYER_ID layer : GetLayerSet() )
+        {
+            if( !HasFilledPolysForLayer( layer ) )
+                continue;
+
+            std::shared_ptr<SHAPE_POLY_SET> fill = GetFilledPolysList( layer );
+
+            if( fill->OutlineCount() == 0 )
+                continue;
+
+            filled = true;
+            largest = std::max( largest, fill->Area() );
+        }
+
+        if( filled )
+            return largest;
+    }
+
+    // Rule areas are never filled, so TransformShapeToPolygon would report a zero coverage
+    // area and make them appear as the smallest item under the cursor.  That incorrectly
+    // gives them selection precedence over the pads, tracks and footprints they enclose.
+    // Use the outline area so an enclosed item is selected first while the rule area stays
+    // available via its border and the disambiguation menu.  An unfilled zone falls back the
+    // same way so it does not collapse to a zero coverage area.
+    SHAPE_POLY_SET outline = *m_Poly;
+    return polygonArea( outline );
+}
+
+
 void ZONE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                     int aError, ERROR_LOC aErrorLoc, bool aIgnoreLineWidth ) const
 {

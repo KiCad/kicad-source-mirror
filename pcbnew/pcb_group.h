@@ -148,6 +148,8 @@ public:
     /// @copydoc BOARD_ITEM::IsOnLayer
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
+    double GetCoverageArea( int aTextMargin ) const override;
+
     /// @copydoc EDA_ITEM::HitTest
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
 

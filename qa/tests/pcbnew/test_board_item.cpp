@@ -777,4 +777,16 @@ BOOST_AUTO_TEST_CASE( IndexedItemSurvivesBoardDestruction )
 }
 
 
+// Squaring the width in int overflowed for any line wider than about 46 um
+BOOST_AUTO_TEST_CASE( LinearShapeCoverageAreaIsWidthSquared )
+{
+    PCB_SHAPE segment( nullptr, SHAPE_T::SEGMENT );
+    segment.SetEnd( VECTOR2I( pcbIUScale.mmToIU( 10 ), 0 ) );
+    segment.SetWidth( pcbIUScale.mmToIU( 0.2 ) );
+
+    const double width = pcbIUScale.mmToIU( 0.2 );
+    BOOST_TEST( segment.GetCoverageArea( 0 ) == width * width );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

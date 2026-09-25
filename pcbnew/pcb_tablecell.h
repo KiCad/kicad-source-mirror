@@ -75,6 +75,8 @@ public:
     int  GetColumnWidth() const;
     void SetColumnWidth( int aWidth );
 
+    double GetCoverageArea( int aTextMargin ) const override;
+
     bool IsFilledForHitTesting() const override { return true; }
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;

@@ -217,6 +217,13 @@ wxString PCB_TABLECELL::GetShownText( RESOLUTION_CONTEXT aContext, int aDepth ) 
 }
 
 
+double PCB_TABLECELL::GetCoverageArea( int aTextMargin ) const
+{
+    // A cell covers its whole box, not only the text a text box would measure
+    return BOARD_ITEM::GetCoverageArea( aTextMargin );
+}
+
+
 int PCB_TABLECELL::GetColumnWidth() const
 {
     return static_cast<PCB_TABLE*>( GetParent() )->GetColWidth( GetColumn() );
