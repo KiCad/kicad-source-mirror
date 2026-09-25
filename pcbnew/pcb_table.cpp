@@ -676,12 +676,14 @@ double PCB_TABLE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 void PCB_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1, const VECTOR2I& aPt2,
                                                        const STROKE_PARAMS& aStroke )>& aCallback ) const
 {
+    if( m_cells.empty() )   // Shouldn't be possible....
+        return;
+
     EDA_ANGLE             drawAngle = GetCell( 0, 0 )->GetDrawRotation();
     std::vector<VECTOR2I> topLeft = GetCell( 0, 0 )->GetCornersInSequence( drawAngle );
     std::vector<VECTOR2I> bottomLeft = GetCell( GetRowCount() - 1, 0 )->GetCornersInSequence( drawAngle );
     std::vector<VECTOR2I> topRight = GetCell( 0, GetColCount() - 1 )->GetCornersInSequence( drawAngle );
-    std::vector<VECTOR2I> bottomRight =
-            GetCell( GetRowCount() - 1, GetColCount() - 1 )->GetCornersInSequence( drawAngle );
+    std::vector<VECTOR2I> botRight = GetCell( GetRowCount() - 1, GetColCount() - 1 )->GetCornersInSequence( drawAngle );
     STROKE_PARAMS stroke;
 
     for( int col = 0; col < GetColCount() - 1; ++col )
@@ -739,8 +741,8 @@ void PCB_TABLE::DrawBorders( const std::function<void( const VECTOR2I& aPt1, con
     if( StrokeExternal() && GetBorderStroke().GetWidth() >= 0 )
     {
         aCallback( topLeft[0], topRight[1], GetBorderStroke() );
-        aCallback( topRight[1], bottomRight[2], GetBorderStroke() );
-        aCallback( bottomRight[2], bottomLeft[3], GetBorderStroke() );
+        aCallback( topRight[1], botRight[2], GetBorderStroke() );
+        aCallback( botRight[2], bottomLeft[3], GetBorderStroke() );
         aCallback( bottomLeft[3], topLeft[0], GetBorderStroke() );
     }
 }
