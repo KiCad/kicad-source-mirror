@@ -24,6 +24,7 @@
 #include <wx/filename.h>
 
 #include <cstdio>
+#include <fcntl.h>
 #include <io.h>
 #include <stdexcept>
 #include <string>
@@ -210,7 +211,9 @@ FILE* KIPLATFORM::IO::OpenUniqueSiblingTempFile( const wxString& aTargetPath,
 
         if( h != INVALID_HANDLE_VALUE )
         {
-            int fd = _open_osfhandle( reinterpret_cast<intptr_t>( h ), _O_WRONLY | _O_BINARY );
+            // _wfdopen ignores the text/binary letter, so honour it here as fopen would
+            const int translation = aMode.Contains( wxT( "b" ) ) ? _O_BINARY : _O_TEXT;
+            int       fd = _open_osfhandle( reinterpret_cast<intptr_t>( h ), _O_WRONLY | translation );
 
             if( fd < 0 )
             {
