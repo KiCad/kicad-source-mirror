@@ -132,6 +132,12 @@ enum DRAG_MODE
                                                      const NETCLASS* aNetClass ) = 0;
     virtual PCB_LAYER_ID GetBoardLayerFromPNSLayer( int aLayer ) const = 0;
     virtual int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const = 0;
+
+    /**
+     * Remove from @a aItems every item the board already joins to one of @a aJoined through
+     * objects the router does not model, such as zones.
+     */
+    virtual void RemoveBoardConnected( const std::vector<const ITEM*>& aJoined, std::set<ITEM*>& aItems ) const {}
 };
 
 class ROUTER

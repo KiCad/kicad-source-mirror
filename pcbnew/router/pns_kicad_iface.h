@@ -102,6 +102,8 @@ public:
 
     PCB_LAYER_ID GetBoardLayerFromPNSLayer( int aLayer ) const override;
     int GetPNSLayerFromBoardLayer( PCB_LAYER_ID aLayer ) const override;
+    void RemoveBoardConnected( const std::vector<const PNS::ITEM*>& aJoined,
+                               std::set<PNS::ITEM*>& aItems ) const override;
 
     void SetStartLayerFromPCBNew( PCB_LAYER_ID aLayer );
     void SetStartLayerFromPNS( int aLayer ) { m_startLayer = aLayer; }
