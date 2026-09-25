@@ -48,11 +48,16 @@ public:
                      const std::map<wxString, EASYEDAPRO::BLOB>&        aBlobMap,
                      const std::multimap<wxString, EASYEDAPRO::POURED>& aPouredMap, const EASYEDAPRO::V3_DOC_RAW& aDoc,
                      const wxString& aFpLibName );
+    wxString        GenerateSafeSpacingRules() const;
+    static wxString GenerateSafeSpacingRules( const nlohmann::json& aSafeSpacing );
+
 
 private:
     BOARD* m_board;
 
     PCB_IO_EASYEDAPRO_PARSER m_v2Parser;
+    nlohmann::json           m_safeSpacing;
+
 
     std::unique_ptr<PAD> createV3PAD( FOOTPRINT* aFootprint, const EASYEDAPRO::V3_ROW& aRow );
 

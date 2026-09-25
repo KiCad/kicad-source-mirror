@@ -28,6 +28,7 @@ from pathlib import Path
 import pytest
 import json
 import os
+import re
 from conftest import KiTestFixture
 
 
@@ -72,6 +73,30 @@ def get_eagle_test_file() -> str:
                                "eagle", "eagle-import-testfile.sch" )
 
     return eagle_file if os.path.exists( eagle_file ) else None
+
+
+def get_easyedapro_v3_test_file() -> str:
+    """Get an EasyEDA Pro v3 project fixture with multiple boards."""
+    archive = os.path.join( os.path.dirname( __file__ ), "..", "..", "data", "pcbnew", "plugins",
+                            "easyedapro", "ProProject_LS2K0300Core_2025-11-14.epro2" )
+
+    return archive if os.path.exists( archive ) else None
+
+
+def get_easyedapro_v2_test_file() -> str:
+    """Get an EasyEDA Pro v2 project fixture with multiple boards."""
+    archive = os.path.join( os.path.dirname( __file__ ), "..", "..", "data", "pcbnew", "plugins",
+                            "easyedapro", "ProProject_Yuzuki Chameleon_2023-09-02.epro" )
+
+    return archive if os.path.exists( archive ) else None
+
+
+def get_easyedapro_v2_single_board_test_file() -> str:
+    """Get an EasyEDA Pro v2 project fixture with one board."""
+    archive = os.path.join( os.path.dirname( __file__ ), "..", "..", "data", "pcbnew", "plugins",
+                            "easyedapro", "Scanning Tunneling Microscope OpenSTM ControlBoard.zip" )
+
+    return archive if os.path.exists( archive ) else None
 
 
 class TestImportHelp:
@@ -151,6 +176,120 @@ class TestImportBoardOnly:
         assert return_code == 0
         assert stem.with_suffix( ".kicad_pro" ).exists()
         assert stem.with_suffix( ".kicad_pcb" ).exists()
+
+
+
+@pytest.mark.skipif( get_easyedapro_v3_test_file() is None,
+                     reason="EasyEDA Pro v3 test file not available" )
+class TestImportEasyEdaProProject:
+    """Test importing every board in an EasyEDA Pro v3 project."""
+
+    def test_import_all_project_boards( self, kitest: KiTestFixture ):
+        """Each PCB document becomes a linked KiCad board."""
+        archive = get_easyedapro_v3_test_file()
+        stem = get_project_stem( kitest, "easyedapro", "project" )
+        first_board = stem.parent / "PCB1.kicad_pcb"
+        second_board = stem.parent / "PCB1_1.kicad_pcb"
+
+        for board in ( first_board, second_board ):
+            if board.exists():
+                board.unlink()
+
+        command = [ utils.kicad_cli(), "import", archive, "-o", str( stem ) ]
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+        assert first_board.exists()
+        assert ( stem.parent / "PCB1-import-fps.pretty" ).is_dir()
+        assert ( stem.parent / "PCB1_1-import-fps.pretty" ).is_dir()
+        assert second_board.exists()
+
+        with open( stem.with_suffix( ".kicad_pro" ), "r" ) as f:
+            project = json.load( f )
+
+        assert sorted( filename for _, filename in project.get( "boards", [] ) ) == [
+            "PCB1.kicad_pcb",
+            "PCB1_1.kicad_pcb"
+        ]
+
+
+@pytest.mark.skipif( get_easyedapro_v2_test_file() is None,
+                     reason="EasyEDA Pro v2 test file not available" )
+class TestImportEasyEdaProV2Project:
+    """Test importing every board in an EasyEDA Pro v2 project."""
+
+    def test_import_all_project_boards( self, kitest: KiTestFixture ):
+        """Each PCB document becomes a source-named, linked KiCad board."""
+        archive = get_easyedapro_v2_test_file()
+        stem = get_project_stem( kitest, "easyedapro_v2", "project" )
+
+        expected_boards = [
+            "PCB.kicad_pcb",
+            "树莓派A版形状.kicad_pcb",
+            "点位图.kicad_pcb",
+            "100ASK.kicad_pcb",
+            "散热器外形.kicad_pcb"
+        ]
+
+        for board in ( stem.parent / name for name in expected_boards ):
+            if board.exists():
+                board.unlink()
+
+        command = [ utils.kicad_cli(), "import", archive, "-o", str( stem ) ]
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+
+        for name in expected_boards:
+            assert ( stem.parent / name ).exists()
+
+        with open( stem.with_suffix( ".kicad_pro" ), "r" ) as f:
+            project = json.load( f )
+
+        assert sorted( filename for _, filename in project.get( "boards", [] ) ) == sorted( expected_boards )
+
+        board_text = ( stem.parent / "PCB.kicad_pcb" ).read_text()
+        zone_settings = re.findall(
+            r"\(connect_pads\s+\(clearance ([0-9.]+)\)\s+\)\s+\(min_thickness ([0-9.]+)\)",
+            board_text,
+        )
+
+        copper_zone_settings = [ ( clearance, thickness ) for clearance, thickness in zone_settings
+                                  if clearance != "0" ]
+
+        assert copper_zone_settings
+        assert { clearance for clearance, _ in copper_zone_settings } == { "0.089" }
+        assert { thickness for _, thickness in copper_zone_settings } == { "0.25" }
+        assert project["net_settings"]["classes"][0]["clearance"] == 0.2
+
+        rules = ( stem.parent / "PCB.kicad_dru" ).read_text()
+        assert "# Board Outline ↔ Track: 11.8 mil" in rules
+        assert "# Copper / Plane Zone ↔ Track: 11.8 mil" not in rules
+
+    @pytest.mark.skipif( get_easyedapro_v2_single_board_test_file() is None,
+                         reason="Single-board EasyEDA Pro v2 test file not available" )
+    def test_import_single_project_board_uses_project_name( self, kitest: KiTestFixture ):
+        """A one-board project uses the requested project board filename."""
+        archive = get_easyedapro_v2_single_board_test_file()
+        stem = get_project_stem( kitest, "easyedapro_v2_single", "project" )
+        source_named_board = stem.parent / "ControlBoard.kicad_pcb"
+
+        if source_named_board.exists():
+            source_named_board.unlink()
+
+        command = [ utils.kicad_cli(), "import", archive, "-o", str( stem ) ]
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+        assert stem.with_suffix( ".kicad_pcb" ).exists()
+        assert not source_named_board.exists()
+
+        with open( stem.with_suffix( ".kicad_pro" ), "r" ) as f:
+            project = json.load( f )
+
+        assert [ filename for _, filename in project.get( "boards", [] ) ] == [
+            stem.with_suffix( ".kicad_pcb" ).name
+        ]
 
 
 @pytest.mark.skipif( get_eagle_test_file() is None,

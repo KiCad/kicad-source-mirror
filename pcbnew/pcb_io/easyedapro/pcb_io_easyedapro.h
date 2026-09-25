@@ -23,10 +23,12 @@
 
 #include <nlohmann/json_fwd.hpp>
 
+#include <utility>
+#include <vector>
+
 #include <io/common/plugin_common_choose_project.h>
 #include <pcb_io/pcb_io.h>
 #include <pcb_io/pcb_io_mgr.h>
-
 
 class PCB_IO_EASYEDAPRO : public PCB_IO, public PROJECT_CHOOSER_PLUGIN
 {
@@ -50,6 +52,8 @@ public:
 
     bool CanReadBoard( const wxString& aFileName ) const override;
 
+    std::vector<std::pair<wxString, wxString>> EnumerateProjectBoards( const wxString& aFileName ) const override;
+
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
@@ -57,6 +61,8 @@ public:
                              const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
+    wxString                GetImportedDesignRules() const override { return m_importedDesignRules; }
+
 
     std::unique_ptr<FOOTPRINT> FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                               bool                               aKeepUUID = false,
@@ -74,6 +80,8 @@ protected:
 private:
     struct PRJ_DATA; // Opaque data structure
     PRJ_DATA* m_projectData = nullptr;
+    wxString  m_importedDesignRules;
+
 
     void LoadAllDataFromProject( const wxString& aLibraryPath, const nlohmann::json& aProject );
 };

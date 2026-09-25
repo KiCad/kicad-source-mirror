@@ -192,6 +192,8 @@ void PCB_IO_EASYEDA::loadBoard( const wxString& aFileName, BOARD& aBoard, bool a
 
         BOARD_DESIGN_SETTINGS&    bds = m_board->GetDesignSettings();
         std::shared_ptr<NETCLASS> defNetclass = bds.m_NetSettings->GetDefaultNetclass();
+        bool                      importedNetclassRules = false;
+
 
         if( pcbDoc.DRCRULE )
         {
@@ -206,6 +208,7 @@ void PCB_IO_EASYEDA::loadBoard( const wxString& aFileName, BOARD& aBoard, bool a
                 {
                     double val = parser.ScaleSize( defRules->at( key ) );
                     defNetclass->SetTrackWidth( val );
+                    importedNetclassRules = true;
                 }
 
                 key = wxS( "clearance" );
@@ -213,6 +216,7 @@ void PCB_IO_EASYEDA::loadBoard( const wxString& aFileName, BOARD& aBoard, bool a
                 {
                     double val = parser.ScaleSize( defRules->at( key ) );
                     defNetclass->SetClearance( val );
+                    importedNetclassRules = true;
                 }
 
                 key = wxS( "viaHoleD" );
@@ -221,6 +225,7 @@ void PCB_IO_EASYEDA::loadBoard( const wxString& aFileName, BOARD& aBoard, bool a
                     double val = parser.ScaleSize( defRules->at( key ) );
 
                     defNetclass->SetViaDrill( val );
+                    importedNetclassRules = true;
                 }
 
                 key = wxS( "viaHoleDiameter" ); // Yes, this is via diameter, not drill diameter
@@ -228,9 +233,13 @@ void PCB_IO_EASYEDA::loadBoard( const wxString& aFileName, BOARD& aBoard, bool a
                 {
                     double val = parser.ScaleSize( defRules->at( key ) );
                     defNetclass->SetViaDiameter( val );
+                    importedNetclassRules = true;
                 }
             }
         }
+        if( importedNetclassRules )
+            m_board->m_LegacyNetclassesLoaded = true;
+
 
         VECTOR2D origin( doc.head.x, doc.head.y );
         parser.ParseBoard( m_board, origin, m_loadedFootprints, doc.shape );

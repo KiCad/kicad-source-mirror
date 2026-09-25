@@ -462,6 +462,17 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             SHAPE_POLY_SET polySet =
                     ParseLineChains( arr[3].Trim(), SHAPE_ARC::DefaultAccuracyForPCB(), true );
 
+            bool validPolySet = polySet.OutlineCount() > 0;
+
+            for( const SHAPE_POLY_SET::POLYGON& polygon : polySet.CPolygons() )
+            {
+                for( const SHAPE_LINE_CHAIN& contour : polygon )
+                    validPolySet &= contour.PointCount() >= 3;
+            }
+
+            if( !validPolySet )
+                continue;
+
             if( layer == wxS( "11" ) ) // Multi-layer (board cutout)
             {
                 for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
@@ -488,6 +499,9 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
 
                 for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
                     zone->Outline()->AddPolygon( poly );
+
+                if( zone->GetNumCorners() == 0 )
+                    continue;
 
                 if( arr[4].Lower() == wxS( "cutout" ) )
                 {
@@ -561,8 +575,8 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
 
                         SHAPE_POLY_SET currentOutline( contourPolySet.COutline( 0 ) );
 
-                        for( int i = 1; i < contourPolySet.OutlineCount(); i++ )
-                            currentOutline.AddHole( contourPolySet.COutline( i ) );
+                        for( int i = 0; i < contourPolySet.HoleCount( 0 ); i++ )
+                            currentOutline.AddHole( contourPolySet.CHole( 0, i ) );
 
                         fillPolySet.Append( currentOutline );
                     }

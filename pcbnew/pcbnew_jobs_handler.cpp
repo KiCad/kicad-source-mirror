@@ -3322,7 +3322,31 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
     }
 
     if( job->m_probeOnly )
+    {
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( fileType ) );
+
+        if( !pi )
+        {
+            m_reporter->Report( wxString::Format( _( "No plugin found for file type '%s'\n" ),
+                                                  PCB_IO_MGR::ShowType( fileType ) ),
+                                RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+
+        try
+        {
+            job->m_projectBoards = pi->EnumerateProjectBoards( job->m_inputFile );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            m_reporter->Report( wxString::Format( _( "Failed to inspect board project: %s\n" ), ioe.What() ),
+                                RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+        }
+
         return CLI::EXIT_CODES::SUCCESS;
+    }
+
 
     // Determine output path
     wxString outputPath = job->GetConfiguredOutputPath();
@@ -3489,7 +3513,20 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
         // LoadBoard reports load failures and user cancellations by throwing.
         try
         {
-            board = pi->LoadBoard( job->m_inputFile );
+            // pcb_id selects a board only within an EasyEDA Pro project.  Other importers must
+            // continue receiving no properties so their existing design-settings import paths remain
+            // unchanged.
+            const std::map<std::string, UTF8>* importProperties = nullptr;
+            std::map<std::string, UTF8>        easyEdaProProperties;
+
+            if( !job->m_importPcbId.empty()
+                && ( fileType == PCB_IO_MGR::EASYEDAPRO || fileType == PCB_IO_MGR::EASYEDAPRO_V3 ) )
+            {
+                easyEdaProProperties.emplace( "pcb_id", std::string( job->m_importPcbId.ToUTF8() ) );
+                importProperties = &easyEdaProProperties;
+            }
+
+            board = pi->LoadBoard( job->m_inputFile, importProperties, projectPtr );
         }
         catch( const IO_CANCELLED& ioce )
         {
@@ -3505,19 +3542,21 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
             m_reporter->Report( wxString::Format( _( "Failed to load board: %s\n" ), ioe.What() ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
         }
+        board->SetProject( projectPtr, job->m_isPartOfMultiBoardProject );
 
-        // Constraints that land in the project need the project attached before they are read.
-        if( PCB_IO_MGR::ImportPopulatesProjectSettings( fileType ) )
-            board->SetProject( projectPtr );
+
 
         if( !ApplyImportedNetNameMap( *board, job->m_netNameMap, *m_reporter ) )
             return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
 
-        // Extract a project footprint library and re-link FPIDs, as the board editor's import
-        // does; without it the saved board references a nickname no library table row resolves.
+        // Extract a project footprint library and re-link FPIDs, as the board editor does.
+        // Each EasyEDA Pro project board needs a distinct cache; using the archive name makes
+        // every board compete to publish the same .pretty directory.
         if( PCB_IO_MGR::ImportGeneratesProjectLibrary( fileType ) )
         {
-            ReconcileImportedFootprints( *pi, *board, *projectPtr, job->m_inputFile, nullptr,
+            const wxString reconciliationPath =
+                    job->m_importPcbId.empty() ? job->m_inputFile : outputPath;
+            ReconcileImportedFootprints( *pi, *board, *projectPtr, reconciliationPath, nullptr,
                                          *m_reporter );
         }
 
@@ -3537,8 +3576,29 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
         }
 
         // Save as KiCad format
+
         IO_RELEASER<PCB_IO> kicadPlugin( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
         kicadPlugin->SaveBoard( outputPath, *board );
+        wxString importedRules = pi->GetImportedDesignRules();
+
+        if( !importedRules.IsEmpty() )
+        {
+            wxFileName rulesPath( outputPath );
+            rulesPath.SetExt( FILEEXT::DesignRulesFileExtension );
+
+            wxFile rulesFile( rulesPath.GetFullPath(), wxFile::write );
+
+            if( rulesFile.IsOpened() )
+            {
+                rulesFile.Write( importedRules );
+            }
+            else
+            {
+                m_reporter->Report( wxString::Format( _( "Could not write imported design rules to '%s'\n" ),
+                                                      rulesPath.GetFullPath() ),
+                                    RPT_SEVERITY_WARNING );
+            }
+        }
 
         m_reporter->Report( wxString::Format( _( "Successfully saved imported board to '%s'\n" ), outputPath ),
                             RPT_SEVERITY_INFO );
@@ -3617,6 +3677,7 @@ int PCBNEW_JOBS_HANDLER::JobImport( JOB* aJob )
     catch( const IO_ERROR& ioe )
     {
         m_reporter->Report( wxString::Format( _( "Error during import: %s\n" ), ioe.What() ), RPT_SEVERITY_ERROR );
+
         return CLI::EXIT_CODES::ERR_UNKNOWN;
     }
 

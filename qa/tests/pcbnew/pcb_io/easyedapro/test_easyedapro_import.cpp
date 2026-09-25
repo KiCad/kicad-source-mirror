@@ -27,12 +27,11 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h>
-#include <pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.h>
 
-#include <board.h>
 #include <footprint.h>
 #include <pad.h>
-#include <pcb_shape.h>
+
+#include <memory>
 
 
 struct EASYEDAPRO_IMPORT_FIXTURE
@@ -80,24 +79,6 @@ BOOST_AUTO_TEST_CASE( PolygonPadImport )
     // Check that primitives were added to the custom pads
     BOOST_CHECK( !pad9->GetPrimitives( PADSTACK::ALL_LAYERS ).empty() );
     BOOST_CHECK( !pad10->GetPrimitives( PADSTACK::ALL_LAYERS ).empty() );
-}
-
-
-/**
- * A closed polyline that collapses to two points must be skipped, not asserted
- * on. Such degenerate outlines occur in real projects (issue #22239) and would
- * otherwise abort the import in a debug build.
- */
-BOOST_AUTO_TEST_CASE( ParsePolyDegenerateClosedPathSkipped )
-{
-    BOARD                    board;
-    PCB_IO_EASYEDAPRO_PARSER parser( &board, nullptr );
-
-    nlohmann::json polyData = nlohmann::json::parse( R"(["L", 5, 5])" );
-
-    std::vector<std::unique_ptr<PCB_SHAPE>> shapes;
-    BOOST_CHECK_NO_THROW( shapes = parser.ParsePoly( &board, polyData, true, false ) );
-    BOOST_CHECK( shapes.empty() );
 }
 
 

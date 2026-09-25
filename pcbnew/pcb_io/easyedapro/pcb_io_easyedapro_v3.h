@@ -54,6 +54,8 @@ public:
 
     bool CanReadBoard( const wxString& aFileName ) const override;
 
+    std::vector<std::pair<wxString, wxString>> EnumerateProjectBoards( const wxString& aFileName ) const override;
+
     bool CanReadLibrary( const wxString& aFileName ) const override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
@@ -62,6 +64,8 @@ public:
                              const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
     std::vector<FOOTPRINT*> GetImportedCachedLibraryFootprints() override;
+    wxString                GetImportedDesignRules() const override { return m_importedDesignRules; }
+
 
     std::unique_ptr<FOOTPRINT> FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
                                               bool                               aKeepUUID = false,
@@ -82,6 +86,7 @@ private:
 
     /// Definitions from the last LoadBoard, cloned out to the import reconciler on request.
     std::vector<std::unique_ptr<FOOTPRINT>> m_importedLibFootprints;
+    wxString                                m_importedDesignRules;
 };
 
 

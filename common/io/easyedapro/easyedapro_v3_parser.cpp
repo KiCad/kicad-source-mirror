@@ -259,6 +259,28 @@ static void ParseEpruStream( wxInputStream& aInput, const wxString& aSource,
     {
         if( currentDoc )
         {
+            // EasyEDA Pro encodes deleted objects as rows with an empty inner
+            // payload.  Deduplication already keeps the highest-ticket row, so
+            // any null winner is a deletion tombstone and must not reach
+            // document consumers, which dereference the inner JSON directly.
+            std::vector<V3_ROW> keptRows;
+            keptRows.reserve( currentDoc->rows.size() );
+
+            for( V3_ROW& row : currentDoc->rows )
+            {
+                if( !row.inner.is_null() )
+                    keptRows.push_back( std::move( row ) );
+            }
+
+            currentDoc->rows = std::move( keptRows );
+            currentDoc->rowById.clear();
+
+            for( size_t i = 0; i < currentDoc->rows.size(); ++i )
+            {
+                if( !currentDoc->rows[i].id.empty() )
+                    currentDoc->rowById[currentDoc->rows[i].id] = i;
+            }
+
             aDocs.push_back( std::move( *currentDoc ) );
             currentDoc.reset();
         }

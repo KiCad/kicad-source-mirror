@@ -187,6 +187,59 @@ BOOST_AUTO_TEST_CASE( LibraryItemDuplicateNamesGetNumericSuffix )
 }
 
 
+BOOST_AUTO_TEST_CASE( RawDocNullTombstonesRemovedAfterDeduplication )
+{
+    wxString archivePath = makeTempElibz2Path( wxS( "easyedapro_v3_tombstone" ) );
+
+    const std::string footprintIndex = R"({
+        "devices": {},
+        "symbols": {},
+        "footprints": {},
+        "panelLibs": {}
+    })";
+
+    // p1: live row superseded by a newer null tombstone (must disappear).
+    // p2: null tombstone superseded by a newer live row (must survive).
+    // p3: plain live row (must survive).
+    const std::string elibu =
+            "{\"type\":\"DOCHEAD\"}||{\"docType\":\"FOOTPRINT\",\"uuid\":\"fp_tombstone\"}|\n"
+            "{\"type\":\"POLY\",\"id\":\"p1\",\"ticket\":1}||{\"path\":[[0,0],[10,10]],\"width\":1}|\n"
+            "{\"type\":\"POLY\",\"id\":\"p1\",\"ticket\":2}|||\n"
+            "{\"type\":\"POLY\",\"id\":\"p2\",\"ticket\":1}|||\n"
+            "{\"type\":\"POLY\",\"id\":\"p2\",\"ticket\":2}||{\"path\":[[0,0],[10,10]],\"width\":1}|\n"
+            "{\"type\":\"FILL\",\"id\":\"p3\",\"ticket\":1}||{\"path\":[[0,0],[10,10]]}|\n";
+
+    writeV3LibraryArchive( archivePath, std::string(), footprintIndex, elibu );
+
+    EASYEDAPRO::V3_DOC_PARSER parser( archivePath );
+    BOOST_REQUIRE_NO_THROW( parser.LoadLibrary() );
+
+    const EASYEDAPRO::V3_DOC_RAW* doc = parser.FindRawDoc( wxS( "FOOTPRINT" ), wxS( "fp_tombstone" ) );
+    BOOST_REQUIRE( doc );
+
+    // Every surviving row carries a non-null inner payload: null tombstones are dropped.
+    for( const EASYEDAPRO::V3_ROW& row : doc->rows )
+        BOOST_CHECK( !row.inner.is_null() );
+
+    // p1 was superseded by a newer null tombstone and must be gone.
+    BOOST_CHECK( !doc->rowById.contains( wxS( "p1" ) ) );
+
+    // p2 and p3 must survive.
+    BOOST_REQUIRE( doc->rowById.contains( wxS( "p2" ) ) );
+    BOOST_REQUIRE( doc->rowById.contains( wxS( "p3" ) ) );
+    BOOST_CHECK_EQUAL( doc->rows.size(), 2 );
+
+    // rowById must index every surviving row at its compacted position.
+    for( const auto& [id, index] : doc->rowById )
+    {
+        BOOST_REQUIRE( index < doc->rows.size() );
+        BOOST_CHECK_EQUAL( doc->rows[index].id, id );
+    }
+
+    BOOST_CHECK( wxRemoveFile( archivePath ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( BuildProjectIndexHasSchematicSheets )
 {
     EASYEDAPRO::V3_DOC_PARSER v3( getEasyEdaProV3ArchivePath() );
