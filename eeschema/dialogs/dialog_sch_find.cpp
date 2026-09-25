@@ -386,7 +386,7 @@ void DIALOG_SCH_FIND::SetFindEntries( const wxArrayString& aEntries, const wxStr
     while( m_comboFind->GetCount() > 10 )
     {
         m_frame->GetFindHistoryList().pop_back();
-        m_comboFind->Delete( 9 );
+        m_comboFind->Delete( m_comboFind->GetCount() - 1 );
     }
 
     if( !aFindString.IsEmpty() )
@@ -409,7 +409,7 @@ void DIALOG_SCH_FIND::SetReplaceEntries( const wxArrayString& aEntries )
     while( m_comboReplace->GetCount() > 10 )
     {
         m_frame->GetFindHistoryList().pop_back();
-        m_comboReplace->Delete( 9 );
+        m_comboReplace->Delete( m_comboReplace->GetCount() - 1 );
     }
 
     if( m_comboReplace->GetCount() )
