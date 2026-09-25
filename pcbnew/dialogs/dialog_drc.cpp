@@ -1189,7 +1189,8 @@ void DIALOG_DRC::OnSaveReport( wxCommandEvent& aEvent )
                              m_ratsnestProvider, m_fpWarningsProvider );
 
     bool success = false;
-    if( fn.GetExt() == FILEEXT::JsonFileExtension )
+
+    if( fn.GetExt().Lower() == FILEEXT::JsonFileExtension )
         success = reportWriter.WriteJsonReport( fn.GetFullPath() );
     else
         success = reportWriter.WriteTextReport( fn.GetFullPath() );
