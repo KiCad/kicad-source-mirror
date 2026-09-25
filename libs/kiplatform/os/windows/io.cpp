@@ -488,6 +488,23 @@ bool KIPLATFORM::IO::FlushDirectory( const wxString& aDirPath )
 }
 
 
+static wxString win32ErrorText( DWORD aError )
+{
+    wchar_t* msg = nullptr;
+    FormatMessageW( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
+                        | FORMAT_MESSAGE_IGNORE_INSERTS,
+                    nullptr, aError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),
+                    reinterpret_cast<LPWSTR>( &msg ), 0, nullptr );
+
+    if( !msg )
+        return wxString::Format( wxT( "Win32 error %lu" ), aError );
+
+    wxString text( msg );
+    LocalFree( msg );
+    return text;
+}
+
+
 bool KIPLATFORM::IO::AtomicRename( const wxString& aSrc, const wxString& aDst, wxString* aError )
 {
     // Try MoveFileEx first. MOVEFILE_WRITE_THROUGH ensures the rename is committed before
@@ -521,25 +538,40 @@ bool KIPLATFORM::IO::AtomicRename( const wxString& aSrc, const wxString& aDst, w
     DWORD fallbackError = GetLastError();
 
     if( aError )
-    {
-        wchar_t* msg = nullptr;
-        FormatMessageW( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM
-                            | FORMAT_MESSAGE_IGNORE_INSERTS,
-                        nullptr, fallbackError ? fallbackError : lastError,
-                        MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), reinterpret_cast<LPWSTR>( &msg ),
-                        0, nullptr );
+        *aError = win32ErrorText( fallbackError ? fallbackError : lastError );
 
-        if( msg )
-        {
-            *aError = wxString( msg );
-            LocalFree( msg );
-        }
-        else
-        {
-            *aError = wxString::Format( wxT( "Win32 error %lu" ), fallbackError ? fallbackError
-                                                                                : lastError );
-        }
+    return false;
+}
+
+
+bool KIPLATFORM::IO::RenameNoReplace( const wxString& aSrc, const wxString& aDst, bool* aExists,
+                                      wxString* aError )
+{
+    if( aExists )
+        *aExists = false;
+
+    DWORD lastError = 0;
+
+    for( int attempt = 0; attempt < 10; ++attempt )
+    {
+        // Without MOVEFILE_REPLACE_EXISTING an existing destination fails the move instead
+        if( MoveFileExW( aSrc.wc_str(), aDst.wc_str(), MOVEFILE_WRITE_THROUGH ) )
+            return true;
+
+        lastError = GetLastError();
+
+        if( lastError != ERROR_SHARING_VIOLATION && lastError != ERROR_ACCESS_DENIED
+            && lastError != ERROR_LOCK_VIOLATION )
+            break;
+
+        Sleep( 50 );
     }
+
+    if( aExists && ( lastError == ERROR_ALREADY_EXISTS || lastError == ERROR_FILE_EXISTS ) )
+        *aExists = true;
+
+    if( aError )
+        *aError = win32ErrorText( lastError );
 
     return false;
 }

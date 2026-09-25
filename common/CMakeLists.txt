@@ -418,6 +418,7 @@ set( KICOMMON_SRCS
     mdw/client/mdw_project_ref.cpp
     mdw/client/mdw_release_readiness.cpp
     mdw/client/mdw_review.cpp
+    mdw/client/mdw_revision_copy.cpp
     mdw/client/mdw_search.cpp
     mdw/client/mdw_source.cpp
     mdw/mdw_backend.cpp

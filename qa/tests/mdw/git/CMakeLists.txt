@@ -38,6 +38,7 @@ add_executable( qa_mdw_git
     test_mdw_git_library_sync.cpp
     test_mdw_git_permissions.cpp
     test_mdw_git_release.cpp
+    test_mdw_git_revision_copy.cpp
     test_mdw_reply_checks.cpp
     ${CMAKE_SOURCE_DIR}/plugins/mdw/git/mdw_git_checkouts.cpp
     ${CMAKE_SOURCE_DIR}/plugins/mdw/git/mdw_git_remote.cpp

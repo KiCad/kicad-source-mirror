@@ -175,6 +175,183 @@ bool KIPLATFORM::IO::AtomicRename( const wxString& aSrc, const wxString& aDst, w
     return false;
 }
 
+
+bool KIPLATFORM::IO::CopyToNewFile( const wxString& aSrc, const wxString& aDst, bool* aExists,
+                                    wxString* aError )
+{
+    if( aExists )
+        *aExists = false;
+
+    auto fail = [&]( int aErrno )
+    {
+        if( aExists && aErrno == EEXIST )
+            *aExists = true;
+
+        if( aError )
+            *aError = wxString::FromUTF8( strerror( aErrno ) );
+
+        return false;
+    };
+
+    const int in = open( aSrc.fn_str(), O_RDONLY | O_CLOEXEC );
+
+    if( in < 0 )
+        return fail( errno );
+
+    struct stat source;
+
+    if( fstat( in, &source ) != 0 )
+    {
+        const int err = errno;
+        close( in );
+        return fail( err );
+    }
+
+    const int out = open( aDst.fn_str(), O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, source.st_mode & 0777 );
+
+    if( out < 0 )
+    {
+        const int err = errno;
+        close( in );
+        return fail( err );
+    }
+
+    struct stat created;
+    const bool  identified = fstat( out, &created ) == 0;
+
+    // Another process may have replaced our file by now, and that one must survive
+    auto removeCreated = [&]()
+    {
+        struct stat current;
+
+        if( identified && lstat( aDst.fn_str(), &current ) == 0 && current.st_dev == created.st_dev
+            && current.st_ino == created.st_ino )
+        {
+            unlink( aDst.fn_str() );
+        }
+    };
+
+    auto abandon = [&]( int aErrno )
+    {
+        close( in );
+        close( out );
+        removeCreated();
+        return fail( aErrno );
+    };
+
+    if( !identified )
+        return abandon( errno );
+
+    char buffer[65536];
+
+    for( ;; )
+    {
+        const ssize_t got = read( in, buffer, sizeof( buffer ) );
+
+        if( got < 0 && errno == EINTR )
+            continue;
+
+        if( got < 0 )
+            return abandon( errno );
+
+        if( got == 0 )
+            break;
+
+        for( ssize_t done = 0; done < got; )
+        {
+            const ssize_t put = write( out, buffer + done, static_cast<size_t>( got - done ) );
+
+            if( put < 0 && errno == EINTR )
+                continue;
+
+            if( put < 0 )
+                return abandon( errno );
+
+            done += put;
+        }
+    }
+
+    // Some FUSE and network mounts cannot sync, and the data is still written
+    if( fsync( out ) != 0 && errno != EINVAL && errno != ENOSYS && errno != ENOTSUP )
+        return abandon( errno );
+
+    close( in );
+
+    if( close( out ) != 0 )
+    {
+        const int err = errno;
+        removeCreated();
+        return fail( err );
+    }
+
+    return true;
+}
+
+
+bool KIPLATFORM::IO::RenameNoReplace( const wxString& aSrc, const wxString& aDst, bool* aExists,
+                                      wxString* aError )
+{
+    if( aExists )
+        *aExists = false;
+
+    auto fail = [&]( int aErrno )
+    {
+        if( aExists && aErrno == EEXIST )
+            *aExists = true;
+
+        if( aError )
+            *aError = wxString::FromUTF8( strerror( aErrno ) );
+
+        return false;
+    };
+
+#if defined( __APPLE__ )
+    if( renamex_np( aSrc.fn_str(), aDst.fn_str(), RENAME_EXCL ) == 0 )
+        return true;
+
+    // Volumes such as FAT and SMB shares may not take the flag
+    if( errno != ENOTSUP && errno != EINVAL )
+        return fail( errno );
+#elif defined( RENAME_NOREPLACE )
+    if( renameat2( AT_FDCWD, aSrc.fn_str(), AT_FDCWD, aDst.fn_str(), RENAME_NOREPLACE ) == 0 )
+        return true;
+
+    // Older kernels lack the call, and filesystems such as NFS reject the flag
+    if( errno != ENOSYS && errno != EINVAL )
+        return fail( errno );
+#endif
+
+    // A hard link is made only where no file exists, so this never replaces either
+    if( link( aSrc.fn_str(), aDst.fn_str() ) != 0 )
+    {
+        const int linkErrno = errno;
+
+        switch( linkErrno )
+        {
+        case ENOTSUP:
+#if EOPNOTSUPP != ENOTSUP
+        case EOPNOTSUPP:
+#endif
+        case ENOSYS:
+        case EINVAL:
+        case EPERM:
+        case EXDEV: break;
+        default: return fail( linkErrno );
+        }
+
+        // FAT and SSHFS have no hard links, and an exclusive create still claims the name before the data lands
+        if( !CopyToNewFile( aSrc, aDst, aExists, aError ) )
+            return false;
+
+        unlink( aSrc.fn_str() );
+        return true;
+    }
+
+    // The copy is already in place, so a source left behind is only an extra name for it
+    unlink( aSrc.fn_str() );
+    return true;
+}
+
 #endif // !_WIN32
 
 

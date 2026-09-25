@@ -262,6 +262,46 @@ namespace IO
     bool AtomicRename( const wxString& aSrc, const wxString& aDst, wxString* aError = nullptr );
 
     /**
+     * Moves @p aSrc to @p aDst only when nothing exists at @p aDst, in one step, so a file
+     * another process creates there meanwhile is never replaced. Both paths must live on the
+     * same filesystem.
+     *
+     * Linux uses renameat2 with RENAME_NOREPLACE, macOS renamex_np with RENAME_EXCL and Windows
+     * MoveFileExW without MOVEFILE_REPLACE_EXISTING. A POSIX filesystem that refuses those flags
+     * falls back to link(2) then unlink(2), which never replaces either. One without hard links,
+     * such as FAT or SSHFS, gets CopyToNewFile() and then unlink(2).
+     *
+     * On failure @p aSrc is left in place so the caller can clean up.
+     *
+     * @param aSrc     source path, typically a sibling temp file of aDst.
+     * @param aDst     destination path.
+     * @param aExists  optional, set true when nothing moved because @p aDst exists.
+     * @param aError   optional out-parameter populated with a human-readable message.
+     * @return true if @p aSrc now lives at @p aDst.
+     */
+    bool RenameNoReplace( const wxString& aSrc, const wxString& aDst, bool* aExists = nullptr,
+                          wxString* aError = nullptr );
+
+#ifndef _WIN32
+    /**
+     * Copies @p aSrc to a file created at @p aDst only when nothing exists there. The create is
+     * exclusive (O_CREAT|O_EXCL), so a file another process makes at @p aDst is never touched.
+     * @p aSrc is left as it was.
+     *
+     * The copy is flushed to disk before closing. A partial @p aDst is removed on failure while
+     * it is still the file this call created.
+     *
+     * @param aSrc     file to copy.
+     * @param aDst     path of the new file.
+     * @param aExists  optional, set true when nothing was copied because @p aDst exists.
+     * @param aError   optional out-parameter populated with a human-readable message.
+     * @return true if @p aDst now holds a full copy of @p aSrc.
+     */
+    bool CopyToNewFile( const wxString& aSrc, const wxString& aDst, bool* aExists = nullptr,
+                        wxString* aError = nullptr );
+#endif
+
+    /**
      * Returns a unique sibling path of @p aTargetPath suitable as an atomic-save temp
      * file. The sibling lives in the same directory so rename() stays atomic. Uniqueness
      * is provided by process pid plus a process-wide atomic counter.

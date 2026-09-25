@@ -48,6 +48,7 @@
 #include <mdw/client/mdw_client.h>
 #include <mdw/client/mdw_library_sources.h>
 #include <mdw/client/mdw_op.h>
+#include <mdw/client/mdw_revision_copy.h>
 #include <mdw/mdw_framework.h>
 #include <app_monitor.h>
 #include <background_jobs_monitor.h>
@@ -237,7 +238,7 @@ void PGM_BASE::ExitIfTeardownUnsafe()
 {
     ExitFastIfAccessWorkerAbandoned( m_runResult );
 
-    if( m_mdw_abandoned )
+    if( m_mdw_abandoned || MdwRevisionSweepRunning() )
         KIPLATFORM::APP::TerminateWithCode( m_runResult );
 }
 
@@ -375,6 +376,18 @@ void PGM_BASE::stopMdwFramework()
 
     // Client workers resolve sources through the framework, so none may run past it
     bool stopped = MdwStopWorkers( std::chrono::seconds( 5 ) );
+
+    bool abandoned = false;
+
+    {
+        std::lock_guard<std::mutex> lock( m_mdw_mutex );
+        abandoned = m_mdw_abandoned;
+    }
+
+    // A worker left running may still commit a copy. A sweep that outlives its wait abandons no worker, since
+    // ExitIfTeardownUnsafe() checks it at exit
+    if( stopped && !abandoned )
+        MdwSweepRevisionCopies( std::chrono::seconds( 5 ) );
 
     // Destroyed unlocked, since its worker may still ask for it while it joins
     {
