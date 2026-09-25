@@ -2131,7 +2131,16 @@ bool SCH_SHEET::operator==( const SCH_ITEM& aOther ) const
 
     for( size_t i = 0; i < GetFields().size(); ++i )
     {
-        if( !( GetFields()[i] == other->GetFields()[i] ) )
+        if( GetFields()[i] != other->GetFields()[i] )
+            return false;
+    }
+
+    if( GetPins().size() != other->GetPins().size() )
+        return false;
+
+    for( size_t ii = 0; ii < GetPins().size(); ++ii )
+    {
+        if( GetPins()[ii] != other->GetPins()[ii] )
             return false;
     }
 
