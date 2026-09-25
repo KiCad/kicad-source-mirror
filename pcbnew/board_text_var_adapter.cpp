@@ -215,29 +215,17 @@ std::vector<TEXT_VAR_REF_KEY> BOARD_TEXT_VAR_ADAPTER::ExtractSourceKeys( EDA_ITE
     if( !fp )
         return out;
 
-    // A footprint U1 sources `${U1:<FIELDNAME>}` for every named field it
-    // carries. This is a conservative over-approximation — an edit to any
-    // footprint field fans out to every dependent on ${U1:*}, even if the
-    // specific field they reference wasn't the one that changed. The blast
-    // radius is bounded by the number of actual dependents, so over-
-    // invalidation is cheap relative to the alternative (per-field diff
-    // against a pre-image snapshot, which would couple the adapter to the
-    // commit system).
+    // Any field edit fans out to every ${U1:*} dependent, which is cheaper than coupling to the
+    // commit system for a per-field diff against a pre-image
     const wxString refdes = fp->GetReference();
 
     if( refdes.IsEmpty() )
         return out;
 
-    out.reserve( fp->GetFields().size() );
-
-    for( PCB_FIELD* field : fp->GetFields() )
-    {
-        TEXT_VAR_REF_KEY key;
-        key.kind      = TEXT_VAR_REF_KEY::KIND::CROSS_REF;
-        key.primary   = refdes;
-        key.secondary = field->GetName();
-        out.push_back( key );
-    }
+    TEXT_VAR_REF_KEY key;
+    key.kind    = TEXT_VAR_REF_KEY::KIND::CROSS_REF;
+    key.primary = refdes;
+    out.push_back( key );
 
     return out;
 }

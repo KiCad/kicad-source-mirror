@@ -219,4 +219,47 @@ BOOST_AUTO_TEST_CASE( ReplacedSheetScreenIsUnindexed )
 }
 
 
+BOOST_AUTO_TEST_CASE( KiidCrossRefInvalidatedBySymbolChange )
+{
+    LOCALE_IO dummy;
+
+    wxString path = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() ) + wxS( "NoConnectOnPin.kicad_sch" );
+    std::unique_ptr<SCHEMATIC> sch( EESCHEMA_HELPERS::LoadSchematic( path, true, true ) );
+    BOOST_REQUIRE( sch );
+
+    SCH_SYMBOL* tp1 = nullptr;
+
+    for( const SCH_SHEET_PATH& sheet : sch->Hierarchy() )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+            tp1 = static_cast<SCH_SYMBOL*>( item );
+    }
+
+    BOOST_REQUIRE( tp1 );
+
+    // Text dialogs store cross-refs in KIID form
+    SCH_TEXT text;
+    text.SetText( sch->ConvertRefsToKIIDs( wxS( "${TP1:value}" ) ) );
+    BOOST_REQUIRE( !text.GetText().Contains( wxS( "TP1" ) ) );
+
+    SCHEMATIC_TEXT_VAR_ADAPTER* adapter = sch->GetTextVarAdapter();
+    std::vector<SCH_ITEM*>      added{ &text };
+    adapter->OnSchItemsAdded( *sch, added );
+
+    bool invalidated = false;
+
+    TEXT_VAR_TRACKER::ListenerHandle handle = adapter->Tracker().AddInvalidateListener(
+            [&]( EDA_ITEM* aDep, const TEXT_VAR_REF_KEY& )
+            {
+                invalidated |= aDep == &text;
+            } );
+
+    std::vector<SCH_ITEM*> changed{ tp1 };
+    adapter->OnSchItemsChanged( *sch, changed );
+    adapter->Tracker().RemoveInvalidateListener( handle );
+
+    BOOST_CHECK( invalidated );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

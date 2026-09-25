@@ -80,9 +80,10 @@ TEXT_VAR_REF_KEY TEXT_VAR_REF_KEY::FromToken( const wxString& aToken )
         }
         else
         {
+            // Keyed by source only; the field part may differ in case, carry a
+            // variant suffix, or name a computed property
             key.kind = KIND::CROSS_REF;
             key.primary = left;
-            key.secondary = right;
         }
 
         return key;

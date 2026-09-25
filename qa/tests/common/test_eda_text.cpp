@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE( TextVarReferences_CapturedAfterSetText )
     };
 
     BOOST_CHECK( hasKey( TEXT_VAR_REF_KEY::KIND::LOCAL, wxS( "VALUE" ), wxS( "" ) ) );
-    BOOST_CHECK( hasKey( TEXT_VAR_REF_KEY::KIND::CROSS_REF, wxS( "U1" ), wxS( "MPN" ) ) );
+    BOOST_CHECK( hasKey( TEXT_VAR_REF_KEY::KIND::CROSS_REF, wxS( "U1" ), wxS( "" ) ) );
 }
 
 

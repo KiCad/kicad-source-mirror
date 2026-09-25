@@ -214,65 +214,47 @@ std::vector<TEXT_VAR_REF_KEY> SCHEMATIC_TEXT_VAR_ADAPTER::ExtractSourceKeys( EDA
     if( !sym )
         return out;
 
-    // Repeated-sheet instances: a single SCH_SYMBOL can carry different
-    // reference designators on each SCH_SHEET_PATH it participates in.
-    // Collect every distinct refdes the symbol currently has across the
-    // hierarchy so each ${REFDES:FIELD} dependent fan-out reaches the right
-    // dependents. Over-approximation (firing U1:Value when U2 — same symbol
-    // on a different sheet — is the actual edit target) is the acceptable
-    // tradeoff for not yet carrying sheet-path identity in the key itself.
-    std::vector<wxString> refdesList;
+    auto addKey =
+            [&]( const wxString& aPrimary )
+            {
+                if( aPrimary.IsEmpty() )
+                    return;
+
+                TEXT_VAR_REF_KEY key;
+                key.kind    = TEXT_VAR_REF_KEY::KIND::CROSS_REF;
+                key.primary = aPrimary;
+
+                if( std::find( out.begin(), out.end(), key ) == out.end() )
+                    out.push_back( key );
+            };
+
+    // Must match the KIID path SCHEMATIC::ConvertRefsToKIIDs writes into stored text
+    auto addInstance =
+            [&]( const SCH_SHEET_PATH& aPath )
+            {
+                KIID_PATH path = aPath.Path();
+                path.push_back( sym->m_Uuid );
+
+                addKey( sym->GetRef( &aPath, false ) );
+                addKey( path.AsString() );
+            };
+
     const SCH_SHEET_LIST& hierarchy = m_schematic.Hierarchy();
 
     if( hierarchy.empty() )
     {
-        // No hierarchy yet (e.g., bare SCHEMATIC before sheets added) —
-        // fall back to the current sheet context.
-        const wxString refdes = sym->GetRef( &m_schematic.CurrentSheet(), false );
-
-        if( !refdes.IsEmpty() )
-            refdesList.push_back( refdes );
-    }
-    else
-    {
-        // SCH_SYMBOL::GetRef falls back to its REFERENCE field when the query
-        // path is not one of its instances, so iterating every path and
-        // calling GetRef would pollute the list with the same refdes from
-        // unrelated sheets. Filter to paths whose last screen matches the
-        // symbol's parent screen — those are the ones where this symbol
-        // actually lives.
-        const SCH_SCREEN* parentScreen = dynamic_cast<const SCH_SCREEN*>( sym->GetParent() );
-
-        for( const SCH_SHEET_PATH& path : hierarchy )
-        {
-            if( path.LastScreen() != parentScreen )
-                continue;
-
-            const wxString refdes = sym->GetRef( &path, false );
-
-            if( refdes.IsEmpty() )
-                continue;
-
-            if( std::find( refdesList.begin(), refdesList.end(), refdes ) == refdesList.end() )
-                refdesList.push_back( refdes );
-        }
-    }
-
-    if( refdesList.empty() )
+        addInstance( m_schematic.CurrentSheet() );
         return out;
+    }
 
-    out.reserve( refdesList.size() * sym->GetFields().size() );
+    // GetRef falls back to the REFERENCE field on paths that are not instances of this
+    // symbol, so only visit paths that actually show the symbol's screen
+    const SCH_SCREEN* parentScreen = dynamic_cast<const SCH_SCREEN*>( sym->GetParent() );
 
-    for( const wxString& refdes : refdesList )
+    for( const SCH_SHEET_PATH& path : hierarchy )
     {
-        for( const SCH_FIELD& field : sym->GetFields() )
-        {
-            TEXT_VAR_REF_KEY key;
-            key.kind      = TEXT_VAR_REF_KEY::KIND::CROSS_REF;
-            key.primary   = refdes;
-            key.secondary = field.GetUntranslatedName();
-            out.push_back( key );
-        }
+        if( path.LastScreen() == parentScreen )
+            addInstance( path );
     }
 
     return out;

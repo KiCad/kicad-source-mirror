@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE( KeyFromToken_CrossRef )
     TEXT_VAR_REF_KEY k = TEXT_VAR_REF_KEY::FromToken( wxT( "U1:VALUE" ) );
     BOOST_CHECK( k.kind == TEXT_VAR_REF_KEY::KIND::CROSS_REF );
     BOOST_CHECK( k.primary == wxT( "U1" ) );
-    BOOST_CHECK( k.secondary == wxT( "VALUE" ) );
+    BOOST_CHECK( k.secondary.IsEmpty() );
 }
 
 
@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE( KeyEquality )
 
     BOOST_CHECK( a == b );
     BOOST_CHECK( !( a == c ) );
-    BOOST_CHECK( !( a == d ) );
+    BOOST_CHECK( a == d );
 }
 
 
@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE( Extract_SingleCrossRef )
     BOOST_REQUIRE_EQUAL( refs.size(), 1u );
     BOOST_CHECK( refs[0].kind == TEXT_VAR_REF_KEY::KIND::CROSS_REF );
     BOOST_CHECK( refs[0].primary == wxT( "U1" ) );
-    BOOST_CHECK( refs[0].secondary == wxT( "VALUE" ) );
+    BOOST_CHECK( refs[0].secondary.IsEmpty() );
 }
 
 
@@ -175,8 +175,8 @@ BOOST_AUTO_TEST_CASE( Extract_MultipleReferences )
                             { return ref.kind == k && ref.primary == p && ref.secondary == s; } );
     };
 
-    BOOST_CHECK( hasKey( TEXT_VAR_REF_KEY::KIND::CROSS_REF, wxT( "R12" ), wxT( "VALUE" ) ) );
-    BOOST_CHECK( hasKey( TEXT_VAR_REF_KEY::KIND::CROSS_REF, wxT( "C3" ), wxT( "VALUE" ) ) );
+    BOOST_CHECK( hasKey( TEXT_VAR_REF_KEY::KIND::CROSS_REF, wxT( "R12" ), wxT( "" ) ) );
+    BOOST_CHECK( hasKey( TEXT_VAR_REF_KEY::KIND::CROSS_REF, wxT( "C3" ), wxT( "" ) ) );
     BOOST_CHECK( hasKey( TEXT_VAR_REF_KEY::KIND::SPECIAL, wxT( "SHEETNAME" ), wxT( "" ) ) );
 }
 
