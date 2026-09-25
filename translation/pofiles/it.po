@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-28 11:24-0700\n"
-"PO-Revision-Date: 2026-09-23 08:51+0000\n"
+"PO-Revision-Date: 2026-09-25 11:52+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -22993,9 +22993,8 @@ msgid "Downloaded symbol payload was empty."
 msgstr "Il payload simboli scaricato era vuoto."
 
 #: eeschema/remote_symbol_import_job.cpp:60
-#, fuzzy
 msgid "Downloaded symbol payload was not a KiCad symbol library."
-msgstr "Simbolo %s non trovato nella tabella librerie di simboli."
+msgstr "Il payload del simbolo scaricato non era una libreria di simboli KiCad."
 
 #: eeschema/remote_symbol_import_job.cpp:70
 #, c-format
@@ -23025,9 +23024,8 @@ msgid "Unable to save the downloaded symbol: %s"
 msgstr "Impossibile salvare il simbolo scaricato: %s"
 
 #: eeschema/remote_symbol_import_job.cpp:354
-#, fuzzy
 msgid "No symbol asset was available to place."
-msgstr "Non è disponibile alcun editor di schemi per il posizionamento."
+msgstr "Non era disponibile alcuna risorsa simbolo da posizionare."
 
 #: eeschema/remote_symbol_import_utils.cpp:79
 msgid "Payload was empty."
@@ -23058,23 +23056,20 @@ msgid "Unable to create directory '%s'."
 msgstr "Fallita creazione cartella '%s'."
 
 #: eeschema/remote_symbol_import_utils.cpp:161
-#, fuzzy
 msgid "Unable to access the library table."
-msgstr "Fallito accesso alla tabella librerie dei simboli."
+msgstr "Fallito accesso alla tabella librerie."
 
 #: eeschema/remote_symbol_import_utils.cpp:181
-#, fuzzy
 msgid "Failed to update the library table."
-msgstr "Fallito aggiornamento tabella librerie dei simboli."
+msgstr "Fallito aggiornamento tabella librerie."
 
 #: eeschema/remote_symbol_import_utils.cpp:195
 msgid "Remote download"
 msgstr "Scaricamento remoto"
 
 #: eeschema/remote_symbol_import_utils.cpp:200
-#, fuzzy
 msgid "Failed to save the library table."
-msgstr "Fallito salvataggio tabella librerie dei simboli."
+msgstr "Fallito salvataggio tabella librerie."
 
 #: eeschema/remote_symbol_import_utils.cpp:213
 msgid "No schematic editor is available for placement."
@@ -23197,9 +23192,8 @@ msgstr "Netclass risolta"
 
 #: eeschema/sch_bus_entry.cpp:706 eeschema/sch_line.cpp:1451
 #: eeschema/widgets/sch_properties_panel.cpp:827
-#, fuzzy
 msgid "Wire Style"
-msgstr "Stile linea"
+msgstr "Stile filo"
 
 #: eeschema/sch_connection.cpp:480
 msgid "Connection Name"
@@ -23259,15 +23253,14 @@ msgstr "Imposta collegamento al blocco progetto"
 
 #: eeschema/sch_design_block_utils.cpp:506
 #: pcbnew/pcb_design_block_utils.cpp:533
-#, fuzzy
 msgid "The selection contains more than one group linked to this design block."
-msgstr "Salva il gruppo selezionato sul blocco progetto collegato"
+msgstr ""
+"La selezione contiene più di un gruppo collegato a questo blocco progetto."
 
 #: eeschema/sch_design_block_utils.cpp:640
 #: pcbnew/pcb_design_block_utils.cpp:616
-#, fuzzy
 msgid "Update Design Block Group"
-msgstr "Aggiorna blocco progetto dalla scheda"
+msgstr "Aggiorna il gruppo blocco progetto"
 
 #: eeschema/sch_edit_frame.cpp:180
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
@@ -23366,19 +23359,16 @@ msgid "Find in Net Inspector"
 msgstr "Trova in ispettore collegamenti"
 
 #: eeschema/sch_edit_frame.cpp:3149
-#, fuzzy
 msgid "No design variants to edit."
-msgstr "Aggiungi una nuova variante progetto allo schema."
+msgstr "Nessuna variante progetto da modificare."
 
 #: eeschema/sch_edit_frame.cpp:3153
-#, fuzzy
 msgid "Select variant to edit description:"
-msgstr "Seleziona nome variante da rimuovere:"
+msgstr "Seleziona la variante per modificarne la descrizione:"
 
 #: eeschema/sch_edit_frame.cpp:3154
-#, fuzzy
 msgid "Edit Variant Description"
-msgstr "Modifica descrizione lavoro"
+msgstr "Modifica descrizione variante"
 
 #: eeschema/sch_edit_frame.cpp:3214
 msgid "Select variant name to remove:"
@@ -23630,6 +23620,8 @@ msgid ""
 "Could not find image file '%s'. The file path may be specific to a different "
 "operating system."
 msgstr ""
+"Impossibile trovare il file immagine '%s'. Il percorso del file potrebbe "
+"essere specifico per un sistema operativo diverso."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5066
 #, c-format
@@ -23637,6 +23629,8 @@ msgid ""
 "Failed to read image file '%s'. The image may be corrupt or in an "
 "unsupported format."
 msgstr ""
+"Impossibile leggere il file immagine '%s'. Il file potrebbe essere "
+"danneggiato o in un formato non supportato."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5615
 #, c-format
@@ -24014,11 +24008,13 @@ msgstr ""
 msgid ""
 "DipTrace import: invalid component extra-tail length %u at offset 0x%06zX."
 msgstr ""
+"Importazione DipTrace: lunghezza extra-coda del componente non valida %u "
+"alla posizione 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1093
 #, c-format
 msgid "Invalid pin count %d at component offset 0x%06zX."
-msgstr ""
+msgstr "Numero di pin non valido %d alla posizione del componente 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1167
 #, c-format
@@ -24026,18 +24022,24 @@ msgid ""
 "DipTrace import: failed to parse pin %d in component at 0x%06zX (offset "
 "0x%06zX): %s"
 msgstr ""
+"Importazione DipTrace: impossibile analizzare il pin %d nel componente "
+"all'indirizzo 0x%06zX (posizione 0x%06zX): %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1289
 #, c-format
 msgid ""
 "DipTrace import: invalid component shape point count %d at offset 0x%06zX."
 msgstr ""
+"Importazione DipTrace: numero di punti della forma del componente non valido "
+"(%d) in posizione 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1917
 #, c-format
 msgid ""
 "DipTrace import: invalid embedded pattern %s count %d at offset 0x%06zX."
 msgstr ""
+"Importazione DipTrace: pattern incorporato non valido %s, conteggio %d in "
+"posizione 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2204
 #, c-format
@@ -24068,17 +24070,21 @@ msgstr ""
 #, c-format
 msgid "DipTrace import: invalid wire count %d for net '%s' at offset 0x%06zX."
 msgstr ""
+"Importazione DipTrace: numero di segmenti non valido (%d) per la net '%s' "
+"posizione 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3795
 #, c-format
 msgid ""
 "DipTrace import: invalid wire point count %d for net '%s' at offset 0x%06zX."
 msgstr ""
+"Importazione DipTrace: numero punti del filo non valido (%d) per la net '%s' "
+"posizione 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:4210
 #, c-format
 msgid "DipTrace import: failed to create symbol for %s (%s): %s"
-msgstr ""
+msgstr "Importazione DipTrace: impossibile creare il simbolo per %s (%s): %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:4230
 #, c-format
