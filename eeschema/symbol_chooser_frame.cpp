@@ -67,7 +67,8 @@ END_EVENT_TABLE()
 SYMBOL_CHOOSER_FRAME::SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent, bool& aCancelled ) :
         SCH_BASE_FRAME( aKiway, aParent, FRAME_SYMBOL_CHOOSER, _( "Symbol Chooser" ),
                         wxDefaultPosition, wxDefaultSize, aParent ? PARENT_STYLE : MODAL_STYLE,
-                        SYMBOL_CHOOSER_FRAME_NAME )
+                        SYMBOL_CHOOSER_FRAME_NAME ),
+        m_firstPaintEvent( true )
 {
     SetModal( true );
 
