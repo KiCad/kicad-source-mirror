@@ -837,6 +837,8 @@ void SCH_SHEET::RemovePin( const SCH_SHEET_PIN* aSheetPin )
                 screen->BumpConnectivityRevision();
 
             m_pins.erase( i );
+            delete aSheetPin;
+
             renumberPins();
             return;
         }
@@ -940,13 +942,13 @@ int SCH_SHEET::GetMinWidth( bool aFromLeft ) const
     int pinsLeft = m_pos.x + m_size.x;
     int pinsRight = m_pos.x;
 
-    for( size_t i = 0; i < m_pins.size();  i++ )
+    for( SCH_SHEET_PIN* pin : m_pins)
     {
-        SHEET_SIDE edge = m_pins[i]->GetSide();
+        SHEET_SIDE edge = pin->GetSide();
 
         if( edge == SHEET_SIDE::TOP || edge == SHEET_SIDE::BOTTOM )
         {
-            BOX2I pinRect = m_pins[i]->GetBoundingBox();
+            BOX2I pinRect = pin->GetBoundingBox();
 
             pinsLeft = std::min( pinsLeft, pinRect.GetLeft() );
             pinsRight = std::max( pinsRight, pinRect.GetRight() );
@@ -974,13 +976,13 @@ int SCH_SHEET::GetMinHeight( bool aFromTop ) const
     int pinsTop = m_pos.y + m_size.y;
     int pinsBottom = m_pos.y;
 
-    for( size_t i = 0; i < m_pins.size();  i++ )
+    for( SCH_SHEET_PIN* pin : m_pins )
     {
-        SHEET_SIDE edge = m_pins[i]->GetSide();
+        SHEET_SIDE edge = pin->GetSide();
 
         if( edge == SHEET_SIDE::RIGHT || edge == SHEET_SIDE::LEFT )
         {
-            BOX2I pinRect = m_pins[i]->GetBoundingBox();
+            BOX2I pinRect = pin->GetBoundingBox();
 
             pinsTop = std::min( pinsTop, pinRect.GetTop() );
             pinsBottom = std::max( pinsBottom, pinRect.GetBottom() );
@@ -1028,6 +1030,8 @@ void SCH_SHEET::CleanupSheet()
 
         if( HLabel )
             m_pins.push_back( pin );
+        else
+            delete pin;
     }
 }
 
@@ -1842,7 +1846,7 @@ void SCH_SHEET::RemoveInstance( const KIID_PATH& aInstancePath )
 {
     // Search for an existing path and remove it if found (should not occur)
     // (search from back to avoid invalidating iterator on remove)
-    for( int ii = m_instances.size() - 1; ii >= 0; --ii )
+    for( int ii = (int) m_instances.size() - 1; ii >= 0; --ii )
     {
         if( m_instances[ii].m_Path == aInstancePath )
         {
@@ -1880,9 +1884,8 @@ bool SCH_SHEET::addInstance( const KIID_PATH& aPath )
             return false;
     }
 
-    wxLogTrace( traceSchSheetPaths, wxT( "Adding instance `%s` to sheet `%s`." ),
-                aPath.AsString(),
-                ( GetName().IsEmpty() ) ? wxString( wxT( "root" ) ) : GetName() );
+    wxLogTrace( traceSchSheetPaths, wxT( "Adding instance `%s` to sheet `%s`." ), aPath.AsString(),
+                GetName().IsEmpty() ? wxString( wxT( "root" ) ) : GetName() );
 
     SCH_SHEET_INSTANCE instance;
 
@@ -1894,8 +1897,7 @@ bool SCH_SHEET::addInstance( const KIID_PATH& aPath )
 }
 
 
-bool SCH_SHEET::getInstance( SCH_SHEET_INSTANCE& aInstance, const KIID_PATH& aSheetPath,
-                             bool aTestFromEnd ) const
+bool SCH_SHEET::getInstance( SCH_SHEET_INSTANCE& aInstance, const KIID_PATH& aSheetPath, bool aTestFromEnd ) const
 {
     for( const SCH_SHEET_INSTANCE& instance : m_instances )
     {
@@ -2212,8 +2214,7 @@ void SCH_SHEET::ClearVariantField( const KIID_PATH& aPath, const wxString& aVari
 }
 
 
-void SCH_SHEET::RenameVariant( const KIID_PATH& aPath, const wxString& aOldName,
-                               const wxString& aNewName )
+void SCH_SHEET::RenameVariant( const KIID_PATH& aPath, const wxString& aOldName, const wxString& aNewName )
 {
     SCH_SHEET_INSTANCE* instance = getInstance( aPath );
 
@@ -2231,8 +2232,7 @@ void SCH_SHEET::RenameVariant( const KIID_PATH& aPath, const wxString& aOldName,
 }
 
 
-void SCH_SHEET::CopyVariant( const KIID_PATH& aPath, const wxString& aSourceVariant,
-                             const wxString& aNewVariant )
+void SCH_SHEET::CopyVariant( const KIID_PATH& aPath, const wxString& aSourceVariant, const wxString& aNewVariant )
 {
     SCH_SHEET_INSTANCE* instance = getInstance( aPath );
 
