@@ -298,14 +298,13 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
     // Sync PNS engine settings with the general PCB editor options.
     ROUTING_SETTINGS& pnss = m_router->Settings();
 
-    // If we're dragging a track segment, don't try to snap to items that are part of the original line.
+    // Don't snap to items that move with the drag, or the cursor sticks to their old position
     if( m_startItem && aItem && m_router->GetState() == ROUTER::DRAG_SEGMENT
         && m_router->GetDragger() )
     {
-        DRAGGER*     dragger = dynamic_cast<DRAGGER*>( m_router->GetDragger() );
-        LINKED_ITEM* linkedItem = dynamic_cast<LINKED_ITEM*>( aItem );
+        DRAGGER* dragger = dynamic_cast<DRAGGER*>( m_router->GetDragger() );
 
-        if( dragger && linkedItem && dragger->GetOriginalLine().ContainsLink( linkedItem ) )
+        if( dragger && dragger->IsDragOrigin( aItem ) )
             return false;
     }
 

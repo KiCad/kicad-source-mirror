@@ -111,6 +111,13 @@ public:
     }
 
     /**
+     * Return true if \a aItem is a world item that moves with the drag: a link of the original
+     * line, or the dragged via and the tracks attached to it.  Snapping to such an item pins the
+     * cursor to its pre-drag position.
+     */
+    bool IsDragOrigin( const ITEM* aItem ) const;
+
+    /**
      * Function Traces()
      *
      * Returns the set of dragged items.

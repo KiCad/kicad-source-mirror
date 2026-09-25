@@ -21,6 +21,7 @@
 
 #include "pns_dragger.h"
 
+#include <core/kicad_algo.h>
 #include <core/typeinfo.h>
 #include <advanced_config.h>
 #include <base_units.h>
@@ -366,6 +367,26 @@ void DRAGGER::SetMode( PNS::DRAG_MODE aMode )
 PNS::DRAG_MODE DRAGGER::Mode() const
 {
     return static_cast<PNS::DRAG_MODE>( m_mode );
+}
+
+
+bool DRAGGER::IsDragOrigin( const ITEM* aItem ) const
+{
+    if( !aItem )
+        return false;
+
+    if( m_mode != DM_VIA )
+    {
+        const LINKED_ITEM* li = dynamic_cast<const LINKED_ITEM*>( aItem );
+        return li && m_draggedLine.ContainsLink( li );
+    }
+
+    if( !m_initialVia.valid || !m_world || !aItem->OfKind( ITEM::VIA_T | ITEM::SEGMENT_T | ITEM::ARC_T ) )
+        return false;
+
+    const JOINT* jt = m_world->FindJoint( m_initialVia.pos, m_initialVia.layers.Start(), m_initialVia.net );
+
+    return jt && alg::contains( jt->LinkList(), aItem );
 }
 
 
