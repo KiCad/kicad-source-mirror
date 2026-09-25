@@ -45,6 +45,12 @@
 #define MSG_OOM _( "<b>Memory was exhausted reading:</b> <i>%s</i>" )
 
 
+static bool isGerberFormatInsteadOfExcellon( const wxString& aFileName )
+{
+    return !EXCELLON_IMAGE::TestFileIsExcellon( aFileName ) && GERBER_FILE_IMAGE::TestFileIsRS274( aFileName );
+}
+
+
 void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
 {
     wxString filename = GetFileFromHistory( event.GetId(), _( "Gerber files" ) );
@@ -373,6 +379,11 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString&      aPath,
                 else if( GERBER_FILE_IMAGE::TestFileIsRS274( filename.GetFullPath() ) )
                     ( *aFileType )[ii] = 0;
             }
+            else if( ( *aFileType )[ii] == 1 && isGerberFormatInsteadOfExcellon( filename.GetFullPath() ) )
+            {
+                // A file selected as drill data can use the Gerber format.
+                ( *aFileType )[ii] = 0;
+            }
 
             switch( ( *aFileType )[ii] )
             {
@@ -584,35 +595,36 @@ bool GERBVIEW_FRAME::unarchiveFiles( const wxString& aFullFileName, REPORTER* aR
             }
         }
 
-        bool read_ok = true;
+        // Use the file extension as a fallback when the format tests are inconclusive.
+        bool isDrillExt = order == GERBER_ORDER_ENUM::GERBER_DRILL;
+        bool isUnknownExt = order == GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN;
 
-        // Try to parse files if we can't tell from file extension
-        if( order == GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN )
+        // Drill data may use the Gerber format despite its filename.
+        bool isGerberDrill = isDrillExt && isGerberFormatInsteadOfExcellon( unzipped_tempfile );
+        bool isExcellonDrill = ( isDrillExt && !isGerberDrill )
+                               || ( isUnknownExt && EXCELLON_IMAGE::TestFileIsExcellon( unzipped_tempfile ) );
+        bool isGerberLayer =
+                !isDrillExt
+                && ( !isUnknownExt || ( !isExcellonDrill && GERBER_FILE_IMAGE::TestFileIsRS274( unzipped_tempfile ) ) );
+
+        if( !isExcellonDrill && !isGerberDrill && !isGerberLayer )
         {
-            if( EXCELLON_IMAGE::TestFileIsExcellon( unzipped_tempfile ) )
+            if( aReporter )
             {
-                order = GERBER_ORDER_ENUM::GERBER_DRILL;
+                msg.Printf( _( "Skipped file '%s' (unknown type)." ), entry->GetName() );
+                aReporter->Report( msg, RPT_SEVERITY_WARNING );
             }
-            else if( GERBER_FILE_IMAGE::TestFileIsRS274( unzipped_tempfile ) )
-            {
-                // If we have no way to know what layer it is, just guess
-                order = GERBER_ORDER_ENUM::GERBER_TOP_COPPER;
-            }
-            else
-            {
-                if( aReporter )
-                {
-                    msg.Printf( _( "Skipped file '%s' (unknown type)." ), entry->GetName() );
-                    aReporter->Report( msg, RPT_SEVERITY_WARNING );
-                }
-            }
+
+            continue;
         }
 
-        if( order == GERBER_ORDER_ENUM::GERBER_DRILL )
+        bool read_ok = true;
+
+        if( isExcellonDrill )
         {
             read_ok = Read_EXCELLON_File( unzipped_tempfile );
         }
-        else if( order != GERBER_ORDER_ENUM::GERBER_LAYER_UNKNOWN )
+        else if( isGerberDrill || isGerberLayer )
         {
             // Read gerber files: each file is loaded on a new GerbView layer
             read_ok = Read_GERBER_File( unzipped_tempfile );
