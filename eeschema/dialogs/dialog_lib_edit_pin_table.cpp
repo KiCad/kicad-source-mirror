@@ -1431,6 +1431,10 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnCellSelected( wxGridEvent& event )
         m_editFrame->FocusOnItem( pin );
         m_editFrame->GetCanvas()->Refresh();
     }
+
+    // Let WX_GRID run its editor-positioning handler
+    if( event.GetEventType() == wxEVT_GRID_EDITOR_SHOWN )
+        event.Skip();
 }
 
 
