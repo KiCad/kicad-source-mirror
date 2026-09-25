@@ -1182,49 +1182,70 @@ BOOST_AUTO_TEST_CASE( CisVariantFallbackUsesBytewiseFirstBomName )
     SCH_IO_ORCAD plugin;
     plugin.LoadSchematicFile( dsn.string(), schematic.get() );
 
-    std::map<wxString, SCH_SYMBOL*> symbols;
+    std::map<wxString, std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>> symbols;
 
     for( const SCH_SHEET_PATH& path : schematic->BuildSheetListSortedByPageNumbers() )
     {
         for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-            symbols.emplace( symbol->GetRef( &path, false ), symbol );
+            symbols.emplace( symbol->GetRef( &path, false ), std::make_pair( symbol, path ) );
         }
     }
 
-    BOOST_REQUIRE( symbols.count( wxS( "U1" ) ) );
-    BOOST_REQUIRE( symbols.count( wxS( "D13" ) ) );
-    BOOST_REQUIRE( symbols.count( wxS( "T2" ) ) );
-    BOOST_REQUIRE( symbols.count( wxS( "LB1" ) ) );
-    BOOST_CHECK_EQUAL( symbols[wxS( "U1" )]->GetField( FIELD_T::VALUE )->GetText(),
-                       wxS( "NVMFS5C680NLT1G" ) );
-    BOOST_CHECK_EQUAL( symbols[wxS( "D13" )]->GetField( FIELD_T::VALUE )->GetText(), wxS( "PDS5100" ) );
-    BOOST_CHECK_EQUAL( symbols[wxS( "T2" )]->GetField( FIELD_T::VALUE )->GetText(), wxS( "LDT1026-50R" ) );
-    BOOST_CHECK_EQUAL( symbols[wxS( "LB1" )]->GetField( FIELD_T::VALUE )->GetText(),
+    // Capture's core design is the default variant; the bytewise-first BOM variant is current
+    BOOST_CHECK( schematic->GetVariantNames() == std::set<wxString>( { wxS( "12V" ), wxS( "5V" ) } ) );
+    BOOST_CHECK_EQUAL( schematic->GetCurrentVariant(), wxS( "12V" ) );
+
+    auto fieldText = [&]( const wxString& aRef, const wxString& aField, const wxString& aVariant )
+    {
+        BOOST_REQUIRE( symbols.count( aRef ) );
+        auto& [symbol, path] = symbols.at( aRef );
+        return symbol->GetFieldText( aField, &path, aVariant );
+    };
+
+    BOOST_CHECK_EQUAL( fieldText( wxS( "U1" ), wxS( "Value" ), wxS( "12V" ) ), wxS( "NVMFS5C680NLT1G" ) );
+    BOOST_CHECK_EQUAL( fieldText( wxS( "D13" ), wxS( "Value" ), wxS( "12V" ) ), wxS( "PDS5100" ) );
+    BOOST_CHECK_EQUAL( fieldText( wxS( "T2" ), wxS( "Value" ), wxS( "12V" ) ), wxS( "LDT1026-50R" ) );
+    BOOST_CHECK_EQUAL( fieldText( wxS( "LB1" ), wxS( "Value" ), wxS( "12V" ) ),
                        wxS( "LABEL-Si34061-EVB-EXT-BOM-R1.7-12V" ) );
-    BOOST_REQUIRE( symbols[wxS( "U1" )]->GetField( wxS( "Voltage" ) ) );
-    BOOST_CHECK_EQUAL( symbols[wxS( "U1" )]->GetField( wxS( "Voltage" ) )->GetText(), wxS( "60V" ) );
-    BOOST_REQUIRE( symbols.count( wxS( "D15" ) ) );
-    BOOST_REQUIRE( symbols.count( wxS( "R35" ) ) );
-    BOOST_REQUIRE( symbols.count( wxS( "TP1" ) ) );
-    BOOST_CHECK( symbols[wxS( "D15" )]->GetDNP() );
-    BOOST_CHECK( symbols[wxS( "R35" )]->GetDNP() );
-    BOOST_CHECK( symbols[wxS( "TP1" )]->GetDNP() );
-    BOOST_CHECK_EQUAL( symbols[wxS( "D15" )]->GetField( FIELD_T::VALUE )->GetText(), wxS( "NI" ) );
+    BOOST_CHECK_EQUAL( fieldText( wxS( "LB1" ), wxS( "Value" ), wxS( "5V" ) ),
+                       wxS( "LABEL-Si34061-EVB-EXT-BOM R1.7" ) );
+    BOOST_CHECK_EQUAL( fieldText( wxS( "U1" ), wxS( "Voltage" ), wxS( "12V" ) ), wxS( "60V" ) );
+
+    // Capture's "UNDEFINED" column placeholder is not a property value
+    BOOST_REQUIRE( symbols.count( wxS( "C19" ) ) );
+    BOOST_CHECK( !symbols.at( wxS( "C19" ) ).first->FindFieldCaseInsensitive( wxS( "Part type" ) ) );
+    BOOST_CHECK( !symbols.at( wxS( "C19" ) ).first->FindFieldCaseInsensitive( wxS( "Power Pins Visible" ) ) );
+
+    // Group membership marks C16 not installed in 12V only
+    BOOST_REQUIRE( symbols.count( wxS( "C16" ) ) );
+    auto& [c16, c16Path] = symbols.at( wxS( "C16" ) );
+    BOOST_CHECK( c16->GetDNP( &c16Path, wxS( "12V" ) ) );
+    BOOST_CHECK( !c16->GetDNP( &c16Path, wxS( "5V" ) ) );
+    BOOST_CHECK( !c16->GetDNP( &c16Path ) );
+
+    for( const wxString& ref : { wxS( "D15" ), wxS( "R35" ), wxS( "TP1" ) } )
+    {
+        BOOST_REQUIRE( symbols.count( ref ) );
+        BOOST_CHECK( symbols.at( ref ).first->GetDNP() );
+    }
+
+    BOOST_CHECK_EQUAL( symbols.at( wxS( "D15" ) ).first->GetField( FIELD_T::VALUE )->GetText(), wxS( "NI" ) );
+
     for( const SCH_SHEET_PATH& path : schematic->BuildSheetListSortedByPageNumbers() )
     {
         bool variantNameFound = false;
 
         for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_TEXT_T ) )
         {
-            const wxString& text = static_cast<SCH_TEXT*>( item )->GetText();
+            wxString text = static_cast<SCH_TEXT*>( item )->GetShownText( &path, FOR_CANVAS );
             BOOST_CHECK_NE( text, wxS( "<Core Design>" ) );
             variantNameFound |= text == wxS( "12V" );
         }
 
         BOOST_CHECK( variantNameFound );
-        BOOST_CHECK_EQUAL( path.LastScreen()->GetTitleBlock().GetComment( 1 ), wxS( "Variant Name: 12V" ) );
+        BOOST_CHECK_EQUAL( path.LastScreen()->GetTitleBlock().GetComment( 1 ), wxS( "Variant Name: ${VARIANT}" ) );
     }
 }
 

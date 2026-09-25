@@ -21,6 +21,7 @@
 #include <sch_io/orcad/orcad_stream.h>
 
 #include <algorithm>
+#include <cctype>
 #include <charconv>
 #include <boost/algorithm/string/split.hpp>
 
@@ -108,27 +109,62 @@ std::vector<std::string> OrcadCisParseCountedList( const std::vector<char>& aDat
 }
 
 
-std::map<uint32_t, std::map<std::string, std::string>> OrcadCisParsePropertyUpdates( const std::vector<char>& aData )
+std::map<uint32_t, ORCAD_CIS_PROPERTIES> OrcadCisParsePropertyUpdates( const std::vector<char>& aData )
 {
-    std::map<uint32_t, std::map<std::string, std::string>> result;
+    std::map<uint32_t, ORCAD_CIS_PROPERTIES> result;
+    std::string                              text = payload( aData );
+    constexpr char                           namesMark = static_cast<char>( 0xB0 );
+    constexpr char                           valuesMark = static_cast<char>( 0xC0 );
 
-    for( const std::string& record : split( payload( aData ), '~' ) )
+    // Values may contain '~', so only the final '~' or one before another "<id>°<names>À" header ends a record
+    auto closesRecord = [&]( size_t aTilde )
     {
-        if( record.empty() )
-            continue;
+        if( aTilde + 1 == text.size() )
+            return true;
 
-        size_t namesAt = record.find( static_cast<char>( 0xB0 ) );
-        size_t valuesAt = record.find( static_cast<char>( 0xC0 ), namesAt == std::string::npos ? 0 : namesAt + 1 );
+        size_t digits = aTilde + 1;
 
-        if( namesAt == std::string::npos || valuesAt == std::string::npos )
+        while( digits < text.size() && std::isdigit( static_cast<unsigned char>( text[digits] ) ) )
+            ++digits;
+
+        if( digits == aTilde + 1 || digits >= text.size() || text[digits] != namesMark )
+            return false;
+
+        size_t values = text.find( valuesMark, digits );
+        return values != std::string::npos && text.find( '~', digits ) > values;
+    };
+
+    size_t start = 0;
+
+    while( start < text.size() )
+    {
+        size_t namesAt = text.find( namesMark, start );
+        size_t valuesAt = namesAt == std::string::npos ? std::string::npos : text.find( valuesMark, namesAt + 1 );
+
+        if( valuesAt == std::string::npos )
             THROW_IO_ERROR( wxS( "OrCAD CIS property update is malformed" ) );
 
-        uint32_t occurrence = decimal( record.substr( 0, namesAt ), wxS( "OrCAD CIS occurrence ID is invalid" ) );
-        std::vector<std::string> names = split( record.substr( namesAt + 1, valuesAt - namesAt - 1 ), '^' );
-        std::vector<std::string> values = split( record.substr( valuesAt + 1 ), '^' );
+        size_t end = text.find( '~', valuesAt );
 
+        while( end != std::string::npos && !closesRecord( end ) )
+            end = text.find( '~', end + 1 );
+
+        uint32_t occurrence =
+                decimal( text.substr( start, namesAt - start ), wxS( "OrCAD CIS occurrence ID is invalid" ) );
+        std::vector<std::string> names = split( text.substr( namesAt + 1, valuesAt - namesAt - 1 ), '^' );
+        std::vector<std::string> values =
+                split( text.substr( valuesAt + 1, end == std::string::npos ? end : end - valuesAt - 1 ), '^' );
+
+        start = end == std::string::npos ? text.size() : end + 1;
+
+        // Capture truncates a stream's last value at a '~', leaving fewer values than names
         if( names.size() != values.size() )
-            THROW_IO_ERROR( wxS( "OrCAD CIS property names and values have different counts" ) );
+        {
+            if( start < text.size() )
+                THROW_IO_ERROR( wxS( "OrCAD CIS property names and values have different counts" ) );
+
+            continue;
+        }
 
         auto& properties = result[occurrence];
 
@@ -148,20 +184,27 @@ std::map<uint32_t, std::map<std::string, std::string>> OrcadCisParsePropertyUpda
 std::map<uint32_t, bool> OrcadCisParseMemberships( const std::vector<char>& aData )
 {
     std::map<uint32_t, bool> result;
+    std::vector<std::string> records = split( payload( aData ), 0xB0 );
 
-    for( const std::string& record : split( payload( aData ), '~' ) )
+    // The first field flags whether the group carries property updates
+    for( size_t i = 1; i < records.size(); ++i )
     {
+        const std::string& record = records[i];
+
         if( record.empty() )
             continue;
 
-        size_t separator = record.find( static_cast<char>( 0xB0 ) );
+        size_t separator = record.find( '~' );
 
-        if( separator != 1 || ( record[0] != '0' && record[0] != '1' ) )
+        if( separator == std::string::npos || separator + 2 != record.size()
+            || ( record.back() != '0' && record.back() != '1' ) )
+        {
             THROW_IO_ERROR( wxS( "OrCAD CIS group membership is malformed" ) );
+        }
 
         uint32_t occurrence =
-                decimal( record.substr( separator + 1 ), wxS( "OrCAD CIS membership occurrence ID is invalid" ) );
-        result[occurrence] = record[0] == '1';
+                decimal( record.substr( 0, separator ), wxS( "OrCAD CIS membership occurrence ID is invalid" ) );
+        result[occurrence] = record.back() == '1';
     }
 
     return result;

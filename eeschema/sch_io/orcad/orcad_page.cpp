@@ -256,7 +256,7 @@ static void readOccurrence( ORCAD_STRUCT_READER& aReader, ORCAD_OCC_SCOPE& aScop
     std::map<std::string, std::string> props;
     readOccHeader( aReader, 0x42, &props );
 
-    stream.ReadU32();
+    uint32_t occurrenceId = stream.ReadU32();
     uint32_t blockObjectId = stream.ReadU32();
 
     if( !aReader.Dialect().legacy )
@@ -301,6 +301,8 @@ static void readOccurrence( ORCAD_STRUCT_READER& aReader, ORCAD_OCC_SCOPE& aScop
 
         if( !unitRef.empty() )
             aScope.partUnitRefs[blockObjectId] = std::move( unitRef );
+
+        aScope.partOccurrenceIds[blockObjectId] = occurrenceId;
     }
 }
 

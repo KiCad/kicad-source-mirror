@@ -525,6 +525,7 @@ struct ORCAD_OCC_SCOPE
     std::map<uint32_t, std::string>                        partUnitRefs; ///< dbId -> package unit reference
     std::map<uint32_t, std::map<std::string, std::string>> partProps; ///< dbId -> occurrence properties
     std::map<uint32_t, std::string>                        netNames; ///< occurrence net id -> effective net name
+    std::map<uint32_t, uint32_t>                           partOccurrenceIds; ///< dbId -> part occurrence id
     std::vector<ORCAD_OCC_BLOCK>                           blocks; ///< hierarchical block occurrences
 };
 
@@ -535,6 +536,15 @@ struct ORCAD_OCC_BLOCK
     uint32_t        targetDbId = 0; ///< type-12 drawn-instance dbId on the parent page
     std::string     childFolder;    ///< child schematic folder name
     ORCAD_OCC_SCOPE scope;          ///< the child's occurrences under this path
+};
+
+
+/** A CIS BOM variant, keyed by part occurrence id. Parts it does not mention follow the core design. */
+struct ORCAD_CIS_VARIANT
+{
+    std::string                                            name;
+    std::map<uint32_t, bool>                               installed;
+    std::map<uint32_t, std::map<std::string, std::string>> props;
 };
 
 
@@ -560,6 +570,9 @@ struct ORCAD_DESIGN
     ORCAD_OCC_SCOPE occurrenceRoot;
 
     bool hasHierarchyBlocks = false;
+
+    std::vector<ORCAD_CIS_VARIANT> cisVariants;
+    std::string                    cisCurrentVariant; ///< CIS variant selected for the import
 };
 
 #endif // ORCAD_RECORDS_H_

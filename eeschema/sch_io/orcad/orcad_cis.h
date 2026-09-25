@@ -33,8 +33,10 @@ using ORCAD_CIS_SCHEMATIC_INFO = std::map<std::string, std::map<uint32_t, ORCAD_
 
 std::vector<std::string> OrcadCisParseCountedList( const std::vector<char>& aData, uint8_t aSeparator );
 
-std::map<uint32_t, std::map<std::string, std::string>> OrcadCisParsePropertyUpdates( const std::vector<char>& aData );
+/** Occurrence id -> property overrides. A final record Capture cut short at a '~' is dropped. */
+std::map<uint32_t, ORCAD_CIS_PROPERTIES> OrcadCisParsePropertyUpdates( const std::vector<char>& aData );
 
+/** Occurrence id -> installed state of each part in a group. */
 std::map<uint32_t, bool> OrcadCisParseMemberships( const std::vector<char>& aData );
 
 ORCAD_CIS_SCHEMATIC_INFO OrcadCisParseSchematicInfo( const std::vector<char>& aData );

@@ -419,7 +419,7 @@ bool isBookkeepingProp( const std::string& aName )
 {
     static const char* const skipped[] = {
         "Part Reference",      "Reference",           "Name",           "Graphic",        "Implementation",
-        "Implementation Type", "Source Library",      "Source Package", "Source Part",
+        "Implementation Type", "Source Library",      "Source Package", "Source Part",    "Power Pins Visible",
     };
 
     for( const char* name : skipped )
@@ -429,6 +429,34 @@ bool isBookkeepingProp( const std::string& aName )
     }
 
     return false;
+}
+
+
+/// Field a placed-part property becomes, as placeSymbolFields() names it; empty when it is no field
+wxString propertyFieldName( const std::string& aProperty )
+{
+    if( OrcadIEquals( aProperty, "Part Reference" ) || OrcadIEquals( aProperty, "Reference" )
+        || isBookkeepingProp( aProperty ) )
+    {
+        return wxEmptyString;
+    }
+
+    if( OrcadIEquals( aProperty, "Value" ) )
+        return GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );
+
+    if( OrcadIEquals( aProperty, "Description" ) )
+        return GetDefaultFieldName( FIELD_T::DESCRIPTION, UNTRANSLATED );
+
+    if( OrcadIEquals( aProperty, "Datasheet" ) )
+        return GetDefaultFieldName( FIELD_T::DATASHEET, UNTRANSLATED );
+
+    if( OrcadIEquals( aProperty, "PCB Footprint" ) )
+        return wxS( "OrCAD Footprint" );
+
+    if( OrcadIEquals( aProperty, "Footprint" ) )
+        return wxS( "OrCAD Footprint Property" );
+
+    return FromOrcadString( aProperty );
 }
 
 
@@ -761,8 +789,9 @@ void ORCAD_CONVERTER::prepareSymbols()
                 std::string sourceLibrary = sourceProperty != inst.props.end() ? sourceProperty->second
                                                                               : inst.sourceLibrary;
 
-                bool sourceMatchedGraphics = !sourceLibrary.empty() && !matching->sourceLib.empty()
-                                             && normalizedPath( sourceLibrary ) == normalizedPath( matching->sourceLib );
+                bool sourceMatchedGraphics =
+                        !sourceLibrary.empty() && !matching->sourceLib.empty()
+                        && normalizedPath( sourceLibrary ) == normalizedPath( matching->sourceLib );
 
                 if( matching != &symbol->second && !sourceMatchedGraphics
                     && std::none_of( symbol->second.variants.begin(), symbol->second.variants.end(),
@@ -3104,6 +3133,8 @@ void ORCAD_CONVERTER::placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_I
     if( def.pins.empty() && aInst.pins.empty() )
         symbol->SetExcludedFromBoard( true );
 
+    applyCisVariants( symbol, aInst, aSheetPath, value );
+
     m_sourceInstances[symbol] = &aInst;
     auto& sourcePins = m_sourcePinIdentities[symbol];
 
@@ -3142,6 +3173,68 @@ void ORCAD_CONVERTER::placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_I
     {
         if( pin.IsNoConnect() && !pin.wordA && !pin.wordB )
             appendPageItem( aScreen, new SCH_NO_CONNECT( OrcadDbuToIu( pin.x, pin.y ) ) );
+    }
+}
+
+
+void ORCAD_CONVERTER::applyCisVariants( SCH_SYMBOL* aSymbol, const ORCAD_PLACED_INSTANCE& aInst,
+                                        const SCH_SHEET_PATH& aSheetPath, const std::string& aValue )
+{
+    if( m_design.cisVariants.empty() )
+        return;
+
+    const ORCAD_OCC_SCOPE* scope = m_scope.occ;
+
+    if( !scope )
+        return;
+
+    auto occurrence = scope->partOccurrenceIds.find( aInst.dbId );
+
+    if( occurrence == scope->partOccurrenceIds.end() )
+        return;
+
+    for( const ORCAD_CIS_VARIANT& cis : m_design.cisVariants )
+    {
+        SCH_SYMBOL_VARIANT variant( FromOrcadString( cis.name ) );
+        variant.InitializeAttributes( *aSymbol );
+
+        if( auto installed = cis.installed.find( occurrence->second ); installed != cis.installed.end() )
+            variant.m_DNP = !installed->second;
+
+        // A variant that installs a part the core design leaves out shows its value, not the "NI" marker
+        if( aSymbol->GetDNP() && !variant.m_DNP && aSymbol->GetField( FIELD_T::VALUE )->GetText() == wxS( "NI" ) )
+            variant.m_Fields[aSymbol->GetField( FIELD_T::VALUE )->GetName()] = FromOrcadString( aValue );
+
+        if( auto props = cis.props.find( occurrence->second ); props != cis.props.end() )
+        {
+            for( const auto& [property, value] : props->second )
+            {
+                wxString fieldName = propertyFieldName( property );
+
+                // CIS database rows fill unused columns with this placeholder
+                if( fieldName.IsEmpty() || value == "UNDEFINED" )
+                    continue;
+
+                wxString   text = value == "<" + property + ">" ? wxString() : FromOrcadString( value );
+                SCH_FIELD* field = aSymbol->FindFieldCaseInsensitive( fieldName );
+
+                // KiCad variants override existing fields, so a property only the variant sets gets an empty base
+                if( !field )
+                {
+                    SCH_FIELD added( aSymbol, FIELD_T::USER, fieldName );
+                    added.SetPosition( aSymbol->GetPosition() );
+                    added.SetTextSize( VECTOR2I( schMm( 1.27 ), schMm( 1.27 ) ) );
+                    added.SetVisible( false );
+                    field = aSymbol->AddField( added );
+                }
+
+                if( field->GetText() != text )
+                    variant.m_Fields[field->GetName()] = text;
+            }
+        }
+
+        if( variant.HasDifferentials( *aSymbol ) )
+            aSymbol->AddVariant( aSheetPath, variant );
     }
 }
 

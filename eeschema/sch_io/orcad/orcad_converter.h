@@ -354,6 +354,11 @@ private:
     void placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_INSTANCE& aInst, SCH_SCREEN* aScreen,
                         const SCH_SHEET_PATH& aSheetPath );
 
+    /** Record each CIS variant's installed state and property overrides as KiCad symbol variants.
+     *  aValue is the part value before a not-installed part shows "NI". */
+    void applyCisVariants( SCH_SYMBOL* aSymbol, const ORCAD_PLACED_INSTANCE& aInst,
+                           const SCH_SHEET_PATH& aSheetPath, const std::string& aValue );
+
     /** Use the occurrence reference when the instance has an unannotated template. */
     wxString resolveReference( const ORCAD_PLACED_INSTANCE& aInst ) const;
 

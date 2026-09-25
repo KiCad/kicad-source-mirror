@@ -125,25 +125,17 @@ enumChildren( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FILE_ENTRY*
 }
 
 
-void mergeCisProperties( ORCAD_OCC_SCOPE& aScope, uint32_t aOccurrence,
-                         const std::map<std::string, std::string>& aProperties, bool& aMatched )
+void collectPartOccurrences( const ORCAD_OCC_SCOPE& aScope, std::multimap<uint32_t, uint32_t>& aOccurrences )
 {
-    if( aScope.partRefs.count( aOccurrence ) || aScope.partProps.count( aOccurrence ) )
-    {
-        auto& target = aScope.partProps[aOccurrence];
+    for( const auto& [dbId, occurrence] : aScope.partOccurrenceIds )
+        aOccurrences.emplace( dbId, occurrence );
 
-        for( const auto& [name, value] : aProperties )
-            target.insert_or_assign( name, value );
-
-        aMatched = true;
-    }
-
-    for( ORCAD_OCC_BLOCK& block : aScope.blocks )
-        mergeCisProperties( block.scope, aOccurrence, aProperties, aMatched );
+    for( const ORCAD_OCC_BLOCK& block : aScope.blocks )
+        collectPartOccurrences( block.scope, aOccurrences );
 }
 
 
-void applyCisVariant( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FILE_ENTRY* aRoot,
+void readCisVariants( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FILE_ENTRY* aRoot,
                       const std::map<std::string, UTF8>* aProperties, ORCAD_DESIGN& aDesign, REPORTER* aReporter )
 {
     const CFB::COMPOUND_FILE_ENTRY* cisStorage = aFile.FindStreamSingleLevel( aRoot, "CIS", false );
@@ -182,9 +174,11 @@ void applyCisVariant( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FIL
     if( selected.empty() )
         return;
 
+    // Capture shows the active variant name where the title block reads "<Core Design>"
     auto applyVariantName = [&]( std::vector<ORCAD_RAW_PAGE>& aPages )
     {
         constexpr std::string_view placeholder = "<Core Design>";
+        constexpr std::string_view variantVar = "${VARIANT}";
 
         for( ORCAD_RAW_PAGE& page : aPages )
         {
@@ -196,8 +190,8 @@ void applyCisVariant( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FIL
 
                     while( ( offset = value.find( placeholder, offset ) ) != std::string::npos )
                     {
-                        value.replace( offset, placeholder.size(), selected );
-                        offset += selected.size();
+                        value.replace( offset, placeholder.size(), variantVar );
+                        offset += variantVar.size();
                     }
                 }
             }
@@ -212,67 +206,34 @@ void applyCisVariant( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FIL
     for( auto& [folder, pages] : aDesign.unreferencedFolderPages )
         applyVariantName( pages );
 
-    std::map<std::string, const CFB::COMPOUND_FILE_ENTRY*> variantEntries;
+    struct CIS_GROUP
+    {
+        const CFB::COMPOUND_FILE_ENTRY* membership = nullptr;
+        const CFB::COMPOUND_FILE_ENTRY* updates = nullptr;
+        std::string                     schematicName;
+    };
 
-    for( const auto& [name, entry] : enumChildren( aFile, bomStorage, false ) )
-        variantEntries.emplace( name, entry );
+    // Variant definitions name subgroups "<group>_<sub>"; schematic info names them "<group>-<sub>"
+    std::map<std::string, CIS_GROUP> groups;
 
-    auto selectedEntry = variantEntries.find( selected );
-
-    if( selectedEntry == variantEntries.end() )
-        THROW_IO_ERROR( _( "The selected OrCAD CIS variant has no definition storage." ) );
-
-    const CFB::COMPOUND_FILE_ENTRY* definition = aFile.FindStreamSingleLevel( selectedEntry->second, selected, true );
-
-    if( !definition )
-        THROW_IO_ERROR( _( "The selected OrCAD CIS variant has no definition stream." ) );
-
-    std::vector<std::string>        selectedGroups = OrcadCisParseCountedList( readStream( aFile, definition ), 0xF9 );
-    const CFB::COMPOUND_FILE_ENTRY* groupsStorage = aFile.FindStreamSingleLevel( variantStore, "Groups", false );
-    std::map<std::string, const CFB::COMPOUND_FILE_ENTRY*> updateStreams;
-    std::map<std::string, std::string>                     schematicGroupNames;
-
-    if( groupsStorage )
+    if( const CFB::COMPOUND_FILE_ENTRY* groupsStorage =
+                aFile.FindStreamSingleLevel( variantStore, "Groups", false ) )
     {
         for( const auto& [groupName, groupEntry] : enumChildren( aFile, groupsStorage, false ) )
         {
-            schematicGroupNames.emplace( groupName, groupName );
-
-            if( const CFB::COMPOUND_FILE_ENTRY* update =
-                        aFile.FindStreamSingleLevel( groupEntry, "UpdateStorageGroupDataStream", true ) )
-            {
-                updateStreams.emplace( groupName, update );
-            }
+            groups[groupName] = { aFile.FindStreamSingleLevel( groupEntry, groupName, true ),
+                                  aFile.FindStreamSingleLevel( groupEntry, "UpdateStorageGroupDataStream", true ),
+                                  groupName };
 
             for( const auto& [subgroupName, subgroupEntry] : enumChildren( aFile, groupEntry, false ) )
             {
-                schematicGroupNames.emplace( groupName + "_" + subgroupName, groupName + "-" + subgroupName );
-
-                if( const CFB::COMPOUND_FILE_ENTRY* update =
-                            aFile.FindStreamSingleLevel( subgroupEntry, "UpdateStorageSubGroupDataStream", true ) )
-                {
-                    updateStreams.emplace( groupName + "_" + subgroupName, update );
-                }
+                groups[groupName + "_" + subgroupName] = {
+                    aFile.FindStreamSingleLevel( subgroupEntry, subgroupName, true ),
+                    aFile.FindStreamSingleLevel( subgroupEntry, "UpdateStorageSubGroupDataStream", true ),
+                    groupName + "-" + subgroupName
+                };
             }
         }
-    }
-
-    for( const std::string& groupName : selectedGroups )
-    {
-        if( groupName == "Common" || groupName == "CommonNI" )
-            continue;
-
-        auto stream = updateStreams.find( groupName );
-
-        if( stream == updateStreams.end() )
-        {
-            if( schematicGroupNames.count( groupName ) )
-                continue;
-
-            THROW_IO_ERROR( _( "The selected OrCAD CIS variant references an unknown property group." ) );
-        }
-
-        OrcadCisParsePropertyUpdates( readStream( aFile, stream->second ) );
     }
 
     ORCAD_CIS_SCHEMATIC_INFO        schematicInfo;
@@ -312,32 +273,99 @@ void applyCisVariant( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FIL
         }
     }
 
-    for( const std::string& selectedGroup : selectedGroups )
+    // Schematic info is keyed by placement; repeated child pages give one placement several occurrences
+    std::multimap<uint32_t, uint32_t> partOccurrences;
+    collectPartOccurrences( aDesign.occurrenceRoot, partOccurrences );
+
+    std::map<std::string, const CFB::COMPOUND_FILE_ENTRY*> variantEntries;
+
+    for( const auto& [name, entry] : enumChildren( aFile, bomStorage, false ) )
+        variantEntries.emplace( name, entry );
+
+    for( const std::string& name : names )
     {
-        auto groupName = schematicGroupNames.find( selectedGroup );
+        ORCAD_CIS_VARIANT variant;
+        variant.name = name;
 
-        if( groupName == schematicGroupNames.end() )
-            continue;
-
-        auto group = schematicInfo.find( groupName->second );
-
-        if( group == schematicInfo.end() )
-            continue;
-
-        for( const auto& [occurrence, properties] : group->second )
+        // Capture matches property names without case, so a later spelling replaces an earlier one
+        auto overlay = [&]( uint32_t aOccurrence, const ORCAD_CIS_PROPERTIES& aProperties )
         {
-            bool matched = false;
-            mergeCisProperties( aDesign.occurrenceRoot, occurrence, properties, matched );
+            ORCAD_CIS_PROPERTIES& target = variant.props[aOccurrence];
 
-            if( !matched )
+            for( const auto& [property, value] : aProperties )
             {
-                auto& target = aDesign.occurrenceRoot.partProps[occurrence];
+                auto existing = std::find_if( target.begin(), target.end(),
+                                              [&]( const auto& aExisting )
+                                              {
+                                                  return OrcadIEquals( aExisting.first, property );
+                                              } );
 
-                for( const auto& [name, value] : properties )
-                    target.insert_or_assign( name, value );
+                if( existing != target.end() )
+                    target.erase( existing );
+
+                target.emplace( property, value );
+            }
+        };
+
+        auto entry = variantEntries.find( name );
+        const CFB::COMPOUND_FILE_ENTRY* definition =
+                entry != variantEntries.end() ? aFile.FindStreamSingleLevel( entry->second, name, true ) : nullptr;
+
+        if( !definition )
+            THROW_IO_ERROR( wxString::Format( _( "The OrCAD CIS variant '%s' has no definition stream." ),
+                                              wxString::FromUTF8( name ) ) );
+
+        // Later groups override earlier ones, and schematic info overrides a group's stored updates
+        for( const std::string& groupName : OrcadCisParseCountedList( readStream( aFile, definition ), 0xF9 ) )
+        {
+            auto group = groups.find( groupName );
+
+            if( group == groups.end() )
+            {
+                if( groupName == "Common" || groupName == "CommonNI" )
+                    continue;
+
+                THROW_IO_ERROR( wxString::Format( _( "The OrCAD CIS variant '%s' references an unknown "
+                                                     "property group." ),
+                                                  wxString::FromUTF8( name ) ) );
+            }
+
+            if( group->second.membership )
+            {
+                for( const auto& [occurrence, installed] :
+                     OrcadCisParseMemberships( readStream( aFile, group->second.membership ) ) )
+                {
+                    variant.installed[occurrence] = installed;
+                }
+            }
+
+            if( group->second.updates )
+            {
+                for( const auto& [occurrence, properties] :
+                     OrcadCisParsePropertyUpdates( readStream( aFile, group->second.updates ) ) )
+                {
+                    overlay( occurrence, properties );
+                }
+            }
+
+            auto info = schematicInfo.find( group->second.schematicName );
+
+            if( info == schematicInfo.end() )
+                continue;
+
+            for( const auto& [dbId, properties] : info->second )
+            {
+                auto [first, last] = partOccurrences.equal_range( dbId );
+
+                for( auto it = first; it != last; ++it )
+                    overlay( it->second, properties );
             }
         }
+
+        aDesign.cisVariants.push_back( std::move( variant ) );
     }
+
+    aDesign.cisCurrentVariant = selected;
 
     if( aReporter )
     {
@@ -803,7 +831,7 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
             }
         }
 
-        applyCisVariant( cfbFile, root, aProperties, design, m_reporter );
+        readCisVariants( cfbFile, root, aProperties, design, m_reporter );
     }
     catch( const CFB::CFBException& e )
     {
@@ -813,6 +841,13 @@ SCH_SHEET* SCH_IO_ORCAD::LoadSchematicFile( const wxString& aFileName, SCHEMATIC
     ORCAD_CONVERTER converter( design, aSchematic, m_reporter, m_progressReporter );
 
     converter.Convert( rootSheet );
+
+    // KiCad's default variant is Capture's core design; the variant selected for import becomes current
+    for( const ORCAD_CIS_VARIANT& variant : design.cisVariants )
+        aSchematic->AddVariant( FromOrcadString( variant.name ) );
+
+    if( !design.cisCurrentVariant.empty() )
+        aSchematic->SetCurrentVariant( FromOrcadString( design.cisCurrentVariant ) );
 
     aSchematic->Settings().m_ShowDNPMarkers = false;
 
