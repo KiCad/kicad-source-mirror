@@ -64,16 +64,47 @@ bool DIALOG_EXPORT_IDF3::TransferDataToWindow()
 
 bool DIALOG_EXPORT_IDF3::TransferDataFromWindow()
 {
-    wxFileName fn = m_filePickerIDF->GetPath();
+    wxFileName brdFile( m_filePickerIDF->GetPath() );
+    brdFile.SetExt( wxT( "emn" ) );
 
-    if( fn.FileExists() )
+    wxFileName libFile( m_filePickerIDF->GetPath() );
+    libFile.SetExt( wxT( "emp" ) );
+
+    wxArrayString existing;
+
+    if( brdFile.FileExists() )
+        existing.push_back( brdFile.GetFullPath() );
+
+    if( libFile.FileExists() )
+        existing.push_back( libFile.GetFullPath() );
+
+    if( !existing.empty() )
     {
-        KIDIALOG dlg( this, wxString::Format( _( "File %s already exists." ), fn.GetPath() ),
-                      _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        wxString msg;
+
+        if( existing.size() == 1 )
+            msg = wxString::Format( _( "File %s already exists." ), existing[0] );
+        else
+            msg = wxString::Format( _( "Files %s and %s already exist." ), existing[0], existing[1] );
+
+        KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
         dlg.SetOKLabel( _( "Overwrite" ) );
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
-        return ( dlg.ShowModal() == wxID_OK );
+        if( dlg.ShowModal() != wxID_OK )
+            return false;
+    }
+
+    for( const wxFileName& fn : { brdFile, libFile } )
+    {
+        if( fn.FileExists() && !fn.IsFileWritable() )
+        {
+            wxMessageBox( wxString::Format( _( "Insufficient permissions to write file '%s'." ),
+                                            fn.GetFullPath() ),
+                          _( "IDF Export" ), wxOK | wxICON_ERROR );
+
+            return false;
+        }
     }
 
     return true;
