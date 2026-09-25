@@ -995,6 +995,7 @@ void DIALOG_ERC::OnIgnoredItemRClick( wxListEvent& event )
         if( settings.GetSeverity( errorCode ) != severity )
         {
             settings.SetSeverity( errorCode, (SEVERITY) severity );
+            m_ignoredList->DeleteItem( event.m_itemIndex );
 
             updateDisplayedCounts();
             redrawDrawPanel();

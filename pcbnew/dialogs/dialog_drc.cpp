@@ -1133,6 +1133,7 @@ void DIALOG_DRC::OnIgnoredItemRClick( wxListEvent& event )
         if( bds().m_DRCSeverities[ errorCode ] != severity )
         {
             bds().m_DRCSeverities[ errorCode ] = (SEVERITY) severity;
+            m_ignoredList->DeleteItem( event.m_itemIndex );
 
             updateDisplayedCounts();
             refreshEditor();
