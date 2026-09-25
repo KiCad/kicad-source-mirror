@@ -453,6 +453,10 @@ void WX_GRID::onIdleRefreshHighlight( wxIdleEvent& aEvent )
 
 void WX_GRID::onCellEditorShown( wxGridEvent& aEvent )
 {
+    // wxGrid slides the editor of a partially visible cell left or up until it fits, covering
+    // the neighbouring cells, so scroll the whole cell into view before the editor is placed
+    MakeCellVisible( aEvent.GetRow(), aEvent.GetCol() );
+
     if( alg::contains( m_autoEvalCols, aEvent.GetCol() ) )
     {
         int row = aEvent.GetRow();
