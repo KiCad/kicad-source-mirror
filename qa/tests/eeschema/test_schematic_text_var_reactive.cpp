@@ -21,7 +21,9 @@
 #include <algorithm>
 #include <memory>
 
+#include <eeschema_helpers.h>
 #include <eeschema_test_utils.h>
+#include <locale_io.h>
 #include <schematic.h>
 #include <schematic_text_var_adapter.h>
 #include <sch_screen.h>
@@ -161,6 +163,59 @@ BOOST_AUTO_TEST_CASE( SpiceOPTokensAreNotRegistered )
     sch.GetTextVarAdapter()->OnSchItemsAdded( sch, items );
 
     BOOST_CHECK_EQUAL( sch.GetTextVarAdapter()->Tracker().Index().ItemCount(), 0u );
+}
+
+
+BOOST_AUTO_TEST_CASE( LoadedSchematicIsIndexed )
+{
+    LOCALE_IO dummy;
+
+    wxString path = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() )
+                    + wxS( "NoConnectOnLineWithGlobalLabel.kicad_sch" );
+    std::unique_ptr<SCHEMATIC> sch( EESCHEMA_HELPERS::LoadSchematic( path, true, true ) );
+    BOOST_REQUIRE( sch );
+
+    // Both global labels carry ${INTERSHEET_REFS} in their intersheet references field
+    const TEXT_VAR_DEPENDENCY_INDEX& index = sch->GetTextVarAdapter()->Tracker().Index();
+    BOOST_CHECK_EQUAL( index.DependentCount( TEXT_VAR_REF_KEY::FromToken( wxT( "INTERSHEET_REFS" ) ) ), 2u );
+}
+
+
+BOOST_AUTO_TEST_CASE( ReplacedSheetScreenIsUnindexed )
+{
+    LOCALE_IO dummy;
+
+    wxString path = wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir() ) + wxS( "issue13212.kicad_sch" );
+    std::unique_ptr<SCHEMATIC> sch( EESCHEMA_HELPERS::LoadSchematic( path, true, true ) );
+    BOOST_REQUIRE( sch );
+
+    const TEXT_VAR_REF_KEY           key = TEXT_VAR_REF_KEY::FromToken( wxT( "INTERSHEET_REFS" ) );
+    const TEXT_VAR_DEPENDENCY_INDEX& index = sch->GetTextVarAdapter()->Tracker().Index();
+
+    // Root holds 3 labels, subsheet 1 holds 2, and the shared subsheet 2 holds 1
+    BOOST_REQUIRE_EQUAL( index.DependentCount( key ), 6u );
+
+    SCH_SHEET* subsheet = nullptr;
+
+    for( SCH_ITEM* item : sch->RootScreen()->Items().OfType( SCH_SHEET_T ) )
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+        if( sheet->GetFileName().EndsWith( wxS( "issue13212_subsheet_1.kicad_sch" ) ) )
+            subsheet = sheet;
+    }
+
+    BOOST_REQUIRE( subsheet );
+
+    // Same sequence as pointing a sheet at another file outside undo; the old screen is freed
+    subsheet->SetScreen( new SCH_SCREEN( sch.get() ) );
+
+    std::vector<SCH_ITEM*> items{ subsheet };
+    sch->OnItemsRemoved( items );
+    sch->OnItemsAdded( items );
+    sch->RefreshHierarchy();
+
+    BOOST_CHECK_EQUAL( index.DependentCount( key ), 4u );
 }
 
 

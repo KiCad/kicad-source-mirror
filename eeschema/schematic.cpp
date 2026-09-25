@@ -341,6 +341,10 @@ void SCHEMATIC::ensureCurrentSheetIsTopLevel()
 
 void SCHEMATIC::rebuildHierarchyState( bool aResetConnectionGraph )
 {
+    // Loaders and importers fill screens directly, bypassing the item listeners
+    if( m_textVarAdapter )
+        m_textVarAdapter->MarkHierarchyChanged();
+
     RefreshHierarchy();
 
     if( aResetConnectionGraph )
@@ -561,6 +565,9 @@ void SCHEMATIC::AdoptContent( SCHEMATIC_CONTENT&& aContent ) noexcept
     }
 
     delete outgoingGraph;
+
+    if( m_textVarAdapter )
+        m_textVarAdapter->RebuildIndex();
 }
 
 
@@ -587,6 +594,9 @@ void SCHEMATIC::RefreshHierarchy()
 {
     ensureDefaultTopLevelSheet();
     m_hierarchy = BuildSheetListSortedByPageNumbers();
+
+    if( m_textVarAdapter )
+        m_textVarAdapter->SyncToHierarchy();
 }
 
 
@@ -2466,6 +2476,10 @@ void SCHEMATIC::RebuildConnectivity( std::function<void( SCH_ITEM* )>* aChangedI
                                       PROGRESS_REPORTER* aProgressReporter,
                                       KIGFX::SCH_VIEW* aSchView )
 {
+    // Some importers populate screens after installing the hierarchy
+    if( m_textVarAdapter )
+        m_textVarAdapter->MarkHierarchyChanged();
+
     RefreshHierarchy();
     m_project->GetProjectFile().NetSettings()->ClearAllCaches();
     std::unordered_set<SCH_SCREEN*> screens;
