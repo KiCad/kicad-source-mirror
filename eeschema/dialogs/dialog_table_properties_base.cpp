@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -196,6 +196,7 @@ DIALOG_TABLE_PROPERTIES_BASE::DIALOG_TABLE_PROPERTIES_BASE( wxWindow* parent, wx
 	// Connect Events
 	this->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_TABLE_PROPERTIES_BASE::onSize ) );
 	m_borderCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLE_PROPERTIES_BASE::onBorderChecked ), NULL, this );
+	m_headerBorder->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLE_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_rowSeparators->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLE_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_colSeparators->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLE_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 }
@@ -205,6 +206,7 @@ DIALOG_TABLE_PROPERTIES_BASE::~DIALOG_TABLE_PROPERTIES_BASE()
 	// Disconnect Events
 	this->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_TABLE_PROPERTIES_BASE::onSize ) );
 	m_borderCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLE_PROPERTIES_BASE::onBorderChecked ), NULL, this );
+	m_headerBorder->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLE_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_rowSeparators->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLE_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 	m_colSeparators->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_TABLE_PROPERTIES_BASE::onBorderChecked ), NULL, this );
 
