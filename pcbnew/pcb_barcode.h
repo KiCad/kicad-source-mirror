@@ -270,8 +270,8 @@ public:
     void OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
                               const EDA_ANGLE& aParentRotate ) override;
 
-    const VECTOR2I&  GetLibraryPos() const { return m_libPos; }
-    const EDA_ANGLE& GetLibraryAngle() const { return m_libAngle; }
+    const VECTOR2I& GetLibraryPos() const { return m_libPos; }
+    EDA_ANGLE       GetLibraryAngle() const { return m_libAngle.GetAngle(); }
 
     void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide ) override;
 
@@ -403,7 +403,7 @@ public:
     double    GetOrientation() const { return GetAngle().AsDegrees(); }
     void   SetOrientation( double aDegrees )
     {
-        EDA_ANGLE newAngle( aDegrees, DEGREES_T );
+        EDA_ANGLE newAngle = EDA_ANGLE( aDegrees, DEGREES_T ).Normalized();
         EDA_ANGLE oldAngle = GetAngle();
 
         if( newAngle != oldAngle )
@@ -443,14 +443,14 @@ public:
     }
 
 private:
-    int            m_width;      ///< Barcode width
-    int            m_height;     ///< Barcode height
-    VECTOR2I       m_libPos;     ///< Position, FP-relative when in a footprint, board absolute otherwise.
-    VECTOR2I       m_margin;     ///< Margin around the barcode (only valid for knockout)
-    PCB_TEXT       m_text;
-    BARCODE_T      m_kind;
-    EDA_ANGLE      m_libAngle;        ///< Angle, FP-relative when in a footprint, board absolute otherwise.
-    BARCODE_ECC_T  m_errorCorrection; ///< Error correction level for QR codes
+    int             m_width;      ///< Barcode width
+    int             m_height;     ///< Barcode height
+    VECTOR2I        m_libPos;     ///< Position, FP-relative when in a footprint, board absolute otherwise.
+    VECTOR2I        m_margin;     ///< Margin around the barcode (only valid for knockout)
+    PCB_TEXT        m_text;
+    BARCODE_T       m_kind;
+    EDA_ORIENTATION m_libAngle;        ///< Angle, FP-relative when in a footprint, board absolute otherwise.
+    BARCODE_ECC_T   m_errorCorrection; ///< Error correction level for QR codes
 
     mutable std::unique_ptr<PCB_BARCODE_CACHE> m_cache;
 

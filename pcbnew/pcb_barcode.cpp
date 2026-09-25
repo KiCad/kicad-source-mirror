@@ -64,7 +64,7 @@ PCB_BARCODE::PCB_BARCODE( BOARD_ITEM* aParent ) :
         m_libPos( 0, 0 ),
         m_text( this ),
         m_kind( BARCODE_T::QR_CODE ),
-        m_libAngle( 0 ),
+        m_libAngle( ANGLE_0 ),
         m_errorCorrection( BARCODE_ECC_T::L )
 {
     m_layer = Dwgs_User;
@@ -134,9 +134,9 @@ VECTOR2I PCB_BARCODE::GetPosition() const
 EDA_ANGLE PCB_BARCODE::GetAngle() const
 {
     if( const FOOTPRINT* fp = GetParentFootprint() )
-        return ( m_libAngle + fp->GetOrientation() ).Normalize();
+        return ( m_libAngle + fp->GetOrientation() ).GetAngle();
 
-    return m_libAngle;
+    return m_libAngle.GetAngle();
 }
 
 
@@ -251,8 +251,6 @@ bool PCB_BARCODE::Deserialize( const google::protobuf::Any& aContainer )
     else
         m_libAngle = newAngle;
 
-    m_libAngle.Normalize();
-
     m_layer = FromProtoEnum<PCB_LAYER_ID, BoardLayer>( barcode.layer() );
 
     m_width = barcode.width().value_nm();
@@ -331,7 +329,6 @@ void PCB_BARCODE::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
         m_libPos = boardPos;
 
     m_libAngle += aAngle;
-    m_libAngle.Normalize();
 
     AssembleBarcode();
 }
@@ -354,8 +351,6 @@ void PCB_BARCODE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         else
             m_libAngle = -m_libAngle;
 
-        m_libAngle.Normalize();
-
         SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
         AssembleBarcode();
         return;
@@ -369,8 +364,6 @@ void PCB_BARCODE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         m_libAngle = ANGLE_180 - m_libAngle;
     else
         m_libAngle = -m_libAngle;
-
-    m_libAngle.Normalize();
 
     SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
     AssembleBarcode();
