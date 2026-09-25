@@ -213,8 +213,10 @@ bool PCB_TABLE::Deserialize( const google::protobuf::Any& aContainer )
 
         if( !cell->Deserialize( protoCell ) )
         {
+            // Since cells are positional, we must add something to the table.  Probably better
+            // to add a new, empy cell than a partially deserialized who-knows-what.
             delete cell;
-            continue;
+            cell = new PCB_TABLECELL( this );
         }
 
         AddCell( cell );
