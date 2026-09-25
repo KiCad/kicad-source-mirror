@@ -233,8 +233,7 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataToWindow()
 }
 
 
-void DIALOG_TABLE_PROPERTIES::getContextualTextVars( const wxString& aCrossRef,
-                                                     wxArrayString*  aTokens )
+void DIALOG_TABLE_PROPERTIES::getContextualTextVars( const wxString& aCrossRef, wxArrayString*  aTokens )
 {
     if( !aCrossRef.IsEmpty() )
     {
@@ -322,6 +321,10 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataFromWindow()
         {
             SCH_TABLECELL* tableCell = m_table->GetCell( row, col );
             wxString       txt = m_grid->GetCellValue( row, col );
+
+            // Don't insert grey colour value back in to table cell
+            if( tableCell->GetColSpan() == 0 || tableCell->GetRowSpan() == 0 )
+                txt = wxEmptyString;
 
             // convert any text variable cross-references to their UUIDs
             if( SCHEMATIC* schematic = tableCell->Schematic() )
