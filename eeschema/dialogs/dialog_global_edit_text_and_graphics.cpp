@@ -400,6 +400,8 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( SCH_COMMIT* aCommit,
         {
             if( !m_selectedFilterOpt->GetValue() || sheet->IsSelected() )
             {
+                aCommit->Modify( sheet, aSheetPath.LastScreen() );
+
                 if( !m_lineWidth.IsIndeterminate() )
                     sheet->SetBorderWidth( m_lineWidth.GetIntValue() );
 
