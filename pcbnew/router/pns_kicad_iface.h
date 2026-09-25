@@ -105,6 +105,8 @@ public:
     bool GetSignalAggregate( PNS::NET_HANDLE aNetP, PNS::NET_HANDLE aNetN,
                              long long& aExtraLength, long long& aExtraDelay ) const override;
     long long GetNetBoardLength( PNS::NET_HANDLE aNet ) const override;
+    void RemoveBoardConnected( const std::vector<const PNS::ITEM*>& aJoined,
+                               std::set<PNS::ITEM*>& aItems ) const override;
 
     void SetStartLayerFromPCBNew( PCB_LAYER_ID aLayer );
     void SetStartLayerFromPNS( int aLayer ) { m_startLayer = aLayer; }

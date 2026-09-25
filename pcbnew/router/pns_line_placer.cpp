@@ -1903,7 +1903,7 @@ void LINE_PLACER::updateLeadingRatLine()
 {
     LINE current = Trace();
     SHAPE_LINE_CHAIN ratLine;
-    TOPOLOGY topo( m_lastNode );
+    TOPOLOGY topo( m_lastNode, m_router->GetInterface() );
 
     if( topo.LeadingRatLine( &current, ratLine ) )
         m_router->GetInterface()->DisplayRatline( ratLine, m_currentNet );

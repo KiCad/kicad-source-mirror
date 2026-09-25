@@ -51,8 +51,14 @@ public:
 
     typedef std::set<const JOINT*> JOINT_SET;
 
-    TOPOLOGY( NODE* aNode ):
-        m_world( aNode ) {};
+    /**
+     * @param aIface if given, lets board connections the router does not model, such as zones,
+     *               count when searching for unconnected items.
+     */
+    TOPOLOGY( NODE* aNode, ROUTER_IFACE* aIface = nullptr ) :
+            m_world( aNode ),
+            m_iface( aIface )
+    {}
 
     ~TOPOLOGY() {};
 
@@ -140,7 +146,8 @@ private:
                                 const JOINT** aTerminalJointB,
                                 bool aFollowLockedSegments = false );
 
-    NODE *m_world;
+    NODE*         m_world;
+    ROUTER_IFACE* m_iface;
 };
 
 }

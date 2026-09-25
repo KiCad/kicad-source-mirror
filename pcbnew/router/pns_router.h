@@ -138,6 +138,12 @@ enum DRAG_MODE
     virtual long long GetNetBoardLength( NET_HANDLE aNet ) const { return 0; }
 
     /**
+     * Remove from @a aItems every item the board already joins to one of @a aJoined through
+     * objects the router does not model, such as zones.
+     */
+    virtual void RemoveBoardConnected( const std::vector<const ITEM*>& aJoined, std::set<ITEM*>& aItems ) const {}
+
+    /**
      * Return the layer span a via placed with @a aSizes occupies.  A through via always spans
      * the whole board; the layer pair only selects the span of blind, buried and micro vias.
      */

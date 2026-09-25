@@ -531,7 +531,7 @@ bool ROUTER::GetNearestRatnestAnchor( VECTOR2I& aOtherEnd, PNS_LAYER_RANGE& aOth
         return false;
 
     PNS::NODE*    lastNode = placer->CurrentNode( true );
-    PNS::TOPOLOGY topo( lastNode );
+    PNS::TOPOLOGY topo( lastNode, m_iface );
 
     // If the user has drawn a line, get the anchor nearest to the line end
     if( trace->SegmentCount() > 0 )

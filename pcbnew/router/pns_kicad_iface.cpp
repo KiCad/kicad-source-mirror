@@ -3188,6 +3188,37 @@ long long PNS_KICAD_IFACE_BASE::GetNetBoardLength( PNS::NET_HANDLE aNet ) const
 }
 
 
+void PNS_KICAD_IFACE_BASE::RemoveBoardConnected( const std::vector<const PNS::ITEM*>& aJoined,
+                                                 std::set<PNS::ITEM*>& aItems ) const
+{
+    if( !m_board )
+        return;
+
+    std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
+    std::set<const BOARD_ITEM*>        boardJoined;
+
+    for( const PNS::ITEM* item : aJoined )
+    {
+        BOARD_ITEM* parent = item->Parent();
+
+        if( !parent || !parent->IsConnected() || !boardJoined.insert( parent ).second )
+            continue;
+
+        for( BOARD_CONNECTED_ITEM* connected :
+             connectivity->GetConnectedItems( static_cast<BOARD_CONNECTED_ITEM*>( parent ) ) )
+        {
+            boardJoined.insert( connected );
+        }
+    }
+
+    std::erase_if( aItems,
+                   [&]( PNS::ITEM* aItem )
+                   {
+                       return aItem->Parent() && boardJoined.count( aItem->Parent() );
+                   } );
+}
+
+
 void PNS_KICAD_IFACE_BASE::SetStartLayerFromPCBNew( PCB_LAYER_ID aLayer )
 {
     m_startLayer = GetPNSLayerFromBoardLayer( aLayer );

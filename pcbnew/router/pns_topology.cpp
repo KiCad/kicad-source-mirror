@@ -149,7 +149,7 @@ bool TOPOLOGY::NearestUnconnectedAnchorPoint( const LINE* aTrack, VECTOR2I& aPoi
     {
         int anchor;
 
-        TOPOLOGY topo( tmpNode.get() );
+        TOPOLOGY topo( tmpNode.get(), m_iface );
         ITEM* it = topo.NearestUnconnectedItem( jt, &anchor );
 
         if( !it )
@@ -184,7 +184,8 @@ bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
 
 ITEM* TOPOLOGY::NearestUnconnectedItem( const JOINT* aStart, int* aAnchor, int aKindMask )
 {
-    std::set<ITEM*> disconnected;
+    std::set<ITEM*>          disconnected;
+    std::vector<const ITEM*> joined;
 
     m_world->AllItemsInNet( aStart->Net(), disconnected );
 
@@ -194,8 +195,14 @@ ITEM* TOPOLOGY::NearestUnconnectedItem( const JOINT* aStart, int* aAnchor, int a
         {
             if( disconnected.find( link ) != disconnected.end() )
                 disconnected.erase( link );
+
+            joined.push_back( link );
         }
     }
+
+    // The router does not model zones, so the board decides what they already join us to
+    if( m_iface )
+        m_iface->RemoveBoardConnected( joined, disconnected );
 
     int best_dist = INT_MAX;
     ITEM* best = nullptr;

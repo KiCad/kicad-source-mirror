@@ -1361,7 +1361,7 @@ void DIFF_PAIR_PLACER::GetModifiedNets( std::vector<NET_HANDLE> &aNets ) const
 void DIFF_PAIR_PLACER::updateLeadingRatLine()
 {
     SHAPE_LINE_CHAIN ratLineN, ratLineP;
-    TOPOLOGY topo( m_lastNode );
+    TOPOLOGY topo( m_lastNode, m_router->GetInterface() );
 
     if( topo.LeadingRatLine( &m_currentTrace.PLine(), ratLineP ) )
         m_router->GetInterface()->DisplayRatline( ratLineP, m_netP );
