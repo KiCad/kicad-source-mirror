@@ -282,9 +282,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 preEditItem = static_cast<BOARD_ITEM*>( entry.m_copy );
 
             if( boardItem->IsOnLayer( Edge_Cuts ) || ( preEditItem && preEditItem->IsOnLayer( Edge_Cuts ) ) )
-            {
                 updateBoardBoundingBox = true;
-            }
 
             if( !( aCommitFlags & SKIP_TEARDROPS ) )
             {
@@ -295,7 +293,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                         {
                             // Pours are the filler's business.  Containers have no copper of
                             // their own and their boxes sweep far more than they occupy.
-                            if( aItem->Type() == PCB_ZONE_T || aItem->Type() == PCB_FOOTPRINT_T
+                            if( aItem->Type() == PCB_ZONE_T
+                                || aItem->Type() == PCB_FOOTPRINT_T
                                 || aItem->Type() == PCB_GROUP_T
                                 || aItem->Type() == PCB_GENERATOR_T )
                             {
@@ -357,12 +356,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
     }
 
     // Old teardrops must be removed before connectivity is rebuilt
-    if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty()
-        || !dirtyCopper.empty() )
-    {
-        teardropMgr.RemoveTeardrops( *this, &staleTeardropPadsAndVias, &staleTeardropTracks,
-                                     &dirtyCopper );
-    }
+    if( !staleTeardropPadsAndVias.empty() || !staleTeardropTracks.empty() || !dirtyCopper.empty() )
+        teardropMgr.RemoveTeardrops( *this, &staleTeardropPadsAndVias, &staleTeardropTracks, &dirtyCopper );
 
     auto updateComponentClasses =
             [this]( BOARD_ITEM* boardItem )
@@ -840,6 +835,12 @@ EDA_ITEM* BOARD_COMMIT::MakeImage( EDA_ITEM* aItem )
 
 void BOARD_COMMIT::Revert()
 {
+    RevertToCheckpoint( 0 );
+}
+
+
+void BOARD_COMMIT::RevertToCheckpoint( int aCheckpoint )
+{
     PICKED_ITEMS_LIST                  undoList;
     KIGFX::VIEW*                       view = m_toolMgr->GetView();   // null in headless sessions
     BOARD*                             board = (BOARD*) m_toolMgr->GetModel();
@@ -863,8 +864,10 @@ void BOARD_COMMIT::Revert()
     std::vector<BOARD_ITEM*> itemsToDelete;
     bool                     containsDrillMap = false;
 
-    for( COMMIT_LINE& entry : m_entries )
+    for( int ii = aCheckpoint; ii < (int) m_entries.size(); ++ii )
     {
+        COMMIT_LINE& entry = m_entries[ii];
+
         if( !entry.m_item || !entry.m_item->IsBOARD_ITEM() )
             continue;
 
@@ -1012,8 +1015,9 @@ void BOARD_COMMIT::Revert()
         }
     }
 
-    clear();
+    m_entries.erase( m_entries.begin() + aCheckpoint, m_entries.end() );
 }
+
 
 EDA_ITEM* BOARD_COMMIT::ResolveItem( KIID& aID )
 {

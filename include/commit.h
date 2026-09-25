@@ -126,10 +126,13 @@ public:
     void Unmodify( EDA_ITEM* aItem, BASE_SCREEN* aScreen );
 
     /// Execute the changes.
-    virtual void Push( const wxString& aMessage = wxT( "A commit" ), int aFlags = 0 ) = 0;
+    virtual void Push( const wxString& aMessage = wxEmptyString, int aFlags = 0 ) = 0;
 
     /// Revert the commit by restoring the modified items state.
     virtual void Revert() = 0;
+
+    int Checkpoint() { return (int) m_entries.size(); }
+    virtual void RevertToCheckpoint( int aCheckpoint ) = 0;
 
     /**
      * Search for an item in this commit that matches the provided KIID.

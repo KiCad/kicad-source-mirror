@@ -1048,7 +1048,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
 {
     ApiResponseStatus e;
 
-    auto containerResult = validateItemHeaderDocument( aHeader );
+    HANDLER_RESULT<std::optional<KIID>> containerResult = validateItemHeaderDocument( aHeader );
 
     if( !containerResult && containerResult.error().status() == ApiStatusCode::AS_UNHANDLED )
     {
@@ -1063,12 +1063,13 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
     }
 
     SCH_SHEET_LIST hierarchy = schematic()->Hierarchy();
-    SCH_SCREEN* targetScreen = schematic()->GetCurrentScreen();
+    SCH_SCREEN*    targetScreen = schematic()->GetCurrentScreen();
     SCH_SHEET_PATH targetPath = m_context->GetCurrentSheet().value_or( *hierarchy.begin() );
 
     if( aHeader.document().has_sheet_path() )
     {
         KIID_PATH kp = UnpackSheetPath( aHeader.document().sheet_path() );
+
         if( std::optional<SCH_SHEET_PATH> path = hierarchy.GetSheetPathByKIIDPath( kp ) )
         {
             targetPath = *path;
@@ -1077,9 +1078,9 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
     }
 
     SCH_COMMIT* commit = static_cast<SCH_COMMIT*>( getCurrentCommit( aClientName ) );
-    bool connectivityChanged = false;   // an in-place symbol update invalidated the net graph
-
-    EDA_ITEM* container = targetScreen;
+    int         commitCheckpoint = commit->Checkpoint();
+    bool        connectivityChanged = false;   // an in-place symbol update invalidated the net graph
+    EDA_ITEM*   container = targetScreen;
 
     if( containerResult->has_value() )
     {
@@ -1103,8 +1104,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
         if( !type )
         {
             status.set_code( ItemStatusCode::ISC_INVALID_TYPE );
-            status.set_error_message( fmt::format( "Could not decode a valid type from {}",
-                                                   anyItem.type_url() ) );
+            status.set_error_message( fmt::format( "Could not decode a valid type from {}", anyItem.type_url() ) );
             aItemHandler( status, anyItem );
             continue;
         }
@@ -1126,7 +1126,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
         // Retained past the unpack: the placement data they carry is applied once the item is
         // in the schematic.
         kiapi::schematic::types::SchematicSymbolInstance symbolProto;
-        kiapi::schematic::types::SheetSymbol            sheetProto;
+        kiapi::schematic::types::SheetSymbol             sheetProto;
 
         if( *type == SCH_SYMBOL_T )
         {
@@ -1163,9 +1163,10 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
 
         if( !unpacked )
         {
+            commit->RevertToCheckpoint( commitCheckpoint );
+
             e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-            e.set_error_message( fmt::format( "could not unpack {} from request",
-                                              item->GetClass().ToStdString() ) );
+            e.set_error_message( fmt::format( "could not unpack {} from request", item->GetClass().ToStdString() ) );
             return tl::unexpected( e );
         }
 
@@ -1331,8 +1332,10 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
         status.set_code( ItemStatusCode::ISC_OK );
         google::protobuf::Any newItem;
 
-        if( aCreate && !item.get() )
+        if( aCreate && !item )
         {
+            commit->RevertToCheckpoint( commitCheckpoint );
+
             e.set_status( ApiStatusCode::AS_BAD_REQUEST );
             e.set_error_message( "could not add the requested item to its parent container" );
             return tl::unexpected( e );

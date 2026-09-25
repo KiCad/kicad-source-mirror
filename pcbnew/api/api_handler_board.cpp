@@ -390,6 +390,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
     }
 
     BOARD_COMMIT* commit = static_cast<BOARD_COMMIT*>( getCurrentCommit( aClientName ) );
+    int           commitCheckpoint = commit->Checkpoint();
 
     for( const google::protobuf::Any& anyItem : aItems )
     {
@@ -399,8 +400,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
         if( !type )
         {
             status.set_code( ItemStatusCode::ISC_INVALID_TYPE );
-            status.set_error_message( fmt::format( "Could not decode a valid type from {}",
-                                                   anyItem.type_url() ) );
+            status.set_error_message( fmt::format( "Could not decode a valid type from {}", anyItem.type_url() ) );
             aItemHandler( status, anyItem );
             continue;
         }
@@ -412,15 +412,14 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
 
             switch( dimension.dimension_style_case() )
             {
-            case board::types::Dimension::kAligned:    type = PCB_DIM_ALIGNED_T;    break;
-            case board::types::Dimension::kOrthogonal: type = PCB_DIM_ORTHOGONAL_T; break;
-            case board::types::Dimension::kRadial:     type = PCB_DIM_RADIAL_T;     break;
-            case board::types::Dimension::kLeader:     type = PCB_DIM_LEADER_T;     break;
-            case board::types::Dimension::kCenter:     type = PCB_DIM_CENTER_T;     break;
-            case board::types::Dimension::DIMENSION_STYLE_NOT_SET: break;
+            case board::types::Dimension::kAligned:                type = PCB_DIM_ALIGNED_T;    break;
+            case board::types::Dimension::kOrthogonal:             type = PCB_DIM_ORTHOGONAL_T; break;
+            case board::types::Dimension::kRadial:                 type = PCB_DIM_RADIAL_T;     break;
+            case board::types::Dimension::kLeader:                 type = PCB_DIM_LEADER_T;     break;
+            case board::types::Dimension::kCenter:                 type = PCB_DIM_CENTER_T;     break;
+            case board::types::Dimension::DIMENSION_STYLE_NOT_SET:                              break;
             }
         }
-
 
         if( *type == PCB_SHAPE_T )
         {
@@ -439,38 +438,38 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
 
         HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>> creationResult =
                 [&]() -> HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>>
-        {
-            if( *type == PCB_GENERATOR_T )
-            {
-                std::optional<wxString> generatorType = GeneratorTypeFromAny( anyItem );
-
-                if( !generatorType )
                 {
-                    ItemStatus genStatus;
-                    genStatus.set_code( ItemStatusCode::ISC_INVALID_TYPE );
-                    genStatus.set_error_message(
-                            fmt::format( "could not decode a generator from {}", anyItem.type_url() ) );
-                    aItemHandler( genStatus, anyItem );
-                    return HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>>( std::unique_ptr<BOARD_ITEM>() );
-                }
+                    if( *type == PCB_GENERATOR_T )
+                    {
+                        std::optional<wxString> generatorType = GeneratorTypeFromAny( anyItem );
 
-                std::unique_ptr<BOARD_ITEM> genItem = CreateGeneratorForType( *generatorType, container );
+                        if( !generatorType )
+                        {
+                            ItemStatus genStatus;
+                            genStatus.set_code( ItemStatusCode::ISC_INVALID_TYPE );
+                            genStatus.set_error_message( fmt::format( "could not decode a generator from {}",
+                                                                      anyItem.type_url() ) );
+                            aItemHandler( genStatus, anyItem );
+                            return HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>>( std::unique_ptr<BOARD_ITEM>() );
+                        }
 
-                if( !genItem )
-                {
-                    ItemStatus genStatus;
-                    genStatus.set_code( ItemStatusCode::ISC_INVALID_TYPE );
-                    genStatus.set_error_message( fmt::format( "generator type {} is not registered",
-                                                              generatorType->ToStdString() ) );
-                    aItemHandler( genStatus, anyItem );
-                    return HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>>( std::unique_ptr<BOARD_ITEM>() );
-                }
+                        std::unique_ptr<BOARD_ITEM> genItem = CreateGeneratorForType( *generatorType, container );
 
-                return HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>>( std::move( genItem ) );
-            }
+                        if( !genItem )
+                        {
+                            ItemStatus genStatus;
+                            genStatus.set_code( ItemStatusCode::ISC_INVALID_TYPE );
+                            genStatus.set_error_message( fmt::format( "generator type {} is not registered",
+                                                                      generatorType->ToStdString() ) );
+                            aItemHandler( genStatus, anyItem );
+                            return HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>>( std::unique_ptr<BOARD_ITEM>() );
+                        }
 
-            return createItemForType( *type, container );
-        }();
+                        return HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>>( std::move( genItem ) );
+                    }
+
+                    return createItemForType( *type, container );
+                }();
 
         if( !creationResult || !creationResult.value() )
         {
@@ -497,6 +496,8 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
 
         if( !unpacked )
         {
+            commit->RevertToCheckpoint( commitCheckpoint );
+
             e.set_status( ApiStatusCode::AS_BAD_REQUEST );
             e.set_error_message( fmt::format( "could not unpack {} from request",
                                               item->GetClass().ToStdString() ) );
@@ -506,10 +507,10 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
         if( std::vector<wxString> removed = item->RemoveConflictingCustomProperties(); !removed.empty() )
         {
             auto as_str =
-                []( const wxString& aIn )
-                {
-                    return std::string( aIn.ToUTF8() );
-                };
+                    []( const wxString& aIn )
+                    {
+                        return std::string( aIn.ToUTF8() );
+                    };
 
             status.set_code( ItemStatusCode::ISC_INVALID_DATA );
             status.set_error_message( fmt::format( "Invalid custom properties for item {}: property name(s) '{}' "
@@ -677,7 +678,6 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
         pushCurrentCommit( aClientName, aCreate ? _( "Created items via API" )
                                                 : _( "Modified items via API" ) );
     }
-
 
     return ItemRequestStatus::IRS_OK;
 }

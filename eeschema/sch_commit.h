@@ -59,24 +59,27 @@ public:
 
     virtual ~SCH_COMMIT();
 
-    virtual void Push( const wxString& aMessage = wxT( "A commit" ), int aCommitFlags = 0 ) override;
+    void Push( const wxString& aMessage = wxEmptyString, int aCommitFlags = 0 ) override;
 
-    virtual void Revert() override;
+    void Revert() override;
+    void RevertToCheckpoint( int aCheckpoint ) override;
+
     COMMIT& Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen = nullptr,
                    RECURSE_MODE aRecurse = RECURSE_MODE::NO_RECURSE ) override;
     COMMIT& Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
                    BASE_SCREEN *aScreen = nullptr ) override;
 
-    virtual EDA_ITEM* ResolveItem( KIID& aID ) override;
+    EDA_ITEM* ResolveItem( KIID& aID ) override;
 
     /** Retain the pre-edit state of an item already removed from its screen by cleanup. */
     void RemovedForCleanup( SCH_ITEM* aItem, SCH_SCREEN* aScreen );
 
-private:
+protected:
     EDA_ITEM* undoLevelItem( EDA_ITEM* aItem ) const override;
 
     EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override;
 
+private:
     void pushLibEdit(  const wxString& aMessage, int aCommitFlags );
     void pushSchEdit(  const wxString& aMessage, int aCommitFlags );
 

@@ -53,9 +53,11 @@ public:
 
     BOARD* GetBoard() const;
 
-    virtual void Push( const wxString& aMessage = wxEmptyString, int aCommitFlags = 0 ) override;
+    void Push( const wxString& aMessage = wxEmptyString, int aCommitFlags = 0 ) override;
 
-    virtual void Revert() override;
+    void Revert() override;
+    void RevertToCheckpoint(int aCheckpoint) override;
+
     COMMIT&      Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType,
                         BASE_SCREEN* aScreen = nullptr,
                         RECURSE_MODE aRecurse = RECURSE_MODE::NO_RECURSE ) override;
@@ -69,11 +71,12 @@ public:
 
     static EDA_ITEM* MakeImage( EDA_ITEM* aItem );
 
-private:
+protected:
     EDA_ITEM* undoLevelItem( EDA_ITEM* aItem ) const override;
 
     EDA_ITEM* makeImage( EDA_ITEM* aItem ) const override;
 
+private:
     void propagateDamage( BOARD_ITEM* aItem, std::vector<ZONE*>* aStaleZones,
                           std::vector<BOX2I>& aStaleRuleAreas );
 

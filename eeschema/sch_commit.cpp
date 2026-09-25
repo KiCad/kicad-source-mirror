@@ -72,8 +72,7 @@ SCH_COMMIT::~SCH_COMMIT()
 }
 
 
-COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen,
-                           RECURSE_MODE aRecurse )
+COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen, RECURSE_MODE aRecurse )
 {
     wxCHECK( aItem, *this );
 
@@ -114,8 +113,7 @@ COMMIT& SCH_COMMIT::Stage( EDA_ITEM *aItem, CHANGE_TYPE aChangeType, BASE_SCREEN
 }
 
 
-COMMIT& SCH_COMMIT::Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType,
-                           BASE_SCREEN *aScreen )
+COMMIT& SCH_COMMIT::Stage( std::vector<EDA_ITEM*> &container, CHANGE_TYPE aChangeType, BASE_SCREEN *aScreen )
 {
     for( EDA_ITEM* item : container )
         Stage( item, aChangeType, aScreen );
@@ -187,7 +185,6 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
 
 void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 {
-
     // Objects potentially interested in changes:
     PICKED_ITEMS_LIST   undoList;
     KIGFX::VIEW*        view = m_toolMgr->GetView();
@@ -213,12 +210,12 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
     undoList.SetDescription( aMessage );
 
-    SCHEMATIC*             schematic = nullptr;
-    std::vector<SCH_ITEM*> bulkAddedItems;
-    std::vector<SCH_ITEM*> bulkRemovedItems;
-    std::vector<SCH_ITEM*> itemsChanged;
+    SCHEMATIC*                             schematic = nullptr;
+    std::vector<SCH_ITEM*>                 bulkAddedItems;
+    std::vector<SCH_ITEM*>                 bulkRemovedItems;
+    std::vector<SCH_ITEM*>                 itemsChanged;
     std::vector<std::unique_ptr<SCH_ITEM>> cleanupRemovedItems;
-    std::set<SCH_SCREEN*> connectivityScreens;
+    std::set<SCH_SCREEN*>                  connectivityScreens;
 
     auto notifyModel =
             [&]()
@@ -574,8 +571,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         }
         else if( schematic )
         {
-            schematic->RecalculateConnections( this, connectivityCleanUp, m_toolMgr,
-                                               nullptr, nullptr, nullptr, nullptr, true );
+            schematic->RecalculateConnections( this, connectivityCleanUp, m_toolMgr, nullptr, nullptr, nullptr,
+                                               nullptr, true );
         }
     }
 
@@ -685,6 +682,12 @@ void SCH_COMMIT::revertLibEdit()
 
 void SCH_COMMIT::Revert()
 {
+    RevertToCheckpoint( 0 );
+}
+
+
+void SCH_COMMIT::RevertToCheckpoint( int aCheckpoint )
+{
     KIGFX::VIEW*        view = m_toolMgr->GetView();
     SCH_EDIT_FRAME*     frame = dynamic_cast<SCH_EDIT_FRAME*>( m_toolMgr->GetToolHolder() );
     SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
@@ -704,13 +707,14 @@ void SCH_COMMIT::Revert()
     std::vector<SCH_ITEM*> bulkRemovedItems;
     std::vector<SCH_ITEM*> itemsChanged;
 
-    for( COMMIT_LINE& ent : m_entries )
+    for( int ii = aCheckpoint; ii < (int) m_entries.size(); ++ii )
     {
-        int         changeType = ent.m_type & CHT_TYPE;
-        int         changeFlags = ent.m_type & CHT_FLAGS;
-        SCH_ITEM*   item = dynamic_cast<SCH_ITEM*>( ent.m_item );
-        SCH_ITEM*   copy = dynamic_cast<SCH_ITEM*>( ent.m_copy );
-        SCH_SCREEN* screen = dynamic_cast<SCH_SCREEN*>( ent.m_screen );
+        COMMIT_LINE& entry = m_entries[ii];
+        int          changeType = entry.m_type & CHT_TYPE;
+        int          changeFlags = entry.m_type & CHT_FLAGS;
+        SCH_ITEM*    item = dynamic_cast<SCH_ITEM*>( entry.m_item );
+        SCH_ITEM*    copy = dynamic_cast<SCH_ITEM*>( entry.m_copy );
+        SCH_SCREEN*  screen = dynamic_cast<SCH_SCREEN*>( entry.m_screen );
 
         wxCHECK2( item && screen, continue );
 
@@ -820,7 +824,7 @@ void SCH_COMMIT::Revert()
         }
 
         delete copy;
-        ent.m_copy = nullptr;
+        entry.m_copy = nullptr;
     }
 
     if( schematic )
@@ -841,8 +845,9 @@ void SCH_COMMIT::Revert()
     if( frame )
         frame->RecalculateConnections( nullptr, NO_CLEANUP );
 
-    clear();
+    m_entries.erase( m_entries.begin() + aCheckpoint, m_entries.end() );
 }
+
 
 EDA_ITEM* SCH_COMMIT::ResolveItem( KIID& aID )
 {
