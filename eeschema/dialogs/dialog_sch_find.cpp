@@ -266,6 +266,10 @@ void DIALOG_SCH_FIND::OnOptions( wxCommandEvent& aEvent )
         m_checkWholeWord->SetValue( false );
         m_checkMatchCase->SetValue( false );
     }
+    else if( aEvent.GetEventObject() == m_checkMatchCase || aEvent.GetEventObject() == m_checkWholeWord )
+    {
+        m_checkRegexMatch->SetValue( false );
+    }
 
     updateFlags();
     m_findDirty = true;
