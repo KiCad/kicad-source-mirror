@@ -67,12 +67,16 @@ wxString KIPLATFORM::IO::MakeSiblingTempPath( const wxString& aTargetPath )
 FILE* KIPLATFORM::IO::OpenUniqueSiblingTempFile( const wxString& aTargetPath, const wxString& aMode,
                                                  wxString* aTempPathOut, wxString* aError )
 {
+    // A new target keeps the umask default fopen would give it; an existing one gets its mode
+    // copied at commit, so the temp stays private until then
+    const mode_t createMode = wxFileName::FileExists( aTargetPath ) ? 0600 : 0666;
+
     // Exclusive-create closes the TOCTOU window: if another process pre-created a file
     // at the candidate path, O_EXCL fails and we retry with a new counter value.
     for( unsigned attempt = 0; attempt < 32; ++attempt )
     {
         wxString candidate = MakeSiblingTempPath( aTargetPath );
-        int      fd = open( candidate.fn_str(), O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, 0600 );
+        int      fd = open( candidate.fn_str(), O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, createMode );
 
         if( fd >= 0 )
         {
