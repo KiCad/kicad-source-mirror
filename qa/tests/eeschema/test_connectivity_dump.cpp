@@ -402,8 +402,8 @@ BOOST_AUTO_TEST_CASE( HeadlessCommitPublishesCompletedCleanup )
 
 
 BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
-                       PreviouslyDisabledFixturesMatchFullAndFreshRebuildsAfterCommits,
-                       boost::unit_test::data::make( ORACLE_FIXTURES ), fixture )
+                        PreviouslyDisabledFixturesMatchFullAndFreshRebuildsAfterCommits,
+                        boost::unit_test::data::make( ORACLE_FIXTURES ), fixture )
 {
     auto& config = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
     SCOPED_SET_RESET restoreEngine( config.m_ConnectivityEngine, config.m_ConnectivityEngine );
@@ -424,7 +424,7 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
     {
         for( SCH_ITEM* item : path.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            auto* candidate = static_cast<SCH_SYMBOL*>( item );
+            SCH_SYMBOL* candidate = static_cast<SCH_SYMBOL*>( item );
 
             if( !candidate->IsPower() && !candidate->GetPins( &path ).empty() )
             {
@@ -440,13 +440,16 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
     BOOST_REQUIRE( symbol );
     BOOST_REQUIRE( !symbol->GetParentGroup() );
     std::set<SCH_SCREEN*> seenScreens;
-    const auto isGeometry = []( const SCH_ITEM* item )
-    {
-        return item->IsConnectable()
-               && ( item->Type() == SCH_LINE_T || item->Type() == SCH_BUS_WIRE_ENTRY_T
-                    || item->Type() == SCH_BUS_BUS_ENTRY_T || item->Type() == SCH_JUNCTION_T
-                    || item->Type() == SCH_NO_CONNECT_T );
-    };
+
+    const auto isGeometry =
+            []( const SCH_ITEM* item )
+            {
+                return item->IsConnectable()
+                       && ( item->Type() == SCH_LINE_T || item->Type() == SCH_BUS_WIRE_ENTRY_T
+                            || item->Type() == SCH_BUS_BUS_ENTRY_T || item->Type() == SCH_JUNCTION_T
+                            || item->Type() == SCH_NO_CONNECT_T );
+            };
+
     std::vector<std::pair<SCH_SCREEN*, std::unique_ptr<SCH_ITEM>>> geometry;
 
     for( const SCH_SHEET_PATH& path : schematic->Hierarchy() )
@@ -465,92 +468,100 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
     }
 
     std::sort( geometry.begin(), geometry.end(),
-               []( const auto& a, const auto& b ) { return a.second->m_Uuid < b.second->m_Uuid; } );
+               []( const auto& a, const auto& b )
+               {
+                   return a.second->m_Uuid < b.second->m_Uuid;
+               } );
+
     const VECTOR2I offset( 10000000, 10000000 );
     SCH_CONNECTIVITY::FACADE rebuilt;
     rebuilt.Update( *schematic, true );
-    const auto verify = [&]()
-    {
-        for( SCH_SCREEN* screen : seenScreens )
-        {
-            for( SCH_ITEM* item : screen->Items() )
+
+    const auto verify =
+            [&]()
             {
-                BOOST_REQUIRE_MESSAGE( !item->HasFlag( STRUCT_DELETED ),
-                                       "Cleanup left a deleted item on the screen: "
-                                               << item->m_Uuid.AsString().ToStdString() );
-            }
-        }
+                for( SCH_SCREEN* screen : seenScreens )
+                {
+                    for( SCH_ITEM* item : screen->Items() )
+                    {
+                        BOOST_REQUIRE_MESSAGE( !item->HasFlag( STRUCT_DELETED ),
+                                               "Cleanup left a deleted item on the screen: "
+                                                       << item->m_Uuid.AsString().ToStdString() );
+                    }
+                }
 
-        const std::string incremental = SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() );
-        rebuilt.Update( *schematic, true );
-        BOOST_CHECK_EQUAL( incremental, SCH_CONNECTIVITY::Dump( *schematic, rebuilt ) );
-        // A separate fresh engine also detects stale content-keyed caches retained by a full rebuild
-        SCH_CONNECTIVITY::FACADE fresh;
-        fresh.Update( *schematic, true );
-        BOOST_CHECK_EQUAL( incremental, SCH_CONNECTIVITY::Dump( *schematic, fresh ) );
-        std::map<int, int> toFresh;
-        std::map<int, int> fromFresh;
-        const auto& current = schematic->Connectivity();
+                const std::string incremental = SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() );
+                rebuilt.Update( *schematic, true );
+                BOOST_CHECK_EQUAL( incremental, SCH_CONNECTIVITY::Dump( *schematic, rebuilt ) );
+                // A separate fresh engine also detects stale content-keyed caches retained by a full rebuild
+                SCH_CONNECTIVITY::FACADE fresh;
+                fresh.Update( *schematic, true );
+                BOOST_CHECK_EQUAL( incremental, SCH_CONNECTIVITY::Dump( *schematic, fresh ) );
+                std::map<int, int> toFresh;
+                std::map<int, int> fromFresh;
+                const auto& current = schematic->Connectivity();
 
-        for( const auto& [key, row] : current.Published().Rows() )
-        {
-            const auto& path = current.Keys().Instance( key.inst );
-            const auto actual = current.Connection( key.item, path );
-            const auto full = rebuilt.Connection( key.item, path );
-            const auto empty = fresh.Connection( key.item, path );
-            BOOST_REQUIRE( actual && full && empty );
-            BOOST_CHECK_EQUAL( actual->NetCode(), full->NetCode() );
-            BOOST_CHECK_EQUAL( actual->NetCode() == 0, empty->NetCode() == 0 );
-            const auto forward = toFresh.emplace( actual->NetCode(), empty->NetCode() ).first;
-            const auto reverse = fromFresh.emplace( empty->NetCode(), actual->NetCode() ).first;
-            BOOST_CHECK_EQUAL( forward->second, empty->NetCode() );
-            BOOST_CHECK_EQUAL( reverse->second, actual->NetCode() );
-        }
-    };
+                for( const auto& [key, row] : current.Published().Rows() )
+                {
+                    const auto& path = current.Keys().Instance( key.inst );
+                    const auto actual = current.Connection( key.item, path );
+                    const auto full = rebuilt.Connection( key.item, path );
+                    const auto empty = fresh.Connection( key.item, path );
+                    BOOST_REQUIRE( actual && full && empty );
+                    BOOST_CHECK_EQUAL( actual->NetCode(), full->NetCode() );
+                    BOOST_CHECK_EQUAL( actual->NetCode() == 0, empty->NetCode() == 0 );
+                    const auto forward = toFresh.emplace( actual->NetCode(), empty->NetCode() ).first;
+                    const auto reverse = fromFresh.emplace( empty->NetCode(), actual->NetCode() ).first;
+                    BOOST_CHECK_EQUAL( forward->second, empty->NetCode() );
+                    BOOST_CHECK_EQUAL( reverse->second, actual->NetCode() );
+                }
+            };
 
     const std::string original = SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() );
-    const auto restoreGeometry = [&]()
-    {
-        // A wire edit can remove junctions and merge other wires. Restore all native geometry
-        // through a commit, preserving engine history while recovering the exact source state
-        SCH_COMMIT restore( &manager );
-        std::vector<SCH_ITEM*> removed;
-        std::vector<std::pair<SCH_SCREEN*, std::unique_ptr<SCH_ITEM>>> added;
 
-        for( SCH_SCREEN* screen : seenScreens )
-        {
-            for( SCH_ITEM* item : screen->Items() )
+    const auto restoreGeometry =
+            [&]()
             {
-                if( isGeometry( item ) )
+                // A wire edit can remove junctions and merge other wires. Restore all native geometry
+                // through a commit, preserving engine history while recovering the exact source state
+                SCH_COMMIT restore( &manager );
+                std::vector<SCH_ITEM*> removed;
+                std::vector<std::pair<SCH_SCREEN*, std::unique_ptr<SCH_ITEM>>> added;
+
+                for( SCH_SCREEN* screen : seenScreens )
                 {
-                    restore.Remove( item, screen );
-                    removed.push_back( item );
+                    for( SCH_ITEM* item : screen->Items() )
+                    {
+                        if( isGeometry( item ) )
+                        {
+                            restore.Remove( item, screen );
+                            removed.push_back( item );
+                        }
+                    }
                 }
-            }
-        }
 
-        for( const auto& [screen, source] : geometry )
-        {
-            auto copy = std::unique_ptr<SCH_ITEM>( static_cast<SCH_ITEM*>( source->Clone() ) );
-            BOOST_REQUIRE( copy && copy->m_Uuid == source->m_Uuid );
-            restore.Add( copy.get(), screen );
-            added.emplace_back( screen, std::move( copy ) );
-        }
+                for( const auto& [screen, source] : geometry )
+                {
+                    auto copy = std::unique_ptr<SCH_ITEM>( static_cast<SCH_ITEM*>( source->Clone() ) );
+                    BOOST_REQUIRE( copy && copy->m_Uuid == source->m_Uuid );
+                    restore.Add( copy.get(), screen );
+                    added.emplace_back( screen, std::move( copy ) );
+                }
 
-        restore.Push( "Restore native oracle geometry", SKIP_UNDO );
+                restore.Push( "Restore native oracle geometry", SKIP_UNDO );
 
-        for( auto& [screen, item] : added )
-        {
-            BOOST_REQUIRE( screen->CheckIfOnDrawList( item.get() ) );
-            item.release();
-        }
+                for( auto& [screen, item] : added )
+                {
+                    BOOST_REQUIRE( screen->CheckIfOnDrawList( item.get() ) );
+                    item.release();
+                }
 
-        for( SCH_ITEM* item : removed )
-            delete item;
+                for( SCH_ITEM* item : removed )
+                    delete item;
 
-        verify();
-        BOOST_CHECK_EQUAL( original, SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() ) );
-    };
+                verify();
+                BOOST_CHECK_EQUAL( original, SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() ) );
+            };
 
     for( const VECTOR2I& movement : { offset, VECTOR2I( -offset.x, -offset.y ) } )
     {
@@ -589,14 +600,16 @@ BOOST_DATA_TEST_CASE_F( CONNECTIVITY_DUMP_FIXTURE,
     {
         for( SCH_ITEM* item : screen->Items() )
         {
-            if( item->Type() == SCH_LABEL_T || item->Type() == SCH_GLOBAL_LABEL_T
-                || item->Type() == SCH_HIER_LABEL_T )
+            if( item->Type() == SCH_LABEL_T || item->Type() == SCH_GLOBAL_LABEL_T || item->Type() == SCH_HIER_LABEL_T )
                 labels.push_back( static_cast<SCH_LABEL_BASE*>( item ) );
         }
     }
 
     std::sort( labels.begin(), labels.end(),
-               []( const auto* a, const auto* b ) { return a->m_Uuid < b->m_Uuid; } );
+               []( const auto* a, const auto* b )
+               {
+                   return a->m_Uuid < b->m_Uuid;
+               } );
 
     for( SCH_LABEL_BASE* label : labels )
     {
