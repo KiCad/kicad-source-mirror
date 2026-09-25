@@ -406,7 +406,7 @@ BOOST_AUTO_TEST_CASE( SheetPinCommitMatchesFullRebuild )
                                     else if( restoring )
                                     {
                                         owner->RemovePin( addedPin );
-                                        removedPin.reset( addedPin );
+                                        removedPin.reset();
                                     }
                                     else
                                     {
