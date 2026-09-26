@@ -24,7 +24,9 @@
 #include <string>
 #include <map>
 #include <optional>
+#include <type_traits>
 
+#include <math/util.h>
 #include <wx/any.h>
 
 
@@ -66,7 +68,12 @@ public:
                 return false;
 
             number *= m_iuScale;
-            aVar = number;
+
+            // Most millimetre values are not exact doubles, so truncating would load them 1 IU short
+            if constexpr( std::is_integral_v<T> )
+                aVar = KiROUND<double, T>( number );
+            else
+                aVar = number;
         }
         else
         {
