@@ -1143,6 +1143,9 @@ const BOX2I SCH_SHEET::GetBoundingBox() const
     for( const SCH_FIELD& field : m_fields )
         bbox.Merge( field.GetBoundingBox() );
 
+    for( const SCH_SHEET_PIN* pin : m_pins )
+        bbox.Merge( pin->GetBoundingBox() );
+
     return bbox;
 }
 
