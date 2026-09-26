@@ -1611,11 +1611,11 @@ void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 void SCH_SYMBOL::SetFieldText( const wxString& aFieldName, const wxString& aFieldText, const SCH_SHEET_PATH* aPath,
                                const wxString& aVariantName )
 {
-    wxCHECK( !aFieldName.IsEmpty(), /* void */ );
+    wxCHECK_MSG( !aFieldName.IsEmpty(), /* void */, wxT( "Can't set text on a field with no name!" ) );
 
     SCH_FIELD* field = GetField( aFieldName );
 
-    wxCHECK( field, /* void */ );
+    wxCHECK_MSG( field, /* void */, wxT( "Can't set text on a field not yet added to the symbol!" ) );
 
     switch( field->GetId() )
     {

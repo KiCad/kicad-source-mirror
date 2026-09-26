@@ -67,6 +67,7 @@ public:
     size_t BaseHash() const override { return TYPE_HASH( SCH_SHEET ); }
     size_t TypeHash() const override { return TYPE_HASH( wxString ); }
 
+private:
     void setter( void* obj, wxAny& v ) override
     {
         wxString value;
@@ -74,7 +75,7 @@ public:
         if( !v.GetAs( &value ) )
             return;
 
-        SCH_SHEET* sheet = reinterpret_cast<SCH_SHEET*>( obj );
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( obj );
         SCH_FIELD* field = sheet->GetField( m_name );
 
         wxString              variantName;
@@ -87,20 +88,14 @@ public:
         }
 
         if( !field )
-        {
-            SCH_FIELD newField( sheet, FIELD_T::USER, m_name );
-            newField.SetText( value, sheetPath, variantName );
-            sheet->AddField( newField );
-        }
-        else
-        {
-            field->SetText( value, sheetPath, variantName );
-        }
+            field = sheet->AddField( SCH_FIELD( sheet, FIELD_T::SHEET_USER, m_name ) );
+
+        field->SetText( value, sheetPath, variantName );
     }
 
     wxAny getter( const void* obj ) const override
     {
-        const SCH_SHEET* sheet = reinterpret_cast<const SCH_SHEET*>( obj );
+        const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( obj );
         const SCH_FIELD* field = sheet->GetField( m_name );
 
         if( !field )
@@ -701,11 +696,11 @@ SCH_FIELD* SCH_SHEET::AddField( const SCH_FIELD& aField )
 void SCH_SHEET::SetFieldText( const wxString& aFieldName, const wxString& aFieldText, const SCH_SHEET_PATH* aPath,
                               const wxString& aVariantName )
 {
-    wxCHECK( !aFieldName.IsEmpty(), /* void */ );
+    wxCHECK_MSG( !aFieldName.IsEmpty(), /* void */, wxT( "Can't set text on a field with no name!" ) );
 
     SCH_FIELD* field = GetField( aFieldName );
 
-    wxCHECK( field, /* void */ );
+    wxCHECK_MSG( field, /* void */, wxT( "Can't set text on a field not yet added to the sheet!" ) );
 
     switch( field->GetId() )
     {

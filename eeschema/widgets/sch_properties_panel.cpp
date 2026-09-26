@@ -760,20 +760,18 @@ void SCH_PROPERTIES_PANEL::addBlankField()
         if( item->Type() == SCH_SYMBOL_T )
         {
             SCH_SYMBOL* symbol   = static_cast<SCH_SYMBOL*>( item );
-            SCH_FIELD   newField( symbol, FIELD_T::USER, name );
+            SCH_FIELD*  newField = symbol->AddField( SCH_FIELD( symbol, FIELD_T::USER, name ) );
 
-            newField.SetVisible( false );
+            newField->SetVisible( false );
             changes.Modify( symbol, screen, RECURSE_MODE::NO_RECURSE );
-            symbol->AddField( newField );
         }
         else if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* sheet    = static_cast<SCH_SHEET*>( item );
-            SCH_FIELD  newField( sheet, FIELD_T::USER, name );
+            SCH_FIELD* newField = sheet->AddField( SCH_FIELD( sheet, FIELD_T::SHEET_USER, name ) );
 
-            newField.SetVisible( false );
+            newField->SetVisible( false );
             changes.Modify( sheet, screen, RECURSE_MODE::NO_RECURSE );
-            sheet->AddField( newField );
         }
     }
 

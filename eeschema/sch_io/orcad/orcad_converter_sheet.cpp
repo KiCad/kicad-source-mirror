@@ -6900,10 +6900,12 @@ void ORCAD_CONVERTER::placeHierarchicalBlockFields( SCH_SHEET* aSheet, const ORC
             valueDisplay = &display;
     }
 
-    auto applyDisplay = [&]( SCH_FIELD& aField, const ORCAD_DISPLAY_PROP& aDisplay )
-    {
-        applyDisplayProp( aField, aDisplay, OrcadDbuToIu( aBlock.x1 + aDisplay.x, aBlock.y1 + aDisplay.y ), false );
-    };
+    auto applyDisplay =
+            [&]( SCH_FIELD& aField, const ORCAD_DISPLAY_PROP& aDisplay )
+            {
+                applyDisplayProp( aField, aDisplay, OrcadDbuToIu( aBlock.x1 + aDisplay.x, aBlock.y1 + aDisplay.y ),
+                                  false );
+            };
 
     if( referenceDisplay )
         applyDisplay( *sheetName, *referenceDisplay );

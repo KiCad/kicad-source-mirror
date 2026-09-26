@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE( ERCFieldNamesRetainSymbolAndSheetSnapshots )
             BOOST_REQUIRE( sheet );
             const wxString badName( " Snapshot Field " );
             symbol->AddField( SCH_FIELD( symbol, FIELD_T::USER, badName ) );
-            sheet->AddField( SCH_FIELD( sheet, FIELD_T::USER, badName ) );
+            sheet->AddField( SCH_FIELD( sheet, FIELD_T::SHEET_USER, badName ) );
             SCH_FIELD* symbolField = symbol->GetField( badName );
             SCH_FIELD* sheetField = sheet->GetField( badName );
             BOOST_REQUIRE( symbolField );
