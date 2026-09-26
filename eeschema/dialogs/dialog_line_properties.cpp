@@ -181,7 +181,7 @@ bool DIALOG_LINE_PROPERTIES::TransferDataToWindow()
     if( std::all_of( m_lines.begin() + 1, m_lines.end(),
             [&]( const SCH_LINE* r )
             {
-                return r->GetPenWidth() == first_stroke_item->GetPenWidth();
+                return r->GetStroke().GetWidth() == first_stroke_item->GetStroke().GetWidth();
             } ) )
     {
         m_width.SetValue( first_stroke_item->GetStroke().GetWidth() );
