@@ -637,7 +637,12 @@ bool SCHEMATIC::ResolveTextVar( const SCH_SHEET_PATH* aSheetPath, wxString* toke
     }
     else if( token->IsSameAs( wxT( "##" ) ) )
     {
-        *token = wxString::Format( "%i", Root().CountSheets() );
+        int i = 0;
+
+        for( SCH_SHEET* sheet : GetTopLevelSheets() )
+            i += sheet->CountSheets();
+
+        *token = wxString::Format( "%i", i );
         return true;
     }
     else if( token->IsSameAs( wxT( "SHEETPATH" ) ) )
