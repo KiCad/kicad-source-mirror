@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-25 13:37+0000\n"
+"PO-Revision-Date: 2026-09-26 16:23+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -729,24 +729,20 @@ msgid "Show user ECO2 layer"
 msgstr "顯示使用者 ECO2 層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show front fabrication layer"
-msgstr "製造層上的草圖焊盤"
+msgstr "顯示頂層組裝層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show back fabrication layer"
-msgstr "製造層上的草圖焊盤"
+msgstr "顯示底層組裝層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show front courtyard layer"
-msgstr "元件外框層"
+msgstr "顯示頂層元件外框層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show back courtyard layer"
-msgstr "元件外框層"
+msgstr "顯示底層元件外框層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 msgid "Show user defined layer 1"
@@ -1739,9 +1735,8 @@ msgid "Align"
 msgstr "對齊"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:577
-#, fuzzy
 msgid "Cancel alignment"
-msgstr "垂直對齊"
+msgstr "取消對齊"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:581
 msgid "Click the model face that sits on the board. Press Esc to cancel."
@@ -1847,9 +1842,8 @@ msgid "Preview"
 msgstr "預覽"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:186
-#, fuzzy
 msgid "Align a STEP model face to a footprint pad"
-msgstr "已連接的接腳未對應到任何封裝焊盤"
+msgstr "將 STEP 模型的面與封裝焊盤對齊"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:213
 msgid ""
@@ -2185,9 +2179,9 @@ msgstr "動作區塊無效: %s"
 
 #: common/api/api_plugin_manager.cpp:102 common/api/api_plugin_manager.cpp:148
 #: pcbnew/footprint_wizard.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s'"
-msgstr "外掛動作 '%s': %s"
+msgstr "外掛動作 '%s'"
 
 #: common/api/api_plugin_manager.cpp:114
 #, c-format
@@ -3214,9 +3208,8 @@ msgid "Design Block Properties"
 msgstr "設計區塊屬性"
 
 #: common/dialogs/dialog_edit_library_tables.cpp:117
-#, fuzzy
 msgid "Save changes to library tables?"
-msgstr "要儲存對巢狀庫表的變更嗎？"
+msgstr "要儲存對庫表的變更嗎？"
 
 #: common/dialogs/dialog_fields_table.cpp:127
 msgid "Revert Row"
@@ -3307,9 +3300,9 @@ msgid "The first %d fields are mandatory."
 msgstr "第一個欄位 %d 是必填的。"
 
 #: common/dialogs/dialog_fields_table.cpp:1053
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' field cannot be removed."
-msgstr "無法建立檔案 '%s'。"
+msgstr "無法移除 '%s'欄位。"
 
 #: common/dialogs/dialog_fields_table.cpp:1059
 #, c-format
@@ -3322,9 +3315,9 @@ msgid "The first %d fields are mandatory and names cannot be changed."
 msgstr "前 %d 個欄位為必填項目，且名稱無法變更。"
 
 #: common/dialogs/dialog_fields_table.cpp:1109
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' field cannot be renamed."
-msgstr "無法建立檔案 '%s'。"
+msgstr "無法改名 '%s'欄位。"
 
 #: common/dialogs/dialog_fields_table.cpp:1114
 msgid "Rename Field"
