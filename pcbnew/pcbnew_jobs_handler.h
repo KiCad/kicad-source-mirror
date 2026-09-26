@@ -61,6 +61,7 @@ public:
     int JobExportDrc( JOB* aJob );
     int JobExportIpc2581( JOB* aJob );
     int JobExportOdb( JOB* aJob );
+    int JobExportIdf( JOB* aJob );
     int JobExportIpcD356( JOB* aJob );
     int JobExportStats( JOB* aJob );
     int JobExportStackup( JOB* aJob );

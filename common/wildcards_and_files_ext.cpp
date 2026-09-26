@@ -207,6 +207,8 @@ const std::string FILEEXT::XaoFileExtension( "xao" );
 const std::string FILEEXT::PlyFileExtension( "ply" );
 const std::string FILEEXT::StlFileExtension( "stl" );
 const std::string FILEEXT::U3DFileExtension( "u3d" );
+const std::string FILEEXT::IdfV3BoardFileExtension( "emn" );
+const std::string FILEEXT::IdfV3LibraryFileExtension( "emp" );
 
 const std::string FILEEXT::GencadFileExtension( "cad" );
 

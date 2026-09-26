@@ -68,6 +68,7 @@
 #include "cli/command_pcb_export_hpgl.h"
 #include "cli/command_pcb_export_gencad.h"
 #include "cli/command_pcb_export_ipc2581.h"
+#include "cli/command_pcb_export_idf.h"
 #include "cli/command_pcb_export_ipcd356.h"
 #include "cli/command_pcb_export_odb.h"
 #include "cli/command_pcb_export_pdf.h"
@@ -186,6 +187,7 @@ static CLI::PCB_EXPORT_GERBERS_COMMAND   exportPcbGerbersCmd{};
 static CLI::PCB_EXPORT_HPGL_COMMAND      exportPcbHpglCmd{};
 static CLI::PCB_EXPORT_GENCAD_COMMAND    exportPcbGencadCmd{};
 static CLI::PCB_EXPORT_IPC2581_COMMAND   exportPcbIpc2581Cmd{};
+static CLI::PCB_EXPORT_IDF_COMMAND       exportPcbIdfCmd{};
 static CLI::PCB_EXPORT_IPCD356_COMMAND   exportPcbIpcD356Cmd{};
 static CLI::PCB_EXPORT_ODB_COMMAND       exportPcbOdbCmd{};
 static CLI::PCB_EXPORT_COMMAND           exportPcbCmd{};
@@ -281,6 +283,7 @@ static std::vector<COMMAND_ENTRY> commandStack = {
                     &exportPcbGencadCmd,
                     &exportPcbGlbCmd,
                     &exportPcbIpc2581Cmd,
+                    &exportPcbIdfCmd,
                     &exportPcbIpcD356Cmd,
                     &exportPcbOdbCmd,
                     &exportPcbPdfCmd,

@@ -158,6 +158,7 @@ set( KICOMMON_SRCS
     jobs/job_export_pcb_hpgl.cpp
     jobs/job_export_pcb_ipc2581.cpp
     jobs/job_export_pcb_ipcd356.cpp
+    jobs/job_export_pcb_idf.cpp
     jobs/job_export_pcb_odb.cpp
     jobs/job_export_pcb_pdf.cpp
     jobs/job_export_pcb_png.cpp

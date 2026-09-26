@@ -53,6 +53,7 @@
 #include <jobs/job_fp_export_svg.h>
 #include <jobs/job_fp_upgrade.h>
 #include <jobs/job_export_pcb_ipc2581.h>
+#include <jobs/job_export_pcb_idf.h>
 #include <jobs/job_export_pcb_ipcd356.h>
 #include <jobs/job_export_pcb_odb.h>
 #include <jobs/job_export_pcb_gerber.h>
@@ -95,6 +96,7 @@
 #include <pad.h>
 #include <pcb_marker.h>
 #include <project/project_file.h>
+#include <exporters/export_idf.h>
 #include <exporters/export_gencad_writer.h>
 #include <exporters/export_d356.h>
 #include <kiface_ids.h>
@@ -121,6 +123,7 @@
 #include <dialogs/dialog_gendrill.h>
 #include <dialogs/dialog_gen_footprint_position.h>
 #include <dialogs/dialog_export_2581.h>
+#include <dialogs/dialog_export_idf.h>
 #include <dialogs/dialog_export_odbpp.h>
 #include <dialogs/dialog_export_step.h>
 #include <dialogs/dialog_footprint_fields_table.h>
@@ -455,6 +458,22 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   wxCHECK( odbJob && editFrame, false );
 
                   DIALOG_EXPORT_ODBPP dlg( odbJob, editFrame, aParent );
+                  return dlg.ShowModal() == wxID_OK;
+              } );
+    Register( "idf", std::bind( &PCBNEW_JOBS_HANDLER::JobExportIdf, this, std::placeholders::_1 ),
+              [aKiway]( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  JOB_EXPORT_PCB_IDF* idfJob = dynamic_cast<JOB_EXPORT_PCB_IDF*>( job );
+
+                  PCB_EDIT_FRAME* editFrame =
+                          dynamic_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB_EDITOR, false ) );
+
+                  wxCHECK( idfJob && editFrame, false );
+
+                  // TODO
+                  DIALOG_EXPORT_IDF3 dlg( editFrame );
+                  dlg.FilePicker()->SetPath( idfJob->GetConfiguredOutputPath() );
+
                   return dlg.ShowModal() == wxID_OK;
               } );
 }
@@ -3058,6 +3077,14 @@ int PCBNEW_JOBS_HANDLER::JobExportIpcD356( JOB* aJob )
         m_reporter->Report( _( "Failed to create IPC-D-356 file\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportIdf( JOB* aJob )
+{
+    // TODO
+
+    return CLI::EXIT_CODES::SUCCESS;
 }
 
 
