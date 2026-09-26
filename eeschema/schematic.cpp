@@ -1417,19 +1417,19 @@ bool SCHEMATIC::resolveCrossReference( wxString* token, int aDepth ) const
     {
         SCH_SYMBOL* refSymbol = static_cast<SCH_SYMBOL*>( refItem );
 
-        bool resolved = refSymbol->ResolveTextVar( &sheetPath, &fieldName, variantName, aDepth + 1 );
-
-        if( resolved )
+        if( refSymbol->ResolveTextVar( &sheetPath, &fieldName, variantName, aDepth + 1 ) )
         {
             *token = std::move( fieldName );
         }
         else
         {
             // Field/function not found on symbol
-            *token = wxString::Format( wxT( "<Unresolved: %s:%s>" ), refSymbol->GetRef( &sheetPath, false ), fieldName );
+            *token = wxString::Format( wxT( "<Unresolved: %s:%s>" ),
+                                       refSymbol->GetRef( &sheetPath, false ),
+                                       fieldName );
         }
 
-        return true;
+        return true;    // Stop looking
     }
     else if( refItem && refItem->Type() == SCH_SHEET_T )
     {
@@ -1437,17 +1437,19 @@ bool SCHEMATIC::resolveCrossReference( wxString* token, int aDepth ) const
 
         sheetPath.push_back( refSheet );
 
-        wxString remainderBefore = remainder;
-
         if( refSheet->ResolveTextVar( &sheetPath, &remainder, aDepth + 1 ) )
+        {
             *token = std::move( remainder );
+        }
+        else
+        {
+            // Field/function not found on sheet
+            *token = wxString::Format( wxT( "<Unresolved: %s:%s>" ),
+                                       refSheet->GetName(),
+                                       remainder );
+        }
 
-        // If the remainder still contains unresolved variables or expressions,
-        // return false so ExpandTextVars keeps the ${...} wrapper
-        if( remainderBefore.Contains( wxT( "${" ) ) || remainderBefore.Contains( wxT( "@{" ) ) )
-            return false;
-
-        return true; // Cross-reference is resolved
+        return true;    // Stop looking
     }
 
     // If UUID resolution failed, try to resolve by reference designator
@@ -1488,20 +1490,19 @@ bool SCHEMATIC::resolveCrossReference( wxString* token, int aDepth ) const
 
         if( foundSymbol )
         {
-            bool resolved = foundSymbol->ResolveTextVar( &foundPath, &fieldName, variantName, aDepth + 1 );
-
-            if( resolved )
+            if( foundSymbol->ResolveTextVar( &foundPath, &fieldName, variantName, aDepth + 1 ) )
             {
                 *token = std::move( fieldName );
             }
             else
             {
                 // Field/function not found on symbol
-                *token = wxString::Format( wxT( "<Unresolved: %s:%s>" ), foundSymbol->GetRef( &foundPath, false ),
+                *token = wxString::Format( wxT( "<Unresolved: %s:%s>" ),
+                                           foundSymbol->GetRef( &foundPath, false ),
                                            fieldName );
             }
 
-            return true;
+            return true;    // Stop looking
         }
 
         // Symbol not found - set unresolved error
