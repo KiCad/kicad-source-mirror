@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-23 15:49+0000\n"
+"PO-Revision-Date: 2026-09-27 02:38+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -10222,7 +10222,7 @@ msgstr "Kann OAuth-Metadaten nicht parsen: %s"
 #: common/remote_provider_models.cpp:50
 msgid "OAuth metadata must include authorization_endpoint and token_endpoint."
 msgstr ""
-"OAuth-Mstadaten müssen authorization_endpoint und token_endpoint enthalten."
+"OAuth-Metadaten müssen authorization_endpoint und token_endpoint enthalten."
 
 #: common/remote_provider_models.cpp:55
 msgid "authorization_endpoint"
