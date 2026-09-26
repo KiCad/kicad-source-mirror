@@ -2666,11 +2666,10 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXT* aText ) const
     if( aText->GetFont() && aText->GetFont()->IsOutline() )
         formatRenderCache( aText );
 
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aText );
+
     if( !field )
-    {
-        KICAD_FORMAT::FormatCustomProperties( m_out, *aText );
         m_out->Print( ")" );
-    }
 }
 
 
@@ -2833,6 +2832,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_DRILL_MAP* aMap ) const
 
     KICAD_FORMAT::FormatBool( m_out, "outline_slots", aMap->GetOutlineSlots() );
     KICAD_FORMAT::FormatBool( m_out, "guide_cross", aMap->GetGuideCross() );
+    KICAD_FORMAT::FormatCustomProperties( m_out, *aMap );
 
     m_out->Print( ")" );        // Close `drill_map` token.
 }

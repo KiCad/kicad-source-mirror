@@ -5174,6 +5174,10 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parseTableBodyToken( PCB_TABLE* aTable, T aToken
 
             return true;
 
+        case T_custom_property:
+            parseCustomProperty( table );
+            return true;
+
     default:
         return false;
     }
@@ -8799,6 +8803,10 @@ PCB_ARC* PCB_IO_KICAD_SEXPR_PARSER::parseARC()
             arc->SetLocked( parseMaybeAbsentBool( true ) );
             break;
 
+        case T_custom_property:
+            parseCustomProperty( arc.get() );
+            break;
+
         default:
             Expecting( "start, mid, end, width, layer, solder_mask_margin, net, tstamp, uuid or status" );
         }
@@ -9190,6 +9198,10 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
 
         case T_back_post_machining:
             parsePostMachining( via->Padstack().BackPostMachining() );
+            break;
+
+        case T_custom_property:
+            parseCustomProperty( via.get() );
             break;
 
         default:
