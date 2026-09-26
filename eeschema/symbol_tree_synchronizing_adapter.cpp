@@ -149,13 +149,18 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::Sync( const wxString& aForceRefresh,
             if( progressThrottle.Ready() )
                 aProgressCallback( i++, max, libName );
 
-            auto optRow = adapter->GetRow( libName );
+            std::optional<LIBRARY_TABLE_ROW*> optRow = adapter->GetRow( libName );
             wxCHECK2( optRow.has_value(), continue );
+
+            if( optRow.value()->Hidden() )
+                continue;
 
             bool pinned = alg::contains( cfg->m_Session.pinned_symbol_libs, libName )
                             || alg::contains( project.m_PinnedSymbolLibs, libName );
 
-            LIB_TREE_NODE_LIBRARY& lib_node = DoAddLibraryNode( libName, ( *optRow )->Description(), pinned );
+            wxString description = optRow.value()->Description();
+
+            LIB_TREE_NODE_LIBRARY& lib_node = DoAddLibraryNode( libName, description, pinned );
 
             updateLibrary( lib_node );
         }
