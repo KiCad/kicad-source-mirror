@@ -103,7 +103,6 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
     m_markerTreeModel = new ERC_TREE_MODEL( parent, m_markerDataView );
     m_markerDataView->AssociateModel( m_markerTreeModel );
-    m_markerTreeModel->Update( m_markerProvider, getSeverities() );
 
     // Prevent RTL locales from mirroring the text in the data views
     m_markerDataView->SetLayoutDirection( wxLayout_LeftToRight );
