@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-04 09:51+0000\n"
+"PO-Revision-Date: 2026-09-27 02:38+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.9\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2183,9 +2183,9 @@ msgstr "アクション セレクションが不正: %s"
 
 #: common/api/api_plugin_manager.cpp:102 common/api/api_plugin_manager.cpp:148
 #: pcbnew/footprint_wizard.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s'"
-msgstr "プラグイン アクション '%s': %s"
+msgstr "プラグイン アクション '%s'"
 
 #: common/api/api_plugin_manager.cpp:114
 #, c-format
@@ -3330,9 +3330,9 @@ msgid "The first %d fields are mandatory."
 msgstr "最初の %d フィールドは必須です。"
 
 #: common/dialogs/dialog_fields_table.cpp:1053
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' field cannot be removed."
-msgstr "デフォルトのネットクラスは削除できません"
+msgstr "フィールド '%s' は削除できません。"
 
 #: common/dialogs/dialog_fields_table.cpp:1059
 #, c-format
@@ -6454,9 +6454,8 @@ msgid "Scroll Gestures"
 msgstr "スクロール ジェスチャー"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:193
-#, fuzzy
 msgid "Touchpad navigation:"
-msgstr "画面のパンにタッチパッドを使用"
+msgstr "タッチパッド 操作:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:197
 #, fuzzy
@@ -8275,9 +8274,8 @@ msgid "Unrecognized"
 msgstr "認識されない"
 
 #: common/eda_shape.cpp:1497
-#, fuzzy
 msgid "Connected Lines"
-msgstr "接続アイテム:"
+msgstr "接続線"
 
 #: common/eda_shape.cpp:1505
 msgid "Curve"
@@ -8493,7 +8491,6 @@ msgid "Line Color"
 msgstr "線の色"
 
 #: common/eda_shape.cpp:4728
-#, fuzzy
 msgid "Arc angle must not be zero."
 msgstr "円弧の角度は0にできません。"
 
@@ -9410,9 +9407,9 @@ msgid "Rebase commit failed: %s"
 msgstr "リベースのコミットに失敗しました: %s"
 
 #: common/git/libgit_backend.cpp:1618
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed: %s"
-msgstr "リベースの完了に失敗しました: %s"
+msgstr "リベースに失敗しました: %s"
 
 #: common/git/libgit_backend.cpp:1626
 #, c-format
@@ -9559,9 +9556,8 @@ msgstr ""
 "か ?): %s"
 
 #: common/history_lock.cpp:312
-#, fuzzy
 msgid "Cannot re-open history repository without the file lock"
-msgstr "出力の一時ファイルを削除できません"
+msgstr "ファイルがロックされていないためリポジトリ履歴を再度開くことができません"
 
 #: common/hotkey_store.cpp:39
 msgid "Accept Autocomplete"
@@ -11475,6 +11471,8 @@ msgid ""
 "Refusing to extract file '%s': the archive entry points outside of the "
 "destination directory."
 msgstr ""
+"ファイル '%s' を抽出できませんでした : アーカイブのエントリー ポイントが宛先"
+"ディレクトリの外側です。"
 
 #: common/project/project_archiver.cpp:177 kicad/pcm/pcm_task_manager.cpp:252
 #: kicad/pcm/pcm_task_manager.cpp:313
@@ -11729,9 +11727,9 @@ msgid "Cannot flush '%s' to disk: %s"
 msgstr "'%s' をデイスクに書き込み出来ません: %s"
 
 #: common/richio.cpp:652
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot close '%s': %s"
-msgstr "基板 '%s' を保存できませんでした: %s"
+msgstr "'%s' を閉じれません: %s"
 
 #: common/richio.cpp:724
 #, c-format
@@ -18483,9 +18481,8 @@ msgid "%s Properties"
 msgstr "%sのプロパティ"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:129
-#, fuzzy
 msgid "Sheet pin name can not be empty."
-msgstr "ピン名を空欄にはできません。"
+msgstr "シートピン名を空欄にはできません。"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:162
 msgid "Edit Sheet Pin Properties"
@@ -24512,9 +24509,9 @@ msgid "Error retrieving data from HTTP library %s: %s"
 msgstr "HTTP ライブラリ %s からのデータ取得時にエラー: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving part %s from HTTP library: %s"
-msgstr "HTTP ライブラリ %s からのデータ取得時にエラー: %s"
+msgstr "HTTP ライブラリ %s からのパーツ取得時にエラー: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:540
 #, c-format
@@ -33340,9 +33337,9 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "Zip ファイル '%s' を開けません。"
 
 #: gerbview/files.cpp:494
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
-msgstr "<b>一時ファイル '%s' を作成できません。</b>"
+msgstr "'%s' をunzipするための一時ファイルを作成できません。"
 
 #: gerbview/files.cpp:523
 #, c-format
@@ -33355,9 +33352,9 @@ msgid "<b>Unable to create temporary file '%s'.</b>"
 msgstr "<b>一時ファイル '%s' を作成できません。</b>"
 
 #: gerbview/files.cpp:589
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to write temporary file '%s'.</b>"
-msgstr "<b>一時ファイル '%s' を作成できません。</b>"
+msgstr "<b>一時ファイル '%s' に書き込みできません。</b>"
 
 #: gerbview/files.cpp:614
 #, c-format
@@ -53606,9 +53603,8 @@ msgid "Tuning profile must have a name"
 msgstr "等長配線の調整プロファイルには名前を付ける必要があります"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:934
-#, fuzzy
 msgid "Tuning profile name already in use"
-msgstr "等長配線の調整プロファイルには名前を付ける必要があります"
+msgstr "等長配線の調整プロファイル名は既に使用されています"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:950
 msgid "Duplicated signal layer configuration in tuning profile"
