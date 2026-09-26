@@ -225,6 +225,11 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 
 	mainSizer->Add( bColumns, 0, wxEXPAND, 5 );
 
+	m_endingsSizer = new wxBoxSizer( wxVERTICAL );
+
+
+	mainSizer->Add( m_endingsSizer, 0, wxEXPAND, 5 );
+
 	m_symbolEditorSizer = new wxBoxSizer( wxVERTICAL );
 
 

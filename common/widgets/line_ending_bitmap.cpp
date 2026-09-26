@@ -30,26 +30,27 @@
 #include <algorithm>
 
 
-wxBitmap MakeLineEndingBitmap( LINE_ENDING_STYLE aStyle, const wxSize& aSize,
-                               const wxColour& aForeground, const wxColour& aBackground,
+wxBitmap MakeLineEndingBitmap( LINE_ENDING_STYLE aStyle, const wxSize& aSize, const wxColour& aForeground,
                                wxWindow* aWindow, bool aShapeOnRight )
 {
-    double scaleFactor = aWindow->GetDPIScaleFactor();
-
-    wxSize physSize( aWindow->ToPhys( aSize.GetWidth() ),
-                     aWindow->ToPhys( aSize.GetHeight() ) );
-
+    double   scaleFactor = aWindow->GetDPIScaleFactor();
+    wxSize   physSize( aWindow->ToPhys( aSize.GetWidth() ), aWindow->ToPhys( aSize.GetHeight() ) );
     wxBitmap bitmap( physSize );
+
+    bitmap.UseAlpha();
+
     wxMemoryDC dc( bitmap );
 
-    dc.SetBackground( wxBrush( aBackground ) );
+    dc.SetBackground( *wxTRANSPARENT_BRUSH );
     dc.Clear();
 
     int w = physSize.GetWidth();
     int h = physSize.GetHeight();
     int midY = h / 2;
-    int marginL = static_cast<int>( 4 * scaleFactor );
-    int marginR = static_cast<int>( 4 * scaleFactor );
+    int marginL = KiROUND( h / 2.0 );  // Use font height to calculate left/right margins
+    int marginR = KiROUND( h / 2.0 );
+    int marginT = KiROUND( h / 6.0 );  // ... and for top/bottom as well
+    int marginB = KiROUND( h / 6.0 );
 
     int lineStartX = marginL;
     int lineEndX = w - marginR;
@@ -58,7 +59,7 @@ wxBitmap MakeLineEndingBitmap( LINE_ENDING_STYLE aStyle, const wxSize& aSize,
 
     if( aStyle != LINE_ENDING_STYLE::NONE )
     {
-        int shapeHeight = h - static_cast<int>( 4 * scaleFactor );
+        int shapeHeight = h - marginT - marginB;
         int fakeLineWidth = std::max( 1, static_cast<int>( shapeHeight / LINE_ENDING::DEFAULT_RATIO_WIDTH ) );
 
         LINE_ENDING ending( aStyle );

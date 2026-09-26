@@ -18,8 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef DIALOG_LINE_PROPERTIES_H
-#define DIALOG_LINE_PROPERTIES_H
+#pragma once
 
 #include <memory>
 
@@ -39,6 +38,12 @@ public:
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+protected:
+    void resetDefaults( wxCommandEvent& event ) override;
+
+private:
+    void createLineEndingControls( SCH_EDIT_FRAME* aParent );
 
 private:
     SCH_EDIT_FRAME*       m_frame;
@@ -62,23 +67,18 @@ private:
     wxStaticText*     m_endWidthLabel;
     wxTextCtrl*       m_endWidthCtrl;
     wxStaticText*     m_endWidthUnits;
-    wxStaticText*     m_startStrokeWidthLabel;
-    wxTextCtrl*       m_startStrokeWidthCtrl;
-    wxStaticText*     m_startStrokeWidthUnits;
-    wxStaticText*     m_endStrokeWidthLabel;
-    wxTextCtrl*       m_endStrokeWidthCtrl;
-    wxStaticText*     m_endStrokeWidthUnits;
+    wxStaticText*     m_startThicknessLabel;
+    wxTextCtrl*       m_startThicknessCtrl;
+    wxStaticText*     m_startThicknessUnits;
+    wxStaticText*     m_endThicknessLabel;
+    wxTextCtrl*       m_endThicknessCtrl;
+    wxStaticText*     m_endThicknessUnits;
     wxStaticText*     m_endingsHelpLabel;
 
     std::unique_ptr<UNIT_BINDER> m_startLength;
     std::unique_ptr<UNIT_BINDER> m_startWidth;
-    std::unique_ptr<UNIT_BINDER> m_startStrokeWidth;
+    std::unique_ptr<UNIT_BINDER> m_startThickness;
     std::unique_ptr<UNIT_BINDER> m_endLength;
     std::unique_ptr<UNIT_BINDER> m_endWidth;
-    std::unique_ptr<UNIT_BINDER> m_endStrokeWidth;
-
-    void resetDefaults( wxCommandEvent& event ) override;
-    void createLineEndingControls( SCH_EDIT_FRAME* aParent );
+    std::unique_ptr<UNIT_BINDER> m_endThickness;
 };
-
-#endif // DIALOG_LINE_PROPERTIES_H

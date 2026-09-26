@@ -92,6 +92,7 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxRadioButton* m_rbFillBackground;
 		wxRadioButton* m_rbFillCustom;
 		COLOR_SWATCH* m_customColorSwatch;
+		wxBoxSizer* m_endingsSizer;
 		wxBoxSizer* m_symbolEditorSizer;
 		wxCheckBox* m_privateCheckbox;
 		wxCheckBox* m_checkApplyToAllUnits;

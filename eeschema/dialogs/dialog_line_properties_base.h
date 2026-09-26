@@ -25,6 +25,9 @@ class COLOR_SWATCH;
 #include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
 #include <wx/button.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -34,12 +37,7 @@ class COLOR_SWATCH;
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_LINE_PROPERTIES_BASE : public DIALOG_SHIM
 {
-	DECLARE_EVENT_TABLE()
 	private:
-
-		// Private event handlers
-		void _wxFB_resetDefaults( wxCommandEvent& event ){ resetDefaults( event ); }
-
 
 	protected:
 		wxStaticText* m_staticTextWidth;
@@ -52,9 +50,10 @@ class DIALOG_LINE_PROPERTIES_BASE : public DIALOG_SHIM
 		wxBitmapComboBox* m_typeCombo;
 		wxStaticText* m_helpLabel1;
 		wxStaticText* m_helpLabel2;
+		wxBoxSizer* m_endingsSizer;
+		wxButton* m_defaultsButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
-		wxButton* m_sdbSizerApply;
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class

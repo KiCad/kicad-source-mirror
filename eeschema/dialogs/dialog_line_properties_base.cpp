@@ -11,10 +11,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( DIALOG_LINE_PROPERTIES_BASE, DIALOG_SHIM )
-	EVT_BUTTON( wxID_APPLY, DIALOG_LINE_PROPERTIES_BASE::_wxFB_resetDefaults )
-END_EVENT_TABLE()
-
 DIALOG_LINE_PROPERTIES_BASE::DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
@@ -85,18 +81,30 @@ DIALOG_LINE_PROPERTIES_BASE::DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bMargins->Add( m_helpLabel2, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	mainSizer->Add( bMargins, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	mainSizer->Add( bMargins, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+
+	m_endingsSizer = new wxBoxSizer( wxVERTICAL );
+
+
+	mainSizer->Add( m_endingsSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+
+	wxBoxSizer* buttonSizer;
+	buttonSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_defaultsButton = new wxButton( this, wxID_ANY, _("Default"), wxDefaultPosition, wxDefaultSize, 0 );
+	buttonSizer->Add( m_defaultsButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
-	m_sdbSizerApply = new wxButton( this, wxID_APPLY );
-	m_sdbSizer->AddButton( m_sdbSizerApply );
 	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	mainSizer->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
+	buttonSizer->Add( m_sdbSizer, 1, wxALL|wxEXPAND, 5 );
+
+
+	mainSizer->Add( buttonSizer, 0, wxEXPAND, 5 );
 
 
 	this->SetSizer( mainSizer );
@@ -104,8 +112,14 @@ DIALOG_LINE_PROPERTIES_BASE::DIALOG_LINE_PROPERTIES_BASE( wxWindow* parent, wxWi
 	mainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_defaultsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LINE_PROPERTIES_BASE::resetDefaults ), NULL, this );
 }
 
 DIALOG_LINE_PROPERTIES_BASE::~DIALOG_LINE_PROPERTIES_BASE()
 {
+	// Disconnect Events
+	m_defaultsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LINE_PROPERTIES_BASE::resetDefaults ), NULL, this );
+
 }

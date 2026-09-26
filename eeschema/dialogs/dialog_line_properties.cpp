@@ -36,91 +36,82 @@ void DIALOG_LINE_PROPERTIES::createLineEndingControls( SCH_EDIT_FRAME* aParent )
     wxSizer* mainSizer = GetSizer();
     wxCHECK_RET( mainSizer, wxT( "Line properties dialog has no main sizer" ) );
 
-    wxBoxSizer* endingsSizer = new wxBoxSizer( wxVERTICAL );
-
     wxGridBagSizer* gbSizerEndings = new wxGridBagSizer( 3, 0 );
     gbSizerEndings->SetFlexibleDirection( wxBOTH );
     gbSizerEndings->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+    gbSizerEndings->SetEmptyCellSize( wxSize( 20, -1 ) );
 
     m_startShapeLabel = new wxStaticText( this, wxID_ANY, _( "Start Shape:" ) );
-    m_startShapeLabel->Wrap( -1 );
-    gbSizerEndings->Add( m_startShapeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL | wxRIGHT,
-                         5 );
+    gbSizerEndings->Add( m_startShapeLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ),
+                         wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
 
     m_startShapeChoice = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0,
                                                nullptr, wxCB_READONLY );
-    gbSizerEndings->Add( m_startShapeChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL | wxEXPAND,
-                         5 );
+    gbSizerEndings->Add( m_startShapeChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ),
+                         wxALIGN_CENTER_VERTICAL | wxEXPAND, 5 );
 
     m_endShapeLabel = new wxStaticText( this, wxID_ANY, _( "End Shape:" ) );
-    m_endShapeLabel->Wrap( -1 );
     gbSizerEndings->Add( m_endShapeLabel, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ),
-                         wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5 );
+                         wxALIGN_CENTER_VERTICAL | wxRIGHT, 5 );
 
     m_endShapeChoice = new wxBitmapComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0,
                                              nullptr, wxCB_READONLY );
-    gbSizerEndings->Add( m_endShapeChoice, wxGBPosition( 0, 5 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL | wxEXPAND,
-                         5 );
+    gbSizerEndings->Add( m_endShapeChoice, wxGBPosition( 0, 5 ), wxGBSpan( 1, 2 ),
+                         wxALIGN_CENTER_VERTICAL | wxEXPAND, 5 );
 
-    auto addEndingValue = [&]( int aRow, int aCol, const wxString& aLabel, wxStaticText*& aLabelCtrl,
-                               wxTextCtrl*& aValueCtrl, wxStaticText*& aUnitsCtrl, int aFlags )
-    {
-        aLabelCtrl = new wxStaticText( this, wxID_ANY, aLabel );
-        aLabelCtrl->Wrap( -1 );
-        gbSizerEndings->Add( aLabelCtrl, wxGBPosition( aRow, aCol ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL | aFlags,
-                             5 );
+    auto addEndingValue =
+            [&]( int aRow, int aCol, const wxString& aLabel, wxStaticText*& aLabelCtrl, wxTextCtrl*& aValueCtrl,
+                 wxStaticText*& aUnitsCtrl, int aFlags )
+            {
+                aLabelCtrl = new wxStaticText( this, wxID_ANY, aLabel );
+                gbSizerEndings->Add( aLabelCtrl, wxGBPosition( aRow, aCol ), wxGBSpan( 1, 1 ),
+                                     wxALIGN_CENTER_VERTICAL | wxLEFT | aFlags, 15 );
 
-        aValueCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1, -1 ), 0 );
-        gbSizerEndings->Add( aValueCtrl, wxGBPosition( aRow, aCol + 1 ), wxGBSpan( 1, 1 ),
-                             wxALIGN_CENTER_VERTICAL | wxEXPAND, 5 );
+                aValueCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1, -1 ), 0 );
+                gbSizerEndings->Add( aValueCtrl, wxGBPosition( aRow, aCol + 1 ), wxGBSpan( 1, 1 ),
+                                     wxALIGN_CENTER_VERTICAL | wxLEFT | wxEXPAND, 15 );
 
-        aUnitsCtrl = new wxStaticText( this, wxID_ANY, _( "unit" ) );
-        aUnitsCtrl->Wrap( -1 );
-        aUnitsCtrl->SetMinSize( wxSize( 60, -1 ) );
-        gbSizerEndings->Add( aUnitsCtrl, wxGBPosition( aRow, aCol + 2 ), wxGBSpan( 1, 1 ),
-                             wxALIGN_CENTER_VERTICAL | wxLEFT, 3 );
-    };
+                aUnitsCtrl = new wxStaticText( this, wxID_ANY, _( "unit" ) );
+                gbSizerEndings->Add( aUnitsCtrl, wxGBPosition( aRow, aCol + 2 ), wxGBSpan( 1, 1 ),
+                                     wxALIGN_CENTER_VERTICAL | wxLEFT, 3 );
+            };
 
-    addEndingValue( 1, 0, _( "Start Length:" ), m_startLengthLabel, m_startLengthCtrl, m_startLengthUnits, wxRIGHT );
-    addEndingValue( 1, 4, _( "End Length:" ), m_endLengthLabel, m_endLengthCtrl, m_endLengthUnits, wxLEFT | wxRIGHT );
-    addEndingValue( 2, 0, _( "Start Width:" ), m_startWidthLabel, m_startWidthCtrl, m_startWidthUnits, wxRIGHT );
-    addEndingValue( 2, 4, _( "End Width:" ), m_endWidthLabel, m_endWidthCtrl, m_endWidthUnits, wxLEFT | wxRIGHT );
-    addEndingValue( 3, 0, _( "Start Stroke Width:" ), m_startStrokeWidthLabel, m_startStrokeWidthCtrl,
-                    m_startStrokeWidthUnits, wxRIGHT );
-    addEndingValue( 3, 4, _( "End Stroke Width:" ), m_endStrokeWidthLabel, m_endStrokeWidthCtrl, m_endStrokeWidthUnits,
+    addEndingValue( 1, 0, _( "Length:" ), m_startLengthLabel, m_startLengthCtrl, m_startLengthUnits, wxRIGHT );
+    addEndingValue( 1, 4, _( "Length:" ), m_endLengthLabel, m_endLengthCtrl, m_endLengthUnits, wxLEFT | wxRIGHT );
+    addEndingValue( 2, 0, _( "Width:" ), m_startWidthLabel, m_startWidthCtrl, m_startWidthUnits, wxRIGHT );
+    addEndingValue( 2, 4, _( "Width:" ), m_endWidthLabel, m_endWidthCtrl, m_endWidthUnits, wxLEFT | wxRIGHT );
+    addEndingValue( 3, 0, _( "Thickness:" ), m_startThicknessLabel, m_startThicknessCtrl, m_startThicknessUnits,
+                    wxRIGHT );
+    addEndingValue( 3, 4, _( "Thickness:" ), m_endThicknessLabel, m_endThicknessCtrl, m_endThicknessUnits,
                     wxLEFT | wxRIGHT );
 
     gbSizerEndings->AddGrowableCol( 1 );
     gbSizerEndings->AddGrowableCol( 5 );
 
-    endingsSizer->Add( gbSizerEndings, 0, wxEXPAND, 0 );
+    m_endingsSizer->Add( gbSizerEndings, 0, wxEXPAND, 0 );
 
     m_endingsHelpLabel = new wxStaticText( this, wxID_ANY, wxEmptyString );
-    m_endingsHelpLabel->Wrap( -1 );
-    endingsSizer->Add( m_endingsHelpLabel, 0, wxTOP | wxBOTTOM, 5 );
-
-    mainSizer->Insert( 1, endingsSizer, 0, wxEXPAND | wxRIGHT | wxLEFT, 10 );
+    m_endingsSizer->Add( m_endingsHelpLabel, 0, wxLEFT | wxRIGHT | wxTOP | wxBOTTOM, 10 );
 
     wxColour fg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
-    wxColour bg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
-    wxSize   iconSize( 80, 24 );
+    wxSize   iconSize = GetTextExtent( wxT( "XXXXXX" ) );
 
     struct
     {
         wxString          name;
         LINE_ENDING_STYLE style;
     } shapeItems[] = {
-        { _( "None" ), LINE_ENDING_STYLE::NONE },
-        { _( "Arrow" ), LINE_ENDING_STYLE::ARROW },
+        { _( "None" ),       LINE_ENDING_STYLE::NONE       },
+        { _( "Arrow" ),      LINE_ENDING_STYLE::ARROW      },
         { _( "Open Arrow" ), LINE_ENDING_STYLE::ARROW_OPEN },
-        { _( "Circle" ), LINE_ENDING_STYLE::CIRCLE },
-        { _( "Square" ), LINE_ENDING_STYLE::SQUARE },
+        { _( "Circle" ),     LINE_ENDING_STYLE::CIRCLE     },
+        { _( "Square" ),     LINE_ENDING_STYLE::SQUARE     },
     };
 
     for( const auto& item : shapeItems )
     {
-        wxBitmap startBmp = MakeLineEndingBitmap( item.style, iconSize, fg, bg, this, false );
-        wxBitmap endBmp = MakeLineEndingBitmap( item.style, iconSize, fg, bg, this, true );
+        wxBitmap startBmp = MakeLineEndingBitmap( item.style, iconSize, fg, this, false );
+        wxBitmap endBmp = MakeLineEndingBitmap( item.style, iconSize, fg, this, true );
         m_startShapeChoice->Append( item.name, startBmp );
         m_endShapeChoice->Append( item.name, endBmp );
     }
@@ -128,21 +119,20 @@ void DIALOG_LINE_PROPERTIES::createLineEndingControls( SCH_EDIT_FRAME* aParent )
     m_startShapeChoice->SetSelection( 0 );
     m_endShapeChoice->SetSelection( 0 );
 
-    m_startLength =
-            std::make_unique<UNIT_BINDER>( aParent, m_startLengthLabel, m_startLengthCtrl, m_startLengthUnits, true );
-    m_startWidth =
-            std::make_unique<UNIT_BINDER>( aParent, m_startWidthLabel, m_startWidthCtrl, m_startWidthUnits, true );
-    m_startStrokeWidth = std::make_unique<UNIT_BINDER>( aParent, m_startStrokeWidthLabel, m_startStrokeWidthCtrl,
-                                                        m_startStrokeWidthUnits, true );
+    m_startLength = std::make_unique<UNIT_BINDER>( aParent, m_startLengthLabel, m_startLengthCtrl, m_startLengthUnits,
+                                                   true );
+    m_startWidth = std::make_unique<UNIT_BINDER>( aParent, m_startWidthLabel, m_startWidthCtrl, m_startWidthUnits,
+                                                  true );
+    m_startThickness = std::make_unique<UNIT_BINDER>( aParent, m_startThicknessLabel, m_startThicknessCtrl,
+                                                      m_startThicknessUnits, true );
     m_endLength = std::make_unique<UNIT_BINDER>( aParent, m_endLengthLabel, m_endLengthCtrl, m_endLengthUnits, true );
     m_endWidth = std::make_unique<UNIT_BINDER>( aParent, m_endWidthLabel, m_endWidthCtrl, m_endWidthUnits, true );
-    m_endStrokeWidth = std::make_unique<UNIT_BINDER>( aParent, m_endStrokeWidthLabel, m_endStrokeWidthCtrl,
-                                                      m_endStrokeWidthUnits, true );
+    m_endThickness = std::make_unique<UNIT_BINDER>( aParent, m_endThicknessLabel, m_endThicknessCtrl,
+                                                    m_endThicknessUnits, true );
 }
 
 
-DIALOG_LINE_PROPERTIES::DIALOG_LINE_PROPERTIES( SCH_EDIT_FRAME* aParent,
-                                                std::deque<SCH_LINE*>& aLines ) :
+DIALOG_LINE_PROPERTIES::DIALOG_LINE_PROPERTIES( SCH_EDIT_FRAME* aParent, std::deque<SCH_LINE*>& aLines ) :
         DIALOG_LINE_PROPERTIES_BASE( aParent ),
         m_frame( aParent ),
         m_lines( aLines ),
@@ -159,7 +149,7 @@ DIALOG_LINE_PROPERTIES::DIALOG_LINE_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_helpLabel2->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
     m_endingsHelpLabel->SetFont( KIUI::GetInfoFont( this ).Italic() );
-    m_endingsHelpLabel->SetLabel( wxString::Format( _( "Shape sizes of 0 = auto (%g\u00d7 line width)." ),
+    m_endingsHelpLabel->SetLabel( wxString::Format( _( "Set line ending sizes to 0 for automatic (%g\u00d7 line width)." ),
                                                     LINE_ENDING::DEFAULT_RATIO_LENGTH ) );
 
     SetInitialFocus( m_lineWidth );
@@ -167,7 +157,7 @@ DIALOG_LINE_PROPERTIES::DIALOG_LINE_PROPERTIES( SCH_EDIT_FRAME* aParent,
     for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
         m_typeCombo->Append( lineStyleDesc.name, KiBitmapBundle( lineStyleDesc.bitmap ) );
 
-    SetupStandardButtons( { { wxID_APPLY, _( "Default" ) } } );
+    SetupStandardButtons();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -288,11 +278,11 @@ bool DIALOG_LINE_PROPERTIES::TransferDataToWindow()
                          return r->GetStartEndingStrokeWidth() == first_stroke_item->GetStartEndingStrokeWidth();
                      } ) )
     {
-        m_startStrokeWidth->SetValue( first_stroke_item->GetStartEndingStrokeWidth() );
+        m_startThickness->SetValue( first_stroke_item->GetStartEndingStrokeWidth() );
     }
     else
     {
-        m_startStrokeWidth->SetValue( INDETERMINATE_ACTION );
+        m_startThickness->SetValue( INDETERMINATE_ACTION );
     }
 
     // End Length
@@ -330,11 +320,11 @@ bool DIALOG_LINE_PROPERTIES::TransferDataToWindow()
                          return r->GetEndEndingStrokeWidth() == first_stroke_item->GetEndEndingStrokeWidth();
                      } ) )
     {
-        m_endStrokeWidth->SetValue( first_stroke_item->GetEndEndingStrokeWidth() );
+        m_endThickness->SetValue( first_stroke_item->GetEndEndingStrokeWidth() );
     }
     else
     {
-        m_endStrokeWidth->SetValue( INDETERMINATE_ACTION );
+        m_endThickness->SetValue( INDETERMINATE_ACTION );
     }
 
     return true;
@@ -352,10 +342,10 @@ void DIALOG_LINE_PROPERTIES::resetDefaults( wxCommandEvent& event )
     m_endShapeChoice->SetSelection( 0 );
     m_startLength->SetValue( 0 );
     m_startWidth->SetValue( 0 );
-    m_startStrokeWidth->SetValue( 0 );
+    m_startThickness->SetValue( 0 );
     m_endLength->SetValue( 0 );
     m_endWidth->SetValue( 0 );
-    m_endStrokeWidth->SetValue( 0 );
+    m_endThickness->SetValue( 0 );
 
     Refresh();
 }
@@ -412,8 +402,8 @@ bool DIALOG_LINE_PROPERTIES::TransferDataFromWindow()
         if( !m_startWidth->IsIndeterminate() )
             line->SetStartEndingWidth( std::max( 0, m_startWidth->GetIntValue() ) );
 
-        if( !m_startStrokeWidth->IsIndeterminate() )
-            line->SetStartEndingStrokeWidth( std::max( 0, m_startStrokeWidth->GetIntValue() ) );
+        if( !m_startThickness->IsIndeterminate() )
+            line->SetStartEndingStrokeWidth( std::max( 0, m_startThickness->GetIntValue() ) );
 
         if( !m_endLength->IsIndeterminate() )
             line->SetEndEndingLength( std::max( 0, m_endLength->GetIntValue() ) );
@@ -421,8 +411,8 @@ bool DIALOG_LINE_PROPERTIES::TransferDataFromWindow()
         if( !m_endWidth->IsIndeterminate() )
             line->SetEndEndingWidth( std::max( 0, m_endWidth->GetIntValue() ) );
 
-        if( !m_endStrokeWidth->IsIndeterminate() )
-            line->SetEndEndingStrokeWidth( std::max( 0, m_endStrokeWidth->GetIntValue() ) );
+        if( !m_endThickness->IsIndeterminate() )
+            line->SetEndEndingStrokeWidth( std::max( 0, m_endThickness->GetIntValue() ) );
     }
 
     commit.Push( m_lines.size() == 1 ? _( "Edit Line" ) : _( "Edit Lines" ) );
