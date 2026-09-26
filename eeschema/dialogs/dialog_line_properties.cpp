@@ -375,26 +375,36 @@ bool DIALOG_LINE_PROPERTIES::TransferDataFromWindow()
         if( !m_width.IsIndeterminate() )
             line->SetLineWidth( std::max( 0, m_width.GetIntValue() ) );
 
-        auto it = lineTypeNames.begin();
-        std::advance( it, m_typeCombo->GetSelection() );
+        if( m_typeCombo->GetStringSelection() != INDETERMINATE_STYLE )
+        {
+            auto it = lineTypeNames.begin();
+            std::advance( it, m_typeCombo->GetSelection() );
 
-        if( it == lineTypeNames.end() )
-            line->SetLineStyle( LINE_STYLE::DEFAULT );
-        else
-            line->SetLineStyle( it->first );
+            if( it == lineTypeNames.end() )
+                line->SetLineStyle( LINE_STYLE::DEFAULT );
+            else
+                line->SetLineStyle( it->first );
+        }
 
-        line->SetLineColor( m_colorSwatch->GetSwatchColor() );
+        if( m_colorSwatch->GetSwatchColor() != COLOR4D::UNSPECIFIED )
+            line->SetLineColor( m_colorSwatch->GetSwatchColor() );
 
         // Line endings
-        int startSel = m_startShapeChoice->GetSelection();
+        if( m_startShapeChoice->GetStringSelection() != INDETERMINATE_STYLE )
+        {
+            int startSel = m_startShapeChoice->GetSelection();
 
-        if( startSel >= 0 && startSel < LINE_ENDING::s_defaultChoiceCount )
-            line->SetStartEndingStyle( LINE_ENDING::s_defaultChoiceOrder[startSel] );
+            if( startSel >= 0 && startSel < LINE_ENDING::s_defaultChoiceCount )
+                line->SetStartEndingStyle( LINE_ENDING::s_defaultChoiceOrder[startSel] );
+        }
 
-        int endSel = m_endShapeChoice->GetSelection();
+        if( m_endShapeChoice->GetStringSelection() != INDETERMINATE_STYLE )
+        {
+            int endSel = m_endShapeChoice->GetSelection();
 
-        if( endSel >= 0 && endSel < LINE_ENDING::s_defaultChoiceCount )
-            line->SetEndEndingStyle( LINE_ENDING::s_defaultChoiceOrder[endSel] );
+            if( endSel >= 0 && endSel < LINE_ENDING::s_defaultChoiceCount )
+                line->SetEndEndingStyle( LINE_ENDING::s_defaultChoiceOrder[endSel] );
+        }
 
         if( !m_startLength->IsIndeterminate() )
             line->SetStartEndingLength( std::max( 0, m_startLength->GetIntValue() ) );
