@@ -20,12 +20,15 @@ class TEXT_CTRL_EVAL;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/filepicker.h>
-#include <wx/checkbox.h>
+#include <wx/choice.h>
+#include <wx/sizer.h>
+#include <wx/statline.h>
+#include <wx/radiobut.h>
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
-#include <wx/choice.h>
 #include <wx/gbsizer.h>
-#include <wx/sizer.h>
+#include <wx/statbox.h>
+#include <wx/checkbox.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -41,17 +44,24 @@ class DIALOG_EXPORT_IDF3_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_txtBrdFile;
 		wxFilePickerCtrl* m_filePickerIDF;
-		wxCheckBox* m_cbSetBoardReferencePoint;
+		wxStaticText* m_outputUnitsLabel;
+		wxChoice* m_outputUnitsChoice;
+		wxStaticText* m_staticText8;
+		wxStaticLine* m_staticline1;
+		wxRadioButton* m_rbOriginBoardCenter;
+		wxRadioButton* m_rbOriginDrill;
+		wxRadioButton* m_rbOriginGrid;
+		wxRadioButton* m_rbOriginUser;
 		wxStaticText* m_xLabel;
 		TEXT_CTRL_EVAL* m_IDF_Xref;
 		wxStaticText* m_xUnits;
 		wxStaticText* m_yLabel;
 		TEXT_CTRL_EVAL* m_IDF_Yref;
 		wxStaticText* m_yUnits;
-		wxStaticText* m_outputUnitsLabel;
-		wxChoice* m_outputUnitsChoice;
 		wxCheckBox* m_cbRemoveDNP;
 		wxCheckBox* m_cbRemoveUnspecified;
+		wxCheckBox* m_cbHeightFromModels;
+		wxTextCtrl* m_tcLog;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

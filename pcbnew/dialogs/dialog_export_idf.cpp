@@ -22,7 +22,10 @@
 #include <board.h>
 #include <widgets/text_ctrl_eval.h>
 #include <dialog_export_idf.h>
-#include <pcbnew_settings.h>
+
+#include <board_design_settings.h>
+#include <jobs/job_export_pcb_idf.h>
+#include <string_utils.h>
 #include <tools/board_editor_control.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <kidialog.h>
@@ -31,11 +34,32 @@
 DIALOG_EXPORT_IDF3::DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* aEditFrame ) :
         DIALOG_EXPORT_IDF3_BASE( aEditFrame ),
         m_xPos( aEditFrame, m_xLabel, m_IDF_Xref, m_xUnits ),
-        m_yPos( aEditFrame, m_yLabel, m_IDF_Yref, m_yUnits )
+        m_yPos( aEditFrame, m_yLabel, m_IDF_Yref, m_yUnits ),
+        m_parent( aEditFrame )
 {
-    SetFocus();
+    setupDialog();
+}
 
-    m_cbSetBoardReferencePoint->Bind( wxEVT_CHECKBOX, &DIALOG_EXPORT_IDF3::OnBoardReferencePointChecked, this );
+
+DIALOG_EXPORT_IDF3::DIALOG_EXPORT_IDF3( JOB_EXPORT_PCB_IDF* aJob, PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent ) :
+        DIALOG_EXPORT_IDF3_BASE( aParent ),
+        m_xPos( aEditFrame, m_xLabel, m_IDF_Xref, m_xUnits ),
+        m_yPos( aEditFrame, m_yLabel, m_IDF_Yref, m_yUnits ),
+        m_parent( aEditFrame ),
+        m_job( aJob )
+{
+    setupDialog();
+}
+
+
+void DIALOG_EXPORT_IDF3::setupDialog()
+{
+    m_hash_key = TO_UTF8( GetTitle() );
+
+    m_rbOriginUser->Bind( wxEVT_RADIOBUTTON, &DIALOG_EXPORT_IDF3::onRadioButtonsChanged, this );
+    m_rbOriginDrill->Bind( wxEVT_RADIOBUTTON, &DIALOG_EXPORT_IDF3::onRadioButtonsChanged, this );
+    m_rbOriginGrid->Bind( wxEVT_RADIOBUTTON, &DIALOG_EXPORT_IDF3::onRadioButtonsChanged, this );
+    m_rbOriginBoardCenter->Bind( wxEVT_RADIOBUTTON, &DIALOG_EXPORT_IDF3::onRadioButtonsChanged, this );
 
     SetupStandardButtons();
 
@@ -44,19 +68,74 @@ DIALOG_EXPORT_IDF3::DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* aEditFrame ) :
 }
 
 
-void DIALOG_EXPORT_IDF3::OnBoardReferencePointChecked( wxCommandEvent& event )
+void DIALOG_EXPORT_IDF3::onRadioButtonsChanged( wxCommandEvent& event )
 {
-    m_xPos.Enable( m_cbSetBoardReferencePoint->GetValue() );
-    m_yPos.Enable( m_cbSetBoardReferencePoint->GetValue() );
+    m_xPos.Enable( m_rbOriginUser->GetValue() );
+    m_yPos.Enable( m_rbOriginUser->GetValue() );
 
     event.Skip();
 }
 
 
+void DIALOG_EXPORT_IDF3::ApplyJobSettings( const JOB_EXPORT_PCB_IDF& aSettings )
+{
+    SetTitle( aSettings.GetSettingsDialogTitle() );
+
+    switch( aSettings.m_units )
+    {
+    default:
+    case JOB_EXPORT_PCB_IDF::UNITS::MM:     m_outputUnitsChoice->SetSelection( 0 ); break;
+    case JOB_EXPORT_PCB_IDF::UNITS::MILS:   m_outputUnitsChoice->SetSelection( 1 ); break;
+    }
+
+    switch( aSettings.m_originMode )
+    {
+    default:
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER:  m_rbOriginBoardCenter->SetValue( true ); break;
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::GRID:    m_rbOriginGrid->SetValue( true );        break;
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::DRILL:   m_rbOriginDrill->SetValue( true );       break;
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER:    m_rbOriginUser->SetValue( true );        break;
+    }
+
+    m_xPos.SetValue( aSettings.m_userOrigin.x );
+    m_yPos.SetValue( aSettings.m_userOrigin.y );
+
+    m_cbRemoveDNP->SetValue( !aSettings.m_includeDNP );
+    m_cbRemoveUnspecified->SetValue( !aSettings.m_includeUnspecified );
+    m_cbHeightFromModels->SetValue( aSettings.m_calculateHeightFromModels );
+}
+
+
+void DIALOG_EXPORT_IDF3::GetJobSettings( JOB_EXPORT_PCB_IDF& aSettingsOut ) const
+{
+    aSettingsOut.m_units = m_outputUnitsChoice->GetSelection() ? JOB_EXPORT_PCB_IDF::UNITS::MILS
+                                                               : JOB_EXPORT_PCB_IDF::UNITS::MM;
+
+    if( m_rbOriginBoardCenter->GetValue() )
+        aSettingsOut.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER;
+    else if( m_rbOriginGrid->GetValue() )
+        aSettingsOut.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::GRID;
+    else if( m_rbOriginDrill->GetValue() )
+        aSettingsOut.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::DRILL;
+    else if( m_rbOriginUser->GetValue() )
+        aSettingsOut.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER;
+
+    aSettingsOut.m_userOrigin.x = m_xPos.GetValue();
+    aSettingsOut.m_userOrigin.y = m_yPos.GetValue();
+
+    aSettingsOut.m_includeDNP = !m_cbRemoveDNP->GetValue();
+    aSettingsOut.m_includeUnspecified = !m_cbRemoveUnspecified->GetValue();
+    aSettingsOut.m_calculateHeightFromModels = m_cbHeightFromModels->GetValue();
+}
+
+
 bool DIALOG_EXPORT_IDF3::TransferDataToWindow()
 {
+    if( m_job )
+        ApplyJobSettings( *m_job );
+
     wxCommandEvent dummy;
-    OnBoardReferencePointChecked( dummy );
+    onRadioButtonsChanged( dummy );
 
     return true;
 }
@@ -131,19 +210,32 @@ int BOARD_EDITOR_CONTROL::ExportIDF( const TOOL_EVENT& aEvent )
     if ( dlg.ShowModal() != wxID_OK )
         return 0;
 
-    double aXRef;
-    double aYRef;
+    JOB_EXPORT_PCB_IDF job;
+    dlg.GetJobSettings( job );
 
-    if( dlg.GetSetBoardReferencePoint() )
+    VECTOR2D origin;
+
+    switch( job.m_originMode )
     {
-        aXRef = dlg.GetXRefMM();
-        aYRef = dlg.GetYRefMM();
-    }
-    else
+    default:
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER:
     {
         BOX2I bbox = board->GetBoardEdgesBoundingBox();
-        aXRef = bbox.Centre().x * pcbIUScale.MM_PER_IU;
-        aYRef = bbox.Centre().y * pcbIUScale.MM_PER_IU;
+        origin = bbox.Centre() * pcbIUScale.MM_PER_IU;
+        break;
+    }
+
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::GRID:
+        origin = board->GetDesignSettings().GetGridOrigin();
+        break;
+
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::DRILL:
+        origin = board->GetDesignSettings().GetAuxOrigin();
+        break;
+
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER:
+        origin = job.m_userOrigin;
+        break;
     }
 
     wxString fullFilename = dlg.FilePicker()->GetPath();
@@ -151,8 +243,8 @@ int BOARD_EDITOR_CONTROL::ExportIDF( const TOOL_EVENT& aEvent )
 
     wxBusyCursor dummy;
 
-    if( !m_frame->Export_IDF3( board, fullFilename, dlg.GetThouOption(), aXRef, aYRef,
-                               !dlg.GetNoUnspecifiedOption(), !dlg.GetNoDNPOption() ) )
+    if( !m_frame->Export_IDF3( board, fullFilename, job.m_units == JOB_EXPORT_PCB_IDF::UNITS::MILS, origin.x, origin.y,
+                               job.m_includeUnspecified, job.m_includeDNP ) )
     {
         wxMessageBox( wxString::Format( _( "Failed to create file '%s'." ), fullFilename ) );
     }

@@ -24,29 +24,31 @@
 #include <widgets/unit_binder.h>
 
 class PCB_EDIT_FRAME;
+class JOB_EXPORT_PCB_IDF;
 
 class DIALOG_EXPORT_IDF3 : public DIALOG_EXPORT_IDF3_BASE
 {
 public:
     DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* aEditFrame );
-    ~DIALOG_EXPORT_IDF3() = default;
+    DIALOG_EXPORT_IDF3( JOB_EXPORT_PCB_IDF* aJob, PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent );
+
+    ~DIALOG_EXPORT_IDF3() override = default;
 
     wxFilePickerCtrl* FilePicker() { return m_filePickerIDF; }
 
-    bool GetSetBoardReferencePoint() { return m_cbSetBoardReferencePoint->GetValue(); }
-    double GetXRefMM() { return pcbIUScale.IUTomm( m_xPos.GetIntValue() ); }
-    double GetYRefMM() { return pcbIUScale.IUTomm( m_yPos.GetIntValue() ); }
-
-    bool GetThouOption() { return m_outputUnitsChoice->GetSelection() == 1; }
-    bool GetNoUnspecifiedOption() { return m_cbRemoveUnspecified->GetValue(); }
-    bool GetNoDNPOption() { return m_cbRemoveDNP->GetValue(); }
-
-    void OnBoardReferencePointChecked( wxCommandEvent& event );
+    void ApplyJobSettings( const JOB_EXPORT_PCB_IDF& aSettings );
+    void GetJobSettings( JOB_EXPORT_PCB_IDF& aSettingsOut ) const;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
 private:
+    void setupDialog();
+    void onRadioButtonsChanged( wxCommandEvent& event );
+
     UNIT_BINDER     m_xPos;
     UNIT_BINDER     m_yPos;
+
+    PCB_EDIT_FRAME*     m_parent = nullptr;
+    JOB_EXPORT_PCB_IDF* m_job = nullptr;
 };
