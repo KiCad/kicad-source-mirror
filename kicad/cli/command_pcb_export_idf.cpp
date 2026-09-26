@@ -59,7 +59,7 @@ CLI::PCB_EXPORT_IDF_COMMAND::PCB_EXPORT_IDF_COMMAND() :
             .help( UTF8STDSTR( _( "User-specified board origin X" ) ) )
             .metavar( "VALUE" );
 
-    m_argParser.add_argument( ARG_USER_ORIGIN_X )
+    m_argParser.add_argument( ARG_USER_ORIGIN_Y )
             .default_value( 0.0 )
             .scan<'g', double>()
             .help( UTF8STDSTR( _( "User-specified board origin Y" ) ) )

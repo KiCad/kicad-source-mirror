@@ -3079,7 +3079,46 @@ int PCBNEW_JOBS_HANDLER::JobExportIpcD356( JOB* aJob )
 
 int PCBNEW_JOBS_HANDLER::JobExportIdf( JOB* aJob )
 {
-    // TODO
+    JOB_EXPORT_PCB_IDF* job = dynamic_cast<JOB_EXPORT_PCB_IDF*>( aJob );
+
+    if( job == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    BOARD* brd = getBoard( job->m_filename );
+
+    if( !brd )
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    if( job->GetConfiguredOutputPath().IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetExt( FILEEXT::IdfV3BoardFileExtension );
+
+        job->SetWorkingOutputPath( fn.GetFullName() );
+    }
+
+    wxString outPath = resolveJobOutputPath( job, brd );
+
+    if( !PATHS::EnsurePathExists( outPath, true ) )
+    {
+        m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    FILENAME_RESOLVER* resolver = PROJECT_PCB::Get3DFilenameResolver( brd->GetProject() );
+
+    if( !resolver )
+    {
+        m_reporter->Report( _( "Internal error\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    IDF_EXPORTER exporter( brd, resolver, job, m_reporter );
+
+    if( !exporter.Export( outPath ) )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    m_reporter->Report( _( "Successfully created IDFv3 files\n" ), RPT_SEVERITY_INFO );
 
     return CLI::EXIT_CODES::SUCCESS;
 }
