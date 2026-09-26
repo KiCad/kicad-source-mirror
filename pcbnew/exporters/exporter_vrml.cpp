@@ -43,7 +43,7 @@
 #include <filename_resolver.h>
 #include "plugins/3dapi/ifsg_all.h"
 #include "streamwrapper.h"
-#include "vrml_layer.h"
+#include <io/idf/vrml_layer.h>
 #include "pcb_edit_frame.h"
 
 #include <convert_basic_shapes_to_polygon.h>

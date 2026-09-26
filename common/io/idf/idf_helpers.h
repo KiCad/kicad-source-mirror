@@ -24,7 +24,7 @@
 #include <wx/string.h>
 #include <iostream>
 #include <string>
-#include <idf_common.h>
+#include <io/idf/idf_common.h>
 
 /**
  * Convert a wxString to a UTF8 encoded C string for all wxWidgets build modes.

@@ -25,7 +25,7 @@
 #include <wx/chartype.h>
 #include <wx/dir.h>
 #include <wx/regex.h>
-#include "idf_helpers.h"
+#include <io/idf/idf_helpers.h>
 #include "odb_defines.h"
 #include "pcb_io_odbpp.h"
 

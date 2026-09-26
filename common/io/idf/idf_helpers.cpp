@@ -22,8 +22,8 @@
 #include <iostream>
 #include <sstream>
 
-#include <idf_common.h>
-#include <idf_helpers.h>
+#include <io/idf/idf_common.h>
+#include <io/idf/idf_helpers.h>
 
 using namespace std;
 using namespace IDF3;
@@ -146,17 +146,17 @@ bool IDF3::ParseOwner( const std::string& aToken, IDF3::KEY_OWNER& aOwner )
 {
     if( CompareToken( "UNOWNED", aToken ) )
     {
-        aOwner = UNOWNED;
+        aOwner = KEY_OWNER::UNOWNED;
         return true;
     }
     else if( CompareToken( "ECAD", aToken ) )
     {
-        aOwner = ECAD;
+        aOwner = KEY_OWNER::ECAD;
         return true;
     }
     else if( CompareToken( "MCAD", aToken ) )
     {
-        aOwner = MCAD;
+        aOwner = KEY_OWNER::MCAD;
         return true;
     }
 
@@ -170,33 +170,33 @@ bool IDF3::ParseIDFLayer( const std::string& aToken, IDF3::IDF_LAYER& aLayer )
 {
     if( CompareToken( "TOP", aToken ) )
     {
-        aLayer = LYR_TOP;
+        aLayer = IDF_LAYER::LYR_TOP;
         return true;
     }
     else if( CompareToken( "BOTTOM", aToken ) )
     {
-        aLayer = LYR_BOTTOM;
+        aLayer = IDF_LAYER::LYR_BOTTOM;
         return true;
     }
     else if( CompareToken( "BOTH", aToken ) )
     {
-        aLayer = LYR_BOTH;
+        aLayer = IDF_LAYER::LYR_BOTH;
         return true;
     }
     else if( CompareToken( "INNER", aToken ) )
     {
-        aLayer = LYR_INNER;
+        aLayer = IDF_LAYER::LYR_INNER;
         return true;
     }
     else if( CompareToken( "ALL", aToken ) )
     {
-        aLayer = LYR_ALL;
+        aLayer = IDF_LAYER::LYR_ALL;
         return true;
     }
 
     ERROR_IDF << "unrecognized IDF LAYER: '" << aToken << "'\n";
 
-    aLayer = LYR_INVALID;
+    aLayer = IDF_LAYER::LYR_INVALID;
     return false;
 }
 
@@ -205,23 +205,23 @@ bool IDF3::WriteLayersText( std::ostream& aBoardFile, IDF3::IDF_LAYER aLayer )
 {
     switch( aLayer )
     {
-    case LYR_TOP:
+    case IDF_LAYER::LYR_TOP:
         aBoardFile << "TOP";
         break;
 
-    case LYR_BOTTOM:
+    case IDF_LAYER::LYR_BOTTOM:
         aBoardFile << "BOTTOM";
         break;
 
-    case LYR_BOTH:
+    case IDF_LAYER::LYR_BOTH:
         aBoardFile << "BOTH";
         break;
 
-    case LYR_INNER:
+    case IDF_LAYER::LYR_INNER:
         aBoardFile << "INNER";
         break;
 
-    case LYR_ALL:
+    case IDF_LAYER::LYR_ALL:
         aBoardFile << "ALL";
         break;
 
@@ -229,7 +229,7 @@ bool IDF3::WriteLayersText( std::ostream& aBoardFile, IDF3::IDF_LAYER aLayer )
         do
         {
             std::ostringstream ostr;
-            ostr << "invalid IDF layer: " << aLayer;
+            ostr << "invalid IDF layer: " << static_cast<int>( aLayer );
 
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         } while( 0 );
@@ -245,16 +245,16 @@ std::string IDF3::GetPlacementString( IDF3::IDF_PLACEMENT aPlacement )
 {
     switch( aPlacement )
     {
-    case PS_UNPLACED:
+    case IDF_PLACEMENT::PS_UNPLACED:
         return "UNPLACED";
 
-    case PS_PLACED:
+    case IDF_PLACEMENT::PS_PLACED:
         return "PLACED";
 
-    case PS_MCAD:
+    case IDF_PLACEMENT::PS_MCAD:
         return "MCAD";
 
-    case PS_ECAD:
+    case IDF_PLACEMENT::PS_ECAD:
         return "ECAD";
 
     default:
@@ -262,7 +262,7 @@ std::string IDF3::GetPlacementString( IDF3::IDF_PLACEMENT aPlacement )
     }
 
     std::ostringstream ostr;
-    ostr << "[INVALID PLACEMENT VALUE]:" << aPlacement;
+    ostr << "[INVALID PLACEMENT VALUE]:" << static_cast<int>( aPlacement );
 
     return ostr.str();
 }
@@ -272,19 +272,19 @@ std::string IDF3::GetLayerString( IDF3::IDF_LAYER aLayer )
 {
     switch( aLayer )
     {
-    case LYR_TOP:
+    case IDF_LAYER::LYR_TOP:
         return "TOP";
 
-    case LYR_BOTTOM:
+    case IDF_LAYER::LYR_BOTTOM:
         return "BOTTOM";
 
-    case LYR_BOTH:
+    case IDF_LAYER::LYR_BOTH:
         return "BOTH";
 
-    case LYR_INNER:
+    case IDF_LAYER::LYR_INNER:
         return "INNER";
 
-    case LYR_ALL:
+    case IDF_LAYER::LYR_ALL:
         return "ALL";
 
     default:
@@ -292,7 +292,7 @@ std::string IDF3::GetLayerString( IDF3::IDF_LAYER aLayer )
     }
 
     std::ostringstream ostr;
-    ostr << "[INVALID LAYER VALUE]:" << aLayer;
+    ostr << "[INVALID LAYER VALUE]:" << static_cast<int>( aLayer );
 
     return ostr.str();
 }
@@ -302,13 +302,13 @@ std::string IDF3::GetOwnerString( IDF3::KEY_OWNER aOwner )
 {
     switch( aOwner )
     {
-    case IDF3::UNOWNED:
+    case KEY_OWNER::UNOWNED:
         return "UNOWNED";
 
-    case IDF3::MCAD:
+    case KEY_OWNER::MCAD:
         return "MCAD";
 
-    case IDF3::ECAD:
+    case KEY_OWNER::ECAD:
         return "ECAD";
 
     default:
@@ -316,7 +316,7 @@ std::string IDF3::GetOwnerString( IDF3::KEY_OWNER aOwner )
     }
 
     ostringstream ostr;
-    ostr << "UNKNOWN: " << aOwner;
+    ostr << "UNKNOWN: " << static_cast<int>( aOwner );
 
     return ostr.str();
 }

@@ -27,7 +27,7 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <footprint_library_adapter.h>
-#include <idf_parser.h>
+#include <io/idf/idf_parser.h>
 #include <pad.h>
 #include <pcb_shape.h>
 #include <build_version.h>
@@ -416,15 +416,15 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
         {
             // plating
             if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
-                kplate = IDF3::NPTH;
+                kplate = IDF3::KEY_PLATING::NPTH;
             else
-                kplate = IDF3::PTH;
+                kplate = IDF3::KEY_PLATING::PTH;
 
             // hole type
             tstr = TO_UTF8( pad->GetNumber() );
 
             if( tstr.empty() || !tstr.compare( "0" ) || !tstr.compare( "~" )
-                || ( kplate == IDF3::NPTH )
+                || ( kplate == IDF3::KEY_PLATING::NPTH )
                 || ( pad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG ) )
                 pintype = "MTG";
             else
@@ -476,7 +476,7 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
             else
             {
                 IDF_DRILL_DATA *dp = new IDF_DRILL_DATA( drill, x, y, kplate, crefdes,
-                                                         pintype, IDF3::ECAD );
+                                                         pintype, IDF3::KEY_OWNER::ECAD );
 
                 if( !aIDFBoard.AddDrill( dp ) )
                 {
@@ -603,16 +603,16 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
             {
                 comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
                                    -aFootprint->GetPosition().y * scale + dy,
-                                   rotz, IDF3::LYR_TOP );
+                                   rotz, IDF3::IDF_LAYER::LYR_TOP );
             }
             else
             {
                 comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
                                    -aFootprint->GetPosition().y * scale + dy,
-                                   rotz, IDF3::LYR_BOTTOM );
+                                   rotz, IDF3::IDF_LAYER::LYR_BOTTOM );
             }
 
-            comp->SetPlacement( IDF3::PS_ECAD );
+            comp->SetPlacement( IDF3::IDF_PLACEMENT::PS_ECAD );
 
             aIDFBoard.AddComponent( comp );
         }
@@ -628,16 +628,16 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
                 {
                     comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
                                        -aFootprint->GetPosition().y * scale + dy,
-                                       rotz, IDF3::LYR_TOP );
+                                       rotz, IDF3::IDF_LAYER::LYR_TOP );
                 }
                 else
                 {
                     comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
                                        -aFootprint->GetPosition().y * scale + dy,
-                                       rotz, IDF3::LYR_BOTTOM );
+                                       rotz, IDF3::IDF_LAYER::LYR_BOTTOM );
                 }
 
-                comp->SetPlacement( IDF3::PS_ECAD );
+                comp->SetPlacement( IDF3::IDF_PLACEMENT::PS_ECAD );
 
             }
             else
@@ -653,7 +653,7 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
 
                 // conditions: same side, X,Y coordinates within 10 microns,
                 // angle within 0.01 degree
-                if( ( top && side == IDF3::LYR_BOTTOM ) || ( !top && side == IDF3::LYR_TOP )
+                if( ( top && side == IDF3::IDF_LAYER::LYR_BOTTOM ) || ( !top && side == IDF3::IDF_LAYER::LYR_TOP )
                     || ( refA > 0.0001 ) || ( refX > 0.0001 ) )
                 {
                     if( m_reporter )
@@ -717,7 +717,7 @@ bool IDF_EXPORTER::Export( const wxString& aFullFileName ) const
     wxCHECK( m_resolver, false );
     wxCHECK( m_settings, false );
 
-    IDF3_BOARD idfBoard( IDF3::CAD_ELEC );
+    IDF3_BOARD idfBoard( IDF3::CAD_TYPE::CAD_ELEC );
 
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO toggle;
@@ -728,12 +728,12 @@ bool IDF_EXPORTER::Export( const wxString& aFullFileName ) const
 
     if( m_settings->m_units == JOB_EXPORT_PCB_IDF::UNITS::MILS )
     {
-        idfUnit = IDF3::UNIT_THOU;
+        idfUnit = IDF3::IDF_UNIT::UNIT_THOU;
         idfBoard.SetUserPrecision( 1 );
     }
     else
     {
-        idfUnit = IDF3::UNIT_MM;
+        idfUnit = IDF3::IDF_UNIT::UNIT_MM;
         idfBoard.SetUserPrecision( 5 );
     }
 

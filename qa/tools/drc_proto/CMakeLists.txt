@@ -98,7 +98,6 @@ target_link_libraries( drc_proto
     tinyspline_lib
     nanosvg
     markdown_lib
-    idf3
     Boost::headers
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}

@@ -30,8 +30,8 @@
 #include <cerrno>
 #include <cstdio>
 #include <cmath>
-#include <idf_common.h>
-#include <idf_helpers.h>
+#include <io/idf/idf_common.h>
+#include <io/idf/idf_helpers.h>
 
 using namespace IDF3;
 using namespace std;
@@ -97,13 +97,13 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( ( !aBoardFile.good() && !aBoardFile.eof() ) || iline.empty() )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, "problems reading board notes" ) );
     }
 
     if( isComment )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: comment within a section (NOTES)" ) );
@@ -114,7 +114,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( quoted )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: X position in NOTES section must not be "
@@ -131,7 +131,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( istr.fail() )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: X position in NOTES section is not "
@@ -140,7 +140,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( !GetIDFString( iline, token, quoted, idx ) )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: Y position in NOTES section is "
@@ -149,7 +149,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( quoted )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: Y position in NOTES section must not be "
@@ -163,7 +163,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( istr.fail() )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: Y position in NOTES section is not "
@@ -172,7 +172,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( !GetIDFString( iline, token, quoted, idx ) )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: text height in NOTES section is "
@@ -181,7 +181,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( quoted )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: text height in NOTES section must not "
@@ -195,7 +195,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( istr.fail() )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: text height in NOTES section is not "
@@ -204,7 +204,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( !GetIDFString( iline, token, quoted, idx ) )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: text length in NOTES section is "
@@ -213,7 +213,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( quoted )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: text length in NOTES section must not "
@@ -227,7 +227,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( istr.fail() )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: text length in NOTES section is not "
@@ -236,7 +236,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     if( !GetIDFString( iline, token, quoted, idx ) )
     {
-        aBoardState = IDF3::FILE_INVALID;
+        aBoardState = FILE_STATE::FILE_INVALID;
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "invalid IDFv3 file\n"
                           "* Violation of specification: text value in NOTES section is "
@@ -245,7 +245,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
     text = token;
 
-    if( aBoardUnit == UNIT_THOU )
+    if( aBoardUnit == IDF_UNIT::UNIT_THOU )
     {
         xpos *= IDF_THOU_TO_MM;
         ypos *= IDF_THOU_TO_MM;
@@ -259,7 +259,7 @@ bool IDF_NOTE::readNote( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState
 
 bool IDF_NOTE::writeNote( std::ostream& aBoardFile, IDF3::IDF_UNIT aBoardUnit )
 {
-    if( aBoardUnit == UNIT_THOU )
+    if( aBoardUnit == IDF_UNIT::UNIT_THOU )
     {
         aBoardFile << setiosflags( ios::fixed ) << setprecision( 1 ) << ( xpos / IDF_THOU_TO_MM )
                    << " " << ( ypos / IDF_THOU_TO_MM ) << " " << ( height / IDF_THOU_TO_MM ) << " "
@@ -321,10 +321,10 @@ IDF_DRILL_DATA::IDF_DRILL_DATA() :
         dia( 0.0 ),
         x( 0.0 ),
         y( 0.0 ),
-        plating( NPTH ),
-        kref( NOREFDES ),
-        khole( MTG ),
-        owner( UNOWNED )
+        plating( KEY_PLATING::NPTH ),
+        kref( KEY_REFDES::NOREFDES ),
+        khole( KEY_HOLETYPE::MTG ),
+        owner( KEY_OWNER::UNOWNED )
 {
 }
 
@@ -344,41 +344,41 @@ IDF_DRILL_DATA::IDF_DRILL_DATA( double aDrillDia, double aPosX, double aPosY,
 
     if( !aRefDes.compare( "BOARD" ) )
     {
-        kref = BOARD;
+        kref = KEY_REFDES::BOARD;
     }
     else if( aRefDes.empty() || !aRefDes.compare( "NOREFDES" ) )
     {
-        kref = NOREFDES;
+        kref = KEY_REFDES::NOREFDES;
     }
     else if( !aRefDes.compare( "PANEL" ) )
     {
-        kref = PANEL;
+        kref = KEY_REFDES::PANEL;
     }
     else
     {
-        kref = REFDES;
+        kref = KEY_REFDES::REFDES;
         refdes = aRefDes;
     }
 
     if( !aHoleType.compare( "PIN" ) )
     {
-        khole = PIN;
+        khole = KEY_HOLETYPE::PIN;
     }
     else if( !aHoleType.compare( "VIA" ) )
     {
-        khole = VIA;
+        khole = KEY_HOLETYPE::VIA;
     }
     else if( aHoleType.empty() || !aHoleType.compare( "MTG" ) )
     {
-        khole = MTG;
+        khole = KEY_HOLETYPE::MTG;
     }
     else if( !aHoleType.compare( "TOOL" ) )
     {
-        khole = TOOL;
+        khole = KEY_HOLETYPE::TOOL;
     }
     else
     {
-        khole = OTHER;
+        khole = KEY_HOLETYPE::OTHER;
         holetype = aHoleType;
     }
 
@@ -455,9 +455,9 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
                           "* Violation of specification: drill diameter is not numeric" ) );
     }
 
-    if( ( aBoardUnit == UNIT_MM && dia < IDF_MIN_DIA_MM )
-        || ( aBoardUnit == UNIT_THOU && dia < IDF_MIN_DIA_THOU )
-        || ( aBoardUnit == UNIT_TNM && dia < IDF_MIN_DIA_TNM ) )
+    if( ( aBoardUnit == IDF_UNIT::UNIT_MM && dia < IDF_MIN_DIA_MM )
+        || ( aBoardUnit == IDF_UNIT::UNIT_THOU && dia < IDF_MIN_DIA_THOU )
+        || ( aBoardUnit == IDF_UNIT::UNIT_TNM && dia < IDF_MIN_DIA_TNM ) )
     {
         ostringstream ostr;
         ostr << "invalid IDF file\n";
@@ -522,7 +522,7 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
                           "not numeric" ) );
     }
 
-    if( aIdfVersion > IDF_V2 )
+    if( aIdfVersion > IDF_VERSION::IDF_V2 )
     {
         if( !GetIDFString( iline, token, quoted, idx ) )
         {
@@ -533,11 +533,11 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
 
         if( CompareToken( "PTH", token ) )
         {
-            plating = IDF3::PTH;
+            plating = KEY_PLATING::PTH;
         }
         else if( CompareToken( "NPTH", token ) )
         {
-            plating = IDF3::NPTH;
+            plating = KEY_PLATING::NPTH;
         }
         else
         {
@@ -550,12 +550,12 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
     }
     else
     {
-        plating = IDF3::PTH;
+        plating = KEY_PLATING::PTH;
     }
 
     if( !GetIDFString( iline, token, quoted, idx ) )
     {
-        if( aIdfVersion > IDF_V2 )
+        if( aIdfVersion > IDF_VERSION::IDF_V2 )
         {
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                               "invalid IDFv3 file\n"
@@ -574,7 +574,7 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
 
     if( !GetIDFString( iline, token, quoted, idx ) )
     {
-        if( aIdfVersion > IDF_V2 )
+        if( aIdfVersion > IDF_VERSION::IDF_V2 )
         {
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                               "invalid IDFv3 file\n"
@@ -591,55 +591,55 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
 
     std::string tok2 = token;
 
-    if( aIdfVersion > IDF_V2 )
+    if( aIdfVersion > IDF_VERSION::IDF_V2 )
         token = tok1;
 
     if( CompareToken( "BOARD", token ) )
     {
-        kref = IDF3::BOARD;
+        kref = KEY_REFDES::BOARD;
     }
     else if( CompareToken( "NOREFDES", token ) )
     {
-        kref = IDF3::NOREFDES;
+        kref = KEY_REFDES::NOREFDES;
     }
     else if( CompareToken( "PANEL", token ) )
     {
-        kref = IDF3::PANEL;
+        kref = KEY_REFDES::PANEL;
     }
     else
     {
-        kref = IDF3::REFDES;
+        kref = KEY_REFDES::REFDES;
         refdes = token;
     }
 
-    if( aIdfVersion > IDF_V2 )
+    if( aIdfVersion > IDF_VERSION::IDF_V2 )
         token = tok2;
     else
         token = tok1;
 
     if( CompareToken( "PIN", token ) )
     {
-        khole = IDF3::PIN;
+        khole = KEY_HOLETYPE::PIN;
     }
     else if( CompareToken( "VIA", token ) )
     {
-        khole = IDF3::VIA;
+        khole = KEY_HOLETYPE::VIA;
     }
     else if( CompareToken( "MTG", token ) )
     {
-        khole = IDF3::MTG;
+        khole = KEY_HOLETYPE::MTG;
     }
     else if( CompareToken( "TOOL", token ) )
     {
-        khole = IDF3::TOOL;
+        khole = KEY_HOLETYPE::TOOL;
     }
     else
     {
-        khole = IDF3::OTHER;
+        khole = KEY_HOLETYPE::OTHER;
         holetype = token;
     }
 
-    if( aIdfVersion > IDF_V2 )
+    if( aIdfVersion > IDF_VERSION::IDF_V2 )
     {
         if( !GetIDFString( iline, token, quoted, idx ) )
         {
@@ -660,25 +660,25 @@ bool IDF_DRILL_DATA::read( std::istream& aBoardFile, IDF3::IDF_UNIT aBoardUnit,
     }
     else
     {
-        owner = IDF3::UNOWNED;
+        owner = KEY_OWNER::UNOWNED;
     }
 
-    if( aBoardUnit == UNIT_THOU )
+    if( aBoardUnit == IDF_UNIT::UNIT_THOU )
     {
         dia *= IDF_THOU_TO_MM;
         x *= IDF_THOU_TO_MM;
         y *= IDF_THOU_TO_MM;
     }
-    else if( ( aIdfVersion == IDF_V2 ) && ( aBoardUnit == UNIT_TNM ) )
+    else if( ( aIdfVersion == IDF_VERSION::IDF_V2 ) && ( aBoardUnit == IDF_UNIT::UNIT_TNM ) )
     {
         dia *= IDF_TNM_TO_MM;
         x *= IDF_TNM_TO_MM;
         y *= IDF_TNM_TO_MM;
     }
-    else if( aBoardUnit != UNIT_MM )
+    else if( aBoardUnit != IDF_UNIT::UNIT_MM )
     {
         ostringstream ostr;
-        ostr << "\n* BUG: invalid UNIT type: " << aBoardUnit;
+        ostr << "\n* BUG: invalid UNIT type: " << static_cast<int>( aBoardUnit );
 
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
@@ -696,34 +696,34 @@ void IDF_DRILL_DATA::write( std::ostream& aBoardFile, IDF3::IDF_UNIT aBoardUnit 
 
     switch( khole )
     {
-    case PIN:   holestr = "PIN";                  break;
-    case VIA:   holestr = "VIA";                  break;
-    case TOOL:  holestr = "TOOL";                 break;
-    case OTHER: holestr = "\"" + holetype + "\""; break;
-    default:    holestr = "MTG";                  break;
+    case KEY_HOLETYPE::PIN:   holestr = "PIN";                  break;
+    case KEY_HOLETYPE::VIA:   holestr = "VIA";                  break;
+    case KEY_HOLETYPE::TOOL:  holestr = "TOOL";                 break;
+    case KEY_HOLETYPE::OTHER: holestr = "\"" + holetype + "\""; break;
+    default:                  holestr = "MTG";                  break;
     }
 
     switch( kref )
     {
-    case BOARD:  refstr = "BOARD";              break;
-    case PANEL:  refstr = "PANEL";              break;
-    case REFDES: refstr = "\"" + refdes + "\""; break;
-    default:     refstr = "NOREFDES";           break;
+    case KEY_REFDES::BOARD:  refstr = "BOARD";              break;
+    case KEY_REFDES::PANEL:  refstr = "PANEL";              break;
+    case KEY_REFDES::REFDES: refstr = "\"" + refdes + "\""; break;
+    default:                 refstr = "NOREFDES";           break;
     }
 
-    if( plating == PTH )
+    if( plating == KEY_PLATING::PTH )
         pltstr = "PTH";
     else
         pltstr = "NPTH";
 
     switch( owner )
     {
-    case MCAD: ownstr = "MCAD";    break;
-    case ECAD: ownstr = "ECAD";    break;
-    default:   ownstr = "UNOWNED"; break;
+    case KEY_OWNER::MCAD: ownstr = "MCAD";    break;
+    case KEY_OWNER::ECAD: ownstr = "ECAD";    break;
+    default:              ownstr = "UNOWNED"; break;
     }
 
-    if( aBoardUnit == UNIT_MM )
+    if( aBoardUnit == IDF_UNIT::UNIT_MM )
     {
         aBoardFile << std::setiosflags( std::ios::fixed ) << std::setprecision( 3 ) << dia << " "
                    << std::setprecision( 5 ) << x << " " << y << " " << pltstr.c_str() << " "
@@ -768,10 +768,10 @@ const std::string& IDF_DRILL_DATA::GetDrillRefDes()
 {
     switch( kref )
     {
-    case BOARD:  refdes = "BOARD";    break;
-    case PANEL:  refdes = "PANEL";    break;
-    case REFDES:                      break;
-    default:     refdes = "NOREFDES"; break;
+    case KEY_REFDES::BOARD:  refdes = "BOARD";    break;
+    case KEY_REFDES::PANEL:  refdes = "PANEL";    break;
+    case KEY_REFDES::REFDES:                      break;
+    default:                 refdes = "NOREFDES"; break;
     }
 
     return refdes;
@@ -782,40 +782,15 @@ const std::string& IDF_DRILL_DATA::GetDrillHoleType()
 {
     switch( khole )
     {
-    case PIN:   holetype = "PIN";  break;
-    case VIA:   holetype = "VIA";  break;
-    case TOOL:  holetype = "TOOL"; break;
-    case OTHER:                    break;
-    default:    holetype = "MTG";  break;
+    case KEY_HOLETYPE::PIN:   holetype = "PIN";  break;
+    case KEY_HOLETYPE::VIA:   holetype = "VIA";  break;
+    case KEY_HOLETYPE::TOOL:  holetype = "TOOL"; break;
+    case KEY_HOLETYPE::OTHER:                    break;
+    default:                  holetype = "MTG";  break;
     }
 
     return holetype;
 }
-
-
-#ifdef DEBUG_IDF
-void IDF3::PrintSeg( IDF_SEGMENT* aSegment )
-{
-    if( aSegment->IsCircle() )
-    {
-        fprintf( stdout, "printSeg(): CIRCLE: C(%.3f, %.3f) P(%.3f, %.3f) rad. %.3f\n",
-                 aSegment->startPoint.x, aSegment->startPoint.y, aSegment->endPoint.x,
-                 aSegment->endPoint.y, aSegment->radius );
-        return;
-    }
-
-    if( aSegment->angle < -MIN_ANG || aSegment->angle > MIN_ANG )
-    {
-        fprintf( stdout, "printSeg(): ARC: p1(%.3f, %.3f) p2(%.3f, %.3f) ang. %.3f\n",
-                 aSegment->startPoint.x, aSegment->startPoint.y, aSegment->endPoint.x,
-                 aSegment->endPoint.y, aSegment->angle );
-        return;
-    }
-
-    fprintf( stdout, "printSeg(): LINE: p1(%.3f, %.3f) p2(%.3f, %.3f)\n", aSegment->startPoint.x,
-             aSegment->startPoint.y, aSegment->endPoint.x, aSegment->endPoint.y );
-}
-#endif
 
 
 bool IDF_POINT::Matches( const IDF_POINT& aPoint, double aRadius ) const

@@ -59,7 +59,7 @@ namespace IDF3 {
 /**
  * State values for the IDF parser's input.
  */
-enum FILE_STATE
+enum class FILE_STATE
 {
     FILE_START = 0, // no data has been read; expecting .HEADER
     FILE_HEADER,    // header has been read; expecting  .BOARD_OUTLINE
@@ -72,7 +72,7 @@ enum FILE_STATE
 /**
  * The supported IDF versions (3.0 and 2.0  ONLY).
  */
-enum IDF_VERSION
+enum class IDF_VERSION
 {
     IDF_V2 = 0, // version 2 has read support only; files written as IDFv3
     IDF_V3      // version 3 has full read/write support
@@ -81,7 +81,7 @@ enum IDF_VERSION
 /**
  * The type of CAD which has ownership an object.
  */
-enum KEY_OWNER
+enum class KEY_OWNER
 {
     UNOWNED = 0, //< either MCAD or ECAD may modify a feature
     MCAD,        //< only MCAD may modify a feature
@@ -91,7 +91,7 @@ enum KEY_OWNER
 /**
  * The purpose of an IDF hole.
  */
-enum KEY_HOLETYPE
+enum class KEY_HOLETYPE
 {
     PIN = 0, //< drill hole is for a pin
     VIA,     //< drill hole is for a via
@@ -103,7 +103,7 @@ enum KEY_HOLETYPE
 /**
  * The plating condition of a hole.
  */
-enum KEY_PLATING
+enum class KEY_PLATING
 {
     PTH = 0, //< Plate-Through Hole
     NPTH     //< Non-Plate-Through Hole
@@ -112,7 +112,7 @@ enum KEY_PLATING
 /**
  * A component's Reference Designator.
  */
-enum KEY_REFDES
+enum class KEY_REFDES
 {
     BOARD = 0, //< feature is associated with the board
     NOREFDES,  //< feature is associated with a component with no RefDes
@@ -123,7 +123,7 @@ enum KEY_REFDES
 /**
  * The class of CAD program which is opening or modifying a file.
  */
-enum CAD_TYPE
+enum class CAD_TYPE
 {
     CAD_ELEC = 0, //< An Electrical CAD is opening/modifying the file
     CAD_MECH,     //< A Mechanical CAD is opening/modifying the file
@@ -133,7 +133,7 @@ enum CAD_TYPE
 /**
  * The various IDF layer classes and groupings.
  */
-enum IDF_LAYER
+enum class IDF_LAYER
 {
     LYR_TOP = 0,
     LYR_BOTTOM,
@@ -146,7 +146,7 @@ enum IDF_LAYER
 /**
  * The class of outline.
  */
-enum OUTLINE_TYPE
+enum class OUTLINE_TYPE
 {
     OTLN_BOARD = 0,
     OTLN_OTHER,
@@ -163,7 +163,7 @@ enum OUTLINE_TYPE
 /**
  * Whether a component is a mechanical or electrical part.
  */
-enum COMP_TYPE
+enum class COMP_TYPE
 {
     COMP_ELEC = 0, //< Component library object is an electrical part
     COMP_MECH,     //< Component library object is a mechanical part
@@ -173,7 +173,7 @@ enum COMP_TYPE
 /**
  * The native unit of the board and of component outlines.
  */
-enum IDF_UNIT
+enum class IDF_UNIT
 {
     UNIT_MM = 0, //< Units in the file are in millimeters
     UNIT_THOU,   //< Units in the file are in mils (aka thou)
@@ -184,7 +184,7 @@ enum IDF_UNIT
 /**
  * The placement status of a component.
  */
-enum IDF_PLACEMENT
+enum class IDF_PLACEMENT
 {
     PS_UNPLACED = 0, //< component location on the board has not been specified
     PS_PLACED,       //< component location has been specified and may be modified by ECAD or MCAD

@@ -808,7 +808,6 @@ set( PCBNEW_KIFACE_LIBRARIES
     common
     gal
     core
-    idf3
     markdown_lib
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}

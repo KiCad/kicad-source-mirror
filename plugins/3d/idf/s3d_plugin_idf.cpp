@@ -29,8 +29,8 @@
 
 #include "plugins/3d/3d_plugin.h"
 #include "plugins/3dapi/ifsg_all.h"
-#include "idf_parser.h"
-#include "vrml_layer.h"
+#include <io/idf/idf_parser.h>
+#include <io/idf/vrml_layer.h>
 
 #define PLUGIN_3D_IDF_MAJOR 1
 #define PLUGIN_3D_IDF_MINOR 0
@@ -601,7 +601,7 @@ static SCENEGRAPH* addOutline( IDF3_COMP_OUTLINE* outline, int idxColor, SGNODE*
 static SCENEGRAPH* loadIDFOutline( const wxString& aFileName )
 {
     LOCALESWITCH switcher;
-    IDF3_BOARD brd( IDF3::CAD_ELEC );
+    IDF3_BOARD brd( IDF3::CAD_TYPE::CAD_ELEC );
     IDF3_COMP_OUTLINE* outline = nullptr;
 
     outline = brd.GetComponentOutline( aFileName );
@@ -628,7 +628,7 @@ static SCENEGRAPH* loadIDFOutline( const wxString& aFileName )
 static SCENEGRAPH* loadIDFBoard( const wxString& aFileName )
 {
     LOCALESWITCH switcher;
-    IDF3_BOARD brd( IDF3::CAD_ELEC );
+    IDF3_BOARD brd( IDF3::CAD_TYPE::CAD_ELEC );
 
     // note: if the IDF model is defective no outline substitutes shall be made
     if( !brd.ReadFile( aFileName, true ) )
@@ -761,7 +761,7 @@ static bool makeComponents( IDF3_BOARD& brd, SGNODE* aParent )
     {
         sc->second->GetPosition( vX, vY, vA, lyr );
 
-        if( lyr == IDF3::LYR_BOTTOM )
+        if( lyr == IDF3::IDF_LAYER::LYR_BOTTOM )
             bottom = true;
         else
             bottom = false;
@@ -896,7 +896,7 @@ static bool makeOtherOutlines( IDF3_BOARD& brd, SGNODE* aParent )
         while( nvcont > 0 )
             vpcb.EnsureWinding( nvcont--, true );
 
-        if( pout->GetSide() == IDF3::LYR_BOTTOM )
+        if( pout->GetSide() == IDF3::IDF_LAYER::LYR_BOTTOM )
         {
             top = 0.0;
             bot = -pout->GetThickness();

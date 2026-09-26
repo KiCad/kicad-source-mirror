@@ -26,7 +26,7 @@
 #include <list>
 #include <map>
 
-#include <idf_common.h>
+#include <io/idf/idf_common.h>
 
 /*
  *  NOTES ON OUTLINE TYPES:

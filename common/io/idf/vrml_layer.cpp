@@ -33,7 +33,7 @@
 #include <string>
 #include <iomanip>
 #include <cmath>
-#include <vrml_layer.h>
+#include <io/idf/vrml_layer.h>
 #include <trigo.h>
 
 #ifndef CALLBACK

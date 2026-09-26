@@ -57,7 +57,6 @@ target_link_libraries( ibis_proto
     dxflib_qcad
     tinyspline_lib
     nanosvg
-    idf3
     Boost::headers
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}

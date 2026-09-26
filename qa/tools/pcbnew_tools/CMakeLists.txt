@@ -56,7 +56,6 @@ target_link_libraries( qa_pcbnew_tools
     dxflib_qcad
     tinyspline_lib
     nanosvg
-    idf3
     common
     qa_utils
     markdown_lib

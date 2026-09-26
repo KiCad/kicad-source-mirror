@@ -14,17 +14,15 @@
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/utils/idftools
 )
 
 add_library( s3d_plugin_idf MODULE
         s3d_plugin_idf.cpp
-        ${CMAKE_SOURCE_DIR}/utils/idftools/vrml_layer.cpp
+        ${CMAKE_SOURCE_DIR}/common/io/idf/vrml_layer.cpp
         )
 
 target_link_libraries( s3d_plugin_idf
         kicad_3dsg
-        idf3
         common
         ${OPENGL_LIBRARIES}
         ${wxWidgets_LIBRARIES} )

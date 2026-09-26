@@ -65,7 +65,6 @@ target_link_libraries( qa_drc_benchmark
     dxflib_qcad
     tinyspline_lib
     nanosvg
-    idf3
     markdown_lib
     nlohmann_json
     ${PCBNEW_IO_LIBRARIES}

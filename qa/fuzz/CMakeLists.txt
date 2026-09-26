@@ -76,7 +76,6 @@ if(KICAD_BUILD_FUZZ_TESTS)
             dxflib_qcad
             tinyspline_lib
             nanosvg
-            idf3
             common
             qa_utils
             markdown_lib

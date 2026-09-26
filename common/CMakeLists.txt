@@ -779,6 +779,14 @@ set( COMMON_IO_SRCS
     # P-CAD
     io/pcad/s_expr_loader.cpp
 
+    # IDFv3
+    io/idf/idf_common.cpp
+    io/idf/idf_helpers.cpp
+    io/idf/idf_outlines.cpp
+    io/idf/idf_parser.cpp
+    io/idf/vrml_layer.cpp
+
+
     io/csv.cpp
     )
 

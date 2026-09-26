@@ -37,7 +37,6 @@
 #include <layer_range.h>
 #include <board.h>
 #include <project/net_settings.h>
-#include <idf_parser.h>
 #include <scintilla_tricks.h>
 #include <wx/stc/stc.h>
 #include <dialogs/html_message_box.h>

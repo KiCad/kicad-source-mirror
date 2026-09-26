@@ -389,7 +389,6 @@ target_link_libraries( qa_pcbnew
     tinyspline_lib
     nanosvg
     planegcs
-    idf3
     markdown_lib
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}

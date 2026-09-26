@@ -50,7 +50,6 @@ target_link_libraries( qa_api
     pnsrouter
     gal
     common
-    idf3
     markdown_lib
     ${PCBNEW_IO_LIBRARIES}
     ${wxWidgets_LIBRARIES}

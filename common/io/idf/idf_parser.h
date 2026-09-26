@@ -52,7 +52,8 @@
 #ifndef IDF_PARSER_H
 #define IDF_PARSER_H
 
-#include <idf_outlines.h>
+#include <io/idf/idf_common.h>
+#include <io/idf/idf_outlines.h>
 
 class IDF3_COMPONENT;
 class REPORTER;
@@ -560,6 +561,12 @@ public:
     // returns a pointer to the component outline object with the
     // unique ID aComponentID
     IDF3_COMP_OUTLINE* GetComponentOutline( const std::string& aComponentID );
+    // Return a pointer to a component outline registered under the unique ID
+    // GEOM_PART; if no such outline exists, create one, register it, and
+    // return it. The component class, unit, and height must be set by the
+    // caller; the outline has no file backing.
+    IDF3_COMP_OUTLINE* GetComponentOutline( const std::string& aGeomName,
+                                            const std::string& aPartName );
 
     // returns a pointer to the outline "NOGEOM NOPART" which is substituted
     // whenever a true outline cannot be found or is defective

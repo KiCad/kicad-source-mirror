@@ -29,8 +29,8 @@
 #include <wx/string.h>
 #include <wx/filename.h>
 
-#include "idf_parser.h"
-#include "idf_helpers.h"
+#include <io/idf/idf_parser.h>
+#include <io/idf/idf_helpers.h>
 #include "streamwrapper.h"
 
 #include <reporter.h>
@@ -144,13 +144,13 @@ bool IDF3_COMP_OUTLINE_DATA::checkOwnership( int aSourceLine, const char* aSourc
     IDF3::IDF_PLACEMENT placement = parent->GetPlacement();
     IDF3::CAD_TYPE parentCAD = parent->GetCadType();
 
-    if( placement == PS_PLACED || placement == PS_UNPLACED )
+    if( placement == IDF_PLACEMENT::PS_PLACED || placement == IDF_PLACEMENT::PS_UNPLACED )
         return true;
 
-    if( placement == PS_MCAD && parentCAD == CAD_MECH )
+    if( placement == IDF_PLACEMENT::PS_MCAD && parentCAD == CAD_TYPE::CAD_MECH )
         return true;
 
-    if( placement == PS_ECAD && parentCAD == CAD_ELEC )
+    if( placement == IDF_PLACEMENT::PS_ECAD && parentCAD == CAD_TYPE::CAD_ELEC )
         return true;
 
     do
@@ -159,7 +159,7 @@ bool IDF3_COMP_OUTLINE_DATA::checkOwnership( int aSourceLine, const char* aSourc
         ostr << "* " << __FILE__ << ":" << aSourceLine << ":" << aSourceFunc << "():\n";
         ostr << "* ownership violation; CAD type is ";
 
-        if( parentCAD == CAD_MECH )
+        if( parentCAD == CAD_TYPE::CAD_MECH )
             ostr << "MCAD ";
         else
             ostr << "ECAD ";
@@ -225,11 +225,8 @@ bool IDF3_COMP_OUTLINE_DATA::SetOutline( IDF3_COMP_OUTLINE* aOutline )
 }
 
 
-bool IDF3_COMP_OUTLINE_DATA::readPlaceData( std::istream &aBoardFile,
-                                            IDF3::FILE_STATE& aBoardState,
-                                            IDF3_BOARD *aBoard,
-                                            IDF3::IDF_VERSION aIdfVersion,
-                                            bool aNoSubstituteOutlines )
+bool IDF3_COMP_OUTLINE_DATA::readPlaceData( std::istream& aBoardFile, FILE_STATE& aBoardState, IDF3_BOARD* aBoard,
+                                            IDF_VERSION aIdfVersion, bool aNoSubstituteOutlines )
 {
     if( !aBoard )
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
@@ -247,8 +244,8 @@ bool IDF3_COMP_OUTLINE_DATA::readPlaceData( std::istream &aBoardFile,
     std::string token;
     std::string uid;
     std::string refdes;
-    IDF3::IDF_PLACEMENT placement = IDF3::PS_UNPLACED;
-    IDF3::IDF_LAYER side = IDF3::LYR_TOP;
+    IDF3::IDF_PLACEMENT placement = IDF3::IDF_PLACEMENT::PS_UNPLACED;
+    IDF3::IDF_LAYER side = IDF3::IDF_LAYER::LYR_TOP;
 
     // RECORD 2: 'package name', 'part number', 'Refdes' (any, NOREFDES, BOARD)
     while( !FetchIDFLine( aBoardFile, iline, isComment, pos ) && aBoardFile.good() );
@@ -281,7 +278,7 @@ bool IDF3_COMP_OUTLINE_DATA::readPlaceData( std::istream &aBoardFile,
 
     if( !quoted && CompareToken( ".END_PLACEMENT", token ) )
     {
-        aBoardState = IDF3::FILE_PLACEMENT;
+        aBoardState = FILE_STATE::FILE_PLACEMENT;
         return false;
     }
 
@@ -450,7 +447,7 @@ bool IDF3_COMP_OUTLINE_DATA::readPlaceData( std::istream &aBoardFile,
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
-    if( aIdfVersion > IDF_V2 )
+    if( aIdfVersion > IDF_VERSION::IDF_V2 )
     {
         if( !GetIDFString( iline, token, quoted, idx ) )
         {
@@ -523,11 +520,11 @@ bool IDF3_COMP_OUTLINE_DATA::readPlaceData( std::istream &aBoardFile,
 
     if( CompareToken( "TOP", token ) )
     {
-        side = IDF3::LYR_TOP;
+        side = IDF3::IDF_LAYER::LYR_TOP;
     }
     else if( CompareToken( "BOTTOM", token ) )
     {
-        side = IDF3::LYR_BOTTOM;
+        side = IDF3::IDF_LAYER::LYR_BOTTOM;
     }
     else
     {
@@ -556,26 +553,26 @@ bool IDF3_COMP_OUTLINE_DATA::readPlaceData( std::istream &aBoardFile,
 
     if( CompareToken( "PLACED", token ) )
     {
-        placement = IDF3::PS_PLACED;
+        placement = IDF3::IDF_PLACEMENT::PS_PLACED;
     }
     else if( CompareToken( "UNPLACED", token ) )
     {
-        placement = IDF3::PS_UNPLACED;
+        placement = IDF3::IDF_PLACEMENT::PS_UNPLACED;
     }
-    else if( aIdfVersion > IDF_V2 && CompareToken( "MCAD", token ) )
+    else if( aIdfVersion > IDF_VERSION::IDF_V2 && CompareToken( "MCAD", token ) )
     {
-        placement = IDF3::PS_MCAD;
+        placement = IDF3::IDF_PLACEMENT::PS_MCAD;
     }
-    else if( aIdfVersion > IDF_V2 && CompareToken( "ECAD", token ) )
+    else if( aIdfVersion > IDF_VERSION::IDF_V2 && CompareToken( "ECAD", token ) )
     {
-        placement = IDF3::PS_ECAD;
+        placement = IDF3::IDF_PLACEMENT::PS_ECAD;
     }
-    else if( aIdfVersion < IDF_V3 && CompareToken( "FIXED", token ) )
+    else if( aIdfVersion < IDF_VERSION::IDF_V3 && CompareToken( "FIXED", token ) )
     {
-        if( aBoard->GetCadType() == CAD_ELEC )
-            placement = IDF3::PS_MCAD;
+        if( aBoard->GetCadType() == CAD_TYPE::CAD_ELEC )
+            placement = IDF3::IDF_PLACEMENT::PS_MCAD;
         else
-            placement = IDF3::PS_ECAD;
+            placement = IDF3::IDF_PLACEMENT::PS_ECAD;
     }
     else
     {
@@ -604,7 +601,7 @@ bool IDF3_COMP_OUTLINE_DATA::readPlaceData( std::istream &aBoardFile,
                               "\n* missing outline: cannot create default" ) );
     }
 
-    if( aBoard->GetUnit() == IDF3::UNIT_THOU )
+    if( aBoard->GetUnit() == IDF3::IDF_UNIT::UNIT_THOU )
     {
         xoff *= IDF_THOU_TO_MM;
         yoff *= IDF_THOU_TO_MM;
@@ -726,13 +723,13 @@ void IDF3_COMP_OUTLINE_DATA::writePlaceData( std::ostream& aBoardFile,
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                           "empty GEOM and PART names" ) );
 
-    if( aPlacement == PS_INVALID )
+    if( aPlacement == IDF_PLACEMENT::PS_INVALID )
     {
         ERROR_IDF << "placement invalid (" << aRefDes << ":";
-        aPlacement = PS_PLACED;
+        aPlacement = IDF_PLACEMENT::PS_PLACED;
     }
 
-    if( aSide != LYR_TOP && aSide != LYR_BOTTOM )
+    if( aSide != IDF_LAYER::LYR_TOP && aSide != IDF_LAYER::LYR_BOTTOM )
     {
         ostringstream ostr;
         ostr << "\n* invalid side (" << GetLayerString( aSide ) << "); ";
@@ -746,7 +743,7 @@ void IDF3_COMP_OUTLINE_DATA::writePlaceData( std::ostream& aBoardFile,
 
     switch( aSide )
     {
-        case LYR_TOP:
+        case IDF_LAYER::LYR_TOP:
             xpos = aXpos + xoff;
             ypos = aYpos + yoff;
             ang  = aAngle + aoff;
@@ -768,12 +765,12 @@ void IDF3_COMP_OUTLINE_DATA::writePlaceData( std::ostream& aBoardFile,
     aBoardFile << "\"" << outline->GetGeomName() << "\" \"" << outline->GetPartName() << "\" "
     << arefdes << "\n";
 
-    IDF3::IDF_UNIT unit = UNIT_MM;
+    IDF3::IDF_UNIT unit = IDF_UNIT::UNIT_MM;
 
     if( parent )
         unit = parent->GetUnit();
 
-    if( unit == UNIT_MM )
+    if( unit == IDF_UNIT::UNIT_MM )
     {
         aBoardFile << setiosflags(ios::fixed) << setprecision(5) << xpos << " "
         << ypos << " " << setprecision(3) << zoff << " "
@@ -790,15 +787,15 @@ void IDF3_COMP_OUTLINE_DATA::writePlaceData( std::ostream& aBoardFile,
 
     switch( aPlacement )
     {
-        case PS_PLACED:
+        case IDF_PLACEMENT::PS_PLACED:
             aBoardFile << " PLACED\n";
             break;
 
-        case PS_UNPLACED:
+        case IDF_PLACEMENT::PS_UNPLACED:
             aBoardFile << " UNPLACED\n";
             break;
 
-        case PS_MCAD:
+        case IDF_PLACEMENT::PS_MCAD:
             aBoardFile << " MCAD\n";
             break;
 
@@ -816,8 +813,8 @@ IDF3_COMPONENT::IDF3_COMPONENT( IDF3_BOARD* aParent )
     angle  = 0.0;
 
     hasPosition = false;
-    placement   = PS_INVALID;
-    layer       = LYR_INVALID;
+    placement   = IDF_PLACEMENT::PS_INVALID;
+    layer       = IDF_LAYER::LYR_INVALID;
 
     parent = aParent;
 }
@@ -866,14 +863,14 @@ bool IDF3_COMPONENT::checkOwnership( int aSourceLine, const char* aSourceFunc )
 
     switch( placement )
     {
-        case PS_UNPLACED:
-        case PS_PLACED:
-        case PS_INVALID:
+        case IDF_PLACEMENT::PS_UNPLACED:
+        case IDF_PLACEMENT::PS_PLACED:
+        case IDF_PLACEMENT::PS_INVALID:
             break;
 
-        case PS_MCAD:
+        case IDF_PLACEMENT::PS_MCAD:
 
-            if( pcad != CAD_MECH )
+            if( pcad != CAD_TYPE::CAD_MECH )
             {
                 ostringstream ostr;
                 ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
@@ -887,9 +884,9 @@ bool IDF3_COMPONENT::checkOwnership( int aSourceLine, const char* aSourceFunc )
 
             break;
 
-        case PS_ECAD:
+        case IDF_PLACEMENT::PS_ECAD:
 
-            if( pcad != CAD_ELEC )
+            if( pcad != CAD_TYPE::CAD_ELEC )
             {
                 ostringstream ostr;
                 ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
@@ -906,7 +903,7 @@ bool IDF3_COMPONENT::checkOwnership( int aSourceLine, const char* aSourceFunc )
             do
             {
                 ostringstream ostr;
-                ostr << "\n* BUG: unhandled internal placement value (" << placement << ")";
+                ostr << "\n* BUG: unhandled internal placement value (" << static_cast<int>( placement ) << ")";
                 errormsg = ostr.str();
 
                 return false;
@@ -931,7 +928,7 @@ IDF3::CAD_TYPE IDF3_COMPONENT::GetCadType( void )
     if( parent )
         return parent->GetCadType();
 
-    return CAD_INVALID;
+    return CAD_TYPE::CAD_INVALID;
 }
 
 IDF3::IDF_UNIT IDF3_COMPONENT::GetUnit( void )
@@ -939,7 +936,7 @@ IDF3::IDF_UNIT IDF3_COMPONENT::GetUnit( void )
     if( parent )
         return parent->GetUnit();
 
-    return UNIT_INVALID;
+    return IDF_UNIT::UNIT_INVALID;
 }
 
 bool IDF3_COMPONENT::SetRefDes( const std::string& aRefDes )
@@ -1223,7 +1220,7 @@ bool IDF3_COMPONENT::GetPosition( double& aXpos, double& aYpos, double& aAngle,
         aXpos = 0.0;
         aYpos = 0.0;
         aAngle = 0.0;
-        aLayer = IDF3::LYR_INVALID;
+        aLayer = IDF3::IDF_LAYER::LYR_INVALID;
         return false;
     }
 
@@ -1247,8 +1244,8 @@ bool IDF3_COMPONENT::SetPosition( double aXpos, double aYpos, double aAngle,
 
     switch( aLayer )
     {
-        case LYR_TOP:
-        case LYR_BOTTOM:
+        case IDF_LAYER::LYR_TOP:
+        case IDF_LAYER::LYR_BOTTOM:
             break;
 
         default:
@@ -1286,11 +1283,11 @@ IDF3::IDF_PLACEMENT IDF3_COMPONENT::GetPlacement( void )
 
 bool IDF3_COMPONENT::SetPlacement( IDF3::IDF_PLACEMENT aPlacementValue )
 {
-    if( aPlacementValue < PS_UNPLACED || aPlacementValue >= PS_INVALID )
+    if( aPlacementValue < IDF_PLACEMENT::PS_UNPLACED || aPlacementValue >= IDF_PLACEMENT::PS_INVALID )
     {
         ostringstream ostr;
         ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
-        ostr << "\n* invalid PLACEMENT value (" << aPlacementValue << ")";
+        ostr << "\n* invalid PLACEMENT value (" << static_cast<int>( aPlacementValue ) << ")";
         errormsg = ostr.str();
 
         return false;
@@ -1345,7 +1342,7 @@ bool IDF3_COMPONENT::writePlaceData( std::ostream& aBoardFile )
 
 IDF3_BOARD::IDF3_BOARD( IDF3::CAD_TYPE aCadType )
 {
-    m_idfVer         = IDF_V3;
+    m_idfVer         = IDF_VERSION::IDF_V3;
     m_cadType        = aCadType;
     m_userPrec       = 5;
     m_userScale      = 1.0;
@@ -1354,7 +1351,7 @@ IDF3_BOARD::IDF3_BOARD( IDF3::CAD_TYPE aCadType )
     m_brdFileVersion = 0;
     m_libFileVersion = 0;
     m_refDesCounter  = 0;
-    m_unit           = UNIT_MM;
+    m_unit           = IDF_UNIT::UNIT_MM;
 
     // unlike other outlines which are created as necessary,
     // the board outline always exists and its parent must
@@ -1401,13 +1398,13 @@ bool IDF3_BOARD::checkComponentOwnership( int aSourceLine, const char* aSourceFu
 
     IDF3::IDF_PLACEMENT place = aComponent->GetPlacement();
 
-    if( place == PS_PLACED || place == PS_UNPLACED )
+    if( place == IDF_PLACEMENT::PS_PLACED || place == IDF_PLACEMENT::PS_UNPLACED )
         return true;
 
-    if( place == PS_MCAD && m_cadType == CAD_MECH )
+    if( place == IDF_PLACEMENT::PS_MCAD && m_cadType == CAD_TYPE::CAD_MECH )
         return true;
 
-    if( place == PS_ECAD && m_cadType == CAD_ELEC )
+    if( place == IDF_PLACEMENT::PS_ECAD && m_cadType == CAD_TYPE::CAD_ELEC )
         return true;
 
     do
@@ -1416,7 +1413,7 @@ bool IDF3_BOARD::checkComponentOwnership( int aSourceLine, const char* aSourceFu
         ostr << "* " << __FILE__ << ":" << aSourceLine << ":" << aSourceFunc << "():\n";
         ostr << "* ownership violation; CAD type is ";
 
-        if( m_cadType == CAD_MECH )
+        if( m_cadType == CAD_TYPE::CAD_MECH )
             ostr << "MCAD ";
         else
             ostr << "ECAD ";
@@ -1435,14 +1432,14 @@ bool IDF3_BOARD::setUnit( IDF3::IDF_UNIT aUnit, bool convert )
 {
     switch( aUnit )
     {
-    case UNIT_MM:
-    case UNIT_THOU:
+    case IDF_UNIT::UNIT_MM:
+    case IDF_UNIT::UNIT_THOU:
         m_unit = aUnit;
         break;
 
-    case UNIT_TNM:
+    case IDF_UNIT::UNIT_TNM:
         ERROR_IDF << "\n* TNM unit is not supported; defaulting to mm\n";
-        m_unit = UNIT_MM;
+        m_unit = IDF_UNIT::UNIT_MM;
         break;
 
     default:
@@ -1450,7 +1447,7 @@ bool IDF3_BOARD::setUnit( IDF3::IDF_UNIT aUnit, bool convert )
         {
             ostringstream ostr;
             ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
-            ostr << "* invalid board unit (" << aUnit << ")";
+            ostr << "* invalid board unit (" << static_cast<int>( aUnit ) << ")";
             m_errormsg = ostr.str();
 
             return false;
@@ -1602,7 +1599,7 @@ double IDF3_BOARD::GetBoardThickness( void )
 }
 
 
-void IDF3_BOARD::readBrdDrills( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState )
+void IDF3_BOARD::readBrdDrills( std::istream& aBoardFile, FILE_STATE& aBoardState )
 {
     IDF_DRILL_DATA drill;
 
@@ -1622,7 +1619,7 @@ void IDF3_BOARD::readBrdDrills( std::istream& aBoardFile, IDF3::FILE_STATE& aBoa
 }
 
 
-void IDF3_BOARD::readBrdNotes( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState )
+void IDF3_BOARD::readBrdNotes( std::istream& aBoardFile, FILE_STATE& aBoardState )
 {
     IDF_NOTE note;
 
@@ -1635,7 +1632,7 @@ void IDF3_BOARD::readBrdNotes( std::istream& aBoardFile, IDF3::FILE_STATE& aBoar
 }
 
 
-void IDF3_BOARD::readBrdPlacement( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState,
+void IDF3_BOARD::readBrdPlacement( std::istream& aBoardFile, FILE_STATE& aBoardState,
                                    bool aNoSubstituteOutlines )
 {
     IDF3_COMP_OUTLINE_DATA oldata;
@@ -1644,7 +1641,7 @@ void IDF3_BOARD::readBrdPlacement( std::istream& aBoardFile, IDF3::FILE_STATE& a
 }
 
 
-void IDF3_BOARD::readBrdHeader( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState )
+void IDF3_BOARD::readBrdHeader( std::istream& aBoardFile, FILE_STATE& aBoardState )
 {
     std::string iline;      // the input line
     bool isComment;         // true if a line just read in is a comment line
@@ -1737,11 +1734,11 @@ void IDF3_BOARD::readBrdHeader( std::istream& aBoardFile, IDF3::FILE_STATE& aBoa
 
     if( !token.compare( "3.0" ) || !token.compare( "3." ) || !token.compare( "3" ) )
     {
-        m_idfVer = IDF_V3;
+        m_idfVer = IDF_VERSION::IDF_V3;
     }
     else if( !token.compare( "2.0" ) || !token.compare( "2." ) || !token.compare( "2" ) )
     {
-        m_idfVer = IDF_V2;
+        m_idfVer = IDF_VERSION::IDF_V2;
     }
     else
     {
@@ -1839,15 +1836,15 @@ void IDF3_BOARD::readBrdHeader( std::istream& aBoardFile, IDF3::FILE_STATE& aBoa
 
     if( CompareToken( "MM", token ) )
     {
-        m_unit = IDF3::UNIT_MM;
+        m_unit = IDF3::IDF_UNIT::UNIT_MM;
     }
     else if( CompareToken( "THOU", token ) )
     {
-        m_unit = IDF3::UNIT_THOU;
+        m_unit = IDF3::IDF_UNIT::UNIT_THOU;
     }
-    else if( ( m_idfVer == IDF_V2 ) && CompareToken( "TNM", token ) )
+    else if( ( m_idfVer == IDF_VERSION::IDF_V2 ) && CompareToken( "TNM", token ) )
     {
-        m_unit = IDF3::UNIT_TNM;
+        m_unit = IDF3::IDF_UNIT::UNIT_TNM;
     }
     else
     {
@@ -1887,11 +1884,11 @@ void IDF3_BOARD::readBrdHeader( std::istream& aBoardFile, IDF3::FILE_STATE& aBoa
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
-    aBoardState = IDF3::FILE_HEADER;
+    aBoardState = FILE_STATE::FILE_HEADER;
 }
 
 
-void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBoardState,
+void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, FILE_STATE& aBoardState,
                                  bool aNoSubstituteOutlines )
 {
     std::list< std::string > comments;  // comments associated with a section
@@ -1923,8 +1920,8 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
 
         if( !aBoardFile.good() )
         {
-            if( aBoardFile.eof() && aBoardState >= IDF3::FILE_HEADER &&
-                aBoardState < IDF3::FILE_INVALID )
+            if( aBoardFile.eof() && aBoardState >= FILE_STATE::FILE_HEADER &&
+                aBoardState < FILE_STATE::FILE_INVALID )
             {
                 if( !comments.empty() )
                     ERROR_IDF << "[warning]: trailing comments in IDF file (comments will be lost)\n";
@@ -1959,9 +1956,9 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
 
         if( CompareToken( ".BOARD_OUTLINE", token ) )
         {
-            if( aBoardState != IDF3::FILE_HEADER )
+            if( aBoardState != FILE_STATE::FILE_HEADER )
             {
-                aBoardState = IDF3::FILE_INVALID;
+                aBoardState = FILE_STATE::FILE_INVALID;
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "invalid IDF file\n"
                                   "* Violation of specification: no HEADER section" ) );
@@ -1981,7 +1978,7 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
                 }
             }
 
-            aBoardState = IDF3::FILE_OUTLINE;
+            aBoardState = FILE_STATE::FILE_OUTLINE;
             return;
         }
 
@@ -1990,7 +1987,7 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
 
         if( CompareToken( ".OTHER_OUTLINE", token ) )
         {
-            if( aBoardState != IDF3::FILE_OUTLINE )
+            if( aBoardState != FILE_STATE::FILE_OUTLINE )
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "invalid IDF file\n"
                                   "* Violation of specification: expecting .BOARD_OUTLINE, have .OTHER_OUTLINE" ) );
@@ -2042,7 +2039,7 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
 
         if( CompareToken( ".ROUTE_OUTLINE", token ) )
         {
-            if( aBoardState != IDF3::FILE_OUTLINE )
+            if( aBoardState != FILE_STATE::FILE_OUTLINE )
             {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "invalid IDF file\n"
@@ -2083,7 +2080,7 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
 
         if( CompareToken( ".PLACE_OUTLINE", token ) )
         {
-            if( aBoardState != IDF3::FILE_OUTLINE )
+            if( aBoardState != FILE_STATE::FILE_OUTLINE )
             {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "invalid IDF file\n"
@@ -2124,7 +2121,7 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
 
         if( CompareToken( ".ROUTE_KEEPOUT", token ) )
         {
-            if( aBoardState != IDF3::FILE_OUTLINE )
+            if( aBoardState != FILE_STATE::FILE_OUTLINE )
             {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "invalid IDF file\n"
@@ -2165,7 +2162,7 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
 
         if( CompareToken( ".VIA_KEEPOUT", token ) )
         {
-            if( aBoardState != IDF3::FILE_OUTLINE )
+            if( aBoardState != FILE_STATE::FILE_OUTLINE )
             {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "invalid IDF file\n"
@@ -2205,7 +2202,7 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
 
         if( CompareToken( ".PLACE_KEEPOUT", token ) )
         {
-            if( aBoardState != IDF3::FILE_OUTLINE )
+            if( aBoardState != FILE_STATE::FILE_OUTLINE )
             {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "invalid IDF file\n"
@@ -2244,7 +2241,7 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
 
         if( CompareToken( ".PLACE_REGION", token ) )
         {
-            if( aBoardState != IDF3::FILE_OUTLINE )
+            if( aBoardState != FILE_STATE::FILE_OUTLINE )
             {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "invalid IDF file\n"
@@ -2284,7 +2281,7 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
 
         if( CompareToken( ".DRILLED_HOLES", token ) )
         {
-            if( aBoardState != IDF3::FILE_OUTLINE )
+            if( aBoardState != FILE_STATE::FILE_OUTLINE )
             {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "invalid IDF file\n"
@@ -2310,14 +2307,14 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
 
         if( CompareToken( ".NOTES", token ) )
         {
-            if( aBoardState != IDF3::FILE_OUTLINE )
+            if( aBoardState != FILE_STATE::FILE_OUTLINE )
             {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "invalid IDF file\n"
                                   "* Violation of specification: expecting .BOARD_OUTLINE, have .NOTES" ) );
             }
 
-            if( m_idfVer < IDF_V3 )
+            if( m_idfVer < IDF_VERSION::IDF_V3 )
             {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "invalid IDFv2 file\n"
@@ -2343,7 +2340,7 @@ void IDF3_BOARD::readBrdSection( std::istream& aBoardFile, IDF3::FILE_STATE& aBo
 
         if( CompareToken( ".PLACEMENT", token ) )
         {
-            if( aBoardState != IDF3::FILE_OUTLINE )
+            if( aBoardState != FILE_STATE::FILE_OUTLINE )
             {
                 throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__,
                                   "invalid IDF file\n"
@@ -2390,7 +2387,7 @@ void IDF3_BOARD::readBoardFile( const std::string& aFileName, bool aNoSubstitute
         std::string iline;      // the input line
         bool isComment;         // true if a line just read in is a comment line
         std::streampos pos;
-        IDF3::FILE_STATE state = IDF3::FILE_START;
+        FILE_STATE state = FILE_STATE::FILE_START;
 
         // note: as per IDFv3 specification:
         //      "The Header section must be the first section in the file, the second
@@ -2406,13 +2403,13 @@ void IDF3_BOARD::readBoardFile( const std::string& aFileName, bool aNoSubstitute
         readBrdHeader( brd, state );
 
         // read the various sections
-        while( state != IDF3::FILE_PLACEMENT && brd.good() )
+        while( state != FILE_STATE::FILE_PLACEMENT && brd.good() )
             readBrdSection( brd, state, aNoSubstituteOutlines );
 
         if( !brd.good() )
         {
             // check if we have valid data
-            if( brd.eof() && state >= IDF3::FILE_OUTLINE && state < IDF3::FILE_INVALID )
+            if( brd.eof() && state >= FILE_STATE::FILE_OUTLINE && state < FILE_STATE::FILE_INVALID )
             {
                 CLOSE_STREAM( brd );
                 return;
@@ -2425,7 +2422,7 @@ void IDF3_BOARD::readBoardFile( const std::string& aFileName, bool aNoSubstitute
             throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
         }
 
-        if( brd.good() && state == IDF3::FILE_PLACEMENT )
+        if( brd.good() && state == FILE_STATE::FILE_PLACEMENT )
         {
             // read in any trailing lines and report on ignored comments (minor fault)
             // and any non-comment item (non-compliance with IDFv3)
@@ -2464,7 +2461,7 @@ void IDF3_BOARD::readBoardFile( const std::string& aFileName, bool aNoSubstitute
 }
 
 
-void IDF3_BOARD::readLibSection( std::istream& aLibFile, IDF3::FILE_STATE& aLibState,
+void IDF3_BOARD::readLibSection( std::istream& aLibFile, FILE_STATE& aLibState,
                                  IDF3_BOARD* aBoard )
 {
     if( aBoard == nullptr )
@@ -2596,7 +2593,7 @@ void IDF3_BOARD::readLibSection( std::istream& aLibFile, IDF3::FILE_STATE& aLibS
 
 
 // read the library HEADER
-void IDF3_BOARD::readLibHeader( std::istream& aLibFile, IDF3::FILE_STATE& aLibState )
+void IDF3_BOARD::readLibHeader( std::istream& aLibFile, FILE_STATE& aLibState )
 {
     std::string iline;      // the input line
     bool isComment;         // true if a line just read in is a comment line
@@ -2688,11 +2685,11 @@ void IDF3_BOARD::readLibHeader( std::istream& aLibFile, IDF3::FILE_STATE& aLibSt
 
     if( !token.compare( "3.0" ) || !token.compare( "3." ) || !token.compare( "3" ) )
     {
-        m_idfVer = IDF_V3;
+        m_idfVer = IDF_VERSION::IDF_V3;
     }
     else if( !token.compare( "2.0" ) || !token.compare( "2." ) || !token.compare( "2" ) )
     {
-        m_idfVer = IDF_V2;
+        m_idfVer = IDF_VERSION::IDF_V2;
     }
     else
     {
@@ -2775,7 +2772,7 @@ void IDF3_BOARD::readLibHeader( std::istream& aLibFile, IDF3::FILE_STATE& aLibSt
         throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
     }
 
-    aLibState = IDF3::FILE_HEADER;
+    aLibState = FILE_STATE::FILE_HEADER;
 }
 
 
@@ -2796,7 +2793,7 @@ void IDF3_BOARD::readLibFile( const std::string& aFileName )
         }
 
         lib.imbue( std::locale( "C" ) );
-        IDF3::FILE_STATE state = IDF3::FILE_START;
+        FILE_STATE state = FILE_STATE::FILE_START;
 
         readLibHeader( lib, state );
 
@@ -3010,7 +3007,7 @@ void IDF3_BOARD::writeBoardFile( const std::string& aFileName )
 
         brd << setw(1) << setfill( ' ' );
 
-        if( m_unit == IDF3::UNIT_MM )
+        if( m_unit == IDF3::IDF_UNIT::UNIT_MM )
             brd << "MM\n";
         else
             brd << "THOU\n";
@@ -3490,8 +3487,8 @@ bool IDF3_BOARD::DelBoardDrill( double aDia, double aXpos, double aYpos )
 #ifndef DISABLE_IDF_OWNERSHIP
             IDF3::KEY_OWNER keyo = (*sp)->GetDrillOwner();
 
-            if( keyo == UNOWNED || ( keyo == MCAD && m_cadType == CAD_MECH )
-                || ( keyo == ECAD && m_cadType == CAD_ELEC ) )
+            if( keyo == KEY_OWNER::UNOWNED || ( keyo == KEY_OWNER::MCAD && m_cadType == CAD_TYPE::CAD_MECH )
+                || ( keyo == KEY_OWNER::ECAD && m_cadType == CAD_TYPE::CAD_ELEC ) )
             {
                 rval = true;
                 delete *sp;
@@ -3506,22 +3503,22 @@ bool IDF3_BOARD::DelBoardDrill( double aDia, double aXpos, double aYpos )
 
                 switch( keyo )
                 {
-                case ECAD:
+                case KEY_OWNER::ECAD:
                     ostr << "ECAD";
                     break;
 
-                case MCAD:
+                case KEY_OWNER::MCAD:
                     ostr << "MCAD";
                     break;
 
                 default:
-                    ostr << "invalid: " << keyo;
+                    ostr << "invalid: " << static_cast<int>( keyo );
                     break;
                 }
 
                 ostr << ") may not be modified by ";
 
-                if( m_cadType == CAD_MECH )
+                if( m_cadType == CAD_TYPE::CAD_MECH )
                     ostr << "MCAD";
                 else
                     ostr << "ECAD";
@@ -4114,6 +4111,36 @@ IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const std::string& aComponen
 }
 
 
+IDF3_COMP_OUTLINE* IDF3_BOARD::GetComponentOutline( const std::string& aGeomName,
+                                                    const std::string& aPartName )
+{
+    IDF3_COMP_OUTLINE* cp = GetComponentOutline( aGeomName + "_" + aPartName );
+
+    if( cp != nullptr )
+        return cp;
+
+    try
+    {
+        cp = new IDF3_COMP_OUTLINE( this );
+    }
+    catch( std::bad_alloc& )
+    {
+        ostringstream ostr;
+        ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "(): \n";
+        cerr << "could not create new outline";
+        m_errormsg = ostr.str();
+
+        return nullptr;
+    }
+
+    cp->SetGeomName( aGeomName );
+    cp->SetPartName( aPartName );
+    m_componentOutlines.emplace( cp->GetUID(), cp );
+
+    return cp;
+}
+
+
 IDF3_COMP_OUTLINE* IDF3_BOARD::GetInvalidOutline( const std::string& aGeomName,
                                                   const std::string& aPartName )
 {
@@ -4351,7 +4378,7 @@ void IDF3_BOARD::Clear( void )
     m_boardName.clear();
     m_boardOutline.setThickness( thickness );
 
-    m_unit      = UNIT_MM;
+    m_unit      = IDF_UNIT::UNIT_MM;
     m_userScale = 1.0;
     m_userXoff  = 0.0;
     m_userYoff  = 0.0;

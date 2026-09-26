@@ -69,7 +69,6 @@ target_link_libraries( qa_pcbnew_utils PUBLIC
 #     gal
 #     qa_utils
 #     lib_dxf
-#     idf3
 #     unit_test_utils
 #     ${PCBNEW_IO_LIBRARIES}
 #     ${wxWidgets_LIBRARIES}
