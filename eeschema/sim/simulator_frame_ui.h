@@ -375,20 +375,20 @@ private:
      */
     void autoSizeGridColumn( WX_GRID* aGrid, int aCol, int aMinWidth, int aExtraPadding = 0 );
 
-    ///< The Signals grid's "Plot" column choices: "Disabled" plus one entry per current view.
+    /// The Signals grid's "Plot" column choices: "Disabled" plus one entry per current view.
     wxArrayString getViewChoices( SIM_PLOT_TAB* aPlotTab ) const;
 
-    ///< The Signals grid's "Plot" column label for a given view ("Disabled" if null).
+    /// The Signals grid's "Plot" column label for a given view ("Disabled" if null).
     wxString getViewLabel( SIM_PLOT_TAB* aPlotTab, SIM_VIEW* aView ) const;
 
-    ///< The views a trace's Y-axis scale could be linked to: every view except its own (since
-    ///< linking to its own view is equivalent to -- and represented by -- "Default").
+    /// The views a trace's Y-axis scale could be linked to: every view except its own (since
+    /// linking to its own view is equivalent to -- and represented by -- "Default").
     std::vector<SIM_VIEW*> getYScaleTargetViews( SIM_PLOT_TAB* aPlotTab, SIM_VIEW* aOwnView ) const;
 
-    ///< The Signals grid's "Y Scale" column choices: "Default" plus one entry per eligible view.
+    /// The Signals grid's "Y Scale" column choices: "Default" plus one entry per eligible view.
     wxArrayString getYScaleChoices( SIM_PLOT_TAB* aPlotTab, SIM_VIEW* aOwnView ) const;
 
-    ///< The Signals grid's "Y Scale" column label for a trace ("Default" if not explicitly linked).
+    /// The Signals grid's "Y Scale" column label for a trace ("Default" if not explicitly linked).
     wxString getYScaleLabel( SIM_PLOT_TAB* aPlotTab, TRACE* aTrace ) const;
 
     /**

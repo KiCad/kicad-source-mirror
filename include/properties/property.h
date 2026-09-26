@@ -56,7 +56,7 @@ class PROPERTY_BASE;
 template<typename T>
 class ENUM_MAP;
 
-///< Common property types
+/// Common property types
 enum PROPERTY_DISPLAY
 {
     PT_DEFAULT,    ///< Default property for a given type
@@ -66,11 +66,11 @@ enum PROPERTY_DISPLAY
     PT_DEGREE,     ///< Angle expressed in degrees
     PT_DECIDEGREE, ///< Angle expressed in decidegrees
     PT_RATIO,
-    PT_TIME, ///< Time expressed in ps
+    PT_TIME,       ///< Time expressed in ps
     PT_NET,        ///< Net selection property
 };
 
-///< Macro to generate unique identifier for a type
+/// Macro to generate unique identifier for a type
 #define TYPE_HASH( x ) typeid( x ).hash_code()
 #define TYPE_NAME( x ) typeid( x ).name()
 //#define TYPE_HASH( x ) typeid( std::decay<x>::type ).hash_code()
@@ -195,7 +195,7 @@ public:
 class PROPERTY_BASE
 {
 private:
-    ///< Used to generate unique IDs.  Must come up front so it's initialized before ctor.
+    /// Used to generate unique IDs.  Must come up front so it's initialized before ctor.
 
 public:
     PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
@@ -573,19 +573,19 @@ protected:
         return res;
     }
 
-    ///< Set method
+    /// Set method
     std::unique_ptr<SETTER_BASE<Owner, T>> m_setter;
 
-    ///< Get method
+    /// Get method
     std::unique_ptr<GETTER_BASE<Owner, T>> m_getter;
 
-    ///< Owner class type-id
+    /// Owner class type-id
     const size_t m_ownerHash;
 
-    ///< Base class type-id
+    /// Base class type-id
     const size_t m_baseHash;
 
-    ///< Property value type-id
+    /// Property value type-id
     const size_t m_typeHash;
 };
 
@@ -883,7 +883,7 @@ private:
     DECLARE_ENUM_TO_WXANY( type )                                                           \
     IMPLEMENT_ENUM_TO_WXANY( type )
 
-///< Macro to define read-only fields (no setter method available)
+/// Macro to define read-only fields (no setter method available)
 #define NO_SETTER( owner, type ) ( ( void ( owner::* )( type ) ) nullptr )
 
 /*

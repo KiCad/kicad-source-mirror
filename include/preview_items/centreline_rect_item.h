@@ -47,20 +47,20 @@ public:
 
     CENTRELINE_RECT_ITEM( const TWO_POINT_GEOMETRY_MANAGER& aGeomMgr, double aAspect );
 
-    ///< Gets the bounding box of the rectangle
+    /// Gets the bounding box of the rectangle
     virtual const BOX2I ViewBBox() const override;
 
 private:
 
-    ///< Get the rectangular outline
+    /// Get the rectangular outline
     SHAPE_POLY_SET getOutline() const;
 
-    ///< Draw rectangle and center line onto GAL
+    /// Draw rectangle and center line onto GAL
     void drawPreviewShape( KIGFX::VIEW* aView ) const override;
 
     const TWO_POINT_GEOMETRY_MANAGER& m_geomMgr;
 
-    ///< The aspect ratio of the rectangle to draw
+    /// The aspect ratio of the rectangle to draw
     double m_aspect;
 };
 

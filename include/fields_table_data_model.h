@@ -326,7 +326,7 @@ protected:
     bool             m_includeExcluded;
     bool             m_rebuildsEnabled;
 
-    ///< Items included by the user selection scope
+    /// Items included by the user selection scope
     std::unordered_set<KIID_PATH> m_selectionItems;
 
     wxString              m_currentVariant;  ///< Current variant name for highlighting

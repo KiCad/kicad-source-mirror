@@ -104,7 +104,7 @@ public:
     void FixDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem );
 
 private:
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
     /**

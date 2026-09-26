@@ -26,7 +26,7 @@
 #include <cmath>
 #include <limits>
 
-///< Possible simulation types
+/// Possible simulation types
 enum SIM_TYPE
 {
     ST_UNKNOWN,
@@ -44,7 +44,7 @@ enum SIM_TYPE
     ST_LAST
 };
 
-///< Possible trace types
+/// Possible trace types
 enum SIM_TRACE_TYPE
 {
     // Y axis

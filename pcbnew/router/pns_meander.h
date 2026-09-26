@@ -36,7 +36,7 @@ namespace PNS {
 class MEANDER_PLACER_BASE;
 class MEANDERED_LINE;
 
-///< Shapes of available meanders.
+/// Shapes of available meanders.
 enum MEANDER_TYPE {
         MT_SINGLE,          // _|^|_, single-sided
         MT_START,           // _|^|
@@ -49,13 +49,13 @@ enum MEANDER_TYPE {
         MT_EMPTY            // no meander (straight line)
 };
 
-///< Meander corner shape.
+/// Meander corner shape.
 enum MEANDER_STYLE {
     MEANDER_STYLE_ROUND = 1,          // rounded (90 degree arc)
     MEANDER_STYLE_CHAMFER             // chamfered (45 degree segment)
 };
 
-///< Initial side the meander is placed on.
+/// Initial side the meander is placed on.
 enum MEANDER_SIDE
 {
     MEANDER_SIDE_LEFT = -1,
@@ -97,72 +97,72 @@ public:
     void SetTargetSignalLengthDelay( long long int aOpt );
     void SetTargetSignalLengthDelay( const MINOPTMAX<int>& aConstraint );
 
-    ///< Minimum meandering amplitude.
+    /// Minimum meandering amplitude.
     int m_minAmplitude;
 
-    ///< Maximum meandering amplitude.
+    /// Maximum meandering amplitude.
     int m_maxAmplitude;
 
-    ///< Meandering period/spacing (see dialog picture for explanation).
+    /// Meandering period/spacing (see dialog picture for explanation).
     int m_spacing;
 
-    ///< Amplitude/spacing adjustment step.
+    /// Amplitude/spacing adjustment step.
     int m_step;
 
-    ///< Length PadToDie.
+    /// Length PadToDie.
     int m_lenPadToDie;
 
-    ///< Additional pre-existing length contributed by other nets in the same logical chain
-    ///< (used when chain-level tuning mode is active). Stored in internal units.
+    /// Additional pre-existing length contributed by other nets in the same logical chain
+    /// (used when chain-level tuning mode is active). Stored in internal units.
     long long int m_signalExtraLength;
 
-    ///< Additional pre-existing delay contributed by other nets in the same logical chain
-    ///< (used when chain-level tuning mode is active and in time-domain tuning). Stored in internal
-    ///< time internal units (ps * IU_PER_PS).
+    /// Additional pre-existing delay contributed by other nets in the same logical chain
+    /// (used when chain-level tuning mode is active and in time-domain tuning). Stored in internal
+    /// time internal units (ps * IU_PER_PS).
     long long int m_signalExtraDelay;
 
-    ///< Desired length of the tuned line/diff pair (this is in nm, so allow more than board width).
+    /// Desired length of the tuned line/diff pair (this is in nm, so allow more than board width).
     MINOPTMAX<long long int> m_targetLength;
 
-    ///< Desired propagation delay of the tuned line
+    /// Desired propagation delay of the tuned line
     MINOPTMAX<long long int> m_targetLengthDelay;
 
-    ///< Desired chain length (copper-only, bridging subtracted).
+    /// Desired chain length (copper-only, bridging subtracted).
     MINOPTMAX<long long int> m_targetSignalLength;
 
-    ///< Desired overall chain propagation delay.
+    /// Desired overall chain propagation delay.
     MINOPTMAX<long long int> m_targetSignalLengthDelay;
 
-    ///< Target skew value for diff pair de-skewing.
+    /// Target skew value for diff pair de-skewing.
     MINOPTMAX<int>           m_targetSkew;
 
-    ///< Target skew value for diff pair de-skewing.
+    /// Target skew value for diff pair de-skewing.
     MINOPTMAX<int> m_targetSkewDelay;
 
     bool                     m_overrideCustomRules;
 
-    ///< Type of corners for the meandered line.
+    /// Type of corners for the meandered line.
     MEANDER_STYLE m_cornerStyle;
 
-    ///< Rounding percentage (0 - 100).
+    /// Rounding percentage (0 - 100).
     int m_cornerRadiusPercentage;
 
-    ///< Place meanders on one side.
+    /// Place meanders on one side.
     bool m_singleSided;
 
-    ///< Initial side when placing meanders at segment
+    /// Initial side when placing meanders at segment
     MEANDER_SIDE m_initialSide;
 
-    ///< Allowable tuning error.
+    /// Allowable tuning error.
     int m_lengthTolerance;
 
-    ///< Keep vertices between pre, tuned and post parts of the line.
+    /// Keep vertices between pre, tuned and post parts of the line.
     bool m_keepEndpoints;
 
-    ///< Calculate tuning in the time domain
+    /// Calculate tuning in the time domain
     bool m_isTimeDomain;
 
-    ///< The net class this meander pattern belongs to
+    /// The net class this meander pattern belongs to
     NETCLASS* m_netClass;
 };
 
@@ -379,86 +379,86 @@ public:
 private:
     friend class MEANDERED_LINE;
 
-    ///< Start turtle drawing
+    /// Start turtle drawing
     void start( SHAPE_LINE_CHAIN* aTarget, const VECTOR2D& aWhere, const VECTOR2D& aDir );
 
-    ///< Move turtle forward by \a aLength.
+    /// Move turtle forward by \a aLength.
     void forward( int aLength );
 
-    ///< Turn the turtle by \a aAngle
+    /// Turn the turtle by \a aAngle
     void turn( const EDA_ANGLE& aAngle );
 
-    ///< Tell the turtle to draw a mitered corner of given radius and turn direction.
+    /// Tell the turtle to draw a mitered corner of given radius and turn direction.
     void miter( int aRadius, bool aSide );
 
-    ///< Tell the turtle to draw an U-like shape.
+    /// Tell the turtle to draw an U-like shape.
     void uShape( int aSides, int aCorner, int aTop );
 
-    ///< Generate a 90-degree circular arc.
+    /// Generate a 90-degree circular arc.
     SHAPE_LINE_CHAIN makeMiterShape( const VECTOR2D& aP, const VECTOR2D& aDir, bool aSide );
 
-    ///< Produce a meander shape of given type.
+    /// Produce a meander shape of given type.
     SHAPE_LINE_CHAIN genMeanderShape( const VECTOR2D& aP, const VECTOR2D& aDir, bool aSide,
                                       MEANDER_TYPE aType, int aBaselineOffset = 0 );
 
-    ///< Recalculate the clipped baseline after the parameters of the meander have been changed.
+    /// Recalculate the clipped baseline after the parameters of the meander have been changed.
     void updateBaseSegment();
 
-    ///< Return sanitized corner radius value.
+    /// Return sanitized corner radius value.
     int cornerRadius() const;
 
-    ///< Return sanitized spacing value.
+    /// Return sanitized spacing value.
     int spacing() const;
 
-    ///< The type of meander.
+    /// The type of meander.
     MEANDER_TYPE m_type;
 
-    ///< The placer that placed this meander.
+    /// The placer that placed this meander.
     MEANDER_PLACER_BASE* m_placer;
 
-    ///< Dual or single line.
+    /// Dual or single line.
     bool m_dual;
 
-    ///< Width of the line.
+    /// Width of the line.
     int m_width;
 
-    ///< Amplitude of the meander.
+    /// Amplitude of the meander.
     int m_amplitude;
 
-    ///< Offset wrs the base segment (dual only).
+    /// Offset wrs the base segment (dual only).
     int m_baselineOffset;
 
-    ///< Average radius of meander corners (for correction of DP meanders).
+    /// Average radius of meander corners (for correction of DP meanders).
     int m_meanCornerRadius;
 
-    ///< Minimum length of the base segment to target when resizing.
+    /// Minimum length of the base segment to target when resizing.
     int m_targetBaseLen;
 
-    ///< First point of the meandered line.
+    /// First point of the meandered line.
     VECTOR2I m_p0;
 
-    ///< Base segment (unclipped).
+    /// Base segment (unclipped).
     SEG m_baseSeg;
 
-    ///< Base segment (clipped).
+    /// Base segment (clipped).
     SEG m_clippedBaseSeg;
 
-    ///< Side (true = right).
+    /// Side (true = right).
     bool m_side;
 
-    ///< The actual shapes (0 used for single, both for dual).
+    /// The actual shapes (0 used for single, both for dual).
     SHAPE_LINE_CHAIN m_shapes[2];
 
-    ///< Index of the meandered segment in the base line.
+    /// Index of the meandered segment in the base line.
     int m_baseIndex;
 
-    ///< The current turtle direction.
+    /// The current turtle direction.
     VECTOR2D m_currentDir;
 
-    ///< The current turtle position.
+    /// The current turtle position.
     VECTOR2D m_currentPos;
 
-    ///< The line the turtle is drawing on.
+    /// The line the turtle is drawing on.
     SHAPE_LINE_CHAIN* m_currentTarget;
 };
 

@@ -85,7 +85,7 @@ public:
      */
     int DistributeItems( const TOOL_EVENT& aEvent );
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
 private:

@@ -73,7 +73,7 @@ public:
     }
 
 protected:
-    ///< Index of the free first space where a vertex can be stored
+    /// Index of the free first space where a vertex can be stored
     unsigned int m_freePtr;
 };
 } // namespace KIGFX

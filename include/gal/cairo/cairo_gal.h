@@ -245,7 +245,7 @@ public:
 
     void EnableDepthTest( bool aEnabled = false ) override;
 
-    ///< @copydoc GAL::DrawGrid()
+    /// @copydoc GAL::DrawGrid()
     void DrawGrid() override;
 
     /// @copydoc GAL::BeginDrawing()

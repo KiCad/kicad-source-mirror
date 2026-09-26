@@ -129,7 +129,7 @@ private:
 
     void adjustParamGridColumns( int aWidth, bool aForce );
 
-    ///< Show/populate the decomposition controls (multi-unit only) and sync their enabled state.
+    /// Show/populate the decomposition controls (multi-unit only) and sync their enabled state.
     void updateDecompositionControls();
 
     bool isIbisLoaded() { return dynamic_cast<const SIM_LIBRARY_IBIS*>( library() ); }

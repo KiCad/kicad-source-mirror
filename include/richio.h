@@ -514,7 +514,7 @@ public:
 protected:
     void write( const char* aOutBuf, int aCount ) override;
 
-    ///< sibling temp file, committed by Finish()
+    /// sibling temp file, committed by Finish()
     std::unique_ptr<SIBLING_TEMP_FILE> m_tempFile;
 };
 
@@ -549,7 +549,7 @@ protected:
     void write( const char* aOutBuf, int aCount ) override;
 
 private:
-    ///< sibling temp file, committed by Finish()
+    /// sibling temp file, committed by Finish()
     std::unique_ptr<SIBLING_TEMP_FILE> m_tempFile;
     std::string                        m_buf;
     KICAD_FORMAT::FORMAT_MODE          m_mode;

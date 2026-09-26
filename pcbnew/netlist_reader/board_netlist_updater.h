@@ -99,7 +99,7 @@ public:
 
     void SetReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 
-    ///< Enable dry run mode (just report, no changes to PCB).
+    /// Enable dry run mode (just report, no changes to PCB).
     void SetIsDryRun( bool aEnabled ) { m_isDryRun = aEnabled; }
 
     void SetReplaceFootprints( bool aEnabled ) { m_replaceFootprints = aEnabled; }

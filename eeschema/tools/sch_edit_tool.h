@@ -71,12 +71,12 @@ public:
     int CleanupSheetPins( const TOOL_EVENT& aEvent );
     int GlobalEdit( const TOOL_EVENT& aEvent );
 
-    ///< Lock/unlock selected items.
+    /// Lock/unlock selected items.
     int ToggleLock( const TOOL_EVENT& aEvent );
     int Lock( const TOOL_EVENT& aEvent );
     int Unlock( const TOOL_EVENT& aEvent );
 
-    ///< Delete the selected items, or the item under the cursor.
+    /// Delete the selected items, or the item under the cursor.
     int DoDelete( const TOOL_EVENT& aEvent );
 
     /// Drag and drop
@@ -98,11 +98,11 @@ private:
     void collectUnits( const SCH_SELECTION& aSelection,
                        std::set<std::pair<SCH_SYMBOL*, SCH_SCREEN*>>& aCollectedUnits );
 
-    ///< How to modify a property for selected items.
+    /// How to modify a property for selected items.
     enum MODIFY_MODE { ON, OFF, TOGGLE };
 
     int modifyLockSelected( MODIFY_MODE aMode );
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 };

@@ -88,7 +88,7 @@ protected:
      */
     void updateItem( EDA_ITEM* aItem, bool aUpdateRTree ) const;
 
-    ///< Similar to m_frame->SaveCopyInUndoList(), but also handles connectivity.
+    /// Similar to m_frame->SaveCopyInUndoList(), but also handles connectivity.
     void saveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aType, bool aAppend = false, bool aDirtyConnectivity = true );
 
 protected:

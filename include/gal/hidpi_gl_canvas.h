@@ -60,7 +60,7 @@ public:
     void SetVcSettings( const KIGFX::VC_SETTINGS& aVcSettings ) { m_settings = aVcSettings; }
 
 protected:
-    ///< Current VIEW_CONTROLS settings.
+    /// Current VIEW_CONTROLS settings.
     KIGFX::VC_SETTINGS m_settings;
 };
 

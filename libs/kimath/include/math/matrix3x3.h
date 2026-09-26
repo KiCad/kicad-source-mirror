@@ -160,10 +160,10 @@ public:
      */
     friend std::ostream& operator<<<T>( std::ostream& aStream, const MATRIX3x3<T>& aMatrix );
 
-    ///< Equality operator
+    /// Equality operator
     bool operator==( const MATRIX3x3<T>& aOtherMatrix ) const;
 
-    ///< Not equality operator
+    /// Not equality operator
     bool operator!=( const MATRIX3x3<T>& aOtherMatrix ) const;
 };
 

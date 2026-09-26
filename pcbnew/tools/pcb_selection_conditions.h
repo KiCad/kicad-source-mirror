@@ -63,10 +63,10 @@ public:
     static bool HasUnlockedItems( const SELECTION& aSelection );
 
 private:
-    ///< Helper function used by SameNet()
+    /// Helper function used by SameNet()
     static bool sameNetFunc( const SELECTION& aSelection, bool aAllowUnconnected );
 
-    ///< Helper function used by SameLayer()
+    /// Helper function used by SameLayer()
     static bool sameLayerFunc( const SELECTION& aSelection );
 
 };

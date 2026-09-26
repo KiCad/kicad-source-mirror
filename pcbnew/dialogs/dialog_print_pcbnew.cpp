@@ -67,7 +67,7 @@ private:
     void onColorModeClicked( wxCommandEvent& event );
     void onPopUpLayers( wxCommandEvent& event );
 
-    ///< Update layerset basing on the selected layers.
+    /// Update layerset basing on the selected layers.
     int setLayerSetFromList();
 
     void saveSettings() override;

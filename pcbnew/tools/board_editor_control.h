@@ -107,7 +107,7 @@ public:
     // Zone actions
     int ZoneMerge( const TOOL_EVENT& aEvent );
 
-    ///< Duplicate a zone onto a layer (prompts for new layer)
+    /// Duplicate a zone onto a layer (prompts for new layer)
     int ZoneDuplicate( const TOOL_EVENT& aEvent );
 
     // Zone priority manipulation
@@ -118,13 +118,13 @@ public:
 
     int EditFpInFpEditor( const TOOL_EVENT& aEvent );
 
-    ///< Notify Eeschema about selected items.
+    /// Notify Eeschema about selected items.
     int CrossProbeToSch( const TOOL_EVENT& aEvent );
 
-    ///< Equivalent to the above, but initiated by the user.
+    /// Equivalent to the above, but initiated by the user.
     int ExplicitCrossProbeToSch( const TOOL_EVENT& aEvent );
 
-    ///< Assign a netclass to a labelled net.
+    /// Assign a netclass to a labelled net.
     int AssignNetclass( const TOOL_EVENT& aEvent );
 
     /**
@@ -137,19 +137,19 @@ public:
      */
     bool PlacingFootprint() const { return m_placingFootprint; }
 
-    ///< Toggle 'lock' property for selected items.
+    /// Toggle 'lock' property for selected items.
     int ToggleLockSelected( const TOOL_EVENT& aEvent );
 
-    ///< Lock selected items.
+    /// Lock selected items.
     int LockSelected( const TOOL_EVENT& aEvent );
 
-    ///< Unlock selected items.
+    /// Unlock selected items.
     int UnlockSelected( const TOOL_EVENT& aEvent );
 
-    ///< Run the drill origin tool for setting the origin for drill and pick-and-place files.
+    /// Run the drill origin tool for setting the origin for drill and pick-and-place files.
     int DrillOrigin( const TOOL_EVENT& aEvent );
 
-    ///< Low-level access (below undo) to setting the drill origin.
+    /// Low-level access (below undo) to setting the drill origin.
     static void DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                   EDA_ITEM* aItem, const VECTOR2D& aPoint );
 
@@ -158,12 +158,12 @@ public:
     int OnAngleSnapModeChanged( const TOOL_EVENT& aEvent );
 
 private:
-    ///< How to modify a property for selected items.
+    /// How to modify a property for selected items.
     enum MODIFY_MODE { ON, OFF, TOGGLE };
 
     int modifyLockSelected( MODIFY_MODE aMode );
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
     void doCrossProbePcbToSch( const TOOL_EVENT& aEvent, bool aForce );

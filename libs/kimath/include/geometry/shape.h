@@ -113,7 +113,7 @@ public:
     virtual void GetIndexableSubshapes( std::vector<const SHAPE*>& aSubshapes ) const { }
 
 protected:
-    ///< type of our shape
+    /// type of our shape
     SHAPE_TYPE m_type;
 };
 

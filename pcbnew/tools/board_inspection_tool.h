@@ -51,36 +51,36 @@ public:
      */
     int ShowBoardStatistics( const TOOL_EVENT& aEvent );
 
-    ///< Highlight net belonging to the item under the cursor.
+    /// Highlight net belonging to the item under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );
     int HighlightNetChain( const TOOL_EVENT& aEvent );
     int ReplaceTerminalPad( const TOOL_EVENT& aEvent );
 
-    ///< Clear all board highlights
+    /// Clear all board highlights
     int ClearHighlight( const TOOL_EVENT& aEvent );
 
-    ///< Perform the appropriate action in response to an Eeschema cross-probe.
+    /// Perform the appropriate action in response to an Eeschema cross-probe.
     int HighlightItem( const TOOL_EVENT& aEvent );
 
-    ///< Update ratsnest for selected items.
+    /// Update ratsnest for selected items.
     int UpdateLocalRatsnest( const TOOL_EVENT& aEvent );
 
-    ///< Hide ratsnest for selected items. Called when there are no items selected.
+    /// Hide ratsnest for selected items. Called when there are no items selected.
     int HideLocalRatsnest( const TOOL_EVENT& aEvent );
 
-    ///< Show local ratsnest of a component.
+    /// Show local ratsnest of a component.
     int LocalRatsnestTool( const TOOL_EVENT& aEvent );
 
-    ///< Hide the ratsnest for a given net.
+    /// Hide the ratsnest for a given net.
     int HideNetInRatsnest( const TOOL_EVENT& aEvent );
 
-    ///< Show the ratsnest for a given net.
+    /// Show the ratsnest for a given net.
     int ShowNetInRatsnest( const TOOL_EVENT& aEvent );
 
     wxString InspectDRCErrorMenuText( const std::shared_ptr<RC_ITEM>& aDRCItem );
     void InspectDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem );
 
-    ///< Show the clearance resolution for two selected items.
+    /// Show the clearance resolution for two selected items.
     int InspectClearance( const TOOL_EVENT& aEvent );
 
     int InspectConstraints( const TOOL_EVENT& aEvent );
@@ -111,7 +111,7 @@ private:
     int showBoardComparison( const wxString& aOtherPath, const wxString& aProjectPath,
                              const wxString& aComparisonLabel );
 
-    ///< Recalculate dynamic ratsnest for the current selection.
+    /// Recalculate dynamic ratsnest for the current selection.
     void calculateSelectionRatsnest( const VECTOR2I& aDelta );
 
     /**
@@ -125,7 +125,7 @@ private:
 
     void doHideRatsnestNet( int aNetCode, bool aHide );
 
-    ///< Bind handlers to corresponding TOOL_ACTIONs.
+    /// Bind handlers to corresponding TOOL_ACTIONs.
     void setTransitions() override;
 
     std::unique_ptr<DRC_ENGINE> makeDRCEngine( bool* aCompileError, bool* aCourtyardError );

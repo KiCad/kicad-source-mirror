@@ -85,7 +85,7 @@ static const std::map<wxString, ELECTRICAL_PINTYPE> pinDirectionsMap = {
 };
 
 
-///< Compute a bounding box for all items in a schematic sheet
+/// Compute a bounding box for all items in a schematic sheet
 static BOX2I getSheetBbox( SCH_SHEET* aSheet )
 {
     BOX2I bbox;
@@ -97,7 +97,7 @@ static BOX2I getSheetBbox( SCH_SHEET* aSheet )
 }
 
 
-///< Strip the Eagle "@<tag>" linking hint from a pin name (e.g. return 'GND' for 'GND@2')
+/// Strip the Eagle "@<tag>" linking hint from a pin name (e.g. return 'GND' for 'GND@2')
 static inline wxString extractNetName( const wxString& aPinName )
 {
     return aPinName.BeforeFirst( '@' );

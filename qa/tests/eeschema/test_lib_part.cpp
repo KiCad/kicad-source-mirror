@@ -54,7 +54,7 @@ public:
     {
     }
 
-    ///< Part with no extra data set
+    /// Part with no extra data set
     LIB_SYMBOL m_part_no_data;
 };
 

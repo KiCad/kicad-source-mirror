@@ -54,7 +54,7 @@ public:
     int ExportTableToCSV( const TOOL_EVENT& aEvent );
 
 private:
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
 private:

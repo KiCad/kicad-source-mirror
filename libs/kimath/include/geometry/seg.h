@@ -372,7 +372,7 @@ public:
         return SEG( B, A );
     }
 
-    ///< Returns the center point of the line
+    /// Returns the center point of the line
     VECTOR2I Center() const
     {
         return A + ( B - A ) / 2;

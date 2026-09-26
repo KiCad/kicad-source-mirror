@@ -162,7 +162,7 @@ protected:
 
     void positionCategoryButtons();
 
-    ///< Find the caption row for the given untranslated group name, if present.
+    /// Find the caption row for the given untranslated group name, if present.
     wxPGProperty* categoryForGroup( const wxString& aGroupKey ) const;
 
     wxStaticText*               m_caption;
@@ -194,8 +194,8 @@ protected:
         std::function<void()>    action;
         std::function<bool()>    enableFunc;    ///< optional extra enable predicate
 
-        ///< Emit the category caption row even when it has no properties; the row is
-        ///< only forced on rebuilds where enableFunc() (if set) returns true.
+        /// Emit the category caption row even when it has no properties; the row is
+        /// only forced on rebuilds where enableFunc() (if set) returns true.
         bool                     forceCategory = false;
     };
 

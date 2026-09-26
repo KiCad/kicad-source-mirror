@@ -144,25 +144,25 @@ protected:
      **/
     static wxString getOutputExtension( const wxString& aHeader );
 
-    ///< true if the plugin is working (i.e. if the plugin file exists and was read
+    /// true if the plugin is working (i.e. if the plugin file exists and was read
     bool m_isOk;
 
-    ///< Path to the plugin
+    /// Path to the plugin
     wxFileName m_file;
 
-    ///< Path to the plugin stored in config (can be absolute or just a filename)
+    /// Path to the plugin stored in config (can be absolute or just a filename)
     const wxString m_storedPath;
 
-    ///< User customisable name
+    /// User customisable name
     wxString m_name;
 
-    ///< Command to execute the plugin
+    /// Command to execute the plugin
     wxString m_cmd;
 
-    ///< Description of the plugin (normally from the plugin header)
+    /// Description of the plugin (normally from the plugin header)
     wxString m_info;
 
-    ///< Plugin specific options
+    /// Plugin specific options
     wxArrayString m_options;
 };
 

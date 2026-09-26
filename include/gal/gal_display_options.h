@@ -89,28 +89,28 @@ namespace KIGFX
 
         GAL_ANTIALIASING_MODE antialiasing_mode;
 
-        ///< The grid style to draw the grid in
+        /// The grid style to draw the grid in
         KIGFX::GRID_STYLE m_gridStyle;
 
-        ///< Snapping options for the grid
+        /// Snapping options for the grid
         GRID_SNAPPING m_gridSnapping;
 
-        ///< Thickness to render grid lines/dots
+        /// Thickness to render grid lines/dots
         double m_gridLineWidth;
 
-        ///< Minimum pixel distance between displayed grid lines
+        /// Minimum pixel distance between displayed grid lines
         double m_gridMinSpacing;
 
-        ///< Whether or not to draw the coordinate system axes
+        /// Whether or not to draw the coordinate system axes
         bool m_axesEnabled;
 
-        ///< Crosshair drawing mode
+        /// Crosshair drawing mode
         CROSS_HAIR_MODE m_crossHairMode;
 
-        ///< Force cursor display
+        /// Force cursor display
         bool m_forceDisplayCursor;
 
-        ///< The pixel scale factor (>1 for hi-DPI scaled displays)
+        /// The pixel scale factor (>1 for hi-DPI scaled displays)
         double m_scaleFactor;
 
         void SetCursorMode( CROSS_HAIR_MODE aMode ) { m_crossHairMode = aMode; }

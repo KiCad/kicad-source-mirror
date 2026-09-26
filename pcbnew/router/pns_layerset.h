@@ -125,7 +125,7 @@ public:
         return overlap;
     }
 
-    ///< Shortcut for comparisons/overlap tests
+    /// Shortcut for comparisons/overlap tests
     static PNS_LAYER_RANGE All()
     {
         return PNS_LAYER_RANGE( 0, 256 ); // fixme: use layer IDs header

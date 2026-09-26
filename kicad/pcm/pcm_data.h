@@ -37,7 +37,7 @@ using STRING_MAP = std::map<std::string, wxString>;
 using nlohmann::json;
 
 
-///< Supported package types
+/// Supported package types
 enum PCM_PACKAGE_TYPE
 {
     PT_INVALID,
@@ -48,7 +48,7 @@ enum PCM_PACKAGE_TYPE
     PT_COLORTHEME,
 };
 
-///< Plugin categories
+/// Plugin categories
 enum PCM_PLUGIN_CATEGORY
 {
     PC_INVALID,
@@ -57,7 +57,7 @@ enum PCM_PLUGIN_CATEGORY
 };
 
 
-///< Status of specific package version
+/// Status of specific package version
 enum PCM_PACKAGE_VERSION_STATUS
 {
     PVS_INVALID,
@@ -67,7 +67,7 @@ enum PCM_PACKAGE_VERSION_STATUS
     PVS_DEPRECATED
 };
 
-///< The runtime a plugin package uses
+/// The runtime a plugin package uses
 enum class PCM_PACKAGE_RUNTIME
 {
     PPR_SWIG,
@@ -75,7 +75,7 @@ enum class PCM_PACKAGE_RUNTIME
 };
 
 
-///< Describes a person's name and contact information
+/// Describes a person's name and contact information
 struct PCM_CONTACT
 {
     wxString   name;
@@ -87,7 +87,7 @@ struct PCM_CONTACT
 // create linker errors about redefinition of some vector members
 // if an attempt to use vector<wxString> in json is made.
 
-///< Package version metadata
+/// Package version metadata
 struct PACKAGE_VERSION
 {
     wxString                   version;
@@ -109,7 +109,7 @@ struct PACKAGE_VERSION
 };
 
 
-///< Package metadata
+/// Package metadata
 struct PCM_PACKAGE
 {
     wxString                           name;
@@ -128,7 +128,7 @@ struct PCM_PACKAGE
 };
 
 
-///< Repository reference to a resource
+/// Repository reference to a resource
 struct PCM_RESOURCE_REFERENCE
 {
     wxString                url;
@@ -137,7 +137,7 @@ struct PCM_RESOURCE_REFERENCE
 };
 
 
-///< Repository metadata
+/// Repository metadata
 struct PCM_REPOSITORY
 {
     wxString                              name;
@@ -154,7 +154,7 @@ struct PCM_REPOSITORY
 };
 
 
-///< Package installation entry
+/// Package installation entry
 struct PCM_INSTALLATION_ENTRY
 {
     PCM_PACKAGE package;

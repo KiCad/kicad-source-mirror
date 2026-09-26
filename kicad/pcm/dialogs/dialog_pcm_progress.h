@@ -46,19 +46,19 @@ public:
     /** Constructor */
     DIALOG_PCM_PROGRESS( wxWindow* parent, bool aShowDownloadSection = true );
 
-    ///< Safe to call from non-UI thread. Adds a message to detailed report window.
+    /// Safe to call from non-UI thread. Adds a message to detailed report window.
     void PCMReport( const wxString& aText, SEVERITY aSeverity );
 
-    ///< Safe to call from non-UI thread. Sets the download progress of the current zip entry.
+    /// Safe to call from non-UI thread. Sets the download progress of the current zip entry.
     void SetDownloadProgress( uint64_t aDownloaded, uint64_t aTotal );
 
-    ///< Safe to call from non-UI thread. Sets the download prgress of the current package.
+    /// Safe to call from non-UI thread. Sets the download prgress of the current package.
     void SetPackageProgress( uint64_t aProgress, uint64_t aTotal );
 
-    ///< Safe to call from non-UI thread. Advances to the next package.
+    /// Safe to call from non-UI thread. Advances to the next package.
     void AdvancePhase() override;
 
-    ///< Safe to call from non-UI thread. Disables cancel button, enables close button.
+    /// Safe to call from non-UI thread. Disables cancel button, enables close button.
     void SetFinished();
 
 private:

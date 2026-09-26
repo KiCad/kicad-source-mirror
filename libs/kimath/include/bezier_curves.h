@@ -76,7 +76,7 @@ private:
 
     double m_minSegLen;
 
-    ///< Control points
+    /// Control points
     std::vector<VECTOR2D> m_ctrlPts;
 };
 

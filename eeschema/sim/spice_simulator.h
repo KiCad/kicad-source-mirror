@@ -91,7 +91,7 @@ public:
      */
     virtual bool Command( const std::string& aCmd ) = 0;
 
-    ///< Return X axis name for a given simulation type
+    /// Return X axis name for a given simulation type
     virtual wxString GetXAxis( SIM_TYPE aType ) const = 0;
 
     /**
@@ -109,7 +109,7 @@ public:
         m_reporter.store( aReporter, std::memory_order_release );
     }
 
-    ///< Set a #SIM_STATE_LISTENER object to receive simulation state transitions.
+    /// Set a #SIM_STATE_LISTENER object to receive simulation state transitions.
     virtual void SetSimStateListener( SIM_STATE_LISTENER* aListener )
     {
         std::lock_guard<std::mutex> lock( m_reporterMutex );
@@ -211,16 +211,16 @@ public:
     static wxString TypeToName( SIM_TYPE aType, bool aShortName );
 
 protected:
-    ///< Reporter object to receive simulation log (not owned, accessed from BG threads).
+    /// Reporter object to receive simulation log (not owned, accessed from BG threads).
     std::atomic<REPORTER*>           m_reporter;
     std::atomic<SIM_STATE_LISTENER*> m_stateListener;
 
-    ///< Held by BG threads while invoking the reporter and by SetReporter while
-    ///< swapping the pointer, so SetReporter(nullptr) can serve as a barrier
-    ///< before the caller destroys the reporter.
+    /// Held by BG threads while invoking the reporter and by SetReporter while
+    /// swapping the pointer, so SetReporter(nullptr) can serve as a barrier
+    /// before the caller destroys the reporter.
     std::mutex m_reporterMutex;
 
-    ///< We don't own this.  We are just borrowing it from the #SCHEMATIC_SETTINGS.
+    /// We don't own this.  We are just borrowing it from the #SCHEMATIC_SETTINGS.
     std::shared_ptr<SPICE_SETTINGS> m_settings;
 };
 

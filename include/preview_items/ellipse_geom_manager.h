@@ -62,8 +62,8 @@ public:
     void Reset() override;
 
     /*
-    * Geometry query interface - used by clients of the manager
-    */
+     * Geometry query interface - used by clients of the manager
+     */
 
     /**
      * Get the ellipse defined by the current geometry (valid after SET_BBOX_C2).
@@ -73,16 +73,16 @@ public:
      */
     ELLIPSE<int> GetEllipse() const;
 
-    ///< Get the start angle (valid after SET_START_ANGLE).
+    /// Get the start angle (valid after SET_START_ANGLE).
     EDA_ANGLE GetStartAngle() const { return m_startAngle; }
 
-    ///< Get the end angle (valid after SET_END_ANGLE).  Always > startAngle.
+    /// Get the end angle (valid after SET_END_ANGLE).  Always > startAngle.
     EDA_ANGLE GetEndAngle() const { return m_endAngle; }
 
-    ///< Get the first bbox corner (valid after SET_BBOX_C1).
+    /// Get the first bbox corner (valid after SET_BBOX_C1).
     VECTOR2I GetBboxCorner1() const { return m_bboxC1; }
 
-    ///< Get the second bbox corner (valid after SET_BBOX_C2).
+    /// Get the second bbox corner (valid after SET_BBOX_C2).
     VECTOR2I GetBboxCorner2() const { return m_bboxC2; }
 
 protected:

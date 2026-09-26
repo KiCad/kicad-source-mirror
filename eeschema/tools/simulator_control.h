@@ -91,7 +91,7 @@ private:
 
     SIM_TAB* getCurrentSimTab();
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
 private:

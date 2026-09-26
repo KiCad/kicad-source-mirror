@@ -43,12 +43,12 @@ public:
     {
     }
 
-    ///< Dummy schematic to attach the test sheet to
+    /// Dummy schematic to attach the test sheet to
     SCHEMATIC m_schematic;
 
     SCH_SHEET m_sheet;
 
-    ///< Can use when you need a const ref (lots of places need fixing here)
+    /// Can use when you need a const ref (lots of places need fixing here)
     const SCH_SHEET& m_csheet;
 };
 

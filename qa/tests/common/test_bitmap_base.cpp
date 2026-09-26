@@ -54,7 +54,7 @@ static const std::vector<unsigned char> png_data_4tile = { //
     0x42, 0x60, 0x82
 };
 
-///< 4tile is an 8x8 image
+/// 4tile is an 8x8 image
 static const VECTOR2I size_4tile{ 8, 8 };
 
 static const KIGFX::COLOR4D col_red{ 1.0, 0.0, 0.0, 1.0 };

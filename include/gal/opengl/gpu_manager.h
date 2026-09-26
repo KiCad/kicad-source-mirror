@@ -77,19 +77,19 @@ public:
 protected:
     GPU_MANAGER( VERTEX_CONTAINER* aContainer );
 
-    ///< Drawing status flag.
+    /// Drawing status flag.
     bool m_isDrawing;
 
-    ///< Container that stores vertices data.
+    /// Container that stores vertices data.
     VERTEX_CONTAINER* m_container;
 
-    ///< Shader handling
+    /// Shader handling
     SHADER* m_shader;
 
-    ///< Location of shader attributes (for glVertexAttribPointer)
+    /// Location of shader attributes (for glVertexAttribPointer)
     int m_shaderAttrib;
 
-    ///< true: enable Z test when drawing
+    /// true: enable Z test when drawing
     bool m_enableDepthTest;
 };
 

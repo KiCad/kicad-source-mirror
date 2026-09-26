@@ -49,7 +49,7 @@ public:
 
     const BOX2I ViewBBox() const override;
 
-    ///< Set the origin of the rectangle (the fixed corner)
+    /// Set the origin of the rectangle (the fixed corner)
     void SetOrigin( const VECTOR2I& aOrigin )
     {
         m_origin = aOrigin;

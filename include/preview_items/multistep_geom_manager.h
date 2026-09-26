@@ -141,13 +141,13 @@ public:
 
 protected:
 
-    ///< Mark the geometry as changed for clients to notice
+    /// Mark the geometry as changed for clients to notice
     void setGeometryChanged()
     {
         m_changed = true;
     }
 
-    ///< Get the current stage of the manager
+    /// Get the current stage of the manager
     int getStep() const
     {
         return m_step;
@@ -155,8 +155,8 @@ protected:
 
 private:
 
-    ///< Function that accepts a point for a stage, or rejects it
-    ///< to return to the previous stage
+    /// Function that accepts a point for a stage, or rejects it
+    /// to return to the previous stage
     virtual bool acceptPoint( const VECTOR2I& aPt ) = 0;
 
     /**
@@ -165,7 +165,7 @@ private:
      */
     virtual int getMaxStep() const = 0;
 
-    ///< Moves the manager forward or backward through the stages
+    /// Moves the manager forward or backward through the stages
     void performStep( bool aForward )
     {
         m_step += aForward ? 1 : -1;
@@ -174,10 +174,10 @@ private:
         m_step = std::clamp( m_step, 0, getMaxStep() );
     }
 
-    ///< Has the geometry changed such that a client should redraw?
+    /// Has the geometry changed such that a client should redraw?
     bool m_changed = false;
 
-    ///< The last (raw) point added, which is usually the cursor position
+    /// The last (raw) point added, which is usually the cursor position
     VECTOR2I m_lastPoint;
 
     /**

@@ -28,7 +28,7 @@ public:
     DIALOG_GLOBAL_DELETION( PCB_EDIT_FRAME* parent );
     void SetCurrentLayer( int aLayer );
 
-    ///< @todo Move this back into the tool rather than having the dialog do the deleting.
+    /// @todo Move this back into the tool rather than having the dialog do the deleting.
     void DoGlobalDeletions();
 
 private:

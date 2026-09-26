@@ -52,7 +52,7 @@ public:
     KI_UNION_FIND( const KI_UNION_FIND& ) = delete;
     KI_UNION_FIND& operator=( const KI_UNION_FIND& ) = delete;
 
-    ///< Discard all unions and resize the set to \a aCount single-element components.
+    /// Discard all unions and resize the set to \a aCount single-element components.
     void Reset( size_t aCount )
     {
         // Parents are uint32_t to keep the array dense, so a larger set would alias index
@@ -71,7 +71,7 @@ public:
 
     size_t Size() const { return m_parent.size(); }
 
-    ///< @return the number of components that remain.
+    /// @return the number of components that remain.
     size_t ComponentCount() const { return m_components.load( std::memory_order_relaxed ); }
 
     /**
@@ -126,7 +126,7 @@ public:
         return false;
     }
 
-    ///< @return the representative of the component that holds \a aX.
+    /// @return the representative of the component that holds \a aX.
     size_t Find( size_t aX ) const
     {
         uint32_t x = static_cast<uint32_t>( aX );

@@ -70,19 +70,19 @@ public:
     void commitRuleArea( std::unique_ptr<SCH_RULE_AREA> aRuleArea );
 
 private:
-    ///< The preview item to display
+    /// The preview item to display
     KIGFX::PREVIEW::POLYGON_ITEM m_previewItem;
 
-    ///< view that show the preview item
+    /// view that show the preview item
     KIGFX::VIEW& m_parentView;
 
-    ///< The active schematic edit frame
+    /// The active schematic edit frame
     SCH_EDIT_FRAME* m_frame;
 
-    ///< The rule area in progress
+    /// The rule area in progress
     std::unique_ptr<SCH_RULE_AREA> m_rule_area;
 
-    ///< The TOOL_MANAGER running the tool
+    /// The TOOL_MANAGER running the tool
     TOOL_MANAGER* m_toolManager;
 };
 

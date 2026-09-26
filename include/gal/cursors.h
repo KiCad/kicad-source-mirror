@@ -111,7 +111,7 @@ public:
     {
         const char** m_xpm;
 
-        ///< The "hotspot" where the cursor "is" in the image
+        /// The "hotspot" where the cursor "is" in the image
         wxPoint m_hotspot;
     };
 
@@ -155,7 +155,7 @@ private:
 #endif
 
 #if wxCHECK_VERSION( 3, 3, 0 )
-    ///< Internal store of cursor bundles for wx 3.3+
+    /// Internal store of cursor bundles for wx 3.3+
     std::map<KICURSOR, wxCursorBundle> m_bundleMap;
 #else
     std::map<KICURSOR, wxCursor> m_standardCursorMap;

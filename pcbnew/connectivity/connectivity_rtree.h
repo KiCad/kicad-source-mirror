@@ -38,7 +38,7 @@ class CN_RTREE
 public:
     using TREE = KIRTREE::DYNAMIC_RTREE<T, int, 3>;
 
-    ///< Entry type accepted by BulkLoad().
+    /// Entry type accepted by BulkLoad().
     using BULK_ENTRY = typename TREE::BULK_ENTRY;
 
     CN_RTREE() = default;

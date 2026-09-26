@@ -228,10 +228,10 @@ private:
     bool                active;             ///< Is any of shaders used?
     GLuint              maximumVertices;    ///< The maximum of vertices to be generated
 
-    ///< Input type [e.g. GL_LINES, GL_TRIANGLES, GL_QUADS etc.]
+    /// Input type [e.g. GL_LINES, GL_TRIANGLES, GL_QUADS etc.]
     GLuint              geomInputType;
 
-    ///< Output type [e.g. GL_LINES, GL_TRIANGLES, GL_QUADS etc.]
+    /// Output type [e.g. GL_LINES, GL_TRIANGLES, GL_QUADS etc.]
     GLuint              geomOutputType;
     std::deque<GLint>   parameterLocation;  ///< Location of the parameter
 };

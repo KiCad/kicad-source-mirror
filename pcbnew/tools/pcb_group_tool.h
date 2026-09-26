@@ -29,7 +29,7 @@ public:
      */
     int PickNewMember( const TOOL_EVENT& aEvent ) override;
 
-    ///< Group selected items.
+    /// Group selected items.
     int Group( const TOOL_EVENT& aEvent ) override;
 
 protected:

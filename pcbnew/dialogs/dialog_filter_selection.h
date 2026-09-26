@@ -62,6 +62,6 @@ private:
     void forceCheckboxStates( bool aNewState );
     wxCheckBoxState GetSuggestedAllItemsState( void );
 
-    ///< Reference to the options struct to fill.
+    /// Reference to the options struct to fill.
     OPTIONS& m_options;
 };

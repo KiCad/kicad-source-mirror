@@ -504,7 +504,7 @@ public:
         return true;
     }
 
-    ///< Index everything queued since StartBulkAdd().  A no-op outside bulk mode.
+    /// Index everything queued since StartBulkAdd().  A no-op outside bulk mode.
     void FinishBulkAdd()
     {
         if( !m_bulkAdd )
@@ -597,7 +597,7 @@ protected:
             m_index.Insert( item );
     }
 
-    ///< The sole place CN_ITEM list numbering is assigned.
+    /// The sole place CN_ITEM list numbering is assigned.
     void appendItem( CN_ITEM* aItem )
     {
         aItem->SetListIndex( static_cast<int>( m_items.size() ) );

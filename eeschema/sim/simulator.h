@@ -42,10 +42,10 @@ public:
 
     virtual ~SIMULATOR() {}
 
-    ///< Create a simulator instance of particular type (currently only ngspice is handled)
+    /// Create a simulator instance of particular type (currently only ngspice is handled)
     static std::shared_ptr<SPICE_SIMULATOR> CreateInstance( const std::string& aName );
 
-    /*
+    /**
      * @return mutex for exclusive access to the simulator.
      */
     std::mutex& GetMutex()
@@ -94,11 +94,11 @@ public:
     virtual void Clean() = 0;
 
 protected:
-    ///< Model that should be simulated.
+    /// Model that should be simulated.
     std::shared_ptr<SIMULATION_MODEL> m_simModel;
 
 private:
-    ///< For interprocess synchronisation.
+    /// For interprocess synchronisation.
     std::mutex m_mutex;
 };
 

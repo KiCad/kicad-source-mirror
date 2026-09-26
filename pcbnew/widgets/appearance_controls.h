@@ -214,7 +214,7 @@ public:
 
     wxSize GetBestSize() const;
 
-    ///< Update the panel contents from the application and board models.
+    /// Update the panel contents from the application and board models.
     void OnBoardChanged();
 
     void OnBoardNetSettingsChanged( BOARD& aBoard ) override;
@@ -228,29 +228,29 @@ public:
                                  std::vector<BOARD_ITEM*>& aRemovedItems,
                                  std::vector<BOARD_ITEM*>& aChangedItems ) override;
 
-    ///< Update the colors on all the widgets from the new chosen color theme.
+    /// Update the colors on all the widgets from the new chosen color theme.
     void OnColorThemeChanged();
 
-    ///< Respond to change in OS's DarkMode
+    /// Respond to change in OS's DarkMode
     void OnDarkModeToggle();
 
-    ///< Update the widget when the active board layer is changed.
+    /// Update the widget when the active board layer is changed.
     void OnLayerChanged();
 
     /// Notifies the panel when a net has been hidden or shown via the external tool.
     void OnNetVisibilityChanged( int aNetCode, bool aVisibility );
 
-    ///< Manually update visibility for a given layer
+    /// Manually update visibility for a given layer
     void SetLayerVisible( int aLayer, bool isVisible );
 
     void SetObjectVisible( GAL_LAYER_ID aLayer, bool isVisible = true );
 
     void UpdateDisplayOptions();
 
-    ///< Return a list of the layer presets created by the user.
+    /// Return a list of the layer presets created by the user.
     std::vector<LAYER_PRESET> GetUserLayerPresets() const;
 
-    ///< Update the current layer presets from those saved in the project file.
+    /// Update the current layer presets from those saved in the project file.
     void SetUserLayerPresets( std::vector<LAYER_PRESET>& aPresetList );
 
     void ApplyLayerPreset( const wxString& aPresetName );
@@ -267,10 +267,10 @@ public:
 
     const wxArrayString& GetLayerPresetsMRU() { return m_presetMRU; }
 
-    ///< Return a list of viewports created by the user.
+    /// Return a list of viewports created by the user.
     std::vector<VIEWPORT> GetUserViewports() const;
 
-    ///< Update the current viewports from those saved in the project file.
+    /// Update the current viewports from those saved in the project file.
     void SetUserViewports( std::vector<VIEWPORT>& aPresetList );
 
     void ApplyViewport( const wxString& aPresetName );
@@ -283,10 +283,10 @@ public:
 
     void OnLayerContextMenu( wxCommandEvent& aEvent );
 
-    ///< Return the index of the current tab (0-2).
+    /// Return the index of the current tab (0-2).
     int GetTabIndex() const;
 
-    ///< Set the current notebook tab.
+    /// Set the current notebook tab.
     void SetTabIndex( int aTab );
 
     /**

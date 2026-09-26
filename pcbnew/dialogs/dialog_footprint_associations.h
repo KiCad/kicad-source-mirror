@@ -37,7 +37,7 @@ public:
     DIALOG_FOOTPRINT_ASSOCIATIONS( PCB_BASE_FRAME* aFrame, FOOTPRINT* aFootprint );
     ~DIALOG_FOOTPRINT_ASSOCIATIONS() { }
 
-    ///< Get data from the PCB board and print it to dialog
+    /// Get data from the PCB board and print it to dialog
     bool TransferDataToWindow() override;
 
 private:

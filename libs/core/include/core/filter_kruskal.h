@@ -43,7 +43,7 @@
 namespace KI_MST
 {
 
-///< Sort and scan a range of this size or smaller instead of splitting it again.
+/// Sort and scan a range of this size or smaller instead of splitting it again.
 static constexpr size_t KRUSKAL_THRESHOLD = 1024;
 
 

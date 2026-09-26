@@ -56,64 +56,64 @@ public:
     void SetPackageState( const wxString& aPackageId, const PCM_PACKAGE_STATE aState,
                           const bool aPinned );
 
-    ///< Destroys package panels
+    /// Destroys package panels
     void ClearData();
 
-    ///< Selects full row of the clicked cell
+    /// Selects full row of the clicked cell
     void OnVersionsCellClicked( wxGridEvent& event ) override;
 
-    ///< Opens file chooser dialog and downloads selected package version archive
+    /// Opens file chooser dialog and downloads selected package version archive
     void OnDownloadVersionClicked( wxCommandEvent& event ) override;
 
-    ///< Schedules relevant action for selected package version
+    /// Schedules relevant action for selected package version
     void OnVersionActionClicked( wxCommandEvent& event ) override;
 
-    ///< Shows all versions including incompatible ones
+    /// Shows all versions including incompatible ones
     void OnShowAllVersionsClicked( wxCommandEvent& event ) override;
 
-    ///< Ranks packages for entered search term and rearranges/hides panels according to their rank
+    /// Ranks packages for entered search term and rearranges/hides panels according to their rank
     void OnSearchTextChanged( wxCommandEvent& event );
 
     void OnSizeInfoBox( wxSizeEvent& aEvent ) override;
 
-    ///< Respond to a URL in the info window
+    /// Respond to a URL in the info window
     void OnURLClicked( wxHtmlLinkEvent& event ) override;
 
-    ///< Respond to scrolling over the window
+    /// Respond to scrolling over the window
     void OnInfoMouseWheel( wxMouseEvent& event ) override;
 
-    ///< Replacement of wxFormBuilder's ill-advised m_splitter1OnIdle
+    /// Replacement of wxFormBuilder's ill-advised m_splitter1OnIdle
     void SetSashOnIdle( wxIdleEvent& );
 
-    ///< Enqueues all available package updates
+    /// Enqueues all available package updates
     void OnUpdateAllClicked( wxCommandEvent& event ) override;
 
 private:
-    ///< Updates package listing according to search term
+    /// Updates package listing according to search term
     void updatePackageList();
 
-    ///< Updates buttons below the package details: Download and Install
+    /// Updates buttons below the package details: Download and Install
     void updateDetailsButtons();
 
-    ///< Called when package state changes, currently used to calculate Update All button state
+    /// Called when package state changes, currently used to calculate Update All button state
     void updateCommonState();
 
-    ///< Updates details panel
+    /// Updates details panel
     void setPackageDetails( const PACKAGE_VIEW_DATA& aPackageData );
 
-    ///< Clears details panel
+    /// Clears details panel
     void unsetPackageDetails();
 
-    ///< Bytes to Kb/Mb/Gb string or "-" if absent
+    /// Bytes to Kb/Mb/Gb string or "-" if absent
     wxString toHumanReadableSize( const std::optional<uint64_t> size ) const;
 
-    ///< Returns true if it the download operation can be performed
+    /// Returns true if it the download operation can be performed
     bool canDownload() const;
 
-    ///< Returns true if the package action can be performed
+    /// Returns true if the package action can be performed
     bool canRunAction() const;
 
-    ///< Returns implied action for the action button
+    /// Returns implied action for the action button
     PCM_PACKAGE_ACTION getAction() const;
 
 private:

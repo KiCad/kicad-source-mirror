@@ -58,13 +58,13 @@ public:
     int ReportBug( const TOOL_EVENT& aEvent );
     int ReloadPlugins( const TOOL_EVENT& aEvent );
 
-    ///< Sets up handlers for various events.
+    /// Sets up handlers for various events.
     void setTransitions() override;
 
     int Execute( const wxString& aExecutible, const wxString& aParam );
 
 private:
-    ///< Pointer to the currently used edit frame.
+    /// Pointer to the currently used edit frame.
     EDA_BASE_FRAME* m_frame;
 
     static wxString m_bugReportUrl;

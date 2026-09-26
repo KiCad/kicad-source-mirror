@@ -34,7 +34,7 @@ class wxTextCtrl;
 class STD_BITMAP_BUTTON;
 class PCB_EDIT_FRAME;
 
-///< Settings for GenCAD exporter
+/// Settings for GenCAD exporter
 enum GENCAD_EXPORT_OPT
 {
     FLIP_BOTTOM_PADS,       // flip bottom components padstacks geometry
@@ -53,10 +53,10 @@ public:
     DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent, const wxString& aTitle, JOB_EXPORT_PCB_GENCAD* aJob );
     ~DIALOG_GENCAD_EXPORT_OPTIONS();
 
-    ///< Check whether an option has been selected.
+    /// Check whether an option has been selected.
     bool GetOption( GENCAD_EXPORT_OPT aOption ) const;
 
-    ///< Return the selected file path.
+    /// Return the selected file path.
     wxString GetFileName() const;
 
 protected:
@@ -65,7 +65,7 @@ protected:
 
     virtual void onBrowseClicked( wxCommandEvent& aEvent );
 
-    ///< Create checkboxes for GenCAD export options.
+    /// Create checkboxes for GenCAD export options.
     void createOptCheckboxes();
 
 protected:

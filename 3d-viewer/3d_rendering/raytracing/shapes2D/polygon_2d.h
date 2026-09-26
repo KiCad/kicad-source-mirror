@@ -107,7 +107,7 @@ private:
      */
     SEGMENTS_WIDTH_NORMALS m_open_segments;
 
-    ///< A polygon block can have multiple polygon and holes
+    /// A polygon block can have multiple polygon and holes
     OUTERS_AND_HOLES m_outers_and_holes;
 };
 

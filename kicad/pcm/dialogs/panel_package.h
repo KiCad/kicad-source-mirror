@@ -26,7 +26,7 @@
 #include "panel_package_base.h"
 #include "pcm.h"
 
-///< Collection of data relevant to the package display panel
+/// Collection of data relevant to the package display panel
 struct PACKAGE_VIEW_DATA
 {
     const PCM_PACKAGE package;
@@ -58,7 +58,7 @@ struct PACKAGE_VIEW_DATA
 };
 
 
-///< Callback for (un)install button
+/// Callback for (un)install button
 using ActionCallback = std::function<void( const PACKAGE_VIEW_DATA& aData,
                                            PCM_PACKAGE_ACTION aAction, const wxString& aVersion )>;
 
@@ -72,18 +72,18 @@ public:
     PANEL_PACKAGE( wxWindow* parent, const ActionCallback& aCallback,
                    const PinCallback& aPinCallback, const PACKAGE_VIEW_DATA& aData );
 
-    ///< Sets callback for OnClick action
+    /// Sets callback for OnClick action
     void SetSelectCallback( const std::function<void()>& aCallback );
 
-    ///< Marks panel as selected
+    /// Marks panel as selected
     void SetSelected( bool aSelected );
 
     void OnButtonClicked( wxCommandEvent& event ) override;
 
-    ///< Changes state of the (un)install button
+    /// Changes state of the (un)install button
     void SetState( PCM_PACKAGE_STATE aState, bool aPinned );
 
-    ///< Called when anywhere on the panel is clicked (except install button)
+    /// Called when anywhere on the panel is clicked (except install button)
     void OnClick( wxMouseEvent& event ) override;
 
     void OnUninstallClick( wxCommandEvent& event );
@@ -92,7 +92,7 @@ public:
 
     void OnSize( wxSizeEvent& event ) override;
 
-    ///< Get preferred version. If criteria are not met, return wxEmptyString
+    /// Get preferred version. If criteria are not met, return wxEmptyString
     wxString GetPreferredVersion() const;
 
     const PACKAGE_VIEW_DATA& GetPackageData() const { return m_data; };

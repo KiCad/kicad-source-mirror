@@ -155,7 +155,7 @@ static inline double scale( int kicadDist )
 }
 
 
-///< Convert integer internal units to float um
+/// Convert integer internal units to float um
 static inline double IU2um( int kicadDist )
 {
     return kicadDist * ( 1000.0 / pcbIUScale.IU_PER_MM );

@@ -790,7 +790,7 @@ struct BLK_0x08_PIN_NUMBER
 
     COND_GE<FMT_VER::V_172, uint32_t> m_StrPtr;
 
-    ///< Pointer to 0x11 PIN_NAME object
+    /// Pointer to 0x11 PIN_NAME object
     uint32_t m_PinNamePtr;
 
     COND_GE<FMT_VER::V_172, uint32_t> m_Unknown1;
@@ -1038,11 +1038,11 @@ struct BLK_0x11_PIN_NAME
     uint8_t  m_Type;
     uint16_t m_R;
     uint32_t m_Key;
-    ///< Pointer to pin name string
+    /// Pointer to pin name string
     uint32_t m_PinNameStrPtr;
-    ///< Pointer to next 0x11 PIN_NAME object or 0x0F SLOT
+    /// Pointer to next 0x11 PIN_NAME object or 0x0F SLOT
     uint32_t m_Next;
-    ///< Pointer to 0x08 PIN_NUMBER object
+    /// Pointer to 0x08 PIN_NUMBER object
     uint32_t m_PinNumberPtr;
     uint32_t m_Unknown1;
 
@@ -1143,7 +1143,7 @@ struct BLK_0x1B_NET
 
     uint32_t m_Assignment;
     uint32_t m_Ratline;
-    ///< Pointer to first 0x03 FIELD object or null
+    /// Pointer to first 0x03 FIELD object or null
     uint32_t m_FieldsPtr;
     uint32_t m_MatchGroupPtr; ///< Diff pair / match group pointer (0x26 or 0x2C)
     uint32_t m_ModelPtr;
@@ -1877,7 +1877,7 @@ struct BLK_0x2B_FOOTPRINT_DEF
     uint32_t m_UnknownPtr4;
     uint32_t m_UnknownPtr5;
 
-    ///< Pointer to first 0x03 FIELD object or null
+    /// Pointer to first 0x03 FIELD object or null
     uint32_t m_FieldsPtr;
 
     uint32_t m_UnknownPtr6;

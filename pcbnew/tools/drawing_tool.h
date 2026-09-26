@@ -90,7 +90,7 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    ///< The possible drawing modes of DRAWING_TOOL
+    /// The possible drawing modes of DRAWING_TOOL
     enum class MODE
     {
         NONE,
@@ -272,7 +272,7 @@ public:
      */
     int PlaceSubGrid( const TOOL_EVENT& aEvent );
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
     void SetStroke( const STROKE_PARAMS& aStroke, PCB_LAYER_ID aLayer )

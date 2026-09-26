@@ -90,16 +90,16 @@ public:
     const std::vector<const TOOL_ACTION*>& GetActions() const { return m_actions; }
 
 protected:
-    ///< The action ID for this action group
+    /// The action ID for this action group
     int m_id;
 
-    ///< The name of this action group
+    /// The name of this action group
     std::string m_name;
 
-    ///< The default action to display on the toolbar item
+    /// The default action to display on the toolbar item
     const TOOL_ACTION* m_defaultAction;
 
-    ///< The actions that compose the group.  Non-owning.
+    /// The actions that compose the group.  Non-owning.
     std::vector<const TOOL_ACTION*> m_actions;
 };
 
@@ -174,20 +174,20 @@ public:
 protected:
     void onCharHook( wxKeyEvent& aEvent );
 
-    // The group that the buttons in the palette are part of
+    /// The group that the buttons in the palette are part of
      ACTION_GROUP* m_group;
 
-    ///< The size each button on the toolbar should be
+    /// The size each button on the toolbar should be
     wxRect         m_buttonSize;
 
-    ///< True if the palette uses vertical buttons, false for horizontal buttons
+    /// True if the palette uses vertical buttons, false for horizontal buttons
     bool           m_isVertical;
 
     wxPanel*       m_panel;
     wxBoxSizer*    m_mainSizer;
     wxBoxSizer*    m_buttonSizer;
 
-    ///< The buttons that act as the toolbar on the palette
+    /// The buttons that act as the toolbar on the palette
     std::map<int, BITMAP_BUTTON*> m_buttons;
 };
 
@@ -382,35 +382,35 @@ protected:
      */
     void popupPalette( wxAuiToolBarItem* aItem );
 
-    ///< Handler for a mouse up/down event
+    /// Handler for a mouse up/down event
     void onMouseClick( wxMouseEvent& aEvent );
 
-    ///< Handler for when a drag event occurs on an item
+    /// Handler for when a drag event occurs on an item
     void onItemDrag( wxAuiToolBarEvent& aEvent );
 
-    ///< The default tool event handler
+    /// The default tool event handler
     void onToolEvent( wxAuiToolBarEvent& aEvent );
 
-    ///< Handle a right-click on a menu item
+    /// Handle a right-click on a menu item
     void onRightClick( wxAuiToolBarEvent& aEvent );
 
-    ///< Handle a right mouse button release; resolves the tool ourselves to work around a
-    ///< wxAuiToolBar hit-testing bug that dead-zones part of every button on vertical toolbars.
+    /// Handle a right mouse button release; resolves the tool ourselves to work around a
+    /// wxAuiToolBar hit-testing bug that dead-zones part of every button on vertical toolbars.
     void onRightUp( wxMouseEvent& aEvent );
 
-    ///< Show the context menu registered for the given tool ID (handles group remapping).
+    /// Show the context menu registered for the given tool ID (handles group remapping).
     void showContextMenu( int aToolId );
 
-    ///< Handle the button select inside the palette
+    /// Handle the button select inside the palette
     void onPaletteEvent( wxCommandEvent& aEvent );
 
-    ///< Handle the palette timer triggering
+    /// Handle the palette timer triggering
     void onTimerDone( wxTimerEvent& aEvent );
 
     void onThemeChanged( wxSysColourChangedEvent &aEvent );
 
-    ///< Render the triangle in the lower-right corner that represents that an action palette
-    ///< is available for an item
+    /// Render the triangle in the lower-right corner that represents that an action palette
+    /// is available for an item
     void OnCustomRender( wxDC& aDc, const wxAuiToolBarItem& aItem, const wxRect& aRect ) override;
 
     void DoSetToolTipText( const wxString& aTip ) override;

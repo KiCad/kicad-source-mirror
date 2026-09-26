@@ -50,16 +50,16 @@ public:
 
     virtual ~ALGO_BASE() {}
 
-    ///< Return the instance of our router
+    /// Return the instance of our router
     ROUTER* Router() const
     {
         return m_router;
     }
 
-    ///< Return current router settings
+    /// Return current router settings
     ROUTING_SETTINGS& Settings() const;
 
-    ///< Return the logger object, allowing to dump geometry to a file.
+    /// Return the logger object, allowing to dump geometry to a file.
     virtual LOGGER* Logger();
 
     void SetLogger( LOGGER* aLogger )

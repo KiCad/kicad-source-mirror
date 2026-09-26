@@ -45,7 +45,7 @@ public:
     SELECTION_CONDITION LineMode( LINE_MODE aMode );
 
 protected:
-    ///< Helper function used by LineMode().
+    /// Helper function used by LineMode().
     static bool lineModeFunc( const SELECTION& aSelection, SCH_BASE_FRAME* aFrame,
                               LINE_MODE aMode );
 };

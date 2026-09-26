@@ -43,7 +43,7 @@ class LIB_ID;
 class LIB_TREE : public wxPanel
 {
 public:
-    ///< Flags to select extra widgets and options
+    /// Flags to select extra widgets and options
     enum FLAGS
     {
         FLAGS_NONE  = 0x00,

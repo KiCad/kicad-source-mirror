@@ -32,7 +32,7 @@ public:
     ~AUTOPLACE_TOOL() {}
 
 protected:
-    ///< Bind handlers to corresponding TOOL_ACTIONs.
+    /// Bind handlers to corresponding TOOL_ACTIONs.
     void setTransitions() override;
 
 private:

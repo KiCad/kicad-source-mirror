@@ -44,10 +44,10 @@ public:
         m_createNewProject = m_cb->GetValue();
     }
 
-    ///< Gets the selected state of the create new project option
+    /// Gets the selected state of the create new project option
     bool GetCreateNewProject() const { return m_createNewProject; }
 
-    ///< Gets if this hook has attached controls to a dialog box
+    /// Gets if this hook has attached controls to a dialog box
     bool IsAttachedToDialog() const { return m_controlsAttached; }
 
 private:

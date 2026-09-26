@@ -793,7 +793,7 @@ protected:
         int                     id;              ///< Layer ID.
         RENDER_TARGET           target;          ///< Where the layer should be rendered.
 
-        ///< Layers that have to be enabled to show the layer.
+        /// Layers that have to be enabled to show the layer.
         std::set<int>           requiredLayers;
 
         bool operator< ( const VIEW_LAYER& aOther ) const

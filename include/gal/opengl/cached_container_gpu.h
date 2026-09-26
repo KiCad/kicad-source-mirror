@@ -47,13 +47,13 @@ public:
         return m_isMapped;
     }
 
-    ///< @copydoc VERTEX_CONTAINER::Abandon()
+    /// @copydoc VERTEX_CONTAINER::Abandon()
     void Abandon() override;
 
-    ///< @copydoc VERTEX_CONTAINER::Map()
+    /// @copydoc VERTEX_CONTAINER::Map()
     void Map() override;
 
-    ///< @copydoc VERTEX_CONTAINER::Unmap()
+    /// @copydoc VERTEX_CONTAINER::Unmap()
     void Unmap() override;
 
     virtual unsigned int AllItemsSize() const override;
@@ -82,13 +82,13 @@ protected:
      */
     bool defragmentResizeStaged( unsigned int aNewSize );
 
-    ///< Flag saying if vertex buffer is currently mapped
+    /// Flag saying if vertex buffer is currently mapped
     bool m_isMapped;
 
-    ///< Vertex buffer handle
+    /// Vertex buffer handle
     unsigned int m_glBufferHandle;
 
-    ///< Flag saying whether it is safe to use glCopyBufferSubData
+    /// Flag saying whether it is safe to use glCopyBufferSubData
     bool m_useCopyBuffer;
 };
 } // namespace KIGFX

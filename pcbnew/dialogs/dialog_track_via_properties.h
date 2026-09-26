@@ -68,7 +68,7 @@ private:
     int getLayerDepth();
     void afterPadstackModeChanged();
 
-    ///< Get data from the PCB board and display it to dialog
+    /// Get data from the PCB board and display it to dialog
     bool TransferDataToWindow() override;
 
 private:

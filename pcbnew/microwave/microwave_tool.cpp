@@ -97,8 +97,8 @@ static const COLOR4D inductorAreaFill( 0.3, 0.3, 0.5, 0.3 );
 static const COLOR4D inductorAreaStroke( 0.4, 1.0, 1.0, 1.0 );
 static const double  inductorAreaStrokeWidth = 1.0;
 
-///< Aspect of the preview rectangle - this is hardcoded in the
-///< microwave backend for now
+/// Aspect of the preview rectangle - this is hardcoded in the
+/// microwave backend for now
 static const double  inductorAreaAspect = 0.5;
 
 

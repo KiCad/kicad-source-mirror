@@ -85,7 +85,7 @@ private:
 
     SYMBOL_DIFF_WIDGET* constructDiffPanel( wxPanel* aParentPanel );
 
-    ///< @copydoc TOOL_INTERACTIVE::setTransitions();
+    /// @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 
 private:

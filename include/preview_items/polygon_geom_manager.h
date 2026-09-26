@@ -49,10 +49,10 @@ public:
          */
         virtual bool OnFirstPoint( POLYGON_GEOM_MANAGER& aMgr ) = 0;
 
-        ///< Sent when the polygon geometry changes
+        /// Sent when the polygon geometry changes
         virtual void OnGeometryChange( const POLYGON_GEOM_MANAGER& aMgr ) = 0;
 
-        ///< Called when the polygon is complete
+        /// Called when the polygon is complete
         virtual void OnComplete( const POLYGON_GEOM_MANAGER& aMgr ) = 0;
 
         virtual ~CLIENT()
@@ -182,22 +182,22 @@ private:
     void updateTemporaryLines( const VECTOR2I& aEndPoint,
                                LEADER_MODE     aModifier = LEADER_MODE::DIRECT );
 
-    ///< The "user" of the polygon data that is informed when the geometry changes
+    /// The "user" of the polygon data that is informed when the geometry changes
     CLIENT& m_client;
 
-    ///< The current mode of the leader line
+    /// The current mode of the leader line
     LEADER_MODE m_leaderMode;
 
-    ///< Flag enabling self-intersecting polygons
+    /// Flag enabling self-intersecting polygons
     bool m_intersectionsAllowed;
 
-    ///< Point that have been "locked in"
+    /// Point that have been "locked in"
     SHAPE_LINE_CHAIN m_lockedPoints;
 
-    ///< Points in the temporary "leader" line(s)
+    /// Points in the temporary "leader" line(s)
     SHAPE_LINE_CHAIN m_leaderPts;
 
-    ///< Points between the cursor and start point
+    /// Points between the cursor and start point
     SHAPE_LINE_CHAIN m_loopPts;
 };
 

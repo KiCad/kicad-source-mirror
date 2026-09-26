@@ -42,7 +42,7 @@ public:
         m_createNewDir = m_cb->GetValue();
     }
 
-    ///< Gets the selected state of the create new directory checkbox
+    /// Gets the selected state of the create new directory checkbox
     bool GetCreateNewDir() const { return m_createNewDir; }
 
 private:

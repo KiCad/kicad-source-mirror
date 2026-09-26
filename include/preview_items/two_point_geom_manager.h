@@ -36,7 +36,7 @@ namespace PREVIEW
 class TWO_POINT_GEOMETRY_MANAGER
 {
 public:
-    ///< Set the origin of the ruler (the fixed end)
+    /// Set the origin of the ruler (the fixed end)
     void SetOrigin( const VECTOR2I& aOrigin )
     {
         m_origin = aOrigin;

@@ -475,10 +475,10 @@ public:
 
     bool IsSymbolAlias() const;
 
-    ///< Return true if \a aLibId is an alias for the editor screen symbol.
+    /// Return true if \a aLibId is an alias for the editor screen symbol.
     bool IsCurrentSymbol( const LIB_ID& aLibId ) const;
 
-    ///< Restore the empty editor screen, without any symbol or library selected.
+    /// Restore the empty editor screen, without any symbol or library selected.
     void emptyScreen();
 
     void ClearToolbarControl( int aId ) override;
@@ -707,7 +707,7 @@ private:
 
 public:
 private:
-    ///< Helper screen used when no symbol is loaded
+    /// Helper screen used when no symbol is loaded
     SCH_SCREEN*         m_dummyScreen;
 
     LIB_SYMBOL*         m_symbol;                // a symbol I own, it is not in any library, but a copy could be.

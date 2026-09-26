@@ -65,7 +65,7 @@ public:
     std::shared_ptr<DRC_ENGINE> GetDRCEngine() { return m_drcEngine; }
 
 private:
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
     /**

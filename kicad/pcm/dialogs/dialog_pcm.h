@@ -44,41 +44,41 @@ public:
 
     EDA_BASE_FRAME* ParentFrame() const { return m_parentFrame; }
 
-    ///< Closes the window, asks user confirmation if there are pending actions
+    /// Closes the window, asks user confirmation if there are pending actions
     void OnCloseClicked( wxCommandEvent& event ) override;
     void OnCloseWindow( wxCloseEvent& aEvent );
 
-    ///< Opens repository management dialog, saves changes to PCM
+    /// Opens repository management dialog, saves changes to PCM
     void OnManageRepositoriesClicked( wxCommandEvent& event ) override;
 
-    ///< Discards current repo cache, fetches it anew and displays
+    /// Discards current repo cache, fetches it anew and displays
     void OnRefreshClicked( wxCommandEvent& event ) override;
 
-    ///< Opens file selection dialog and installs selected package archive
+    /// Opens file selection dialog and installs selected package archive
     void OnInstallFromFileClicked( wxCommandEvent& event ) override;
 
-    ///< Opens local directory where packages are installed in file manager
+    /// Opens local directory where packages are installed in file manager
     void OnOpenPackageDirClicked( wxCommandEvent& event ) override;
 
-    ///< Enqueues current pending actions in PCM_TASK_MANAGER and runs the queue
+    /// Enqueues current pending actions in PCM_TASK_MANAGER and runs the queue
     void OnApplyChangesClicked( wxCommandEvent& event ) override;
 
-    ///< Discards all pending changes
+    /// Discards all pending changes
     void OnDiscardChangesClicked( wxCommandEvent& event ) override;
 
-    ///< Switches to another repository
+    /// Switches to another repository
     void OnRepositoryChoice( wxCommandEvent& event ) override;
 
-    ///< Selects the whole row in the grid if a cell is clicked
+    /// Selects the whole row in the grid if a cell is clicked
     void OnPendingActionsCellClicked( wxGridEvent& event ) override;
 
-    ///< Discards selected pending actions
+    /// Discards selected pending actions
     void OnDiscardActionClicked( wxCommandEvent& event ) override;
 
-    ///< Handles modification of the buttons' status
+    /// Handles modification of the buttons' status
     void OnUpdateEventButtons( wxUpdateUIEvent& event );
 
-    ///< Returns types of packages that were installed/uninstalled
+    /// Returns types of packages that were installed/uninstalled
     const std::unordered_set<PCM_PACKAGE_TYPE>& GetChangedPackageTypes() const
     {
         return m_changed_package_types;
@@ -110,19 +110,19 @@ private:
                              const std::unordered_map<wxString, wxString>&    aPackageRepoIds,
                              const std::unordered_map<wxString, wxString>&    aPackageRepoNames );
 
-    ///< Sets repository choice list values
+    /// Sets repository choice list values
     void setRepositoryListFromPcm();
 
-    ///< Updates pending actions tab caption and content-fits the grid
+    /// Updates pending actions tab caption and content-fits the grid
     void updatePendingActionsTab();
 
-    ///< Gets installed packages list from PCM and displays it on installed tab
+    /// Gets installed packages list from PCM and displays it on installed tab
     void setInstalledPackages();
 
-    ///< Reflects new state of the package in all panels where it is displayed
+    /// Reflects new state of the package in all panels where it is displayed
     void updatePackageState( const wxString& aPackageId, const PCM_PACKAGE_STATE aState );
 
-    ///< Discards specified pending action
+    /// Discards specified pending action
     void discardAction( int aIndex );
 
 private:

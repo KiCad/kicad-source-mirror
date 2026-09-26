@@ -33,7 +33,7 @@
 class EDA_GROUP;
 class BASE_SCREEN;
 
-///< Types of changes
+/// Types of changes
 enum CHANGE_TYPE {
     CHT_ADD     = 1,
     CHT_REMOVE  = 2,
@@ -88,7 +88,7 @@ public:
         return Stage( aItem, CHT_REMOVE, aScreen );
     }
 
-    ///< Notify observers that aItem has been removed
+    /// Notify observers that aItem has been removed
     COMMIT& Removed( EDA_ITEM* aItem, BASE_SCREEN *aScreen = nullptr )
     {
         return Stage( aItem, CHT_REMOVE | CHT_DONE, aScreen );

@@ -113,7 +113,7 @@ public:
     OPTIMIZER( NODE* aWorld );
     ~OPTIMIZER();
 
-    ///< A quick shortcut to optimize a line without creating and setting up an optimizer.
+    /// A quick shortcut to optimize a line without creating and setting up an optimizer.
     static bool Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld,
                           const VECTOR2I& aV = VECTOR2I(0, 0) );
 

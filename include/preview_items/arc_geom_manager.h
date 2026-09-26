@@ -64,13 +64,13 @@ public:
 
     void Reset() override;
 
-    ///< The arc to be clockwise from start
+    /// The arc to be clockwise from start
     void SetClockwise( bool aCw );
 
-    ///< Reverse the current are direction
+    /// Reverse the current are direction
     void ToggleClockwise();
 
-    ///< Set angle snapping (for the next point)
+    /// Set angle snapping (for the next point)
     void SetAngleSnap( bool aSnap )
     {
         m_angleSnap = aSnap;
@@ -80,22 +80,22 @@ public:
      * Geometry query interface - used by clients of the manager
      */
 
-    ///< Get the center point of the arc (valid when state > SET_ORIGIN)
+    /// Get the center point of the arc (valid when state > SET_ORIGIN)
     VECTOR2I GetOrigin() const;
 
-    ///< Get the coordinates of the arc start
+    /// Get the coordinates of the arc start
     VECTOR2I GetStartRadiusEnd() const;
 
-    ///< Get the coordinates of the arc end point
+    /// Get the coordinates of the arc end point
     VECTOR2I GetEndRadiusEnd() const;
 
-    ///< Get the radius of the arc (valid if step >= SET_START)
+    /// Get the radius of the arc (valid if step >= SET_START)
     double GetRadius() const;
 
-    ///< Get the angle of the vector leading to the start point (valid if step >= SET_START)
+    /// Get the angle of the vector leading to the start point (valid if step >= SET_START)
     EDA_ANGLE GetStartAngle() const;
 
-    ///< Get the angle of the vector leading to the end point (valid if step >= SET_ANGLE)
+    /// Get the angle of the vector leading to the end point (valid if step >= SET_ANGLE)
     EDA_ANGLE GetSubtended() const;
 
 protected:
@@ -106,13 +106,13 @@ private:
      * Point acceptor functions
      */
 
-    ///< Set the center point of the arc
+    /// Set the center point of the arc
     bool setOrigin( const VECTOR2I& aOrigin );
 
-    ///< Set the end of the first radius line (arc start)
+    /// Set the end of the first radius line (arc start)
     bool setStart( const VECTOR2I& aEnd );
 
-    ///< Set a point of the second radius line (collinear with arc end)
+    /// Set a point of the second radius line (collinear with arc end)
     bool setEnd( const VECTOR2I& aCursor );
 
     /*

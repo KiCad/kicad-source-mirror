@@ -59,7 +59,7 @@ public:
                                       const SCH_PIN& aOriginalPin );
 
 private:
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 };
 

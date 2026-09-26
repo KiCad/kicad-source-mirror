@@ -471,7 +471,7 @@ public:
     /// Dcode (Aperture) List for this layer (see dcode.h)
     std::map<int, D_CODE*> m_ApertureList;
 
-    ///< Whether an aperture macro tool is flashed on or off.
+    /// Whether an aperture macro tool is flashed on or off.
     bool m_Exposure;
 
     GERBER_LAYER      m_GBRLayerParams; // hold params for the current gerber layer

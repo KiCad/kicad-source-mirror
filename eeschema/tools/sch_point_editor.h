@@ -63,30 +63,30 @@ public:
      */
     bool IsDragging() const { return m_inDrag; }
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
 private:
-    ///< Update item's points with edit points.
+    /// Update item's points with edit points.
     void updateParentItem( bool aSnapToGrid, SCH_COMMIT& aCommit ) const;
 
-    ///< When dragging a graphics edge, update pins too.
+    /// When dragging a graphics edge, update pins too.
     void dragPinsOnEdge( const std::vector<SEG>& aOldEdges, const std::vector<VECTOR2I>& aMoveVecs,
                          int aUnit, SCH_COMMIT& aCommit ) const;
 
-    ///< Update edit points with item's points.
+    /// Update edit points with item's points.
     void updatePoints();
 
-    ///< Update which point is being edited.
+    /// Update which point is being edited.
     void updateEditedPoint( const TOOL_EVENT& aEvent );
 
-    ///< Clear references to the points
+    /// Clear references to the points
     int clearEditedPoints( const TOOL_EVENT& aEvent );
 
-    ///< Set the current point being edited. NULL means none.
+    /// Set the current point being edited. NULL means none.
     void setEditedPoint( EDIT_POINT* aPoint );
 
-    ///< Return true if \a aPoint is the currently modified point.
+    /// Return true if \a aPoint is the currently modified point.
     inline bool isModified( const EDIT_POINT& aPoint ) const
     {
         return m_editedPoint == &aPoint;
@@ -118,22 +118,22 @@ private:
 private:
     void makePointsAndBehavior( EDA_ITEM* aItem );
 
-    ///< Currently edited point, NULL if there is none.
+    /// Currently edited point, NULL if there is none.
     EDIT_POINT* m_editedPoint;
 
-    ///< True while a point drag is in progress (between grab and release).
+    /// True while a point drag is in progress (between grab and release).
     bool m_inDrag;
 
     ARC_EDIT_MODE m_arcEditMode;
 
-    ///< Re-entrancy guards
+    /// Re-entrancy guards
     bool m_inPointEditor;
 
-    ///< Currently available edit points.
+    /// Currently available edit points.
     std::shared_ptr<EDIT_POINTS> m_editPoints;
     std::unique_ptr<KIGFX::PREVIEW::ANGLE_ITEM> m_angleItem;
 
-    ///< Current item-specific edit behavior.
+    /// Current item-specific edit behavior.
     std::unique_ptr<POINT_EDIT_BEHAVIOR> m_editBehavior;
 };
 

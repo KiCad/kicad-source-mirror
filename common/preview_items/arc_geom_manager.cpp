@@ -26,7 +26,7 @@
 using namespace KIGFX::PREVIEW;
 
 
-///< Snap an angle to the nearest 45 degrees
+/// Snap an angle to the nearest 45 degrees
 static EDA_ANGLE snapAngle( const EDA_ANGLE& aAngle )
 {
     return ANGLE_45 * KiROUND( aAngle / ANGLE_45 );

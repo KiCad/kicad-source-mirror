@@ -69,7 +69,7 @@ public:
         }
     }
 
-    ///< @copydoc BOARD_ITEM::IsConnected()
+    /// @copydoc BOARD_ITEM::IsConnected()
     bool IsConnected() const override
     {
         return true;

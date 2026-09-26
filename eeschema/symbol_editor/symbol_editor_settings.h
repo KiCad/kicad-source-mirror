@@ -105,7 +105,7 @@ public:
      */
     bool m_SyncPinEdit;
 
-    ///< When true, dragging an outline edge will drag pins rooted on it
+    /// When true, dragging an outline edge will drag pins rooted on it
     bool m_dragPinsAlongWithEdges;
 
     int m_LibWidth;

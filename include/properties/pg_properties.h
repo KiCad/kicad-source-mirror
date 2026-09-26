@@ -37,7 +37,7 @@ class EDA_DRAW_FRAME;
 
 wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME* aFrame );
 
-///< Customized abstract wxPGProperty class to handle coordinate/size units
+/// Customized abstract wxPGProperty class to handle coordinate/size units
 class PGPROPERTY_DISTANCE
 {
 public:
@@ -166,7 +166,7 @@ public:
 };
 
 
-///< Customized wxPGProperty class to handle angles
+/// Customized wxPGProperty class to handle angles
 class PGPROPERTY_ANGLE : public wxFloatProperty
 {
 public:
@@ -199,16 +199,16 @@ public:
 
     wxValidator* DoGetValidator() const override;
 
-    ///< Do not perform PG validation; the UX is not what we want.
+    /// Do not perform PG validation; the UX is not what we want.
     bool ValidateValue( wxVariant&, wxPGValidationInfo& ) const override { return true; }
 
 protected:
-    ///< Scale factor to convert between raw and displayed value
+    /// Scale factor to convert between raw and displayed value
     double m_scale;
 };
 
 
-///< A wxEnumProperty that displays a color next to the enum value
+/// A wxEnumProperty that displays a color next to the enum value
 class PGPROPERTY_COLORENUM : public wxEnumProperty
 {
 public:

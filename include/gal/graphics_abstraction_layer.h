@@ -1041,7 +1041,7 @@ public:
     int            GetCoarseGrid() const { return m_gridTick; }
     const COLOR4D& GetGridColor() const { return m_gridColor; }
 
-    ///< Draw the grid
+    /// Draw the grid
     virtual void DrawGrid() {};
 
     /**

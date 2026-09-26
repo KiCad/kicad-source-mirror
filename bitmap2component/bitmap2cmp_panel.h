@@ -104,7 +104,7 @@ private:
 
     OUTPUT_FMT_ID getOutputFormat();
 
-    ///< @return the EDA_UNITS from the m_PixelUnit choice
+    /// @return the EDA_UNITS from the m_PixelUnit choice
     EDA_UNITS getUnitFromSelection();
 
     // return a string giving the output size, according to the selected unit

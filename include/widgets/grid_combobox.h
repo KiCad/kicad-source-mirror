@@ -29,8 +29,8 @@
 class wxGrid;
 
 
-///< Renders a combobox cell's text with an always-visible dropdown arrow, so it reads as a
-///< dropdown even when it isn't currently being edited (matching GRID_CELL_COMBOBOX's editor).
+/// Renders a combobox cell's text with an always-visible dropdown arrow, so it reads as a
+/// dropdown even when it isn't currently being edited (matching GRID_CELL_COMBOBOX's editor).
 class KICOMMON_API GRID_CELL_COMBOBOX_RENDERER : public wxGridCellStringRenderer
 {
 public:

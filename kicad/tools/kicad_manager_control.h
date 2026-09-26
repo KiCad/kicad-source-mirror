@@ -71,7 +71,7 @@ public:
     int ShowDesignBlockLibTable( const TOOL_EVENT& aEvent );
     int ShowPluginManager( const TOOL_EVENT& aEvent );
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
     bool InShowPlayer() const { return m_inShowPlayer; }

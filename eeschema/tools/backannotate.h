@@ -116,7 +116,7 @@ public:
         std::map<wxString, wxString> m_fieldsMap;
     };
 
-    ///< Map to hold NETLIST footprints data
+    /// Map to hold NETLIST footprints data
     using PCB_FOOTPRINTS_MAP = std::map<wxString, std::shared_ptr<PCB_FP_DATA>>;
 
     using CHANGELIST_ITEM = std::pair<SCH_REFERENCE, std::shared_ptr<PCB_FP_DATA>>;

@@ -58,14 +58,14 @@ private:
 
     void moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta );
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
 private:
     bool        m_moveInProgress;
 
-    ///< Last cursor position (needed for getModificationPoint() to avoid changes
-    ///< of edit reference point).
+    /// Last cursor position (needed for getModificationPoint() to avoid changes
+    /// of edit reference point).
     VECTOR2I    m_cursor;
     VECTOR2I    m_anchorPos;
 };

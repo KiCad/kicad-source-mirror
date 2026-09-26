@@ -357,19 +357,22 @@ public:
 
     struct PLACE_SYMBOL_PARAMS
     {
-        ///< Provide a symbol to place
+        /// Provide a symbol to place
         SCH_SYMBOL* m_Symbol = nullptr;
-        ///< If a symbol is provide, reannotate it?
+
+        /// If a symbol is provide, reannotate it?
         bool m_Reannotate = true;
-        ///< For a preselected multi-unit symbol, keep placing remaining units instead of exiting
+
+        /// For a preselected multi-unit symbol, keep placing remaining units instead of exiting
         bool m_PlaceAllUnits = false;
     };
 
     struct PLACE_SYMBOL_UNIT_PARAMS
     {
-        ///< Symbol used as reference for unit placement
+        /// Symbol used as reference for unit placement
         SCH_SYMBOL* m_Symbol = nullptr;
-        ///< Unit number to place; 0 means next available unit
+
+        /// Unit number to place; 0 means next available unit
         int m_Unit = 0;
     };
 };

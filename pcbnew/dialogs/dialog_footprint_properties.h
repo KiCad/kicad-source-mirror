@@ -56,7 +56,7 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    ///< @return the value depending on the way the dialog was closed.
+    /// @return the value depending on the way the dialog was closed.
     enum FP_PROPS_RETVALUE GetReturnValue() { return m_returnValue; }
 
 private:

@@ -31,7 +31,7 @@
 class PCB_GENERATOR;
 
 
-///< Unique type identifier
+/// Unique type identifier
 using TYPE_ID = size_t;
 
 /**

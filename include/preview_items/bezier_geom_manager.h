@@ -64,14 +64,14 @@ public:
      * Geometry query interface - used by clients of the manager
      */
 
-    ///< Get the center point of the arc (valid when state > SET_ORIGIN)
+    /// Get the center point of the arc (valid when state > SET_ORIGIN)
     VECTOR2I GetStart() const;
 
-    ///< Get the coordinates of the arc start
+    /// Get the coordinates of the arc start
     VECTOR2I GetControlC1() const;
     VECTOR2I GetControlC2() const;
 
-    ///< Get the coordinates of the arc end point
+    /// Get the coordinates of the arc end point
     VECTOR2I GetEnd() const;
 
 private:
@@ -79,7 +79,7 @@ private:
      * Point acceptor functions
      */
 
-    ///< Set the center point of the arc
+    /// Set the center point of the arc
     bool setStart( const VECTOR2I& aOrigin );
     bool setControlC1( const VECTOR2I& aControl );
     bool setEnd( const VECTOR2I& aCursor );

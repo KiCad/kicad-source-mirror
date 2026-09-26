@@ -58,13 +58,13 @@ public:
 private:
     void setTransitions() override;
 
-    ///< The layer to use for new shapes in the current editor.
+    /// The layer to use for new shapes in the current editor.
     SCH_LAYER_ID getShapeLayer() const;
 
-    ///< Commit a completed item.
+    /// Commit a completed item.
     void commitItem( SCH_COMMIT& aCommit, std::unique_ptr<SCH_ITEM> aItem, const wxString& aDescription );
 
-    ///< Return the default text size (in IU) for the active editor.
+    /// Return the default text size (in IU) for the active editor.
     int getDefaultTextSize() const;
 
     /**

@@ -46,36 +46,36 @@ public:
      */
     virtual int PickNewMember( const TOOL_EVENT& aEvent ) = 0;
 
-    ///< Group selected items.
+    /// Group selected items.
     virtual int Group( const TOOL_EVENT& aEvent ) = 0;
 
-    ///< Ungroup selected items.
+    /// Ungroup selected items.
     virtual int Ungroup( const TOOL_EVENT& aEvent );
 
-    ///< Add selection to group.
+    /// Add selection to group.
     virtual int AddToGroup( const TOOL_EVENT& aEvent );
 
-    ///< Remove selection from group.
+    /// Remove selection from group.
     virtual int RemoveFromGroup( const TOOL_EVENT& aEvent );
 
-    ///< Restrict selection to only member of the group.
+    /// Restrict selection to only member of the group.
     virtual int EnterGroup( const TOOL_EVENT& aEvent );
 
-    ///< Leave the current group (deselect its members and select the group as a whole).
+    /// Leave the current group (deselect its members and select the group as a whole).
     virtual int LeaveGroup( const TOOL_EVENT& aEvent );
 
 protected:
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
-    ///< Check if an item can be a direct member of a group.
+    /// Check if an item can be a direct member of a group.
     virtual bool canGroupItem( EDA_ITEM* aItem, wxString& aErrorMsg ) const = 0;
 
-    ///< Get the correctly casted group type from the item.
+    /// Get the correctly casted group type from the item.
     /// Works around our lack of working dynamic_cast.
     virtual EDA_GROUP* getGroupFromItem( EDA_ITEM* ) = 0;
 
-    ///< Subclasses implement to provide correct *_COMMIT object type
+    /// Subclasses implement to provide correct *_COMMIT object type
     virtual std::shared_ptr<COMMIT> createCommit() = 0;
 
     EDA_DRAW_FRAME*          m_frame = nullptr;

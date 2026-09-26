@@ -44,13 +44,13 @@ class POLYGON_ITEM : public SIMPLE_OVERLAY_ITEM
 public:
     POLYGON_ITEM();
 
-    ///< Sets the color of the preview outline
+    /// Sets the color of the preview outline
     void SetLineColor( KIGFX::COLOR4D lineColor );
 
-    ///< Sets the color of the outline leader line
+    /// Sets the color of the outline leader line
     void SetLeaderColor( KIGFX::COLOR4D leaderColor );
 
-    ///< Gets the bounding box of the polygon
+    /// Gets the bounding box of the polygon
     virtual const BOX2I ViewBBox() const override;
 
     /**
@@ -65,19 +65,19 @@ public:
                     const SHAPE_LINE_CHAIN& aLoopPts );
 
 private:
-    ///< Draw rectangle and center line onto GAL
+    /// Draw rectangle and center line onto GAL
     void drawPreviewShape( KIGFX::VIEW* aView ) const override;
 
-    ///< complete polyline of locked in, leader and looping points
+    /// complete polyline of locked in, leader and looping points
     SHAPE_LINE_CHAIN m_lockedChain, m_leaderChain, m_loopChain;
 
-    ///< polygon fill
+    /// polygon fill
     SHAPE_POLY_SET m_polyfill;
 
-    ///< the preview outline color
+    /// the preview outline color
     KIGFX::COLOR4D m_lineColor;
 
-    ///< the preview leader line color
+    /// the preview leader line color
     KIGFX::COLOR4D m_leaderColor;
 
     static const double POLY_LINE_WIDTH;

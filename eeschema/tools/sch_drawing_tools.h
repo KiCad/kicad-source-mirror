@@ -38,11 +38,10 @@ class DIALOG_SYNC_SHEET_PINS;
 /**
  * Tool responsible for drawing/placing items (symbols, wires, buses, labels, etc.).
  */
-
 class SCH_DRAWING_TOOLS : public SCH_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
-    ///< The possible drawing modes of @ref SCH_DRAWING_TOOLS
+    /// The possible drawing modes of @ref SCH_DRAWING_TOOLS
     enum class MODE
     {
         NONE,
@@ -71,7 +70,7 @@ public:
 private:
     SCH_LINE* findWire( const VECTOR2I& aPosition );
 
-    ///< Gets the (global) label name driving this wire, if it is driven by a label
+    /// Gets the (global) label name driving this wire, if it is driven by a label
     wxString findWireLabelDriverName( SCH_LINE* aWire );
 
     SCH_TEXT* createNewText( const VECTOR2I& aPosition );
@@ -86,12 +85,12 @@ private:
 
     void sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos );
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
     int doSyncSheetsPins( std::list<SCH_SHEET_PATH> aSheets, SCH_SHEET* aInitialSheet = nullptr );
 
-    ///< Try finding any hierlabel that does not have a sheet pin associated with it
+    /// Try finding any hierlabel that does not have a sheet pin associated with it
     SCH_HIERLABEL* importHierLabel( SCH_SHEET* aSheet );
 
     std::vector<SCH_HIERLABEL*> importHierLabels( SCH_SHEET* aSheet );

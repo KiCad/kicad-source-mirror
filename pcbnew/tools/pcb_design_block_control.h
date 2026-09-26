@@ -45,7 +45,7 @@ public:
     int UpdateDesignBlockFromSelection( const TOOL_EVENT& aEvent );
 
 private:
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
     DESIGN_BLOCK_PANE* getDesignBlockPane() override;

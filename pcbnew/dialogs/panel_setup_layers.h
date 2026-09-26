@@ -70,7 +70,7 @@ public:
      */
     bool CheckCopperLayerCount( BOARD* aWorkingBoard, BOARD* aImportedBoard );
 
-    ///< @return the selected layer mask within the UI checkboxes
+    /// @return the selected layer mask within the UI checkboxes
     LSET GetUILayerMask();
 
     /**

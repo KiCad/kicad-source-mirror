@@ -27,7 +27,7 @@
 #include <wx/gdicmn.h>
 #include <wx/string.h>
 
-///< Smith chart placement plus pan/zoom, maps a gamma point to a screen pixel and back.
+/// Smith chart placement plus pan/zoom, maps a gamma point to a screen pixel and back.
 struct SMITH_VIEW
 {
     wxPoint     center;
@@ -60,8 +60,8 @@ struct SMITH_VIEW
 namespace SMITH_MATH
 {
 
-///< Impedance of a reflection coefficient, z = z0 ( 1 + gamma ) / ( 1 - gamma ),
-///< false at the gamma = 1 singularity.
+/// Impedance of a reflection coefficient, z = z0 ( 1 + gamma ) / ( 1 - gamma ),
+/// false at the gamma = 1 singularity.
 inline bool GammaToImpedance( double aRe, double aIm, double aZ0, double& aResistance, double& aReactance )
 {
     double denom = ( 1.0 - aRe ) * ( 1.0 - aRe ) + aIm * aIm;
@@ -91,8 +91,8 @@ inline double ReturnLoss( double aGammaMag )
     return -20.0 * std::log10( aGammaMag );
 }
 
-///< Series equivalent element of a reactance at one frequency, henries for aReactance > 0,
-///< farads for aReactance < 0.
+/// Series equivalent element of a reactance at one frequency, henries for aReactance > 0,
+/// farads for aReactance < 0.
 inline double SeriesInductance( double aReactance, double aFreq )
 {
     return aReactance / ( 2.0 * M_PI * aFreq );
@@ -103,7 +103,7 @@ inline double SeriesCapacitance( double aReactance, double aFreq )
     return 1.0 / ( 2.0 * M_PI * aFreq * -aReactance );
 }
 
-///< Pan that keeps the gamma point under aPos fixed when the view zooms to aNewZoom.
+/// Pan that keeps the gamma point under aPos fixed when the view zooms to aNewZoom.
 inline wxRealPoint ZoomAboutPoint( const SMITH_VIEW& aView, const wxPoint& aPos, double aNewZoom )
 {
     wxRealPoint gamma = aView.ToGamma( aPos );
@@ -113,7 +113,7 @@ inline wxRealPoint ZoomAboutPoint( const SMITH_VIEW& aView, const wxPoint& aPos,
                         gamma.y + ( aPos.y - aView.center.y ) / newRadius );
 }
 
-///< S-parameter vectors are named S_<responsePort>_<drivePort>.
+/// S-parameter vectors are named S_<responsePort>_<drivePort>.
 inline bool ParseSParamPorts( const wxString& aVectorName, long* aResponsePort, long* aDrivePort )
 {
     if( !aVectorName.StartsWith( wxS( "S_" ) ) )

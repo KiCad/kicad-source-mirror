@@ -73,13 +73,13 @@ public:
     bool m_plotPadNumbers;
 
     LSEQ m_plotLayerSequence;
-    ///< Layers to include on all individual layer prints
+    /// Layers to include on all individual layer prints
     LSEQ m_plotOnAllLayersSequence;
 
-    ///< Used by SVG & PDF
+    /// Used by SVG & PDF
     DRILL_MARKS m_drillShapeOption;
 
-    ///< Used by SVG/DXF/PDF/Gerbers
+    /// Used by SVG/DXF/PDF/Gerbers
     bool m_useDrillOrigin;
 
     bool m_checkZonesBeforePlot;

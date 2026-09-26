@@ -145,7 +145,7 @@ private:
      */
     bool selectionContains( const VECTOR2I& aPoint ) const;
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
 private:

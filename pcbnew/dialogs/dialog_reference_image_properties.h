@@ -43,7 +43,7 @@ private:
 
 private:
     PCB_BASE_FRAME*      m_frame;
-    ///< The reference image being edited
+    /// The reference image being edited
     PCB_REFERENCE_IMAGE& m_bitmap;
     PANEL_IMAGE_EDITOR*  m_imageEditor;
 

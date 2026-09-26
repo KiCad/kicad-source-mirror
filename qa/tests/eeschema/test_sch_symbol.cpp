@@ -61,7 +61,7 @@ public:
         return nullptr;
     }
 
-    ///< #SCH_SYMBOL object with no extra data set.
+    /// #SCH_SYMBOL object with no extra data set.
     SCH_SYMBOL m_symbol;
 };
 

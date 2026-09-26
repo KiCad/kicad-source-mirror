@@ -42,7 +42,7 @@ public:
         ITEM( aKind )
     {}
 
-    ///< Add a reference to an item registered in a #NODE that is a part of this line.
+    /// Add a reference to an item registered in a #NODE that is a part of this line.
     void Link( LINKED_ITEM* aLink )
     {
         if( alg::contains( m_links, aLink ) )
@@ -61,8 +61,8 @@ public:
         std::erase( m_links, aLink );
     }
 
-    ///< Return the list of links from the owning node that constitute this
-    ///< line (or NULL if the line is not linked).
+    /// Return the list of links from the owning node that constitute this
+    /// line (or NULL if the line is not linked).
     std::vector<LINKED_ITEM*>& Links() { return m_links; }
     const std::vector<LINKED_ITEM*>& Links() const { return m_links; }
 
@@ -71,7 +71,7 @@ public:
         return m_links.size() != 0;
     }
 
-    ///< Check if the segment aLink is a part of the line.
+    /// Check if the segment aLink is a part of the line.
     bool ContainsLink( const LINKED_ITEM* aItem ) const
     {
         return alg::contains( m_links, aItem );
@@ -85,13 +85,13 @@ public:
         return m_links[aIndex];
     }
 
-    ///< Erase the linking information. Used to detach the line from the owning node.
+    /// Erase the linking information. Used to detach the line from the owning node.
     virtual void ClearLinks()
     {
         m_links.clear();
     }
 
-    ///< Return the number of segments that were assembled together to form this line.
+    /// Return the number of segments that were assembled together to form this line.
     int LinkCount() const
     {
         return m_links.size();
@@ -114,14 +114,14 @@ public:
     }
 
 protected:
-    ///< Copy m_links from the line \a aParent.
+    /// Copy m_links from the line \a aParent.
     void copyLinks( const LINK_HOLDER* aParent )
     {
         m_links = aParent->m_links;
     }
 
-    ///< List of segments in the owning NODE (ITEM::m_owner) that constitute this line, or NULL
-    ///< if the line is not a part of any node.
+    /// List of segments in the owning NODE (ITEM::m_owner) that constitute this line, or NULL
+    /// if the line is not a part of any node.
     std::vector<LINKED_ITEM*> m_links;
 };
 

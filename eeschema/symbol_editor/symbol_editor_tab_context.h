@@ -161,13 +161,13 @@ private:
     int         m_unit;
     int         m_bodyStyle;
 
-    ///< True for an instance tab edited in place from a placed schematic symbol.
+    /// True for an instance tab edited in place from a placed schematic symbol.
     bool        m_fromSchematic;
 
-    ///< Source instance UUID, used as both the de-dup key and the save-back target.
+    /// Source instance UUID, used as both the de-dup key and the save-back target.
     KIID        m_schematicSymbolUUID;
 
-    ///< Reference designator of the source instance, shown as the tab label.
+    /// Reference designator of the source instance, shown as the tab label.
     wxString    m_reference;
 };
 

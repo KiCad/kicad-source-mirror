@@ -62,7 +62,7 @@ public:
      */
     // int DoCreateArray( const VECTOR2I& anchor, const VECTOR2I& translation );
 
-    ///< Set up handlers for various events.
+    /// Set up handlers for various events.
     void setTransitions() override;
 
 private:

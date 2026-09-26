@@ -175,7 +175,7 @@ protected:
     int64_t       m_baselineDelay = 0;
     bool          m_hasBaseline = false;
 
-    ///< Active path length at Start().
+    /// Active path length at Start().
     long long int m_startPathLength = 0;
 
     /// Aggregate length/delay of other nets in the same chain, cached at Start().

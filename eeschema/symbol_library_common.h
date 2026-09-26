@@ -48,7 +48,7 @@ struct LibSymbolMapSort
 };
 
 
-///< Symbol library map sorted by the symbol name.
+/// Symbol library map sorted by the symbol name.
 typedef std::map< wxString, LIB_SYMBOL*, LibSymbolMapSort > LIB_SYMBOL_MAP;
 
 

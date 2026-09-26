@@ -115,7 +115,7 @@ enum class HIGH_CONTRAST_MODE
     HIDDEN          ///< Inactive layers are hidden
 };
 
-///< Determine how zones should be displayed.
+/// Determine how zones should be displayed.
 enum class ZONE_DISPLAY_MODE
 {
     SHOW_FILLED,
@@ -127,7 +127,7 @@ enum class ZONE_DISPLAY_MODE
     SHOW_TRIANGULATION
 };
 
-///< Determine how net color overrides should be applied.
+/// Determine how net color overrides should be applied.
 enum class NET_COLOR_MODE
 {
     OFF,        ///< Net (and netclass) colors are not shown
@@ -135,14 +135,14 @@ enum class NET_COLOR_MODE
     ALL         ///< Net/netclass colors are shown on all net copper
 };
 
-///< Determine how ratsnest lines are drawn.
+/// Determine how ratsnest lines are drawn.
 enum class RATSNEST_MODE
 {
     ALL,        ///< Ratsnest lines are drawn to items on all layers (default)
     VISIBLE     ///< Ratsnest lines are drawn to items on visible layers only
 };
 
-///< BOM Data choices for IPC2581 export
+/// BOM Data choices for IPC2581 export
 struct KICOMMON_API IP2581_BOM
 {
     wxString mfg;       ///< Manufacturer name column

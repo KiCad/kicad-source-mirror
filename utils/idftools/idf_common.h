@@ -536,7 +536,7 @@ public:
     IDF_POINT startPoint;   ///< starting point coordinates in mm
     IDF_POINT endPoint;     ///< end point coordinates in mm
 
-    ///< center of an arc or circle; internally calculated and not to be set by the user.
+    /// center of an arc or circle; internally calculated and not to be set by the user.
     IDF_POINT center;
     double    angle;        ///< included angle (degrees) according to IDFv3 specification
     double    offsetAngle;  ///< angle between center and start of arc; internally calculated

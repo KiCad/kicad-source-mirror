@@ -30,10 +30,10 @@ class PAD_TOOL : public PCB_TOOL_BASE
 public:
     PAD_TOOL();
 
-    ///< React to model/view changes
+    /// React to model/view changes
     void Reset( RESET_REASON aReason ) override;
 
-    ///< Basic initialization
+    /// Basic initialization
     bool Init() override;
 
     /**
@@ -70,17 +70,17 @@ public:
     std::vector<PCB_SHAPE*> RecombinePad( PAD* aPad, bool aIsDryRun );
 
 protected:
-    ///< Bind handlers to corresponding TOOL_ACTIONs.
+    /// Bind handlers to corresponding TOOL_ACTIONs.
     void setTransitions() override;
 
 private:
-    ///< Apply pad settings from board design settings to a pad.
+    /// Apply pad settings from board design settings to a pad.
     int pastePadProperties( const TOOL_EVENT& aEvent );
 
-    ///< Copy pad settings from a pad to the board design settings.
+    /// Copy pad settings from a pad to the board design settings.
     int copyPadSettings( const TOOL_EVENT& aEvent );
 
-    ///< Push pad settings from a pad to other pads on board or footprint.
+    /// Push pad settings from a pad to other pads on board or footprint.
     int pushPadSettings( const TOOL_EVENT& aEvent );
 
     void explodePad( PAD* aPad, BOARD_COMMIT& aCommit );

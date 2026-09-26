@@ -39,7 +39,7 @@ class KICOMMON_API KIDIALOG : public KIDIALOG_BASE
 public:
     static void ClearDoNotShowAgainDialogs();
 
-    ///< Dialog type. Selects appropriate icon and default dialog title
+    /// Dialog type. Selects appropriate icon and default dialog title
     enum KD_TYPE { KD_NONE, KD_INFO, KD_QUESTION, KD_WARNING, KD_ERROR };
 
     KIDIALOG( wxWindow* aParent, const wxString& aMessage, const wxString& aCaption, long aStyle = wxOK );

@@ -175,7 +175,7 @@ private:
 protected:
     int                      m_version;          ///< Version of file being loaded.
 
-    ///< Indicate if we are appending the loaded schemitic or loading a full project.
+    /// Indicate if we are appending the loaded schemitic or loading a full project.
     bool                     m_appending;
 
     wxString                 m_error;            ///< For throwing exceptions or errors on partial

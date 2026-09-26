@@ -25,61 +25,61 @@
 /// The size of the rectangle indicating an unconnected wire or label
 #define DANGLING_SYMBOL_SIZE 12
 
-///< The size of the rectangle indicating a connected, unselected wire end
+/// The size of the rectangle indicating a connected, unselected wire end
 #define UNSELECTED_END_SIZE 4
 
-///< The size of the rectangle indicating the anchor of a text object (including fields)
+/// The size of the rectangle indicating the anchor of a text object (including fields)
 #define TEXT_ANCHOR_SIZE 8
 
-///< The default pin len value when creating pins(can be changed in preference menu)
+/// The default pin len value when creating pins(can be changed in preference menu)
 #define DEFAULT_PIN_LENGTH 100
 
-///< The default pin number size when creating pins(can be changed in preference menu)
+/// The default pin number size when creating pins(can be changed in preference menu)
 #define DEFAULT_PINNUM_SIZE 50
 
-///< The default pin name size when creating pins(can be changed in preference menu)
+/// The default pin name size when creating pins(can be changed in preference menu)
 #define DEFAULT_PINNAME_SIZE 50
 
-///< The default selection highlight thickness (can be changed in preference menu)
+/// The default selection highlight thickness (can be changed in preference menu)
 #define DEFAULTSELECTIONTHICKNESS 3
 
-///< The default line width in mils. (can be changed in preference menu)
+/// The default line width in mils. (can be changed in preference menu)
 #define DEFAULT_LINE_WIDTH_MILS 6
 
-///< The default wire width in mils. (can be changed in preference menu)
+/// The default wire width in mils. (can be changed in preference menu)
 #define DEFAULT_WIRE_WIDTH_MILS 6
 
-///< The default bus width in mils. (can be changed in preference menu)
+/// The default bus width in mils. (can be changed in preference menu)
 #define DEFAULT_BUS_WIDTH_MILS 12
 
-///< The default noconnect size in mils.
+/// The default noconnect size in mils.
 #define DEFAULT_NOCONNECT_SIZE 48
 
-///< The default junction diameter in mils. (can be changed in preference menu)
+/// The default junction diameter in mils. (can be changed in preference menu)
 #define DEFAULT_JUNCTION_DIAM 36
 
-///< The default bus and wire entry size in mils.
+/// The default bus and wire entry size in mils.
 #define DEFAULT_SCH_ENTRY_SIZE 100
 
-///< The default text size in mils. (can be changed in preference menu)
+/// The default text size in mils. (can be changed in preference menu)
 #define DEFAULT_TEXT_SIZE 50
 
-///< Ratio of the font height to the baseline of the text above the wire.
+/// Ratio of the font height to the baseline of the text above the wire.
 #define DEFAULT_TEXT_OFFSET_RATIO 0.15
 
-///< Ratio of the font height to space around global labels
+/// Ratio of the font height to space around global labels
 #define DEFAULT_LABEL_SIZE_RATIO 0.375
 
-///< The offset of the pin name string from the end of the pin in mils.
+/// The offset of the pin name string from the end of the pin in mils.
 #define DEFAULT_PIN_NAME_OFFSET 20
 
-///< The intersheets references prefix string
+/// The intersheets references prefix string
 #define DEFAULT_IREF_PREFIX "["
 
-///< The intersheets references suffix string
+/// The intersheets references suffix string
 #define DEFAULT_IREF_SUFFIX "]"
 
-///< Radius of snap "gravity well"
+/// Radius of snap "gravity well"
 #define SNAP_RANGE 55
 
 #endif

@@ -59,7 +59,8 @@ public:
 
 private:
     SCH_EDIT_FRAME*        m_parent;
-    ///< Source VIEW object (note that actual printing only refers to this object)
+
+    /// Source VIEW object (note that actual printing only refers to this object)
     const KIGFX::SCH_VIEW* m_view;
 
     int milsToIU( int aMils );

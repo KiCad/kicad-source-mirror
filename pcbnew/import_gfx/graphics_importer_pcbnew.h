@@ -96,7 +96,7 @@ public:
     STROKE_PARAMS MapStrokeParams( const IMPORTED_STROKE& aStroke );
 
 protected:
-    ///< Target layer for the imported shapes.
+    /// Target layer for the imported shapes.
     PCB_LAYER_ID          m_layer;
     PCB_LAYER_ID                     m_defaultLayer;
     BOARD_ITEM_CONTAINER* m_parent;

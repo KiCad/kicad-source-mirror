@@ -67,7 +67,7 @@ public:
             panel->positionCategoryButtons();
     }
 
-    ///< True while a wxPropertyGrid event (e.g. right-click) is being processed.
+    /// True while a wxPropertyGrid event (e.g. right-click) is being processed.
     bool IsProcessingWxPGEvent() const { return m_processedEvent != nullptr; }
 
 #if wxUSE_STATUSBAR

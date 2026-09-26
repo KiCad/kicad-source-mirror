@@ -35,7 +35,7 @@ class TOOL_SETTINGS;
 
 namespace PNS {
 
-///< Routing modes
+/// Routing modes
 enum PNS_MODE
 {
     RM_MarkObstacles = 0,   ///< Ignore collisions, mark obstacles
@@ -43,7 +43,7 @@ enum PNS_MODE
     RM_Walkaround,          ///< Only walk around
 };
 
-///< Optimization effort.
+/// Optimization effort.
 enum PNS_OPTIMIZATION_EFFORT
 {
     OE_LOW = 0,

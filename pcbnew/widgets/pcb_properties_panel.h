@@ -76,7 +76,7 @@ protected:
 
     void applyConfirmedScale( const wxString& aPropName, const wxVariant& aValue );
 
-    ///< Regenerates caches storing layer and net names
+    /// Regenerates caches storing layer and net names
     void updateLists( const BOARD* aBoard );
 
     /**

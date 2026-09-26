@@ -64,7 +64,7 @@ class TRACE;
  */
 
 
-///< Cursor attached to a trace to follow its values:
+/// Cursor attached to a trace to follow its values:
 class CURSOR : public mpInfoLayer
 {
 public:
@@ -202,21 +202,21 @@ public:
     void SetMultiRunLabels( const std::vector<wxString>& aLabels ) { m_multiRunLabels = aLabels; }
     const std::vector<wxString>& GetMultiRunLabels() const { return m_multiRunLabels; }
 
-    ///< The SIM_VIEW this trace is currently plotted on (nullptr if not plotted anywhere).
+    /// The SIM_VIEW this trace is currently plotted on (nullptr if not plotted anywhere).
     SIM_VIEW* GetView() const { return m_view; }
     void      SetView( SIM_VIEW* aView ) { m_view = aView; }
 
-    ///< The view whose Y-axis scale this trace's axis should match (defaults to its own view).
-    ///< When set to a view other than its own, this trace's Y-axis range is merged with that
-    ///< of every other trace targeting the same view/axis, as if they were all plotted together.
+    /// The view whose Y-axis scale this trace's axis should match (defaults to its own view).
+    /// When set to a view other than its own, this trace's Y-axis range is merged with that
+    /// of every other trace targeting the same view/axis, as if they were all plotted together.
     SIM_VIEW* GetYScaleView() const { return m_yScaleView ? m_yScaleView : m_view; }
     void      SetYScaleView( SIM_VIEW* aView ) { m_yScaleView = ( aView == m_view ) ? nullptr : aView; }
 
-    ///< True if this trace's Y-axis scale hasn't been explicitly linked to another view (i.e.
-    ///< it defaults to its own view's scale).
+    /// True if this trace's Y-axis scale hasn't been explicitly linked to another view (i.e.
+    /// it defaults to its own view's scale).
     bool IsYScaleDefault() const { return m_yScaleView == nullptr; }
 
-    ///< Clears an explicit Y-scale link if it pointed at a view that no longer exists.
+    /// Clears an explicit Y-scale link if it pointed at a view that no longer exists.
     void ClearYScaleViewIf( SIM_VIEW* aView )
     {
         if( m_yScaleView == aView )
@@ -234,7 +234,7 @@ protected:
 };
 
 
-///< Overlay layer drawing the Smith chart grid (constant resistance and reactance circles)
+/// Overlay layer drawing the Smith chart grid (constant resistance and reactance circles)
 class SMITH_GRID : public mpLayer
 {
 public:
@@ -244,12 +244,12 @@ public:
 
     bool HasBBox() const override { return false; }
 
-    ///< Zero when no single reference applies, which labels the grid normalized.
+    /// Zero when no single reference applies, which labels the grid normalized.
     void SetReferenceImpedance( double aZ0 ) { m_z0 = aZ0; }
 
     void SetMixedReferences( bool aMixed ) { m_mixedReferences = aMixed; }
 
-    ///< Chart placement including pan/zoom.
+    /// Chart placement including pan/zoom.
     static bool GetChartView( mpWindow& aWindow, double aZoom, const wxRealPoint& aPan, SMITH_VIEW& aView );
 
 private:
@@ -258,7 +258,7 @@ private:
 };
 
 
-///< Reflection coefficient locus, Re in X and Im in Y, drawn on the Smith chart
+/// Reflection coefficient locus, Re in X and Im in Y, drawn on the Smith chart
 class SMITH_TRACE : public TRACE
 {
 public:
@@ -275,7 +275,7 @@ public:
     void                       SetFrequencies( const std::vector<double>& aFreqs ) { m_frequencies = aFreqs; }
     const std::vector<double>& GetFrequencies() const { return m_frequencies; }
 
-    ///< Zero until the response port resolves one, which leaves only normalized values readable.
+    /// Zero until the response port resolves one, which leaves only normalized values readable.
     void   SetReferenceImpedance( double aZ0 ) { m_z0 = aZ0; }
     double GetReferenceImpedance() const { return m_z0; }
 
@@ -285,8 +285,8 @@ private:
 };
 
 
-///< Cursor that snaps along a Smith chart locus, keyed by frequency.
-///< m_coords holds ( frequency, gamma magnitude ) so the cursor grid and workbook still work.
+/// Cursor that snaps along a Smith chart locus, keyed by frequency.
+/// m_coords holds ( frequency, gamma magnitude ) so the cursor grid and workbook still work.
 class SMITH_CURSOR : public CURSOR
 {
 public:
@@ -327,7 +327,7 @@ private:
 };
 
 
-///< Trace hidden while the tab is in Smith mode, kept so leaving the mode restores it.
+/// Trace hidden while the tab is in Smith mode, kept so leaving the mode restores it.
 struct SMITH_STASHED_TRACE
 {
     wxString vectorName;
@@ -336,7 +336,7 @@ struct SMITH_STASHED_TRACE
 };
 
 
-///< Cursor recorded when entering Smith mode, so leaving restores it to its original trace.
+/// Cursor recorded when entering Smith mode, so leaving restores it to its original trace.
 struct SMITH_STASHED_CURSOR
 {
     int      id;
@@ -358,10 +358,10 @@ class SIM_VIEW : public mpWindow
 public:
     SIM_VIEW( SIM_PLOT_TAB* aPlotTab, wxWindow* aParent );
 
-    ///< Mirrors this view's X range onto every other view of the same tab.
+    /// Mirrors this view's X range onto every other view of the same tab.
     void OnXViewChanged() override;
 
-    ///< Directly set this view's X range (used to mirror another view's zoom/pan onto this one).
+    /// Directly set this view's X range (used to mirror another view's zoom/pan onto this one).
     void SetXRange( double aPos, double aDesiredMax, double aDesiredMin )
     {
         SetXView( aPos, aDesiredMax, aDesiredMin );
@@ -410,13 +410,13 @@ public:
     wxString GetUnitsY2() const;
     wxString GetUnitsY3() const;
 
-    ///< Get the display units (e.g. "V", "A", "dB") for a given trace plotted on this view.
+    /// Get the display units (e.g. "V", "A", "dB") for a given trace plotted on this view.
     wxString GetUnitsForTrace( TRACE* aTrace ) const;
 
-    ///< Get the Y-axis slot (1, 2 or 3) a trace of this type is plotted on.
+    /// Get the Y-axis slot (1, 2 or 3) a trace of this type is plotted on.
     int GetAxisSlot( TRACE* aTrace ) const;
 
-    ///< Get the Y-axis scale object for a given slot (1, 2 or 3), or nullptr if not created yet.
+    /// Get the Y-axis scale object for a given slot (1, 2 or 3), or nullptr if not created yet.
     mpScaleY* GetAxisBySlot( int aSlot ) const;
 
     void ShowGrid( bool aEnable )
@@ -461,10 +461,10 @@ public:
         m_lastLegendPosition = aPosition;
     }
 
-    ///< Reset the Y (and, if requested, X) scale ranges to fit this view's own traces.
+    /// Reset the Y (and, if requested, X) scale ranges to fit this view's own traces.
     void ResetScales( bool aIncludeX );
 
-    ///< Create/Ensure axes are available for plotting.
+    /// Create/Ensure axes are available for plotting.
     void updateAxes( int aNewTraceType = SIM_TRACE_TYPE::SPT_UNKNOWN );
 
     void UpdateAxisVisibility();
@@ -473,16 +473,16 @@ public:
 
     // ---- Smith chart --------------------------------------------------------------------
 
-    ///< Show/hide this view's Smith chart overlay.  The mode itself is owned by the tab; each
-    ///< view keeps its own grid layer and pan/zoom so the stacked charts stay independent.
+    /// Show/hide this view's Smith chart overlay.  The mode itself is owned by the tab; each
+    /// view keeps its own grid layer and pan/zoom so the stacked charts stay independent.
     void SetSmithChart( bool aEnable );
 
     bool IsSmithChart() const { return m_smithChart; }
 
-    ///< Refresh the grid z0 from the Smith traces shown on this view.
+    /// Refresh the grid z0 from the Smith traces shown on this view.
     void UpdateSmithReferenceImpedance();
 
-    ///< Re-read the Smith grid pen from the tab's color theme.
+    /// Re-read the Smith grid pen from the tab's color theme.
     void UpdateSmithGridColor();
 
     double             GetSmithZoom() const { return m_smithZoom; }
@@ -514,7 +514,7 @@ public:
     mpInfoLegend* m_legend;
 
 private:
-    ///< @brief Construct the plot axes for DC simulation plot.
+    /// @brief Construct the plot axes for DC simulation plot.
     void prepareDCAxes( int aNewTraceType );
 
     void onSmithMouseWheel( wxMouseEvent& aEvent );
@@ -567,17 +567,17 @@ public:
 
     int GetViewCount() const { return (int) m_views.size(); }
 
-    ///< The view new traces default to, and legacy (single-view) settings apply to.
+    /// The view new traces default to, and legacy (single-view) settings apply to.
     SIM_VIEW* GetDefaultView() const { return m_views.empty() ? nullptr : m_views[0]; }
 
-    ///< Add a new (empty) view, stacked below the existing ones.
+    /// Add a new (empty) view, stacked below the existing ones.
     SIM_VIEW* AddView();
 
-    ///< Remove a view.  Any traces plotted on it are unplotted (not deleted from the grid).
-    ///< The last remaining view cannot be removed.
+    /// Remove a view.  Any traces plotted on it are unplotted (not deleted from the grid).
+    /// The last remaining view cannot be removed.
     bool RemoveView( SIM_VIEW* aView );
 
-    ///< Mirror aSource's current X range onto every other view of this tab.
+    /// Mirror aSource's current X range onto every other view of this tab.
     void SyncXView( SIM_VIEW* aSource );
 
     // ---- Tab-wide accessors (identical across views; delegate to the default view) -------
@@ -585,7 +585,7 @@ public:
     wxString GetLabelX() const;
     wxString GetUnitsX() const;
 
-    ///< Get the display units (e.g. "V", "A", "dB") for a given trace's own view.
+    /// Get the display units (e.g. "V", "A", "dB") for a given trace's own view.
     wxString GetUnitsForTrace( TRACE* aTrace ) const;
 
     // ---- Settings shared/fanned out across all views --------------------------------------
@@ -632,52 +632,52 @@ public:
 
     bool GetDottedSecondary() const { return m_dotted_cp; }
 
-    ///< Smith mode is tab-wide: every view of the tab shows a Smith chart while it is on.
+    /// Smith mode is tab-wide: every view of the tab shows a Smith chart while it is on.
     void SetSmithMode( bool aEnable );
     bool IsSmithMode() const { return m_smithMode; }
 
-    ///< Refresh the grid z0 from the shown Smith traces, on every view.
+    /// Refresh the grid z0 from the shown Smith traces, on every view.
     void UpdateSmithReferenceImpedance();
 
-    ///< The saved/restored pan and zoom track the default view.
+    /// The saved/restored pan and zoom track the default view.
     double      GetSmithZoom() const;
     wxRealPoint GetSmithPan() const;
 
     void ResetSmithView();
 
-    ///< Restore a saved view, values are validated and clamped.
+    /// Restore a saved view, values are validated and clamped.
     void SetSmithView( double aZoom, double aPanX, double aPanY );
 
     void SmithZoomAt( const wxPoint& aPos, double aFactor );
     void SmithPanBy( const wxPoint& aDelta );
 
-    ///< Traces and cursors set aside while in Smith mode, restored when leaving it.
+    /// Traces and cursors set aside while in Smith mode, restored when leaving it.
     std::vector<SMITH_STASHED_TRACE>&  SmithStashedTraces() { return m_smithStashedTraces; }
     std::vector<SMITH_STASHED_CURSOR>& SmithStashedCursors() { return m_smithStashedCursors; }
 
-    ///< Turn on/off the cursor for a particular trace.
+    /// Turn on/off the cursor for a particular trace.
     void EnableCursor( TRACE* aTrace, int aCursorId, const wxString& aSignalName );
     void DisableCursor( TRACE* aTrace, int aCursorId );
 
-    ///< Reset scale ranges to fit the current traces, on every view.
+    /// Reset scale ranges to fit the current traces, on every view.
     void ResetScales( bool aIncludeX );
 
-    ///< Update trace line style
+    /// Update trace line style
     void UpdateTraceStyle( TRACE* trace );
 
-    ///< Update plot colors
+    /// Update plot colors
     void UpdatePlotColors();
 
     wxColour GetPlotColor( SIM_PLOT_COLORS::COLOR_SET aColorId ) { return m_colors.GetPlotColor( aColorId ); }
 
     void OnLanguageChanged() override;
 
-    ///< Getter for the default view's math plot window (back-compat for zoom undo/redo, export).
+    /// Getter for the default view's math plot window (back-compat for zoom undo/redo, export).
     mpWindow* GetPlotWin() const;
 
-    ///< Get (or create, on aView) the TRACE for a signal.  If the trace already exists (on any
-    ///< view), it is returned unchanged -- callers wanting to move an existing trace to a
-    ///< different view should DeleteTrace() it first.
+    /// Get (or create, on aView) the TRACE for a signal.  If the trace already exists (on any
+    /// view), it is returned unchanged -- callers wanting to move an existing trace to a
+    /// different view should DeleteTrace() it first.
     TRACE* GetOrAddTrace( const wxString& aVectorName, int aType, SIM_VIEW* aView );
 
     void SetTraceData( TRACE* aTrace, std::vector<double>& aX, std::vector<double>& aY, int aSweepCount,
@@ -756,8 +756,8 @@ private:
 
 wxDECLARE_EVENT( EVT_SIM_CURSOR_UPDATE, wxCommandEvent );
 
-///< Fired whenever a view is added to or removed from a SIM_PLOT_TAB, so the Signals grid can
-///< refresh its "Plot" column dropdown choices.
+/// Fired whenever a view is added to or removed from a SIM_PLOT_TAB, so the Signals grid can
+/// refresh its "Plot" column dropdown choices.
 wxDECLARE_EVENT( EVT_SIM_VIEWS_CHANGED, wxCommandEvent );
 
 #endif
