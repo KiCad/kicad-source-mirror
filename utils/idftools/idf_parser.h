@@ -55,6 +55,7 @@
 #include <idf_outlines.h>
 
 class IDF3_COMPONENT;
+class REPORTER;
 
 class IDF3_COMP_OUTLINE_DATA
 {
@@ -438,8 +439,7 @@ public:
     double GetBoardThickness( void );
 
     bool ReadFile( const wxString& aFullFileName, bool aNoSubstituteOutlines = false );
-    bool WriteFile( const wxString& aFullFileName, bool aUnitMM = true,
-                    bool aForceUnitFlag = false );
+    bool WriteFile( const wxString& aFullFileName, IDF3::IDF_UNIT aUnits, REPORTER* aReporter = nullptr );
 
     const std::string& GetIDFSource( void ) const { return m_idfSource; }
     void  SetIDFSource( const std::string& aIDFSource) { m_idfSource = aIDFSource; }

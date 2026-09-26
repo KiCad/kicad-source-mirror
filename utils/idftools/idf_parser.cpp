@@ -33,6 +33,9 @@
 #include "idf_helpers.h"
 #include "streamwrapper.h"
 
+#include <reporter.h>
+#include <wildcards_and_files_ext.h>
+
 using namespace std;
 using namespace IDF3;
 
@@ -3238,22 +3241,15 @@ void IDF3_BOARD::writeBoardFile( const std::string& aFileName )
 }
 
 
-bool IDF3_BOARD::WriteFile( const wxString& aFullFileName, bool aUnitMM, bool aForceUnitFlag )
+bool IDF3_BOARD::WriteFile( const wxString& aFullFileName, IDF_UNIT aUnits, REPORTER* aReporter )
 {
-    if( aUnitMM != IDF3::UNIT_THOU )
-        setUnit( IDF3::UNIT_MM, aForceUnitFlag );
-    else
-        setUnit( IDF3::UNIT_THOU, aForceUnitFlag );
-
-    // 1. Check that the file extension is 'emn'
-    // 2. Write the *.emn file according to the IDFv3 spec
-    // 3. Write the *.emp file according to the IDFv3 spec
+    setUnit( aUnits, false );
 
     wxFileName brdname( aFullFileName );
     wxFileName libname( aFullFileName );
 
-    brdname.SetExt( wxT( "emn" ) );
-    libname.SetExt( wxT( "emp" ) );
+    brdname.SetExt( FILEEXT::IdfV3BoardFileExtension );
+    libname.SetExt( FILEEXT::IdfV3LibraryFileExtension );
 
     std::string bfname = TO_UTF8( aFullFileName );
 
@@ -3261,19 +3257,24 @@ bool IDF3_BOARD::WriteFile( const wxString& aFullFileName, bool aUnitMM, bool aF
     {
         if( !brdname.IsOk() )
         {
-            ostringstream ostr;
-            ostr << "\n* invalid file name: '" << bfname << "'";
+            if( aReporter )
+            {
+                aReporter->Report( wxString::Format( _( "Invalid output path: %s" ), brdname.GetFullPath() ),
+                                   RPT_SEVERITY_ERROR );
+            }
 
-            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+            return false;
         }
 
         if( brdname.FileExists() && !brdname.IsFileWritable() )
         {
-            ostringstream ostr;
-            ostr << "cannot overwrite existing board file\n";
-            ostr << "* filename: '" << bfname << "'";
+            if( aReporter )
+            {
+                aReporter->Report( wxString::Format( _( "Cannot overwrite file: %s" ), brdname.GetFullPath() ),
+                                   RPT_SEVERITY_ERROR );
+            }
 
-            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+            return false;
         }
 
         bfname = TO_UTF8( brdname.GetFullPath() );
@@ -3281,20 +3282,24 @@ bool IDF3_BOARD::WriteFile( const wxString& aFullFileName, bool aUnitMM, bool aF
 
         if( libname.FileExists() && !libname.IsFileWritable() )
         {
-            ostringstream ostr;
-            ostr << "cannot overwrite existing library file\n";
-            ostr << "* filename: '" << lfname << "'";
+            if( aReporter )
+            {
+                aReporter->Report( wxString::Format( _( "Cannot overwrite file: %s" ), libname.GetFullPath() ),
+                                   RPT_SEVERITY_ERROR );
+            }
 
-            throw( IDF_ERROR( __FILE__, __FUNCTION__, __LINE__, ostr.str() ) );
+            return false;
         }
 
         writeLibFile( lfname );
         writeBoardFile( bfname );
-
     }
     catch( const std::exception& e )
     {
         m_errormsg = e.what();
+
+        if( aReporter )
+            aReporter->Report( wxString::Format( _( "Error writing IDF file: %s" ), e.what() ), RPT_SEVERITY_ERROR );
 
         return false;
     }

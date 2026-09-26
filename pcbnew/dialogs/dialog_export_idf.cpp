@@ -150,6 +150,8 @@ void DIALOG_EXPORT_IDF3::GetJobSettings( JOB_EXPORT_PCB_IDF& aSettingsOut ) cons
 
 bool DIALOG_EXPORT_IDF3::TransferDataToWindow()
 {
+    m_tcLog->Clear();
+
     if( m_job )
         ApplyJobSettings( *m_job );
 

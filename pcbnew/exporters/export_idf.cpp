@@ -482,11 +482,13 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
                 {
                     delete dp;
 
-                    std::ostringstream ostr;
-                    ostr << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__;
-                    ostr << "(): could not add drill";
-
-                    throw std::runtime_error( ostr.str() );
+                    if( m_reporter )
+                    {
+                        m_reporter->Report( wxString::Format( "Error exporting footprint %s: %s",
+                                                              aFootprint->GetReferenceAsString(),
+                                                              _( "could not add drill for pad" ) ),
+                                            RPT_SEVERITY_ERROR );
+                    }
                 }
             }
         }
@@ -546,7 +548,17 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
         outline = aIDFBoard.GetComponentOutline( idfFile.GetFullPath() );
 
         if( !outline )
-            throw( std::runtime_error( aIDFBoard.GetError() ) );
+        {
+            if( m_reporter )
+            {
+                m_reporter->Report( wxString::Format( "Error exporting footprint %s: %s",
+                                                      aFootprint->GetReferenceAsString(),
+                                                      _( "could not find a valid outline" ) ),
+                                    RPT_SEVERITY_ERROR );
+            }
+
+            return;
+        }
 
         double rotz = aFootprint->GetOrientation().AsDegrees();
         double locx = sM->m_Offset.x;  // part offsets are in mm
@@ -584,9 +596,6 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
         if( comp == nullptr )
         {
             comp = new IDF3_COMPONENT( &aIDFBoard );
-
-            if( comp == nullptr )
-                throw( std::runtime_error( aIDFBoard.GetError() ) );
 
             comp->SetRefDes( refdes );
 
@@ -647,29 +656,15 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
                 if( ( top && side == IDF3::LYR_BOTTOM ) || ( !top && side == IDF3::LYR_TOP )
                     || ( refA > 0.0001 ) || ( refX > 0.0001 ) )
                 {
-                    comp->GetPosition( refX, refY, refA, side );
+                    if( m_reporter )
+                    {
+                        m_reporter->Report( wxString::Format( "Error exporting footprint %s: %s",
+                                                              aFootprint->GetReferenceAsString(),
+                                                              _( "duplicate reference designator" ) ),
+                                            RPT_SEVERITY_ERROR );
+                    }
 
-                    std::ostringstream ostr;
-                    ostr << "* " << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
-                    ostr << "* conflicting Reference Designator '" << refdes << "'\n";
-                    ostr << "* X loc: " << ( aFootprint->GetPosition().x * scale + dx);
-                    ostr << " vs. " << refX << "\n";
-                    ostr << "* Y loc: " << ( -aFootprint->GetPosition().y * scale + dy);
-                    ostr << " vs. " << refY << "\n";
-                    ostr << "* angle: " << rotz;
-                    ostr << " vs. " << refA << "\n";
-
-                    if( top )
-                        ostr << "* TOP vs. ";
-                    else
-                        ostr << "* BOTTOM vs. ";
-
-                    if( side == IDF3::LYR_TOP )
-                        ostr << "TOP";
-                    else
-                        ostr << "BOTTOM";
-
-                    throw( std::runtime_error( ostr.str() ) );
+                    return;
                 }
             }
         }
@@ -760,20 +755,27 @@ bool IDF_EXPORTER::Export( const wxString& aFullFileName ) const
         VECTOR2D origin = getOrigin();
         idfBoard.SetUserOffset( -origin.x, origin.y );
 
+        if( m_reporter )
+            m_reporter->Report( _( "Exporting board shape" ), RPT_SEVERITY_INFO );
+
         // Export the board outline
         idf_export_outline( m_board, idfBoard );
 
         // Output the drill holes and footprint (library) data.
         for( FOOTPRINT* footprint : m_board->Footprints() )
-            exportFootprint( footprint, idfBoard );
-
-        if( !idfBoard.WriteFile( aFullFileName, idfUnit, false ) )
         {
-            if( m_reporter && !idfBoard.GetError().empty() )
-                m_reporter->Report( From_UTF8( idfBoard.GetError().c_str() ), RPT_SEVERITY_ERROR );
+            if( m_reporter )
+            {
+                m_reporter->Report( wxString::Format( _( "Exporting footprint %s" ),
+                                                      footprint->GetReferenceAsString() ),
+                                    RPT_SEVERITY_INFO );
+            }
 
-            ok = false;
+            exportFootprint( footprint, idfBoard );
         }
+
+        if( !idfBoard.WriteFile( aFullFileName, idfUnit, m_reporter ) )
+            ok = false;
     }
     catch( const IO_ERROR& ioe )
     {
@@ -788,6 +790,26 @@ bool IDF_EXPORTER::Export( const wxString& aFullFileName ) const
             m_reporter->Report( From_UTF8( e.what() ), RPT_SEVERITY_ERROR );
 
         ok = false;
+    }
+
+    if( ok )
+    {
+        wxFileName brdname( aFullFileName );
+        wxFileName libname( aFullFileName );
+
+        brdname.SetExt( FILEEXT::IdfV3BoardFileExtension );
+        libname.SetExt( FILEEXT::IdfV3LibraryFileExtension );
+
+        m_settings->AddOutput( brdname.GetFullPath() );
+        m_settings->AddOutput( libname.GetFullPath() );
+
+        if( m_reporter )
+        {
+            m_reporter->Report( wxString::Format( _( "Wrote IDF board file to %s" ), brdname.GetFullPath() ),
+                                RPT_SEVERITY_INFO );
+            m_reporter->Report( wxString::Format( _( "Wrote IDF library file to %s" ), libname.GetFullPath() ),
+                                RPT_SEVERITY_INFO );
+        }
     }
 
     return ok;
