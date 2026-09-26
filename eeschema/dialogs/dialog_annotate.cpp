@@ -295,7 +295,7 @@ void SCH_EDIT_FRAME::OnAnnotate()
 
 int SCH_EDIT_FRAME::ModalAnnotate( const wxString& aMessage )
 {
-    DIALOG_ANNOTATE dlg( this, aMessage );
+    DIALOG_ANNOTATE* dlg = new DIALOG_ANNOTATE( this, aMessage );
 
-    return dlg.ShowModal();
+    return dlg->ShowModal();
 }
