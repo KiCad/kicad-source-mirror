@@ -116,8 +116,11 @@ void DIALOG_EXPORT_IDF3::ApplyJobSettings( const JOB_EXPORT_PCB_IDF& aSettings )
     case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER:    m_rbOriginUser->SetValue( true );        break;
     }
 
-    m_xPos.SetValue( aSettings.m_userOrigin.x );
-    m_yPos.SetValue( aSettings.m_userOrigin.y );
+    // Settings are stored in m_units; unit binder wants IU
+    double scale = aSettings.m_units == JOB_EXPORT_PCB_IDF::UNITS::MM ? pcbIUScale.IU_PER_MM : pcbIUScale.IU_PER_MILS;
+
+    m_xPos.SetValue( aSettings.m_userOrigin.x * scale );
+    m_yPos.SetValue( aSettings.m_userOrigin.y * scale );
 
     m_cbRemoveDNP->SetValue( !aSettings.m_includeDNP );
     m_cbRemoveUnspecified->SetValue( !aSettings.m_includeUnspecified );
@@ -139,8 +142,12 @@ void DIALOG_EXPORT_IDF3::GetJobSettings( JOB_EXPORT_PCB_IDF& aSettingsOut ) cons
     else if( m_rbOriginUser->GetValue() )
         aSettingsOut.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER;
 
-    aSettingsOut.m_userOrigin.x = m_xPos.GetValue();
-    aSettingsOut.m_userOrigin.y = m_yPos.GetValue();
+    // Settings are stored in m_units; unit binder wants IU
+    double scale = aSettingsOut.m_units == JOB_EXPORT_PCB_IDF::UNITS::MM ? pcbIUScale.MM_PER_IU
+                                                                         : pcbIUScale.MILS_PER_IU;
+
+    aSettingsOut.m_userOrigin.x = m_xPos.GetValue() * scale;
+    aSettingsOut.m_userOrigin.y = m_yPos.GetValue() * scale;
 
     aSettingsOut.m_includeDNP = !m_cbRemoveDNP->GetValue();
     aSettingsOut.m_includeUnspecified = !m_cbRemoveUnspecified->GetValue();

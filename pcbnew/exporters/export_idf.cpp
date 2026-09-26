@@ -703,8 +703,12 @@ VECTOR2D IDF_EXPORTER::getOrigin() const
         break;
 
     case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER:
-        origin = m_settings->m_userOrigin;
+    {
+        double scale = m_settings->m_units == JOB_EXPORT_PCB_IDF::UNITS::MM ? pcbIUScale.MM_PER_IU
+                                                                            : pcbIUScale.MILS_PER_IU;
+        origin = m_settings->m_userOrigin *scale;
         break;
+    }
     }
 
     return origin;

@@ -51,7 +51,7 @@ public:
     UNITS    m_units;
 
     COORD_ORIGIN m_originMode;
-    VECTOR2D     m_userOrigin;
+    VECTOR2D     m_userOrigin;      ///< In whatever units the user specified in m_units
 
     bool     m_includeUnspecified;
     bool     m_includeDNP;
