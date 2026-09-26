@@ -3173,4 +3173,114 @@ BOOST_FIXTURE_TEST_CASE( RepeatLayoutCopiesPadOverrides, MULTICHANNEL_TEST_FIXTU
 }
 
 
+static std::vector<PCB_GROUP*> findGroupsByName( BOARD* aBoard, const wxString& aName )
+{
+    std::vector<PCB_GROUP*> found;
+
+    for( PCB_GROUP* group : aBoard->Groups() )
+    {
+        if( group->GetName() == aName )
+            found.push_back( group );
+    }
+
+    return found;
+}
+
+
+static std::set<FOOTPRINT*> collectFootprints( const PCB_GROUP* aGroup )
+{
+    std::set<FOOTPRINT*> footprints;
+
+    aGroup->RunOnChildren(
+            [&]( BOARD_ITEM* child )
+            {
+                if( child->Type() == PCB_FOOTPRINT_T )
+                    footprints.insert( static_cast<FOOTPRINT*>( child ) );
+            },
+            RECURSE_MODE::RECURSE );
+
+    return footprints;
+}
+
+
+static void checkGroupChannelRepeatLayout( SETTINGS_MANAGER& aSettingsManager, std::unique_ptr<BOARD>& aBoard,
+                                           bool aGroupItems )
+{
+    KI_TEST::LoadBoard( aSettingsManager, "issue22983/issue22983", aBoard );
+
+    const wxString sourceChannel = wxT( "SourceA" );
+    const wxString targetChannel = wxT( "DestA" );
+
+    TOOL_MANAGER       toolMgr;
+    MOCK_TOOLS_HOLDER* toolsHolder = new MOCK_TOOLS_HOLDER;
+
+    toolMgr.SetEnvironment( aBoard.get(), nullptr, nullptr, nullptr, toolsHolder );
+
+    MULTICHANNEL_TOOL* mtTool = new MULTICHANNEL_TOOL;
+    toolMgr.RegisterTool( mtTool );
+
+    mtTool->FindExistingRuleAreas();
+
+    RULE_AREA* refArea = findRuleAreaByPlacementGroup( mtTool, sourceChannel );
+    RULE_AREA* targetArea = findRuleAreaByPlacementGroup( mtTool, targetChannel );
+
+    BOOST_REQUIRE( refArea && targetArea );
+
+    // Both areas have to be driven by a group, or the test proves nothing.
+    BOOST_REQUIRE( refArea->m_zone->GetPlacementAreaSourceType() == PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
+    BOOST_REQUIRE( targetArea->m_zone->GetPlacementAreaSourceType() == PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
+
+    std::vector<PCB_GROUP*> targetGroups = findGroupsByName( aBoard.get(), targetChannel );
+
+    BOOST_REQUIRE_EQUAL( targetGroups.size(), 1 );
+
+    const std::set<FOOTPRINT*> targetFootprints = collectFootprints( targetGroups[0] );
+
+    BOOST_REQUIRE( !targetFootprints.empty() );
+
+    mtTool->CheckRACompatibility( refArea->m_zone );
+
+    for( auto& [area, compatData] : mtTool->GetData()->m_compatMap )
+        compatData.m_doCopy = true;
+
+    REPEAT_LAYOUT_OPTIONS& opts = mtTool->GetData()->m_options;
+
+    opts.m_copyPlacement = true;
+    opts.m_copyRouting = true;
+    opts.m_copyOtherItems = true;
+    opts.m_includeLockedItems = true;
+    opts.m_groupItems = aGroupItems;
+
+    // Every footprint of the target channel takes part, so the copy really does reach its group.
+    const RULE_AREA_COMPAT_DATA& compat = mtTool->GetData()->m_compatMap.at( targetArea );
+
+    BOOST_REQUIRE( compat.m_isOk );
+    BOOST_REQUIRE_EQUAL( compat.m_matchingComponents.size(), targetFootprints.size() );
+
+    BOOST_REQUIRE( mtTool->RepeatLayout( TOOL_EVENT(), refArea->m_zone ) >= 0 );
+
+    // Nothing else may carry the source channel's name.
+    BOOST_CHECK_EQUAL( findGroupsByName( aBoard.get(), sourceChannel ).size(), 1 );
+
+    targetGroups = findGroupsByName( aBoard.get(), targetChannel );
+
+    BOOST_REQUIRE_EQUAL( targetGroups.size(), 1 );
+    BOOST_CHECK( collectFootprints( targetGroups[0] ) == targetFootprints );
+}
+
+
+// Repeat Layout must leave the group a target placement area is named after alone (issue 25622).
+BOOST_FIXTURE_TEST_CASE( RepeatLayoutGroupAreaKeepsTargetGroup, MULTICHANNEL_TEST_FIXTURE )
+{
+    checkGroupChannelRepeatLayout( m_settingsManager, m_board, false );
+}
+
+
+// With "group items" the copies join the channel's own group instead of a new one (issue 25622).
+BOOST_FIXTURE_TEST_CASE( RepeatLayoutGroupAreaGroupsIntoTargetGroup, MULTICHANNEL_TEST_FIXTURE )
+{
+    checkGroupChannelRepeatLayout( m_settingsManager, m_board, true );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
