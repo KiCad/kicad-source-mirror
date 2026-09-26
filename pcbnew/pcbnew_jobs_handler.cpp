@@ -40,6 +40,7 @@
 #include <diff_merge/kicad_diff_types.h>
 #include <settings/json_settings_internals.h>
 #include <trace_helpers.h>
+#include <board_tables/generated_table_refresh.h>
 #include <pcb_drill_chart.h>
 #include <drc/drc_engine.h>
 #include <board_statistics_report.h>
@@ -1776,7 +1777,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     for( PCB_LAYER_ID commonLayer : aGerberJob->m_plotOnAllLayersSequence )
         preflightLayers.set( commonLayer );
 
-    RefreshDrillCharts( *brd );
+    RefreshGeneratedTables( *brd );
 
     for( PCB_LAYER_ID layer : layersToPlot.UIOrder() )
     {
@@ -2195,7 +2196,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     {
         LSET preflightLayers( { aGerberJob->m_plotLayerSequence } );
 
-        RefreshDrillCharts( *brd );
+        RefreshGeneratedTables( *brd );
     }
 
     PLOTTER* plotter = StartPlotBoard( brd, &plotOpts, layer, layerName, outPath, sheetName, sheetPath );
@@ -3210,10 +3211,7 @@ int PCBNEW_JOBS_HANDLER::JobUpgrade( JOB* aJob )
 
         // A chart is derived data, so the upgrade brings every one up to date and saves if
         // that changed anything
-        const uint64_t before = brd->GetDrillModelGeneration();
-        RefreshDrillCharts( *brd );
-
-        if( brd->GetDrillModelGeneration() != before )
+        if( RefreshGeneratedTables( *brd ) > 0 )
             shouldSave = true;
 
         if( shouldSave )

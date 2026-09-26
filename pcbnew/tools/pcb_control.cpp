@@ -57,6 +57,7 @@
 #include <pcb_layer_presentation.h>
 #include <pcb_reference_image.h>
 #include <pcb_textbox.h>
+#include <board_tables/generated_table_refresh.h>
 #include <pcb_drill_chart.h>
 #include <dialogs/dialog_drill_groups.h>
 #include <pcb_drill_map.h>
@@ -2945,10 +2946,11 @@ int PCB_CONTROL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*> items;
     items.push_back( table );
 
+    // Revert rather than delete, since an entered group may already hold the table
     if( placeBoardItems( &commit, items, true, true, false, false ) )
         commit.Push( _( "Place Board Characteristics" ) );
     else
-        delete table;
+        commit.Revert();
 
     return 0;
 }
@@ -2965,10 +2967,11 @@ int PCB_CONTROL::PlaceStackup( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*> items;
     items.push_back( table );
 
+    // Revert rather than delete, since an entered group may already hold the table
     if( placeBoardItems( &commit, items, true, true, false, false ) )
         commit.Push( _( "Place Board Stackup Table" ) );
     else
-        delete table;
+        commit.Revert();
 
     return 0;
 }
@@ -2976,28 +2979,27 @@ int PCB_CONTROL::PlaceStackup( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::PlaceDrillChart( const TOOL_EVENT& aEvent )
 {
-    BOARD* board = m_frame->GetBoard();
+    return placeGeneratedTable( std::make_unique<PCB_DRILL_CHART>( m_frame->GetBoard() ),
+                                _( "No documentation layer is enabled to hold a drill chart." ),
+                                _( "Place Drill Chart" ) );
+}
 
-    // Copper, silk, mask, paste, adhesive, Edge.Cuts, Margin and courtyard are manufacturing
-    // inputs a chart would corrupt. Unlike a map, a chart may share a layer with another
-    const auto available =
-            [board]( PCB_LAYER_ID aLayer )
-            {
-                return DrillDocumentationLayers().Contains( aLayer ) && board->IsLayerEnabled( aLayer );
-            };
 
+PCB_LAYER_ID PCB_CONTROL::pickDocumentationLayer( const std::function<bool( PCB_LAYER_ID )>& aAvailable,
+                                                  const wxString&                            aNoLayerMessage )
+{
+    BOARD*       board = m_frame->GetBoard();
     PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
-    if( !available( layer ) )
+    if( !aAvailable( layer ) )
     {
-        const LSEQ candidates = DrillDocumentationLayers().Seq();
-        const auto next = std::find_if( candidates.begin(), candidates.end(), available );
+        const LSEQ candidates = DocumentationLayers().Seq();
+        const auto next = std::find_if( candidates.begin(), candidates.end(), aAvailable );
 
         if( next == candidates.end() )
         {
-            m_frame->ShowInfoBarError( _( "No documentation layer is enabled to hold a drill "
-                                          "chart." ) );
-            return 0;
+            m_frame->ShowInfoBarError( aNoLayerMessage );
+            return UNDEFINED_LAYER;
         }
 
         layer = *next;
@@ -3013,48 +3015,67 @@ int PCB_CONTROL::PlaceDrillChart( const TOOL_EVENT& aEvent )
                 board->GetLayerName( layer ) ) );
     }
 
-    BOARD_COMMIT commit( this );
+    return layer;
+}
 
-    PCB_DRILL_CHART* chart = new PCB_DRILL_CHART( board );
 
-    // Seeded from the board, not default-constructed. RebuildCells builds on whatever it is
-    // handed, so a default here would drop the board's grouping and its existing marks
-    DRILL_SYMBOL_PROFILE assigned = board->GetDesignSettings().GetDrillSymbolProfile();
+int PCB_CONTROL::placeGeneratedTable( std::unique_ptr<PCB_GENERATED_TABLE> aTable, const wxString& aNoLayerMessage,
+                                      const wxString& aUndoMessage )
+{
+    BOARD* board = m_frame->GetBoard();
 
-    chart->SetLayer( layer );
-    chart->RebuildCells( *board, &assigned );
+    // Copper, silk, mask, paste, adhesive, Edge.Cuts, Margin and courtyard are manufacturing
+    // inputs a table would corrupt. Unlike a map, a table may share a layer with another
+    const auto available =
+            [board]( PCB_LAYER_ID aLayer )
+            {
+                return DocumentationLayers().Contains( aLayer ) && board->IsLayerEnabled( aLayer );
+            };
 
-    // Cascade off any chart already on this layer rather than landing on top of it
+    const PCB_LAYER_ID layer = pickDocumentationLayer( available, aNoLayerMessage );
+
+    if( layer == UNDEFINED_LAYER )
+        return 0;
+
+    BOARD_COMMIT            commit( this );
+    GENERATED_TABLE_REFRESH refresh( *board );
+
+    aTable->SetLayer( layer );
+    aTable->RebuildCells( *board, &refresh );
+
+    // Cascade off any table of the same kind on this layer rather than landing on top of it
     int existing = 0;
 
     for( BOARD_ITEM* item : board->Drawings() )
     {
-        if( item->Type() == PCB_DRILL_CHART_T && item->GetLayer() == layer )
+        if( item->Type() == aTable->Type() && item->GetLayer() == layer )
             existing++;
     }
 
     if( existing )
     {
-        const BOX2I bbox = chart->GetBoundingBox();
-        chart->Move( VECTOR2I( 0, existing * ( bbox.GetHeight() + pcbIUScale.mmToIU( 5 ) ) ) );
+        const BOX2I bbox = aTable->GetBoundingBox();
+        aTable->Move( VECTOR2I( 0, existing * ( bbox.GetHeight() + pcbIUScale.mmToIU( 5 ) ) ) );
     }
 
-    std::vector<BOARD_ITEM*> items;
-    items.push_back( chart );
+    std::vector<BOARD_ITEM*> items{ aTable.get() };
 
-    if( placeBoardItems( &commit, items, true, true, false, false ) )
+    // The commit owns the table from here, even on cancel, since an entered group may already
+    // hold it and only Revert undoes that before deleting it
+    aTable.release();
+
+    if( !placeBoardItems( &commit, items, true, true, false, false ) )
     {
-        // Only now do the assignments become the board's. The profile is design settings,
-        // which KiCad does not undo, so the board is marked dirty instead
-        board->GetDesignSettings().GetDrillSymbolProfile() = assigned;
-        m_frame->OnModify();
+        commit.Revert();
+        return 0;
+    }
 
-        commit.Push( _( "Place Drill Chart" ) );
-    }
-    else
-    {
-        delete chart;
-    }
+    // Only now does the refresh's pending state become the board's. The drill profile is
+    // design settings, which KiCad does not undo, so the board is marked dirty instead
+    refresh.Commit();
+    m_frame->OnModify();
+
+    commit.Push( aUndoMessage );
 
     return 0;
 }
@@ -3069,7 +3090,7 @@ int PCB_CONTROL::PlaceDrillMap( const TOOL_EVENT& aEvent )
     const auto available =
             [&]( PCB_LAYER_ID aLayer )
             {
-                if( !DrillDocumentationLayers().Contains( aLayer ) || !board->IsLayerEnabled( aLayer ) )
+                if( !DocumentationLayers().Contains( aLayer ) || !board->IsLayerEnabled( aLayer ) )
                     return false;
 
                 for( const BOARD_ITEM* item : board->Drawings() )
@@ -3081,31 +3102,11 @@ int PCB_CONTROL::PlaceDrillMap( const TOOL_EVENT& aEvent )
                 return true;
             };
 
-    PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+    const PCB_LAYER_ID layer =
+            pickDocumentationLayer( available, _( "Every documentation layer already has a drill map." ) );
 
-    if( !available( layer ) )
-    {
-        const LSEQ candidates = DrillDocumentationLayers().Seq();
-        const auto next = std::find_if( candidates.begin(), candidates.end(), available );
-
-        if( next == candidates.end() )
-        {
-            m_frame->ShowInfoBarError( _( "Every documentation layer already has a drill map." ) );
-            return 0;
-        }
-
-        layer = *next;
-        m_frame->SetActiveLayer( layer );
-    }
-
-    // Placing onto a hidden layer draws nothing at all, which is indistinguishable from the
-    // feature being broken
-    if( !board->IsLayerVisible( layer ) )
-    {
-        m_frame->ShowInfoBarWarning( wxString::Format(
-                _( "Layer '%s' is hidden; nothing will be shown until you make it visible." ),
-                board->GetLayerName( layer ) ) );
-    }
+    if( layer == UNDEFINED_LAYER )
+        return 0;
 
     BOARD_COMMIT commit( this );
 

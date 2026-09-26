@@ -249,8 +249,8 @@ void API_HANDLER_BOARD::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>&
         if( item->Type() == PCB_TABLECELL_T )
         {
             // Cells are owned by their table; the commit removal path doesn't handle them.
-            // Match the GUI delete: clear the cell contents (drill-chart cells have no user text).
-            if( item->GetParent() && item->GetParent()->Type() == PCB_DRILL_CHART_T )
+            // Match the GUI delete: clear the cell contents (generated-table cells have no user text).
+            if( IsGeneratedTableCell( item ) )
                 continue;
 
             commit->Modify( item );

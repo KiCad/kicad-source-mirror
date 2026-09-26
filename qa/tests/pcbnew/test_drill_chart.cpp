@@ -186,7 +186,7 @@ BOOST_AUTO_TEST_CASE( AChartFollowsTheBoardWithoutBeingAsked )
     const uint64_t builtAt = chart->GetBuiltGeneration();
 
     // Nothing moved, so the refresh is one comparison and the cells stay as they are
-    RefreshDrillCharts( board );
+    RefreshGeneratedTables( board );
 
     BOOST_CHECK_EQUAL( chart->GetBuiltGeneration(), builtAt );
     BOOST_CHECK_EQUAL( chart->GetRowCount(), rowsBefore );
@@ -199,7 +199,7 @@ BOOST_AUTO_TEST_CASE( AChartFollowsTheBoardWithoutBeingAsked )
     via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.80 ) );
     board.Add( via );
 
-    RefreshDrillCharts( board );
+    RefreshGeneratedTables( board );
 
     // A new hole size is a new row, and nobody had to ask for it
     BOOST_CHECK_EQUAL( chart->GetRowCount(), rowsBefore + 1 );
@@ -932,7 +932,7 @@ BOOST_AUTO_TEST_CASE( CloneAndSwapPreserveChartSettings )
     buildHoles( board );
 
     PCB_DRILL_CHART chart( &board );
-    chart.SetUnits( DRILL_CHART_UNITS::INCH );
+    chart.SetUnits( GENERATED_TABLE_UNITS::INCH );
     chart.SetPrecision( 5 );
     chart.RebuildCells( board );
 
@@ -943,7 +943,7 @@ BOOST_AUTO_TEST_CASE( CloneAndSwapPreserveChartSettings )
 
     PCB_DRILL_CHART* copy = dynamic_cast<PCB_DRILL_CHART*>( clone.get() );
     BOOST_REQUIRE( copy );
-    BOOST_CHECK( copy->GetUnits() == DRILL_CHART_UNITS::INCH );
+    BOOST_CHECK( copy->GetUnits() == GENERATED_TABLE_UNITS::INCH );
     BOOST_CHECK_EQUAL( copy->GetPrecision(), 5 );
 
     copy->SetPrecision( 2 );
@@ -1038,7 +1038,7 @@ BOOST_AUTO_TEST_CASE( DefaultColumnHeadingsSurviveBeingLeftOutOfTheFile )
     board.Add( chart );
     chart->RebuildCells( board );
 
-    const std::vector<DRILL_CHART_COLUMN> columns = chart->Columns();
+    const std::vector<GENERATED_TABLE_COLUMN> columns = chart->Columns();
 
     const std::filesystem::path path(
             wxFileName::CreateTempFileName( wxT( "qa_drill_chart_coldefaults" ) ).ToStdString() );

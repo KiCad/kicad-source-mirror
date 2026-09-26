@@ -26,6 +26,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <project.h>
+#include <board_tables/generated_table_refresh.h>
 #include <pcb_drill_chart.h>
 #include <reporter.h>
 #include <pcbplot.h>
@@ -92,7 +93,7 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
     LSET plotted( { aLayersToPlot } );
     plotted |= LSET( { aCommonLayers } );
 
-    RefreshDrillCharts( *m_board );
+    RefreshGeneratedTables( *m_board );
 
     PAGE_INFO existingPageInfo = m_board->GetPageSettings();
     VECTOR2I  existingAuxOrigin = m_board->GetDesignSettings().GetAuxOrigin();

@@ -1052,6 +1052,8 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/board_design_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/teardrop/teardrop_parameters.cpp     #needed by board_design_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/router/pns_meander.cpp               #needed by board_design_settings.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/board_tables/generated_table_refresh.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/board_tables/generated_table_schema.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drill/drill_enumerator.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drill/drill_symbol_profile.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drill/drill_chart_model.cpp
@@ -1090,6 +1092,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_reference_image.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_field.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_drill_chart.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_generated_table.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_drill_map.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_table.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_tablecell.cpp

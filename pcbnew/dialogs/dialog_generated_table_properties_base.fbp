@@ -7,20 +7,20 @@
     <property name="cpp_event_generation">connect</property>
     <property name="cpp_use_enum">1</property>
     <property name="encoding">UTF-8</property>
-    <property name="file">dialog_drill_chart_properties_base</property>
+    <property name="file">dialog_generated_table_properties_base</property>
     <property name="first_id">1000</property>
     <property name="internationalize">1</property>
-    <property name="name">dialog_drill_chart_properties_base</property>
+    <property name="name">dialog_generated_table_properties_base</property>
     <property name="path">.</property>
     <property name="relative_path">1</property>
     <object class="Dialog" expanded="true">
       <property name="event_handler">impl_virtual</property>
       <property name="id">wxID_ANY</property>
-      <property name="name">DIALOG_DRILL_CHART_PROPERTIES_BASE</property>
+      <property name="name">DIALOG_GENERATED_TABLE_PROPERTIES_BASE</property>
       <property name="size">-1,-1</property>
       <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
       <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
-      <property name="title">Drill Chart Properties</property>
+      <property name="title">Table Properties</property>
       <object class="wxBoxSizer" expanded="true">
         <property name="name">bMain</property>
         <property name="orient">wxVERTICAL</property>
@@ -42,20 +42,20 @@
             <property name="id">wxID_ANY</property>
             <property name="name">m_notebook</property>
             <object class="notebookpage" expanded="true">
-              <property name="label">Contents</property>
+              <property name="label">General</property>
               <property name="select">0</property>
               <object class="wxPanel" expanded="true">
                 <property name="id">wxID_ANY</property>
-                <property name="name">m_contentsPanel</property>
+                <property name="name">m_generalPanel</property>
                 <object class="wxBoxSizer" expanded="true">
-                  <property name="name">bContents</property>
+                  <property name="name">bGeneral</property>
                   <property name="orient">wxVERTICAL</property>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND|wxALL</property>
                     <property name="proportion">0</property>
                     <object class="wxFlexGridSizer" expanded="true">
-                      <property name="name">fgContents</property>
+                      <property name="name">fgGeneral</property>
                       <property name="rows">0</property>
                       <property name="cols">2</property>
                       <property name="vgap">5</property>
@@ -104,7 +104,7 @@
                         <object class="wxChoice" expanded="true">
                           <property name="id">wxID_ANY</property>
                           <property name="name">m_unitsCtrl</property>
-                          <property name="choices">"mm" "inch"</property>
+                          <property name="choices">"mm" "inch" "mils"</property>
                           <property name="selection">0</property>
                         </object>
                       </object>
@@ -134,107 +134,6 @@
                         </object>
                       </object>
                       </object>
-                  </object>
-                  <object class="sizeritem" expanded="true">
-                    <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxALL</property>
-                    <property name="proportion">0</property>
-                    <object class="wxStaticBoxSizer" expanded="true">
-                      <property name="name">sbInclude</property>
-                      <property name="label">Include</property>
-                      <property name="orient">wxVERTICAL</property>
-                      <object class="sizeritem" expanded="true">
-                        <property name="border">5</property>
-                        <property name="flag">wxEXPAND|wxALL</property>
-                        <property name="proportion">0</property>
-                        <object class="wxFlexGridSizer" expanded="true">
-                          <property name="name">fgFilter</property>
-                          <property name="rows">0</property>
-                          <property name="cols">3</property>
-                          <property name="vgap">5</property>
-                          <property name="hgap">5</property>
-                          <property name="flexible_direction">wxBOTH</property>
-                          <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
-                          <object class="sizeritem" expanded="true">
-                            <property name="border">5</property>
-                            <property name="flag">wxRIGHT</property>
-                            <property name="proportion">0</property>
-                            <object class="wxCheckBox" expanded="true">
-                              <property name="id">wxID_ANY</property>
-                              <property name="name">m_filterPlated</property>
-                              <property name="label">Plated holes</property>
-                              <property name="checked">1</property>
-                            </object>
-                          </object>
-                          <object class="sizeritem" expanded="true">
-                            <property name="border">5</property>
-                            <property name="flag">wxRIGHT</property>
-                            <property name="proportion">0</property>
-                            <object class="wxCheckBox" expanded="true">
-                              <property name="id">wxID_ANY</property>
-                              <property name="name">m_filterNonPlated</property>
-                              <property name="label">Non-plated holes</property>
-                              <property name="checked">1</property>
-                            </object>
-                          </object>
-                          <object class="sizeritem" expanded="true">
-                            <property name="border">5</property>
-                            <property name="flag">wxRIGHT</property>
-                            <property name="proportion">0</property>
-                            <object class="wxCheckBox" expanded="true">
-                              <property name="id">wxID_ANY</property>
-                              <property name="name">m_filterVias</property>
-                              <property name="label">Vias</property>
-                              <property name="checked">1</property>
-                            </object>
-                          </object>
-                          <object class="sizeritem" expanded="true">
-                            <property name="border">5</property>
-                            <property name="flag">wxRIGHT</property>
-                            <property name="proportion">0</property>
-                            <object class="wxCheckBox" expanded="true">
-                              <property name="id">wxID_ANY</property>
-                              <property name="name">m_filterSlots</property>
-                              <property name="label">Slots</property>
-                              <property name="checked">1</property>
-                            </object>
-                          </object>
-                          <object class="sizeritem" expanded="true">
-                            <property name="border">5</property>
-                            <property name="flag">wxRIGHT</property>
-                            <property name="proportion">0</property>
-                            <object class="wxCheckBox" expanded="true">
-                              <property name="id">wxID_ANY</property>
-                              <property name="name">m_filterBackdrills</property>
-                              <property name="label">Backdrills</property>
-                              <property name="checked">1</property>
-                            </object>
-                          </object>
-                          <object class="sizeritem" expanded="true">
-                            <property name="border">5</property>
-                            <property name="flag">wxRIGHT</property>
-                            <property name="proportion">0</property>
-                            <object class="wxCheckBox" expanded="true">
-                              <property name="id">wxID_ANY</property>
-                              <property name="name">m_filterCastellated</property>
-                              <property name="label">Castellated</property>
-                              <property name="checked">1</property>
-                            </object>
-                          </object>
-                        </object>
-                      </object>
-                    </object>
-                  </object>
-                  <object class="sizeritem" expanded="true">
-                    <property name="border">5</property>
-                    <property name="flag">wxALL|wxEXPAND</property>
-                    <property name="proportion">0</property>
-                    <object class="wxCheckBox" expanded="true">
-                      <property name="id">wxID_ANY</property>
-                      <property name="name">m_showTotals</property>
-                      <property name="label">Show totals row</property>
-                      <property name="checked">1</property>
-                    </object>
                   </object>
                   <object class="sizeritem" expanded="true">
                     <property name="border">5</property>
@@ -273,6 +172,7 @@
                         <object class="wxGrid" expanded="true">
                           <property name="id">wxID_ANY</property>
                           <property name="name">m_columnGrid</property>
+                          <property name="minimum_size">-1,220</property>
                           <property name="subclass">WX_GRID; widgets/wx_grid.h; Not forward declarable</property>
                           <property name="rows">0</property>
                           <property name="cols">5</property>
@@ -341,34 +241,13 @@
                     </object>
                   </object>
                   <object class="sizeritem" expanded="true">
-                    <property name="border">5</property>
-                    <property name="flag">wxEXPAND|wxALL</property>
+                    <property name="border">0</property>
+                    <property name="flag">wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="true">
-                      <property name="name">bTemplate</property>
-                      <property name="orient">wxHORIZONTAL</property>
-                      <object class="sizeritem" expanded="true">
-                        <property name="border">5</property>
-                        <property name="flag">wxRIGHT</property>
-                        <property name="proportion">0</property>
-                        <object class="wxButton" expanded="true">
-                          <property name="id">wxID_ANY</property>
-                          <property name="name">m_importTemplateButton</property>
-                          <property name="label">Import Template...</property>
-                          <event name="OnButtonClick">onImportTemplate</event>
-                        </object>
-                      </object>
-                      <object class="sizeritem" expanded="true">
-                        <property name="border">5</property>
-                        <property name="flag">wxRIGHT</property>
-                        <property name="proportion">0</property>
-                        <object class="wxButton" expanded="true">
-                          <property name="id">wxID_ANY</property>
-                          <property name="name">m_exportTemplateButton</property>
-                          <property name="label">Export Template...</property>
-                          <event name="OnButtonClick">onExportTemplate</event>
-                        </object>
-                      </object>
+                      <property name="name">m_optionsSizer</property>
+                      <property name="orient">wxVERTICAL</property>
+                      <property name="permission">protected</property>
                     </object>
                   </object>
                 </object>

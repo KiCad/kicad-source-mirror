@@ -307,7 +307,7 @@ bool PCB_DRILL_MAP::Deserialize( const google::protobuf::Any& aContainer )
 
     // Copper, silkscreen, mask, paste, adhesive, Edge.Cuts, Margin and courtyard are all
     // manufacturing inputs that hole symbols would corrupt rather than document
-    if( !DrillDocumentationLayers().Contains( layer ) )
+    if( !DocumentationLayers().Contains( layer ) )
     {
         return false;
     }

@@ -66,9 +66,8 @@ class PCB_TEXT;
 class PCB_TEXTBOX;
 class PCB_TRACK;
 class PCB_TABLE;
-class PCB_DRILL_CHART;
+class PCB_GENERATED_TABLE;
 class PCB_DRILL_MAP;
-class PCB_DRILL_CHART;
 class PCB_TABLECELL;
 class FOOTPRINT;
 class PCB_GROUP;
@@ -308,7 +307,18 @@ private:
     bool                 parseTableBodyToken( PCB_TABLE* aTable, PCB_KEYS_T::T aToken,
                                               bool aAllowIdentity );
     void                 parseTableBody( PCB_TABLE* aTable, bool aAllowIdentity );
-    PCB_DRILL_CHART*     parsePCB_DRILL_CHART( BOARD_ITEM* aParent );
+
+    /**
+     * The body every generated table shares. Takes a new table of the kind being read and
+     * leaves what only that kind carries to parseGeneratedTableExtra.
+     */
+    PCB_GENERATED_TABLE* parseGeneratedTable( std::unique_ptr<PCB_GENERATED_TABLE> aTable );
+
+    /**
+     * One token only aTable's kind carries. False when the token is not one of them.
+     */
+    bool                 parseGeneratedTableExtra( PCB_GENERATED_TABLE* aTable, PCB_KEYS_T::T aToken );
+
     DRILL_SPAN           parseDrillSpanBody();
     PCB_DRILL_MAP*       parsePCB_DRILL_MAP( BOARD_ITEM* aParent );
     PCB_DIMENSION_BASE*  parseDIMENSION( BOARD_ITEM* aParent );

@@ -155,7 +155,7 @@ wxString PCB_TABLECELL::GetAddr() const
 }
 
 
-wxString PCB_TABLECELL::GetShownText( RESOLUTION_CONTEXT aContext, int aDepth ) const
+wxString PCB_TABLECELL::GetUnwrappedShownText( RESOLUTION_CONTEXT aContext, int aDepth ) const
 {
     const FOOTPRINT* parentFootprint = GetParentFootprint();
     const BOARD*     board = GetBoard();
@@ -200,6 +200,14 @@ wxString PCB_TABLECELL::GetShownText( RESOLUTION_CONTEXT aContext, int aDepth ) 
         text = ResolveTextVars( text, &tableCellResolver, aDepth );
         FinalizeTextVarExpansion( text, aContext );
     }
+
+    return text;
+}
+
+
+wxString PCB_TABLECELL::GetShownText( RESOLUTION_CONTEXT aContext, int aDepth ) const
+{
+    wxString text = GetUnwrappedShownText( aContext, aDepth );
 
     KIFONT::FONT*         font = GetDrawFont( nullptr );
     EDA_ANGLE             drawAngle = GetDrawRotation();
@@ -366,14 +374,12 @@ static struct PCB_TABLECELL_DESC
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Color" ) );
 
-        // A chart reports the board, so cell contents are not the user's to edit but their
-        // formatting is. Scoped here, not on EDA_TEXT's descriptor, which eeschema shares
+        // A generated table reports the board, so cell contents are not the user's to edit but
+        // their formatting is. Scoped here, not on EDA_TEXT's descriptor, which eeschema shares
         propMgr.OverrideWriteability( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Text" ),
                 []( INSPECTABLE* aItem ) -> bool
                 {
-                    PCB_TABLECELL* cell = dynamic_cast<PCB_TABLECELL*>( aItem );
-
-                    return !cell || !cell->GetParent() || cell->GetParent()->Type() != PCB_DRILL_CHART_T;
+                    return !IsGeneratedTableCell( dynamic_cast<PCB_TABLECELL*>( aItem ) );
                 } );
 
         const wxString tableProps = _( "Table" );

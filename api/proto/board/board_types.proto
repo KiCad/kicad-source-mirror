@@ -1612,20 +1612,11 @@ enum DrillChartColumnId
 }
 
 // Since: 11.0
-enum DrillChartAlign
-{
-  DCA_UNKNOWN = 0;
-  DCA_LEFT = 1;
-  DCA_CENTER = 2;
-  DCA_RIGHT = 3;
-}
-
-// Since: 11.0
 message DrillChartColumn
 {
   DrillChartColumnId id = 1;
   string heading = 2;
-  DrillChartAlign align = 3;
+  kiapi.common.types.HorizontalAlignment align = 3;
   kiapi.common.types.Distance width = 4;
 }
 

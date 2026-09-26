@@ -58,7 +58,7 @@ class ZONE;
 class PCB_TEXT;
 class PCB_TEXTBOX;
 class PCB_TABLE;
-class PCB_DRILL_CHART;
+class PCB_GENERATED_TABLE;
 class PCB_DRILL_MAP;
 class PCB_BARCODE;
 class EDA_TEXT;
@@ -510,7 +510,13 @@ private:
     void format( const PCB_TEXTBOX* aTextBox ) const;
 
     void format( const PCB_TABLE* aTable ) const;
-    void format( const PCB_DRILL_CHART* aChart ) const;
+    void format( const PCB_GENERATED_TABLE* aTable ) const;
+
+    /**
+     * What only one kind of generated table carries, written after the shared settings.
+     */
+    void formatGeneratedTableExtras( const PCB_GENERATED_TABLE* aTable ) const;
+
     void format( const PCB_DRILL_MAP* aMap ) const;
 
     /**

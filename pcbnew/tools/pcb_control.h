@@ -24,6 +24,7 @@
 #define PCB_CONTROL_H
 
 #include <pcb_io/pcb_io_mgr.h>
+#include <functional>
 #include <memory>
 #include <tools/pcb_tool_base.h>
 #include <status_popup.h>
@@ -36,6 +37,7 @@ namespace KIGFX {
 
 class PCB_BASE_FRAME;
 class BOARD_ITEM;
+class PCB_GENERATED_TABLE;
 
 /**
  * Handle actions that are shared between different frames in PcbNew.
@@ -166,6 +168,25 @@ private:
 
     bool placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aAnchorAtOrigin, bool aReannotateDuplicates,
                           bool aSkipMove );
+
+    /**
+     * The active layer when \a aAvailable accepts it, otherwise the first documentation layer it
+     * does, which becomes active. UNDEFINED_LAYER, with \a aNoLayerMessage shown, when none does.
+     */
+    PCB_LAYER_ID pickDocumentationLayer( const std::function<bool( PCB_LAYER_ID )>& aAvailable,
+                                         const wxString&                            aNoLayerMessage );
+
+    /**
+     * Build a generated table on a documentation layer and hand it to the user to place.
+     *
+     * A cancelled placement is reverted, which deletes the table and leaves the refresh's
+     * pending board state uncommitted.
+     *
+     * @param aNoLayerMessage is shown when no enabled documentation layer can hold the table.
+     * @param aUndoMessage names the placement in the undo history.
+     */
+    int placeGeneratedTable( std::unique_ptr<PCB_GENERATED_TABLE> aTable, const wxString& aNoLayerMessage,
+                             const wxString& aUndoMessage );
 
 private:
     PCB_BASE_FRAME*                         m_frame;

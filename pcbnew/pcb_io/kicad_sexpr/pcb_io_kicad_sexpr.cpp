@@ -423,7 +423,7 @@ void PCB_IO_KICAD_SEXPR::Format( const BOARD_ITEM* aItem ) const
         break;
 
     case PCB_DRILL_CHART_T:
-        format( static_cast<const PCB_DRILL_CHART*>( aItem ) );
+        format( static_cast<const PCB_GENERATED_TABLE*>( aItem ) );
         break;
 
     case PCB_DRILL_MAP_T:
@@ -2838,57 +2838,49 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_DRILL_MAP* aMap ) const
 }
 
 
-void PCB_IO_KICAD_SEXPR::format( const PCB_DRILL_CHART* aChart ) const
+void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATED_TABLE* aTable ) const
 {
-    wxCHECK_RET( aChart != nullptr && m_out != nullptr, "" );
+    wxCHECK_RET( aTable != nullptr && m_out != nullptr, "" );
 
-    m_out->Print( "(drill_chart " );
-
-    KICAD_FORMAT::FormatUuid( m_out, aChart->m_Uuid );
-
-    if( aChart->IsLocked() )
-        KICAD_FORMAT::FormatBool( m_out, "locked", true );
-
-    formatLayer( aChart->GetLayer() );
-
-    // Anything the reader would arrive at on its own is left out. A chart nobody has
-    // reconfigured is a handful of bytes rather than a page of them
-    const DRILL_CHART_TEMPLATE defaults = DRILL_CHART_TEMPLATE::MakeDefault();
-    const DRILL_CHART_FILTER&  filter = aChart->Filter();
-
-    if( !( filter == DRILL_CHART_FILTER() ) )
+    switch( aTable->Type() )
     {
-        m_out->Print( "(filter" );
-        KICAD_FORMAT::FormatBool( m_out, "plated", filter.m_Plated );
-        KICAD_FORMAT::FormatBool( m_out, "npth", filter.m_NonPlated );
-        KICAD_FORMAT::FormatBool( m_out, "vias", filter.m_Vias );
-        KICAD_FORMAT::FormatBool( m_out, "slots", filter.m_Slots );
-        KICAD_FORMAT::FormatBool( m_out, "backdrill", filter.m_Backdrills );
-        KICAD_FORMAT::FormatBool( m_out, "castellated", filter.m_Castellated );
-        m_out->Print( ")" );
+    case PCB_DRILL_CHART_T: m_out->Print( "(drill_chart " ); break;
+
+    default:
+        wxFAIL_MSG( wxT( "Unhandled generated table type " ) + aTable->GetClass() );
+        return;
     }
 
-    if( aChart->GetUnits() != defaults.GetUnits() )
-        m_out->Print( "(units %s)", DrillChartUnitsToken( aChart->GetUnits() ) );
+    KICAD_FORMAT::FormatUuid( m_out, aTable->m_Uuid );
 
-    if( aChart->GetPrecision() != defaults.GetPrecision() )
-        m_out->Print( "(precision %d)", aChart->GetPrecision() );
+    if( aTable->IsLocked() )
+        KICAD_FORMAT::FormatBool( m_out, "locked", true );
 
-    if( aChart->GetShowTotals() != defaults.GetShowTotals() )
-        KICAD_FORMAT::FormatBool( m_out, "totals", aChart->GetShowTotals() );
+    formatLayer( aTable->GetLayer() );
 
-    for( const DRILL_CHART_COLUMN& col : aChart->Columns() )
+    // Anything the reader would arrive at on its own is left out. A table nobody has
+    // reconfigured is a handful of bytes rather than a page of them
+    const GENERATED_TABLE_SCHEMA& schema = aTable->Schema();
+
+    if( aTable->GetUnits() != schema.DefaultUnits() )
+        m_out->Print( "(units %s)", GeneratedTableUnitsToken( aTable->GetUnits() ) );
+
+    if( aTable->GetPrecision() != schema.DefaultPrecision() )
+        m_out->Print( "(precision %d)", aTable->GetPrecision() );
+
+    for( const GENERATED_TABLE_COLUMN& col : aTable->Columns() )
     {
-        DRILL_CHART_COLUMN colDefaults;
-        const bool         haveDefaults = DrillChartDefaultColumn( col.m_Id, colDefaults );
+        const GENERATED_TABLE_COLUMN_DEF* def = schema.Find( col.m_Id );
 
-        m_out->Print( "(column (id %s)", DrillChartColumnToken( col.m_Id ) );
+        m_out->Print( "(column (id %s)", schema.Token( col.m_Id ) );
 
-        if( !haveDefaults || col.m_Heading != colDefaults.m_Heading )
+        // Compared against the def's own literal, never DefaultColumn()'s translated text, so
+        // a heading written under one UI language reads back unchanged under another
+        if( !def || col.m_Heading != wxString( def->m_Heading ) )
             m_out->Print( "(name %s)", m_out->Quotew( col.m_Heading ).c_str() );
 
-        if( !haveDefaults || col.m_Align != colDefaults.m_Align )
-            m_out->Print( "(justify %s)", DrillChartAlignToken( col.m_Align ) );
+        if( !def || col.m_Align != def->m_Align )
+            m_out->Print( "(justify %s)", GeneratedTableAlignToken( col.m_Align ) );
 
         if( col.m_Width > 0 )
             m_out->Print( "(width %s)", formatInternalUnits( col.m_Width ).c_str() );
@@ -2896,34 +2888,70 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_DRILL_CHART* aChart ) const
         m_out->Print( ")" );
     }
 
-    if( aChart->GetSymbolColumn() >= 0 && !aChart->RowShapes().empty() )
+    if( !aTable->RowKeys().empty() )
     {
-        // Generated payload, like the cell text. A shape mark has no text of its own, so
-        // without this the symbol column comes back blank
-        m_out->Print( "(row_shapes (column %d)", aChart->GetSymbolColumn() );
-
-        for( const auto& [row, shapeIndex] : aChart->RowShapes() )
-            m_out->Print( "(shape %d %d)", row, shapeIndex );
-
-        m_out->Print( ")" );
-    }
-
-    if( !aChart->RowKeys().empty() )
-    {
-        // Which group each row reports, so a rebuild after the board has changed can hand a
-        // row's formatting to the row that still reports the same holes
+        // What each row reports, so a rebuild after the board has changed can hand a row's
+        // formatting to the row that still reports the same thing
         m_out->Print( "(row_keys" );
 
-        for( const auto& [row, key] : aChart->RowKeys() )
+        for( const auto& [row, key] : aTable->RowKeys() )
             m_out->Print( "(key %d %s)", row, m_out->Quotew( wxString::FromUTF8( key ) ).c_str() );
 
         m_out->Print( ")" );
     }
 
-    // The geometry and cells a chart shares with any other table, written the same way
-    formatTableData( aChart );
+    formatGeneratedTableExtras( aTable );
 
-    m_out->Print( ")" );        // Close `drill_chart` token.
+    // The geometry and cells a generated table shares with any other table, written the same way
+    formatTableData( aTable );
+
+    m_out->Print( ")" );        // Close the table's kind token
+}
+
+
+void PCB_IO_KICAD_SEXPR::formatGeneratedTableExtras( const PCB_GENERATED_TABLE* aTable ) const
+{
+    switch( aTable->Type() )
+    {
+    case PCB_DRILL_CHART_T:
+    {
+        const PCB_DRILL_CHART*     chart = static_cast<const PCB_DRILL_CHART*>( aTable );
+        const DRILL_CHART_TEMPLATE defaults = DRILL_CHART_TEMPLATE::MakeDefault();
+        const DRILL_CHART_FILTER&  filter = chart->Filter();
+
+        if( !( filter == DRILL_CHART_FILTER() ) )
+        {
+            m_out->Print( "(filter" );
+            KICAD_FORMAT::FormatBool( m_out, "plated", filter.m_Plated );
+            KICAD_FORMAT::FormatBool( m_out, "npth", filter.m_NonPlated );
+            KICAD_FORMAT::FormatBool( m_out, "vias", filter.m_Vias );
+            KICAD_FORMAT::FormatBool( m_out, "slots", filter.m_Slots );
+            KICAD_FORMAT::FormatBool( m_out, "backdrill", filter.m_Backdrills );
+            KICAD_FORMAT::FormatBool( m_out, "castellated", filter.m_Castellated );
+            m_out->Print( ")" );
+        }
+
+        if( chart->GetShowTotals() != defaults.GetShowTotals() )
+            KICAD_FORMAT::FormatBool( m_out, "totals", chart->GetShowTotals() );
+
+        if( chart->GetSymbolColumn() >= 0 && !chart->RowShapes().empty() )
+        {
+            // Generated payload, like the cell text. A shape mark has no text of its own, so
+            // without this the symbol column comes back blank
+            m_out->Print( "(row_shapes (column %d)", chart->GetSymbolColumn() );
+
+            for( const auto& [row, shapeIndex] : chart->RowShapes() )
+                m_out->Print( "(shape %d %d)", row, shapeIndex );
+
+            m_out->Print( ")" );
+        }
+
+        break;
+    }
+
+    default:
+        break;
+    }
 }
 
 

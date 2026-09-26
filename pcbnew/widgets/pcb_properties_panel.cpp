@@ -37,7 +37,7 @@
 #include <drill/drill_chart_model.h>
 #include <math/util.h>
 #include <base_units.h>
-#include <pcb_drill_chart.h>
+#include <pcb_generated_table.h>
 #include <pcb_drill_map.h>
 #include <pcb_shape.h>
 #include <eda_units.h>
@@ -1283,13 +1283,10 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
         item->Set( property, newValue );
 
-        // A chart's cells are generated from the settings just changed, so they say nothing
+        // A generated table's cells come from the settings just changed, so they say nothing
         // about the edit until the table has been laid out again
-        if( item->Type() == PCB_DRILL_CHART_T && item->GetBoard() )
-        {
-            PCB_DRILL_CHART* chart = static_cast<PCB_DRILL_CHART*>( item );
-            chart->RebuildCells( *item->GetBoard() );
-        }
+        if( IsGeneratedTableType( item->Type() ) && item->GetBoard() )
+            static_cast<PCB_GENERATED_TABLE*>( item )->RebuildCells( *item->GetBoard() );
     }
 
     changes.Push( _( "Edit Properties" ) );

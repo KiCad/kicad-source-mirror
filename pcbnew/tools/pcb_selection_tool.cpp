@@ -4945,14 +4945,11 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
             aCollector.Remove( i );
     }
 
-    // A drill chart says what the board says, so a click on it is a click on the chart. Its
-    // cells stay collectable for everything else, and a double-click still reaches them.
+    // A generated table says what the board says, so a click on it is a click on the table.
+    // Its cells stay collectable for everything else, and a double-click still reaches them.
     for( int i = aCollector.GetCount() - 1; i >= 0; --i )
     {
-        const BOARD_ITEM* parent = aCollector[i]->GetParent();
-
-        if( aCollector[i]->Type() == PCB_TABLECELL_T && parent
-            && parent->Type() == PCB_DRILL_CHART_T && aCollector.HasItem( parent ) )
+        if( IsGeneratedTableCell( aCollector[i] ) && aCollector.HasItem( aCollector[i]->GetParent() ) )
         {
             aCollector.Remove( i );
         }

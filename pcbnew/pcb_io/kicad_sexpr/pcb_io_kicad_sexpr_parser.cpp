@@ -52,7 +52,6 @@
 #include <pcb_track.h>
 #include <pcb_textbox.h>
 #include <pcb_drill_chart.h>
-#include <drill/drill_chart_template.h>
 #include <pcb_drill_map.h>
 #include <pcb_table.h>
 #include <pad.h>
@@ -1304,7 +1303,7 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             break;
 
         case T_drill_chart:
-            item = parsePCB_DRILL_CHART( m_board );
+            item = parseGeneratedTable( std::make_unique<PCB_DRILL_CHART>( m_board ) );
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
             bulkAddedItems.push_back( item );
             break;
@@ -5307,7 +5306,7 @@ PCB_DRILL_MAP* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_DRILL_MAP( BOARD_ITEM* aParen
         }
     }
 
-    if( !DrillDocumentationLayers().Contains( map->GetLayer() ) )
+    if( !DocumentationLayers().Contains( map->GetLayer() ) )
     {
         THROW_IO_ERROR( _( "Invalid drill map: not on a documentation layer" ) );
     }
@@ -5316,13 +5315,16 @@ PCB_DRILL_MAP* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_DRILL_MAP( BOARD_ITEM* aParen
 }
 
 
-PCB_DRILL_CHART* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_DRILL_CHART( BOARD_ITEM* aParent )
+PCB_GENERATED_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parseGeneratedTable( std::unique_ptr<PCB_GENERATED_TABLE> aTable )
 {
-    wxCHECK_MSG( CurTok() == T_drill_chart, nullptr,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a drill chart." ) );
+    const GENERATED_TABLE_SCHEMA& schema = aTable->Schema();
 
-    std::unique_ptr<PCB_DRILL_CHART> chart = std::make_unique<PCB_DRILL_CHART>( aParent );
-    chart->Columns().clear();
+    // The file's columns replace the defaults a new table starts with rather than adding to them
+    aTable->Columns().clear();
+
+    // The writer omits units and precision equal to these, whatever the constructor chose
+    aTable->SetUnits( schema.DefaultUnits() );
+    aTable->SetPrecision( schema.DefaultPrecision() );
 
     for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -5335,22 +5337,166 @@ PCB_DRILL_CHART* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_DRILL_CHART( BOARD_ITEM* aP
         {
         case T_uuid:
             NextTok();
-            chart->SetUuidDirect( CurStrToKIID() );
+            aTable->SetUuidDirect( CurStrToKIID() );
             NeedRIGHT();
             break;
 
         case T_locked:
-            chart->SetLocked( parseBool() );
+            aTable->SetLocked( parseBool() );
             NeedRIGHT();
             break;
 
         case T_layer:
-            chart->SetLayer( parseBoardItemLayer() );
+            aTable->SetLayer( parseBoardItemLayer() );
             NeedRIGHT();
             break;
 
-        case T_filter:
+        case T_units:
+        {
+            NeedSYMBOLorNUMBER();
+            GENERATED_TABLE_UNITS units;
+
+            if( GeneratedTableUnitsFromToken( FromUTF8(), units ) )
+                aTable->SetUnits( units );
+
+            NeedRIGHT();
+            break;
+        }
+
+        case T_precision:
+            aTable->SetPrecision( parseInt( "generated table precision" ) );
+            NeedRIGHT();
+            break;
+
+        case T_column:
+        {
+            GENERATED_TABLE_COLUMN col;
+
+            // Not GENERATED_TABLE_COLUMN's default 0 (a schema's first id), or an unrecognized
+            // id token that never sets it would silently become a real column instead of being
+            // dropped by Validate() below as the unknown id it actually is
+            col.m_Id = -1;
+
             for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                switch( token )
+                {
+                case T_id:
+                    NeedSYMBOLorNUMBER();
+
+                    if( const GENERATED_TABLE_COLUMN_DEF* def = schema.FindToken( FromUTF8() ) )
+                    {
+                        // The writer's own default is this literal, never DefaultColumn()'s
+                        // translated text, so a heading it left out reads back the same
+                        // regardless of which locale is active now
+                        col.m_Id = def->m_Id;
+                        col.m_Heading = wxString( def->m_Heading );
+                        col.m_Align = def->m_Align;
+                    }
+
+                    NeedRIGHT();
+                    break;
+
+                case T_name:
+                    NeedSYMBOLorNUMBER();
+                    col.m_Heading = FromUTF8();
+                    NeedRIGHT();
+                    break;
+
+                case T_justify:
+                    NeedSYMBOLorNUMBER();
+                    GeneratedTableAlignFromToken( FromUTF8(), col.m_Align );
+                    NeedRIGHT();
+                    break;
+
+                case T_width:
+                    col.m_Width = parseBoardUnits( "generated table column width" );
+                    NeedRIGHT();
+                    break;
+
+                default:
+                    skipCurrent();
+                    break;
+                }
+            }
+
+            aTable->Columns().push_back( col );
+            break;
+        }
+
+        case T_row_keys:
+            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            {
+                if( token != T_LEFT )
+                    Expecting( T_LEFT );
+
+                token = NextTok();
+
+                if( token == T_key )
+                {
+                    const int row = parseInt( "row key row" );
+
+                    NeedSYMBOLorNUMBER();
+                    aTable->RowKeys()[row] = curText;
+                }
+
+                NeedRIGHT();
+            }
+
+            break;
+
+        default:
+            if( parseGeneratedTableExtra( aTable.get(), token ) )
+                break;
+
+            // A generated table is a table, so whatever is left is the geometry and cells it
+            // shares with one rather than something to skip
+            if( !parseTableBodyToken( aTable.get(), token, false ) )
+                skipCurrent();
+
+            break;
+        }
+    }
+
+    if( aTable->Columns().empty() )
+        aTable->Columns() = schema.Defaults();
+
+    // No columns leaves every later consumer dividing by the column count. Repeats and
+    // implausible widths reach table geometry
+    if( aTable->GetColCount() < 1 || !schema.Validate( aTable->Columns() ) )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Invalid %s: bad column set" ), aTable->GetFriendlyName() ) );
+    }
+
+    // Copper, silkscreen, mask, paste, adhesive, Edge.Cuts, Margin and courtyard are all
+    // manufacturing inputs that table artwork would corrupt rather than document
+    if( !DocumentationLayers().Contains( aTable->GetLayer() ) )
+    {
+        THROW_IO_ERROR(
+                wxString::Format( _( "Invalid %s: not on a documentation layer" ), aTable->GetFriendlyName() ) );
+    }
+
+    return aTable.release();
+}
+
+
+bool PCB_IO_KICAD_SEXPR_PARSER::parseGeneratedTableExtra( PCB_GENERATED_TABLE* aTable, T aToken )
+{
+    switch( aTable->Type() )
+    {
+    case PCB_DRILL_CHART_T:
+    {
+        PCB_DRILL_CHART* chart = static_cast<PCB_DRILL_CHART*>( aTable );
+
+        switch( aToken )
+        {
+        case T_filter:
+            for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
                 if( token != T_LEFT )
                     Expecting( T_LEFT );
@@ -5369,85 +5515,15 @@ PCB_DRILL_CHART* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_DRILL_CHART( BOARD_ITEM* aP
                 }
             }
 
-            break;
-
-        case T_units:
-        {
-            NeedSYMBOLorNUMBER();
-            DRILL_CHART_UNITS units;
-
-            if( DrillChartUnitsFromToken( FromUTF8(), units ) )
-                chart->SetUnits( units );
-
-            NeedRIGHT();
-            break;
-        }
-
-        case T_precision:
-            chart->SetPrecision( parseInt( "drill chart precision" ) );
-            NeedRIGHT();
-            break;
+            return true;
 
         case T_totals:
             chart->SetShowTotals( parseBool() );
             NeedRIGHT();
-            break;
-
-        case T_column:
-        {
-            DRILL_CHART_COLUMN col;
-
-            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
-            {
-                if( token != T_LEFT )
-                    Expecting( T_LEFT );
-
-                token = NextTok();
-
-                switch( token )
-                {
-                case T_id:
-                    NeedSYMBOLorNUMBER();
-
-                    if( DrillChartColumnFromToken( FromUTF8(), col.m_Id ) )
-                    {
-                        // The writer leaves out whatever matches these, so they have to be
-                        // in place before the rest of the block overrides them
-                        DrillChartDefaultColumn( col.m_Id, col );
-                    }
-
-                    NeedRIGHT();
-                    break;
-
-                case T_name:
-                    NeedSYMBOLorNUMBER();
-                    col.m_Heading = FromUTF8();
-                    NeedRIGHT();
-                    break;
-
-                case T_justify:
-                    NeedSYMBOLorNUMBER();
-                    DrillChartAlignFromToken( FromUTF8(), col.m_Align );
-                    NeedRIGHT();
-                    break;
-
-                case T_width:
-                    col.m_Width = parseBoardUnits( "drill chart column width" );
-                    NeedRIGHT();
-                    break;
-
-                default:
-                    skipCurrent();
-                    break;
-                }
-            }
-
-            chart->Columns().push_back( col );
-            break;
-        }
+            return true;
 
         case T_row_shapes:
-            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+            for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
             {
                 if( token != T_LEFT )
                     Expecting( T_LEFT );
@@ -5467,58 +5543,16 @@ PCB_DRILL_CHART* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_DRILL_CHART( BOARD_ITEM* aP
                 NeedRIGHT();
             }
 
-            break;
-
-        case T_row_keys:
-            for( token = NextTok(); token != T_RIGHT; token = NextTok() )
-            {
-                if( token != T_LEFT )
-                    Expecting( T_LEFT );
-
-                token = NextTok();
-
-                if( token == T_key )
-                {
-                    const int row = parseInt( "row key row" );
-
-                    NeedSYMBOLorNUMBER();
-                    chart->RowKeys()[row] = curText;
-                }
-
-                NeedRIGHT();
-            }
-
-            break;
+            return true;
 
         default:
-            // A chart is a table, so whatever is left is the geometry and cells it shares
-            // with one rather than something to skip
-            if( !parseTableBodyToken( chart.get(), token, false ) )
-                skipCurrent();
-
-            break;
+            return false;
         }
     }
 
-    if( chart->Columns().empty() )
-        chart->ApplyTemplate( DRILL_CHART_TEMPLATE::MakeDefault() );
-
-    // No columns leaves every later consumer dividing by the column count. Repeats and
-    // implausible widths reach table geometry
-
-    if( chart->GetColCount() < 1 || !ValidateDrillChartColumns( chart->Columns() ) )
-    {
-        THROW_IO_ERROR( _( "Invalid drill chart: bad column set" ) );
+    default:
+        return false;
     }
-
-    // Copper, silkscreen, mask, paste, adhesive, Edge.Cuts, Margin and courtyard are all
-    // manufacturing inputs that chart artwork would corrupt rather than document
-    if( !DrillDocumentationLayers().Contains( chart->GetLayer() ) )
-    {
-        THROW_IO_ERROR( _( "Invalid drill chart: not on a documentation layer" ) );
-    }
-
-    return chart.release();
 }
 
 

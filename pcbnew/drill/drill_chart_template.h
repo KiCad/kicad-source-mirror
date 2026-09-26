@@ -23,7 +23,7 @@
 #include <optional>
 #include <vector>
 
-#include <lset.h>
+#include <board_tables/generated_table_schema.h>
 #include <math/vector2d.h>
 #include <wx/string.h>
 
@@ -45,64 +45,10 @@ enum class DRILL_CHART_COLUMN_ID
 };
 
 
-enum class DRILL_CHART_ALIGN
-{
-    LEFT,
-    CENTER,
-    RIGHT
-};
-
-
-
-enum class DRILL_CHART_UNITS
-{
-    MM,
-    INCH
-};
-
-
 /**
- * Layers a chart or map may live on.
- *
- * Excludes copper, silkscreen, mask, paste, adhesive, Edge.Cuts, Margin, courtyard and rescue
- * layers. Chart artwork and hole symbols must not alter fabrication outputs or DRC constraints.
+ * Every column the drill chart schema knows how to build, in the order the schema lists them.
  */
-LSET DrillDocumentationLayers();
-
-
-/**
- * A chart column can be no wider than this, and no chart wider than that in total. Bounds
- * hostile input from any decoder. No real chart column is a metre across, and the totals are
- * summed in int64 before being checked so the check itself cannot overflow.
- */
-constexpr int     DRILL_CHART_MAX_COLUMN_WIDTH = 1000 * 1000000;
-constexpr int64_t DRILL_CHART_MAX_TOTAL_WIDTH = 10LL * 1000 * 1000000;
-
-
-
-struct DRILL_CHART_COLUMN
-{
-    DRILL_CHART_COLUMN_ID m_Id = DRILL_CHART_COLUMN_ID::SYMBOL;
-    wxString              m_Heading;
-    DRILL_CHART_ALIGN     m_Align = DRILL_CHART_ALIGN::LEFT;
-    int                   m_Width = 0;
-
-    bool operator==( const DRILL_CHART_COLUMN& aOther ) const;
-};
-
-
-/**
- * Reject a column set that repeats an id or is implausibly wide. Shared so the s-expression
- * parser, the protobuf decoder and template import cannot disagree about what is acceptable.
- */
-bool ValidateDrillChartColumns( std::vector<DRILL_CHART_COLUMN>& aColumns );
-
-
-/**
- * The heading and alignment a column starts with, so the writer can leave them out of the
- * file and the parser can put the same values back. False for a column with no default.
- */
-bool DrillChartDefaultColumn( DRILL_CHART_COLUMN_ID aId, DRILL_CHART_COLUMN& aColumn );
+const GENERATED_TABLE_SCHEMA& DrillChartSchema();
 
 
 /**
@@ -136,11 +82,11 @@ public:
 
     void SetName( const wxString& aName ) { m_name = aName; }
 
-    std::vector<DRILL_CHART_COLUMN>& Columns() { return m_columns; }
-    const std::vector<DRILL_CHART_COLUMN>& Columns() const { return m_columns; }
+    std::vector<GENERATED_TABLE_COLUMN>& Columns() { return m_columns; }
+    const std::vector<GENERATED_TABLE_COLUMN>& Columns() const { return m_columns; }
 
-    DRILL_CHART_UNITS GetUnits() const { return m_units; }
-    void SetUnits( DRILL_CHART_UNITS aUnits ) { m_units = aUnits; }
+    GENERATED_TABLE_UNITS GetUnits() const { return m_units; }
+    void SetUnits( GENERATED_TABLE_UNITS aUnits ) { m_units = aUnits; }
 
     int GetPrecision() const { return m_precision; }
     void SetPrecision( int aPrecision ) { m_precision = aPrecision; }
@@ -166,22 +112,10 @@ private:
     wxString m_name;
     int      m_version;
 
-    std::vector<DRILL_CHART_COLUMN> m_columns;
-    DRILL_CHART_UNITS               m_units;
-    int                             m_precision;
-    bool                            m_showTotals;
+    std::vector<GENERATED_TABLE_COLUMN> m_columns;
+    GENERATED_TABLE_UNITS                m_units;
+    int                                   m_precision;
+    bool                                  m_showTotals;
 };
-
-/**
- * Stable file tokens, independent of enum ordering so inserting a value later cannot change
- * what an existing board file means.
- */
-const char* DrillChartUnitsToken( DRILL_CHART_UNITS aUnits );
-const char* DrillChartColumnToken( DRILL_CHART_COLUMN_ID aId );
-const char* DrillChartAlignToken( DRILL_CHART_ALIGN aAlign );
-
-bool DrillChartUnitsFromToken( const wxString& aToken, DRILL_CHART_UNITS& aUnits );
-bool DrillChartColumnFromToken( const wxString& aToken, DRILL_CHART_COLUMN_ID& aId );
-bool DrillChartAlignFromToken( const wxString& aToken, DRILL_CHART_ALIGN& aAlign );
 
 #endif // DRILL_CHART_TEMPLATE_H

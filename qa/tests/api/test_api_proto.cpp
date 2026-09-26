@@ -228,7 +228,7 @@ BOOST_FIXTURE_TEST_CASE( DrillChartColumnWidths, PROTO_TEST_FIXTURE )
     BOOST_REQUIRE_GT( proto.columns_size(), 0 );
     BOOST_CHECK_EQUAL( proto.columns( 0 ).width().value_nm(), 16000000 );
 
-    for( int64_t width : { int64_t( 0 ), int64_t( DRILL_CHART_MAX_COLUMN_WIDTH ) } )
+    for( int64_t width : { int64_t( 0 ), int64_t( GENERATED_TABLE_MAX_COLUMN_WIDTH ) } )
     {
         proto.mutable_columns( 0 )->mutable_width()->set_value_nm( width );
         any.PackFrom( proto );
@@ -237,7 +237,7 @@ BOOST_FIXTURE_TEST_CASE( DrillChartColumnWidths, PROTO_TEST_FIXTURE )
         BOOST_CHECK_EQUAL( restored.Columns().front().m_Width, width );
     }
 
-    for( int64_t width : { int64_t( -1 ), int64_t( DRILL_CHART_MAX_COLUMN_WIDTH ) + 1,
+    for( int64_t width : { int64_t( -1 ), int64_t( GENERATED_TABLE_MAX_COLUMN_WIDTH ) + 1,
                           std::numeric_limits<int64_t>::max() } )
     {
         proto.mutable_columns( 0 )->mutable_width()->set_value_nm( width );
@@ -245,7 +245,7 @@ BOOST_FIXTURE_TEST_CASE( DrillChartColumnWidths, PROTO_TEST_FIXTURE )
         PCB_DRILL_CHART restored( m_board.get() );
         BOOST_REQUIRE( restored.Deserialize( any ) );
         BOOST_CHECK_EQUAL( restored.Columns().front().m_Width,
-                           width < 0 ? 0 : DRILL_CHART_MAX_COLUMN_WIDTH );
+                           width < 0 ? 0 : GENERATED_TABLE_MAX_COLUMN_WIDTH );
     }
 }
 

@@ -20,34 +20,51 @@
 #ifndef PCB_DRILL_CHART_H
 #define PCB_DRILL_CHART_H
 
-#include <algorithm>
 #include <map>
+#include <optional>
+#include <vector>
 
+#include <board_tables/generated_table_refresh.h>
 #include <drill/drill_chart_model.h>
 #include <drill/drill_chart_template.h>
 #include <drill/drill_span.h>
-#include <pcb_table.h>
+#include <drill/drill_symbol_profile.h>
+#include <pcb_generated_table.h>
 
 
 /**
- * Bring every chart on the board up to date.
- *
- * A chart is derived data. Anything that reads one calls this first, so a chart can never
- * show a board that has moved on. Charts already built at the current drill generation cost
- * one integer comparison each.
+ * A drill chart's rows, with the symbol each one is drawn with.
  */
-void RefreshDrillCharts( BOARD& aBoard );
+struct DRILL_CHART_CONTENT : GENERATED_TABLE_CONTENT
+{
+    std::vector<std::optional<int>> m_RowShapes; ///< Per m_Rows entry, empty when the mark is not a shape
+    int                             m_SymbolColumn = -1;
+};
+
+
+/**
+ * The board's drill symbol profile as a refresh assigns new symbols into it.
+ *
+ * Seeded from the board, not default-constructed. Assignment builds on whatever it is handed,
+ * so a default would drop the board's grouping and its existing marks.
+ */
+struct DRILL_PROFILE_PENDING : GENERATED_TABLE_PENDING
+{
+    explicit DRILL_PROFILE_PENDING( BOARD& aBoard );
+
+    void Commit( BOARD& aBoard ) override;
+
+    DRILL_SYMBOL_PROFILE m_Profile;
+};
 
 
 /**
  * A drill chart placed on the board, kept in step with the holes.
  *
- * The chart owns a materialized copy of its columns rather than pointing at a template, so
- * importing or editing a template can never rewrite a fabrication drawing that has already
- * been approved. Grouping and symbols come from the board's shared symbol profile so that a
- * chart and the drill map beside it cannot disagree.
+ * Grouping and symbols come from the board's shared symbol profile so that a chart and the
+ * drill map beside it cannot disagree.
  */
-class PCB_DRILL_CHART : public PCB_TABLE
+class PCB_DRILL_CHART : public PCB_GENERATED_TABLE
 {
 public:
     PCB_DRILL_CHART( BOARD_ITEM* aParent );
@@ -67,22 +84,10 @@ public:
 
     EDA_ITEM* Clone() const override { return new PCB_DRILL_CHART( *this ); }
 
+    const GENERATED_TABLE_SCHEMA& Schema() const override { return DrillChartSchema(); }
+
     DRILL_CHART_FILTER& Filter() { return m_filter; }
     const DRILL_CHART_FILTER& Filter() const { return m_filter; }
-
-    std::vector<DRILL_CHART_COLUMN>& Columns() { return m_columns; }
-    const std::vector<DRILL_CHART_COLUMN>& Columns() const { return m_columns; }
-
-    DRILL_CHART_UNITS GetUnits() const { return m_units; }
-    void SetUnits( DRILL_CHART_UNITS aUnits ) { m_units = aUnits; }
-
-    int GetPrecision() const { return m_precision; }
-
-    /**
-     * Clamped. The value reaches a "%.*f" format, where a hostile file asking for two
-     * billion decimals would try to allocate gigabytes.
-     */
-    void SetPrecision( int aPrecision ) { m_precision = std::clamp( aPrecision, 0, 6 ); }
 
     bool GetShowTotals() const { return m_showTotals; }
     void SetShowTotals( bool aShow ) { m_showTotals = aShow; }
@@ -98,17 +103,10 @@ public:
      */
     void ApplyTemplate( const DRILL_CHART_TEMPLATE& aTemplate );
 
-
     /**
-     * Regenerate the cells from the board.
-     *
-     * Cells are reused rather than recreated so their UUIDs survive, which keeps selection
-     * restore and file diffs meaningful. Symbol assignments are worked out on a copy of the
-     * board's profile. AAssignedProfile receives it so the caller can commit it as an
-     * undoable board change once placement has actually happened. Passing nullptr discards
-     * new assignments, which is what a preview wants.
+     * One integer comparison, so a board with nothing drill related changed pays nothing.
      */
-    void RebuildCells( const BOARD& aBoard, DRILL_SYMBOL_PROFILE* aAssignedProfile = nullptr );
+    bool IsStale( const BOARD& aBoard ) const override;
 
     /**
      * Curated shape index for each generated row, by table row.
@@ -121,28 +119,15 @@ public:
     std::map<int, int>& RowShapes() { return m_rowShapes; }
 
     /**
-     * Drill group each generated row reports on, by table row.
-     *
-     * A rebuild reorders rows as holes come and go, so this is what lets a row's formatting
-     * follow its group rather than its position. Serialized, because the first rebuild after
-     * a load would otherwise have nothing to match the loaded rows against.
-     */
-    const std::map<int, std::string>& RowKeys() const { return m_rowKeys; }
-    std::map<int, std::string>& RowKeys() { return m_rowKeys; }
-
-    /**
      * True for a row that reports a drill group, false for the title, heading and totals.
      */
-    bool IsDataRow( int aRow ) const;
+    bool IsDataRow( int aRow ) const override;
 
     /**
      * Table column the symbol is drawn in, or -1 when the chart has no symbol column.
      */
     int GetSymbolColumn() const { return m_symbolColumn; }
     void SetSymbolColumn( int aCol ) { m_symbolColumn = aCol; }
-
-    INSPECT_RESULT Visit( INSPECTOR inspector, void* testData,
-                          const std::vector<KICAD_T>& aScanTypes ) override;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
@@ -156,36 +141,31 @@ public:
     bool Deserialize( const google::protobuf::Any& aContainer ) override;
 
 protected:
+    std::unique_ptr<GENERATED_TABLE_CONTENT> generate( const BOARD&             aBoard,
+                                                       GENERATED_TABLE_REFRESH* aRefresh ) const override;
+
+    void onRebuilt( const BOARD& aBoard, const GENERATED_TABLE_CONTENT& aContent ) override;
+
     void swapData( BOARD_ITEM* aImage ) override;
 
 private:
     /**
-     * The board data this chart reports on, as chart rows.
+     * The board data this chart reports on, as chart rows grouped the way aProfile says.
      */
-    std::vector<DRILL_CHART_GROUP> buildGroups( const BOARD& aBoard ) const;
+    std::vector<DRILL_CHART_GROUP> buildGroups( const BOARD& aBoard, const DRILL_SYMBOL_PROFILE& aProfile ) const;
 
     /**
-     * Move each row's cells to the row that reports the same drill group.
-     *
-     * Formatting lives on the cells, so without this a rebuild that adds or removes a group
-     * would hand a row's formatting to whichever group happened to land on its index. Rows
-     * whose group has gone are deleted and rows for a new group are created, leaving the
-     * table exactly aRows by aCols.
+     * The typed id a column at this index holds, so generate's switch stays exhaustive
+     * even though a stored column only carries the schema's plain int.
      */
-    void migrateRows( int aRows, int aCols, int aFirstDataRow,
-                      const std::vector<std::string>& aNewRowKeys );
+    DRILL_CHART_COLUMN_ID columnId( int aCol ) const;
 
     DRILL_CHART_FILTER m_filter;
 
-    std::vector<DRILL_CHART_COLUMN> m_columns;
+    bool m_showTotals;
 
-    DRILL_CHART_UNITS m_units;
-    int               m_precision;
-    bool              m_showTotals;
-
-    std::map<int, int>         m_rowShapes;
-    std::map<int, std::string> m_rowKeys;
-    int                        m_symbolColumn;
+    std::map<int, int> m_rowShapes;
+    int                m_symbolColumn;
 
     uint64_t m_builtGeneration;
 };

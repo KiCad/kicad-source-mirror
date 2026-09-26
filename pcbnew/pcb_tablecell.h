@@ -63,6 +63,12 @@ public:
 
     wxString GetShownText( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const override;
 
+    /**
+     * GetShownText() before it is line-broken to the cell's width, i.e. the width the text
+     * needs rather than the width it has been given.
+     */
+    wxString GetUnwrappedShownText( RESOLUTION_CONTEXT aContext, int aDepth = 0 ) const;
+
     int  GetColSpan() const { return m_colSpan; }
     void SetColSpan( int aSpan ) { m_colSpan = aSpan; }
 

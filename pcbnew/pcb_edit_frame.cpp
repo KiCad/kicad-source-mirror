@@ -69,9 +69,11 @@
 #include <dialogs/dialog_migrate_3d_models.h>
 #include <dialog_board_setup.h>
 #include <dialogs/dialog_dimension_properties.h>
+#include <board_tables/generated_table_refresh.h>
 #include <pcb_drill_chart.h>
 #include <pcb_drill_map.h>
-#include <dialogs/dialog_drill_chart_properties.h>
+#include <dialogs/dialog_generated_table_properties.h>
+#include <dialogs/panel_drill_chart_options.h>
 #include <dialogs/dialog_table_properties.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <pad.h>
@@ -2333,7 +2335,7 @@ void PCB_EDIT_FRAME::OnModify()
 
     // A chart reports the board, so an edit that moved a hole has already made it wrong.
     // Costs one integer comparison per chart when nothing drill related changed.
-    RefreshDrillCharts( *GetBoard() );
+    RefreshGeneratedTables( *GetBoard() );
 
     Update3DView( true, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 
@@ -3125,7 +3127,11 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     {
         // Not the generic table dialog, which would offer copper layers and direct editing of
         // cells that the next rebuild discards
-        DIALOG_DRILL_CHART_PROPERTIES dlg( this, static_cast<PCB_DRILL_CHART*>( aItem ) );
+        DIALOG_GENERATED_TABLE_PROPERTIES dlg( this, static_cast<PCB_DRILL_CHART*>( aItem ),
+                                               []( wxWindow* aParent )
+                                               {
+                                                   return new PANEL_DRILL_CHART_OPTIONS( aParent );
+                                               } );
         dlg.ShowModal();
         break;
     }

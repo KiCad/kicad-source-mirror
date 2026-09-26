@@ -3094,8 +3094,8 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             break;
 
         case PCB_TABLECELL_T:
-            // A drill chart's cells report the board, so there is no user text to clear
-            if( board_item->GetParent() && board_item->GetParent()->Type() == PCB_DRILL_CHART_T )
+            // A generated table's cells report the board, so there is no user text to clear
+            if( IsGeneratedTableCell( board_item ) )
                 break;
 
             // Clear contents of table cell

@@ -98,9 +98,9 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME*  
 
     m_table = static_cast<PCB_TABLE*>( m_cells[0]->GetParent() );
 
-    // A drill chart reports the board. Its text is generated, so only the formatting on this
-    // page is the user's to change
-    if( m_table->Type() == PCB_DRILL_CHART_T )
+    // A generated table reports the board. Its text is generated, so only the formatting on
+    // this page is the user's to change
+    if( m_table->IsGenerated() )
     {
         m_cellTextIsGenerated = true;
         m_cellText->SetReadOnly( true );

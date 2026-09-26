@@ -319,6 +319,14 @@ constexpr bool IsNullType( const KICAD_T aType )
     return aType <= 0;
 }
 
+/**
+ * A PCB_TABLE subclass whose cells are generated from the board rather than typed by the user
+ */
+constexpr bool IsGeneratedTableType( const KICAD_T aType )
+{
+    return aType == PCB_DRILL_CHART_T;
+}
+
 constexpr bool IsInstantiableType( const KICAD_T aType )
 {
     if( IsNullType( aType ) )
