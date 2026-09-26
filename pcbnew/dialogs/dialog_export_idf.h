@@ -34,15 +34,20 @@ public:
 
     ~DIALOG_EXPORT_IDF3() override = default;
 
-    wxFilePickerCtrl* FilePicker() { return m_filePickerIDF; }
-
     void ApplyJobSettings( const JOB_EXPORT_PCB_IDF& aSettings );
     void GetJobSettings( JOB_EXPORT_PCB_IDF& aSettingsOut ) const;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    wxString GetFilePath() const;
+
+protected:
+    void OnOKButton( wxCommandEvent& event ) override;
+
 private:
+    bool checkFilenames();
+    void doExport();
     void setupDialog();
     void onRadioButtonsChanged( wxCommandEvent& event );
 

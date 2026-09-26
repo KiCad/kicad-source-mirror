@@ -23,12 +23,16 @@
 #include <widgets/text_ctrl_eval.h>
 #include <dialog_export_idf.h>
 
+#include <3d_cache/3d_cache.h>
 #include <board_design_settings.h>
+#include <export_idf.h>
 #include <jobs/job_export_pcb_idf.h>
 #include <string_utils.h>
 #include <tools/board_editor_control.h>
+#include <project_pcb.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <kidialog.h>
+#include <reporter.h>
 
 
 DIALOG_EXPORT_IDF3::DIALOG_EXPORT_IDF3( PCB_EDIT_FRAME* aEditFrame ) :
@@ -61,7 +65,10 @@ void DIALOG_EXPORT_IDF3::setupDialog()
     m_rbOriginGrid->Bind( wxEVT_RADIOBUTTON, &DIALOG_EXPORT_IDF3::onRadioButtonsChanged, this );
     m_rbOriginBoardCenter->Bind( wxEVT_RADIOBUTTON, &DIALOG_EXPORT_IDF3::onRadioButtonsChanged, this );
 
-    SetupStandardButtons();
+    if( m_job )
+        SetupStandardButtons();
+    else
+        SetupStandardButtons( { { wxID_OK, _( "Export" ) }, { wxID_CANCEL, _( "Close" ) } } );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
@@ -74,6 +81,18 @@ void DIALOG_EXPORT_IDF3::onRadioButtonsChanged( wxCommandEvent& event )
     m_yPos.Enable( m_rbOriginUser->GetValue() );
 
     event.Skip();
+}
+
+
+void DIALOG_EXPORT_IDF3::OnOKButton( wxCommandEvent& event )
+{
+    if( m_job )
+    {
+        GetJobSettings( *m_job );
+        EndModal( wxID_OK );
+    }
+
+    doExport();
 }
 
 
@@ -134,6 +153,20 @@ bool DIALOG_EXPORT_IDF3::TransferDataToWindow()
     if( m_job )
         ApplyJobSettings( *m_job );
 
+    wxString path = m_parent->GetLastPath( LAST_PATH_IDF );
+
+    if( m_job )
+        path = m_job->GetConfiguredOutputPath();
+
+    if( path.IsEmpty() )
+    {
+        wxFileName brdFile = m_parent->GetBoard()->GetFileName();
+        brdFile.SetExt( FILEEXT::IdfV3BoardFileExtension );
+        path = brdFile.GetFullPath();
+    }
+
+    m_filePickerIDF->SetPath( path );
+
     wxCommandEvent dummy;
     onRadioButtonsChanged( dummy );
 
@@ -142,6 +175,15 @@ bool DIALOG_EXPORT_IDF3::TransferDataToWindow()
 
 
 bool DIALOG_EXPORT_IDF3::TransferDataFromWindow()
+{
+    if( m_job )
+        GetJobSettings( *m_job );
+
+    return true;
+}
+
+
+bool DIALOG_EXPORT_IDF3::checkFilenames()
 {
     wxFileName brdFile( m_filePickerIDF->GetPath() );
     brdFile.SetExt( wxT( "emn" ) );
@@ -190,65 +232,52 @@ bool DIALOG_EXPORT_IDF3::TransferDataFromWindow()
 }
 
 
-int BOARD_EDITOR_CONTROL::ExportIDF( const TOOL_EVENT& aEvent )
+void DIALOG_EXPORT_IDF3::doExport()
 {
-    BOARD* board = m_frame->GetBoard();
+    if( !checkFilenames() )
+        return;
 
-    // Build default output file name
-    wxString path = m_frame->GetLastPath( LAST_PATH_IDF );
+    m_tcLog->Clear();
+    WX_TEXT_CTRL_REPORTER reporter( m_tcLog );
 
-    if( path.IsEmpty() )
+    FILENAME_RESOLVER* resolver = PROJECT_PCB::Get3DCacheManager( &m_parent->Prj() )->GetResolver();
+
+    bool resetJob = false;
+    JOB_EXPORT_PCB_IDF job;
+
+    if( !m_job )
     {
-        wxFileName brdFile = board->GetFileName();
-        brdFile.SetExt( wxT( "emn" ) );
-        path = brdFile.GetFullPath();
+        GetJobSettings( job );
+        m_job = &job;
+        resetJob = true;
     }
 
+    IDF_EXPORTER exporter( m_parent->GetBoard(), resolver, &job, &reporter );
+
+    wxBusyCursor dummy;
+
+    if( !exporter.Export( m_filePickerIDF->GetPath() ) )
+        wxMessageBox( wxString::Format( _( "Failed to create file '%s'." ), m_filePickerIDF->GetPath() ) );
+
+    if( resetJob )
+        m_job = nullptr;
+}
+
+
+wxString DIALOG_EXPORT_IDF3::GetFilePath() const
+{
+    return m_filePickerIDF->GetPath();
+}
+
+
+int BOARD_EDITOR_CONTROL::ExportIDF( const TOOL_EVENT& aEvent )
+{
     DIALOG_EXPORT_IDF3 dlg( m_frame );
-    dlg.FilePicker()->SetPath( path );
 
     if ( dlg.ShowModal() != wxID_OK )
         return 0;
 
-    JOB_EXPORT_PCB_IDF job;
-    dlg.GetJobSettings( job );
-
-    VECTOR2D origin;
-
-    switch( job.m_originMode )
-    {
-    default:
-    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER:
-    {
-        BOX2I bbox = board->GetBoardEdgesBoundingBox();
-        origin = bbox.Centre() * pcbIUScale.MM_PER_IU;
-        break;
-    }
-
-    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::GRID:
-        origin = board->GetDesignSettings().GetGridOrigin();
-        break;
-
-    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::DRILL:
-        origin = board->GetDesignSettings().GetAuxOrigin();
-        break;
-
-    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER:
-        origin = job.m_userOrigin;
-        break;
-    }
-
-    wxString fullFilename = dlg.FilePicker()->GetPath();
-    m_frame->SetLastPath( LAST_PATH_IDF, fullFilename );
-
-    wxBusyCursor dummy;
-
-    if( !m_frame->Export_IDF3( board, fullFilename, job.m_units == JOB_EXPORT_PCB_IDF::UNITS::MILS, origin.x, origin.y,
-                               job.m_includeUnspecified, job.m_includeDNP ) )
-    {
-        wxMessageBox( wxString::Format( _( "Failed to create file '%s'." ), fullFilename ) );
-    }
+    m_frame->SetLastPath( LAST_PATH_IDF, dlg.GetFilePath() );
 
     return 0;
 }
-

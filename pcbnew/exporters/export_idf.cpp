@@ -32,7 +32,7 @@
 #include <pcb_shape.h>
 #include <build_version.h>
 #include <project_pcb.h>
-#include <wx/msgdlg.h>
+#include <reporter.h>
 #include "project.h"
 #include "3d_cache/3d_cache.h"
 #include "filename_resolver.h"
@@ -40,14 +40,26 @@
 
 
 #include <base_units.h>     // to define pcbIUScale.FromMillimeter(x)
+#include <jobs/job_export_pcb_idf.h>
 
 
 // assumed default graphical line thickness: == 0.1mm
 #define LINE_WIDTH (pcbIUScale.mmToIU( 0.1 ))
 
 
-static FILENAME_RESOLVER* resolver;
-
+IDF_EXPORTER::IDF_EXPORTER( BOARD* aBoard, FILENAME_RESOLVER* aResolver, JOB_EXPORT_PCB_IDF* aSettings,
+                            REPORTER* aReporter ) :
+        m_board( aBoard ),
+        m_resolver( aResolver ),
+        m_settings( aSettings ),
+        m_reporter( aReporter )
+{
+    if( !m_settings )
+    {
+        m_defaultSettings = std::make_unique<JOB_EXPORT_PCB_IDF>();
+        m_settings = m_defaultSettings.get();
+    }
+}
 
 /**
  * Convert a single Edge_Cuts graphic into IDF segments and append them to @p aLines.
@@ -322,19 +334,21 @@ UseBoundingBox:
  * BOARD_OUTLINE section as appropriate,  Compiles data for the PLACEMENT section and compiles
  * data for the library ELECTRICAL section.
  */
-static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard,
-                                  bool aIncludeUnspecified, bool aIncludeDNP )
+void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard ) const
 {
+    wxCHECK( m_board && m_resolver && m_settings, /* void */ );
+
     // Reference Designator
     std::string crefdes = TO_UTF8( aFootprint->Reference().GetShownText( RESOLVED ) );
 
     wxString libraryName = aFootprint->GetFPID().GetLibNickname();
     wxString footprintBasePath = wxEmptyString;
 
-    if( aPcb->GetProject() )
+    if( m_board->GetProject() )
     {
         std::optional<LIBRARY_TABLE_ROW*> fpRow =
-                            PROJECT_PCB::FootprintLibAdapter( aPcb->GetProject() )->GetRow( libraryName );
+                            PROJECT_PCB::FootprintLibAdapter( m_board->GetProject() )->GetRow( libraryName );
+
         if( fpRow )
             footprintBasePath = LIBRARY_MANAGER::GetFullURI( *fpRow, true );
     }
@@ -478,11 +492,10 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
         }
     }
 
-    if( ( !(aFootprint->GetAttributes() & (FP_THROUGH_HOLE|FP_SMD)) ) && !aIncludeUnspecified )
+    if( ( !(aFootprint->GetAttributes() & (FP_THROUGH_HOLE|FP_SMD)) ) && !m_settings->m_includeUnspecified )
         return;
 
-    if( aFootprint->GetDNPForVariant( aPcb ? aPcb->GetCurrentVariant() : wxString() )
-            && !aIncludeDNP )
+    if( aFootprint->GetDNPForVariant( m_board->GetCurrentVariant() ) && !m_settings->m_includeDNP )
         return;
 
     // add any valid models to the library item list
@@ -505,9 +518,9 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
 
         std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
         embeddedFilesStack.push_back( aFootprint->GetEmbeddedFiles() );
-        embeddedFilesStack.push_back( aPcb->GetEmbeddedFiles() );
+        embeddedFilesStack.push_back( m_board->GetEmbeddedFiles() );
 
-        idfFile.Assign( resolver->ResolvePath( sM->m_Filename, footprintBasePath, std::move( embeddedFilesStack ) ) );
+        idfFile.Assign( m_resolver->ResolvePath( sM->m_Filename, footprintBasePath, std::move( embeddedFilesStack ) ) );
         idfExt = idfFile.GetExt();
 
         if( idfExt.Cmp( wxT( "idf" ) ) && idfExt.Cmp( wxT( "IDF" ) ) )
@@ -671,33 +684,54 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
 }
 
 
-/**
- * Generate IDFv3 compliant board (*.emn) and library (*.emp) files representing the user's
- * PCB design.
- *
- * Split out from PCB_EDIT_FRAME::Export_IDF3 so it can be driven headlessly (unit tests, CLI)
- * with an explicitly supplied 3D model resolver and no GUI error reporting.
- */
-bool ExportBoardToIDF3( BOARD* aPcb, const wxString& aFullFileName, bool aUseThou, double aXRef,
-                        double aYRef, bool aIncludeUnspecified, bool aIncludeDNP,
-                        FILENAME_RESOLVER* aResolver, wxString* aErrorMsg )
+VECTOR2D IDF_EXPORTER::getOrigin() const
 {
-    // idf_export_footprint dereferences the resolver for every 3D model, so a null one
-    // must fail up front rather than crash mid-export
-    wxCHECK( aResolver, false );
+    VECTOR2D origin;
+    wxCHECK( m_settings && m_board, origin );
+
+    switch( m_settings->m_originMode )
+    {
+    default:
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER:
+    {
+        BOX2I bbox = m_board->GetBoardEdgesBoundingBox();
+        origin = bbox.Centre() * pcbIUScale.MM_PER_IU;
+        break;
+    }
+
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::GRID:
+        origin = m_board->GetDesignSettings().GetGridOrigin() * pcbIUScale.MM_PER_IU;
+        break;
+
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::DRILL:
+        origin = m_board->GetDesignSettings().GetAuxOrigin() * pcbIUScale.MM_PER_IU;
+        break;
+
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER:
+        origin = m_settings->m_userOrigin;
+        break;
+    }
+
+    return origin;
+}
+
+
+bool IDF_EXPORTER::Export( const wxString& aFullFileName ) const
+{
+    wxCHECK( m_board, false );
+    wxCHECK( m_resolver, false );
+    wxCHECK( m_settings, false );
 
     IDF3_BOARD idfBoard( IDF3::CAD_ELEC );
 
     // Switch the locale to standard C (needed to print floating point numbers)
     LOCALE_IO toggle;
 
-    resolver = aResolver;
-
     bool ok = true;
     double scale = pcbIUScale.MM_PER_IU;   // we must scale internal units to mm for IDF
     IDF3::IDF_UNIT idfUnit;
 
-    if( aUseThou )
+    if( m_settings->m_units == JOB_EXPORT_PCB_IDF::UNITS::MILS )
     {
         idfUnit = IDF3::UNIT_THOU;
         idfBoard.SetUserPrecision( 1 );
@@ -708,10 +742,10 @@ bool ExportBoardToIDF3( BOARD* aPcb, const wxString& aFullFileName, bool aUseTho
         idfBoard.SetUserPrecision( 5 );
     }
 
-    wxFileName brdName = aPcb->GetFileName();
+    wxFileName brdName = m_board->GetFileName();
 
     idfBoard.SetUserScale( scale );
-    idfBoard.SetBoardThickness( aPcb->GetDesignSettings().GetBoardThickness() * scale );
+    idfBoard.SetBoardThickness( m_board->GetDesignSettings().GetBoardThickness() * scale );
     idfBoard.SetBoardName( TO_UTF8( brdName.GetFullName() ) );
     idfBoard.SetBoardVersion( 0 );
     idfBoard.SetLibraryVersion( 0 );
@@ -723,57 +757,37 @@ bool ExportBoardToIDF3( BOARD* aPcb, const wxString& aFullFileName, bool aUseTho
     try
     {
         // set up the board reference point
-        idfBoard.SetUserOffset( -aXRef, aYRef );
+        VECTOR2D origin = getOrigin();
+        idfBoard.SetUserOffset( -origin.x, origin.y );
 
         // Export the board outline
-        idf_export_outline( aPcb, idfBoard );
+        idf_export_outline( m_board, idfBoard );
 
         // Output the drill holes and footprint (library) data.
-        for( FOOTPRINT* footprint : aPcb->Footprints() )
-            idf_export_footprint( aPcb, footprint, idfBoard, aIncludeUnspecified, aIncludeDNP );
+        for( FOOTPRINT* footprint : m_board->Footprints() )
+            exportFootprint( footprint, idfBoard );
 
         if( !idfBoard.WriteFile( aFullFileName, idfUnit, false ) )
         {
-            if( aErrorMsg )
-                *aErrorMsg = From_UTF8( idfBoard.GetError().c_str() );
+            if( m_reporter && !idfBoard.GetError().empty() )
+                m_reporter->Report( From_UTF8( idfBoard.GetError().c_str() ), RPT_SEVERITY_ERROR );
 
             ok = false;
         }
     }
     catch( const IO_ERROR& ioe )
     {
-        if( aErrorMsg )
-            *aErrorMsg = ioe.What();
+        if( m_reporter && !idfBoard.GetError().empty() )
+            m_reporter->Report( ioe.What(), RPT_SEVERITY_ERROR );
 
         ok = false;
     }
     catch( const std::exception& e )
     {
-        if( aErrorMsg )
-            *aErrorMsg = From_UTF8( e.what() );
+        if( m_reporter && !idfBoard.GetError().empty() )
+            m_reporter->Report( From_UTF8( e.what() ), RPT_SEVERITY_ERROR );
 
         ok = false;
-    }
-
-    return ok;
-}
-
-
-bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
-                                  bool aUseThou, double aXRef, double aYRef,
-                                  bool aIncludeUnspecified, bool aIncludeDNP )
-{
-    FILENAME_RESOLVER* res = PROJECT_PCB::Get3DCacheManager( &Prj() )->GetResolver();
-    wxString           errorMsg;
-
-    bool ok = ExportBoardToIDF3( aPcb, aFullFileName, aUseThou, aXRef, aYRef, aIncludeUnspecified,
-                                 aIncludeDNP, res, &errorMsg );
-
-    if( !ok )
-    {
-        wxString msg;
-        msg << _( "IDF Export Failed:\n" ) << errorMsg;
-        wxMessageBox( msg );
     }
 
     return ok;

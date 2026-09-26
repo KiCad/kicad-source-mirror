@@ -66,6 +66,10 @@ class DIALOG_EXPORT_IDF3_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 
+		// Virtual event handlers, override them in your derived class
+		virtual void OnOKButton( wxCommandEvent& event ) { event.Skip(); }
+
+
 	public:
 
 		DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export IDFv3"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );

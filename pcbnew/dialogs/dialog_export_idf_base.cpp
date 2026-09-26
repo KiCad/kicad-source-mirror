@@ -176,8 +176,14 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 	bSizerIDFFile->Fit( this );
 
 	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_IDF3_BASE::OnOKButton ), NULL, this );
 }
 
 DIALOG_EXPORT_IDF3_BASE::~DIALOG_EXPORT_IDF3_BASE()
 {
+	// Disconnect Events
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EXPORT_IDF3_BASE::OnOKButton ), NULL, this );
+
 }

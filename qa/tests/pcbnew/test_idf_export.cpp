@@ -44,7 +44,9 @@
 #include <filename_resolver.h>
 #include <footprint.h>
 #include <geometry/eda_angle.h>
+#include <jobs/job_export_pcb_idf.h>
 #include <pcb_shape.h>
+#include <reporter.h>
 
 #include <wx/string.h>
 
@@ -167,13 +169,16 @@ BOOST_AUTO_TEST_CASE( FootprintCutoutIsExported )
     const std::filesystem::path emnPath = outDir / "cutout.emn";
     std::filesystem::remove( emnPath );
 
+    JOB_EXPORT_PCB_IDF job;
+    job.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER;
     FILENAME_RESOLVER resolver;
-    wxString          errorMsg;
+    WX_STRING_REPORTER reporter;
 
-    const bool ok = ExportBoardToIDF3( board.get(), wxString::FromUTF8( emnPath.string().c_str() ),
-                                       false, 0.0, 0.0, true, true, &resolver, &errorMsg );
+    IDF_EXPORTER exporter( board.get(), &resolver, &job, &reporter );
 
-    BOOST_REQUIRE_MESSAGE( ok, "IDF export failed: " << errorMsg.ToStdString() );
+    const bool ok = exporter.Export( wxString::FromUTF8( emnPath.string().c_str() ) );
+
+    BOOST_REQUIRE_MESSAGE( ok, "IDF export failed: " << reporter.GetMessages() );
     BOOST_REQUIRE( std::filesystem::exists( emnPath ) );
 
     const std::map<int, std::vector<VECTOR2D>> loops = ReadBoardOutlineLoops( emnPath );
@@ -219,13 +224,16 @@ BOOST_AUTO_TEST_CASE( RotatedPolygonCutoutIsExported )
     const std::filesystem::path emnPath = outDir / "poly_cutout.emn";
     std::filesystem::remove( emnPath );
 
+    JOB_EXPORT_PCB_IDF job;
+    job.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER;
     FILENAME_RESOLVER resolver;
-    wxString          errorMsg;
+    WX_STRING_REPORTER reporter;
 
-    const bool ok = ExportBoardToIDF3( board.get(), wxString::FromUTF8( emnPath.string().c_str() ),
-                                       false, 0.0, 0.0, true, true, &resolver, &errorMsg );
+    IDF_EXPORTER exporter( board.get(), &resolver, &job, &reporter );
 
-    BOOST_REQUIRE_MESSAGE( ok, "IDF export failed: " << errorMsg.ToStdString() );
+    const bool ok = exporter.Export( wxString::FromUTF8( emnPath.string().c_str() ) );
+
+    BOOST_REQUIRE_MESSAGE( ok, "IDF export failed: " << reporter.GetMessages() );
     BOOST_REQUIRE( std::filesystem::exists( emnPath ) );
 
     const std::map<int, std::vector<VECTOR2D>> loops = ReadBoardOutlineLoops( emnPath );

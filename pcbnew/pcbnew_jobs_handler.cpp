@@ -470,10 +470,7 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
 
                   wxCHECK( idfJob && editFrame, false );
 
-                  // TODO
-                  DIALOG_EXPORT_IDF3 dlg( editFrame );
-                  dlg.FilePicker()->SetPath( idfJob->GetConfiguredOutputPath() );
-
+                  DIALOG_EXPORT_IDF3 dlg( idfJob, editFrame, aParent );
                   return dlg.ShowModal() == wxID_OK;
               } );
 }

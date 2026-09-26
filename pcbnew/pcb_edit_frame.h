@@ -501,22 +501,6 @@ public:
                           const wxString& a3D_Subdir, double aXRef, double aYRef );
 
     /**
-     * Create an IDF3 compliant BOARD (*.emn) and LIBRARY (*.emp) file.
-     *
-     * @param aPcb a pointer to the board to be exported to IDF.
-     * @param aFullFileName the full filename of the export file.
-     * @param aUseThou set to true if the desired IDF unit is thou (mil).
-     * @param aXRef the board Reference Point in mm, X value.
-     * @param aYRef the board Reference Point in mm, Y value.
-     * @param aIncludeUnspecified true to include unspecified-type footprint models
-     * @param aIncludeDNP true to include DNP footprint models
-     * @return true if OK.
-     */
-    bool Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
-                      bool aUseThou, double aXRef, double aYRef,
-                      bool aIncludeUnspecified, bool aIncludeDNP );
-
-    /**
      * Export the current BOARD to a specctra dsn file.
      *
      * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the specification.
