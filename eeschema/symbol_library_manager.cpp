@@ -777,12 +777,13 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
     SYMBOL_LIBRARY_ADAPTER*       adapter = PROJECT_SCH::SymbolLibAdapter( &m_frame.Prj() );
     LIBRARY_MANAGER&              manager = Pgm().GetLibraryManager();
     std::optional<LIBRARY_TABLE*> optTable = manager.Table( LIBRARY_TABLE_TYPE::SYMBOL, aScope );
+
     wxCHECK( optTable, false );
     LIBRARY_TABLE* table = optTable.value();
-    bool           success = true;
 
     try
     {
+        bool               success = true;
         LIBRARY_TABLE_ROW& row = table->InsertRow();
 
         row.SetNickname( libName );
@@ -796,15 +797,10 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
                                   _( "File Save Error" ), wxOK | wxICON_ERROR );
                     success = false;
                 } );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( nullptr, ioe.What() );
-        return false;
-    }
 
-    if( success )
-    {
+        if( !success )
+            return false;
+
         if( aCreate )
         {
             wxCHECK( schFileType != SCH_IO_MGR::SCH_FILE_T::SCH_LEGACY, false );
@@ -812,6 +808,14 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
             if( !adapter->CreateLibrary( libName ) )
             {
                 table->Rows().erase( table->Rows().end() - 1 );
+
+                table->Save().map_error(
+                        [&]( const LIBRARY_ERROR& aError )
+                        {
+                            wxMessageBox( _( "Error saving library table:\n\n" ) + aError.message,
+                                          _( "File Save Error" ), wxOK | wxICON_ERROR );
+                        } );
+
                 return false;
             }
         }
@@ -819,8 +823,13 @@ bool SYMBOL_LIBRARY_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate
         adapter->LoadOne( libName );
         OnDataChanged();
     }
+    catch( const IO_ERROR& ioe )
+    {
+        DisplayError( nullptr, ioe.What() );
+        return false;
+    }
 
-    return success;
+    return true;
 }
 
 
