@@ -1369,7 +1369,7 @@ std::set<wxString> SCHEMATIC::GetNetClassAssignmentCandidates()
 
 bool SCHEMATIC::ResolveCrossReference( wxString* token, int aDepth ) const
 {
-    auto* environment = TEXT_EVAL::ENVIRONMENT::Current();
+    TEXT_EVAL::ENVIRONMENT* environment = TEXT_EVAL::ENVIRONMENT::Current();
 
     if( !environment || !environment->IsCollectingSources() )
         return resolveCrossReference( token, aDepth );
@@ -1386,12 +1386,13 @@ bool SCHEMATIC::resolveCrossReference( wxString* token, int aDepth ) const
     wxString       remainder;
     wxString       ref = token->BeforeFirst( ':', &remainder );
     KIID_PATH      path( ref );
-    KIID           uuid = path.back();
+    KIID           uuid( 0 );
     SCH_SHEET_PATH sheetPath;
     SCH_ITEM*      refItem = ResolveItem( KIID( uuid ), &sheetPath, true );
 
     if( path.size() > 1 )
     {
+        uuid = path.back();
         path.pop_back();
         sheetPath = Hierarchy().GetSheetPathByKIIDPath( path ).value_or( sheetPath );
     }
