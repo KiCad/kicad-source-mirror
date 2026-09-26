@@ -145,7 +145,7 @@ SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, FIELD_T aFieldId, const wxString& aName
     else
         SetName( GetDefaultFieldName( aFieldId, TRANSLATED ) );
 
-    setId( aFieldId ); // will also set the layer
+    setId( aFieldId ); // will also set the layer; call only AFTER SetName()
     SetVisible( true );
 
     if( aParent && aParent->Schematic() )
@@ -184,9 +184,9 @@ SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
         EDA_TEXT( aField )
 {
     m_private = aField.m_private;
-    setId( aField.m_id ); // will also set the layer
-    m_ordinal = aField.m_ordinal;
     m_name = aField.m_name;
+    setId( aField.m_id ); // will also set the layer; call only AFTER setting m_name
+    m_ordinal = aField.m_ordinal;
     m_showName = aField.m_showName;
     m_allowAutoPlace = aField.m_allowAutoPlace;
     m_isGeneratedField = aField.m_isGeneratedField;
@@ -257,9 +257,9 @@ SCH_FIELD& SCH_FIELD::operator=( const SCH_FIELD& aField )
     EDA_TEXT::operator=( aField );
 
     m_private = aField.m_private;
-    setId( aField.m_id ); // will also set the layer
-    m_ordinal = aField.m_ordinal;
     m_name = aField.m_name;
+    setId( aField.m_id ); // will also set the layer; call only AFTER setting m_name
+    m_ordinal = aField.m_ordinal;
     m_showName = aField.m_showName;
     m_allowAutoPlace = aField.m_allowAutoPlace;
     m_isGeneratedField = aField.m_isGeneratedField;
