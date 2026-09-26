@@ -184,6 +184,9 @@ private:
     HANDLER_RESULT<types::RunJobResponse> handleRunBoardJobExportODB(
             const HANDLER_CONTEXT<RunBoardJobExportODB>& aCtx );
 
+    HANDLER_RESULT<types::RunJobResponse> handleRunBoardJobExportIdf(
+            const HANDLER_CONTEXT<RunBoardJobExportIdf>& aCtx );
+
     HANDLER_RESULT<types::RunJobResponse> handleRunBoardJobExportStats(
             const HANDLER_CONTEXT<RunBoardJobExportStats>& aCtx );
 

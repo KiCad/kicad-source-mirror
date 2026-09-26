@@ -38,6 +38,7 @@
 #include <jobs/job_export_pcb_3d.h>
 #include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_drill.h>
+#include <jobs/job_export_pcb_idf.h>
 #include <jobs/job_export_pcb_ipc2581.h>
 #include <jobs/job_export_pcb_odb.h>
 #include <jobs/job_export_pcb_pdf.h>
@@ -2122,6 +2123,69 @@ JOB_EXPORT_PCB_ODB::ODB_UNITS FromProtoEnum( kiapi::common::types::Units aValue 
     case kiapi::common::types::Units::U_TENTHS:
     default:
         return JOB_EXPORT_PCB_ODB::ODB_UNITS::MM;
+    }
+}
+
+
+template<>
+kiapi::common::types::Units ToProtoEnum( JOB_EXPORT_PCB_IDF::UNITS aValue )
+{
+    switch( aValue )
+    {
+    case JOB_EXPORT_PCB_IDF::UNITS::MILS: return kiapi::common::types::Units::U_MILS;
+    case JOB_EXPORT_PCB_IDF::UNITS::MM:   return kiapi::common::types::Units::U_MM;
+    default:
+        wxCHECK_MSG( false, kiapi::common::types::Units::U_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<JOB_EXPORT_PCB_IDF::UNITS>" );
+    }
+}
+
+
+template<>
+JOB_EXPORT_PCB_IDF::UNITS FromProtoEnum( kiapi::common::types::Units aValue )
+{
+    switch( aValue )
+    {
+    case kiapi::common::types::Units::U_MILS: return JOB_EXPORT_PCB_IDF::UNITS::MILS;
+    case kiapi::common::types::Units::U_MM:   return JOB_EXPORT_PCB_IDF::UNITS::MM;
+    case kiapi::common::types::Units::U_UNKNOWN:
+    case kiapi::common::types::Units::U_INCH:
+    case kiapi::common::types::Units::U_METERS:
+    case kiapi::common::types::Units::U_TENTHS:
+    default:
+        return JOB_EXPORT_PCB_IDF::UNITS::MM;
+    }
+}
+
+
+template<>
+IdfOriginMode ToProtoEnum( JOB_EXPORT_PCB_IDF::COORD_ORIGIN aValue )
+{
+    switch( aValue )
+    {
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER: return IdfOriginMode::IOM_BOARD_CENTER;
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::GRID:   return IdfOriginMode::IOM_GRID_ORIGIN;
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::DRILL:  return IdfOriginMode::IOM_DRILL_ORIGIN;
+    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER:   return IdfOriginMode::IOM_USER;
+    default:
+        wxCHECK_MSG( false, IdfOriginMode::IOM_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<JOB_EXPORT_PCB_IDF::COORD_ORIGIN>" );
+    }
+}
+
+
+template<>
+JOB_EXPORT_PCB_IDF::COORD_ORIGIN FromProtoEnum( IdfOriginMode aValue )
+{
+    switch( aValue )
+    {
+    case IdfOriginMode::IOM_BOARD_CENTER: return JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER;
+    case IdfOriginMode::IOM_GRID_ORIGIN:  return JOB_EXPORT_PCB_IDF::COORD_ORIGIN::GRID;
+    case IdfOriginMode::IOM_DRILL_ORIGIN: return JOB_EXPORT_PCB_IDF::COORD_ORIGIN::DRILL;
+    case IdfOriginMode::IOM_USER:         return JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER;
+    case IdfOriginMode::IOM_UNKNOWN:
+    default:
+        return JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER;
     }
 }
 

@@ -587,3 +587,42 @@ message RunBoardJobExportPng
     // plot_settings.  If false or absent, will plot with a transparent background.
     optional bool plot_background_color = 6;
 }
+
+// Which reference point of the board maps to the IDF file origin.
+enum IdfOriginMode
+{
+    IOM_UNKNOWN = 0;
+    // Center of the board outline bounding box.
+    IOM_BOARD_CENTER = 1;
+    // The board's grid origin.
+    IOM_GRID_ORIGIN = 2;
+    // The board's auxiliary (drill/place file) origin.
+    IOM_DRILL_ORIGIN = 3;
+    // A user-specified point; see user_origin.
+    IOM_USER = 4;
+}
+
+// Exports a board to IDFv3 files.  Returns RunJobResponse.
+message RunBoardJobExportIdf
+{
+    kiapi.common.types.RunJobSettings job_settings = 1;
+
+    // Millimeters or mils are accepted
+    kiapi.common.types.Units units = 2;
+
+    IdfOriginMode origin_mode = 3;
+
+    // Origin point used when origin_mode is IOM_USER.
+    kiapi.common.types.Vector2 user_origin = 4;
+
+    // If true, footprints without the through-hole or SMD attribute are included.
+    bool include_unspecified = 5;
+
+    // If true, footprints marked DNP in the current variant are included.
+    bool include_dnp = 6;
+
+    // If true, footprints without an explicit height property or explicit IDF model will be
+    // excluded from the export.  If false / absent, footprints without an explicit height set will
+    // be exported if they have a visible STEP model, using the height of the tallest model.
+    bool only_use_explicit_heights = 7;
+}

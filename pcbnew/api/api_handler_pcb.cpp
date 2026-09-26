@@ -61,6 +61,7 @@
 #include <jobs/job_export_pcb_gencad.h>
 #include <jobs/job_export_pcb_gerber.h>
 #include <jobs/job_export_pcb_gerbers.h>
+#include <jobs/job_export_pcb_idf.h>
 #include <jobs/job_export_pcb_ipc2581.h>
 #include <jobs/job_export_pcb_ipcd356.h>
 #include <jobs/job_export_pcb_odb.h>
@@ -196,6 +197,8 @@ API_HANDLER_PCB::API_HANDLER_PCB( std::shared_ptr<PCB_CONTEXT> aContext, PCB_EDI
             &API_HANDLER_PCB::handleRunBoardJobExportODB );
     registerHandler<RunBoardJobExportStats, types::RunJobResponse>(
             &API_HANDLER_PCB::handleRunBoardJobExportStats );
+    registerHandler<RunBoardJobExportIdf, types::RunJobResponse>(
+            &API_HANDLER_PCB::handleRunBoardJobExportIdf );
 
     registerHandler<GetPageSettings, types::PageSettings>( &API_HANDLER_PCB::handleGetPageSettings );
     registerHandler<SetPageSettings, types::PageSettings>( &API_HANDLER_PCB::handleSetPageSettings );
@@ -2866,6 +2869,53 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportSt
     job.m_excludeFootprintsWithoutPads = aCtx.Request.exclude_footprints_without_pads();
     job.m_subtractHolesFromBoardArea = aCtx.Request.subtract_holes_from_board_area();
     job.m_subtractHolesFromCopperAreas = aCtx.Request.subtract_holes_from_copper_areas();
+
+    return ExecuteBoardJob( pcbContext(), job );
+}
+
+
+HANDLER_RESULT<types::RunJobResponse>
+API_HANDLER_PCB::handleRunBoardJobExportIdf( const HANDLER_CONTEXT<RunBoardJobExportIdf>& aCtx )
+{
+    if( HANDLER_RESULT<bool> valid = validateDocument( aCtx.Request.job_settings().document() ); !valid )
+        return tl::unexpected( valid.error() );
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    switch( aCtx.Request.units() )
+    {
+    case types::Units::U_UNKNOWN:
+    case types::Units::U_MM:
+    case types::Units::U_MILS:
+        break;
+
+    default:
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "RunBoardJobExportIdf supports only mm and mils units" );
+        return tl::unexpected( e );
+    }
+    }
+
+    JOB_EXPORT_PCB_IDF job;
+    job.m_filename = pcbContext()->GetCurrentFileName();
+    job.SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
+
+    job.m_units = FromProtoEnum<JOB_EXPORT_PCB_IDF::UNITS>( aCtx.Request.units() );
+    job.m_originMode = FromProtoEnum<JOB_EXPORT_PCB_IDF::COORD_ORIGIN>( aCtx.Request.origin_mode() );
+
+    if( aCtx.Request.origin_mode() == IdfOriginMode::IOM_USER )
+    {
+        // m_userOrigin is expressed in the units selected by m_units
+        double scale = job.m_units == JOB_EXPORT_PCB_IDF::UNITS::MM ? pcbIUScale.MM_PER_IU : pcbIUScale.MILS_PER_IU;
+        job.m_userOrigin = UnpackVector2( aCtx.Request.user_origin() ) * scale;
+    }
+
+    job.m_includeUnspecified = aCtx.Request.include_unspecified();
+    job.m_includeDNP = aCtx.Request.include_dnp();
+    job.m_calculateHeightFromModels = !aCtx.Request.only_use_explicit_heights();
 
     return ExecuteBoardJob( pcbContext(), job );
 }

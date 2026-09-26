@@ -54,6 +54,7 @@
 #include <jobs/job_export_pcb_3d.h>
 #include <jobs/job_export_pcb_dxf.h>
 #include <jobs/job_export_pcb_drill.h>
+#include <jobs/job_export_pcb_idf.h>
 #include <jobs/job_export_pcb_ipc2581.h>
 #include <jobs/job_export_pcb_odb.h>
 #include <jobs/job_export_pcb_pdf.h>
@@ -571,6 +572,16 @@ BOOST_AUTO_TEST_CASE( StatsOutputFormat )
 BOOST_AUTO_TEST_CASE( StatsUnits )
 {
     testEnums<JOB_EXPORT_PCB_STATS::UNITS, kiapi::common::types::Units>( true );
+}
+
+BOOST_AUTO_TEST_CASE( IdfUnits )
+{
+    testEnums<JOB_EXPORT_PCB_IDF::UNITS, kiapi::common::types::Units>( true );
+}
+
+BOOST_AUTO_TEST_CASE( IdfOriginMode )
+{
+    testEnums<JOB_EXPORT_PCB_IDF::COORD_ORIGIN, kiapi::board::jobs::IdfOriginMode>();
 }
 
 BOOST_AUTO_TEST_CASE( SchematicJobPageSize )
