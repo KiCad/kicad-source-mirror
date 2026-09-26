@@ -150,6 +150,7 @@ private:
     std::set<FOOTPRINT*> queryComponentsInComponentClass( const wxString& aComponentClassName ) const;
     std::set<FOOTPRINT*> queryComponentsInGroup( const wxString& aGroupName ) const;
     std::set<BOARD_ITEM*> queryBoardItemsInGroup( const wxString& aGroupName ) const;
+    PCB_GROUP*            findPlacementGroup( const wxString& aGroupName ) const;
 
     RULE_AREA* findRAByName( const wxString& aName );
     bool       resolveConnectionTopology( RULE_AREA* aRefArea, RULE_AREA* aTargetArea,

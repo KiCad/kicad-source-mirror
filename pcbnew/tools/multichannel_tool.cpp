@@ -457,6 +457,25 @@ std::set<FOOTPRINT*> MULTICHANNEL_TOOL::queryComponentsInGroup( const wxString& 
 }
 
 
+PCB_GROUP* MULTICHANNEL_TOOL::findPlacementGroup( const wxString& aGroupName ) const
+{
+    PCB_GROUP* found = nullptr;
+
+    for( PCB_GROUP* group : board()->Groups() )
+    {
+        if( !group->GetName().Matches( aGroupName ) )
+            continue;
+
+        if( found )
+            return nullptr;
+
+        found = group;
+    }
+
+    return found;
+}
+
+
 std::set<BOARD_ITEM*> MULTICHANNEL_TOOL::queryBoardItemsInGroup( const wxString& aGroupName ) const
 {
     std::set<BOARD_ITEM*> rv;
@@ -657,8 +676,23 @@ void MULTICHANNEL_TOOL::FindExistingRuleAreas()
 
         area.m_existsAlready = true;
         area.m_zone = zone;
+        area.m_sourceType = zone->GetPlacementAreaSourceType();
         area.m_ruleName = zone->GetZoneName();
         area.m_center = zone->Outline()->COutline( 0 ).Centre();
+
+        switch( area.m_sourceType )
+        {
+        case PLACEMENT_SOURCE_T::SHEETNAME: area.m_sheetPath = zone->GetPlacementAreaSource(); break;
+
+        case PLACEMENT_SOURCE_T::COMPONENT_CLASS: area.m_componentClass = zone->GetPlacementAreaSource(); break;
+
+        case PLACEMENT_SOURCE_T::GROUP_PLACEMENT:
+            area.m_groupName = zone->GetPlacementAreaSource();
+            area.m_group = findPlacementGroup( area.m_groupName );
+            break;
+
+        case PLACEMENT_SOURCE_T::DESIGN_BLOCK: break;
+        }
 
         findComponentsInRuleArea( &area, area.m_components );
 
@@ -942,7 +976,8 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, RULE_AREA& aRefAr
     // If no anchor is provided, pick the first matched pair to avoid center-alignment shifting
     // the whole group. This keeps Apply Design Block Layout from moving the group to wherever
     // the source design block happened to be placed.
-    if( aTargetArea.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT && !aOptions.m_anchorFp )
+    if( aRefArea.m_sourceType == PLACEMENT_SOURCE_T::DESIGN_BLOCK
+        && aTargetArea.m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT && !aOptions.m_anchorFp )
     {
         if( !compat.m_matchingComponents.empty() )
             aOptions.m_anchorFp = compat.m_matchingComponents.begin()->first;
@@ -1036,11 +1071,21 @@ int MULTICHANNEL_TOOL::RepeatLayout( const TOOL_EVENT& aEvent, ZONE* aRefZone )
             if( compatData.m_groupableItems.size() < 2 )
                 continue;
 
-            pruneExistingGroups( commit, compatData.m_affectedItems );
+            // A group-driven area already has a group.
+            EDA_GROUP* group =
+                    targetArea->m_sourceType == PLACEMENT_SOURCE_T::GROUP_PLACEMENT ? targetArea->m_group : nullptr;
 
-            PCB_GROUP* group = new PCB_GROUP( board() );
+            if( group )
+            {
+                commit.Modify( group->AsEdaItem(), nullptr, RECURSE_MODE::NO_RECURSE );
+            }
+            else
+            {
+                pruneExistingGroups( commit, compatData.m_affectedItems );
 
-            commit.Add( group );
+                group = new PCB_GROUP( board() );
+                commit.Add( group->AsEdaItem() );
+            }
 
             for( BOARD_ITEM* item : compatData.m_groupableItems )
             {
