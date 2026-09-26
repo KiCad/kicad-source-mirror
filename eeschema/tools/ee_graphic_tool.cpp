@@ -161,6 +161,7 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
     int        defaultTextSize = getDefaultTextSize();
     bool       isTextBox = aEvent.IsAction( &SCH_ACTIONS::drawTextBox )
                         || aEvent.IsAction( &SCH_ACTIONS::drawSymbolTextBox );
+    bool       isLineTool = aEvent.IsAction( &SCH_ACTIONS::drawSymbolLines );
     SHAPE_T    type = isTextBox ? SHAPE_T::RECTANGLE : aEvent.Parameter<SHAPE_T>();
 
     if( m_inDrawingTool )
@@ -304,14 +305,14 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
                           || evt->IsAction( &ACTIONS::finishInteractive ) ) )
         {
             bool finished = false;
-            bool doubleClick = false;
+            bool closedShape = false;
 
             if( evt->IsDblClick( BUT_LEFT )
                     || evt->IsAction( &ACTIONS::cursorDblClick )
                     || evt->IsAction( &ACTIONS::finishInteractive ) )
             {
                 finished = true;
-                doubleClick = true;
+                closedShape = !isLineTool;
             }
             else
             {
@@ -320,7 +321,7 @@ int EE_GRAPHIC_TOOL::DrawShape( const TOOL_EVENT& aEvent )
 
             if( finished )
             {
-                item->EndEdit( doubleClick );
+                item->EndEdit( closedShape );
                 item->SetFlags( IS_NEW );
 
                 if( isTextBox )
