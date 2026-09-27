@@ -678,26 +678,21 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
             m_symbolList->Append( UnescapeString( symbol->GetName() ) );
     }
 
-    if( m_symbolList->IsEmpty() )
-    {
-        SetSelectedSymbol( wxEmptyString );
-        m_bodyStyle = BODY_STYLE::BASE;
-        m_unit    = 1;
-        return true;
-    }
-
     int  index = m_symbolList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibItemName() ) );
     bool selChanged = false;
 
     if( index == wxNOT_FOUND )
     {
-        // Select the first library entry when the previous entry name does not exist in
-        // the current library.
+        // Clear out the current selection so that we don't match same-named symbols between
+        // libraries.
+        SetSelectedSymbol( wxEmptyString );
+
+        // Select the first library entry (if available) when the previous entry name no
+        // longer exists.
+        index       = m_symbolList->IsEmpty() ? -1 : 0;
         m_bodyStyle = BODY_STYLE::BASE;
         m_unit      = 1;
-        index       = -1;
-        selChanged     = true;
-        SetSelectedSymbol( wxEmptyString );
+        selChanged  = true;
     }
 
     m_symbolList->SetSelection( index, true );
