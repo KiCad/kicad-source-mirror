@@ -39,7 +39,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
 "PO-Revision-Date: 2026-09-28 07:51+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -64028,9 +64028,8 @@ msgid "Via Properties"
 msgstr "Via-Eigenschaften"
 
 #: pcbnew/pcb_track.cpp:3560
-#, fuzzy
 msgid "Automatically Update Net"
-msgstr "Via-Netze automatisch aktualisieren"
+msgstr "Netz automatisch aktualisieren"
 
 #: pcbnew/pcb_track.cpp:3572 pcbnew/widgets/pcb_properties_panel.cpp:1359
 msgid "Layer Top"
@@ -69308,9 +69307,8 @@ msgid "the design block's board layout is empty"
 msgstr "Das Designblocklayout ist leer"
 
 #: pcbnew/tools/pcb_control.cpp:1677
-#, fuzzy
 msgid "the group has no items"
-msgstr "Gruppe hat keine Footprints"
+msgstr "die Gruppe hat keine Elemente"
 
 #: pcbnew/tools/pcb_control.cpp:1682 pcbnew/tools/pcb_control.cpp:1809
 msgid "(unnamed group)"
@@ -69451,18 +69449,16 @@ msgid "Layer '%s' is hidden; nothing will be shown until you make it visible."
 msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:3052
-#, fuzzy
 msgid "Place Drill Chart"
-msgstr "Alle Einheiten platzieren"
+msgstr "Bohrdiagramm platzieren"
 
 #: pcbnew/tools/pcb_control.cpp:3093
 msgid "Every documentation layer already has a drill map."
 msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:3118
-#, fuzzy
 msgid "Place Drill Map"
-msgstr "Via hinzufügen"
+msgstr "Bohrkarte platzieren"
 
 #: pcbnew/tools/pcb_control.cpp:3272
 msgid "Embed 3D Models"
@@ -70462,19 +70458,17 @@ msgid "Configure net classes"
 msgstr "Netzklassen konfigurieren"
 
 #: pcbnew/widgets/constraint_list_view.cpp:35
-#, fuzzy
 msgid "Item 1"
-msgstr "Element"
+msgstr "Element 1"
 
 #: pcbnew/widgets/constraint_list_view.cpp:36
-#, fuzzy
 msgid "Item 2"
-msgstr "Element"
+msgstr "Element 2"
 
 #: pcbnew/widgets/constraint_list_view.cpp:75
 #, c-format
 msgid " (+%zu)"
-msgstr ""
+msgstr " (+%zu)"
 
 #: pcbnew/widgets/filedlg_hook_save_project.h:36
 msgid "Create a new project for this board"
@@ -70574,9 +70568,8 @@ msgid "Die Length"
 msgstr "Die-Länge"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:164
-#, fuzzy
 msgid "Unrouted Length"
-msgstr "Geroutete Länge"
+msgstr "Ungeroutete Länge"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:167
 msgid "Pad Count"
@@ -70873,7 +70866,6 @@ msgid "Copper thieving"
 msgstr "Copper Thieving"
 
 #: pcbnew/zone.cpp:2281
-#, fuzzy
 msgid "Squares"
 msgstr "Quadrate"
 
