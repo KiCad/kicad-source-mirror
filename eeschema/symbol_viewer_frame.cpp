@@ -560,7 +560,9 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
     }
     else
     {
-        wxStringTokenizer tokenizer( m_libFilter->GetValue(), " \t\r\n", wxTOKEN_STRTOK );
+        wxStringTokenizer  tokenizer( m_libFilter->GetValue(), " \t\r\n", wxTOKEN_STRTOK );
+        std::set<wxString> successfulMatches;
+        std::set<wxString> failedMatches;
 
         while( tokenizer.HasMoreTokens() )
         {
@@ -570,8 +572,16 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
             for( const wxString& lib : libNicknames )
             {
                 if( matcher.Find( lib.Lower() ) )
-                    process( lib );
+                    successfulMatches.insert( lib );
+                else
+                    failedMatches.insert( lib );
             }
+        }
+
+        for( const wxString& lib : successfulMatches )
+        {
+            if( !failedMatches.contains( lib ) )
+                process( lib );
         }
     }
 
