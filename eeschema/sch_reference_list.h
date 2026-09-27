@@ -185,12 +185,14 @@ public:
 
     int CompareValue( const SCH_REFERENCE& item ) const
     {
-        return m_value.Cmp( item.m_value );
+        // Values are compared with case sensitivity
+        return StrNumCmp( m_value, item.m_value, false );
     }
 
     int CompareRef( const SCH_REFERENCE& item ) const
     {
-        return m_ref.CmpNoCase( item.m_ref );
+        // References are compared ignoring case
+        return StrNumCmp( m_ref, item.m_ref, true );
     }
 
     int CompareLibId( const SCH_REFERENCE& item ) const
