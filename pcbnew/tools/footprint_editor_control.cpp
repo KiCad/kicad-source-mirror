@@ -236,7 +236,14 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
     // Give the new footprint a resolvable identity so it opens in its own tab instead of
     // overwriting the active one.
     if( !libraryName.IsEmpty() )
+    {
         newFootprint->SetFPID( LIB_ID( libraryName, newFootprint->GetFPID().GetLibItemName() ) );
+    }
+    else
+    {
+        newFootprint->SetParent( nullptr );
+        m_frame->CreateUnsavedFootprintTab();
+    }
 
     canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     m_frame->AddFootprintToBoard( newFootprint );
@@ -249,6 +256,7 @@ int FOOTPRINT_EDITOR_CONTROL::NewFootprint( const TOOL_EVENT& aEvent )
 
     m_frame->Zoom_Automatique( false );
     m_frame->GetScreen()->SetContentModified();
+    m_frame->OnModify();
 
     tryToSaveFootprintInLibrary( *newFootprint, selected );
 
