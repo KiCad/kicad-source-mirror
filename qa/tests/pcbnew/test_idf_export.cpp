@@ -170,7 +170,7 @@ BOOST_AUTO_TEST_CASE( FootprintCutoutIsExported )
     std::filesystem::remove( emnPath );
 
     JOB_EXPORT_PCB_IDF job;
-    job.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER;
+    job.m_originMode = IDF_SETTINGS::COORD_ORIGIN::USER;
     FILENAME_RESOLVER resolver;
     WX_STRING_REPORTER reporter;
 
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE( RotatedPolygonCutoutIsExported )
     std::filesystem::remove( emnPath );
 
     JOB_EXPORT_PCB_IDF job;
-    job.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER;
+    job.m_originMode = IDF_SETTINGS::COORD_ORIGIN::USER;
     FILENAME_RESOLVER resolver;
     WX_STRING_REPORTER reporter;
 

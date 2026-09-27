@@ -576,12 +576,12 @@ BOOST_AUTO_TEST_CASE( StatsUnits )
 
 BOOST_AUTO_TEST_CASE( IdfUnits )
 {
-    testEnums<JOB_EXPORT_PCB_IDF::UNITS, kiapi::common::types::Units>( true );
+    testEnums<IDF_SETTINGS::UNITS, kiapi::common::types::Units>( true );
 }
 
 BOOST_AUTO_TEST_CASE( IdfOriginMode )
 {
-    testEnums<JOB_EXPORT_PCB_IDF::COORD_ORIGIN, kiapi::board::jobs::IdfOriginMode>();
+    testEnums<IDF_SETTINGS::COORD_ORIGIN, kiapi::board::jobs::IdfOriginMode>();
 }
 
 BOOST_AUTO_TEST_CASE( SchematicJobPageSize )

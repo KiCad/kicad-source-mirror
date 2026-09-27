@@ -23,31 +23,31 @@
 #include <wildcards_and_files_ext.h>
 #include <wx/filename.h>
 
-NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_IDF::UNITS,
+NLOHMANN_JSON_SERIALIZE_ENUM( IDF_SETTINGS::UNITS,
                               {
-                                  { JOB_EXPORT_PCB_IDF::UNITS::MM,   "mm" },
-                                  { JOB_EXPORT_PCB_IDF::UNITS::MILS, "mils" },
+                                  { IDF_SETTINGS::UNITS::MM,   "mm" },
+                                  { IDF_SETTINGS::UNITS::MILS, "mils" },
                               } )
 
-NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_IDF::COORD_ORIGIN,
+NLOHMANN_JSON_SERIALIZE_ENUM( IDF_SETTINGS::COORD_ORIGIN,
                               {
-                                  { JOB_EXPORT_PCB_IDF::COORD_ORIGIN::DRILL,  "drill" },
-                                  { JOB_EXPORT_PCB_IDF::COORD_ORIGIN::GRID,   "grid" },
-                                  { JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER, "center" },
-                                  { JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER,   "user" },
+                                  { IDF_SETTINGS::COORD_ORIGIN::DRILL,  "drill" },
+                                  { IDF_SETTINGS::COORD_ORIGIN::GRID,   "grid" },
+                                  { IDF_SETTINGS::COORD_ORIGIN::CENTER, "center" },
+                                  { IDF_SETTINGS::COORD_ORIGIN::USER,   "user" },
                               } )
 
 JOB_EXPORT_PCB_IDF::JOB_EXPORT_PCB_IDF() :
         JOB( "idf", false ),
         m_filename(),
-        m_units( UNITS::MM ),
-        m_originMode( COORD_ORIGIN::CENTER ),
+        m_units( IDF_SETTINGS::UNITS::MM ),
+        m_originMode( IDF_SETTINGS::COORD_ORIGIN::CENTER ),
         m_includeUnspecified( true ),
         m_includeDNP( true ),
         m_calculateHeightFromModels( true )
 {
-    m_params.emplace_back( new JOB_PARAM<UNITS>( "units", &m_units, m_units ) );
-    m_params.emplace_back( new JOB_PARAM<COORD_ORIGIN>( "origin", &m_originMode, m_originMode ) );
+    m_params.emplace_back( new JOB_PARAM<IDF_SETTINGS::UNITS>( "units", &m_units, m_units ) );
+    m_params.emplace_back( new JOB_PARAM<IDF_SETTINGS::COORD_ORIGIN>( "origin", &m_originMode, m_originMode ) );
     m_params.emplace_back( new JOB_PARAM<double>( "user_origin.x", &m_userOrigin.x, m_userOrigin.x ) );
     m_params.emplace_back( new JOB_PARAM<double>( "user_origin.y", &m_userOrigin.y, m_userOrigin.y ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "include_unspecified", &m_includeUnspecified, m_includeUnspecified ) );

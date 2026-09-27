@@ -65,6 +65,8 @@ void DIALOG_EXPORT_IDF3::setupDialog()
     m_rbOriginGrid->Bind( wxEVT_RADIOBUTTON, &DIALOG_EXPORT_IDF3::onRadioButtonsChanged, this );
     m_rbOriginBoardCenter->Bind( wxEVT_RADIOBUTTON, &DIALOG_EXPORT_IDF3::onRadioButtonsChanged, this );
 
+    OptOut( m_filePickerIDF );
+
     if( m_job )
         SetupStandardButtons();
     else
@@ -96,62 +98,120 @@ void DIALOG_EXPORT_IDF3::OnOKButton( wxCommandEvent& event )
 }
 
 
+void DIALOG_EXPORT_IDF3::ApplySettings( const IDF_EXPORT_SETTINGS& aSettings )
+{
+    m_outputUnitsChoice->SetSelection( aSettings.units == IDF_SETTINGS::UNITS::MILS ? 1 : 0 );
+
+    switch( aSettings.originMode )
+    {
+    default:
+    case IDF_SETTINGS::COORD_ORIGIN::CENTER:  m_rbOriginBoardCenter->SetValue( true ); break;
+    case IDF_SETTINGS::COORD_ORIGIN::GRID:    m_rbOriginGrid->SetValue( true );        break;
+    case IDF_SETTINGS::COORD_ORIGIN::DRILL:   m_rbOriginDrill->SetValue( true );       break;
+    case IDF_SETTINGS::COORD_ORIGIN::USER:    m_rbOriginUser->SetValue( true );        break;
+    }
+
+    m_xPos.SetValue( pcbIUScale.mmToIU( aSettings.userOriginX ) );
+    m_yPos.SetValue( pcbIUScale.mmToIU( aSettings.userOriginY ) );
+
+    m_cbRemoveDNP->SetValue( !aSettings.includeDNP );
+    m_cbRemoveUnspecified->SetValue( !aSettings.includeUnspecified );
+    m_cbHeightFromModels->SetValue( aSettings.calculateHeightFromModels );
+}
+
+
+IDF_EXPORT_SETTINGS DIALOG_EXPORT_IDF3::GetSettings() const
+{
+    IDF_EXPORT_SETTINGS settings;
+
+    settings.units = m_outputUnitsChoice->GetSelection() ? IDF_SETTINGS::UNITS::MILS : IDF_SETTINGS::UNITS::MM;
+
+    if( m_rbOriginBoardCenter->GetValue() )
+        settings.originMode = IDF_SETTINGS::COORD_ORIGIN::CENTER;
+    else if( m_rbOriginGrid->GetValue() )
+        settings.originMode = IDF_SETTINGS::COORD_ORIGIN::GRID;
+    else if( m_rbOriginDrill->GetValue() )
+        settings.originMode = IDF_SETTINGS::COORD_ORIGIN::DRILL;
+    else if( m_rbOriginUser->GetValue() )
+        settings.originMode = IDF_SETTINGS::COORD_ORIGIN::USER;
+
+    settings.userOriginX = m_xPos.GetValue() / pcbIUScale.IU_PER_MM;
+    settings.userOriginY = m_yPos.GetValue() / pcbIUScale.IU_PER_MM;
+
+    settings.includeDNP = !m_cbRemoveDNP->GetValue();
+    settings.includeUnspecified = !m_cbRemoveUnspecified->GetValue();
+    settings.calculateHeightFromModels = m_cbHeightFromModels->GetValue();
+
+    return settings;
+}
+
+
 void DIALOG_EXPORT_IDF3::ApplyJobSettings( const JOB_EXPORT_PCB_IDF& aSettings )
 {
     SetTitle( aSettings.GetSettingsDialogTitle() );
 
+    IDF_EXPORT_SETTINGS settings;
+
     switch( aSettings.m_units )
     {
     default:
-    case JOB_EXPORT_PCB_IDF::UNITS::MM:     m_outputUnitsChoice->SetSelection( 0 ); break;
-    case JOB_EXPORT_PCB_IDF::UNITS::MILS:   m_outputUnitsChoice->SetSelection( 1 ); break;
+    case IDF_SETTINGS::UNITS::MM:     settings.units = IDF_SETTINGS::UNITS::MM;     break;
+    case IDF_SETTINGS::UNITS::MILS:   settings.units = IDF_SETTINGS::UNITS::MILS;   break;
     }
 
     switch( aSettings.m_originMode )
     {
     default:
-    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER:  m_rbOriginBoardCenter->SetValue( true ); break;
-    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::GRID:    m_rbOriginGrid->SetValue( true );        break;
-    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::DRILL:   m_rbOriginDrill->SetValue( true );       break;
-    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER:    m_rbOriginUser->SetValue( true );        break;
+    case IDF_SETTINGS::COORD_ORIGIN::CENTER:  settings.originMode = IDF_SETTINGS::COORD_ORIGIN::CENTER; break;
+    case IDF_SETTINGS::COORD_ORIGIN::GRID:    settings.originMode = IDF_SETTINGS::COORD_ORIGIN::GRID;   break;
+    case IDF_SETTINGS::COORD_ORIGIN::DRILL:   settings.originMode = IDF_SETTINGS::COORD_ORIGIN::DRILL;  break;
+    case IDF_SETTINGS::COORD_ORIGIN::USER:    settings.originMode = IDF_SETTINGS::COORD_ORIGIN::USER;   break;
     }
 
-    // Settings are stored in m_units; unit binder wants IU
-    double scale = aSettings.m_units == JOB_EXPORT_PCB_IDF::UNITS::MM ? pcbIUScale.IU_PER_MM : pcbIUScale.IU_PER_MILS;
+    // The job stores the origin in m_units; the project stores it in mm
+    double iuPerUnit = aSettings.m_units == IDF_SETTINGS::UNITS::MM ? pcbIUScale.IU_PER_MM : pcbIUScale.IU_PER_MILS;
 
-    m_xPos.SetValue( aSettings.m_userOrigin.x * scale );
-    m_yPos.SetValue( aSettings.m_userOrigin.y * scale );
+    settings.userOriginX = aSettings.m_userOrigin.x * iuPerUnit * pcbIUScale.MM_PER_IU;
+    settings.userOriginY = aSettings.m_userOrigin.y * iuPerUnit * pcbIUScale.MM_PER_IU;
+    settings.includeDNP = aSettings.m_includeDNP;
+    settings.includeUnspecified = aSettings.m_includeUnspecified;
+    settings.calculateHeightFromModels = aSettings.m_calculateHeightFromModels;
 
-    m_cbRemoveDNP->SetValue( !aSettings.m_includeDNP );
-    m_cbRemoveUnspecified->SetValue( !aSettings.m_includeUnspecified );
-    m_cbHeightFromModels->SetValue( aSettings.m_calculateHeightFromModels );
+    ApplySettings( settings );
 }
 
 
 void DIALOG_EXPORT_IDF3::GetJobSettings( JOB_EXPORT_PCB_IDF& aSettingsOut ) const
 {
-    aSettingsOut.m_units = m_outputUnitsChoice->GetSelection() ? JOB_EXPORT_PCB_IDF::UNITS::MILS
-                                                               : JOB_EXPORT_PCB_IDF::UNITS::MM;
+    IDF_EXPORT_SETTINGS settings = GetSettings();
 
-    if( m_rbOriginBoardCenter->GetValue() )
-        aSettingsOut.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER;
-    else if( m_rbOriginGrid->GetValue() )
-        aSettingsOut.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::GRID;
-    else if( m_rbOriginDrill->GetValue() )
-        aSettingsOut.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::DRILL;
-    else if( m_rbOriginUser->GetValue() )
-        aSettingsOut.m_originMode = JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER;
+    aSettingsOut.m_units = settings.units;
 
-    // Settings are stored in m_units; unit binder wants IU
-    double scale = aSettingsOut.m_units == JOB_EXPORT_PCB_IDF::UNITS::MM ? pcbIUScale.MM_PER_IU
-                                                                         : pcbIUScale.MILS_PER_IU;
+    switch( settings.originMode )
+    {
+    default:
+    case IDF_SETTINGS::COORD_ORIGIN::CENTER:
+        aSettingsOut.m_originMode = IDF_SETTINGS::COORD_ORIGIN::CENTER;
+        break;
+    case IDF_SETTINGS::COORD_ORIGIN::GRID:
+        aSettingsOut.m_originMode = IDF_SETTINGS::COORD_ORIGIN::GRID;
+        break;
+    case IDF_SETTINGS::COORD_ORIGIN::DRILL:
+        aSettingsOut.m_originMode = IDF_SETTINGS::COORD_ORIGIN::DRILL;
+        break;
+    case IDF_SETTINGS::COORD_ORIGIN::USER:
+        aSettingsOut.m_originMode = IDF_SETTINGS::COORD_ORIGIN::USER;
+        break;
+    }
 
-    aSettingsOut.m_userOrigin.x = m_xPos.GetValue() * scale;
-    aSettingsOut.m_userOrigin.y = m_yPos.GetValue() * scale;
+    // The project stores the origin in mm; the job stores it in m_units
+    double iuPerUnit = aSettingsOut.m_units == IDF_SETTINGS::UNITS::MM ? pcbIUScale.IU_PER_MM : pcbIUScale.IU_PER_MILS;
 
-    aSettingsOut.m_includeDNP = !m_cbRemoveDNP->GetValue();
-    aSettingsOut.m_includeUnspecified = !m_cbRemoveUnspecified->GetValue();
-    aSettingsOut.m_calculateHeightFromModels = m_cbHeightFromModels->GetValue();
+    aSettingsOut.m_userOrigin.x = settings.userOriginX * iuPerUnit;
+    aSettingsOut.m_userOrigin.y = settings.userOriginY * iuPerUnit;
+    aSettingsOut.m_includeDNP = settings.includeDNP;
+    aSettingsOut.m_includeUnspecified = settings.includeUnspecified;
+    aSettingsOut.m_calculateHeightFromModels = settings.calculateHeightFromModels;
 }
 
 
@@ -161,6 +221,8 @@ bool DIALOG_EXPORT_IDF3::TransferDataToWindow()
 
     if( m_job )
         ApplyJobSettings( *m_job );
+    else
+        ApplySettings( m_parent->Prj().GetProjectFile().m_IdfExportSettings );
 
     wxString path = m_parent->GetLastPath( LAST_PATH_IDF );
 
@@ -266,27 +328,46 @@ void DIALOG_EXPORT_IDF3::doExport()
     wxBusyCursor dummy;
 
     if( !exporter.Export( m_filePickerIDF->GetPath() ) )
+    {
         wxMessageBox( wxString::Format( _( "Failed to create file '%s'." ), m_filePickerIDF->GetPath() ) );
+        return;
+    }
+
+    GetJobSettings( job );
+
+    IDF_EXPORT_SETTINGS& projectSettings = m_parent->Prj().GetProjectFile().m_IdfExportSettings;
+
+    projectSettings.units = job.m_units;
+
+    switch( job.m_originMode )
+    {
+    default:
+    case IDF_SETTINGS::COORD_ORIGIN::CENTER:  projectSettings.originMode = IDF_SETTINGS::COORD_ORIGIN::CENTER; break;
+    case IDF_SETTINGS::COORD_ORIGIN::GRID:    projectSettings.originMode = IDF_SETTINGS::COORD_ORIGIN::GRID;   break;
+    case IDF_SETTINGS::COORD_ORIGIN::DRILL:   projectSettings.originMode = IDF_SETTINGS::COORD_ORIGIN::DRILL;  break;
+    case IDF_SETTINGS::COORD_ORIGIN::USER:    projectSettings.originMode = IDF_SETTINGS::COORD_ORIGIN::USER;   break;
+    }
+
+    // The job stores the origin in m_units; the project stores it in mm
+    double iuPerUnit = job.m_units == IDF_SETTINGS::UNITS::MM ? pcbIUScale.IU_PER_MM : pcbIUScale.IU_PER_MILS;
+
+    projectSettings.userOriginX = job.m_userOrigin.x * iuPerUnit * pcbIUScale.MM_PER_IU;
+    projectSettings.userOriginY = job.m_userOrigin.y * iuPerUnit * pcbIUScale.MM_PER_IU;
+    projectSettings.includeDNP = job.m_includeDNP;
+    projectSettings.includeUnspecified = job.m_includeUnspecified;
+    projectSettings.calculateHeightFromModels = job.m_calculateHeightFromModels;
+
+    m_parent->SetLastPath( LAST_PATH_IDF, m_filePickerIDF->GetPath() );
 
     if( resetJob )
         m_job = nullptr;
 }
 
 
-wxString DIALOG_EXPORT_IDF3::GetFilePath() const
-{
-    return m_filePickerIDF->GetPath();
-}
-
-
 int BOARD_EDITOR_CONTROL::ExportIDF( const TOOL_EVENT& aEvent )
 {
     DIALOG_EXPORT_IDF3 dlg( m_frame );
-
-    if ( dlg.ShowModal() != wxID_OK )
-        return 0;
-
-    m_frame->SetLastPath( LAST_PATH_IDF, dlg.GetFilePath() );
+    dlg.ShowModal();
 
     return 0;
 }

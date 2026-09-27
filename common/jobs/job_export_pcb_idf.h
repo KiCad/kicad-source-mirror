@@ -21,6 +21,7 @@
 #define JOB_EXPORT_PCB_IDF_H
 
 #include <kicommon.h>
+#include <io/idf/idf_settings.h>
 #include <math/vector2d.h>
 #include "job.h"
 
@@ -33,24 +34,10 @@ public:
 
     void SetDefaultOutputPath( const wxString& aReferenceName );
 
-    enum class UNITS
-    {
-        MM,
-        MILS
-    };
-
-    enum class COORD_ORIGIN
-    {
-        DRILL,
-        GRID,
-        CENTER,
-        USER
-    };
-
     wxString m_filename;
-    UNITS    m_units;
+    IDF_SETTINGS::UNITS    m_units;
 
-    COORD_ORIGIN m_originMode;
+    IDF_SETTINGS::COORD_ORIGIN m_originMode;
     VECTOR2D     m_userOrigin;      ///< In whatever units the user specified in m_units
 
     bool     m_includeUnspecified;

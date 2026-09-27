@@ -40,8 +40,6 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    wxString GetFilePath() const;
-
 protected:
     void OnOKButton( wxCommandEvent& event ) override;
 
@@ -50,6 +48,9 @@ private:
     void doExport();
     void setupDialog();
     void onRadioButtonsChanged( wxCommandEvent& event );
+
+    void ApplySettings( const IDF_EXPORT_SETTINGS& aSettings );
+    IDF_EXPORT_SETTINGS GetSettings() const;
 
     UNIT_BINDER     m_xPos;
     UNIT_BINDER     m_yPos;

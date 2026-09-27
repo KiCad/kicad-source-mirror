@@ -25,6 +25,7 @@
 #include <project/tuning_profiles.h>
 #include <settings/json_settings_internals.h>
 #include <project/project_file.h>
+#include <jobs/job_export_pcb_idf.h>
 #include <project/board_project_settings_params.h>
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
@@ -265,6 +266,30 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
 
     m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.ref_des",
             &m_IP2581Bom.refDes, wxEmptyString ) );
+
+    m_params.emplace_back( new PARAM_ENUM<IDF_SETTINGS::UNITS>( "board.idf_export.units",
+            &m_IdfExportSettings.units, IDF_SETTINGS::UNITS::MM,
+            IDF_SETTINGS::UNITS::MM, IDF_SETTINGS::UNITS::MILS ) );
+
+    m_params.emplace_back( new PARAM_ENUM<IDF_SETTINGS::COORD_ORIGIN>(
+            "board.idf_export.origin_mode", &m_IdfExportSettings.originMode,
+            IDF_SETTINGS::COORD_ORIGIN::CENTER, IDF_SETTINGS::COORD_ORIGIN::DRILL,
+            IDF_SETTINGS::COORD_ORIGIN::USER ) );
+
+    m_params.emplace_back( new PARAM<double>( "board.idf_export.user_origin_x",
+            &m_IdfExportSettings.userOriginX, 0.0 ) );
+
+    m_params.emplace_back( new PARAM<double>( "board.idf_export.user_origin_y",
+            &m_IdfExportSettings.userOriginY, 0.0 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "board.idf_export.include_unspecified",
+            &m_IdfExportSettings.includeUnspecified, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "board.idf_export.include_dnp",
+            &m_IdfExportSettings.includeDNP, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "board.idf_export.calculate_height_from_models",
+            &m_IdfExportSettings.calculateHeightFromModels, true ) );
 
 
     registerMigration( 1, 2, std::bind( &PROJECT_FILE::migrateSchema1To2, this ) );

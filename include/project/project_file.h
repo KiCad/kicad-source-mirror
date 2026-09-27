@@ -268,6 +268,8 @@ public:
 
     struct IP2581_BOM             m_IP2581Bom;      /// IPC-2581 BOM settings
 
+    IDF_EXPORT_SETTINGS           m_IdfExportSettings;
+
 private:
     /**
      * Schema version 2: Bump for KiCad 9 layer numbering changes.

@@ -25,6 +25,7 @@
 #include <lset.h>
 #include <math/box2.h>
 #include <glm/glm.hpp>
+#include <io/idf/idf_settings.h>
 
 /**
  * This file contains data structures that are saved in the project file or project local settings
@@ -140,6 +141,18 @@ enum class RATSNEST_MODE
 {
     ALL,        ///< Ratsnest lines are drawn to items on all layers (default)
     VISIBLE     ///< Ratsnest lines are drawn to items on visible layers only
+};
+
+/// Persisted settings for the IDF export dialog
+struct KICOMMON_API IDF_EXPORT_SETTINGS
+{
+    IDF_SETTINGS::UNITS        units = IDF_SETTINGS::UNITS::MM;
+    IDF_SETTINGS::COORD_ORIGIN originMode = IDF_SETTINGS::COORD_ORIGIN::CENTER;
+    double                     userOriginX = 0.0; ///< In mm
+    double                     userOriginY = 0.0; ///< In mm
+    bool                       includeUnspecified = true;
+    bool                       includeDNP = true;
+    bool                       calculateHeightFromModels = true;
 };
 
 /// BOM Data choices for IPC2581 export

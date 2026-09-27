@@ -585,8 +585,7 @@ IDF3_COMP_OUTLINE* IDF_EXPORTER::createOutlineFromExtrudedBody( const FOOTPRINT*
     outline.Rotate( -aFootprint->GetOrientation() );
     outline.Simplify();
 
-    double scale = m_settings->m_units == JOB_EXPORT_PCB_IDF::UNITS::MILS ? pcbIUScale.MILS_PER_IU
-                                                                          : pcbIUScale.MM_PER_IU;
+    double scale = m_settings->m_units == IDF_SETTINGS::UNITS::MILS ? pcbIUScale.MILS_PER_IU : pcbIUScale.MM_PER_IU;
 
     SHAPE_LINE_CHAIN chain = outline.COutline( 0 );
 
@@ -665,8 +664,8 @@ IDF3_COMP_OUTLINE* IDF_EXPORTER::createOutlineFromExtrudedBody( const FOOTPRINT*
                         : IDF3::COMP_TYPE::COMP_MECH;
 
         libOutline->SetComponentClass( compType );
-        libOutline->SetUnit( m_settings->m_units == JOB_EXPORT_PCB_IDF::UNITS::MILS ? IDF3::IDF_UNIT::UNIT_THOU
-                                                                                    : IDF3::IDF_UNIT::UNIT_MM );
+        libOutline->SetUnit( m_settings->m_units == IDF_SETTINGS::UNITS::MILS ? IDF3::IDF_UNIT::UNIT_THOU
+                                                                              : IDF3::IDF_UNIT::UNIT_MM );
 
         double height = std::max( 0.0, aBody.m_height * aBody.m_scale.z * scale );
 
@@ -994,8 +993,8 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
                 }
             }
 
-            double unitScale = m_settings->m_units == JOB_EXPORT_PCB_IDF::UNITS::MILS ? pcbIUScale.MILS_PER_IU
-                                                                                      : pcbIUScale.MM_PER_IU;
+            double unitScale = m_settings->m_units == IDF_SETTINGS::UNITS::MILS ? pcbIUScale.MILS_PER_IU
+                                                                                : pcbIUScale.MM_PER_IU;
 
             IDF3_COMP_OUTLINE_DATA* data = new IDF3_COMP_OUTLINE_DATA( comp, libOutline );
             data->SetOffsets( 0.0, 0.0, standoffHeight * unitScale, 0.0 );
@@ -1020,25 +1019,24 @@ VECTOR2D IDF_EXPORTER::getOrigin() const
     switch( m_settings->m_originMode )
     {
     default:
-    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER:
+    case IDF_SETTINGS::COORD_ORIGIN::CENTER:
     {
         BOX2I bbox = m_board->GetBoardEdgesBoundingBox();
         origin = bbox.Centre() * pcbIUScale.MM_PER_IU;
         break;
     }
 
-    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::GRID:
+    case IDF_SETTINGS::COORD_ORIGIN::GRID:
         origin = m_board->GetDesignSettings().GetGridOrigin() * pcbIUScale.MM_PER_IU;
         break;
 
-    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::DRILL:
+    case IDF_SETTINGS::COORD_ORIGIN::DRILL:
         origin = m_board->GetDesignSettings().GetAuxOrigin() * pcbIUScale.MM_PER_IU;
         break;
 
-    case JOB_EXPORT_PCB_IDF::COORD_ORIGIN::USER:
+    case IDF_SETTINGS::COORD_ORIGIN::USER:
     {
-        double scale = m_settings->m_units == JOB_EXPORT_PCB_IDF::UNITS::MM ? pcbIUScale.MM_PER_IU
-                                                                            : pcbIUScale.MILS_PER_IU;
+        double scale = m_settings->m_units == IDF_SETTINGS::UNITS::MM ? pcbIUScale.MM_PER_IU : pcbIUScale.MILS_PER_IU;
         origin = m_settings->m_userOrigin *scale;
         break;
     }
@@ -1063,7 +1061,7 @@ bool IDF_EXPORTER::Export( const wxString& aFullFileName ) const
     double scale = pcbIUScale.MM_PER_IU;   // we must scale internal units to mm for IDF
     IDF3::IDF_UNIT idfUnit;
 
-    if( m_settings->m_units == JOB_EXPORT_PCB_IDF::UNITS::MILS )
+    if( m_settings->m_units == IDF_SETTINGS::UNITS::MILS )
     {
         idfUnit = IDF3::IDF_UNIT::UNIT_THOU;
         idfBoard.SetUserPrecision( 1 );

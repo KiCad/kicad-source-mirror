@@ -93,13 +93,13 @@ int CLI::PCB_EXPORT_IDF_COMMAND::doPerform( KIWAY& aKiway )
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
 
-    idfJob->m_units = magic_enum::enum_cast<JOB_EXPORT_PCB_IDF::UNITS>( m_argParser.get<std::string>( ARG_UNITS ),
-                                                                        magic_enum::case_insensitive )
-                              .value_or( JOB_EXPORT_PCB_IDF::UNITS::MM );
+    idfJob->m_units = magic_enum::enum_cast<IDF_SETTINGS::UNITS>( m_argParser.get<std::string>( ARG_UNITS ),
+                                                                  magic_enum::case_insensitive )
+                              .value_or( IDF_SETTINGS::UNITS::MM );
 
-    idfJob->m_originMode = magic_enum::enum_cast<JOB_EXPORT_PCB_IDF::COORD_ORIGIN>(
+    idfJob->m_originMode = magic_enum::enum_cast<IDF_SETTINGS::COORD_ORIGIN>(
                                    m_argParser.get<std::string>( ARG_ORIGIN ), magic_enum::case_insensitive )
-                                   .value_or( JOB_EXPORT_PCB_IDF::COORD_ORIGIN::CENTER );
+                                   .value_or( IDF_SETTINGS::COORD_ORIGIN::CENTER );
 
     idfJob->m_userOrigin.x = m_argParser.get<double>( ARG_USER_ORIGIN_X );
     idfJob->m_userOrigin.y = m_argParser.get<double>( ARG_USER_ORIGIN_Y );

@@ -2903,13 +2903,13 @@ API_HANDLER_PCB::handleRunBoardJobExportIdf( const HANDLER_CONTEXT<RunBoardJobEx
     job.m_filename = pcbContext()->GetCurrentFileName();
     job.SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
-    job.m_units = FromProtoEnum<JOB_EXPORT_PCB_IDF::UNITS>( aCtx.Request.units() );
-    job.m_originMode = FromProtoEnum<JOB_EXPORT_PCB_IDF::COORD_ORIGIN>( aCtx.Request.origin_mode() );
+    job.m_units = FromProtoEnum<IDF_SETTINGS::UNITS>( aCtx.Request.units() );
+    job.m_originMode = FromProtoEnum<IDF_SETTINGS::COORD_ORIGIN>( aCtx.Request.origin_mode() );
 
     if( aCtx.Request.origin_mode() == IdfOriginMode::IOM_USER )
     {
         // m_userOrigin is expressed in the units selected by m_units
-        double scale = job.m_units == JOB_EXPORT_PCB_IDF::UNITS::MM ? pcbIUScale.MM_PER_IU : pcbIUScale.MILS_PER_IU;
+        double scale = job.m_units == IDF_SETTINGS::UNITS::MM ? pcbIUScale.MM_PER_IU : pcbIUScale.MILS_PER_IU;
         job.m_userOrigin = UnpackVector2( aCtx.Request.user_origin() ) * scale;
     }
 
