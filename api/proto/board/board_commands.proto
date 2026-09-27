@@ -619,6 +619,33 @@ message PlaceFootprintFromLibrary
   optional kiapi.board.types.BoardLayer layer = 5;
 }
 
+// What items to use to calculate the board bounding box
+// Since: 11.0
+enum BoardBoundingBoxMode
+{
+  BBBM_UNKNOWN = 0;
+  // All board items on visible layers
+  BBBM_ALL_ITEMS = 1;
+  // Items on visible physical (copper/technical) layers only
+  BBBM_PHYSICAL_LAYERS_ONLY = 2;
+  // Graphics on Edge.Cuts only
+  BBBM_BOARD_EDGES_ONLY = 3;
+}
+
+// Returns BoardBoundingBoxResponse
+// Since: 11.0
+message GetBoardBoundingBox
+{
+  kiapi.common.types.DocumentSpecifier board = 1;
+  BoardBoundingBoxMode mode = 2;
+}
+
+// Since: 11.0
+message BoardBoundingBoxResponse
+{
+  kiapi.common.types.Box2 box = 1;  // zero-size box for an empty board
+}
+
 
 //// Interactive commands ////
 // These commands begin an interactive operation in the editor.

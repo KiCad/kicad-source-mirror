@@ -82,6 +82,8 @@ API_HANDLER_BOARD::API_HANDLER_BOARD( std::shared_ptr<BOARD_CONTEXT> aContext,
     registerHandler<GetGraphicsDefaults, GraphicsDefaultsResponse>(
             &API_HANDLER_BOARD::handleGetGraphicsDefaults );
     registerHandler<GetBoundingBox, GetBoundingBoxResponse>( &API_HANDLER_BOARD::handleGetBoundingBox );
+    registerHandler<GetBoardBoundingBox, BoardBoundingBoxResponse>(
+            &API_HANDLER_BOARD::handleGetBoardBoundingBox );
     registerHandler<GetPadShapeAsPolygon, PadShapeAsPolygonResponse>(
             &API_HANDLER_BOARD::handleGetPadShapeAsPolygon );
     registerHandler<CheckPadstackPresenceOnLayers, PadstackPresenceResponse>(
@@ -1084,6 +1086,33 @@ HANDLER_RESULT<GetBoundingBoxResponse> API_HANDLER_BOARD::handleGetBoundingBox(
         response.add_items()->set_value( idMsg.value() );
         PackBox2( *response.add_boxes(), bbox );
     }
+
+    return response;
+}
+
+
+HANDLER_RESULT<BoardBoundingBoxResponse>
+API_HANDLER_BOARD::handleGetBoardBoundingBox( const HANDLER_CONTEXT<GetBoardBoundingBox>& aCtx )
+{
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.board() ); !documentValidation )
+        return tl::unexpected( documentValidation.error() );
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
+
+    BoardBoundingBoxResponse response;
+    BOX2I                    bbox;
+
+    switch( aCtx.Request.mode() )
+    {
+    case BoardBoundingBoxMode::BBBM_ALL_ITEMS:            bbox = board()->ComputeBoundingBox( false, false ); break;
+    case BoardBoundingBoxMode::BBBM_PHYSICAL_LAYERS_ONLY: bbox = board()->ComputeBoundingBox( false, true );  break;
+    case BoardBoundingBoxMode::BBBM_BOARD_EDGES_ONLY:     bbox = board()->GetBoardEdgesBoundingBox();         break;
+    default:
+        return tl::unexpected( MakeResponseStatus( AS_BAD_REQUEST, "invalid bounding box mode requested" ) );
+    }
+
+    PackBox2( *response.mutable_box(), bbox );
 
     return response;
 }

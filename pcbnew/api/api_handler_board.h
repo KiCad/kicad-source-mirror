@@ -134,6 +134,9 @@ private:
     HANDLER_RESULT<commands::GetBoundingBoxResponse> handleGetBoundingBox(
             const HANDLER_CONTEXT<commands::GetBoundingBox>& aCtx );
 
+    HANDLER_RESULT<BoardBoundingBoxResponse> handleGetBoardBoundingBox(
+            const HANDLER_CONTEXT<GetBoardBoundingBox>& aCtx );
+
     HANDLER_RESULT<PadShapeAsPolygonResponse> handleGetPadShapeAsPolygon(
             const HANDLER_CONTEXT<GetPadShapeAsPolygon>& aCtx );
 
