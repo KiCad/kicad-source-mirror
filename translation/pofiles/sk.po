@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-25 11:51+0000\n"
+"PO-Revision-Date: 2026-09-28 07:51+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -89,7 +89,7 @@ msgstr "Zjednodušovanie mnohouholníkov medených vrstiev"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1714
 msgid "Calculating plated copper"
-msgstr "Vypočítavanie plátovania medi"
+msgstr "Vypočítavanie medeného pokovenia"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1764
 #, c-format
@@ -627,7 +627,7 @@ msgstr "Pokovené otvory"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show barrels of plated through-holes and vias"
-msgstr "Zobraziť pokovenie priechodzích otvorov a prekovov"
+msgstr "Zobraziť pokovenie priechodných otvorov a prekovov"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front copper / surface finish color"
@@ -868,7 +868,7 @@ msgstr "Zobraziť požívateľom definovanú vrstvu 45"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 msgid "Through-hole Models"
-msgstr "Vývodové modely"
+msgstr "Modely s priechodnými otvormi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:119
 msgid "SMD Models"
@@ -5879,7 +5879,7 @@ msgstr "Vonkajší priemer prekovu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:706
 msgid "Via plated hole diameter"
-msgstr "Priemer vŕtania prekovu"
+msgstr "Priemer pokoveného otvoru"
 
 #: common/dialogs/panel_setup_netclasses.cpp:707
 msgid "Microvia pad diameter"
@@ -5887,7 +5887,7 @@ msgstr "Vonkajší priemer mikroprekovu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:708
 msgid "Microvia plated hole diameter"
-msgstr "Priemer plátovanej diery pre mikroprekov"
+msgstr "Priemer otvoru pokoveného mikroprekovu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:709
 msgid "Differential pair track width"
@@ -9254,7 +9254,7 @@ msgstr "Spoje"
 #: common/layer_id.cpp:131
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:38
 msgid "Through vias"
-msgstr "Priechodzie prekovy"
+msgstr "Priechodné prekovy"
 
 #: common/layer_id.cpp:132
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:52
@@ -9924,6 +9924,8 @@ msgid ""
 "Refusing to extract file '%s': the archive entry points outside of the "
 "destination directory."
 msgstr ""
+"Rozbalenie súboru '%s' bolo zamietnuté: položka archívu smeruje mimo "
+"cieľového priečinka."
 
 #: common/project/project_archiver.cpp:177 kicad/pcm/pcm_task_manager.cpp:252
 #: kicad/pcm/pcm_task_manager.cpp:313
@@ -21141,9 +21143,9 @@ msgid "Show Field Name"
 msgstr "Zobraziť názov poľa"
 
 #: eeschema/sch_footprint_field_reconciler.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
-msgstr "Zmeniť %s priradenie puzdra z '%s' na '%s'."
+msgstr "Znovu prepojených %d importovaných priradení puzdier ku knižnici '%s'."
 
 #: eeschema/sch_group.cpp:349 pcbnew/pcb_group.cpp:429
 #, c-format
@@ -30827,7 +30829,7 @@ msgstr "Zahrnúť iba SMD puzdra (len ascii alebo csv)"
 #: kicad/cli/command_pcb_export_pos.cpp:78
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
 msgstr ""
-"Vylúčiť všetky puzdrá s plôškami s priechodzími otvormi (iba ascii alebo csv)"
+"Vylúčiť všetky puzdrá s plôškami s priechodnými otvormi (iba ascii alebo csv)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:82
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:110
@@ -32604,7 +32606,7 @@ msgstr "Inštalujem balíček '%s'."
 msgid ""
 "Package archive entry '%s' would be extracted outside of the package "
 "directory."
-msgstr ""
+msgstr "Položka archívu balíka '%s' by bola rozbalená mimo priečinka balíka."
 
 #: kicad/pcm/pcm_task_manager.cpp:343
 msgid "Aborting package installation."
@@ -36932,7 +36934,7 @@ msgstr "Nešpecifikované:"
 
 #: pcbnew/board_statistics_report.cpp:112
 msgid "Through hole:"
-msgstr "Priechodzí otvor:"
+msgstr "Priechodný otvor:"
 
 #: pcbnew/board_statistics_report.cpp:114
 msgid "Connector:"
@@ -36952,7 +36954,7 @@ msgstr "Lisovaný kontakt:"
 
 #: pcbnew/board_statistics_report.cpp:122
 msgid "Through vias:"
-msgstr "Priechodzie prekovy:"
+msgstr "Priechodné prekovy:"
 
 #: pcbnew/board_statistics_report.cpp:123
 msgid "Blind vias:"
@@ -37328,7 +37330,7 @@ msgid ""
 "connectivity."
 msgstr ""
 "Plôška %s z %s sa nemôže zhodovať s kandidátskou plôškou %s z %s z dôvodu "
-"odlišného spôsobu pripojenia."
+"odlišného spôsobu prepojenia."
 
 #: pcbnew/connectivity/topo_match.cpp:171
 #, c-format
@@ -38065,7 +38067,7 @@ msgstr "Kontrolujú sa zóny..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:221
 msgid "Rebuilding connectivity..."
-msgstr "Obnova konektivity..."
+msgstr "Obnova prepojení..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:235
 #: pcbnew/tools/drc_tool.cpp:160
@@ -38098,7 +38100,7 @@ msgstr "&Odstrániť nadbytočné prekovy"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:42
 msgid "remove vias on through hole pads and superimposed vias"
 msgstr ""
-"odstrániť prekovy z plôšok s priechodzími otvormi a prekrývajúcich sa "
+"odstrániť prekovy z plôšok s priechodnými otvormi a prekrývajúcich sa "
 "prekovov"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
@@ -40174,7 +40176,7 @@ msgstr "Typ puzdra:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:153
 #: pcbnew/footprint.cpp:1704
 msgid "Through hole"
-msgstr "Priechodzí otvor"
+msgstr "Priechodný otvor"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:188
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:153
@@ -40595,7 +40597,7 @@ msgstr "Vlastný tvar"
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:640
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/pad.cpp:3351
 msgid "Through-hole"
-msgstr "Priechodzí otvor"
+msgstr "Priechodný otvor"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:89
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:215
@@ -40736,7 +40738,7 @@ msgstr "Zahrnúť iba SMD puzdra"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:107
 msgid "Exclude all footprints with through hole pads"
-msgstr "Vylúčiť všetky puzdrá s plôškami s priechodzími otvormi"
+msgstr "Vylúčiť všetky puzdrá s plôškami s priechodnými otvormi"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:113
 msgid "Exclude all footprints with the Exclude from BOM flag set"
@@ -42191,7 +42193,7 @@ msgstr "%s, %s a spojené vrstvy"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1589
 msgid "Error: Through hole pad has no hole."
-msgstr "Chyba: plôška s priechodzím otvorom nemá otvor."
+msgstr "Chyba: plôška s priechodným otvorom nemá otvor."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1594
 msgid "Pad Properties Errors"
@@ -42495,8 +42497,8 @@ msgstr ""
 "Globálny fiduciál je zameriavacia značka pre celú dosku\n"
 "Testovací bod stanovuje elektrický testovací bod\n"
 "Chladičová stanovuje plôšku s tepelným prechodom\n"
-"S polootvorom stanovuje kontaktnú plôšku s polovičným priechoddzím otvorom "
-"na okraji dosky\n"
+"S polootvorom stanovuje kontaktnú plôšku s polovičným priechodným otvorom na "
+"okraji dosky\n"
 "Mechanické stanovuje kontaktnú plôšku s priechodným otvorom, ktorá sa "
 "používa na mechanickú účely"
 
@@ -42963,7 +42965,7 @@ msgid ""
 msgstr ""
 "Zahrnúť metadáta netlistu a atribúty apertúr do Gerber súborov.\n"
 "Sú to komentáre vo formáte X1.\n"
-"Používa sa na kontrolu prepojenia v nástrojoch CAM a prehliadačoch Gerber."
+"Používa sa na kontrolu prepojení v nástrojoch CAM a prehliadačoch Gerber."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:261
 msgid "Disable aperture macros (not recommended)"
@@ -43904,7 +43906,7 @@ msgstr "Typom:"
 #: pcbnew/drc/rule_editor/drc_re_via_style_overlay_panel.cpp:61
 #: pcbnew/pcb_track.cpp:2952
 msgid "Through"
-msgstr "Priechodzí"
+msgstr "Priechodný"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 #: pcbnew/drc/rule_editor/drc_re_via_style_overlay_panel.cpp:62
@@ -47395,7 +47397,7 @@ msgstr "Typ pripojenia zóny: %s."
 #: pcbnew/drc/drc_engine.cpp:1004
 #, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
-msgstr "Plôška nie je plôška s priechodzím otvorom; pripojenie bude: %s."
+msgstr "Plôška nie je plôška s priechodným otvorom; pripojenie bude: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1137
 #, c-format
@@ -47983,7 +47985,7 @@ msgstr "Typ puzdra sa nezhoduje s typom plôšok puzdra"
 
 #: pcbnew/drc/drc_item.cpp:294
 msgid "Through hole pad has no hole"
-msgstr "Plôška s priechodzím otvorom nemá žiadný otvor"
+msgstr "Plôška s priechodným otvorom nemá žiadný otvor"
 
 #: pcbnew/drc/drc_item.cpp:298
 msgid "Mirrored text on front layer"
@@ -49766,6 +49768,8 @@ msgid ""
 "Board stackup does not define a board thickness; exporting a %.3f mm board "
 "body."
 msgstr ""
+"Skladba vrstiev dosky nedefinuje hrúbku dosky; telo dosky sa exportuje s "
+"hrúbkou %.3f mm."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1788
 #, c-format
@@ -49914,11 +49918,11 @@ msgstr "Nie je možné vytvoriť vstupný dátový tok '%s'.\n"
 #: pcbnew/exporters/step/step_pcb_model.cpp:3101
 #, c-format
 msgid "Cannot create output stream '%s'.\n"
-msgstr "Nie je možné vytvoriť výstupný prúd '%s'.\n"
+msgstr "Nie je možné vytvoriť dátový tok '%s'.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:3109
 msgid "Impossible create compress stream"
-msgstr "Nie je možné vytvoriť komprimovaný prúd"
+msgstr "Nie je možné vytvoriť komprimovaný dátový tok"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:3117
 msgid "Compress read or write error"
@@ -50147,7 +50151,7 @@ msgstr "puzdro: %s"
 #: pcbnew/footprint.cpp:3935
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr "(očakávané 'Priechodzí otvor'; aktuálne '%s')"
+msgstr "(očakávané 'Priechodný otvor'; aktuálne '%s')"
 
 #: pcbnew/footprint.cpp:3938
 #, c-format
@@ -51742,7 +51746,7 @@ msgstr "PTH plôška %s"
 msgid ""
 "(plated through holes normally have a copper pad on at least one outer layer)"
 msgstr ""
-"(pokovené priechodzie otvory, normálne majú medenú plôšku na minimálne "
+"(pokovené priechodné otvory, normálne majú medenú plôšku, minimálne na "
 "jednej vonkajšej vrstve)"
 
 #: pcbnew/pad.cpp:2913
@@ -54989,7 +54993,7 @@ msgstr "Vnorený prekov"
 
 #: pcbnew/pcb_track.cpp:2510
 msgid "Through Via"
-msgstr "Priechodzí prekov"
+msgstr "Priechodný prekov"
 
 #: pcbnew/pcb_track.cpp:2531
 #, c-format
@@ -55622,11 +55626,11 @@ msgstr "Nie je možné spustiť diferenciálny pár uprostred ničoho."
 
 #: pcbnew/router/router_tool.cpp:148
 msgid "Place Through Via"
-msgstr "Umiestniť priechodzí prekov"
+msgstr "Umiestniť priechodný prekov"
 
 #: pcbnew/router/router_tool.cpp:149
 msgid "Adds a through-hole via at the end of currently routed track."
-msgstr "Pridá priechodzí prekov na konci aktuálne routovaného spoja."
+msgstr "Pridá priechodný prekov na konci aktuálne routovaného spoja."
 
 #: pcbnew/router/router_tool.cpp:159
 msgid "Place Blind/Buried Via"
@@ -55643,18 +55647,18 @@ msgstr "Umiestniť mikroprekov"
 
 #: pcbnew/router/router_tool.cpp:171
 msgid "Adds a microvia at the end of currently routed track."
-msgstr "Pridá mikro prekov na koniec aktuálne routovaného spoja."
+msgstr "Pridá mikroprekov na koniec aktuálne routovaného spoja."
 
 #: pcbnew/router/router_tool.cpp:181
 msgid "Select Layer and Place Through Via..."
-msgstr "Vybrať vrstvu a umiestniť priechodzí prekov..."
+msgstr "Vybrať vrstvu a umiestniť priechodný prekov..."
 
 #: pcbnew/router/router_tool.cpp:182
 msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed "
 "track."
 msgstr ""
-"Vybrať vrstvu a potom pridať priechodzí prekov na konci aktuálne routovaného "
+"Vybrať vrstvu a potom pridať priechodný prekov na konci aktuálne routovaného "
 "spoja."
 
 #: pcbnew/router/router_tool.cpp:192
@@ -57943,7 +57947,7 @@ msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
 "Odstrániť alebo obnoviť nepripojené vnútorné vrstvy v plôškach s "
-"priechodzími otvormi a prekovoch"
+"priechodnými otvormi a prekovoch"
 
 #: pcbnew/tools/pcb_actions.cpp:1023
 msgid "Assign a different footprint from the library"
@@ -58173,7 +58177,7 @@ msgstr "Importovať netlist..."
 
 #: pcbnew/tools/pcb_actions.cpp:1250
 msgid "Read netlist and update board connectivity"
-msgstr "Načítať netlist a aktualizovať spojenia na doske"
+msgstr "Načítať zoznam spojov a aktualizovať prepojenia na doske"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
 msgid "Import Specctra Session..."
@@ -61005,7 +61009,7 @@ msgid ""
 "Automatically assign zone priorities based on connectivity analysis of "
 "overlapping regions."
 msgstr ""
-"Automaticky priradiť priority zón na základe analýzy prepojenia "
+"Automaticky priradiť priority zón na základe analýzy prepojení "
 "prekrývajúcich sa oblastí."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:146
