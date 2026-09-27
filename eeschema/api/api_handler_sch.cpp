@@ -2885,6 +2885,8 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleRenameVariant( const HANDLER_CONTEX
         return tl::unexpected( e );
     }
 
+    bool isCurrent = frame() ? frame()->Schematic().GetCurrentVariant().CmpNoCase( oldName ) == 0 : false;
+
     VARIANT_PROXY_UNDO_ITEM* undoItem = m_frame ? new VARIANT_PROXY_UNDO_ITEM( schematic ) : nullptr;
     SCH_COMMIT               commit( m_frame ? frame()->GetToolManager() : toolManager() );
     bool                     pushedCommit = false;
@@ -2911,7 +2913,15 @@ HANDLER_RESULT<Empty> API_HANDLER_SCH::handleRenameVariant( const HANDLER_CONTEX
         undoCmd->SetDescription( _( "Rename Variant" ) );
         frame()->PushCommandToUndoList( undoCmd );
 
+        // This will zero out the selection if it happened to point to the old name
         frame()->UpdateVariantSelectionCtrl( frame()->Schematic().GetVariantNamesForUI() );
+
+        if( isCurrent )
+        {
+            // This will reset the variant-selection-ctrl's selection, but only if the
+            // names have already been updated to include the new name
+            frame()->SetCurrentVariant( newName );
+        }
     }
 
     return Empty();
