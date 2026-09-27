@@ -2681,25 +2681,25 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
             addPastAndPresentContainedItems( changedRuleArea, screen );
 
         // Add all changed items, and associated items, to the change set
-        for( CHANGED_ITEM& changed_item_data : changed_connectable_items )
+        for( CHANGED_ITEM& changed_item : changed_connectable_items )
         {
-            addItemToChangeSet( changed_item_data );
+            addItemToChangeSet( changed_item );
 
             // If a SCH_DIRECTIVE_LABEL was changed which is attached to a SCH_RULE_AREA, we need
             // to add the contained items to the change set to force update of their connectivity
-            if( changed_item_data.item->Type() == SCH_DIRECTIVE_LABEL_T )
+            if( changed_item.item->Type() == SCH_DIRECTIVE_LABEL_T )
             {
-                const std::vector<VECTOR2I> labelConnectionPoints = changed_item_data.item->GetConnectionPoints();
+                const std::vector<VECTOR2I> labelConnectionPoints = changed_item.item->GetConnectionPoints();
 
-                auto candidateRuleAreas = changed_item_data.screen->Items().Overlapping(
-                        SCH_RULE_AREA_T, changed_item_data.item->GetBoundingBox() );
+                auto candidateRuleAreas = changed_item.screen->Items()
+                                            .Overlapping( SCH_RULE_AREA_T, changed_item.item->GetBoundingBox() );
 
                 for( SCH_ITEM* candidateRuleArea : candidateRuleAreas )
                 {
                     SCH_RULE_AREA* ruleArea = static_cast<SCH_RULE_AREA*>( candidateRuleArea );
 
                     if( ruleArea->GetPolyShape().CollideEdge( labelConnectionPoints[0], nullptr, 5 ) )
-                        addPastAndPresentContainedItems( ruleArea, changed_item_data.screen );
+                        addPastAndPresentContainedItems( ruleArea, changed_item.screen );
                 }
             }
         }
