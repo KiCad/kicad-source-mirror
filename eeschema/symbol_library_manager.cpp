@@ -84,7 +84,7 @@ int SYMBOL_LIBRARY_MANAGER::GetLibraryHash( const wxString& aLibrary ) const
 
     LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
 
-    if( auto uri = manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, aLibrary, true ); uri )
+    if( std::optional<wxString> uri = manager.GetFullURI( LIBRARY_TABLE_TYPE::SYMBOL, aLibrary, true ); uri )
     {
         // Mix a file modification timestamp into the hash so that external changes (e.g. a git
         // branch switch) are detected by the library tree synchronizer without a restart.
@@ -503,10 +503,10 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateSymbol( LIB_SYMBOL* aSymbol, const wxString& 
 
         symbolCopy->SetLibId( LIB_ID( aLibrary, aSymbol->GetLibId().GetLibItemName() ) );
 
-        auto        newScreen = std::make_unique<SCH_SCREEN>();
-        SCH_SCREEN& screen = *newScreen;
+        std::unique_ptr<SCH_SCREEN> newScreen = std::make_unique<SCH_SCREEN>();
+        newScreen->SetContentModified();
+
         libBuf.CreateBuffer( std::move( symbolCopy ), std::move( newScreen ) );
-        screen.SetContentModified();
     }
 
     return true;
@@ -967,13 +967,12 @@ bool SYMBOL_BUFFER::IsModified() const
 
 LIB_SYMBOL* LIB_BUFFER::GetSymbol( const wxString& aAlias ) const
 {
-    auto buf = GetBuffer( aAlias );
+    std::shared_ptr<SYMBOL_BUFFER> buf = GetBuffer( aAlias );
 
     if( !buf )
         return nullptr;
 
-    LIB_SYMBOL& symbol = buf->GetSymbol();
-    return &symbol;
+    return &buf->GetSymbol();
 }
 
 
@@ -988,7 +987,8 @@ bool LIB_BUFFER::CreateBuffer( std::unique_ptr<LIB_SYMBOL> aCopy, std::unique_pt
     libId.SetLibNickname( m_libName );
     aCopy->SetLibId( libId );
 
-    auto symbolBuf = std::make_shared<SYMBOL_BUFFER>( std::move( aCopy ), std::move( aScreen ) );
+    std::shared_ptr<SYMBOL_BUFFER> symbolBuf = std::make_shared<SYMBOL_BUFFER>( std::move( aCopy ),
+                                                                                std::move( aScreen ) );
     m_symbols.push_back( std::move( symbolBuf ) );
 
     ++m_hash;
@@ -1119,11 +1119,11 @@ bool LIB_BUFFER::SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileNam
                 return false;
             }
 
-            auto        originalParent = std::make_unique<LIB_SYMBOL>( *bufferedParent.get() );
-            LIB_SYMBOL& parentRef = *originalParent;
+            std::unique_ptr<LIB_SYMBOL> originalParent = std::make_unique<LIB_SYMBOL>( *bufferedParent );
+            LIB_SYMBOL&                 parentRef = *originalParent;
             aSymbolBuf.SetOriginal( std::move( originalParent ) );
 
-            auto newSymbol = std::make_unique<LIB_SYMBOL>( libSymbol );
+            std::unique_ptr<LIB_SYMBOL> newSymbol = std::make_unique<LIB_SYMBOL>( libSymbol );
             newSymbol->SetParent( &parentRef );
             aSymbolBuf.SetOriginal( std::move( newSymbol ) );
         }
@@ -1158,10 +1158,10 @@ bool LIB_BUFFER::SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileNam
                 return false;
             }
 
-            auto originalBufferedParent = GetBuffer( bufferedParent->GetName() );
+            std::shared_ptr<SYMBOL_BUFFER> originalBufferedParent = GetBuffer( bufferedParent->GetName() );
             wxCHECK( originalBufferedParent, false );
 
-            auto newSymbol = std::make_unique<LIB_SYMBOL>( libSymbol );
+            std::unique_ptr<LIB_SYMBOL> newSymbol = std::make_unique<LIB_SYMBOL>( libSymbol );
             newSymbol->SetParent( &originalBufferedParent->GetSymbol() );
             aSymbolBuf.SetOriginal( std::move( newSymbol ) );
         }
