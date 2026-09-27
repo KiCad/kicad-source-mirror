@@ -3353,6 +3353,7 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
 
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
     bool markExclusion = eeconfig()->m_Appearance.mark_sim_exclusions
+                            && !m_schSettings.IsPrinting()
                             && aSheet->GetExcludedFromSim( sheetPath, variant );
 
     if( m_schSettings.IsPrinting() && drawingShadows )
@@ -3434,7 +3435,7 @@ void SCH_PAINTER::draw( const SCH_SHEET* aSheet, int aLayer )
         m_gal->DrawSegment( pt1, pt2, strokeWidth );
     }
 
-    if( markExclusion )
+    if( markExclusion && aLayer == LAYER_SHEET )
     {
         int   layer = LAYER_EXCLUDED_FROM_SIM;
         BOX2I bbox = aSheet->GetBodyBoundingBox();
