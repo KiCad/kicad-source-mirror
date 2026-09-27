@@ -54,12 +54,12 @@ HANDLER_RESULT<BeginCommitResponse> API_HANDLER_EDITOR::handleBeginCommit(
         return tl::unexpected( *busy );
 
     // Before 11.0, commit requests had no header so we assume they are for the PCB editor
-    if( aCtx.Request.has_header() && !validateItemHeaderDocument( aCtx.Request.header() ) )
+    if( aCtx.Request.has_header() )
     {
-        ApiResponseStatus e;
-        // No message needed for AS_UNHANDLED; this is an internal flag for the API server
-        e.set_status( ApiStatusCode::AS_UNHANDLED );
-        return tl::unexpected( e );
+        HANDLER_RESULT<std::optional<KIID>> valid = validateItemHeaderDocument( aCtx.Request.header() );
+
+        if( !valid )
+            return tl::unexpected( valid.error() );
     }
 
     if( m_commits.count( aCtx.ClientName ) )
@@ -92,12 +92,12 @@ HANDLER_RESULT<EndCommitResponse> API_HANDLER_EDITOR::handleEndCommit(
         return tl::unexpected( *busy );
 
     // Before 11.0, commit requests had no header so we assume they are for the PCB editor
-    if( aCtx.Request.has_header() && !validateItemHeaderDocument( aCtx.Request.header() ) )
+    if( aCtx.Request.has_header() )
     {
-        ApiResponseStatus e;
-        // No message needed for AS_UNHANDLED; this is an internal flag for the API server
-        e.set_status( ApiStatusCode::AS_UNHANDLED );
-        return tl::unexpected( e );
+        HANDLER_RESULT<std::optional<KIID>> valid = validateItemHeaderDocument( aCtx.Request.header() );
+
+        if( !valid )
+            return tl::unexpected( valid.error() );
     }
 
     if( !m_commits.count( aCtx.ClientName ) )
