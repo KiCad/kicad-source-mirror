@@ -747,6 +747,11 @@ set( PLOTTERS_CONTROL_SRCS
     plotters/common_plot_functions.cpp
     )
 
+
+if( MINGW )
+    set( extra_file ${CMAKE_SOURCE_DIR}/common/streamwrapper.cpp )
+endif( MINGW )
+
 set( COMMON_IO_SRCS
 
     # Altium
@@ -785,6 +790,7 @@ set( COMMON_IO_SRCS
     io/idf/idf_outlines.cpp
     io/idf/idf_parser.cpp
     io/idf/vrml_layer.cpp
+    ${extra_file}
 
 
     io/csv.cpp
