@@ -1011,12 +1011,28 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN_BASE& aB
     }
     else
     {
+        const BOX2I arc_bbox = aA.BBox( aClearance );
+        const bool near_full_circle = ( aA.GetP0() - aA.GetP1() ).SquaredEuclideanNorm() < SEG::Square( aClearance )
+                                      && aA.GetCentralAngle().AsDegrees() > 180.0;
+
         for( size_t i = 0; i < aB.GetSegmentCount(); i++ )
         {
+            const SEG segment = aB.GetSegment( i );
+
+            // SHAPE_ARC::Collide( SEG ) uses the full circle for near-full arcs
+            if( !near_full_circle
+                && ( std::max( segment.A.x, segment.B.x ) < arc_bbox.GetLeft()
+                     || std::min( segment.A.x, segment.B.x ) > arc_bbox.GetRight()
+                     || std::max( segment.A.y, segment.B.y ) < arc_bbox.GetTop()
+                     || std::min( segment.A.y, segment.B.y ) > arc_bbox.GetBottom() ) )
+            {
+                continue;
+            }
+
             int      collision_dist = 0;
             VECTOR2I pn;
 
-            if( aA.Collide( aB.GetSegment( i ), aClearance,
+            if( aA.Collide( segment, aClearance,
                             aActual || aLocation ? &collision_dist : nullptr,
                             aLocation ? &pn : nullptr ) )
             {
