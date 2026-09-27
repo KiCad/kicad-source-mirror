@@ -54,6 +54,7 @@ JOB_EXPORT_PCB_IDF::JOB_EXPORT_PCB_IDF() :
     m_params.emplace_back( new JOB_PARAM<bool>( "include_dnp", &m_includeDNP, m_includeDNP ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "calculate_height_from_models", &m_calculateHeightFromModels,
                                                 m_calculateHeightFromModels ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "part_number_field", &m_partNumberField, m_partNumberField ) );
 }
 
 

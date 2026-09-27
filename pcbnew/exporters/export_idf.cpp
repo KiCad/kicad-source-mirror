@@ -630,8 +630,13 @@ IDF3_COMP_OUTLINE* IDF_EXPORTER::createOutlineFromExtrudedBody( const FOOTPRINT*
             }
         };
 
+    const PCB_FIELD* field = aFootprint->GetField( m_settings->m_partNumberField );
+
+    if( !field )
+        field = &aFootprint->Value();
+
     IDF3_COMP_OUTLINE* libOutline = aIDFBoard.GetComponentOutline( aFootprint->GetFPID().Format(),
-                                                                   std::string( aFootprint->GetReference().ToUTF8() ) );
+                                                                   std::string( field->GetShownText( RESOLVED ) ) );
 
     if( !libOutline )
     {

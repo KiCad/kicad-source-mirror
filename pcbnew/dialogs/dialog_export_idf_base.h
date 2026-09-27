@@ -61,6 +61,8 @@ class DIALOG_EXPORT_IDF3_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbRemoveDNP;
 		wxCheckBox* m_cbRemoveUnspecified;
 		wxCheckBox* m_cbHeightFromModels;
+		wxStaticText* m_stPartNumberField;
+		wxChoice* m_choicePartNumberField;
 		wxTextCtrl* m_tcLog;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;

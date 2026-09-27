@@ -2917,6 +2917,11 @@ API_HANDLER_PCB::handleRunBoardJobExportIdf( const HANDLER_CONTEXT<RunBoardJobEx
     job.m_includeDNP = aCtx.Request.include_dnp();
     job.m_calculateHeightFromModels = !aCtx.Request.only_use_explicit_heights();
 
+    if( aCtx.Request.has_part_number_field() )
+        job.m_partNumberField = wxString::FromUTF8( aCtx.Request.part_number_field() );
+    else
+        job.m_partNumberField = wxS( "Value" );
+
     return ExecuteBoardJob( pcbContext(), job );
 }
 

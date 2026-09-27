@@ -34,6 +34,7 @@
 #define ARG_NO_UNSPECIFIED "--no-unspecified"
 #define ARG_NO_DNP "--no-dnp"
 #define ARG_EXPLICIT_HEIGHT "--explicit-height"
+#define ARG_PART_NUMBER_FIELD "--part-number-field"
 
 
 CLI::PCB_EXPORT_IDF_COMMAND::PCB_EXPORT_IDF_COMMAND() :
@@ -76,6 +77,10 @@ CLI::PCB_EXPORT_IDF_COMMAND::PCB_EXPORT_IDF_COMMAND() :
     m_argParser.add_argument( ARG_EXPLICIT_HEIGHT )
             .help( UTF8STDSTR( _( "Only use explicitly-set footprint heights to create IDFv3 shapes" ) ) )
             .flag();
+
+    m_argParser.add_argument( ARG_PART_NUMBER_FIELD )
+            .default_value( std::string( "Value" ) )
+            .help( UTF8STDSTR( _( "Footprint field to export as the part number to the IDF library" ) ) );
 }
 
 
@@ -107,6 +112,7 @@ int CLI::PCB_EXPORT_IDF_COMMAND::doPerform( KIWAY& aKiway )
     idfJob->m_includeUnspecified = !m_argParser.get<bool>( ARG_NO_UNSPECIFIED );
     idfJob->m_includeDNP = !m_argParser.get<bool>( ARG_NO_DNP );
     idfJob->m_calculateHeightFromModels = !m_argParser.get<bool>( ARG_EXPLICIT_HEIGHT );
+    idfJob->m_partNumberField = wxString::FromUTF8( m_argParser.get<std::string>( ARG_PART_NUMBER_FIELD ) );
 
     return aKiway.ProcessJob( KIWAY::FACE_PCB, idfJob.get() );
 }

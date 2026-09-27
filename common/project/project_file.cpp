@@ -291,6 +291,9 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_params.emplace_back( new PARAM<bool>( "board.idf_export.calculate_height_from_models",
             &m_IdfExportSettings.calculateHeightFromModels, true ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "board.idf_export.part_number_field",
+            &m_IdfExportSettings.partNumberField, wxS( "Value" ) ) );
+
 
     registerMigration( 1, 2, std::bind( &PROJECT_FILE::migrateSchema1To2, this ) );
     registerMigration( 2, 3, std::bind( &PROJECT_FILE::migrateSchema2To3, this ) );

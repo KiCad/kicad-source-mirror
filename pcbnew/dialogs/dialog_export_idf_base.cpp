@@ -143,6 +143,25 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 
 	sbsComponents->Add( m_cbHeightFromModels, 0, wxALL, 5 );
 
+	wxBoxSizer* bSizer61;
+	bSizer61 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_stPartNumberField = new wxStaticText( sbsComponents->GetStaticBox(), wxID_ANY, _("Part number field:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stPartNumberField->Wrap( -1 );
+	m_stPartNumberField->SetToolTip( _("Which footprint field to export as the part number in the IDF library file") );
+
+	bSizer61->Add( m_stPartNumberField, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxArrayString m_choicePartNumberFieldChoices;
+	m_choicePartNumberField = new wxChoice( sbsComponents->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePartNumberFieldChoices, 0 );
+	m_choicePartNumberField->SetSelection( 0 );
+	m_choicePartNumberField->SetToolTip( _("Which footprint field to export as the part number in the IDF library file") );
+
+	bSizer61->Add( m_choicePartNumberField, 1, wxALL, 5 );
+
+
+	sbsComponents->Add( bSizer61, 0, wxEXPAND, 5 );
+
 
 	bSizer6->Add( sbsComponents, 1, wxALL|wxEXPAND, 5 );
 
@@ -156,7 +175,7 @@ DIALOG_EXPORT_IDF3_BASE::DIALOG_EXPORT_IDF3_BASE( wxWindow* parent, wxWindowID i
 	sbSizer4->Add( m_tcLog, 1, wxEXPAND, 5 );
 
 
-	bSizer2->Add( sbSizer4, 0, wxALL|wxEXPAND, 5 );
+	bSizer2->Add( sbSizer4, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizerIDFFile->Add( bSizer2, 1, wxEXPAND, 5 );

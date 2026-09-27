@@ -625,4 +625,8 @@ message RunBoardJobExportIdf
     // excluded from the export.  If false / absent, footprints without an explicit height set will
     // be exported if they have a visible STEP model, using the height of the tallest model.
     bool only_use_explicit_heights = 7;
+
+    // The footprint field to export as the component part number in the IDF library file.
+    // Defaults to the Value field if unspecified.
+    optional string part_number_field = 8;
 }

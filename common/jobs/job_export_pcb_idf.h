@@ -43,6 +43,8 @@ public:
     bool     m_includeUnspecified;
     bool     m_includeDNP;
     bool     m_calculateHeightFromModels;
+
+    wxString m_partNumberField;
 };
 
 #endif

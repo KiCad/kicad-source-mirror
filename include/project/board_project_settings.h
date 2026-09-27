@@ -153,6 +153,7 @@ struct KICOMMON_API IDF_EXPORT_SETTINGS
     bool                       includeUnspecified = true;
     bool                       includeDNP = true;
     bool                       calculateHeightFromModels = true;
+    wxString                   partNumberField;
 };
 
 /// BOM Data choices for IPC2581 export

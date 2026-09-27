@@ -23,10 +23,13 @@
 #include <widgets/text_ctrl_eval.h>
 #include <dialog_export_idf.h>
 
+#include <set>
 #include <3d_cache/3d_cache.h>
 #include <board_design_settings.h>
 #include <export_idf.h>
+#include <footprint.h>
 #include <jobs/job_export_pcb_idf.h>
+#include <pcb_field.h>
 #include <string_utils.h>
 #include <tools/board_editor_control.h>
 #include <project_pcb.h>
@@ -117,6 +120,9 @@ void DIALOG_EXPORT_IDF3::ApplySettings( const IDF_EXPORT_SETTINGS& aSettings )
     m_cbRemoveDNP->SetValue( !aSettings.includeDNP );
     m_cbRemoveUnspecified->SetValue( !aSettings.includeUnspecified );
     m_cbHeightFromModels->SetValue( aSettings.calculateHeightFromModels );
+
+    if( !m_choicePartNumberField->SetStringSelection( aSettings.partNumberField ) )
+        m_choicePartNumberField->SetStringSelection( wxS( "Value" ) );
 }
 
 
@@ -141,6 +147,7 @@ IDF_EXPORT_SETTINGS DIALOG_EXPORT_IDF3::GetSettings() const
     settings.includeDNP = !m_cbRemoveDNP->GetValue();
     settings.includeUnspecified = !m_cbRemoveUnspecified->GetValue();
     settings.calculateHeightFromModels = m_cbHeightFromModels->GetValue();
+    settings.partNumberField = m_choicePartNumberField->GetStringSelection();
 
     return settings;
 }
@@ -176,6 +183,7 @@ void DIALOG_EXPORT_IDF3::ApplyJobSettings( const JOB_EXPORT_PCB_IDF& aSettings )
     settings.includeDNP = aSettings.m_includeDNP;
     settings.includeUnspecified = aSettings.m_includeUnspecified;
     settings.calculateHeightFromModels = aSettings.m_calculateHeightFromModels;
+    settings.partNumberField = aSettings.m_partNumberField;
 
     ApplySettings( settings );
 }
@@ -212,12 +220,29 @@ void DIALOG_EXPORT_IDF3::GetJobSettings( JOB_EXPORT_PCB_IDF& aSettingsOut ) cons
     aSettingsOut.m_includeDNP = settings.includeDNP;
     aSettingsOut.m_includeUnspecified = settings.includeUnspecified;
     aSettingsOut.m_calculateHeightFromModels = settings.calculateHeightFromModels;
+    aSettingsOut.m_partNumberField = settings.partNumberField;
 }
 
 
 bool DIALOG_EXPORT_IDF3::TransferDataToWindow()
 {
     m_tcLog->Clear();
+    std::set<wxString> fieldNames;
+
+    for( FOOTPRINT* fp : m_parent->GetBoard()->Footprints() )
+    {
+        for( PCB_FIELD* field : fp->GetFields() )
+        {
+            wxCHECK2( field, continue );
+
+            if( field->IsReference() )
+                continue;
+
+            fieldNames.insert( field->GetUntranslatedName() );
+        }
+    }
+
+    m_choicePartNumberField->Append( std::vector<wxString>( fieldNames.begin(), fieldNames.end() ) );
 
     if( m_job )
         ApplyJobSettings( *m_job );
@@ -356,6 +381,7 @@ void DIALOG_EXPORT_IDF3::doExport()
     projectSettings.includeDNP = job.m_includeDNP;
     projectSettings.includeUnspecified = job.m_includeUnspecified;
     projectSettings.calculateHeightFromModels = job.m_calculateHeightFromModels;
+    projectSettings.partNumberField = job.m_partNumberField;
 
     m_parent->SetLastPath( LAST_PATH_IDF, m_filePickerIDF->GetPath() );
 
