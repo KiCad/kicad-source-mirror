@@ -153,7 +153,8 @@ public:
      *
      * @return true if this reference hasn't been split yet.
      */
-    bool IsSplitNeeded();
+    bool IsSplitNeeded() const;
+    bool IsSplit() const { return !IsSplitNeeded(); }
 
     void SetRef( const wxString& aReference ) { m_ref = aReference; }
     wxString GetRef() const { return m_ref; }
@@ -162,17 +163,42 @@ public:
     const char* GetRefStr() const { return m_ref.c_str(); }
 
     /// Return reference name with unit altogether.
-    wxString GetFullRef( bool aIncludeUnit = true ) const
+    wxString GetFullRef() const
     {
-        wxString refNum = m_numRefStr;
+        wxString ref = GetRef();
 
-        if( refNum.IsEmpty() )
-            refNum << m_numRef;
+        if( IsSplit() )
+        {
+            if( !m_numRefStr.IsEmpty() )
+                ref += m_numRefStr;
+            else
+                ref << m_numRef;
+        }
+
+        if( GetSymbol()->GetUnitCount() > 1 )
+            ref += GetSymbol()->SubReference( GetUnit() );
+
+        return ref;
+    }
+
+    /// Return reference name in canonical format, optionally with unit.
+    /// (Canonical form will return "R1" even when the user entered "R001".)
+    wxString GetCanonicalRef( bool aIncludeUnit ) const
+    {
+        wxString ref = GetRef();
+
+        if( IsSplit() )
+        {
+            if( m_numRef >= 0 )
+                ref << m_numRef;
+            else
+                ref += m_numRefStr;
+        }
 
         if( aIncludeUnit && GetSymbol()->GetUnitCount() > 1 )
-            return GetRef() + refNum + GetSymbol()->SubReference( GetUnit() );
-        else
-            return GetRef() + refNum;
+            ref += GetSymbol()->SubReference( GetUnit() );
+
+        return ref;
     }
 
     wxString GetRefNumber() const

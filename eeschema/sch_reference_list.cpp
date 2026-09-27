@@ -883,14 +883,14 @@ void SCH_REFERENCE::Split()
 }
 
 
-bool SCH_REFERENCE::IsSplitNeeded()
+bool SCH_REFERENCE::IsSplitNeeded() const
 {
     std::string refText = GetRefStr();
 
     if( refText.empty() )
         return false;
 
-    int ll = refText.length() - 1;
+    int ll = (int) refText.length() - 1;
 
     return ( refText[ll] == '?' ) || isdigit( refText[ll] );
 }

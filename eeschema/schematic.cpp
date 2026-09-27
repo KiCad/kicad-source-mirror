@@ -247,7 +247,7 @@ void SCHEMATIC::CacheExistingAnnotation()
 
     for( const SCH_REFERENCE& ref : references )
     {
-        refdesTracker->Insert( ref.GetFullRef( false ).ToStdString() );
+        refdesTracker->Insert( ref.GetCanonicalRef( false ).ToStdString() );
     }
 }
 
@@ -266,7 +266,7 @@ bool SCHEMATIC::Contains( const SCH_REFERENCE& aRef ) const
     return std::any_of( references.begin(), references.end(),
                         [&]( const SCH_REFERENCE& ref )
                         {
-                            return ref.GetFullRef( true ) == aRef.GetFullRef( true );
+                            return ref.GetCanonicalRef( true ) == aRef.GetCanonicalRef( true );
                         } );
 }
 
