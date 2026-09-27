@@ -3188,15 +3188,14 @@ void SCH_PAINTER::draw( const SCH_LABEL* aLabel, int aLayer, bool aDimmed )
     if( drawingShadows && !( aLabel->IsBrightened() || aLabel->IsSelected() ) )
         return;
 
-    COLOR4D color = getRenderColor( aLabel, LAYER_HIERLABEL, drawingShadows, aDimmed, true );
+    COLOR4D color = getRenderColor( aLabel, LAYER_LOCLABEL, drawingShadows, aDimmed, true );
 
     if( drawingDangling )
     {
         if( aLabel->IsDangling() )
         {
-            drawDanglingIndicator( aLabel->GetTextPos(), color,
-                                   schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
-                                   drawingShadows, aLabel->IsBrightened() );
+            drawDanglingIndicator( aLabel->GetTextPos(), color, schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ),
+                                   true, drawingShadows, aLabel->IsBrightened() );
         }
 
         return;
@@ -3235,9 +3234,8 @@ void SCH_PAINTER::draw( const SCH_HIERLABEL* aLabel, int aLayer, bool aDimmed )
     {
         if( aLabel->IsDangling() )
         {
-            drawDanglingIndicator( aLabel->GetTextPos(), color,
-                                   schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ), true,
-                                   drawingShadows, aLabel->IsBrightened() );
+            drawDanglingIndicator( aLabel->GetTextPos(), color, schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE / 2 ),
+                                   true, drawingShadows, aLabel->IsBrightened() );
         }
 
         return;
