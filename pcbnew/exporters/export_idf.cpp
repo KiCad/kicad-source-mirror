@@ -20,6 +20,7 @@
 
 
 #include <list>
+#include <optional>
 #include <locale_io.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
@@ -39,6 +40,8 @@
 #include "export_idf.h"
 
 
+#include <3d_math.h>
+#include <3d_rendering/3d_placeholder_utils.h>
 #include <base_units.h>     // to define pcbIUScale.FromMillimeter(x)
 #include <jobs/job_export_pcb_idf.h>
 
@@ -329,18 +332,39 @@ UseBoundingBox:
 }
 
 
-/**
- * Retrieve information from all board footprints, adds drill holes to the DRILLED_HOLES or
- * BOARD_OUTLINE section as appropriate,  Compiles data for the PLACEMENT section and compiles
- * data for the library ELECTRICAL section.
- */
-void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard ) const
+/// Returns the largest board Z value, in mm, of the given model
+static std::optional<double> getModelHeight( const S3DMODEL& aModel, const VECTOR3D& aRotation, const VECTOR3D& aScale )
 {
-    wxCHECK( m_board && m_resolver && m_settings, /* void */ );
+    if( !aModel.m_Meshes )
+        return std::nullopt;
 
-    // Reference Designator
-    std::string crefdes = TO_UTF8( aFootprint->Reference().GetShownText( RESOLVED ) );
+    const glm::mat4 modelMatrix = CalcModelMatrix( SFVEC3F( 0.0f, 0.0f, 0.0f ),
+                                                   SFVEC3F( aRotation.x, aRotation.y, aRotation.z ),
+                                                   SFVEC3F( aScale.x, aScale.y, aScale.z ) );
+    const SFVEC3F zRow( modelMatrix[0].z, modelMatrix[1].z, modelMatrix[2].z );
 
+    float ret = 0.0;
+
+    for( unsigned int meshIdx = 0; meshIdx < aModel.m_MeshesSize; ++meshIdx )
+    {
+        const SMESH& mesh = aModel.m_Meshes[meshIdx];
+
+        if( !mesh.m_Positions )
+            continue;
+
+        for( unsigned int vtx = 0; vtx < mesh.m_VertexSize; ++vtx )
+        {
+            const SFVEC3F& pos = mesh.m_Positions[vtx];
+            ret = std::max( ret, glm::dot( zRow, pos ) );
+        }
+    }
+
+    return ret;
+}
+
+
+bool IDF_EXPORTER::exportFootprintIdfModels( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard ) const
+{
     wxString libraryName = aFootprint->GetFPID().GetLibNickname();
     wxString footprintBasePath = wxEmptyString;
 
@@ -352,6 +376,380 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
         if( fpRow )
             footprintBasePath = LIBRARY_MANAGER::GetFullURI( *fpRow, true );
     }
+
+    double scale = aIDFBoard.GetUserScale();
+    double dx, dy;
+    aIDFBoard.GetUserOffset( dx, dy );
+
+    std::string refdes;
+    IDF3_COMPONENT* comp = nullptr;
+
+    auto sM = aFootprint->Models().begin();
+    auto eM = aFootprint->Models().end();
+    wxFileName idfFile;
+    wxString   idfExt;
+
+    while( sM != eM )
+    {
+        if( !sM->m_Show )
+        {
+            ++sM;
+            continue;
+        }
+
+        std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
+        embeddedFilesStack.push_back( aFootprint->GetEmbeddedFiles() );
+        embeddedFilesStack.push_back( m_board->GetEmbeddedFiles() );
+
+        idfFile.Assign( m_resolver->ResolvePath( sM->m_Filename, footprintBasePath, std::move( embeddedFilesStack ) ) );
+        idfExt = idfFile.GetExt();
+
+        if( idfExt.Cmp( wxT( "idf" ) ) && idfExt.Cmp( wxT( "IDF" ) ) )
+        {
+            ++sM;
+            continue;
+        }
+
+        if( refdes.empty() )
+        {
+            refdes = TO_UTF8( aFootprint->Reference().GetShownText( RESOLVED ) );
+
+            // NOREFDES cannot be used or else the software gets confused
+            // when writing out the placement data due to conflicting
+            // placement and layer specifications; to work around this we
+            // create a (hopefully) unique refdes for our exported part.
+            if( refdes.empty() || !refdes.compare( "~" ) )
+                refdes = aIDFBoard.GetNewRefDes();
+        }
+
+        IDF3_COMP_OUTLINE* outline = aIDFBoard.GetComponentOutline( idfFile.GetFullPath() );
+
+        if( !outline )
+        {
+            if( m_reporter )
+            {
+                m_reporter->Report( wxString::Format( "Error exporting footprint %s model %s",
+                                                      aFootprint->GetReference(), idfFile.GetFullPath() ),
+                                    RPT_SEVERITY_ERROR );
+            }
+
+            return false;
+        }
+
+        double rotz = aFootprint->GetOrientation().AsDegrees();
+        double locx = sM->m_Offset.x;  // part offsets are in mm
+        double locy = sM->m_Offset.y;
+        double locz = sM->m_Offset.z;
+        double lrot = sM->m_Rotation.z;
+
+        bool top = ( aFootprint->GetLayer() == B_Cu ) ? false : true;
+
+        if( top )
+        {
+            locy = -locy;
+            RotatePoint( &locx, &locy, aFootprint->GetOrientation() );
+            locy = -locy;
+        }
+
+        if( !top )
+        {
+            lrot = -lrot;
+            RotatePoint( &locx, &locy, aFootprint->GetOrientation() );
+            locy = -locy;
+
+            rotz = 180.0 - rotz;
+
+            if( rotz >= 360.0 )
+                while( rotz >= 360.0 ) rotz -= 360.0;
+
+            if( rotz <= -360.0 )
+                while( rotz <= -360.0 ) rotz += 360.0;
+        }
+
+        if( comp == nullptr )
+            comp = aIDFBoard.FindComponent( refdes );
+
+        if( comp == nullptr )
+        {
+            comp = new IDF3_COMPONENT( &aIDFBoard );
+
+            comp->SetRefDes( refdes );
+
+            if( top )
+            {
+                comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
+                                   -aFootprint->GetPosition().y * scale + dy,
+                                   rotz, IDF3::IDF_LAYER::LYR_TOP );
+            }
+            else
+            {
+                comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
+                                   -aFootprint->GetPosition().y * scale + dy,
+                                   rotz, IDF3::IDF_LAYER::LYR_BOTTOM );
+            }
+
+            comp->SetPlacement( IDF3::IDF_PLACEMENT::PS_ECAD );
+
+            aIDFBoard.AddComponent( comp );
+        }
+        else
+        {
+            double refX, refY, refA;
+            IDF3::IDF_LAYER side;
+
+            if( ! comp->GetPosition( refX, refY, refA, side ) )
+            {
+                // place the item
+                if( top )
+                {
+                    comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
+                                       -aFootprint->GetPosition().y * scale + dy,
+                                       rotz, IDF3::IDF_LAYER::LYR_TOP );
+                }
+                else
+                {
+                    comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
+                                       -aFootprint->GetPosition().y * scale + dy,
+                                       rotz, IDF3::IDF_LAYER::LYR_BOTTOM );
+                }
+
+                comp->SetPlacement( IDF3::IDF_PLACEMENT::PS_ECAD );
+
+            }
+            else
+            {
+                // check that the retrieved component matches this one
+                refX = refX - ( aFootprint->GetPosition().x * scale + dx );
+                refY = refY - ( -aFootprint->GetPosition().y * scale + dy );
+                refA = refA - rotz;
+                refA *= refA;
+                refX *= refX;
+                refY *= refY;
+                refX += refY;
+
+                // conditions: same side, X,Y coordinates within 10 microns,
+                // angle within 0.01 degree
+                if( ( top && side == IDF3::IDF_LAYER::LYR_BOTTOM ) || ( !top && side == IDF3::IDF_LAYER::LYR_TOP )
+                    || ( refA > 0.0001 ) || ( refX > 0.0001 ) )
+                {
+                    if( m_reporter )
+                    {
+                        m_reporter->Report(
+                                wxString::Format( "Error exporting footprint %s: duplicate reference designator",
+                                                  aFootprint->GetReference() ),
+                                RPT_SEVERITY_ERROR );
+                    }
+
+                    return false;
+                }
+            }
+        }
+
+        // create the local data ...
+        IDF3_COMP_OUTLINE_DATA* data = new IDF3_COMP_OUTLINE_DATA( comp, outline );
+
+        data->SetOffsets( locx, locy, locz, lrot );
+        comp->AddOutlineData( data );
+        ++sM;
+    }
+
+    if( comp && m_reporter )
+    {
+        m_reporter->Report( wxString::Format( _( "Exported IDF model for footprint %s" ), aFootprint->GetReference() ),
+                            RPT_SEVERITY_INFO );
+    }
+
+    return comp != nullptr;
+}
+
+
+IDF3_COMP_OUTLINE* IDF_EXPORTER::createOutlineFromExtrudedBody( const FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard,
+                                                                const EXTRUDED_3D_BODY& aBody ) const
+{
+    SHAPE_POLY_SET outline;
+
+    if( !GetExtrusionOutline( aFootprint, outline ) || outline.OutlineCount() < 1 )
+    {
+        if( m_reporter )
+        {
+            m_reporter->Report( wxString::Format( _( "Could not generate extruded body for %s" ),
+                                                  aFootprint->GetReference() ),
+                                RPT_SEVERITY_ERROR );
+        }
+
+        return nullptr;
+    }
+
+    ApplyExtrusionTransform( outline, &aBody, VECTOR2D() );
+    outline.Move( -aFootprint->GetPosition() );
+    outline.Rotate( -aFootprint->GetOrientation() );
+    outline.Simplify();
+
+    double scale = m_settings->m_units == JOB_EXPORT_PCB_IDF::UNITS::MILS ? pcbIUScale.MILS_PER_IU
+                                                                          : pcbIUScale.MM_PER_IU;
+
+    SHAPE_LINE_CHAIN chain = outline.COutline( 0 );
+
+    if( chain.PointCount() < 3 )
+    {
+        if( m_reporter )
+        {
+            m_reporter->Report( wxString::Format( _( "Could not generate extruded body for %s" ),
+                                                  aFootprint->GetReference() ),
+                                RPT_SEVERITY_ERROR );
+        }
+
+        return nullptr;
+    }
+
+    // Specify counter-clockwise: maybe not necessary for component outlines per the spec, but seems safe?
+    chain = chain.Reverse();
+
+    std::list<IDF_SEGMENT*> lines;
+
+    for( int ii = 0; ii < chain.PointCount(); ++ii )
+    {
+        VECTOR2I start = chain.CPoint( ii );
+        VECTOR2I end = chain.CPoint( ( ii + 1 ) % chain.PointCount() );
+
+        if( start == end )
+            continue;
+
+        IDF_POINT sp( start.x * scale, -start.y * scale );
+        IDF_POINT ep( end.x * scale, -end.y * scale );
+
+        lines.push_back( new IDF_SEGMENT( sp, ep ) );
+    }
+
+    auto cleanup =
+        [&lines]()
+        {
+            while( !lines.empty() )
+            {
+                delete lines.front();
+                lines.pop_front();
+            }
+        };
+
+    IDF3_COMP_OUTLINE* libOutline = aIDFBoard.GetComponentOutline( aFootprint->GetFPID().Format(),
+                                                                   std::string( aFootprint->GetReference().ToUTF8() ) );
+
+    if( !libOutline )
+    {
+        if( m_reporter )
+        {
+            m_reporter->Report( wxString::Format( _( "Could not generate extruded body for %s" ),
+                                                  aFootprint->GetReference() ),
+                                RPT_SEVERITY_ERROR );
+        }
+
+        cleanup();
+        return nullptr;
+    }
+
+    if( libOutline->OutlinesSize() == 0 )
+    {
+        IDF_OUTLINE* idfOutline = new IDF_OUTLINE;
+        IDF3::GetOutline( lines, *idfOutline );
+
+        if( idfOutline->empty() )
+        {
+            delete idfOutline;
+            cleanup();
+            return nullptr;
+        }
+
+        IDF3::COMP_TYPE compType =
+                ( aFootprint->GetAttributes() & FP_THROUGH_HOLE || aFootprint->GetAttributes() & FP_SMD )
+                        ? IDF3::COMP_TYPE::COMP_ELEC
+                        : IDF3::COMP_TYPE::COMP_MECH;
+
+        libOutline->SetComponentClass( compType );
+        libOutline->SetUnit( m_settings->m_units == JOB_EXPORT_PCB_IDF::UNITS::MILS ? IDF3::IDF_UNIT::UNIT_THOU
+                                                                                    : IDF3::IDF_UNIT::UNIT_MM );
+
+        double height = std::max( 0.0, aBody.m_height * aBody.m_scale.z * scale );
+
+        libOutline->SetThickness( height );
+
+        if( !libOutline->AddOutline( idfOutline ) )
+        {
+            delete idfOutline;
+
+            if( m_reporter )
+            {
+                m_reporter->Report( wxString::Format( _( "Could not generate extruded body for %s" ),
+                                                      aFootprint->GetReference() ),
+                                    RPT_SEVERITY_ERROR );
+            }
+
+            cleanup();
+            return nullptr;
+        }
+    }
+    else
+    {
+        // The outline is shared with another footprint; reuse its geometry
+    }
+
+    return libOutline;
+}
+
+
+int IDF_EXPORTER::getMaxModelHeight( FOOTPRINT* aFootprint ) const
+{
+    PROJECT* project = m_board->GetProject();
+    S3D_CACHE* cache = project ? PROJECT_PCB::Get3DCacheManager( project ) : nullptr;
+    wxString libraryName = aFootprint->GetFPID().GetLibNickname();
+    wxString footprintBasePath = wxEmptyString;
+
+    if( !cache || !project )
+        return 0;
+
+    if( std::optional<LIBRARY_TABLE_ROW*> r = PROJECT_PCB::FootprintLibAdapter( project )->GetRow( libraryName ); r )
+        footprintBasePath = LIBRARY_MANAGER::GetFullURI( *r, true );
+
+    int height = 0;
+
+    for( const FP_3DMODEL& fpModel : aFootprint->Models() )
+    {
+        if( !fpModel.m_Show || fpModel.m_Filename.empty() )
+            continue;
+
+        std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
+        embeddedFilesStack.push_back( aFootprint->GetEmbeddedFiles() );
+        embeddedFilesStack.push_back( m_board->GetEmbeddedFiles() );
+
+        wxString modelPath = m_resolver->ResolvePath( fpModel.m_Filename, footprintBasePath,
+                                                    std::move( embeddedFilesStack ) );
+
+        if( modelPath.empty() )
+            continue;
+
+        const S3DMODEL* model = cache->GetModel( modelPath, footprintBasePath, {} );
+
+        if( !model )
+            continue;
+
+        height = std::max( height, pcbIUScale.mmToIU( getModelHeight( *model, fpModel.m_Rotation,
+                                                                      fpModel.m_Scale ).value_or( 0 ) ) );
+    }
+
+    return height;
+}
+
+
+/**
+ * Retrieve information from all board footprints, adds drill holes to the DRILLED_HOLES or
+ * BOARD_OUTLINE section as appropriate,  Compiles data for the PLACEMENT section and compiles
+ * data for the library ELECTRICAL section.
+ */
+void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard ) const
+{
+    wxCHECK( m_board && m_resolver && m_settings, /* void */ );
+
+    // Reference Designator
+    std::string crefdes = TO_UTF8( aFootprint->Reference().GetShownText( RESOLVED ) );
 
     if( crefdes.empty() || !crefdes.compare( "~" ) )
     {
@@ -485,7 +883,7 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
                     if( m_reporter )
                     {
                         m_reporter->Report( wxString::Format( "Error exporting footprint %s: %s",
-                                                              aFootprint->GetReferenceAsString(),
+                                                              aFootprint->GetReference(),
                                                               _( "could not add drill for pad" ) ),
                                             RPT_SEVERITY_ERROR );
                     }
@@ -500,181 +898,116 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
     if( aFootprint->GetDNPForVariant( m_board->GetCurrentVariant() ) && !m_settings->m_includeDNP )
         return;
 
+    int standoffHeight = 0;
+
     // add any valid models to the library item list
-    std::string refdes;
-
-    IDF3_COMPONENT* comp = nullptr;
-
-    auto sM = aFootprint->Models().begin();
-    auto eM = aFootprint->Models().end();
-    wxFileName idfFile;
-    wxString   idfExt;
-
-    while( sM != eM )
+    if( !exportFootprintIdfModels( aFootprint, aIDFBoard ) )
     {
-        if( !sM->m_Show )
+        // No explicit models found: use the existing extruded body, or generate one
+        IDF3_COMP_OUTLINE* libOutline = nullptr;
+        EXTRUDED_3D_BODY generatedBody;
+        EXTRUDED_3D_BODY* body = nullptr;
+
+        if( EXTRUDED_3D_BODY* extruded = aFootprint->GetExtrudedBody() )
         {
-            ++sM;
-            continue;
+            if( extruded->m_height <= 0 )
+                return;
+
+            standoffHeight = extruded->m_standoff;
+            body = extruded;
         }
 
-        std::vector<const EMBEDDED_FILES*> embeddedFilesStack;
-        embeddedFilesStack.push_back( aFootprint->GetEmbeddedFiles() );
-        embeddedFilesStack.push_back( m_board->GetEmbeddedFiles() );
-
-        idfFile.Assign( m_resolver->ResolvePath( sM->m_Filename, footprintBasePath, std::move( embeddedFilesStack ) ) );
-        idfExt = idfFile.GetExt();
-
-        if( idfExt.Cmp( wxT( "idf" ) ) && idfExt.Cmp( wxT( "IDF" ) ) )
+        if( !body )
         {
-            ++sM;
-            continue;
+            int height = getMaxModelHeight( aFootprint );
+
+            if( height == 0 )
+                return;
+
+            generatedBody.m_height = height;
+            body = &generatedBody;
         }
 
-        if( refdes.empty() )
-        {
-            refdes = TO_UTF8( aFootprint->Reference().GetShownText( RESOLVED ) );
+        libOutline = createOutlineFromExtrudedBody( aFootprint, aIDFBoard, *body );
 
-            // NOREFDES cannot be used or else the software gets confused
-            // when writing out the placement data due to conflicting
-            // placement and layer specifications; to work around this we
-            // create a (hopefully) unique refdes for our exported part.
+        if( libOutline )
+        {
+            std::string refdes = TO_UTF8( aFootprint->Reference().GetShownText( RESOLVED ) );
+
             if( refdes.empty() || !refdes.compare( "~" ) )
                 refdes = aIDFBoard.GetNewRefDes();
-        }
 
-        IDF3_COMP_OUTLINE* outline;
+            IDF3_COMPONENT* comp = aIDFBoard.FindComponent( refdes );
+            double          rotz = aFootprint->GetOrientation().AsDegrees();
+            bool            top = ( aFootprint->GetLayer() != B_Cu );
 
-        outline = aIDFBoard.GetComponentOutline( idfFile.GetFullPath() );
-
-        if( !outline )
-        {
-            if( m_reporter )
+            if( comp == nullptr )
             {
-                m_reporter->Report( wxString::Format( "Error exporting footprint %s: %s",
-                                                      aFootprint->GetReferenceAsString(),
-                                                      _( "could not find a valid outline" ) ),
-                                    RPT_SEVERITY_ERROR );
-            }
-
-            return;
-        }
-
-        double rotz = aFootprint->GetOrientation().AsDegrees();
-        double locx = sM->m_Offset.x;  // part offsets are in mm
-        double locy = sM->m_Offset.y;
-        double locz = sM->m_Offset.z;
-        double lrot = sM->m_Rotation.z;
-
-        bool top = ( aFootprint->GetLayer() == B_Cu ) ? false : true;
-
-        if( top )
-        {
-            locy = -locy;
-            RotatePoint( &locx, &locy, aFootprint->GetOrientation() );
-            locy = -locy;
-        }
-
-        if( !top )
-        {
-            lrot = -lrot;
-            RotatePoint( &locx, &locy, aFootprint->GetOrientation() );
-            locy = -locy;
-
-            rotz = 180.0 - rotz;
-
-            if( rotz >= 360.0 )
-                while( rotz >= 360.0 ) rotz -= 360.0;
-
-            if( rotz <= -360.0 )
-                while( rotz <= -360.0 ) rotz += 360.0;
-        }
-
-        if( comp == nullptr )
-            comp = aIDFBoard.FindComponent( refdes );
-
-        if( comp == nullptr )
-        {
-            comp = new IDF3_COMPONENT( &aIDFBoard );
-
-            comp->SetRefDes( refdes );
-
-            if( top )
-            {
+                comp = new IDF3_COMPONENT( &aIDFBoard );
+                comp->SetRefDes( refdes );
                 comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
                                    -aFootprint->GetPosition().y * scale + dy,
-                                   rotz, IDF3::IDF_LAYER::LYR_TOP );
+                                   rotz, top ? IDF3::IDF_LAYER::LYR_TOP : IDF3::IDF_LAYER::LYR_BOTTOM );
+                comp->SetPlacement( IDF3::IDF_PLACEMENT::PS_ECAD );
+                aIDFBoard.AddComponent( comp );
             }
             else
             {
-                comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
-                                   -aFootprint->GetPosition().y * scale + dy,
-                                   rotz, IDF3::IDF_LAYER::LYR_BOTTOM );
-            }
+                double          refX, refY, refA;
+                IDF3::IDF_LAYER side;
 
-            comp->SetPlacement( IDF3::IDF_PLACEMENT::PS_ECAD );
-
-            aIDFBoard.AddComponent( comp );
-        }
-        else
-        {
-            double refX, refY, refA;
-            IDF3::IDF_LAYER side;
-
-            if( ! comp->GetPosition( refX, refY, refA, side ) )
-            {
-                // place the item
-                if( top )
+                if( !comp->GetPosition( refX, refY, refA, side ) )
                 {
                     comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
                                        -aFootprint->GetPosition().y * scale + dy,
-                                       rotz, IDF3::IDF_LAYER::LYR_TOP );
+                                       rotz, top ? IDF3::IDF_LAYER::LYR_TOP : IDF3::IDF_LAYER::LYR_BOTTOM );
+                    comp->SetPlacement( IDF3::IDF_PLACEMENT::PS_ECAD );
                 }
                 else
                 {
-                    comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
-                                       -aFootprint->GetPosition().y * scale + dy,
-                                       rotz, IDF3::IDF_LAYER::LYR_BOTTOM );
-                }
+                    // check that the retrieved component matches this one
+                    refX = refX - ( aFootprint->GetPosition().x * scale + dx );
+                    refY = refY - ( -aFootprint->GetPosition().y * scale + dy );
+                    refA = refA - rotz;
+                    refA *= refA;
+                    refX *= refX;
+                    refY *= refY;
+                    refX += refY;
 
-                comp->SetPlacement( IDF3::IDF_PLACEMENT::PS_ECAD );
-
-            }
-            else
-            {
-                // check that the retrieved component matches this one
-                refX = refX - ( aFootprint->GetPosition().x * scale + dx );
-                refY = refY - ( -aFootprint->GetPosition().y * scale + dy );
-                refA = refA - rotz;
-                refA *= refA;
-                refX *= refX;
-                refY *= refY;
-                refX += refY;
-
-                // conditions: same side, X,Y coordinates within 10 microns,
-                // angle within 0.01 degree
-                if( ( top && side == IDF3::IDF_LAYER::LYR_BOTTOM ) || ( !top && side == IDF3::IDF_LAYER::LYR_TOP )
-                    || ( refA > 0.0001 ) || ( refX > 0.0001 ) )
-                {
-                    if( m_reporter )
+                    // conditions: same side, X,Y coordinates within 10 microns,
+                    // angle within 0.01 degree
+                    if( ( top && side == IDF3::IDF_LAYER::LYR_BOTTOM ) || ( !top && side == IDF3::IDF_LAYER::LYR_TOP )
+                            || ( refA > 0.0001 ) || ( refX > 0.0001 ) )
                     {
-                        m_reporter->Report( wxString::Format( "Error exporting footprint %s: %s",
-                                                              aFootprint->GetReferenceAsString(),
-                                                              _( "duplicate reference designator" ) ),
-                                            RPT_SEVERITY_ERROR );
-                    }
+                        comp->GetPosition( refX, refY, refA, side );
 
-                    return;
+                        if( m_reporter )
+                        {
+                            m_reporter->Report(
+                                    wxString::Format( "Error exporting footprint %s: duplicate reference designator",
+                                                      aFootprint->GetReference() ),
+                                    RPT_SEVERITY_ERROR );
+                        }
+
+                        return;
+                    }
                 }
+            }
+
+            double unitScale = m_settings->m_units == JOB_EXPORT_PCB_IDF::UNITS::MILS ? pcbIUScale.MILS_PER_IU
+                                                                                      : pcbIUScale.MM_PER_IU;
+
+            IDF3_COMP_OUTLINE_DATA* data = new IDF3_COMP_OUTLINE_DATA( comp, libOutline );
+            data->SetOffsets( 0.0, 0.0, standoffHeight * unitScale, 0.0 );
+            comp->AddOutlineData( data );
+
+            if( m_reporter )
+            {
+                m_reporter->Report( wxString::Format( _( "Exported extruded body for footprint %s" ),
+                                                      aFootprint->GetReference() ),
+                                    RPT_SEVERITY_INFO );
             }
         }
-
-        // create the local data ...
-        IDF3_COMP_OUTLINE_DATA* data = new IDF3_COMP_OUTLINE_DATA( comp, outline );
-
-        data->SetOffsets( locx, locy, locz, lrot );
-        comp->AddOutlineData( data );
-        ++sM;
     }
 }
 
@@ -767,16 +1100,7 @@ bool IDF_EXPORTER::Export( const wxString& aFullFileName ) const
 
         // Output the drill holes and footprint (library) data.
         for( FOOTPRINT* footprint : m_board->Footprints() )
-        {
-            if( m_reporter )
-            {
-                m_reporter->Report( wxString::Format( _( "Exporting footprint %s" ),
-                                                      footprint->GetReferenceAsString() ),
-                                    RPT_SEVERITY_INFO );
-            }
-
             exportFootprint( footprint, idfBoard );
-        }
 
         if( !idfBoard.WriteFile( aFullFileName, idfUnit, m_reporter ) )
             ok = false;

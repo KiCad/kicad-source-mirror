@@ -25,7 +25,9 @@
 #include <wx/string.h>
 
 class BOARD;
+class EXTRUDED_3D_BODY;
 class IDF3_BOARD;
+class IDF3_COMP_OUTLINE;
 class JOB_EXPORT_PCB_IDF;
 class FILENAME_RESOLVER;
 class REPORTER;
@@ -52,6 +54,19 @@ private:
 
     /// Exports the given footprint to an in-progress IDF file
     void exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard ) const;
+
+    /**
+     * Exports any explicit IDF models attached to a footprint to an in-progress IDF file
+     * @return true if one or more models was found and exported
+     */
+    bool exportFootprintIdfModels( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard ) const;
+
+    /// Generates an IDF component outline from a footprint extruded 3D body, if possible
+    IDF3_COMP_OUTLINE* createOutlineFromExtrudedBody( const FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard,
+                                                      const EXTRUDED_3D_BODY& aBody ) const;
+
+    /// Returns the largest extent in Z of the footprint's visible 3D models, in IU
+    int getMaxModelHeight( FOOTPRINT* aFootprint ) const;
 
     BOARD*              m_board = nullptr;
     FILENAME_RESOLVER*  m_resolver = nullptr;
