@@ -153,6 +153,7 @@ public:
     KIID                        m_ImplicitItemId;
     BOARD_ITEM*                 m_ImplicitItem;
     wxString                    m_Name;
+    wxString                    m_ImplicitNetclass;   ///< Netclass named by an implicit netclass rule's condition
     wxString                    m_LayerSource;
     LSET                        m_LayerCondition;
     DRC_RULE_CONDITION*         m_Condition;

@@ -277,6 +277,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s')" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassRule->m_ImplicitNetclass = nc->GetName();
                     netclassClearanceRules.push_back( netclassRule );
 
                     DRC_CONSTRAINT constraint( CLEARANCE_CONSTRAINT );
@@ -298,6 +299,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s')" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassRule->m_ImplicitNetclass = nc->GetName();
                     netclassClearanceRules.push_back( netclassRule );
 
                     DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
@@ -315,6 +317,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.inDiffPair('*')" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassRule->m_ImplicitNetclass = nc->GetName();
                     netclassItemSpecificRules.push_back( netclassRule );
 
                     DRC_CONSTRAINT constraint( TRACK_WIDTH_CONSTRAINT );
@@ -332,6 +335,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s')" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassRule->m_ImplicitNetclass = nc->GetName();
                     netclassItemSpecificRules.push_back( netclassRule );
 
                     DRC_CONSTRAINT constraint( DIFF_PAIR_GAP_CONSTRAINT );
@@ -349,6 +353,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                         expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && AB.isCoupledDiffPair()" ), ncName );
                         netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                        netclassRule->m_ImplicitNetclass = nc->GetName();
                         netclassItemSpecificRules.push_back( netclassRule );
 
                         DRC_CONSTRAINT min_clearanceConstraint( CLEARANCE_CONSTRAINT );
@@ -368,6 +373,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Via_Type != 'Micro'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassRule->m_ImplicitNetclass = nc->GetName();
                     netclassItemSpecificRules.push_back( netclassRule );
 
                     DRC_CONSTRAINT constraint( VIA_DIAMETER_CONSTRAINT );
@@ -385,6 +391,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Via_Type != 'Micro'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassRule->m_ImplicitNetclass = nc->GetName();
                     netclassItemSpecificRules.push_back( netclassRule );
 
                     DRC_CONSTRAINT constraint( HOLE_SIZE_CONSTRAINT );
@@ -402,6 +409,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Via_Type == 'Micro'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassRule->m_ImplicitNetclass = nc->GetName();
                     netclassItemSpecificRules.push_back( netclassRule );
 
                     DRC_CONSTRAINT constraint( VIA_DIAMETER_CONSTRAINT );
@@ -419,6 +427,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     expr = wxString::Format( wxT( "A.hasExactNetclass('%s') && A.Via_Type == 'Micro'" ), ncName );
                     netclassRule->m_Condition = new DRC_RULE_CONDITION( expr );
+                    netclassRule->m_ImplicitNetclass = nc->GetName();
                     netclassItemSpecificRules.push_back( netclassRule );
 
                     DRC_CONSTRAINT constraint( HOLE_SIZE_CONSTRAINT );
@@ -1013,6 +1022,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
     const BOARD_CONNECTED_ITEM* ac = a && a->IsConnected() ? static_cast<const BOARD_CONNECTED_ITEM*>( a ) : nullptr;
     const BOARD_CONNECTED_ITEM* bc = b && b->IsConnected() ? static_cast<const BOARD_CONNECTED_ITEM*>( b ) : nullptr;
+    const NETCLASS*             acNetclass = ac ? ac->GetEffectiveNetClass() : nullptr;
+    const NETCLASS*             bcNetclass = bc ? bc->GetEffectiveNetClass() : nullptr;
 
     bool a_is_non_copper = a && ( !a->IsOnCopperLayer() || isKeepoutZone( a, false ) );
     bool b_is_non_copper = b && ( !b->IsOnCopperLayer() || isKeepoutZone( b, false ) );
@@ -1637,6 +1648,17 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                             REPORT( _( "Netclass clearances apply only between copper items." ) )
                             return;
                         }
+                    }
+
+                    // The condition starts with A.hasExactNetclass( tag ) and is tried both ways round, so
+                    // it cannot match unless one of the items is in that netclass
+                    const wxString& netclassName = c->parentRule->m_ImplicitNetclass;
+
+                    if( !netclassName.empty()
+                        && !( acNetclass && acNetclass->NameEquals( netclassName ) )
+                        && !( bcNetclass && bcNetclass->NameEquals( netclassName ) ) )
+                    {
+                        return;
                     }
 
                     if( !checkCondition( c, nullptr ) )
