@@ -436,6 +436,7 @@ void PCB_IO_KICAD_SEXPR::Format( const BOARD_ITEM* aItem ) const
         break;
 
     case PCB_DRILL_CHART_T:
+    case PCB_STACKUP_TABLE_T:
         format( static_cast<const PCB_GENERATED_TABLE*>( aItem ) );
         break;
 
@@ -2863,7 +2864,8 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATED_TABLE* aTable ) const
 
     switch( aTable->Type() )
     {
-    case PCB_DRILL_CHART_T: m_out->Print( "(drill_chart " ); break;
+    case PCB_DRILL_CHART_T:   m_out->Print( "(drill_chart " ); break;
+    case PCB_STACKUP_TABLE_T: m_out->Print( "(stackup_table " ); break;
 
     default:
         wxFAIL_MSG( wxT( "Unhandled generated table type " ) + aTable->GetClass() );
@@ -2887,7 +2889,7 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATED_TABLE* aTable ) const
     if( aTable->GetPrecision() != schema.DefaultPrecision() )
         m_out->Print( "(precision %d)", aTable->GetPrecision() );
 
-    for( const GENERATED_TABLE_COLUMN& col : aTable->Columns() )
+    for( const GENERATED_TABLE_COLUMN& col : aTable->AllColumns() )
     {
         const GENERATED_TABLE_COLUMN_DEF* def = schema.Find( col.m_Id );
 
@@ -2903,6 +2905,9 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_GENERATED_TABLE* aTable ) const
 
         if( col.m_Width > 0 )
             m_out->Print( "(width %s)", formatInternalUnits( col.m_Width ).c_str() );
+
+        if( !col.m_Visible )
+            KICAD_FORMAT::FormatBool( m_out, "hide", true );
 
         m_out->Print( ")" );
     }

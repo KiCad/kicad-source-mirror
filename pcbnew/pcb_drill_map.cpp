@@ -237,6 +237,16 @@ void PCB_DRILL_MAP::swapData( BOARD_ITEM* aImage )
 }
 
 
+void PCB_DRILL_MAP::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == Type(), /* void */ );
+
+    // BOARD_ITEM's copy stops at the base. swapData covers every member of the map
+    std::unique_ptr<BOARD_ITEM> copy( static_cast<BOARD_ITEM*>( aOther->Clone() ) );
+    SwapItemData( copy.get() );
+}
+
+
 double PCB_DRILL_MAP::Similarity( const BOARD_ITEM& aOther ) const
 {
     if( aOther.Type() != Type() )

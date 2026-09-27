@@ -501,7 +501,7 @@ TOOL_ACTION PCB_ACTIONS::placeStackup( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .LegacyHotkeyName( "Add Stackup Table" )
         .FriendlyName( _( "Add Stackup Table" ) )
-        .Tooltip( _( "Add a board stackup table on a graphic layer" ) )
+        .Tooltip( _( "Add a board stackup table that follows the stackup" ) )
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Flags( AF_ACTIVATE ) );
 

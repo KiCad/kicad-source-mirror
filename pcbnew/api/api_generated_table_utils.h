@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <type_traits>
 
+#include <api/api_enums.h>
 #include <api/api_utils.h>
 #include <base_units.h>
 #include <pcb_generated_table.h>
@@ -35,7 +36,7 @@
  * Pack what every generated table shares into its message.
  *
  * Each generated table has its own message, so this relies on every one of them naming these
- * fields the same way: table, columns (id, heading, align, width), units, precision and
+ * fields the same way: table, columns (id, heading, align, width, hidden), units, precision and
  * row_keys. Column ids and alignments are offset by one, leaving zero as the unset value.
  */
 template <typename MSG>
@@ -45,7 +46,7 @@ void PackGeneratedTable( const PCB_GENERATED_TABLE& aTable, MSG& aMsg )
     aTable.PCB_TABLE::Serialize( tableAny );
     tableAny.UnpackTo( aMsg.mutable_table() );
 
-    for( const GENERATED_TABLE_COLUMN& col : aTable.Columns() )
+    for( const GENERATED_TABLE_COLUMN& col : aTable.AllColumns() )
     {
         auto* proto = aMsg.add_columns();
 
@@ -56,14 +57,10 @@ void PackGeneratedTable( const PCB_GENERATED_TABLE& aTable, MSG& aMsg )
         proto->set_heading( col.m_Heading.ToStdString() );
         proto->set_align( static_cast<ALIGN>( static_cast<int>( col.m_Align ) + 1 ) );
         kiapi::common::PackDistance( *proto->mutable_width(), col.m_Width );
+        proto->set_hidden( !col.m_Visible );
     }
 
-    switch( aTable.GetUnits() )
-    {
-    case GENERATED_TABLE_UNITS::MM:   aMsg.set_units( kiapi::common::types::U_MM ); break;
-    case GENERATED_TABLE_UNITS::INCH: aMsg.set_units( kiapi::common::types::U_INCH ); break;
-    case GENERATED_TABLE_UNITS::MILS: aMsg.set_units( kiapi::common::types::U_MILS ); break;
-    }
+    aMsg.set_units( ToProtoEnum<GENERATED_TABLE_UNITS, kiapi::common::types::Units>( aTable.GetUnits() ) );
 
     aMsg.set_precision( aTable.GetPrecision() );
 
@@ -91,8 +88,7 @@ bool UnpackGeneratedTable( const MSG& aMsg, PCB_GENERATED_TABLE& aTable )
     if( !DocumentationLayers().Contains( aTable.GetLayer() ) )
         return false;
 
-    std::vector<GENERATED_TABLE_COLUMN>& columns = aTable.Columns();
-    columns.clear();
+    std::vector<GENERATED_TABLE_COLUMN> columns;
 
     for( const auto& proto : aMsg.columns() )
     {
@@ -126,6 +122,7 @@ bool UnpackGeneratedTable( const MSG& aMsg, PCB_GENERATED_TABLE& aTable )
         width.set_value_nm( std::clamp<int64_t>( proto.width().value_nm(), 0,
                                                  pcbIUScale.IUToNm( GENERATED_TABLE_MAX_COLUMN_WIDTH ) ) );
         col.m_Width = kiapi::common::UnpackDistance( width );
+        col.m_Visible = !proto.hidden();
         columns.push_back( col );
     }
 
@@ -134,14 +131,17 @@ bool UnpackGeneratedTable( const MSG& aMsg, PCB_GENERATED_TABLE& aTable )
     if( !aTable.Schema().Validate( columns ) )
         return false;
 
-    // The shared enum also carries metres and tenths. A table has no rendering for those, so
-    // anything but inches or mils reads back as millimetres rather than as a broken table
-    switch( aMsg.units() )
-    {
-    case kiapi::common::types::U_INCH: aTable.SetUnits( GENERATED_TABLE_UNITS::INCH ); break;
-    case kiapi::common::types::U_MILS: aTable.SetUnits( GENERATED_TABLE_UNITS::MILS ); break;
-    default:                           aTable.SetUnits( GENERATED_TABLE_UNITS::MM ); break;
-    }
+    // A visibility edit can leave the message's cell grid at its old width until the caller rebuilds it.
+    if( std::none_of( columns.begin(), columns.end(),
+                      []( const GENERATED_TABLE_COLUMN& aCol )
+                      {
+                          return aCol.m_Visible;
+                      } ) )
+        return false;
+
+    aTable.RestoreColumns( columns );
+
+    aTable.SetUnits( FromProtoEnum<GENERATED_TABLE_UNITS, kiapi::common::types::Units>( aMsg.units() ) );
 
     aTable.RowKeys().clear();
 

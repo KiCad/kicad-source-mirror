@@ -247,7 +247,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
         return;
 
     bool containsDrillMap = false;
-    bool containsDrillChart = false;
+    bool containsGeneratedTable = false;
 
     for( const COMMIT_LINE& entry : m_entries )
     {
@@ -256,11 +256,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( entry.m_item );
 
-        if( item->Type() == PCB_DRILL_CHART_T || item->Type() == PCB_DRILL_MAP_T )
-        {
-            containsDrillMap |= item->Type() == PCB_DRILL_MAP_T;
-            containsDrillChart |= item->Type() == PCB_DRILL_CHART_T;
-        }
+        containsDrillMap |= item->Type() == PCB_DRILL_MAP_T;
+        containsGeneratedTable |= IsGeneratedTableType( item->Type() );
     }
 
     undoList.SetDescription( aMessage );
@@ -506,6 +503,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             case PCB_TABLE_T:
             case PCB_DRILL_CHART_T:
             case PCB_DRILL_MAP_T:
+            case PCB_STACKUP_TABLE_T:
             case PCB_TRACE_T:
             case PCB_ARC_T:
             case PCB_VIA_T:
@@ -787,7 +785,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
     // A shrinking table deletes the cells past its new end and the selection holds those
     // cells directly, so it has to be resolved again from what is still on the board
-    if( containsDrillChart && selTool )
+    if( containsGeneratedTable && selTool )
         selTool->RebuildSelection();
 
     if( frame )

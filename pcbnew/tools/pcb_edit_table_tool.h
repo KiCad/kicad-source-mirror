@@ -55,6 +55,8 @@ private:
     void setTransitions() override;
 
 private:
+    bool canEditTableStructure( const PCB_TABLE* aTable ) const override { return !aTable->IsGenerated(); }
+
     TOOL_MANAGER* getToolMgr() override { return m_toolMgr; }
     BASE_SCREEN* getScreen() override { return nullptr; }
 

@@ -54,6 +54,12 @@ public:
      */
     void SaveSelection( const PCB_SELECTION& selected, bool isFootprintEditor );
 
+    /**
+     * The items a copy of \a aSelection carries, which is what its reference point has to be
+     * picked from. A generated table is copied whole, so its selected cells stand for the table.
+     */
+    static std::vector<BOARD_ITEM*> CopiedItems( const PCB_SELECTION& aSelection );
+
     BOARD_ITEM* Parse();
 
     void SetBoard( BOARD* aBoard );

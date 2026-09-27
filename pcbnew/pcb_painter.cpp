@@ -868,6 +868,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_TABLE_T:
+    case PCB_STACKUP_TABLE_T:
         draw( static_cast<const PCB_TABLE*>( item ), aLayer );
         break;
 

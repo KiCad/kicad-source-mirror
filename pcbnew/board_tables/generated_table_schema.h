@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <vector>
 
+#include <eda_units.h>
 #include <lset.h>
 #include <wx/string.h>
 
@@ -61,8 +62,8 @@ constexpr int64_t GENERATED_TABLE_MAX_TOTAL_WIDTH = 10LL * 1000 * 1000000;
 
 /**
  * A column as a generated table actually carries it: what a row's cell in that column holds
- * and how it is presented. Every generated table (drill chart, stackup table, board
- * characteristics) shares this shape rather than inventing its own.
+ * and how it is presented. Every generated table (drill chart, stackup table) shares this
+ * shape rather than inventing its own.
  */
 struct GENERATED_TABLE_COLUMN
 {
@@ -70,6 +71,7 @@ struct GENERATED_TABLE_COLUMN
     wxString              m_Heading;
     GENERATED_TABLE_ALIGN m_Align = GENERATED_TABLE_ALIGN::LEFT;
     int                   m_Width = 0;    // minimum width, 0 = autosize
+    bool                  m_Visible = true;
 
     bool operator==( const GENERATED_TABLE_COLUMN& aOther ) const = default;
 };
@@ -137,11 +139,17 @@ private:
 
 
 /**
- * Render a length the way a generated table's cell shows it. INCH and MILS both derive their
- * decimal count from aPrecision, so a table can switch units without needing a second
- * precision setting.
+ * Render a length the way a generated table's cell shows it. Every unit gets aPrecision
+ * decimals and its own suffix, so a table can switch units without needing a second
+ * precision setting and a cell never reads as a bare number with no unit attached.
  */
 wxString FormatGeneratedTableLength( int aValue, GENERATED_TABLE_UNITS aUnits, int aPrecision );
+
+
+/**
+ * The table units a user's display units seed. Every unit that is neither inch nor mil maps to MM.
+ */
+GENERATED_TABLE_UNITS ToGeneratedTableUnits( EDA_UNITS aUnits );
 
 
 /**
@@ -155,10 +163,10 @@ bool        GeneratedTableAlignFromToken( const wxString& aToken, GENERATED_TABL
 
 
 /**
- * Layers a drill chart or drill map may live on. Manufacturing layers would be corrupted.
+ * Layers a generated table or drill map may live on. Manufacturing layers would be corrupted.
  *
  * Excludes copper, silkscreen, mask, paste, adhesive, Edge.Cuts, Margin, courtyard and rescue
- * layers. Chart artwork and hole symbols must not alter fabrication outputs or DRC constraints.
+ * layers. Table artwork and hole symbols must not alter fabrication outputs or DRC constraints.
  */
 LSET DocumentationLayers();
 

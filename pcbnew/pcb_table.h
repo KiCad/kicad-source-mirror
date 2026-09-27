@@ -328,6 +328,13 @@ protected:
 
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
+    /**
+     * Give each row the height Autosize measured its text to need, margins included. Called
+     * once the column widths are set and before the cells are placed, so an override still
+     * sees the heights the rows had through GetRowHeight.
+     */
+    virtual void setAutosizedRowHeights( const std::vector<int>& aNeeded );
+
     bool                        m_strokeExternal;
     bool                        m_StrokeHeaderSeparator;
     STROKE_PARAMS               m_borderStroke;

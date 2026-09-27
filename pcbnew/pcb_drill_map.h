@@ -146,6 +146,8 @@ public:
     void Serialize( google::protobuf::Any& aContainer ) const override;
     bool Deserialize( const google::protobuf::Any& aContainer ) override;
 
+    void CopyFrom( const BOARD_ITEM* aOther ) override;
+
 #if defined( DEBUG )
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif

@@ -1703,6 +1703,7 @@ message DrillChartColumn
   string heading = 2;
   kiapi.common.types.HorizontalAlignment align = 3;
   kiapi.common.types.Distance width = 4;
+  bool hidden = 5;
 }
 
 // Since: 11.0
@@ -2089,4 +2090,39 @@ message ViaStack
 
   // Optional custom user properties for this via stack generator
   repeated kiapi.common.types.CustomProperty custom_properties = 17;
+}
+
+// Since: 11.0
+enum StackupTableColumnId
+{
+  STC_UNKNOWN = 0;
+  STC_LAYER = 1;
+  STC_TYPE = 2;
+  STC_MATERIAL = 3;
+  STC_THICKNESS = 4;
+  STC_COLOR = 5;
+  STC_EPSILON_R = 6;
+  STC_LOSS_TANGENT = 7;
+}
+
+// Since: 11.0
+message StackupTableColumn
+{
+  StackupTableColumnId id = 1;
+  string heading = 2;
+  kiapi.common.types.HorizontalAlignment align = 3;
+  kiapi.common.types.Distance width = 4;
+  bool hidden = 5;
+}
+
+// Since: 11.0
+message StackupTable
+{
+  Table table = 1;
+  repeated StackupTableColumn columns = 2;
+
+  kiapi.common.types.Units units = 3;
+  int32 precision = 4;
+
+  map<int32, string> row_keys = 5;
 }

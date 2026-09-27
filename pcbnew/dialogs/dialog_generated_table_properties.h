@@ -101,6 +101,11 @@ private:
 
     std::vector<GENERATED_TABLE_COLUMN> shownColumns() const;
 
+    /**
+     * The columns the table has, or is given now, in order and marked shown or hidden.
+     */
+    std::vector<GENERATED_TABLE_COLUMN> placedColumns() const;
+
     std::optional<GENERATED_TABLE_FORMAT> getFormat();
     void                                  setFormat( const GENERATED_TABLE_FORMAT& aFormat );
 
@@ -131,11 +136,13 @@ private:
     {
         GENERATED_TABLE_COLUMN m_Column;
         bool                   m_Shown;
+        bool                   m_Placed;    ///< The table has it, shown or hidden
     };
 
     /**
-     * Every known column, checked ones first in table order. Held here rather than in the
-     * grid so a heading survives being unchecked and rechecked.
+     * Every known column, the table's own first in the table's order, then any it has never
+     * had. Held here rather than in the grid so a heading survives being unchecked and
+     * rechecked.
      */
     std::vector<COLUMN_ROW> m_rows;
 

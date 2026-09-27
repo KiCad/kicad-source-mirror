@@ -31,7 +31,6 @@
 #include <eda_text.h>
 #include <i18n_utility.h>
 #include <properties/property_mgr.h>
-#include <widgets/msgpanel.h>
 #include <api/api_enums.h>
 #include <api/api_generated_table_utils.h>
 #include <api/api_utils.h>
@@ -65,6 +64,7 @@ PCB_DRILL_CHART::PCB_DRILL_CHART( const PCB_DRILL_CHART& aOther ) :
         PCB_GENERATED_TABLE( aOther ),
         m_filter( aOther.m_filter ),
         m_showTotals( aOther.m_showTotals ),
+        m_laidOutShowTotals( aOther.m_laidOutShowTotals ),
         m_rowShapes( aOther.m_rowShapes ),
         m_symbolColumn( aOther.m_symbolColumn ),
         m_builtGeneration( aOther.m_builtGeneration )
@@ -93,6 +93,7 @@ void PCB_DRILL_CHART::swapData( BOARD_ITEM* aImage )
 
     std::swap( m_filter, other->m_filter );
     std::swap( m_showTotals, other->m_showTotals );
+    std::swap( m_laidOutShowTotals, other->m_laidOutShowTotals );
     std::swap( m_builtGeneration, other->m_builtGeneration );
     std::swap( m_rowShapes, other->m_rowShapes );
     std::swap( m_symbolColumn, other->m_symbolColumn );
@@ -119,9 +120,31 @@ std::vector<DRILL_CHART_GROUP> PCB_DRILL_CHART::buildGroups( const BOARD&       
 }
 
 
+void PCB_DRILL_CHART::ApplySettings( const PCB_GENERATED_TABLE& aOther )
+{
+    wxCHECK_RET( aOther.Type() == Type(), wxT( "Cannot apply settings from another kind of table." ) );
+
+    PCB_GENERATED_TABLE::ApplySettings( aOther );
+
+    const PCB_DRILL_CHART& other = static_cast<const PCB_DRILL_CHART&>( aOther );
+
+    m_filter = other.m_filter;
+    SetShowTotals( other.m_showTotals );
+}
+
+
 bool PCB_DRILL_CHART::IsStale( const BOARD& aBoard ) const
 {
     return m_builtGeneration != aBoard.GetDrillModelGeneration();
+}
+
+
+void PCB_DRILL_CHART::SetShowTotals( bool aShow )
+{
+    if( aShow != m_showTotals && m_rowKeys.empty() && !m_laidOutShowTotals )
+        m_laidOutShowTotals = m_showTotals;
+
+    m_showTotals = aShow;
 }
 
 
@@ -133,7 +156,7 @@ bool PCB_DRILL_CHART::IsDataRow( int aRow ) const
     // A chart written before the keys were recorded still has to answer this, and its rows are
     // laid out the way RebuildCells lays them out
     const int firstDataRow = 1;
-    const int lastDataRow = GetRowCount() - 1 - ( m_showTotals ? 1 : 0 );
+    const int lastDataRow = GetRowCount() - 1 - ( m_laidOutShowTotals.value_or( m_showTotals ) ? 1 : 0 );
 
     return aRow >= firstDataRow && aRow <= lastDataRow;
 }
@@ -142,23 +165,6 @@ bool PCB_DRILL_CHART::IsDataRow( int aRow ) const
 wxString PCB_DRILL_CHART::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Drill Chart (%d rows)" ), GetRowCount() );
-}
-
-
-void PCB_DRILL_CHART::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
-{
-    aList.emplace_back( _( "Drill Chart" ), wxEmptyString );
-    aList.emplace_back( _( "Rows" ), wxString::Format( wxT( "%d" ), GetRowCount() ) );
-    aList.emplace_back( _( "Layer" ), GetLayerName() );
-}
-
-
-double PCB_DRILL_CHART::Similarity( const BOARD_ITEM& aOther ) const
-{
-    if( aOther.Type() != Type() )
-        return 0.0;
-
-    return PCB_TABLE::Similarity( aOther );
 }
 
 
@@ -397,6 +403,14 @@ std::unique_ptr<GENERATED_TABLE_CONTENT> PCB_DRILL_CHART::generate( const BOARD&
 }
 
 
+void PCB_DRILL_CHART::onColumnsReversed()
+{
+    // The chart is not stale after a flip, so no rebuild would move the marks to the new column
+    if( m_symbolColumn >= 0 )
+        m_symbolColumn = static_cast<int>( m_columns.size() ) - 1 - m_symbolColumn;
+}
+
+
 void PCB_DRILL_CHART::onRebuilt( const BOARD& aBoard, const GENERATED_TABLE_CONTENT& aContent )
 {
     const DRILL_CHART_CONTENT& content = static_cast<const DRILL_CHART_CONTENT&>( aContent );
@@ -472,7 +486,9 @@ bool PCB_DRILL_CHART::Deserialize( const google::protobuf::Any& aContainer )
     for( const auto& [row, shapeIndex] : chart.row_shapes() )
         m_rowShapes[row] = shapeIndex;
 
-    m_showTotals = chart.show_totals();
+    // The cells come with the message, laid out with its setting
+    RestoreShowTotals( chart.show_totals() );
+    m_laidOutShowTotals.reset();
 
     return true;
 }
@@ -497,5 +513,35 @@ static struct PCB_DRILL_CHART_DESC
                                                                   &PCB_DRILL_CHART::SetShowTotals,
                                                                   &PCB_DRILL_CHART::GetShowTotals ),
                              chartProps );
+
+        const wxString includeProps = _HKI( "Include Holes" );
+
+        propMgr.AddProperty( new PROPERTY<PCB_DRILL_CHART, bool>( _HKI( "Plated Holes" ),
+                                                                  &PCB_DRILL_CHART::SetIncludePlated,
+                                                                  &PCB_DRILL_CHART::GetIncludePlated ),
+                             includeProps );
+
+        propMgr.AddProperty( new PROPERTY<PCB_DRILL_CHART, bool>( _HKI( "Non-plated Holes" ),
+                                                                  &PCB_DRILL_CHART::SetIncludeNonPlated,
+                                                                  &PCB_DRILL_CHART::GetIncludeNonPlated ),
+                             includeProps );
+
+        propMgr.AddProperty( new PROPERTY<PCB_DRILL_CHART, bool>( _HKI( "Vias" ), &PCB_DRILL_CHART::SetIncludeVias,
+                                                                  &PCB_DRILL_CHART::GetIncludeVias ),
+                             includeProps );
+
+        propMgr.AddProperty( new PROPERTY<PCB_DRILL_CHART, bool>( _HKI( "Slots" ), &PCB_DRILL_CHART::SetIncludeSlots,
+                                                                  &PCB_DRILL_CHART::GetIncludeSlots ),
+                             includeProps );
+
+        propMgr.AddProperty( new PROPERTY<PCB_DRILL_CHART, bool>( _HKI( "Backdrills" ),
+                                                                  &PCB_DRILL_CHART::SetIncludeBackdrills,
+                                                                  &PCB_DRILL_CHART::GetIncludeBackdrills ),
+                             includeProps );
+
+        propMgr.AddProperty( new PROPERTY<PCB_DRILL_CHART, bool>( _HKI( "Castellated" ),
+                                                                  &PCB_DRILL_CHART::SetIncludeCastellated,
+                                                                  &PCB_DRILL_CHART::GetIncludeCastellated ),
+                             includeProps );
     }
 } _PCB_DRILL_CHART_DESC;

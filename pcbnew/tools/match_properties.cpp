@@ -28,6 +28,7 @@
 #include <pcb_dimension.h>
 #include <pcb_reference_image.h>
 #include <pcb_shape.h>
+#include <pcb_generated_table.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <pcb_target.h>
@@ -66,6 +67,7 @@ static const std::map<wxString, FAMILY>& families()
         { wxS( "rule_area" ),       { TYPE_HASH( ZONE ),                _HKI( "Rule Areas" ) } },
         { wxS( "footprint" ),       { TYPE_HASH( FOOTPRINT ),           _HKI( "Footprints" ) } },
         { wxS( "table" ),           { TYPE_HASH( PCB_TABLE ),           _HKI( "Tables" ) } },
+        { wxS( "generated_table" ), { TYPE_HASH( PCB_GENERATED_TABLE ), _HKI( "Generated Tables" ) } },
         { wxS( "table_cell" ),      { TYPE_HASH( PCB_TABLECELL ),       _HKI( "Table Cells" ) } },
         { wxS( "target" ),          { TYPE_HASH( PCB_TARGET ),          _HKI( "Targets" ) } },
         { wxS( "reference_image" ), { TYPE_HASH( PCB_REFERENCE_IMAGE ), _HKI( "Reference Images" ) } },
@@ -101,6 +103,7 @@ static const std::map<wxString, COMMON_PROPERTY>& commonProperties()
                 { wxS( "dimension" ),       wxS( "Layer" ) },
                 { wxS( "shape" ),           wxS( "Layer" ) },
                 { wxS( "table" ),           wxS( "Layer" ) },
+                { wxS( "generated_table" ), wxS( "Layer" ) },
                 { wxS( "target" ),          wxS( "Layer" ) },
                 { wxS( "text" ),            wxS( "Layer" ) },
                 { wxS( "textbox" ),         wxS( "Layer" ) },
@@ -110,6 +113,7 @@ static const std::map<wxString, COMMON_PROPERTY>& commonProperties()
                 { wxS( "route" ),  wxS( "Width" ) },
                 { wxS( "shape" ),  wxS( "Line Width" ) },
                 { wxS( "table" ),  wxS( "Border Width" ) },
+                { wxS( "generated_table" ), wxS( "Border Width" ) },
                 { wxS( "target" ), wxS( "Width" ) } } } },
 
         { wxS( "Soldermask" ), { _HKI( "Soldermask" ), {
@@ -226,6 +230,10 @@ wxString MATCH_PROPERTIES_CATALOG::Family( const EDA_ITEM& aItem )
     case PCB_DIM_ORTHOGONAL_T: return wxS( "dimension" );
     case PCB_FOOTPRINT_T: return wxS( "footprint" );
     case PCB_TABLE_T: return wxS( "table" );
+    // Their own family, since plain tables advertise colors and Cell Separators they mask and
+    // lack the Row Height and Font they add
+    case PCB_DRILL_CHART_T:
+    case PCB_STACKUP_TABLE_T: return wxS( "generated_table" );
     case PCB_TABLECELL_T: return wxS( "table_cell" );
     case PCB_TARGET_T: return wxS( "target" );
     case PCB_REFERENCE_IMAGE_T: return wxS( "reference_image" );
@@ -394,6 +402,10 @@ static std::vector<PENDING_PROPERTY> plan( const EDA_ITEM& aSource, const EDA_IT
                 {
                     return;
                 }
+
+                // A mixed value has no single value to copy, only whichever part the getter reads
+                if( sourceProperty->IsIndeterminate( source ) )
+                    return;
 
                 pending.push_back( { targetProperty, aSource.Get( sourceProperty ), aOptional } );
             };

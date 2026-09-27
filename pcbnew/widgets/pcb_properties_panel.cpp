@@ -1121,6 +1121,8 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
     // Driving length constraints touched by this edit solved again after commit lands
     std::vector<PCB_CONSTRAINT*> drivingConstraints;
 
+    std::set<PCB_GENERATED_TABLE*> generatedTables;
+
     for( EDA_ITEM* edaItem : selection )
     {
         if( !edaItem->IsBOARD_ITEM() )
@@ -1294,10 +1296,18 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
         item->Set( property, newValue );
 
-        // A generated table's cells come from the settings just changed, so they say nothing
-        // about the edit until the table has been laid out again
-        if( IsGeneratedTableType( item->Type() ) && item->GetBoard() )
-            static_cast<PCB_GENERATED_TABLE*>( item )->RebuildCells( *item->GetBoard() );
+        if( IsGeneratedTableType( item->Type() ) )
+            generatedTables.insert( static_cast<PCB_GENERATED_TABLE*>( item ) );
+        else if( IsGeneratedTableCell( item ) )
+            generatedTables.insert( static_cast<PCB_GENERATED_TABLE*>( item->GetParent() ) );
+    }
+
+    // A generated table's cells come from the settings just changed, so they say nothing
+    // about the edit until the table has been laid out again. So does a cell's formatting
+    for( PCB_GENERATED_TABLE* table : generatedTables )
+    {
+        if( table->GetBoard() )
+            table->RebuildCells( *table->GetBoard() );
     }
 
     changes.Push( _( "Edit Properties" ) );

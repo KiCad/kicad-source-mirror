@@ -53,6 +53,7 @@
 #include <pcb_track.h>
 #include <pcb_textbox.h>
 #include <pcb_drill_chart.h>
+#include <pcb_stackup_table.h>
 #include <pcb_drill_map.h>
 #include <pcb_table.h>
 #include <pad.h>
@@ -1439,6 +1440,12 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
             bulkAddedItems.push_back( item );
             break;
 
+        case T_stackup_table:
+            item = parseGeneratedTable( std::make_unique<PCB_STACKUP_TABLE>( m_board ) );
+            m_board->Add( item, ADD_MODE::BULK_APPEND, true );
+            bulkAddedItems.push_back( item );
+            break;
+
         case T_drill_map:
             item = parsePCB_DRILL_MAP( m_board );
             m_board->Add( item, ADD_MODE::BULK_APPEND, true );
@@ -2483,7 +2490,6 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseBoardStackup()
                 item->AddDielectricPrms( sublayer_idx );
             }
         }
-
     }
 
     if( token != T_RIGHT )
@@ -5487,7 +5493,7 @@ PCB_GENERATED_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parseGeneratedTable( std::unique
     const GENERATED_TABLE_SCHEMA& schema = aTable->Schema();
 
     // The file's columns replace the defaults a new table starts with rather than adding to them
-    aTable->Columns().clear();
+    std::vector<GENERATED_TABLE_COLUMN> columns;
 
     // The writer omits units and precision equal to these, whatever the constructor chose
     aTable->SetUnits( schema.DefaultUnits() );
@@ -5586,13 +5592,18 @@ PCB_GENERATED_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parseGeneratedTable( std::unique
                     NeedRIGHT();
                     break;
 
+                case T_hide:
+                    col.m_Visible = !parseBool();
+                    NeedRIGHT();
+                    break;
+
                 default:
                     skipCurrent();
                     break;
                 }
             }
 
-            aTable->Columns().push_back( col );
+            columns.push_back( col );
             break;
         }
 
@@ -5630,15 +5641,27 @@ PCB_GENERATED_TABLE* PCB_IO_KICAD_SEXPR_PARSER::parseGeneratedTable( std::unique
         }
     }
 
-    if( aTable->Columns().empty() )
-        aTable->Columns() = schema.Defaults();
+    if( columns.empty() )
+        columns = schema.Defaults();
+
+    const auto anyShown =
+            []( const std::vector<GENERATED_TABLE_COLUMN>& aColumns )
+            {
+                return std::any_of( aColumns.begin(), aColumns.end(),
+                                    []( const GENERATED_TABLE_COLUMN& aCol )
+                                    {
+                                        return aCol.m_Visible;
+                                    } );
+            };
 
     // No columns leaves every later consumer dividing by the column count. Repeats and
     // implausible widths reach table geometry
-    if( aTable->GetColCount() < 1 || !schema.Validate( aTable->Columns() ) )
+    if( aTable->GetColCount() < 1 || !schema.Validate( columns ) || !anyShown( columns ) )
     {
         THROW_IO_ERROR( wxString::Format( _( "Invalid %s: bad column set" ), aTable->GetFriendlyName() ) );
     }
+
+    aTable->RestoreColumns( columns );
 
     // Copper, silkscreen, mask, paste, adhesive, Edge.Cuts, Margin and courtyard are all
     // manufacturing inputs that table artwork would corrupt rather than document
@@ -5685,7 +5708,7 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parseGeneratedTableExtra( PCB_GENERATED_TABLE* a
             return true;
 
         case T_totals:
-            chart->SetShowTotals( parseBool() );
+            chart->RestoreShowTotals( parseBool() );
             NeedRIGHT();
             return true;
 

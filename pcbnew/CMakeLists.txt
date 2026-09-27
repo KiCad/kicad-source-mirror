@@ -436,7 +436,6 @@ set( PCBNEW_CLASS_SRCS
     board_statistics.cpp
     board_statistics_report.cpp
     board_tables/board_characteristics_table.cpp
-    board_tables/board_stackup_table.cpp
     build_BOM_from_board.cpp
     cleanup_item.cpp
     convert_shape_list_to_polygon.cpp

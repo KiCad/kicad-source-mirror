@@ -1752,7 +1752,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         case PCB_TEXT_T:      mask = DRC_DISALLOW_TEXTS;      break;
                         case PCB_TEXTBOX_T:   mask = DRC_DISALLOW_TEXTS;      break;
                         case PCB_TABLE_T:
-                        case PCB_DRILL_CHART_T: mask = DRC_DISALLOW_TEXTS;    break;
+                        case PCB_DRILL_CHART_T:
+                        case PCB_STACKUP_TABLE_T: mask = DRC_DISALLOW_TEXTS;  break;
 
                         case PCB_ZONE_T:
                             // Treat teardrop areas as tracks for DRC purposes

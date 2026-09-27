@@ -21,13 +21,16 @@
 #define PCB_GENERATED_TABLE_H
 
 #include <algorithm>
+#include <functional>
 #include <map>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
 #include <board_tables/generated_table_schema.h>
 #include <pcb_table.h>
+#include <pcb_tablecell.h>
 
 class GENERATED_TABLE_REFRESH;
 
@@ -67,8 +70,30 @@ class PCB_GENERATED_TABLE : public PCB_TABLE
 public:
     virtual const GENERATED_TABLE_SCHEMA& Schema() const = 0;
 
+    /**
+     * The columns the table shows, which are the columns of its cells. Edit an entry in place
+     * if need be, but add, remove or hide one through SetColumns.
+     */
     std::vector<GENERATED_TABLE_COLUMN>&       Columns() { return m_columns; }
     const std::vector<GENERATED_TABLE_COLUMN>& Columns() const { return m_columns; }
+
+    /**
+     * Every column the table has been given, in order, with hidden ones marked by m_Visible.
+     */
+    std::vector<GENERATED_TABLE_COLUMN> AllColumns() const;
+
+    /**
+     * Replace the columns of a built table, moving each column's cells to where its id now sits
+     * so their formatting goes with them. A hidden column keeps its place; showing it again
+     * creates cells formatted from their rows. Call RebuildCells after.
+     */
+    void SetColumns( std::vector<GENERATED_TABLE_COLUMN> aColumns );
+
+    /**
+     * Replace the columns without touching any cell, for a loader whose cells already match
+     * the visible ones.
+     */
+    void RestoreColumns( const std::vector<GENERATED_TABLE_COLUMN>& aColumns );
 
     GENERATED_TABLE_UNITS GetUnits() const { return m_units; }
     void                  SetUnits( GENERATED_TABLE_UNITS aUnits ) { m_units = aUnits; }
@@ -80,6 +105,35 @@ public:
      * billion decimals would try to allocate gigabytes.
      */
     void SetPrecision( int aPrecision ) { m_precision = std::clamp( aPrecision, 0, 6 ); }
+
+    /**
+     * The first data row's height, with RowHeightsDiffer saying whether it speaks for every data
+     * row. Setting it sets every data row, each no shorter than its text. Heading and trailer rows
+     * keep heights of their own.
+     */
+    int  GetRowHeightProp() const;
+    void SetRowHeightProp( int aHeight );
+    bool RowHeightsDiffer() const;
+
+    /**
+     * Set one row's height, no shorter than its text. Margins are the default, not a minimum.
+     */
+    void SetRowHeightToFit( int aRow, int aHeight );
+
+    /**
+     * The first cell's font, with FontNamesDiffer saying whether it speaks for every shown cell.
+     */
+    wxString GetFontNameProp() const;
+    void     SetFontNameProp( const wxString& aFontName );
+    bool     FontNamesDiffer() const;
+
+    /**
+     * The first cell's text height, with FontSizesDiffer saying whether every shown cell has
+     * that size, square.
+     */
+    int  GetFontSizeProp() const;
+    void SetFontSizeProp( int aSize );
+    bool FontSizesDiffer() const;
 
     /**
      * What each generated row reports on, by table row.
@@ -109,15 +163,45 @@ public:
 
     /**
      * True for a row that reports on the board, false for the heading and trailer rows.
+     *
+     * A table loaded without row keys has only position to go on, so every row below the
+     * heading counts as data. A kind with trailer rows overrides this to tell them apart.
      */
-    virtual bool IsDataRow( int aRow ) const { return m_rowKeys.count( aRow ) > 0; }
+    virtual bool IsDataRow( int aRow ) const
+    {
+        if( m_rowKeys.empty() )
+            return aRow >= 1 && aRow < GetRowCount();
+
+        return m_rowKeys.count( aRow ) > 0;
+    }
 
     INSPECT_RESULT Visit( INSPECTOR aInspector, void* aTestData, const std::vector<KICAD_T>& aScanTypes ) override;
+
+    double Similarity( const BOARD_ITEM& aOther ) const override;
+
+    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
+
+    /**
+     * PCB_TABLE::Flip reverses the columns in either direction, as it does for a plain table's
+     * text, so the column set is reversed with them. Mirror goes through here too.
+     */
+    void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection ) override;
+
+    /**
+     * Copy everything a table of this kind holds, including what a subclass adds.
+     */
+    void CopyFrom( const BOARD_ITEM* aOther ) override;
+
+    /**
+     * Take \a aOther's settings and placement but keep this table's cells, so formatting applied
+     * to them survives. Columns go through SetColumns, so call RebuildCells after.
+     */
+    virtual void ApplySettings( const PCB_GENERATED_TABLE& aOther );
 
 protected:
     PCB_GENERATED_TABLE( BOARD_ITEM* aParent, KICAD_T aType, int aLineWidth );
 
-    PCB_GENERATED_TABLE( const PCB_GENERATED_TABLE& aOther ) = default;
+    PCB_GENERATED_TABLE( const PCB_GENERATED_TABLE& aOther );
 
     /**
      * The rows this table reports. A null aRefresh must leave no pending board state behind.
@@ -131,11 +215,30 @@ protected:
     virtual void onRebuilt( const BOARD& aBoard, const GENERATED_TABLE_CONTENT& aContent ) {}
 
     /**
+     * Called once a rebuild has moved the rows to where the new content puts them, before
+     * anything asks which rows are data rows under the new layout.
+     */
+    virtual void onRowsMigrated() {}
+
+    /**
      * Called for each cell a rebuild creates, before its text is set.
      */
     virtual void styleNewCell( PCB_TABLECELL* aCell, bool aIsHeading ) {}
 
+    /**
+     * Called once the columns have been reversed, for any column index a subclass keeps.
+     */
+    virtual void onColumnsReversed() {}
+
     void swapData( BOARD_ITEM* aImage ) override;
+
+    /**
+     * Row heights are the user's, carried by key through migrateRows. Every row keeps the height
+     * it held while its text still fits inside it, and otherwise takes what its text needs with
+     * margins. A data row that held none takes the height most data rows held, or when none held
+     * one, what the tallest data row's text needs with margins.
+     */
+    void setAutosizedRowHeights( const std::vector<int>& aNeeded ) override;
 
     /**
      * Equality of the members this class owns and of the underlying PCB_TABLE.
@@ -149,14 +252,108 @@ protected:
 
 private:
     /**
+     * A hidden column and its place among all columns.
+     */
+    struct HIDDEN_COLUMN
+    {
+        GENERATED_TABLE_COLUMN m_Column;
+        int                    m_Position = 0; ///< In AllColumns()
+
+        bool operator==( const HIDDEN_COLUMN& aOther ) const = default;
+    };
+
+    enum class CELL_ORIGIN
+    {
+        EMPTY,    ///< Nothing filled the slot yet
+        MOVED,    ///< A shown column's cell, carried to its new column
+        CREATED   ///< New, including a cell in a column shown again
+    };
+
+    /**
+     * SetColumns' work in progress, laying the old cells out for the new columns.
+     */
+    struct COLUMN_REMAP
+    {
+        int                         m_Rows = 0;
+        int                         m_OldCols = 0;
+        int                         m_NewCols = 0;
+        std::vector<PCB_TABLECELL*> m_Cells;     ///< The new layout, row by row
+        std::vector<CELL_ORIGIN>    m_Origin;    ///< Where each of m_Cells came from
+        std::vector<bool>           m_Carried;   ///< Old cells that went somewhere, by old index
+        std::map<int, int>          m_ColWidths; ///< By new column
+    };
+
+    /**
+     * Carry each shown column's cells and width to its new position.
+     */
+    void moveShownCells( const std::vector<GENERATED_TABLE_COLUMN>& aShown, COLUMN_REMAP& aRemap ) const;
+
+    /**
+     * Put every cell in the geometry its slot had, so the table stays where it was, creating
+     * those nothing filled.
+     */
+    void placeCells( COLUMN_REMAP& aRemap );
+
+    /**
+     * Style cells placeCells created from another cell in their row.
+     */
+    void styleCreatedCells( const std::vector<CELL_ORIGIN>& aOrigin );
+
+    /**
+     * The rows below the heading that IsDataRow accepts, in order.
+     */
+    std::vector<int> dataRows() const;
+
+    /**
+     * The height \a aRow needs by its cells' line count, line spacing, pen width and margins. Unlike
+     * a glyph outline, it is the same for any text in the same font, size and line count.
+     */
+    int metricRowHeight( int aRow ) const;
+
+    /**
+     * The smallest height \a aRow may take with its text still inside it. Centred text needs no
+     * margin, while top or bottom aligned text keeps the margin it is set in by.
+     */
+    int minRowHeight( int aRow ) const;
+
+    /**
+     * The nearest data cell in \a aCol among \a aStyled, or null when the column has none.
+     */
+    const PCB_TABLECELL* nearestDataCell( int aRow, int aCol, const std::set<KIID>& aStyled ) const;
+
+    /**
+     * Give a new cell the text formatting of the nearest data cell in its column among
+     * \a aStyled, or the kind's defaults when there is none or the cell is a heading.
+     */
+    void styleFromColumn( PCB_TABLECELL* aCell, int aRow, int aCol, const std::set<KIID>& aStyled );
+
+    /** Visit every shown cell. */
+    void forEachCell( const std::function<void( PCB_TABLECELL* )>& aFunc );
+
+    /**
+     * True when \a aTest holds for any cell forEachCell would visit, stopping at the first.
+     */
+    bool anyCell( const std::function<bool( const PCB_TABLECELL* )>& aTest ) const;
+
+    /**
+     * The first cell forEachCell visits, which the font getters speak for, or null.
+     */
+    const PCB_TABLECELL* firstCell() const;
+
+    /**
      * Move each row's cells to the row that reports the same thing.
      *
      * Formatting lives on the cells, so without this a rebuild that adds or removes a row
      * would hand a row's formatting to whichever row happened to land on its index. Rows
      * whose key has gone are deleted and rows for a new key are created, leaving the table
      * exactly aRows by aCols.
+     *
+     * A table without row keys has only position to go on for its data rows, and its trailers
+     * still follow their role.
      */
     void migrateRows( int aRows, int aCols, const std::vector<std::string>& aNewRowKeys );
+
+    std::vector<HIDDEN_COLUMN> m_hidden;    ///< By position
 };
 
 #endif // PCB_GENERATED_TABLE_H

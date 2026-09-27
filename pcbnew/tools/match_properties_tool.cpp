@@ -24,6 +24,7 @@
 #include <collectors.h>
 #include <dialog_shim.h>
 #include <pgm_base.h>
+#include <pcb_generated_table.h>
 #include <pcbnew_settings.h>
 #include <properties/property_mgr.h>
 #include <settings/settings_manager.h>
@@ -219,6 +220,15 @@ bool MATCH_PROPERTIES_TOOL::applyToTargets( const EDA_ITEM& aSource, const std::
         }
 
         changed += result.m_Changed;
+
+        // A generated table is laid out from its cells' formatting, so relayout what was copied
+        if( BOARD* board = static_cast<BOARD_ITEM*>( target )->GetBoard(); result.m_Changed && board )
+        {
+            if( IsGeneratedTableType( target->Type() ) )
+                static_cast<PCB_GENERATED_TABLE*>( target )->RebuildCells( *board );
+            else if( IsGeneratedTableCell( target ) )
+                static_cast<PCB_GENERATED_TABLE*>( target->GetParent() )->RebuildCells( *board );
+        }
     }
 
     if( !error.IsEmpty() )

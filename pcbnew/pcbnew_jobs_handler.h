@@ -114,6 +114,14 @@ public:
 private:
     BOARD* getBoard( const wxString& aPath = wxEmptyString );
     void refillFabZones( const JOB_EXPORT_PCB_FAB& aJob, BOARD* aBoard );
+
+    /**
+     * Rebuild the stale generated tables on \a aBoard, through the editor when it is the board
+     * open there, so a GUI-run job cannot free table cells the editor's selection holds.
+     *
+     * @return the number of tables rebuilt.
+     */
+    int refreshGeneratedTables( BOARD* aBoard );
     LSEQ convertLayerArg( wxString& aLayerString, BOARD* aBoard ) const;
 
     bool preparePlotLayers( JOB_EXPORT_PCB_PLOT* aJob, BOARD* aBoard, TOOL_MANAGER* aToolManager,

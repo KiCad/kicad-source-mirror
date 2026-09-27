@@ -27,7 +27,6 @@
 #include <pad.h>
 #include <project.h>
 #include <board_tables/generated_table_refresh.h>
-#include <pcb_drill_chart.h>
 #include <reporter.h>
 #include <pcbplot.h>
 #include <wx/filename.h>
@@ -87,11 +86,6 @@ bool PCB_PLOTTER::Plot( const wxString& aOutputPath, const LSEQ& aLayersToPlot,
 
         return false;
     }
-
-    // The one path GUI plotting, PNG, PS and every CLI plot job share. Common layers are
-    // included or a chart plotted as one slips past the policy
-    LSET plotted( { aLayersToPlot } );
-    plotted |= LSET( { aCommonLayers } );
 
     RefreshGeneratedTables( *m_board );
 

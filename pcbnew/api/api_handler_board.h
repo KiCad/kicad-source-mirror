@@ -91,6 +91,15 @@ protected:
 
     std::optional<ApiResponseStatus> checkForHeadless( const std::string& aCommandName ) const;
 
+    virtual void refreshGeneratedTables();
+
+    /**
+     * Refresh generated tables before a save writes them, including edits an open commit holds.
+     */
+    void prepareGeneratedTablesForSave();
+
+    void onCommitDropped() override;
+
     /// Creates the generator tool if needed (e.g. in headless mode); returns it if available.
     GENERATOR_TOOL* ensureGeneratorTool() const;
 

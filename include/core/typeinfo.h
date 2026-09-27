@@ -239,6 +239,7 @@ enum KICAD_T
     PCB_DRILL_CHART_T,     ///< class PCB_DRILL_CHART, a live drill chart derived from PCB_TABLE
     PCB_DRILL_MAP_T,       ///< class PCB_DRILL_MAP, drill symbols drawn at the holes
     PCB_3D_BODY_T,         ///< class PCB_3D_BODY, a 3D body (extruded or model) on a footprint
+    PCB_STACKUP_TABLE_T,   ///< class PCB_STACKUP_TABLE, a live stackup table derived from PCB_TABLE
 
     // End value
     MAX_STRUCT_TYPE_ID
@@ -308,6 +309,7 @@ constexpr KICAD_T BaseType( const KICAD_T aType )
         return PCB_DIMENSION_T;
 
     case PCB_DRILL_CHART_T:
+    case PCB_STACKUP_TABLE_T:
         return PCB_TABLE_T;
 
     default:
@@ -325,7 +327,7 @@ constexpr bool IsNullType( const KICAD_T aType )
  */
 constexpr bool IsGeneratedTableType( const KICAD_T aType )
 {
-    return aType == PCB_DRILL_CHART_T;
+    return aType == PCB_DRILL_CHART_T || aType == PCB_STACKUP_TABLE_T;
 }
 
 constexpr bool IsInstantiableType( const KICAD_T aType )
@@ -475,6 +477,7 @@ constexpr bool IsPcbnewType( const KICAD_T aType )
     case PCB_DRILL_CHART_T:
     case PCB_DRILL_MAP_T:
     case PCB_3D_BODY_T:
+    case PCB_STACKUP_TABLE_T:
     case PCB_POINT_T:
     case PCB_ZONE_T:
     case PCB_ITEM_LIST_T:
@@ -526,6 +529,7 @@ constexpr bool IsSingleLayerType( const KICAD_T aType )
     case PCB_TABLE_T:
     case PCB_DRILL_CHART_T:
     case PCB_DRILL_MAP_T:
+    case PCB_STACKUP_TABLE_T:
     case PCB_TABLECELL_T:
     case PCB_TRACE_T:
     case PCB_ARC_T:

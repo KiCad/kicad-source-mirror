@@ -33,7 +33,7 @@ using namespace std::placeholders;
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_point.h>
-#include <pcb_drill_chart.h>
+#include <pcb_generated_table.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <pcb_track.h>
@@ -594,7 +594,7 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 EnterGroup();
                 selectPoint( evt->Position() );
             }
-            else if( !selectChartRow( evt->Position() ) )
+            else if( !selectGeneratedTableRow( evt->Position() ) )
                 m_toolMgr->RunAction( PCB_ACTIONS::properties );
         }
         else if( evt->IsDblClick( BUT_MIDDLE ) )
@@ -3698,6 +3698,7 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
     case PCB_TABLE_T:
     case PCB_DRILL_CHART_T:
     case PCB_DRILL_MAP_T:
+    case PCB_STACKUP_TABLE_T:
     case PCB_TABLECELL_T:
         return aFilterOptions.includePcbTexts;
 
@@ -3923,6 +3924,7 @@ bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem, bool aMultiSelect,
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
     case PCB_DRILL_CHART_T:
+    case PCB_STACKUP_TABLE_T:
     case PCB_TABLECELL_T:
         if( !m_filter.text )
             return false;
@@ -4007,17 +4009,17 @@ void PCB_SELECTION_TOOL::ClearSelection( bool aQuietMode )
 }
 
 
-bool PCB_SELECTION_TOOL::selectChartRow( const VECTOR2I& aPosition )
+bool PCB_SELECTION_TOOL::selectGeneratedTableRow( const VECTOR2I& aPosition )
 {
     // The whole row goes in, because formatting one cell of a generated row and not its
     // neighbours is never what was meant
-    if( m_selection.GetSize() != 1 || m_selection[0]->Type() != PCB_DRILL_CHART_T )
+    if( m_selection.GetSize() != 1 || !IsGeneratedTableType( m_selection[0]->Type() ) )
         return false;
 
-    PCB_DRILL_CHART* chart = static_cast<PCB_DRILL_CHART*>( m_selection[0] );
-    PCB_TABLECELL*   clicked = nullptr;
+    PCB_GENERATED_TABLE* table = static_cast<PCB_GENERATED_TABLE*>( m_selection[0] );
+    PCB_TABLECELL*       clicked = nullptr;
 
-    for( PCB_TABLECELL* cell : chart->GetCells() )
+    for( PCB_TABLECELL* cell : table->GetCells() )
     {
         if( cell->HitTest( aPosition, 0 ) )
         {
@@ -4026,14 +4028,14 @@ bool PCB_SELECTION_TOOL::selectChartRow( const VECTOR2I& aPosition )
         }
     }
 
-    // The title and totals rows are configured from the chart's own dialog, so a click there
+    // The heading and trailer rows are configured from the table's own dialog, so a click there
     // falls through to it rather than offering to reformat a row the user cannot vary
-    if( !clicked || !chart->IsDataRow( clicked->GetRow() ) )
+    if( !clicked || !table->IsDataRow( clicked->GetRow() ) )
         return false;
 
     ClearSelection( true );
 
-    for( PCB_TABLECELL* cell : chart->GetCells() )
+    for( PCB_TABLECELL* cell : table->GetCells() )
     {
         if( cell->GetRow() == clicked->GetRow() )
             select( cell );
@@ -4420,6 +4422,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
     case PCB_DRILL_CHART_T:
+    case PCB_STACKUP_TABLE_T:
         if( !layerVisible( aItem->GetLayer() ) )
             return false;
 
@@ -4687,6 +4690,7 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
 
     case PCB_TABLE_T:
     case PCB_DRILL_CHART_T:
+    case PCB_STACKUP_TABLE_T:
     {
         PCB_TABLE* table = static_cast<PCB_TABLE*>( aItem );
         distance = aMaxDistance;

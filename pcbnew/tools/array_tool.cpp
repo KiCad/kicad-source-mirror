@@ -304,7 +304,8 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
                     case PCB_TEXT_T:
                     case PCB_TEXTBOX_T:
                     case PCB_TABLE_T:
-            case PCB_DRILL_CHART_T:
+                    case PCB_DRILL_CHART_T:
+                    case PCB_STACKUP_TABLE_T:
                     case PCB_TRACE_T:
                     case PCB_ARC_T:
                     case PCB_VIA_T:

@@ -422,9 +422,9 @@ protected:
 
 private:
     /**
-     * Select the drill chart row under a point, when the chart itself is what is selected.
+     * Select the generated table row under a point, when the table itself is what is selected.
      */
-    bool selectChartRow( const VECTOR2I& aPosition );
+    bool selectGeneratedTableRow( const VECTOR2I& aPosition );
 
     /// True when a selection mode switch must keep the point editor's block handles alive.
     bool keepsBlockHandles() const;

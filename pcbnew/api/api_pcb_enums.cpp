@@ -30,6 +30,7 @@
 #include <widgets/report_severity.h>
 
 #include <board_stackup_manager/board_stackup.h>
+#include <board_tables/generated_table_schema.h>
 #include <constraints/pcb_constraint.h>
 #include <drc/drc_item.h>
 #include <padstack.h>
@@ -1825,6 +1826,40 @@ JOB_EXPORT_PCB_DRILL::MAP_FORMAT FromProtoEnum( DrillMapFormat aValue )
     case DrillMapFormat::DMF_UNKNOWN:
     default:
         return JOB_EXPORT_PCB_DRILL::MAP_FORMAT::PDF;
+    }
+}
+
+
+template<>
+kiapi::common::types::Units ToProtoEnum( GENERATED_TABLE_UNITS aValue )
+{
+    switch( aValue )
+    {
+    case GENERATED_TABLE_UNITS::MM:   return kiapi::common::types::Units::U_MM;
+    case GENERATED_TABLE_UNITS::INCH: return kiapi::common::types::Units::U_INCH;
+    case GENERATED_TABLE_UNITS::MILS: return kiapi::common::types::Units::U_MILS;
+    default:
+        wxCHECK_MSG( false, kiapi::common::types::Units::U_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<GENERATED_TABLE_UNITS>" );
+    }
+}
+
+
+template<>
+GENERATED_TABLE_UNITS FromProtoEnum( kiapi::common::types::Units aValue )
+{
+    // A table has no rendering for metres or tenths, so they read back as millimetres rather
+    // than as a broken table
+    switch( aValue )
+    {
+    case kiapi::common::types::Units::U_INCH: return GENERATED_TABLE_UNITS::INCH;
+    case kiapi::common::types::Units::U_MILS: return GENERATED_TABLE_UNITS::MILS;
+    case kiapi::common::types::Units::U_MM:
+    case kiapi::common::types::Units::U_UNKNOWN:
+    case kiapi::common::types::Units::U_METERS:
+    case kiapi::common::types::Units::U_TENTHS:
+    default:
+        return GENERATED_TABLE_UNITS::MM;
     }
 }
 

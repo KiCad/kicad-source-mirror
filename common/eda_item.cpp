@@ -589,6 +589,7 @@ static struct EDA_ITEM_DESC
             .Map( PCB_TABLE_T,             _HKI( "Table" ) )
             .Map( PCB_DRILL_CHART_T,       _HKI( "Drill Chart" ) )
             .Map( PCB_DRILL_MAP_T,         _HKI( "Drill Map" ) )
+            .Map( PCB_STACKUP_TABLE_T,     _HKI( "Stackup Table" ) )
             .Map( PCB_TABLECELL_T,         _HKI( "Table Cell" ) )
             .Map( PCB_TRACE_T,             _HKI( "Track" ) )
             .Map( PCB_ARC_T,               _HKI( "Track" ) )

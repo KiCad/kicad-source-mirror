@@ -394,6 +394,7 @@ span
 spec_frequency
 square
 stackup
+stackup_table
 start
 start_angle
 start_end_only

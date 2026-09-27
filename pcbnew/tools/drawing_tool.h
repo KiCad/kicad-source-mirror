@@ -126,15 +126,6 @@ public:
 
     /**
      */
-    std::vector<BOARD_ITEM*> DrawSpecificationStackup( const VECTOR2I& origin, PCB_LAYER_ID aLayer,
-                                                       bool aDrawNow, VECTOR2I* tablesize );
-
-    /**
-     */
-    int PlaceStackup( const TOOL_EVENT& aEvent );
-
-    /**
-     */
     int PlaceTuningPattern( const TOOL_EVENT& aEvent );
 
     /**

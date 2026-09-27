@@ -223,7 +223,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20260930  // UUID for extruded 3D body
 //#define SEXPR_BOARD_FILE_VERSION    20261017  // Footprint overall height
 //#define SEXPR_BOARD_FILE_VERSION    20261018  // Linked placement rule areas
-#define SEXPR_BOARD_FILE_VERSION      20261025  // Reference image rotation and opacity
+//#define SEXPR_BOARD_FILE_VERSION    20261025  // Reference image rotation and opacity
+#define SEXPR_BOARD_FILE_VERSION      20261030  // Live stackup tables
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting
@@ -238,7 +239,7 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 // The footprint library now has a header and is a separate format from the board file FOOTPRINT
 // object parser and formatter.  If you make any footprint library file format changes that do not
 // affect the board file format, please do not bump the board file format.
-#define SEXPR_FOOTPRINT_LIB_FILE_VERSION  20261028
+#define SEXPR_FOOTPRINT_LIB_FILE_VERSION  20261030
 
 // A footprint body uses the board format, so a library file stamped older than the board format would
 // run migrations on current data

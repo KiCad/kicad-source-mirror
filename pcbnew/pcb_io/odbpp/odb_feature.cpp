@@ -1128,6 +1128,7 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, const std::vector<B
 
         case PCB_TABLE_T:
         case PCB_DRILL_CHART_T:
+        case PCB_STACKUP_TABLE_T:
         {
             PCB_TABLE* table = static_cast<PCB_TABLE*>( item );
 

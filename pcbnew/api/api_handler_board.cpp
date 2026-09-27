@@ -38,6 +38,8 @@
 #include <pcb_group.h>
 #include <tools/generator_tool.h>
 #include <pcb_track.h>
+#include <board_tables/generated_table_refresh.h>
+#include <pcb_generated_table.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <pcb_3d_body.h>
@@ -130,8 +132,14 @@ BOARD_ITEM_CONTAINER* API_HANDLER_BOARD::getDefaultContainer()
 void API_HANDLER_BOARD::pushCurrentCommit( const std::string& aClientName,
                                             const wxString& aMessage )
 {
+    // A request whose every item was refused leaves an empty commit, which must not dirty the board
+    auto       it = m_commits.find( aClientName );
+    const bool changed = it != m_commits.end() && !it->second.second->Empty();
+
     API_HANDLER_EDITOR::pushCurrentCommit( aClientName, aMessage );
-    onModified();
+
+    if( changed )
+        onModified();
 }
 
 
@@ -237,6 +245,13 @@ void API_HANDLER_BOARD::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>&
                 continue;
             }
 
+            // A generated table writes its own cells, so there is nothing a client could clear
+            if( IsGeneratedTableCell( item ) )
+            {
+                aItemsToDelete[pair.first] = ItemDeletionStatus::IDS_IMMUTABLE;
+                continue;
+            }
+
             validatedItems.push_back( item );
             aItemsToDelete[pair.first] = ItemDeletionStatus::IDS_OK;
         }
@@ -252,10 +267,7 @@ void API_HANDLER_BOARD::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>&
         if( item->Type() == PCB_TABLECELL_T )
         {
             // Cells are owned by their table; the commit removal path doesn't handle them.
-            // Match the GUI delete: clear the cell contents (generated-table cells have no user text).
-            if( IsGeneratedTableCell( item ) )
-                continue;
-
+            // Match the GUI delete: clear the cell contents.
             commit->Modify( item );
             static_cast<PCB_TABLECELL*>( item )->SetText( wxEmptyString );
         }
@@ -281,6 +293,30 @@ void API_HANDLER_BOARD::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>&
 
     if( !m_activeClients.count( aClientName ) )
         pushCurrentCommit( aClientName, _( "Deleted items via API" ) );
+}
+
+
+void API_HANDLER_BOARD::refreshGeneratedTables()
+{
+    ::RefreshGeneratedTables( *board() );
+}
+
+
+void API_HANDLER_BOARD::prepareGeneratedTablesForSave()
+{
+    // An open commit edits holes in place without telling the board, so the drill counter would miss them
+    if( !m_activeClients.empty() )
+        board()->BumpDrillModelGeneration();
+
+    refreshGeneratedTables();
+}
+
+
+void API_HANDLER_BOARD::onCommitDropped()
+{
+    // A save during the commit may have rebuilt tables from the edits just discarded
+    board()->BumpDrillModelGeneration();
+    refreshGeneratedTables();
 }
 
 
@@ -507,6 +543,11 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             return tl::unexpected( e );
         }
 
+        // The message's cells were written under its old metadata, so they must be regenerated to match the new.
+        // An update only carries settings, which are applied to the live table below
+        if( aCreate && IsGeneratedTableType( item->Type() ) )
+            static_cast<PCB_GENERATED_TABLE*>( item.get() )->RebuildCells( *board );
+
         if( std::vector<wxString> removed = item->RemoveConflictingCustomProperties(); !removed.empty() )
         {
             auto as_str =
@@ -555,6 +596,18 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             continue;
         }
 
+        // A generated table rewrites its cells from the board, and a new cell would be a row with no key
+        if( item->Type() == PCB_TABLECELL_T
+            && ( aCreate ? IsGeneratedTableType( container->Type() ) : IsGeneratedTableCell( *optItem ) ) )
+        {
+            status.set_code( ItemStatusCode::ISC_IMMUTABLE );
+            status.set_error_message( fmt::format( "cells of generated table {} cannot be modified",
+                                                   ( aCreate ? container->m_Uuid : ( *optItem )->GetParent()->m_Uuid )
+                                                           .AsStdString() ) );
+            aItemHandler( status, anyItem );
+            continue;
+        }
+
         if( aCreate
             && !item->FitsEnabledLayers( board->GetEnabledLayers(), board->GetCopperLayerCount() ) )
         {
@@ -591,7 +644,7 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
             }
             else
             {
-                if( item->Type() == PCB_FOOTPRINT_T || item->Type() == PCB_TABLE_T )
+                if( item->Type() == PCB_FOOTPRINT_T || BaseType( item->Type() ) == PCB_TABLE_T )
                 {
                     // Ensure children have unique identifiers; in case the API client created
                     // this new item by cloning an existing one and only changing the parent UUID.
@@ -632,6 +685,18 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_BOARD::handleCreateUpdateItemsInte
                     regenerateGenerators( genTool, commit, { static_cast<PCB_GENERATOR*>( boardItem ) }, {} );
 
                 boardItem->Serialize( newItem );
+            }
+
+            // A client cannot format generated cells, so the live cells hold the only formatting and a copy would
+            // drop it. The message's settings are applied to the live table instead
+            else if( IsGeneratedTableType( boardItem->Type() ) )
+            {
+                PCB_GENERATED_TABLE* table = static_cast<PCB_GENERATED_TABLE*>( boardItem );
+
+                commit->Modify( table );
+                table->ApplySettings( *static_cast<PCB_GENERATED_TABLE*>( item.get() ) );
+                table->RebuildCells( *board );
+                table->Serialize( newItem );
             }
 
             // Footprints can't be modified by CopyFrom at the moment because the commit system
@@ -1361,6 +1426,9 @@ HANDLER_RESULT<FlipItemsResponse> API_HANDLER_BOARD::handleFlipItems(
             PCB_TEXT_T,
             PCB_TEXTBOX_T,
             PCB_TABLE_T,
+            PCB_DRILL_CHART_T,
+            PCB_STACKUP_TABLE_T,
+            PCB_DRILL_MAP_T,
             PCB_TRACE_T,
             PCB_VIA_T,
             PCB_ARC_T,
@@ -1426,6 +1494,8 @@ HANDLER_RESULT<SavedDocumentResponse> API_HANDLER_BOARD::handleSaveDocumentToStr
     SavedDocumentResponse response;
     response.mutable_document()->CopyFrom( aCtx.Request.document() );
 
+    prepareGeneratedTablesForSave();
+
     CLIPBOARD_IO io;
     io.SetWriter(
         [&]( const wxString& aData )
@@ -1444,6 +1514,8 @@ HANDLER_RESULT<SavedSelectionResponse> API_HANDLER_BOARD::handleSaveSelectionToS
 {
     if( std::optional<ApiResponseStatus> headless = checkForHeadless( "SaveSelectionToString" ) )
         return tl::unexpected( *headless );
+
+    prepareGeneratedTablesForSave();
 
     SavedSelectionResponse response;
 

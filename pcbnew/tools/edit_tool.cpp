@@ -80,7 +80,6 @@ using namespace std::placeholders;
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
 #include <dialogs/dialog_tablecell_properties.h>
-#include <dialogs/dialog_table_properties.h>
 #include <dialogs/dialog_multi_unit_entry.h>
 #include <dialogs/dialog_unit_entry.h>
 #include <pcb_reference_image.h>
@@ -879,6 +878,7 @@ bool EDIT_TOOL::Init()
                                        PCB_DIM_ORTHOGONAL_T,
                                        PCB_TABLE_T,
                                        PCB_DRILL_CHART_T,
+                                       PCB_STACKUP_TABLE_T,
                                        PCB_TABLECELL_T,
                                } );
 
@@ -2328,10 +2328,8 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         if( dlg.GetReturnValue() == DIALOG_TABLECELL_PROPERTIES::TABLECELL_PROPS_EDIT_TABLE )
         {
-            PCB_TABLE*              table = static_cast<PCB_TABLE*>( cells[0]->GetParent() );
-            DIALOG_TABLE_PROPERTIES tableDlg( frame(), table );
-
-            tableDlg.ShowQuasiModal(); // Scintilla's auto-complete requires quasiModal
+            // The frame picks the dialog, since a generated table's cell text is not the user's to edit
+            editFrame->OnEditItemRequest( static_cast<PCB_TABLE*>( cells[0]->GetParent() ) );
         }
     }
     else if( selection.Size() == 1 && selection.Front()->Type() == PCB_GROUP_T
@@ -2718,6 +2716,7 @@ const std::vector<KICAD_T> EDIT_TOOL::MirrorableItems = {
     PCB_TABLE_T,
     PCB_REFERENCE_IMAGE_T,
     PCB_DRILL_CHART_T,
+    PCB_STACKUP_TABLE_T,
 };
 
 
@@ -2799,6 +2798,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         case PCB_TABLE_T:
         case PCB_DRILL_CHART_T:
+        case PCB_STACKUP_TABLE_T:
             static_cast<PCB_TABLE*>( item )->Mirror( mirrorPoint, flipDirection );
             break;
 
@@ -3100,6 +3100,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_BARCODE_T:
         case PCB_TABLE_T:
         case PCB_DRILL_CHART_T:
+        case PCB_STACKUP_TABLE_T:
         case PCB_REFERENCE_IMAGE_T:
         case PCB_DIMENSION_T:
         case PCB_DIM_ALIGNED_T:
@@ -3596,7 +3597,8 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 break;
 
             case PCB_DRILL_CHART_T:
-                // A second chart of the same holes says nothing the first does not, and it
+            case PCB_STACKUP_TABLE_T:
+                // A second copy of a generated table says nothing the first does not, and it
                 // would land on top of it
                 break;
 
@@ -3966,15 +3968,8 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
 
     if( !selection.Empty() )
     {
-        std::vector<BOARD_ITEM*> items;
-
-        for( EDA_ITEM* item : selection )
-        {
-            if( item->IsBOARD_ITEM() )
-                items.push_back( static_cast<BOARD_ITEM*>( item ) );
-        }
-
-        VECTOR2I refPoint;
+        std::vector<BOARD_ITEM*> items = CLIPBOARD_IO::CopiedItems( selection );
+        VECTOR2I                 refPoint;
 
         if( aEvent.IsAction( &PCB_ACTIONS::copyWithReference ) )
         {
@@ -4041,6 +4036,7 @@ int EDIT_TOOL::copyToClipboardAsText( const TOOL_EVENT& aEvent )
                 }
                 case PCB_TABLE_T:
                 case PCB_DRILL_CHART_T:
+                case PCB_STACKUP_TABLE_T:
                 {
                     const PCB_TABLE& table = static_cast<const PCB_TABLE&>( aItem );
                     wxString         s;

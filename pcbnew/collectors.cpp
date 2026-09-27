@@ -42,6 +42,7 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::AllBoardItems = {
     PCB_TEXTBOX_T,          // in m_drawings
     PCB_TABLE_T,            // in m_drawings
     PCB_DRILL_CHART_T,      // in m_drawings
+    PCB_STACKUP_TABLE_T,    // in m_drawings
     PCB_DRILL_MAP_T,        // in m_drawings
     PCB_TABLECELL_T,        // in tables
     PCB_SHAPE_T,            // in m_drawings
@@ -73,6 +74,7 @@ const std::vector<KICAD_T> GENERAL_COLLECTOR::BoardLevelItems = {
     PCB_TEXTBOX_T,
     PCB_TABLE_T,
     PCB_DRILL_CHART_T,
+    PCB_STACKUP_TABLE_T,
     PCB_DRILL_MAP_T,
     PCB_SHAPE_T,
     PCB_DIM_ALIGNED_T,
@@ -225,6 +227,7 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
     case PCB_DRILL_CHART_T:
+    case PCB_STACKUP_TABLE_T:
     case PCB_DRILL_MAP_T:
     case PCB_TABLECELL_T:
         if( m_Guide->IgnoreNoNets() )

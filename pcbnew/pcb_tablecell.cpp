@@ -27,6 +27,7 @@
 #include <widgets/msgpanel.h>
 #include <string_utils.h>
 #include <board.h>
+#include <pcb_generated_table.h>
 #include <pcb_table.h>
 #include <footprint.h>
 #include <properties/property.h>
@@ -112,6 +113,13 @@ bool PCB_TABLECELL::Deserialize( const google::protobuf::Any& aContainer )
 wxString PCB_TABLECELL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Table cell %s" ), GetAddr() );
+}
+
+
+void PCB_TABLECELL::CopyFrom( const BOARD_ITEM* aOther )
+{
+    wxCHECK( aOther && aOther->Type() == PCB_TABLECELL_T, /* void */ );
+    *this = *static_cast<const PCB_TABLECELL*>( aOther );
 }
 
 
@@ -242,6 +250,15 @@ void PCB_TABLECELL::SetColumnWidth( int aWidth )
 {
     PCB_TABLE* table = static_cast<PCB_TABLE*>( GetParent() );
 
+    // A generated table autosizes its columns on every rebuild, keeping only the authored width
+    if( table->IsGenerated() )
+    {
+        std::vector<GENERATED_TABLE_COLUMN>& columns = static_cast<PCB_GENERATED_TABLE*>( table )->Columns();
+
+        if( GetColumn() < static_cast<int>( columns.size() ) )
+            columns[GetColumn()].m_Width = aWidth;
+    }
+
     table->SetColWidth( GetColumn(), aWidth );
     table->Normalize();
 }
@@ -255,10 +272,22 @@ int PCB_TABLECELL::GetRowHeight() const
 
 void PCB_TABLECELL::SetRowHeight( int aHeight )
 {
+    if( PCB_GENERATED_TABLE* generated = dynamic_cast<PCB_GENERATED_TABLE*>( GetParent() ) )
+    {
+        generated->SetRowHeightToFit( GetRow(), aHeight );
+        return;
+    }
+
     PCB_TABLE* table = static_cast<PCB_TABLE*>( GetParent() );
 
     table->SetRowHeight( GetRow(), aHeight );
     table->Normalize();
+}
+
+
+wxPGChoices PCB_TABLECELL::FontChoices( INSPECTABLE* aItem )
+{
+    return PROPERTY_MANAGER::Instance().GetProperty( TYPE_HASH( EDA_TEXT ), _HKI( "Font" ) )->GetChoices( aItem );
 }
 
 
@@ -381,6 +410,44 @@ static struct PCB_TABLECELL_DESC
                 {
                     return !IsGeneratedTableCell( dynamic_cast<PCB_TABLECELL*>( aItem ) );
                 } );
+
+        auto isGeneratedCell =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    return IsGeneratedTableCell( dynamic_cast<PCB_TABLECELL*>( aItem ) );
+                };
+
+        auto isPlainCell =
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    return !isGeneratedCell( aItem );
+                };
+
+        // A generated cell takes its font and size through the Font group, the same as its table
+        for( const wxString& name : { _HKI( "Font" ), _HKI( "Width" ), _HKI( "Height" ) } )
+            propMgr.OverrideAvailability( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), name, isPlainCell );
+
+        const wxString fontProps = _HKI( "Font" );
+
+        propMgr.AddProperty( new PROPERTY<PCB_TABLECELL, wxString, EDA_TEXT>( _HKI( "Font Name" ),
+                    &EDA_TEXT::SetFontProp, &EDA_TEXT::GetFontProp ),
+                    fontProps )
+                .SetAvailableFunc( isGeneratedCell )
+                .SetIsHiddenFromRulesEditor()
+                .SetIsCopyable()
+                .SetChoicesFunc( &PCB_TABLECELL::FontChoices );
+
+        propMgr.AddProperty( new PROPERTY<PCB_TABLECELL, int>( _HKI( "Font Size" ),
+                    &PCB_TABLECELL::SetFontSize, &PCB_TABLECELL::GetFontSize, PROPERTY_DISPLAY::PT_SIZE ),
+                    fontProps )
+                .SetAvailableFunc( isGeneratedCell )
+                .SetIsCopyable()
+                .SetIndeterminateFunc(
+                        []( INSPECTABLE* aItem ) -> bool
+                        {
+                            PCB_TABLECELL* cell = dynamic_cast<PCB_TABLECELL*>( aItem );
+                            return cell && !cell->HasSquareFontSize();
+                        } );
 
         const wxString tableProps = _( "Table" );
 

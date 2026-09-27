@@ -2130,6 +2130,7 @@ void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos
 
     case PCB_TABLE_T:
     case PCB_DRILL_CHART_T:
+    case PCB_STACKUP_TABLE_T:
         if( aFrom )
         {
             if( aSelectionFilter && !aSelectionFilter->text )

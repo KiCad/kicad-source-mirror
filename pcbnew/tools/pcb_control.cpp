@@ -64,6 +64,7 @@
 #include <pcb_textbox.h>
 #include <board_tables/generated_table_refresh.h>
 #include <pcb_drill_chart.h>
+#include <pcb_stackup_table.h>
 #include <dialogs/dialog_drill_groups.h>
 #include <pcb_drill_map.h>
 #include <pcb_table.h>
@@ -110,8 +111,6 @@ using namespace std::placeholders;
 // files.cpp
 extern bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCtl = 0 );
 
-// board_tables/board_stackup_table.cpp
-extern PCB_TABLE* Build_Board_Stackup_Table( BOARD* aBoard, EDA_UNITS aDisplayUnits );
 // board_tables/board_characteristics_table.cpp
 extern PCB_TABLE* Build_Board_Characteristics_Table( BOARD* aBoard, EDA_UNITS aDisplayUnits );
 
@@ -1284,7 +1283,6 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 case PCB_TEXT_T:
                 case PCB_TEXTBOX_T:
                 case PCB_TABLE_T:
-            case PCB_DRILL_CHART_T:
                 case PCB_SHAPE_T:
                 case PCB_BARCODE_T:
                 case PCB_DIM_ALIGNED_T:
@@ -3007,22 +3005,14 @@ int PCB_CONTROL::PlaceCharacteristics( const TOOL_EVENT& aEvent )
 
 int PCB_CONTROL::PlaceStackup( const TOOL_EVENT& aEvent )
 {
-    BOARD_COMMIT commit( this );
-    EDA_UNITS    displayUnit = m_frame->GetUserUnits();
+    auto table = std::make_unique<PCB_STACKUP_TABLE>( m_frame->GetBoard() );
 
-    PCB_TABLE* table = Build_Board_Stackup_Table( m_frame->GetBoard(), displayUnit );
-    table->SetLayer( m_frame->GetActiveLayer() );
+    // Seeded from the user's units once. After that the table keeps its own
+    table->SetUnits( ToGeneratedTableUnits( m_frame->GetUserUnits() ) );
 
-    std::vector<BOARD_ITEM*> items;
-    items.push_back( table );
-
-    // Revert rather than delete, since an entered group may already hold the table
-    if( placeBoardItems( &commit, items, true, true, false, false ) )
-        commit.Push( _( "Place Board Stackup Table" ) );
-    else
-        commit.Revert();
-
-    return 0;
+    return placeGeneratedTable( std::move( table ),
+                                _( "No documentation layer is enabled to hold a stackup table." ),
+                                _( "Place Board Stackup Table" ) );
 }
 
 
@@ -3071,6 +3061,11 @@ PCB_LAYER_ID PCB_CONTROL::pickDocumentationLayer( const std::function<bool( PCB_
 int PCB_CONTROL::placeGeneratedTable( std::unique_ptr<PCB_GENERATED_TABLE> aTable, const wxString& aNoLayerMessage,
                                       const wxString& aUndoMessage )
 {
+    // Generated tables report a board, and FOOTPRINT::Add would refuse one anyway. A user
+    // hotkey can still reach this action from the footprint editor
+    if( m_isFootprintEditor )
+        return 0;
+
     BOARD* board = m_frame->GetBoard();
 
     // Copper, silk, mask, paste, adhesive, Edge.Cuts, Margin and courtyard are manufacturing

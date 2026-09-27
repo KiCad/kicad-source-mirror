@@ -146,16 +146,25 @@ wxString FormatGeneratedTableLength( int aValue, GENERATED_TABLE_UNITS aUnits, i
     switch( aUnits )
     {
     case GENERATED_TABLE_UNITS::INCH:
-        return wxString::Format( wxT( "%.*f″" ), aPrecision + 1, mm / 25.4 );
+        return wxString::Format( wxT( "%.*f″" ), aPrecision, mm / 25.4 );
 
-    // A mil is three orders of magnitude finer than an inch, so its precision borrows from
-    // the same setting rather than needing one of its own
     case GENERATED_TABLE_UNITS::MILS:
-        return wxString::Format( wxT( "%.*f mil" ), std::max( aPrecision - 2, 0 ), mm / 25.4 * 1000.0 );
+        return wxString::Format( wxT( "%.*f mil" ), aPrecision, mm / 25.4 * 1000.0 );
 
     case GENERATED_TABLE_UNITS::MM:
     default:
-        return wxString::Format( wxT( "%.*f" ), aPrecision, mm );
+        return wxString::Format( wxT( "%.*f mm" ), aPrecision, mm );
+    }
+}
+
+
+GENERATED_TABLE_UNITS ToGeneratedTableUnits( EDA_UNITS aUnits )
+{
+    switch( aUnits )
+    {
+    case EDA_UNITS::INCH: return GENERATED_TABLE_UNITS::INCH;
+    case EDA_UNITS::MILS: return GENERATED_TABLE_UNITS::MILS;
+    default:              return GENERATED_TABLE_UNITS::MM;
     }
 }
 

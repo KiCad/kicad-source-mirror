@@ -56,6 +56,7 @@ bool BOARD_ITEM::IsGroupableType() const
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
     case PCB_DRILL_CHART_T:
+    case PCB_STACKUP_TABLE_T:
     case PCB_DRILL_MAP_T:
     case PCB_GROUP_T:
     case PCB_GENERATOR_T:

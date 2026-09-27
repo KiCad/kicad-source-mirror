@@ -605,7 +605,7 @@ bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection, 
         if( getItemValue( item, property, value ) )
         {
             // Null value indicates different property values between items
-            if( !different && !aValue.IsNull() && value != aValue )
+            if( !different && ( property->IsIndeterminate( item ) || ( !aValue.IsNull() && value != aValue ) ) )
             {
                 different = true;
                 aValue.MakeNull();

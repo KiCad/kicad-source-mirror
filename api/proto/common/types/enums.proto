@@ -95,6 +95,7 @@ enum KiCadObjectType
   KOT_PCB_DRILL_CHART = 57;
   KOT_PCB_DRILL_MAP = 58;
   KOT_PCB_3D_BODY = 59;
+  KOT_PCB_STACKUP_TABLE = 60;
 }
 
 // Mapped to GR_TEXT_H_ALIGN_T

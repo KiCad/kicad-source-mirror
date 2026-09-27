@@ -289,6 +289,16 @@ public:
     void OnModify() override;
 
     /**
+     * Rebuild every stale generated table on the board, keeping the selection and view in step.
+     *
+     * Call this rather than the board-level function whenever the board is the one being edited,
+     * since a rebuild outside a commit can free table cells the selection still holds.
+     *
+     * @return the number of tables rebuilt.
+     */
+    int RefreshGeneratedTables();
+
+    /**
      * Change the currently active layer to \a aLayer and also update the #APPEARANCE_CONTROLS.
      */
     void SetActiveLayer( PCB_LAYER_ID aLayer ) override

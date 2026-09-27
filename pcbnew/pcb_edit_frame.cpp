@@ -2414,14 +2414,51 @@ void PCB_EDIT_FRAME::OnModify()
     if( m_isClosing )
         return;
 
-    // A chart reports the board, so an edit that moved a hole has already made it wrong.
-    // Costs one integer comparison per chart when nothing drill related changed.
-    RefreshGeneratedTables( *GetBoard() );
+    // A generated table reports the board, so any edit may already have made it wrong
+    // A drill chart compares a counter but a stackup table regenerates its text, ~100 us at 32 layers
+    RefreshGeneratedTables();
 
     Update3DView( true, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 
     if( !GetTitle().StartsWith( wxT( "*" ) ) )
         UpdateTitle();
+}
+
+
+int PCB_EDIT_FRAME::RefreshGeneratedTables()
+{
+    PCB_SELECTION_TOOL* selTool = m_toolManager ? m_toolManager->GetTool<PCB_SELECTION_TOOL>() : nullptr;
+    bool                holdsGeneratedCells = false;
+
+    // Read before the refresh, which may free the cells. Skipping the rebuild otherwise avoids
+    // a whole-board walk on every edit that only makes a drill chart stale
+    if( selTool )
+    {
+        const PCB_SELECTION& selection = selTool->GetSelection();
+        holdsGeneratedCells = std::any_of( selection.begin(), selection.end(), IsGeneratedTableCell );
+    }
+
+    const int rebuilt = ::RefreshGeneratedTables( *GetBoard() );
+
+    if( rebuilt == 0 )
+        return 0;
+
+    // No commit held the tables, so the rebuild may have freed selected cells
+    if( holdsGeneratedCells )
+        selTool->RebuildSelection();
+
+    // Nor did one update the view, which would keep drawing the old cells. Tables are few, so
+    // every one is updated rather than tracking which were stale
+    if( GetCanvas() )
+    {
+        for( BOARD_ITEM* item : GetBoard()->Drawings() )
+        {
+            if( IsGeneratedTableType( item->Type() ) )
+                GetCanvas()->GetView()->Update( item );
+        }
+    }
+
+    return rebuilt;
 }
 
 
@@ -3199,6 +3236,13 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
                                                {
                                                    return new PANEL_DRILL_CHART_OPTIONS( aParent );
                                                } );
+        dlg.ShowModal();
+        break;
+    }
+
+    case PCB_STACKUP_TABLE_T:
+    {
+        DIALOG_GENERATED_TABLE_PROPERTIES dlg( this, static_cast<PCB_GENERATED_TABLE*>( aItem ), {} );
         dlg.ShowModal();
         break;
     }

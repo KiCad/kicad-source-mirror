@@ -192,7 +192,7 @@ void DIALOG_GENERATED_TABLE_PROPERTIES::setColumns( const std::vector<GENERATED_
     m_rows.clear();
 
     for( const GENERATED_TABLE_COLUMN& col : aColumns )
-        m_rows.push_back( { col, true } );
+        m_rows.push_back( { col, col.m_Visible, true } );
 
     for( const GENERATED_TABLE_COLUMN_DEF& def : m_table->Schema().Defs() )
     {
@@ -203,7 +203,7 @@ void DIALOG_GENERATED_TABLE_PROPERTIES::setColumns( const std::vector<GENERATED_
                                           } );
 
         if( !present )
-            m_rows.push_back( { m_table->Schema().DefaultColumn( def.m_Id ), false } );
+            m_rows.push_back( { m_table->Schema().DefaultColumn( def.m_Id ), false, false } );
     }
 
     fillColumnGrid();
@@ -212,12 +212,31 @@ void DIALOG_GENERATED_TABLE_PROPERTIES::setColumns( const std::vector<GENERATED_
 
 std::vector<GENERATED_TABLE_COLUMN> DIALOG_GENERATED_TABLE_PROPERTIES::shownColumns() const
 {
+    std::vector<GENERATED_TABLE_COLUMN> columns = placedColumns();
+
+    std::erase_if( columns,
+                   []( const GENERATED_TABLE_COLUMN& aColumn )
+                   {
+                       return !aColumn.m_Visible;
+                   } );
+
+    return columns;
+}
+
+
+std::vector<GENERATED_TABLE_COLUMN> DIALOG_GENERATED_TABLE_PROPERTIES::placedColumns() const
+{
     std::vector<GENERATED_TABLE_COLUMN> columns;
 
+    // One the table never had and nobody ticked stays out, rather than every table carrying
+    // every column the schema knows
     for( const COLUMN_ROW& row : m_rows )
     {
-        if( row.m_Shown )
-            columns.push_back( row.m_Column );
+        if( !row.m_Shown && !row.m_Placed )
+            continue;
+
+        GENERATED_TABLE_COLUMN& col = columns.emplace_back( row.m_Column );
+        col.m_Visible = row.m_Shown;
     }
 
     return columns;
@@ -261,7 +280,7 @@ bool DIALOG_GENERATED_TABLE_PROPERTIES::TransferDataToWindow()
     m_unitsCtrl->SetSelection( static_cast<int>( m_table->GetUnits() ) );
     m_precisionCtrl->SetValue( m_table->GetPrecision() );
 
-    setColumns( m_table->Columns() );
+    setColumns( m_table->AllColumns() );
 
     if( m_options )
         m_options->TransferToWindow( *m_table );
@@ -324,7 +343,7 @@ bool DIALOG_GENERATED_TABLE_PROPERTIES::TransferDataFromWindow()
     m_table->SetUnits( static_cast<GENERATED_TABLE_UNITS>( m_unitsCtrl->GetSelection() ) );
     m_table->SetPrecision( m_precisionCtrl->GetValue() );
 
-    m_table->Columns() = columns;
+    m_table->SetColumns( placedColumns() );
 
     m_table->SetStrokeExternal( m_borderCheckbox->GetValue() );
     m_table->SetStrokeHeaderSeparator( m_headerBorder->GetValue() );

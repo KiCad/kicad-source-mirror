@@ -90,7 +90,31 @@ public:
     const DRILL_CHART_FILTER& Filter() const { return m_filter; }
 
     bool GetShowTotals() const { return m_showTotals; }
-    void SetShowTotals( bool aShow ) { m_showTotals = aShow; }
+
+    /**
+     * A chart without row keys can only tell its totals row by position, so it remembers the
+     * setting its rows were laid out with until the next rebuild has moved them.
+     */
+    void SetShowTotals( bool aShow );
+
+    /**
+     * Set it without that, for a loader whose cells were laid out with this setting.
+     */
+    void RestoreShowTotals( bool aShow ) { m_showTotals = aShow; }
+
+    // One pair per filter entry, for the property manager
+    bool GetIncludePlated() const { return m_filter.m_Plated; }
+    void SetIncludePlated( bool aInclude ) { m_filter.m_Plated = aInclude; }
+    bool GetIncludeNonPlated() const { return m_filter.m_NonPlated; }
+    void SetIncludeNonPlated( bool aInclude ) { m_filter.m_NonPlated = aInclude; }
+    bool GetIncludeVias() const { return m_filter.m_Vias; }
+    void SetIncludeVias( bool aInclude ) { m_filter.m_Vias = aInclude; }
+    bool GetIncludeSlots() const { return m_filter.m_Slots; }
+    void SetIncludeSlots( bool aInclude ) { m_filter.m_Slots = aInclude; }
+    bool GetIncludeBackdrills() const { return m_filter.m_Backdrills; }
+    void SetIncludeBackdrills( bool aInclude ) { m_filter.m_Backdrills = aInclude; }
+    bool GetIncludeCastellated() const { return m_filter.m_Castellated; }
+    void SetIncludeCastellated( bool aInclude ) { m_filter.m_Castellated = aInclude; }
 
     /**
      * Board drill generation the cells were built at. A chart is derived data, so anything
@@ -107,6 +131,8 @@ public:
      * One integer comparison, so a board with nothing drill related changed pays nothing.
      */
     bool IsStale( const BOARD& aBoard ) const override;
+
+    void ApplySettings( const PCB_GENERATED_TABLE& aOther ) override;
 
     /**
      * Curated shape index for each generated row, by table row.
@@ -131,10 +157,6 @@ public:
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const override;
 
-    void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
-
-    double Similarity( const BOARD_ITEM& aOther ) const override;
-
     bool operator==( const BOARD_ITEM& aOther ) const override;
 
     void Serialize( google::protobuf::Any& aContainer ) const override;
@@ -145,6 +167,10 @@ protected:
                                                        GENERATED_TABLE_REFRESH* aRefresh ) const override;
 
     void onRebuilt( const BOARD& aBoard, const GENERATED_TABLE_CONTENT& aContent ) override;
+
+    void onColumnsReversed() override;
+
+    void onRowsMigrated() override { m_laidOutShowTotals.reset(); }
 
     void swapData( BOARD_ITEM* aImage ) override;
 
@@ -163,6 +189,8 @@ private:
     DRILL_CHART_FILTER m_filter;
 
     bool m_showTotals;
+
+    std::optional<bool> m_laidOutShowTotals; ///< Set only between a change and the next rebuild
 
     std::map<int, int> m_rowShapes;
     int                m_symbolColumn;
