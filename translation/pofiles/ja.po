@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-27 02:38+0000\n"
+"PO-Revision-Date: 2026-09-28 07:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -720,24 +720,20 @@ msgid "Show user ECO2 layer"
 msgstr "ユーザー設計変更指示用のレイヤー2を表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show front fabrication layer"
-msgstr "基板製造用レイヤーにパッドを描画する"
+msgstr "表面の基板製造用レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show back fabrication layer"
-msgstr "基板製造用レイヤーにパッドを描画する"
+msgstr "裏面の基板製造用レイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show front courtyard layer"
-msgstr "コートヤード レイヤー"
+msgstr "表面のコートヤードレイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show back courtyard layer"
-msgstr "コートヤード レイヤー"
+msgstr "裏面のコートヤードレイヤーを表示"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 msgid "Show user defined layer 1"
@@ -1732,12 +1728,11 @@ msgstr "ライト8:"
 #: eeschema/tools/sch_align_tool.cpp:61
 #: pcbnew/dialogs/dialog_drill_chart_properties.cpp:135
 msgid "Align"
-msgstr "整列"
+msgstr "揃え"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:577
-#, fuzzy
 msgid "Cancel alignment"
-msgstr "垂直揃え"
+msgstr "揃え解除"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:581
 msgid "Click the model face that sits on the board. Press Esc to cancel."
@@ -1843,10 +1838,8 @@ msgid "Preview"
 msgstr "プレビュー"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:186
-#, fuzzy
 msgid "Align a STEP model face to a footprint pad"
-msgstr ""
-"接続されているピンはどのフットプリントパッドにもマッピングされていません"
+msgstr "STEPモデル面をフットプリントパッドに揃える"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:213
 msgid ""
@@ -3237,9 +3230,8 @@ msgid "Design Block Properties"
 msgstr "デザインブロックのプロパティ"
 
 #: common/dialogs/dialog_edit_library_tables.cpp:117
-#, fuzzy
 msgid "Save changes to library tables?"
-msgstr "入れ子になったライブラリ テーブルの変更を保存しますか?"
+msgstr "ライブラリ テーブルの変更を保存しますか?"
 
 #: common/dialogs/dialog_fields_table.cpp:127
 msgid "Revert Row"
@@ -3345,9 +3337,9 @@ msgid "The first %d fields are mandatory and names cannot be changed."
 msgstr "最初の %d フィールドは必須であり、名前は変更できません。"
 
 #: common/dialogs/dialog_fields_table.cpp:1109
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' field cannot be renamed."
-msgstr "ファイル '%s' を作成できませんでした。"
+msgstr "フィールド名 '%s' を変更できませんでした。"
 
 #: common/dialogs/dialog_fields_table.cpp:1114
 msgid "Rename Field"
@@ -6130,6 +6122,8 @@ msgid ""
 "The imported file assigned reserved hotkeys (%s). These assignments were "
 "ignored."
 msgstr ""
+"インポートされたファイルには予約済のホットキー (%s) が含まれていました。これ"
+"らの割り当ては無視されます。"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:283
 msgid "| Action | Default Hotkey | Description"
@@ -6224,14 +6218,12 @@ msgid "Convert to Greyscale"
 msgstr "グレースケールに変換"
 
 #: common/dialogs/panel_image_editor_base.cpp:51
-#, fuzzy
 msgid "Invert Colors"
-msgstr "環境色"
+msgstr "色を反転"
 
 #: common/dialogs/panel_image_editor_base.cpp:54
-#, fuzzy
 msgid "Remove Background"
-msgstr "背景"
+msgstr "背景削除"
 
 #: common/dialogs/panel_maintenance.cpp:86
 msgid "File history cleared."
@@ -6458,14 +6450,12 @@ msgid "Touchpad navigation:"
 msgstr "タッチパッド 操作:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:197
-#, fuzzy
 msgid "Native gestures (recommended)"
-msgstr "開口部 マクロを無効化 (非推奨)"
+msgstr "ネイティブのジェスチャー (推奨)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:197
-#, fuzzy
 msgid "Configurable scroll gestures"
-msgstr "ネットクラスを設定"
+msgstr "設定可能なスクロール ジェスチャー"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:201
 msgid ""
@@ -6518,9 +6508,8 @@ msgid "Reset to Mouse Defaults"
 msgstr "マウスのデフォルト値にリセット"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:349
-#, fuzzy
 msgid "Reset to Configurable Touchpad Defaults"
-msgstr "トラックパッドのデフォルト値にリセット"
+msgstr "タッチパッドの設定をデフォルト値にリセット"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
 #: common/eda_base_frame.cpp:1677
@@ -7197,18 +7186,16 @@ msgid "Enable anonymous data collection"
 msgstr "自動的な匿名レポートの提供に同意を有効にする"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:49
-#, fuzzy
 msgid "API"
-msgstr "パイ型"
+msgstr "API"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:51
-#, fuzzy
 msgid ""
 "The KiCad API allows plugins and third-party software on your computer to "
 "access KiCad."
 msgstr ""
-"KiCad API を有効にする事により、このコンピュータ上で実行されているサードパー"
-"ティのソフトウェアがKiCadにアクセスできるようになります。"
+"KiCad API を使うと、プラグインやこのコンピュータ上で実行されている"
+"サードパーティのソフトウェアがKiCadにアクセスできるようになります。"
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -7998,9 +7985,8 @@ msgstr "ネット インスペクター"
 #: pcbnew/widgets/pcb_properties_panel.cpp:567
 #: pcbnew/widgets/pcb_properties_panel.cpp:640
 #: pcbnew/widgets/pcb_properties_panel.cpp:657
-#, fuzzy
 msgid "Custom Properties"
-msgstr "アイテムのプロパティ"
+msgstr "カスタム プロパティ"
 
 #: common/eda_item.cpp:578
 msgid "Screen"
@@ -8053,14 +8039,12 @@ msgstr "テーブル"
 
 #: common/eda_item.cpp:590 pcbnew/dialogs/dialog_board_setup.cpp:141
 #: pcbnew/pcb_drill_chart.cpp:284
-#, fuzzy
 msgid "Drill Chart"
-msgstr "ドリルマーク:"
+msgstr "ドリル チャート"
 
 #: common/eda_item.cpp:591 pcbnew/pcb_drill_map.cpp:220
-#, fuzzy
 msgid "Drill Map"
-msgstr "ドリル X"
+msgstr "ドリル マップ"
 
 #: common/eda_item.cpp:592 common/eda_item.cpp:623
 #: eeschema/sch_tablecell.cpp:406 pcbnew/pcb_tablecell.cpp:259
@@ -8843,9 +8827,8 @@ msgid "Deprecated version of %s."
 msgstr "%s 推奨されないバージョン。"
 
 #: common/exceptions.cpp:74
-#, fuzzy
 msgid "Canceled by user."
-msgstr "オープンの操作はユーザーによってキャンセルされました。"
+msgstr "ユーザーによってキャンセルされました。"
 
 #: common/exceptions.cpp:87
 #, c-format
@@ -9525,9 +9508,8 @@ msgid "History repository is locked by %s@%s"
 msgstr "履歴リポジトリは %s@%s によってロックされている"
 
 #: common/history_lock.cpp:168
-#, fuzzy
 msgid "History repository is locked by an older KiCad instance."
-msgstr "履歴リポジトリは %s@%s によってロックされている"
+msgstr "履歴リポジトリは 古いKiCadインスタンスによってロックされている。"
 
 #: common/history_lock.cpp:181
 #, c-format
@@ -11120,6 +11102,8 @@ msgid ""
 "Could not restore local history '%s'. The previous history is preserved at "
 "'%s'."
 msgstr ""
+"ローカル履歴 '%s' を復元できませんでした。 以前の履歴は '%s' に保存されていま"
+"す。"
 
 #: common/local_history.cpp:2737
 msgid "Cannot restore - the following files are open by another user:"
@@ -11148,27 +11132,23 @@ msgstr ""
 
 #: common/model_preview_manager.cpp:107
 msgid "3D model previews require setup for this KiCad version."
-msgstr ""
+msgstr "このKiCad版数では、3Dモデルプレビューには設定が必要です。"
 
 #: common/model_preview_manager.cpp:108
-#, fuzzy
 msgid "3D Model Previews"
-msgstr "3D モデル"
+msgstr "3D モデル プレビュー"
 
 #: common/model_preview_manager.cpp:109
-#, fuzzy
 msgid "Set Up Previews"
-msgstr "印刷プレビュー"
+msgstr "プレビューの設定"
 
 #: common/model_preview_manager.cpp:109
-#, fuzzy
 msgid "Skip This Version"
-msgstr "このバージョンをスキップ(&s)"
+msgstr "この版数はスキップ"
 
 #: common/model_preview_manager.cpp:123
-#, fuzzy
 msgid "Could not set up 3D model previews."
-msgstr "マージをするためのテンポラリファイルを書き込めませんでした\n"
+msgstr "3Dモデルの設定ができませんでした。"
 
 #: common/netclass.cpp:345 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1275 pcbnew/zone.cpp:1167
@@ -11545,18 +11525,16 @@ msgid "Open file"
 msgstr "ファイルを開く"
 
 #: common/pth_hole_size.cpp:94
-#, fuzzy
 msgid "A (General)"
-msgstr "一般設定"
+msgstr "A (一般)"
 
 #: common/pth_hole_size.cpp:95
 msgid "B (Moderate)"
-msgstr ""
+msgstr "B (中間)"
 
 #: common/pth_hole_size.cpp:96
-#, fuzzy
 msgid "C (High density)"
-msgstr "%s (アイデンティティ(ID))"
+msgstr "C (高密度)"
 
 #: common/rc_item.cpp:526 eeschema/erc/erc_item.cpp:440
 msgid "Excluded warning: "
@@ -13257,9 +13235,9 @@ msgstr ""
 "ライブラリ内のすべてのデザイン ブロックが削除されます。"
 
 #: common/widgets/design_block_pane.cpp:314
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' could not be deleted."
-msgstr "デザイン ブロック ライブラリ ' %s ' は開くことができませんでした。"
+msgstr "デザイン ブロック ライブラリ ' %s ' は削除できませんでした。"
 
 #: common/widgets/design_block_pane.cpp:325
 #, c-format
@@ -14358,42 +14336,36 @@ msgid "Deleted items via API"
 msgstr "API経由でアイテムを削除"
 
 #: eeschema/api/api_handler_sch.cpp:2068 eeschema/sch_edit_frame.cpp:1969
-#, fuzzy
 msgid "Unable to rebuild schematic connectivity."
-msgstr "回路図の設定の読み込みに失敗しました。"
+msgstr "回路図の接続性の再構築に失敗しました。"
 
 #: eeschema/api/api_handler_sch.cpp:2764 eeschema/toolbars_sch_editor.cpp:440
-#, fuzzy
 msgid "Add Variant"
-msgstr "バリアントを追加..."
+msgstr "バリアントを追加"
 
 #: eeschema/api/api_handler_sch.cpp:2827
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1162
 #: eeschema/sch_edit_frame.cpp:3415
-#, fuzzy
 msgid "Delete Variant"
-msgstr "エイリアス エントリーを削除"
+msgstr "バリアントを削除"
 
 #: eeschema/api/api_handler_sch.cpp:2911
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1242
 #: eeschema/sch_edit_frame.cpp:3519
-#, fuzzy
 msgid "Rename Variant"
-msgstr "デザイン バリアント名の変更"
+msgstr "バリアント名の変更"
 
 #: eeschema/api/api_handler_sch.cpp:2994 eeschema/sch_edit_frame.cpp:3588
-#, fuzzy
 msgid "Copy Variant"
-msgstr "デザイン バリアントのコピー"
+msgstr "バリアントのコピー"
 
 #: eeschema/api/api_handler_sch.cpp:3038 eeschema/sch_edit_frame.cpp:3326
 msgid "Edit Variant Description"
 msgstr "バリアントの説明を編集"
 
 #: eeschema/api/api_handler_sch.cpp:3218
-#, fuzzy
 msgid "Placed symbol via API"
-msgstr "シンボルを配置"
+msgstr "APIでシンボルを配置した"
 
 #: eeschema/bom_plugins.cpp:45
 #, c-format
@@ -16783,14 +16755,12 @@ msgid "Pin Table"
 msgstr "ピン テーブル"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:141
-#, fuzzy
 msgid "Use Parent Value"
-msgstr "ネットクラスの値を使用"
+msgstr "基底の値を使用"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:142
-#, fuzzy
 msgid "Remove the local override and inherit the parent's value"
-msgstr "バリアント シンボルの上書きを削除し変更を破棄し基底のシンボルに戻す"
+msgstr "ローカルの上書きを削除し変更を破棄し基底の値に戻す"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:146
 msgid "Create Derived Symbol"
@@ -16873,9 +16843,9 @@ msgid "No symbols could be loaded from the library."
 msgstr "ライブラリからシンボルが読み込まれていません。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid reference for symbol '%s'."
-msgstr "\"%s\" シンボルのフットプリントが見つかりません"
+msgstr "\"%s\" シンボルの参照が不正です。"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:649
 #: eeschema/dialogs/dialog_rescue_each.cpp:113
@@ -16979,6 +16949,8 @@ msgstr "既存シンボルから派生:"
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:57
 msgid "(Preface filter with ‘::’ to include only base symbols in list.)"
 msgstr ""
+"（リストに基底シンボルだけを含めるには、フィルターに ‘::’ を付けてください。"
+"）"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:61
 msgid "Default reference designator:"
@@ -17119,9 +17091,9 @@ msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
 msgstr "ピン '%s' (ジャンパー ピン グループ %d )はこのシンボルに存在しません。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:861
-#, fuzzy, c-format
+#, c-format
 msgid "(Pins %s.)"
-msgstr "プラグイン (%d)"
+msgstr "(ピン %s)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:887
 #, c-format
@@ -17537,14 +17509,12 @@ msgid "Alternate Pin Function Definitions"
 msgstr "代替ピン機能定義"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:200
-#, fuzzy
 msgid "Electrical Type "
-msgstr "エレクトリカル タイプ"
+msgstr "エレクトリカル タイプ "
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:201
-#, fuzzy
 msgid "Graphic Style "
-msgstr "グラフィック スタイル"
+msgstr "グラフィック スタイル "
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:384
 msgid "Exit sync pins mode"
@@ -19451,9 +19421,8 @@ msgstr ""
 "シンボルを追加するときに便利です"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:232
-#, fuzzy
 msgid "Passthrough:"
-msgstr "貫通"
+msgstr "貫通:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 msgid "Block"
@@ -20347,24 +20316,23 @@ msgid "Never show Rescue Symbols tool"
 msgstr "シンボルのレスキューを行わない"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:367
-#, fuzzy
 msgid "Failed to query matching footprints."
-msgstr "一致するフットプリントを強調表示"
+msgstr "一致するフットプリントの照会が失敗しました。"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Matching footprints (%zu+):"
-msgstr "一致するフットプリント:"
+msgstr "一致するフットプリント (%zu+):"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Matching footprints (%zu):"
-msgstr "一致するフットプリント:"
+msgstr "一致するフットプリント (%zu):"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "Loading footprint libraries (%d%%)..."
-msgstr "フットプリント ライブラリ テーブルを読み込み中…"
+msgstr "フットプリント ライブラリ を読み込み中 (%d%%)..."
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:505
 #: pcbnew/tools/pcb_actions.cpp:844
@@ -20481,14 +20449,12 @@ msgid "Pin symbol size:"
 msgstr "ピン シンボルのサイズ:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:133
-#, fuzzy
 msgid "Show 'Do not populate' markers"
-msgstr "'DNP(未実装)'の部品を無視"
+msgstr "'DNP(未実装)'マーカーを表示"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:135
-#, fuzzy
 msgid "Draw a cross over symbols marked 'Do not populate'"
-msgstr "'DNP(未実装)'と指定された部品を表示しない"
+msgstr "'DNP(未実装)'とマークしたシンボルにバツを描画"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:142
 #: eeschema/erc/erc_item.cpp:37
@@ -21205,10 +21171,9 @@ msgid "Failed to save drawing sheet '%s': %s"
 msgstr "図面用紙 '%s' の保存に失敗しました: %s"
 
 #: eeschema/eeschema_helpers.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' has a malformed root sheet instance path."
-msgstr ""
-"回路図 ’%s’ はすでに[ユーザー:'%s' ホスト:'%s']によって開かれています。"
+msgstr "回路図 ’%s’ のルート用紙インスタンスパスが正しくない。"
 
 #: eeschema/eeschema_helpers.cpp:189
 #, c-format
@@ -23954,13 +23919,13 @@ msgstr ""
 "ツがKiCadライブラリに読み込まれていません。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded."
 msgstr ""
 "シンボル '%s' は、ライブラリで見つからなかったパーツ '%s' を参照しています。"
-"シンボルは読み込まれませんでした"
+"シンボルは読み込まれませんでした。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:837
 #, c-format
@@ -24044,22 +24009,22 @@ msgstr ""
 "おらず、手動で修正する必要がある場合があります。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2280
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net %s references unknown terminal %s on symbol %s. The net was not properly "
 "loaded and may require manual fixing."
 msgstr ""
-"ネット %s は不明のネット要素 %s を参照しています。ネットが正しく読み込まれて"
-"おらず、手動で修正する必要がある場合があります。"
+"ネット %s は不明な端子 %s をシンボル %s で参照しています。ネットが正しく読み"
+"込まれておらず、手動で修正する必要がある場合があります。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2337
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net %s references unknown terminal %s on block %s. The net was not properly "
 "loaded and may require manual fixing."
 msgstr ""
-"ネット %s は不明のネット要素 %s を参照しています。ネットが正しく読み込まれて"
-"おらず、手動で修正する必要がある場合があります。"
+"ネット %s は不明な端子 %s をブロック %s で参照しています。ネットが正しく読み"
+"込まれておらず、手動で修正する必要がある場合があります。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2531
 #, c-format
@@ -24338,14 +24303,13 @@ msgid "Could not find '%s' in the imported library."
 msgstr "インポートしたライブラリ内で '%s' を見つけることができません。"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:2432
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reload saved symbol '%s'"
-msgstr "'%s' から画像を読み込みできません。"
+msgstr "保存したシンボル '%s' を再読み込みできませんでした"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:89
-#, fuzzy
 msgid "Eagle schematic files"
-msgstr "Eagle XML 回路図ファイル"
+msgstr "Eagle 回路図ファイル"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:94
 msgid "Eagle XML library files"
@@ -37156,6 +37120,8 @@ msgid ""
 "Package archive entry '%s' would be extracted outside of the package "
 "directory."
 msgstr ""
+"パッケージ アーカイブ エントリー '%s' はパッケージ ディレクトリの外側に展開さ"
+"れる可能性があります。"
 
 #: kicad/pcm/pcm_task_manager.cpp:343
 msgid "Aborting package installation."
@@ -55936,7 +55902,6 @@ msgid "Tolerance must be greater than or equal to 0"
 msgstr "許容差は0以上である必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:93
-#, fuzzy
 msgid "Tolerance is too large: resulting minimum length is negative"
 msgstr "許容差が大きすぎます: 計算結果の最小長さは正値ではありません"
 
@@ -55961,9 +55926,8 @@ msgid "Maximum Skew must be greater than or equal to 0"
 msgstr "最大遅延差は0以上である必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:91
-#, fuzzy
 msgid "Time domain (ps)"
-msgstr "時間領域のパラメーター"
+msgstr "時間領域(ps)"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:92
 msgid "The values are picoseconds instead of a length"
@@ -56299,14 +56263,12 @@ msgid "Maximum length over which the pair may run uncoupled"
 msgstr "ペアが連結しないで進むことが出来る最大長"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:77
-#, fuzzy
 msgid "Optimum Width must be greater than or equal to 0"
-msgstr "最適な幅は0より大きくなければなりません"
+msgstr "最適な幅は0以上である必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:80
-#, fuzzy
 msgid "Optimum Gap must be greater than or equal to 0"
-msgstr "最大遅延差は0以上である必要があります"
+msgstr "最適なギャップは 0以上である必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:98
 msgid "Gap Tolerance must be greater than or equal to 0"
@@ -56849,7 +56811,7 @@ msgstr "皿穴作成中のOpenCasCade(OCC)例外発生: %s"
 msgid ""
 "Board stackup does not define a board thickness; exporting a %.3f mm board "
 "body."
-msgstr ""
+msgstr "基板積層構造は厚さを定義しません; %.3f mmの基板本体をエクスポートしています。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1876
 #, c-format
@@ -62984,9 +62946,8 @@ msgid "Via Properties"
 msgstr "ビアのプロパティ"
 
 #: pcbnew/pcb_track.cpp:3560
-#, fuzzy
 msgid "Automatically Update Net"
-msgstr "ビアとネットを自動的に更新"
+msgstr "ネットを自動的に更新"
 
 #: pcbnew/pcb_track.cpp:3572 pcbnew/widgets/pcb_properties_panel.cpp:1359
 msgid "Layer Top"
