@@ -168,7 +168,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
 
             if( !libBuf.SaveBuffer( *symbolBuf, aFileName, &*pi, true ) )
             {
-                // Something went wrong, but try to save other libraries
+                // Something went wrong, but try to save other symbols
                 res = false;
             }
         }
@@ -1036,6 +1036,15 @@ bool LIB_BUFFER::DeleteBuffer( const SYMBOL_BUFFER& aSymbolBuf )
 }
 
 
+/// Name of the parent a buffered symbol inherits from, or empty if it is a root symbol.
+static wxString getParentName( const SYMBOL_BUFFER& aSymbolBuf )
+{
+    std::shared_ptr<LIB_SYMBOL> parent = aSymbolBuf.GetSymbol().GetParent().lock();
+
+    return parent ? parent->GetName() : wxString();
+}
+
+
 bool LIB_BUFFER::SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileName, SCH_IO* aPlugin,
                              bool aBuffer )
 {
@@ -1048,6 +1057,15 @@ bool LIB_BUFFER::SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileNam
     properties.emplace( SCH_IO_KICAD_LEGACY::PropBuffering, "" );
 
     LIB_SYMBOL& libSymbol = aSymbolBuf.GetSymbol();
+
+    // Collect symbols that are *directly* derived from this symbol before renaming it
+    wxArrayString derivedSymbols;
+
+    for( const std::shared_ptr<SYMBOL_BUFFER>& buf : m_symbols )
+    {
+        if( getParentName( *buf ) == libSymbol.GetName() )
+            derivedSymbols.push_back( buf->GetSymbol().GetName() );
+    }
 
     {
         LIB_SYMBOL&    originalSymbol = aSymbolBuf.GetOriginal();
@@ -1183,10 +1201,10 @@ bool LIB_BUFFER::SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileNam
         aSymbolBuf.SetOriginal( std::make_unique<LIB_SYMBOL>( libSymbol ) );
     }
 
-    wxArrayString derivedSymbols;
+    bool res = true;
 
     // Reparent all symbols derived from the saved symbol.
-    if( GetDerivedSymbolNames( libSymbol.GetName(), derivedSymbols ) != 0 )
+    if( !derivedSymbols.IsEmpty() )
     {
         // The saved copy is owned by the plugin cache. Borrow it back to reparent the
         // derived symbols. The lookup cannot normally fail since it was just added.
@@ -1215,13 +1233,15 @@ bool LIB_BUFFER::SaveBuffer( SYMBOL_BUFFER& aSymbolBuf, const wxString& aFileNam
             catch( const IO_ERROR& ioe )
             {
                 wxLogError( errorMsg, UnescapeString( derivedSymbolName ), aFileName, ioe.What() );
-                return false;
+
+                // Something went wrong, but try to save other derived symbols
+                res = false;
             }
         }
     }
 
     ++m_hash;
-    return true;
+    return res;
 }
 
 
@@ -1234,15 +1254,6 @@ std::shared_ptr<SYMBOL_BUFFER> LIB_BUFFER::GetBuffer( const wxString& aSymbolNam
     }
 
     return std::shared_ptr<SYMBOL_BUFFER>( nullptr );
-}
-
-
-/// Name of the parent a buffered symbol inherits from, or empty if it is a root symbol.
-static wxString getParentName( const SYMBOL_BUFFER& aSymbolBuf )
-{
-    std::shared_ptr<LIB_SYMBOL> parent = aSymbolBuf.GetSymbol().GetParent().lock();
-
-    return parent ? parent->GetName() : wxString();
 }
 
 
