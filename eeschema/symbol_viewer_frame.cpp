@@ -575,9 +575,6 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
         }
     }
 
-    if( libNicknames.empty() )
-        return true;
-
     for( const wxString& name : pinnedMatches )
         m_libList->Append( LIB_TREE_MODEL_ADAPTER::GetPinningSymbol() + UnescapeString( name ) );
 
