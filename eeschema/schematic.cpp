@@ -3037,7 +3037,7 @@ wxArrayString SCHEMATIC::GetVariantNamesForUI() const
     for( const wxString& name : m_variantNames )
         variantNames.Add( name );
 
-    variantNames.Sort( SortVariantNames );
+    variantNames.Sort( SortVariantNames );  // SortVariantNames ensures the default is always first
 
     return variantNames;
 }
@@ -3072,7 +3072,7 @@ void SCHEMATIC::SetCurrentVariant( const wxString& aVariantName )
     if( ( aVariantName != GetDefaultVariantName() ) && m_variantNames.contains( aVariantName ) )
         newVariant = aVariantName;
 
-    if( m_currentVariant == newVariant )
+    if( m_currentVariant.CmpNoCase( newVariant ) == 0 )
         return;
 
     m_currentVariant = newVariant;

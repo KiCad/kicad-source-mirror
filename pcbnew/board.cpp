@@ -3362,7 +3362,7 @@ wxArrayString BOARD::GetVariantNamesForUI() const
     for( const wxString& name : m_variantNames )
         names.Add( name );
 
-    names.Sort( SortVariantNames );
+    names.Sort( SortVariantNames );  // SortVariantNames ensures the default is always first
 
     return names;
 }

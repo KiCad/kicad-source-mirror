@@ -288,12 +288,7 @@ void SCH_EDIT_FRAME::UpdateVariantSelectionCtrl( const wxArrayString& aVariantNa
     if( !m_currentVariantCtrl )
         return;
 
-    // Fall back to the default if nothing is currently selected.
-    wxString currentSelection = GetDefaultVariantName();
-    int selectionIndex = m_currentVariantCtrl->GetSelection();
-
-    if( selectionIndex != wxNOT_FOUND )
-        currentSelection = m_currentVariantCtrl->GetString( selectionIndex );
+    wxString currentSelection = m_currentVariantCtrl->GetStringSelection();
 
     // Add all variant names, a separator, and "Add New Variant..." at the end
     wxArrayString contents = aVariantNames;
@@ -302,12 +297,8 @@ void SCH_EDIT_FRAME::UpdateVariantSelectionCtrl( const wxArrayString& aVariantNa
 
     m_currentVariantCtrl->Set( contents );
 
-    selectionIndex = m_currentVariantCtrl->FindString( currentSelection );
-
-    if( ( selectionIndex == wxNOT_FOUND ) && ( m_currentVariantCtrl->GetCount() != 0 ) )
-        selectionIndex = 0;
-
-    m_currentVariantCtrl->SetSelection( selectionIndex );
+    if( !m_currentVariantCtrl->SetStringSelection( currentSelection ) )
+        m_currentVariantCtrl->SetSelection( 0 );        // default variant
 }
 
 
@@ -450,29 +441,14 @@ bool SCH_EDIT_FRAME::ShowAddVariantDialog( wxWindow* aParent )
 
 void SCH_EDIT_FRAME::SetCurrentVariant( const wxString& aVariantName )
 {
-    if( !m_currentVariantCtrl )
-        return;
+    Schematic().SetCurrentVariant( aVariantName );
 
-    wxString name = aVariantName.IsEmpty() ? GetDefaultVariantName() : aVariantName;
-
-    int newSelection = m_currentVariantCtrl->FindString( name );
-
-    if( newSelection == wxNOT_FOUND )
-        return;
-
-    int currentSelection = m_currentVariantCtrl->GetSelection();
-
-    wxString selectedString;
-
-    if( currentSelection != wxNOT_FOUND )
-        selectedString = m_currentVariantCtrl->GetString( currentSelection );
-
-    if( selectedString != name )
+    if( m_currentVariantCtrl )
     {
-        m_currentVariantCtrl->SetSelection( newSelection );
-        Schematic().SetCurrentVariant( aVariantName );
-
-        UpdateProperties();
-        HardRedraw();
+        if( !m_currentVariantCtrl->SetStringSelection( aVariantName ) )
+            m_currentVariantCtrl->SetSelection( 0 );    // default variant
     }
+
+    UpdateProperties();
+    HardRedraw();
 }

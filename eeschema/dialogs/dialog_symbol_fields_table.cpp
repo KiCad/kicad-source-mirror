@@ -1110,15 +1110,13 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onAddVariant( wxCommandEvent& aEvent )
     for( const wxString& variant : m_parent->Schematic().GetVariantNames() )
         ctrlContents.Add( variant );
 
-    ctrlContents.Sort( SortVariantNames );
+    ctrlContents.Sort( SortVariantNames );  // SortVariantNames ensures the default is always first
     m_variantListBox->Set( ctrlContents );
 
     wxString currentVariant = m_parent->Schematic().GetCurrentVariant();
-    int      newSelection = m_variantListBox->FindString(
-                currentVariant.IsEmpty() ? GetDefaultVariantName() : currentVariant );
 
-    if( newSelection != wxNOT_FOUND )
-        m_variantListBox->SetSelection( newSelection );
+    if( !m_variantListBox->SetStringSelection( currentVariant ) )
+        m_variantListBox->SetSelection( 0 );
 
     onVariantSelectionChange( aEvent );
 }
@@ -1247,13 +1245,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onRenameVariant( wxCommandEvent& aEvent )
     wxArrayString ctrlContents = m_variantListBox->GetStrings();
     ctrlContents.Remove( oldVariantName );
     ctrlContents.Add( newVariantName );
-    ctrlContents.Sort( SortVariantNames );
+    ctrlContents.Sort( SortVariantNames );  // SortVariantNames ensures the default is always first
     m_variantListBox->Set( ctrlContents );
 
-    int newSelection = m_variantListBox->FindString( newVariantName );
-
-    if( newSelection != wxNOT_FOUND )
-        m_variantListBox->SetSelection( newSelection );
+    m_variantListBox->SetStringSelection( newVariantName );
 
     updateVariantButtonStates();
     m_parent->UpdateVariantSelectionCtrl( m_parent->Schematic().GetVariantNamesForUI() );
@@ -1309,13 +1304,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onCopyVariant( wxCommandEvent& aEvent )
 
     wxArrayString ctrlContents = m_variantListBox->GetStrings();
     ctrlContents.Add( newVariantName );
-    ctrlContents.Sort( SortVariantNames );
+    ctrlContents.Sort( SortVariantNames );  // SortVariantNames ensures the default is always first
     m_variantListBox->Set( ctrlContents );
 
-    int newSelection = m_variantListBox->FindString( newVariantName );
-
-    if( newSelection != wxNOT_FOUND )
-        m_variantListBox->SetSelection( newSelection );
+    m_variantListBox->SetStringSelection( newVariantName );
 
     onVariantSelectionChange( aEvent );
     m_parent->UpdateVariantSelectionCtrl( m_parent->Schematic().GetVariantNamesForUI() );
