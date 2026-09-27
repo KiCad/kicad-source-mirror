@@ -2696,8 +2696,7 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
 
                 for( SCH_ITEM* candidateRuleArea : candidateRuleAreas )
                 {
-                    SCH_RULE_AREA*      ruleArea = static_cast<SCH_RULE_AREA*>( candidateRuleArea );
-                    std::vector<SHAPE*> borderShapes = ruleArea->MakeEffectiveShapes( true );
+                    SCH_RULE_AREA* ruleArea = static_cast<SCH_RULE_AREA*>( candidateRuleArea );
 
                     if( ruleArea->GetPolyShape().CollideEdge( labelConnectionPoints[0], nullptr, 5 ) )
                         addPastAndPresentContainedItems( ruleArea, changed_item_data.screen );
