@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
 "PO-Revision-Date: 2026-09-28 07:51+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -55715,9 +55715,8 @@ msgid "Post-machining"
 msgstr "Nachbearbeitung"
 
 #: pcbnew/pcb_track.cpp:3258
-#, fuzzy
 msgid "Automatically Update Net"
-msgstr "Via-Netze automatisch aktualisieren"
+msgstr "Netz automatisch aktualisieren"
 
 #: pcbnew/pcb_track.cpp:3268 pcbnew/widgets/pcb_properties_panel.cpp:669
 msgid "Layer Top"
