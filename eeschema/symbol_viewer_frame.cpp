@@ -358,7 +358,16 @@ LIB_SYMBOL* SYMBOL_VIEWER_FRAME::GetSelectedSymbol() const
     LIB_SYMBOL* symbol = nullptr;
 
     if( m_currentSymbol.IsValid() )
-        symbol = PROJECT_SCH::SymbolLibAdapter( &Prj() )->LoadSymbol( m_currentSymbol );
+    {
+        try
+        {
+            symbol = PROJECT_SCH::SymbolLibAdapter( &Prj() )->LoadSymbol( m_currentSymbol );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            // best efforts
+        }
+    }
 
     return symbol;
 }
