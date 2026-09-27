@@ -74,7 +74,7 @@ KICOMMON_API void FormatStreamData( OUTPUTFORMATTER& aOut, const wxStreamBuffer&
 /**
  * Control the pretty-printing mode used by Prettify().
  */
-KICOMMON_API enum class FORMAT_MODE
+enum class KICOMMON_API FORMAT_MODE
 {
     NORMAL,                     ///< Follows standard pretty-printing rules
     COMPACT_TEXT_PROPERTIES,    ///< Collapses certain text properties to single-line
