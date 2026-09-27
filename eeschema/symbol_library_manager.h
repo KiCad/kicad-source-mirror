@@ -111,6 +111,11 @@ public:
      */
     bool DeleteBuffer( const SYMBOL_BUFFER& aSymbolBuf );
 
+    /**
+     * Move symbol buffers on the library's deleted list back to its main list.
+     */
+    void RevertDeletedBuffers();
+
     /// Return the deleted symbol buffers that need to be removed from the library file.
     const std::deque<std::shared_ptr<SYMBOL_BUFFER>>& GetDeletedBuffers() const { return m_deleted; }
 

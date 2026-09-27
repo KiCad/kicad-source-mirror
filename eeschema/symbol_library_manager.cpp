@@ -576,10 +576,14 @@ bool SYMBOL_LIBRARY_MANAGER::RevertAll()
     if( GetHash() == 0 )
         return true;
 
-    for( const auto& [libName, libBuffer] : m_libs )
+    for( auto& [libName, libBuffer] : m_libs )
     {
         if( !libBuffer.IsModified() )
             continue;
+
+        // A buffer could be modified and then deleted, so make sure it's replaced on the
+        // active list first, and any previous changes can then be reverted below.
+        libBuffer.RevertDeletedBuffers();
 
         for( const std::shared_ptr<SYMBOL_BUFFER>& buffer : libBuffer.GetBuffers() )
         {
@@ -1033,6 +1037,16 @@ bool LIB_BUFFER::DeleteBuffer( const SYMBOL_BUFFER& aSymbolBuf )
     ++m_hash;
 
     return retv;
+}
+
+
+void LIB_BUFFER::RevertDeletedBuffers()
+{
+    for( std::shared_ptr<SYMBOL_BUFFER>& buffer : m_deleted )
+        m_symbols.emplace_back( buffer );
+
+    m_deleted.clear();
+    ++m_hash;
 }
 
 
