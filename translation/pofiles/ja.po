@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-27 02:38+0000\n"
+"PO-Revision-Date: 2026-09-28 07:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -27586,7 +27586,7 @@ msgstr "既存のデザイン バリアントの説明を編集します。"
 
 #: eeschema/tools/sch_align_tool.cpp:64
 msgid "Align"
-msgstr "整列"
+msgstr "揃え"
 
 #: eeschema/tools/sch_align_tool.cpp:361
 #: pcbnew/tools/align_distribute_tool.cpp:436
@@ -32583,6 +32583,8 @@ msgid ""
 "Package archive entry '%s' would be extracted outside of the package "
 "directory."
 msgstr ""
+"パッケージ アーカイブ エントリー '%s' はパッケージ ディレクトリの外側に展開さ"
+"れる可能性があります。"
 
 #: kicad/pcm/pcm_task_manager.cpp:343
 msgid "Aborting package installation."
@@ -49039,7 +49041,6 @@ msgid "Tolerance must be greater than or equal to 0"
 msgstr "許容差は0以上である必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:96
-#, fuzzy
 msgid "Tolerance is too large: resulting minimum length is negative"
 msgstr "許容差が大きすぎます: 計算結果の最小長さは正値ではありません"
 
@@ -49056,9 +49057,8 @@ msgid "Maximum Skew must be greater than or equal to 0"
 msgstr "最大遅延差は0以上である必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:95
-#, fuzzy
 msgid "Time domain (ps)"
-msgstr "時間領域のパラメーター"
+msgstr "時間領域(ps)"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:64
 msgid "Allow 0°"
@@ -49221,14 +49221,12 @@ msgid "Width Tolerance must be less than Optimum Width"
 msgstr "幅の許容差は最適な幅より小さくなければなりません"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:76
-#, fuzzy
 msgid "Optimum Width must be greater than or equal to 0"
-msgstr "最適な幅は0より大きくなければなりません"
+msgstr "最適な幅は0以上である必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:79
-#, fuzzy
 msgid "Optimum Gap must be greater than or equal to 0"
-msgstr "最大遅延差は0以上である必要があります"
+msgstr "最適なギャップは 0以上である必要があります"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:97
 msgid "Gap Tolerance must be greater than or equal to 0"
@@ -49675,7 +49673,7 @@ msgstr "皿穴作成中のOpenCasCade(OCC)例外発生: %s"
 msgid ""
 "Board stackup does not define a board thickness; exporting a %.3f mm board "
 "body."
-msgstr ""
+msgstr "基板積層構造は厚さを定義しません; %.3f mmの基板本体をエクスポートしています。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1788
 #, c-format
@@ -55029,9 +55027,8 @@ msgid "Post-machining"
 msgstr "後加工"
 
 #: pcbnew/pcb_track.cpp:3258
-#, fuzzy
 msgid "Automatically Update Net"
-msgstr "ビアとネットを自動的に更新"
+msgstr "ネットを自動的に更新"
 
 #: pcbnew/pcb_track.cpp:3268 pcbnew/widgets/pcb_properties_panel.cpp:669
 msgid "Layer Top"
