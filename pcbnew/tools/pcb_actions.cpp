@@ -1538,21 +1538,6 @@ TOOL_ACTION PCB_ACTIONS::defaultPadProperties( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::options_pad ) );
 
 
-// SCRIPTING TOOL
-//
-
-TOOL_ACTION PCB_ACTIONS::pluginsShowFolder( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.ScriptingTool.pluginsShowFolder" )
-        .Scope( AS_GLOBAL )
-#ifdef __WXMAC__
-        .FriendlyName( _( "Reveal Plugin Folder in Finder" ) )
-        .Tooltip( _( "Reveals the plugins folder in a Finder window" ) )
-#else
-        .FriendlyName( _( "Open Plugin Directory" ) )
-        .Tooltip( _( "Opens the directory in the default system file manager" ) )
-#endif
-        .Icon( BITMAPS::directory_open ) );
-
 // BOARD_EDITOR_CONTROL
 //
 TOOL_ACTION PCB_ACTIONS::appendBoard( TOOL_ACTION_ARGS()

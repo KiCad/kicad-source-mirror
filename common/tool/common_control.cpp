@@ -39,6 +39,9 @@
 #include <kiface_base.h>
 #include <dialogs/dialog_configure_paths.h>
 #include <eda_doc.h>
+#include <launch_ext.h>
+#include <paths.h>
+#include <wx/filename.h>
 #include <wx/msgdlg.h>
 #include <executable_names.h>
 #include <gestfich.h>
@@ -440,6 +443,30 @@ int COMMON_CONTROL::ReloadPlugins( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_CONTROL::ShowPluginFolder( const TOOL_EVENT& aEvent )
+{
+    wxString dir( PATHS::GetUserPluginsPath() );
+
+    if( !wxFileName::DirExists( dir ) )
+    {
+        if( !PATHS::EnsurePathExists( dir ) )
+        {
+            DisplayErrorMessage( m_frame,
+                                 wxString::Format( _( "Unable to create plugin directory '%s'." ),
+                                                   dir ) );
+            return 0;
+        }
+    }
+
+    if( !LaunchExternal( dir ) )
+        DisplayErrorMessage( m_frame,
+                             wxString::Format( _( "Unable to open plugin directory '%s'." ),
+                                               dir ) );
+
+    return 0;
+}
+
+
 void COMMON_CONTROL::setTransitions()
 {
     Go( &COMMON_CONTROL::Quit,               ACTIONS::quit.MakeEvent() );
@@ -464,6 +491,7 @@ void COMMON_CONTROL::setTransitions()
     Go( &COMMON_CONTROL::ReportBug,          ACTIONS::reportBug.MakeEvent() );
     Go( &COMMON_CONTROL::About,              ACTIONS::about.MakeEvent() );
     Go( &COMMON_CONTROL::ReloadPlugins,      ACTIONS::pluginsReload.MakeEvent() );
+    Go( &COMMON_CONTROL::ShowPluginFolder,   ACTIONS::pluginsShowFolder.MakeEvent() );
 }
 
 

@@ -481,7 +481,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     submenuActionPlugins->SetIcon( BITMAPS::puzzle_piece );
 
     submenuActionPlugins->Add( ACTIONS::pluginsReload );
-    submenuActionPlugins->Add( PCB_ACTIONS::pluginsShowFolder );
+    submenuActionPlugins->Add( ACTIONS::pluginsShowFolder );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( submenuActionPlugins );

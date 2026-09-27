@@ -1261,7 +1261,8 @@ ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::ipcScripting( "control.IPCPlugin
                                                               _( "IPC/Scripting plugins" ),
                                                               _( "Region to hold the IPC/Scripting action buttons" ),
                                                               { FRAME_SCH,
-                                                                FRAME_PCB_EDITOR } );
+                                                                FRAME_PCB_EDITOR,
+                                                                FRAME_FOOTPRINT_EDITOR } );
 
 ACTION_TOOLBAR_CONTROL ACTION_TOOLBAR_CONTROLS::layerSelector( "control.LayerSelector",
                                                                _( "Layer selector" ),

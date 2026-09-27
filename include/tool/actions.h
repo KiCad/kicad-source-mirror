@@ -290,6 +290,7 @@ public:
 
     // API
     static TOOL_ACTION pluginsReload;
+    static TOOL_ACTION pluginsShowFolder;
 
     // Embedding Files
     static TOOL_ACTION embeddedFiles;

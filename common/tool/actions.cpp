@@ -1456,6 +1456,18 @@ TOOL_ACTION ACTIONS::pluginsReload( TOOL_ACTION_ARGS()
         .Tooltip( _( "Reload all python plugins and refresh plugin menus" ) )
         .Icon( BITMAPS::reload ) );
 
+TOOL_ACTION ACTIONS::pluginsShowFolder( TOOL_ACTION_ARGS()
+        .Name( "common.API.pluginsShowFolder" )
+        .Scope( AS_GLOBAL )
+#ifdef __WXMAC__
+        .FriendlyName( _( "Reveal Plugin Folder in Finder" ) )
+        .Tooltip( _( "Reveals the plugins folder in a Finder window" ) )
+#else
+        .FriendlyName( _( "Open Plugin Directory" ) )
+        .Tooltip( _( "Opens the directory in the default system file manager" ) )
+#endif
+        .Icon( BITMAPS::directory_open ) );
+
 // Embedding Files
 
 TOOL_ACTION ACTIONS::embeddedFiles( TOOL_ACTION_ARGS()

@@ -240,6 +240,15 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->Add( PCB_ACTIONS::cleanupGraphics );
     toolsMenu->Add( PCB_ACTIONS::repairFootprint );
 
+    ACTION_MENU* submenuActionPlugins = new ACTION_MENU( false, selTool );
+    submenuActionPlugins->SetTitle( _( "External Plugins" ) );
+    submenuActionPlugins->SetIcon( BITMAPS::puzzle_piece );
+
+    submenuActionPlugins->Add( ACTIONS::pluginsReload );
+    submenuActionPlugins->Add( ACTIONS::pluginsShowFolder );
+
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( submenuActionPlugins );
 
     //-- Preferences menu -------------------------------------------------
     //

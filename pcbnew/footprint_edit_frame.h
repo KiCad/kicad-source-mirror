@@ -194,6 +194,13 @@ public:
      */
     void ReCreateLayerBox( bool aForceResizeToolbar = true );
 
+    void configureToolbars() override;
+
+    PLUGIN_ACTION_SCOPE PluginActionScope() const override
+    {
+        return PLUGIN_ACTION_SCOPE::FOOTPRINT;
+    }
+
     // The Tool Framework initialization, for GAL mode
     void setupTools();
 
@@ -460,6 +467,8 @@ protected:
     void editFootprintProperties( FOOTPRINT* aFootprint );
 
     void setupUIConditions() override;
+
+    void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
 
     void centerItemIdleHandler( wxIdleEvent& aEvent );
 

@@ -41,7 +41,9 @@
 #include <api/api_handler_common.h>
 #include <api/api_handler_footprint.h>
 #include <api/api_handler_libraries.h>
+#include <api/api_plugin_manager.h>
 #include <api/api_server.h>
+#include <api/api_utils.h>
 #include <board.h>
 #include <project/net_settings.h>
 #include <widgets/wx_infobar.h>
@@ -97,6 +99,7 @@
 
 #include <wx/filedlg.h>
 #include <wx/hyperlink.h>
+#include <wx/log.h>
 
 BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( wxID_CLOSE, FOOTPRINT_EDIT_FRAME::CloseFootprintEditor )
@@ -191,6 +194,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateLayerBox( false );
 
     ReCreateMenuBar();
+
+    wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
+                    &FOOTPRINT_EDIT_FRAME::onPluginAvailabilityChanged, this );
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
     m_appearancePanel = new APPEARANCE_CONTROLS( this, GetCanvas(), true );
@@ -1888,6 +1894,8 @@ void FOOTPRINT_EDIT_FRAME::doCloseWindow()
     GetCanvas()->StopDrawing();
 
     Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
+    wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
+                      &FOOTPRINT_EDIT_FRAME::onPluginAvailabilityChanged, this );
 
     if( GetLibTree() )
         GetLibTree()->ShutdownPreviews();

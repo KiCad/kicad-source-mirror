@@ -440,9 +440,6 @@ public:
     static TOOL_ACTION zonePriorityLower;
     static TOOL_ACTION zonePriorityMoveToBottom;
 
-    /// Scripting Actions
-    static TOOL_ACTION pluginsShowFolder;
-
     // Board editor control
     static TOOL_ACTION appendBoard;
     static TOOL_ACTION rescueAutosave;
