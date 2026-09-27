@@ -3586,11 +3586,15 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 
 void SCH_PAINTER::draw( const SCH_BITMAP* aBitmap, int aLayer )
 {
+    const REFERENCE_IMAGE& refImage = aBitmap->GetReferenceImage();
+    bool                   drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( m_schSettings.IsPrinting() && drawingShadows )
+        return;
+
     auto t1 = std::chrono::high_resolution_clock::now();
     m_gal->Save();
     m_gal->Translate( aBitmap->GetPosition() );
-
-    const REFERENCE_IMAGE& refImage = aBitmap->GetReferenceImage();
 
     // When the image scale factor is not 1.0, we need to modify the actual as the image scale
     // factor is similar to a local zoom
@@ -3600,9 +3604,7 @@ void SCH_PAINTER::draw( const SCH_BITMAP* aBitmap, int aLayer )
         m_gal->Scale( VECTOR2D( img_scale, img_scale ) );
 
     if( aLayer == LAYER_DRAW_BITMAPS )
-    {
         m_gal->DrawBitmap( refImage.GetImage() );
-    }
 
     if( aLayer == LAYER_SELECTION_SHADOWS )
     {
