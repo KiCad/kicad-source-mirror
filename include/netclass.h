@@ -119,6 +119,9 @@ public:
     /// name to a user. Use GetHumanReadableName instead.
     const wxString GetName() const;
 
+    /// @brief Compares a name with GetName() without constructing the aggregate name
+    bool NameEquals( const wxString& aName ) const;
+
     /// @brief Gets the consolidated name of this netclass (which may be an aggregate). This is
     /// intended for display to users (e.g. in infobars or messages). WARNING: Do not use this
     /// to compare equivalence, or to export to other tools)

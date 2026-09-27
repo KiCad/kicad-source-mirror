@@ -468,7 +468,6 @@ void BOARD::IncrementTimeStamp()
         || !m_ZoneBBoxCache.empty()
         || m_CopperItemRTreeCache
         || m_maxClearanceValue.has_value()
-        || !m_ItemNetclassCache.empty()
         || !m_ZonesByNameCache.empty()
         || !m_DeflatedZoneOutlineCache.empty()
         || !m_ItemFieldCache.Empty()
@@ -489,7 +488,6 @@ void BOARD::IncrementTimeStamp()
         m_ItemFieldCache.Clear();
         m_StackedMicroviaCache.reset();
         m_LayerExpressionCache.clear();
-        m_ItemNetclassCache.clear();
         m_ZonesByNameCache.clear();
         m_DeflatedZoneOutlineCache.clear();
 

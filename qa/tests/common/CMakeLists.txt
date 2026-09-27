@@ -159,6 +159,7 @@ set( QA_COMMON_SRCS
     view/test_zoom_controller.cpp
     view/test_view_null_safety.cpp
 
+    test_netclass.cpp
     test_netname_validator.cpp
 
     # GAL tests

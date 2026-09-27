@@ -390,3 +390,32 @@ const wxString NETCLASS::GetName() const
 
     return name;
 }
+
+
+bool NETCLASS::NameEquals( const wxString& aName ) const
+{
+    if( m_constituents.size() <= 1 )
+        return m_Name == aName;
+
+    size_t offset = 0;
+
+    for( size_t i = 0; i < m_constituents.size(); ++i )
+    {
+        if( i > 0 )
+        {
+            if( offset >= aName.length() || aName[offset] != wxS( ',' ) )
+                return false;
+
+            ++offset;
+        }
+
+        const wxString& constituentName = m_constituents[i]->m_Name;
+
+        if( aName.compare( offset, constituentName.length(), constituentName ) != 0 )
+            return false;
+
+        offset += constituentName.length();
+    }
+
+    return offset == aName.length();
+}

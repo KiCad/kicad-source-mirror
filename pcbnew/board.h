@@ -1842,8 +1842,6 @@ public:
     mutable std::unordered_map<const ZONE*, BOX2I>        m_ZoneBBoxCache;
     mutable std::optional<int>                            m_maxClearanceValue;
 
-    mutable std::unordered_map<const BOARD_ITEM*, wxString> m_ItemNetclassCache;
-
     // Microvias that land on another microvia, for isStackedVia(). Whole-board relation, so it
     // is built in one pass rather than per via.
     mutable std::optional<std::set<const PCB_VIA*>> m_StackedMicroviaCache;
