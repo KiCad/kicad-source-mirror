@@ -592,7 +592,8 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
         m_libList->Append( UnescapeString( name ) );
 
     // Search for a previous selection:
-    int index = m_libList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibNickname() ) );
+    int  index = m_libList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibNickname() ) );
+    bool selChanged = false;
 
     if( index != wxNOT_FOUND )
     {
@@ -607,13 +608,14 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
         m_currentSymbol.SetLibItemName( wxEmptyString );
         m_unit = 1;
         m_bodyStyle = BODY_STYLE::BASE;
+        selChanged = true;
     }
 
-    bool cmp_changed = ReCreateSymbolList();
+    selChanged |= ReCreateSymbolList();
     DisplayLibInfos();
     GetCanvas()->Refresh();
 
-    return cmp_changed;
+    return selChanged;
 }
 
 
@@ -684,8 +686,8 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
         return true;
     }
 
-    int index = m_symbolList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibItemName() ) );
-    bool changed = false;
+    int  index = m_symbolList->FindString( UnescapeString( m_currentSymbol.GetUniStringLibItemName() ) );
+    bool selChanged = false;
 
     if( index == wxNOT_FOUND )
     {
@@ -694,13 +696,13 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
         m_bodyStyle = BODY_STYLE::BASE;
         m_unit      = 1;
         index       = -1;
-        changed     = true;
+        selChanged     = true;
         SetSelectedSymbol( wxEmptyString );
     }
 
     m_symbolList->SetSelection( index, true );
 
-    return changed;
+    return selChanged;
 }
 
 
