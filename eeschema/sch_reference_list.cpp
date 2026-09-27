@@ -226,7 +226,7 @@ std::vector<int> SCH_REFERENCE_LIST::GetUnitsMatchingRef( const SCH_REFERENCE& a
         if( ref.CompareValue( aRef ) != 0 )
             continue;
 
-        if( ref.CompareLibName( aRef ) != 0 )
+        if( ref.CompareLibId( aRef ) != 0 )
             continue;
 
         // Split if needed before comparing ref and number
@@ -556,7 +556,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 if( lockedRef.CompareValue( ref_unit ) != 0 )
                     continue;
 
-                if( lockedRef.CompareLibName( ref_unit ) != 0 )
+                if( lockedRef.CompareLibId( ref_unit ) != 0 )
                     continue;
 
                 // Find the matching symbol

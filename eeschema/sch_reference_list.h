@@ -193,10 +193,9 @@ public:
         return m_ref.CmpNoCase( item.m_ref );
     }
 
-    int CompareLibName( const SCH_REFERENCE& item ) const
+    int CompareLibId( const SCH_REFERENCE& item ) const
     {
-        return m_rootSymbol->GetLibId().GetLibItemName().compare(
-            item.m_rootSymbol->GetLibId().GetLibItemName() );
+        return GetSymbol()->GetLibId().compare( item.GetSymbol()->GetLibId() );
     }
 
     /**

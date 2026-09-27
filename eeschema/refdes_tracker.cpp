@@ -167,7 +167,7 @@ bool REFDES_TRACKER::areUnitsAvailable( const SCH_REFERENCE& aRef,
             // If we have a different library or different value,
             // we cannot share a reference designator.  Also, if the unit matches,
             // the reference designator + unit is already in use.
-            if( ref.CompareLibName( aRef ) != 0
+            if( ref.CompareLibId( aRef ) != 0
                 || ref.CompareValue( aRef ) != 0
                 || ref.GetUnit() == unit )
             {
