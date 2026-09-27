@@ -836,6 +836,49 @@ BOOST_AUTO_TEST_CASE( Issue18083_SelfIntersectingPolygonArea )
                 "Triangulated area should match expected area of 49 mm²" );
 }
 
+BOOST_AUTO_TEST_CASE( Issue18083_IndexedSelfTouchingOutlineArea )
+{
+    const int SCALE = 1000000;
+    const std::array<VECTOR2I, 5> corners = { VECTOR2I( 165 * SCALE, 87 * SCALE ),
+                                               VECTOR2I( 179 * SCALE, 87 * SCALE ),
+                                               VECTOR2I( 174 * SCALE, 94 * SCALE ),
+                                               VECTOR2I( 169 * SCALE, 87 * SCALE ),
+                                               VECTOR2I( 167 * SCALE, 94 * SCALE ) };
+    SHAPE_LINE_CHAIN outline;
+
+    // Subdivision preserves the pinch and its area while exercising the indexed split
+    for( size_t i = 0; i < corners.size(); ++i )
+    {
+        const VECTOR2I& a = corners[i];
+        const VECTOR2I& b = corners[( i + 1 ) % corners.size()];
+
+        for( int step = 0; step < 8; ++step )
+            outline.Append( a.x + ( b.x - a.x ) * step / 8, a.y + ( b.y - a.y ) * step / 8 );
+    }
+
+    outline.SetClosed( true );
+    BOOST_REQUIRE_EQUAL( outline.PointCount(), 40 );
+
+    SHAPE_POLY_SET polySet;
+    polySet.AddOutline( outline );
+    const double outlineArea = polySet.Area();
+
+    polySet.CacheTriangulation( false );
+    BOOST_TEST( polySet.IsTriangulationUpToDate() );
+
+    double triangulatedArea = 0.0;
+
+    for( int i = 0; i < polySet.TriangulatedPolyCount(); ++i )
+    {
+        const auto triPoly = polySet.TriangulatedPolygon( i );
+
+        for( const auto& tri : triPoly->Triangles() )
+            triangulatedArea += std::abs( tri.Area() );
+    }
+
+    BOOST_TEST( std::abs( triangulatedArea - outlineArea ) < outlineArea * 0.01 );
+}
+
 BOOST_AUTO_TEST_CASE( Issue25141_FractureCorridorIsNotAPinchPoint )
 {
     // Vertex 6 sits 1nm off vertex 1 and the corridor runs just under 45 degrees, so it rounds

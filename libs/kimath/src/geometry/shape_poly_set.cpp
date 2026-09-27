@@ -49,7 +49,7 @@
 #include <geometry/shape.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
-#include <geometry/rtree/dynamic_rtree.h>
+#include <geometry/segment_index.h>
 #include <math/box2.h>                       // for BOX2I
 #include <math/util.h>                       // for KiROUND, rescale
 #include <math/vector2d.h>                   // for VECTOR2I, VECTOR2D, VECTOR2
@@ -2246,16 +2246,13 @@ void SHAPE_POLY_SET::splitCollinearOutlines()
             SHAPE_LINE_CHAIN& outline = m_polys[polyIdx][0];
             intptr_t count = outline.PointCount();
 
-            KIRTREE::DYNAMIC_RTREE<intptr_t, intptr_t, 2> rtree;
+            std::vector<SEG> segs;
+            segs.reserve( count );
 
             for( intptr_t i = 0; i < count; ++i )
-            {
-                const VECTOR2I& a = outline.CPoint( i );
-                const VECTOR2I& b = outline.CPoint( ( i + 1 ) % count );
-                intptr_t min[2] = { std::min( a.x, b.x ), std::min( a.y, b.y ) };
-                intptr_t max[2] = { std::max( a.x, b.x ), std::max( a.y, b.y ) };
-                rtree.Insert( min, max, i );
-            }
+                segs.emplace_back( outline.CPoint( i ), outline.CPoint( ( i + 1 ) % count ) );
+
+            SEGMENT_INDEX index( std::move( segs ) );
 
             bool found = false;
             int segA = -1;
@@ -2266,11 +2263,9 @@ void SHAPE_POLY_SET::splitCollinearOutlines()
                 const VECTOR2I& a = outline.CPoint( i );
                 const VECTOR2I& b = outline.CPoint( ( i + 1 ) % count );
                 SEG seg( a, b );
-                intptr_t min[2] = { std::min( a.x, b.x ), std::min( a.y, b.y ) };
-                intptr_t max[2] = { std::max( a.x, b.x ), std::max( a.y, b.y ) };
 
                 auto visitor =
-                        [&]( const intptr_t& j ) -> bool
+                        [&]( int j ) -> bool
                         {
                             if( j == i || j == ( ( i + 1 ) % count ) || j == ( ( i + count - 1 ) % count ) )
                                 return true;
@@ -2298,7 +2293,7 @@ void SHAPE_POLY_SET::splitCollinearOutlines()
                             return true;
                         };
 
-                rtree.Search( min, max, visitor );
+                index.VisitCandidates( seg, 0, visitor );
             }
 
             if( !found )
@@ -2453,26 +2448,21 @@ void SHAPE_POLY_SET::splitSelfTouchingOutlines()
             }
             else
             {
-                KIRTREE::DYNAMIC_RTREE<intptr_t, int, 2> rtree;
+                std::vector<SEG> segs;
+                segs.reserve( count );
 
                 for( int i = 0; i < count; ++i )
-                {
-                    const VECTOR2I& a = outline.CPoint( i );
-                    const VECTOR2I& b = outline.CPoint( ( i + 1 ) % count );
-                    int bmin[2] = { std::min( a.x, b.x ), std::min( a.y, b.y ) };
-                    int bmax[2] = { std::max( a.x, b.x ), std::max( a.y, b.y ) };
-                    rtree.Insert( bmin, bmax, i );
-                }
+                    segs.emplace_back( outline.CPoint( i ), outline.CPoint( ( i + 1 ) % count ) );
+
+                SEGMENT_INDEX index( std::move( segs ) );
 
                 for( int vertIdx = 0; vertIdx < count && insertSegIdx < 0; ++vertIdx )
                 {
                     const VECTOR2I& pt = outline.CPoint( vertIdx );
                     const int prevSeg = ( vertIdx + count - 1 ) % count;
-                    int bmin[2] = { pt.x, pt.y };
-                    int bmax[2] = { pt.x, pt.y };
 
                     auto pinchVisitor =
-                            [&]( const intptr_t& segIdx ) -> bool
+                            [&]( int segIdx ) -> bool
                             {
                                 if( segIdx == prevSeg || segIdx == vertIdx )
                                     return true;
@@ -2485,7 +2475,7 @@ void SHAPE_POLY_SET::splitSelfTouchingOutlines()
                                 // coordinates; they can land within 1nm of an endpoint but
                                 // are not true pinch points.
                                 if( pt != a && pt != b && SEG( a, b ).SquaredDistance( pt ) == 0
-                                    && splittable( vertIdx, static_cast<int>( segIdx ) ) )
+                                    && splittable( vertIdx, segIdx ) )
                                 {
                                     insertSegIdx = segIdx;
                                     insertVertIdx = vertIdx;
@@ -2495,7 +2485,7 @@ void SHAPE_POLY_SET::splitSelfTouchingOutlines()
                                 return true;
                             };
 
-                    rtree.Search( bmin, bmax, pinchVisitor );
+                    index.VisitCandidates( SEG( pt, pt ), 0, pinchVisitor );
                 }
             }
 
