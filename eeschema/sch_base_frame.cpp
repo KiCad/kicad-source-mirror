@@ -51,6 +51,7 @@
 #include <libraries/legacy_symbol_library.h>
 #include <libraries/symbol_library_adapter.h>
 #include <sch_base_frame.h>
+#include <tools/sch_actions.h>
 #include <dialogs/dialog_sch_find.h>
 #include <design_block.h>
 #include <thread_pool.h>
@@ -790,6 +791,12 @@ wxString SCH_BASE_FRAME::SelectLibrary( const wxString& aDialogTitle, const wxSt
             break;
         }
     }
+}
+
+
+const TOOL_ACTION* SCH_BASE_FRAME::drawArcAction( ARC_DRAW_MODE aMode ) const
+{
+    return &SCH_ACTIONS::DrawArcForMode( aMode );
 }
 
 

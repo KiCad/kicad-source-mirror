@@ -314,6 +314,8 @@ protected:
      */
     virtual void updateSelectionFilterVisbility() {}
 
+    const TOOL_ACTION* drawArcAction( ARC_DRAW_MODE aMode ) const override;
+
 protected:
     PANEL_SCH_SELECTION_FILTER* m_selectionFilterPanel;
     DIALOG_SCH_FIND*            m_findReplaceDialog;

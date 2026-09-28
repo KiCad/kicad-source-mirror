@@ -103,7 +103,11 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
                             .AddAction( SCH_ACTIONS::drawCircle )
                             .AddAction( SCH_ACTIONS::drawEllipse ) )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Arc" ) )
-                            .AddAction( SCH_ACTIONS::drawArc )
+                            .AddAction( SCH_ACTIONS::drawArcCenter )
+                            .AddAction( SCH_ACTIONS::drawArcStartEndMid )
+                            .AddAction( SCH_ACTIONS::drawArcStartEndCenter )
+                            .AddAction( SCH_ACTIONS::drawArcTangent )
+                            .AddAction( SCH_ACTIONS::drawArcStartDirEnd )
                             .AddAction( SCH_ACTIONS::drawEllipseArc ) )
               .AppendAction( SCH_ACTIONS::drawBezier )
               .AppendAction( SCH_ACTIONS::drawSymbolLines )
@@ -231,5 +235,3 @@ void SYMBOL_EDIT_FRAME::ClearToolbarControl( int aId )
     case ID_LIBEDIT_SELECT_BODY_STYLE:  m_bodyStyleSelectBox = nullptr; break;
     }
 }
-
-

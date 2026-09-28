@@ -1016,6 +1016,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( SCH_ACTIONS::drawEllipse );
     CURRENT_TOOL( SCH_ACTIONS::drawEllipseArc );
     CURRENT_TOOL( SCH_ACTIONS::drawArc );
+    setArcModeConditions( SCH_ACTIONS::drawArc, SELECTION_CONDITIONS::ShowAlways );
     CURRENT_TOOL( SCH_ACTIONS::drawBezier );
     CURRENT_TOOL( SCH_ACTIONS::drawPolygon );
     CURRENT_TOOL( SCH_ACTIONS::drawLines );
