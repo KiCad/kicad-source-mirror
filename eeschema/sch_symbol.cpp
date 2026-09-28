@@ -2168,7 +2168,7 @@ const wxString SCH_SYMBOL::GetValue( const SCH_SHEET_PATH* aInstance, RESOLUTION
 
     // Fall back to default value when variant doesn't have an override
 
-    return GetField( FIELD_T::VALUE )->GetShownText( aInstance, aContext );
+    return GetField( FIELD_T::VALUE )->GetShownText( aInstance, aContext, aVariantName );
 }
 
 
