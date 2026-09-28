@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-28 07:51+0000\n"
+"PO-Revision-Date: 2026-09-28 18:35+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
@@ -7358,9 +7358,8 @@ msgid "Line Color"
 msgstr "Viivan väri"
 
 #: common/eda_shape.cpp:3014
-#, fuzzy
 msgid "Arc angle must not be zero."
-msgstr "Kaarikulma ei voi olla nolla."
+msgstr "Kaaren kulma ei saa olla nolla."
 
 #: common/eda_shape.cpp:3049
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:217
@@ -8217,9 +8216,9 @@ msgid "Rebase commit failed: %s"
 msgstr "Rebase epäonnistui commitin kohdalla: %s"
 
 #: common/git/libgit_backend.cpp:1631
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed: %s"
-msgstr "Rebasen viimeistely epäonnistui: %s"
+msgstr "Pohjustus epäonnistui: %s"
 
 #: common/git/libgit_backend.cpp:1639
 #, c-format
@@ -8371,9 +8370,8 @@ msgstr ""
 "Indeksin lukitusta ei voitu hankkia (toinen operaatio on käynnissä?): %s"
 
 #: common/history_lock.cpp:333
-#, fuzzy
 msgid "Cannot re-open history repository without the file lock"
-msgstr "Väliaikaista tulostustiedostoa ei voi poistaa"
+msgstr "Historiasäiliön avaaminen uudelleen ilman tiedostolukitusta epäonnistui"
 
 #: common/hotkey_store.cpp:44
 msgid "Accept Autocomplete"
@@ -9957,6 +9955,8 @@ msgid ""
 "Refusing to extract file '%s': the archive entry points outside of the "
 "destination directory."
 msgstr ""
+"Tiedostoa ”%s” ei pureta: arkiston tietue viittaa kohdehakemiston "
+"ulkopuolelle."
 
 #: common/project/project_archiver.cpp:177 kicad/pcm/pcm_task_manager.cpp:252
 #: kicad/pcm/pcm_task_manager.cpp:313
@@ -10217,9 +10217,9 @@ msgid "Cannot flush '%s' to disk: %s"
 msgstr "Ei voida siirtää '%s' roskakoriin."
 
 #: common/richio.cpp:656
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot close '%s': %s"
-msgstr "Ei voitu tuoda symbolia '%s': %s"
+msgstr "Kohteen '%s' sulkeminen epäonnistui:%s"
 
 #: common/richio.cpp:728
 #, fuzzy, c-format
@@ -16563,9 +16563,8 @@ msgid "%s Properties"
 msgstr "%s ominaisuudet"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:133
-#, fuzzy
 msgid "Sheet pin name can not be empty."
-msgstr "Nastan nimi ei voi olla tyhjä."
+msgstr "Sivunastan nimi ei voi olla tyhjä."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:166
 msgid "Edit Sheet Pin Properties"
@@ -17750,14 +17749,15 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"Tämä kaavio käyttää tällä hetkellä projektisymbolikirjastoluettelon "
-"hakumenetelmää kirjastosymbolien lataamiseen. KiCad yrittää kartoittaa "
-"olemassa olevat symbolit käyttämään uutta symbolikirjastotaulukkoa. "
-"Uudelleenkartoitus muuttaa joitakin projektitiedostoja ja kaaviot eivät "
-"välttämättä ole yhteensopivia KiCadin vanhempien versioiden kanssa. Kaikki "
-"muutetut tiedostot varmuuskopioidaan projektikansion \"rescue-backup\"-"
-"kansioon, jos sinun on peruutettava muutokset. Jos päätät ohittaa tämän "
-"vaiheen, olet vastuussa symbolien manuaalisesta kartoittamisesta."
+"Tämä kytkentäkaavio käyttää tällä hetkellä projektisymbolikirjastoluettelon "
+"hakumenetelmää kirjastosymbolien lataamiseen.  KiCad yrittää kartoittaa "
+"olemassa olevat symbolit käyttämään uutta symbolikirjastotaulukkoa.  "
+"Uudelleenkartoitus muuttaa joitakin projektitiedostoja ja kytkentäkaaviot "
+"eivät enää välttämättä ole yhteensopivia KiCadin vanhempien versioiden "
+"kanssa.  Kaikki muutetut tiedostot varmuuskopioidaan projektikansion "
+"\"rescue-backup\"-kansioon, jos sinun on peruutettava muutokset.  Jos päätät "
+"ohittaa tämän vaiheen, olet vastuussa symbolien manuaalisesta "
+"kartoittamisesta."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:217
 #, c-format
@@ -21779,9 +21779,9 @@ msgid "Error retrieving data from HTTP library %s: %s"
 msgstr "Virhe haettaessa tietoja HTTP-kirjastosta %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving part %s from HTTP library: %s"
-msgstr "Virhe haettaessa tietoja HTTP-kirjastosta %s: %s"
+msgstr "Virhe haettaessa osaa %s HTTP-kirjastosta:%s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:541
 #, c-format
@@ -29477,9 +29477,9 @@ msgid "<b>Unable to create temporary file '%s'.</b>"
 msgstr "<b>Väliaikaisen tiedoston '%s' luominen epäonnistui. </b>"
 
 #: gerbview/files.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to write temporary file '%s'.</b>"
-msgstr "<b>Väliaikaisen tiedoston '%s' luominen epäonnistui. </b>"
+msgstr "<b>Väliaikaistiedoston %s kirjoittaminen epäonnistui.</b>"
 
 #: gerbview/files.cpp:603
 #, c-format
@@ -32699,6 +32699,7 @@ msgid ""
 "Package archive entry '%s' would be extracted outside of the package "
 "directory."
 msgstr ""
+"Pakettiarkiston tietue ”%s” purettaisiin pakettihakemiston ulkopuolelle."
 
 #: kicad/pcm/pcm_task_manager.cpp:343
 msgid "Aborting package installation."
@@ -42539,11 +42540,11 @@ msgstr "Tekniset kerrokset"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:571
 msgid "Front adhesive"
-msgstr "Etupuolen sidosaine"
+msgstr "Etupuolen liima"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:574
 msgid "Back adhesive"
-msgstr "Kääntöpuolen sidosaine"
+msgstr "Takaosan liima"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:577
 msgid "Front solder paste"
@@ -45214,7 +45215,7 @@ msgstr "Ei levyllä, valmistus"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:171
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "Jos haluat sidosainepohjan piirilevyn etupuolle"
+msgstr "Jos haluat liimapohjan piirilevyn etupuolle"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:181
 #: pcbnew/dialogs/panel_setup_layers.cpp:199
@@ -45253,7 +45254,7 @@ msgstr "Haluttaessa kääntöpuolen juotospastakerros"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:303
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr "Jos haluat sidosainekerroksen piirilevyn kääntöpuolelle"
+msgstr "Jos haluat liimakerroksen piirilevyn takapuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:321
 msgid "If you want a fabrication layer for the back side of the board"
@@ -46628,9 +46629,8 @@ msgid "Tuning profile must have a name"
 msgstr "Säätöprofiililla on oltava nimi"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:845
-#, fuzzy
 msgid "Tuning profile name already in use"
-msgstr "Säätöprofiililla on oltava nimi"
+msgstr "Säätöprofiilin nimi on jo käytössä"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:861
 msgid "Duplicated signal layer configuration in tuning profile"
@@ -48767,11 +48767,8 @@ msgid "Tolerance must be greater than or equal to 0"
 msgstr "Toleranssin on oltava suurempi tai yhtä suuri kuin 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:96
-#, fuzzy
 msgid "Tolerance is too large: resulting minimum length is negative"
-msgstr ""
-"Toleranssi on liian suuri: tuloksena saatava vähimmäispituus ei ole "
-"positiivinen"
+msgstr "Toleranssi on liian suuri: laskettu vähimmäispituus on negatiivinen"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:157
 msgid "Within diff pairs"
@@ -48786,9 +48783,8 @@ msgid "Maximum Skew must be greater than or equal to 0"
 msgstr "Maksimivinouman on oltava vähintään 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:95
-#, fuzzy
 msgid "Time domain (ps)"
-msgstr "Otsikkolohkon parametrit"
+msgstr "Aikataso (ps)"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:64
 msgid "Allow 0°"
@@ -48951,14 +48947,12 @@ msgid "Width Tolerance must be less than Optimum Width"
 msgstr "Leveystoleranssin on oltava pienempi kuin optimileveys"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:76
-#, fuzzy
 msgid "Optimum Width must be greater than or equal to 0"
-msgstr "Optimaalisen leveyden on oltava suurempi kuin 0"
+msgstr "Optimaalisen leveyden on oltava suurempi tai yhtäsuuri kuin 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:79
-#, fuzzy
 msgid "Optimum Gap must be greater than or equal to 0"
-msgstr "Maksimivinouman on oltava vähintään 0"
+msgstr "Optimaalisen välin on oltava suurempi tai yhtä suuri kuin 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:97
 msgid "Gap Tolerance must be greater than or equal to 0"
@@ -49413,6 +49407,8 @@ msgid ""
 "Board stackup does not define a board thickness; exporting a %.3f mm board "
 "body."
 msgstr ""
+"Piirilevyn kerrosrakenne ei määritä levyn paksuutta; viedään %.3f mm "
+"paksuinen levyn runko."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1788
 #, c-format
@@ -54747,9 +54743,8 @@ msgid "Post-machining"
 msgstr "Jälkikoneistus"
 
 #: pcbnew/pcb_track.cpp:3258
-#, fuzzy
 msgid "Automatically Update Net"
-msgstr "Päivitä läpivientien verkot automaattisesti"
+msgstr "Päivitä verkko automaattisesti"
 
 #: pcbnew/pcb_track.cpp:3268 pcbnew/widgets/pcb_properties_panel.cpp:669
 msgid "Layer Top"
@@ -59889,11 +59884,11 @@ msgstr "Näytä tai piilota tämä kerros"
 
 #: pcbnew/widgets/appearance_controls.cpp:1757
 msgid "Adhesive on board's front"
-msgstr "Sidosaine piirilevyn etupuolella"
+msgstr "Liima piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1758
 msgid "Adhesive on board's back"
-msgstr "Sidosaine piirilevyn kääntöpuolella"
+msgstr "Liima piirilevyn takapuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1759
 msgid "Solder paste on board's front"
@@ -60897,11 +60892,11 @@ msgstr "KiCad Projekti"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
 msgid "KiCad Schematic"
-msgstr "KiCad kytkentäkaavio"
+msgstr "KiCad-kytkentäkaavio"
 
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
-msgstr "KiCad-piirilevytiedosto"
+msgstr "KiCad-piirilevy"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
 msgid "KiCad Footprint"
@@ -60909,7 +60904,7 @@ msgstr "KiCad jalanjälki"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
 msgid "KiCad Schematic Symbol"
-msgstr "KiCad kytkentäkaaviosymboli"
+msgstr "KiCad-kytkentäkaaviosymboli"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
