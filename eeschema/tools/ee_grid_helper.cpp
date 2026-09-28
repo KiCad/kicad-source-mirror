@@ -713,6 +713,9 @@ SNAP_RESULT EE_GRID_HELPER::ResolveSnap( const VECTOR2I& aOrigin, GRID_HELPER_GR
 
 VECTOR2D EE_GRID_HELPER::GetGridSize( GRID_HELPER_GRIDS aGrid ) const
 {
+    if( !m_toolMgr )
+        return GRID_HELPER::GetGridSize( aGrid );
+
     const GRID_SETTINGS& grid = m_toolMgr->GetSettings()->m_Window.grid;
     int                  idx = -1;
 
