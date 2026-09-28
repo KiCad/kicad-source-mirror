@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-28 07:51+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2026-09-28 18:35+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -48147,13 +48147,13 @@ msgid "Netclass clearances apply only between copper items."
 msgstr "Netzklassen-Freiräume gelten nur zwischen Kupferelementen."
 
 #: pcbnew/drc/drc_engine.cpp:1647 pcbnew/drc/drc_engine.cpp:1653
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Constraint ignored."
-msgstr "%s enthält kein Kupfer; Regel ignoriert."
+msgstr "%s enthält kein Kupfer.  Einschränkung ignoriert."
 
 #: pcbnew/drc/drc_engine.cpp:1664
 msgid "Keepout belongs to the footprint under test; constraint ignored."
-msgstr ""
+msgstr "Sperrfläche gehört zum zu prüfenden Footprint; Einschränkung ignoriert."
 
 #: pcbnew/drc/drc_engine.cpp:1719
 msgid "Keepout constraint not met."
@@ -48171,11 +48171,11 @@ msgstr "Sperrflächen-Lage(n) stimmen nicht überein."
 #: pcbnew/drc/drc_engine.cpp:2225
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr "Regellage \"%s\" stimmt nicht überein, Regel ignoriert."
+msgstr "Regellage \"%s\" stimmt nicht überein; Regel ignoriert."
 
 #: pcbnew/drc/drc_engine.cpp:1752 pcbnew/drc/drc_engine.cpp:1773
 msgid "Rule layer not matched; rule ignored."
-msgstr "Regellage stimmt nicht überein, Regel ignoriert."
+msgstr "Regellage stimmt nicht überein; Regel ignoriert."
 
 #: pcbnew/drc/drc_engine.cpp:1764
 msgid "Constraint layer not matched."
