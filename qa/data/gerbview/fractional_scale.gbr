@@ -1,0 +1,12 @@
+G04 Regression for Repose 2368 and 2505 - fractional SF scale factors*
+G04 Both flashes use raw coordinates 2 mm, 2 mm*
+G04 Expected Gerber positions: 1 mm, 3 mm and 3 mm, 1 mm*
+%FSLAX24Y24*%
+%MOMM*%
+%ADD10C,0.1*%
+D10*
+%SFA0.5B1.5*%
+X20000Y20000D03*
+%SFA1.5B0.5*%
+X20000Y20000D03*
+M02*

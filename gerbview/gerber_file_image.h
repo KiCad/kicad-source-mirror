@@ -413,7 +413,7 @@ public:
                             ///< @note This value is stored in 0.1 degrees
 
     VECTOR2I m_Offset;       ///< Coord Offset, from OF command
-    VECTOR2I m_Scale;        ///< scale (X and Y) of layer.
+    VECTOR2D m_Scale;        ///< scale (X and Y) of layer.
     bool     m_SwapAxis;     ///< false if A = X and B = Y (default); true if
                              ///<   A = Y, B = X
     bool m_MirrorA;          ///< true: mirror / axis A (X)

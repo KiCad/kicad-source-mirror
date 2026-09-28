@@ -89,4 +89,41 @@ BOOST_AUTO_TEST_CASE( DecimalModeDoesNotLeakBetweenAxes )
 }
 
 
+BOOST_AUTO_TEST_CASE( FractionalScaleFactorsRoundTrip )
+{
+    wxString          path = KI_TEST::GetTestDataRootDir() + "gerbview/fractional_scale.gbr";
+    GERBER_FILE_IMAGE image( 0 );
+
+    BOOST_REQUIRE( image.LoadGerberFile( path ) );
+    BOOST_CHECK_EQUAL( image.GetMessages().GetCount(), 0u );
+
+    const GERBER_DRAW_ITEMS& items = image.GetItems();
+    BOOST_REQUIRE_EQUAL( items.size(), 2u );
+
+    const int      unit = gerbIUScale.mmToIU( 1.0 );
+    const VECTOR2I expected[] = { { unit, -3 * unit }, { 3 * unit, -unit } };
+
+    // Swap the fractional scales between flashes to exercise both axes and ensure
+    // each item keeps its own scale. Display coordinates invert the Gerber Y axis.
+    for( size_t i = 0; i < items.size(); ++i )
+    {
+        BOOST_TEST_CONTEXT( "flash " << i )
+        {
+            const GERBER_DRAW_ITEM* item = items[i];
+            VECTOR2I                position = item->GetABPosition( item->m_Start );
+
+            // Require correct forward scaling before trying the inverse: truncating
+            // 0.5 to zero used to cause integer division by zero in GetXYPosition().
+            BOOST_REQUIRE_EQUAL( position.x, expected[i].x );
+            BOOST_REQUIRE_EQUAL( position.y, expected[i].y );
+
+            VECTOR2I original = item->GetXYPosition( position );
+
+            BOOST_CHECK_EQUAL( original.x, 2 * unit );
+            BOOST_CHECK_EQUAL( original.y, 2 * unit );
+        }
+    }
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
