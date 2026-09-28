@@ -111,6 +111,10 @@ public:
 
     void SetOriginalEntryCount( int aCount ) { m_originalEntryCount = aCount; }
 
+    int GetSourceRule() const { return m_sourceRule; }
+
+    void SetSourceRule( int aIndex ) { m_sourceRule = aIndex; }
+
     SEVERITY GetSeverity() const { return m_severity; }
 
     void SetSeverity( SEVERITY aSeverity ) { m_severity = aSeverity; }
@@ -260,6 +264,7 @@ private:
     wxString m_originalRuleText;
     bool     m_wasEdited = false;
     int                       m_originalEntryCount = 1;
+    int      m_sourceRule = -1; ///< Not copied, since a duplicate is a new rule
     SEVERITY m_severity = RPT_SEVERITY_UNDEFINED;
 };
 

@@ -48,21 +48,25 @@ public:
      * @param aPath Path to the output file.
      * @param aEntries Vector of panel entries to save.
      * @param aBoard Optional board for layer name resolution.
+     * @param aTrivia Text outside the rules of the loaded file, reproduced around them.
      * @return True if the file was saved successfully.
      */
     bool SaveFile( const wxString&                               aPath,
                    const std::vector<DRC_RE_LOADED_PANEL_ENTRY>& aEntries,
-                   const BOARD*                                  aBoard = nullptr );
+                   const BOARD*                                  aBoard = nullptr,
+                   const DRC_RE_FILE_TRIVIA&                     aTrivia = {} );
 
     /**
      * Generate rule text from panel entries.
      *
      * @param aEntries Vector of panel entries to convert.
      * @param aBoard Optional board for layer name resolution.
+     * @param aTrivia Text outside the rules of the loaded file, reproduced around them.
      * @return String containing all rules in DRC file format.
      */
     wxString GenerateRulesText( const std::vector<DRC_RE_LOADED_PANEL_ENTRY>& aEntries,
-                                const BOARD*                                  aBoard = nullptr );
+                                const BOARD*                                  aBoard = nullptr,
+                                const DRC_RE_FILE_TRIVIA&                     aTrivia = {} );
 
 private:
     /**

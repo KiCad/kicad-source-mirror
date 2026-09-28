@@ -75,6 +75,11 @@ public:
     std::vector<DRC_RE_LOADED_PANEL_ENTRY> LoadFromString( const wxString& aRulesText );
 
     /**
+     * @return The text outside the rules of the last loaded file, for DRC_RULE_SAVER.
+     */
+    const DRC_RE_FILE_TRIVIA& GetFileTrivia() const { return m_fileTrivia; }
+
+    /**
      * Extract the complete original text of a rule from file content.
      *
      * @param aContent The full file content.
@@ -140,7 +145,8 @@ private:
      */
     wxString cleanStrippedCondition( const wxString& aCondition );
 
-    DRC_PANEL_MATCHER m_matcher;
+    DRC_PANEL_MATCHER  m_matcher;
+    DRC_RE_FILE_TRIVIA m_fileTrivia;
 };
 
 

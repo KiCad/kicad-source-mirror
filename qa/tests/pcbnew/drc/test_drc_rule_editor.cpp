@@ -48,6 +48,7 @@
 #include <reporter.h>
 #include <dialogs/rule_editor_dialog_base.h>
 #include <footprint.h>
+#include <pcbnew_utils/board_file_utils.h>
 
 BOOST_AUTO_TEST_SUITE( DRC_RULE_EDITOR )
 
@@ -1852,6 +1853,30 @@ BOOST_AUTO_TEST_CASE( RuleSaverLoadSaveRoundTrip )
     BOOST_REQUIRE_EQUAL( reloadedEntries.size(), 1 );
     BOOST_CHECK_EQUAL( reloadedEntries[0].ruleName, "RoundTripTest" );
     BOOST_CHECK_EQUAL( reloadedEntries[0].panelType, entries[0].panelType );
+}
+
+BOOST_AUTO_TEST_CASE( RuleSaverKeepsUneditedFileIntact )
+{
+    // issue16182 comments each rule outside it, and issue20480 has two rules sharing name and condition
+    for( const char* name : { "issue16182.kicad_dru", "issue20480/issue20480.kicad_dru" } )
+    {
+        BOOST_TEST_CONTEXT( name )
+        {
+            wxString path = KI_TEST::GetPcbnewTestDataDir() + name;
+            wxString content;
+            wxFFile  file( path, "r" );
+
+            BOOST_REQUIRE( file.IsOpened() );
+            file.ReadAll( &content );
+
+            DRC_RULE_LOADER                        loader;
+            std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFile( path );
+            DRC_RULE_SAVER                         saver;
+
+            BOOST_REQUIRE( !entries.empty() );
+            BOOST_CHECK_EQUAL( saver.GenerateRulesText( entries, nullptr, loader.GetFileTrivia() ), content );
+        }
+    }
 }
 
 BOOST_AUTO_TEST_CASE( RuleSaverPreservesQuotedNameWithSpaces )

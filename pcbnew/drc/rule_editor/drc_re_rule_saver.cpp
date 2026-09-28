@@ -55,9 +55,10 @@ DRC_RULE_SAVER::DRC_RULE_SAVER()
 
 bool DRC_RULE_SAVER::SaveFile( const wxString&                               aPath,
                                 const std::vector<DRC_RE_LOADED_PANEL_ENTRY>& aEntries,
-                                const BOARD*                                  aBoard )
+                                const BOARD*                                  aBoard,
+                                const DRC_RE_FILE_TRIVIA&                     aTrivia )
 {
-    wxString    content = GenerateRulesText( aEntries, aBoard );
+    wxString    content = GenerateRulesText( aEntries, aBoard, aTrivia );
     std::string utf8 = std::string( content.mb_str( wxConvUTF8 ) );
 
     return KIPLATFORM::IO::AtomicWriteFile( aPath, utf8.data(), utf8.size() );
@@ -65,14 +66,18 @@ bool DRC_RULE_SAVER::SaveFile( const wxString&                               aPa
 
 
 wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANEL_ENTRY>& aEntries,
-                                             const BOARD*                                  aBoard )
+                                             const BOARD*                                  aBoard,
+                                             const DRC_RE_FILE_TRIVIA&                     aTrivia )
 {
-    wxString result = "(version 2)\n";
+    wxString result = aTrivia.header;
 
-    // Group entries by (ruleName, condition, layerSource) for merging same-rule constraints.
+    if( result.IsEmpty() )
+        result = wxS( "(version 2)" );
+
+    // Group entries by (sourceRule, ruleName, condition, layerSource) for merging same-rule constraints.
     // Including the layer source prevents rules with different layer scopes from being
     // incorrectly merged (e.g. separate "outer" and "inner" rules must remain distinct).
-    using GroupKey = std::tuple<wxString, wxString, wxString>;
+    using GroupKey = std::tuple<int, wxString, wxString, wxString>;
 
     std::vector<std::pair<GroupKey, std::vector<const DRC_RE_LOADED_PANEL_ENTRY*>>>
             groupedEntries;
@@ -80,7 +85,7 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
 
     for( const DRC_RE_LOADED_PANEL_ENTRY& entry : aEntries )
     {
-        auto key = std::make_tuple( entry.ruleName, entry.condition, entry.layerSource );
+        auto key = std::make_tuple( entry.sourceRule, entry.ruleName, entry.condition, entry.layerSource );
         auto it = groupIndex.find( key );
 
         if( it == groupIndex.end() )
@@ -93,6 +98,8 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
             groupedEntries[it->second].second.push_back( &entry );
         }
     }
+
+    size_t nextTrivia = 0;
 
     // Generate rule text for each group
     for( const auto& [key, entries] : groupedEntries )
@@ -110,9 +117,33 @@ wxString DRC_RULE_SAVER::GenerateRulesText( const std::vector<DRC_RE_LOADED_PANE
             ruleText = generateMergedRuleText( entries, aBoard );
         }
 
-        if( !ruleText.IsEmpty() )
-            result += ruleText + "\n";
+        if( ruleText.IsEmpty() )
+            continue;
+
+        // Comments of deleted rules are kept, and a file rule split by an edit emits its own only once
+        int source = entries[0]->sourceRule;
+
+        if( source >= 0 && static_cast<size_t>( source ) >= nextTrivia
+            && static_cast<size_t>( source ) < aTrivia.leadingTrivia.size() )
+        {
+            while( nextTrivia <= static_cast<size_t>( source ) )
+                result += aTrivia.leadingTrivia[nextTrivia++];
+        }
+        else
+        {
+            result += wxS( "\n" );
+        }
+
+        result += ruleText;
     }
+
+    while( nextTrivia < aTrivia.leadingTrivia.size() )
+        result += aTrivia.leadingTrivia[nextTrivia++];
+
+    if( aTrivia.header.IsEmpty() )
+        result += wxS( "\n" );
+    else
+        result += aTrivia.trailer;
 
     return result;
 }

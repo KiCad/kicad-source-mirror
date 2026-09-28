@@ -37,6 +37,7 @@
 #include "panel_drc_rule_editor.h"
 #include "drc_rule_editor_utils.h"
 #include "panel_drc_group_header.h"
+#include "drc_re_loaded_rule.h"
 
 #define DIALOG_DRC_RULE_EDITOR_WINDOW_NAME wxT( "DialogDrcRuleEditorWindowName" )
 
@@ -275,6 +276,7 @@ private:
     std::shared_ptr<RC_ITEMS_PROVIDER> m_markersProvider;
     RC_TREE_MODEL*                     m_markersTreeModel;
     int                                m_severities;
+    DRC_RE_FILE_TRIVIA                 m_rulesFileTrivia;
 };
 
 #endif //DIALOG_DRC_RULE_EDITOR_H
