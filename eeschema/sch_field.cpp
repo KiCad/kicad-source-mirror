@@ -879,6 +879,9 @@ bool SCH_FIELD::IsLocked() const
 
 bool SCH_FIELD::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
 {
+    if( m_isGeneratedField )
+        return false;
+
     bool replaceReferences = false;
 
     try
