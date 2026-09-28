@@ -771,6 +771,11 @@ static std::optional<VECTOR2I> designBlockAnchor( const std::vector<SCH_ITEM*>& 
 
 int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
 {
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD guard( &m_inDrawingTool );
+
     COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
     EESCHEMA_SETTINGS*    cfg = m_frame->eeconfig();
     SCHEMATIC_SETTINGS&   schSettings = m_frame->Schematic().Settings();
@@ -795,9 +800,6 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
     RESET_FORCED_CURSOR_GUARD forcedCursorGuard{ controls };
 
     if( !cfg || !common_settings )
-        return 0;
-
-    if( m_inDrawingTool )
         return 0;
 
     bool placingDesignBlock = aEvent.IsAction( &SCH_ACTIONS::placeDesignBlock );
