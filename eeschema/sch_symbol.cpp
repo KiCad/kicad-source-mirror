@@ -3960,13 +3960,14 @@ void SCH_SYMBOL::GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList )
 {
     for( std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
-        SCH_PIN* lib_pin = pin->GetLibPin();
+        if( SCH_PIN* lib_pin = pin->GetLibPin() )
+        {
+            if( lib_pin->GetUnit() && m_unit && ( m_unit != lib_pin->GetUnit() ) )
+                continue;
 
-        if( lib_pin && lib_pin->GetUnit() && m_unit && ( m_unit != lib_pin->GetUnit() ) )
-            continue;
-
-        DANGLING_END_ITEM item( PIN_END, lib_pin, GetPinPhysicalPosition( lib_pin ), this );
-        aItemList.push_back( item );
+            DANGLING_END_ITEM item( PIN_END, lib_pin, GetPinPhysicalPosition( lib_pin ), this );
+            aItemList.push_back( item );
+        }
     }
 }
 
