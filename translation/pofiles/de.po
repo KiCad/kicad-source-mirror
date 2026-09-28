@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-27 02:38+0000\n"
+"PO-Revision-Date: 2026-09-28 07:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -2773,7 +2773,7 @@ msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
 msgid "Restore Auto-saved"
-msgstr "Automatisch gespeicherte(s) wiederherstellen"
+msgstr "Automatische Sicherung wiederherstellen"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
@@ -10430,8 +10430,7 @@ msgstr "Aktualisierungen && Datenschutz"
 
 #: common/startwizard/startwizard_provider_settings.cpp:75
 msgid "Import settings from a previous version (none found)"
-msgstr ""
-"Einstellungen importieren aus einer vorherigen Version (keine gefunden)"
+msgstr "Einstellungen aus einer vorherigen Version importieren (keine gefunden)"
 
 #: common/startwizard/startwizard_provider_settings.cpp:145
 msgid "Select Settings Path"
@@ -13544,7 +13543,7 @@ msgstr "Aktualisierungsoptionen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:126
 msgid "Remove fields if not in library symbol"
-msgstr "Felder entfernen, welche im Bibliothekssymbol nicht enthalten sind"
+msgstr "Felder entfernen, welche nicht im Bibliothekssymbol enthalten sind"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:127
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
@@ -19946,8 +19945,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
-"„ %s “ ist kein KiCad-Schaltplan.\n"
-" Verwenden Sie Datei -> Importieren für Nicht-KiCad-Schaltplan."
+"\\\"%s\\\" ist kein KiCad-Schaltplan.\n"
+"Verwenden Sie Datei -> Importieren für Nicht-KiCad-Schaltplan."
 
 #: eeschema/files-io.cpp:382
 msgid ""
@@ -21743,7 +21742,7 @@ msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
 msgstr ""
-"Net %s verweist auf ein unbekanntes Netzelement %s. Das Netz wurde nicht "
+"Netz %s verweist auf ein unbekanntes Netzelement %s. Das Netz wurde nicht "
 "richtig geladen und muss möglicherweise manuell repariert werden."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2534
