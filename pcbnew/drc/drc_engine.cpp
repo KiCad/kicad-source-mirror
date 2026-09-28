@@ -1059,6 +1059,11 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
     auto applyConstraint =
             [&]( const DRC_ENGINE_CONSTRAINT* c )
             {
+                DRC_RULE* rule = c->constraint.GetParentRule();
+                DRC_RULE* minRule = constraint.GetMinRule();
+                DRC_RULE* optRule = constraint.GetOptRule();
+                DRC_RULE* maxRule = constraint.GetMaxRule();
+
                 if( c->constraint.m_Value.HasMin() )
                 {
                     if( c->parentRule && c->parentRule->IsImplicit() )
@@ -1067,13 +1072,20 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                         constraint.m_ImplicitMin = false;
 
                     constraint.m_Value.SetMin( c->constraint.m_Value.Min() );
+                    minRule = rule;
                 }
 
                 if( c->constraint.m_Value.HasOpt() )
+                {
                     constraint.m_Value.SetOpt( c->constraint.m_Value.Opt() );
+                    optRule = rule;
+                }
 
                 if( c->constraint.m_Value.HasMax() )
-                    constraint .m_Value.SetMax( c->constraint.m_Value.Max() );
+                {
+                    constraint.m_Value.SetMax( c->constraint.m_Value.Max() );
+                    maxRule = rule;
+                }
 
                 switch( c->constraint.m_Type )
                 {
@@ -1100,7 +1112,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
 
                 constraint.m_ZoneConnection = c->constraint.m_ZoneConnection;
 
-                constraint.SetParentRule( c->constraint.GetParentRule() );
+                constraint.SetParentRule( rule );
+                constraint.SetValueRules( minRule, optRule, maxRule );
 
                 constraint.SetOptionsFromOther( c->constraint );
             };
@@ -1972,7 +1985,11 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                                       MessageTextFromValue( clearanceConstraint.m_Value.Min() ) ) )
 
             if( constraint.m_Value.Min() < clearanceConstraint.m_Value.Min() )
+            {
                 constraint.m_Value.SetMin( clearanceConstraint.m_Value.Min() );
+                constraint.SetValueRules( clearanceConstraint.GetMinRule(), constraint.GetOptRule(),
+                                          constraint.GetMaxRule() );
+            }
 
             return constraint;
         }

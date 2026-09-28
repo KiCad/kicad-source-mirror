@@ -177,7 +177,10 @@ public:
             m_Test( nullptr ),
             m_ImplicitMin( false ),
             m_name( aName ),
-            m_parentRule( nullptr )
+            m_parentRule( nullptr ),
+            m_minRule( nullptr ),
+            m_optRule( nullptr ),
+            m_maxRule( nullptr )
     {
     }
 
@@ -201,19 +204,50 @@ public:
     const MINOPTMAX<int>& GetValue() const { return m_Value; }
     MINOPTMAX<int>& Value() { return m_Value; }
 
-    void SetParentRule( DRC_RULE *aParentRule ) { m_parentRule = aParentRule; }
+    /**
+     * Attribute the constraint, including each min, opt and max value it has, to \a aParentRule.
+     */
+    void SetParentRule( DRC_RULE *aParentRule )
+    {
+        m_parentRule = aParentRule;
+        m_minRule = m_Value.HasMin() ? aParentRule : nullptr;
+        m_optRule = m_Value.HasOpt() ? aParentRule : nullptr;
+        m_maxRule = m_Value.HasMax() ? aParentRule : nullptr;
+    }
+
+    /**
+     * @return the last rule applied.  When several rules apply, each overrides only the values it
+     *         sets, so use GetMinRule(), GetOptRule() or GetMaxRule() to find where a value came from.
+     */
     DRC_RULE* GetParentRule() const { return m_parentRule; }
+
+    void SetValueRules( DRC_RULE* aMinRule, DRC_RULE* aOptRule, DRC_RULE* aMaxRule )
+    {
+        m_minRule = aMinRule;
+        m_optRule = aOptRule;
+        m_maxRule = aMaxRule;
+    }
+
+    DRC_RULE* GetMinRule() const { return m_minRule; }
+    DRC_RULE* GetOptRule() const { return m_optRule; }
+    DRC_RULE* GetMaxRule() const { return m_maxRule; }
 
     void SetName( const wxString& aName ) { m_name = aName; }
 
-    wxString GetName() const
+    wxString GetName() const { return GetRuleName( m_parentRule ); }
+
+    /**
+     * @return a user-facing name for \a aRule, or this constraint's own name when \a aRule is null
+     *         (for constraints from board setup or local overrides rather than rules).
+     */
+    wxString GetRuleName( const DRC_RULE* aRule ) const
     {
-        if( m_parentRule )
+        if( aRule )
         {
-            if( m_parentRule->IsImplicit() )
-                return m_parentRule->m_Name;
+            if( aRule->IsImplicit() )
+                return aRule->m_Name;
             else
-                return wxString::Format( _( "rule '%s'" ), m_parentRule->m_Name );
+                return wxString::Format( _( "rule '%s'" ), aRule->m_Name );
         }
 
         return m_name;
@@ -261,6 +295,9 @@ public:
 private:
     wxString            m_name;          // For just-in-time constraints
     DRC_RULE*           m_parentRule;    // For constraints found in rules
+    DRC_RULE*           m_minRule;       // Rules that supplied each value, which can differ
+    DRC_RULE*           m_optRule;       // from m_parentRule when several rules apply
+    DRC_RULE*           m_maxRule;
     std::bitset<static_cast<int>( OPTIONS::NUM_OPTIONS )> m_options;       // Constraint-specific option bits
                                                                            // (indexed from DRC_CONSTRAINT::OPTIONS)
 };
