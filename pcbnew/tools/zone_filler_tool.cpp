@@ -349,10 +349,11 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     rebuildConnectivity();
     PostFillRefresh();
 
-    if( GetRunningMicroSecs() - startTime > 3000000 )   // 3 seconds
-    {
-        WX_INFOBAR* infobar = frame->GetInfoBar();
+    WX_INFOBAR* infobar = frame->GetInfoBar();
 
+    // Only hint after a completed fill, and never over another tool's message and links
+    if( filled && !infobar->IsShownOnScreen() && GetRunningMicroSecs() - startTime > 3000000 )   // 3 seconds
+    {
         infobar->RemoveAllButtons();
         infobar->AddLink( _( "Open Preferences" ),
                 [this]( wxHyperlinkEvent& )
