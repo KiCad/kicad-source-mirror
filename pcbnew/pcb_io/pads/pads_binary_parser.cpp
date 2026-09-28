@@ -3625,6 +3625,7 @@ void BINARY_PARSER::parseCopperPours()
     //   +0   u32 first piece index
     //   +4   u32 first vertex index
     //   +8   u32 first arc index (arcs are not yet imported)
+    //   +12  i32 section-23 net record index, -1 when the pour has no net
     //   +24  i32 raw XLOC -- each pour owns its own anchor, not a shared board anchor
     //   +28  i32 raw YLOC
     //   +70  char name[16]
@@ -3653,6 +3654,7 @@ void BINARY_PARSER::parseCopperPours()
         int32_t     rawX = 0;
         int32_t     rawY = 0;
         std::string name;
+        std::string netName;
     };
 
     std::vector<POUR_OWNER> owners;
@@ -3684,6 +3686,10 @@ void BINARY_PARSER::parseCopperPours()
         owner.rawY = m_cursor.I32At( offset + 28 );
         owner.pieceCount = m_cursor.U32At( offset + 64 );
         owner.name = std::move( name );
+
+        if( auto netIt = m_sec23IndexToNet.find( m_cursor.U32At( offset + 12 ) ); netIt != m_sec23IndexToNet.end() )
+            owner.netName = netIt->second;
+
         owners.push_back( std::move( owner ) );
     }
 
@@ -3712,6 +3718,7 @@ void BINARY_PARSER::parseCopperPours()
 
             POUR pour;
             pour.owner_pour = owner.name;
+            pour.net_name = owner.netName;
             pour.width = static_cast<double>( width );
             pour.layer = static_cast<int>( layer );
 
