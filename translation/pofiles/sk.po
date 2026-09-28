@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-28 07:51+0000\n"
+"PO-Revision-Date: 2026-09-28 18:36+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -203,7 +203,6 @@ msgid "Loading..."
 msgstr "Načítavanie..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:437
-#, fuzzy
 msgid "Building hit-test scene..."
 msgstr "Vytváranie hit-test scény..."
 
@@ -212,7 +211,6 @@ msgid "Load Raytracing: board"
 msgstr "Načítať Raytracing: doska"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:673
-#, fuzzy
 msgid "Building hit-test scene: layers..."
 msgstr "Vytváranie hit-test scény: vrstvy..."
 
@@ -221,12 +219,11 @@ msgid "Load Raytracing: layers"
 msgstr "Načítať Raytracing: vrstvy"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:919
-#, fuzzy
 msgid "Building hit-test scene: 3D models..."
-msgstr "Vytváranie hit-test scény: 3D modely súčiastok..."
+msgstr "Vytváranie hit-test scény: 3D modely..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1116
-#, fuzzy, c-format
+#, c-format
 msgid "Hit-test scene ready in %.3f s"
 msgstr "Hit-test scéna bude pripravená za %.3f s"
 
@@ -728,24 +725,20 @@ msgid "Show user ECO2 layer"
 msgstr "Zobraziť používateľskú vrstvu ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show front fabrication layer"
-msgstr "Obrys plôšok na výrobných vrstvách"
+msgstr "Zobraziť prednú výrobnú vrstvu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show back fabrication layer"
-msgstr "Obrys plôšok na výrobných vrstvách"
+msgstr "Zobraziť zadnú výrobnú vrstvu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show front courtyard layer"
-msgstr "Vrstva montážnej oblasti"
+msgstr "Zobraziť vrstvu prednej montážnej oblasti"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show back courtyard layer"
-msgstr "Vrstva montážnej oblasti"
+msgstr "Zobraziť vrstvu zadnej montážnej oblasti"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 msgid "Show user defined layer 1"
@@ -1748,9 +1741,8 @@ msgid "Align"
 msgstr "Zarovnať"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:577
-#, fuzzy
 msgid "Cancel alignment"
-msgstr "Zarovnať zvislo"
+msgstr "Zrušiť zarovnanie"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:581
 msgid "Click the model face that sits on the board. Press Esc to cancel."
@@ -1859,9 +1851,8 @@ msgid "Preview"
 msgstr "Náhľad"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:186
-#, fuzzy
 msgid "Align a STEP model face to a footprint pad"
-msgstr "Pripojený pin nie je namapovaný na žiadnu plôšku puzdra"
+msgstr "Zarovnať STEP model k plôške puzdra"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:213
 msgid ""
@@ -2199,9 +2190,9 @@ msgstr "neplatná sekcia akcií: %s"
 
 #: common/api/api_plugin_manager.cpp:102 common/api/api_plugin_manager.cpp:148
 #: pcbnew/footprint_wizard.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s'"
-msgstr "Akcie doplnku '%s': %s"
+msgstr "Akcia doplnku '%s'"
 
 #: common/api/api_plugin_manager.cpp:114
 #, c-format
@@ -3247,9 +3238,8 @@ msgid "Design Block Properties"
 msgstr "Vlastnosti návrhového bloku"
 
 #: common/dialogs/dialog_edit_library_tables.cpp:117
-#, fuzzy
 msgid "Save changes to library tables?"
-msgstr "Uložiť zmeny do vnorenej tabuľky knižnice?"
+msgstr "Uložiť zmeny do tabuľky knižníc?"
 
 #: common/dialogs/dialog_fields_table.cpp:127
 msgid "Revert Row"
@@ -3340,9 +3330,9 @@ msgid "The first %d fields are mandatory."
 msgstr "Prvých %d polí je povinných."
 
 #: common/dialogs/dialog_fields_table.cpp:1053
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' field cannot be removed."
-msgstr "Súbor '%s' sa nepodarilo vytvoriť."
+msgstr "Pole '%s' nie je možné odstrániť."
 
 #: common/dialogs/dialog_fields_table.cpp:1059
 #, c-format
@@ -3355,9 +3345,9 @@ msgid "The first %d fields are mandatory and names cannot be changed."
 msgstr "Prvých %d polí je povinných a názvy nemôžu byť menené."
 
 #: common/dialogs/dialog_fields_table.cpp:1109
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' field cannot be renamed."
-msgstr "Súbor '%s' sa nepodarilo vytvoriť."
+msgstr "Pole '%s' nie je možné premenovať."
 
 #: common/dialogs/dialog_fields_table.cpp:1114
 msgid "Rename Field"
@@ -6236,14 +6226,12 @@ msgid "Convert to Greyscale"
 msgstr "Konvertovať na odtiene sivej"
 
 #: common/dialogs/panel_image_editor_base.cpp:51
-#, fuzzy
 msgid "Invert Colors"
-msgstr "Farby prostredia"
+msgstr "Invertovať farby"
 
 #: common/dialogs/panel_image_editor_base.cpp:54
-#, fuzzy
 msgid "Remove Background"
-msgstr "Pozadie"
+msgstr "Odstrániť pozadie"
 
 #: common/dialogs/panel_maintenance.cpp:86
 msgid "File history cleared."
@@ -6467,19 +6455,16 @@ msgid "Scroll Gestures"
 msgstr "Gestá posunu"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:193
-#, fuzzy
 msgid "Touchpad navigation:"
-msgstr "Znova načítať nastavenie"
+msgstr "Navigácia touchpadom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:197
-#, fuzzy
 msgid "Native gestures (recommended)"
-msgstr "Zakázať makrá otvorov (neodporúča sa)"
+msgstr "Natívne gestá (odporúčané)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:197
-#, fuzzy
 msgid "Configurable scroll gestures"
-msgstr "Konfigurovať triedy spojov"
+msgstr "Konfigurovateľné gestá posúvania"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:201
 msgid ""
@@ -6536,9 +6521,8 @@ msgid "Reset to Mouse Defaults"
 msgstr "Obnoviť predvolené nastavenie myši"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:349
-#, fuzzy
 msgid "Reset to Configurable Touchpad Defaults"
-msgstr "Obnoviť predvolené pre trackpad"
+msgstr "Obnoviť predvolené nastavenia konfigurovateľného touchpadu"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
 #: common/eda_base_frame.cpp:1677
@@ -7216,18 +7200,16 @@ msgid "Enable anonymous data collection"
 msgstr "Povoliť anonymný zber údajov"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:49
-#, fuzzy
 msgid "API"
-msgstr "PI"
+msgstr "API"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:51
-#, fuzzy
 msgid ""
 "The KiCad API allows plugins and third-party software on your computer to "
 "access KiCad."
 msgstr ""
-"Povoliť rozhranie KiCad API.  Týmto spôsobom umožníte softvéru tretích strán "
-"spusteným na vašom počítači, prístup k aplikácii KiCad."
+"Rozhranie API programu KiCad umožňuje doplnkom a softvéru tretích strán vo "
+"vašom počítači pristupovať ku KiCadu."
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -8017,9 +7999,8 @@ msgstr "Inšpektor spojov"
 #: pcbnew/widgets/pcb_properties_panel.cpp:567
 #: pcbnew/widgets/pcb_properties_panel.cpp:640
 #: pcbnew/widgets/pcb_properties_panel.cpp:657
-#, fuzzy
 msgid "Custom Properties"
-msgstr "Vlastnosti položky"
+msgstr "Vlastné vlastnosti"
 
 #: common/eda_item.cpp:578
 msgid "Screen"
@@ -8076,9 +8057,8 @@ msgid "Drill Chart"
 msgstr "Tabuľka vŕtania"
 
 #: common/eda_item.cpp:591 pcbnew/pcb_drill_map.cpp:220
-#, fuzzy
 msgid "Drill Map"
-msgstr "Vrták X"
+msgstr "Mapa vŕtania"
 
 #: common/eda_item.cpp:592 common/eda_item.cpp:623
 #: eeschema/sch_tablecell.cpp:406 pcbnew/pcb_tablecell.cpp:259
@@ -8292,9 +8272,8 @@ msgid "Unrecognized"
 msgstr "Nerozpoznané"
 
 #: common/eda_shape.cpp:1497
-#, fuzzy
 msgid "Connected Lines"
-msgstr "Pripojené položky:"
+msgstr "Pripojené čiary"
 
 #: common/eda_shape.cpp:1505
 msgid "Curve"
@@ -8510,9 +8489,8 @@ msgid "Line Color"
 msgstr "Farba čiary"
 
 #: common/eda_shape.cpp:4728
-#, fuzzy
 msgid "Arc angle must not be zero."
-msgstr "Uhol oblúka musí byť väčší ako 0"
+msgstr "Uhol oblúka nesmie byť nulový."
 
 #: common/eda_shape.cpp:4763
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:217
@@ -8863,9 +8841,8 @@ msgid "Deprecated version of %s."
 msgstr "Zastaraná verzia %s."
 
 #: common/exceptions.cpp:74
-#, fuzzy
 msgid "Canceled by user."
-msgstr "Otváranie zrušil používateľ."
+msgstr "Zrušené používateľom."
 
 #: common/exceptions.cpp:87
 #, c-format
@@ -9426,9 +9403,9 @@ msgid "Rebase commit failed: %s"
 msgstr "Zlyhal rebase commit: %s"
 
 #: common/git/libgit_backend.cpp:1618
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed: %s"
-msgstr "Zlyhalo ukončenie rebase: %s"
+msgstr "Rebase zlyhalo: %s"
 
 #: common/git/libgit_backend.cpp:1626
 #, c-format
@@ -9543,9 +9520,8 @@ msgid "History repository is locked by %s@%s"
 msgstr "História repozitára je uzamknutá používateľom %s@%s"
 
 #: common/history_lock.cpp:168
-#, fuzzy
 msgid "History repository is locked by an older KiCad instance."
-msgstr "História repozitára je uzamknutá používateľom %s@%s"
+msgstr "Repozitár histórie je uzamknutý staršou inštanciou programu KiCad."
 
 #: common/history_lock.cpp:181
 #, c-format
@@ -9572,9 +9548,8 @@ msgid "Failed to acquire git index lock (another operation in progress?): %s"
 msgstr "Nepodarilo sa získať zámok indexu git (prebieha ďalšia operácia?): %s"
 
 #: common/history_lock.cpp:312
-#, fuzzy
 msgid "Cannot re-open history repository without the file lock"
-msgstr "Nepodarilo sa odstrániť dočasný výstupný súbor"
+msgstr "Nie je možné znova otvoriť úložisko histórie bez zámku súboru"
 
 #: common/hotkey_store.cpp:39
 msgid "Accept Autocomplete"
