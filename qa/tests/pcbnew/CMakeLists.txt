@@ -79,6 +79,7 @@ set( QA_PCBNEW_SRCS
     test_issue25010.cpp
     test_issue25110_bezier_line_style.cpp
     test_issue25521.cpp
+    test_issue25621_via_flashing_contact_layer.cpp
     test_fp_lib_load_save.cpp
     test_io_mgr.cpp
     test_ellipse_roundtrip.cpp

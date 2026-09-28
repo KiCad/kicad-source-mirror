@@ -996,6 +996,28 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE_LAYER* aZoneLayerA, CN_ZONE_LA
 }
 
 
+static FLASHING flashingFor( const BOARD_CONNECTED_ITEM* aItem, PCB_LAYER_ID aLayer )
+{
+    bool alwaysFlashed = false;
+
+    if( aItem->Type() == PCB_PAD_T )
+        alwaysFlashed = !static_cast<const PAD*>( aItem )->ConditionallyFlashed( aLayer );
+    else if( aItem->Type() == PCB_VIA_T )
+        alwaysFlashed = !static_cast<const PCB_VIA*>( aItem )->ConditionallyFlashed( aLayer );
+
+    return alwaysFlashed ? FLASHING::ALWAYS_FLASHED : FLASHING::NEVER_FLASHED;
+}
+
+
+bool ItemsTouchOnLayer( const BOARD_CONNECTED_ITEM* aItemA, const BOARD_CONNECTED_ITEM* aItemB, PCB_LAYER_ID aLayer )
+{
+    std::shared_ptr<SHAPE> shapeA = aItemA->GetEffectiveShape( aLayer, flashingFor( aItemA, aLayer ) );
+    std::shared_ptr<SHAPE> shapeB = aItemB->GetEffectiveShape( aLayer, flashingFor( aItemB, aLayer ) );
+
+    return shapeA->Collide( shapeB.get() );
+}
+
+
 bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
 {
     const BOARD_CONNECTED_ITEM* parentA = aCandidate->Parent();
@@ -1044,33 +1066,7 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
 
     for( PCB_LAYER_ID layer : commonLayers )
     {
-        FLASHING flashingA = FLASHING::NEVER_FLASHED;
-        FLASHING flashingB = FLASHING::NEVER_FLASHED;
-
-        if( parentA->Type() == PCB_PAD_T )
-        {
-            if( !static_cast<const PAD*>( parentA )->ConditionallyFlashed( layer ) )
-                flashingA = FLASHING::ALWAYS_FLASHED;
-        }
-        else if( parentA->Type() == PCB_VIA_T )
-        {
-            if( !static_cast<const PCB_VIA*>( parentA )->ConditionallyFlashed( layer ) )
-                flashingA = FLASHING::ALWAYS_FLASHED;
-        }
-
-        if( parentB->Type() == PCB_PAD_T )
-        {
-            if( !static_cast<const PAD*>( parentB )->ConditionallyFlashed( layer ) )
-                flashingB = FLASHING::ALWAYS_FLASHED;
-        }
-        else if( parentB->Type() == PCB_VIA_T )
-        {
-            if( !static_cast<const PCB_VIA*>( parentB )->ConditionallyFlashed( layer ) )
-                flashingB = FLASHING::ALWAYS_FLASHED;
-        }
-
-        if( parentA->GetEffectiveShape( layer, flashingA )->Collide(
-                    parentB->GetEffectiveShape( layer, flashingB ).get() ) )
+        if( ItemsTouchOnLayer( parentA, parentB, layer ) )
         {
             m_item->Connect( aCandidate );
             aCandidate->Connect( m_item );

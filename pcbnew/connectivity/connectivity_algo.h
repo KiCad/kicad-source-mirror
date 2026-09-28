@@ -49,6 +49,15 @@ class PROGRESS_REPORTER;
 
 
 /**
+ * Test whether two items have copper in contact on aLayer.
+ *
+ * An item that only keeps copper where something connects is tested without it. A ring cannot
+ * be the reason for its own existence.
+ */
+bool ItemsTouchOnLayer( const BOARD_CONNECTED_ITEM* aItemA, const BOARD_CONNECTED_ITEM* aItemB, PCB_LAYER_ID aLayer );
+
+
+/**
  * CN_EDGE represents a point-to-point connection, whether realized or unrealized (ie: tracks etc.
  * or a ratsnest line).
  */

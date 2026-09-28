@@ -481,6 +481,16 @@ bool CONNECTIVITY_DATA::IsConnectedOnLayer( const BOARD_CONNECTED_ITEM *aItem, i
                     }
                 }
 
+                // A pad or a via spans several layers, so touching us is not the same as
+                // touching us here
+                if( connectedItem->Type() == PCB_PAD_T || connectedItem->Type() == PCB_VIA_T )
+                {
+                    const BOARD_CONNECTED_ITEM* other = static_cast<const BOARD_CONNECTED_ITEM*>( connectedItem );
+
+                    if( !ItemsTouchOnLayer( aItem, other, ToLAYER_ID( aLayer ) ) )
+                        continue;
+                }
+
                 if( aItem->Type() == PCB_PAD_T && zoneLayer )
                 {
                     const PAD*    pad = static_cast<const PAD*>( aItem );
