@@ -991,7 +991,7 @@ namespace
         libId.SetLibNickname( wxS( "pads_import" ) );
         libId.SetLibItemName( libraryName );
         symbol->SetLibId( libId );
-        symbol->SetExcludedFromBoard( library->GetPins().empty() );
+        symbol->SetExcludedFromBoard( library->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).empty() );
         symbol->SetLibSymbol( library.release() );
         symbol->SetPosition( pagePoint( aPlacement.position, aPageHeight ) );
 
@@ -1000,10 +1000,10 @@ namespace
 
         switch( angle )
         {
-        case 900: orientation = SYM_ORIENT_90; break;
+        case 900:  orientation = SYM_ORIENT_90;  break;
         case 1800: orientation = SYM_ORIENT_180; break;
         case 2700: orientation = SYM_ORIENT_270; break;
-        default: break;
+        default:                                 break;
         }
 
         if( aPlacement.mirrorFlags & 1 )

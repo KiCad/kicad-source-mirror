@@ -176,7 +176,7 @@ struct PCAD_SCH_IMPORT_FIXTURE
         if( !aSymbol )
             return nullptr;
 
-        for( SCH_PIN* pin : aSymbol->GetPins() )
+        for( SCH_PIN* pin : aSymbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         {
             if( pin->GetNumber() == aNumber )
                 return pin;

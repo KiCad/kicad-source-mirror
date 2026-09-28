@@ -232,7 +232,9 @@ std::vector<std::pair<const SCH_PIN*, VECTOR2I>> EE_GRID_HELPER::layoutPins( SCH
     }
     else if( aItem.Type() == SCH_SYMBOL_T )
     {
-        for( SCH_PIN* pin : static_cast<SCH_SYMBOL&>( aItem ).GetPins() )
+        // TODO: we don't know what sheet we're on, so we can't pick the correct unit for
+        // that instance of the symbol.  For now we check all units and all bodystyles.
+        for( SCH_PIN* pin : static_cast<SCH_SYMBOL&>( aItem ).GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
             pins.emplace_back( pin, pin->GetPosition() );
     }
 

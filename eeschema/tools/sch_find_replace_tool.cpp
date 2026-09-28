@@ -157,12 +157,12 @@ SCH_ITEM* SCH_FIND_REPLACE_TOOL::nextMatch( SCH_SCREEN* aScreen, SCH_SHEET_PATH*
 
                 if( item->Type() == SCH_SYMBOL_T )
                 {
-                    SCH_SYMBOL* cmp = static_cast<SCH_SYMBOL*>( item );
+                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-                    for( SCH_FIELD& field : cmp->GetFields() )
+                    for( SCH_FIELD& field : symbol->GetFields() )
                         sorted_items.push_back( &field );
 
-                    for( SCH_PIN* pin : cmp->GetPins() )
+                    for( SCH_PIN* pin : symbol->GetPins( aSheet ) )
                         sorted_items.push_back( pin );
                 }
                 else if( item->Type() == SCH_SHEET_T )

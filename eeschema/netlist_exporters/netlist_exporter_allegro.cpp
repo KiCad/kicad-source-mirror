@@ -274,15 +274,13 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
     wxString deviceFileCreatingError = wxString( "" );
 
     //Group the components......
-    while(!m_orderedSymbolsSheetpath.empty())
+    while( !m_orderedSymbolsSheetpath.empty() )
     {
         std::pair<SCH_SYMBOL*, SCH_SHEET_PATH> first_ele = m_orderedSymbolsSheetpath.front();
         m_orderedSymbolsSheetpath.pop_front();
-        m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*,
-                                  SCH_SHEET_PATH>>( groupCount, first_ele ) );
+        m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>>( groupCount, first_ele ) );
 
-        for( auto it = m_orderedSymbolsSheetpath.begin(); it != m_orderedSymbolsSheetpath.end();
-             ++it )
+        for( auto it = m_orderedSymbolsSheetpath.begin(); it != m_orderedSymbolsSheetpath.end(); ++it )
         {
             if( it->first->GetValue( &it->second, RAW_VALUE )
                 != first_ele.first->GetValue( &first_ele.second, RAW_VALUE ) )
@@ -301,8 +299,8 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
             if( removeTailDigits( ref1 ) == removeTailDigits( ref2 ) )
             {
-                m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*,
-                                          SCH_SHEET_PATH>>( groupCount, ( *it ) ) );
+                m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>>( groupCount,
+                                                                                                  ( *it ) ) );
                 it = m_orderedSymbolsSheetpath.erase( it );
 
                 if( m_orderedSymbolsSheetpath.size() == 0 )
@@ -311,6 +309,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
                     it--;   // we want to test the new it element, so compensate the next ++it
             }
         }
+
         groupCount++;
     }
 
@@ -359,9 +358,8 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
         for( auto iter = beginIter; iter != endIter; iter++ )
         {
-            symbolSheetpaths.push_back( std::pair<SCH_SYMBOL*,
-                                        SCH_SHEET_PATH>( iter->second.first,
-                                                         iter->second.second ) );
+            symbolSheetpaths.push_back( std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>( iter->second.first,
+                                                                                iter->second.second ) );
         }
 
         std::stable_sort( symbolSheetpaths.begin(), symbolSheetpaths.end(),
@@ -374,8 +372,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
         // Write out the corresponding device file
         FILE* d = nullptr;
-        wxString deviceFileName = wxFileName( m_exportPath, deviceType,
-                                              wxString( "txt" ) ).GetFullPath();
+        wxString deviceFileName = wxFileName( m_exportPath, deviceType, wxString( "txt" ) ).GetFullPath();
 
         if( ( d = wxFopen( deviceFileName, wxT( "wt" ) ) ) == nullptr )
         {
@@ -416,7 +413,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         fmt::print( d, "PACKAGE '{}'\n", TO_UTF8( formatDevice( footprintText ) ) );
         fmt::print( d, "CLASS IC\n" );
 
-        std::vector<SCH_PIN*> pinList = sym->GetLibSymbolRef()->GetPins();
+        std::vector<SCH_PIN*> pinList = sym->GetLibSymbolRef()->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
 
         /*
          * We must erase redundant Pins references in pinList

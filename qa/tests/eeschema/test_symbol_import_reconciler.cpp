@@ -200,8 +200,11 @@ COLLISION_CANDIDATE findCandidate( IMPORTED_SAMPLE& aSample )
 
         for( const std::unique_ptr<LIB_SYMBOL>& def : aSample.m_definitions )
         {
-            if( def->GetLibId().GetUniStringLibItemName() != name || def->GetPins().empty() )
+            if( def->GetLibId().GetUniStringLibItemName() != name
+                    || def->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).empty() )
+            {
                 continue;
+            }
 
             candidate.m_symbol = symbol;
             candidate.m_definition = def.get();
@@ -344,7 +347,7 @@ BOOST_AUTO_TEST_CASE( CollidingNicknameDoesNotStealTheLink )
 
     // a pinless namesake registered under the importer's nickname: same name, different part
     LIB_SYMBOL impostor( candidate.m_name );
-    BOOST_REQUIRE( impostor.GetPins().empty() );
+    BOOST_REQUIRE( impostor.GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).empty() );
     publishLibrary( project, *adapter, candidate.m_nickname, wxS( "impostor" ), impostor );
 
     const wxString           cacheNick = wxS( "collide-import-syms" );
@@ -360,7 +363,7 @@ BOOST_AUTO_TEST_CASE( CollidingNicknameDoesNotStealTheLink )
 
     LIB_SYMBOL* linked = adapter->LoadSymbol( cacheNick, candidate.m_name );
     BOOST_REQUIRE( linked );
-    BOOST_CHECK_GT( linked->GetPins().size(), 0 );
+    BOOST_CHECK_GT( linked->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), 0 );
 }
 
 
@@ -408,13 +411,18 @@ BOOST_AUTO_TEST_CASE( SameNameFromDifferentLibrariesKeepsBothDefinitions )
     {
         const std::unique_ptr<LIB_SYMBOL>& part = symbol->GetLibSymbolRef();
 
-        if( !part || part->GetPins().empty() )
+        if( !part || part->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).empty() )
             continue;
 
         if( !firstPlaced )
+        {
             firstPlaced = symbol;
-        else if( part->GetPins().size() != firstPlaced->GetLibSymbolRef()->GetPins().size() )
+        }
+        else if( part->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size()
+                    != firstPlaced->GetLibSymbolRef()->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size() )
+        {
             secondPlaced = symbol;
+        }
 
         if( secondPlaced )
             break;
@@ -424,8 +432,8 @@ BOOST_AUTO_TEST_CASE( SameNameFromDifferentLibrariesKeepsBothDefinitions )
     BOOST_REQUIRE( secondPlaced );
 
     const wxString sharedName = wxS( "SHARED_SYM" );
-    const size_t   firstPins = firstPlaced->GetLibSymbolRef()->GetPins().size();
-    const size_t   secondPins = secondPlaced->GetLibSymbolRef()->GetPins().size();
+    const size_t   firstPins = firstPlaced->GetLibSymbolRef()->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size();
+    const size_t   secondPins = secondPlaced->GetLibSymbolRef()->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size();
 
     std::vector<std::unique_ptr<LIB_SYMBOL>> defs;
 
@@ -469,16 +477,14 @@ BOOST_AUTO_TEST_CASE( SameNameFromDifferentLibrariesKeepsBothDefinitions )
 
     BOOST_REQUIRE( firstLinked );
     BOOST_REQUIRE( secondLinked );
-    BOOST_CHECK_EQUAL( firstLinked->GetPins().size(), firstPins );
-    BOOST_CHECK_EQUAL( secondLinked->GetPins().size(), secondPins );
+    BOOST_CHECK_EQUAL( firstLinked->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), firstPins );
+    BOOST_CHECK_EQUAL( secondLinked->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), secondPins );
 
     // the user is told which symbol the cache renamed
-    const wxString renamed = firstId.GetUniStringLibItemName() == sharedName
-                                     ? secondId.GetUniStringLibItemName()
-                                     : firstId.GetUniStringLibItemName();
+    const wxString renamed = firstId.GetUniStringLibItemName() == sharedName ? secondId.GetUniStringLibItemName()
+                                                                             : firstId.GetUniStringLibItemName();
 
-    BOOST_CHECK_MESSAGE( reporter.GetMessages().Contains(
-                                 wxString::Format( wxS( "renamed to '%s'" ), renamed ) ),
+    BOOST_CHECK_MESSAGE( reporter.GetMessages().Contains( wxString::Format( wxS( "renamed to '%s'" ), renamed ) ),
                          "Cache rename was not reported" );
 }
 
@@ -516,8 +522,7 @@ BOOST_AUTO_TEST_CASE( ExistingUserRowIsNotRepurposed )
     BOOST_CHECK( result.m_cacheNickname.IsEmpty() );
     BOOST_CHECK_EQUAL( row->URI(), uriBefore );
 
-    wxFileName cacheFile( project.GetProjectPath(), cacheNick,
-                          wxString( FILEEXT::KiCadSymbolLibFileExtension ) );
+    wxFileName cacheFile( project.GetProjectPath(), cacheNick, wxString( FILEEXT::KiCadSymbolLibFileExtension ) );
     BOOST_CHECK_MESSAGE( !wxFileExists( cacheFile.GetFullPath() ),
                          "Published a cache over a nickname the user already owns" );
 }
@@ -541,8 +546,7 @@ BOOST_AUTO_TEST_CASE( UnsavableTableLeavesCacheUnclaimed )
     // CI containers commonly run as root, where the permission bits do not deny access
     if( tableFn.IsFileWritable() )
     {
-        BOOST_TEST_MESSAGE( "Skipping read-only table check; file remains writable (running as "
-                            "root?)" );
+        BOOST_TEST_MESSAGE( "Skipping read-only table check; file remains writable (running as root?)" );
         tableFn.SetPermissions( wxS_IRUSR | wxS_IWUSR );
         return;
     }
@@ -552,8 +556,9 @@ BOOST_AUTO_TEST_CASE( UnsavableTableLeavesCacheUnclaimed )
     const wxString           cacheNick = wxS( "rotable-import-syms" );
     SYMBOL_IMPORT_RECONCILER reconciler( *adapter, project.GetProjectPath() );
 
-    SYMBOL_IMPORT_RECONCILE_RESULT result = reconciler.Reconcile(
-            sample.m_schematic.get(), std::move( sample.m_definitions ), cacheNick, {} );
+    SYMBOL_IMPORT_RECONCILE_RESULT result = reconciler.Reconcile( sample.m_schematic.get(),
+                                                                  std::move( sample.m_definitions ),
+                                                                  cacheNick, {} );
 
     BOOST_CHECK( result.m_cacheNickname.IsEmpty() );
     BOOST_CHECK_EQUAL( result.m_linkedToCache, 0 );

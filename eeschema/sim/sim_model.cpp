@@ -464,13 +464,13 @@ void SIM_MODEL::WriteFields( std::vector<SCH_FIELD>& aFields, const SCH_SHEET_PA
             aFields.erase( aFields.begin() + ii );
     }
 
-    SetFieldValue( aFields, SIM_DEVICE_FIELD, m_serializer->GenerateDevice(), false,
-                   aSheetPath, aVariantName );
-    SetFieldValue( aFields, SIM_DEVICE_SUBTYPE_FIELD, m_serializer->GenerateDeviceSubtype(), false,
-                   aSheetPath, aVariantName );
+    SetFieldValue( aFields, SIM_DEVICE_FIELD, m_serializer->GenerateDevice(), false, aSheetPath, aVariantName );
+    SetFieldValue( aFields, SIM_DEVICE_SUBTYPE_FIELD, m_serializer->GenerateDeviceSubtype(), false, aSheetPath,
+                   aVariantName );
 
-    SetFieldValue( aFields, SIM_LEGACY_ENABLE_FIELD_V7, m_serializer->GenerateEnable(), false,
-                   aSheetPath, aVariantName );
+    SetFieldValue( aFields, SIM_LEGACY_ENABLE_FIELD_V7, m_serializer->GenerateEnable(), false, aSheetPath,
+                   aVariantName );
+
     SetFieldValue( aFields, SIM_PINS_FIELD, m_serializer->GeneratePins(), false, aSheetPath, aVariantName );
 
     SetFieldValue( aFields, SIM_PARAMS_FIELD, m_serializer->GenerateParams(), false, aSheetPath, aVariantName );
@@ -1529,12 +1529,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
     wxString              prefix = aSymbol.GetPrefix();
     SCH_FIELD*            valueField = aSymbol.GetField( FIELD_T::VALUE );
     bool                  sourcePinsSorted = false;
-    std::vector<SCH_PIN*> sourcePins;
-
-    if constexpr (std::is_same_v<T, SCH_SYMBOL>)
-        sourcePins = static_cast<SCH_SYMBOL*>( &aSymbol )->GetPins( nullptr );
-    else if constexpr (std::is_same_v<T, LIB_SYMBOL>)
-        sourcePins = static_cast<LIB_SYMBOL*>( &aSymbol )->GetGraphicalPins( 0, 0 );
+    std::vector<SCH_PIN*> sourcePins = aSymbol.GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
 
     auto lazySortSourcePins =
             [&sourcePins, &sourcePinsSorted]()

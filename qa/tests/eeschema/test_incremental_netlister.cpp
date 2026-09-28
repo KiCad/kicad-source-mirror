@@ -49,7 +49,7 @@ BOOST_FIXTURE_TEST_CASE( DestroyingAnotherSchematicPreservesPinCleanup, CONNECTI
     auto symbols = screen->Items().OfType( SCH_SYMBOL_T );
     BOOST_REQUIRE( symbols.begin() != symbols.end() );
     auto* symbol = static_cast<SCH_SYMBOL*>( *symbols.begin() );
-    std::vector<SCH_PIN*> pins = symbol->GetPins();
+    std::vector<SCH_PIN*> pins = symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
     BOOST_REQUIRE( !pins.empty() );
     BOOST_REQUIRE( graph->GetSubgraphForItem( pins.front() ) );
 
@@ -68,8 +68,9 @@ BOOST_FIXTURE_TEST_CASE( DestroyingAnotherSchematicPreservesPinCleanup, CONNECTI
 BOOST_FIXTURE_TEST_CASE( PinCleanupHandlesMultipleGraphsAndExpiredOwners, CONNECTIVITY_TEST_FIXTURE )
 {
     KI_TEST::LoadSchematic( m_settingsManager, "issue7203", m_schematic );
-    auto* mainGraph = m_schematic->ConnectionGraph();
-    const auto paths = m_schematic->Hierarchy();
+
+    CONNECTION_GRAPH*    mainGraph = m_schematic->ConnectionGraph();
+    const SCH_SHEET_LIST paths = m_schematic->Hierarchy();
     mainGraph->Recalculate( paths, true );
     auto expired = std::make_unique<CONNECTION_GRAPH>( m_schematic.get() );
     expired->Recalculate( paths, true );
@@ -78,8 +79,9 @@ BOOST_FIXTURE_TEST_CASE( PinCleanupHandlesMultipleGraphsAndExpiredOwners, CONNEC
     SCH_SCREEN* screen = paths.front().LastScreen();
     auto symbols = screen->Items().OfType( SCH_SYMBOL_T );
     BOOST_REQUIRE( symbols.begin() != symbols.end() );
-    auto* symbol = static_cast<SCH_SYMBOL*>( *symbols.begin() );
-    const auto pins = symbol->GetPins();
+
+    SCH_SYMBOL*                 symbol = static_cast<SCH_SYMBOL*>( *symbols.begin() );
+    const std::vector<SCH_PIN*> pins = symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
     BOOST_REQUIRE( !pins.empty() );
 
     for( SCH_PIN* pin : pins )
@@ -145,7 +147,7 @@ BOOST_FIXTURE_TEST_CASE( RemoveAddItems, CONNECTIVITY_TEST_FIXTURE )
 
                     if( item->Type() == SCH_SYMBOL_T )
                     {
-                        for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( item )->GetPins() )
+                        for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( item )->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
                         {
                             items.push_back( pin );
                         }
@@ -269,10 +271,10 @@ BOOST_FIXTURE_TEST_CASE( SharedSheetUpdatePinsNoDanglingDriver, CONNECTIVITY_TES
         {
             SCH_SYMBOL* candidate = static_cast<SCH_SYMBOL*>( item );
 
-            if( !candidate->GetLibSymbolRef() || candidate->GetPins().size() < 2 )
+            if( !candidate->GetLibSymbolRef() || candidate->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size() < 2 )
                 continue;
 
-            for( SCH_PIN* pin : candidate->GetPins() )
+            for( SCH_PIN* pin : candidate->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
             {
                 if( countRefs( pin ) >= 2 )
                 {

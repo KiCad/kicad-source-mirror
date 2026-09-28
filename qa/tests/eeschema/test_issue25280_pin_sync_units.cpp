@@ -62,7 +62,7 @@ static std::unique_ptr<LIB_SYMBOL> loadQuadBuffer()
  */
 static SCH_PIN* firstGateInput( LIB_SYMBOL& aSymbol )
 {
-    for( SCH_PIN* pin : aSymbol.GetPins() )
+    for( SCH_PIN* pin : aSymbol.GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         if( pin->GetUnit() == 1 && pin->GetType() == ELECTRICAL_PINTYPE::PT_INPUT
             && pin->GetOrientation() == PIN_ORIENTATION::PIN_RIGHT )
@@ -83,7 +83,7 @@ static int countMatchingPins( LIB_SYMBOL& aSymbol, const SCH_PIN& aPin )
 {
     int count = 0;
 
-    for( SCH_PIN* pin : aSymbol.GetPins() )
+    for( SCH_PIN* pin : aSymbol.GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         if( pin != &aPin && pin->GetUnit() != aPin.GetUnit()
             && pin->GetPosition() == aPin.GetPosition()
@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE( CommonToAllUnitsRemovesSubsumedPins )
     BOOST_REQUIRE( edited );
 
     const VECTOR2I pinPos = edited->GetPosition();
-    const size_t   pinsBefore = symbol->GetPins().size();
+    const size_t   pinsBefore = symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size();
     const int      expectedRemovals = countMatchingPins( *symbol, *edited );
 
     BOOST_REQUIRE_GT( expectedRemovals, 0 );
@@ -125,17 +125,16 @@ BOOST_AUTO_TEST_CASE( CommonToAllUnitsRemovesSubsumedPins )
     SCH_PIN originalPin( *edited );
     edited->SetUnit( 0 );
 
-    int removed = SYMBOL_EDITOR_PIN_TOOL::SynchronizeOtherUnits( symbol.get(), edited,
-                                                                 originalPin );
+    int removed = SYMBOL_EDITOR_PIN_TOOL::SynchronizeOtherUnits( symbol.get(), edited, originalPin );
 
     BOOST_CHECK_EQUAL( removed, expectedRemovals );
-    BOOST_CHECK_EQUAL( symbol->GetPins().size(),
+    BOOST_CHECK_EQUAL( symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(),
                        pinsBefore - static_cast<size_t>( expectedRemovals ) );
 
     // The edited pin survives, and no unit kept a duplicate of it.
     int survivorsAtPos = 0;
 
-    for( SCH_PIN* pin : symbol->GetPins() )
+    for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         BOOST_CHECK( pin->GetParentSymbol() == symbol.get() );
 
@@ -161,7 +160,7 @@ BOOST_AUTO_TEST_CASE( PerUnitEditPropagatesWithoutRemoving )
     BOOST_REQUIRE( edited );
 
     const VECTOR2I pinPos = edited->GetPosition();
-    const size_t   pinsBefore = symbol->GetPins().size();
+    const size_t   pinsBefore = symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size();
     const int      expectedMatches = countMatchingPins( *symbol, *edited );
 
     BOOST_REQUIRE_GT( expectedMatches, 0 );
@@ -171,15 +170,14 @@ BOOST_AUTO_TEST_CASE( PerUnitEditPropagatesWithoutRemoving )
     edited->SetName( wxS( "SYNCED" ) );
     edited->SetNameTextSize( edited->GetNameTextSize() + schIUScale.MilsToIU( 10 ) );
 
-    int removed = SYMBOL_EDITOR_PIN_TOOL::SynchronizeOtherUnits( symbol.get(), edited,
-                                                                 originalPin );
+    int removed = SYMBOL_EDITOR_PIN_TOOL::SynchronizeOtherUnits( symbol.get(), edited, originalPin );
 
     BOOST_CHECK_EQUAL( removed, 0 );
-    BOOST_CHECK_EQUAL( symbol->GetPins().size(), pinsBefore );
+    BOOST_CHECK_EQUAL( symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), pinsBefore );
 
     int propagated = 0;
 
-    for( SCH_PIN* pin : symbol->GetPins() )
+    for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         if( pin == edited || pin->GetPosition() != pinPos )
             continue;

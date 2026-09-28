@@ -920,29 +920,43 @@ std::vector<TEXT_CHECK_FACT> ExtractTextChecks( const SCH_SCREEN& aScreen, const
 
             if( const auto& library = symbol.GetLibSymbolRef() )
             {
-                library->RunOnChildren( [&]( SCH_ITEM* child )
-                {
-                    auto text = [&]( const auto& source, auto&& shown )
-                    {
-                        append( symbol.m_Uuid, symbol.m_Uuid, source.GetPosition(), source.GetText(), true, [&]
+                library->RunOnChildren(
+                        [&]( SCH_ITEM* child )
                         {
-                            wxString shownText = shown();
-                            const BOX2I box = symbol.GetTransform().TransformCoordinate( source.GetBoundingBox() );
-                            return std::make_pair( std::move( shownText ), box.Centre() + symbol.GetPosition() );
-                        } );
-                    };
+                            auto text =
+                                    [&]( const auto& source, auto&& shown )
+                                    {
+                                        append( symbol.m_Uuid, symbol.m_Uuid, source.GetPosition(), source.GetText(),
+                                                true,
+                                                [&]()
+                                                {
+                                                    wxString shownText = shown();
+                                                    const BOX2I bbox = source.GetBoundingBox();
+                                                    const BOX2I box = symbol.GetTransform().TransformCoordinate( bbox );
+                                                    return std::make_pair( std::move( shownText ),
+                                                                           box.Centre() + symbol.GetPosition() );
+                                                } );
+                                    };
 
-                    if( child->Type() == SCH_TEXT_T )
-                    {
-                        const auto& source = *static_cast<SCH_TEXT*>( child );
-                        text( source, [&] { return source.GetShownText( &aPath, FOR_ERC_DRC ); } );
-                    }
-                    else if( child->Type() == SCH_TEXTBOX_T )
-                    {
-                        const auto& source = *static_cast<SCH_TEXTBOX*>( child );
-                        text( source, [&] { return source.GetShownText( nullptr, &aPath, FOR_ERC_DRC ); } );
-                    }
-                }, RECURSE_MODE::NO_RECURSE );
+                            if( child->Type() == SCH_TEXT_T )
+                            {
+                                const auto& source = *static_cast<SCH_TEXT*>( child );
+                                text( source,
+                                      [&]()
+                                      {
+                                          return source.GetShownText( &aPath, FOR_ERC_DRC );
+                                      } );
+                            }
+                            else if( child->Type() == SCH_TEXTBOX_T )
+                            {
+                                const auto& source = *static_cast<SCH_TEXTBOX*>( child );
+                                text( source,
+                                      [&]()
+                                      {
+                                          return source.GetShownText( nullptr, &aPath, FOR_ERC_DRC );
+                                      } );
+                            }
+                        }, RECURSE_MODE::NO_RECURSE );
             }
         }
         else if( const auto* label = dynamic_cast<SCH_LABEL_BASE*>( item ) )
@@ -951,32 +965,36 @@ std::vector<TEXT_CHECK_FACT> ExtractTextChecks( const SCH_SCREEN& aScreen, const
         }
         else if( item->Type() == SCH_SHEET_T )
         {
-            auto& sheet = *static_cast<SCH_SHEET*>( item );
+            SCH_SHEET& sheet = *static_cast<SCH_SHEET*>( item );
             fields( sheet );
             SCH_SHEET_PATH childPath = aPath;
             childPath.push_back( &sheet );
 
             for( const SCH_SHEET_PIN* pin : sheet.GetPins() )
             {
-                append( niluuid, pin->m_Uuid, pin->GetPosition(), wxString(), false, [&]
-                {
-                    return std::make_pair( pin->GetShownText( &childPath, FOR_ERC_DRC ), pin->GetPosition() );
-                } );
+                append( niluuid, pin->m_Uuid, pin->GetPosition(), wxString(), false,
+                        [&]()
+                        {
+                            return std::make_pair( pin->GetShownText( &childPath, FOR_ERC_DRC ), pin->GetPosition() );
+                        } );
             }
         }
         else if( const auto* text = dynamic_cast<SCH_TEXT*>( item ) )
         {
-            append( text->m_Uuid, text->m_Uuid, text->GetPosition(), text->GetText(), false, [&]
-            {
-                return std::make_pair( text->GetShownText( &aPath, FOR_ERC_DRC ), text->GetPosition() );
-            } );
+            append( text->m_Uuid, text->m_Uuid, text->GetPosition(), text->GetText(), false,
+                    [&]()
+                    {
+                        return std::make_pair( text->GetShownText( &aPath, FOR_ERC_DRC ), text->GetPosition() );
+                    } );
         }
         else if( const auto* textbox = dynamic_cast<SCH_TEXTBOX*>( item ) )
         {
-            append( textbox->m_Uuid, textbox->m_Uuid, textbox->GetPosition(), textbox->GetText(), false, [&]
-            {
-                return std::make_pair( textbox->GetShownText( nullptr, &aPath, FOR_ERC_DRC ), textbox->GetPosition() );
-            } );
+            append( textbox->m_Uuid, textbox->m_Uuid, textbox->GetPosition(), textbox->GetText(), false,
+                    [&]()
+                    {
+                        return std::make_pair( textbox->GetShownText( nullptr, &aPath, FOR_ERC_DRC ),
+                                               textbox->GetPosition() );
+                    } );
         }
     }
 
@@ -986,13 +1004,13 @@ std::vector<TEXT_CHECK_FACT> ExtractTextChecks( const SCH_SCREEN& aScreen, const
 
 std::optional<PIN_MAP_FACT> ExtractPinMapFacts( const SCH_SYMBOL& aSymbol )
 {
-    const auto& lib = aSymbol.GetLibSymbolRef();
+    const std::unique_ptr<LIB_SYMBOL>& lib = aSymbol.GetLibSymbolRef();
 
     if( !lib )
         return std::nullopt;
 
-    const auto& maps = lib->GetEffectivePinMaps();
-    const auto& footprints = lib->GetEffectiveAssociatedFootprints();
+    const PIN_MAP_SET&                       maps = lib->GetEffectivePinMaps();
+    const std::vector<ASSOCIATED_FOOTPRINT>& footprints = lib->GetEffectiveAssociatedFootprints();
 
     if( maps.IsEmpty() && footprints.empty() )
         return std::nullopt;
@@ -1004,7 +1022,7 @@ std::optional<PIN_MAP_FACT> ExtractPinMapFacts( const SCH_SYMBOL& aSymbol )
     result.footprints = footprints;
     result.jumperGroups = lib->JumperPinGroups();
 
-    for( const SCH_PIN* pin : lib->GetPins() )
+    for( const SCH_PIN* pin : lib->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         result.pinNumbers.insert( pin->GetNumber() );
 
     return result;
@@ -1102,9 +1120,10 @@ INSTANCE_FACTS ExtractInstanceFacts( const SCREEN_FACTS& aFacts, const SCH_SCREE
             if( state == SCH_PIN::PAD_RESOLUTION::MAPPED )
                 continue;
 
-            const auto type = pin->GetType();
+            const ELECTRICAL_PINTYPE type = pin->GetType();
             result.pinMapCandidates.push_back( { pin->m_Uuid, pin->GetPosition(), pin->GetNumber(), footprint,
-                    type == ELECTRICAL_PINTYPE::PT_NC || type == ELECTRICAL_PINTYPE::PT_NIC } );
+                                                 type == ELECTRICAL_PINTYPE::PT_NC
+                                                     || type == ELECTRICAL_PINTYPE::PT_NIC } );
         }
     }
 
@@ -1116,7 +1135,8 @@ INSTANCE_FACTS ExtractInstanceFacts( const SCREEN_FACTS& aFacts, const SCH_SCREE
             throw std::runtime_error( "Multiunit symbol disappeared during extraction" );
 
         result.multiUnits.push_back( { fact.id, symbol->GetRef( &aPath ), symbol->GetRef( &aPath, true ),
-                symbol->GetFootprintFieldText( &aPath, RESOLVED ), symbol->GetUnitSelection( &aPath ) } );
+                                       symbol->GetFootprintFieldText( &aPath, RESOLVED ),
+                                       symbol->GetUnitSelection( &aPath ) } );
     }
 
     // Screen order fixes the main and auxiliary witnesses in saved ERC exclusions
@@ -1124,7 +1144,8 @@ INSTANCE_FACTS ExtractInstanceFacts( const SCREEN_FACTS& aFacts, const SCH_SCREE
     {
         const auto* sheet = static_cast<const SCH_SHEET*>( item );
         result.childSheets.push_back( { sheet->m_Uuid, sheet->GetPosition(),
-                sheet->GetField( FIELD_T::SHEET_NAME )->GetShownText( &aPath, RESOLVED, variant ) } );
+                                        sheet->GetField( FIELD_T::SHEET_NAME )->GetShownText( &aPath, RESOLVED,
+                                                                                              variant ) } );
     }
 
     for( const KIID& owner : aFacts.netclassOwners )
@@ -1147,8 +1168,10 @@ INSTANCE_FACTS ExtractInstanceFacts( const SCREEN_FACTS& aFacts, const SCH_SCREE
                         wxString name = field->GetShownText( &aPath, FOR_NETNAME, variant );
 
                         if( !name.empty() )
-                            result.netclassReferences.push_back(
-                                    { aPath.PathRef(), owner, item->GetPosition(), std::move( name ) } );
+                        {
+                            result.netclassReferences.push_back( { aPath.PathRef(), owner, item->GetPosition(),
+                                                                   std::move( name ) } );
+                        }
                     }
 
                     return true;

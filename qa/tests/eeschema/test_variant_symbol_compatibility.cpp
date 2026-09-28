@@ -95,8 +95,8 @@ bool HasError( const std::vector<VARIANT_COMPAT_RESULT>& aResults, VARIANT_COMPA
 }
 
 
-bool HasErrorForPin( const std::vector<VARIANT_COMPAT_RESULT>& aResults,
-                     VARIANT_COMPAT_ERROR aError, const wxString& aPin )
+bool HasErrorForPin( const std::vector<VARIANT_COMPAT_RESULT>& aResults, VARIANT_COMPAT_ERROR aError,
+                     const wxString& aPin )
 {
     for( const VARIANT_COMPAT_RESULT& r : aResults )
     {
@@ -214,9 +214,8 @@ BOOST_AUTO_TEST_CASE( DuplicatePinNumbersMapByPosition )
     AddPin( candidate, wxS( "1" ), VECTOR2I( 0, 2540000 ) );
     AddPin( candidate, wxS( "1" ), VECTOR2I( 0, 0 ) );
 
-    const LIB_SYMBOL&             constCandidate = candidate;
-    std::vector<const SCH_PIN*>   candidatePins = constCandidate.GetGraphicalPins( 1, 1 );
-    std::vector<SCH_PIN*>         mapped = symbol.MapLibPins( candidatePins, true );
+    std::vector<SCH_PIN*> candidatePins = candidate.GetGraphicalPins( 1, 1 );
+    std::vector<SCH_PIN*> mapped = symbol.MapLibPins( candidatePins, true );
 
     BOOST_REQUIRE_EQUAL( mapped.size(), 2 );
     BOOST_REQUIRE( mapped[0] );
@@ -254,8 +253,7 @@ BOOST_AUTO_TEST_CASE( PinPositionMismatch_Incompatible )
     auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( !results.empty() );
-    BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::PIN_POSITION_MISMATCH,
-                                 wxS( "2" ) ) );
+    BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::PIN_POSITION_MISMATCH, wxS( "2" ) ) );
 }
 
 
@@ -270,8 +268,7 @@ BOOST_AUTO_TEST_CASE( PinTypeMismatch_Incompatible )
     auto results = CheckCompatibility( *base, *candidate );
 
     BOOST_CHECK( !results.empty() );
-    BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::PIN_TYPE_MISMATCH,
-                                 wxS( "1" ) ) );
+    BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::PIN_TYPE_MISMATCH, wxS( "1" ) ) );
 }
 
 
@@ -455,8 +452,7 @@ BOOST_AUTO_TEST_CASE( MultipleErrors_AllReported )
 
     BOOST_CHECK_EQUAL( results.size(), 3 );
     BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::PIN_TYPE_MISMATCH, wxS( "1" ) ) );
-    BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::PIN_POSITION_MISMATCH,
-                                 wxS( "2" ) ) );
+    BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::PIN_POSITION_MISMATCH, wxS( "2" ) ) );
     BOOST_CHECK( HasErrorForPin( results, VARIANT_COMPAT_ERROR::MISSING_PIN_NUMBER, wxS( "3" ) ) );
 }
 

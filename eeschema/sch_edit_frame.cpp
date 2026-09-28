@@ -2454,7 +2454,7 @@ bool SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
     }
 
     // Clear any orphaned alternate pins.
-    for( SCH_PIN* pin : principalSymbol->GetPins() )
+    for( SCH_PIN* pin : principalSymbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         wxString altName = pin->GetAlt();
 

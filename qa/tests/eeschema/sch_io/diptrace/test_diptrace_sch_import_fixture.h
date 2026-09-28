@@ -194,7 +194,7 @@ struct DIPTRACE_SCH_IMPORT_FIXTURE
                 SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
                 if( symbol->GetRef( &sheetPath, false ) == aRefdes )
-                    maxPins = std::max( maxPins, static_cast<int>( symbol->GetPins().size() ) );
+                    maxPins = std::max( maxPins, static_cast<int>( symbol->GetPins( &sheetPath ).size() ) );
             }
         }
 
@@ -267,15 +267,15 @@ struct DIPTRACE_SCH_IMPORT_FIXTURE
                 if( symbol->GetRef( &sheetPath, false ) != aRefdes || !symbol->GetLibSymbolRef() )
                     continue;
 
-                for( SCH_PIN* pin : symbol->GetLibSymbolRef()->GetPins() )
+                for( SCH_PIN* pin : symbol->GetLibSymbolRef()->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
                 {
                     switch( pin->GetOrientation() )
                     {
-                    case PIN_ORIENTATION::PIN_LEFT: aLeft++; break;
+                    case PIN_ORIENTATION::PIN_LEFT:  aLeft++;  break;
                     case PIN_ORIENTATION::PIN_RIGHT: aRight++; break;
-                    case PIN_ORIENTATION::PIN_UP: aUp++; break;
-                    case PIN_ORIENTATION::PIN_DOWN: aDown++; break;
-                    default: break;
+                    case PIN_ORIENTATION::PIN_UP:    aUp++;    break;
+                    case PIN_ORIENTATION::PIN_DOWN:  aDown++;  break;
+                    default:                                   break;
                     }
                 }
 

@@ -106,7 +106,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
     m_libraryModelsMgr.SetFilesStack( m_filesStack );
     m_builtinModelsMgr.SetFilesStack( m_filesStack );
 
-    for( SCH_PIN* pin : aSymbol.GetPins() )
+    for( SCH_PIN* pin : aSymbol.GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         // Body styles (including De Morgan variants) are equivalences, not additional items to simulate
         if( !pin->GetParentSymbol()->IsMultiBodyStyle() || pin->GetBodyStyle() < 2 )

@@ -137,7 +137,7 @@ int SYMBOL_EDITOR_PIN_TOOL::SynchronizeOtherUnits( LIB_SYMBOL* aSymbol, SCH_PIN*
 
     int removed = 0;
 
-    for( SCH_PIN* other : aSymbol->GetPins() )
+    for( SCH_PIN* other : aSymbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         if( other == aPin )
             continue;
@@ -248,7 +248,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( SCH_COMMIT* aCommit, SCH_PIN* aPin )
     LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
     bool        ask_for_pin = true;   // Test for another pin in same position in other units
 
-    std::vector<SCH_PIN*> pins = symbol->GetPins();
+    std::vector<SCH_PIN*> pins = symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
 
     for( SCH_PIN* test : pins )
     {
@@ -416,7 +416,7 @@ int SYMBOL_EDITOR_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
 
     saveCopyInUndoList( symbol, UNDO_REDO::LIBEDIT );
 
-    for( SCH_PIN* pin : symbol->GetPins() )
+    for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         if( pin == sourcePin )
             continue;

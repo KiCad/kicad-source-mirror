@@ -3203,7 +3203,7 @@ BOOST_AUTO_TEST_CASE( NumericUnitNamesUseNaturalOrder )
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             if( symbol->GetRef( &sheet, false ) == wxS( "U9" ) )
-                pinCounts[symbol->GetUnit()] = symbol->GetPins().size();
+                pinCounts[symbol->GetUnit()] = symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size();
         }
     }
 
@@ -3485,7 +3485,7 @@ BOOST_AUTO_TEST_CASE( CapturePseudoGlobalWirelessPinsConnectAcrossPages )
                 if( ref != wxS( "L1" ) && ref != wxS( "L4" ) )
                     continue;
 
-                for( SCH_PIN* pin : symbol->GetPins() )
+                for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
                 {
                     if( pin->GetNumber() != wxS( "3" ) )
                         continue;
@@ -4773,7 +4773,7 @@ BOOST_AUTO_TEST_CASE( LogicalPowerPinNameDoesNotOverrideConnectedWire )
                 continue;
             }
 
-            for( SCH_PIN* pin : symbol->GetPins() )
+            for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
             {
                 if( pin->GetNumber() == wxS( "3" ) )
                 {
@@ -5222,7 +5222,7 @@ BOOST_AUTO_TEST_CASE( UnreferencedPagesDoNotOverwriteHierarchicalSheets )
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             if( symbol->GetRef( &path, false ) == wxS( "J24" ) )
-                connectorPins += symbol->GetPins().size();
+                connectorPins += symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size();
         }
     }
 
@@ -6468,11 +6468,11 @@ BOOST_AUTO_TEST_CASE( Dc2693aSmaOnlyDisplaysCenterPinNumber )
     }
 
     BOOST_REQUIRE( j1 );
-    BOOST_REQUIRE_EQUAL( j1->GetPins().size(), 5u );
+    BOOST_REQUIRE_EQUAL( j1->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), 5u );
 
     std::vector<wxString> displayedNumbers;
 
-    for( const SCH_PIN* pin : j1->GetPins() )
+    for( const SCH_PIN* pin : j1->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         if( j1->GetShowPinNumbers() && pin->IsVisible() && pin->GetNumberTextSize() > 0 )
             displayedNumbers.push_back( pin->GetNumber() );
@@ -6506,21 +6506,22 @@ BOOST_AUTO_TEST_CASE( Cy8cproto040tDisplaysComponentPinNumbers )
     SCH_IO_ORCAD plugin;
     plugin.LoadSchematicFile( dsn.string(), schematic.get() );
 
-    auto displayedPinNumbers = []( SCH_SYMBOL& aSymbol )
-    {
-        std::set<wxString> numbers;
-
-        if( aSymbol.GetShowPinNumbers() )
-        {
-            for( const SCH_PIN* pin : aSymbol.GetPins() )
+    auto displayedPinNumbers =
+            []( SCH_SYMBOL& aSymbol )
             {
-                if( pin->IsVisible() && pin->GetNumberTextSize() > 0 )
-                    numbers.insert( pin->GetNumber() );
-            }
-        }
+                std::set<wxString> numbers;
 
-        return numbers;
-    };
+                if( aSymbol.GetShowPinNumbers() )
+                {
+                    for( const SCH_PIN* pin : aSymbol.GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
+                    {
+                        if( pin->IsVisible() && pin->GetNumberTextSize() > 0 )
+                            numbers.insert( pin->GetNumber() );
+                    }
+                }
+
+                return numbers;
+            };
 
     SCH_SYMBOL* j1 = nullptr;
     SCH_SYMBOL* u1 = nullptr;
@@ -6544,11 +6545,11 @@ BOOST_AUTO_TEST_CASE( Cy8cproto040tDisplaysComponentPinNumbers )
 
     BOOST_CHECK( j1->GetShowPinNames() );
     BOOST_CHECK( j1->GetShowPinNumbers() );
-    BOOST_REQUIRE_EQUAL( j1->GetPins().size(), 20u );
+    BOOST_REQUIRE_EQUAL( j1->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), 20u );
 
     std::set<wxString> j1PinText;
 
-    for( const SCH_PIN* pin : j1->GetPins() )
+    for( const SCH_PIN* pin : j1->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         BOOST_CHECK( !pin->GetName().IsEmpty() );
         BOOST_CHECK( !pin->GetNumber().IsEmpty() );
@@ -6622,12 +6623,9 @@ BOOST_AUTO_TEST_CASE( Cy8ckit149EmbeddedBlockDiagramIsComplete )
                 BOOST_CHECK_EQUAL( text.GetFont()->GetName(), wxS( "KiCad OrCAD Elephant" ) );
                 int sourceBottom = path.Last()->GetName().Contains( wxS( "PSoC 4100S" ) ) ? 623 : 613;
                 BOX2I ink = text.GetEffectiveTextShape( false, BOX2I(), ANGLE_0 )->BBox();
-                ink.Offset( text.GetSchematicTextOffset( nullptr )
-                            + text.GetOffsetToMatchSCH_FIELD( nullptr ) );
-                BOOST_CHECK_SMALL( ink.GetY() - OrcadDbuToIu( 0, sourceBottom - 10 ).y,
-                                   OrcadDbuToIu( 0, 1 ).y );
-                BOOST_CHECK_SMALL( ink.GetBottom() - OrcadDbuToIu( 0, sourceBottom ).y,
-                                   OrcadDbuToIu( 0, 1 ).y );
+                ink.Offset( text.GetSchematicTextOffset( nullptr ) + text.GetOffsetToMatchSCH_FIELD( nullptr ) );
+                BOOST_CHECK_SMALL( ink.GetY() - OrcadDbuToIu( 0, sourceBottom - 10 ).y, OrcadDbuToIu( 0, 1 ).y );
+                BOOST_CHECK_SMALL( ink.GetBottom() - OrcadDbuToIu( 0, sourceBottom ).y, OrcadDbuToIu( 0, 1 ).y );
                 ++elephantNotes;
             }
         }

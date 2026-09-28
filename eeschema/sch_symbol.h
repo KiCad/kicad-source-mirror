@@ -21,8 +21,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SCH_SYMBOL_H
-#define SCH_SYMBOL_H
+#pragma once
 
 #include <eda_item.h>
 #include <core/typeinfo.h>
@@ -673,7 +672,7 @@ public:
     std::vector<const SCH_PIN*> GetPins( const SCH_SHEET_PATH* aSheet ) const;
     std::vector<SCH_PIN*> GetPins( const SCH_SHEET_PATH* aSheet );
 
-    std::vector<SCH_PIN*> GetPins() const override;
+    std::vector<SCH_PIN*> GetGraphicalPins( int aUnit, int aBodyStyle ) const override;
 
 
     std::vector<std::unique_ptr<SCH_PIN>>& GetRawPins() { return m_pins; }
@@ -1053,16 +1052,14 @@ public:
      * @param aByNumber true when aLibPins belong to a variant alternate symbol.
      * @return instance pins aligned with aLibPins; entries are nullptr when unmatched.
      */
-    std::vector<SCH_PIN*> MapLibPins( const std::vector<const SCH_PIN*>& aLibPins,
-                                      bool aByNumber ) const;
+    std::vector<SCH_PIN*> MapLibPins( const std::vector<SCH_PIN*>& aLibPins, bool aByNumber ) const;
 
     void DeleteVariant( const SCH_SHEET_PATH& aInstance, const wxString& aVariantName )
     {
         DeleteVariant( aInstance.Path(), aVariantName );
     }
 
-    void RenameVariant( const SCH_SHEET_PATH& aInstance, const wxString& aOldName,
-                        const wxString& aNewName )
+    void RenameVariant( const SCH_SHEET_PATH& aInstance, const wxString& aOldName, const wxString& aNewName )
     {
         RenameVariant( aInstance.Path(), aOldName, aNewName );
     }
@@ -1160,6 +1157,3 @@ private:
     /// @see SCH_SYMBOL::GetOrientation
     static std::unordered_map<TRANSFORM, int> s_transformToOrientationCache;
 };
-
-
-#endif /* SCH_SYMBOL_H */

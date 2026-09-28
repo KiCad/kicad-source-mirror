@@ -241,7 +241,7 @@ BOOST_AUTO_TEST_CASE( NoOpWireCommitRestoresConnectivityFlags )
             {
                 auto* candidate = static_cast<SCH_SYMBOL*>( item );
 
-                if( !candidate->GetPins().empty() )
+                if( !candidate->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).empty() )
                 {
                     symbol = candidate;
                     break;
@@ -254,7 +254,7 @@ BOOST_AUTO_TEST_CASE( NoOpWireCommitRestoresConnectivityFlags )
             SCH_COMMIT symbolCommit( &manager );
             symbolCommit.Modify( symbol, screen );
 
-            for( SCH_PIN* pin : symbol->GetPins() )
+            for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
             {
                 dangling.push_back( pin->IsDangling() );
                 pin->SetIsDangling( !pin->IsDangling() );
@@ -266,7 +266,10 @@ BOOST_AUTO_TEST_CASE( NoOpWireCommitRestoresConnectivityFlags )
             BOOST_CHECK( !symbol->IsConnectivityDirty() );
 
             for( size_t i = 0; i < dangling.size(); ++i )
-                BOOST_CHECK_EQUAL( symbol->GetPins()[i]->IsDangling(), dangling[i] );
+            {
+                BOOST_CHECK_EQUAL( symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES )[i]->IsDangling(),
+                                   dangling[i] );
+            }
 
             BOOST_CHECK_EQUAL( dump(), before );
 
@@ -348,14 +351,17 @@ BOOST_AUTO_TEST_CASE( SheetPinCommitMatchesFullRebuild )
                     BOOST_REQUIRE( pin );
                     BOOST_REQUIRE_EQUAL( parentInstances, expectedParentInstances );
                     schematic->RecalculateConnections( nullptr, GLOBAL_CLEANUP, &manager );
-                    SCH_SHEET* owner = pin->GetParent();
-                    const wxString originalText = pin->GetText();
-                    const auto hierarchy = schematic->Hierarchy();
-                    const auto dump = [&]()
-                    {
-                        return useEngine ? SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() )
-                                         : SCH_CONNECTIVITY::Dump( *schematic );
-                    };
+                    SCH_SHEET*           owner = pin->GetParent();
+                    const wxString       originalText = pin->GetText();
+                    const SCH_SHEET_LIST hierarchy = schematic->Hierarchy();
+
+                    const auto dump =
+                            [&]()
+                            {
+                                return useEngine ? SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() )
+                                                 : SCH_CONNECTIVITY::Dump( *schematic );
+                            };
+
                     const auto baseline = dump();
 
                     const VECTOR2I originalPosition = pin->GetPosition();

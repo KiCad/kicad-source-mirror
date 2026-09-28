@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_CASE( ValuePreservedWhenNotStored )
     symbol->GetReferenceField().SetText( "R1" );
     symbol->GetValueField().SetText( "3R3" );
 
-    std::vector<SCH_PIN*>  pins = symbol->GetPins();
+    std::vector<SCH_PIN*>  pins = symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
     std::vector<SCH_FIELD> fields;
     wxString               original = buildDialogFields( *symbol, fields );
 
@@ -93,8 +93,7 @@ BOOST_AUTO_TEST_CASE( ValuePreservedWhenNotStored )
     // Mirror DIALOG_SIM_MODEL::TransferDataFromWindow() with the checkbox unchecked.
     model->SetIsStoredInValue( false );
     model->WriteFields( fields );
-    DIALOG_SIM_MODEL<LIB_SYMBOL>::RestoreInferredValue( fields, original, true,
-                                                        model->IsStoredInValue() );
+    DIALOG_SIM_MODEL<LIB_SYMBOL>::RestoreInferredValue( fields, original, true, model->IsStoredInValue() );
 
     BOOST_CHECK_EQUAL( GetFieldValue( &fields, FIELD_T::VALUE ), wxString( "3R3" ) );
 }
@@ -108,7 +107,7 @@ BOOST_AUTO_TEST_CASE( ValueReplacedWhenStored )
     symbol->GetReferenceField().SetText( "R1" );
     symbol->GetValueField().SetText( "3R3" );
 
-    std::vector<SCH_PIN*>  pins = symbol->GetPins();
+    std::vector<SCH_PIN*>  pins = symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
     std::vector<SCH_FIELD> fields;
     wxString               original = buildDialogFields( *symbol, fields );
 
@@ -119,12 +118,10 @@ BOOST_AUTO_TEST_CASE( ValueReplacedWhenStored )
     // replaces the placeholder with the model value and the restore is a no-op.
     model->SetIsStoredInValue( true );
     model->WriteFields( fields );
-    DIALOG_SIM_MODEL<LIB_SYMBOL>::RestoreInferredValue( fields, original, true,
-                                                        model->IsStoredInValue() );
+    DIALOG_SIM_MODEL<LIB_SYMBOL>::RestoreInferredValue( fields, original, true, model->IsStoredInValue() );
 
     wxString value = GetFieldValue( &fields, FIELD_T::VALUE );
-    BOOST_CHECK_MESSAGE( value != wxT( "${SIM.PARAMS}" ),
-                         "Value left as placeholder when parameters stored in Value" );
+    BOOST_CHECK_MESSAGE( value != wxT( "${SIM.PARAMS}" ), "Value left as placeholder when parameters stored in Value" );
     BOOST_CHECK( !value.IsEmpty() );
 }
 

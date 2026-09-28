@@ -3431,8 +3431,7 @@ void SCH_IO_GEDA::addSymbolGraphic( LIB_SYMBOL& aSymbol, const wxString& aLine,
                     bezier->SetBezierC2( cp2 );
                     bezier->SetEnd( endPt );
                     bezier->SetStroke( symStroke );
-                    bezier->RebuildBezierToSegmentsPointsList(
-                            schIUScale.mmToIU( ARC_LOW_DEF_MM ) );
+                    bezier->RebuildBezierToSegmentsPointsList( schIUScale.mmToIU( ARC_LOW_DEF_MM ) );
 
                     if( symFill != FILL_T::NO_FILL )
                     {
@@ -3522,8 +3521,8 @@ std::unique_ptr<LIB_SYMBOL> SCH_IO_GEDA::loadBuiltinSymbol( const wxString& aBas
         }
     }
 
-    wxString netAttr;
-    auto result = loadSymbolFile( tempPath, nullptr, &netAttr );
+    wxString                    netAttr;
+    std::unique_ptr<LIB_SYMBOL> result = loadSymbolFile( tempPath, nullptr, &netAttr );
     wxRemoveFile( tempPath );
 
     if( result )
@@ -3563,9 +3562,8 @@ LIB_SYMBOL* SCH_IO_GEDA::getOrLoadSymbol( const wxString& aBasename )
     {
         if( !cacheIt->second.symbol )
         {
-            cacheIt->second.symbol = loadSymbolFile( cacheIt->second.path,
-                                                      &cacheIt->second.symversion,
-                                                      &cacheIt->second.netAttr );
+            cacheIt->second.symbol = loadSymbolFile( cacheIt->second.path, &cacheIt->second.symversion,
+                                                     &cacheIt->second.netAttr );
 
             // When a project-local symbol overrides a builtin power symbol but lacks a
             // net= attribute, inherit the builtin's net= so power detection still works.
@@ -3704,7 +3702,7 @@ void SCH_IO_GEDA::flushPendingComponent()
 
         if( ncSym )
         {
-            const std::vector<SCH_PIN*>& pins = ncSym->GetPins();
+            const std::vector<SCH_PIN*>& pins = ncSym->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
 
             if( !pins.empty() )
             {
@@ -3723,7 +3721,7 @@ void SCH_IO_GEDA::flushPendingComponent()
         case 90:   rx = -pinLocalY;  ry =  pinLocalX;      break;
         case 180:  rx = -pinLocalX;  ry = -pinLocalY;      break;
         case 270:  rx =  pinLocalY;  ry = -pinLocalX;      break;
-        default:                                            break;
+        default:                                           break;
         }
 
         if( m_pendingComp->mirror )
@@ -3792,13 +3790,13 @@ void SCH_IO_GEDA::flushPendingComponent()
                 wxString refdes = findAttr( m_pendingComp->attrs, wxT( "refdes" ) );
                 wxString label = refdes.IsEmpty() ? m_pendingComp->basename : refdes;
 
-                m_reporter->Report(
-                        wxString::Format( _( "Symbol version mismatch for '%s' (%s): "
-                                             "schematic has symversion %s, "
-                                             "library symbol has symversion %s." ),
-                                          label, m_pendingComp->basename,
-                                          compSymver, symSymver ),
-                        RPT_SEVERITY_WARNING );
+                m_reporter->Report( wxString::Format( _( "Symbol version mismatch for '%s' (%s): schematic "
+                                                         "has symversion %s, library symbol has symversion %s." ),
+                                                      label,
+                                                      m_pendingComp->basename,
+                                                      compSymver,
+                                                      symSymver ),
+                                    RPT_SEVERITY_WARNING );
             }
         }
     }
@@ -3843,7 +3841,7 @@ void SCH_IO_GEDA::flushPendingComponent()
         libSym->GetValueField().SetText( powerNetName );
         libSym->GetValueField().SetVisible( true );
 
-        for( SCH_PIN* pin : libSym->GetPins() )
+        for( SCH_PIN* pin : libSym->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         {
             pin->SetName( powerNetName );
             pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
@@ -3853,8 +3851,7 @@ void SCH_IO_GEDA::flushPendingComponent()
     LIB_ID libId( getLibName(), libSym->GetName() );
     VECTOR2I pos = toKiCad( m_pendingComp->x, m_pendingComp->y );
 
-    auto symbol = std::make_unique<SCH_SYMBOL>( *libSym, libId, &m_schematic->CurrentSheet(),
-                                                 1, 0, pos );
+    auto symbol = std::make_unique<SCH_SYMBOL>( *libSym, libId, &m_schematic->CurrentSheet(), 1, 0, pos );
 
     int orient = toKiCadOrientation( m_pendingComp->angle, m_pendingComp->mirror );
     symbol->SetOrientation( orient );
@@ -3879,8 +3876,8 @@ void SCH_IO_GEDA::flushPendingComponent()
         symbol->SetExcludedFromSim( true );
     }
 
-    wxString refdes   = findAttr( m_pendingComp->attrs, wxT( "refdes" ) );
-    wxString value    = findAttr( m_pendingComp->attrs, wxT( "value" ) );
+    wxString refdes    = findAttr( m_pendingComp->attrs, wxT( "refdes" ) );
+    wxString value     = findAttr( m_pendingComp->attrs, wxT( "value" ) );
     wxString footprint = findAttr( m_pendingComp->attrs, wxT( "footprint" ) );
 
     if( !isPowerSym && !refdes.IsEmpty() )
@@ -3989,7 +3986,7 @@ void SCH_IO_GEDA::flushPendingComponent()
 
     // Track pin connection points for junction detection. Reverse-map the
     // KiCad IU positions back to gEDA coordinates to match the wire endpoints.
-    for( SCH_PIN* pin : libSym->GetPins() )
+    for( SCH_PIN* pin : libSym->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         VECTOR2I pinPos = symbol->GetPinPhysicalPosition( pin );
         int gedaX = pinPos.x / MILS_TO_IU;
@@ -4044,7 +4041,7 @@ void SCH_IO_GEDA::flushPendingComponent()
             std::map<long, SCH_PIN*> pinsBySeq;
             int autoSeq = 1;
 
-            for( SCH_PIN* pin : privateSym->GetPins() )
+            for( SCH_PIN* pin : privateSym->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
             {
                 pinsBySeq[autoSeq] = pin;
                 autoSeq++;
@@ -4083,11 +4080,9 @@ void SCH_IO_GEDA::importHierarchicalSheet( const wxString& aSourceFile )
     {
         if( m_reporter )
         {
-            m_reporter->Report(
-                    wxString::Format( _( "Hierarchical source '%s' not found, "
-                                         "creating empty sheet." ),
-                                      aSourceFile ),
-                    RPT_SEVERITY_WARNING );
+            m_reporter->Report( wxString::Format( _( "Hierarchical source '%s' not found, creating empty sheet." ),
+                                                  aSourceFile ),
+                                RPT_SEVERITY_WARNING );
         }
     }
 
@@ -4095,10 +4090,9 @@ void SCH_IO_GEDA::importHierarchicalSheet( const wxString& aSourceFile )
     {
         if( m_reporter )
         {
-            m_reporter->Report(
-                    wxString::Format( _( "Circular hierarchy detected for '%s', skipping." ),
-                                      aSourceFile ),
-                    RPT_SEVERITY_WARNING );
+            m_reporter->Report( wxString::Format( _( "Circular hierarchy detected for '%s', skipping." ),
+                                                  aSourceFile ),
+                                RPT_SEVERITY_WARNING );
         }
 
         return;
@@ -4114,14 +4108,9 @@ void SCH_IO_GEDA::importHierarchicalSheet( const wxString& aSourceFile )
     wxString refdes = findAttr( m_pendingComp->attrs, wxT( "refdes" ) );
 
     if( !refdes.IsEmpty() )
-    {
         sheet->GetField( FIELD_T::SHEET_NAME )->SetText( refdes );
-    }
     else
-    {
-        sheet->GetField( FIELD_T::SHEET_NAME )->SetText(
-                sourceFileName.GetName() );
-    }
+        sheet->GetField( FIELD_T::SHEET_NAME )->SetText( sourceFileName.GetName() );
 
     sheet->GetField( FIELD_T::SHEET_FILENAME )->SetText( aSourceFile );
     sheet->SetFileName( aSourceFile );
@@ -4173,14 +4162,14 @@ void SCH_IO_GEDA::processNetAttributes()
             continue;
 
         // Find the pin with matching number
-        for( SCH_PIN* pin : libSym->GetPins() )
+        for( SCH_PIN* pin : libSym->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         {
             if( pin->GetNumber() == rec.pinnumber )
             {
                 VECTOR2I pinPos = rec.symbol->GetPinPhysicalPosition( pin );
 
                 auto label = std::make_unique<SCH_GLOBALLABEL>( pinPos, rec.netname );
-                int textSize = toKiCadDist( GEDA_DEFAULT_TEXT_SIZE_MILS / 2 );
+                int  textSize = toKiCadDist( GEDA_DEFAULT_TEXT_SIZE_MILS / 2 );
                 label->SetTextSize( VECTOR2I( textSize, textSize ) );
 
                 // Build a unit direction vector for the pin in library space,
@@ -4429,8 +4418,7 @@ void SCH_IO_GEDA::loadDeferredSheets()
 
         try
         {
-            subImporter.LoadSchematicFile( deferred.sourceFile, m_schematic,
-                                           sheet, m_properties );
+            subImporter.LoadSchematicFile( deferred.sourceFile, m_schematic, sheet, m_properties );
 
             // Merge any newly-discovered symbols back into the parent cache
             // so subsequent sub-schematics benefit from them.
@@ -4444,10 +4432,10 @@ void SCH_IO_GEDA::loadDeferredSheets()
         {
             if( m_reporter )
             {
-                m_reporter->Report(
-                        wxString::Format( _( "Failed to load sub-schematic '%s': %s" ),
-                                          deferred.sourceFile, e.What() ),
-                        RPT_SEVERITY_WARNING );
+                m_reporter->Report( wxString::Format( _( "Failed to load sub-schematic '%s': %s" ),
+                                                      deferred.sourceFile,
+                                                      e.What() ),
+                                    RPT_SEVERITY_WARNING );
             }
         }
     }

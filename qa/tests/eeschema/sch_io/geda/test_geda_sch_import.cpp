@@ -2097,7 +2097,7 @@ BOOST_AUTO_TEST_CASE( PinOrientationCorrect )
 
         BOOST_REQUIRE( libSym );
 
-        std::vector<SCH_PIN*> pins = libSym->GetPins();
+        std::vector<SCH_PIN*> pins = libSym->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
 
         BOOST_REQUIRE_GE( pins.size(), 2u );
 

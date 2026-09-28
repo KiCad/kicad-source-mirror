@@ -326,7 +326,7 @@ void SCH_RULE_AREA::RefreshContainedItemsAndDirectives( SCH_SCREEN* screen )
                 addContainedItem( areaItem );
 
                 // Add child pins which are within the rule area
-                for( SCH_PIN* pin : symbol->GetPins() )
+                for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
                 {
                     if( GetPolyShape().Collide( pin->GetPosition() ) )
                         addContainedItem( pin );

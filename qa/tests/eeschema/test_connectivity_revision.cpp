@@ -46,7 +46,7 @@ BOOST_FIXTURE_TEST_SUITE( ConnectivityRevision, CONNECTIVITY_REVISION_FIXTURE )
 
 BOOST_AUTO_TEST_CASE( ScreenIndexTracksSymbolPinReplacementAndUndo )
 {
-    auto& config = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
+    ADVANCED_CFG&    config = const_cast<ADVANCED_CFG&>( ADVANCED_CFG::GetCfg() );
     SCOPED_SET_RESET restoreEngine( config.m_ConnectivityEngine, config.m_ConnectivityEngine );
     SCOPED_SET_RESET restoreIncremental( config.m_IncrementalConnectivity, config.m_IncrementalConnectivity );
     config.m_ConnectivityEngine = true;
@@ -58,9 +58,9 @@ BOOST_AUTO_TEST_CASE( ScreenIndexTracksSymbolPinReplacementAndUndo )
 
     for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
     {
-        auto* candidate = static_cast<SCH_SYMBOL*>( item );
+        SCH_SYMBOL* candidate = static_cast<SCH_SYMBOL*>( item );
 
-        if( candidate->GetLibSymbolRef() && candidate->GetPins().size() >= 2 )
+        if( candidate->GetLibSymbolRef() && candidate->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size() >= 2 )
         {
             symbol = candidate;
             break;
@@ -72,22 +72,26 @@ BOOST_AUTO_TEST_CASE( ScreenIndexTracksSymbolPinReplacementAndUndo )
     manager.SetEnvironment( schematic.get(), nullptr, nullptr, nullptr, nullptr );
     schematic->RebuildConnectivity();
     SCH_CONNECTIVITY::FACADE rebuilt;
-    const auto verify = [&]()
-    {
-        const std::string incremental = SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() );
-        rebuilt.Update( *schematic, true );
-        BOOST_CHECK_EQUAL( incremental, SCH_CONNECTIVITY::Dump( *schematic, rebuilt ) );
-    };
+
+    const auto verify =
+            [&]()
+            {
+                const std::string incremental = SCH_CONNECTIVITY::Dump( *schematic, schematic->Connectivity() );
+                rebuilt.Update( *schematic, true );
+                BOOST_CHECK_EQUAL( incremental, SCH_CONNECTIVITY::Dump( *schematic, rebuilt ) );
+            };
+
     verify();
 
-    SCH_PIN* pin = symbol->GetPins().front();
-    const KIID id = pin->m_Uuid;
-    const wxString number = pin->GetNumber();
+    SCH_PIN*        pin = symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).front();
+    const KIID      id = pin->m_Uuid;
+    const wxString  number = pin->GetNumber();
     const KIID_PATH path = schematic->Hierarchy().front().Path();
+
     BOOST_REQUIRE( schematic->Connectivity().Connection( id, path ) );
     BOOST_REQUIRE( screen->GetConnectivityItem( id ) == pin );
-    std::unique_ptr<SCH_ITEM> undo( static_cast<SCH_ITEM*>( symbol->Clone() ) );
-    auto updated = symbol->GetLibSymbolRef()->Flatten();
+    std::unique_ptr<SCH_ITEM>   undo( static_cast<SCH_ITEM*>( symbol->Clone() ) );
+    std::unique_ptr<LIB_SYMBOL> updated = symbol->GetLibSymbolRef()->Flatten();
 
     for( SCH_PIN* libPin : updated->GetPinsByNumber( number ) )
         updated->RemoveDrawItem( libPin );
@@ -118,13 +122,13 @@ BOOST_AUTO_TEST_CASE( AssigningSymbolPreservesAlternatePinDefinitions )
     KI_TEST::LoadSchematic( settings, "issue22286/bugtest", schematic );
     SCH_SCREEN* screen = schematic->GetTopLevelSheets().front()->GetScreen();
     SCH_SYMBOL* symbol = nullptr;
-    SCH_PIN* pin = nullptr;
+    SCH_PIN*    pin = nullptr;
 
     for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
     {
         auto* candidate = static_cast<SCH_SYMBOL*>( item );
 
-        for( SCH_PIN* candidatePin : candidate->GetPins() )
+        for( SCH_PIN* candidatePin : candidate->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         {
             if( !candidatePin->GetAlt().IsEmpty() )
             {

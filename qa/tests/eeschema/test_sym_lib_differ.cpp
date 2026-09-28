@@ -234,7 +234,7 @@ BOOST_AUTO_TEST_CASE( ModifiedSymbolCarriesPinChildDelta )
 
     for( const std::unique_ptr<LIB_SYMBOL>& owner : ownersB )
     {
-        if( owner && !owner->IsDerived() && !owner->GetPins().empty() )
+        if( owner && !owner->IsDerived() && !owner->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).empty() )
         {
             victim = owner.get();
             break;
@@ -243,7 +243,7 @@ BOOST_AUTO_TEST_CASE( ModifiedSymbolCarriesPinChildDelta )
 
     BOOST_REQUIRE( victim );
 
-    victim->GetPins().front()->Move( VECTOR2I( 1270, 0 ) );
+    victim->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).front()->Move( VECTOR2I( 1270, 0 ) );
 
     SYM_LIB_DIFFER differ( mapA, mapB );
     DOCUMENT_DIFF  result = differ.Diff();
@@ -282,7 +282,7 @@ BOOST_AUTO_TEST_CASE( PinNameChangeIsDetected )
 
     for( const std::unique_ptr<LIB_SYMBOL>& owner : ownersB )
     {
-        if( owner && !owner->IsDerived() && !owner->GetPins().empty() )
+        if( owner && !owner->IsDerived() && !owner->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).empty() )
         {
             victim = owner.get();
             break;
@@ -291,7 +291,7 @@ BOOST_AUTO_TEST_CASE( PinNameChangeIsDetected )
 
     BOOST_REQUIRE( victim );
 
-    victim->GetPins().front()->SetName( wxS( "QA_RENAMED_PIN" ) );
+    victim->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).front()->SetName( wxS( "QA_RENAMED_PIN" ) );
 
     SYM_LIB_DIFFER differ( mapA, mapB );
     DOCUMENT_DIFF  result = differ.Diff();

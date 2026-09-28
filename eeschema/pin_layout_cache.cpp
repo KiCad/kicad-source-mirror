@@ -811,10 +811,12 @@ std::optional<PIN_LAYOUT_CACHE::TEXT_INFO> PIN_LAYOUT_CACHE::GetPinNameInfo( int
         // specified as inside.  When names are inside, they should not overlap with the
         // number position.
         const SYMBOL* parentSym = m_pin.GetParentSymbol();
+
         if( parentSym )
         {
             int maxHalfHeight = 0;
-            for( const SCH_PIN* p : parentSym->GetPins() )
+
+            for( const SCH_PIN* p : parentSym->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
             {
                 wxString n = p->GetShownName();
 

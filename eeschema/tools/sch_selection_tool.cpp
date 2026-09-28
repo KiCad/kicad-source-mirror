@@ -2856,7 +2856,7 @@ void SCH_SELECTION_TOOL::SelectMultiple( KIGFX::PREVIEW::SELECTION_AREA& aArea, 
         }
         else if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
         {
-            for( SCH_PIN* pin : symbol->GetPins() )
+            for( SCH_PIN* pin : symbol->GetPins( &getEditFrame<SCH_EDIT_FRAME>()->GetCurrentSheet() ) )
             {
                 if( boxMode ? selectionRect.Intersects( pin->GetBoundingBox() )
                             : KIGEOM::BoxHitTest( aArea.GetPoly(), pin->GetBoundingBox(), true ) )

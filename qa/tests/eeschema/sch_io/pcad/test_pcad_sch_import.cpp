@@ -252,7 +252,7 @@ BOOST_AUTO_TEST_CASE( EnumerateLibrary )
     // repeated loads must serve the identical cached object
     BOOST_CHECK_EQUAL( sym, m_plugin.LoadSymbol( GetTestDataDir() + "pcad_library_test.lia",
                                                  wxT( "RES_QA" ) ) );
-    BOOST_CHECK_EQUAL( sym->GetPins().size(), 2 );
+    BOOST_CHECK_EQUAL( sym->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), 2 );
     BOOST_CHECK_EQUAL( sym->GetReferenceField().GetText(), wxT( "R" ) );
     BOOST_CHECK_EQUAL( sym->GetFootprintField().GetText(), wxT( "RES0805" ) );
 

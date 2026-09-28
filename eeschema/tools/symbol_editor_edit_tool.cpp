@@ -364,7 +364,7 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
 
                     int coLocatedCount = 0;
 
-                    for( SCH_PIN* pin : symbol->GetPins() )
+                    for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
                     {
                         if( pin->GetPosition() == pos )
                         {
@@ -701,7 +701,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
                 got_unit[curr_pin->GetUnit()] = true;
 
-                for( SCH_PIN* pin : symbol->GetPins() )
+                for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
                 {
                     if( got_unit[pin->GetUnit()] )
                         continue;
@@ -1135,7 +1135,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::ConvertStackedPins( const TOOL_EVENT& aEvent )
         SCH_PIN* selectedPin = static_cast<SCH_PIN*>( selection.Front() );
         VECTOR2I pos = selectedPin->GetPosition();
 
-        for( SCH_PIN* pin : symbol->GetPins() )
+        for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         {
             if( pin->GetPosition() == pos )
                 pinsToConvert.push_back( pin );

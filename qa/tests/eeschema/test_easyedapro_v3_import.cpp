@@ -378,7 +378,7 @@ BOOST_AUTO_TEST_CASE( RawSymbolPartUnitsAndPinOrientationAreStable )
 
     std::array<int, 6> unitPinCount = {};
 
-    for( SCH_PIN* pin : ls2kInfo.libSymbol->GetPins() )
+    for( SCH_PIN* pin : ls2kInfo.libSymbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         int unit = pin->GetUnit();
 
@@ -387,8 +387,7 @@ BOOST_AUTO_TEST_CASE( RawSymbolPartUnitsAndPinOrientationAreStable )
     }
 
     for( int unit = 1; unit <= 5; ++unit )
-        BOOST_CHECK_MESSAGE( unitPinCount[unit] > 0,
-                             "LS2K0300 should have pins in each unit" );
+        BOOST_CHECK_MESSAGE( unitPinCount[unit] > 0, "LS2K0300 should have pins in each unit" );
 
     wxString sgmSymbolUuid = sgmDevice->attributes.at( wxS( "Symbol" ) );
     const EASYEDAPRO::V3_DOC_RAW* sgmRaw = v3.FindRawDoc( wxS( "SYMBOL" ), sgmSymbolUuid );
@@ -400,7 +399,7 @@ BOOST_AUTO_TEST_CASE( RawSymbolPartUnitsAndPinOrientationAreStable )
     bool hasLeftPins = false;
     bool hasRightPins = false;
 
-    for( SCH_PIN* pin : sgmInfo.libSymbol->GetPins() )
+    for( SCH_PIN* pin : sgmInfo.libSymbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
     {
         if( pin->GetPosition().x < 0 )
         {
@@ -437,9 +436,8 @@ BOOST_AUTO_TEST_CASE( PluginLoadProducesWireTextAndLabel )
     BOOST_REQUIRE( plugin );
 
     SCH_SHEET* rootSheet = nullptr;
-    BOOST_REQUIRE_NO_THROW( rootSheet =
-                                    plugin->LoadSchematicFile( archiveFile.GetFullPath(),
-                                                               &schematic, nullptr, nullptr ) );
+    BOOST_REQUIRE_NO_THROW( rootSheet = plugin->LoadSchematicFile( archiveFile.GetFullPath(),
+                                                                   &schematic, nullptr, nullptr ) );
     BOOST_REQUIRE( rootSheet );
 
     schematic.RefreshHierarchy();

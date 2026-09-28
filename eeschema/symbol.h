@@ -147,7 +147,10 @@ public:
 
     virtual void GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly ) const = 0;
 
-    virtual std::vector<SCH_PIN*> GetPins() const = 0;
+#define ALL_UNITS 0
+#define ALL_BODY_STYLES 0
+
+    virtual std::vector<SCH_PIN*> GetGraphicalPins( int aUnit, int aBodyStyle ) const = 0;
 
     /**
      * Set the offset in mils of the pin name text from the pin symbol.

@@ -1032,7 +1032,7 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
 
         UpdatePins();
 
-        for( SCH_PIN* pin : GetPins() )
+        for( SCH_PIN* pin : GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         {
             if( pinAltMap.contains( pin->m_Uuid ) )
                 pin->SetAlt( pinAltMap.at( pin->m_Uuid ) );
@@ -1189,13 +1189,10 @@ void SCH_SYMBOL::updatePins()
     if( !m_part )
         return;
 
-    for( SCH_PIN* libPin : m_part->GetPins() )
+    // NB: Don't filter by unit: this data-structure is used for all instances,
+    // some of which might have different units.
+    for( SCH_PIN* libPin : m_part->GetGraphicalPins( ALL_UNITS, m_bodyStyle ) )
     {
-        // NW: Don't filter by unit: this data-structure is used for all instances,
-        // some of which might have different units.
-        if( libPin->GetBodyStyle() && m_bodyStyle && m_bodyStyle != libPin->GetBodyStyle() )
-            continue;
-
         SCH_PIN* pin = nullptr;
 
         auto ii = pinUuidMap.find( libPin->GetNumber() );
@@ -2633,7 +2630,7 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetLibPins() const
 std::vector<SCH_PIN*> SCH_SYMBOL::GetAllLibPins() const
 {
     if( m_part )
-        return m_part->GetPins();
+        return m_part->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
 
     return std::vector<SCH_PIN*>();
 }
@@ -2703,10 +2700,24 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet )
 }
 
 
-std::vector<SCH_PIN*> SCH_SYMBOL::GetPins() const
+std::vector<SCH_PIN*> SCH_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) const
 {
-    // Back-compat shim: return graphical pins for all units/body styles, violating const
-    return const_cast<SCH_SYMBOL*>( this )->GetPins( nullptr );
+    std::vector<SCH_PIN*> pins;
+
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
+    {
+        // Unit filtering:
+        if( aUnit && pin->GetUnit() && ( pin->GetUnit() != aUnit ) )
+            continue;
+
+        // Body style filtering:
+        if( aBodyStyle && pin->GetBodyStyle() && ( pin->GetBodyStyle() != aBodyStyle ) )
+            continue;
+
+        pins.push_back( pin.get() );
+    }
+
+    return pins;
 }
 
 
@@ -4357,7 +4368,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
     {
         bool usingAlternate = ( effectiveSym != m_part.get() );
 
-        std::vector<const SCH_PIN*> libPins = effectiveSym->GetGraphicalPins( GetUnit(), GetBodyStyle() );
+        std::vector<SCH_PIN*> libPins = effectiveSym->GetGraphicalPins( GetUnit(), GetBodyStyle() );
 
         // Copy the source so we can re-orient and translate it.
         LIB_SYMBOL            tempSymbol( *effectiveSym );
@@ -4556,7 +4567,7 @@ void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter, bool aDnp ) const
         TRANSFORM            savedTransform = renderSettings->m_Transform;
         renderSettings->m_Transform = GetTransform();
 
-        std::vector<const SCH_PIN*> libPins = effectiveSym->GetGraphicalPins( GetUnit(), GetBodyStyle() );
+        std::vector<SCH_PIN*> libPins = effectiveSym->GetGraphicalPins( GetUnit(), GetBodyStyle() );
 
         // Copy the source to stay const
         LIB_SYMBOL            tempSymbol( *effectiveSym );
@@ -4869,8 +4880,7 @@ const LIB_SYMBOL* SCH_SYMBOL::GetEffectiveLibSymbol( const SCH_SHEET_PATH* aPath
 }
 
 
-std::vector<SCH_PIN*> SCH_SYMBOL::MapLibPins( const std::vector<const SCH_PIN*>& aLibPins,
-                                              bool aByNumber ) const
+std::vector<SCH_PIN*> SCH_SYMBOL::MapLibPins( const std::vector<SCH_PIN*>& aLibPins, bool aByNumber ) const
 {
     std::vector<SCH_PIN*> mapped;
 
@@ -4886,8 +4896,8 @@ std::vector<SCH_PIN*> SCH_SYMBOL::MapLibPins( const std::vector<const SCH_PIN*>&
             return mapped;
         }
 
-        std::vector<const SCH_PIN*> basePins = baseSymbol->GetGraphicalPins( GetUnit(), GetBodyStyle() );
-        std::vector<bool>           matched( basePins.size(), false );
+        std::vector<SCH_PIN*> basePins = baseSymbol->GetGraphicalPins( GetUnit(), GetBodyStyle() );
+        std::vector<bool>     matched( basePins.size(), false );
 
         for( const SCH_PIN* alternatePin : aLibPins )
         {

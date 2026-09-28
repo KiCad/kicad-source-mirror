@@ -104,7 +104,7 @@ std::multiset<wxString> pinNumbers( const LIB_SYMBOL& aSymbol )
 {
     std::multiset<wxString> numbers;
 
-    for( const SCH_PIN* pin : aSymbol.GetPins() )
+    for( const SCH_PIN* pin : aSymbol.GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         numbers.insert( pin->GetNumber() );
 
     return numbers;

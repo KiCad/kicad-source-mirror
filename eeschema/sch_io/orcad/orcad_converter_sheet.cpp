@@ -7029,7 +7029,7 @@ static std::optional<std::vector<SEG>> interfaceSourceWires( const ORCAD_RAW_PAG
 
 
 static std::optional<VECTOR2I> safeConnectivityLabelPosition( SCH_SCREEN* aScreen, const VECTOR2I& aPosition,
-                                                           const std::optional<std::vector<SEG>>& aSourceWires )
+                                                              const std::optional<std::vector<SEG>>& aSourceWires )
 {
     if( !aSourceWires )
         return std::nullopt;
@@ -7050,7 +7050,10 @@ static std::optional<VECTOR2I> safeConnectivityLabelPosition( SCH_SCREEN* aScree
         }
         else if( item->Type() == SCH_SYMBOL_T )
         {
-            for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( item )->GetPins() )
+            // Since the screen may be instantiated multiple times with different instances
+            // of this symbol (all potentially with different units/bodystyles), about all
+            // we can do is consider all unit/bodystyle pins to be present.
+            for( SCH_PIN* pin : static_cast<SCH_SYMBOL*>( item )->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
                 pins.insert( pin->GetPosition() );
         }
         else if( item->Type() == SCH_SHEET_T )
@@ -7069,40 +7072,49 @@ static std::optional<VECTOR2I> safeConnectivityLabelPosition( SCH_SCREEN* aScree
         }
     }
 
-    auto safe = [&]( const VECTOR2I& aCandidate )
-    {
-        if( busEntries.count( aCandidate ) )
-            return false;
+    auto safe =
+            [&]( const VECTOR2I& aCandidate )
+            {
+                if( busEntries.count( aCandidate ) )
+                    return false;
 
-        int contacts = std::count_if( wires.begin(), wires.end(),
-                                      [&]( const SEG& wire ) { return wire.Contains( aCandidate ); } );
+                int contacts = std::count_if( wires.begin(), wires.end(),
+                                              [&]( const SEG& wire )
+                                              {
+                                                  return wire.Contains( aCandidate );
+                                              } );
 
-        if( aSourceWires->empty() )
-        {
-            // Coincident pins can require a junction dot without any crossing wires.
-            return aCandidate == aPosition && contacts == 0
-                   && ( !junctions.count( aCandidate ) || pins.count( aCandidate ) );
-        }
+                if( aSourceWires->empty() )
+                {
+                    // Coincident pins can require a junction dot without any crossing wires.
+                    return aCandidate == aPosition && contacts == 0
+                           && ( !junctions.count( aCandidate ) || pins.count( aCandidate ) );
+                }
 
-        return !junctions.count( aCandidate ) && !pins.count( aCandidate ) && contacts <= 1;
-    };
+                return !junctions.count( aCandidate ) && !pins.count( aCandidate ) && contacts <= 1;
+            };
 
-    auto supported = [&]( const SEG& aWire, const VECTOR2I& aCandidate )
-    {
-        return aWire.Contains( aCandidate )
-               && std::any_of( aSourceWires->begin(), aSourceWires->end(),
-                               [&]( const SEG& aSource )
-                               {
-                                   return aSource.A != aSource.B && aSource.Contains( aCandidate )
-                                          && ( aSource.B - aSource.A ).Cross( aWire.B - aWire.A ) == 0;
-                               } );
-    };
+    auto supported =
+            [&]( const SEG& aWire, const VECTOR2I& aCandidate )
+            {
+                return aWire.Contains( aCandidate )
+                       && std::any_of( aSourceWires->begin(), aSourceWires->end(),
+                                       [&]( const SEG& aSource )
+                                       {
+                                           return aSource.A != aSource.B && aSource.Contains( aCandidate )
+                                                  && ( aSource.B - aSource.A ).Cross( aWire.B - aWire.A ) == 0;
+                                       } );
+            };
 
     if( safe( aPosition )
-        && ( aSourceWires->empty()
-             || std::any_of( wires.begin(), wires.end(),
-                             [&]( const SEG& aWire ) { return supported( aWire, aPosition ); } ) ) )
+        && ( aSourceWires->empty() || std::any_of( wires.begin(), wires.end(),
+                                                   [&]( const SEG& aWire )
+                                                   {
+                                                       return supported( aWire, aPosition );
+                                                   } ) ) )
+    {
         return aPosition;
+    }
 
     std::set<VECTOR2I> candidates;
 
@@ -7127,24 +7139,28 @@ static std::optional<VECTOR2I> safeConnectivityLabelPosition( SCH_SCREEN* aScree
 
         VECTOR2I step = delta / steps;
         std::set<int> offsets = { 0, steps, steps / 2 };
-        auto addOffset = [&]( long double aOffset )
-        {
-            if( aOffset < -2 || aOffset > steps + 2.0L )
-                return;
 
-            int offset = static_cast<int>( std::floor( aOffset ) );
+        auto addOffset =
+                [&]( long double aOffset )
+                {
+                    if( aOffset < -2 || aOffset > steps + 2.0L )
+                        return;
 
-            for( int adjacent = -1; adjacent <= 2; ++adjacent )
-            {
-                if( offset + adjacent >= 0 && offset + adjacent <= steps )
-                    offsets.insert( offset + adjacent );
-            }
-        };
-        auto projection = [&]( const VECTOR2I& aPoint ) -> long double
-        {
-            return step.x ? ( (long double) aPoint.x - wire.A.x ) / step.x
-                          : ( (long double) aPoint.y - wire.A.y ) / step.y;
-        };
+                    int offset = static_cast<int>( std::floor( aOffset ) );
+
+                    for( int adjacent = -1; adjacent <= 2; ++adjacent )
+                    {
+                        if( offset + adjacent >= 0 && offset + adjacent <= steps )
+                            offsets.insert( offset + adjacent );
+                    }
+                };
+
+        auto projection =
+                [&]( const VECTOR2I& aPoint ) -> long double
+                {
+                    return step.x ? ( (long double) aPoint.x - wire.A.x ) / step.x
+                                  : ( (long double) aPoint.y - wire.A.y ) / step.y;
+                };
 
         addOffset( projection( aPosition ) );
         long double inset = schIUScale.MilsToIU( 50 ) / std::hypot( step.x, step.y );

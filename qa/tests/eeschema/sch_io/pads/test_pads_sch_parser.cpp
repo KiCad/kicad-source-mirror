@@ -1169,13 +1169,13 @@ BOOST_AUTO_TEST_CASE( BuildKiCadPowerSymbol_Styles )
     BOOST_CHECK( pwrTri->IsPower() );
 
     // Verify each symbol has exactly one pin
-    BOOST_CHECK_EQUAL( gnd->GetPins().size(), 1u );
-    BOOST_CHECK_EQUAL( vcc->GetPins().size(), 1u );
-    BOOST_CHECK_EQUAL( vee->GetPins().size(), 1u );
-    BOOST_CHECK_EQUAL( gndd->GetPins().size(), 1u );
-    BOOST_CHECK_EQUAL( earth->GetPins().size(), 1u );
-    BOOST_CHECK_EQUAL( pwrBar->GetPins().size(), 1u );
-    BOOST_CHECK_EQUAL( pwrTri->GetPins().size(), 1u );
+    BOOST_CHECK_EQUAL( gnd->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), 1u );
+    BOOST_CHECK_EQUAL( vcc->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), 1u );
+    BOOST_CHECK_EQUAL( vee->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), 1u );
+    BOOST_CHECK_EQUAL( gndd->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), 1u );
+    BOOST_CHECK_EQUAL( earth->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), 1u );
+    BOOST_CHECK_EQUAL( pwrBar->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), 1u );
+    BOOST_CHECK_EQUAL( pwrTri->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size(), 1u );
     BOOST_CHECK( !gnd->GetReferenceField().IsVisible() );
     BOOST_CHECK( !vcc->GetReferenceField().IsVisible() );
 
@@ -1483,7 +1483,7 @@ BOOST_AUTO_TEST_CASE( SymbolBuilder_ConnectorPinSymbol )
     LIB_SYMBOL* sym15 = builder.GetOrCreateConnectorPinSymbol( connPt, symDef, "15" );
     BOOST_REQUIRE( sym15 != nullptr );
 
-    auto pins15 = sym15->GetPins();
+    auto pins15 = sym15->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
     BOOST_REQUIRE_EQUAL( pins15.size(), 1u );
     BOOST_CHECK_EQUAL( pins15[0]->GetNumber(), "15" );
 
@@ -1491,7 +1491,7 @@ BOOST_AUTO_TEST_CASE( SymbolBuilder_ConnectorPinSymbol )
     LIB_SYMBOL* sym1 = builder.GetOrCreateConnectorPinSymbol( connPt, symDef, "1" );
     BOOST_REQUIRE( sym1 != nullptr );
 
-    auto pins1 = sym1->GetPins();
+    auto pins1 = sym1->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
     BOOST_REQUIRE_EQUAL( pins1.size(), 1u );
     BOOST_CHECK_EQUAL( pins1[0]->GetNumber(), "1" );
 
@@ -1552,7 +1552,7 @@ BOOST_AUTO_TEST_CASE( SymbolBuilder_MultiUnitConnectorSymbol )
     {
         std::vector<SCH_PIN*> unitPins;
 
-        for( SCH_PIN* pin : multiSym->GetPins() )
+        for( SCH_PIN* pin : multiSym->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         {
             if( pin->GetUnit() == unit )
                 unitPins.push_back( pin );

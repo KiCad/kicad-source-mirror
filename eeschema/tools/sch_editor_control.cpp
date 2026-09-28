@@ -1058,16 +1058,16 @@ static bool setNetHighlight( SCH_ITEM* aItem, bool aHighlight )
 }
 
 
-static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
+static bool highlightNet( TOOL_MANAGER* aToolMgr, const SCH_SHEET_PATH& aSheetPath, const VECTOR2D& aPosition )
 {
     wxLogTrace( "KICAD_SCH_HIGHLIGHT", "highlightNet: pos=(%f,%f) clear=%d", aPosition.x, aPosition.y,
                 ( aPosition == CLEAR ) );
-    SCH_EDIT_FRAME*     editFrame     = static_cast<SCH_EDIT_FRAME*>( aToolMgr->GetToolHolder() );
-    SCH_SELECTION_TOOL* selTool       = aToolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SCH_EDITOR_CONTROL* editorControl = aToolMgr->GetTool<SCH_EDITOR_CONTROL>();
+    SCH_EDIT_FRAME*         editFrame     = static_cast<SCH_EDIT_FRAME*>( aToolMgr->GetToolHolder() );
+    SCH_SELECTION_TOOL*     selTool       = aToolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SCH_EDITOR_CONTROL*     editorControl = aToolMgr->GetTool<SCH_EDITOR_CONTROL>();
     std::optional<wxString> connName;
-    SCH_ITEM*           item          = nullptr;
-    bool                retVal        = true;
+    SCH_ITEM*               item          = nullptr;
+    bool                    retVal        = true;
 
     if( aPosition != CLEAR )
     {
@@ -1081,8 +1081,8 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         else
         {
             item = static_cast<SCH_ITEM*>( selTool->GetNode( aPosition ) );
-            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "highlightNet: item=%p type=%d", (void*) item,
-                        item ? (int) item->Type() : -1 );
+            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "highlightNet: item=%p type=%d", (void*) item, item ? (int) item->Type()
+                                                                                                   : -1 );
             SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
             if( item )
@@ -1094,7 +1094,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
                 if( symbol && symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->IsPower() )
                 {
-                    std::vector<SCH_PIN*> pins = symbol->GetPins();
+                    std::vector<SCH_PIN*> pins = symbol->GetPins( &aSheetPath );
 
                     if( pins.size() == 1 )
                         connName = pins[0]->GetConnectionName( &editFrame->GetCurrentSheet() );
@@ -1123,8 +1123,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
         if( *connName != editFrame->GetHighlightedConnection() )
         {
-            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "highlightNet: setting highlighted connection to %s",
-                        *connName );
+            wxLogTrace( "KICAD_SCH_HIGHLIGHT", "highlightNet: setting highlighted connection to %s", *connName );
             editorControl->SetHighlightBusMembers( false );
             // Clear any previous chain highlight when switching to net highlight
             editFrame->SetHighlightedNetChain( wxEmptyString );
@@ -1166,7 +1165,7 @@ int SCH_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     VECTOR2D              cursorPos = controls->GetCursorPosition( !aEvent.DisableGridSnapping() );
 
-    highlightNet( m_toolMgr, cursorPos );
+    highlightNet( m_toolMgr, m_frame->GetCurrentSheet(), cursorPos );
 
     return 0;
 }
@@ -1259,7 +1258,8 @@ int SCH_EDITOR_CONTROL::RemoveFromNetChain( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
 {
-    highlightNet( m_toolMgr, CLEAR );
+    highlightNet( m_toolMgr, m_frame->GetCurrentSheet(), CLEAR );
+
     // Also clear any highlighted chain explicitly
     if( m_frame )
         m_frame->SetHighlightedNetChain( wxEmptyString );
@@ -1423,7 +1423,7 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
                 } );
     }
 
-    highlightNet( m_toolMgr, CLEAR );
+    highlightNet( m_toolMgr, m_frame->GetCurrentSheet(), CLEAR );
     return 0;
 }
 
@@ -1485,13 +1485,13 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
     wxCHECK( m_frame, 0 );
 
     const SCH_SHEET_PATH& sheetPath = m_frame->GetCurrentSheet();
-    SCH_SCREEN* screen = sheetPath.LastScreen();
+    SCH_SCREEN*           screen = sheetPath.LastScreen();
     wxCHECK( screen, 0 );
 
     const wxString selectedName = m_frame->GetHighlightedConnection();
     const wxString chainName = m_frame->GetHighlightedNetChain();
-    SCH_NETCHAIN* chain = chainName.IsEmpty() ? nullptr
-                                             : m_frame->Schematic().NetChains().GetNetChainByName( chainName );
+    SCH_NETCHAIN*  chain = chainName.IsEmpty() ? nullptr
+                                               : m_frame->Schematic().NetChains().GetNetChainByName( chainName );
     std::unordered_set<SCH_ITEM*> highlighted;
 
     if( !selectedName.IsEmpty() || chain )
@@ -1515,10 +1515,14 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         if( !item )
             continue;
 
-        bool redraw = setNetHighlight( item, highlighted.contains( item ) );
-        SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
-        const bool powerHighlight = symbol && symbol->IsPower() && !symbol->GetPins().empty()
-                                    && highlighted.contains( symbol->GetPins().front() );
+        bool                  redraw = setNetHighlight( item, highlighted.contains( item ) );
+        SCH_SYMBOL*           symbol = dynamic_cast<SCH_SYMBOL*>( item );
+        std::vector<SCH_PIN*> pins = symbol->GetPins( &sheetPath );
+
+        const bool powerHighlight = symbol && symbol->IsPower()
+                                           && !pins.empty()
+                                           && highlighted.contains( pins.front() );
+
         item->RunOnChildren(
                 [&]( SCH_ITEM* child )
                 {
@@ -1527,8 +1531,8 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
                     if( powerHighlight && child->Type() == SCH_FIELD_T )
                     {
                         const auto* field = static_cast<SCH_FIELD*>( child );
-                        highlight = field->IsVisible() && ( field->GetId() == FIELD_T::REFERENCE
-                                                          || field->GetId() == FIELD_T::VALUE );
+                        highlight = field->IsVisible() && (   field->GetId() == FIELD_T::REFERENCE
+                                                           || field->GetId() == FIELD_T::VALUE );
                     }
 
                     redraw |= setNetHighlight( child, highlight );
@@ -1562,7 +1566,7 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
     picker->SetClickHandler(
             [this]( const VECTOR2D& aPos )
             {
-                return highlightNet( m_toolMgr, aPos );
+                return highlightNet( m_toolMgr, m_frame->GetCurrentSheet(), aPos );
             } );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, &aEvent );
@@ -2176,7 +2180,7 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( SCH_SHEET* aSheet, const S
                 if( !isSharedPath )
                     const_cast<KIID&>( symbol->m_Uuid ) = KIID();
 
-                for( SCH_PIN* pin : symbol->GetPins() )
+                for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
                 {
                     // Only update the UUID if the symbol is not in a shared sheet.
                     if( !isSharedPath )
@@ -2602,7 +2606,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 const_cast<KIID&>( item->m_Uuid ) = KIID();
 
                 // Make sure pins get a new UUID
-                for( SCH_PIN* pin : symbol->GetPins() )
+                for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
                 {
                     const_cast<KIID&>( pin->m_Uuid ) = KIID();
                     pin->SetConnectivityDirty();

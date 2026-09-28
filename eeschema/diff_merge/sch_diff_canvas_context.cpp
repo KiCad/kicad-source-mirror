@@ -125,8 +125,9 @@ void ConfigureSchDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, SCHEMATIC* aRef
                                     const std::map<KIID, KICAD_DIFF::CATEGORY>& aCategories,
                                     SCH_SCREEN* aReferenceScreen, SCH_SCREEN* aComparisonScreen )
 {
-    aCanvas.SetContextPainter(
-            MakeSchDiffContextPainter( aCanvas.GetGAL(), aReference ? aReference : aComparison, aColor, aOverrides ) );
+    aCanvas.SetContextPainter( MakeSchDiffContextPainter( aCanvas.GetGAL(),
+                                                          aReference ? aReference : aComparison,
+                                                          aColor, aOverrides ) );
 
     std::vector<KIGFX::VIEW_ITEM*> items;
 
@@ -162,7 +163,7 @@ void ConfigureSchDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, SCHEMATIC* aRef
         // child item's IsBrightened individually.
         if( SCH_SYMBOL* sym = dynamic_cast<SCH_SYMBOL*>( schItem ) )
         {
-            for( SCH_PIN* pin : sym->GetPins() )
+            for( SCH_PIN* pin : sym->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
             {
                 if( !pin )
                     continue;
@@ -208,7 +209,7 @@ void ConfigureSchDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, SCHEMATIC* aRef
 
                 if( SCH_SYMBOL* sym = dynamic_cast<SCH_SYMBOL*>( sch ) )
                 {
-                    for( SCH_PIN* pin : sym->GetPins() )
+                    for( SCH_PIN* pin : sym->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
                     {
                         if( pin )
                             apply( pin );

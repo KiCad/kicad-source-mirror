@@ -193,7 +193,7 @@ bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, cons
         for( const SCH_PIN* pin : pins )
             placedNumbers.insert( pin->GetNumber() );
 
-        for( const SCH_PIN* libPin : lib->GetPins() )
+        for( const SCH_PIN* libPin : lib->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         {
             if( libPin->GetBodyStyle() && aInput->GetBodyStyle()
                     && aInput->GetBodyStyle() != libPin->GetBodyStyle() )

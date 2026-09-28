@@ -697,8 +697,7 @@ public:
      * @param aUnit Unit number to collect; 0 = all units
      * @param aBodyStyle Alternate body style to collect; 0 = all body styles
      */
-    std::vector<const SCH_PIN*> GetGraphicalPins( int aUnit = 0, int aBodyStyle = 0 ) const;
-    std::vector<SCH_PIN*> GetGraphicalPins( int aUnit = 0, int aBodyStyle = 0 );
+    std::vector<SCH_PIN*> GetGraphicalPins( int aUnit = 0, int aBodyStyle = 0 ) const override;
 
     /**
      * Logical pins: Return expanded logical pins based on stacked-pin notation.
@@ -727,9 +726,6 @@ public:
      */
     std::vector<UNIT_PIN_INFO> GetUnitPinInfo() const;
 
-
-    // Deprecated: use GetGraphicalPins(). This override remains to satisfy SYMBOL's pure virtual.
-    std::vector<SCH_PIN*> GetPins() const override;
 
     /**
      * @return a count of pins for all units / converts.

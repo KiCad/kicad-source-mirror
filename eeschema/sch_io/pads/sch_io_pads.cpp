@@ -942,7 +942,7 @@ SCH_SHEET* SCH_IO_PADS::LoadSchematicFile( const wxString& aFileName, SCHEMATIC*
                                                           wxString::FromUTF8( connectorPinNumber ) );
 
                 VECTOR2I              pinPos = symbol->GetPosition();
-                std::vector<SCH_PIN*> pins = symbol->GetPins();
+                std::vector<SCH_PIN*> pins = symbol->GetPins( &ctx.path );
 
                 if( !pins.empty() )
                     pinPos = pins[0]->GetPosition();

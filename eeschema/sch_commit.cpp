@@ -457,9 +457,10 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
             if( schItem->Type() == SCH_SHEET_T )
             {
-                const auto* modifiedSheet = static_cast<const SCH_SHEET*>( schItem );
-                const auto* originalSheet = static_cast<const SCH_SHEET*>( itemCopy );
-                const bool hierarchyChanged = originalSheet->HasHierarchyChanges( *modifiedSheet );
+                const SCH_SHEET* modifiedSheet = static_cast<const SCH_SHEET*>( schItem );
+                const SCH_SHEET* originalSheet = static_cast<const SCH_SHEET*>( itemCopy );
+                const bool       hierarchyChanged = originalSheet->HasHierarchyChanges( *modifiedSheet );
+
                 refreshHierarchy |= hierarchyChanged;
 
                 // Stable ports are invalidated through their containing screen, including shared instances
@@ -484,7 +485,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 const SCH_SYMBOL* origSymbol = static_cast<const SCH_SYMBOL*>( itemCopy );
                 const SCH_SYMBOL* modSymbol = static_cast<const SCH_SYMBOL*>( schItem );
 
-                if( origSymbol->GetPins().size() != modSymbol->GetPins().size() )
+                if( origSymbol->GetPins( &currentSheet ).size() != modSymbol->GetPins( &currentSheet ).size() )
                     connectivityCleanUp = GLOBAL_CLEANUP;
 
                 if( origSymbol->GetSchSymbolLibraryName() != modSymbol->GetSchSymbolLibraryName() )
@@ -806,7 +807,13 @@ void SCH_COMMIT::RevertToCheckpoint( int aCheckpoint )
 
                 graph->RemoveItem( symbolCopy );
 
-                for( SCH_PIN* pin : symbolCopy->GetPins() )
+                // Lazy eval of sheet list; this is expensive even when unsorted
+                if( sheets.empty() )
+                    sheets = schematic->Hierarchy();
+
+                SCH_SHEET_PATH sheet = sheets.FindSheetForScreen( screen );
+
+                for( SCH_PIN* pin : symbolCopy->GetPins( &sheet ) )
                     graph->RemoveItem( pin );
             }
 

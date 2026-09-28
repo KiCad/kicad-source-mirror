@@ -2514,10 +2514,9 @@ void SCHEMATIC::RebuildConnectivity( std::function<void( SCH_ITEM* )>* aChangedI
 
 void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags,
                                         TOOL_MANAGER* aToolManager, PROGRESS_REPORTER* aProgressReporter,
-                                        KIGFX::SCH_VIEW*                  aSchView,
+                                        KIGFX::SCH_VIEW* aSchView,
                                         std::function<void( SCH_ITEM* )>* aChangedItemHandler,
-                                        PICKED_ITEMS_LIST*                aLastChangeList,
-                                        bool aCleanupDone )
+                                        PICKED_ITEMS_LIST* aLastChangeList, bool aCleanupDone )
 {
     SCH_COMMIT localCommit( aToolManager );
 
@@ -2551,9 +2550,8 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
         if( !localCommit.Empty() )
             localCommit.Push( _( "Schematic Cleanup" ), SKIP_CONNECTIVITY | DELETE_REMOVED_ITEMS );
 
-        m_connectivity->Recalculate( *this, false,
-                                    aChangedItemHandler ? *aChangedItemHandler
-                                                        : std::function<void( SCH_ITEM* )>() );
+        m_connectivity->Recalculate( *this, false, aChangedItemHandler ? *aChangedItemHandler
+                                                                       : std::function<void( SCH_ITEM* )>() );
         return;
     }
 
@@ -2586,35 +2584,36 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
         std::vector<CHANGED_ITEM>                        changed_connectable_items;
 
         // Lambda to add an item to the connectivity update sets
-        auto addItemToChangeSet = [&changed_items, &pts, &item_paths]( CHANGED_ITEM itemData )
-        {
-            std::vector<SCH_SHEET_PATH>& paths = itemData.screen->GetClientSheetPaths();
+        auto addItemToChangeSet =
+                [&changed_items, &pts, &item_paths]( CHANGED_ITEM itemData )
+                {
+                    std::vector<SCH_SHEET_PATH>& paths = itemData.screen->GetClientSheetPaths();
 
-            std::vector<VECTOR2I> tmp_pts = itemData.item->GetConnectionPoints();
-            pts.insert( tmp_pts.begin(), tmp_pts.end() );
-            changed_items.insert( itemData.item );
+                    std::vector<VECTOR2I> tmp_pts = itemData.item->GetConnectionPoints();
+                    pts.insert( tmp_pts.begin(), tmp_pts.end() );
+                    changed_items.insert( itemData.item );
 
-            for( SCH_SHEET_PATH& path : paths )
-                item_paths.insert( std::make_pair( path, itemData.item ) );
+                    for( SCH_SHEET_PATH& path : paths )
+                        item_paths.insert( std::make_pair( path, itemData.item ) );
 
-            if( !itemData.linked_item || !itemData.linked_item->IsConnectable() )
-                return;
+                    if( !itemData.linked_item || !itemData.linked_item->IsConnectable() )
+                        return;
 
-            tmp_pts = itemData.linked_item->GetConnectionPoints();
-            pts.insert( tmp_pts.begin(), tmp_pts.end() );
-            changed_items.insert( itemData.linked_item );
+                    tmp_pts = itemData.linked_item->GetConnectionPoints();
+                    pts.insert( tmp_pts.begin(), tmp_pts.end() );
+                    changed_items.insert( itemData.linked_item );
 
-            // We have to directly add the pins here because the link may not exist on the schematic
-            // anymore and so won't be picked up by GetScreen()->Items().Overlapping() below.
-            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( itemData.linked_item ) )
-            {
-                std::vector<SCH_PIN*> pins = symbol->GetPins();
-                changed_items.insert( pins.begin(), pins.end() );
-            }
+                    // We have to directly add the pins here because the link may not exist on the schematic
+                    // anymore and so won't be picked up by GetScreen()->Items().Overlapping() below.
+                    if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( itemData.linked_item ) )
+                    {
+                        std::vector<SCH_PIN*> pins = symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
+                        changed_items.insert( pins.begin(), pins.end() );
+                    }
 
-            for( SCH_SHEET_PATH& path : paths )
-                item_paths.insert( std::make_pair( path, itemData.linked_item ) );
-        };
+                    for( SCH_SHEET_PATH& path : paths )
+                        item_paths.insert( std::make_pair( path, itemData.linked_item ) );
+                };
 
         // Get all changed connectable items and determine all changed screens
         for( unsigned ii = 0; ii < aLastChangeList->GetCount(); ++ii )
@@ -2665,17 +2664,18 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
         std::map<KIID, EDA_ITEM*> itemMap;
         list.FillItemMap( itemMap );
 
-        auto addPastAndPresentContainedItems = [&]( SCH_RULE_AREA* changedRuleArea, SCH_SCREEN* screen )
-        {
-            for( const KIID& pastItem : changedRuleArea->GetPastContainedItems() )
-            {
-                if( itemMap.contains( pastItem ) )
-                    addItemToChangeSet( { static_cast<SCH_ITEM*>( itemMap[pastItem] ), nullptr, screen } );
-            }
+        auto addPastAndPresentContainedItems =
+                [&]( SCH_RULE_AREA* changedRuleArea, SCH_SCREEN* screen )
+                {
+                    for( const KIID& pastItem : changedRuleArea->GetPastContainedItems() )
+                    {
+                        if( itemMap.contains( pastItem ) )
+                            addItemToChangeSet( { static_cast<SCH_ITEM*>( itemMap[pastItem] ), nullptr, screen } );
+                    }
 
-            for( SCH_ITEM* containedItem : changedRuleArea->GetContainedItems() )
-                addItemToChangeSet( { containedItem, nullptr, screen } );
-        };
+                    for( SCH_ITEM* containedItem : changedRuleArea->GetContainedItems() )
+                        addItemToChangeSet( { containedItem, nullptr, screen } );
+                };
 
         for( const auto& [changedRuleArea, screen] : changed_rule_areas )
             addPastAndPresentContainedItems( changedRuleArea, screen );
@@ -2728,7 +2728,7 @@ void SCHEMATIC::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS a
                 else if( item->Type() == SCH_SYMBOL_T && item->IsConnected( pt ) )
                 {
                     SCH_SYMBOL*           symbol = static_cast<SCH_SYMBOL*>( item );
-                    std::vector<SCH_PIN*> pins = symbol->GetPins();
+                    std::vector<SCH_PIN*> pins = symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
 
                     changed_items.insert( pins.begin(), pins.end() );
 

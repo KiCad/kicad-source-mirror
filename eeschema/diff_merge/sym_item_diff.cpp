@@ -39,10 +39,10 @@ namespace
     {
         switch( aItem->Type() )
         {
-        case SCH_SHAPE_T: return _( "Graphic" );
-        case SCH_TEXT_T: return _( "Text" );
+        case SCH_SHAPE_T:   return _( "Graphic" );
+        case SCH_TEXT_T:    return _( "Text" );
         case SCH_TEXTBOX_T: return _( "Text Box" );
-        default: return _( "Item" );
+        default:            return _( "Item" );
         }
     }
 
@@ -91,7 +91,7 @@ namespace
 
         if( aSym )
         {
-            for( SCH_PIN* pin : aSym->GetPins() )
+            for( SCH_PIN* pin : aSym->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
             {
                 if( pin )
                     out[pin->GetNumber()] = pin;
@@ -202,8 +202,10 @@ std::vector<SYM_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LI
             std::vector<PROPERTY_DELTA> deltas = DiffItemProperties( best, after );
 
             if( !deltas.empty() )
+            {
                 out.push_back( { after, graphicTypeName( after ), wxEmptyString, CHANGE_KIND::MODIFIED,
                                  std::move( deltas ) } );
+            }
         }
         else
         {
@@ -215,8 +217,10 @@ std::vector<SYM_ELEMENT> DiffSymbolElements( const LIB_SYMBOL* aBefore, const LI
     for( const SCH_ITEM* before : beforeGraphics )
     {
         if( !matchedBefore.count( before ) )
+        {
             out.push_back( { before, graphicTypeName( before ), wxEmptyString, CHANGE_KIND::REMOVED,
                              ItemProperties( before, false ) } );
+        }
     }
 
     return out;

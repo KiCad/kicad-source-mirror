@@ -1468,7 +1468,7 @@ void LIB_SYMBOL::AddDrawItem( SCH_ITEM* aItem, bool aSort )
 }
 
 
-std::vector<const SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) const
+std::vector<SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) const
 {
     if( IsDerived() )
     {
@@ -1478,7 +1478,7 @@ std::vector<const SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodySt
             return const_cast<const LIB_SYMBOL*>( root.get() )->GetGraphicalPins( aUnit, aBodyStyle );
     }
 
-    std::vector<const SCH_PIN*> pins;
+    std::vector<SCH_PIN*> pins;
 
     /* Notes:
      * when aUnit == 0: no unit filtering
@@ -1497,43 +1497,7 @@ std::vector<const SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodySt
         if( aBodyStyle && item.m_bodyStyle && ( item.m_bodyStyle != aBodyStyle ) )
             continue;
 
-        pins.push_back( static_cast<const SCH_PIN*>( &item ) );
-    }
-
-    return pins;
-}
-
-
-std::vector<SCH_PIN*> LIB_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle )
-{
-    if( IsDerived() )
-    {
-        std::shared_ptr<LIB_SYMBOL> root = GetSafeRootSymbol( this, __FUNCTION__ );
-
-        if( root.get() != this )
-            return root->GetGraphicalPins( aUnit, aBodyStyle );
-    }
-
-    std::vector<SCH_PIN*> pins;
-
-    /* Notes:
-     * when aUnit == 0: no unit filtering
-     * when aBodyStyle == 0: no body style filtering
-     * when m_unit == 0, the item is common to all units
-     * when m_bodyStyle == 0, the item is common to all body styles
-     */
-
-    for( SCH_ITEM& item : m_drawings[SCH_PIN_T] )
-    {
-        // Unit filtering:
-        if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
-            continue;
-
-        // Body style filtering:
-        if( aBodyStyle && item.m_bodyStyle && ( item.m_bodyStyle != aBodyStyle ) )
-            continue;
-
-        pins.push_back( static_cast<SCH_PIN*>( &item ) );
+        pins.push_back( static_cast<SCH_PIN*>( const_cast<SCH_ITEM*>( &item ) ) );
     }
 
     return pins;
@@ -1563,7 +1527,7 @@ std::vector<LIB_SYMBOL::UNIT_PIN_INFO> LIB_SYMBOL::GetUnitPinInfo() const
         UNIT_PIN_INFO unitInfo;
         unitInfo.m_unitName = GetUnitDisplayName( unitIdx, false );
 
-        std::vector<const SCH_PIN*> pinList = GetGraphicalPins( unitIdx, 0 );
+        std::vector<SCH_PIN*> pinList = GetGraphicalPins( unitIdx, 0 );
 
         std::sort( pinList.begin(), pinList.end(), compareByPosition );
 
@@ -1747,13 +1711,6 @@ bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums,
     // The loop never gave up, so no conflicts were found.
     return false;
 }
-
-std::vector<SCH_PIN*> LIB_SYMBOL::GetPins() const
-{
-    // Back-compat shim: return graphical pins for all units/body styles, violating const
-    return const_cast<LIB_SYMBOL*>( this )->GetGraphicalPins( 0, 0 );
-}
-
 
 const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aBodyStyle, bool aIgnoreHiddenFields,
                                             bool aIgnoreLabelsOnInvisiblePins ) const

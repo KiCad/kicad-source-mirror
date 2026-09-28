@@ -2686,7 +2686,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     bool usingAlternateSymbol = ( originalSymbol != aSymbol->GetLibSymbolRef().get()
                                   && originalSymbol != LIB_SYMBOL::GetDummy() );
 
-    std::vector<const SCH_PIN*> originalPins = originalSymbol->GetGraphicalPins( unit, bodyStyle );
+    std::vector<SCH_PIN*> originalPins = originalSymbol->GetGraphicalPins( unit, bodyStyle );
 
     if( usingAlternateSymbol && originalPins.empty() && bodyStyle > 1 )
         originalPins = originalSymbol->GetGraphicalPins( unit, 1 );

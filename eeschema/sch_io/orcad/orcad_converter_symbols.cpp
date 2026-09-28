@@ -3301,7 +3301,7 @@ void ORCAD_CONVERTER::placePowerSymbol( ORCAD_RAW_PAGE& aPage, const ORCAD_GRAPH
 
     SCH_SYMBOL* symbol = instantiateSymbol( *libSymbol, libname, 1, ori, pos, aSheetPath );
 
-    std::vector<SCH_PIN*> pins = symbol->GetPins();
+    std::vector<SCH_PIN*> pins = symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES );
     VECTOR2I              sourcePinDbu = powerPinPos( aPage, aInst );
 
     if( !pins.empty() )

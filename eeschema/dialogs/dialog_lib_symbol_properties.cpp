@@ -849,7 +849,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnBodyStyle( wxCommandEvent& event )
     {
         PIN_NUMBERS pinNumbersWithAlternates;
 
-        for( SCH_PIN* pin : m_libEntry->GetPins() )
+        for( SCH_PIN* pin : m_libEntry->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         {
             if( !pin->GetAlternates().empty() )
                 pinNumbersWithAlternates.insert( pin->GetNumber() );

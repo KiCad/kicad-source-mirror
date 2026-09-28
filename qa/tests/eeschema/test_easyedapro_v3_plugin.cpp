@@ -70,9 +70,8 @@ BOOST_AUTO_TEST_CASE( EasyEdaProV3CanReadSchematicFile )
 
 BOOST_AUTO_TEST_CASE( EasyEdaProV3GuessPluginType )
 {
-    BOOST_CHECK_EQUAL(
-            SCH_IO_MGR::GuessPluginTypeFromSchPath( getEasyEdaProV3ArchivePath() ),
-            SCH_IO_MGR::SCH_EASYEDAPRO_V3 );
+    BOOST_CHECK_EQUAL( SCH_IO_MGR::GuessPluginTypeFromSchPath( getEasyEdaProV3ArchivePath() ),
+                       SCH_IO_MGR::SCH_EASYEDAPRO_V3 );
 }
 
 
@@ -102,5 +101,5 @@ BOOST_AUTO_TEST_CASE( EasyEdaProV3EnumeratesAndLoadsSymbolLibrary )
     BOOST_REQUIRE( symbol );
     BOOST_CHECK_EQUAL( symbol->GetName(), wxString( wxS( "LS2K0300" ) ) );
     BOOST_CHECK_EQUAL( symbol->GetUnitCount(), 5 );
-    BOOST_CHECK( symbol->GetPins().size() > 200 );
+    BOOST_CHECK( symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ).size() > 200 );
 }

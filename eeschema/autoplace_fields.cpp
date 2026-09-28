@@ -249,7 +249,7 @@ protected:
     {
         unsigned pin_count = 0;
 
-        for( SCH_PIN* each_pin : m_symbol->GetPins() )
+        for( SCH_PIN* each_pin : m_symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         {
             if( !each_pin->IsVisible() && !m_is_power_symbol )
                 continue;
@@ -585,7 +585,7 @@ protected:
                 {
                     BOX2I pinsBox;
 
-                    for( SCH_PIN* each_pin : m_symbol->GetPins() )
+                    for( SCH_PIN* each_pin : m_symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
                     {
                         if( !each_pin->IsVisible() && !m_is_power_symbol )
                             continue;
