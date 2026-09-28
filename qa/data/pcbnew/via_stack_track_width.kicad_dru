@@ -1,0 +1,128 @@
+(version 1)
+
+(rule "clearance_under_fpga"
+	(constraint clearance (min 0.1mm) )
+	(constraint hole_size (min 0.2mm) )
+	(constraint via_diameter (min 0.4mm) )
+	(condition "A.intersectsArea('underFPGA') || A.intersectsArea('underDDR')" )
+)
+
+(rule "Track-to-Hole Clearance"
+(constraint clearance(min 0.2mm))
+(condition "(A.Type == 'Track' && B.Type == 'Hole')")
+)
+
+
+(rule "clearance_under_fpga_thieving"
+	(constraint clearance (min 1mm) )
+	(condition "A.Type == 'Zone' && A.Name == 'Thieving'")
+)
+
+#(rule "ViaHole_to_Track_Clearance"
+    #(constraint physical_hole_clearance (min 0.254mm))
+    #(condition "A.Type == 'Via' && B.Type == 'Track'"))
+
+
+(rule "zdiff_100R_outer"
+	(layer outer)
+	(constraint track_width (min 0.115mm) (max 0.2mm) (opt 0.17mm) )
+	(constraint diff_pair_gap (min 0.1mm) ( max 1mm) (opt 0.2mm) )
+	(constraint diff_pair_uncoupled (max 5mm) )
+	(condition "A.inDiffPair('*')" )
+)
+
+(rule "zdiff_100R_inner"
+	(layer inner)
+	(constraint track_width (min 0.1mm) (max 0.1mm) (opt 0.1mm) )
+	(constraint diff_pair_gap (min 0.1mm) ( max 1mm) (opt 0.16mm) )
+	(constraint diff_pair_uncoupled (max 5mm) )
+	(condition  "A.inDiffPair('*')")
+)
+
+(rule "skew_diff_pair"
+	(constraint skew (max 0.15mm) (within_diff_pairs))
+)
+
+(rule "zse_50R_outer"
+	(layer outer)
+	(constraint track_width (min 0.1mm) (max 1mm) (opt 0.2mm) )
+	(condition "A.NetClass == 'zse_50r'" )
+)
+
+(rule "zse_50R_inner"
+	(layer inner)
+	(constraint track_width (min 0.1mm) (max 1mm) (opt 0.11mm) )
+	(condition "A.NetClass == 'zse_50r'" )
+)
+
+(rule "length_DDR_CMD_FPGA_To_IC13"
+#	(constraint length (min 42.5mm) (max 43.5mm) (opt 43mm) )
+	(condition "A.NetClass == 'DDR4_CMD' && A.fromTo('IC14-*','IC13-*' )" )
+)
+
+(rule "length_DDR_CMD_IC13_To_IC5"
+#	(constraint length (min 16.5mm) (max 17.5mm) (opt 17mm ) )
+	(condition "A.NetClass == 'DDR4_CMD' && A.fromTo('IC13-*','IC5-*')" )
+)
+
+(rule "length_DDR_Byte0"
+#	(constraint length (min 29.5mm) (max 30.5mm) (opt 30mm))
+	(condition "A.NetClass == 'DDR4_BYTE0' && A.fromTo('IC14-*','IC13-*' )")
+)
+
+(rule "length_DDR_Byte1"
+#	(constraint length (min 31mm) (max 32mm) (opt 31.5mm))
+	(condition "A.NetClass == 'DDR4_BYTE1' && A.fromTo('IC14-*','IC13-*' )")
+)
+
+(rule "length_DDR_Byte2"
+#	(constraint length (min 39mm) (max 40mm) (opt 40.5mm))
+	(condition "A.NetClass == 'DDR4_BYTE2' && A.fromTo('IC14-*','IC5-*' )")
+)
+
+(rule "length_DDR_Byte3"
+#	(constraint length (min 33mm) (max 34mm) (opt 33.5mm))
+	(condition "A.NetClass == 'DDR4_BYTE3' && A.fromTo('IC14-*','IC5-*' )")
+)
+
+(rule allow_topsilk_collisions
+    (constraint silk_clearance)
+	(severity ignore)
+    (condition "A.memberOfGroup('ok_silk') && B.memberOfGroup('ok_silk')")
+)
+
+(rule allow_topsilk_collisions
+    (constraint silk_clearance)
+	(severity ignore)
+	(condition "A.intersectsArea('silk_ok_top') && B.intersectsArea('silk_ok_top')")
+)
+
+(rule allow_topsilk_collisions_overlapping
+    (constraint silk_clearance)
+	(severity ignore)	
+	(condition "A.hasComponentClass('Overlapping') && B.hasComponentClass('Overlapping')")
+)
+
+(rule courtyard_overlap
+    (constraint courtyard_clearance)
+	(severity ignore)
+	(condition "A.Component_Class == 'Overlapping' && B.Component_Class == 'Overlapping'")
+)
+
+(rule Overlap
+(constraint courtyard_clearance)
+(severity ignore)
+(condition "A.hasComponentClass('Overlapping')")
+)
+
+# Allow silk intersection with board edge for connectors
+(rule silk_board_edge_clearance
+    (constraint edge_clearance)
+    (severity ignore)
+    (condition "(A.memberOfFootprint('J*') || A.memberOfFootprint('P*')) && B.Layer=='Edge.Cuts'"))
+
+(rule silkscreen_clipped_by_soldermask
+	(constraint edge_clearance)
+	(severity ignore)
+	(condition "A.memberOfFootprint('P*') && B.Layer=='F.Mask'")
+)

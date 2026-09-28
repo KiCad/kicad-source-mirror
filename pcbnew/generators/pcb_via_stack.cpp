@@ -325,6 +325,8 @@ std::vector<BOARD_ITEM*> PCB_VIA_STACK::BuildMembers( BOARD* aBoard, int aNetCod
 
         int trackWidth = ( nc && nc->HasTrackWidth() ) ? nc->GetTrackWidth() : bds.GetCurrentTrackWidth();
 
+        DRC_ENGINE* drcEngine = bds.m_DRCEngine.get();
+
         for( int i = 0; i < nHops - 1; ++i )
         {
             VECTOR2I a = hopPos( i );
@@ -338,7 +340,24 @@ std::vector<BOARD_ITEM*> PCB_VIA_STACK::BuildMembers( BOARD* aBoard, int aNetCod
             trace->SetStart( a );
             trace->SetEnd( b );
             trace->SetLayer( layers[i + 1] );
-            trace->SetWidth( trackWidth );
+
+            // Width rules can depend on the layer and the net, as the router resolves them
+            DRC_CONSTRAINT width;
+
+            if( drcEngine )
+            {
+                // Rebuilds are freed on each drag step, so their pointers must not seed the geometry caches
+                trace->SetFlags( ROUTER_TRANSIENT );
+                width = drcEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, trace, nullptr, layers[i + 1] );
+                trace->ClearFlags( ROUTER_TRANSIENT );
+            }
+
+            int layerWidth = trackWidth;
+
+            if( !width.IsNull() && width.GetSeverity() != RPT_SEVERITY_IGNORE )
+                layerWidth = width.GetValue().PinnedOpt();
+
+            trace->SetWidth( std::max( bds.m_TrackMinWidth, layerWidth ) );
 
             members.push_back( trace );
         }

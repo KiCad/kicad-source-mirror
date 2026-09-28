@@ -31,6 +31,7 @@
 #include <netinfo.h>
 #include <json_common.h>
 #include <collectors.h>
+#include <drc/drc_engine.h>
 #include <common.h>
 #include <footprint.h>
 #include <pad.h>
@@ -2321,6 +2322,58 @@ BOOST_AUTO_TEST_CASE( ConnectingTraceWidthSurvivesAnEdit )
 
     BOOST_CHECK_MESSAGE( traceWidth() == placed, "trace width changed from " << placed << " to " << traceWidth()
                                                                              << " without the user touching it" );
+}
+
+
+// vme-wren's Default net class asks for 0.08 mm, under the 0.1 mm board minimum and the zdiff_100R_inner rule
+BOOST_AUTO_TEST_CASE( ConnectingTraceTakesTheRuleWidth )
+{
+    SETTINGS_MANAGER       settingsManager;
+    std::unique_ptr<BOARD> board;
+
+    KI_TEST::LoadBoard( settingsManager, "via_stack_track_width", board );
+
+    PCB_VIA_STACK stack( board.get(), F_Cu );
+    stack.SetStartLayer( F_Cu );
+    stack.SetEndLayer( In2_Cu );
+    stack.SetStyle( VIA_STACK_STYLE::STAGGERED );
+    stack.SetPitch( pcbIUScale.mmToIU( 0.6 ) );
+    stack.SetPosition( VECTOR2I( pcbIUScale.mmToIU( 155 ), pcbIUScale.mmToIU( 209 ) ) );
+
+    auto checkWidth = [&]( const wxString& aNetName, double aWidthMm )
+    {
+        NETINFO_ITEM* net = board->FindNet( aNetName );
+        BOOST_REQUIRE( net );
+
+        std::vector<BOARD_ITEM*> members = stack.BuildMembers( board.get(), net->GetNetCode() );
+        int                      traces = 0;
+
+        for( BOARD_ITEM* item : members )
+        {
+            if( item->Type() == PCB_TRACE_T )
+            {
+                int width = static_cast<PCB_TRACK*>( item )->GetWidth();
+
+                traces++;
+                BOOST_CHECK_MESSAGE( width == pcbIUScale.mmToIU( aWidthMm ), aNetName << " trace is " << width );
+            }
+
+            delete item;
+        }
+
+        BOOST_CHECK_EQUAL( traces, 1 );
+    };
+
+    checkWidth( wxS( "/DDR4-PS.RSTN" ), 0.1 );
+    checkWidth( wxS( "/DDR4-PS.CK_P" ), 0.1 );
+
+    // With a lower board minimum only the inner diff pair rule still holds the pair at 0.1 mm
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    bds.m_TrackMinWidth = pcbIUScale.mmToIU( 0.05 );
+    bds.m_DRCEngine->InitEngine( wxFileName( KI_TEST::GetPcbnewTestDataDir() + "via_stack_track_width.kicad_dru" ) );
+
+    checkWidth( wxS( "/DDR4-PS.RSTN" ), 0.08 );
+    checkWidth( wxS( "/DDR4-PS.CK_P" ), 0.1 );
 }
 
 
