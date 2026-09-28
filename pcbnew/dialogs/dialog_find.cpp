@@ -202,8 +202,7 @@ void DIALOG_FIND::search( bool aDirection )
 
     EDA_SEARCH_DATA& frd = m_frame->GetFindReplaceData();
 
-    if( m_matchCase->GetValue() )
-        frd.matchCase = true;
+    frd.matchCase = m_matchCase->GetValue();
 
     if( m_matchWords->GetValue() )
         frd.matchMode = EDA_SEARCH_MATCH_MODE::WHOLEWORD;
