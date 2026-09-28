@@ -2817,12 +2817,10 @@ BITMAPS SCH_SYMBOL::GetMenuImage() const
 
 EMBEDDED_FILES* SCH_SYMBOL::GetEmbeddedFiles()
 {
-    std::unique_ptr<LIB_SYMBOL>& libSymbolRef = GetLibSymbolRef();
+    if( std::unique_ptr<LIB_SYMBOL>& libSymbol = GetLibSymbolRef() )
+        return libSymbol->GetEmbeddedFiles();
 
-    if( !libSymbolRef )
-        return nullptr;
-
-    return GetLibSymbolRef()->GetEmbeddedFiles();
+    return nullptr;
 }
 
 
@@ -2898,13 +2896,16 @@ bool SCH_SYMBOL::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) c
     // Fields are searched as separate items
 
     // Search non-field lib draw items (pins, graphical text) for completeness.
-    for( const SCH_ITEM& drawItem : GetLibSymbolRef()->GetDrawItems() )
+    if( const std::unique_ptr<LIB_SYMBOL>& libSymbol = GetLibSymbolRef() )
     {
-        if( drawItem.Type() == SCH_FIELD_T )
-            continue;
+        for( const SCH_ITEM& drawItem : libSymbol->GetDrawItems() )
+        {
+            if( drawItem.Type() == SCH_FIELD_T )
+                continue;
 
-        if( drawItem.Matches( aSearchData, aAuxData ) )
-            return true;
+            if( drawItem.Matches( aSearchData, aAuxData ) )
+                return true;
+        }
     }
 
     // Symbols are searchable via the child field and pin item text.
