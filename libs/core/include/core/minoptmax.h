@@ -31,6 +31,9 @@ public:
     T Opt() const { return m_hasOpt ? m_opt : Min(); };
     T PinnedOpt() const { return std::max<T>( Min(), std::min<T>( Max(), Opt() ) ) ; }
 
+    /// Like PinnedOpt(), but preferring \a aDefault when there is no opt value.
+    T PinnedOpt( T aDefault ) const { return std::max<T>( Min(), std::min<T>( Max(), m_hasOpt ? m_opt : aDefault ) ); }
+
     bool HasMin() const { return m_hasMin; }
     bool HasMax() const { return m_hasMax; }
     bool HasOpt() const { return m_hasOpt; }

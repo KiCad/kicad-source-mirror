@@ -1305,6 +1305,18 @@ int ROUTER_TOOL::onViaStackCommand( const TOOL_EVENT& aEvent )
 
         viaSize = ( nc && nc->HasuViaDiameter() ) ? nc->GetuViaDiameter() : bds.GetCurrentViaSize();
         viaDrill = ( nc && nc->HasuViaDrill() ) ? nc->GetuViaDrill() : bds.GetCurrentViaDrill();
+
+        // Route with the size the stack's hops will resolve to from the via rules
+        PCB_VIA dummyVia( board() );
+        dummyVia.SetFlags( ROUTER_TRANSIENT );
+        dummyVia.SetViaType( VIATYPE::MICROVIA );
+        dummyVia.SetLayerPair( currentLayer, targetLayer );
+        dummyVia.SetNetCode( net );
+        dummyVia.SetPosition( m_endSnapPoint );
+        dummyVia.SetSizeFromRules( viaSize, viaDrill );
+
+        viaSize = dummyVia.GetWidth( PADSTACK::ALL_LAYERS );
+        viaDrill = dummyVia.GetDrillValue();
     }
     else
     {

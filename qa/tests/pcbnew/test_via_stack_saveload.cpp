@@ -46,6 +46,7 @@
 #include <generators/pcb_via_stack.h>
 #include <generators_mgr.h>
 #include <router/router_tool.h>
+#include <settings/settings_manager.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
@@ -2667,6 +2668,42 @@ BOOST_AUTO_TEST_CASE( RegenerateFreesMembersAddedEarlierInTheCommit )
 
     BOOST_CHECK_EQUAL( board->Tracks().size(), tracks );
     BOOST_CHECK( after == before );
+}
+
+
+// vme-wren's clearance_under_fpga rule asks for 0.4/0.2 mm vias under the FPGA, above the 0.3/0.1 mm net class
+BOOST_AUTO_TEST_CASE( NetclassMicroviaTakesTheRuleMinimum )
+{
+    SETTINGS_MANAGER       settingsManager;
+    std::unique_ptr<BOARD> board;
+
+    KI_TEST::LoadBoard( settingsManager, "via_stack_uvia_rule", board );
+
+    NETINFO_ITEM* net = board->FindNet( wxS( "P1V8" ) );
+    BOOST_REQUIRE( net );
+
+    PCB_VIA_STACK stack( board.get(), F_Cu );
+    stack.SetStartLayer( F_Cu );
+    stack.SetEndLayer( In1_Cu );
+    stack.SetUseNetclass( true );
+
+    auto checkSize = [&]( const VECTOR2I& aPos, double aDiameterMm, double aDrillMm )
+    {
+        stack.SetPosition( aPos );
+
+        std::vector<BOARD_ITEM*> members = stack.BuildMembers( board.get(), net->GetNetCode() );
+        BOOST_REQUIRE_EQUAL( members.size(), 1u );
+
+        PCB_VIA* via = static_cast<PCB_VIA*>( members[0] );
+        BOOST_CHECK_EQUAL( via->GetWidth( PADSTACK::ALL_LAYERS ), pcbIUScale.mmToIU( aDiameterMm ) );
+        BOOST_CHECK_EQUAL( via->GetDrillValue(), pcbIUScale.mmToIU( aDrillMm ) );
+
+        delete via;
+    };
+
+    // The end of a real P1V8 track under the FPGA, then clear of the underFPGA area
+    checkSize( VECTOR2I( pcbIUScale.mmToIU( 155.12157 ), pcbIUScale.mmToIU( 214.280635 ) ), 0.4, 0.2 );
+    checkSize( VECTOR2I( pcbIUScale.mmToIU( 175 ), pcbIUScale.mmToIU( 214.280635 ) ), 0.3, 0.1 );
 }
 
 

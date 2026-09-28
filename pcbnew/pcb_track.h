@@ -516,6 +516,16 @@ public:
     MINOPTMAX<int> GetWidthConstraint( wxString* aSource = nullptr ) const override;
     MINOPTMAX<int> GetDrillConstraint( wxString* aSource = nullptr ) const;
 
+    /**
+     * Give the via a uniform padstack sized from its diameter and hole rules.
+     *
+     * A rule's preferred value wins over the one given here, and the result is pinned to the rule's limits.
+     *
+     * @param aDiameter is the preferred diameter when no rule gives one.
+     * @param aDrill is the preferred drill when no rule gives one.
+     */
+    void SetSizeFromRules( int aDiameter, int aDrill );
+
     void         SetFrontTentingMode( TENTING_MODE aMode );
     TENTING_MODE GetFrontTentingMode() const;
     void         SetBackTentingMode( TENTING_MODE aMode );

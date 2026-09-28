@@ -293,6 +293,10 @@ std::vector<BOARD_ITEM*> PCB_VIA_STACK::BuildMembers( BOARD* aBoard, int aNetCod
         via->SetDrill( viaDrill );
         via->SetPosition( hopPos( i ) );
 
+        // Net class sizes follow the via rules, which can depend on each hop's layers and position
+        if( m_useNetclass )
+            via->SetSizeFromRules( viaSize, viaDrill );
+
         // Only a hop reaching an outer layer has a face to cap.
         bool capped = m_capped && ( IsExternalCopperLayer( layers[i] ) || IsExternalCopperLayer( layers[i + 1] ) );
 
@@ -1296,6 +1300,9 @@ int DRAWING_TOOL::PlaceMicroviaStack( const TOOL_EVENT& aEvent )
         {
             if( BOARD_CONNECTED_ITEM* copper = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
             {
+                // Candidates are freed below, so their pointers must not seed the rule caches
+                copper->SetFlags( ROUTER_TRANSIENT );
+
                 if( CheckItemDRCViolation( copper, m_frame, drcEngine.get(), worstClearance, drcEpsilon ) )
                 {
                     violates = true;

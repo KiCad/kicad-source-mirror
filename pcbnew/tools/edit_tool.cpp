@@ -1294,25 +1294,18 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 
             commit.Modify( via );
 
-            int new_width;
-            int new_drill;
-
             if( via->GetViaType() == VIATYPE::MICROVIA )
             {
                 NETCLASS* netClass = via->GetEffectiveNetClass();
 
-                new_width = netClass->GetuViaDiameter();
-                new_drill = netClass->GetuViaDrill();
+                via->SetSizeFromRules( netClass->GetuViaDiameter(), netClass->GetuViaDrill() );
             }
             else
             {
-                new_width = board()->GetDesignSettings().GetCurrentViaSize();
-                new_drill = board()->GetDesignSettings().GetCurrentViaDrill();
+                via->SetDrill( board()->GetDesignSettings().GetCurrentViaDrill() );
+                via->SetPadstackMode( PADSTACK::MODE::NORMAL );
+                via->SetWidth( PADSTACK::ALL_LAYERS, board()->GetDesignSettings().GetCurrentViaSize() );
             }
-
-            via->SetDrill( new_drill );
-            via->SetPadstackMode( PADSTACK::MODE::NORMAL );
-            via->SetWidth( PADSTACK::ALL_LAYERS, new_width );
         }
         else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
         {

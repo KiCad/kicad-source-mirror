@@ -55,8 +55,14 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK* aItem, PICKED_ITEMS_LIST* 
     }
     else if( via && via->GetViaType() == VIATYPE::MICROVIA )
     {
-        new_width = aItem->GetEffectiveNetClass()->GetuViaDiameter();
-        new_drill = aItem->GetEffectiveNetClass()->GetuViaDrill();
+        NETCLASS* netClass = via->GetEffectiveNetClass();
+        PCB_VIA   original( *via );
+
+        // Resolve on the live via, since rules such as fromTo() match board items only
+        via->SetSizeFromRules( netClass->GetuViaDiameter(), netClass->GetuViaDrill() );
+        new_width = via->GetWidth( PADSTACK::ALL_LAYERS );
+        new_drill = via->GetDrillValue();
+        via->CopyFrom( &original );
     }
     else if( via )
     {

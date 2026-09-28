@@ -708,13 +708,36 @@ MINOPTMAX<int> PCB_VIA::GetDrillConstraint( wxString* aSource ) const
     {
         BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
 
-        constraint = bds.m_DRCEngine->EvalRules( HOLE_SIZE_CONSTRAINT, this, nullptr, m_layer );
+        // Holes are not layer-specific, as in the hole size test
+        constraint = bds.m_DRCEngine->EvalRules( HOLE_SIZE_CONSTRAINT, this, nullptr, UNDEFINED_LAYER );
     }
 
     if( aSource )
         *aSource = constraint.GetName();
 
     return constraint.Value();
+}
+
+
+void PCB_VIA::SetSizeFromRules( int aDiameter, int aDrill )
+{
+    // Area rules test the via's shape, so evaluate them at the preferred size
+    SetPadstackMode( PADSTACK::MODE::NORMAL );
+    SetWidth( PADSTACK::ALL_LAYERS, aDiameter );
+    SetDrill( aDrill );
+
+    // Callers size vias that may still move, so keep them out of the pointer-keyed rule caches
+    bool wasTransient = HasFlag( ROUTER_TRANSIENT );
+    SetFlags( ROUTER_TRANSIENT );
+
+    int diameter = GetWidthConstraint().PinnedOpt( aDiameter );
+    int drill = GetDrillConstraint().PinnedOpt( aDrill );
+
+    if( !wasTransient )
+        ClearFlags( ROUTER_TRANSIENT );
+
+    SetWidth( PADSTACK::ALL_LAYERS, diameter );
+    SetDrill( drill );
 }
 
 

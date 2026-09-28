@@ -4240,6 +4240,14 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         virtual ~VIA_PLACER()
         {
         }
+
+        void sizeMicrovia( PCB_VIA* aVia )
+        {
+            NETCLASS* netClass = aVia->GetEffectiveNetClass();
+
+            aVia->SetSizeFromRules( netClass->GetuViaDiameter(), netClass->GetuViaDrill() );
+        }
+
         bool checkDRCViolation( PCB_VIA* aVia )
         {
             return CheckItemDRCViolation( aVia, m_frame, m_drcEngine.get(), m_worstClearance, m_drcEpsilon );
@@ -4556,7 +4564,17 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 via->SetIsFree( via->GetNetCode() > 0 );
             }
 
-            if( checkDRCViolation( via ) )
+            // A rejected via moves on, so keep it out of the pointer-keyed rule caches
+            via->SetFlags( ROUTER_TRANSIENT );
+
+            // Rules can depend on the net and position, which are only final here
+            if( via->GetViaType() == VIATYPE::MICROVIA )
+                sizeMicrovia( via );
+
+            bool violatesDRC = checkDRCViolation( via );
+            via->ClearFlags( ROUTER_TRANSIENT );
+
+            if( violatesDRC )
             {
                 m_frame->ShowInfoBarError( _( "Via location violates DRC." ), true,
                                            WX_INFOBAR::MESSAGE_TYPE::DRC_VIOLATION );
@@ -4631,8 +4649,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             if( via->GetViaType() == VIATYPE::MICROVIA )
             {
-                via->SetWidth( PADSTACK::ALL_LAYERS, via->GetEffectiveNetClass()->GetuViaDiameter() );
-                via->SetDrill( via->GetEffectiveNetClass()->GetuViaDrill() );
+                sizeMicrovia( via );
             }
             else
             {
