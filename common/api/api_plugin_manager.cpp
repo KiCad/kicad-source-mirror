@@ -313,6 +313,18 @@ void API_PLUGIN_MANAGER::ReloadPlugins( std::optional<wxString> aDirectoryToScan
 }
 
 
+std::map<int, wxString>& API_PLUGIN_MANAGER::ButtonBindings( FRAME_T aFrame )
+{
+    return m_buttonBindings[aFrame];
+}
+
+
+std::map<int, wxString>& API_PLUGIN_MANAGER::MenuBindings( FRAME_T aFrame )
+{
+    return m_menuBindings[aFrame];
+}
+
+
 bool API_PLUGIN_MANAGER::RecreatePluginEnvironment( const wxString& aIdentifier )
 {
     if( !m_pluginsCache.contains( aIdentifier ) )

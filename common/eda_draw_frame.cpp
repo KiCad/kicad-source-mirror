@@ -1471,7 +1471,7 @@ void EDA_DRAW_FRAME::AddApiPluginTools( ACTION_TOOLBAR* aToolbar )
 {
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
 
-    mgr.ButtonBindings().clear();
+    mgr.ButtonBindings( m_ident ).clear();
 
     std::vector<const PLUGIN_ACTION*> actions = GetOrderedPluginActions( PluginActionScope(), config() );
 
@@ -1504,7 +1504,7 @@ void EDA_DRAW_FRAME::AddApiPluginTools( ACTION_TOOLBAR* aToolbar )
         Connect( button->GetId(), wxEVT_COMMAND_MENU_SELECTED,
                  wxCommandEventHandler( EDA_DRAW_FRAME::OnApiPluginInvoke ) );
 
-        mgr.ButtonBindings().insert( { button->GetId(), action->identifier } );
+        mgr.ButtonBindings( m_ident ).insert( { button->GetId(), action->identifier } );
     }
 }
 
@@ -1513,13 +1513,13 @@ void EDA_DRAW_FRAME::OnApiPluginInvoke( wxCommandEvent& aEvent )
 {
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
 
-    if( mgr.ButtonBindings().count( aEvent.GetId() ) )
+    if( mgr.ButtonBindings( m_ident ).contains( aEvent.GetId() ) )
     {
         std::shared_ptr<REPORTER> reporter;
 
         if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
             reporter = std::make_shared<STATUSBAR_WARNING_REPORTER>( statusBar, wxS( "plugin" ) );
 
-        mgr.InvokeAction( mgr.ButtonBindings().at( aEvent.GetId() ), reporter );
+        mgr.InvokeAction( mgr.ButtonBindings( m_ident ).at( aEvent.GetId() ), reporter );
     }
 }

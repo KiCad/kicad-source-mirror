@@ -25,6 +25,7 @@
 #include <wx/event.h>
 
 #include <api/api_plugin.h>
+#include <frame_type.h>
 #include <json_schema_validator.h>
 #include <kicommon.h>
 
@@ -88,9 +89,9 @@ public:
 
     std::vector<const PLUGIN_ACTION*> GetActionsForScope( PLUGIN_ACTION_SCOPE aScope );
 
-    std::map<int, wxString>& ButtonBindings() { return m_buttonBindings; }
+    std::map<int, wxString>& ButtonBindings( FRAME_T aFrame );
 
-    std::map<int, wxString>& MenuBindings() { return m_menuBindings; }
+    std::map<int, wxString>& MenuBindings( FRAME_T aFrame );
 
     std::shared_ptr<REPORTER> GetReporter() { return m_reloadReporter; }
 
@@ -121,11 +122,11 @@ private:
     /// Map of plugin identifier to a path for the plugin's virtual environment, if it has one
     std::map<wxString, wxString> m_environmentCache;
 
-    /// Map of button wx item id to action identifier
-    std::map<int, wxString> m_buttonBindings;
+    /// Map of button wx item id to action identifier, per frame
+    std::map<FRAME_T, std::map<int, wxString>> m_buttonBindings;
 
-    /// Map of menu wx item id to action identifier
-    std::map<int, wxString> m_menuBindings;
+    /// Map of menu wx item id to action identifier, per frame
+    std::map<FRAME_T, std::map<int, wxString>> m_menuBindings;
 
     std::set<wxString> m_readyPlugins;
 
