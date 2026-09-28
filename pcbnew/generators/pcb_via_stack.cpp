@@ -224,6 +224,17 @@ void PCB_VIA_STACK::addMember( BOARD* aBoard, BOARD_COMMIT* aCommit, BOARD_ITEM*
 }
 
 
+std::pair<int, int> PCB_VIA_STACK::GetNetclassViaSize( BOARD* aBoard, int aNetCode )
+{
+    BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
+    NETINFO_ITEM*          net = aBoard->FindNet( aNetCode );
+    NETCLASS*              nc = net ? net->GetNetClass() : nullptr;
+
+    return { ( nc && nc->HasuViaDiameter() ) ? nc->GetuViaDiameter() : bds.GetCurrentViaSize(),
+             ( nc && nc->HasuViaDrill() ) ? nc->GetuViaDrill() : bds.GetCurrentViaDrill() };
+}
+
+
 std::vector<BOARD_ITEM*> PCB_VIA_STACK::BuildMembers( BOARD* aBoard, int aNetCode ) const
 {
     std::vector<BOARD_ITEM*> members;
@@ -248,11 +259,7 @@ std::vector<BOARD_ITEM*> PCB_VIA_STACK::BuildMembers( BOARD* aBoard, int aNetCod
 
     if( m_useNetclass )
     {
-        NETINFO_ITEM* net = aBoard->FindNet( aNetCode );
-        NETCLASS*     nc = net ? net->GetNetClass() : nullptr;
-
-        viaSize = ( nc && nc->HasuViaDiameter() ) ? nc->GetuViaDiameter() : bds.GetCurrentViaSize();
-        viaDrill = ( nc && nc->HasuViaDrill() ) ? nc->GetuViaDrill() : bds.GetCurrentViaDrill();
+        std::tie( viaSize, viaDrill ) = GetNetclassViaSize( aBoard, aNetCode );
     }
     else
     {
@@ -892,6 +899,7 @@ void PCB_VIA_STACK::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
     // Dialog edits a scratch copy so the undo snapshot below sees the pre-edit settings.
     PCB_VIA_STACK temp( GetBoard(), GetLayer() );
     temp.ApplyPreset( ToPreset() );
+    temp.SetNetCode( GetNetCode() );
 
     DIALOG_MICROVIA_STACK dlg( aEditFrame, &temp );
 

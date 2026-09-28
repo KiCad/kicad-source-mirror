@@ -31,6 +31,8 @@
 DIALOG_MICROVIA_STACK::DIALOG_MICROVIA_STACK( PCB_BASE_EDIT_FRAME* aParent, PCB_VIA_STACK* aStack ) :
         DIALOG_MICROVIA_STACK_BASE( aParent ),
         m_stack( aStack ),
+        m_explicitViaSize( aStack->GetViaSize() ),
+        m_explicitViaDrill( aStack->GetViaDrill() ),
         m_viaSize( aParent, m_viaSizeLabel, m_viaSizeCtrl, m_viaSizeUnit ),
         m_viaDrill( aParent, m_viaDrillLabel, m_viaDrillCtrl, m_viaDrillUnit ),
         m_pitch( aParent, m_pitchLabel, m_pitchCtrl, m_pitchUnit )
@@ -61,9 +63,12 @@ bool DIALOG_MICROVIA_STACK::TransferDataToWindow()
     m_filled->SetValue( m_stack->IsFilled() );
     m_capped->SetValue( m_stack->IsCapped() );
 
-    m_viaSize.SetValue( m_stack->GetViaSize() );
-    m_viaDrill.SetValue( m_stack->GetViaDrill() );
+    m_viaSize.SetValue( m_explicitViaSize );
+    m_viaDrill.SetValue( m_explicitViaDrill );
     m_pitch.SetValue( m_stack->GetPitch() );
+
+    if( m_useNetclass->GetValue() )
+        showNetclassViaSize();
 
     updateEnableState();
     return true;
@@ -162,7 +167,32 @@ void DIALOG_MICROVIA_STACK::onTypeChanged( wxCommandEvent& aEvent )
 }
 
 
+void DIALOG_MICROVIA_STACK::showNetclassViaSize()
+{
+    auto [size, drill] = PCB_VIA_STACK::GetNetclassViaSize( m_stack->GetBoard(), m_stack->GetNetCode() );
+
+    m_viaSize.SetValue( size );
+    m_viaDrill.SetValue( drill );
+}
+
+
 void DIALOG_MICROVIA_STACK::onUseNetclass( wxCommandEvent& aEvent )
 {
+    if( m_useNetclass->GetValue() )
+    {
+        m_explicitViaSize = m_viaSize.GetIntValue();
+        m_explicitViaDrill = m_viaDrill.GetIntValue();
+        showNetclassViaSize();
+    }
+    else
+    {
+        // A zero size was never explicit, so the net class value is the better starting point
+        if( m_explicitViaSize > 0 )
+            m_viaSize.SetValue( m_explicitViaSize );
+
+        if( m_explicitViaDrill > 0 )
+            m_viaDrill.SetValue( m_explicitViaDrill );
+    }
+
     updateEnableState();
 }

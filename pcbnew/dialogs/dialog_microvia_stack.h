@@ -39,8 +39,13 @@ private:
     void onTypeChanged( wxCommandEvent& aEvent );
     void onUseNetclass( wxCommandEvent& aEvent );
     void updateEnableState();
+    void showNetclassViaSize();
 
     PCB_VIA_STACK* m_stack;
+
+    // Sizes typed while "use netclass values" was off, restored when it is turned off again
+    int m_explicitViaSize;
+    int m_explicitViaDrill;
 
     UNIT_BINDER m_viaSize;
     UNIT_BINDER m_viaDrill;
