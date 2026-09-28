@@ -51,8 +51,8 @@ void ShowMdwPartHistory( EDA_BASE_FRAME* aFrame, const MDW_PART_TARGET& aTarget,
 
     std::shared_ptr<const MDW_LIBRARY_COPY> copy = MDW_LIBRARY_SOURCES::Get().SharedCopy( aTarget.marker );
 
-    versions->SetItem( aTarget.source, aTarget.item, copy ? copy->local_root : wxString(), aTarget.localPath, aFrame,
-                    aName );
+    versions->SetItem( aTarget.source, aTarget.item, copy ? copy->local_root : wxString(), { aTarget.localPath },
+                       aFrame, aName );
 
     dlg->Bind( wxEVT_CLOSE_WINDOW,
                [dlg]( wxCloseEvent& )

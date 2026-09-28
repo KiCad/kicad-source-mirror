@@ -772,8 +772,9 @@ void PANEL_GIT_WORKSPACE::showDetail( const MDW_ITEM_INFO& aItem )
     item.item_id = aItem.item_id;
 
     m_versions->SetItem( MDW_CLIENT::Get().ProjectSource(), item, m_frame->Prj().GetProjectDirectory(),
-                         WorkspaceCheckoutPath( m_frame->Prj().GetProjectPath(), aItem ), m_frame,
-                         wxString() );
+                         WorkspaceWorkingFiles( m_frame->Prj().GetLocalSettings().WorkspaceItems(),
+                                                m_frame->Prj().GetProjectPath(), aItem ),
+                         m_frame, wxString() );
 }
 
 

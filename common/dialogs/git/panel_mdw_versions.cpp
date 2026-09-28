@@ -25,21 +25,29 @@
 #include <confirm.h>
 #include <diff_merge/merge_dispatch.h>
 #include <eda_base_frame.h>
+#include <project.h>
 #include <mdw/client/mdw_paged_read.h>
+#include <mdw/client/mdw_revision_copy.h>
 #include <mdw/client/mdw_source.h>
 #include <reporter.h>
+#include <wildcards_and_files_ext.h>
 
+#include <algorithm>
 #include <fstream>
 #include <sstream>
 
 #include <wx/button.h>
 #include <wx/filefn.h>
+#include <wx/filedlg.h>
 #include <wx/filename.h>
 #include <wx/listctrl.h>
+#include <wx/menu.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/datetime.h>
 #include <wx/intl.h>
+#include <wx/stdpaths.h>
+#include <wx/weakref.h>
 
 
 namespace
@@ -85,11 +93,20 @@ PANEL_MDW_VERSIONS::PANEL_MDW_VERSIONS( wxWindow* aParent, wxWindowID aId, const
     wxStaticText* label = new wxStaticText( this, wxID_ANY, _( "Versions:" ) );
 
     m_list = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
+    m_copyStatus = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                    wxST_ELLIPSIZE_MIDDLE | wxST_NO_AUTORESIZE );
     m_compareButton = new wxButton( this, wxID_ANY, _( "Compare" ) );
+    m_saveCopyButton = new wxButton( this, wxID_ANY, _( "Save Copy..." ) );
+
+    wxBoxSizer* buttons = new wxBoxSizer( wxHORIZONTAL );
+
+    buttons->Add( m_saveCopyButton, 0, wxRIGHT, FromDIP( 8 ) );
+    buttons->Add( m_compareButton, 0 );
 
     sizer->Add( label, 0, wxBOTTOM, FromDIP( 4 ) );
     sizer->Add( m_list, 1, wxEXPAND );
-    sizer->Add( m_compareButton, 0, wxALIGN_RIGHT | wxTOP, FromDIP( 8 ) );
+    sizer->Add( m_copyStatus, 0, wxEXPAND | wxTOP, FromDIP( 4 ) );
+    sizer->Add( buttons, 0, wxALIGN_RIGHT | wxTOP, FromDIP( 8 ) );
     SetSizer( sizer );
 
     m_list->AppendColumn( _( "Version" ), wxLIST_FORMAT_LEFT, FromDIP( 80 ) );
@@ -97,8 +114,19 @@ PANEL_MDW_VERSIONS::PANEL_MDW_VERSIONS( wxWindow* aParent, wxWindowID aId, const
     m_list->AppendColumn( _( "Date" ), wxLIST_FORMAT_LEFT, FromDIP( 130 ) );
     m_list->AppendColumn( _( "Message" ), wxLIST_FORMAT_LEFT, FromDIP( 220 ) );
 
+    m_list->Bind( wxEVT_SIZE,
+                  [this]( wxSizeEvent& aEvent )
+                  {
+                      fitMessageColumn();
+                      aEvent.Skip();
+                  } );
+
     m_compareButton->SetToolTip( _( "Select a version to compare it with the previous one." ) );
     m_compareButton->Disable();
+
+    m_saveCopyButton->SetToolTip( _( "Save the selected version to a file." ) );
+    m_saveCopyButton->Disable();
+    m_copyStatus->Hide();
 
     auto selectionChanged = [this]( wxListEvent& )
     {
@@ -108,11 +136,24 @@ PANEL_MDW_VERSIONS::PANEL_MDW_VERSIONS( wxWindow* aParent, wxWindowID aId, const
     m_list->Bind( wxEVT_LIST_ITEM_SELECTED, selectionChanged );
     m_list->Bind( wxEVT_LIST_ITEM_DESELECTED, selectionChanged );
 
+    m_list->Bind( wxEVT_LIST_ITEM_RIGHT_CLICK,
+                  [this]( wxListEvent& aEvent )
+                  {
+                      onContextMenu( aEvent );
+                  } );
+
     m_compareButton->Bind( wxEVT_BUTTON,
                            [this]( wxCommandEvent& )
                            {
                                onCompare();
                            } );
+
+    m_saveCopyButton->Bind( wxEVT_BUTTON,
+                            [this]( wxCommandEvent& )
+                            {
+                                if( std::optional<long> row = singleRevisionRow() )
+                                    onSaveCopy( *row );
+                            } );
 }
 
 
@@ -122,10 +163,15 @@ void PANEL_MDW_VERSIONS::Clear()
     m_olderOp = MDW_OP();
     m_newerOp = MDW_OP();
     m_newestOp = MDW_OP();
+    m_copyOp = MDW_OP();
+    m_copying = false;
+    m_itemGeneration++;
+    setCopyStatus( wxEmptyString );
     m_newestScratch.reset();
     m_newestFor.clear();
     m_item = MDW_ITEM_REF();
     m_checkoutPath.clear();
+    m_workingFiles.clear();
     m_workingCopy.clear();
     m_revisions.clear();
     m_olderUnread = false;
@@ -160,8 +206,8 @@ void PANEL_MDW_VERSIONS::RefreshChanges()
 
 
 void PANEL_MDW_VERSIONS::SetItem( const std::shared_ptr<MDW_SOURCE>& aSource, const MDW_ITEM_REF& aItem,
-                                  const wxString& aLocalRoot, const wxString& aCheckoutPath, EDA_BASE_FRAME* aFrame,
-                                  const wxString& aMemberName )
+                                  const wxString& aLocalRoot, const std::vector<wxString>& aWorkingFiles,
+                                  EDA_BASE_FRAME* aFrame, const wxString& aMemberName )
 {
     Clear();
 
@@ -175,7 +221,8 @@ void PANEL_MDW_VERSIONS::SetItem( const std::shared_ptr<MDW_SOURCE>& aSource, co
     m_source = aSource;
     m_localRoot = aLocalRoot;
     m_item = aItem;
-    m_checkoutPath = aCheckoutPath;
+    m_workingFiles = aWorkingFiles;
+    m_checkoutPath = aWorkingFiles.empty() ? wxString() : aWorkingFiles.front();
     m_memberName = aMemberName;
     m_frame = aFrame;
 
@@ -370,6 +417,8 @@ void PANEL_MDW_VERSIONS::fillList()
     if( m_olderUnread )
         m_list->InsertItem( m_list->GetItemCount(), _( "Older versions could not be read" ) );
 
+    // Rows enough to scroll narrow the list without a size event
+    fitMessageColumn();
     updateCompare();
 }
 
@@ -380,10 +429,50 @@ std::optional<std::pair<long, long>> PANEL_MDW_VERSIONS::comparePair() const
 }
 
 
+std::optional<long> PANEL_MDW_VERSIONS::singleRevisionRow() const
+{
+    std::vector<long> rows = selectedRows( *m_list );
+
+    if( rows.size() != 1 || rows[0] >= static_cast<long>( m_rowKeys.size() ) || m_rowKeys[rows[0]].IsEmpty() )
+        return std::nullopt;
+
+    return rows[0];
+}
+
+
+void PANEL_MDW_VERSIONS::fitMessageColumn()
+{
+    const int last = m_list->GetColumnCount() - 1;
+    int       used = 0;
+
+    for( int col = 0; col < last; ++col )
+        used += m_list->GetColumnWidth( col );
+
+    // MSW draws the width past the last column as an empty header with no row highlight
+    m_list->SetColumnWidth( last, std::max( FromDIP( 220 ), m_list->GetClientSize().x - used ) );
+}
+
+
+void PANEL_MDW_VERSIONS::setCopyStatus( const wxString& aText, const wxString& aPath )
+{
+    m_copyStatus->SetLabel( aText );
+    m_copyStatus->Show( !aText.IsEmpty() );
+
+    // The label is ellipsized to fit, so the whole path is only in the tooltip
+    if( aPath.IsEmpty() )
+        m_copyStatus->UnsetToolTip();
+    else
+        m_copyStatus->SetToolTip( aPath );
+
+    Layout();
+}
+
+
 void PANEL_MDW_VERSIONS::updateCompare()
 {
     m_compareButton->Enable( !m_comparing && comparePair().has_value()
                              && compareDocument().kind != KICAD_DIFF::DOC_KIND::UNKNOWN );
+    m_saveCopyButton->Enable( !m_copying && singleRevisionRow().has_value() );
 }
 
 
@@ -525,4 +614,207 @@ void PANEL_MDW_VERSIONS::onCompare()
                            else
                                finish( aStatus );
                        } );
+}
+
+
+wxString PANEL_MDW_VERSIONS::copyFolder() const
+{
+    if( m_memberName.IsEmpty() )
+        return wxFileName( m_checkoutPath ).GetPath();
+
+    // A member's file lives in the team library's checkout, where a copy would sit as an untracked file
+    if( m_frame && !m_frame->Prj().IsNullProject() )
+        return m_frame->Prj().GetProjectPath();
+
+    return wxStandardPaths::Get().GetDocumentsDir();
+}
+
+
+void PANEL_MDW_VERSIONS::onSaveCopy( long aRow )
+{
+    if( !m_source || m_copying || aRow < 0 || aRow >= static_cast<long>( m_rowKeys.size() )
+        || m_rowKeys[aRow].IsEmpty() )
+    {
+        return;
+    }
+
+    // The modal dialog keeps history reads and item changes running, so nothing below may point into members
+    const MDW_REVISION                revision = m_revisions[aRow - ( hasWorkingCopy() ? 1 : 0 )];
+    const std::shared_ptr<MDW_SOURCE> source = m_source;
+    const MDW_ITEM_REF                item = m_item;
+    const std::vector<wxString>       workingFiles = m_workingFiles;
+    const wxString                    memberName = m_memberName;
+    const unsigned                    generation = m_itemGeneration;
+    const wxFileName                  checkout( m_checkoutPath );
+    wxString                          wildcard;
+
+    switch( compareDocument().kind )
+    {
+    case KICAD_DIFF::DOC_KIND::PCB: wildcard = FILEEXT::PcbFileWildcard(); break;
+    case KICAD_DIFF::DOC_KIND::SCH: wildcard = FILEEXT::KiCadSchematicFileWildcard(); break;
+    case KICAD_DIFF::DOC_KIND::SYM_LIB: wildcard = FILEEXT::KiCadSymbolLibFileWildcard(); break;
+    case KICAD_DIFF::DOC_KIND::FP_LIB:
+    case KICAD_DIFF::DOC_KIND::FOOTPRINT: wildcard = FILEEXT::KiCadFootprintLibFileWildcard(); break;
+    default: break;
+    }
+
+    wildcard = wildcard.IsEmpty() ? FILEEXT::AllFilesWildcard() : wildcard + wxS( "|" ) + FILEEXT::AllFilesWildcard();
+
+    wxFileDialog dialog( this, _( "Save Copy" ), copyFolder(),
+                         MdwRevisionCopyName( checkout.GetFullName(), memberName, revision ), wildcard,
+                         wxFD_SAVE );
+
+    wxWeakRef<PANEL_MDW_VERSIONS> self( this );
+
+    if( dialog.ShowModal() != wxID_OK || !self )
+        return;
+
+    // Another item may have been shown, or another copy started, while the dialog was up
+    if( generation != m_itemGeneration || m_copying )
+        return;
+
+    const wxString target = dialog.GetPath();
+    const wxString refusal = MdwCopyTargetRefusal( target, workingFiles );
+
+    if( !refusal.IsEmpty() )
+    {
+        DisplayErrorMessage( this, refusal );
+        return;
+    }
+
+    // Only a file there now was offered for replacing, so one made during the download is kept
+    const bool replace = wxFileName::FileExists( target );
+
+#ifndef __WXMAC__
+    // Asked only after the refusal, so the working file is never offered for replacing first. The macOS save panel
+    // always asks itself
+    if( replace && !IsOK( this, wxString::Format( _( "The file '%s' already exists. Overwrite it?" ), target ) ) )
+        return;
+#endif
+
+    // The question is modal as well, so the panel may be gone or showing another item
+    if( !self || generation != m_itemGeneration || m_copying )
+        return;
+
+    MDW_ITEM_REF shown = item;
+
+    if( !memberName.IsEmpty() )
+        shown.path_hint = memberName;
+
+    const wxString label = MdwVersionSideLabel( shown, revision );
+
+    m_copying = true;
+    setCopyStatus( wxString::Format( _( "Saving %s…" ), label ) );
+    updateCompare();
+
+    m_copyOp = MdwSaveRevisionCopy( source, item, revision.revision_id, target, replace,
+                                    [this, label, target]( const MDW_RESULT& aResult, const MDW_REVISION& )
+                                    {
+                                        m_copying = false;
+
+                                        if( aResult.IsOk() )
+                                        {
+                                            setCopyStatus( wxString::Format( _( "Saved %s" ),
+                                                                             wxFileName( target ).GetFullName() ),
+                                                           target );
+                                            updateCompare();
+                                            return;
+                                        }
+
+                                        setCopyStatus( wxEmptyString );
+                                        updateCompare();
+
+                                        // The modal error can let the panel be destroyed, so nothing may follow it
+                                        DisplayErrorMessage( this,
+                                                             wxString::Format( _( "Could not save a copy of %s." ),
+                                                                               label ),
+                                                             MdwErrorText( aResult ) );
+                                    } );
+}
+
+
+void PANEL_MDW_VERSIONS::onContextMenu( wxListEvent& aEvent )
+{
+    const long row = aEvent.GetIndex();
+
+    if( row < 0 || row >= static_cast<long>( m_rowKeys.size() ) )
+        return;
+
+    auto select = [this]( std::initializer_list<long> aRows )
+    {
+        for( long selected : selectedRows( *m_list ) )
+            m_list->SetItemState( selected, 0, wxLIST_STATE_SELECTED );
+
+        for( long selected : aRows )
+            m_list->SetItemState( selected, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+    };
+
+    // The menu acts on the clicked row alone, as the buttons would, which a right click does not always select
+    select( { row } );
+
+    const long total = static_cast<long>( m_rowKeys.size() );
+    const bool isVersion = !m_rowKeys[row].IsEmpty();
+    const bool canCompare = !m_comparing && compareDocument().kind != KICAD_DIFF::DOC_KIND::UNKNOWN;
+
+    // PopupMenu runs events, so a read may refill the rows before an entry is chosen
+    auto rowNow = [this, generation = m_itemGeneration, key = m_rowKeys[row]]() -> std::optional<long>
+    {
+        if( generation != m_itemGeneration )
+            return std::nullopt;
+
+        auto it = std::find( m_rowKeys.begin(), m_rowKeys.end(), key );
+
+        if( it == m_rowKeys.end() )
+            return std::nullopt;
+
+        return static_cast<long>( it - m_rowKeys.begin() );
+    };
+
+    wxMenu menu;
+
+    wxMenuItem* previous = menu.Append( wxID_ANY, _( "Compare with Previous" ) );
+    wxMenuItem* working = hasWorkingCopy() ? menu.Append( wxID_ANY, _( "Compare with Working Copy" ) ) : nullptr;
+    wxMenuItem* save = menu.Append( wxID_ANY, _( "Save Copy..." ) );
+
+    previous->Enable( canCompare && row + 1 < total );
+
+    if( working )
+        working->Enable( canCompare && isVersion );
+
+    save->Enable( !m_copying && isVersion );
+
+    menu.Bind( wxEVT_MENU,
+               [this, rowNow, select]( wxCommandEvent& )
+               {
+                   if( std::optional<long> now = rowNow() )
+                   {
+                       select( { *now } );
+                       onCompare();
+                   }
+               },
+               previous->GetId() );
+
+    if( working )
+    {
+        menu.Bind( wxEVT_MENU,
+                   [this, rowNow, select]( wxCommandEvent& )
+                   {
+                       if( std::optional<long> now = rowNow(); now && hasWorkingCopy() )
+                       {
+                           select( { *now, 0 } );
+                           onCompare();
+                       }
+                   },
+                   working->GetId() );
+    }
+
+    menu.Bind( wxEVT_MENU,
+               [this, rowNow]( wxCommandEvent& )
+               {
+                   if( std::optional<long> now = rowNow() )
+                       onSaveCopy( *now );
+               },
+               save->GetId() );
+
+    m_list->PopupMenu( &menu );
 }
