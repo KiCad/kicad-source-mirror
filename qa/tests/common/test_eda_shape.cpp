@@ -217,6 +217,32 @@ BOOST_AUTO_TEST_CASE( SetArcGeometry )
 }
 
 /**
+ * SetArcGeometry must keep the supplied midpoint for arcs it stores with swapped ends, as it
+ * does for unswapped ones, so an unedited arc saves back unchanged (issue 10442)
+ */
+BOOST_AUTO_TEST_CASE( SetArcGeometryKeepsMidWhenEndsSwap )
+{
+    // On the circle but away from the half-angle point, so a recomputed mid cannot match it
+    const VECTOR2I mid( 6000000, 8000000 );
+
+    for( bool swap : { false, true } )
+    {
+        BOOST_TEST_INFO_SCOPE( ( swap ? "swapped" : "unswapped" ) );
+
+        EDA_SHAPE_MOCK shape( SHAPE_T::ARC );
+
+        if( swap )
+            shape.SetArcGeometry( { -10000000, 0 }, mid, { 10000000, 0 } );
+        else
+            shape.SetArcGeometry( { 10000000, 0 }, mid, { -10000000, 0 } );
+
+        BOOST_REQUIRE_EQUAL( shape.EndsSwapped(), swap );
+        BOOST_CHECK_EQUAL( shape.GetArcMid(), mid );
+    }
+}
+
+
+/**
  * Editing a small eeschema arc must not snap its radius up to the PCB-scale
  * 1 mil minimum.  The edit helpers used to hard-code pcbIUScale, which in
  * schematic IUs (1 IU = 100 nm) is a 25400 IU == 100 mil floor.

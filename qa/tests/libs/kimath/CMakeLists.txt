@@ -25,6 +25,7 @@ set( QA_KIMATH_SRCS
 
     geometry/geom_test_utils.cpp
     geometry/test_arc_chord_params.cpp
+    geometry/test_arc_construction.cpp
     geometry/test_bezier.cpp
     geometry/test_chamfer.cpp
     geometry/test_circle.cpp
