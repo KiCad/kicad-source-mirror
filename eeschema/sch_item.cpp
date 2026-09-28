@@ -93,6 +93,7 @@ SCH_ITEM& SCH_ITEM::operator=( const SCH_ITEM& aItem )
     if( SCH_SCREEN* screen = GetParentScreen() )
         screen->BumpConnectivityRevision( Type() );
 
+    m_customProperties   = aItem.m_customProperties;
     m_layer              = aItem.m_layer;
     m_unit               = aItem.m_unit;
     m_bodyStyle          = aItem.m_bodyStyle;
@@ -966,6 +967,22 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 
         if( m_Uuid > aOther.m_Uuid )
             return 1;
+    }
+
+    for( const auto& [name, value] : m_customProperties )
+    {
+        if( !aOther.m_customProperties.contains( name ) )
+        {
+            if( !value.IsEmpty() )
+                return false;
+
+            continue;
+        }
+
+        int cmp = aOther.m_customProperties.at( name ).Cmp( value );
+
+        if( cmp != 0 )
+            return cmp;
     }
 
     return 0;
