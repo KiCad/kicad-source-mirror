@@ -20,6 +20,8 @@
  */
 
 #include <bitmaps.h>
+#include <api/api_plugin_manager.h>
+#include <api/api_utils.h>
 #include <wx/hyperlink.h>
 #include <base_screen.h>
 #include <confirm.h>
@@ -214,6 +216,9 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     setupUIConditions();
 
     ReCreateMenuBar();
+
+    wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
+                    &SYMBOL_EDIT_FRAME::onPluginAvailabilityChanged, this );
 
     m_toolbarSettings = GetToolbarSettings<SYMBOL_EDIT_TOOLBAR_SETTINGS>( "symbol_editor-toolbars" );
     configureToolbars();
@@ -758,6 +763,15 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 }
 
 
+void SYMBOL_EDIT_FRAME::onPluginAvailabilityChanged( wxCommandEvent& aEvt )
+{
+    wxLogTrace( traceApi, "Symbol editor frame: EDA_EVT_PLUGIN_AVAILABILITY_CHANGED" );
+    RecreateToolbars();
+    ReCreateMenuBar();
+    aEvt.Skip();
+}
+
+
 bool SYMBOL_EDIT_FRAME::CanCloseSymbolFromSchematic( bool doClose )
 {
     if( IsContentModified() )
@@ -823,6 +837,9 @@ bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 void SYMBOL_EDIT_FRAME::doCloseWindow()
 {
     SCH_BASE_FRAME::doCloseWindow();
+
+    wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
+                      &SYMBOL_EDIT_FRAME::onPluginAvailabilityChanged, this );
 
     if( GetLibTree() )
         GetLibTree()->ShutdownPreviews();

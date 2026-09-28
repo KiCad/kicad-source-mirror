@@ -496,6 +496,8 @@ protected:
 
     void updateSelectionFilterVisbility() override;
 
+    void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
+
 private:
     // Set up the tool framework
     void setupTools();
