@@ -306,7 +306,7 @@ int ReadInt( char*& text, bool aSkipSeparator = true )
 
 double ReadDouble( char*& text, bool aSkipSeparator = true )
 {
-    double ret;
+    double ret = 0.0;
 
     // Skip spaces at the beginning of string: they are here not an operand separator
     while( isspace( *text ) )
@@ -334,7 +334,7 @@ double ReadDouble( char*& text, bool aSkipSeparator = true )
         // "0123456789." but can start by a '+' or '-' char.
         // others chars (usually '+' '-' '$' ',' ) are separators between operands and are not members
         // of the current float number
-        if( ( line[0] == '+' || line[0] == '-' ) && line.Length() > 1 && line[1] != '$' )
+        if( line.Length() > 1 && ( line[0] == '+' || line[0] == '-' ) && line[1] != '$' )
         {
             // It is the sign of a number, not an operator. Remove it to find the last digit
             line[0] = '0';
@@ -362,4 +362,3 @@ double ReadDouble( char*& text, bool aSkipSeparator = true )
 
     return ret;
 }
-
