@@ -132,7 +132,7 @@ bool DIALOG_PRINT_GERBVIEW::TransferDataToWindow()
         listBox->Append( filename.GetFullName() );
 
         if( settings()->m_LayerSet.test( ii) )
-            listBox->Check( ii, true );
+            listBox->Check( itemIdx % LAYER_PER_LIST, true );
 
         wxASSERT( m_layerToItemMap.count( ii ) == 0 );
         m_layerToItemMap[ii] = itemIdx;
