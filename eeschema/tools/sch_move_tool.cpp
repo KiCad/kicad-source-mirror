@@ -2912,7 +2912,10 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
     case SCH_HIER_LABEL_T:
     {
         SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( aItem );
-        if( !m_specialCaseLabels.count( label ) )
+
+        // Interactive dragging positions attached labels separately along their wire.
+        // Align to Grid has no such pass and must move them with the endpoint.
+        if( !m_inMoveTool || !m_specialCaseLabels.count( label ) )
             label->Move( aDelta );
 
         break;
