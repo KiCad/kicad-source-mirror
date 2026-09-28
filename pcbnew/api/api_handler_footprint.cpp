@@ -80,6 +80,22 @@ tl::expected<bool, ApiResponseStatus> API_HANDLER_FOOTPRINT::validateDocumentInt
         return tl::unexpected( e );
     }
 
+    // An empty library nickname addresses an unsaved new footprint
+    if( aDocument.lib_id().library_nickname().empty() )
+    {
+        BOARD* board = this->board();
+
+        if( !board || !board->GetFirstFootprint() )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( "no footprint is currently open" );
+            return tl::unexpected( e );
+        }
+
+        return true;
+    }
+
     LIB_ID target_fp = footprintContext()->GetLoadedFPID();
 
     if( !target_fp.IsValid() )
@@ -199,6 +215,9 @@ HANDLER_RESULT<GetOpenDocumentsResponse> API_HANDLER_FOOTPRINT::handleGetOpenDoc
     common::types::DocumentSpecifier doc;
 
     LIB_ID fpid = footprintContext()->GetLoadedFPID();
+
+    if( !board()->GetFirstFootprint() )
+        return response;
 
     doc.set_type( DocumentType::DOCTYPE_FOOTPRINT );
     doc.mutable_lib_id()->set_library_nickname( fpid.GetUniStringLibNickname() );
