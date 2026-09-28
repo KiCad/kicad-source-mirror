@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-28 07:51+0000\n"
+"PO-Revision-Date: 2026-09-28 18:35+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -7159,9 +7159,8 @@ msgid "Unrecognized"
 msgstr "Nerozpoznané"
 
 #: common/eda_shape.cpp:1268
-#, fuzzy
 msgid "Connected Lines"
-msgstr "Pripojené položky:"
+msgstr "Pripojené čiary"
 
 #: common/eda_shape.cpp:1276
 msgid "Curve"
@@ -7332,9 +7331,8 @@ msgid "Line Color"
 msgstr "Farba čiary"
 
 #: common/eda_shape.cpp:3014
-#, fuzzy
 msgid "Arc angle must not be zero."
-msgstr "Uhol oblúka musí byť väčší ako 0"
+msgstr "Uhol oblúka nesmie byť nulový."
 
 #: common/eda_shape.cpp:3049
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:217
@@ -8190,9 +8188,9 @@ msgid "Rebase commit failed: %s"
 msgstr "Zlyhal rebase commit: %s"
 
 #: common/git/libgit_backend.cpp:1631
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed: %s"
-msgstr "Zlyhalo ukončenie rebase: %s"
+msgstr "Rebase zlyhalo: %s"
 
 #: common/git/libgit_backend.cpp:1639
 #, c-format
@@ -8342,9 +8340,8 @@ msgid "Failed to acquire git index lock (another operation in progress?): %s"
 msgstr "Nepodarilo sa získať zámok indexu git (prebieha ďalšia operácia?): %s"
 
 #: common/history_lock.cpp:333
-#, fuzzy
 msgid "Cannot re-open history repository without the file lock"
-msgstr "Nepodarilo sa odstrániť dočasný výstupný súbor"
+msgstr "Nie je možné znova otvoriť úložisko histórie bez zámku súboru"
 
 #: common/hotkey_store.cpp:44
 msgid "Accept Autocomplete"
