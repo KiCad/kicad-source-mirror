@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-17 23:51+0000\n"
+"PO-Revision-Date: 2026-09-28 07:51+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
@@ -7186,9 +7186,8 @@ msgid "Unrecognized"
 msgstr "Tunnistamaton"
 
 #: common/eda_shape.cpp:1268
-#, fuzzy
 msgid "Connected Lines"
-msgstr "Yhdistetyt kohteet:"
+msgstr "Yhdistetyt viivat"
 
 #: common/eda_shape.cpp:1276
 msgid "Curve"
@@ -29463,9 +29462,9 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "Zip-tiedostoa '%s' ei voitu avata."
 
 #: gerbview/files.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
-msgstr "<b>Väliaikaisen tiedoston '%s' luominen epäonnistui. </b>"
+msgstr "Tilapäistiedoston luominen kohteen '%s' purkamista varten epäonnistui."
 
 #: gerbview/files.cpp:510
 #, c-format
