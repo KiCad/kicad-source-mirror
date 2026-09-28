@@ -259,6 +259,7 @@ set( KICOMMON_SRCS
     dialogs/dialog_mdw_release_base.cpp
     dialogs/mdw_library_checkin_rows.cpp
     dialogs/git/workspace_search_query.cpp
+    dialogs/git/workspace_tree.cpp
     dialogs/panel_startwizard_libraries_base.cpp
     dialogs/panel_startwizard_privacy_base.cpp
     dialogs/panel_startwizard_settings_base.cpp

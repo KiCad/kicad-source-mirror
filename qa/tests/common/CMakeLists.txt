@@ -198,6 +198,7 @@ set( QA_COMMON_SRCS
     test_mdw_serial_worker.cpp
     test_mdw_run_until_stopped.cpp
     test_workspace_item_files.cpp
+    test_workspace_tree.cpp
     test_throttle.cpp
     view/test_zoom_controller.cpp
     view/test_view_null_safety.cpp
