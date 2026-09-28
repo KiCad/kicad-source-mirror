@@ -286,7 +286,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     {
                         std::unique_lock<std::shared_mutex> writeLock( m_clearanceCacheMutex );
-                        m_netclassClearances[nc->GetName()] = nc->GetClearance();
+                        m_netclassClearances[nc->GetName()] = netclassRule.get();
                     }
                 }
 
@@ -820,6 +820,12 @@ void DRC_ENGINE::InitEngine( const std::shared_ptr<DRC_RULE>& rule )
     }
 
     m_constraintMap.clear();
+
+    // The netclass clearance cache points at the rules just destroyed
+    {
+        std::unique_lock<std::shared_mutex> writeLock( m_clearanceCacheMutex );
+        m_netclassClearances.clear();
+    }
 
     m_board->IncrementTimeStamp(); // Clear board-level caches
 
@@ -1915,7 +1921,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
         && !a_is_non_copper
         && ( !b || !b_is_non_copper ) )
     {
-        int clearance = 0;
+        DRC_RULE* netclassRule = nullptr;
+        int       clearance = 0;
 
         // Get netclass names outside of the lock to minimize critical section
         wxString ncNameA;
@@ -1947,15 +1954,21 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
                 auto it = m_netclassClearances.find( ncNameA );
 
                 if( it != m_netclassClearances.end() )
-                    clearance = it->second;
+                {
+                    netclassRule = it->second;
+                    clearance = netclassRule->m_Constraints[0].m_Value.Min();
+                }
             }
 
             if( !ncNameB.empty() )
             {
                 auto it = m_netclassClearances.find( ncNameB );
 
-                if( it != m_netclassClearances.end() )
-                    clearance = std::max( clearance, it->second );
+                if( it != m_netclassClearances.end() && it->second->m_Constraints[0].m_Value.Min() > clearance )
+                {
+                    netclassRule = it->second;
+                    clearance = netclassRule->m_Constraints[0].m_Value.Min();
+                }
             }
         }
 
@@ -1963,6 +1976,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRules( DRC_CONSTRAINT_T aConstraintType, const BO
         {
             constraint.m_Value.SetMin( clearance );
             constraint.m_ImplicitMin = true;
+            constraint.SetParentRule( netclassRule );
         }
     }
     else
