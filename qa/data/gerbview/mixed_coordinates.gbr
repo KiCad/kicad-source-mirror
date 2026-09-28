@@ -1,0 +1,32 @@
+G04 Synthetic reproducer for Repose 2500 - decimal mode leaking between XY and IJ fields*
+G04 Expected: two 1 mm squares with a 2 mm gap between their centerline edges*
+G04 With the bug: the right square becomes a 1 mm wide by 10 mm tall rectangle*
+%FSLAX21Y21*%
+%MOMM*%
+%LPD*%
+%ADD10C,0.05*%
+G01*
+D10*
+G04 Left square - fixed-format coordinates only - X 0 to 1 mm and Y 0 to 1 mm*
+X0Y0D02*
+X10Y0D01*
+X10Y10D01*
+X0Y10D01*
+X0Y0D01*
+G04 Right square - decimal X and fixed-format Y - X 3 to 4 mm and Y 0 to 1 mm*
+G04 Y10 means 1 mm under the declared 2.1 format even when X has a decimal point*
+X3.0Y0D02*
+X4.0Y0D01*
+X4.0Y10D01*
+X3.0Y10D01*
+X3.0Y0D01*
+G04 Two arcs above the squares - identical shapes offset by 4 mm in X*
+G04 Both centers are 1 mm above their endpoints; with the bug the second is 10 mm above*
+G75*
+G04 First arc - fixed-format I and J - center at 1 mm, 4 mm*
+X0Y30D02*
+G02X20Y30I10J10D01*
+G04 Second arc - decimal I and fixed-format J - center at 5 mm, 4 mm*
+X40Y30D02*
+G02X60Y30I1.0J10D01*
+M02*
