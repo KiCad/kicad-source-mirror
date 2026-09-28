@@ -1,0 +1,19 @@
+G04 Regression for Repose 2390 and 2404 - incomplete aperture macro primitives*
+G04 Expected: two insufficient-parameter errors without a crash*
+G04 The valid macros following the malformed definitions must still load*
+G04 Display: a 1 mm diameter circle at 1,1 mm and a triangle at 4,1 mm*
+%FSLAX24Y24*%
+%MOMM*%
+G04 Circle has exposure only - diameter and center coordinates are missing*
+%AMBrokenCircle*1,1*%
+G04 Outline has no parameters - even the vertex count is missing*
+%AMBrokenOutline*4*%
+%AMCircle*1,1,1,0,0*%
+%AMTriangle*4,1,3,0,0,1,0,0,1,0,0,0*%
+%ADD10Circle*%
+%ADD11Triangle*%
+D10*
+X10000Y10000D03*
+D11*
+X40000Y10000D03*
+M02*
