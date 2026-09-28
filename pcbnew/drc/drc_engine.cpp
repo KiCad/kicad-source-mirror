@@ -414,7 +414,7 @@ void DRC_ENGINE::loadImplicitRules()
 
                     DRC_CONSTRAINT constraint( VIA_DIAMETER_CONSTRAINT );
                     constraint.Value().SetMin( bds.m_MicroViasMinSize );
-                    constraint.Value().SetMin( nc->GetuViaDiameter() );
+                    constraint.Value().SetOpt( nc->GetuViaDiameter() );
                     netclassRule->AddConstraint( constraint );
                 }
 

@@ -1228,13 +1228,13 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER, &dummyVia,
                                              nullptr, m_startLayer, &constraint ) )
         {
-            viaDiameter = std::max( viaDiameter, constraint.m_Value.Opt() );
+            viaDiameter = std::max( viaDiameter, constraint.m_Value.PinnedOpt() );
         }
 
         if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_HOLE, &dummyVia,
                                              nullptr, m_startLayer, &constraint ) )
         {
-            viaDrill = std::max( viaDrill, constraint.m_Value.Opt() );
+            viaDrill = std::max( viaDrill, constraint.m_Value.PinnedOpt() );
         }
     }
     else

@@ -39,7 +39,7 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK* aItem, PICKED_ITEMS_LIST* 
         MINOPTMAX<int> constraint = aItem->GetWidthConstraint();
 
         if( constraint.HasOpt() )
-            new_width = constraint.Opt();
+            new_width = constraint.PinnedOpt();
         else if( constraint.Min() > 0 )
             new_width = constraint.Min();
 
@@ -48,7 +48,7 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK* aItem, PICKED_ITEMS_LIST* 
             constraint = via->GetDrillConstraint();
 
             if( constraint.HasOpt() )
-                new_drill = constraint.Opt();
+                new_drill = constraint.PinnedOpt();
             else if( constraint.Min() > 0 )
                 new_drill = constraint.Min();
         }

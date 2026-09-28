@@ -1674,13 +1674,13 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
                                                  currentLayer );
 
         if( !constraint.IsNull() )
-            sizes.SetViaDiameter( constraint.m_Value.Opt() );
+            sizes.SetViaDiameter( constraint.m_Value.PinnedOpt() );
 
         constraint = bds.m_DRCEngine->EvalRules( HOLE_SIZE_CONSTRAINT, &dummyVia, nullptr,
                                                  currentLayer );
 
         if( !constraint.IsNull() )
-            sizes.SetViaDrill( constraint.m_Value.Opt() );
+            sizes.SetViaDrill( constraint.m_Value.PinnedOpt() );
     }
     else
     {
