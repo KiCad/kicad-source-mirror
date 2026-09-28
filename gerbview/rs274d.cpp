@@ -459,7 +459,7 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
 
             char* cptr = (char*)x2buf.data();
             int code_command = ReadXCommandID( cptr );
-            ExecuteRS274XCommand( code_command, nullptr, 0, cptr );
+            ExecuteRS274XCommand( code_command, x2buf.data(), x2buf.size(), cptr );
         }
 
         GetEndOfBlock( m_LineBuffer, GERBER_BUFZ, text, m_Current_File );
