@@ -1792,6 +1792,20 @@ wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxStrin
             break;
 
         case SCH_SHEET_T:
+            if( const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( m_parent ) )
+            {
+                if( !aVariantName.IsEmpty() )
+                {
+                    const SCH_SHEET_INSTANCE* instance = sheet->GetInstance( aPath->Path() );
+
+                    if( instance->m_Variants.contains( aVariantName )
+                        && instance->m_Variants.at( aVariantName ).m_Fields.contains( GetName() ) )
+                    {
+                        return instance->m_Variants.at( aVariantName ).m_Fields.at( GetName() );
+                    }
+                }
+            }
+
             break;
 
         default:

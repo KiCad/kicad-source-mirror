@@ -794,8 +794,10 @@ wxString SCH_SHEET::GetFieldText( const wxString& aFieldName, const SCH_SHEET_PA
             const SCH_SHEET_INSTANCE* instance = getInstance( *aPath );
 
             if( instance->m_Variants.contains( aVariantName )
-              && instance->m_Variants.at( aVariantName ).m_Fields.contains( aFieldName ) )
+                && instance->m_Variants.at( aVariantName ).m_Fields.contains( aFieldName ) )
+            {
                 return instance->m_Variants.at( aVariantName ).m_Fields.at( aFieldName );
+            }
         }
 
         break;
