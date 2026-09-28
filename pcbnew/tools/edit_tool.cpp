@@ -3413,6 +3413,18 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 }
 
 
+bool EDIT_TOOL::CanDuplicateSelection( const SELECTION& aSelection )
+{
+    // Some generators cannot be duplicated on their own, and neither can several of them
+    return std::any_of( aSelection.begin(), aSelection.end(),
+                        []( EDA_ITEM* aItem )
+                        {
+                            PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( aItem );
+                            return !generator || generator->CanDuplicate();
+                        } );
+}
+
+
 int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
     if( isRouterActive() )
@@ -3436,15 +3448,8 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    // Some generators cannot be duplicated on their own.
-    if( selection.Size() == 1 )
-    {
-        if( PCB_GENERATOR* generator = dynamic_cast<PCB_GENERATOR*>( selection.Front() ) )
-        {
-            if( !generator->CanDuplicate() )
-                return 0;
-        }
-    }
+    if( !CanDuplicateSelection( selection ) )
+        return 0;
 
     // we have a selection to work on now, so start the tool process
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();

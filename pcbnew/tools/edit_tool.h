@@ -170,6 +170,11 @@ public:
     int Duplicate( const TOOL_EVENT& aItem );
 
     /**
+     * @return false when every item in \a aSelection is a generator that cannot be duplicated.
+     */
+    static bool CanDuplicateSelection( const SELECTION& aSelection );
+
+    /**
      * Invoke a dialog box to allow moving of the item by an exact amount.
      */
     int MoveExact( const TOOL_EVENT& aEvent );
