@@ -689,6 +689,8 @@ public:
     /**
      * Change the unit of \a aSymbol, swapping with another placed unit if the user asks.
      *
+     * @param aSymbol
+     * @param aUnit
      * @param aCommit is the commit of an edit in progress, such as a move.  The changes are staged
      *                there and not pushed.  Without it, a local commit is pushed.
      */
@@ -697,6 +699,8 @@ public:
     /**
      * Change the body style of \a aSymbol.
      *
+     * @param aSymbol
+     * @param aBodyStyle
      * @param aCommit is the commit of an edit in progress, such as a move.  The change is staged
      *                there and not pushed.  Without it, a local commit is pushed.
      */
@@ -834,6 +838,10 @@ public:
 
     /**
      * Generate the connection data for the entire schematic hierarchy.
+     *
+     * @param aCommit
+     * @param aCleanupFlags
+     * @param aProgressReporter
      * @param aCleanupDone the commit already applied cleanup; flags still select the rebuild scope.
      * @return false if recalculation failed; the frame has already reported the failure.
      */

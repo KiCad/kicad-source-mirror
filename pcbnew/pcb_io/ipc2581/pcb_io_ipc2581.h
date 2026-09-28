@@ -261,7 +261,7 @@ private:
     /**
      * True if a Component keeps a designator that a reference can name
      *
-     * Since rev B makes Component@refDes mandatory the export only replaces the name
+     * Since rev B makes Component\@refDes mandatory the export only replaces the name
      */
     bool refDesEmitted() const
     {

@@ -622,6 +622,8 @@ public:
      */
     int GetOwnClearance( PCB_LAYER_ID aLayer, wxString* aSource = nullptr ) const override;
 
+    double GetCoverageArea( int aTextMargin ) const override;
+
     /**
      * Convert the pad shape to a closed polygon. Circles and arcs are approximated by segments.
      *
@@ -630,13 +632,11 @@ public:
      * @param aClearance the clearance around the pad.
      * @param aMaxError maximum error from true when converting arcs.
      * @param aErrorLoc should the approximation error be placed outside or inside the polygon?
-     * @param ignoreLineWidth used for edge cuts where the line width is only for visualization.
+     * @param aIgnoreLineWidth used for edge cuts where the line width is only for visualization.
      */
-    double GetCoverageArea( int aTextMargin ) const override;
-
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                   int aMaxError, ERROR_LOC aErrorLoc = ERROR_INSIDE,
-                                  bool ignoreLineWidth = false ) const override;
+                                  bool aIgnoreLineWidth = false ) const override;
 
     /**
      * Build the corner list of the polygonal drill shape in the board coordinate system.

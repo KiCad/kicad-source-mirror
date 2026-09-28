@@ -129,7 +129,10 @@ public:
      * Generate ending geometry as polygon vertices at the given point and direction.
      * ARROW_OPEN produces an open 3-point polyline; all others produce closed polygons.
      *
+     * @param aPoint
      * @param aTangent  Outward-facing tangent direction at the endpoint.
+     * @param aLineWidth
+     * @param aPolygon
      */
     void GetShapes( const VECTOR2I& aPoint, const EDA_ANGLE& aTangent,
                     int aLineWidth, std::vector<VECTOR2I>& aPolygon ) const;

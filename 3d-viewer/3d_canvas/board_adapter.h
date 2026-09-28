@@ -139,6 +139,7 @@ public:
      * Creates the layers for the board, should be called after InitSettings
      *
      * @param aStatusReporter the pointer for the status reporter.
+     * @param aStop
      */
     void CreateLayers( std::shared_ptr<REPORTER> aStatusReporter, std::stop_token aStop = std::stop_token() );
 

@@ -73,10 +73,12 @@ public:
 private:
     /**
      * Checks for track/via/hole <-> clearance
+     *
      * @param item Track to text
      * @param itemShape Primitive track shape
      * @param layer Which layer to test (in case of vias this can be multiple
      * @param other item against which to test the track item
+     * @param aPreparedOther
      * @return false if there is a clearance violation reported, true if there is none
      */
     bool testSingleLayerItemAgainstItem( BOARD_ITEM* item, SHAPE* itemShape, PCB_LAYER_ID layer,

@@ -130,7 +130,7 @@ wxString AltiumUnnamedNetName( const BOARD& aBoard, int& aCounter );
 /**
  * Copy the values of Altium rules scoped to a single netclass onto that netclass.
  *
- * Only rules of the form InNetClass('<name>') against All are considered, and only for the
+ * Only rules of the form InNetClass('\<name\>') against All are considered, and only for the
  * clearance, width and routing-via kinds.  Each vector in @p aRulesByKind must be sorted by
  * ARULE6::priority ascending; the first enabled match for a netclass wins, because Altium
  * priority 1 is the most specific.  Disabled rules are skipped.
@@ -340,6 +340,9 @@ private:
      * Return the 3D model @p aModelName embedded in @p aFootprint, inflating and embedding
      * @p aCompressedData first if it is not there yet.
      *
+     * @param aFootprint
+     * @param aModelName
+     * @param aCompressedData
      * @param aIsNew is set when the model was embedded by this call and so still owes a
      *               CompressAndEncode(), which the caller may run inline or on the pool.
      */

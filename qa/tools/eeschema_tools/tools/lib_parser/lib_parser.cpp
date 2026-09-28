@@ -172,6 +172,8 @@ static bool parseStdin()
 /**
  * Load libraries from a symbol library table file.
  *
+ * @param aTablePath
+ * @param aVerbose
  * @param aVisited set of already-visited table paths
  * @return the number of libraries successfully parsed, or -1 if the table
  *         itself could not be loaded.

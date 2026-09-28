@@ -298,6 +298,7 @@ private:
      * @param aCadstarVertices
      * @param aKiCadLayer KiCad layer to draw on
      * @param aLineThickness Thickness of line to draw with
+     * @param aLineStyle
      * @param aContainer to draw on (e.g. m_board)
      * @param aCadstarGroupID to add the shape to
      * @param aMoveVector move shape by this amount (in KiCad coordinates)

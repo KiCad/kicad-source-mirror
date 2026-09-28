@@ -54,7 +54,9 @@ public:
      * The pointer only says what the user is aiming at while the pointer is the device being
      * steered.  Arrow-key cursor motion warps it, so it must be ignored in that case.
      *
+     * @param aPin
      * @param aMousePos is the pointer position in symbol coordinates.
+     * @param aCursorMovedByKeyboard
      */
     static bool ShouldFocusPinNumber( SCH_PIN& aPin, const VECTOR2I& aMousePos,
                                       bool aCursorMovedByKeyboard );

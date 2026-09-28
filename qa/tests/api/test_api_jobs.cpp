@@ -112,7 +112,7 @@ static size_t countOccurrences( const std::string& aHaystack, const std::string&
 
 
 /**
- * Return every distinct #RRGGBB literal appearing in @a aSvg.
+ * Return every distinct \#RRGGBB literal appearing in @a aSvg.
  */
 static std::set<std::string> collectColours( const std::string& aSvg )
 {

@@ -285,6 +285,8 @@ public:
 
     void UpdateHatching() const override;
 
+    double GetCoverageArea( int aTextMargin ) const override;
+
     /**
      * Convert the shape to a closed polygon.  Circles and arcs are approximated by segments.
      *
@@ -296,8 +298,6 @@ public:
      * @param ignoreLineWidth is used for edge cut items where the line width is only for
      *                        visualization
      */
-    double GetCoverageArea( int aTextMargin ) const override;
-
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                   int aError, ERROR_LOC aErrorLoc,
                                   bool ignoreLineWidth = false ) const override;

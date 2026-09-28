@@ -139,7 +139,7 @@ protected:
      * @retval true if the footprint attribute value has changed.
      * @retval false if the footprint attribute has **not** changed.
      */
-    bool setAttributeValue( const FOOTPRINT_REF& aRef, const wxString& aAttributeName, const wxString& aValue,
+    bool setAttributeValue( const FOOTPRINT_REF& aReference, const wxString& aAttributeName, const wxString& aValue,
                             const wxString& aVariantName = wxEmptyString );
 
     bool getLiveFieldValue( const FOOTPRINT_REF& aRef, const wxString& aFieldName,

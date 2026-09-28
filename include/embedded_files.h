@@ -224,6 +224,7 @@ public:
      * The data is then decompressed using ZSTD and stored in the decompressedData buffer.
      * This call is used when loading the embedded files using the parsers.
      *
+     * @param aFile
      * @param aAllowEmptyHash will let this succeed if aFile.data_hash is empty
      */
     static RETURN_CODE  DecompressAndDecode( EMBEDDED_FILE& aFile, bool aAllowEmptyHash = false );

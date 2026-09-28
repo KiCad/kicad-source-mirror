@@ -34,10 +34,11 @@ public:
      * Convert a value in Altium's internal unit (0.1 uinch) to KiCad IU, clamped to the
      * representable range.
      *
-     * @param aOutOfRange, when given, is set true if @p aValue did not fit and the result is a
-     *                     clamp rather than a conversion.  A clamped coordinate names the edge
-     *                     of the int range, not a place on the board, so callers that position
-     *                     geometry must reject it instead of using it.
+     * @param aValue
+     * @param aOutOfRange when given, is set true if @p aValue did not fit and the result is a
+     *                    clamp rather than a conversion.  A clamped coordinate names the edge
+     *                    of the int range, not a place on the board, so callers that position
+     *                    geometry must reject it instead of using it.
      */
     static int32_t ConvertToKicadUnit( const double aValue, bool* aOutOfRange = nullptr );
 
@@ -51,6 +52,9 @@ public:
                           bool aDefault );
 
     /**
+     * @param aProps
+     * @param aKey
+     * @param aDefault
      * @param aOutOfRange is forwarded to ConvertToKicadUnit(); it stays false for a missing or
      *                    unparseable property, which yields zero rather than a clamp.
      */

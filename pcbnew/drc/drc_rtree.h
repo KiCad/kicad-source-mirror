@@ -226,6 +226,10 @@ public:
     /**
      * As CheckColliding(), but the clearance is resolved per item hit rather than once for the
      * whole query, so a rule written against a particular obstacle is honoured.
+     *
+     * @param aRefShape
+     * @param aTargetLayer
+     * @param aMaxClearance
      * @param aClearanceResolver returns false to ignore an item, else writes what it is owed
      */
     bool CheckColliding( SHAPE* aRefShape, PCB_LAYER_ID aTargetLayer, int aMaxClearance,

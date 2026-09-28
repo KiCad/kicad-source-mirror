@@ -52,6 +52,7 @@ public:
     typedef std::set<const JOINT*> JOINT_SET;
 
     /**
+     * @param aNode
      * @param aIface if given, lets board connections the router does not model, such as zones,
      *               count when searching for unconnected items.
      */

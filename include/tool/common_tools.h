@@ -63,6 +63,7 @@ public:
      * "Zoom to Selection" action leaves clear of the infobar.  A box with no extent
      * on either axis falls back to the canvas's default view.
      *
+     * @param aBox is the bounding boox to fit the zoom.
      * @param aMarginScale replaces the default margin factor when given.
      */
     int ZoomFitBox( const BOX2I& aBox, std::optional<double> aMarginScale = std::nullopt );

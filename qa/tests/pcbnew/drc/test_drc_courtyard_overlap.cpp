@@ -166,7 +166,6 @@ static void CheckCollisionsMatchExpected( BOARD& aBoard,
  * Run a single courtyard overlap test case.
  *
  * @param aCase The testcase to run.
- * @param aDumper
  */
 static void DoCourtyardOverlapTest( const COURTYARD_OVERLAP_TEST_CASE& aCase )
 {

@@ -87,6 +87,7 @@ public:
      * default is desired (usually 1).
      *
      * @param aUnit if not NULL, the selected unit is filled in here.
+     * @param aBodyStyle if not NULL the body style is filled here.
      * @return the #LIB_ID of the symbol that has been selected.
      */
     LIB_ID GetSelectedLibId( int* aUnit = nullptr, int* aBodyStyle = nullptr ) const;

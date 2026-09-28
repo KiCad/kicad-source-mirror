@@ -669,6 +669,11 @@ static bool closerEndpoint( const nanoflann::ResultItem<uint32_t, double>& aLeft
  * Find the shapes that could continue a chain at @a aPoint. Exlcuding the existing
  * chain elements
  *
+ * @param aShape
+ * @param aPoint
+ * @param aKdTree
+ * @param aAdaptor
+ * @param aChainingEpsilon
  * @param aIsConsumed whether a shape is already chained.
  */
 template <typename CONSUMED_FUNC>

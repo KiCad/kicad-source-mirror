@@ -76,6 +76,8 @@ public:
                           std::vector<VECTOR2I>&    aIntersections );
 
     /**
+     * @param aOtherGeometry
+     * @param aIntersections
      * @param aContact Receives how the geometries meet.  Flags are only set, never cleared, so one
      *                 contact accumulates across visits.
      */

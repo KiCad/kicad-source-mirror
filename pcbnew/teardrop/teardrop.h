@@ -110,6 +110,10 @@ public:
 
     /**
      * Add teardrop on tracks of different sizes connected by their end
+     *
+     * @param aCommit
+     * @param aTracks
+     * @param aForceFullUpdate
      * @param aSetPriorities is false when the caller numbers them itself once the rest are built
      */
     void AddTeardropsOnTracks( BOARD_COMMIT& aCommit, const std::set<PCB_TRACK*>* aTracks,
@@ -151,6 +155,9 @@ private:
 
     /**
      * @return true if a teardrop with the given outline would touch copper of another net.
+     *
+     * @param aPoints
+     * @param aSourceTrack
      * @param aExempt are the items it overlaps by construction, its anchor and its track(s);
      * without them a no-net teardrop collides with its own anchor, no net being shared with none
      */
@@ -231,7 +238,7 @@ private:
      * @param aMatchType returns the end point id 0, STARTPOINT, ENDPOINT
      * @param aTrackRef is the reference track
      * @param aSourceTrack is the board track aTrackRef stands in for, excluded from the search
-     * @param aEndpoint is the coordinate to test
+     * @param aEndPoint is the coordinate to test
      * @return a reference to the touching track (or nullptr)
      */
     PCB_TRACK* findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_TRACK* aTrackRef,
@@ -239,6 +246,9 @@ private:
 
     /**
      * Build the UUID a teardrop is created with.
+     *
+     * @param aTrack
+     * @param aCandidate
      * @param aSlot separates the two teardrops of a crossing track; each slot spans two UUIDs
      */
     static KIID teardropUuid( const PCB_TRACK* aTrack, const BOARD_ITEM* aCandidate, int aSlot );
@@ -306,6 +316,7 @@ private:
      * @param aIntersection is the point where the track's centerline meets the pad/via edge
      * @param aTrack is the track connected to the pad/via used to search a anchor point
      *  this reference can be modified if a connected track to the initial track is selected
+     * @param aSourceTrack
      * @param aOther is the via/pad/track used to build the teardrop
      * @param aOtherPos is the via/pad position, or track start or end
      * @param aEffectiveTeardropLen is the actual teardrop length, that can be smaller than expected

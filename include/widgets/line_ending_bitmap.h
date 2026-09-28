@@ -33,6 +33,11 @@ enum class LINE_ENDING_STYLE;
 /**
  * Generate a DPI-aware bitmap icon showing a line ending style.
  *
+ * @param aStyle
+ * @param aSize
+ * @param aForeground
+ * @param aBackground
+ * @param aWindow
  * @param aShapeOnRight If true, shape is on the right (end); if false, on the left (start).
  */
 wxBitmap MakeLineEndingBitmap( LINE_ENDING_STYLE aStyle, const wxSize& aSize, const wxColour& aForeground,

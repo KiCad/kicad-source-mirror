@@ -865,8 +865,8 @@ public:
      * @param aToken is the variable to resolve.
      * @param aDepth a counter to limit recursion and circular references.
      */
-    bool ResolveTextVar( wxString* token, int aDepth = 0 ) const;
-    bool ResolveTextVar( wxString* token, const wxString& aVariantName, int aDepth = 0 ) const;
+    bool ResolveTextVar( wxString* aToken, int aDepth = 0 ) const;
+    bool ResolveTextVar( wxString* aToken, const wxString& aVariantName, int aDepth = 0 ) const;
 
     /// @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;

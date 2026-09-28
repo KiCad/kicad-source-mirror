@@ -141,8 +141,11 @@ public:
      * Apply the cutout or fill settings of @p aPour to a zone whose outline the caller has
      * already built.
      *
+     * @param aZone
+     * @param aPour
      * @param aMaxPriority is the largest priority in the pour set, used to invert the PADS
      *        convention where the lowest number fills on top.
+     * @param aParams
      */
     void ApplyPourSettings( ZONE* aZone, const PADS_IO::POUR& aPour, int aMaxPriority,
                             const PADS_IO::PARAMETERS& aParams );

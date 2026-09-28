@@ -209,6 +209,7 @@ public:
     /**
      * @return true if @a aPad is drawn on at least one shown layer.
      *
+     * @param aPad is the #PAD to test for visibility.
      * @param aVisibleLayers is the shown layer set, as returned by resolveVisibleLayers().
      */
     static bool isPadVisible( const PAD& aPad, const LSET& aVisibleLayers );

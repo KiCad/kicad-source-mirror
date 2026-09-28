@@ -370,6 +370,9 @@ private:
     /**
      * Grow (but never shrink below \a aMinWidth) a grid column to fit its current contents.
      *
+     * @param aGrid
+     * @param aCol
+     * @param aMinWidth
      * @param aExtraPadding additional width to reserve beyond the content, e.g. for a combo
      *                      box column's dropdown arrow so it doesn't crowd the text.
      */

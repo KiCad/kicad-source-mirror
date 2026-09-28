@@ -488,6 +488,7 @@ public:
      * Circles (vias) and arcs (ends of tracks) are approximated by segments.
      *
      * @param aBuffer is a buffer to store the polygon
+     * @param aLayer is the layer of the polygon
      * @param aClearance is the min clearance around outlines
      * @param aError is the maximum deviation from true circle
      * @param aErrorLoc
@@ -495,6 +496,8 @@ public:
      */
     void TransformSmoothedOutlineToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                             int aError, ERROR_LOC aErrorLoc, SHAPE_POLY_SET* aBoardOutline ) const;
+
+    double GetCoverageArea( int aTextMargin ) const override;
 
     /**
      * Convert the zone shape to a closed polygon
@@ -509,8 +512,6 @@ public:
      * @param ignoreLineWidth is used for edge cut items where the line width is only for
      *                        visualization
      */
-    double GetCoverageArea( int aTextMargin ) const override;
-
     void TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer, int aClearance,
                                   int aError, ERROR_LOC aErrorLoc, bool ignoreLineWidth = false ) const override;
 

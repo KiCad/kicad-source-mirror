@@ -172,6 +172,10 @@ static bool DrillsAreEditable( const PAD& aPad )
 /**
  * Update the drill size cells in the pad table for a given pad.
  *
+ * @param aGrid
+ * @param aUnitsProvider
+ * @param aRowId
+ * @param aPad
  * @param aPreserveValues if true, do not overwrite the cell values, just update
  *        their read-only state and text color.
  */

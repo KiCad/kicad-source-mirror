@@ -42,8 +42,8 @@ tl::expected<wxXmlDocument, wxString> LoadSvg( const wxString& aSvg );
 tl::expected<SVG_VIEWBOX, wxString> ParseViewBox( const wxXmlNode& aRoot );
 
 /**
- * Find the first <rect> element in the given XML node's descendants.
- * Returns nullptr if no <rect> element is found.
+ * Find the first \<rect\> element in the given XML node's descendants.
+ * Returns nullptr if no \<rect\> element is found.
  */
 const wxXmlNode* FindFirstRect( const wxXmlNode& aNode );
 

@@ -97,13 +97,13 @@ enum class REVISION
  */
 enum class SUPPRESS
 {
-    COMPONENT_REFDES,       ///< Component@refDes
-    COMPONENT_PACKAGEREF,   ///< Component@packageRef
-    PINREF_COMPONENTREF,    ///< Pad/PinRef@componentRef and LogicalNet/PinRef@componentRef
-    PAD_PADSTACKDEFREF,     ///< Pad@padstackDefRef, and the PadStackDef elements themselves
+    COMPONENT_REFDES,       ///< Component@\refDes
+    COMPONENT_PACKAGEREF,   ///< Component\@packageRef
+    PINREF_COMPONENTREF,    ///< Pad/PinRef\@componentRef and LogicalNet/PinRef\@componentRef
+    PAD_PADSTACKDEFREF,     ///< Pad\@padstackDefRef, and the PadStackDef elements themselves
     BOM_REFDES,             ///< Bom/BomItem/RefDes and all its attributes
-    BOM_REFDES_LAYERREF,    ///< Bom/BomItem/RefDes@layerRef
-    BOM_REFDES_PACKAGEREF,  ///< Bom/BomItem/RefDes@packageRef
+    BOM_REFDES_LAYERREF,    ///< Bom/BomItem/RefDes\@layerRef
+    BOM_REFDES_PACKAGEREF,  ///< Bom/BomItem/RefDes\@packageRef
     BOM_HEADER_STEPREF,     ///< Bom/BomHeader/StepRef
 
     COUNT

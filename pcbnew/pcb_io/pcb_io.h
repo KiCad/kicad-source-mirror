@@ -150,7 +150,10 @@ public:
      * Same as \ref LoadBoard(), but appends the loaded board to an existing board, which must
      * already exist.
      *
+     * @param aFileName is the file name of the board to load and append to \a aAppendToMe.
      * @param aAppendToMe is the existing board to append to. The caller always owns it.
+     * @param[in] aProperties are any custom properties for the plugin.
+     * @param[in] aProject is an optional #PROJECT object.
      */
     void LoadAndAppendBoard( const wxString& aFileName, BOARD& aAppendToMe,
                              const std::map<std::string, UTF8>* aProperties = nullptr, PROJECT* aProject = nullptr );
@@ -375,9 +378,13 @@ protected:
     /**
      * Parse @a aFileName into @a aBoard.  The caller owns @a aBoard in both cases.
      *
+     * @param aFileName is the file name of the board to load.
+     * @param[in] aBoard is the #BOARD object to load \a aFileName into.
      * @param aIsNewLoad is true for a fresh load (adopt the file's setup, keep the
      *                   file's UUIDs) and false when merging into an existing board
      *                   (preserve its setup, regenerate UUIDs that would clash).
+     * @param aProperties are any optional properties used by the plugin.
+     * @param aProject
      */
     virtual void loadBoard( const wxString& aFileName, BOARD& aBoard, bool aIsNewLoad,
                             const std::map<std::string, UTF8>* aProperties, PROJECT* aProject );

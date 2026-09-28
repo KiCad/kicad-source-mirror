@@ -146,6 +146,10 @@ public:
      * Callers store an unresolved sheet name, so this owns the whole decision rather than
      * leaving each of them to recognize the reserved name before resolving.
      *
+     * @param aSheetName
+     * @param aBasePath
+     * @param aProject
+     * @param aEmbeddedFilesStack
      * @param aMsg [optional] if non-null, is filled with any error message.
      * @return false only when a real drawing sheet failed to load.
      */

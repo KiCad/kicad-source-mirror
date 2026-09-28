@@ -222,7 +222,6 @@ public:
 
     virtual bool Draw( const VIEW_ITEM* aItem, int aLayer ) override;
 
-    /// @copydoc PAINTER::HasUniformColor()
     virtual bool HasUniformColor( const VIEW_ITEM* aItem, int aLayer ) const override;
 
 protected:
