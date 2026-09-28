@@ -261,7 +261,11 @@ std::optional<TOOLBAR_CONFIGURATION> PCB_EDIT_TOOLBAR_SETTINGS::DefaultToolbarCo
         config.AppendSeparator()
               .AppendAction( PCB_ACTIONS::drawLine )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Arc" ) )
-                            .AddAction( PCB_ACTIONS::drawArc )
+                            .AddAction( PCB_ACTIONS::drawArcCenter )
+                            .AddAction( PCB_ACTIONS::drawArcStartEndMid )
+                            .AddAction( PCB_ACTIONS::drawArcStartEndCenter )
+                            .AddAction( PCB_ACTIONS::drawArcTangent )
+                            .AddAction( PCB_ACTIONS::drawArcStartDirEnd )
                             .AddAction( PCB_ACTIONS::drawEllipseArc )
                             .AddContextMenu(
                                 []( TOOL_MANAGER* aMgr ) -> std::unique_ptr<ACTION_MENU>

@@ -26,6 +26,7 @@
 #include <vector>
 
 #include <layer_ids.h>
+#include <tool/arc_draw_mode.h>
 #include <tool/tool_action.h>
 #include <tool/actions.h>
 
@@ -207,6 +208,14 @@ public:
     static TOOL_ACTION drawEllipse;
     static TOOL_ACTION drawEllipseArc;
     static TOOL_ACTION drawArc;
+    static TOOL_ACTION drawArcCenter;
+    static TOOL_ACTION drawArcStartEndMid;
+    static TOOL_ACTION drawArcStartEndCenter;
+    static TOOL_ACTION drawArcTangent;
+    static TOOL_ACTION drawArcStartDirEnd;
+
+    /// Tool action that starts the arc tool in the given mode.
+    static const TOOL_ACTION& DrawArcForMode( ARC_DRAW_MODE aMode );
     static TOOL_ACTION drawBezier;
     static TOOL_ACTION placePoint;
     static TOOL_ACTION placeReferenceImage;

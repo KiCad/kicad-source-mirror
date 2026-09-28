@@ -110,7 +110,11 @@ std::optional<TOOLBAR_CONFIGURATION> FOOTPRINT_EDIT_TOOLBAR_SETTINGS::DefaultToo
         config.AppendSeparator()
               .AppendAction( PCB_ACTIONS::drawLine )
               .AppendGroup( TOOLBAR_GROUP_CONFIG( _( "Arc" ) )
-                            .AddAction( PCB_ACTIONS::drawArc )
+                            .AddAction( PCB_ACTIONS::drawArcCenter )
+                            .AddAction( PCB_ACTIONS::drawArcStartEndMid )
+                            .AddAction( PCB_ACTIONS::drawArcStartEndCenter )
+                            .AddAction( PCB_ACTIONS::drawArcTangent )
+                            .AddAction( PCB_ACTIONS::drawArcStartDirEnd )
                             .AddAction( PCB_ACTIONS::drawEllipseArc )
                             .AddContextMenu(
                                     []( TOOL_MANAGER* aToolMgr )

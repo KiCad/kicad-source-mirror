@@ -51,6 +51,8 @@
 #include <pcb_barcode.h>
 #include <tools/tool_event_utils.h>
 #include <tool/arc_draw_behavior.h>
+#include <tool/arc_mode_session.h>
+#include <tool/arc_tangent_seed.h>
 #include <tool/bezier_draw_behavior.h>
 #include <tool/ellipse_draw_behavior.h>
 #include <tools/zone_create_helper.h>
@@ -401,6 +403,12 @@ bool DRAWING_TOOL::Init()
     ctxMenu.AddItem( ACTIONS::deleteLastPoint,           canUndoPoint, 200 );
     ctxMenu.AddItem( ACTIONS::finishInteractive,         canFinishShape, 200 );
     ctxMenu.AddItem( ACTIONS::arcPosture,                arcToolActive, 200 );
+    ctxMenu.AddCheckItem( PCB_ACTIONS::drawArcCenter,    arcToolActive, 200 );
+    ctxMenu.AddCheckItem( PCB_ACTIONS::drawArcStartEndMid, arcToolActive, 200 );
+    ctxMenu.AddCheckItem( PCB_ACTIONS::drawArcStartEndCenter, arcToolActive, 200 );
+    ctxMenu.AddCheckItem( PCB_ACTIONS::drawArcTangent,   arcToolActive, 200 );
+    ctxMenu.AddCheckItem( PCB_ACTIONS::drawArcStartDirEnd, arcToolActive, 200 );
+    ctxMenu.AddItem( ACTIONS::cycleArcDrawMode,          arcToolActive, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::spacingIncrease,       tuningToolActive, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::spacingDecrease,       tuningToolActive, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::amplIncrease,          tuningToolActive, 200 );
@@ -655,19 +663,33 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     Activate();
 
     if( aEvent.HasPosition() )
-        initialPts.push_back( aEvent.Position() );
+        initialPts.push_back( snapEventPosition( aEvent ) );
 
     ARC_DRAW_BEHAVIOR arcBehavior( pcbIUScale, m_frame->GetUserUnits() );
+
+    APP_SETTINGS_BASE* cfg = m_frame->config();
+
+    m_frame->SelectToolbarAction( PCB_ACTIONS::DrawArcForMode( StartArcDrawMode( aEvent, cfg, arcBehavior ) ) );
+
+    std::optional<ARC_TANGENT_SEED> tangentSeed;
+    VECTOR2I                        lastClick;
 
     SHAPE_DRAW_RESULT result = SHAPE_DRAW_RESULT::NEXT_SHAPE;
 
     while( result == SHAPE_DRAW_RESULT::NEXT_SHAPE )
     {
-        result = drawManagedShape( originalEvent, arc, arcBehavior, initialPts );
+        result = drawManagedShape( originalEvent, arc, arcBehavior, initialPts, tangentSeed, &lastClick );
+
+        tangentSeed.reset();
 
         if( arc )
         {
             PCB_SHAPE* committedArc = arc.get();
+
+            // The mode can change mid-draw so chain from whatever the settings hold now
+            if( result == SHAPE_DRAW_RESULT::NEXT_SHAPE && cfg && cfg->m_ArcDrawMode == ARC_DRAW_MODE::TANGENT )
+                tangentSeed = ArcTangentSeedNear( *committedArc, lastClick );
+
             commit.Add( arc.release() );
 
             std::vector<PCB_CONSTRAINT*> snaps;
@@ -717,7 +739,7 @@ int DRAWING_TOOL::DrawEllipseArc( const TOOL_EVENT& aEvent )
     Activate();
 
     if( aEvent.HasPosition() )
-        initialPts.push_back( aEvent.Position() );
+        initialPts.push_back( snapEventPosition( aEvent ) );
 
     ELLIPSE_ARC_DRAW_BEHAVIOR ellipseBehavior( pcbIUScale, m_frame->GetUserUnits() );
 
@@ -779,7 +801,7 @@ int DRAWING_TOOL::DrawBezier( const TOOL_EVENT& aEvent )
     Activate();
 
     if( aEvent.HasPosition() )
-        initialPts.push_back( aEvent.Position() );
+        initialPts.push_back( snapEventPosition( aEvent ) );
 
     BEZIER_DRAW_BEHAVIOR bezierBehavior( pcbIUScale, m_frame->GetUserUnits() );
 
@@ -3227,9 +3249,22 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
 }
 
 
+VECTOR2I DRAWING_TOOL::snapEventPosition( const TOOL_EVENT& aEvent )
+{
+    PCB_GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
+    grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() );
+
+    SNAP_RESULT snap = grid.ResolveSnap( aEvent.Position(), LSET{ m_frame->GetActiveLayer() }, GRID_GRAPHICS );
+
+    return GetClampedCoords( snap.position, COORDS_PADDING );
+}
+
+
 SHAPE_DRAW_RESULT DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PCB_SHAPE>& aGraphic,
                                                   SHAPE_DRAW_BEHAVIOR&         aBehavior,
-                                                  const std::vector<VECTOR2D>& aInitialPts )
+                                                  const std::vector<VECTOR2D>& aInitialPts,
+                                                  const std::optional<ARC_TANGENT_SEED>& aTangentSeed,
+                                                  VECTOR2I*                    aLastClick )
 {
     if( !aGraphic )
         return SHAPE_DRAW_RESULT::CANCELLED;
@@ -3265,6 +3300,45 @@ SHAPE_DRAW_RESULT DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::
                 aGraphic.reset();
             };
 
+    // Clicking a graphic on the active layer starts a tangent arc from it instead of placing a start point
+    auto findTangentSeed =
+            [&]( const VECTOR2I&, const VECTOR2I& aPos ) -> std::optional<ARC_TANGENT_SEED>
+            {
+                const int tolerance = KiROUND( m_view->ToWorld( ARC_SEED_PICK_PIXELS ) );
+
+                auto seedFrom =
+                        [&]( const PCB_SHAPE* aShape ) -> std::optional<ARC_TANGENT_SEED>
+                        {
+                            if( !aShape || aShape->GetLayer() != m_layer )
+                                return std::nullopt;
+
+                            BOX2I reach = aShape->GetBoundingBox();
+
+                            if( !reach.Inflate( tolerance ).Contains( aPos ) )
+                                return std::nullopt;
+
+                            return ArcTangentSeedAt( *aShape, aPos, tolerance );
+                        };
+
+                if( std::optional<ARC_TANGENT_SEED> seed = seedFrom( dynamic_cast<PCB_SHAPE*>( grid.GetSnapped() ) ) )
+                    return seed;
+
+                for( PCB_SHAPE* shape : CollectConstraintShapes( board(), m_layer ) )
+                {
+                    if( std::optional<ARC_TANGENT_SEED> seed = seedFrom( shape ) )
+                        return seed;
+                }
+
+                return std::nullopt;
+            };
+
+    ARC_MODE_SESSION arcSession( aBehavior, m_frame->config(), m_mode == MODE::ARC, aTangentSeed, findTangentSeed,
+                                 [&]( ARC_DRAW_MODE aMode )
+                                 {
+                                     m_frame->SelectToolbarAction( PCB_ACTIONS::DrawArcForMode( aMode ) );
+                                     m_toolMgr->PostAction( ACTIONS::refreshPreview );
+                                 } );
+
     m_controls->ShowCursor( true );
     m_controls->ForceCursorPosition( false );
     // Set initial cursor
@@ -3279,9 +3353,9 @@ SHAPE_DRAW_RESULT DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::
     // Pre-load any initial points into the behaviour, advancing the construction
     // state machine so that the next user click adds the subsequent point.
     for( const VECTOR2D& pt : aInitialPts )
-        aBehavior.AddPoint( pt );
+        arcSession.PlacePoint( pt, pt );
 
-    if( !aInitialPts.empty() )
+    if( !aInitialPts.empty() || aTangentSeed )
     {
         m_toolMgr->RunAction( ACTIONS::selectionClear );
 
@@ -3343,6 +3417,10 @@ SHAPE_DRAW_RESULT DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::
             cleanup();
             break;
         }
+        else if( arcSession.HandleModeEvent( *evt ) )
+        {
+            // A mode switch keeps the tool running rather than restarting it
+        }
         else if( evt->IsActivate() )
         {
             if( evt->IsPointEditor() )
@@ -3385,7 +3463,10 @@ SHAPE_DRAW_RESULT DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::
                 started = true;
             }
 
-            aBehavior.AddPoint( cursorPos );
+            arcSession.PlacePoint( cursorPos, cursorPos );
+
+            if( aLastClick )
+                *aLastClick = cursorPos;
         }
         else if( evt->IsDblClick( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::cursorDblClick )
@@ -3399,12 +3480,13 @@ SHAPE_DRAW_RESULT DRAWING_TOOL::drawManagedShape( const TOOL_EVENT& aTool, std::
             finished = true;
             break;
         }
-        else if( evt->IsAction( &ACTIONS::deleteLastPoint ) )
+        else if( evt->IsAction( &ACTIONS::deleteLastPoint ) || ( started && evt->IsAction( &ACTIONS::doDelete ) ) )
         {
+            // Backspace is also doDelete's alternate hotkey, so a backup can arrive as either action
             // Snap guides persist in the grid helper until the tool exits, so a mid-draw backup
             // must clear them or they linger on screen.
             grid.FullReset();
-            aBehavior.RemoveLastPoint();
+            arcSession.RemoveLastPoint();
         }
         else if( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
@@ -4745,6 +4827,11 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawEllipse,           PCB_ACTIONS::drawEllipse.MakeEvent() );
     Go( &DRAWING_TOOL::DrawEllipseArc,        PCB_ACTIONS::drawEllipseArc.MakeEvent() );
     Go( &DRAWING_TOOL::DrawArc,               PCB_ACTIONS::drawArc.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawArc,               PCB_ACTIONS::drawArcCenter.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawArc,               PCB_ACTIONS::drawArcStartEndMid.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawArc,               PCB_ACTIONS::drawArcStartEndCenter.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawArc,               PCB_ACTIONS::drawArcTangent.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawArc,               PCB_ACTIONS::drawArcStartDirEnd.MakeEvent() );
     Go( &DRAWING_TOOL::DrawBezier,            PCB_ACTIONS::drawBezier.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawAlignedDimension.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension,         PCB_ACTIONS::drawOrthogonalDimension.MakeEvent() );

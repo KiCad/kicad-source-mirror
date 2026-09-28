@@ -263,6 +263,8 @@ protected:
 
     void unitsChangeRefresh() override;
 
+    const TOOL_ACTION* drawArcAction( ARC_DRAW_MODE aMode ) const override;
+
     void onDarkModeToggle( wxSysColourChangedEvent& aEvent );
 
 protected:

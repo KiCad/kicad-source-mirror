@@ -27,6 +27,7 @@
 #include <stack>
 #include <optional>
 #include <eda_shape.h>
+#include <tool/arc_tangent_seed.h>
 #include <tool/shape_draw_behavior.h>
 #include <tool/tool_menu.h>
 #include <tools/pcb_selection.h>
@@ -304,6 +305,13 @@ private:
                             std::function<bool( const TOOL_EVENT&, PCB_SHAPE**, std::optional<VECTOR2D> )> aDrawer );
 
     /**
+     * Snap a tool event's position the way a click is snapped.
+     *
+     * A hotkey start carries the raw mouse position, which becomes the first point of a managed shape.
+     */
+    VECTOR2I snapEventPosition( const TOOL_EVENT& aEvent );
+
+    /**
      * Run the interactive drawing event loop for a shape, driven by a SHAPE_DRAW_BEHAVIOR.
      *
      * @param aTool  the tool event to draw the managed shape.
@@ -312,10 +320,15 @@ private:
      * @param aBehavior  defines the drawing behavior of the managed shape.
      * @param aInitialPts  points to pre-load into the behaviour before the first user click, e.g. start
      *                     point and mirrored control point for tangent-continuous bezier chaining.
+     * @param aTangentSeed  start point and direction that begin a tangent arc, applied to the behavior before
+     *                      any initial point.  A seeded draw counts as started.
+     * @param aLastClick  if not null, receives the position of the last click taken by the loop.
      * @return the outcome of the drawing loop: see @ref SHAPE_DRAW_RESULT.
      */
     SHAPE_DRAW_RESULT drawManagedShape( const TOOL_EVENT& aTool, std::unique_ptr<PCB_SHAPE>& aGraphic,
-                                        SHAPE_DRAW_BEHAVIOR& aBehavior, const std::vector<VECTOR2D>& aInitialPts );
+                                        SHAPE_DRAW_BEHAVIOR& aBehavior, const std::vector<VECTOR2D>& aInitialPts,
+                                        const std::optional<ARC_TANGENT_SEED>& aTangentSeed = std::nullopt,
+                                        VECTOR2I* aLastClick = nullptr );
 
     /**
      * Get a source zone item for an action that takes an existing zone into account (for

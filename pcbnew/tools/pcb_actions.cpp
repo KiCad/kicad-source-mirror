@@ -22,6 +22,7 @@
 #include "pcb_actions.h"
 #include "tool/tool_action.h"
 #include "tool/tool_event.h"
+#include <tool/arc_draw_mode.h>
 #include <pcbnew_id.h>
 #include <bitmaps.h>
 #include <layer_ids.h>
@@ -401,6 +402,71 @@ TOOL_ACTION PCB_ACTIONS::drawArc( TOOL_ACTION_ARGS()
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::add_arc )
         .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION PCB_ACTIONS::drawArcCenter( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.arcCenter" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Arc: Center, Start, End" ) )
+        .Tooltip( _( "Draw arcs by clicking the center, the start point, then the end point" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_arc )
+        .Flags( AF_ACTIVATE )
+        .Parameter( ARC_DRAW_MODE::CENTER_START_END ) );
+
+TOOL_ACTION PCB_ACTIONS::drawArcStartEndMid( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.arcStartEndMid" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Arc: Start, End, Midpoint" ) )
+        .Tooltip( _( "Draw arcs by clicking the start point, the end point, then a point on the arc" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_arc )
+        .Flags( AF_ACTIVATE )
+        .Parameter( ARC_DRAW_MODE::START_END_MID ) );
+
+TOOL_ACTION PCB_ACTIONS::drawArcStartEndCenter( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.arcStartEndCenter" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Arc: Start, End, Center" ) )
+        .Tooltip( _( "Draw arcs by clicking the start point, the end point, then the center" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_arc )
+        .Flags( AF_ACTIVATE )
+        .Parameter( ARC_DRAW_MODE::START_END_CENTER ) );
+
+TOOL_ACTION PCB_ACTIONS::drawArcTangent( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.arcTangent" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Arc: Tangent" ) )
+        .Tooltip( _( "Draw arcs tangent to the previous arc or to the line or arc ending at the start point" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_arc )
+        .Flags( AF_ACTIVATE )
+        .Parameter( ARC_DRAW_MODE::TANGENT ) );
+
+TOOL_ACTION PCB_ACTIONS::drawArcStartDirEnd( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveDrawing.arcStartDirEnd" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Arc: Start, Direction, End" ) )
+        .Tooltip( _( "Draw arcs by clicking the start point, a point giving the start direction, then the end point" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::add_arc )
+        .Flags( AF_ACTIVATE )
+        .Parameter( ARC_DRAW_MODE::START_DIR_END ) );
+
+const TOOL_ACTION& PCB_ACTIONS::DrawArcForMode( ARC_DRAW_MODE aMode )
+{
+    switch( aMode )
+    {
+    case ARC_DRAW_MODE::CENTER_START_END: return drawArcCenter;
+    case ARC_DRAW_MODE::START_END_MID:    return drawArcStartEndMid;
+    case ARC_DRAW_MODE::START_END_CENTER: return drawArcStartEndCenter;
+    case ARC_DRAW_MODE::TANGENT:          return drawArcTangent;
+    case ARC_DRAW_MODE::START_DIR_END:    return drawArcStartDirEnd;
+    }
+
+    return drawArcCenter;
+}
+
 
 TOOL_ACTION PCB_ACTIONS::drawBezier( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveDrawing.bezier" )
