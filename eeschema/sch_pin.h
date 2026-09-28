@@ -446,6 +446,8 @@ public:
     PIN_LAYOUT_CACHE& GetLayoutCache() const;
 
 protected:
+    void swapData( SCH_ITEM* aItem ) override;
+
     wxString getItemDescription( ALT* aAlt ) const;
 
     struct EXTENTS_CACHE

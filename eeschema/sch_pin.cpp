@@ -270,6 +270,29 @@ SCH_PIN& SCH_PIN::operator=( const SCH_PIN& aPin )
 }
 
 
+void SCH_PIN::swapData( SCH_ITEM* aItem )
+{
+    wxCHECK( aItem && aItem->Type() == SCH_PIN_T, /* void */ );
+
+    SCH_PIN* pin = static_cast<SCH_PIN*>( aItem );
+
+    std::swap( m_libPin, pin->m_libPin );
+    std::swap( m_alternates, pin->m_alternates );
+    std::swap( m_alt, pin->m_alt );
+    std::swap( m_name, pin->m_name );
+    std::swap( m_number, pin->m_number );
+    std::swap( m_position, pin->m_position );
+    std::swap( m_length, pin->m_length );
+    std::swap( m_orientation, pin->m_orientation );
+    std::swap( m_shape, pin->m_shape );
+    std::swap( m_type, pin->m_type );
+    std::swap( m_hidden, pin->m_hidden );
+    std::swap( m_numTextSize, pin->m_numTextSize );
+    std::swap( m_nameTextSize, pin->m_nameTextSize );
+    std::swap( m_isDangling, pin->m_isDangling );
+}
+
+
 void SCH_PIN::Serialize( google::protobuf::Any& aContainer ) const
 {
     using namespace kiapi::common;
