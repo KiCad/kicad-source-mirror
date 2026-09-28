@@ -208,15 +208,15 @@ bool SCH_COLLECTOR::IsCorner() const
 }
 
 
-void CollectOtherUnits( const wxString& aRef, int aUnit, const LIB_ID& aLibId,
-                        SCH_SHEET_PATH& aSheet, std::vector<SCH_SYMBOL*>* otherUnits )
+void CollectOtherUnits( const wxString& aRef, int aUnit, const LIB_ID& aLibId, SCH_SHEET_PATH& aSheet,
+                        std::vector<SCH_SYMBOL*>* otherUnits )
 {
     SCH_REFERENCE_LIST symbols;
     aSheet.GetSymbols( symbols, SYMBOL_FILTER_ALL );
 
-    for( unsigned i = 0; i < symbols.GetCount(); i++ )
+    for( int i = 0; i < (int) symbols.GetCount(); i++ )
     {
-        SCH_REFERENCE symbol = symbols[i];
+        const SCH_REFERENCE& symbol = symbols[i];
 
         if( symbol.GetRef() == aRef
                 && symbol.GetSymbol()->GetLibId() == aLibId

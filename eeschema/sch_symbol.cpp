@@ -2440,7 +2440,7 @@ void SCH_SYMBOL::SyncOtherUnits( const SCH_SHEET_PATH& aSourceSheet, SCH_COMMIT&
             SCH_SCREEN*              screen = sheet.LastScreen();
             std::vector<SCH_SYMBOL*> otherUnits;
 
-            CollectOtherUnits( ref, m_unit, m_lib_id, sheet, &otherUnits );
+            CollectOtherUnits( ref, GetUnitSelection( &aSourceSheet ), m_lib_id, sheet, &otherUnits );
 
             for( SCH_SYMBOL* otherUnit : otherUnits )
             {

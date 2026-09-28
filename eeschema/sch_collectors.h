@@ -104,5 +104,5 @@ public:
 };
 
 
-void CollectOtherUnits( const wxString& thisRef, int thisUnit, const LIB_ID& aLibId,
+void CollectOtherUnits( const wxString& aRef, int aUnit, const LIB_ID& aLibId,
                         SCH_SHEET_PATH& aSheet, std::vector<SCH_SYMBOL*>* otherUnits );
