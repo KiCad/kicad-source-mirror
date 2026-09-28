@@ -1467,6 +1467,57 @@ std::vector<const PLUGIN_ACTION*> EDA_DRAW_FRAME::GetOrderedPluginActions( PLUGI
 }
 
 
+size_t EDA_DRAW_FRAME::AddApiPluginMenuItems( ACTION_MENU* aMenu )
+{
+    wxCHECK( aMenu, 0 );
+
+    API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
+
+    mgr.MenuBindings( m_ident ).clear();
+
+    std::vector<const PLUGIN_ACTION*> actions = GetOrderedPluginActions( PluginActionScope(), config() );
+
+    size_t count = 0;
+
+    for( const PLUGIN_ACTION* action : actions )
+    {
+        const std::vector<wxImage>& images =
+                KIPLATFORM::UI::IsDarkTheme() && !action->icon_dark.empty() ? action->icon_dark : action->icon_light;
+
+        int            iconSize = Pgm().GetCommonSettings()->m_Appearance.toolbar_icon_size;
+        wxBitmapBundle icon;
+
+        if( images.empty() )
+        {
+            icon = KiBitmapBundleDef( BITMAPS::puzzle_piece, iconSize );
+        }
+        else
+        {
+            wxVector<wxBitmap> bitmaps;
+
+            for( const wxImage& img : images )
+                bitmaps.push_back( wxBitmap( img ) );
+
+            icon = BITMAP_STORE::MakeBitmapBundleDef( bitmaps, iconSize );
+        }
+
+        if( !icon.IsOk() )
+            continue;
+
+        wxMenuItem* item = KIUI::AddMenuItem( aMenu, wxID_ANY, action->name, action->description, icon );
+
+        Connect( item->GetId(), wxEVT_COMMAND_MENU_SELECTED,
+                 wxCommandEventHandler( EDA_DRAW_FRAME::OnApiPluginInvoke ) );
+
+        mgr.MenuBindings( m_ident ).insert( { item->GetId(), action->identifier } );
+
+        ++count;
+    }
+
+    return count;
+}
+
+
 void EDA_DRAW_FRAME::AddApiPluginTools( ACTION_TOOLBAR* aToolbar )
 {
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
@@ -1513,13 +1564,20 @@ void EDA_DRAW_FRAME::OnApiPluginInvoke( wxCommandEvent& aEvent )
 {
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
 
+    std::optional<wxString> identifier;
+
     if( mgr.ButtonBindings( m_ident ).contains( aEvent.GetId() ) )
-    {
-        std::shared_ptr<REPORTER> reporter;
+        identifier = mgr.ButtonBindings( m_ident ).at( aEvent.GetId() );
+    else if( mgr.MenuBindings( m_ident ).contains( aEvent.GetId() ) )
+        identifier = mgr.MenuBindings( m_ident ).at( aEvent.GetId() );
 
-        if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
-            reporter = std::make_shared<STATUSBAR_WARNING_REPORTER>( statusBar, wxS( "plugin" ) );
+    if( !identifier )
+        return;
 
-        mgr.InvokeAction( mgr.ButtonBindings( m_ident ).at( aEvent.GetId() ), reporter );
-    }
+    std::shared_ptr<REPORTER> reporter;
+
+    if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
+        reporter = std::make_shared<STATUSBAR_WARNING_REPORTER>( statusBar, wxS( "plugin" ) );
+
+    mgr.InvokeAction( *identifier, reporter );
 }

@@ -20,8 +20,11 @@
  */
 
 #include <bitmaps.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <tool/action_menu.h>
 #include <tool/tool_manager.h>
+#include <tool/actions.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
 #include <symbol_library_manager.h>
@@ -185,6 +188,21 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     prefsMenu->AppendSeparator();
     AddMenuLanguageList( prefsMenu, selTool );
 
+    //-- Tools menu -----------------------------------------------
+    //
+    ACTION_MENU* toolsMenu = new ACTION_MENU( false, selTool );
+
+    ACTION_MENU* submenuActionPlugins = new ACTION_MENU( false, selTool );
+    submenuActionPlugins->SetTitle( _( "External Plugins" ) );
+    submenuActionPlugins->SetIcon( BITMAPS::puzzle_piece );
+
+    if( Pgm().GetCommonSettings()->m_Api.enable_server && AddApiPluginMenuItems( submenuActionPlugins ) > 0 )
+        submenuActionPlugins->AppendSeparator();
+
+    submenuActionPlugins->Add( ACTIONS::pluginsReload );
+    submenuActionPlugins->Add( ACTIONS::pluginsShowFolder );
+
+    toolsMenu->Add( submenuActionPlugins );
 
     //-- Menubar -------------------------------------------------------------
     //
@@ -192,6 +210,7 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     menuBar->Append( editMenu,    _( "&Edit" ) );
     menuBar->Append( viewMenu,    _( "&View" ) );
     menuBar->Append( placeMenu,   _( "&Place" ) );
+    menuBar->Append( toolsMenu,   _( "&Tools" ) );
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
     menuBar->Append( prefsMenu,   _( "P&references" ) );
     AddStandardHelpMenu( menuBar );

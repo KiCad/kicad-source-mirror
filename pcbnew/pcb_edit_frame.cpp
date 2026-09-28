@@ -3063,6 +3063,7 @@ void PCB_EDIT_FRAME::onPluginAvailabilityChanged( wxCommandEvent& aEvt )
 {
     wxLogTrace( traceApi, "PCB frame: EDA_EVT_PLUGIN_AVAILABILITY_CHANGED" );
     RecreateToolbars();
+    ReCreateMenuBar();
     aEvt.Skip();
 }
 

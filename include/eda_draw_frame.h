@@ -534,6 +534,14 @@ public:
                                                                       APP_SETTINGS_BASE* aCfg );
 
     /**
+     * Append actions from API plugins to the given menu.
+     *
+     * @param aMenu is the menu to add the plugin actions to
+     * @return the number of actions added to the menu
+     */
+    size_t AddApiPluginMenuItems( ACTION_MENU* aMenu );
+
+    /**
      * Append actions from API plugins to the given toolbar.
      *
      * @param aToolbar is the toolbar to add the plugins to

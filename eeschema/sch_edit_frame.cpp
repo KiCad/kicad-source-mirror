@@ -3060,6 +3060,7 @@ void SCH_EDIT_FRAME::onPluginAvailabilityChanged( wxCommandEvent& aEvt )
 {
     wxLogTrace( traceApi, "SCH frame: EDA_EVT_PLUGIN_AVAILABILITY_CHANGED" );
     RecreateToolbars();
+    ReCreateMenuBar();
     aEvt.Skip();
 }
 

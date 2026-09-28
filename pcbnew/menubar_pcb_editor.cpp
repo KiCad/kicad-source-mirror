@@ -480,6 +480,9 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     submenuActionPlugins->SetTitle( _( "External Plugins" ) );
     submenuActionPlugins->SetIcon( BITMAPS::puzzle_piece );
 
+    if( Pgm().GetCommonSettings()->m_Api.enable_server && AddApiPluginMenuItems( submenuActionPlugins ) > 0 )
+        submenuActionPlugins->AppendSeparator();
+
     submenuActionPlugins->Add( ACTIONS::pluginsReload );
     submenuActionPlugins->Add( ACTIONS::pluginsShowFolder );
 

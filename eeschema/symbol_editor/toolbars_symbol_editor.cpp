@@ -20,7 +20,10 @@
  */
 
 #include <advanced_config.h>
+#include <api/api_plugin_manager.h>
 #include <eeschema_id.h>
+#include <pgm_base.h>
+#include <settings/common_settings.h>
 #include <symbol_edit_frame.h>
 #include <sch_painter.h>
 #include <symbol_editor_settings.h>
@@ -32,7 +35,6 @@
 #include <tool/ui/toolbar_context_menu_registry.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
-#include <widgets/sch_properties_panel.h>
 #include <widgets/sch_properties_panel.h>
 #include <widgets/wx_aui_utils.h>
 #include <wx/combobox.h>
@@ -155,6 +157,9 @@ std::optional<TOOLBAR_CONFIGURATION> SYMBOL_EDIT_TOOLBAR_SETTINGS::DefaultToolba
 
         config.AppendSeparator()
               .AppendAction( SCH_ACTIONS::addSymbolToSchematic );
+
+        config.AppendSeparator()
+              .AppendControl( ACTION_TOOLBAR_CONTROLS::ipcScripting );
         break;
     }
 
@@ -197,6 +202,22 @@ void SYMBOL_EDIT_FRAME::configureToolbars()
 
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::unitSelector, unitDisplayFactory );
     RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::bodyStyleSelector, bodyDisplayFactory );
+
+    // IPC/Scripting plugin control
+    auto pluginControlFactory =
+            [this]( ACTION_TOOLBAR* aToolbar )
+            {
+                bool haveApiPlugins = Pgm().GetCommonSettings()->m_Api.enable_server
+                                        && !Pgm().GetPluginManager().GetActionsForScope( PluginActionScope() ).empty();
+
+                if( haveApiPlugins )
+                {
+                    aToolbar->AddScaledSeparator( aToolbar->GetParent() );
+                    AddApiPluginTools( aToolbar );
+                }
+            };
+
+    RegisterCustomToolbarControlFactory( ACTION_TOOLBAR_CONTROLS::ipcScripting, pluginControlFactory );
 }
 
 

@@ -489,6 +489,11 @@ protected:
 
     void doReCreateMenuBar() override;
 
+    PLUGIN_ACTION_SCOPE PluginActionScope() const override
+    {
+        return PLUGIN_ACTION_SCOPE::SYMBOL;
+    }
+
     void updateSelectionFilterVisbility() override;
 
 private:
