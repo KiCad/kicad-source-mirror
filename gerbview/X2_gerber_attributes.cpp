@@ -54,7 +54,7 @@ X2_ATTRIBUTE::~X2_ATTRIBUTE()
 
 const wxString& X2_ATTRIBUTE::GetAttribute()
 {
-    return m_Prms.Item( 0 );
+    return GetPrm( 0 );
 }
 
 
