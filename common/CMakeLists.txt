@@ -967,6 +967,7 @@ set( COMMON_SRCS
     ${COMMON_TRANSLINE_CALCULATION_SRCS}
     track_width_calculations.cpp
     pth_hole_size.cpp
+    r_divider_solver.cpp
     base_screen.cpp
     bin_mod.cpp
     bitmap_base.cpp

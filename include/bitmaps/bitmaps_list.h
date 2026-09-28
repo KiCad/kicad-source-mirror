@@ -514,6 +514,7 @@ enum class BITMAPS : unsigned int
     puzzle_piece,
     py_script,
     question_mark,
+    r_divider,
     ray_tracing,
     reannotate_down_left,
     reannotate_down_right,

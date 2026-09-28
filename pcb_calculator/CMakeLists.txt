@@ -37,6 +37,8 @@ set( PCB_CALCULATOR_SRCS
     calculator_panels/panel_pth_size_base.cpp
     calculator_panels/panel_r_calculator.cpp
     calculator_panels/panel_r_calculator_base.cpp
+    calculator_panels/panel_r_divider.cpp
+    calculator_panels/panel_r_divider_base.cpp
     calculator_panels/panel_fusing_current.cpp
     calculator_panels/panel_fusing_current_base.cpp
     calculator_panels/panel_regulator.cpp
@@ -242,6 +244,7 @@ endfunction()
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/fusing_current_help )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/galvanic_corrosion_help )
     md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/iec60664_help )
+    md_doc2h( ${CMAKE_CURRENT_SOURCE_DIR}/r_divider_help )
 
 set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/attenuators/pi_formula.h
@@ -254,6 +257,7 @@ set( DOCS_LIST
         ${CMAKE_CURRENT_SOURCE_DIR}/fusing_current_help.h
         ${CMAKE_CURRENT_SOURCE_DIR}/galvanic_corrosion_help.h
         ${CMAKE_CURRENT_SOURCE_DIR}/iec60664_help.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/r_divider_help.h
     )
 
 set_source_files_properties( attenuators/attenuator_classes.cpp

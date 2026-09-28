@@ -199,6 +199,17 @@ public:
         bool     show_symbols;
     };
 
+    struct R_DIVIDER
+    {
+        int      mode;
+        wxString ratio;
+        wxString vin;
+        wxString vout;
+        int      impedanceType;
+        wxString impedance;
+        int      series;
+    };
+
     PCB_CALCULATOR_SETTINGS();
 
     virtual ~PCB_CALCULATOR_SETTINGS() {}
@@ -232,6 +243,8 @@ public:
     VIA_SIZE m_ViaSize;
 
     CORROSION_TABLE m_CorrosionTable;
+
+    R_DIVIDER m_RDivider;
 };
 
 #endif

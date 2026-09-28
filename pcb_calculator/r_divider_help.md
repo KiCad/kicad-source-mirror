@@ -1,0 +1,24 @@
+This calculator finds sets of standard E-series resistors that best realize a resistor divider. Enter the target either as a resistor ratio (R1/R2) or as an input and output voltage. The Target Impedance lets you constrain either the total resistance (R1 + R2) or the output impedance (R1 | R2). It must be between 0.1 Ω and 100 MΩ. The ratio R1/R2, whether entered or implied by the voltages, must be between 0.000001 and 1000000.
+
+Error columns show the deviation of each solution from the requested ratio (or output voltage) and impedance.
+
+Up to five solutions are listed, each the best pair of resistors under a different trade-off:
+
+1. The closest ratio, whatever the impedance.
+2. The closest ratio with the impedance loosely held (within 30 %, or three steps of the series).
+3. The closest ratio with the impedance tightly held (within 10 %, or two steps of the series).
+4. The best balance of ratio and impedance error, favoring the ratio.
+5. The best balance of ratio and impedance error, giving the impedance more weight.
+
+The last two avoid the resistor values already used above, to offer alternatives.
+
+When impedance mode is set to (R1 + R2), three resistor solutions are also considered. Up to four more solutions make R1 or R2 out of two resistors, either in series (shown as A + B) or in parallel (shown as A | B). Each is the closest ratio under a different limit on the impedance:
+
+1. Whatever the impedance.
+2. The impedance loosely held (within 30 %, or three steps of the series).
+3. The impedance tightly held (within 10 %, or two steps of the series).
+4. The impedance within 1 %.
+
+A three resistor solution is only listed if its ratio error or its impedance error is smaller than that of every two resistor solution.
+
+A set of resistors that is the best under several of these criteria is only listed once, so fewer than four three resistor solutions may be shown.

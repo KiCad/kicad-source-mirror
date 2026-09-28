@@ -45,6 +45,7 @@
 #include <calculator_panels/panel_color_code.h>
 #include <calculator_panels/panel_electrical_spacing.h>
 #include <calculator_panels/panel_r_calculator.h>
+#include <calculator_panels/panel_r_divider.h>
 #include <calculator_panels/panel_fusing_current.h>
 #include <calculator_panels/panel_regulator.h>
 #include <calculator_panels/panel_track_width.h>
@@ -167,6 +168,7 @@ void PCB_CALCULATOR_FRAME::loadPages()
 
     AddCalculator( new PANEL_REGULATOR( m_treebook ), _( "Regulators" ) );
     AddCalculator( new PANEL_R_CALCULATOR( m_treebook ), _( "Resistor Calculator" ) );
+    AddCalculator( new PANEL_R_DIVIDER( m_treebook ), _( "Resistor Divider" ) );
 
     m_treebook->AddPage( nullptr, _( "Footprint design" ) );
 

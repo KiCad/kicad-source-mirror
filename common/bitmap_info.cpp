@@ -5162,6 +5162,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::pads_remove_unused].emplace_back( BITMAPS::pads_remove_unused, wxT( "pads_remove_unused.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::pads_remove_unused_keep_bottom].emplace_back( BITMAPS::pads_remove_unused_keep_bottom, wxT( "pads_remove_unused_keep_bottom.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::pads_reset_unused].emplace_back( BITMAPS::pads_reset_unused, wxT( "pads_reset_unused.png" ), -1, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::r_divider].emplace_back( BITMAPS::r_divider, wxT( "r_divider.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::rectwaveguide].emplace_back( BITMAPS::rectwaveguide, wxT( "rectwaveguide.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::regul].emplace_back( BITMAPS::regul, wxT( "regul.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::regul_3pins].emplace_back( BITMAPS::regul_3pins, wxT( "regul_3pins.png" ), -1, wxT( "light" ) );
@@ -5198,6 +5199,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::pads_remove_unused].emplace_back( BITMAPS::pads_remove_unused, wxT( "pads_remove_unused_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::pads_remove_unused_keep_bottom].emplace_back( BITMAPS::pads_remove_unused_keep_bottom, wxT( "pads_remove_unused_keep_bottom_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::pads_reset_unused].emplace_back( BITMAPS::pads_reset_unused, wxT( "pads_reset_unused_dark.png" ), -1, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::r_divider].emplace_back( BITMAPS::r_divider, wxT( "r_divider_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::rectwaveguide].emplace_back( BITMAPS::rectwaveguide, wxT( "rectwaveguide_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::regul].emplace_back( BITMAPS::regul, wxT( "regul_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::regul_3pins].emplace_back( BITMAPS::regul_3pins, wxT( "regul_3pins_dark.png" ), -1, wxT( "dark" ) );
