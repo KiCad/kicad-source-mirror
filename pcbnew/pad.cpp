@@ -2966,8 +2966,9 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
             [&]( PCB_LAYER_ID aLayer )
             {
                 // Ensure that circles are circles
+                // Stay in the library frame, since a board-frame round trip under a scale rounds the size
                 if( aMasterPad.GetShape( aLayer ) == PAD_SHAPE::CIRCLE )
-                    SetSize( aLayer, VECTOR2I( GetSize( aLayer ).x, GetSize( aLayer ).x ) );
+                    SetLibSize( aLayer, VECTOR2I( Padstack().Size( aLayer ).x, Padstack().Size( aLayer ).x ) );
             } );
 
     switch( aMasterPad.GetAttribute() )
