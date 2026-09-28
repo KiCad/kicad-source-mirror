@@ -1169,8 +1169,9 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts, const 
             field.ClearRenderCache();
             field.Plot( aPlotter, false, aPlotOpts, sym->GetUnit(), sym->GetBodyStyle(), { 0, 0 }, dnp );
 
-            if( sym->IsSymbolLikePowerLocalLabel() && field.GetId() == FIELD_T::VALUE
-                && ( field.IsVisible() || field.IsForceVisible() ) )
+            if( sym->IsSymbolLikePowerLocalLabel()
+                    && field.GetId() == FIELD_T::VALUE
+                    && ( field.IsVisible() || field.IsForceVisible() ) )
             {
                 sym->PlotLocalPowerIconShape( aPlotter );
             }

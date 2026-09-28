@@ -4466,7 +4466,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
         aPlotter->StartBlock( nullptr );
 
         wxString variant = Schematic() ? Schematic()->GetCurrentVariant() : wxString();
-        bool            dnp = GetDNP( sheet, variant );
+        bool     dnp = GetDNP( sheet, variant );
 
         for( bool local_background : { true, false } )
         {
@@ -4477,8 +4477,10 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
                 field.ClearRenderCache();
                 field.Plot( aPlotter, local_background, aPlotOpts, GetUnit(), GetBodyStyle(), m_pos, dnp );
 
-                if( IsSymbolLikePowerLocalLabel() && field.GetId() == FIELD_T::VALUE
-                    && ( field.IsVisible() || field.IsForceVisible() ) )
+                if( IsSymbolLikePowerLocalLabel()
+                        && field.GetId() == FIELD_T::VALUE
+                        && ( field.IsVisible() || field.IsForceVisible() )
+                        && !local_background )
                 {
                     PlotLocalPowerIconShape( aPlotter );
                 }
