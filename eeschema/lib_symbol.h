@@ -138,6 +138,11 @@ public:
         return dupe;
     }
 
+    EDA_ITEM* Clone() const override
+    {
+        return new LIB_SYMBOL( *this, m_library );
+    }
+
     /**
      * Return a dummy #LIB_SYMBOL, used when one is missing in the schematic
      */
