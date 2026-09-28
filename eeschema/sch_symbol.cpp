@@ -2835,8 +2835,8 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 }
 
 
-bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
-                                 const wxString& aVariantName, int aDepth ) const
+bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, const wxString& aVariantName,
+                                 int aDepth ) const
 {
     // Per-thread regex.  CONNECTION_GRAPH::resolveAllDrivers calls this from worker
     // threads, and wxRegEx::Matches is not safe to call concurrently on one instance.
@@ -2854,8 +2854,6 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
 
     if( !schematic )
         return false;
-
-    wxString variant = aVariantName;
 
     if( SCH_CONNECTIVITY::INPUT_TEXT_SCOPE::Active()
         && ( operatingPoint.Matches( *token ) || token->StartsWith( wxS( "NET_NAME(" ) )
@@ -2994,7 +2992,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
 
     if( token->IsSameAs( wxT( "FOOTPRINT_LIBRARY" ) ) )
     {
-        wxString footprint = GetFootprintFieldText( aPath, INTERNAL );
+        wxString footprint = GetFootprintFieldText( aPath, INTERNAL, aVariantName );
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -3007,7 +3005,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
     }
     else if( token->IsSameAs( wxT( "FOOTPRINT_NAME" ) ) )
     {
-        wxString footprint = GetFootprintFieldText( aPath, INTERNAL );
+        wxString footprint = GetFootprintFieldText( aPath, INTERNAL, aVariantName );
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -3062,7 +3060,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
     {
         *token = wxEmptyString;
 
-        if( aPath->GetExcludedFromBOM( variant ) || this->ResolveExcludedFromBOM( aPath, variant ) )
+        if( aPath->GetExcludedFromBOM( aVariantName ) || this->ResolveExcludedFromBOM( aPath, aVariantName ) )
             *token = wxS( "Excluded from BOM" );
 
         return true;
@@ -3071,7 +3069,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
     {
         *token = wxEmptyString;
 
-        if( aPath->GetExcludedFromBoard( variant ) || this->ResolveExcludedFromBoard( aPath, variant ) )
+        if( aPath->GetExcludedFromBoard( aVariantName ) || this->ResolveExcludedFromBoard( aPath, aVariantName ) )
             *token = wxS( "Excluded from board" );
 
         return true;
@@ -3080,7 +3078,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
     {
         *token = wxEmptyString;
 
-        if( aPath->GetExcludedFromSim( variant ) || this->ResolveExcludedFromSim( aPath, variant ) )
+        if( aPath->GetExcludedFromSim( aVariantName ) || this->ResolveExcludedFromSim( aPath, aVariantName ) )
             *token = wxS( "Excluded from simulation" );
 
         return true;
@@ -3089,7 +3087,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
     {
         *token = wxEmptyString;
 
-        if( aPath->GetDNP( variant ) || this->ResolveDNP( aPath, variant ) )
+        if( aPath->GetDNP( aVariantName ) || this->ResolveDNP( aPath, aVariantName ) )
             *token = wxS( "DNP" );
 
         return true;
@@ -3353,21 +3351,21 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token,
         if( name == wxS( "Reference" ) )
             sourceValue = GetRef( aPath );
         else if( name == wxS( "Value" ) )
-            sourceValue = GetValue( aPath, RAW_VALUE, variant );
+            sourceValue = GetValue( aPath, RAW_VALUE, aVariantName );
         else if( name == wxS( "Unit" ) )
             sourceValue = GetUnitSelection( aPath );
         else if( name == wxS( "Exclude From Simulation" ) )
-            sourceValue = GetExcludedFromSim( aPath, variant );
+            sourceValue = GetExcludedFromSim( aPath, aVariantName );
         else if( name == wxS( "Exclude From Bill of Materials" ) )
-            sourceValue = GetExcludedFromBOM( aPath, variant );
+            sourceValue = GetExcludedFromBOM( aPath, aVariantName );
         else if( name == wxS( "Exclude From Board" ) )
-            sourceValue = GetExcludedFromBoard( aPath, variant );
+            sourceValue = GetExcludedFromBoard( aPath, aVariantName );
         else if( name == wxS( "Exclude From Position Files" ) )
-            sourceValue = GetExcludedFromPosFiles( aPath, variant );
+            sourceValue = GetExcludedFromPosFiles( aPath, aVariantName );
         else if( name == wxS( "Do not Populate" ) )
-            sourceValue = GetDNP( aPath, variant );
+            sourceValue = GetDNP( aPath, aVariantName );
         else if( auto* instanceProperty = dynamic_cast<SCH_SYMBOL_INSTANCE_PROPERTY*>( property ) )
-            sourceValue = instanceProperty->ValueForInstance( this, aPath, variant );
+            sourceValue = instanceProperty->ValueForInstance( this, aPath, aVariantName );
         else
             sourceValue = Get( property );
 
