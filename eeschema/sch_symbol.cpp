@@ -4902,7 +4902,7 @@ LIB_SYMBOL* SCH_SYMBOL::GetVariantLibSymbol( const wxString&      aVariantName,
 
             cached = libSymbol->Flatten();
 
-            if( m_part && !ValidateVariantSymbolCompatibility( *m_part, *cached ).empty() )
+            if( m_part && cached && !ValidateVariantSymbolCompatibility( *m_part, *cached ).empty() )
             {
                 cached.reset();
                 return nullptr;
