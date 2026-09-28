@@ -49,6 +49,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
         m_Plugins(),
         m_Window(),
         m_CustomToolbars( false ),
+        m_ArcDrawMode( ARC_DRAW_MODE::CENTER_START_END ),
         m_appSettingsSchemaVersion( aSchemaVersion )
 {
     // Build parameters list:
@@ -296,6 +297,9 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
 
     m_params.emplace_back( new PARAM<bool>( "appearance.custom_toolbars",
                 &m_CustomToolbars, false ) );
+
+    m_params.emplace_back( new PARAM_ENUM<ARC_DRAW_MODE>( "editing.arc_draw_mode", &m_ArcDrawMode,
+            ARC_DRAW_MODE::CENTER_START_END, ARC_DRAW_MODE::CENTER_START_END, ARC_DRAW_MODE::START_DIR_END ) );
 
     addParamsForWindow( &m_Window, "window" );
 

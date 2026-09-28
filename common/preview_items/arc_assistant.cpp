@@ -25,7 +25,10 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <view/view.h>
 
+#include <algorithm>
+
 #include <base_units.h>
+#include <math/util.h>
 #include <trigo.h>
 
 using namespace KIGFX::PREVIEW;
@@ -46,7 +49,7 @@ const BOX2I ARC_ASSISTANT::ViewBBox() const
     BOX2I tmp;
 
     // no bounding box when no graphic shown
-    if( m_constructMan.IsReset() )
+    if( !m_constructMan.HasPreview() )
         return tmp;
 
     // this is an edit-time artifact; no reason to try and be smart with the bounding box
@@ -58,27 +61,34 @@ const BOX2I ARC_ASSISTANT::ViewBBox() const
 
 void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    KIGFX::GAL& gal = *aView->GetGAL();
-
     // not in a position to draw anything
-    if( m_constructMan.IsReset() )
+    if( !m_constructMan.HasPreview() )
         return;
 
-    gal.ResetTextAttributes();
+    aView->GetGAL()->ResetTextAttributes();
 
+    if( m_constructMan.GetMode() == ARC_DRAW_MODE::CENTER_START_END )
+        drawCenterGuides( aLayer, aView );
+    else
+        drawEndpointGuides( aLayer, aView );
+}
+
+
+void ARC_ASSISTANT::drawCenterGuides( int aLayer, KIGFX::VIEW* aView ) const
+{
     const VECTOR2I origin = m_constructMan.GetOrigin();
 
     KIGFX::PREVIEW::DRAW_CONTEXT preview_ctx( *aView );
 
     // draw first radius line
-    bool dimFirstLine = m_constructMan.GetStep() > ARC_GEOM_MANAGER::SET_START;
+    bool dimFirstLine = m_constructMan.GetStep() > ARC_GEOM_MANAGER::SECOND_POINT;
 
     preview_ctx.DrawLineWithAngleHighlight( origin, m_constructMan.GetStartRadiusEnd(),
                                             dimFirstLine );
 
     wxArrayString cursorStrings;
 
-    if( m_constructMan.GetStep() == ARC_GEOM_MANAGER::SET_START )
+    if( m_constructMan.GetStep() == ARC_GEOM_MANAGER::SECOND_POINT )
     {
         // haven't started the angle selection phase yet
 
@@ -119,5 +129,107 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     // place the text next to cursor, on opposite side from radius
     DrawTextNextToCursor( aView, m_constructMan.GetLastPoint(),
                           origin - m_constructMan.GetLastPoint(), cursorStrings,
+                          aLayer == LAYER_SELECT_OVERLAY );
+}
+
+
+void ARC_ASSISTANT::drawEndpointGuides( int aLayer, KIGFX::VIEW* aView ) const
+{
+    const int index = m_constructMan.GetPointIndex();
+
+    // The first point is only being placed
+    if( index == 0 )
+        return;
+
+    const ARC_DRAW_MODE         mode = m_constructMan.GetMode();
+    const KIGEOM::ARC_SOLUTION& sol = m_constructMan.GetSolution();
+    const VECTOR2I              start = m_constructMan.GetStartRadiusEnd();
+    const VECTOR2I              cursor = m_constructMan.GetLastPoint();
+    const bool chordModes = mode == ARC_DRAW_MODE::START_END_MID || mode == ARC_DRAW_MODE::START_END_CENTER;
+    const double pixel = aView->ToWorld( 1.0 );
+    const int    dashSize = KiROUND( 12 * pixel );
+
+    KIGFX::PREVIEW::DRAW_CONTEXT preview_ctx( *aView );
+
+    // Long guides, such as the line to a far away center, are cut so the dashes stay bounded
+    auto dashedGuide =
+            [&]( const VECTOR2I& aFrom, const VECTOR2D& aTo )
+            {
+                const VECTOR2D delta = aTo - VECTOR2D( aFrom );
+                const double   length = delta.EuclideanNorm();
+                const double   limit = 400 * pixel;
+                const VECTOR2D end = length > limit ? VECTOR2D( aFrom ) + delta * ( limit / length ) : aTo;
+
+                preview_ctx.DrawLineDashed( aFrom, KiROUND( end ), dashSize,
+                                            dashSize / 2, false );
+            };
+
+    wxArrayString cursorStrings;
+    VECTOR2D      labelAnchor( start );
+
+    if( chordModes )
+    {
+        // The chord is what the first two clicks fixed, and the cursor chases its end until then
+        const VECTOR2I chordEnd = index == 1 ? cursor : m_constructMan.GetPoint( 1 );
+        const VECTOR2D chordMid = ( VECTOR2D( start ) + VECTOR2D( chordEnd ) ) / 2.0;
+
+        preview_ctx.DrawLineWithAngleHighlight( start, chordEnd, index > 1 );
+        labelAnchor = chordMid;
+
+        if( index > 1 && sol.valid )
+        {
+            const VECTOR2D marked = mode == ARC_DRAW_MODE::START_END_MID ? VECTOR2D( sol.mid ) : sol.center;
+
+            // Bisector guide and a marker on the point derived from the cursor
+            dashedGuide( KiROUND( chordMid ), marked );
+            preview_ctx.DrawCircle( KiROUND( marked ), 4 * pixel, false );
+
+            if( mode == ARC_DRAW_MODE::START_END_CENTER )
+            {
+                preview_ctx.DrawLine( KiROUND( marked ), sol.start, true );
+                preview_ctx.DrawLine( KiROUND( marked ), sol.end, true );
+            }
+
+            cursorStrings.push_back( DimensionLabel( "r", sol.radius, m_iuScale, m_units ) );
+            cursorStrings.push_back( DimensionLabel( "s", ( VECTOR2D( sol.mid ) - chordMid ).EuclideanNorm(),
+                                                     m_iuScale, m_units ) );
+        }
+    }
+    else
+    {
+        // The tangent ray is at least as long as the distance to the cursor so it reads as a direction
+        const VECTOR2D dir = m_constructMan.GetTangentDirection();
+        const double   length = dir.EuclideanNorm();
+
+        if( length > 0.0 )
+            dashedGuide( start, VECTOR2D( start ) + dir * ( std::max( length, 100 * pixel ) / length ) );
+
+        if( index == 1 )
+        {
+            preview_ctx.DrawLineWithAngleHighlight( start, cursor, true );
+
+            EDA_ANGLE heading( dir );
+
+            cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), heading.AsDegrees(), m_iuScale,
+                                                     EDA_UNITS::DEGREES ) );
+        }
+        else if( sol.valid )
+        {
+            preview_ctx.DrawLine( start, sol.end, true );
+            cursorStrings.push_back( DimensionLabel( "r", sol.radius, m_iuScale, m_units ) );
+        }
+    }
+
+    if( sol.valid )
+    {
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "Δθ" ), m_constructMan.GetSubtended().AsDegrees(),
+                                                 m_iuScale, EDA_UNITS::DEGREES ) );
+    }
+
+    if( cursorStrings.empty() )
+        return;
+
+    // place the text next to cursor, on opposite side from the guides
+    DrawTextNextToCursor( aView, cursor, labelAnchor - VECTOR2D( cursor ), cursorStrings,
                           aLayer == LAYER_SELECT_OVERLAY );
 }

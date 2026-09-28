@@ -650,6 +650,9 @@ protected:
 
     virtual void configureToolbars();
 
+    /// Called after the toolbars are rebuilt so a frame can select the group entries that reflect its saved state.
+    virtual void syncToolbarSelections() {}
+
     /**
      * Handle the auto save timer event.
      */

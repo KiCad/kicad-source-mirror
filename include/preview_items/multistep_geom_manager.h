@@ -63,7 +63,7 @@ public:
         bool accepted = acceptPoint( aPt );
 
         // advance or regress the manager
-        if( aLockIn )
+        if( aLockIn && ( accepted || rejectRegresses() ) )
             performStep( accepted );
 
         setGeometryChanged();
@@ -158,6 +158,12 @@ private:
     /// Function that accepts a point for a stage, or rejects it
     /// to return to the previous stage
     virtual bool acceptPoint( const VECTOR2I& aPt ) = 0;
+
+    /**
+     * @return false if a rejected point should leave the manager on its current stage instead of
+     *         returning it to the previous one.
+     */
+    virtual bool rejectRegresses() const { return true; }
 
     /**
      * The highest step this manager has - used to recognize completion

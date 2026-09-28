@@ -68,6 +68,12 @@ public:
     void SetUnits( EDA_UNITS aUnits ) { m_units = aUnits; }
 
 private:
+    /// Guides for center, start and end construction
+    void drawCenterGuides( int aLayer, KIGFX::VIEW* aView ) const;
+
+    /// Guides for the modes that keep the clicked endpoints
+    void drawEndpointGuides( int aLayer, KIGFX::VIEW* aView ) const;
+
     const ARC_GEOM_MANAGER& m_constructMan;
     const EDA_IU_SCALE&     m_iuScale;
     EDA_UNITS               m_units;

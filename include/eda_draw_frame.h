@@ -32,6 +32,7 @@
 #include <kiid.h>
 #include <hotkeys_basic.h>
 #include <lib_id.h>
+#include <tool/arc_draw_mode.h>
 
 struct EDA_SEARCH_DATA;
 struct PLUGIN_ACTION;
@@ -558,6 +559,19 @@ protected:
     void unitsChangeRefresh() override;
 
     void setupUIConditions() override;
+
+    /// The action that starts the arc tool in @a aMode, or nullptr in a frame without an arc tool.
+    virtual const TOOL_ACTION* drawArcAction( ARC_DRAW_MODE aMode ) const { return nullptr; }
+
+    /**
+     * Check each arc mode's tool action while the arc tool runs in that mode.
+     *
+     * @param aDrawArc is the arc tool action without a mode; its name must begin every arc tool action's name.
+     * @param aEnable enables the arc tool actions.
+     */
+    void setArcModeConditions( const TOOL_ACTION& aDrawArc, const std::function<bool( const SELECTION& )>& aEnable );
+
+    void syncToolbarSelections() override;
 
     void setupUnits( APP_SETTINGS_BASE* aCfg );
 

@@ -608,6 +608,13 @@ TOOL_ACTION ACTIONS::arcPosture( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Switch Arc Posture" ) )
         .Tooltip( _( "Switch arc posture between clockwise and counter-clockwise" ) ) );
 
+TOOL_ACTION ACTIONS::cycleArcDrawMode( TOOL_ACTION_ARGS()
+        .Name( "common.InteractiveDrawing.cycleArcDrawMode" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_ALT + '/' )
+        .FriendlyName( _( "Cycle Arc Drawing Mode" ) )
+        .Tooltip( _( "Switch to the next method of drawing arcs" ) ) );
+
 TOOL_ACTION ACTIONS::deleteLastPoint( TOOL_ACTION_ARGS()
         .Name( "common.InteractiveDrawing.deleteLastPoint" )
         .Scope( AS_GLOBAL )

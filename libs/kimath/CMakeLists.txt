@@ -12,6 +12,7 @@ set( KIMATH_SRCS
     src/trigo.cpp
 
     src/geometry/arc_chord_params.cpp
+    src/geometry/arc_construction.cpp
     src/geometry/corner_operations.cpp
     src/geometry/distribute.cpp
     src/geometry/eda_angle.cpp

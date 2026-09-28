@@ -902,6 +902,8 @@ set( COMMON_SRCS
     tool/action_menu.cpp
     tool/action_toolbar.cpp
     tool/actions.cpp
+    tool/arc_mode_session.cpp
+    tool/arc_tangent_seed.cpp
     tool/common_control.cpp
     tool/construction_manager.cpp
     tool/common_tools.cpp

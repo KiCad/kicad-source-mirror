@@ -836,6 +836,8 @@ void EDA_BASE_FRAME::RecreateToolbars()
 
         m_tbTopAux->ApplyConfiguration( tbConfig.value() );
     }
+
+    syncToolbarSelections();
 }
 
 

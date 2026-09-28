@@ -22,6 +22,7 @@
 #include <eda_item.h>
 #include <eda_units.h>
 #include <math/vector2d.h>
+#include <tool/arc_draw_mode.h>
 
 class EDA_SHAPE;
 
@@ -92,6 +93,28 @@ public:
 
     /// Enable or disable angle snapping (circular arcs only; no-op for others).
     virtual void SetAngleSnap( bool aSnap ) {}
+
+    /**
+     * Select the construction sequence (circular arcs only; no-op for others).
+     *
+     * Switching mid-draw keeps the first locked point when it is an arc start in both modes, which is
+     * every mode except CENTER_START_END; otherwise construction restarts.
+     */
+    virtual void SetArcDrawMode( ARC_DRAW_MODE aMode ) {}
+
+    /**
+     * Preload the start point and departure direction for ARC_DRAW_MODE::TANGENT.
+     *
+     * Reset() clears the seed, so call this after Reset() and before the first AddPoint(). Without a seed,
+     * TANGENT takes its start and direction from clicks exactly like START_DIR_END.
+     *
+     * @param aDirectionIsAxis false when @a aDirection is the signed departure direction (continuing from an
+     *                         endpoint); true when only the tangent line is known (starting inside an item), in
+     *                         which case the sign giving the smaller sweep to the cursor is used and
+     *                         ToggleClockwise() flips it.
+     */
+    virtual void SetTangentSeed( const VECTOR2I& aStart, const VECTOR2D& aDirection,
+                                 bool aDirectionIsAxis = false ) {}
 
     /**
      * Called when the user invokes the properties action mid-draw.

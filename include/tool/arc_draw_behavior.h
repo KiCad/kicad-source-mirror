@@ -31,7 +31,8 @@ struct EDA_IU_SCALE;
 
 
 /**
- * Interactive arc drawing behaviour: center -> start -> end angle.
+ * Interactive arc drawing behaviour. The points to click depend on the arc draw mode, which
+ * defaults to center -> start -> end angle.
  */
 class ARC_DRAW_BEHAVIOR : public MANAGED_DRAW_BEHAVIOR<KIGFX::PREVIEW::ARC_GEOM_MANAGER, KIGFX::PREVIEW::ARC_ASSISTANT>
 {
@@ -44,15 +45,32 @@ public:
     void SetAngleSnap( bool aSnap ) override { m_manager.SetAngleSnap( aSnap ); }
     void ToggleClockwise() override { m_manager.ToggleClockwise(); }
 
+    void SetArcDrawMode( ARC_DRAW_MODE aMode ) override { m_manager.SetMode( aMode ); }
+
+    void SetTangentSeed( const VECTOR2I& aStart, const VECTOR2D& aDirection, bool aDirectionIsAxis = false ) override
+    {
+        m_manager.SetTangentSeed( aStart, aDirection, aDirectionIsAxis );
+    }
+
     bool OnProperties( EDA_SHAPE& aShape ) override
     {
-        if( m_manager.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_START )
+        if( m_manager.UsesExactEndpoints() )
+        {
+            // Once the arc is determined, hand over what the preview shows
+            if( !m_manager.GetSolution().valid )
+                return false;
+
+            ApplyToShape( aShape );
+            return true;
+        }
+
+        if( m_manager.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SECOND_POINT )
         {
             aShape.SetArcAngleAndEnd( ANGLE_90 );
             return true;
         }
 
-        if( m_manager.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::SET_ANGLE
+        if( m_manager.GetStep() == KIGFX::PREVIEW::ARC_GEOM_MANAGER::THIRD_POINT
             && m_manager.GetStartRadiusEnd() != m_manager.GetEndRadiusEnd() )
         {
             return true;
@@ -63,6 +81,15 @@ public:
 
     void ApplyToShape( EDA_SHAPE& aShape ) const override
     {
+        // Winding follows the midpoint, and the clicked endpoints are kept exactly
+        if( m_manager.UsesExactEndpoints() && m_manager.GetSolution().valid )
+        {
+            const KIGEOM::ARC_SOLUTION& solution = m_manager.GetSolution();
+
+            aShape.SetArcGeometry( solution.start, solution.mid, solution.end );
+            return;
+        }
+
         const VECTOR2I center = m_manager.GetOrigin();
         aShape.SetCenter( center );
 

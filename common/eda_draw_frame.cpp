@@ -1295,6 +1295,49 @@ void EDA_DRAW_FRAME::setupUIConditions()
 }
 
 
+void EDA_DRAW_FRAME::setArcModeConditions( const TOOL_ACTION&                                 aDrawArc,
+                                           const std::function<bool( const SELECTION& )>& aEnable )
+{
+    ACTION_MANAGER*   mgr = m_toolManager->GetActionManager();
+    const std::string arcToolPrefix = aDrawArc.GetName();
+
+    // Every arc tool action extends the plain action's name, so one compare covers them all
+    const SELECTION_CONDITION arcToolActive =
+            [this, arcToolPrefix]( const SELECTION& )
+            {
+                return CurrentToolName().starts_with( arcToolPrefix );
+            };
+
+    ARC_DRAW_MODE mode = ARC_DRAW_MODE::CENTER_START_END;
+
+    do
+    {
+        const SELECTION_CONDITION inMode =
+                [this, mode]( const SELECTION& )
+                {
+                    APP_SETTINGS_BASE* cfg = config();
+
+                    return cfg && cfg->m_ArcDrawMode == mode;
+                };
+
+        if( const TOOL_ACTION* action = drawArcAction( mode ) )
+            mgr->SetConditions( *action, ACTION_CONDITIONS().Enable( aEnable ).Check( inMode && arcToolActive ) );
+
+        mode = IncrementArcDrawMode( mode );
+    } while( mode != ARC_DRAW_MODE::CENTER_START_END );
+}
+
+
+void EDA_DRAW_FRAME::syncToolbarSelections()
+{
+    APP_SETTINGS_BASE* cfg = config();
+
+    // The arc group would otherwise start on its first entry and overwrite the saved mode
+    if( const TOOL_ACTION* action = cfg ? drawArcAction( cfg->m_ArcDrawMode ) : nullptr )
+        SelectToolbarAction( *action );
+}
+
+
 void EDA_DRAW_FRAME::setupUnits( APP_SETTINGS_BASE* aCfg )
 {
     COMMON_TOOLS* cmnTool = m_toolManager->GetTool<COMMON_TOOLS>();

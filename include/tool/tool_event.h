@@ -463,6 +463,21 @@ public:
     }
 
     /**
+     * Return the parameter when it holds a @a T, or std::nullopt otherwise.
+     *
+     * Unlike Parameter(), a parameter of another type is not an error, so a tool can probe events from actions
+     * whose parameters differ in type.
+     */
+    template<typename T>
+    std::optional<T> ParameterIf() const
+    {
+        if( m_param.has_value() && m_param.type() == typeid( T ) )
+            return ki::any_cast<T>( m_param );
+
+        return std::nullopt;
+    }
+
+    /**
      * Return a parameter assigned to the event. Its meaning depends on the target tool.
      */
     template<typename T, std::enable_if_t<!std::is_pointer<T>::value>* = nullptr >

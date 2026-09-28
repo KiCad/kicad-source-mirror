@@ -1409,10 +1409,6 @@ void EDA_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, co
 
     m_endsSwapped = false;
 
-    // Watch the ordering here.  GetArcMid above needs to be called prior to initializing the
-    // m_arcMidData structure in order to ensure we get the calculated variant, not the cached
-    SetCachedArcData( aStart, aMid, aEnd, m_arcCenter );
-
     /*
      * If the input winding doesn't match our internal winding, the calculated midpoint will end
      * up on the other side of the arc.  In this case, we need to flip the start/end points and
@@ -1426,6 +1422,11 @@ void EDA_SHAPE::SetArcGeometry( const VECTOR2I& aStart, const VECTOR2I& aMid, co
         std::swap( m_start, m_end );
         m_endsSwapped = true;
     }
+
+    // Watch the ordering here.  GetArcMid above needs to be called prior to initializing the
+    // m_arcMidData structure in order to ensure we get the calculated variant, not the cached.
+    // The cache is keyed on the stored ends, so it must follow any swap or GetArcMid never hits it
+    SetCachedArcData( m_start, aMid, m_end, m_arcCenter );
 }
 
 

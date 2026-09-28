@@ -24,6 +24,7 @@
 #include <gal/color4d.h>
 #include <json_common.h>
 #include <settings/json_settings.h>
+#include <tool/arc_draw_mode.h>
 #include <settings/grid_settings.h>
 
 /**
@@ -268,6 +269,9 @@ public:
 
     /// Use custom toolbars
     bool m_CustomToolbars;
+
+    /// Construction sequence last used by the arc drawing tool in this application.
+    ARC_DRAW_MODE m_ArcDrawMode;
 
 
     /// Local schema version for common app settings.
