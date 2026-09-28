@@ -237,7 +237,10 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
         view->UpdateAllItemsConditionally( KIGFX::REPAINT,
                 []( KIGFX::VIEW_ITEM* aItem )
                 {
-                    GERBER_DRAW_ITEM* item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+                    GERBER_DRAW_ITEM* item = dynamic_cast<GERBER_DRAW_ITEM*>( aItem );
+
+                    if( !item )
+                        return false;
 
                     switch( item->m_ShapeType )
                     {
@@ -258,7 +261,10 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
         view->UpdateAllItemsConditionally( KIGFX::REPAINT,
                 []( KIGFX::VIEW_ITEM* aItem )
                 {
-                    GERBER_DRAW_ITEM* item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+                    GERBER_DRAW_ITEM* item = dynamic_cast<GERBER_DRAW_ITEM*>( aItem );
+
+                    if( !item )
+                        return false;
 
                     switch( item->m_ShapeType )
                     {
@@ -281,9 +287,9 @@ int GERBVIEW_CONTROL::DisplayControl( const TOOL_EVENT& aEvent )
         view->UpdateAllItemsConditionally( KIGFX::REPAINT,
                 []( KIGFX::VIEW_ITEM* aItem )
                 {
-                    GERBER_DRAW_ITEM* item = static_cast<GERBER_DRAW_ITEM*>( aItem );
+                    GERBER_DRAW_ITEM* item = dynamic_cast<GERBER_DRAW_ITEM*>( aItem );
 
-                    return ( item->m_ShapeType == GBR_POLYGON );
+                    return ( item && item->m_ShapeType == GBR_POLYGON );
                 } );
     }
     else if( aEvent.IsAction( &GERBVIEW_ACTIONS::negativeObjectDisplay ) )
