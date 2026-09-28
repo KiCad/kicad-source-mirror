@@ -47,6 +47,7 @@
 #include <board_text_var_adapter.h>
 #include <font/outline_font.h>
 #include <length_delay_calculation/length_delay_calculation.h>
+#include <layer_range.h>
 #include <lset.h>
 #include <pad.h>
 #include <pcb_base_frame.h>
@@ -1169,13 +1170,8 @@ PCB_LAYER_ID BOARD::GetCopperLayerStackMaxId() const
 
 int BOARD::LayerDepth( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer ) const
 {
-    if( aStartLayer > aEndLayer )
-        std::swap( aStartLayer, aEndLayer );
-
-    if( aEndLayer == B_Cu )
-        aEndLayer = ToLAYER_ID( F_Cu + GetCopperLayerCount() - 1 );
-
-    return aEndLayer - aStartLayer;
+    // Copper IDs are not in stack order (B_Cu=2, In1_Cu=4), so count in stack positions
+    return static_cast<int>( LAYER_RANGE( aStartLayer, aEndLayer, GetCopperLayerCount() ).size() ) - 1;
 }
 
 
