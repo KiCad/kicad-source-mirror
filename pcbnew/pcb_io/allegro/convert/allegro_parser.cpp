@@ -157,7 +157,8 @@ FMT_VER HEADER_PARSER::FormatFromMagic( uint32_t aMagic )
     switch( masked )
     {
     case 0x00130000: return FMT_VER::V_160;
-    case 0x00130400: return FMT_VER::V_162;
+    case 0x00130400:
+    case 0x00130500: return FMT_VER::V_162;
     case 0x00130C00: return FMT_VER::V_164;
     case 0x00131000: return FMT_VER::V_165;
     case 0x00131500: return FMT_VER::V_166;

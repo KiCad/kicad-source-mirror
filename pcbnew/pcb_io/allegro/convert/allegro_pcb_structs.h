@@ -133,7 +133,7 @@ enum class FMT_VER
     V_UNKNOWN,
     V_PRE_V16, // Allegro versions before 16.0 (unsupported binary format)
     V_160, // Allegro 16.0, 0x00130000
-    V_162, // Allegro 16.2  0x00130400
+    V_162, // Allegro 16.2  0x00130400, 0x00130500
     V_164, // Allegro 16.4, 0x00130C00
     V_165, // Allegro 16.5, 0x00131000
     V_166, // Allegro 16.6, 0x00131500
@@ -1546,10 +1546,9 @@ struct BLK_0x1E_SI_MODEL
     uint32_t m_Key;
     uint32_t m_Next;         ///< Linked list next pointer (used by LL_WALKER)
 
-    // Versioning seems unsure here
-    // At least it is in Kinoma (V_164)
-    COND_GE<FMT_VER::V_164, uint16_t> m_Unknown2;
-    COND_GE<FMT_VER::V_164, uint16_t> m_Unknown3;
+    // Present in 16.2 (TWR-MCF51JG LAY-26493) and Kinoma (V_164); no 16.0 sample yet
+    COND_GE<FMT_VER::V_162, uint16_t> m_Unknown2;
+    COND_GE<FMT_VER::V_162, uint16_t> m_Unknown3;
 
     uint32_t m_StrPtr;
     uint32_t m_Size;
