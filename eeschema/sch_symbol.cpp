@@ -2957,13 +2957,9 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, c
         if( token->IsSameAs( fieldName, false ) )
         {
             if( field.GetId() == FIELD_T::REFERENCE )
-            {
                 *token = GetRef( aPath, true );
-            }
             else
-            {
                 *token = field.GetShownText( aPath, INTERNAL, aVariantName, aDepth + 1 );
-            }
 
             return true;
         }
@@ -3101,24 +3097,25 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, c
         wxString pinNumber = token->AfterFirst( '(' );
         pinNumber = pinNumber.BeforeLast( ')' );
 
-        auto resolvePinConnection = [&]( const SCH_PIN& pin, const SCH_SHEET_PATH& path )
-        {
-            const bool local = token->StartsWith( wxS( "SHORT_NET_NAME" ) );
-            const auto name = pin.GetConnectionName( &path, local );
+        auto resolvePinConnection =
+                [&]( const SCH_PIN& pin, const SCH_SHEET_PATH& path )
+                {
+                    const bool local = token->StartsWith( wxS( "SHORT_NET_NAME" ) );
+                    const auto name = pin.GetConnectionName( &path, local );
 
-            if( !name )
-            {
-                token->clear();
-                return;
-            }
+                    if( !name )
+                    {
+                        token->clear();
+                        return;
+                    }
 
-            if( local )
-                *token = name->Lower().StartsWith( wxS( "unconnected" ) ) ? wxString( "NC" ) : *name;
-            else if( token->StartsWith( wxS( "NET_NAME" ) ) )
-                *token = *name;
-            else if( token->StartsWith( wxS( "NET_CLASS" ) ) )
-                *token = pin.GetEffectiveNetClass( &path )->GetName();
-        };
+                    if( local )
+                        *token = name->Lower().StartsWith( wxS( "unconnected" ) ) ? wxString( "NC" ) : *name;
+                    else if( token->StartsWith( wxS( "NET_NAME" ) ) )
+                        *token = *name;
+                    else if( token->StartsWith( wxS( "NET_CLASS" ) ) )
+                        *token = pin.GetEffectiveNetClass( &path )->GetName();
+                };
 
         bool isReferenceFunction = token->StartsWith( wxT( "REFERENCE(" ) );
         bool isShortReferenceFunction = token->StartsWith( wxT( "SHORT_REFERENCE(" ) );
