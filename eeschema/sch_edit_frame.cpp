@@ -525,7 +525,7 @@ void SCH_EDIT_FRAME::StartCrossProbeFlash( const std::vector<SCH_ITEM*>& aItems 
     if( !m_crossProbeFlashTimer.GetOwner() )
         m_crossProbeFlashTimer.SetOwner( this );
 
-    bool started = m_crossProbeFlashTimer.Start( 500, wxTIMER_CONTINUOUS );
+    [[maybe_unused]] bool started = m_crossProbeFlashTimer.Start( 500, wxTIMER_CONTINUOUS );
     wxLogTrace( traceCrossProbeFlash, "StartCrossProbeFlash: timer start=%d id=%d", (int) started,
                 m_crossProbeFlashTimer.GetId() );
 }
