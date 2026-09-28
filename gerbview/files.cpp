@@ -385,11 +385,15 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString&      aPath,
                 ( *aFileType )[ii] = 0;
             }
 
+            bool read_ok = false;
+
             switch( ( *aFileType )[ii] )
             {
             case 0:
 
-                if( Read_GERBER_File( filename.GetFullPath() ) )
+                read_ok = Read_GERBER_File( filename.GetFullPath() );
+
+                if( read_ok )
                 {
                     UpdateFileHistory( filename.GetFullPath() );
 
@@ -403,7 +407,9 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString&      aPath,
 
             case 1:
 
-                if( Read_EXCELLON_File( filename.GetFullPath() ) )
+                read_ok = Read_EXCELLON_File( filename.GetFullPath() );
+
+                if( read_ok )
                 {
                     UpdateFileHistory( filename.GetFullPath(), &m_drillFileHistory );
 
@@ -416,6 +422,12 @@ bool GERBVIEW_FRAME::LoadListOfGerberAndDrillFiles( const wxString&      aPath,
 
                 break;
             default:
+                break;
+            }
+
+            if( !read_ok )
+            {
+                success = false;
                 wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
                 reporter.Report( txt, RPT_SEVERITY_ERROR );
             }
