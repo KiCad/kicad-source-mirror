@@ -867,6 +867,12 @@ bool SCH_FIELD::IsLocked() const
             return true;
     }
 
+    if( const SCH_LABEL_BASE* parentLabel = dynamic_cast<const SCH_LABEL_BASE*>( m_parent ) )
+    {
+        if( parentLabel->IsLocked() )
+            return true;
+    }
+
     return SCH_ITEM::IsLocked();
 }
 
