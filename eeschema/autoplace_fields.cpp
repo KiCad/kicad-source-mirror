@@ -120,7 +120,7 @@ public:
         m_fbox_size = computeFBoxSize( /* aDynamic */ true );
 
         if( SCH_SYMBOL* schSymbol = dynamic_cast<SCH_SYMBOL*>( m_symbol ) )
-            m_is_power_symbol = !schSymbol->IsInNetlist();
+            m_is_power_symbol = !schSymbol->DoNetList();
 
         if( aScreen )
             getPossibleCollisions( m_colliders );

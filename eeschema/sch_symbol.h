@@ -843,7 +843,7 @@ public:
     /**
      * @return true if the symbol is in netlist.
      */
-    bool IsInNetlist() const;
+    bool DoNetList() const;
 
     enum class PASSTHROUGH_MODE
     {
@@ -1098,13 +1098,15 @@ private:
     PIN_MAP_INSTANCE_OVERRIDE resolveDelegatedPinMapOverride( const SCH_SHEET_PATH& aSheet,
                                                               const wxString&       aVariantName ) const;
 
+    void rebuildInstancePathIndex();
+
 private:
-    VECTOR2I    m_pos;
-    LIB_ID      m_lib_id;       ///< Name and library the symbol was loaded from, i.e. 74xx:74LS00.
-    wxString    m_prefix;       ///< C, R, U, Q etc - the first character(s) which typically
-                                ///<   indicate what the symbol is. Determined, upon placement,
-                                ///<   from the library symbol.  Created upon file load, by the
-                                ///<   first non-digits in the reference fields.
+    VECTOR2I              m_pos;
+    LIB_ID                m_lib_id;       ///< Name and library the symbol was loaded from, i.e. 74xx:74LS00.
+    wxString              m_prefix;       ///< C, R, U, Q etc - the first character(s) which typically
+                                          ///<   indicate what the symbol is. Determined, upon placement,
+                                          ///<   from the library symbol.  Created upon file load, by the
+                                          ///<   first non-digits in the reference fields.
 
     /**
      * The name used to look up a symbol in the symbol library embedded in a schematic.
@@ -1113,29 +1115,29 @@ private:
      * multiple variants of the same library symbol.  Set this member in order to preserve the
      * link to the original symbol library.  If empty, #LIB_ID::GetLibItemName() should be used.
      */
-    wxString                    m_schLibSymbolName;
+    wxString                               m_schLibSymbolName;
 
-    std::vector<SCH_FIELD>      m_fields;        ///< Variable length list of fields.
+    std::vector<SCH_FIELD>                 m_fields;        ///< Variable length list of fields.
 
     /// Per-object cache of dynamic property descriptors for custom fields and
     /// effective pin-map entries, keyed by descriptor name and populated
     /// lazily.
     mutable std::map<wxString, std::unique_ptr<PROPERTY_BASE>> m_dynamicPropertyCache;
 
-    std::unique_ptr<LIB_SYMBOL> m_part;          ///< A flattened copy of the #LIB_SYMBOL from the
-                                                 ///< #PROJECT object's libraries.
-    bool                        m_isInNetlist;   ///< True if the symbol should appear in netlist
+    std::unique_ptr<LIB_SYMBOL>            m_part;          ///< A flattened copy of the #LIB_SYMBOL from the
+                                                            ///< #PROJECT object's libraries.
+    bool                                   m_doNetlist;     ///< True if the symbol should appear in netlist
 
-    PASSTHROUGH_MODE            m_passthroughMode;
+    PASSTHROUGH_MODE                       m_passthroughMode;
 
-    wxString                    m_signalName;
+    wxString                               m_signalName;
 
     std::vector<std::unique_ptr<SCH_PIN>>  m_pins;     ///< A copy of #SCH_PIN objects from the library symbol.
     std::unordered_map<SCH_PIN*, SCH_PIN*> m_pinMap;   ///< Library pin pointer : #SCH_PIN indices.
 
     /// Base (no-variant) pin-to-pad map override applied when no variant override exists for the
     /// sheet path (issue #2282).
-    PIN_MAP_INSTANCE_OVERRIDE m_pinMapOverride;
+    PIN_MAP_INSTANCE_OVERRIDE              m_pinMapOverride;
 
     /**
      * Define the hierarchical path and reference of the symbol.
@@ -1149,8 +1151,6 @@ private:
      * Maintained by AddHierarchicalReference() and RemoveInstance().
      */
     std::unordered_map<KIID_PATH, size_t>  m_instancePathIndex;
-
-    void rebuildInstancePathIndex();
 
     mutable std::map<wxString, std::unique_ptr<LIB_SYMBOL>> m_variantSymbolCache;
 

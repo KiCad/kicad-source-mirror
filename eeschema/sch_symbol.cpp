@@ -651,7 +651,7 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
     m_unit = aSymbol.m_unit;
     m_bodyStyle = aSymbol.m_bodyStyle;
     m_lib_id = aSymbol.m_lib_id;
-    m_isInNetlist = aSymbol.m_isInNetlist;
+    m_doNetlist = aSymbol.m_doNetlist;
     m_DNP = aSymbol.m_DNP;
 
     const_cast<KIID&>( m_Uuid ) = aSymbol.m_Uuid;
@@ -660,21 +660,26 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
     m_prefix = aSymbol.m_prefix;
     m_instances = aSymbol.m_instances;
     m_instancePathIndex = aSymbol.m_instancePathIndex;
-    m_fields = aSymbol.m_fields;
     m_passthroughMode = aSymbol.m_passthroughMode;
     m_signalName = aSymbol.m_signalName;
 
-    // Re-parent the fields, which before this had aSymbol as parent
-    for( SCH_FIELD& field : m_fields )
-        field.SetParent( this );
-
-    m_pins.clear();
-
-    // Copy (and re-parent) the pins
-    for( const std::unique_ptr<SCH_PIN>& pin : aSymbol.m_pins )
     {
-        m_pins.emplace_back( std::make_unique<SCH_PIN>( *pin ) );
-        m_pins.back()->SetParent( this );
+        m_fields = aSymbol.m_fields;    // std::vector's operator=()
+
+        // Re-parent the fields, which before this had aSymbol as parent
+        for( SCH_FIELD& field : m_fields )
+            field.SetParent( this );
+    }
+
+    {
+        m_pins.clear();
+
+        // Copy (and re-parent) the pins
+        for( const std::unique_ptr<SCH_PIN>& pin : aSymbol.m_pins )
+        {
+            m_pins.emplace_back( std::make_unique<SCH_PIN>( *pin ) );
+            m_pins.back()->SetParent( this );
+        }
     }
 
     if( aSymbol.m_part )
@@ -805,12 +810,13 @@ void SCH_SYMBOL::Init( const VECTOR2I& pos )
     // The rotation/mirror transformation matrix. pos normal
     m_transform = TRANSFORM();
 
-    auto addField = [&]( FIELD_T id, SCH_LAYER_ID layer )
-    {
-        m_fields.emplace_back( this, id, GetDefaultFieldName( id, UNTRANSLATED ) );
-        m_fields.back().SetTextPos( pos );
-        m_fields.back().SetLayer( layer );
-    };
+    auto addField =
+            [&]( FIELD_T id, SCH_LAYER_ID layer )
+            {
+                m_fields.emplace_back( this, id, GetDefaultFieldName( id, UNTRANSLATED ) );
+                m_fields.back().SetTextPos( pos );
+                m_fields.back().SetLayer( layer );
+            };
 
     // construct only the mandatory fields
     addField( FIELD_T::REFERENCE, LAYER_REFERENCEPART );
@@ -820,7 +826,7 @@ void SCH_SYMBOL::Init( const VECTOR2I& pos )
     addField( FIELD_T::DESCRIPTION, LAYER_FIELDS );
 
     m_prefix = wxString( wxT( "U" ) );
-    m_isInNetlist = true;
+    m_doNetlist = true;
     m_passthroughMode = PASSTHROUGH_MODE::DEFAULT;
     m_signalName.clear();
 }
@@ -1574,7 +1580,7 @@ void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 {
     KIID_PATH path = sheet->Path();
     const wxString previousPrefix = m_prefix;
-    const bool wasInNetlist = m_isInNetlist;
+    const bool wasDoNetlist = m_doNetlist;
     bool changed = false;
 
     if( auto it = m_instancePathIndex.find( path ); it != m_instancePathIndex.end() )
@@ -1598,9 +1604,9 @@ void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
         m_prefix = wxT( "U" );
 
     // Power symbols have references starting with # and are not included in netlists
-    m_isInNetlist = !ref.StartsWith( wxT( "#" ) );
+    m_doNetlist = !ref.StartsWith( wxT( "#" ) );
 
-    if( changed || m_prefix != previousPrefix || m_isInNetlist != wasInNetlist )
+    if( changed || m_prefix != previousPrefix || m_doNetlist != wasDoNetlist )
         invalidateConnectivity();
 }
 
@@ -2727,15 +2733,19 @@ void SCH_SYMBOL::swapData( SCH_ITEM* aItem )
 
     SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aItem );
 
+    std::swap( m_pos, symbol->m_pos );
     std::swap( m_lib_id, symbol->m_lib_id );
+    std::swap( m_prefix, symbol->m_prefix );
 
-    m_pins.swap( symbol->m_pins ); // std::vector's swap()
+    {
+        m_pins.swap( symbol->m_pins ); // std::vector's swap()
 
-    for( std::unique_ptr<SCH_PIN>& pin : symbol->m_pins )
-        pin->SetParent( symbol );
+        for( std::unique_ptr<SCH_PIN>& pin : symbol->m_pins )
+            pin->SetParent( symbol );
 
-    for( std::unique_ptr<SCH_PIN>& pin : m_pins )
-        pin->SetParent( this );
+        for( std::unique_ptr<SCH_PIN>& pin : m_pins )
+            pin->SetParent( this );
+    }
 
     LIB_SYMBOL* libSymbol = symbol->m_part.release();
     symbol->m_part = std::move( m_part );
@@ -2743,18 +2753,17 @@ void SCH_SYMBOL::swapData( SCH_ITEM* aItem )
     m_part.reset( libSymbol );
     UpdatePins();
 
-    std::swap( m_pos, symbol->m_pos );
+    {
+        m_fields.swap( symbol->m_fields ); // std::vector's swap()
 
-    m_fields.swap( symbol->m_fields ); // std::vector's swap()
+        for( SCH_FIELD& field : symbol->m_fields )
+            field.SetParent( symbol );
 
-    for( SCH_FIELD& field : symbol->m_fields )
-        field.SetParent( symbol );
-
-    for( SCH_FIELD& field : m_fields )
-        field.SetParent( this );
+        for( SCH_FIELD& field : m_fields )
+            field.SetParent( this );
+    }
 
     TRANSFORM tmp = m_transform;
-
     m_transform = symbol->m_transform;
     symbol->m_transform = tmp;
 
@@ -2768,7 +2777,9 @@ void SCH_SYMBOL::swapData( SCH_ITEM* aItem )
     std::swap( m_instances, symbol->m_instances );
     std::swap( m_instancePathIndex, symbol->m_instancePathIndex );
     std::swap( m_schLibSymbolName, symbol->m_schLibSymbolName );
+    std::swap( m_doNetlist, symbol->m_doNetlist );
     std::swap( m_passthroughMode, symbol->m_passthroughMode );
+    std::swap( m_signalName, symbol->m_signalName );
 
     m_variantSymbolCache.clear();
     symbol->m_variantSymbolCache.clear();
@@ -4216,12 +4227,31 @@ bool SCH_SYMBOL::operator<( const SCH_ITEM& aItem ) const
     if( m_pos.y != symbol->m_pos.y )
         return m_pos.y < symbol->m_pos.y;
 
+    if( m_prefix != symbol->m_prefix )
+        return m_prefix < symbol->m_prefix;
+
+    if( m_schLibSymbolName != symbol->m_schLibSymbolName )
+        return m_schLibSymbolName < symbol->m_schLibSymbolName;
+
     return m_Uuid < aItem.m_Uuid; // Ensure deterministic sort
 }
 
 
 bool SCH_SYMBOL::operator==( const SCH_SYMBOL& aSymbol ) const
 {
+    // Don't compare m_lib_id: it may be instance-specific.  Compare m_schLibSymbolName
+    // instead.
+    if( m_schLibSymbolName != aSymbol.m_schLibSymbolName )
+        return false;
+
+    // m_prefix is an interesting one.  It's sort of part of the annotation, which we don't
+    // compare, but it's also sort of a higher level than the annotation itself.  For now,
+    // we skip it along with the annotation (FIELD_T::REFERENCE).
+#if 0
+    if( m_prefix != aSymbol.m_prefix )
+        return false;
+#endif
+
     std::vector<SCH_FIELD*> fields, otherFields;
 
     GetFields( fields, false );
@@ -4236,6 +4266,32 @@ bool SCH_SYMBOL::operator==( const SCH_SYMBOL& aSymbol ) const
             continue;
 
         if( fields[ii]->GetText().Cmp( otherFields[ii]->GetText() ) != 0 )
+            return false;
+    }
+
+    if( m_doNetlist != aSymbol.m_doNetlist )
+        return false;
+
+    if( m_passthroughMode != aSymbol.m_passthroughMode )
+        return false;
+
+    // m_signalName has more to do with the placement on the schematic than the symbol itself
+#if 0
+    if( m_signalName != aSymbol.m_signalName )
+        return false;
+#endif
+
+    if( m_pins.size() != aSymbol.m_pins.size() )
+        return false;
+
+    for( int ii = 0; ii < (int) m_pins.size(); ++ii )
+    {
+        SCH_PIN* matched = aSymbol.GetPin( m_pins[ii]->GetNumber() );
+
+        if( !matched )
+            return false;
+
+        if( *m_pins[ii] != *matched )
             return false;
     }
 
@@ -4258,26 +4314,32 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_SYMBOL& aSymbol )
     {
         SYMBOL::operator=( aSymbol );
 
+        m_pos = aSymbol.m_pos;
         m_lib_id = aSymbol.m_lib_id;
+        m_prefix = aSymbol.m_prefix;
 
         // Pin relinking still needs the previous library's alternate definitions.
         auto oldPart = std::exchange( m_part, aSymbol.m_part ? std::make_unique<LIB_SYMBOL>( *aSymbol.m_part )
                                                              : nullptr );
 
-        m_pos = aSymbol.m_pos;
         m_unit = aSymbol.m_unit;
         m_bodyStyle = aSymbol.m_bodyStyle;
         m_transform = aSymbol.m_transform;
 
         m_instances = aSymbol.m_instances;
         m_instancePathIndex = aSymbol.m_instancePathIndex;
+        m_doNetlist = aSymbol.m_doNetlist;
+        m_passthroughMode = aSymbol.m_passthroughMode;
+        m_signalName = aSymbol.m_signalName;
         m_pinMapOverride = aSymbol.m_pinMapOverride;
 
-        m_fields = aSymbol.m_fields; // std::vector's assignment operator
+        {
+            m_fields = aSymbol.m_fields; // std::vector's assignment operator
 
-        // Reparent fields after assignment to new symbol.
-        for( SCH_FIELD& field : m_fields )
-            field.SetParent( this );
+            // Reparent fields after assignment to new symbol.
+            for( SCH_FIELD& field : m_fields )
+                field.SetParent( this );
+        }
 
         UpdatePins();
         m_variantSymbolCache.clear();
@@ -4349,9 +4411,9 @@ bool SCH_SYMBOL::doIsConnected( const VECTOR2I& aPosition ) const
 }
 
 
-bool SCH_SYMBOL::IsInNetlist() const
+bool SCH_SYMBOL::DoNetList() const
 {
-    return m_isInNetlist;
+    return m_doNetlist;
 }
 
 

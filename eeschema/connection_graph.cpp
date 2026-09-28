@@ -299,7 +299,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
         {
             SCH_PIN* pin = static_cast<SCH_PIN*>( item );
 
-            if( !static_cast<SCH_SYMBOL*>( pin->GetParentSymbol() )->IsInNetlist() )
+            if( !static_cast<SCH_SYMBOL*>( pin->GetParentSymbol() )->DoNetList() )
                 continue;
         }
 

@@ -2053,11 +2053,11 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
     if( dynamic_cast<const LIB_SYMBOL*>( GetParentSymbol() ) )
     {
         const PIN_COMPARISON_VIEW lhs{ GetUnit(), GetBodyStyle(), IsPrivate(), m_position, m_number,
-                m_length, m_orientation, m_shape, m_type, m_hidden, m_numTextSize,
-                m_nameTextSize, m_alternates };
+                                       m_length, m_orientation, m_shape, m_type, m_hidden, m_numTextSize,
+                                       m_nameTextSize, m_alternates };
         const PIN_COMPARISON_VIEW rhs{ tmp->GetUnit(), tmp->GetBodyStyle(), tmp->IsPrivate(), tmp->m_position,
-                tmp->m_number, tmp->m_length, tmp->m_orientation, tmp->m_shape, tmp->m_type,
-                tmp->m_hidden, tmp->m_numTextSize, tmp->m_nameTextSize, tmp->m_alternates };
+                                       tmp->m_number, tmp->m_length, tmp->m_orientation, tmp->m_shape, tmp->m_type,
+                                       tmp->m_hidden, tmp->m_numTextSize, tmp->m_nameTextSize, tmp->m_alternates };
         return lhs.Compare( rhs, aCompareFlags );
     }
 
@@ -2089,8 +2089,69 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
             return retv;
     }
 
-
     return 0;
+}
+
+
+bool SCH_PIN::operator==( const SCH_PIN& aPin ) const
+{
+    // Compare local positions below.  SCH_ITEM's position compare uses global coordinates
+    if( SCH_ITEM::compare( aPin, -1 & ~( COMPARE_FLAGS::UUID | COMPARE_FLAGS::POSITION ) ) != 0 )
+        return false;
+
+    if( m_libPin && aPin.m_libPin )
+    {
+        // Both have a libPin; pins are children of a SCH_SYMBOL.
+        if( !m_libPin->operator==( *aPin.m_libPin ) )
+            return false;
+
+        if( m_alt != aPin.m_alt )
+            return false;
+    }
+    else if( m_libPin != aPin.m_libPin )
+    {
+        // One has a libPin but the other doesn't.
+        return false;
+    }
+    else
+    {
+        // Both libPins are nullptr; pins are children of a LIB_SYMBOL.  Alternates are valid here.
+        if( m_alternates != aPin.m_alternates )
+            return false;
+    }
+
+    if( GetName() != aPin.GetName() )
+        return false;
+
+    if( GetNumber() != aPin.GetNumber() )
+        return false;
+
+    // Don't use GetPosition(); it will return the global coordinates rather than the local ones
+    if( m_position != aPin.m_position )
+        return false;
+
+    if( GetLength() != aPin.GetLength() )
+        return false;
+
+    if( GetOrientation() != aPin.GetOrientation() )
+        return false;
+
+    if( GetShape() != aPin.GetShape() )
+        return false;
+
+    if( GetType() != aPin.GetType() )       // Electrical type
+        return false;
+
+    if( IsVisible() != aPin.IsVisible() )
+        return false;
+
+    if( GetNumberTextSize() != aPin.GetNumberTextSize() )
+        return false;
+
+    if( GetNameTextSize() != aPin.GetNameTextSize() )
+        return false;
+
+    return true;
 }
 
 

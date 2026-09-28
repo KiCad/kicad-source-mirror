@@ -432,6 +432,8 @@ public:
 
     double Similarity( const SCH_ITEM& aOther ) const override;
 
+    bool operator==( const SCH_PIN& aPin ) const;
+
     bool operator>( const SCH_ITEM& aRhs ) const { return compare( aRhs, ~COMPARE_FLAGS::UUID ) > 0; }
 
     /**
@@ -498,10 +500,10 @@ protected:
     wxString                m_operatingPoint;
 
     /// Render-only original number for a pad-remapped pin; see GetRemappedFromNumber().  Not saved.
-    wxString m_remappedFromNumber;
+    wxString                m_remappedFromNumber;
 
     /// Render-only stacked block side hint, see GetFlipStackedTextSide().  Not saved.
-    bool m_flipStackedTextSide = false;
+    bool                    m_flipStackedTextSide = false;
 
     bool                    m_isDangling;
 

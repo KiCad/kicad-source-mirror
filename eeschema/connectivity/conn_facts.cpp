@@ -1238,8 +1238,8 @@ INSTANCE_FACTS ExtractInstanceFacts( const SCREEN_FACTS& aFacts, const SCH_SCREE
                 if( member.globalPower || member.localPower )
                 {
                     text.name = EscapeString( member.globalPowerParent || member.localPowerParent
-                                                      ? symbol->GetValue( &aPath, FOR_NETNAME, variant )
-                                                      : pin->GetLibPin()->GetName(),
+                                                                  ? symbol->GetValue( &aPath, FOR_NETNAME, variant )
+                                                                  : pin->GetLibPin()->GetName(),
                                               CTX_NETNAME );
                     text.ncName = text.name;
                 }
@@ -1263,7 +1263,7 @@ INSTANCE_FACTS ExtractInstanceFacts( const SCREEN_FACTS& aFacts, const SCH_SCREE
 
                     text.name = RenderPinNetName( name, reference );
                     text.ncName = RenderPinNetName( name, reference, true );
-                    text.canDrive &= symbol->IsInNetlist() && !symbol->GetExcludedFromBoard( &aPath, variant )
+                    text.canDrive &= symbol->DoNetList() && !symbol->GetExcludedFromBoard( &aPath, variant )
                                      && !reference.reference.StartsWith( wxS( "#" ) );
                 }
 
@@ -1273,7 +1273,7 @@ INSTANCE_FACTS ExtractInstanceFacts( const SCREEN_FACTS& aFacts, const SCH_SCREE
             continue;
         }
 
-        const auto* label = dynamic_cast<const SCH_LABEL_BASE*>( aScreen.GetConnectivityItem( fact.id ) );
+        const SCH_LABEL_BASE* label = dynamic_cast<const SCH_LABEL_BASE*>( aScreen.GetConnectivityItem( fact.id ) );
 
         if( !label )
             continue;
@@ -1312,8 +1312,8 @@ INSTANCE_FACTS ExtractInstanceFacts( const SCREEN_FACTS& aFacts, const SCH_SCREE
         {
             if( item->Type() == SCH_SYMBOL_T )
             {
-                const auto& symbol = *static_cast<const SCH_SYMBOL*>( item );
-                const int   unit = symbol.GetUnitSelection( &aPath );
+                const SCH_SYMBOL& symbol = *static_cast<const SCH_SYMBOL*>( item );
+                const int         unit = symbol.GetUnitSelection( &aPath );
                 units.emplace( symbol.m_Uuid, unit );
                 const LIB_SYMBOL* library = symbol.GetEffectiveLibSymbol( &aPath );
 
@@ -1335,8 +1335,8 @@ INSTANCE_FACTS ExtractInstanceFacts( const SCREEN_FACTS& aFacts, const SCH_SCREE
             }
             else if( item->Type() == SCH_SHEET_T )
             {
-                const auto& sheet = *static_cast<const SCH_SHEET*>( item );
-                BOX2I       box = sheet.GetBodyBoundingBox();
+                const SCH_SHEET& sheet = *static_cast<const SCH_SHEET*>( item );
+                BOX2I            box = sheet.GetBodyBoundingBox();
 
                 for( const SCH_FIELD& field : sheet.GetFields() )
                     box.Merge( INSTANCE_FIELD( field, aPath ).GetBoundingBox() );
