@@ -182,7 +182,7 @@ void COMMIT::Unstage( EDA_ITEM* aItem, BASE_SCREEN* aScreen )
                        if( line.m_item == aItem && line.m_screen == aScreen )
                        {
                            // Only new items which have never been committed can be unstaged
-                           wxASSERT( line.m_item->IsNew() );
+                           wxASSERT( ( line.m_type & CHT_TYPE ) == CHT_ADD );
 
                            delete line.m_item;
                            delete line.m_copy;
@@ -191,6 +191,9 @@ void COMMIT::Unstage( EDA_ITEM* aItem, BASE_SCREEN* aScreen )
 
                        return false;
                    } );
+
+    // Otherwise a later item allocated at the same address is taken as already added
+    m_addedItems.erase( { aItem, aScreen } );
 }
 
 

@@ -149,6 +149,28 @@ COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag
 }
 
 
+bool BOARD_COMMIT::RemoveOrDiscard( BOARD_ITEM* aItem )
+{
+    COMMIT_LINE* entry = findEntry( aItem );
+
+    // An add already applied to the board has to be undone through it, so only pending adds are freed
+    if( !entry || entry->m_type != CHT_ADD )
+    {
+        Remove( aItem );
+        return false;
+    }
+
+    if( EDA_GROUP* parentGroup = aItem->GetParentGroup() )
+        parentGroup->RemoveItem( aItem );
+
+    if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
+        group->RemoveAll();
+
+    Unstage( aItem, nullptr );
+    return true;
+}
+
+
 void BOARD_COMMIT::propagateDamage( BOARD_ITEM* aChangedItem, std::vector<ZONE*>* aStaleZones,
                                     std::vector<BOX2I>& aStaleRuleAreas )
 {

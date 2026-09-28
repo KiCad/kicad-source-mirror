@@ -67,6 +67,16 @@ public:
                         UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED,
                         BASE_SCREEN* aScreen = nullptr ) override;
 
+    /**
+     * Remove \a aItem, or free it if it was added earlier in this commit and never reached the board.
+     *
+     * Remove() cancels such an add without freeing the item, because some callers (tuning patterns) re-add
+     * the same pointer later in the commit.  Callers that rebuild their children use this instead.
+     *
+     * @return true if the item was freed and must not be used again.
+     */
+    bool RemoveOrDiscard( BOARD_ITEM* aItem );
+
     virtual EDA_ITEM* ResolveItem( KIID& aID ) override;
 
     static EDA_ITEM* MakeImage( EDA_ITEM* aItem );

@@ -446,8 +446,10 @@ void PCB_VIA_STACK::Regenerate( BOARD* aBoard, BOARD_COMMIT* aCommit )
         if( aCommit )
         {
             aCommit->Unmodify( item, nullptr );
-            aCommit->Remove( item );
-            RemoveItem( item );
+
+            // A member added by an earlier motion event in this commit is freed, not orphaned
+            if( !aCommit->RemoveOrDiscard( item ) )
+                RemoveItem( item );
         }
         else
         {

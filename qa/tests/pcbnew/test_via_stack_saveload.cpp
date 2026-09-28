@@ -2596,4 +2596,78 @@ BOOST_AUTO_TEST_CASE( ExpansionLeavesPlainViasAlone )
 }
 
 
+// A member discarded before it reaches the board has no other owner, so only its destructor shows it was freed
+class COUNTED_TRACK : public PCB_TRACK
+{
+public:
+    COUNTED_TRACK( BOARD* aBoard, int& aDestroyed ) :
+            PCB_TRACK( aBoard ),
+            m_destroyed( aDestroyed )
+    {
+    }
+
+    ~COUNTED_TRACK() override { ++m_destroyed; }
+
+private:
+    int& m_destroyed;
+};
+
+
+// A drag regenerates inside one commit, so members added by an earlier motion event must be freed
+BOOST_AUTO_TEST_CASE( RegenerateFreesMembersAddedEarlierInTheCommit )
+{
+    std::unique_ptr<BOARD> board =
+            ::KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir() + "via_stacks.kicad_pcb" );
+    BOOST_REQUIRE( board );
+
+    TOOL_MANAGER mgr;
+    mgr.SetEnvironment( board.get(), nullptr, nullptr, nullptr, nullptr );
+    mgr.RegisterTool( new KI_TEST::DUMMY_TOOL() );
+
+    PCB_VIA_STACK* stack = nullptr;
+
+    for( PCB_GENERATOR* gen : board->Generators() )
+    {
+        if( PCB_VIA_STACK* candidate = dynamic_cast<PCB_VIA_STACK*>( gen ) )
+        {
+            if( candidate->GetStyle() == VIA_STACK_STYLE::STACKED )
+                stack = candidate;
+        }
+    }
+
+    BOOST_REQUIRE( stack );
+
+    std::set<KIID> before;
+
+    for( BOARD_ITEM* item : stack->GetBoardItems() )
+        before.insert( item->m_Uuid );
+
+    const size_t tracks = board->Tracks().size();
+    int          destroyed = 0;
+
+    BOARD_COMMIT edit( &mgr, true, false );
+    stack->EditStart( nullptr, board.get(), &edit );
+
+    // Stands in for a member the previous motion event added, and forces the rebuild fallback
+    COUNTED_TRACK* pending = new COUNTED_TRACK( board.get(), destroyed );
+    edit.Add( pending );
+    stack->AddItem( pending );
+
+    BOOST_REQUIRE( stack->Update( nullptr, board.get(), &edit ) );
+    BOOST_CHECK_EQUAL( destroyed, 1 );
+    BOOST_CHECK_EQUAL( stack->GetItems().size(), 2u );
+
+    stack->EditFinish( nullptr, board.get(), &edit );
+    edit.Revert();
+
+    std::set<KIID> after;
+
+    for( BOARD_ITEM* item : stack->GetBoardItems() )
+        after.insert( item->m_Uuid );
+
+    BOOST_CHECK_EQUAL( board->Tracks().size(), tracks );
+    BOOST_CHECK( after == before );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
