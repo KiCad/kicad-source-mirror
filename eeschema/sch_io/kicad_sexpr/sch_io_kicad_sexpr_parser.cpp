@@ -5969,6 +5969,17 @@ SCH_TABLE* SCH_IO_KICAD_SEXPR_PARSER::parseSchTable()
                            CurOffset() );
     }
 
+    if( table->GetColCount() <= 0 )
+    {
+        THROW_PARSE_ERROR( _( "Invalid table: column count must be positive" ), CurSource(), CurLine(), CurLineNumber(),
+                           CurOffset() );
+    }
+
+    if( table->GetCells().size() % table->GetColCount() != 0 )
+    {
+        THROW_PARSE_ERROR( _( "Invalid table: incomplete row" ), CurSource(), CurLine(), CurLineNumber(), CurOffset() );
+    }
+
     return table.release();
 }
 
