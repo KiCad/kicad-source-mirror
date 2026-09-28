@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-28 17:04+0000\n"
+"PO-Revision-Date: 2026-09-28 17:08+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -57411,7 +57411,7 @@ msgstr "sulje pois materiaaliluettelosta"
 #: pcbnew/footprint.cpp:2653
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1641
 msgid "exclude from simulation"
-msgstr "Jätä simulaation ulkopuolelle"
+msgstr "jätä simulaation ulkopuolelle"
 
 #: pcbnew/footprint.cpp:2658
 msgid "Status: "
