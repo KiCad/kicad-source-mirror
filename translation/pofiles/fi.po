@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-28 17:12+0000\n"
+"PO-Revision-Date: 2026-09-28 17:24+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -19576,14 +19576,15 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"Tämä kaavio käyttää tällä hetkellä projektisymbolikirjastoluettelon "
-"hakumenetelmää kirjastosymbolien lataamiseen. KiCad yrittää kartoittaa "
-"olemassa olevat symbolit käyttämään uutta symbolikirjastotaulukkoa. "
-"Uudelleenkartoitus muuttaa joitakin projektitiedostoja ja kaaviot eivät "
-"välttämättä ole yhteensopivia KiCadin vanhempien versioiden kanssa. Kaikki "
-"muutetut tiedostot varmuuskopioidaan projektikansion \"rescue-backup\"-"
-"kansioon, jos sinun on peruutettava muutokset. Jos päätät ohittaa tämän "
-"vaiheen, olet vastuussa symbolien manuaalisesta kartoittamisesta."
+"Tämä kytkentäkaavio käyttää tällä hetkellä projektisymbolikirjastoluettelon "
+"hakumenetelmää kirjastosymbolien lataamiseen.  KiCad yrittää kartoittaa "
+"olemassa olevat symbolit käyttämään uutta symbolikirjastotaulukkoa.  "
+"Uudelleenkartoitus muuttaa joitakin projektitiedostoja ja kytkentäkaaviot "
+"eivät enää välttämättä ole yhteensopivia KiCadin vanhempien versioiden "
+"kanssa.  Kaikki muutetut tiedostot varmuuskopioidaan projektikansion "
+"\"rescue-backup\"-kansioon, jos sinun on peruutettava muutokset.  Jos päätät "
+"ohittaa tämän vaiheen, olet vastuussa symbolien manuaalisesta "
+"kartoittamisesta."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:217
 #, c-format
@@ -70255,11 +70256,11 @@ msgstr "KiCad Projekti"
 
 #: resources/linux/mime/kicad-kicad.xml.in:12
 msgid "KiCad Schematic"
-msgstr "KiCad kytkentäkaavio"
+msgstr "KiCad-kytkentäkaavio"
 
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
-msgstr "KiCad-piirilevytiedosto"
+msgstr "KiCad-piirilevy"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
 msgid "KiCad Footprint"
@@ -70267,7 +70268,7 @@ msgstr "KiCad jalanjälki"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
 msgid "KiCad Schematic Symbol"
-msgstr "KiCad kytkentäkaaviosymboli"
+msgstr "KiCad-kytkentäkaaviosymboli"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
