@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-28 17:08+0000\n"
+"PO-Revision-Date: 2026-09-28 17:12+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -48655,11 +48655,11 @@ msgstr "Tekniset kerrokset"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:581
 msgid "Front adhesive"
-msgstr "Etupuolen sidosaine"
+msgstr "Etupuolen liima"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:584
 msgid "Back adhesive"
-msgstr "Kääntöpuolen sidosaine"
+msgstr "Takaosan liima"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:587
 msgid "Front solder paste"
@@ -51591,7 +51591,7 @@ msgstr "Ei levyllä, valmistus"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:167
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "Jos haluat sidosainepohjan piirilevyn etupuolle"
+msgstr "Jos haluat liimapohjan piirilevyn etupuolle"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:177
 #: pcbnew/dialogs/panel_setup_layers.cpp:195
@@ -51630,7 +51630,7 @@ msgstr "Haluttaessa kääntöpuolen juotospastakerros"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:299
 msgid "If you want an adhesive layer for the back side of the board"
-msgstr "Jos haluat sidosainekerroksen piirilevyn kääntöpuolelle"
+msgstr "Jos haluat liimakerroksen piirilevyn takapuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:317
 msgid "If you want a fabrication layer for the back side of the board"
@@ -69149,11 +69149,11 @@ msgstr "Näytä tai piilota tämä kerros"
 
 #: pcbnew/widgets/appearance_controls.cpp:1767
 msgid "Adhesive on board's front"
-msgstr "Sidosaine piirilevyn etupuolella"
+msgstr "Liima piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1768
 msgid "Adhesive on board's back"
-msgstr "Sidosaine piirilevyn kääntöpuolella"
+msgstr "Liima piirilevyn takapuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1769
 msgid "Solder paste on board's front"
