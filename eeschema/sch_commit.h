@@ -54,6 +54,7 @@ class SCH_COMMIT : public COMMIT
 {
 public:
     SCH_COMMIT( TOOL_MANAGER* aToolMgr );
+    SCH_COMMIT( TOOL_MANAGER* aToolMgr, bool aIsLibEditor );
     SCH_COMMIT( EDA_DRAW_FRAME* aFrame );
     SCH_COMMIT( SCH_TOOL_BASE<SCH_BASE_FRAME>* aFrame );
 
