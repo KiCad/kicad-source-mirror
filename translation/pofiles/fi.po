@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-17 19:11+0000\n"
+"PO-Revision-Date: 2026-09-28 07:51+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -2204,9 +2204,9 @@ msgstr "toimintovalinta on virheellinen: %s"
 
 #: common/api/api_plugin_manager.cpp:102 common/api/api_plugin_manager.cpp:148
 #: pcbnew/footprint_wizard.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s'"
-msgstr "Laajennuksen toiminto '%s': %s"
+msgstr "Laajennuksen toiminto '%s'"
 
 #: common/api/api_plugin_manager.cpp:114
 #, c-format
@@ -6485,9 +6485,8 @@ msgid "Scroll Gestures"
 msgstr "Vierityseleet"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:193
-#, fuzzy
 msgid "Touchpad navigation:"
-msgstr "Lataa Asetukset Uudelleen"
+msgstr "Kosketuslevynavigointi:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:197
 #, fuzzy
@@ -8312,9 +8311,8 @@ msgid "Unrecognized"
 msgstr "Tunnistamaton"
 
 #: common/eda_shape.cpp:1497
-#, fuzzy
 msgid "Connected Lines"
-msgstr "Yhdistetyt kohteet:"
+msgstr "Yhdistetyt viivat"
 
 #: common/eda_shape.cpp:1505
 msgid "Curve"
@@ -9565,9 +9563,8 @@ msgid "History repository is locked by %s@%s"
 msgstr "Historia etävarasto on lukittu %s@%s toimesta"
 
 #: common/history_lock.cpp:168
-#, fuzzy
 msgid "History repository is locked by an older KiCad instance."
-msgstr "Historia etävarasto on lukittu %s@%s toimesta"
+msgstr "Vanhempi KiCad-instanssi on lukinnut historiasäiliön."
 
 #: common/history_lock.cpp:181
 #, c-format
@@ -11211,9 +11208,8 @@ msgid "Skip This Version"
 msgstr "&Ohita tämä versio"
 
 #: common/model_preview_manager.cpp:123
-#, fuzzy
 msgid "Could not set up 3D model previews."
-msgstr "Yhdistämisen syötetiedostoja ei voitu valmistella.\n"
+msgstr "3D-mallien esikatselun alustaminen epäonnistui."
 
 #: common/netclass.cpp:345 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1275 pcbnew/zone.cpp:1167
@@ -16944,9 +16940,8 @@ msgid "Symbol Name"
 msgstr "Symbolin nimi"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:650
-#, fuzzy
 msgid "Parent Symbol"
-msgstr "Kantasymboli:"
+msgstr "Kantasymboli"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:651
 #, fuzzy
@@ -17181,9 +17176,9 @@ msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
 msgstr "Nastaa '%s' hyppylangan nastaryhmässä %d ei ole tässä symbolissa."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:861
-#, fuzzy, c-format
+#, c-format
 msgid "(Pins %s.)"
-msgstr "Lisäosat (%d)"
+msgstr "(Nastat %s.)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:887
 #, c-format
@@ -17455,9 +17450,8 @@ msgstr "Poista jalanjälkisuodatin"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:676
 #: eeschema/dialogs/panel_footprint_filters.cpp:410
-#, fuzzy
 msgid "Matching footprints:"
-msgstr "Etsi liitoskuvaa"
+msgstr "Täsmäävät jalanjäljet:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:678
 msgid ""
@@ -17603,14 +17597,12 @@ msgid "Alternate Pin Function Definitions"
 msgstr "Vaihtoehtoiset nastatoimintojen määritelmät"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:200
-#, fuzzy
 msgid "Electrical Type "
-msgstr "Sähkötyyppi"
+msgstr "Sähkötyyppi "
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:201
-#, fuzzy
 msgid "Graphic Style "
-msgstr "Graafinen tyyli"
+msgstr "Graafinen tyyli "
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:384
 msgid "Exit sync pins mode"
@@ -19531,9 +19523,8 @@ msgstr ""
 "ladontakoneiden käyttämiin vietäviin sijaintitiedostoihin"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:232
-#, fuzzy
 msgid "Passthrough:"
-msgstr "Läpimeno"
+msgstr "Läpimeno:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 msgid "Block"
@@ -20434,24 +20425,23 @@ msgid "Never show Rescue Symbols tool"
 msgstr "Älä koskaan näytä Pelasta Symbolit -työkalua"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:367
-#, fuzzy
 msgid "Failed to query matching footprints."
-msgstr "Korosta täsmäävät jalanjäljet"
+msgstr "Täsmäävien jalanjälkien kysely epäonnistui."
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Matching footprints (%zu+):"
-msgstr "Etsi liitoskuvaa"
+msgstr "Täsmäävät jalanjäljet (%zu+):"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Matching footprints (%zu):"
-msgstr "Etsi liitoskuvaa"
+msgstr "Täsmäävät jalanjäljet (%zu):"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "Loading footprint libraries (%d%%)..."
-msgstr "Ladataan jalanjälkikirjaston taulukkoa..."
+msgstr "Ladataan jalanjälkikirjastoja (%d %%)..."
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:505
 #: pcbnew/tools/pcb_actions.cpp:844
@@ -21290,9 +21280,9 @@ msgid "Failed to save drawing sheet '%s': %s"
 msgstr "Piirrustuspohjan tallennus epäonnistui '%s': %s"
 
 #: eeschema/eeschema_helpers.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' has a malformed root sheet instance path."
-msgstr "Kytkentäkaavio '%s' on jo avattu '%s' kohteessa '%s'."
+msgstr "Kytkentäkaaviolla '%s' on virheellinen pääsivun instanssipolku."
 
 #: eeschema/eeschema_helpers.cpp:189
 #, c-format
@@ -24036,13 +24026,13 @@ msgstr ""
 "symbolimäärityksiä). Osaa ei ole ladattu KiCad-kirjastoon."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded."
 msgstr ""
-"Symboli '%s' viittaa osaan '%s', jota ei löydy kirjastosta. Symbolia ei "
-"ladattu"
+"Symboli '%s' viittaa osaan '%s', jota ei löytynyt kirjastosta. Symbolia ei "
+"ladattu."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:837
 #, c-format
@@ -24125,22 +24115,22 @@ msgstr ""
 "ladattu oikein, ja se saattaa vaatia manuaalista kiinnitystä."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2280
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net %s references unknown terminal %s on symbol %s. The net was not properly "
 "loaded and may require manual fixing."
 msgstr ""
-"Netto %s viittaa tuntemattomaan verkkoelementtiin %s. Verkkoa ei ollut "
-"ladattu oikein, ja se saattaa vaatia manuaalista kiinnitystä."
+"Verkko %s viittaa tuntemattomaan liitäntään %s symbolissa %s. Verkkoa ei "
+"ladattu oikein, ja se saattaa vaatia manuaalista korjausta."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2337
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net %s references unknown terminal %s on block %s. The net was not properly "
 "loaded and may require manual fixing."
 msgstr ""
-"Netto %s viittaa tuntemattomaan verkkoelementtiin %s. Verkkoa ei ollut "
-"ladattu oikein, ja se saattaa vaatia manuaalista kiinnitystä."
+"Verkko %s viittaa tuntemattomaan liitäntään %s lohkossa %s. Verkkoa ei "
+"ladattu oikein, ja se saattaa vaatia manuaalista korjausta."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2531
 #, c-format
@@ -24428,14 +24418,13 @@ msgid "Could not find '%s' in the imported library."
 msgstr "'%s' ei löydy tuodusta kirjastosta."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:2432
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reload saved symbol '%s'"
-msgstr "Ei voitu ladata kuvaa kohteesta '%s'."
+msgstr "Tallennetun symbolin '%s' lataaminen uudelleen epäonnistui"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:89
-#, fuzzy
 msgid "Eagle schematic files"
-msgstr "Eagle XML kytkentäkaaviotiedostot"
+msgstr "Eagle kytkentäkaaviotiedostot"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:94
 msgid "Eagle XML library files"
@@ -25127,13 +25116,13 @@ msgstr ""
 "lähdesuunnitelmassa; ohitettu."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:7964
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Page '%s': cannot place off-page connector '%s' at (%d, %d) without a wire "
 "intersection."
 msgstr ""
-"Sivu '%s': sivujen välinen liitin kohdassa (%d, %d) on kytkemätön "
-"lähdesuunnitelmassa; ohitettu."
+"Sivu '%s': sivujenvälistä liitintä '%s' ei voi sijoittaa koordinaatteihin "
+"(%d,%d) ilman johtimen risteystä."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:8117
 #, c-format
@@ -25142,9 +25131,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:8667
-#, fuzzy, c-format
+#, c-format
 msgid "An embedded picture could not be decoded and was skipped (%s)."
-msgstr "Upotettua kuvaa ei voitu purkaa, joten se ohitettiin."
+msgstr "Upotettua kuvaa ei voitu purkaa, joten se ohitettiin. (%s)."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:689
 #, c-format
@@ -25156,10 +25145,10 @@ msgstr ""
 "paikkamerkki %d esiintymän perusteella."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:922
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol '%s' could not be converted and was left out of the library (%s)."
-msgstr "Yhtään symbolia ei voitu ladata kirjastosta."
+msgstr "Symbolia '%s' ei voitu muuntaa, ja se jätettiin pois kirjastosta (%s)."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1537
 #, c-format
@@ -25253,13 +25242,13 @@ msgstr ""
 "kytkentäkaavio."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:641
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The schematic folder directory could not be read (%s); all stored folders "
 "are imported."
 msgstr ""
-"Kytkentäkaaviokansion ”%s” sivujen näyttöjärjestystä ei voitu lukea (%s); "
-"sivut tuodaan nimen mukaiseen järjestykseen."
+"Kytkentäkaavion kansiohakemistoa ei voitu lukea (%s); kaikki tallennetut "
+"kansiot on tuotu."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:653
 msgid "The design contains no schematic folders."
@@ -25302,9 +25291,9 @@ msgstr ""
 "Tiedosto ei ole OrCAD Capture -kirjasto (”Library”-tietovirtaa ei löydy)."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid "The library stream '%s' could not be read and was skipped (%s)."
-msgstr "Sivua '%s' ei voitu jäsennellä, joten se ohitettiin: %s"
+msgstr "Kirjastovirtaa '%s' ei voitu lukea, ja se jätettiin väliin (%s)."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:1006
 #, c-format
@@ -28932,9 +28921,9 @@ msgid "Error opening unpacked library directory: '%s'."
 msgstr "Virhe avattaessa hakemistoa: '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1639
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create library backup file '%s'."
-msgstr "Varmuuskopiokansion '%s' luominen epäonnistui\n"
+msgstr "Kirjaston varmuuskopiotiedoston '%s' luominen epäonnistui."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1948
 #, c-format
@@ -31798,18 +31787,18 @@ msgid "Net chain name:"
 msgstr "Verkkoketjun nimi:"
 
 #: eeschema/tools/sch_editor_control.cpp:1625
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to rename net chain '%s' to '%s'."
-msgstr "Hakemistoa ”%s” ei voitu luoda."
+msgstr "Verkkoketjun '%s' nimeäminen uudelleen nimelle '%s' epäonnistui."
 
 #: eeschema/tools/sch_editor_control.cpp:1661
 msgid "No potential net chain connects the selected pins."
 msgstr "Mikään mahdollinen verkkoketju ei yhdistä valittuja nastoja."
 
 #: eeschema/tools/sch_editor_control.cpp:1670
-#, fuzzy, c-format
+#, c-format
 msgid "The selected pins are already in net chain '%s'."
-msgstr "Valittu kansio on jo Git-projekti."
+msgstr "Valitut nastat kuuluvat jo verkkoketjuun '%s'."
 
 #: eeschema/tools/sch_editor_control.cpp:1680
 #: eeschema/tools/sch_selection_tool.cpp:431
@@ -32680,9 +32669,8 @@ msgstr ""
 #: pcbnew/widgets/pcb_properties_panel.cpp:641
 #: pcbnew/widgets/pcb_properties_panel.cpp:660
 #: pcbnew/widgets/pcb_properties_panel.cpp:783
-#, fuzzy
 msgid "Add Custom Property"
-msgstr "Lisää mukautettu ryhmä..."
+msgstr "Lisää mukautettu ominaisuus"
 
 #: eeschema/widgets/sch_properties_panel.cpp:82
 msgid "Edit Pin Map..."
@@ -32703,9 +32691,8 @@ msgstr "Nimeä Net uudelleen"
 #: eeschema/widgets/sch_properties_panel.cpp:887
 #: pcbnew/widgets/pcb_properties_panel.cpp:653
 #: pcbnew/widgets/pcb_properties_panel.cpp:817
-#, fuzzy
 msgid "Remove Field"
-msgstr "Poista Kenttä..."
+msgstr "Poista kenttä"
 
 #: eeschema/widgets/sch_properties_panel.cpp:698
 #: eeschema/widgets/sch_properties_panel.cpp:912
@@ -33419,9 +33406,9 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "Zip-tiedostoa '%s' ei voitu avata."
 
 #: gerbview/files.cpp:494
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
-msgstr "<b>Väliaikaisen tiedoston '%s' luominen epäonnistui. </b>"
+msgstr "Tilapäistiedoston luominen kohteen '%s' purkamista varten epäonnistui."
 
 #: gerbview/files.cpp:523
 #, c-format
@@ -33920,14 +33907,12 @@ msgid "Show Inactive Layers Normally"
 msgstr "Epäaktiivisen kerroksen näyttö"
 
 #: gerbview/tools/gerbview_actions.cpp:264
-#, fuzzy
 msgid "Dim Inactive Layers"
-msgstr "Ei-aktiiviset kerrokset:"
+msgstr "Himmennä epäaktiiviset kerrokset"
 
 #: gerbview/tools/gerbview_actions.cpp:270
-#, fuzzy
 msgid "Hide Inactive Layers"
-msgstr "Ei-aktiiviset kerrokset:"
+msgstr "Piilota epäaktiiviset kerrokset"
 
 #: gerbview/tools/gerbview_control.cpp:121
 msgid "None of the Gerber layers contain any data"
@@ -39732,14 +39717,12 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:266
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:110
-#, fuzzy
 msgid "Standard:"
-msgstr "Standardi"
+msgstr "Standardi:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:267
-#, fuzzy
 msgid "Production level:"
-msgstr "ODB++ tuotantotiedosto"
+msgstr "Tuotantotaso:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:268
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:34
@@ -39783,9 +39766,8 @@ msgid "Recommended hole size:"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:279
-#, fuzzy
 msgid "Hole clearance over max. lead:"
-msgstr "Reiän välyksen rikkomus"
+msgstr "Reiän turvaväli suhteessa johtimen enimmäishalkaisijaan:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:281
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:173
@@ -39804,19 +39786,19 @@ msgid "Copy the report to the clipboard"
 msgstr "Kopioi nykyinen 3D-kuva leikepöydälle"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:415
-#, fuzzy, c-format
+#, c-format
 msgid "%s Summary"
-msgstr "Yhteenveto"
+msgstr "%s Yhteenveto"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "Maximum lead diameter + %smm"
-msgstr "Pienin reiän halkaisija"
+msgstr "Johtimen enimmäishalkaisija + %s mm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:463
-#, fuzzy, c-format
+#, c-format
 msgid "Minimum lead diameter + %smm"
-msgstr "Pienin reiän halkaisija"
+msgstr "Johtimen vähimmäishalkaisija + %s mm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:485
 #, fuzzy
@@ -39830,14 +39812,12 @@ msgid "Size X:"
 msgstr "X-Koko:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:53
-#, fuzzy
 msgid "Min"
-msgstr "Min:"
+msgstr "Min"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:57
-#, fuzzy
 msgid "Max"
-msgstr "Max:"
+msgstr "Max"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:78
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:122
@@ -39845,32 +39825,28 @@ msgid "Size Y:"
 msgstr "Y-Koko:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:102
-#, fuzzy
 msgid "Hole size standard"
-msgstr "Reiän koko X:"
+msgstr "Reiän kokostandardi"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:122
 msgid "Level:"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:134
-#, fuzzy
 msgid "Round to:"
-msgstr "Pyöreä"
+msgstr "Pyöristä kohteeseen:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:145
-#, fuzzy
 msgid "Rounding:"
-msgstr "Pyöreä"
+msgstr "Pyöristys:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:149
 msgid "Nearest"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:165
-#, fuzzy
 msgid "Annular ring"
-msgstr "Sormuskehät:"
+msgstr "Kuparijohdinrengas"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:194
 #, fuzzy
@@ -39878,9 +39854,8 @@ msgid "Result"
 msgstr "Tulokset"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:211
-#, fuzzy
 msgid "Show minimum lead size"
-msgstr "Pienin poraushalkaisija:"
+msgstr "Näytä johtimen vähimmäiskoko"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:214
 #, fuzzy
@@ -39893,23 +39868,20 @@ msgid "Show maximum hole size"
 msgstr "Näytä liimakerrokset"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:248
-#, fuzzy
 msgid "Recommended pad size:"
-msgstr "Yhdistä antura uudelleen"
+msgstr "Suositeltu anturan koko:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:288
 msgid "IPC-2222B Summary"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:314
-#, fuzzy
 msgid "Min. hole diameter"
-msgstr "Reiän pienin halkaisija: "
+msgstr "Reiän pienin halkaisija"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:315
-#, fuzzy
 msgid "Max. hole diameter"
-msgstr "Reiän pienin halkaisija: "
+msgstr "Reiän suurin halkaisija"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:63
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:147
@@ -44559,9 +44531,8 @@ msgid "Plating"
 msgstr "Platina"
 
 #: pcbnew/dialogs/dialog_drill_chart_properties.cpp:89
-#, fuzzy
 msgid "Operation count"
-msgstr "DC-Toimintapiste"
+msgstr "Toimenpiteiden määrä"
 
 #: pcbnew/dialogs/dialog_drill_chart_properties.cpp:90
 #, fuzzy
@@ -44678,9 +44649,8 @@ msgid "Row separators"
 msgstr "Rivin erottimet"
 
 #: pcbnew/dialogs/dialog_drill_chart_properties_base.cpp:202
-#, fuzzy
 msgid "Column separators"
-msgstr "Yhdistämiserotin:"
+msgstr "Sarakkeiden erottimet"
 
 #: pcbnew/dialogs/dialog_drill_chart_properties_base.cpp:212
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:217
@@ -44688,9 +44658,8 @@ msgid "Border width:"
 msgstr "Reunan leveys:"
 
 #: pcbnew/dialogs/dialog_drill_chart_properties_base.cpp:223
-#, fuzzy
 msgid "Separator width:"
-msgstr "Erottimen leveys"
+msgstr "Erottimen leveys:"
 
 #: pcbnew/dialogs/dialog_drill_chart_properties_base.h:101
 #: pcbnew/pcb_drill_chart.cpp:833
@@ -44699,9 +44668,9 @@ msgid "Drill Chart Properties"
 msgstr "Läpiviennin ominaisuudet"
 
 #: pcbnew/dialogs/dialog_drill_groups.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Shape %d"
-msgstr "Muoto"
+msgstr "Muoto %d"
 
 #: pcbnew/dialogs/dialog_drill_groups.cpp:77
 msgid "From / To"
@@ -44717,9 +44686,8 @@ msgid "Sites"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:22
-#, fuzzy
 msgid "Profile:"
-msgstr "Tiedoston nimi"
+msgstr "Profiili:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:30
 #, fuzzy
@@ -44732,9 +44700,8 @@ msgid "Selected group"
 msgstr "&Valinta ainoastaan"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:73
-#, fuzzy
 msgid "Mark:"
-msgstr "Merkintä"
+msgstr "Merkintä:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:77
 #, fuzzy
@@ -44743,9 +44710,8 @@ msgstr "Kuvio"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:77
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
-#, fuzzy
 msgid "Hole size text"
-msgstr "Reiän koko X:"
+msgstr "Reiän koon teksti"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:83
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
@@ -45994,9 +45960,9 @@ msgid "Syntax error in expression"
 msgstr "Syntaksivirhe lausekkeessa"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:1124
-#, fuzzy, c-format
+#, c-format
 msgid "No value to match: %s"
-msgstr "%s vastaavia osioita ei löytynyt."
+msgstr "Ei vastaavaa arvoa: %s"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:1126
 #, c-format
@@ -47888,9 +47854,9 @@ msgid "Footprint Fields Table ('%s' Library)"
 msgstr "Jalanjälkikenttien taulukko (%s-kirjasto)"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprints from library '%s': %s"
-msgstr "Virhe luettaessa jalanjälkeä '%s' kirjastosta '%s': %s"
+msgstr "Virhe ladattaessa jalanjälkiä kirjastosta '%s':%s"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:248
 #, c-format
@@ -47935,9 +47901,8 @@ msgid "The start and end layers must be different."
 msgstr "Lähteen 1 ja Lähteen 2 on oltava erilaisia."
 
 #: pcbnew/dialogs/dialog_microvia_stack.cpp:87
-#, fuzzy
 msgid "Select a start and an end layer present on this board."
-msgstr "Aloituskerros ja lopetuskerros eivät voi olla samat"
+msgstr "Valitse tällä piirilevyllä oleva aloitus- ja päätekerros."
 
 #: pcbnew/dialogs/dialog_microvia_stack.cpp:93
 #, fuzzy
@@ -47969,9 +47934,8 @@ msgstr "Kerrosrakenne"
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:51
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:69
 #: pcbnew/generators/pcb_via_stack.cpp:1562
-#, fuzzy
 msgid "Staggered"
-msgstr "Porrastaa:"
+msgstr "Lomittainen"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:60
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:310
@@ -50562,9 +50526,8 @@ msgid "Via Stitching Properties"
 msgstr "Läpivientitikkauksen ominaisuudet"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:39
-#, fuzzy
 msgid "Stitch Net:"
-msgstr "Tikkaa"
+msgstr "Tikkausverkko:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:75
 msgid "Normal Grid"
@@ -50605,9 +50568,8 @@ msgid "Guard"
 msgstr "Suojaus"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:114
-#, fuzzy
 msgid "Guard Net:"
-msgstr "Suojattava verkko"
+msgstr "Suojausverkko:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.h:85
 msgid "Via Stitch Properties"
@@ -52153,7 +52115,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_2constraints.h:2
-#, fuzzy
 msgid ""
 "### Constraints\n"
 "\n"
@@ -52452,291 +52413,314 @@ msgid ""
 msgstr ""
 "### Rajoitteet\n"
 "\n"
-"| Rajoitetyyppi             | Argumentin "
-"tyyppi                                                                                                    "
-"| "
-"Kuvaus                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+"| Rajoitteen tyyppi           | Argumentin tyyppi"
+"                                                                                                         "
+"| Kuvaus"
+"                                                                                                                                                                                                                                                                                                                                                                                                                                             "
 "|\n"
-"|---------------------------|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/"
-"max                                                                                                               "
-"| Tarkistaa läpivientien rengasmaisten kuparialueiden leveyden."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
+"|---------------------------"
+"|-----------------------------------------------------------------------------------------------------------------------"
+"|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
 "|\n"
-"| `assertion`               | \"&lt;"
-"lauseke>\"                                                                                                        "
-"| Tarkistaa annetun lausekkeen."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
+"| `annular_width`           | min/max"
+"                                                                                                               "
+"| Tarkistaa via-yhteyksien rengasmaisten kuparialueiden leveyden.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                                          "
+"|\n"
+"| `assertion`               | \"&lt;expression>"
+"\"                                                                                                     "
+"| Tarkistaa annetun lausekkeen.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
 "| `bridged_mask`            "
 "|                                                                                                                       "
-"| Tarkistaa, onko kuparikohteiden välillä juotteenestopinnoitteen siltoja. "
-"Tämä rajoite ei käytä min/opt/max-arvoa. Yhdessä vakavuustasoehdon kanssa "
-"tätä rajoitetta voidaan käyttää sallimaan tai estämään "
-"juotteenestopinnoitteen siltoja eri tilanteissa."
-"<br>                                                                                                                                                                                                       "
+"| Tarkistaa kuparikohteiden väliset juotosmaskisillat.  Tämä rajoite ei "
+"käytä min/opt/max-arvoa.  Yhdessä severity-lausekkeen kanssa tätä rajoitetta "
+"voidaan käyttää sallimaan tai estämään juotosmaskin siltaantuminen "
+"erilaisissa olosuhteissa.<br>"
+"                                                                                                                                                                                                       "
 "|\n"
-"| `clearance`               | "
-"min                                                                                                                   "
+"| `clearance`               | min"
+"                                                                                                                   "
 "| Määrittää **sähköisen** eristysetäisyyden eri verkkoihin kuuluvien "
-"kuparikohteiden välillä. (Katso `physical_clearance`, jos haluat määrittää "
-"etäisyyden kohteiden välillä verkosta riippumatta.)<br><br>Kuparikohteiden "
-"päällekkäisyyden (törmäyksen) sallimiseksi luo `clearance`-rajoite, jonka "
-"`min`-arvo on pienempi kuin nolla (esimerkiksi `-1`)."
-"<br>                                                                                                                      "
+"kuparikohteiden välillä.  (Katso `physical_clearance`, jos haluat määrittää "
+"kohteiden välisen etäisyyden verkosta riippumatta.)<br><br>Jotta "
+"kuparikohteet voivat olla päällekkäin (törmätä), luo `clearance`-rajoite, "
+"jonka `min`-arvo on pienempi kuin nolla (esimerkiksi `-1`).<br>"
+"                                                                                                                      "
 "|\n"
-"| `connection_width`        | "
-"min                                                                                                                   "
-"| Tarkistaa anturoiden ja alueiden välisten yhteyksien leveyden. Virhe "
-"ilmoitetaan jokaisesta anturayhteydestä, joka on kapeampi kuin `min`-arvo."
-"<br>                                                                                                                                                                                  "
+"| `connection_width`        | min"
+"                                                                                                                   "
+"| Tarkistaa padien ja zone-alueiden välisten yhteyksien leveyden.  "
+"Jokaisesta `min`-arvoa kapeammasta pad-yhteydestä syntyy virhe.<br>"
+"                                                                                                                                                                                  "
 "|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                   "
-"| Tarkistaa jalanjälkien courtyard-alueiden välisen etäisyyden ja ilmoittaa "
+"| `courtyard_clearance`     | min"
+"                                                                                                                   "
+"| Tarkistaa footprintien courtyard-alueiden välisen etäisyyden ja tuottaa "
 "virheen, jos mitkä tahansa kaksi courtyard-aluetta ovat lähempänä toisiaan "
-"kuin `min`-etäisyys. Jos jalanjäljellä ei ole courtyard-muotoa, tämä rajoite "
-"ei aiheuta virheitä."
-"<br>                                                                                                                                                                                                               "
+"kuin `min`-etäisyys.  Jos footprintillä ei ole courtyard-muotoa, tämä "
+"rajoite ei tuota virheitä.<br>"
+"                                                                                                                                                                                                               "
 "|\n"
-"| `creepage`                | "
-"min                                                                                                                   "
+"| `creepage`                | min"
+"                                                                                                                   "
 "| Määrittää eri verkkoihin kuuluvien kuparikohteiden välisen "
-"pintamatkaetäisyyden."
-"<br>                                                                                                                                                                                                                                                                                                                                                                           "
+"ryömintäetäisyyden.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                           "
-"| Tarkistaa differentiaaliparin rinnakkaisten johtimien välisen raon. `opt`-"
+"| `diff_pair_gap`           | min/opt/max"
+"                                                                                                           "
+"| Tarkistaa differentiaaliparin rinnakkaisten trackien välisen raon.  `opt`-"
 "asetusta käyttää interaktiivinen reititin uusien differentiaaliparien "
-"sijoittamiseen. Virhe ilmoitetaan, jos differentiaaliparin johtimien välinen "
-"etäisyys on `min`- ja `max`-asetusten ulkopuolella. Differentiaaliparin "
-"rakoa ei tarkisteta differentiaaliparin ei-rinnakkaisissa osissa "
-"(esimerkiksi komponentista lähtevässä fanout-osassa)."
-"<br>                                                                                                                                                                                                                                                                       "
+"sijoittamiseen.  Virhe syntyy, jos differentiaaliparin trackien välinen "
+"etäisyys on `min`- ja `max`-asetusten ulkopuolella.  Differentiaaliparin "
+"rakoa ei testata differentiaaliparin ei-rinnakkaisissa osissa (esimerkiksi "
+"komponentista lähtevässä fanout-osassa).<br>"
+"                                                                                                                                                                                                                                                                       "
 "|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                   "
-"| Tarkistaa etäisyyden, jonka differentiaaliparin johdin on reititetty "
-"kytkeytymättömänä parin toiseen polariteettijohtimeen (esimerkiksi kohdassa, "
-"jossa pari haarautuu komponentista tai irtoaa kytkennästä kiertääkseen "
-"toisen kohteen, kuten läpiviennin)."
-"<br>                                                                                                                                                                                                         "
+"| `diff_pair_uncoupled`     | max"
+"                                                                                                                   "
+"| Tarkistaa etäisyyden, jonka differentiaaliparin track kulkee "
+"irtikytkettynä parin toisen polariteetin trackista (esimerkiksi kohdassa, "
+"jossa pari haarautuu komponentista tai irtikytkeytyy kiertääkseen jonkin "
+"muun kohteen, kuten vian).<br>"
+"                                                                                                                                                                                                         "
 "|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`through_via`<br>`blind_via`<br>`buried_via`<br>`micro_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint` "
-"| Määritä yksi tai useampi kielletty kohdetyyppi välilyönneillä erotettuna. "
-"Esimerkiksi `(constraint disallow track)` tai `(constraint disallow track "
-"via pad)`. Jos tämän tyyppinen kohde vastaa säännön ehtoa, luodaan DRC-virhe."
-"<br><br>Tämä rajoite vastaa olennaisesti keepout-sääntöaluetta, mutta sitä "
-"voidaan käyttää tarkempien keepout-rajoitusten luomiseen."
-"<br>                                  |\n"
-"| `edge_clearance`          | "
-"min                                                                                                                   "
+"| `disallow`                | `track`<br>`via`<br>`through_via`<br>"
+"`blind_via`<br>`buried_via`<br>`micro_via`<br>`pad`<br>`zone`<br>`text`<br>"
+"`graphic`<br>`hole`<br>`footprint`<br> | Määrittää yhden tai useamman "
+"kiellettävän kohdetyypin välilyönnein eroteltuna.  Esimerkiksi `(constraint "
+"disallow track)` tai `(constraint disallow track via pad)`.  Jos tämän "
+"tyyppinen kohde vastaa säännön ehtoa, syntyy DRC-virhe.<br><br>Tämä rajoite "
+"vastaa olennaisesti keepout-sääntöaluetta, mutta sitä voidaan käyttää "
+"tarkempien keepout-rajoitusten luomiseen.<br>"
+"                                  |\n"
+"| `edge_clearance`          | min"
+"                                                                                                                   "
 "| Tarkistaa kohteiden ja piirilevyn reunan välisen etäisyyden.<br><br>Tätä "
 "voidaan ajatella myös \"jyrsintätoleranssina\", koska piirilevyn reuna "
-"sisältää kaikki `Edge.Cuts`-tasolla olevat graafiset kohteet sekä kaikki "
-"*ovaalit* anturareiät. (Katso `physical_hole_clearance` poraustoleranssia "
-"varten.)<br>                                                                                                                                                    "
+"sisältää kaikki `Edge.Cuts`-tasolla olevat graafiset kohteet sekä "
+"mahdolliset *soikeat* pad-reiät.  (Katso `physical_hole_clearance` "
+"poraustoleranssia varten.)<br>"
+"                                                                                                                                                    "
 "|\n"
-"| `net_chain_length`        | min/"
-"max                                                                                                               "
-"| Mittaa ketjun kahden päätepään anturan (kaaviossa määritettyjen) välisen "
-"runkopituuden ja tarkistaa sen `min`/`max`-arvoja vastaan. Rungosta "
-"haarautuvat haarat rajataan erikseen `stub_length`-rajoitteella, eikä niitä "
-"lasketa tässä mukaan. Jos ketjulla ei ole päätepään anturoita tai reititetty "
-"kupari sisältää silmukan, tarkistus käyttää varamenetelmänä kaikkien ketjuun "
-"kuuluvien verkkojen sekä sarjaan kytkettyjen passiivisten komponenttien "
-"välisten yhteyksien summaa. Kun sekä `length` että `net_chain_length` "
-"vastaavat samaa kohdetta, `net_chain_length` on etusijalla. |\n"
-"| `hole_clearance`          | "
-"min                                                                                                                   "
-"| Tarkistaa anturan tai läpiviennin poratun reiän ja eri verkkoon kuuluvien "
-"kuparikohteiden välisen etäisyyden. Etäisyys mitataan reiän halkaisijasta, "
-"ei sen keskipisteestä."
-"<br>                                                                                                                                                                                                                                                                        "
+"| `net_chain_length`        | min/max"
+"                                                                                                               "
+"| Mittaa ketjun kahden päätepadin (kaaviossa määritettyjen) välisen rungon "
+"pituuden ja tarkistaa sen arvojen `min`/`max` suhteen.  Rungosta haarautuvat "
+"sivuhaarat rajataan erikseen `stub_length`-rajoitteella, eikä niitä lasketa "
+"tässä.  Jos ketjulla ei ole päätepadeja tai reititetty kupari sisältää "
+"silmukan, tarkistus palautuu kaikkien jäsenverkkojen sekä sarjapassiivien "
+"muodostamien siltojen summapituuteen.  Kun sekä `length` että "
+"`net_chain_length` vastaavat samaa kohdetta, `net_chain_length` voittaa. |\n"
+"| `hole_clearance`          | min"
+"                                                                                                                   "
+"| Tarkistaa padissa tai viassa olevan poratun reiän ja eri verkkoon "
+"kuuluvien kuparikohteiden välisen etäisyyden.  Etäisyys mitataan reiän "
+"halkaisijasta, ei sen keskipisteestä.<br>"
+"                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `hole_size`               | min/opt/"
-"max                                                                                                           "
-"| Tarkistaa anturan tai läpiviennin poratun reiän koon (halkaisijan). "
-"Ovaalirei'issä pienempi (minor) halkaisija tarkistetaan `min`-arvoa (jos "
-"määritetty) ja suurempi (major) halkaisija `max`-arvoa (jos määritetty) "
-"vastaan. Interaktiivinen reititin käyttää `opt`-arvoa oletusarvoisena "
-"läpiviennin reikäkokoina verkoille, jotka vastaavat säännön ehtoa."
-"<br>                                                                    |\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                   "
-"| Tarkistaa anturoiden ja läpivientien mekaanisesti porattujen reikien "
-"välisen etäisyyden. Etäisyys mitataan reikien halkaisijoiden väliltä, ei "
-"niiden keskipisteiden väliltä.<br><br>Tämä rajoite on tarkoitettu ainoastaan "
-"poranterien suojaamiseen. **Laserporattujen** (microvia) ja muiden kuin "
+"| `hole_size`               | min/opt/max"
+"                                                                                                           "
+"| Tarkistaa padissa tai viassa olevan poratun reiän koon (halkaisijan).  "
+"Soikeiden reikien tapauksessa pienempi (minor) halkaisija testataan `min`-"
+"arvoa (jos määritetty) vastaan ja suurempi (major) halkaisija testataan "
+"`max`-arvoa (jos määritetty) vastaan.  Interaktiivinen reititin käyttää "
+"`opt`-arvoa oletusvia-reikäkokoina verkoille, jotka vastaavat säännön "
+"ehtoa.<br>"
+"                                                                    |\n"
+"| `hole_to_hole`            | min"
+"                                                                                                                   "
+"| Tarkistaa padeissa ja vioissa olevien mekaanisesti porattujen reikien "
+"välisen etäisyyden.  Etäisyys mitataan reikien halkaisijoiden välillä, ei "
+"niiden keskipisteiden välillä.<br><br>Tämä rajoite on tarkoitettu ainoastaan "
+"poranterien suojaamiseen.  **Laserporattujen** (microvias) ja muiden ei-"
 "mekaanisesti porattujen reikien välistä etäisyyttä ei tarkisteta, eikä "
-"myöskään **jyrsittyjen** (ovaalinmuotoisten) ja muiden kuin mekaanisesti "
-"porattujen reikien välistä etäisyyttä.<br> |\n"
-"| `length`                  | min/opt/"
-"max                                                                                                           "
-"| Tarkistaa säännön ehtoa vastaavien verkkojen reititetyn kokonaispituuden "
-"ja ilmoittaa virheen jokaisesta verkosta, joka on alle rajoitteen `min`-"
-"arvon (jos määritetty) tai yli `max`-arvon (jos määritetty).<br>`opt`-arvo "
-"määrittää tavoitepituuden, jota pituuden säätötyökalu käyttää kaikille "
-"säännön ehtoa vastaaville verkoille."
-"<br>                                                                                                    "
+"**jyrsittyjen** (soikean muotoisten) ja muiden ei-mekaanisesti porattujen "
+"reikien välistä etäisyyttä.<br> |\n"
+"| `length`                  | min/opt/max"
+"                                                                                                           "
+"| Tarkistaa säännön ehtoa vastaavien verkkojen kokonaisreitityspituuden ja "
+"tuottaa virheen jokaisesta verkosta, joka on määritettyä `min`-arvoa (jos "
+"määritetty) lyhyempi tai määritettyä `max`-arvoa (jos määritetty) "
+"pidempi.<br>`opt`-arvo määrittää tavoitepituuden, jota pituuden säätötyökalu "
+"käyttää kaikille säännön ehtoa vastaaville verkoille.<br>"
+"                                                                                                    "
 "|\n"
-"| `min_resolved_spokes`     | "
-"`0`<br>`1`<br>`2`<br>`3`<br>`4`<br>                                                                                   "
-"| Tarkistaa anturan yhteyksien (spokien) kokonaismäärän. Virhe ilmoitetaan "
-"jokaisesta anturasta, jolla on vähemmän kuin määritetty määrä spokeyhteyksiä."
-"<br>                                                                                                                                                                                 "
+"| `min_resolved_spokes`     | `0`<br>`1`<br>`2`<br>`3`<br>`4`<br>"
+"                                                                                   "
+"| Tarkistaa padin yhteyksien (spokejen) kokonaismäärän.  Jokaisesta padista, "
+"jolla on vähemmän kuin määritetty määrä spokeja, syntyy virhe.<br>"
+"                                                                                                                                                                                 "
 "|\n"
-"| `physical_clearance`      | "
-"min                                                                                                                   "
-"| Tarkistaa kahden samalla tasolla olevan kohteen välisen etäisyyden (mukaan "
-"lukien muut kuin kuparitasot).<br><br>Vaikka tämä voi suorittaa "
-"yleiskäyttöisempiä tarkistuksia kuin `clearance`, se on paljon hitaampi. "
-"Käytä `clearance`-rajoitetta aina kun mahdollista."
-"<br>                                                                                                                                                                                                                            "
+"| `microvia_aspect_ratio`  | max"
+"                                                                                                                   "
+"| Tarkistaa microvian poraussyvyyden suhteessa sen reiän halkaisijaan.  "
+"Syvyys on sen läpäisemän dielektrisen materiaalin paksuus sekä kuparikalvo, "
+"jonka läpi laser poraa.  Jos suhde ylittää enimmäisarvon, syntyy virhe. IPC-"
+"2226:ssa tavanomainen raja on 0.75–1.0.<br> |\n"
+"| `microvia_stack_depth`   | max"
+"                                                                                                                   "
+"| Tarkistaa, kuinka monta microviaa on pinottu päällekkäin.  Jos pino on "
+"enimmäisarvoa syvempi, syntyy virhe.  Säännöllä voidaan määrittää eri raja "
+"piirilevyn eri osille, esimerkiksi hienojakoisen BGA:n alla.<br> |\n"
+"| `physical_clearance`      | min"
+"                                                                                                                   "
+"| Tarkistaa kahden kohteen välisen etäisyyden tietyllä tasolla (mukaan "
+"lukien ei-kuparitasot).<br><br>Vaikka tämä voi suorittaa yleiskäyttöisempiä "
+"tarkistuksia kuin `clearance`, se on huomattavasti hitaampi.  Käytä "
+"`clearance`-rajoitetta aina kun mahdollista.<br>"
+"                                                                                                                                                                                                                            "
 "|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                   "
-"| Tarkistaa anturan tai läpiviennin poratun reiän ja toisen kohteen välisen "
-"etäisyyden verkosta riippumatta. Etäisyys mitataan reiän halkaisijasta, ei "
-"sen keskipisteestä.<br><br>Tätä voidaan ajatella myös "
-"\"poraustoleranssina\", koska se koskee vain **pyöreitä** reikiä (katso "
-"`edge_clearance` jyrsintätoleranssia varten)."
-"<br>                                                                                                                    "
+"| `physical_hole_clearance` | min"
+"                                                                                                                   "
+"| Tarkistaa padissa tai viassa olevan poratun reiän ja toisen kohteen "
+"välisen etäisyyden verkosta riippumatta.  Etäisyys mitataan reiän "
+"halkaisijasta, ei sen keskipisteestä.<br><br>Tätä voidaan ajatella myös "
+"\"poraustoleranssina\", koska se sisältää vain **pyöreät** reiät (katso "
+"`edge_clearance` jyrsintätoleranssia varten).<br>"
+"                                                                                                                    "
 "|\n"
-"| `silk_clearance`          | "
-"min                                                                                                                   "
-"| Tarkistaa silkkipainotasoilla olevien kohteiden ja muiden kohteiden "
-"välisen etäisyyden."
-"<br>                                                                                                                                                                                                                                                                                                                                                                        "
+"| `silk_clearance`          | min"
+"                                                                                                                   "
+"| Tarkistaa silkkipainatustasoilla olevien kohteiden ja muiden kohteiden "
+"välisen etäisyyden.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `stub_length`             | min/"
-"max                                                                                                               "
-"| Rajaa moniverkkoisen ketjun haaraverkkojen pituuden. Haara on ketjuun "
-"kuuluva verkko, joka ei kosketa kumpaakaan ketjun kahdesta päätepään "
-"anturasta, joten se sijaitsee yhdestä päätepäästä toiseen kulkevan rungon "
-"sivussa. Sen koko reititetty pituus verrataan `min`/`max`-arvoihin.<br> |\n"
+"| `stub_length`             | min/max"
+"                                                                                                               "
+"| Rajaa moniverkkoketjun sivuhaaroina olevien jäsenverkkojen pituuden.  "
+"Sivuhaara on jäsenverkko, joka ei kosketa kumpaakaan ketjun kahdesta "
+"päätepadista, joten se sijaitsee päätepisteiden välillä kulkevan rungon "
+"ulkopuolella.  Sen koko reititettyä pituutta verrataan arvoihin `min`/"
+"`max`.<br> |\n"
 "| `return_path`             | `(layer \"<layer_name>\")`<br>`(net "
-"\"<net_name_or_pattern>\")`                                                            "
-"| Vaatii, että jokaisen ketjun johtimen ja kaaren päällä on vertailutasolla "
-"oleva alue. Jokainen peittämätön osuus tuottaa yhden merkin, joka "
-"sijoitetaan raon kohdalle. Valinnainen `(net …)`-suodatin rajoittaa "
-"hyväksyttävän alueen tiettyyn verkkoon (yleensä `\"GND\"`); jokerimerkit "
-"ovat sallittuja. Ilman sitä mikä tahansa vertailutasolla oleva alue "
-"hyväksytään. Esimerkki: `(constraint return_path (layer \"B.Cu\") (net "
-"\"GND\"))`<br> |\n"
-"| `skew`                    | min/opt/max/"
-"within\\_diff\\_pairs                                                                                       "
-"| Tarkistaa säännön ehtoa vastaavien verkkojen kokonaisvinouman eli kunkin "
-"verkon pituuden ja säännön piiriin kuuluvan pisimmän verkon välisen eron. "
-"Jos pisimmän verkon ja jonkin muun verkon välinen ero ylittää rajoitteen "
-"`max`-arvon, ilmoitetaan virhe.<br>Tämä rajoite määrittää myös "
-"tavoitevinouman, jota vinouman säätötyökalu käyttää kaikille säännön ehtoa "
-"vastaaville verkoille. Tavoitevinouma on `opt`-arvo, jos se on määritetty, "
-"tai `min`-arvo, jos `opt`-arvoa ei ole määritetty. Jos `min`- eikä `opt`-"
-"arvoa ole määritetty, tavoitevinouma on `0`.<br>Jos `within_diff_pairs`-"
-"asetus on määritetty, vinouma testataan erikseen jokaiselle säännön "
-"verkkoihin kuuluvalle differentiaaliparille. Jos `within_diff_pairs`-"
-"asetusta ei ole määritetty, vinouma testataan kaikille säännön piiriin "
-"kuuluville verkoille (esimerkiksi väylän vinouman säätöä varten)."
-"<br>                                                          |\n"
-"| `solder_mask_expansion`   | "
-"opt                                                                                                                   "
-"| Määrittää anturoiden, muotojen ja johtimien juotteenestopinnoitteen "
-"laajennuksen.                                                                                                                                                                                                                                                                                                                                                                                        "
+"\"<net_name_or_pattern>\")"
+"`                                                            | Edellyttää, "
+"että jokaisen ketjun trackin ja kaaren alla on vertailutasolla oleva zone.  "
+"Jokainen suojaamaton osuus tuottaa yhden merkinnän, joka ankkuroidaan raon "
+"päälle.  Valinnainen `(net …)`-suodatin rajoittaa kelpuutettavan zonen "
+"tiettyyn verkkoon (yleensä `\"GND\"`); jokerimerkit ovat sallittuja.  Ilman "
+"sitä mikä tahansa vertailutasolla oleva zone kelpaa.  Esimerkki: `"
+"(constraint return_path (layer \"B.Cu\") (net \"GND\"))`<br> |\n"
+"| `skew`                    | min/opt/max/within\\_diff\\_pairs"
+"                                                                                       "
+"| Tarkistaa säännön ehtoa vastaavien verkkojen kokonais-skew'n eli kunkin "
+"verkon pituuden ja säännön pisimmän vastaavan verkon välisen eron.  Jos "
+"pisimmän verkon ja minkä tahansa muun verkon välinen ero ylittää rajoitteen "
+"`max`-arvon, syntyy virhe.<br>Tämä rajoite määrittää myös tavoite-skew'n, "
+"jota skew-säätötyökalu käyttää kaikille säännön ehtoa vastaaville "
+"verkoille.  Tavoite-skew on `opt`-arvo, jos se on määritetty, tai `min`-"
+"arvo, jos `opt`-arvoa ei ole määritetty.  Jos kumpaakaan `min`- tai `opt`-"
+"arvoa ei ole määritetty, tavoite-skew on `0`.<br>Jos optio "
+"`within_diff_pairs` on määritetty, skew testataan erikseen jokaiselle "
+"säännön mukaisissa verkoissa olevalle differentiaaliparille.  Jos "
+"`within_diff_pairs`-optiota ei ole määritetty, skew testataan kaikille "
+"säännön mukaisille verkoille (esimerkiksi väylän skew-säätöä varten).<br>"
+"                                                          |\n"
+"| `solder_mask_expansion`   | opt"
+"                                                                                                                   "
+"| Määrittää padien, muotojen ja trackien juotosmaskin laajennuksen.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
-"| `solder_paste_abs_margin` | "
-"opt                                                                                                                   "
-"| Määrittää anturoiden absoluuttisen juotospastan välyksen. Yleensä "
-"negatiivinen, jotta juotospastan aluetta pienennetään.<br><br>Lopullinen "
-"juotospastan välys on absoluuttisen ja suhteellisen välyksen "
+"| `solder_paste_abs_margin` | opt"
+"                                                                                                                   "
+"| Määrittää padien absoluuttisen juotospastavälyksen.  Yleensä negatiivinen, "
+"jotta pasta-aluetta pienennetään.<br><br>Lopullinen juotospastavälys on "
+"absoluuttisen välyksen ja suhteellisen välyksen "
 "summa.                                                                                                                                                                                                                                                        "
 "|\n"
-"| `solder_paste_rel_margin` | "
-"opt                                                                                                                   "
-"| Määrittää anturoiden suhteellisen juotospastan välyksen. Yleensä "
-"negatiivinen, jotta juotospastan aluetta pienennetään.<br><br>Lopullinen "
-"juotospastan välys on absoluuttisen ja suhteellisen välyksen "
+"| `solder_paste_rel_margin` | opt"
+"                                                                                                                   "
+"| Määrittää padien suhteellisen juotospastavälyksen.  Yleensä negatiivinen, "
+"jotta pasta-aluetta pienennetään.<br><br>Lopullinen juotospastavälys on "
+"absoluuttisen välyksen ja suhteellisen välyksen "
 "summa.                                                                                                                                                                                                                                                        "
 "|\n"
-"| `text_height`             | min/"
-"max                                                                                                               "
-"| Tarkistaa tekstin korkeuden, mukaan lukien tekstilaatikot. Virhe "
-"ilmoitetaan jokaisesta tekstikohteesta, jonka korkeus on alle `min`-arvon "
-"(jos määritetty) tai yli `max`-arvon (jos määritetty)."
-"<br>                                                                                                                                                                                                                                                     "
+"| `text_height`             | min/max"
+"                                                                                                               "
+"| Tarkistaa tekstin korkeuden, mukaan lukien tekstilaatikot.  Jokaisesta "
+"tekstikohteesta, jonka korkeus on määritettyä `min`-arvoa (jos määritetty) "
+"pienempi tai määritettyä `max`-arvoa (jos määritetty) suurempi, syntyy "
+"virhe.<br>"
+"                                                                                                                                                                                                                                                     "
 "|\n"
-"| `text_thickness`          | min/"
-"max                                                                                                               "
-"| Tarkistaa tekstin paksuuden, mukaan lukien tekstilaatikot. Virhe "
-"ilmoitetaan jokaisesta tekstikohteesta, jonka paksuus on alle `min`-arvon "
-"(jos määritetty) tai yli `max`-arvon (jos määritetty)."
-"<br>                                                                                                                                                                                                                                               "
+"| `text_thickness`          | min/max"
+"                                                                                                               "
+"| Tarkistaa tekstin paksuuden, mukaan lukien tekstilaatikot.  Jokaisesta "
+"tekstikohteesta, jonka paksuus on määritettyä `min`-arvoa (jos määritetty) "
+"pienempi tai määritettyä `max`-arvoa (jos määritetty) suurempi, syntyy "
+"virhe.<br>"
+"                                                                                                                                                                                                                                               "
 "|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                   "
-"| Määrittää anturan ja lämpöhelpotusyhteydellä yhdistetyn alueen välisen "
-"raon leveyden."
-"<br>                                                                                                                                                                                                                                                                                                                                                           "
+"| `thermal_relief_gap`      | min"
+"                                                                                                                   "
+"| Määrittää padin ja thermal-relief-yhteydellä varustetun zonen välisen raon "
+"leveyden.<br>"
+"                                                                                                                                                                                                                                                                                                                                                           "
 "|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                   "
-"| Määrittää anturan lämpöhelpotusyhteydellä alueeseen yhdistävien spokien "
-"leveyden."
-"<br>                                                                                                                                                                                                                                                                                                                                                      "
+"| `thermal_spoke_width`     | opt"
+"                                                                                                                   "
+"| Määrittää padin ja thermal-relief-yhteydellä varustetun zonen yhdistävien "
+"spokejen leveyden.<br>"
+"                                                                                                                                                                                                                                                                                                                                                      "
 "|\n"
-"| `track_angle`             | min/"
-"max                                                                                                               "
-"| Tarkistaa kahden toisiinsa yhdistetyn johdinsegmentin välisen kulman. "
-"Virhe ilmoitetaan jokaisesta yhdistetystä parista, jonka kulma on alle `min`-"
-"arvon (jos määritetty) tai yli `max`-arvon (jos määritetty)."
-"<br>                                                                                                                                                                                                                                              "
+"| `track_angle`             | min/max"
+"                                                                                                               "
+"| Tarkistaa kahden yhdistetyn track-segmentin välisen kulman.  Jokaisesta "
+"yhdistetystä parista, jonka kulma on määritettyä `min`-arvoa (jos "
+"määritetty) pienempi tai määritettyä `max`-arvoa (jos määritetty) suurempi, "
+"syntyy virhe.<br>"
+"                                                                                                                                                                                                                                              "
 "|\n"
-"| `track_segment_length`    | min/"
-"max                                                                                                               "
-"| Tarkistaa johdin- ja kaarisegmenttien pituuden. Virhe ilmoitetaan "
-"jokaisesta segmentistä, jonka pituus on alle `min`-arvon (jos määritetty) "
-"tai yli `max`-arvon (jos määritetty)."
-"<br>                                                                                                                                                                                                                                                           "
+"| `track_segment_length`    | min/max"
+"                                                                                                               "
+"| Tarkistaa track- ja kaarisegmenttien pituuden.  Jokaisesta segmentistä, "
+"jonka pituus on määritettyä `min`-arvoa (jos määritetty) pienempi tai "
+"määritettyä `max`-arvoa (jos määritetty) suurempi, syntyy virhe.<br>"
+"                                                                                                                                                                                                                                                           "
 "|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                           "
-"| Tarkistaa johdin- ja kaarisegmenttien leveyden. Virhe ilmoitetaan "
-"jokaisesta segmentistä, jonka leveys on alle `min`-arvon (jos määritetty) "
-"tai yli `max`-arvon (jos määritetty). Interaktiivinen reititin käyttää `opt`-"
-"arvoa oletusarvoisena johtimen leveytenä verkoille, jotka vastaavat säännön "
-"ehtoa."
-"<br>                                                                                                                                       "
+"| `track_width`             | min/opt/max"
+"                                                                                                           "
+"| Tarkistaa track- ja kaarisegmenttien leveyden.  Jokaisesta segmentistä, "
+"jonka leveys on määritettyä `min`-arvoa (jos määritetty) pienempi tai "
+"määritettyä `max`-arvoa (jos määritetty) suurempi, syntyy virhe.  "
+"Interaktiivinen reititin käyttää `opt`-arvoa oletustrack-leveytenä "
+"verkoille, jotka vastaavat säännön ehtoa.<br>"
+"                                                                                                                                       "
 "|\n"
-"| `via_count`               | min/"
-"max                                                                                                               "
-"| Laskee säännön ehtoa vastaavien verkkojen läpivientien määrän. Virhe "
-"ilmoitetaan jokaisesta verkosta, jolla on vähemmän läpivientejä kuin `min`-"
-"arvo (jos määritetty) tai enemmän kuin `max`-arvo (jos määritetty)."
-"<br>                                                                                                                                                                                                                                 "
+"| `via_count`               | min/max"
+"                                                                                                               "
+"| Laskee jokaisella säännön ehtoa vastaavalla verkolla olevien via-"
+"yhteyksien määrän.  Jokaisesta verkosta, jolla on vähemmän via-yhteyksiä "
+"kuin `min`-arvo (jos määritetty) tai enemmän kuin `max`-arvo (jos määritetty)"
+", syntyy virhe.<br>"
+"                                                                                                                                                                                                                                 "
 "|\n"
 "| `via_dangling`            "
 "|                                                                                                                       "
-"| Tarkistaa läpiviennit, jotka ovat kytkemättömiä tai kytkettyjä vain yhteen "
-"tasoon. Tämä rajoite ei käytä min/opt/max-arvoa. Yhdessä vakavuustasoehdon "
-"kanssa tätä rajoitetta voidaan käyttää sallimaan tai estämään irrallisia "
-"läpivientejä eri tilanteissa."
-"<br>                                                                                                                                                                                              "
+"| Tarkistaa via-yhteydet, jotka eivät ole yhteydessä mihinkään tai jotka "
+"ovat yhteydessä vain yhdellä tasolla.  Tämä rajoite ei käytä min/opt/max-"
+"arvoa.  Yhdessä severity-lausekkeen kanssa tätä rajoitetta voidaan käyttää "
+"sallimaan tai estämään irralliset via-yhteydet erilaisissa olosuhteissa.<br>"
+"                                                                                                                                                                                              "
 "|\n"
-"| `via_diameter`            | min/opt/"
-"max                                                                                                           "
-"| Tarkistaa läpivientien halkaisijan. Virhe ilmoitetaan jokaisesta "
-"läpiviennistä, jonka halkaisija on alle `min`-arvon (jos määritetty) tai yli "
-"`max`-arvon (jos määritetty). Interaktiivinen reititin käyttää `opt`-arvoa "
-"oletusarvoisena läpiviennin halkaisijana verkoille, jotka vastaavat säännön "
-"ehtoa."
-"<br>                                                                                                                                                      "
+"| `via_diameter`            | min/opt/max"
+"                                                                                                           "
+"| Tarkistaa via-yhteyksien halkaisijan.  Jokaisesta viasta, jonka halkaisija "
+"on määritettyä `min`-arvoa (jos määritetty) pienempi tai määritettyä `max`-"
+"arvoa (jos määritetty) suurempi, syntyy virhe.  Interaktiivinen reititin "
+"käyttää `opt`-arvoa oletusvia-halkaisijana verkoille, jotka vastaavat "
+"säännön ehtoa.<br>"
+"                                                                                                                                                      "
 "|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                "
-"| Määrittää alueen ja anturan välille muodostettavan yhteyden."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`\n"
+"\n"
+"\n"
+"                                                                                "
+"| Määrittää zonen ja padin välille muodostettavan yhteyden.<br>"
+"                                                                                                                                                                                                                                                                                                                                                                                       "
 "|\n"
 "\n"
 "\n"
@@ -54097,9 +54081,8 @@ msgid "no"
 msgstr "ei"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:117
-#, fuzzy
 msgid "Preset name:"
-msgstr "BOM-asetuksen nimi:"
+msgstr "Esiasetuksen nimi:"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:117
 msgid "New Microvia Stack Preset"
@@ -54497,9 +54480,9 @@ msgid "Checking %s max microvia stack depth: %s."
 msgstr "Tarkistetaan %s maksimivinoutta: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1458
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max microvia aspect ratio: %.3f."
-msgstr "Tarkistetaan %s maksimi erotuspituus: %s."
+msgstr "Tarkistetaan kohteen %s mikro-läpiviennin suurin kuvasuhde:%.3f."
 
 #: pcbnew/drc/drc_engine.cpp:1464
 #, c-format
@@ -56495,9 +56478,8 @@ msgstr ""
 "Lämpökevennysliitäntöjen vähimmäismäärä anturan ja kuparialueen välillä"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:202
-#, fuzzy
 msgid "Largest number of microvias allowed stacked on one another."
-msgstr "Läpivientien suurin sallittu määrä pituustasatussa verkossa"
+msgstr "Suurin sallittu määrä mikroläpivientejä pinottuna päällekkäin."
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:217
 msgid ""
@@ -57422,9 +57404,8 @@ msgid "File format is not supported"
 msgstr "Tiedostomuotoa ei tueta"
 
 #: pcbnew/files.cpp:732
-#, fuzzy
 msgid "Invalid imported net-name map."
-msgstr "Virheellinen ominaisuuden nimi"
+msgstr "Tuotu verkkonimikartta on virheellinen."
 
 #: pcbnew/files.cpp:735
 msgid "Cannot apply imported net-name map to the board."
@@ -57924,9 +57905,8 @@ msgstr ""
 "Numero, joka on numero, vastaa myös anturoiden määrää."
 
 #: pcbnew/footprint_wizard.cpp:119
-#, fuzzy
 msgid "could not parse wizard info"
-msgstr "Tiedostoa ei voitu lukea "
+msgstr "generointityökalun tietoja ei voitu jäsentää"
 
 #: pcbnew/footprint_wizard.cpp:133 pcbnew/footprint_wizard.cpp:153
 msgid "Unexpected error with footprint wizard"
@@ -58004,9 +57984,9 @@ msgid "current length"
 msgstr "nykyinen pituus"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2399
-#, fuzzy, c-format
+#, c-format
 msgid "Skew: %s"
-msgstr "Marginaali:"
+msgstr "Vinouma: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2399
 #, c-format
@@ -58225,9 +58205,8 @@ msgid "Microvia Stack Properties"
 msgstr "Läpivientien tikkausasetukset"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1594
-#, fuzzy
 msgid "End Layer"
-msgstr "Päätykerros:"
+msgstr "Päätekerros"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1606
 msgid "Use Netclass Values"
@@ -59837,9 +59816,9 @@ msgid "Show Totals"
 msgstr "Näytä tiedot"
 
 #: pcbnew/pcb_drill_map.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Drill Map on %s"
-msgstr "Poranreikiä"
+msgstr "Porauskartta kerroksella %s"
 
 #: pcbnew/pcb_drill_map.cpp:222
 #, fuzzy
@@ -59870,9 +59849,8 @@ msgid "Hole Span"
 msgstr "Reiän muoto"
 
 #: pcbnew/pcb_drill_map.cpp:413
-#, fuzzy
 msgid "Outline Slots"
-msgstr "Ääriviivat sileät:"
+msgstr "Ulkoreunan hahlot"
 
 #: pcbnew/pcb_drill_map.cpp:417
 #, fuzzy
@@ -60117,9 +60095,9 @@ msgid "File is empty: %s"
 msgstr "Tiedosto '%s' on tyhjä"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load Allegro board from file: %s"
-msgstr "Piirilevyn luominen Allegro-tiedoista epäonnistui"
+msgstr "Allegro-piirilevyn lataaminen tiedostosta epäonnistui: %s"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:173
 msgid "Failed to build board from Allegro data"
@@ -60621,9 +60599,11 @@ msgid "Autotrax import: %d pad(s) with a target shape were skipped."
 msgstr ""
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Autotrax import: %d pad(s) on unsupported layers were skipped."
-msgstr "Anturan tyyppiä ei tueta; se ohitettiin."
+msgstr ""
+"Autotrax-tuonti: %d tukemattomilla kerroksilla olevaa anturaa jätettiin "
+"väliin."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:212
 #, c-format
@@ -60639,9 +60619,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:715
-#, fuzzy, c-format
+#, c-format
 msgid "Autotrax import: net '%s' node '%s' matches no pad."
-msgstr "Autotrax-tuonti, rivi %d: %s"
+msgstr "Autotrax-tuonti: verkon '%s' solmu '%s' ei täsmää mihinkään anturaan."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:721
 #, c-format
@@ -60651,9 +60631,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:846
-#, fuzzy
 msgid "Autotrax import: keepout layer used as the board outline."
-msgstr "Älä leikkaa silkkipainokerroksia piirilevyn reunan mukaan"
+msgstr "Autotrax-tuonti: Keepout-kerrosta käytettiin piirilevyn hahmotelmana."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:854 pcbnew/zone.cpp:2417
 msgid "Keepout"
@@ -61327,9 +61306,8 @@ msgid "No PCB was found in the project to import."
 msgstr "Jalanjäljestä ei löytynyt datalehteä."
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:189
-#, fuzzy
 msgid "Failed to load the project data."
-msgstr "Projektin lataus epäonnistui kohteelle %s"
+msgstr "Projektitiedon lataaminen epäonnistui."
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:440
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:490
@@ -61989,14 +61967,12 @@ msgid "Invalid drill map: not on a documentation layer"
 msgstr ""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5511
-#, fuzzy
 msgid "Invalid drill chart: bad column set"
-msgstr "Virheellinen porausmuoto\n"
+msgstr "Virheellinen porauskaavio: virheellinen sarakeryhmä"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5518
-#, fuzzy
 msgid "Invalid drill chart: not on a documentation layer"
-msgstr "Näytä DNP valmistuskerroksilla"
+msgstr "Virheellinen porauskaavio: ei dokumentaatiotasolla"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6053
 #, c-format
@@ -63429,14 +63405,14 @@ msgid "Missing diff-pair name argument to %s."
 msgstr "Puuttuva Differentiaaliparin nimiargumentti osoitteesta %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1505
-#, fuzzy, c-format
+#, c-format
 msgid "Missing net-chain name argument to %s"
-msgstr "Puuttuva sivun nimen argumentti komennolle %s."
+msgstr "Verkkoketjun nimiparametri puuttuu kohteesta %s"
 
 #: pcbnew/pcbexpr_functions.cpp:1577
-#, fuzzy, c-format
+#, c-format
 msgid "Missing netclass name argument to %s"
-msgstr "Puuttuva kerrosnimen argumentti %s."
+msgstr "Verkkoluokan nimiparametri puuttuu kohteesta %s"
 
 #: pcbnew/pcbexpr_functions.cpp:1639
 #, c-format
@@ -63449,9 +63425,9 @@ msgid "Missing netclass name argument to %s."
 msgstr "Puuttuva kerrosnimen argumentti %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1808
-#, fuzzy, c-format
+#, c-format
 msgid "Missing component class name argument to %s."
-msgstr "Komponenttiluokan nimen argumentti puuttuu arvosta hasComponentClass()"
+msgstr "Komponenttiluokan nimiparametri puuttuu kohteesta %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1858 pcbnew/pcbexpr_functions.cpp:1902
 #, fuzzy, c-format
@@ -63681,14 +63657,14 @@ msgstr ""
 "kerroskohdistusten muuttamista; se jätetään huomiotta"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3536
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected cancellation: %s\n"
-msgstr "Odottamaton tiedostopääte: '%s'."
+msgstr "Odottamaton peruutus: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3542
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load board: %s\n"
-msgstr "Piirilevyn lataus epäonnistui.\n"
+msgstr "Piirilevyn lataaminen epäonnistui: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3571
 #, c-format
@@ -63700,9 +63676,10 @@ msgstr ""
 "se jätetään huomiotta"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3597
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write imported design rules to '%s'\n"
-msgstr "Suunnittelusääntöjen kirjoittaminen kohteeseen ”%s” epäonnistui."
+msgstr ""
+"Tuotujen suunnittelusääntöjen kirjoittaminen kohteeseen '%s' epäonnistui\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3603
 #, c-format
@@ -63790,9 +63767,8 @@ msgstr ""
 "nimet jotka kuuluvat differentiaalipareille päättyvät joko _N / _P tai +/-."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:729
-#, fuzzy
 msgid "Can't find a suitable starting point for the diff pair"
-msgstr "Ei löydy sopivaa lähtöpistettä kytketylle verkolle \"%s\"."
+msgstr "Differentiaaliparille ei löydy sopivaa aloituspistettä"
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:93
 #: pcbnew/router/pns_meander_placer.cpp:73
@@ -64416,9 +64392,9 @@ msgid "Microvia stack: none defined"
 msgstr "Virheellinen taulukko: ei määriteltyjä soluja"
 
 #: pcbnew/toolbars_pcb_editor.cpp:785
-#, fuzzy, c-format
+#, c-format
 msgid "Microvia stack: %s"
-msgstr "Mikroläpivienti '%s' kerroksissa %s"
+msgstr "Mikroläpivientien pino: %s"
 
 #: pcbnew/toolbars_pcb_editor.cpp:788
 #, fuzzy
@@ -65568,9 +65544,8 @@ msgid "Error renaming footprint"
 msgstr "Virhe jalanjäljen nimeämisessä"
 
 #: pcbnew/tools/footprint_editor_control.cpp:632
-#, fuzzy
 msgid "No footprint to export"
-msgstr "Ei jalanjälkiä vietäväksi!"
+msgstr "Ei vietävää jalanjälkeä"
 
 #: pcbnew/tools/footprint_editor_control.cpp:669
 msgid "Select a library to compare against another."
@@ -65634,9 +65609,8 @@ msgid "Zone Manager"
 msgstr "Alueiden hallinta"
 
 #: pcbnew/tools/graphic_edit_tool.cpp:128
-#, fuzzy
 msgid "More than one shape meets this one here."
-msgstr "Tälle väylälle tai verkolle on annettu useampi kuin yksi nimi"
+msgstr "Tässä kohdassa kohtaa useampi kuin yksi muoto."
 
 #: pcbnew/tools/graphic_edit_tool.cpp:130
 msgid "That shape is too small or too near a full circle to work with."
@@ -65823,9 +65797,9 @@ msgid "Match Properties Settings"
 msgstr "Anturan ominaisuuksien varoitukset"
 
 #: pcbnew/tools/match_properties_tool.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Properties copied from %s:"
-msgstr "Ominaisuudet "
+msgstr "Ominaisuudet kopioitu kohteesta %s:"
 
 #: pcbnew/tools/match_properties_tool.cpp:140
 #, fuzzy
@@ -66297,9 +66271,8 @@ msgid "Draw drill symbols at the holes on a documentation layer"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:461
-#, fuzzy
 msgid "Drill Groups..."
-msgstr "Liuskojen eristysvälit...\n"
+msgstr "Porausryhmät..."
 
 #: pcbnew/tools/pcb_actions.cpp:462
 #, fuzzy
@@ -69876,9 +69849,8 @@ msgid "All spans"
 msgstr "Kaikki sivut"
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:1408
-#, fuzzy
 msgid " (backdrill)"
-msgstr "Ei vastaporausta"
+msgstr " (Vastaporaus)"
 
 #: pcbnew/widgets/search_handlers.cpp:363
 msgid "Textbox"
