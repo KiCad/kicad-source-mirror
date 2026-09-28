@@ -178,7 +178,7 @@ wxString DRC_RULE_SAVER::generateRuleText( const DRC_RE_LOADED_PANEL_ENTRY& aEnt
             if( !aEntry.layerSource.IsEmpty() )
                 ctx.layerClause = formatLayerClause( aEntry.layerSource );
             else
-                ctx.layerClause = generateLayerClause( aEntry.layerCondition, aBoard );
+                ctx.layerClause = generateLayerClause( aEntry.layerCondition );
         }
 
         ruleText = aEntry.constraintData->GenerateRule( ctx );
@@ -206,9 +206,10 @@ wxString DRC_RULE_SAVER::generateRuleText( const DRC_RE_LOADED_PANEL_ENTRY& aEnt
 }
 
 
-wxString DRC_RULE_SAVER::generateLayerClause( const LSET& aLayers, const BOARD* aBoard )
+wxString DRC_RULE_SAVER::generateLayerClause( const LSET& aLayers )
 {
-    if( !aBoard || !aLayers.any() )
+    // The parser gives a rule without a layer clause every layer
+    if( !aLayers.any() || aLayers == LSET::AllLayersMask() )
         return wxEmptyString;
 
     if( ( aLayers & LSET::AllCuMask() ) == LSET::ExternalCuMask() )
@@ -217,10 +218,10 @@ wxString DRC_RULE_SAVER::generateLayerClause( const LSET& aLayers, const BOARD* 
     if( ( aLayers & LSET::AllCuMask() ) == LSET::InternalCuMask() )
         return wxString::Format( wxS( "(layer %s)" ), DRC_RULES_LEXER::TokenName( DRCRULE_T::T_inner ) );
 
-    // The parser only accepts a single layer name, so emit the first matching layer.
-    // Multi-layer conditions should use "outer" or "inner" keywords above.
+    // The parser only accepts a single layer name, and a user name only where the board registered
+    // it, so emit the canonical name of the first layer. Multi-layer sets use outer or inner above
     for( PCB_LAYER_ID layer : aLayers.Seq() )
-        return wxString::Format( wxS( "(layer \"%s\")" ), aBoard->GetLayerName( layer ) );
+        return wxString::Format( wxS( "(layer \"%s\")" ), LSET::Name( layer ) );
 
     return wxEmptyString;
 }
@@ -281,7 +282,7 @@ wxString DRC_RULE_SAVER::generateMergedRuleText(
             if( !entry->layerSource.IsEmpty() )
                 ctx.layerClause = formatLayerClause( entry->layerSource );
             else
-                ctx.layerClause = generateLayerClause( entry->layerCondition, aBoard );
+                ctx.layerClause = generateLayerClause( entry->layerCondition );
 
             break;
         }

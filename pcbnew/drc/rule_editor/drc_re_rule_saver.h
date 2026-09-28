@@ -83,10 +83,9 @@ private:
      * Generate a layer clause from an LSET.
      *
      * @param aLayers The layer set.
-     * @param aBoard The board for layer name resolution.
-     * @return Layer clause string like "(layer \"F.Cu\" \"B.Cu\")".
+     * @return Layer clause string like "(layer \"F.Cu\")", or empty for every layer.
      */
-    wxString generateLayerClause( const LSET& aLayers, const BOARD* aBoard );
+    wxString generateLayerClause( const LSET& aLayers );
 
     /**
      * Generate a severity clause.

@@ -42,6 +42,10 @@
 #include <drc/rule_editor/drc_re_rule_saver.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_rule_condition.h>
+#include <drc/drc_rule_parser.h>
+#include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <pcbnew_utils/board_file_utils.h>
+#include <reporter.h>
 #include <dialogs/rule_editor_dialog_base.h>
 #include <footprint.h>
 
@@ -398,6 +402,64 @@ BOOST_AUTO_TEST_CASE( DeletedSplitEntryStaysDeleted )
     }
 
     BOOST_CHECK_EQUAL( constraints, 1 );
+}
+
+
+// Regenerated rules must keep their layers on a board with user layer names
+BOOST_AUTO_TEST_CASE( EditedRulesKeepTheirLayers )
+{
+    const std::string path = KI_TEST::GetPcbnewTestDataDir() + "issue24211/issue24211";
+
+    PCB_IO_KICAD_SEXPR     plugin;
+    std::unique_ptr<BOARD> board = plugin.LoadBoard( path + ".kicad_pcb" );
+
+    BOOST_REQUIRE( board );
+    BOOST_REQUIRE( board->GetLayerName( F_Cu ) == wxS( "top_layer" ) );
+
+    auto layersByRule =
+            []( const wxString& aText )
+            {
+                DRC_RULES_PARSER                       parser( aText, wxS( "issue24211" ) );
+                WX_STRING_REPORTER                     reporter;
+                std::vector<std::shared_ptr<DRC_RULE>> rules;
+
+                parser.Parse( rules, &reporter );
+
+                BOOST_CHECK_MESSAGE( !reporter.HasMessageOfSeverity( RPT_SEVERITY_ERROR ),
+                                     reporter.GetMessages().ToStdString() << aText.ToStdString() );
+
+                std::map<wxString, LSET> layers;
+
+                for( const std::shared_ptr<DRC_RULE>& rule : rules )
+                    layers[rule->m_Name] = rule->m_LayerCondition;
+
+                return layers;
+            };
+
+    wxString original;
+    wxFFile  file( path + ".kicad_dru", "r" );
+
+    BOOST_REQUIRE( file.ReadAll( &original ) );
+
+    DRC_RULE_LOADER                        loader;
+    std::vector<DRC_RE_LOADED_PANEL_ENTRY> entries = loader.LoadFile( path + ".kicad_dru" );
+
+    BOOST_REQUIRE( !entries.empty() );
+
+    for( DRC_RE_LOADED_PANEL_ENTRY& entry : entries )
+        entry.wasEdited = true;
+
+    DRC_RULE_SAVER saver;
+
+    BOOST_CHECK( layersByRule( saver.GenerateRulesText( entries, board.get() ) ) == layersByRule( original ) );
+
+    // A layer set without source text, as a caller other than the loader builds it
+    entries.resize( 1 );
+    entries[0].layerCondition = LSET( { F_Cu } );
+
+    std::map<wxString, LSET> single = layersByRule( saver.GenerateRulesText( entries, board.get() ) );
+
+    BOOST_CHECK( single[entries[0].ruleName] == LSET( { F_Cu } ) );
 }
 
 

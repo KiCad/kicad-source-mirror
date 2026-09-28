@@ -290,7 +290,7 @@ wxString PANEL_DRC_RULE_EDITOR::getSelectedLayerSource() const
         case SILK_TO_SOLDERMASK_CLEARANCE: return wxS( "F.SilkS" );
         case VIAS_UNDER_SMD:
         case ALLOWED_ORIENTATION:          return wxS( "F.Cu" );
-        default:                           return m_board ? m_board->GetLayerName( F_Cu ) : wxString();
+        default:                           return LSET::Name( F_Cu );
         }
 
     case LAYER_SEL_BOTTOM:
@@ -300,11 +300,12 @@ wxString PANEL_DRC_RULE_EDITOR::getSelectedLayerSource() const
         case SILK_TO_SOLDERMASK_CLEARANCE: return wxS( "B.SilkS" );
         case VIAS_UNDER_SMD:
         case ALLOWED_ORIENTATION:          return wxS( "B.Cu" );
-        default:                           return m_board ? m_board->GetLayerName( B_Cu ) : wxString();
+        default:                           return LSET::Name( B_Cu );
         }
     default:
-        if( layerValue >= 0 && m_board )
-            return m_board->GetLayerName( static_cast<PCB_LAYER_ID>( layerValue ) );
+        if( layerValue >= 0 )
+            return LSET::Name( static_cast<PCB_LAYER_ID>( layerValue ) );
+
         return wxEmptyString;
     }
 }
@@ -1185,7 +1186,7 @@ wxString PANEL_DRC_RULE_EDITOR::buildLayerClause() const
 
     // Real layer ID
     PCB_LAYER_ID layerId = static_cast<PCB_LAYER_ID>( layerValue );
-    wxString clause = wxString::Format( wxS( "(layer \"%s\")" ), m_board->GetLayerName( layerId ) );
+    wxString clause = wxString::Format( wxS( "(layer \"%s\")" ), LSET::Name( layerId ) );
     wxLogTrace( KI_TRACE_DRC_RULE_EDITOR, wxS( "Layer clause: %s" ), clause );
     return clause;
 }

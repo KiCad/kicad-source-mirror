@@ -297,7 +297,19 @@ void DIALOG_DRC_RULE_EDITOR::LoadExistingRules()
             ruleData->SetOriginalRuleText( entry.originalRuleText );
             ruleData->SetWasEdited( entry.wasEdited );
             ruleData->SetOriginalEntryCount( entry.originalEntryCount );
-            ruleData->SetLayerSource( entry.layerSource );
+
+            wxString layerSource = entry.layerSource;
+
+            // Edited panels write the canonical name, and siblings of a split rule must keep matching it
+            if( entry.layerCondition.count() == 1 )
+            {
+                PCB_LAYER_ID layer = entry.layerCondition.Seq().front();
+
+                if( layerSource == m_currentBoard->GetLayerName( layer ) )
+                    layerSource = LSET::Name( layer );
+            }
+
+            ruleData->SetLayerSource( layerSource );
 
             if( !entry.layerSource.IsEmpty() )
                 ruleData->SetLayers( entry.layerCondition.Seq() );
