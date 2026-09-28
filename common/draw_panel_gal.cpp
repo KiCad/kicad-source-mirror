@@ -130,6 +130,9 @@ wxString visibilityDetail( wxWindow* aWindow )
 } // namespace
 
 
+int EDA_DRAW_PANEL_GAL::s_traceBurst = 0;
+
+
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,
                                         KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
@@ -154,6 +157,10 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_tracedPaintState( -1 ),
         m_tracedPaintRepeats( 0 ),
         m_enableRetries( 0 ),
+        m_seenTraceBurst( 0 ),
+        m_burstPaints( 0 ),
+        m_paintEvents( 0 ),
+        m_repaintCalls( 0 ),
         m_stealsFocus( true ),
         m_statusPopup( nullptr )
 {
@@ -245,6 +252,8 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
     // The owning frame may already be half destroyed, so only the pointer is safe to report
     wxLogTrace( traceGalContext, wxS( "Canvas %p destroyed" ), this );
 
+    StartTraceBurst();
+
     // Ensure EDA_DRAW_PANEL_GAL::onShowEvent is not fired during Dtor process
     Disconnect( wxEVT_SHOW, wxShowEventHandler( EDA_DRAW_PANEL_GAL::onShowEvent ) );
     StopDrawing();
@@ -268,6 +277,7 @@ void EDA_DRAW_PANEL_GAL::SetFocus()
 
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
+    ++m_paintEvents;
     DoRePaint( false );
 }
 
@@ -329,6 +339,17 @@ static constexpr int MAX_CONTEXT_BIND_RETRIES = 2;
 
 bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
 {
+    ++m_repaintCalls;
+
+    if( m_seenTraceBurst != s_traceBurst )
+    {
+        m_seenTraceBurst = s_traceBurst;
+        m_burstPaints = 5;
+
+        if( KIGFX::OPENGL_GAL* gl = dynamic_cast<KIGFX::OPENGL_GAL*>( m_gal ) )
+            gl->SetSwapTraceBudget( 5 );
+    }
+
     if( !m_refreshMutex.try_lock() )
     {
         tracePaintState( PAINT_MUTEX_HELD );
@@ -410,6 +431,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
         // because the window content may have been invalidated by the OS.
         if( aAllowSkip && !viewDirty && !cursorMoved && !hasPendingItemUpdates )
         {
+            traceUnchangedSkip();
             m_lastRepaintEnd = std::chrono::steady_clock::now();
             return true;
         }
@@ -446,6 +468,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
         // view targets nor the cursor position have changed.
         if( aAllowSkip && !viewDirty && !cursorMoved )
         {
+            traceUnchangedSkip();
             m_lastRepaintEnd = std::chrono::steady_clock::now();
             return true;
         }
@@ -950,13 +973,23 @@ void EDA_DRAW_PANEL_GAL::onShowEvent( wxShowEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::tracePaintState( int aState )
 {
+    bool burst = m_burstPaints > 0;
+
+    if( burst )
+        --m_burstPaints;
+
     if( aState == m_tracedPaintState )
     {
-        // A canvas stuck behind one guard would otherwise go silent, so keep a slow heartbeat
-        if( aState != PAINT_DREW && ++m_tracedPaintRepeats % 200 == 0 )
+        ++m_tracedPaintRepeats;
+
+        // Successful frames are otherwise silent, so a canvas that draws but never shows needs a pulse
+        int period = aState == PAINT_DREW ? 100 : 200;
+
+        if( burst || m_tracedPaintRepeats % period == 0 )
         {
-            wxLogTrace( traceGalContext, wxS( "Canvas %s still %s (%d times)" ), traceName(),
-                        paintStateName( aState ), m_tracedPaintRepeats );
+            wxLogTrace( traceGalContext, wxS( "Canvas %s still %s (%d times)%s, paint events %d, repaints %d" ),
+                        traceName(), paintStateName( aState ), m_tracedPaintRepeats,
+                        burst ? wxS( " [burst]" ) : wxS( "" ), m_paintEvents, m_repaintCalls );
         }
 
         return;
@@ -967,11 +1000,30 @@ void EDA_DRAW_PANEL_GAL::tracePaintState( int aState )
     if( aState == PAINT_NOT_VISIBLE )
         detail = wxS( ": " ) + visibilityDetail( dynamic_cast<wxWindow*>( m_gal ) );
 
-    wxLogTrace( traceGalContext, wxS( "Canvas %s %s -> %s after %d repeats%s" ), traceName(),
-                paintStateName( m_tracedPaintState ), paintStateName( aState ), m_tracedPaintRepeats, detail );
+    wxLogTrace( traceGalContext, wxS( "Canvas %s %s -> %s after %d repeats, paint events %d, repaints %d%s" ),
+                traceName(), paintStateName( m_tracedPaintState ), paintStateName( aState ),
+                m_tracedPaintRepeats, m_paintEvents, m_repaintCalls, detail );
 
     m_tracedPaintState = aState;
     m_tracedPaintRepeats = 0;
+}
+
+
+void EDA_DRAW_PANEL_GAL::traceUnchangedSkip()
+{
+    if( m_burstPaints <= 0 )
+        return;
+
+    --m_burstPaints;
+
+    wxLogTrace( traceGalContext, wxS( "Canvas %s skipped, nothing changed [burst], paint events %d, repaints %d" ),
+                traceName(), m_paintEvents, m_repaintCalls );
+}
+
+
+void EDA_DRAW_PANEL_GAL::StartTraceBurst()
+{
+    ++s_traceBurst;
 }
 
 

@@ -360,7 +360,9 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
         m_tempBuffer( 0 ),
         m_isContextLocked( false ),
         m_isContextValid( false ),
-        m_lockClientCookie( 0 )
+        m_lockClientCookie( 0 ),
+        m_swapTraceBudget( 0 ),
+        m_swapCount( 0 )
 {
     if( m_glMainContext == nullptr )
     {
@@ -864,8 +866,31 @@ void OPENGL_GAL::EndDrawing()
     cntComposite.Stop();
 
     cntSwap.Start();
-    SwapBuffers();
+    bool swapped = SwapBuffers();
     cntSwap.Stop();
+
+    ++m_swapCount;
+
+    // A frame drawn but never shown looks healthy everywhere else, so report where the swap went
+    if( m_swapTraceBudget > 0 || m_swapCount % 100 == 0 )
+    {
+        if( m_swapTraceBudget > 0 )
+            --m_swapTraceBudget;
+
+        GLenum glErr = glGetError();
+
+#ifdef __WXMSW__
+        HWND dcWindow = ::WindowFromDC( ::wglGetCurrentDC() );
+        bool ownContext = ::wglGetCurrentContext() == m_glPrivContext->GetGLRC();
+
+        wxLogTrace( traceGalContext, wxS( "OPENGL_GAL %p swap %d returned %d, glError 0x%x, DC window %p, "
+                                          "own window %p, own context current %d" ),
+                    this, m_swapCount, swapped, (unsigned) glErr, dcWindow, GetHWND(), ownContext );
+#else
+        wxLogTrace( traceGalContext, wxS( "OPENGL_GAL %p swap %d returned %d, glError 0x%x" ), this,
+                    m_swapCount, swapped, (unsigned) glErr );
+#endif
+    }
 
     cntTotal.Stop();
 
