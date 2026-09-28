@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-27 02:38+0000\n"
+"PO-Revision-Date: 2026-09-28 07:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -2973,7 +2973,7 @@ msgstr ""
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:28
 msgid "Restore Auto-saved"
-msgstr "Automatisch gespeicherte(s) wiederherstellen"
+msgstr "Automatische Sicherung wiederherstellen"
 
 #: common/dialogs/dialog_autosave_recovery_base.cpp:29
 msgid ""
@@ -12001,8 +12001,7 @@ msgstr "Aktualisierungen && Datenschutz"
 
 #: common/startwizard/startwizard_provider_settings.cpp:75
 msgid "Import settings from a previous version (none found)"
-msgstr ""
-"Einstellungen importieren aus einer vorherigen Version (keine gefunden)"
+msgstr "Einstellungen aus einer vorherigen Version importieren (keine gefunden)"
 
 #: common/startwizard/startwizard_provider_settings.cpp:145
 msgid "Select Settings Path"
@@ -13425,9 +13424,9 @@ msgstr ""
 "Designblöcke der Bibliothek gelöscht."
 
 #: common/widgets/design_block_pane.cpp:314
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' could not be deleted."
-msgstr "Designblockbibliothek \"%s\" konnte nicht geöffnet werden."
+msgstr "Designblockbibliothek \"%s\" konnte nicht gelöscht werden."
 
 #: common/widgets/design_block_pane.cpp:325
 #, c-format
@@ -13518,9 +13517,8 @@ msgid "Select Path"
 msgstr "Pfad auswählen"
 
 #: common/widgets/kistatusbar.cpp:105
-#, fuzzy
 msgid "Additional information"
-msgstr "Fehlende Information"
+msgstr "Zusätzliche Information"
 
 #: common/widgets/kistatusbar.cpp:192
 msgid "Clear Warnings"
@@ -13907,9 +13905,8 @@ msgstr "DipTrace-Dateien"
 
 #: common/wildcards_and_files_ext.cpp:366
 #: eeschema/sch_io/orcad/sch_io_orcad.h:74
-#, fuzzy
 msgid "OrCAD Capture schematic files"
-msgstr "PADS Logic-Schaltplandateien"
+msgstr "OrCAD Capture-Schaltplandateien"
 
 #: common/wildcards_and_files_ext.cpp:372
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.h:35
@@ -14532,42 +14529,36 @@ msgid "Deleted items via API"
 msgstr "Mittels API gelöschte Elemente"
 
 #: eeschema/api/api_handler_sch.cpp:2068 eeschema/sch_edit_frame.cpp:1969
-#, fuzzy
 msgid "Unable to rebuild schematic connectivity."
-msgstr "Einstellungen für Schaltplan konnten nicht geladen werden."
+msgstr "Schaltplanverbindungen können nicht wiederhergestellt werden."
 
 #: eeschema/api/api_handler_sch.cpp:2764 eeschema/toolbars_sch_editor.cpp:440
-#, fuzzy
 msgid "Add Variant"
-msgstr "Variante hinzufügen ..."
+msgstr "Variante hinzufügen"
 
 #: eeschema/api/api_handler_sch.cpp:2827
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1162
 #: eeschema/sch_edit_frame.cpp:3415
-#, fuzzy
 msgid "Delete Variant"
-msgstr "Letzten Punkt entfernen"
+msgstr "Variante löschen"
 
 #: eeschema/api/api_handler_sch.cpp:2911
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1242
 #: eeschema/sch_edit_frame.cpp:3519
-#, fuzzy
 msgid "Rename Variant"
-msgstr "Designvariante umbenennen"
+msgstr "Variante umbenennen"
 
 #: eeschema/api/api_handler_sch.cpp:2994 eeschema/sch_edit_frame.cpp:3588
-#, fuzzy
 msgid "Copy Variant"
-msgstr "Designvariante kopieren"
+msgstr "Variante kopieren"
 
 #: eeschema/api/api_handler_sch.cpp:3038 eeschema/sch_edit_frame.cpp:3326
 msgid "Edit Variant Description"
 msgstr "Variantenbeschreibung bearbeiten"
 
 #: eeschema/api/api_handler_sch.cpp:3218
-#, fuzzy
 msgid "Placed symbol via API"
-msgstr "Symbol einfügen"
+msgstr "Symbol mittels API eingefügt"
 
 #: eeschema/bom_plugins.cpp:45
 #, c-format
@@ -15203,7 +15194,7 @@ msgstr "Aktualisierungsoptionen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:126
 msgid "Remove fields if not in library symbol"
-msgstr "Felder entfernen, welche im Bibliothekssymbol nicht enthalten sind"
+msgstr "Felder entfernen, welche nicht im Bibliothekssymbol enthalten sind"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:127
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:62
@@ -15280,13 +15271,12 @@ msgid "Create"
 msgstr "Erstellen"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:128
-#, fuzzy, c-format
+#, c-format
 msgid "Chain created (%d total). Select another or close."
 msgstr ""
 "Kette erstellt (%d insgesamt). Wählen Sie eine andere oder schließen Sie sie."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:141
-#, fuzzy
 msgid "Please select a chain from the list."
 msgstr "Bitte eine Kette aus der Liste auswählen."
 
@@ -15298,19 +15288,16 @@ msgstr "Bitte eine Kette aus der Liste auswählen."
 #: eeschema/dialogs/dialog_create_net_chain.cpp:215
 #: eeschema/dialogs/dialog_create_net_chain_base.h:79
 #: eeschema/tools/sch_editor_control.cpp:1727
-#, fuzzy
 msgid "Create Net Chain"
 msgstr "Netzkette anlegen"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:161
-#, fuzzy
 msgid "Please enter a name for the net chain."
 msgstr "Bitte geben Sie einen Namen für die Netzkette ein."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:168
 #: eeschema/tools/sch_editor_control.cpp:1619
 #: eeschema/tools/sch_editor_control.cpp:1738
-#, fuzzy
 msgid "Chain name cannot contain spaces, quotes, or parentheses."
 msgstr ""
 "Kettennamen dürfen keine Leerzeichen, Anführungszeichen oder Klammern "
@@ -15318,17 +15305,15 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:177
 #: eeschema/tools/sch_editor_control.cpp:1745
-#, fuzzy, c-format
+#, c-format
 msgid "A net chain named '%s' already exists."
 msgstr "Eine Netzkette namens \"%s\" existiert bereits."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:190
-#, fuzzy
 msgid "Failed to create the net chain."
 msgstr "Netzkette konnte nicht erstellt werden."
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:215
-#, fuzzy
 msgid "Failed to create the manual net chain."
 msgstr "Manuelle Netzkette konnte nicht erstellt werden."
 
@@ -17201,6 +17186,8 @@ msgstr "Von einem existierenden Symbol ableiten:"
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:57
 msgid "(Preface filter with ‘::’ to include only base symbols in list.)"
 msgstr ""
+"(Dem Filter \"::\" voranstellen, um nur die Basissymbole aus der Liste "
+"miteinzubinden.)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:61
 msgid "Default reference designator:"
@@ -17342,9 +17329,9 @@ msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
 msgstr "Pin \"%s\" in Jumperpin-Gruppe %d existiert in diesem Symbol nicht."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:861
-#, fuzzy, c-format
+#, c-format
 msgid "(Pins %s.)"
-msgstr "Plugins (%d)"
+msgstr "(Pins %s.)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:887
 #, c-format
@@ -21420,11 +21407,11 @@ msgstr "Datei umbenennen ..."
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:79
 #, c-format
 msgid "Reset '%s' to 1:1"
-msgstr "%s auf 1:1 zurücksetzen"
+msgstr "\"%s\" auf 1:1 zurücksetzen"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:95
 msgid "Copy From..."
-msgstr "Kopieren von..."
+msgstr "Kopieren von ..."
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:479
 #, fuzzy
@@ -22155,9 +22142,8 @@ msgid "Checking field names..."
 msgstr "Prüfe Feldnamen ..."
 
 #: eeschema/erc/erc.cpp:3490
-#, fuzzy
 msgid "Checking for empty label names..."
-msgstr "Prüfe Feldnamen ..."
+msgstr "Prüfe auf leere Bezeichnernamen ..."
 
 #: eeschema/erc/erc.cpp:3498
 msgid "Checking SPICE models..."
@@ -22232,6 +22218,8 @@ msgstr "Pins mit unterschiedlichen Netzen doppeln"
 #: eeschema/erc/erc_item.cpp:67
 msgid "Wired hidden power input pin also connects globally by name"
 msgstr ""
+"Verdrahtete, verborgene Stromversorgungs-Eingangspins sind ebenfalls global "
+"durch ihren Namen verbunden"
 
 #: eeschema/erc/erc_item.cpp:71 eeschema/erc/erc_item.cpp:75
 msgid "Conflict problem between pins"
@@ -22502,8 +22490,8 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
-"„ %s “ ist kein KiCad-Schaltplan.\n"
-" Verwenden Sie Datei -> Importieren für Nicht-KiCad-Schaltplan."
+"\\\"%s\\\" ist kein KiCad-Schaltplan.\n"
+"Verwenden Sie Datei -> Importieren für Nicht-KiCad-Schaltplan."
 
 #: eeschema/files-io.cpp:286
 #, c-format
@@ -22839,6 +22827,8 @@ msgstr "Importiere Vektorgrafikdatei"
 #, c-format
 msgid "Ambiguous imported net name '%s'; board net rename omitted."
 msgstr ""
+"Mehrdeutiger Netzname \"%s\" importiert; Umbenennung des Platinennetzes "
+"verworfen."
 
 #: eeschema/import_net_map.cpp:81
 #, c-format
@@ -22846,6 +22836,8 @@ msgid ""
 "Imported net name '%s' is claimed by more than one source net; board net "
 "rename omitted."
 msgstr ""
+"Importierter Netzname \"%s\" wird von mehr als einem Quellnetz beansprucht; "
+"Umbenennung des Platinennetzes verworfen."
 
 #: eeschema/lib_symbol.cpp:780 eeschema/sch_symbol.cpp:1378
 #, c-format
@@ -24348,13 +24340,13 @@ msgstr ""
 "Bibliothek geladen."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded."
 msgstr ""
 "Das Symbol \"%s\" verweist auf den Teil \"%s\", der in der Bibliothek nicht "
-"gefunden werden konnte. Das Symbol wurde nicht geladen"
+"gefunden werden konnte. Das Symbol wurde nicht geladen."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:837
 #, c-format
@@ -24437,26 +24429,26 @@ msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
 msgstr ""
-"Net %s verweist auf ein unbekanntes Netzelement %s. Das Netz wurde nicht "
+"Netz %s verweist auf ein unbekanntes Netzelement %s. Das Netz wurde nicht "
 "richtig geladen und muss möglicherweise manuell repariert werden."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2280
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net %s references unknown terminal %s on symbol %s. The net was not properly "
 "loaded and may require manual fixing."
 msgstr ""
-"Net %s verweist auf ein unbekanntes Netzelement %s. Das Netz wurde nicht "
-"richtig geladen und muss möglicherweise manuell repariert werden."
+"Netz %s verweist auf unbekannten Anschluss %s von Symbol %s. Das Netz wurde "
+"nicht richtig geladen und muss möglicherweise manuell repariert werden."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2337
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net %s references unknown terminal %s on block %s. The net was not properly "
 "loaded and may require manual fixing."
 msgstr ""
-"Net %s verweist auf ein unbekanntes Netzelement %s. Das Netz wurde nicht "
-"richtig geladen und muss möglicherweise manuell repariert werden."
+"Netz %s verweist auf unbekannten Anschluss %s am Block %s. Das Netz wurde "
+"nicht richtig geladen und muss möglicherweise manuell repariert werden."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2531
 #, c-format
