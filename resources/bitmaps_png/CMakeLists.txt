@@ -157,6 +157,11 @@ set( BMAPS_MID
     about
     add_aligned_dimension
     add_arc
+    add_arc_center
+    add_arc_start_end_mid
+    add_arc_start_end_center
+    add_arc_tangent
+    add_arc_start_dir_end
     add_barcode
     add_bezier
     add_board
