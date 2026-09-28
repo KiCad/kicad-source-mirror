@@ -49,10 +49,10 @@ BOOST_AUTO_TEST_CASE( RuleAreaDestroyedBeforeContainedItems )
     auto line2 = std::make_unique<SCH_LINE>( VECTOR2I( 100, 0 ), LAYER_WIRE );
 
     // Simulate what RefreshContainedItemsAndDirectives does
-    ruleArea->m_items.insert( line1.get() );
+    ruleArea->_GetContainedItems().insert( line1.get() );
     line1->AddRuleAreaToCache( ruleArea.get() );
 
-    ruleArea->m_items.insert( line2.get() );
+    ruleArea->_GetContainedItems().insert( line2.get() );
     line2->AddRuleAreaToCache( ruleArea.get() );
 
     BOOST_CHECK_EQUAL( line1->GetRuleAreaCache().size(), 1u );
@@ -83,20 +83,20 @@ BOOST_AUTO_TEST_CASE( ContainedItemsDestroyedBeforeRuleArea )
     auto line1 = std::make_unique<SCH_LINE>( VECTOR2I( 0, 0 ), LAYER_WIRE );
     auto line2 = std::make_unique<SCH_LINE>( VECTOR2I( 100, 0 ), LAYER_WIRE );
 
-    ruleArea->m_items.insert( line1.get() );
+    ruleArea->_GetContainedItems().insert( line1.get() );
     line1->AddRuleAreaToCache( ruleArea.get() );
 
-    ruleArea->m_items.insert( line2.get() );
+    ruleArea->_GetContainedItems().insert( line2.get() );
     line2->AddRuleAreaToCache( ruleArea.get() );
 
-    BOOST_CHECK_EQUAL( ruleArea->m_items.size(), 2u );
+    BOOST_CHECK_EQUAL( ruleArea->_GetContainedItems().size(), 2u );
 
     // Destroy items first (the normal ordering)
     line1.reset();
     line2.reset();
 
     // Rule area should have had items removed by their destructors
-    BOOST_CHECK_EQUAL( ruleArea->m_items.size(), 0u );
+    BOOST_CHECK_EQUAL( ruleArea->_GetContainedItems().size(), 0u );
 
     ruleArea.reset();
 }

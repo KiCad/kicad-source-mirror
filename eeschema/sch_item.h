@@ -814,6 +814,10 @@ protected:
 
 private:
     friend class CONNECTION_GRAPH;
+    friend class LIB_SYMBOL;
+
+    /// Graph membership belongs to this item identity and must not propagate to clones.
+    void registerConnectivityOwner( const std::shared_ptr<CONNECTION_GRAPH_LIFETIME>& aOwner );
 
     /**
      * Provide the object specific test to see if it is connected to \a aPosition.
@@ -850,17 +854,11 @@ protected:
     /// Store pointers to rule areas which this item is contained within
     std::unordered_set<SCH_RULE_AREA*>                               m_rule_areas_cache;
 
-    bool                                                   m_isLocked;
+    bool                                                             m_isLocked;
 
 private:
-    friend class LIB_SYMBOL;
-    friend class CONNECTION_GRAPH;
-
-    /// Graph membership belongs to this item identity and must not propagate to clones.
-    void registerConnectivityOwner( const std::shared_ptr<CONNECTION_GRAPH_LIFETIME>& aOwner );
-
     /// An item may be indexed by multiple graphs, each with an independent lifetime.
-    std::vector<std::weak_ptr<CONNECTION_GRAPH_LIFETIME>> m_connectivityOwners;
+    std::vector<std::weak_ptr<CONNECTION_GRAPH_LIFETIME>>            m_connectivityOwners;
 };
 
 DECLARE_ENUM_TO_WXANY( SCH_LAYER_ID );

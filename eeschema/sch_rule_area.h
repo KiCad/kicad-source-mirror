@@ -173,6 +173,16 @@ public:
     /// Get the message panel info for the rule area.
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
+    /// Remove an item from this rule area's caches (called when the item is deleted).
+    void RemoveItem( SCH_ITEM* aItem );
+
+    /// Remove a directive label from this rule area's caches (called when the label is deleted).
+    void RemoveDirective( SCH_DIRECTIVE_LABEL* aLabel );
+
+    /// Break the const-contract for the test suite (only)
+    std::unordered_set<SCH_ITEM*>& _GetContainedItems() { return m_items; }
+    std::unordered_set<SCH_DIRECTIVE_LABEL*>& _GetContainedDirectives() { return m_directives; }
+
 protected:
     /// Add a directive label which applies to items within ths rule area.
     void addDirective( SCH_DIRECTIVE_LABEL* label );
@@ -188,13 +198,6 @@ protected:
     bool          m_excludedFromBOM;
     bool          m_excludedFromBoard;
     bool          m_DNP;                   ///< True if symbol is set to 'Do Not Populate'.
-
-public:
-    /// Remove an item from this rule area's caches (called when the item is deleted).
-    void RemoveItem( SCH_ITEM* aItem );
-
-    /// Remove a directive label from this rule area's caches (called when the label is deleted).
-    void RemoveDirective( SCH_DIRECTIVE_LABEL* aLabel );
 
     /// All #SCH_ITEM objects currently contained or intersecting the rule area.  No ownership.
     std::unordered_set<SCH_ITEM*>            m_items;

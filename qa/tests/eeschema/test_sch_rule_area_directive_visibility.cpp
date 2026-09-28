@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_SUITE( SchRuleAreaDirectiveVisibility )
 static void attachDirective( SCH_RULE_AREA& aRuleArea, SCH_DIRECTIVE_LABEL& aDirective )
 {
     aDirective.AddConnectedRuleArea( &aRuleArea );
-    aRuleArea.m_directives.insert( &aDirective );
+    aRuleArea._GetContainedDirectives().insert( &aDirective );
 }
 
 
