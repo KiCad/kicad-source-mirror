@@ -1515,13 +1515,15 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
         if( !item )
             continue;
 
-        bool                  redraw = setNetHighlight( item, highlighted.contains( item ) );
-        SCH_SYMBOL*           symbol = dynamic_cast<SCH_SYMBOL*>( item );
-        std::vector<SCH_PIN*> pins = symbol->GetPins( &sheetPath );
+        bool        redraw = setNetHighlight( item, highlighted.contains( item ) );
+        SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
+        bool        powerHighlight = false;
 
-        const bool powerHighlight = symbol && symbol->IsPower()
-                                           && !pins.empty()
-                                           && highlighted.contains( pins.front() );
+        if( symbol && symbol->IsPower() )
+        {
+            std::vector<SCH_PIN*> pins = symbol->GetPins( &sheetPath );
+            powerHighlight = !pins.empty() && highlighted.contains( pins.front() );
+        }
 
         item->RunOnChildren(
                 [&]( SCH_ITEM* child )
