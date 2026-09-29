@@ -357,6 +357,9 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
     // The center sits (chord/2) * cot(angle/2) off the chord; sqrt(r^2 - chord^2/4) cancels near 180 degrees
     double d = ( chord / 2.0 ) * ( angle / 2.0 ).Cos() / sinHalfAngle;
 
+    if( !std::isfinite( d ) )
+        d = 0.0;
+
     VECTOR2D vec2 = VECTOR2D(end - start).Resize( d );
     VECTOR2D vc = VECTOR2D(end - start).Resize( chord / 2 );
 
@@ -523,11 +526,12 @@ const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, cons
         }
         else
         {
+            // Fold start into the numerator so the sum is rounded once
             double dd = ToDouble( d );
-            double ux = ToDouble( b2 * KI_INT128( c.y ) - c2 * KI_INT128( b.y ) ) / dd;
-            double uy = ToDouble( c2 * KI_INT128( b.x ) - b2 * KI_INT128( c.x ) ) / dd;
+            double cx = ToDouble( KI_INT128( aStart.x ) * d + b2 * KI_INT128( c.y ) - c2 * KI_INT128( b.y ) ) / dd;
+            double cy = ToDouble( KI_INT128( aStart.y ) * d + c2 * KI_INT128( b.x ) - b2 * KI_INT128( c.x ) ) / dd;
 
-            dCenter = snapArcCenter( VECTOR2D( dStart.x + ux, dStart.y + uy ), dStart, dMid, dEnd );
+            dCenter = snapArcCenter( VECTOR2D( cx, cy ), dStart, dMid, dEnd );
         }
     }
 

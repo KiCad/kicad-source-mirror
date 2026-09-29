@@ -1680,5 +1680,15 @@ BOOST_AUTO_TEST_CASE( CalcArcCenterFromAngleNearHalfTurn )
     BOOST_CHECK_LE( std::abs( std::abs( (long double) center.y ) - offset ), 0.1L );
 }
 
+// The center is rounded once from an exact numerator, so a .4999999 fraction cannot be pushed up
+BOOST_AUTO_TEST_CASE( CalcArcCenterRoundsOnceNearHalf )
+{
+    const VECTOR2I s( -2123435277, -1114039370 );
+    const VECTOR2I m( -1828331619, -517415848 );
+    const VECTOR2I e( 2011509719, -1246150838 );
+
+    BOOST_CHECK_EQUAL( CalcArcCenter( s, m, e ), VECTOR2I( -74371215, -1756259108 ) );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
