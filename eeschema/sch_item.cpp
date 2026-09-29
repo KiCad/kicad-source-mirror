@@ -502,18 +502,14 @@ wxString SCH_ITEM::ResolveText( const wxString& aText, const SCH_SHEET_PATH* aPa
                 if( !aPath )
                     return false;
 
-                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
-
-                SCHEMATIC*     schematic = Schematic();
+                SCH_SHEET*     sheet = static_cast<SCH_SHEET*>( m_parent );
                 SCH_SHEET_PATH path = *aPath;
-                path.push_back( sheet );
 
-                bool retval = sheet->ResolveTextVar( &path, token, depth + 1 );
+                if( path.Last() != sheet )
+                    path.push_back( sheet );
 
-                if( schematic )
-                    retval |= schematic->ResolveTextVar( &path, token, depth + 1 );
-
-                return retval;
+                // Sheet resolver will recurse to ancestors, including the schematic itself
+                return sheet->ResolveTextVar( &path, token, depth + 1 );
             };
 
     std::function<bool( wxString* )> labelResolver =
