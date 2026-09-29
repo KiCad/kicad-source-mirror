@@ -253,7 +253,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         Prj().SetElem( PROJECT::ELEM::LEGACY_SYMBOL_LIBS, nullptr );
     }
 
-    wxFileName rfn( GetCurrentFileName() );
+    wxFileName rfn( fullFileName );
     rfn.MakeRelativeTo( Prj().GetProjectPath() );
     LoadWindowState( rfn.GetFullPath() );
 
