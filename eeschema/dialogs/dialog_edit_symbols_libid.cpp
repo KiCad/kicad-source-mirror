@@ -748,6 +748,17 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
             if( symbol == nullptr )
                 continue;
 
+            std::unique_ptr<LIB_SYMBOL> flattenedSymbol = symbol->Flatten();
+
+            if( flattenedSymbol->GetUnitCount() < candidate.m_Symbol->GetUnit() )
+            {
+                wxString msg;
+                msg.Printf( _( "Cannot remap symbol %s to '%s': the new symbol has too few units." ),
+                            candidate.m_Reference, new_libid );
+                DisplayErrorMessage( this, msg );
+                continue;
+            }
+
             commit.Modify( candidate.m_Symbol, candidate.m_Screen );
             m_isModified = true;
 
@@ -759,7 +770,7 @@ bool DIALOG_EDIT_SYMBOLS_LIBID::TransferDataFromWindow()
                 candidate.m_Symbol->SetValueFieldText( getName( id ) );
 
             candidate.m_Symbol->SetLibId( id );
-            candidate.m_Symbol->SetLibSymbol( symbol->Flatten().release() );
+            candidate.m_Symbol->SetLibSymbol( flattenedSymbol.release() );
             candidate.m_Screen->Append( candidate.m_Symbol );
             candidate.m_Screen->SetContentModified();
 
