@@ -988,7 +988,7 @@ void SCH_EDIT_FRAME::OnImportProject()
 }
 
 
-bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSavePath )
+bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSavePath, bool isSaveAs )
 {
     wxString msg;
     wxFileName schematicFileName;
@@ -1073,7 +1073,8 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 
     if( success )
     {
-        screen->SetContentModified( false );
+        if( !isSaveAs )
+            screen->SetContentModified( false );
 
         msg.Printf( _( "File '%s' saved." ),  screen->GetFileName() );
         SetStatusText( msg, 0 );
@@ -1403,7 +1404,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         if( !saveCopy && tmpFn.GetFullPath() != screen->GetFileName() )
             screen->AssignNewUuid();
 
-        bool savedThisSheet = saveSchematicFile( screens.GetSheet( i ), tmpFn.GetFullPath() );
+        bool savedThisSheet = saveSchematicFile( screens.GetSheet( i ), tmpFn.GetFullPath(), false );
 
         if( savedThisSheet )
             savedSheetPaths.push_back( tmpFn.GetFullPath() );
