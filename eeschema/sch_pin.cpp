@@ -1835,6 +1835,14 @@ bool SCH_PIN::HasConnectivityChanges( const SCH_ITEM* aItem,
             return true;
     }
 
+    // Similarly, changing to/from PT_NC affects whether or not the pin participates
+    // in the connectivity graph.
+    if( GetType() == ELECTRICAL_PINTYPE::PT_NC || pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
+    {
+        if( GetType() != pin->GetType() )
+            return true;
+    }
+
     return false;
 }
 
