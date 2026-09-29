@@ -31,6 +31,7 @@
 #include <project/net_settings.h>
 #include <wildcards_and_files_ext.h>
 #include <diff_merge/merge_validation_pipeline.h>
+#include <diff_merge/doc_property_helpers.h>
 #include <diff_merge/property_diff.h>
 
 #include <wx/file.h>
@@ -237,6 +238,7 @@ std::unique_ptr<BOARD> PCB_MERGE_APPLIER::Apply()
         if( settingsSrc )
         {
             result->SetPageSettings( settingsSrc->GetPageSettings() );
+            result->SetTitleBlock( settingsSrc->GetTitleBlock() );
             result->SetDesignSettings( settingsSrc->GetDesignSettings() );
             detachNetSettingsFor( result.get() );
             adoptNetSettings( settingsSrc );
@@ -516,6 +518,11 @@ std::unique_ptr<BOARD> PCB_MERGE_APPLIER::Apply()
                         m_report.drawingSheetFileSet = true;
                         m_report.projectFileTouched = true;
                     }
+                }
+                else
+                {
+                    // Any name this does not own, such as an ERC or library table property, is ignored.
+                    ApplyTitleBlockProperty( result->GetTitleBlock(), prop.name, src->GetTitleBlock() );
                 }
             }
 

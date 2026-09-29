@@ -25,6 +25,7 @@
 #include "sch_diff_utils.h"
 
 #include <diff_merge/merge_validation_pipeline.h>
+#include <diff_merge/doc_property_helpers.h>
 #include <diff_merge/property_diff.h>
 
 #include <schematic.h>
@@ -399,6 +400,7 @@ bool SCH_MERGE_APPLIER::Apply()
                 {
                     m_ancestor->RootScreen()->SetPageSettings(
                             aSrc->RootScreen()->GetPageSettings() );
+                    m_ancestor->RootScreen()->SetTitleBlock( aSrc->RootScreen()->GetTitleBlock() );
                 }
 
                 if( aSrc->IsValid() && m_ancestor->IsValid()
@@ -480,6 +482,12 @@ bool SCH_MERGE_APPLIER::Apply()
                                     src->Settings().m_SchDrawingSheetFileName;
                         }
                     }
+                    else
+                    {
+                        // Any name this does not own, such as an ERC or library table property, is ignored.
+                        ApplyTitleBlockProperty( ancRoot->GetTitleBlock(), prop.name,
+                                                 src->RootScreen()->GetTitleBlock() );
+                    }
                 }
 
                 if( pageTouched && ancRoot )
@@ -521,12 +529,18 @@ bool SCH_MERGE_APPLIER::Apply()
             if( res.kind == ITEM_RES::TAKE_OURS )
             {
                 if( SCH_SCREEN* src = resolveScreen( oursStorage ) )
+                {
                     ancScreen->SetPageSettings( src->GetPageSettings() );
+                    ancScreen->SetTitleBlock( src->GetTitleBlock() );
+                }
             }
             else if( res.kind == ITEM_RES::TAKE_THEIRS )
             {
                 if( SCH_SCREEN* src = resolveScreen( theirsStorage ) )
+                {
                     ancScreen->SetPageSettings( src->GetPageSettings() );
+                    ancScreen->SetTitleBlock( src->GetTitleBlock() );
+                }
             }
             else if( res.kind == ITEM_RES::MERGE_PROPS )
             {
@@ -556,6 +570,11 @@ bool SCH_MERGE_APPLIER::Apply()
                         merged.SetType( srcPage.GetType(), merged.IsPortrait() );
                     else if( prop.name == DOC_PROP_PAGE_ORIENTATION )
                         merged.SetPortrait( srcPage.IsPortrait() );
+                    else
+                    {
+                        // Any name this does not own, such as an ERC or library table property, is ignored.
+                        ApplyTitleBlockProperty( ancScreen->GetTitleBlock(), prop.name, src->GetTitleBlock() );
+                    }
                 }
 
                 ancScreen->SetPageSettings( merged );

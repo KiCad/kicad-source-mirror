@@ -677,6 +677,7 @@ DOCUMENT_DIFF PCB_DIFFER::Diff()
     std::vector<PROPERTY_DELTA> docDeltas;
 
     AppendPaperDeltas( docDeltas, m_before->GetPageSettings(), m_after->GetPageSettings() );
+    AppendTitleBlockDeltas( docDeltas, m_before->GetTitleBlock(), m_after->GetTitleBlock() );
 
     const BOARD_DESIGN_SETTINGS& beforeDS = m_before->GetDesignSettings();
     const BOARD_DESIGN_SETTINGS& afterDS = m_after->GetDesignSettings();

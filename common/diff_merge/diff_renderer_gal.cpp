@@ -160,8 +160,6 @@ void RenderSceneToOverlay( KIGFX::VIEW_OVERLAY& aOverlay, const DIFF_SCENE& aSce
     renderDocumentGeometry( aOverlay, aScene.referenceGeometry );
     renderDocumentGeometry( aOverlay, aScene.comparisonGeometry );
 
-    const bool nativeContext = aScene.referenceGeometry.Empty() && aScene.comparisonGeometry.Empty();
-
     // Bounding boxes of the changed items (footprints, tracks, vias) in the
     // visible categories. Zone heat fills are punched with these so an item
     // added inside a changed zone shows through instead of being washed by the
@@ -237,12 +235,16 @@ void RenderSceneToOverlay( KIGFX::VIEW_OVERLAY& aOverlay, const DIFF_SCENE& aSce
                 continue;
             }
 
-            if( nativeContext )
-                continue;
+            // A translucent fill lets the item show through, and a solid border keeps the box
+            // crisp over whatever the editor has already drawn underneath.
+            KIGFX::COLOR4D border = s.color;
+            border.a = hidden ? HIDDEN_FILL.a : 1.0;
 
             aOverlay.SetIsFill( true );
-            aOverlay.SetIsStroke( false );
+            aOverlay.SetIsStroke( true );
             aOverlay.SetFillColor( fill );
+            aOverlay.SetStrokeColor( border );
+            aOverlay.SetLineWidth( 0.0 );
             aOverlay.Rectangle( s.bbox.GetOrigin(), s.bbox.GetEnd() );
         }
     }

@@ -159,6 +159,32 @@ BOOST_AUTO_TEST_CASE( WidthChangeProducesPropertyDelta )
 }
 
 
+BOOST_AUTO_TEST_CASE( TitleBlockEditSurfacesAsDocumentChange )
+{
+    m_after->GetTitleBlock().SetRevision( wxS( "B" ) );
+
+    PCB_DIFFER    differ( m_before.get(), m_after.get() );
+    DOCUMENT_DIFF result = differ.Diff();
+
+    BOOST_REQUIRE_EQUAL( result.changes.size(), 1u );
+    BOOST_CHECK( result.changes[0].id.empty() );
+    BOOST_CHECK( result.changes[0].kind == CHANGE_KIND::MODIFIED );
+
+    bool foundRevisionDelta = false;
+
+    for( const PROPERTY_DELTA& d : result.changes[0].properties )
+    {
+        if( d.name.Lower().Contains( wxS( "revision" ) ) )
+        {
+            foundRevisionDelta = true;
+            BOOST_CHECK_EQUAL( d.after.AsString().ToStdString(), "B" );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( foundRevisionDelta, "Expected a title block delta after changing the board revision" );
+}
+
+
 BOOST_AUTO_TEST_CASE( RoutingChangesCarryNetNamesForPresentationGrouping )
 {
     BOARD_ITEM_SET                 items = m_after->GetItemSet();

@@ -25,6 +25,7 @@
 #define KICAD_DIFF_DOC_PROPERTY_HELPERS_H
 
 #include <diff_merge/kicad_diff_types.h>
+#include <title_block.h>
 
 #include <page_info.h>
 
@@ -70,6 +71,68 @@ inline void AppendPaperDeltas( std::vector<PROPERTY_DELTA>& aDeltas, const PAGE_
         d.after  = DIFF_VALUE::FromBool( aAfter.IsPortrait() );
         aDeltas.push_back( std::move( d ) );
     }
+}
+
+
+/**
+ * Append a delta for every title block field that differs between the two documents, in
+ * the field order of the page settings dialog.
+ */
+inline void AppendTitleBlockDeltas( std::vector<PROPERTY_DELTA>& aDeltas, const TITLE_BLOCK& aBefore,
+                                    const TITLE_BLOCK& aAfter )
+{
+    auto append = [&aDeltas]( const wxString& aName, const wxString& aBeforeValue, const wxString& aAfterValue )
+    {
+        if( aBeforeValue == aAfterValue )
+            return;
+
+        PROPERTY_DELTA d;
+        d.name = aName;
+        d.before = DIFF_VALUE::FromString( aBeforeValue );
+        d.after = DIFF_VALUE::FromString( aAfterValue );
+        aDeltas.push_back( std::move( d ) );
+    };
+
+    append( DOC_PROP_TITLE, aBefore.GetTitle(), aAfter.GetTitle() );
+    append( DOC_PROP_DATE, aBefore.GetDate(), aAfter.GetDate() );
+    append( DOC_PROP_REVISION, aBefore.GetRevision(), aAfter.GetRevision() );
+    append( DOC_PROP_COMPANY, aBefore.GetCompany(), aAfter.GetCompany() );
+
+    for( int ii = 0; ii < DOC_TITLE_BLOCK_COMMENTS; ii++ )
+        append( DocPropComment( ii ), aBefore.GetComment( ii ), aAfter.GetComment( ii ) );
+}
+
+
+/**
+ * Copy the title block field named by a document property from aSource into aTarget.
+ *
+ * @return False when the name is not a title block property, leaving aTarget untouched.
+ */
+inline bool ApplyTitleBlockProperty( TITLE_BLOCK& aTarget, const wxString& aName, const TITLE_BLOCK& aSource )
+{
+    if( aName == DOC_PROP_TITLE )
+        aTarget.SetTitle( aSource.GetTitle() );
+    else if( aName == DOC_PROP_DATE )
+        aTarget.SetDate( aSource.GetDate() );
+    else if( aName == DOC_PROP_REVISION )
+        aTarget.SetRevision( aSource.GetRevision() );
+    else if( aName == DOC_PROP_COMPANY )
+        aTarget.SetCompany( aSource.GetCompany() );
+    else
+    {
+        for( int ii = 0; ii < DOC_TITLE_BLOCK_COMMENTS; ii++ )
+        {
+            if( aName == DocPropComment( ii ) )
+            {
+                aTarget.SetComment( ii, aSource.GetComment( ii ) );
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    return true;
 }
 
 } // namespace KICAD_DIFF

@@ -356,8 +356,11 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
     const SCH_SCREEN* afterRoot  = m_after  ? m_after->RootScreen()  : nullptr;
 
     if( beforeRoot && afterRoot )
+    {
         AppendPaperDeltas( docDeltas, beforeRoot->GetPageSettings(),
                            afterRoot->GetPageSettings() );
+        AppendTitleBlockDeltas( docDeltas, beforeRoot->GetTitleBlock(), afterRoot->GetTitleBlock() );
+    }
 
     // ERC severity overrides live in the project file. Diff only fires when
     // sibling .kicad_pro files were loaded — for plain .kicad_sch temp blobs
@@ -483,6 +486,7 @@ DOCUMENT_DIFF SCH_DIFFER::Diff()
         std::vector<PROPERTY_DELTA> sheetDeltas;
         AppendPaperDeltas( sheetDeltas, beforePaper,
                            afterIt->second->GetPageSettings() );
+        AppendTitleBlockDeltas( sheetDeltas, beforeScreen->GetTitleBlock(), afterIt->second->GetTitleBlock() );
 
         if( !sheetDeltas.empty() )
         {

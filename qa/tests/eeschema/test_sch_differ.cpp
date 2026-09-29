@@ -79,6 +79,34 @@ BOOST_AUTO_TEST_CASE( TwoFreshLoadsAreIdentical )
 }
 
 
+BOOST_AUTO_TEST_CASE( TitleBlockEditSurfacesAsDocumentChange )
+{
+    m_before->RootScreen()->GetTitleBlock().SetTitle( wxS( "Original" ) );
+    m_after->RootScreen()->GetTitleBlock().SetTitle( wxS( "Renamed" ) );
+
+    SCH_DIFFER    differ( m_before.get(), m_after.get(), wxS( "issue18606.kicad_sch" ) );
+    DOCUMENT_DIFF result = differ.Diff();
+
+    BOOST_REQUIRE_EQUAL( result.changes.size(), 1u );
+    BOOST_CHECK( result.changes[0].id.empty() );
+    BOOST_CHECK( result.changes[0].kind == CHANGE_KIND::MODIFIED );
+
+    bool foundTitleDelta = false;
+
+    for( const PROPERTY_DELTA& d : result.changes[0].properties )
+    {
+        if( d.name == DOC_PROP_TITLE )
+        {
+            foundTitleDelta = true;
+            BOOST_CHECK_EQUAL( d.before.AsString().ToStdString(), "Original" );
+            BOOST_CHECK_EQUAL( d.after.AsString().ToStdString(), "Renamed" );
+        }
+    }
+
+    BOOST_CHECK_MESSAGE( foundTitleDelta, "Expected a title block delta after changing the sheet title" );
+}
+
+
 BOOST_AUTO_TEST_CASE( SymbolFieldEditSurfacesAsProperty )
 {
     // Find any symbol on the after-side and tweak a field value.
