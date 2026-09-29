@@ -432,6 +432,7 @@ public:
 
     double Similarity( const SCH_ITEM& aOther ) const override;
 
+    bool operator==( const SCH_ITEM& aPin ) const override;
     bool operator==( const SCH_PIN& aPin ) const;
 
     bool operator>( const SCH_ITEM& aRhs ) const { return compare( aRhs, ~COMPARE_FLAGS::UUID ) > 0; }

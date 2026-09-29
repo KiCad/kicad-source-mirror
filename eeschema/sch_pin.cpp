@@ -2116,6 +2116,15 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 }
 
 
+bool SCH_PIN::operator==( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return false;
+
+    return *this == static_cast<const SCH_PIN&>( aOther );
+}
+
+
 bool SCH_PIN::operator==( const SCH_PIN& aPin ) const
 {
     // Compare local positions below.  SCH_ITEM's position compare uses global coordinates

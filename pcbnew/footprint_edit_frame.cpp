@@ -94,6 +94,7 @@
 #include <wildcards_and_files_ext.h>
 #include <widgets/wx_aui_utils.h>
 #include <toolbars_footprint_editor.h>
+#include <wx/app.h>
 
 #include <algorithm>
 
