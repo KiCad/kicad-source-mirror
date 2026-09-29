@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-29 19:51+0000\n"
+"PO-Revision-Date: 2026-09-30 08:29+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -39615,9 +39615,9 @@ msgid "Copy the report to the clipboard"
 msgstr "現在の3Dイメージをクリップボードへコピー"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:415
-#, fuzzy, c-format
+#, c-format
 msgid "%s Summary"
-msgstr "要約"
+msgstr "%s 要約"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:459
 #, fuzzy, c-format
