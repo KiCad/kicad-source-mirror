@@ -117,7 +117,7 @@ bool SCH_EDIT_FRAME::SaveSheetAsDesignBlock( const wxString& aLibraryName, SCH_S
     // Save a temporary copy of the schematic file, as the plugin is just going to move it
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
 
-    if( !saveSchematicFile( aSheetPath.Last(), tempFile ) )
+    if( !saveSchematicFile( aSheetPath.Last(), tempFile, true ) )
     {
         DisplayErrorMessage( this, _( "Error saving temporary schematic file to create design block." ) );
         wxRemoveFile( tempFile );
@@ -200,7 +200,8 @@ bool SCH_EDIT_FRAME::UpdateDesignBlockFromSheet( const LIB_ID& aLibId, SCH_SHEET
 
     // Save a temporary copy of the schematic file, as the plugin is just going to move it
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
-    if( !saveSchematicFile( aSheetPath.Last(), tempFile ) )
+
+    if( !saveSchematicFile( aSheetPath.Last(), tempFile, true ) )
     {
         DisplayErrorMessage( this, _( "Error saving temporary schematic file to create design block." ) );
         wxRemoveFile( tempFile );
@@ -351,7 +352,8 @@ bool SCH_EDIT_FRAME::SaveSelectionAsDesignBlock( const wxString& aLibraryName )
 
     // Save a temporary copy of the schematic file, as the plugin is just going to move it
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
-    if( !saveSchematicFile( tempSheet.get(), tempFile ) )
+
+    if( !saveSchematicFile( tempSheet.get(), tempFile, true ) )
     {
         DisplayErrorMessage( this, _( "Error saving temporary schematic file to create design block." ) );
         wxRemoveFile( tempFile );
@@ -579,7 +581,7 @@ bool SCH_EDIT_FRAME::UpdateDesignBlockFromSelection( const LIB_ID& aLibId )
     // Save a temporary copy of the schematic file, as the plugin is just going to move it
     wxString tempFile = wxFileName::CreateTempFileName( "design_block" );
 
-    if( !saveSchematicFile( tempSheet.get(), tempFile ) )
+    if( !saveSchematicFile( tempSheet.get(), tempFile, true ) )
     {
         DisplayErrorMessage( this, _( "Error saving temporary schematic file to create design block." ) );
         wxRemoveFile( tempFile );

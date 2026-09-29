@@ -415,7 +415,7 @@ int SCH_EDITOR_CONTROL::SaveCurrSheetCopyAs( const TOOL_EVENT& aEvent )
 
     wxString newFilename = EnsureFileExtension( dlg.GetPath(), FILEEXT::KiCadSchematicFileExtension );
 
-    m_frame->saveSchematicFile( curr_sheet, newFilename );
+    m_frame->saveSchematicFile( curr_sheet, newFilename, true );
     return 0;
 }
 

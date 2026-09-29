@@ -1096,9 +1096,11 @@ private:
      *
      * @param aSheet is the #SCH_SHEET object to save.
      * @param aSavePath is the full path of the destination file
+     * @param isSaveAs indicates this is a save-as or save-copy-as operation, and that the dirty
+     *                 bit should NOT be cleared on the sheet
      * @return True if the file has been saved.
      */
-    bool saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSavePath );
+    bool saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSavePath, bool isSaveAs );
 
     /**
      * Fill a map of uuid -> reference from the currently loaded schematic.
