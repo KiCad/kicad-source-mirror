@@ -452,6 +452,10 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         aPlotter->Rect( start, end, fill, pen_size, GetCornerRadius() );
         break;
 
+    case SHAPE_T::SEGMENT:
+        aPlotter->ThickSegment( start, end, pen_size, nullptr );
+        break;
+
     case SHAPE_T::POLY:
         if( !ShortenBodyPolyPoints( ptList, IsClosed(), 0, pen_size ) )
             break;
