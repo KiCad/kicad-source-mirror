@@ -156,6 +156,8 @@ public:
      *
      * It is used to calculate the length of the vector.
      *
+     * For int the result is exactly rounded to nearest and saturates at INT_MAX.
+     *
      * @return Scalar, the euclidean norm
      */
     T EuclideanNorm() const;
@@ -163,7 +165,7 @@ public:
     /**
      * Compute the squared euclidean norm of the vector, which is defined as (x ** 2 + y ** 2).
      *
-     * It is used to calculate the length of the vector.
+     * It is used to calculate the length of the vector.  For int it saturates at the extended type maximum.
      *
      * @return Scalar, the euclidean norm
      */
@@ -278,31 +280,57 @@ constexpr VECTOR2<T>::VECTOR2( T aX, T aY )
 template <class T>
 T VECTOR2<T>::EuclideanNorm() const
 {
-    // 45° are common in KiCad, so we can optimize the calculation
-    if( std::abs( x ) == std::abs( y ) )
+    if constexpr( std::is_same<T, int>::value )
     {
-        if constexpr( std::is_integral<T>::value )
-            return KiROUND<double, T>( std::abs( x ) * M_SQRT2 );
-        else
-            return static_cast<T>( std::abs( x ) * M_SQRT2 );
+        // Saturating at 2^63 - 1 cannot change the result because both round above INT_MAX
+        const uint64_t n = SquaredEuclideanNorm();
+        const uint64_t f = isqrt( n );
+
+        // n > f^2 + f is the same as n >= (f + 1/2)^2 for integer n, so ties cannot occur
+        const uint64_t r = f + ( n - f * f > f );
+
+        return int( std::min<uint64_t>( r, std::numeric_limits<int>::max() ) );
     }
-
-    if( x == 0 )
-        return static_cast<T>( std::abs( y ) );
-    if( y == 0 )
-        return static_cast<T>( std::abs( x ) );
-
-    if constexpr( std::is_integral<T>::value )
-        return KiROUND<double, T>( std::hypot( x, y ) );
     else
-        return static_cast<T>( std::hypot( x, y ) );
+    {
+        // 45° are common in KiCad, so we can optimize the calculation
+        if( std::abs( x ) == std::abs( y ) )
+        {
+            if constexpr( std::is_integral<T>::value )
+                return KiROUND<double, T>( std::abs( x ) * M_SQRT2 );
+            else
+                return static_cast<T>( std::abs( x ) * M_SQRT2 );
+        }
+
+        if( x == 0 )
+            return static_cast<T>( std::abs( y ) );
+        if( y == 0 )
+            return static_cast<T>( std::abs( x ) );
+
+        if constexpr( std::is_integral<T>::value )
+            return KiROUND<double, T>( std::hypot( x, y ) );
+        else
+            return static_cast<T>( std::hypot( x, y ) );
+    }
 }
 
 
 template <class T>
 constexpr typename VECTOR2<T>::extended_type VECTOR2<T>::SquaredEuclideanNorm() const
 {
-    return (extended_type) x * x + (extended_type) y * y;
+    if constexpr( std::is_same<T, int>::value )
+    {
+        // (INT_MIN, INT_MIN) is 2^63, one past what int64_t holds
+        const uint64_t ax = x < 0 ? 0 - uint64_t( x ) : uint64_t( x );
+        const uint64_t ay = y < 0 ? 0 - uint64_t( y ) : uint64_t( y );
+        const uint64_t n = ax * ax + ay * ay;
+
+        return extended_type( std::min<uint64_t>( n, ECOORD_MAX ) );
+    }
+    else
+    {
+        return (extended_type) x * x + (extended_type) y * y;
+    }
 }
 
 

@@ -176,6 +176,58 @@ template <>
 int64_t rescale( int64_t aNumerator, int64_t aValue, int64_t aDenominator );
 
 
+template <typename T>
+constexpr T ct_sqrt_helper( T aX, T aLo, T aHi )
+{
+    if( aLo == aHi )
+        return aLo;
+
+    const T mid = ( aLo + aHi + 1 ) / 2;
+
+    if( aX / mid < mid )
+        return ct_sqrt_helper<T>( aX, aLo, mid - 1 );
+
+    return ct_sqrt_helper<T>( aX, mid, aHi );
+}
+
+/**
+ * Floor of the square root of an integer, evaluated at compile time.
+ */
+template <typename T>
+constexpr T ct_sqrt( T aX )
+{
+    return ct_sqrt_helper<T>( aX, 0, aX / 2 + 1 );
+}
+
+/**
+ * Exact floor of the square root of an integer.  Negative input returns the largest root representable in T.
+ */
+template <typename T>
+T isqrt( T aX )
+{
+    static_assert( std::is_integral<T>::value, "isqrt requires an integer type" );
+
+    constexpr T sqrt_max = ct_sqrt( std::numeric_limits<T>::max() );
+
+    if constexpr( std::is_signed<T>::value )
+    {
+        if( aX < 0 )
+            return sqrt_max;
+    }
+
+    T r = (T) std::sqrt( (double) aX );
+
+    // The double conversion loses precision above 2^53
+    while( r < sqrt_max && r * r < aX )
+        r++;
+
+    while( r > sqrt_max || r * r > aX )
+        r--;
+
+    return r;
+}
+
+
 /**
  * Template to compare two floating point values for equality within a required epsilon.
  *
