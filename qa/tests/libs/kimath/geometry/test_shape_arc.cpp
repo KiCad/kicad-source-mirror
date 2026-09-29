@@ -1527,8 +1527,9 @@ BOOST_AUTO_TEST_CASE( CalcArcCenterThinArcNotDegenerate )
     double rm = ( center - mid ).EuclideanNorm();
     double re = ( center - end ).EuclideanNorm();
 
-    BOOST_CHECK_CLOSE( rs, rm, 0.01 );
-    BOOST_CHECK_CLOSE( rm, re, 0.01 );
+    // Snapping to the 10 nm grid moves the center off the exact (10, -49.5) by half an IU
+    BOOST_CHECK_SMALL( rs - rm, 1.0 );
+    BOOST_CHECK_SMALL( rm - re, 1.0 );
 
     // True circumradius is 50.5 IU; a wrongly-triggered midpoint guard would give ~10 IU
     BOOST_CHECK_GT( rs, 40.0 );
@@ -1561,6 +1562,122 @@ BOOST_AUTO_TEST_CASE( CalcArcCenterBoardScaleSanity )
 
     BOOST_CHECK_SMALL( center.x, 1.0 );
     BOOST_CHECK_SMALL( center.y, 1.0 );
+}
+
+namespace
+{
+// Circumcenter of integer points relative to start, in long double
+VECTOR2<long double> exactCircumcenter( const VECTOR2I& aS, const VECTOR2I& aM, const VECTOR2I& aE )
+{
+    long double bx = (long double) aM.x - aS.x, by = (long double) aM.y - aS.y;
+    long double cx = (long double) aE.x - aS.x, cy = (long double) aE.y - aS.y;
+    long double b2 = bx * bx + by * by, c2 = cx * cx + cy * cy;
+    long double d = 2.0L * ( bx * cy - by * cx );
+
+    return VECTOR2<long double>( aS.x + ( b2 * cy - c2 * by ) / d, aS.y + ( c2 * bx - b2 * cx ) / d );
+}
+
+
+// Point on the circle about aCenter, rounded to integer IU
+VECTOR2I arcPoint( const VECTOR2D& aCenter, double aRadius, double aDegrees, const VECTOR2I& aOffset )
+{
+    double a = aDegrees * M_PI / 180.0;
+
+    return VECTOR2I( KiROUND( aCenter.x + aRadius * std::cos( a ) ) + aOffset.x,
+                     KiROUND( aCenter.y + aRadius * std::sin( a ) ) + aOffset.y );
+}
+} // namespace
+
+
+// A 150 um arc must get the same center wherever it sits.  The slope formulation drifted by
+// 147 nm at 10 cm and 1244 nm at 1 m
+BOOST_AUTO_TEST_CASE( CalcArcCenterTranslationInvariant )
+{
+    const VECTOR2D c0( 18833.0, 51544.24 );
+    const double   radius = 150000.0;
+    const int      offsets[] = { 0, 100000000, 1000000000, -1000000000 };
+
+    VECTOR2I baseCenter;
+
+    for( int off : offsets )
+    {
+        const VECTOR2I o( off, off );
+        VECTOR2I       s = arcPoint( c0, radius, 20.0, o );
+        VECTOR2I       m = arcPoint( c0, radius, 60.0, o );
+        VECTOR2I       e = arcPoint( c0, radius, 100.0, o );
+
+        VECTOR2I                 center = CalcArcCenter( s, m, e );
+        VECTOR2<long double>     exact = exactCircumcenter( s, m, e );
+        VECTOR2D                 dcenter = CalcArcCenter( VECTOR2D( s ), VECTOR2D( m ), VECTOR2D( e ) );
+
+        BOOST_CHECK_LE( std::abs( (long double) center.x - exact.x ), 1.5L );
+        BOOST_CHECK_LE( std::abs( (long double) center.y - exact.y ), 1.5L );
+
+        double rs = ( dcenter - VECTOR2D( s ) ).EuclideanNorm();
+        double re = ( dcenter - VECTOR2D( e ) ).EuclideanNorm();
+        BOOST_CHECK_LE( std::abs( rs - re ), 1.0 );
+
+        if( off == 0 )
+            baseCenter = center;
+        else
+            BOOST_CHECK_LE( ( center - o - baseCenter ).EuclideanNorm(), 1.5 );
+    }
+}
+
+
+// Codex found the slope form returning (1e9 + 5, 1e9) for this right-angled arc
+BOOST_AUTO_TEST_CASE( CalcArcCenterFarFromOrigin )
+{
+    const VECTOR2I s( 1000000000, 1000000000 );
+    const VECTOR2I m( 1000000010, 1000000000 );
+    const VECTOR2I e( 1000000000, 1000000010 );
+
+    BOOST_CHECK_EQUAL( CalcArcCenter( s, m, e ), VECTOR2I( 1000000005, 1000000005 ) );
+    BOOST_CHECK_EQUAL( CalcArcCenter( VECTOR2D( s ), VECTOR2D( m ), VECTOR2D( e ) ),
+                       VECTOR2D( 1000000005.0, 1000000005.0 ) );
+}
+
+
+// A center a nm or two off the 100 nm grid snaps to it, since every radius still agrees
+BOOST_AUTO_TEST_CASE( CalcArcCenterSnapsToGridWhenRadiiAgree )
+{
+    const VECTOR2I c( 1000000, 2000000 );
+    const VECTOR2I s = c + VECTOR2I( 250000, 0 );
+    const VECTOR2I m = c + VECTOR2I( 150000, 200001 );
+    const VECTOR2I e = c + VECTOR2I( -150000, 200000 );
+
+    VECTOR2<long double> exact = exactCircumcenter( s, m, e );
+
+    BOOST_CHECK_GT( std::abs( exact.x - c.x ) + std::abs( exact.y - c.y ), 1.0L );
+    BOOST_CHECK_EQUAL( CalcArcCenter( s, m, e ), c );
+    BOOST_CHECK_EQUAL( CalcArcCenter( VECTOR2D( s ), VECTOR2D( m ), VECTOR2D( e ) ), VECTOR2D( c ) );
+}
+
+
+// The 10 nm grid point would put the radii 4 nm apart, so the exact center is kept
+BOOST_AUTO_TEST_CASE( CalcArcCenterKeepsExactWhenSnapBreaksRadii )
+{
+    const VECTOR2I s( 0, 0 );
+    const VECTOR2I m( 10, 0 );
+    const VECTOR2I e( 0, 10 );
+
+    BOOST_CHECK_EQUAL( CalcArcCenter( s, m, e ), VECTOR2I( 5, 5 ) );
+}
+
+// Near a half turn r^2 - chord^2/4 cancels to nothing; the center must sit at the true offset
+BOOST_AUTO_TEST_CASE( CalcArcCenterFromAngleNearHalfTurn )
+{
+    const VECTOR2D start( 0.0, 0.0 );
+    const VECTOR2D end( 1.0e9, 0.0 );
+    const EDA_ANGLE angle( 179.999999, DEGREES_T );
+
+    VECTOR2D center = CalcArcCenter( start, end, angle );
+
+    long double half = angle.AsRadians() / 2.0L;
+    long double offset = 5.0e8L * std::cos( half ) / std::sin( half );
+
+    BOOST_CHECK_LE( std::abs( (long double) center.x - 5.0e8L ), 1e-3L );
+    BOOST_CHECK_LE( std::abs( std::abs( (long double) center.y ) - offset ), 0.1L );
 }
 
 

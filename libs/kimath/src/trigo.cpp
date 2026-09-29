@@ -25,11 +25,13 @@
 
 #include <algorithm>        // for std::clamp
 #include <limits>           // for numeric_limits
+#include <cmath>
 #include <cstdlib>         // for abs
 #include <type_traits>      // for swap
 
 #include <geometry/seg.h>
 #include <math/util.h>
+#include <math/wide_int.h>
 #include <math/vector2d.h>  // for VECTOR2I
 #include <trigo.h>
 
@@ -352,12 +354,8 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
     if( sinHalfAngle == 0.0 )
         return VECTOR2D( ( start + end ) / 2.0 );
 
-    double r = ( chord / 2.0 ) / sinHalfAngle;
-    double d_squared = r * r - chord*  chord / 4.0;
-    double d = 0.0;
-
-    if( d_squared > 0.0 )
-        d = sqrt( d_squared );
+    // The center sits (chord/2) * cot(angle/2) off the chord; sqrt(r^2 - chord^2/4) cancels near 180 degrees
+    double d = ( chord / 2.0 ) * ( angle / 2.0 ).Cos() / sinHalfAngle;
 
     VECTOR2D vec2 = VECTOR2D(end - start).Resize( d );
     VECTOR2D vc = VECTOR2D(end - start).Resize( chord / 2 );
@@ -368,25 +366,38 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
 }
 
 
-const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd )
+namespace
 {
-    // No unique circumcircle exists if any two of the three points coincide
-    // Bbox below catches all three; pairwise checks below catch just one pair
-    constexpr double kClusterExtent = 5.0;
+// No unique circumcircle exists if any two of the three points coincide
+// Bbox below catches all three; pairwise checks below catch just one pair
+constexpr double kClusterExtent = 5.0;
 
-    // A pair separated by more than integer rounding is a real, if small, arc.  This is not the
-    // cluster extent above: three points inside a 5 IU box are all noise, but two points 4 IU
-    // apart with a distant third still span a healthy triangle
-    constexpr double kCoincidentRadius        = 2.0;
-    constexpr double kCoincidentRadiusSquared = kCoincidentRadius * kCoincidentRadius;
+// A pair separated by more than integer rounding is a real, if small, arc.  This is not the
+// cluster extent above: three points inside a 5 IU box are all noise, but two points 4 IU
+// apart with a distant third still span a healthy triangle
+constexpr double kCoincidentRadius        = 2.0;
+constexpr double kCoincidentRadiusSquared = kCoincidentRadius * kCoincidentRadius;
 
+// Radius agreement required of a snapped center, in IU
+constexpr double kSnapRadiusTolerance = 1.0;
+
+// Stand-in radius for collinear points, whose true center is at infinity
+constexpr double kCollinearRadius = 1e17;
+
+// Largest magnitude at which every integer is still a double
+constexpr double kMaxExactInteger = 9007199254740992.0;
+
+
+bool degenerateArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd,
+                          VECTOR2D& aCenter )
+{
     auto [minX, maxX] = std::minmax( { aStart.x, aMid.x, aEnd.x } );
     auto [minY, maxY] = std::minmax( { aStart.y, aMid.y, aEnd.y } );
 
     if( maxX - minX < kClusterExtent && maxY - minY < kClusterExtent )
     {
-        return VECTOR2D( ( aStart.x + aMid.x + aEnd.x ) / 3.0,
-                        ( aStart.y + aMid.y + aEnd.y ) / 3.0 );
+        aCenter = VECTOR2D( ( aStart.x + aMid.x + aEnd.x ) / 3.0, ( aStart.y + aMid.y + aEnd.y ) / 3.0 );
+        return true;
     }
 
     auto coincident = []( const VECTOR2D& a, const VECTOR2D& b )
@@ -396,166 +407,96 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
 
     // Two distinct points fall back to the chord midpoint, same as the diameter-arc paths below
     if( coincident( aStart, aMid ) || coincident( aMid, aEnd ) )
-        return VECTOR2D( ( aStart.x + aEnd.x ) / 2.0, ( aStart.y + aEnd.y ) / 2.0 );
+    {
+        aCenter = VECTOR2D( ( aStart.x + aEnd.x ) / 2.0, ( aStart.y + aEnd.y ) / 2.0 );
+        return true;
+    }
 
     if( coincident( aStart, aEnd ) )
-        return VECTOR2D( ( aStart.x + aMid.x ) / 2.0, ( aStart.y + aMid.y ) / 2.0 );
+    {
+        aCenter = VECTOR2D( ( aStart.x + aMid.x ) / 2.0, ( aStart.y + aMid.y ) / 2.0 );
+        return true;
+    }
 
+    return false;
+}
+
+
+VECTOR2D collinearArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd )
+{
+    VECTOR2D chord = aEnd - aStart;
+    VECTOR2D mid( ( aStart.x + aEnd.x ) / 2.0, ( aStart.y + aEnd.y ) / 2.0 );
+
+    return mid + VECTOR2D( chord.y, -chord.x ).Resize( kCollinearRadius );
+}
+
+
+// Kahan's a*d - b*c, accurate to about one ulp despite the cancellation
+double det2( double a, double b, double c, double d )
+{
+    double w = b * c;
+    double e = std::fma( -b, c, w );
+    double f = std::fma( a, d, -w );
+
+    return f + e;
+}
+
+
+// Prefer a nice 100 nm or 10 nm center when it still lies on the circle to within a nanometer
+VECTOR2D snapArcCenter( const VECTOR2D& aCenter, const VECTOR2D& aStart, const VECTOR2D& aMid,
+                        const VECTOR2D& aEnd )
+{
+    if( !( std::abs( aCenter.x ) < kMaxExactInteger ) || !( std::abs( aCenter.y ) < kMaxExactInteger ) )
+        return aCenter;
+
+    auto radiiAgree = [&]( const VECTOR2D& aCandidate )
+                      {
+                          double rs = ( aCandidate - aStart ).EuclideanNorm();
+                          double rm = ( aCandidate - aMid ).EuclideanNorm();
+                          double re = ( aCandidate - aEnd ).EuclideanNorm();
+                          auto [minR, maxR] = std::minmax( { rs, rm, re } );
+
+                          return maxR - minR <= kSnapRadiusTolerance;
+                      };
+
+    for( double grid : { 100.0, 10.0 } )
+    {
+        VECTOR2D candidate( std::floor( aCenter.x / grid + 0.5 ) * grid,
+                            std::floor( aCenter.y / grid + 0.5 ) * grid );
+
+        if( radiiAgree( candidate ) )
+            return candidate;
+    }
+
+    return aCenter;
+}
+} // namespace
+
+
+const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd )
+{
     VECTOR2D center;
 
-    double yDelta_21 = aMid.y - aStart.y;
-    double xDelta_21 = aMid.x - aStart.x;
-    double yDelta_32 = aEnd.y - aMid.y;
-    double xDelta_32 = aEnd.x - aMid.x;
-
-    // This is a special case for aMid as the half-way point when aSlope = 0 and bSlope = inf
-    // or the other way around.  In that case, the center lies in a straight line between
-    // aStart and aEnd
-    if( ( ( xDelta_21 == 0.0 ) && ( yDelta_32 == 0.0 ) ) ||
-        ( ( yDelta_21 == 0.0 ) && ( xDelta_32 == 0.0 ) ) )
-    {
-        center.x = ( aStart.x + aEnd.x ) / 2.0;
-        center.y = ( aStart.y + aEnd.y ) / 2.0 ;
+    if( degenerateArcCenter( aStart, aMid, aEnd, center ) )
         return center;
-    }
 
-    // Prevent div-by-0 errors
-    if( xDelta_21 == 0.0 )
-        xDelta_21 = std::numeric_limits<double>::epsilon();
+    // Work relative to start so the result cannot depend on where the arc sits
+    double bx = aMid.x - aStart.x;
+    double by = aMid.y - aStart.y;
+    double cx = aEnd.x - aStart.x;
+    double cy = aEnd.y - aStart.y;
 
-    if( xDelta_32 == 0.0 )
-        xDelta_32 = -std::numeric_limits<double>::epsilon();
+    double b2 = std::fma( bx, bx, by * by );
+    double c2 = std::fma( cx, cx, cy * cy );
+    double d = 2.0 * det2( bx, by, cx, cy );
 
-    double aSlope = yDelta_21 / xDelta_21;
-    double bSlope = yDelta_32 / xDelta_32;
+    if( d == 0.0 )
+        return collinearArcCenter( aStart, aEnd );
 
-    // Guard the y-deltas after the slopes are taken so a horizontal chord keeps its exact zero
-    // slope while the 0.5/yDelta uncertainty terms below stay finite instead of a NaN-yielding inf
-    if( yDelta_21 == 0.0 )
-        yDelta_21 = std::numeric_limits<double>::epsilon();
+    double ux = det2( b2, c2, by, cy ) / d;
+    double uy = det2( c2, b2, cx, bx ) / d;
 
-    if( yDelta_32 == 0.0 )
-        yDelta_32 = std::numeric_limits<double>::epsilon();
-
-    double daSlope = aSlope * VECTOR2D( 0.5 / yDelta_21, 0.5 / xDelta_21 ).EuclideanNorm();
-    double dbSlope = bSlope * VECTOR2D( 0.5 / yDelta_32, 0.5 / xDelta_32 ).EuclideanNorm();
-
-    if( aSlope == bSlope )
-    {
-        if( aStart == aEnd )
-        {
-            // This is a special case for a 360 degrees arc.  In this case, the center is
-            // halfway between the midpoint and either end point.
-            center.x = ( aStart.x + aMid.x ) / 2.0;
-            center.y = ( aStart.y + aMid.y ) / 2.0 ;
-            return center;
-        }
-        else
-        {
-            // If the points are colinear, the center is at infinity, so offset
-            // the slope by a minimal amount
-            // Warning: This will induce a small error in the center location
-            aSlope += std::numeric_limits<double>::epsilon();
-            bSlope -= std::numeric_limits<double>::epsilon();
-        }
-    }
-#ifdef USE_ALTERNATE_CENTER_ALGO
-    // We can call ArcCenterFrom3Points from here because special cases are filtered.
-    CircleCenterFrom3Points( aStart, aMid, aEnd, &center );
-    return center;
-#endif
-
-    // Prevent divide by zero error
-    // a small value is used. std::numeric_limits<double>::epsilon() is too small and
-    // generate false results
-    if( aSlope == 0.0 )
-        aSlope = 1e-10;
-    if( bSlope == 0.0 )
-        bSlope = 1e-10;
-
-    // What follows is the calculation of the center using the slope of the two lines as well as
-    // the propagated error that occurs when rounding to the nearest nanometer.  The error can be
-    // ±0.5 units but can add up to multiple nanometers after the full calculation is performed.
-    // All variables starting with `d` are the delta of that variable.  This is approximately equal
-    // to the standard deviation.
-    // We ignore the possible covariance between variables.  We also truncate our series expansion
-    // at the first term.  These are reasonable assumptions as the worst-case scenario is that we
-    // underestimate the potential uncertainty, which would potentially put us back at the status
-    // quo.
-    double abSlopeStartEndY = aSlope * bSlope * ( aStart.y - aEnd.y );
-    double dabSlopeStartEndY = abSlopeStartEndY *
-                               std::sqrt( ( daSlope / aSlope * daSlope / aSlope )
-                                        + ( dbSlope / bSlope * dbSlope / bSlope )
-                                        + ( M_SQRT1_2 / ( aStart.y - aEnd.y )
-                                          * M_SQRT1_2 / ( aStart.y - aEnd.y ) ) );
-
-    double bSlopeStartMidX = bSlope * ( aStart.x + aMid.x );
-    double dbSlopeStartMidX = bSlopeStartMidX * std::sqrt( ( dbSlope / bSlope * dbSlope / bSlope )
-                                                         + ( M_SQRT1_2 / ( aStart.x + aMid.x )
-                                                           * M_SQRT1_2 / ( aStart.x + aMid.x ) ) );
-
-    double aSlopeMidEndX = aSlope * ( aMid.x + aEnd.x );
-    double daSlopeMidEndX = aSlopeMidEndX * std::sqrt( ( daSlope / aSlope * daSlope / aSlope )
-                                                     + ( M_SQRT1_2 / ( aMid.x + aEnd.x )
-                                                       * M_SQRT1_2 / ( aMid.x + aEnd.x ) ) );
-
-    double twiceBASlopeDiff = 2 * ( bSlope - aSlope );
-    double dtwiceBASlopeDiff = 2 * std::sqrt( dbSlope * dbSlope + daSlope * daSlope );
-
-    double centerNumeratorX = abSlopeStartEndY + bSlopeStartMidX - aSlopeMidEndX;
-    double dCenterNumeratorX = std::sqrt( dabSlopeStartEndY * dabSlopeStartEndY
-                                       + dbSlopeStartMidX * dbSlopeStartMidX
-                                       + daSlopeMidEndX * daSlopeMidEndX );
-
-    double centerX = ( abSlopeStartEndY + bSlopeStartMidX - aSlopeMidEndX ) / twiceBASlopeDiff;
-    double dCenterX = centerX * std::sqrt( ( dCenterNumeratorX / centerNumeratorX *
-                                             dCenterNumeratorX / centerNumeratorX )
-                                         + ( dtwiceBASlopeDiff / twiceBASlopeDiff *
-                                             dtwiceBASlopeDiff / twiceBASlopeDiff ) );
-
-
-    double centerNumeratorY = ( ( aStart.x + aMid.x ) / 2.0 - centerX );
-    double dCenterNumeratorY = std::sqrt( 1.0 / 8.0 + dCenterX * dCenterX );
-
-    double centerFirstTerm = centerNumeratorY / aSlope;
-    double dcenterFirstTermY = centerFirstTerm * std::sqrt(
-                                          ( dCenterNumeratorY/ centerNumeratorY *
-                                            dCenterNumeratorY / centerNumeratorY )
-                                        + ( daSlope / aSlope * daSlope / aSlope ) );
-
-    double centerY = centerFirstTerm + ( aStart.y + aMid.y ) / 2.0;
-    double dCenterY = std::sqrt( dcenterFirstTermY * dcenterFirstTermY + 1.0 / 8.0 );
-
-    double rounded100CenterX = std::floor( ( centerX + 50.0 ) / 100.0 ) * 100.0;
-    double rounded100CenterY = std::floor( ( centerY + 50.0 ) / 100.0 ) * 100.0;
-    double rounded10CenterX = std::floor( ( centerX + 5.0 ) / 10.0 ) * 10.0;
-    double rounded10CenterY = std::floor( ( centerY + 5.0 ) / 10.0 ) * 10.0;
-
-    // The last step is to find the nice, round numbers near our baseline estimate and see if
-    // they are within our uncertainty range.  If they are, then we use this round value as the
-    // true value.  This is justified because ALL values within the uncertainty range are equally
-    // true.  Using a round number will make sure that we are on a multiple of 1mil or 100nm
-    // when calculating centers.
-    if( std::abs( rounded100CenterX - centerX ) < dCenterX &&
-        std::abs( rounded100CenterY - centerY ) < dCenterY )
-    {
-        center.x = rounded100CenterX;
-        center.y = rounded100CenterY;
-    }
-    else if( std::abs( rounded10CenterX - centerX ) < dCenterX &&
-             std::abs( rounded10CenterY - centerY ) < dCenterY )
-    {
-        center.x = rounded10CenterX;
-        center.y = rounded10CenterY;
-    }
-    else
-    {
-        center.x = centerX;
-        center.y = centerY;
-    }
-
-
-    return center;
+    return snapArcCenter( VECTOR2D( aStart.x + ux, aStart.y + uy ), aStart, aMid, aEnd );
 }
 
 
@@ -564,7 +505,31 @@ const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, cons
     VECTOR2D dStart( static_cast<double>( aStart.x ), static_cast<double>( aStart.y ) );
     VECTOR2D dMid( static_cast<double>( aMid.x ), static_cast<double>( aMid.y ) );
     VECTOR2D dEnd( static_cast<double>( aEnd.x ), static_cast<double>( aEnd.y ) );
-    VECTOR2D dCenter = CalcArcCenter( dStart, dMid, dEnd );
+    VECTOR2D dCenter;
+
+    if( !degenerateArcCenter( dStart, dMid, dEnd, dCenter ) )
+    {
+        // Deltas are exact in 64 bits and the numerators in 128, so only the final divisions round
+        VECTOR2L b( int64_t( aMid.x ) - aStart.x, int64_t( aMid.y ) - aStart.y );
+        VECTOR2L c( int64_t( aEnd.x ) - aStart.x, int64_t( aEnd.y ) - aStart.y );
+
+        KI_INT128 b2 = KI_INT128( b.x ) * KI_INT128( b.x ) + KI_INT128( b.y ) * KI_INT128( b.y );
+        KI_INT128 c2 = KI_INT128( c.x ) * KI_INT128( c.x ) + KI_INT128( c.y ) * KI_INT128( c.y );
+        KI_INT128 d = CrossWide( b, c ) * KI_INT128( 2 );
+
+        if( d == KI_INT128( 0 ) )
+        {
+            dCenter = collinearArcCenter( dStart, dEnd );
+        }
+        else
+        {
+            double dd = ToDouble( d );
+            double ux = ToDouble( b2 * KI_INT128( c.y ) - c2 * KI_INT128( b.y ) ) / dd;
+            double uy = ToDouble( c2 * KI_INT128( b.x ) - b2 * KI_INT128( c.x ) ) / dd;
+
+            dCenter = snapArcCenter( VECTOR2D( dStart.x + ux, dStart.y + uy ), dStart, dMid, dEnd );
+        }
+    }
 
     VECTOR2I iCenter;
 
