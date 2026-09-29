@@ -1471,6 +1471,9 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
             ref_unit.SetRefNum( ii );
         }
     }
+
+    // Write any changed references back to the power symbols
+    references.UpdateAnnotation();
 }
 
 
