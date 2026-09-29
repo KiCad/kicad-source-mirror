@@ -390,10 +390,11 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     VECTOR2I end = renderSettings->TransformCoordinate( m_end ) + aOffset;
     VECTOR2I mid, center;
 
-    auto transformBezierPoint = [&]( const VECTOR2D& aPoint )
-    {
-        return renderSettings->TransformCoordinate( VECTOR2I( aPoint ) ) + aOffset;
-    };
+    auto transformBezierPoint =
+            [&]( const VECTOR2D& aPoint )
+            {
+                return renderSettings->TransformCoordinate( VECTOR2I( aPoint ) ) + aOffset;
+            };
 
     std::vector<VECTOR2I> lineEndingPlotPoints = ptList;
 
@@ -452,13 +453,11 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         break;
 
     case SHAPE_T::POLY:
-    {
         if( !ShortenBodyPolyPoints( ptList, IsClosed(), 0, pen_size ) )
             break;
 
         aPlotter->PlotPoly( ptList, fill, pen_size, nullptr );
         break;
-    }
 
     case SHAPE_T::BEZIER:
     {
@@ -467,8 +466,8 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         if( curve && aPlotter->GetPlotterType() == PLOT_FORMAT::SVG )
         {
             aPlotter->BezierCurve( transformBezierPoint( curve->Start ), transformBezierPoint( curve->C1 ),
-                                   transformBezierPoint( curve->C2 ), transformBezierPoint( curve->End ), GetMaxError(),
-                                   pen_size );
+                                   transformBezierPoint( curve->C2 ), transformBezierPoint( curve->End ),
+                                   GetMaxError(), pen_size );
         }
         else if( curve )
         {
@@ -482,6 +481,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
             aPlotter->PlotPoly( plotPts, fill, pen_size, nullptr );
         }
+
         break;
     }
 
@@ -492,7 +492,9 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         aPlotter->PlotPoly( ptList, fill, pen_size, nullptr );
         break;
 
-    case SHAPE_T::ELLIPSE_ARC: aPlotter->PlotPoly( ptList, FILL_T::NO_FILL, pen_size, nullptr ); break;
+    case SHAPE_T::ELLIPSE_ARC:
+        aPlotter->PlotPoly( ptList, FILL_T::NO_FILL, pen_size, nullptr );
+        break;
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -518,10 +520,8 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         switch( GetShape() )
         {
         case SHAPE_T::ARC:
-        {
             endingShape.SetArcGeometry( startPt, mid, endPt );
             break;
-        }
 
         case SHAPE_T::POLY:
             if( lineEndingPlotPoints.size() >= 2 )
@@ -541,14 +541,12 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
             break;
 
         case SHAPE_T::BEZIER:
-        {
             endingShape.SetStart( startPt );
             endingShape.SetBezierC1( transformBezierPoint( GetBezierC1() ) );
             endingShape.SetBezierC2( transformBezierPoint( GetBezierC2() ) );
             endingShape.SetEnd( endPt );
             endingShape.RebuildBezierToSegmentsPointsList( getMaxError() );
             break;
-        }
 
         case SHAPE_T::SEGMENT:
             endingShape.SetStart( startPt );
@@ -646,13 +644,13 @@ BITMAPS SCH_SHAPE::GetMenuImage() const
 {
     switch( GetShape() )
     {
-    case SHAPE_T::SEGMENT:   return BITMAPS::add_line;
-    case SHAPE_T::ARC:       return BITMAPS::add_arc;
-    case SHAPE_T::CIRCLE:    return BITMAPS::add_circle;
-    case SHAPE_T::RECTANGLE: return BITMAPS::add_rectangle;
-    case SHAPE_T::POLY:      return BITMAPS::add_graphical_segments;
-    case SHAPE_T::BEZIER:    return BITMAPS::add_bezier;
-    case SHAPE_T::ELLIPSE: return BITMAPS::add_ellipse;
+    case SHAPE_T::SEGMENT:     return BITMAPS::add_line;
+    case SHAPE_T::ARC:         return BITMAPS::add_arc;
+    case SHAPE_T::CIRCLE:      return BITMAPS::add_circle;
+    case SHAPE_T::RECTANGLE:   return BITMAPS::add_rectangle;
+    case SHAPE_T::POLY:        return BITMAPS::add_graphical_segments;
+    case SHAPE_T::BEZIER:      return BITMAPS::add_bezier;
+    case SHAPE_T::ELLIPSE:     return BITMAPS::add_ellipse;
     case SHAPE_T::ELLIPSE_ARC: return BITMAPS::add_ellipse_arc;
 
     default:
