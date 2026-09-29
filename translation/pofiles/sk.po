@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-29 19:51+0000\n"
+"PO-Revision-Date: 2026-09-30 08:29+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -46977,9 +46977,8 @@ msgid "Tuning profile must have a name"
 msgstr "Ladiaci profil musí mať názov"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:845
-#, fuzzy
 msgid "Tuning profile name already in use"
-msgstr "Ladiaci profil musí mať názov"
+msgstr "Názov ladiaceho profilu sa už používa"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:861
 msgid "Duplicated signal layer configuration in tuning profile"
@@ -47177,9 +47176,9 @@ msgstr "Názov zóny:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:39
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:44
-#, fuzzy
 msgid "A unique name for this zone, used to identify it in DRC rules"
-msgstr "Jedinečný názov tejto zóny na jej identifikáciu pre KDR"
+msgstr ""
+"Jedinečný názov tejto zóny používaný na jej identifikáciu v pravidlách DRC"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:76
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -47590,9 +47589,9 @@ msgstr ""
 "Minimálne vzdialenosti z triedy spojov použiť iba medzi medenými položkami."
 
 #: pcbnew/drc/drc_engine.cpp:1647 pcbnew/drc/drc_engine.cpp:1653
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Constraint ignored."
-msgstr "%s neobsahuje meď.  Pravidlo ignorované."
+msgstr "%s neobsahuje meď.  Podmienka sa ignoruje."
 
 #: pcbnew/drc/drc_engine.cpp:1664
 msgid "Keepout belongs to the footprint under test; constraint ignored."
@@ -47749,9 +47748,8 @@ msgid "Items not allowed"
 msgstr "Položky nie sú povolené"
 
 #: pcbnew/drc/drc_item.cpp:65
-#, fuzzy
 msgid "Text or graphic on Edge.Cuts layer"
-msgstr "Text (alebo kóta) vo vrstve Edge.Cuts"
+msgstr "Text alebo grafika na vrstve Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:69
 msgid "Clearance violation"
@@ -48166,9 +48164,9 @@ msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s minimálna šírka prstenca %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min annular width %s; actual %s on %s)"
-msgstr "(%s minimálna šírka prstenca %s; aktuálna %s)"
+msgstr "(%s min. šírka prstenca plôšky a %s; aktuálna %s na %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:356
 #, c-format
@@ -49021,9 +49019,9 @@ msgid "(%s min diameter %s; actual %s)"
 msgstr "(%s minimálny priemer %s; aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min diameter %s; actual %s on %s)"
-msgstr "(%s minimálny priemer %s; aktuálne %s)"
+msgstr "(%s min. priemer %s; aktuálny %s na %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:148
 #, c-format
@@ -49031,9 +49029,9 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s maximálny priemer %s; aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:155
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max diameter %s; actual %s on %s)"
-msgstr "(%s maximálny priemer %s; aktuálne %s)"
+msgstr "(%s max. priemer %s; aktuálny %s na %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:199
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:294
@@ -49112,9 +49110,8 @@ msgid "Tolerance must be greater than or equal to 0"
 msgstr "Tolerancia musí byť väčšia alebo rovná 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:96
-#, fuzzy
 msgid "Tolerance is too large: resulting minimum length is negative"
-msgstr "Tolerancia je príliš veľká: výsledná minimálna dĺžka nie je kladná"
+msgstr "Tolerancia je príliš veľká: výsledná minimálna dĺžka je záporná"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:157
 msgid "Within diff pairs"
@@ -49129,9 +49126,8 @@ msgid "Maximum Skew must be greater than or equal to 0"
 msgstr "Maximálny rozdiel dĺžok musí byť väčší alebo rovný 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:95
-#, fuzzy
 msgid "Time domain (ps)"
-msgstr "Parametre rohového razítka"
+msgstr "Časová doména (ps)"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:64
 msgid "Allow 0°"
@@ -49294,14 +49290,12 @@ msgid "Width Tolerance must be less than Optimum Width"
 msgstr "Tolerancia šírky musí byť menšia ako optimálna šírka"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:76
-#, fuzzy
 msgid "Optimum Width must be greater than or equal to 0"
-msgstr "Optimálna šírka musí byť väčšia ako 0"
+msgstr "Optimálna šírka musí byť väčšia alebo rovná 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:79
-#, fuzzy
 msgid "Optimum Gap must be greater than or equal to 0"
-msgstr "Maximálny rozdiel dĺžok musí byť väčší alebo rovný 0"
+msgstr "Optimálna medzera musí byť väčšia alebo rovná 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:97
 msgid "Gap Tolerance must be greater than or equal to 0"
@@ -50053,9 +50047,9 @@ msgstr ""
 "%s"
 
 #: pcbnew/files.cpp:1235
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reconcile imported footprint libraries: %s"
-msgstr "Nie je možné vytvoriť knižnicu puzdier '%s'."
+msgstr "Importované knižnice puzdier nie je možné zosúladiť: %s"
 
 #: pcbnew/files.cpp:1278
 msgid "Generate ODB++ Files"
@@ -50299,14 +50293,14 @@ msgid ""
 msgstr ""
 
 #: pcbnew/footprint_import_reconciler.cpp:270
-#, fuzzy
 msgid "Cannot reconcile imported footprints: no KiCad footprint writer."
-msgstr "Nie je možné odstrániť nepoužívané puzdro %s (puzdro je uzamknuté)."
+msgstr ""
+"Importované puzdrá nie je možné zosúladiť: chýba zapisovač puzdier KiCad."
 
 #: pcbnew/footprint_import_reconciler.cpp:312
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing imported footprint cache '%s': %s"
-msgstr "Pri zapisovaní súboru protokolu vŕtania '%s' nastala chyba"
+msgstr "Chyba pri zápise vyrovnávacej pamäte importovaných puzdier '%s': %s"
 
 #: pcbnew/footprint_import_reconciler.cpp:335
 #, c-format
@@ -50315,12 +50309,10 @@ msgid ""
 msgstr ""
 
 #: pcbnew/footprint_import_reconciler.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "Could not publish imported footprint cache to '%s'."
 msgstr ""
-"Nepodarilo sa načítať stopu „%s“ z knižnice „%s“.\n"
-"\n"
-"%s"
+"Vyrovnávaciu pamäť importovaných puzdier sa nepodarilo zverejniť do '%s'."
 
 #: pcbnew/footprint_import_reconciler.cpp:369
 msgid "Cannot register imported footprint cache: no project library table."
@@ -51483,14 +51475,14 @@ msgid "Changed group library link from '%s' to '%s'."
 msgstr "Zmenená skupina knižničného prepojenia z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1977
-#, fuzzy, c-format
+#, c-format
 msgid "Add group '%s' to group '%s'."
-msgstr "Pridať %s do skupiny '%s'."
+msgstr "Pridať skupinu '%s' do skupiny '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1982
-#, fuzzy, c-format
+#, c-format
 msgid "Added group '%s' to group '%s'."
-msgstr "Pridané %s do skupiny '%s'."
+msgstr "Pridaná skupina '%s' do skupiny '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2022
 #, c-format
@@ -52753,9 +52745,9 @@ msgid "Loading unicode strings..."
 msgstr "Načítavanie reťazcov unicode..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:5113
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "Ladiace tvary dĺžky"
+msgstr "Importovaných %d vzorov ladenia dĺžky."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:5146
 msgid "Loading text..."
