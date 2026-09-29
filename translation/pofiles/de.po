@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-28 17:04+0000\n"
+"PO-Revision-Date: 2026-09-29 19:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -2391,7 +2391,7 @@ msgstr "Ab&brechen"
 
 #: common/confirm.cpp:48 common/confirm.cpp:53
 msgid "&Open Anyway"
-msgstr "Trotzdem öffnen"
+msgstr "&Trotzdem öffnen"
 
 #: common/confirm.cpp:64 common/confirm.cpp:107
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1206
@@ -11090,7 +11090,7 @@ msgstr "Element"
 #: pcbnew/dialogs/dialog_find_by_properties_base.cpp:63
 #: pcbnew/widgets/panel_footprint_chooser.cpp:94
 msgid "Recently Used"
-msgstr "Kürzlich benutzt"
+msgstr "Zuletzt verwendet"
 
 #: common/lib_tree_model_adapter.cpp:496
 #: eeschema/widgets/panel_symbol_chooser.cpp:182
@@ -12537,7 +12537,7 @@ msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
 msgstr ""
-"Wechseln des Bogenbearbeitungsmodus, um die Endpunkte oder die Richtung des "
+"Bogenbearbeitungsmodus wechseln, um die Endpunkte oder die Richtung des "
 "anderen Punktes beizubehalten"
 
 #: common/tool/actions.cpp:599
@@ -12547,7 +12547,7 @@ msgstr "Bogenradius und -mitte beibehalten, Winkel anpassen"
 #: common/tool/actions.cpp:600
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
 msgstr ""
-"Bogenbearbeitungsmodus wechseln um Radius beizubehalten wenn Endpunkte "
+"Bogenbearbeitungsmodus wechseln, um Radius beizubehalten, wenn Endpunkte "
 "bewegt werden"
 
 #: common/tool/actions.cpp:608
@@ -21826,7 +21826,7 @@ msgstr "Konnte zusammengeführte Projektdatei nicht speichern: %s\n"
 #, c-format
 msgid "Merge completed with %zu unresolved conflict(s) in %s\n"
 msgstr ""
-"Zusammenführung mit %zu ungelöstem/.n Konflikt/-en in %s abgeschlossen\n"
+"Zusammenführung mit %zu ungelöstem/-n Konflikt/-en in %s abgeschlossen\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2464 kicad/cli/command_mergetool.cpp:117
 #: pcbnew/pcbnew_jobs_handler.cpp:4384
@@ -36783,7 +36783,7 @@ msgid ""
 "Recently used templates appear at the top. Use the folder icon to browse "
 "custom template directories."
 msgstr ""
-"Kürzlich verwende Vorlagen werden oben angezeigt. Verwenden Sie das "
+"Zuletzt verwendete Vorlagen werden oben angezeigt. Verwenden Sie das "
 "Ordnersymbol, um benutzerdefinierte Vorlagenverzeichnisse zu durchsuchen."
 
 #: kicad/dialogs/template_default_html.h:399
