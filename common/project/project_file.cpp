@@ -64,7 +64,8 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_params.emplace_back( new PARAM_WXSTRING_MAP( "text_variables",
             &m_TextVars, {}, false, true /* array behavior, even though stored as a map */ ) );
 
-    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "schematic.drawing.field_names",
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
+            "schematic.drawing.field_names",
             [&]() -> nlohmann::json
             {
                 nlohmann::json ret = nlohmann::json::array();
@@ -83,7 +84,13 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
             },
             [&]( const nlohmann::json& aJson )
             {
-                if( !aJson.empty() && aJson.is_array() )
+                if( aJson.is_string() )
+                {
+                    m_TemplateFieldNames.DeleteFieldNameTemplates( TEMPLATES::SCOPE::PROJECT );
+                    m_TemplateFieldNames.AddTemplateFieldNames( wxString::FromUTF8( aJson.get<std::string>() ),
+                                                                TEMPLATES::SCOPE::PROJECT );
+                }
+                else if( aJson.is_array() )
                 {
                     m_TemplateFieldNames.DeleteFieldNameTemplates( TEMPLATES::SCOPE::PROJECT );
 
@@ -99,7 +106,8 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
                         }
                     }
                 }
-            }, {} ) );
+            },
+            {} ) );
 
     m_params.emplace_back( new PARAM_LIST<wxString>( "libraries.pinned_symbol_libs",
             &m_PinnedSymbolLibs, {} ) );
