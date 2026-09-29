@@ -840,6 +840,7 @@ void SCH_COMMIT::RevertToCheckpoint( int aCheckpoint )
             if( view )
                 view->Add( item );
 
+            itemsChanged.push_back( item );
             break;
         }
 
