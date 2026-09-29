@@ -1801,8 +1801,9 @@ wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxStrin
                 {
                     const SCH_SHEET_INSTANCE* instance = sheet->GetInstance( aPath->Path() );
 
-                    if( instance->m_Variants.contains( aVariantName )
-                        && instance->m_Variants.at( aVariantName ).m_Fields.contains( GetName() ) )
+                    if( instance
+                            && instance->m_Variants.contains( aVariantName )
+                            && instance->m_Variants.at( aVariantName ).m_Fields.contains( GetName() ) )
                     {
                         return instance->m_Variants.at( aVariantName ).m_Fields.at( GetName() );
                     }
