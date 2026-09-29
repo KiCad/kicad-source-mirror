@@ -2197,16 +2197,12 @@ double SCH_PIN::Similarity( const SCH_ITEM& aOther ) const
 
     const SCH_PIN* other = static_cast<const SCH_PIN*>( &aOther );
 
-    if( m_libPin )
-    {
-        if( m_number != other->m_number )
-            return 0.0;
-
-        if( m_position != other->m_position )
-            return 0.0;
-
+    if( m_libPin && !other->m_libPin )
+        return 0.0;
+    else if( !m_libPin && other->m_libPin )
+        return 0.0;
+    else if( m_libPin )
         return m_libPin->Similarity( *other->m_libPin );
-    }
 
     double similarity = SimilarityBase( aOther );
 
