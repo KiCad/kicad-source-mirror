@@ -543,14 +543,40 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
 
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
+    MOVE_MODE mode = MOVE;
+
     if( aEvent.IsAction( &SCH_ACTIONS::drag ) )
-        m_mode = DRAG;
+        mode = DRAG;
     else if( aEvent.IsAction( &SCH_ACTIONS::breakWire ) )
-        m_mode = BREAK;
+        mode = BREAK;
     else if( aEvent.IsAction( &SCH_ACTIONS::slice ) )
-        m_mode = SLICE;
-    else
-        m_mode = MOVE;
+        mode = SLICE;
+
+    bool requestedModeIsDragLike = mode != MOVE;
+    bool currentModeIsDragLike = m_mode != MOVE;
+
+    if( m_moveInProgress )
+    {
+        if( requestedModeIsDragLike != currentModeIsDragLike )
+        {
+            EDA_ITEM* item = m_selectionTool->GetSelection().Front();
+
+            if( item && !item->IsNew() )
+                m_toolMgr->PostAction( SCH_ACTIONS::restartMove, mode );
+        }
+        else
+        {
+            // Repeating the tool hotkey places the moving items.
+            m_toolMgr->PostAction( ACTIONS::cursorClick );
+        }
+
+        return 0;
+    }
+
+    if( m_inMoveTool )
+        return 0;
+
+    m_mode = mode;
 
     if( SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() ) )
     {
@@ -672,18 +698,9 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     EE_GRID_HELPER        grid( m_toolMgr );
-    bool                  currentModeIsDragLike = ( m_mode != MOVE );
-    bool                  wasDragging = m_moveInProgress && currentModeIsDragLike;
     bool                  didAtLeastOneBreak = false;
 
     m_anchorPos.reset();
-
-    // Check if already in progress and handle state transitions
-    if( checkMoveInProgress( aEvent, aCommit, currentModeIsDragLike, wasDragging ) )
-        return false;
-
-    if( m_inMoveTool )      // Must come after m_moveInProgress checks above...
-        return false;
 
     REENTRANCY_GUARD guard( &m_inMoveTool );
 
@@ -806,9 +823,15 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
         {
             refreshTraits();
 
-            if( !m_moveInProgress )    // Prepare to start moving/dragging
+            if( evt->IsAction( &SCH_ACTIONS::restartMove ) )
             {
-                initializeMoveOperation( aEvent, selection, aCommit, internalPoints, snapLayer );
+                restartMoveOperation( *evt, selection, aCommit, internalPoints, snapLayer );
+                prevPos = m_cursor;
+                refreshTraits();
+            }
+            else if( !m_moveInProgress ) // Prepare to start moving/dragging
+            {
+                startMoveOperation( selection, aCommit, internalPoints, snapLayer );
                 prevPos = m_cursor;
                 refreshTraits();
             }
@@ -1127,42 +1150,6 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
 }
 
 
-bool SCH_MOVE_TOOL::checkMoveInProgress( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool aCurrentModeIsDragLike,
-                                         bool aWasDragging )
-{
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-
-    if( !m_moveInProgress )
-        return false;
-
-    if( aCurrentModeIsDragLike != aWasDragging )
-    {
-        EDA_ITEM* sel = m_selectionTool->GetSelection().Front();
-
-        if( sel && !sel->IsNew() )
-        {
-            // Reset the selected items so we can start again with the current drag mode state
-            aCommit->Revert();
-
-            m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
-            m_anchorPos = m_cursor - m_moveOffset;
-            m_moveInProgress = false;
-            controls->SetAutoPan( false );
-
-            // Give it a kick so it doesn't have to wait for the first mouse movement to refresh
-            m_toolMgr->PostAction( SCH_ACTIONS::restartMove );
-        }
-    }
-    else
-    {
-        // The tool hotkey is interpreted as a click when already dragging/moving
-        m_toolMgr->PostAction( ACTIONS::cursorClick );
-    }
-
-    return true;
-}
-
-
 SCH_SELECTION& SCH_MOVE_TOOL::prepareSelection( bool& aUnselect )
 {
     SCH_SELECTION& userSelection = m_selectionTool->GetSelection();
@@ -1310,14 +1297,54 @@ void SCH_MOVE_TOOL::setupItemsForMove( SCH_SELECTION& aSelection, std::vector<DA
 }
 
 
-void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELECTION& aSelection, SCH_COMMIT* aCommit,
-                                             std::vector<DANGLING_END_ITEM>& aInternalPoints,
-                                             GRID_HELPER_GRIDS&              aSnapLayer )
+void SCH_MOVE_TOOL::restartMoveOperation( const TOOL_EVENT& aEvent, SCH_SELECTION& aSelection, SCH_COMMIT* aCommit,
+                                          std::vector<DANGLING_END_ITEM>& aInternalPoints,
+                                          GRID_HELPER_GRIDS&              aSnapLayer )
 {
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    EE_GRID_HELPER        grid( m_toolMgr );
-    SCH_ITEM*             sch_item = static_cast<SCH_ITEM*>( aSelection.Front() );
-    bool                  placingNewItems = sch_item && sch_item->IsNew();
+    // Revert through the active operation's commit before collecting the new drag items.
+    for( const HIDDEN_JUNCTION& hidden : m_hiddenJunctions )
+        m_view->Hide( hidden.m_junction, false );
+
+    m_hiddenJunctions.clear();
+
+    m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
+    clearNewDragLines();
+    m_view->ClearPreview();
+
+    aCommit->Revert();
+    m_changedDragLines.clear();
+    m_lineConnectionCache.clear();
+
+    m_anchorPos = m_cursor - m_moveOffset;
+    m_moveOffset = VECTOR2I( 0, 0 );
+
+    m_mode = aEvent.Parameter<MOVE_MODE>();
+    m_moveInProgress = false;
+    getViewControls()->SetAutoPan( false );
+
+    preprocessBreakOrSliceSelection( aCommit, aEvent );
+    prepareMoveOperation( aSelection, aCommit, aInternalPoints, aSnapLayer );
+
+    if( m_mode == BREAK && m_breakPos )
+    {
+        m_anchorPos = *m_breakPos;
+        aSelection.SetReferencePoint( *m_anchorPos );
+        m_breakPos.reset();
+    }
+
+    // Leave the actual cursor in place. The event loop reapplies the full displacement,
+    // including orthogonal wire bends and attached label positioning.
+    m_cursor = *m_anchorPos;
+    getViewControls()->SetAutoPan( true );
+    m_moveInProgress = true;
+}
+
+
+void SCH_MOVE_TOOL::prepareMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit,
+                                          std::vector<DANGLING_END_ITEM>& aInternalPoints,
+                                          GRID_HELPER_GRIDS&              aSnapLayer )
+{
+    EE_GRID_HELPER grid( m_toolMgr );
 
     //------------------------------------------------------------------------
     // Setup a drag or a move
@@ -1396,6 +1423,18 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
             m_sheetPinDragArc[pin] = sheetBorderArc( pin->GetParent(), pin->GetSide(), pin->GetPosition() );
         }
     }
+}
+
+
+void SCH_MOVE_TOOL::startMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit,
+                                        std::vector<DANGLING_END_ITEM>& aInternalPoints, GRID_HELPER_GRIDS& aSnapLayer )
+{
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    EE_GRID_HELPER        grid( m_toolMgr );
+    SCH_ITEM*             sch_item = static_cast<SCH_ITEM*>( aSelection.Front() );
+    bool                  placingNewItems = sch_item && sch_item->IsNew();
+
+    prepareMoveOperation( aSelection, aCommit, aInternalPoints, aSnapLayer );
 
     // Set up the starting position and move/drag offset
     m_cursor = controls->GetCursorPosition();
@@ -1409,11 +1448,7 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
         m_breakPos.reset();
     }
 
-    if( aEvent.IsAction( &SCH_ACTIONS::restartMove ) )
-    {
-        wxASSERT_MSG( m_anchorPos, "Should be already set from previous cmd" );
-    }
-    else if( placingNewItems )
+    if( placingNewItems )
     {
         m_anchorPos = aSelection.GetReferencePoint();
     }
@@ -1467,6 +1502,7 @@ void SCH_MOVE_TOOL::initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELEC
     }
 
     controls->SetCursorPosition( m_cursor, false );
+
     controls->SetAutoPan( true );
     m_moveInProgress = true;
 }

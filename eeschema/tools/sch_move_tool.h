@@ -115,10 +115,6 @@ private:
     void preprocessBreakOrSliceSelection( SCH_COMMIT* aCommit, const TOOL_EVENT& aEvent );
 
     // Helper methods for doMoveSelection refactoring
-    /// Check if a move is already in progress and handle state transitions
-    bool checkMoveInProgress( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool aCurrentModeIsDragLike,
-                              bool aWasDragging );
-
     /// Promote pin selections to parent symbols and request final selection
     SCH_SELECTION& prepareSelection( bool& aUnselect );
 
@@ -127,9 +123,17 @@ private:
                                  bool& aHasGraphicItems, bool& aHasNonGraphicItems,
                                  bool& aIsGraphicsOnly );
 
-    /// Initialize the move/drag operation, setting up flags and connections
-    void initializeMoveOperation( const TOOL_EVENT& aEvent, SCH_SELECTION& aSelection, SCH_COMMIT* aCommit,
-                                  std::vector<DANGLING_END_ITEM>& aInternalPoints, GRID_HELPER_GRIDS& aSnapLayer );
+    /// Restore the original geometry and restart with the requested move mode
+    void restartMoveOperation( const TOOL_EVENT& aEvent, SCH_SELECTION& aSelection, SCH_COMMIT* aCommit,
+                               std::vector<DANGLING_END_ITEM>& aInternalPoints, GRID_HELPER_GRIDS& aSnapLayer );
+
+    /// Set up flags, connections, and undo state for either a new or restarted move
+    void prepareMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit,
+                               std::vector<DANGLING_END_ITEM>& aInternalPoints, GRID_HELPER_GRIDS& aSnapLayer );
+
+    /// Start a new move and position the selection at its initial cursor anchor
+    void startMoveOperation( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit,
+                             std::vector<DANGLING_END_ITEM>& aInternalPoints, GRID_HELPER_GRIDS& aSnapLayer );
 
     /// Setup items for drag operation, collecting connected items
     void setupItemsForDrag( SCH_SELECTION& aSelection, SCH_COMMIT* aCommit );
