@@ -269,6 +269,7 @@ set( KICOMMON_SRCS
     widgets/aui_json_serializer.cpp
     widgets/bitmap_button.cpp
     widgets/field_warning_icon.cpp
+    widgets/file_checklist_ctrl.cpp
     widgets/grid_combobox.cpp
     widgets/grid_icon_text_helpers.cpp
     widgets/grid_text_button_helpers.cpp
