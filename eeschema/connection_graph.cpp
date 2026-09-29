@@ -1145,6 +1145,15 @@ void CONNECTION_GRAPH::RemoveItem( SCH_ITEM* aItem )
 {
     std::erase( m_items, aItem );
 
+    if( aItem->Type() == SCH_PIN_T )
+    {
+        std::erase_if( m_global_power_pins,
+                       [aItem]( const std::pair<SCH_SHEET_PATH, SCH_PIN*>& aEntry )
+                       {
+                           return aEntry.second == aItem;
+                       } );
+    }
+
     auto it = m_item_to_subgraph_map.find( aItem );
 
     if( it == m_item_to_subgraph_map.end() )
