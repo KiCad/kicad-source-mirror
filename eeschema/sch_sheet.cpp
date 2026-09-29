@@ -142,11 +142,8 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize ) 
     m_backgroundColor = COLOR4D::UNSPECIFIED;
     m_fieldsAutoplaced = AUTOPLACE_AUTO;
 
-    m_fields.emplace_back( this, FIELD_T::SHEET_NAME,
-                           GetDefaultFieldName( FIELD_T::SHEET_NAME, TRANSLATED ) );
-
-    m_fields.emplace_back( this, FIELD_T::SHEET_FILENAME,
-                           GetDefaultFieldName( FIELD_T::SHEET_FILENAME, TRANSLATED ) );
+    m_fields.emplace_back( this, FIELD_T::SHEET_NAME, GetDefaultFieldName( FIELD_T::SHEET_NAME, TRANSLATED ) );
+    m_fields.emplace_back( this, FIELD_T::SHEET_FILENAME, GetDefaultFieldName( FIELD_T::SHEET_FILENAME, TRANSLATED ) );
 
     AutoplaceFields( nullptr, m_fieldsAutoplaced );
 }
@@ -196,7 +193,7 @@ void SCH_SHEET::Serialize( google::protobuf::Any& aContainer ) const
     }
 
     for( const SCH_SHEET_PIN* pin : GetPins() )
-        pin->Serialize( *sheet.add_pins(), schIUScale );
+        pin->Serialize( *sheet.add_pins() );
 
     kiapi::common::PackCustomProperties( sheet.mutable_custom_properties(), *this );
     aContainer.PackFrom( sheet );
@@ -230,7 +227,7 @@ bool SCH_SHEET::Deserialize( const google::protobuf::Any& aContainer )
 
     SetBorderWidth( UnpackDistance( sheet.border_stroke().width(), schIUScale ) );
     SetBorderColor( sheet.border_stroke().has_color() ? UnpackColor( sheet.border_stroke().color() )
-                                                       : COLOR4D::UNSPECIFIED );
+                                                      : COLOR4D::UNSPECIFIED );
 
     if( sheet.fill().fill_type() == GraphicFillType::GFT_UNFILLED || !sheet.fill().has_color() )
         SetBackgroundColor( COLOR4D::UNSPECIFIED );
@@ -243,10 +240,8 @@ bool SCH_SHEET::Deserialize( const google::protobuf::Any& aContainer )
     m_pins.clear();
 
     m_fields.clear();
-    m_fields.emplace_back( this, FIELD_T::SHEET_NAME,
-                           GetDefaultFieldName( FIELD_T::SHEET_NAME, TRANSLATED ) );
-    m_fields.emplace_back( this, FIELD_T::SHEET_FILENAME,
-                           GetDefaultFieldName( FIELD_T::SHEET_FILENAME, TRANSLATED ) );
+    m_fields.emplace_back( this, FIELD_T::SHEET_NAME, GetDefaultFieldName( FIELD_T::SHEET_NAME, TRANSLATED ) );
+    m_fields.emplace_back( this, FIELD_T::SHEET_FILENAME, GetDefaultFieldName( FIELD_T::SHEET_FILENAME, TRANSLATED ) );
 
     GetField( FIELD_T::SHEET_NAME )->Deserialize( sheet.name_field(), schIUScale );
     GetField( FIELD_T::SHEET_FILENAME )->Deserialize( sheet.filename_field(), schIUScale );
@@ -261,7 +256,7 @@ bool SCH_SHEET::Deserialize( const google::protobuf::Any& aContainer )
     {
         std::unique_ptr<SCH_SHEET_PIN> pin = std::make_unique<SCH_SHEET_PIN>( this );
 
-        if( !pin->Deserialize( pinProto, schIUScale ) )
+        if( !pin->Deserialize( pinProto ) )
             return false;
 
         AddPin( pin.release() );
