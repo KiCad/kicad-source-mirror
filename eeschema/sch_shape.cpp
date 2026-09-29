@@ -619,6 +619,10 @@ wxString SCH_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFu
                                  aUnitsProvider->MessageTextFromValue( std::abs( m_start.x - m_end.x ) ),
                                  aUnitsProvider->MessageTextFromValue( std::abs( m_start.y - m_end.y ) ) );
 
+    case SHAPE_T::SEGMENT:
+        return wxString::Format( _( "Line, length %s" ),
+                                 aUnitsProvider->MessageTextFromValue( ( m_start - m_end ).EuclideanNorm() ) );
+
     case SHAPE_T::POLY:
         return wxString::Format( _( "Polyline, %d points" ),
                                  int( GetPolyShape().IsEmpty() ? 0 : GetPolyShape().Outline( 0 ).GetPointCount() ) );
