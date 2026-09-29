@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-28 18:35+0000\n"
+"PO-Revision-Date: 2026-09-29 19:51+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -7267,7 +7267,7 @@ msgstr "Opačné šrafovanie"
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:149
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:261
 msgid "Cross-hatch"
-msgstr "Krížové šrafovanie"
+msgstr "Šrafovanie do kríža"
 
 #: common/eda_shape.cpp:2895 eeschema/sch_shape.cpp:620
 msgid "Shape Properties"
@@ -10170,9 +10170,9 @@ msgid "Cannot flush '%s' to disk: %s"
 msgstr "Nie je možné presunúť '%s' do koša."
 
 #: common/richio.cpp:656
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot close '%s': %s"
-msgstr "Nie je možné importovať symbol '%s': %s"
+msgstr "Nie je možné zavrieť '%s': %s"
 
 #: common/richio.cpp:728
 #, fuzzy, c-format
@@ -13164,18 +13164,18 @@ msgstr ""
 "\n"
 "# 3. Vlastné generátory a príkazové riadky\n"
 "\n"
-"Interne KiCad vytvorí dočasný súbor zoznamu spojov vo formáte XML, ktorý "
-"obsahuje aj informácie o všetkých súčiastkach v návrhu. Skript generátora "
-"zoznamu konvertuje tento dočasný súbor na požadovaný výstupný formát. KiCad "
-"spúšťa skripty generátora zoznamu materiálu podľa príkazového riadku "
-"zadaného v spodnej časti dialógu.\n"
+"Interne KiCad vytvorí dočasný netlist súbor vo formáte XML, ktorý obsahuje "
+"aj informácie o všetkých súčiastkach v návrhu. Skript generátora zoznamu "
+"konvertuje tento dočasný súbor na požadovaný výstupný formát. KiCad spúšťa "
+"skripty generátora zoznamu materiálu podľa príkazového riadku zadaného v "
+"spodnej časti dialógu.\n"
 "\n"
 "Formát príkazového riadka akceptuje parametre pre názvy súborov. Každý "
 "parameter formátovania je nahradený cestou alebo názvom súboru špecifickou "
 "pre projekt. Podporované parametre formátovania sú: \n"
 "\n"
-"* `%I`: absolútna cesta a názov súboru dočasného súboru so zoznamom spojov, "
-"ktorý je vstupom do generátora zoznamu materiálu \n"
+"* `%I`: absolútna cesta a názov súboru dočasného netlist súboru, ktorý je "
+"vstupom do generátora zoznamu materiálu \n"
 "* `%O`: absolútna cesta a názov súboru výstupného zoznamu materiálu (bez "
 "prípony súboru) \n"
 "* `%B`: základný názov súboru výstupného zoznamu materiálu (bez prípony "
@@ -13194,8 +13194,8 @@ msgstr ""
 "Formát príkazového riadka pre skript Python je v tvare:\n"
 "\n"
 "```\n"
-"python <názov súboru skriptu> <vstupný názov súboru> <výstupný názov "
-"súboru>\n"
+"python <názov súboru skriptu> <vstupný názov súboru> <výstupný názov súboru>"
+"\n"
 "```\n"
 "\n"
 "Ak je v systéme Windows požadovaný skript generátora pre zoznam materiálu "
@@ -13203,8 +13203,8 @@ msgstr ""
 "bude:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "Ak je v systéme Linux požadovaný skript generátora pre zoznam materiálu CSV "
@@ -13749,7 +13749,7 @@ msgstr "Komentár k vylúčeniu"
 #: eeschema/dialogs/dialog_erc.cpp:972
 #: eeschema/dialogs/dialog_schematic_setup.cpp:107
 msgid "Pin Conflicts Map"
-msgstr "Pripnúť mapu konfliktov"
+msgstr "Mapa konfliktov vývodov"
 
 #: eeschema/dialogs/dialog_erc.cpp:976 eeschema/dialogs/dialog_erc.cpp:1114
 #: eeschema/dialogs/dialog_schematic_setup.cpp:100
@@ -16508,9 +16508,8 @@ msgid "%s Properties"
 msgstr "%s Vlastnosti"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:133
-#, fuzzy
 msgid "Sheet pin name can not be empty."
-msgstr "Názov vývodu nemôže byť prázdny."
+msgstr "Názov vývodu listu nemôže byť prázdny."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:166
 msgid "Edit Sheet Pin Properties"
@@ -18907,7 +18906,7 @@ msgstr "Pre&dvolená veľkosť názvu vývodu:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:116
 msgid "&Pitch of repeated pins:"
-msgstr "&Rozostup opakovania vývodov:"
+msgstr "&Rozstup opakovania vývodov:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:146
 msgid "General Editing"
@@ -19157,7 +19156,7 @@ msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
 "Výstupná cesta musí byť zadaná pre konverziu zo staršej verzie a z knižníc "
-"mimo KiCad\n"
+"iných ako KiCad\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1256
 msgid "Saving symbol library in updated format\n"
@@ -19733,7 +19732,7 @@ msgid ""
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
 "'%s' nie je KiCad súbor schémy.\n"
-"Pre súbory schém, iných než KiCad, použite Súbor -> Importovať."
+"Pre súbory schém, iných ako KiCad, použite Súbor -> Importovať."
 
 #: eeschema/files-io.cpp:382
 msgid ""
@@ -19979,9 +19978,8 @@ msgstr "Súbor nie je zvolený!"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:181
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:186
-#, fuzzy
 msgid "Import scale must be a positive number."
-msgstr "Mierka musí byť kladné číslo."
+msgstr "Mierka importu musí byť kladné číslo."
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:217
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:234
@@ -20243,7 +20241,7 @@ msgstr "Pri načítaní knižnice symbolov '%s' nastala chyba."
 
 #: eeschema/menubar.cpp:104
 msgid "Non-KiCad Schematic..."
-msgstr "Schéma inú ako KiCad..."
+msgstr "Schéma iná ako KiCad..."
 
 #: eeschema/menubar.cpp:105
 msgid "Footprint Assignments..."
@@ -20949,17 +20947,14 @@ msgstr "Nastaviť prepojenie návrhového bloku skupiny"
 
 #: eeschema/sch_design_block_utils.cpp:517
 #: pcbnew/pcb_design_block_utils.cpp:544
-#, fuzzy
 msgid "The selection contains more than one group linked to this design block."
 msgstr ""
-"Bolo vynechaných %d vybraných položiek, ktoré nie sú skupinami prepojenými s "
-"návrhovým blokom."
+"Výber obsahuje viac ako jednu skupinu prepojenú s týmto návrhovým blokom."
 
 #: eeschema/sch_design_block_utils.cpp:658
 #: pcbnew/pcb_design_block_utils.cpp:634
-#, fuzzy
 msgid "Update Design Block Group"
-msgstr "Aktualizovať návrhový blok z dosky"
+msgstr "Aktualizovať skupinu návrhového bloku"
 
 #: eeschema/sch_edit_frame.cpp:185
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
@@ -21184,7 +21179,7 @@ msgstr ""
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1435
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
-msgstr "Súbor úložiska nebol plne analyzovaný (zostávajúce %d bajty)."
+msgstr "Súbor úložiska nebol plne spracovaný (zostávajúce %d bajty)."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1518
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1619
@@ -21722,9 +21717,9 @@ msgid "Error retrieving data from HTTP library %s: %s"
 msgstr "Pri preberaní údajov z HTTP knižnice %s: %s nastala chyba"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving part %s from HTTP library: %s"
-msgstr "Pri preberaní údajov z HTTP knižnice %s: %s nastala chyba"
+msgstr "Chyba pri získavaní súčiastky %s z HTTP knižnice: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:541
 #, c-format
@@ -25448,13 +25443,13 @@ msgid "Add Symbol Library"
 msgstr "Pridať knižnicu symbolov"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1225
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not overwrite the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Nepodarilo sa vytvoriť súbor knižnice '%s'.\n"
-"Uistite sa, že máte oprávnenie na zápis, a skúste znova."
+"Nebolo možné prepísať súbor knižnice '%s'.\n"
+"Uistite sa, že máte práva na zápis, a skúste to znova."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1233
 #, c-format
@@ -26944,9 +26939,8 @@ msgid "Set the exclude from board attribute"
 msgstr "Nastaviť atribút vylúčenia z dosky"
 
 #: eeschema/tools/sch_actions.cpp:1098
-#, fuzzy
 msgid "Set the exclude from position files attribute"
-msgstr "Nastaviť atribút vylúčenia zo simulácie"
+msgstr "Nastaviť atribút 'vylúčiť z polohových súborov'"
 
 #: eeschema/tools/sch_actions.cpp:1104
 msgid "Set the do not populate attribute"
@@ -27768,9 +27762,8 @@ msgid "Modify schematic item"
 msgstr "Upraviť položku schémy"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3860
-#, fuzzy
 msgid "Auto-place Sheet Pins"
-msgstr "Automaticky umiestniť všetky vývody listu"
+msgstr "Automaticky umiestniť vývody listu"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3907
 msgid "No sub schematic found in the current project"
@@ -28702,9 +28695,8 @@ msgid "Excl. Board"
 msgstr "Vylúčiť dosku"
 
 #: eeschema/widgets/search_handlers.cpp:169
-#, fuzzy
 msgid "Excl. Pos Files"
-msgstr "Vylúčiť z polohových súborov"
+msgstr "Mimo pol. súborov"
 
 #: eeschema/widgets/search_handlers.cpp:481
 msgid "Hierarchical"
@@ -29389,9 +29381,9 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "Nie je možné otvoriť súbor zip '%s'."
 
 #: gerbview/files.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
-msgstr "<b>Nepodarilo sa vytvoriť dočasný súbor '%s'.</b>"
+msgstr "Nepodarilo sa vytvoriť dočasný súbor na rozbalenie '%s'."
 
 #: gerbview/files.cpp:510
 #, c-format
@@ -29404,9 +29396,9 @@ msgid "<b>Unable to create temporary file '%s'.</b>"
 msgstr "<b>Nepodarilo sa vytvoriť dočasný súbor '%s'.</b>"
 
 #: gerbview/files.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to write temporary file '%s'.</b>"
-msgstr "<b>Nepodarilo sa vytvoriť dočasný súbor '%s'.</b>"
+msgstr "<b>Nepodarilo sa zapísať dočasný súbor '%s'.</b>"
 
 #: gerbview/files.cpp:603
 #, c-format
@@ -30990,9 +30982,9 @@ msgstr ""
 "predvoľby"
 
 #: kicad/cli/command_pcb_render.cpp:266
-#, fuzzy
 msgid "Use colors defined in the board stackup instead of those in the preset"
-msgstr "Farby definované v skladbe vrstiev dosky prepíšu farby z predvoľby"
+msgstr ""
+"Použiť farby definované v skladbe vrstiev dosky namiesto farieb v predvoľbe"
 
 #: kicad/cli/command_pcb_render.cpp:271
 msgid ""
@@ -31435,9 +31427,8 @@ msgid "Select Templates Directory"
 msgstr "Vyberte adresár šablón"
 
 #: kicad/dialogs/dialog_template_selector.cpp:1393
-#, fuzzy
 msgid "(no other directory)"
-msgstr "Vstupný adresár"
+msgstr "(žiadny iný priečinok)"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:28
 msgid "Recent project templates"
@@ -31456,14 +31447,12 @@ msgid "System Templates"
 msgstr "Systémové šablóny"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:64
-#, fuzzy
 msgid "Other Templates"
-msgstr "Používateľské šablóny"
+msgstr "Ostatné šablóny"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:74
-#, fuzzy
 msgid "Browse for templates in another directory"
-msgstr "v adresári tejto šablóny."
+msgstr "Prehľadávať šablóny v inom priečinku"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:79
 msgid "Stop showing templates from the browsed directory"
@@ -31593,9 +31582,9 @@ msgid "Select all jobs"
 msgstr "Vybrať všetky úlohy"
 
 #: kicad/dialogs/panel_jobset.cpp:697
-#, fuzzy, c-format
+#, c-format
 msgid "This version of KiCad does not support the '%s' job type."
-msgstr "Táto inštalácia KiCad nemá povolenú podporu API."
+msgstr "Táto verzia KiCad nepodporuje typ úlohy '%s'."
 
 #: kicad/dialogs/panel_jobset.cpp:744
 msgid "Job Types"
@@ -32085,7 +32074,7 @@ msgstr "Vymazať posledné projekty"
 
 #: kicad/menubar.cpp:123
 msgid "Import Non-KiCad Project..."
-msgstr "Importovať projekt, ktorý nie je KiCad..."
+msgstr "Importovať projekt, iný ako KiCad..."
 
 #: kicad/menubar.cpp:126
 msgid "Altium Project..."
@@ -36405,9 +36394,8 @@ msgid "Deleted items via API"
 msgstr "Odstránené položky pomocou API"
 
 #: pcbnew/api/api_handler_pcb.cpp:1724
-#, fuzzy
 msgid "Flipped items via API"
-msgstr "Odstránené položky pomocou API"
+msgstr "Prevrátené položky prostredníctvom API"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:813
 msgid "Autoplacing components..."
@@ -36853,7 +36841,7 @@ msgstr "OSP"
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:83
 #: pcbnew/exporters/step/step_pcb_model.cpp:2484
 msgid "User defined"
-msgstr "Definovaný používateľom"
+msgstr "Používateľom definované"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:62
 #: pcbnew/exporters/step/step_pcb_model.cpp:2477
@@ -37440,12 +37428,9 @@ msgid "Custom Rules"
 msgstr "Vlastné pravidlá"
 
 #: pcbnew/cross-probing.cpp:678
-#, fuzzy, c-format
+#, c-format
 msgid "Error copying footprint library '%s'."
-msgstr ""
-"Chyba pri načítaní stopy %s z knižnice %s.\n"
-"\n"
-"%s"
+msgstr "Chyba pri kopírovaní knižnice puzdier '%s'."
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:243
 msgid "Barcode Error"
@@ -41461,7 +41446,7 @@ msgstr "Nastaviť vlastnosti spoja a prekovu"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:72
 msgid "Load and Test Netlist"
-msgstr "Načítať a otestovať zoznam spojov"
+msgstr "Načítať a otestovať netlist"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:113
 #: pcbnew/dialogs/dialog_import_netlist_base.h:72
@@ -41945,7 +41930,7 @@ msgstr "Celá šrafovaná"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:81
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:169
 msgid "Outline hatch pitch:"
-msgstr "Rozostup šrafovania obrysu:"
+msgstr "Rozstup šrafovania obrysu:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:79
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:87
@@ -42001,7 +41986,7 @@ msgstr "Šírka šrafovania:"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:163
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:226
 msgid "Hatch gap:"
-msgstr "Rozostup šrafovania:"
+msgstr "Rozstup šrafovania:"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:174
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:237
@@ -53181,9 +53166,9 @@ msgid ""
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
 msgstr ""
-"CADSTAR kód šrafovania '%s' má definované %d šrafy. KiCad podporuje iba 2 "
-"šrafy (šrafovanie) vzdialené od seba 90 stupňov. Importovaný šrafovanie je "
-"šrafované."
+"CADSTAR kód šrafovania '%s' má definované %d šrafovania. KiCad podporuje iba "
+"2 šrafovania (šrafovanie do kríža) s odstupom 90 stupňov. Importovaný "
+"šrafovanie je šrafovanie do kríža."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3573
 #, c-format
@@ -56088,7 +56073,7 @@ msgstr "Súbor Specctra DSN"
 
 #: pcbnew/tools/board_editor_control.cpp:666
 msgid "Export Board Netlist"
-msgstr "Exportovať zoznam spojov dosky"
+msgstr "Exportovať netlist z dosky"
 
 #: pcbnew/tools/board_editor_control.cpp:667
 msgid "KiCad board netlist files"
@@ -58174,7 +58159,7 @@ msgstr "Importovať netlist..."
 
 #: pcbnew/tools/pcb_actions.cpp:1250
 msgid "Read netlist and update board connectivity"
-msgstr "Načítať zoznam spojov a aktualizovať prepojenia na doske"
+msgstr "Načítať netlist a aktualizovať prepojenia na doske"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
 msgid "Import Specctra Session..."
@@ -60214,7 +60199,7 @@ msgstr "Doplňujúce komentáre"
 #: pcbnew/widgets/appearance_controls.cpp:1767
 #: pcbnew/widgets/appearance_controls.cpp:1768
 msgid "User defined meaning"
-msgstr "Užívateľom definovaný význam"
+msgstr "Používateľom definovaný význam"
 
 #: pcbnew/widgets/appearance_controls.cpp:1769
 msgid "Board's perimeter definition"
@@ -60242,183 +60227,183 @@ msgstr "Osadenie puzdier na zadnej strane dosky"
 
 #: pcbnew/widgets/appearance_controls.cpp:1775
 msgid "User defined layer 1"
-msgstr "Užívateľom definovaná vrstva 1"
+msgstr "Používateľom definovaná vrstva 1"
 
 #: pcbnew/widgets/appearance_controls.cpp:1776
 msgid "User defined layer 2"
-msgstr "Užívateľom definovaná vrstva 2"
+msgstr "Používateľom definovaná vrstva 2"
 
 #: pcbnew/widgets/appearance_controls.cpp:1777
 msgid "User defined layer 3"
-msgstr "Užívateľom definovaná vrstva 3"
+msgstr "Používateľom definovaná vrstva 3"
 
 #: pcbnew/widgets/appearance_controls.cpp:1778
 msgid "User defined layer 4"
-msgstr "Užívateľom definovaná vrstva 4"
+msgstr "Používateľom definovaná vrstva 4"
 
 #: pcbnew/widgets/appearance_controls.cpp:1779
 msgid "User defined layer 5"
-msgstr "Užívateľom definovaná vrstva 5"
+msgstr "Používateľom definovaná vrstva 5"
 
 #: pcbnew/widgets/appearance_controls.cpp:1780
 msgid "User defined layer 6"
-msgstr "Užívateľom definovaná vrstva 6"
+msgstr "Používateľom definovaná vrstva 6"
 
 #: pcbnew/widgets/appearance_controls.cpp:1781
 msgid "User defined layer 7"
-msgstr "Užívateľom definovaná vrstva 7"
+msgstr "Používateľom definovaná vrstva 7"
 
 #: pcbnew/widgets/appearance_controls.cpp:1782
 msgid "User defined layer 8"
-msgstr "Užívateľom definovaná vrstva 8"
+msgstr "Používateľom definovaná vrstva 8"
 
 #: pcbnew/widgets/appearance_controls.cpp:1783
 msgid "User defined layer 9"
-msgstr "Užívateľom definovaná vrstva 9"
+msgstr "Používateľom definovaná vrstva 9"
 
 #: pcbnew/widgets/appearance_controls.cpp:1784
 msgid "User defined layer 10"
-msgstr "Používateľská vrstva 10"
+msgstr "Používateľom definovaná vrstva 10"
 
 #: pcbnew/widgets/appearance_controls.cpp:1785
 msgid "User defined layer 11"
-msgstr "Používateľská vrstva 11"
+msgstr "Používateľom definovaná vrstva 11"
 
 #: pcbnew/widgets/appearance_controls.cpp:1786
 msgid "User defined layer 12"
-msgstr "Používateľská vrstva 12"
+msgstr "Používateľom definovaná vrstva 12"
 
 #: pcbnew/widgets/appearance_controls.cpp:1787
 msgid "User defined layer 13"
-msgstr "Používateľská vrstva 13"
+msgstr "Používateľom definovaná vrstva 13"
 
 #: pcbnew/widgets/appearance_controls.cpp:1788
 msgid "User defined layer 14"
-msgstr "Používateľská vrstva 14"
+msgstr "Používateľom definovaná vrstva 14"
 
 #: pcbnew/widgets/appearance_controls.cpp:1789
 msgid "User defined layer 15"
-msgstr "Používateľská vrstva 15"
+msgstr "Používateľom definovaná vrstva 15"
 
 #: pcbnew/widgets/appearance_controls.cpp:1790
 msgid "User defined layer 16"
-msgstr "Používateľská vrstva 16"
+msgstr "Používateľom definovaná vrstva 16"
 
 #: pcbnew/widgets/appearance_controls.cpp:1791
 msgid "User defined layer 17"
-msgstr "Používateľská vrstva 17"
+msgstr "Používateľom definovaná vrstva 17"
 
 #: pcbnew/widgets/appearance_controls.cpp:1792
 msgid "User defined layer 18"
-msgstr "Používateľská vrstva 18"
+msgstr "Používateľom definovaná vrstva 18"
 
 #: pcbnew/widgets/appearance_controls.cpp:1793
 msgid "User defined layer 19"
-msgstr "Používateľská vrstva 19"
+msgstr "Používateľom definovaná vrstva 19"
 
 #: pcbnew/widgets/appearance_controls.cpp:1794
 msgid "User defined layer 20"
-msgstr "Používateľská vrstva 20"
+msgstr "Používateľom definovaná vrstva 20"
 
 #: pcbnew/widgets/appearance_controls.cpp:1795
 msgid "User defined layer 21"
-msgstr "Používateľská vrstva 21"
+msgstr "Používateľom definovaná vrstva 21"
 
 #: pcbnew/widgets/appearance_controls.cpp:1796
 msgid "User defined layer 22"
-msgstr "Používateľská vrstva 22"
+msgstr "Používateľom definovaná vrstva 22"
 
 #: pcbnew/widgets/appearance_controls.cpp:1797
 msgid "User defined layer 23"
-msgstr "Používateľská vrstva 23"
+msgstr "Používateľom definovaná vrstva 23"
 
 #: pcbnew/widgets/appearance_controls.cpp:1798
 msgid "User defined layer 24"
-msgstr "Používateľská vrstva 24"
+msgstr "Používateľom definovaná vrstva 24"
 
 #: pcbnew/widgets/appearance_controls.cpp:1799
 msgid "User defined layer 25"
-msgstr "Používateľská vrstva 25"
+msgstr "Používateľom definovaná vrstva 25"
 
 #: pcbnew/widgets/appearance_controls.cpp:1800
 msgid "User defined layer 26"
-msgstr "Používateľská vrstva 26"
+msgstr "Používateľom definovaná vrstva 26"
 
 #: pcbnew/widgets/appearance_controls.cpp:1801
 msgid "User defined layer 27"
-msgstr "Používateľská vrstva 27"
+msgstr "Používateľom definovaná vrstva 27"
 
 #: pcbnew/widgets/appearance_controls.cpp:1802
 msgid "User defined layer 28"
-msgstr "Používateľská vrstva 28"
+msgstr "Používateľom definovaná vrstva 28"
 
 #: pcbnew/widgets/appearance_controls.cpp:1803
 msgid "User defined layer 29"
-msgstr "Používateľská vrstva 29"
+msgstr "Používateľom definovaná vrstva 29"
 
 #: pcbnew/widgets/appearance_controls.cpp:1804
 msgid "User defined layer 30"
-msgstr "Používateľská vrstva 30"
+msgstr "Používateľom definovaná vrstva 30"
 
 #: pcbnew/widgets/appearance_controls.cpp:1805
 msgid "User defined layer 31"
-msgstr "Používateľská vrstva 31"
+msgstr "Používateľom definovaná vrstva 31"
 
 #: pcbnew/widgets/appearance_controls.cpp:1806
 msgid "User defined layer 32"
-msgstr "Používateľská vrstva 32"
+msgstr "Používateľom definovaná vrstva 32"
 
 #: pcbnew/widgets/appearance_controls.cpp:1807
 msgid "User defined layer 33"
-msgstr "Používateľská vrstva 33"
+msgstr "Používateľom definovaná vrstva 33"
 
 #: pcbnew/widgets/appearance_controls.cpp:1808
 msgid "User defined layer 34"
-msgstr "Používateľská vrstva 34"
+msgstr "Používateľom definovaná vrstva 34"
 
 #: pcbnew/widgets/appearance_controls.cpp:1809
 msgid "User defined layer 35"
-msgstr "Používateľská vrstva 35"
+msgstr "Používateľom definovaná vrstva 35"
 
 #: pcbnew/widgets/appearance_controls.cpp:1810
 msgid "User defined layer 36"
-msgstr "Používateľská vrstva 36"
+msgstr "Používateľom definovaná vrstva 36"
 
 #: pcbnew/widgets/appearance_controls.cpp:1811
 msgid "User defined layer 37"
-msgstr "Používateľská vrstva 37"
+msgstr "Používateľom definovaná vrstva 37"
 
 #: pcbnew/widgets/appearance_controls.cpp:1812
 msgid "User defined layer 38"
-msgstr "Používateľská vrstva 38"
+msgstr "Používateľom definovaná vrstva 38"
 
 #: pcbnew/widgets/appearance_controls.cpp:1813
 msgid "User defined layer 39"
-msgstr "Používateľská vrstva 39"
+msgstr "Používateľom definovaná vrstva 39"
 
 #: pcbnew/widgets/appearance_controls.cpp:1814
 msgid "User defined layer 40"
-msgstr "Používateľská vrstva 40"
+msgstr "Používateľom definovaná vrstva 40"
 
 #: pcbnew/widgets/appearance_controls.cpp:1815
 msgid "User defined layer 41"
-msgstr "Používateľská vrstva 41"
+msgstr "Používateľom definovaná vrstva 41"
 
 #: pcbnew/widgets/appearance_controls.cpp:1816
 msgid "User defined layer 42"
-msgstr "Používateľská vrstva 42"
+msgstr "Používateľom definovaná vrstva 42"
 
 #: pcbnew/widgets/appearance_controls.cpp:1817
 msgid "User defined layer 43"
-msgstr "Používateľská vrstva 43"
+msgstr "Používateľom definovaná vrstva 43"
 
 #: pcbnew/widgets/appearance_controls.cpp:1818
 msgid "User defined layer 44"
-msgstr "Používateľská vrstva 44"
+msgstr "Používateľom definovaná vrstva 44"
 
 #: pcbnew/widgets/appearance_controls.cpp:1819
 msgid "User defined layer 45"
-msgstr "Používateľská vrstva 45"
+msgstr "Používateľom definovaná vrstva 45"
 
 #: pcbnew/widgets/appearance_controls.cpp:1866
 msgid "Front copper layer"
