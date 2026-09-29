@@ -23,6 +23,7 @@
 #include <geometry/seg.h>
 #include <math/util.h>      // for rescale
 #include <math/vector2d.h>  // for VECTOR2I, VECTOR2
+#include <math/wide_int.h>
 #include <trigo.h>          // for RAD2DEG
 
 template <typename T>
@@ -737,13 +738,11 @@ SEG::ecoord SEG::SquaredDistance( const VECTOR2I& aP ) const
         return bp.Dot( bp );
     }
 
-    const double g = ap.SquaredEuclideanNorm() - ( double( e ) * e ) / f;
+    // Lagrange identity keeps the small result free of cancellation
+    const double cross = ToDouble( CrossWide( ab, ap ) );
+    const double g = cross * cross / double( f );
 
-    // The only way g can be negative is if there was a rounding error since
-    // e is the projection of aP onto ab and therefore cannot be greater than
-    // the length of ap and f is guaranteed to be greater than e, meaning
-    // e * e / f cannot be greater than ap.SquaredEuclideanNorm()
-    if( g < 0 || g > static_cast<double>( std::numeric_limits<ecoord>::max() ) )
+    if( !( g >= 0 ) || g > static_cast<double>( std::numeric_limits<ecoord>::max() ) )
         return 0;
 
     return KiROUND<double, ecoord>( g );

@@ -24,6 +24,9 @@
 
 #include <geometry/seg.h>
 
+#include <cmath>
+#include <random>
+
 namespace
 {
 
@@ -773,6 +776,49 @@ BOOST_AUTO_TEST_CASE( LineDistance )
 
     BOOST_TEST( seg.LineDistance( { 5, 0 } ) == 0 );
     BOOST_TEST( seg.LineDistance( { 5, 8 } ) == 8 );
+}
+
+BOOST_AUTO_TEST_CASE( SquaredDistanceLongSegmentNoCancellation )
+{
+    SEG          seg( { 0, 0 }, { 700000000, 700000001 } );
+    const VECTOR2I pt( 350001004, 350000992 );
+
+    // True distance is 8.84 nm, the old |ap|^2 - e^2/f form returned 0
+    BOOST_CHECK_LE( std::abs( seg.SquaredDistance( pt ) - 78 ), 1 );
+    BOOST_CHECK_EQUAL( seg.Distance( pt ), 8 );
+    BOOST_CHECK( !seg.Collide( SEG( pt, pt ), 0 ) );
+}
+
+BOOST_AUTO_TEST_CASE( SquaredDistanceLongSegmentRandom )
+{
+    std::mt19937                            rng( 12345 );
+    std::uniform_int_distribution<int64_t>  coord( -500000000, 500000000 );
+    std::uniform_int_distribution<int>      offs( -40, 40 );
+    std::uniform_real_distribution<double>  frac( 0.05, 0.95 );
+
+    for( int i = 0; i < 2000; ++i )
+    {
+        const VECTOR2I a( coord( rng ), coord( rng ) );
+        const VECTOR2I b( coord( rng ), coord( rng ) );
+        const double   t = frac( rng );
+        const VECTOR2I p( int( a.x + t * ( double( b.x ) - a.x ) ) + offs( rng ),
+                          int( a.y + t * ( double( b.y ) - a.y ) ) + offs( rng ) );
+
+        const long double abx = (long double) b.x - a.x;
+        const long double aby = (long double) b.y - a.y;
+        const long double apx = (long double) p.x - a.x;
+        const long double apy = (long double) p.y - a.y;
+        const long double e = apx * abx + apy * aby;
+        const long double f = abx * abx + aby * aby;
+
+        if( e <= 0 || e >= f )
+            continue;
+
+        const long double cr = abx * apy - aby * apx;
+        const long double expected = cr * cr / f;
+
+        BOOST_CHECK_LE( std::abs( (long double) SEG( a, b ).SquaredDistance( p ) - expected ), 1.0L );
+    }
 }
 
 BOOST_AUTO_TEST_CASE( LineDistanceSided )
