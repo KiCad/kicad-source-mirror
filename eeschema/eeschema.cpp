@@ -23,10 +23,12 @@
 
 #include <api/api_handler_sch.h>
 #include <api/api_handler_sch_libraries.h>
+#include <api/api_handler_symbol.h>
 #include <api/api_server.h>
 #include <api/api_utils.h>
 #include <api/cross_probe_client.h>
 #include <api/headless_sch_context.h>
+#include <api/headless_symbol_editor_context.h>
 #include <core/json_serializers.h>
 #include <pgm_base.h>
 #include <kiface_base.h>
@@ -470,7 +472,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                                 wxString* aError ) override;
 
     bool handleCreateSchematic( const wxString& aPath, KICAD_API_SERVER* aServer, wxString* aError );
-    bool HandleApiCloseDocument( const wxString& aSchFileName,
+    bool handleOpenSymbol( const wxString& aProjectPath, const wxString& aLibIdStr, KICAD_API_SERVER* aServer,
+                           wxString* aError );
+    bool HandleApiCloseDocument( const DOCUMENT_SPEC& aSpec,
                                  KICAD_API_SERVER* aServer,
                                  wxString* aError ) override;
 
@@ -488,11 +492,14 @@ private:
     std::atomic_bool                       m_libraryPreloadInProgress;
     std::atomic_bool                       m_libraryPreloadAbort;
 
-    void closeCurrentDocument( KICAD_API_SERVER* aServer );
+    void closeSchematic( KICAD_API_SERVER* aServer );
+    void closeSymbol( KICAD_API_SERVER* aServer );
 
     KIWAY*                                    m_kiway = nullptr;
     SCHEMATIC*                                m_openSchematic = nullptr;
     std::shared_ptr<HEADLESS_SCH_CONTEXT>     m_openContext;
+    std::shared_ptr<HEADLESS_SYMBOL_EDITOR_CONTEXT> m_openSymbolContext;
+    std::unique_ptr<API_HANDLER_SYMBOL>             m_openSymbolHandler;
     std::unique_ptr<API_HANDLER_SCH>          m_openHandler;
     std::unique_ptr<API_HANDLER_SCH_LIBRARIES> m_apiHandlerSchLibs;
 
@@ -882,7 +889,7 @@ bool IFACE::HandleJobConfig( JOB* aJob, wxWindow* aParent )
 
 
 // TODO(JE) some of the below methods can probably be factored out and shared between sch/pcb
-void IFACE::closeCurrentDocument( KICAD_API_SERVER* aServer )
+void IFACE::closeSchematic( KICAD_API_SERVER* aServer )
 {
     if( m_openHandler )
     {
@@ -903,6 +910,20 @@ void IFACE::closeCurrentDocument( KICAD_API_SERVER* aServer )
 }
 
 
+void IFACE::closeSymbol( KICAD_API_SERVER* aServer )
+{
+    if( m_openSymbolHandler )
+    {
+        if( aServer )
+            aServer->DeregisterHandler( m_openSymbolHandler.get() );
+
+        m_openSymbolHandler.reset();
+    }
+
+    m_openSymbolContext.reset();
+}
+
+
 bool IFACE::HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec,
                                    KICAD_API_SERVER* aServer, wxString* aError )
 {
@@ -910,6 +931,9 @@ bool IFACE::HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec,
 
     if( aSpec.kind == DOCUMENT_SPEC::KIND::CREATE_KIND )
         return handleCreateSchematic( aSpec.path, aServer, aError );
+
+    if( aSpec.kind == DOCUMENT_SPEC::KIND::LIBID_KIND )
+        return handleOpenSymbol( aSpec.path, aSpec.libId.GetUniStringLibId(), aServer, aError );
 
     if( aSpec.path.IsEmpty() )
     {
@@ -930,7 +954,7 @@ bool IFACE::HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec,
 
     // We currently only support one document per type (and each needs to come from
     // the same project).  This will need evolution once we support MDI and multi-project.
-    closeCurrentDocument( aServer );
+    closeSchematic( aServer );
 
     SETTINGS_MANAGER& settingsManager = Pgm().GetSettingsManager();
 
@@ -1022,7 +1046,7 @@ bool IFACE::handleCreateSchematic( const wxString& aPath, KICAD_API_SERVER* aSer
         }
     }
 
-    closeCurrentDocument( aServer );
+    closeSchematic( aServer );
 
     SETTINGS_MANAGER& settingsManager = Pgm().GetSettingsManager();
 
@@ -1067,24 +1091,131 @@ bool IFACE::handleCreateSchematic( const wxString& aPath, KICAD_API_SERVER* aSer
 }
 
 
-bool IFACE::HandleApiCloseDocument( const wxString& aSchFileName, KICAD_API_SERVER* aServer,
-                                    wxString* aError )
+bool IFACE::handleOpenSymbol( const wxString& aProjectPath, const wxString& aLibIdStr, KICAD_API_SERVER* aServer,
+                              wxString* aError )
 {
-    wxCHECK( aServer, false );
+    LIB_ID libId;
 
-    if( !m_openContext )
+    if( libId.Parse( aLibIdStr ) >= 0 )
     {
         if( aError )
-            *aError = wxS( "No document is currently open" );
+            *aError = wxString::Format( wxS( "Invalid symbol LIB_ID: %s" ), aLibIdStr );
 
         return false;
     }
 
-    if( !aSchFileName.IsEmpty() )
+    wxFileName projectPath( aProjectPath );
+    projectPath.MakeAbsolute();
+
+    SETTINGS_MANAGER& settingsManager = Pgm().GetSettingsManager();
+
+    if( !settingsManager.LoadProject( projectPath.GetFullPath(), true ) )
+    {
+        wxLogTrace( traceApi, "Warning: no project file found for %s", aProjectPath );
+    }
+
+    PROJECT* project = settingsManager.GetProject( projectPath.GetFullPath() );
+
+    if( !project )
+    {
+        if( aError )
+            *aError = wxString::Format( wxS( "Error loading project for %s" ), aProjectPath );
+
+        return false;
+    }
+
+    SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( project );
+    adapter->AsyncLoad();
+    adapter->BlockUntilLoaded();
+
+    std::unique_ptr<LIB_SYMBOL> symbol;
+
+    try
+    {
+        LIB_SYMBOL* loaded = adapter->LoadSymbol( libId );
+
+        if( !loaded )
+        {
+            if( aError )
+                *aError = wxString::Format( wxS( "Symbol not found: %s" ), aLibIdStr );
+
+            return false;
+        }
+
+        symbol = std::make_unique<LIB_SYMBOL>( *loaded );
+    }
+    catch( const IO_ERROR& err )
+    {
+        if( aError )
+            *aError = wxString::Format( wxS( "Failed to load symbol: %s" ), err.What() );
+
+        return false;
+    }
+    catch( ... )
+    {
+        if( aError )
+            *aError = wxS( "Failed to load symbol" );
+
+        return false;
+    }
+
+    closeSymbol( aServer );
+
+    if( !m_apiHandlerSchLibs )
+    {
+        m_apiHandlerSchLibs = std::make_unique<API_HANDLER_SCH_LIBRARIES>();
+        aServer->RegisterHandler( m_apiHandlerSchLibs.get() );
+    }
+
+    m_openSymbolContext = std::make_shared<HEADLESS_SYMBOL_EDITOR_CONTEXT>(
+            std::move( symbol ), libId, project, GetAppSettings<SYMBOL_EDITOR_SETTINGS>( "symbol_editor" ), m_kiway );
+
+    m_openSymbolHandler = std::make_unique<API_HANDLER_SYMBOL>( m_openSymbolContext, nullptr );
+    aServer->RegisterHandler( m_openSymbolHandler.get() );
+
+    return true;
+}
+
+
+bool IFACE::HandleApiCloseDocument( const DOCUMENT_SPEC& aSpec, KICAD_API_SERVER* aServer, wxString* aError )
+{
+    wxCHECK( aServer, false );
+
+    if( aSpec.kind == DOCUMENT_SPEC::KIND::LIBID_KIND )
+    {
+        if( !m_openSymbolContext )
+        {
+            if( aError )
+                *aError = wxS( "No symbol is currently open" );
+
+            return false;
+        }
+
+        if( aSpec.libId.IsValid() && m_openSymbolContext->GetLoadedLibId() != aSpec.libId )
+        {
+            if( aError )
+                *aError = wxS( "Requested document does not match the open document" );
+
+            return false;
+        }
+
+        closeSymbol( aServer );
+        return true;
+    }
+
+    if( !m_openContext )
+    {
+        if( aError )
+            *aError = wxS( "No schematic is currently open" );
+
+        return false;
+    }
+
+    if( !aSpec.path.IsEmpty() )
     {
         wxFileName currentSch( m_openContext->GetCurrentFileName() );
 
-        if( currentSch.GetFullName() != aSchFileName )
+        if( currentSch.GetFullName() != wxFileName( aSpec.path ).GetFullName() )
         {
             if( aError )
                 *aError = wxS( "Requested document does not match the open document" );
@@ -1093,7 +1224,7 @@ bool IFACE::HandleApiCloseDocument( const wxString& aSchFileName, KICAD_API_SERV
         }
     }
 
-    closeCurrentDocument( aServer );
+    closeSchematic( aServer );
     return true;
 }
 

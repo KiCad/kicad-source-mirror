@@ -20,6 +20,10 @@
  */
 
 #include <bitmaps.h>
+#include <api/api_handler_common.h>
+#include <api/api_handler_libraries.h>
+#include <api/api_handler_symbol.h>
+#include <api/api_server.h>
 #include <api/api_plugin_manager.h>
 #include <api/api_utils.h>
 #include <wx/hyperlink.h>
@@ -371,6 +375,18 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // in debug mode because the loading time of ecah library can be really noticeable
     SyncLibraries( true );
 
+    m_apiHandler = std::make_unique<API_HANDLER_SYMBOL>( this );
+    Pgm().GetApiServer().RegisterHandler( m_apiHandler.get() );
+
+    if( Kiface().IsSingle() )
+    {
+        m_apiHandlerCommon = std::make_unique<API_HANDLER_COMMON>();
+        Pgm().GetApiServer().RegisterHandler( m_apiHandlerCommon.get() );
+        m_apiLibrariesHandler = std::make_unique<API_HANDLER_LIBRARIES>(
+                LIBRARY_TABLE_TYPE::DESIGN_BLOCK );
+        Pgm().GetApiServer().RegisterHandler( m_apiLibrariesHandler.get() );
+    }
+
     // Must follow SyncLibraries so persisted tabs can resolve against the loaded libraries.
     restoreSymbolTabsFromSettings();
 }
@@ -378,6 +394,15 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
 {
+    // Ensure that teardowns without doCloseWindow() are fully unregistered
+    Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
+
+    if( Kiface().IsSingle() )
+    {
+        Pgm().GetApiServer().DeregisterHandler( m_apiHandlerCommon.get() );
+        Pgm().GetApiServer().DeregisterHandler( m_apiLibrariesHandler.get() );
+    }
+
     // Hand the borrowed canvas back before the base destructor frees it, else the panel reparents
     // freed memory on its own teardown.
     if( m_tabsPanel )
@@ -838,6 +863,17 @@ bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 void SYMBOL_EDIT_FRAME::doCloseWindow()
 {
     SCH_BASE_FRAME::doCloseWindow();
+
+    if( Pgm().ApiServerOrNull() )
+    {
+        Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
+
+        if( Kiface().IsSingle() )
+        {
+            Pgm().GetApiServer().DeregisterHandler( m_apiHandlerCommon.get() );
+            Pgm().GetApiServer().DeregisterHandler( m_apiLibrariesHandler.get() );
+        }
+    }
 
     wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
                       &SYMBOL_EDIT_FRAME::onPluginAvailabilityChanged, this );

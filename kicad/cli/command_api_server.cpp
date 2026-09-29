@@ -100,7 +100,26 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
     {
         types::DocumentType type;
         wxString            fileName;
+        wxString            specPath; ///< Full path sent to the face for file-backed documents
         LIB_ID              libId;
+
+        KIFACE::DOCUMENT_SPEC Spec() const
+        {
+            KIFACE::DOCUMENT_SPEC spec;
+
+            if( type == types::DOCTYPE_FOOTPRINT || type == types::DOCTYPE_SYMBOL )
+            {
+                spec.kind = KIFACE::DOCUMENT_SPEC::KIND::LIBID_KIND;
+                spec.libId = libId;
+            }
+            else
+            {
+                spec.kind = KIFACE::DOCUMENT_SPEC::KIND::FILE_KIND;
+                spec.path = specPath.IsEmpty() ? fileName : specPath;
+            }
+
+            return spec;
+        }
     };
 
     std::vector<OPEN_DOCUMENT> openDocuments;
@@ -110,6 +129,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
         switch( aType )
         {
         case types::DOCTYPE_SCHEMATIC:  return KIWAY::FACE_SCH;
+        case types::DOCTYPE_SYMBOL:     return KIWAY::FACE_SCH;
         case types::DOCTYPE_PCB:        return KIWAY::FACE_PCB;
         case types::DOCTYPE_FOOTPRINT:  return KIWAY::FACE_PCB;
         default:                        return KIWAY::KIWAY_FACE_COUNT;
@@ -126,7 +146,15 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
                 continue;
 
             wxString error;
-            aKiway.ProcessApiCloseDocument( faceForDocument( doc.type ), doc.fileName, server.get(), &error );
+
+            if( !aKiway.ProcessApiCloseDocument( faceForDocument( doc.type ), doc.Spec(), server.get(), &error ) )
+            {
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
+                e.set_error_message(
+                        wxString::Format( wxS( "Failed to close %s: %s" ), doc.fileName, error ).ToStdString() );
+                return tl::unexpected( e );
+            }
         }
 
         openDocuments.clear();
@@ -148,11 +176,12 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
         types::DocumentType requestType = aRequest.type();
 
         if( requestType != types::DOCTYPE_PCB && requestType != types::DOCTYPE_SCHEMATIC
-            && requestType != types::DOCTYPE_PROJECT && requestType != types::DOCTYPE_FOOTPRINT )
+            && requestType != types::DOCTYPE_PROJECT && requestType != types::DOCTYPE_FOOTPRINT
+            && requestType != types::DOCTYPE_SYMBOL )
         {
             ApiResponseStatus e;
             e.set_status( ApiStatusCode::AS_UNIMPLEMENTED );
-            e.set_error_message( "Only PCB, schematic, footprint, and project document types are supported" );
+            e.set_error_message( "Only PCB, schematic, footprint, symbol, and project document types are supported" );
             return tl::unexpected( e );
         }
 
@@ -180,7 +209,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
             }
 
             KIFACE::DOCUMENT_SPEC spec;
-            spec.kind = KIFACE::DOCUMENT_SPEC::KIND::FPID_KIND;
+            spec.kind = KIFACE::DOCUMENT_SPEC::KIND::LIBID_KIND;
             spec.libId = fpid;
 
             if( openProjectPath )
@@ -206,6 +235,48 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
             docSpec->set_type( requestType );
             docSpec->mutable_lib_id()->set_library_nickname( fpid.GetUniStringLibNickname() );
             docSpec->mutable_lib_id()->set_entry_name( fpid.GetUniStringLibItemName() );
+
+            return response;
+        }
+        if( requestType == types::DOCTYPE_SYMBOL )
+        {
+            LIB_ID libId;
+
+            if( libId.Parse( inputPath ) >= 0 )
+            {
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                e.set_error_message( wxString::Format( wxS( "Invalid symbol LIB_ID: %s" ), inputPath ).ToStdString() );
+                return tl::unexpected( e );
+            }
+
+            KIFACE::DOCUMENT_SPEC spec;
+            spec.kind = KIFACE::DOCUMENT_SPEC::KIND::LIBID_KIND;
+            spec.libId = libId;
+
+            if( openProjectPath )
+                spec.path = openProjectPath->GetFullPath();
+
+            wxString error;
+
+            if( !aKiway.ProcessApiOpenDocument( KIWAY::FACE_SCH, spec, server.get(), &error ) )
+            {
+                ApiResponseStatus e;
+                e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+                e.set_error_message( error.ToStdString() );
+                return tl::unexpected( e );
+            }
+
+            OPEN_DOCUMENT doc;
+            doc.type = requestType;
+            doc.libId = libId;
+            openDocuments.push_back( doc );
+
+            commands::OpenDocumentResponse response;
+            types::DocumentSpecifier*      docSpec = response.mutable_document();
+            docSpec->set_type( requestType );
+            docSpec->mutable_lib_id()->set_library_nickname( libId.GetUniStringLibNickname() );
+            docSpec->mutable_lib_id()->set_entry_name( libId.GetUniStringLibItemName() );
 
             return response;
         }
@@ -324,6 +395,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
         OPEN_DOCUMENT doc;
         doc.type = requestType;
         doc.fileName = docFile.GetFullName();
+        doc.specPath = docFile.GetFullPath();
         openDocuments.push_back( doc );
 
         openProjectPath = projectPath;
@@ -395,6 +467,7 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
         OPEN_DOCUMENT doc;
         doc.type = requestType;
         doc.fileName = docPath.GetFullName();
+        doc.specPath = docPath.GetFullPath();
 
         openDocuments.push_back( doc );
 
@@ -463,20 +536,21 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
                 return tl::unexpected( e );
             }
 
-            if( typeToClose == types::DOCTYPE_FOOTPRINT && aRequest.document().has_lib_id() )
+            if( ( typeToClose == types::DOCTYPE_FOOTPRINT || typeToClose == types::DOCTYPE_SYMBOL )
+                && aRequest.document().has_lib_id() )
             {
-                LIB_ID fpid = UnpackLibId( aRequest.document().lib_id() );
+                LIB_ID docId = UnpackLibId( aRequest.document().lib_id() );
 
-                if( !fpid.IsValid() )
+                if( !docId.IsValid() )
                 {
                     ApiResponseStatus e;
                     e.set_status( ApiStatusCode::AS_BAD_REQUEST );
-                    e.set_error_message( wxString::Format( wxS( "Invalid footprint LIB_ID: %s" ),
-                                                           fpid.GetUniStringLibId() ).ToStdString() );
+                    e.set_error_message( wxString::Format( wxS( "Invalid library item LIB_ID: %s" ),
+                                                           docId.GetUniStringLibId() ).ToStdString() );
                     return tl::unexpected( e );
                 }
 
-                if( it->libId != fpid )
+                if( it->libId != docId )
                 {
                     ApiResponseStatus e;
                     e.set_status( ApiStatusCode::AS_BAD_REQUEST );
@@ -499,7 +573,8 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
         {
             wxString error;
 
-            if( !aKiway.ProcessApiCloseDocument( faceForDocument( it->type ), it->fileName, server.get(), &error ) )
+            if( !aKiway.ProcessApiCloseDocument( faceForDocument( it->type ), it->Spec(),
+                                                 server.get(), &error ) )
             {
                 ApiResponseStatus e;
                 e.set_status( ApiStatusCode::AS_BAD_REQUEST );

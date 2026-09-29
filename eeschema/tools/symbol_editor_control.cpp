@@ -442,7 +442,10 @@ int SYMBOL_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvt )
 int SYMBOL_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
-        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->Revert();
+    {
+        LIB_ID libId = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetTargetLibId();
+        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->Revert( libId );
+    }
 
     return 0;
 }

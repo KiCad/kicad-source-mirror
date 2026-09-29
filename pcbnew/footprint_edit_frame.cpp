@@ -425,6 +425,14 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 FOOTPRINT_EDIT_FRAME::~FOOTPRINT_EDIT_FRAME()
 {
+    Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
+
+    if( Kiface().IsSingle() )
+    {
+        Pgm().GetApiServer().DeregisterHandler( m_apiHandlerCommon.get() );
+        Pgm().GetApiServer().DeregisterHandler( m_apiHandlerFpLibs.get() );
+    }
+
     // Hand the borrowed canvas back before the base destructor deletes it, or the later-destroyed
     // panel would reparent already-freed memory. The canvas then frees exactly once.
     m_tabsPanel->ReleaseSharedCanvas();

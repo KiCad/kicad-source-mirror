@@ -679,7 +679,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
                                 KICAD_API_SERVER* aServer,
                                 wxString* aError ) override;
 
-    bool HandleApiCloseDocument( const wxString& aBoardFileName,
+    bool HandleApiCloseDocument( const DOCUMENT_SPEC& aSpec,
                                  KICAD_API_SERVER* aServer,
                                  wxString* aError ) override;
 
@@ -704,7 +704,8 @@ private:
     std::atomic_bool                     m_libraryPreloadInProgress;
     std::atomic_bool                     m_libraryPreloadAbort;
 
-    void closeCurrentDocument( KICAD_API_SERVER* aServer );
+    void closeBoard( KICAD_API_SERVER* aServer );
+    void closeFootprint( KICAD_API_SERVER* aServer );
 
     KIWAY* m_kiway = nullptr;
     std::shared_ptr<HEADLESS_PCB_CONTEXT>       m_openContext;
@@ -957,7 +958,7 @@ bool IFACE::HandleJobConfig( JOB* aJob, wxWindow* aParent )
 }
 
 
-void IFACE::closeCurrentDocument( KICAD_API_SERVER* aServer )
+void IFACE::closeBoard( KICAD_API_SERVER* aServer )
 {
     if( m_openHandler )
     {
@@ -972,7 +973,11 @@ void IFACE::closeCurrentDocument( KICAD_API_SERVER* aServer )
     // The jobs handler caches the last-loaded board. Clear it so the next job
     // uses the board from the newly opened document rather than a stale copy.
     m_jobHandler->ClearCachedBoard();
+}
 
+
+void IFACE::closeFootprint( KICAD_API_SERVER* aServer )
+{
     if( m_openFpHandler )
     {
         if( aServer )
@@ -989,7 +994,7 @@ bool IFACE::HandleApiOpenDocument( const DOCUMENT_SPEC& aSpec, KICAD_API_SERVER*
 {
     wxCHECK( aServer, false );
 
-    if( aSpec.kind == DOCUMENT_SPEC::KIND::FPID_KIND )
+    if( aSpec.kind == DOCUMENT_SPEC::KIND::LIBID_KIND )
         return handleOpenFootprint( aSpec.path, aSpec.libId.GetUniStringLibId(), aServer, aError );
 
     if( aSpec.kind == DOCUMENT_SPEC::KIND::CREATE_KIND )
@@ -1068,7 +1073,7 @@ bool IFACE::handleOpenFootprint( const wxString& aProjectPath, const wxString& a
         return false;
     }
 
-    closeCurrentDocument( aServer );
+    closeFootprint( aServer );
 
     if( !m_apiHandlerFpLibs )
     {
@@ -1098,7 +1103,7 @@ bool IFACE::handleOpenPcb( const wxString& aPath, KICAD_API_SERVER* aServer, wxS
 
     // We currently only support one document per type (and each needs to come from
     // the same project).  This will need evolution once we support MDI and multi-project.
-    closeCurrentDocument( aServer );
+    closeBoard( aServer );
 
     SETTINGS_MANAGER& settingsManager = Pgm().GetSettingsManager();
 
@@ -1206,7 +1211,7 @@ bool IFACE::handleCreatePcb( const wxString& aPath, KICAD_API_SERVER* aServer, w
         return false;
     }
 
-    closeCurrentDocument( aServer );
+    closeBoard( aServer );
 
     SETTINGS_MANAGER& settingsManager = Pgm().GetSettingsManager();
 
@@ -1268,23 +1273,45 @@ bool IFACE::handleCreatePcb( const wxString& aPath, KICAD_API_SERVER* aServer, w
 }
 
 
-bool IFACE::HandleApiCloseDocument( const wxString& aFileName, KICAD_API_SERVER* aServer, wxString* aError )
+bool IFACE::HandleApiCloseDocument( const DOCUMENT_SPEC& aSpec, KICAD_API_SERVER* aServer, wxString* aError )
 {
     wxCHECK( aServer, false );
 
-    if( !m_openContext && !m_openFpContext )
+    if( aSpec.kind == DOCUMENT_SPEC::KIND::LIBID_KIND )
+    {
+        if( !m_openFpContext )
+        {
+            if( aError )
+                *aError = wxS( "No footprint is currently open" );
+
+            return false;
+        }
+
+        if( aSpec.libId.IsValid() && m_openFpContext->GetLoadedFPID() != aSpec.libId )
+        {
+            if( aError )
+                *aError = wxS( "Requested document does not match the open document" );
+
+            return false;
+        }
+
+        closeFootprint( aServer );
+        return true;
+    }
+
+    if( !m_openContext )
     {
         if( aError )
-            *aError = wxS( "No document is currently open" );
+            *aError = wxS( "No board is currently open" );
 
         return false;
     }
 
-    if( !aFileName.IsEmpty() && m_openContext )
+    if( !aSpec.path.IsEmpty() )
     {
         wxFileName currentBoard( m_openContext->GetCurrentFileName() );
 
-        if( currentBoard.GetFullName() != aFileName )
+        if( currentBoard.GetFullName() != wxFileName( aSpec.path ).GetFullName() )
         {
             if( aError )
                 *aError = wxS( "Requested document does not match the open document" );
@@ -1293,7 +1320,7 @@ bool IFACE::HandleApiCloseDocument( const wxString& aFileName, KICAD_API_SERVER*
         }
     }
 
-    closeCurrentDocument( aServer );
+    closeBoard( aServer );
     return true;
 }
 

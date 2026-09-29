@@ -1404,13 +1404,12 @@ void SYMBOL_EDIT_FRAME::ensureUniqueName( LIB_SYMBOL* aSymbol, const wxString& a
 }
 
 
-void SYMBOL_EDIT_FRAME::Revert( bool aConfirm )
+void SYMBOL_EDIT_FRAME::Revert( LIB_ID& aTarget, bool aConfirm )
 {
-    LIB_ID libId = GetTargetLibId();
-    const wxString& libName = libId.GetLibNickname();
+    const wxString& libName = aTarget.GetLibNickname();
 
     // Empty if this is the library itself that is selected.
-    const wxString& symbolName = libId.GetLibItemName();
+    const wxString& symbolName = aTarget.GetLibItemName();
 
     wxString msg = wxString::Format( _( "Revert '%s' to last version saved?" ),
                                      symbolName.IsEmpty() ? libName : symbolName );
@@ -1435,7 +1434,7 @@ void SYMBOL_EDIT_FRAME::Revert( bool aConfirm )
         }
         else
         {
-            reload_currentSymbol = IsCurrentSymbol( libId );
+            reload_currentSymbol = IsCurrentSymbol( aTarget );
         }
     }
 
@@ -1450,10 +1449,10 @@ void SYMBOL_EDIT_FRAME::Revert( bool aConfirm )
     }
     else
     {
-        libId = m_libMgr->RevertSymbol( libId );
+        aTarget = m_libMgr->RevertSymbol( aTarget );
 
-        m_treePane->GetLibTree()->SelectLibId( libId );
-        m_libMgr->ClearSymbolModified( libId.GetLibItemName(), libId.GetLibNickname() );
+        m_treePane->GetLibTree()->SelectLibId( aTarget );
+        m_libMgr->ClearSymbolModified( aTarget.GetLibItemName(), aTarget.GetLibNickname() );
     }
 
     if( reload_currentSymbol && m_libMgr->SymbolExists( curr_symbolName, libName ) )
@@ -1467,7 +1466,8 @@ void SYMBOL_EDIT_FRAME::RevertAll()
 {
     wxCHECK_RET( m_libMgr, "Library manager object not created." );
 
-    Revert( false );
+    LIB_ID target = GetTargetLibId();
+    Revert( target, false );
     m_libMgr->RevertAll();
 }
 
@@ -1707,6 +1707,12 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, SAVE_LIBRARY_AS a
     RebuildSymbolUnitAndBodyStyleLists();
 
     return true;
+}
+
+
+bool SYMBOL_EDIT_FRAME::SaveLibraryHeadless( const wxString& aLibrary )
+{
+    return saveLibrary( aLibrary, SAVE_LIBRARY_AS::ORIGINAL );
 }
 
 

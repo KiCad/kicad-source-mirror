@@ -43,6 +43,9 @@ class EDITOR_TABS_PANEL;
 class EDITOR_TABS_MODEL;
 class EDA_LIST_DIALOG;
 class UNDO_REDO_CONTAINER;
+class API_HANDLER_COMMON;
+class API_HANDLER_LIBRARIES;
+class API_HANDLER_SYMBOL;
 
 
 #define UNITS_ALL _HKI( "ALL" )
@@ -214,9 +217,16 @@ public:
     void SaveAll();
 
     /**
-     * Revert unsaved changes in a symbol, restoring to the last saved state.
+     * Save the given library (including buffered changes) without user interaction.
+     * Used by the API handler; returns false if the library is read-only or the save fails.
      */
-    void Revert( bool aConfirm = true );
+    bool SaveLibraryHeadless( const wxString& aLibrary );
+
+    /**
+     * Revert unsaved changes in a symbol, restoring to the last saved state.
+     * Can modify aTarget if the unsaved changes include a change in symbol name.
+     */
+    void Revert( LIB_ID& aTarget, bool aConfirm = true );
     void RevertAll();
 
     void DeleteSymbolFromLibrary();
@@ -775,6 +785,10 @@ private:
     // accumulated while the app was busy).  Without this guard, opening the symbol library
     // table dialog from within an active SyncLibraries call corrupts the library tree.
     bool        m_syncLibrariesInProgress;
+
+    std::unique_ptr<API_HANDLER_SYMBOL>    m_apiHandler;
+    std::unique_ptr<API_HANDLER_COMMON>    m_apiHandlerCommon;
+    std::unique_ptr<API_HANDLER_LIBRARIES> m_apiLibrariesHandler;
 };
 
 #endif  // SYMBOL_EDIT_FRAME_H

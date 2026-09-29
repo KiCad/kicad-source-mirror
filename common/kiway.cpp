@@ -770,8 +770,8 @@ bool KIWAY::ProcessApiOpenDocument( KIWAY::FACE_T aFace, const KIFACE::DOCUMENT_
 }
 
 
-bool KIWAY::ProcessApiCloseDocument( KIWAY::FACE_T aFace, const wxString& aPath, KICAD_API_SERVER* aServer,
-                                     wxString* aError )
+bool KIWAY::ProcessApiCloseDocument( KIWAY::FACE_T aFace, const KIFACE::DOCUMENT_SPEC& aSpec,
+                                     KICAD_API_SERVER* aServer, wxString* aError )
 {
     KIFACE* kiface = KiFACE( aFace );
 
@@ -783,7 +783,7 @@ bool KIWAY::ProcessApiCloseDocument( KIWAY::FACE_T aFace, const wxString& aPath,
         return false;
     }
 
-    return kiface->HandleApiCloseDocument( aPath, aServer, aError );
+    return kiface->HandleApiCloseDocument( aSpec, aServer, aError );
 }
 
 
