@@ -180,15 +180,6 @@ protected:
                           RENDER_SETTINGS* aRenderSettings, const SCH_PLOT_OPTS& aPlotOpts );
 
     /**
-     * Everything done, close the plot and restore the environment.
-     *
-     * @param aPlotter the plotter to close and destroy (can be null if no current active plotter)
-     * @param aOldsheetpath the stored old sheet path for the current sheet before the plot started
-     */
-    void restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH& aOldsheetpath );
-
-
-    /**
      * Create a file name with an absolute path name.
      *
      * @param aPlotOpts The configuration for the plotting operation
