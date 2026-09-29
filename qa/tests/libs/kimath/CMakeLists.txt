@@ -67,6 +67,7 @@ set( QA_KIMATH_SRCS
     math/test_vector2.cpp
     math/test_vector3.cpp
     math/test_util.cpp
+    math/test_wide_int.cpp
 )
 
 if( WIN32 )

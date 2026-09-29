@@ -29,6 +29,7 @@
 #include <cstdint>
 
 #include <math/vector2d.h>
+#include <math/wide_int.h>
 
 namespace KIGEOM
 {
@@ -42,14 +43,9 @@ inline int OrientationSign( const VECTOR2I& a, const VECTOR2I& b, const VECTOR2I
     int64_t acX = static_cast<int64_t>( c.x ) - a.x;
     int64_t acY = static_cast<int64_t>( c.y ) - a.y;
 
-#if defined( __SIZEOF_INT128__ )
-    __int128 cross = static_cast<__int128>( abX ) * acY - static_cast<__int128>( abY ) * acX;
-#else
-    double cross = static_cast<double>( abX ) * static_cast<double>( acY )
-                   - static_cast<double>( abY ) * static_cast<double>( acX );
-#endif
+    const KI_INT128 cross = CrossWide( VECTOR2L( abX, abY ), VECTOR2L( acX, acY ) );
 
-    return cross > 0 ? 1 : ( cross < 0 ? -1 : 0 );
+    return cross > KI_INT128( 0 ) ? 1 : ( cross < KI_INT128( 0 ) ? -1 : 0 );
 }
 
 
@@ -82,7 +78,6 @@ inline bool inCircleLegalDouble( const VECTOR2I& a, const VECTOR2I& b, const VEC
 inline bool InCircleDelaunayLegal( const VECTOR2I& a, const VECTOR2I& b, const VECTOR2I& c,
                                    const VECTOR2I& p )
 {
-#if defined( __SIZEOF_INT128__ )
     // Widen before subtracting; an int32 difference overflows past ~2.1e9 nm.
     int64_t paX = static_cast<int64_t>( a.x ) - p.x, paY = static_cast<int64_t>( a.y ) - p.y;
     int64_t pbX = static_cast<int64_t>( b.x ) - p.x, pbY = static_cast<int64_t>( b.y ) - p.y;
@@ -98,18 +93,16 @@ inline bool InCircleDelaunayLegal( const VECTOR2I& a, const VECTOR2I& b, const V
         return detail::inCircleLegalDouble( a, b, c, p );
     }
 
-    __int128 paSq = static_cast<__int128>( paX ) * paX + static_cast<__int128>( paY ) * paY;
-    __int128 pbSq = static_cast<__int128>( pbX ) * pbX + static_cast<__int128>( pbY ) * pbY;
-    __int128 pcSq = static_cast<__int128>( pcX ) * pcX + static_cast<__int128>( pcY ) * pcY;
+    const KI_INT128 paX128( paX ), paY128( paY ), pbX128( pbX ), pbY128( pbY ), pcX128( pcX ), pcY128( pcY );
 
-    __int128 det = static_cast<__int128>( paX ) * ( pbY * pcSq - pbSq * pcY )
-                   - static_cast<__int128>( paY ) * ( pbX * pcSq - pbSq * pcX )
-                   + paSq * ( static_cast<__int128>( pbX ) * pcY - static_cast<__int128>( pbY ) * pcX );
+    const KI_INT128 paSq = paX128 * paX128 + paY128 * paY128;
+    const KI_INT128 pbSq = pbX128 * pbX128 + pbY128 * pbY128;
+    const KI_INT128 pcSq = pcX128 * pcX128 + pcY128 * pcY128;
 
-    return det <= 0;
-#else
-    return detail::inCircleLegalDouble( a, b, c, p );
-#endif
+    const KI_INT128 det = paX128 * ( pbY128 * pcSq - pbSq * pcY128 ) - paY128 * ( pbX128 * pcSq - pbSq * pcX128 )
+                          + paSq * ( pbX128 * pcY128 - pbY128 * pcX128 );
+
+    return det <= KI_INT128( 0 );
 }
 
 
