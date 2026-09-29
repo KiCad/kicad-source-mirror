@@ -228,8 +228,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( isNonKicadImport )
     {
         progressReporter.Hide();
-        importFile( fullFileName, schFileType, nullptr );
-        return true;
+        return importFile( fullFileName, schFileType, nullptr );
     }
 
     if( schFileType == SCH_IO_MGR::SCH_LEGACY )
@@ -1475,6 +1474,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
 bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                                  const std::map<std::string, UTF8>* aProperties )
 {
+    bool                   success = true;
     wxFileName             filename( aFileName );
     wxFileName             newfilename;
     SCH_IO_MGR::SCH_FILE_T fileType = (SCH_IO_MGR::SCH_FILE_T) aFileType;
@@ -1569,6 +1569,9 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                 {
                     errorReporter.m_Reporter->Flush(); // Build HTML messages
                     errorReporter.ShowModal();
+
+                    // These are not catastrophic errors: leave success set to true so the caller
+                    // doesn't destroy the frame.
                 }
 
                 const wxString drawingSheetName = Schematic().Settings().m_SchDrawingSheetFileName;
@@ -1632,6 +1635,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 
             msg.Printf( _( "Failed to load '%s'." ), aFileName );
             SetMsgPanel( wxEmptyString, msg );
+
+            success = false;
         }
         catch( const std::exception& exc )
         {
@@ -1643,6 +1648,8 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
 
             msg.Printf( _( "Failed to load '%s'." ), aFileName );
             SetMsgPanel( wxEmptyString, msg );
+
+            success = false;
         }
 
         ClearUndoRedoList();
@@ -1692,7 +1699,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
         break;
     }
 
-    return true;
+    return success;
 }
 
 
