@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-29 19:51+0000\n"
+"PO-Revision-Date: 2026-09-30 08:29+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
@@ -47694,16 +47694,14 @@ msgstr "Koncová vrstva:"
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:51
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:69
 #: pcbnew/generators/pcb_via_stack.cpp:1561
-#, fuzzy
 msgid "Stacked"
-msgstr "Štruktúra dosky"
+msgstr "Súosé"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:51
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:69
 #: pcbnew/generators/pcb_via_stack.cpp:1562
-#, fuzzy
 msgid "Staggered"
-msgstr "Krokovanie:"
+msgstr "Posunuté"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:60
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:310
@@ -47718,15 +47716,13 @@ msgid "Via hole:"
 msgstr "Otvor prekovov:"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:82
-#, fuzzy
 msgid "Use netclass values"
-msgstr "Použiť Netclass hodnoty"
+msgstr "Použiť hodnoty triedy spojov"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:91
 #: pcbnew/generators/pcb_via_stack.cpp:1632
-#, fuzzy
 msgid "Copper-filled"
-msgstr "Meď"
+msgstr "Vyplnené meďou"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:94
 #: pcbnew/generators/pcb_via_stack.cpp:1637 pcbnew/pcb_track.cpp:3258
@@ -47741,9 +47737,8 @@ msgstr "Rozstup:"
 #: pcbnew/dialogs/dialog_microvia_stack_base.h:64
 #: pcbnew/generators/pcb_via_stack.cpp:75 pcbnew/generators/pcb_via_stack.h:62
 #: pcbnew/generators/pcb_via_stack.h:65
-#, fuzzy
 msgid "Microvia Stack"
-msgstr "Mikroprekovy"
+msgstr "Skladba mikroprekovu"
 
 #: pcbnew/dialogs/dialog_migrate_3d_models.cpp:434
 msgid "Auto-migrate 3D model references"
@@ -48458,9 +48453,8 @@ msgid "Oblong"
 msgstr "Oválny"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:470
-#, fuzzy
 msgid "Show hole size calculator"
-msgstr "Ukážte inšpektora siete"
+msgstr "Zobraziť kalkulačku veľkosti otvoru"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:492
 msgid "Specify pad to die length"
@@ -48591,11 +48585,8 @@ msgid "Press-fit (round TH only)"
 msgstr "Zalisovanie (iba okrúhle TH)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:632
-#, fuzzy
 msgid "Simulation electrical type:"
-msgstr ""
-"Elektrický typ\n"
-"simulácie:"
+msgstr "Elektrický typ simulácie:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:639 pcbnew/pad.cpp:3830
 msgid "Sink"
@@ -48741,7 +48732,6 @@ msgid "Back:"
 msgstr "Zadné:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1208
-#, fuzzy
 msgid "Backdrilling"
 msgstr "Spätné vŕtanie"
 
@@ -48751,9 +48741,8 @@ msgstr "Hore aj dole"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1224
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1259
-#, fuzzy
 msgid "Must-cut layer:"
-msgstr "Počiatočná vrstva:"
+msgstr "Vrstva, ktorú treba prerezať:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1226
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1231
@@ -49309,9 +49298,8 @@ msgid "Suggest track finish"
 msgstr "Navrhnúť ukončenie spoja"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:117
-#, fuzzy
 msgid "Dragging"
-msgstr "Ťahať"
+msgstr "Ťahanie"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:122
 msgid "Smooth dragged segments"
@@ -49340,9 +49328,8 @@ msgstr ""
 "optimalizovaná bude iba oblasť v blízkosti ťahaného segmentu."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:132
-#, fuzzy
 msgid "Avoid sharp angles"
-msgstr "Pridajte obdĺžnik"
+msgstr "Vyhnúť sa ostrým uhlom"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:133
 msgid ""
@@ -49746,9 +49733,8 @@ msgid "Radius must be greater than 0"
 msgstr "Polomer musí byť väčší ako 0"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:483
-#, fuzzy
 msgid "Arc must have at least 2 distinct points"
-msgstr "Oblúk musí mať 3 rôzne body"
+msgstr "Oblúk musí mať aspoň 2 odlišné body"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:497
 #, c-format
@@ -49757,15 +49743,13 @@ msgstr "Neplatný oblúk s polomerom %f a uhlom %f."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:740
 #: pcbnew/dialogs/dialog_shape_properties.cpp:818
-#, fuzzy
 msgid "Major radius must be greater than 0"
-msgstr "Polomer musí byť väčší ako 0"
+msgstr "Hlavný polomer musí byť väčší ako 0"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:746
 #: pcbnew/dialogs/dialog_shape_properties.cpp:824
-#, fuzzy
 msgid "Minor radius must be greater than 0"
-msgstr "Polomer musí byť väčší ako 0"
+msgstr "Vedľajší polomer musí byť väčší ako 0"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1198
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1213
@@ -49819,9 +49803,8 @@ msgid "Line width must be greater than zero for an unfilled curve."
 msgstr "Šírka čiary musí byť väčšia ako nula pre nevyplnenú krivku."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1666
-#, fuzzy
 msgid "Line width must be greater than zero for an unfilled ellipse."
-msgstr "Šírka čiary musí byť väčšia ako nula pre nevyplnený kruh."
+msgstr "Šírka čiary musí byť väčšia ako nula pre nevyplnenú elipsu."
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1683
 msgid "Error List"
@@ -49848,9 +49831,8 @@ msgid "By Start/Mid/End"
 msgstr "Podľa začiatku/stredu/konca"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:165
-#, fuzzy
 msgid "By Center/Radius/Angles"
-msgstr "Podľa stredu/polomeru"
+msgstr "Podľa stredu/polomeru/uhlov"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:181
 msgid "By Center/Radius"
@@ -50290,9 +50272,8 @@ msgid "Via Stitching Properties"
 msgstr "Vlastnosti prešitia prekovmi"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:39
-#, fuzzy
 msgid "Stitch Net:"
-msgstr "Prešiť"
+msgstr "Prešiť spoj:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:75
 msgid "Normal Grid"
@@ -50311,19 +50292,16 @@ msgid "Seed:"
 msgstr "Počiatočná hodnota:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:98
-#, fuzzy
 msgid "Via Properties:"
-msgstr "Vlastnosti prekovu"
+msgstr "Vlastnosti prekovu:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:102
-#, fuzzy
 msgid "Configure"
-msgstr "Konfigurovať cesty..."
+msgstr "Konfigurovať"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:105
-#, fuzzy
 msgid "Mode:"
-msgstr "Režim"
+msgstr "Režim:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:110
 #: pcbnew/generators/pcb_via_stitch.cpp:1735
@@ -50333,12 +50311,11 @@ msgstr "Prešiť"
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:111
 #: pcbnew/generators/pcb_via_stitch.cpp:1736
 msgid "Guard"
-msgstr "Ochranná zóna"
+msgstr "Ochrániť"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:114
-#, fuzzy
 msgid "Guard Net:"
-msgstr "Pridať text"
+msgstr "Chránený spoj:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.h:85
 msgid "Via Stitch Properties"
@@ -50795,9 +50772,8 @@ msgid "Unable to open file"
 msgstr "Nepodarilo sa otvoriť súbor"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1039
-#, fuzzy
 msgid "Overall height is not a valid number."
-msgstr "Hodnota %s musí byť platné číslo."
+msgstr "Celková výška nie je platné číslo."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1045
 msgid "Standoff height is not a valid number."
@@ -51313,48 +51289,40 @@ msgstr ""
 "nastavená presnosť pri zobrazovaní ďalších číslic"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:23
-#, fuzzy
 msgid "Group holes by:"
-msgstr "Zoskupiť podľa:"
+msgstr "Zoskupiť otvory podľa:"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
-#, fuzzy
 msgid "Hole size"
 msgstr "Veľkosť otvoru"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
-#, fuzzy
 msgid "Slot shape"
-msgstr "Importovaný tvar"
+msgstr "Tvar drážky"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
-#, fuzzy
 msgid "Drill operation"
-msgstr "Generovanie súborov vŕtania"
+msgstr "Operácia vŕtačky"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
-#, fuzzy
 msgid "Hole function"
-msgstr "Umiestniť spojovacie body"
+msgstr "Funkcia otvoru"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
-#, fuzzy
 msgid "IPC-4761 protection"
-msgstr "Projekcia"
+msgstr "Ochrana podľa IPC-4761"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27 pcbnew/pcb_track.cpp:3556
 msgid "Post-machining"
 msgstr "Dodatočné obrábanie"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:43
-#, fuzzy
 msgid "Default marks:"
-msgstr "Predvolený typ prechodky:"
+msgstr "Predvolené značky:"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
-#, fuzzy
 msgid "Curated shapes"
-msgstr "Importovaný tvar"
+msgstr ""
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
 msgid "Letters"
@@ -51365,14 +51333,12 @@ msgid "Curated shapes, then letters"
 msgstr "Vybrané tvary, potom písmená"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:57
-#, fuzzy
 msgid "Symbol size:"
-msgstr "Veľkosť symbolu vývodu:"
+msgstr "Veľkosť symbolu:"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:68
-#, fuzzy
 msgid "Symbol line width:"
-msgstr "Minimálna šírka čiary:"
+msgstr "Šírka čiary symbolu:"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:82
 msgid "Keep existing symbol assignments when holes change"
@@ -51828,7 +51794,6 @@ msgstr ""
 "docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -51854,7 +51819,7 @@ msgid ""
 msgstr ""
 "### Klauzuly najvyššej úrovne\n"
 "\n"
-"    (version 1)\n"
+"    (version 2)\n"
 "\n"
 "    (rule <rule_name> <rule_clause> ...)\n"
 "\n"
@@ -53521,9 +53486,8 @@ msgid "Tuning profile must have a name"
 msgstr "Ladiaci profil musí mať názov"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:934
-#, fuzzy
 msgid "Tuning profile name already in use"
-msgstr "Ladiaci profil musí mať názov"
+msgstr "Názov ladiaceho profilu sa už používa"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:950
 msgid "Duplicated signal layer configuration in tuning profile"
@@ -53641,14 +53605,12 @@ msgid "Enable time domain tuning"
 msgstr "Povoliť ladenie v časovej doméne"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:127
-#, fuzzy
 msgid "Model solder mask"
-msgstr "Vrchná spájkovacia maska"
+msgstr "Model spájkovacej masky"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:152
-#, fuzzy
 msgid "Net Chain Bridge Propagation"
-msgstr "Šírenie prekovov"
+msgstr "Šírenie cez zreťazený spoj"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:158
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:252
@@ -53709,9 +53671,8 @@ msgid "Via Layer To"
 msgstr "Vrstva prekovov do"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:42
-#, fuzzy
 msgid "Diameter / Hole"
-msgstr "Priemer"
+msgstr "Priemer / Otvor"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:44
 #: pcbnew/generators/pcb_via_stack.cpp:1627
@@ -53720,9 +53681,8 @@ msgid "Pitch"
 msgstr "Rozstup"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:77
-#, fuzzy
 msgid "netclass"
-msgstr "Trieda spojov"
+msgstr "trieda spojov"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:80
 msgid "yes"
@@ -53733,9 +53693,8 @@ msgid "no"
 msgstr "nie"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:117
-#, fuzzy
 msgid "Preset name:"
-msgstr "Názov predvoľby BOM:"
+msgstr "Názov predvoľby:"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:117
 msgid "New Microvia Stack Preset"
@@ -53743,14 +53702,13 @@ msgstr "Nová predvoľba skladby mikroprekovov"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:131
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "A preset named \"%s\" already exists."
-msgstr "List nazvaný „%s” už existuje."
+msgstr "Predvoľba s názvom \"%s\" už existuje."
 
 #: pcbnew/dialogs/panel_setup_via_stacks_base.cpp:49
-#, fuzzy
 msgid "Add..."
-msgstr "Pridať pole ..."
+msgstr "Pridať..."
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:19
 msgid "Zone Hatched Fill Offsets"
@@ -53792,9 +53750,9 @@ msgstr "Názov zóny:"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:39
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:44
-#, fuzzy
 msgid "A unique name for this zone, used to identify it in DRC rules"
-msgstr "Jedinečný názov tejto zóny na jej identifikáciu pre KDR"
+msgstr ""
+"Jedinečný názov tejto zóny používaný na jej identifikáciu v pravidlách DRC"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:76
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -53952,14 +53910,14 @@ msgid "netclass '%s'"
 msgstr "trieda spojov '%s'"
 
 #: pcbnew/drc/drc_engine.cpp:312 pcbnew/drc/drc_engine.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' diff pair"
-msgstr "trieda spojov '%s' (diff pár)"
+msgstr "trieda sietí '%s' diferenciálneho páru"
 
 #: pcbnew/drc/drc_engine.cpp:399 pcbnew/drc/drc_engine.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' uvia"
-msgstr "trieda spojov '%s' (uPrekov)"
+msgstr "trieda sietí '%s' mikroprekovu"
 
 #: pcbnew/drc/drc_engine.cpp:467 pcbnew/drc/drc_engine.cpp:493
 #: pcbnew/drc/drc_engine.cpp:511 pcbnew/drc/drc_engine.cpp:532
@@ -54127,14 +54085,14 @@ msgid "Checking %s min spoke count: %s."
 msgstr "Kontroluje sa %s min počet ramien tep. prepojenia: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1452
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max microvia stack depth: %s."
-msgstr "Kontroluje sa %s max. rozd. dĺžok: %s."
+msgstr "Kontrola maximálnej hĺbky skladby mikroprekovov %s: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1458
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max microvia aspect ratio: %.3f."
-msgstr "Kontroluje sa %s max. nepárová dĺžka: %s."
+msgstr "Kontrola maximálneho pomeru strán mikroprekovov %s: %.3f."
 
 #: pcbnew/drc/drc_engine.cpp:1464
 #, c-format
@@ -54213,9 +54171,9 @@ msgstr ""
 "Minimálne vzdialenosti z triedy spojov použiť iba medzi medenými položkami."
 
 #: pcbnew/drc/drc_engine.cpp:1652 pcbnew/drc/drc_engine.cpp:1658
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Constraint ignored."
-msgstr "%s neobsahuje meď.  Pravidlo ignorované."
+msgstr "%s neobsahuje meď.  Podmienka sa ignoruje."
 
 #: pcbnew/drc/drc_engine.cpp:1669
 msgid "Keepout belongs to the footprint under test; constraint ignored."
@@ -54248,9 +54206,9 @@ msgid "Constraint layer not matched."
 msgstr "'Constraint' vrstva sa nezhoduje."
 
 #: pcbnew/drc/drc_engine.cpp:1790
-#, fuzzy, c-format
+#, c-format
 msgid "%s does not have a hole; rule ignored."
-msgstr "%s nie je vŕtaná diera; pravidlo ignorované."
+msgstr "%s nemá otvor; pravidlo sa ignoruje."
 
 #: pcbnew/drc/drc_engine.cpp:1799
 msgid "Unconditional constraint applied."
@@ -54291,9 +54249,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "Podmienka nie je splnená; pravidlo ignorované."
 
 #: pcbnew/drc/drc_engine.cpp:1949
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved minimum clearance: %s."
-msgstr "Zistené obmedzenia min. vzdialenosti: %s."
+msgstr "Zistená minimálna vzdialenosť: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1973
 #, c-format
@@ -54377,9 +54335,8 @@ msgid "Items not allowed"
 msgstr "Položky nie sú povolené"
 
 #: pcbnew/drc/drc_item.cpp:61
-#, fuzzy
 msgid "Text or graphic on Edge.Cuts layer"
-msgstr "Text (alebo kóta) vo vrstve Edge.Cuts"
+msgstr "Text alebo grafika na vrstve Edge.Cuts"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Clearance violation"
@@ -54466,28 +54423,24 @@ msgid "Micro via hole size out of range"
 msgstr "Mikro prekov je mimo rozsah"
 
 #: pcbnew/drc/drc_item.cpp:149
-#, fuzzy
 msgid "Microvia stack has malformed span"
-msgstr "Doska má chybný obrys"
+msgstr "Skladba mikroprekovov má chybný rozsah"
 
 #: pcbnew/drc/drc_item.cpp:152
 msgid "Microvia under microvia not filled"
 msgstr "Mikroprekov pod mikroprekovom nie je vyplnený"
 
 #: pcbnew/drc/drc_item.cpp:155
-#, fuzzy
 msgid "Microvia stack too deep"
-msgstr "Min veľkosť via"
+msgstr "Skladba mikroprekovov je príliš hlboká"
 
 #: pcbnew/drc/drc_item.cpp:158
-#, fuzzy
 msgid "Microvia too deep for its diameter"
-msgstr "Priemer plátovanej diery pre mikroprekov"
+msgstr "Mikroprekov je príliš hlboký vzhľadom na svoj priemer"
 
 #: pcbnew/drc/drc_item.cpp:161
-#, fuzzy
 msgid "Microvia crosses core material"
-msgstr "Min veľkosť via"
+msgstr "Mikroprekov prechádza cez materiál jadra"
 
 #: pcbnew/drc/drc_item.cpp:165
 msgid "Courtyards overlap"
@@ -54594,9 +54547,8 @@ msgid "Track length out of range"
 msgstr "Dĺžka spoja mimo rozsahu"
 
 #: pcbnew/drc/drc_item.cpp:281
-#, fuzzy
 msgid "Net chain stub length out of range"
-msgstr "Dĺžka spoja mimo rozsahu"
+msgstr "Dĺžka odbočky zreťazeného spoja je mimo rozsahu"
 
 #: pcbnew/drc/drc_item.cpp:285
 msgid ""
@@ -54806,9 +54758,8 @@ msgid "Missing assertion expression."
 msgstr "Chýba výraz tvrdenia."
 
 #: pcbnew/drc/drc_rule_parser.cpp:768
-#, fuzzy
 msgid "Item 'B' is not available in assertion expressions."
-msgstr "Chýba výraz tvrdenia."
+msgstr "Položka 'B' nie je dostupná vo výrazoch tvrdení."
 
 #: pcbnew/drc/drc_rule_parser.cpp:795
 msgid "within_diff_pairs option invalid for constraint type."
@@ -54849,9 +54800,9 @@ msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s minimálna šírka prstenca %s; aktuálna %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min annular width %s; actual %s on %s)"
-msgstr "(%s minimálna šírka prstenca %s; aktuálna %s)"
+msgstr "(%s min. šírka prstenca plôšky a %s; aktuálna %s na %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:356
 #, c-format
@@ -55499,9 +55450,9 @@ msgstr ""
 "medi."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid " (net '%s')"
-msgstr "Text '%s'"
+msgstr " (spoj '%s')"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:214
 #, c-format
@@ -55542,9 +55493,8 @@ msgid "Checking for missing tuning profiles..."
 msgstr "Kontrolujú sa chýbajúce ladiace profily..."
 
 #: pcbnew/drc/drc_test_provider_net_chain_tuning_profiles.cpp:57
-#, fuzzy
 msgid "Checking net chain tuning profiles..."
-msgstr "Kontrolujú sa chýbajúce ladiace profily..."
+msgstr "Kontrola ladiacich profilov zreťazených spojov..."
 
 #: pcbnew/drc/drc_test_provider_net_chain_tuning_profiles.cpp:86
 #, c-format
@@ -55732,9 +55682,9 @@ msgid "(%s min diameter %s; actual %s)"
 msgstr "(%s minimálny priemer %s; aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min diameter %s; actual %s on %s)"
-msgstr "(%s minimálny priemer %s; aktuálne %s)"
+msgstr "(%s min. priemer %s; aktuálny %s na %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:147
 #, c-format
@@ -55742,9 +55692,9 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s maximálny priemer %s; aktuálne %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max diameter %s; actual %s on %s)"
-msgstr "(%s maximálny priemer %s; aktuálne %s)"
+msgstr "(%s max. priemer %s; aktuálny %s na %s)"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:168
 #, c-format
@@ -55762,14 +55712,12 @@ msgid "Crosses %s dielectric: aspect ratio %.2f exceeds the %.2f limit"
 msgstr "Prechádza cez dielektrikum %s: pomer strán %.2f prekračuje limit %.2f"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:338
-#, fuzzy
 msgid "an unnamed"
-msgstr "<bez mena>"
+msgstr "nepomenované"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:358
-#, fuzzy
 msgid "Checking microvia stacks..."
-msgstr "Kontrolujú sa otvory mikro prekovov..."
+msgstr "Kontrola skladieb mikroprekovov..."
 
 #: pcbnew/drc/drc_test_provider_via_stitch.cpp:56
 msgid "Checking via-stitch zone overlaps..."
@@ -55862,9 +55810,8 @@ msgid "Tolerance must be greater than or equal to 0"
 msgstr "Tolerancia musí byť väčšia alebo rovná 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:93
-#, fuzzy
 msgid "Tolerance is too large: resulting minimum length is negative"
-msgstr "Tolerancia je príliš veľká: výsledná minimálna dĺžka nie je kladná"
+msgstr "Tolerancia je príliš veľká: výsledná minimálna dĺžka je záporná"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:155
 msgid "Maximum length difference between matched tracks"
@@ -55875,9 +55822,8 @@ msgid "Within diff pairs"
 msgstr "V diferenciálnych pároch"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:157
-#, fuzzy
 msgid "Limit skew between the two tracks of each differential pair"
-msgstr "Nalaďte dĺžku diferenciálneho páru"
+msgstr "Obmedziť rozdiel dĺžok medzi dvoma spojmi každého diferenciálneho páru"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:215
 msgid "At least one constraint must be defined"
@@ -55888,9 +55834,8 @@ msgid "Maximum Skew must be greater than or equal to 0"
 msgstr "Maximálny rozdiel dĺžok musí byť väčší alebo rovný 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:91
-#, fuzzy
 msgid "Time domain (ps)"
-msgstr "Parametre rohového razítka"
+msgstr "Časová doména (ps)"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:92
 msgid "The values are picoseconds instead of a length"
@@ -55901,45 +55846,40 @@ msgid "Allow 0°"
 msgstr "Povoliť 0°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:61
-#, fuzzy
 msgid "Allow footprints placed at 0 degrees"
-msgstr "Zobraziť referencie puzdier"
+msgstr "Povoliť puzdrá umiestnené pod uhlom 0°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:62
 msgid "Allow 90°"
 msgstr "Povoliť 90°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:63
-#, fuzzy
 msgid "Allow footprints placed at 90 degrees"
-msgstr "Zobraziť referencie puzdier"
+msgstr "Povoliť puzdrá umiestnené pod uhlom 90°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:64
 msgid "Allow 180°"
 msgstr "Povoliť 180°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:65
-#, fuzzy
 msgid "Allow footprints placed at 180 degrees"
-msgstr "Zobraziť referencie puzdier"
+msgstr "Povoliť puzdrá umiestnené pod uhlom 180°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:66
 msgid "Allow 270°"
 msgstr "Povoliť 270°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:67
-#, fuzzy
 msgid "Allow footprints placed at 270 degrees"
-msgstr "Zobraziť referencie puzdier"
+msgstr "Povoliť puzdrá umiestnené pod uhlom 270°"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:68
 msgid "Allow All"
 msgstr "Povoliť všetky"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:69
-#, fuzzy
 msgid "Allow footprints at any orientation"
-msgstr "Zobraziť dokumentáciu zoznamu puzdier"
+msgstr "Povoliť puzdrá v ľubovoľnej orientácii"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:112
 msgid "At least one orientation must be selected"
@@ -56018,23 +55958,20 @@ msgid "Custom Query"
 msgstr "Vlastný dopyt"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:76
-#, fuzzy
 msgid "How items are matched by this condition"
-msgstr "Odstrániť túto podmienku"
+msgstr "Ako sa položky porovnávajú touto podmienkou"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:82
 msgid "Net an item must belong to"
 msgstr "Spoj, ku ktorému musí položka patriť"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:89
-#, fuzzy
 msgid "Net class an item must belong to"
-msgstr "Musí byť vybraný aspoň jeden prekov"
+msgstr "Trieda spojov, do ktorej musí položka patriť"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:96
-#, fuzzy
 msgid "Rule area an item must be inside"
-msgstr "Názov pravidla musí byť jedinečný."
+msgstr "Oblasť pravidiel, v ktorej sa musí položka nachádzať"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:104
 msgid "Custom match expression in the DRC rule language"
@@ -56071,14 +56008,12 @@ msgid "Syntax check passed with warnings:\n"
 msgstr "Kontrola syntax prešla s upozorneniami:\n"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:56
-#, fuzzy
 msgid "Minimum text height"
-msgstr "Minimálna výška textu:"
+msgstr "Minimálna výška textu"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:58
-#, fuzzy
 msgid "Minimum text stroke thickness"
-msgstr "Minimálna hrúbka textu:"
+msgstr "Minimálna hrúbka ťahu textu"
 
 #: pcbnew/drc/rule_editor/drc_re_min_txt_ht_th_constraint_data.h:75
 msgid "Minimum Text Height must be greater than 0"
@@ -56089,57 +56024,44 @@ msgid "Minimum Text Thickness must be greater than 0"
 msgstr "Minimálna hrúbka textu musí byť väčšia ako 0"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:35
-#, fuzzy
 msgid "Minimum clearance between copper items and the board edge"
-msgstr ""
-"Minimálna vzdialenosť medzi bodmi, pri ktorej sa považujú za samostatné"
+msgstr "Minimálna vzdialenosť medzi medenými položkami a okrajom dosky"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:47
-#, fuzzy
 msgid "Minimum clearance between copper items and hole edges"
-msgstr "Vzdialenosť medzi plôškami rovnakého spoju a vyplnenými oblasťami."
+msgstr "Minimálna vzdialenosť medzi medenými položkami a okrajmi otvorov"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:60
-#, fuzzy
 msgid "Minimum clearance between footprint courtyards"
-msgstr "Zhromažďovanie montážnych oblastí puzdier..."
+msgstr "Minimálna vzdialenosť medzi montážnymi oblasťami puzdier"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:73
-#, fuzzy
 msgid "Minimum clearance between items regardless of net"
-msgstr ""
-"Minimálna vzdialenosť medzi bodmi, pri ktorej sa považujú za samostatné"
+msgstr "Minimálna vzdialenosť medzi položkami bez ohľadu na spoj"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:86
-#, fuzzy
 msgid "Minimum creepage distance between conductors along the board surface"
-msgstr ""
-"Minimálna vzdialenosť medzi bodmi, pri ktorej sa považujú za samostatné"
+msgstr "Minimálna povrchová cesta pozdĺž povrchu dosky medzi vodičmi"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:98
-#, fuzzy
 msgid "Minimum hole diameter"
-msgstr "Minimálny priemer diery: "
+msgstr "Minimálny priemer otvoru"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:110
-#, fuzzy
 msgid "Minimum distance between hole edges"
-msgstr "Vzdialenosť medzi stĺpcami"
+msgstr "Minimálna vzdialenosť medzi hranami otvorov"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:124
-#, fuzzy
 msgid "Maximum number of vias allowed on a matched net"
-msgstr "Maximálny počet doplnkov už pridaných do dialógového okna."
+msgstr "Maximálny počet povolených prechodov na zodpovedajúcom spoji"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:137
 msgid "Minimum width of the copper ring around a hole"
 msgstr "Minimálna šírka medeného prstenca okolo otvoru"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:150
-#, fuzzy
 msgid "Minimum clearance between copper items on different nets"
-msgstr ""
-"Minimálna vzdialenosť medzi bodmi, pri ktorej sa považujú za samostatné"
+msgstr "Minimálna vzdialenosť medzi medenými položkami na rôznych spojoch"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:161
 msgid "Minimum width of any copper connection"
@@ -56150,14 +56072,13 @@ msgid "Minimum width of solder mask left between two mask openings"
 msgstr "Minimálna šírka spájkovacej masky medzi dvoma otvormi v maske"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:188
-#, fuzzy
 msgid "Minimum number of thermal relief spokes connecting a pad to its zone"
-msgstr "Minimálny počet ramien tepelného reliéfu:"
+msgstr ""
+"Minimálny počet lúčov tepelného prepojenia spájajúcich plôšku s jej zónou"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:202
-#, fuzzy
 msgid "Largest number of microvias allowed stacked on one another."
-msgstr "Maximálny počet doplnkov už pridaných do dialógového okna."
+msgstr "Najväčší povolený počet mikroprekovov navrstvených na sebe."
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:217
 msgid ""
@@ -56171,23 +56092,20 @@ msgstr ""
 "pokovuje."
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:231
-#, fuzzy
 msgid "Minimum drill diameter"
 msgstr "Minimálny priemer vrtáku"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:243
-#, fuzzy
 msgid "Minimum outer diameter of vias"
-msgstr "Minimálny priemer uVia:"
+msgstr "Minimálny vonkajší priemer prekovov"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:256
 msgid "Minimum clearance between silkscreen items"
 msgstr "Minimálna vzdialenosť medzi položkami potlače"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:269
-#, fuzzy
 msgid "Minimum clearance between silkscreen and solder mask openings"
-msgstr "Skrátiť potlač na hrany spájkovacej masky"
+msgstr "Minimálna vzdialenosť medzi potlačou a otvormi v spájkovacej maske"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:282
 msgid "Distance the solder mask opening extends beyond the pad"
@@ -56207,18 +56125,16 @@ msgid "Allow top Layer"
 msgstr "Povoliť vrchnú vrstvu"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:54
-#, fuzzy
 msgid "Allow matched items on the front copper layer"
-msgstr "Ak chcete prednú medenú vrstvu"
+msgstr "Povoliť zodpovedajúce objekty na prednej medenej vrstve"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:55
 msgid "Allow bottom Layer"
 msgstr "Povoliť spodnú vrstvu"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:56
-#, fuzzy
 msgid "Allow matched items on the back copper layer"
-msgstr "Koľko položiek v poli."
+msgstr "Povoliť zodpovedajúce objekty na zadnej medenej vrstve"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:89
 msgid "At least one layer must be selected"
@@ -56260,14 +56176,12 @@ msgid "Maximum length over which the pair may run uncoupled"
 msgstr "Maximálna dĺžka, po ktorú môže byť pár vedený ako nespárovaný"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:77
-#, fuzzy
 msgid "Optimum Width must be greater than or equal to 0"
-msgstr "Optimálna šírka musí byť väčšia ako 0"
+msgstr "Optimálna šírka musí byť väčšia alebo rovná 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:80
-#, fuzzy
 msgid "Optimum Gap must be greater than or equal to 0"
-msgstr "Maximálny rozdiel dĺžok musí byť väčší alebo rovný 0"
+msgstr "Optimálna medzera musí byť väčšia alebo rovná 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:98
 msgid "Gap Tolerance must be greater than or equal to 0"
@@ -56287,24 +56201,20 @@ msgid "At least one constraint must be specified"
 msgstr "Musí byť dané aspoň jedno obmedzenie"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:70
-#, fuzzy
 msgid "Smallest allowed via diameter"
-msgstr "Veľkosť vrtáku prekovu musí byť menšia než priemer prekovu"
+msgstr "Najmenší povolený priemer prekovu"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:71
-#, fuzzy
 msgid "Largest allowed via diameter"
-msgstr "Veľkosť vrtáku prekovu musí byť menšia než priemer prekovu"
+msgstr "Najväčší povolený priemer prekovu"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:74
-#, fuzzy
 msgid "Smallest allowed via hole diameter"
-msgstr "Priemer vŕtania prekovu"
+msgstr "Najmenší povolený priemer otvoru prekovu"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:75
-#, fuzzy
 msgid "Largest allowed via hole diameter"
-msgstr "Priemer vŕtania prekovu"
+msgstr "Najväčší povolený priemer otvoru prekovu"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:78
 msgid "Restrict this rule to a single via type"
@@ -56412,19 +56322,16 @@ msgid "Please select at least one option from %s list."
 msgstr "Prosím, vyberte aspoň jednu možnosť zo zoznamu %s."
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header_base.cpp:30
-#, fuzzy
 msgid "Rule Type"
 msgstr "Typ pravidla"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header_base.cpp:31
-#, fuzzy
 msgid "Rule Name"
 msgstr "Názov pravidla"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:119
-#, fuzzy
 msgid "Name of this rule, must be unique"
-msgstr "Názov pravidla musí byť jedinečný."
+msgstr "Názov tohto pravidla, musí byť jedinečný"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:120
 msgid "Optional comment stored with the rule"
@@ -56482,29 +56389,27 @@ msgid "Conditions"
 msgstr "Podmienky"
 
 #: pcbnew/drill/drill_chart_template.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot write '%s'."
-msgstr "Nie je možné prečítať súbor '%s'."
+msgstr "Nie je možné zapísať '%s'."
 
 #: pcbnew/drill/drill_chart_template.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing '%s'."
-msgstr "Pri zapisovaní súboru '%s' nastala chyba."
+msgstr "Chyba pri zápise '%s'."
 
 #: pcbnew/drill/drill_chart_template.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read '%s'."
-msgstr "Nie je možné prečítať súbor '%s'."
+msgstr "Nie je možné načítať '%s'."
 
 #: pcbnew/drill/drill_chart_template.cpp:343
-#, fuzzy
 msgid "Template is not a JSON object."
-msgstr "Názov šablóny nemôže byť prázdny."
+msgstr "Šablóna nie je objekt JSON."
 
 #: pcbnew/drill/drill_chart_template.cpp:410
-#, fuzzy
 msgid "Template has no usable columns."
-msgstr "Názov šablóny nemôže byť prázdny."
+msgstr "Šablóna nemá použiteľné stĺpce."
 
 #: pcbnew/edit_zone_helpers.cpp:41
 msgid "Edit copper-thieving parameters in the Properties panel."
@@ -57091,9 +56996,8 @@ msgid "File format is not supported"
 msgstr "Formát súboru nie je podporovaný"
 
 #: pcbnew/files.cpp:732
-#, fuzzy
 msgid "Invalid imported net-name map."
-msgstr "Neplatný názov vlastnosti"
+msgstr "Neplatná importovaná mapa názvov spojov."
 
 #: pcbnew/files.cpp:735
 msgid "Cannot apply imported net-name map to the board."
@@ -57169,9 +57073,8 @@ msgstr "vylúčiť zo zoznamu materiálu"
 
 #: pcbnew/footprint.cpp:2653
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1641
-#, fuzzy
 msgid "exclude from simulation"
-msgstr "Vylúčiť zo simulácie"
+msgstr "vylúčiť zo simulácie"
 
 #: pcbnew/footprint.cpp:2658
 msgid "Status: "
@@ -57229,20 +57132,17 @@ msgstr "Tepelné reliéfy pre PTH"
 
 #: pcbnew/footprint.cpp:5445 pcbnew/widgets/pcb_properties_panel.cpp:989
 #: pcbnew/widgets/pcb_properties_panel.cpp:1099
-#, fuzzy
 msgid "Scale X"
-msgstr "Mierka 2"
+msgstr "Mierka X"
 
 #: pcbnew/footprint.cpp:5449 pcbnew/widgets/pcb_properties_panel.cpp:989
 #: pcbnew/widgets/pcb_properties_panel.cpp:1100
-#, fuzzy
 msgid "Scale Y"
-msgstr "Mierka 2"
+msgstr "Mierka Y"
 
 #: pcbnew/footprint.cpp:5479
-#, fuzzy
 msgid "Footprint Type"
-msgstr "Typ puzdra:"
+msgstr "Typ puzdra"
 
 #: pcbnew/footprint.cpp:5482
 msgid "Not in Schematic"
@@ -57325,9 +57225,9 @@ msgid "Editing %s from board.  Saving will update the board only."
 msgstr "Upravovanie %s z dosky. Uložením sa aktualizuje iba doska."
 
 #: pcbnew/footprint_edit_frame.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid "Open footprint from library %s"
-msgstr "Otvoriť modul púzdra z knižnice"
+msgstr "Otvoriť puzdro z knižnice %s"
 
 #: pcbnew/footprint_edit_frame.cpp:819
 msgid "Save as editable copy"
@@ -57338,9 +57238,8 @@ msgid "No footprint selected."
 msgstr "Nie je vybrané žiadne puzdro."
 
 #: pcbnew/footprint_editor_tab_context.cpp:76
-#, fuzzy
 msgid "[from board]"
-msgstr "Zo schránky"
+msgstr "[z dosky]"
 
 #: pcbnew/footprint_editor_utils.cpp:89 pcbnew/footprint_editor_utils.cpp:154
 msgid "The current footprint has been modified.  Save changes?"
@@ -57391,21 +57290,23 @@ msgstr ""
 "knižnica obsahuje puzdro s rovnakým názvom."
 
 #: pcbnew/footprint_import_reconciler.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "A footprint library named '%s' is already registered; leaving imported "
 "footprints unresolved."
-msgstr "Knižnica už existuje na '%s'; importované puzdrá sú vynechané."
+msgstr ""
+"Knižnica puzdier s názvom '%s' je už zaregistrovaná; importované puzdrá "
+"zostanú nevyriešené."
 
 #: pcbnew/footprint_import_reconciler.cpp:381
-#, fuzzy
 msgid "Cannot reconcile imported footprints: no KiCad footprint writer."
-msgstr "Nie je možné odstrániť nepoužívané puzdro %s (puzdro je uzamknuté)."
+msgstr ""
+"Importované puzdrá nie je možné zosúladiť: chýba zapisovač puzdier KiCad."
 
 #: pcbnew/footprint_import_reconciler.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing imported footprint cache '%s': %s"
-msgstr "Pri zapisovaní súboru protokolu vŕtania '%s' nastala chyba"
+msgstr "Chyba pri zápise vyrovnávacej pamäte importovaných puzdier '%s': %s"
 
 #: pcbnew/footprint_import_reconciler.cpp:448
 #, c-format
@@ -57414,9 +57315,10 @@ msgid ""
 msgstr "Knižnica už existuje na '%s'; importované puzdrá sú vynechané."
 
 #: pcbnew/footprint_import_reconciler.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "Could not publish imported footprint cache to '%s'."
-msgstr "Nebolo možné spustiť sprievodcu puzdrom '%s'"
+msgstr ""
+"Vyrovnávaciu pamäť importovaných puzdier sa nepodarilo zverejniť do '%s'."
 
 #: pcbnew/footprint_import_reconciler.cpp:481
 msgid "Cannot register imported footprint cache: no project library table."
@@ -57425,16 +57327,17 @@ msgstr ""
 "tabuľka knižnice projektu."
 
 #: pcbnew/footprint_import_reconciler.cpp:506
-#, fuzzy
 msgid ""
 "Error saving project footprint library table; imported footprints left "
 "unresolved."
-msgstr "Chyba načítania tabuľky z knižnice puzdier projektu"
+msgstr ""
+"Chyba pri ukladaní tabuľky knižníc puzdier projektu; importované puzdrá "
+"zostanú nevyriešené."
 
 #: pcbnew/footprint_import_reconciler.cpp:547
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reconcile imported footprint libraries: %s"
-msgstr "Nepodarilo sa uložiť súbor knižnice puzdier '%s'."
+msgstr "Importované knižnice puzdier nie je možné zosúladiť: %s"
 
 #: pcbnew/footprint_info_impl.cpp:193
 msgid "Loading footprints..."
@@ -57530,9 +57433,9 @@ msgstr ""
 "Aktualizovať puzdra dosky pre vytvorenie prepojenia s exportovanými puzdrami"
 
 #: pcbnew/footprint_libraries_utils.cpp:898
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' could not be saved to library '%s'."
-msgstr "Puzdro '%s' sa nenašlo v knižnici '%s'"
+msgstr "Puzdro '%s' sa nepodarilo uložiť do knižnice '%s'."
 
 #: pcbnew/footprint_libraries_utils.cpp:929
 #: pcbnew/footprint_viewer_frame.cpp:748
@@ -57592,9 +57495,8 @@ msgstr ""
 "Výraz, ktorý je číslom, sa bude zhodovať aj s počtom plôšok."
 
 #: pcbnew/footprint_wizard.cpp:119
-#, fuzzy
 msgid "could not parse wizard info"
-msgstr "Nebolo možné načítať súbor "
+msgstr "nepodarilo sa analyzovať informácie sprievodcu"
 
 #: pcbnew/footprint_wizard.cpp:133 pcbnew/footprint_wizard.cpp:153
 msgid "Unexpected error with footprint wizard"
@@ -57672,19 +57574,19 @@ msgid "current length"
 msgstr "aktuálna dĺžka"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2399
-#, fuzzy, c-format
+#, c-format
 msgid "Skew: %s"
-msgstr "Skosiť:"
+msgstr "Rozdiel dĺžok: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2399
-#, fuzzy, c-format
+#, c-format
 msgid "Net: %s"
-msgstr "Spoj:"
+msgstr "Spoj: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2461
-#, fuzzy, c-format
+#, c-format
 msgid "Chain: %s"
-msgstr "Spustiť: %s"
+msgstr "Reťazenie: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2567
 msgid "Routed Lengths"
@@ -57721,14 +57623,12 @@ msgid "Full Delay"
 msgstr "Celkové oneskorenie"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2648
-#, fuzzy
 msgid "Net Chain Full Length"
-msgstr "Celá dĺžka"
+msgstr "Celková dĺžka zreťazeného spoja"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2656
-#, fuzzy
 msgid "Net Chain Full Delay"
-msgstr "Celkové oneskorenie"
+msgstr "Celkové oneskorenie zreťazeného spoja"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2672
 #, c-format
@@ -57882,24 +57782,20 @@ msgid "The microvia stack layers are not present on this board."
 msgstr "Vrstvy skladby mikroprekovov nie sú na tejto doske prítomné."
 
 #: pcbnew/generators/pcb_via_stack.cpp:1310
-#, fuzzy
 msgid "Microvia stack location violates DRC."
-msgstr "Poloha prekovu porušuje DRC."
+msgstr "Umiestnenie skladby mikroprekovov porušuje DRC."
 
 #: pcbnew/generators/pcb_via_stack.cpp:1334 pcbnew/tools/pcb_actions.cpp:627
-#, fuzzy
 msgid "Place Microvia Stack"
-msgstr "Umiestniť mikroprekov"
+msgstr "Umiestniť skladbu mikroprekovov"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1586
-#, fuzzy
 msgid "Microvia Stack Properties"
-msgstr "Vlastnosti prešitia prekovmi"
+msgstr "Vlastnosti skladby mikroprekovov"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1594
-#, fuzzy
 msgid "End Layer"
-msgstr "Koncová vrstva:"
+msgstr "Koncová vrstva"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1606
 msgid "Use Netclass Values"
@@ -57927,14 +57823,12 @@ msgid "Edit Via Stitching"
 msgstr "Upraviť prešitie prekovmi"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1711
-#, fuzzy
 msgid "Drill"
-msgstr "Vrtáky"
+msgstr "Vrták"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1719
-#, fuzzy
 msgid "Plain grid"
-msgstr "Čistý text"
+msgstr "Obyčajná mriežka"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1720
 msgid "Staggered grid"
@@ -57950,9 +57844,8 @@ msgstr "Počiatočná hodnota"
 
 #: pcbnew/generators/pcb_via_stitch.cpp:1756
 #: pcbnew/widgets/pcb_properties_panel.cpp:1391
-#, fuzzy
 msgid "Guarded Net"
-msgstr "Pridať text"
+msgstr "Chránená spoj"
 
 #: pcbnew/generators/pcb_via_stitch.h:124
 msgid "Stitching Update"
@@ -58003,19 +57896,16 @@ msgid "If not checked: use interactive placement."
 msgstr "Ak nie je začiarknuté, použiť interaktívne umiestnenie."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:154
-#, fuzzy
 msgid "Current layer"
-msgstr "Aktuálna vrstva:"
+msgstr "Aktuálna vrstva"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
-#, fuzzy
 msgid "Map layers"
-msgstr "Zameniť vrstvy"
+msgstr "Mapovať vrstvy"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:161
-#, fuzzy
 msgid "Single layer:"
-msgstr "Signálová vrstva"
+msgstr "Jedna vrstva:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:173
 msgid "Group imported items"
@@ -58077,9 +57967,8 @@ msgid "Footprint..."
 msgstr "Puzdro..."
 
 #: pcbnew/menubar_footprint_editor.cpp:74
-#, fuzzy
 msgid "Footprint as &SVG..."
-msgstr "Puzdra..."
+msgstr "Puzdro ako &SVG..."
 
 #: pcbnew/menubar_footprint_editor.cpp:75
 msgid "View as &PNG..."
@@ -58479,24 +58368,24 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "Odstránený %s výrobný atribút 'vylúčiť zo zoznamu materiálu'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:838
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from simulation' attribute."
-msgstr "Pridať %s výrobný atribút 'vylúčiť zo zoznamu materiálu'."
+msgstr "Pridať atribút %s 'vylúčiť zo simulácie'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:840
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from simulation' attribute."
-msgstr "Odstrániť %s výrobný atribútu 'vylúčiť zo zoznamu materiálu'."
+msgstr "Odstrániť %s atribút 'vylúčiť zo simulácie'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from simulation' attribute."
-msgstr "Pridaný %s výrobný atribút 'vylúčiť zo zoznamu materiálu'."
+msgstr "Pridaných %s atribútov 'vylúčiť zo simulácie'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:854
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from simulation' attribute."
-msgstr "Odstránený %s výrobný atribút 'vylúčiť zo zoznamu materiálu'."
+msgstr "Odstránených %s atribútov 'vylúčiť zo simulácie'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:874
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1538
@@ -58796,14 +58685,14 @@ msgid "Changed group library link from '%s' to '%s'."
 msgstr "Zmenená skupina knižničného prepojenia z '%s' na '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2080
-#, fuzzy, c-format
+#, c-format
 msgid "Add group '%s' to group '%s'."
-msgstr "Pridať %s do skupiny '%s'."
+msgstr "Pridať skupinu '%s' do skupiny '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2085
-#, fuzzy, c-format
+#, c-format
 msgid "Added group '%s' to group '%s'."
-msgstr "Pridané %s do skupiny '%s'."
+msgstr "Pridaná skupina '%s' do skupiny '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2125
 #, c-format
@@ -58942,15 +58831,13 @@ msgid "Press-fit"
 msgstr "Lisovacie kont."
 
 #: pcbnew/pad.cpp:2293
-#, fuzzy
 msgid "(mixed shapes)"
-msgstr "Vyplnený tvar"
+msgstr "(zmiešané tvary)"
 
 #: pcbnew/pad.cpp:2298 pcbnew/pad.cpp:2303 pcbnew/pad.cpp:2305
 #: pcbnew/pcb_track.cpp:2794
-#, fuzzy
 msgid "(mixed)"
-msgstr "zmiešané"
+msgstr "(zmiešané)"
 
 #: pcbnew/pad.cpp:2320
 msgid "Length in Package"
@@ -59461,9 +59348,8 @@ msgid "Enter a positive length for a driving dimension"
 msgstr "Zadajte kladnú dĺžku riadiacej kóty"
 
 #: pcbnew/pcb_dimension.cpp:2225 pcbnew/widgets/pcb_properties_panel.cpp:1228
-#, fuzzy
 msgid "Value Mode"
-msgstr "Virtuálne modely"
+msgstr "Režim hodnoty"
 
 #: pcbnew/pcb_dimension.cpp:2253
 msgid "Units Format"
@@ -59507,24 +59393,21 @@ msgid "Decimal Places"
 msgstr "Desatinné miesta"
 
 #: pcbnew/pcb_drill_chart.cpp:844
-#, fuzzy
 msgid "Show Totals"
-msgstr "Zobraziť podrobnosti"
+msgstr "Zobraziť súhrny"
 
 #: pcbnew/pcb_drill_map.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Drill Map on %s"
-msgstr "Vŕtané otvory"
+msgstr "Mapa vŕtania na %s"
 
 #: pcbnew/pcb_drill_map.cpp:222
-#, fuzzy
 msgid "Spans"
-msgstr "Španielský"
+msgstr "Rozsahy"
 
 #: pcbnew/pcb_drill_map.cpp:386
-#, fuzzy
 msgid "Drill Map Properties"
-msgstr "Vlastnosti prekovu"
+msgstr "Vlastnosti mapy vŕtania"
 
 #: pcbnew/pcb_drill_map.cpp:390 pcbnew/zone_layer_properties_grid.h:49
 msgid "Offset X"
@@ -59535,24 +59418,20 @@ msgid "Offset Y"
 msgstr "Posun Y"
 
 #: pcbnew/pcb_drill_map.cpp:400
-#, fuzzy
 msgid "Symbol Size"
-msgstr "Polia symbolov"
+msgstr "Veľkosť symbolu"
 
 #: pcbnew/pcb_drill_map.cpp:409 pcbnew/widgets/pcb_properties_panel.cpp:1413
-#, fuzzy
 msgid "Hole Span"
-msgstr "Tvar otvoru"
+msgstr "Rozsah otvoru"
 
 #: pcbnew/pcb_drill_map.cpp:413
-#, fuzzy
 msgid "Outline Slots"
-msgstr "Obrys hladký:"
+msgstr "Drážky obrysu"
 
 #: pcbnew/pcb_drill_map.cpp:417
-#, fuzzy
 msgid "Guide Cross"
-msgstr "Skryť kurzor"
+msgstr "Vodiaci kríž"
 
 #: pcbnew/pcb_edit_frame.cpp:249
 msgid "KiCad PCB Editor"
@@ -59567,14 +59446,13 @@ msgid "New PCB file is unsaved"
 msgstr "Nový súbor DPS je neuložený"
 
 #: pcbnew/pcb_edit_frame.cpp:2156
-#, fuzzy
 msgid "WRL 3D model could not be matched to equivalent STEP model."
-msgstr "%d 3D model WRL sa nepodaril priradiť k ekvivalentnému STEP modelu."
+msgstr "3D model WRL sa nepodarilo priradiť k zodpovedajúcemu modelu STEP."
 
 #: pcbnew/pcb_edit_frame.cpp:2160
-#, fuzzy, c-format
+#, c-format
 msgid "%d WRL 3D models could not be matched to equivalent STEP models."
-msgstr "%d 3D model WRL sa nepodaril priradiť k ekvivalentnému STEP modelu."
+msgstr "%d 3D modelov WRL sa nepodarilo priradiť k zodpovedajúcim modelom STEP."
 
 #: pcbnew/pcb_edit_frame.cpp:2165
 msgid "Show options"
@@ -59681,9 +59559,8 @@ msgid "Generator Properties"
 msgstr "Vlastnosti generátora"
 
 #: pcbnew/pcb_grid_item.cpp:332 pcbnew/pcb_grid_item.cpp:350
-#, fuzzy
 msgid "Grid Item"
-msgstr "Položky skupiny"
+msgstr "Položka mriežky"
 
 #: pcbnew/pcb_grid_item.cpp:535
 msgid "Grid Type"
@@ -59718,9 +59595,8 @@ msgid "Phi Extent"
 msgstr "Phi rozsah"
 
 #: pcbnew/pcb_grid_item.cpp:571
-#, fuzzy
 msgid "Phi Spacing"
-msgstr "Phi Spacing"
+msgstr "Rozstup Phi"
 
 #: pcbnew/pcb_grid_item.cpp:576 pcbnew/widgets/search_handlers.cpp:229
 #: pcbnew/zone.cpp:1149 pcbnew/zone.cpp:2410
@@ -59732,19 +59608,16 @@ msgid "Tick Interval"
 msgstr "Interval značiek"
 
 #: pcbnew/pcb_grid_item.cpp:582
-#, fuzzy
 msgid "Affects Cursor Snap"
-msgstr "Tvar kurzora"
+msgstr "Ovplyvňuje prichytenie kurzora"
 
 #: pcbnew/pcb_grid_item.cpp:585
-#, fuzzy
 msgid "Affects Routing"
-msgstr "Smerovanie"
+msgstr "Ovplyvňuje routovanie"
 
 #: pcbnew/pcb_grid_item.cpp:588
-#, fuzzy
 msgid "Affects Placement"
-msgstr "Umiestnenie"
+msgstr "Ovplyvňuje umiestnenie"
 
 #: pcbnew/pcb_io/allegro/allegro_builder.cpp:4684
 msgid "Constructing caches"
@@ -59768,9 +59641,9 @@ msgid "Unknown Allegro file version %#010x (rev %d)"
 msgstr "Neznáma verzia Allegro súboru %#010x (rev %d)"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown board units %d"
-msgstr "neznámy tvar plôšky: %d"
+msgstr "Neznáme jednotky dosky %d"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2691
 msgid "Parsing Allegro objects"
@@ -59792,14 +59665,14 @@ msgstr ""
 "verzie 16.0 alebo novšej a znova uložiť, potom importovať výsledný súbor."
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:131
-#, fuzzy, c-format
+#, c-format
 msgid "File is empty: %s"
-msgstr "Súbor '%s' je prázdny."
+msgstr "Súbor je prázdny: %s"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load Allegro board from file: %s"
-msgstr "Nepodarilo sa zostaviť dosku z údajov Allegro"
+msgstr "Nepodarilo sa načítať dosku Allegro zo súboru: %s"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:173
 msgid "Failed to build board from Allegro data"
@@ -60188,9 +60061,9 @@ msgid "Loading unicode strings..."
 msgstr "Načítavanie reťazcov unicode..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:5267
-#, fuzzy, c-format
+#, c-format
 msgid "Imported %d length-tuning pattern(s)."
-msgstr "Ladiace tvary dĺžky"
+msgstr "Importovaných %d vzorov ladenia dĺžky."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:5300
 msgid "Loading text..."
@@ -60218,9 +60091,9 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "Altium Circuit Studio PCB súbory"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:408
-#, fuzzy, c-format
+#, c-format
 msgid "Component name not found: '%s'"
-msgstr "Súčiastka [%s] nenájdená"
+msgstr "Názov súčiastky sa nenašiel: '%s'"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:434
 #, c-format
@@ -60262,33 +60135,30 @@ msgid "insufficient via fields"
 msgstr "nedostatočné množstvo polí prekovu"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:187
-#, fuzzy
 msgid "insufficient pad fields"
-msgstr "Nedostatočné oprávnenia na čítanie súboru '%s'."
+msgstr "nedostatočný počet polí plošiek"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:219
 msgid "insufficient fill fields"
 msgstr "nedostatočné množstvo polí výplne"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:256
-#, fuzzy
 msgid "insufficient text fields"
-msgstr "Prepnúť zobrazenie skrytých textových polí"
+msgstr "nedostatočný počet textových polí"
 
 #: pcbnew/pcb_io/autotrax/autotrax_parser.cpp:316
-#, fuzzy
 msgid "insufficient component fields"
-msgstr "Nedostatočné oprávnenia na odstránenie priečinku '%s'."
+msgstr "nedostatočný počet polí súčiastky"
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:149
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read file '%s'."
-msgstr "Nepodarilo sa načítať súbor: %s"
+msgstr "Nebolo možné načítať súbor '%s'."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:156
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid Protel Autotrax file."
-msgstr "'%s' nie je platné puzdro."
+msgstr "'%s' nie je platný Protel Autotrax súbor."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:198
 #, c-format
