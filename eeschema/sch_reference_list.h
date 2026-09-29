@@ -19,8 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _SCH_REFERENCE_LIST_H_
-#define _SCH_REFERENCE_LIST_H_
+#pragma once
 
 #include <map>
 
@@ -617,15 +616,8 @@ public:
     void Show( const char* aPrefix = "" );
 #endif
 
-    std::shared_ptr<REFDES_TRACKER> GetRefDesTracker() const
-    {
-        return m_refDesTracker;
-    }
-
-    void SetRefDesTracker( std::shared_ptr<REFDES_TRACKER> aTracker )
-    {
-        m_refDesTracker = aTracker;
-    }
+    std::shared_ptr<REFDES_TRACKER> GetRefDesTracker() const { return m_refDesTracker; }
+    void SetRefDesTracker( std::shared_ptr<REFDES_TRACKER> aTracker ) { m_refDesTracker = aTracker; }
 
     friend class BACK_ANNOTATION;
 
@@ -660,9 +652,7 @@ private:
     // Used for sorting static sortByTimeStamp function
     friend class BACK_ANNOTATE;
 
-    std::vector<SCH_REFERENCE> m_flatList;
-
-    std::shared_ptr<REFDES_TRACKER> m_refDesTracker; ///< A list of previously used reference designators.
+private:
+    std::vector<SCH_REFERENCE>      m_flatList;
+    std::shared_ptr<REFDES_TRACKER> m_refDesTracker;   ///< A list of previously used reference designators.
 };
-
-#endif    // _SCH_REFERENCE_LIST_H_

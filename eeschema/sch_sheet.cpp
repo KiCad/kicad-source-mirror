@@ -1055,9 +1055,9 @@ int SCH_SHEET::GetPenWidth() const
 void SCH_SHEET::AutoplaceFields( SCH_SCREEN* aScreen, AUTOPLACE_ALGO aAlgo )
 {
     SCH_FIELD* sheetNameField = GetField( FIELD_T::SHEET_NAME );
-    VECTOR2I  textSize = sheetNameField->GetTextSize();
-    int       borderMargin = KiROUND( GetPenWidth() / 2.0 ) + 4;
-    int       margin = borderMargin + KiROUND( std::max( textSize.x, textSize.y ) * 0.5 );
+    VECTOR2I   textSize = sheetNameField->GetTextSize();
+    int        borderMargin = KiROUND( GetPenWidth() / 2.0 ) + 4;
+    int        margin = borderMargin + KiROUND( std::max( textSize.x, textSize.y ) * 0.5 );
 
     if( IsVerticalOrientation() )
     {
@@ -1539,8 +1539,7 @@ bool SCH_SHEET::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListBy
 }
 
 
-bool SCH_SHEET::HasConnectivityChanges( const SCH_ITEM* aItem,
-                                        const SCH_SHEET_PATH* aInstance ) const
+bool SCH_SHEET::HasConnectivityChanges( const SCH_ITEM* aItem, const SCH_SHEET_PATH* aInstance ) const
 {
     // Do not compare to ourself.
     if( aItem == this )
@@ -1584,8 +1583,7 @@ std::vector<VECTOR2I> SCH_SHEET::GetConnectionPoints() const
 }
 
 
-INSPECT_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData,
-                                 const std::vector<KICAD_T>& aScanTypes )
+INSPECT_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const std::vector<KICAD_T>& aScanTypes )
 {
     for( KICAD_T scanType : aScanTypes )
     {
@@ -1730,8 +1728,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     // Make the sheet object a clickable hyperlink (e.g. for PDF plotter)
     if( aPlotOpts.m_PDFHierarchicalLinks )
     {
-        aPlotter->HyperlinkBox( GetBoundingBox(),
-                                EDA_TEXT::GotoPageHref( findSelf().GetPageNumber() ) );
+        aPlotter->HyperlinkBox( GetBoundingBox(), EDA_TEXT::GotoPageHref( findSelf().GetPageNumber() ) );
     }
     else if( aPlotOpts.m_PDFPropertyPopups )
     {
@@ -1999,8 +1996,10 @@ void SCH_SHEET::setPageNumber( const KIID_PATH& aPath, const wxString& aPageNumb
 
 bool SCH_SHEET::HasHierarchyChanges( const SCH_SHEET& aOther ) const
 {
-    return GetName() != aOther.GetName() || GetFileName() != aOther.GetFileName()
-           || GetScreen() != aOther.GetScreen() || HasPageNumberChanges( aOther );
+    return GetName() != aOther.GetName()
+            || GetFileName() != aOther.GetFileName()
+            || GetScreen() != aOther.GetScreen()
+            || HasPageNumberChanges( aOther );
 }
 
 
@@ -2049,8 +2048,8 @@ bool SCH_SHEET::HasPageNumberChanges( const SCH_SHEET& aOther ) const
 
     while( itThis != instances.end() )
     {
-        if( ( itThis->m_Path == itOther->m_Path )
-          && ( itThis->m_PageNumber != itOther->m_PageNumber ) )
+        if( itThis->m_Path == itOther->m_Path
+            && itThis->m_PageNumber != itOther->m_PageNumber )
         {
             return true;
         }
@@ -2455,7 +2454,7 @@ static struct SCH_SHEET_DESC
                     groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Exclude From Bill of Materials" ),
                     &SCH_SHEET::SetExcludedFromBOMProp, &SCH_SHEET::GetExcludedFromBOMProp ),
-                groupAttributes );
+                    groupAttributes );
         propMgr.AddProperty( new PROPERTY<SCH_SHEET, bool>( _HKI( "Do not Populate" ),
                     &SCH_SHEET::SetDNPProp, &SCH_SHEET::GetDNPProp ),
                     groupAttributes );
