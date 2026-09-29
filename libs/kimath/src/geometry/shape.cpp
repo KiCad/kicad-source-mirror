@@ -90,7 +90,7 @@ int SHAPE::GetClearance( const SHAPE* aOther ) const
     {
         for( const SHAPE* b : b_shapes )
         {
-            int temp_dist = 0;
+            int temp_dist = std::numeric_limits<int>::max();
             a->Collide( b, std::numeric_limits<int>::max() / 2, &temp_dist );
 
             if( temp_dist < actual_clearance )

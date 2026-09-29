@@ -26,6 +26,7 @@
 #include <geometry/shape_arc.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>
+#include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
 #include <trigo.h>
 
@@ -1690,5 +1691,16 @@ BOOST_AUTO_TEST_CASE( CalcArcCenterRoundsOnceNearHalf )
     BOOST_CHECK_EQUAL( CalcArcCenter( s, m, e ), VECTOR2I( -74371215, -1756259108 ) );
 }
 
+
+// GetClearance passes an INT_MAX / 2 sentinel that must not overflow the arc bounding box
+BOOST_AUTO_TEST_CASE( GetClearanceAgainstSegment )
+{
+    const SHAPE_ARC     arc( VECTOR2I( 0, 0 ), VECTOR2I( 1000000, 0 ), ANGLE_90, 50000 );
+    const SHAPE_SEGMENT seg( VECTOR2I( 2000000, 0 ), VECTOR2I( 2000000, 0 ), 50000 );
+
+    // Gap between the arc start point and the segment minus both half widths
+    BOOST_CHECK_EQUAL( arc.GetClearance( &seg ), 1000000 - 25000 - 25000 );
+    BOOST_CHECK_EQUAL( seg.GetClearance( &arc ), 1000000 - 25000 - 25000 );
+}
 
 BOOST_AUTO_TEST_SUITE_END()

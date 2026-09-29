@@ -211,4 +211,62 @@ BOOST_AUTO_TEST_CASE( test_intersects_circle_edge, *boost::unit_test::tolerance(
     BOOST_TEST( box.IntersectsCircleEdge( VECTOR2D( 14, 6 ), 5, 1 ) == false );
 }
 
+// Reference distance from a point to a box by clamping per axis
+static int64_t refSquaredDistance( const BOX2I& aBox, const VECTOR2I& aP )
+{
+    const int64_t x1 = std::min<int64_t>( aBox.GetLeft(), aBox.GetRight() );
+    const int64_t x2 = std::max<int64_t>( aBox.GetLeft(), aBox.GetRight() );
+    const int64_t y1 = std::min<int64_t>( aBox.GetTop(), aBox.GetBottom() );
+    const int64_t y2 = std::max<int64_t>( aBox.GetTop(), aBox.GetBottom() );
+    const int64_t dx = aP.x < x1 ? x1 - aP.x : ( aP.x > x2 ? aP.x - x2 : 0 );
+    const int64_t dy = aP.y < y1 ? y1 - aP.y : ( aP.y > y2 ? aP.y - y2 : 0 );
+
+    return dx * dx + dy * dy;
+}
+
+BOOST_AUTO_TEST_CASE( SquaredDistanceToPoint )
+{
+    const BOX2I box( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) );
+
+    BOOST_CHECK_EQUAL( box.SquaredDistance( VECTOR2I( 1000, 50 ) ), 810000 );
+    BOOST_CHECK_EQUAL( box.SquaredDistance( VECTOR2I( -20, 50 ) ), 400 );
+    BOOST_CHECK_EQUAL( box.SquaredDistance( VECTOR2I( 50, 1000 ) ), 810000 );
+    BOOST_CHECK_EQUAL( box.SquaredDistance( VECTOR2I( 50, -30 ) ), 900 );
+    BOOST_CHECK_EQUAL( box.SquaredDistance( VECTOR2I( 50, 50 ) ), 0 );
+
+    const int coords[] = { -300, -100, -1, 0, 1, 50, 99, 100, 101, 250, 1000 };
+
+    for( const BOX2I& b : { box, BOX2I( VECTOR2I( 10, -40 ), VECTOR2I( 60, 25 ) ),
+                            BOX2I( VECTOR2I( 100, 100 ), VECTOR2L( -100, -100 ) ) } )
+    {
+        for( int x : coords )
+        {
+            for( int y : coords )
+                BOOST_CHECK_EQUAL( b.SquaredDistance( VECTOR2I( x, y ) ), refSquaredDistance( b, VECTOR2I( x, y ) ) );
+        }
+    }
+}
+
+BOOST_AUTO_TEST_CASE( InflateSentinelDoesNotWrap )
+{
+    const int delta = std::numeric_limits<int>::max() / 2 + 50000;
+
+    BOX2I box( VECTOR2I( 1000, 2000 ), VECTOR2I( 300, 400 ) );
+    box.Inflate( delta );
+
+    BOOST_CHECK_EQUAL( box.GetLeft(), 1000 - delta );
+    BOOST_CHECK_EQUAL( box.GetTop(), 2000 - delta );
+    BOOST_CHECK_EQUAL( box.GetWidth(), 300 + 2 * int64_t( delta ) );
+    BOOST_CHECK_EQUAL( box.GetHeight(), 400 + 2 * int64_t( delta ) );
+
+    // Far enough to saturate the coordinate range, the box must still cover the original
+    BOX2I huge( VECTOR2I( -1000, 500 ), VECTOR2I( 2000, 100 ) );
+    huge.Inflate( std::numeric_limits<int>::max() );
+
+    BOOST_CHECK_LE( huge.GetLeft(), -1000 );
+    BOOST_CHECK_LE( huge.GetTop(), 500 );
+    BOOST_CHECK_GE( int64_t( huge.GetLeft() ) + huge.GetWidth(), 1000 );
+    BOOST_CHECK_GE( int64_t( huge.GetTop() ) + huge.GetHeight(), 600 );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
