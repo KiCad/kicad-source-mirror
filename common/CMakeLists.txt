@@ -125,6 +125,7 @@ set( KICOMMON_SRCS
     git/git_sync_handler.cpp
     git/kicad_git_common.cpp
     git/kicad_git_errors.cpp
+    git/text_diff.cpp
     git/git_backend.cpp
     git/kigit_orphan_registry.cpp
     git/libgit_backend.cpp
@@ -565,6 +566,7 @@ set( COMMON_GIT_DLG_SRCS
     dialogs/git/dialog_git_credentials_base.cpp
     dialogs/git/dialog_git_repository.cpp
     dialogs/git/dialog_git_repository_base.cpp
+    dialogs/git/dialog_text_diff.cpp
     dialogs/git/panel_git_repos.cpp
     dialogs/git/panel_git_repos_base.cpp
 
