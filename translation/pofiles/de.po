@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-28 18:35+0000\n"
+"PO-Revision-Date: 2026-09-29 19:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -2261,7 +2261,7 @@ msgstr "Ab&brechen"
 
 #: common/confirm.cpp:52 common/confirm.cpp:57
 msgid "&Open Anyway"
-msgstr "Trotzdem öffnen"
+msgstr "&Trotzdem öffnen"
 
 #: common/confirm.cpp:68 common/confirm.cpp:111
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:1196
@@ -9549,7 +9549,7 @@ msgstr "Element"
 #: eeschema/widgets/panel_symbol_chooser.cpp:173
 #: pcbnew/widgets/panel_footprint_chooser.cpp:98
 msgid "Recently Used"
-msgstr "Kürzlich benutzt"
+msgstr "Zuletzt verwendet"
 
 #: common/lib_tree_model_adapter.cpp:472
 #: eeschema/widgets/panel_symbol_chooser.cpp:180
@@ -10961,7 +10961,7 @@ msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
 msgstr ""
-"Wechseln des Bogenbearbeitungsmodus, um die Endpunkte oder die Richtung des "
+"Bogenbearbeitungsmodus wechseln, um die Endpunkte oder die Richtung des "
 "anderen Punktes beizubehalten"
 
 #: common/tool/actions.cpp:606
@@ -10971,7 +10971,7 @@ msgstr "Bogenradius und -mitte beibehalten, Winkel anpassen"
 #: common/tool/actions.cpp:607
 msgid "Switch arc editing mode to maintaining radius when endpoint are moved"
 msgstr ""
-"Bogenbearbeitungsmodus wechseln um Radius beizubehalten wenn Endpunkte "
+"Bogenbearbeitungsmodus wechseln, um Radius beizubehalten, wenn Endpunkte "
 "bewegt werden"
 
 #: common/tool/actions.cpp:614
@@ -32144,7 +32144,7 @@ msgid ""
 "Recently used templates appear at the top. Use the folder icon to browse "
 "custom template directories."
 msgstr ""
-"Kürzlich verwende Vorlagen werden oben angezeigt. Verwenden Sie das "
+"Zuletzt verwendete Vorlagen werden oben angezeigt. Verwenden Sie das "
 "Ordnersymbol, um benutzerdefinierte Vorlagenverzeichnisse zu durchsuchen."
 
 #: kicad/dialogs/template_default_html.h:399
