@@ -125,11 +125,11 @@ struct SCH_SYMBOL_INSTANCE
     // The project name associated with this instance.
     wxString  m_ProjectName;
 
-    bool m_DNP = false;
-    bool m_ExcludedFromBOM = false;
-    bool m_ExcludedFromSim = false;
-    bool m_ExcludedFromBoard = false;
-    bool m_ExcludedFromPosFiles = false;
+    bool      m_DNP = false;
+    bool      m_ExcludedFromBOM = false;
+    bool      m_ExcludedFromSim = false;
+    bool      m_ExcludedFromBoard = false;
+    bool      m_ExcludedFromPosFiles = false;
 
     /// A list of symbol variants.
     std::map<wxString, SCH_SYMBOL_VARIANT> m_Variants;
