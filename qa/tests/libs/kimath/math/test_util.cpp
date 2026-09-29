@@ -144,6 +144,9 @@ BOOST_AUTO_TEST_CASE( KiROUNDSaturates )
 
     BOOST_CHECK_EQUAL( KiROUND( 1e30f, true ), INT_MAX );
     BOOST_CHECK_EQUAL( KiROUND( std::numeric_limits<float>::quiet_NaN(), true ), 0 );
+
+    BOOST_CHECK_EQUAL( KiROUND( LLONG_MAX, true ), INT_MAX );
+    BOOST_CHECK_EQUAL( ( KiROUND<int64_t, int64_t>( ( int64_t( 1 ) << 53 ) + 1, true ) ), ( int64_t( 1 ) << 53 ) + 1 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

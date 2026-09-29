@@ -36,6 +36,7 @@
 #include <limits>
 #include <typeinfo>
 #include <type_traits>
+#include <utility>
 #include <algorithm>
 
 /**
@@ -99,6 +100,8 @@ constexpr ret_type KiROUND( fp_type v, bool aQuiet = false )
 {
     using limits = std::numeric_limits<ret_type>;
 
+    static_assert( limits::digits <= std::numeric_limits<long long>::digits );
+
     auto overflow = [&]( ret_type aResult )
     {
         if( !aQuiet )
@@ -106,6 +109,18 @@ constexpr ret_type KiROUND( fp_type v, bool aQuiet = false )
 
         return aResult;
     };
+
+    // llround would convert through double and lose precision past 2^53
+    if constexpr( std::is_integral_v<fp_type> )
+    {
+        if( std::cmp_greater( v, limits::max() ) )
+            return overflow( limits::max() );
+
+        if( std::cmp_less( v, limits::lowest() ) )
+            return overflow( limits::lowest() );
+
+        return static_cast<ret_type>( v );
+    }
 
     // llround is unspecified for NaN and for results beyond long long, so saturate before calling it.
     // v != v stands in for std::isnan, which is not constexpr until C++23.
@@ -117,7 +132,8 @@ constexpr ret_type KiROUND( fp_type v, bool aQuiet = false )
         if( v >= fp_type( limits::max() ) + 0.5 )
             return overflow( limits::max() );
 
-        if( v < fp_type( limits::lowest() ) - 0.5 )
+        // lowest - 0.5 can round to lowest itself, which llround still handles exactly
+        if( v - fp_type( limits::lowest() ) <= -0.5 )
             return overflow( limits::lowest() );
     }
 
