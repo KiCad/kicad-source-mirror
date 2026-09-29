@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-28 07:51+0000\n"
+"PO-Revision-Date: 2026-09-29 19:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -42217,7 +42217,7 @@ msgstr "円"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Rectangular"
-msgstr "四角"
+msgstr "長方形"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Trapezoidal"
@@ -42333,7 +42333,7 @@ msgstr "穴形状:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:3379
 msgid "Oblong"
-msgstr "長方形"
+msgstr "楕円形"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:487
 msgid "Specify pad to die length"
