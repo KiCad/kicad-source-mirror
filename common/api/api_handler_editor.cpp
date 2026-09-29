@@ -50,9 +50,6 @@ API_HANDLER_EDITOR::API_HANDLER_EDITOR( EDA_BASE_FRAME* aFrame ) :
 HANDLER_RESULT<BeginCommitResponse> API_HANDLER_EDITOR::handleBeginCommit(
         const HANDLER_CONTEXT<BeginCommit>& aCtx )
 {
-    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
-        return tl::unexpected( *busy );
-
     // Before 11.0, commit requests had no header so we assume they are for the PCB editor
     if( aCtx.Request.has_header() )
     {
@@ -61,6 +58,9 @@ HANDLER_RESULT<BeginCommitResponse> API_HANDLER_EDITOR::handleBeginCommit(
         if( !valid )
             return tl::unexpected( valid.error() );
     }
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
 
     if( m_commits.count( aCtx.ClientName ) )
     {
@@ -88,9 +88,6 @@ HANDLER_RESULT<BeginCommitResponse> API_HANDLER_EDITOR::handleBeginCommit(
 HANDLER_RESULT<EndCommitResponse> API_HANDLER_EDITOR::handleEndCommit(
         const HANDLER_CONTEXT<EndCommit>& aCtx )
 {
-    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
-        return tl::unexpected( *busy );
-
     // Before 11.0, commit requests had no header so we assume they are for the PCB editor
     if( aCtx.Request.has_header() )
     {
@@ -99,6 +96,9 @@ HANDLER_RESULT<EndCommitResponse> API_HANDLER_EDITOR::handleEndCommit(
         if( !valid )
             return tl::unexpected( valid.error() );
     }
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
 
     if( !m_commits.count( aCtx.ClientName ) )
     {
@@ -296,9 +296,6 @@ HANDLER_RESULT<UpdateItemsResponse> API_HANDLER_EDITOR::handleUpdateItems(
 HANDLER_RESULT<DeleteItemsResponse> API_HANDLER_EDITOR::handleDeleteItems(
         const HANDLER_CONTEXT<DeleteItems>& aCtx )
 {
-    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
-        return tl::unexpected( *busy );
-
     if( !validateItemHeaderDocument( aCtx.Request.header() ) )
     {
         ApiResponseStatus e;
@@ -306,6 +303,9 @@ HANDLER_RESULT<DeleteItemsResponse> API_HANDLER_EDITOR::handleDeleteItems(
         e.set_status( ApiStatusCode::AS_UNHANDLED );
         return tl::unexpected( e );
     }
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
 
     std::map<KIID, ItemDeletionStatus> itemsToDelete;
 
@@ -345,9 +345,6 @@ HANDLER_RESULT<DeleteItemsResponse> API_HANDLER_EDITOR::handleDeleteItems(
 HANDLER_RESULT<HitTestResponse> API_HANDLER_EDITOR::handleHitTest(
         const HANDLER_CONTEXT<HitTest>& aCtx )
 {
-    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
-        return tl::unexpected( *busy );
-
     if( !validateItemHeaderDocument( aCtx.Request.header() ) )
     {
         ApiResponseStatus e;
@@ -355,6 +352,9 @@ HANDLER_RESULT<HitTestResponse> API_HANDLER_EDITOR::handleHitTest(
         e.set_status( ApiStatusCode::AS_UNHANDLED );
         return tl::unexpected( e );
     }
+
+    if( std::optional<ApiResponseStatus> busy = checkForBusy() )
+        return tl::unexpected( *busy );
 
     HitTestResponse response;
 
