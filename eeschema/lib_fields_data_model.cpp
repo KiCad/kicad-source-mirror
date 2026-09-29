@@ -135,6 +135,8 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxSt
 
             if( aValue == wxS( "1" ) )
                 setPowerSymbolDefaults( symbol );
+            else
+                setStoredFieldValue( symbol, SYMBOL_IS_LOCAL_POWER, wxS( "0" ) );
         }
         else if( fieldName == SYMBOL_IS_LOCAL_POWER )
         {
@@ -156,9 +158,39 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const wxSt
         {
             setStoredFieldValue( symbol, fieldName, aValue );
         }
+
+        if( fieldName == SYMBOL_IS_POWER || fieldName == SYMBOL_IS_LOCAL_POWER )
+        {
+            const bool isPower = getStoredPowerSymbolValue( symbol );
+            wxString   localPower;
+            getStoredFieldValue( symbol, SYMBOL_IS_LOCAL_POWER, localPower );
+
+            // Show pending changes in descendants too, including those hidden by the filter.
+            for( LIB_SYMBOL* child : m_symbolsList )
+            {
+                if( !child->IsDerived() )
+                    continue;
+
+                std::shared_ptr<LIB_SYMBOL> root = child->GetRootSymbol();
+
+                // The root on the editing canvas can be a different object from the library copy.
+                if( !root || root->m_Uuid != symbol->m_Uuid )
+                    continue;
+
+                setStoredFieldValue( child, SYMBOL_IS_POWER, isPower ? wxS( "1" ) : wxS( "0" ) );
+                setStoredFieldValue( child, SYMBOL_IS_LOCAL_POWER,
+                                     isPower && localPower == wxS( "1" ) ? wxS( "1" ) : wxS( "0" ) );
+
+                if( isPower )
+                    setPowerSymbolDefaults( child );
+            }
+        }
     }
 
     m_edited = true;
+
+    if( GetView() )
+        GetView()->ForceRefresh();
 }
 
 
@@ -226,6 +258,15 @@ bool LIB_FIELDS_EDITOR_GRID_DATA_MODEL::IsCellReadOnly( int aRow, int aCol )
 {
     if( FIELDS_TABLE_DATA_MODEL<LIB_SYMBOL*>::IsCellReadOnly( aRow, aCol ) )
         return true;
+
+    if( m_cols[aCol].m_fieldName == SYMBOL_IS_POWER || m_cols[aCol].m_fieldName == SYMBOL_IS_LOCAL_POWER )
+    {
+        for( LIB_SYMBOL* symbol : m_rows[aRow].GetCellItems() )
+        {
+            if( symbol->IsDerived() )
+                return true;
+        }
+    }
 
     if( m_cols[aCol].m_fieldName == SYMBOL_IS_LOCAL_POWER )
     {
@@ -777,10 +818,15 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
 {
     int powerCol = GetFieldNameCol( SYMBOL_IS_POWER );
     int localPowerCol = GetFieldNameCol( SYMBOL_IS_LOCAL_POWER );
+    std::set<LIB_SYMBOL*> modifiedSymbols;
 
+    // Power state belongs to the root. Apply it before fields so derived symbols see
+    // the final inherited state regardless of their position in the table.
     for( LIB_SYMBOL* symbol : m_symbolsList )
     {
-        bool symbolModified = false;
+        if( symbol->IsDerived() )
+            continue;
+
         bool symbolIsPower = symbol->IsPower();
         bool symbolIsLocalPower = symbol->IsLocalPower();
         wxString value;
@@ -810,8 +856,14 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
             else
                 symbol->SetNormal();
 
-            symbolModified = true;
+            modifiedSymbols.insert( symbol );
         }
+    }
+
+    for( LIB_SYMBOL* symbol : m_symbolsList )
+    {
+        bool       symbolModified = modifiedSymbols.contains( symbol );
+        const bool symbolIsPower = symbol->IsPower();
 
         for( size_t i = 0; i < m_cols.size(); ++i )
         {
@@ -933,6 +985,25 @@ void LIB_FIELDS_EDITOR_GRID_DATA_MODEL::ApplyData( std::function<void( LIB_SYMBO
         }
 
         if( symbolModified )
+            modifiedSymbols.insert( symbol );
+    }
+
+    // Apply all field edits before rebuilding metadata. Publish parents first so children
+    // also see edits made to a separate copy of their parent on the editing canvas.
+    std::vector<LIB_SYMBOL*> symbols = m_symbolsList;
+
+    std::stable_sort( symbols.begin(), symbols.end(),
+                      []( const LIB_SYMBOL* aLeft, const LIB_SYMBOL* aRight )
+                      {
+                          return aLeft->GetInheritanceDepth() < aRight->GetInheritanceDepth();
+                      } );
+
+    for( LIB_SYMBOL* symbol : symbols )
+    {
+        // Unedited children can inherit changed descriptions and keywords too.
+        symbol->RefreshLibraryTreeCaches();
+
+        if( modifiedSymbols.contains( symbol ) )
             symbolChangeHandler( symbol );
 
         acceptDataStoreItem( symbol );
