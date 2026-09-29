@@ -263,7 +263,7 @@ BOOST_AUTO_TEST_CASE( InflateSentinelDoesNotWrap )
     BOX2I huge( VECTOR2I( -1000, 500 ), VECTOR2I( 2000, 100 ) );
     huge.Inflate( std::numeric_limits<int>::max() );
 
-    BOOST_CHECK_LE( huge.GetLeft(), -1000 );
+    BOOST_CHECK_EQUAL( huge.GetLeft(), std::numeric_limits<int>::lowest() );
     BOOST_CHECK_LE( huge.GetTop(), 500 );
     BOOST_CHECK_GE( int64_t( huge.GetLeft() ) + huge.GetWidth(), 1000 );
     BOOST_CHECK_GE( int64_t( huge.GetTop() ) + huge.GetHeight(), 600 );

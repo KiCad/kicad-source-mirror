@@ -865,7 +865,8 @@ private:
     {
         const ecoord_type pos = aPos;
         const ecoord_type delta = aDelta;
-        const ecoord_type limit = coord_limits::max();
+        const ecoord_type lowLimit = coord_limits::lowest();
+        const ecoord_type highLimit = coord_limits::max();
 
         if( aSize >= 0 )
         {
@@ -877,8 +878,8 @@ private:
             }
             else
             {
-                const ecoord_type lo = std::clamp<ecoord_type>( pos - delta, -limit, limit );
-                const ecoord_type hi = std::clamp<ecoord_type>( pos + aSize + delta, -limit, limit );
+                const ecoord_type lo = std::clamp<ecoord_type>( pos - delta, lowLimit, highLimit );
+                const ecoord_type hi = std::clamp<ecoord_type>( pos + aSize + delta, lowLimit, highLimit );
 
                 aPos = static_cast<coord_type>( lo );
                 aSize = hi - lo;
@@ -894,8 +895,8 @@ private:
             else
             {
                 // Negative size, pos is the high edge so inflating moves it up and the low edge down
-                const ecoord_type hi = std::clamp<ecoord_type>( pos + delta, -limit, limit );
-                const ecoord_type lo = std::clamp<ecoord_type>( pos + aSize - delta, -limit, limit );
+                const ecoord_type hi = std::clamp<ecoord_type>( pos + delta, lowLimit, highLimit );
+                const ecoord_type lo = std::clamp<ecoord_type>( pos + aSize - delta, lowLimit, highLimit );
 
                 aPos = static_cast<coord_type>( hi );
                 aSize = lo - hi;

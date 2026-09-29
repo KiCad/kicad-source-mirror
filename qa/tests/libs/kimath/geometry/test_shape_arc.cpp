@@ -1703,4 +1703,14 @@ BOOST_AUTO_TEST_CASE( GetClearanceAgainstSegment )
     BOOST_CHECK_EQUAL( seg.GetClearance( &arc ), 1000000 - 25000 - 25000 );
 }
 
+
+// Beyond the search cutoff no collision is reported, which must not read as zero clearance
+BOOST_AUTO_TEST_CASE( GetClearanceBeyondCutoff )
+{
+    const SHAPE_SEGMENT a( VECTOR2I( 0, 0 ), VECTOR2I( 0, 0 ) );
+    const SHAPE_SEGMENT b( VECTOR2I( 1500000000, 0 ), VECTOR2I( 1500000000, 0 ) );
+
+    BOOST_CHECK_EQUAL( a.GetClearance( &b ), std::numeric_limits<int>::max() );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
