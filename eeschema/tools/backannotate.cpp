@@ -73,6 +73,59 @@ static std::vector<wxString> netsInUnitOrder( const std::vector<wxString>&      
 }
 
 
+// The board reports pad numbers, the unit planner compares logical pin numbers.
+bool CollectBackannotatePcbNets( const SCH_SYMBOL& aSymbol, const SCH_SHEET_PATH& aSheetPath,
+                                 const wxString& aVariantName, const std::map<wxString, wxString>& aPcbNetsByPad,
+                                 std::map<wxString, wxString>& aPcbNetsByLogicalPin )
+{
+    for( const SCH_PIN* pin : aSymbol.GetPins( &aSheetPath ) )
+    {
+        // Pins on symbols can have more than one pin stacked
+        bool                        logicalPinsValid = false;
+        const std::vector<wxString> logicalPins = pin->GetStackedPinNumbers( &logicalPinsValid );
+
+        if( !logicalPinsValid || logicalPins.empty() )
+            return false;
+
+        // Map those multiple stacked pins to whatever we have them mapped to on the PCB side
+        bool                        padsValid = false;
+        const std::vector<wxString> pads =
+                ExpandStackedPinNotation( pin->GetEffectivePadNumber( aSheetPath, aVariantName ), &padsValid );
+
+        if( !padsValid || pads.empty() )
+            return false;
+
+        // Get all our nets now that we have all our pads
+        std::set<wxString> pcbNets;
+
+        for( const wxString& pad : pads )
+        {
+            auto it = aPcbNetsByPad.find( pad );
+            pcbNets.insert( it != aPcbNetsByPad.end() ? it->second : wxString() );
+        }
+
+        // A stacked pin represents one schematic net. More than one pad net corresponding
+        // to a single stacked pin cannot be resolved by a unit swap
+        if( pcbNets.size() != 1 )
+            return false;
+
+        const wxString& pcbNet = *pcbNets.begin();
+
+        for( const wxString& pinNum : logicalPins )
+        {
+            auto [it, inserted] = aPcbNetsByLogicalPin.emplace( pinNum, pcbNet );
+
+            // We might already have some mappings from previous calls to this function,
+            // same mappings are fine, but new different mappings are not
+            if( !inserted && it->second != pcbNet )
+                return false;
+        }
+    }
+
+    return true;
+}
+
+
 BACKANNOTATE_UNIT_SWAP_PLAN PlanBackannotateUnitSwaps(
         const std::vector<BACKANNOTATE_UNIT_SWAP_CANDIDATE>& aCandidates,
         const std::map<wxString, wxString>& aPcbPinMap )
@@ -504,6 +557,7 @@ void BACK_ANNOTATE::applyChangelist()
     // because the swaps will modify the changelist
     if( m_processNetNames && m_preferUnitSwaps )
     {
+        const wxString variantName = m_frame->Schematic().GetCurrentVariant();
         REPORTER& debugReporter = NULL_REPORTER::GetInstance(); // Change to m_reporter for debugging
 
         // Group changelist items by shared PCB footprint data pointer
@@ -550,7 +604,9 @@ void BACK_ANNOTATE::applyChangelist()
             };
 
             // All symbol units for this footprint
-            std::vector<SYM_UNIT> symbolUnits;
+            std::vector<SYM_UNIT>        symbolUnits;
+            std::map<wxString, wxString> pcbNetsByLogicalPin;
+            bool                         mappingValid = true;
 
             std::map<LIB_SYMBOL*, std::vector<LIB_SYMBOL::UNIT_PIN_INFO>> unitPinsByLibSymbol;
 
@@ -612,18 +668,21 @@ void BACK_ANNOTATE::applyChangelist()
 
                 const SCH_SHEET_PATH& sheetPath = ref.GetSheetPath();
 
-                for( SCH_PIN* pin : symbol->GetPins( &ref.GetSheetPath() ) )
+                if( !CollectBackannotatePcbNets( *symbol, sheetPath, variantName, fp->m_pinMap, pcbNetsByLogicalPin ) )
                 {
-                    const wxString& pinNum = pin->GetNumber();
+                    mappingValid = false;
+                    break;
+                }
 
-                    // PCB nets from footprint pin map
-                    auto it = fp->m_pinMap.find( pinNum );
-                    symbolUnit.pcbNetsByPin[pinNum] = ( it != fp->m_pinMap.end() ) ? it->second : wxString();
+                for( SCH_PIN* pin : symbol->GetPins( &sheetPath ) )
+                {
+                    const wxString schNet = pin->GetConnectionName( &sheetPath, false, true ).value_or( wxString() );
 
-                    // Schematic nets from connections
-                    const SCH_PIN* p = symbol->GetPin( pinNum );
-                    symbolUnit.schNetsByPin[pinNum] =
-                            p ? p->GetConnectionName( &sheetPath, false, true ).value_or( wxString() ) : wxString();
+                    for( const wxString& pinNum : pin->GetStackedPinNumbers() )
+                    {
+                        symbolUnit.pcbNetsByPin[pinNum] = pcbNetsByLogicalPin.at( pinNum );
+                        symbolUnit.schNetsByPin[pinNum] = schNet;
+                    }
                 }
 
                 symbolUnit.pcbNetsInUnitOrder = netsInUnitOrder( symbolUnit.unitPinNumbers, symbolUnit.pcbNetsByPin );
@@ -674,7 +733,7 @@ void BACK_ANNOTATE::applyChangelist()
                 debugReporter.ReportHead( msg, RPT_SEVERITY_INFO );
             }
 
-            if( symbolUnits.size() < 2 )
+            if( !mappingValid || symbolUnits.size() < 2 )
                 continue;
 
             std::vector<BACKANNOTATE_UNIT_SWAP_CANDIDATE> candidates;
@@ -689,7 +748,7 @@ void BACK_ANNOTATE::applyChangelist()
                 candidates.push_back( candidate );
             }
 
-            BACKANNOTATE_UNIT_SWAP_PLAN plan = PlanBackannotateUnitSwaps( candidates, fp->m_pinMap );
+            BACKANNOTATE_UNIT_SWAP_PLAN plan = PlanBackannotateUnitSwaps( candidates, pcbNetsByLogicalPin );
 
             if( !plan.m_mappingOk )
             {

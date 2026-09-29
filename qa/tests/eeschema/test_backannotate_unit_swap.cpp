@@ -20,8 +20,14 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <tools/backannotate.h>
+#include <lib_symbol.h>
+#include <pin_map.h>
+#include <sch_pin.h>
+#include <sch_symbol.h>
+#include <sch_sheet_path.h>
 
 #include <map>
+#include <memory>
 #include <vector>
 
 
@@ -93,6 +99,61 @@ static void check_final_units( const std::vector<BACKANNOTATE_UNIT_SWAP_CANDIDAT
     for( int expectedUnit : aExpectedUnits )
         BOOST_CHECK_EQUAL( finalUnits[idx++], expectedUnit );
 }
+
+
+struct MAPPED_UNIT_SWAP_FIXTURE
+{
+    MAPPED_UNIT_SWAP_FIXTURE()
+    {
+        LIB_SYMBOL lib( wxS( "MappedUnits" ), nullptr );
+        lib.SetUnitCount( 2, false );
+
+        for( int number = 1; number <= 4; ++number )
+        {
+            SCH_PIN* pin = new SCH_PIN( &lib );
+            pin->SetNumber( wxString::Format( wxS( "%d" ), number ) );
+            pin->SetUnit( number <= 2 ? 1 : 2 );
+            pin->SetPosition( VECTOR2I( 0, number * 100 ) );
+            pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+            lib.AddDrawItem( pin );
+        }
+
+        PIN_MAP map( wxS( "ReversedPads" ) );
+        map.SetEntry( wxS( "1" ), wxS( "3" ) );
+        map.SetEntry( wxS( "2" ), wxS( "4" ) );
+        map.SetEntry( wxS( "3" ), wxS( "1" ) );
+        map.SetEntry( wxS( "4" ), wxS( "2" ) );
+        lib.PinMaps().AddOrReplace( map );
+
+        LIB_ID footprint;
+        footprint.Parse( wxS( "Test:MappedUnits" ) );
+        lib.SetAssociatedFootprints( { { footprint, wxS( "ReversedPads" ) } } );
+
+        m_first = std::make_unique<SCH_SYMBOL>( lib, lib.GetLibId(), nullptr, 1 );
+        m_second = std::make_unique<SCH_SYMBOL>( lib, lib.GetLibId(), nullptr, 2 );
+        m_first->SetFootprintFieldText( footprint.Format() );
+        m_second->SetFootprintFieldText( footprint.Format() );
+
+        m_candidates = { make_candidate( "U1A", 1, { "1", "2" }, { { "1", "A_IN" }, { "2", "A_OUT" } } ),
+                         make_candidate( "U1B", 2, { "3", "4" }, { { "3", "B_IN" }, { "4", "B_OUT" } } ) };
+    }
+
+    BACKANNOTATE_UNIT_SWAP_PLAN Plan( const std::map<wxString, wxString>& aPcbNetsByPad )
+    {
+        std::map<wxString, wxString> pcbNetsByLogicalPin;
+        BOOST_REQUIRE(
+                CollectBackannotatePcbNets( *m_first, m_sheet, wxEmptyString, aPcbNetsByPad, pcbNetsByLogicalPin ) );
+        BOOST_REQUIRE(
+                CollectBackannotatePcbNets( *m_second, m_sheet, wxEmptyString, aPcbNetsByPad, pcbNetsByLogicalPin ) );
+        BOOST_REQUIRE_EQUAL( pcbNetsByLogicalPin.size(), 4U );
+        return PlanBackannotateUnitSwaps( m_candidates, pcbNetsByLogicalPin );
+    }
+
+    SCH_SHEET_PATH                                m_sheet;
+    std::unique_ptr<SCH_SYMBOL>                   m_first;
+    std::unique_ptr<SCH_SYMBOL>                   m_second;
+    std::vector<BACKANNOTATE_UNIT_SWAP_CANDIDATE> m_candidates;
+};
 
 
 BOOST_AUTO_TEST_SUITE( BackannotateUnitSwapPlanner )
@@ -206,5 +267,87 @@ BOOST_AUTO_TEST_CASE( BackannotateUnitSwapPlanner_DoesNotTreatHybridBAS16TWGateA
     BOOST_CHECK( plan.m_steps.empty() );
     BOOST_CHECK( plan.m_swappedCandidateIndices.empty() );
 }
+
+BOOST_FIXTURE_TEST_CASE( MappedPadsAlreadyMatch, MAPPED_UNIT_SWAP_FIXTURE )
+{
+    // The footprint pad order differs from the logical pin order, but the nets already agree.
+    // Comparing raw pad numbers would incorrectly infer an A/B unit swap here.
+    const auto plan = Plan( make_pin_map( { { "1", "B_IN" }, { "2", "B_OUT" }, { "3", "A_IN" }, { "4", "A_OUT" } } ) );
+
+    check_plan( plan, true, true, {} );
+    BOOST_CHECK( plan.m_steps.empty() );
+    check_final_units( m_candidates, plan, { 1, 2 } );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( MappedPadsDetectRealSwap, MAPPED_UNIT_SWAP_FIXTURE )
+{
+    // Swap the physical gates on the PCB. Raw pad lookup would incorrectly call this unchanged.
+    const auto plan = Plan( make_pin_map( { { "1", "A_IN" }, { "2", "A_OUT" }, { "3", "B_IN" }, { "4", "B_OUT" } } ) );
+
+    check_plan( plan, true, false, { 0, 1 } );
+    check_final_units( m_candidates, plan, { 2, 1 } );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( IdentityOverrideKeepsOriginalPinNumbers, MAPPED_UNIT_SWAP_FIXTURE )
+{
+    PIN_MAP_INSTANCE_OVERRIDE pinOverride;
+    pinOverride.m_Mode = PIN_MAP_OVERRIDE_MODE::FORCE_IDENTITY;
+    m_first->SetPinMapOverride( pinOverride );
+    m_second->SetPinMapOverride( pinOverride );
+
+    const auto plan = Plan( make_pin_map( { { "1", "A_IN" }, { "2", "A_OUT" }, { "3", "B_IN" }, { "4", "B_OUT" } } ) );
+
+    check_plan( plan, true, true, {} );
+    check_final_units( m_candidates, plan, { 1, 2 } );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( StackedPadsMustAgree, MAPPED_UNIT_SWAP_FIXTURE )
+{
+    PIN_MAP_INSTANCE_OVERRIDE pinOverride;
+    pinOverride.m_Edits.push_back( { wxS( "1" ), wxS( "[3,5]" ) } );
+    m_first->SetPinMapOverride( pinOverride );
+
+    auto                         pcbNetsByPad = make_pin_map( { { "3", "A_IN" }, { "4", "A_OUT" }, { "5", "A_IN" } } );
+    std::map<wxString, wxString> logicalNets;
+
+    BOOST_REQUIRE( CollectBackannotatePcbNets( *m_first, m_sheet, wxEmptyString, pcbNetsByPad, logicalNets ) );
+    BOOST_CHECK_EQUAL( logicalNets.at( wxS( "1" ) ), wxS( "A_IN" ) );
+
+    // One logical pin cannot describe two different PCB nets.
+    pcbNetsByPad[wxS( "5" )] = wxS( "OTHER_NET" );
+    logicalNets.clear();
+    BOOST_CHECK( !CollectBackannotatePcbNets( *m_first, m_sheet, wxEmptyString, pcbNetsByPad, logicalNets ) );
+
+    pcbNetsByPad.erase( wxS( "5" ) );
+    logicalNets.clear();
+    BOOST_CHECK( !CollectBackannotatePcbNets( *m_first, m_sheet, wxEmptyString, pcbNetsByPad, logicalNets ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( StackedLogicalPinsUseExpandedNumbers )
+{
+    LIB_SYMBOL lib( wxS( "StackedUnit" ), nullptr );
+    SCH_PIN*   pin = new SCH_PIN( &lib );
+    pin->SetNumber( wxS( "[1,2]" ) );
+    pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
+    lib.AddDrawItem( pin );
+
+    SCH_SYMBOL                symbol( lib, lib.GetLibId(), nullptr, 1 );
+    PIN_MAP_INSTANCE_OVERRIDE pinOverride;
+    pinOverride.m_Edits.push_back( { wxS( "[1,2]" ), wxS( "[8,9]" ) } );
+    symbol.SetPinMapOverride( pinOverride );
+    SCH_SHEET_PATH               sheet;
+    std::map<wxString, wxString> logicalNets;
+
+    BOOST_REQUIRE( CollectBackannotatePcbNets(
+            symbol, sheet, wxEmptyString, make_pin_map( { { "8", "SIGNAL" }, { "9", "SIGNAL" } } ), logicalNets ) );
+    BOOST_REQUIRE_EQUAL( logicalNets.size(), 2U );
+    BOOST_CHECK_EQUAL( logicalNets.at( wxS( "1" ) ), wxS( "SIGNAL" ) );
+    BOOST_CHECK_EQUAL( logicalNets.at( wxS( "2" ) ), wxS( "SIGNAL" ) );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
