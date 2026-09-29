@@ -1853,6 +1853,19 @@ bool SCH_SCREEN::HasInstanceDataFromOtherProjects() const
         }
     }
 
+    for( const SCH_ITEM* item : Items().OfType( SCH_SHEET_T ) )
+    {
+        const SCH_SHEET* sheet = static_cast<const SCH_SHEET*>( item );
+
+        const std::vector<SCH_SHEET_INSTANCE> sheetInstances = sheet->GetInstances();
+
+        for( const SCH_SHEET_INSTANCE& instance : sheetInstances )
+        {
+            if( !hierarchy.HasPath( instance.m_Path ) )
+                return true;
+        }
+    }
+
     return false;
 }
 
