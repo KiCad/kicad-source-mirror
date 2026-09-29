@@ -904,7 +904,10 @@ public:
      * Potential net chains are inferred groupings produced by RebuildNetChains() but not
      * yet user-committed. Existing m_committedNetChains now represents only user-created connectivity groups.
      */
-    const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetPotentialNetChains() const { return m_netChains->GetPotentialNetChains(); }
+    const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetPotentialNetChains() const
+    {
+        return m_netChains->GetPotentialNetChains();
+    }
 
     /** Promote a potential net chain to an actual user net chain with the provided name. */
     SCH_NETCHAIN* CreateNetChainFromPotential( SCH_NETCHAIN* aPotential, const wxString& aName );
@@ -933,7 +936,10 @@ public:
                                         const wxString& aRefB, const wxString& aPinNumB );
 
     /** Return user-created (committed) net chains (legacy accessor retained under net-chain API). */
-    const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetCommittedNetChains() const { return m_netChains->GetCommittedNetChains(); }
+    const std::vector<std::unique_ptr<SCH_NETCHAIN>>& GetCommittedNetChains() const
+    {
+        return m_netChains->GetCommittedNetChains();
+    }
 
     /**
      * Mirror each committed net chain's netclass override into the project NET_SETTINGS as a
@@ -991,11 +997,11 @@ private:
      * chain when two potentials share an endpoint but differ at the other terminal.  Tested
      * via the boost_test_resolve_potential_chain_by_terminals friend shim.
      */
-    static SCH_NETCHAIN* resolvePotentialChainByTerminals(
-            const CHAIN_TERMINAL_REFS& aTermRefs,
-            const std::map<std::pair<wxString, wxString>, wxString>& aRefPinToNet,
-            const std::vector<std::unique_ptr<SCH_NETCHAIN>>& aPotentials,
-            const wxString& aChainName );
+    static SCH_NETCHAIN*
+    resolvePotentialChainByTerminals( const CHAIN_TERMINAL_REFS& aTermRefs,
+                                      const std::map<std::pair<wxString, wxString>, wxString>& aRefPinToNet,
+                                      const std::vector<std::unique_ptr<SCH_NETCHAIN>>& aPotentials,
+                                      const wxString& aChainName );
 
     /// All the sheets in the schematic (as long as we don't have partial updates).
     SCH_SHEET_LIST m_sheetList;

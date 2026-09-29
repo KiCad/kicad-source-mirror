@@ -108,14 +108,14 @@ SCH_ITEM& SCH_ITEM::operator=( const SCH_ITEM& aItem )
 
 SCH_ITEM::~SCH_ITEM()
 {
-    for( const auto& weakOwner : m_connectivityOwners )
+    for( const std::weak_ptr<CONNECTION_GRAPH_LIFETIME>& weakOwner : m_connectivityOwners )
     {
-        if( const auto owner = weakOwner.lock() )
+        if( const std::shared_ptr<CONNECTION_GRAPH_LIFETIME>& owner = weakOwner.lock() )
             owner->graph->RemoveItem( this );
     }
 
-    for( const auto& it : m_connection_map )
-        delete it.second;
+    for( const auto& [path, connection] : m_connection_map )
+        delete connection;
 
     // Remove this item from any rule areas that contain it
     for( SCH_RULE_AREA* ruleArea : m_rule_areas_cache )
@@ -125,9 +125,13 @@ SCH_ITEM::~SCH_ITEM()
 
 void SCH_ITEM::registerConnectivityOwner( const std::shared_ptr<CONNECTION_GRAPH_LIFETIME>& aOwner )
 {
-    std::erase_if( m_connectivityOwners, []( const auto& owner ) { return owner.expired(); } );
+    std::erase_if( m_connectivityOwners,
+                   []( const auto& owner )
+                   {
+                       return owner.expired();
+                   } );
 
-    for( const auto& owner : m_connectivityOwners )
+    for( const std::weak_ptr<CONNECTION_GRAPH_LIFETIME>& owner : m_connectivityOwners )
     {
         if( owner.lock() == aOwner )
             return;
@@ -327,7 +331,11 @@ void SCH_ITEM::invalidateConnectivity( KICAD_T aChangedType )
     {
         // Plotting and property dialogs use child copies with a live parent pointer
         bool owned = false;
-        owner->RunOnChildren( [&]( SCH_ITEM* child ) { owned |= child == this; }, RECURSE_MODE::NO_RECURSE );
+        owner->RunOnChildren( [&]( SCH_ITEM* child )
+                              {
+                                  owned |= child == this;
+                              },
+                              RECURSE_MODE::NO_RECURSE );
 
         if( owned && screen->CheckIfOnDrawList( owner ) )
             screen->BumpConnectivityRevision( aChangedType );
@@ -363,8 +371,7 @@ SYMBOL* SCH_ITEM::GetParentSymbol()
 }
 
 
-bool SCH_ITEM::ResolveExcludedFromSim( const SCH_SHEET_PATH* aInstance,
-                                       const wxString& aVariantName ) const
+bool SCH_ITEM::ResolveExcludedFromSim( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
 {
     if( GetExcludedFromSim( aInstance, aVariantName ) )
         return true;
@@ -382,8 +389,7 @@ bool SCH_ITEM::ResolveExcludedFromSim( const SCH_SHEET_PATH* aInstance,
 }
 
 
-bool SCH_ITEM::ResolveExcludedFromBOM( const SCH_SHEET_PATH* aInstance,
-                                       const wxString& aVariantName ) const
+bool SCH_ITEM::ResolveExcludedFromBOM( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
 {
     if( GetExcludedFromBOM( aInstance, aVariantName ) )
         return true;
@@ -401,8 +407,7 @@ bool SCH_ITEM::ResolveExcludedFromBOM( const SCH_SHEET_PATH* aInstance,
 }
 
 
-bool SCH_ITEM::ResolveExcludedFromBoard( const SCH_SHEET_PATH* aInstance,
-                                         const wxString& aVariantName ) const
+bool SCH_ITEM::ResolveExcludedFromBoard( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
 {
     if( GetExcludedFromBoard( aInstance, aVariantName ) )
         return true;
@@ -420,8 +425,7 @@ bool SCH_ITEM::ResolveExcludedFromBoard( const SCH_SHEET_PATH* aInstance,
 }
 
 
-bool SCH_ITEM::ResolveExcludedFromPosFiles( const SCH_SHEET_PATH* aInstance,
-                                            const wxString& aVariantName ) const
+bool SCH_ITEM::ResolveExcludedFromPosFiles( const SCH_SHEET_PATH* aInstance, const wxString& aVariantName ) const
 {
     if( GetExcludedFromPosFiles( aInstance, aVariantName ) )
         return true;
@@ -610,7 +614,7 @@ void SCH_ITEM::SetConnectionGraph( CONNECTION_GRAPH* aGraph )
 
 
 static std::optional<SCH_CONNECTIVITY::ITEM_VIEW> publishedConnection( const SCH_ITEM& aItem,
-                                                                        const SCH_SHEET_PATH* aSheet )
+                                                                       const SCH_SHEET_PATH* aSheet )
 {
     SCHEMATIC* schematic = aItem.Schematic();
 
@@ -623,7 +627,7 @@ static std::optional<SCH_CONNECTIVITY::ITEM_VIEW> publishedConnection( const SCH
 
 
 std::optional<wxString> SCH_ITEM::GetConnectionName( const SCH_SHEET_PATH* aSheet, bool aLocal,
-                                                   bool aIgnoreSheet ) const
+                                                     bool aIgnoreSheet ) const
 {
     if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine && wxThread::IsMain() )
     {
@@ -673,7 +677,7 @@ bool SCH_ITEM::MatchesNetName( const EDA_SEARCH_DATA& aSearchData, const SCH_SHE
 {
     if( ADVANCED_CFG::GetCfg().m_ConnectivityEngine && wxThread::IsMain() )
     {
-        const auto connection = publishedConnection( *this, aSheet );
+        const std::optional<SCH_CONNECTIVITY::ITEM_VIEW> connection = publishedConnection( *this, aSheet );
 
         if( !connection )
             return false;
@@ -681,7 +685,7 @@ bool SCH_ITEM::MatchesNetName( const EDA_SEARCH_DATA& aSearchData, const SCH_SHE
         if( !connection->IsBus() )
             return EDA_ITEM::Matches( connection->Name(), aSearchData );
 
-        for( const auto& member : connection->Members().leaves )
+        for( const SCH_CONNECTIVITY::NET_VIEW& member : connection->Members().leaves )
         {
             if( EDA_ITEM::Matches( member.Name(), aSearchData ) )
                 return true;
@@ -783,8 +787,7 @@ void SCH_ITEM::AddConnectionTo( const SCH_SHEET_PATH& aSheet, SCH_ITEM* aItem )
 }
 
 
-SCH_CONNECTION* SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet,
-                                                CONNECTION_GRAPH* aGraph )
+SCH_CONNECTION* SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet, CONNECTION_GRAPH* aGraph )
 {
     SCH_CONNECTION* connection = Connection( &aSheet );
 
@@ -807,8 +810,7 @@ SCH_CONNECTION* SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet,
 }
 
 
-SCH_CONNECTION* SCH_ITEM::GetOrInitConnection( const SCH_SHEET_PATH& aSheet,
-                                               CONNECTION_GRAPH* aGraph )
+SCH_CONNECTION* SCH_ITEM::GetOrInitConnection( const SCH_SHEET_PATH& aSheet, CONNECTION_GRAPH* aGraph )
 {
     if( !IsConnectable() )
         return nullptr;
