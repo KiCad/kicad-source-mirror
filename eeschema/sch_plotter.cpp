@@ -354,16 +354,14 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_OPTS& aPlotOpts,
      */
     SCH_SHEET_LIST sheetList;
 
-    if( aPlotOpts.m_plotAll )
+    if( aPlotOpts.m_plotAll || aPlotOpts.m_plotPages.size() > 0 )
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
-        sheetList.SortByPageNumbers();
+        sheetList.SortByHierarchicalPageNumbers();
 
         // remove the non-selected pages if we are in plot pages mode
         if( aPlotOpts.m_plotPages.size() > 0 )
-        {
             sheetList.TrimToPageNumbers( aPlotOpts.m_plotPages );
-        }
     }
     else
     {
@@ -545,16 +543,14 @@ void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_OPTS& aPlotOpts,
     SCH_SHEET_LIST sheetList;
     PLOT_CONTEXT   raii( nullptr, m_schematic );
 
-    if( aPlotOpts.m_plotAll )
+    if( aPlotOpts.m_plotAll || aPlotOpts.m_plotPages.size() > 0 )
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
-        sheetList.SortByPageNumbers();
+        sheetList.SortByHierarchicalPageNumbers();
 
         // remove the non-selected pages if we are in plot pages mode
         if( aPlotOpts.m_plotPages.size() > 0 )
-        {
             sheetList.TrimToPageNumbers( aPlotOpts.m_plotPages );
-        }
     }
     else
     {
@@ -738,10 +734,10 @@ void SCH_PLOTTER::createPNGFiles( const SCH_PLOT_OPTS& aPlotOpts,
     SCH_SHEET_LIST sheetList;
     PLOT_CONTEXT   raii( nullptr, m_schematic );
 
-    if( aPlotOpts.m_plotAll )
+    if( aPlotOpts.m_plotAll || aPlotOpts.m_plotPages.size() > 0 )
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
-        sheetList.SortByPageNumbers();
+        sheetList.SortByHierarchicalPageNumbers();
 
         if( aPlotOpts.m_plotPages.size() > 0 )
             sheetList.TrimToPageNumbers( aPlotOpts.m_plotPages );
@@ -933,10 +929,10 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_OPTS& aPlotOpts, SCH_RENDER_SET
      */
     SCH_SHEET_LIST sheetList;
 
-    if( aPlotOpts.m_plotAll )
+    if( aPlotOpts.m_plotAll || aPlotOpts.m_plotPages.size() > 0 )
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
-        sheetList.SortByPageNumbers();
+        sheetList.SortByHierarchicalPageNumbers();
 
         // remove the non-selected pages if we are in plot pages mode
         if( aPlotOpts.m_plotPages.size() > 0 )
