@@ -2913,29 +2913,30 @@ void ORCAD_CONVERTER::placeInstance( ORCAD_RAW_PAGE& aPage, const ORCAD_PLACED_I
     TRANSFORM                                     inverseTransform = symbol->GetTransform().InverseTransform();
     std::vector<std::pair<SCH_TEXT*, SCH_SHAPE*>> degreeMarks;
 
-    auto circleTouchesStroke = [&]( const SCH_SHAPE& aCircle )
-    {
-        int64_t radiusSquared = static_cast<int64_t>( aCircle.GetRadius() ) * aCircle.GetRadius();
-
-        for( const SCH_ITEM& item : symbol->GetLibSymbolRef()->GetDrawItems() )
-        {
-            if( item.Type() != SCH_SHAPE_T )
-                continue;
-
-            const SCH_SHAPE& shape = static_cast<const SCH_SHAPE&>( item );
-
-            if( &shape == &aCircle || shape.GetShape() != SHAPE_T::POLY )
-                continue;
-
-            for( const VECTOR2I& point : shape.GetPolyShape().Outline( 0 ).CPoints() )
+    auto circleTouchesStroke =
+            [&]( const SCH_SHAPE& aCircle )
             {
-                if( ( point - aCircle.GetPosition() ).SquaredEuclideanNorm() <= radiusSquared )
-                    return true;
-            }
-        }
+                int64_t radiusSquared = static_cast<int64_t>( aCircle.GetRadius() ) * aCircle.GetRadius();
 
-        return false;
-    };
+                for( const SCH_ITEM& item : symbol->GetLibSymbolRef()->GetDrawItems() )
+                {
+                    if( item.Type() != SCH_SHAPE_T )
+                        continue;
+
+                    const SCH_SHAPE& shape = static_cast<const SCH_SHAPE&>( item );
+
+                    if( &shape == &aCircle || shape.GetShape() != SHAPE_T::POLY || shape.GetPolyShape().IsEmpty() )
+                        continue;
+
+                    for( const VECTOR2I& point : shape.GetPolyShape().Outline( 0 ).CPoints() )
+                    {
+                        if( ( point - aCircle.GetPosition() ).SquaredEuclideanNorm() <= radiusSquared )
+                            return true;
+                    }
+                }
+
+                return false;
+            };
 
     for( SCH_ITEM& item : symbol->GetLibSymbolRef()->GetDrawItems() )
     {

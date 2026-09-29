@@ -1810,7 +1810,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::savePin( const SCH_PIN* aPin, OUTPUTFORMATTE
 void SCH_IO_KICAD_LEGACY_LIB_CACHE::savePolyLine( SCH_SHAPE* aPolyLine,
                                                   OUTPUTFORMATTER& aFormatter )
 {
-    wxCHECK_RET( aPolyLine && aPolyLine->GetShape() == SHAPE_T::POLY, "Invalid POLY object." );
+    wxCHECK_RET( aPolyLine && !aPolyLine->GetPolyShape().IsEmpty(), "Invalid POLY object." );
 
     aFormatter.Print( 0, "P %d %d %d %d",
                       (int) aPolyLine->GetPolyShape().Outline( 0 ).GetPointCount(),

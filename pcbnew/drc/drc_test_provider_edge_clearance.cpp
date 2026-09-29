@@ -355,12 +355,14 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                         edges.back()->SetStroke( stroke );
                     }
                 }
-                else if( shape->GetShape() == SHAPE_T::POLY && !shape->IsSolidFill() )
+                else if( shape->GetShape() == SHAPE_T::POLY
+                            && !shape->IsSolidFill()
+                            && !shape->GetPolyShape().IsEmpty() )
                 {
                     // A single polygon for the board would defeat the RTree, so convert to edges.
                     SHAPE_LINE_CHAIN poly = shape->GetPolyShape().Outline( 0 );
 
-                    for( size_t ii = 0; ii < poly.GetSegmentCount(); ++ii )
+                    for( int ii = 0; ii < (int) poly.GetSegmentCount(); ++ii )
                     {
                         SEG seg = poly.CSegment( ii );
                         edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );

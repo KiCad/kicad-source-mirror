@@ -3214,13 +3214,14 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
                 shape.SetStart( scalePt( shape.GetStart() ) );
                 shape.SetEnd( scalePt( shape.GetEnd() ) );
             }
-            else if( shape.GetShape() == SHAPE_T::POLY )
+            else if( shape.GetShape() == SHAPE_T::POLY && !shape.GetPolyShape().IsEmpty() )
             {
                 SHAPE_LINE_CHAIN& poly = shape.GetPolyShape().Outline( 0 );
 
-                for( size_t ii = 0; ii < poly.GetPointCount(); ++ii )
+                for( int ii = 0; ii < (int) poly.GetPointCount(); ++ii )
                     poly.SetPoint( ii, scalePt( poly.CPoint( ii ) ) );
             }
+
             break;
         }
 

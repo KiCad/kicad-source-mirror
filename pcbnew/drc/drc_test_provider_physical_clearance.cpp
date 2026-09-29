@@ -301,8 +301,12 @@ bool DRC_TEST_PROVIDER_PHYSICAL_CLEARANCE::Run()
                             switch( shape->GetShape() )
                             {
                             case SHAPE_T::POLY:
-                                testShapeLineChain( shape->GetPolyShape().Outline( 0 ), shape->GetWidth(), layer,
-                                                    item, c );
+                                if( !shape->GetPolyShape().IsEmpty() )
+                                {
+                                    testShapeLineChain( shape->GetPolyShape().Outline( 0 ), shape->GetWidth(),
+                                                        layer, item, c );
+                                }
+
                                 break;
 
                             case SHAPE_T::BEZIER:

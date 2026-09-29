@@ -1673,7 +1673,11 @@ int SCH_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     if( !m_editPoints || !m_editPoints->GetParent()->IsType( { SCH_SHAPE_T, SCH_RULE_AREA_T } ) )
         return 0;
 
-    SCH_SHAPE*        shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
+    SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
+
+    if( shape->GetPolyShape().IsEmpty() )
+        return 0;
+
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
     SCH_COMMIT        commit( m_toolMgr );
 
@@ -1714,7 +1718,11 @@ int SCH_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     if( !m_editPoints || !m_editedPoint || !m_editPoints->GetParent()->IsType( { SCH_SHAPE_T, SCH_RULE_AREA_T } ) )
         return 0;
 
-    SCH_SHAPE*        shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
+    SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
+
+    if( shape->GetPolyShape().IsEmpty() )
+        return 0;
+
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
     SCH_COMMIT        commit( m_toolMgr );
 
