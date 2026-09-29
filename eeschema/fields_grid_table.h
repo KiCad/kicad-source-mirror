@@ -89,9 +89,9 @@ class FIELDS_GRID_TABLE : public WX_GRID_TABLE_BASE, public std::vector<SCH_FIEL
 {
 public:
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
-                       LIB_SYMBOL* aSymbol, std::vector<EMBEDDED_FILES*> aFilesStack = {} );
+                       LIB_SYMBOL* aSymbol, std::vector<EMBEDDED_FILES*> aFilesStack );
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
-                       SCH_SYMBOL* aSymbol );
+                       SCH_SYMBOL* aSymbol, std::vector<EMBEDDED_FILES*> aFilesStack );
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
                        SCH_SHEET* aSheet );
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,

@@ -323,16 +323,21 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
     m_symbol = aSymbol;
     LIB_SYMBOL* libSymbol = m_symbol->GetLibSymbolRef().get();
 
+    if( m_symbol->GetEmbeddedFiles() )
+    {
+        m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_notebook1, m_symbol->GetEmbeddedFiles() );
+        m_notebook1->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
+    }
+
     // GetLibSymbolRef() now points to the cached part in the schematic, which should always be
     // there for usual cases, but can be null when opening old schematics not storing the part
     // so we need to handle m_part == nullptr
     // wxASSERT( m_part );
 
-    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_fieldsGrid, m_symbol );
+    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_fieldsGrid, m_symbol, { m_embeddedFiles->GetLocalFiles() } );
     m_fieldsGrid->SetTable( m_fields );
     m_fieldsGrid->OverrideMinSize( 1.0, 1.0 );
-    m_fieldsGrid->PushEventHandler( new FIELDS_GRID_TRICKS( m_fieldsGrid, this,
-                                                            m_fields->GetEmbeddedFilesStack(),
+    m_fieldsGrid->PushEventHandler( new FIELDS_GRID_TRICKS( m_fieldsGrid, this, { m_embeddedFiles->GetLocalFiles() },
                                                             [&]( wxCommandEvent& aEvent )
                                                             {
                                                                 OnAddField( aEvent );
@@ -357,12 +362,6 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH
 
     m_fieldsGrid->ShowHideColumns( "0 1 2 3 4 5 6 7" );
     m_shownColumns = m_fieldsGrid->GetShownColumns();
-
-    if( m_symbol->GetEmbeddedFiles() )
-    {
-        m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_notebook1, m_symbol->GetEmbeddedFiles() );
-        m_notebook1->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
-    }
 
     m_pinMapPanel = new PANEL_SYMBOL_PIN_MAP( m_pinMapPage );
     bPinMapPageSizer->Add( m_pinMapPanel, 1, wxEXPAND, 5 );

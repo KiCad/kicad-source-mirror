@@ -147,11 +147,12 @@ FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFra
 
 
 FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
-                                      SCH_SYMBOL* aSymbol ) :
+                                      SCH_SYMBOL* aSymbol, std::vector<EMBEDDED_FILES*> aFilesStack ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_parentType( SCH_SYMBOL_T ),
         m_part( nullptr ),
+        m_filesStack( aFilesStack ),
         m_symbolNetlist( BuildFootprintChooserSymbolNetlist( aSymbol->GetLibSymbolRef().get() ) ),
         m_fieldNameValidator( FIELD_T::USER ),
         m_referenceValidator( FIELD_T::REFERENCE ),
