@@ -39,6 +39,7 @@
 
 #include <board.h>
 #include <footprint.h>
+#include <pcb_3d_body.h>
 #include <footprint_library_adapter.h>
 #include <eda_3d_viewer_frame.h>
 #include <project_pcb.h>
@@ -2124,7 +2125,7 @@ bool RENDER_3D_RAYTRACE_BASE::addExtrudedBodyToRaytracer( CONTAINER_3D& aDstCont
 
     outline.Simplify();
 
-    const EXTRUDED_3D_BODY* body = aFootprint->GetExtrudedBody();
+    const EXTRUDED_3D_BODY* body = aFootprint->GetBody() ? aFootprint->GetBody()->GetExtruded() : nullptr;
     const float             biuTo3d = m_boardAdapter.BiuTo3dUnits();
 
     VECTOR2I fpPos = aFootprint->GetPosition();
@@ -2271,7 +2272,7 @@ void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aS
         // Placeholder is suppressed when an extrusion was built.
         bool hasExtrudedBody = false;
 
-        if( fp->HasExtrudedBody() && fp->GetExtrudedBody()->m_show && m_boardAdapter.IsFootprintShown( fp ) )
+        if( fp->HasBody() && fp->GetBody()->GetExtruded()->m_show && m_boardAdapter.IsFootprintShown( fp ) )
             hasExtrudedBody = addExtrudedBodyToRaytracer( aDstContainer, fp );
 
         if( ( hasModels || showMissing ) && m_boardAdapter.IsFootprintShown( fp ) )

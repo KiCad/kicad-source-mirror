@@ -63,6 +63,8 @@ static constexpr double ARC_TO_SEGMENT_MAX_ERROR_MM = 0.005;
 
 class FOOTPRINT;
 class PAD;
+enum class EXTRUSION_MATERIAL;
+class EXTRUDED_3D_BODY;
 
 class TDocStd_Document;
 class XCAFApp_Application;

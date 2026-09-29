@@ -25,6 +25,7 @@
 #include <3d_viewer_id.h>
 #include <board.h>
 #include <footprint.h>
+#include <pcb_3d_body.h>
 #include <pcb_track.h>
 #include "convert_basic_shapes_to_polygon.h"
 #include <lset.h>
@@ -678,10 +679,10 @@ void RENDER_3D_OPENGL::renderExtrudedBodies()
 
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
-        if( !fp->HasExtrudedBody() )
+        if( !fp->HasBody() )
             continue;
 
-        const EXTRUDED_3D_BODY* body = fp->GetExtrudedBody();
+        const EXTRUDED_3D_BODY* body = fp->GetBody()->GetExtruded();
 
         if( !body->m_show || !m_boardAdapter.IsFootprintShown( fp ) )
             continue;

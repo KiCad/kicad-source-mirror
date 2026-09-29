@@ -1,6 +1,7 @@
 #include <qa_utils/file_utils.h>
 #include <boost/test/unit_test.hpp>
 #include <footprint.h>
+#include <pcb_3d_body.h>
 #include <pcbnew_utils/board_file_utils.h>
 #include <pcbnew_utils/board_test_utils.h>
 #include <settings/settings_manager.h>
@@ -13,7 +14,7 @@ BOOST_AUTO_TEST_CASE( FullRoundTrip )
     SETTINGS_MANAGER settingsManager;
 
     FOOTPRINT         footprint( nullptr );
-    EXTRUDED_3D_BODY& body = footprint.EnsureExtrudedBody();
+    EXTRUDED_3D_BODY& body = *footprint.EnsureBody().MutableExtruded();
     body.m_height = pcbIUScale.mmToIU( 2.5 );
     body.m_standoff = pcbIUScale.mmToIU( 0.1 );
     body.m_layer = F_CrtYd;
@@ -32,8 +33,8 @@ BOOST_AUTO_TEST_CASE( FullRoundTrip )
     std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
     BOOST_REQUIRE( loaded != nullptr );
 
-    BOOST_REQUIRE( loaded->HasExtrudedBody() );
-    const EXTRUDED_3D_BODY* lb = loaded->GetExtrudedBody();
+    BOOST_REQUIRE( loaded->HasBody() );
+    const EXTRUDED_3D_BODY* lb = loaded->GetBody()->GetExtruded();
 
     BOOST_CHECK_EQUAL( lb->m_height, body.m_height );
     BOOST_CHECK_EQUAL( lb->m_standoff, body.m_standoff );
@@ -62,7 +63,7 @@ BOOST_AUTO_TEST_CASE( DefaultsRoundTrip )
     SETTINGS_MANAGER settingsManager;
 
     FOOTPRINT         footprint( nullptr );
-    EXTRUDED_3D_BODY& body = footprint.EnsureExtrudedBody();
+    EXTRUDED_3D_BODY& body = *footprint.EnsureBody().MutableExtruded();
     body.m_height = pcbIUScale.mmToIU( 5.0 );
     // Leave everything else at defaults
 
@@ -73,9 +74,9 @@ BOOST_AUTO_TEST_CASE( DefaultsRoundTrip )
 
     std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
     BOOST_REQUIRE( loaded != nullptr );
-    BOOST_REQUIRE( loaded->HasExtrudedBody() );
+    BOOST_REQUIRE( loaded->HasBody() );
 
-    const EXTRUDED_3D_BODY* lb = loaded->GetExtrudedBody();
+    const EXTRUDED_3D_BODY* lb = loaded->GetBody()->GetExtruded();
     BOOST_CHECK_EQUAL( lb->m_height, body.m_height );
     BOOST_CHECK_EQUAL( lb->m_standoff, 0 );
     BOOST_CHECK_EQUAL( lb->m_layer, UNDEFINED_LAYER );
@@ -108,7 +109,7 @@ BOOST_AUTO_TEST_CASE( NoExtrudedBodyRoundTrip )
 
     std::unique_ptr<FOOTPRINT> loaded = KI_TEST::ReadFootprintFromFileOrStream( savePath.string() );
     BOOST_REQUIRE( loaded != nullptr );
-    BOOST_CHECK( !loaded->HasExtrudedBody() );
+    BOOST_CHECK( !loaded->HasBody() );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

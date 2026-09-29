@@ -36,6 +36,7 @@
 #include <board_design_settings.h>
 #include <board_stackup_manager/board_stackup.h>
 #include <footprint.h>
+#include <pcb_3d_body.h>
 #include <constraints/pcb_constraint.h>
 #include <generators/pcb_via_stack.h>
 #include <generators/pcb_via_stitch.h>
@@ -126,7 +127,7 @@ static PCB_REFERENCE_IMAGE* addTransformFeatures( BOARD& aBoard )
     aBoard.Add( net );
 
     FOOTPRINT* fp = new FOOTPRINT( &aBoard );
-    fp->EnsureExtrudedBody().m_height = pcbIUScale.mmToIU( 5 );
+    fp->EnsureBody().MutableExtruded()->m_height = pcbIUScale.mmToIU( 5 );
     fp->SetUnitInfo( { { wxT( "A" ), { wxT( "1" ) } }, { wxT( "B" ), { wxT( "2" ) } } } );
     fp->SetDuplicatePadNumbersAreJumpers( true );
     fp->AddVariant( wxT( "alternate" ) )->SetDNP( true );

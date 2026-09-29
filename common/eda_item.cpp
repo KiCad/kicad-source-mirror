@@ -607,6 +607,7 @@ static struct EDA_ITEM_DESC
             .Map( PCB_GROUP_T,             _HKI( "Group" ) )
             .Map( PCB_BARCODE_T,           _HKI( "Barcode" ) )
             .Map( PCB_GRID_ITEM_T,         _HKI( "Grid" ) )
+            .Map( PCB_3D_BODY_T,           _HKI( "3D Body" ) )
 
             .Map( SCH_MARKER_T,            _HKI( "Marker" ) )
             .Map( SCH_JUNCTION_T,          _HKI( "Junction" ) )

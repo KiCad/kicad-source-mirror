@@ -26,6 +26,7 @@
 #include <bezier_curves.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <footprint.h>
+#include <pcb_3d_body.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
@@ -654,9 +655,10 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, const VECTOR2
 
     }
 
-    if( aFootprint->HasExtrudedBody() && aFootprint->GetExtrudedBody()->m_show )
+    if( aFootprint->HasBody() && aFootprint->GetBody()->GetExtruded()->m_show )
     {
-        const EXTRUDED_3D_BODY* body = aFootprint->GetExtrudedBody();
+        const PCB_3D_BODY* bodyItem = aFootprint->GetBody();
+        const EXTRUDED_3D_BODY* body = bodyItem->GetExtruded();
         SHAPE_POLY_SET          outline;
 
         if( GetExtrusionOutline( aFootprint, outline ) && outline.OutlineCount() > 0 )

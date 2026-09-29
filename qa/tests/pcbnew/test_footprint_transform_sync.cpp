@@ -31,6 +31,7 @@
 #include <pcb_dimension.h>
 #include <pcb_marker.h>
 #include <pcb_point.h>
+#include <pcb_3d_body.h>
 #include <pcb_shape.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
@@ -110,7 +111,7 @@ BOOST_AUTO_TEST_CASE( BoardlessFootprintFlip )
     point->SetLayer( F_CrtYd );
     fp.Add( point, ADD_MODE::APPEND );
 
-    fp.EnsureExtrudedBody().m_layer = F_Fab;
+    fp.EnsureBody().MutableExtruded()->m_layer = F_Fab;
 
     fp.Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::TOP_BOTTOM );
 
@@ -127,7 +128,7 @@ BOOST_AUTO_TEST_CASE( BoardlessFootprintFlip )
     BOOST_CHECK_EQUAL( cell->GetLayer(), B_SilkS );
     BOOST_CHECK_EQUAL( dimension->GetLayer(), B_SilkS );
     BOOST_CHECK_EQUAL( point->GetLayer(), F_CrtYd );
-    BOOST_CHECK_EQUAL( fp.GetExtrudedBody()->m_layer, B_Fab );
+    BOOST_CHECK_EQUAL( fp.GetBody()->GetExtruded()->m_layer, B_Fab );
 }
 
 

@@ -40,6 +40,7 @@
 #include <pcb_track.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>
+#include <pcb_3d_body.h>
 
 #include <layer_ids.h>
 #include <project.h>
@@ -190,7 +191,7 @@ HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>> API_HANDLER_BOARD::createItemForType
             PCB_FIELD_T, PCB_BARCODE_T, PCB_TEXT_T, PCB_TEXTBOX_T, PCB_SHAPE_T,
             PCB_REFERENCE_IMAGE_T, PCB_TABLE_T, PCB_PAD_T, PCB_ZONE_T, PCB_GROUP_T,
             PCB_CONSTRAINT_T, PCB_POINT_T, PCB_DIM_ALIGNED_T, PCB_DIM_LEADER_T,
-            PCB_DIM_CENTER_T, PCB_DIM_RADIAL_T, PCB_DIM_ORTHOGONAL_T
+            PCB_DIM_CENTER_T, PCB_DIM_RADIAL_T, PCB_DIM_ORTHOGONAL_T, PCB_3D_BODY_T
         };
 
         if( !s_footprintItemTypes.contains( aType ) )

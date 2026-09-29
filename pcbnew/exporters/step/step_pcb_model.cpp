@@ -47,6 +47,7 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <3d_rendering/3d_placeholder_utils.h>
+#include <pcb_3d_body.h>
 #include <pad.h>
 #include <pcb_track.h>
 #include <kiplatform/io.h>

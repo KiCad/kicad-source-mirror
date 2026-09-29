@@ -438,14 +438,14 @@ BOOST_AUTO_TEST_CASE( ExtrudedBodyDroppedForKicad10 )
 {
     BOARD      board;
     FOOTPRINT* fp = new FOOTPRINT( &board );
-    fp->EnsureExtrudedBody();
+    fp->EnsureBody();
     board.Add( fp );
 
     BOOST_CHECK_EQUAL( ClassifyBoardForDowngrade( &board, kicad10 ).Count( DOWNGRADE_BUCKET::DROP ), 1 );
 
     DowngradeBoardInPlace( &board, kicad10 );
 
-    BOOST_CHECK( !fp->HasExtrudedBody() );
+    BOOST_CHECK( !fp->HasBody() );
 }
 
 

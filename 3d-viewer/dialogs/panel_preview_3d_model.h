@@ -65,7 +65,7 @@ class EMBEDDED_FILES;
 class BOARD;
 class BOARD_ADAPTER;
 class FOOTPRINT;
-class EXTRUDED_3D_BODY;
+class PCB_3D_BODY;
 #if defined(__linux__) || defined(__FreeBSD__)
 class SPNAV_VIEWER_PLUGIN;
 #else
@@ -113,7 +113,7 @@ public:
      */
     FOOTPRINT* GetDummyFootprint() const { return m_dummyFootprint; }
 
-    void SetExtrusionTransformMode( EXTRUDED_3D_BODY* aBody );
+    void SetExtrusionTransformMode( PCB_3D_BODY* aBody );
 
 private:
     enum class ALIGN_STATE { IDLE, PICK_MODEL, PICK_FOOTPRINT, SOLVED };
@@ -301,7 +301,7 @@ private:
     size_t   m_dummySelectedModel = std::numeric_limits<size_t>::max();  ///< Selected model in the dummy footprint.
 
     EDA_UNITS                m_userUnits;
-    EXTRUDED_3D_BODY*        m_extrudedBody = nullptr;
+    PCB_3D_BODY*             m_extrudedBody = nullptr;
     EMBEDDED_FILES*          m_localEmbeddedFiles = nullptr;
 
     /// The 3d viewer Render initial settings (must be saved and restored)

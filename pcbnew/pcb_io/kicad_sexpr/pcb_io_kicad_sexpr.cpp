@@ -46,6 +46,7 @@
 #include <pcb_group.h>
 #include <constraints/pcb_constraint.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <pcb_3d_body.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <pcb_point.h>
 #include <pcb_reference_image.h>
@@ -1764,10 +1765,15 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint ) const
         aFootprint->WriteEmbeddedFiles( *m_out, !( m_ctl & CTL_FOR_BOARD ) );
 
     // Save extruded 3D body info.
-    if( const EXTRUDED_3D_BODY* body = aFootprint->GetExtrudedBody(); body && body->m_height > 0 )
+    for( const PCB_3D_BODY* bodyItem : aFootprint->Bodies() )
     {
+        if( bodyItem->GetExtruded()->m_height <= 0 )
+            continue;
+
+        const EXTRUDED_3D_BODY* body = bodyItem->GetExtruded();
         m_out->Print( "(model" );
         m_out->Print( "(type extruded)" );
+        KICAD_FORMAT::FormatUuid( m_out, bodyItem->m_Uuid );
         KICAD_FORMAT::FormatBool( m_out, "hide", !body->m_show );
         m_out->Print( "(overall_height %s)", formatInternalUnits( body->m_height ).c_str() );
         m_out->Print( "(body_pcb_gap %s)", formatInternalUnits( body->m_standoff ).c_str() );

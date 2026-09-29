@@ -69,6 +69,7 @@ KICAD_T FromProtoEnum( types::KiCadObjectType aValue )
     case types::KiCadObjectType::KOT_PCB_TABLE:             return PCB_TABLE_T;
     case types::KiCadObjectType::KOT_PCB_DRILL_CHART:       return PCB_DRILL_CHART_T;
     case types::KiCadObjectType::KOT_PCB_DRILL_MAP:         return PCB_DRILL_MAP_T;
+    case types::KiCadObjectType::KOT_PCB_3D_BODY:           return PCB_3D_BODY_T;
     case types::KiCadObjectType::KOT_PCB_TABLECELL:         return PCB_TABLECELL_T;
     case types::KiCadObjectType::KOT_PCB_TRACE:             return PCB_TRACE_T;
     case types::KiCadObjectType::KOT_PCB_VIA:               return PCB_VIA_T;
@@ -136,6 +137,7 @@ types::KiCadObjectType ToProtoEnum( KICAD_T aValue )
     case PCB_TABLE_T:            return types::KiCadObjectType::KOT_PCB_TABLE;
     case PCB_DRILL_CHART_T:      return types::KiCadObjectType::KOT_PCB_DRILL_CHART;
     case PCB_DRILL_MAP_T:        return types::KiCadObjectType::KOT_PCB_DRILL_MAP;
+    case PCB_3D_BODY_T:          return types::KiCadObjectType::KOT_PCB_3D_BODY;
     case PCB_TABLECELL_T:        return types::KiCadObjectType::KOT_PCB_TABLECELL;
     case PCB_TRACE_T:            return types::KiCadObjectType::KOT_PCB_TRACE;
     case PCB_VIA_T:              return types::KiCadObjectType::KOT_PCB_VIA;

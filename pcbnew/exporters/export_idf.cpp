@@ -27,6 +27,7 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
+#include <pcb_3d_body.h>
 #include <footprint_library_adapter.h>
 #include <io/idf/idf_parser.h>
 #include <pad.h>
@@ -909,11 +910,13 @@ void IDF_EXPORTER::exportFootprint( FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard
     {
         // No explicit models found: use the existing extruded body, or generate one
         IDF3_COMP_OUTLINE* libOutline = nullptr;
-        EXTRUDED_3D_BODY generatedBody;
-        EXTRUDED_3D_BODY* body = nullptr;
+        EXTRUDED_3D_BODY   generatedBody;
+        EXTRUDED_3D_BODY*  body = nullptr;
 
-        if( EXTRUDED_3D_BODY* extruded = aFootprint->GetExtrudedBody() )
+        if( PCB_3D_BODY* bodyItem = aFootprint->GetBody() )
         {
+            EXTRUDED_3D_BODY* extruded = bodyItem->MutableExtruded();
+
             if( extruded->m_height <= 0 )
                 return;
 

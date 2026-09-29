@@ -34,6 +34,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <footprint_library_adapter.h>
+#include <pcb_3d_body.h>
 #include <footprint_edit_frame.h>
 #include <footprint_editor_settings.h>
 #include <dialog_footprint_properties_fp_editor.h>
@@ -200,10 +201,10 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataToWindow()
 {
     ReloadModelsFromFootprint();
 
-    bool hasExtrusion = m_footprint->HasExtrudedBody();
+    bool hasExtrusion = m_footprint->HasBody();
     m_enableExtrusionCheckbox->SetValue( hasExtrusion );
 
-    const EXTRUDED_3D_BODY* body = m_footprint->GetExtrudedBody();
+    const EXTRUDED_3D_BODY* body = m_footprint->GetBody() ? m_footprint->GetBody()->GetExtruded() : nullptr;
     m_showExtrusionCheckbox->SetValue( body ? body->m_show : true );
     m_componentHeightCtrl->SetValue(
             wxString::Format( wxT( "%.4f" ), body ? pcbIUScale.IUTomm( body->m_height ) : 0.0 ) );
@@ -310,7 +311,7 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
 
         int sel = m_extrusionLayerChoice->GetSelection();
 
-        EXTRUDED_3D_BODY& body = m_footprint->EnsureExtrudedBody();
+        EXTRUDED_3D_BODY& body = *m_footprint->EnsureBody().MutableExtruded();
         body.m_height = pcbIUScale.mmToIU( compHeight );
         body.m_standoff = pcbIUScale.mmToIU( standoff );
         body.m_layer = m_extrusionLayers[sel];
@@ -319,9 +320,9 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
 
         FOOTPRINT* dummyFp = m_previewPane->GetDummyFootprint();
 
-        if( dummyFp && dummyFp->HasExtrudedBody() )
+        if( dummyFp && dummyFp->HasBody() )
         {
-            const EXTRUDED_3D_BODY* dummyBody = dummyFp->GetExtrudedBody();
+            const EXTRUDED_3D_BODY* dummyBody = dummyFp->GetBody()->GetExtruded();
             body.m_scale = dummyBody->m_scale;
             body.m_rotation = dummyBody->m_rotation;
             body.m_offset = dummyBody->m_offset;
@@ -331,7 +332,7 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataFromWindow()
     }
     else
     {
-        m_footprint->ClearExtrudedBody();
+        m_footprint->ClearBody();
     }
 
     return true;
@@ -1018,7 +1019,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::updateExtrusionControls()
         FOOTPRINT* dummyFp = m_previewPane->GetDummyFootprint();
 
         if( dummyFp )
-            m_previewPane->SetExtrusionTransformMode( &dummyFp->EnsureExtrudedBody() );
+            m_previewPane->SetExtrusionTransformMode( &dummyFp->EnsureBody() );
     }
     else
     {
@@ -1066,7 +1067,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::updateExtrusionPreview()
 
     int sel = m_extrusionLayerChoice->GetSelection();
 
-    EXTRUDED_3D_BODY& body = dummyFp->EnsureExtrudedBody();
+    EXTRUDED_3D_BODY& body = *dummyFp->EnsureBody().MutableExtruded();
     body.m_height = pcbIUScale.mmToIU( compHeight );
     body.m_standoff = pcbIUScale.mmToIU( standoff );
     body.m_layer = m_extrusionLayers[sel];
@@ -1138,7 +1139,7 @@ void PANEL_FP_PROPERTIES_3D_MODEL::OnExportExtrudedModel( wxCommandEvent& event 
     VECTOR2D origin( m_footprint->GetPosition().x, m_footprint->GetPosition().y );
 
     FOOTPRINT*              dummyFp = m_previewPane->GetDummyFootprint();
-    const EXTRUDED_3D_BODY* body = dummyFp ? dummyFp->GetExtrudedBody() : nullptr;
+    const EXTRUDED_3D_BODY* body = dummyFp && dummyFp->HasBody() ? dummyFp->GetBody()->GetExtruded() : nullptr;
 
     double bodyStandoff = standoff;
 

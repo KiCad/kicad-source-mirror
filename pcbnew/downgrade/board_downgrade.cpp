@@ -120,7 +120,7 @@ static constexpr int VER_DRILL_DRAWINGS = 20260901;
 // 3. Otherwise add a VER_ constant above, a BOARD_RULE row that counts and strips the feature,
 //    and a dated row in BOARD_TOKENS or BOARD_VALUES for each new node head or bareword value.
 // 4. Set this constant to the new version.
-static constexpr int BOARD_DOWNGRADE_COVERED = 20260901;
+static constexpr int BOARD_DOWNGRADE_COVERED = 20260930;
 
 
 static bool isEllipse( const BOARD_ITEM* aItem )
@@ -317,7 +317,7 @@ static void dropPcbPointsFp( FOOTPRINT* aFootprint )
 
 static void dropExtrudedBodiesFp( FOOTPRINT* aFootprint )
 {
-    aFootprint->ClearExtrudedBody();
+    aFootprint->ClearBody();
 }
 
 
@@ -472,7 +472,7 @@ static int countExtrudedBodies( const BOARD* aBoard )
 
     for( FOOTPRINT* fp : aBoard->Footprints() )
     {
-        if( fp->HasExtrudedBody() )
+        if( fp->HasBody() )
             count++;
     }
 

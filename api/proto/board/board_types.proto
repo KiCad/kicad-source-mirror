@@ -1457,6 +1457,67 @@ message Footprint3DModel
   double opacity = 6;
 }
 
+// Since: 11.0
+enum Body3DKind
+{
+  BDK_UNKNOWN = 0;
+  BDK_EXTRUDED = 1;
+  // BDK_MODEL reserved for STEP-referenced bodies; do not use yet
+  BDK_MODEL = 2;
+}
+
+// Since: 11.0
+enum ExtrusionMaterial
+{
+  EM_UNKNOWN = 0;
+  EM_PLASTIC = 1;
+  EM_MATTE = 2;
+  EM_METAL = 3;
+  EM_COPPER = 4;
+}
+
+// Since: 11.0
+message ExtrudedBody
+{
+  kiapi.common.types.Distance height = 1;
+  kiapi.common.types.Distance standoff = 2;
+
+  // Outline source: BL_UNDEFINED = auto (courtyard, then fab, then pad bbox),
+  // BL_UNSELECTED = pad bounding box, otherwise the named layer
+  BoardLayer outline_layer = 3;
+
+  ExtrusionMaterial material = 4;
+
+  // Absent means use the material's default color
+  optional kiapi.common.types.Color color = 5;
+}
+
+// A free 3D body. Currently only used as a footprint child (to support the extruded 3D body
+// feature) but may be extended in the future
+// Since: 11.0
+message Body3D
+{
+  kiapi.common.types.KIID id = 1;
+  kiapi.common.types.KIID parent = 2;
+  Body3DKind kind = 3;
+
+  // Scaling factor along each axis, with Footprint3DModel semantics
+  kiapi.common.types.Vector3D scale = 4;
+
+  // Rotation around each axis, in degrees
+  kiapi.common.types.Vector3D rotation = 5;
+
+  // Offset from the footprint origin
+  kiapi.common.types.Vector3D offset = 6;
+
+  bool visible = 7;
+
+  oneof body
+  {
+    ExtrudedBody extruded = 8;
+  }
+}
+
 message JumperGroup
 {
   repeated string pad_names = 1;

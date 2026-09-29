@@ -39,6 +39,7 @@
 #include <dpi_scaling_common.h>
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_3d_body.h>
 #include <3d_math.h>
 #include <core/profile.h>
 #include <geometry/shape_poly_set.h>
@@ -459,8 +460,8 @@ void PANEL_PREVIEW_3D_MODEL::restoreAlignmentView()
 
     if( m_alignBodyShown )
     {
-        if( EXTRUDED_3D_BODY* body = m_dummyFootprint->GetExtrudedBody() )
-            body->m_show = *m_alignBodyShown;
+        if( PCB_3D_BODY* body = m_dummyFootprint->GetBody() )
+            body->MutableExtruded()->m_show = *m_alignBodyShown;
 
         m_alignBodyShown.reset();
     }
@@ -575,10 +576,10 @@ void PANEL_PREVIEW_3D_MODEL::onAlign( wxCommandEvent& aEvent )
             m_alignTriangleRegions.emplace( source, i );
     }
 
-    if( EXTRUDED_3D_BODY* body = m_dummyFootprint->GetExtrudedBody() )
+    if( PCB_3D_BODY* body = m_dummyFootprint->GetBody() )
     {
-        m_alignBodyShown = body->m_show;
-        body->m_show = false;
+        m_alignBodyShown = body->GetExtruded()->m_show;
+        body->MutableExtruded()->m_show = false;
     }
 
     m_alignLayers = m_boardAdapter.GetVisibleLayers();
@@ -1026,24 +1027,26 @@ void PANEL_PREVIEW_3D_MODEL::SetSelectedModel( int idx )
 }
 
 
-void PANEL_PREVIEW_3D_MODEL::SetExtrusionTransformMode( EXTRUDED_3D_BODY* aBody )
+void PANEL_PREVIEW_3D_MODEL::SetExtrusionTransformMode( PCB_3D_BODY* aBody )
 {
     cancelAlignment();
     m_extrudedBody = aBody;
 
     if( aBody )
     {
-        xscale->ChangeValue( formatScaleValue( aBody->m_scale.x ) );
-        yscale->ChangeValue( formatScaleValue( aBody->m_scale.y ) );
-        zscale->ChangeValue( formatScaleValue( aBody->m_scale.z ) );
+        const EXTRUDED_3D_BODY& body = *aBody->GetExtruded();
 
-        xrot->ChangeValue( formatRotationValue( -aBody->m_rotation.x ) );
-        yrot->ChangeValue( formatRotationValue( -aBody->m_rotation.y ) );
-        zrot->ChangeValue( formatRotationValue( -aBody->m_rotation.z ) );
+        xscale->ChangeValue( formatScaleValue( body.m_scale.x ) );
+        yscale->ChangeValue( formatScaleValue( body.m_scale.y ) );
+        zscale->ChangeValue( formatScaleValue( body.m_scale.z ) );
 
-        xoff->ChangeValue( formatOffsetValue( aBody->m_offset.x ) );
-        yoff->ChangeValue( formatOffsetValue( aBody->m_offset.y ) );
-        zoff->ChangeValue( formatOffsetValue( aBody->m_offset.z ) );
+        xrot->ChangeValue( formatRotationValue( -body.m_rotation.x ) );
+        yrot->ChangeValue( formatRotationValue( -body.m_rotation.y ) );
+        zrot->ChangeValue( formatRotationValue( -body.m_rotation.z ) );
+
+        xoff->ChangeValue( formatOffsetValue( body.m_offset.x ) );
+        yoff->ChangeValue( formatOffsetValue( body.m_offset.y ) );
+        zoff->ChangeValue( formatOffsetValue( body.m_offset.z ) );
 
         m_opacity->SetValue( 100 );
         m_opacity->Enable( false );
@@ -1059,26 +1062,28 @@ void PANEL_PREVIEW_3D_MODEL::updateOrientation( wxCommandEvent &event )
 {
     if( m_extrudedBody )
     {
-        m_extrudedBody->m_scale.x = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::UNSCALED,
-                                                                               evaluateTextCtrl( xscale->GetValue() ) );
-        m_extrudedBody->m_scale.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::UNSCALED,
-                                                                               evaluateTextCtrl( yscale->GetValue() ) );
-        m_extrudedBody->m_scale.z = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::UNSCALED,
-                                                                               evaluateTextCtrl( zscale->GetValue() ) );
+        EXTRUDED_3D_BODY& body = *m_extrudedBody->MutableExtruded();
 
-        m_extrudedBody->m_rotation.x = -rotationFromString( evaluateTextCtrl( xrot->GetValue() ) );
-        m_extrudedBody->m_rotation.y = -rotationFromString( evaluateTextCtrl( yrot->GetValue() ) );
-        m_extrudedBody->m_rotation.z = -rotationFromString( evaluateTextCtrl( zrot->GetValue() ) );
+        body.m_scale.x = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::UNSCALED,
+                                                                    evaluateTextCtrl( xscale->GetValue() ) );
+        body.m_scale.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::UNSCALED,
+                                                                    evaluateTextCtrl( yscale->GetValue() ) );
+        body.m_scale.z = EDA_UNIT_UTILS::UI::DoubleValueFromString( unityScale, EDA_UNITS::UNSCALED,
+                                                                    evaluateTextCtrl( zscale->GetValue() ) );
 
-        m_extrudedBody->m_offset.x = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
-                                                                                evaluateTextCtrl( xoff->GetValue() ) )
-                                     / pcbIUScale.IU_PER_MM;
-        m_extrudedBody->m_offset.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
-                                                                                evaluateTextCtrl( yoff->GetValue() ) )
-                                     / pcbIUScale.IU_PER_MM;
-        m_extrudedBody->m_offset.z = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
-                                                                                evaluateTextCtrl( zoff->GetValue() ) )
-                                     / pcbIUScale.IU_PER_MM;
+        body.m_rotation.x = -rotationFromString( evaluateTextCtrl( xrot->GetValue() ) );
+        body.m_rotation.y = -rotationFromString( evaluateTextCtrl( yrot->GetValue() ) );
+        body.m_rotation.z = -rotationFromString( evaluateTextCtrl( zrot->GetValue() ) );
+
+        body.m_offset.x = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
+                                                                     evaluateTextCtrl( xoff->GetValue() ) )
+                          / pcbIUScale.IU_PER_MM;
+        body.m_offset.y = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
+                                                                     evaluateTextCtrl( yoff->GetValue() ) )
+                          / pcbIUScale.IU_PER_MM;
+        body.m_offset.z = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, m_userUnits,
+                                                                     evaluateTextCtrl( zoff->GetValue() ) )
+                          / pcbIUScale.IU_PER_MM;
 
         UpdateDummyFootprint( true );
         onModify();
@@ -1419,7 +1424,7 @@ void PANEL_PREVIEW_3D_MODEL::UpdateDummyFootprint( bool aReloadRequired )
 
     syncLocalEmbeddedFiles();
 
-    if( m_extrudedBody && !m_dummyFootprint->HasExtrudedBody() )
+    if( m_extrudedBody && !m_dummyFootprint->HasBody() )
         m_extrudedBody = nullptr;
 
     if( aReloadRequired )

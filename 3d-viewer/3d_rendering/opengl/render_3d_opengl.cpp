@@ -30,6 +30,7 @@
 #include "../3d_placeholder_utils.h"
 #include <board.h>
 #include <footprint.h>
+#include <pcb_3d_body.h>
 #include <kicad_gl/gl_context_mgr.h>
 #include <3d_math.h>
 #include <glm/geometric.hpp>
@@ -1379,7 +1380,7 @@ void RENDER_3D_OPENGL::renderExtrudedBodies( bool aTransparentPass )
 
     for( auto& [fp, renderListDef] : m_extrudedBodyLists )
     {
-        const EXTRUDED_3D_BODY* body = fp->GetExtrudedBody();
+        const EXTRUDED_3D_BODY* body = fp->GetBody() ? fp->GetBody()->GetExtruded() : nullptr;
 
         if( !body )
             continue;

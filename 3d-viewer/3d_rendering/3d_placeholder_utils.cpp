@@ -21,6 +21,7 @@
 
 #include <footprint.h>
 #include <pad.h>
+#include <pcb_3d_body.h>
 #include <board_item.h>
 #include <layer_ids.h>
 #include <base_units.h>
@@ -262,7 +263,7 @@ bool GetExtrusionOutline( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aOutline,
 {
     aOutline.RemoveAllContours();
 
-    const EXTRUDED_3D_BODY* body = aFootprint->GetExtrudedBody();
+    const EXTRUDED_3D_BODY* body = aFootprint->GetBody() ? aFootprint->GetBody()->GetExtruded() : nullptr;
     PCB_LAYER_ID            extLayer =
             ( aLayerOverride != UNDEFINED_LAYER ) ? aLayerOverride : ( body ? body->m_layer : UNDEFINED_LAYER );
 
@@ -386,7 +387,6 @@ EXTRUSION_MATERIAL_PROPS GetMaterialProps( EXTRUSION_MATERIAL aMaterial, const S
         return { aDiffuse * 0.1f, aDiffuse * 0.75f + SFVEC3F( 0.25f, 0.25f, 0.25f ), 0.4f * 128.0f };
     }
 }
-
 
 void ApplyExtrusionTransform( SHAPE_POLY_SET& aOutline, const EXTRUDED_3D_BODY* aBody, const VECTOR2I& aFpPos )
 {

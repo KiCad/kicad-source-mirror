@@ -64,6 +64,7 @@
 #include <constraints/pcb_constraint.h>
 #include <pcb_marker.h>
 #include <pcb_point.h>
+#include <pcb_3d_body.h>
 #include <pcb_reference_image.h>
 #include <pcb_textbox.h>
 #include <pcb_track.h>
@@ -238,8 +239,8 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
 
     m_3D_Drawings      = aFootprint.m_3D_Drawings;
 
-    if( aFootprint.m_extrudedBody )
-        m_extrudedBody = std::make_unique<EXTRUDED_3D_BODY>( *aFootprint.m_extrudedBody );
+    for( PCB_3D_BODY* body : aFootprint.m_bodies )
+        Add( static_cast<PCB_3D_BODY*>( body->Clone() ), ADD_MODE::APPEND );
 
     m_initial_comments = aFootprint.m_initial_comments ? new wxArrayString( *aFootprint.m_initial_comments )
                                                        : nullptr;
@@ -390,8 +391,10 @@ FOOTPRINT::~FOOTPRINT()
         delete d;
 
     m_drawings.clear();
-}
 
+    for( PCB_3D_BODY* body : m_bodies )
+        delete body;
+}
 
 std::vector<PROPERTY_BASE*> FOOTPRINT::GetDynamicProperties() const
 {
@@ -612,6 +615,15 @@ void FOOTPRINT::SerializeDefinition( kiapi::board::types::Footprint* aOutput ) c
         item->Serialize( *itemMsg );
     }
 
+    for( const PCB_3D_BODY* body : Bodies() )
+    {
+        if( body->GetExtruded()->m_height > 0 )
+        {
+            google::protobuf::Any* itemMsg = aOutput->add_items();
+            body->Serialize( *itemMsg );
+        }
+    }
+
     for( const FP_3DMODEL& model : Models() )
     {
         google::protobuf::Any* itemMsg = aOutput->add_items();
@@ -696,6 +708,9 @@ bool FOOTPRINT::DeserializeDefinition( const kiapi::board::types::Footprint& aIn
     Constraints().clear();
     Models().clear();
     Points().clear();
+
+    for( PCB_3D_BODY* body : m_bodies )
+        Remove( body );
 
     for( const google::protobuf::Any& itemMsg : aInput.items() )
     {
@@ -1225,7 +1240,6 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 
     // Copy auxiliary data
     m_3D_Drawings      = aOther.m_3D_Drawings;
-    m_extrudedBody = std::move( aOther.m_extrudedBody );
     m_libDescription   = aOther.m_libDescription;
     m_keywords         = aOther.m_keywords;
     m_privateLayers    = aOther.m_privateLayers;
@@ -1236,6 +1250,16 @@ FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
             aOther.m_componentClassCacheProxy->GetStaticComponentClass() );
 
     // Clear the other item's containers since this is a move
+
+    for( PCB_3D_BODY* body : m_bodies )
+        delete body;
+
+    m_bodies.clear();
+
+    for( PCB_3D_BODY* body : aOther.m_bodies )
+        Add( body );
+
+    aOther.m_bodies.clear();
     aOther.m_fields.clear();
     aOther.Pads().clear();
     aOther.Zones().clear();
@@ -1379,10 +1403,8 @@ FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
     // Copy auxiliary data
     m_3D_Drawings   = aOther.m_3D_Drawings;
 
-    if( aOther.m_extrudedBody )
-        m_extrudedBody = std::make_unique<EXTRUDED_3D_BODY>( *aOther.m_extrudedBody );
-    else
-        m_extrudedBody.reset();
+    for( PCB_3D_BODY* body : aOther.m_bodies )
+        Add( static_cast<PCB_3D_BODY*>( body->Clone() ), ADD_MODE::APPEND );
 
     m_libDescription = aOther.m_libDescription;
     m_keywords      = aOther.m_keywords;
@@ -1894,6 +1916,14 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
 
         break;
 
+    case PCB_3D_BODY_T:
+        if( aMode == ADD_MODE::APPEND )
+            m_bodies.push_back( static_cast<PCB_3D_BODY*>( aBoardItem ) );
+        else
+            m_bodies.push_front( static_cast<PCB_3D_BODY*>( aBoardItem ) );
+
+        break;
+
     default:
         wxFAIL_MSG( wxString::Format( wxT( "FOOTPRINT::Add(): BOARD_ITEM type (%d) not handled" ),
                                       aBoardItem->Type() ) );
@@ -2029,6 +2059,10 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
             }
         }
 
+        break;
+
+    case PCB_3D_BODY_T:
+        std::erase( m_bodies, static_cast<PCB_3D_BODY*>( aBoardItem ) );
         break;
 
     default:
@@ -3085,20 +3119,22 @@ void FOOTPRINT::Add3DModel( FP_3DMODEL* a3DModel )
 }
 
 
-EXTRUDED_3D_BODY& FOOTPRINT::EnsureExtrudedBody()
+PCB_3D_BODY& FOOTPRINT::EnsureBody()
 {
-    if( !m_extrudedBody )
-        m_extrudedBody = std::make_unique<EXTRUDED_3D_BODY>();
+    if( PCB_3D_BODY* body = GetBody() )
+        return *body;
 
-    return *m_extrudedBody;
+    PCB_3D_BODY* body = new PCB_3D_BODY( this );
+    Add( body, ADD_MODE::APPEND );
+    return *body;
 }
 
 
-void FOOTPRINT::SetExtrudedBody( std::unique_ptr<EXTRUDED_3D_BODY> aBody )
+void FOOTPRINT::ClearBody()
 {
-    m_extrudedBody = std::move( aBody );
+    for( PCB_3D_BODY* body : m_bodies )
+        Remove( body );
 }
-
 
 bool FOOTPRINT::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
@@ -3198,6 +3234,15 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
 
             break;
 
+        case PCB_3D_BODY_T:
+            if( IterateForward<PCB_3D_BODY*>( m_bodies, inspector, testData, { scanType } )
+                    == INSPECT_RESULT::QUIT )
+            {
+                return INSPECT_RESULT::QUIT;
+            }
+
+            break;
+
         default:
             break;
         }
@@ -3253,6 +3298,9 @@ void FOOTPRINT::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFuncti
 
         for( PCB_GROUP* group : m_groups )
             aFunction( group );
+
+        for( PCB_3D_BODY* body : m_bodies )
+            aFunction( body );
 
         for( PCB_CONSTRAINT* constraint : m_constraints )
             aFunction( constraint );
@@ -3526,9 +3574,8 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         m_courtyard_cache->front_hash = m_courtyard_cache->front.GetHash();
     }
 
-    // Flip the extrusion source layer to match the new side.
-    if( m_extrudedBody && m_extrudedBody->m_layer != UNDEFINED_LAYER )
-        m_extrudedBody->m_layer = GetFlippedLayer( m_extrudedBody->m_layer );
+    for( PCB_3D_BODY* body : m_bodies )
+        body->Flip( pos, aFlipDirection );
 
     if( m_geometry_cache )
         m_geometry_cache->hull.Mirror( pos, FLIP_DIRECTION::TOP_BOTTOM );

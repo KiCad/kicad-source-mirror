@@ -26,6 +26,7 @@
 #include <board_commit.h>
 #include <footprint.h>
 #include <footprint_edit_frame.h>
+#include <pcb_3d_body.h>
 #include <ki_exception.h>
 #include <pad.h>
 #include <pcb_group.h>
@@ -332,7 +333,8 @@ static const std::vector<KICAD_T> s_allowedFootprintTypes = {
         PCB_DIMENSION_T,
         PCB_ZONE_T,
         PCB_GROUP_T,
-        PCB_BARCODE_T
+        PCB_BARCODE_T,
+        PCB_3D_BODY_T
 };
 
 
@@ -496,6 +498,20 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_FOOTPRINT::handleGetItems(
                        std::back_inserter( items ) );
 
             typesInserted.insert( PCB_GROUP_T );
+            break;
+        }
+
+        case PCB_3D_BODY_T:
+        {
+            handledAnything = true;
+
+            for( PCB_3D_BODY* body : footprint->Bodies() )
+            {
+                if( body->GetExtruded()->m_height > 0 )
+                    items.push_back( static_cast<BOARD_ITEM*>( body ) );
+            }
+
+            typesInserted.insert( PCB_3D_BODY_T );
             break;
         }
 

@@ -59,6 +59,7 @@
 #include <generators_mgr.h>
 #include <zone.h>
 #include <footprint.h>
+#include <pcb_3d_body.h>
 #include <geometry/shape_line_chain.h>
 #include <font/font.h>
 #include <core/ignore.h>
@@ -6717,7 +6718,12 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                 {
                     NeedRIGHT(); // close (type extruded)
 
-                    EXTRUDED_3D_BODY& body = footprint->EnsureExtrudedBody();
+                    PCB_3D_BODY* bodyItem = footprint->GetBody();
+
+                    if( !bodyItem )
+                        bodyItem = &footprint->EnsureBody();
+
+                    EXTRUDED_3D_BODY& body = *bodyItem->MutableExtruded();
 
                     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
                     {
@@ -6734,6 +6740,12 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                             body.m_show = !hide;
                             break;
                         }
+
+                        case T_uuid:
+                            NextTok();
+                            bodyItem->SetUuidDirect( CurStrToKIID() );
+                            NeedRIGHT();
+                            break;
 
                         case T_overall_height:
                             body.m_height = parseBoardUnits( "overall height" );
@@ -6852,7 +6864,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                             break;
 
                         default:
-                            Expecting( "hide, overall_height, body_pcb_gap, layer, material, "
+                            Expecting( "hide, uuid, overall_height, body_pcb_gap, layer, material, "
                                        "color, offset, scale, or rotate" );
                         }
                     }

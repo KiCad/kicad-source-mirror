@@ -219,7 +219,8 @@ class PCB_IO_KICAD_SEXPR;   // forward decl
 //#define SEXPR_BOARD_FILE_VERSION    20260828  // Exclude-from-simulation footprint attribute
 //#define SEXPR_BOARD_FILE_VERSION    20260830  // Microvia stack generator (via_stack)
 //#define SEXPR_BOARD_FILE_VERSION    20260831  // Custom user properties
-#define SEXPR_BOARD_FILE_VERSION      20260901  // Drill charts and maps
+//#define SEXPR_BOARD_FILE_VERSION    20260901  // Drill charts and maps
+#define SEXPR_BOARD_FILE_VERSION      20260930  // UUID for extruded 3D body
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 #define LEGACY_ARC_FORMATTING         20210925  ///< These were the last to use old arc formatting

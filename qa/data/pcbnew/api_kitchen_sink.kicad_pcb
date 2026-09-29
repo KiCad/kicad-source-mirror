@@ -305,6 +305,23 @@
 			(uuid "dae62be7-5b36-462f-8f68-44e6e11e6733")
 		)
 		(embedded_fonts no)
+		(model
+			(type extruded)
+			(overall_height 1.6)
+			(body_pcb_gap 0.2)
+			(layer "F.CrtYd")
+			(material metal)
+			(color unspecified)
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0603_1608Metric.step"
 			(offset
 				(xyz 0 0 0)

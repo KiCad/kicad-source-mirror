@@ -62,6 +62,7 @@
 #include <pcb_target.h>
 #include <pcb_shape.h>
 #include <pcb_barcode.h>
+#include <pcb_3d_body.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_table.h>
@@ -2233,6 +2234,12 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
             if( point->m_Uuid == aID )
                 return cacheAndReturn( *point );
         }
+
+        for( PCB_3D_BODY* body : footprint->Bodies() )
+        {
+            if( body->m_Uuid == aID )
+                return cacheAndReturn( *body );
+        }
     }
 
     for( ZONE* zone : Zones() )
@@ -2280,8 +2287,6 @@ BOARD_ITEM* BOARD::ResolveItem( const KIID& aID, bool aAllowNullptrReturn ) cons
 
 
 
-
-
 int BOARD::RepairDuplicateItemUuids()
 {
     std::set<KIID> ids;
@@ -2325,6 +2330,9 @@ int BOARD::RepairDuplicateItemUuids()
 
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
             processItem( item );
+
+        for( PCB_3D_BODY* body : footprint->Bodies() )
+            processItem( body );
 
         for( ZONE* zone : footprint->Zones() )
             processItem( zone );

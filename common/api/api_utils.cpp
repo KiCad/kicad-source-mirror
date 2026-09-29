@@ -92,6 +92,7 @@ KICOMMON_API std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any
         { "type.googleapis.com/kiapi.board.types.ViaStitchArea", PCB_GENERATOR_T },
         { "type.googleapis.com/kiapi.board.types.ViaStack", PCB_GENERATOR_T },
         { "type.googleapis.com/kiapi.board.types.Constraint", PCB_CONSTRAINT_T },
+        { "type.googleapis.com/kiapi.board.types.Body3D", PCB_3D_BODY_T },
         { "type.googleapis.com/kiapi.board.types.Field", PCB_FIELD_T },
         { "type.googleapis.com/kiapi.board.types.FootprintInstance", PCB_FOOTPRINT_T },
         { "type.googleapis.com/kiapi.schematic.types.Junction", SCH_JUNCTION_T },

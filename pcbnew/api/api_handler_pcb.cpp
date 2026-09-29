@@ -54,6 +54,7 @@
 #include <pcb_track.h>
 #include <pcbnew_id.h>
 #include <pcb_marker.h>
+#include <pcb_3d_body.h>
 #include <pcb_point.h>
 #include <kiway.h>
 #include <drc/drc_item.h>
@@ -480,7 +481,8 @@ static const std::vector<KICAD_T> s_allowedBoardTypes = {
     PCB_BARCODE_T,
     PCB_CONSTRAINT_T,
     PCB_GRID_ITEM_T,
-    PCB_POINT_T
+    PCB_POINT_T,
+    PCB_3D_BODY_T
 };
 
 
@@ -628,12 +630,17 @@ HANDLER_RESULT<GetItemsResponse> API_HANDLER_PCB::handleGetItems( const HANDLER_
             typesInserted.insert( PCB_GROUP_T );
             break;
         }
-
         case PCB_POINT_T:
         {
             handledAnything = true;
             std::copy( board->Points().begin(), board->Points().end(), std::back_inserter( items ) );
             typesInserted.insert( PCB_POINT_T );
+            break;
+        }
+
+        case PCB_3D_BODY_T:
+        {
+            // Not supported on a board context yet
             break;
         }
 
