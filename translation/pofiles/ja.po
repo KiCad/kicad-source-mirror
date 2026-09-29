@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-28 07:51+0000\n"
+"PO-Revision-Date: 2026-09-29 19:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25003,13 +25003,13 @@ msgstr ""
 "ていません; スキップされました。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:7964
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Page '%s': cannot place off-page connector '%s' at (%d, %d) without a wire "
 "intersection."
 msgstr ""
-"ページ '%s': ページ外 (%d, %d) に在るコネクターは、 元のデザインでは接続され"
-"ていません; スキップされました。"
+"ページ '%s': ページ外コネクター '%s' を (%d, %d) に配線の交点なしに配置するこ"
+"とはできません。"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:8117
 #, c-format
@@ -25018,11 +25018,9 @@ msgid ""
 msgstr ""
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:8667
-#, fuzzy, c-format
+#, c-format
 msgid "An embedded picture could not be decoded and was skipped (%s)."
-msgstr ""
-"埋め込み画像はデコードできなかったためスキップされました。 純粋なビットマップ"
-"画像のみがサポートされています。"
+msgstr "埋め込み画像はデコードできなかったためスキップされました (%s) 。"
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:689
 #, c-format
@@ -25034,10 +25032,10 @@ msgstr ""
 "成された大枠を使用します。"
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:922
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol '%s' could not be converted and was left out of the library (%s)."
-msgstr "ライブラリからシンボルが読み込まれていません。"
+msgstr "シンボル '%s' は変換できすライブラリ(%s) から除外されました。"
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1537
 #, c-format
@@ -25131,13 +25129,13 @@ msgstr ""
 "OrCAD Capture デザインではありません。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:641
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The schematic folder directory could not be read (%s); all stored folders "
 "are imported."
 msgstr ""
-"この回路図フォルダ '%s' のページ表示順位を読み取ることができませんでした "
-"(%s); ページは名前順にインポートされます。"
+"この回路図フォルダ ディレクトリを読み取ることができませんでした (%s); 残りの"
+"全ての保存済みフォルダがインポートされます。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:653
 msgid "The design contains no schematic folders."
@@ -25181,9 +25179,9 @@ msgstr ""
 "ん。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid "The library stream '%s' could not be read and was skipped (%s)."
-msgstr "ページ '%s' を解釈できませんでした、そしてスキップされました: %s"
+msgstr "ライブラリ ストリーム '%s' を読み込みできず、スキップされました (%s) 。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:1006
 #, c-format
@@ -28839,9 +28837,9 @@ msgid "Error opening unpacked library directory: '%s'."
 msgstr "ディレクトリを開く際のエラー: '%s'。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1639
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create library backup file '%s'."
-msgstr "バックアップ フォルダー '%s' の作成に失敗しました。\n"
+msgstr "ライブラリ バックアップ ファイル'%s' の作成に失敗しました。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1948
 #, c-format
@@ -31676,18 +31674,18 @@ msgid "Net chain name:"
 msgstr "ネット チェーン名:"
 
 #: eeschema/tools/sch_editor_control.cpp:1625
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to rename net chain '%s' to '%s'."
-msgstr "'%s' ディレクトリの作成に失敗しました."
+msgstr "'%s' から '%s' へのネット チェーン名の変更に失敗しました。"
 
 #: eeschema/tools/sch_editor_control.cpp:1661
 msgid "No potential net chain connects the selected pins."
 msgstr "選択したピン間を接続するネット チェーンは存在しません。"
 
 #: eeschema/tools/sch_editor_control.cpp:1670
-#, fuzzy, c-format
+#, c-format
 msgid "The selected pins are already in net chain '%s'."
-msgstr "選択したディレクトリはすでにGit プロジェクトです。"
+msgstr "選択したピンはすでにネット チェーン '%s' にあります。"
 
 #: eeschema/tools/sch_editor_control.cpp:1680
 #: eeschema/tools/sch_selection_tool.cpp:431
@@ -32557,9 +32555,8 @@ msgstr ""
 #: pcbnew/widgets/pcb_properties_panel.cpp:641
 #: pcbnew/widgets/pcb_properties_panel.cpp:660
 #: pcbnew/widgets/pcb_properties_panel.cpp:783
-#, fuzzy
 msgid "Add Custom Property"
-msgstr "カスタムグループを追加…"
+msgstr "カスタムプロパティを追加"
 
 #: eeschema/widgets/sch_properties_panel.cpp:82
 msgid "Edit Pin Map..."
@@ -32572,25 +32569,22 @@ msgstr "プロパティを編集"
 
 #: eeschema/widgets/sch_properties_panel.cpp:667
 #: pcbnew/widgets/pcb_properties_panel.cpp:628
-#, fuzzy
 msgid "Rename Property"
-msgstr "ネット名を変更"
+msgstr "プロパティ名の変更"
 
 #: eeschema/widgets/sch_properties_panel.cpp:692
 #: eeschema/widgets/sch_properties_panel.cpp:887
 #: pcbnew/widgets/pcb_properties_panel.cpp:653
 #: pcbnew/widgets/pcb_properties_panel.cpp:817
-#, fuzzy
 msgid "Remove Field"
-msgstr "フィールドを削除..."
+msgstr "フィールドを削除"
 
 #: eeschema/widgets/sch_properties_panel.cpp:698
 #: eeschema/widgets/sch_properties_panel.cpp:912
 #: pcbnew/widgets/pcb_properties_panel.cpp:659
 #: pcbnew/widgets/pcb_properties_panel.cpp:839
-#, fuzzy
 msgid "Remove Custom Property"
-msgstr "すべてのカスタムグループを削除"
+msgstr "カスタム プロパティを削除"
 
 #: eeschema/widgets/search_handlers.cpp:176
 msgid "Excl. Sim"
@@ -39535,24 +39529,23 @@ msgstr "ラウンド"
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:271
 #, c-format
 msgid "%s – %s mm"
-msgstr ""
+msgstr "%s 〜 %s mm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:260
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:38
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:127
 msgid "Rectangular"
-msgstr "四角"
+msgstr "長方形"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:261
 #, c-format
 msgid "%s – %s mm x %s – %s mm"
-msgstr ""
+msgstr "%s〜 %s mm x %s 〜 %s mm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:266
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:110
-#, fuzzy
 msgid "Standard:"
-msgstr "標準"
+msgstr "標準:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:267
 #, fuzzy
@@ -48474,7 +48467,7 @@ msgstr "穴形状:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:3825
 msgid "Oblong"
-msgstr "長方形"
+msgstr "楕円形"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:470
 #, fuzzy
