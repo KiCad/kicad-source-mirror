@@ -84,7 +84,19 @@ public:
      */
     bool ContainsAll( const LSET& aLayers ) const
     {
-        return aLayers.is_subset_of( *this );
+        if( size() == aLayers.size() )
+            return aLayers.is_subset_of( *this );
+
+        if( size() < aLayers.size() )
+        {
+            LSET expanded( *this );
+            expanded.resize( aLayers.size() );
+            return aLayers.is_subset_of( expanded );
+        }
+
+        LSET expanded( aLayers );
+        expanded.resize( size() );
+        return expanded.is_subset_of( *this );
     }
 
     /**

@@ -86,6 +86,23 @@ BOOST_AUTO_TEST_CASE(LSETContains)
     BOOST_CHECK(!set.Contains(In30_Cu));
 }
 
+BOOST_AUTO_TEST_CASE( LSETContainsAllWithDifferentSizes )
+{
+    BASE_SET base( 64 );
+    base.set( F_Cu );
+
+    LSET shortSet( base );
+    LSET fullSet( { F_Cu } );
+
+    BOOST_CHECK( shortSet.ContainsAll( fullSet ) );
+    BOOST_CHECK( fullSet.ContainsAll( shortSet ) );
+
+    fullSet.set( User_14 );
+
+    BOOST_CHECK( !shortSet.ContainsAll( fullSet ) );
+    BOOST_CHECK( fullSet.ContainsAll( shortSet ) );
+}
+
 // Test Sequence Generation
 BOOST_AUTO_TEST_CASE(LSETSequenceGeneration)
 {
