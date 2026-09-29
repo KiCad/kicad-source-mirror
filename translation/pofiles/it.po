@@ -117,7 +117,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-25 11:52+0000\n"
+"PO-Revision-Date: 2026-09-29 19:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -838,24 +838,20 @@ msgid "Show user ECO2 layer"
 msgstr "Mostra strato utente ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Show front fabrication layer"
-msgstr "Schizza piazzole su strati fab"
+msgstr "Mostra strato di fabbricazione fronte"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Show back fabrication layer"
-msgstr "Schizza piazzole su strati fab"
+msgstr "Mostra strato di fabbricazione retro"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
-#, fuzzy
 msgid "Show front courtyard layer"
-msgstr "Gli ingombri si sovrappongono"
+msgstr "Mostra strato di ingombro fronte"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
-#, fuzzy
 msgid "Show back courtyard layer"
-msgstr "Gli ingombri si sovrappongono"
+msgstr "Mostra strato di ingombro retro"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 msgid "Show user defined layer 1"
@@ -1864,22 +1860,23 @@ msgid "Align"
 msgstr "Allinea"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:577
-#, fuzzy
 msgid "Cancel alignment"
-msgstr "Allineamento verticale"
+msgstr "Elimina allineamento"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:581
 msgid "Click the model face that sits on the board. Press Esc to cancel."
-msgstr ""
+msgstr "Fare clic sul modello presente sulla scheda. Premere Esc per annullare."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:614
 msgid "Click the footprint pad for that contact. Press Esc to cancel."
 msgstr ""
+"Fare clic sulla piazzola impronta per quel contatto. Premere Esc per "
+"annullare."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:715
 #, c-format
 msgid "Solution %d of %d, press Align to cycle."
-msgstr ""
+msgstr "Soluzione %d di %d, premere Allinea per ciclare."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:1151
 msgid "3D Preview Options"
@@ -1972,9 +1969,8 @@ msgid "Preview"
 msgstr "Anteprima"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:186
-#, fuzzy
 msgid "Align a STEP model face to a footprint pad"
-msgstr "Il pin collegato non è mappato su alcuna piazzola dell'impronta"
+msgstr "Allinea un modello STEP a una piazzola di impronta"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:213
 msgid ""
@@ -2312,9 +2308,9 @@ msgstr "sezione azioni non valida: %s"
 
 #: common/api/api_plugin_manager.cpp:102 common/api/api_plugin_manager.cpp:148
 #: pcbnew/footprint_wizard.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s'"
-msgstr "azione plugin '%s': %s"
+msgstr "Azione plugin '%s'"
 
 #: common/api/api_plugin_manager.cpp:114
 #, c-format
@@ -3366,9 +3362,8 @@ msgid "Design Block Properties"
 msgstr "Proprietà blocco progetto"
 
 #: common/dialogs/dialog_edit_library_tables.cpp:117
-#, fuzzy
 msgid "Save changes to library tables?"
-msgstr "Salvare le modifiche alla tabella della libreria nidificata?"
+msgstr "Salvare le modifiche alle tabelle librerie?"
 
 #: common/dialogs/dialog_fields_table.cpp:127
 msgid "Revert Row"
@@ -3459,9 +3454,9 @@ msgid "The first %d fields are mandatory."
 msgstr "I primi %d campi sono obbligatori."
 
 #: common/dialogs/dialog_fields_table.cpp:1053
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' field cannot be removed."
-msgstr "Il file '%s' non può essere creato."
+msgstr "Il campo '%s' non può essere rimosso."
 
 #: common/dialogs/dialog_fields_table.cpp:1059
 #, c-format
@@ -3475,9 +3470,9 @@ msgstr ""
 "I primi %d campi sono obbligatori e i nomi non possono essere cambiati."
 
 #: common/dialogs/dialog_fields_table.cpp:1109
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' field cannot be renamed."
-msgstr "Il file '%s' non può essere creato."
+msgstr "Il campo '%s' non può essere rinominato."
 
 #: common/dialogs/dialog_fields_table.cpp:1114
 msgid "Rename Field"
