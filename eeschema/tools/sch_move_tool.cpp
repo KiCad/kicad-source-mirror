@@ -2423,11 +2423,16 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
         case SCH_BUS_BUS_ENTRY_T:
             if( aOriginalItem->Type() == SCH_LINE_T && test->CanConnect( aOriginalItem ) )
             {
-                SCH_TEXT* label = static_cast<SCH_TEXT*>( test );
                 SCH_LINE* line = static_cast<SCH_LINE*>( aOriginalItem );
 
-                if( line->HitTest( aPoint, 1 ) )
-                    aList.push_back( label );
+                for( const VECTOR2I& point : test->GetConnectionPoints() )
+                {
+                    if( line->HitTest( point, 1 ) )
+                    {
+                        aList.push_back( test );
+                        break;
+                    }
+                }
             }
 
             break;
