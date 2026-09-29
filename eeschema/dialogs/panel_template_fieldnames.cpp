@@ -30,6 +30,9 @@
 #include <bitmaps.h>
 #include <confirm.h>
 
+#include <algorithm>
+#include <set>
+
 PANEL_TEMPLATE_FIELDNAMES::PANEL_TEMPLATE_FIELDNAMES( wxWindow* aWindow,
                                                       TEMPLATES* aProjectTemplateMgr ) :
         PANEL_TEMPLATE_FIELDNAMES_BASE( aWindow )
@@ -86,7 +89,20 @@ void PANEL_TEMPLATE_FIELDNAMES::OnAddButtonClick( wxCommandEvent& event )
                 int row = m_grid->GetNumberRows();
                 TransferDataFromGrid();
 
-                TEMPLATE_FIELDNAME newFieldname = TEMPLATE_FIELDNAME( _( "Untitled Field" ) );
+                const wxString untitledName = _( "Untitled Field" );
+                wxString       name = untitledName;
+                int            suffix = 2;
+
+                while( std::any_of( m_fields.begin(), m_fields.end(),
+                                    [&]( const TEMPLATE_FIELDNAME& aField )
+                                    {
+                                        return aField.m_Name == name;
+                                    } ) )
+                {
+                    name = wxString::Format( wxS( "%s %d" ), untitledName, suffix++ );
+                }
+
+                TEMPLATE_FIELDNAME newFieldname( name );
                 newFieldname.m_Visible = false;
                 m_fields.insert( m_fields.end(), newFieldname );
 
@@ -182,10 +198,12 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
     if( !TransferDataFromGrid() )
         return false;
 
-    m_templateMgr->DeleteFieldNameTemplates( m_scope );
+    std::set<wxString> names;
 
-    for( TEMPLATE_FIELDNAME& field : m_fields )
+    for( int row = 0; row < m_grid->GetNumberRows(); ++row )
     {
+        TEMPLATE_FIELDNAME& field = m_fields[row];
+
         if( !field.m_Name.IsEmpty() )
         {
             wxString trimmedName = field.m_Name;
@@ -213,11 +231,44 @@ bool PANEL_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
                                        KICAD_MESSAGE_DIALOG::ButtonLabel( _( "Keep White Space" ) ) );
 
                 if( dlg.ShowModal() == wxID_OK )
+                {
                     field.m_Name = trimmedName;
+                    m_grid->SetCellValue( row, 0, trimmedName );
+                }
             }
 
-            m_templateMgr->AddTemplateFieldName( field, m_scope );
+            for( FIELD_T fieldId : MANDATORY_FIELDS )
+            {
+                if( field.m_Name.CmpNoCase( GetDefaultFieldName( fieldId, UNTRANSLATED ) ) == 0 )
+                {
+                    DisplayErrorMessage( this, wxString::Format(
+                            _( "Field name template '%s' already exists as a mandatory field." ),
+                            field.m_Name ) );
+                    m_grid->MakeCellVisible( row, 0 );
+                    m_grid->SetGridCursor( row, 0 );
+                    m_grid->SetFocus();
+                    return false;
+                }
+            }
+
+            if( !names.insert( field.m_Name ).second )
+            {
+                DisplayErrorMessage( this, wxString::Format(
+                        _( "Field name template '%s' already exists." ), field.m_Name ) );
+                m_grid->MakeCellVisible( row, 0 );
+                m_grid->SetGridCursor( row, 0 );
+                m_grid->SetFocus();
+                return false;
+            }
         }
+    }
+
+    m_templateMgr->DeleteFieldNameTemplates( m_scope );
+
+    for( const TEMPLATE_FIELDNAME& field : m_fields )
+    {
+        if( !field.m_Name.IsEmpty() )
+            m_templateMgr->AddTemplateFieldName( field, m_scope );
     }
 
     return true;
