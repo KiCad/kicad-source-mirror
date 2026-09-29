@@ -77,6 +77,7 @@ void to_json( nlohmann::json& j, const BOM_PRESET& p )
 {
     j = nlohmann::json{
         { "name", p.name },
+        { "fields_ordered", p.fieldsOrdered },
         { "sort_field", p.sortField },
         { "sort_asc", p.sortAsc },
         { "filter_string", p.filterString },
@@ -85,16 +86,13 @@ void to_json( nlohmann::json& j, const BOM_PRESET& p )
         { "exclude_dnp", p.excludeDNP },
         { "include_excluded_from_bom", p.includeExcludedFromBOM },
     };
-
-    if( p.fieldsOrdered.size() > 0 )
-        j["fields_ordered"] = p.fieldsOrdered;
 }
 
 
 void from_json( const nlohmann::json& j, BOM_PRESET& f )
 {
     j.at( "name" ).get_to( f.name );
-    j.at( "fields_ordered" ).get_to( f.fieldsOrdered );
+    f.fieldsOrdered = j.value( "fields_ordered", std::vector<BOM_FIELD>{} );
     j.at( "sort_field" ).get_to( f.sortField );
     j.at( "sort_asc" ).get_to( f.sortAsc );
     j.at( "filter_string" ).get_to( f.filterString );
