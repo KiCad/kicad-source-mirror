@@ -99,26 +99,35 @@ constexpr ret_type KiROUND( fp_type v, bool aQuiet = false )
 {
     using limits = std::numeric_limits<ret_type>;
 
-#if __cplusplus >= 202302L // isnan is not constexpr until C++23
+    auto overflow = [&]( ret_type aResult )
+    {
+        if( !aQuiet )
+            kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+
+        return aResult;
+    };
+
+    // llround is unspecified for NaN and for results beyond long long, so saturate before calling it.
+    // v != v stands in for std::isnan, which is not constexpr until C++23.
     if constexpr( std::is_floating_point_v<fp_type> )
     {
-        if( std::isnan( v ) )
-        {
-            if( !aQuiet )
-                kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+        if( v != v )
+            return overflow( 0 );
 
-            return 0;
-        }
+        if( v >= fp_type( limits::max() ) + 0.5 )
+            return overflow( limits::max() );
+
+        if( v < fp_type( limits::lowest() ) - 0.5 )
+            return overflow( limits::lowest() );
     }
-#endif
 
     long long rounded = std::llround( v );
     long long clamped = std::clamp<long long>( rounded,
                                               static_cast<long long>( limits::lowest() ),
                                               static_cast<long long>( limits::max() ) );
 
-    if( !aQuiet && clamped != rounded )
-        kimathLogOverflow( double( v ), typeid( ret_type ).name() );
+    if( clamped != rounded )
+        return overflow( static_cast<ret_type>( clamped ) );
 
     return static_cast<ret_type>( clamped );
 }

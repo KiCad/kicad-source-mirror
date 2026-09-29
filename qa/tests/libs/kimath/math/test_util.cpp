@@ -22,7 +22,9 @@
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <climits>
 #include <inttypes.h>
+#include <limits>
 
 // Code under test
 #include <math/util.h>
@@ -120,6 +122,28 @@ BOOST_AUTO_TEST_CASE( test_rescale_int64 )
 
         BOOST_CHECK_MESSAGE( calculated == entry.m_result, msg );
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( KiROUNDSaturates )
+{
+    const double inf = std::numeric_limits<double>::infinity();
+    const double nan = std::numeric_limits<double>::quiet_NaN();
+
+    BOOST_CHECK_EQUAL( KiROUND( 1e30, true ), INT_MAX );
+    BOOST_CHECK_EQUAL( KiROUND( -1e30, true ), INT_MIN );
+    BOOST_CHECK_EQUAL( KiROUND( inf, true ), INT_MAX );
+    BOOST_CHECK_EQUAL( KiROUND( -inf, true ), INT_MIN );
+    BOOST_CHECK_EQUAL( KiROUND( nan, true ), 0 );
+    BOOST_CHECK_EQUAL( KiROUND( 2147483647.4, true ), INT_MAX );
+    BOOST_CHECK_EQUAL( KiROUND( 2147483647.5, true ), INT_MAX );
+    BOOST_CHECK_EQUAL( KiROUND( -2147483648.5, true ), INT_MIN );
+
+    BOOST_CHECK_EQUAL( ( KiROUND<double, int64_t>( 1e19, true ) ), INT64_MAX );
+    BOOST_CHECK_EQUAL( ( KiROUND<double, int64_t>( 0x1p63, true ) ), INT64_MAX );
+
+    BOOST_CHECK_EQUAL( KiROUND( 1e30f, true ), INT_MAX );
+    BOOST_CHECK_EQUAL( KiROUND( std::numeric_limits<float>::quiet_NaN(), true ), 0 );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
