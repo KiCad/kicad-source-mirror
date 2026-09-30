@@ -1016,7 +1016,7 @@ private:
     // We create a different set parent function for this class, so we hide the inherited one.
     using EDA_ITEM::SetParent;
 
-    void deleteAllFields();
+    void deleteAllUserFields();
 
     wxString getShownDescription( RESOLUTION_CONTEXT aContext, int aDepth ) const;
 

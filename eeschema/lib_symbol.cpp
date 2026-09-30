@@ -1808,7 +1808,7 @@ void LIB_SYMBOL::RefreshLibraryTreeCaches()
 }
 
 
-void LIB_SYMBOL::deleteAllFields()
+void LIB_SYMBOL::deleteAllUserFields()
 {
     m_drawings[SCH_FIELD_T].clear();
     cacheSearchTerms();
@@ -1824,7 +1824,7 @@ void LIB_SYMBOL::AddField( SCH_FIELD* aField )
 
 void LIB_SYMBOL::SetFields( const std::vector<SCH_FIELD>& aFieldsList )
 {
-    deleteAllFields();
+    deleteAllUserFields();
 
     for( const SCH_FIELD& src : aFieldsList )
     {
@@ -1892,11 +1892,11 @@ void LIB_SYMBOL::SyncFieldsFromParent( const LIB_FIELD_SYNC_OPTIONS& aOptions )
                        || aOptions.m_updateFields.count( aFieldName ) > 0;
             };
 
-    std::vector<SCH_FIELD> fields;
+    std::vector<SCH_FIELD> fieldsCopy;
     std::vector<SCH_FIELD> result;
-    CopyFields( fields );
+    CopyFields( fieldsCopy );
 
-    for( SCH_FIELD& field : fields )
+    for( SCH_FIELD& field : fieldsCopy )
     {
         bool       copy = true;
         SCH_FIELD* parentField = nullptr;
@@ -1948,6 +1948,7 @@ void LIB_SYMBOL::SyncFieldsFromParent( const LIB_FIELD_SYNC_OPTIONS& aOptions )
             result.emplace_back( std::move( field ) );
     }
 
+    int                     nextOrdinal = GetNextFieldOrdinal();
     std::vector<SCH_FIELD*> parentFields;
 
     flattenedParent->GetFields( parentFields );
@@ -1965,6 +1966,7 @@ void LIB_SYMBOL::SyncFieldsFromParent( const LIB_FIELD_SYNC_OPTIONS& aOptions )
             newField->SetName( parentField->GetUntranslatedName() );
             newField->SetText( parentField->GetText() );
             newField->SetAttributes( *parentField );   // Includes visible bit and position
+            newField->SetOrdinal( nextOrdinal++, FIELD_T::USER );
         }
     }
 
