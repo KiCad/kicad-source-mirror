@@ -1461,7 +1461,10 @@ void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
                 }
 
                 // Fallback to regular single-line text
-                drawText( aGal, aText, aPosition, aAttrs, aShadowWidth, aFontMetrics );
+                if( aRenderTextAsBitmap )
+                    bitmapText( aGal, aText, aPosition, aAttrs );
+                else
+                    drawText( aGal, aText, aPosition, aAttrs, aShadowWidth, aFontMetrics );
             };
 
     const auto drawTextInfo =
