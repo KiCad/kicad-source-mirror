@@ -1146,7 +1146,7 @@ bool DIFF_PAIR_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
                                m_currentTrace.PLine().SegmentCount(), m_currentTrace.NLine().SegmentCount() ) );
 
 
-    if( m_target )
+    if( m_target && m_target->PrimP() && m_target->PrimN() )
     {
         if( m_currentTrace.PLine().SegmentCount() && m_currentTrace.NLine().SegmentCount() )
         {
