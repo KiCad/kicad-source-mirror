@@ -20,6 +20,8 @@
 
 
 #include <algorithm>
+#include <array>
+#include <map>
 #include <tuple>
 #include <unordered_set>
 #include <base_units.h>
@@ -48,6 +50,7 @@
 #include <pcb_text.h>
 #include <pcb_textbox.h>
 #include <pcb_track.h>
+#include <zone.h>
 #include <pcbnew_settings.h>
 #include <board_design_settings.h>
 #include <pgm_base.h>
@@ -63,6 +66,7 @@
 #include <wx/log.h>
 #include <wx/numformatter.h>
 #include <wx/mstream.h>
+#include <wx/xml/xml.h>
 
 #include "odb_attribute.h"
 #include "odb_entity.h"
@@ -71,6 +75,73 @@
 #include "odb_util.h"
 #include "pcb_io_odbpp.h"
 #include <trace_helpers.h>
+
+
+namespace
+{
+enum class METADATA_SECTION
+{
+    HEADER,
+    REQUIREMENTS,
+    MANUFACTURING,
+    ASSEMBLY
+};
+
+
+struct METADATA_FIELD
+{
+    const char*      m_name;
+    const char*      m_display;
+    METADATA_SECTION m_section;
+    bool             m_distance = false;
+};
+
+
+constexpr std::array<METADATA_FIELD, 15> METADATA_FIELDS = { {
+        { "counter_bore", "Counter Bore", METADATA_SECTION::HEADER },
+        { "countersink", "Counter Sink", METADATA_SECTION::HEADER },
+        { "edge_connectors", "Edge Connectors", METADATA_SECTION::HEADER },
+        { "layer_count", "Layer Count", METADATA_SECTION::HEADER },
+        { "board_thickness", "Board Thickness", METADATA_SECTION::REQUIREMENTS, true },
+        { "bottom_legend_color", "Bottom Legend Color", METADATA_SECTION::REQUIREMENTS },
+        { "bottom_soldermask_color", "Bottom Soldermask Color", METADATA_SECTION::REQUIREMENTS },
+        { "legend_sides", "Legend Sides", METADATA_SECTION::REQUIREMENTS },
+        { "plated_edge", "Plated Edge", METADATA_SECTION::REQUIREMENTS },
+        { "plated_slots", "Plated Slots", METADATA_SECTION::REQUIREMENTS },
+        { "soldermask_sides", "Soldermask Sides", METADATA_SECTION::REQUIREMENTS },
+        { "top_legend_color", "Top Legend Color", METADATA_SECTION::REQUIREMENTS },
+        { "top_soldermask_color", "Top Soldermask Color", METADATA_SECTION::REQUIREMENTS },
+        { "surface_finish_pads", "Surface Finish Pads", METADATA_SECTION::MANUFACTURING },
+        { "pressfit_technology", "Pressfit Technology", METADATA_SECTION::ASSEMBLY },
+} };
+
+
+const BOARD_STACKUP_ITEM* StackupItemForLayer( const FAB_STACKUP& aStackup, const ODB_LAYER_NAME& aLayer )
+{
+    return aLayer.m_layer == UNDEFINED_LAYER ? aLayer.m_stackupItem : aStackup.ItemForLayer( aLayer.m_layer );
+}
+
+
+void WriteXmlFile( ODB_TREE_WRITER& aWriter, const char* aName, wxXmlDocument& aDocument, const wxString& aError )
+{
+    wxMemoryOutputStream xml;
+
+    if( !aDocument.Save( xml ) )
+        THROW_IO_ERROR( aError );
+
+    std::string output( xml.GetSize(), '\0' );
+    xml.CopyTo( output.data(), output.size() );
+    auto file = aWriter.CreateFileProxy( aName );
+    file.GetStream().write( output.data(), output.size() );
+}
+
+
+double CopperWeightOz( int aThickness )
+{
+    double thicknessMm = static_cast<double>( aThickness ) / pcbIUScale.mmToIU( 1.0 );
+    return thicknessMm / 0.035;
+}
+} // namespace
 
 
 bool ODB_ENTITY_BASE::CreateDirectoryTree( ODB_TREE_WRITER& writer )
@@ -120,6 +191,9 @@ void ODB_MISC_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
 
     GenerateUserAttrFile( writer );
 
+    if( m_plugin->GetFormat().m_boardMetadata )
+        GenerateMetadataFile( writer );
+
     if( !m_board->GetVariantNames().empty() )
         GenerateAttrListFile( writer );
 }
@@ -162,6 +236,152 @@ void ODB_MISC_ENTITY::GenerateUserAttrFile( ODB_TREE_WRITER& writer )
 }
 
 
+void ODB_MISC_ENTITY::GenerateMetadataFile( ODB_TREE_WRITER& writer )
+{
+    const ODB_FORMAT&               format = m_plugin->GetFormat();
+    const BOARD_STACKUP&            stackup = m_plugin->GetFabStackup().Stackup();
+    const FAB_DRILL_MODEL&          drillModel = m_plugin->GetFabDrillModel();
+    std::map<std::string, wxString> values;
+
+    auto yesNo = []( bool aValue )
+    {
+        return aValue ? wxS( "yes" ) : wxS( "no" );
+    };
+    auto sides = []( bool aTop, bool aBottom, const wxString& aNone ) -> wxString
+    {
+        if( aTop )
+            return aBottom ? wxS( "Both" ) : wxS( "Top" );
+
+        if( aBottom )
+            return wxS( "Bottom" );
+
+        return aNone;
+    };
+
+    const FAB_DRILL_FACTS& drillFacts = drillModel.Facts();
+
+    values["counter_bore"] = yesNo( drillFacts.m_counterbore );
+    values["countersink"] = yesNo( drillFacts.m_countersink );
+    values["edge_connectors"] = yesNo( stackup.m_EdgeConnectorConstraints != BS_EDGE_CONNECTOR_NONE );
+    values["layer_count"] = wxString::Format( "%d", m_board->GetCopperLayerCount() );
+    values["board_thickness"] = ODB::Data2String( format, m_plugin->GetFabStackup().Thickness() );
+    values["plated_edge"] = yesNo( stackup.m_EdgePlating );
+    values["plated_slots"] = yesNo( drillFacts.m_platedSlots );
+    values["pressfit_technology"] = yesNo( drillFacts.m_pressfit );
+    values["soldermask_sides"] =
+            sides( m_board->IsLayerEnabled( F_Mask ), m_board->IsLayerEnabled( B_Mask ), wxS( "None" ) );
+
+    values["legend_sides"] = sides( FabLayerHasVisibleItems( *m_board, F_SilkS ),
+                                    FabLayerHasVisibleItems( *m_board, B_SilkS ), wxS( "none" ) );
+
+    auto addColor = [this, &values]( const char* aName, PCB_LAYER_ID aLayer )
+    {
+        wxString color = m_plugin->GetFabStackup().NamedColor( aLayer );
+
+        if( !color.IsEmpty() )
+            values[aName] = color;
+    };
+
+    addColor( "top_soldermask_color", F_Mask );
+    addColor( "bottom_soldermask_color", B_Mask );
+    addColor( "top_legend_color", F_SilkS );
+    addColor( "bottom_legend_color", B_SilkS );
+
+    wxString finish = stackup.m_FinishType;
+
+    if( IsPrmSpecified( finish ) && finish != wxS( "User defined" ) )
+    {
+        static const std::map<wxString, wxString> finishNames = {
+            { wxS( "HAL SnPb" ), wxS( "HASL" ) },
+            { wxS( "HAL lead-free" ), wxS( "Lead-Free HASL" ) },
+            { wxS( "Immersion silver" ), wxS( "Immersion Silver" ) },
+            { wxS( "Immersion tin" ), wxS( "White Tin" ) },
+            { wxS( "OSP" ), wxS( "OSP (Entek)" ) },
+            { wxS( "None" ), wxS( "Bare Cu" ) },
+        };
+
+        if( auto it = finishNames.find( finish ); it != finishNames.end() )
+            finish = it->second;
+
+        if( std::all_of( finish.begin(), finish.end(),
+                         []( wxUniChar aChar )
+                         {
+                             return aChar >= 32 && aChar <= 126;
+                         } ) )
+            values["surface_finish_pads"] = finish;
+    }
+
+    wxXmlDocument document;
+    wxXmlNode*    root = new wxXmlNode( wxXML_ELEMENT_NODE, wxS( "metadata" ) );
+    document.SetRoot( root );
+
+    auto addElement = []( wxXmlNode* aParent, const wxString& aName, const wxString& aDescription )
+    {
+        wxXmlNode* node = new wxXmlNode( wxXML_ELEMENT_NODE, aName );
+
+        if( !aDescription.IsEmpty() )
+            node->AddAttribute( wxS( "description" ), aDescription );
+
+        aParent->AddChild( node );
+        return node;
+    };
+
+    constexpr std::array<std::pair<const char*, const char*>, 4> sectionInfo = { {
+            { "Header", "General Information" },
+            { "Requirements", "Board Requirements" },
+            { "Manufacturing", "Manufacturing Process" },
+            { "Assembly", "Assembly" },
+    } };
+    std::array<wxXmlNode*, sectionInfo.size()>                   sections{};
+    wxXmlNode*                                                   step = nullptr;
+
+    auto sectionNode = [&]( METADATA_SECTION aSection )
+    {
+        size_t index = static_cast<size_t>( aSection );
+
+        if( !sections[index] )
+        {
+            wxXmlNode* parent = root;
+
+            if( index >= static_cast<size_t>( METADATA_SECTION::MANUFACTURING ) )
+            {
+                if( !step )
+                {
+                    wxXmlNode* steps = addElement( root, wxS( "Steps" ), wxS( "Steps" ) );
+                    step = addElement( steps, wxS( "Step" ), wxString() );
+                    step->AddAttribute( wxS( "name" ), wxString::FromUTF8( ODB_STEP_ENTITY::STEP_NAME ) );
+                }
+
+                parent = step;
+            }
+
+            sections[index] = addElement( parent, wxString::FromUTF8( sectionInfo[index].first ),
+                                          wxString::FromUTF8( sectionInfo[index].second ) );
+        }
+
+        return sections[index];
+    };
+
+    for( const METADATA_FIELD& field : METADATA_FIELDS )
+    {
+        auto value = values.find( field.m_name );
+
+        if( value == values.end() )
+            continue;
+
+        wxXmlNode* node = addElement( sectionNode( field.m_section ), wxS( "node" ), wxString() );
+        node->AddAttribute( wxS( "name" ), wxString::FromUTF8( field.m_name ) );
+        node->AddAttribute( wxS( "display" ), wxString::FromUTF8( field.m_display ) );
+        node->AddAttribute( wxS( "value" ), value->second );
+
+        if( field.m_distance )
+            node->AddAttribute( wxS( "units" ), wxString::FromUTF8( format.m_unitsStr ) );
+    }
+
+    WriteXmlFile( writer, "metadata.xml", document, _( "Failed to generate ODB++ metadata." ) );
+}
+
+
 void ODB_MATRIX_ENTITY::AddStep( const wxString& aStepName )
 {
     m_matrixSteps.emplace( ODB::GenLegalEntityName( aStepName ),
@@ -171,7 +391,7 @@ void ODB_MATRIX_ENTITY::AddStep( const wxString& aStepName )
 
 void ODB_MATRIX_ENTITY::InitEntityData()
 {
-    AddStep( "PCB" );
+    AddStep( wxString::FromUTF8( ODB_STEP_ENTITY::STEP_NAME ) );
 
     InitMatrixLayerData();
 }
@@ -349,6 +569,9 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
                                   || excluded.contains( aLayer.m_info.m_layer );
                        } );
 
+        // Overrides are checked against the final automatic names
+        EnsureUniqueLayerNames();
+
         std::set<wxString> usedNames;
 
         for( const MATRIX_LAYER& layer : m_matrixLayers )
@@ -402,59 +625,61 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
 
     EnsureUniqueLayerNames();
 
+    std::map<PCB_LAYER_ID, wxString> namesByLayer;
+
+    for( const MATRIX_LAYER& layer : m_matrixLayers )
+    {
+        if( layer.m_info.m_role == ODB_LAYER_ROLE::BOARD_LAYER && layer.m_info.m_layer != UNDEFINED_LAYER )
+        {
+            namesByLayer[layer.m_info.m_layer] = layer.m_layerName;
+        }
+    }
+
+    std::erase_if( m_matrixLayers,
+                   [&]( MATRIX_LAYER& aLayer )
+                   {
+                       if( !aLayer.m_span )
+                           return false;
+
+                       PCB_LAYER_ID start = F_Cu;
+                       PCB_LAYER_ID end = B_Cu;
+
+                       if( aLayer.m_info.m_drillSpan )
+                       {
+                           start = aLayer.m_info.m_drillSpan->TopLayer();
+                           end = aLayer.m_info.m_drillSpan->BottomLayer();
+                       }
+                       else if( aLayer.m_info.m_auxKey )
+                       {
+                           start = std::get<1>( *aLayer.m_info.m_auxKey );
+                           end = std::get<2>( *aLayer.m_info.m_auxKey );
+                       }
+
+                       if( namesByLayer.contains( start ) && namesByLayer.contains( end ) )
+                       {
+                           aLayer.m_span = { namesByLayer.at( start ), namesByLayer.at( end ) };
+                           return false;
+                       }
+
+                       wxCHECK_MSG( filtered, false, wxS( "ODB++ span layer has no matrix row" ) );
+
+                       bool through =
+                               aLayer.m_info.m_role == ODB_LAYER_ROLE::ROUT
+                               || ( aLayer.m_info.m_role == ODB_LAYER_ROLE::DRILL && start == F_Cu && end == B_Cu );
+
+                       if( through )
+                       {
+                           aLayer.m_span = { wxEmptyString, wxEmptyString };
+                           return false;
+                       }
+
+                       m_plugin->Report( _( "ODB++ partial drill layer omitted because a span layer is excluded." ),
+                                         RPT_SEVERITY_WARNING );
+                       return true;
+                   } );
+
     if( filtered )
     {
-        std::map<PCB_LAYER_ID, wxString> namesByLayer;
-
-        for( const MATRIX_LAYER& layer : m_matrixLayers )
-        {
-            if( layer.m_info.m_role == ODB_LAYER_ROLE::BOARD_LAYER && layer.m_info.m_layer != UNDEFINED_LAYER )
-            {
-                namesByLayer[layer.m_info.m_layer] = layer.m_layerName;
-            }
-        }
-
-        std::erase_if( m_matrixLayers,
-                       [&]( MATRIX_LAYER& aLayer )
-                       {
-                           if( !aLayer.m_span )
-                               return false;
-
-                           PCB_LAYER_ID start = F_Cu;
-                           PCB_LAYER_ID end = B_Cu;
-
-                           if( aLayer.m_info.m_drillSpan )
-                           {
-                               start = aLayer.m_info.m_drillSpan->TopLayer();
-                               end = aLayer.m_info.m_drillSpan->BottomLayer();
-                           }
-                           else if( aLayer.m_info.m_auxKey )
-                           {
-                               start = std::get<1>( *aLayer.m_info.m_auxKey );
-                               end = std::get<2>( *aLayer.m_info.m_auxKey );
-                           }
-
-                           if( namesByLayer.contains( start ) && namesByLayer.contains( end ) )
-                           {
-                               aLayer.m_span = { namesByLayer.at( start ), namesByLayer.at( end ) };
-                               return false;
-                           }
-
-                           bool through =
-                                   aLayer.m_info.m_role == ODB_LAYER_ROLE::ROUT
-                                   || ( aLayer.m_info.m_role == ODB_LAYER_ROLE::DRILL && start == F_Cu && end == B_Cu );
-
-                           if( through )
-                           {
-                               aLayer.m_span = { wxEmptyString, wxEmptyString };
-                               return false;
-                           }
-
-                           m_plugin->Report( _( "ODB++ partial drill layer omitted because a span layer is excluded." ),
-                                             RPT_SEVERITY_WARNING );
-                           return true;
-                       } );
-
         for( size_t index = 0; index < m_matrixLayers.size(); ++index )
             m_matrixLayers[index].m_rowNumber = static_cast<uint32_t>( index + 1 );
     }
@@ -777,6 +1002,7 @@ void ODB_MATRIX_ENTITY::AddCOMPMatrixLayer( PCB_LAYER_ID aCompSide )
     MATRIX_LAYER matrix( m_row++, aCompSide == F_Cu ? "COMP_+_TOP" : "COMP_+_BOT" );
     matrix.m_type = ODB_TYPE::COMPONENT;
     matrix.m_info.m_role = ODB_LAYER_ROLE::COMPONENT;
+    matrix.m_info.m_componentSide = aCompSide;
     matrix.m_context = ODB_CONTEXT::BOARD;
     m_matrixLayers.push_back( matrix );
 }
@@ -784,6 +1010,7 @@ void ODB_MATRIX_ENTITY::AddCOMPMatrixLayer( PCB_LAYER_ID aCompSide )
 void ODB_MATRIX_ENTITY::AddAuxilliaryMatrixLayer()
 {
     auto& auxilliary_layers = m_plugin->GetAuxilliaryLayerItemsMap();
+    auxilliary_layers.clear();
 
     const FAB_DRILL_MODEL& model = m_plugin->GetFabDrillModel();
 
@@ -902,45 +1129,16 @@ void ODB_MATRIX_ENTITY::AddAuxilliaryMatrixLayer()
 
 void ODB_MATRIX_ENTITY::EnsureUniqueLayerNames()
 {
-    // Track occurrences of each layer name to detect and handle duplicates
-    std::map<wxString, std::vector<size_t>> name_to_indices;
+    std::vector<wxString> bases;
+    bases.reserve( m_matrixLayers.size() );
 
-    // First pass: collect all layer names and their indices
-    for( size_t i = 0; i < m_matrixLayers.size(); ++i )
-    {
-        const wxString& layerName = m_matrixLayers[i].m_layerName;
-        name_to_indices[layerName].push_back( i );
-    }
+    for( const MATRIX_LAYER& layer : m_matrixLayers )
+        bases.push_back( layer.m_layerName );
 
-    // Second pass: for any layer names that appear more than once, add suffixes
-    for( auto& [layerName, indices] : name_to_indices )
-    {
-        if( indices.size() > 1 )
-        {
-            // Multiple layers have the same name, add suffixes to make them unique
-            for( size_t count = 0; count < indices.size(); ++count )
-            {
-                size_t idx = indices[count];
-                wxString newLayerName = wxString::Format( "%s_%zu", m_matrixLayers[idx].m_layerName, count + 1 );
+    std::vector<wxString> names = ODB::UniqueNames( bases, {}, 64 );
 
-                // Ensure the new name doesn't exceed the 64-character limit
-                if( newLayerName.length() > 64 )
-                {
-                    // Truncate the base name if necessary to fit the suffix
-                    wxString baseName = m_matrixLayers[idx].m_layerName;
-                    size_t suffixLen = wxString::Format( "_%zu", count + 1 ).length();
-
-                    if( suffixLen < baseName.length() )
-                    {
-                        baseName.Truncate( 64 - suffixLen );
-                        newLayerName = wxString::Format( "%s_%zu", baseName, count + 1 );
-                    }
-                }
-
-                m_matrixLayers[idx].m_layerName = std::move( newLayerName );
-            }
-        }
-    }
+    for( size_t index = 0; index < names.size(); ++index )
+        m_matrixLayers[index].m_layerName = std::move( names[index] );
 }
 
 
@@ -1000,6 +1198,163 @@ void ODB_MATRIX_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
 
         twriter.WriteEquationLine( "COLOR", "0" );
     }
+
+    if( m_plugin->GetFormat().Includes( FAB::SECTION::STACKUP ) )
+        GenerateStackupFile( writer );
+}
+
+
+void ODB_MATRIX_ENTITY::GenerateStackupFile( ODB_TREE_WRITER& writer )
+{
+    const ODB_FORMAT&  format = m_plugin->GetFormat();
+    const FAB_STACKUP& stackup = m_plugin->GetFabStackup();
+    wxString           units = wxString::FromUTF8( format.m_unitsStr.c_str() );
+    wxString           stepName = wxString::FromUTF8( ODB_STEP_ENTITY::STEP_NAME );
+    wxXmlDocument      document;
+
+    auto add = []( wxXmlNode* aParent, const wxString& aName )
+    {
+        wxXmlNode* node = new wxXmlNode( wxXML_ELEMENT_NODE, aName );
+
+        if( aParent )
+            aParent->AddChild( node );
+
+        return node;
+    };
+
+    wxXmlNode* root = add( nullptr, wxS( "StackupFile" ) );
+    document.SetRoot( root );
+    root->AddAttribute( wxS( "Version" ), wxS( "8.1" ) );
+    root->AddAttribute( wxS( "DefaultUnits" ), units );
+
+    wxXmlNode* eda = add( root, wxS( "EdaData" ) );
+    eda->AddAttribute( wxS( "CompanyName" ), m_board->GetTitleBlock().GetCompany() );
+    wxXmlNode* specs = add( eda, wxS( "Specs" ) );
+    wxXmlNode* spec = add( specs, wxS( "Spec" ) );
+    spec->AddAttribute( wxS( "SpecName" ), stepName );
+    wxXmlNode* stackupNode = add( eda, wxS( "Stackup" ) );
+    stackupNode->AddAttribute( wxS( "StackupName" ), stepName );
+    stackupNode->AddAttribute( wxS( "StackupThickness" ), ODB::Data2String( format, stackup.Thickness() ) );
+    stackupNode->AddAttribute( wxS( "Units" ), units );
+    bool maskThickness = false;
+
+    for( PCB_LAYER_ID layer : { F_Mask, B_Mask } )
+    {
+        const BOARD_STACKUP_ITEM* item = stackup.ItemForLayer( layer );
+        maskThickness |= item && item->IsEnabled() && item->GetThickness() > 0;
+    }
+
+    stackupNode->AddAttribute( wxS( "WhereMeasured" ), maskThickness ? wxS( "MASK" ) : wxS( "METAL" ) );
+    wxXmlNode* group = add( stackupNode, wxS( "Group" ) );
+    group->AddAttribute( wxS( "GroupName" ), stepName );
+
+    for( const MATRIX_LAYER& row : m_matrixLayers )
+    {
+        if( row.m_context != ODB_CONTEXT::BOARD )
+            continue;
+
+        wxXmlNode* layer = add( group, wxS( "Layer" ) );
+        layer->AddAttribute( wxS( "LayerName" ), row.m_layerName );
+        layer->AddAttribute( wxS( "LayerType" ),
+                             wxString::FromUTF8( ODB::EnumStringMap<ODB_TYPE>::GetMap().at( row.m_type ).c_str() ) );
+
+        if( row.m_type == ODB_TYPE::DIELECTRIC )
+            layer->AddAttribute( wxS( "Side" ), wxS( "INNER" ) );
+        else if( m_board->IsFrontLayer( row.m_info.m_layer ) )
+            layer->AddAttribute( wxS( "Side" ), wxS( "TOP" ) );
+        else if( m_board->IsBackLayer( row.m_info.m_layer ) )
+            layer->AddAttribute( wxS( "Side" ), wxS( "BOTTOM" ) );
+        else if( IsCopperLayer( row.m_info.m_layer ) )
+            layer->AddAttribute( wxS( "Side" ), wxS( "INNER" ) );
+
+        if( row.m_span && ( row.m_type == ODB_TYPE::DRILL || row.m_type == ODB_TYPE::ROUT ) )
+        {
+            if( !row.m_span->first.IsEmpty() )
+                layer->AddAttribute( wxS( "MechStartLayerName" ), row.m_span->first );
+
+            if( !row.m_span->second.IsEmpty() )
+                layer->AddAttribute( wxS( "MechEndLayerName" ), row.m_span->second );
+        }
+
+        const BOARD_STACKUP_ITEM* item = StackupItemForLayer( stackup, row.m_info );
+        int                       sublayer = row.m_info.m_sublayer;
+
+        if( !item || !item->IsThicknessEditable() || item->GetThickness( sublayer ) <= 0 )
+            continue;
+
+        wxXmlNode* material = add( spec, wxS( "Material" ) );
+        material->AddAttribute( wxS( "MaterialName" ), row.m_layerName );
+
+        if( item->GetType() == BS_ITEM_TYPE_COPPER )
+        {
+            wxXmlNode* conductor = add( material, wxS( "Conductor" ) );
+            conductor->AddAttribute( wxS( "ConductorType" ), wxS( "COPPER" ) );
+            conductor->AddAttribute( wxS( "CopperWeight_oz_ft2" ),
+                                     ODB::Double2String( format, CopperWeightOz( item->GetThickness( sublayer ) ) ) );
+        }
+        else
+        {
+            wxXmlNode* dielectric = add( material, wxS( "Dielectric" ) );
+
+            if( item->GetType() == BS_ITEM_TYPE_SOLDERMASK )
+            {
+                dielectric->AddAttribute( wxS( "DielectricType" ), wxS( "OTHER" ) );
+                dielectric->AddAttribute( wxS( "OtherSubType" ), wxS( "SOLDER_MASK" ) );
+            }
+            else
+            {
+                dielectric->AddAttribute( wxS( "DielectricType" ),
+                                          row.m_diType == ODB_DIELECTRIC_TYPE::CORE      ? wxS( "CORE" )
+                                          : row.m_diType == ODB_DIELECTRIC_TYPE::PREPREG ? wxS( "PREPREG" )
+                                                                                         : wxS( "UNDEFINED" ) );
+            }
+
+            wxString reference = item->GetMaterial( sublayer );
+
+            if( IsPrmSpecified( reference ) )
+                dielectric->AddAttribute( wxS( "MaterialReference" ), reference );
+
+            bool hasDk = item->HasEpsilonRValue() && item->GetEpsilonR( sublayer ) > 0.0;
+            bool hasDf = item->HasLossTangentValue() && item->GetLossTangent( sublayer ) > 0.0;
+
+            if( hasDk || hasDf )
+            {
+                wxXmlNode* properties = add( dielectric, wxS( "Properties" ) );
+                properties->AddAttribute( wxS( "PropertyName" ), wxS( "default" ) );
+                wxXmlNode* property = add( properties, wxS( "Property" ) );
+                double     frequency = item->GetSpecFreq( sublayer );
+
+                if( frequency > 0.0 )
+                {
+                    property->AddAttribute( wxS( "FrequencyVal" ), ODB::Double2String( format, frequency / 1e9 ) );
+                    property->AddAttribute( wxS( "Units" ), wxS( "GHz" ) );
+                }
+
+                if( hasDk )
+                {
+                    property->AddAttribute( wxS( "DielectricConstant_Dk" ),
+                                            ODB::Double2String( format, item->GetEpsilonR( sublayer ) ) );
+                }
+
+                if( hasDf )
+                {
+                    property->AddAttribute( wxS( "LossTangent_Df" ),
+                                            ODB::Double2String( format, item->GetLossTangent( sublayer ) ) );
+                }
+            }
+        }
+
+        wxXmlNode* thickness = add( material, wxS( "Default_Thickness" ) );
+        thickness->AddAttribute( wxS( "Thickness" ), ODB::Data2String( format, item->GetThickness( sublayer ) ) );
+        thickness->AddAttribute( wxS( "Units" ), units );
+
+        wxXmlNode* ref = add( layer, wxS( "SpecRef" ) );
+        ref->AddAttribute( wxS( "MaterialSpecName" ), stepName );
+        wxXmlNode* named = add( ref, wxS( "Material" ) );
+        named->AddAttribute( wxS( "MaterialName" ), row.m_layerName );
+    }
+
+    WriteXmlFile( writer, "stackup.xml", document, _( "Failed to generate ODB++ stackup." ) );
 }
 
 
@@ -1323,14 +1678,20 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
 
         if( stop != UNDEFINED_LAYER )
         {
-            ost << ".backdrill_penetrate_stop_layer="
-                << ODB::GenLegalEntityName( m_board->GetLayerName( stop ) ).ToStdString() << std::endl;
+            const std::vector<ODB_LAYER_NAME>& layers = m_plugin->GetLayerNameList();
+            auto row = std::find_if( layers.begin(), layers.end(),
+                                     [stop]( const ODB_LAYER_NAME& aLayer )
+                                     {
+                                         return aLayer.m_role == ODB_LAYER_ROLE::BOARD_LAYER
+                                                && aLayer.m_layer == stop;
+                                     } );
+
+            if( row != layers.end() )
+                ost << ".backdrill_penetrate_stop_layer=" << row->m_name.ToStdString() << std::endl;
         }
     }
 
-    const BOARD_STACKUP_ITEM* stackupItem = m_layer.m_layer != PCB_LAYER_ID::UNDEFINED_LAYER
-                                                    ? m_plugin->GetFabStackup().ItemForLayer( m_layer.m_layer )
-                                                    : m_layer.m_stackupItem;
+    const BOARD_STACKUP_ITEM* stackupItem = StackupItemForLayer( m_plugin->GetFabStackup(), m_layer );
 
     if( stackupItem )
     {
@@ -1344,9 +1705,8 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
 
         if( stackupItem->GetType() == BS_ITEM_TYPE_COPPER )
         {
-            double copperThicknessMM = static_cast<double>( thickness ) / pcbIUScale.mmToIU( 1.0 );
-            double thicknessOz = copperThicknessMM / 0.035;
-            ost << ".copper_weight=" << ODB::Double2String( m_plugin->GetFormat(), thicknessOz ) << std::endl;
+            ost << ".copper_weight=" << ODB::Double2String( m_plugin->GetFormat(), CopperWeightOz( thickness ) )
+                << std::endl;
         }
 
         if( stackupItem->HasEpsilonRValue() )
@@ -1406,6 +1766,13 @@ void ODB_STEP_ENTITY::InitEdaData()
     // for CMP
     size_t j = 0;
     bool   writeComponents = m_plugin->GetFormat().Includes( FAB::SECTION::COMPONENTS );
+    std::array<wxString, 2> componentNames;
+
+    for( const ODB_LAYER_NAME& layer : m_plugin->GetLayerNameList() )
+    {
+        if( layer.m_role == ODB_LAYER_ROLE::COMPONENT )
+            componentNames[layer.m_componentSide == B_Cu ? 1 : 0] = layer.m_name;
+    }
 
     for( const FOOTPRINT* fp : m_board->Footprints() )
     {
@@ -1430,8 +1797,7 @@ void ODB_STEP_ENTITY::InitEdaData()
 
         if( writeComponents )
         {
-            wxString compName = ODB::GenLegalEntityName( fp->IsFlipped() ? wxS( "COMP_+_BOT" ) : wxS( "COMP_+_TOP" ) );
-            auto     iter = m_layerEntityMap.find( compName );
+            auto iter = m_layerEntityMap.find( componentNames[fp->IsFlipped() ? 1 : 0] );
 
             if( iter != m_layerEntityMap.end() )
                 comp = &iter->second->InitComponentData( fp, eda_pkg );

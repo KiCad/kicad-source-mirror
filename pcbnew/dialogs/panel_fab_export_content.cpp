@@ -19,6 +19,7 @@
 
 #include "panel_fab_export_content.h"
 #include <pcb_io/odbpp/odb_export_job.h>
+#include <pcb_io/odbpp/odb_util.h>
 
 #include <algorithm>
 #include <board.h>
@@ -47,7 +48,7 @@ std::vector<SECTION_ROW> sectionRows()
         { SECTION::PACKAGES, _( "packages" ), wxS( "eda/data PKG" ), wxS( "Package" ) },
         { SECTION::COMPONENTS, _( "components" ), wxS( "comp_+_top, comp_+_bot" ), wxS( "Component" ) },
         { SECTION::PADSTACKS, _( "padstacks" ), wxS( "features .geometry" ), wxS( "PadStackDef" ) },
-        { SECTION::STACKUP, _( "stackup" ), wxS( "matrix" ), wxS( "Stackup, Spec" ) },
+        { SECTION::STACKUP, _( "stackup" ), wxS( "matrix/stackup.xml" ), wxS( "Stackup, Spec" ) },
         { SECTION::PROFILE, _( "board profile" ), wxS( "steps/pcb/profile" ), wxS( "Profile" ) },
         { SECTION::SOLDERMASK, _( "solder mask" ), wxS( "SOLDER_MASK" ), wxS( "SOLDERMASK" ) },
         { SECTION::SOLDERPASTE, _( "solder paste" ), wxS( "SOLDER_PASTE" ), wxS( "SOLDERPASTE" ) },
@@ -69,7 +70,7 @@ class DIALOG_FAB_CUSTOMIZE : public DIALOG_FAB_CUSTOMIZE_BASE
 {
 public:
     DIALOG_FAB_CUSTOMIZE( wxWindow* aParent, FAB_CONTENT_FORMAT aFormat, FAB::MODE aMode,
-                          const FAB::SECTION_SET& aCurrent ) :
+                          const FAB::SECTION_SET& aCurrent, bool aBoardMetadata ) :
             DIALOG_FAB_CUSTOMIZE_BASE( aParent ),
             m_original( aCurrent )
     {
@@ -96,6 +97,14 @@ public:
             m_intro->SetLabel(
                     _( "Choose sections to include. Intentional shorts are written when the board has net ties." ) );
             wxVector<wxVariant> values;
+            values.push_back( wxVariant( aBoardMetadata ) );
+            values.push_back( wxVariant( _( "board metadata" ) ) );
+            values.push_back( wxVariant( wxS( "misc/metadata.xml" ) ) );
+            m_metadataRow = m_sections->GetItemCount();
+            m_sections->AppendItem( values );
+            m_editable.push_back( true );
+
+            values.clear();
             values.push_back( wxVariant( true ) );
             values.push_back( wxVariant( _( "intentional shorts" ) ) );
             values.push_back( wxVariant( wxS( "eda/shortf" ) ) );
@@ -124,6 +133,13 @@ public:
         return selected;
     }
 
+    bool BoardMetadata() const
+    {
+        wxVariant value;
+        m_sections->GetValue( value, m_metadataRow, 0 );
+        return value.GetBool();
+    }
+
 private:
     void onValueChanged( wxDataViewEvent& aEvent )
     {
@@ -147,6 +163,7 @@ private:
 
     std::vector<FAB::SECTION> m_rows;
     std::vector<bool>         m_editable;
+    unsigned int              m_metadataRow = 0;
     FAB::SECTION_SET          m_original;
     bool                      m_restoring = false;
 };
@@ -272,6 +289,13 @@ void PANEL_FAB_EXPORT_CONTENT::SetSectionKey( const std::optional<wxString>& aKe
 }
 
 
+void PANEL_FAB_EXPORT_CONTENT::SetBoardMetadata( bool aValue )
+{
+    m_boardMetadata = aValue;
+    updateSummary();
+}
+
+
 std::vector<wxString> PANEL_FAB_EXPORT_CONTENT::GetVariantNames() const
 {
     int selection = m_choiceVariant->GetSelection();
@@ -357,17 +381,24 @@ FAB::SECTION_SET PANEL_FAB_EXPORT_CONTENT::ResolvedSections() const
 
 void PANEL_FAB_EXPORT_CONTENT::updateSummary()
 {
-    FAB::SECTION_SET sections = ResolvedSections();
-    wxString             summary = _( "Includes: " );
-    wxString             line = summary;
-    int                  lines = 1;
+    FAB::SECTION_SET      sections = ResolvedSections();
+    wxString              summary = _( "Includes: " );
+    wxString              line = summary;
+    int                   lines = 1;
+    std::vector<wxString> labels;
 
     for( const SECTION_ROW& row : sectionRows() )
     {
-        if( !sections.Contains( row.m_section ) )
-            continue;
+        if( sections.Contains( row.m_section ) )
+            labels.push_back( row.m_label );
+    }
 
-        wxString item = row.m_label;
+    if( m_format == FAB_CONTENT_FORMAT::ODBPP && m_boardMetadata )
+        labels.push_back( _( "board metadata" ) );
+
+    for( const wxString& label : labels )
+    {
+        wxString item = label;
         bool     first = line == _( "Includes: " );
         item = first ? item : wxS( ", " ) + item;
 
@@ -376,7 +407,7 @@ void PANEL_FAB_EXPORT_CONTENT::updateSummary()
             summary << wxS( "\n" );
             line.clear();
             ++lines;
-            item = row.m_label;
+            item = label;
         }
 
         summary << item;
@@ -485,7 +516,7 @@ void PANEL_FAB_EXPORT_CONTENT::onVariantOutputChange( wxCommandEvent& aEvent )
 
 void PANEL_FAB_EXPORT_CONTENT::onCustomizeClick( wxCommandEvent& aEvent )
 {
-    DIALOG_FAB_CUSTOMIZE dialog( this, m_format, GetDataSet(), ResolvedSections() );
+    DIALOG_FAB_CUSTOMIZE dialog( this, m_format, GetDataSet(), ResolvedSections(), m_boardMetadata );
 
     if( dialog.ShowModal() != wxID_OK )
         return;
@@ -495,6 +526,9 @@ void PANEL_FAB_EXPORT_CONTENT::onCustomizeClick( wxCommandEvent& aEvent )
 
     if( m_format == FAB_CONTENT_FORMAT::ODBPP && m_sectionKey->IsEmpty() )
         m_sectionKey.reset();
+
+    if( m_format == FAB_CONTENT_FORMAT::ODBPP )
+        m_boardMetadata = dialog.BoardMetadata();
 
     updateSummary();
     changed();

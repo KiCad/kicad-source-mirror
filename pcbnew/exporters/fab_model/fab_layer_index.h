@@ -44,6 +44,8 @@ private:
 };
 
 
+/// True if the board draws visible text, graphics or zones on @a aLayer
+bool FabLayerHasVisibleItems( const BOARD& aBoard, PCB_LAYER_ID aLayer );
 /// Use only for traces and arcs; vias require a layer-specific width
 int  FabTrackWidth( const PCB_TRACK& aTrack, PCB_LAYER_ID aLayer );
 /// Build an expanded mask copy of an exposed copper shape when needed

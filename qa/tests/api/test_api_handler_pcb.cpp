@@ -182,7 +182,8 @@ BOOST_AUTO_TEST_CASE( OdbJobRequestMapsExportOptions )
     BOOST_CHECK( job.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::GRID );
     BOOST_CHECK_EQUAL( job.m_productName, wxString( wxS( "board product" ) ) );
     BOOST_CHECK( job.m_dataSet == JOB_EXPORT_PCB_FAB::DATA_SET::ASSEMBLY );
-    BOOST_CHECK_EQUAL( job.m_sections, wxString( wxS( "KP" ) ) );
+    BOOST_REQUIRE( job.m_sections );
+    BOOST_CHECK_EQUAL( *job.m_sections, wxString( wxS( "KP" ) ) );
     BOOST_CHECK( job.m_netNames == JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE );
 
     kiapi::board::jobs::RunBoardJobExportODB legacy;

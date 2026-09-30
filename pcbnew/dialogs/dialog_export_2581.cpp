@@ -252,8 +252,7 @@ bool DIALOG_EXPORT_2581::TransferDataToWindow()
         if( std::optional<IPC2581::MODE> mode = IPC2581::ModeFromToken( prj.m_IP2581Bom.mode ) )
             m_contentPanel->SetDataSet( *mode );
 
-        if( !prj.m_IP2581Bom.sections.IsEmpty() )
-            m_contentPanel->SetSectionKey( prj.m_IP2581Bom.sections );
+        m_contentPanel->SetSectionKey( prj.m_IP2581Bom.sections );
 
         m_contentPanel->SetNetNames( prj.m_IP2581Bom.netNames == wxS( "anonymize" )
                                              ? JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE
@@ -273,8 +272,7 @@ bool DIALOG_EXPORT_2581::TransferDataToWindow()
 
         m_contentPanel->SetDataSet( m_job->m_dataSet );
 
-        if( !m_job->m_sections.IsEmpty() )
-            m_contentPanel->SetSectionKey( m_job->m_sections );
+        m_contentPanel->SetSectionKey( m_job->m_sections );
 
         m_contentPanel->SetNetNames( m_job->m_netNames );
         m_contentPanel->SetRefDes( m_job->m_refDes );
@@ -299,7 +297,7 @@ void DIALOG_EXPORT_2581::saveToProject()
     prj.m_IP2581Bom.dist = bomFields.m_dist;
     prj.m_IP2581Bom.bomRev = bomFields.m_revision;
     prj.m_IP2581Bom.mode = IPC2581::ModeToken( m_contentPanel->GetDataSet() );
-    prj.m_IP2581Bom.sections = m_contentPanel->GetSectionKey().value_or( wxString() );
+    prj.m_IP2581Bom.sections = m_contentPanel->GetSectionKey();
     prj.m_IP2581Bom.netNames = m_contentPanel->GetNetNames() == JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE
                                        ? wxS( "anonymize" ) : wxS( "include" );
     prj.m_IP2581Bom.refDes = m_contentPanel->GetRefDes() == JOB_EXPORT_PCB_IPC2581::REF_DES::OMIT
@@ -331,7 +329,7 @@ bool DIALOG_EXPORT_2581::TransferDataFromWindow()
         m_job->m_netNames = m_contentPanel->GetNetNames();
         m_job->m_refDes = m_contentPanel->GetRefDes();
 
-        m_job->m_sections = m_contentPanel->GetSectionKey().value_or( wxString() );
+        m_job->m_sections = m_contentPanel->GetSectionKey();
         m_job->m_variantNames = m_contentPanel->GetVariantNames();
     }
 

@@ -2833,7 +2833,9 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportIp
 void ApplyFabExportContent( const FabExportContent& aContent, JOB_EXPORT_PCB_FAB& aJob )
 {
     aJob.m_dataSet = FromProtoEnum<JOB_EXPORT_PCB_FAB::DATA_SET>( aContent.data_set() );
-    aJob.m_sections = wxString::FromUTF8( aContent.sections() );
+    aJob.m_sections = aContent.sections().empty()
+                              ? std::nullopt
+                              : std::optional<wxString>( wxString::FromUTF8( aContent.sections() ) );
     aJob.m_netNames = FromProtoEnum<JOB_EXPORT_PCB_FAB::NET_NAMES>( aContent.net_names() );
 }
 

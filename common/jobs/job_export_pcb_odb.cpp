@@ -95,6 +95,7 @@ JOB_EXPORT_PCB_ODB::JOB_EXPORT_PCB_ODB() :
             new JOB_PARAM<VARIANT_PACKAGING>( "variant_packaging", &m_variantPackaging, m_variantPackaging ) );
     m_params.emplace_back( new JOB_PARAM<ORIGIN>( "origin", &m_origin, m_origin ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "product_name", &m_productName, m_productName ) );
+    m_params.emplace_back( new JOB_PARAM<bool>( "board_metadata", &m_boardMetadata, m_boardMetadata ) );
     m_params.emplace_back( new JOB_PARAM_LIST<ODB_LAYER_OVERRIDE>( "layers", &m_layerOverrides, m_layerOverrides ) );
 }
 

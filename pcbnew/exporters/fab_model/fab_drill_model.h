@@ -21,6 +21,7 @@
 #define FAB_DRILL_MODEL_H
 
 #include <map>
+#include <tuple>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -39,6 +40,16 @@ struct FAB_DRILL_LAYER
 };
 
 
+/// Board-wide hole facts that a fabrication product states outright
+struct FAB_DRILL_FACTS
+{
+    bool m_platedSlots = false;
+    bool m_counterbore = false;
+    bool m_countersink = false;
+    bool m_pressfit = false;
+};
+
+
 class FAB_DRILL_MODEL
 {
 public:
@@ -47,13 +58,20 @@ public:
     FAB_DRILL_MODEL& operator=( const FAB_DRILL_MODEL& ) = delete;
 
     const std::vector<FAB_DRILL_LAYER>& Layers() const { return m_layers; }
+    const FAB_DRILL_FACTS&              Facts() const { return m_facts; }
 
     const DRILL_OPERATION* Find( const DRILL_SPAN& aSpan, const BOARD_ITEM* aItem,
                                  bool aIgnorePlating = false ) const;
 
 private:
+    /// Backdrills keep their start layer so a reverse backdrill on the same item stays separate
+    using INDEX_KEY = std::tuple<DRILL_LAYER_PAIR, bool, PCB_LAYER_ID>;
+
+    static INDEX_KEY indexKey( const DRILL_SPAN& aSpan );
+
     std::vector<FAB_DRILL_LAYER> m_layers;
-    std::map<std::pair<DRILL_LAYER_PAIR, bool>, std::unordered_map<const BOARD_ITEM*, const DRILL_OPERATION*>> m_index;
+    FAB_DRILL_FACTS              m_facts;
+    std::map<INDEX_KEY, std::unordered_map<const BOARD_ITEM*, const DRILL_OPERATION*>> m_index;
 };
 
 #endif // FAB_DRILL_MODEL_H

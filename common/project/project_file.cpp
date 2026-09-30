@@ -266,8 +266,24 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
     m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.mode",
             &m_IP2581Bom.mode, wxEmptyString ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.sections",
-            &m_IP2581Bom.sections, wxEmptyString ) );
+    // An empty key alone means the mode picks the sections, so the flag marks an empty choice
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "board.ipc2581.sections",
+            [this]() { return nlohmann::json( m_IP2581Bom.sections.value_or( wxString() ) ); },
+            [this]( const nlohmann::json& aVal )
+            {
+                wxString sections = aVal.is_string() ? aVal.get<wxString>() : wxString();
+                m_IP2581Bom.sections = sections.IsEmpty() ? std::nullopt : std::optional<wxString>( sections );
+            },
+            nlohmann::json( "" ) ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "board.ipc2581.custom_sections",
+            [this]() { return nlohmann::json( m_IP2581Bom.sections && m_IP2581Bom.sections->IsEmpty() ); },
+            [this]( const nlohmann::json& aVal )
+            {
+                if( aVal.is_boolean() && aVal.get<bool>() && !m_IP2581Bom.sections )
+                    m_IP2581Bom.sections = wxString();
+            },
+            nlohmann::json( false ) ) );
 
     m_params.emplace_back( new PARAM<wxString>( "board.ipc2581.net_names",
             &m_IP2581Bom.netNames, wxEmptyString ) );

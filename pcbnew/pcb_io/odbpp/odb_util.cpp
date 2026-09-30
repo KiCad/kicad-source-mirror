@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <locale>
+#include <map>
 #include <set>
 #include "odb_util.h"
 #include <string_utils.h>
@@ -248,29 +249,75 @@ wxString GenLegalEntityName( const wxString& aStr )
 }
 
 
+std::vector<wxString> UniqueNames( const std::vector<wxString>& aBases, const std::set<wxString>& aReserved,
+                                   size_t aMaxLength )
+{
+    std::vector<wxString> bases;
+    bases.reserve( aBases.size() );
+
+    for( const wxString& base : aBases )
+    {
+        wxCHECK_MSG( !base.IsEmpty(), aBases, wxS( "ODB++ name base must not be empty" ) );
+        bases.push_back( base.Left( aMaxLength ) );
+    }
+
+    const std::set<wxString> originalBases( bases.begin(), bases.end() );
+    std::set<wxString>       used = aReserved;
+    std::vector<wxString>    names;
+    names.reserve( bases.size() );
+
+    // Names are never freed, so a base resumes after the last suffix it took
+    std::map<wxString, size_t> nextSuffix;
+
+    for( const wxString& base : bases )
+    {
+        wxString legal = base;
+
+        if( used.contains( legal ) )
+        {
+            size_t& suffixNumber = nextSuffix.try_emplace( base, 2 ).first->second;
+
+            for( ; ; ++suffixNumber )
+            {
+                wxString suffix = wxString::Format( wxS( "_%zu" ), suffixNumber );
+                legal = base.Left( aMaxLength - suffix.length() ) + suffix;
+
+                if( !originalBases.contains( legal ) && !used.contains( legal ) )
+                    break;
+            }
+        }
+
+        names.push_back( legal );
+        used.insert( legal );
+    }
+
+    return names;
+}
+
+
 VARIANT_NAMES VARIANT_NAMES::Build( const std::vector<wxString>& aNames )
 {
     VARIANT_NAMES result;
-    std::set<wxString> used;
+    std::vector<wxString> bases;
+    std::vector<bool>     unnamed;
+    bases.reserve( aNames.size() );
 
     for( const wxString& name : aNames )
     {
-        wxString original = ODB::GenLegalEntityName( name );
-        wxString base = original;
+        wxString base = ODB::GenLegalEntityName( name );
+        unnamed.push_back( base.IsEmpty() );
+        bases.push_back( base.IsEmpty() ? wxString( wxS( "variant" ) ) : base );
+    }
 
-        if( base.IsEmpty() )
-            base = wxS( "variant" );
+    std::vector<wxString> legalNames = UniqueNames( bases, {}, 64 );
 
-        wxString legal = base;
-        int      suffixNumber = 2;
+    for( size_t index = 0; index < aNames.size(); ++index )
+    {
+        const wxString& name = aNames[index];
+        const wxString& base = bases[index];
+        const wxString& legal = legalNames[index];
 
-        while( !used.insert( legal ).second )
-        {
-            wxString suffix = wxString::Format( wxS( "_%d" ), suffixNumber++ );
-            legal = base.Left( 64 - suffix.length() ) + suffix;
-        }
-
-        if( original.IsEmpty() || legal != base )
+        if( unnamed[index] || legal != base )
             result.m_renamed.push_back( name );
 
         result.m_names.emplace_back( name, legal );

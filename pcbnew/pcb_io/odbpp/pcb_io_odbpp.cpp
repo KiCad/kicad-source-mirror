@@ -93,7 +93,6 @@ void PCB_IO_ODBPP::CreateEntity()
     m_netNames.clear();
     m_netNames.emplace( 0, wxS( "$NONE$" ) );
     std::map<int, wxString> bases;
-    std::set<wxString> reserved = { wxS( "$NONE$" ) };
     std::map<int, wxString> anonymous = m_format.m_anonymizeNets ? FabAnonymousNetNames( *m_board )
                                                                   : std::map<int, wxString>{};
 
@@ -105,29 +104,20 @@ void PCB_IO_ODBPP::CreateEntity()
         wxString base = m_format.m_anonymizeNets ? anonymous.at( net->GetNetCode() )
                                                  : ODB::GenLegalNetName( net->GetNetname() );
         bases.emplace( net->GetNetCode(), base );
-        reserved.insert( base );
     }
 
-    std::set<wxString> assigned = { wxS( "$NONE$" ) };
+    std::vector<wxString> baseNames;
+    baseNames.reserve( bases.size() );
 
-    for( const auto& [code, base] : bases )
-    {
-        wxString name = base;
+    for( const auto& entry : bases )
+        baseNames.push_back( entry.second );
 
-        if( assigned.count( name ) )
-        {
-            for( unsigned suffix = 2; ; ++suffix )
-            {
-                name = wxString::Format( wxS( "%s_%u" ), base, suffix );
+    std::vector<wxString> names = ODB::UniqueNames( baseNames, { wxS( "$NONE$" ) }, wxString::npos );
 
-                if( !reserved.count( name ) && !assigned.count( name ) )
-                    break;
-            }
-        }
+    size_t index = 0;
 
-        m_netNames.emplace( code, name );
-        assigned.insert( name );
-    }
+    for( const auto& entry : bases )
+        m_netNames.emplace( entry.first, names[index++] );
 
     Make<ODB_FONTS_ENTITY>();
     Make<ODB_INPUT_ENTITY>();
@@ -255,6 +245,7 @@ void PCB_IO_ODBPP::ConfigureExport( BOARD& aBoard, const ODB_EXPORT_OPTIONS& aOp
     m_format.m_productModelName = aOptions.m_productModelName;
     m_format.m_mpnField = aOptions.m_mpnField;
     m_format.m_anonymizeNets = aOptions.m_anonymizeNets;
+    m_format.m_boardMetadata = aOptions.m_boardMetadata;
     m_format.m_sections = aOptions.m_sections;
 
     if( aOptions.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::AUX )

@@ -50,21 +50,45 @@ FAB_DRILL_MODEL::FAB_DRILL_MODEL( const BOARD& aBoard )
 
     for( const FAB_DRILL_LAYER& layer : m_layers )
     {
-        auto& items = m_index[{ layer.m_Span.Pair(), layer.m_Span.m_IsBackdrill }];
+        auto& items = m_index[indexKey( layer.m_Span )];
 
         for( const DRILL_OPERATION& op : layer.m_Holes )
             items.try_emplace( op.m_SourceItem, &op );
 
         for( const DRILL_OPERATION& op : layer.m_Slots )
             items.try_emplace( op.m_SourceItem, &op );
+
+        for( const auto* operations : { &layer.m_Holes, &layer.m_Slots } )
+        {
+            for( const DRILL_OPERATION& op : *operations )
+            {
+                if( op.IsBackdrill() )
+                    continue;
+
+                m_facts.m_platedSlots |= op.m_IsSlot && !op.m_NotPlated;
+                m_facts.m_pressfit |= op.m_Attribute == HOLE_ATTRIBUTE::HOLE_PAD_PRESSFIT;
+
+                for( const DRILL_POST_MACHINING& machining : { op.m_FrontPostMachining, op.m_BackPostMachining } )
+                {
+                    m_facts.m_counterbore |= machining.m_Mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;
+                    m_facts.m_countersink |= machining.m_Mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
+                }
+            }
+        }
     }
+}
+
+
+FAB_DRILL_MODEL::INDEX_KEY FAB_DRILL_MODEL::indexKey( const DRILL_SPAN& aSpan )
+{
+    return { aSpan.Pair(), aSpan.m_IsBackdrill, aSpan.m_IsBackdrill ? aSpan.DrillStartLayer() : UNDEFINED_LAYER };
 }
 
 
 const DRILL_OPERATION* FAB_DRILL_MODEL::Find( const DRILL_SPAN& aSpan, const BOARD_ITEM* aItem,
                                               bool aIgnorePlating ) const
 {
-    auto layer = m_index.find( { aSpan.Pair(), aSpan.m_IsBackdrill } );
+    auto layer = m_index.find( indexKey( aSpan ) );
 
     if( layer == m_index.end() )
         return nullptr;

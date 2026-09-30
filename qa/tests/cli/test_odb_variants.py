@@ -101,4 +101,4 @@ def test_pcb_export_odb_net_names_option(kitest: KiTestFixture):
         eda = next(name for name in package.namelist() if name.endswith("/eda/data"))
         records = [line for line in package.read(eda).decode("utf-8").splitlines()
                    if line.startswith("NET ") and not line.startswith("NET $NONE$")]
-        assert records and all(re.match(r"NET N\d+(?:\s|$)", line) for line in records)
+        assert records and all(re.match(r"NET NET_\d+(?:;|\s|$)", line) for line in records)

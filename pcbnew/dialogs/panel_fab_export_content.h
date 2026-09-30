@@ -56,6 +56,8 @@ public:
     void                            SetRefDes( JOB_EXPORT_PCB_IPC2581::REF_DES aRefDes );
     const std::optional<wxString>&  GetSectionKey() const { return m_sectionKey; }
     void                            SetSectionKey( const std::optional<wxString>& aKey );
+    bool                            GetBoardMetadata() const { return m_boardMetadata; }
+    void                            SetBoardMetadata( bool aValue );
     std::vector<wxString>           GetVariantNames() const;
     void                            SetVariantNames( const std::vector<wxString>& aNames );
     bool                            IsCombinedVariantOutput() const { return m_variantOutput->GetSelection() == 1; }
@@ -83,6 +85,7 @@ private:
     std::vector<wxString>   m_selectedVariants;
     /// Set after Customize  An empty IPC-2581 key is a true empty selection
     std::optional<wxString> m_sectionKey;
+    bool                    m_boardMetadata = true;
     std::function<void()>   m_contentChanged;
     int                     m_selectedChoice = 0;
 };

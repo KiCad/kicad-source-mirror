@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <board.h>
 #include <board_connected_item.h>
+#include <eda_text.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_field.h>
@@ -162,4 +163,52 @@ bool FabMaskShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer, PCB_SHAPE& aRes
     }
 
     return true;
+}
+
+
+bool FabLayerHasVisibleItems( const BOARD& aBoard, PCB_LAYER_ID aLayer )
+{
+    if( !aBoard.IsLayerEnabled( aLayer ) )
+        return false;
+
+    auto visible = [aLayer]( const BOARD_ITEM* aItem )
+    {
+        const EDA_TEXT* text = dynamic_cast<const EDA_TEXT*>( aItem );
+        return aItem->IsOnLayer( aLayer ) && ( !text || text->IsVisible() );
+    };
+
+    for( const BOARD_ITEM* item : aBoard.Drawings() )
+    {
+        if( visible( item ) )
+            return true;
+    }
+
+    for( const ZONE* zone : aBoard.Zones() )
+    {
+        if( visible( zone ) )
+            return true;
+    }
+
+    for( const FOOTPRINT* footprint : aBoard.Footprints() )
+    {
+        for( const BOARD_ITEM* item : footprint->GraphicalItems() )
+        {
+            if( visible( item ) )
+                return true;
+        }
+
+        for( const PCB_FIELD* field : footprint->GetFields() )
+        {
+            if( visible( field ) )
+                return true;
+        }
+
+        for( const ZONE* zone : footprint->Zones() )
+        {
+            if( visible( zone ) )
+                return true;
+        }
+    }
+
+    return false;
 }

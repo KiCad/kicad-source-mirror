@@ -74,8 +74,8 @@ bool GenerateIpc2581File( JOB_EXPORT_PCB_IPC2581& aJob, BOARD* aBoard, PROGRESS_
 
     props["mode"] = IPC2581::ModeToken( aJob.m_dataSet );
 
-    if( !aJob.m_sections.IsEmpty() )
-        props["sections"] = aJob.m_sections;
+    if( aJob.m_sections )
+        props["sections"] = *aJob.m_sections;
 
     if( aJob.m_netNames == JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE )
         props["netnames"] = "anonymize";

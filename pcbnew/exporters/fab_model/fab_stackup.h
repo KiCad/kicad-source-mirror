@@ -37,6 +37,8 @@ public:
 
     const BOARD_STACKUP&      Stackup() const { return m_stackup; }
     const BOARD_STACKUP_ITEM* ItemForLayer( PCB_LAYER_ID aLayer ) const;
+    /// Lower case color name of the layer, empty for an unset or hex color
+    wxString                  NamedColor( PCB_LAYER_ID aLayer ) const;
     int                       Thickness() const { return m_stackup.BuildBoardThicknessFromStackup(); }
 
 private:

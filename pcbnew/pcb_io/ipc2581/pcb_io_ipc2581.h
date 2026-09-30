@@ -39,12 +39,14 @@
 #include <memory>
 #include <map>
 #include <set>
+#include <tuple>
 
 class BOARD;
 class BOARD_ITEM;
 class BOARD_STACKUP_ITEM;
 class FAB_STACKUP;
 class FAB_DRILL_MODEL;
+struct DRILL_OPERATION;
 class EDA_TEXT;
 class FOOTPRINT;
 class PROGRESS_REPORTER;
@@ -295,6 +297,8 @@ private:
 
     void addBackdrillSpecRefs( wxXmlNode* aHoleNode, const wxString& aPadstackName );
 
+    void addPostMachiningSpecRefs( wxXmlNode* aHoleNode, const DRILL_OPERATION& aOperation );
+
     void pruneUnusedBackdrillSpecs();
 
     void addLocationNode( wxXmlNode* aContentNode, double aX, double aY );
@@ -367,7 +371,6 @@ private:
 
     void addLayerAttributes( wxXmlNode* aNode, PCB_LAYER_ID aLayer );
 
-    bool isValidLayerFor2581( PCB_LAYER_ID aLayer );
 private:
 
     size_t                  m_total_bytes;  //<! Total number of bytes to be written
@@ -421,6 +424,7 @@ private:
     std::map<wxString, wxXmlNode*>                    m_backdrill_spec_nodes;
     std::set<wxString>                                m_backdrill_spec_used;
     int                                               m_backdrill_spec_index;
+    std::map<std::tuple<bool, int, int, int, int>, wxString> m_post_machining_specs;
     wxXmlNode*                                        m_cad_header_node;
 
     std::map<size_t, wxString>
@@ -452,8 +456,8 @@ private:
 
     PROGRESS_REPORTER*      m_progress_reporter;
 
-    mutable std::set<wxString>           m_element_names;   //<! Track generated element names
-    mutable std::map<wxString, wxString> m_generated_names; //<! Map input keys to unique names
+    mutable std::map<wxString, std::set<wxString>> m_element_names;   //<! Track generated names by namespace
+    mutable std::map<wxString, wxString>           m_generated_names; //<! Map input keys to unique names
 
     std::set<wxUniChar>     m_acceptable_chars;     //<! IPC2581B and C have differing sets of allowed characters in names
 

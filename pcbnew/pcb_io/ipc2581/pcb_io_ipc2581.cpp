@@ -363,11 +363,15 @@ wxString PCB_IO_IPC2581::genString( const wxString& aStr, const char* aPrefix ) 
     wxString base = str;
     wxString name = base;
     int      suffix = 1;
+    // Designators and OEM part numbers use separate schema keys; other names share one set
+    wxString            prefix = aPrefix ? wxString( aPrefix ) : wxString();
+    bool                ownSet = prefix == wxS( "CMP" ) || prefix == wxS( "REF" );
+    std::set<wxString>& names = m_element_names[ownSet ? prefix : wxString()];
 
-    while( m_element_names.count( name ) )
+    while( names.count( name ) )
         name = wxString::Format( "%s_%d", base, suffix++ );
 
-    m_element_names.insert( name );
+    names.insert( name );
     m_generated_names[key] = name;
 
     return name;
@@ -1689,12 +1693,10 @@ void PCB_IO_IPC2581::addSlotCavity( wxXmlNode* aNode, const PAD& aPad, const wxS
     addAttribute( slotNode, "minusTol", "0.0" );
 
     if( m_revision == IPC2581::REVISION::C )
-        addLocationNode( slotNode, aPad, false, aPad.GetLayer() );
+        addLocationNode( slotNode, aPad.GetPosition().x, aPad.GetPosition().y );
 
-    // Normally only oblong drill shapes should reach this code path since m_slot_holes
-    // is filtered to pads where DrillSizeX != DrillSizeY. However, use a fallback to
-    // ensure valid XML is always generated.
-    if( aPad.GetDrillShape() == PAD_DRILL_SHAPE::OBLONG )
+    // B1 SlotCavity accepts only Simple shapes, so revision B writes the hole outline
+    if( m_revision == IPC2581::REVISION::C && aPad.GetDrillShape() == PAD_DRILL_SHAPE::OBLONG )
     {
         VECTOR2I  drill_size = aPad.GetDrillSize();
         EDA_ANGLE rotation = aPad.GetOrientation().Normalize();
@@ -1721,7 +1723,7 @@ void PCB_IO_IPC2581::addSlotCavity( wxXmlNode* aNode, const PAD& aPad, const wxS
     }
     else
     {
-        // Fallback to polygon outline for non-oblong shapes
+        // Polygon outline for non-oblong drills and revision B
         SHAPE_POLY_SET poly_set;
         int            maxError = m_board->GetDesignSettings().m_MaxError;
         aPad.TransformHoleToPolygon( poly_set, 0, maxError, ERROR_INSIDE );
@@ -2158,12 +2160,6 @@ void PCB_IO_IPC2581::addCadHeader( wxXmlNode* aEcadNode )
 }
 
 
-bool PCB_IO_IPC2581::isValidLayerFor2581( PCB_LAYER_ID aLayer )
-{
-    return IsCopperLayer( aLayer ) || ( IsNonCopperLayer( aLayer ) && aLayer <= User_9 ) || aLayer == UNDEFINED_LAYER;
-}
-
-
 void PCB_IO_IPC2581::addLayerAttributes( wxXmlNode* aNode, PCB_LAYER_ID aLayer )
 {
     switch( aLayer )
@@ -2214,15 +2210,6 @@ void PCB_IO_IPC2581::addLayerAttributes( wxXmlNode* aNode, PCB_LAYER_ID aLayer )
     case Eco1_User:
     case Eco2_User:
     case Margin:
-    case User_1:
-    case User_2:
-    case User_3:
-    case User_4:
-    case User_5:
-    case User_6:
-    case User_7:
-    case User_8:
-    case User_9:
         addAttribute( aNode,  "layerFunction", "DOCUMENT" );
         addAttribute( aNode,  "polarity", "POSITIVE" );
         addAttribute( aNode,  "side", "NONE" );
@@ -2237,6 +2224,12 @@ void PCB_IO_IPC2581::addLayerAttributes( wxXmlNode* aNode, PCB_LAYER_ID aLayer )
                           aLayer == F_Cu ? "TOP"
                                          : aLayer == B_Cu ? "BOTTOM"
                                                           : "INTERNAL" );
+        }
+        else if( IsUserLayer( aLayer ) )
+        {
+            addAttribute( aNode, "layerFunction", "DOCUMENT" );
+            addAttribute( aNode, "polarity", "POSITIVE" );
+            addAttribute( aNode, "side", "NONE" );
         }
 
         break; // Do not handle other layers
@@ -2386,8 +2379,7 @@ void PCB_IO_IPC2581::generateCadLayers( wxXmlNode* aCadLayerNode )
 
     for( PCB_LAYER_ID layer : layer_seq )
     {
-        if( added_layers.find( layer ) != added_layers.end() || !isValidLayerFor2581( layer )
-            || !layerIncluded( layer ) )
+        if( added_layers.find( layer ) != added_layers.end() || !layerIncluded( layer ) )
         {
             continue;
         }
@@ -2716,7 +2708,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
 
     // Only handle round holes here because IPC2581 does not support non-round holes
     // These will be handled in a slot layer
-    if( aPad->HasDrilledHole() )
+    if( aPad->HasHole() && !IsDrillSlot( *aPad ) )
     {
         wxXmlNode* padStackHoleNode = appendNode( padStackDefNode, "PadstackHoleDef" );
         padStackHoleNode->AddAttribute( "name",
@@ -2724,7 +2716,9 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
                                                           aPad->GetAttribute() == PAD_ATTRIB::PTH ? "PTH" : "NPTH",
                                                           aPad->GetDrillSizeX(), aPad->GetDrillSizeY() ) );
 
-        addAttribute( padStackHoleNode,  "diameter", floatVal( m_scale * aPad->GetDrillSizeX() ) );
+        // A round drill with unequal axes is drilled at its smaller axis, like its layer hole
+        int diameter = std::min( aPad->GetDrillSizeX(), aPad->GetDrillSizeY() );
+        addAttribute( padStackHoleNode,  "diameter", floatVal( m_scale * diameter ) );
         addAttribute( padStackHoleNode,  "platingStatus",
                       aPad->GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
         addAttribute( padStackHoleNode,  "plusTol", "0.0" );
@@ -2936,29 +2930,6 @@ void PCB_IO_IPC2581::ensureBackdrillSpecs( const wxString& aPadstackName, const 
         wxXmlNode* specNode = appendNode( m_cad_header_node, "Spec" );
         addAttribute( specNode, "name", aSpecName );
 
-        // Counterbore/countersink hint. SpecType has no comment attribute, so
-        // surface it as an OTHER-typed Backdrill child whose comment field is
-        // schema-allowed.
-        PAD_DRILL_POST_MACHINING_MODE pm_mode = PAD_DRILL_POST_MACHINING_MODE::UNKNOWN;
-
-        if( aDrill.start == F_Cu )
-        {
-            pm_mode = aPadstack.FrontPostMachining().mode.value_or(
-                    PAD_DRILL_POST_MACHINING_MODE::UNKNOWN );
-        }
-        else if( aDrill.start == B_Cu )
-        {
-            pm_mode = aPadstack.BackPostMachining().mode.value_or(
-                    PAD_DRILL_POST_MACHINING_MODE::UNKNOWN );
-        }
-
-        wxString postMachiningComment;
-
-        if( pm_mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE )
-            postMachiningComment = wxT( "post-machining=COUNTERBORE" );
-        else if( pm_mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK )
-            postMachiningComment = wxT( "post-machining=COUNTERSINK" );
-
         // START_LAYER
         {
             wxXmlNode* bd = appendNode( specNode, "Backdrill" );
@@ -3001,13 +2972,6 @@ void PCB_IO_IPC2581::ensureBackdrillSpecs( const wxString& aPadstackName, const 
             addAttribute( p, "unit", propertyUnitForCadUnits( m_units_str ) );
         }
 
-        if( !postMachiningComment.IsEmpty() )
-        {
-            wxXmlNode* bd = appendNode( specNode, "Backdrill" );
-            addAttribute( bd, "type", wxT( "OTHER" ) );
-            addAttribute( bd, "comment", postMachiningComment );
-        }
-
         m_backdrill_spec_nodes[aSpecName] = specNode;
 
         return aSpecName;
@@ -3046,6 +3010,70 @@ void PCB_IO_IPC2581::addBackdrillSpecRefs( wxXmlNode* aHoleNode, const wxString&
 
     for( const wxString& specName : it->second )
         addRef( specName );
+}
+
+
+void PCB_IO_IPC2581::addPostMachiningSpecRefs( wxXmlNode* aHoleNode, const DRILL_OPERATION& aOperation )
+{
+    if( m_revision != IPC2581::REVISION::C || !m_cad_header_node || aOperation.IsBackdrill() )
+        return;
+
+    auto addSide = [&]( const DRILL_POST_MACHINING& aMachining, bool aFront )
+    {
+        bool countersink = aMachining.m_Mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK;
+        bool counterbore = aMachining.m_Mode == PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE;
+
+        if( aMachining.m_Size <= 0 || ( !countersink && !counterbore ) )
+            return;
+
+        auto key = std::make_tuple( aFront, static_cast<int>( aMachining.m_Mode ), aMachining.m_Size,
+                                    counterbore ? aMachining.m_Depth : 0, countersink ? aMachining.m_Angle : 0 );
+        auto [it, inserted] = m_post_machining_specs.try_emplace( key );
+
+        if( inserted )
+        {
+            it->second = wxString::Format( countersink ? wxT( "CSK_%zu" ) : wxT( "CBORE_%zu" ),
+                                           m_post_machining_specs.size() );
+            wxXmlNode* spec = appendNode( m_cad_header_node, "Spec" );
+            addAttribute( spec, "name", it->second );
+
+            auto addValue = [&]( const wxString& aType, const wxString& aValue, const wxString& aUnit )
+            {
+                wxXmlNode* drill = appendNode( spec, "SecondaryDrill" );
+                addAttribute( drill, "type", aType );
+                wxXmlNode* property = appendNode( drill, "Property" );
+                addAttribute( property, "value", aValue );
+                addAttribute( property, "unit", aUnit );
+            };
+
+            wxString lengthUnit = propertyUnitForCadUnits( m_units_str );
+            addValue( wxT( "MAJOR_DIAMETER" ), floatVal( m_scale * aMachining.m_Size ), lengthUnit );
+
+            if( counterbore && aMachining.m_Depth > 0 )
+                addValue( wxT( "DEPTH" ), floatVal( m_scale * aMachining.m_Depth ), lengthUnit );
+
+            if( countersink && aMachining.m_Angle > 0 )
+                addValue( wxT( "ANGLE" ), floatVal( aMachining.m_Angle / 10.0 ), wxT( "DEGREES" ) );
+
+            wxXmlNode* side = appendNode( spec, "SecondaryDrill" );
+            addAttribute( side, "type", "SIDE" );
+            wxXmlNode* property = appendNode( side, "Property" );
+            addAttribute( property, "text", aFront ? wxT( "TOP" ) : wxT( "BOTTOM" ) );
+
+            if( ( counterbore && aMachining.m_Depth <= 0 ) || ( countersink && aMachining.m_Angle <= 0 ) )
+            {
+                wxXmlNode* other = appendNode( spec, "SecondaryDrill" );
+                addAttribute( other, "type", "OTHER" );
+                addAttribute( other, "comment", counterbore ? wxT( "COUNTERBORE" ) : wxT( "COUNTERSINK" ) );
+            }
+        }
+
+        wxXmlNode* ref = appendNode( aHoleNode, "SpecRef" );
+        addAttribute( ref, "id", it->second );
+    };
+
+    addSide( aOperation.m_FrontPostMachining, true );
+    addSide( aOperation.m_BackPostMachining, false );
 }
 
 
@@ -3675,7 +3703,7 @@ void PCB_IO_IPC2581::generateComponents( wxXmlNode* aStepNode )
         for( PAD* pad : fp->Pads() )
         {
             if( pad->GetNetCode() > 0 )
-                m_net_pin_dict[pad->GetNetCode()].emplace_back( componentName( fp ), pad->GetNumber() );
+                m_net_pin_dict[pad->GetNetCode()].emplace_back( componentName( fp ), pinName( pad ) );
         }
         wxXmlNode* pkg = addPackage( componentNode, fp );
 
@@ -4006,6 +4034,7 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
                 addAttribute( holeNode,  "minusTol", "0.0" );
                 addXY( holeNode, via->GetPosition() );
                 addBackdrillSpecRefs( holeNode, it->second );
+                addPostMachiningSpecRefs( holeNode, *operation );
             }
             else if( item->Type() == PCB_PAD_T )
             {
@@ -4039,6 +4068,7 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
                 addAttribute( holeNode,  "minusTol", "0.0" );
                 addXY( holeNode, pad->GetPosition() );
                 addBackdrillSpecRefs( holeNode, it->second );
+                addPostMachiningSpecRefs( holeNode, *operation );
             }
         }
     }
@@ -4058,6 +4088,12 @@ void PCB_IO_IPC2581::generateLayerSetDrill( wxXmlNode* aLayerNode )
                 addAttribute( padNode,  "net", netName( pad->GetNetname() ) );
 
             addSlotCavity( padNode, *pad, wxString::Format( "SLOT%d", hole_count++ ) );
+
+            // SlotCavity has no SpecRef, so the slot's own Set carries its post-machining
+            DRILL_SPAN span( layers.first, layers.second, false, false );
+
+            if( const DRILL_OPERATION* operation = m_fabDrillModel->Find( span, pad, true ) )
+                addPostMachiningSpecRefs( padNode, *operation );
         }
     }
 }
@@ -4623,6 +4659,7 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD& aBoard,
     m_backdrill_spec_nodes.clear();
     m_backdrill_spec_used.clear();
     m_backdrill_spec_index = 0;
+    m_post_machining_specs.clear();
     m_cad_header_node = nullptr;
     m_layer_name_map.clear();
 

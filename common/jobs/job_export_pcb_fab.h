@@ -23,6 +23,7 @@
 #include <kicommon.h>
 #include "job.h"
 
+#include <optional>
 #include <vector>
 
 
@@ -82,8 +83,8 @@ public:
     DATA_SET              m_dataSet = DATA_SET::USERDEF;
 
     /// Section key that replaces the optional sections of the data set
-    /// An empty value lets the data set select them
-    wxString              m_sections;
+    /// Unset lets the data set select them and an empty key selects none
+    std::optional<wxString> m_sections;
     NET_NAMES             m_netNames = NET_NAMES::INCLUDE;
 
 protected:

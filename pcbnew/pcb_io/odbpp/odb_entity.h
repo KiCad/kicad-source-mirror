@@ -79,6 +79,8 @@ struct ODB_LAYER_NAME
     const BOARD_STACKUP_ITEM*         m_stackupItem = nullptr; // Owned by the export stackup snapshot
     int                               m_sublayer = 0;
     std::optional<DRILL_SPAN>         m_drillSpan;
+    // F_Cu or B_Cu for a component row, which has no board layer of its own
+    PCB_LAYER_ID                      m_componentSide = PCB_LAYER_ID::UNDEFINED_LAYER;
 };
 
 class ODB_MATRIX_ENTITY : public ODB_ENTITY_BASE
@@ -120,6 +122,7 @@ public:
     virtual void GenerateFiles( ODB_TREE_WRITER& writer ) override;
     virtual void InitEntityData() override;
     void         InitMatrixLayerData();
+    void         GenerateStackupFile( ODB_TREE_WRITER& writer );
 
     const std::vector<MATRIX_LAYER>& GetMatrixLayers() const { return m_matrixLayers; }
 
@@ -153,6 +156,7 @@ public:
     virtual void GenerateFiles( ODB_TREE_WRITER& writer ) override;
     void GenerateUserAttrFile( ODB_TREE_WRITER& writer );
     void GenerateAttrListFile( ODB_TREE_WRITER& writer );
+    void GenerateMetadataFile( ODB_TREE_WRITER& writer );
 
 private:
     std::vector<std::pair<wxString, wxString>> m_info;
@@ -163,6 +167,8 @@ class ODB_LAYER_ENTITY;
 class ODB_STEP_ENTITY : public ODB_ENTITY_BASE
 {
 public:
+    static constexpr const char* STEP_NAME = "pcb";
+
     ODB_STEP_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin ) :
             ODB_ENTITY_BASE( aBoard, aPlugin ), m_profile( nullptr ), m_netlist( aBoard, aPlugin )
     {
@@ -170,7 +176,7 @@ public:
 
     virtual ~ODB_STEP_ENTITY() = default;
 
-    inline virtual std::string GetEntityName() override { return "pcb"; }
+    inline virtual std::string GetEntityName() override { return STEP_NAME; }
 
     void InitEdaData();
     void InitPackage();

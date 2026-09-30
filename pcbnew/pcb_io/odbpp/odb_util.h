@@ -2,6 +2,7 @@
 #define _ODB_UTIL_H_
 
 #include <map>
+#include <set>
 #include <optional>
 #include <iostream>
 #include <fstream>
@@ -27,6 +28,9 @@ enum class ODB_POLARITY
 
 namespace ODB
 {
+std::vector<wxString> UniqueNames( const std::vector<wxString>& aBases, const std::set<wxString>& aReserved,
+                                   size_t aMaxLength );
+
 struct VARIANT_NAMES
 {
     static VARIANT_NAMES Build( const std::vector<wxString>& aNames );
@@ -52,6 +56,7 @@ struct ODB_EXPORT_OPTIONS
     wxString                        m_productModelName;
     JOB_EXPORT_PCB_ODB::ORIGIN      m_origin = JOB_EXPORT_PCB_ODB::ORIGIN::ABSOLUTE_COORDS;
     bool                            m_anonymizeNets = false;
+    bool                            m_boardMetadata = true;
     /// Unset exports every section
     std::optional<FAB::SECTION_SET> m_sections;
     std::vector<ODB_LAYER_OVERRIDE> m_layerOverrides;
@@ -72,6 +77,7 @@ struct ODB_FORMAT
     VECTOR2I    m_originOffset{ 0, 0 };
     bool        m_anonymizeNets = false;
     bool        m_writeEdaNets = true;
+    bool        m_boardMetadata = true;
     std::optional<FAB::SECTION_SET> m_sections;
     std::vector<ODB_LAYER_OVERRIDE> m_layerOverrides;
     ODB::VARIANT_NAMES m_variantNames;

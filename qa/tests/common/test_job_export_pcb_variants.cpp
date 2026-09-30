@@ -83,6 +83,7 @@ BOOST_AUTO_TEST_CASE( FabJobMissingKeysKeepDefaults )
     BOOST_CHECK_EQUAL( odbJson.at( "precision" ).get<int>(), 6 );
     BOOST_CHECK_EQUAL( odbJson.at( "units" ).get<std::string>(), "mm" );
     BOOST_CHECK( !odbJson.at( "check_zones" ).get<bool>() );
+    BOOST_CHECK( odbJson.at( "board_metadata" ).get<bool>() );
     BOOST_CHECK_EQUAL( odbJson.at( "variant" ).get<std::string>(), "" );
 
     JOB_EXPORT_PCB_IPC2581 ipc;
@@ -142,7 +143,7 @@ BOOST_AUTO_TEST_CASE( FabV10JobsLoadUnchanged )
     BOOST_CHECK( odb.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::ABSOLUTE_COORDS );
     BOOST_CHECK( odb.m_productName.IsEmpty() );
     BOOST_CHECK( odb.m_dataSet == JOB_EXPORT_PCB_FAB::DATA_SET::USERDEF );
-    BOOST_CHECK( odb.m_sections.IsEmpty() );
+    BOOST_CHECK( !odb.m_sections );
     BOOST_CHECK( odb.m_netNames == JOB_EXPORT_PCB_FAB::NET_NAMES::INCLUDE );
     BOOST_CHECK( odb.m_layerOverrides.empty() );
     BOOST_CHECK( ipc.m_dataSet == JOB_EXPORT_PCB_FAB::DATA_SET::USERDEF );
@@ -162,7 +163,8 @@ BOOST_AUTO_TEST_CASE( Ipc2581NightlyContentKeysStillLoad )
                                   { "net_names", "anonymize" },
                                   { "ref_des", "omit" } } );
     BOOST_CHECK( job.m_dataSet == DATA_SET::FABRICATION );
-    BOOST_CHECK_EQUAL( job.m_sections, wxString( wxS( "KE" ) ) );
+    BOOST_REQUIRE( job.m_sections );
+    BOOST_CHECK_EQUAL( *job.m_sections, wxString( wxS( "KE" ) ) );
     BOOST_CHECK( job.m_netNames == JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE );
     BOOST_CHECK( job.m_refDes == JOB_EXPORT_PCB_IPC2581::REF_DES::OMIT );
 
@@ -221,6 +223,7 @@ BOOST_AUTO_TEST_CASE( OdbExportOptionsRoundTrip )
                                    { "product_name", "Fab Rev A" },
                                    { "data_set", "assembly" },
                                    { "sections", "ACOP" },
+                                   { "board_metadata", false },
                                    { "net_names", "anonymize" },
                                    { "layers", nlohmann::json::array( { { { "layer", "F.Cu" },
                                                                           { "include", false },
@@ -356,6 +359,35 @@ BOOST_AUTO_TEST_CASE( PcbIpc2581VariantRoundTrip )
 
     BOOST_REQUIRE_EQUAL( loaded.m_variantNames.size(), 1u );
     BOOST_CHECK( loaded.m_variantNames.front() == wxS( "VarIpc" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( Ipc2581ExplicitEmptySectionsRoundTrip )
+{
+    JOB_EXPORT_PCB_IPC2581 job;
+    job.FromJson( nlohmann::json{ { "mode", "USERDEF" }, { "sections", "" }, { "custom_sections", true } } );
+
+    nlohmann::json saved;
+    job.ToJson( saved );
+    BOOST_CHECK( saved.value( "custom_sections", false ) );
+    BOOST_CHECK_EQUAL( saved.at( "sections" ).get<std::string>(), "" );
+
+    JOB_EXPORT_PCB_IPC2581 loaded;
+    loaded.FromJson( saved );
+    nlohmann::json roundTrip;
+    loaded.ToJson( roundTrip );
+    BOOST_CHECK( roundTrip.value( "custom_sections", false ) );
+
+    JOB_EXPORT_PCB_IPC2581 legacy;
+    legacy.FromJson( nlohmann::json{ { "sections", "" } } );
+    nlohmann::json legacyJson;
+    legacy.ToJson( legacyJson );
+    BOOST_CHECK( !legacyJson.value( "custom_sections", false ) );
+    BOOST_CHECK( !legacy.m_sections );
+
+    JOB_EXPORT_PCB_IPC2581 legacyNonempty;
+    legacyNonempty.FromJson( nlohmann::json{ { "sections", "K" } } );
+    BOOST_CHECK( legacyNonempty.m_sections );
 }
 
 

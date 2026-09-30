@@ -21,6 +21,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <board_stackup_manager/stackup_predefined_prms.h>
 
 
 FAB_STACKUP::FAB_STACKUP( const BOARD& aBoard ) :
@@ -42,4 +43,20 @@ const BOARD_STACKUP_ITEM* FAB_STACKUP::ItemForLayer( PCB_LAYER_ID aLayer ) const
     }
 
     return nullptr;
+}
+
+
+wxString FAB_STACKUP::NamedColor( PCB_LAYER_ID aLayer ) const
+{
+    const BOARD_STACKUP_ITEM* item = ItemForLayer( aLayer );
+
+    if( !item )
+        return wxString();
+
+    wxString color = item->GetColor();
+
+    if( !IsPrmSpecified( color ) || color.StartsWith( wxS( "#" ) ) )
+        return wxString();
+
+    return color.Lower();
 }

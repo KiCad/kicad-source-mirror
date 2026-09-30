@@ -445,3 +445,87 @@ BOOST_AUTO_TEST_CASE( OdbRoutDoesNotInferMissingBoardOutline )
 }
 
 
+BOOST_AUTO_TEST_CASE( OdbCollidingLayerNamesKeepMatrixReferences )
+{
+    std::unique_ptr<BOARD> board = LoadBoard( "odbpp/layer_name_collisions.kicad_pcb" );
+    BOOST_REQUIRE( board );
+    BOOST_REQUIRE_EQUAL( board->GetLayerName( F_Cu ), wxS( "Signal" ) );
+    BOOST_REQUIRE_EQUAL( board->GetLayerName( In1_Cu ), wxS( "SiGnAl" ) );
+    BOOST_REQUIRE_EQUAL( board->GetLayerName( B_Cu ), wxS( "SIGNAL" ) );
+    BOOST_REQUIRE_EQUAL( board->GetLayerName( User_1 ), wxS( "notes" ) );
+    BOOST_REQUIRE_EQUAL( board->GetLayerName( User_2 ), wxS( "Notes" ) );
+    BOOST_REQUIRE_EQUAL( board->GetLayerName( User_3 ), wxS( "notes_1" ) );
+    BOOST_REQUIRE_EQUAL( board->GetLayerName( User_4 ), wxS( "COMP_+_BOT" ) );
+    KI_TEST::SCOPED_TEMP_DIR dir( wxT( "odb_colliding_layers" ) );
+
+    for( bool filtered : { false, true } )
+    {
+        fs::path root = dir.Path() / ( filtered ? "filtered" : "default" );
+
+        if( filtered )
+        {
+            fs::create_directories( root );
+            PCB_IO_ODBPP plugin;
+            ODB_EXPORT_OPTIONS options;
+            options.m_sections = FAB::LegacySections();
+            BOOST_REQUIRE_NO_THROW( plugin.Export( wxString::FromUTF8( root.string() ), *board, options ) );
+        }
+        else
+        {
+            ExportOdb( *board, root );
+        }
+
+        std::vector<FIELDS> rows = MatrixLayers( root );
+        BOOST_REQUIRE( !rows.empty() );
+        std::set<std::string> names;
+
+        for( const FIELDS& row : rows )
+            BOOST_CHECK( names.insert( row.at( "NAME" ) ).second );
+
+        for( const std::string& name : { "signal", "signal_2", "signal_3", "notes", "notes_2", "notes_1",
+                                         "comp_+_bot_2" } )
+            BOOST_CHECK_EQUAL( names.count( name ), 1u );
+
+        const FIELDS* rout = FindRow( rows, "rout" );
+        BOOST_REQUIRE( rout );
+        BOOST_CHECK_EQUAL( rout->at( "START_NAME" ), "signal" );
+        BOOST_CHECK_EQUAL( rout->at( "END_NAME" ), "signal_3" );
+
+        bool throughDrill = false;
+        bool backdrill = false;
+
+        for( const FIELDS& row : rows )
+        {
+            if( row.at( "TYPE" ) != "DRILL" )
+                continue;
+
+            if( row.contains( "ADD_TYPE" ) && row.at( "ADD_TYPE" ) == "BACKDRILL" )
+            {
+                if( row.at( "START_NAME" ) == "in2.cu" && row.at( "END_NAME" ) == "signal_3" )
+                {
+                    backdrill = true;
+                    fs::path attrs = root / "steps" / "pcb" / "layers" / row.at( "NAME" ) / "attrlist";
+                    std::vector<std::string> lines = ReadLines( attrs );
+                    BOOST_CHECK( std::find( lines.begin(), lines.end(),
+                                            ".backdrill_penetrate_stop_layer=signal_2" ) != lines.end() );
+                }
+            }
+            else if( row.at( "START_NAME" ) == "signal" && row.at( "END_NAME" ) == "signal_3" )
+            {
+                throughDrill = true;
+            }
+        }
+
+        BOOST_CHECK( throughDrill );
+        BOOST_CHECK( backdrill );
+
+        const FIELDS* bottomComponents = FindRow( rows, "comp_+_bot_2" );
+        BOOST_REQUIRE( bottomComponents );
+        BOOST_CHECK_EQUAL( bottomComponents->at( "TYPE" ), "COMPONENT" );
+        fs::path components = root / "steps" / "pcb" / "layers" / "comp_+_bot_2" / "components";
+        BOOST_REQUIRE( fs::exists( components ) );
+        std::vector<std::string> lines = ReadLines( components );
+        BOOST_CHECK( std::any_of( lines.begin(), lines.end(), []( const std::string& aLine )
+                                  { return aLine.rfind( "CMP ", 0 ) == 0; } ) );
+    }
+}

@@ -78,6 +78,7 @@ public:
     VARIANT_PACKAGING               m_variantPackaging = VARIANT_PACKAGING::SEPARATE;
     ORIGIN                          m_origin = ORIGIN::ABSOLUTE_COORDS;
     wxString                        m_productName;
+    bool                            m_boardMetadata = true;
     std::vector<ODB_LAYER_OVERRIDE> m_layerOverrides;
 };
 

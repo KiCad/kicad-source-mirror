@@ -25,6 +25,7 @@
 #include <wx/filename.h>
 
 #include <boost/test/unit_test.hpp>
+#include <gestfich.h>
 #include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
@@ -408,6 +409,88 @@ BOOST_FIXTURE_TEST_CASE( ExportBoardDrill, API_SERVER_E2E_FIXTURE )
     wxString goldenPath = testDataDir + wxS( "basic_test_excellon_inches.drl" );
     BOOST_CHECK_MESSAGE( textFilesMatch( goldenPath, generatedDrillPath, 5 ),
                          "Drill output does not match golden file" );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( ExportBoardOdbVariants, API_SERVER_E2E_FIXTURE )
+{
+    BOOST_REQUIRE_MESSAGE( Start(), LastError() );
+
+    wxFileName boardPath( wxString::FromUTF8( KI_TEST::GetTestDataRootDir() ) + wxS( "pcbnew/issue24735/" ),
+                          wxS( "issue24735.kicad_pcb" ) );
+
+    kiapi::common::types::DocumentSpecifier document;
+
+    BOOST_REQUIRE_MESSAGE( Client().OpenDocument( boardPath.GetFullPath(), &document ),
+                           "OpenDocument failed: " + Client().LastError() );
+
+    KI_TEST::SCOPED_TEMP_DIR tempDir( "api_job_odb" );
+    wxFileName               target( tempDir.CreateChildDirStr( "odb" ), wxS( "combined" ) );
+
+    kiapi::board::jobs::RunBoardJobExportODB request;
+    *request.mutable_job_settings()->mutable_document() = document;
+    request.mutable_job_settings()->set_output_path( target.GetFullPath().ToUTF8().data() );
+    request.set_units( kiapi::common::types::U_MM );
+    request.set_compression( kiapi::board::jobs::ODBC_NONE );
+    request.add_variant_names( "var1" );
+    request.add_variant_names( "var2" );
+    request.set_variant_packaging( kiapi::board::jobs::ODBVP_COMBINED );
+
+    kiapi::common::types::RunJobResponse response;
+    BOOST_REQUIRE_MESSAGE( Client().RunJob( request, &response ), "RunJob failed: " + Client().LastError() );
+    BOOST_REQUIRE_MESSAGE( response.status() == kiapi::common::types::JS_SUCCESS,
+                           "Job failed: " + wxString::FromUTF8( response.message() ) );
+
+    auto hasLine = []( const wxString& aPackage, const wxString& aDir, const std::string& aLine )
+    {
+        wxFileName    file( aPackage + wxFileName::GetPathSeparator() + aDir, wxS( "attrlist" ) );
+        std::ifstream input( ToFsPath( file.GetFullPath() ) );
+        std::string   line;
+
+        while( std::getline( input, line ) )
+        {
+            if( line == aLine )
+                return true;
+        }
+
+        return false;
+    };
+
+    BOOST_REQUIRE_EQUAL( response.output_path_size(), 1 );
+    wxString combined = wxString::FromUTF8( response.output_path( 0 ) );
+    BOOST_REQUIRE_MESSAGE( wxFileName::DirExists( combined ), "Missing reported output " + combined );
+    BOOST_CHECK_MESSAGE( wxFileName::DirName( combined ).SameAs( wxFileName::DirName( target.GetFullPath() ) ),
+                         "Combined output ignored the requested path: " + combined );
+    BOOST_CHECK( hasLine( combined, wxS( "misc" ), ".variant_list=var1:var2" ) );
+    BOOST_CHECK( hasLine( combined, wxS( "steps/pcb" ), ".current_variant=var1" ) );
+
+    // One package per variant proves every repeated variant name reached the job
+    wxFileName separateTarget( tempDir.CreateChildDirStr( "odb_separate" ), wxS( "separate" ) );
+    request.mutable_job_settings()->set_output_path( separateTarget.GetFullPath().ToUTF8().data() );
+    request.set_variant_packaging( kiapi::board::jobs::ODBVP_SEPARATE );
+    response.Clear();
+
+    BOOST_REQUIRE_MESSAGE( Client().RunJob( request, &response ), "RunJob failed: " + Client().LastError() );
+    BOOST_REQUIRE_MESSAGE( response.status() == kiapi::common::types::JS_SUCCESS,
+                           "Separate job failed: " + wxString::FromUTF8( response.message() ) );
+    BOOST_REQUIRE_EQUAL( response.output_path_size(), 2 );
+    std::set<std::string> currentVariants;
+
+    for( int i = 0; i < response.output_path_size(); ++i )
+    {
+        wxString package = wxString::FromUTF8( response.output_path( i ) );
+        BOOST_REQUIRE_MESSAGE( wxFileName::DirExists( package ), "Missing reported output " + package );
+        BOOST_CHECK_MESSAGE( package.StartsWith( separateTarget.GetFullPath() + wxS( "-" ) ),
+                             "Separate output ignored the requested path: " + package );
+
+        for( const std::string variant : { "var1", "var2" } )
+        {
+            if( hasLine( package, wxS( "steps/pcb" ), ".current_variant=" + variant ) )
+                currentVariants.insert( variant );
+        }
+    }
+
+    BOOST_CHECK( currentVariants == std::set<std::string>( { "var1", "var2" } ) );
 }
 
 

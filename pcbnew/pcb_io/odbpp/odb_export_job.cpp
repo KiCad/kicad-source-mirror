@@ -112,6 +112,7 @@ ODB_EXPORT_OPTIONS odbJobOptions( const JOB_EXPORT_PCB_ODB& aJob, const wxString
     options.m_productModelName = aProductModelName;
     options.m_origin = aJob.m_origin;
     options.m_anonymizeNets = aJob.m_netNames == JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE;
+    options.m_boardMetadata = aJob.m_boardMetadata;
     options.m_layerOverrides = aJob.m_layerOverrides;
 
     // USERDEF with no section key keeps the unfiltered matrix
@@ -120,7 +121,7 @@ ODB_EXPORT_OPTIONS odbJobOptions( const JOB_EXPORT_PCB_ODB& aJob, const wxString
 
     FAB::SECTION_SET sections;
 
-    if( !aJob.m_sections.IsEmpty() && FAB::SectionSetFromKeyString( aJob.m_sections, sections ) )
+    if( aJob.m_sections && !aJob.m_sections->IsEmpty() && FAB::SectionSetFromKeyString( *aJob.m_sections, sections ) )
         options.m_sections = sections;
 
     return options;
@@ -591,7 +592,7 @@ ODB_EXPORT_RESULT GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBo
 
     FAB::SECTION_SET sections;
 
-    if( !FAB::SectionSetFromKeyString( aJob.m_sections, sections ) )
+    if( !FAB::SectionSetFromKeyString( aJob.m_sections.value_or( wxString() ), sections ) )
     {
         if( aReporter )
             aReporter->Report( _( "Unknown ODB++ section key." ), RPT_SEVERITY_ERROR );

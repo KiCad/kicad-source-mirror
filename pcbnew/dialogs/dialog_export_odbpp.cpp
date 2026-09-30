@@ -168,8 +168,8 @@ bool DIALOG_EXPORT_ODBPP::TransferDataToWindow()
     m_productName->SetValue( settings.m_productName );
     m_refillZones->SetValue( m_job ? settings.m_checkZonesBeforeExport : true );
     m_contentPanel->SetDataSet( settings.m_dataSet );
-    m_contentPanel->SetSectionKey( settings.m_sections.IsEmpty() ? std::optional<wxString>()
-                                                                 : std::optional<wxString>( settings.m_sections ) );
+    m_contentPanel->SetSectionKey( settings.m_sections );
+    m_contentPanel->SetBoardMetadata( settings.m_boardMetadata );
     m_contentPanel->SetNetNames( settings.m_netNames );
     m_contentPanel->SetVariantNames( settings.m_variantNames );
     m_contentPanel->SetCombinedVariantOutput( settings.m_variantPackaging
@@ -217,7 +217,8 @@ void DIALOG_EXPORT_ODBPP::populateJob( JOB_EXPORT_PCB_ODB& aJob ) const
     aJob.m_productName = m_productName->GetValue();
     aJob.m_checkZonesBeforeExport = m_refillZones->GetValue();
     aJob.m_dataSet = m_contentPanel->GetDataSet();
-    aJob.m_sections = m_contentPanel->GetSectionKey().value_or( wxEmptyString );
+    aJob.m_sections = m_contentPanel->GetSectionKey();
+    aJob.m_boardMetadata = m_contentPanel->GetBoardMetadata();
     aJob.m_netNames = m_contentPanel->GetNetNames();
     aJob.m_variantNames = m_contentPanel->GetVariantNames();
     aJob.m_variantPackaging = m_contentPanel->IsCombinedVariantOutput()

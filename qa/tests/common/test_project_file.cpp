@@ -59,6 +59,30 @@ public:
 BOOST_FIXTURE_TEST_SUITE( ProjectFile, PROJECT_FILE_TEST_FIXTURE )
 
 
+BOOST_AUTO_TEST_CASE( Ipc2581ExplicitEmptySectionsRoundTrips )
+{
+    fs::path projectPath = m_tempDir / "api_kitchen_sink.kicad_pro";
+    fs::copy_file( fs::path( KI_TEST::GetTestDataRootDir() ) / "pcbnew" / "api_kitchen_sink.kicad_pro",
+                   projectPath );
+
+    {
+        SETTINGS_MANAGER mgr;
+        BOOST_REQUIRE( mgr.LoadProject( wxString( projectPath.string() ), true ) );
+        PROJECT_FILE& project = mgr.Prj().GetProjectFile();
+        BOOST_REQUIRE( !project.m_IP2581Bom.sections );
+        project.m_IP2581Bom.sections = wxString();
+        BOOST_REQUIRE( project.SaveToFile( wxString( m_tempDir.string() ), true ) );
+        mgr.UnloadProject( &mgr.Prj(), false );
+    }
+
+    SETTINGS_MANAGER mgr;
+    BOOST_REQUIRE( mgr.LoadProject( wxString( projectPath.string() ), true ) );
+    PROJECT_FILE& loaded = mgr.Prj().GetProjectFile();
+    BOOST_REQUIRE( loaded.m_IP2581Bom.sections );
+    BOOST_CHECK( loaded.m_IP2581Bom.sections->IsEmpty() );
+}
+
+
 /**
  * Test that SaveAs updates top-level sheet names when they match the old project name.
  *

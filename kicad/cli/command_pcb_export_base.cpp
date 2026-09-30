@@ -116,7 +116,9 @@ void CLI::PCB_EXPORT_BASE_COMMAND::applyFabExportArgs( JOB_EXPORT_PCB_FAB& aJob 
 
     aJob.m_dataSet = JOB_EXPORT_PCB_FAB::DataSetFromToken(
             From_UTF8( m_argParser.get<std::string>( ARG_DATA_SET ).c_str() ) );
-    aJob.m_sections = From_UTF8( m_argParser.get<std::string>( ARG_SECTIONS ).c_str() );
+
+    wxString sections = From_UTF8( m_argParser.get<std::string>( ARG_SECTIONS ).c_str() );
+    aJob.m_sections = sections.IsEmpty() ? std::nullopt : std::optional<wxString>( sections );
     aJob.m_netNames = m_argParser.get<std::string>( ARG_NET_NAMES ) == "anonymize"
                               ? JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE
                               : JOB_EXPORT_PCB_FAB::NET_NAMES::INCLUDE;

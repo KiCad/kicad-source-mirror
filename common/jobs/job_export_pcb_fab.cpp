@@ -61,7 +61,6 @@ JOB_EXPORT_PCB_FAB::JOB_EXPORT_PCB_FAB( const std::string& aType ) : JOB( aType,
     m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.mfg_pn", &m_colMfgPn,
                                                      m_colMfgPn ) );
     m_params.emplace_back( new JOB_PARAM<DATA_SET>( "data_set", &m_dataSet, m_dataSet ) );
-    m_params.emplace_back( new JOB_PARAM<wxString>( "sections", &m_sections, m_sections ) );
     m_params.emplace_back( new JOB_PARAM<NET_NAMES>( "net_names", &m_netNames, m_netNames ) );
 }
 
@@ -99,6 +98,14 @@ void JOB_EXPORT_PCB_FAB::FromJson( const nlohmann::json& aJson )
             m_variantNames = { legacy };
         }
     }
+
+    // Older files hold an empty key when nothing was chosen, so only the flag marks an empty choice
+    wxString sections = aJson.value( "sections", wxString() );
+
+    if( !sections.IsEmpty() || aJson.value( "custom_sections", false ) )
+        m_sections = sections;
+    else
+        m_sections.reset();
 }
 
 
@@ -106,4 +113,6 @@ void JOB_EXPORT_PCB_FAB::ToJson( nlohmann::json& aJson ) const
 {
     JOB::ToJson( aJson );
     aJson["variant"] = m_variantNames.empty() ? wxString() : m_variantNames.front();
+    aJson["sections"] = m_sections.value_or( wxString() );
+    aJson["custom_sections"] = m_sections && m_sections->IsEmpty();
 }
