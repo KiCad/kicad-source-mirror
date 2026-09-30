@@ -42,6 +42,14 @@
 static wxString stripUrlUserinfo( const wxString& aUrl );
 
 
+wxWindow*& KIGIT::ActiveAdvancedGitWindow()
+{
+    static wxWindow* window = nullptr;
+
+    return window;
+}
+
+
 KIGIT_COMMON::KIGIT_COMMON( git_repository* aRepo ) :
         m_repo( aRepo ), m_connType( GIT_CONN_TYPE::GIT_CONN_LOCAL ), m_testedTypes( 0 ),
         m_nextPublicKey( 0 ), m_secretFetched( false )

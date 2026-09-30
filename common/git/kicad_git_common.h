@@ -499,6 +499,9 @@ extern "C" APIEXPORT int credentials_cb( git_cred** aOut, const char* aUrl, cons
                                          unsigned int aAllowedTypes, void* aPayload );
 
 
+class wxWindow;
+
+
 namespace KIGIT
 {
 
@@ -509,6 +512,15 @@ namespace KIGIT
  * recognised as a private key is reported as unencrypted.
  */
 APIEXPORT bool IsPrivateKeyEncrypted( const wxString& aKeyText );
+
+
+/**
+ * The advanced git window, or null when none is open.
+ *
+ * Kept here because libcommon is linked into the project manager and into each editor
+ * separately, so a static there would give every one of them a window of its own.
+ */
+APIEXPORT wxWindow*& ActiveAdvancedGitWindow();
 
 
 /**
