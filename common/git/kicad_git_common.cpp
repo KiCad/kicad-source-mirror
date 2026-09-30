@@ -196,6 +196,28 @@ wxString KIGIT_COMMON::GetPassword()
 }
 
 
+wxString KIGIT_COMMON::GetLastCommitMessage() const
+{
+    if( !m_repo )
+        return wxEmptyString;
+
+    git_oid headOid;
+
+    if( git_reference_name_to_id( &headOid, m_repo, "HEAD" ) != GIT_OK )
+        return wxEmptyString;
+
+    git_commit* commit = nullptr;
+
+    if( git_commit_lookup( &commit, m_repo, &headOid ) != GIT_OK )
+        return wxEmptyString;
+
+    KIGIT::GitCommitPtr commitPtr( commit );
+    const char*         message = git_commit_message( commit );
+
+    return message ? wxString::FromUTF8( message ) : wxString();
+}
+
+
 bool KIGIT_COMMON::HasUncommittedTrackedChanges() const
 {
     if( !m_repo )

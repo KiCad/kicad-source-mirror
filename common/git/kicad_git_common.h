@@ -182,6 +182,11 @@ public:
     // count: a merge leaves them alone.
     bool HasUncommittedTrackedChanges() const;
 
+    // The full message of the commit HEAD points at, body and trailers included. The amend
+    // prefill uses this, so accepting the suggestion does not truncate the message to its
+    // first line.
+    wxString GetLastCommitMessage() const;
+
     // The stashes in the repository, in the order git reports them (newest first).
     std::vector<KIGIT_STASH_INFO> GetStashes() const;
 

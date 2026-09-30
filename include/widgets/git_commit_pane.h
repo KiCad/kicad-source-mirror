@@ -22,6 +22,7 @@
 
 #include <atomic>
 #include <memory>
+#include <thread>
 #include <set>
 
 #include <wx/timer.h>
@@ -133,6 +134,9 @@ private:
     /// The token of the push or pull this panel submitted last. Held so Cancel reaches it even
     /// while the task is still queued and has no handler yet.
     std::shared_ptr<std::atomic<bool>> m_networkCancel;
+
+    /// The push or pull running for this pane, joined before the pane goes.
+    std::thread m_networkWorker;
 
     /// Unwrapped status text, kept so it can be re-wrapped on resize.
     wxString m_statusText;
