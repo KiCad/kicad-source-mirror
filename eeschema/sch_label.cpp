@@ -343,6 +343,7 @@ void SCH_LABEL_BASE::swapData( SCH_ITEM* aItem )
     std::swap( m_shape, label->m_shape );
     std::swap( m_connectionType, label->m_connectionType );
     std::swap( m_isDangling, label->m_isDangling );
+    std::swap( m_autoRotateOnPlacement, label->m_autoRotateOnPlacement );
     std::swap( m_lastResolvedColor, label->m_lastResolvedColor );
 }
 
@@ -651,6 +652,9 @@ bool SCH_LABEL_BASE::operator==( const SCH_ITEM& aOther ) const
     if( m_fields.size() != other->m_fields.size() )
         return false;
 
+    if( m_autoRotateOnPlacement != other->m_autoRotateOnPlacement )
+        return false;
+
     for( size_t ii = 0; ii < m_fields.size(); ++ii )
     {
         if( !( m_fields[ii] == other->m_fields[ii] ) )
@@ -677,6 +681,9 @@ double SCH_LABEL_BASE::Similarity( const SCH_ITEM& aOther ) const
         similarity *= 0.9;
 
     if( m_shape != other->m_shape )
+        similarity *= 0.9;
+
+    if( m_autoRotateOnPlacement != other->m_autoRotateOnPlacement )
         similarity *= 0.9;
 
     for( size_t ii = 0; ii < m_fields.size(); ++ii )
