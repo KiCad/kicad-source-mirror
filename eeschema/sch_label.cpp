@@ -676,7 +676,7 @@ double SCH_LABEL_BASE::Similarity( const SCH_ITEM& aOther ) const
     if( typeid( *this ) != typeid( aOther ) )
         similarity *= 0.9;
 
-    if( m_shape == other->m_shape )
+    if( m_shape != other->m_shape )
         similarity *= 0.9;
 
     for( size_t ii = 0; ii < m_fields.size(); ++ii )
