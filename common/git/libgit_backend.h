@@ -73,10 +73,6 @@ public:
 
     bool PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock ) override;
     PullResult PerformPull( GIT_PULL_HANDLER* aHandler ) override;
-    bool       ResetToUpstream( GIT_PULL_HANDLER* aHandler ) override;
-    PullResult RebaseOntoUpstream( GIT_PULL_HANDLER* aHandler ) override;
-
-    void PerformRevert( GIT_REVERT_HANDLER* aHandler ) override;
 
     git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError ) override;
     int CreateBranch( git_repository* aRepo, const wxString& aBranchName ) override;
@@ -115,14 +111,6 @@ public:
     bool CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid, const wxString& aTheirsOid,
                              const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
                              wxString&                                         aError ) override;
-
-    bool AddToIndex( GIT_ADD_TO_INDEX_HANDLER* aHandler, const wxString& aFilePath ) override;
-
-    bool PerformAddToIndex( GIT_ADD_TO_INDEX_HANDLER* aHandler ) override;
-
-    bool RemoveFromIndex( GIT_REMOVE_FROM_INDEX_HANDLER* aHandler, const wxString& aFilePath ) override;
-
-    void PerformRemoveFromIndex( GIT_REMOVE_FROM_INDEX_HANDLER* aHandler ) override;
 
 private:
     PullResult handleFastForward( GIT_PULL_HANDLER* aHandler );

@@ -40,18 +40,6 @@ PullResult GIT_PULL_HANDLER::PerformPull()
 }
 
 
-bool GIT_PULL_HANDLER::ResetToUpstream()
-{
-    return GetGitBackend()->ResetToUpstream( this );
-}
-
-
-PullResult GIT_PULL_HANDLER::RebaseOntoUpstream()
-{
-    return GetGitBackend()->RebaseOntoUpstream( this );
-}
-
-
 const std::vector<std::pair<std::string, std::vector<CommitDetails>>>&GIT_PULL_HANDLER::GetFetchResults() const
 {
     return m_fetchResults;

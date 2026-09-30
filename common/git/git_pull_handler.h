@@ -60,12 +60,6 @@ public:
     bool       PerformFetch( bool aSkipLock = false );
     PullResult PerformPull();
 
-    // Conflict-recovery actions, offered after PerformPull() returns Conflict.
-    // ResetToUpstream discards local commits and matches the remote branch.
-    // RebaseOntoUpstream replays local commits on top of the remote branch.
-    bool       ResetToUpstream();
-    PullResult RebaseOntoUpstream();
-
     const std::vector<std::pair<std::string, std::vector<CommitDetails>>>& GetFetchResults() const;
 
 private:

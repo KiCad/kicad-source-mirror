@@ -22,14 +22,11 @@
 #include "git_clone_handler.h"
 #include "git_commit_handler.h"
 #include "git_push_handler.h"
-#include "git_add_to_index_handler.h"
-#include "git_remove_from_index_handler.h"
 #include "git_status_handler.h"
 #include "git_config_handler.h"
 #include "git_init_handler.h"
 #include "git_branch_handler.h"
 #include "git_pull_handler.h"
-#include "git_revert_handler.h"
 #include "project_git_utils.h"
 #include "kicad_git_common.h"
 #include "kicad_git_memory.h"
@@ -2548,163 +2545,14 @@ PullResult LIBGIT_BACKEND::handleRebase( GIT_PULL_HANDLER* aHandler, const git_a
 }
 
 
-static bool lookup_upstream_ref( GIT_PULL_HANDLER* aHandler, git_reference** aUpstreamRef )
-{
-    git_repository* repo = aHandler->GetRepo();
-    git_reference*  head_ref = nullptr;
-
-    if( git_repository_head( &head_ref, repo ) != GIT_OK )
-        return false;
-
-    KIGIT::GitReferencePtr headRefPtr( head_ref );
-    wxString               remoteName = aHandler->GetCommon()->GetRemoteNameOrDefault();
-    wxString               remoteRef = wxString::Format( "refs/remotes/%s/%s",
-                                                         remoteName,
-                                                         git_reference_shorthand( head_ref ) );
-
-    return git_reference_lookup( aUpstreamRef, repo, remoteRef.utf8_string().c_str() ) == GIT_OK;
-}
-
-
-bool LIBGIT_BACKEND::ResetToUpstream( GIT_PULL_HANDLER* aHandler )
-{
-    git_repository* repo = aHandler->GetRepo();
-
-    if( !repo )
-        return false;
-
-    std::unique_lock<std::mutex> lock( aHandler->GetCommon()->m_gitActionMutex, std::try_to_lock );
-
-    if( !lock.owns_lock() )
-    {
-        aHandler->AddErrorString( _( "Another git operation is in progress." ) );
-        return false;
-    }
-
-    git_reference* upstream_ref = nullptr;
-
-    if( !lookup_upstream_ref( aHandler, &upstream_ref ) )
-    {
-        aHandler->AddErrorString( _( "Could not find the matching remote branch." ) );
-        return false;
-    }
-
-    KIGIT::GitReferencePtr upstreamRefPtr( upstream_ref );
-    git_object*            target = nullptr;
-
-    if( git_reference_peel( &target, upstream_ref, GIT_OBJECT_COMMIT ) != GIT_OK )
-    {
-        aHandler->AddErrorString( _( "Could not read the remote branch." ) );
-        return false;
-    }
-
-    KIGIT::GitObjectPtr targetPtr( target );
-
-    if( git_reset( repo, target, GIT_RESET_HARD, nullptr ) != GIT_OK )
-    {
-        aHandler->AddErrorString( wxString::Format( _( "Could not reset to the remote branch: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
-        return false;
-    }
-
-    git_repository_state_cleanup( repo );
-    return true;
-}
-
-
-PullResult LIBGIT_BACKEND::RebaseOntoUpstream( GIT_PULL_HANDLER* aHandler )
-{
-    git_repository* repo = aHandler->GetRepo();
-
-    if( !repo )
-        return PullResult::Error;
-
-    std::unique_lock<std::mutex> lock( aHandler->GetCommon()->m_gitActionMutex, std::try_to_lock );
-
-    if( !lock.owns_lock() )
-    {
-        aHandler->AddErrorString( _( "Another git operation is in progress." ) );
-        return PullResult::Error;
-    }
-
-    if( hasUnstagedChanges( repo ) )
-    {
-        aHandler->AddErrorString( _( "Cannot rebase: you have unstaged changes.  Please commit or stash them "
-                                     "first." ) );
-        return PullResult::DirtyWorkdir;
-    }
-
-    git_reference* upstream_ref = nullptr;
-
-    if( !lookup_upstream_ref( aHandler, &upstream_ref ) )
-    {
-        aHandler->AddErrorString( _( "Could not find the matching remote branch." ) );
-        return PullResult::Error;
-    }
-
-    KIGIT::GitReferencePtr upstreamRefPtr( upstream_ref );
-    git_annotated_commit*  onto = nullptr;
-
-    if( git_annotated_commit_from_ref( &onto, repo, upstream_ref ) != GIT_OK )
-    {
-        aHandler->AddErrorString( _( "Could not read the remote branch." ) );
-        return PullResult::Error;
-    }
-
-    KIGIT::GitAnnotatedCommitPtr ontoPtr( onto );
-
-    return rebaseOnto( aHandler, repo, onto );
-}
-
-
-void LIBGIT_BACKEND::PerformRevert( GIT_REVERT_HANDLER* aHandler )
-{
-    git_object* head_commit = nullptr;
-    git_checkout_options opts;
-    git_checkout_init_options( &opts, GIT_CHECKOUT_OPTIONS_VERSION );
-
-    if( git_revparse_single( &head_commit, aHandler->m_repository, "HEAD" ) != 0 )
-        return;
-
-    opts.checkout_strategy = GIT_CHECKOUT_FORCE;
-    char** paths = new char*[aHandler->m_filesToRevert.size()];
-
-    for( size_t ii = 0; ii < aHandler->m_filesToRevert.size(); ii++ )
-        paths[ii] = wxStrdup( aHandler->m_filesToRevert[ii].ToUTF8() );
-
-    git_strarray arr = { paths, aHandler->m_filesToRevert.size() };
-
-    opts.paths = arr;
-    opts.progress_cb = nullptr;
-    opts.notify_cb = nullptr;
-    opts.notify_payload = static_cast<void*>( aHandler );
-
-    if( git_checkout_tree( aHandler->m_repository, head_commit, &opts ) != 0 )
-    {
-        const git_error* e = git_error_last();
-
-        if( e )
-            wxLogTrace( traceGit, wxS( "Checkout failed: %d: %s" ), e->klass, e->message );
-    }
-
-    for( size_t ii = 0; ii < aHandler->m_filesToRevert.size(); ii++ )
-        delete( paths[ii] );
-
-    delete[] paths;
-
-    git_object_free( head_commit );
-}
-
-
 git_repository* LIBGIT_BACKEND::GetRepositoryForFile( const char* aFilename, wxString* aError )
 {
     git_repository* repo = nullptr;
-    git_buf repo_path = GIT_BUF_INIT;
+    git_buf         repo_path = GIT_BUF_INIT;
 
     if( git_repository_discover( &repo_path, aFilename, 0, nullptr ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "Can't repo discover %s: %s", aFilename,
-                    KIGIT_COMMON::GetLastGitError() );
+        wxLogTrace( traceGit, "Can't repo discover %s: %s", aFilename, KIGIT_COMMON::GetLastGitError() );
         return nullptr;
     }
 
@@ -2757,7 +2605,7 @@ int LIBGIT_BACKEND::CreateBranch( git_repository* aRepo, const wxString& aBranch
     }
 
     KIGIT::GitCommitPtr commitPtr( commit );
-    git_reference* branchRef = nullptr;
+    git_reference*      branchRef = nullptr;
 
     if( int error = git_branch_create( &branchRef, aRepo, aBranchName.mb_str(), commit, 0 ); error != GIT_OK )
     {
@@ -4011,133 +3859,4 @@ bool LIBGIT_BACKEND::RemoveVCS( git_repository*& aRepo, const wxString& aProject
 
     wxLogTrace( traceGit, "Successfully removed VCS from project" );
     return true;
-}
-
-
-bool LIBGIT_BACKEND::AddToIndex( GIT_ADD_TO_INDEX_HANDLER* aHandler, const wxString& aFilePath )
-{
-    git_repository* repo = aHandler->GetRepo();
-
-    git_index* index = nullptr;
-    size_t     at_pos = 0;
-
-    if( git_repository_index( &index, repo ) != 0 )
-    {
-        wxLogError( "Failed to get repository index" );
-        return false;
-    }
-
-    KIGIT::GitIndexPtr indexPtr( index );
-
-    if( git_index_find( &at_pos, index, aFilePath.ToUTF8().data() ) == GIT_OK )
-    {
-        wxLogError( "%s already in index", aFilePath );
-        return false;
-    }
-
-    aHandler->m_filesToAdd.push_back( aFilePath );
-    return true;
-}
-
-
-bool LIBGIT_BACKEND::PerformAddToIndex( GIT_ADD_TO_INDEX_HANDLER* aHandler )
-{
-    git_repository* repo = aHandler->GetRepo();
-    git_index* index = nullptr;
-
-    aHandler->m_filesFailedToAdd.clear();
-
-    if( git_repository_index( &index, repo ) != 0 )
-    {
-        wxLogError( "Failed to get repository index" );
-        std::copy( aHandler->m_filesToAdd.begin(), aHandler->m_filesToAdd.end(),
-                   std::back_inserter( aHandler->m_filesFailedToAdd ) );
-        return false;
-    }
-
-    KIGIT::GitIndexPtr indexPtr( index );
-
-    for( const wxString& file : aHandler->m_filesToAdd )
-    {
-        if( git_index_add_bypath( index, file.ToUTF8().data() ) != 0 )
-        {
-            wxLogError( "Failed to add %s to index", file );
-            aHandler->m_filesFailedToAdd.push_back( file );
-            continue;
-        }
-    }
-
-    if( git_index_write( index ) != 0 )
-    {
-        wxLogError( "Failed to write index" );
-        aHandler->m_filesFailedToAdd.clear();
-        std::copy( aHandler->m_filesToAdd.begin(), aHandler->m_filesToAdd.end(),
-                   std::back_inserter( aHandler->m_filesFailedToAdd ) );
-        return false;
-    }
-
-    return true;
-}
-
-
-bool LIBGIT_BACKEND::RemoveFromIndex( GIT_REMOVE_FROM_INDEX_HANDLER* aHandler, const wxString& aFilePath )
-{
-    git_repository* repo = aHandler->GetRepo();
-    git_index*      index = nullptr;
-    size_t          at_pos = 0;
-
-    if( git_repository_index( &index, repo ) != 0 )
-    {
-        wxLogError( "Failed to get repository index" );
-        return false;
-    }
-
-    KIGIT::GitIndexPtr indexPtr( index );
-
-    if( git_index_find( &at_pos, index, aFilePath.ToUTF8().data() ) != 0 )
-    {
-        wxLogError( "Failed to find index entry for %s", aFilePath );
-        return false;
-    }
-
-    aHandler->m_filesToRemove.push_back( aFilePath );
-    return true;
-}
-
-
-void LIBGIT_BACKEND::PerformRemoveFromIndex( GIT_REMOVE_FROM_INDEX_HANDLER* aHandler )
-{
-    git_repository* repo = aHandler->GetRepo();
-
-    for( const wxString& file : aHandler->m_filesToRemove )
-    {
-        git_index* index = nullptr;
-        git_oid    oid;
-
-        if( git_repository_index( &index, repo ) != 0 )
-        {
-            wxLogError( "Failed to get repository index" );
-            return;
-        }
-
-        KIGIT::GitIndexPtr indexPtr( index );
-
-        if( git_index_remove_bypath( index, file.ToUTF8().data() ) != 0 )
-        {
-            wxLogError( "Failed to remove index entry for %s", file );
-            return;
-        }
-
-        if( git_index_write( index ) != 0 )
-        {
-            wxLogError( "Failed to write index" );
-            return;
-        }
-
-        if( git_index_write_tree( &oid, index ) != 0 )
-        {
-            wxLogError( "Failed to write index tree" );
-            return;
-        }
-    }
 }

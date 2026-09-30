@@ -33,13 +33,10 @@ class GIT_CLONE_HANDLER;
 class GIT_COMMIT_HANDLER;
 class GIT_PUSH_HANDLER;
 class GIT_STATUS_HANDLER;
-class GIT_ADD_TO_INDEX_HANDLER;
-class GIT_REMOVE_FROM_INDEX_HANDLER;
 class GIT_CONFIG_HANDLER;
 class GIT_INIT_HANDLER;
 class GIT_BRANCH_HANDLER;
 class GIT_PULL_HANDLER;
-class GIT_REVERT_HANDLER;
 struct RemoteConfig;
 struct git_repository;
 enum class InitResult;
@@ -70,8 +67,8 @@ public:
     virtual void Init() = 0;
     virtual void Shutdown() = 0;
 
-    // Clone, Push, PerformFetch, PerformPull, ResetToUpstream and RebaseOntoUpstream take the
-    // action lock themselves. Every other method here expects the caller to hold it.
+    // Clone, Push, PerformFetch and PerformPull take the action lock themselves. Every other
+    // method here expects the caller to hold it.
 
     /**
      * Return the process-wide orphan thread registry owned by this backend.
@@ -126,10 +123,6 @@ public:
 
     virtual bool PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock ) = 0;
     virtual PullResult PerformPull( GIT_PULL_HANDLER* aHandler ) = 0;
-    virtual bool       ResetToUpstream( GIT_PULL_HANDLER* aHandler ) = 0;
-    virtual PullResult RebaseOntoUpstream( GIT_PULL_HANDLER* aHandler ) = 0;
-
-    virtual void PerformRevert( GIT_REVERT_HANDLER* aHandler ) = 0;
 
     /// aError receives why git refused to open the repository. Untouched otherwise.
     virtual git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError ) = 0;
@@ -172,14 +165,6 @@ public:
                                      const wxString&                                   aTheirsOid,
                                      const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
                                      wxString&                                         aError ) = 0;
-
-    virtual bool AddToIndex( GIT_ADD_TO_INDEX_HANDLER* aHandler, const wxString& aFilePath ) = 0;
-
-    virtual bool PerformAddToIndex( GIT_ADD_TO_INDEX_HANDLER* aHandler ) = 0;
-
-    virtual bool RemoveFromIndex( GIT_REMOVE_FROM_INDEX_HANDLER* aHandler, const wxString& aFilePath ) = 0;
-
-    virtual void PerformRemoveFromIndex( GIT_REMOVE_FROM_INDEX_HANDLER* aHandler ) = 0;
 
 protected:
     KIGIT_ORPHAN_REGISTRY m_orphanRegistry;

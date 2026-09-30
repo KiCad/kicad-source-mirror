@@ -104,7 +104,6 @@ set( KICOMMON_SRCS
     kicad_gl/gl_context_mgr.cpp
 
     # Git
-    git/git_add_to_index_handler.cpp
     git/git_branch_handler.cpp
     git/git_clone_handler.cpp
     git/git_commit_handler.cpp
@@ -116,13 +115,9 @@ set( KICOMMON_SRCS
     git/project_git_utils.cpp
     git/git_pull_handler.cpp
     git/git_push_handler.cpp
-    git/git_remove_from_index_handler.cpp
     git/git_remove_vcs_handler.cpp
-    git/git_resolve_conflict_handler.cpp
-    git/git_revert_handler.cpp
     git/git_status_handler.cpp
     git/git_switch_branch_handler.cpp
-    git/git_sync_handler.cpp
     git/kicad_git_common.cpp
     git/kicad_git_errors.cpp
     git/text_diff.cpp
@@ -560,7 +555,6 @@ set( COMMON_ABOUT_DLG_SRCS
     )
 
 set( COMMON_GIT_DLG_SRCS
-    dialogs/git/dialog_git_commit.cpp
     dialogs/git/dialog_git_switch.cpp
     dialogs/git/dialog_git_credentials.cpp
     dialogs/git/git_credentials_prompt.cpp
