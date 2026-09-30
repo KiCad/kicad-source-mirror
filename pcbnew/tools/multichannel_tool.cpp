@@ -674,7 +674,6 @@ void MULTICHANNEL_TOOL::FindExistingRuleAreas()
 
         RULE_AREA area;
 
-        area.m_existsAlready = true;
         area.m_zone = zone;
         area.m_sourceType = zone->GetPlacementAreaSourceType();
         area.m_ruleName = zone->GetZoneName();
@@ -2354,7 +2353,8 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
 
     for( RULE_AREA& ra : m_areas.m_areas )
     {
-        ra.m_existsAlready = false;
+        // Clear the result so skipped candidates are not grouped below.
+        ra.m_zone = nullptr;
 
         if( !ra.m_generateEnabled )
             continue;
@@ -2404,9 +2404,7 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             oldZones.push_back( zone );
         }
 
-        ra.m_existsAlready = !oldZones.empty();
-
-        if( ra.m_existsAlready && !m_areas.m_replaceExisting )
+        if( !oldZones.empty() && !m_areas.m_replaceExisting )
             continue;
 
         SHAPE_LINE_CHAIN raOutline;
@@ -2505,22 +2503,12 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
     {
         for( RULE_AREA& ra : m_areas.m_areas )
         {
-            if( !ra.m_generateEnabled )
-                continue;
-
-            if( ra.m_existsAlready && !m_areas.m_replaceExisting )
-                continue;
-
-            // A group needs at least 2 items (zone + at least 1 component)
-            if( ra.m_components.empty() )
+            if( !ra.m_zone )
                 continue;
 
             std::unordered_set<BOARD_ITEM*> toPrune;
 
             std::copy( ra.m_components.begin(), ra.m_components.end(), std::inserter( toPrune, toPrune.begin() ) );
-
-            if( ra.m_existsAlready )
-                toPrune.insert( ra.m_zone );
 
             pruneExistingGroups( commit, toPrune );
 

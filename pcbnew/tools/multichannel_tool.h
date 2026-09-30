@@ -71,7 +71,6 @@ struct RULE_AREA
     std::set<FOOTPRINT*>      m_components;
     std::unordered_set<EDA_ITEM*> m_designBlockItems;
     PCB_GROUP*                    m_group = nullptr;
-    bool                      m_existsAlready = false;
     bool                      m_generateEnabled = false;
     wxString                  m_sheetPath;
     wxString                  m_sheetName;
