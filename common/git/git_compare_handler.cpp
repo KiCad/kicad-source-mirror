@@ -82,11 +82,23 @@ std::vector<CHANGED_FILE> CompareRefs( git_repository* aRepo,
     if( !aRepo )
         return result;
 
-    GitTreePtr baseTree( ResolveRefToTree( aRepo, aBaseRef ) );
     GitTreePtr headTree( ResolveRefToTree( aRepo, aHeadRef ) );
 
-    if( !baseTree || !headTree )
+    if( !headTree )
         return result;
+
+    // An empty base ref means compare against the empty tree, so a root commit (which has no
+    // parent to name) shows all of its files as added. A non-empty base ref that fails to
+    // resolve is a real error.
+    GitTreePtr baseTree;
+
+    if( !aBaseRef.IsEmpty() )
+    {
+        baseTree.reset( ResolveRefToTree( aRepo, aBaseRef ) );
+
+        if( !baseTree )
+            return result;
+    }
 
     git_diff*        diff = nullptr;
     git_diff_options opts;

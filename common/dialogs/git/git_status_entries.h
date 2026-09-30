@@ -24,11 +24,44 @@
 
 #include <git/git_editor_snapshot.h>
 #include <widgets/file_checklist_ctrl.h>
+#include <diff_merge/diff_doc_kind.h>
 
 class EDA_BASE_FRAME;
 class KIWAY;
 class PROJECT;
+class wxWindow;
+struct git_repository;
 
+
+/**
+ * A private scratch directory for extracting committed file versions to diff, removed when
+ * this object goes out of scope. A schematic checks out the whole tree so its sub-sheet files
+ * resolve. Other document kinds are written as a single blob.
+ */
+class GIT_DIFF_WORKSPACE
+{
+public:
+    GIT_DIFF_WORKSPACE();
+    ~GIT_DIFF_WORKSPACE();
+
+    GIT_DIFF_WORKSPACE( const GIT_DIFF_WORKSPACE& ) = delete;
+    GIT_DIFF_WORKSPACE& operator=( const GIT_DIFF_WORKSPACE& ) = delete;
+
+    /// True when the scratch directory was created.
+    bool IsOk() const { return !m_root.IsEmpty(); }
+
+    /// The scratch directory, for callers that lay out their own files (e.g. footprint libraries).
+    const wxString& Root() const { return m_root; }
+
+    /// Extract aRelPath at aRef into a uniquely named slot and return the path to load, or an
+    /// empty string when that version does not exist or could not be written.
+    wxString Materialize( git_repository* aRepo, const wxString& aRef, const wxString& aRelPath,
+                          KICAD_DIFF::DOC_KIND aKind );
+
+private:
+    wxString m_root;
+    int      m_slot = 0;
+};
 
 /**
  * Build the file checklist entries for the project's changed files, transient files filtered
@@ -83,5 +116,27 @@ EDITOR_SNAPSHOT CaptureOpenEditorDocs( KIWAY& aKiway );
  * Settings changes reach editors whose document did not reload. An empty aBefore reloads all.
  */
 void ReloadOpenEditors( KIWAY& aKiway, const EDITOR_SNAPSHOT& aBefore = {} );
+
+/**
+ * Open the diff for a changed file, comparing the committed version at HEAD with the working
+ * copy. Design files open the visual diff, other text files a line diff, and a new file is
+ * compared against an empty committed side. Binary content gets a message instead.
+ *
+ * @param aFrame Frame to parent the diff to, and whose project supplies the repository.
+ * @param aRelativePath Path of the file relative to the repository working directory.
+ */
+void ShowGitFileDiff( EDA_BASE_FRAME* aFrame, const wxString& aRelativePath );
+
+/**
+ * Open the diff for what a commit changed, comparing it against its parent. When the commit
+ * changed more than one file the user picks which one to compare. Design files open the
+ * visual diff and other text files a line diff.
+ *
+ * @param aFrame Frame whose project supplies the repository.
+ * @param aCommitHash Hash of the commit to inspect.
+ * @param aParentWindow Window to parent the diff to, or null to use aFrame. Pass the calling
+ *                      dialog so it stays open behind the diff instead of being dismissed.
+ */
+void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxWindow* aParentWindow = nullptr );
 
 #endif // GIT_STATUS_ENTRIES_H

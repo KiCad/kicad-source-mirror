@@ -299,4 +299,22 @@ BOOST_AUTO_TEST_CASE( CompareRefs_InvalidRefReturnsEmpty )
 }
 
 
+// An empty base ref compares against the empty tree, so the initial commit (which has no parent
+// to name) reports all of its files as added instead of returning nothing.
+BOOST_AUTO_TEST_CASE( CompareRefs_EmptyBaseComparesAgainstEmptyTree )
+{
+    BOOST_REQUIRE( ready() );
+
+    std::vector<KIGIT::CHANGED_FILE> changes = KIGIT::CompareRefs( repo(), wxEmptyString, wxT( "HEAD~1" ) );
+
+    std::map<wxString, KIGIT::FILE_CHANGE_STATUS> byPath;
+
+    for( const KIGIT::CHANGED_FILE& f : changes )
+        byPath[f.path] = f.status;
+
+    BOOST_CHECK( byPath.at( wxT( "a.txt" ) ) == KIGIT::FILE_CHANGE_STATUS::ADDED );
+    BOOST_CHECK( byPath.at( wxT( "b.txt" ) ) == KIGIT::FILE_CHANGE_STATUS::ADDED );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

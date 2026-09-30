@@ -19,17 +19,30 @@
 
 #include <dialogs/git/git_status_entries.h>
 
+#include <fstream>
 #include <map>
 #include <memory>
 #include <set>
 #include <sys/stat.h>
+#include <mutex>
 #include <vector>
 
+#include <wx/choicdlg.h>
 #include <wx/dir.h>
 #include <wx/filename.h>
 #include <wx/richmsgdlg.h>
+#include <wx/stdpaths.h>
+#include <wx/time.h>
+#include <wx/utils.h>
+
+#include <reporter.h>
 
 #include <confirm.h>
+#include <dialogs/git/dialog_text_diff.h>
+#include <diff_merge/diff_doc_kind.h>
+#include <diff_merge/merge_dispatch.h>
+#include <git/text_diff.h>
+#include <git/git_compare_handler.h>
 #include <eda_base_frame.h>
 #include <frame_type.h>
 #include <git/kicad_git_common.h>
@@ -549,4 +562,330 @@ bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPur
         aFrame->GetSettingsManager()->SaveProject();
 
     return true;
+}
+
+
+GIT_DIFF_WORKSPACE::GIT_DIFF_WORKSPACE()
+{
+    // Create the scratch directory with a non-recursive Mkdir so its final component cannot be
+    // an attacker-precreated symlink. Retry on collision rather than reusing a predictable name.
+    const wxString base =
+            wxStandardPaths::Get().GetTempDir() + wxFileName::GetPathSeparator()
+            + wxString::Format( wxS( "kicad_gitdiff_%lu_" ), static_cast<unsigned long>( wxGetProcessId() ) );
+    const unsigned millis = static_cast<unsigned>( wxGetLocalTimeMillis().GetLo() );
+
+    for( int attempt = 0; attempt < 16 && m_root.IsEmpty(); ++attempt )
+    {
+        wxString candidate = base + wxString::Format( wxS( "%d_%u" ), attempt, millis );
+
+        if( wxFileName::Mkdir( candidate, 0700, 0 ) )
+            m_root = candidate;
+    }
+}
+
+
+GIT_DIFF_WORKSPACE::~GIT_DIFF_WORKSPACE()
+{
+    if( !m_root.IsEmpty() && wxFileName::DirExists( m_root ) )
+        wxFileName::Rmdir( m_root, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+wxString GIT_DIFF_WORKSPACE::Materialize( git_repository* aRepo, const wxString& aRef, const wxString& aRelPath,
+                                          KICAD_DIFF::DOC_KIND aKind )
+{
+    if( m_root.IsEmpty() )
+        return wxEmptyString;
+
+    const wxString sep = wxFileName::GetPathSeparator();
+
+    // A schematic root sheet references its sub-sheet files by relative path, so check out the
+    // whole tree and the sub-sheets come along. A board is self-contained, so write just the blob.
+    if( aKind == KICAD_DIFF::DOC_KIND::SCH )
+    {
+        wxString dir = m_root + sep + wxString::Format( wxS( "s%d" ), m_slot++ );
+
+        if( !KIGIT::PROJECT_GIT_UTILS::WriteTreeToDir( aRepo, aRef, dir ) )
+            return wxEmptyString;
+
+        wxString path = dir + sep + aRelPath;
+
+        return wxFileName::FileExists( path ) ? path : wxString( wxEmptyString );
+    }
+
+    wxString path = m_root + sep + wxString::Format( wxS( "s%d_" ), m_slot++ ) + wxFileName( aRelPath ).GetFullName();
+
+    if( !KIGIT::PROJECT_GIT_UTILS::WriteBlobToFile( aRepo, aRef, aRelPath, path ) )
+        return wxEmptyString;
+
+    return path;
+}
+
+
+static void showTextFileDiff( wxWindow* aParent, const wxString& aRelativePath, const wxString& aFileA,
+                              const wxString& aFileB )
+{
+    auto readAll = []( const wxString& aPath ) -> std::string
+    {
+        if( aPath.IsEmpty() )
+            return std::string();
+
+        std::ifstream in( aPath.fn_str(), std::ios::binary );
+        return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    };
+
+    std::string contentA = readAll( aFileA );
+    std::string contentB = readAll( aFileB );
+
+    if( KIGIT::TextLooksBinary( contentA ) || KIGIT::TextLooksBinary( contentB ) )
+    {
+        DisplayInfoMessage( aParent, wxString::Format( _( "'%s' is not a plain text file. KiCad compares "
+                                                          "design files and text files only, so there "
+                                                          "is no comparison to show." ),
+                                                       aRelativePath ) );
+        return;
+    }
+
+    std::vector<KIGIT::TEXT_DIFF_LINE> lines =
+            KIGIT::BuildTextDiff( KIGIT::SplitTextLines( contentA ), KIGIT::SplitTextLines( contentB ) );
+
+    DIALOG_TEXT_DIFF dlg( aParent, aRelativePath, lines );
+    dlg.ShowModal();
+}
+
+
+// Shared by the working-copy and history diffs. An empty path on either side means that side
+// of the document does not exist.
+static void presentFileDiff( KIWAY& aKiway, KICAD_DIFF::DOC_KIND aKind, const wxString& aRelativePath,
+                             const wxString& aFileA, const wxString& aFileB, const wxString& aLabelA,
+                             const wxString& aLabelB, wxWindow* aParent )
+{
+    if( aKind == KICAD_DIFF::DOC_KIND::UNKNOWN )
+    {
+        showTextFileDiff( aParent, aRelativePath, aFileA, aFileB );
+        return;
+    }
+
+    WX_STRING_REPORTER reporter;
+    KICAD_DIFF::DispatchOpenDiffDialog( aKiway, aKind, aFileA, aFileB, aLabelA, aLabelB, aParent, &reporter );
+
+    if( reporter.HasMessage() )
+        DisplayErrorMessage( aParent, _( "Could not open the diff." ), reporter.GetMessages() );
+}
+
+
+void ShowGitFileDiff( EDA_BASE_FRAME* aFrame, const wxString& aRelativePath )
+{
+    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
+    git_repository*               repo = common->GetRepo();
+
+    if( !repo )
+        return;
+
+    KICAD_DIFF::DOC_KIND kind = KICAD_DIFF::DocKindFromExtension( aRelativePath );
+
+    GIT_DIFF_WORKSPACE workspace;
+
+    if( !workspace.IsOk() )
+    {
+        DisplayInfoMessage( aFrame, _( "Could not create a temporary directory for the diff." ) );
+        return;
+    }
+
+    wxString committed;
+    wxString workingFile;
+    bool     inHead = true;
+
+    {
+        // Hold the git action lock only while reading, then release it before the modal diff.
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            DisplayInfoMessage( aFrame, _( "Another git operation is in progress. Try again in a moment." ) );
+            return;
+        }
+
+        GIT_STATUS_HANDLER handler( common.get() );
+        workingFile = handler.GetWorkingDirectory() + aRelativePath;
+
+        // A new file has no committed version, so that side stays empty and shows as added.
+        if( common->IsPathInHead( aRelativePath ) )
+            committed = workspace.Materialize( repo, wxT( "HEAD" ), aRelativePath, kind );
+        else
+            inHead = false;
+    }
+
+    if( inHead && committed.IsEmpty() )
+    {
+        DisplayInfoMessage( aFrame,
+                            wxString::Format( _( "Could not read the committed version of '%s'." ), aRelativePath ) );
+        return;
+    }
+
+    // A deleted file has no working copy, so an empty path makes the loader synthesize an empty
+    // document instead of failing on a file that is gone.
+    if( !wxFileName::FileExists( workingFile ) )
+        workingFile.clear();
+
+    presentFileDiff( aFrame->Kiway(), kind, aRelativePath, committed, workingFile, _( "Committed (HEAD)" ),
+                     _( "Working copy" ), aFrame );
+}
+
+
+void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxWindow* aParentWindow )
+{
+    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
+    git_repository*               repo = common->GetRepo();
+
+    if( !repo )
+        return;
+
+    GIT_DIFF_WORKSPACE workspace;
+
+    if( !workspace.IsOk() )
+    {
+        DisplayInfoMessage( aFrame, _( "Could not create a temporary directory for the diff." ) );
+        return;
+    }
+
+    struct DESIGN_FILE
+    {
+        wxString             path;
+        wxString             parentPath;
+        KICAD_DIFF::DOC_KIND kind;
+        bool                 hasParent;
+        bool                 hasCommit;
+    };
+
+    std::vector<DESIGN_FILE> designFiles;
+    wxString                 parentRef;
+    bool                     busy = false;
+
+    {
+        // Hold the git action lock only while reading, then release it before any modal dialog.
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            busy = true;
+        }
+        else
+        {
+            // A root commit has no "<hash>^". An empty base ref compares it against the empty
+            // tree, so its files show as added.
+            git_object* commitObj = nullptr;
+
+            if( git_revparse_single( &commitObj, repo, aCommitHash.utf8_string().c_str() ) == GIT_OK )
+            {
+                if( git_object_type( commitObj ) == GIT_OBJECT_COMMIT
+                    && git_commit_parentcount( reinterpret_cast<git_commit*>( commitObj ) ) > 0 )
+                {
+                    parentRef = aCommitHash + wxT( "^" );
+                }
+
+                git_object_free( commitObj );
+            }
+
+            for( const KIGIT::CHANGED_FILE& file : KIGIT::CompareRefs( repo, parentRef, aCommitHash ) )
+            {
+                KICAD_DIFF::DOC_KIND kind = KICAD_DIFF::DocKindFromExtension( file.path );
+
+                DESIGN_FILE df;
+                df.path = file.path;
+
+                // Materialize only the side that exists.
+                df.hasParent = file.status != KIGIT::FILE_CHANGE_STATUS::ADDED;
+                df.hasCommit = file.status != KIGIT::FILE_CHANGE_STATUS::REMOVED;
+                df.parentPath = file.oldPath.IsEmpty() ? file.path : file.oldPath;
+                df.kind = kind;
+                designFiles.push_back( df );
+            }
+        }
+    }
+
+    if( busy )
+    {
+        DisplayInfoMessage( aFrame, _( "Another git operation is in progress. Try again in a moment." ) );
+        return;
+    }
+
+    if( designFiles.empty() )
+    {
+        DisplayInfoMessage( aFrame, _( "This commit has no file changes to show." ) );
+        return;
+    }
+
+    wxWindow* diffParent = aParentWindow ? aParentWindow : static_cast<wxWindow*>( aFrame );
+
+    // The diff viewer shows one file at a time, so let the user pick which one.
+    const DESIGN_FILE* chosen = &designFiles.front();
+
+    if( designFiles.size() > 1 )
+    {
+        wxArrayString choices;
+
+        for( const DESIGN_FILE& df : designFiles )
+            choices.Add( df.path );
+
+        int sel = wxGetSingleChoiceIndex( _( "This commit changed more than one file. "
+                                             "Select one to compare:" ),
+                                          _( "Select File to Compare" ), choices, diffParent );
+
+        if( sel < 0 )
+            return;
+
+        chosen = &designFiles[sel];
+    }
+
+    // Materialize only the chosen file, taking the lock again for the file writes.
+    wxString before, after;
+    bool     busyMaterialize = false;
+    bool     repoGone = false;
+
+    {
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            busyMaterialize = true;
+        }
+        else
+        {
+            // The chooser ran its own event loop, so the project may have closed since. Re-read
+            // the handle rather than reusing the one captured before it.
+            git_repository* liveRepo = common->GetRepo();
+
+            if( !liveRepo )
+            {
+                repoGone = true;
+            }
+            else
+            {
+                if( chosen->hasParent )
+                    before = workspace.Materialize( liveRepo, parentRef, chosen->parentPath, chosen->kind );
+
+                if( chosen->hasCommit )
+                    after = workspace.Materialize( liveRepo, aCommitHash, chosen->path, chosen->kind );
+            }
+        }
+    }
+
+    if( busyMaterialize )
+    {
+        DisplayInfoMessage( aFrame, _( "Another git operation is in progress. Try again in a moment." ) );
+        return;
+    }
+
+    if( repoGone )
+        return;
+
+    if( ( chosen->hasParent && before.IsEmpty() ) || ( chosen->hasCommit && after.IsEmpty() ) )
+    {
+        DisplayInfoMessage( aFrame, _( "Could not read this commit's file contents." ) );
+        return;
+    }
+
+    presentFileDiff( aFrame->Kiway(), chosen->kind, chosen->path, before, after,
+                     wxString::Format( _( "Parent of %s" ), aCommitHash ), aCommitHash, diffParent );
 }
