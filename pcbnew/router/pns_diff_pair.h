@@ -287,7 +287,7 @@ private:
     ITEM*                       m_primP;
     ITEM*                       m_primN;
     VECTOR2I                    m_anchorP, m_anchorN;
-    bool                        m_isMidtrace;
+    bool                        m_isMidtrace = false;
     std::optional<DIRECTION_45> m_fixedDirection;
     wxString                    m_name;
     std::optional<int>          m_gap;

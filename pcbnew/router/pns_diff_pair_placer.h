@@ -161,7 +161,7 @@ public:
 
 private:
     static constexpr int DP_DEFAULT_GAP_EPSILON = 1000;
-
+    static constexpr double DP_CPR_SWITCH_POSTURE_RATIO = 10.0;
 
     int viaGap() const;
     int gap() const;

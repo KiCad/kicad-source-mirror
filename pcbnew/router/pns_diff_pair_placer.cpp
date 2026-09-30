@@ -989,15 +989,18 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
 
         int   bestScore[2] = { -100, -100 }; // cater for negative score adjustments
         float bestCpr[2] = { 0.0f, 0.0f };
+        int bestId[2] = {-1, -1 };
+        
+        int current_id = 0;
 
         for( const auto& f : fits )
         {
             constexpr int angleMask = DIRECTION_45::ANG_OBTUSE | DIRECTION_45::ANG_STRAIGHT;
 
             PNS_DBG( Dbg(), BeginGroup,
-                     wxString::Format( wxT( "fit: bestCpr0=%.3f bestCpr1=%.3f diag=%d cpr=%.2f ar=%.2f score=%d" ),
-                                       bestCpr[0], bestCpr[1], f.diagonal ? 1 : 0, f.coupledRatio, f.aspectRatio,
-                                       f.score ),
+                     wxString::Format( wxT( "fit[%d]: bestId0=%d bestId1=%d bestS0=%d bestS1=%d bestCpr0=%.3f bestCpr1=%.3f diag=%d cpr=%.2f ar=%.2f score=%d scoreEnt=%d scoreTgt=%d" ),
+                                       current_id, bestId[0], bestId[1], bestScore[0], bestScore[1], bestCpr[0], bestCpr[1], f.diagonal ? 1 : 0, f.coupledRatio, f.aspectRatio,
+                                       f.score, f.entry.Priority(), f.target.Priority() ),
                      0 );
             drawSingleGateway( Dbg(), f.entry, wxString::Format( "entry=%s", f.entry.GetName() ) );
             drawSingleGateway( Dbg(), f.target, wxString::Format( "target=%s", f.target.GetName() ) );
@@ -1013,13 +1016,15 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
                 auto         angP = startDirP.Angle( dp.DirP( false ) );
                 auto         angN = startDirN.Angle( dp.DirN( false ) );
 
-                if( !( angP & angleMask ) || !( angN & angleMask ) )
+                bool startHasDirection = m_start.DirP().IsDefined() && m_start.DirN().IsDefined();
+
+                if( startHasDirection && ( !( angP & angleMask ) || !( angN & angleMask ) ) )
                 {
                     PNS_DBG( Dbg(), Message,
                              wxString::Format( " reject dp %s dn %s sd %s %s", dp.DirP( false ).Format(),
                                                dp.DirN( false ).Format(), startDirP.Format(), startDirN.Format() ) );
                     PNS_DBGN( Dbg(), EndGroup );
-
+                    current_id++;
                     continue;
                 }
             }
@@ -1028,20 +1033,24 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
             int index = f.diagonal ? 1 : 0;
             int score = f.score;
 
-            if( score > bestScore[index] || f.coupledRatio > bestCpr[index] * 2.0 )
+            if( score >= bestScore[index] || (f.coupledRatio > bestCpr[index] * 5.0 && bestCpr[index] < 0.2 ) )
             {
                 bestFits[index] = &f;
                 bestScore[index] = score;
                 bestCpr[index] = f.coupledRatio;
+                bestId[index] = current_id;
             }
             else if( score == bestScore[index] )
             {
-                if( f.coupledRatio > bestCpr[index] )
+                if( f.coupledRatio >= bestCpr[index] )
                 {
                     bestCpr[index] = f.coupledRatio;
                     bestFits[index] = &f;
+                    bestId[index] = current_id;
                 }
             }
+        
+            current_id++;
         }
 
         if( bestFits[0] || bestFits[1] )
@@ -1070,14 +1079,27 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
         PNS_DBGN( Dbg(), EndGroup );
     }
 
-    if( m_startDiagonal && bestFits[1] )
-        bestestFit = bestFits[1];
-    else if( !m_startDiagonal && bestFits[0] )
-        bestestFit = bestFits[0];
-    else if( bestFits[1] )
-        bestestFit = bestFits[1];
-    else if( bestFits[0] )
-        bestestFit = bestFits[0];
+    // Corner case for making a 45-degree turn with poorly aligned exits (eg #21343), can result with a diff pair with a gap
+    // completely out of range (very low CPR). Force other posture if its CPR exceeds the chosen posture by a big enough factor
+    if( bestFits[0] && bestFits[1] )
+    {
+        if( bestFits[0]->coupledRatio > DP_CPR_SWITCH_POSTURE_RATIO * bestFits[1]->coupledRatio )
+            bestestFit = bestFits[0];
+        else if ( bestFits[1]->coupledRatio > DP_CPR_SWITCH_POSTURE_RATIO * bestFits[0]->coupledRatio )
+            bestestFit = bestFits[1];
+    }
+
+    if( !bestestFit )
+    {
+        if( m_startDiagonal && bestFits[1] )
+            bestestFit = bestFits[1];
+        else if( !m_startDiagonal && bestFits[0] )
+            bestestFit = bestFits[0];
+        else if( bestFits[1] )
+            bestestFit = bestFits[1];
+        else if( bestFits[0] )
+            bestestFit = bestFits[0];
+    }
 
     if( bestestFit )
     {
