@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-29 19:51+0000\n"
+"PO-Revision-Date: 2026-10-01 05:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -7254,9 +7254,8 @@ msgid "Unrecognized"
 msgstr "Unerkannt"
 
 #: common/eda_shape.cpp:1268
-#, fuzzy
 msgid "Connected Lines"
-msgstr "Verbundene Elemente:"
+msgstr "Verbundene Linien"
 
 #: common/eda_shape.cpp:1276
 msgid "Curve"
@@ -7427,9 +7426,8 @@ msgid "Line Color"
 msgstr "Linienfarbe"
 
 #: common/eda_shape.cpp:3014
-#, fuzzy
 msgid "Arc angle must not be zero."
-msgstr "Der Bogenwinkel darf nicht Null sein."
+msgstr "Bogenwinkel darf nicht Null sein."
 
 #: common/eda_shape.cpp:3049
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:217
@@ -8292,9 +8290,9 @@ msgid "Rebase commit failed: %s"
 msgstr "Rebase-Commit fehlgeschlagen: %s"
 
 #: common/git/libgit_backend.cpp:1631
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed: %s"
-msgstr "Rebase-Abschluss fehlgeschlagen: %s"
+msgstr "Rebase fehlgeschlagen: %s"
 
 #: common/git/libgit_backend.cpp:1639
 #, c-format
@@ -8449,9 +8447,8 @@ msgstr ""
 "%s"
 
 #: common/history_lock.cpp:333
-#, fuzzy
 msgid "Cannot re-open history repository without the file lock"
-msgstr "Kann temporäre Ausgabedatei nicht entfernen"
+msgstr "Kann Verlaufsrepository nicht ohne Dateisperre erneut öffnen"
 
 #: common/hotkey_store.cpp:44
 msgid "Accept Autocomplete"
@@ -19945,7 +19942,7 @@ msgid ""
 "'%s' is not a KiCad schematic file.\n"
 "Use File -> Import for non-KiCad schematic files."
 msgstr ""
-"\\\"%s\\\" ist kein KiCad-Schaltplan.\n"
+"\"%s\" ist kein KiCad-Schaltplan.\n"
 "Verwenden Sie Datei -> Importieren für Nicht-KiCad-Schaltplan."
 
 #: eeschema/files-io.cpp:382
