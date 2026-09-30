@@ -340,6 +340,18 @@ wxWindow* makeBranchesPage( wxWindow* aBook, wxListCtrl** aOutList )
 }
 
 
+wxWindow* makeRemotesPage( wxWindow* aBook, wxListCtrl** aOutList )
+{
+    LIST_PAGE page = makeListPage( aBook );
+
+    page.list->AppendColumn( _( "Name" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 110 ) );
+    page.list->AppendColumn( _( "URL" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 420 ) );
+
+    *aOutList = page.list;
+    return page.panel;
+}
+
+
 wxWindow* makeStashesPage( wxWindow* aBook, wxListCtrl** aOutList )
 {
     LIST_PAGE page = makeListPage( aBook );
@@ -425,6 +437,23 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
                                         onForcePush();
                                     } } } );
     m_book->AddPage( branchesPage, _( "Branches" ) );
+
+    wxWindow* remotesPage = makeRemotesPage( m_book, &m_remotesList );
+    addButtonRow( remotesPage, { { _( "Add..." ),
+                                   [this]()
+                                   {
+                                       onAddRemote();
+                                   } },
+                                 { _( "Edit URL..." ),
+                                   [this]()
+                                   {
+                                       onEditRemote();
+                                   } },
+                                 { _( "Remove" ), [this]()
+                                   {
+                                       onRemoveRemote();
+                                   } } } );
+    m_book->AddPage( remotesPage, _( "Remotes" ) );
 
     wxWindow* stashesPage = makeStashesPage( m_book, &m_stashesList );
     addButtonRow( stashesPage, { { _( "Stash Changes..." ),
@@ -698,6 +727,7 @@ void GIT_ADVANCED_DIALOG::ReloadPages()
 
     populateHistory();
     populateBranches();
+    populateRemotes();
     populateStashes();
     populateTags();
 }
@@ -899,6 +929,22 @@ void GIT_ADVANCED_DIALOG::populateBranches()
             status = _( "remote" );
 
         m_branchesList->SetItem( idx, 1, status );
+    }
+}
+
+
+void GIT_ADVANCED_DIALOG::populateRemotes()
+{
+    if( !m_remotesList )
+        return;
+
+    // The caller holds the git action lock.
+    m_remotesList->DeleteAllItems();
+
+    for( const auto& [name, url] : m_parent->Prj().GetGitCommon()->GetRemotes() )
+    {
+        long idx = m_remotesList->InsertItem( m_remotesList->GetItemCount(), name );
+        m_remotesList->SetItem( idx, 1, url );
     }
 }
 
@@ -1827,4 +1873,89 @@ void GIT_ADVANCED_DIALOG::onDeleteTag()
                 return aCommon.DeleteTag( name );
             },
             wxString::Format( _( "Could not delete tag '%s'." ), name ) );
+}
+
+
+void GIT_ADVANCED_DIALOG::runRemoteAction( const std::function<bool( KIGIT_COMMON& )>& aMutation,
+                                           const wxString&                             aError )
+{
+    runGitAction(
+            [&aMutation]( KIGIT_COMMON& aCommon )
+            {
+                if( !aMutation( aCommon ) )
+                    return false;
+
+                // Refresh the cached URL and credentials, so a later push does not reach the new
+                // remote authenticating as the old one.
+                aCommon.UpdateCurrentBranchInfo();
+                return true;
+            },
+            aError );
+}
+
+
+void GIT_ADVANCED_DIALOG::onAddRemote()
+{
+    wxString name = wxGetTextFromUser( _( "Remote name:" ), _( "Add Remote" ), wxEmptyString, this );
+
+    if( name.IsEmpty() )
+        return;
+
+    wxString url = wxGetTextFromUser( _( "Remote URL:" ), _( "Add Remote" ), wxEmptyString, this );
+
+    if( url.IsEmpty() )
+        return;
+
+    runRemoteAction(
+            [name, url]( KIGIT_COMMON& aCommon )
+            {
+                return aCommon.AddRemote( name, url );
+            },
+            _( "Could not add the remote." ) );
+}
+
+
+void GIT_ADVANCED_DIALOG::onEditRemote()
+{
+    wxString name = selectedText( m_remotesList, 0 );
+
+    if( name.IsEmpty() )
+        return;
+
+    wxString current = selectedText( m_remotesList, 1 );
+    wxString url = wxGetTextFromUser( _( "Remote URL:" ), _( "Edit Remote" ), current, this );
+
+    if( url.IsEmpty() )
+        return;
+
+    // The list shows the address with any user:password removed, so writing it back unchanged
+    // would delete credentials the config still holds.
+    if( url == current )
+        return;
+
+    runRemoteAction(
+            [name, url]( KIGIT_COMMON& aCommon )
+            {
+                return aCommon.SetRemoteUrl( name, url );
+            },
+            _( "Could not update the remote." ) );
+}
+
+
+void GIT_ADVANCED_DIALOG::onRemoveRemote()
+{
+    wxString name = selectedText( m_remotesList, 0 );
+
+    if( name.IsEmpty() )
+        return;
+
+    if( !IsOK( this, wxString::Format( _( "Remove remote '%s'?" ), name ) ) )
+        return;
+
+    runRemoteAction(
+            [name]( KIGIT_COMMON& aCommon )
+            {
+                return aCommon.RemoveRemote( name );
+            },
+            _( "Could not remove the remote." ) );
 }
