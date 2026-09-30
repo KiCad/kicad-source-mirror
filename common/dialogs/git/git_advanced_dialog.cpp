@@ -46,8 +46,10 @@
 #include <eda_base_frame.h>
 #include <frame_type.h>
 #include <dialogs/git/git_credentials_prompt.h>
+#include <git/git_branch_handler.h>
 #include <git/git_commit_handler.h>
 #include <git/git_config_handler.h>
+#include <git/git_push_handler.h>
 #include <git/kicad_git_common.h>
 #include <kicad_curl/kicad_curl_easy.h>
 #include <kiway.h>
@@ -325,6 +327,18 @@ wxWindow* makeHistoryPage( wxWindow* aBook, wxDataViewListCtrl** aOutList )
     return panel;
 }
 
+
+wxWindow* makeBranchesPage( wxWindow* aBook, wxListCtrl** aOutList )
+{
+    LIST_PAGE page = makeListPage( aBook );
+
+    page.list->AppendColumn( _( "Branch" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 300 ) );
+    page.list->AppendColumn( _( "Status" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 120 ) );
+
+    *aOutList = page.list;
+    return page.panel;
+}
+
 } // namespace
 
 
@@ -369,6 +383,23 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
     m_book->SetFitToCurrentPage( true );
 
     m_book->AddPage( makeHistoryPage( m_book, &m_historyList ), _( "History" ), true );
+
+    wxWindow* branchesPage = makeBranchesPage( m_book, &m_branchesList );
+    addButtonRow( branchesPage, { { _( "New Branch..." ),
+                                    [this]()
+                                    {
+                                        onNewBranch();
+                                    } },
+                                  { _( "Delete" ),
+                                    [this]()
+                                    {
+                                        onDeleteBranch();
+                                    } },
+                                  { _( "Force Push..." ), [this]()
+                                    {
+                                        onForcePush();
+                                    } } } );
+    m_book->AddPage( branchesPage, _( "Branches" ) );
 
     // Double-clicking a commit shows what it changed against its parent.
     m_historyList->SetToolTip( _( "Double click a commit to see what it changed. Right click for more." ) );
@@ -424,6 +455,14 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
                                      2 );
                              m_historyList->PopupMenu( &menu );
                          } );
+
+    // Double-clicking a branch switches the working tree to it.
+    m_branchesList->SetToolTip( _( "Double click a branch to switch the project to it." ) );
+    m_branchesList->Bind( wxEVT_LIST_ITEM_ACTIVATED,
+                          [this]( wxListEvent& aEvent )
+                          {
+                              switchToBranch( m_branchesList->GetItemText( aEvent.GetIndex(), 0 ) );
+                          } );
 
     mainSizer->Add( m_book, 1, wxEXPAND | wxALL, 4 );
 
@@ -533,13 +572,28 @@ GIT_ADVANCED_DIALOG::~GIT_ADVANCED_DIALOG()
     if( activeDialog() == this )
         setActiveDialog( nullptr );
 
+    // A push still running holds this window, so stop it and wait.
+    bool pushStarted = m_pushWorker.joinable();
+
+    if( m_pushCancel )
+        m_pushCancel->store( true );
+
+    if( pushStarted )
+        m_pushWorker.join();
+
     m_avatarCancel = true;
 
     for( std::thread& worker : m_avatarWorkers )
         worker.join();
 
     if( std::shared_ptr<KIGIT_COMMON> session = m_listenerSession.lock() )
+    {
         session->RemoveRefreshListener( this );
+
+        // The completion queued on this window goes with it, so the others are told here.
+        if( pushStarted )
+            session->NotifyRefreshListeners();
+    }
 }
 
 
@@ -579,6 +633,7 @@ void GIT_ADVANCED_DIALOG::ReloadPages()
     }
 
     populateHistory();
+    populateBranches();
 }
 
 
@@ -756,6 +811,108 @@ void GIT_ADVANCED_DIALOG::applyAvatar( const wxString& aEmail, int aDiameter, co
 }
 
 
+void GIT_ADVANCED_DIALOG::populateBranches()
+{
+    if( !m_branchesList )
+        return;
+
+    // The caller holds the git action lock.
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    wxString                      current = common->GetCurrentBranchName();
+
+    m_branchesList->DeleteAllItems();
+
+    for( const auto& [name, isRemote] : common->GetAllBranches() )
+    {
+        long     idx = m_branchesList->InsertItem( m_branchesList->GetItemCount(), name );
+        wxString status;
+
+        if( name == current )
+            status = _( "current" );
+        else if( isRemote )
+            status = _( "remote" );
+
+        m_branchesList->SetItem( idx, 1, status );
+    }
+}
+
+
+void GIT_ADVANCED_DIALOG::switchToBranch( const wxString& aBranch )
+{
+    if( !sessionStillCurrent() )
+        return;
+
+    if( aBranch.IsEmpty() )
+        return;
+
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    wxString                      current;
+
+    // Reading the current branch touches the repository, so do it under the lock too.
+    {
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            return;
+        }
+
+        current = common->GetCurrentBranchName();
+    }
+
+    if( aBranch == current )
+        return;
+
+    // Switching refuses over uncommitted work, so saving the editors first would only turn
+    // unsaved edits into the very changes that block it. Ask for a commit up front instead.
+    if( !refuseOverUncommittedWork() )
+        return;
+
+    if( !IsOK( this, wxString::Format( _( "Switch to branch '%s'? This replaces the project files "
+                                          "on disk with that branch's version." ),
+                                       aBranch ) ) )
+    {
+        return;
+    }
+
+    if( !confirmWorkingTreeChange() )
+        return;
+
+    BranchResult result = BranchResult::Error;
+    wxString     resultError;
+
+    {
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            return;
+        }
+
+        GIT_BRANCH_HANDLER handler( common.get() );
+        result = handler.SwitchToBranch( aBranch );
+        resultError = handler.GetErrorString();
+    }
+
+    if( result == BranchResult::Conflict )
+    {
+        DisplayInfoMessage( this, resultError );
+        return;
+    }
+
+    if( result != BranchResult::Success )
+    {
+        DisplayErrorMessage( this, wxString::Format( _( "Could not switch to branch '%s'." ), aBranch ),
+                             KIGIT_COMMON::GetLastGitError() );
+        return;
+    }
+
+    finishWorkingTreeChange();
+}
+
+
 void GIT_ADVANCED_DIALOG::onAmendLastCommit()
 {
     if( !sessionStillCurrent() )
@@ -814,6 +971,105 @@ void GIT_ADVANCED_DIALOG::onAmendLastCommit()
                 return result == CommitResult::Success || result == CommitResult::SuccessIndexStale;
             },
             _( "Could not amend the commit." ) );
+}
+
+
+void GIT_ADVANCED_DIALOG::onForcePush()
+{
+    if( !sessionStillCurrent() )
+        return;
+
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+
+    if( !common->GetRepo() )
+        return;
+
+    wxString branch;
+    wxString upstream;
+
+    {
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            return;
+        }
+
+        if( !common->HasPushAndPullRemote() )
+        {
+            DisplayInfoMessage( this, _( "No remote is configured to push to." ) );
+            return;
+        }
+
+        branch = common->GetCurrentBranchName();
+
+        // Push sends the branch to its same-named ref on the remote, regardless of any
+        // differently named upstream, so the warning must name that actual target.
+        upstream = common->GetRemoteNameOrDefault() + wxS( "/" ) + branch;
+    }
+
+    wxRichMessageDialog confirm( this,
+                                 wxString::Format( _( "Force push replaces '%s' with your local '%s'.\n\n"
+                                                      "Commits that exist only on the remote will be lost." ),
+                                                   upstream, branch ),
+                                 _( "Force Push" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
+    confirm.SetYesNoLabels( _( "Force &Push" ), _( "Cancel" ) );
+
+    if( confirm.ShowModal() != wxID_YES )
+        return;
+
+    // Never the shared compute pool. A libgit2 network read parked there stalls DRC, zone
+    // filling and library loading.
+    KIGIT_COMMON::CANCEL_TOKEN token = KIGIT_COMMON::NewCancelToken();
+    m_pushCancel = token;
+
+    if( m_pushWorker.joinable() )
+        m_pushWorker.join();
+
+    m_pushWorker = std::thread(
+            [this, common, token]()
+            {
+                common->ClearAuthFailure();
+
+                GIT_PUSH_HANDLER handler( common.get() );
+                handler.SetCancelToken( token );
+                PushResult       result = handler.PerformPush( true );
+                wxString         error = handler.GetErrorString();
+                bool             authFailure = common->WasAuthFailure();
+
+                // This operation's own token, so a force push that never became active cannot
+                // consume a cancel belonging to the transfer that is running.
+                bool cancelled = handler.IsThisOperationCancelled();
+
+                CallAfter(
+                        [this, common, result, error, authFailure, cancelled]()
+                        {
+                            if( cancelled )
+                                return;
+
+                            if( result == PushResult::Success )
+                            {
+                                common->NotifyRefreshListeners();
+                                return;
+                            }
+
+                            if( result == PushResult::Busy )
+                            {
+                                DisplayInfoMessage( this, _( "Another git operation is in progress. "
+                                                             "Try again in a moment." ) );
+                                return;
+                            }
+
+                            if( authFailure && KIGIT::PromptForCredentials( this, common.get(), &m_parent->Prj() ) )
+                            {
+                                onForcePush();
+                                return;
+                            }
+
+                            DisplayErrorMessage( this, _( "Force push failed." ), error );
+                        } );
+            } );
 }
 
 
@@ -1125,4 +1381,95 @@ wxString GIT_ADVANCED_DIALOG::selectedText( wxListCtrl* aList, int aColumn ) con
         return wxEmptyString;
 
     return aList->GetItemText( sel, aColumn );
+}
+
+
+void GIT_ADVANCED_DIALOG::onNewBranch()
+{
+    wxString name = wxGetTextFromUser( _( "New branch name:" ), _( "New Branch" ), wxEmptyString, this );
+
+    if( name.IsEmpty() )
+        return;
+
+    runGitAction(
+            [name]( KIGIT_COMMON& aCommon )
+            {
+                return aCommon.CreateBranch( name );
+            },
+            wxString::Format( _( "Could not create branch '%s'." ), name ) );
+}
+
+
+void GIT_ADVANCED_DIALOG::onDeleteBranch()
+{
+    if( !sessionStillCurrent() )
+        return;
+
+    wxString name = selectedText( m_branchesList, 0 );
+
+    if( name.IsEmpty() )
+        return;
+
+    // Deleting a remote-tracking branch would mean deleting it on the server, and the lookup
+    // below could otherwise hit a local branch of the same name.
+    if( selectedText( m_branchesList, 1 ) == _( "remote" ) )
+    {
+        DisplayInfoMessage( this, _( "This branch lives on the remote, so it can not be deleted from here." ) );
+        return;
+    }
+
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    wxString                      current;
+    size_t                        unmerged = 0;
+
+    // Reading the current branch touches the repository, so do it under the lock.
+    {
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            return;
+        }
+
+        current = common->GetCurrentBranchName();
+        unmerged = common->GetUnmergedCommitCount( name );
+    }
+
+    if( name == current )
+    {
+        DisplayErrorMessage( this, _( "You cannot delete the branch you are on." ) );
+        return;
+    }
+
+    // Deleting drops any commit no other branch reaches, and git offers no way back a
+    // beginner would find, so say what is at stake before asking.
+    wxString question;
+
+    if( unmerged == 1 )
+    {
+        question = wxString::Format( _( "Branch '%s' has one commit that is not on the current branch. "
+                                        "Deleting it loses that commit.\n\nDelete it anyway?" ),
+                                     name );
+    }
+    else if( unmerged > 1 )
+    {
+        question = wxString::Format( _( "Branch '%s' has %zu commits that are not on the current branch. "
+                                        "Deleting it loses them.\n\nDelete it anyway?" ),
+                                     name, unmerged );
+    }
+    else
+    {
+        question = wxString::Format( _( "Delete branch '%s'?" ), name );
+    }
+
+    if( !IsOK( this, question ) )
+        return;
+
+    runGitAction(
+            [name]( KIGIT_COMMON& aCommon )
+            {
+                return aCommon.DeleteBranch( name );
+            },
+            wxString::Format( _( "Could not delete branch '%s'." ), name ) );
 }

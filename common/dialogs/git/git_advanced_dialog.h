@@ -169,6 +169,10 @@ private:
     /// The avatar fetches the History page started, joined before this window goes.
     std::vector<std::thread> m_avatarWorkers;
 
+    /// The push the Branches page started, and its token, so closing can stop it and wait.
+    std::thread                        m_pushWorker;
+    std::shared_ptr<std::atomic<bool>> m_pushCancel;
+
     EDA_BASE_FRAME*     m_parent;
     WX_TREEBOOK*        m_book;
     wxDataViewListCtrl* m_historyList;
