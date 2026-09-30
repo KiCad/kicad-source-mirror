@@ -1566,6 +1566,50 @@ BOOST_AUTO_TEST_CASE( DiscardChangesMatchesPathsLiterally )
 }
 
 
+// libgit2 reads a status pathspec as a wildmatch pattern, so a folder name holding a glob
+// character must be matched literally or the wrong folder is listed.
+BOOST_AUTO_TEST_CASE( GetFileStatusMatchesPathspecLiterally )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    auto writeAll = []( const wxString& aPath, const std::string& aContent )
+    {
+        wxFileName fn( aPath );
+        fn.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+        std::ofstream f( aPath.ToStdString(), std::ios::binary );
+        f << aContent;
+    };
+
+    writeAll( workDir + wxT( "a[1]/x.txt" ), "one\n" );
+    writeAll( workDir + wxT( "a1/y.txt" ), "two\n" );
+
+    KIGIT_COMMON       common( repo );
+    GIT_STATUS_HANDLER handler( &common );
+
+    std::map<wxString, FileStatus> status = handler.GetFileStatus( wxT( "a[1]/" ), true );
+
+    bool bracketed = false;
+    bool plain = false;
+
+    for( const auto& [path, fileStatus] : status )
+    {
+        bracketed |= path.EndsWith( wxT( "a[1]/x.txt" ) );
+        plain |= path.EndsWith( wxT( "a1/y.txt" ) );
+    }
+
+    BOOST_CHECK_MESSAGE( bracketed, "the folder named in the pathspec was not listed" );
+    BOOST_CHECK_MESSAGE( !plain, "a folder the pathspec does not name was listed" );
+
+    git_repository_free( repo );
+}
+
+
 // Rebuilding the index from HEAD would drop the conflict stages before libgit2's unmerged-index
 // guard could see them, recording the markers as resolved content.
 BOOST_AUTO_TEST_CASE( Commit_RefusesConflictedRepository )

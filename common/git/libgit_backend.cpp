@@ -1077,11 +1077,15 @@ std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER
 
     if( !aPathspec.IsEmpty() )
     {
-        pathspec_str = aPathspec.ToStdString();
+        pathspec_str = aPathspec.utf8_string();
         pathspec_ptrs.push_back( pathspec_str.c_str() );
 
         status_options.pathspec.strings = const_cast<char**>( pathspec_ptrs.data() );
         status_options.pathspec.count = pathspec_ptrs.size();
+
+        // Callers pass a folder, not a pattern. Without this a folder name holding a glob
+        // character would match its neighbours instead of itself.
+        status_options.flags |= GIT_STATUS_OPT_DISABLE_PATHSPEC_MATCH;
     }
 
     git_status_list* status_list = nullptr;

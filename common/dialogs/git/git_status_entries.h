@@ -23,11 +23,19 @@
 #include <vector>
 
 #include <git/git_editor_snapshot.h>
+#include <widgets/file_checklist_ctrl.h>
 
 class EDA_BASE_FRAME;
 class KIWAY;
 class PROJECT;
 
+
+/**
+ * Build the file checklist entries for the project's changed files, transient files filtered
+ * out and each path stored relative to the working directory. Shared by the docked commit
+ * panel and the advanced window so both show the same list.
+ */
+std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( PROJECT& aProject );
 
 /**
  * What the caller is about to do, which decides the wording and whether the project file is

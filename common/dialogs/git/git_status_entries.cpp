@@ -19,6 +19,7 @@
 
 #include <dialogs/git/git_status_entries.h>
 
+#include <map>
 #include <memory>
 #include <set>
 #include <sys/stat.h>
@@ -42,6 +43,123 @@
 #include <project/project_local_settings.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
+
+
+// False for a status that is not a working-tree change worth showing.
+static bool statusToDisplay( KIGIT_COMMON::GIT_STATUS aStatus, wxString& aWord, BITMAPS& aIcon )
+{
+    switch( aStatus )
+    {
+    case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED:
+        aWord = _( "Modified" );
+        aIcon = BITMAPS::git_modified;
+        return true;
+    case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_ADDED:
+    case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_UNTRACKED:
+        aWord = _( "New" );
+        aIcon = BITMAPS::git_add;
+        return true;
+    case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_DELETED:
+        aWord = _( "Deleted" );
+        aIcon = BITMAPS::git_delete;
+        return true;
+    case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CONFLICTED:
+        aWord = _( "Conflict" );
+        aIcon = BITMAPS::git_conflict;
+        return true;
+    default: return false;
+    }
+}
+
+
+std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( PROJECT& aProject )
+{
+    std::vector<FILE_CHECKLIST_ENTRY> entries;
+
+    std::shared_ptr<KIGIT_COMMON> common = aProject.GetGitCommon();
+
+    if( !common->GetRepo() )
+        return entries;
+
+    GIT_STATUS_HANDLER handler( common.get() );
+    wxString           workDir = handler.GetWorkingDirectory();
+    wxString           projectPath = aProject.GetProjectPath();
+    wxString           projectName = aProject.GetProjectName();
+
+    // Walk only the project folder, since the rest of the repository is filtered out below
+    // anyway. The trailing slash keeps a sibling folder sharing the prefix out. An empty scope
+    // means the project is the whole repository, or its folder could not be worked out.
+    wxString scope;
+
+    {
+        wxString project = projectPath;
+        wxString root = workDir;
+
+        project.Replace( wxS( "\\" ), wxS( "/" ) );
+        root.Replace( wxS( "\\" ), wxS( "/" ) );
+
+        if( !root.EndsWith( wxS( "/" ) ) )
+            root += wxS( "/" );
+
+        if( project.StartsWith( root ) )
+        {
+            scope = project.Mid( root.length() );
+
+            if( !scope.IsEmpty() && !scope.EndsWith( wxS( "/" ) ) )
+                scope += wxS( "/" );
+        }
+    }
+
+    std::map<wxString, FileStatus> statusMap = handler.GetFileStatus( scope, /* changed only */ true );
+
+    for( const auto& [path, fileStatus] : statusMap )
+    {
+        wxString word;
+        BITMAPS  icon = BITMAPS::INVALID_BITMAP;
+
+        if( !statusToDisplay( fileStatus.status, word, icon ) )
+            continue;
+
+        if( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( path, projectPath ) )
+            continue;
+
+        wxFileName fn( path );
+
+        // Only files git does not know at all are hidden. One that is tracked, or staged to be,
+        // is carried by a commit and blocks a merge, so hiding it would leave the user with
+        // nothing to commit and no way forward.
+        bool untracked = ( fileStatus.gitStatus & GIT_STATUS_WT_NEW )
+                         && !( fileStatus.gitStatus & GIT_STATUS_INDEX_NEW );
+
+        if( untracked && KIGIT::PROJECT_GIT_UTILS::IsTransientGitFile( fn, projectName ) )
+            continue;
+
+        // A local settings file nobody has committed is this user's own, not a project change.
+        if( untracked && fn.GetExt().CmpNoCase( FILEEXT::ProjectLocalSettingsFileExtension ) == 0 )
+            continue;
+
+        // The commit handler stages paths relative to the working directory.
+        wxString relativePath = path;
+
+        if( relativePath.StartsWith( workDir ) )
+            relativePath = relativePath.Mid( workDir.length() );
+
+#ifdef __WINDOWS__
+        relativePath.Replace( wxS( "\\" ), wxS( "/" ) );
+#endif
+
+        FILE_CHECKLIST_ENTRY entry;
+        entry.section = _( "Changes" );
+        entry.path = relativePath;
+        entry.label = wxFileName( relativePath ).GetFullName();
+        entry.status = word;
+        entry.icon = icon;
+        entry.checked = true;
+        entries.push_back( entry );
+    }
+
+    return entries;
+}
 
 
 namespace
