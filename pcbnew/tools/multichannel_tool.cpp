@@ -2348,65 +2348,65 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             return 0;
     }
 
-    for( ZONE* zone : board()->Zones() )
-    {
-        if( !zone->GetIsRuleArea() )
-            continue;
-
-        if( !zone->GetPlacementAreaEnabled() )
-            continue;
-
-        std::set<FOOTPRINT*> components;
-        RULE_AREA            zoneRA;
-        zoneRA.m_zone = zone;
-        zoneRA.m_sourceType = zone->GetPlacementAreaSourceType();
-        findComponentsInRuleArea( &zoneRA, components );
-
-        if( components.empty() )
-            continue;
-
-        for( RULE_AREA& ra : m_areas.m_areas )
-        {
-            if( components == ra.m_components )
-            {
-                if( zone->GetPlacementAreaSourceType() == PLACEMENT_SOURCE_T::SHEETNAME )
-                {
-                    wxLogTrace( traceMultichannelTool,
-                                wxT( "Placement rule area for sheet '%s' already exists as '%s'\n" ),
-                                ra.m_sheetPath, zone->GetZoneName() );
-                }
-                else if( zone->GetPlacementAreaSourceType() == PLACEMENT_SOURCE_T::COMPONENT_CLASS )
-                {
-                    wxLogTrace( traceMultichannelTool,
-                                wxT( "Placement rule area for component class '%s' already exists as '%s'\n" ),
-                                ra.m_componentClass, zone->GetZoneName() );
-                }
-                else
-                {
-                    wxLogTrace( traceMultichannelTool,
-                                wxT( "Placement rule area for group '%s' already exists as '%s'\n" ),
-                                ra.m_groupName, zone->GetZoneName() );
-                }
-
-                ra.m_oldZone = zone;
-                ra.m_existsAlready = true;
-            }
-        }
-    }
-
     wxLogTrace( traceMultichannelTool, wxT( "%d placement areas found\n" ), (int) m_areas.m_areas.size() );
 
     BOARD_COMMIT commit( GetManager(), true, false );
 
     for( RULE_AREA& ra : m_areas.m_areas )
     {
+        ra.m_existsAlready = false;
+
         if( !ra.m_generateEnabled )
             continue;
 
-        if( ra.m_existsAlready && !m_areas.m_replaceExisting )
+        if( ra.m_components.empty() )
             continue;
 
-        if( ra.m_components.empty() )
+        wxString source;
+        wxString existingAreaTraceFormat;
+
+        if( ra.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME )
+        {
+            source = ra.m_sheetPath;
+            existingAreaTraceFormat = wxT( "Placement rule area for sheet '%s' already exists as '%s'\n" );
+        }
+        else if( ra.m_sourceType == PLACEMENT_SOURCE_T::COMPONENT_CLASS )
+        {
+            source = ra.m_componentClass;
+            existingAreaTraceFormat = wxT( "Placement rule area for component class '%s' already exists as '%s'\n" );
+        }
+        else
+        {
+            source = ra.m_groupName;
+            existingAreaTraceFormat = wxT( "Placement rule area for group '%s' already exists as '%s'\n" );
+        }
+
+        std::unique_ptr<ZONE> newZone( new ZONE( board() ) );
+        newZone->SetZoneName( wxString::Format( wxT( "auto-placement-area-%s" ), source ) );
+        newZone->SetPlacementAreaSourceType( ra.m_sourceType );
+        newZone->SetPlacementAreaSource( source );
+
+        std::vector<ZONE*> oldZones;
+
+        for( ZONE* zone : board()->Zones() )
+        {
+            if( !zone->GetIsRuleArea() || !zone->GetPlacementAreaEnabled() )
+                continue;
+
+            if( zone->GetPlacementAreaSourceType() != newZone->GetPlacementAreaSourceType()
+                || zone->GetPlacementAreaSource() != newZone->GetPlacementAreaSource() )
+            {
+                continue;
+            }
+
+            wxLogTrace( traceMultichannelTool, existingAreaTraceFormat, source, zone->GetZoneName() );
+
+            oldZones.push_back( zone );
+        }
+
+        ra.m_existsAlready = !oldZones.empty();
+
+        if( ra.m_existsAlready && !m_areas.m_replaceExisting )
             continue;
 
         SHAPE_LINE_CHAIN raOutline;
@@ -2475,15 +2475,6 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
             raOutline = buildRAOutline( outlineItems, 100000 );
         }
 
-        std::unique_ptr<ZONE> newZone( new ZONE( board() ) );
-
-        if( ra.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME )
-            newZone->SetZoneName( wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_sheetPath ) );
-        else if( ra.m_sourceType == PLACEMENT_SOURCE_T::COMPONENT_CLASS )
-            newZone->SetZoneName( wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_componentClass ) );
-        else
-            newZone->SetZoneName( wxString::Format( wxT( "auto-placement-area-%s" ), ra.m_groupName ) );
-
         wxLogTrace( traceMultichannelTool, wxT( "Generated rule area '%s' (%d components)\n" ),
                     newZone->GetZoneName(),
                     (int) ra.m_components.size() );
@@ -2497,29 +2488,11 @@ int MULTICHANNEL_TOOL::AutogenerateRuleAreas( const TOOL_EVENT& aEvent )
         newZone->SetDoNotAllowPads( false );
         newZone->SetDoNotAllowFootprints( false );
 
-        if( ra.m_sourceType == PLACEMENT_SOURCE_T::SHEETNAME )
-        {
-            newZone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::SHEETNAME );
-            newZone->SetPlacementAreaSource( ra.m_sheetPath );
-        }
-        else if( ra.m_sourceType == PLACEMENT_SOURCE_T::COMPONENT_CLASS )
-        {
-            newZone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::COMPONENT_CLASS );
-            newZone->SetPlacementAreaSource( ra.m_componentClass );
-        }
-        else
-        {
-            newZone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::GROUP_PLACEMENT );
-            newZone->SetPlacementAreaSource( ra.m_groupName );
-        }
-
         newZone->AddPolygon( raOutline );
         newZone->SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE::NO_HATCH );
 
-        if( ra.m_existsAlready )
-        {
-            commit.Remove( ra.m_oldZone );
-        }
+        for( ZONE* oldZone : oldZones )
+            commit.Remove( oldZone );
 
         ra.m_zone = newZone.release();
         commit.Add( ra.m_zone );
