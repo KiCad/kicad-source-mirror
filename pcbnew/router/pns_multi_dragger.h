@@ -137,11 +137,14 @@ private:
         int leaderSegIndex = -1;
         bool cornerIsLast  = false;
 
-        PNS::LINE originalLine; // complete line (in a bundle) to drag
-        PNS::LINE preDragLine; // complete line (in a bundle) to drag
-        PNS::LINE draggedLine; // result of the drag calculation
-        PNS::LINE preShoveLine; // result of the drag calculation
+        std::shared_ptr<DIFF_PAIR> assembledDiffPair;
+        LINE assembledOrigLine; // LINE as assembled, containing all original links to the owning NODE
+        LINE originalLine; // complete line (in a bundle) to drag. In case of DPs, with reconstructed original coupling(s)
+        LINE preDragLine; // complete line (in a bundle) to drag
+        LINE draggedLine; // result of the drag calculation
+        LINE preShoveLine; // result of the drag calculation
 
+        bool dpPolarity    = false; // false = -
         bool dragOK        = false;
         bool isPrimaryLine = false; // when true, it's the "leader"/"primary one" - the one the cursor is attached to
         bool clipDone      = false;
@@ -159,6 +162,8 @@ private:
     void restoreLeaderSegments( std::vector<MDRAG_LINE>& aCompletedLines );
     int findNewLeaderSegment( const MDRAG_LINE& aLine ) const;
     bool tryWalkaround( NODE* aNode, LINE& aOrig, LINE& aWalk );
+    bool reconstructOriginalDpCoupling( DIFF_PAIR& aOrigDP, PNS::ITEM* aAnchorItem, DIFF_PAIR& aReconstructedDP, int& aLeaderSegmentN, int& aLeaderSegmentP );
+    std::shared_ptr<DIFF_PAIR> tryAssembleDiffPair( ITEM* aStart );
 
 
     bool                    m_dragStatus;

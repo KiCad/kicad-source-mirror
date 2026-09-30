@@ -192,6 +192,8 @@ public:
 
     ITEM* FindVertex( const VECTOR2I& aV ) const;
 
+    ITEM* FindSegment( const SEG& aSeg ) const;
+
 private:
     std::vector<ITEM*> m_items;
 };

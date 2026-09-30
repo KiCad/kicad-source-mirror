@@ -658,4 +658,40 @@ const wxString Format( const MINOPTMAX<int> x )
 
     return ret;
 }
+
+
+const SEG LongestCoveringSegment( const SEG& a, const SEG& b )
+{
+    const SEG::ecoord dists[4] = 
+    {
+        (a.A - b.A).SquaredEuclideanNorm(),
+        (a.A - b.B).SquaredEuclideanNorm(),
+        (a.B - b.A).SquaredEuclideanNorm(),
+        (a.B - b.B).SquaredEuclideanNorm()
+    };
+    
+    SEG::ecoord maxDist = std::numeric_limits<SEG::ecoord>::min();
+    int farthest;
+
+    for( int i = 0; i < 4; i++ )
+    {
+        if ( dists[i] > maxDist )
+        {
+            maxDist = dists[i];
+            farthest = i;
+        }
+    }
+
+    switch(farthest)
+    {
+        case 0: return SEG( a.A, b.A );
+        case 1: return SEG( a.A, b.B );
+        case 2: return SEG( a.B, b.A );
+        case 3: return SEG( a.B, b.B );
+        default: wxASSERT_MSG( false, wxT("failed to find farthest points?")); break;
+    }
+    return SEG();
+}
+
+
 }

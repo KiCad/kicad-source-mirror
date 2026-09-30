@@ -63,6 +63,7 @@ class SHOVE;
 class DRAGGER;
 class DRAG_ALGO;
 class LOGGER;
+class DIFF_PAIR;
 
 enum ROUTER_MODE {
     PNS_MODE_ROUTE_SINGLE = 1,
@@ -266,7 +267,18 @@ public:
 
     bool GetNearestRatnestAnchor( VECTOR2I& aOtherEnd, PNS_LAYER_RANGE& aOtherEndLayers,
                                   ITEM*& aOtherEndItem );
+
+
 private:
+
+    DEBUG_DECORATOR* dbg() const
+    {
+        return GetInterface()->GetDebugDecorator();
+    }
+
+    bool areWeLengthTuning() const;
+    bool hasDiffPairMembers( const ITEM_SET& aItems ) const;
+    
     bool movePlacing( const VECTOR2I& aP, ITEM* aItem );
     bool moveDragging( const VECTOR2I& aP, ITEM* aItem );
 

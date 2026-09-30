@@ -149,4 +149,19 @@ ITEM* ITEM_SET::FindVertex( const VECTOR2I& aV ) const
     return nullptr;
 }
 
+ITEM* ITEM_SET::FindSegment( const SEG& aSeg ) const
+{
+    for( ITEM* item : m_items )
+    {
+        // fixme: biconnected concept
+        if( auto seg = dyn_cast<SEGMENT*>( item ) )
+        {
+            if( seg->Seg() == aSeg )
+                return seg;
+        }
+    }
+
+    return nullptr;
+}
+
 }

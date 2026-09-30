@@ -26,6 +26,8 @@
 #include "pns_debug_decorator.h"
 #include "pns_walkaround.h"
 #include "pns_shove.h"
+#include "pns_diff_pair.h"
+#include "pns_utils.h"
 
 namespace PNS
 {
@@ -41,9 +43,181 @@ MULTI_DRAGGER::~MULTI_DRAGGER()
 {
 }
 
+
+std::shared_ptr<DIFF_PAIR> MULTI_DRAGGER::tryAssembleDiffPair( ITEM* aStart )
+{
+    auto rr = Router()->GetRuleResolver();
+    TOPOLOGY topo( m_world );
+
+    if( rr->DpCoupledNet( aStart->Net() ) )
+    {
+        DIFF_PAIR dp;
+        if( topo.AssembleDiffPair( aStart, dp ) )
+        {
+            PNS_DBG( Dbg(), Message, wxString::Format( wxT("LC1 %d/%d"), dp.PLine().LinkCount(), dp.NLine().LinkCount() ) );
+
+            return std::make_shared<DIFF_PAIR>( dp );
+        }
+    }
+
+    return nullptr;
+}
+
+
+bool MULTI_DRAGGER::reconstructOriginalDpCoupling( DIFF_PAIR& aOrigDP, PNS::ITEM* aAnchorItem,
+                                                   DIFF_PAIR& aReconstructedDP, int& aLeaderSegmentN,
+                                                   int& aLeaderSegmentP )
+{
+    auto                          resolver = Router()->GetRuleResolver();
+    CONSTRAINT                    gapConstraint;
+    std::optional<MINOPTMAX<int>> gapValue;
+
+ 
+    if( aOrigDP.PLine().LinkCount() <= 0 )
+        return false;
+
+    if( aOrigDP.NLine().LinkCount() <= 0 )
+        return false;
+
+    if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, aOrigDP.PLine().Links()[0], aOrigDP.NLine().Links()[0],
+                                   aOrigDP.Layer(), &gapConstraint ) )
+    {
+        gapValue = gapConstraint.m_Value;
+    }
+
+    PNS::DIFF_PAIR::COUPLED_SEGMENTS_VEC csv;
+    aOrigDP.CoupledSegmentPairs( csv, true, gapValue );
+
+
+    int n = 0;
+    int leaderIndex = -1;
+
+    PNS_DBG( Dbg(), Message, wxString::Format( wxT("Coupled pairs: %d"), (int) csv.size() ) );
+
+
+    for( auto sp : csv )
+    {
+        if( sp.linkP == aAnchorItem || sp.linkN == aAnchorItem )
+        {
+            leaderIndex = n;
+        }
+        n++;
+    }
+
+    if ( leaderIndex < 0 )
+        return false;
+
+    auto nearestCoupledSegmentPair = [&]( const SEG aRefSeg ) -> int
+    {
+        SEG::ecoord minDist = std::numeric_limits<SEG::ecoord>::max();
+        int         nearestIdx = -1;
+
+        for( size_t i = 0; i < csv.size(); i++ )
+        {
+            auto distP = csv[i].coupledP.SquaredDistance( aRefSeg );
+            auto distN = csv[i].coupledN.SquaredDistance( aRefSeg );
+
+            if( distP < minDist )
+            {
+                minDist = distP;
+                nearestIdx = i;
+            }
+            if( distN < minDist )
+            {
+                minDist = distN;
+                nearestIdx = i;
+            }
+        }
+
+        return nearestIdx;
+    };
+
+    if( leaderIndex < 0 )
+    {
+        const auto leadSegment = dyn_cast<PNS::SEGMENT*>( aAnchorItem );
+        if( leadSegment )
+        {
+            leaderIndex = nearestCoupledSegmentPair( leadSegment->Seg() );
+        }
+    }
+
+    auto areParallel = [&]( const PNS::DIFF_PAIR::COUPLED_SEGMENTS& cs,
+                            const PNS::DIFF_PAIR::COUPLED_SEGMENTS& ref ) -> bool
+    {
+        constexpr int threshold = DIFF_PAIR::DP_PARALLELITY_THRESHOLD;
+        if( cs.coupledN.ApproxCollinear( ref.coupledN, threshold )
+            && cs.coupledP.ApproxCollinear( ref.coupledP, threshold ) )
+            return true;
+
+        return false;
+    };
+
+
+    if( leaderIndex >= 0 )
+    {
+        int start = leaderIndex, end = leaderIndex;
+
+        for( int i = leaderIndex - 1; i >= 0; i-- )
+        {
+            if( areParallel( csv[i], csv[leaderIndex] ) )
+                start = i;
+            else
+                break;
+        }
+        for( size_t i = leaderIndex + 1; i < csv.size(); i++ )
+        {
+            if( areParallel( csv[i], csv[leaderIndex] ) )
+                end = i;
+            else
+                break;
+        }
+
+
+        auto cs_start = csv[start];
+        auto cs_end = csv[end];
+
+        auto longestN = LongestCoveringSegment( cs_start.parentN, cs_end.parentN );
+        auto longestP = LongestCoveringSegment( cs_start.parentP, cs_end.parentP );
+
+
+        int p_start = aOrigDP.CP().Find( longestP.A );
+        int p_end = aOrigDP.CP().Find( longestP.B );
+        int n_start = aOrigDP.CN().Find( longestN.A );
+        int n_end = aOrigDP.CN().Find( longestN.B );
+
+        SHAPE_LINE_CHAIN shape_p( aOrigDP.CP() );
+        SHAPE_LINE_CHAIN shape_n( aOrigDP.CN() );
+        shape_p.Replace( p_start, p_end, SHAPE_LINE_CHAIN( { longestP.A, longestP.B } ) );
+        shape_n.Replace( n_start, n_end, SHAPE_LINE_CHAIN( { longestN.A, longestN.B } ) );
+
+
+        PNS_DBG( Dbg(), Message,
+                     wxString::Format( wxT( "reconstruct p %d/%d n %d/%d SE %d %d"), p_start, p_end, n_start, n_end, start, end ) );
+
+        PNS_DBG( Dbg(), AddShape, &shape_p, GREEN, 10000, "rec-ps" );
+
+
+        aReconstructedDP = aOrigDP;
+        aReconstructedDP.ClearLinks();
+        aReconstructedDP.SetShape( shape_p, shape_n );
+
+        PNS_DBG( Dbg(), AddItem, &aReconstructedDP.PLine(), GREEN, 10000, "rec-ps2" );
+
+
+        aLeaderSegmentN = n_start;
+        aLeaderSegmentP = p_start;
+        return true;
+    }
+
+    return false;
+}
+
+
 // here we initialize everything that's needed for multidrag. this means:
 bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 {
+    ITEM_SET leaders( aPrimitives );
+
     m_lastNode = nullptr;
     m_dragStatus = false;
     m_dragStartPoint = aP;
@@ -63,7 +237,7 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
         bool         redundant = false;
         for( auto& l : m_mdragLines )
         {
-            if( l.originalLine.ContainsLink( litem ) )
+            if( l.assembledOrigLine.ContainsLink( litem ) )
             {
                 l.originalLeaders.push_back( litem );
                 redundant = true;
@@ -73,16 +247,75 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 
         // we can possibly have multiple SEGMENTs in aPrimitives that belong to the same line.
         // We reject these.
-        if( !redundant )
+        if ( redundant )
+            continue;
+
+        if( Settings().GetKeepDPCouplingWhenDragging() )
         {
-            MDRAG_LINE l;
-            l.originalLine = m_world->AssembleLine( litem );
-            l.originalLeaders.push_back( litem );
-            l.isDraggable = true;
-            l.mdragIndex = static_cast<int>( m_mdragLines.size() );
-            m_mdragLines.push_back( std::move( l ) );
+            auto diffPair = tryAssembleDiffPair( pitem );
+
+            if( diffPair )
+            {
+                DIFF_PAIR  reconstructed;
+                int        leaderIndexN, leaderIndexP;
+
+                bool reconstructOK =
+                        reconstructOriginalDpCoupling( *diffPair.get(), pitem, reconstructed, leaderIndexN, leaderIndexP );
+
+                PNS_DBG( Dbg(), Message,
+                        wxString::Format( wxT( "DP assembled OK, leaders: %d/%d reconstructed=%d lc %d %d" ), leaderIndexP,
+                                        leaderIndexN, reconstructOK ? 1 : 0,
+                                        diffPair->PLine().LinkCount(), diffPair->NLine().LinkCount()) );
+
+
+
+                if( reconstructOK )
+                {
+                    MDRAG_LINE l_p;
+                    l_p.assembledDiffPair = diffPair;
+                    l_p.assembledOrigLine = diffPair->PLine();
+                    l_p.originalLine = reconstructed.PLine();
+                    if( diffPair->PLine().ContainsLink( litem ) )
+                    {
+                        l_p.originalLeaders.push_back( litem );
+                    }
+                    //leaders.Add( diffPair->PLine().GetLink( leaderIndexP) );
+                    l_p.leaderSegIndex = leaderIndexP;
+                    l_p.isDraggable = true;
+                    l_p.mdragIndex = static_cast<int>( m_mdragLines.size() );
+                    PNS_DBG( Dbg(), AddShape, l_p.originalLine.CSegment( leaderIndexP ), GREEN, 10000, "leader-p" );
+                    m_mdragLines.push_back( ( l_p ) );
+                    MDRAG_LINE l_n;
+                    l_n.assembledDiffPair = diffPair;
+                    l_n.assembledOrigLine = diffPair->NLine();
+                    l_n.leaderSegIndex = leaderIndexN;
+                    l_n.originalLine = reconstructed.NLine();
+                    if( diffPair->NLine().ContainsLink( litem ) )
+                    {
+                        l_n.originalLeaders.push_back( litem );
+                    }
+                    //leaders.Add( diffPair->NLine().GetLink( leaderIndexN ) );
+                    l_n.isDraggable = true;
+                    l_n.mdragIndex = static_cast<int>( m_mdragLines.size() );
+                    PNS_DBG( Dbg(), AddShape, l_n.originalLine.CSegment( leaderIndexN ), GREEN, 10000, "leader-n" );
+
+                    m_mdragLines.push_back( ( l_n ) );
+                    continue;
+                }
+            }
         }
+
+        MDRAG_LINE l;
+        l.assembledOrigLine = m_world->AssembleLine( litem );
+        l.originalLine = l.assembledOrigLine;
+        l.originalLeaders.push_back( litem );
+        l.isDraggable = true;
+        l.leaderSegIndex = -1;
+        l.mdragIndex = static_cast<int>( m_mdragLines.size() );
+        m_mdragLines.push_back( std::move( l ) );
     }
+
+    PNS_DBG( Dbg(), Message, wxString::Format( wxT("draglines :%d"), (int) m_mdragLines.size() ) );
 
     bool anyStrictCornersFound = false;
     bool anyStrictMidSegsFound = false;
@@ -96,6 +329,8 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 
         const VECTOR2I& origLast = l.originalLine.CLine().CLastPoint();
         const int       distLast = ( origLast - aP ).EuclideanNorm();
+
+        PNS_DBG( Dbg(), AddItem, &l.originalLine, GREEN, 10000, "orig-m" );
 
         l.cornerDistance = std::min( distFirst, distLast );
 
@@ -140,31 +375,39 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
             }
         }
 
-        const auto& links = l.originalLine.Links();
 
-            for( int lidx = 0; lidx < (int) links.size(); lidx++ )
+        for( int lidx = 0; lidx < (int) l.originalLine.SegmentCount(); lidx++ )
+        {
+            const SEG& origSeg = l.originalLine.CSegment( lidx );
+            ITEM*      origLink = leaders.FindSegment( origSeg );
+
+            if( l.leaderSegIndex < 0 && !origLink )
+                continue;
+
+            int d = origSeg.Distance( aP );
+
+            if( origLink )
             {
-                if( auto lseg = dyn_cast<SEGMENT*>( links[lidx] ) )
+                l.isMidSeg = true;
+                l.midSeg = origSeg;
+            }
+             
+            if( l.leaderSegIndex < 0 )
+                l.leaderSegIndex = lidx;
+
+            if( lidx == l.leaderSegIndex )
+            {
+                l.midSeg = origSeg;
+                l.leaderSegDistance = d + thr;
+
+                if( d < thr && !l.isStrict )
                 {
-
-                    if( !aPrimitives.Contains( lseg ) )
-                        continue;
-
-                    int d = lseg->Seg().Distance( aP );
-
-                    l.midSeg = lseg->Seg();
-                    l.isMidSeg = true;
-                    l.leaderSegIndex = lidx;
-                    l.leaderSegDistance = d + thr;
-
-                    if( d < thr && !l.isStrict )
-                    {
-                        l.isCorner = false;
-                        l.isStrict = true;
-                        l.leaderSegDistance = 0;
-                    }
+                    l.isCorner = false;
+                    l.isStrict = true;
+                    l.leaderSegDistance = 0;
                 }
             }
+        }
 
          if( l.isStrict )
         {
@@ -268,7 +511,7 @@ bool MULTI_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 
         for( auto& l : m_mdragLines )
         {
-            m_preShoveNode->Remove( l.originalLine );
+            m_preShoveNode->Remove( l.assembledOrigLine );
         }
 
         m_shove.reset( new SHOVE( m_preShoveNode, Router() ) );
@@ -476,8 +719,8 @@ bool MULTI_DRAGGER::multidragWalkaround( std::vector<MDRAG_LINE>& aCompletedLine
 
     for( auto& l : aCompletedLines )
     {
-        PNS_DBG( Dbg(), AddItem, &l.originalLine, BLUE, 100000, wxString::Format("prewalk-remove lc=%d", l.originalLine.LinkCount() ) );
-        preWalkNode->Remove( l.originalLine );
+        PNS_DBG( Dbg(), AddItem, &l.assembledOrigLine, BLUE, 100000, wxString::Format("prewalk-remove lc=%d", l.originalLine.LinkCount() ) );
+        preWalkNode->Remove( l.assembledOrigLine );
     }
 
     struct WALK_STATE
@@ -553,6 +796,7 @@ bool MULTI_DRAGGER::multidragWalkaround( std::vector<MDRAG_LINE>& aCompletedLine
         for( int lidx = 0; lidx < (int) aCompletedLines.size(); lidx++ )
         {
             aCompletedLines[lidx].draggedLine = walkState[ *bestAttempt ].postWalkLines[ lidx ];
+            m_draggedItems.Add( aCompletedLines[lidx].draggedLine );
         }
    
         m_lastNode = walkState[ *bestAttempt ].node;
@@ -601,8 +845,9 @@ bool MULTI_DRAGGER::multidragMarkObstacles( std::vector<MDRAG_LINE>& aCompletedL
 
     for ( auto&l : aCompletedLines )
     {
-        m_lastNode->Remove( l.originalLine );
+        m_lastNode->Remove( l.assembledOrigLine );
         m_lastNode->Add( l.draggedLine );
+        m_draggedItems.Add( l.draggedLine );
     }
 
     restoreLeaderSegments( aCompletedLines );
@@ -704,8 +949,7 @@ bool MULTI_DRAGGER::multidragShove( std::vector<MDRAG_LINE>& aCompletedLines )
 bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
 {
     std::optional<LINE> primaryPreDrag, primaryDragged;
-
-
+    m_draggedItems.Clear();
 
     SEG lastPreDrag;
     DIRECTION_45 primaryDir;
@@ -722,7 +966,8 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
         {
             l.dragOK = false;
             l.preDragLine = l.originalLine;
-                //PNS_DBG( Dbg(), AddItem, &l.originalLine, GREEN, 300000, "par" );
+            PNS_DBG( Dbg(), AddItem, &l.originalLine, GREEN, 30000, wxString::Format( wxT("original is-prim: %d"), l.isPrimaryLine?1:0) );
+            
             if( l.isPrimaryLine )
             {
 
@@ -797,21 +1042,26 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
 //            PNS_DBG( Dbg(), AddShape, &ll, LIGHTBLUE, 200000, "par" );
 
         }
-        else
+        else // DM_SEGMENT
         {
 
-            SHAPE_LINE_CHAIN ll2( { lastPreDrag.A, lastPreDrag.B } );
-            PNS_DBG( Dbg(), AddShape, &ll2, LIGHTYELLOW, 300000, "par" );
             lastPreDrag =  primaryDragged->CSegment( primaryLine->leaderSegIndex );
+
+            SHAPE_LINE_CHAIN ll2( { lastPreDrag.A, lastPreDrag.B } );
+            PNS_DBG( Dbg(), AddShape, &ll2, LIGHTYELLOW, 300000, "primary-lead" );
+
             primaryDragged->SetSnapThreshhold( snapThreshold );
+            PNS_DBG( Dbg(), AddItem, &primaryDragged.value(), GREEN, 30000, "primary-orig" );
             primaryDragged->DragSegment( aP, primaryLine->leaderSegIndex );
+            PNS_DBG( Dbg(), AddItem, &primaryDragged.value(), GREEN, 30000, "primary-dragged" );
+
             perp = (primaryLine->midSeg.B - primaryLine->midSeg.A).Perpendicular();
             m_guide = SEG( aP, aP + perp );
         }
 
 
         m_leaderSegments = m_origDraggedItems.CItems();
-        m_draggedItems.Clear();
+
 
         // now drag all other lines
         for( auto& l : m_mdragLines )
@@ -820,7 +1070,7 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
             if( l.isDraggable )
             {
                 l.dragOK = false;
-                //PNS_DBG( Dbg(), AddItem, &l.originalLine, GREEN, 100000, wxT("mdrag-sec"));
+                PNS_DBG( Dbg(), AddItem, &l.originalLine, GREEN, 100000, wxT("mdrag-noprim"));
 
                 // reject nulls
                 if( l.preDragLine.SegmentCount() >= 1 )
@@ -877,7 +1127,6 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                             {
                                 l.draggedLine = parallelDragged;
                                 completed.push_back( l );
-                                m_draggedItems.Add( parallelDragged );
                             }
                         }
                     }
@@ -887,6 +1136,9 @@ bool MULTI_DRAGGER::Drag( const VECTOR2I& aP )
                         DIRECTION_45 refDir( lastPreDrag );
                         DIRECTION_45 curDir( sdrag );
                         auto ang = refDir.Angle( curDir );
+
+                        PNS_DBG( Dbg(), AddShape, lastPreDrag, LIGHTBLUE, 30000, "lpd" );
+                        PNS_DBG( Dbg(), AddShape, sdrag, LIGHTRED, 30000, "sdrag" );
 
                         if( ang & ( DIRECTION_45::ANG_HALF_FULL | DIRECTION_45::ANG_STRAIGHT ) )
                         {

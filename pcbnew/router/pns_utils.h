@@ -86,6 +86,9 @@ bool SplitAdjacentArcs( NODE* aNode, ITEM* aArc, const VECTOR2I& aP );
 
 const wxString Format( const MINOPTMAX<int> x );
 
+const SEG LongestCoveringSegment( const SEG& a, const SEG& b );
+
+
 }
 
 
