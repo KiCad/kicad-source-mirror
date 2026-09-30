@@ -1124,7 +1124,7 @@ CONNECTION_GRAPH::ExtractAffectedItems( const std::set<SCH_ITEM*> &aItems )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-            for( SCH_PIN* pin : symbol->GetPins( &m_schematic->CurrentSheet() ) )
+            for( SCH_PIN* pin : symbol->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
                 extract_element( pin );
         }
         else
