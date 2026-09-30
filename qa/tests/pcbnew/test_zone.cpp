@@ -36,11 +36,14 @@
 #include <padstack.h>
 #include <pcb_painter.h>
 #include <pcb_track.h>
+#include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <tools/zone_create_helper.h>
 #include <view/view.h>
 #include <zone.h>
 #include <zone_utils.h>
+
+#include <functional>
 
 
 struct ZONE_TEST_FIXTURE
@@ -790,6 +793,39 @@ BOOST_AUTO_TEST_CASE( SimilarZoneGetsUniqueName )
 
     BOOST_CHECK_EQUAL( helper.createZoneFromExisting( *named )->GetZoneName(), wxS( "GND_POUR_1" ) );
     BOOST_CHECK( helper.createZoneFromExisting( *unnamed )->GetZoneName().IsEmpty() );
+}
+
+
+// Footprint keepouts must not keep a stale cached bbox after the footprint is transformed
+BOOST_AUTO_TEST_CASE( KeepoutBBoxTracksFootprintTransform )
+{
+    SETTINGS_MANAGER       settingsManager;
+    std::unique_ptr<BOARD> board;
+
+    KI_TEST::LoadBoard( settingsManager, "issue25580", board );
+
+    for( FOOTPRINT* fp : board->Footprints() )
+    {
+        BOOST_REQUIRE( !fp->Zones().empty() );
+
+        auto primeAndTransform =
+                [&]( const std::function<void()>& aTransform )
+                {
+                    for( ZONE* zone : fp->Zones() )
+                        zone->CacheBoundingBox();
+
+                    aTransform();
+
+                    for( ZONE* zone : fp->Zones() )
+                    {
+                        BOOST_CHECK_MESSAGE( zone->GetBoundingBox() == zone->Outline()->BBox(),
+                                             fp->GetReference() << " keepout bbox is stale after transform" );
+                    }
+                };
+
+        primeAndTransform( [&]() { fp->SetOrientation( fp->GetOrientation() + ANGLE_90 ); } );
+        primeAndTransform( [&]() { fp->SetPosition( fp->GetPosition() + VECTOR2I( 1234567, 7654321 ) ); } );
+    }
 }
 
 

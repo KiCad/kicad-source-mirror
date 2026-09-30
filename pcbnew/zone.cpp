@@ -733,6 +733,18 @@ const BOX2I ZONE::GetBoundingBox() const
 }
 
 
+void ZONE::invalidateBoundingBoxCache() const
+{
+    if( const BOARD* board = GetBoard() )
+    {
+        std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
+        board->m_ZoneBBoxCache.erase( this );
+    }
+
+    m_bboxCacheTimeStamp.store( -1, std::memory_order_release );
+}
+
+
 void ZONE::CacheBoundingBox()
 {
     const BOARD* board = GetBoard();
@@ -1163,6 +1175,7 @@ void ZONE::MoveEdge( const VECTOR2I& offset, int aEdge )
 void ZONE::Rotate( const VECTOR2I& aCentre, const EDA_ANGLE& aAngle )
 {
     m_Poly->Rotate( aAngle, aCentre );
+    invalidateBoundingBoxCache();
     HatchBorder();
 
     /* rotate filled areas: */
@@ -1206,6 +1219,7 @@ void ZONE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 void ZONE::Mirror( const VECTOR2I& aMirrorRef, FLIP_DIRECTION aFlipDirection )
 {
     m_Poly->Mirror( aMirrorRef, aFlipDirection );
+    invalidateBoundingBoxCache();
 
     HatchBorder();
 
