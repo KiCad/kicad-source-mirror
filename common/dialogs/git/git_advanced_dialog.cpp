@@ -351,6 +351,19 @@ wxWindow* makeStashesPage( wxWindow* aBook, wxListCtrl** aOutList )
     return page.panel;
 }
 
+
+wxWindow* makeTagsPage( wxWindow* aBook, wxListCtrl** aOutList )
+{
+    LIST_PAGE page = makeListPage( aBook );
+
+    page.list->AppendColumn( _( "Tag" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 90 ) );
+    page.list->AppendColumn( _( "Commit" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 90 ) );
+    page.list->AppendColumn( _( "Description" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 330 ) );
+
+    *aOutList = page.list;
+    return page.panel;
+}
+
 } // namespace
 
 
@@ -434,6 +447,23 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
                                        onStashDrop();
                                    } } } );
     m_book->AddPage( stashesPage, _( "Stashes" ) );
+
+    wxWindow* tagsPage = makeTagsPage( m_book, &m_tagsList );
+    addButtonRow( tagsPage, { { _( "New Tag..." ),
+                                [this]()
+                                {
+                                    onNewTag();
+                                } },
+                              { _( "Check Out" ),
+                                [this]()
+                                {
+                                    onCheckoutTag();
+                                } },
+                              { _( "Delete" ), [this]()
+                                {
+                                    onDeleteTag();
+                                } } } );
+    m_book->AddPage( tagsPage, _( "Tags" ) );
 
     // Double-clicking a commit shows what it changed against its parent.
     m_historyList->SetToolTip( _( "Double click a commit to see what it changed. Right click for more." ) );
@@ -669,6 +699,7 @@ void GIT_ADVANCED_DIALOG::ReloadPages()
     populateHistory();
     populateBranches();
     populateStashes();
+    populateTags();
 }
 
 
@@ -908,6 +939,23 @@ void GIT_ADVANCED_DIALOG::populateStashes()
         m_stashesList->SetItem( idx, 1, relativeDate( s.when ) );
         m_stashesList->SetItemData( idx, static_cast<long>( s.index ) );
         m_stashIds.push_back( s.id );
+    }
+}
+
+
+void GIT_ADVANCED_DIALOG::populateTags()
+{
+    if( !m_tagsList )
+        return;
+
+    // The caller holds the git action lock.
+    m_tagsList->DeleteAllItems();
+
+    for( const KIGIT_TAG_INFO& t : m_parent->Prj().GetGitCommon()->GetTags() )
+    {
+        long idx = m_tagsList->InsertItem( m_tagsList->GetItemCount(), t.name );
+        m_tagsList->SetItem( idx, 1, t.hash );
+        m_tagsList->SetItem( idx, 2, t.summary );
     }
 }
 
@@ -1713,4 +1761,70 @@ void GIT_ADVANCED_DIALOG::onStashDrop()
             },
             _( "Could not drop the stash. Another program may have changed the stash list, so nothing "
                "was dropped." ) );
+}
+
+
+void GIT_ADVANCED_DIALOG::onNewTag()
+{
+    wxString name = wxGetTextFromUser( _( "New tag name:" ), _( "New Tag" ), wxEmptyString, this );
+
+    if( name.IsEmpty() )
+        return;
+
+    runGitAction(
+            [name]( KIGIT_COMMON& aCommon )
+            {
+                return aCommon.CreateTag( name );
+            },
+            wxString::Format( _( "Could not create tag '%s'." ), name ) );
+}
+
+
+void GIT_ADVANCED_DIALOG::onCheckoutTag()
+{
+    wxString name = selectedText( m_tagsList, 0 );
+
+    if( name.IsEmpty() )
+        return;
+
+    if( !refuseOverUncommittedWork() )
+        return;
+
+    if( !IsOK( this, wxString::Format( _( "Check out tag '%s'? This shows an old snapshot of the "
+                                          "project. To keep any commits you make here, create a new "
+                                          "branch before committing. Switching away without one "
+                                          "leaves those commits outside every branch." ),
+                                       name ) ) )
+    {
+        return;
+    }
+
+    if( !confirmWorkingTreeChange() )
+        return;
+
+    runGitAction(
+            [name]( KIGIT_COMMON& aCommon )
+            {
+                return aCommon.CheckoutTag( name );
+            },
+            wxString::Format( _( "Could not check out tag '%s'." ), name ), /* rewrites working tree */ true );
+}
+
+
+void GIT_ADVANCED_DIALOG::onDeleteTag()
+{
+    wxString name = selectedText( m_tagsList, 0 );
+
+    if( name.IsEmpty() )
+        return;
+
+    if( !IsOK( this, wxString::Format( _( "Delete tag '%s'?" ), name ) ) )
+        return;
+
+    runGitAction(
+            [name]( KIGIT_COMMON& aCommon )
+            {
+                return aCommon.DeleteTag( name );
+            },
+            wxString::Format( _( "Could not delete tag '%s'." ), name ) );
 }
