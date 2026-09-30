@@ -2806,14 +2806,13 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
 
             if( aCompareFlags & COMPARE_FLAGS::FIELD_POSITIONS )
             {
-                if( aField->GetPosition().x != bField->GetPosition().x )
-                    retv = aField->GetPosition().x - bField->GetPosition().x;
-
-                if( aField->GetPosition().y != bField->GetPosition().y )
-                    retv = aField->GetPosition().y - bField->GetPosition().y;
-
-                if( retv )
+                if( aField->GetPosition() != bField->GetPosition() )
                 {
+                    if( aField->GetPosition().x != bField->GetPosition().x )
+                        retv = aField->GetPosition().x - bField->GetPosition().x;
+                    else if( aField->GetPosition().y != bField->GetPosition().y )
+                        retv = aField->GetPosition().y - bField->GetPosition().y;
+
                     REPORT( wxString::Format( _( "Field '%s' positions differ." ), aField->GetName( false ) ) );
 
                     if( !aReporter )
