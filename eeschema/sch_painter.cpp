@@ -2572,45 +2572,48 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed )
     if( aLayer == LAYER_SELECTION_SHADOWS )
         return;
 
-    aTable->DrawBorders(
-            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
-            {
-                int        lineWidth = stroke.GetWidth();
-                COLOR4D    color = stroke.GetColor();
-                LINE_STYLE lineStyle = stroke.GetLineStyle();
-
-                if( lineWidth == 0 )
-                    lineWidth = m_schSettings.GetDefaultPenWidth();
-
-                if( color == COLOR4D::UNSPECIFIED )
-                    color = m_schSettings.GetLayerColor( LAYER_NOTES );
-
-                if( lineStyle == LINE_STYLE::DEFAULT )
-                    lineStyle = LINE_STYLE::SOLID;
-
-                m_gal->SetIsFill( false );
-                m_gal->SetIsStroke( true );
-                m_gal->SetStrokeColor( color );
-                m_gal->SetLineWidth( (float) lineWidth );
-
-                if( lineStyle <= LINE_STYLE::FIRST_TYPE )
+    if( aLayer == LAYER_NOTES )
+    {
+        aTable->DrawBorders(
+                [&]( const VECTOR2I& ptA, const VECTOR2I& ptB, const STROKE_PARAMS& stroke )
                 {
-                    m_gal->DrawLine( ptA, ptB );
-                }
-                else
-                {
-                    SHAPE_SEGMENT seg( ptA, ptB );
-                    STROKE_PARAMS::Stroke( &seg, lineStyle, lineWidth, &m_schSettings,
-                            [&]( const VECTOR2I& a, const VECTOR2I& b )
-                            {
-                                // DrawLine has problem with 0 length lines so enforce minimum
-                                if( a == b )
-                                    m_gal->DrawLine( a+1, b );
-                                else
-                                    m_gal->DrawLine( a, b );
-                            } );
-                }
-            } );
+                    int        lineWidth = stroke.GetWidth();
+                    COLOR4D    color = stroke.GetColor();
+                    LINE_STYLE lineStyle = stroke.GetLineStyle();
+
+                    if( lineWidth == 0 )
+                        lineWidth = m_schSettings.GetDefaultPenWidth();
+
+                    if( color == COLOR4D::UNSPECIFIED )
+                        color = m_schSettings.GetLayerColor( LAYER_NOTES );
+
+                    if( lineStyle == LINE_STYLE::DEFAULT )
+                        lineStyle = LINE_STYLE::SOLID;
+
+                    m_gal->SetIsFill( false );
+                    m_gal->SetIsStroke( true );
+                    m_gal->SetStrokeColor( color );
+                    m_gal->SetLineWidth( (float) lineWidth );
+
+                    if( lineStyle <= LINE_STYLE::FIRST_TYPE )
+                    {
+                        m_gal->DrawLine( ptA, ptB );
+                    }
+                    else
+                    {
+                        SHAPE_SEGMENT seg( ptA, ptB );
+                        STROKE_PARAMS::Stroke( &seg, lineStyle, lineWidth, &m_schSettings,
+                                [&]( const VECTOR2I& a, const VECTOR2I& b )
+                                {
+                                    // DrawLine has problem with 0 length lines so enforce minimum
+                                    if( a == b )
+                                        m_gal->DrawLine( a+1, b );
+                                    else
+                                        m_gal->DrawLine( a, b );
+                                } );
+                    }
+                } );
+    }
 }
 
 
