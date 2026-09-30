@@ -187,7 +187,7 @@ public:
      * @brief Return the connection types that have been tested for authentication
      * @return The connection types that have been tested for authentication
      */
-    unsigned& TestedTypes() { return m_common->TestedTypes(); }
+    std::atomic<unsigned>& TestedTypes() { return m_common->TestedTypes(); }
 
 
 private:

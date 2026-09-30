@@ -38,6 +38,9 @@
 #include <string>
 #include <vector>
 
+static wxString stripUrlUserinfo( const wxString& aUrl );
+
+
 KIGIT_COMMON::KIGIT_COMMON( git_repository* aRepo ) :
         m_repo( aRepo ), m_connType( GIT_CONN_TYPE::GIT_CONN_LOCAL ), m_testedTypes( 0 ),
         m_nextPublicKey( 0 ), m_secretFetched( false )
@@ -53,7 +56,7 @@ KIGIT_COMMON::KIGIT_COMMON( const KIGIT_COMMON& aOther ) :
         m_hostname( aOther.m_hostname ),
         m_username( aOther.m_username ),
         m_password( aOther.m_password ),
-        m_testedTypes( aOther.m_testedTypes ),
+        m_testedTypes( aOther.m_testedTypes.load() ),
 
         // The mutex is default-initialized, not copied
         m_gitActionMutex(),
@@ -161,6 +164,8 @@ wxString KIGIT_COMMON::GetCurrentBranchName() const
 
 wxString KIGIT_COMMON::GetPassword()
 {
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+
     if( !m_secretFetched )
     {
         if( m_connType != GIT_CONN_TYPE::GIT_CONN_LOCAL && !m_remote.IsEmpty() )
@@ -669,6 +674,18 @@ wxString KIGIT_COMMON::GetRemotename() const
 
 void KIGIT_COMMON::SetSSHKey( const wxString& aKey )
 {
+    // GetNextPublicKey reads an empty result as the end of the list, so an empty key at the
+    // front would hide every key behind it.
+    if( aKey.IsEmpty() )
+        return;
+
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+    setSSHKeyUnlocked( aKey );
+}
+
+
+void KIGIT_COMMON::setSSHKeyUnlocked( const wxString& aKey )
+{
     auto it = std::find( m_publicKeys.begin(), m_publicKeys.end(), aKey );
 
     if( it != m_publicKeys.end() )
@@ -697,6 +714,10 @@ wxString KIGIT_COMMON::GetGitRootDirectory() const
 
 void KIGIT_COMMON::updatePublicKeys()
 {
+    // Deadlocks if the credentials lock is already held. UpdateCurrentBranchInfo releases it
+    // first for that reason.
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+
     m_publicKeys.clear();
 
     wxFileName keyFile( wxGetHomeDir(), wxEmptyString );
@@ -753,9 +774,9 @@ void KIGIT_COMMON::updatePublicKeys()
                 if( keyPath.StartsWith( "~" ) )
                     keyPath.Replace( "~", wxGetHomeDir(), false );
 
-                // Add the public key to the beginning of the list
+                // The lock is already held, so not through the locking entry point.
                 if( wxFileName::FileExists( keyPath ) )
-                    SetSSHKey( keyPath );
+                    setSSHKeyUnlocked( keyPath );
             }
         }
 
@@ -795,7 +816,12 @@ void KIGIT_COMMON::UpdateCurrentBranchInfo()
 
 KIGIT_COMMON::GIT_CONN_TYPE KIGIT_COMMON::GetConnType() const
 {
-    wxString remote = m_remote;
+    wxString remote;
+
+    {
+        std::lock_guard<std::mutex> lock( m_credentialsMutex );
+        remote = m_remote;
+    }
 
     if( remote.IsEmpty() )
         remote = GetRemotename();
@@ -814,7 +840,48 @@ KIGIT_COMMON::GIT_CONN_TYPE KIGIT_COMMON::GetConnType() const
 }
 
 
+// Index of the '@' ending the userinfo of proto://user:password@host/path, or npos. The last
+// one, since the first would split inside a password that contains an '@'.
+static size_t findUserinfoAt( const wxString& aUrl )
+{
+    size_t protoSep = aUrl.find( "://" );
+
+    if( protoSep == wxString::npos )
+        return wxString::npos;
+
+    size_t hostStart = protoSep + 3;
+    size_t pathStart = aUrl.find( '/', hostStart );
+    size_t searchEnd = ( pathStart == wxString::npos ) ? aUrl.length() : pathStart;
+
+    if( searchEnd <= hostStart )
+        return wxString::npos;
+
+    size_t at = aUrl.rfind( '@', searchEnd - 1 );
+
+    return ( at != wxString::npos && at >= hostStart ) ? at : wxString::npos;
+}
+
+
+// The copy kept for display, tracing and the keychain key must not carry the secret.
+static wxString stripUrlUserinfo( const wxString& aUrl )
+{
+    size_t at = findUserinfoAt( aUrl );
+
+    if( at == wxString::npos )
+        return aUrl;
+
+    return aUrl.Left( aUrl.find( "://" ) + 3 ) + aUrl.Mid( at + 1 );
+}
+
+
 void KIGIT_COMMON::updateConnectionType()
+{
+    std::lock_guard<std::mutex> lock( m_credentialsMutex );
+    updateConnectionTypeUnlocked();
+}
+
+
+void KIGIT_COMMON::updateConnectionTypeUnlocked()
 {
     if( m_remote.StartsWith( "https://" ) || m_remote.StartsWith( "http://" ) )
         m_connType = GIT_CONN_TYPE::GIT_CONN_HTTPS;
@@ -826,31 +893,31 @@ void KIGIT_COMMON::updateConnectionType()
     if( m_connType != GIT_CONN_TYPE::GIT_CONN_LOCAL )
     {
         wxString uri = m_remote;
-        size_t atPos = uri.find( '@' );
+        size_t   atPos = findUserinfoAt( uri );
 
         if( atPos != wxString::npos )
         {
-            size_t protoEnd = uri.find( "//" );
+            size_t   hostStart = uri.find( "://" ) + 3;
+            wxString credentials = uri.Mid( hostStart, atPos - hostStart );
+            size_t   colonPos = credentials.find( ':' );
 
-            if( protoEnd != wxString::npos )
+            if( colonPos != wxString::npos )
             {
-                wxString credentials = uri.Mid( protoEnd + 2, atPos - protoEnd - 2 );
-                size_t colonPos = credentials.find( ':' );
-
-                if( colonPos != wxString::npos )
-                {
-                    m_username = credentials.Left( colonPos );
-                    m_password = credentials.Mid( colonPos + 1, credentials.Length() - colonPos - 1 );
-                }
-                else
-                {
-                    m_username = credentials;
-                }
+                m_username = credentials.Left( colonPos );
+                m_password = credentials.Mid( colonPos + 1 );
             }
             else
             {
-                m_username = uri.Left( atPos );
+                m_username = credentials;
             }
+        }
+        else if( uri.find( "://" ) == wxString::npos )
+        {
+            // scp-style git@host:path, where the leading token is an ssh user name.
+            size_t scpAt = uri.find( '@' );
+
+            if( scpAt != wxString::npos )
+                m_username = uri.Left( scpAt );
         }
 
         if( m_remote.StartsWith( "git@" ) )
@@ -864,7 +931,7 @@ void KIGIT_COMMON::updateConnectionType()
         else
         {
             // other URL format: proto://[user@]hostname/path
-            size_t hostStart = m_remote.find( "://" ) + 2;
+            size_t   hostStart = m_remote.find( "://" ) + 3;
             size_t hostEnd = m_remote.find( '/', hostStart );
             wxString host;
 
@@ -873,13 +940,16 @@ void KIGIT_COMMON::updateConnectionType()
             else
                 host = m_remote.Mid( hostStart );
 
-            atPos = host.find( '@' );
+            // The last '@', as findUserinfoAt explains.
+            atPos = host.rfind( '@' );
 
             if( atPos != wxString::npos )
                 m_hostname = host.Mid( atPos + 1 );
             else
                 m_hostname = host;
         }
+
+        m_remote = stripUrlUserinfo( m_remote );
     }
 
     m_secretFetched = !m_password.IsEmpty();
@@ -926,10 +996,10 @@ int KIGIT_COMMON::HandlePlaintextAuthentication( git_cred** aOut, const wxString
 {
     wxString password = GetPassword();
 
-    git_credential_userpass_plaintext_new( aOut, aUsername.mbc_str(), password.mbc_str() );
+    int rc = git_credential_userpass_plaintext_new( aOut, aUsername.mbc_str(), password.mbc_str() );
     m_testedTypes |= GIT_CREDENTIAL_USERPASS_PLAINTEXT;
 
-    return GIT_OK;
+    return rc;
 }
 
 
@@ -1080,7 +1150,10 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
     KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
     KIGIT_COMMON* common = parent->GetCommon();
 
-    wxLogTrace( traceGit, "Credentials callback for %s, testing %d", aUrl, aAllowedTypes );
+    // The configured remote URL may embed a password. Keep it out of the trace log.
+    wxString safeUrl = stripUrlUserinfo( wxString::FromUTF8( aUrl ) );
+
+    wxLogTrace( traceGit, "Credentials callback for %s, testing %d", safeUrl, aAllowedTypes );
 
     if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL )
     {
@@ -1092,13 +1165,24 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
         && !( parent->TestedTypes() & GIT_CREDENTIAL_USERNAME ) )
     {
         wxString username = parent->GetUsername().Trim().Trim( false );
-        wxLogTrace( traceGit, "Username credential for %s at %s with allowed type %d",
-                    username, aUrl, aAllowedTypes );
+        wxLogTrace( traceGit, "Username credential for %s at %s with allowed type %d", username, safeUrl,
+                    aAllowedTypes );
 
-        if( git_credential_username_new( aOut, username.ToStdString().c_str() ) != GIT_OK )
+        // An empty username makes the server answer "unsupported authentication", which tells
+        // the user nothing. Fail authentication instead, so the caller prompts and retries.
+        if( username.IsEmpty() )
+        {
+            git_error_clear();
+            git_error_set_str( GIT_ERROR_NET, _( "Unable to authenticate" ).mbc_str() );
+            common->SetAuthFailure();
+            return GIT_EAUTH;
+        }
+
+        if( int rc = git_credential_username_new( aOut, username.ToStdString().c_str() ); rc != GIT_OK )
         {
             wxLogTrace( traceGit, "Failed to create username credential for %s: %s",
                         username, KIGIT_COMMON::GetLastGitError() );
+            return rc;
         }
         else
         {
@@ -1113,8 +1197,8 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
                 && !parent->GetUsername().IsEmpty() )
     {
         // Plaintext authentication
-        wxLogTrace( traceGit, "Plaintext authentication for %s at %s with allowed type %d",
-                    parent->GetUsername(), aUrl, aAllowedTypes );
+        wxLogTrace( traceGit, "Plaintext authentication for %s at %s with allowed type %d", parent->GetUsername(),
+                    safeUrl, aAllowedTypes );
         return common->HandlePlaintextAuthentication( aOut, parent->GetUsername() );
     }
     else if( parent->GetConnType() == KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH
@@ -1138,15 +1222,10 @@ extern "C" int credentials_cb( git_cred** aOut, const char* aUrl, const char* aU
     }
     else
     {
-        // If we didn't find anything to try, then we don't have a callback set that the
-        // server likes
-        if( !parent->TestedTypes() )
-            return GIT_PASSTHROUGH;
-
+        // Signal an auth failure so the caller prompts and retries, rather than letting libgit2 report
+        // "no callback set" as a dead end.
         git_error_clear();
         git_error_set_str( GIT_ERROR_NET, _( "Unable to authenticate" ).mbc_str() );
-
-        // Otherwise, we did try something but we failed, so return an authentication error
         common->SetAuthFailure();
         return GIT_EAUTH;
     }

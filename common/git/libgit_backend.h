@@ -78,7 +78,7 @@ public:
 
     void PerformRevert( GIT_REVERT_HANDLER* aHandler ) override;
 
-    git_repository* GetRepositoryForFile( const char* aFilename ) override;
+    git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError ) override;
     int CreateBranch( git_repository* aRepo, const wxString& aBranchName ) override;
     bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                     bool aRemoveGitDir, wxString* aErrors ) override;

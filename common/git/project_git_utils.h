@@ -35,9 +35,10 @@ public:
      * Discover and open the repository that contains the given file.
      *
      * @param aFilename Absolute path to a file inside the repository.
+     * @param aError Receives a reason worth showing when the repository cannot be opened.
      * @return Newly opened git_repository or nullptr on failure.
      */
-    static git_repository* GetRepositoryForFile( const char* aFilename );
+    static git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError = nullptr );
 
     /**
      * Create a new branch based on HEAD.

@@ -89,18 +89,34 @@ public:
         GIT_CONN_LAST
     };
 
-    wxString GetUsername() const { return m_username; }
+    wxString GetUsername() const
+    {
+        std::lock_guard<std::mutex> lock( m_credentialsMutex );
+        return m_username;
+    }
+
     wxString GetPassword();
     GIT_CONN_TYPE GetConnType() const;
 
-    void SetUsername( const wxString& aUsername ) { m_username = aUsername; m_secretFetched = false; }
-    void SetPassword( const wxString& aPassword ) { m_password = aPassword; m_secretFetched = true; }
+    void SetUsername( const wxString& aUsername )
+    {
+        std::lock_guard<std::mutex> lock( m_credentialsMutex );
+        m_username = aUsername;
+        m_secretFetched = false;
+    }
+
+    void SetPassword( const wxString& aPassword )
+    {
+        std::lock_guard<std::mutex> lock( m_credentialsMutex );
+        m_password = aPassword;
+        m_secretFetched = true;
+    }
     void SetSSHKey( const wxString& aSSHKey );
 
     // Holds a temporary variable that can be used by the authentication callback
     // to remember which types of authentication have been tested so that we
     // don't loop forever.
-    unsigned& TestedTypes() { return m_testedTypes; }
+    std::atomic<unsigned>& TestedTypes() { return m_testedTypes; }
 
     // Returns true if the repository has local commits that have not been pushed
     bool HasLocalCommits() const;
@@ -135,10 +151,17 @@ public:
      */
     wxString GetProjectDir() const;
 
-    void ResetNextKey() { m_nextPublicKey = 0; }
+    void ResetNextKey()
+    {
+        std::lock_guard<std::mutex> lock( m_credentialsMutex );
+        m_nextPublicKey = 0;
+    }
 
+    /// By value, so the caller never holds a pointer into the vector.
     wxString GetNextPublicKey()
     {
+        std::lock_guard<std::mutex> lock( m_credentialsMutex );
+
         if( m_nextPublicKey >= static_cast<int>( m_publicKeys.size() ) )
             return wxEmptyString;
 
@@ -147,13 +170,18 @@ public:
 
     void SetRemote( const wxString& aRemote )
     {
+        std::lock_guard<std::mutex> lock( m_credentialsMutex );
         m_remote = aRemote;
         m_password.clear();
         m_secretFetched = false;
-        updateConnectionType();
+        updateConnectionTypeUnlocked();
     }
 
-    const wxString& GetRemote() const { return m_remote; }
+    wxString GetRemote() const
+    {
+        std::lock_guard<std::mutex> lock( m_credentialsMutex );
+        return m_remote;
+    }
 
     int HandleSSHKeyAuthentication( git_cred** aOut, const wxString& aUsername );
 
@@ -185,6 +213,13 @@ public:
     void ClearAuthFailure() { m_authFailed = false; }
     void SetAuthFailure() { m_authFailed = true; }
 
+    std::unique_lock<std::mutex> TryLockAction()
+    {
+        return std::unique_lock<std::mutex>( m_gitActionMutex, std::try_to_lock );
+    }
+
+    std::unique_lock<std::mutex> LockAction() { return std::unique_lock<std::mutex>( m_gitActionMutex ); }
+
 protected:
     git_repository* m_repo;
 
@@ -196,11 +231,16 @@ protected:
     wxString m_username;
     wxString m_password;
 
-    unsigned m_testedTypes;
+    std::atomic<unsigned> m_testedTypes;
 
-    bool m_authFailed = false;
+    std::atomic<bool> m_authFailed{ false };
 
     std::mutex m_gitActionMutex;
+
+    /// Serializes the credential fields between the UI thread and the authentication
+    /// callback's worker thread. wxString is copy on write, so a read racing a write corrupts
+    /// it. Separate from m_gitActionMutex, which the worker holds while the callback runs.
+    mutable std::mutex m_credentialsMutex;
 
     // Make git handlers friends so they can access the mutex
     friend class GIT_PUSH_HANDLER;
@@ -211,7 +251,13 @@ protected:
 
 private:
     void updatePublicKeys();
+
+    /// Body of SetSSHKey, for callers that already hold m_credentialsMutex.
+    void setSSHKeyUnlocked( const wxString& aKey );
     void updateConnectionType();
+
+    /// Body of updateConnectionType, for callers that already hold m_credentialsMutex.
+    void updateConnectionTypeUnlocked();
 
     std::vector<wxString> m_publicKeys;
     int m_nextPublicKey;
@@ -220,8 +266,9 @@ private:
     std::atomic<bool> m_cancel{ false };  // Set to true when the user cancels an operation
 
     // Create a dummy flag to tell if we have tested ssh agent credentials separately
-    // from the ssh key credentials
-    static const unsigned KIGIT_CREDENTIAL_SSH_AGENT = 1 << sizeof( m_testedTypes - 1 );
+    // from the ssh key credentials. Our own bit, so it must clear every git_credential_t
+    // value. The highest is GIT_CREDENTIAL_SSH_MEMORY at 1 << 6.
+    static const unsigned KIGIT_CREDENTIAL_SSH_AGENT = 1u << ( sizeof( unsigned ) * 8 - 1 );
 };
 
 extern "C" APIEXPORT int  progress_cb( const char* str, int len, void* data );

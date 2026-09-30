@@ -35,6 +35,7 @@
 #include <git/git_pull_handler.h>
 #include <git/git_push_handler.h>
 #include <git/git_commit_handler.h>
+#include <qa_utils/scoped_git_backend.h>
 
 #include <git2.h>
 
@@ -59,10 +60,6 @@ struct GIT_BACKEND_FIXTURE
 {
     GIT_BACKEND_FIXTURE()
     {
-        m_backend = new LIBGIT_BACKEND();
-        m_backend->Init();
-        SetGitBackend( m_backend );
-
         m_tempBase = wxFileName::GetTempDir() + wxFileName::GetPathSeparator()
                      + wxString::Format( "kicad_libgit_backend_test_%ld_%ld", wxGetProcessId(), s_counter++ );
         wxFileName::Mkdir( m_tempBase, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
@@ -80,15 +77,12 @@ struct GIT_BACKEND_FIXTURE
     {
         if( wxFileName::DirExists( m_tempBase ) )
             wxFileName::Rmdir( m_tempBase, wxPATH_RMDIR_RECURSIVE );
-
-        SetGitBackend( nullptr );
-        m_backend->Shutdown();
-        delete m_backend;
     }
 
 
     bool            ready() const { return m_ready; }
     const wxString& repoPath() const { return m_repoPath; }
+    const wxString& tempBase() const { return m_tempBase; }
     const wxString& remotePath() const { return m_remotePath; }
 
 
@@ -159,6 +153,60 @@ struct GIT_BACKEND_FIXTURE
         return commitOid;
     }
 
+
+    /// Create a commit on top of aParentOid setting aFile to aContent, without moving HEAD.
+    git_oid createDetachedCommit( git_repository* aRepo, const git_oid& aParentOid, const wxString& aFile,
+                                  const std::string& aContent, const char* aMessage )
+    {
+        git_oid result = {};
+
+        git_commit* parentCommit = nullptr;
+        BOOST_REQUIRE_EQUAL( git_commit_lookup( &parentCommit, aRepo, &aParentOid ), GIT_OK );
+
+        git_oid blobOid;
+        BOOST_REQUIRE_EQUAL( git_blob_create_from_buffer( &blobOid, aRepo, aContent.data(), aContent.size() ), GIT_OK );
+
+        git_tree* parentTree = nullptr;
+        BOOST_REQUIRE_EQUAL( git_commit_tree( &parentTree, parentCommit ), GIT_OK );
+
+        git_treebuilder* builder = nullptr;
+        BOOST_REQUIRE_EQUAL( git_treebuilder_new( &builder, aRepo, parentTree ), GIT_OK );
+        BOOST_REQUIRE_EQUAL(
+                git_treebuilder_insert( nullptr, builder, aFile.ToUTF8().data(), &blobOid, GIT_FILEMODE_BLOB ),
+                GIT_OK );
+
+        git_oid treeOid;
+        BOOST_REQUIRE_EQUAL( git_treebuilder_write( &treeOid, builder ), GIT_OK );
+        git_treebuilder_free( builder );
+        git_tree_free( parentTree );
+
+        git_tree* tree = nullptr;
+        BOOST_REQUIRE_EQUAL( git_tree_lookup( &tree, aRepo, &treeOid ), GIT_OK );
+
+        git_signature* sig = nullptr;
+        BOOST_REQUIRE_EQUAL( git_signature_now( &sig, TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL ), GIT_OK );
+
+        const git_commit* parents[1] = { parentCommit };
+        BOOST_REQUIRE_EQUAL(
+                git_commit_create( &result, aRepo, nullptr, sig, sig, nullptr, aMessage, tree, 1, parents ), GIT_OK );
+
+        git_signature_free( sig );
+        git_tree_free( tree );
+        git_commit_free( parentCommit );
+        return result;
+    }
+
+    /// Write .git/FETCH_HEAD naming aOid, as a fetch would leave it.
+    void writeFetchHead( const git_oid& aOid )
+    {
+        char hex[GIT_OID_HEXSZ + 1] = { 0 };
+        git_oid_tostr( hex, sizeof( hex ), &aOid );
+
+        wxString      fetchHead = repoPath() + wxFileName::GetPathSeparator() + wxT( ".git" )
+                                  + wxFileName::GetPathSeparator() + wxT( "FETCH_HEAD" );
+        std::ofstream f( fetchHead.ToStdString() );
+        f << hex << "\t\tbranch 'master' of test\n";
+    }
 
     /// Add an `origin` remote pointing at the bare remote on disk.
     bool addOrigin( git_repository* aRepo )
@@ -252,6 +300,7 @@ private:
         {
             git_config_set_string( cfg, "user.name", TEST_AUTHOR_NAME );
             git_config_set_string( cfg, "user.email", TEST_AUTHOR_EMAIL );
+            git_config_set_bool( cfg, "pull.rebase", 0 );
             git_config_free( cfg );
         }
 
@@ -277,10 +326,10 @@ private:
     }
 
 
-    LIBGIT_BACKEND* m_backend;
-    wxString        m_tempBase;
-    wxString        m_repoPath;
-    wxString        m_remotePath;
+    SCOPED_GIT_BACKEND m_backend;
+    wxString           m_tempBase;
+    wxString           m_repoPath;
+    wxString           m_remotePath;
     bool            m_ready;
 
     static long s_counter;
@@ -450,12 +499,7 @@ BOOST_AUTO_TEST_CASE( AmendFileList_ExcludesFilesOutsideProject )
 }
 
 
-
-/**
- * When the local branch has no upstream configured, GetUpstreamShorthand must
- * synthesise \<remote\>/\<branch\> so the pull fallback and first-push paths have
- * a meaningful target to display and act on.
- */
+// The synthesised target is what the pull fallback and the first push act on.
 BOOST_AUTO_TEST_CASE( GetUpstreamShorthand_NoUpstreamFallsBackToRemoteSlashBranch )
 {
     BOOST_TEST_REQUIRE( ready() );

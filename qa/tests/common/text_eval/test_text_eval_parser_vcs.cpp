@@ -28,8 +28,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <text_eval/text_eval_wrapper.h>
 #include <text_eval/text_eval_vcs.h>
-#include <git/git_backend.h>
-#include <git/libgit_backend.h>
+#include <qa_utils/scoped_git_backend.h>
 #include <git2.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -56,10 +55,6 @@ struct VCS_TEST_FIXTURE
 {
     VCS_TEST_FIXTURE()
     {
-        m_backend = new LIBGIT_BACKEND();
-        m_backend->Init();
-        SetGitBackend( m_backend );
-
         m_originalDir = wxGetCwd();
 
         m_tempDir = wxFileName::GetTempDir() + wxFileName::GetPathSeparator()
@@ -79,10 +74,6 @@ struct VCS_TEST_FIXTURE
 
         if( wxFileName::DirExists( m_tempDir ) )
             wxFileName::Rmdir( m_tempDir, wxPATH_RMDIR_RECURSIVE );
-
-        SetGitBackend( nullptr );
-        m_backend->Shutdown();
-        delete m_backend;
     }
 
     bool            repoReady() const { return m_repoReady; }
@@ -169,7 +160,7 @@ private:
 
     // These tests exercise cwd-based discovery independently of projects loaded by other tests.
     TEXT_EVAL_VCS::CONTEXT_PATH_SCOPE m_context{ wxString() };
-    LIBGIT_BACKEND* m_backend;
+    SCOPED_GIT_BACKEND                m_backend;
     wxString        m_originalDir;
     wxString        m_tempDir;
     bool            m_repoReady;

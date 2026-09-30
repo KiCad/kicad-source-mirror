@@ -121,7 +121,8 @@ public:
 
     virtual void PerformRevert( GIT_REVERT_HANDLER* aHandler ) = 0;
 
-    virtual git_repository* GetRepositoryForFile( const char* aFilename ) = 0;
+    /// aError receives why git refused to open the repository. Untouched otherwise.
+    virtual git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError ) = 0;
     virtual int CreateBranch( git_repository* aRepo, const wxString& aBranchName ) = 0;
     virtual bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                             bool aRemoveGitDir, wxString* aErrors ) = 0;

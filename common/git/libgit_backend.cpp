@@ -793,7 +793,9 @@ bool LIBGIT_BACKEND::IsRepository( GIT_INIT_HANDLER* aHandler, const wxString& a
         return true;
     }
 
-    return false;
+    // A repository git refuses to open is still a repository. Answering false here sends the
+    // initialize path into reinitializing it.
+    return error == GIT_EOWNER;
 }
 
 
@@ -1794,7 +1796,7 @@ void LIBGIT_BACKEND::PerformRevert( GIT_REVERT_HANDLER* aHandler )
 }
 
 
-git_repository* LIBGIT_BACKEND::GetRepositoryForFile( const char* aFilename )
+git_repository* LIBGIT_BACKEND::GetRepositoryForFile( const char* aFilename, wxString* aError )
 {
     git_repository* repo = nullptr;
     git_buf repo_path = GIT_BUF_INIT;
@@ -1808,9 +1810,27 @@ git_repository* LIBGIT_BACKEND::GetRepositoryForFile( const char* aFilename )
 
     KIGIT::GitBufPtr repo_path_ptr( &repo_path );
 
-    if( git_repository_open( &repo, repo_path.ptr ) != GIT_OK )
+    if( int rc = git_repository_open( &repo, repo_path.ptr ); rc != GIT_OK )
     {
         wxLogTrace( traceGit, "Can't open repo for %s: %s", repo_path.ptr, KIGIT_COMMON::GetLastGitError() );
+
+        // Left unexplained, a repository git refuses to open looks like no repository at all.
+        if( rc == GIT_EOWNER && aError )
+        {
+            // Discovery gives the git directory. An ordinary repository keeps it as .git inside
+            // the project, so the directory to trust is its parent. A worktree or a submodule
+            // keeps it elsewhere, and there the git directory is the one to name.
+            wxFileName gitDir( wxString::FromUTF8( repo_path.ptr ), wxEmptyString );
+
+            if( gitDir.GetDirCount() > 0 && gitDir.GetDirs().Last() == wxS( ".git" ) )
+                gitDir.RemoveLastDir();
+
+            *aError = wxString::Format( _( "The repository at '%s' belongs to another user, so git will not "
+                                           "open it. To trust it, run:\n\n"
+                                           "git config --global --add safe.directory \"%s\"" ),
+                                        gitDir.GetPath(), gitDir.GetPath() );
+        }
+
         return nullptr;
     }
 
