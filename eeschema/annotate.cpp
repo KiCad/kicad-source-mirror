@@ -55,6 +55,52 @@ void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 }
 
 
+std::unordered_set<SCH_SYMBOL*> getInferredSymbols( const SCH_SELECTION& aSelection )
+{
+    std::unordered_set<SCH_SYMBOL*> symbols;
+
+    for( EDA_ITEM* item : aSelection )
+    {
+        switch( item->Type() )
+        {
+        case SCH_FIELD_T:
+            {
+                SCH_FIELD*  field = static_cast<SCH_FIELD*>( item );
+
+                if( field->GetId() == FIELD_T::REFERENCE && field->GetParent()->Type() == SCH_SYMBOL_T )
+                    symbols.insert( static_cast<SCH_SYMBOL*>( field->GetParent() ) );
+
+                break;
+            }
+
+        case SCH_SYMBOL_T:
+            symbols.insert( static_cast<SCH_SYMBOL*>( item ) );
+            break;
+
+        case SCH_GROUP_T:
+            {
+                SCH_GROUP* group = static_cast<SCH_GROUP*>( item );
+
+                group->RunOnChildren(
+                        [&symbols]( SCH_ITEM* aChild )
+                        {
+                            if( aChild->Type() == SCH_SYMBOL_T )
+                                symbols.insert( static_cast<SCH_SYMBOL*>( aChild ) );
+                        },
+                        RECURSE_MODE::RECURSE );
+
+                break;
+            }
+
+        default:
+            break;
+        }
+    }
+
+    return symbols;
+}
+
+
 void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRecursive,
                                        REPORTER& aReporter )
 {
@@ -140,11 +186,11 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
         SCH_SELECTION&      selection = selTool->RequestSelection();
         SCH_SHEET_LIST      selectedSheets;
 
+        for( SCH_SYMBOL* symbol : getInferredSymbols( selection ) )
+            clearSymbolAnnotation( symbol, screen, &currentSheet, false );
+
         for( EDA_ITEM* item : selection.Items() )
         {
-            if( item->Type() == SCH_SYMBOL_T )
-                clearSymbolAnnotation( item, screen, &currentSheet, false );
-
             if( item->Type() == SCH_SHEET_T && aRecursive )
             {
                 SCH_SHEET_PATH subSheetPath = currentSheet;
@@ -173,52 +219,6 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
 
     // Must go after OnModify() so the connectivity graph has been updated
     UpdateNetHighlightStatus();
-}
-
-
-std::unordered_set<SCH_SYMBOL*> getInferredSymbols( const SCH_SELECTION& aSelection )
-{
-    std::unordered_set<SCH_SYMBOL*> symbols;
-
-    for( EDA_ITEM* item : aSelection )
-    {
-        switch( item->Type() )
-        {
-        case SCH_FIELD_T:
-        {
-            SCH_FIELD*  field = static_cast<SCH_FIELD*>( item );
-
-            if( field->GetId() == FIELD_T::REFERENCE && field->GetParent()->Type() == SCH_SYMBOL_T )
-                symbols.insert( static_cast<SCH_SYMBOL*>( field->GetParent() ) );
-
-            break;
-        }
-
-        case SCH_SYMBOL_T:
-            symbols.insert( static_cast<SCH_SYMBOL*>( item ) );
-            break;
-
-        case SCH_GROUP_T:
-        {
-            SCH_GROUP* group = static_cast<SCH_GROUP*>( item );
-
-            group->RunOnChildren(
-                    [&symbols]( SCH_ITEM* aChild )
-                    {
-                        if( aChild->Type() == SCH_SYMBOL_T )
-                            symbols.insert( static_cast<SCH_SYMBOL*>( aChild ) );
-                    },
-                    RECURSE_MODE::RECURSE );
-
-            break;
-        }
-
-        default:
-            break;
-        }
-    }
-
-    return symbols;
 }
 
 
