@@ -280,9 +280,9 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, LEGACY_SYMBO
     SetName( aName );
     SetParent( aParent );
     SetLib( aLibrary );
-    cacheSearchTerms();
-    cachePinCount();
     cacheShownDescription();
+    cachePinCount();
+    cacheSearchTerms();
     cacheChooserFields();
 }
 
@@ -1802,8 +1802,8 @@ void LIB_SYMBOL::RefreshLibraryTreeCaches()
 {
     // cacheSearchTerms() reads the shown-description cache, so refresh it first.
     cacheShownDescription();
-    cacheSearchTerms();
     cachePinCount();
+    cacheSearchTerms();
     cacheChooserFields();
 }
 
@@ -1836,9 +1836,9 @@ void LIB_SYMBOL::SetFields( const std::vector<SCH_FIELD>& aFieldsList )
     }
 
     m_drawings.sort();
+    cacheShownDescription();
     cacheSearchTerms();
     cacheChooserFields();
-    cacheShownDescription();
 }
 
 
