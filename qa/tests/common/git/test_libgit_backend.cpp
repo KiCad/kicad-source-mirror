@@ -494,13 +494,7 @@ BOOST_AUTO_TEST_CASE( GetDifferentFiles_DifferentTreeAmendKeepsAheadFile )
 }
 
 
-/**
- * Regression for the original issue #24332 surface: pull on a fresh repo where
- * Add Version Control wired up `origin` but never set per-branch upstream
- * tracking used to fail with "Could not lookup commit" because FETCH_HEAD has
- * no merge-marked entry.  The fallback in PerformPull resolves the implicit
- * target via refs/remotes/origin/\<branch\> and persists the upstream config.
- */
+// origin without per-branch tracking leaves FETCH_HEAD unmarked, which used to fail (#24332).
 BOOST_AUTO_TEST_CASE( PerformPull_NoUpstreamConfig_FallbackSucceedsAndWritesUpstream )
 {
     BOOST_TEST_REQUIRE( ready() );
@@ -718,6 +712,623 @@ BOOST_AUTO_TEST_CASE( Push_ReportsErrorWhenRemoteRefusesTheUpdate )
 #endif
 
 
+// Left mid-rebase, every later commit is refused until it is finished from the command line.
+BOOST_AUTO_TEST_CASE( PerformPull_RebaseConflictLeavesRepositoryAsItWas )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    {
+        git_repository* remote = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_open( &remote, remotePath().ToUTF8().data() ), GIT_OK );
+
+        git_oid remoteHead;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &remoteHead, remote, "refs/heads/master" ), GIT_OK );
+
+        git_oid ahead = createDetachedCommit( remote, remoteHead, wxT( "file.txt" ), "remote\n", "Remote change" );
+
+        git_reference* ref = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_create( &ref, remote, "refs/heads/master", &ahead, 1, nullptr ), GIT_OK );
+        git_reference_free( ref );
+        git_repository_free( remote );
+    }
+
+    git_oid localHead = createCommit( repo, wxT( "file.txt" ), wxT( "local\n" ), wxT( "Local change" ) );
+
+    addOrigin( repo );
+    setUpstreamConfig( repo, wxT( "master" ) );
+
+    {
+        git_config* cfg = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_config( &cfg, repo ), GIT_OK );
+        git_config_set_bool( cfg, "pull.rebase", 1 );
+        git_config_free( cfg );
+    }
+
+    KIGIT_COMMON     common( repo );
+    GIT_PULL_HANDLER handler( &common );
+
+    PullResult result = handler.PerformPull();
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PullResult::Conflict ) );
+    BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_NONE );
+
+    git_oid headNow;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headNow, repo, "HEAD" ), GIT_OK );
+    BOOST_CHECK( git_oid_equal( &headNow, &localHead ) );
+
+    wxTextFile file( repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" ) );
+    BOOST_REQUIRE( file.Open() );
+    BOOST_CHECK_EQUAL( file.GetFirstLine(), wxString( "local" ) );
+
+    git_repository_free( repo );
+}
+
+
+// The fast-forward must follow branch.<name>.merge, not a remote branch of the same name.
+BOOST_AUTO_TEST_CASE( PerformPull_FastForwardFollowsConfiguredUpstreamBranch )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_oid ahead;
+
+    {
+        git_repository* remote = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_open( &remote, remotePath().ToUTF8().data() ), GIT_OK );
+
+        // The remote's branch is called main, while the local one stays master.
+        git_reference* masterRef = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_lookup( &masterRef, remote, "refs/heads/master" ), GIT_OK );
+
+        git_reference* mainRef = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_rename( &mainRef, masterRef, "refs/heads/main", 0, nullptr ), GIT_OK );
+        git_reference_free( masterRef );
+        BOOST_REQUIRE_EQUAL( git_repository_set_head( remote, "refs/heads/main" ), GIT_OK );
+
+        git_oid remoteHead = *git_reference_target( mainRef );
+        git_reference_free( mainRef );
+
+        ahead = createDetachedCommit( remote, remoteHead, wxT( "theirs.txt" ), "theirs\n", "Remote commit" );
+
+        git_reference* ref = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_create( &ref, remote, "refs/heads/main", &ahead, 1, nullptr ), GIT_OK );
+        git_reference_free( ref );
+        git_repository_free( remote );
+    }
+
+    addOrigin( repo );
+
+    {
+        git_config* cfg = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_config( &cfg, repo ), GIT_OK );
+        git_config_set_string( cfg, "branch.master.remote", "origin" );
+        git_config_set_string( cfg, "branch.master.merge", "refs/heads/main" );
+        git_config_free( cfg );
+    }
+
+    KIGIT_COMMON     common( repo );
+    GIT_PULL_HANDLER handler( &common );
+
+    PullResult result = handler.PerformPull();
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PullResult::FastForward ) );
+
+    git_oid headNow;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headNow, repo, "HEAD" ), GIT_OK );
+    BOOST_CHECK( git_oid_equal( &headNow, &ahead ) );
+
+    git_repository_free( repo );
+}
+
+
+// Lock contention is not a pull failure, and the user must be told what actually happened.
+// Files are written before the branch moves, so a branch that cannot move must not leave the
+// tree holding a commit HEAD does not point at.
+BOOST_AUTO_TEST_CASE( PerformPull_FastForwardRollsBackWhenBranchCannotMove )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_oid before;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &before, repo, "HEAD" ), GIT_OK );
+
+    wxString trackedPath = repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" );
+    wxString contentBefore;
+    {
+        wxFFile f( trackedPath, wxT( "rb" ) );
+        f.ReadAll( &contentBefore );
+    }
+
+    git_oid ahead;
+    {
+        git_repository* remote = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_open( &remote, remotePath().ToUTF8().data() ), GIT_OK );
+
+        git_oid remoteHead;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &remoteHead, remote, "refs/heads/master" ), GIT_OK );
+
+        ahead = createDetachedCommit( remote, remoteHead, wxT( "file.txt" ), "changed by remote\n", "Remote edit" );
+
+        git_reference* ref = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_create( &ref, remote, "refs/heads/master", &ahead, 1, nullptr ), GIT_OK );
+        git_reference_free( ref );
+        git_repository_free( remote );
+    }
+
+    addOrigin( repo );
+
+    // Sits outside the paths the pull touches. Rolling back must leave it exactly as it is.
+    wxString bystanderPath = repoPath() + wxFileName::GetPathSeparator() + wxT( "bystander.txt" );
+    {
+        wxFFile bystander( bystanderPath, wxT( "wb" ) );
+        BOOST_TEST_REQUIRE( bystander.IsOpened() );
+        bystander.Write( wxT( "written by something else\n" ) );
+    }
+
+    // A real reference lock, so the update fails after the checkout, with no production seam.
+    wxString refLock = repoPath() + wxFileName::GetPathSeparator() + wxT( ".git" ) + wxFileName::GetPathSeparator()
+                       + wxT( "refs" ) + wxFileName::GetPathSeparator() + wxT( "heads" )
+                       + wxFileName::GetPathSeparator() + wxT( "master.lock" );
+    {
+        wxFFile lock( refLock, wxT( "wb" ) );
+        BOOST_TEST_REQUIRE( lock.IsOpened() );
+        lock.Write( wxT( "locked\n" ) );
+    }
+
+    KIGIT_COMMON     common( repo );
+    GIT_PULL_HANDLER handler( &common );
+
+    PullResult result = handler.PerformPull();
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PullResult::Error ) );
+
+    wxRemoveFile( refLock );
+    git_repository_free( repo );
+
+    // Reopen so nothing is answered from a cached index or reference.
+    git_repository* fresh = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_open( &fresh, repoPath().ToUTF8().data() ), GIT_OK );
+
+    git_oid headAfter;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headAfter, fresh, "HEAD" ), GIT_OK );
+    BOOST_CHECK_MESSAGE( git_oid_equal( &headAfter, &before ), "HEAD must not have moved" );
+
+    wxString contentAfter;
+    {
+        wxFFile f( trackedPath, wxT( "rb" ) );
+        f.ReadAll( &contentAfter );
+    }
+
+    BOOST_CHECK_MESSAGE( contentAfter == contentBefore, "the working file must be back at the commit HEAD points at" );
+
+    // A tree left at the incoming commit would show up here as an uncommitted change.
+    git_status_options opts;
+    git_status_init_options( &opts, GIT_STATUS_OPTIONS_VERSION );
+    opts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+
+    git_status_list* list = nullptr;
+    BOOST_REQUIRE_EQUAL( git_status_list_new( &list, fresh, &opts ), GIT_OK );
+    size_t dirty = git_status_list_entrycount( list );
+    git_status_list_free( list );
+
+    BOOST_CHECK_MESSAGE( dirty == 0, "the rollback must leave no phantom local changes" );
+
+    // Only the paths the pull wrote. Widening it would delete files it never touched.
+    BOOST_CHECK_MESSAGE( wxFileName::FileExists( bystanderPath ),
+                         "the rollback must not remove a file outside the paths the pull wrote" );
+
+    git_repository_free( fresh );
+}
+
+
+// The unborn path, where the branch creation is what has to be undone.
+// An untracked directory where the incoming commit wants a file blocks the checkout, and the
+// rollback must not take the directory with it.
+BOOST_AUTO_TEST_CASE( PerformPull_RollbackKeepsAnUntrackedDirectoryItCannotIdentify )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    // The remote adds a file called "notes".
+    {
+        git_repository* remote = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_open( &remote, remotePath().ToUTF8().data() ), GIT_OK );
+
+        git_oid remoteHead;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &remoteHead, remote, "refs/heads/master" ), GIT_OK );
+
+        git_oid ahead = createDetachedCommit( remote, remoteHead, wxT( "notes" ), "from the remote\n", "Add notes" );
+
+        git_reference* ref = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_create( &ref, remote, "refs/heads/master", &ahead, 1, nullptr ), GIT_OK );
+        git_reference_free( ref );
+        git_repository_free( remote );
+    }
+
+    addOrigin( repo );
+
+    // An untracked directory does not make the tree dirty, and the collision check names the
+    // file inside it, so the pull reaches the checkout.
+    wxString notesDir = repoPath() + wxFileName::GetPathSeparator() + wxT( "notes" );
+    BOOST_REQUIRE( wxFileName::Mkdir( notesDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    wxString keptFile = notesDir + wxFileName::GetPathSeparator() + wxT( "keep.txt" );
+    {
+        wxFFile f( keptFile, wxT( "wb" ) );
+        BOOST_TEST_REQUIRE( f.IsOpened() );
+        f.Write( wxT( "the only copy\n" ) );
+    }
+
+    KIGIT_COMMON     common( repo );
+    GIT_PULL_HANDLER handler( &common );
+
+    PullResult result = handler.PerformPull();
+
+    BOOST_CHECK_MESSAGE( result != PullResult::Success, "the checkout cannot succeed over a directory" );
+
+    git_repository_free( repo );
+
+    BOOST_CHECK_MESSAGE( wxFileName::DirExists( notesDir ),
+                         "the rollback must not remove an untracked directory it did not write" );
+    BOOST_REQUIRE_MESSAGE( wxFileName::FileExists( keptFile ), "the file inside it must survive" );
+
+    wxString after;
+    {
+        wxFFile f( keptFile, wxT( "rb" ) );
+        f.ReadAll( &after );
+    }
+
+    BOOST_CHECK_EQUAL( after.ToStdString(), std::string( "the only copy\n" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( PerformPull_AdoptRemoteHistoryLeavesUnbornBranchOnFailedCheckout )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    wxString emptyDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "unborn_rollback" );
+    wxFileName::Mkdir( emptyDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+    git_repository* fresh = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_init( &fresh, emptyDir.ToUTF8().data(), 0 ), GIT_OK );
+
+    {
+        git_remote* remote = nullptr;
+        BOOST_REQUIRE_EQUAL( git_remote_create( &remote, fresh, "origin", remotePath().ToUTF8().data() ), GIT_OK );
+        git_remote_free( remote );
+    }
+
+    // The checkout refuses, which this path must survive without leaving a branch behind.
+    wxString collide = emptyDir + wxFileName::GetPathSeparator() + wxT( "file.txt" );
+    {
+        wxFFile f( collide, wxT( "wb" ) );
+        f.Write( wxT( "mine\n" ) );
+    }
+
+    KIGIT_COMMON     common( fresh );
+    GIT_PULL_HANDLER handler( &common );
+
+    PullResult result = handler.PerformPull();
+
+    BOOST_CHECK_MESSAGE( result != PullResult::Success && result != PullResult::FastForward,
+                         "a colliding untracked file must not be overwritten" );
+
+    git_repository_free( fresh );
+
+    git_repository* reopened = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_open( &reopened, emptyDir.ToUTF8().data() ), GIT_OK );
+
+    BOOST_CHECK_MESSAGE( git_repository_head_unborn( reopened ) == 1,
+                         "the branch must still be unborn after a refused checkout" );
+
+    wxString kept;
+    {
+        wxFFile f( collide, wxT( "rb" ) );
+        f.ReadAll( &kept );
+    }
+
+    BOOST_CHECK_EQUAL( kept.ToStdString(), std::string( "mine\n" ) );
+
+    git_repository_free( reopened );
+
+    if( wxFileName::DirExists( emptyDir ) )
+        wxFileName::Rmdir( emptyDir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+BOOST_AUTO_TEST_CASE( PerformPull_ExplainsWhenActionLockHeld )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    addOrigin( repo );
+
+    KIGIT_COMMON     common( repo );
+    GIT_PULL_HANDLER handler( &common );
+
+    std::unique_lock<std::mutex> held = common.LockAction();
+
+    PullResult result = std::async( std::launch::async,
+                                    [&handler]()
+                                    {
+                                        return handler.PerformPull();
+                                    } )
+                                .get();
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PullResult::Error ) );
+    BOOST_CHECK( !handler.GetErrorStrings().empty() );
+
+    held.unlock();
+    git_repository_free( repo );
+}
+
+
+// The user has to be told which file, since the checklist may not even show it.
+BOOST_AUTO_TEST_CASE( PerformPull_NamesUntrackedFileBlockingFastForward )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    {
+        git_repository* remote = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_open( &remote, remotePath().ToUTF8().data() ), GIT_OK );
+
+        git_oid remoteHead;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &remoteHead, remote, "refs/heads/master" ), GIT_OK );
+
+        git_oid ahead = createDetachedCommit( remote, remoteHead, wxT( "theirs.txt" ), "theirs\n", "Remote adds" );
+
+        git_reference* ref = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_create( &ref, remote, "refs/heads/master", &ahead, 1, nullptr ), GIT_OK );
+        git_reference_free( ref );
+        git_repository_free( remote );
+    }
+
+    wxString collidingPath = repoPath() + wxFileName::GetPathSeparator() + wxT( "theirs.txt" );
+    {
+        std::ofstream f( collidingPath.ToStdString() );
+        f << "mine, never committed\n";
+    }
+
+    addOrigin( repo );
+    setUpstreamConfig( repo, wxT( "master" ) );
+
+    git_oid headBefore;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headBefore, repo, "HEAD" ), GIT_OK );
+
+    KIGIT_COMMON     common( repo );
+    GIT_PULL_HANDLER handler( &common );
+
+    PullResult result = handler.PerformPull();
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PullResult::DirtyWorkdir ) );
+    BOOST_CHECK( handler.PeekErrorString().Contains( wxT( "theirs.txt" ) ) );
+
+    git_oid headAfter;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headAfter, repo, "HEAD" ), GIT_OK );
+    BOOST_CHECK( git_oid_equal( &headBefore, &headAfter ) );
+
+    wxTextFile file( collidingPath );
+    BOOST_REQUIRE( file.Open() );
+    BOOST_CHECK_EQUAL( file.GetFirstLine(), wxString( "mine, never committed" ) );
+
+    git_repository_free( repo );
+}
+
+
+// The same collision when the branches have diverged, which takes the merge path.
+BOOST_AUTO_TEST_CASE( PerformPull_NamesUntrackedFileBlockingMerge )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    {
+        git_repository* remote = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_open( &remote, remotePath().ToUTF8().data() ), GIT_OK );
+
+        git_oid remoteHead;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &remoteHead, remote, "refs/heads/master" ), GIT_OK );
+
+        git_oid ahead = createDetachedCommit( remote, remoteHead, wxT( "theirs.txt" ), "theirs\n", "Remote adds" );
+
+        git_reference* ref = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_create( &ref, remote, "refs/heads/master", &ahead, 1, nullptr ), GIT_OK );
+        git_reference_free( ref );
+        git_repository_free( remote );
+    }
+
+    git_oid localHead = createCommit( repo, wxT( "other.txt" ), wxT( "local\n" ), wxT( "Local change" ) );
+
+    wxString collidingPath = repoPath() + wxFileName::GetPathSeparator() + wxT( "theirs.txt" );
+    {
+        std::ofstream f( collidingPath.ToStdString() );
+        f << "mine, never committed\n";
+    }
+
+    addOrigin( repo );
+    setUpstreamConfig( repo, wxT( "master" ) );
+
+    KIGIT_COMMON     common( repo );
+    GIT_PULL_HANDLER handler( &common );
+
+    PullResult result = handler.PerformPull();
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PullResult::DirtyWorkdir ) );
+    BOOST_CHECK( handler.PeekErrorString().Contains( wxT( "theirs.txt" ) ) );
+    BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_NONE );
+
+    git_oid headAfter;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headAfter, repo, "HEAD" ), GIT_OK );
+    BOOST_CHECK( git_oid_equal( &localHead, &headAfter ) );
+
+    git_repository_free( repo );
+}
+
+
+// With no commit of its own to merge from, getting changes adopts the remote history.
+BOOST_AUTO_TEST_CASE( PerformPull_UnbornBranchAdoptsRemoteHistory )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    wxString freshPath = tempBase() + wxFileName::GetPathSeparator() + wxT( "fresh" );
+
+    git_repository*             repo = nullptr;
+    git_repository_init_options initOpts;
+    git_repository_init_options_init( &initOpts, GIT_REPOSITORY_INIT_OPTIONS_VERSION );
+    initOpts.flags = GIT_REPOSITORY_INIT_MKPATH;
+    initOpts.initial_head = "master";
+    BOOST_REQUIRE_EQUAL( git_repository_init_ext( &repo, freshPath.ToUTF8().data(), &initOpts ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_repository_head_unborn( repo ), 1 );
+
+    addOrigin( repo );
+
+    KIGIT_COMMON     common( repo );
+    GIT_PULL_HANDLER handler( &common );
+
+    PullResult result = handler.PerformPull();
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PullResult::FastForward ) );
+    BOOST_CHECK_EQUAL( git_repository_head_unborn( repo ), 0 );
+    BOOST_CHECK_EQUAL( git_repository_head_detached( repo ), 0 );
+    BOOST_CHECK( wxFileName::FileExists( freshPath + wxFileName::GetPathSeparator() + wxT( "file.txt" ) ) );
+
+    git_repository_free( repo );
+}
+
+
+// A rebase pull with nothing to resolve must simply replay the local commit on the remote.
+BOOST_AUTO_TEST_CASE( PerformPull_RebaseWithoutConflictSucceeds )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_oid remoteTip;
+
+    {
+        git_repository* remote = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_open( &remote, remotePath().ToUTF8().data() ), GIT_OK );
+
+        git_oid remoteHead;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &remoteHead, remote, "refs/heads/master" ), GIT_OK );
+
+        remoteTip = createDetachedCommit( remote, remoteHead, wxT( "theirs.txt" ), "theirs\n", "Remote adds" );
+
+        git_reference* ref = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_create( &ref, remote, "refs/heads/master", &remoteTip, 1, nullptr ),
+                             GIT_OK );
+        git_reference_free( ref );
+        git_repository_free( remote );
+    }
+
+    createCommit( repo, wxT( "other.txt" ), wxT( "local\n" ), wxT( "Local change" ) );
+
+    addOrigin( repo );
+    setUpstreamConfig( repo, wxT( "master" ) );
+
+    {
+        git_config* cfg = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_config( &cfg, repo ), GIT_OK );
+        git_config_set_bool( cfg, "pull.rebase", 1 );
+        git_config_free( cfg );
+    }
+
+    KIGIT_COMMON     common( repo );
+    GIT_PULL_HANDLER handler( &common );
+
+    PullResult result = handler.PerformPull();
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PullResult::Success ) );
+    BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_NONE );
+
+    // The local commit now sits on top of the remote one.
+    git_oid headNow;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headNow, repo, "HEAD" ), GIT_OK );
+
+    git_commit* headCommit = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &headCommit, repo, &headNow ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_commit_parentcount( headCommit ), 1u );
+    BOOST_CHECK( git_oid_equal( git_commit_parent_id( headCommit, 0 ), &remoteTip ) );
+    git_commit_free( headCommit );
+
+    BOOST_CHECK( wxFileName::FileExists( repoPath() + wxFileName::GetPathSeparator() + wxT( "theirs.txt" ) ) );
+    BOOST_CHECK( wxFileName::FileExists( repoPath() + wxFileName::GetPathSeparator() + wxT( "other.txt" ) ) );
+
+    git_repository_free( repo );
+}
+
+
+// A fast-forward over a locally modified file must refuse, not move the branch past a change
+// it could not apply. Otherwise the local edit reads as reverting the remote change.
+BOOST_AUTO_TEST_CASE( PerformPull_FastForwardRefusesOverDirtyTrackedFile )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    {
+        git_repository* remote = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_open( &remote, remotePath().ToUTF8().data() ), GIT_OK );
+
+        git_oid remoteHead;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &remoteHead, remote, "refs/heads/master" ), GIT_OK );
+
+        git_oid ahead = createDetachedCommit( remote, remoteHead, wxT( "file.txt" ), "remote\n", "Remote change" );
+
+        git_reference* ref = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_create( &ref, remote, "refs/heads/master", &ahead, 1, nullptr ), GIT_OK );
+        git_reference_free( ref );
+        git_repository_free( remote );
+    }
+
+    wxString filePath = repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" );
+    {
+        std::ofstream f( filePath.ToStdString() );
+        f << "local edit\n";
+    }
+
+    addOrigin( repo );
+    setUpstreamConfig( repo, wxT( "master" ) );
+
+    git_oid headBefore;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headBefore, repo, "HEAD" ), GIT_OK );
+
+    KIGIT_COMMON     common( repo );
+    GIT_PULL_HANDLER handler( &common );
+
+    PullResult result = handler.PerformPull();
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PullResult::DirtyWorkdir ) );
+
+    git_oid headAfter;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headAfter, repo, "HEAD" ), GIT_OK );
+    BOOST_CHECK( git_oid_equal( &headBefore, &headAfter ) );
+
+    wxTextFile file( filePath );
+    BOOST_REQUIRE( file.Open() );
+    BOOST_CHECK_EQUAL( file.GetFirstLine(), wxString( "local edit" ) );
+
+    git_repository_free( repo );
+}
+
+
 // Rebuilding the index from HEAD would drop the conflict stages before libgit2's unmerged-index
 // guard could see them, recording the markers as resolved content.
 BOOST_AUTO_TEST_CASE( Commit_RefusesConflictedRepository )
@@ -854,6 +1465,70 @@ BOOST_AUTO_TEST_CASE( BusyOperationDoesNotConsumeAnotherCancellation )
 
     BOOST_CHECK_MESSAGE( pushC.CancelToken() != tokenA, "a later operation must not inherit the retired token" );
     BOOST_CHECK_MESSAGE( !pushC.IsThisOperationCancelled(), "a later operation must start uncancelled" );
+
+    git_repository_free( repo );
+}
+
+
+// Cancel pressed while the task is still queued must stop it before any network work.
+BOOST_AUTO_TEST_CASE( CancelRequestedWhileQueuedAbortsTransfer )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    createCommit( repo, wxT( "file.txt" ), wxT( "second\n" ), wxT( "Second commit" ) );
+    addOrigin( repo );
+
+    KIGIT_COMMON common( repo );
+
+    // What the panel does: make the token, then cancel it before the worker starts.
+    KIGIT_COMMON::CANCEL_TOKEN token = KIGIT_COMMON::NewCancelToken();
+    token->store( true );
+
+    GIT_PULL_HANDLER pullHandler( &common );
+    pullHandler.SetCancelToken( token );
+
+    BOOST_CHECK( !pullHandler.PerformFetch() );
+    BOOST_CHECK( pullHandler.IsThisOperationCancelled() );
+
+    GIT_PUSH_HANDLER pushHandler( &common );
+    pushHandler.SetCancelToken( token );
+
+    BOOST_CHECK( pushHandler.PerformPush() != PushResult::Success );
+
+    // The session was never shutting down, so it must not look like it afterwards.
+    BOOST_CHECK( !common.IsShuttingDown() );
+
+    git_repository_free( repo );
+}
+
+
+// The session-wide shutdown flag reaches an operation that starts after it was raised.
+BOOST_AUTO_TEST_CASE( ShutdownRequestAbortsAnOperationThatStartsAfterIt )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    createCommit( repo, wxT( "file.txt" ), wxT( "second\n" ), wxT( "Second commit" ) );
+    addOrigin( repo );
+
+    KIGIT_COMMON common( repo );
+
+    common.SetShuttingDown( true );
+
+    GIT_PULL_HANDLER pullHandler( &common );
+    BOOST_CHECK( !pullHandler.PerformFetch() );
+    BOOST_CHECK( common.IsShuttingDown() );
+
+    GIT_PUSH_HANDLER pushHandler( &common );
+    PushResult       result = pushHandler.PerformPush();
+
+    BOOST_CHECK( result != PushResult::Success );
+    BOOST_CHECK( common.IsShuttingDown() );
 
     git_repository_free( repo );
 }

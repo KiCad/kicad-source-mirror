@@ -56,9 +56,3 @@ const std::vector<std::pair<std::string, std::vector<CommitDetails>>>&GIT_PULL_H
 {
     return m_fetchResults;
 }
-
-
-void GIT_PULL_HANDLER::UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage )
-{
-    ReportProgress( aCurrent, aTotal, aMessage );
-}

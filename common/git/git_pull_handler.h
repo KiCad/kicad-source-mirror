@@ -68,9 +68,6 @@ public:
 
     const std::vector<std::pair<std::string, std::vector<CommitDetails>>>& GetFetchResults() const;
 
-    // Implementation for progress updates
-    void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
-
 private:
     std::vector<std::pair<std::string, std::vector<CommitDetails>>> m_fetchResults;
 };

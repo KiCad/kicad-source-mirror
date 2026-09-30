@@ -43,6 +43,7 @@
 #include <iterator>
 #include <map>
 #include <memory>
+#include <optional>
 #include <set>
 #include <string>
 #include <time.h>
@@ -1495,13 +1496,24 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
         return false;
     }
 
-    std::unique_lock<std::mutex> lock( aHandler->GetCommon()->m_gitActionMutex, std::try_to_lock );
+    // A pull already holds the lock when it fetches, and relocking from the owner is undefined.
+    std::unique_lock<std::mutex> lock;
 
-    if( !aSkipLock && !lock.owns_lock() )
+    if( !aSkipLock )
     {
-        wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Could not lock mutex" );
-        return false;
+        lock = std::unique_lock<std::mutex>( aHandler->GetCommon()->m_gitActionMutex, std::try_to_lock );
+
+        if( !lock.owns_lock() )
+        {
+            wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Could not lock mutex" );
+            aHandler->AddErrorString( _( "Another git operation is in progress." ) );
+            return false;
+        }
     }
+
+    // A close while this waited in the queue frees the repository, so check it under the lock.
+    if( !aHandler->GetRepo() )
+        return false;
 
     wxString    remoteName = aHandler->GetCommon()->GetRemoteNameOrDefault();
     std::string remoteNameUtf8 = remoteName.utf8_string();
@@ -1530,6 +1542,16 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     // Do not SetShuttingDown( false ) here. A close or a preference change can raise the flag
     // after this fetch starts, and clearing it would strand the caller on the transfer.
 
+    // A nested fetch must not republish or retire the pull's token while the pull still runs.
+    std::optional<KIGIT_COMMON::OPERATION_GUARD> operation;
+
+    if( !aSkipLock )
+        operation.emplace( aHandler->GetCommon(), aHandler->CancelToken() );
+
+    // Cancelled while this task was still queued, so it must not start network work.
+    if( aHandler->IsThisOperationCancelled() )
+        return false;
+
     aHandler->TestedTypes() = 0;
     aHandler->ResetNextKey();
 
@@ -1537,9 +1559,8 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     {
         wxString errorMsg = KIGIT_COMMON::GetLastGitError();
         wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to connect to remote: %s", errorMsg );
-        aHandler->AddErrorString( wxString::Format( _( "Could not connect to remote '%s': %s" ),
-                                                    remoteName,
-                                                    errorMsg ) );
+        aHandler->AddErrorString(
+                wxString::Format( _( "Could not connect to remote '%s': %s" ), remoteName, errorMsg ) );
         return false;
     }
 
@@ -1551,14 +1572,88 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     {
         wxString errorMsg = KIGIT_COMMON::GetLastGitError();
         wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Failed to fetch from remote: %s", errorMsg );
-        aHandler->AddErrorString( wxString::Format( _( "Could not fetch data from remote '%s': %s" ),
-                                                    remoteName,
-                                                    errorMsg ) );
+        aHandler->AddErrorString(
+                wxString::Format( _( "Could not fetch data from remote '%s': %s" ), remoteName, errorMsg ) );
         return false;
     }
 
     wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformFetch() - Fetch completed successfully" );
     return true;
+}
+
+
+static bool rollbackWorkingTree( git_repository* aRepo, git_commit* aHeadCommit, git_tree* aWrittenTree );
+static bool restorePathsFromCommit( git_repository* aRepo, git_commit* aCommit,
+                                    const std::vector<std::string>& aPaths );
+
+
+// A failed checkout leaves the cached index ahead of disk, which reads as phantom staged changes.
+static void refreshCachedIndex( git_repository* aRepo )
+{
+    git_index* index = nullptr;
+
+    if( git_repository_index( &index, aRepo ) == GIT_OK )
+    {
+        KIGIT::GitIndexPtr indexPtr( index );
+        git_index_read( index, 1 );
+    }
+}
+
+
+enum class TREE_STATE
+{
+    CLEAN,
+    DIRTY,
+    UNKNOWN
+};
+
+
+// After a failed operation under the action lock, this is the set that operation disturbed.
+static std::vector<std::string> changedPaths( git_repository* aRepo )
+{
+    std::vector<std::string> paths;
+
+    git_status_options statusOpts;
+    git_status_init_options( &statusOpts, GIT_STATUS_OPTIONS_VERSION );
+    statusOpts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+
+    git_status_list* statusList = nullptr;
+
+    if( git_status_list_new( &statusList, aRepo, &statusOpts ) != GIT_OK )
+        return paths;
+
+    KIGIT::GitStatusListPtr statusListPtr( statusList );
+
+    for( size_t ii = 0; ii < git_status_list_entrycount( statusList ); ii++ )
+    {
+        const git_status_entry* entry = git_status_byindex( statusList, ii );
+
+        if( entry->head_to_index && entry->head_to_index->new_file.path )
+            paths.emplace_back( entry->head_to_index->new_file.path );
+        else if( entry->index_to_workdir && entry->index_to_workdir->new_file.path )
+            paths.emplace_back( entry->index_to_workdir->new_file.path );
+    }
+
+    return paths;
+}
+
+
+// Tracked files only. Callers read CLEAN as permission to roll back over the tree, so an
+// unreadable status gets its own answer rather than passing as clean.
+static TREE_STATE trackedTreeState( git_repository* aRepo )
+{
+    git_status_options statusOpts;
+    git_status_init_options( &statusOpts, GIT_STATUS_OPTIONS_VERSION );
+    statusOpts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+
+    git_status_list* statusList = nullptr;
+
+    if( git_status_list_new( &statusList, aRepo, &statusOpts ) != GIT_OK )
+        return TREE_STATE::UNKNOWN;
+
+    KIGIT::GitStatusListPtr statusListPtr( statusList );
+
+    return git_status_list_entrycount( statusList ) > 0 ? TREE_STATE::DIRTY : TREE_STATE::CLEAN;
 }
 
 
@@ -1614,6 +1709,105 @@ static wxString describeUntrackedCollisions( const std::vector<wxString>& aPaths
 }
 
 
+// A local repository pointed at a remote with history has nothing to merge from, so adopt it.
+static PullResult adoptRemoteHistory( GIT_PULL_HANDLER* aHandler, const git_oid& aRemoteOid )
+{
+    git_repository* repo = aHandler->GetRepo();
+    git_reference*  symbolic = nullptr;
+    std::string     branchRefName;
+
+    if( git_reference_lookup( &symbolic, repo, "HEAD" ) == GIT_OK )
+    {
+        KIGIT::GitReferencePtr symbolicPtr( symbolic );
+
+        if( const char* target = git_reference_symbolic_target( symbolic ) )
+            branchRefName = target;
+    }
+
+    if( branchRefName.empty() )
+    {
+        aHandler->AddErrorString( _( "Could not get repository head" ) );
+        return PullResult::Error;
+    }
+
+    git_commit* commit = nullptr;
+
+    if( git_commit_lookup( &commit, repo, &aRemoteOid ) != GIT_OK )
+    {
+        aHandler->AddErrorString( _( "Could not look up target commit" ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitCommitPtr commitPtr( commit );
+    git_tree*           tree = nullptr;
+
+    if( git_commit_tree( &tree, commit ) != GIT_OK )
+    {
+        aHandler->AddErrorString( _( "Could not get tree from target commit" ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitTreePtr     treePtr( tree );
+    std::vector<wxString> collisions;
+
+    if( !untrackedFilesOverwrittenBy( repo, tree, collisions ) )
+    {
+        aHandler->AddErrorString( _( "Could not read the status of the project files, so getting changes was "
+                                     "stopped. Files that were never committed could have been overwritten." ) );
+        return PullResult::Error;
+    }
+
+    if( !collisions.empty() )
+    {
+        aHandler->AddErrorString( describeUntrackedCollisions( collisions ) );
+        return PullResult::DirtyWorkdir;
+    }
+
+    // The reference goes first, because deleting one just created restores the unborn state,
+    // while a checkout against no previous commit has nothing to undo from.
+    git_reference* branchRef = nullptr;
+
+    if( git_reference_create( &branchRef, repo, branchRefName.c_str(), &aRemoteOid, 0, "pull: adopt remote history" )
+        != GIT_OK )
+    {
+        aHandler->AddErrorString( wxString::Format( _( "Failed to update reference '%s' to point to '%s'" ),
+                                                    wxString::FromUTF8( branchRefName ),
+                                                    git_oid_tostr_s( &aRemoteOid ) ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitReferencePtr branchRefPtr( branchRef );
+
+    git_checkout_options checkoutOpts = GIT_CHECKOUT_OPTIONS_INIT;
+    checkoutOpts.checkout_strategy = GIT_CHECKOUT_SAFE | GIT_CHECKOUT_RECREATE_MISSING;
+
+    if( git_checkout_tree( repo, reinterpret_cast<git_object*>( tree ), &checkoutOpts ) != GIT_OK )
+    {
+        wxString gitError = KIGIT_COMMON::GetLastGitError();
+        bool     restored = git_reference_delete( branchRef ) == GIT_OK;
+
+        refreshCachedIndex( repo );
+
+        aHandler->AddErrorString(
+                restored ? wxString::Format( _( "Could not check out the remote branch, so nothing was "
+                                                "changed: %s" ),
+                                             gitError )
+                         : wxString::Format( _( "Could not check out the remote branch, and the project may "
+                                                "be partly changed: %s" ),
+                                             gitError ) );
+        return PullResult::Error;
+    }
+
+    wxString shorthand = wxString::FromUTF8( branchRefName );
+    shorthand.StartsWith( wxS( "refs/heads/" ), &shorthand );
+
+    wxString upstream = wxString::Format( "%s/%s", aHandler->GetCommon()->GetRemoteNameOrDefault(), shorthand );
+    git_branch_set_upstream( branchRef, upstream.utf8_string().c_str() );
+
+    return PullResult::FastForward;
+}
+
+
 PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
 {
     PullResult result = PullResult::Success;
@@ -1622,8 +1816,19 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
     if( !lock.owns_lock() )
     {
         wxLogTrace( traceGit, "GIT_PULL_HANDLER::PerformPull() - Could not lock mutex" );
+        aHandler->AddErrorString( _( "Another git operation is in progress." ) );
         return PullResult::Error;
     }
+
+    // A close while this waited in the queue frees the repository, so check it under the lock.
+    if( !aHandler->GetRepo() )
+        return PullResult::Error;
+
+    // The pull owns cancellation for the whole operation, the fetch inside it included.
+    KIGIT_COMMON::OPERATION_GUARD operation( aHandler->GetCommon(), aHandler->CancelToken() );
+
+    if( aHandler->IsThisOperationCancelled() )
+        return PullResult::Error;
 
     if( !PerformFetch( aHandler, true ) )
         return PullResult::Error;
@@ -1646,25 +1851,40 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
 #endif
     {
         git_reference* head_ref = nullptr;
+        wxString       branch_shorthand;
 
         if( git_repository_head( &head_ref, aHandler->GetRepo() ) == GIT_OK )
         {
-            KIGIT::GitReferencePtr headRefPtr( head_ref );
-
             if( git_reference_is_branch( head_ref ) )
-            {
-                const char* branch_shorthand = git_reference_shorthand( head_ref );
-                wxString    remoteName = aHandler->GetCommon()->GetRemoteNameOrDefault();
-                wxString    remoteRefName = wxString::Format( "refs/remotes/%s/%s",
-                                                              remoteName,
-                                                              branch_shorthand );
+                branch_shorthand = wxString::FromUTF8( git_reference_shorthand( head_ref ) );
+        }
+        else if( git_repository_head_unborn( aHandler->GetRepo() ) == 1 )
+        {
+            // No commit yet, so HEAD is only a branch name and the first pull adopts its remote.
+            git_reference* symbolic = nullptr;
 
-                if( git_reference_name_to_id( &pull_merge_oid, aHandler->GetRepo(),
-                                              remoteRefName.utf8_string().c_str() ) == GIT_OK )
-                {
-                    wxString upstream = wxString::Format( "%s/%s", remoteName, branch_shorthand );
-                    git_branch_set_upstream( head_ref, upstream.utf8_string().c_str() );
-                }
+            if( git_reference_lookup( &symbolic, aHandler->GetRepo(), "HEAD" ) == GIT_OK )
+            {
+                KIGIT::GitReferencePtr symbolicPtr( symbolic );
+
+                if( const char* target = git_reference_symbolic_target( symbolic ) )
+                    wxString::FromUTF8( target ).StartsWith( wxS( "refs/heads/" ), &branch_shorthand );
+            }
+        }
+
+        KIGIT::GitReferencePtr headRefPtr( head_ref );
+
+        if( !branch_shorthand.IsEmpty() )
+        {
+            wxString remoteName = aHandler->GetCommon()->GetRemoteNameOrDefault();
+            wxString remoteRefName = wxString::Format( "refs/remotes/%s/%s", remoteName, branch_shorthand );
+
+            if( git_reference_name_to_id( &pull_merge_oid, aHandler->GetRepo(), remoteRefName.utf8_string().c_str() )
+                        == GIT_OK
+                && head_ref )
+            {
+                wxString upstream = wxString::Format( "%s/%s", remoteName, branch_shorthand );
+                git_branch_set_upstream( head_ref, upstream.utf8_string().c_str() );
             }
         }
     }
@@ -1700,10 +1920,7 @@ PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
     }
 
     if( merge_analysis & GIT_MERGE_ANALYSIS_UNBORN )
-    {
-        aHandler->AddErrorString( _( "Invalid HEAD.  Cannot merge." ) );
-        return PullResult::MergeFailed;
-    }
+        return adoptRemoteHistory( aHandler, pull_merge_oid );
 
     if( merge_analysis & GIT_MERGE_ANALYSIS_UP_TO_DATE )
     {
@@ -1767,7 +1984,21 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
     const char* currentBranchName = git_reference_name( rawRef );
     const char* branch_shorthand = git_reference_shorthand( rawRef );
     wxString remote_name = aHandler->GetRemotename();
-    wxString remoteBranchName = wxString::Format( "refs/remotes/%s/%s", remote_name, branch_shorthand );
+    wxString    remoteBranchName;
+
+    // The analysis followed branch.<name>.merge, so move to that branch. Without a configured
+    // upstream, the remote branch of the same name stands in.
+    git_reference* upstreamRef = nullptr;
+
+    if( git_branch_upstream( &upstreamRef, rawRef ) == GIT_OK )
+    {
+        KIGIT::GitReferencePtr upstreamPtr( upstreamRef );
+        remoteBranchName = wxString::FromUTF8( git_reference_name( upstreamRef ) );
+    }
+    else
+    {
+        remoteBranchName = wxString::Format( "refs/remotes/%s/%s", remote_name, branch_shorthand );
+    }
 
     if( git_reference_name_to_id( &updatedRefOid, aHandler->GetRepo(), remoteBranchName.c_str() ) != GIT_OK )
     {
@@ -1790,12 +2021,44 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
 
     if( git_commit_tree( &targetTree, targetCommit ) != GIT_OK )
     {
-        git_commit_free( targetCommit );
         aHandler->AddErrorString( _( "Could not get tree from target commit" ) );
         return PullResult::Error;
     }
 
     KIGIT::GitTreePtr targetTreePtr( targetTree );
+
+    // A skipped file would leave the local edit reading as a reversal of the remote change.
+    TREE_STATE treeState = trackedTreeState( aHandler->GetRepo() );
+
+    if( treeState == TREE_STATE::UNKNOWN )
+    {
+        aHandler->AddErrorString( wxString::Format( _( "Could not read the status of the project files, so "
+                                                       "getting changes was stopped: %s" ),
+                                                    KIGIT_COMMON::GetLastGitError() ) );
+        return PullResult::Error;
+    }
+
+    if( treeState == TREE_STATE::DIRTY )
+    {
+        aHandler->AddErrorString( _( "There are changes that are not committed yet, and getting changes would "
+                                     "run over them. Commit them first." ) );
+        return PullResult::DirtyWorkdir;
+    }
+
+    std::vector<wxString> collisions;
+
+    if( !untrackedFilesOverwrittenBy( aHandler->GetRepo(), targetTree, collisions ) )
+    {
+        aHandler->AddErrorString( _( "Could not read the status of the project files, so getting changes was "
+                                     "stopped. Files that were never committed could have been overwritten." ) );
+        return PullResult::Error;
+    }
+
+    if( !collisions.empty() )
+    {
+        aHandler->AddErrorString( describeUntrackedCollisions( collisions ) );
+        return PullResult::DirtyWorkdir;
+    }
 
     git_checkout_options checkoutOptions;
     git_checkout_init_options( &checkoutOptions, GIT_CHECKOUT_OPTIONS_VERSION );
@@ -1827,14 +2090,35 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
                 return 0;
             };
 
-    checkoutOptions.checkout_strategy = GIT_CHECKOUT_SAFE | GIT_CHECKOUT_ALLOW_CONFLICTS;
+    checkoutOptions.checkout_strategy = GIT_CHECKOUT_SAFE;
     checkoutOptions.notify_flags = GIT_CHECKOUT_NOTIFY_ALL;
     checkoutOptions.notify_cb = notify_cb;
+
+    // Where the branch is now, so the files can go back if it cannot be moved to match them.
+    git_commit* previousCommit = nullptr;
+
+    if( git_reference_peel( (git_object**) &previousCommit, rawRef, GIT_OBJECT_COMMIT ) != GIT_OK )
+    {
+        aHandler->AddErrorString( _( "Could not read the current commit." ) );
+        return PullResult::Error;
+    }
+
+    KIGIT::GitCommitPtr previousCommitPtr( previousCommit );
 
     if( git_checkout_tree( aHandler->GetRepo(), reinterpret_cast<git_object*>( targetTree ),
                            &checkoutOptions ) != GIT_OK )
     {
-        aHandler->AddErrorString( _( "Failed to perform checkout operation." ) );
+        wxString gitError = KIGIT_COMMON::GetLastGitError();
+        bool     restored = rollbackWorkingTree( aHandler->GetRepo(), previousCommit, targetTree );
+
+        refreshCachedIndex( aHandler->GetRepo() );
+
+        aHandler->AddErrorString( restored ? wxString::Format( _( "Could not update the project files, so "
+                                                                  "nothing was changed: %s" ),
+                                                               gitError )
+                                           : wxString::Format( _( "Could not update the project files, and "
+                                                                  "they may be partly changed: %s" ),
+                                                               gitError ) );
         return PullResult::Error;
     }
 
@@ -1842,8 +2126,19 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
 
     if( git_reference_set_target( &updatedRef, rawRef, &updatedRefOid, nullptr ) != GIT_OK )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Failed to update reference '%s' to point to '%s'" ),
-                                                    currentBranchName, git_oid_tostr_s( &updatedRefOid ) ) );
+        // Left here, git reads them as local changes undoing the incoming commit.
+        wxString gitError = KIGIT_COMMON::GetLastGitError();
+        bool     restored = rollbackWorkingTree( aHandler->GetRepo(), previousCommit, targetTree );
+
+        refreshCachedIndex( aHandler->GetRepo() );
+
+        aHandler->AddErrorString( restored ? wxString::Format( _( "Could not move the branch, so nothing was "
+                                                                  "changed: %s" ),
+                                                               gitError )
+                                           : wxString::Format( _( "Could not move the branch, and the project "
+                                                                  "files may be left at the incoming version "
+                                                                  "while the branch is not: %s" ),
+                                                               gitError ) );
         return PullResult::Error;
     }
 
@@ -1851,8 +2146,9 @@ PullResult LIBGIT_BACKEND::handleFastForward( GIT_PULL_HANDLER* aHandler )
 
     if( git_repository_state_cleanup( aHandler->GetRepo() ) != GIT_OK )
     {
-        aHandler->AddErrorString( _( "Failed to clean up repository state after fast-forward." ) );
-        return PullResult::Error;
+        // Branch and files already match, so this is leftover merge state, not a failed pull.
+        wxLogTrace( traceGit, "handleFastForward: state cleanup failed after a completed fast-forward: %s",
+                    KIGIT_COMMON::GetLastGitError() );
     }
 
     git_revwalk* revWalker = nullptr;
@@ -2418,6 +2714,169 @@ int LIBGIT_BACKEND::CreateBranch( git_repository* aRepo, const wxString& aBranch
 
     git_reference_free( branchRef );
     return 0;
+}
+
+
+// Just these paths. Everything else is left alone, so a rollback cannot reach an untouched file.
+static bool restorePathsFromCommit( git_repository* aRepo, git_commit* aCommit, const std::vector<std::string>& aPaths )
+{
+    if( aPaths.empty() )
+        return true;
+
+    git_tree* tree = nullptr;
+
+    if( git_commit_tree( &tree, aCommit ) != GIT_OK )
+        return false;
+
+    KIGIT::GitTreePtr  treePtr( tree );
+    std::vector<char*> pathSpec;
+
+    // git_strarray wants mutable pointers, though checkout only reads them.
+    for( const std::string& path : aPaths )
+        pathSpec.push_back( const_cast<char*>( path.c_str() ) );
+
+    git_checkout_options checkoutOpts;
+    git_checkout_init_options( &checkoutOpts, GIT_CHECKOUT_OPTIONS_VERSION );
+    checkoutOpts.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_REMOVE_UNTRACKED;
+    checkoutOpts.paths.strings = pathSpec.data();
+    checkoutOpts.paths.count = pathSpec.size();
+
+    return git_checkout_tree( aRepo, reinterpret_cast<git_object*>( tree ), &checkoutOpts ) == GIT_OK;
+}
+
+
+// Whether aPath in aTree holds exactly what is on disk at aOnDisk.
+static bool treeHolds( git_tree* aTree, const char* aPath, const git_oid& aOnDisk )
+{
+    git_tree_entry* entry = nullptr;
+
+    if( git_tree_entry_bypath( &entry, aTree, aPath ) != GIT_OK )
+        return false;
+
+    KIGIT::GitTreeEntryPtr entryPtr( entry );
+
+    return git_oid_equal( &aOnDisk, git_tree_entry_id( entry ) );
+}
+
+
+// Safe when nothing is there, or the file still holds what was written or what is being restored.
+static bool safeToRestore( git_repository* aRepo, const char* aPath, git_tree* aPreviousTree, git_tree* aWrittenTree )
+{
+    const char* workdir = git_repository_workdir( aRepo );
+
+    if( !workdir )
+        return false;
+
+    // Nothing there is the state a restore is meant to repair, so there is nothing to lose.
+    if( !wxFileName::Exists( wxString::FromUTF8( workdir ) + wxString::FromUTF8( aPath ) ) )
+        return true;
+
+    git_oid onDisk;
+
+    // Not readable as a file, such as a directory of untracked work, so it cannot be shown ours.
+    if( git_repository_hashfile( &onDisk, aRepo, aPath, GIT_OBJECT_BLOB, nullptr ) != GIT_OK )
+        return false;
+
+    return treeHolds( aWrittenTree, aPath, onDisk ) || treeHolds( aPreviousTree, aPath, onDisk );
+}
+
+
+// Only the paths the operation wrote, and only while they still hold what it wrote, so an edit
+// made meanwhile is kept. False when anything had to be left behind.
+static bool rollbackWorkingTree( git_repository* aRepo, git_commit* aHeadCommit, git_tree* aWrittenTree )
+{
+    git_tree* previousTree = nullptr;
+
+    if( git_commit_tree( &previousTree, aHeadCommit ) != GIT_OK )
+        return false;
+
+    KIGIT::GitTreePtr previousTreePtr( previousTree );
+
+    git_diff* diff = nullptr;
+
+    if( git_diff_tree_to_tree( &diff, aRepo, previousTree, aWrittenTree, nullptr ) != GIT_OK )
+        return false;
+
+    KIGIT::GitDiffPtr diffPtr( diff );
+
+    std::set<std::string> touched;
+
+    for( size_t ii = 0; ii < git_diff_num_deltas( diff ); ii++ )
+    {
+        const git_diff_delta* delta = git_diff_get_delta( diff, ii );
+
+        // A rename reports two paths, and both need putting back.
+        for( const char* path : { delta->old_file.path, delta->new_file.path } )
+        {
+            if( path )
+                touched.emplace( path );
+        }
+    }
+
+    std::vector<std::string> restorable;
+    bool                     leftBehind = false;
+
+    for( const std::string& path : touched )
+    {
+        if( safeToRestore( aRepo, path.c_str(), previousTree, aWrittenTree ) )
+            restorable.push_back( path );
+        else
+            leftBehind = true;
+    }
+
+    if( restorable.empty() )
+        return !leftBehind;
+
+    return restorePathsFromCommit( aRepo, aHeadCommit, restorable ) && !leftBehind;
+}
+
+
+// So each operation can word the same underlying failure its own way.
+enum class PUBLISH_RESULT
+{
+    PUBLISHED,
+    CHECKOUT_FAILED_ROLLED_BACK,
+    CHECKOUT_FAILED_PARTIAL,
+    RECORD_FAILED_ROLLED_BACK,
+    RECORD_FAILED_PARTIAL
+};
+
+
+// Working tree first, branch last, so any failure leaves the branch and its history untouched.
+static PUBLISH_RESULT publishPreparedCommit( git_repository* aRepo, git_tree* aTree, const git_oid& aCommitOid,
+                                             git_reference* aHeadRef, git_commit* aRollbackCommit,
+                                             const char* aReflogLabel, wxString& aGitError )
+{
+    git_checkout_options checkoutOpts = GIT_CHECKOUT_OPTIONS_INIT;
+    checkoutOpts.checkout_strategy = GIT_CHECKOUT_FORCE;
+
+    if( git_checkout_tree( aRepo, reinterpret_cast<git_object*>( aTree ), &checkoutOpts ) != GIT_OK )
+    {
+        aGitError = KIGIT_COMMON::GetLastGitError();
+
+        bool rolledBack = rollbackWorkingTree( aRepo, aRollbackCommit, aTree );
+
+        refreshCachedIndex( aRepo );
+
+        return rolledBack ? PUBLISH_RESULT::CHECKOUT_FAILED_ROLLED_BACK : PUBLISH_RESULT::CHECKOUT_FAILED_PARTIAL;
+    }
+
+    git_reference* updatedRef = nullptr;
+
+    if( git_reference_set_target( &updatedRef, aHeadRef, &aCommitOid, aReflogLabel ) != GIT_OK )
+    {
+        aGitError = KIGIT_COMMON::GetLastGitError();
+
+        bool rolledBack = rollbackWorkingTree( aRepo, aRollbackCommit, aTree );
+
+        refreshCachedIndex( aRepo );
+
+        return rolledBack ? PUBLISH_RESULT::RECORD_FAILED_ROLLED_BACK : PUBLISH_RESULT::RECORD_FAILED_PARTIAL;
+    }
+
+    KIGIT::GitReferencePtr updatedRefPtr( updatedRef );
+
+    return PUBLISH_RESULT::PUBLISHED;
 }
 
 
