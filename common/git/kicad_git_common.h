@@ -149,6 +149,15 @@ public:
                             std::vector<KIGIT_CONFLICT_SIDES>& aConflicts, wxString& aError );
 
     /**
+     * Put the given working directory relative paths back to their committed state. A path
+     * that is not in HEAD keeps its file and loses its staged entry.
+     */
+    bool DiscardChanges( const std::vector<wxString>& aPaths, wxString& aError );
+
+    /// True when the working directory relative path exists in the HEAD commit's tree.
+    bool IsPathInHead( const wxString& aPath );
+
+    /**
      * Redo the merge with each conflicted path replaced by its resolved file, then commit and
      * check out. All or nothing.
      *

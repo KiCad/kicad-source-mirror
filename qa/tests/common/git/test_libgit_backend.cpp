@@ -1331,6 +1331,94 @@ BOOST_AUTO_TEST_CASE( PerformPull_FastForwardRefusesOverDirtyTrackedFile )
 }
 
 
+// Equivalent to git checkout HEAD with a path, so other changes and untracked files stay.
+BOOST_AUTO_TEST_CASE( DiscardChangesRestoresOnlyTheGivenPaths )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    createCommit( repo, wxT( "keep.txt" ), wxT( "keep\n" ), wxT( "Add keep" ) );
+    createCommit( repo, wxT( "gone.txt" ), wxT( "gone\n" ), wxT( "Add gone" ) );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    auto writeAll = []( const wxString& aPath, const std::string& aContent )
+    {
+        std::ofstream f( aPath.ToStdString(), std::ios::binary );
+        f << aContent;
+    };
+
+    auto readAll = []( const wxString& aPath )
+    {
+        std::ifstream in( aPath.ToStdString(), std::ios::binary );
+        return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    };
+
+    writeAll( workDir + wxT( "file.txt" ), "accidental\n" );
+    writeAll( workDir + wxT( "keep.txt" ), "still dirty\n" );
+    writeAll( workDir + wxT( "new.txt" ), "never committed\n" );
+    BOOST_TEST_REQUIRE( wxRemoveFile( workDir + wxT( "gone.txt" ) ) );
+
+    KIGIT_COMMON common( repo );
+
+    BOOST_CHECK( common.IsPathInHead( wxT( "file.txt" ) ) );
+    BOOST_CHECK( !common.IsPathInHead( wxT( "new.txt" ) ) );
+
+    wxString error;
+    BOOST_REQUIRE_MESSAGE( common.DiscardChanges( { wxT( "file.txt" ), wxT( "gone.txt" ) }, error ), error );
+
+    BOOST_CHECK_EQUAL( readAll( workDir + wxT( "file.txt" ) ), "initial\n" );
+    BOOST_CHECK_EQUAL( readAll( workDir + wxT( "gone.txt" ) ), "gone\n" );
+    BOOST_CHECK_EQUAL( readAll( workDir + wxT( "keep.txt" ) ), "still dirty\n" );
+    BOOST_CHECK_EQUAL( readAll( workDir + wxT( "new.txt" ) ), "never committed\n" );
+
+    git_repository_free( repo );
+}
+
+
+// libgit2 reads checkout paths as wildmatch patterns, so a name holding a glob character must
+// be matched literally or the wrong file is restored.
+BOOST_AUTO_TEST_CASE( DiscardChangesMatchesPathsLiterally )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    createCommit( repo, wxT( "board[1].txt" ), wxT( "committed\n" ), wxT( "Add bracketed" ) );
+    createCommit( repo, wxT( "board1.txt" ), wxT( "other committed\n" ), wxT( "Add plain" ) );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    auto writeAll = []( const wxString& aPath, const std::string& aContent )
+    {
+        std::ofstream f( aPath.ToStdString(), std::ios::binary );
+        f << aContent;
+    };
+
+    auto readAll = []( const wxString& aPath )
+    {
+        std::ifstream in( aPath.ToStdString(), std::ios::binary );
+        return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    };
+
+    writeAll( workDir + wxT( "board[1].txt" ), "edited\n" );
+    writeAll( workDir + wxT( "board1.txt" ), "edited too\n" );
+
+    KIGIT_COMMON common( repo );
+
+    wxString error;
+    BOOST_REQUIRE_MESSAGE( common.DiscardChanges( { wxT( "board[1].txt" ) }, error ), error );
+
+    BOOST_CHECK_EQUAL( readAll( workDir + wxT( "board[1].txt" ) ), "committed\n" );
+    BOOST_CHECK_EQUAL( readAll( workDir + wxT( "board1.txt" ) ), "edited too\n" );
+
+    git_repository_free( repo );
+}
+
+
 // Rebuilding the index from HEAD would drop the conflict stages before libgit2's unmerged-index
 // guard could see them, recording the markers as resolved content.
 BOOST_AUTO_TEST_CASE( Commit_RefusesConflictedRepository )
@@ -1411,6 +1499,39 @@ BOOST_AUTO_TEST_CASE( Commit_RefusesConflictedRepository )
     BOOST_CHECK( handler.PerformCommit( { wxT( "file.txt" ) }, wxT( "Oops" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL )
                  == CommitResult::Error );
     BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_MERGE );
+
+    git_repository_free( repo );
+}
+
+
+// A surviving staged entry would leave a phantom New row in the checklist.
+BOOST_AUTO_TEST_CASE( DiscardChangesDropsStagedEntryForNeverCommittedFile )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    {
+        std::ofstream f( ( workDir + wxT( "staged.txt" ) ).ToStdString(), std::ios::binary );
+        f << "staged outside\n";
+    }
+
+    git_index* index = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, "staged.txt" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
+    git_index_free( index );
+
+    BOOST_TEST_REQUIRE( wxRemoveFile( workDir + wxT( "staged.txt" ) ) );
+
+    KIGIT_COMMON common( repo );
+    wxString     error;
+
+    BOOST_REQUIRE_MESSAGE( common.DiscardChanges( { wxT( "staged.txt" ) }, error ), error );
+    BOOST_CHECK( !common.HasUncommittedTrackedChanges() );
 
     git_repository_free( repo );
 }

@@ -133,6 +133,10 @@ public:
     virtual bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                             bool aRemoveGitDir, wxString* aErrors ) = 0;
 
+    virtual bool DiscardChanges( git_repository* aRepo, const std::vector<wxString>& aPaths, wxString& aError ) = 0;
+
+    virtual bool IsPathInHead( git_repository* aRepo, const wxString& aPath ) = 0;
+
     virtual bool GetMergeConflicts( git_repository* aRepo, const wxString& aStageDir, wxString& aHeadOid,
                                     wxString& aTheirsOid, std::vector<KIGIT_CONFLICT_SIDES>& aConflicts,
                                     wxString& aError ) = 0;

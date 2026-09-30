@@ -83,6 +83,10 @@ public:
     bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                     bool aRemoveGitDir, wxString* aErrors ) override;
 
+    bool DiscardChanges( git_repository* aRepo, const std::vector<wxString>& aPaths, wxString& aError ) override;
+
+    bool IsPathInHead( git_repository* aRepo, const wxString& aPath ) override;
+
     bool GetMergeConflicts( git_repository* aRepo, const wxString& aStageDir, wxString& aHeadOid, wxString& aTheirsOid,
                             std::vector<KIGIT_CONFLICT_SIDES>& aConflicts, wxString& aError ) override;
 

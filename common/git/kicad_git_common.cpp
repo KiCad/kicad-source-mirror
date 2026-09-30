@@ -537,6 +537,17 @@ bool KIGIT_COMMON::HasLocalCommits() const
 }
 
 
+bool KIGIT_COMMON::DiscardChanges( const std::vector<wxString>& aPaths, wxString& aError )
+{
+    return GetGitBackend()->DiscardChanges( m_repo, aPaths, aError );
+}
+
+
+bool KIGIT_COMMON::IsPathInHead( const wxString& aPath )
+{
+    return GetGitBackend()->IsPathInHead( m_repo, aPath );
+}
+
 bool KIGIT_COMMON::GetMergeConflicts( const wxString& aStageDir, wxString& aHeadOid, wxString& aTheirsOid,
                                       std::vector<KIGIT_CONFLICT_SIDES>& aConflicts, wxString& aError )
 {

@@ -3020,6 +3020,110 @@ static PUBLISH_RESULT publishPreparedCommit( git_repository* aRepo, git_tree* aT
 }
 
 
+bool LIBGIT_BACKEND::DiscardChanges( git_repository* aRepo, const std::vector<wxString>& aPaths, wxString& aError )
+{
+    if( !aRepo )
+    {
+        aError = _( "The project has no git repository." );
+        return false;
+    }
+
+    if( aPaths.empty() )
+        return true;
+
+    std::vector<std::string> pathStorage;
+    std::vector<char*>       pathPtrs;
+    std::vector<wxString>    neverCommitted;
+
+    for( const wxString& path : aPaths )
+    {
+        if( IsPathInHead( aRepo, path ) )
+            pathStorage.push_back( path.utf8_string() );
+        else
+            neverCommitted.push_back( path );
+    }
+
+    // HEAD has nothing to restore for these, so discarding means dropping the staged entry.
+    if( !neverCommitted.empty() )
+    {
+        git_index* index = nullptr;
+
+        if( git_repository_index( &index, aRepo ) != GIT_OK )
+        {
+            aError = KIGIT_COMMON::GetLastGitError();
+            return false;
+        }
+
+        KIGIT::GitIndexPtr indexPtr( index );
+
+        for( const wxString& path : neverCommitted )
+            git_index_remove_bypath( index, path.utf8_string().c_str() );
+
+        if( git_index_write( index ) != GIT_OK )
+        {
+            aError = KIGIT_COMMON::GetLastGitError();
+            return false;
+        }
+    }
+
+    if( pathStorage.empty() )
+        return true;
+
+    for( std::string& path : pathStorage )
+        pathPtrs.push_back( path.data() );
+
+    git_checkout_options opts;
+    git_checkout_init_options( &opts, GIT_CHECKOUT_OPTIONS_VERSION );
+
+    // Without DISABLE_PATHSPEC_MATCH these are wildmatch patterns, so a file name holding a
+    // glob character would discard its neighbours too.
+    opts.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_DISABLE_PATHSPEC_MATCH;
+    opts.paths.strings = pathPtrs.data();
+    opts.paths.count = pathPtrs.size();
+
+    if( git_checkout_head( aRepo, &opts ) != GIT_OK )
+    {
+        aError = KIGIT_COMMON::GetLastGitError();
+        return false;
+    }
+
+    return true;
+}
+
+
+bool LIBGIT_BACKEND::IsPathInHead( git_repository* aRepo, const wxString& aPath )
+{
+    if( !aRepo )
+        return false;
+
+    git_oid headOid;
+
+    if( git_reference_name_to_id( &headOid, aRepo, "HEAD" ) != GIT_OK )
+        return false;
+
+    git_commit* headCommit = nullptr;
+
+    if( git_commit_lookup( &headCommit, aRepo, &headOid ) != GIT_OK )
+        return false;
+
+    KIGIT::GitCommitPtr headCommitPtr( headCommit );
+    git_tree*           headTree = nullptr;
+
+    if( git_commit_tree( &headTree, headCommit ) != GIT_OK )
+        return false;
+
+    KIGIT::GitTreePtr headTreePtr( headTree );
+    git_tree_entry*   entry = nullptr;
+
+    if( git_tree_entry_bypath( &entry, headTree, aPath.utf8_string().c_str() ) != GIT_OK )
+        return false;
+
+    KIGIT::GitTreeEntryPtr entryPtr( entry );
+
+    return true;
+}
+
+
 bool LIBGIT_BACKEND::GetMergeConflicts( git_repository* aRepo, const wxString& aStageDir, wxString& aHeadOid,
                                         wxString& aTheirsOid, std::vector<KIGIT_CONFLICT_SIDES>& aConflicts,
                                         wxString& aError )
