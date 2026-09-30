@@ -703,10 +703,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
     case MAIL_RELOAD_LIB:
     {
         if( m_designBlocksPane && m_designBlocksPane->IsShown() )
-        {
             m_designBlocksPane->RefreshLibs();
-            SyncView();
-        }
 
         // Show any symbol library load errors in the status bar
         if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
