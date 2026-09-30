@@ -778,31 +778,32 @@ void CONNECTION_GRAPH::ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem )
 {
     wxCHECK2( aOldItem->Type() == aNewItem->Type(), return );
 
-    auto exchange = [&]( SCH_ITEM* aOld, SCH_ITEM* aNew )
-    {
-        auto it = m_item_to_subgraph_map.find( aOld );
-
-        if( it == m_item_to_subgraph_map.end() )
-            return;
-
-        std::vector<CONNECTION_SUBGRAPH*> sgs = std::move( it->second );
-
-        for( CONNECTION_SUBGRAPH* sg : sgs )
-            sg->ExchangeItem( aOld, aNew );
-
-        m_item_to_subgraph_map.erase( it );
-        m_item_to_subgraph_map.emplace( aNew, std::move( sgs ) );
-        aNew->registerConnectivityOwner( m_lifetime );
-
-        for( auto it2 = m_items.begin(); it2 != m_items.end(); ++it2 )
-        {
-            if( *it2 == aOld )
+    auto exchange =
+            [&]( SCH_ITEM* aOld, SCH_ITEM* aNew )
             {
-                *it2 = aNew;
-                break;
-            }
-        }
-    };
+                auto it = m_item_to_subgraph_map.find( aOld );
+
+                if( it == m_item_to_subgraph_map.end() )
+                    return;
+
+                std::vector<CONNECTION_SUBGRAPH*> sgs = std::move( it->second );
+
+                for( CONNECTION_SUBGRAPH* sg : sgs )
+                    sg->ExchangeItem( aOld, aNew );
+
+                m_item_to_subgraph_map.erase( it );
+                m_item_to_subgraph_map.emplace( aNew, std::move( sgs ) );
+                aNew->registerConnectivityOwner( m_lifetime );
+
+                for( SCH_ITEM* item : m_items )
+                {
+                    if( item == aOld )
+                    {
+                        item = aNew;
+                        break;
+                    }
+                }
+            };
 
     exchange( aOldItem, aNewItem );
 
@@ -816,9 +817,7 @@ void CONNECTION_GRAPH::ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem )
         wxCHECK2( oldPins.size() == newPins.size(), return );
 
         for( size_t ii = 0; ii < oldPins.size(); ii++ )
-        {
             exchange( oldPins[ii], newPins[ii] );
-        }
     }
 }
 
@@ -890,8 +889,7 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
         {
             if( item->IsConnectable() && ( aUnconditional || item->IsConnectivityDirty() ) )
             {
-                wxLogTrace( ConnTrace, wxT( "Adding item %s to connectivity graph update" ),
-                            item->GetTypeDesc() );
+                wxLogTrace( ConnTrace, wxT( "Adding item %s to connectivity graph update" ), item->GetTypeDesc() );
                 items.push_back( item );
                 dirty_items.insert( item );
 
