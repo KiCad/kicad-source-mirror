@@ -381,25 +381,29 @@ int SYMBOL_EDITOR_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
     const wxString&    libName = target.GetLibNickname();
     wxString           msg;
 
-    if( libName.IsEmpty() )
+    // Allow creating a new symbol before choosing a library
+    if( !aEvent.IsAction( &SCH_ACTIONS::newSymbol ) )
     {
-        msg.Printf( _( "No symbol library selected." ) );
-        m_frame->ShowInfoBarError( msg );
-        return 0;
-    }
+        if( libName.IsEmpty() )
+        {
+            msg.Printf( _( "No symbol library selected." ) );
+            m_frame->ShowInfoBarError( msg );
+            return 0;
+        }
 
-    if( !editFrame->GetLibManager().LibraryExists( libName ) )
-    {
-        msg.Printf( _( "Symbol library '%s' not found." ), libName );
-        m_frame->ShowInfoBarError( msg );
-        return 0;
-    }
+        if( !editFrame->GetLibManager().LibraryExists( libName ) )
+        {
+            msg.Printf( _( "Symbol library '%s' not found." ), libName );
+            m_frame->ShowInfoBarError( msg );
+            return 0;
+        }
 
-    if( editFrame->GetLibManager().IsLibraryReadOnly( libName ) )
-    {
-        msg.Printf( _( "Symbol library '%s' is not writable." ), libName );
-        m_frame->ShowInfoBarError( msg );
-        return 0;
+        if( editFrame->GetLibManager().IsLibraryReadOnly( libName ) )
+        {
+            msg.Printf( _( "Symbol library '%s' is not writable." ), libName );
+            m_frame->ShowInfoBarError( msg );
+            return 0;
+        }
     }
 
     if( aEvent.IsAction( &SCH_ACTIONS::newSymbol ) )

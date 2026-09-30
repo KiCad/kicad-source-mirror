@@ -29,6 +29,8 @@
 #include <widgets/wx_infobar.h>
 #include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
+#include <symbol_editor/symbol_editor_tab_context.h>
+#include <widgets/editor_tabs_panel.h>
 #include <template_fieldnames.h>
 #include <wildcards_and_files_ext.h>
 #include <lib_symbol_library_manager.h>
@@ -84,6 +86,14 @@ bool SYMBOL_EDIT_FRAME::saveCurrentSymbol()
         else
         {
             const wxString& libName = GetCurSymbol()->GetLibId().GetLibNickname();
+
+            // A brand-new symbol has no library home yet, so its first save asks for one and
+            // promotes the unsaved tab to a library tab.
+            if( libName.IsEmpty() )
+            {
+                saveSymbolCopyAs( false );
+                return !GetScreen()->IsContentModified();
+            }
 
             if( m_libMgr->IsLibraryReadOnly( libName ) )
             {
@@ -293,18 +303,16 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
 
     wxString lib = getTargetLib();
 
-    if( !m_libMgr->LibraryExists( lib ) )
-    {
-        lib = SelectLibrary( _( "New Symbol" ), _( "Create symbol in library:" ) );
-
-        if( !m_libMgr->LibraryExists( lib ) )
-            return;
-    }
-
     wxArrayString symbolNamesInLib;
     wxArrayString derivedSymbols;
-    m_libMgr->GetSymbolNames( lib, symbolNamesInLib, SYMBOL_NAME_FILTER::ALL );
-    m_libMgr->GetSymbolNames( lib, derivedSymbols, SYMBOL_NAME_FILTER::DERIVED_ONLY );
+
+    // With no target library there are no names to list or style; querying would create a bogus
+    // empty library buffer keyed by an empty nickname.
+    if( !lib.empty() )
+    {
+        m_libMgr->GetSymbolNames( lib, symbolNamesInLib, SYMBOL_NAME_FILTER::ALL );
+        m_libMgr->GetSymbolNames( lib, derivedSymbols, SYMBOL_NAME_FILTER::DERIVED_ONLY );
+    }
 
     const auto validator =
             [&]( wxString newName ) -> bool
@@ -373,6 +381,22 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
     props.transferUserFields = dlg.GetTransferUserFields();
     props.keepContentUserFields = dlg.GetKeepContentUserFields();
 
+    if( lib.empty() )
+    {
+        // No library home yet: edit the new symbol in an unsaved tab and let the first save
+        // (which asks for a library) promote the tab.  With no target library there is no source
+        // for a parent symbol, so the dialog's inheritance combo is empty and the symbol is a root.
+        std::unique_ptr<LIB_SYMBOL> newSymbol = LIB_SYMBOL_LIBRARY_MANAGER::CreateSymbol( props, nullptr );
+
+        SCH_SCREEN* screen = new SCH_SCREEN();
+        CreateUnsavedSymbolTab( newSymbol.release(), screen );
+
+        GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+        UpdateMsgPanel();
+        OnModify();
+        return;
+    }
+
     m_libMgr->CreateNewSymbol( lib, props );
     SyncLibraries( false );
     LoadSymbol( props.name, lib, 1 );
@@ -383,25 +407,32 @@ void SYMBOL_EDIT_FRAME::Save()
 {
     wxString libName;
 
-    if( IsLibraryTreeShown() )
-        libName = GetTreeLIBID().GetUniStringLibNickname();
-
-    if( libName.empty() )
+    if( m_activeTab && m_activeTab->IsUnsaved() )
     {
         saveCurrentSymbol();
     }
-    else if( m_libMgr->IsLibraryReadOnly( libName ) )
-    {
-        wxString msg = wxString::Format( _( "Symbol library '%s' is not writable." ),
-                                         libName );
-        wxString msg2 = _( "You must save to a different location." );
-
-        if( OKOrCancelDialog( this, _( "Warning" ), msg, msg2 ) == wxID_OK )
-            saveLibrary( libName, SAVE_LIBRARY_AS::NEW );
-    }
     else
     {
-        saveLibrary( libName, SAVE_LIBRARY_AS::ORIGINAL );
+        if( IsLibraryTreeShown() )
+            libName = GetTreeLIBID().GetUniStringLibNickname();
+
+        if( libName.empty() )
+        {
+            saveCurrentSymbol();
+        }
+        else if( m_libMgr->IsLibraryReadOnly( libName ) )
+        {
+            wxString msg = wxString::Format( _( "Symbol library '%s' is not writable." ),
+                                             libName );
+            wxString msg2 = _( "You must save to a different location." );
+
+            if( OKOrCancelDialog( this, _( "Warning" ), msg, msg2 ) == wxID_OK )
+                saveLibrary( libName, SAVE_LIBRARY_AS::NEW );
+        }
+        else
+        {
+            saveLibrary( libName, SAVE_LIBRARY_AS::ORIGINAL );
+        }
     }
 
     if( IsLibraryTreeShown() )
@@ -857,6 +888,8 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
     if( !symbol )
         return;
 
+    const bool savingUnsavedTab = m_activeTab && m_activeTab->IsUnsaved() && symbol == m_symbol;
+
     LIB_ID   old_lib_id = symbol->GetLibId();
     wxString symbolName = old_lib_id.GetLibItemName();
     wxString libraryName = old_lib_id.GetLibNickname();
@@ -995,6 +1028,7 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
         switch( ret )
         {
         case wxID_CANCEL:
+            // A cancelled save leaves the unsaved tab dirty so the user is re-prompted later.
             return;
 
         case wxID_OK: // No conflicts
@@ -1023,6 +1057,22 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs( bool aOpenCopy )
     saver.DoSave( *symbol, params.m_SymbolName, params.m_LibraryName, params.m_FlattenSymbol );
 
     SyncLibraries( false );
+
+    if( savingUnsavedTab )
+    {
+        symbol->SetLibId( LIB_ID( params.m_LibraryName, params.m_SymbolName ) );
+
+        RenameSymbolTab( LIB_ID( wxEmptyString, symbolName ), LIB_ID( params.m_LibraryName, params.m_SymbolName ) );
+
+        GetScreen()->SetContentModified( false );
+
+        if( int idx = m_tabsPanel->FindTab( m_activeTab->GetTabKey() ); idx >= 0 )
+            m_tabsPanel->MarkModified( idx, false );
+    }
+    else
+    {
+        RenameSymbolTab( LIB_ID( libraryName, symbolName ), LIB_ID( params.m_LibraryName, params.m_SymbolName ) );
+    }
 
     if( aOpenCopy )
         LoadSymbol( params.m_SymbolName, params.m_LibraryName, 1 );

@@ -34,15 +34,42 @@ class SYMBOL_BUFFER;
 /**
  * One open symbol tab owning a working LIB_SYMBOL and screen lent to the frame while active.
  *
- * A tab is one of two kinds.  A library tab edits a buffered library symbol and is keyed by its
+ * A tab is one of three kinds.  A library tab edits a buffered library symbol and is keyed by its
  * library:name pair and persisted across sessions.  An instance tab edits a symbol pulled from a
  * placed schematic instance (Ctrl-E); it owns a transient working symbol with no library buffer, is
- * keyed by the source instance UUID, and is session-only so it is never persisted.
+ * keyed by the source instance UUID, and is session-only so it is never persisted.  An unsaved tab
+ * edits a brand-new symbol with no library home yet; it is keyed by a session id and is promoted to
+ * a library tab by the save that gives it an identity.
  */
 class SYMBOL_EDITOR_TAB_CONTEXT : public EDITOR_TAB_CONTEXT
 {
 public:
+    /**
+     * What the tab edits, which decides its key, its label and whether it is persisted.
+     */
+    enum class KIND
+    {
+        LIBRARY,            ///< A library symbol, keyed library:name and persisted across sessions
+        SCHEMATIC_INSTANCE, ///< A symbol pulled off a placed schematic symbol, session-only
+        UNSAVED             ///< A brand-new symbol with no library home yet, session-only
+    };
+
+
+    /**
+     * Construct a library tab over the buffer for aLibrary:aName.
+     *
+     * The context edits a private clone of the buffered symbol; the buffer keeps ownership of the
+     * original.  A fresh empty screen is created since symbol geometry lives in the LIB_SYMBOL.
+     */
     SYMBOL_EDITOR_TAB_CONTEXT( const wxString& aLib, const wxString& aName, SYMBOL_BUFFER* aBuffer );
+
+    /**
+     * Construct an unsaved tab over an already-built transient working symbol/screen.
+     *
+     * The context takes ownership of both objects, following the same frame-borrow contract as a
+     * library tab.  There is no library buffer; the symbol has no library identity yet.
+     */
+    SYMBOL_EDITOR_TAB_CONTEXT( LIB_SYMBOL* aSymbol, SCH_SCREEN* aScreen );
 
     /**
      * Construct an instance (schematic) tab over an already-built transient working symbol/screen.
@@ -75,33 +102,49 @@ public:
         return wxString( wxT( "\x01@sym:" ) ) + aSchematicSymbolUUID.AsString();
     }
 
+    /**
+     * De-duplication key for an unsaved new symbol
+     */
+    static wxString MakeUnsavedTabKey( const KIID& aSessionId )
+    {
+        return wxString( wxT( "\x01@unsaved:" ) ) + aSessionId.AsString();
+    }
+
     wxString GetTabKey() const override
     {
-        return m_fromSchematic ? MakeInstanceTabKey( m_schematicSymbolUUID )
-                               : MakeTabKey( m_lib, m_name );
+        switch( m_kind )
+        {
+        case KIND::SCHEMATIC_INSTANCE: return MakeInstanceTabKey( m_schematicSymbolUUID );
+        case KIND::UNSAVED:            return MakeUnsavedTabKey( m_sessionId );
+        default:                       return MakeTabKey( m_lib, m_name );
+        }
     }
 
     wxString GetDisplayName( bool aShortForm = false ) const override
     {
-        if( m_fromSchematic )
+        switch( m_kind )
         {
+        case KIND::SCHEMATIC_INSTANCE:
             if( aShortForm )
                 return m_reference;
             else
                 return m_reference + wxS( " " ) + _( "[from schematic]" );
-        }
-        else
-        {
+
+        case KIND::UNSAVED:
+            return _( "<unnamed>" );
+
+        default:
             return m_name;
         }
     }
 
     /**
-     * True for an instance (schematic) tab, which is session-only and never persisted.
+     * True for a tab that is session-only and not persisted.
      */
-    bool IsTransient() const { return m_fromSchematic; }
+    bool IsTransient() const { return m_kind != KIND::LIBRARY; }
 
-    bool        IsFromSchematic() const          { return m_fromSchematic; }
+    bool        IsFromSchematic() const          { return m_kind == KIND::SCHEMATIC_INSTANCE; }
+    bool        IsUnsaved() const                { return m_kind == KIND::UNSAVED; }
     const KIID& GetSchematicSymbolUUID() const   { return m_schematicSymbolUUID; }
     const wxString& GetReference() const         { return m_reference; }
 
@@ -113,6 +156,11 @@ public:
     const wxString& GetLibrary() const { return m_lib; }
     const wxString& GetName() const    { return m_name; }
     void            SetName( const wxString& aName ) { m_name = aName; }
+
+    /**
+     * Gives an unsaved new symbol a library identity
+     */
+    void PromoteToLibrary( const wxString& aLib, const wxString& aName );
 
     /**
      * Observe the working symbol/screen.  Valid whether active or detached.
@@ -161,14 +209,16 @@ private:
     int         m_unit;
     int         m_bodyStyle;
 
-    /// True for an instance tab edited in place from a placed schematic symbol.
-    bool        m_fromSchematic;
+    KIND        m_kind = KIND::LIBRARY;
 
     /// Source instance UUID, used as both the de-dup key and the save-back target.
     KIID        m_schematicSymbolUUID;
 
     /// Reference designator of the source instance, shown as the tab label.
     wxString    m_reference;
+
+    /// Identity of an unsaved new symbol, which has no library:name pair to key on.
+    KIID        m_sessionId;
 };
 
 #endif // SYMBOL_EDITOR_TAB_CONTEXT_H

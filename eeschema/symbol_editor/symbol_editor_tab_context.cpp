@@ -24,26 +24,15 @@
 #include <symbol_library_manager.h>
 
 
-SYMBOL_EDITOR_TAB_CONTEXT::SYMBOL_EDITOR_TAB_CONTEXT( const wxString& aLib, const wxString& aName,
-                                                      SYMBOL_BUFFER* aBuffer ) :
-        m_lib( aLib ),
-        m_name( aName ),
-        m_symbol( nullptr ),
-        m_screen( nullptr ),
+SYMBOL_EDITOR_TAB_CONTEXT::SYMBOL_EDITOR_TAB_CONTEXT( LIB_SYMBOL* aSymbol, SCH_SCREEN* aScreen ) :
+        m_symbol( aSymbol ),
+        m_screen( aScreen ),
         m_frameOwns( false ),
         m_unit( 1 ),
         m_bodyStyle( 1 ),
-        m_fromSchematic( false )
+        m_kind( KIND::UNSAVED ),
+        m_sessionId( aSymbol->m_Uuid )
 {
-    // Edit a private clone; the buffer's symbol stays owned by the libMgr.
-    if( aBuffer )
-        m_symbol = new LIB_SYMBOL( aBuffer->GetSymbol() );
-
-    // Symbol geometry lives in the LIB_SYMBOL, so a fresh empty screen is correct.
-    m_screen = new SCH_SCREEN();
-
-    if( aBuffer && aBuffer->IsModified() )
-        m_screen->SetContentModified();
 }
 
 
@@ -55,10 +44,42 @@ SYMBOL_EDITOR_TAB_CONTEXT::SYMBOL_EDITOR_TAB_CONTEXT( LIB_SYMBOL* aSymbol, SCH_S
         m_frameOwns( false ),
         m_unit( 1 ),
         m_bodyStyle( 1 ),
-        m_fromSchematic( true ),
+        m_kind( KIND::SCHEMATIC_INSTANCE ),
         m_schematicSymbolUUID( aSchematicSymbolUUID ),
         m_reference( aReference )
 {
+}
+
+
+void SYMBOL_EDITOR_TAB_CONTEXT::PromoteToLibrary( const wxString& aLib, const wxString& aName )
+{
+    wxCHECK( m_kind == KIND::UNSAVED, /* void */ );
+
+    m_kind = KIND::LIBRARY;
+    m_lib = aLib;
+    m_name = aName;
+}
+
+
+SYMBOL_EDITOR_TAB_CONTEXT::SYMBOL_EDITOR_TAB_CONTEXT( const wxString& aLib, const wxString& aName,
+                                                      SYMBOL_BUFFER* aBuffer ) :
+        m_lib( aLib ),
+        m_name( aName ),
+        m_symbol( nullptr ),
+        m_screen( nullptr ),
+        m_frameOwns( false ),
+        m_unit( 1 ),
+        m_bodyStyle( 1 )
+{
+    // Edit a private clone; the buffer's symbol stays owned by the libMgr.
+    if( aBuffer )
+        m_symbol = new LIB_SYMBOL( aBuffer->GetSymbol() );
+
+    // Symbol geometry lives in the LIB_SYMBOL, so a fresh empty screen is correct.
+    m_screen = new SCH_SCREEN();
+
+    if( aBuffer && aBuffer->IsModified() )
+        m_screen->SetContentModified();
 }
 
 

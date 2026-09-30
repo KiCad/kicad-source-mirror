@@ -644,6 +644,15 @@ private:
                                                               int aBodyStyle );
 
     /**
+     * Open a new tab over a transient working symbol and screen and make it active.
+     *
+     * For a brand-new symbol with no library identity yet: the tab reads as unnamed and is never
+     * de-duplicated against another tab; RenameSymbolTab() promotes it once a save names it.  The
+     * context takes ownership of both objects.
+     */
+    SYMBOL_EDITOR_TAB_CONTEXT* CreateUnsavedSymbolTab( LIB_SYMBOL* aSymbol, SCH_SCREEN* aScreen );
+
+    /**
      * Resolve the tab context for a panel tab index, or nullptr. The panel owns tab order, so the
      * index maps through the panel's key, not into m_tabContexts directly.
      */

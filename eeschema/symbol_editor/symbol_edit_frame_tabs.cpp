@@ -476,6 +476,22 @@ SYMBOL_EDIT_FRAME::findOrCreateSymbolInstanceTab( LIB_SYMBOL* aSymbol, SCH_SCREE
 }
 
 
+SYMBOL_EDITOR_TAB_CONTEXT* SYMBOL_EDIT_FRAME::CreateUnsavedSymbolTab( LIB_SYMBOL* aSymbol, SCH_SCREEN* aScreen )
+{
+    auto                       ctx = std::make_unique<SYMBOL_EDITOR_TAB_CONTEXT>( aSymbol, aScreen );
+    SYMBOL_EDITOR_TAB_CONTEXT* raw = ctx.get();
+
+    m_tabContexts.push_back( std::move( ctx ) );
+
+    if( m_tabsPanel )
+        m_tabsPanel->AddTab( raw->GetTabKey(), raw->GetDisplayName(), false );
+    else
+        activateSymbolTab( raw );
+
+    return raw;
+}
+
+
 bool SYMBOL_EDIT_FRAME::promptAndCloseSymbolTab( int aIdx )
 {
     SYMBOL_EDITOR_TAB_CONTEXT* ctx = symbolTabContextForIndex( aIdx );
@@ -667,15 +683,25 @@ void SYMBOL_EDIT_FRAME::RenameSymbolTab( const LIB_ID& aOldId, const LIB_ID& aNe
     if( !m_tabsPanel )
         return;
 
+    const wxString newLib = aNewId.GetLibNickname();
+    const wxString newName = aNewId.GetLibItemName();
+
+    if( m_activeTab && m_activeTab->IsUnsaved() && aOldId.GetLibNickname().empty() && !newLib.IsEmpty() )
+    {
+        const wxString unsavedKey = m_activeTab->GetTabKey();
+
+        m_activeTab->PromoteToLibrary( newLib, newName );
+        m_tabsPanel->RenameTab( unsavedKey, m_activeTab->GetTabKey(), m_activeTab->GetDisplayName() );
+
+        return;
+    }
+
     const wxString oldKey = SYMBOL_EDITOR_TAB_CONTEXT::MakeTabKey( aOldId.GetLibNickname(), aOldId.GetLibItemName() );
 
     if( SYMBOL_EDITOR_TAB_CONTEXT* ctx = symbolTabContextForKey( oldKey ) )
     {
-        const wxString newName = aNewId.GetLibItemName();
-        const wxString newKey = SYMBOL_EDITOR_TAB_CONTEXT::MakeTabKey( aNewId.GetLibNickname(), newName );
-
         ctx->SetName( newName );
-        m_tabsPanel->RenameTab( oldKey, newKey, newName );
+        m_tabsPanel->RenameTab( oldKey, SYMBOL_EDITOR_TAB_CONTEXT::MakeTabKey( newLib, newName ), newName );
     }
 }
 

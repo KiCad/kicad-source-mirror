@@ -850,6 +850,35 @@ bool SYMBOL_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     if( !promptToSaveInactiveInstanceTabs() )
         return false;
 
+    // A dirty unsaved tab has no library buffer for saveAllLibraries to prompt about, so ask here
+    if( m_activeTab && m_activeTab->IsUnsaved() && GetScreen()->IsContentModified() )
+    {
+        wxString msg = wxString::Format( _( "Save changes to '%s' before closing?" ),
+                                         m_activeTab->GetDisplayName( true ) );
+
+        KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxCANCEL | wxICON_WARNING );
+        dlg.SetYesNoCancelLabels( _( "Save" ), _( "Discard Changes" ), _( "Cancel" ) );
+
+        switch( dlg.ShowModal() )
+        {
+        case wxID_YES:
+            if( !saveCurrentSymbol() )
+            {
+                aEvent.Veto();
+                return false;
+            }
+
+            break;
+
+        case wxID_NO:
+            break;
+
+        default:
+            aEvent.Veto();
+            return false;
+        }
+    }
+
     if( !saveAllLibraries( true ) )
         return false;
 
@@ -1228,7 +1257,7 @@ void SYMBOL_EDIT_FRAME::OnModify()
 
     GetScreen()->SetContentModified();
 
-    if( !IsSymbolFromSchematic() )
+    if( !IsSymbolFromSchematic() && !( m_activeTab && m_activeTab->IsUnsaved() ) )
     {
         if( m_symbol && GetScreen()->IsContentModified() )
             m_libMgr->UpdateSymbol( m_symbol, m_symbol->GetLibNickname() ); // UpdateSymbol() makes a copy
