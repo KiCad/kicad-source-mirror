@@ -1097,7 +1097,7 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     LINE_STYLE lineStyle = GetStroke().GetLineStyle();
 
-    if( GetEffectiveLineStyle() != lineStyle )
+    if( ( IsWire() || IsBus() ) && GetEffectiveLineStyle() != lineStyle )
         aList.emplace_back( _( "Line Style" ), _( "from netclass" ) );
     else
         m_stroke.GetMsgPanelInfo( aFrame, aList, true, false );
