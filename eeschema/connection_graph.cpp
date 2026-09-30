@@ -593,21 +593,24 @@ void CONNECTION_SUBGRAPH::Absorb( CONNECTION_SUBGRAPH* aOther )
 
     m_absorbed_subgraphs.insert( aOther );
     m_absorbed_subgraphs.insert( aOther->m_absorbed_subgraphs.begin(),
-            aOther->m_absorbed_subgraphs.end() );
+                                 aOther->m_absorbed_subgraphs.end() );
 
     m_bus_neighbors.insert( aOther->m_bus_neighbors.begin(), aOther->m_bus_neighbors.end() );
     m_bus_parents.insert( aOther->m_bus_parents.begin(), aOther->m_bus_parents.end() );
 
+    if( !m_no_connect && aOther->m_no_connect )
+        m_no_connect = aOther->m_no_connect;
+
     m_multiple_drivers |= aOther->m_multiple_drivers;
 
     std::function<void( CONNECTION_SUBGRAPH* )> set_absorbed_by =
-            [ & ]( CONNECTION_SUBGRAPH *child )
-    {
-        child->m_absorbed_by = this;
+            [&]( CONNECTION_SUBGRAPH *child )
+            {
+                child->m_absorbed_by = this;
 
-        for( CONNECTION_SUBGRAPH* subchild : child->m_absorbed_subgraphs )
-            set_absorbed_by( subchild );
-    };
+                for( CONNECTION_SUBGRAPH* subchild : child->m_absorbed_subgraphs )
+                    set_absorbed_by( subchild );
+            };
 
     aOther->m_absorbed = true;
     aOther->m_dirty = false;
