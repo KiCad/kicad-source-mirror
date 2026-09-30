@@ -515,7 +515,7 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
     git_proxy_options proxyOpts;
     git_proxy_init_options( &proxyOpts, GIT_PROXY_OPTIONS_VERSION );
     proxyOpts.type = GIT_PROXY_AUTO;
-    common->SetCancelled( false );
+    common->SetShuttingDown( false );
 
     aHandler->TestedTypes() = 0;
     aHandler->ResetNextKey();
@@ -1091,7 +1091,7 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
     git_proxy_init_options( &proxyOpts, GIT_PROXY_OPTIONS_VERSION );
     proxyOpts.type = GIT_PROXY_AUTO;
 
-    // Do not SetCancelled( false ) here.  A close or a preference change can raise the flag
+    // Do not SetShuttingDown( false ) here. A close or a preference change can raise the flag
     // after this fetch starts, and clearing it would strand the caller on the transfer.
 
     aHandler->TestedTypes() = 0;

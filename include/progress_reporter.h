@@ -71,6 +71,14 @@ public:
     virtual void Report( const wxString& aMessage ) = 0;
 
     /**
+     * Ask for an indeterminate (pulsing) display, for work whose total is not known yet.
+     *
+     * Safe to call from a worker thread. Implementations record the request and apply it on
+     * the next UI refresh.
+     */
+    virtual void SetIndeterminate( bool aIndeterminate ) {}
+
+    /**
      * Set the progress value to aProgress (0..1).
      */
     virtual void SetCurrentProgress( double aProgress ) = 0;

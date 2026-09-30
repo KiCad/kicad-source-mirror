@@ -22,7 +22,9 @@
 class APIEXPORT KIGIT_REPO_MIXIN: public KIGIT_ERRORS, public GIT_PROGRESS
 {
 public:
-    KIGIT_REPO_MIXIN( KIGIT_COMMON* aCommon ) : m_common( aCommon )
+    KIGIT_REPO_MIXIN( KIGIT_COMMON* aCommon ) :
+            m_common( aCommon ),
+            m_cancelToken( KIGIT_COMMON::NewCancelToken() )
     {
         // Ensure m_common is initialized
         wxASSERT( aCommon != nullptr );
@@ -189,9 +191,31 @@ public:
      */
     std::atomic<unsigned>& TestedTypes() { return m_common->TestedTypes(); }
 
+    void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override
+    {
+        // The transfer callbacks poll this token and abort on their next tick.
+        if( !ReportProgress( aCurrent, aTotal, aMessage ) )
+            CancelThisOperation();
+    }
+
+    /// Callbacks read this token rather than the session, so one operation's cancel cannot
+    /// reach another. A pull passes its own token to the fetch nested inside it.
+    void SetCancelToken( const KIGIT_COMMON::CANCEL_TOKEN& aToken )
+    {
+        if( aToken )
+            m_cancelToken = aToken;
+    }
+
+    const KIGIT_COMMON::CANCEL_TOKEN& CancelToken() const { return m_cancelToken; }
+
+    bool IsThisOperationCancelled() const { return m_cancelToken->load(); }
+
+    void CancelThisOperation() { m_cancelToken->store( true ); }
+
 
 private:
-    KIGIT_COMMON* m_common;
+    KIGIT_COMMON*              m_common;
+    KIGIT_COMMON::CANCEL_TOKEN m_cancelToken;
 };
 
 

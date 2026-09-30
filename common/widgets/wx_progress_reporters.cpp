@@ -33,24 +33,22 @@ static wxString getPlaceholderText()
 }
 
 
-WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& aTitle,
-                                            int aNumPhases, int aCanAbort,
+WX_PROGRESS_REPORTER::WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& aTitle, int aNumPhases, int aCanAbort,
                                             bool aReserveSpaceForMessage ) :
         PROGRESS_REPORTER_BASE( aNumPhases ),
-        WX_PROGRESS_REPORTER_BASE( aTitle, aReserveSpaceForMessage
-                                           ? getPlaceholderText()
-                                           : wxString( wxEmptyString ),
+        WX_PROGRESS_REPORTER_BASE( aTitle, aReserveSpaceForMessage ? getPlaceholderText() : wxString( wxEmptyString ),
                                    1, aParent,
                                    // wxPD_APP_MODAL |   // Don't use; messes up OSX when called from
-                                                         // quasi-modal dialog
-                                   wxPD_AUTO_HIDE |      // *MUST* use; otherwise wxWidgets will spin
-                                                         // up another event loop on completion which
-                                                         // causes all sorts of grief
-                                   aCanAbort | wxPD_ELAPSED_TIME ),
+                                   // quasi-modal dialog
+                                   wxPD_AUTO_HIDE | // *MUST* use; otherwise wxWidgets will spin
+                                                    // up another event loop on completion which
+                                                    // causes all sorts of grief
+                                           aCanAbort | wxPD_ELAPSED_TIME ),
         m_appProgressIndicator( aParent ),
         m_reservedSize( aReserveSpaceForMessage ),
         m_updateThrottle( std::chrono::milliseconds( 100 ) ),
-        m_lastUpdateResult( true )
+        m_lastUpdateResult( true ),
+        m_indeterminate( false )
 {
     // wxAppProgressIndicator doesn't like value > max, ever. However there are some risks
     // with multithreaded setting of those values making a mess
@@ -103,8 +101,10 @@ bool WX_PROGRESS_REPORTER::updateUI()
     // Allowing interaction with other windows has unintended consequences
     wxWindowDisabler ed( this );
 
-    // Returns false when cancelled (if it's a cancellable dialog)
-    bool diag = WX_PROGRESS_REPORTER_BASE::Update( cur, message );
+    // Returns false when cancelled (if it's a cancellable dialog). A phase whose total is not
+    // known yet pulses instead, so the gauge shows that work is still going on.
+    bool diag = m_indeterminate.load() ? WX_PROGRESS_REPORTER_BASE::Pulse( message )
+                                       : WX_PROGRESS_REPORTER_BASE::Update( cur, message );
 
     if( !message.empty() )
         Fit();

@@ -199,14 +199,77 @@ public:
         return wxString( error->message );
     }
 
-    bool IsCancelled() const
+    /// One token per operation. Born uncancelled, so nothing has to be reset before an
+    /// operation starts and one operation's cancel cannot reach another.
+    using CANCEL_TOKEN = std::shared_ptr<std::atomic<bool>>;
+
+    static CANCEL_TOKEN NewCancelToken() { return std::make_shared<std::atomic<bool>>( false ); }
+
+    /// Cancel whichever operation is running now. Nothing happens when none is.
+    void CancelActiveOperation()
     {
-        return m_cancel.load();
+        std::lock_guard<std::mutex> lock( m_operationMutex );
+
+        if( m_activeCancel )
+            m_activeCancel->store( true );
     }
 
-    void SetCancelled( bool aCancel )
+    CANCEL_TOKEN ActiveCancelToken() const
     {
-        m_cancel.store( aCancel );
+        std::lock_guard<std::mutex> lock( m_operationMutex );
+        return m_activeCancel;
+    }
+
+    /// Publishes a token for as long as its operation runs. Constructed once the action lock
+    /// is held, so Cancel can only reach the operation that owns the repository.
+    class OPERATION_GUARD
+    {
+    public:
+        OPERATION_GUARD( KIGIT_COMMON* aCommon, const CANCEL_TOKEN& aToken ) :
+                m_common( aCommon ),
+                m_token( aToken )
+        {
+            std::lock_guard<std::mutex> lock( m_common->m_operationMutex );
+            m_common->m_activeCancel = m_token;
+
+            // A shutdown asked for before this operation reached the lock still applies to it.
+            if( m_token && m_common->m_shutdown )
+                m_token->store( true );
+        }
+
+        /// Only while it is still the published one, or a slow operation finishing would
+        /// drop a newer one's token.
+        ~OPERATION_GUARD()
+        {
+            std::lock_guard<std::mutex> lock( m_common->m_operationMutex );
+
+            if( m_common->m_activeCancel == m_token )
+                m_common->m_activeCancel.reset();
+        }
+
+        OPERATION_GUARD( const OPERATION_GUARD& ) = delete;
+        OPERATION_GUARD& operator=( const OPERATION_GUARD& ) = delete;
+
+    private:
+        KIGIT_COMMON* m_common;
+        CANCEL_TOKEN  m_token;
+    };
+
+    /// Background timers ask this before starting work of their own.
+    bool IsShuttingDown() const
+    {
+        std::lock_guard<std::mutex> lock( m_operationMutex );
+        return m_shutdown;
+    }
+
+    /// Stop the operation running now and keep later ones from starting.
+    void SetShuttingDown( bool aCancel )
+    {
+        std::lock_guard<std::mutex> lock( m_operationMutex );
+        m_shutdown = aCancel;
+
+        if( aCancel && m_activeCancel )
+            m_activeCancel->store( true );
     }
 
     bool WasAuthFailure() const { return m_authFailed; }
@@ -263,7 +326,11 @@ private:
     int m_nextPublicKey;
     bool m_secretFetched;
 
-    std::atomic<bool> m_cancel{ false };  // Set to true when the user cancels an operation
+    /// Guarded together, so a shutdown cannot miss an operation registering itself at the
+    /// same moment. The token is null when nothing is running.
+    mutable std::mutex m_operationMutex;
+    CANCEL_TOKEN       m_activeCancel;
+    bool               m_shutdown = false;
 
     // Create a dummy flag to tell if we have tested ssh agent credentials separately
     // from the ssh key credentials. Our own bit, so it must clear every git_credential_t

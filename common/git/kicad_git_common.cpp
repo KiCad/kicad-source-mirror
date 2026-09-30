@@ -318,7 +318,7 @@ std::pair<std::set<wxString>, std::set<wxString>> KIGIT_COMMON::GetDifferentFile
 {
     std::pair<std::set<wxString>, std::set<wxString>> modified_files;
 
-    if( !m_repo || IsCancelled() )
+    if( !m_repo || IsShuttingDown() )
         return modified_files;
 
     git_reference* head = nullptr;
@@ -403,37 +403,34 @@ std::pair<std::set<wxString>, std::set<wxString>> KIGIT_COMMON::GetDifferentFile
     if( !base_tree )
         return modified_files;
 
-    auto collect_paths =
-            [this]( git_tree* aOldTree, git_tree* aNewTree, std::set<wxString>& aOut )
-            {
-                if( IsCancelled() )
-                    return;
+    auto collect_paths = [this]( git_tree* aOldTree, git_tree* aNewTree, std::set<wxString>& aOut )
+    {
+        if( IsShuttingDown() )
+            return;
 
-                git_diff_options localOpts;
-                git_diff_init_options( &localOpts, GIT_DIFF_OPTIONS_VERSION );
+        git_diff_options localOpts;
+        git_diff_init_options( &localOpts, GIT_DIFF_OPTIONS_VERSION );
 
-                git_diff* diff = nullptr;
+        git_diff* diff = nullptr;
 
-                if( git_diff_tree_to_tree( &diff, m_repo, aOldTree, aNewTree, &localOpts )
-                    != GIT_OK )
-                {
-                    wxLogTrace( traceGit, "Failed to diff trees: %s",
-                                KIGIT_COMMON::GetLastGitError() );
-                    return;
-                }
+        if( git_diff_tree_to_tree( &diff, m_repo, aOldTree, aNewTree, &localOpts ) != GIT_OK )
+        {
+            wxLogTrace( traceGit, "Failed to diff trees: %s", KIGIT_COMMON::GetLastGitError() );
+            return;
+        }
 
-                KIGIT::CollectDiffDeltas( diff,
-                        [&aOut]( const git_diff_delta& aDelta )
-                        {
-                            if( aDelta.new_file.path )
-                                aOut.insert( wxString::FromUTF8( aDelta.new_file.path ) );
+        KIGIT::CollectDiffDeltas( diff,
+                                  [&aOut]( const git_diff_delta& aDelta )
+                                  {
+                                      if( aDelta.new_file.path )
+                                          aOut.insert( wxString::FromUTF8( aDelta.new_file.path ) );
 
-                            if( aDelta.old_file.path )
-                                aOut.insert( wxString::FromUTF8( aDelta.old_file.path ) );
-                        } );
+                                      if( aDelta.old_file.path )
+                                          aOut.insert( wxString::FromUTF8( aDelta.old_file.path ) );
+                                  } );
 
-                git_diff_free( diff );
-            };
+        git_diff_free( diff );
+    };
 
     collect_paths( base_tree, head_tree, modified_files.first );    // AHEAD
     collect_paths( base_tree, remote_tree, modified_files.second ); // BEHIND
@@ -1041,7 +1038,7 @@ extern "C" int progress_cb( const char* str, int len, void* aPayload )
 {
     KIGIT_REPO_MIXIN* parent = reinterpret_cast<KIGIT_REPO_MIXIN*>( aPayload );
 
-    if( parent->GetCommon()->IsCancelled() )
+    if( parent->IsThisOperationCancelled() )
     {
         wxLogTrace( traceGit, "Progress CB cancelled" );
         return GIT_EUSER;
@@ -1061,7 +1058,7 @@ extern "C" int transfer_progress_cb( const git_transfer_progress* aStats, void* 
     wxString progressMessage = wxString::Format( _( "Received %u of %u objects" ),
                                                  aStats->received_objects,
                                                  aStats->total_objects );
-    if( parent->GetCommon()->IsCancelled() )
+    if( parent->IsThisOperationCancelled() )
     {
         wxLogTrace( traceGit, "Transfer progress cancelled" );
         return GIT_EUSER;

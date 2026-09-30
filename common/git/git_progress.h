@@ -20,7 +20,7 @@
 #ifndef GIT_PROGRESS_H_
 #define GIT_PROGRESS_H_
 
-#include <widgets/wx_progress_reporters.h>
+#include <progress_reporter.h>
 #include <import_export.h>
 
 #include <memory>
@@ -34,28 +34,30 @@ public:
         m_progressReporter.reset();
     }
 
-    void SetProgressReporter( std::unique_ptr<WX_PROGRESS_REPORTER> aProgressReporter )
+    void SetProgressReporter( std::unique_ptr<PROGRESS_REPORTER> aProgressReporter )
     {
         m_progressReporter = std::move( aProgressReporter );
     }
 
-    void ReportProgress( int aCurrent, int aTotal, const wxString& aMessage )
+    /// Returns false when the user pressed the reporter's cancel button.
+    bool ReportProgress( int aCurrent, int aTotal, const wxString& aMessage )
     {
         if( m_progressReporter )
         {
-            if( aCurrent == m_previousProgress || aTotal == 0 )
-            {
-                m_progressReporter->Pulse( aMessage );
-            }
-            else
-            {
+            // A transfer reports a zero total until the server announces the object count.
+            // Pulse until then, or the gauge sits frozen.
+            m_progressReporter->SetIndeterminate( aTotal == 0 );
+
+            if( aTotal != 0 && aCurrent != m_previousProgress )
                 m_progressReporter->SetCurrentProgress( static_cast<double>( aCurrent ) / aTotal );
-                m_progressReporter->Report( aMessage );
-            }
+
+            m_progressReporter->Report( aMessage );
 
             m_previousProgress = aCurrent;
-            m_progressReporter->KeepRefreshing();
+            return m_progressReporter->KeepRefreshing();
         }
+
+        return true;
     }
 
     virtual void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) {};
@@ -64,7 +66,7 @@ public:
 protected:
     int m_previousProgress;
 
-    std::unique_ptr<WX_PROGRESS_REPORTER> m_progressReporter;
+    std::unique_ptr<PROGRESS_REPORTER> m_progressReporter;
 };
 
 #endif // GIT_PROGRESS_H__

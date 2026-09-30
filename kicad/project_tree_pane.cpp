@@ -47,6 +47,7 @@
 #include <confirm.h>
 #include <dialogs/git/dialog_git_commit.h>
 #include <dialogs/git/dialog_git_credentials.h>
+#include <widgets/wx_progress_reporters.h>
 #include <dialogs/git/dialog_git_switch.h>
 #include <gestfich.h>
 #include <macros.h>
@@ -668,7 +669,7 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
     m_gitSyncTimer.Stop();
 
     if( m_TreeProject && m_TreeProject->GetGitRepo() )
-        m_TreeProject->GitCommon()->SetCancelled( true );
+        m_TreeProject->GitCommon()->SetShuttingDown( true );
 
     m_gitTreeCache.clear();
     m_gitStatusIcons.clear();
@@ -713,7 +714,7 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
         {
             // Reset the cancel flag so git operations work after project switches.
             // EmptyTreePrj() sets this to true during shutdown.
-            m_TreeProject->GitCommon()->SetCancelled( false );
+            m_TreeProject->GitCommon()->SetShuttingDown( false );
 
             const char* canonicalWorkDir = git_repository_workdir( m_TreeProject->GetGitRepo() );
 
@@ -1701,7 +1702,7 @@ void PROJECT_TREE_PANE::EmptyTreePrj()
     if( m_TreeProject->GetGitRepo() )
     {
         KIGIT_COMMON* common = m_TreeProject->GitCommon();
-        common->SetCancelled( true );
+        common->SetShuttingDown( true );
 
         std::unique_lock<std::mutex> lock( common->m_gitActionMutex, std::try_to_lock );
 
@@ -1759,7 +1760,7 @@ void PROJECT_TREE_PANE::EmptyTreePrj()
 
             // Register the cleanup thread with the orphan registry so the
             // shutdown path can wait for it before tearing down libgit2.
-            // Cancellation has already been requested via SetCancelled() above,
+            // Cancellation has already been requested via SetShuttingDown() above,
             // and progress_cb/transfer_progress_cb honour it so long-running
             // fetches will exit with GIT_EUSER as soon as they hit a callback.
 
@@ -1809,7 +1810,7 @@ void PROJECT_TREE_PANE::releaseGitRepo()
         return;
 
     KIGIT_COMMON* common = m_TreeProject->GitCommon();
-    common->SetCancelled( true );
+    common->SetShuttingDown( true );
 
     std::unique_lock<std::mutex> gitLock( common->m_gitActionMutex, std::try_to_lock );
 
@@ -1942,7 +1943,7 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
 
     m_gitLastError = GIT_ERROR_NONE;
 
-    m_TreeProject->GitCommon()->SetCancelled( false );
+    m_TreeProject->GitCommon()->SetShuttingDown( false );
 
     const char* canonicalWorkDir = git_repository_workdir( initHandler.GetRepo() );
 
@@ -2324,7 +2325,7 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
 
         if( m_TreeProject->GetGitRepo() )
         {
-            m_TreeProject->GitCommon()->SetCancelled( false );
+            m_TreeProject->GitCommon()->SetShuttingDown( false );
 
             const char* canonicalWorkDir = git_repository_workdir( m_TreeProject->GetGitRepo() );
 
@@ -2516,7 +2517,7 @@ void PROJECT_TREE_PANE::updateGitStatusIconMap()
     }
 
     // Check if cancellation was requested (e.g., during shutdown)
-    if( gitCommon->IsCancelled() )
+    if( gitCommon->IsShuttingDown() )
     {
         wxLogTrace( traceGit, wxS( "updateGitStatusIconMap: Cancelled" ) );
         return;
@@ -3225,7 +3226,7 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
     }
 
     if( std::shared_ptr<KIGIT_COMMON> gitCommon = m_TreeProject->GitCommonPtr() )
-        gitCommon->SetCancelled( false );
+        gitCommon->SetShuttingDown( false );
 
     // Never the shared compute pool; a libgit2 network read parked there stalls DRC, zone
     // filling and library loading.
@@ -3242,7 +3243,7 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
         }
 
         // Check if cancellation was requested (e.g., during shutdown)
-        if( gitCommon->IsCancelled() )
+        if( gitCommon->IsShuttingDown() )
         {
             wxLogTrace( traceGit, "onGitSyncTimer: Cancelled" );
             return;
@@ -3252,7 +3253,7 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
         handler.PerformFetch();
 
         // Only schedule the follow-up work if not cancelled
-        if( !gitCommon->IsCancelled() )
+        if( !gitCommon->IsShuttingDown() )
             CallAfter( [this]() { gitStatusTimerHandler(); } );
     } );
 
@@ -3267,7 +3268,7 @@ void PROJECT_TREE_PANE::gitStatusTimerHandler()
     // Check if git is still available and not cancelled before spawning background work
     KIGIT_COMMON* gitCommon = m_TreeProject ? m_TreeProject->GitCommon() : nullptr;
 
-    if( !gitCommon || gitCommon->IsCancelled() )
+    if( !gitCommon || gitCommon->IsShuttingDown() )
         return;
 
     updateTreeCache();
