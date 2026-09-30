@@ -50,6 +50,7 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTIN
     m_autoPosture->SetValue( m_settings.GetAutoPosture() );
     m_fixAllSegments->SetValue( m_settings.GetFixAllSegments() );
     m_restrictAngles->SetValue( m_settings.GetRestrictAngles() );
+    m_keepDPCouplingWhenDragging->SetValue( m_settings.GetKeepDPCouplingWhenDragging() );
 
     // Enable/disable some options
     wxCommandEvent event;

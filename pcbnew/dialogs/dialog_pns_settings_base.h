@@ -48,6 +48,7 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_smoothDragged;
 		wxCheckBox* m_optimizeEntireDraggedTrack;
 		wxCheckBox* m_restrictAngles;
+		wxCheckBox* m_keepDPCouplingWhenDragging;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;

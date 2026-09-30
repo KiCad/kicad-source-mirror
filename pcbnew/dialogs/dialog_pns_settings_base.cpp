@@ -134,6 +134,12 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	gSizer4->Add( m_restrictAngles, 0, wxLEFT|wxRIGHT, 5 );
 
+	m_keepDPCouplingWhenDragging = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Keep coupling between differential pairs"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_keepDPCouplingWhenDragging->SetValue(true);
+	m_keepDPCouplingWhenDragging->SetToolTip( _("When enabled, dragging one track belonging to a differential pair drags the other, maintaining their coupling,") );
+
+	gSizer4->Add( m_keepDPCouplingWhenDragging, 0, wxRIGHT|wxLEFT, 5 );
+
 
 	sbSizer4->Add( gSizer4, 0, wxEXPAND, 5 );
 
