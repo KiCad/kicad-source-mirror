@@ -343,7 +343,16 @@ public:
         kiapi::common::commands::CloseAllDocuments request;
         kiapi::common::ApiResponse                 response;
 
-        return send( request, response );
+        if( !send( request, response ) )
+            return false;
+
+        if( response.status().status() != kiapi::common::AS_OK )
+        {
+            m_lastError = response.status().error_message();
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -423,7 +432,11 @@ public:
         if( m_ready )
         {
             if( isProcessAlive() )
+            {
+                // A new testcase is starting up, make sure old things are closed
+                Client().CloseAllDocuments();
                 return true;
+            }
 
             m_ready = false;
         }
@@ -692,6 +705,7 @@ public:
         API_SERVER_MANAGER::Instance().Client().CloseAllDocuments();
     }
 
+    /// Starts the API server if not already running.  If running, closes any open documents.
     bool Start( const wxString& aCliPathOverride = wxString() )
     {
         wxString cliPath = aCliPathOverride.IsEmpty() ? m_cliPath : aCliPathOverride;

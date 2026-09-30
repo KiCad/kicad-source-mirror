@@ -139,6 +139,8 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
     auto closeAllDocuments =
             [&]( const commands::CloseAllDocuments& aRequest ) -> HANDLER_RESULT<google::protobuf::Empty>
     {
+        wxString errors;
+
         for( const OPEN_DOCUMENT& doc : openDocuments )
         {
             // The project has no document face; it is released by UnloadProject below.
@@ -149,11 +151,10 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
 
             if( !aKiway.ProcessApiCloseDocument( faceForDocument( doc.type ), doc.Spec(), server.get(), &error ) )
             {
-                ApiResponseStatus e;
-                e.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
-                e.set_error_message(
-                        wxString::Format( wxS( "Failed to close %s: %s" ), doc.fileName, error ).ToStdString() );
-                return tl::unexpected( e );
+                if( !errors.IsEmpty() )
+                    errors.Append( wxS( "; " ) );
+
+                errors.Append( wxString::Format( wxS( "Failed to close %s: %s" ), doc.fileName, error ) );
             }
         }
 
@@ -166,6 +167,14 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
         }
 
         openProjectPath.reset();
+
+        if( !errors.IsEmpty() )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_INTERNAL_ERROR );
+            e.set_error_message( errors.ToStdString() );
+            return tl::unexpected( e );
+        }
 
         return google::protobuf::Empty();
     };
@@ -468,6 +477,12 @@ int CLI::API_SERVER_COMMAND::doPerform( KIWAY& aKiway )
         doc.type = requestType;
         doc.fileName = docPath.GetFullName();
         doc.specPath = docPath.GetFullPath();
+
+        std::erase_if( openDocuments,
+                       [&]( const OPEN_DOCUMENT& d )
+                       {
+                           return d.type == requestType;
+                       } );
 
         openDocuments.push_back( doc );
 
