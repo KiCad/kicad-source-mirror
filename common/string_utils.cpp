@@ -1481,6 +1481,19 @@ std::string FormatDouble2Str( double aValue )
 }
 
 
+wxString FormatTrimmedDecimal( double aValue, int aPrecision )
+{
+    wxString str = wxString::FromCDouble( aValue, aPrecision );
+    int      dot = str.Find( '.' );
+
+    // Keep one zero after the last significant digit and never trim the integer part
+    while( dot != wxNOT_FOUND && (int) str.length() - dot > 2 && str.EndsWith( wxT( "00" ) ) )
+        str.RemoveLast();
+
+    return str;
+}
+
+
 std::string UIDouble2Str( double aValue )
 {
     char    buf[50];

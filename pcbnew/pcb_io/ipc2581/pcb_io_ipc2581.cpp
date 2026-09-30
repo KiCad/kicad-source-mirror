@@ -18,6 +18,7 @@
 */
 
 #include "pcb_io_ipc2581.h"
+#include "ipc2581_avl_order.h"
 #include "ipc2581_types.h"
 
 #include <base_units.h>
@@ -474,11 +475,7 @@ wxString PCB_IO_IPC2581::componentName( FOOTPRINT* aFootprint )
 
 wxString PCB_IO_IPC2581::floatVal( double aVal, int aSigFig ) const
 {
-    wxString str = wxString::FromCDouble( aVal, aSigFig == -1 ? m_sigfig : aSigFig );
-
-    // Remove all but the last trailing zeros from str
-    while( str.EndsWith( wxT( "00" ) ) )
-        str.RemoveLast();
+    wxString str = FormatTrimmedDecimal( aVal, aSigFig == -1 ? m_sigfig : aSigFig );
 
     // We don't want to output -0.0 as this value is just 0 for fabs
     if( str == wxT( "-0.0" ) )
@@ -2818,11 +2815,11 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
         addAttribute( padStackPadDefNode,  "padUse", "REGULAR" );
         addLocationNode( padStackPadDefNode, offset.x, offset.y );
 
-        if( aPad->HasHole() || !aPad->FlashLayer( layer ) )
+        if( !aPad->FlashLayer( layer ) )
         {
             PCB_SHAPE shape( nullptr, SHAPE_T::CIRCLE );
             shape.SetStart( offset );
-            shape.SetEnd( shape.GetStart() + aPad->GetDrillSize() / 2 );
+            shape.SetEnd( offset + VECTOR2I( std::min( aPad->GetDrillSizeX(), aPad->GetDrillSizeY() ) / 2, 0 ) );
             addShape( padStackPadDefNode, shape );
         }
         else
@@ -4812,9 +4809,24 @@ wxXmlNode* PCB_IO_IPC2581::generateAvlSection()
 
     std::set<wxString> unique_parts;
     std::map<wxString,wxString> unique_vendors;
+    std::vector<FOOTPRINT*>     footprints;
+    std::vector<AVL_ROW>        rows;
 
-    for( auto& [fp, name] : m_OEMRef_dict )
+    for( FOOTPRINT* fp : m_board->Footprints() )
     {
+        auto it = m_OEMRef_dict.find( fp );
+
+        if( it == m_OEMRef_dict.end() )
+            continue;
+
+        footprints.push_back( fp );
+        rows.push_back( { it->second, fp->GetReference() } );
+    }
+
+    for( size_t index : OrderAvlRows( rows ) )
+    {
+        FOOTPRINT*      fp = footprints[index];
+        const wxString& name = rows[index].m_oemName;
         auto [ it, success ] = unique_parts.insert( name );
 
         if( !success )

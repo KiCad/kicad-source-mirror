@@ -440,6 +440,15 @@ KICOMMON_API std::string UIDouble2Str( double aValue );
 KICOMMON_API std::string FormatDouble2Str( double aValue );
 
 /**
+ * Format a value to aPrecision decimal digits and strip trailing zeros, keeping one digit
+ * after the decimal point and never trimming into the integer part.
+ *
+ * This is the one formatter shared by exporters (ODB++, IPC-2581) that previously each carried
+ * their own copy of this trimming loop.
+ */
+KICOMMON_API wxString FormatTrimmedDecimal( double aValue, int aPrecision );
+
+/**
  * Convert a wxString to a UTF8 encoded C string for all wxWidgets build modes.
  *
  * wxstring is a wxString, not a wxT() or _().  The scope of the return value

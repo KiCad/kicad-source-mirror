@@ -224,4 +224,21 @@ BOOST_AUTO_TEST_CASE( VariantNameSort )
 }
 
 
+/**
+ * Test #FormatTrimmedDecimal().
+ */
+BOOST_AUTO_TEST_CASE( FormatTrimmedDecimalKeepsIntegerDigits )
+{
+    // Precision 0 has no decimal point and must not lose integer zeros
+    BOOST_CHECK_EQUAL( FormatTrimmedDecimal( 100.0, 0 ), wxString( "100" ) );
+    BOOST_CHECK_EQUAL( FormatTrimmedDecimal( 1000.0, 0 ), wxString( "1000" ) );
+
+    // Byte-identical with the old exporters for precision >= 1
+    BOOST_CHECK_EQUAL( FormatTrimmedDecimal( 1.5, 6 ), wxString( "1.50" ) );
+    BOOST_CHECK_EQUAL( FormatTrimmedDecimal( 1.0, 6 ), wxString( "1.0" ) );
+    BOOST_CHECK_EQUAL( FormatTrimmedDecimal( 100.0, 4 ), wxString( "100.0" ) );
+    BOOST_CHECK_EQUAL( FormatTrimmedDecimal( 0.123456, 6 ), wxString( "0.123456" ) );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
