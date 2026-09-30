@@ -78,6 +78,10 @@ public:
 
     std::vector<wxString> GetBranchNames() const;
 
+    /// Every branch in the repository, local and remote-tracking. The bool is true for a
+    /// remote-tracking branch. The current branch is first, then the rest newest first.
+    std::vector<std::pair<wxString, bool>> GetAllBranches() const;
+
     /**
      * Return a vector of project files in the repository.  Sorted by the depth of
      * the project file in the directory tree
@@ -147,9 +151,17 @@ public:
     // Returns true if the repository has local commits that have not been pushed
     bool HasLocalCommits() const;
 
+    /// How many commits aBranch holds that the current HEAD does not, which deleting it would
+    /// lose. Zero when the branch is fully merged or cannot be read.
+    size_t GetUnmergedCommitCount( const wxString& aBranch ) const;
+
     // True when tracked files hold uncommitted changes, staged or not. Untracked files do not
     // count: a merge leaves them alone.
     bool HasUncommittedTrackedChanges() const;
+
+    // The caller holds the action lock, as with the query methods above.
+    bool CreateBranch( const wxString& aName );
+    bool DeleteBranch( const wxString& aName );
 
     /**
      * Recompute the merge in memory and extract each conflicted file's three versions into

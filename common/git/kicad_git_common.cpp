@@ -141,6 +141,10 @@ wxString KIGIT_COMMON::GetCurrentBranchName() const
     if( retval && retval != GIT_EUNBORNBRANCH && retval != GIT_ENOTFOUND )
         return wxEmptyString;
 
+    // An unborn or missing HEAD leaves head null, so there is no branch to resolve.
+    if( !head )
+        return wxEmptyString;
+
     KIGIT::GitReferencePtr headPtr( head );
     git_reference*         branch;
 
@@ -225,8 +229,22 @@ std::vector<wxString> KIGIT_COMMON::GetBranchNames() const
     git_reference*              branchReference = nullptr;
     git_branch_t                branchType;
 
-    while( git_branch_next( &branchReference, &branchType, branchIterator ) != GIT_ITEROVER )
+    // Only GIT_ITEROVER means the end. Any other error leaves the reference invalid.
+    while( true )
     {
+        branchReference = nullptr;
+
+        int rc = git_branch_next( &branchReference, &branchType, branchIterator );
+
+        if( rc == GIT_ITEROVER )
+            break;
+
+        if( rc != GIT_OK )
+        {
+            wxLogTrace( traceGit, "Failed to iterate branches: %s", KIGIT_COMMON::GetLastGitError() );
+            break;
+        }
+
         const char* branchName = "";
         KIGIT::GitReferencePtr branchReferencePtr( branchReference );
 
@@ -264,6 +282,88 @@ std::vector<wxString> KIGIT_COMMON::GetBranchNames() const
         branchNames.push_back( rit->second );
 
     return branchNames;
+}
+
+
+std::vector<std::pair<wxString, bool>> KIGIT_COMMON::GetAllBranches() const
+{
+    if( !m_repo )
+        return {};
+
+    std::pair<wxString, bool>                            current;
+    std::multimap<git_time_t, std::pair<wxString, bool>> localByTime;
+    std::multimap<git_time_t, std::pair<wxString, bool>> remoteByTime;
+
+    git_branch_iterator* branchIterator = nullptr;
+
+    if( git_branch_iterator_new( &branchIterator, m_repo, GIT_BRANCH_ALL ) )
+    {
+        wxLogTrace( traceGit, "Failed to get branch iterator" );
+        return {};
+    }
+
+    KIGIT::GitBranchIteratorPtr branchIteratorPtr( branchIterator );
+    git_reference*              branchReference = nullptr;
+    git_branch_t                branchType;
+
+    // Only GIT_ITEROVER means the end. Any other error leaves the reference invalid.
+    while( true )
+    {
+        branchReference = nullptr;
+
+        int rc = git_branch_next( &branchReference, &branchType, branchIterator );
+
+        if( rc == GIT_ITEROVER )
+            break;
+
+        if( rc != GIT_OK )
+        {
+            wxLogTrace( traceGit, "Failed to iterate branches: %s", KIGIT_COMMON::GetLastGitError() );
+            break;
+        }
+
+        const char*            branchName = "";
+        KIGIT::GitReferencePtr branchReferencePtr( branchReference );
+
+        if( git_branch_name( &branchName, branchReference ) )
+        {
+            wxLogTrace( traceGit, "Failed to get branch name in iter loop" );
+            continue;
+        }
+
+        const git_oid* commitId = git_reference_target( branchReference );
+        git_commit*    commit = nullptr;
+
+        if( git_commit_lookup( &commit, m_repo, commitId ) )
+        {
+            wxLogTrace( traceGit, "Failed to get commit in iter loop" );
+            continue;
+        }
+
+        KIGIT::GitCommitPtr commitPtr( commit );
+        git_time_t          commitTime = git_commit_time( commit );
+        bool                isRemote = ( branchType == GIT_BRANCH_REMOTE );
+
+        if( !isRemote && git_branch_is_head( branchReference ) )
+            current = { branchName, false };
+        else if( isRemote )
+            remoteByTime.emplace( commitTime, std::make_pair( wxString( branchName ), true ) );
+        else
+            localByTime.emplace( commitTime, std::make_pair( wxString( branchName ), false ) );
+    }
+
+    std::vector<std::pair<wxString, bool>> branches;
+
+    if( !current.first.IsEmpty() )
+        branches.push_back( current );
+
+    for( auto rit = localByTime.rbegin(); rit != localByTime.rend(); ++rit )
+        branches.push_back( rit->second );
+
+    for( auto rit = remoteByTime.rbegin(); rit != remoteByTime.rend(); ++rit )
+        branches.push_back( rit->second );
+
+    return branches;
 }
 
 
@@ -534,6 +634,48 @@ bool KIGIT_COMMON::HasLocalCommits() const
     }
 
     return true;
+}
+
+
+size_t KIGIT_COMMON::GetUnmergedCommitCount( const wxString& aBranch ) const
+{
+    if( !m_repo )
+        return 0;
+
+    git_reference* branchRef = nullptr;
+
+    if( git_branch_lookup( &branchRef, m_repo, aBranch.utf8_string().c_str(), GIT_BRANCH_LOCAL ) != GIT_OK )
+        return 0;
+
+    KIGIT::GitReferencePtr branchPtr( branchRef );
+    const git_oid*         branchOid = git_reference_target( branchRef );
+    git_oid                headOid;
+
+    if( !branchOid || git_reference_name_to_id( &headOid, m_repo, "HEAD" ) != GIT_OK )
+        return 0;
+
+    size_t ahead = 0;
+    size_t behind = 0;
+
+    if( git_graph_ahead_behind( &ahead, &behind, m_repo, branchOid, &headOid ) != GIT_OK )
+        return 0;
+
+    return ahead;
+}
+
+
+bool KIGIT_COMMON::CreateBranch( const wxString& aName )
+{
+    if( !m_repo || aName.IsEmpty() )
+        return false;
+
+    return GetGitBackend()->CreateBranch( m_repo, aName ) == 0;
+}
+
+
+bool KIGIT_COMMON::DeleteBranch( const wxString& aName )
+{
+    return GetGitBackend()->DeleteBranch( m_repo, aName );
 }
 
 

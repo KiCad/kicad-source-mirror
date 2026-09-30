@@ -70,6 +70,9 @@ public:
     virtual void Init() = 0;
     virtual void Shutdown() = 0;
 
+    // Clone, Push, PerformFetch, PerformPull, ResetToUpstream and RebaseOntoUpstream take the
+    // action lock themselves. Every other method here expects the caller to hold it.
+
     /**
      * Return the process-wide orphan thread registry owned by this backend.
      *
@@ -133,6 +136,8 @@ public:
     virtual int CreateBranch( git_repository* aRepo, const wxString& aBranchName ) = 0;
     virtual bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                             bool aRemoveGitDir, wxString* aErrors ) = 0;
+
+    virtual bool DeleteBranch( git_repository* aRepo, const wxString& aBranchName ) = 0;
 
     virtual RestoreResult RestoreVersion( git_repository* aRepo, const wxString& aCommitHash,
                                           const wxString& aProjectPrefix, wxString& aError ) = 0;

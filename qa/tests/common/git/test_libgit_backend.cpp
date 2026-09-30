@@ -32,6 +32,7 @@
 #include <git/git_status_handler.h>
 #include <git/project_git_utils.h>
 #include <git/git_init_handler.h>
+#include <git/git_branch_handler.h>
 #include <git/git_pull_handler.h>
 #include <git/git_push_handler.h>
 #include <git/git_commit_handler.h>
@@ -2676,6 +2677,94 @@ BOOST_AUTO_TEST_CASE( Amend_KeepsFilesAlreadyInCommit )
 
     git_tree_free( tree );
     git_commit_free( head );
+    git_repository_free( repo );
+}
+
+
+// A switch that would overwrite local changes must report a conflict and change nothing.
+BOOST_AUTO_TEST_CASE( SwitchToBranch_ReportsConflictOverLocalChanges )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_oid headOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, repo, "HEAD" ), GIT_OK );
+
+    git_commit* headCommit = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &headCommit, repo, &headOid ), GIT_OK );
+
+    git_reference* oldBranch = nullptr;
+    BOOST_REQUIRE_EQUAL( git_branch_create( &oldBranch, repo, "old", headCommit, 0 ), GIT_OK );
+    git_reference_free( oldBranch );
+    git_commit_free( headCommit );
+
+    git_oid advancedOid = createCommit( repo, wxT( "file.txt" ), wxT( "master2\n" ), wxT( "Advance master" ) );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    {
+        std::ofstream f( ( workDir + wxT( "file.txt" ) ).ToStdString(), std::ios::binary );
+        f << "local edit\n";
+    }
+
+    KIGIT_COMMON       common( repo );
+    GIT_BRANCH_HANDLER handler( &common );
+
+    BOOST_CHECK( handler.SwitchToBranch( wxT( "old" ) ) == BranchResult::Conflict );
+
+    git_oid afterOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &afterOid, repo, "HEAD" ), GIT_OK );
+    BOOST_CHECK_EQUAL( git_oid_cmp( &afterOid, &advancedOid ), 0 );
+
+    std::ifstream in( ( workDir + wxT( "file.txt" ) ).ToStdString(), std::ios::binary );
+    std::string   content( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    BOOST_CHECK_EQUAL( content, "local edit\n" );
+
+    git_repository_free( repo );
+}
+
+
+// A never-committed file the target branch carries must stop the switch too.
+BOOST_AUTO_TEST_CASE( SwitchToBranch_ReportsConflictOverUntrackedCollision )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_oid headOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, repo, "HEAD" ), GIT_OK );
+
+    git_commit* headCommit = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &headCommit, repo, &headOid ), GIT_OK );
+
+    git_reference* plainBranch = nullptr;
+    BOOST_REQUIRE_EQUAL( git_branch_create( &plainBranch, repo, "plain", headCommit, 0 ), GIT_OK );
+    git_reference_free( plainBranch );
+    git_commit_free( headCommit );
+
+    createCommit( repo, wxT( "extra.txt" ), wxT( "committed\n" ), wxT( "Add extra" ) );
+
+    KIGIT_COMMON       common( repo );
+    GIT_BRANCH_HANDLER handler( &common );
+
+    BOOST_REQUIRE( handler.SwitchToBranch( wxT( "plain" ) ) == BranchResult::Success );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    {
+        std::ofstream f( ( workDir + wxT( "extra.txt" ) ).ToStdString(), std::ios::binary );
+        f << "local\n";
+    }
+
+    BOOST_CHECK( handler.SwitchToBranch( wxT( "master" ) ) == BranchResult::Conflict );
+
+    std::ifstream in( ( workDir + wxT( "extra.txt" ) ).ToStdString(), std::ios::binary );
+    std::string   content( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    BOOST_CHECK_EQUAL( content, "local\n" );
+
     git_repository_free( repo );
 }
 

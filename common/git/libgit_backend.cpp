@@ -1408,8 +1408,52 @@ BranchResult LIBGIT_BACKEND::SwitchToBranch( GIT_BRANCH_HANDLER* aHandler, const
     git_checkout_init_options( &checkoutOpts, GIT_CHECKOUT_OPTIONS_VERSION );
     checkoutOpts.checkout_strategy = GIT_CHECKOUT_SAFE;
 
-    if( git_checkout_tree( repo, branchObj, &checkoutOpts ) != GIT_OK )
+    std::vector<wxString> conflictPaths;
+
+    checkoutOpts.notify_flags = GIT_CHECKOUT_NOTIFY_CONFLICT;
+    checkoutOpts.notify_payload = &conflictPaths;
+    checkoutOpts.notify_cb = []( git_checkout_notify_t aWhy, const char* aPath, const git_diff_file*,
+                                 const git_diff_file*, const git_diff_file*, void* aPayload ) -> int
     {
+        if( aWhy == GIT_CHECKOUT_NOTIFY_CONFLICT && aPath )
+            static_cast<std::vector<wxString>*>( aPayload )->push_back( wxString::FromUTF8( aPath ) );
+
+        return 0;
+    };
+
+    if( int rc = git_checkout_tree( repo, branchObj, &checkoutOpts ) )
+    {
+        // A stash does not cover never-committed files, so those need their own advice.
+        if( rc == GIT_ECONFLICT )
+        {
+            wxString fileList;
+            bool     anyUntracked = false;
+            size_t   shown = std::min<size_t>( conflictPaths.size(), 10 );
+
+            for( size_t i = 0; i < shown; i++ )
+            {
+                bool tracked = IsPathInHead( repo, conflictPaths[i] );
+
+                anyUntracked |= !tracked;
+                wxString tag = tracked ? wxString() : wxS( " " ) + _( "(never committed)" );
+
+                fileList << conflictPaths[i] << tag << wxS( "\n" );
+            }
+
+            if( conflictPaths.size() > shown )
+                fileList << wxString::Format( _( "and %zu more\n" ), conflictPaths.size() - shown );
+
+            wxString advice = anyUntracked ? _( "Commit or stash your changes first. Files that were never "
+                                                "committed are not included in a stash, so commit or discard "
+                                                "those from the Version Control panel." )
+                                           : _( "Commit or stash your changes first." );
+
+            aHandler->AddErrorString( wxString::Format( _( "Switching to branch '%s' would overwrite:\n\n"
+                                                           "%s\n%s" ),
+                                                        aBranchName, fileList, advice ) );
+            return BranchResult::Conflict;
+        }
+
         aHandler->AddErrorString( wxString::Format( _( "Failed to switch to branch '%s': %s" ),
                                                     aBranchName, KIGIT_COMMON::GetLastGitError() ) );
         return BranchResult::CheckoutFailed;
@@ -2716,6 +2760,21 @@ int LIBGIT_BACKEND::CreateBranch( git_repository* aRepo, const wxString& aBranch
 
     git_reference_free( branchRef );
     return 0;
+}
+
+
+bool LIBGIT_BACKEND::DeleteBranch( git_repository* aRepo, const wxString& aBranchName )
+{
+    if( !aRepo || aBranchName.IsEmpty() )
+        return false;
+
+    git_reference* branch = nullptr;
+
+    if( git_branch_lookup( &branch, aRepo, aBranchName.utf8_string().c_str(), GIT_BRANCH_LOCAL ) != GIT_OK )
+        return false;
+
+    KIGIT::GitReferencePtr branchPtr( branch );
+    return git_branch_delete( branch ) == GIT_OK;
 }
 
 

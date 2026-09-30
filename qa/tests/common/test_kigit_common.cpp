@@ -208,6 +208,40 @@ git_repository* makeRepoWithCommit( const wxString& aRepoPath, const wxString& a
     return repo;
 }
 
+
+// Stage aFileName from the working tree and commit it on top of HEAD.
+void commitWorkingFile( git_repository* aRepo, const wxString& aFileName, const char* aMessage )
+{
+    git_index* index = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, aRepo ), GIT_OK );
+    KIGIT::GitIndexPtr indexPtr( index );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, aFileName.utf8_string().c_str() ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
+
+    git_oid treeOid;
+    BOOST_REQUIRE_EQUAL( git_index_write_tree( &treeOid, index ), GIT_OK );
+
+    git_tree* tree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_tree_lookup( &tree, aRepo, &treeOid ), GIT_OK );
+    KIGIT::GitTreePtr treePtr( tree );
+
+    git_oid headOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, aRepo, "HEAD" ), GIT_OK );
+
+    git_commit* parent = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &parent, aRepo, &headOid ), GIT_OK );
+    KIGIT::GitCommitPtr parentPtr( parent );
+
+    git_signature* sig = nullptr;
+    BOOST_REQUIRE_EQUAL( git_signature_now( &sig, "QA Test", "qa@example.com" ), GIT_OK );
+    KIGIT::GitSignaturePtr sigPtr( sig );
+
+    const git_commit* parents[1] = { parent };
+    git_oid           commitOid;
+    BOOST_REQUIRE_EQUAL( git_commit_create( &commitOid, aRepo, "HEAD", sig, sig, nullptr, aMessage, tree, 1, parents ),
+                         GIT_OK );
+}
+
 } // namespace
 
 
@@ -760,6 +794,86 @@ BOOST_AUTO_TEST_CASE( RefreshListenerRemovedByAnotherDoesNotFire )
 
 
 // The History page reads the log through GetRecentCommits. With no repository it must return
+
+
+// CreateBranch and DeleteBranch add and remove a local branch.
+BOOST_AUTO_TEST_CASE( CreateAndDeleteBranch )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+
+    BOOST_REQUIRE_EQUAL( common.GetBranchNames().size(), 1u );
+    BOOST_CHECK( common.CreateBranch( "feature" ) );
+    BOOST_CHECK_EQUAL( common.GetBranchNames().size(), 2u );
+    BOOST_CHECK( common.DeleteBranch( "feature" ) );
+    BOOST_CHECK_EQUAL( common.GetBranchNames().size(), 1u );
+}
+
+
+// The count is what deleting the branch would lose: its commits that HEAD does not reach.
+BOOST_AUTO_TEST_CASE( UnmergedCommitCountIsWhatDeletingWouldLose )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+    KIGIT_COMMON            common( repo );
+
+    BOOST_REQUIRE( common.CreateBranch( "feature" ) );
+    BOOST_CHECK_EQUAL( common.GetUnmergedCommitCount( "feature" ), 0u );
+
+    BOOST_REQUIRE_EQUAL( git_repository_set_head( repo, "refs/heads/feature" ), GIT_OK );
+
+    wxFileName fn( tmp.path, wxS( "file.txt" ) );
+    {
+        std::ofstream f( fn.GetFullPath().utf8_string() );
+        f << "v2\n";
+    }
+
+    commitWorkingFile( repo, wxS( "file.txt" ), "only on feature" );
+    BOOST_REQUIRE_EQUAL( git_repository_set_head( repo, "refs/heads/main" ), GIT_OK );
+
+    BOOST_CHECK_EQUAL( common.GetUnmergedCommitCount( "feature" ), 1u );
+    BOOST_CHECK_EQUAL( common.GetUnmergedCommitCount( "main" ), 0u );
+    BOOST_CHECK_EQUAL( common.GetUnmergedCommitCount( "no-such-branch" ), 0u );
+}
+
+
+// Branches created at the same HEAD share a timestamp. A std::map keyed on it would drop one.
+BOOST_AUTO_TEST_CASE( GetAllBranchesKeepsBranchesSharingACommitTime )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_REQUIRE( common.CreateBranch( "alpha" ) );
+    BOOST_REQUIRE( common.CreateBranch( "beta" ) );
+
+    std::vector<std::pair<wxString, bool>> all = common.GetAllBranches();
+
+    bool haveAlpha = false;
+    bool haveBeta = false;
+
+    for( const auto& [name, isRemote] : all )
+    {
+        if( name == wxS( "alpha" ) )
+            haveAlpha = true;
+        else if( name == wxS( "beta" ) )
+            haveBeta = true;
+    }
+
+    BOOST_CHECK_MESSAGE( haveAlpha && haveBeta,
+                         "both same-commit-time branches must appear, got " + std::to_string( all.size() ) );
+}
 
 
 // libgit2 reports forward slashes on every platform while the project path is native. On Windows

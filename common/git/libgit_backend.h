@@ -83,6 +83,8 @@ public:
     bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                     bool aRemoveGitDir, wxString* aErrors ) override;
 
+    bool DeleteBranch( git_repository* aRepo, const wxString& aBranchName ) override;
+
     RestoreResult RestoreVersion( git_repository* aRepo, const wxString& aCommitHash, const wxString& aProjectPrefix,
                                   wxString& aError ) override;
 

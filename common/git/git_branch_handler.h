@@ -30,6 +30,7 @@ enum class BranchResult
     Success,
     BranchNotFound,
     CheckoutFailed,
+    Conflict,
     Error
 };
 
@@ -52,8 +53,6 @@ public:
      * @return True if branch exists, false otherwise
      */
     bool BranchExists( const wxString& aBranchName );
-
-    void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
 };
 
 #endif // GIT_BRANCH_HANDLER_H
