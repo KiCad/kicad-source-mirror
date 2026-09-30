@@ -205,7 +205,7 @@ public:
      */
     int GetNextFieldOrdinal() const;
 
-    virtual int GetMandatoryFieldCount()              { return 0; }
+    virtual int GetMandatoryFieldCount() const        { return 0; }
 
     std::vector<SCH_FIELD>& GetFields()               { return m_fields; }
     const std::vector<SCH_FIELD>& GetFields() const   { return m_fields; }
@@ -551,7 +551,7 @@ public:
         return new SCH_GLOBALLABEL( *this );
     }
 
-    int GetMandatoryFieldCount() override { return 1; }
+    int GetMandatoryFieldCount() const override { return 1; }
 
     /**
      * Return a mandatory field in this label.  The const version will return nullptr if the

@@ -987,7 +987,7 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
         wxString   name = wxString::FromUTF8( fieldProto.name() );
         SCH_FIELD* existing = GetField( name );
 
-        // Don't duplicate existing or mandatory fields.
+        // Don't duplicate existing mandatory fields.
         if( existing && existing->IsMandatory() )
             continue;
 
