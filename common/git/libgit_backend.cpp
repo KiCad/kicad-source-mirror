@@ -1953,6 +1953,50 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
 
     git_repository* repo = aHandler->GetRepo();
 
+    // Probe now, so a missing identity fails with a clean tree rather than a rewritten one.
+    {
+        git_signature* probe = nullptr;
+
+        if( git_signature_default( &probe, repo ) != GIT_OK )
+        {
+            aHandler->AddErrorString( _( "Could not create a commit signature. Set user.name and user.email "
+                                         "in your git configuration." ) );
+            return PullResult::MergeFailed;
+        }
+
+        KIGIT::GitSignaturePtr probePtr( probe );
+    }
+
+    {
+        git_commit* theirs = nullptr;
+
+        if( git_commit_lookup( &theirs, repo, git_annotated_commit_id( aMergeHeads[0] ) ) == GIT_OK )
+        {
+            KIGIT::GitCommitPtr theirsPtr( theirs );
+            git_tree*           theirsTree = nullptr;
+
+            if( git_commit_tree( &theirsTree, theirs ) == GIT_OK )
+            {
+                KIGIT::GitTreePtr     theirsTreePtr( theirsTree );
+                std::vector<wxString> collisions;
+
+                if( !untrackedFilesOverwrittenBy( repo, theirsTree, collisions ) )
+                {
+                    aHandler->AddErrorString( _( "Could not read the status of the project files, so getting "
+                                                 "changes was stopped. Files that were never committed could "
+                                                 "have been overwritten." ) );
+                    return PullResult::Error;
+                }
+
+                if( !collisions.empty() )
+                {
+                    aHandler->AddErrorString( describeUntrackedCollisions( collisions ) );
+                    return PullResult::DirtyWorkdir;
+                }
+            }
+        }
+    }
+
     if( git_merge( repo, aMergeHeads, aMergeHeadsCount, nullptr, nullptr ) )
     {
         wxString errorMsg = KIGIT_COMMON::GetLastGitError();
@@ -1994,9 +2038,24 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
     git_commit*    merge_commit = nullptr;
     git_signature* signature = nullptr;
 
+    // Merged on disk but not recorded, so a failure from here puts the tree back at HEAD.
+    auto undoMerge = [&]()
+    {
+        git_object* headObj = nullptr;
+
+        if( git_revparse_single( &headObj, repo, "HEAD" ) == GIT_OK )
+        {
+            KIGIT::GitObjectPtr headObjPtr( headObj );
+            git_reset( repo, headObj, GIT_RESET_HARD, nullptr );
+        }
+
+        git_repository_state_cleanup( repo );
+    };
+
     if( git_index_write_tree( &tree_oid, index ) != GIT_OK || git_tree_lookup( &tree, repo, &tree_oid ) != GIT_OK )
     {
         aHandler->AddErrorString( _( "Could not write the merge result." ) );
+        undoMerge();
         return PullResult::MergeFailed;
     }
 
@@ -2005,6 +2064,7 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
     if( git_repository_head( &head_ref, repo ) != GIT_OK )
     {
         aHandler->AddErrorString( _( "Could not get the repository head." ) );
+        undoMerge();
         return PullResult::MergeFailed;
     }
 
@@ -2015,6 +2075,7 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
         || git_commit_lookup( &merge_commit, repo, git_annotated_commit_id( aMergeHeads[0] ) ) != GIT_OK )
     {
         aHandler->AddErrorString( _( "Could not look up the commits to merge." ) );
+        undoMerge();
         return PullResult::MergeFailed;
     }
 
@@ -2025,6 +2086,7 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
     {
         aHandler->AddErrorString( _( "Could not create a commit signature.  Set user.name and user.email in your "
                                      "git configuration." ) );
+        undoMerge();
         return PullResult::MergeFailed;
     }
 
@@ -2040,6 +2102,7 @@ PullResult LIBGIT_BACKEND::handleMerge( GIT_PULL_HANDLER* aHandler, const git_an
     {
         aHandler->AddErrorString( wxString::Format( _( "Could not create merge commit: %s" ),
                                                     KIGIT_COMMON::GetLastGitError() ) );
+        undoMerge();
         return PullResult::MergeFailed;
     }
 
