@@ -31,11 +31,13 @@
 #include <git/kicad_git_common.h>
 #include <git/git_status_handler.h>
 #include <git/project_git_utils.h>
+#include <wildcards_and_files_ext.h>
 #include <git/git_init_handler.h>
 #include <git/git_branch_handler.h>
 #include <git/git_pull_handler.h>
 #include <git/git_push_handler.h>
 #include <git/git_commit_handler.h>
+#include <git/git_clone_handler.h>
 #include <qa_utils/scoped_git_backend.h>
 
 #include <git2.h>
@@ -51,6 +53,7 @@
 #include <thread>
 
 #include <wx/ffile.h>
+#include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/textfile.h>
 #include <wx/utils.h>
@@ -1784,6 +1787,84 @@ BOOST_AUTO_TEST_CASE( BusyOperationDoesNotConsumeAnotherCancellation )
 }
 
 
+// Reports the token the session published, and can stop the operation as Cancel does.
+class CLONE_CANCEL_REPORTER : public PROGRESS_REPORTER
+{
+public:
+    CLONE_CANCEL_REPORTER( KIGIT_COMMON* aCommon ) :
+            m_common( aCommon )
+    {
+    }
+
+    void SetNumPhases( int ) override {}
+    void AddPhases( int ) override {}
+    void BeginPhase( int ) override {}
+    void AdvancePhase() override {}
+    void AdvancePhase( const wxString& ) override {}
+    void Report( const wxString& ) override {}
+    void SetCurrentProgress( double ) override {}
+    void SetMaxProgress( int ) override {}
+    void AdvanceProgress() override {}
+    void SetTitle( const wxString& ) override {}
+    bool IsCancelled() const override { return true; }
+
+    bool KeepRefreshing( bool = false ) override
+    {
+        m_ticks++;
+
+        if( m_common->ActiveCancelToken() )
+            m_sawActiveToken = true;
+
+        return false;
+    }
+
+    int  Ticks() const { return m_ticks; }
+    bool SawActiveToken() const { return m_sawActiveToken; }
+
+private:
+    KIGIT_COMMON* m_common;
+    int           m_ticks = 0;
+    bool          m_sawActiveToken = false;
+};
+
+
+// A per-operation token left clone with none, so Cancel set a flag nothing read.
+BOOST_AUTO_TEST_CASE( Clone_CancelFromProgressReporterStopsTheClone )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    wxString dest = tempBase() + wxFileName::GetPathSeparator() + wxT( "clone_cancelled" );
+
+    KIGIT_COMMON      common( nullptr );
+    GIT_CLONE_HANDLER handler( &common );
+
+    handler.SetRemote( wxS( "file://" ) + remotePath() );
+    handler.SetClonePath( dest );
+
+    auto                   reporter = std::make_unique<CLONE_CANCEL_REPORTER>( &common );
+    CLONE_CANCEL_REPORTER* watcher = reporter.get();
+
+    handler.SetProgressReporter( std::move( reporter ) );
+
+    bool cloned = handler.PerformClone();
+
+    BOOST_REQUIRE_MESSAGE( watcher->Ticks() > 0, "the clone must report progress at least once" );
+    BOOST_CHECK_MESSAGE( watcher->SawActiveToken(), "the clone must publish a cancellation token while it runs" );
+    BOOST_CHECK_MESSAGE( handler.IsThisOperationCancelled(), "the clone must record the cancellation" );
+    BOOST_CHECK_MESSAGE( !cloned, "a clone cancelled from the progress dialog must not report success" );
+    BOOST_CHECK_MESSAGE( !wxDirExists( dest ), "a cancelled clone must not leave a directory that blocks a retry" );
+
+    // Retired on the way out, so the next operation does not inherit this cancellation.
+    BOOST_CHECK_MESSAGE( !common.ActiveCancelToken(), "the clone must retire its token" );
+
+    if( common.GetRepo() )
+    {
+        git_repository_free( common.GetRepo() );
+        common.SetRepo( nullptr );
+    }
+}
+
+
 // Cancel pressed while the task is still queued must stop it before any network work.
 BOOST_AUTO_TEST_CASE( CancelRequestedWhileQueuedAbortsTransfer )
 {
@@ -1969,10 +2050,8 @@ BOOST_AUTO_TEST_CASE( Amend_UnbornBranchReturnsError )
 }
 
 
-/**
- * InitializeRepository seeds a project-level .gitignore with KiCad-specific
- * transient paths (.history/, *-backups/, _autosave-*, fp-info-cache, ~*.lck).
- */
+// The seeded entries are the KiCad transients: .history/, *-backups/, _autosave-*, fp-info-cache
+// and ~*.lck.
 BOOST_AUTO_TEST_CASE( InitializeRepository_SeedsGitignoreWithKicadEntries )
 {
     BOOST_TEST_REQUIRE( ready() );
@@ -2006,22 +2085,20 @@ BOOST_AUTO_TEST_CASE( InitializeRepository_SeedsGitignoreWithKicadEntries )
 }
 
 
-/**
- * InitializeRepository must not duplicate entries that the user (or a template)
- * has already written.  An existing `.history/` line should be left alone while
- * the other four KiCad defaults are appended.
- */
-BOOST_AUTO_TEST_CASE( InitializeRepository_GitignoreDoesNotDuplicateEntries )
+// A curated .gitignore must not be edited. Appending defaults dirtied a fresh clone.
+BOOST_AUTO_TEST_CASE( InitializeRepository_LeavesExistingGitignoreUntouched )
 {
     BOOST_TEST_REQUIRE( ready() );
 
-    wxString freshDir = repoPath() + wxT( "_dedup" );
+    wxString freshDir = repoPath() + wxT( "_existing" );
     wxFileName::Mkdir( freshDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
 
-    wxFileName gitignoreFile( freshDir, wxT( ".gitignore" ) );
+    const wxString curated = wxT( "# my custom ignores\n.history/\nbuild/\n" );
+    wxFileName     gitignoreFile( freshDir, wxT( ".gitignore" ) );
+
     {
-        wxFFile f( gitignoreFile.GetFullPath(), wxT( "w" ) );
-        f.Write( wxT( "# my custom ignores\n.history/\nbuild/\n" ) );
+        wxFFile f( gitignoreFile.GetFullPath(), wxT( "wb" ) );
+        f.Write( curated );
     }
 
     KIGIT_COMMON     common( nullptr );
@@ -2030,29 +2107,110 @@ BOOST_AUTO_TEST_CASE( InitializeRepository_GitignoreDoesNotDuplicateEntries )
     InitResult result = handler.InitializeRepository( freshDir );
     BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( InitResult::Success ) );
 
-    wxTextFile tf;
-    BOOST_TEST_REQUIRE( tf.Open( gitignoreFile.GetFullPath() ) );
-
-    int historyCount = 0;
-    int buildCount = 0;
-    int fpInfoCount = 0;
-
-    for( size_t i = 0; i < tf.GetLineCount(); ++i )
+    wxString after;
     {
-        wxString line = tf.GetLine( i );
-        line.Trim().Trim( false );
-
-        if( line == wxT( ".history/" ) )
-            historyCount++;
-        else if( line == wxT( "build/" ) )
-            buildCount++;
-        else if( line == wxT( "fp-info-cache" ) )
-            fpInfoCount++;
+        wxFFile f( gitignoreFile.GetFullPath(), wxT( "rb" ) );
+        f.ReadAll( &after );
     }
 
-    BOOST_CHECK_EQUAL( historyCount, 1 ); // was already present; not duplicated
-    BOOST_CHECK_EQUAL( buildCount, 1 );   // user's custom entry preserved
-    BOOST_CHECK_EQUAL( fpInfoCount, 1 );  // KiCad default that was missing got appended
+    BOOST_CHECK_EQUAL( after.ToStdString(), curated.ToStdString() );
+
+    if( wxFileName::DirExists( freshDir ) )
+        wxFileName::Rmdir( freshDir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// An empty file is still the team's file, so it stays empty rather than being filled in.
+BOOST_AUTO_TEST_CASE( InitializeRepository_LeavesEmptyGitignoreEmpty )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    wxString freshDir = repoPath() + wxT( "_emptyignore" );
+    wxFileName::Mkdir( freshDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+    wxFileName gitignoreFile( freshDir, wxT( ".gitignore" ) );
+
+    {
+        wxFFile f( gitignoreFile.GetFullPath(), wxT( "wb" ) );
+    }
+
+    KIGIT_COMMON     common( nullptr );
+    GIT_INIT_HANDLER handler( &common );
+
+    BOOST_CHECK_EQUAL( static_cast<int>( handler.InitializeRepository( freshDir ) ),
+                       static_cast<int>( InitResult::Success ) );
+
+    BOOST_TEST_REQUIRE( gitignoreFile.FileExists() );
+    BOOST_CHECK_EQUAL( gitignoreFile.GetSize().GetValue(), 0u );
+
+    if( wxFileName::DirExists( freshDir ) )
+        wxFileName::Rmdir( freshDir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// Clone applies the same conventions as init, so a cloned repository's own .gitignore has to
+// survive it too.
+BOOST_AUTO_TEST_CASE( CloneConventions_LeaveExistingGitignoreUntouched )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    wxString clonedDir = repoPath() + wxT( "_clonedignore" );
+    wxFileName::Mkdir( clonedDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+    const wxString curated = wxT( "# upstream policy\n*.bak\n" );
+    wxFileName     gitignoreFile( clonedDir, wxT( ".gitignore" ) );
+
+    {
+        wxFFile f( gitignoreFile.GetFullPath(), wxT( "wb" ) );
+        f.Write( curated );
+    }
+
+    // The entry point GIT_CLONE_HANDLER uses after a successful clone.
+    ApplyKicadGitConventions( clonedDir );
+
+    wxString after;
+    {
+        wxFFile f( gitignoreFile.GetFullPath(), wxT( "rb" ) );
+        f.ReadAll( &after );
+    }
+
+    BOOST_CHECK_EQUAL( after.ToStdString(), curated.ToStdString() );
+
+    if( wxFileName::DirExists( clonedDir ) )
+        wxFileName::Rmdir( clonedDir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// Another process can create the file between the existence test and the create, so the create
+// is exclusive and the loser keeps out of the way.
+// Covers the primitive the initializer relies on, not the initializer itself. The race cannot
+// be staged without a production test seam, so the cases above cover the rule instead.
+BOOST_AUTO_TEST_CASE( GitignoreExclusiveCreateRefusesAnExistingFile )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    wxString freshDir = repoPath() + wxT( "_race" );
+    wxFileName::Mkdir( freshDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+    wxFileName     gitignoreFile( freshDir, wxT( ".gitignore" ) );
+    const wxString other = wxT( "written by someone else\n" );
+
+    {
+        wxFFile f( gitignoreFile.GetFullPath(), wxT( "wb" ) );
+        f.Write( other );
+    }
+
+    // wxFile::Create with overwrite false is O_CREAT|O_EXCL, which is what makes the loser safe.
+    wxFile probe;
+    BOOST_CHECK( !probe.Create( gitignoreFile.GetFullPath(), false ) );
+
+    wxString after;
+    {
+        wxFFile f( gitignoreFile.GetFullPath(), wxT( "rb" ) );
+        f.ReadAll( &after );
+    }
+
+    BOOST_CHECK_EQUAL( after.ToStdString(), other.ToStdString() );
 
     if( wxFileName::DirExists( freshDir ) )
         wxFileName::Rmdir( freshDir, wxPATH_RMDIR_RECURSIVE );

@@ -41,8 +41,6 @@ public:
 
     void SetRemote( const wxString& aRemote ) { GetCommon()->SetRemote( aRemote ); }
 
-    void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
-
 private:
     wxString m_branch;
     wxString m_clonePath;

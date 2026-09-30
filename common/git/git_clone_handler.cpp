@@ -43,9 +43,3 @@ bool GIT_CLONE_HANDLER::PerformClone()
 
     return ok;
 }
-
-
-void GIT_CLONE_HANDLER::UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage )
-{
-    ReportProgress( aCurrent, aTotal, aMessage );
-}

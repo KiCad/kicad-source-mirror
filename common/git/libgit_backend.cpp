@@ -167,6 +167,9 @@ bool LIBGIT_BACKEND::Clone( GIT_CLONE_HANDLER* aHandler )
         return false;
     }
 
+    // Without this the progress dialog's Cancel would set a token nothing reads.
+    KIGIT_COMMON::OPERATION_GUARD operation( common, aHandler->CancelToken() );
+
     wxFileName clonePath( aHandler->GetClonePath() );
 
     if( !clonePath.DirExists() )

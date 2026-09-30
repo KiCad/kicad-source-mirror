@@ -66,8 +66,6 @@ public:
      * @return True on success, false on error
      */
     bool SetupRemote( const RemoteConfig& aConfig );
-
-    void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
 };
 
 
