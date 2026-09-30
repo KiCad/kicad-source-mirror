@@ -33,9 +33,11 @@
 #include <libraries/library_table.h>
 #include <lockfile.h>
 #include <macros.h>
+#include <git/kicad_git_common.h>
 #include <git/project_git_utils.h>
 #include <git2.h>
 #include <project.h>
+#include <project/project_local_settings.h>
 
 #include <footprint_library_adapter.h>
 
@@ -74,7 +76,86 @@ void PROJECT::elemsClear()
 
 PROJECT::~PROJECT()
 {
+    ReleaseGitCommon();
     elemsClear();
+}
+
+
+std::shared_ptr<KIGIT_COMMON> PROJECT::GetGitCommon() const
+{
+    if( !m_gitCommon )
+        m_gitCommon = std::make_shared<KIGIT_COMMON>( nullptr );
+
+    return m_gitCommon;
+}
+
+
+bool PROJECT::AttachGitRepository()
+{
+    std::shared_ptr<KIGIT_COMMON> common = GetGitCommon();
+
+    if( common->GetRepo() )
+        return true;
+
+    if( m_localSettings && m_localSettings->m_GitIntegrationDisabled )
+        return false;
+
+    // First attach only, or every panel refresh would undo what the credentials prompt
+    // corrected on the live session.
+    if( m_localSettings )
+    {
+        common->SetUsername( m_localSettings->m_GitRepoUsername );
+        common->SetSSHKey( m_localSettings->m_GitSSHKey );
+    }
+
+    wxFileName      fn( GetProjectFullName() );
+    wxString        projectDir = fn.GetPath();
+    wxString        attachError;
+    git_repository* repo = KIGIT::PROJECT_GIT_UTILS::GetRepositoryForFile( projectDir.mb_str(), &attachError );
+
+    common->SetAttachError( attachError );
+
+    if( !repo )
+        return false;
+
+    // A bare repository has no files on disk to show or commit, so attaching to one would
+    // report the project as having no changes while every operation on it failed.
+    if( !git_repository_workdir( repo ) )
+    {
+        git_repository_free( repo );
+        common->SetAttachError( _( "The git repository holding this project has no working folder, so "
+                                   "KiCad cannot use it. Clone the repository normally and open the "
+                                   "project from the clone." ) );
+        return false;
+    }
+
+    common->SetRepo( repo );
+    common->SetShuttingDown( false );
+
+    const char* canonicalWorkDir = git_repository_workdir( repo );
+
+    if( canonicalWorkDir )
+    {
+        wxString symlinkWorkDir = KIGIT::PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir(
+                projectDir, wxString::FromUTF8( canonicalWorkDir ) );
+        common->SetProjectDir( symlinkWorkDir );
+    }
+
+    common->UpdateCurrentBranchInfo();
+
+    return true;
+}
+
+
+void PROJECT::ReleaseGitCommon()
+{
+    if( !m_gitCommon )
+        return;
+
+    std::shared_ptr<KIGIT_COMMON> old = std::move( m_gitCommon );
+
+    std::string label = "release " + GetProjectPath().ToStdString();
+    KIGIT::PROJECT_GIT_UTILS::SafeFreeRepository( std::move( old ), label );
 }
 
 

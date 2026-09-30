@@ -251,6 +251,14 @@ using GitIndexConflictIteratorPtr = std::unique_ptr<git_index_conflict_iterator,
                                                        })>;
 
 /**
+* @brief A unique pointer for git_tree_entry objects with automatic cleanup.
+*/
+using GitTreeEntryPtr = std::unique_ptr<git_tree_entry,
+                                           decltype([](git_tree_entry* aEntry) {
+                                               git_tree_entry_free(aEntry);
+                                           })>;
+
+/**
 * @brief A unique pointer for git_status_list objects with automatic cleanup.
 */
 using GitStatusListPtr = std::unique_ptr<git_status_list,

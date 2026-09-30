@@ -50,6 +50,7 @@ class FOOTPRINT_LIBRARY_ADAPTER;
 class PROJECT_FILE;
 class PROJECT_LOCAL_SETTINGS;
 class LOCKFILE;
+class KIGIT_COMMON;
 
 
 /**
@@ -208,6 +209,24 @@ public:
         wxASSERT( m_localSettings );
         return *m_localSettings;
     }
+
+    /**
+     * This project's Git session, created empty on first use. The repository handle is null
+     * until AttachGitRepository() finds one.
+     *
+     * UI thread only, the lazy creation is not synchronized. Background work takes a shared
+     * pointer captured on the UI thread instead.
+     */
+    virtual std::shared_ptr<KIGIT_COMMON> GetGitCommon() const;
+
+    /**
+     * Find the Git repository containing the project directory and bind it to the session.
+     * Does nothing when Git integration is disabled for this project.
+     */
+    virtual bool AttachGitRepository();
+
+    /// Safely release the session's repository handle and drop the session.
+    virtual void ReleaseGitCommon();
 
     /// Retain a number of project specific wxStrings, enumerated here:
     enum RSTRING_T
@@ -374,6 +393,9 @@ private:
 
     /// Backing store for project local settings -- owned by SETTINGS_MANAGER
     PROJECT_LOCAL_SETTINGS*  m_localSettings;
+
+    /// Git session for the repository containing this project, created on first use
+    mutable std::shared_ptr<KIGIT_COMMON> m_gitCommon;
 
     std::map<KIID, wxString> m_sheetNames;
 

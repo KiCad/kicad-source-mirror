@@ -571,4 +571,26 @@ BOOST_AUTO_TEST_CASE( VcsContextPathSetByLoadProject )
     cleanup();
 }
 
+
+// The context is process-wide, so a manager that dies with a project loaded leaves it stale.
+BOOST_AUTO_TEST_CASE( VcsContextClearedWhenSettingsManagerDies )
+{
+    BOOST_TEST_REQUIRE( repoReady() );
+
+    wxString projectPath = tempDir() + wxFileName::GetPathSeparator() + wxT( "ctx.kicad_pro" );
+
+    {
+        std::ofstream f( projectPath.ToStdString() );
+        f << "{\"meta\": {\"filename\": \"ctx.kicad_pro\", \"version\": 3}}";
+    }
+
+    {
+        SETTINGS_MANAGER mgr;
+        BOOST_TEST_REQUIRE( mgr.LoadProject( projectPath ) );
+        BOOST_CHECK( TEXT_EVAL_VCS::GetContextPath() != wxT( "." ) );
+    }
+
+    BOOST_CHECK_EQUAL( TEXT_EVAL_VCS::GetContextPath().ToStdString(), std::string( "." ) );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

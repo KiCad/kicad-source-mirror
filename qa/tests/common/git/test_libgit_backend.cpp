@@ -39,7 +39,13 @@
 
 #include <git2.h>
 
+#include <project.h>
+#include <project/project_local_settings.h>
+#include <settings/settings_manager.h>
+
 #include <fstream>
+#include <future>
+#include <thread>
 
 #include <wx/ffile.h>
 #include <wx/filename.h>
@@ -341,12 +347,8 @@ long GIT_BACKEND_FIXTURE::s_counter = 0;
 BOOST_FIXTURE_TEST_SUITE( LibgitBackend, GIT_BACKEND_FIXTURE )
 
 
-/**
- * The commit/amend checklists scope files to the project directory so that
- * unrelated files elsewhere in the repository do not leak into the commit
- * (issue #15910).  IsWithinProjectPath is the single scope predicate shared by
- * every checklist path in the project manager.
- */
+// The single scope predicate behind every checklist, so a file elsewhere in the repository
+// cannot leak into a project commit (issue #15910).
 BOOST_AUTO_TEST_CASE( IsWithinProjectPath_ScopesToProjectDirectory )
 {
     const wxString project = wxT( "/repo/proj/" );
@@ -959,6 +961,273 @@ BOOST_AUTO_TEST_CASE( InitializeRepository_GitignoreDoesNotDuplicateEntries )
 
     if( wxFileName::DirExists( freshDir ) )
         wxFileName::Rmdir( freshDir, wxPATH_RMDIR_RECURSIVE );
+}
+
+
+// LoadProject() needs a real project file with a meta section.
+static wxString seedProjectFile( const wxString& aDir )
+{
+    wxString path = aDir + wxFileName::GetPathSeparator() + wxT( "proj.kicad_pro" );
+
+    if( !wxFileName::FileExists( path ) )
+    {
+        wxFFile f( path, wxT( "w" ) );
+        f.Write( wxT( "{\"meta\": {\"filename\": \"proj.kicad_pro\", \"version\": 3}}" ) );
+    }
+
+    return path;
+}
+
+
+BOOST_AUTO_TEST_CASE( ProjectGitCommon_LazyCreateAttachRelease )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    wxString projectPath = seedProjectFile( repoPath() );
+
+    SETTINGS_MANAGER mgr;
+    BOOST_TEST_REQUIRE( mgr.LoadProject( projectPath ) );
+
+    PROJECT* project = mgr.GetProject( projectPath );
+    BOOST_TEST_REQUIRE( project != nullptr );
+
+    std::shared_ptr<KIGIT_COMMON> common = project->GetGitCommon();
+    BOOST_TEST_REQUIRE( common != nullptr );
+    BOOST_CHECK( common->GetRepo() == nullptr );
+    BOOST_CHECK( common == project->GetGitCommon() );
+
+    BOOST_TEST_REQUIRE( project->AttachGitRepository() );
+    git_repository* repo = common->GetRepo();
+    BOOST_TEST_REQUIRE( repo != nullptr );
+    BOOST_CHECK( !common->GetProjectDir().IsEmpty() );
+
+    BOOST_TEST_REQUIRE( project->AttachGitRepository() );
+    BOOST_CHECK( common->GetRepo() == repo );
+
+    project->ReleaseGitCommon();
+
+    std::shared_ptr<KIGIT_COMMON> fresh = project->GetGitCommon();
+    BOOST_TEST_REQUIRE( fresh != nullptr );
+    BOOST_CHECK( fresh != common );
+    BOOST_CHECK( fresh->GetRepo() == nullptr );
+    BOOST_CHECK( common->GetRepo() == nullptr );
+
+    // Unloading with the repository still attached exercises the destructor release path.
+    BOOST_TEST_REQUIRE( project->AttachGitRepository() );
+    BOOST_CHECK( mgr.UnloadProject( project, false ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ProjectGitCommon_ReleaseSkipsFreeWhenBackendGone )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    wxString projectPath = seedProjectFile( repoPath() );
+
+    SETTINGS_MANAGER mgr;
+    BOOST_TEST_REQUIRE( mgr.LoadProject( projectPath ) );
+
+    PROJECT* project = mgr.GetProject( projectPath );
+    BOOST_TEST_REQUIRE( project != nullptr );
+    BOOST_TEST_REQUIRE( project->AttachGitRepository() );
+
+    git_repository* repo = project->GetGitCommon()->GetRepo();
+    BOOST_TEST_REQUIRE( repo != nullptr );
+
+    // Simulate the process-exit ordering where the backend is torn down before the
+    // last project. The release must clear the handle without freeing it, since a free
+    // would call into a shut-down libgit2.
+    GIT_BACKEND* backend = GetGitBackend();
+    SetGitBackend( nullptr );
+
+    project->ReleaseGitCommon();
+
+    BOOST_CHECK( project->GetGitCommon()->GetRepo() == nullptr );
+
+    SetGitBackend( backend );
+
+    // The release skipped the free on purpose, so reclaim the handle now.
+    git_repository_free( repo );
+}
+
+
+BOOST_AUTO_TEST_CASE( ProjectGitCommon_AttachOutsideRepositoryFails )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    wxFileName tempBase( repoPath(), wxEmptyString );
+    tempBase.RemoveLastDir();
+    wxString outsideDir = tempBase.GetPath() + wxFileName::GetPathSeparator() + wxT( "no_repo_here" );
+    wxFileName::Mkdir( outsideDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+    wxString projectPath = seedProjectFile( outsideDir );
+
+    SETTINGS_MANAGER mgr;
+    BOOST_TEST_REQUIRE( mgr.LoadProject( projectPath ) );
+
+    PROJECT* project = mgr.GetProject( projectPath );
+    BOOST_TEST_REQUIRE( project != nullptr );
+
+    BOOST_CHECK( !project->AttachGitRepository() );
+    BOOST_CHECK( project->GetGitCommon()->GetRepo() == nullptr );
+}
+
+
+BOOST_AUTO_TEST_CASE( ProjectGitCommon_AttachHonorsDisabledSetting )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    wxString projectPath = seedProjectFile( repoPath() );
+
+    SETTINGS_MANAGER mgr;
+    BOOST_TEST_REQUIRE( mgr.LoadProject( projectPath ) );
+
+    PROJECT* project = mgr.GetProject( projectPath );
+    BOOST_TEST_REQUIRE( project != nullptr );
+
+    project->GetLocalSettings().m_GitIntegrationDisabled = true;
+
+    BOOST_CHECK( !project->AttachGitRepository() );
+    BOOST_CHECK( project->GetGitCommon()->GetRepo() == nullptr );
+
+    project->GetLocalSettings().m_GitIntegrationDisabled = false;
+
+    BOOST_CHECK( project->AttachGitRepository() );
+    BOOST_CHECK( project->GetGitCommon()->GetRepo() != nullptr );
+
+    project->ReleaseGitCommon();
+}
+
+
+BOOST_AUTO_TEST_CASE( ProjectGitCommon_ReleaseDefersFreeWhileActionMutexHeld )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    wxString projectPath = seedProjectFile( repoPath() );
+
+    SETTINGS_MANAGER mgr;
+    BOOST_TEST_REQUIRE( mgr.LoadProject( projectPath ) );
+
+    PROJECT* project = mgr.GetProject( projectPath );
+    BOOST_TEST_REQUIRE( project != nullptr );
+
+    BOOST_TEST_REQUIRE( project->AttachGitRepository() );
+    std::shared_ptr<KIGIT_COMMON> common = project->GetGitCommon();
+
+    std::promise<void> lockHeld;
+    std::promise<void> allowUnlock;
+
+    std::thread worker(
+            [&]()
+            {
+                std::unique_lock<std::mutex> lock = common->LockAction();
+                lockHeld.set_value();
+                allowUnlock.get_future().wait();
+            } );
+
+    lockHeld.get_future().wait();
+
+    // The worker holds the action mutex, so the release must defer the free to the
+    // orphan registry instead of blocking. The repo handle must stay valid for the
+    // running operation until it finishes.
+    project->ReleaseGitCommon();
+
+    BOOST_CHECK( common->GetRepo() != nullptr );
+    BOOST_CHECK( GetGitBackend()->OrphanRegistry().TrackedCount() >= 1 );
+
+    allowUnlock.set_value();
+    worker.join();
+
+    auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds( 5 );
+
+    while( GetGitBackend()->OrphanRegistry().TrackedCount() > 0 && std::chrono::steady_clock::now() < deadline )
+    {
+        std::this_thread::sleep_for( std::chrono::milliseconds( 20 ) );
+    }
+
+    BOOST_CHECK_EQUAL( GetGitBackend()->OrphanRegistry().TrackedCount(), 0 );
+    BOOST_CHECK( common->GetRepo() == nullptr );
+}
+
+
+// WriteTreeToDir must reproduce the full tree of a ref, including files in subdirectories, so a
+// hierarchical schematic's sub-sheets are present when the committed side is diffed.
+BOOST_AUTO_TEST_CASE( WriteTreeToDir_MaterializesSubdirectoryFiles )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    const wxString sep = wxFileName::GetPathSeparator();
+
+    createCommit( repo, wxT( "root.kicad_sch" ), wxT( "root\n" ), wxT( "add root" ) );
+
+    BOOST_REQUIRE( wxFileName::Mkdir( repoPath() + sep + wxT( "sub" ), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+    createCommit( repo, wxT( "sub/child.kicad_sch" ), wxT( "child\n" ), wxT( "add child" ) );
+
+    wxString dest = wxFileName::CreateTempFileName( wxT( "kicad_qa_tree_" ) );
+    wxRemoveFile( dest );
+
+    BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::WriteTreeToDir( repo, wxT( "HEAD" ), dest ) );
+    BOOST_CHECK( wxFileName::FileExists( dest + sep + wxT( "root.kicad_sch" ) ) );
+    BOOST_CHECK_MESSAGE( wxFileName::FileExists( dest + sep + wxT( "sub" ) + sep + wxT( "child.kicad_sch" ) ),
+                         "sub-sheet file in a subdirectory must be materialized alongside the root" );
+
+    if( wxFileName::DirExists( dest ) )
+        wxFileName::Rmdir( dest, wxPATH_RMDIR_RECURSIVE );
+
+    git_repository_free( repo );
+}
+
+
+// The repository must stay untouched until the final commit, and that commit must also bring the
+
+
+// Viewing a diff materializes a committed tree, and that must never replace what the user has
+// staged.
+BOOST_AUTO_TEST_CASE( WriteTreeToDir_LeavesIndexUntouched )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    // Stage content that differs from both HEAD and the working file.
+    wxString filePath = repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" );
+    {
+        std::ofstream f( filePath.ToStdString() );
+        f << "staged-work-in-progress";
+    }
+
+    git_index* index = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+    git_index_add_bypath( index, "file.txt" );
+    git_index_write( index );
+
+    const git_index_entry* before = git_index_get_bypath( index, "file.txt", 0 );
+    BOOST_REQUIRE( before );
+    git_oid stagedOid = before->id;
+
+    wxString dest = wxFileName::CreateTempFileName( wxT( "kicad_qa_tree_" ) );
+    wxRemoveFile( dest );
+
+    BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::WriteTreeToDir( repo, wxT( "HEAD" ), dest ) );
+
+    // Re-read the index from disk and confirm the staged blob is still the one we staged, not
+    // the committed version that was checked out.
+    git_index_read( index, 1 );
+    const git_index_entry* after = git_index_get_bypath( index, "file.txt", 0 );
+    BOOST_REQUIRE( after );
+    BOOST_CHECK_MESSAGE( git_oid_equal( &stagedOid, &after->id ),
+                         "WriteTreeToDir must not rewrite the repository index" );
+
+    git_index_free( index );
+
+    if( wxFileName::DirExists( dest ) )
+        wxFileName::Rmdir( dest, wxPATH_RMDIR_RECURSIVE );
+
+    git_repository_free( repo );
 }
 
 

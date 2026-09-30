@@ -513,6 +513,8 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM<int>( "git.updatInterval",
             &m_Git.updatInterval, 5 ) );
 
+    m_params.emplace_back( new PARAM<bool>( "git.showContributorAvatars", &m_Git.showContributorAvatars, false ) );
+
     m_params.emplace_back( new PARAM<wxString>( "api.interpreter_path",
             &m_Api.python_interpreter, wxS( "" ) ) );
 

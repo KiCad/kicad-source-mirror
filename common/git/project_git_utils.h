@@ -21,8 +21,13 @@
 #define PROJECT_GIT_UTILS_H
 
 #include <git2.h>
+#include <memory>
+#include <string>
 #include <wx/string.h>
+#include <wx/filename.h>
 #include <import_export.h>
+
+class KIGIT_COMMON;
 
 namespace KIGIT
 {
@@ -115,6 +120,42 @@ public:
      * @return True if aAbsPath is within the project directory.
      */
     static bool IsWithinProjectPath( const wxString& aAbsPath, const wxString& aProjectPath );
+
+    /**
+     * Free the session's repository handle without pulling it out from under a running
+     * operation. With the action mutex free it goes at once, otherwise the orphan registry
+     * frees it once the running operation releases the mutex.
+     *
+     * @param aLabel Names the orphan registry entry, for shutdown diagnostics.
+     */
+    static void SafeFreeRepository( std::shared_ptr<KIGIT_COMMON> aCommon, const std::string& aLabel );
+
+    /**
+     * True for a file a commit should never offer: lock files, autosaves, backups, the
+     * archived backups directory and the local history directory.
+     *
+     * @param aProjectName Base name of the project, used to match its backups directory.
+     */
+    static bool IsTransientGitFile( const wxFileName& aFile, const wxString& aProjectName );
+
+    /**
+     * Write a file as it exists at a git ref to a path on disk, so a committed version can
+     * be diffed. False for an empty ref or path, or one that is not a blob.
+     *
+     * @param aRef Branch, tag or commit to read from, for example "HEAD".
+     * @param aPath Path inside the repository, relative to its root.
+     */
+    static bool WriteBlobToFile( git_repository* aRepo, const wxString& aRef, const wxString& aPath,
+                                 const wxString& aDestPath );
+
+    /**
+     * Check out a whole tree into a directory, leaving the repository's working copy and
+     * index alone. A hierarchical schematic needs this rather than a lone blob, because its
+     * root sheet references sub-sheet files.
+     *
+     * @param aDestDir Destination directory, created if needed.
+     */
+    static bool WriteTreeToDir( git_repository* aRepo, const wxString& aRef, const wxString& aDestDir );
 };
 
 } // namespace KIGIT

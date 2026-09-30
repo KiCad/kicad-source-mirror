@@ -20,9 +20,12 @@
 #include <text_eval/text_eval_environment.h>
 #include "project_git_utils.h"
 #include "git_backend.h"
-#include "kicad_git_memory.h"
+#include "kicad_git_common.h"
 
+#include <wx/file.h>
 #include <wx/filename.h>
+
+#include "kicad_git_memory.h"
 #include <wx/string.h>
 #include <string_utils.h>
 
@@ -119,6 +122,29 @@ wxString PROJECT_GIT_UTILS::GetCurrentHash( const wxString& aProjectFile, bool a
 }
 
 
+// The path with its symlinks resolved and a trailing separator, or the path unchanged when it
+// cannot be resolved. git reports paths under the resolved root, so a path only compares against
+// one of git's once both have been through this.
+static wxString canonicalDir( const wxString& aPath )
+{
+#ifdef __WINDOWS__
+    return aPath;
+#else
+    char resolved[PATH_MAX];
+
+    if( aPath.IsEmpty() || realpath( aPath.mb_str(), resolved ) == nullptr )
+        return aPath;
+
+    wxString out = wxString::FromUTF8( resolved );
+
+    if( !out.EndsWith( wxFileName::GetPathSeparator() ) && wxFileName::DirExists( out ) )
+        out += wxFileName::GetPathSeparator();
+
+    return out;
+#endif
+}
+
+
 wxString PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir( const wxString& aUserProjectPath,
                                                              const wxString& aCanonicalWorkDir )
 {
@@ -175,16 +201,19 @@ wxString PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir( const wxString& aUs
         userFn.RemoveLastDir();
     }
 
+    // One symlink can stand for several directories, so stepping up the visible path a component
+    // at a time can land somewhere that is not the repository. Only an answer that resolves back
+    // to the working directory is an alias for it.
+    if( canonicalDir( userFn.GetPathWithSep() ) != canonicalWorkDirNorm )
+        return aCanonicalWorkDir;
+
     return userFn.GetPathWithSep();
 #endif
 }
 
 
-bool PROJECT_GIT_UTILS::IsWithinProjectPath( const wxString& aAbsPath, const wxString& aProjectPath )
+static bool pathIsUnder( const wxString& aAbsPath, const wxString& aProjectPath )
 {
-    if( aProjectPath.IsEmpty() )
-        return false;
-
     wxString absPath = aAbsPath;
     wxString projectPath = aProjectPath;
 
@@ -201,6 +230,140 @@ bool PROJECT_GIT_UTILS::IsWithinProjectPath( const wxString& aAbsPath, const wxS
 #else
     return absPath.StartsWith( projectPath );
 #endif
+}
+
+
+bool PROJECT_GIT_UTILS::IsWithinProjectPath( const wxString& aAbsPath, const wxString& aProjectPath )
+{
+    if( aProjectPath.IsEmpty() )
+        return false;
+
+    if( pathIsUnder( aAbsPath, aProjectPath ) )
+        return true;
+
+    // The project can be reached through a symlink the repository path does not share, and then
+    // the two only line up once both are resolved.
+    return pathIsUnder( canonicalDir( aAbsPath ), canonicalDir( aProjectPath ) );
+}
+
+
+void PROJECT_GIT_UTILS::SafeFreeRepository( std::shared_ptr<KIGIT_COMMON> aCommon, const std::string& aLabel )
+{
+    if( !aCommon )
+        return;
+
+    git_repository* repo = aCommon->GetRepo();
+
+    if( !repo )
+        return;
+
+    // A null backend means libgit2 is already shut down at process exit. Freeing now would
+    // call into a torn-down library, so drop the handle and let the OS reclaim it.
+    if( !GetGitBackend() )
+    {
+        aCommon->SetRepo( nullptr );
+        return;
+    }
+
+    aCommon->SetShuttingDown( true );
+
+    {
+        std::unique_lock<std::mutex> gitLock = aCommon->TryLockAction();
+
+        if( gitLock.owns_lock() )
+        {
+            aCommon->SetRepo( nullptr );
+            git_repository_free( repo );
+            return;
+        }
+    }
+
+    // An operation still holds the action mutex, so the handle must stay valid until it
+    // finishes. The orphan registry frees it once the mutex is released.
+    auto cleanup = [repo, old = std::move( aCommon )]() mutable
+    {
+        std::unique_lock<std::mutex> g = old->LockAction();
+        old->SetRepo( nullptr );
+        git_repository_free( repo );
+    };
+
+    GIT_BACKEND* backend = GetGitBackend();
+
+    if( !backend || !backend->OrphanRegistry().Register( aLabel, std::move( cleanup ) ) )
+    {
+        // No registry is available, so free synchronously rather than leak. Blocking on
+        // the mutex here is safe because libgit2 shutdown is gated on the registry.
+        cleanup();
+    }
+}
+
+
+bool PROJECT_GIT_UTILS::WriteBlobToFile( git_repository* aRepo, const wxString& aRef, const wxString& aPath,
+                                         const wxString& aDestPath )
+{
+    if( !aRepo || aRef.IsEmpty() || aPath.IsEmpty() )
+        return false;
+
+    KIGIT::GitTreePtr treePtr( KIGIT::ResolveRefToTree( aRepo, aRef ) );
+
+    if( !treePtr )
+        return false;
+
+    git_tree_entry* entry = nullptr;
+
+    if( git_tree_entry_bypath( &entry, treePtr.get(), aPath.ToUTF8().data() ) != 0 )
+        return false;
+
+    KIGIT::GitTreeEntryPtr entryPtr( entry );
+
+    if( git_tree_entry_type( entry ) != GIT_OBJECT_BLOB )
+        return false;
+
+    git_object* blobObj = nullptr;
+
+    if( git_tree_entry_to_object( &blobObj, aRepo, entry ) != 0 )
+        return false;
+
+    KIGIT::GitObjectPtr blobObjPtr( blobObj );
+    git_blob*           blob = reinterpret_cast<git_blob*>( blobObj );
+
+    // Committed file contents can be sensitive and the destination lives in the shared temp
+    // directory, so create it readable and writable only by the current user.
+    wxFile out;
+
+    if( !out.Create( aDestPath, /* overwrite */ true, wxS_IRUSR | wxS_IWUSR ) )
+        return false;
+
+    const void* raw = git_blob_rawcontent( blob );
+    git_off_t   size = git_blob_rawsize( blob );
+
+    return out.Write( raw, static_cast<size_t>( size ) ) == static_cast<size_t>( size );
+}
+
+
+bool PROJECT_GIT_UTILS::WriteTreeToDir( git_repository* aRepo, const wxString& aRef, const wxString& aDestDir )
+{
+    if( !aRepo || aRef.IsEmpty() || aDestDir.IsEmpty() )
+        return false;
+
+    KIGIT::GitTreePtr treePtr( KIGIT::ResolveRefToTree( aRepo, aRef ) );
+
+    if( !treePtr )
+        return false;
+
+    // Owner-only, matching the 0600 blob files written into it.
+    if( !wxFileName::Mkdir( aDestDir, 0700, wxPATH_MKDIR_FULL ) )
+        return false;
+
+    std::string          destUtf8 = aDestDir.utf8_string();
+    git_checkout_options opts = GIT_CHECKOUT_OPTIONS_INIT;
+
+    // Without DONT_UPDATE_INDEX, git_checkout_tree rewrites .git/index to the checked-out
+    // tree, replacing whatever the user has staged.
+    opts.checkout_strategy = GIT_CHECKOUT_FORCE | GIT_CHECKOUT_RECREATE_MISSING | GIT_CHECKOUT_DONT_UPDATE_INDEX;
+    opts.target_directory = destUtf8.c_str();
+
+    return git_checkout_tree( aRepo, reinterpret_cast<git_object*>( treePtr.get() ), &opts ) == GIT_OK;
 }
 
 } // namespace KIGIT

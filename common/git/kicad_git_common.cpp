@@ -516,6 +516,42 @@ bool KIGIT_COMMON::HasLocalCommits() const
 }
 
 
+void KIGIT_COMMON::AddRefreshListener( void* aOwner, std::function<void()> aCallback )
+{
+    m_refreshListeners.emplace_back( aOwner, std::move( aCallback ) );
+}
+
+
+void KIGIT_COMMON::RemoveRefreshListener( void* aOwner )
+{
+    std::erase_if( m_refreshListeners,
+                   [aOwner]( const auto& aEntry )
+                   {
+                       return aEntry.first == aOwner;
+                   } );
+}
+
+
+void KIGIT_COMMON::NotifyRefreshListeners()
+{
+    // Copy first: a listener could add or remove one while it runs.
+    std::vector<std::pair<void*, std::function<void()>>> listeners = m_refreshListeners;
+
+    for( const auto& [owner, callback] : listeners )
+    {
+        // An earlier listener in this round can have removed this one.
+        bool registered = std::any_of( m_refreshListeners.begin(), m_refreshListeners.end(),
+                                       [owner = owner]( const auto& aEntry )
+                                       {
+                                           return aEntry.first == owner;
+                                       } );
+
+        if( registered )
+            callback();
+    }
+}
+
+
 bool KIGIT_COMMON::HasPushAndPullRemote() const
 {
     wxCHECK( m_repo, false );

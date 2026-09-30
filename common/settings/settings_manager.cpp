@@ -90,6 +90,9 @@ SETTINGS_MANAGER::SETTINGS_MANAGER() :
 
 SETTINGS_MANAGER::~SETTINGS_MANAGER()
 {
+    // The projects go away without passing through UnloadProject, which is what would drop this.
+    TEXT_EVAL_VCS::SetContextPath( wxString() );
+
     for( std::unique_ptr<PROJECT>& project : m_projects_list )
         project.reset();
 

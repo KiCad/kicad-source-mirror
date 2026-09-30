@@ -21,6 +21,8 @@
 
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
+#include <git/project_git_utils.h>
+#include <qa_utils/scoped_git_backend.h>
 
 #include <git2.h>
 
@@ -104,11 +106,9 @@ const char* c_pkcs8Encrypted = "-----BEGIN ENCRYPTED PRIVATE KEY-----\n"
                                "-----END ENCRYPTED PRIVATE KEY-----\n";
 
 
-struct GitInitGuard
-{
-    GitInitGuard()  { git_libgit2_init(); }
-    ~GitInitGuard() { git_libgit2_shutdown(); }
-};
+// KIGIT_COMMON routes its repository edits through the installed backend, and libgit2 must be
+// initialized, so every test installs one for its lifetime through the shared helper.
+using GitInitGuard = SCOPED_GIT_BACKEND;
 
 
 struct ScopedTempDir
@@ -214,10 +214,8 @@ git_repository* makeRepoWithCommit( const wxString& aRepoPath, const wxString& a
 BOOST_AUTO_TEST_SUITE( KiGitCommon )
 
 
-// GetGitRootDirectory must return the working directory (project root) and not the
-// internal .git folder.  Older code returned git_repository_path() which produced a path
-// ending in /.git/, breaking the version-control popup-menu detection logic for whether a
-// project lives at the repository root.
+// git_repository_path() returns a path ending in /.git/, which broke the popup-menu test for
+// whether a project lives at the repository root.
 BOOST_AUTO_TEST_CASE( GitRootDirectoryReturnsWorkdir )
 {
     GitInitGuard libgit;
@@ -573,6 +571,155 @@ BOOST_AUTO_TEST_CASE( PrivateKeyEncryptionRejectsNonKeys )
     BOOST_CHECK_MESSAGE( !KIGIT::IsPrivateKeyEncrypted( "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKB0 t\n" ),
                          "A public key is not an encrypted private key" );
 }
+
+
+// The commit panels and the advanced window register refresh listeners so a write from any
+// one of them updates the others. A notify must fire every registered listener.
+BOOST_AUTO_TEST_CASE( RefreshListenersFireOnNotify )
+{
+    KIGIT_COMMON common( nullptr );
+
+    int a = 0;
+    int b = 0;
+    int ownerA = 0;
+    int ownerB = 0;
+
+    common.AddRefreshListener( &ownerA,
+                               [&]()
+                               {
+                                   a++;
+                               } );
+    common.AddRefreshListener( &ownerB,
+                               [&]()
+                               {
+                                   b++;
+                               } );
+
+    common.NotifyRefreshListeners();
+    BOOST_CHECK_EQUAL( a, 1 );
+    BOOST_CHECK_EQUAL( b, 1 );
+
+    common.NotifyRefreshListeners();
+    BOOST_CHECK_EQUAL( a, 2 );
+    BOOST_CHECK_EQUAL( b, 2 );
+}
+
+
+// A removed listener, such as one whose panel was destroyed, must never fire again.
+BOOST_AUTO_TEST_CASE( RemovedRefreshListenerDoesNotFire )
+{
+    KIGIT_COMMON common( nullptr );
+
+    int a = 0;
+    int b = 0;
+    int ownerA = 0;
+    int ownerB = 0;
+
+    common.AddRefreshListener( &ownerA,
+                               [&]()
+                               {
+                                   a++;
+                               } );
+    common.AddRefreshListener( &ownerB,
+                               [&]()
+                               {
+                                   b++;
+                               } );
+    common.RemoveRefreshListener( &ownerA );
+
+    common.NotifyRefreshListeners();
+    BOOST_CHECK_EQUAL( a, 0 );
+    BOOST_CHECK_EQUAL( b, 1 );
+}
+
+
+// A panel torn down while responding to a refresh unregisters from inside its own callback, and
+// the remaining listeners must still run.
+BOOST_AUTO_TEST_CASE( RefreshListenerCanUnregisterDuringNotify )
+{
+    KIGIT_COMMON common( nullptr );
+
+    int a = 0;
+    int b = 0;
+    int ownerA = 0;
+    int ownerB = 0;
+
+    common.AddRefreshListener( &ownerA,
+                               [&]()
+                               {
+                                   a++;
+                                   common.RemoveRefreshListener( &ownerA );
+                               } );
+    common.AddRefreshListener( &ownerB,
+                               [&]()
+                               {
+                                   b++;
+                               } );
+
+    common.NotifyRefreshListeners();
+    BOOST_CHECK_EQUAL( a, 1 );
+    BOOST_CHECK_EQUAL( b, 1 );
+
+    common.NotifyRefreshListeners();
+    BOOST_CHECK_EQUAL( a, 1 );
+    BOOST_CHECK_EQUAL( b, 2 );
+}
+
+
+// A listener removed by an earlier listener in the same round must not run.
+BOOST_AUTO_TEST_CASE( RefreshListenerRemovedByAnotherDoesNotFire )
+{
+    KIGIT_COMMON common( nullptr );
+
+    int a = 0;
+    int b = 0;
+    int ownerA = 0;
+    int ownerB = 0;
+
+    common.AddRefreshListener( &ownerA,
+                               [&]()
+                               {
+                                   a++;
+                                   common.RemoveRefreshListener( &ownerB );
+                               } );
+    common.AddRefreshListener( &ownerB,
+                               [&]()
+                               {
+                                   b++;
+                               } );
+
+    common.NotifyRefreshListeners();
+    BOOST_CHECK_EQUAL( a, 1 );
+    BOOST_CHECK_EQUAL( b, 0 );
+}
+
+
+// The History page reads the log through GetRecentCommits. With no repository it must return
+
+
+// libgit2 reports forward slashes on every platform while the project path is native. On Windows
+// the raw prefix test rejected every file and the commit panel stayed empty. A backslash is an
+// ordinary file name character elsewhere, so only Windows folds the separators.
+BOOST_AUTO_TEST_CASE( IsWithinProjectPathHandlesMixedSeparators )
+{
+    using KIGIT::PROJECT_GIT_UTILS;
+
+#ifdef __WINDOWS__
+    BOOST_CHECK(
+            PROJECT_GIT_UTILS::IsWithinProjectPath( wxS( "C:/repo/proj/board.kicad_pcb" ), wxS( "C:\\repo\\proj" ) ) );
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsWithinProjectPath( wxS( "C:/repo/proj/sub/sheet.kicad_sch" ),
+                                                         wxS( "C:\\repo\\proj\\" ) ) );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::IsWithinProjectPath( wxS( "C:/repo/other/board.kicad_pcb" ),
+                                                          wxS( "C:\\repo\\proj" ) ) );
+#endif
+
+    // A sibling directory sharing the prefix as plain text is not inside the project.
+    BOOST_CHECK( !PROJECT_GIT_UTILS::IsWithinProjectPath( wxS( "/repo/project2/file" ), wxS( "/repo/project" ) ) );
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsWithinProjectPath( wxS( "/repo/project/file" ), wxS( "/repo/project" ) ) );
+}
+
+
+// The pull gate refuses over uncommitted tracked changes, but untracked files must not block
 
 
 BOOST_AUTO_TEST_SUITE_END()

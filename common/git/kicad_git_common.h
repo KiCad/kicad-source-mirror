@@ -28,6 +28,8 @@
 #include <functional>
 #include <mutex>
 #include <set>
+#include <utility>
+#include <vector>
 
 #include <wx/string.h>
 
@@ -150,6 +152,10 @@ public:
      * SetProjectDir(), returns that path. Otherwise falls back to git_repository_workdir().
      */
     wxString GetProjectDir() const;
+
+    /// Why binding a repository last failed, for the panels to show. Empty on success.
+    void            SetAttachError( const wxString& aError ) { m_attachError = aError; }
+    const wxString& GetAttachError() const { return m_attachError; }
 
     void ResetNextKey()
     {
@@ -283,10 +289,17 @@ public:
 
     std::unique_lock<std::mutex> LockAction() { return std::unique_lock<std::mutex>( m_gitActionMutex ); }
 
+    // Views showing working-tree state register here, so a commit, push or pull in one of them
+    // refreshes the others. UI thread only, so the list needs no lock.
+    void AddRefreshListener( void* aOwner, std::function<void()> aCallback );
+    void RemoveRefreshListener( void* aOwner );
+    void NotifyRefreshListeners();
+
 protected:
     git_repository* m_repo;
 
     wxString m_projectDir;  // Project directory path preserving symlinks
+    wxString m_attachError;
 
     GIT_CONN_TYPE m_connType;
     wxString m_remote;      // This is the full connection string
@@ -304,6 +317,8 @@ protected:
     /// callback's worker thread. wxString is copy on write, so a read racing a write corrupts
     /// it. Separate from m_gitActionMutex, which the worker holds while the callback runs.
     mutable std::mutex m_credentialsMutex;
+
+    std::vector<std::pair<void*, std::function<void()>>> m_refreshListeners;
 
     // Make git handlers friends so they can access the mutex
     friend class GIT_PUSH_HANDLER;
