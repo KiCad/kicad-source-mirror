@@ -28,6 +28,7 @@
 #include <wx/bitmap.h>
 #include <wx/bmpbndl.h>
 #include <wx/button.h>
+#include <wx/checkbox.h>
 #include <wx/dataview.h>
 #include <wx/dcgraph.h>
 #include <wx/dcmemory.h>
@@ -36,6 +37,8 @@
 #include <wx/mstream.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
 #include <wx/richmsgdlg.h>
 #include <wx/textdlg.h>
 #include <wx/treectrl.h>
@@ -376,6 +379,39 @@ wxWindow* makeTagsPage( wxWindow* aBook, wxListCtrl** aOutList )
     return page.panel;
 }
 
+
+wxWindow* makeRepositoryPage( wxWindow* aBook, wxTextCtrl** aName, wxTextCtrl** aEmail, wxStaticText** aRemote )
+{
+    wxPanel*    panel = new wxPanel( aBook );
+    wxBoxSizer* outer = new wxBoxSizer( wxVERTICAL );
+
+    wxFlexGridSizer* grid = new wxFlexGridSizer( 3, 2, 8, 12 );
+    grid->AddGrowableCol( 1 );
+
+    *aName = new wxTextCtrl( panel, wxID_ANY, wxEmptyString );
+    *aEmail = new wxTextCtrl( panel, wxID_ANY, wxEmptyString );
+    *aRemote = new wxStaticText( panel, wxID_ANY, wxEmptyString );
+
+    grid->Add( new wxStaticText( panel, wxID_ANY, _( "Name:" ) ), 0, wxALIGN_CENTER_VERTICAL );
+    grid->Add( *aName, 1, wxEXPAND );
+    grid->Add( new wxStaticText( panel, wxID_ANY, _( "Email:" ) ), 0, wxALIGN_CENTER_VERTICAL );
+    grid->Add( *aEmail, 1, wxEXPAND );
+    grid->Add( new wxStaticText( panel, wxID_ANY, _( "Remote:" ) ), 0, wxALIGN_CENTER_VERTICAL );
+    grid->Add( *aRemote, 1, wxEXPAND );
+
+    outer->Add( grid, 0, wxEXPAND | wxALL, 4 );
+
+    outer->Add( new wxStaticText( panel, wxID_ANY,
+                                  _( "Name and email apply to this project only. Preferences holds the default "
+                                     "used when these are empty." ) ),
+                0, wxALL, 4 );
+
+    wxBoxSizer* pad = new wxBoxSizer( wxVERTICAL );
+    pad->Add( outer, 1, wxEXPAND | wxALL, 8 );
+    panel->SetSizer( pad );
+    return panel;
+}
+
 } // namespace
 
 
@@ -493,6 +529,13 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
                                     onDeleteTag();
                                 } } } );
     m_book->AddPage( tagsPage, _( "Tags" ) );
+
+    wxWindow* repositoryPage = makeRepositoryPage( m_book, &m_repoUserName, &m_repoUserEmail, &m_repoRemoteUrl );
+    addButtonRow( repositoryPage, { { _( "Save" ), [this]()
+                                    {
+                                        onSaveRepositoryConfig();
+                                    } } } );
+    m_book->AddPage( repositoryPage, _( "Repository" ) );
 
     // Double-clicking a commit shows what it changed against its parent.
     m_historyList->SetToolTip( _( "Double click a commit to see what it changed. Right click for more." ) );
@@ -730,6 +773,7 @@ void GIT_ADVANCED_DIALOG::ReloadPages()
     populateRemotes();
     populateStashes();
     populateTags();
+    populateRepository();
 }
 
 
@@ -1003,6 +1047,25 @@ void GIT_ADVANCED_DIALOG::populateTags()
         m_tagsList->SetItem( idx, 1, t.hash );
         m_tagsList->SetItem( idx, 2, t.summary );
     }
+}
+
+
+void GIT_ADVANCED_DIALOG::populateRepository()
+{
+    // The caller holds the git action lock.
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+
+    GIT_CONFIG_HANDLER configHandler( common.get() );
+    GitUserConfig      userConfig = configHandler.GetUserConfig();
+
+    if( m_repoUserName )
+        m_repoUserName->SetValue( userConfig.authorName );
+
+    if( m_repoUserEmail )
+        m_repoUserEmail->SetValue( userConfig.authorEmail );
+
+    if( m_repoRemoteUrl )
+        m_repoRemoteUrl->SetLabel( common->GetRemoteUrl() );
 }
 
 
@@ -1958,4 +2021,25 @@ void GIT_ADVANCED_DIALOG::onRemoveRemote()
                 return aCommon.RemoveRemote( name );
             },
             _( "Could not remove the remote." ) );
+}
+
+
+void GIT_ADVANCED_DIALOG::onSaveRepositoryConfig()
+{
+    wxString name = m_repoUserName->GetValue().Trim().Trim( false );
+    wxString email = m_repoUserEmail->GetValue().Trim().Trim( false );
+
+    if( name.IsEmpty() || email.IsEmpty() )
+    {
+        DisplayErrorMessage( this, _( "Enter both a name and an email. Git needs them to record who "
+                                      "made each commit." ) );
+        return;
+    }
+
+    runGitAction(
+            [name, email]( KIGIT_COMMON& aCommon )
+            {
+                return aCommon.SetUserConfig( name, email );
+            },
+            _( "Could not save the git configuration." ) );
 }
