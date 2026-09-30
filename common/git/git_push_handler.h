@@ -32,6 +32,7 @@ enum class PushResult
 {
     Success,
     NonFastForward,
+    Busy, ///< Another git operation held the action lock, so nothing was pushed.
     Error
 };
 
@@ -42,14 +43,6 @@ public:
     ~GIT_PUSH_HANDLER();
 
     PushResult PerformPush( bool aForce = false );
-
-    // Virtual method for progress reporting
-    virtual void ReportProgress( int aCurrent, int aTotal, const wxString& aMessage ) {}
-
-private:
-
-    // Implementation of GIT_PROGRESS's virtual method
-    void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
 };
 
 #endif // _GIT_PUSH_HANDLER_H_

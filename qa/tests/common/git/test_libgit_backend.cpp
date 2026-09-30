@@ -582,11 +582,7 @@ BOOST_AUTO_TEST_CASE( PerformPull_RebaseConfigReplaysLocalCommit )
 }
 
 
-/**
- * Push -u behavior: after the first successful push from a branch with no
- * upstream configured, branch.\<name\>.merge and .remote should be populated so
- * subsequent pull/push hit the FETCH_HEAD path instead of the fallback.
- */
+// Tracking config is what lets later operations take the FETCH_HEAD path.
 BOOST_AUTO_TEST_CASE( Push_FirstPushSetsUpstreamTracking )
 {
     BOOST_TEST_REQUIRE( ready() );
@@ -612,6 +608,114 @@ BOOST_AUTO_TEST_CASE( Push_FirstPushSetsUpstreamTracking )
 
     git_repository_free( repo );
 }
+
+
+// A push that cannot take the action lock reports Busy rather than touch libgit2.
+BOOST_AUTO_TEST_CASE( Push_ReportsBusyWhenActionLockHeld )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    createCommit( repo, wxT( "file.txt" ), wxT( "second\n" ), wxT( "Second commit" ) );
+    addOrigin( repo );
+
+    KIGIT_COMMON     common( repo );
+    GIT_PUSH_HANDLER handler( &common );
+
+    // Hold the lock here and push from a worker, so the try_lock inside Push fails.
+    std::unique_lock<std::mutex> held = common.LockAction();
+
+    PushResult result = std::async( std::launch::async,
+                                    [&handler]()
+                                    {
+                                        return handler.PerformPush();
+                                    } )
+                                .get();
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PushResult::Busy ) );
+
+    held.unlock();
+    git_repository_free( repo );
+}
+
+
+// Behind the upstream. libgit2 reports it through the return code, not the message.
+BOOST_AUTO_TEST_CASE( Push_ReportsNonFastForwardWhenRemoteIsAhead )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    {
+        git_repository* remote = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_open( &remote, remotePath().ToUTF8().data() ), GIT_OK );
+
+        git_oid remoteHead;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &remoteHead, remote, "refs/heads/master" ), GIT_OK );
+
+        git_oid ahead = createDetachedCommit( remote, remoteHead, wxT( "theirs.txt" ), "theirs\n", "Remote commit" );
+
+        git_reference* ref = nullptr;
+        BOOST_REQUIRE_EQUAL( git_reference_create( &ref, remote, "refs/heads/master", &ahead, 1, nullptr ), GIT_OK );
+        git_reference_free( ref );
+        git_repository_free( remote );
+    }
+
+    createCommit( repo, wxT( "file.txt" ), wxT( "second\n" ), wxT( "Local commit" ) );
+    addOrigin( repo );
+
+    KIGIT_COMMON     common( repo );
+    GIT_PUSH_HANDLER handler( &common );
+
+    PushResult result = handler.PerformPush();
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PushResult::NonFastForward ) );
+
+    git_repository_free( repo );
+}
+
+
+// A refusal the client-side check let through arrives only on the per-reference callback. A
+// read-only refs directory provokes one, which directory permissions cannot do on Windows.
+#ifndef __WINDOWS__
+BOOST_AUTO_TEST_CASE( Push_ReportsErrorWhenRemoteRefusesTheUpdate )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    createCommit( repo, wxT( "file.txt" ), wxT( "second\n" ), wxT( "Local commit" ) );
+    addOrigin( repo );
+
+    wxString headsDir = remotePath() + wxFileName::GetPathSeparator() + wxT( "refs" ) + wxFileName::GetPathSeparator()
+                        + wxT( "heads" );
+
+    BOOST_REQUIRE( wxFileName::DirExists( headsDir ) );
+
+    // Put the permissions back however the test ends, or the fixture cannot remove its directory.
+    struct WRITABLE_AGAIN
+    {
+        wxString dir;
+        ~WRITABLE_AGAIN() { chmod( dir.fn_str(), 0755 ); }
+    } restore{ headsDir };
+
+    chmod( headsDir.fn_str(), 0555 );
+
+    KIGIT_COMMON     common( repo );
+    GIT_PUSH_HANDLER handler( &common );
+
+    PushResult result = handler.PerformPush();
+
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PushResult::Error ) );
+    BOOST_CHECK( !handler.GetErrorString().IsEmpty() );
+
+    git_repository_free( repo );
+}
+#endif
 
 
 // Rebuilding the index from HEAD would drop the conflict stages before libgit2's unmerged-index
@@ -694,6 +798,62 @@ BOOST_AUTO_TEST_CASE( Commit_RefusesConflictedRepository )
     BOOST_CHECK( handler.PerformCommit( { wxT( "file.txt" ) }, wxT( "Oops" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL )
                  == CommitResult::Error );
     BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_MERGE );
+
+    git_repository_free( repo );
+}
+
+
+// A second operation that cannot get the lock returns Busy without touching the cancellation
+// of the one holding it, and a cancelled operation leaves none behind for the next.
+BOOST_AUTO_TEST_CASE( BusyOperationDoesNotConsumeAnotherCancellation )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    addOrigin( repo );
+
+    KIGIT_COMMON common( repo );
+
+    GIT_PUSH_HANDLER           pushA( &common );
+    KIGIT_COMMON::CANCEL_TOKEN tokenA = pushA.CancelToken();
+
+    BOOST_REQUIRE( tokenA );
+    BOOST_REQUIRE( !tokenA->load() );
+
+    {
+        // What the backend does for A once it owns the action lock.
+        KIGIT_COMMON::OPERATION_GUARD operationA( &common, tokenA );
+
+        common.CancelActiveOperation();
+        BOOST_REQUIRE( tokenA->load() );
+
+        // A is holding the action lock, so B cannot start.
+        std::unique_lock<std::mutex> heldByA = common.LockAction();
+
+        GIT_PUSH_HANDLER           pushB( &common );
+        KIGIT_COMMON::CANCEL_TOKEN tokenB = pushB.CancelToken();
+
+        BOOST_CHECK_MESSAGE( tokenB != tokenA, "each operation must own its own token" );
+
+        PushResult resultB = pushB.PerformPush();
+
+        BOOST_CHECK_EQUAL( static_cast<int>( resultB ), static_cast<int>( PushResult::Busy ) );
+
+        BOOST_CHECK_MESSAGE( tokenA->load(), "a Busy operation must not clear another's cancellation" );
+        BOOST_CHECK_MESSAGE( !tokenB->load(), "a Busy operation must not inherit another's cancellation" );
+        BOOST_CHECK_MESSAGE( common.ActiveCancelToken() == tokenA, "the active operation must still be A" );
+    }
+
+    // Leaving the backend retires the token. Nothing in production calls a retire of its own.
+    BOOST_CHECK_MESSAGE( !common.ActiveCancelToken(), "finishing an operation must retire its token" );
+
+    // A cancelled operation used to leave its token published for the next one to adopt.
+    GIT_PUSH_HANDLER pushC( &common );
+
+    BOOST_CHECK_MESSAGE( pushC.CancelToken() != tokenA, "a later operation must not inherit the retired token" );
+    BOOST_CHECK_MESSAGE( !pushC.IsThisOperationCancelled(), "a later operation must start uncancelled" );
 
     git_repository_free( repo );
 }

@@ -79,6 +79,17 @@ static std::string getFormattedCommitDate( const git_time& aTime )
 }
 
 
+// libgit2 phrases a rejected login several ways, so match the class and prompt for credentials.
+static bool isAuthenticationError( const wxString& aGitError )
+{
+    wxString lower = aGitError.Lower();
+
+    return lower.Contains( wxS( "authenticat" ) ) // authenticate, authentication
+           || lower.Contains( wxS( "credential" ) ) || lower.Contains( wxS( "unauthorized" ) )
+           || lower.Contains( wxS( "401" ) );
+}
+
+
 void LIBGIT_BACKEND::Init()
 {
     git_libgit2_init();
@@ -887,14 +898,18 @@ CommitResult LIBGIT_BACKEND::Amend( GIT_COMMIT_HANDLER* aHandler, const std::vec
 
 PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
 {
-    KIGIT_COMMON* common = aHandler->GetCommon();
+    KIGIT_COMMON*                common = aHandler->GetCommon();
     std::unique_lock<std::mutex> lock( common->m_gitActionMutex, std::try_to_lock );
 
     if( !lock.owns_lock() )
     {
         wxLogTrace( traceGit, "GIT_PUSH_HANDLER::PerformPush: Could not lock mutex" );
-        return PushResult::Error;
+        return PushResult::Busy;
     }
+
+    // A close while this waited in the queue frees the repository, so check it under the lock.
+    if( !aHandler->GetRepo() )
+        return PushResult::Error;
 
     PushResult result = PushResult::Success;
 
@@ -916,21 +931,38 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
     remoteCallbacks.transfer_progress = transfer_progress_cb;
     remoteCallbacks.update_tips = update_cb;
     remoteCallbacks.push_transfer_progress = push_transfer_progress_cb;
+    remoteCallbacks.push_update_reference = push_update_reference_cb;
     remoteCallbacks.credentials = credentials_cb;
     remoteCallbacks.payload = aHandler;
 
     git_proxy_options proxyOpts;
     git_proxy_init_options( &proxyOpts, GIT_PROXY_OPTIONS_VERSION );
     proxyOpts.type = GIT_PROXY_AUTO;
-    common->SetShuttingDown( false );
+    // Published under the lock, so Cancel reaches this push and no other.
+    KIGIT_COMMON::OPERATION_GUARD operation( common, aHandler->CancelToken() );
+
+    // Cancelled while this task was still queued, so it must not start network work.
+    if( aHandler->IsThisOperationCancelled() )
+        return PushResult::Error;
 
     aHandler->TestedTypes() = 0;
     aHandler->ResetNextKey();
 
-    if( git_remote_connect( remote, GIT_DIRECTION_PUSH, &remoteCallbacks, &proxyOpts, nullptr ) )
+    if( int connectResult = git_remote_connect( remote, GIT_DIRECTION_PUSH, &remoteCallbacks, &proxyOpts, nullptr ) )
     {
-        aHandler->AddErrorString( wxString::Format( _( "Could not connect to remote: %s" ),
-                                                    KIGIT_COMMON::GetLastGitError() ) );
+        wxString gitError = KIGIT_COMMON::GetLastGitError();
+
+        if( connectResult == GIT_EAUTH || isAuthenticationError( gitError ) )
+        {
+            common->SetAuthFailure();
+            aHandler->AddErrorString( _( "Authentication failed. Check the username and access "
+                                         "token for the remote." ) );
+        }
+        else
+        {
+            aHandler->AddErrorString( wxString::Format( _( "Could not connect to remote: %s" ), gitError ) );
+        }
+
         return PushResult::Error;
     }
 
@@ -956,21 +988,14 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
     const char*        refs[1] = { refspecUtf8.c_str() };
     const git_strarray refspecs = { (char**) refs, 1 };
 
-    if( git_remote_push( remote, &refspecs, &pushOptions ) )
+    if( int pushResult = git_remote_push( remote, &refspecs, &pushOptions ) )
     {
-        wxString errorMsg = KIGIT_COMMON::GetLastGitError();
-        aHandler->AddErrorString( wxString::Format( _( "Could not push to remote: %s" ), errorMsg ) );
+        aHandler->AddErrorString(
+                wxString::Format( _( "Could not push to remote: %s" ), KIGIT_COMMON::GetLastGitError() ) );
         git_remote_disconnect( remote );
 
-        wxString lower = errorMsg.Lower();
-
-        if( lower.Contains( wxS( "non-fast-forward" ) ) || lower.Contains( wxS( "non-fastforwardable" ) )
-            || lower.Contains( wxS( "would not be" ) ) )
-        {
-            return PushResult::NonFastForward;
-        }
-
-        return PushResult::Error;
+        // The return code, not the message, which varies between libgit2 versions.
+        return pushResult == GIT_ENONFASTFORWARD ? PushResult::NonFastForward : PushResult::Error;
     }
 
     // First push from this branch: point it at where we just pushed (git push -u).

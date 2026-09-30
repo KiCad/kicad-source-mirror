@@ -33,9 +33,3 @@ PushResult GIT_PUSH_HANDLER::PerformPush( bool aForce )
 {
     return GetGitBackend()->Push( this, aForce );
 }
-
-
-void GIT_PUSH_HANDLER::UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage )
-{
-    ReportProgress( aCurrent, aTotal, aMessage );
-}

@@ -1186,6 +1186,10 @@ extern "C" int push_update_reference_cb( const char* aRefname, const char* aStat
     {
         wxString statusMessage = wxString::Format( _( "* [rejected] %s (%s)" ), aRefname, aStatus );
         parent->UpdateProgress( 0, 0, statusMessage );
+
+        // Without this the push reports success even though the remote refused it.
+        git_error_set_str( GIT_ERROR_NET, aStatus );
+        return GIT_ERROR;
     }
     else
     {
