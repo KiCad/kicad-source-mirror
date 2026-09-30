@@ -700,6 +700,61 @@ size_t KIGIT_COMMON::GetUnmergedCommitCount( const wxString& aBranch ) const
 }
 
 
+std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax ) const
+{
+    std::vector<KIGIT_COMMIT_INFO> commits;
+
+    if( !m_repo )
+        return commits;
+
+    git_revwalk* walker = nullptr;
+
+    if( git_revwalk_new( &walker, m_repo ) != GIT_OK )
+        return commits;
+
+    KIGIT::GitRevWalkPtr walkerPtr( walker );
+    git_revwalk_sorting( walker, GIT_SORT_TIME );
+
+    if( git_revwalk_push_head( walker ) != GIT_OK )
+        return commits;
+
+    git_oid oid;
+
+    while( commits.size() < aMax && git_revwalk_next( &oid, walker ) == GIT_OK )
+    {
+        git_commit* commit = nullptr;
+
+        if( git_commit_lookup( &commit, m_repo, &oid ) != GIT_OK )
+            continue;
+
+        KIGIT::GitCommitPtr commitPtr( commit );
+
+        KIGIT_COMMIT_INFO info;
+
+        // A 7-char abbreviation can be ambiguous in a large repository, which makes a later
+        // revparse of the hash fail. Twelve characters is what git uses for big repos.
+        char shortHash[13] = { 0 };
+        git_oid_tostr( shortHash, sizeof( shortHash ), &oid );
+        info.hash = wxString::FromUTF8( shortHash );
+
+        if( const char* summary = git_commit_summary( commit ) )
+            info.summary = wxString::FromUTF8( summary );
+
+        if( const git_signature* author = git_commit_author( commit ) )
+        {
+            info.author = wxString::FromUTF8( author->name );
+            info.email = wxString::FromUTF8( author->email );
+        }
+
+        info.when = wxDateTime( static_cast<time_t>( git_commit_time( commit ) ) );
+
+        commits.push_back( info );
+    }
+
+    return commits;
+}
+
+
 namespace
 {
 struct STASH_COLLECT

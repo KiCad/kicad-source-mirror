@@ -37,6 +37,17 @@
 class LIBGIT_BACKEND;
 
 
+// One entry in the commit history, as shown by the advanced git window's History page.
+struct KIGIT_COMMIT_INFO
+{
+    wxString   hash;    ///< Short commit hash.
+    wxString   summary; ///< First line of the commit message.
+    wxString   author;  ///< Author name.
+    wxString   email;   ///< Author email, used to look up a web avatar.
+    wxDateTime when;    ///< Commit time.
+};
+
+
 // One entry in the stash list, as shown by the advanced git window's Stashes page.
 struct KIGIT_STASH_INFO
 {
@@ -181,6 +192,9 @@ public:
     // True when tracked files hold uncommitted changes, staged or not. Untracked files do not
     // count: a merge leaves them alone.
     bool HasUncommittedTrackedChanges() const;
+
+    // The most recent commits on the current branch, newest first, up to aMax of them.
+    std::vector<KIGIT_COMMIT_INFO> GetRecentCommits( size_t aMax = 50 ) const;
 
     // The full message of the commit HEAD points at, body and trailers included. The amend
     // prefill uses this, so accepting the suggestion does not truncate the message to its

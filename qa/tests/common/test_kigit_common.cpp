@@ -26,6 +26,7 @@
 
 #include <git2.h>
 
+#include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/string.h>
 #include <wx/stdpaths.h>
@@ -800,6 +801,101 @@ BOOST_AUTO_TEST_CASE( RefreshListenerRemovedByAnotherDoesNotFire )
 
 
 // The History page reads the log through GetRecentCommits. With no repository it must return
+// an empty list rather than crash.
+BOOST_AUTO_TEST_CASE( GetRecentCommitsEmptyWithoutRepo )
+{
+    KIGIT_COMMON common( nullptr );
+    BOOST_CHECK( common.GetRecentCommits( 10 ).empty() );
+}
+
+
+// GetRecentCommits returns commits newest-first with their summary, author and short hash,
+// and honors the requested maximum.
+BOOST_AUTO_TEST_CASE( GetRecentCommitsReturnsNewestFirst )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    // Add a second commit on top of the first.
+    {
+        wxFileName    fn( tmp.path, wxS( "file.txt" ) );
+        std::ofstream f( fn.GetFullPath().utf8_string() );
+        f << "v2\n";
+    }
+
+    git_index* index = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+    KIGIT::GitIndexPtr indexPtr( index );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, "file.txt" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
+
+    git_oid treeOid;
+    BOOST_REQUIRE_EQUAL( git_index_write_tree( &treeOid, index ), GIT_OK );
+
+    git_tree* tree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_tree_lookup( &tree, repo, &treeOid ), GIT_OK );
+    KIGIT::GitTreePtr treePtr( tree );
+
+    git_reference* head = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_head( &head, repo ), GIT_OK );
+    KIGIT::GitReferencePtr headPtr( head );
+
+    git_commit* parent = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &parent, repo, git_reference_target( head ) ), GIT_OK );
+    KIGIT::GitCommitPtr parentPtr( parent );
+
+    git_signature* sig = nullptr;
+    BOOST_REQUIRE_EQUAL( git_signature_now( &sig, "QA Test", "qa@example.com" ), GIT_OK );
+    KIGIT::GitSignaturePtr sigPtr( sig );
+
+    const git_commit* parents[1] = { parent };
+    git_oid           secondOid;
+    BOOST_REQUIRE_EQUAL( git_commit_create( &secondOid, repo, "HEAD", sig, sig, nullptr, "second", tree, 1, parents ),
+                         GIT_OK );
+
+    KIGIT_COMMON common( repo );
+
+    std::vector<KIGIT_COMMIT_INFO> commits = common.GetRecentCommits( 10 );
+    BOOST_REQUIRE_EQUAL( commits.size(), 2u );
+    BOOST_CHECK_EQUAL( commits[0].summary.ToStdString(), "second" );
+    BOOST_CHECK_EQUAL( commits[1].summary.ToStdString(), "initial" );
+    BOOST_CHECK_EQUAL( commits[0].author.ToStdString(), "QA Test" );
+
+    // The hash is abbreviated to 12 characters. A 7-char abbreviation was ambiguous in large
+    // repositories, which made a later revparse of the hash fail.
+    BOOST_CHECK_EQUAL( commits[0].hash.length(), 12u );
+
+    // The maximum is honored.
+    BOOST_CHECK_EQUAL( common.GetRecentCommits( 1 ).size(), 1u );
+    BOOST_CHECK_EQUAL( common.GetRecentCommits( 0 ).size(), 0u );
+}
+
+
+// WriteBlobToFile materializes a file's committed content, used to feed the diff viewer.
+BOOST_AUTO_TEST_CASE( WriteBlobToFileExtractsCommittedContent )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "hello world\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    wxString dest = tmp.path + wxFileName::GetPathSeparator() + wxS( "extracted.txt" );
+
+    BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::WriteBlobToFile( repo, wxS( "HEAD" ), wxS( "file.txt" ), dest ) );
+
+    wxFile   in( dest );
+    wxString content;
+    BOOST_REQUIRE( in.IsOpened() );
+    in.ReadAll( &content );
+    BOOST_CHECK_EQUAL( content.ToStdString(), "hello world\n" );
+
+    // A path that is not in the tree returns false.
+    BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::WriteBlobToFile( repo, wxS( "HEAD" ), wxS( "missing.txt" ), dest ) );
+}
 
 
 // GetTags resolves each tag to the commit it points at.
