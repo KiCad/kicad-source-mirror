@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-30 08:29+0000\n"
+"PO-Revision-Date: 2026-10-01 05:01+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -39554,24 +39554,20 @@ msgstr "ODB++ 製造ファイル"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:268
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:34
-#, fuzzy
 msgid "Lead shape:"
-msgstr "パッド形状:"
+msgstr "リード 形状 :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:269
-#, fuzzy
 msgid "Lead size:"
-msgstr "パッド サイズ X:"
+msgstr "リード サイズ :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:271
-#, fuzzy
 msgid "Effective lead size:"
-msgstr "実効 %s:"
+msgstr "有功 リード サイズ :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:276
-#, fuzzy
 msgid "Minimum hole size:"
-msgstr "最小ドリルサイズ:"
+msgstr "最小穴サイズ :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:276
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:277
@@ -39581,38 +39577,33 @@ msgstr "最小ドリルサイズ:"
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:282
 #, c-format
 msgid "%s mm"
-msgstr ""
+msgstr "%s mm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:277
-#, fuzzy
 msgid "Maximum hole size:"
-msgstr "バックアップ合計サイズの最大値:"
+msgstr "最大穴サイズ :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:278
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:237
 msgid "Recommended hole size:"
-msgstr ""
+msgstr "推奨穴サイズ :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:279
-#, fuzzy
 msgid "Hole clearance over max. lead:"
-msgstr "穴のクリアランス違反"
+msgstr "最大リードに対する穴のクリアランス :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:281
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:173
-#, fuzzy
 msgid "Annular ring:"
 msgstr "アニュラーリング:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:282
-#, fuzzy
 msgid "Pad diameter:"
-msgstr "ビア直径:"
+msgstr "パッド直径 :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:333
-#, fuzzy
 msgid "Copy the report to the clipboard"
-msgstr "現在の3Dイメージをクリップボードへコピー"
+msgstr "レポートをクリップボードへコピー"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:415
 #, c-format
@@ -39620,19 +39611,18 @@ msgid "%s Summary"
 msgstr "%s 要約"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "Maximum lead diameter + %smm"
-msgstr "最小スルーホール直径"
+msgstr "最大リード直径 + %smm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:463
-#, fuzzy, c-format
+#, c-format
 msgid "Minimum lead diameter + %smm"
-msgstr "最小スルーホール直径"
+msgstr "最小リード直径 + %smm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:485
-#, fuzzy
 msgid "Side length:"
-msgstr "ピンの長さ:"
+msgstr "辺の長さ :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:490
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:64
@@ -39641,14 +39631,12 @@ msgid "Size X:"
 msgstr "サイズ X:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:53
-#, fuzzy
 msgid "Min"
-msgstr "最小:"
+msgstr "最小"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:57
-#, fuzzy
 msgid "Max"
-msgstr "最大:"
+msgstr "最大"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:78
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:122
@@ -39656,9 +39644,8 @@ msgid "Size Y:"
 msgstr "サイズ Y:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:102
-#, fuzzy
 msgid "Hole size standard"
-msgstr "穴サイズ X:"
+msgstr "標準穴サイズ"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:122
 msgid "Level:"
