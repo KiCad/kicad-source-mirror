@@ -818,6 +818,27 @@ const BOX2I ZONE::GetBoundingBox() const
 }
 
 
+void ZONE::invalidateBoundingBoxCache() const
+{
+    if( const BOARD* board = GetBoard() )
+    {
+        std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
+        board->m_ZoneBBoxCache.erase( this );
+    }
+
+    m_bboxCacheTimeStamp.store( -1, std::memory_order_release );
+}
+
+
+void ZONE::OnFootprintTransformed()
+{
+    // Footprint zone bounding boxes are derived through the parent transform
+    invalidateBoundingBoxCache();
+    SetNeedRefill( true );
+    UnFill();
+}
+
+
 void ZONE::CacheBoundingBox()
 {
     const BOARD* board = GetBoard();
@@ -1322,6 +1343,7 @@ void ZONE::Rotate( const VECTOR2I& aCentre, const EDA_ANGLE& aAngle )
         outlineCentre = fp->GetTransform().InverseApply( aCentre );
 
     m_Poly->Rotate( aAngle, outlineCentre );
+    invalidateBoundingBoxCache();
     HatchBorder();
 
     /* rotate filled areas: */
@@ -1338,6 +1360,7 @@ void ZONE::OnFootprintRescaled( double aRatioX, double aRatioY, double /* aLinea
 
     // Zone outline auto-derives from lib storage through the parent transform.
     // Just invalidate the fill since geometry-on-screen has changed.
+    invalidateBoundingBoxCache();
     SetNeedRefill( true );
     UnFill();
 }
@@ -1383,6 +1406,7 @@ void ZONE::Mirror( const VECTOR2I& aMirrorRef, FLIP_DIRECTION aFlipDirection )
         outlineRef = fp->GetTransform().InverseApply( aMirrorRef );
 
     m_Poly->Mirror( outlineRef, aFlipDirection );
+    invalidateBoundingBoxCache();
 
     HatchBorder();
 

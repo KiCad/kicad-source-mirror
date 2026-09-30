@@ -43,6 +43,7 @@
 #include <zone.h>
 
 #include <filesystem>
+#include <functional>
 
 
 BOOST_AUTO_TEST_SUITE( FootprintTransformSync )
@@ -5154,6 +5155,36 @@ BOOST_AUTO_TEST_CASE( CustomPadShapeScalesWithFootprint )
 
     BOOST_CHECK_MESSAGE( wRatio > 1.9 && wRatio < 2.1, "custom pad width ratio " << wRatio << " expected ~2.0" );
     BOOST_CHECK_MESSAGE( hRatio > 1.4 && hRatio < 1.6, "custom pad height ratio " << hRatio << " expected ~1.5" );
+}
+
+
+// Footprint keepouts derive their bbox through the parent transform, so it must not go stale
+BOOST_FIXTURE_TEST_CASE( KeepoutBBoxTracksFootprintTransform, BOARD_FIXTURE )
+{
+    KI_TEST::LoadBoard( m_settingsManager, "issue25580", m_board );
+
+    for( FOOTPRINT* fp : m_board->Footprints() )
+    {
+        BOOST_REQUIRE( !fp->Zones().empty() );
+
+        auto primeAndTransform =
+                [&]( const std::function<void()>& aTransform )
+                {
+                    for( ZONE* zone : fp->Zones() )
+                        zone->CacheBoundingBox();
+
+                    aTransform();
+
+                    for( ZONE* zone : fp->Zones() )
+                    {
+                        BOOST_CHECK_MESSAGE( zone->GetBoundingBox() == zone->GetBoardOutline().BBox(),
+                                             fp->GetReference() << " keepout bbox is stale after transform" );
+                    }
+                };
+
+        primeAndTransform( [&]() { fp->SetOrientation( fp->GetOrientation() + ANGLE_90 ); } );
+        primeAndTransform( [&]() { fp->SetPosition( fp->GetPosition() + VECTOR2I( 1234567, 7654321 ) ); } );
+    }
 }
 
 
