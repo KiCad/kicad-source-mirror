@@ -114,7 +114,7 @@ static int eeschemaOpenDiffDialogExport( int aKind, const wxString& aFileA, cons
 // TODO: This should move out of this file
 static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFilename )
 {
-    SCH_IO* pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD );
+    IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
     std::unique_ptr<SCHEMATIC> schematic = std::make_unique<SCHEMATIC>( nullptr );
 
     SETTINGS_MANAGER& manager = Pgm().GetSettingsManager();
