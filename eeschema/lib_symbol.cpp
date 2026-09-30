@@ -3199,25 +3199,30 @@ void LIB_SYMBOL::AppendParentEmbeddedFiles( std::vector<EMBEDDED_FILES*>& aStack
 
 std::set<KIFONT::OUTLINE_FONT*> LIB_SYMBOL::GetFonts() const
 {
-    using EMBEDDING_PERMISSION = KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION;
+    using PERMISSION = KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION;
 
     std::set<KIFONT::OUTLINE_FONT*> fonts;
 
+    auto processFont =
+            [&]( KIFONT::FONT* font )
+            {
+                if( font && !font->IsStroke() )
+                {
+                    KIFONT::OUTLINE_FONT* outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
+                    PERMISSION            permission = outline->GetEmbeddingPermission();
+
+                    if( permission == PERMISSION::EDITABLE || permission == PERMISSION::INSTALLABLE )
+                        fonts.insert( outline );
+                }
+            };
+
     for( const SCH_ITEM& item : m_drawings )
     {
-        if( item.Type() == SCH_TEXT_T )
-        {
-            const SCH_TEXT& text = static_cast<const SCH_TEXT&>( item );
-
-            if( KIFONT::FONT* font = text.GetFont(); font && !font->IsStroke() )
-            {
-                KIFONT::OUTLINE_FONT*                      outline = static_cast<KIFONT::OUTLINE_FONT*>( font );
-                KIFONT::OUTLINE_FONT::EMBEDDING_PERMISSION permission = outline->GetEmbeddingPermission();
-
-                if( permission == EMBEDDING_PERMISSION::EDITABLE || permission == EMBEDDING_PERMISSION::INSTALLABLE )
-                    fonts.insert( outline );
-            }
-        }
+        // Use dynamic_cast to catch SCH_TEXTBOX, SCH_TABLECELL, etc.
+        if( const SCH_TEXT* text = dynamic_cast<const SCH_TEXT*>( &item ) )
+            processFont( text->GetFont() );
+        else if( const SCH_FIELD* field = dynamic_cast<const SCH_FIELD*>( &item ) )
+            processFont( field->GetFont() );
     }
 
     return fonts;
