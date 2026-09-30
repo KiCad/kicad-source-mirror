@@ -1028,19 +1028,34 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL::Flatten() const
         if( !m_fpFilters.IsEmpty() )
             retv->SetFPFilters( m_fpFilters );
 
-        for( const auto& [name, file] : EmbeddedFileMap() )
+        // Copying the embedded files needs to go in the other direction.  AddFile() silently
+        // drops collisions, so the most relevant symbol ("this") must go first, followed by
+        // parents up the chain to the root.
         {
-            EMBEDDED_FILES::EMBEDDED_FILE* newFile = new EMBEDDED_FILES::EMBEDDED_FILE( *file );
-            retv->AddFile( newFile );
+            for( const auto& [name, file] : EmbeddedFileMap() )
+            {
+                EMBEDDED_FILES::EMBEDDED_FILE* newFile = new EMBEDDED_FILES::EMBEDDED_FILE( *file );
+                retv->AddFile( newFile );
+            }
+
+            for( const LIB_SYMBOL* ancestor : parentChain )
+            {
+                for( const auto& [name, file] : ancestor->EmbeddedFileMap() )
+                {
+                    EMBEDDED_FILES::EMBEDDED_FILE* newFile = new EMBEDDED_FILES::EMBEDDED_FILE( *file );
+                    retv->AddFile( newFile );
+                }
+            }
         }
 
-        // Get excluded flags from the immediate parent (first in chain)
+        // Get excluded flags from the top-level parent (back of the chain).  Derived symbols
+        // aren't allowed to change the exclusion flags.
         if( !parentChain.empty() )
         {
-            retv->SetExcludedFromSim( parentChain.front()->GetExcludedFromSim() );
-            retv->SetExcludedFromBOM( parentChain.front()->GetExcludedFromBOM() );
-            retv->SetExcludedFromBoard( parentChain.front()->GetExcludedFromBoard() );
-            retv->SetExcludedFromPosFiles( parentChain.front()->GetExcludedFromPosFiles() );
+            retv->SetExcludedFromSim( parentChain.back()->GetExcludedFromSim() );
+            retv->SetExcludedFromBOM( parentChain.back()->GetExcludedFromBOM() );
+            retv->SetExcludedFromBoard( parentChain.back()->GetExcludedFromBoard() );
+            retv->SetExcludedFromPosFiles( parentChain.back()->GetExcludedFromPosFiles() );
         }
 
         // Pin maps and associated footprints inherit as a coupled bundle; copy the resolved
