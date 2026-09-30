@@ -563,6 +563,7 @@ set( COMMON_GIT_DLG_SRCS
     dialogs/git/dialog_git_commit.cpp
     dialogs/git/dialog_git_switch.cpp
     dialogs/git/dialog_git_credentials.cpp
+    dialogs/git/git_credentials_prompt.cpp
     dialogs/git/dialog_git_credentials_base.cpp
     dialogs/git/dialog_git_repository.cpp
     dialogs/git/dialog_git_repository_base.cpp
