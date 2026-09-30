@@ -51,6 +51,10 @@ enum class PushResult;
 enum class CommitResult
 {
     Success,
+
+    /// Committed, but the staged list was left as another program had it. Never retry on this.
+    SuccessIndexStale,
+
     Error,
     Cancelled
 };

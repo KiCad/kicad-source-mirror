@@ -382,125 +382,6 @@ BOOST_AUTO_TEST_CASE( IsWithinProjectPath_ScopesToProjectDirectory )
 }
 
 
-/**
- * Regression for issue #15910: the Amend Last Commit checklist is seeded from a
- * tree diff of the previous commit.  Files that commit touched outside the
- * current project directory must be filtered out with IsWithinProjectPath,
- * exactly as the amend handler does, instead of leaking into the dialog.
- */
-BOOST_AUTO_TEST_CASE( AmendFileList_ExcludesFilesOutsideProject )
-{
-    BOOST_TEST_REQUIRE( ready() );
-
-    git_repository* repo = openRepo();
-    BOOST_TEST_REQUIRE( repo );
-
-    // The commit to be amended touches both a project-subdir file and an outside file, so
-    // the HEAD-vs-parent diff contains one in-scope and one out-of-scope path.
-    wxFileName::Mkdir( repoPath() + wxFileName::GetPathSeparator() + wxT( "proj" ), wxS_DIR_DEFAULT,
-                       wxPATH_MKDIR_FULL );
-    {
-        std::ofstream f( ( repoPath() + wxFileName::GetPathSeparator() + wxT( "proj/proj.kicad_sch" ) ).ToStdString() );
-        f << "sch\n";
-    }
-    {
-        std::ofstream f( ( repoPath() + wxFileName::GetPathSeparator() + wxT( "outside.txt" ) ).ToStdString() );
-        f << "unrelated\n";
-    }
-
-    {
-        git_index* index = nullptr;
-        BOOST_TEST_REQUIRE( git_repository_index( &index, repo ) == 0 );
-        git_index_add_bypath( index, "proj/proj.kicad_sch" );
-        git_index_add_bypath( index, "outside.txt" );
-        git_index_write( index );
-
-        git_oid treeOid;
-        git_index_write_tree( &treeOid, index );
-        git_index_free( index );
-
-        git_tree* tree = nullptr;
-        BOOST_TEST_REQUIRE( git_tree_lookup( &tree, repo, &treeOid ) == 0 );
-
-        git_signature* sig = nullptr;
-        git_signature_now( &sig, TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
-
-        git_reference* headRefForParent = nullptr;
-        git_repository_head( &headRefForParent, repo );
-
-        git_commit* parent = nullptr;
-        git_reference_peel( (git_object**) &parent, headRefForParent, GIT_OBJECT_COMMIT );
-        git_reference_free( headRefForParent );
-
-        const git_commit* parents[1] = { parent };
-        git_oid           commitOid;
-        git_commit_create( &commitOid, repo, "HEAD", sig, sig, nullptr, "touch both", tree, 1, parents );
-
-        git_commit_free( parent );
-        git_signature_free( sig );
-        git_tree_free( tree );
-    }
-
-    KIGIT_COMMON common( repo );
-    common.SetProjectDir( repoPath() + wxFileName::GetPathSeparator() );
-
-    GIT_STATUS_HANDLER statusHandler( &common );
-    wxString           repoWorkDir = statusHandler.GetWorkingDirectory();
-    wxString projectPath = repoWorkDir + wxT( "proj" ) + wxFileName::GetPathSeparator();
-
-    std::map<wxString, int> modifiedFiles;
-
-    // Mirror the amend handler's diff-merge (HEAD vs parent), including the scope filter.
-    git_reference* headRef = nullptr;
-    BOOST_TEST_REQUIRE( git_repository_head( &headRef, repo ) == GIT_OK );
-
-    git_commit* lastCommit = nullptr;
-    git_reference_peel( (git_object**) &lastCommit, headRef, GIT_OBJECT_COMMIT );
-
-    git_commit* parentCommit = nullptr;
-    git_commit_parent( &parentCommit, lastCommit, 0 );
-
-    git_tree* parentTree = nullptr;
-    git_tree* lastTree = nullptr;
-    git_commit_tree( &parentTree, parentCommit );
-    git_commit_tree( &lastTree, lastCommit );
-
-    git_diff* diff = nullptr;
-    git_diff_tree_to_tree( &diff, repo, parentTree, lastTree, nullptr );
-
-    size_t deltas = git_diff_num_deltas( diff );
-
-    for( size_t ii = 0; ii < deltas; ++ii )
-    {
-        const git_diff_delta* delta = git_diff_get_delta( diff, ii );
-        const char*           path = delta->new_file.path ? delta->new_file.path : delta->old_file.path;
-
-        if( !path )
-            continue;
-
-        wxString absPath = repoWorkDir + wxString::FromUTF8( path );
-
-        if( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( absPath, projectPath ) )
-            continue;
-
-        modifiedFiles[wxString::FromUTF8( path )] |= GIT_STATUS_INDEX_MODIFIED;
-    }
-
-    BOOST_CHECK_MESSAGE( modifiedFiles.count( wxT( "outside.txt" ) ) == 0,
-                         "outside.txt must not leak into the amend checklist" );
-    BOOST_CHECK_MESSAGE( modifiedFiles.count( wxT( "proj/proj.kicad_sch" ) ) == 1,
-                         "the project file should still appear in the amend checklist" );
-
-    git_diff_free( diff );
-    git_tree_free( lastTree );
-    git_tree_free( parentTree );
-    git_commit_free( parentCommit );
-    git_commit_free( lastCommit );
-    git_reference_free( headRef );
-    git_repository_free( repo );
-}
-
-
 // The synthesised target is what the pull fallback and the first push act on.
 BOOST_AUTO_TEST_CASE( GetUpstreamShorthand_NoUpstreamFallsBackToRemoteSlashBranch )
 {
@@ -733,10 +614,91 @@ BOOST_AUTO_TEST_CASE( Push_FirstPushSetsUpstreamTracking )
 }
 
 
-/**
- * Amend rewrites HEAD with a new commit OID.  For a message-only amend, the
- * tree (and therefore the working tree) is unchanged.
- */
+// Rebuilding the index from HEAD would drop the conflict stages before libgit2's unmerged-index
+// guard could see them, recording the markers as resolved content.
+BOOST_AUTO_TEST_CASE( Commit_RefusesConflictedRepository )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_oid baseOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &baseOid, repo, "HEAD" ), GIT_OK );
+
+    createCommit( repo, wxT( "file.txt" ), wxT( "mine\n" ), wxT( "Local change" ) );
+
+    git_oid remoteCommitOid = createDetachedCommit( repo, baseOid, wxT( "file.txt" ), "remote\n", "Remote change" );
+
+    git_annotated_commit* theirs = nullptr;
+    BOOST_REQUIRE_EQUAL( git_annotated_commit_lookup( &theirs, repo, &remoteCommitOid ), GIT_OK );
+
+    const git_annotated_commit* heads[1] = { theirs };
+    BOOST_REQUIRE_EQUAL( git_merge( repo, heads, 1, nullptr, nullptr ), GIT_OK );
+    git_annotated_commit_free( theirs );
+
+    git_index* index = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+    BOOST_REQUIRE( git_index_has_conflicts( index ) );
+    git_index_free( index );
+
+    git_oid headBefore;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headBefore, repo, "HEAD" ), GIT_OK );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    auto readAll = []( const wxString& aPath )
+    {
+        std::ifstream in( aPath.ToStdString(), std::ios::binary );
+        return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    };
+
+    std::string conflictedBytes = readAll( workDir + wxT( "file.txt" ) );
+
+    GIT_COMMIT_HANDLER handler( repo );
+
+    BOOST_CHECK( handler.PerformCommit( { wxT( "file.txt" ) }, wxT( "Oops" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL )
+                 == CommitResult::Error );
+    BOOST_CHECK( !handler.GetErrorString().IsEmpty() );
+
+    BOOST_CHECK( handler.PerformAmend( { wxT( "file.txt" ) }, wxT( "Oops" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL )
+                 == CommitResult::Error );
+
+    // A clean selected file elsewhere must not erase the unrelated conflict either.
+    {
+        std::ofstream f( ( workDir + wxT( "other.txt" ) ).ToStdString(), std::ios::binary );
+        f << "clean\n";
+    }
+
+    BOOST_CHECK( handler.PerformCommit( { wxT( "other.txt" ) }, wxT( "Oops" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL )
+                 == CommitResult::Error );
+
+    git_oid headAfter;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headAfter, repo, "HEAD" ), GIT_OK );
+    BOOST_CHECK_EQUAL( git_oid_cmp( &headBefore, &headAfter ), 0 );
+
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+    BOOST_CHECK( git_index_has_conflicts( index ) );
+    git_index_free( index );
+
+    BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_MERGE );
+    BOOST_CHECK_EQUAL( readAll( workDir + wxT( "file.txt" ) ), conflictedBytes );
+
+    // An in-progress merge whose conflicts were staged as resolved is still not an ordinary
+    // commit: the single-parent path would record the wrong parent structure.
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, "file.txt" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
+    git_index_free( index );
+
+    BOOST_CHECK( handler.PerformCommit( { wxT( "file.txt" ) }, wxT( "Oops" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL )
+                 == CommitResult::Error );
+    BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_MERGE );
+
+    git_repository_free( repo );
+}
+
+
 BOOST_AUTO_TEST_CASE( Amend_MessageOnlyRewritesHeadKeepsTree )
 {
     BOOST_TEST_REQUIRE( ready() );
@@ -779,9 +741,6 @@ BOOST_AUTO_TEST_CASE( Amend_MessageOnlyRewritesHeadKeepsTree )
 }
 
 
-/**
- * Amend with new files: the tree changes and includes the newly staged content.
- */
 BOOST_AUTO_TEST_CASE( Amend_StagedFileChangesTreeAndKeepsParent )
 {
     BOOST_TEST_REQUIRE( ready() );
@@ -837,10 +796,7 @@ BOOST_AUTO_TEST_CASE( Amend_StagedFileChangesTreeAndKeepsParent )
 }
 
 
-/**
- * Amending an unborn branch (a fresh repo with no commits yet) must fail
- * cleanly rather than crash or produce a bogus commit.
- */
+// A repository with no commits yet must fail cleanly rather than crash or write a bogus commit.
 BOOST_AUTO_TEST_CASE( Amend_UnbornBranchReturnsError )
 {
     BOOST_TEST_REQUIRE( ready() );
@@ -1140,6 +1096,56 @@ BOOST_AUTO_TEST_CASE( ProjectGitCommon_ReleaseDefersFreeWhileActionMutexHeld )
 }
 
 
+// A listed path that is not a regular file is still a path. A symlink to a directory, and a
+// submodule, both look absent to a regular-file test, and recording them as deletions drops
+// them out of the project.
+#ifndef __WINDOWS__
+BOOST_AUTO_TEST_CASE( CommitKeepsAPathThatIsNotARegularFile )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    wxString sep = wxFileName::GetPathSeparator();
+    BOOST_REQUIRE( wxFileName::Mkdir( repoPath() + sep + wxT( "shared" ), 0700, wxPATH_MKDIR_FULL ) );
+
+    {
+        std::ofstream f( ( repoPath() + sep + wxT( "shared" ) + sep + wxT( "lib.txt" ) ).ToStdString() );
+        f << "shared\n";
+    }
+
+    BOOST_REQUIRE_EQUAL( symlink( "shared", ( repoPath() + sep + wxT( "link" ) ).ToUTF8().data() ), 0 );
+
+    GIT_COMMIT_HANDLER handler( repo );
+
+    BOOST_REQUIRE( handler.PerformCommit( { wxT( "link" ) }, wxT( "Add the shared library link" ), wxT( "Test Author" ),
+                                          wxT( "test@kicad.example" ) )
+                   == CommitResult::Success );
+
+    git_oid headOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, repo, "HEAD" ), GIT_OK );
+
+    git_commit* head = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &head, repo, &headOid ), GIT_OK );
+
+    git_tree* tree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_tree( &tree, head ), GIT_OK );
+
+    git_tree_entry* entry = nullptr;
+    BOOST_CHECK_MESSAGE( git_tree_entry_bypath( &entry, tree, "link" ) == GIT_OK,
+                         "the commit dropped the symlink instead of recording it" );
+
+    if( entry )
+        git_tree_entry_free( entry );
+
+    git_tree_free( tree );
+    git_commit_free( head );
+    git_repository_free( repo );
+}
+#endif
+
+
 BOOST_AUTO_TEST_CASE( IsTransientGitFile_ExcludesTransientFilesOnly )
 {
     using KIGIT::PROJECT_GIT_UTILS;
@@ -1215,6 +1221,591 @@ BOOST_AUTO_TEST_CASE( WriteTreeToDir_MaterializesSubdirectoryFiles )
 
 
 // The repository must stay untouched until the final commit, and that commit must also bring the
+
+
+// Rebuilding from the parent would drop every file the amended commit held but the list omits.
+BOOST_AUTO_TEST_CASE( Amend_KeepsFilesAlreadyInCommit )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    // The commit to amend carries second.txt, which the amend below does not mention.
+    createCommit( repo, wxT( "second.txt" ), wxT( "two\n" ), wxT( "Add second" ) );
+
+    {
+        wxString      filePath = repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" );
+        std::ofstream f( filePath.ToStdString() );
+        f << "amended\n";
+    }
+
+    GIT_COMMIT_HANDLER handler( repo );
+    BOOST_REQUIRE( handler.PerformAmend( { wxT( "file.txt" ) }, wxT( "Amended" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL )
+                   == CommitResult::Success );
+
+    git_oid headOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, repo, "HEAD" ), GIT_OK );
+
+    git_commit* head = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &head, repo, &headOid ), GIT_OK );
+
+    git_tree* tree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_tree( &tree, head ), GIT_OK );
+
+    BOOST_CHECK_MESSAGE( git_tree_entry_byname( tree, "second.txt" ) != nullptr,
+                         "a file already in the amended commit must survive an amend that does not list it" );
+    BOOST_CHECK( git_tree_entry_byname( tree, "file.txt" ) != nullptr );
+
+    git_tree_free( tree );
+    git_commit_free( head );
+    git_repository_free( repo );
+}
+
+
+// A file deleted from the working tree is offered in the checklist, so committing it must
+// record the deletion instead of failing to add the missing path.
+BOOST_AUTO_TEST_CASE( Commit_RecordsDeletedFile )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    createCommit( repo, wxT( "doomed.txt" ), wxT( "doomed\n" ), wxT( "Add doomed" ) );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+    BOOST_TEST_REQUIRE( wxRemoveFile( workDir + wxT( "doomed.txt" ) ) );
+
+    GIT_COMMIT_HANDLER handler( repo );
+    CommitResult result = handler.PerformCommit( { wxT( "doomed.txt" ) }, wxT( "Remove doomed" ), TEST_AUTHOR_NAME,
+                                                 TEST_AUTHOR_EMAIL );
+
+    BOOST_REQUIRE_MESSAGE( result == CommitResult::Success, handler.GetErrorString() );
+
+    git_oid headOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, repo, "HEAD" ), GIT_OK );
+
+    git_commit* head = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &head, repo, &headOid ), GIT_OK );
+
+    git_tree* tree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_tree( &tree, head ), GIT_OK );
+
+    BOOST_CHECK( git_tree_entry_byname( tree, "doomed.txt" ) == nullptr );
+    BOOST_CHECK( git_tree_entry_byname( tree, "file.txt" ) != nullptr );
+
+    git_tree_free( tree );
+    git_commit_free( head );
+    git_repository_free( repo );
+}
+
+
+// The selected entries must also advance to the committed content, or they linger afterwards as
+// phantom staged changes.
+BOOST_AUTO_TEST_CASE( Commit_PreservesIndexEntriesOfUnselectedFiles )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    createCommit( repo, wxT( "board.txt" ), wxT( "board v1\n" ), wxT( "Add board" ) );
+    createCommit( repo, wxT( "doomed.txt" ), wxT( "doomed\n" ), wxT( "Add doomed" ) );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    auto writeAll = [&]( const wxString& aName, const std::string& aContent )
+    {
+        std::ofstream f( ( workDir + aName ).ToStdString(), std::ios::binary );
+        f << aContent;
+    };
+
+    auto readAll = [&]( const wxString& aName )
+    {
+        std::ifstream in( ( workDir + aName ).ToStdString(), std::ios::binary );
+        return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    };
+
+    // Staged content of a path, or a marker for "no entry staged".
+    auto stagedContent = [&]( const char* aPath )
+    {
+        std::string result = "<none>";
+        git_index*  index = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+        BOOST_REQUIRE_EQUAL( git_index_read( index, 1 ), GIT_OK );
+
+        if( const git_index_entry* entry = git_index_get_bypath( index, aPath, 0 ) )
+        {
+            git_blob* blob = nullptr;
+            BOOST_REQUIRE_EQUAL( git_blob_lookup( &blob, repo, &entry->id ), GIT_OK );
+            result.assign( static_cast<const char*>( git_blob_rawcontent( blob ) ), git_blob_rawsize( blob ) );
+            git_blob_free( blob );
+        }
+
+        git_index_free( index );
+        return result;
+    };
+
+    auto committedContent = [&]( const char* aPath )
+    {
+        std::string result = "<none>";
+        git_oid     headOid;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, repo, "HEAD" ), GIT_OK );
+
+        git_commit* head = nullptr;
+        BOOST_REQUIRE_EQUAL( git_commit_lookup( &head, repo, &headOid ), GIT_OK );
+
+        git_tree* tree = nullptr;
+        BOOST_REQUIRE_EQUAL( git_commit_tree( &tree, head ), GIT_OK );
+
+        git_tree_entry* entry = nullptr;
+
+        if( git_tree_entry_bypath( &entry, tree, aPath ) == GIT_OK )
+        {
+            git_blob* blob = nullptr;
+            BOOST_REQUIRE_EQUAL( git_blob_lookup( &blob, repo, git_tree_entry_id( entry ) ), GIT_OK );
+            result.assign( static_cast<const char*>( git_blob_rawcontent( blob ) ), git_blob_rawsize( blob ) );
+            git_blob_free( blob );
+            git_tree_entry_free( entry );
+        }
+
+        git_tree_free( tree );
+        git_commit_free( head );
+        return result;
+    };
+
+    // Three kinds of staging the user did outside KiCad and did not select: a modification, a
+    // brand new file, and a deletion.
+    writeAll( wxT( "notes.txt" ), "staged A\n" );
+    writeAll( wxT( "board.txt" ), "board staged\n" );
+
+    git_index* index = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, "notes.txt" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, "board.txt" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_remove_bypath( index, "doomed.txt" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
+    git_index_free( index );
+
+    // The staged version and the working version differ, so a lost index entry cannot be
+    // recovered from the working file.
+    writeAll( wxT( "notes.txt" ), "working B\n" );
+    writeAll( wxT( "board.txt" ), "board working\n" );
+
+    // The selected file is a fourth path, untouched by any of the staging above.
+    writeAll( wxT( "file.txt" ), "selected\n" );
+
+    GIT_COMMIT_HANDLER handler( repo );
+    CommitResult       result =
+            handler.PerformCommit( { wxT( "file.txt" ) }, wxT( "Only file.txt" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+    BOOST_REQUIRE_MESSAGE( result == CommitResult::Success, handler.GetErrorString() );
+
+    // The commit holds HEAD plus the selected file only.
+    BOOST_CHECK_EQUAL( committedContent( "file.txt" ), "selected\n" );
+    BOOST_CHECK_EQUAL( committedContent( "board.txt" ), "board v1\n" );
+    BOOST_CHECK_EQUAL( committedContent( "notes.txt" ), "<none>" );
+    BOOST_CHECK_EQUAL( committedContent( "doomed.txt" ), "doomed\n" );
+
+    // Every unselected staged decision survives, and the working files are untouched.
+    BOOST_CHECK_EQUAL( stagedContent( "notes.txt" ), "staged A\n" );
+    BOOST_CHECK_EQUAL( stagedContent( "board.txt" ), "board staged\n" );
+    BOOST_CHECK_EQUAL( stagedContent( "doomed.txt" ), "<none>" );
+    BOOST_CHECK_EQUAL( readAll( wxT( "notes.txt" ) ), "working B\n" );
+    BOOST_CHECK_EQUAL( readAll( wxT( "board.txt" ) ), "board working\n" );
+
+    // The selected path matches what was committed, so it is not left looking staged.
+    BOOST_CHECK_EQUAL( stagedContent( "file.txt" ), "selected\n" );
+
+    // A selected deletion behaves the same way, and still leaves the others alone.
+    BOOST_TEST_REQUIRE( wxRemoveFile( workDir + wxT( "file.txt" ) ) );
+
+    result = handler.PerformCommit( { wxT( "file.txt" ) }, wxT( "Remove file.txt" ), TEST_AUTHOR_NAME,
+                                    TEST_AUTHOR_EMAIL );
+    BOOST_REQUIRE_MESSAGE( result == CommitResult::Success, handler.GetErrorString() );
+
+    BOOST_CHECK_EQUAL( committedContent( "file.txt" ), "<none>" );
+    BOOST_CHECK_EQUAL( stagedContent( "file.txt" ), "<none>" );
+    BOOST_CHECK_EQUAL( stagedContent( "notes.txt" ), "staged A\n" );
+    BOOST_CHECK_EQUAL( stagedContent( "board.txt" ), "board staged\n" );
+    BOOST_CHECK_EQUAL( stagedContent( "doomed.txt" ), "<none>" );
+
+    // A message-only amend keeps the tree and must not disturb the staged entries either.
+    result = handler.PerformAmend( {}, wxT( "Reworded" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+    BOOST_REQUIRE_MESSAGE( result == CommitResult::Success, handler.GetErrorString() );
+
+    BOOST_CHECK_EQUAL( stagedContent( "notes.txt" ), "staged A\n" );
+    BOOST_CHECK_EQUAL( stagedContent( "board.txt" ), "board staged\n" );
+    BOOST_CHECK_EQUAL( stagedContent( "doomed.txt" ), "<none>" );
+    BOOST_CHECK_EQUAL( committedContent( "board.txt" ), "board v1\n" );
+
+    // A failed commit must not cost the user any staged content either.
+    writeAll( wxT( "late.txt" ), "late\n" );
+    BOOST_CHECK( handler.PerformCommit( { wxT( "late.txt" ) }, wxT( "Bad author" ), wxEmptyString, wxEmptyString )
+                 == CommitResult::Error );
+
+    BOOST_CHECK_EQUAL( stagedContent( "notes.txt" ), "staged A\n" );
+    BOOST_CHECK_EQUAL( stagedContent( "board.txt" ), "board staged\n" );
+    BOOST_CHECK_EQUAL( stagedContent( "doomed.txt" ), "<none>" );
+
+    git_repository_free( repo );
+}
+
+
+// libgit2 wants UTF-8 paths. A locale conversion would mangle or reject non-ASCII names, so
+// check that they survive an add, a modify, an amend and a delete with byte-exact identity.
+BOOST_AUTO_TEST_CASE( Commit_HandlesNonAsciiPaths )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    const wxString    umlaut = wxString::FromUTF8( "Gr\xc3\xb6\xc3\x9f"
+                                                   "e.kicad_sch" );
+    const wxString    cyrillic = wxString::FromUTF8( "\xd0\xbf\xd0\xbb\xd0\xb0\xd1\x82\xd0\xb0.txt" );
+    const std::string umlautUtf8 = umlaut.utf8_string();
+    const std::string cyrillicUtf8 = cyrillic.utf8_string();
+
+    auto writeAll = [&]( const wxString& aName, const std::string& aContent )
+    {
+        std::ofstream f( ( workDir + aName ).ToStdString(), std::ios::binary );
+        f << aContent;
+    };
+
+    auto inHeadTree = [&]( const std::string& aPath )
+    {
+        git_oid headOid;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, repo, "HEAD" ), GIT_OK );
+
+        git_commit* head = nullptr;
+        BOOST_REQUIRE_EQUAL( git_commit_lookup( &head, repo, &headOid ), GIT_OK );
+
+        git_tree* tree = nullptr;
+        BOOST_REQUIRE_EQUAL( git_commit_tree( &tree, head ), GIT_OK );
+
+        git_tree_entry* entry = nullptr;
+        bool            found = git_tree_entry_bypath( &entry, tree, aPath.c_str() ) == GIT_OK;
+
+        if( found )
+            git_tree_entry_free( entry );
+
+        git_tree_free( tree );
+        git_commit_free( head );
+        return found;
+    };
+
+    writeAll( umlaut, "one\n" );
+    writeAll( cyrillic, "one\n" );
+
+    GIT_COMMIT_HANDLER handler( repo );
+    CommitResult       result =
+            handler.PerformCommit( { umlaut, cyrillic }, wxT( "Add" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+    BOOST_REQUIRE_MESSAGE( result == CommitResult::Success, handler.GetErrorString() );
+
+    // The recorded path must be the same bytes as the file on disk, not a locale transcoding.
+    BOOST_CHECK( inHeadTree( umlautUtf8 ) );
+    BOOST_CHECK( inHeadTree( cyrillicUtf8 ) );
+
+    writeAll( umlaut, "two\n" );
+    result = handler.PerformCommit( { umlaut }, wxT( "Modify" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+    BOOST_REQUIRE_MESSAGE( result == CommitResult::Success, handler.GetErrorString() );
+    BOOST_CHECK( inHeadTree( umlautUtf8 ) );
+
+    writeAll( umlaut, "three\n" );
+    result = handler.PerformAmend( { umlaut }, wxT( "Amended" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+    BOOST_REQUIRE_MESSAGE( result == CommitResult::Success, handler.GetErrorString() );
+    BOOST_CHECK( inHeadTree( umlautUtf8 ) );
+    BOOST_CHECK( inHeadTree( cyrillicUtf8 ) );
+
+    BOOST_TEST_REQUIRE( wxRemoveFile( workDir + umlaut ) );
+    result = handler.PerformCommit( { umlaut }, wxT( "Delete" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+    BOOST_REQUIRE_MESSAGE( result == CommitResult::Success, handler.GetErrorString() );
+
+    BOOST_CHECK( !inHeadTree( umlautUtf8 ) );
+    BOOST_CHECK( inHeadTree( cyrillicUtf8 ) );
+
+    git_repository_free( repo );
+}
+
+
+// While another process holds .git/index.lock, KiCad's own index write must fail cleanly and
+// leave that process's staging on disk untouched.
+BOOST_AUTO_TEST_CASE( Commit_DoesNotDamageIndexWhileAnotherProcessHoldsTheLock )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    {
+        std::ofstream f( ( workDir + wxT( "notes.txt" ) ).ToStdString(), std::ios::binary );
+        f << "staged elsewhere\n";
+    }
+
+    git_repository* foreignRepo = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_open( &foreignRepo, repoPath().ToUTF8().data() ), GIT_OK );
+
+    git_index* foreign = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &foreign, foreignRepo ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( foreign, "notes.txt" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_write( foreign ), GIT_OK );
+    git_index_free( foreign );
+    git_repository_free( foreignRepo );
+
+    {
+        std::ofstream f( ( workDir + wxT( "file.txt" ) ).ToStdString(), std::ios::binary );
+        f << "selected\n";
+    }
+
+    // Stand in for another git process that is part way through its own index write.
+    wxString indexLock = repoPath() + wxFileName::GetPathSeparator() + wxT( ".git" ) + wxFileName::GetPathSeparator()
+                         + wxT( "index.lock" );
+    {
+        std::ofstream f( indexLock.ToStdString() );
+        f << "held\n";
+    }
+
+    GIT_COMMIT_HANDLER handler( repo );
+    CommitResult       result =
+            handler.PerformCommit( { wxT( "file.txt" ) }, wxT( "Only file.txt" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+
+    // The commit itself does not need the index lock, so it exists. Only the staged file list
+    // could not be rewritten, which is a different outcome from a failed commit.
+    BOOST_CHECK( result == CommitResult::SuccessIndexStale );
+    BOOST_CHECK( !handler.GetErrorString().IsEmpty() );
+
+    BOOST_TEST_REQUIRE( wxRemoveFile( indexLock ) );
+
+    git_oid committed;
+    BOOST_CHECK_MESSAGE( git_reference_name_to_id( &committed, repo, "HEAD" ) == GIT_OK,
+                         "the commit must exist even though the index could not be rewritten" );
+
+    // The other process's staging is still exactly as it left it.
+    git_index* after = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &after, repo ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_read( after, 1 ), GIT_OK );
+
+    const git_index_entry* notes = git_index_get_bypath( after, "notes.txt", 0 );
+    BOOST_REQUIRE_MESSAGE( notes, "the locked-out write damaged another process's staging" );
+
+    git_blob* blob = nullptr;
+    BOOST_REQUIRE_EQUAL( git_blob_lookup( &blob, repo, &notes->id ), GIT_OK );
+    std::string content( static_cast<const char*>( git_blob_rawcontent( blob ) ), git_blob_rawsize( blob ) );
+    BOOST_CHECK_EQUAL( content, "staged elsewhere\n" );
+
+    git_blob_free( blob );
+    git_index_free( after );
+    git_repository_free( repo );
+}
+
+
+// Staging written to .git/index by another process must survive a commit, even when the
+// repository handle is holding an older cached copy of that index.
+// Amend needs the same protection as Commit. Staging done outside KiCad must survive it.
+BOOST_AUTO_TEST_CASE( Amend_KeepsStagingWrittenByAnotherProcess )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    git_index* cached = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &cached, repo ), GIT_OK );
+
+    {
+        std::ofstream f( ( workDir + wxT( "notes.txt" ) ).ToStdString(), std::ios::binary );
+        f << "staged elsewhere\n";
+    }
+
+    // A second handle on the same directory stands in for a terminal git process.
+    git_repository* foreignRepo = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_open( &foreignRepo, repoPath().ToUTF8().data() ), GIT_OK );
+
+    git_index* foreign = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &foreign, foreignRepo ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( foreign, "notes.txt" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_write( foreign ), GIT_OK );
+
+    const git_index_entry* stagedBefore = git_index_get_bypath( foreign, "notes.txt", 0 );
+    BOOST_REQUIRE( stagedBefore );
+    git_oid stagedBlob = stagedBefore->id;
+
+    git_index_free( foreign );
+    git_repository_free( foreignRepo );
+
+    {
+        std::ofstream f( ( workDir + wxT( "file.txt" ) ).ToStdString(), std::ios::binary );
+        f << "amended\n";
+    }
+
+    GIT_COMMIT_HANDLER handler( repo );
+    CommitResult       result = handler.PerformAmend( { wxT( "file.txt" ) }, wxT( "Amended message" ), TEST_AUTHOR_NAME,
+                                                      TEST_AUTHOR_EMAIL );
+    BOOST_REQUIRE_MESSAGE( result == CommitResult::Success, handler.GetErrorString() );
+
+    git_repository_free( repo );
+
+    // Reopen so nothing is answered from a cached index.
+    git_repository* fresh = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_open( &fresh, repoPath().ToUTF8().data() ), GIT_OK );
+
+    git_index* after = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &after, fresh ), GIT_OK );
+
+    const git_index_entry* notes = git_index_get_bypath( after, "notes.txt", 0 );
+    BOOST_REQUIRE_MESSAGE( notes, "the externally staged file must still be staged after an amend" );
+    BOOST_CHECK_MESSAGE( git_oid_equal( &notes->id, &stagedBlob ),
+                         "the externally staged blob must be the exact one the other process wrote" );
+
+    // The amend must not have pulled notes.txt into the commit.
+    git_oid headOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, fresh, "HEAD" ), GIT_OK );
+
+    git_commit* headCommit = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &headCommit, fresh, &headOid ), GIT_OK );
+
+    git_tree* headTree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_tree( &headTree, headCommit ), GIT_OK );
+
+    git_tree_entry* leaked = nullptr;
+    BOOST_CHECK_MESSAGE( git_tree_entry_bypath( &leaked, headTree, "notes.txt" ) != GIT_OK,
+                         "an unselected staged file must not ride into the amended commit" );
+    git_tree_entry_free( leaked );
+
+    git_tree_free( headTree );
+    git_commit_free( headCommit );
+    git_index_free( after );
+    git_repository_free( fresh );
+}
+
+
+BOOST_AUTO_TEST_CASE( Commit_KeepsStagingWrittenByAnotherProcess )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    // Make the repository handle cache an index that knows nothing about the staging below.
+    git_index* cached = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &cached, repo ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_entrycount( cached ), 1 );
+
+    {
+        std::ofstream f( ( workDir + wxT( "notes.txt" ) ).ToStdString(), std::ios::binary );
+        f << "staged elsewhere\n";
+    }
+
+    // A second repository handle on the same directory stands in for the terminal.
+    git_repository* foreignRepo = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_open( &foreignRepo, repoPath().ToUTF8().data() ), GIT_OK );
+
+    git_index* foreign = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &foreign, foreignRepo ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( foreign, "notes.txt" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_write( foreign ), GIT_OK );
+    git_index_free( foreign );
+    git_repository_free( foreignRepo );
+
+    {
+        std::ofstream f( ( workDir + wxT( "file.txt" ) ).ToStdString(), std::ios::binary );
+        f << "selected\n";
+    }
+
+    GIT_COMMIT_HANDLER handler( repo );
+    CommitResult       result =
+            handler.PerformCommit( { wxT( "file.txt" ) }, wxT( "Only file.txt" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+    BOOST_REQUIRE_MESSAGE( result == CommitResult::Success, handler.GetErrorString() );
+
+    git_index* after = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &after, repo ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_read( after, 1 ), GIT_OK );
+
+    const git_index_entry* notes = git_index_get_bypath( after, "notes.txt", 0 );
+    BOOST_REQUIRE_MESSAGE( notes, "staging written by another process was lost" );
+
+    git_blob* blob = nullptr;
+    BOOST_REQUIRE_EQUAL( git_blob_lookup( &blob, repo, &notes->id ), GIT_OK );
+    std::string content( static_cast<const char*>( git_blob_rawcontent( blob ) ), git_blob_rawsize( blob ) );
+    BOOST_CHECK_EQUAL( content, "staged elsewhere\n" );
+
+    git_blob_free( blob );
+    git_index_free( after );
+    git_index_free( cached );
+    git_repository_free( repo );
+}
+
+
+// The panel promises to commit exactly the checked files. Content staged outside KiCad for
+// an unchecked file must not ride into the commit.
+BOOST_AUTO_TEST_CASE( Commit_IgnoresContentStagedElsewhere )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    createCommit( repo, wxT( "sneaky.txt" ), wxT( "clean\n" ), wxT( "Add sneaky" ) );
+
+    wxString workDir = wxString::FromUTF8( git_repository_workdir( repo ) );
+
+    // Stage a change to sneaky.txt the way a command line git add would, then change the
+    // checked file too.
+    {
+        std::ofstream f( ( workDir + wxT( "sneaky.txt" ) ).ToStdString(), std::ios::binary );
+        f << "staged elsewhere\n";
+    }
+
+    git_index* index = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, "sneaky.txt" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
+    git_index_free( index );
+
+    {
+        std::ofstream f( ( workDir + wxT( "file.txt" ) ).ToStdString(), std::ios::binary );
+        f << "wanted\n";
+    }
+
+    GIT_COMMIT_HANDLER handler( repo );
+    CommitResult       result =
+            handler.PerformCommit( { wxT( "file.txt" ) }, wxT( "Only file.txt" ), TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL );
+
+    BOOST_REQUIRE_MESSAGE( result == CommitResult::Success, handler.GetErrorString() );
+
+    git_oid headOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, repo, "HEAD" ), GIT_OK );
+
+    git_commit* head = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &head, repo, &headOid ), GIT_OK );
+
+    git_tree* tree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_tree( &tree, head ), GIT_OK );
+
+    const git_tree_entry* sneaky = git_tree_entry_byname( tree, "sneaky.txt" );
+    BOOST_REQUIRE( sneaky );
+
+    git_blob* blob = nullptr;
+    BOOST_REQUIRE_EQUAL( git_blob_lookup( &blob, repo, git_tree_entry_id( sneaky ) ), GIT_OK );
+
+    std::string sneakyContent( static_cast<const char*>( git_blob_rawcontent( blob ) ), git_blob_rawsize( blob ) );
+
+    BOOST_CHECK_EQUAL( sneakyContent, "clean\n" );
+
+    git_blob_free( blob );
+    git_tree_free( tree );
+    git_commit_free( head );
+    git_repository_free( repo );
+}
 
 
 // Viewing a diff materializes a committed tree, and that must never replace what the user has

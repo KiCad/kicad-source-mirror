@@ -2783,7 +2783,11 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
     CommitResult       result = commitHandler.PerformCommit( files, dlg.GetCommitMessage(), dlg.GetAuthorName(),
                                                              dlg.GetAuthorEmail() );
 
-    if( result != CommitResult::Success )
+    if( result == CommitResult::SuccessIndexStale )
+    {
+        wxMessageBox( commitHandler.GetErrorString() );
+    }
+    else if( result != CommitResult::Success )
     {
         wxMessageBox( wxString::Format( _( "Failed to create commit: %s" ), commitHandler.GetErrorString() ) );
         return;
@@ -3076,7 +3080,11 @@ void PROJECT_TREE_PANE::onGitAmendCommit( wxCommandEvent& aEvent )
     CommitResult       result = commitHandler.PerformAmend( dlg.GetSelectedFiles(), dlg.GetCommitMessage(),
                                                             dlg.GetAuthorName(), dlg.GetAuthorEmail() );
 
-    if( result != CommitResult::Success )
+    if( result == CommitResult::SuccessIndexStale )
+    {
+        wxMessageBox( commitHandler.GetErrorString() );
+    }
+    else if( result != CommitResult::Success )
     {
         wxMessageBox( wxString::Format( _( "Failed to amend commit: %s" ), commitHandler.GetErrorString() ) );
         return;
