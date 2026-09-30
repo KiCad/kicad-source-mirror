@@ -61,8 +61,7 @@ void EDA_DATA::AddNET( const NETINFO_ITEM* aNet )
 {
     if( nets_map.end() == nets_map.find( aNet->GetNetCode() ) )
     {
-        wxString netName = aNet->GetNetname();
-        ODB::RemoveWhitespace( netName );
+        wxString netName = ODB::GenLegalNetName( aNet->GetNetname() );
 
         auto& net = nets_map.emplace( std::piecewise_construct,
                                       std::forward_as_tuple( aNet->GetNetCode() ),
@@ -236,9 +235,9 @@ void EDA_DATA::AddPackage( const FOOTPRINT* aFp )
 
     BOX2I bbox = fp->GetBoundingBox();
     pkg->m_xmin = bbox.GetPosition().x;
-    pkg->m_ymin = bbox.GetPosition().y;
+    pkg->m_ymin = -bbox.GetEnd().y;
     pkg->m_xmax = bbox.GetEnd().x;
-    pkg->m_ymax = bbox.GetEnd().y;
+    pkg->m_ymax = -bbox.GetPosition().y;
     pkg->m_pitch = UINT64_MAX;
 
     if( fp->Pads().size() < 2 )
@@ -397,7 +396,11 @@ void EDA_DATA::PACKAGE::Write( std::ostream& ost ) const
 {
     ost << "PKG " << m_name << " " << ODB::Data2String( m_pitch ) << " "
         << ODB::Data2String( m_xmin ) << " " << ODB::Data2String( m_ymin ) << " "
-        << ODB::Data2String( m_xmax ) << " " << ODB::Data2String( m_ymax ) << ";" << std::endl;
+        << ODB::Data2String( m_xmax ) << " " << ODB::Data2String( m_ymax );
+
+    WriteAttributes( ost );
+
+    ost << std::endl;
 
     for( const auto& outline : m_pkgOutlines )
     {

@@ -23,6 +23,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 set( ODBPP_SRCS
     odb_util.cpp
+    odb_export_job.cpp
     odb_attribute.cpp
     odb_feature.cpp
     odb_component.cpp

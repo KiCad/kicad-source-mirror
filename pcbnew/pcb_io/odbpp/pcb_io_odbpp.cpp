@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
+
 #include "pcb_io_odbpp.h"
 #include "progress_reporter.h"
 #include "odb_util.h"
@@ -29,6 +31,7 @@
 #include "wx/log.h"
 
 #include <footprint.h>
+#include <ki_exception.h>
 
 
 double      PCB_IO_ODBPP::m_scale = 1.0 / PCB_IU_PER_MM;
@@ -147,24 +150,47 @@ void PCB_IO_ODBPP::SaveBoard( const wxString& aFileName, BOARD& aBoard, const st
 {
     m_board = &aBoard;
 
-    if( auto it = aProperties->find( "units" ); it != aProperties->end() )
+    // Defaults for a caller that passes no properties at all; otherwise a prior export in the
+    // same process would leak its units/precision into this one
+    m_unitsStr = "MM";
+    m_scale = 1.0 / PCB_IU_PER_MM;
+    m_symbolScale = 1.0 / PL_IU_PER_MM;
+    m_sigfig = 6;
+
+    if( aProperties )
     {
-        if( it->second == "inch" )
+        if( auto it = aProperties->find( "units" ); it != aProperties->end() )
         {
-            m_unitsStr = "INCH";
-            m_scale = ( 1.0 / 25.4 ) / PCB_IU_PER_MM;
-            m_symbolScale = ( 1.0 / 25.4 ) / PL_IU_PER_MM;
+            // Only INCH needs setting here; MM is already the default set above
+            if( it->second == "inch" )
+            {
+                m_unitsStr = "INCH";
+                m_scale = ( 1.0 / 25.4 ) / PCB_IU_PER_MM;
+                m_symbolScale = ( 1.0 / 25.4 ) / PL_IU_PER_MM;
+            }
         }
-        else
+
+        if( auto it = aProperties->find( "sigfig" ); it != aProperties->end() )
         {
-            m_unitsStr = "MM";
-            m_scale = 1.0 / PCB_IU_PER_MM;
-            m_symbolScale = 1.0 / PL_IU_PER_MM;
+            int requested = std::stoi( it->second );
+            int precisionFloor = MinPrecision( m_unitsStr == "INCH" );
+
+            m_sigfig = std::clamp( requested, precisionFloor, MaxPrecision() );
+
+            if( requested < precisionFloor )
+            {
+                Report( wxString::Format( _( "ODB++ precision %d is below the minimum of %d for these units; "
+                                             "using %d." ), requested, precisionFloor, m_sigfig ),
+                        RPT_SEVERITY_WARNING );
+            }
+            else if( requested > MaxPrecision() )
+            {
+                Report( wxString::Format( _( "ODB++ precision %d is above the maximum of %d; using %d." ),
+                                          requested, MaxPrecision(), m_sigfig ), RPT_SEVERITY_WARNING );
+            }
         }
     }
 
-    if( auto it = aProperties->find( "sigfig" ); it != aProperties->end() )
-        m_sigfig = std::stoi( it->second );
-
-    ExportODB( aFileName );
+    if( !ExportODB( aFileName ) )
+        THROW_IO_ERROR( _( "ODB++ export failed. See the messages above for the cause." ) );
 }

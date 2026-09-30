@@ -61,7 +61,7 @@ DIALOG_EXPORT_ODBPP_BASE::DIALOG_EXPORT_ODBPP_BASE( wxWindow* parent, wxWindowID
 
 	fgSizer->Add( m_lblPrecision, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_precision = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxSP_ARROW_KEYS, 2, 16, 6 );
+	m_precision = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxSP_ARROW_KEYS, 3, 16, 6 );
 	m_precision->SetToolTip( _("The number of values following the decimal separator") );
 
 	fgSizer->Add( m_precision, 0, wxEXPAND, 5 );

@@ -111,7 +111,13 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
 
         wxString key = field->GetName();
         ODB::RemoveWhitespace( key );
-        comp.m_prp[key] = wxString::Format( "'%s'", field->GetShownText( RESOLVED ) );
+
+        // A PRP record is one line
+        wxString value = field->GetShownText( RESOLVED );
+        value.Replace( wxS( "\r" ), wxEmptyString );
+        value.Replace( wxS( "\n" ), wxS( " " ) );
+
+        comp.m_prp[key] = wxString::Format( "'%s'", value );
     }
 
     if( aFp->GetDNPForVariant( aFp->GetBoard() ? aFp->GetBoard()->GetCurrentVariant() : wxString() ) )

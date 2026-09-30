@@ -58,15 +58,22 @@ void ATTR_RECORD_WRITER::WriteAttributes( std::ostream& ost ) const
 {
     ODB::CHECK_ONCE once;
 
-    ost << " ";
+    // Some readers need the attribute and ID sections even when both are empty
+    if( m_ODBattributes.empty() )
+    {
+        ost << " ;;";
+        return;
+    }
+
+    ost << " ;";
 
     for( const auto& attr : m_ODBattributes )
     {
-        if( once() )
-            ost << ";";
-        else
+        if( !once() )
             ost << ",";
+
         ost << attr.first;
+
         if( attr.second.size() )
             ost << "=" << attr.second;
     }

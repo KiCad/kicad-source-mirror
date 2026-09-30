@@ -805,8 +805,9 @@ BOOST_AUTO_TEST_CASE( OdbPpPlatedSlotDrill )
         return false;
     };
 
-    // The plated slot must appear on the plated drill layer as exactly one oval pad feature,
-    // and the slot must NOT leak onto this layer as a non-plated hole.
+    // The plated slot must appear on the plated drill layer as exactly one line feature (drill
+    // layers hold only lines and circular pads), and must NOT leak onto this layer as a
+    // non-plated hole.
     wxFileName platedDir = layerDir( wxT( "drill_plated_f.cu-b.cu" ) );
     BOOST_REQUIRE_MESSAGE( platedDir.DirExists(), "Plated drill layer should exist" );
 
@@ -814,9 +815,9 @@ BOOST_AUTO_TEST_CASE( OdbPpPlatedSlotDrill )
     BOOST_REQUIRE( platedFeatures.FileExists() );
     wxString platedContents = readFile( platedFeatures );
 
-    BOOST_CHECK_EQUAL( countLinesStartingWith( platedContents, wxT( "P " ) ), 1 );
-    BOOST_CHECK_MESSAGE( containsOvalSymbol( platedContents ),
-                         "Plated slot should use an oval symbol" );
+    BOOST_CHECK_EQUAL( countLinesStartingWith( platedContents, wxT( "L " ) ), 1 );
+    BOOST_CHECK_MESSAGE( !containsOvalSymbol( platedContents ),
+                         "Plated slot should be a line, not an oval pad" );
 
     wxFileName platedTools( platedDir.GetFullPath(), wxT( "tools" ) );
     BOOST_REQUIRE( platedTools.FileExists() );
@@ -833,9 +834,9 @@ BOOST_AUTO_TEST_CASE( OdbPpPlatedSlotDrill )
     BOOST_REQUIRE( nonPlatedFeatures.FileExists() );
     wxString nonPlatedContents = readFile( nonPlatedFeatures );
 
-    BOOST_CHECK_EQUAL( countLinesStartingWith( nonPlatedContents, wxT( "P " ) ), 1 );
-    BOOST_CHECK_MESSAGE( containsOvalSymbol( nonPlatedContents ),
-                         "Non-plated slot should still export an oval symbol" );
+    BOOST_CHECK_EQUAL( countLinesStartingWith( nonPlatedContents, wxT( "L " ) ), 1 );
+    BOOST_CHECK_MESSAGE( !containsOvalSymbol( nonPlatedContents ),
+                         "Non-plated slot should be a line, not an oval pad" );
 
     wxFileName nonPlatedTools( nonPlatedDir.GetFullPath(), wxT( "tools" ) );
     BOOST_REQUIRE( nonPlatedTools.FileExists() );

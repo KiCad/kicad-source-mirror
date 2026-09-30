@@ -23,9 +23,6 @@
 
 class PCB_EDIT_FRAME;
 class JOB_EXPORT_PCB_ODB;
-class REPORTER;
-class PROGRESS_REPORTER;
-class BOARD;
 
 class DIALOG_EXPORT_ODBPP : public DIALOG_EXPORT_ODBPP_BASE
 {
@@ -46,12 +43,6 @@ public:
     int GetPrecision() const { return m_precision->GetValue(); }
 
     int GetCompressFormat() const { return m_choiceCompress->GetSelection(); }
-
-    // Runs the actual generation process; shared between GUI and CLI system
-    static void GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard,
-                                    PCB_EDIT_FRAME* aParentFrame = nullptr,
-                                    PROGRESS_REPORTER* aProgressReporter = nullptr,
-                                    REPORTER* aErrorReporter = nullptr );
 
 private:
     void onBrowseClicked( wxCommandEvent& event ) override;

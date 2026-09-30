@@ -22,9 +22,12 @@
 #pragma once
 
 #include "odb_attribute.h"
+#include "odb_util.h"
 #include "convert_basic_shapes_to_polygon.h"
 
+#include <iterator>
 #include <list>
+#include <optional>
 #include <math/vector2d.h>
 #include <common.h>
 #include "odb_defines.h"
@@ -52,10 +55,15 @@ class PCB_TRACK;
 class FEATURES_MANAGER : public ATTR_MANAGER
 {
 public:
-    FEATURES_MANAGER( BOARD* aBoard, PCB_IO_ODBPP* aPlugin, const wxString& aLayerName ) :
+    FEATURES_MANAGER( BOARD* aBoard, PCB_IO_ODBPP* aPlugin, const wxString& aLayerName, ODB_LAYER_ROLE aRole,
+                      std::optional<ODB_AUX_LAYER_TYPE> aAuxType,
+                      std::optional<ODB_DRILL_SPAN>     aDrillSpan = std::nullopt ) :
             m_board( aBoard ),
             m_plugin( aPlugin ),
-            m_layerName( aLayerName )
+            m_layerName( aLayerName ),
+            m_role( aRole ),
+            m_auxType( aAuxType ),
+            m_drillSpan( aDrillSpan )
     {}
 
     virtual ~FEATURES_MANAGER() { m_featuresList.clear(); }
@@ -74,19 +82,19 @@ public:
     void AddFeatureArc( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCenter,
                         uint64_t aWidth, ODB_DIRECTION aDirection );
 
-    void AddPadCircle( const VECTOR2I& aCenter, uint64_t aDiameter, const EDA_ANGLE& aAngle,
-                       bool aMirror, double aResize = 1.0 );
+    void AddPadCircle( const VECTOR2I& aCenter, uint64_t aDiameter );
 
     void AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer );
 
-    void AddFeatureSurface( const SHAPE_POLY_SET::POLYGON& aPolygon,
-                            FILL_T                         aFillType = FILL_T::FILLED_SHAPE );
+    bool AddFeatureSurface( const SHAPE_POLY_SET::POLYGON& aPolygon, FILL_T aFillType = FILL_T::FILLED_SHAPE );
+
+    size_t FeatureCount() const { return m_featuresList.size(); }
 
     void AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer = UNDEFINED_LAYER );
 
     void AddVia( const PCB_VIA* aVia, PCB_LAYER_ID aLayer );
 
-    void AddViaDrillHole( const PCB_VIA* aVia, PCB_LAYER_ID aLayer );
+    bool AddViaDrillHole( const PCB_VIA* aVia, PCB_LAYER_ID aLayer );
 
     void AddViaProtection( const PCB_VIA* aVia, bool drill, PCB_LAYER_ID aLayer );
 
@@ -198,12 +206,24 @@ private:
         m_featuresList.emplace_back( std::move( feature ) );
     }
 
+    template <typename F>
+    void forEachNewFeature( size_t aFirst, F&& aFunc )
+    {
+        auto it = std::prev( m_featuresList.end(), m_featuresList.size() - aFirst );
+
+        for( size_t index = aFirst; it != m_featuresList.end(); ++it, ++index )
+            aFunc( **it, index );
+    }
+
     inline PCB_IO_ODBPP* GetODBPlugin() { return m_plugin; }
 
-    BOARD*        m_board;
-    PCB_IO_ODBPP* m_plugin;
-    wxString      m_layerName;
-    uint32_t      m_symIndex = 0;
+    BOARD*                            m_board;
+    PCB_IO_ODBPP*                     m_plugin;
+    wxString                          m_layerName;
+    ODB_LAYER_ROLE                    m_role;
+    std::optional<ODB_AUX_LAYER_TYPE> m_auxType;
+    std::optional<ODB_DRILL_SPAN>     m_drillSpan;
+    uint32_t                          m_symIndex = 0;
 
     std::list<std::unique_ptr<ODB_FEATURE>>      m_featuresList;
     std::map<BOARD_ITEM*, std::vector<uint32_t>> m_featureIDMap;
@@ -290,13 +310,12 @@ private:
 class ODB_PAD : public ODB_FEATURE
 {
 public:
-    ODB_PAD( uint32_t aIndex, const std::pair<wxString, wxString>& aCenter, uint32_t aSym,
-             EDA_ANGLE aAngle = ANGLE_0, bool aMirror = false, double aResize = 1.0 ) :
+    ODB_PAD( uint32_t aIndex, const std::pair<wxString, wxString>& aCenter, uint32_t aSym, EDA_ANGLE aAngle = ANGLE_0,
+             double aResize = 1.0 ) :
             ODB_FEATURE( aIndex ),
             m_center( aCenter ),
             m_symIndex( aSym ),
             m_angle( aAngle ),
-            m_mirror( aMirror ),
             m_resize( aResize )
     {
     }
@@ -310,7 +329,6 @@ private:
     std::pair<wxString, wxString> m_center;
     uint32_t                      m_symIndex;
     EDA_ANGLE                     m_angle;
-    bool                          m_mirror;
     double                        m_resize;
 };
 
@@ -369,4 +387,7 @@ public:
     void WriteData( std::ostream& ost ) const;
 
     std::vector<std::vector<SURFACE_LINE>> m_polygons;
+
+private:
+    void AddContour( const SHAPE_LINE_CHAIN& aChain, bool aHole );
 };

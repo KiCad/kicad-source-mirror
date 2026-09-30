@@ -71,6 +71,7 @@
 #include <dialogs/dialog_export_2581.h>
 #include <dialogs/dialog_map_layers.h>
 #include <dialogs/dialog_export_odbpp.h>
+#include <pcb_io/odbpp/odb_export_job.h>
 #include <jobs/job_export_pcb_odb.h>
 #include <dialogs/dialog_import_choose_project.h>
 #include <tools/pcb_actions.h>
@@ -1282,13 +1283,52 @@ int BOARD_EDITOR_CONTROL::GenerateODBPPFiles( const TOOL_EVENT& aEvent )
     job.m_units = dlg.GetUnitsString() == "mm" ? JOB_EXPORT_PCB_ODB::ODB_UNITS::MM
                                                : JOB_EXPORT_PCB_ODB::ODB_UNITS::INCH;
 
+    wxFileName outputFn = ResolveOdbOutputPath( job, m_frame->GetBoard() );
+    wxString   outputPath = outputFn.GetFullPath();
+
+    auto confirmOverwrite = [&]( const wxString& aMsg )
+    {
+        KIDIALOG confirm( m_frame, aMsg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        confirm.SetOKLabel( _( "Overwrite" ) );
+        return confirm.ShowModal() == wxID_OK;
+    };
+
+    if( job.m_compressionMode != JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE )
+    {
+        if( outputFn.Exists()
+            && !confirmOverwrite( wxString::Format( _( "Output file '%s' already exists. Do you want to "
+                                                       "overwrite it?" ),
+                                                    outputPath ) ) )
+        {
+            return 0;
+        }
+    }
+    else if( wxDirExists( outputPath ) && ( wxDir( outputPath ).HasFiles() || wxDir( outputPath ).HasSubDirs() ) )
+    {
+        if( !confirmOverwrite( wxString::Format( _( "Output directory '%s' already exists and is not empty. "
+                                                    "Do you want to overwrite it?" ),
+                                                 outputPath ) ) )
+        {
+            return 0;
+        }
+
+        if( !wxFileName::Rmdir( outputPath, wxPATH_RMDIR_RECURSIVE ) )
+        {
+            DisplayErrorMessage( m_frame, wxString::Format( _( "Cannot remove existing output directory '%s'." ),
+                                                            outputPath ) );
+            return 0;
+        }
+    }
+
     WX_PROGRESS_REPORTER progressReporter( m_frame, _( "Generate ODB++ Files" ), 3, PR_CAN_ABORT );
     WX_STRING_REPORTER reporter;
 
-    DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( job, m_frame->GetBoard(), m_frame, &progressReporter, &reporter );
+    bool ok = ::GenerateODBPPFiles( job, m_frame->GetBoard(), &progressReporter, &reporter );
 
-    if( reporter.HasMessage() )
+    if( !ok && reporter.HasMessage() )
         DisplayError( m_frame, reporter.GetMessages() );
+    else if( reporter.HasMessage() )
+        DisplayInfoMessage( m_frame, _( "ODB++ export finished with warnings." ), reporter.GetMessages() );
 
     return 0;
 }

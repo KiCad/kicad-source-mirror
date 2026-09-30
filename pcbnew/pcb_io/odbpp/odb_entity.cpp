@@ -107,7 +107,7 @@ void ODB_MISC_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
 
 void ODB_MATRIX_ENTITY::AddStep( const wxString& aStepName )
 {
-    m_matrixSteps.emplace( aStepName.Upper(), m_col++ );
+    m_matrixSteps.emplace( ODB::GenLegalEntityName( aStepName ), m_col++ );
 }
 
 
@@ -127,6 +127,9 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
 
     std::vector<BOARD_STACKUP_ITEM*> layers = stackup.GetList();
     std::set<PCB_LAYER_ID>           added_layers;
+
+    for( const FOOTPRINT* fp : m_board->Footprints() )
+        ( fp->IsFlipped() ? m_hasBotComp : m_hasTopComp ) = true;
 
     AddCOMPMatrixLayer( F_Cu );
 
@@ -148,6 +151,8 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
             }
 
             MATRIX_LAYER matrix( m_row++, ly_name );
+            matrix.m_info.m_stackupItem = stackup_item;
+            matrix.m_info.m_sublayer = sublayer_id;
 
             if( stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
             {
@@ -160,8 +165,6 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
                 matrix.m_context = ODB_CONTEXT::BOARD;
                 matrix.m_polarity = ODB_POLARITY::POSITIVE;
                 m_matrixLayers.push_back( matrix );
-                m_plugin->GetLayerNameList().emplace_back(
-                        std::make_pair( PCB_LAYER_ID::UNDEFINED_LAYER, matrix.m_layerName ) );
 
                 continue;
             }
@@ -190,11 +193,22 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
     AddCOMPMatrixLayer( B_Cu );
 
     EnsureUniqueLayerNames();
+
+    std::vector<ODB_LAYER_NAME>& names = m_plugin->GetLayerNameList();
+    names.clear();
+    names.reserve( m_matrixLayers.size() );
+
+    for( const MATRIX_LAYER& layer : m_matrixLayers )
+    {
+        names.push_back( layer.m_info );
+        names.back().m_name = layer.m_layerName;
+    }
 }
 
 
 void ODB_MATRIX_ENTITY::AddMatrixLayerField( MATRIX_LAYER& aMLayer, PCB_LAYER_ID aLayer )
 {
+    aMLayer.m_info.m_layer = aLayer;
     aMLayer.m_polarity = ODB_POLARITY::POSITIVE;
     aMLayer.m_context = ODB_CONTEXT::BOARD;
     switch( aLayer )
@@ -293,7 +307,6 @@ void ODB_MATRIX_ENTITY::AddMatrixLayerField( MATRIX_LAYER& aMLayer, PCB_LAYER_ID
     if( aMLayer.m_type != ODB_TYPE::UNDEFINED )
     {
         m_matrixLayers.push_back( aMLayer );
-        m_plugin->GetLayerNameList().emplace_back( std::make_pair( aLayer, aMLayer.m_layerName ) );
     }
 }
 
@@ -308,9 +321,6 @@ void ODB_MATRIX_ENTITY::AddDrillMatrixLayer()
     drill_layers.clear();
     slot_holes.clear();
 
-    std::map<ODB_DRILL_SPAN, wxString>& span_names = m_plugin->GetDrillSpanNameMap();
-    span_names.clear();
-
     bool has_pth_layer = false;
     bool has_npth_layer = false;
 
@@ -321,7 +331,10 @@ void ODB_MATRIX_ENTITY::AddDrillMatrixLayer()
             PCB_VIA* via = static_cast<PCB_VIA*>( item );
             has_pth_layer = true;
 
-            ODB_DRILL_SPAN platedSpan( via->TopLayer(), via->BottomLayer(), false, false );
+            // Start is the drilling side, so blind vias reaching only B.Cu start there
+            bool           fromBack = via->BottomLayer() == B_Cu && via->TopLayer() != F_Cu;
+            ODB_DRILL_SPAN platedSpan( fromBack ? via->BottomLayer() : via->TopLayer(),
+                                       fromBack ? via->TopLayer() : via->BottomLayer(), false, false );
             drill_layers[platedSpan].push_back( via );
 
             std::set<ODB_DRILL_SPAN> addedBackdrillSpans;
@@ -345,11 +358,6 @@ void ODB_MATRIX_ENTITY::AddDrillMatrixLayer()
 
     for( FOOTPRINT* fp : m_board->Footprints() )
     {
-        if( fp->IsFlipped() )
-        {
-            m_hasBotComp = true;
-        }
-
         for( PAD* pad : fp->Pads() )
         {
             if( pad->GetAttribute() == PAD_ATTRIB::PTH )
@@ -383,33 +391,23 @@ void ODB_MATRIX_ENTITY::AddDrillMatrixLayer()
 
     int backdrillIndex = 1;
 
-    auto assignName =
-            [&]( const ODB_DRILL_SPAN& aSpan )
-            {
-                auto it = span_names.find( aSpan );
+    auto assignName = [&]( const ODB_DRILL_SPAN& aSpan )
+    {
+        wxString name;
 
-                if( it != span_names.end() )
-                    return it->second;
+        if( aSpan.m_IsBackdrill )
+        {
+            name.Printf( wxT( "drill%d" ), backdrillIndex++ );
+        }
+        else
+        {
+            wxString platedLabel = aSpan.m_IsNonPlated ? wxT( "non-plated" ) : wxT( "plated" );
+            name.Printf( wxT( "drill_%s_%s-%s" ), platedLabel, m_board->GetLayerName( aSpan.TopLayer() ),
+                         m_board->GetLayerName( aSpan.BottomLayer() ) );
+        }
 
-                wxString name;
-
-                if( aSpan.m_IsBackdrill )
-                {
-                    name.Printf( wxT( "drill%d" ), backdrillIndex++ );
-                }
-                else
-                {
-                    wxString platedLabel = aSpan.m_IsNonPlated ? wxT( "non-plated" ) : wxT( "plated" );
-                    name.Printf( wxT( "drill_%s_%s-%s" ), platedLabel,
-                                 m_board->GetLayerName( aSpan.TopLayer() ),
-                                 m_board->GetLayerName( aSpan.BottomLayer() ) );
-                }
-
-                wxString legalName = ODB::GenLegalEntityName( name );
-                span_names[aSpan] = legalName;
-
-                return legalName;
-            };
+        return ODB::GenLegalEntityName( name );
+    };
 
     auto InitDrillMatrix =
             [&]( const ODB_DRILL_SPAN& aSpan )
@@ -418,18 +416,18 @@ void ODB_MATRIX_ENTITY::AddDrillMatrixLayer()
                 MATRIX_LAYER matrix( m_row++, dLayerName );
 
                 matrix.m_type = ODB_TYPE::DRILL;
+                matrix.m_info.m_role = aSpan.m_IsBackdrill ? ODB_LAYER_ROLE::BACKDRILL : ODB_LAYER_ROLE::DRILL;
+                matrix.m_info.m_drillSpan = aSpan;
                 matrix.m_context = ODB_CONTEXT::BOARD;
                 matrix.m_polarity = ODB_POLARITY::POSITIVE;
-                matrix.m_span.emplace( std::make_pair(
-                        ODB::GenLegalEntityName( m_board->GetLayerName( aSpan.m_StartLayer ) ),
-                        ODB::GenLegalEntityName( m_board->GetLayerName( aSpan.m_EndLayer ) ) ) );
+                matrix.m_span.emplace(
+                        std::make_pair( ODB::GenLegalEntityName( m_board->GetLayerName( aSpan.TopLayer() ) ),
+                                        ODB::GenLegalEntityName( m_board->GetLayerName( aSpan.BottomLayer() ) ) ) );
 
                 if( aSpan.m_IsBackdrill )
                     matrix.m_addType.emplace( ODB_SUBTYPE::BACKDRILL );
 
                 m_matrixLayers.push_back( matrix );
-                m_plugin->GetLayerNameList().emplace_back(
-                        std::make_pair( PCB_LAYER_ID::UNDEFINED_LAYER, matrix.m_layerName ) );
             };
 
     for( const auto& entry : drill_layers )
@@ -439,24 +437,15 @@ void ODB_MATRIX_ENTITY::AddDrillMatrixLayer()
 
 void ODB_MATRIX_ENTITY::AddCOMPMatrixLayer( PCB_LAYER_ID aCompSide )
 {
-    MATRIX_LAYER matrix( m_row++, "COMP_+_TOP" );
+    // A component layer must have a components file, so a side with no components has no layer
+    if( aCompSide == F_Cu ? !m_hasTopComp : !m_hasBotComp )
+        return;
+
+    MATRIX_LAYER matrix( m_row++, aCompSide == F_Cu ? "COMP_+_TOP" : "COMP_+_BOT" );
     matrix.m_type = ODB_TYPE::COMPONENT;
+    matrix.m_info.m_role = ODB_LAYER_ROLE::COMPONENT;
     matrix.m_context = ODB_CONTEXT::BOARD;
-
-    if( aCompSide == F_Cu )
-    {
-        m_matrixLayers.push_back( matrix );
-        m_plugin->GetLayerNameList().emplace_back(
-                std::make_pair( PCB_LAYER_ID::UNDEFINED_LAYER, matrix.m_layerName ) );
-    }
-
-    if( aCompSide == B_Cu && m_hasBotComp )
-    {
-        matrix.m_layerName = ODB::GenLegalEntityName( "COMP_+_BOT" );
-        m_matrixLayers.push_back( matrix );
-        m_plugin->GetLayerNameList().emplace_back(
-                std::make_pair( PCB_LAYER_ID::UNDEFINED_LAYER, matrix.m_layerName ) );
-    }
+    m_matrixLayers.push_back( matrix );
 }
 
 void ODB_MATRIX_ENTITY::AddAuxilliaryMatrixLayer()
@@ -509,8 +498,7 @@ void ODB_MATRIX_ENTITY::AddAuxilliaryMatrixLayer()
         }
     }
 
-    auto InitAuxMatrix =
-            [&]( std::tuple<ODB_AUX_LAYER_TYPE, PCB_LAYER_ID, PCB_LAYER_ID> aLayerPair )
+    auto InitAuxMatrix = [&]( ODB_AUX_LAYER_KEY aLayerPair )
     {
         wxString featureName = "";
         switch( std::get<0>( aLayerPair ) )
@@ -543,6 +531,12 @@ void ODB_MATRIX_ENTITY::AddAuxilliaryMatrixLayer()
         MATRIX_LAYER matrix( m_row++, dLayerName );
 
         matrix.m_type = ODB_TYPE::DOCUMENT;
+        matrix.m_info.m_role = ODB_LAYER_ROLE::VIA_PROTECTION;
+        matrix.m_info.m_auxType = std::get<0>( aLayerPair );
+        matrix.m_info.m_auxKey = aLayerPair;
+        matrix.m_info.m_layer = std::get<2>( aLayerPair ) == PCB_LAYER_ID::UNDEFINED_LAYER
+                                        ? std::get<1>( aLayerPair )
+                                        : PCB_LAYER_ID::UNDEFINED_LAYER;
         matrix.m_context = ODB_CONTEXT::BOARD;
         matrix.m_polarity = ODB_POLARITY::POSITIVE;
 
@@ -555,17 +549,6 @@ void ODB_MATRIX_ENTITY::AddAuxilliaryMatrixLayer()
         }
 
         m_matrixLayers.push_back( matrix );
-
-        if( std::get<2>( aLayerPair ) != PCB_LAYER_ID::UNDEFINED_LAYER )
-        {
-            m_plugin->GetLayerNameList().emplace_back(
-                    std::make_pair( PCB_LAYER_ID::UNDEFINED_LAYER, matrix.m_layerName ) );
-        }
-        else
-        {
-            m_plugin->GetLayerNameList().emplace_back(
-                    std::make_pair( std::get<1>( aLayerPair ), matrix.m_layerName ) );
-        }
     };
 
     for( const auto& [layer_pair, vec] : auxilliary_layers )
@@ -644,7 +627,7 @@ void ODB_MATRIX_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
             twriter.write_line_enum( "ADD_TYPE", layer.m_addType.value() );
         }
 
-        twriter.WriteEquationLine( "NAME", layer.m_layerName.Upper() );
+        twriter.WriteEquationLine( "NAME", layer.m_layerName );
         twriter.WriteEquationLine( "OLD_NAME", wxEmptyString );
         twriter.write_line_enum( "POLARITY", layer.m_polarity );
 
@@ -663,8 +646,8 @@ void ODB_MATRIX_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
 
         if( layer.m_span.has_value() )
         {
-            twriter.WriteEquationLine( "START_NAME", layer.m_span->first.Upper() );
-            twriter.WriteEquationLine( "END_NAME", layer.m_span->second.Upper() );
+            twriter.WriteEquationLine( "START_NAME", layer.m_span->first );
+            twriter.WriteEquationLine( "END_NAME", layer.m_span->second );
         }
 
         twriter.WriteEquationLine( "COLOR", "0" );
@@ -672,35 +655,34 @@ void ODB_MATRIX_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
 }
 
 
-ODB_LAYER_ENTITY::ODB_LAYER_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin,
-                                    std::map<int, std::vector<BOARD_ITEM*>>& aMap,
-                                    const PCB_LAYER_ID& aLayerID, const wxString& aLayerName ) :
-        ODB_ENTITY_BASE( aBoard, aPlugin ), m_layerItems( aMap ), m_layerID( aLayerID ),
-        m_matrixLayerName( aLayerName )
+ODB_LAYER_ENTITY::ODB_LAYER_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin, std::map<int, std::vector<BOARD_ITEM*>>& aMap,
+                                    const ODB_LAYER_NAME& aLayer ) :
+        ODB_ENTITY_BASE( aBoard, aPlugin ),
+        m_layerItems( aMap ),
+        m_layer( aLayer )
 {
-    m_featuresMgr = std::make_unique<FEATURES_MANAGER>( aBoard, aPlugin, aLayerName );
+    m_featuresMgr = std::make_unique<FEATURES_MANAGER>( aBoard, aPlugin, aLayer.m_name, aLayer.m_role, aLayer.m_auxType,
+                                                        aLayer.m_drillSpan );
 }
 
 
 void ODB_LAYER_ENTITY::InitEntityData()
 {
-    if( m_matrixLayerName.Contains( "drill" ) )
+    if( m_layer.m_role == ODB_LAYER_ROLE::DRILL || m_layer.m_role == ODB_LAYER_ROLE::BACKDRILL )
     {
         InitDrillData();
         InitFeatureData();
         return;
     }
 
-    if( m_matrixLayerName.Contains( "filling" ) || m_matrixLayerName.Contains( "capping" )
-        || m_matrixLayerName.Contains( "covering" ) || m_matrixLayerName.Contains( "plugging" )
-        || m_matrixLayerName.Contains( "tenting" ) )
+    if( m_layer.m_role == ODB_LAYER_ROLE::VIA_PROTECTION )
     {
         InitAuxilliaryData();
         InitFeatureData();
         return;
     }
 
-    if( m_layerID != PCB_LAYER_ID::UNDEFINED_LAYER )
+    if( m_layer.m_layer != PCB_LAYER_ID::UNDEFINED_LAYER )
     {
         InitFeatureData();
     }
@@ -729,7 +711,7 @@ void ODB_LAYER_ENTITY::InitFeatureData()
         if( vec.empty() )
             continue;
 
-        m_featuresMgr->InitFeatureList( m_layerID, vec );
+        m_featuresMgr->InitFeatureList( m_layer.m_layer, vec );
     }
 }
 
@@ -737,7 +719,7 @@ void ODB_LAYER_ENTITY::InitFeatureData()
 ODB_COMPONENT& ODB_LAYER_ENTITY::InitComponentData( const FOOTPRINT*         aFp,
                                                     const EDA_DATA::PACKAGE& aPkg )
 {
-    if( m_matrixLayerName == "COMP_+_BOT" )
+    if( m_layer.m_name == ODB::GenLegalEntityName( "COMP_+_BOT" ) )
     {
         if( !m_compBot.has_value() )
         {
@@ -765,7 +747,8 @@ void ODB_LAYER_ENTITY::InitDrillData()
     std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<BOARD_ITEM*>>& slot_holes =
             m_plugin->GetSlotHolesMap();
 
-    std::map<ODB_DRILL_SPAN, wxString>& span_names = m_plugin->GetDrillSpanNameMap();
+    wxCHECK_RET( m_layer.m_drillSpan.has_value(), "Drill matrix row has no span" );
+    const ODB_DRILL_SPAN& matchedSpan = *m_layer.m_drillSpan;
 
     if( !m_layerItems.empty() )
     {
@@ -774,31 +757,16 @@ void ODB_LAYER_ENTITY::InitDrillData()
 
     m_tools.emplace( PCB_IO_ODBPP::m_unitsStr );
 
-    std::optional<ODB_DRILL_SPAN> matchedSpan;
+    bool isBackdrillLayer = matchedSpan.m_IsBackdrill;
+    bool isNonPlatedLayer = matchedSpan.m_IsNonPlated;
+    bool isNPTHLayer = matchedSpan.m_IsNonPlated && !matchedSpan.m_IsBackdrill;
 
-    for( const auto& [span, name] : span_names )
-    {
-        if( name == m_matrixLayerName )
-        {
-            matchedSpan = span;
-            break;
-        }
-    }
-
-    bool useLegacyMatching = !matchedSpan.has_value();
-    bool isBackdrillLayer = matchedSpan.has_value() && matchedSpan->m_IsBackdrill;
-    bool isNonPlatedLayer = matchedSpan.has_value() && matchedSpan->m_IsNonPlated;
-    bool isNPTHLayer = matchedSpan.has_value() && matchedSpan->m_IsNonPlated
-                       && !matchedSpan->m_IsBackdrill;
-    bool isPlatedDrillLayer = matchedSpan.has_value() && !matchedSpan->m_IsNonPlated
-                              && !matchedSpan->m_IsBackdrill;
-
-    if( matchedSpan.has_value() && ( isNPTHLayer || isPlatedDrillLayer ) )
+    if( !isBackdrillLayer )
     {
         // Slotted (oval) holes are routed to a separate map; emit them on the matching
         // plated or non-plated drill layer. Plated slots belong on the plated layer,
         // non-plated slots on the non-plated layer.
-        auto slotIt = slot_holes.find( matchedSpan->Pair() );
+        auto slotIt = slot_holes.find( matchedSpan.Pair() );
 
         if( slotIt != slot_holes.end() )
         {
@@ -821,185 +789,66 @@ void ODB_LAYER_ENTITY::InitDrillData()
             }
         }
     }
-    else if( useLegacyMatching )
+
+    auto drillIt = drill_layers.find( matchedSpan );
+
+    if( drillIt != drill_layers.end() )
     {
-        bool     is_npth_layer = false;
-        wxString plated_name = wxT( "plated" );
-
-        if( m_matrixLayerName.Contains( wxT( "non-plated" ) ) )
+        for( BOARD_ITEM* item : drillIt->second )
         {
-            is_npth_layer = true;
-            plated_name = wxT( "non-plated" );
-        }
-
-        for( const auto& [layer_pair, vec] : slot_holes )
-        {
-            wxString dLayerName = wxString::Format( wxT( "drill_%s_%s-%s" ), plated_name,
-                                                    m_board->GetLayerName( layer_pair.first ),
-                                                    m_board->GetLayerName( layer_pair.second ) );
-
-            if( ODB::GenLegalEntityName( dLayerName ) == m_matrixLayerName )
+            if( item->Type() == PCB_VIA_T )
             {
-                for( BOARD_ITEM* item : vec )
+                PCB_VIA* via = static_cast<PCB_VIA*>( item );
+
+                if( isBackdrillLayer )
                 {
-                    if( item->Type() != PCB_PAD_T )
+                    const PADSTACK::DRILL_PROPS* drill =
+                            ODB::MatchBackdrill( *via, matchedSpan.m_StartLayer, matchedSpan.m_EndLayer );
+
+                    if( !drill )
                         continue;
 
-                    PAD* pad = static_cast<PAD*>( item );
+                    int diameter = ODB::BackdrillDiameter( *drill );
 
-                    if( ( is_npth_layer && pad->GetAttribute() == PAD_ATTRIB::PTH )
-                        || ( !is_npth_layer && pad->GetAttribute() == PAD_ATTRIB::NPTH ) )
-                    {
+                    if( diameter <= 0 )
                         continue;
-                    }
 
-                    m_tools.value().AddDrillTool(
-                            pad->GetAttribute() == PAD_ATTRIB::PTH ? wxT( "PLATED" )
-                                                                    : wxT( "NON_PLATED" ),
-                            std::min( pad->GetDrillSizeX(), pad->GetDrillSizeY() ) );
-
-                    m_layerItems[pad->GetNetCode()].push_back( item );
+                    m_tools.value().AddDrillTool( wxT( "NON_PLATED" ), diameter, wxT( "BLIND" ) );
+                }
+                else if( isNonPlatedLayer )
+                {
+                    m_tools.value().AddDrillTool( wxT( "NON_PLATED" ), via->GetDrillValue() );
+                }
+                else
+                {
+                    m_tools.value().AddDrillTool( wxT( "VIA" ), via->GetDrillValue() );
                 }
 
-                break;
+                m_layerItems[via->GetNetCode()].push_back( item );
             }
-        }
-    }
-
-    if( matchedSpan.has_value() )
-    {
-        auto drillIt = drill_layers.find( *matchedSpan );
-
-        if( drillIt != drill_layers.end() )
-        {
-            for( BOARD_ITEM* item : drillIt->second )
+            else if( item->Type() == PCB_PAD_T )
             {
-                if( item->Type() == PCB_VIA_T )
-                {
-                    PCB_VIA* via = static_cast<PCB_VIA*>( item );
+                PAD* pad = static_cast<PAD*>( item );
 
-                    if( isBackdrillLayer )
-                    {
-                        auto drillMatches = [&]( const PADSTACK::DRILL_PROPS& aDrill )
-                        {
-                            return aDrill.start == matchedSpan->m_StartLayer
-                                    && aDrill.end == matchedSpan->m_EndLayer
-                                    && ( aDrill.size.x > 0 || aDrill.size.y > 0 );
-                        };
+                bool padIsNPTH = pad->GetAttribute() == PAD_ATTRIB::NPTH;
 
-                        const PADSTACK::DRILL_PROPS& secondary = via->Padstack().SecondaryDrill();
-                        const PADSTACK::DRILL_PROPS& tertiary  = via->Padstack().TertiaryDrill();
+                if( isNPTHLayer && !padIsNPTH )
+                    continue;
 
-                        const PADSTACK::DRILL_PROPS* drill = nullptr;
+                if( !isNonPlatedLayer && padIsNPTH )
+                    continue;
 
-                        if( drillMatches( secondary ) )
-                            drill = &secondary;
-                        else if( drillMatches( tertiary ) )
-                            drill = &tertiary;
-                        else
-                            continue;
+                int drillSize = pad->GetDrillSizeX();
 
-                        int diameter = drill->size.x;
+                if( pad->GetDrillSizeX() != pad->GetDrillSizeY() )
+                    drillSize = std::min( pad->GetDrillSizeX(), pad->GetDrillSizeY() );
 
-                        if( drill->size.y > 0 )
-                        {
-                            diameter = ( diameter > 0 ) ? std::min( diameter, drill->size.y )
-                                                        : drill->size.y;
-                        }
+                wxString typeLabel = ( padIsNPTH || isNonPlatedLayer ) ? wxT( "NON_PLATED" ) : wxT( "PLATED" );
+                wxString type2 = isBackdrillLayer ? wxT( "BLIND" ) : wxT( "STANDARD" );
 
-                        if( diameter <= 0 )
-                            continue;
+                m_tools.value().AddDrillTool( typeLabel, drillSize, type2 );
 
-                        m_tools.value().AddDrillTool( wxT( "NON_PLATED" ), diameter, wxT( "BLIND" ) );
-                    }
-                    else if( isNonPlatedLayer )
-                    {
-                        m_tools.value().AddDrillTool( wxT( "NON_PLATED" ), via->GetDrillValue() );
-                    }
-                    else
-                    {
-                        m_tools.value().AddDrillTool( wxT( "VIA" ), via->GetDrillValue() );
-                    }
-
-                    m_layerItems[via->GetNetCode()].push_back( item );
-                }
-                else if( item->Type() == PCB_PAD_T )
-                {
-                    PAD* pad = static_cast<PAD*>( item );
-
-                    bool padIsNPTH = pad->GetAttribute() == PAD_ATTRIB::NPTH;
-
-                    if( isNPTHLayer && !padIsNPTH )
-                        continue;
-
-                    if( !isNonPlatedLayer && padIsNPTH )
-                        continue;
-
-                    int drillSize = pad->GetDrillSizeX();
-
-                    if( pad->GetDrillSizeX() != pad->GetDrillSizeY() )
-                        drillSize = std::min( pad->GetDrillSizeX(), pad->GetDrillSizeY() );
-
-                    wxString typeLabel = ( padIsNPTH || isNonPlatedLayer ) ? wxT( "NON_PLATED" )
-                                                                           : wxT( "PLATED" );
-                    wxString type2 = isBackdrillLayer ? wxT( "BLIND" ) : wxT( "STANDARD" );
-
-                    m_tools.value().AddDrillTool( typeLabel, drillSize, type2 );
-
-                    m_layerItems[pad->GetNetCode()].push_back( item );
-                }
-            }
-        }
-    }
-    else
-    {
-        bool     is_npth_layer = false;
-        wxString plated_name = wxT( "plated" );
-
-        if( m_matrixLayerName.Contains( wxT( "non-plated" ) ) )
-        {
-            is_npth_layer = true;
-            plated_name = wxT( "non-plated" );
-        }
-
-        for( const auto& [span, vec] : drill_layers )
-        {
-            wxString dLayerName = wxString::Format( wxT( "drill_%s_%s-%s" ), plated_name,
-                                                    m_board->GetLayerName( span.TopLayer() ),
-                                                    m_board->GetLayerName( span.BottomLayer() ) );
-
-            if( ODB::GenLegalEntityName( dLayerName ) == m_matrixLayerName )
-            {
-                for( BOARD_ITEM* item : vec )
-                {
-                    if( item->Type() == PCB_VIA_T && !is_npth_layer )
-                    {
-                        PCB_VIA* via = static_cast<PCB_VIA*>( item );
-
-                        m_tools.value().AddDrillTool( wxT( "VIA" ), via->GetDrillValue() );
-
-                        m_layerItems[via->GetNetCode()].push_back( item );
-                    }
-                    else if( item->Type() == PCB_PAD_T )
-                    {
-                        PAD* pad = static_cast<PAD*>( item );
-
-                        if( ( is_npth_layer && pad->GetAttribute() == PAD_ATTRIB::PTH )
-                            || ( !is_npth_layer && pad->GetAttribute() == PAD_ATTRIB::NPTH ) )
-                        {
-                            continue;
-                        }
-
-                        m_tools.value().AddDrillTool(
-                                pad->GetAttribute() == PAD_ATTRIB::PTH ? wxT( "PLATED" )
-                                                                        : wxT( "NON_PLATED" ),
-                                pad->GetDrillSizeX() );
-
-                        m_layerItems[pad->GetNetCode()].push_back( item );
-                    }
-                }
-
-                break;
+                m_layerItems[pad->GetNetCode()].push_back( item );
             }
         }
     }
@@ -1009,55 +858,25 @@ void ODB_LAYER_ENTITY::InitAuxilliaryData()
 {
     auto& auxilliary_layers = m_plugin->GetAuxilliaryLayerItemsMap();
 
+    wxCHECK_RET( m_layer.m_auxKey.has_value(), "Auxiliary matrix row has no key" );
+
     if( !m_layerItems.empty() )
     {
         m_layerItems.clear();
     }
 
-    for( const auto& [layer_pair, vec] : auxilliary_layers )
+    auto auxIt = auxilliary_layers.find( *m_layer.m_auxKey );
+
+    if( auxIt == auxilliary_layers.end() )
+        return;
+
+    for( BOARD_ITEM* item : auxIt->second )
     {
-        wxString featureName = "";
-        switch( std::get<0>( layer_pair ) )
+        if( item->Type() == PCB_VIA_T )
         {
-        case ODB_AUX_LAYER_TYPE::TENTING: featureName = "tenting"; break;
-        case ODB_AUX_LAYER_TYPE::COVERING: featureName = "covering"; break;
-        case ODB_AUX_LAYER_TYPE::PLUGGING: featureName = "plugging"; break;
-        case ODB_AUX_LAYER_TYPE::FILLING: featureName = "filling"; break;
-        case ODB_AUX_LAYER_TYPE::CAPPING: featureName = "capping"; break;
-        default: return;
-        }
+            PCB_VIA* via = static_cast<PCB_VIA*>( item );
 
-        wxString dLayerName;
-
-        if( std::get<2>( layer_pair ) != PCB_LAYER_ID::UNDEFINED_LAYER )
-        {
-            dLayerName = wxString::Format( "%s_%s-%s", featureName,
-                                           m_board->GetLayerName( std::get<1>( layer_pair ) ),
-                                           m_board->GetLayerName( std::get<2>( layer_pair ) ) );
-        }
-        else
-        {
-            if( m_board->IsFrontLayer( std::get<1>( layer_pair ) ) )
-                dLayerName = wxString::Format( "%s_front", featureName );
-            else if( m_board->IsBackLayer( std::get<1>( layer_pair ) ) )
-                dLayerName = wxString::Format( "%s_back", featureName );
-            else
-                return;
-        }
-
-        if( ODB::GenLegalEntityName( dLayerName ) == m_matrixLayerName )
-        {
-            for( BOARD_ITEM* item : vec )
-            {
-                if( item->Type() == PCB_VIA_T )
-                {
-                    PCB_VIA* via = static_cast<PCB_VIA*>( item );
-
-                    m_layerItems[via->GetNetCode()].push_back( item );
-                }
-            }
-
-            break;
+            m_layerItems[via->GetNetCode()].push_back( item );
         }
     }
 }
@@ -1123,16 +942,22 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
 
     std::ostream& ost = fileproxy.GetStream();
 
+    if( m_layer.m_drillSpan
+        && IsCopperLayerLowerThan( m_layer.m_drillSpan->m_StartLayer, m_layer.m_drillSpan->m_EndLayer ) )
+    {
+        ost << ".drill_layer_direction=bottom2top" << std::endl;
+    }
+
     BOARD_DESIGN_SETTINGS& dsnSettings = m_board->GetDesignSettings();
     BOARD_STACKUP&         stackup = dsnSettings.GetStackupDescriptor();
 
-    BOARD_STACKUP_ITEM* stackupItem = nullptr;
+    const BOARD_STACKUP_ITEM* stackupItem = nullptr;
 
-    if( m_layerID != PCB_LAYER_ID::UNDEFINED_LAYER )
+    if( m_layer.m_layer != PCB_LAYER_ID::UNDEFINED_LAYER )
     {
         for( BOARD_STACKUP_ITEM* item : stackup.GetList() )
         {
-            if( item->GetBrdLayerId() == m_layerID )
+            if( item->GetBrdLayerId() == m_layer.m_layer )
             {
                 stackupItem = item;
                 break;
@@ -1141,25 +966,13 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
     }
     else
     {
-        for( BOARD_STACKUP_ITEM* item : stackup.GetList() )
-        {
-            if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
-            {
-                wxString dielectricName = wxString::Format( "DIELECTRIC_%d",
-                                                            item->GetDielectricLayerId() );
-
-                if( ODB::GenLegalEntityName( dielectricName ) == m_matrixLayerName )
-                {
-                    stackupItem = item;
-                    break;
-                }
-            }
-        }
+        stackupItem = m_layer.m_stackupItem;
     }
 
     if( stackupItem )
     {
-        int thickness = stackupItem->GetThickness();
+        int sublayer = m_layer.m_sublayer;
+        int thickness = stackupItem->GetThickness( sublayer );
 
         if( thickness > 0 )
         {
@@ -1175,7 +988,7 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
 
         if( stackupItem->HasEpsilonRValue() )
         {
-            double epsilonR = stackupItem->GetEpsilonR();
+            double epsilonR = stackupItem->GetEpsilonR( sublayer );
 
             if( epsilonR > 0.0 )
             {
@@ -1185,7 +998,7 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
 
         if( stackupItem->HasLossTangentValue() )
         {
-            double lossTangent = stackupItem->GetLossTangent();
+            double lossTangent = stackupItem->GetLossTangent( sublayer );
 
             if( lossTangent > 0.0 )
             {
@@ -1193,7 +1006,7 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
             }
         }
 
-        wxString material = stackupItem->GetMaterial();
+        wxString material = stackupItem->GetMaterial( sublayer );
 
         if( !material.IsEmpty() )
         {
@@ -1346,14 +1159,38 @@ void ODB_STEP_ENTITY::GenerateProfileFile( ODB_TREE_WRITER& writer )
 {
     auto fileproxy = writer.CreateFileProxy( "profile" );
 
-    m_profile = std::make_unique<FEATURES_MANAGER>( m_board, m_plugin, wxEmptyString );
+    m_profile = std::make_unique<FEATURES_MANAGER>( m_board, m_plugin, wxEmptyString, ODB_LAYER_ROLE::BOARD_LAYER,
+                                                    std::nullopt );
 
     SHAPE_POLY_SET board_outline;
 
     if( !m_board->GetBoardPolygonOutlines( board_outline, true ) )
         wxLogTrace( traceOdbppIo, "Failed to get board outline" );
 
-    if( !m_profile->AddContour( board_outline, 0 ) )
+    int    count = board_outline.OutlineCount();
+    int    largest = 0;
+    double largestArea = count > 0 ? board_outline.Outline( 0 ).Area() : 0.0;
+
+    for( int ii = 1; ii < count; ++ii )
+    {
+        double area = board_outline.Outline( ii ).Area();
+
+        if( area > largestArea )
+        {
+            largest = ii;
+            largestArea = area;
+        }
+    }
+
+    if( count > 1 )
+    {
+        m_plugin->Report( wxString::Format( _( "ODB++ profile uses the largest of %d board outline islands; "
+                                               "other islands are omitted." ),
+                                            count ),
+                          RPT_SEVERITY_WARNING );
+    }
+
+    if( !m_profile->AddContour( board_outline, largest ) )
         wxLogTrace( traceOdbppIo, "Failed to add polygon to profile" );
 
     m_profile->GenerateProfileFeatures( fileproxy.GetStream() );
@@ -1528,11 +1365,11 @@ void ODB_STEP_ENTITY::MakeLayerEntity()
         }
     }
 
-    for( const auto& [layerID, layerName] : m_plugin->GetLayerNameList() )
+    for( const ODB_LAYER_NAME& layer : m_plugin->GetLayerNameList() )
     {
-        std::shared_ptr<ODB_LAYER_ENTITY> layer_entity_ptr = std::make_shared<ODB_LAYER_ENTITY>(
-                m_board, m_plugin, elements[layerID], layerID, layerName );
+        std::shared_ptr<ODB_LAYER_ENTITY> layer_entity_ptr =
+                std::make_shared<ODB_LAYER_ENTITY>( m_board, m_plugin, elements[layer.m_layer], layer );
 
-        m_layerEntityMap.emplace( layerName, layer_entity_ptr );
+        m_layerEntityMap.emplace( layer.m_name, layer_entity_ptr );
     }
 }

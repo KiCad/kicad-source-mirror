@@ -36,7 +36,9 @@
 #include <odb_netlist.h>
 #include <wx/filedlg.h>
 #include <wx/log.h>
+#include "odb_defines.h"
 #include "odb_util.h"
+#include "pcb_io_odbpp.h"
 
 
 // Compute the side code for a pad. Returns "" if there is no copper
@@ -91,7 +93,7 @@ void ODB_NET_LIST::InitPadNetPoints( BOARD*                                     
                 if( !net_point.hole )
                     net_point.drill_radius = 0;
                 else
-                    net_point.drill_radius = std::min( drill.x, drill.y );
+                    net_point.drill_radius = std::min( drill.x, drill.y ) / 2;
 
                 net_point.smd = pad->GetAttribute() == PAD_ATTRIB::SMD
                                 || pad->GetAttribute() == PAD_ATTRIB::CONN;
@@ -186,7 +188,7 @@ void ODB_NET_LIST::InitViaNetPoints( BOARD*                                     
 
                 net_point.refdes = "VIA";
                 net_point.is_via = true;
-                net_point.drill_radius = via->GetDrillValue();
+                net_point.drill_radius = via->GetDrillValue() / 2;
                 net_point.mechanical = false;
                 net_point.x_location = via->GetPosition().x;
                 net_point.y_location = -via->GetPosition().y;
@@ -216,6 +218,7 @@ void ODB_NET_LIST::WriteNetPointRecords( std::map<size_t, std::vector<ODB_NET_RE
                                          std::ostream&                                  aStream )
 {
     aStream << "H optimize n staggered n" << std::endl;
+    aStream << ODB_UNITS << "=" << PCB_IO_ODBPP::m_unitsStr << std::endl;
 
     for( const auto& [key, vec] : aRecords )
     {
@@ -233,7 +236,7 @@ void ODB_NET_LIST::WriteNetPointRecords( std::map<size_t, std::vector<ODB_NET_RE
             if( net_point.hole )
                 aStream << ODB::Data2String( net_point.drill_radius );
             else
-                aStream << 0;
+                aStream << "0.002";
 
             aStream << " " << ODB::Data2String( net_point.x_location ) << " "
                     << ODB::Data2String( net_point.y_location ) << " " << net_point.side << " ";

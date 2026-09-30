@@ -41,7 +41,7 @@ CLI::PCB_EXPORT_ODB_COMMAND::PCB_EXPORT_ODB_COMMAND() :
     m_argParser.add_argument( ARG_PRECISION )
             .help( std::string( "Precision" ) )
             .scan<'i', int>()
-            .default_value( 2 )
+            .default_value( 6 )
             .metavar( "PRECISION" );
 
     m_argParser.add_argument( ARG_COMPRESS )

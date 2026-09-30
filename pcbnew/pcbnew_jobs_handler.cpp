@@ -126,6 +126,7 @@
 #include <dialogs/dialog_export_2581.h>
 #include <dialogs/dialog_export_idf.h>
 #include <dialogs/dialog_export_odbpp.h>
+#include <pcb_io/odbpp/odb_export_job.h>
 #include <dialogs/dialog_export_step.h>
 #include <dialogs/dialog_footprint_fields_table.h>
 #include <dialogs/dialog_plot.h>
@@ -3169,11 +3170,6 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
 
     // The helper handles output path creation, so hand it a job that already has fully-resolved
     // token context (title block and project overrides applied above).
-    CLI_REPORTER reporter;
-
-    if( !m_reporter )
-        m_reporter = &reporter;
-
     if( job->m_checkZonesBeforeExport )
     {
         TOOL_MANAGER* toolManager = getToolManager( brd );
@@ -3184,10 +3180,12 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
         toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
     }
 
-    DIALOG_EXPORT_ODBPP::GenerateODBPPFiles( *job, brd, nullptr, m_progressReporter, m_reporter );
-    aJob->AddOutput( outPath );
+    bool ok = ::GenerateODBPPFiles( *job, brd, m_progressReporter, m_reporter );
 
-    if( m_reporter->HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
+    if( ok )
+        aJob->AddOutput( outPath );
+
+    if( !ok || m_reporter->HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     return CLI::EXIT_CODES::SUCCESS;

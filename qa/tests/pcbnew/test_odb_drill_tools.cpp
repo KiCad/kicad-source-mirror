@@ -17,9 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
 #include <filesystem>
 #include <fstream>
-#include <map>
 #include <memory>
 #include <set>
 #include <string>
@@ -31,42 +31,11 @@
 
 #include <board.h>
 #include <pad.h>
-#include <pcbnew/pcb_io/odbpp/pcb_io_odbpp.h>
 #include <settings/settings_manager.h>
-#include <core/utf8.h>
+
+#include "pcb_io/odbpp/odb_test_utils.h"
 
 namespace fs = std::filesystem;
-
-/**
- * Save and restore the static ODB++ exporter formatting state.
- *
- * SaveBoard() writes these, so without a guard the sigfig this test asks for would follow the
- * shared qa_pcbnew binary into every later ODB++ test.
- */
-struct ODB_EXPORT_STATE_GUARD
-{
-    ODB_EXPORT_STATE_GUARD() :
-            m_scale( PCB_IO_ODBPP::m_scale ),
-            m_symbolScale( PCB_IO_ODBPP::m_symbolScale ),
-            m_sigfig( PCB_IO_ODBPP::m_sigfig ),
-            m_unitsStr( PCB_IO_ODBPP::m_unitsStr )
-    {
-    }
-
-    ~ODB_EXPORT_STATE_GUARD()
-    {
-        PCB_IO_ODBPP::m_scale = m_scale;
-        PCB_IO_ODBPP::m_symbolScale = m_symbolScale;
-        PCB_IO_ODBPP::m_sigfig = m_sigfig;
-        PCB_IO_ODBPP::m_unitsStr = m_unitsStr;
-    }
-
-    double      m_scale;
-    double      m_symbolScale;
-    int         m_sigfig;
-    std::string m_unitsStr;
-};
-
 
 /**
  * One TOOLS record from an ODB++ drill layer "tools" file.
@@ -122,15 +91,9 @@ static std::vector<ODB_TOOL_RECORD> parseOdbTools( const fs::path& aToolsFile )
 }
 
 
-/**
- * Test that the ODB++ drill "tools" file describes the board's non-plated holes.
- *
- * The fixture carries a Tag-Connect TC2030 footprint whose non-plated holes come in three
- * distinct sizes, two of them repeated, which is what makes both halves of the contract
- * observable: sizes are written in the file's own units, and each drill bit gets exactly one
- * tool number.
- */
-BOOST_AUTO_TEST_CASE( OdbNonPlatedDrillTools )
+// The Tag-Connect footprint has repeated non-plated holes at three sizes
+// This checks size conversion and duplicate bit numbering
+static void checkNonPlatedDrillTools( const char* aUnits, double aOutputScale )
 {
     SETTINGS_MANAGER       settingsManager;
     std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream(
@@ -146,8 +109,8 @@ BOOST_AUTO_TEST_CASE( OdbNonPlatedDrillTools )
         if( pad->GetAttribute() != PAD_ATTRIB::NPTH || !pad->HasHole() )
             continue;
 
-        expectedSizes.insert( pcbIUScale.IUTomm( std::min( pad->GetDrillSizeX(),
-                                                           pad->GetDrillSizeY() ) ) );
+        expectedSizes.insert( pcbIUScale.IUTomm( std::min( pad->GetDrillSizeX(), pad->GetDrillSizeY() ) )
+                              * aOutputScale );
         npthHoleCount++;
     }
 
@@ -158,12 +121,7 @@ BOOST_AUTO_TEST_CASE( OdbNonPlatedDrillTools )
     KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_qa_odb_drill_tools" ) );
     ODB_EXPORT_STATE_GUARD   stateGuard;
 
-    PCB_IO_ODBPP                odbExporter;
-    std::map<std::string, UTF8> props;
-    props["units"] = "mm";
-    props["sigfig"] = "6";
-
-    BOOST_REQUIRE_NO_THROW( odbExporter.SaveBoard( tempDir.Path().string(), *board, &props ) );
+    BOOST_REQUIRE_NO_THROW( ExportOdb( *board, tempDir.Path(), aUnits ) );
 
     fs::path toolsFile;
 
@@ -181,6 +139,11 @@ BOOST_AUTO_TEST_CASE( OdbNonPlatedDrillTools )
     BOOST_REQUIRE_MESSAGE( !toolsFile.empty(),
                            "ODB++ export produced no non-plated drill tools file" );
 
+    std::ifstream unitsStream( toolsFile );
+    std::string   unitsLine;
+    BOOST_REQUIRE( static_cast<bool>( std::getline( unitsStream, unitsLine ) ) );
+    BOOST_CHECK_EQUAL( unitsLine, std::string( "UNITS=" ) + ( std::string( aUnits ) == "mm" ? "MM" : "INCH" ) );
+
     const std::vector<ODB_TOOL_RECORD> tools = parseOdbTools( toolsFile );
 
     std::set<int>    seenNums;
@@ -191,12 +154,26 @@ BOOST_AUTO_TEST_CASE( OdbNonPlatedDrillTools )
         BOOST_CHECK_MESSAGE( seenNums.insert( tool.m_num ).second,
                              "Drill tool number " << tool.m_num << " is used twice" );
 
+        BOOST_CHECK_EQUAL( tool.m_finishSize, tool.m_drillSize );
         seenSizes.insert( tool.m_drillSize );
     }
 
-    // Sizes first, then the count, so a regression in either half is reported on its own
-    BOOST_CHECK_EQUAL_COLLECTIONS( seenSizes.begin(), seenSizes.end(), expectedSizes.begin(),
-                                   expectedSizes.end() );
-
     BOOST_CHECK_EQUAL( tools.size(), expectedSizes.size() );
+    BOOST_REQUIRE_EQUAL( seenSizes.size(), expectedSizes.size() );
+
+    auto actual = seenSizes.begin();
+    auto expected = expectedSizes.begin();
+
+    while( actual != seenSizes.end() )
+    {
+        BOOST_CHECK_SMALL( std::abs( *actual - *expected ), 0.00001 );
+        ++actual;
+        ++expected;
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( OdbNonPlatedDrillTools )
+{
+    checkNonPlatedDrillTools( "mm", 1000.0 );
 }

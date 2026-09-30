@@ -47,6 +47,8 @@
 #include <wx/utils.h>
 #include <wx/regex.h>
 
+#include "odb_test_utils.h"
+
 
 namespace
 {
@@ -61,33 +63,6 @@ wxFileName MakeTempDir( const wxString& aPrefix )
 
     return tempDir;
 }
-
-
-// Save and restore the static ODB++ exporter formatting state so this regression
-// test does not change formatting defaults for later tests in the shared binary.
-struct ODB_EXPORT_STATE_GUARD
-{
-    ODB_EXPORT_STATE_GUARD() :
-            m_scale( PCB_IO_ODBPP::m_scale ),
-            m_symbolScale( PCB_IO_ODBPP::m_symbolScale ),
-            m_sigfig( PCB_IO_ODBPP::m_sigfig ),
-            m_unitsStr( PCB_IO_ODBPP::m_unitsStr )
-    {
-    }
-
-    ~ODB_EXPORT_STATE_GUARD()
-    {
-        PCB_IO_ODBPP::m_scale = m_scale;
-        PCB_IO_ODBPP::m_symbolScale = m_symbolScale;
-        PCB_IO_ODBPP::m_sigfig = m_sigfig;
-        PCB_IO_ODBPP::m_unitsStr = m_unitsStr;
-    }
-
-    double      m_scale;
-    double      m_symbolScale;
-    int         m_sigfig;
-    std::string m_unitsStr;
-};
 
 
 wxString ReadFile( const wxFileName& aPath )

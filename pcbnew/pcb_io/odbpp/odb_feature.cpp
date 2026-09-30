@@ -67,13 +67,9 @@ void FEATURES_MANAGER::AddFeatureArc( const VECTOR2I& aStart, const VECTOR2I& aE
 }
 
 
-void FEATURES_MANAGER::AddPadCircle( const VECTOR2I& aCenter, uint64_t aDiameter,
-                                     const EDA_ANGLE& aAngle, bool aMirror,
-                                     double aResize /*= 1.0 */ )
+void FEATURES_MANAGER::AddPadCircle( const VECTOR2I& aCenter, uint64_t aDiameter )
 {
-    AddFeature<ODB_PAD>( ODB::AddXY( aCenter ),
-                         AddCircleSymbol( ODB::SymDouble2String( aDiameter ) ), aAngle, aMirror,
-                         aResize );
+    AddFeature<ODB_PAD>( ODB::AddXY( aCenter ), AddCircleSymbol( ODB::SymDouble2String( aDiameter ) ) );
 }
 
 
@@ -85,9 +81,7 @@ bool FEATURES_MANAGER::AddContour( const SHAPE_POLY_SET& aPolySet, int aOutline 
     if( aPolySet.OutlineCount() < ( aOutline + 1 ) )
         return false;
 
-    AddFeatureSurface( aPolySet.Polygon( aOutline ), aFillType );
-
-    return true;
+    return AddFeatureSurface( aPolySet.Polygon( aOutline ), aFillType );
 }
 
 
@@ -302,24 +296,19 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
 }
 
 
-void FEATURES_MANAGER::AddFeatureSurface( const SHAPE_POLY_SET::POLYGON& aPolygon,
-                                          FILL_T aFillType /*= FILL_T::FILLED_SHAPE */ )
+bool FEATURES_MANAGER::AddFeatureSurface( const SHAPE_POLY_SET::POLYGON& aPolygon,
+                                          FILL_T                         aFillType /*= FILL_T::FILLED_SHAPE */ )
 {
+    if( aPolygon.empty() || aPolygon[0].PointCount() < 3 || aPolygon[0].Area( false ) == 0.0 )
+        return false;
+
     AddFeature<ODB_SURFACE>( aPolygon, aFillType );
+    return true;
 }
 
 
 void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
 {
-    FOOTPRINT* fp = aPad.GetParentFootprint();
-    bool       mirror = false;
-
-    if( aPad.GetOrientation() != ANGLE_0 )
-    {
-        if( fp && fp->IsFlipped() )
-            mirror = true;
-    }
-
     int maxError = m_board->GetDesignSettings().m_MaxError;
 
     VECTOR2I expansion{ 0, 0 };
@@ -345,8 +334,7 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
     {
         wxString diam = ODB::SymDouble2String( plotSize.x );
 
-        AddFeature<ODB_PAD>( ODB::AddXY( center ), AddCircleSymbol( diam ), aPad.GetOrientation(),
-                             mirror );
+        AddFeature<ODB_PAD>( ODB::AddXY( center ), AddCircleSymbol( diam ), aPad.GetOrientation() );
 
         break;
     }
@@ -357,28 +345,25 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
             wxString rad = ODB::SymDouble2String( mask_clearance );
 
             AddFeature<ODB_PAD>( ODB::AddXY( center ), AddRoundRectSymbol( width, height, rad ),
-                                 aPad.GetOrientation(), mirror );
+                                 aPad.GetOrientation() );
         }
         else
         {
-            AddFeature<ODB_PAD>( ODB::AddXY( center ), AddRectSymbol( width, height ),
-                                 aPad.GetOrientation(), mirror );
+            AddFeature<ODB_PAD>( ODB::AddXY( center ), AddRectSymbol( width, height ), aPad.GetOrientation() );
         }
 
         break;
     }
     case PAD_SHAPE::OVAL:
     {
-        AddFeature<ODB_PAD>( ODB::AddXY( center ), AddOvalSymbol( width, height ),
-                             aPad.GetOrientation(), mirror );
+        AddFeature<ODB_PAD>( ODB::AddXY( center ), AddOvalSymbol( width, height ), aPad.GetOrientation() );
         break;
     }
     case PAD_SHAPE::ROUNDRECT:
     {
         wxString rad = ODB::SymDouble2String( aPad.GetRoundRectCornerRadius( aLayer ) );
 
-        AddFeature<ODB_PAD>( ODB::AddXY( center ), AddRoundRectSymbol( width, height, rad ),
-                             aPad.GetOrientation(), mirror );
+        AddFeature<ODB_PAD>( ODB::AddXY( center ), AddRoundRectSymbol( width, height, rad ), aPad.GetOrientation() );
 
         break;
     }
@@ -390,9 +375,8 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
         wxString rad = ODB::SymDouble2String( chamfer );
         int      positions = aPad.GetChamferPositions( aLayer );
 
-        AddFeature<ODB_PAD>( ODB::AddXY( center ),
-                             AddChamferRectSymbol( width, height, rad, positions ),
-                             aPad.GetOrientation(), mirror );
+        AddFeature<ODB_PAD>( ODB::AddXY( center ), AddChamferRectSymbol( width, height, rad, positions ),
+                             aPad.GetOrientation() );
 
         break;
     }
@@ -453,7 +437,13 @@ void FEATURES_MANAGER::AddTrack( PCB_LAYER_ID aLayer, PCB_TRACK* track )
         return;
     }
 
-    auto subnet = iter->second;
+    auto   subnet = iter->second;
+    size_t first = FeatureCount();
+
+    auto linkCopper = [&]( ODB_FEATURE&, size_t index )
+    {
+        subnet->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::COPPER, m_layerName, index );
+    };
 
     if( track->Type() == PCB_TRACE_T )
     {
@@ -463,7 +453,7 @@ void FEATURES_MANAGER::AddTrack( PCB_LAYER_ID aLayer, PCB_TRACK* track )
         shape.SetWidth( track->GetWidth() );
 
         AddShape( shape );
-        subnet->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::COPPER, m_layerName, m_featuresList.size() - 1 );
+        forEachNewFeature( first, linkCopper );
     }
     else if( track->Type() == PCB_ARC_T )
     {
@@ -485,7 +475,7 @@ void FEATURES_MANAGER::AddTrack( PCB_LAYER_ID aLayer, PCB_TRACK* track )
             AddFeatureLine( track->GetStart(), track->GetEnd(), track->GetWidth() );
         }
 
-        subnet->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::COPPER, m_layerName, m_featuresList.size() - 1 );
+        forEachNewFeature( first, linkCopper );
     }
     else
     {
@@ -494,44 +484,50 @@ void FEATURES_MANAGER::AddTrack( PCB_LAYER_ID aLayer, PCB_TRACK* track )
 
         bool hole = false;
 
-        if( aLayer != PCB_LAYER_ID::UNDEFINED_LAYER )
+        if( m_role == ODB_LAYER_ROLE::VIA_PROTECTION )
         {
-            hole = m_layerName.Contains( "plugging" );
+            hole = m_auxType == ODB_AUX_LAYER_TYPE::PLUGGING || m_auxType == ODB_AUX_LAYER_TYPE::FILLING
+                   || m_auxType == ODB_AUX_LAYER_TYPE::CAPPING;
         }
         else
         {
-            hole = m_layerName.Contains( "drill" )
-                   || m_layerName.Contains( "filling" )
-                   || m_layerName.Contains( "capping" );
+            hole = m_role == ODB_LAYER_ROLE::DRILL || m_role == ODB_LAYER_ROLE::BACKDRILL;
         }
 
         if( hole )
         {
-            AddViaDrillHole( via, aLayer );
-            subnet->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::HOLE, m_layerName, m_featuresList.size() - 1 );
+            if( !AddViaDrillHole( via, aLayer ) )
+                return;
 
             // TODO: confirm TOOLING_HOLE
             // AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::PAD_USAGE::TOOLING_HOLE );
 
-            if( !m_featuresList.empty() )
-            {
-                AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::DRILL::VIA );
-                AddSystemAttribute( *m_featuresList.back(),
-                                    ODB_ATTR::GEOMETRY{ "VIA_RoundD" + std::to_string( via->GetWidth( aLayer ) ) } );
-            }
+            forEachNewFeature(
+                    first,
+                    [&]( ODB_FEATURE& feature, size_t index )
+                    {
+                        subnet->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::HOLE, m_layerName, index );
+                        AddSystemAttribute( feature, m_role == ODB_LAYER_ROLE::BACKDRILL ? ODB_ATTR::DRILL::NON_PLATED
+                                                                                         : ODB_ATTR::DRILL::VIA );
+                        AddSystemAttribute(
+                                feature,
+                                ODB_ATTR::GEOMETRY{ "VIA_RoundD" + std::to_string( via->GetWidth( aLayer ) ) } );
+                    } );
         }
         else
         {
             // to draw via copper shape on copper layer
             AddVia( via, aLayer );
-            subnet->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::COPPER, m_layerName, m_featuresList.size() - 1 );
 
-            if( !m_featuresList.empty() )
-            {
-                AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::PAD_USAGE::VIA );
-                AddSystemAttribute( *m_featuresList.back(),
-                                    ODB_ATTR::GEOMETRY{ "VIA_RoundD" + std::to_string( via->GetWidth( aLayer ) ) } );
-            }
+            forEachNewFeature( first,
+                               [&]( ODB_FEATURE& feature, size_t index )
+                               {
+                                   subnet->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::COPPER, m_layerName, index );
+                                   AddSystemAttribute( feature, ODB_ATTR::PAD_USAGE::VIA );
+                                   AddSystemAttribute(
+                                           feature, ODB_ATTR::GEOMETRY{ "VIA_RoundD"
+                                                                        + std::to_string( via->GetWidth( aLayer ) ) } );
+                               } );
         }
     }
 }
@@ -543,6 +539,7 @@ void FEATURES_MANAGER::AddZone( PCB_LAYER_ID aLayer, ZONE* zone )
 
     for( int ii = 0; ii < zone_shape.OutlineCount(); ++ii )
     {
+        size_t first = FeatureCount();
         AddContour( zone_shape, ii );
 
         auto iter = GetODBPlugin()->GetPlaneSubnetMap().find( std::make_pair( aLayer, zone ) );
@@ -553,10 +550,14 @@ void FEATURES_MANAGER::AddZone( PCB_LAYER_ID aLayer, ZONE* zone )
             return;
         }
 
-        iter->second->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::COPPER, m_layerName, m_featuresList.size() - 1 );
+        forEachNewFeature( first,
+                           [&]( ODB_FEATURE& feature, size_t index )
+                           {
+                               iter->second->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::COPPER, m_layerName, index );
 
-        if( zone->IsTeardropArea() && !m_featuresList.empty() )
-            AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::TEAR_DROP{ true } );
+                               if( zone->IsTeardropArea() )
+                                   AddSystemAttribute( feature, ODB_ATTR::TEAR_DROP{ true } );
+                           } );
     }
 };
 
@@ -597,6 +598,11 @@ void FEATURES_MANAGER::AddText( PCB_LAYER_ID aLayer, BOARD_ITEM* item, RESOLUTIO
 
                 std::list<VECTOR2I> pts;
 
+                auto tagString = [&]( ODB_FEATURE& aFeature, size_t )
+                {
+                    AddSystemAttribute( aFeature, ODB_ATTR::STRING{ aTextString.ToStdString() } );
+                };
+
                 auto push_pts =
                         [&]()
                         {
@@ -608,19 +614,20 @@ void FEATURES_MANAGER::AddText( PCB_LAYER_ID aLayer, BOARD_ITEM* item, RESOLUTIO
 
                             if( pts.size() < 3 )
                             {
+                                size_t    first = FeatureCount();
                                 PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
                                 shape.SetStart( pts.front() );
                                 shape.SetEnd( pts.back() );
                                 shape.SetWidth( attributes.m_StrokeWidth );
 
                                 AddShape( shape );
-                                AddSystemAttribute( *m_featuresList.back(),
-                                                    ODB_ATTR::STRING{ aTextString.ToStdString() } );
+                                forEachNewFeature( first, tagString );
                             }
                             else
                             {
                                 for( auto it = pts.begin(); std::next( it ) != pts.end(); ++it )
                                 {
+                                    size_t    first = FeatureCount();
                                     auto      it2 = std::next( it );
                                     PCB_SHAPE shape( nullptr, SHAPE_T::SEGMENT );
                                     shape.SetStart( *it );
@@ -628,11 +635,7 @@ void FEATURES_MANAGER::AddText( PCB_LAYER_ID aLayer, BOARD_ITEM* item, RESOLUTIO
                                     shape.SetWidth( attributes.m_StrokeWidth );
                                     AddShape( shape );
 
-                                    if( !m_featuresList.empty() )
-                                    {
-                                        AddSystemAttribute( *m_featuresList.back(),
-                                                            ODB_ATTR::STRING{ aTextString.ToStdString() } );
-                                    }
+                                    forEachNewFeature( first, tagString );
                                 }
                             }
 
@@ -678,13 +681,10 @@ void FEATURES_MANAGER::AddText( PCB_LAYER_ID aLayer, BOARD_ITEM* item, RESOLUTIO
 
                             for( int ii = 0; ii < poly_set.OutlineCount(); ++ii )
                             {
+                                size_t first = FeatureCount();
                                 AddContour( poly_set, ii, FILL_T::FILLED_SHAPE );
 
-                                if( !m_featuresList.empty() )
-                                {
-                                    AddSystemAttribute( *m_featuresList.back(),
-                                                        ODB_ATTR::STRING{ aTextString.ToStdString() } );
-                                }
+                                forEachNewFeature( first, tagString );
                             }
                         } );
 
@@ -733,10 +733,14 @@ void FEATURES_MANAGER::AddText( PCB_LAYER_ID aLayer, BOARD_ITEM* item, RESOLUTIO
 
         for( int ii = 0; ii < finalpolyset.OutlineCount(); ++ii )
         {
+            size_t first = FeatureCount();
             AddContour( finalpolyset, ii, FILL_T::FILLED_SHAPE );
 
-            if( !m_featuresList.empty() )
-                AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::STRING{ shownText.ToStdString() } );
+            forEachNewFeature( first,
+                               [&]( ODB_FEATURE& feature, size_t )
+                               {
+                                   AddSystemAttribute( feature, ODB_ATTR::STRING{ shownText.ToStdString() } );
+                               } );
         }
     }
     else if( text_item->IsMultilineAllowed() )
@@ -829,48 +833,52 @@ void FEATURES_MANAGER::AddPad( PCB_LAYER_ID aLayer, PAD* pad )
     {
         // FOOTPRINT* fp = pad->GetParentFootprint();
 
+        size_t first = FeatureCount();
         AddPadShape( *pad, aLayer );
 
-        iter->second->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::COPPER, m_layerName, m_featuresList.size() - 1 );
+        forEachNewFeature( first,
+                           [&]( ODB_FEATURE& feature, size_t index )
+                           {
+                               iter->second->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::COPPER, m_layerName, index );
+                               AddSystemAttribute( feature, ODB_ATTR::PAD_USAGE::TOEPRINT );
 
-        if( !m_featuresList.empty() )
-            AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::PAD_USAGE::TOEPRINT );
-
-        if( !pad->HasHole() && !m_featuresList.empty() )
-            AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::SMD{ true } );
+                               if( !pad->HasHole() )
+                                   AddSystemAttribute( feature, ODB_ATTR::SMD{ true } );
+                           } );
     }
     else
     {
         // drill layer round hole or slot hole
-        if( m_layerName.Contains( "drill" ) )
+        if( m_role == ODB_LAYER_ROLE::DRILL || m_role == ODB_LAYER_ROLE::BACKDRILL )
         {
-            // here we exchange round hole or slot hole into pad to draw in drill layer
-            PAD dummy( *pad );
-            dummy.Padstack().SetMode( PADSTACK::MODE::NORMAL );
+            // Drill layers hold only circular pads and lines, so a slot is the line its tool cuts
+            std::shared_ptr<SHAPE_SEGMENT> hole = pad->GetEffectiveHoleShape();
+            const SEG&                     seg = hole->GetSeg();
+            size_t                         first = FeatureCount();
 
-            if( pad->GetDrillSizeX() == pad->GetDrillSizeY() )
-                dummy.SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE ); // round hole shape
+            if( seg.A == seg.B )
+                AddPadCircle( seg.A, hole->GetWidth() );
             else
-                dummy.SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );   // slot hole shape
-
-            dummy.SetOffset( PADSTACK::ALL_LAYERS,  VECTOR2I( 0, 0 ) );    // use hole position not pad position
-            dummy.SetSize( PADSTACK::ALL_LAYERS, pad->GetDrillSize() );
-
-            AddPadShape( dummy, aLayer );
+                AddFeatureLine( seg.A, seg.B, hole->GetWidth() );
 
             if( pad->GetAttribute() == PAD_ATTRIB::PTH )
             {
                 // only plated holes link to subnet
-                iter->second->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::HOLE, m_layerName,
-                                            m_featuresList.size() - 1 );
-
-                if( !m_featuresList.empty() )
-                    AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::DRILL::PLATED );
+                forEachNewFeature( first,
+                                   [&]( ODB_FEATURE& feature, size_t index )
+                                   {
+                                       iter->second->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::HOLE, m_layerName,
+                                                                   index );
+                                       AddSystemAttribute( feature, ODB_ATTR::DRILL::PLATED );
+                                   } );
             }
             else
             {
-                if( !m_featuresList.empty() )
-                    AddSystemAttribute( *m_featuresList.back(), ODB_ATTR::DRILL::NON_PLATED );
+                forEachNewFeature( first,
+                                   [&]( ODB_FEATURE& feature, size_t )
+                                   {
+                                       AddSystemAttribute( feature, ODB_ATTR::DRILL::NON_PLATED );
+                                   } );
             }
         }
     }
@@ -982,8 +990,26 @@ void FEATURES_MANAGER::AddVia( const PCB_VIA* aVia, PCB_LAYER_ID aLayer )
 }
 
 
-void FEATURES_MANAGER::AddViaDrillHole( const PCB_VIA* aVia, PCB_LAYER_ID aLayer )
+bool FEATURES_MANAGER::AddViaDrillHole( const PCB_VIA* aVia, PCB_LAYER_ID aLayer )
 {
+    if( m_role == ODB_LAYER_ROLE::BACKDRILL )
+    {
+        wxCHECK_MSG( m_drillSpan.has_value(), false, "Backdrill layer has no span" );
+        const PADSTACK::DRILL_PROPS* drill =
+                ODB::MatchBackdrill( *aVia, m_drillSpan->m_StartLayer, m_drillSpan->m_EndLayer );
+
+        if( !drill )
+            return false;
+
+        int diameter = ODB::BackdrillDiameter( *drill );
+
+        if( diameter <= 0 )
+            return false;
+
+        AddPadCircle( aVia->GetStart(), diameter );
+        return true;
+    }
+
     PAD dummy( nullptr );
     dummy.SetPadstackMode( PADSTACK::MODE::NORMAL );
     dummy.SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
@@ -991,6 +1017,7 @@ void FEATURES_MANAGER::AddViaDrillHole( const PCB_VIA* aVia, PCB_LAYER_ID aLayer
     dummy.SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( aVia->GetDrillValue(), aVia->GetDrillValue() ) );
 
     AddPadShape( dummy, aLayer );
+    return true;
 }
 
 
@@ -1087,10 +1114,7 @@ void ODB_PAD::WriteRecordContent( std::ostream& ost )
 
     ost << m_symIndex << " P 0 ";
 
-    if( m_mirror )
-        ost << "9 " << ODB::Double2String( m_angle.Normalize().AsDegrees() );
-    else
-        ost << "8 " << ODB::Double2String( ( ANGLE_360 - m_angle ).Normalize().AsDegrees() );
+    ost << "8 " << ODB::Double2String( ( ANGLE_360 - m_angle ).Normalize().AsDegrees() );
 
     WriteAttributes( ost );
 }
@@ -1099,18 +1123,10 @@ void ODB_PAD::WriteRecordContent( std::ostream& ost )
 ODB_SURFACE::ODB_SURFACE( uint32_t aIndex, const SHAPE_POLY_SET::POLYGON& aPolygon,
                           FILL_T aFillType /*= FILL_T::FILLED_SHAPE*/ ) : ODB_FEATURE( aIndex )
 {
-    if( !aPolygon.empty() && aPolygon[0].PointCount() >= 3 )
-    {
-        m_surfaces = std::make_unique<ODB_SURFACE_DATA>( aPolygon );
-        if( aFillType != FILL_T::NO_FILL )
-        {
-            m_surfaces->AddPolygonHoles( aPolygon );
-        }
-    }
-    else
-    {
-        delete this;
-    }
+    m_surfaces = std::make_unique<ODB_SURFACE_DATA>( aPolygon );
+
+    if( aFillType != FILL_T::NO_FILL )
+        m_surfaces->AddPolygonHoles( aPolygon );
 }
 
 
@@ -1126,49 +1142,45 @@ void ODB_SURFACE::WriteRecordContent( std::ostream& ost )
 
 ODB_SURFACE_DATA::ODB_SURFACE_DATA( const SHAPE_POLY_SET::POLYGON& aPolygon )
 {
-    const std::vector<VECTOR2I>& pts = aPolygon[0].CPoints();
-    if( !pts.empty() )
-    {
-        if( m_polygons.empty() )
-        {
-            m_polygons.resize( 1 );
-        }
-
-        m_polygons.at( 0 ).reserve( pts.size() );
-        m_polygons.at( 0 ).emplace_back( pts.back() );
-
-        for( size_t jj = 0; jj < pts.size(); ++jj )
-        {
-            m_polygons.at( 0 ).emplace_back( pts.at( jj ) );
-        }
-    }
+    AddContour( aPolygon[0], false );
 }
 
 
 void ODB_SURFACE_DATA::AddPolygonHoles( const SHAPE_POLY_SET::POLYGON& aPolygon )
 {
     for( size_t ii = 1; ii < aPolygon.size(); ++ii )
+        AddContour( aPolygon[ii], true );
+}
+
+
+void ODB_SURFACE_DATA::AddContour( const SHAPE_LINE_CHAIN& aChain, bool aHole )
+{
+    if( aChain.PointCount() < 3 )
+        return;
+
+    double area = aChain.Area( false );
+
+    if( area == 0.0 )
+        return;
+
+    const std::vector<VECTOR2I>& pts = aChain.CPoints();
+    bool                         reverse = aHole ? area > 0 : area < 0;
+    auto&                        contour = m_polygons.emplace_back();
+    contour.reserve( pts.size() + 1 );
+
+    if( reverse )
     {
-        wxCHECK2( aPolygon[ii].PointCount() >= 3, continue );
+        contour.emplace_back( pts.front() );
 
-        const std::vector<VECTOR2I>& hole = aPolygon[ii].CPoints();
+        for( auto it = pts.rbegin(); it != pts.rend(); ++it )
+            contour.emplace_back( *it );
+    }
+    else
+    {
+        contour.emplace_back( pts.back() );
 
-        if( hole.empty() )
-            continue;
-
-        if( m_polygons.size() <= ii )
-        {
-            m_polygons.resize( ii + 1 );
-
-            m_polygons[ii].reserve( hole.size() );
-        }
-
-        m_polygons.at( ii ).emplace_back( hole.back() );
-
-        for( size_t jj = 0; jj < hole.size(); ++jj )
-        {
-            m_polygons.at( ii ).emplace_back( hole[jj] );
-        }
+        for( const VECTOR2I& pt : pts )
+            contour.emplace_back( pt );
     }
 }
 

@@ -6,6 +6,9 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <tuple>
+#include <layer_ids.h>
+#include <padstack.h>
 #include <wx/string.h>
 #include "pcb_shape.h"
 #include <wx/filename.h>
@@ -79,9 +82,81 @@ enum class ODB_AUX_LAYER_TYPE
     CAPPING,
 };
 
+using ODB_AUX_LAYER_KEY = std::tuple<ODB_AUX_LAYER_TYPE, PCB_LAYER_ID, PCB_LAYER_ID>;
+
+enum class ODB_LAYER_ROLE
+{
+    BOARD_LAYER,
+    DRILL,
+    BACKDRILL,
+    VIA_PROTECTION,
+    COMPONENT
+};
+
+struct ODB_DRILL_SPAN
+{
+    ODB_DRILL_SPAN() :
+            m_StartLayer( F_Cu ),
+            m_EndLayer( B_Cu ),
+            m_IsBackdrill( false ),
+            m_IsNonPlated( false )
+    {
+    }
+
+    ODB_DRILL_SPAN( PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aEndLayer, bool aIsBackdrill, bool aIsNonPlated ) :
+            m_StartLayer( aStartLayer ),
+            m_EndLayer( aEndLayer ),
+            m_IsBackdrill( aIsBackdrill ),
+            m_IsNonPlated( aIsNonPlated )
+    {
+    }
+
+    // B_Cu sorts before inner layers by ID, so order by stack position
+    PCB_LAYER_ID TopLayer() const
+    {
+        return IsCopperLayerLowerThan( m_StartLayer, m_EndLayer ) ? m_EndLayer : m_StartLayer;
+    }
+
+    PCB_LAYER_ID BottomLayer() const
+    {
+        return IsCopperLayerLowerThan( m_StartLayer, m_EndLayer ) ? m_StartLayer : m_EndLayer;
+    }
+
+    std::pair<PCB_LAYER_ID, PCB_LAYER_ID> Pair() const { return { TopLayer(), BottomLayer() }; }
+
+    bool operator<( const ODB_DRILL_SPAN& aOther ) const
+    {
+        if( TopLayer() != aOther.TopLayer() )
+            return TopLayer() < aOther.TopLayer();
+
+        if( BottomLayer() != aOther.BottomLayer() )
+            return BottomLayer() < aOther.BottomLayer();
+
+        if( m_IsBackdrill != aOther.m_IsBackdrill )
+            return m_IsBackdrill && !aOther.m_IsBackdrill;
+
+        if( m_IsNonPlated != aOther.m_IsNonPlated )
+            return m_IsNonPlated && !aOther.m_IsNonPlated;
+
+        if( m_StartLayer != aOther.m_StartLayer )
+            return m_StartLayer < aOther.m_StartLayer;
+
+        return m_EndLayer < aOther.m_EndLayer;
+    }
+
+    PCB_LAYER_ID m_StartLayer;
+    PCB_LAYER_ID m_EndLayer;
+    bool         m_IsBackdrill;
+    bool         m_IsNonPlated;
+};
+
+class PCB_VIA;
 
 namespace ODB
 {
+const PADSTACK::DRILL_PROPS* MatchBackdrill( const PCB_VIA& aVia, PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd );
+int                          BackdrillDiameter( const PADSTACK::DRILL_PROPS& aDrill );
+
 wxString GenODBString( const wxString& aStr );
 
 wxString GenLegalNetName( const wxString& aStr );

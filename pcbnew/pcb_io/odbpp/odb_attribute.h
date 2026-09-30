@@ -306,6 +306,9 @@ public:
     template <typename Tr, typename Ta>
     void AddSystemAttribute( Tr& r, Ta v )
     {
+        if( isEmptyText( v ) )
+            return;
+
         std::string name = std::string( "." ) + std::string( ODB_ATTR::AttributeName<Ta>::name );
         const auto id = GetAttrNameNumber( name );
 
@@ -318,6 +321,9 @@ public:
     template <typename Tr, typename Ta>
     void AddUserDefAttribute( Tr& r, Ta v )
     {
+        if( isEmptyText( v ) )
+            return;
+
         const auto id = GetAttrNameNumber( ODB_ATTR::AttributeName<Ta>::name );
 
         if constexpr( std::is_enum_v<Ta> )
@@ -335,6 +341,16 @@ protected:
 
 
 private:
+    /// An empty TEXT value is the attribute's default and has no legal text table entry
+    template <typename Ta>
+    static bool isEmptyText( const Ta& v )
+    {
+        if constexpr( requires { v.value.empty(); } )
+            return v.value.empty();
+        else
+            return false;
+    }
+
     size_t GetAttrTextNumber( const wxString& aName );
     size_t GetTextIndex( std::unordered_map<std::string, size_t>&     aMap,
                          std::vector<std::pair<size_t, std::string>>& aVec,

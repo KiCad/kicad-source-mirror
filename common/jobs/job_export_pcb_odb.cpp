@@ -41,7 +41,7 @@ JOB_EXPORT_PCB_ODB::JOB_EXPORT_PCB_ODB() :
         m_filename(),
         m_drawingSheet(),
         m_units( ODB_UNITS::MM ),
-        m_precision( 4 ),
+        m_precision( 6 ),
         m_compressionMode( ODB_COMPRESSION::ZIP ),
         m_checkZonesBeforeExport( false )
 {

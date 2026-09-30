@@ -22,15 +22,49 @@
 #include <algorithm>
 #include <locale>
 #include "odb_util.h"
+#include <string_utils.h>
 #include <wx/chartype.h>
 #include <wx/dir.h>
 #include <wx/regex.h>
-#include <io/idf/idf_helpers.h>
+#include <pcb_track.h>
 #include "odb_defines.h"
 #include "pcb_io_odbpp.h"
 
 namespace ODB
 {
+
+const PADSTACK::DRILL_PROPS* MatchBackdrill( const PCB_VIA& aVia, PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd )
+{
+    auto matches = [&]( const PADSTACK::DRILL_PROPS& aDrill )
+    {
+        return aDrill.start == aStart && aDrill.end == aEnd && ( aDrill.size.x > 0 || aDrill.size.y > 0 );
+    };
+
+    const PADSTACK::DRILL_PROPS& secondary = aVia.Padstack().SecondaryDrill();
+
+    if( matches( secondary ) )
+        return &secondary;
+
+    const PADSTACK::DRILL_PROPS& tertiary = aVia.Padstack().TertiaryDrill();
+
+    if( matches( tertiary ) )
+        return &tertiary;
+
+    return nullptr;
+}
+
+
+int BackdrillDiameter( const PADSTACK::DRILL_PROPS& aDrill )
+{
+    if( aDrill.size.x <= 0 )
+        return std::max( aDrill.size.y, 0 );
+
+    if( aDrill.size.y <= 0 )
+        return aDrill.size.x;
+
+    return std::min( aDrill.size.x, aDrill.size.y );
+}
+
 
 wxString GenODBString( const wxString& aStr )
 {
@@ -56,19 +90,30 @@ wxString GenODBString( const wxString& aStr )
 
 wxString GenLegalNetName( const wxString& aStr )
 {
-    std::string str = aStr.ToStdString();
-    wxString    out;
-    out.reserve( str.size() );
+    wxString out;
+    out.reserve( aStr.size() );
 
-    for( auto c : str )
+    for( size_t ii = 0; ii < aStr.size(); ++ii )
     {
-        if( ( c >= 33 && c <= 126 ) && c != ';' )
+        wxUniChar    c = aStr[ii];
+        unsigned int code = c.GetValue();
+
+        // Windows wxString stores supplementary characters as surrogate pairs
+        if( code >= 0xD800 && code <= 0xDBFF && ii + 1 < aStr.size() )
         {
-            out.append( 1, c );
+            unsigned int next = aStr[ii + 1].GetValue();
+
+            if( next >= 0xDC00 && next <= 0xDFFF )
+                ++ii;
+        }
+
+        if( ( code >= 33 && code <= 126 ) && code != ';' )
+        {
+            out += c;
         }
         else
         {
-            out.append( 1, '_' ); // Replace invalid characters with underscore
+            out += '_';
         }
     }
 
@@ -154,13 +199,7 @@ wxString Double2String( double aVal )
     if( aVal == -0.0 )
         aVal = 0.0;
 
-    wxString str = wxString::FromCDouble( aVal, PCB_IO_ODBPP::m_sigfig );
-
-    // Remove all but the last trailing zeros from str
-    while( str.EndsWith( wxT( "00" ) ) )
-        str.RemoveLast();
-
-    return str;
+    return FormatTrimmedDecimal( aVal, PCB_IO_ODBPP::m_sigfig );
 }
 
 
@@ -367,8 +406,8 @@ ODB_DRILL_TOOLS::ODB_DRILL_TOOLS( const wxString& aUnits, const wxString& aThick
 void ODB_DRILL_TOOLS::AddDrillTool( const wxString& aType, int aDiameter,
                                     const wxString& aType2 )
 {
-    // Tool sizes are in the file's own units, not the x1000 scale that symbol names use
-    wxString size = ODB::Data2String( aDiameter );
+    // ODB++ tools use microns or mils, the same scale as symbol sizes
+    wxString size = ODB::SymDouble2String( aDiameter );
 
     // NUM names a physical drill bit, so a size that recurs across holes reuses its tool
     for( const TOOLS& existing : m_tools )

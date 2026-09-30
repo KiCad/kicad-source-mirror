@@ -25,10 +25,12 @@
 #include <optional>
 #include <vector>
 #include <map>
+#include <layer_ids.h>
 #include <wx/string.h>
 #include <iostream>
 #include <functional>
 #include "odb_feature.h"
+#include "odb_util.h"
 #include "odb_eda_data.h"
 #include "odb_netlist.h"
 #include "odb_component.h"
@@ -37,6 +39,7 @@
 class BOARD;
 class ODB_TREE_WRITER;
 class BOARD_ITEM;
+class BOARD_STACKUP_ITEM;
 class PCB_IO_ODBPP;
 
 class ODB_ENTITY_BASE
@@ -66,6 +69,18 @@ enum class ODB_POLARITY;
 enum class ODB_CONTEXT;
 enum class ODB_TYPE;
 
+struct ODB_LAYER_NAME
+{
+    PCB_LAYER_ID                      m_layer = PCB_LAYER_ID::UNDEFINED_LAYER;
+    wxString                          m_name;
+    ODB_LAYER_ROLE                    m_role = ODB_LAYER_ROLE::BOARD_LAYER;
+    std::optional<ODB_AUX_LAYER_TYPE> m_auxType;
+    std::optional<ODB_AUX_LAYER_KEY>  m_auxKey;
+    const BOARD_STACKUP_ITEM*         m_stackupItem = nullptr; // Owned by the board stackup for the export
+    int                               m_sublayer = 0;
+    std::optional<ODB_DRILL_SPAN>     m_drillSpan;
+};
+
 class ODB_MATRIX_ENTITY : public ODB_ENTITY_BASE
 {
 public:
@@ -88,6 +103,8 @@ public:
         ODB_CONTEXT  m_context  = ODB_CONTEXT::BOARD;
         ODB_TYPE     m_type     = ODB_TYPE::UNDEFINED;
         ODB_POLARITY m_polarity = ODB_POLARITY::POSITIVE;
+
+        ODB_LAYER_NAME m_info;
 
         MATRIX_LAYER( uint32_t aRow, const wxString& aLayerName ) :
                 m_rowNumber( aRow ), m_layerName( ODB::GenLegalEntityName( aLayerName ) )
@@ -112,6 +129,7 @@ private:
     std::vector<MATRIX_LAYER>        m_matrixLayers;
     unsigned int                     m_row = 1;
     unsigned int                     m_col = 1;
+    bool                             m_hasTopComp = false;
     bool                             m_hasBotComp = false;
 };
 
@@ -170,18 +188,17 @@ private:
     std::map<wxString, std::shared_ptr<ODB_LAYER_ENTITY>> m_layerEntityMap;
     std::unique_ptr<FEATURES_MANAGER>                     m_profile;
 
-    EDA_DATA                               m_edaData;
-    std::unordered_map<wxString, wxString> m_stephdr;
-    ODB_NET_LIST                           m_netlist;
+    EDA_DATA                                   m_edaData;
+    std::vector<std::pair<wxString, wxString>> m_stephdr;
+    ODB_NET_LIST                               m_netlist;
 };
 
 
 class ODB_LAYER_ENTITY : public ODB_ENTITY_BASE
 {
 public:
-    ODB_LAYER_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin,
-                      std::map<int, std::vector<BOARD_ITEM*>>& aMap, const PCB_LAYER_ID& aLayerID,
-                      const wxString& aLayerName );
+    ODB_LAYER_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin, std::map<int, std::vector<BOARD_ITEM*>>& aMap,
+                      const ODB_LAYER_NAME& aLayer );
 
     virtual ~ODB_LAYER_ENTITY() = default;
 
@@ -206,8 +223,7 @@ public:
 
 private:
     std::map<int, std::vector<BOARD_ITEM*>> m_layerItems;
-    PCB_LAYER_ID                            m_layerID;
-    wxString                                m_matrixLayerName;
+    ODB_LAYER_NAME                          m_layer;
     // ODB_ATTRLIST m_attrList;
     std::optional<ODB_DRILL_TOOLS>    m_tools;
     std::optional<COMPONENTS_MANAGER> m_compTop;
