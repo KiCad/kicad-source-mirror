@@ -21,9 +21,10 @@
 #ifndef NATIVE_MODEL_FILE_PICKER_GTK_H
 #define NATIVE_MODEL_FILE_PICKER_GTK_H
 
-#ifdef __WXGTK3__
-
+// wx/setup.h defines __WXGTK3__, so a wx header must precede the guard
 #include "native_model_file_picker.h"
+
+#ifdef __WXGTK3__
 
 NATIVE_MODEL_FILE_PICKER_RESULT
 ShowNativeModelFilePickerGtk( const NATIVE_MODEL_FILE_PICKER_OPTIONS& aOptions );
