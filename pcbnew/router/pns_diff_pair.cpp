@@ -1017,10 +1017,10 @@ void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, int 
                 m_gateways.emplace_back( m - dir, m + dir, diagColl, DIRECTION_45::ANG_OBTUSE, prio, DIRECTION_45::AllDirectionsMask(), wxString::Format( "gen-mp-gap %d", gap ).ToStdString() );
 
                 dir = makeGapVector( p0_n - p0_p, 2 * gap );
-                m_gateways.emplace_back( p0_p - dir, p0_p - dir + dir.Perpendicular(), diagColl, DIRECTION_45::ANG_OBTUSE, 0, DIRECTION_45::AllDirectionsMask(), "gen-d1" );
-                m_gateways.emplace_back( p0_p - dir, p0_p - dir - dir.Perpendicular(), diagColl, DIRECTION_45::ANG_OBTUSE, 0, DIRECTION_45::AllDirectionsMask(), "gen-d2" );
-                m_gateways.emplace_back( p0_n + dir + dir.Perpendicular(), p0_n + dir, diagColl, DIRECTION_45::ANG_OBTUSE, 0, DIRECTION_45::AllDirectionsMask(), "gen-d3" );
-                m_gateways.emplace_back( p0_n + dir - dir.Perpendicular(), p0_n + dir, diagColl, DIRECTION_45::ANG_OBTUSE, 0, DIRECTION_45::AllDirectionsMask(), "gen-d4" );
+                m_gateways.emplace_back( p0_p - dir, p0_p - dir + dir.Perpendicular(), diagColl, DIRECTION_45::ANG_OBTUSE, 2, DIRECTION_45::AllDirectionsMask(), "gen-d1" );
+                m_gateways.emplace_back( p0_p - dir, p0_p - dir - dir.Perpendicular(), diagColl, DIRECTION_45::ANG_OBTUSE, 2, DIRECTION_45::AllDirectionsMask(), "gen-d2" );
+                m_gateways.emplace_back( p0_n + dir + dir.Perpendicular(), p0_n + dir, diagColl, DIRECTION_45::ANG_OBTUSE, 2, DIRECTION_45::AllDirectionsMask(), "gen-d3" );
+                m_gateways.emplace_back( p0_n + dir - dir.Perpendicular(), p0_n + dir, diagColl, DIRECTION_45::ANG_OBTUSE, 2, DIRECTION_45::AllDirectionsMask(), "gen-d4" );
             }
         }
     }
