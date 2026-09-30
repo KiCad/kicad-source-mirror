@@ -139,6 +139,11 @@ public:
 
     virtual bool DeleteBranch( git_repository* aRepo, const wxString& aBranchName ) = 0;
 
+    virtual bool StashSave( git_repository* aRepo, const wxString& aMessage ) = 0;
+    virtual bool StashApply( git_repository* aRepo, size_t aIndex ) = 0;
+    virtual bool StashPop( git_repository* aRepo, size_t aIndex ) = 0;
+    virtual bool StashDrop( git_repository* aRepo, size_t aIndex ) = 0;
+
     virtual RestoreResult RestoreVersion( git_repository* aRepo, const wxString& aCommitHash,
                                           const wxString& aProjectPrefix, wxString& aError ) = 0;
 

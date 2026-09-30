@@ -85,6 +85,11 @@ public:
 
     bool DeleteBranch( git_repository* aRepo, const wxString& aBranchName ) override;
 
+    bool StashSave( git_repository* aRepo, const wxString& aMessage ) override;
+    bool StashApply( git_repository* aRepo, size_t aIndex ) override;
+    bool StashPop( git_repository* aRepo, size_t aIndex ) override;
+    bool StashDrop( git_repository* aRepo, size_t aIndex ) override;
+
     RestoreResult RestoreVersion( git_repository* aRepo, const wxString& aCommitHash, const wxString& aProjectPrefix,
                                   wxString& aError ) override;
 

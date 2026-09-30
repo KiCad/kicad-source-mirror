@@ -31,9 +31,20 @@
 #include <utility>
 #include <vector>
 
+#include <wx/datetime.h>
 #include <wx/string.h>
 
 class LIBGIT_BACKEND;
+
+
+// One entry in the stash list, as shown by the advanced git window's Stashes page.
+struct KIGIT_STASH_INFO
+{
+    size_t     index = 0; ///< Position in the stash list, which shifts as stashes come and go.
+    wxString   id;        ///< Full hash of the stash commit, which does not.
+    wxString   message;   ///< The line git writes, such as "WIP on main: 7f8e9d1 subject".
+    wxDateTime when;      ///< Time the stash was created.
+};
 
 
 // Outcome of restoring an old version as a new commit.
@@ -159,9 +170,18 @@ public:
     // count: a merge leaves them alone.
     bool HasUncommittedTrackedChanges() const;
 
+    // The stashes in the repository, in the order git reports them (newest first).
+    std::vector<KIGIT_STASH_INFO> GetStashes() const;
+
     // The caller holds the action lock, as with the query methods above.
     bool CreateBranch( const wxString& aName );
     bool DeleteBranch( const wxString& aName );
+
+    /// Set the uncommitted tracked changes aside as a new stash, as git stash push would.
+    bool StashSave( const wxString& aMessage );
+    bool StashApply( size_t aIndex );
+    bool StashPop( size_t aIndex );
+    bool StashDrop( size_t aIndex );
 
     /**
      * Recompute the merge in memory and extract each conflicted file's three versions into

@@ -32,6 +32,7 @@
 
 #include <chrono>
 #include <fstream>
+#include <iterator>
 #include <memory>
 #include <cstdlib>
 
@@ -240,6 +241,13 @@ void commitWorkingFile( git_repository* aRepo, const wxString& aFileName, const 
     git_oid           commitOid;
     BOOST_REQUIRE_EQUAL( git_commit_create( &commitOid, aRepo, "HEAD", sig, sig, nullptr, aMessage, tree, 1, parents ),
                          GIT_OK );
+}
+
+
+std::string readWorkingFile( const wxFileName& aFile )
+{
+    std::ifstream in( aFile.GetFullPath().utf8_string() );
+    return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
 }
 
 } // namespace
@@ -796,6 +804,123 @@ BOOST_AUTO_TEST_CASE( RefreshListenerRemovedByAnotherDoesNotFire )
 // The History page reads the log through GetRecentCommits. With no repository it must return
 
 
+// GetStashes lists the repository's stashes.
+BOOST_AUTO_TEST_CASE( GetStashesListsStash )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_CHECK( common.GetStashes().empty() );
+
+    // Dirty the working tree so there is something to stash.
+    {
+        wxFileName    fn( tmp.path, wxS( "file.txt" ) );
+        std::ofstream f( fn.GetFullPath().utf8_string() );
+        f << "v2\n";
+    }
+
+    git_signature* sig = nullptr;
+    BOOST_REQUIRE_EQUAL( git_signature_now( &sig, "QA Test", "qa@example.com" ), GIT_OK );
+    KIGIT::GitSignaturePtr sigPtr( sig );
+
+    git_oid stashOid;
+    BOOST_REQUIRE_EQUAL( git_stash_save( &stashOid, repo, sig, "work in progress", GIT_STASH_DEFAULT ), GIT_OK );
+
+    std::vector<KIGIT_STASH_INFO> stashes = common.GetStashes();
+    BOOST_REQUIRE_EQUAL( stashes.size(), 1u );
+    BOOST_CHECK_EQUAL( stashes[0].index, 0u );
+    BOOST_CHECK( stashes[0].message.Contains( "work in progress" ) );
+}
+
+
+// A new stash takes index 0 and pushes the rest down, so anything holding an index from an
+// earlier listing would act on the wrong stash. The id stays with its own stash.
+BOOST_AUTO_TEST_CASE( StashIdStaysWithItsStashWhenAnotherIsAdded )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+
+    auto dirtyAndStash = [&]( const char* aContent, const wxString& aMessage )
+    {
+        wxFileName fn( tmp.path, wxS( "file.txt" ) );
+
+        {
+            std::ofstream f( fn.GetFullPath().utf8_string() );
+            f << aContent;
+        }
+
+        BOOST_REQUIRE( common.StashSave( aMessage ) );
+    };
+
+    dirtyAndStash( "v2\n", wxS( "first" ) );
+
+    std::vector<KIGIT_STASH_INFO> before = common.GetStashes();
+    BOOST_REQUIRE_EQUAL( before.size(), 1u );
+
+    wxString firstId = before[0].id;
+    BOOST_REQUIRE( !firstId.IsEmpty() );
+
+    dirtyAndStash( "v3\n", wxS( "second" ) );
+
+    std::vector<KIGIT_STASH_INFO> after = common.GetStashes();
+    BOOST_REQUIRE_EQUAL( after.size(), 2u );
+
+    // Index 0 is now a different stash than it was.
+    BOOST_CHECK( after[0].id != firstId );
+
+    // The first stash is still there, one place further down, under the same id.
+    BOOST_CHECK_EQUAL( after[1].id.ToStdString(), firstId.ToStdString() );
+}
+
+
+// StashSave puts the committed content back, and the stash restores the edits afterwards.
+BOOST_AUTO_TEST_CASE( StashSaveRoundTrip )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+
+    {
+        wxFileName    fn( tmp.path, wxS( "file.txt" ) );
+        std::ofstream f( fn.GetFullPath().utf8_string() );
+        f << "v2\n";
+    }
+
+    BOOST_REQUIRE( common.StashSave( wxT( "set aside for pull" ) ) );
+
+    wxFileName fn( tmp.path, wxS( "file.txt" ) );
+
+    auto readAll = []( const wxString& aPath )
+    {
+        std::ifstream in( aPath.utf8_string(), std::ios::binary );
+        return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    };
+
+    BOOST_CHECK_EQUAL( readAll( fn.GetFullPath() ), "v1\n" );
+
+    std::vector<KIGIT_STASH_INFO> stashes = common.GetStashes();
+    BOOST_REQUIRE_EQUAL( stashes.size(), 1u );
+    BOOST_CHECK( stashes[0].message.Contains( "set aside for pull" ) );
+
+    BOOST_CHECK( common.StashPop( 0 ) );
+    BOOST_CHECK_EQUAL( readAll( fn.GetFullPath() ), "v2\n" );
+    BOOST_CHECK( common.GetStashes().empty() );
+}
+
+
 // CreateBranch and DeleteBranch add and remove a local branch.
 BOOST_AUTO_TEST_CASE( CreateAndDeleteBranch )
 {
@@ -812,6 +937,116 @@ BOOST_AUTO_TEST_CASE( CreateAndDeleteBranch )
     BOOST_CHECK_EQUAL( common.GetBranchNames().size(), 2u );
     BOOST_CHECK( common.DeleteBranch( "feature" ) );
     BOOST_CHECK_EQUAL( common.GetBranchNames().size(), 1u );
+}
+
+
+// StashDrop removes a stash from the list.
+BOOST_AUTO_TEST_CASE( StashDropRemovesStash )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+
+    {
+        wxFileName    fn( tmp.path, wxS( "file.txt" ) );
+        std::ofstream f( fn.GetFullPath().utf8_string() );
+        f << "v2\n";
+    }
+
+    git_signature* sig = nullptr;
+    BOOST_REQUIRE_EQUAL( git_signature_now( &sig, "QA Test", "qa@example.com" ), GIT_OK );
+    KIGIT::GitSignaturePtr sigPtr( sig );
+
+    git_oid stashOid;
+    BOOST_REQUIRE_EQUAL( git_stash_save( &stashOid, repo, sig, "work in progress", GIT_STASH_DEFAULT ), GIT_OK );
+
+    BOOST_REQUIRE_EQUAL( common.GetStashes().size(), 1u );
+    BOOST_CHECK( common.StashDrop( 0 ) );
+    BOOST_CHECK( common.GetStashes().empty() );
+}
+
+
+// Apply leaves the stash in the list. Pop removes it.
+BOOST_AUTO_TEST_CASE( StashApplyKeepsAndStashPopRemoves )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+
+    auto dirtyAndStash = [&]()
+    {
+        wxFileName    fn( tmp.path, wxS( "file.txt" ) );
+        std::ofstream f( fn.GetFullPath().utf8_string() );
+        f << "v2\n";
+        f.close();
+
+        git_signature* sig = nullptr;
+        BOOST_REQUIRE_EQUAL( git_signature_now( &sig, "QA Test", "qa@example.com" ), GIT_OK );
+        KIGIT::GitSignaturePtr sigPtr( sig );
+
+        git_oid stashOid;
+        BOOST_REQUIRE_EQUAL( git_stash_save( &stashOid, repo, sig, "wip", GIT_STASH_DEFAULT ), GIT_OK );
+    };
+
+    dirtyAndStash();
+    BOOST_REQUIRE_EQUAL( common.GetStashes().size(), 1u );
+
+    // Apply keeps the stash in the list.
+    BOOST_CHECK( common.StashApply( 0 ) );
+    BOOST_CHECK_EQUAL( common.GetStashes().size(), 1u );
+
+    // Applying needs a clean tree, so put the applied change away before popping.
+    wxString error;
+    BOOST_REQUIRE( common.DiscardChanges( { wxS( "file.txt" ) }, error ) );
+
+    // Pop removes it.
+    BOOST_CHECK( common.StashPop( 0 ) );
+    BOOST_CHECK( common.GetStashes().empty() );
+}
+
+
+// libgit2 reports a conflicting apply as success, so pop would drop the only copy of the work.
+BOOST_AUTO_TEST_CASE( StashPopKeepsStashWhenItConflicts )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+    KIGIT_COMMON            common( repo );
+
+    wxFileName fn( tmp.path, wxS( "file.txt" ) );
+
+    auto writeFile = [&fn]( const char* aContent )
+    {
+        std::ofstream f( fn.GetFullPath().utf8_string() );
+        f << aContent;
+    };
+
+    writeFile( "stashed\n" );
+    BOOST_REQUIRE( common.StashSave( wxS( "wip" ) ) );
+    BOOST_REQUIRE_EQUAL( common.GetStashes().size(), 1u );
+
+    // A different change to the same line, committed, so the stash no longer applies cleanly.
+    writeFile( "committed\n" );
+    commitWorkingFile( repo, wxS( "file.txt" ), "conflicting change" );
+
+    BOOST_CHECK( !common.StashPop( 0 ) );
+    BOOST_CHECK_EQUAL( common.GetStashes().size(), 1u );
+    BOOST_CHECK_EQUAL( readWorkingFile( fn ), "committed\n" );
+
+    git_index* index = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+    KIGIT::GitIndexPtr indexPtr( index );
+    BOOST_CHECK( !git_index_has_conflicts( index ) );
 }
 
 

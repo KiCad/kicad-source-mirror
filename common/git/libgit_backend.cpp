@@ -2778,6 +2778,101 @@ bool LIBGIT_BACKEND::DeleteBranch( git_repository* aRepo, const wxString& aBranc
 }
 
 
+bool LIBGIT_BACKEND::StashSave( git_repository* aRepo, const wxString& aMessage )
+{
+    if( !aRepo )
+        return false;
+
+    git_signature* signature = nullptr;
+
+    if( git_signature_default( &signature, aRepo ) != GIT_OK )
+        return false;
+
+    KIGIT::GitSignaturePtr signaturePtr( signature );
+    std::string            message = aMessage.utf8_string();
+    git_oid                stashOid;
+
+    return git_stash_save( &stashOid, aRepo, signature, message.empty() ? nullptr : message.c_str(), GIT_STASH_DEFAULT )
+           == GIT_OK;
+}
+
+
+static bool rollbackWorkingTree( git_repository* aRepo, git_commit* aHeadCommit, git_tree* aWrittenTree );
+static bool restorePathsFromCommit( git_repository* aRepo, git_commit* aCommit,
+                                    const std::vector<std::string>& aPaths );
+
+
+// libgit2 reports a conflicting apply as applied, so a pop would drop the only copy of the
+// stashed work. A clean tracked tree makes the rollback lossless.
+static bool applyStashOntoCleanTree( git_repository* aRepo, size_t aIndex )
+{
+    if( !aRepo )
+        return false;
+
+    if( trackedTreeState( aRepo ) != TREE_STATE::CLEAN )
+    {
+        git_error_set_str( GIT_ERROR_STASH, _( "Commit or discard the current changes first, so the stash has "
+                                               "a clean version to apply to." )
+                                                    .utf8_string()
+                                                    .c_str() );
+        return false;
+    }
+
+    git_oid headOid;
+
+    if( git_reference_name_to_id( &headOid, aRepo, "HEAD" ) != GIT_OK )
+        return false;
+
+    git_commit* headCommit = nullptr;
+
+    if( git_commit_lookup( &headCommit, aRepo, &headOid ) != GIT_OK )
+        return false;
+
+    KIGIT::GitCommitPtr headCommitPtr( headCommit );
+
+    if( git_stash_apply( aRepo, aIndex, nullptr ) != GIT_OK )
+        return false;
+
+    // An unreadable index cannot confirm the apply, and a caller reading success would drop the
+    // stash, so treat it as a conflict.
+    git_index*         index = nullptr;
+    bool               conflicted = git_repository_index( &index, aRepo ) != GIT_OK || git_index_has_conflicts( index );
+    KIGIT::GitIndexPtr indexPtr( index );
+
+    if( conflicted )
+    {
+        // Conflict markers match neither version, so the touched paths come from the status.
+        restorePathsFromCommit( aRepo, headCommit, changedPaths( aRepo ) );
+        git_error_set_str( GIT_ERROR_STASH, _( "The stash does not fit on top of the current version of the "
+                                               "files, so nothing was changed. Restore the version it was made "
+                                               "on from History, then apply it there." )
+                                                    .utf8_string()
+                                                    .c_str() );
+        return false;
+    }
+
+    return true;
+}
+
+
+bool LIBGIT_BACKEND::StashApply( git_repository* aRepo, size_t aIndex )
+{
+    return applyStashOntoCleanTree( aRepo, aIndex );
+}
+
+
+bool LIBGIT_BACKEND::StashPop( git_repository* aRepo, size_t aIndex )
+{
+    return applyStashOntoCleanTree( aRepo, aIndex ) && git_stash_drop( aRepo, aIndex ) == GIT_OK;
+}
+
+
+bool LIBGIT_BACKEND::StashDrop( git_repository* aRepo, size_t aIndex )
+{
+    return aRepo && git_stash_drop( aRepo, aIndex ) == GIT_OK;
+}
+
+
 namespace
 {
 

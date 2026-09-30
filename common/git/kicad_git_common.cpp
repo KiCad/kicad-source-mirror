@@ -664,6 +664,54 @@ size_t KIGIT_COMMON::GetUnmergedCommitCount( const wxString& aBranch ) const
 }
 
 
+namespace
+{
+struct STASH_COLLECT
+{
+    git_repository*                repo;
+    std::vector<KIGIT_STASH_INFO>* out;
+};
+
+
+int collectStash( size_t aIndex, const char* aMessage, const git_oid* aStashId, void* aPayload )
+{
+    STASH_COLLECT* ctx = static_cast<STASH_COLLECT*>( aPayload );
+
+    KIGIT_STASH_INFO info;
+    info.index = aIndex;
+    info.message = wxString::FromUTF8( aMessage ? aMessage : "" );
+
+    char hash[GIT_OID_HEXSZ + 1] = { 0 };
+    git_oid_tostr( hash, sizeof( hash ), aStashId );
+    info.id = wxString::FromUTF8( hash );
+
+    git_commit* commit = nullptr;
+
+    if( git_commit_lookup( &commit, ctx->repo, aStashId ) == GIT_OK )
+    {
+        KIGIT::GitCommitPtr commitPtr( commit );
+        info.when = wxDateTime( static_cast<time_t>( git_commit_time( commit ) ) );
+    }
+
+    ctx->out->push_back( info );
+    return 0;
+}
+} // namespace
+
+
+std::vector<KIGIT_STASH_INFO> KIGIT_COMMON::GetStashes() const
+{
+    std::vector<KIGIT_STASH_INFO> stashes;
+
+    if( !m_repo )
+        return stashes;
+
+    STASH_COLLECT ctx{ m_repo, &stashes };
+    git_stash_foreach( m_repo, collectStash, &ctx );
+
+    return stashes;
+}
+
 bool KIGIT_COMMON::CreateBranch( const wxString& aName )
 {
     if( !m_repo || aName.IsEmpty() )
@@ -676,6 +724,30 @@ bool KIGIT_COMMON::CreateBranch( const wxString& aName )
 bool KIGIT_COMMON::DeleteBranch( const wxString& aName )
 {
     return GetGitBackend()->DeleteBranch( m_repo, aName );
+}
+
+
+bool KIGIT_COMMON::StashSave( const wxString& aMessage )
+{
+    return GetGitBackend()->StashSave( m_repo, aMessage );
+}
+
+
+bool KIGIT_COMMON::StashApply( size_t aIndex )
+{
+    return GetGitBackend()->StashApply( m_repo, aIndex );
+}
+
+
+bool KIGIT_COMMON::StashPop( size_t aIndex )
+{
+    return GetGitBackend()->StashPop( m_repo, aIndex );
+}
+
+
+bool KIGIT_COMMON::StashDrop( size_t aIndex )
+{
+    return GetGitBackend()->StashDrop( m_repo, aIndex );
 }
 
 
