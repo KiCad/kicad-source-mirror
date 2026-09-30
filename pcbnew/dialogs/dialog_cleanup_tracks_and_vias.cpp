@@ -22,6 +22,7 @@
 #include <pcb_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/pcb_selection_tool.h>
 #include <tracks_cleaner.h>
 #include <drc/drc_item.h>
 #include <tools/zone_filler_tool.h>
@@ -147,16 +148,19 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::doCleanup( bool aDryRun )
     BOARD_COMMIT commit( m_parentFrame );
     TRACKS_CLEANER cleaner( m_brd, commit );
 
+    // Keep the filter's selection after clearing the live selection before deleting items.
+    const PCB_SELECTION selectionCopy = m_parentFrame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+
     cleaner.SetFilter(
             [&]( BOARD_CONNECTED_ITEM* aItem ) -> bool
             {
                 if( m_selectedItemsFilter->GetValue() )
                 {
-                    if( !aItem->IsSelected() )
+                    if( !selectionCopy.Contains( aItem ) )
                     {
                         EDA_GROUP* group = aItem->GetParentGroup();
 
-                        while( group && !group->AsEdaItem()->IsSelected() )
+                        while( group && !selectionCopy.Contains( group->AsEdaItem() ) )
                             group = group->AsEdaItem()->GetParentGroup();
 
                         if( !group )
@@ -277,5 +281,3 @@ void DIALOG_CLEANUP_TRACKS_AND_VIAS::OnLeftDClickItem( wxMouseEvent& event )
             Show( false );
     }
 }
-
-
