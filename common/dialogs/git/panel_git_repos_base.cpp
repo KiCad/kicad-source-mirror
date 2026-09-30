@@ -90,8 +90,9 @@ PANEL_GIT_REPOS_BASE::PANEL_GIT_REPOS_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_author = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_author->Enable( false );
+	m_author->SetMinSize( wxSize( 240,-1 ) );
 
-	fgSizer1->Add( m_author, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_author, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_authorEmailLabel = new wxStaticText( this, wxID_ANY, _("Author e-mail:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_authorEmailLabel->Wrap( -1 );
@@ -101,14 +102,33 @@ PANEL_GIT_REPOS_BASE::PANEL_GIT_REPOS_BASE( wxWindow* parent, wxWindowID id, con
 
 	m_authorEmail = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_authorEmail->Enable( false );
+	m_authorEmail->SetMinSize( wxSize( 240,-1 ) );
 
-	fgSizer1->Add( m_authorEmail, 1, wxALL, 5 );
+	fgSizer1->Add( m_authorEmail, 1, wxEXPAND|wxALL, 5 );
 
 
 	bSizerCommitData->Add( fgSizer1, 0, wxEXPAND|wxALL, 5 );
 
+	m_authorDefaultNote = new wxStaticText( this, wxID_ANY, _("Used when a project's repository has no name and email of its own."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_authorDefaultNote->Wrap( -1 );
+	bSizerCommitData->Add( m_authorDefaultNote, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+
 
 	m_gitSizer->Add( bSizerCommitData, 1, wxEXPAND|wxTOP, 10 );
+
+	m_avatarsLabel = new wxStaticText( this, wxID_ANY, _("Contributor Photos"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_avatarsLabel->Wrap( -1 );
+	m_gitSizer->Add( m_avatarsLabel, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 13 );
+
+	m_staticline41 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_gitSizer->Add( m_staticline41, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
+	m_cbShowAvatars = new wxCheckBox( this, wxID_ANY, _("Show contributor photos from the web (Gravatar)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_gitSizer->Add( m_cbShowAvatars, 0, wxTOP|wxRIGHT|wxLEFT, 10 );
+
+	m_avatarsNote = new wxStaticText( this, wxID_ANY, _("Each contributor's email is sent to Gravatar to look up a photo."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_avatarsNote->Wrap( -1 );
+	m_gitSizer->Add( m_avatarsNote, 0, wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 
 	bLeftSizer->Add( m_gitSizer, 0, wxEXPAND, 0 );

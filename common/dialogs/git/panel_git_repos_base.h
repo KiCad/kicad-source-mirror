@@ -49,6 +49,11 @@ class PANEL_GIT_REPOS_BASE : public RESETTABLE_PANEL
 		wxTextCtrl* m_author;
 		wxStaticText* m_authorEmailLabel;
 		wxTextCtrl* m_authorEmail;
+		wxStaticText* m_authorDefaultNote;
+		wxStaticText* m_avatarsLabel;
+		wxStaticLine* m_staticline41;
+		wxCheckBox* m_cbShowAvatars;
+		wxStaticText* m_avatarsNote;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onEnableGitClick( wxCommandEvent& event ) { event.Skip(); }

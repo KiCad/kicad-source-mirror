@@ -50,6 +50,7 @@ void PANEL_GIT_REPOS::ResetPanel()
     m_cbDefault->SetValue( true );
     m_author->SetValue( wxEmptyString );
     m_authorEmail->SetValue( wxEmptyString );
+    m_cbShowAvatars->SetValue( false );
 }
 
 static std::pair<wxString, wxString> getDefaultAuthorAndEmail()
@@ -104,6 +105,7 @@ bool PANEL_GIT_REPOS::TransferDataFromWindow()
     settings->m_Git.useDefaultAuthor = m_cbDefault->GetValue();
     settings->m_Git.authorName = m_author->GetValue();
     settings->m_Git.authorEmail = m_authorEmail->GetValue();
+    settings->m_Git.showContributorAvatars = m_cbShowAvatars->GetValue();
 
     return true;
 }
@@ -116,6 +118,7 @@ bool PANEL_GIT_REPOS::TransferDataToWindow()
 
     m_enableGit->SetValue( settings->m_Git.enableGit );
     m_updateInterval->SetValue( settings->m_Git.updatInterval );
+    m_cbShowAvatars->SetValue( settings->m_Git.showContributorAvatars );
 
     m_cbDefault->SetValue( settings->m_Git.useDefaultAuthor );
 
@@ -155,6 +158,9 @@ void PANEL_GIT_REPOS::onEnableGitClick( wxCommandEvent& aEvent )
 {
     bool enable = m_enableGit->GetValue();
     m_updateInterval->Enable( enable );
+    m_cbShowAvatars->Enable( enable );
+    m_avatarsLabel->Enable( enable );
+    m_avatarsNote->Enable( enable );
     m_cbDefault->Enable( enable );
     m_author->Enable( enable && !m_cbDefault->GetValue() );
     m_authorEmail->Enable( enable && !m_cbDefault->GetValue() );
