@@ -83,8 +83,7 @@ void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages, 
             continue;
 
         // Pins are not duplicated only if they are in different body styles
-        // (but GetBodyStyle() == 0 means common to all body styles)
-        if( prev.pin->GetBodyStyle() != 0 && next.pin->GetBodyStyle() != 0 )
+        if( prev.pin->GetBodyStyle() != ALL_BODY_STYLES && next.pin->GetBodyStyle() != ALL_BODY_STYLES )
         {
             if( prev.pin->GetBodyStyle() != next.pin->GetBodyStyle() )
                 continue;
@@ -114,7 +113,7 @@ void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages, 
 
         if( aSymbol->IsMultiBodyStyle() && next.pin->GetBodyStyle() )
         {
-            if( prev.pin->GetUnit() == 0 || next.pin->GetUnit() == 0 )
+            if( prev.pin->GetUnit() == ALL_UNITS || next.pin->GetUnit() == ALL_UNITS )
             {
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
                                " conflicts with pin %s%s at location <b>(%s, %s)</b>"
@@ -149,7 +148,7 @@ void CheckDuplicatePins( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages, 
         }
         else
         {
-            if( prev.pin->GetUnit() == 0 || next.pin->GetUnit() == 0 )
+            if( prev.pin->GetUnit() == ALL_UNITS || next.pin->GetUnit() == ALL_UNITS )
             {
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
                                " conflicts with pin %s%s at location <b>(%s, %s)</b>." ),

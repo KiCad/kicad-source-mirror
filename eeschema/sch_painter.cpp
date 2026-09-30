@@ -265,15 +265,15 @@ bool SCH_PAINTER::nonCached( const EDA_ITEM* aItem )
 
 bool SCH_PAINTER::isUnitAndConversionShown( const SCH_ITEM* aItem ) const
 {
-    if( m_schSettings.m_ShowUnit            // showing a specific unit
-            && aItem->GetUnit()             // item is unit-specific
+    if( m_schSettings.m_ShowUnit
+            && aItem->GetUnit() != ALL_UNITS
             && aItem->GetUnit() != m_schSettings.m_ShowUnit )
     {
         return false;
     }
 
-    if( m_schSettings.m_ShowBodyStyle       // showing a specific body style
-            && aItem->GetBodyStyle()        // item is body-style-specific
+    if( m_schSettings.m_ShowBodyStyle
+            && aItem->GetBodyStyle() != ALL_BODY_STYLES
             && aItem->GetBodyStyle() != m_schSettings.m_ShowBodyStyle )
     {
         return false;
@@ -751,11 +751,19 @@ void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields,
         if( !childOnLayer( item, aLayer ) )
             continue;
 
-        if( aUnit && item.GetUnit() && aUnit != item.GetUnit() )
+        if( aUnit != ALL_UNITS
+                && item.GetUnit() != ALL_UNITS
+                && aUnit != item.GetUnit() )
+        {
             continue;
+        }
 
-        if( aBodyStyle && item.GetBodyStyle() && aBodyStyle != item.GetBodyStyle() )
+        if( aBodyStyle != ALL_BODY_STYLES
+                && item.GetBodyStyle() != ALL_BODY_STYLES
+                && aBodyStyle != item.GetBodyStyle() )
+        {
             continue;
+        }
 
         draw( &item, aLayer, aDimmed );
     }

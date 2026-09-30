@@ -155,7 +155,7 @@ public:
                     return wxGetTranslation( UNITS_ALL );
             }
 
-            if( aPin.GetUnit() == 0 )
+            if( aPin.GetUnit() == ALL_UNITS )
                 return wxGetTranslation( UNITS_ALL );
             else
                 return aPin.GetUnitDisplayName( aPin.GetUnit(), true );
@@ -167,7 +167,7 @@ public:
                     return wxGetTranslation( UNITS_ALL );
             }
 
-            if( aPin.GetBodyStyle() == 0 )
+            if( aPin.GetBodyStyle() == ALL_BODY_STYLES )
                 return wxGetTranslation( DEMORGAN_ALL );
             else
                 return aPin.GetBodyStyleDescription( aPin.GetBodyStyle(), true );
@@ -330,13 +330,11 @@ void getSelectedArea( WX_GRID* aGrid, int* aRowStart, int* aRowCount )
 class PIN_TABLE_DATA_MODEL : public WX_GRID_TABLE_BASE
 {
 public:
-    PIN_TABLE_DATA_MODEL( SYMBOL_EDIT_FRAME* aFrame,
-                          DIALOG_LIB_EDIT_PIN_TABLE* aPinTable,
-                          LIB_SYMBOL* aSymbol,
+    PIN_TABLE_DATA_MODEL( SYMBOL_EDIT_FRAME* aFrame, DIALOG_LIB_EDIT_PIN_TABLE* aPinTable, LIB_SYMBOL* aSymbol,
                           const std::vector<SCH_PIN*>& aOrigSelectedPins ) :
             m_frame( aFrame ),
-            m_unitFilter( -1 ),
-            m_bodyStyleFilter( -1 ),
+            m_unitFilter( ALL_UNITS ),
+            m_bodyStyleFilter( ALL_BODY_STYLES ),
             m_filterBySelection( false ),
             m_edited( false ),
             m_pinTable( aPinTable ),
@@ -683,10 +681,14 @@ public:
 
         for( SCH_PIN* pin : aPins )
         {
-            const bool includedByUnit = m_unitFilter <= 0 || pin->GetUnit() == 0 || pin->GetUnit() == m_unitFilter;
-            const bool includedByBodyStyle =
-                    m_bodyStyleFilter <= 0 || pin->GetBodyStyle() == 0 || pin->GetBodyStyle() == m_bodyStyleFilter;
-            const bool includedBySelection = !m_filterBySelection || pinIsInEditorSelection( pin );
+            const bool includedByUnit = m_unitFilter == ALL_UNITS
+                                            || pin->GetUnit() == ALL_UNITS
+                                            || pin->GetUnit() == m_unitFilter;
+            const bool includedByBodyStyle = m_bodyStyleFilter == ALL_BODY_STYLES
+                                                || pin->GetBodyStyle() == ALL_BODY_STYLES
+                                                || pin->GetBodyStyle() == m_bodyStyleFilter;
+            const bool includedBySelection = !m_filterBySelection
+                                                || pinIsInEditorSelection( pin );
 
             if( includedByUnit && includedByBodyStyle && includedBySelection )
             {
@@ -802,8 +804,8 @@ private:
     // data model is a 2D vector.  If we're in the single pin case, each row's SCH_PINs
     // contains only a single pin.
     std::vector<std::vector<SCH_PIN*>> m_rows;
-    int                                m_unitFilter;      // 0 or -1 to show pins for all units
-    int                                m_bodyStyleFilter; // 0 or -1 to show all body styles
+    int                                m_unitFilter;         // 0 to show pins for all units
+    int                                m_bodyStyleFilter;    // 0 to show all body styles
     bool                               m_filterBySelection;
 
     bool                               m_edited;
@@ -1288,7 +1290,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnFilterCheckBox( wxCommandEvent& event )
         }
         else
         {
-            m_dataModel->SetBodyStyleFilter( -1 );
+            m_dataModel->SetBodyStyleFilter( ALL_BODY_STYLES );
             m_bodyStyleFilter->SetSelection( -1 );
         }
     }
@@ -1306,12 +1308,12 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnFilterChoice( wxCommandEvent& event )
     if( event.GetEventObject() == m_unitFilter )
     {
         m_cbFilterByUnit->SetValue( true );
-        m_dataModel->SetUnitFilter( m_unitFilter->GetSelection() );
+        m_dataModel->SetUnitFilter( std::max( m_unitFilter->GetSelection(), ALL_UNITS ) );
     }
     else if( event.GetEventObject() == m_bodyStyleFilter )
     {
         m_cbFilterByBodyStyle->SetValue( true );
-        m_dataModel->SetBodyStyleFilter( m_bodyStyleFilter->GetSelection() );
+        m_dataModel->SetBodyStyleFilter( std::max( m_bodyStyleFilter->GetSelection(), ALL_BODY_STYLES ) );
     }
 
     OnRebuildRows( event );

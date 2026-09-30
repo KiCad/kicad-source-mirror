@@ -758,10 +758,12 @@ SHAPE_DRAW_RESULT EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, st
                     {
                         for( SCH_ITEM& item : symbol->GetDrawItems() )
                         {
-                            bool inUnit = item.GetUnit() == 0 || item.GetUnit() == symFrame->GetUnit();
-                            bool inStyle = item.GetBodyStyle() == 0 || item.GetBodyStyle() == symFrame->GetBodyStyle();
+                            bool inUnit = item.GetUnit() == ALL_UNITS
+                                            || item.GetUnit() == symFrame->GetUnit();
+                            bool inBodyStyle = item.GetBodyStyle() == ALL_BODY_STYLES
+                                                || item.GetBodyStyle() == symFrame->GetBodyStyle();
 
-                            if( !inUnit || !inStyle )
+                            if( !inUnit || !inBodyStyle )
                                 continue;
 
                             if( std::optional<ARC_TANGENT_SEED> seed = seedFrom( &item, aPos ) )

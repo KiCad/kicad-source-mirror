@@ -178,10 +178,10 @@ int SYMBOL_EDITOR_PIN_TOOL::SynchronizeOtherUnits( LIB_SYMBOL* aSymbol, SCH_PIN*
 
         // Unit or body style 0 means aPin applies to all of them, making the matching pin
         // redundant.  Delete last, because RemoveDrawItem() frees the pin.
-        bool coversBodyStyles = aPin->GetBodyStyle() == 0
-                                && ( aPin->GetUnit() == 0 || other->GetUnit() == aPin->GetUnit() );
-        bool coversUnits = aPin->GetUnit() == 0
-                           && ( aPin->GetBodyStyle() == 0
+        bool coversBodyStyles = aPin->GetBodyStyle() == ALL_BODY_STYLES
+                                && ( aPin->GetUnit() == ALL_UNITS || other->GetUnit() == aPin->GetUnit() );
+        bool coversUnits = aPin->GetUnit() == ALL_UNITS
+                           && ( aPin->GetBodyStyle() == ALL_BODY_STYLES
                                 || other->GetBodyStyle() == aPin->GetBodyStyle() );
 
         if( coversBodyStyles || coversUnits )
@@ -235,8 +235,8 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( SCH_PIN* aPin, bool aFocusPinNum
     g_LastPinLength = aPin->GetLength();
     g_LastPinShape = aPin->GetShape();
     g_LastPinType = aPin->GetType();
-    g_LastPinCommonBodyStyle = aPin->GetBodyStyle() == 0;
-    g_LastPinCommonUnit = aPin->GetUnit() == 0;
+    g_LastPinCommonBodyStyle = aPin->GetBodyStyle() == ALL_BODY_STYLES;
+    g_LastPinCommonUnit = aPin->GetUnit() == ALL_UNITS;
     g_LastPinVisible = aPin->IsVisible();
 
     return true;
@@ -256,7 +256,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( SCH_COMMIT* aCommit, SCH_PIN* aPin )
             continue;
 
         // test for same body style
-        if( test->GetBodyStyle() && test->GetBodyStyle() != aPin->GetBodyStyle() )
+        if( test->GetBodyStyle() != ALL_BODY_STYLES && test->GetBodyStyle() != aPin->GetBodyStyle() )
             continue;
 
         if( ask_for_pin && m_frame->SynchronizePins() )
@@ -362,7 +362,7 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( SCH_COMMIT* aCommit, SCH_PIN* aPin
     if( !m_frame->SynchronizePins() )
         return;
 
-    if( aPin->GetUnit() == 0 )  // Pin common to all units: no need to create similar pins.
+    if( aPin->GetUnit() == ALL_UNITS )  // Pin common to all units: no need to create similar pins.
         return;
 
     // When units are interchangeable, all units are expected to have similar pins
@@ -423,7 +423,7 @@ int SYMBOL_EDITOR_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
 
         if( aEvent.IsAction( &SCH_ACTIONS::pushPinLength ) )
         {
-            if( !pin->GetBodyStyle() || pin->GetBodyStyle() == m_frame->GetBodyStyle() )
+            if( pin->GetBodyStyle() == ALL_BODY_STYLES || pin->GetBodyStyle() == m_frame->GetBodyStyle() )
                 pin->ChangeLength( sourcePin->GetLength() );
         }
         else if( aEvent.IsAction( &SCH_ACTIONS::pushPinNameSize ) )

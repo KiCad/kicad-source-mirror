@@ -1585,8 +1585,8 @@ void SCH_POINT_EDITOR::updatePoints()
         SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
         SCH_ITEM*          item = dynamic_cast<SCH_ITEM*>( m_editPoints->GetParent() );
 
-        if( ( item && item->GetUnit() != 0 && item->GetUnit() != editor->GetUnit() )
-                || ( item && item->GetBodyStyle() != 0 && item->GetBodyStyle() != editor->GetBodyStyle() ) )
+        if( ( item && item->GetUnit() != ALL_UNITS && item->GetUnit() != editor->GetUnit() )
+            || ( item && item->GetBodyStyle() != ALL_BODY_STYLES && item->GetBodyStyle() != editor->GetBodyStyle() ) )
         {
             getView()->Remove( m_editPoints.get() );
             getView()->Remove( m_angleItem.get() );

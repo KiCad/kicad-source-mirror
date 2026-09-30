@@ -127,11 +127,19 @@ INSPECT_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 
         if( schItem && schItem->Type() != SCH_PIN_T )
         {
-            if( m_Unit && schItem->GetUnit() && schItem->GetUnit() != m_Unit )
+            if( m_Unit != ALL_UNITS
+                    && schItem->GetUnit() != ALL_UNITS
+                    && schItem->GetUnit() != m_Unit )
+            {
                 return INSPECT_RESULT::CONTINUE;
+            }
 
-            if( m_BodyStyle && schItem->GetBodyStyle() && schItem->GetBodyStyle() != m_BodyStyle )
+            if( m_BodyStyle != ALL_BODY_STYLES
+                    && schItem->GetBodyStyle() != ALL_BODY_STYLES
+                    && schItem->GetBodyStyle() != m_BodyStyle )
+            {
                 return INSPECT_RESULT::CONTINUE;
+            }
         }
     }
 

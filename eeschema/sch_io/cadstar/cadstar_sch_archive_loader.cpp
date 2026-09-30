@@ -305,11 +305,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::copySymbolItems( LIB_SYMBOL* aSourceSym, LIB_SY
                                                   int aDestUnit, bool aOverrideFields )
 {
     // Ensure there are no items on the unit we want to load onto
-    for( SCH_ITEM* item : aDestSym->GetUnitDrawItems( aDestUnit, 0 /* aBodyStyle */ ) )
+    for( SCH_ITEM* item : aDestSym->GetUnitDrawItems( aDestUnit, ALL_BODY_STYLES ) )
         aDestSym->RemoveDrawItem( item );
 
     // Copy all draw items
-    for( SCH_ITEM* newItem : aSourceSym->GetUnitDrawItems( 1, 0 /* aBodyStyle */ ) )
+    for( SCH_ITEM* newItem : aSourceSym->GetUnitDrawItems( 1, ALL_BODY_STYLES ) )
     {
         SCH_ITEM* itemCopy = static_cast<SCH_ITEM*>( newItem->Clone() );
         itemCopy->SetParent( aDestSym );

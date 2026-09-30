@@ -369,9 +369,9 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
     m_numberSize.SetValue( m_pin->GetNumberTextSize() );
     m_pinLength.SetValue( m_pin->GetLength() );
     m_checkApplyToAllParts->Enable( m_pin->GetParentSymbol()->IsMultiUnit() );
-    m_checkApplyToAllParts->SetValue( m_pin->GetParentSymbol()->IsMultiUnit() && m_pin->GetUnit() == 0 );
+    m_checkApplyToAllParts->SetValue( m_pin->GetParentSymbol()->IsMultiUnit() && m_pin->GetUnit() == ALL_UNITS );
     m_checkApplyToAllBodyStyles->Enable( m_pin->GetParentSymbol()->IsMultiBodyStyle() );
-    m_checkApplyToAllBodyStyles->SetValue( m_pin->GetBodyStyle() == 0 );
+    m_checkApplyToAllBodyStyles->SetValue( m_pin->GetBodyStyle() == ALL_BODY_STYLES );
     m_checkShow->SetValue( m_pin->IsVisible() );
 
     m_dummyPin->SetVisible( m_pin->IsVisible() );

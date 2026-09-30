@@ -299,9 +299,9 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataToWindow()
         const SYMBOL* symbol = m_shape->GetParentSymbol();
 
         m_privateCheckbox->SetValue( m_shape->IsPrivate() );
-        m_checkApplyToAllUnits->SetValue( symbol->IsMultiUnit() && m_shape->GetUnit() == 0 );
+        m_checkApplyToAllUnits->SetValue( symbol->IsMultiUnit() && m_shape->GetUnit() == ALL_UNITS );
         m_checkApplyToAllUnits->Enable( symbol->IsMultiUnit() );
-        m_checkApplyToAllBodyStyles->SetValue( symbol->IsMultiBodyStyle() && m_shape->GetBodyStyle() == 0 );
+        m_checkApplyToAllBodyStyles->SetValue( symbol->IsMultiBodyStyle() && m_shape->GetBodyStyle() == ALL_BODY_STYLES );
         m_checkApplyToAllBodyStyles->Enable( symbol->IsMultiBodyStyle() );
     }
     else

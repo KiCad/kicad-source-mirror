@@ -4074,10 +4074,10 @@ bool SCH_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos
 
         if( symEditFrame )
         {
-            if( pin->GetUnit() && pin->GetUnit() != symEditFrame->GetUnit() )
+            if( pin->GetUnit() != ALL_UNITS && pin->GetUnit() != symEditFrame->GetUnit() )
                 return false;
 
-            if( pin->GetBodyStyle() && pin->GetBodyStyle() != symEditFrame->GetBodyStyle() )
+            if( pin->GetBodyStyle() != ALL_BODY_STYLES && pin->GetBodyStyle() != symEditFrame->GetBodyStyle() )
                 return false;
         }
 
@@ -4139,10 +4139,10 @@ bool SCH_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos
         {
             const SCH_ITEM* sch_item = static_cast<const SCH_ITEM*>( aItem );
 
-            if( sch_item->GetUnit() && sch_item->GetUnit() != symEditFrame->GetUnit() )
+            if( sch_item->GetUnit() != ALL_UNITS && sch_item->GetUnit() != symEditFrame->GetUnit() )
                 return false;
 
-            if( sch_item->GetBodyStyle() && sch_item->GetBodyStyle() != symEditFrame->GetBodyStyle() )
+            if( sch_item->GetBodyStyle() != ALL_BODY_STYLES && sch_item->GetBodyStyle() != symEditFrame->GetBodyStyle() )
                 return false;
         }
 

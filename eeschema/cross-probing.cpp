@@ -113,7 +113,7 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindSymbolAndItem( const wxString* aPath, const wx
                     {
                         int unit = pin->GetLibPin()->GetUnit();
 
-                        if( unit != 0 && unit != symbol->GetUnit() )
+                        if( unit != ALL_UNITS && unit != symbol->GetUnit() )
                         {
                             pin = nullptr;
                             continue;

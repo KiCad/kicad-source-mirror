@@ -2233,7 +2233,7 @@ bool findSymbolsAndPins( const SCH_SHEET_LIST& aSchematicSheetList, const SCH_SH
 
             for( SCH_PIN* pin : pinsOnSheet )
             {
-                int pinUnit = pin->GetLibPin() ? pin->GetLibPin()->GetUnit() : 0;
+                int pinUnit = pin->GetLibPin() ? pin->GetLibPin()->GetUnit() : ALL_UNITS;
 
                 if( pinUnit > 0 && pinUnit != schRef.GetUnit() )
                     continue;

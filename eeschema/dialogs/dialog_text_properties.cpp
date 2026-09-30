@@ -352,9 +352,9 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         SYMBOL* symbol = m_currentItem->GetParentSymbol();
 
         m_privateCheckbox->SetValue( m_currentItem->IsPrivate() );
-        m_commonToAllUnits->SetValue( symbol->IsMultiUnit() && m_currentItem->GetUnit() == 0 );
+        m_commonToAllUnits->SetValue( symbol->IsMultiUnit() && m_currentItem->GetUnit() == ALL_UNITS );
         m_commonToAllUnits->Enable( symbol->IsMultiUnit() );
-        m_commonToAllBodyStyles->SetValue( symbol->IsMultiBodyStyle() && m_currentItem->GetBodyStyle() == 0 );
+        m_commonToAllBodyStyles->SetValue( symbol->IsMultiBodyStyle() && m_currentItem->GetBodyStyle() == ALL_BODY_STYLES );
         m_commonToAllBodyStyles->Enable( symbol->IsMultiBodyStyle() );
     }
 

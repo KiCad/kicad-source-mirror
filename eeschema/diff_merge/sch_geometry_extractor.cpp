@@ -162,11 +162,19 @@ DOCUMENT_GEOMETRY ExtractSymbolGeometry( const LIB_SYMBOL& aSymbol, const KIGFX:
 
     for( const SCH_ITEM& item : aSymbol.GetDrawItems() )
     {
-        if( item.GetUnit() > 0 && aUnit > 0 && item.GetUnit() != aUnit )
+        if( item.GetUnit() != ALL_UNITS
+                && aUnit != ALL_UNITS
+                && item.GetUnit() != aUnit )
+        {
             continue;
+        }
 
-        if( item.GetBodyStyle() > 0 && aBodyStyle > 0 && item.GetBodyStyle() != aBodyStyle )
+        if( item.GetBodyStyle() != ALL_BODY_STYLES
+                && aBodyStyle != ALL_BODY_STYLES
+                && item.GetBodyStyle() != aBodyStyle )
+        {
             continue;
+        }
 
         addBBoxAsPolygon( item.GetBoundingBox(), aColor, false, out );
     }

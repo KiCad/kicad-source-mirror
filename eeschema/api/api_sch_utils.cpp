@@ -195,7 +195,8 @@ bool PackSymbol( kiapi::schematic::types::SchematicSymbolInstance* aOutput, cons
 
         for( const SCH_PIN* libPin : lib->GetGraphicalPins( ALL_UNITS, ALL_BODY_STYLES ) )
         {
-            if( libPin->GetBodyStyle() && aInput->GetBodyStyle()
+            if( libPin->GetBodyStyle() != ALL_BODY_STYLES
+                    && aInput->GetBodyStyle() != ALL_BODY_STYLES
                     && aInput->GetBodyStyle() != libPin->GetBodyStyle() )
             {
                 continue;

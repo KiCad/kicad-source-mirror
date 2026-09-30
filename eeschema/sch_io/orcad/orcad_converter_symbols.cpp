@@ -2159,14 +2159,15 @@ LIB_SYMBOL* ORCAD_CONVERTER::kicadSymbolFor( const std::string& aLibName )
     symbol->GetDatasheetField().SetVisible( false );
 
     // Items stay common to both body styles unless their unit has a Convert view
-    auto stampBodyStyle = [&]( int aUnit, int aBodyStyle )
-    {
-        for( SCH_ITEM& item : symbol->GetDrawItems() )
-        {
-            if( item.Type() != SCH_FIELD_T && item.GetUnit() == aUnit && item.GetBodyStyle() == 0 )
-                item.SetBodyStyle( aBodyStyle );
-        }
-    };
+    auto stampBodyStyle =
+            [&]( int aUnit, int aBodyStyle )
+            {
+                for( SCH_ITEM& item : symbol->GetDrawItems() )
+                {
+                    if( item.Type() != SCH_FIELD_T && item.GetUnit() == aUnit && item.GetBodyStyle() == ALL_BODY_STYLES )
+                        item.SetBodyStyle( aBodyStyle );
+                }
+            };
 
     for( size_t ui = 0; ui < entry.units.size(); ++ui )
     {

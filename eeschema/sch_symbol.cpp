@@ -2610,10 +2610,10 @@ const SCH_PIN* SCH_SYMBOL::GetPin( const VECTOR2I& aPos ) const
         int pin_unit = pin->GetLibPin() ? pin->GetLibPin()->GetUnit() : GetUnit();
         int pin_bodyStyle = pin->GetLibPin() ? pin->GetLibPin()->GetBodyStyle() : GetBodyStyle();
 
-        if( pin_unit > 0 && pin_unit != GetUnit() )
+        if( pin_unit != ALL_UNITS && pin_unit != GetUnit() )
             continue;
 
-        if( pin_bodyStyle > 0 && pin_bodyStyle != GetBodyStyle() )
+        if( pin_bodyStyle != ALL_BODY_STYLES && pin_bodyStyle != GetBodyStyle() )
             continue;
 
         if( pin->GetPosition() == aPos )
@@ -2673,7 +2673,7 @@ std::vector<const SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) 
 
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
-        if( unit && pin->GetUnit() && pin->GetUnit() != unit )
+        if( unit != ALL_UNITS && pin->GetUnit() != ALL_UNITS && pin->GetUnit() != unit )
             continue;
 
         pins.push_back( pin.get() );
@@ -2696,7 +2696,7 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet )
 
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
-        if( unit && pin->GetUnit() && pin->GetUnit() != unit )
+        if( unit != ALL_UNITS && pin->GetUnit() != ALL_UNITS && pin->GetUnit() != unit )
             continue;
 
         pins.push_back( pin.get() );
@@ -2713,12 +2713,20 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetGraphicalPins( int aUnit, int aBodyStyle ) 
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
         // Unit filtering:
-        if( aUnit && pin->GetUnit() && ( pin->GetUnit() != aUnit ) )
+        if( aUnit != ALL_UNITS
+                && pin->GetUnit() != ALL_UNITS
+                && pin->GetUnit() != aUnit )
+        {
             continue;
+        }
 
         // Body style filtering:
-        if( aBodyStyle && pin->GetBodyStyle() && ( pin->GetBodyStyle() != aBodyStyle ) )
+        if( aBodyStyle != ALL_BODY_STYLES
+                && pin->GetBodyStyle() != ALL_BODY_STYLES
+                && pin->GetBodyStyle() != aBodyStyle )
+        {
             continue;
+        }
 
         pins.push_back( pin.get() );
     }
@@ -3152,7 +3160,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, c
                     if( isReferenceFunction )
                     {
                         // Return the full unit reference (e.g., "J601A")
-                        if( pinUnit > 0 )
+                        if( pinUnit != ALL_UNITS )
                             result = GetRef( aPath, false ) + SubReference( pinUnit, false );
                         else
                             result = GetRef( aPath, false );
@@ -3165,7 +3173,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, c
                     else if( isUnitFunction )
                     {
                         // Return only the unit letter (e.g., "A")
-                        if( pinUnit > 0 )
+                        if( pinUnit != ALL_UNITS )
                             result = SubReference( pinUnit, false );
                         else
                             result = wxEmptyString;
@@ -3963,7 +3971,7 @@ void SCH_SYMBOL::GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList )
     {
         if( SCH_PIN* lib_pin = pin->GetLibPin() )
         {
-            if( lib_pin->GetUnit() && m_unit && ( m_unit != lib_pin->GetUnit() ) )
+            if( lib_pin->GetUnit() != ALL_UNITS && m_unit != ALL_UNITS && m_unit != lib_pin->GetUnit() )
                 continue;
 
             DANGLING_END_ITEM item( PIN_END, lib_pin, GetPinPhysicalPosition( lib_pin ), this );
@@ -4098,10 +4106,10 @@ std::vector<VECTOR2I> SCH_SYMBOL::GetConnectionPoints() const
         int pin_unit = pin->GetLibPin() ? pin->GetLibPin()->GetUnit() : GetUnit();
         int pin_bodyStyle = pin->GetLibPin() ? pin->GetLibPin()->GetBodyStyle() : GetBodyStyle();
 
-        if( pin_unit > 0 && pin_unit != GetUnit() )
+        if( pin_unit != ALL_UNITS && pin_unit != GetUnit() )
             continue;
 
-        if( pin_bodyStyle > 0 && pin_bodyStyle != GetBodyStyle() )
+        if( pin_bodyStyle != ALL_BODY_STYLES && pin_bodyStyle != GetBodyStyle() )
             continue;
 
         retval.push_back( m_transform.TransformCoordinate( pin->GetLocalPosition() ) + m_pos );
@@ -4190,10 +4198,10 @@ INSPECT_RESULT SCH_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData, const s
                 int pin_unit = pin->GetLibPin() ? pin->GetLibPin()->GetUnit() : GetUnit();
                 int pin_bodyStyle = pin->GetLibPin() ? pin->GetLibPin()->GetBodyStyle() : GetBodyStyle();
 
-                if( pin_unit > 0 && pin_unit != GetUnit() )
+                if( pin_unit != ALL_UNITS && pin_unit != GetUnit() )
                     continue;
 
-                if( pin_bodyStyle > 0 && pin_bodyStyle != GetBodyStyle() )
+                if( pin_bodyStyle != ALL_BODY_STYLES && pin_bodyStyle != GetBodyStyle() )
                     continue;
 
                 if( INSPECT_RESULT::QUIT == aInspector( pin.get(), (void*) this ) )
@@ -4394,10 +4402,10 @@ bool SCH_SYMBOL::doIsConnected( const VECTOR2I& aPosition ) const
 
         // Collect only pins attached to the current unit and convert.
         // others are not associated to this symbol instance
-        if( pin->GetUnit() > 0 && pin->GetUnit() != GetUnit() )
+        if( pin->GetUnit() != ALL_UNITS && pin->GetUnit() != GetUnit() )
             continue;
 
-        if( pin->GetBodyStyle() > 0 && pin->GetBodyStyle() != GetBodyStyle() )
+        if( pin->GetBodyStyle() != ALL_BODY_STYLES && pin->GetBodyStyle() != GetBodyStyle() )
             continue;
 
         if( pin->GetLocalPosition() == new_pos )
@@ -4713,10 +4721,10 @@ bool SCH_SYMBOL::IsPointClickableAnchor( const VECTOR2I& aPos ) const
         int pin_unit = pin->GetLibPin() ? pin->GetLibPin()->GetUnit() : GetUnit();
         int pin_bodyStyle = pin->GetLibPin() ? pin->GetLibPin()->GetBodyStyle() : GetBodyStyle();
 
-        if( pin_unit > 0 && pin_unit != GetUnit() )
+        if( pin_unit != ALL_UNITS && pin_unit != GetUnit() )
             continue;
 
-        if( pin_bodyStyle > 0 && pin_bodyStyle != GetBodyStyle() )
+        if( pin_bodyStyle != ALL_BODY_STYLES && pin_bodyStyle != GetBodyStyle() )
             continue;
 
         if( pin->IsPointClickableAnchor( aPos ) )

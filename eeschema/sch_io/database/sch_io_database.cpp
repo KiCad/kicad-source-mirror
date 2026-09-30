@@ -868,7 +868,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
 
                         int targetStyle;
 
-                        if( item.GetBodyStyle() == 0 )
+                        if( item.GetBodyStyle() == ALL_BODY_STYLES )
                             targetStyle = base;
                         else
                             targetStyle = base + ( item.GetBodyStyle() - 1 );
@@ -881,7 +881,7 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
                         newItem->SetBodyStyle( targetStyle );
                         symbol->AddDrawItem( newItem, false );
                     }
-                    else if( item.GetBodyStyle() == 0 )
+                    else if( item.GetBodyStyle() == ALL_BODY_STYLES )
                     {
                         for( int bodyStyle = 0; bodyStyle < srcCount; ++bodyStyle )
                         {

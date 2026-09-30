@@ -1028,9 +1028,9 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL::Flatten() const
         if( !m_fpFilters.IsEmpty() )
             retv->SetFPFilters( m_fpFilters );
 
-        for( const auto& file : EmbeddedFileMap() )
+        for( const auto& [name, file] : EmbeddedFileMap() )
         {
-            EMBEDDED_FILES::EMBEDDED_FILE* newFile = new EMBEDDED_FILES::EMBEDDED_FILE( *file.second );
+            EMBEDDED_FILES::EMBEDDED_FILE* newFile = new EMBEDDED_FILES::EMBEDDED_FILE( *file );
             retv->AddFile( newFile );
         }
 
@@ -2466,11 +2466,21 @@ std::vector<SCH_ITEM*> LIB_SYMBOL::GetUnitDrawItems( int aUnit, int aBodyStyle )
         if( item.Type() == SCH_FIELD_T )
             continue;
 
-        if( ( aBodyStyle == -1 && item.GetUnit() == aUnit ) || ( aUnit == -1 && item.GetBodyStyle() == aBodyStyle )
-            || ( aUnit == item.GetUnit() && aBodyStyle == item.GetBodyStyle() ) )
+        if( aUnit != ALL_UNITS
+                && item.GetUnit() != ALL_UNITS
+                && aUnit != item.GetUnit() )
         {
-            unitItems.push_back( &item );
+            continue;
         }
+
+        if( aBodyStyle != ALL_BODY_STYLES
+                && item.GetBodyStyle() != ALL_BODY_STYLES
+                && aBodyStyle != item.GetBodyStyle() )
+        {
+            continue;
+        }
+
+        unitItems.push_back( &item );
     }
 
     return unitItems;
