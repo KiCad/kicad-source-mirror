@@ -912,11 +912,11 @@ BOOST_AUTO_TEST_CASE( GetUnitItems )
     // A single unique unit with 1 pin common to all units and all body styles.
     SCH_PIN* pin1 = new SCH_PIN( &m_part_no_data );
     m_part_no_data.AddDrawItem( pin1 );
-    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 0, 0 ).size() == 1 );
+    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( ALL_UNITS, ALL_BODY_STYLES ).size() == 1 );
 
     // A single unique unit with 1 pin in unit 1 and common to all body styles.
     pin1->SetUnit( 1 );
-    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 1, 0 ).size() == 1 );
+    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 1, ALL_BODY_STYLES ).size() == 1 );
 
     // A single unique unit with 1 pin in unit 1 and body style 1.
     pin1->SetBodyStyle( 1 );
@@ -932,9 +932,9 @@ BOOST_AUTO_TEST_CASE( GetUnitItems )
     m_part_no_data.AddDrawItem( pin2 );
     BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 2, 2 ).size() == 1 );
 
-    // Make pin 1 body style common to all units.
-    pin1->SetBodyStyle( 0 );
-    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 1, 1 ).size() == 0 );
+    // Make pin 1 body style common to all body styles.
+    pin1->SetBodyStyle( ALL_BODY_STYLES );
+    BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 1, 1 ).size() == 1 );
     BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 2, 1 ).size() == 1 );
 
     m_part_no_data.RemoveDrawItem( pin2 );
