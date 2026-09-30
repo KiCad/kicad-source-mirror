@@ -90,6 +90,16 @@ public:
     bool StashPop( git_repository* aRepo, size_t aIndex ) override;
     bool StashDrop( git_repository* aRepo, size_t aIndex ) override;
 
+    bool CreateTag( git_repository* aRepo, const wxString& aName ) override;
+    bool DeleteTag( git_repository* aRepo, const wxString& aName ) override;
+    bool CheckoutTag( git_repository* aRepo, const wxString& aName ) override;
+
+    bool AddRemote( git_repository* aRepo, const wxString& aName, const wxString& aUrl ) override;
+    bool SetRemoteUrl( git_repository* aRepo, const wxString& aName, const wxString& aUrl ) override;
+    bool RemoveRemote( git_repository* aRepo, const wxString& aName ) override;
+
+    bool SetUserConfig( git_repository* aRepo, const wxString& aName, const wxString& aEmail ) override;
+
     RestoreResult RestoreVersion( git_repository* aRepo, const wxString& aCommitHash, const wxString& aProjectPrefix,
                                   wxString& aError ) override;
 

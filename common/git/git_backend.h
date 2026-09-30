@@ -144,6 +144,16 @@ public:
     virtual bool StashPop( git_repository* aRepo, size_t aIndex ) = 0;
     virtual bool StashDrop( git_repository* aRepo, size_t aIndex ) = 0;
 
+    virtual bool CreateTag( git_repository* aRepo, const wxString& aName ) = 0;
+    virtual bool DeleteTag( git_repository* aRepo, const wxString& aName ) = 0;
+    virtual bool CheckoutTag( git_repository* aRepo, const wxString& aName ) = 0;
+
+    virtual bool AddRemote( git_repository* aRepo, const wxString& aName, const wxString& aUrl ) = 0;
+    virtual bool SetRemoteUrl( git_repository* aRepo, const wxString& aName, const wxString& aUrl ) = 0;
+    virtual bool RemoveRemote( git_repository* aRepo, const wxString& aName ) = 0;
+
+    virtual bool SetUserConfig( git_repository* aRepo, const wxString& aName, const wxString& aEmail ) = 0;
+
     virtual RestoreResult RestoreVersion( git_repository* aRepo, const wxString& aCommitHash,
                                           const wxString& aProjectPrefix, wxString& aError ) = 0;
 

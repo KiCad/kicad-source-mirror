@@ -47,6 +47,15 @@ struct KIGIT_STASH_INFO
 };
 
 
+// One entry in the tag list, as shown by the advanced git window's Tags page.
+struct KIGIT_TAG_INFO
+{
+    wxString name;    ///< Tag name.
+    wxString hash;    ///< Short hash of the tagged commit.
+    wxString summary; ///< First line of the tagged commit message.
+};
+
+
 // Outcome of restoring an old version as a new commit.
 enum class RestoreResult
 {
@@ -162,6 +171,9 @@ public:
     // Returns true if the repository has local commits that have not been pushed
     bool HasLocalCommits() const;
 
+    /// True when HEAD points at a commit rather than a branch, as after checking out a tag.
+    bool IsHeadDetached() const;
+
     /// How many commits aBranch holds that the current HEAD does not, which deleting it would
     /// lose. Zero when the branch is fully merged or cannot be read.
     size_t GetUnmergedCommitCount( const wxString& aBranch ) const;
@@ -173,6 +185,9 @@ public:
     // The stashes in the repository, in the order git reports them (newest first).
     std::vector<KIGIT_STASH_INFO> GetStashes() const;
 
+    // The tags in the repository, each resolved to the commit it points at.
+    std::vector<KIGIT_TAG_INFO> GetTags() const;
+
     // The caller holds the action lock, as with the query methods above.
     bool CreateBranch( const wxString& aName );
     bool DeleteBranch( const wxString& aName );
@@ -182,6 +197,16 @@ public:
     bool StashApply( size_t aIndex );
     bool StashPop( size_t aIndex );
     bool StashDrop( size_t aIndex );
+
+    bool CreateTag( const wxString& aName );
+    bool DeleteTag( const wxString& aName );
+    bool CheckoutTag( const wxString& aName );
+
+    bool AddRemote( const wxString& aName, const wxString& aUrl );
+    bool SetRemoteUrl( const wxString& aName, const wxString& aUrl );
+    bool RemoveRemote( const wxString& aName );
+
+    bool SetUserConfig( const wxString& aName, const wxString& aEmail );
 
     /**
      * Recompute the merge in memory and extract each conflicted file's three versions into
@@ -231,6 +256,12 @@ public:
     wxString GetGitRootDirectory() const;
 
     wxString GetRemotename() const;
+
+    /// Returns the URL of the repository's remote, or an empty string when there is none.
+    wxString GetRemoteUrl() const;
+
+    /// Returns every remote as a (name, URL) pair.
+    std::vector<std::pair<wxString, wxString>> GetRemotes() const;
 
     /// Returns GetRemotename() when non-empty, otherwise "origin".  Centralizes the
     /// fallback policy used by push/pull/fetch paths.

@@ -2873,6 +2873,106 @@ bool LIBGIT_BACKEND::StashDrop( git_repository* aRepo, size_t aIndex )
 }
 
 
+bool LIBGIT_BACKEND::CreateTag( git_repository* aRepo, const wxString& aName )
+{
+    if( !aRepo || aName.IsEmpty() )
+        return false;
+
+    git_object* target = nullptr;
+
+    if( git_revparse_single( &target, aRepo, "HEAD" ) != GIT_OK )
+        return false;
+
+    KIGIT::GitObjectPtr targetPtr( target );
+
+    git_oid oid;
+    return git_tag_create_lightweight( &oid, aRepo, aName.utf8_string().c_str(), target, 0 ) == GIT_OK;
+}
+
+
+bool LIBGIT_BACKEND::DeleteTag( git_repository* aRepo, const wxString& aName )
+{
+    if( !aRepo || aName.IsEmpty() )
+        return false;
+
+    return git_tag_delete( aRepo, aName.utf8_string().c_str() ) == GIT_OK;
+}
+
+
+bool LIBGIT_BACKEND::CheckoutTag( git_repository* aRepo, const wxString& aName )
+{
+    if( !aRepo || aName.IsEmpty() )
+        return false;
+
+    git_object* target = nullptr;
+    wxString    spec = aName + wxT( "^{commit}" );
+
+    if( git_revparse_single( &target, aRepo, spec.utf8_string().c_str() ) != GIT_OK )
+        return false;
+
+    KIGIT::GitObjectPtr targetPtr( target );
+
+    git_checkout_options opts = GIT_CHECKOUT_OPTIONS_INIT;
+    opts.checkout_strategy = GIT_CHECKOUT_SAFE;
+
+    if( git_checkout_tree( aRepo, target, &opts ) != GIT_OK )
+        return false;
+
+    return git_repository_set_head_detached( aRepo, git_object_id( target ) ) == GIT_OK;
+}
+
+
+bool LIBGIT_BACKEND::AddRemote( git_repository* aRepo, const wxString& aName, const wxString& aUrl )
+{
+    if( !aRepo || aName.IsEmpty() )
+        return false;
+
+    git_remote* remote = nullptr;
+
+    if( git_remote_create( &remote, aRepo, aName.utf8_string().c_str(), aUrl.utf8_string().c_str() ) != GIT_OK )
+        return false;
+
+    KIGIT::GitRemotePtr remotePtr( remote );
+    return true;
+}
+
+
+bool LIBGIT_BACKEND::SetRemoteUrl( git_repository* aRepo, const wxString& aName, const wxString& aUrl )
+{
+    if( !aRepo || aName.IsEmpty() )
+        return false;
+
+    return git_remote_set_url( aRepo, aName.utf8_string().c_str(), aUrl.utf8_string().c_str() ) == GIT_OK;
+}
+
+
+bool LIBGIT_BACKEND::RemoveRemote( git_repository* aRepo, const wxString& aName )
+{
+    if( !aRepo || aName.IsEmpty() )
+        return false;
+
+    return git_remote_delete( aRepo, aName.utf8_string().c_str() ) == GIT_OK;
+}
+
+
+bool LIBGIT_BACKEND::SetUserConfig( git_repository* aRepo, const wxString& aName, const wxString& aEmail )
+{
+    if( !aRepo )
+        return false;
+
+    git_config* config = nullptr;
+
+    if( git_repository_config( &config, aRepo ) != GIT_OK )
+        return false;
+
+    KIGIT::GitConfigPtr configPtr( config );
+
+    bool ok = git_config_set_string( config, "user.name", aName.utf8_string().c_str() ) == GIT_OK;
+    ok = ok && git_config_set_string( config, "user.email", aEmail.utf8_string().c_str() ) == GIT_OK;
+    return ok;
+}
+
+
 namespace
 {
 

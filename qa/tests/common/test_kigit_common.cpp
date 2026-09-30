@@ -285,9 +285,7 @@ BOOST_AUTO_TEST_CASE( GitRootDirectoryReturnsWorkdir )
 }
 
 
-// HasPushAndPullRemote must report true for repositories whose remote uses a name other
-// than "origin", because libgit2 allows arbitrary remote names and many users rename or
-// add additional remotes.
+// The remote need not be called origin.
 BOOST_AUTO_TEST_CASE( HasPushAndPullRemoteAcceptsNonOriginName )
 {
     GitInitGuard libgit;
@@ -804,6 +802,36 @@ BOOST_AUTO_TEST_CASE( RefreshListenerRemovedByAnotherDoesNotFire )
 // The History page reads the log through GetRecentCommits. With no repository it must return
 
 
+// GetTags resolves each tag to the commit it points at.
+BOOST_AUTO_TEST_CASE( GetTagsResolvesTagToCommit )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON emptyCommon( nullptr );
+    BOOST_CHECK( emptyCommon.GetTags().empty() );
+
+    KIGIT_COMMON common( repo );
+    BOOST_CHECK( common.GetTags().empty() );
+
+    git_object* target = nullptr;
+    BOOST_REQUIRE_EQUAL( git_revparse_single( &target, repo, "HEAD" ), GIT_OK );
+    KIGIT::GitObjectPtr targetPtr( target );
+
+    git_oid tagOid;
+    BOOST_REQUIRE_EQUAL( git_tag_create_lightweight( &tagOid, repo, "v1.0", target, 0 ), GIT_OK );
+
+    std::vector<KIGIT_TAG_INFO> tags = common.GetTags();
+    BOOST_REQUIRE_EQUAL( tags.size(), 1u );
+    BOOST_CHECK_EQUAL( tags[0].name.ToStdString(), "v1.0" );
+    BOOST_CHECK_EQUAL( tags[0].summary.ToStdString(), "initial" );
+    BOOST_CHECK( !tags[0].hash.IsEmpty() );
+}
+
+
 // GetStashes lists the repository's stashes.
 BOOST_AUTO_TEST_CASE( GetStashesListsStash )
 {
@@ -940,6 +968,58 @@ BOOST_AUTO_TEST_CASE( CreateAndDeleteBranch )
 }
 
 
+// CreateTag and DeleteTag add and remove a lightweight tag.
+BOOST_AUTO_TEST_CASE( CreateAndDeleteTag )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+
+    BOOST_CHECK( common.CreateTag( "v1.0" ) );
+
+    std::vector<KIGIT_TAG_INFO> tags = common.GetTags();
+    BOOST_REQUIRE_EQUAL( tags.size(), 1u );
+    BOOST_CHECK_EQUAL( tags[0].name.ToStdString(), "v1.0" );
+
+    BOOST_CHECK( common.DeleteTag( "v1.0" ) );
+    BOOST_CHECK( common.GetTags().empty() );
+}
+
+
+// SetUserConfig writes user.name and user.email to the repository config.
+BOOST_AUTO_TEST_CASE( SetUserConfigPersists )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+
+    BOOST_CHECK( common.SetUserConfig( "New Name", "new@example.com" ) );
+
+    // Read it back with libgit2 directly. GIT_CONFIG_HANDLER needs a backend the harness lacks.
+    git_config* config = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config( &config, repo ), GIT_OK );
+    KIGIT::GitConfigPtr configPtr( config );
+
+    git_config_entry* nameEntry = nullptr;
+    BOOST_REQUIRE_EQUAL( git_config_get_entry( &nameEntry, config, "user.name" ), GIT_OK );
+    BOOST_CHECK_EQUAL( wxString::FromUTF8( nameEntry->value ).ToStdString(), "New Name" );
+    git_config_entry_free( nameEntry );
+
+    git_config_entry* emailEntry = nullptr;
+    BOOST_REQUIRE_EQUAL( git_config_get_entry( &emailEntry, config, "user.email" ), GIT_OK );
+    BOOST_CHECK_EQUAL( wxString::FromUTF8( emailEntry->value ).ToStdString(), "new@example.com" );
+    git_config_entry_free( emailEntry );
+}
+
+
 // StashDrop removes a stash from the list.
 BOOST_AUTO_TEST_CASE( StashDropRemovesStash )
 {
@@ -1050,6 +1130,25 @@ BOOST_AUTO_TEST_CASE( StashPopKeepsStashWhenItConflicts )
 }
 
 
+// CheckoutTag puts the working tree at the tagged commit with HEAD detached.
+BOOST_AUTO_TEST_CASE( CheckoutTagDetachesHead )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_REQUIRE( common.CreateTag( "v1.0" ) );
+
+    BOOST_CHECK( !common.IsHeadDetached() );
+    BOOST_CHECK( common.CheckoutTag( "v1.0" ) );
+    BOOST_CHECK_EQUAL( git_repository_head_detached( repo ), 1 );
+    BOOST_CHECK( common.IsHeadDetached() );
+}
+
+
 // The count is what deleting the branch would lose: its commits that HEAD does not reach.
 BOOST_AUTO_TEST_CASE( UnmergedCommitCountIsWhatDeletingWouldLose )
 {
@@ -1077,6 +1176,36 @@ BOOST_AUTO_TEST_CASE( UnmergedCommitCountIsWhatDeletingWouldLose )
     BOOST_CHECK_EQUAL( common.GetUnmergedCommitCount( "feature" ), 1u );
     BOOST_CHECK_EQUAL( common.GetUnmergedCommitCount( "main" ), 0u );
     BOOST_CHECK_EQUAL( common.GetUnmergedCommitCount( "no-such-branch" ), 0u );
+}
+
+
+// Remotes round-trip, and neither getter returns an embedded user:password.
+BOOST_AUTO_TEST_CASE( RemoteRoundTripAndUserinfoStripped )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_CHECK( common.GetRemotes().empty() );
+
+    BOOST_CHECK( common.AddRemote( "origin", "https://example.com/x.git" ) );
+
+    std::vector<std::pair<wxString, wxString>> remotes = common.GetRemotes();
+    BOOST_REQUIRE_EQUAL( remotes.size(), 1u );
+    BOOST_CHECK_EQUAL( remotes[0].first.ToStdString(), "origin" );
+    BOOST_CHECK_EQUAL( remotes[0].second.ToStdString(), "https://example.com/x.git" );
+
+    BOOST_CHECK( common.SetRemoteUrl( "origin", "https://u:secret@example.com/y.git" ) );
+
+    // The password must not surface through GetRemotes or GetRemoteUrl.
+    BOOST_CHECK_EQUAL( common.GetRemotes()[0].second.ToStdString(), "https://example.com/y.git" );
+    BOOST_CHECK_EQUAL( common.GetRemoteUrl().ToStdString(), "https://example.com/y.git" );
+
+    BOOST_CHECK( common.RemoveRemote( "origin" ) );
+    BOOST_CHECK( common.GetRemotes().empty() );
 }
 
 
@@ -1108,6 +1237,77 @@ BOOST_AUTO_TEST_CASE( GetAllBranchesKeepsBranchesSharingACommitTime )
 
     BOOST_CHECK_MESSAGE( haveAlpha && haveBeta,
                          "both same-commit-time branches must appear, got " + std::to_string( all.size() ) );
+}
+
+
+// The stored connection string must not carry the secret. A scp-style git@host is left intact.
+BOOST_AUTO_TEST_CASE( SetRemoteStripsUrlUserinfo )
+{
+    KIGIT_COMMON common( nullptr );
+
+    common.SetRemote( wxS( "https://user:secret@gitlab.com/x/y.git" ) );
+    BOOST_CHECK_EQUAL( common.GetRemote().ToStdString(), "https://gitlab.com/x/y.git" );
+
+    common.SetRemote( wxS( "git@gitlab.com:x/y.git" ) );
+    BOOST_CHECK_EQUAL( common.GetRemote().ToStdString(), "git@gitlab.com:x/y.git" );
+}
+
+
+// A password may contain '@'. Splitting on the first one would leave part of the secret.
+BOOST_AUTO_TEST_CASE( SetRemoteStripsUserinfoContainingAtSign )
+{
+    KIGIT_COMMON common( nullptr );
+
+    common.SetRemote( wxS( "https://alice:pa@ss@gitlab.com/x/y.git" ) );
+    BOOST_CHECK_EQUAL( common.GetRemote().ToStdString(), "https://gitlab.com/x/y.git" );
+
+    // The credentials must also be split at the right place.
+    BOOST_CHECK_EQUAL( common.GetUsername().ToStdString(), "alice" );
+    BOOST_CHECK_EQUAL( common.GetPassword().ToStdString(), "pa@ss" );
+
+    // An '@' that belongs to the path is not userinfo.
+    common.SetRemote( wxS( "https://gitlab.com/x/y@z.git" ) );
+    BOOST_CHECK_EQUAL( common.GetRemote().ToStdString(), "https://gitlab.com/x/y@z.git" );
+}
+
+
+// Called after editing a remote, so a later push authenticates against the new server.
+BOOST_AUTO_TEST_CASE( UpdateCurrentBranchInfoRefreshesChangedRemoteUrl )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_REQUIRE( common.AddRemote( "origin", "https://example.com/old.git" ) );
+
+    git_config* cfg = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config( &cfg, repo ), GIT_OK );
+    KIGIT::GitConfigPtr cfgPtr( cfg );
+    BOOST_REQUIRE_EQUAL( git_config_set_string( cfg, "branch.main.remote", "origin" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_config_set_string( cfg, "branch.main.merge", "refs/heads/main" ), GIT_OK );
+
+    common.UpdateCurrentBranchInfo();
+    BOOST_CHECK_EQUAL( common.GetRemote().ToStdString(), "https://example.com/old.git" );
+
+    BOOST_REQUIRE( common.SetRemoteUrl( "origin", "https://example.com/new.git" ) );
+    common.UpdateCurrentBranchInfo();
+    BOOST_CHECK_EQUAL( common.GetRemote().ToStdString(), "https://example.com/new.git" );
+}
+
+
+// An empty result means the end of the list, so an empty entry would hide every key behind it.
+BOOST_AUTO_TEST_CASE( SetSSHKeyIgnoresEmptyKey )
+{
+    KIGIT_COMMON common( nullptr );
+
+    common.SetSSHKey( wxS( "/home/qa/.ssh/id_ed25519" ) );
+    common.SetSSHKey( wxEmptyString );
+    common.ResetNextKey();
+
+    BOOST_CHECK_EQUAL( common.GetNextPublicKey().ToStdString(), "/home/qa/.ssh/id_ed25519" );
 }
 
 

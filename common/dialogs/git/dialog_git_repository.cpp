@@ -320,8 +320,11 @@ void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
 
     KIGIT_COMMON common( m_repository );
     common.SetRemote( fullURL );
-    common.SetPassword( m_txtPassword->GetValue() );
+
+    // SetUsername clears the fetched-secret flag, so it comes first. The other order tests the
+    // keychain's secret instead of the one just typed.
     common.SetUsername( m_txtUsername->GetValue() );
+    common.SetPassword( m_txtPassword->GetValue() );
     common.SetSSHKey( m_fpSSHKey->GetFileName().GetFullPath() );
     
     KIGIT_REPO_MIXIN repoMixin( &common );

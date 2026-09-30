@@ -51,8 +51,6 @@ public:
      */
     wxString GetWorkingDirectory();
 
-    void UpdateProgress( int aCurrent, int aTotal, const wxString& aMessage ) override;
-
 private:
     /**
      * Get a string value from git config

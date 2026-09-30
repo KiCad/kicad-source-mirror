@@ -637,6 +637,12 @@ bool KIGIT_COMMON::HasLocalCommits() const
 }
 
 
+bool KIGIT_COMMON::IsHeadDetached() const
+{
+    return m_repo && git_repository_head_detached( m_repo ) == 1;
+}
+
+
 size_t KIGIT_COMMON::GetUnmergedCommitCount( const wxString& aBranch ) const
 {
     if( !m_repo )
@@ -712,6 +718,108 @@ std::vector<KIGIT_STASH_INFO> KIGIT_COMMON::GetStashes() const
     return stashes;
 }
 
+
+std::vector<KIGIT_TAG_INFO> KIGIT_COMMON::GetTags() const
+{
+    std::vector<KIGIT_TAG_INFO> tags;
+
+    if( !m_repo )
+        return tags;
+
+    git_strarray tagNames = { nullptr, 0 };
+
+    if( git_tag_list( &tagNames, m_repo ) != GIT_OK )
+        return tags;
+
+    KIGIT::GitStrArrayPtr tagNamesPtr( &tagNames );
+
+    for( size_t i = 0; i < tagNames.count; ++i )
+    {
+        KIGIT_TAG_INFO info;
+        info.name = wxString::FromUTF8( tagNames.strings[i] );
+
+        // Peel to the commit so lightweight and annotated tags resolve the same way.
+        git_object* target = nullptr;
+        wxString    spec = info.name + wxT( "^{commit}" );
+
+        if( git_revparse_single( &target, m_repo, spec.utf8_string().c_str() ) == GIT_OK )
+        {
+            KIGIT::GitObjectPtr targetPtr( target );
+
+            char shortHash[13] = { 0 };
+            git_oid_tostr( shortHash, sizeof( shortHash ), git_object_id( target ) );
+            info.hash = wxString::FromUTF8( shortHash );
+
+            if( const char* summary = git_commit_summary( reinterpret_cast<git_commit*>( target ) ) )
+                info.summary = wxString::FromUTF8( summary );
+        }
+
+        tags.push_back( info );
+    }
+
+    return tags;
+}
+
+
+wxString KIGIT_COMMON::GetRemoteUrl() const
+{
+    if( !m_repo )
+        return wxEmptyString;
+
+    wxString name = GetRemotename();
+
+    if( name.IsEmpty() )
+        return wxEmptyString;
+
+    git_remote* remote = nullptr;
+
+    if( git_remote_lookup( &remote, m_repo, name.utf8_string().c_str() ) != GIT_OK )
+        return wxEmptyString;
+
+    KIGIT::GitRemotePtr remotePtr( remote );
+
+    const char* url = git_remote_url( remote );
+
+    if( !url )
+        return wxEmptyString;
+
+    // Keep any embedded user:password out of the string shown in the UI.
+    return stripUrlUserinfo( wxString::FromUTF8( url ) );
+}
+
+
+std::vector<std::pair<wxString, wxString>> KIGIT_COMMON::GetRemotes() const
+{
+    std::vector<std::pair<wxString, wxString>> remotes;
+
+    if( !m_repo )
+        return remotes;
+
+    git_strarray names = { nullptr, 0 };
+
+    if( git_remote_list( &names, m_repo ) != GIT_OK )
+        return remotes;
+
+    KIGIT::GitStrArrayPtr namesPtr( &names );
+
+    for( size_t i = 0; i < names.count; ++i )
+    {
+        wxString    name = wxString::FromUTF8( names.strings[i] );
+        git_remote* remote = nullptr;
+
+        if( git_remote_lookup( &remote, m_repo, names.strings[i] ) != GIT_OK )
+            continue;
+
+        KIGIT::GitRemotePtr remotePtr( remote );
+
+        const char* url = git_remote_url( remote );
+        remotes.emplace_back( name, url ? stripUrlUserinfo( wxString::FromUTF8( url ) ) : wxString() );
+    }
+
+    return remotes;
+}
+
+
 bool KIGIT_COMMON::CreateBranch( const wxString& aName )
 {
     if( !m_repo || aName.IsEmpty() )
@@ -751,6 +859,48 @@ bool KIGIT_COMMON::StashDrop( size_t aIndex )
 }
 
 
+bool KIGIT_COMMON::CreateTag( const wxString& aName )
+{
+    return GetGitBackend()->CreateTag( m_repo, aName );
+}
+
+
+bool KIGIT_COMMON::DeleteTag( const wxString& aName )
+{
+    return GetGitBackend()->DeleteTag( m_repo, aName );
+}
+
+
+bool KIGIT_COMMON::CheckoutTag( const wxString& aName )
+{
+    return GetGitBackend()->CheckoutTag( m_repo, aName );
+}
+
+
+bool KIGIT_COMMON::AddRemote( const wxString& aName, const wxString& aUrl )
+{
+    return GetGitBackend()->AddRemote( m_repo, aName, aUrl );
+}
+
+
+bool KIGIT_COMMON::SetRemoteUrl( const wxString& aName, const wxString& aUrl )
+{
+    return GetGitBackend()->SetRemoteUrl( m_repo, aName, aUrl );
+}
+
+
+bool KIGIT_COMMON::RemoveRemote( const wxString& aName )
+{
+    return GetGitBackend()->RemoveRemote( m_repo, aName );
+}
+
+
+bool KIGIT_COMMON::SetUserConfig( const wxString& aName, const wxString& aEmail )
+{
+    return GetGitBackend()->SetUserConfig( m_repo, aName, aEmail );
+}
+
+
 RestoreResult KIGIT_COMMON::RestoreVersion( const wxString& aCommitHash, const wxString& aProjectPrefix,
                                             wxString& aError )
 {
@@ -769,6 +919,7 @@ bool KIGIT_COMMON::IsPathInHead( const wxString& aPath )
     return GetGitBackend()->IsPathInHead( m_repo, aPath );
 }
 
+
 bool KIGIT_COMMON::IsOperationInProgress() const
 {
     return m_repo && git_repository_state( m_repo ) != GIT_REPOSITORY_STATE_NONE;
@@ -779,6 +930,7 @@ bool KIGIT_COMMON::AbandonOperation( wxString& aError )
 {
     return GetGitBackend()->AbandonOperation( m_repo, aError );
 }
+
 
 bool KIGIT_COMMON::GetMergeConflicts( const wxString& aStageDir, wxString& aHeadOid, wxString& aTheirsOid,
                                       std::vector<KIGIT_CONFLICT_SIDES>& aConflicts, wxString& aError )
@@ -1104,24 +1256,27 @@ void KIGIT_COMMON::UpdateCurrentBranchInfo()
     // We want to get the current branch's upstream url as well as the stored password
     // if one exists given the url and username.
 
-    wxString remote_name = GetRemotename();
+    wxString    remote_name = GetRemotename();
+    wxString    url;
     git_remote* remote = nullptr;
-
-    m_remote.clear();
-    m_password.clear();
-    m_secretFetched = false;
 
     if( git_remote_lookup( &remote, m_repo, remote_name.ToStdString().c_str() ) == GIT_OK )
     {
-        const char* url = git_remote_url( remote );
-
-        if( url )
-            m_remote = url;
+        if( const char* remoteUrl = git_remote_url( remote ) )
+            url = remoteUrl;
 
         git_remote_free( remote );
     }
 
-    updateConnectionType();
+    {
+        // The authentication callback reads these on a worker thread, so update them together.
+        std::lock_guard<std::mutex> lock( m_credentialsMutex );
+        m_remote = url;
+        m_password.clear();
+        m_secretFetched = false;
+        updateConnectionTypeUnlocked();
+    }
+
     updatePublicKeys();
 }
 
