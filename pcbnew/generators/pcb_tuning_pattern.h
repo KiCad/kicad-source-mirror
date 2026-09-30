@@ -451,6 +451,28 @@ public:
 
     const wxString& GetTuningInfo() const { return m_tuningInfo; }
 
+    /// True when CreateNew() took the targets from a DRC length, chain length or skew rule.
+    bool HasRuleTarget() const { return m_hasRuleTarget; }
+
+    /**
+     * Adopt the tuning tool's working settings.  A rule-derived target is kept unless the tool settings
+     * override custom rules.  Otherwise the tool's manual target applies.
+     */
+    void ApplyToolSettings( const PNS::MEANDER_SETTINGS& aToolSettings );
+
+    /// The per-mode tool defaults stored on the board.
+    static PNS::MEANDER_SETTINGS& DefaultSettings( BOARD_DESIGN_SETTINGS& aBds, LENGTH_TUNING_MODE aMode );
+
+    /**
+     * Remember the tool's settings as the per-mode default for the next activation.
+     *
+     * The override flag is never stored, so a rule always wins on a fresh activation.
+     *
+     * @param aIncludeTargets stores the manual targets too.  False when the targets came from a rule.
+     */
+    static void StoreDefaults( BOARD_DESIGN_SETTINGS& aBds, LENGTH_TUNING_MODE aMode,
+                               const PNS::MEANDER_SETTINGS& aSettings, bool aIncludeTargets );
+
     int  GetMinAmplitude() const { return m_settings.m_minAmplitude; }
     void SetMinAmplitude( int aValue )
     {
@@ -629,6 +651,8 @@ protected:
     PNS::MEANDER_PLACER_BASE::TUNING_STATUS m_tuningStatus;
 
     bool                  m_updateSideFromEnd;
+
+    bool                  m_hasRuleTarget = false;
 
     // Bridging cache (pad-to-pad gaps across 2-net series components in a chain)
 public:

@@ -496,12 +496,15 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
 
     PCB_TUNING_PATTERN* pattern = new PCB_TUNING_PATTERN( board, layer, aMode );
 
-    switch( aMode )
-    {
-    case SINGLE:         pattern->m_settings = bds.m_SingleTrackMeanderSettings; break;
-    case DIFF_PAIR:      pattern->m_settings = bds.m_DiffPairMeanderSettings;    break;
-    case DIFF_PAIR_SKEW: pattern->m_settings = bds.m_SkewMeanderSettings;        break;
-    }
+    pattern->m_settings = DefaultSettings( bds, aMode );
+
+    // Stored manual targets reach the pattern through ApplyToolSettings so a rule can beat them
+    const PNS::MEANDER_SETTINGS unconstrained;
+
+    pattern->m_settings.m_targetLength = unconstrained.m_targetLength;
+    pattern->m_settings.m_targetLengthDelay = unconstrained.m_targetLengthDelay;
+    pattern->m_settings.m_targetSkew = unconstrained.m_targetSkew;
+    pattern->m_settings.m_targetSkewDelay = unconstrained.m_targetSkewDelay;
 
     if( aMode == SINGLE || aMode == DIFF_PAIR )
     {
@@ -557,6 +560,8 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
                                                                         bridgingIU ) );
                 }
 
+                pattern->m_hasRuleTarget = true;
+
                 if( isTimeDomain )
                 {
                     pattern->m_settings.SetTargetSignalLengthDelay( adjustedTarget );
@@ -570,6 +575,7 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
 
         if( hasConstraint )
         {
+            pattern->m_hasRuleTarget = true;
             constraint = netConstraint.IsNull() ? chainConstraint : netConstraint;
 
             if( isTimeDomain )
@@ -608,6 +614,8 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
 
         if( !constraint.IsNull() )
         {
+            pattern->m_hasRuleTarget = true;
+
             if( constraint.GetOption( DRC_CONSTRAINT::OPTIONS::TIME_DOMAIN ) )
             {
                 pattern->m_settings.SetTargetSkew( MINOPTMAX<int>() );
@@ -628,6 +636,72 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
 
     return pattern;
 }
+
+
+PNS::MEANDER_SETTINGS& PCB_TUNING_PATTERN::DefaultSettings( BOARD_DESIGN_SETTINGS& aBds, LENGTH_TUNING_MODE aMode )
+{
+    switch( aMode )
+    {
+    case DIFF_PAIR:      return aBds.m_DiffPairMeanderSettings;
+    case DIFF_PAIR_SKEW: return aBds.m_SkewMeanderSettings;
+    case SINGLE:
+    default:             return aBds.m_SingleTrackMeanderSettings;
+    }
+}
+
+
+void PCB_TUNING_PATTERN::StoreDefaults( BOARD_DESIGN_SETTINGS& aBds, LENGTH_TUNING_MODE aMode,
+                                        const PNS::MEANDER_SETTINGS& aSettings, bool aIncludeTargets )
+{
+    PNS::MEANDER_SETTINGS& dest = DefaultSettings( aBds, aMode );
+
+    dest.m_minAmplitude = aSettings.m_minAmplitude;
+    dest.m_maxAmplitude = aSettings.m_maxAmplitude;
+    dest.m_spacing = aSettings.m_spacing;
+    dest.m_cornerStyle = aSettings.m_cornerStyle;
+    dest.m_cornerRadiusPercentage = aSettings.m_cornerRadiusPercentage;
+    dest.m_singleSided = aSettings.m_singleSided;
+
+    if( aIncludeTargets )
+    {
+        dest.m_targetLength = aSettings.m_targetLength;
+        dest.m_targetLengthDelay = aSettings.m_targetLengthDelay;
+        dest.m_targetSkew = aSettings.m_targetSkew;
+        dest.m_targetSkewDelay = aSettings.m_targetSkewDelay;
+    }
+}
+
+
+void PCB_TUNING_PATTERN::ApplyToolSettings( const PNS::MEANDER_SETTINGS& aToolSettings )
+{
+    const auto origTargetLength = m_settings.m_targetLength;
+    const auto origTargetLengthDelay = m_settings.m_targetLengthDelay;
+    const auto origTargetSignalLength = m_settings.m_targetSignalLength;
+    const auto origTargetSignalLengthDelay = m_settings.m_targetSignalLengthDelay;
+    const auto origTargetSkew = m_settings.m_targetSkew;
+    const auto origTargetSkewDelay = m_settings.m_targetSkewDelay;
+    const bool origIsTimeDomain = m_settings.m_isTimeDomain;
+
+    m_settings = aToolSettings;
+
+    if( !aToolSettings.m_overrideCustomRules )
+    {
+        m_settings.m_targetSignalLength = origTargetSignalLength;
+        m_settings.m_targetSignalLengthDelay = origTargetSignalLengthDelay;
+    }
+
+    if( m_hasRuleTarget && !aToolSettings.m_overrideCustomRules )
+    {
+        m_settings.m_targetLength = origTargetLength;
+        m_settings.m_targetLengthDelay = origTargetLengthDelay;
+        m_settings.m_targetSkew = origTargetSkew;
+        m_settings.m_targetSkewDelay = origTargetSkewDelay;
+    }
+
+    if( !aToolSettings.m_overrideCustomRules )
+        m_settings.m_isTimeDomain = origIsTimeDomain;
+}
+
 
 void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
@@ -2772,14 +2846,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
     PNS::ROUTER*                 router = generatorTool->Router();
     PNS::ROUTER_MODE             routerMode = aEvent.Parameter<PNS::ROUTER_MODE>();
     LENGTH_TUNING_MODE           mode = fromPNSMode( routerMode );
-    PNS::MEANDER_SETTINGS        meanderSettings;
-
-    switch( mode )
-    {
-    case LENGTH_TUNING_MODE::SINGLE: meanderSettings = bds.m_SingleTrackMeanderSettings; break;
-    case DIFF_PAIR:                  meanderSettings = bds.m_DiffPairMeanderSettings;    break;
-    case DIFF_PAIR_SKEW:             meanderSettings = bds.m_SkewMeanderSettings;        break;
-    }
+    PNS::MEANDER_SETTINGS        meanderSettings = PCB_TUNING_PATTERN::DefaultSettings( bds, mode );
 
     KIGFX::VIEW_CONTROLS*    controls = getViewControls();
     PCB_SELECTION_TOOL*      selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
@@ -2793,26 +2860,10 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
     m_preview.Clear();
     m_view->Add( &m_preview );
 
-    auto applyCommonSettings =
-            [&]( PCB_TUNING_PATTERN* aPattern )
-            {
-                const auto origTargetLength = aPattern->GetSettings().m_targetLength;
-                const auto origTargetLengthDelay = aPattern->GetSettings().m_targetLengthDelay;
-                const auto origTargetSignalLength = aPattern->GetSettings().m_targetSignalLength;
-                const auto origTargetSignalLengthDelay = aPattern->GetSettings().m_targetSignalLengthDelay;
-                const auto origTargetSkew = aPattern->GetSettings().m_targetSkew;
-                const bool origIsTimeDomain = aPattern->GetSettings().m_isTimeDomain;
-
-                aPattern->GetSettings() = meanderSettings;
-
-                // Always preserve DRC-evaluated targets
-                aPattern->GetSettings().m_targetLength = origTargetLength;
-                aPattern->GetSettings().m_targetLengthDelay = origTargetLengthDelay;
-                aPattern->GetSettings().m_targetSignalLength = origTargetSignalLength;
-                aPattern->GetSettings().m_targetSignalLengthDelay = origTargetSignalLengthDelay;
-                aPattern->GetSettings().m_targetSkew = origTargetSkew;
-                aPattern->GetSettings().m_isTimeDomain = origIsTimeDomain;
-            };
+    auto applyCommonSettings = [&]( PCB_TUNING_PATTERN* aPattern )
+    {
+        aPattern->ApplyToolSettings( meanderSettings );
+    };
 
     auto updateHoverStatus =
             [&]()
@@ -3019,6 +3070,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                     placer->SpacingStep( evt->IsAction( &PCB_ACTIONS::spacingIncrease ) ? 1 : -1 );
                     m_tuningPattern->SetSpacing( placer->MeanderSettings().m_spacing );
                     meanderSettings.m_spacing = placer->MeanderSettings().m_spacing;
+                    PCB_TUNING_PATTERN::StoreDefaults( bds, mode, meanderSettings, false );
 
                     updateTuningPattern();
                 }
@@ -3040,6 +3092,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                     placer->AmplitudeStep( evt->IsAction( &PCB_ACTIONS::amplIncrease ) ? 1 : -1 );
                     m_tuningPattern->SetMaxAmplitude( placer->MeanderSettings().m_maxAmplitude );
                     meanderSettings.m_maxAmplitude = placer->MeanderSettings().m_maxAmplitude;
+                    PCB_TUNING_PATTERN::StoreDefaults( bds, mode, meanderSettings, false );
 
                     updateTuningPattern();
                 }
@@ -3065,10 +3118,41 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 }
             }
 
-            DIALOG_TUNING_PATTERN_PROPERTIES dlg( m_frame, meanderSettings, routerMode, constraint );
+            const PNS::MEANDER_SETTINGS priorSettings = meanderSettings;
+            const bool                  ruleDriven = m_tuningPattern && m_tuningPattern->HasRuleTarget();
+
+            // Show the rule's target rather than a stored manual one unless the rules are overridden
+            PNS::MEANDER_SETTINGS dlgSettings = meanderSettings;
+
+            if( ruleDriven && !dlgSettings.m_overrideCustomRules )
+            {
+                const PNS::MEANDER_SETTINGS& ruleSettings = m_tuningPattern->GetSettings();
+
+                dlgSettings.m_targetLength = ruleSettings.m_targetLength;
+                dlgSettings.m_targetLengthDelay = ruleSettings.m_targetLengthDelay;
+                dlgSettings.m_targetSkew = ruleSettings.m_targetSkew;
+                dlgSettings.m_targetSkewDelay = ruleSettings.m_targetSkewDelay;
+            }
+
+            DIALOG_TUNING_PATTERN_PROPERTIES dlg( m_frame, dlgSettings, routerMode, constraint );
 
             if( dlg.ShowModal() == wxID_OK )
             {
+                meanderSettings = dlgSettings;
+
+                // The dialog echoes a rule's value into the targets unless the user overrode the rule
+                const bool manualTargets = !ruleDriven || meanderSettings.m_overrideCustomRules;
+
+                if( !manualTargets )
+                {
+                    meanderSettings.m_targetLength = priorSettings.m_targetLength;
+                    meanderSettings.m_targetLengthDelay = priorSettings.m_targetLengthDelay;
+                    meanderSettings.m_targetSkew = priorSettings.m_targetSkew;
+                    meanderSettings.m_targetSkewDelay = priorSettings.m_targetSkewDelay;
+                }
+
+                PCB_TUNING_PATTERN::StoreDefaults( bds, mode, meanderSettings, manualTargets );
+
                 if( m_tuningPattern )
                     applyCommonSettings( m_tuningPattern );
 
