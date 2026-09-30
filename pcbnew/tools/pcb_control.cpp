@@ -1705,20 +1705,17 @@ int PCB_CONTROL::ApplyDesignBlockLayout( const TOOL_EVENT& aEvent )
 
         // Give the appended block's auto-generated nets a private namespace so they cannot fuse by
         // name with a different part's net on the board, which would corrupt the topology match
-        // (issue 24767). Reverted with the temporary block, so the private nets are removed below.
+        // (issue 24767). Record the private nets with the temporary block so rollback removes them.
         std::vector<NETINFO_ITEM*> isolatedNets =
                 MULTICHANNEL_TOOL::IsolateDesignBlockAutoNets( brd, dbRA.m_components, dbRA.m_designBlockItems );
+
+        for( NETINFO_ITEM* net : isolatedNets )
+            tempCommit.Added( net );
 
         wxString repeatErr;
         int      result = mct->RepeatLayout( aEvent, dbRA, destRA, options, &sharedCommit, &repeatErr );
 
         tempCommit.Revert();
-
-        for( NETINFO_ITEM* net : isolatedNets )
-        {
-            brd->Remove( net );
-            delete net;
-        }
 
         clearFlags();
         delete dbRA.m_zone;
@@ -2124,6 +2121,11 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
     // the new items after loading
     BOARD_ITEM_SET existingItems = brd->GetItemSet();
 
+    std::set<NETINFO_ITEM*> existingNets;
+
+    for( NETINFO_ITEM* net : brd->GetNetInfo() )
+        existingNets.insert( net );
+
     for( BOARD_ITEM* item : existingItems )
         item->SetFlags( SKIP_STRUCT );
 
@@ -2205,6 +2207,14 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, const wxString& fileName, DESIGN_BLOCK
     brd->BuildListOfNets();
     brd->SynchronizeNetsAndNetClasses( true );
     brd->BuildConnectivity();
+
+    // GetItemSet omits net definitions. Record new nets before geometry so undo removes the
+    // geometry first and redo restores its nets first.
+    for( NETINFO_ITEM* net : brd->GetNetInfo() )
+    {
+        if( !existingNets.contains( net ) )
+            commit->Added( net );
+    }
 
     // New appended items need to inherit the current global ratsnest state.
     // Existing items are marked SKIP_STRUCT and are handled elsewhere.
