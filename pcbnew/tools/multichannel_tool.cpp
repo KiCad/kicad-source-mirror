@@ -719,7 +719,8 @@ RULE_AREA* MULTICHANNEL_TOOL::findRAByName( const wxString& aName )
 
 void MULTICHANNEL_TOOL::UpdatePickedItem( const EDA_ITEM* aItem )
 {
-    m_toolMgr->RunAction( PCB_ACTIONS::repeatLayout );
+    if( aItem )
+        m_toolMgr->RunAction( PCB_ACTIONS::repeatLayout );
 }
 
 
