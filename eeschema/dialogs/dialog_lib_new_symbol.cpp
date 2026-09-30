@@ -142,7 +142,8 @@ void DIALOG_LIB_NEW_SYMBOL::onParentSymbolSelect( wxCommandEvent& aEvent )
 
     if( m_textName->IsEmpty() || m_nameIsDefaulted )
     {
-        m_textName->SetValue( getDerivativeName( parent ) );
+        m_textName->SetValue( parent.IsEmpty() ? wxString( _( "Untitled" ) )
+                                               : getDerivativeName( parent ) );
         m_textName->SetInsertionPointEnd();
         m_nameIsDefaulted = true;
     }

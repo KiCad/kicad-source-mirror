@@ -122,6 +122,20 @@ API_HANDLER_SYMBOL::validateDocumentInternal( const DocumentSpecifier& aDocument
 
     LIB_ID loaded = context()->GetLoadedLibId();
 
+    // An empty library nickname addresses an unsaved new symbol
+    if( aDocument.lib_id().library_nickname().empty() )
+    {
+        if( loaded.GetLibItemName().empty() )
+        {
+            ApiResponseStatus e;
+            e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+            e.set_error_message( "no symbol is currently open" );
+            return tl::unexpected( e );
+        }
+
+        return true;
+    }
+
     if( !loaded.IsValid() )
     {
         ApiResponseStatus e;
@@ -226,9 +240,16 @@ API_HANDLER_SYMBOL::handleOpenLibraryItem( const HANDLER_CONTEXT<commands::OpenL
 
 HANDLER_RESULT<Empty> API_HANDLER_SYMBOL::handleSaveDocument( const HANDLER_CONTEXT<commands::SaveDocument>& aCtx )
 {
-    HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() );
+    if( context()->GetLoadedLibId().GetLibNickname().empty() )
+    {
+        ApiResponseStatus e;
+        e.set_status( ApiStatusCode::AS_BAD_REQUEST );
+        e.set_error_message( "the open symbol has no library yet; use SaveCopyOfDocument with a "
+                             "path to save it" );
+        return tl::unexpected( e );
+    }
 
-    if( !documentValidation )
+    if( HANDLER_RESULT<bool> documentValidation = validateDocument( aCtx.Request.document() ); !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
     if( std::optional<ApiResponseStatus> busy = checkForBusy() )
