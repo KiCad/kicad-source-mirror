@@ -33,6 +33,7 @@
 
 #include <pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.h>
 #include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <pcbnew/dialogs/dialog_export_2581.h>
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -44,12 +45,17 @@
 #include <pcb_textbox.h>
 #include <pcb_track.h>
 #include <base_units.h>
+#include <jobs/job_export_pcb_ipc2581.h>
+#include <reporter.h>
 
 #include <wx/dir.h>
 #include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/process.h>
 #include <wx/txtstrm.h>
+#include <wx/xml/xml.h>
+#include <wx/wfstream.h>
+#include <wx/zipstrm.h>
 
 #include <cmath>
 #include <fstream>
@@ -257,6 +263,31 @@ struct IPC2581_EXPORT_FIXTURE
 
 
 BOOST_FIXTURE_TEST_SUITE( Ipc2581Export, IPC2581_EXPORT_FIXTURE )
+
+
+BOOST_AUTO_TEST_CASE( CompressedExportKeepsXmlAtArchiveRoot )
+{
+    std::unique_ptr<BOARD>   board = LoadBoard( "issue14130.kicad_pcb" );
+    KI_TEST::SCOPED_TEMP_DIR dir( wxT( "ipc_archive" ) );
+    wxString                 output = wxString( ( dir.Path() / "ipc.zip" ).wstring() );
+    BOOST_REQUIRE( board );
+
+    JOB_EXPORT_PCB_IPC2581 job;
+    job.m_compress = true;
+    job.SetConfiguredOutputPath( output );
+
+    WX_STRING_REPORTER reporter;
+    BOOST_REQUIRE_MESSAGE( DIALOG_EXPORT_2581::GenerateFile( job, board.get(), nullptr, &reporter ),
+                           reporter.GetMessages().ToStdString() );
+
+    wxFFileInputStream input( output );
+    wxZipInputStream   archive( input );
+    std::unique_ptr<wxArchiveEntry> entry( archive.GetNextEntry() );
+    BOOST_REQUIRE( entry );
+    BOOST_CHECK( entry->GetName() == wxS( "ipc.xml" ) );
+    std::unique_ptr<wxArchiveEntry> next( archive.GetNextEntry() );
+    BOOST_CHECK( !next );
+}
 
 
 /**

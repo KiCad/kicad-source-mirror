@@ -53,6 +53,7 @@ struct ODB_NET_RECORD
 
 
 class BOARD;
+struct ODB_FORMAT;
 class ODB_NET_LIST
 {
 public:
@@ -60,7 +61,7 @@ public:
 
     virtual ~ODB_NET_LIST() {}
 
-    void Write( std::ostream& aStream );
+    void Write( std::ostream& aStream, const ODB_FORMAT& aFormat );
 
 private:
     BOARD*      m_board;
@@ -71,7 +72,8 @@ private:
     void InitViaNetPoints( BOARD* aBoard, std::map<size_t, std::vector<ODB_NET_RECORD>>& aRecords );
     /// Writes a list of records to the given output stream
     void WriteNetPointRecords( std::map<size_t, std::vector<ODB_NET_RECORD>>& aRecords,
-                               std::ostream&                                  aStream );
+                               std::ostream&                                  aStream,
+                               const ODB_FORMAT&                              aFormat );
 };
 
 #endif // _ODB_NETLIST_H_

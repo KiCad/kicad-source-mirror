@@ -509,6 +509,7 @@ message RunBoardJobExportIpc2581
     string distributor_part_number_column = 11;
     string distributor_column = 12;
     string bom_revision = 13;
+    optional bool check_zones = 14;
 }
 
 // Exports a board netlist in IPC-D-356 format.  Returns RunJobResponse.
@@ -541,6 +542,7 @@ message RunBoardJobExportODB
     kiapi.common.types.Units units = 4;
     optional int32 precision = 5;
     OdbCompression compression = 6;
+    optional bool check_zones = 7;
 }
 
 // Board statistics output format.

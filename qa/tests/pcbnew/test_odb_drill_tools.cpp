@@ -119,7 +119,6 @@ static void checkNonPlatedDrillTools( const char* aUnits, double aOutputScale )
     BOOST_REQUIRE_GT( expectedSizes.size(), 1 );
 
     KI_TEST::SCOPED_TEMP_DIR tempDir( wxT( "kicad_qa_odb_drill_tools" ) );
-    ODB_EXPORT_STATE_GUARD   stateGuard;
 
     BOOST_REQUIRE_NO_THROW( ExportOdb( *board, tempDir.Path(), aUnits ) );
 

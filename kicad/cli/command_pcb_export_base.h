@@ -23,6 +23,8 @@
 
 #include "command.h"
 
+class JOB_EXPORT_PCB_FAB;
+
 namespace CLI
 {
 #define ARG_BLACKANDWHITE "--black-and-white"
@@ -72,6 +74,8 @@ namespace CLI
 
 #define ARG_CHECK_ZONES "--check-zones"
 #define ARG_CHECK_ZONES_DESC "Check and refill zones if required"
+#define ARG_FAB_UNITS "--units"
+#define ARG_PRECISION "--precision"
 
 struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 {
@@ -81,6 +85,8 @@ struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 protected:
     void addLayerArg();
     void addCommonLayersArg();
+    void addFabExportArgs();
+    void applyFabExportArgs( JOB_EXPORT_PCB_FAB& aJob );
 };
 } // namespace CLI
 

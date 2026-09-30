@@ -9,6 +9,7 @@
 #include <tuple>
 #include <layer_ids.h>
 #include <padstack.h>
+#include <base_units.h>
 #include <wx/string.h>
 #include "pcb_shape.h"
 #include <wx/filename.h>
@@ -18,6 +19,17 @@ enum class ODB_POLARITY
 {
     POSITIVE,
     NEGATIVE
+};
+
+struct ODB_FORMAT
+{
+    // Internal units to output units for data values
+    double      m_scale = 1.0 / PCB_IU_PER_MM;
+    // Internal units to thousandths of output units for symbols and drills
+    // This scale is 1000x m_scale
+    double      m_symbolScale = 1.0 / PL_IU_PER_MM;
+    int         m_sigfig = 6;
+    std::string m_unitsStr = "MM";
 };
 
 enum class ODB_CONTEXT
@@ -167,15 +179,15 @@ wxString GenLegalEntityName( const wxString& aStr );
 
 void RemoveWhitespace( wxString& aStr );
 
-wxString Double2String( double aVal );
+wxString Double2String( const ODB_FORMAT& aFormat, double aVal );
 
 std::string Double2String( double aVal, int32_t aDigits );
 
-wxString Data2String( double aVal );
+wxString Data2String( const ODB_FORMAT& aFormat, double aVal );
 
-wxString SymDouble2String( double aVal );
+wxString SymDouble2String( const ODB_FORMAT& aFormat, double aVal );
 
-std::pair<wxString, wxString> AddXY( const VECTOR2I& aVec );
+std::pair<wxString, wxString> AddXY( const ODB_FORMAT& aFormat, const VECTOR2I& aVec );
 
 VECTOR2I GetShapePosition( const PCB_SHAPE& aShape );
 
@@ -430,7 +442,7 @@ public:
      * @param aDiameter is the hole diameter in internal units.
      * @param aType2 is the ODB++ drilling method (STANDARD, LASER, BLIND, ...).
      */
-    void AddDrillTool( const wxString& aType, int aDiameter,
+    void AddDrillTool( const ODB_FORMAT& aFormat, const wxString& aType, int aDiameter,
                         const wxString& aType2 = wxT( "STANDARD" ) );
 
     void GenerateFile( std::ostream& aStream );

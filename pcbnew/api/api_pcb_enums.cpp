@@ -2068,61 +2068,31 @@ JOB_EXPORT_PCB_POS::UNITS FromProtoEnum( kiapi::common::types::Units aValue )
 
 
 template<>
-kiapi::common::types::Units ToProtoEnum( JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS aValue )
+kiapi::common::types::Units ToProtoEnum( JOB_EXPORT_PCB_FAB::UNITS aValue )
 {
     switch( aValue )
     {
-    case JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::INCH: return kiapi::common::types::Units::U_INCH;
-    case JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM:   return kiapi::common::types::Units::U_MM;
+    case JOB_EXPORT_PCB_FAB::UNITS::INCH: return kiapi::common::types::Units::U_INCH;
+    case JOB_EXPORT_PCB_FAB::UNITS::MM:   return kiapi::common::types::Units::U_MM;
     default:
         wxCHECK_MSG( false, kiapi::common::types::Units::U_UNKNOWN,
-                     "Unhandled case in ToProtoEnum<JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS>" );
+                     "Unhandled case in ToProtoEnum<JOB_EXPORT_PCB_FAB::UNITS>" );
     }
 }
 
 
 template<>
-JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS FromProtoEnum( kiapi::common::types::Units aValue )
+JOB_EXPORT_PCB_FAB::UNITS FromProtoEnum( kiapi::common::types::Units aValue )
 {
     switch( aValue )
     {
-    case kiapi::common::types::Units::U_INCH: return JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::INCH;
-    case kiapi::common::types::Units::U_MM:   return JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM;
+    case kiapi::common::types::Units::U_INCH: return JOB_EXPORT_PCB_FAB::UNITS::INCH;
+    case kiapi::common::types::Units::U_MM:   return JOB_EXPORT_PCB_FAB::UNITS::MM;
     case kiapi::common::types::Units::U_UNKNOWN:
     case kiapi::common::types::Units::U_METERS:
     case kiapi::common::types::Units::U_TENTHS:
     default:
-        return JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM;
-    }
-}
-
-
-template<>
-kiapi::common::types::Units ToProtoEnum( JOB_EXPORT_PCB_ODB::ODB_UNITS aValue )
-{
-    switch( aValue )
-    {
-    case JOB_EXPORT_PCB_ODB::ODB_UNITS::INCH: return kiapi::common::types::Units::U_INCH;
-    case JOB_EXPORT_PCB_ODB::ODB_UNITS::MM:   return kiapi::common::types::Units::U_MM;
-    default:
-        wxCHECK_MSG( false, kiapi::common::types::Units::U_UNKNOWN,
-                     "Unhandled case in ToProtoEnum<JOB_EXPORT_PCB_ODB::ODB_UNITS>" );
-    }
-}
-
-
-template<>
-JOB_EXPORT_PCB_ODB::ODB_UNITS FromProtoEnum( kiapi::common::types::Units aValue )
-{
-    switch( aValue )
-    {
-    case kiapi::common::types::Units::U_INCH: return JOB_EXPORT_PCB_ODB::ODB_UNITS::INCH;
-    case kiapi::common::types::Units::U_MM:   return JOB_EXPORT_PCB_ODB::ODB_UNITS::MM;
-    case kiapi::common::types::Units::U_UNKNOWN:
-    case kiapi::common::types::Units::U_METERS:
-    case kiapi::common::types::Units::U_TENTHS:
-    default:
-        return JOB_EXPORT_PCB_ODB::ODB_UNITS::MM;
+        return JOB_EXPORT_PCB_FAB::UNITS::MM;
     }
 }
 

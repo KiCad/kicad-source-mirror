@@ -25,8 +25,6 @@
 
 namespace CLI
 {
-#define ARG_PRECISION "--precision"
-
 class PCB_EXPORT_ODB_COMMAND : public PCB_EXPORT_BASE_COMMAND
 {
 public:

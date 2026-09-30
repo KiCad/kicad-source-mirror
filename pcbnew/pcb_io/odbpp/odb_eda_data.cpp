@@ -25,6 +25,7 @@
 #include <hash_eda.h>
 #include <footprint.h>
 #include <pad.h>
+#include <exporters/fab_model/fab_pin.h>
 #include <string_utils.h>
 
 #include <netinfo.h>
@@ -163,39 +164,39 @@ size_t EDA_DATA::GetLyrIdx( const wxString& aLayer )
 }
 
 
-void OUTLINE_SQUARE::Write( std::ostream& ost ) const
+void OUTLINE_SQUARE::Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const
 {
-    ost << "SQ " << ODB::Data2String( m_center.x ) << " " << ODB::Data2String( m_center.y ) << " "
-        << ODB::Data2String( m_halfSide ) << std::endl;
+    ost << "SQ " << ODB::Data2String( aFormat, m_center.x ) << " " << ODB::Data2String( aFormat, m_center.y ) << " "
+        << ODB::Data2String( aFormat, m_halfSide ) << std::endl;
 }
 
 
-void OUTLINE_CIRCLE::Write( std::ostream& ost ) const
+void OUTLINE_CIRCLE::Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const
 {
-    ost << "CR " << ODB::Data2String( m_center.x ) << " " << ODB::Data2String( m_center.y ) << " "
-        << ODB::Data2String( m_radius ) << std::endl;
+    ost << "CR " << ODB::Data2String( aFormat, m_center.x ) << " " << ODB::Data2String( aFormat, m_center.y ) << " "
+        << ODB::Data2String( aFormat, m_radius ) << std::endl;
 }
 
 
-void OUTLINE_RECT::Write( std::ostream& ost ) const
+void OUTLINE_RECT::Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const
 {
-    ost << "RC " << ODB::Data2String( m_lower_left.x ) << " " << ODB::Data2String( m_lower_left.y )
-        << " " << ODB::Data2String( m_width ) << " " << ODB::Data2String( m_height ) << std::endl;
+    ost << "RC " << ODB::Data2String( aFormat, m_lower_left.x ) << " " << ODB::Data2String( aFormat, m_lower_left.y )
+        << " " << ODB::Data2String( aFormat, m_width ) << " " << ODB::Data2String( aFormat, m_height ) << std::endl;
 }
 
 
-void OUTLINE_CONTOUR::Write( std::ostream& ost ) const
+void OUTLINE_CONTOUR::Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const
 {
     if( !m_surfaces )
         return;
 
     ost << "CT" << std::endl;
-    m_surfaces->WriteData( ost );
+    m_surfaces->WriteData( ost, aFormat );
     ost << "CE" << std::endl;
 }
 
 
-void EDA_DATA::AddPackage( const FOOTPRINT* aFp )
+void EDA_DATA::AddPackage( const FOOTPRINT* aFp, const ODB_FORMAT& aFormat )
 {
     // ODBPP only need unique PACKAGE in PKG record in eda/data file.
     // the PKG index can repeat to be ref in CMP record in component file.
@@ -286,27 +287,26 @@ void EDA_DATA::AddPackage( const FOOTPRINT* aFp )
     for( size_t i = 0; i < fp->Pads().size(); ++i )
     {
         const PAD* pad = fp->Pads()[i];
-        pkg->AddPin( pad, i );
+        pkg->AddPin( pad, i, aFormat );
     }
 
     return;
 }
 
 
-void EDA_DATA::PACKAGE::AddPin( const PAD* aPad, size_t aPinNum )
+void EDA_DATA::PACKAGE::AddPin( const PAD* aPad, size_t aPinNum, const ODB_FORMAT& aFormat )
 {
-    wxString name = aPad->GetNumber();
+    FAB_PIN fabPin = MakeFabPin( *aPad, aPinNum );
+    wxString name = fabPin.m_name;
 
     // ODB is unhappy with whitespace in most places
     ODB::RemoveWhitespace( name );
 
-    // Pins are required to have names, so if our pad doesn't have a name, we need to
-    // generate one that is unique
-
-    if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
-        name = wxString::Format( "NPTH%zu", aPinNum );
-    else if( name.empty() )
+    // Whitespace-only pad numbers can become empty after filtering
+    if( name.IsEmpty() )
+    {
         name = wxString::Format( "PAD%zu", aPinNum );
+    }
 
     // // for SNT record, pad, net, pin
     std::shared_ptr<PIN> pin = std::make_shared<PIN>( m_pinsVec.size(), name );
@@ -314,7 +314,7 @@ void EDA_DATA::PACKAGE::AddPin( const PAD* aPad, size_t aPinNum )
 
     VECTOR2D relpos = aPad->GetFPRelativePosition();
 
-    pin->m_center = ODB::AddXY( relpos );
+    pin->m_center = ODB::AddXY( aFormat, relpos );
 
     if( aPad->HasHole() )
     {
@@ -325,29 +325,19 @@ void EDA_DATA::PACKAGE::AddPin( const PAD* aPad, size_t aPinNum )
         pin->type = PIN::TYPE::SURFACE;
     }
 
-    if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
-        pin->etype = PIN::ELECTRICAL_TYPE::MECHANICAL;
-    else if( aPad->IsOnCopperLayer() )
-        pin->etype = PIN::ELECTRICAL_TYPE::ELECTRICAL;
-    else
-        pin->etype = PIN::ELECTRICAL_TYPE::UNDEFINED;
+    switch( fabPin.m_electrical )
+    {
+    case FAB_ELECTRICAL::MECHANICAL: pin->etype = PIN::ELECTRICAL_TYPE::MECHANICAL; break;
+    case FAB_ELECTRICAL::ELECTRICAL: pin->etype = PIN::ELECTRICAL_TYPE::ELECTRICAL; break;
+    case FAB_ELECTRICAL::UNDEFINED:  pin->etype = PIN::ELECTRICAL_TYPE::UNDEFINED; break;
+    }
 
-
-    if( ( aPad->HasHole() && aPad->IsOnCopperLayer() ) || aPad->GetAttribute() == PAD_ATTRIB::PTH )
+    switch( fabPin.m_mount )
     {
-        pin->mtype = PIN::MOUNT_TYPE::THROUGH_HOLE;
-    }
-    else if( aPad->HasHole() && aPad->GetAttribute() == PAD_ATTRIB::NPTH )
-    {
-        pin->mtype = PIN::MOUNT_TYPE::HOLE;
-    }
-    else if( aPad->GetAttribute() == PAD_ATTRIB::SMD )
-    {
-        pin->mtype = PIN::MOUNT_TYPE::SMT;
-    }
-    else
-    {
-        pin->mtype = PIN::MOUNT_TYPE::UNDEFINED;
+    case FAB_MOUNT::THT:   pin->mtype = PIN::MOUNT_TYPE::THROUGH_HOLE; break;
+    case FAB_MOUNT::HOLE:  pin->mtype = PIN::MOUNT_TYPE::HOLE; break;
+    case FAB_MOUNT::SMT:   pin->mtype = PIN::MOUNT_TYPE::SMT; break;
+    case FAB_MOUNT::OTHER: pin->mtype = PIN::MOUNT_TYPE::UNDEFINED; break;
     }
 
     // AddPackage() unflips the footprint, so this pin record always describes the component-side
@@ -365,7 +355,7 @@ void EDA_DATA::PACKAGE::AddPin( const PAD* aPad, size_t aPinNum )
 }
 
 
-void EDA_DATA::PIN::Write( std::ostream& ost ) const
+void EDA_DATA::PIN::Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const
 {
     static const std::map<TYPE, std::string> type_map = { { TYPE::SURFACE, "S" },
                                                           { TYPE::THROUGH_HOLE, "T" },
@@ -387,16 +377,16 @@ void EDA_DATA::PIN::Write( std::ostream& ost ) const
 
     for( const auto& outline : m_pinOutlines )
     {
-        outline->Write( ost );
+        outline->Write( ost, aFormat );
     }
 }
 
 
-void EDA_DATA::PACKAGE::Write( std::ostream& ost ) const
+void EDA_DATA::PACKAGE::Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const
 {
-    ost << "PKG " << m_name << " " << ODB::Data2String( m_pitch ) << " "
-        << ODB::Data2String( m_xmin ) << " " << ODB::Data2String( m_ymin ) << " "
-        << ODB::Data2String( m_xmax ) << " " << ODB::Data2String( m_ymax );
+    ost << "PKG " << m_name << " " << ODB::Data2String( aFormat, m_pitch ) << " "
+        << ODB::Data2String( aFormat, m_xmin ) << " " << ODB::Data2String( aFormat, m_ymin ) << " "
+        << ODB::Data2String( aFormat, m_xmax ) << " " << ODB::Data2String( aFormat, m_ymax );
 
     WriteAttributes( ost );
 
@@ -404,21 +394,21 @@ void EDA_DATA::PACKAGE::Write( std::ostream& ost ) const
 
     for( const auto& outline : m_pkgOutlines )
     {
-        outline->Write( ost );
+        outline->Write( ost, aFormat );
     }
 
     for( const auto& pin : m_pinsVec )
     {
-        pin->Write( ost );
+        pin->Write( ost, aFormat );
     }
 }
 
 
-void EDA_DATA::Write( std::ostream& ost ) const
+void EDA_DATA::Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const
 {
     ost << "# " << wxDateTime::Now().FormatISOCombined() << std::endl;
     ost << "HDR KiCad EDA " << TO_UTF8( GetBuildVersion() ) << std::endl;
-    ost << "UNITS=" << PCB_IO_ODBPP::m_unitsStr << std::endl;
+    ost << "UNITS=" << aFormat.m_unitsStr << std::endl;
     ost << "LYR";
 
     for( const auto& layer : layers )
@@ -441,7 +431,7 @@ void EDA_DATA::Write( std::ostream& ost ) const
     {
         ost << "# PKG " << i << std::endl;
         i++;
-        pkg->Write( ost );
+        pkg->Write( ost, aFormat );
         ost << "#" << std::endl;
     }
 }

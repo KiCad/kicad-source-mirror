@@ -17,23 +17,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef QA_PCBNEW_ODBPP_TEST_UTILS_H
-#define QA_PCBNEW_ODBPP_TEST_UTILS_H
+#pragma once
 
-#include <filesystem>
-#include <string>
+#include <board_item.h>
+#include <footprint.h>
 
-class BOARD;
-class REPORTER;
 
-/**
- * Export a board to an ODB++ product model tree rooted at aDir and return aDir.
- *
- * aDir must be a directory the caller does not share with any other export, since the exporter
- * does not clear stale files from a previous run out of a reused directory.
- */
-std::filesystem::path ExportOdb( const BOARD& aBoard, const std::filesystem::path& aDir,
-                                 const std::string& aUnits = "mm", const std::string& aSigfig = "6",
-                                 REPORTER* aReporter = nullptr );
+/// Order by footprint UUID so feature output is independent of allocation order
+inline bool FabItemLess( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond )
+{
+    const FOOTPRINT* firstParent = aFirst->GetParentFootprint();
+    const FOOTPRINT* secondParent = aSecond->GetParentFootprint();
 
-#endif // QA_PCBNEW_ODBPP_TEST_UTILS_H
+    if( firstParent && secondParent )
+    {
+        if( firstParent->m_Uuid != secondParent->m_Uuid )
+            return firstParent->m_Uuid < secondParent->m_Uuid;
+    }
+    else if( firstParent != secondParent )
+    {
+        return firstParent == nullptr;
+    }
+
+    return aFirst->Type() < aSecond->Type();
+}

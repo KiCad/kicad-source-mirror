@@ -21,22 +21,23 @@
 #include "odb_util.h"
 
 #include <thread_pool.h>
+#include <gestfich.h>
+
+#include <algorithm>
+#include <array>
+#include <filesystem>
 
 #include <wx/dir.h>
-#include <wx/wfstream.h>
-#include <wx/zipstrm.h>
-#include <wx/tarstrm.h>
-#include <wx/zstream.h>
 
 #include <board.h>
 #include <reporter.h>
 #include <paths.h>
+#include <pcb_edit_frame.h>
 #include <progress_reporter.h>
 #include <project.h>
 #include <io/io_mgr.h>
 #include <jobs/job_export_pcb_odb.h>
 #include <pcb_io/pcb_io_mgr.h>
-#include <kiplatform/io.h>
 #include <locale_io.h>
 
 
@@ -45,9 +46,9 @@ namespace
 class TEMP_ODB_DIRECTORY
 {
 public:
-    bool Create()
+    bool Create( const wxString& aPrefix = wxS( "kicad-odb" ) )
     {
-        m_path = wxFileName::CreateTempFileName( wxS( "kicad-odb" ) );
+        m_path = wxFileName::CreateTempFileName( aPrefix );
 
         if( m_path.IsEmpty() || !wxRemoveFile( m_path ) )
             return false;
@@ -70,151 +71,239 @@ private:
 };
 
 
-bool AddArchiveContents( wxArchiveOutputStream& aArchive, const wxString& aSourceDir, const wxString& aParent )
+std::filesystem::path toFsPath( const wxString& aPath )
 {
-    wxDir dir( aSourceDir );
+#ifdef __WXMSW__
+    return std::filesystem::path( std::wstring( aPath.wc_str() ) );
+#else
+    return std::filesystem::path( aPath.utf8_string() );
+#endif
+}
 
-    if( !dir.IsOpened() )
+
+wxString fromFsPath( const std::filesystem::path& aPath )
+{
+#ifdef __WXMSW__
+    return wxString( aPath.wstring() );
+#else
+    std::u8string utf8 = aPath.u8string();
+    return wxString::FromUTF8( reinterpret_cast<const char*>( utf8.data() ), utf8.size() );
+#endif
+}
+
+
+bool containsBoardFile( const std::filesystem::path& aTarget, const wxString& aBoardFile )
+{
+    namespace fs = std::filesystem;
+
+    if( aBoardFile.IsEmpty() )
         return false;
 
-    wxString name;
-    bool     cont = dir.GetFirst( &name, wxEmptyString, wxDIR_DEFAULT );
+    fs::path        file = toFsPath( aBoardFile );
+    std::error_code ec;
 
-    while( cont )
+    if( !fs::exists( file, ec ) )
+        return bool( ec );
+
+    for( fs::path dir = file.parent_path(); !dir.empty(); dir = dir.parent_path() )
     {
-        wxFileName source( aSourceDir, name );
-        wxString   relative = aParent + wxS( "/" ) + name;
+        if( fs::equivalent( aTarget, dir, ec ) )
+            return true;
 
-        if( wxDirExists( source.GetFullPath() ) )
+        if( ec )
+            return true;
+
+        if( dir == dir.root_path() )
+            break;
+    }
+
+    return false;
+}
+
+
+bool canReplaceOdbDirectory( const wxString& aTarget, const wxString& aBoardFile,
+                             const wxString& aJobFile, wxString& aError )
+{
+    namespace fs = std::filesystem;
+    fs::path        target = toFsPath( aTarget );
+    std::error_code ec;
+
+    if( !fs::exists( target, ec ) )
+    {
+        if( ec )
+            aError = wxString::FromUTF8( ec.message() );
+
+        return !ec;
+    }
+
+    if( !fs::is_directory( target, ec ) )
+    {
+        aError = ec ? wxString::FromUTF8( ec.message() ) : _( "Output path is not a directory" );
+        return false;
+    }
+
+    bool empty = fs::is_empty( target, ec );
+
+    if( ec )
+    {
+        aError = wxString::FromUTF8( ec.message() );
+        return false;
+    }
+
+    if( empty )
+        return true;
+
+    if( !fs::is_regular_file( target / "matrix" / "matrix", ec ) )
+    {
+        aError = _( "Output directory is not an ODB++ product" );
+
+        if( ec )
+            aError += wxS( "\n" ) + wxString::FromUTF8( ec.message() );
+
+        return false;
+    }
+
+    static const std::array<fs::path, 9> allowed = {
+        fs::path( "ext" ), fs::path( "fonts" ), fs::path( "input" ), fs::path( "matrix" ), fs::path( "misc" ),
+        fs::path( "steps" ), fs::path( "symbols" ), fs::path( "user" ), fs::path( "wheels" )
+    };
+
+    fs::directory_iterator child( target, ec );
+    fs::directory_iterator end;
+
+    while( !ec && child != end )
+    {
+        fs::path name = child->path().filename();
+
+        if( std::find( allowed.begin(), allowed.end(), name ) == allowed.end() )
         {
-            if( !aArchive.PutNextDirEntry( relative )
-                || !AddArchiveContents( aArchive, source.GetFullPath(), relative ) )
-                return false;
+            aError = wxString::Format( _( "Output directory contains unrelated entry '%s'" ), fromFsPath( name ) );
+            return false;
         }
-        else
+
+        child.increment( ec );
+    }
+
+    if( ec )
+    {
+        aError = wxString::FromUTF8( ec.message() );
+        return false;
+    }
+
+    if( containsBoardFile( target, aBoardFile ) || containsBoardFile( target, aJobFile ) )
+    {
+        aError = _( "Output directory contains the source board" );
+        return false;
+    }
+
+    fs::recursive_directory_iterator nested( target, ec );
+    fs::recursive_directory_iterator nestedEnd;
+
+    while( !ec && nested != nestedEnd )
+    {
+        bool regular = nested->is_regular_file( ec );
+
+        if( ec )
         {
-            wxFFileInputStream input( source.GetFullPath() );
-            wxFileOffset       expectedLength = input.IsOk() ? input.GetLength() : wxInvalidOffset;
-
-            if( !input.IsOk() || !aArchive.PutNextEntry( relative, wxDateTime::Now(), expectedLength ) )
-                return false;
-
-            input.Read( aArchive );
-
-            if( input.TellI() != expectedLength || !aArchive.IsOk() || aArchive.GetLastError() != wxSTREAM_NO_ERROR
-                || !aArchive.CloseEntry() )
-                return false;
+            aError = wxString::FromUTF8( ec.message() );
+            return false;
         }
 
-        cont = dir.GetNext( &name );
+        if( regular )
+        {
+            wxString extension = fromFsPath( nested->path().extension() ).Lower();
+
+            if( extension.StartsWith( wxS( ".kicad_" ) ) || extension == wxS( ".pro" )
+                || extension == wxS( ".sch" ) || extension == wxS( ".pcb" ) )
+            {
+                aError = wxString::Format( _( "Output directory contains project file '%s'" ),
+                                            fromFsPath( nested->path().filename() ) );
+                return false;
+            }
+        }
+
+        nested.increment( ec );
+    }
+
+    if( ec )
+        aError = wxString::FromUTF8( ec.message() );
+
+    return !ec;
+}
+
+
+bool CommitOdbDirectory( const wxString& aSource, const wxString& aTarget,
+                         const wxString& aBoardFile, const wxString& aJobFile,
+                         REPORTER* aReporter, wxString& aError )
+{
+    namespace fs = std::filesystem;
+    fs::path        source = toFsPath( aSource );
+    fs::path        target = toFsPath( aTarget );
+    std::error_code ec;
+
+    if( !canReplaceOdbDirectory( aTarget, aBoardFile, aJobFile, aError ) )
+        return false;
+
+    if( !fs::exists( target, ec ) )
+    {
+        if( ec )
+        {
+            aError = wxString::FromUTF8( ec.message() );
+            return false;
+        }
+
+        fs::rename( source, target, ec );
+
+        if( ec )
+            aError = wxString::FromUTF8( ec.message() );
+
+        return !ec;
+    }
+
+    wxString backup = wxFileName::CreateTempFileName( aTarget + wxS( ".kicad-backup-" ) );
+
+    if( backup.IsEmpty() || !wxRemoveFile( backup ) )
+    {
+        aError = _( "Cannot create temporary backup path" );
+        return false;
+    }
+
+    fs::path backupPath = toFsPath( backup );
+    fs::rename( target, backupPath, ec );
+
+    if( ec )
+    {
+        aError = wxString::FromUTF8( ec.message() );
+        return false;
+    }
+
+    fs::rename( source, target, ec );
+
+    if( ec )
+    {
+        aError = wxString::FromUTF8( ec.message() );
+        std::error_code restoreError;
+        fs::rename( backupPath, target, restoreError );
+
+        if( restoreError )
+            aError += wxS( "\n" ) + wxString::FromUTF8( restoreError.message() );
+
+        return false;
+    }
+
+    fs::remove_all( backupPath, ec );
+
+    if( ec && aReporter )
+    {
+        aReporter->Report( wxString::Format( _( "Cannot remove previous ODB++ directory '%s': %s" ),
+                                             backup, wxString::FromUTF8( ec.message() ) ), RPT_SEVERITY_WARNING );
     }
 
     return true;
 }
+
+
 } // namespace
-
-
-bool WriteOdbArchive( const wxString& aSourceDir, wxOutputStream& aOut, bool aTgz, const wxString& aTopDir )
-{
-    if( !aOut.IsOk() || !wxDirExists( aSourceDir ) || aTopDir.IsEmpty() )
-        return false;
-
-    auto fill = [&]( wxArchiveOutputStream& aArchive )
-    {
-        bool ok = aArchive.PutNextDirEntry( aTopDir ) && AddArchiveContents( aArchive, aSourceDir, aTopDir );
-        bool archiveOk = aArchive.IsOk() && aArchive.GetLastError() == wxSTREAM_NO_ERROR;
-        bool archiveClosed = aArchive.Close();
-        return ok && archiveOk && archiveClosed;
-    };
-
-    if( aTgz )
-    {
-        wxZlibOutputStream gzip( aOut, -1, wxZLIB_GZIP );
-        wxTarOutputStream  archive( gzip );
-        bool               filled = fill( archive );
-        bool               gzipClosed = gzip.Close();
-        return filled && gzipClosed && aOut.IsOk();
-    }
-
-    wxZipOutputStream archive( aOut );
-    return fill( archive ) && aOut.IsOk();
-}
-
-
-bool WriteOdbArchiveFile( const wxString& aSourceDir, const wxString& aTarget, bool aTgz, const wxString& aTopDir,
-                          const ODB_STREAM_FACTORY& aOpen, wxString* aError )
-{
-    wxString tempPath;
-    wxString error;
-    FILE*    fp = KIPLATFORM::IO::OpenUniqueSiblingTempFile( aTarget, wxS( "wb" ), &tempPath, &error );
-
-    if( !fp )
-    {
-        if( aError )
-            *aError = error.IsEmpty() ? _( "Cannot create temporary archive file" ) : error;
-
-        return false;
-    }
-
-    // Use a large I/O buffer for cloud-synced folders
-    // See KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE
-    setvbuf( fp, nullptr, _IOFBF, KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE );
-
-    bool ok = false;
-
-    {
-        wxFFile file( fp );
-
-        try
-        {
-            std::unique_ptr<wxOutputStream> output = aOpen( file );
-
-            if( output )
-                ok = WriteOdbArchive( aSourceDir, *output, aTgz, aTopDir );
-        }
-        catch( const std::exception& exception )
-        {
-            ok = false;
-            error = wxString::FromUTF8( exception.what() );
-        }
-
-        bool  writeOk = ok;
-        bool  streamError = file.Error();
-        FILE* raw = file.Detach();
-        bool  flushed = KIPLATFORM::IO::FlushToDisk( raw );
-        bool  closed = fclose( raw ) == 0;
-        ok = writeOk && !streamError && flushed && closed;
-
-        if( !writeOk || streamError )
-        {
-            if( error.IsEmpty() )
-                error = _( "Write error" );
-        }
-        else if( !flushed || !closed )
-        {
-            error = _( "Cannot flush or close temporary file" );
-        }
-    }
-
-    if( ok )
-    {
-        ok = KIPLATFORM::IO::CommitTempFile( tempPath, aTarget, &error );
-
-        if( !ok && error.IsEmpty() )
-            error = _( "Cannot replace archive" );
-    }
-
-    if( !ok && wxFileExists( tempPath ) )
-    {
-        if( !wxRemoveFile( tempPath ) )
-            error += _( "\nCannot remove temporary archive file" );
-    }
-
-    if( aError )
-        *aError = error;
-
-    return ok;
-}
 
 
 wxFileName ResolveOdbOutputPath( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard )
@@ -223,6 +312,16 @@ wxFileName ResolveOdbOutputPath( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard )
 
     if( outputPath.IsEmpty() )
         outputPath = wxFileName( aJob.m_filename ).GetPath();
+
+    bool compressed = aJob.m_compressionMode != JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE;
+
+    if( !compressed && !outputPath.IsEmpty() )
+    {
+        std::filesystem::path directory = toFsPath( outputPath );
+
+        if( directory.filename().empty() && directory != directory.root_path() )
+            outputPath = fromFsPath( directory.parent_path() );
+    }
 
     wxFileName outputFn( outputPath );
     // Write through symlinks, don't replace them
@@ -252,7 +351,7 @@ bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS
     bool       compressed = aJob.m_compressionMode != JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE;
     wxString   msg;
 
-    if( !PATHS::EnsurePathExists( outputFn.GetFullPath(), compressed ) )
+    if( !PATHS::EnsurePathExists( outputFn.GetFullPath(), true ) )
     {
         msg.Printf( _( "Cannot create output directory '%s'." ), outputFn.GetFullPath() );
 
@@ -286,25 +385,38 @@ bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS
             return false;
         }
     }
-
-    TEMP_ODB_DIRECTORY temporary;
-    wxString           treePath = outputFn.GetFullPath();
-
-    if( compressed )
+    else
     {
-        if( !temporary.Create() )
+        wxString replaceError;
+
+        if( !canReplaceOdbDirectory( outputFn.GetFullPath(), aBoard->GetFileName(), aJob.m_filename, replaceError ) )
         {
             if( aReporter )
-                aReporter->Report( _( "Cannot create temporary output directory." ), RPT_SEVERITY_ERROR );
+            {
+                aReporter->Report( wxString::Format( _( "Cannot use ODB++ directory '%s'.\n%s" ),
+                                                     outputFn.GetFullPath(), replaceError ), RPT_SEVERITY_ERROR );
+            }
 
             return false;
         }
-
-        treePath = temporary.Path();
     }
 
+    TEMP_ODB_DIRECTORY temporary;
+    wxString           prefix = compressed ? wxString( wxS( "kicad-odb" ) )
+                                           : outputFn.GetFullPath() + wxS( ".kicad-temp-" );
+
+    if( !temporary.Create( prefix ) )
+    {
+        if( aReporter )
+            aReporter->Report( _( "Cannot create temporary output directory." ), RPT_SEVERITY_ERROR );
+
+        return false;
+    }
+
+    wxString treePath = temporary.Path();
+
     std::map<std::string, UTF8> props;
-    props["units"] = aJob.m_units == JOB_EXPORT_PCB_ODB::ODB_UNITS::MM ? "mm" : "inch";
+    props["units"] = aJob.m_units == JOB_EXPORT_PCB_FAB::UNITS::MM ? "mm" : "inch";
     props["sigfig"] = wxString::Format( "%d", aJob.m_precision );
 
     auto saveFile = [&]() -> bool
@@ -368,22 +480,33 @@ bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS
         if( product.IsEmpty() )
             product = wxS( "odb" );
 
-        ODB_STREAM_FACTORY open = []( wxFFile& aFile )
-        {
-            return std::make_unique<wxFFileOutputStream>( aFile );
-        };
-
-        bool tgz = aJob.m_compressionMode == JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ;
-
+        ARCHIVE_FORMAT format = aJob.m_compressionMode == JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ
+                                ? ARCHIVE_FORMAT::TGZ : ARCHIVE_FORMAT::ZIP;
         wxString archiveError;
 
-        if( !WriteOdbArchiveFile( treePath, outputFn.GetFullPath(), tgz, product, open, &archiveError ) )
+        if( !WriteDirectoryArchive( treePath, outputFn.GetFullPath(), format, product, &archiveError ) )
         {
             if( aReporter )
             {
                 aReporter->Report( wxString::Format( _( "Cannot write ODB++ archive '%s'.\n%s" ),
                                                      outputFn.GetFullPath(), archiveError ),
                                    RPT_SEVERITY_ERROR );
+            }
+
+            return false;
+        }
+    }
+    else
+    {
+        wxString commitError;
+
+        if( !CommitOdbDirectory( treePath, outputFn.GetFullPath(), aBoard->GetFileName(),
+                                 aJob.m_filename, aReporter, commitError ) )
+        {
+            if( aReporter )
+            {
+                aReporter->Report( wxString::Format( _( "Cannot replace ODB++ directory '%s'.\n%s" ),
+                                                     outputFn.GetFullPath(), commitError ), RPT_SEVERITY_ERROR );
             }
 
             return false;

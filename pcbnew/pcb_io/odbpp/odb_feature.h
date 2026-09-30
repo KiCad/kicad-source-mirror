@@ -235,7 +235,7 @@ class ODB_FEATURE : public ATTR_RECORD_WRITER
 public:
     // template <typename T> using check_type = attribute::is_feature<T>;
     ODB_FEATURE( uint32_t aIndex ) : m_index( aIndex ) {}
-    virtual void WriteFeatures( std::ostream& ost );
+    virtual void WriteFeatures( std::ostream& ost, const ODB_FORMAT& aFormat );
 
     virtual ~ODB_FEATURE() = default;
 
@@ -250,7 +250,7 @@ protected:
 
     virtual FEATURE_TYPE GetFeatureType() = 0;
 
-    virtual void WriteRecordContent( std::ostream& ost ) = 0;
+    virtual void WriteRecordContent( std::ostream& ost, const ODB_FORMAT& aFormat ) = 0;
 
     const uint32_t m_index;
 };
@@ -269,7 +269,7 @@ public:
     inline virtual FEATURE_TYPE GetFeatureType() override { return FEATURE_TYPE::LINE; }
 
 protected:
-    virtual void WriteRecordContent( std::ostream& ost ) override;
+    virtual void WriteRecordContent( std::ostream& ost, const ODB_FORMAT& aFormat ) override;
 
 private:
     std::pair<wxString, wxString> m_start;
@@ -297,7 +297,7 @@ public:
     {}
 
 protected:
-    virtual void WriteRecordContent( std::ostream& ost ) override;
+    virtual void WriteRecordContent( std::ostream& ost, const ODB_FORMAT& aFormat ) override;
 
 private:
     std::pair<wxString, wxString> m_start;
@@ -323,7 +323,7 @@ public:
     inline virtual FEATURE_TYPE GetFeatureType() override { return FEATURE_TYPE::PAD; }
 
 protected:
-    virtual void WriteRecordContent( std::ostream& ost ) override;
+    virtual void WriteRecordContent( std::ostream& ost, const ODB_FORMAT& aFormat ) override;
 
 private:
     std::pair<wxString, wxString> m_center;
@@ -346,7 +346,7 @@ public:
     std::unique_ptr<ODB_SURFACE_DATA> m_surfaces;
 
 protected:
-    virtual void WriteRecordContent( std::ostream& ost ) override;
+    virtual void WriteRecordContent( std::ostream& ost, const ODB_FORMAT& aFormat ) override;
 };
 
 
@@ -384,7 +384,7 @@ public:
     };
 
     void AddPolygonHoles( const SHAPE_POLY_SET::POLYGON& aPolygon );
-    void WriteData( std::ostream& ost ) const;
+    void WriteData( std::ostream& ost, const ODB_FORMAT& aFormat ) const;
 
     std::vector<std::vector<SURFACE_LINE>> m_polygons;
 

@@ -20,6 +20,7 @@
 
 #include <string>
 #include <algorithm>
+#include <filesystem>
 #include <locale>
 #include "odb_util.h"
 #include <string_utils.h>
@@ -193,13 +194,9 @@ void RemoveWhitespace( wxString& aStr )
 }
 
 
-wxString Double2String( double aVal )
+wxString Double2String( const ODB_FORMAT& aFormat, double aVal )
 {
-    // We don't want to output -0.0 as this value is just 0 for fabs
-    if( aVal == -0.0 )
-        aVal = 0.0;
-
-    return FormatTrimmedDecimal( aVal, PCB_IO_ODBPP::m_sigfig );
+    return FormatTrimmedDecimal( aVal, aFormat.m_sigfig );
 }
 
 
@@ -215,26 +212,23 @@ std::string Double2String( double aVal, int32_t aDigits )
 }
 
 
-wxString SymDouble2String( double aVal )
+wxString SymDouble2String( const ODB_FORMAT& aFormat, double aVal )
 {
-    return Double2String( PCB_IO_ODBPP::m_symbolScale * aVal );
+    return Double2String( aFormat, aFormat.m_symbolScale * aVal );
 }
 
 
-wxString Data2String( double aVal )
+wxString Data2String( const ODB_FORMAT& aFormat, double aVal )
 {
-    return Double2String( PCB_IO_ODBPP::m_scale * aVal );
+    return Double2String( aFormat, aFormat.m_scale * aVal );
 }
 
 
-std::pair<wxString, wxString> AddXY( const VECTOR2I& aVec )
+std::pair<wxString, wxString> AddXY( const ODB_FORMAT& aFormat, const VECTOR2I& aVec )
 {
     // TODO: to deal with user preference x y increment setting
-    std::pair<wxString, wxString> xy =
-            std::pair<wxString, wxString>( Double2String( PCB_IO_ODBPP::m_scale * aVec.x ),
-                                           Double2String( -PCB_IO_ODBPP::m_scale * aVec.y ) );
-
-    return xy;
+    return { Double2String( aFormat, aFormat.m_scale * aVec.x ),
+             Double2String( aFormat, -aFormat.m_scale * aVec.y ) };
 }
 
 
@@ -320,8 +314,14 @@ void ODB_FILE_WRITER::CreateFile( const wxString& aFileName )
     if( m_ostream.is_open() )
         m_ostream.close();
 
+    // Windows narrow stream paths use the process code page, which may not be UTF-8
+#ifdef __WXMSW__
+    m_ostream.open( std::filesystem::path( std::wstring( fn.GetFullPath().wc_str() ) ),
+                    std::ios_base::out | std::ios_base::trunc | std::ios_base::binary );
+#else
     m_ostream.open( TO_UTF8( fn.GetFullPath() ),
                     std::ios_base::out | std::ios_base::trunc | std::ios_base::binary );
+#endif
 
     m_ostream.imbue( std::locale::classic() );
 
@@ -403,11 +403,11 @@ ODB_DRILL_TOOLS::ODB_DRILL_TOOLS( const wxString& aUnits, const wxString& aThick
 }
 
 
-void ODB_DRILL_TOOLS::AddDrillTool( const wxString& aType, int aDiameter,
+void ODB_DRILL_TOOLS::AddDrillTool( const ODB_FORMAT& aFormat, const wxString& aType, int aDiameter,
                                     const wxString& aType2 )
 {
     // ODB++ tools use microns or mils, the same scale as symbol sizes
-    wxString size = ODB::SymDouble2String( aDiameter );
+    wxString size = ODB::SymDouble2String( aFormat, aDiameter );
 
     // NUM names a physical drill bit, so a size that recurs across holes reuses its tool
     for( const TOOLS& existing : m_tools )

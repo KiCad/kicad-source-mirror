@@ -20,6 +20,7 @@
 
 #include "command_pcb_export_base.h"
 #include <bitset>
+#include <jobs/job_export_pcb_fab.h>
 #include <string_utils.h>
 
 
@@ -48,4 +49,33 @@ void CLI::PCB_EXPORT_BASE_COMMAND::addCommonLayersArg()
             .help( UTF8STDSTR( _( "Layers to include on each plot, comma separated list of "
                                   "untranslated layer names to include such as F.Cu,B.Cu" ) ) )
             .metavar( "COMMON_LAYER_LIST" );
+}
+
+
+void CLI::PCB_EXPORT_BASE_COMMAND::addFabExportArgs()
+{
+    m_argParser.add_argument( ARG_PRECISION )
+            .help( std::string( "Precision" ) )
+            .scan<'i', int>()
+            .default_value( 6 )
+            .metavar( "PRECISION" );
+
+    m_argParser.add_argument( ARG_FAB_UNITS )
+            .default_value( std::string( "mm" ) )
+            .help( std::string( "Units" ) )
+            .choices( "mm", "in" );
+
+    m_argParser.add_argument( ARG_CHECK_ZONES ).help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) ).flag();
+}
+
+
+void CLI::PCB_EXPORT_BASE_COMMAND::applyFabExportArgs( JOB_EXPORT_PCB_FAB& aJob )
+{
+    aJob.m_filename = m_argInput;
+    aJob.m_drawingSheet = m_argDrawingSheet;
+    aJob.m_variantNames = m_argVariantNames;
+    aJob.m_precision = m_argParser.get<int>( ARG_PRECISION );
+    aJob.m_checkZonesBeforeExport = m_argParser.get<bool>( ARG_CHECK_ZONES );
+    std::string units = m_argParser.get<std::string>( ARG_FAB_UNITS );
+    aJob.m_units = units == "in" ? JOB_EXPORT_PCB_FAB::UNITS::INCH : JOB_EXPORT_PCB_FAB::UNITS::MM;
 }

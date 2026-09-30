@@ -2781,7 +2781,11 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportIp
     job.SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
     job.m_drawingSheet = wxString::FromUTF8( aCtx.Request.drawing_sheet() );
-    job.m_variant = wxString::FromUTF8( aCtx.Request.variant() );
+    if( !aCtx.Request.variant().empty() )
+    {
+        job.m_variantNames.push_back( wxString::FromUTF8( aCtx.Request.variant() ) );
+    }
+
     if( aCtx.Request.has_precision() )
         job.m_precision = aCtx.Request.precision();
 
@@ -2799,7 +2803,8 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportIp
         return tl::unexpected( *unitError );
     }
 
-    job.m_units = FromProtoEnum<JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS>( aCtx.Request.units() );
+    job.m_units = FromProtoEnum<JOB_EXPORT_PCB_FAB::UNITS>( aCtx.Request.units() );
+    job.m_checkZonesBeforeExport = aCtx.Request.check_zones();
     job.m_version = FromProtoEnum<JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION>( aCtx.Request.version() );
 
     return ExecuteBoardJob( pcbContext(), job );
@@ -2837,7 +2842,11 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportOD
     job.SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
     job.m_drawingSheet = wxString::FromUTF8( aCtx.Request.drawing_sheet() );
-    job.m_variant = wxString::FromUTF8( aCtx.Request.variant() );
+    if( !aCtx.Request.variant().empty() )
+    {
+        job.m_variantNames.push_back( wxString::FromUTF8( aCtx.Request.variant() ) );
+    }
+
     if( aCtx.Request.has_precision() )
         job.m_precision = aCtx.Request.precision();
 
@@ -2847,7 +2856,8 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportOD
         return tl::unexpected( *unitError );
     }
 
-    job.m_units = FromProtoEnum<JOB_EXPORT_PCB_ODB::ODB_UNITS>( aCtx.Request.units() );
+    job.m_units = FromProtoEnum<JOB_EXPORT_PCB_FAB::UNITS>( aCtx.Request.units() );
+    job.m_checkZonesBeforeExport = aCtx.Request.check_zones();
     job.m_compressionMode = FromProtoEnum<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>( aCtx.Request.compression() );
 
     return ExecuteBoardJob( pcbContext(), job );

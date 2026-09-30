@@ -136,7 +136,7 @@ private:
 class ODB_MISC_ENTITY : public ODB_ENTITY_BASE
 {
 public:
-    ODB_MISC_ENTITY();
+    ODB_MISC_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin );
     virtual ~ODB_MISC_ENTITY() = default;
     inline virtual std::string GetEntityName() override { return "misc"; }
 

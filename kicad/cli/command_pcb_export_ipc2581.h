@@ -31,7 +31,6 @@ namespace CLI
 #define ARG_SUBTRACT_SOLDERMASK "--subtract-soldermask"
 #define ARG_DISABLE_APERTURE_MACROS "--disable-aperture-macros"
 #define ARG_USE_DRILL_FILE_ORIGIN "--use-drill-file-origin"
-#define ARG_PRECISION "--precision"
 #define ARG_NO_PROTEL_EXTENSION "--no-protel-ext"
 
 class PCB_EXPORT_IPC2581_COMMAND : public PCB_EXPORT_BASE_COMMAND

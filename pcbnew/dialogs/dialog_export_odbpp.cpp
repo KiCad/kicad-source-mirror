@@ -87,7 +87,7 @@ bool DIALOG_EXPORT_ODBPP::TransferDataToWindow()
     {
         SetTitle( m_job->GetSettingsDialogTitle() );
 
-        m_choiceUnits->SetSelection( static_cast<int>( m_job->m_units ) );
+        m_choiceUnits->SetSelection( m_job->m_units == JOB_EXPORT_PCB_FAB::UNITS::MM ? 0 : 1 );
         m_precision->SetValue( m_job->m_precision );
         m_choiceCompress->SetSelection( static_cast<int>( m_job->m_compressionMode ) );
         m_outputFileName->SetValue( m_job->GetConfiguredOutputPath() );
@@ -226,7 +226,8 @@ bool DIALOG_EXPORT_ODBPP::TransferDataFromWindow()
         m_job->SetConfiguredOutputPath( m_outputFileName->GetValue() );
 
         m_job->m_precision = m_precision->GetValue();
-        m_job->m_units = static_cast<JOB_EXPORT_PCB_ODB::ODB_UNITS>( m_choiceUnits->GetSelection() );
+        m_job->m_units = m_choiceUnits->GetSelection() == 0 ? JOB_EXPORT_PCB_FAB::UNITS::MM
+                                                       : JOB_EXPORT_PCB_FAB::UNITS::INCH;
         m_job->m_compressionMode = static_cast<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>( m_choiceCompress->GetSelection() );
     }
 

@@ -29,13 +29,15 @@
 #include "odb_feature.h"
 
 
+class PAD;
 class PKG_OUTLINE;
+
 class EDA_DATA : public ATTR_MANAGER
 {
 public:
     EDA_DATA();
 
-    void                                    Write( std::ostream& ost ) const;
+    void                                    Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const;
     size_t                                  GetLyrIdx( const wxString& aLayerName );
     std::vector<std::shared_ptr<FOOTPRINT>> GetEdaFootprints() const { return m_eda_footprints; }
 
@@ -214,7 +216,7 @@ public:
 
         std::list<std::unique_ptr<PKG_OUTLINE>> m_pinOutlines;
 
-        void Write( std::ostream& ost ) const;
+        void Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const;
     };
 
     class PACKAGE : public ATTR_RECORD_WRITER
@@ -237,19 +239,19 @@ public:
 
         std::list<std::unique_ptr<PKG_OUTLINE>> m_pkgOutlines;
 
-        void                       AddPin( const PAD* aPad, size_t aPinNum );
+        void                       AddPin( const PAD* aPad, size_t aPinNum, const ODB_FORMAT& aFormat );
         const std::shared_ptr<PIN> GetEdaPkgPin( size_t aPadIndex ) const
         {
             return m_pinsVec.at( aPadIndex );
         }
 
-        void Write( std::ostream& ost ) const;
+        void Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const;
 
     private:
         std::vector<std::shared_ptr<PIN>> m_pinsVec;
     };
 
-    void           AddPackage( const FOOTPRINT* aFp );
+    void           AddPackage( const FOOTPRINT* aFp, const ODB_FORMAT& aFormat );
     const PACKAGE& GetPackage( size_t aHash ) const { return packages_map.at( aHash ); }
 
 private:
@@ -267,7 +269,7 @@ private:
 class PKG_OUTLINE
 {
 public:
-    virtual void Write( std::ostream& ost ) const = 0;
+    virtual void Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const = 0;
 
     virtual ~PKG_OUTLINE() = default;
 };
@@ -289,7 +291,7 @@ public:
     size_t   m_width;
     size_t   m_height;
 
-    void Write( std::ostream& ost ) const override;
+    void Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const override;
 };
 
 class ODB_SURFACE_DATA;
@@ -311,7 +313,7 @@ public:
 
     std::unique_ptr<ODB_SURFACE_DATA> m_surfaces;
 
-    void Write( std::ostream& ost ) const override;
+    void Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const override;
 };
 
 class OUTLINE_SQUARE : public PKG_OUTLINE
@@ -324,7 +326,7 @@ public:
     VECTOR2I m_center;
     size_t   m_halfSide;
 
-    void Write( std::ostream& ost ) const override;
+    void Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const override;
 };
 
 class OUTLINE_CIRCLE : public PKG_OUTLINE
@@ -337,7 +339,7 @@ public:
     VECTOR2I m_center;
     size_t   m_radius;
 
-    void Write( std::ostream& ost ) const override;
+    void Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const override;
 };
 
 

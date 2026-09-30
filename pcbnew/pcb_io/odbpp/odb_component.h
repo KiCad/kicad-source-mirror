@@ -35,7 +35,7 @@ class PCB_IO_ODBPP;
 class COMPONENTS_MANAGER : public ATTR_MANAGER
 {
 public:
-    explicit COMPONENTS_MANAGER( PCB_IO_ODBPP* aPlugin = nullptr ) : m_plugin( aPlugin ) {}
+    explicit COMPONENTS_MANAGER( PCB_IO_ODBPP* aPlugin ) : m_plugin( aPlugin ) {}
 
     virtual ~COMPONENTS_MANAGER() { m_compList.clear(); }
 
@@ -44,7 +44,7 @@ public:
     void Write( std::ostream& ost ) const;
 
 private:
-    /// Plugin the export runs under, used to report designator changes; may be nullptr.
+    /// Plugin the export runs under, used for formatting and designator reports
     PCB_IO_ODBPP*            m_plugin;
     std::list<ODB_COMPONENT> m_compList;
     std::set<wxString>       m_usedCompNames;

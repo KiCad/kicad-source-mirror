@@ -29,6 +29,7 @@
 #include <kiplatform/ui.h>
 
 #include <board.h>
+#include <gestfich.h>
 #include <footprint.h>
 #include <kiway_holder.h>
 #include <paths.h>
@@ -42,13 +43,57 @@
 #include <widgets/wx_html_report_panel.h>
 #include <widgets/wx_progress_reporters.h>
 #include <settings/settings_manager.h>
+#include <tools/zone_filler_tool.h>
+#include <tool/tool_manager.h>
 #include <string_utils.h>
 #include <widgets/std_bitmap_button.h>
 #include <jobs/job_export_pcb_ipc2581.h>
-#include <kiplatform/io.h>
-#include <wx/wfstream.h>
-#include <wx/zipstrm.h>
 #include <wx_filename.h>
+
+
+namespace
+{
+class TEMP_IPC_EXPORT
+{
+public:
+    bool Create( bool aDirectory, const wxString& aFileName )
+    {
+        m_root = wxFileName::CreateTempFileName( wxS( "pcbnew_ipc" ) );
+
+        if( m_root.IsEmpty() )
+            return false;
+
+        if( !aDirectory )
+        {
+            m_file = m_root;
+            return true;
+        }
+
+        if( !wxRemoveFile( m_root ) || !wxFileName::Mkdir( m_root, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
+            return false;
+
+        m_isDirectory = true;
+        m_file = wxFileName( m_root, aFileName ).GetFullPath();
+        return true;
+    }
+
+    ~TEMP_IPC_EXPORT()
+    {
+        if( m_isDirectory && wxDirExists( m_root ) )
+            wxFileName::Rmdir( m_root, wxPATH_RMDIR_RECURSIVE );
+        else if( wxFileExists( m_root ) )
+            wxRemoveFile( m_root );
+    }
+
+    const wxString& File() const { return m_file; }
+    const wxString& Root() const { return m_root; }
+
+private:
+    wxString m_root;
+    wxString m_file;
+    bool     m_isDirectory = false;
+};
+} // namespace
 
 
 DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent ) :
@@ -204,6 +249,8 @@ void DIALOG_EXPORT_2581::onOKClick( wxCommandEvent& event )
         return;
     }
 
+    m_parent->GetToolManager()->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( this );
+
     WX_PROGRESS_REPORTER progress( this, _( "Generate IPC-2581 File" ),
                                    PCB_IO_IPC2581::EXPORT_PHASES, PR_CAN_ABORT );
 
@@ -229,7 +276,7 @@ bool DIALOG_EXPORT_2581::GenerateFile( JOB_EXPORT_PCB_IPC2581& aJob, BOARD* aBoa
     }
 
     std::map<std::string, UTF8> props;
-    props["units"] = aJob.m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM ? "mm" : "inch";
+    props["units"] = aJob.m_units == JOB_EXPORT_PCB_FAB::UNITS::MM ? "mm" : "inch";
     props["sigfig"] = wxString::Format( "%d", aJob.m_precision );
     props["version"] = aJob.m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C ? "C" : "B";
     props["OEMRef"] = aJob.m_colInternalId;
@@ -264,7 +311,19 @@ bool DIALOG_EXPORT_2581::GenerateFile( JOB_EXPORT_PCB_IPC2581& aJob, BOARD* aBoa
     if( !bomRev.IsEmpty() )
         props["bomrev"] = bomRev;
 
-    wxString tempFile = wxFileName::CreateTempFileName( wxS( "pcbnew_ipc" ) );
+    wxFileName xmlName = outPath;
+    xmlName.SetExt( FILEEXT::Ipc2581FileExtension );
+    TEMP_IPC_EXPORT temporary;
+
+    if( !temporary.Create( aJob.m_compress, xmlName.GetFullName() ) )
+    {
+        if( aReporter )
+            aReporter->Report( _( "Cannot create temporary IPC-2581 output." ), RPT_SEVERITY_ERROR );
+
+        return false;
+    }
+
+    wxString tempFile = temporary.File();
 
     try
     {
@@ -283,35 +342,26 @@ bool DIALOG_EXPORT_2581::GenerateFile( JOB_EXPORT_PCB_IPC2581& aJob, BOARD* aBoa
                                 RPT_SEVERITY_ERROR );
         }
 
-        wxRemoveFile( tempFile );
-
         return false;
     }
 
     if( aJob.m_compress )
     {
-        wxFileName tempfn = outPath;
-        tempfn.SetExt( FILEEXT::Ipc2581FileExtension );
-        wxFileName zipfn = tempFile;
-        zipfn.SetExt( "zip" );
+        wxString error;
 
+        if( !WriteDirectoryArchive( temporary.Root(), outPath, ARCHIVE_FORMAT::ZIP, wxEmptyString, &error ) )
         {
-            wxFFileOutputStream fnout( zipfn.GetFullPath() );
+            if( aReporter )
+            {
+                aReporter->Report( wxString::Format( _( "Cannot write IPC-2581 archive '%s'.\n%s" ),
+                                                     outPath, error ), RPT_SEVERITY_ERROR );
+            }
 
-            // Use a large I/O buffer to improve compatibility with cloud-synced folders.
-            // See KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE comment for details.
-            if( FILE* fp = fnout.GetFile()->fp() )
-                setvbuf( fp, nullptr, _IOFBF, KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE );
-
-            wxZipOutputStream   zip( fnout );
-            wxFFileInputStream  fnin( tempFile );
-
-            zip.PutNextEntry( tempfn.GetFullName() );
-            fnin.Read( zip );
+            return false;
         }
 
-        wxRemoveFile( tempFile );
-        tempFile = zipfn.GetFullPath();
+        aJob.AddOutput( outPath );
+        return true;
     }
 
     // If save succeeded, replace the original with what we just wrote
@@ -484,7 +534,7 @@ bool DIALOG_EXPORT_2581::TransferDataToWindow()
     }
     else
     {
-        m_choiceUnits->SetSelection( m_job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM ? 0 : 1 );
+        m_choiceUnits->SetSelection( m_job->m_units == JOB_EXPORT_PCB_FAB::UNITS::MM ? 0 : 1 );
         m_precision->SetValue( static_cast<int>( m_job->m_precision ) );
         m_versionChoice->SetSelection( m_job->m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::B ? 0 : 1 );
         m_cbCompress->SetValue( m_job->m_compress );
@@ -572,8 +622,8 @@ bool DIALOG_EXPORT_2581::TransferDataFromWindow()
 
         m_job->m_version = GetVersion() == 'B' ? JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::B
 											   : JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C;
-        m_job->m_units = GetUnitsString() == wxT( "mm" ) ? JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM
-														 : JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::INCH;
+        m_job->m_units = GetUnitsString() == wxT( "mm" ) ? JOB_EXPORT_PCB_FAB::UNITS::MM
+                                                        : JOB_EXPORT_PCB_FAB::UNITS::INCH;
         m_job->m_precision = m_precision->GetValue();
         m_job->m_compress = GetCompress();
         m_job->m_mode = IPC2581::ModeToken( GetDataSet() );

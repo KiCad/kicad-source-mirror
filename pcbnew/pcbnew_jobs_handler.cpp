@@ -2994,6 +2994,37 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 }
 
 
+BOARD* PCBNEW_JOBS_HANDLER::prepareFabBoard( const JOB_EXPORT_PCB_FAB& aJob )
+{
+    BOARD* board = getBoard( aJob.m_filename );
+
+    if( board && !aJob.m_variantNames.empty() )
+    {
+        board->SetCurrentVariant( aJob.m_variantNames.front() );
+    }
+
+    return board;
+}
+
+
+void PCBNEW_JOBS_HANDLER::refillFabZones( const JOB_EXPORT_PCB_FAB& aJob, BOARD* aBoard )
+{
+    if( !aJob.m_checkZonesBeforeExport )
+    {
+        return;
+    }
+
+    TOOL_MANAGER* toolManager = getToolManager( aBoard );
+
+    if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
+    {
+        toolManager->RegisterTool( new ZONE_FILLER_TOOL );
+    }
+
+    toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
+}
+
+
 int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
 {
     JOB_EXPORT_PCB_IPC2581* job = dynamic_cast<JOB_EXPORT_PCB_IPC2581*>( aJob );
@@ -3001,13 +3032,10 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     if( job == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    BOARD* brd = getBoard( job->m_filename );
+    BOARD* brd = prepareFabBoard( *job );
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-
-    if( !job->m_variant.IsEmpty() )
-        brd->SetCurrentVariant( job->m_variant );
 
     if( job->GetConfiguredOutputPath().IsEmpty() )
     {
@@ -3024,6 +3052,8 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
+
+    refillFabZones( *job, brd );
 
     if( !DIALOG_EXPORT_2581::GenerateFile( *job, brd, m_progressReporter, m_reporter ) )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -3133,13 +3163,10 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
     if( job == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    BOARD* brd = getBoard( job->m_filename );
+    BOARD* brd = prepareFabBoard( *job );
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-
-    if( !job->m_variant.IsEmpty() )
-        brd->SetCurrentVariant( job->m_variant );
 
     if( job->GetConfiguredOutputPath().IsEmpty() )
     {
@@ -3170,15 +3197,7 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
 
     // The helper handles output path creation, so hand it a job that already has fully-resolved
     // token context (title block and project overrides applied above).
-    if( job->m_checkZonesBeforeExport )
-    {
-        TOOL_MANAGER* toolManager = getToolManager( brd );
-
-        if( !toolManager->FindTool( ZONE_FILLER_TOOL_NAME ) )
-            toolManager->RegisterTool( new ZONE_FILLER_TOOL );
-
-        toolManager->GetTool<ZONE_FILLER_TOOL>()->FillAllZones( nullptr, m_progressReporter, true );
-    }
+    refillFabZones( *job, brd );
 
     bool ok = ::GenerateODBPPFiles( *job, brd, m_progressReporter, m_reporter );
 

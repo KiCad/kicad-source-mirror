@@ -215,10 +215,11 @@ void ODB_NET_LIST::InitViaNetPoints( BOARD*                                     
 
 
 void ODB_NET_LIST::WriteNetPointRecords( std::map<size_t, std::vector<ODB_NET_RECORD>>& aRecords,
-                                         std::ostream&                                  aStream )
+                                         std::ostream&                                  aStream,
+                                         const ODB_FORMAT&                              aFormat )
 {
     aStream << "H optimize n staggered n" << std::endl;
-    aStream << ODB_UNITS << "=" << PCB_IO_ODBPP::m_unitsStr << std::endl;
+    aStream << ODB_UNITS << "=" << aFormat.m_unitsStr << std::endl;
 
     for( const auto& [key, vec] : aRecords )
     {
@@ -234,16 +235,16 @@ void ODB_NET_LIST::WriteNetPointRecords( std::map<size_t, std::vector<ODB_NET_RE
             aStream << key << " ";
 
             if( net_point.hole )
-                aStream << ODB::Data2String( net_point.drill_radius );
+                aStream << ODB::Data2String( aFormat, net_point.drill_radius );
             else
                 aStream << "0.002";
 
-            aStream << " " << ODB::Data2String( net_point.x_location ) << " "
-                    << ODB::Data2String( net_point.y_location ) << " " << net_point.side << " ";
+            aStream << " " << ODB::Data2String( aFormat, net_point.x_location ) << " "
+                    << ODB::Data2String( aFormat, net_point.y_location ) << " " << net_point.side << " ";
 
             if( !net_point.hole )
-                aStream << ODB::Data2String( net_point.x_size ) << " "
-                        << ODB::Data2String( net_point.y_size ) << " ";
+                aStream << ODB::Data2String( aFormat, net_point.x_size ) << " "
+                        << ODB::Data2String( aFormat, net_point.y_size ) << " ";
 
             std::string exp;
 
@@ -270,7 +271,7 @@ void ODB_NET_LIST::WriteNetPointRecords( std::map<size_t, std::vector<ODB_NET_RE
 }
 
 
-void ODB_NET_LIST::Write( std::ostream& aStream )
+void ODB_NET_LIST::Write( std::ostream& aStream, const ODB_FORMAT& aFormat )
 {
     std::map<size_t, std::vector<ODB_NET_RECORD>> net_point_records;
 
@@ -278,5 +279,5 @@ void ODB_NET_LIST::Write( std::ostream& aStream )
 
     InitPadNetPoints( m_board, net_point_records );
 
-    WriteNetPointRecords( net_point_records, aStream );
+    WriteNetPointRecords( net_point_records, aStream, aFormat );
 }

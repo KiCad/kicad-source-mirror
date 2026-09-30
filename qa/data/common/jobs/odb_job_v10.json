@@ -1,0 +1,10 @@
+{
+  "check_zones": true,
+  "compression": "tgz",
+  "description": "",
+  "drawing_sheet": "legacy.kicad_wks",
+  "output_filename": "legacy-odb.tgz",
+  "precision": 7,
+  "units": "in",
+  "variant": "V10-ODB"
+}

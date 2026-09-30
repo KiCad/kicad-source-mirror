@@ -19,33 +19,19 @@
 
 #pragma once
 
-#include <functional>
-#include <memory>
-
 #include <wx/string.h>
 
 class BOARD;
 class JOB_EXPORT_PCB_ODB;
 class PROGRESS_REPORTER;
 class REPORTER;
-class wxFFile;
 class wxFileName;
-class wxOutputStream;
 
-
-using ODB_STREAM_FACTORY = std::function<std::unique_ptr<wxOutputStream>( wxFFile& )>;
 
 /// The directory or archive file the job writes, with symlinks resolved
 wxFileName ResolveOdbOutputPath( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard );
 
-/// Generate the ODB++ tree or archive, replacing an existing archive and writing into an existing directory
+/// Generate the ODB++ tree or archive, replacing an existing archive or directory product
 /// @return true if the output was written
 bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter = nullptr,
                          REPORTER* aReporter = nullptr );
-
-/// Put every entry under aTopDir and return false on any stream error
-bool WriteOdbArchive( const wxString& aSourceDir, wxOutputStream& aOut, bool aTgz, const wxString& aTopDir );
-
-/// Write through a sibling temp file, allowing an injected output stream for QA
-bool WriteOdbArchiveFile( const wxString& aSourceDir, const wxString& aTarget, bool aTgz, const wxString& aTopDir,
-                          const ODB_STREAM_FACTORY& aOpen, wxString* aError = nullptr );

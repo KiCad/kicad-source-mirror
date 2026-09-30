@@ -1490,6 +1490,13 @@ wxString FormatTrimmedDecimal( double aValue, int aPrecision )
     while( dot != wxNOT_FOUND && (int) str.length() - dot > 2 && str.EndsWith( wxT( "00" ) ) )
         str.RemoveLast();
 
+    // Rounded zero has no meaningful sign
+    if( str.StartsWith( wxS( "-" ) )
+        && str.find_first_not_of( wxS( "0." ), 1 ) == wxString::npos )
+    {
+        str.Remove( 0, 1 );
+    }
+
     return str;
 }
 

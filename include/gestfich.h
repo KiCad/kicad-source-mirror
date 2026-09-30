@@ -22,6 +22,8 @@
 
 #include <map>
 #include <filesystem>
+#include <functional>
+#include <memory>
 #include <string>
 #include <unordered_set>
 #include <kicommon.h>
@@ -40,6 +42,27 @@
 
 /* Forward class declarations. */
 class EDA_LIST_DIALOG;
+class wxFFile;
+class wxOutputStream;
+
+
+enum class ARCHIVE_FORMAT
+{
+    ZIP,
+    TGZ
+};
+
+using ARCHIVE_STREAM_FACTORY = std::function<std::unique_ptr<wxOutputStream>( wxFFile& )>;
+
+/** Write directory entries in sorted archive path order, using the archive root when aTopDir is empty. */
+KICOMMON_API bool WriteDirectoryArchive( const wxString& aSourceDir, wxOutputStream& aOut,
+                                         ARCHIVE_FORMAT aFormat, const wxString& aTopDir );
+
+/** Replace the archive atomically after writing and closing a sibling temporary file. */
+KICOMMON_API bool WriteDirectoryArchive( const wxString& aSourceDir, const wxString& aArchive,
+                                         ARCHIVE_FORMAT aFormat, const wxString& aTopDir,
+                                         wxString* aError = nullptr,
+                                         const ARCHIVE_STREAM_FACTORY& aOpen = {} );
 
 
 /**

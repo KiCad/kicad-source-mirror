@@ -32,6 +32,7 @@ class FOOTPRINT;
 class JOB_EXPORT_PCB_GERBER;
 class JOB_EXPORT_PCB_GERBERS;
 class JOB_EXPORT_PCB_PLOT;
+class JOB_EXPORT_PCB_FAB;
 class JOB_FP_EXPORT_SVG;
 class TOOL_MANAGER;
 class REPORTER;
@@ -95,6 +96,8 @@ public:
 
 private:
     BOARD* getBoard( const wxString& aPath = wxEmptyString );
+    BOARD* prepareFabBoard( const JOB_EXPORT_PCB_FAB& aJob );
+    void refillFabZones( const JOB_EXPORT_PCB_FAB& aJob, BOARD* aBoard );
     LSEQ convertLayerArg( wxString& aLayerString, BOARD* aBoard ) const;
 
     bool preparePlotLayers( JOB_EXPORT_PCB_PLOT* aJob, BOARD* aBoard, TOOL_MANAGER* aToolManager );

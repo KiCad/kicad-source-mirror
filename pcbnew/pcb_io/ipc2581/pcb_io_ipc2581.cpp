@@ -31,6 +31,8 @@
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <exporters/fab_model/fab_item_order.h>
+#include <exporters/fab_model/fab_pin.h>
 #include <font/font.h>
 #include <footprint.h>
 #include <hash.h>
@@ -395,30 +397,23 @@ wxString PCB_IO_IPC2581::genLayersString( PCB_LAYER_ID aTop, PCB_LAYER_ID aBotto
 
 wxString PCB_IO_IPC2581::pinName( const PAD* aPad ) const
 {
-    wxString name = aPad->GetNumber();
+    FOOTPRINT* footprint = aPad->GetParentFootprint();
+    size_t index = 0;
 
-    FOOTPRINT* fp = aPad->GetParentFootprint();
-    size_t ii = 0;
-
-    if( name.empty() && fp )
+    if( ( aPad->GetAttribute() == PAD_ATTRIB::NPTH || aPad->GetNumber().IsEmpty() ) && footprint )
     {
-        for( ii = 0; ii < fp->GetPadCount(); ++ii )
+        for( ; index < footprint->Pads().size(); ++index )
         {
-            if( fp->Pads()[ii] == aPad )
+            if( footprint->Pads()[index] == aPad )
+            {
                 break;
+            }
         }
     }
 
-    // Pins are required to have names, so if our pad doesn't have a name, we need to
-    // generate one that is unique
-    if( aPad->GetAttribute() == PAD_ATTRIB::NPTH )
-        name = wxString::Format( "NPTH%zu", ii );
-    else if( name.empty() )
-        name = wxString::Format( "PAD%zu", ii );
-
     // Pins are scoped per-package, so we only sanitize; uniqueness is handled by
     // the per-package pin_nodes map in addPackage().
-    return sanitizeId( name );
+    return sanitizeId( MakeFabPin( *aPad, index ).m_name );
 }
 
 
@@ -475,13 +470,7 @@ wxString PCB_IO_IPC2581::componentName( FOOTPRINT* aFootprint )
 
 wxString PCB_IO_IPC2581::floatVal( double aVal, int aSigFig ) const
 {
-    wxString str = FormatTrimmedDecimal( aVal, aSigFig == -1 ? m_sigfig : aSigFig );
-
-    // We don't want to output -0.0 as this value is just 0 for fabs
-    if( str == wxT( "-0.0" ) )
-        return wxT( "0.0" );
-
-    return str;
+    return FormatTrimmedDecimal( aVal, aSigFig == -1 ? m_sigfig : aSigFig );
 }
 
 
@@ -3689,7 +3678,8 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
     for( size_t ii = 0; ii < fp->Pads().size(); ++ii )
     {
         PAD* pad = fp->Pads()[ii];
-        wxString pin_name = pinName( pad );
+        FAB_PIN fabPin = MakeFabPin( *pad, ii );
+        wxString pin_name = sanitizeId( fabPin.m_name );
         wxXmlNode* pinNode = nullptr;
 
         auto [ it, inserted ] = pin_nodes.emplace( pin_name, nullptr );
@@ -3701,12 +3691,12 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
 
             addAttribute( pinNode,  "number", pin_name );
 
-            if( pad->GetAttribute() == PAD_ATTRIB::NPTH )
-                addAttribute( pinNode,  "electricalType", "MECHANICAL" );
-            else if( pad->IsOnCopperLayer() )
-                addAttribute( pinNode,  "electricalType", "ELECTRICAL" );
-            else
-                addAttribute( pinNode,  "electricalType", "UNDEFINED" );
+            switch( fabPin.m_electrical )
+            {
+            case FAB_ELECTRICAL::MECHANICAL: addAttribute( pinNode, "electricalType", "MECHANICAL" ); break;
+            case FAB_ELECTRICAL::ELECTRICAL: addAttribute( pinNode, "electricalType", "ELECTRICAL" ); break;
+            case FAB_ELECTRICAL::UNDEFINED:  addAttribute( pinNode, "electricalType", "UNDEFINED" ); break;
+            }
 
             if( pad->HasHole() )
                 addAttribute( pinNode,  "type", "THRU" );
@@ -4178,14 +4168,7 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
             if( vec.empty() )
                 return;
 
-            std::stable_sort( vec.begin(), vec.end(),
-                       []( BOARD_ITEM* a, BOARD_ITEM* b )
-                       {
-                            if( a->GetParentFootprint() == b->GetParentFootprint() )
-                                return a->Type() < b->Type();
-
-                            return a->GetParentFootprint() < b->GetParentFootprint();
-                       } );
+            std::stable_sort( vec.begin(), vec.end(), FabItemLess );
 
             generateLayerSetNet( layerNode, layer, vec );
         };

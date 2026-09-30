@@ -1280,8 +1280,8 @@ int BOARD_EDITOR_CONTROL::GenerateODBPPFiles( const TOOL_EVENT& aEvent )
     job.m_compressionMode = static_cast<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>( dlg.GetCompressFormat() );
 
     job.m_precision = dlg.GetPrecision();
-    job.m_units = dlg.GetUnitsString() == "mm" ? JOB_EXPORT_PCB_ODB::ODB_UNITS::MM
-                                               : JOB_EXPORT_PCB_ODB::ODB_UNITS::INCH;
+    job.m_units = dlg.GetUnitsString() == "mm" ? JOB_EXPORT_PCB_FAB::UNITS::MM
+                                               : JOB_EXPORT_PCB_FAB::UNITS::INCH;
 
     wxFileName outputFn = ResolveOdbOutputPath( job, m_frame->GetBoard() );
     wxString   outputPath = outputFn.GetFullPath();
@@ -1309,13 +1309,6 @@ int BOARD_EDITOR_CONTROL::GenerateODBPPFiles( const TOOL_EVENT& aEvent )
                                                     "Do you want to overwrite it?" ),
                                                  outputPath ) ) )
         {
-            return 0;
-        }
-
-        if( !wxFileName::Rmdir( outputPath, wxPATH_RMDIR_RECURSIVE ) )
-        {
-            DisplayErrorMessage( m_frame, wxString::Format( _( "Cannot remove existing output directory '%s'." ),
-                                                            outputPath ) );
             return 0;
         }
     }

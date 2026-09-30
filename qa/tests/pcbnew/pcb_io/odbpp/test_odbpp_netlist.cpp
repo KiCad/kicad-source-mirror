@@ -81,8 +81,6 @@ BOOST_AUTO_TEST_CASE( ODBNetlistCoordinatesMatchFeatures )
 {
     wxFileName tempDir = MakeTempDir( wxT( "odb-netlist" ) );
 
-    ODB_EXPORT_STATE_GUARD odbExportStateGuard;
-
     BOARD board;
     board.SetCopperLayerCount( 2 );
 

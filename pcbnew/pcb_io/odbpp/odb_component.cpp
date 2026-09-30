@@ -36,7 +36,7 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
 {
     auto& comp = m_compList.emplace_back( m_compList.size(), aPkg.m_index );
 
-    comp.m_center = ODB::AddXY( aFp->GetPosition() );
+    comp.m_center = ODB::AddXY( m_plugin->GetFormat(), aFp->GetPosition() );
     EDA_ANGLE angle = aFp->GetOrientation();
 
     if( angle != ANGLE_0 )
@@ -44,7 +44,7 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
         // odb Rotation is expressed in degrees and is always clockwise.
         // while kicad EDA_ANGLE is anticlockwise.
         angle = ANGLE_360 - angle;
-        comp.m_rot = ODB::Double2String( angle.Normalize().AsDegrees() );
+        comp.m_rot = ODB::Double2String( m_plugin->GetFormat(), angle.Normalize().AsDegrees() );
     }
 
     if( aFp->IsFlipped() )
@@ -144,7 +144,7 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
 
 void COMPONENTS_MANAGER::Write( std::ostream& ost ) const
 {
-    ost << "UNITS=" << PCB_IO_ODBPP::m_unitsStr << std::endl;
+    ost << "UNITS=" << m_plugin->GetFormat().m_unitsStr << std::endl;
 
     WriteAttributes( ost );
 

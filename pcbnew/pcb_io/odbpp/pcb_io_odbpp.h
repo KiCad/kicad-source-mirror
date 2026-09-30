@@ -81,6 +81,8 @@ public:
     /// Highest sigfig accepted by the exporter, matching the export dialog's spin control.
     static int MaxPrecision() { return 16; }
 
+    const ODB_FORMAT& GetFormat() const { return m_format; }
+
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override { return 0; }
 
     // Reading currently disabled
@@ -148,15 +150,6 @@ public:
     // Frees the memory allocated for the loaded footprints in #m_loaded_footprints.
     void ClearLoadedFootprints();
 
-    /// Internal units to the output units named by #m_unitsStr, for values written as data.
-    static double      m_scale;
-
-    /// Internal units to thousandths of the output unit for symbols and drill tool sizes
-    /// This is 1000x #m_scale; coordinates and other data values must use #m_scale
-    static double      m_symbolScale;
-    static int         m_sigfig;
-    static std::string m_unitsStr;
-
 private:
     template <typename T, typename... Args>
     void Make( Args&&... args )
@@ -169,6 +162,7 @@ private:
     }
 
     BOARD* m_board;
+    ODB_FORMAT m_format;
 
     std::vector<std::shared_ptr<FOOTPRINT>> m_loaded_footprints;
 

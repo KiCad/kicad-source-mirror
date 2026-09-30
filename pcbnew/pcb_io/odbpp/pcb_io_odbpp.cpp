@@ -34,11 +34,6 @@
 #include <ki_exception.h>
 
 
-double      PCB_IO_ODBPP::m_scale = 1.0 / PCB_IU_PER_MM;
-double      PCB_IO_ODBPP::m_symbolScale = 1.0 / PL_IU_PER_MM;
-int         PCB_IO_ODBPP::m_sigfig = 4;
-std::string PCB_IO_ODBPP::m_unitsStr = "MM";
-
 PCB_IO_ODBPP::~PCB_IO_ODBPP()
 {
     ClearLoadedFootprints();
@@ -57,7 +52,7 @@ void PCB_IO_ODBPP::CreateEntity()
     Make<ODB_INPUT_ENTITY>();
     Make<ODB_MATRIX_ENTITY>( m_board, this );
     Make<ODB_STEP_ENTITY>( m_board, this );
-    Make<ODB_MISC_ENTITY>();
+    Make<ODB_MISC_ENTITY>( m_board, this );
     Make<ODB_SYMBOLS_ENTITY>();
     Make<ODB_USER_ENTITY>();
     Make<ODB_WHEELS_ENTITY>();
@@ -150,12 +145,8 @@ void PCB_IO_ODBPP::SaveBoard( const wxString& aFileName, BOARD& aBoard, const st
 {
     m_board = &aBoard;
 
-    // Defaults for a caller that passes no properties at all; otherwise a prior export in the
-    // same process would leak its units/precision into this one
-    m_unitsStr = "MM";
-    m_scale = 1.0 / PCB_IU_PER_MM;
-    m_symbolScale = 1.0 / PL_IU_PER_MM;
-    m_sigfig = 6;
+    // A second export on this plugin starts with the default format
+    m_format = ODB_FORMAT();
 
     if( aProperties )
     {
@@ -164,29 +155,29 @@ void PCB_IO_ODBPP::SaveBoard( const wxString& aFileName, BOARD& aBoard, const st
             // Only INCH needs setting here; MM is already the default set above
             if( it->second == "inch" )
             {
-                m_unitsStr = "INCH";
-                m_scale = ( 1.0 / 25.4 ) / PCB_IU_PER_MM;
-                m_symbolScale = ( 1.0 / 25.4 ) / PL_IU_PER_MM;
+                m_format.m_unitsStr = "INCH";
+                m_format.m_scale = ( 1.0 / 25.4 ) / PCB_IU_PER_MM;
+                m_format.m_symbolScale = ( 1.0 / 25.4 ) / PL_IU_PER_MM;
             }
         }
 
         if( auto it = aProperties->find( "sigfig" ); it != aProperties->end() )
         {
             int requested = std::stoi( it->second );
-            int precisionFloor = MinPrecision( m_unitsStr == "INCH" );
+            int precisionFloor = MinPrecision( m_format.m_unitsStr == "INCH" );
 
-            m_sigfig = std::clamp( requested, precisionFloor, MaxPrecision() );
+            m_format.m_sigfig = std::clamp( requested, precisionFloor, MaxPrecision() );
 
             if( requested < precisionFloor )
             {
                 Report( wxString::Format( _( "ODB++ precision %d is below the minimum of %d for these units; "
-                                             "using %d." ), requested, precisionFloor, m_sigfig ),
+                                             "using %d." ), requested, precisionFloor, m_format.m_sigfig ),
                         RPT_SEVERITY_WARNING );
             }
             else if( requested > MaxPrecision() )
             {
                 Report( wxString::Format( _( "ODB++ precision %d is above the maximum of %d; using %d." ),
-                                          requested, MaxPrecision(), m_sigfig ), RPT_SEVERITY_WARNING );
+                                          requested, MaxPrecision(), m_format.m_sigfig ), RPT_SEVERITY_WARNING );
             }
         }
     }

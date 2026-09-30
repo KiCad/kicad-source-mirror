@@ -53,8 +53,8 @@
 void FEATURES_MANAGER::AddFeatureLine( const VECTOR2I& aStart, const VECTOR2I& aEnd,
                                        uint64_t aWidth )
 {
-    AddFeature<ODB_LINE>( ODB::AddXY( aStart ), ODB::AddXY( aEnd ),
-                          AddCircleSymbol( ODB::SymDouble2String( aWidth ) ) );
+    AddFeature<ODB_LINE>( ODB::AddXY( m_plugin->GetFormat(), aStart ), ODB::AddXY( m_plugin->GetFormat(), aEnd ),
+                          AddCircleSymbol( ODB::SymDouble2String( m_plugin->GetFormat(), aWidth ) ) );
 }
 
 
@@ -62,14 +62,20 @@ void FEATURES_MANAGER::AddFeatureArc( const VECTOR2I& aStart, const VECTOR2I& aE
                                       const VECTOR2I& aCenter, uint64_t aWidth,
                                       ODB_DIRECTION aDirection )
 {
-    AddFeature<ODB_ARC>( ODB::AddXY( aStart ), ODB::AddXY( aEnd ), ODB::AddXY( aCenter ),
-                         AddCircleSymbol( ODB::SymDouble2String( aWidth ) ), aDirection );
+    const ODB_FORMAT& fmt = m_plugin->GetFormat();
+
+    AddFeature<ODB_ARC>( ODB::AddXY( fmt, aStart ),
+                         ODB::AddXY( fmt, aEnd ),
+                         ODB::AddXY( fmt, aCenter ),
+                         AddCircleSymbol( ODB::SymDouble2String( fmt, aWidth ) ),
+                         aDirection );
 }
 
 
 void FEATURES_MANAGER::AddPadCircle( const VECTOR2I& aCenter, uint64_t aDiameter )
 {
-    AddFeature<ODB_PAD>( ODB::AddXY( aCenter ), AddCircleSymbol( ODB::SymDouble2String( aDiameter ) ) );
+    AddFeature<ODB_PAD>( ODB::AddXY( m_plugin->GetFormat(), aCenter ),
+                         AddCircleSymbol( ODB::SymDouble2String( m_plugin->GetFormat(), aDiameter ) ) );
 }
 
 
@@ -87,6 +93,8 @@ bool FEATURES_MANAGER::AddContour( const SHAPE_POLY_SET& aPolySet, int aOutline 
 
 void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
 {
+    const ODB_FORMAT& fmt = m_plugin->GetFormat();
+
     int stroke_width = aShape.GetWidth();
 
     switch( aShape.GetShape() )
@@ -100,18 +108,18 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
         // The stroke straddles the radius, so in diameter terms the whole width comes off the
         // inner edge and goes onto the outer
         int64_t  innerDiameter = diameter - stroke_width;
-        wxString outerDim = ODB::SymDouble2String( diameter + stroke_width );
+        wxString outerDim = ODB::SymDouble2String( fmt, diameter + stroke_width );
 
         // donut_r has no spelling for a hole closed by its own stroke
         if( aShape.IsSolidFill() || innerDiameter <= 0 )
         {
-            AddFeature<ODB_PAD>( ODB::AddXY( center ), AddCircleSymbol( outerDim ) );
+            AddFeature<ODB_PAD>( ODB::AddXY( fmt, center ), AddCircleSymbol( outerDim ) );
         }
         else
         {
-            AddFeature<ODB_PAD>( ODB::AddXY( center ),
+            AddFeature<ODB_PAD>( ODB::AddXY( fmt, center ),
                                  AddRoundDonutSymbol( outerDim,
-                                                      ODB::SymDouble2String( innerDiameter ) ) );
+                                                      ODB::SymDouble2String( fmt, innerDiameter ) ) );
         }
 
         break;
@@ -129,9 +137,9 @@ void FEATURES_MANAGER::AddShape( const PCB_SHAPE& aShape, PCB_LAYER_ID aLayer )
             int      height = std::abs( aShape.GetRectangleHeight() );
             VECTOR2I center = ODB::GetShapePosition( aShape );
 
-            AddFeature<ODB_PAD>( ODB::AddXY( center ),
-                                 AddRectSymbol( ODB::SymDouble2String( width ),
-                                                ODB::SymDouble2String( height ) ) );
+            AddFeature<ODB_PAD>( ODB::AddXY( fmt, center ),
+                                 AddRectSymbol( ODB::SymDouble2String( fmt, width ),
+                                                ODB::SymDouble2String( fmt, height ) ) );
         }
 
         if( stroke_width > 0 )
@@ -309,6 +317,8 @@ bool FEATURES_MANAGER::AddFeatureSurface( const SHAPE_POLY_SET::POLYGON& aPolygo
 
 void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
 {
+    const ODB_FORMAT& fmt = m_plugin->GetFormat();
+
     int maxError = m_board->GetDesignSettings().m_MaxError;
 
     VECTOR2I expansion{ 0, 0 };
@@ -325,16 +335,17 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
 
     VECTOR2I center = aPad.ShapePos( aLayer );
 
-    wxString width = ODB::SymDouble2String( std::abs( plotSize.x ) );
-    wxString height = ODB::SymDouble2String( std::abs( plotSize.y ) );
+    wxString width = ODB::SymDouble2String( fmt, std::abs( plotSize.x ) );
+    wxString height = ODB::SymDouble2String( fmt, std::abs( plotSize.y ) );
 
     switch( aPad.GetShape( aLayer ) )
     {
     case PAD_SHAPE::CIRCLE:
     {
-        wxString diam = ODB::SymDouble2String( plotSize.x );
+        wxString diam = ODB::SymDouble2String( fmt, plotSize.x );
 
-        AddFeature<ODB_PAD>( ODB::AddXY( center ), AddCircleSymbol( diam ), aPad.GetOrientation() );
+        AddFeature<ODB_PAD>( ODB::AddXY( fmt, center ), AddCircleSymbol( diam ),
+                             aPad.GetOrientation() );
 
         break;
     }
@@ -342,28 +353,31 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
     {
         if( mask_clearance > 0 )
         {
-            wxString rad = ODB::SymDouble2String( mask_clearance );
+            wxString rad = ODB::SymDouble2String( fmt, mask_clearance );
 
-            AddFeature<ODB_PAD>( ODB::AddXY( center ), AddRoundRectSymbol( width, height, rad ),
+            AddFeature<ODB_PAD>( ODB::AddXY( fmt, center ), AddRoundRectSymbol( width, height, rad ),
                                  aPad.GetOrientation() );
         }
         else
         {
-            AddFeature<ODB_PAD>( ODB::AddXY( center ), AddRectSymbol( width, height ), aPad.GetOrientation() );
+            AddFeature<ODB_PAD>( ODB::AddXY( fmt, center ),
+                                 AddRectSymbol( width, height ), aPad.GetOrientation() );
         }
 
         break;
     }
     case PAD_SHAPE::OVAL:
     {
-        AddFeature<ODB_PAD>( ODB::AddXY( center ), AddOvalSymbol( width, height ), aPad.GetOrientation() );
+        AddFeature<ODB_PAD>( ODB::AddXY( fmt, center ), AddOvalSymbol( width, height ),
+                             aPad.GetOrientation() );
         break;
     }
     case PAD_SHAPE::ROUNDRECT:
     {
-        wxString rad = ODB::SymDouble2String( aPad.GetRoundRectCornerRadius( aLayer ) );
+        wxString rad = ODB::SymDouble2String( fmt, aPad.GetRoundRectCornerRadius( aLayer ) );
 
-        AddFeature<ODB_PAD>( ODB::AddXY( center ), AddRoundRectSymbol( width, height, rad ), aPad.GetOrientation() );
+        AddFeature<ODB_PAD>( ODB::AddXY( fmt, center ),
+                             AddRoundRectSymbol( width, height, rad ), aPad.GetOrientation() );
 
         break;
     }
@@ -372,11 +386,11 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
         int shorterSide = std::min( plotSize.x, plotSize.y );
         int chamfer = std::max(
                 0, KiROUND( aPad.GetChamferRectRatio( aLayer ) * shorterSide ) );
-        wxString rad = ODB::SymDouble2String( chamfer );
+        wxString rad = ODB::SymDouble2String( fmt, chamfer );
         int      positions = aPad.GetChamferPositions( aLayer );
 
-        AddFeature<ODB_PAD>( ODB::AddXY( center ), AddChamferRectSymbol( width, height, rad, positions ),
-                             aPad.GetOrientation() );
+        AddFeature<ODB_PAD>( ODB::AddXY( fmt, center ),
+                             AddChamferRectSymbol( width, height, rad, positions ), aPad.GetOrientation() );
 
         break;
     }
@@ -1023,7 +1037,8 @@ bool FEATURES_MANAGER::AddViaDrillHole( const PCB_VIA* aVia, PCB_LAYER_ID aLayer
 
 void FEATURES_MANAGER::GenerateProfileFeatures( std::ostream& ost ) const
 {
-    ost << "UNITS=" << PCB_IO_ODBPP::m_unitsStr << std::endl;
+    const ODB_FORMAT& format = m_plugin->GetFormat();
+    ost << "UNITS=" << format.m_unitsStr << std::endl;
     ost << "#\n#Num Features\n#" << std::endl;
     ost << "F " << m_featuresList.size() << std::endl;
 
@@ -1034,14 +1049,15 @@ void FEATURES_MANAGER::GenerateProfileFeatures( std::ostream& ost ) const
 
     for( const auto& feat : m_featuresList )
     {
-        feat->WriteFeatures( ost );
+        feat->WriteFeatures( ost, format );
     }
 }
 
 
 void FEATURES_MANAGER::GenerateFeatureFile( std::ostream& ost ) const
 {
-    ost << "UNITS=" << PCB_IO_ODBPP::m_unitsStr << std::endl;
+    const ODB_FORMAT& format = m_plugin->GetFormat();
+    ost << "UNITS=" << format.m_unitsStr << std::endl;
     ost << "#\n#Num Features\n#" << std::endl;
     ost << "F " << m_featuresList.size() << std::endl << std::endl;
 
@@ -1061,12 +1077,12 @@ void FEATURES_MANAGER::GenerateFeatureFile( std::ostream& ost ) const
 
     for( const auto& feat : m_featuresList )
     {
-        feat->WriteFeatures( ost );
+        feat->WriteFeatures( ost, format );
     }
 }
 
 
-void ODB_FEATURE::WriteFeatures( std::ostream& ost )
+void ODB_FEATURE::WriteFeatures( std::ostream& ost, const ODB_FORMAT& aFormat )
 {
     switch( GetFeatureType() )
     {
@@ -1080,12 +1096,12 @@ void ODB_FEATURE::WriteFeatures( std::ostream& ost )
     default: return;
     }
 
-    WriteRecordContent( ost );
+    WriteRecordContent( ost, aFormat );
     ost << std::endl;
 }
 
 
-void ODB_LINE::WriteRecordContent( std::ostream& ost )
+void ODB_LINE::WriteRecordContent( std::ostream& ost, const ODB_FORMAT& )
 {
     ost << m_start.first << " " << m_start.second << " " << m_end.first << " " << m_end.second
         << " " << m_symIndex << " P 0";
@@ -1094,7 +1110,7 @@ void ODB_LINE::WriteRecordContent( std::ostream& ost )
 }
 
 
-void ODB_ARC::WriteRecordContent( std::ostream& ost )
+void ODB_ARC::WriteRecordContent( std::ostream& ost, const ODB_FORMAT& )
 {
     ost << m_start.first << " " << m_start.second << " " << m_end.first << " " << m_end.second
         << " " << m_center.first << " " << m_center.second << " " << m_symIndex << " P 0 "
@@ -1104,7 +1120,7 @@ void ODB_ARC::WriteRecordContent( std::ostream& ost )
 }
 
 
-void ODB_PAD::WriteRecordContent( std::ostream& ost )
+void ODB_PAD::WriteRecordContent( std::ostream& ost, const ODB_FORMAT& aFormat )
 {
     ost << m_center.first << " " << m_center.second << " ";
 
@@ -1114,7 +1130,7 @@ void ODB_PAD::WriteRecordContent( std::ostream& ost )
 
     ost << m_symIndex << " P 0 ";
 
-    ost << "8 " << ODB::Double2String( ( ANGLE_360 - m_angle ).Normalize().AsDegrees() );
+    ost << "8 " << ODB::Double2String( aFormat, ( ANGLE_360 - m_angle ).Normalize().AsDegrees() );
 
     WriteAttributes( ost );
 }
@@ -1130,12 +1146,12 @@ ODB_SURFACE::ODB_SURFACE( uint32_t aIndex, const SHAPE_POLY_SET::POLYGON& aPolyg
 }
 
 
-void ODB_SURFACE::WriteRecordContent( std::ostream& ost )
+void ODB_SURFACE::WriteRecordContent( std::ostream& ost, const ODB_FORMAT& aFormat )
 {
     ost << "P 0";
     WriteAttributes( ost );
     ost << std::endl;
-    m_surfaces->WriteData( ost );
+    m_surfaces->WriteData( ost, aFormat );
     ost << "SE";
 }
 
@@ -1185,7 +1201,7 @@ void ODB_SURFACE_DATA::AddContour( const SHAPE_LINE_CHAIN& aChain, bool aHole )
 }
 
 
-void ODB_SURFACE_DATA::WriteData( std::ostream& ost ) const
+void ODB_SURFACE_DATA::WriteData( std::ostream& ost, const ODB_FORMAT& aFormat ) const
 {
     ODB::CHECK_ONCE is_island;
 
@@ -1194,8 +1210,8 @@ void ODB_SURFACE_DATA::WriteData( std::ostream& ost ) const
         if( contour.empty() )
             continue;
 
-        ost << "OB " << ODB::AddXY( contour.back().m_end ).first << " "
-            << ODB::AddXY( contour.back().m_end ).second << " ";
+        ost << "OB " << ODB::AddXY( aFormat, contour.back().m_end ).first << " "
+            << ODB::AddXY( aFormat, contour.back().m_end ).second << " ";
 
         if( is_island() )
             ost << "I";
@@ -1206,12 +1222,12 @@ void ODB_SURFACE_DATA::WriteData( std::ostream& ost ) const
         for( const auto& line : contour )
         {
             if( SURFACE_LINE::LINE_TYPE::SEGMENT == line.m_type )
-                ost << "OS " << ODB::AddXY( line.m_end ).first << " "
-                    << ODB::AddXY( line.m_end ).second << std::endl;
+                ost << "OS " << ODB::AddXY( aFormat, line.m_end ).first << " "
+                    << ODB::AddXY( aFormat, line.m_end ).second << std::endl;
             else
-                ost << "OC " << ODB::AddXY( line.m_end ).first << " "
-                    << ODB::AddXY( line.m_end ).second << " " << ODB::AddXY( line.m_center ).first
-                    << " " << ODB::AddXY( line.m_center ).second << " "
+                ost << "OC " << ODB::AddXY( aFormat, line.m_end ).first << " "
+                    << ODB::AddXY( aFormat, line.m_end ).second << " " << ODB::AddXY( aFormat, line.m_center ).first
+                    << " " << ODB::AddXY( aFormat, line.m_center ).second << " "
                     << ( line.m_direction == ODB_DIRECTION::CW ? "Y" : "N" ) << std::endl;
         }
         ost << "OE" << std::endl;

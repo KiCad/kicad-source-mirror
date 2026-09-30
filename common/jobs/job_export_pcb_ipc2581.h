@@ -22,9 +22,9 @@
 #define JOB_EXPORT_PCB_IPC2581_H
 
 #include <kicommon.h>
-#include "job.h"
+#include "job_export_pcb_fab.h"
 
-class KICOMMON_API JOB_EXPORT_PCB_IPC2581 : public JOB
+class KICOMMON_API JOB_EXPORT_PCB_IPC2581 : public JOB_EXPORT_PCB_FAB
 {
 public:
     JOB_EXPORT_PCB_IPC2581();
@@ -33,12 +33,6 @@ public:
 
     void SetDefaultOutputPath( const wxString& aReferenceName );
 
-    enum class IPC2581_UNITS
-    {
-        INCH,
-        MM
-    };
-
     enum class IPC2581_VERSION
     {
         B,
@@ -46,13 +40,7 @@ public:
     };
 
 public:
-    wxString        m_filename;
-    wxString        m_drawingSheet;
-    wxString        m_variant;
-
-    IPC2581_UNITS   m_units;
     IPC2581_VERSION m_version;
-    int             m_precision;
 
     bool            m_compress;
 

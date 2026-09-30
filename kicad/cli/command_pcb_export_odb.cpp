@@ -28,33 +28,20 @@
 #include <locale_io.h>
 
 #define ARG_COMPRESS "--compression"
-#define ARG_UNITS "--units"
 
 CLI::PCB_EXPORT_ODB_COMMAND::PCB_EXPORT_ODB_COMMAND() :
         PCB_EXPORT_BASE_COMMAND( "odb" )
 {
     addDrawingSheetArg();
     addDefineArg();
+    addFabExportArgs();
 
     m_argParser.add_description( std::string( "Export the PCB in ODB++ format" ) );
-
-    m_argParser.add_argument( ARG_PRECISION )
-            .help( std::string( "Precision" ) )
-            .scan<'i', int>()
-            .default_value( 6 )
-            .metavar( "PRECISION" );
 
     m_argParser.add_argument( ARG_COMPRESS )
             .default_value( std::string( "zip" ) )
             .help( std::string( "Compression mode" ) )
             .choices( "none", "zip", "tgz" );
-
-    m_argParser.add_argument( ARG_UNITS )
-            .default_value( std::string( "mm" ) )
-            .help( std::string( "Units" ) )
-            .choices( "mm", "in" );
-
-    m_argParser.add_argument( ARG_CHECK_ZONES ).help( UTF8STDSTR( _( ARG_CHECK_ZONES_DESC ) ) ).flag();
 
     addVariantsArg();
 }
@@ -64,29 +51,15 @@ int CLI::PCB_EXPORT_ODB_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_PCB_ODB> job( new JOB_EXPORT_PCB_ODB() );
 
-    job->m_filename = m_argInput;
+    applyFabExportArgs( *job );
     job->SetConfiguredOutputPath( m_argOutput );
-    job->m_drawingSheet = m_argDrawingSheet;
     job->SetVarOverrides( m_argDefineVars );
-
-    if( !m_argVariantNames.empty() )
-        job->m_variant = m_argVariantNames.front();
 
     if( !wxFile::Exists( job->m_filename ) )
     {
         wxFprintf( stderr, _( "Board file does not exist or is not accessible\n" ) );
         return EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
-
-    job->m_precision = m_argParser.get<int>( ARG_PRECISION );
-    job->m_checkZonesBeforeExport = m_argParser.get<bool>( ARG_CHECK_ZONES );
-
-    wxString units = From_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
-
-    if( units == "mm" )
-        job->m_units = JOB_EXPORT_PCB_ODB::ODB_UNITS::MM;
-    else if( units == "in" )
-        job->m_units = JOB_EXPORT_PCB_ODB::ODB_UNITS::INCH;
 
     wxString compression = From_UTF8( m_argParser.get<std::string>( ARG_COMPRESS ).c_str() ).Lower();
 

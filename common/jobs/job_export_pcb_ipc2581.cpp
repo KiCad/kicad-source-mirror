@@ -23,12 +23,6 @@
 #include <i18n_utility.h>
 #include <wildcards_and_files_ext.h>
 
-NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS,
-                              {
-                                      { JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::INCH, "in" },
-                                      { JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM, "mm" },
-                              } )
-
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION,
                               {
                                       { JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::B, "B" },
@@ -36,12 +30,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION,
                               } )
 
 JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581() :
-        JOB( "ipc2581", false ),
-        m_filename(),
-        m_drawingSheet(),
-        m_units( IPC2581_UNITS::MM ),
+        JOB_EXPORT_PCB_FAB( "ipc2581" ),
         m_version( IPC2581_VERSION::C ),
-        m_precision( 6 ),
         m_compress( false ),
         m_colInternalId(),
         m_colMfgPn(),
@@ -50,10 +40,7 @@ JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581() :
         m_colDist(),
         m_bomRev()
 {
-    m_params.emplace_back( new JOB_PARAM<wxString>( "drawing_sheet", &m_drawingSheet, m_drawingSheet ) );
-    m_params.emplace_back( new JOB_PARAM<IPC2581_UNITS>( "units", &m_units, m_units ) );
     m_params.emplace_back( new JOB_PARAM<IPC2581_VERSION>( "version", &m_version, m_version ) );
-    m_params.emplace_back( new JOB_PARAM<int>( "precision", &m_precision, m_precision ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "compress", &m_compress, m_compress ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.internal_id",
                                                     &m_colInternalId,
@@ -66,7 +53,6 @@ JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581() :
                                                     m_colDistPn ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.dist", &m_colDist, m_colDist ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "bom_rev", &m_bomRev, m_bomRev ) );
-    m_params.emplace_back( new JOB_PARAM<wxString>( "variant", &m_variant, m_variant ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "mode", &m_mode, m_mode ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "sections", &m_sections, m_sections ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "net_names", &m_netNamePolicy,

@@ -544,19 +544,14 @@ BOOST_AUTO_TEST_CASE( PositionFormat )
     testEnums<JOB_EXPORT_PCB_POS::FORMAT, kiapi::board::jobs::PositionFormat>();
 }
 
-BOOST_AUTO_TEST_CASE( Ipc2581Units )
+BOOST_AUTO_TEST_CASE( FabUnits )
 {
-    testEnums<JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS, kiapi::common::types::Units>( true );
+    testEnums<JOB_EXPORT_PCB_FAB::UNITS, kiapi::common::types::Units>( true );
 }
 
 BOOST_AUTO_TEST_CASE( Ipc2581Version )
 {
     testEnums<JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION, kiapi::board::jobs::Ipc2581Version>();
-}
-
-BOOST_AUTO_TEST_CASE( OdbUnits )
-{
-    testEnums<JOB_EXPORT_PCB_ODB::ODB_UNITS, kiapi::common::types::Units>( true );
 }
 
 BOOST_AUTO_TEST_CASE( OdbCompression )

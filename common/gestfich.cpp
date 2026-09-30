@@ -29,6 +29,7 @@
 #include <wx/stdpaths.h>
 
 #include <pgm_base.h>
+#include <kiplatform/io.h>
 #include <confirm.h>
 #include <core/arraydim.h>
 #include <gestfich.h>
@@ -42,11 +43,15 @@
 #include <wx/wfstream.h>
 #include <wx/fs_zip.h>
 #include <wx/zipstrm.h>
+#include <wx/tarstrm.h>
+#include <wx/zstream.h>
 
+#include <algorithm>
 #include <filesystem>
 #include <string>
 #include <system_error>
 #include <unordered_set>
+#include <vector>
 #include <core/kicad_algo.h>
 
 void QuoteString( wxString& string )
@@ -709,6 +714,195 @@ bool AddDirectoryToZip( wxZipOutputStream& aZip, const wxString& aSourceDir, wxS
     }
 
     return true;
+}
+
+
+namespace
+{
+struct ARCHIVE_SOURCE
+{
+    wxString m_path;
+    wxString m_name;
+    wxString m_key;
+    bool     m_isDirectory;
+};
+
+
+bool collectArchiveSources( const wxString& aSourceDir, const wxString& aParent,
+                            DIR_LOOP_GUARD& aGuard, std::vector<ARCHIVE_SOURCE>& aSources )
+{
+    wxDir dir( aSourceDir );
+
+    if( !dir.IsOpened() )
+        return false;
+
+    wxString name;
+    bool     cont = dir.GetFirst( &name, wxEmptyString, wxDIR_DEFAULT );
+
+    while( cont )
+    {
+        wxString path = wxFileName( aSourceDir, name ).GetFullPath();
+        wxString relative = aParent.IsEmpty() ? name : aParent + wxS( "/" ) + name;
+        bool     isDirectory = wxDirExists( path );
+        wxString key = relative + ( isDirectory ? wxS( "/" ) : wxS( "" ) );
+        aSources.push_back( { path, relative, key, isDirectory } );
+
+        if( isDirectory )
+        {
+            if( !aGuard.ShouldDescend( path ) || !collectArchiveSources( path, relative, aGuard, aSources ) )
+                return false;
+        }
+
+        cont = dir.GetNext( &name );
+    }
+
+    return true;
+}
+
+
+bool writeArchiveContents( wxArchiveOutputStream& aArchive, const std::vector<ARCHIVE_SOURCE>& aSources )
+{
+    for( const ARCHIVE_SOURCE& source : aSources )
+    {
+        if( source.m_isDirectory )
+        {
+            if( !aArchive.PutNextDirEntry( source.m_name ) )
+                return false;
+
+            continue;
+        }
+
+        wxFFileInputStream input( source.m_path );
+        wxFileOffset       expectedLength = input.IsOk() ? input.GetLength() : wxInvalidOffset;
+
+        if( !input.IsOk() || !aArchive.PutNextEntry( source.m_name, wxDateTime::Now(), expectedLength ) )
+            return false;
+
+        input.Read( aArchive );
+
+        if( input.TellI() != expectedLength || !aArchive.IsOk() || aArchive.GetLastError() != wxSTREAM_NO_ERROR
+            || !aArchive.CloseEntry() )
+            return false;
+    }
+
+    return true;
+}
+} // namespace
+
+
+bool WriteDirectoryArchive( const wxString& aSourceDir, wxOutputStream& aOut,
+                            ARCHIVE_FORMAT aFormat, const wxString& aTopDir )
+{
+    if( !aOut.IsOk() || !wxDirExists( aSourceDir ) )
+        return false;
+
+    DIR_LOOP_GUARD               guard( aSourceDir );
+    std::vector<ARCHIVE_SOURCE> sources;
+
+    if( !guard.IsRooted() || !collectArchiveSources( aSourceDir, aTopDir, guard, sources ) )
+        return false;
+
+    std::sort( sources.begin(), sources.end(), []( const ARCHIVE_SOURCE& a, const ARCHIVE_SOURCE& b )
+    {
+        return a.m_key < b.m_key;
+    } );
+
+    if( aFormat == ARCHIVE_FORMAT::TGZ )
+    {
+        wxZlibOutputStream gzip( aOut, -1, wxZLIB_GZIP );
+        wxTarOutputStream  archive( gzip, wxTAR_PAX, wxConvUTF8 );
+        bool ok = ( aTopDir.IsEmpty() || archive.PutNextDirEntry( aTopDir ) )
+                  && writeArchiveContents( archive, sources );
+        bool archiveOk = archive.IsOk() && archive.GetLastError() == wxSTREAM_NO_ERROR;
+        bool archiveClosed = archive.Close();
+        bool gzipClosed = gzip.Close();
+        return ok && archiveOk && archiveClosed && gzipClosed && aOut.IsOk();
+    }
+
+    wxZipOutputStream archive( aOut );
+    bool ok = ( aTopDir.IsEmpty() || archive.PutNextDirEntry( aTopDir ) )
+              && writeArchiveContents( archive, sources );
+    bool archiveOk = archive.IsOk() && archive.GetLastError() == wxSTREAM_NO_ERROR;
+    bool archiveClosed = archive.Close();
+    return ok && archiveOk && archiveClosed && aOut.IsOk();
+}
+
+
+bool WriteDirectoryArchive( const wxString& aSourceDir, const wxString& aArchive,
+                            ARCHIVE_FORMAT aFormat, const wxString& aTopDir, wxString* aError,
+                            const ARCHIVE_STREAM_FACTORY& aOpen )
+{
+    wxString tempPath;
+    wxString error;
+    FILE*    fp = KIPLATFORM::IO::OpenUniqueSiblingTempFile( aArchive, wxS( "wb" ), &tempPath, &error );
+
+    if( !fp )
+    {
+        if( aError )
+            *aError = error.IsEmpty() ? _( "Cannot create temporary archive file" ) : error;
+
+        return false;
+    }
+
+    // Use a large I/O buffer for cloud-synced folders
+    // See KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE
+    setvbuf( fp, nullptr, _IOFBF, KIPLATFORM::IO::CLOUD_SYNC_BUFFER_SIZE );
+
+    bool ok = false;
+
+    {
+        wxFFile file( fp );
+
+        try
+        {
+            std::unique_ptr<wxOutputStream> output = aOpen ? aOpen( file )
+                                                           : std::make_unique<wxFFileOutputStream>( file );
+
+            if( output )
+                ok = WriteDirectoryArchive( aSourceDir, *output, aFormat, aTopDir );
+        }
+        catch( const std::exception& exception )
+        {
+            ok = false;
+            error = wxString::FromUTF8( exception.what() );
+        }
+
+        bool  writeOk = ok;
+        bool  streamError = file.Error();
+        FILE* raw = file.Detach();
+        bool  flushed = KIPLATFORM::IO::FlushToDisk( raw );
+        bool  closed = fclose( raw ) == 0;
+        ok = writeOk && !streamError && flushed && closed;
+
+        if( !writeOk || streamError )
+        {
+            if( error.IsEmpty() )
+                error = _( "Write error" );
+        }
+        else if( !flushed || !closed )
+        {
+            error = _( "Cannot flush or close temporary file" );
+        }
+    }
+
+    if( ok )
+    {
+        ok = KIPLATFORM::IO::CommitTempFile( tempPath, aArchive, &error );
+
+        if( !ok && error.IsEmpty() )
+            error = _( "Cannot replace archive" );
+    }
+
+    if( !ok && wxFileExists( tempPath ) )
+    {
+        if( !wxRemoveFile( tempPath ) )
+            error += _( "\nCannot remove temporary archive file" );
+    }
+
+    if( aError )
+        *aError = error;
+
+    return ok;
 }
 
 

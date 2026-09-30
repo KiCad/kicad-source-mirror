@@ -22,12 +22,6 @@
 #include <i18n_utility.h>
 #include <wildcards_and_files_ext.h>
 
-NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::ODB_UNITS,
-                              {
-                                      { JOB_EXPORT_PCB_ODB::ODB_UNITS::INCH, "in" },
-                                      { JOB_EXPORT_PCB_ODB::ODB_UNITS::MM, "mm" },
-                              } )
-
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION,
                               {
                                       { JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE, "none" },
@@ -37,21 +31,11 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION,
 
 
 JOB_EXPORT_PCB_ODB::JOB_EXPORT_PCB_ODB() :
-        JOB( "odb", false ),
-        m_filename(),
-        m_drawingSheet(),
-        m_units( ODB_UNITS::MM ),
-        m_precision( 6 ),
-        m_compressionMode( ODB_COMPRESSION::ZIP ),
-        m_checkZonesBeforeExport( false )
+        JOB_EXPORT_PCB_FAB( "odb" ),
+        m_compressionMode( ODB_COMPRESSION::ZIP )
 {
-    m_params.emplace_back( new JOB_PARAM<wxString>( "drawing_sheet", &m_drawingSheet, m_drawingSheet ) );
-    m_params.emplace_back( new JOB_PARAM<ODB_UNITS>( "units", &m_units, m_units ) );
-    m_params.emplace_back( new JOB_PARAM<int>( "precision", &m_precision, m_precision ) );
     m_params.emplace_back( new JOB_PARAM<ODB_COMPRESSION>( "compression", &m_compressionMode,
                                                            m_compressionMode ) );
-    m_params.emplace_back( new JOB_PARAM<wxString>( "variant", &m_variant, m_variant ) );
-    m_params.emplace_back( new JOB_PARAM<bool>( "check_zones", &m_checkZonesBeforeExport, m_checkZonesBeforeExport ) );
 }
 
 

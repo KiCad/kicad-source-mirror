@@ -441,7 +441,7 @@ KICOMMON_API std::string FormatDouble2Str( double aValue );
 
 /**
  * Format a value to aPrecision decimal digits and strip trailing zeros, keeping one digit
- * after the decimal point and never trimming into the integer part.
+ * after the decimal point and never trimming into the integer part. Rounded zero has no minus sign.
  *
  * This is the one formatter shared by exporters (ODB++, IPC-2581) that previously each carried
  * their own copy of this trimming loop.

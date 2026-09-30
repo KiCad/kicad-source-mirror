@@ -21,9 +21,9 @@
 #define JOB_EXPORT_PCB_ODB_H
 
 #include <kicommon.h>
-#include "job.h"
+#include "job_export_pcb_fab.h"
 
-class KICOMMON_API JOB_EXPORT_PCB_ODB : public JOB
+class KICOMMON_API JOB_EXPORT_PCB_ODB : public JOB_EXPORT_PCB_FAB
 {
 public:
     JOB_EXPORT_PCB_ODB();
@@ -31,12 +31,6 @@ public:
     wxString GetSettingsDialogTitle() const override;
 
     void SetDefaultOutputPath( const wxString& aReferenceName );
-
-    enum class ODB_UNITS
-    {
-        MM,
-        INCH,       // Do not use IN: it conflicts with a Windows header
-    };
 
     enum class ODB_COMPRESSION
     {
@@ -46,16 +40,7 @@ public:
     };
 
 public:
-    wxString       m_filename;
-    wxString       m_drawingSheet;
-    wxString       m_variant;
-
-    ODB_UNITS      m_units;
-    int            m_precision;
-
     ODB_COMPRESSION m_compressionMode;
-
-    bool m_checkZonesBeforeExport;
 };
 
 #endif

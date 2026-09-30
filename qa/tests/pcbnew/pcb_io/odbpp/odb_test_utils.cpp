@@ -29,24 +29,6 @@
 namespace fs = std::filesystem;
 
 
-ODB_EXPORT_STATE_GUARD::ODB_EXPORT_STATE_GUARD() :
-        m_scale( PCB_IO_ODBPP::m_scale ),
-        m_symbolScale( PCB_IO_ODBPP::m_symbolScale ),
-        m_sigfig( PCB_IO_ODBPP::m_sigfig ),
-        m_unitsStr( PCB_IO_ODBPP::m_unitsStr )
-{
-}
-
-
-ODB_EXPORT_STATE_GUARD::~ODB_EXPORT_STATE_GUARD()
-{
-    PCB_IO_ODBPP::m_scale = m_scale;
-    PCB_IO_ODBPP::m_symbolScale = m_symbolScale;
-    PCB_IO_ODBPP::m_sigfig = m_sigfig;
-    PCB_IO_ODBPP::m_unitsStr = m_unitsStr;
-}
-
-
 fs::path ExportOdb( const BOARD& aBoard, const fs::path& aDir, const std::string& aUnits,
                     const std::string& aSigfig, REPORTER* aReporter )
 {

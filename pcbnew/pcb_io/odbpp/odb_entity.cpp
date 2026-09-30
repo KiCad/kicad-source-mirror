@@ -28,6 +28,7 @@
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <exporters/fab_model/fab_item_order.h>
 #include <font/font.h>
 #include <footprint.h>
 #include <hash_eda.h>
@@ -79,10 +80,11 @@ bool ODB_ENTITY_BASE::CreateDirectoryTree( ODB_TREE_WRITER& writer )
 }
 
 
-ODB_MISC_ENTITY::ODB_MISC_ENTITY()
+ODB_MISC_ENTITY::ODB_MISC_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin ) :
+        ODB_ENTITY_BASE( aBoard, aPlugin )
 {
     m_info = { { wxS( ODB_JOB_NAME ), wxS( "job" ) },
-               { wxS( ODB_UNITS ), PCB_IO_ODBPP::m_unitsStr },
+               { wxS( ODB_UNITS ), m_plugin->GetFormat().m_unitsStr },
                { wxS( "ODB_VERSION_MAJOR" ), wxS( "8" ) },
                { wxS( "ODB_VERSION_MINOR" ), wxS( "1" ) },
                { wxS( "ODB_SOURCE" ), wxS( "KiCad EDA" ) },
@@ -699,17 +701,10 @@ void ODB_LAYER_ENTITY::InitFeatureData()
     {
         std::vector<BOARD_ITEM*>& vec = m_layerItems[net->GetNetCode()];
 
-        std::stable_sort( vec.begin(), vec.end(),
-                          []( BOARD_ITEM* a, BOARD_ITEM* b )
-                          {
-                              if( a->GetParentFootprint() == b->GetParentFootprint() )
-                                  return a->Type() < b->Type();
-
-                              return a->GetParentFootprint() < b->GetParentFootprint();
-                          } );
-
         if( vec.empty() )
             continue;
+
+        std::stable_sort( vec.begin(), vec.end(), FabItemLess );
 
         m_featuresMgr->InitFeatureList( m_layer.m_layer, vec );
     }
@@ -755,7 +750,7 @@ void ODB_LAYER_ENTITY::InitDrillData()
         m_layerItems.clear();
     }
 
-    m_tools.emplace( PCB_IO_ODBPP::m_unitsStr );
+    m_tools.emplace( m_plugin->GetFormat().m_unitsStr );
 
     bool isBackdrillLayer = matchedSpan.m_IsBackdrill;
     bool isNonPlatedLayer = matchedSpan.m_IsNonPlated;
@@ -782,7 +777,8 @@ void ODB_LAYER_ENTITY::InitDrillData()
                 if( isNPTHLayer != padIsNPTH )
                     continue;
 
-                m_tools.value().AddDrillTool( padIsNPTH ? wxT( "NON_PLATED" ) : wxT( "PLATED" ),
+                m_tools.value().AddDrillTool( m_plugin->GetFormat(),
+                                               padIsNPTH ? wxT( "NON_PLATED" ) : wxT( "PLATED" ),
                                                std::min( pad->GetDrillSizeX(), pad->GetDrillSizeY() ) );
 
                 m_layerItems[pad->GetNetCode()].push_back( item );
@@ -813,15 +809,17 @@ void ODB_LAYER_ENTITY::InitDrillData()
                     if( diameter <= 0 )
                         continue;
 
-                    m_tools.value().AddDrillTool( wxT( "NON_PLATED" ), diameter, wxT( "BLIND" ) );
+                    m_tools.value().AddDrillTool( m_plugin->GetFormat(), wxT( "NON_PLATED" ), diameter,
+                                                   wxT( "BLIND" ) );
                 }
                 else if( isNonPlatedLayer )
                 {
-                    m_tools.value().AddDrillTool( wxT( "NON_PLATED" ), via->GetDrillValue() );
+                    m_tools.value().AddDrillTool( m_plugin->GetFormat(), wxT( "NON_PLATED" ),
+                                                   via->GetDrillValue() );
                 }
                 else
                 {
-                    m_tools.value().AddDrillTool( wxT( "VIA" ), via->GetDrillValue() );
+                    m_tools.value().AddDrillTool( m_plugin->GetFormat(), wxT( "VIA" ), via->GetDrillValue() );
                 }
 
                 m_layerItems[via->GetNetCode()].push_back( item );
@@ -846,7 +844,7 @@ void ODB_LAYER_ENTITY::InitDrillData()
                 wxString typeLabel = ( padIsNPTH || isNonPlatedLayer ) ? wxT( "NON_PLATED" ) : wxT( "PLATED" );
                 wxString type2 = isBackdrillLayer ? wxT( "BLIND" ) : wxT( "STANDARD" );
 
-                m_tools.value().AddDrillTool( typeLabel, drillSize, type2 );
+                m_tools.value().AddDrillTool( m_plugin->GetFormat(), typeLabel, drillSize, type2 );
 
                 m_layerItems[pad->GetNetCode()].push_back( item );
             }
@@ -976,14 +974,14 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
 
         if( thickness > 0 )
         {
-            ost << ".layer_dielectric=" << ODB::Data2String( thickness ) << std::endl;
+            ost << ".layer_dielectric=" << ODB::Data2String( m_plugin->GetFormat(), thickness ) << std::endl;
         }
 
         if( stackupItem->GetType() == BS_ITEM_TYPE_COPPER )
         {
             double copperThicknessMM = static_cast<double>( thickness ) / pcbIUScale.mmToIU( 1.0 );
             double thicknessOz = copperThicknessMM / 0.035;
-            ost << ".copper_weight=" << ODB::Double2String( thicknessOz ) << std::endl;
+            ost << ".copper_weight=" << ODB::Double2String( m_plugin->GetFormat(), thicknessOz ) << std::endl;
         }
 
         if( stackupItem->HasEpsilonRValue() )
@@ -992,7 +990,7 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
 
             if( epsilonR > 0.0 )
             {
-                ost << ".dielectric_constant=" << ODB::Double2String( epsilonR ) << std::endl;
+                ost << ".dielectric_constant=" << ODB::Double2String( m_plugin->GetFormat(), epsilonR ) << std::endl;
             }
         }
 
@@ -1002,7 +1000,7 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
 
             if( lossTangent > 0.0 )
             {
-                ost << ".loss_tangent=" << ODB::Double2String( lossTangent ) << std::endl;
+                ost << ".loss_tangent=" << ODB::Double2String( m_plugin->GetFormat(), lossTangent ) << std::endl;
             }
         }
 
@@ -1029,7 +1027,7 @@ void ODB_STEP_ENTITY::InitEdaData()
     //InitPackage
     for( const FOOTPRINT* fp : m_board->Footprints() )
     {
-        m_edaData.AddPackage( fp );
+        m_edaData.AddPackage( fp, m_plugin->GetFormat() );
     }
 
     // for NET
@@ -1090,9 +1088,10 @@ void ODB_STEP_ENTITY::InitEdaData()
             toep.m_net_num = eda_net.m_index;
             toep.m_subnet_num = subnet.m_index;
 
-            toep.m_center = ODB::AddXY( pad->GetPosition() );
+            toep.m_center = ODB::AddXY( m_plugin->GetFormat(), pad->GetPosition() );
 
-            toep.m_rot = ODB::Double2String( ( ANGLE_360 - pad->GetOrientation() ).Normalize().AsDegrees() );
+            toep.m_rot = ODB::Double2String( m_plugin->GetFormat(),
+                                             ( ANGLE_360 - pad->GetOrientation() ).Normalize().AsDegrees() );
 
             if( pad->IsFlipped() )
                 toep.m_mirror = wxT( "M" );
@@ -1202,7 +1201,7 @@ void ODB_STEP_ENTITY::GenerateStepHeaderFile( ODB_TREE_WRITER& writer )
     auto fileproxy = writer.CreateFileProxy( "stephdr" );
 
     m_stephdr = {
-        { ODB_UNITS, PCB_IO_ODBPP::m_unitsStr },
+        { ODB_UNITS, m_plugin->GetFormat().m_unitsStr },
         { "X_DATUM", "0" },
         { "Y_DATUM", "0" },
         { "X_ORIGIN", "0" },
@@ -1241,7 +1240,7 @@ void ODB_STEP_ENTITY::GenerateEdaFiles( ODB_TREE_WRITER& writer )
 {
     auto fileproxy = writer.CreateFileProxy( "data" );
 
-    m_edaData.Write( fileproxy.GetStream() );
+    m_edaData.Write( fileproxy.GetStream(), m_plugin->GetFormat() );
 }
 
 
@@ -1249,7 +1248,7 @@ void ODB_STEP_ENTITY::GenerateNetlistsFiles( ODB_TREE_WRITER& writer )
 {
     auto fileproxy = writer.CreateFileProxy( "netlist" );
 
-    m_netlist.Write( fileproxy.GetStream() );
+    m_netlist.Write( fileproxy.GetStream(), m_plugin->GetFormat() );
 }
 
 

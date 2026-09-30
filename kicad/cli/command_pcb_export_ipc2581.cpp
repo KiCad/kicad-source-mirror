@@ -38,7 +38,6 @@
 #define ARG_BOM_COL_DIST_PN "--bom-col-dist-pn"
 #define ARG_BOM_COL_DIST "--bom-col-dist"
 #define ARG_BOM_REV "--bom-rev"
-#define ARG_UNITS "--units"
 #define ARG_MODE "--mode"
 #define ARG_SECTIONS "--sections"
 #define ARG_NET_NAMES "--net-names"
@@ -49,14 +48,9 @@ CLI::PCB_EXPORT_IPC2581_COMMAND::PCB_EXPORT_IPC2581_COMMAND() :
 {
     addDrawingSheetArg();
     addDefineArg();
+    addFabExportArgs();
 
     m_argParser.add_description( std::string( "Export the PCB in IPC-2581 format" ) );
-
-    m_argParser.add_argument( ARG_PRECISION )
-            .help( std::string( "Precision" ) )
-            .scan<'i', int>()
-            .default_value( 6 )
-            .metavar( "PRECISION" );
 
     m_argParser.add_argument( ARG_COMPRESS )
             .help( std::string( "Compress the output" ) )
@@ -66,11 +60,6 @@ CLI::PCB_EXPORT_IPC2581_COMMAND::PCB_EXPORT_IPC2581_COMMAND() :
             .default_value( std::string( "C" ) )
             .help( std::string( "IPC-2581 standard version" ) )
             .choices( "B", "C" );
-
-    m_argParser.add_argument( ARG_UNITS )
-            .default_value( std::string( "mm" ) )
-            .help( std::string( "Units" ) )
-            .choices( "mm", "in" );
 
     m_argParser.add_argument( ARG_BOM_COL_INT_ID )
             .default_value( std::string() )
@@ -142,13 +131,9 @@ int CLI::PCB_EXPORT_IPC2581_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_PCB_IPC2581> ipc2581Job( new JOB_EXPORT_PCB_IPC2581() );
 
-    ipc2581Job->m_filename = m_argInput;
+    applyFabExportArgs( *ipc2581Job );
     ipc2581Job->SetConfiguredOutputPath( m_argOutput );
-    ipc2581Job->m_drawingSheet = m_argDrawingSheet;
     ipc2581Job->SetVarOverrides( m_argDefineVars );
-
-    if( !m_argVariantNames.empty() )
-        ipc2581Job->m_variant = m_argVariantNames.front();
 
     if( !wxFile::Exists( ipc2581Job->m_filename ) )
     {
@@ -157,19 +142,12 @@ int CLI::PCB_EXPORT_IPC2581_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     ipc2581Job->m_compress = m_argParser.get<bool>( ARG_COMPRESS );
-    ipc2581Job->m_precision = m_argParser.get<int>( ARG_PRECISION );
 
     wxString version = From_UTF8( m_argParser.get<std::string>( ARG_VERSION ).c_str() );
     if( version == 'B' )
         ipc2581Job->m_version = JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::B;
     else if( version == 'C' )
         ipc2581Job->m_version = JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C;
-
-    wxString units = From_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
-    if( units == "mm" )
-        ipc2581Job->m_units = JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MM;
-    else if( units == "in" )
-        ipc2581Job->m_units = JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::INCH;
 
     ipc2581Job->m_colInternalId =
             From_UTF8( m_argParser.get<std::string>( ARG_BOM_COL_INT_ID ).c_str() );

@@ -26,12 +26,95 @@
 #include <jobs/job_export_sch_plot.h>
 #include <jobs/job_pcb_render.h>
 #include <json_common.h>
+#include <qa_utils/wx_utils/unit_test_utils.h>
+
+#include <filesystem>
+#include <fstream>
 
 
 // Regression coverage for issue #24092: variant fields on JOBSET-resident jobs
 // must round-trip through ToJson/FromJson.
 
 BOOST_AUTO_TEST_SUITE( JobExportPcbVariants )
+
+
+BOOST_AUTO_TEST_CASE( FabJobMissingKeysKeepDefaults )
+{
+    nlohmann::json missingKeys = nlohmann::json::object();
+
+    JOB_EXPORT_PCB_ODB odb;
+    odb.FromJson( missingKeys );
+    nlohmann::json odbJson;
+    odb.ToJson( odbJson );
+    BOOST_CHECK_EQUAL( odbJson.at( "precision" ).get<int>(), 6 );
+    BOOST_CHECK_EQUAL( odbJson.at( "units" ).get<std::string>(), "mm" );
+    BOOST_CHECK( !odbJson.at( "check_zones" ).get<bool>() );
+    BOOST_CHECK_EQUAL( odbJson.at( "variant" ).get<std::string>(), "" );
+
+    JOB_EXPORT_PCB_IPC2581 ipc;
+    ipc.FromJson( missingKeys );
+    nlohmann::json ipcJson;
+    ipc.ToJson( ipcJson );
+    BOOST_CHECK_EQUAL( ipcJson.at( "precision" ).get<int>(), 6 );
+    BOOST_CHECK_EQUAL( ipcJson.at( "units" ).get<std::string>(), "mm" );
+    BOOST_CHECK( !ipcJson.value( "check_zones", true ) );
+
+    BOOST_CHECK_EQUAL( ipcJson.at( "variant" ).get<std::string>(), "" );
+
+    nlohmann::json emptyVariant = { { "variant", "" } };
+    JOB_EXPORT_PCB_ODB legacyOdb;
+    JOB_EXPORT_PCB_IPC2581 legacyIpc;
+    legacyOdb.FromJson( emptyVariant );
+    legacyIpc.FromJson( emptyVariant );
+    BOOST_CHECK( legacyOdb.m_variantNames.empty() );
+    BOOST_CHECK( legacyIpc.m_variantNames.empty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( FabV10JobsLoadUnchanged )
+{
+    std::filesystem::path fixtureDir = std::filesystem::path( KI_TEST::GetTestDataRootDir() ) / "common" / "jobs";
+    std::ifstream odbFile( fixtureDir / "odb_job_v10.json" );
+    std::ifstream ipcFile( fixtureDir / "ipc2581_job_v10.json" );
+    BOOST_REQUIRE( odbFile );
+    BOOST_REQUIRE( ipcFile );
+    nlohmann::json odbV10 = nlohmann::json::parse( odbFile );
+    nlohmann::json ipcV10 = nlohmann::json::parse( ipcFile );
+
+    JOB_EXPORT_PCB_ODB odb;
+    odb.FromJson( odbV10 );
+    nlohmann::json odbRoundTrip;
+    odb.ToJson( odbRoundTrip );
+
+    for( auto it = odbV10.begin(); it != odbV10.end(); ++it )
+    {
+        BOOST_CHECK_MESSAGE( odbRoundTrip.at( it.key() ) == it.value(), "ODB key " << it.key() );
+    }
+
+    JOB_EXPORT_PCB_IPC2581 ipc;
+    ipc.FromJson( ipcV10 );
+    nlohmann::json ipcRoundTrip;
+    ipc.ToJson( ipcRoundTrip );
+
+    for( auto it = ipcV10.begin(); it != ipcV10.end(); ++it )
+    {
+        BOOST_CHECK_MESSAGE( ipcRoundTrip.at( it.key() ) == it.value(), "IPC key " << it.key() );
+    }
+
+    BOOST_CHECK( odbRoundTrip.contains( "variant_names" ) );
+    BOOST_CHECK( ipcRoundTrip.contains( "variant_names" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( Ipc2581CheckZonesOptionExists )
+{
+    JOB_EXPORT_PCB_IPC2581 ipc;
+    nlohmann::json options = { { "check_zones", true } };
+    ipc.FromJson( options );
+    nlohmann::json roundTrip;
+    ipc.ToJson( roundTrip );
+    BOOST_CHECK( roundTrip.value( "check_zones", false ) );
+}
 
 
 BOOST_AUTO_TEST_CASE( Pcb3dVariantRoundTrip )
@@ -71,7 +154,7 @@ BOOST_AUTO_TEST_CASE( PcbPlotVariantRoundTrip )
 BOOST_AUTO_TEST_CASE( PcbOdbVariantRoundTrip )
 {
     JOB_EXPORT_PCB_ODB job;
-    job.m_variant = wxS( "VarOdb" );
+    job.m_variantNames = { wxS( "VarOdb" ) };
 
     nlohmann::json j;
     job.ToJson( j );
@@ -81,14 +164,15 @@ BOOST_AUTO_TEST_CASE( PcbOdbVariantRoundTrip )
     JOB_EXPORT_PCB_ODB loaded;
     loaded.FromJson( j );
 
-    BOOST_CHECK( loaded.m_variant == wxS( "VarOdb" ) );
+    BOOST_REQUIRE_EQUAL( loaded.m_variantNames.size(), 1u );
+    BOOST_CHECK( loaded.m_variantNames.front() == wxS( "VarOdb" ) );
 }
 
 
 BOOST_AUTO_TEST_CASE( PcbIpc2581VariantRoundTrip )
 {
     JOB_EXPORT_PCB_IPC2581 job;
-    job.m_variant = wxS( "VarIpc" );
+    job.m_variantNames = { wxS( "VarIpc" ) };
 
     nlohmann::json j;
     job.ToJson( j );
@@ -98,7 +182,8 @@ BOOST_AUTO_TEST_CASE( PcbIpc2581VariantRoundTrip )
     JOB_EXPORT_PCB_IPC2581 loaded;
     loaded.FromJson( j );
 
-    BOOST_CHECK( loaded.m_variant == wxS( "VarIpc" ) );
+    BOOST_REQUIRE_EQUAL( loaded.m_variantNames.size(), 1u );
+    BOOST_CHECK( loaded.m_variantNames.front() == wxS( "VarIpc" ) );
 }
 
 

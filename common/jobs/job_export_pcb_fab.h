@@ -17,23 +17,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef QA_PCBNEW_ODBPP_TEST_UTILS_H
-#define QA_PCBNEW_ODBPP_TEST_UTILS_H
+#ifndef JOB_EXPORT_PCB_FAB_H
+#define JOB_EXPORT_PCB_FAB_H
 
-#include <filesystem>
-#include <string>
+#include <kicommon.h>
+#include "job.h"
 
-class BOARD;
-class REPORTER;
+#include <vector>
 
-/**
- * Export a board to an ODB++ product model tree rooted at aDir and return aDir.
- *
- * aDir must be a directory the caller does not share with any other export, since the exporter
- * does not clear stale files from a previous run out of a reused directory.
- */
-std::filesystem::path ExportOdb( const BOARD& aBoard, const std::filesystem::path& aDir,
-                                 const std::string& aUnits = "mm", const std::string& aSigfig = "6",
-                                 REPORTER* aReporter = nullptr );
 
-#endif // QA_PCBNEW_ODBPP_TEST_UTILS_H
+class KICOMMON_API JOB_EXPORT_PCB_FAB : public JOB
+{
+public:
+    enum class UNITS
+    {
+        MM,
+        INCH    // Not IN because a Windows header defines it as a macro
+    };
+
+    void FromJson( const nlohmann::json& aJson ) override;
+    void ToJson( nlohmann::json& aJson ) const override;
+
+    wxString              m_filename;
+    wxString              m_drawingSheet;
+    std::vector<wxString> m_variantNames;
+    UNITS                 m_units = UNITS::MM;
+    int                   m_precision = 6;
+    bool                  m_checkZonesBeforeExport = false;
+
+protected:
+    explicit JOB_EXPORT_PCB_FAB( const std::string& aType );
+};
+
+#endif
