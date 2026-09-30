@@ -825,6 +825,7 @@ void LIB_SYMBOL::SetLibId( const LIB_ID& aLibId )
     if( m_searchTermsCache.empty() )
         cacheSearchTerms();
 
+    m_searchTermsCache[STCI_LIB_NICKNAME].Text = aLibId.GetLibNickname().wx_str();
     m_searchTermsCache[STCI_LIB_ID].Text = GetLIB_ID().Format().wx_str();
 }
 
