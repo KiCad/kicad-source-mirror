@@ -401,6 +401,21 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM_ENUM<POWER_SYMBOLS>( "drawing.new_power_symbols",
             &m_Drawing.new_power_symbols, POWER_SYMBOLS::DEFAULT, POWER_SYMBOLS::DEFAULT, POWER_SYMBOLS::LOCAL ) );
 
+    m_params.emplace_back( new PARAM<bool>( "find_replace.intersheets_ref_show",
+            &m_Drawing.intersheets_ref_show, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "find_replace.intersheets_ref_own_page",
+            &m_Drawing.intersheets_ref_own_page, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "find_replace.intersheets_ref_short",
+            &m_Drawing.intersheets_ref_short, false ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "remote_symbols.intersheets_ref_prefix",
+            &m_Drawing.intersheets_ref_prefix, wxS( DEFAULT_IREF_PREFIX ) ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "remote_symbols.intersheets_ref_suffix",
+            &m_Drawing.intersheets_ref_suffix, wxS( DEFAULT_IREF_SUFFIX ) ) );
+
     m_params.emplace_back( new PARAM<int>( "drawing.junction_size_choice",
             &m_Drawing.junction_size_choice, 3, 0, 5 ) );
 
