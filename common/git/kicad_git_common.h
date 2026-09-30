@@ -236,6 +236,9 @@ public:
     /// True when the working directory relative path exists in the HEAD commit's tree.
     bool IsPathInHead( const wxString& aPath );
 
+    /// True while aPath is one of the files a merge or rebase stopped on.
+    bool IsPathConflicted( const wxString& aPath ) const;
+
     /// True while a merge, rebase, cherry-pick or revert is in progress, which refuses commits.
     bool IsOperationInProgress() const;
 

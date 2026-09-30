@@ -33,6 +33,8 @@
 #include <wx/file.h>
 #include <wx/filefn.h>
 #include <wx/filename.h>
+#include <wx/menu.h>
+#include <wx/msgdlg.h>
 #include <wx/textctrl.h>
 
 #include <wx/choicdlg.h>
@@ -47,6 +49,7 @@
 #include <git/git_pull_handler.h>
 #include <git/git_push_handler.h>
 #include <eda_base_frame.h>
+#include <kiplatform/environment.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <settings/common_settings.h>
@@ -115,6 +118,9 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( EDA_BASE_FRAME* aParent ) :
     m_amendCheckbox->Bind( wxEVT_CHECKBOX, &GIT_COMMIT_PANE::onAmendToggled, this );
     m_message->Bind( wxEVT_TEXT, &GIT_COMMIT_PANE::onMessageChanged, this );
     m_checklist->Bind( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &GIT_COMMIT_PANE::onChecklistChanged, this );
+    m_checklist->SetToolTip( _( "Double click a file to see what changed in it. Right click for more." ) );
+    m_checklist->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &GIT_COMMIT_PANE::onFileActivated, this );
+    m_checklist->Bind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &GIT_COMMIT_PANE::onChecklistContextMenu, this );
     Bind( wxEVT_SIZE, &GIT_COMMIT_PANE::onSize, this );
     Bind( wxEVT_IDLE, &GIT_COMMIT_PANE::onIdle, this );
 
@@ -302,6 +308,13 @@ void GIT_COMMIT_PANE::RefreshFileList()
 }
 
 
+void GIT_COMMIT_PANE::ReloadAdvancedWindow()
+{
+    if( GIT_ADVANCED_DIALOG* dialog = GIT_ADVANCED_DIALOG::Active() )
+        dialog->ReloadPages();
+}
+
+
 void GIT_COMMIT_PANE::showDisabledState()
 {
     m_hasUnpushedCommits = false;
@@ -468,6 +481,154 @@ void GIT_COMMIT_PANE::onMessageChanged( wxCommandEvent& aEvent )
 void GIT_COMMIT_PANE::onChecklistChanged( wxDataViewEvent& aEvent )
 {
     updateCommitButton();
+}
+
+
+void GIT_COMMIT_PANE::onChecklistContextMenu( wxDataViewEvent& aEvent )
+{
+    if( m_networkBusy )
+        return;
+
+    wxString path = m_checklist->GetItemPath( aEvent.GetItem() );
+
+    if( path.IsEmpty() )
+        return;
+
+    wxMenu menu;
+    menu.Append( 1, _( "Discard Changes" ) );
+
+    if( GetPopupMenuSelectionFromUser( menu ) != 1 )
+        return;
+
+    discardFile( m_frame->Prj().GetGitCommon(), path );
+}
+
+
+void GIT_COMMIT_PANE::discardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aPath )
+{
+    std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
+
+    if( !lock.owns_lock() )
+    {
+        setBusy( false, _( "Another git operation is in progress. Try again in a moment." ) );
+        return;
+    }
+
+    if( !aCommon->GetRepo() )
+        return;
+
+    bool     tracked = aCommon->IsPathInHead( aPath );
+    bool     conflicted = aCommon->IsPathConflicted( aPath );
+    wxString rootDir = aCommon->GetGitRootDirectory();
+
+    // The confirmation is modal, so it must not run while the action lock is held.
+    lock.unlock();
+
+    // An unsaved editor's next save would undo the discard, so settle that first.
+    if( DocumentEditorsDirty( m_frame->Kiway() ) || !LibraryEditorsWithUnsavedChanges( m_frame->Kiway() ).empty() )
+    {
+        DisplayInfoMessage( this, _( "An editor has unsaved changes. Save or revert them before discarding "
+                                     "files, so the discard is not undone by the next save." ) );
+        return;
+    }
+
+    wxString name = wxFileName( aPath ).GetFullName();
+    wxString question;
+
+    if( conflicted )
+    {
+        // Putting back what HEAD holds also clears the conflict, so the file is settled rather
+        // than only reverted.
+        question = wxString::Format( _( "Resolve the conflict in '%s' by going back to the version this "
+                                        "project was on?\n\n"
+                                        "The version that arrived is dropped, and the file no longer needs "
+                                        "resolving." ),
+                                     name );
+    }
+    else if( tracked )
+    {
+        question = wxString::Format( _( "Throw away the changes to '%s'?\n\n"
+                                        "The file goes back to the last committed version." ),
+                                     name );
+    }
+    else
+    {
+        question = wxString::Format( _( "Move '%s' to the trash?\n\n"
+                                        "It has never been committed, so there is no version to bring back." ),
+                                     name );
+    }
+
+    wxMessageDialog dlg( this, question, _( "Discard Changes" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING );
+    dlg.SetYesNoLabels( conflicted  ? _( "Resolve" )
+                        : tracked ? _( "Discard" )
+                                  : _( "Move to Trash" ),
+                        _( "Cancel" ) );
+
+    if( dlg.ShowModal() != wxID_YES )
+        return;
+
+    // Snapshot first, so an editor showing the file reloads the committed version afterwards.
+    EDITOR_SNAPSHOT docsBefore = CaptureOpenEditorDocs( m_frame->Kiway() );
+
+    // Dropping the staged entry before touching the file means a contended lock or an index
+    // failure leaves everything unchanged.
+    lock = aCommon->TryLockAction();
+
+    if( !lock.owns_lock() )
+    {
+        setBusy( false, _( "Another git operation is in progress. Try again in a moment." ) );
+        return;
+    }
+
+    // The question above ran without the lock, so the project may have closed meanwhile.
+    if( !aCommon->GetRepo() )
+        return;
+
+    wxString error;
+
+    if( !aCommon->DiscardChanges( { aPath }, error ) )
+    {
+        lock.unlock();
+        DisplayErrorMessage( this, wxString::Format( _( "Could not discard the changes to '%s'." ), name ),
+                             error );
+        return;
+    }
+
+    lock.unlock();
+
+    if( !tracked )
+    {
+        if( !rootDir.EndsWith( wxS( "/" ) ) )
+            rootDir += wxS( "/" );
+
+        wxFileName fullPath( rootDir + aPath );
+
+        // A previous discard can have removed the file already, so a missing file is done,
+        // not an error.
+        if( fullPath.FileExists() && !KIPLATFORM::ENV::MoveToTrash( fullPath.GetFullPath(), error ) )
+        {
+            // The staged entry is already gone, so the panels still refresh.
+            aCommon->NotifyRefreshListeners();
+            DisplayErrorMessage( this,
+                                 wxString::Format( _( "Could not move '%s' to the trash. The file is "
+                                                      "still on disk, so discard it again to retry." ),
+                                                   name ),
+                                 error );
+            return;
+        }
+    }
+
+    ReloadOpenEditors( m_frame->Kiway(), docsBefore );
+    aCommon->NotifyRefreshListeners();
+}
+
+
+void GIT_COMMIT_PANE::onFileActivated( wxDataViewEvent& aEvent )
+{
+    wxString path = m_checklist->GetItemPath( aEvent.GetItem() );
+
+    if( !path.IsEmpty() )
+        ShowGitFileDiff( m_frame, path );
 }
 
 

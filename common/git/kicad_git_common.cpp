@@ -950,6 +950,26 @@ bool KIGIT_COMMON::IsPathInHead( const wxString& aPath )
 }
 
 
+bool KIGIT_COMMON::IsPathConflicted( const wxString& aPath ) const
+{
+    if( !m_repo || aPath.IsEmpty() )
+        return false;
+
+    git_index* index = nullptr;
+
+    if( git_repository_index( &index, m_repo ) != GIT_OK )
+        return false;
+
+    KIGIT::GitIndexPtr indexPtr( index );
+
+    const git_index_entry* ancestor = nullptr;
+    const git_index_entry* ours = nullptr;
+    const git_index_entry* theirs = nullptr;
+
+    return git_index_conflict_get( &ancestor, &ours, &theirs, index, aPath.utf8_string().c_str() ) == GIT_OK;
+}
+
+
 bool KIGIT_COMMON::IsOperationInProgress() const
 {
     return m_repo && git_repository_state( m_repo ) != GIT_REPOSITORY_STATE_NONE;

@@ -1366,4 +1366,45 @@ BOOST_AUTO_TEST_CASE( HasUncommittedTrackedChangesIgnoresUntracked )
 }
 
 
+// Discarding a conflicted file puts back what HEAD holds and clears the conflict, so it settles
+// the file rather than only throwing away an edit. The panel says so, and asks first.
+BOOST_AUTO_TEST_CASE( DiscardingAConflictedPathSettlesIt )
+{
+    SCOPED_GIT_BACKEND libgit;
+    ScopedTempDir      tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "one\ntwo\nthree\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_CHECK( !common.IsPathConflicted( wxS( "file.txt" ) ) );
+    BOOST_CHECK( !common.IsPathConflicted( wxS( "nothing.txt" ) ) );
+
+    git_oid blobOid;
+    BOOST_REQUIRE_EQUAL( git_blob_create_from_buffer( &blobOid, repo, "other\n", 6 ), GIT_OK );
+
+    {
+        git_index* index = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+        KIGIT::GitIndexPtr indexPtr( index );
+
+        git_index_entry stage{};
+        stage.path = "file.txt";
+        stage.mode = GIT_FILEMODE_BLOB;
+        git_oid_cpy( &stage.id, &blobOid );
+
+        BOOST_REQUIRE_EQUAL( git_index_conflict_add( index, &stage, &stage, &stage ), GIT_OK );
+        BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
+    }
+
+    BOOST_CHECK( common.IsPathConflicted( wxS( "file.txt" ) ) );
+
+    wxString error;
+    BOOST_REQUIRE_MESSAGE( common.DiscardChanges( { wxS( "file.txt" ) }, error ), error.ToStdString() );
+
+    BOOST_CHECK_MESSAGE( !common.IsPathConflicted( wxS( "file.txt" ) ),
+                         "discarding left the file still needing resolution" );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
