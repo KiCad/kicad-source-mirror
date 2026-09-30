@@ -23,6 +23,7 @@
 #include <memory>
 #include <vector>
 
+#include <wx/app.h>
 #include <wx/arrstr.h>
 #include <wx/bitmap.h>
 #include <wx/bmpbndl.h>
@@ -30,12 +31,16 @@
 #include <wx/dataview.h>
 #include <wx/dcgraph.h>
 #include <wx/dcmemory.h>
+#include <wx/image.h>
 #include <wx/listctrl.h>
+#include <wx/mstream.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/richmsgdlg.h>
 #include <wx/textdlg.h>
 #include <wx/treectrl.h>
+
+#include <picosha2.h>
 
 #include <confirm.h>
 #include <eda_base_frame.h>
@@ -44,9 +49,13 @@
 #include <git/git_commit_handler.h>
 #include <git/git_config_handler.h>
 #include <git/kicad_git_common.h>
+#include <kicad_curl/kicad_curl_easy.h>
 #include <kiway.h>
 #include <kiway_player.h>
+#include <pgm_base.h>
 #include <project.h>
+#include <settings/common_settings.h>
+#include <thread>
 #include <widgets/ui_common.h>
 #include <widgets/wx_treebook.h>
 
@@ -143,6 +152,72 @@ wxBitmap makeAvatarBitmap( wxWindow* aCtx, const wxString& aName, int aSlot, int
 
     mdc.SelectObject( wxNullBitmap );
     return bmp;
+}
+
+
+// Fetch a contributor's Gravatar over HTTPS using the SHA-256 of their email. Returns the raw
+// image bytes, or empty on any failure or when the contributor has no Gravatar. Runs on a
+// worker thread, so it does no wx GUI work.
+std::string fetchGravatarBytes( const wxString& aEmail, int aPixels, const std::atomic<bool>& aCancel )
+{
+    wxString normalized = aEmail;
+    normalized.Trim( true ).Trim( false );
+    normalized.MakeLower();
+
+    std::string hash = picosha2::hash256_hex_string( std::string( normalized.utf8_string() ) );
+
+    KICAD_CURL_EASY curl;
+    curl.SetURL( "https://www.gravatar.com/avatar/" + hash + "?s=" + std::to_string( aPixels ) + "&d=404" );
+    curl.SetUserAgent( "KiCad" );
+    curl.SetFollowRedirects( true );
+
+    // A photo is decoration, so it must not sit on an unresponsive host for the default 30
+    // second connect timeout.
+    curl.SetConnectTimeout( 5 );
+    curl.SetTimeout( 10 );
+
+    // Closing the window must not wait out those timeouts, so the fetch gives up when asked.
+    curl.SetTransferCallback(
+            [&aCancel]( size_t, size_t, size_t, size_t ) -> int
+            {
+                return aCancel ? 1 : 0;
+            },
+            0 );
+
+    if( curl.Perform() != 0 || curl.GetResponseStatusCode() != 200 )
+        return {};
+
+    return curl.GetBuffer();
+}
+
+
+// Scale a fetched photo to aDiameter and clip it to a circle so it matches the generated
+// initials avatars.
+wxBitmap makeCircularBitmap( const wxImage& aImage, int aDiameter )
+{
+    wxImage scaled = aImage.Scale( aDiameter, aDiameter, wxIMAGE_QUALITY_HIGH );
+
+    if( !scaled.HasAlpha() )
+        scaled.InitAlpha();
+
+    // Clear the alpha outside the inscribed circle so the photo shows as a disc, matching the
+    // generated initials avatars.
+    const double centre = ( aDiameter - 1 ) / 2.0;
+    const double radius = aDiameter / 2.0;
+
+    for( int y = 0; y < aDiameter; ++y )
+    {
+        for( int x = 0; x < aDiameter; ++x )
+        {
+            double dx = x - centre;
+            double dy = y - centre;
+
+            if( dx * dx + dy * dy > radius * radius )
+                scaled.SetAlpha( x, y, 0 );
+        }
+    }
+
+    return wxBitmap( scaled );
 }
 
 
@@ -458,6 +533,11 @@ GIT_ADVANCED_DIALOG::~GIT_ADVANCED_DIALOG()
     if( activeDialog() == this )
         setActiveDialog( nullptr );
 
+    m_avatarCancel = true;
+
+    for( std::thread& worker : m_avatarWorkers )
+        worker.join();
+
     if( std::shared_ptr<KIGIT_COMMON> session = m_listenerSession.lock() )
         session->RemoveRefreshListener( this );
 }
@@ -528,6 +608,8 @@ void GIT_ADVANCED_DIALOG::populateHistory()
 
 void GIT_ADVANCED_DIALOG::appendHistoryRows( const std::vector<KIGIT_COMMIT_INFO>& aCommits, size_t aFrom )
 {
+    bool showAvatars = Pgm().GetCommonSettings()->m_Git.showContributorAvatars;
+
     // The custom renderer centers this avatar in the row, so the bitmap is just the circle.
     int diameter = m_historyList->FromDIP( 20 );
 
@@ -535,7 +617,13 @@ void GIT_ADVANCED_DIALOG::appendHistoryRows( const std::vector<KIGIT_COMMIT_INFO
     {
         const KIGIT_COMMIT_INFO& c = aCommits[ii];
 
-        wxBitmap avatar = makeAvatarBitmap( m_historyList, c.author, diameter, diameter );
+        wxBitmap avatar;
+        auto     cached = m_avatarCache.find( c.email );
+
+        if( showAvatars && cached != m_avatarCache.end() && cached->second.IsOk() )
+            avatar = cached->second;
+        else
+            avatar = makeAvatarBitmap( m_historyList, c.author, diameter, diameter );
 
         wxVariant iconText;
         iconText << wxDataViewIconText( c.summary, wxBitmapBundle::FromBitmap( avatar ) );
@@ -548,6 +636,9 @@ void GIT_ADVANCED_DIALOG::appendHistoryRows( const std::vector<KIGIT_COMMIT_INFO
         m_historyList->AppendItem( row );
 
         m_historyEmails.push_back( c.email );
+
+        if( showAvatars )
+            requestAvatar( c.email, diameter );
     }
 }
 
@@ -596,6 +687,72 @@ void GIT_ADVANCED_DIALOG::onHistoryScrollTick()
 
     if( m_historyComplete )
         m_historyScrollTimer.Stop();
+}
+
+
+void GIT_ADVANCED_DIALOG::requestAvatar( const wxString& aEmail, int aDiameter )
+{
+    if( aEmail.IsEmpty() || m_avatarCache.count( aEmail ) || m_avatarRequested.count( aEmail ) )
+        return;
+
+    // Each fetch is its own network round trip, so cap how many a history page can start. The
+    // rest keep their generated initials avatar.
+    const size_t maxAvatarFetches = 24;
+
+    if( m_avatarRequested.size() >= maxAvatarFetches )
+        return;
+
+    m_avatarRequested.insert( aEmail );
+
+    wxString email = aEmail;
+    int      fetchPx = aDiameter * 2;
+
+    // Never the shared compute pool. A network read parked there stalls DRC, zone filling
+    // and library loading.
+    m_avatarWorkers.emplace_back(
+            [this, email, aDiameter, fetchPx]()
+            {
+                std::string bytes = fetchGravatarBytes( email, fetchPx, m_avatarCancel );
+
+                CallAfter(
+                        [this, email, aDiameter, bytes]()
+                        {
+                            applyAvatar( email, aDiameter, bytes );
+                        } );
+            } );
+}
+
+
+void GIT_ADVANCED_DIALOG::applyAvatar( const wxString& aEmail, int aDiameter, const std::string& aBytes )
+{
+    if( aBytes.empty() )
+        return;
+
+    wxMemoryInputStream stream( aBytes.data(), aBytes.size() );
+    wxImage             image;
+
+    if( !image.LoadFile( stream, wxBITMAP_TYPE_ANY ) )
+        return;
+
+    wxBitmap circle = makeCircularBitmap( image, aDiameter );
+    m_avatarCache[aEmail] = circle;
+
+    for( unsigned row = 0; row < m_historyEmails.size(); ++row )
+    {
+        if( m_historyEmails[row] != aEmail )
+            continue;
+
+        wxVariant value;
+        m_historyList->GetValue( value, row, 0 );
+
+        wxDataViewIconText iconText;
+        iconText << value;
+
+        wxDataViewIconText updated( iconText.GetText(), wxBitmapBundle::FromBitmap( circle ) );
+        wxVariant          updatedValue;
+        updatedValue << updated;
+        m_historyList->SetValue( updatedValue, row, 0 );
+    }
 }
 
 

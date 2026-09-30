@@ -27,6 +27,7 @@
 #include <set>
 #include <string>
 #include <utility>
+#include <thread>
 #include <vector>
 
 #include <wx/bitmap.h>
@@ -160,6 +161,13 @@ private:
     void onEditRemote();
     void onRemoveRemote();
     void onSaveRepositoryConfig();
+
+    /// Set when the window goes, so a fetch still waiting on the network gives up rather
+    /// than holding the close for its timeout.
+    std::atomic<bool> m_avatarCancel{ false };
+
+    /// The avatar fetches the History page started, joined before this window goes.
+    std::vector<std::thread> m_avatarWorkers;
 
     EDA_BASE_FRAME*     m_parent;
     WX_TREEBOOK*        m_book;
