@@ -3226,6 +3226,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     {
         if( lineStyle <= LINE_STYLE::FIRST_TYPE )
         {
+            // Simple case: faster than not solid hape lines
             if( thickness > 0 )
             {
                 std::vector<VECTOR2I> pts = aTextBox->GetCorners();
@@ -3236,7 +3237,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
         }
         else
         {
-            std::vector<SHAPE*> shapes = aTextBox->MakeEffectiveShapes( true );
+            std::vector<SHAPE*> shapes = aTextBox->GetPolygonalBoxShape().MakeEffectiveShapes( true );
 
             for( SHAPE* shape : shapes )
             {

@@ -78,6 +78,14 @@ public:
 
     std::vector<VECTOR2I> GetCorners() const override;
 
+    /*
+     * @return a PCB_SHAPE type POLYGON of the box of the TEXTBOX, according to the box shape
+     * and the textbox rotation
+     * The base PCB_SHAPE of a textbox is a RECTANGLE, so creating some issues when orientation
+     * is not 0 is some draw functions
+     */
+    PCB_SHAPE GetPolygonalBoxShape() const;
+
     std::vector<VECTOR2I> GetCornersInSequence( EDA_ANGLE angle ) const override;
 
     // Keep the lib shape as RECTANGLE even if a runtime polygon conversion happens.

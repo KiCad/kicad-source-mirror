@@ -1009,23 +1009,9 @@ void BOARD_ADAPTER::addShape( const PCB_TEXTBOX* aTextBox, CONTAINER_2D_BASE* aC
     if( !aTextBox->IsBorderEnabled() )
         return;
 
-    // We cannot use PCB_TEXTBOX::TransformShapeToPolygon because it convert the textbox
-    // as filled polygon even if there's no background colour.
-    // So for polygon, we use PCB_SHAPE::TransformShapeToPolygon
-
-    if( aTextBox->GetShape() == SHAPE_T::RECTANGLE )
-    {
-        addShape( static_cast<const PCB_SHAPE*>( aTextBox ), aContainer, aOwner, UNDEFINED_LAYER );
-    }
-    else
-    {
-        SHAPE_POLY_SET polyList;
-
-        aTextBox->PCB_SHAPE::TransformShapeToPolygon( polyList, UNDEFINED_LAYER, 0, aTextBox->GetMaxError(),
-                                                      ERROR_INSIDE );
-
-        ConvertPolygonToTriangles( polyList, *aContainer, m_biuTo3Dunits, *aOwner );
-    }
+    // we use the box polygonal shape to honor the text box rotation and box line style
+    PCB_SHAPE tb_box = aTextBox->GetPolygonalBoxShape();
+    addShape( &tb_box, aContainer, aOwner, UNDEFINED_LAYER );
 }
 
 

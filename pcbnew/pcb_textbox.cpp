@@ -835,6 +835,20 @@ std::shared_ptr<SHAPE> PCB_TEXTBOX::GetEffectiveShape( PCB_LAYER_ID aLayer, FLAS
 }
 
 
+PCB_SHAPE PCB_TEXTBOX::GetPolygonalBoxShape() const
+{
+    // Build a PCB_SHAPE type POLYGON of the TEXTBOX, according to the box shape and the textbox rotation
+    PCB_SHAPE dummy( GetParent(), SHAPE_T::POLY );
+    dummy.SetWidth( GetBorderWidth() );
+    dummy.SetStroke( GetStroke() );
+    dummy.SetLayer( GetLayer() );
+    std::vector<VECTOR2I> poly = GetCorners();  // Already rotated
+    dummy.SetPolyPoints( poly );
+
+    return dummy;
+}
+
+
 void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearance, int aMaxError,
                                           ERROR_LOC aErrorLoc ) const
 {
@@ -877,6 +891,14 @@ void PCB_TEXTBOX::TransformTextToPolySet( SHAPE_POLY_SET& aBuffer, int aClearanc
         SHAPE_POLY_SET finalPoly;
 
         TransformShapeToPolygon( finalPoly, GetLayer(), aClearance, aMaxError, aErrorLoc );
+
+        // A TEXTBOX can be rotated, but TransformShapeToPolygon does not handle the text rotation.
+        // so rotate the finalPoly by the text rotation
+        EDA_ANGLE angle = GetTextAngle();
+
+        if( angle != ANGLE_0 )
+            finalPoly.Rotate( angle, GetCenter() );
+
         finalPoly.BooleanSubtract( textShape );
 
         aBuffer.Append( finalPoly );
