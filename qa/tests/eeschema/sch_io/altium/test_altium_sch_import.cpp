@@ -27,6 +27,7 @@
 #include <schematic.h>
 #include <sch_io/altium/sch_io_altium.h>
 #include <sch_label.h>
+#include <sch_no_connect.h>
 #include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
@@ -67,6 +68,13 @@ struct ALTIUM_SCH_IMPORT_FIXTURE
     {
         return wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir()
                                    + "/plugins/altium/issue24861/" )
+               + aName;
+    }
+
+    wxString issue22908DataFile( const wxString& aName ) const
+    {
+        return wxString::FromUTF8( KI_TEST::GetEeschemaTestDataDir()
+                                   + "/plugins/altium/issue22908/" )
                + aName;
     }
 
@@ -205,6 +213,51 @@ BOOST_AUTO_TEST_CASE( Issue24861_RepeatedSchematicChannels )
                                                         wxT( "LED1_CH3" ) } ) );
     BOOST_CHECK( resistorReferences == std::set<wxString>( { wxT( "R1_CH1" ), wxT( "R1_CH2" ),
                                                              wxT( "R1_CH3" ) } ) );
+}
+
+
+// https://gitlab.com/kicad/code/kicad/-/issues/22908
+// Only the 34 Generic No ERC crosses are no-connects, the four Specific No ERC checkboxes are not
+BOOST_AUTO_TEST_CASE( Issue22908_SpecificNoErcIsNotNoConnect )
+{
+    SCH_IO_ALTIUM plugin;
+
+    SCH_SHEET* rootSheet = plugin.LoadSchematicFile( issue22908DataFile( wxT( "3_mpcie.SchDoc" ) ), &m_schematic );
+    BOOST_REQUIRE( rootSheet );
+
+    SCH_SCREEN* screen = rootSheet->GetScreen();
+    BOOST_REQUIRE( screen );
+
+    // Altium places these in 10 mil units with the Y axis flipped about the page bottom
+    static const std::vector<VECTOR2I> crosses = {
+        { 360, 500 }, { 360, 540 }, { 360, 610 }, { 360, 600 }, { 360, 620 }, { 360, 530 }, { 360, 460 },
+        { 360, 450 }, { 170, 550 }, { 170, 540 }, { 170, 520 }, { 170, 510 }, { 170, 610 }, { 170, 590 },
+        { 170, 580 }, { 880, 500 }, { 880, 540 }, { 880, 610 }, { 880, 600 }, { 880, 620 }, { 880, 530 },
+        { 880, 460 }, { 880, 450 }, { 690, 550 }, { 690, 540 }, { 690, 520 }, { 690, 510 }, { 690, 610 },
+        { 690, 590 }, { 690, 580 }, { 480, 650 }, { 1000, 650 }, { 290, 340 }, { 810, 340 }
+    };
+
+    const int gridPitch = m_schematic.Settings().m_ConnectionGridSize;
+    const int pageHeight = screen->GetPageSettings().GetHeightIU( schIUScale.IU_PER_MILS );
+    const int flipY = ( pageHeight / gridPitch ) * gridPitch;
+
+    std::set<std::pair<int, int>> expected;
+
+    for( const VECTOR2I& cross : crosses )
+        expected.emplace( schIUScale.MilsToIU( cross.x * 10 ), flipY - schIUScale.MilsToIU( cross.y * 10 ) );
+
+    std::set<std::pair<int, int>> actual;
+
+    size_t actualCount = 0;
+
+    for( SCH_ITEM* item : screen->Items().OfType( SCH_NO_CONNECT_T ) )
+    {
+        ++actualCount;
+        actual.emplace( item->GetPosition().x, item->GetPosition().y );
+    }
+
+    BOOST_CHECK_EQUAL( actualCount, crosses.size() );
+    BOOST_CHECK( actual == expected );
 }
 
 

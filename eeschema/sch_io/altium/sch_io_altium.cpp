@@ -4881,7 +4881,8 @@ void SCH_IO_ALTIUM::ParseNoERC( const std::map<wxString, wxString>& aProperties 
     SCH_SCREEN* screen = getCurrentScreen();
     wxCHECK( screen, /* void */ );
 
-    if( elem.isActive )
+    // Only the generic cross means unconnected, a specific No ERC just waives selected violations
+    if( elem.isActive && elem.suppressAll )
     {
         SCH_NO_CONNECT* noConnect = new SCH_NO_CONNECT( elem.location + m_sheetOffset );
 

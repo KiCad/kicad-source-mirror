@@ -700,7 +700,7 @@ ASCH_NO_ERC::ASCH_NO_ERC( const std::map<wxString, wxString>& aProps )
                          -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
 
     isActive   = ALTIUM_PROPS_UTILS::ReadBool( aProps, "ISACTIVE", true );
-    suppressAll = ALTIUM_PROPS_UTILS::ReadInt( aProps, "SUPPRESSALL", true );
+    suppressAll = ALTIUM_PROPS_UTILS::ReadBool( aProps, "SUPPRESSALL", true );
 }
 
 
