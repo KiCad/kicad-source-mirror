@@ -26,6 +26,8 @@
 #include <pcb_io/common/plugin_common_layer_mapping.h>
 
 #include <layer_ids.h> // PCB_LAYER_ID
+#include <exporters/fab_model/fab_drill_model.h>
+#include <exporters/fab_model/fab_stackup.h>
 #include <font/font.h>
 #include <geometry/shape_segment.h>
 #include <stroke_params.h>
@@ -86,6 +88,8 @@ public:
     static int MaxPrecision() { return 16; }
 
     const ODB_FORMAT& GetFormat() const { return m_format; }
+    const FAB_STACKUP& GetFabStackup() const { return *m_fabStackup; }
+    const FAB_DRILL_MODEL& GetFabDrillModel();
 
     uint32_t NewUid() { return ++m_maxUid; }
     uint32_t MaxUid() const { return m_maxUid; }
@@ -104,20 +108,12 @@ public:
 public:
     inline std::vector<ODB_LAYER_NAME>& GetLayerNameList() { return m_layer_name_list; }
 
-    inline std::map<PCB_LAYER_ID, std::map<int, std::vector<BOARD_ITEM*>>>& GetLayerElementsMap()
-    {
-        return m_layer_elements;
-    }
-
     inline std::vector<std::shared_ptr<FOOTPRINT>>& GetLoadedFootprintList()
     {
         return m_loaded_footprints;
     }
 
-    inline std::map<ODB_DRILL_SPAN, std::vector<BOARD_ITEM*>>& GetDrillLayerItemsMap()
-    {
-        return m_drill_layers;
-    }
+    inline std::map<DRILL_SPAN, std::vector<BOARD_ITEM*>>& GetDrillLayerItemsMap() { return m_drill_layers; }
 
     inline std::map<ODB_AUX_LAYER_KEY, std::vector<BOARD_ITEM*>>& GetAuxilliaryLayerItemsMap()
     {
@@ -193,16 +189,12 @@ private:
 
     std::vector<ODB_LAYER_NAME> m_layer_name_list; //<! matrix row metadata in row order
 
-    std::map<ODB_DRILL_SPAN, std::vector<BOARD_ITEM*>>
-            m_drill_layers; //<! Drill sets are output as layers (to/from pairs)
+    std::map<DRILL_SPAN, std::vector<BOARD_ITEM*>> m_drill_layers; //<! Drill sets are output as layers, one per span
     std::map<ODB_AUX_LAYER_KEY, std::vector<BOARD_ITEM*>>
             m_auxilliary_layers; //<! Auxilliary layers, from/to pairs or simple (depending on type)
 
     std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<BOARD_ITEM*>>
             m_slot_holes; //<! Storage vector of slotted holes that need to be output as cutouts
-
-    std::map<PCB_LAYER_ID, std::map<int, std::vector<BOARD_ITEM*>>>
-            m_layer_elements; //<! Storage map of layer to element list
 
     std::map<const PAD*, EDA_DATA::SUB_NET_TOEPRINT*> m_topeprint_subnets;
 
@@ -214,6 +206,9 @@ private:
 
     std::map<std::pair<const BOARD_ITEM*, PCB_LAYER_ID>, std::pair<wxString, size_t>> m_netTieFeatures;
 
+    // The entities hold pointers into the snapshot and must be destroyed first
+    std::unique_ptr<FAB_STACKUP>                  m_fabStackup;
+    std::unique_ptr<FAB_DRILL_MODEL>              m_fabDrillModel;
     std::vector<std::shared_ptr<ODB_ENTITY_BASE>> m_entities;
 };
 

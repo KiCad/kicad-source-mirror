@@ -23,6 +23,7 @@
  * @brief Export IPC-D-356 test format
  */
 #include "export_d356.h"
+#include <exporters/fab_model/fab_test_points.h>
 
 #include <algorithm>
 #include <cctype>
@@ -111,64 +112,65 @@ static int iu_to_d356(int iu, int clamp)
 }
 
 /* Extract the D356 record from the footprints (pads) */
-void IPC356D_WRITER::build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecords )
+void IPC356D_WRITER::appendPadRecords( BOARD* aPcb, const std::vector<FAB_TEST_POINT>& aPoints,
+                                       std::vector<D356_RECORD>& aRecords )
 {
     VECTOR2I origin = aPcb->GetDesignSettings().GetAuxOrigin();
 
-    for( FOOTPRINT* footprint : aPcb->Footprints() )
+    for( const FAB_TEST_POINT& point : aPoints )
     {
-        for( PAD* pad : footprint->Pads() )
-        {
-            D356_RECORD rk;
-            rk.access = compute_pad_access_code( aPcb, pad->GetLayerSet() );
+        if( !point.m_pad )
+            continue;
 
-            // It could be a mask only pad, we only handle pads with copper here
-            if( rk.access == -1 )
-                continue;
+        const PAD*       pad = point.m_pad;
+        const FOOTPRINT* footprint = pad->GetParentFootprint();
+        D356_RECORD      rk;
+        rk.access = compute_pad_access_code( aPcb, pad->GetLayerSet() );
 
-            if( m_doNotExportUnconnectedPads && pad->GetNetCode() == NETINFO_LIST::UNCONNECTED )
-                continue;
+        // It could be a mask only pad, we only handle pads with copper here
+        if( rk.access == -1 )
+            continue;
 
-            rk.netname = pad->GetNetname();
-            rk.pin = pad->GetNumber();
-            rk.refdes = footprint->GetReference();
-            // A named pad is a component terminal (end-net point); an unnamed copper
-            // feature is only reachable mid-net, so it is a midpoint per IPC-D-356A
-            rk.midpoint = rk.pin.IsEmpty();
-            const VECTOR2I& drill = pad->GetDrillSize();
-            rk.drill = std::min( drill.x, drill.y );
-            rk.hole = (rk.drill != 0);
-            rk.smd = pad->GetAttribute() == PAD_ATTRIB::SMD
-                        || pad->GetAttribute() == PAD_ATTRIB::CONN;
-            rk.mechanical = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
-            rk.x_location = pad->GetPosition().x - origin.x;
-            rk.y_location = origin.y - pad->GetPosition().y;
+        if( m_doNotExportUnconnectedPads && point.m_netCode == NETINFO_LIST::UNCONNECTED )
+            continue;
 
-            PCB_LAYER_ID accessLayer = footprint->IsFlipped() ? B_Cu : F_Cu;
-            rk.x_size = pad->GetSize( accessLayer ).x;
+        rk.netname = pad->GetNetname();
+        rk.pin = pad->GetNumber();
+        rk.refdes = footprint->GetReference();
+        // A named pad is a component terminal (end-net point); an unnamed copper
+        // feature is only reachable mid-net, so it is a midpoint per IPC-D-356A
+        rk.midpoint = rk.pin.IsEmpty();
+        rk.drill = point.m_drill;
+        rk.hole = ( rk.drill != 0 );
+        rk.smd = pad->GetAttribute() == PAD_ATTRIB::SMD || pad->GetAttribute() == PAD_ATTRIB::CONN;
+        rk.mechanical = ( pad->GetAttribute() == PAD_ATTRIB::NPTH );
+        rk.x_location = point.m_position.x - origin.x;
+        rk.y_location = origin.y - point.m_position.y;
 
-            // Rule: round pads have y = 0
-            if( pad->GetShape( accessLayer ) == PAD_SHAPE::CIRCLE )
-                rk.y_size = 0;
-            else
-                rk.y_size = pad->GetSize( accessLayer ).y;
+        PCB_LAYER_ID accessLayer = footprint->IsFlipped() ? B_Cu : F_Cu;
+        rk.x_size = pad->GetSize( accessLayer ).x;
 
-            rk.rotation = - pad->GetOrientation().AsDegrees();
+        // Rule: round pads have y = 0
+        if( pad->GetShape( accessLayer ) == PAD_SHAPE::CIRCLE )
+            rk.y_size = 0;
+        else
+            rk.y_size = pad->GetSize( accessLayer ).y;
 
-            if( rk.rotation < 0 )
-                rk.rotation += 360;
+        rk.rotation = -pad->GetOrientation().AsDegrees();
 
-            // the value indicates which sides are *not* accessible
-            rk.soldermask = 3;
+        if( rk.rotation < 0 )
+            rk.rotation += 360;
 
-            if( pad->GetLayerSet()[F_Mask] )
-                rk.soldermask &= ~1;
+        // the value indicates which sides are *not* accessible
+        rk.soldermask = 3;
 
-            if( pad->GetLayerSet()[B_Mask] )
-                rk.soldermask &= ~2;
+        if( point.m_frontMask )
+            rk.soldermask &= ~1;
 
-            aRecords.push_back( std::move( rk ) );
-        }
+        if( point.m_backMask )
+            rk.soldermask &= ~2;
+
+        aRecords.push_back( std::move( rk ) );
     }
 }
 
@@ -196,73 +198,73 @@ static int via_access_code( BOARD *aPcb, int top_layer, int bottom_layer )
 }
 
 /* Extract the D356 record from the vias */
-static void build_via_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecords )
+static void appendViaRecords( BOARD* aPcb, const std::vector<FAB_TEST_POINT>& aPoints,
+                              std::vector<D356_RECORD>& aRecords )
 {
     VECTOR2I origin = aPcb->GetDesignSettings().GetAuxOrigin();
 
-    // Enumerate all the track segments and keep the vias
-    for( auto track : aPcb->Tracks() )
+    for( const FAB_TEST_POINT& point : aPoints )
     {
-        if( track->Type() == PCB_VIA_T )
+        if( !point.m_via )
+            continue;
+
+        const PCB_VIA*      via = point.m_via;
+        const NETINFO_ITEM* net = via->GetNet();
+
+        D356_RECORD rk;
+        rk.smd = false;
+        rk.hole = true;
+
+        if( net )
+            rk.netname = net->GetNetname();
+        else
+            rk.netname = wxEmptyString;
+
+        rk.refdes = wxT( "VIA" );
+        rk.pin = wxT( "" );
+        rk.midpoint = true; // Vias are always midpoints
+        rk.drill = point.m_drill;
+        rk.mechanical = false;
+
+        PCB_LAYER_ID top_layer, bottom_layer;
+
+        via->LayerPair( &top_layer, &bottom_layer );
+
+        rk.access = via_access_code( aPcb, top_layer, bottom_layer );
+
+        if( rk.access != 0 )
         {
-            PCB_VIA *via = static_cast<PCB_VIA*>( track );
-            NETINFO_ITEM *net = track->GetNet();
-
-            D356_RECORD rk;
-            rk.smd = false;
-            rk.hole = true;
-
-            if( net )
-                rk.netname = net->GetNetname();
-            else
-                rk.netname = wxEmptyString;
-
-            rk.refdes = wxT("VIA");
-            rk.pin = wxT("");
-            rk.midpoint = true; // Vias are always midpoints
-            rk.drill = via->GetDrillValue();
-            rk.mechanical = false;
-
-            PCB_LAYER_ID top_layer, bottom_layer;
-
-            via->LayerPair( &top_layer, &bottom_layer );
-
-            rk.access = via_access_code( aPcb, top_layer, bottom_layer );
-
-            if( rk.access != 0 )
-            {
-                rk.start_layer = physical_layer( aPcb, top_layer );
-                rk.end_layer = physical_layer( aPcb, bottom_layer );
-            }
-
-            rk.x_location = via->GetPosition().x - origin.x;
-            rk.y_location = origin.y - via->GetPosition().y;
-
-            // The record has a single size for vias. A blind via's 027 record describes its one
-            // surface pad; otherwise take the smaller of the front and back
-            if( rk.access == 1 )
-                rk.x_size = via->GetWidth( F_Cu );
-            else if( rk.access == aPcb->GetCopperLayerCount() )
-                rk.x_size = via->GetWidth( B_Cu );
-            else if( via->Padstack().Mode() != PADSTACK::MODE::NORMAL )
-                rk.x_size = std::min( via->GetWidth( F_Cu ), via->GetWidth( B_Cu ) );
-            else
-                rk.x_size = via->GetWidth( F_Cu );
-
-            rk.y_size = 0; // Round so height = 0
-            rk.rotation = 0;
-
-            // the value indicates which sides are *not* accessible
-            rk.soldermask = 0;
-
-            if( via->IsTented( F_Mask ) )
-                rk.soldermask |= 1;
-
-            if( via->IsTented( B_Mask ) )
-                rk.soldermask |= 2;
-
-            aRecords.push_back( rk );
+            rk.start_layer = physical_layer( aPcb, top_layer );
+            rk.end_layer = physical_layer( aPcb, bottom_layer );
         }
+
+        rk.x_location = point.m_position.x - origin.x;
+        rk.y_location = origin.y - point.m_position.y;
+
+        // The record has a single size for vias. A blind via's 027 record describes its one
+        // surface pad; otherwise take the smaller of the front and back
+        if( rk.access == 1 )
+            rk.x_size = via->GetWidth( F_Cu );
+        else if( rk.access == aPcb->GetCopperLayerCount() )
+            rk.x_size = via->GetWidth( B_Cu );
+        else if( via->Padstack().Mode() != PADSTACK::MODE::NORMAL )
+            rk.x_size = std::min( via->GetWidth( F_Cu ), via->GetWidth( B_Cu ) );
+        else
+            rk.x_size = via->GetWidth( F_Cu );
+
+        rk.y_size = 0; // Round so height = 0
+        rk.rotation = 0;
+
+        // the value indicates which sides are *not* accessible
+        rk.soldermask = 0;
+
+        if( via->IsTented( F_Mask ) )
+            rk.soldermask |= 1;
+
+        if( via->IsTented( B_Mask ) )
+            rk.soldermask |= 2;
+
+        aRecords.push_back( rk );
     }
 }
 
@@ -453,9 +455,9 @@ bool IPC356D_WRITER::Write( const wxString& aFilename )
     // This will contain everything needed for the 356 file
     std::vector<D356_RECORD> d356_records;
 
-    build_via_testpoints( m_pcb, d356_records );
-
-    build_pad_testpoints( m_pcb, d356_records );
+    std::vector<FAB_TEST_POINT> points = FabTestPoints( *m_pcb );
+    appendViaRecords( m_pcb, points, d356_records );
+    appendPadRecords( m_pcb, points, d356_records );
 
     // Code 00 AFAIK is ASCII, CUST 0 is decimils/degrees
     // CUST 1 would be metric but gerbtool simply ignores it!

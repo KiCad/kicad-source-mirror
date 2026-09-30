@@ -26,6 +26,7 @@
 #include <board_design_settings.h>
 #include <confirm.h>
 #include <drill/drill_symbol_assigner.h>
+#include <drill/drill_enumerator.h>
 #include <pad.h>
 #include <pcb_edit_frame.h>
 #include <pcb_track.h>

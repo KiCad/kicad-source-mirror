@@ -66,6 +66,7 @@ std::vector<std::string> exportD356( const std::string& aBoardFile )
     for( std::string line; std::getline( in, line ); )
         lines.push_back( line );
 
+    in.close();
     std::filesystem::remove( outputPath );
     return lines;
 }
@@ -157,6 +158,7 @@ BOOST_AUTO_TEST_CASE( ExportD356MidpointFlag )
     BOOST_CHECK_GT( unnamedPads, 0 );
     BOOST_CHECK_GT( vias, 0 );
 
+    in.close();
     std::filesystem::remove( outputPath );
 }
 

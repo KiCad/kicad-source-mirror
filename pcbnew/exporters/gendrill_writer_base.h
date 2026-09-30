@@ -284,9 +284,6 @@ protected:
      */
     bool plotDrillMarks( PLOTTER* aPlotter );
 
-    /// Get unique layer pairs by examining the micro and blind_buried vias.
-    std::vector<DRILL_SPAN> getUniqueLayerPairs() const;
-
     /// Selects which subset of m_toolListBuffer a summary covers.
     enum class TOOL_SUMMARY
     {

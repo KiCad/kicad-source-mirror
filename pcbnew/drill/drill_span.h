@@ -41,7 +41,8 @@ enum class HOLE_ATTRIBUTE
     HOLE_PAD,               // a plated or not plated pad hole
     HOLE_PAD_CASTELLATED,   // a plated castelleted pad hole
     HOLE_PAD_PRESSFIT,      // a plated press-fit pad hole
-    HOLE_MECHANICAL         // a mechanical pad (provided, not used)
+    HOLE_MECHANICAL,        // a mechanical pad (provided, not used)
+    HOLE_PAD_BACKDRILL      // a pad hole created by a backdrill operation
 };
 
 

@@ -76,9 +76,9 @@ struct ODB_LAYER_NAME
     ODB_LAYER_ROLE                    m_role = ODB_LAYER_ROLE::BOARD_LAYER;
     std::optional<ODB_AUX_LAYER_TYPE> m_auxType;
     std::optional<ODB_AUX_LAYER_KEY>  m_auxKey;
-    const BOARD_STACKUP_ITEM*         m_stackupItem = nullptr; // Owned by the board stackup for the export
+    const BOARD_STACKUP_ITEM*         m_stackupItem = nullptr; // Owned by the export stackup snapshot
     int                               m_sublayer = 0;
-    std::optional<ODB_DRILL_SPAN>     m_drillSpan;
+    std::optional<DRILL_SPAN>         m_drillSpan;
 };
 
 class ODB_MATRIX_ENTITY : public ODB_ENTITY_BASE
@@ -206,7 +206,8 @@ private:
 class ODB_LAYER_ENTITY : public ODB_ENTITY_BASE
 {
 public:
-    ODB_LAYER_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin, std::map<int, std::vector<BOARD_ITEM*>>& aMap,
+    ODB_LAYER_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin,
+                      const std::map<int, std::vector<BOARD_ITEM*>>& aMap,
                       const ODB_LAYER_NAME& aLayer );
 
     virtual ~ODB_LAYER_ENTITY() = default;

@@ -106,39 +106,6 @@ bool ViaInPad( const PCB_VIA& aVia )
 }
 
 
-const PADSTACK::DRILL_PROPS* MatchBackdrill( const PCB_VIA& aVia, PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd )
-{
-    auto matches = [&]( const PADSTACK::DRILL_PROPS& aDrill )
-    {
-        return aDrill.start == aStart && aDrill.end == aEnd && ( aDrill.size.x > 0 || aDrill.size.y > 0 );
-    };
-
-    const PADSTACK::DRILL_PROPS& secondary = aVia.Padstack().SecondaryDrill();
-
-    if( matches( secondary ) )
-        return &secondary;
-
-    const PADSTACK::DRILL_PROPS& tertiary = aVia.Padstack().TertiaryDrill();
-
-    if( matches( tertiary ) )
-        return &tertiary;
-
-    return nullptr;
-}
-
-
-int BackdrillDiameter( const PADSTACK::DRILL_PROPS& aDrill )
-{
-    if( aDrill.size.x <= 0 )
-        return std::max( aDrill.size.y, 0 );
-
-    if( aDrill.size.y <= 0 )
-        return aDrill.size.x;
-
-    return std::min( aDrill.size.x, aDrill.size.y );
-}
-
-
 std::vector<ODB_TYPE> OverridableLayerTypes( PCB_LAYER_ID aLayer )
 {
     if( IsCopperLayer( aLayer ) )

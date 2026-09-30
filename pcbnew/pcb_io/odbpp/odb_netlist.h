@@ -29,6 +29,7 @@ struct ODB_NET_RECORD
     bool        smd;
     bool        hole;
     bool        is_via;
+    bool        testpoint;
     std::string refdes;
     int         drill_radius;
     bool        mechanical;
@@ -66,11 +67,9 @@ public:
 private:
     BOARD*        m_board;
     PCB_IO_ODBPP* m_plugin;
-    std::string ComputePadAccessSide( BOARD* aBoard, LSET aLayerMask );
     std::string ComputeViaAccessSide( BOARD* aBoard, int top_layer, int bottom_layer );
 
-    void InitPadNetPoints( BOARD* aBoard, std::map<size_t, std::vector<ODB_NET_RECORD>>& aRecords );
-    void InitViaNetPoints( BOARD* aBoard, std::map<size_t, std::vector<ODB_NET_RECORD>>& aRecords );
+    void InitNetPoints( std::map<size_t, std::vector<ODB_NET_RECORD>>& aRecords );
     /// Writes a list of records to the given output stream
     void WriteNetPointRecords( std::map<size_t, std::vector<ODB_NET_RECORD>>& aRecords,
                                std::ostream&                                  aStream,

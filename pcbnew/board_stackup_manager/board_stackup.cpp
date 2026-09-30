@@ -636,7 +636,7 @@ int BOARD_STACKUP::BuildBoardThicknessFromStackup() const
 }
 
 
-bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
+bool BOARD_STACKUP::SynchronizeWithBoard( const BOARD_DESIGN_SETTINGS* aSettings )
 {
     bool change = false;
     // Build the suitable stackup:

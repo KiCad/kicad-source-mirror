@@ -29,6 +29,7 @@
 
 #include <eda_shape.h>
 #include <layer_ids.h> // PCB_LAYER_ID
+#include <drill/drill_span.h>
 #include <font/font.h>
 #include <geometry/shape_segment.h>
 #include <stroke_params.h>
@@ -42,6 +43,8 @@
 class BOARD;
 class BOARD_ITEM;
 class BOARD_STACKUP_ITEM;
+class FAB_STACKUP;
+class FAB_DRILL_MODEL;
 class EDA_TEXT;
 class FOOTPRINT;
 class PROGRESS_REPORTER;
@@ -205,7 +208,7 @@ private:
 
     void generateLayerSetDrill( wxXmlNode* aStepNode );
 
-    void generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aLayer, std::vector<BOARD_ITEM*>& aItems );
+    void generateLayerSetNet( wxXmlNode* aLayerNode, PCB_LAYER_ID aLayer, const std::vector<BOARD_ITEM*>& aItems );
 
     void generateLayerSetAuxilliary( wxXmlNode* aStepNode );
 
@@ -397,6 +400,7 @@ private:
     wxXmlNode*              m_enterpriseNode;
 
     BOARD*                  m_board;
+    const FAB_STACKUP*                  m_fabStackup = nullptr;
     std::vector<FOOTPRINT*> m_loaded_footprints;
     const std::map<std::string, UTF8>*  m_props;
 
@@ -437,8 +441,8 @@ private:
     std::map<PCB_LAYER_ID, wxString>
             m_layer_name_map; //<! Mapping layer name in 2581 to the internal layer id
 
-    std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<BOARD_ITEM*>>
-            m_drill_layers; //<! Drill sets are output as layers (to/from pairs)
+    std::map<DRILL_SPAN, std::vector<BOARD_ITEM*>> m_drill_layers; //<! Drill sets are output as layers, one per span
+    const FAB_DRILL_MODEL* m_fabDrillModel = nullptr;
 
     std::map<std::pair<PCB_LAYER_ID, PCB_LAYER_ID>, std::vector<PAD*>>
             m_slot_holes; //<! Storage vector of slotted holes that need to be output as cutouts

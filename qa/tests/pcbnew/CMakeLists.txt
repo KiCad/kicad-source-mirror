@@ -296,6 +296,8 @@ set( QA_PCBNEW_SRCS
     pcb_io/odbpp/test_odbpp_attributes.cpp
     pcb_io/odbpp/test_odbpp_rout.cpp
     test_fab_pin.cpp
+    test_fab_stackup.cpp
+    test_fab_pad_geometry.cpp
     pcb_io/odbpp/odb_test_utils.cpp
 
     group_saveload.cpp

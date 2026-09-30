@@ -34,6 +34,7 @@
 #include <pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.h>
 #include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcbnew/pcb_io/ipc2581/ipc2581_export_job.h>
+#include <pcbnew/drill/drill_enumerator.h>
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -60,7 +61,9 @@
 #include <cmath>
 #include <fstream>
 #include <regex>
+#include <set>
 #include <sstream>
+#include <tuple>
 
 
 namespace
@@ -75,6 +78,18 @@ void CollectXmlElements( wxXmlNode* aNode, const wxString& aName, std::vector<wx
 
         CollectXmlElements( node->GetChildren(), aName, aResult );
     }
+}
+
+
+wxXmlNode* FindXmlChild( wxXmlNode* aParent, const wxString& aName )
+{
+    for( wxXmlNode* child = aParent->GetChildren(); child; child = child->GetNext() )
+    {
+        if( child->GetName() == aName )
+            return child;
+    }
+
+    return nullptr;
 }
 
 
@@ -277,6 +292,121 @@ struct IPC2581_EXPORT_FIXTURE
 BOOST_FIXTURE_TEST_SUITE( Ipc2581Export, IPC2581_EXPORT_FIXTURE )
 
 
+BOOST_AUTO_TEST_CASE( Ipc2581PadHoleMatchesNcDrill )
+{
+    std::unique_ptr<BOARD> board = LoadBoard( "odbpp/pad_roles.kicad_pcb" );
+    BOOST_REQUIRE( board );
+    using HOLE_KEY = std::tuple<int, int, int>;
+    std::multiset<HOLE_KEY> expected;
+    int slots = 0;
+
+    for( bool nonPlated : { false, true } )
+    {
+        DRILL_QUERY query;
+        query.m_Span = DRILL_SPAN( F_Cu, B_Cu, false, nonPlated );
+        query.m_NonPlatedOnly = nonPlated;
+
+        for( const DRILL_OPERATION& op : EnumerateDrillOperations( *board, query ) )
+        {
+            if( op.m_SourceItem->Type() != PCB_PAD_T )
+                continue;
+
+            if( op.m_IsSlot )
+                slots++;
+            else
+                expected.emplace( op.m_Position.x, -op.m_Position.y, op.m_Diameter );
+        }
+    }
+
+    BOOST_REQUIRE_GT( expected.size(), 0 );
+    BOOST_REQUIRE_GT( slots, 0 );
+
+    wxString output = CreateTempFile();
+    std::map<std::string, UTF8> props = { { "units", "mm" }, { "version", "C" }, { "sigfig", "6" } };
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( output, *board, &props ) );
+    wxXmlDocument document;
+    BOOST_REQUIRE( document.Load( output ) );
+    std::vector<wxXmlNode*> holes;
+    CollectXmlElements( document.GetRoot(), wxS( "Hole" ), holes );
+    std::multiset<HOLE_KEY> actual;
+
+    auto toIu = []( const wxString& aValue )
+    {
+        return static_cast<int>( std::llround( std::stod( aValue.ToStdString() ) * PCB_IU_PER_MM ) );
+    };
+
+    for( wxXmlNode* hole : holes )
+    {
+        wxString plating = hole->GetAttribute( wxS( "platingStatus" ) );
+
+        if( plating == wxS( "PLATED" ) || plating == wxS( "NONPLATED" ) )
+        {
+            actual.emplace( toIu( hole->GetAttribute( wxS( "x" ) ) ),
+                            toIu( hole->GetAttribute( wxS( "y" ) ) ),
+                            toIu( hole->GetAttribute( wxS( "diameter" ) ) ) );
+        }
+    }
+
+    BOOST_CHECK( actual == expected );
+}
+
+
+BOOST_AUTO_TEST_CASE( Ipc2581ViaProtectionUsesBoardDefaults )
+{
+    std::unique_ptr<BOARD> board = LoadBoard( "drc_via_stack/FillFromBoardHonoursTheBoardDefault.kicad_pcb" );
+    BOOST_REQUIRE( board );
+    const BOARD_DESIGN_SETTINGS& settings = board->GetDesignSettings();
+    BOOST_REQUIRE( settings.m_FillVias );
+    BOOST_REQUIRE( settings.m_TentViasFront );
+    BOOST_REQUIRE( settings.m_TentViasBack );
+    BOOST_REQUIRE_EQUAL( board->Tracks().size(), 2u );
+
+    for( const PCB_TRACK* track : board->Tracks() )
+    {
+        BOOST_REQUIRE( track->Type() == PCB_VIA_T );
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( track );
+        BOOST_REQUIRE( !via->Padstack().IsFilled().has_value() );
+        BOOST_REQUIRE( !via->Padstack().IsTented( F_Cu ).has_value() );
+    }
+
+    wxString output = CreateTempFile();
+    std::map<std::string, UTF8> props = { { "units", "mm" }, { "version", "C" }, { "sigfig", "6" } };
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( output, *board, &props ) );
+    wxXmlDocument document;
+    BOOST_REQUIRE( document.Load( output ) );
+    std::vector<wxXmlNode*> layers;
+    CollectXmlElements( document.GetRoot(), wxS( "Layer" ), layers );
+    std::set<wxString> fillingNames;
+    std::set<wxString> tentingNames;
+
+    for( wxXmlNode* layer : layers )
+    {
+        wxString function = layer->GetAttribute( wxS( "layerFunction" ) );
+
+        if( function == wxS( "HOLEFILL" ) && FindXmlChild( layer, wxS( "Span" ) ) )
+            fillingNames.insert( layer->GetAttribute( wxS( "name" ) ) );
+
+        if( function == wxS( "COATINGNONCOND" ) && !FindXmlChild( layer, wxS( "Span" ) ) )
+            tentingNames.insert( layer->GetAttribute( wxS( "name" ) ) );
+    }
+
+    BOOST_REQUIRE_EQUAL( fillingNames.size(), 2u );
+    BOOST_REQUIRE_EQUAL( tentingNames.size(), 1u );
+    std::vector<wxXmlNode*> padDefs;
+    CollectXmlElements( document.GetRoot(), wxS( "PadstackPadDef" ), padDefs );
+    std::set<wxString> padRefs;
+
+    for( wxXmlNode* padDef : padDefs )
+        padRefs.insert( padDef->GetAttribute( wxS( "layerRef" ) ) );
+
+    for( const wxString& name : fillingNames )
+        BOOST_CHECK( padRefs.contains( name ) );
+
+    for( const wxString& name : tentingNames )
+        BOOST_CHECK( padRefs.contains( name ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( CompressedExportKeepsXmlAtArchiveRoot )
 {
     std::unique_ptr<BOARD>   board = LoadBoard( "issue14130.kicad_pcb" );
@@ -312,6 +442,7 @@ BOOST_AUTO_TEST_CASE( Ipc2581VariantPropertySelectsPopulation )
     wxString                 output = wxString( ( dir.Path() / "variant.xml" ).wstring() );
     JOB_EXPORT_PCB_IPC2581   job;
     job.m_variantNames = { wxS( "Variant A" ) };
+    job.m_colInternalId = wxS( "Datasheet" );
     job.SetConfiguredOutputPath( output );
     WX_STRING_REPORTER reporter;
     BOOST_REQUIRE_MESSAGE( GenerateIpc2581File( job, board.get(), nullptr, &reporter ),
@@ -333,6 +464,89 @@ BOOST_AUTO_TEST_CASE( Ipc2581VariantPropertySelectsPopulation )
     }
 
     BOOST_CHECK( found );
+
+    std::vector<wxXmlNode*> components;
+    CollectXmlElements( document.GetRoot(), wxS( "Component" ), components );
+    bool foundPart = false;
+
+    for( wxXmlNode* node : components )
+    {
+        if( node->GetAttribute( wxS( "refDes" ) ) == wxS( "R1" ) )
+        {
+            BOOST_CHECK_EQUAL( node->GetAttribute( wxS( "part" ) ), wxString( wxS( "test" ) ) );
+            foundPart = true;
+        }
+    }
+
+    BOOST_CHECK( foundPart );
+}
+
+
+BOOST_AUTO_TEST_CASE( IpcBackBlindDrillSpanUsesStackOrder )
+{
+    std::unique_ptr<BOARD> board = LoadBoard( "issue23451/3Rs_bv.kicad_pcb" );
+    BOOST_REQUIRE( board );
+
+    bool hasBackBlindVia = false;
+
+    for( PCB_TRACK* track : board->Tracks() )
+    {
+        if( track->Type() == PCB_VIA_T )
+        {
+            PCB_VIA* via = static_cast<PCB_VIA*>( track );
+            hasBackBlindVia |= via->TopLayer() == In2_Cu && via->BottomLayer() == B_Cu;
+        }
+    }
+
+    BOOST_REQUIRE( hasBackBlindVia );
+
+    wxString                    output = CreateTempFile();
+    std::map<std::string, UTF8> props = { { "units", "mm" }, { "version", "C" }, { "sigfig", "6" } };
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( output, *board, &props ) );
+
+    wxXmlDocument document;
+    BOOST_REQUIRE( document.Load( output ) );
+    std::vector<wxXmlNode*> layers;
+    CollectXmlElements( document.GetRoot(), wxS( "Layer" ), layers );
+    int matchingSpans = 0;
+
+    for( wxXmlNode* layer : layers )
+    {
+        if( layer->GetAttribute( wxS( "layerFunction" ) ) != wxS( "DRILL" ) )
+            continue;
+
+        wxXmlNode* span = FindXmlChild( layer, wxS( "Span" ) );
+
+        if( span && span->GetAttribute( wxS( "fromLayer" ) ) == board->GetLayerName( In2_Cu )
+            && span->GetAttribute( wxS( "toLayer" ) ) == board->GetLayerName( B_Cu ) )
+        {
+            ++matchingSpans;
+        }
+    }
+
+    BOOST_CHECK_EQUAL( matchingSpans, 1 );
+}
+
+
+BOOST_AUTO_TEST_CASE( IpcExportLeavesBoardStackupUntouched )
+{
+    std::unique_ptr<BOARD> board = LoadBoard( "custom_pads.kicad_pcb" );
+    BOOST_REQUIRE( board );
+
+    BOARD_DESIGN_SETTINGS&           settings = board->GetDesignSettings();
+    BOARD_STACKUP                    before = settings.GetStackupDescriptor();
+    std::vector<BOARD_STACKUP_ITEM*> beforeItems = settings.GetStackupDescriptor().GetList();
+    BOOST_REQUIRE( !beforeItems.empty() );
+
+    std::map<std::string, UTF8> props;
+    props["units"] = "mm";
+    props["version"] = "C";
+    props["sigfig"] = "3";
+    m_ipc2581Plugin.SaveBoard( CreateTempFile(), *board, &props );
+
+    BOOST_CHECK_EQUAL( settings.GetStackupDescriptor().GetCount(), before.GetCount() );
+    BOOST_CHECK( settings.GetStackupDescriptor() == before );
+    BOOST_CHECK( settings.GetStackupDescriptor().GetList() == beforeItems );
 }
 
 
@@ -744,11 +958,8 @@ BOOST_AUTO_TEST_CASE( TextBoxUsesDrawPosition )
 
 
 /**
- * Test that SMD pad solder mask openings are exported (Issue #16658)
- *
- * This test verifies that SMD pads which have implicit solder mask openings
- * (pads on copper layers that don't explicitly include F_Mask/B_Mask in their
- * layer set) still get exported with solder mask features in the IPC-2581 output.
+ * Pads with authored F.Mask layers emit IPC-2581 mask features
+ * Issue #16658
  */
 BOOST_AUTO_TEST_CASE( SmdPadSolderMaskExport_Issue16658 )
 {
@@ -757,33 +968,18 @@ BOOST_AUTO_TEST_CASE( SmdPadSolderMaskExport_Issue16658 )
 
     BOOST_REQUIRE( board );
 
-    // Verify the board has SMD pads with implicit mask openings
-    bool hasSmtPad = false;
+    bool hasMaskedSmtPad = false;
 
     for( FOOTPRINT* fp : board->Footprints() )
     {
         for( PAD* pad : fp->Pads() )
         {
-            if( pad->GetAttribute() == PAD_ATTRIB::SMD )
-            {
-                hasSmtPad = true;
-
-                // Verify pad is on copper but NOT explicitly on mask layer
-                bool isOnCopperOnly = pad->IsOnLayer( F_Cu ) && !pad->IsOnLayer( F_Mask );
-
-                if( isOnCopperOnly )
-                {
-                    // This is the condition we're testing
-                    break;
-                }
-            }
+            if( pad->GetAttribute() == PAD_ATTRIB::SMD && pad->IsOnLayer( F_Mask ) )
+                hasMaskedSmtPad = true;
         }
-
-        if( hasSmtPad )
-            break;
     }
 
-    BOOST_REQUIRE_MESSAGE( hasSmtPad, "Test board should have SMD pads" );
+    BOOST_REQUIRE_MESSAGE( hasMaskedSmtPad, "Test board should have an authored F.Mask SMD pad" );
 
     // Export to IPC-2581 version C
     wxString tempPath = CreateTempFile();
@@ -808,6 +1004,61 @@ BOOST_AUTO_TEST_CASE( SmdPadSolderMaskExport_Issue16658 )
     // Also check for LayerFeature element with mask layer reference
     bool hasLayerFeature = FileContainsPattern( tempPath, wxT( "<LayerFeature" ) );
     BOOST_CHECK_MESSAGE( hasLayerFeature, "IPC-2581 export should contain LayerFeature elements" );
+}
+
+
+/**
+ * Extract the text of the first LayerFeature block for a given layer reference.
+ * Returns an empty string when no such LayerFeature exists.
+ */
+static std::string LayerFeatureRegion( const std::string& aXml, const std::string& aLayerRef )
+{
+    const std::string open = "<LayerFeature layerRef=\"" + aLayerRef + "\"";
+    size_t start = aXml.find( open );
+
+    if( start == std::string::npos )
+        return std::string();
+
+    size_t end = aXml.find( "</LayerFeature>", start );
+
+    if( end == std::string::npos )
+        return std::string();
+
+    return aXml.substr( start, end - start );
+}
+
+
+BOOST_AUTO_TEST_CASE( TentedThermalViaPadsDoNotOpenMask )
+{
+    std::unique_ptr<BOARD> board = LoadBoard( "connect/connect.kicad_pcb" );
+    BOOST_REQUIRE( board );
+
+    wxString tempPath = CreateTempFile();
+    std::map<std::string, UTF8> props = { { "units", "mm" }, { "version", "C" }, { "sigfig", "6" } };
+    m_ipc2581Plugin.SaveBoard( tempPath, *board, &props );
+
+    std::ifstream stream( tempPath.ToStdString(), std::ios::binary );
+    BOOST_REQUIRE( stream );
+    std::string xml( std::istreambuf_iterator<char>{ stream }, std::istreambuf_iterator<char>{} );
+    const std::string thermalPin = "<PinRef componentRef=\"U102\" pin=\"65\"";
+    auto countThermalPins = [&]( const std::string& aLayer )
+    {
+        std::string mask = LayerFeatureRegion( xml, aLayer );
+        BOOST_REQUIRE( !mask.empty() );
+        size_t count = 0;
+        size_t pos = 0;
+
+        while( ( pos = mask.find( thermalPin, pos ) ) != std::string::npos )
+        {
+            ++count;
+            pos += thermalPin.size();
+        }
+
+        return count;
+    };
+
+    BOOST_CHECK_EQUAL( countThermalPins( "F.Mask" ), 1u );
+    BOOST_CHECK_EQUAL( countThermalPins( "B.Mask" ), 0u );
 }
 
 
@@ -1055,168 +1306,68 @@ BOOST_AUTO_TEST_CASE( BackdrillSpecEncoding )
 
 
 /**
- * Test that SMD pads without F.Paste in their layer set are not added to the
- * solder paste layer (Issue #24318).
- *
- * Exposed-pad QFN/QFP footprints commonly use a copper-only thermal pad
- * (F.Cu + F.Mask, no F.Paste) plus several separate paste-only apertures.
- * The earlier #16658 fix implicitly added every copper SMD pad to the paste
- * layer, which contaminated the stencil for these footprints. Mask is still
- * implicit for SMD pads (every copper pad needs a mask opening), but paste
- * must be respected exactly as authored.
+ * Authored mask and paste pad layers govern exposed-pad IPC-2581 features
+ * Issue #24318
  */
 BOOST_AUTO_TEST_CASE( ExposedPadPasteRespected_Issue24318 )
 {
-    BOARD board;
+    std::unique_ptr<BOARD> board = LoadBoard( "connect/connect.kicad_pcb" );
+    BOOST_REQUIRE( board );
+    bool thermalMask = false;
+    bool normalPaste = false;
+    bool copperOnly = false;
+    bool maskAperture = false;
 
-    FOOTPRINT* fp = new FOOTPRINT( &board );
-    fp->SetReference( wxT( "U1" ) );
-    fp->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 50 ), pcbIUScale.mmToIU( 50 ) ) );
-    board.Add( fp );
+    for( FOOTPRINT* footprint : board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( footprint->GetReference() == wxS( "U102" ) )
+            {
+                if( pad->GetNumber() == wxS( "65" ) && pad->IsOnLayer( F_Mask ) )
+                {
+                    thermalMask = true;
+                    BOOST_CHECK( !pad->IsOnLayer( F_Paste ) );
+                }
 
-    // Copper-only thermal pad: F.Cu + F.Mask, deliberately NOT on F.Paste.
-    PAD* thermalPad = new PAD( fp );
-    thermalPad->SetPadstackMode( PADSTACK::MODE::NORMAL );
-    thermalPad->SetNumber( wxT( "33" ) );
-    thermalPad->SetAttribute( PAD_ATTRIB::SMD );
-    thermalPad->SetProperty( PAD_PROP::HEATSINK );
-    thermalPad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-    thermalPad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 3.45 ), pcbIUScale.mmToIU( 3.45 ) ) );
-    thermalPad->SetLayerSet( LSET( { F_Cu, F_Mask } ) );
-    fp->Add( thermalPad );
+                if( pad->GetNumber() == wxS( "1" ) && pad->IsOnLayer( F_Paste ) )
+                    normalPaste = true;
+            }
+            else if( footprint->GetReference() == wxS( "J301" ) )
+            {
+                if( pad->GetNumber() == wxS( "1" ) && pad->IsOnLayer( F_Cu )
+                    && !pad->IsOnLayer( F_Mask ) && !pad->IsOnLayer( F_Paste ) )
+                {
+                    copperOnly = true;
+                }
 
-    // Paste-only aperture pad, models a stencil opening for the thermal pad.
-    PAD* pasteAperture = new PAD( fp );
-    pasteAperture->SetPadstackMode( PADSTACK::MODE::NORMAL );
-    pasteAperture->SetNumber( wxEmptyString );
-    pasteAperture->SetAttribute( PAD_ATTRIB::SMD );
-    pasteAperture->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-    pasteAperture->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 0.93 ),
-                                                            pcbIUScale.mmToIU( 0.93 ) ) );
-    pasteAperture->SetPosition( fp->GetPosition() + VECTOR2I( pcbIUScale.mmToIU( 1.15 ),
-                                                              pcbIUScale.mmToIU( 1.15 ) ) );
-    pasteAperture->SetLayerSet( LSET( { F_Paste } ) );
-    fp->Add( pasteAperture );
+                if( pad->IsOnLayer( F_Mask ) && !pad->IsOnLayer( F_Cu ) )
+                    maskAperture = true;
+            }
+        }
+    }
 
-    // Add a control pad whose paste IS authored (F.Cu + F.Mask + F.Paste). It must still
-    // appear on the paste layer, confirming the fix doesn't suppress legitimate paste pads.
-    FOOTPRINT* fp2 = new FOOTPRINT( &board );
-    fp2->SetReference( wxT( "R1" ) );
-    fp2->SetPosition( VECTOR2I( pcbIUScale.mmToIU( 60 ), pcbIUScale.mmToIU( 60 ) ) );
-    board.Add( fp2 );
-
-    PAD* normalSmd = new PAD( fp2 );
-    normalSmd->SetPadstackMode( PADSTACK::MODE::NORMAL );
-    normalSmd->SetNumber( wxT( "1" ) );
-    normalSmd->SetAttribute( PAD_ATTRIB::SMD );
-    normalSmd->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-    normalSmd->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
-    normalSmd->SetLayerSet( LSET( { F_Cu, F_Mask, F_Paste } ) );
-    fp2->Add( normalSmd );
-
-    // Implicit-mask control pad: F.Cu only. Mask must be added implicitly by the exporter,
-    // matching the #16658 fix. This guards against accidental removal of the mask code path.
-    PAD* implicitMaskSmd = new PAD( fp2 );
-    implicitMaskSmd->SetPadstackMode( PADSTACK::MODE::NORMAL );
-    implicitMaskSmd->SetNumber( wxT( "2" ) );
-    implicitMaskSmd->SetAttribute( PAD_ATTRIB::SMD );
-    implicitMaskSmd->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-    implicitMaskSmd->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
-    implicitMaskSmd->SetPosition( fp2->GetPosition() + VECTOR2I( pcbIUScale.mmToIU( 2.0 ), 0 ) );
-    implicitMaskSmd->SetLayerSet( LSET( { F_Cu } ) );
-    fp2->Add( implicitMaskSmd );
-
+    BOOST_REQUIRE( thermalMask );
+    BOOST_REQUIRE( normalPaste );
+    BOOST_REQUIRE( copperOnly );
+    BOOST_REQUIRE( maskAperture );
     wxString tempPath = CreateTempFile();
-    std::map<std::string, UTF8> props;
-    props["units"] = "mm";
-    props["version"] = "C";
-    props["sigfig"] = "4";
+    std::map<std::string, UTF8> props = { { "units", "mm" }, { "version", "C" }, { "sigfig", "4" } };
+    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, *board, &props ) );
 
-    BOOST_REQUIRE_NO_THROW( m_ipc2581Plugin.SaveBoard( tempPath, board, &props ) );
-    BOOST_REQUIRE( wxFileExists( tempPath ) );
+    std::ifstream stream( tempPath.ToStdString(), std::ios::binary );
+    BOOST_REQUIRE( stream );
+    std::string xml( std::istreambuf_iterator<char>{ stream }, std::istreambuf_iterator<char>{} );
+    std::string paste = LayerFeatureRegion( xml, "F.Paste" );
+    std::string mask = LayerFeatureRegion( xml, "F.Mask" );
+    BOOST_REQUIRE( !paste.empty() );
+    BOOST_REQUIRE( !mask.empty() );
 
-    std::ifstream xmlFile( tempPath.ToStdString() );
-    BOOST_REQUIRE( xmlFile.is_open() );
-
-    std::string xml( ( std::istreambuf_iterator<char>( xmlFile ) ),
-                     std::istreambuf_iterator<char>() );
-
-    // Locate the F.Paste LayerFeature block, if any.
-    const std::string pasteOpen = "<LayerFeature layerRef=\"F.Paste\"";
-    size_t pasteStart = xml.find( pasteOpen );
-
-    if( pasteStart != std::string::npos )
-    {
-        size_t pasteEnd = xml.find( "</LayerFeature>", pasteStart );
-        BOOST_REQUIRE( pasteEnd != std::string::npos );
-
-        std::string pasteRegion = xml.substr( pasteStart, pasteEnd - pasteStart );
-
-        // The exposed thermal pad (U1 pin 33) must NOT appear on F.Paste.
-        BOOST_CHECK_MESSAGE(
-                pasteRegion.find( "<PinRef componentRef=\"U1\" pin=\"33\"" ) == std::string::npos,
-                "Copper-only thermal pad U1.33 must not appear on F.Paste layer feature" );
-
-        // The normal SMD pad (R1 pin 1) SHOULD still appear on F.Paste.
-        BOOST_CHECK_MESSAGE(
-                pasteRegion.find( "<PinRef componentRef=\"R1\" pin=\"1\"" ) != std::string::npos,
-                "Normal SMD pad with explicit F.Paste in layer set should still emit a paste "
-                "feature" );
-
-        // The implicit-mask control pad (R1 pin 2) had F.Cu only and must NOT have paste.
-        BOOST_CHECK_MESSAGE(
-                pasteRegion.find( "<PinRef componentRef=\"R1\" pin=\"2\"" ) == std::string::npos,
-                "Copper-only SMD pad R1.2 must not appear on F.Paste layer feature" );
-    }
-    else
-    {
-        // If no F.Paste layer feature was emitted at all the regression would be hidden, so
-        // require its presence (R1 must drive its creation).
-        BOOST_FAIL( "Expected an F.Paste LayerFeature for the explicitly-pasted control pad" );
-    }
-
-    // Mask must still be added implicitly for the thermal pad. Confirm an F.Mask
-    // LayerFeature exists with U1 pin 33 so the #16658 behavior is preserved for mask.
-    const std::string maskOpen = "<LayerFeature layerRef=\"F.Mask\"";
-    size_t maskStart = xml.find( maskOpen );
-    BOOST_REQUIRE_MESSAGE( maskStart != std::string::npos,
-                           "F.Mask LayerFeature should still be emitted for SMD copper pads" );
-
-    size_t maskEnd = xml.find( "</LayerFeature>", maskStart );
-    BOOST_REQUIRE( maskEnd != std::string::npos );
-
-    std::string maskRegion = xml.substr( maskStart, maskEnd - maskStart );
-
-    BOOST_CHECK_MESSAGE(
-            maskRegion.find( "<PinRef componentRef=\"U1\" pin=\"33\"" ) != std::string::npos,
-            "Thermal pad with explicit F.Mask should appear on F.Mask layer feature" );
-
-    // The truly implicit case: R1 pin 2 had F.Cu only and must still acquire an F.Mask
-    // entry. This is the actual regression guard for the #16658 implicit-mask behavior.
-    BOOST_CHECK_MESSAGE(
-            maskRegion.find( "<PinRef componentRef=\"R1\" pin=\"2\"" ) != std::string::npos,
-            "SMD copper pad without explicit F.Mask must get an implicit F.Mask opening" );
-}
-
-
-/**
- * Extract the text of the first LayerFeature block for a given layer reference.
- * Returns an empty string when no such LayerFeature exists.
- */
-static std::string LayerFeatureRegion( const std::string& aXml, const std::string& aLayerRef )
-{
-    const std::string open = "<LayerFeature layerRef=\"" + aLayerRef + "\"";
-    size_t start = aXml.find( open );
-
-    if( start == std::string::npos )
-        return std::string();
-
-    size_t end = aXml.find( "</LayerFeature>", start );
-
-    if( end == std::string::npos )
-        return std::string();
-
-    return aXml.substr( start, end - start );
+    BOOST_CHECK( paste.find( "<PinRef componentRef=\"U102\" pin=\"65\"" ) == std::string::npos );
+    BOOST_CHECK( paste.find( "<PinRef componentRef=\"U102\" pin=\"1\"" ) != std::string::npos );
+    BOOST_CHECK( paste.find( "<PinRef componentRef=\"J301\" pin=\"1\"" ) == std::string::npos );
+    BOOST_CHECK( mask.find( "<PinRef componentRef=\"U102\" pin=\"65\"" ) != std::string::npos );
+    BOOST_CHECK( mask.find( "<PinRef componentRef=\"J301\" pin=\"1\"" ) == std::string::npos );
 }
 
 

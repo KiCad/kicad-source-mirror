@@ -37,6 +37,7 @@
 #include <plugins/3dapi/c3dmodel.h>
 #include <project_pcb.h>
 #include <exporters/fab_model/fab_pin.h>
+#include <exporters/fab_model/fab_component_row.h>
 
 #include "odb_component.h"
 #include "odb_util.h"
@@ -153,10 +154,8 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
     comp.m_comp_name = ODB::GenLegalComponentName( originalRef );
 
     const ODB_FORMAT& format = m_plugin->GetFormat();
-    PCB_FIELD* mappedField = format.m_mpnField.IsEmpty() ? nullptr : aFp->GetField( format.m_mpnField );
-
-    if( mappedField && !mappedField->GetText().IsEmpty() )
-        comp.m_part_name = mappedField->GetShownText( format.m_variantName, RESOLVED );
+    FAB_COMPONENT_ROW row = MakeFabComponentRow( *aFp, format.m_variantName );
+    comp.m_part_name = format.m_mpnField.IsEmpty() ? wxString() : row.Field( format.m_mpnField );
 
     if( comp.m_part_name.IsEmpty() )
         comp.m_part_name = wxString::Format( "%s_%s", aFp->GetFPID().GetFullLibraryName(),
@@ -170,10 +169,10 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
 
     if( heightMm <= 0.0 )
     {
-        if( PCB_FIELD* heightField = aFp->GetField( wxS( "Height" ) ); heightField
-            && !heightField->GetText().IsEmpty() )
+        wxString value = row.Field( wxS( "Height" ) );
+
+        if( !value.IsEmpty() )
         {
-            wxString value = heightField->GetShownText( format.m_variantName, RESOLVED );
             double heightIU = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MM, value );
             heightMm = pcbIUScale.IUTomm( heightIU );
         }
@@ -237,14 +236,14 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
         ODB::RemoveWhitespace( key );
 
         // A PRP record is one line
-        wxString value = field->GetShownText( m_plugin->GetFormat().m_variantName, RESOLVED );
+        wxString value = row.Field( field->GetName() );
         value.Replace( wxS( "\r" ), wxEmptyString );
         value.Replace( wxS( "\n" ), wxS( " " ) );
 
         comp.m_prp[key] = wxString::Format( "'%s'", value );
     }
 
-    if( aFp->GetDNPForVariant( m_plugin->GetFormat().m_variantName ) )
+    if( row.m_dnp )
     {
         AddSystemAttribute( comp, ODB_ATTR::NO_POP{ true } );
     }
@@ -264,21 +263,15 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
                 m_plugin->GetFormat().m_variantNames.Join( included ).ToStdString() } );
     }
 
-    bool hasPressFitPad = std::any_of( aFp->Pads().begin(), aFp->Pads().end(),
-                                       []( const PAD* aPad )
-                                       {
-                                           return GetFabPadRole( *aPad ) == FAB_PAD_ROLE::PRESSFIT;
-                                       } );
-
-    if( hasPressFitPad )
+    if( row.m_pressFit )
     {
         AddSystemAttribute( comp, ODB_ATTR::COMP_MOUNT_TYPE::PRESSFIT );
     }
-    else if( aFp->GetAttributes() & FP_SMD )
+    else if( row.m_mount == FAB_MOUNT::SMT )
     {
         AddSystemAttribute( comp, ODB_ATTR::COMP_MOUNT_TYPE::MT_SMD );
     }
-    else if( aFp->GetAttributes() & FP_THROUGH_HOLE )
+    else if( row.m_mount == FAB_MOUNT::THT )
     {
         AddSystemAttribute( comp, ODB_ATTR::COMP_MOUNT_TYPE::THT );
     }

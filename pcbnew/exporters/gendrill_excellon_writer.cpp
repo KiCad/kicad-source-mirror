@@ -41,6 +41,7 @@
 
 #include <pcbplot.h>
 #include <board.h>
+#include <drill/drill_enumerator.h>
 #include <gendrill_excellon_writer.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
@@ -78,7 +79,7 @@ bool EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
     wxFileName  fn;
     wxString    msg;
 
-    std::vector<DRILL_SPAN> hole_sets = getUniqueLayerPairs();
+    std::vector<DRILL_SPAN> hole_sets = EnumerateDrillSpans( *m_pcb );
 
     if( !m_merge_PTH_NPTH )
         hole_sets.emplace_back( F_Cu, B_Cu, false, true );
@@ -199,6 +200,7 @@ void EXCELLON_WRITER::writeHoleAttribute( HOLE_ATTRIBUTE aAttribute )
             break;
 
         case HOLE_ATTRIBUTE::HOLE_VIA_BACKDRILL:
+        case HOLE_ATTRIBUTE::HOLE_PAD_BACKDRILL:
             fmt::print( m_file, "{}", "; #@! TA.AperFunction,NonPlated,BackDrill\n" );
             break;
 

@@ -290,7 +290,7 @@ public:
      * @param aSettings is the current board setting.
      * @return true if changes are made
      */
-    bool SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings );
+    bool SynchronizeWithBoard( const BOARD_DESIGN_SETTINGS* aSettings );
 
     /**
      * Create a default stackup, according to the current BOARD_DESIGN_SETTINGS settings.

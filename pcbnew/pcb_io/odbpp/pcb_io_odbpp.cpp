@@ -35,6 +35,8 @@
 #include <pad.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <exporters/fab_model/fab_stackup.h>
+#include <exporters/fab_model/fab_net_names.h>
 #include <netinfo.h>
 #include <ki_exception.h>
 #include <lset.h>
@@ -92,13 +94,15 @@ void PCB_IO_ODBPP::CreateEntity()
     m_netNames.emplace( 0, wxS( "$NONE$" ) );
     std::map<int, wxString> bases;
     std::set<wxString> reserved = { wxS( "$NONE$" ) };
+    std::map<int, wxString> anonymous = m_format.m_anonymizeNets ? FabAnonymousNetNames( *m_board )
+                                                                  : std::map<int, wxString>{};
 
     for( const NETINFO_ITEM* net : m_board->GetNetInfo() )
     {
         if( net->GetNetCode() <= 0 )
             continue;
 
-        wxString base = m_format.m_anonymizeNets ? wxString::Format( wxS( "N%zu" ), bases.size() + 1 )
+        wxString base = m_format.m_anonymizeNets ? anonymous.at( net->GetNetCode() )
                                                  : ODB::GenLegalNetName( net->GetNetname() );
         bases.emplace( net->GetNetCode(), base );
         reserved.insert( base );
@@ -218,9 +222,25 @@ std::vector<FOOTPRINT*> PCB_IO_ODBPP::GetImportedCachedLibraryFootprints()
 }
 
 
+const FAB_DRILL_MODEL& PCB_IO_ODBPP::GetFabDrillModel()
+{
+    if( !m_fabDrillModel )
+        m_fabDrillModel = std::make_unique<FAB_DRILL_MODEL>( *m_board );
+
+    return *m_fabDrillModel;
+}
+
+
 void PCB_IO_ODBPP::ConfigureExport( BOARD& aBoard, const ODB_EXPORT_OPTIONS& aOptions )
 {
     m_board = &aBoard;
+    m_entities.clear();
+    m_topeprint_subnets.clear();
+    m_plane_subnets.clear();
+    m_via_trace_subnets.clear();
+    m_fabDrillModel.reset();
+    m_fabStackup = std::make_unique<FAB_STACKUP>( aBoard );
+
     // A second export on this plugin starts with the default format
     m_format = ODB_FORMAT();
     m_format.m_variantName = aBoard.GetCurrentVariant();

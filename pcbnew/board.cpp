@@ -32,6 +32,7 @@
 #include <drc/drc_rtree.h>
 #include <board_design_settings.h>
 #include <drill/drill_chart_model.h>
+#include <drill/drill_enumerator.h>
 #include <drill/drill_symbol_assigner.h>
 #include <pcb_drill_map.h>
 #include <board_commit.h>

@@ -382,7 +382,7 @@ BOOST_AUTO_TEST_CASE( OdbSlotsStayOnDrillAndGainRoutChains )
     OdbFeatureFile routFeatures( rout );
     BOOST_CHECK_GT( routFeatures.CountRecordsWithFlag( ".rout_plated" ), 0u );
 
-    bool drillHasOval = false;
+    bool drillHasSlotLine = false;
 
     for( const ODB_MATRIX_ROW& row : product.Matrix() )
     {
@@ -392,12 +392,12 @@ BOOST_AUTO_TEST_CASE( OdbSlotsStayOnDrillAndGainRoutChains )
         for( const std::string& line : ReadLines( fs::path( product.LayerFile( row.m_name,
                                                                                 wxS( "features" ) ).ToStdWstring() ) ) )
         {
-            if( line.rfind( "$", 0 ) == 0 && line.find( " oval" ) != std::string::npos )
-                drillHasOval = true;
+            if( line.rfind( "L ", 0 ) == 0 )
+                drillHasSlotLine = true;
         }
     }
 
-    BOOST_CHECK( drillHasOval );
+    BOOST_CHECK( drillHasSlotLine );
 
     board = LoadBoard( "odbpp/npth_pressfit_slot.kicad_pcb" );
     BOOST_REQUIRE( board );

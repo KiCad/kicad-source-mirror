@@ -20,6 +20,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <board.h>
+#include <board_design_settings.h>
+#include <drill/drill_enumerator.h>
 #include <footprint.h>
 #include <netinfo.h>
 #include <pad.h>
@@ -29,9 +31,15 @@
 #include <pcbnew/pcb_io/odbpp/pcb_io_odbpp.h>
 #include <pcbnew/pcb_track.h>
 #include <pcbnew_utils/board_test_utils.h>
+#include <pcbnew_utils/board_file_utils.h>
+#include <qa_utils/file_utils.h>
 #include <settings/settings_manager.h>
 #include <base_units.h>
 
+#include <algorithm>
+#include <filesystem>
+#include <fstream>
+#include <iterator>
 #include <map>
 #include <memory>
 
@@ -54,7 +62,86 @@ wxFileName MakeTempDir()
 
     return tempDir;
 }
+
+
+std::vector<wxString> ExportGerberDrill( BOARD& aBoard, const KI_TEST::SCOPED_TEMP_DIR& aDir )
+{
+    GERBER_WRITER gerber( &aBoard );
+    gerber.SetOptions( VECTOR2I( 0, 0 ) );
+    gerber.SetFormat( 6 );
+    BOOST_REQUIRE( gerber.CreateDrillandMapFilesSet( aDir.PathStr(), true, false, true ) );
+    return gerber.GetCreatedFiles();
+}
+
+
+size_t CountContaining( const std::vector<wxString>& aFiles, const wxString& aPart )
+{
+    return std::count_if( aFiles.begin(), aFiles.end(), [&]( const wxString& aName )
+    {
+        return aName.Contains( aPart );
+    } );
+}
 } // anonymous namespace
+
+
+BOOST_AUTO_TEST_CASE( GerberDrillBoardDefaultsCreateProtectionFiles )
+{
+    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream(
+            KI_TEST::GetPcbnewTestDataDir()
+            + "drc_via_stack/FillFromBoardHonoursTheBoardDefault.kicad_pcb" );
+    BOOST_REQUIRE( board );
+    BOOST_REQUIRE( board->GetDesignSettings().m_FillVias );
+    BOOST_REQUIRE( board->GetDesignSettings().m_TentViasFront );
+
+    KI_TEST::SCOPED_TEMP_DIR dir( wxT( "gerber_default_protection" ) );
+    std::vector<wxString> created = ExportGerberDrill( *board, dir );
+    auto front = std::find_if( created.begin(), created.end(), []( const wxString& aName )
+    {
+        return aName.EndsWith( wxT( "-tenting-front.gbr" ) );
+    } );
+    BOOST_REQUIRE( front != created.end() );
+    std::ifstream stream( std::filesystem::path( front->ToStdString() ), std::ios::binary );
+    std::string frontTenting( std::istreambuf_iterator<char>{ stream }, std::istreambuf_iterator<char>{} );
+
+    BOOST_CHECK_EQUAL( CountContaining( created, wxT( "-filling-" ) ), 2 );
+    BOOST_CHECK_EQUAL( CountContaining( created, wxT( "-tenting-" ) ), 1 );
+    BOOST_CHECK_EQUAL( CountContaining( created, wxT( "-tenting-front.gbr" ) ), 1 );
+    BOOST_CHECK( frontTenting.find( "TF,FileFunction,Other,Tenting-Front" ) != std::string::npos );
+}
+
+
+BOOST_AUTO_TEST_CASE( GerberBackdrillDoesNotInheritViaProtection )
+{
+    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream(
+            KI_TEST::GetPcbnewTestDataDir() + "issue25021/backdrill.kicad_pcb" );
+    BOOST_REQUIRE( board );
+    BOOST_REQUIRE( board->GetDesignSettings().m_TentViasFront );
+    BOOST_REQUIRE( board->GetDesignSettings().m_TentViasBack );
+
+    for( const DRILL_SPAN& span : EnumerateDrillSpans( *board ) )
+    {
+        if( !span.m_IsBackdrill )
+            continue;
+
+        DRILL_QUERY query;
+        query.m_Span = span;
+
+        for( const DRILL_OPERATION& op : EnumerateDrillOperations( *board, query ) )
+        {
+            BOOST_CHECK( !op.m_TopTented );
+            BOOST_CHECK( !op.m_BottomTented );
+            BOOST_CHECK( !op.m_TopCovered );
+            BOOST_CHECK( !op.m_BottomCovered );
+            BOOST_CHECK( !op.m_TopPlugged );
+            BOOST_CHECK( !op.m_BottomPlugged );
+        }
+    }
+
+    KI_TEST::SCOPED_TEMP_DIR dir( wxT( "gerber_backdrill_protection" ) );
+    std::vector<wxString> created = ExportGerberDrill( *board, dir );
+    BOOST_CHECK_EQUAL( CountContaining( created, wxT( "-tenting-front.gbr" ) ), 1 );
+    BOOST_CHECK_EQUAL( CountContaining( created, wxT( "-tenting-back.gbr" ) ), 1 );
+}
 
 
 BOOST_AUTO_TEST_CASE( BackdrillCamOutputs )

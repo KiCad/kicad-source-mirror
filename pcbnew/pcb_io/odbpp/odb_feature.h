@@ -57,7 +57,7 @@ class FEATURES_MANAGER : public ATTR_MANAGER
 public:
     FEATURES_MANAGER( BOARD* aBoard, PCB_IO_ODBPP* aPlugin, const wxString& aLayerName, ODB_LAYER_ROLE aRole,
                       std::optional<ODB_AUX_LAYER_TYPE> aAuxType,
-                      std::optional<ODB_DRILL_SPAN>     aDrillSpan = std::nullopt ) :
+                      std::optional<DRILL_SPAN>         aDrillSpan = std::nullopt ) :
             m_board( aBoard ),
             m_plugin( aPlugin ),
             m_layerName( aLayerName ),
@@ -66,8 +66,6 @@ public:
             m_drillSpan( aDrillSpan )
     {}
 
-    virtual ~FEATURES_MANAGER() { m_featuresList.clear(); }
-
     void AddPad( PCB_LAYER_ID aLayer, PAD* pad );
     void AddDimension( PCB_LAYER_ID aLayer, PCB_DIMENSION_BASE* dimension );
     void AddShape( PCB_LAYER_ID aLayer, PCB_SHAPE* shape );
@@ -75,7 +73,7 @@ public:
     void AddZone( PCB_LAYER_ID aLayer, ZONE* zone );
     void AddTrack( PCB_LAYER_ID aLayer, PCB_TRACK* track );
 
-    void InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_ITEM*>& aItems );
+    void InitFeatureList( PCB_LAYER_ID aLayer, const std::vector<BOARD_ITEM*>& aItems );
 
     void AddFeatureLine( const VECTOR2I& aStart, const VECTOR2I& aEnd, uint64_t aWidth );
 
@@ -192,6 +190,7 @@ private:
 
     void tagRoutFeatures( size_t aFirst, int aChain, bool aPlated );
     void addViaDrillAttributes( ODB_FEATURE& aFeature, const PCB_VIA* aVia );
+    void addPostMachiningAttributes( ODB_FEATURE& aFeature, const DRILL_OPERATION& aOperation );
 
     std::map<wxString, uint32_t> m_circleSymMap; // diameter -> symbol index
     std::map<wxString, uint32_t> m_roundDonutSymMap;
@@ -228,8 +227,7 @@ private:
     wxString                          m_layerName;
     ODB_LAYER_ROLE                    m_role;
     std::optional<ODB_AUX_LAYER_TYPE> m_auxType;
-    std::optional<ODB_DRILL_SPAN>     m_drillSpan;
-    std::optional<std::map<const PCB_VIA*, std::pair<int, int>>> m_viaDrillTypes;
+    std::optional<DRILL_SPAN>         m_drillSpan;
     uint32_t                          m_symIndex = 0;
 
     std::list<std::unique_ptr<ODB_FEATURE>>      m_featuresList;

@@ -39,6 +39,13 @@ std::vector<DRILL_OPERATION> EnumerateDrillOperations( const BOARD& aBoard,
                                                        const DRILL_QUERY& aQuery );
 
 /**
+ * Every drill span present on the board, through-holes first.
+ * Shared with the drill writers so a per-span chart and a per-span drill file cannot disagree
+ * about which spans exist. Pad backdrills are optional so NC drill retains its established spans.
+ */
+std::vector<DRILL_SPAN> EnumerateDrillSpans( const BOARD& aBoard, bool aPadBackdrills = false );
+
+/**
  * Whether a pad's hole is a slot rather than a round drill.
  *
  * One definition, because the drill writers, the chart and the IPC-2581 and ODB++ exporters

@@ -35,6 +35,7 @@
 #include <constraints/constraint_builder.h>
 #include <constraints/pcb_constraint.h>
 #include <drill/drill_chart_model.h>
+#include <drill/drill_enumerator.h>
 #include <math/util.h>
 #include <base_units.h>
 #include <pcb_generated_table.h>

@@ -273,8 +273,37 @@ USED_BY_FEATURE_ENTITY( STRING_ANGLE )
 DEFINE_FLOAT_ATTR( COMP_HEIGHT, 6 )
 USED_BY_CMP_ENTITY( COMP_HEIGHT )
 
+DEFINE_ATTR( post_machining_top_diameter, FloatAttribute, TYPE::FLOAT, "post_machining_top_diameter", 3 )
+USED_BY_FEATURE_ENTITY( post_machining_top_diameter )
+DEFINE_ATTR( post_machining_top_depth, FloatAttribute, TYPE::FLOAT, "post_machining_top_depth", 3 )
+USED_BY_FEATURE_ENTITY( post_machining_top_depth )
+DEFINE_ATTR( post_machining_top_angle, FloatAttribute, TYPE::FLOAT, "post_machining_top_angle", 1 )
+USED_BY_FEATURE_ENTITY( post_machining_top_angle )
+DEFINE_ATTR( post_machining_bottom_diameter, FloatAttribute, TYPE::FLOAT, "post_machining_bottom_diameter", 3 )
+USED_BY_FEATURE_ENTITY( post_machining_bottom_diameter )
+DEFINE_ATTR( post_machining_bottom_depth, FloatAttribute, TYPE::FLOAT, "post_machining_bottom_depth", 3 )
+USED_BY_FEATURE_ENTITY( post_machining_bottom_depth )
+DEFINE_ATTR( post_machining_bottom_angle, FloatAttribute, TYPE::FLOAT, "post_machining_bottom_angle", 1 )
+USED_BY_FEATURE_ENTITY( post_machining_bottom_angle )
+
 
 // OPTION ATTRIBUTES
+enum class post_machining_top
+{
+    COUNTERSINK,
+    COUNTERBORE
+};
+DEFINE_OPTION_ATTR( post_machining_top )
+USED_BY_FEATURE_ENTITY( post_machining_top )
+
+enum class post_machining_bottom
+{
+    COUNTERSINK,
+    COUNTERBORE
+};
+DEFINE_OPTION_ATTR( post_machining_bottom )
+USED_BY_FEATURE_ENTITY( post_machining_bottom )
+
 enum class DRILL
 {
     PLATED,

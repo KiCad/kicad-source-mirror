@@ -141,6 +141,9 @@ struct DRILL_QUERY
      * Emit plated and non-plated together, as the merged drill file does.
      */
     bool m_MergePTHNPTH = false;
+
+    /// Include pad backdrills and post-machining, kept off for NC drill output
+    bool m_PadMachining = false;
 };
 
 #endif // DRILL_OPERATION_H

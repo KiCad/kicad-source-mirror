@@ -27,6 +27,7 @@
 #include <string_utils.h>
 #include <locale_io.h>
 #include <board.h>
+#include <drill/drill_enumerator.h>
 #include <footprint.h>
 #include <pcb_track.h>
 #include <pad.h>
@@ -63,9 +64,42 @@ bool GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
     wxFileName  fn;
     wxString    msg;
 
-    std::vector<DRILL_SPAN> hole_sets = getUniqueLayerPairs();
+    std::vector<DRILL_SPAN> hole_sets = EnumerateDrillSpans( *m_pcb );
+    std::vector<DRILL_OPERATION> sideProtectionHoles;
 
     hole_sets.emplace_back( F_Cu, B_Cu, false, true );
+
+    auto writeProtection = [&]( IPC4761_FEATURES aFeature, const DRILL_SPAN& aSpan )
+    {
+        if( !hasViaType( aFeature ) )
+            return;
+
+        fn = getProtectionFileName( aSpan, aFeature );
+        fn.SetPath( aPlotDirectory );
+
+        wxString fullFilename = fn.GetFullPath();
+
+        if( createProtectionFile( fullFilename, aFeature, aSpan.Pair() ) < 0 )
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "Failed to create file '%s'." ), fullFilename );
+                aReporter->Report( msg, RPT_SEVERITY_ERROR );
+            }
+
+            success = false;
+        }
+        else
+        {
+            if( aReporter )
+            {
+                msg.Printf( _( "Created file '%s'." ), fullFilename );
+                aReporter->Report( msg, RPT_SEVERITY_ACTION );
+            }
+
+            AddCreatedFile( fullFilename );
+        }
+    };
 
     for( std::vector<DRILL_SPAN>::const_iterator it = hole_sets.begin();
          it != hole_sets.end();  ++it )
@@ -124,50 +158,38 @@ bool GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
         if( doing_npth )
             continue;
 
-        for( IPC4761_FEATURES feature :
-             { IPC4761_FEATURES::FILLED, IPC4761_FEATURES::CAPPED,
-               IPC4761_FEATURES::COVERED_BACK, IPC4761_FEATURES::COVERED_FRONT,
-               IPC4761_FEATURES::PLUGGED_BACK, IPC4761_FEATURES::PLUGGED_FRONT,
-               IPC4761_FEATURES::TENTED_BACK, IPC4761_FEATURES::TENTED_FRONT } )
+        // Side files name only the outer layer, so every plated span must share one file
+        if( !span.m_IsBackdrill )
         {
-            if( !aGenTenting )
+            for( const DRILL_OPERATION& hole : m_holeListBuffer )
             {
-                if( feature == IPC4761_FEATURES::TENTED_BACK
-                        || feature == IPC4761_FEATURES::TENTED_FRONT )
-                {
-                    continue;
-                }
-            }
-
-            if( !hasViaType( feature ) )
-                continue;
-
-            fn = getProtectionFileName( span, feature );
-            fn.SetPath( aPlotDirectory );
-
-            wxString fullFilename = fn.GetFullPath();
-
-            if( createProtectionFile( fullFilename, feature, span.Pair() ) < 0 )
-            {
-                if( aReporter )
-                {
-                    msg.Printf( _( "Failed to create file '%s'." ), fullFilename );
-                    aReporter->Report( msg, RPT_SEVERITY_ERROR );
-                    success = false;
-                }
-            }
-            else
-            {
-                if( aReporter )
-                {
-                    msg.Printf( _( "Created file '%s'." ), fullFilename );
-                    aReporter->Report( msg, RPT_SEVERITY_ACTION );
-                }
-
-                AddCreatedFile( fullFilename );
+                if( dyn_cast<const PCB_VIA*>( hole.m_SourceItem ) )
+                    sideProtectionHoles.push_back( hole );
             }
         }
+
+        writeProtection( IPC4761_FEATURES::FILLED, span );
+        writeProtection( IPC4761_FEATURES::CAPPED, span );
     }
+
+    std::swap( m_holeListBuffer, sideProtectionHoles );
+    const DRILL_SPAN outerSpan( F_Cu, B_Cu, false, false );
+
+    for( IPC4761_FEATURES feature :
+         { IPC4761_FEATURES::COVERED_BACK, IPC4761_FEATURES::COVERED_FRONT,
+           IPC4761_FEATURES::PLUGGED_BACK, IPC4761_FEATURES::PLUGGED_FRONT,
+           IPC4761_FEATURES::TENTED_BACK, IPC4761_FEATURES::TENTED_FRONT } )
+    {
+        if( !aGenTenting && ( feature == IPC4761_FEATURES::TENTED_BACK
+                              || feature == IPC4761_FEATURES::TENTED_FRONT ) )
+        {
+            continue;
+        }
+
+        writeProtection( feature, outerSpan );
+    }
+
+    std::swap( m_holeListBuffer, sideProtectionHoles );
 
     if( aGenMap )
         success &= CreateMapFilesSet( aPlotDirectory, aReporter );

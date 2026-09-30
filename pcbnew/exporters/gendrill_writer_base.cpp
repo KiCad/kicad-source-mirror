@@ -162,56 +162,6 @@ void GENDRILL_WRITER_BASE::buildHolesList( const DRILL_SPAN& aSpan, bool aGenera
 }
 
 
-std::vector<DRILL_SPAN> GENDRILL_WRITER_BASE::getUniqueLayerPairs() const
-{
-    wxASSERT( m_pcb );
-
-    PCB_TYPE_COLLECTOR vias;
-
-    vias.Collect( m_pcb, { PCB_VIA_T } );
-
-    std::set<DRILL_SPAN> unique;
-
-    for( int i = 0; i < vias.GetCount(); ++i )
-    {
-        PCB_VIA* via = static_cast<PCB_VIA*>( vias[i] );
-        PCB_LAYER_ID top_layer;
-        PCB_LAYER_ID bottom_layer;
-
-        via->LayerPair( &top_layer, &bottom_layer );
-
-        if( DRILL_LAYER_PAIR( top_layer, bottom_layer ) != DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
-            unique.emplace( top_layer, bottom_layer, false, false );
-
-        auto addBackdrillSpan = [&]( const PADSTACK::DRILL_PROPS& aDrill )
-        {
-            if( aDrill.start == UNDEFINED_LAYER || aDrill.end == UNDEFINED_LAYER )
-                return;
-
-            if( aDrill.size.x <= 0 && aDrill.size.y <= 0 )
-                return;
-
-            unique.emplace( aDrill.start, aDrill.end, true, false );
-        };
-
-        addBackdrillSpan( via->Padstack().SecondaryDrill() );
-        addBackdrillSpan( via->Padstack().TertiaryDrill() );
-    }
-
-    std::vector<DRILL_SPAN> ret;
-
-    ret.emplace_back( F_Cu, B_Cu, false, false );
-
-    for( const DRILL_SPAN& span : unique )
-    {
-        if( span.m_IsBackdrill || span.Pair() != DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
-            ret.push_back( span );
-    }
-
-    return ret;
-}
-
-
 const std::string GENDRILL_WRITER_BASE::layerName( PCB_LAYER_ID aLayer ) const
 {
     // Generic names here.
@@ -355,7 +305,7 @@ bool GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory, RE
     wxFileName  fn;
     wxString    msg;
 
-    std::vector<DRILL_SPAN> hole_sets = getUniqueLayerPairs();
+    std::vector<DRILL_SPAN> hole_sets = EnumerateDrillSpans( *m_pcb );
 
     if( !m_merge_PTH_NPTH )
         hole_sets.emplace_back( F_Cu, B_Cu, false, true );
@@ -923,7 +873,7 @@ bool GENDRILL_WRITER_BASE::GenDrillReportFile( const wxString& aFullFileName, RE
     unsigned    totalHoleCount;
     wxFileName  brdFilename( m_pcb->GetFileName() );
 
-    std::vector<DRILL_SPAN> hole_sets = getUniqueLayerPairs();
+    std::vector<DRILL_SPAN> hole_sets = EnumerateDrillSpans( *m_pcb );
 
     bool writeError = false;
 
