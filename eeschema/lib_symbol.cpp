@@ -263,12 +263,13 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, LEGACY_SYMBO
     m_duplicatePinNumbersAreJumpers = false;
     m_library = nullptr;
 
-    auto addField = [&]( FIELD_T id, bool visible )
-    {
-        SCH_FIELD* field = new SCH_FIELD( this, id );
-        field->SetVisible( visible );
-        m_drawings[SCH_FIELD_T].push_back( field );
-    };
+    auto addField =
+            [&]( FIELD_T id, bool visible )
+            {
+                SCH_FIELD* field = new SCH_FIELD( this, id );
+                field->SetVisible( visible );
+                m_drawings[SCH_FIELD_T].push_back( field );
+            };
 
     // construct only the mandatory fields
     addField( FIELD_T::REFERENCE, true );
@@ -280,10 +281,14 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, LEGACY_SYMBO
     SetName( aName );
     SetParent( aParent );
     SetLib( aLibrary );
+
+    // SetParent() regenerates these caches
+#if 0
     cacheShownDescription();
     cachePinCount();
     cacheSearchTerms();
     cacheChooserFields();
+#endif
 }
 
 
@@ -334,10 +339,14 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary, 
     }
 
     SetParent( aSymbol.m_parent.lock().get() );
+
+    // SetParent() regenerates these caches
+#if 0
     m_searchTermsCache = aSymbol.m_searchTermsCache;
     m_pinCountCache = aSymbol.m_pinCountCache;
     m_shownDescriptionCache = aSymbol.m_shownDescriptionCache;
     m_chooserFieldsCache = aSymbol.m_chooserFieldsCache;
+#endif
 }
 
 
@@ -653,10 +662,13 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
 
     EMBEDDED_FILES::operator=( aSymbol );
 
+    // SetParent() regenerates these caches
+#if 0
     m_searchTermsCache = aSymbol.m_searchTermsCache;
     m_pinCountCache = aSymbol.m_pinCountCache;
     m_shownDescriptionCache = aSymbol.m_shownDescriptionCache;
     m_chooserFieldsCache = aSymbol.m_chooserFieldsCache;
+#endif
 
     return *this;
 }
@@ -844,9 +856,8 @@ void LIB_SYMBOL::SetParent( LIB_SYMBOL* aParent )
         {
             if( visited.count( ancestor.get() ) )
             {
-                wxLogTrace( traceSymbolInheritance,
-                            wxT( "SetParent: Rejecting parent '%s' for symbol '%s' - would create "
-                                 "circular inheritance (lib: %s)" ),
+                wxLogTrace( traceSymbolInheritance, wxT( "SetParent: Rejecting parent '%s' for symbol '%s' "
+                                                         "- would create circular inheritance (lib: %s)" ),
                             aParent->GetName(), m_name, m_libId.GetLibNickname().wx_str() );
 
                 // Don't set the parent - it would create circular inheritance
@@ -869,6 +880,12 @@ void LIB_SYMBOL::SetParent( LIB_SYMBOL* aParent )
         // symbol whose live parent has been lost can still be serialized by name.
         m_parent.reset();
     }
+
+    // Regenerate caches.  Even ones that don't have inheritance semantics today might tomorrow.
+    cacheShownDescription();
+    cachePinCount();
+    cacheSearchTerms();
+    cacheChooserFields();
 }
 
 

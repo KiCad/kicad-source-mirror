@@ -1058,7 +1058,7 @@ private:
                                             ///< names accepted).
 
     /// Named pin-to-pad maps owned by this symbol (issue #2282).
-    PIN_MAP_SET m_pinMaps;
+    PIN_MAP_SET                       m_pinMaps;
 
     /// Footprints associated with this symbol, each tied to a named pin map.  Coupled with
     /// m_pinMaps for inheritance.
@@ -1066,20 +1066,20 @@ private:
 
     /// A list of jumper pin groups, each of which is a set of pin numbers that should be jumpered
     /// together (treated as internally connected for the purposes of connectivity)
-    JUMPER_GROUP_SET m_jumperPinGroups;
+    JUMPER_GROUP_SET                  m_jumperPinGroups;
 
     /// Flag that this symbol should automatically treat sets of two or more pins with the same
     /// number as jumpered pin groups
-    bool m_duplicatePinNumbersAreJumpers;
+    bool                              m_duplicatePinNumbersAreJumpers;
 
-    std::map<int, wxString> m_unitDisplayNames;
-    std::vector<wxString>   m_bodyStyleNames;
+    std::map<int, wxString>           m_unitDisplayNames;
+    std::vector<wxString>             m_bodyStyleNames;
 
     // Caches for things that are expensive to compute but required every time
     // the symbol chooser or other library list is created
 
-    std::vector<SEARCH_TERM> m_searchTermsCache;
-    int m_pinCountCache;
-    wxString m_shownDescriptionCache;
-    std::map<wxString, wxString> m_chooserFieldsCache;
+    std::vector<SEARCH_TERM>          m_searchTermsCache;
+    int                               m_pinCountCache;
+    wxString                          m_shownDescriptionCache;
+    std::map<wxString, wxString>      m_chooserFieldsCache;
 };
