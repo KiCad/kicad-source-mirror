@@ -157,6 +157,12 @@ public:
     /// True when the working directory relative path exists in the HEAD commit's tree.
     bool IsPathInHead( const wxString& aPath );
 
+    /// True while a merge, rebase, cherry-pick or revert is in progress, which refuses commits.
+    bool IsOperationInProgress() const;
+
+    /// Drop that operation and return to the last commit. The caller holds the action lock.
+    bool AbandonOperation( wxString& aError );
+
     /**
      * Redo the merge with each conflicted path replaced by its resolved file, then commit and
      * check out. All or nothing.

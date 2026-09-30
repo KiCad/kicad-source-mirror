@@ -137,6 +137,9 @@ public:
 
     virtual bool IsPathInHead( git_repository* aRepo, const wxString& aPath ) = 0;
 
+    /// Drop a merge, rebase, cherry-pick or revert left in progress and return to the last commit.
+    virtual bool AbandonOperation( git_repository* aRepo, wxString& aError ) = 0;
+
     virtual bool GetMergeConflicts( git_repository* aRepo, const wxString& aStageDir, wxString& aHeadOid,
                                     wxString& aTheirsOid, std::vector<KIGIT_CONFLICT_SIDES>& aConflicts,
                                     wxString& aError ) = 0;

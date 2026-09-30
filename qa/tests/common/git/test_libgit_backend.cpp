@@ -1213,6 +1213,152 @@ BOOST_AUTO_TEST_CASE( PerformPull_UnbornBranchAdoptsRemoteHistory )
 }
 
 
+// A merge left in progress refuses every commit until it is cleared.
+BOOST_AUTO_TEST_CASE( AbandonOperation_ClearsInterruptedMerge )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_oid base;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &base, repo, "HEAD" ), GIT_OK );
+
+    git_oid side = createDetachedCommit( repo, base, wxT( "file.txt" ), "side\n", "Side change" );
+    git_oid localHead = createCommit( repo, wxT( "file.txt" ), wxT( "local\n" ), wxT( "Local change" ) );
+
+    {
+        git_annotated_commit* sideCommit = nullptr;
+        BOOST_REQUIRE_EQUAL( git_annotated_commit_lookup( &sideCommit, repo, &side ), GIT_OK );
+
+        const git_annotated_commit* heads[1] = { sideCommit };
+        git_checkout_options        checkoutOpts = GIT_CHECKOUT_OPTIONS_INIT;
+        checkoutOpts.checkout_strategy = GIT_CHECKOUT_SAFE | GIT_CHECKOUT_ALLOW_CONFLICTS;
+
+        BOOST_REQUIRE_EQUAL( git_merge( repo, heads, 1, nullptr, &checkoutOpts ), GIT_OK );
+        git_annotated_commit_free( sideCommit );
+    }
+
+    BOOST_REQUIRE_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_MERGE );
+
+    KIGIT_COMMON common( repo );
+    wxString     error;
+
+    BOOST_CHECK( common.IsOperationInProgress() );
+    BOOST_CHECK( common.AbandonOperation( error ) );
+    BOOST_CHECK( !common.IsOperationInProgress() );
+    BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_NONE );
+
+    git_index* index = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+    BOOST_CHECK( !git_index_has_conflicts( index ) );
+    git_index_free( index );
+
+    git_oid headNow;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headNow, repo, "HEAD" ), GIT_OK );
+    BOOST_CHECK( git_oid_equal( &headNow, &localHead ) );
+
+    wxTextFile file( repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" ) );
+    BOOST_REQUIRE( file.Open() );
+    BOOST_CHECK_EQUAL( file.GetFirstLine(), wxString( "local" ) );
+
+    git_repository_free( repo );
+}
+
+
+// An interrupted rebase also leaves HEAD detached. Abandoning it must put the branch back.
+// A bisect is a search, not a half-finished change. Resetting and clearing its bookkeeping
+// leaves the project on whichever commit the search had reached, with no way back to where it
+// started.
+BOOST_AUTO_TEST_CASE( AbandonOperation_RefusesDuringABisect )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_oid head;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &head, repo, "HEAD" ), GIT_OK );
+
+    // What `git bisect start` leaves behind, which is how git itself recognises the state.
+    wxString gitDir = repoPath() + wxFileName::GetPathSeparator() + wxT( ".git" ) + wxFileName::GetPathSeparator();
+
+    {
+        std::ofstream log( ( gitDir + wxT( "BISECT_LOG" ) ).ToStdString() );
+        log << "git bisect start\n";
+    }
+
+    {
+        std::ofstream start( ( gitDir + wxT( "BISECT_START" ) ).ToStdString() );
+        start << "master\n";
+    }
+
+    BOOST_REQUIRE_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_BISECT );
+
+    KIGIT_COMMON common( repo );
+    wxString     error;
+
+    BOOST_CHECK_MESSAGE( !common.AbandonOperation( error ), "a bisect must not be abandoned from here" );
+    BOOST_CHECK( !error.IsEmpty() );
+    BOOST_CHECK_MESSAGE( wxFileName::FileExists( gitDir + wxT( "BISECT_LOG" ) ),
+                         "the bisect bookkeeping must survive" );
+
+    wxRemoveFile( gitDir + wxT( "BISECT_LOG" ) );
+    wxRemoveFile( gitDir + wxT( "BISECT_START" ) );
+    git_repository_free( repo );
+}
+
+
+BOOST_AUTO_TEST_CASE( AbandonOperation_ClearsInterruptedRebase )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_oid base;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &base, repo, "HEAD" ), GIT_OK );
+
+    git_oid side = createDetachedCommit( repo, base, wxT( "file.txt" ), "side\n", "Side change" );
+    git_oid localHead = createCommit( repo, wxT( "file.txt" ), wxT( "local\n" ), wxT( "Local change" ) );
+
+    {
+        git_annotated_commit* upstream = nullptr;
+        BOOST_REQUIRE_EQUAL( git_annotated_commit_lookup( &upstream, repo, &side ), GIT_OK );
+
+        git_rebase* rebase = nullptr;
+        BOOST_REQUIRE_EQUAL( git_rebase_init( &rebase, repo, nullptr, upstream, nullptr, nullptr ), GIT_OK );
+
+        git_rebase_operation* op = nullptr;
+        BOOST_REQUIRE_EQUAL( git_rebase_next( &op, rebase ), GIT_OK );
+
+        // Walk away mid-rebase, as a crash would.
+        git_rebase_free( rebase );
+        git_annotated_commit_free( upstream );
+    }
+
+    BOOST_REQUIRE_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_REBASE_MERGE );
+    BOOST_REQUIRE_EQUAL( git_repository_head_detached( repo ), 1 );
+
+    KIGIT_COMMON common( repo );
+    wxString     error;
+
+    BOOST_CHECK( common.AbandonOperation( error ) );
+    BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_NONE );
+    BOOST_CHECK_EQUAL( git_repository_head_detached( repo ), 0 );
+
+    git_oid headNow;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headNow, repo, "HEAD" ), GIT_OK );
+    BOOST_CHECK( git_oid_equal( &headNow, &localHead ) );
+
+    wxTextFile file( repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" ) );
+    BOOST_REQUIRE( file.Open() );
+    BOOST_CHECK_EQUAL( file.GetFirstLine(), wxString( "local" ) );
+
+    git_repository_free( repo );
+}
+
+
 // A rebase pull with nothing to resolve must simply replay the local commit on the remote.
 BOOST_AUTO_TEST_CASE( PerformPull_RebaseWithoutConflictSucceeds )
 {

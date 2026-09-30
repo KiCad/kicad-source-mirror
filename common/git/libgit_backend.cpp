@@ -3124,6 +3124,84 @@ bool LIBGIT_BACKEND::IsPathInHead( git_repository* aRepo, const wxString& aPath 
 }
 
 
+bool LIBGIT_BACKEND::AbandonOperation( git_repository* aRepo, wxString& aError )
+{
+    if( !aRepo )
+    {
+        aError = _( "The project has no git repository." );
+        return false;
+    }
+
+    switch( git_repository_state( aRepo ) )
+    {
+    case GIT_REPOSITORY_STATE_NONE: return true;
+
+    case GIT_REPOSITORY_STATE_REBASE_MERGE:
+    case GIT_REPOSITORY_STATE_REBASE_INTERACTIVE:
+    {
+        // Aborting restores the branch and its starting commit. A reset to the detached HEAD
+        // would not.
+        git_rebase* rebase = nullptr;
+
+        if( git_rebase_open( &rebase, aRepo, nullptr ) != GIT_OK )
+        {
+            aError = KIGIT_COMMON::GetLastGitError();
+            return false;
+        }
+
+        KIGIT::GitRebasePtr rebasePtr( rebase );
+
+        if( git_rebase_abort( rebase ) != GIT_OK )
+        {
+            aError = KIGIT_COMMON::GetLastGitError();
+            return false;
+        }
+
+        return true;
+    }
+
+    case GIT_REPOSITORY_STATE_BISECT:
+        // A bisect is a search through the history, not a half-finished change. A reset would
+        // leave the project on whichever commit the search had reached.
+        aError = _( "This project is in the middle of a search through its history, started by another "
+                    "program. Only that program can end the search and bring the project back." );
+        return false;
+
+    case GIT_REPOSITORY_STATE_REBASE:
+    case GIT_REPOSITORY_STATE_APPLY_MAILBOX:
+    case GIT_REPOSITORY_STATE_APPLY_MAILBOX_OR_REBASE:
+        aError = _( "This rebase was started by another program, and only that program can finish or abort it." );
+        return false;
+
+    default: break;
+    }
+
+    git_object* head = nullptr;
+
+    if( git_revparse_single( &head, aRepo, "HEAD" ) != GIT_OK )
+    {
+        aError = KIGIT_COMMON::GetLastGitError();
+        return false;
+    }
+
+    KIGIT::GitObjectPtr headPtr( head );
+
+    if( git_reset( aRepo, head, GIT_RESET_HARD, nullptr ) != GIT_OK )
+    {
+        aError = KIGIT_COMMON::GetLastGitError();
+        return false;
+    }
+
+    if( git_repository_state_cleanup( aRepo ) != GIT_OK )
+    {
+        aError = KIGIT_COMMON::GetLastGitError();
+        return false;
+    }
+
+    return true;
+}
+
+
 bool LIBGIT_BACKEND::GetMergeConflicts( git_repository* aRepo, const wxString& aStageDir, wxString& aHeadOid,
                                         wxString& aTheirsOid, std::vector<KIGIT_CONFLICT_SIDES>& aConflicts,
                                         wxString& aError )

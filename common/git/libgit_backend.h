@@ -87,6 +87,8 @@ public:
 
     bool IsPathInHead( git_repository* aRepo, const wxString& aPath ) override;
 
+    bool AbandonOperation( git_repository* aRepo, wxString& aError ) override;
+
     bool GetMergeConflicts( git_repository* aRepo, const wxString& aStageDir, wxString& aHeadOid, wxString& aTheirsOid,
                             std::vector<KIGIT_CONFLICT_SIDES>& aConflicts, wxString& aError ) override;
 

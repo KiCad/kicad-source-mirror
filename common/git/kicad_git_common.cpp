@@ -548,6 +548,17 @@ bool KIGIT_COMMON::IsPathInHead( const wxString& aPath )
     return GetGitBackend()->IsPathInHead( m_repo, aPath );
 }
 
+bool KIGIT_COMMON::IsOperationInProgress() const
+{
+    return m_repo && git_repository_state( m_repo ) != GIT_REPOSITORY_STATE_NONE;
+}
+
+
+bool KIGIT_COMMON::AbandonOperation( wxString& aError )
+{
+    return GetGitBackend()->AbandonOperation( m_repo, aError );
+}
+
 bool KIGIT_COMMON::GetMergeConflicts( const wxString& aStageDir, wxString& aHeadOid, wxString& aTheirsOid,
                                       std::vector<KIGIT_CONFLICT_SIDES>& aConflicts, wxString& aError )
 {
