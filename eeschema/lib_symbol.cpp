@@ -1048,6 +1048,11 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL::Flatten() const
         retv->m_pinMaps = GetEffectivePinMaps();
         retv->m_associatedFootprints = GetEffectiveAssociatedFootprints();
 
+        retv->cacheShownDescription();
+        retv->cachePinCount();
+        retv->cacheSearchTerms();
+        retv->cacheChooserFields();
+
         retv->m_parent.reset();
     }
     else
