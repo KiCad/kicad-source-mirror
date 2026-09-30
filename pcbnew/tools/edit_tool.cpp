@@ -3944,7 +3944,8 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
         frame()->SetStatusText( _( "Selection copied" ) );
     }
 
-    if( selection.IsHover() )
+    // Cut needs this selection to delete exactly the items copied to the clipboard.
+    if( selection.IsHover() && !aEvent.IsAction( &ACTIONS::cut ) )
         m_selectionTool->ClearSelection();
 
     return 0;
