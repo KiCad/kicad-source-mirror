@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-30 10:43+0000\n"
+"PO-Revision-Date: 2026-10-01 05:01+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -3304,9 +3304,8 @@ msgid "Design Block Properties"
 msgstr "Designblockeigenschaften"
 
 #: common/dialogs/dialog_edit_library_tables.cpp:117
-#, fuzzy
 msgid "Save changes to library tables?"
-msgstr "Änderungen in verschachtelter Bibliothekstabelle speichern?"
+msgstr "Änderungen in Bibliothekstabellen speichern?"
 
 #: common/dialogs/dialog_fields_table.cpp:127
 msgid "Revert Row"
@@ -3397,9 +3396,9 @@ msgid "The first %d fields are mandatory."
 msgstr "Die ersten %d Felder sind notwendig."
 
 #: common/dialogs/dialog_fields_table.cpp:1053
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' field cannot be removed."
-msgstr "Konnte die Datei \"%s\" nicht erstellen."
+msgstr "Das \"%s\"-Feld kann nicht entfernt werden."
 
 #: common/dialogs/dialog_fields_table.cpp:1059
 #, c-format
@@ -3412,9 +3411,9 @@ msgid "The first %d fields are mandatory and names cannot be changed."
 msgstr "Die ersten %d Felder sind notwendig und ihre Namen sind unveränderbar."
 
 #: common/dialogs/dialog_fields_table.cpp:1109
-#, fuzzy, c-format
+#, c-format
 msgid "The '%s' field cannot be renamed."
-msgstr "Das \"Benutzer\" Thema kann nicht umbenannt werden"
+msgstr "Das \"%s\"-Feld kann nicht umbenannt werden."
 
 #: common/dialogs/dialog_fields_table.cpp:1114
 msgid "Rename Field"
@@ -6224,6 +6223,8 @@ msgid ""
 "The imported file assigned reserved hotkeys (%s). These assignments were "
 "ignored."
 msgstr ""
+"Die importierte Datei wies reservierte Hotkeys (%s) zu. Diese Zuweisungen "
+"wurden ignoriert."
 
 #: common/dialogs/panel_hotkeys_editor.cpp:283
 msgid "| Action | Default Hotkey | Description"
@@ -6317,14 +6318,12 @@ msgid "Convert to Greyscale"
 msgstr "In Graustufen umwandeln"
 
 #: common/dialogs/panel_image_editor_base.cpp:51
-#, fuzzy
 msgid "Invert Colors"
-msgstr "Umgebungsfarben"
+msgstr "Farben umkehren"
 
 #: common/dialogs/panel_image_editor_base.cpp:54
-#, fuzzy
 msgid "Remove Background"
-msgstr "Hintergrund"
+msgstr "Hintergrund entfernen"
 
 #: common/dialogs/panel_maintenance.cpp:86
 msgid "File history cleared."
@@ -6550,25 +6549,24 @@ msgid "Scroll Gestures"
 msgstr "Scroll-Gesten"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:193
-#, fuzzy
 msgid "Touchpad navigation:"
-msgstr "Konfiguration neu laden"
+msgstr "Touchpad-Navigation:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:197
-#, fuzzy
 msgid "Native gestures (recommended)"
-msgstr "Blendenmakros deaktivieren (nicht empfohlen)"
+msgstr "Native Gesten (empfohlen)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:197
-#, fuzzy
 msgid "Configurable scroll gestures"
-msgstr "Netzklassen konfigurieren"
+msgstr "Konfigurierbare Scroll-Gesten"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:201
 msgid ""
 "Native gestures use two-finger movement to pan and pinch to zoom. Mouse "
 "wheel mappings remain active in both modes."
 msgstr ""
+"Native Gesten verwenden beim Auf- und Zusammenziehen (Zoom) eine "
+"Zweifingerbewegung. Mausradzuordnungen bleiben bei beiden Modi erhalten."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:217
 msgid "Vertical touchpad or scroll wheel movement:"
@@ -6617,9 +6615,8 @@ msgid "Reset to Mouse Defaults"
 msgstr "Auf Maus-Standards zurücksetzen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:349
-#, fuzzy
 msgid "Reset to Configurable Touchpad Defaults"
-msgstr "Auf Trackpad-Standards zurücksetzen"
+msgstr "Auf konfigurierbare Touchpad-Standards zurücksetzen"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
 #: common/eda_base_frame.cpp:1677
@@ -7057,9 +7054,8 @@ msgid "Always"
 msgstr "Immer"
 
 #: common/dialogs/panel_snapping_base.cpp:17
-#, fuzzy
 msgid "Grid Snapping"
-msgstr "Raster-Einstellungen"
+msgstr "Rasterfang"
 
 #: common/dialogs/panel_snapping_base.cpp:29
 msgid "Snap to grid:"
@@ -7070,9 +7066,8 @@ msgid "When grid shown"
 msgstr "Wenn Raster angezeigt wird"
 
 #: common/dialogs/panel_snapping_base.cpp:37
-#, fuzzy
 msgid "Snap the cursor to the active grid"
-msgstr "Nur auf Objekte auf der aktiven Lage einrasten"
+msgstr "Zeiger auf dem aktiven Raster fangen"
 
 #: common/dialogs/panel_snapping_base.cpp:47 pcbnew/tools/pcb_control.cpp:2404
 msgid "Object Snapping"
@@ -7103,16 +7098,14 @@ msgid "Capture cursor when the mouse approaches graphical control points"
 msgstr "Zeiger fangen, wenn er sich einem Grafik-Kontrollpunkt nähert"
 
 #: common/dialogs/panel_snapping_base.cpp:97
-#, fuzzy
 msgid "Snap to objects on all layers"
 msgstr "Auf Objekte auf allen Lagen einrasten"
 
 #: common/dialogs/panel_snapping_base.cpp:98
-#, fuzzy
 msgid "When unchecked, only objects on the active layer are snapped to"
 msgstr ""
-"Ermöglicht das Einrasten nur auf Objekten, die sich auf der aktiven Lage "
-"befinden"
+"Wenn dies Option nicht aktiviert ist, wird nur auf Objekte einer aktiven "
+"Lage eingerastet"
 
 #: common/dialogs/panel_snapping_base.cpp:108
 #, fuzzy
@@ -7129,9 +7122,8 @@ msgstr ""
 "Auf Endpunkte, Mittelpunkte, Zentren und Kanten bestehender Objekte einrasten"
 
 #: common/dialogs/panel_snapping_base.cpp:122
-#, fuzzy
 msgid "Construction extensions"
-msgstr "Erstelle Caches"
+msgstr "Konstruktionserweiterungen"
 
 #: common/dialogs/panel_snapping_base.cpp:123
 msgid "Snap to virtual extensions of lines and arcs"
@@ -7310,18 +7302,16 @@ msgid "Enable anonymous data collection"
 msgstr "Anonyme Datenerfassung aktivieren"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:49
-#, fuzzy
 msgid "API"
-msgstr "Pi-Glied"
+msgstr "API"
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:51
-#, fuzzy
 msgid ""
 "The KiCad API allows plugins and third-party software on your computer to "
 "access KiCad."
 msgstr ""
-"KiCad API aktivieren.  Dadurch kann Software von Drittanbietern, die auf "
-"Ihrem Computer läuft, auf KiCad zugreifen."
+"Die KiCad API erlaubt Plugins und Drittanbietersoftware, die auf Ihrem "
+"Computer läuft, auf KiCad zuzugreifen."
 
 #: common/dialogs/panel_startwizard_settings_base.cpp:21
 msgid "How would you like to configure KiCad?"
@@ -7866,9 +7856,8 @@ msgstr "Anzeigeoptionen"
 #: common/eda_base_frame.cpp:1615 common/eda_base_frame.cpp:1626
 #: common/eda_base_frame.cpp:1651 common/eda_base_frame.cpp:1666
 #: common/eda_base_frame.cpp:1701 common/eda_base_frame.cpp:1721
-#, fuzzy
 msgid "Snapping"
-msgstr "Überkontaktieren"
+msgstr "Einrastend"
 
 #: common/eda_base_frame.cpp:1616 common/eda_base_frame.cpp:1627
 #: common/eda_base_frame.cpp:1653 common/eda_base_frame.cpp:1668
@@ -8113,9 +8102,8 @@ msgstr "Netzinspektor"
 #: pcbnew/widgets/pcb_properties_panel.cpp:567
 #: pcbnew/widgets/pcb_properties_panel.cpp:640
 #: pcbnew/widgets/pcb_properties_panel.cpp:657
-#, fuzzy
 msgid "Custom Properties"
-msgstr "Elementeigenschaften"
+msgstr "Anwenderdefinierte Eigenschaften"
 
 #: common/eda_item.cpp:578
 msgid "Screen"
@@ -8389,9 +8377,8 @@ msgid "Unrecognized"
 msgstr "Unerkannt"
 
 #: common/eda_shape.cpp:1497
-#, fuzzy
 msgid "Connected Lines"
-msgstr "Verbundene Elemente:"
+msgstr "Verbundene Linien"
 
 #: common/eda_shape.cpp:1505
 msgid "Curve"
@@ -8607,9 +8594,8 @@ msgid "Line Color"
 msgstr "Linienfarbe"
 
 #: common/eda_shape.cpp:4728
-#, fuzzy
 msgid "Arc angle must not be zero."
-msgstr "Der Bogenwinkel darf nicht Null sein."
+msgstr "Bogenwinkel darf nicht Null sein."
 
 #: common/eda_shape.cpp:4763
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:217
@@ -8964,9 +8950,8 @@ msgid "Deprecated version of %s."
 msgstr "Veraltete Version von %s."
 
 #: common/exceptions.cpp:74
-#, fuzzy
 msgid "Canceled by user."
-msgstr "Öffnen durch Benutzer abgebrochen."
+msgstr "Durch Anwender abgebrochen."
 
 #: common/exceptions.cpp:87
 #, c-format
@@ -9531,9 +9516,9 @@ msgid "Rebase commit failed: %s"
 msgstr "Rebase-Commit fehlgeschlagen: %s"
 
 #: common/git/libgit_backend.cpp:1618
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed: %s"
-msgstr "Rebase-Abschluss fehlgeschlagen: %s"
+msgstr "Rebase fehlgeschlagen: %s"
 
 #: common/git/libgit_backend.cpp:1626
 #, c-format
@@ -9651,9 +9636,8 @@ msgid "History repository is locked by %s@%s"
 msgstr "Verlaufsrepository ist durch %s@%s gesperrt"
 
 #: common/history_lock.cpp:168
-#, fuzzy
 msgid "History repository is locked by an older KiCad instance."
-msgstr "Verlaufsrepository ist durch %s@%s gesperrt"
+msgstr "Verlaufsrepository ist durch eine ältere KiCad-Instanz gesperrt."
 
 #: common/history_lock.cpp:181
 #, c-format
@@ -9682,9 +9666,8 @@ msgstr ""
 "%s"
 
 #: common/history_lock.cpp:312
-#, fuzzy
 msgid "Cannot re-open history repository without the file lock"
-msgstr "Kann temporäre Ausgabedatei nicht entfernen"
+msgstr "Kann Verlaufsrepository nicht ohne Dateisperre erneut öffnen"
 
 #: common/hotkey_store.cpp:39
 msgid "Accept Autocomplete"
@@ -9986,12 +9969,12 @@ msgid "Unexpected end of file at offset 0x%06zX: need 1 byte."
 msgstr "Unerwartetes Dateiende bei Offset 0x%06zX: es wird 1 Byte benötigt."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Unreasonable string length %d at offset 0x%06zX."
 msgstr "Unpassende Zeichenkettenlänge %d bei Offset 0x%06zX."
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid "Unreasonable v37 string length %d at offset 0x%06zX."
 msgstr "Unpassende v37-Zeichenkettenlänge %d bei Offset 0x%06zX."
 
@@ -10019,7 +10002,6 @@ msgid "Unknown Eagle binary block id 0x%02x%02x at offset %zu."
 msgstr "Unbekannte Eagle Binärblock-ID 0x%02x%02x bei Offset %zu."
 
 #: common/io/eagle/eagle_bin_parser.cpp:2439
-#, fuzzy
 msgid "Eagle binary file has no drawing section."
 msgstr "Eagle Binärdatei hat keinen Zeichnungsabschnitt."
 
@@ -10096,22 +10078,23 @@ msgid "JSON error in '%s' at line %d: %s"
 msgstr "JSON-Fehler in \"%s\" in Zeile %d: %s"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 project. Cannot "
 "find project2.json and .epru documents."
 msgstr ""
-"\"%s\" ist anscheinend keine gültige EasyEDA (JLCEDA) Pro Projekt- oder "
-"Bibliotheksdatei. Kann keine project.json oder device.json finden."
+"\"%s\" ist anscheinend kein gültiges \"EasyEDA (JLCEDA) Pro v3\"-Projekt. "
+"Kann keine project2.json oder .epru-Dokumente finden."
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:610
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro v3 library. Cannot "
 "find symbol2.json, footprint2.json or device2.json and .elibu documents."
 msgstr ""
-"\"%s\" ist anscheinend keine gültige EasyEDA (JLCEDA) Pro Projekt- oder "
-"Bibliotheksdatei. Kann keine project.json oder device.json finden."
+"\"%s\" ist anscheinend keine gültige \"EasyEDA (JLCEDA) Pro v3\"-Bibliothek. "
+"Kann keine symbol2.json, footprint2.json oder device2.json und .elibu-"
+"Dokumente finden."
 
 #: common/io/pcad/s_expr_loader.cpp:194 common/io/pcad/s_expr_loader.cpp:199
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1301
@@ -10403,9 +10386,8 @@ msgid "Schematic PythonBOM export"
 msgstr "Schaltplan: Pythonstücklistenexport"
 
 #: common/jobs/job_fp_diff.cpp:37
-#, fuzzy
 msgid "Diff two .pretty footprint libraries"
-msgstr "Footprintbibliotheken durchsuchen"
+msgstr "Zwei .pretty-Footprintbibliotheken vergleichen"
 
 #: common/jobs/job_fp_diff.cpp:41
 msgid "Footprint Library: Diff"
@@ -10961,24 +10943,20 @@ msgid "Courtyard collision shadow"
 msgstr "Schatten kollidierender Abstandsflächen"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "Constrained item shadow"
-msgstr "Schatten gesperrter Elemente"
+msgstr "Eingeschränkter Elementschatten"
 
 #: common/layer_id.cpp:161
-#, fuzzy
 msgid "Under-constrained tint"
-msgstr "Uneingeschränkt"
+msgstr "Unterbestimmter Farbton"
 
 #: common/layer_id.cpp:162
-#, fuzzy
 msgid "Fully constrained tint"
-msgstr "Uneingeschränkten Pin-Tausch erlauben"
+msgstr "Vollständig bestimmter Farbton"
 
 #: common/layer_id.cpp:163
-#, fuzzy
 msgid "Over-constrained tint"
-msgstr "Uneingeschränkt"
+msgstr "Überbestimmter Farbton"
 
 #: common/layer_id.cpp:164
 msgid "Board outline area"
@@ -11262,6 +11240,8 @@ msgid ""
 "Could not restore local history '%s'. The previous history is preserved at "
 "'%s'."
 msgstr ""
+"Konnte lokalen Verlauf \"%s\" nicht wiederherstellen. Der vorige Verlauf "
+"wird unter \"%s\" gespeichert."
 
 #: common/local_history.cpp:2737
 msgid "Cannot restore - the following files are open by another user:"
@@ -11306,9 +11286,8 @@ msgid "Set Up Previews"
 msgstr "Druckvorschau"
 
 #: common/model_preview_manager.cpp:109
-#, fuzzy
 msgid "Skip This Version"
-msgstr "Diese Version über&springen"
+msgstr "Diese Version überspringen"
 
 #: common/model_preview_manager.cpp:123
 msgid "Could not set up 3D model previews."
