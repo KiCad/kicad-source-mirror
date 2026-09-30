@@ -58,6 +58,10 @@ enum MAIL_T
     MAIL_SCH_NAVIGATE_TO_SHEET, // Navigate to sheet by filename if in hierarchy
     MAIL_SCH_SHEET_CHANGED,     // Schematic editor current sheet changed
     MAIL_CALC_SHOW,             // Show the PCB calculator window
+    MAIL_SCH_RELOAD,            // Reload the schematic from disk (for example after a git pull)
+    MAIL_PCB_RELOAD,            // Reload the board from disk (for example after a git pull)
+    MAIL_SCH_PROJECT_SETTINGS_CHANGED, // Project settings changed on disk without a document reload
+    MAIL_PCB_PROJECT_SETTINGS_CHANGED  // Project settings changed on disk without a document reload
 };
 
 /**
