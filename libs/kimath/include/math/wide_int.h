@@ -21,7 +21,7 @@
 
 /**
  * @file math/wide_int.h
- * @brief Signed 128-bit integer for exact products of 64-bit coordinate deltas.
+ * @brief 128-bit integers for exact products of 64-bit coordinate deltas.
  *
  * Coordinates span 2^32 units, so deltas need 33 bits and their cross and dot products need 66.
  * KI_INT128 holds those products exactly.
@@ -81,6 +81,7 @@ inline double WordsToDouble( int64_t aHi, uint64_t aLo )
 
 #if defined( _MSC_VER )
 using KI_INT128 = std::_Signed128;
+using KI_UINT128 = std::_Unsigned128;
 
 inline double ToDouble( const KI_INT128& aValue )
 {
@@ -88,6 +89,7 @@ inline double ToDouble( const KI_INT128& aValue )
 }
 #else
 using KI_INT128 = __int128;
+using KI_UINT128 = unsigned __int128;
 
 inline double ToDouble( KI_INT128 aValue )
 {

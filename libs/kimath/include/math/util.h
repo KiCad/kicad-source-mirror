@@ -229,6 +229,41 @@ T isqrt( T aX )
 
 
 /**
+ * Magnitude of a signed integer, well defined for INT64_MIN.
+ */
+constexpr uint64_t UnsignedAbs( int64_t aX )
+{
+    return aX < 0 ? 0 - uint64_t( aX ) : uint64_t( aX );
+}
+
+/**
+ * Nearest integer to sqrt( aX^2 + aY^2 ) for magnitudes of at most 2^63, using 128-bit arithmetic.
+ */
+uint64_t RoundedHypotWide( uint64_t aX, uint64_t aY );
+
+/**
+ * Nearest integer to sqrt( aX^2 + aY^2 ), computed exactly.  Ties cannot occur for integer input.
+ */
+inline uint64_t RoundedHypot( int64_t aX, int64_t aY )
+{
+    // Below this both squares are under 2^63, so their sum fits in uint64_t
+    constexpr uint64_t narrowMax = ct_sqrt<uint64_t>( std::numeric_limits<int64_t>::max() );
+
+    const uint64_t ax = UnsignedAbs( aX );
+    const uint64_t ay = UnsignedAbs( aY );
+
+    if( ax > narrowMax || ay > narrowMax )
+        return RoundedHypotWide( ax, ay );
+
+    const uint64_t n = ax * ax + ay * ay;
+    const uint64_t f = isqrt( n );
+
+    // n > f^2 + f is the same as n >= (f + 1/2)^2 for integer n
+    return f + ( n - f * f > f );
+}
+
+
+/**
  * Template to compare two floating point values for equality within a required epsilon.
  *
  * @param aFirst value to compare.

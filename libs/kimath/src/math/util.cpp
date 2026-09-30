@@ -24,6 +24,7 @@
 #include <cstdlib>
 #include <limits>
 #include <math/util.h>
+#include <math/wide_int.h>
 #include <wx/log.h>
 #include <wx/string.h>
 
@@ -55,6 +56,25 @@ void kimathLogOverflow( double v, const char* aTypeName )
 {
     wxString typeName( aTypeName );
     wxFAIL_MSG( wxString::Format( wxT( "\n\nOverflow converting value %f to %s." ), v, typeName ) );
+}
+
+
+uint64_t RoundedHypotWide( uint64_t aX, uint64_t aY )
+{
+    const KI_UINT128 n = KI_UINT128( aX ) * KI_UINT128( aX ) + KI_UINT128( aY ) * KI_UINT128( aY );
+    uint64_t         f = 0;
+
+    // n <= 2^127 keeps the floor root below 2^64
+    for( int bit = 63; bit >= 0; bit-- )
+    {
+        const uint64_t candidate = f | ( uint64_t( 1 ) << bit );
+
+        if( KI_UINT128( candidate ) * KI_UINT128( candidate ) <= n )
+            f = candidate;
+    }
+
+    // Round up when n - f^2 > f, the same test as the narrow path
+    return f + ( n - KI_UINT128( f ) * KI_UINT128( f ) > KI_UINT128( f ) );
 }
 
 

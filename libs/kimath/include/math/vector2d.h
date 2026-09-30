@@ -156,7 +156,7 @@ public:
      *
      * It is used to calculate the length of the vector.
      *
-     * For int the result is exactly rounded to nearest and saturates at INT_MAX.
+     * For signed integer types the result is exactly rounded to nearest and saturates at the type maximum.
      *
      * @return Scalar, the euclidean norm
      */
@@ -165,7 +165,7 @@ public:
     /**
      * Compute the squared euclidean norm of the vector, which is defined as (x ** 2 + y ** 2).
      *
-     * It is used to calculate the length of the vector.  For int it saturates at the extended type maximum.
+     * It is used to calculate the length of the vector.  For int and int64_t it saturates at the extended type maximum.
      *
      * @return Scalar, the euclidean norm
      */
@@ -280,16 +280,9 @@ constexpr VECTOR2<T>::VECTOR2( T aX, T aY )
 template <class T>
 T VECTOR2<T>::EuclideanNorm() const
 {
-    if constexpr( std::is_same<T, int>::value )
+    if constexpr( std::is_integral<T>::value && std::is_signed<T>::value )
     {
-        // Saturating at 2^63 - 1 cannot change the result because both round above INT_MAX
-        const uint64_t n = SquaredEuclideanNorm();
-        const uint64_t f = isqrt( n );
-
-        // n > f^2 + f is the same as n >= (f + 1/2)^2 for integer n, so ties cannot occur
-        const uint64_t r = f + ( n - f * f > f );
-
-        return int( std::min<uint64_t>( r, std::numeric_limits<int>::max() ) );
+        return T( std::min<uint64_t>( RoundedHypot( x, y ), std::numeric_limits<T>::max() ) );
     }
     else
     {
@@ -318,14 +311,18 @@ T VECTOR2<T>::EuclideanNorm() const
 template <class T>
 constexpr typename VECTOR2<T>::extended_type VECTOR2<T>::SquaredEuclideanNorm() const
 {
-    if constexpr( std::is_same<T, int>::value )
+    if constexpr( std::is_integral<T>::value && std::is_same<extended_type, int64_t>::value )
     {
-        // (INT_MIN, INT_MIN) is 2^63, one past what int64_t holds
-        const uint64_t ax = x < 0 ? 0 - uint64_t( x ) : uint64_t( x );
-        const uint64_t ay = y < 0 ? 0 - uint64_t( y ) : uint64_t( y );
-        const uint64_t n = ax * ax + ay * ay;
+        // Past this a single square exceeds ECOORD_MAX; below it the sum still fits in uint64_t
+        constexpr uint64_t narrowMax = ct_sqrt<uint64_t>( ECOORD_MAX );
 
-        return extended_type( std::min<uint64_t>( n, ECOORD_MAX ) );
+        const uint64_t ax = UnsignedAbs( x );
+        const uint64_t ay = UnsignedAbs( y );
+
+        if( ax > narrowMax || ay > narrowMax )
+            return ECOORD_MAX;
+
+        return extended_type( std::min<uint64_t>( ax * ax + ay * ay, ECOORD_MAX ) );
     }
     else
     {

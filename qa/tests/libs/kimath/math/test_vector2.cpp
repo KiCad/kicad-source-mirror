@@ -99,6 +99,18 @@ BOOST_AUTO_TEST_CASE( test_euclidean_norm_exact )
     BOOST_CHECK_EQUAL( VECTOR2I( imin, imin ).SquaredEuclideanNorm(), std::numeric_limits<int64_t>::max() );
 }
 
+BOOST_AUTO_TEST_CASE( test_euclidean_norm_int64_exact )
+{
+    const int64_t lmin = std::numeric_limits<int64_t>::min();
+    const int64_t lmax = std::numeric_limits<int64_t>::max();
+
+    // std::hypot rounds this to a multiple of the double spacing, 1414213562373095168
+    BOOST_CHECK_EQUAL( VECTOR2L( 1000000000000000003, 1000000000000000007 ).EuclideanNorm(), 1414213562373095056 );
+
+    BOOST_CHECK_EQUAL( VECTOR2L( lmin, 0 ).EuclideanNorm(), lmax );
+    BOOST_CHECK_EQUAL( VECTOR2L( lmin, 0 ).SquaredEuclideanNorm(), lmax );
+}
+
 BOOST_AUTO_TEST_CASE( test_resize, *boost::unit_test::tolerance( 0.000001 ) )
 {
     // just some arbitrary vectors
