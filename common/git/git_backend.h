@@ -23,6 +23,7 @@
 #include <map>
 #include <import_export.h>
 #include <set>
+#include <utility>
 #include <vector>
 #include <wx/string.h>
 
@@ -45,6 +46,7 @@ enum class InitResult;
 enum class BranchResult;
 enum class PullResult;
 struct FileStatus;
+struct KIGIT_CONFLICT_SIDES;
 enum class PushResult;
 
 // Commit result shared across backend and handlers
@@ -130,6 +132,15 @@ public:
     virtual int CreateBranch( git_repository* aRepo, const wxString& aBranchName ) = 0;
     virtual bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                             bool aRemoveGitDir, wxString* aErrors ) = 0;
+
+    virtual bool GetMergeConflicts( git_repository* aRepo, const wxString& aStageDir, wxString& aHeadOid,
+                                    wxString& aTheirsOid, std::vector<KIGIT_CONFLICT_SIDES>& aConflicts,
+                                    wxString& aError ) = 0;
+
+    virtual bool CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid,
+                                     const wxString&                                   aTheirsOid,
+                                     const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
+                                     wxString&                                         aError ) = 0;
 
     virtual bool AddToIndex( GIT_ADD_TO_INDEX_HANDLER* aHandler, const wxString& aFilePath ) = 0;
 

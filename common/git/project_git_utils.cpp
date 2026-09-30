@@ -266,6 +266,10 @@ bool PROJECT_GIT_UTILS::IsTransientGitFile( const wxFileName& aFile, const wxStr
     if( aFile.GetFullName().StartsWith( wxS( "_autosave-" ) ) || aFile.GetFullName() == wxS( "fp-info-cache" ) )
         return true;
 
+    // What the conflict resolver keeps beside a file so the replaced version is recoverable.
+    if( aFile.GetExt() == wxS( "mine" ) || aFile.GetExt() == wxS( "theirs" ) )
+        return true;
+
     // Archived project backups
     if( !aProjectName.IsEmpty() )
     {

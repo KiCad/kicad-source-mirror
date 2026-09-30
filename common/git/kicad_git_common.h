@@ -35,6 +35,20 @@
 
 class LIBGIT_BACKEND;
 
+
+// Each side of a conflicted file, extracted to a temp file. A side that does not exist is empty.
+struct KIGIT_CONFLICT_SIDES
+{
+    wxString path;                ///< Repository-relative path of the conflicted file.
+    wxString ancestorFile;        ///< Extracted common-ancestor version, an empty file when absent.
+    wxString oursFile;            ///< Extracted local version, an empty file when absent.
+    wxString theirsFile;          ///< Extracted remote version, an empty file when absent.
+    bool     hasAncestor = false; ///< False when the file did not exist in the common ancestor.
+    bool     hasOurs = false;     ///< False when the local side deleted the file.
+    bool     hasTheirs = false;   ///< False when the remote side deleted the file.
+};
+
+
 class APIEXPORT KIGIT_COMMON
 {
 
@@ -126,6 +140,23 @@ public:
     // True when tracked files hold uncommitted changes, staged or not. Untracked files do not
     // count: a merge leaves them alone.
     bool HasUncommittedTrackedChanges() const;
+
+    /**
+     * Recompute the merge in memory and extract each conflicted file's three versions into
+     * aStageDir, without touching the repository. aHeadOid pins HEAD for CreateMergedCommit.
+     */
+    bool GetMergeConflicts( const wxString& aStageDir, wxString& aHeadOid, wxString& aTheirsOid,
+                            std::vector<KIGIT_CONFLICT_SIDES>& aConflicts, wxString& aError );
+
+    /**
+     * Redo the merge with each conflicted path replaced by its resolved file, then commit and
+     * check out. All or nothing.
+     *
+     * aTheirsOid pins the remote commit, so a background fetch cannot change what gets merged.
+     * An empty resolved-file path records "the file is deleted".
+     */
+    bool CreateMergedCommit( const wxString& aExpectedHeadOid, const wxString& aTheirsOid,
+                             const std::vector<std::pair<wxString, wxString>>& aResolvedFiles, wxString& aError );
 
     // Returns true if the repository has a remote that can be pushed to pulled from
     bool HasPushAndPullRemote() const;

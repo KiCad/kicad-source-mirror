@@ -83,6 +83,13 @@ public:
     bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                     bool aRemoveGitDir, wxString* aErrors ) override;
 
+    bool GetMergeConflicts( git_repository* aRepo, const wxString& aStageDir, wxString& aHeadOid, wxString& aTheirsOid,
+                            std::vector<KIGIT_CONFLICT_SIDES>& aConflicts, wxString& aError ) override;
+
+    bool CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid, const wxString& aTheirsOid,
+                             const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
+                             wxString&                                         aError ) override;
+
     bool AddToIndex( GIT_ADD_TO_INDEX_HANDLER* aHandler, const wxString& aFilePath ) override;
 
     bool PerformAddToIndex( GIT_ADD_TO_INDEX_HANDLER* aHandler ) override;

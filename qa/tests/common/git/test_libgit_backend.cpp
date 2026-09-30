@@ -43,6 +43,8 @@
 #include <project/project_local_settings.h>
 #include <settings/settings_manager.h>
 
+#include <sys/stat.h>
+
 #include <fstream>
 #include <future>
 #include <thread>
@@ -2018,6 +2020,10 @@ BOOST_AUTO_TEST_CASE( IsTransientGitFile_ExcludesTransientFilesOnly )
             PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/_autosave-board.kicad_pcb" ), wxT( "proj" ) ) );
     BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/fp-info-cache" ), wxT( "proj" ) ) );
 
+    // The copies the conflict resolver leaves beside a file are recovery aids, not project files.
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb.mine" ), wxT( "proj" ) ) );
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb.theirs" ), wxT( "proj" ) ) );
+
     // A design file that merely mentions one of those names is still a design file.
     BOOST_CHECK(
             !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/fp-info-cache.kicad_pcb" ), wxT( "proj" ) ) );
@@ -2056,6 +2062,315 @@ BOOST_AUTO_TEST_CASE( WriteTreeToDir_MaterializesSubdirectoryFiles )
 
 
 // The repository must stay untouched until the final commit, and that commit must also bring the
+// working tree to the merged content.
+BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    // Remember the shared base, then diverge: "mine" on HEAD, "remote" on a side commit.
+    git_reference* headRef = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_head( &headRef, repo ), GIT_OK );
+    git_oid baseOid = *git_reference_target( headRef );
+    git_reference_free( headRef );
+
+    createCommit( repo, wxT( "file.txt" ), wxT( "mine\n" ), wxT( "Local change" ) );
+
+    // The remote-side commit shares the base but does not move HEAD.
+    git_oid remoteCommitOid = createDetachedCommit( repo, baseOid, wxT( "file.txt" ), "remote\n", "Remote change" );
+
+    // A pull would leave this in FETCH_HEAD.
+    writeFetchHead( remoteCommitOid );
+
+    KIGIT_COMMON common( repo );
+
+    wxString                          stageDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "stages" );
+    wxString                          headOid, theirsOid, error;
+    std::vector<KIGIT_CONFLICT_SIDES> conflicts;
+
+    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, error ),
+                           "GetMergeConflicts failed: " + error.ToStdString() );
+    BOOST_REQUIRE_EQUAL( conflicts.size(), 1u );
+    BOOST_CHECK_EQUAL( conflicts[0].path.ToStdString(), "file.txt" );
+    BOOST_CHECK( conflicts[0].hasAncestor && conflicts[0].hasOurs && conflicts[0].hasTheirs );
+
+    // Reported so the resolutions can be pinned to it.
+    {
+        char expect[GIT_OID_HEXSZ + 1] = { 0 };
+        git_oid_tostr( expect, sizeof( expect ), &remoteCommitOid );
+        BOOST_CHECK_EQUAL( theirsOid.ToStdString(), std::string( expect ) );
+    }
+
+    auto readAll = []( const wxString& aPath )
+    {
+        std::ifstream in( aPath.ToStdString(), std::ios::binary );
+        return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    };
+
+    BOOST_CHECK_EQUAL( readAll( conflicts[0].oursFile ), "mine\n" );
+    BOOST_CHECK_EQUAL( readAll( conflicts[0].theirsFile ), "remote\n" );
+    BOOST_CHECK_EQUAL( readAll( conflicts[0].ancestorFile ), "initial\n" );
+
+    // The repository must not have been touched by the conflict listing.
+    BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_NONE );
+
+    // Refuse to apply resolutions against a moved head.
+    BOOST_CHECK( !common.CreateMergedCommit( wxT( "0000000000000000000000000000000000000000" ), theirsOid,
+                                             { { conflicts[0].path, conflicts[0].oursFile } }, error ) );
+
+    // A background fetch can move FETCH_HEAD while the user resolves. The pinned commit id must
+    // win over whatever FETCH_HEAD says by then.
+    writeFetchHead( baseOid );
+
+    // A save landing while the user resolves must be refused, not reverted by the final
+    // checkout.
+    wxString trackedFile = repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" );
+    {
+        std::ofstream f( trackedFile.ToStdString() );
+        f << "edited during resolution\n";
+    }
+
+    BOOST_CHECK(
+            !common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, conflicts[0].oursFile } }, error ) );
+
+    {
+        std::ofstream f( trackedFile.ToStdString() );
+        f << "mine\n";
+    }
+
+    // A checkout failure, here injected with git's own index lock, must leave the branch where
+    // it was. Recording the merge first would make a later pull report up to date while the
+    // files still hold the old content.
+    wxString indexLock = repoPath() + wxFileName::GetPathSeparator() + wxT( ".git" ) + wxFileName::GetPathSeparator()
+                         + wxT( "index.lock" );
+    {
+        std::ofstream f( indexLock.ToStdString() );
+    }
+
+    {
+        wxString      lockedMerged = tempBase() + wxFileName::GetPathSeparator() + wxT( "locked_merged.txt" );
+        std::ofstream f( lockedMerged.ToStdString() );
+        f << "merged\n";
+        f.close();
+
+        BOOST_CHECK( !common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, lockedMerged } }, error ) );
+
+        git_oid headNow;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headNow, repo, "HEAD" ), GIT_OK );
+
+        char headNowStr[GIT_OID_HEXSZ + 1] = { 0 };
+        git_oid_tostr( headNowStr, sizeof( headNowStr ), &headNow );
+        BOOST_CHECK_EQUAL( std::string( headNowStr ), headOid.ToStdString() );
+    }
+
+    wxRemoveFile( indexLock );
+
+    // A failure after the checkout, injected here by making the branch ref unwritable, must
+    // roll the working files back automatically. The operation required a clean tree, so the
+    // rollback is lossless by construction.
+    {
+        // The ref update writes a lock file next to the ref and renames it into place, so the
+        // way to make it fail is denying writes on the containing directory.
+        wxString refsDir = repoPath() + wxFileName::GetPathSeparator() + wxT( ".git" ) + wxFileName::GetPathSeparator()
+                           + wxT( "refs" ) + wxFileName::GetPathSeparator() + wxT( "heads" );
+
+        BOOST_REQUIRE( wxFileName::DirExists( refsDir ) );
+        chmod( refsDir.fn_str(), 0555 );
+
+        wxString refMerged = tempBase() + wxFileName::GetPathSeparator() + wxT( "ref_merged.txt" );
+        {
+            std::ofstream f( refMerged.ToStdString() );
+            f << "merged\n";
+        }
+
+        BOOST_CHECK( !common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, refMerged } }, error ) );
+
+        chmod( refsDir.fn_str(), 0755 );
+
+        // The branch did not move and the working file is back at the pre-merge content.
+        git_oid headNow;
+        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headNow, repo, "HEAD" ), GIT_OK );
+
+        char headNowStr[GIT_OID_HEXSZ + 1] = { 0 };
+        git_oid_tostr( headNowStr, sizeof( headNowStr ), &headNow );
+        BOOST_CHECK_EQUAL( std::string( headNowStr ), headOid.ToStdString() );
+
+        std::ifstream in( trackedFile.ToStdString(), std::ios::binary );
+        std::string   rolled( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+        BOOST_CHECK_EQUAL( rolled, "mine\n" );
+    }
+
+    // The branch did not move, so the half-written file is an ordinary local modification. Put it
+    // back the way a user cleaning up would, so the retry starts from a clean tree.
+    {
+        std::ofstream f( trackedFile.ToStdString() );
+        f << "mine\n";
+    }
+
+    // Resolve with fresh content and finish the merge.
+    wxString mergedFile = tempBase() + wxFileName::GetPathSeparator() + wxT( "merged.txt" );
+    {
+        std::ofstream f( mergedFile.ToStdString() );
+        f << "merged\n";
+    }
+
+    BOOST_REQUIRE_MESSAGE(
+            common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, mergedFile } }, error ),
+            "CreateMergedCommit failed: " + error.ToStdString() );
+
+    // HEAD is now a merge commit of both sides, the working file carries the resolution, and no
+    // merge state is left behind.
+    git_oid newHead;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &newHead, repo, "HEAD" ), GIT_OK );
+
+    git_commit* mergeCommit = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &mergeCommit, repo, &newHead ), GIT_OK );
+    BOOST_CHECK_EQUAL( git_commit_parentcount( mergeCommit ), 2u );
+
+    // Merged against the pinned remote commit, not the one FETCH_HEAD moved to meanwhile.
+    const git_oid* secondParent = git_commit_parent_id( mergeCommit, 1 );
+    BOOST_REQUIRE( secondParent );
+    BOOST_CHECK( git_oid_equal( secondParent, &remoteCommitOid ) );
+    git_commit_free( mergeCommit );
+
+    BOOST_CHECK_EQUAL( readAll( repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" ) ), "merged\n" );
+    BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_NONE );
+
+    git_repository_free( repo );
+}
+
+
+// The panel writes the .mine or .theirs recovery copy into the working tree before finishing
+// the merge, so an untracked file must not count as a change made during resolution.
+BOOST_AUTO_TEST_CASE( MergeConflictFinishesWithAnUntrackedFilePresent )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_reference* headRef = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_head( &headRef, repo ), GIT_OK );
+    git_oid baseOid = *git_reference_target( headRef );
+    git_reference_free( headRef );
+
+    createCommit( repo, wxT( "file.txt" ), wxT( "mine\n" ), wxT( "Local change" ) );
+    git_oid remoteCommitOid = createDetachedCommit( repo, baseOid, wxT( "file.txt" ), "remote\n", "Remote change" );
+    writeFetchHead( remoteCommitOid );
+
+    KIGIT_COMMON common( repo );
+
+    wxString                          stageDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "stages" );
+    wxString                          headOid, theirsOid, error;
+    std::vector<KIGIT_CONFLICT_SIDES> conflicts;
+
+    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, error ),
+                           "GetMergeConflicts failed: " + error.ToStdString() );
+    BOOST_REQUIRE_EQUAL( conflicts.size(), 1u );
+
+    // The recovery copy the panel leaves beside the file.
+    {
+        wxString      copy = repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt.mine" );
+        std::ofstream f( copy.ToStdString() );
+        f << "mine\n";
+    }
+
+    BOOST_CHECK_MESSAGE(
+            common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, conflicts[0].theirsFile } }, error ),
+            "refused with an untracked file present: " + error.ToStdString() );
+
+    git_repository_free( repo );
+}
+
+
+// A rename on the remote arrives as two conflict entries, the old name with no remote side and the
+// new name with no base. Taking theirs on both must leave the content on the new name only.
+BOOST_AUTO_TEST_CASE( MergeConflictRenameTakeTheirsLandsOnNewPath )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    wxString base;
+
+    for( int i = 1; i <= 12; ++i )
+        base << wxString::Format( wxT( "line %d\n" ), i );
+
+    git_oid baseOid = createCommit( repo, wxT( "file.txt" ), base, wxT( "Base" ) );
+
+    wxString mine = base;
+    mine.Replace( wxT( "line 6\n" ), wxT( "line 6 mine\n" ) );
+    createCommit( repo, wxT( "file.txt" ), mine, wxT( "Local change" ) );
+
+    // Theirs: file.txt removed, renamed.txt added with the same text except line 6.
+    wxString theirs = base;
+    theirs.Replace( wxT( "line 6\n" ), wxT( "line 6 theirs\n" ) );
+
+    git_oid theirsOidRaw;
+    {
+        git_commit* baseCommit = nullptr;
+        BOOST_REQUIRE_EQUAL( git_commit_lookup( &baseCommit, repo, &baseOid ), GIT_OK );
+        git_tree* baseTree = nullptr;
+        BOOST_REQUIRE_EQUAL( git_commit_tree( &baseTree, baseCommit ), GIT_OK );
+
+        git_treebuilder* tb = nullptr;
+        BOOST_REQUIRE_EQUAL( git_treebuilder_new( &tb, repo, baseTree ), GIT_OK );
+        BOOST_REQUIRE_EQUAL( git_treebuilder_remove( tb, "file.txt" ), GIT_OK );
+
+        std::string content = theirs.utf8_string();
+        git_oid     blob;
+        BOOST_REQUIRE_EQUAL( git_blob_create_from_buffer( &blob, repo, content.data(), content.size() ), GIT_OK );
+        BOOST_REQUIRE_EQUAL( git_treebuilder_insert( nullptr, tb, "renamed.txt", &blob, GIT_FILEMODE_BLOB ), GIT_OK );
+
+        git_oid treeOid;
+        BOOST_REQUIRE_EQUAL( git_treebuilder_write( &treeOid, tb ), GIT_OK );
+        git_tree* tree = nullptr;
+        BOOST_REQUIRE_EQUAL( git_tree_lookup( &tree, repo, &treeOid ), GIT_OK );
+
+        git_signature* sig = nullptr;
+        BOOST_REQUIRE_EQUAL( git_signature_now( &sig, "QA", "qa@example.com" ), GIT_OK );
+        const git_commit* parents[1] = { baseCommit };
+        BOOST_REQUIRE_EQUAL( git_commit_create( &theirsOidRaw, repo, nullptr, sig, sig, nullptr, "Rename and edit",
+                                                tree, 1, parents ),
+                             GIT_OK );
+        git_signature_free( sig );
+        git_tree_free( tree );
+        git_treebuilder_free( tb );
+        git_tree_free( baseTree );
+        git_commit_free( baseCommit );
+    }
+
+    writeFetchHead( theirsOidRaw );
+
+    KIGIT_COMMON                      common( repo );
+    wxString                          stageDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "stages" );
+    wxString                          headOid, theirsOid, error;
+    std::vector<KIGIT_CONFLICT_SIDES> conflicts;
+
+    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, error ), error );
+
+
+    BOOST_REQUIRE_EQUAL( conflicts.size(), 2u );
+
+    std::vector<std::pair<wxString, wxString>> resolved;
+
+    for( const KIGIT_CONFLICT_SIDES& c : conflicts )
+        resolved.emplace_back( c.path, c.hasTheirs ? c.theirsFile : wxString() );
+
+    BOOST_REQUIRE_MESSAGE( common.CreateMergedCommit( headOid, theirsOid, resolved, error ), error );
+
+    wxString workdir = wxString::FromUTF8( git_repository_workdir( repo ) );
+    bool     renamedExists = wxFileExists( workdir + wxT( "renamed.txt" ) );
+    bool     oldExists = wxFileExists( workdir + wxT( "file.txt" ) );
+
+    BOOST_CHECK_MESSAGE( renamedExists, "theirs' content must land on the renamed path" );
+    BOOST_CHECK_MESSAGE( !oldExists, "the old path must not survive a take-theirs of a rename" );
+
+    git_repository_free( repo );
+}
 
 
 // Rebuilding from the parent would drop every file the amended commit held but the list omits.
@@ -2639,6 +2954,94 @@ BOOST_AUTO_TEST_CASE( Commit_IgnoresContentStagedElsewhere )
     git_blob_free( blob );
     git_tree_free( tree );
     git_commit_free( head );
+    git_repository_free( repo );
+}
+
+
+// A file deleted here and changed on the remote conflicts with no local side. Keeping the
+// deletion must produce a merge commit without the file, not a zero byte one.
+BOOST_AUTO_TEST_CASE( MergeConflictKeepsDeletion )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_reference* headRef = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_head( &headRef, repo ), GIT_OK );
+    git_oid baseOid = *git_reference_target( headRef );
+    git_reference_free( headRef );
+
+    // Local side deletes the file.
+    {
+        git_index* index = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+        BOOST_REQUIRE_EQUAL( git_index_remove_bypath( index, "file.txt" ), GIT_OK );
+        git_index_write( index );
+
+        git_oid treeOid;
+        BOOST_REQUIRE_EQUAL( git_index_write_tree( &treeOid, index ), GIT_OK );
+        git_index_free( index );
+
+        git_tree* tree = nullptr;
+        BOOST_REQUIRE_EQUAL( git_tree_lookup( &tree, repo, &treeOid ), GIT_OK );
+
+        git_commit* baseCommit = nullptr;
+        BOOST_REQUIRE_EQUAL( git_commit_lookup( &baseCommit, repo, &baseOid ), GIT_OK );
+
+        git_signature* sig = nullptr;
+        BOOST_REQUIRE_EQUAL( git_signature_now( &sig, TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL ), GIT_OK );
+
+        const git_commit* parents[1] = { baseCommit };
+        git_oid           deleteOid;
+        BOOST_REQUIRE_EQUAL(
+                git_commit_create( &deleteOid, repo, "HEAD", sig, sig, nullptr, "Delete file", tree, 1, parents ),
+                GIT_OK );
+
+        git_signature_free( sig );
+        git_commit_free( baseCommit );
+        git_tree_free( tree );
+        wxRemoveFile( repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" ) );
+    }
+
+    // Remote side modifies it, without moving HEAD.
+    git_oid remoteCommitOid = createDetachedCommit( repo, baseOid, wxT( "file.txt" ), "remote\n", "Remote change" );
+
+    writeFetchHead( remoteCommitOid );
+
+    KIGIT_COMMON common( repo );
+
+    wxString                          stageDir = tempBase() + wxFileName::GetPathSeparator() + wxT( "del_stages" );
+    wxString                          headOid, theirsOid, error;
+    std::vector<KIGIT_CONFLICT_SIDES> conflicts;
+
+    BOOST_REQUIRE_MESSAGE( common.GetMergeConflicts( stageDir, headOid, theirsOid, conflicts, error ),
+                           "GetMergeConflicts failed: " + error.ToStdString() );
+    BOOST_REQUIRE_EQUAL( conflicts.size(), 1u );
+    BOOST_CHECK( !conflicts[0].hasOurs );
+    BOOST_CHECK( conflicts[0].hasTheirs );
+
+    // Keep the deletion: an empty resolved path, not the extracted empty placeholder file.
+    BOOST_REQUIRE_MESSAGE(
+            common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, wxString() } }, error ),
+            "CreateMergedCommit failed: " + error.ToStdString() );
+
+    git_oid newHead;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &newHead, repo, "HEAD" ), GIT_OK );
+
+    git_commit* mergeCommit = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &mergeCommit, repo, &newHead ), GIT_OK );
+    BOOST_CHECK_EQUAL( git_commit_parentcount( mergeCommit ), 2u );
+
+    git_tree* mergedTree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_tree( &mergedTree, mergeCommit ), GIT_OK );
+    BOOST_CHECK_MESSAGE( git_tree_entry_byname( mergedTree, "file.txt" ) == nullptr,
+                         "keeping the deletion must not commit the file" );
+    git_tree_free( mergedTree );
+    git_commit_free( mergeCommit );
+
+    BOOST_CHECK( !wxFileName::FileExists( repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" ) ) );
+
     git_repository_free( repo );
 }
 

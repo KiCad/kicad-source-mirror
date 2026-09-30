@@ -36,10 +36,12 @@
 #include "trace_helpers.h"
 
 #include "kicad_git_compat.h"
+#include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <gestfich.h>
 #include <algorithm>
+#include <fstream>
 #include <iterator>
 #include <map>
 #include <memory>
@@ -2717,6 +2719,144 @@ int LIBGIT_BACKEND::CreateBranch( git_repository* aRepo, const wxString& aBranch
 }
 
 
+namespace
+{
+
+// Owner-only, matching the other extracted-content helpers.
+bool writeConflictSide( git_repository* aRepo, const git_index_entry* aEntry, const wxString& aDest )
+{
+    wxFile out;
+
+    if( !out.Create( aDest, true, wxS_IRUSR | wxS_IWUSR ) )
+        return false;
+
+    if( !aEntry )
+        return true;
+
+    git_blob* blob = nullptr;
+
+    if( git_blob_lookup( &blob, aRepo, &aEntry->id ) != GIT_OK )
+        return false;
+
+    KIGIT::GitBlobPtr blobPtr( blob );
+
+    const void* raw = git_blob_rawcontent( blob );
+    git_off_t   size = git_blob_rawsize( blob );
+
+    return out.Write( raw, static_cast<size_t>( size ) ) == static_cast<size_t>( size );
+}
+
+
+// Into a fresh in-memory index, leaving the repository untouched.
+bool remergeInMemory( git_repository* aRepo, const wxString& aPinnedTheirsOid, KIGIT::GitIndexPtr& aIndexOut,
+                      KIGIT::GitCommitPtr& aOursOut, KIGIT::GitCommitPtr& aTheirsOut, wxString& aError )
+{
+    git_oid oursOid;
+
+    if( git_reference_name_to_id( &oursOid, aRepo, "HEAD" ) != GIT_OK )
+    {
+        aError = _( "Could not read the repository head." );
+        return false;
+    }
+
+    git_oid theirsOid;
+
+    if( !aPinnedTheirsOid.IsEmpty() )
+    {
+        // The exact commit the conflicts came from, since the background fetch can move FETCH_HEAD.
+        if( git_oid_fromstr( &theirsOid, aPinnedTheirsOid.utf8_string().c_str() ) != GIT_OK )
+        {
+            aError = _( "Could not find the fetched remote commit." );
+            return false;
+        }
+    }
+    else
+    {
+        git_object* fetchHead = nullptr;
+
+        if( git_revparse_single( &fetchHead, aRepo, "FETCH_HEAD" ) != GIT_OK )
+        {
+            aError = _( "Could not find the fetched remote commit." );
+            return false;
+        }
+
+        KIGIT::GitObjectPtr fetchHeadPtr( fetchHead );
+        theirsOid = *git_object_id( fetchHead );
+    }
+
+    git_commit* ours = nullptr;
+
+    if( git_commit_lookup( &ours, aRepo, &oursOid ) != GIT_OK )
+    {
+        aError = _( "Could not look up the commits to merge." );
+        return false;
+    }
+
+    aOursOut.reset( ours );
+
+    git_commit* theirs = nullptr;
+
+    if( git_commit_lookup( &theirs, aRepo, &theirsOid ) != GIT_OK )
+    {
+        aError = _( "Could not look up the commits to merge." );
+        return false;
+    }
+
+    aTheirsOut.reset( theirs );
+
+    git_tree* oursTree = nullptr;
+
+    if( git_commit_tree( &oursTree, ours ) != GIT_OK )
+    {
+        aError = _( "Could not read the commit trees." );
+        return false;
+    }
+
+    KIGIT::GitTreePtr oursTreePtr( oursTree );
+    git_tree*         theirsTree = nullptr;
+
+    if( git_commit_tree( &theirsTree, theirs ) != GIT_OK )
+    {
+        aError = _( "Could not read the commit trees." );
+        return false;
+    }
+
+    KIGIT::GitTreePtr theirsTreePtr( theirsTree );
+
+    // Unrelated histories have no merge base, which git_merge_trees accepts as a null ancestor.
+    KIGIT::GitTreePtr baseTreePtr;
+    git_oid           baseOid;
+
+    if( git_merge_base( &baseOid, aRepo, &oursOid, &theirsOid ) == GIT_OK )
+    {
+        git_commit* baseCommit = nullptr;
+
+        if( git_commit_lookup( &baseCommit, aRepo, &baseOid ) == GIT_OK )
+        {
+            KIGIT::GitCommitPtr baseCommitPtr( baseCommit );
+            git_tree*           baseTree = nullptr;
+
+            if( git_commit_tree( &baseTree, baseCommit ) == GIT_OK )
+                baseTreePtr.reset( baseTree );
+        }
+    }
+
+    git_merge_options mergeOpts = GIT_MERGE_OPTIONS_INIT;
+    git_index*        mergedIndex = nullptr;
+
+    if( git_merge_trees( &mergedIndex, aRepo, baseTreePtr.get(), oursTree, theirsTree, &mergeOpts ) != GIT_OK )
+    {
+        aError = wxString::Format( _( "Merge failed: %s" ), KIGIT_COMMON::GetLastGitError() );
+        return false;
+    }
+
+    aIndexOut.reset( mergedIndex );
+    return true;
+}
+
+} // namespace
+
+
 // Just these paths. Everything else is left alone, so a rollback cannot reach an untouched file.
 static bool restorePathsFromCommit( git_repository* aRepo, git_commit* aCommit, const std::vector<std::string>& aPaths )
 {
@@ -2877,6 +3017,296 @@ static PUBLISH_RESULT publishPreparedCommit( git_repository* aRepo, git_tree* aT
     KIGIT::GitReferencePtr updatedRefPtr( updatedRef );
 
     return PUBLISH_RESULT::PUBLISHED;
+}
+
+
+bool LIBGIT_BACKEND::GetMergeConflicts( git_repository* aRepo, const wxString& aStageDir, wxString& aHeadOid,
+                                        wxString& aTheirsOid, std::vector<KIGIT_CONFLICT_SIDES>& aConflicts,
+                                        wxString& aError )
+{
+    aConflicts.clear();
+
+    if( !aRepo )
+    {
+        aError = _( "The project has no git repository." );
+        return false;
+    }
+
+    KIGIT::GitIndexPtr  mergedIndex;
+    KIGIT::GitCommitPtr ours;
+    KIGIT::GitCommitPtr theirs;
+
+    if( !remergeInMemory( aRepo, wxEmptyString, mergedIndex, ours, theirs, aError ) )
+        return false;
+
+    {
+        char theirsStr[GIT_OID_HEXSZ + 1] = { 0 };
+        git_oid_tostr( theirsStr, sizeof( theirsStr ), git_commit_id( theirs.get() ) );
+        aTheirsOid = wxString::FromUTF8( theirsStr );
+    }
+
+    if( !git_index_has_conflicts( mergedIndex.get() ) )
+    {
+        aError = _( "The merge has no conflicts." );
+        return false;
+    }
+
+    if( !wxFileName::Mkdir( aStageDir, 0700, wxPATH_MKDIR_FULL ) )
+    {
+        aError = _( "Could not create a temporary directory." );
+        return false;
+    }
+
+    char oidStr[GIT_OID_HEXSZ + 1] = { 0 };
+    git_oid_tostr( oidStr, sizeof( oidStr ), git_commit_id( ours.get() ) );
+    aHeadOid = wxString::FromUTF8( oidStr );
+
+    git_index_conflict_iterator* iter = nullptr;
+
+    if( git_index_conflict_iterator_new( &iter, mergedIndex.get() ) != GIT_OK )
+    {
+        aError = _( "Could not list the merge conflicts." );
+        return false;
+    }
+
+    KIGIT::GitIndexConflictIteratorPtr iterPtr( iter );
+
+    const git_index_entry* ancestor = nullptr;
+    const git_index_entry* mine = nullptr;
+    const git_index_entry* remote = nullptr;
+    const wxString         sep = wxFileName::GetPathSeparator();
+    int                    n = 0;
+
+    while( git_index_conflict_next( &ancestor, &mine, &remote, iter ) == GIT_OK )
+    {
+        const git_index_entry* named = mine ? mine : ( remote ? remote : ancestor );
+
+        if( !named )
+            continue;
+
+        KIGIT_CONFLICT_SIDES sides;
+        sides.path = wxString::FromUTF8( named->path );
+        sides.hasAncestor = ancestor != nullptr;
+        sides.hasOurs = mine != nullptr;
+        sides.hasTheirs = remote != nullptr;
+
+        wxString base = wxFileName( sides.path ).GetFullName();
+        sides.ancestorFile = aStageDir + sep + wxString::Format( wxS( "c%d_base_%s" ), n, base );
+        sides.oursFile = aStageDir + sep + wxString::Format( wxS( "c%d_mine_%s" ), n, base );
+        sides.theirsFile = aStageDir + sep + wxString::Format( wxS( "c%d_remote_%s" ), n, base );
+        n++;
+
+        if( !writeConflictSide( aRepo, ancestor, sides.ancestorFile )
+            || !writeConflictSide( aRepo, mine, sides.oursFile )
+            || !writeConflictSide( aRepo, remote, sides.theirsFile ) )
+        {
+            aError = _( "Could not extract the conflicting file versions." );
+            return false;
+        }
+
+        aConflicts.push_back( sides );
+    }
+
+    return !aConflicts.empty();
+}
+
+
+bool LIBGIT_BACKEND::CreateMergedCommit( git_repository* aRepo, const wxString& aExpectedHeadOid,
+                                         const wxString&                                   aTheirsOid,
+                                         const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
+                                         wxString&                                         aError )
+{
+    if( !aRepo )
+    {
+        aError = _( "The project has no git repository." );
+        return false;
+    }
+
+    // The lock is released while the user resolves, so anything dirty now appeared during
+    // resolution and the checkout below would revert it. Untracked files do not count, since
+    // the recovery copies the panel writes beside a conflicted file are untracked.
+    {
+        git_status_options statusOpts;
+        git_status_init_options( &statusOpts, GIT_STATUS_OPTIONS_VERSION );
+        statusOpts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+
+        git_status_list* statusList = nullptr;
+
+        if( git_status_list_new( &statusList, aRepo, &statusOpts ) != GIT_OK )
+        {
+            aError = _( "Could not read the repository status." );
+            return false;
+        }
+
+        KIGIT::GitStatusListPtr statusListPtr( statusList );
+
+        if( git_status_list_entrycount( statusList ) > 0 )
+        {
+            aError = _( "Files changed while the conflicts were being resolved, and finishing the "
+                        "merge would overwrite those changes. Get changes again to redo the merge "
+                        "with the current files." );
+            return false;
+        }
+    }
+
+    KIGIT::GitIndexPtr  mergedIndex;
+    KIGIT::GitCommitPtr ours;
+    KIGIT::GitCommitPtr theirs;
+
+    if( !remergeInMemory( aRepo, aTheirsOid, mergedIndex, ours, theirs, aError ) )
+        return false;
+
+    char oidStr[GIT_OID_HEXSZ + 1] = { 0 };
+    git_oid_tostr( oidStr, sizeof( oidStr ), git_commit_id( ours.get() ) );
+
+    // The resolutions were made against this head. If the branch moved, they no longer apply.
+    if( aExpectedHeadOid != wxString::FromUTF8( oidStr ) )
+    {
+        aError = _( "The repository changed while resolving. Get changes again." );
+        return false;
+    }
+
+    for( const auto& [path, resolvedFile] : aResolvedFiles )
+    {
+        std::string            pathUtf8( path.utf8_string() );
+        const git_index_entry* mine = nullptr;
+        const git_index_entry* remote = nullptr;
+        const git_index_entry* ancestor = nullptr;
+
+        git_index_conflict_get( &ancestor, &mine, &remote, mergedIndex.get(), pathUtf8.c_str() );
+
+        // An empty path means deleted. An empty file would commit a zero byte document instead.
+        if( resolvedFile.IsEmpty() )
+        {
+            if( git_index_conflict_remove( mergedIndex.get(), pathUtf8.c_str() ) != GIT_OK )
+            {
+                aError = wxString::Format( _( "Could not mark '%s' as resolved." ), path );
+                return false;
+            }
+
+            continue;
+        }
+
+        std::ifstream in( resolvedFile.fn_str(), std::ios::binary );
+
+        if( !in )
+        {
+            aError = wxString::Format( _( "Could not read the resolved file for '%s'." ), path );
+            return false;
+        }
+
+        std::string bytes( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+
+        git_oid blobOid;
+
+        if( git_blob_create_from_buffer( &blobOid, aRepo, bytes.data(), bytes.size() ) != GIT_OK )
+        {
+            aError = wxString::Format( _( "Could not store the resolved file for '%s'." ), path );
+            return false;
+        }
+
+        git_index_entry entry;
+        memset( &entry, 0, sizeof( entry ) );
+        entry.path = pathUtf8.c_str();
+        entry.id = blobOid;
+        entry.mode = mine ? mine->mode : ( remote ? remote->mode : GIT_FILEMODE_BLOB );
+
+        if( git_index_conflict_remove( mergedIndex.get(), pathUtf8.c_str() ) != GIT_OK
+            || git_index_add( mergedIndex.get(), &entry ) != GIT_OK )
+        {
+            aError = wxString::Format( _( "Could not mark '%s' as resolved." ), path );
+            return false;
+        }
+    }
+
+    if( git_index_has_conflicts( mergedIndex.get() ) )
+    {
+        aError = _( "Not every conflict was resolved." );
+        return false;
+    }
+
+    git_oid treeOid;
+
+    if( git_index_write_tree_to( &treeOid, mergedIndex.get(), aRepo ) != GIT_OK )
+    {
+        aError = _( "Could not write the merge result." );
+        return false;
+    }
+
+    git_tree* tree = nullptr;
+
+    if( git_tree_lookup( &tree, aRepo, &treeOid ) != GIT_OK )
+    {
+        aError = _( "Could not write the merge result." );
+        return false;
+    }
+
+    KIGIT::GitTreePtr treePtr( tree );
+
+    git_signature* signature = nullptr;
+
+    if( git_signature_default( &signature, aRepo ) != GIT_OK )
+    {
+        aError = _( "Could not create a commit signature. Set user.name and user.email in your "
+                    "git configuration." );
+        return false;
+    }
+
+    KIGIT::GitSignaturePtr signaturePtr( signature );
+
+    git_reference* headRef = nullptr;
+
+    if( git_repository_head( &headRef, aRepo ) != GIT_OK )
+    {
+        aError = _( "Could not get the repository head." );
+        return false;
+    }
+
+    KIGIT::GitReferencePtr headRefPtr( headRef );
+
+    const git_commit* parents[] = { ours.get(), theirs.get() };
+    wxString          message =
+            wxString::Format( _( "Merge remote-tracking branch into %s" ), git_reference_shorthand( headRef ) );
+    git_oid mergeCommitOid;
+
+    // Branch last, because the checkout is the step that can fail.
+    if( git_commit_create( &mergeCommitOid, aRepo, nullptr, signature, signature, nullptr,
+                           message.utf8_string().c_str(), tree, 2, parents )
+        != GIT_OK )
+    {
+        aError = wxString::Format( _( "Could not create merge commit: %s" ), KIGIT_COMMON::GetLastGitError() );
+        return false;
+    }
+
+    // Bring the working tree and the real index to the merged content.
+    wxString gitError;
+
+    switch( publishPreparedCommit( aRepo, tree, mergeCommitOid, headRef, ours.get(), "merge", gitError ) )
+    {
+    case PUBLISH_RESULT::PUBLISHED: return true;
+
+    case PUBLISH_RESULT::CHECKOUT_FAILED_ROLLED_BACK:
+        aError = wxString::Format( _( "Could not update the working files, so nothing was changed: %s" ), gitError );
+        return false;
+
+    case PUBLISH_RESULT::CHECKOUT_FAILED_PARTIAL:
+        aError = wxString::Format( _( "Could not update the working files, and they may be partially "
+                                      "changed: %s" ),
+                                   gitError );
+        return false;
+
+    case PUBLISH_RESULT::RECORD_FAILED_ROLLED_BACK:
+        aError = wxString::Format( _( "Could not record the merge commit, so nothing was changed: %s" ), gitError );
+        return false;
+
+    case PUBLISH_RESULT::RECORD_FAILED_PARTIAL:
+        aError = wxString::Format( _( "Could not record the merge commit, and the working files may "
+                                      "have been changed: %s" ),
+                                   gitError );
+        return false;
+    }
+
+    return false;
 }
 
 

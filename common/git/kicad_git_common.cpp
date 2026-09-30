@@ -20,6 +20,7 @@
 #include "kicad_git_common.h"
 #include "kicad_git_memory.h"
 #include "git_repo_mixin.h"
+#include "git_backend.h"
 
 #include <git/git_progress.h>
 #include <git/kicad_git_compat.h>
@@ -533,6 +534,21 @@ bool KIGIT_COMMON::HasLocalCommits() const
     }
 
     return true;
+}
+
+
+bool KIGIT_COMMON::GetMergeConflicts( const wxString& aStageDir, wxString& aHeadOid, wxString& aTheirsOid,
+                                      std::vector<KIGIT_CONFLICT_SIDES>& aConflicts, wxString& aError )
+{
+    return GetGitBackend()->GetMergeConflicts( m_repo, aStageDir, aHeadOid, aTheirsOid, aConflicts, aError );
+}
+
+
+bool KIGIT_COMMON::CreateMergedCommit( const wxString& aExpectedHeadOid, const wxString& aTheirsOid,
+                                       const std::vector<std::pair<wxString, wxString>>& aResolvedFiles,
+                                       wxString&                                         aError )
+{
+    return GetGitBackend()->CreateMergedCommit( m_repo, aExpectedHeadOid, aTheirsOid, aResolvedFiles, aError );
 }
 
 
