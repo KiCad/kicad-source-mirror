@@ -1562,6 +1562,58 @@ bool LIBGIT_BACKEND::PerformFetch( GIT_PULL_HANDLER* aHandler, bool aSkipLock )
 }
 
 
+// libgit2 refuses these with a count and no name, so the caller names them.
+static bool untrackedFilesOverwrittenBy( git_repository* aRepo, git_tree* aIncomingTree,
+                                         std::vector<wxString>& aCollisions )
+{
+    git_status_options statusOpts;
+    git_status_init_options( &statusOpts, GIT_STATUS_OPTIONS_VERSION );
+    statusOpts.show = GIT_STATUS_SHOW_WORKDIR_ONLY;
+    statusOpts.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED | GIT_STATUS_OPT_RECURSE_UNTRACKED_DIRS;
+
+    git_status_list* statusList = nullptr;
+
+    // An unreadable status must not read as nothing in the way, or the checkout overwrites it.
+    if( git_status_list_new( &statusList, aRepo, &statusOpts ) != GIT_OK )
+        return false;
+
+    KIGIT::GitStatusListPtr statusListPtr( statusList );
+    size_t                  count = git_status_list_entrycount( statusList );
+
+    for( size_t ii = 0; ii < count; ++ii )
+    {
+        const git_status_entry* entry = git_status_byindex( statusList, ii );
+
+        if( !( entry->status & GIT_STATUS_WT_NEW ) || !entry->index_to_workdir )
+            continue;
+
+        const char*     path = entry->index_to_workdir->new_file.path;
+        git_tree_entry* treeEntry = nullptr;
+
+        if( path && git_tree_entry_bypath( &treeEntry, aIncomingTree, path ) == GIT_OK )
+        {
+            KIGIT::GitTreeEntryPtr treeEntryPtr( treeEntry );
+            aCollisions.push_back( wxString::FromUTF8( path ) );
+        }
+    }
+
+    return true;
+}
+
+
+static wxString describeUntrackedCollisions( const std::vector<wxString>& aPaths )
+{
+    wxString listed;
+
+    for( const wxString& path : aPaths )
+        listed += wxS( "\n    " ) + path;
+
+    return wxString::Format( _( "Getting changes would overwrite files that were never committed:%s\n\n"
+                                "Commit or discard them first." ),
+                             listed );
+}
+
+
 PullResult LIBGIT_BACKEND::PerformPull( GIT_PULL_HANDLER* aHandler )
 {
     PullResult result = PullResult::Success;
