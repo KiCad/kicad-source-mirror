@@ -3225,6 +3225,207 @@ BOOST_AUTO_TEST_CASE( Commit_IgnoresContentStagedElsewhere )
 }
 
 
+// The old version arrives as a new commit on top of the head, and never over uncommitted work.
+BOOST_AUTO_TEST_CASE( RestoreVersionRoundTrip )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_oid secondOid = createCommit( repo, wxT( "file.txt" ), wxT( "second\n" ), wxT( "Second version" ) );
+
+    git_object* firstObj = nullptr;
+    BOOST_REQUIRE_EQUAL( git_revparse_single( &firstObj, repo, "HEAD~1" ), GIT_OK );
+    git_oid firstOid = *git_object_id( firstObj );
+    git_object_free( firstObj );
+
+    char firstHash[GIT_OID_HEXSZ + 1] = { 0 };
+    git_oid_tostr( firstHash, sizeof( firstHash ), &firstOid );
+
+    KIGIT_COMMON common( repo );
+    wxString     error;
+
+    // Refuses over uncommitted changes.
+    wxString trackedFile = repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" );
+    {
+        std::ofstream f( trackedFile.ToStdString() );
+        f << "uncommitted\n";
+    }
+
+    BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( firstHash ), wxEmptyString, error )
+                 == RestoreResult::Dirty );
+
+    {
+        std::ofstream f( trackedFile.ToStdString() );
+        f << "second\n";
+    }
+
+    // Restores as a new commit whose parent is the current head.
+    BOOST_REQUIRE_MESSAGE( common.RestoreVersion( wxString::FromUTF8( firstHash ), wxEmptyString, error )
+                                   == RestoreResult::Restored,
+                           "RestoreVersion failed: " + error.ToStdString() );
+
+    git_oid newHead;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &newHead, repo, "HEAD" ), GIT_OK );
+
+    git_commit* restoreCommit = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &restoreCommit, repo, &newHead ), GIT_OK );
+    BOOST_CHECK_EQUAL( git_commit_parentcount( restoreCommit ), 1u );
+    BOOST_CHECK( git_oid_equal( git_commit_parent_id( restoreCommit, 0 ), &secondOid ) );
+    git_commit_free( restoreCommit );
+
+    std::ifstream in( trackedFile.ToStdString() );
+    std::string   content( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    BOOST_CHECK_EQUAL( content, "initial\n" );
+
+    // Restoring the same version again is a no-op.
+    BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( firstHash ), wxEmptyString, error )
+                 == RestoreResult::AlreadyCurrent );
+
+    git_repository_free( repo );
+}
+
+
+// Restoring one project in a shared repository must leave the siblings current.
+BOOST_AUTO_TEST_CASE( RestoreScopesToProjectDirectory )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    const wxString sep = wxFileName::GetPathSeparator();
+
+    BOOST_REQUIRE( wxFileName::Mkdir( repoPath() + sep + wxT( "proj_a" ), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+    BOOST_REQUIRE( wxFileName::Mkdir( repoPath() + sep + wxT( "proj_b" ), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+
+    createCommit( repo, wxT( "proj_a/f.txt" ), wxT( "a1\n" ), wxT( "A v1" ) );
+    git_oid bothV1 = createCommit( repo, wxT( "proj_b/g.txt" ), wxT( "b1\n" ), wxT( "B v1" ) );
+
+    createCommit( repo, wxT( "proj_a/f.txt" ), wxT( "a2\n" ), wxT( "A v2" ) );
+    createCommit( repo, wxT( "proj_b/g.txt" ), wxT( "b2\n" ), wxT( "B v2" ) );
+
+    char v1Hash[GIT_OID_HEXSZ + 1] = { 0 };
+    git_oid_tostr( v1Hash, sizeof( v1Hash ), &bothV1 );
+
+    KIGIT_COMMON common( repo );
+    wxString     error;
+
+    BOOST_REQUIRE_MESSAGE( common.RestoreVersion( wxString::FromUTF8( v1Hash ), wxS( "proj_a" ), error )
+                                   == RestoreResult::Restored,
+                           "RestoreVersion failed: " + error.ToStdString() );
+
+    auto readAll = []( const wxString& aPath )
+    {
+        std::ifstream in( aPath.ToStdString(), std::ios::binary );
+        return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    };
+
+    // The restored project went back, the sibling stayed current.
+    BOOST_CHECK_EQUAL( readAll( repoPath() + sep + wxT( "proj_a" ) + sep + wxT( "f.txt" ) ), "a1\n" );
+    BOOST_CHECK_EQUAL( readAll( repoPath() + sep + wxT( "proj_b" ) + sep + wxT( "g.txt" ) ), "b2\n" );
+
+    // A version from before the project's folder existed is refused, not emptied.
+    git_object* rootObj = nullptr;
+    BOOST_REQUIRE_EQUAL( git_revparse_single( &rootObj, repo, "HEAD~5" ), GIT_OK );
+
+    char rootHash[GIT_OID_HEXSZ + 1] = { 0 };
+    git_oid_tostr( rootHash, sizeof( rootHash ), git_object_id( rootObj ) );
+    git_object_free( rootObj );
+
+    BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( rootHash ), wxS( "proj_a" ), error )
+                 == RestoreResult::Error );
+
+    git_repository_free( repo );
+}
+
+
+// The colliding content was never committed, so nothing could bring it back.
+BOOST_AUTO_TEST_CASE( RestoreRefusesUntrackedCollision )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    // A version that carries notes.txt, then a commit deleting it.
+    git_oid withNotesOid = createCommit( repo, wxT( "notes.txt" ), wxT( "keep\n" ), wxT( "Add notes" ) );
+
+    {
+        git_index* index = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+        BOOST_REQUIRE_EQUAL( git_index_remove_bypath( index, "notes.txt" ), GIT_OK );
+        git_index_write( index );
+
+        git_oid treeOid;
+        BOOST_REQUIRE_EQUAL( git_index_write_tree( &treeOid, index ), GIT_OK );
+        git_index_free( index );
+
+        git_tree* tree = nullptr;
+        BOOST_REQUIRE_EQUAL( git_tree_lookup( &tree, repo, &treeOid ), GIT_OK );
+
+        git_commit* parent = nullptr;
+        BOOST_REQUIRE_EQUAL( git_commit_lookup( &parent, repo, &withNotesOid ), GIT_OK );
+
+        git_signature* sig = nullptr;
+        BOOST_REQUIRE_EQUAL( git_signature_now( &sig, TEST_AUTHOR_NAME, TEST_AUTHOR_EMAIL ), GIT_OK );
+
+        const git_commit* parents[1] = { parent };
+        git_oid           deleteOid;
+        BOOST_REQUIRE_EQUAL(
+                git_commit_create( &deleteOid, repo, "HEAD", sig, sig, nullptr, "Delete notes", tree, 1, parents ),
+                GIT_OK );
+
+        git_signature_free( sig );
+        git_commit_free( parent );
+        git_tree_free( tree );
+        wxRemoveFile( repoPath() + wxFileName::GetPathSeparator() + wxT( "notes.txt" ) );
+    }
+
+    char withNotesHash[GIT_OID_HEXSZ + 1] = { 0 };
+    git_oid_tostr( withNotesHash, sizeof( withNotesHash ), &withNotesOid );
+
+    KIGIT_COMMON common( repo );
+    wxString     error;
+
+    // A new, never committed notes.txt collides with the version being restored.
+    wxString notesFile = repoPath() + wxFileName::GetPathSeparator() + wxT( "notes.txt" );
+    {
+        std::ofstream f( notesFile.ToStdString() );
+        f << "precious\n";
+    }
+
+    // An untracked file the old version does not carry must not block anything.
+    wxString unrelatedFile = repoPath() + wxFileName::GetPathSeparator() + wxT( "unrelated.txt" );
+    {
+        std::ofstream f( unrelatedFile.ToStdString() );
+        f << "scratch\n";
+    }
+
+    auto readAll = []( const wxString& aPath )
+    {
+        std::ifstream in( aPath.ToStdString(), std::ios::binary );
+        return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    };
+
+    BOOST_CHECK( common.RestoreVersion( wxString::FromUTF8( withNotesHash ), wxEmptyString, error )
+                 == RestoreResult::Dirty );
+    BOOST_CHECK_EQUAL( readAll( notesFile ), "precious\n" );
+
+    // With the colliding file gone, the harmless untracked one alone does not block.
+    wxRemoveFile( notesFile );
+
+    BOOST_REQUIRE_MESSAGE( common.RestoreVersion( wxString::FromUTF8( withNotesHash ), wxEmptyString, error )
+                                   == RestoreResult::Restored,
+                           "RestoreVersion failed: " + error.ToStdString() );
+    BOOST_CHECK_EQUAL( readAll( notesFile ), "keep\n" );
+    BOOST_CHECK_EQUAL( readAll( unrelatedFile ), "scratch\n" );
+
+    git_repository_free( repo );
+}
+
+
 // A file deleted here and changed on the remote conflicts with no local side. Keeping the
 // deletion must produce a merge commit without the file, not a zero byte one.
 BOOST_AUTO_TEST_CASE( MergeConflictKeepsDeletion )

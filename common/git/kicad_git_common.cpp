@@ -537,6 +537,13 @@ bool KIGIT_COMMON::HasLocalCommits() const
 }
 
 
+RestoreResult KIGIT_COMMON::RestoreVersion( const wxString& aCommitHash, const wxString& aProjectPrefix,
+                                            wxString& aError )
+{
+    return GetGitBackend()->RestoreVersion( m_repo, aCommitHash, aProjectPrefix, aError );
+}
+
+
 bool KIGIT_COMMON::DiscardChanges( const std::vector<wxString>& aPaths, wxString& aError )
 {
     return GetGitBackend()->DiscardChanges( m_repo, aPaths, aError );

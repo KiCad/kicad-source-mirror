@@ -36,6 +36,16 @@
 class LIBGIT_BACKEND;
 
 
+// Outcome of restoring an old version as a new commit.
+enum class RestoreResult
+{
+    Restored,       ///< A new commit carrying the old version's content was created.
+    AlreadyCurrent, ///< The chosen version's content matches the current head.
+    Dirty,          ///< Uncommitted changes exist, and restoring would overwrite them.
+    Error           ///< The restore failed. See the error string.
+};
+
+
 // Each side of a conflicted file, extracted to a temp file. A side that does not exist is empty.
 struct KIGIT_CONFLICT_SIDES
 {
@@ -147,6 +157,13 @@ public:
      */
     bool GetMergeConflicts( const wxString& aStageDir, wxString& aHeadOid, wxString& aTheirsOid,
                             std::vector<KIGIT_CONFLICT_SIDES>& aConflicts, wxString& aError );
+
+    /**
+     * Restore the project as it was at aCommitHash, recorded as a new commit on top of the
+     * current head. aProjectPrefix is the project directory relative to the repository root,
+     * and only that subtree is restored. Empty restores the whole tree.
+     */
+    RestoreResult RestoreVersion( const wxString& aCommitHash, const wxString& aProjectPrefix, wxString& aError );
 
     /**
      * Put the given working directory relative paths back to their committed state. A path

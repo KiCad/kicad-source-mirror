@@ -83,6 +83,9 @@ public:
     bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                     bool aRemoveGitDir, wxString* aErrors ) override;
 
+    RestoreResult RestoreVersion( git_repository* aRepo, const wxString& aCommitHash, const wxString& aProjectPrefix,
+                                  wxString& aError ) override;
+
     bool DiscardChanges( git_repository* aRepo, const std::vector<wxString>& aPaths, wxString& aError ) override;
 
     bool IsPathInHead( git_repository* aRepo, const wxString& aPath ) override;

@@ -3020,6 +3020,233 @@ static PUBLISH_RESULT publishPreparedCommit( git_repository* aRepo, git_tree* aT
 }
 
 
+RestoreResult LIBGIT_BACKEND::RestoreVersion( git_repository* aRepo, const wxString& aCommitHash,
+                                              const wxString& aProjectPrefix, wxString& aError )
+{
+    if( !aRepo )
+    {
+        aError = _( "The project has no git repository." );
+        return RestoreResult::Error;
+    }
+
+    git_object* targetObj = nullptr;
+
+    if( git_revparse_single( &targetObj, aRepo, aCommitHash.utf8_string().c_str() ) != GIT_OK )
+    {
+        aError = _( "Could not find that version." );
+        return RestoreResult::Error;
+    }
+
+    KIGIT::GitObjectPtr targetObjPtr( targetObj );
+    git_commit*         targetCommit = nullptr;
+
+    if( git_object_type( targetObj ) != GIT_OBJECT_COMMIT
+        || git_commit_lookup( &targetCommit, aRepo, git_object_id( targetObj ) ) != GIT_OK )
+    {
+        aError = _( "Could not find that version." );
+        return RestoreResult::Error;
+    }
+
+    KIGIT::GitCommitPtr targetCommitPtr( targetCommit );
+    git_tree*           targetTree = nullptr;
+
+    if( git_commit_tree( &targetTree, targetCommit ) != GIT_OK )
+    {
+        aError = _( "Could not read that version's contents." );
+        return RestoreResult::Error;
+    }
+
+    KIGIT::GitTreePtr targetTreePtr( targetTree );
+
+    git_reference* headRef = nullptr;
+
+    if( git_repository_head( &headRef, aRepo ) != GIT_OK )
+    {
+        aError = _( "Could not get the repository head." );
+        return RestoreResult::Error;
+    }
+
+    KIGIT::GitReferencePtr headRefPtr( headRef );
+    git_commit*            headCommit = nullptr;
+
+    if( git_reference_peel( (git_object**) &headCommit, headRef, GIT_OBJECT_COMMIT ) != GIT_OK )
+    {
+        aError = _( "Could not get the repository head." );
+        return RestoreResult::Error;
+    }
+
+    KIGIT::GitCommitPtr headCommitPtr( headCommit );
+    git_tree*           headTree = nullptr;
+
+    if( git_commit_tree( &headTree, headCommit ) != GIT_OK )
+    {
+        aError = _( "Could not get the repository head." );
+        return RestoreResult::Error;
+    }
+
+    KIGIT::GitTreePtr headTreePtr( headTree );
+
+    // A repository can hold several projects, so graft only this one's subtree onto the head.
+    KIGIT::GitTreePtr effectiveTreePtr;
+    git_tree*         effectiveTree = targetTree;
+
+    if( !aProjectPrefix.IsEmpty() )
+    {
+        std::string     prefixUtf8( aProjectPrefix.utf8_string() );
+        git_tree_entry* subtreeEntry = nullptr;
+
+        if( git_tree_entry_bypath( &subtreeEntry, targetTree, prefixUtf8.c_str() ) != GIT_OK )
+        {
+            aError = _( "That version does not contain this project's folder." );
+            return RestoreResult::Error;
+        }
+
+        KIGIT::GitTreeEntryPtr subtreeEntryPtr( subtreeEntry );
+
+        if( git_tree_entry_type( subtreeEntry ) != GIT_OBJECT_TREE )
+        {
+            aError = _( "That version does not contain this project's folder." );
+            return RestoreResult::Error;
+        }
+
+        git_tree_update update;
+        update.action = GIT_TREE_UPDATE_UPSERT;
+        update.id = *git_tree_entry_id( subtreeEntry );
+        update.filemode = GIT_FILEMODE_TREE;
+        update.path = prefixUtf8.c_str();
+
+        git_oid combinedOid;
+
+        if( git_tree_create_updated( &combinedOid, aRepo, headTree, 1, &update ) != GIT_OK )
+        {
+            aError = wxString::Format( _( "Could not build the restored content: %s" ),
+                                       KIGIT_COMMON::GetLastGitError() );
+            return RestoreResult::Error;
+        }
+
+        git_tree* combined = nullptr;
+
+        if( git_tree_lookup( &combined, aRepo, &combinedOid ) != GIT_OK )
+        {
+            aError = _( "Could not build the restored content." );
+            return RestoreResult::Error;
+        }
+
+        effectiveTreePtr.reset( combined );
+        effectiveTree = combined;
+    }
+
+    // The checkout is forced, so refuse when uncommitted work would be overwritten. An untracked
+    // file only counts when the restored content carries its path.
+    {
+        git_status_options statusOpts;
+        git_status_init_options( &statusOpts, GIT_STATUS_OPTIONS_VERSION );
+        statusOpts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+        statusOpts.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED | GIT_STATUS_OPT_RECURSE_UNTRACKED_DIRS;
+
+        git_status_list* statusList = nullptr;
+
+        if( git_status_list_new( &statusList, aRepo, &statusOpts ) != GIT_OK )
+        {
+            aError = _( "Could not read the repository status." );
+            return RestoreResult::Error;
+        }
+
+        KIGIT::GitStatusListPtr statusListPtr( statusList );
+        bool                    dirty = false;
+        size_t                  count = git_status_list_entrycount( statusList );
+
+        for( size_t ii = 0; ii < count && !dirty; ++ii )
+        {
+            const git_status_entry* entry = git_status_byindex( statusList, ii );
+
+            if( entry->status == GIT_STATUS_WT_NEW )
+            {
+                const char* path = entry->index_to_workdir ? entry->index_to_workdir->new_file.path : nullptr;
+
+                if( path )
+                {
+                    git_tree_entry* treeEntry = nullptr;
+
+                    if( git_tree_entry_bypath( &treeEntry, effectiveTree, path ) == GIT_OK )
+                    {
+                        KIGIT::GitTreeEntryPtr treeEntryPtr( treeEntry );
+                        dirty = true;
+                    }
+                }
+            }
+            else
+            {
+                dirty = true;
+            }
+        }
+
+        if( dirty )
+            return RestoreResult::Dirty;
+    }
+
+    if( git_oid_equal( git_commit_tree_id( headCommit ), git_tree_id( effectiveTree ) ) )
+        return RestoreResult::AlreadyCurrent;
+
+    git_signature* signature = nullptr;
+
+    if( git_signature_default( &signature, aRepo ) != GIT_OK )
+    {
+        aError = _( "Could not create a commit signature. Set user.name and user.email in your "
+                    "git configuration." );
+        return RestoreResult::Error;
+    }
+
+    KIGIT::GitSignaturePtr signaturePtr( signature );
+
+    char shortHash[13] = { 0 };
+    git_oid_tostr( shortHash, sizeof( shortHash ), git_commit_id( targetCommit ) );
+
+    // The commit stays dangling until the checkout succeeds, so a failure leaves the branch as
+    // it was.
+    const git_commit* parents[] = { headCommit };
+    wxString          message = wxString::Format( _( "Restore version %s" ), shortHash );
+    git_oid           restoreCommitOid;
+
+    if( git_commit_create( &restoreCommitOid, aRepo, nullptr, signature, signature, nullptr,
+                           message.utf8_string().c_str(), effectiveTree, 1, parents )
+        != GIT_OK )
+    {
+        aError = wxString::Format( _( "Could not create the restore commit: %s" ), KIGIT_COMMON::GetLastGitError() );
+        return RestoreResult::Error;
+    }
+
+    wxString gitError;
+
+    switch( publishPreparedCommit( aRepo, effectiveTree, restoreCommitOid, headRef, headCommit, "restore", gitError ) )
+    {
+    case PUBLISH_RESULT::PUBLISHED: return RestoreResult::Restored;
+
+    case PUBLISH_RESULT::CHECKOUT_FAILED_ROLLED_BACK:
+        aError = wxString::Format( _( "Could not update the working files, so nothing was changed: %s" ), gitError );
+        return RestoreResult::Error;
+
+    case PUBLISH_RESULT::CHECKOUT_FAILED_PARTIAL:
+        aError = wxString::Format( _( "Could not update the working files, and they may be partially "
+                                      "changed: %s" ),
+                                   gitError );
+        return RestoreResult::Error;
+
+    case PUBLISH_RESULT::RECORD_FAILED_ROLLED_BACK:
+        aError = wxString::Format( _( "Could not record the restore commit, so nothing was changed: %s" ), gitError );
+        return RestoreResult::Error;
+
+    case PUBLISH_RESULT::RECORD_FAILED_PARTIAL:
+        aError = wxString::Format( _( "Could not record the restore commit, and the working files may "
+                                      "have been changed: %s" ),
+                                   gitError );
+        return RestoreResult::Error;
+    }
+
+    return RestoreResult::Error;
+}
+
+
 bool LIBGIT_BACKEND::DiscardChanges( git_repository* aRepo, const std::vector<wxString>& aPaths, wxString& aError )
 {
     if( !aRepo )

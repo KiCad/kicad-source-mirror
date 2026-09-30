@@ -47,6 +47,7 @@ enum class BranchResult;
 enum class PullResult;
 struct FileStatus;
 struct KIGIT_CONFLICT_SIDES;
+enum class RestoreResult;
 enum class PushResult;
 
 // Commit result shared across backend and handlers
@@ -132,6 +133,9 @@ public:
     virtual int CreateBranch( git_repository* aRepo, const wxString& aBranchName ) = 0;
     virtual bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                             bool aRemoveGitDir, wxString* aErrors ) = 0;
+
+    virtual RestoreResult RestoreVersion( git_repository* aRepo, const wxString& aCommitHash,
+                                          const wxString& aProjectPrefix, wxString& aError ) = 0;
 
     virtual bool DiscardChanges( git_repository* aRepo, const std::vector<wxString>& aPaths, wxString& aError ) = 0;
 
