@@ -569,6 +569,8 @@ set( COMMON_GIT_DLG_SRCS
     dialogs/git/dialog_git_repository_base.cpp
     dialogs/git/dialog_text_diff.cpp
     dialogs/git/git_advanced_dialog.cpp
+    dialogs/git/git_commit_pane.cpp
+    dialogs/git/git_commit_pane_base.cpp
     dialogs/git/git_status_entries.cpp
     dialogs/git/panel_git_repos.cpp
     dialogs/git/panel_git_repos_base.cpp
