@@ -27,6 +27,7 @@
 #define TREEPRJ_FRAME_H
 
 #include <map>
+#include <memory>
 #include <mutex>
 #include <unordered_map>
 #include <vector>
@@ -73,6 +74,12 @@ public:
      * Delete all @ref m_TreeProject entries
      */
     void EmptyTreePrj();
+
+    /**
+     * Give a running background git operation a chance to finish, asking the user
+     * to keep waiting or abandon. Call before the owning project is unloaded.
+     */
+    void WaitForGitOperations();
 
 protected:
     static wxString GetFileExt( TREE_FILE_TYPE type );
@@ -162,69 +169,14 @@ private:
     void onGitRemoteSettings( wxCommandEvent& event );
 
     /**
-     * Commit the current project saved changes to the git repository
-     */
-    void onGitCommit( wxCommandEvent& event );
-
-    /**
-     * Amend (rewrite) the last commit on the current branch
-     */
-    void onGitAmendCommit( wxCommandEvent& event );
-
-    /**
-     * Pull the latest changes from the git repository
-     */
-    void onGitPullProject( wxCommandEvent& event );
-
-    /**
-     * Push the current project changes to the git repository
-     */
-    void onGitPushProject( wxCommandEvent& event );
-
-    /**
      * Switch to a different branch in the git repository
      */
     void onGitSwitchBranch( wxCommandEvent& event );
 
     /**
-     * Compare the current project to a different branch in the git repository
-     */
-    void onGitCompare( wxCommandEvent& event );
-
-    /**
      * Remove the git repository from the current project directory
      */
     void onGitRemoveVCS( wxCommandEvent& event );
-
-    /**
-     * Add a file to the git index
-     */
-    void onGitAddToIndex( wxCommandEvent& event );
-
-    /**
-     * Remove a file from the git index
-     */
-    void onGitRemoveFromIndex( wxCommandEvent& event );
-
-    /**
-     * Sync the current project with the git repository
-     */
-    void onGitSyncProject( wxCommandEvent& event );
-
-    /**
-     * Fetch the latest changes from the git repository
-     */
-    void onGitFetch( wxCommandEvent& event );
-
-    /**
-     * Resolve conflicts in the git repository
-     */
-    void onGitResolveConflict( wxCommandEvent& event );
-
-    /**
-     * Revert the local repository to the last commit
-     */
-    void onGitRevertLocal( wxCommandEvent& event );
 
     /**
      * Run a selected jobs file
@@ -240,7 +192,7 @@ private:
      * This is a threaded call that will change the map of git status icons for use in
      *  the main thread
      */
-    void updateGitStatusIconMap();
+    void updateGitStatusIconMap( std::shared_ptr<KIGIT_COMMON> aGitCommon, const wxString& aProjectFullName );
 
     /**
      * Updates the map of the wxtreeitemid to the name of each file for use in the thread
@@ -253,10 +205,16 @@ private:
      */
     void releaseGitRepo();
 
+    /// The current project's git session, created empty on first use.
+    std::shared_ptr<KIGIT_COMMON> gitCommon() const;
+
     /**
-     * Returns true if the current project has any uncommitted changes
+     * Follow the project's git session with a refresh listener, so operations started from the
+     * version control panel or the advanced window update the tree's icons and branch label.
      */
-    bool hasChangedFiles();
+    void syncGitListener();
+
+    git_repository* gitRepo() const;
 
     /**
      * Returns true if the current project has local commits that have not been pushed to the
@@ -299,22 +257,11 @@ private:
 
     void onThemeChanged( wxSysColourChangedEvent &aEvent );
 
-    /**
-     * Returns true if the file has already been added to the repository or
-     * false if it has not been added yet.
-     */
-    bool canFileBeAddedToVCS( const wxString& aFilePath );
-
     void onGitSyncTimer( wxTimerEvent& event );
 
     void onGitStatusTimer( wxTimerEvent& event );
 
     void gitStatusTimerHandler();
-
-    /// Show a short message in the project status bar after a git operation.
-    void showGitFeedback( const wxString& aText );
-
-    void onGitFeedbackTimer( wxTimerEvent& event );
 
 public:
     KICAD_MANAGER_FRAME*    m_Parent;
@@ -331,12 +278,12 @@ private:
                                                 // the main loop event handler is started
     int                     m_gitLastError;
     wxString                m_gitCurrentBranchName;
-    wxString                m_gitCurrentUpstream;
     wxTimer                 m_gitSyncTimer;
     wxTimer                 m_gitStatusTimer;
-    wxTimer                 m_gitFeedbackTimer;
     std::future<void>       m_gitSyncTask;
     std::future<void>       m_gitStatusIconTask;
+
+    std::weak_ptr<KIGIT_COMMON> m_gitListenerSession;
 
     std::mutex                                       m_gitTreeCacheMutex;
     std::unordered_map<wxString, wxTreeItemId>       m_gitTreeCache;

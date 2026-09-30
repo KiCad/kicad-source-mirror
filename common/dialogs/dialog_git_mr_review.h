@@ -32,6 +32,7 @@
 
 
 struct git_repository;
+class KIGIT_COMMON;
 
 
 /**
@@ -41,14 +42,14 @@ struct git_repository;
  * KIGIT::CompareRefs() to produce a changed-file list. Double-clicking a
  * file opens DIALOG_KICAD_DIFF preloaded with both blobs.
  *
- * The repository pointer is borrowed from the caller (project manager) and
- * must outlive the dialog.
+ * The git session is borrowed from the caller (project manager) and must
+ * outlive the dialog. Its action lock serializes every repository access, since
+ * libgit2 is not safe for concurrent use of one repository.
  */
 class DIALOG_GIT_MR_REVIEW : public DIALOG_GIT_MR_REVIEW_BASE
 {
 public:
-    DIALOG_GIT_MR_REVIEW( wxWindow* aParent, git_repository* aRepo,
-                          const std::vector<wxString>& aRefList );
+    DIALOG_GIT_MR_REVIEW( wxWindow* aParent, KIGIT_COMMON* aCommon, const std::vector<wxString>& aRefList );
     ~DIALOG_GIT_MR_REVIEW() override = default;
 
 protected:
@@ -60,7 +61,8 @@ private:
     void populateFileList();
     void openFileDiff( long aListIndex );
 
-    git_repository*                m_repo;
+    KIGIT_COMMON*                    m_common;
+    git_repository*                  m_repo;
     std::vector<KIGIT::CHANGED_FILE> m_changedFiles;
 };
 

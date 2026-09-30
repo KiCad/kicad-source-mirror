@@ -32,6 +32,7 @@ class PLUGIN_CONTENT_MANAGER;
 class PROJECT_TREE;
 class PROJECT_TREE_PANE;
 class LOCAL_HISTORY_PANE;
+class GIT_COMMIT_PANE;
 class UPDATE_MANAGER;
 
 /**
@@ -56,6 +57,9 @@ public:
     void RestoreCommitFromHistory( const wxString& aHash );
     void ToggleLocalHistory();
     bool HistoryPanelShown();
+
+    void ToggleGitCommitPane();
+    bool GitCommitPaneShown();
 
     void OnOpenFileInTextEditor( wxCommandEvent& event );
     void OnEditAdvancedCfg( wxCommandEvent& event );
@@ -266,9 +270,11 @@ private:
     int                   m_leftWinWidth;
     bool                  m_active_project;
     bool                  m_showHistoryPanel;
+    bool                  m_showGitCommitPanel;
 
     PROJECT_TREE_PANE*    m_projectTreePane;
     LOCAL_HISTORY_PANE*   m_historyPane;
+    GIT_COMMIT_PANE*      m_gitCommitPane;
     wxAuiNotebook*        m_notebook;
     PANEL_KICAD_LAUNCHER* m_launcher;
     int                   m_lastToolbarIconSize;

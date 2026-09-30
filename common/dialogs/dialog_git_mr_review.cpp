@@ -25,11 +25,14 @@
 
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
+#include <git/project_git_utils.h>
+#include <dialogs/git/git_status_entries.h>
 #include <diff_merge/merge_dispatch.h>
 #include <kiway.h>
 #include <reporter.h>
 
 #include <git2.h>
+#include <mutex>
 #include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/log.h>
@@ -39,10 +42,11 @@
 #include <wx/utils.h>
 
 
-DIALOG_GIT_MR_REVIEW::DIALOG_GIT_MR_REVIEW( wxWindow* aParent, git_repository* aRepo,
+DIALOG_GIT_MR_REVIEW::DIALOG_GIT_MR_REVIEW( wxWindow* aParent, KIGIT_COMMON* aCommon,
                                             const std::vector<wxString>& aRefList ) :
         DIALOG_GIT_MR_REVIEW_BASE( aParent ),
-        m_repo( aRepo )
+        m_common( aCommon ),
+        m_repo( aCommon ? aCommon->GetRepo() : nullptr )
 {
     m_listFiles->AppendColumn( _( "Path" ),   wxLIST_FORMAT_LEFT, 400 );
     m_listFiles->AppendColumn( _( "Status" ), wxLIST_FORMAT_LEFT, 100 );
@@ -104,6 +108,17 @@ void DIALOG_GIT_MR_REVIEW::populateFileList()
         return;
     }
 
+    // libgit2 is not safe for concurrent use of one repository, so serialize repository access
+    // on the git action lock while resolving the refs and comparing them.
+    std::unique_lock<std::mutex> lock = m_common->TryLockAction();
+
+    if( !lock.owns_lock() )
+    {
+        wxMessageBox( _( "Another git operation is in progress. Try again in a moment." ), _( "Compare Branches" ),
+                      wxOK | wxICON_INFORMATION, this );
+        return;
+    }
+
     // Validate each ref resolves and peels to a tree; CompareRefs needs a
     // tree on both sides.
     auto validateRef =
@@ -128,6 +143,8 @@ void DIALOG_GIT_MR_REVIEW::populateFileList()
 
     m_changedFiles = KIGIT::CompareRefs( m_repo, base, head );
 
+    lock.unlock();
+
     if( m_changedFiles.empty() )
     {
         m_listFiles->InsertItem( 0, _( "No changes between selected refs." ) );
@@ -151,57 +168,6 @@ void DIALOG_GIT_MR_REVIEW::populateFileList()
 namespace
 {
 
-/// Resolve a ref + path inside the repo to a blob written into aDestPath.
-/// Returns true on success. Empty/null on the ref side (e.g. ADDED on base or
-/// REMOVED on head) writes an empty file so the differ sees a valid empty
-/// document.
-bool writeRefBlobToFile( git_repository* aRepo, const wxString& aRef, const wxString& aPath,
-                         const wxString& aDestPath )
-{
-    if( aRef.IsEmpty() || aPath.IsEmpty() )
-        return false;
-
-    KIGIT::GitTreePtr treePtr( KIGIT::ResolveRefToTree( aRepo, aRef ) );
-
-    if( !treePtr )
-        return false;
-
-    git_tree_entry* entry = nullptr;
-
-    if( git_tree_entry_bypath( &entry, treePtr.get(), aPath.ToUTF8().data() ) != 0 )
-        return false;
-
-    std::unique_ptr<git_tree_entry, decltype( &git_tree_entry_free )> entryPtr(
-            entry, &git_tree_entry_free );
-
-    if( git_tree_entry_type( entry ) != GIT_OBJECT_BLOB )
-        return false;
-
-    git_object* blobObj = nullptr;
-
-    if( git_tree_entry_to_object( &blobObj, aRepo, entry ) != 0 )
-        return false;
-
-    KIGIT::GitObjectPtr blobObjPtr( blobObj );
-    git_blob*           blob = reinterpret_cast<git_blob*>( blobObj );
-
-    wxFile out( aDestPath, wxFile::write );
-
-    if( !out.IsOpened() )
-        return false;
-
-    const void* raw  = git_blob_rawcontent( blob );
-    git_off_t   size = git_blob_rawsize( blob );
-
-    return out.Write( raw, static_cast<size_t>( size ) ) == static_cast<size_t>( size );
-}
-
-} // namespace
-
-
-namespace
-{
-
 /// Detect "foo.pretty/bar.kicad_mod" change paths so we can dispatch them as
 /// a single-footprint FP_LIB diff (the FP differ is library-level; we build
 /// minimal one-entry .pretty dirs on each side).
@@ -216,19 +182,6 @@ bool isPrettyFootprintChange( const wxString& aPath )
     return !dirs.IsEmpty() && dirs.Last().EndsWith( wxS( ".pretty" ) );
 }
 
-
-/// Recursively removes a directory on scope exit. Prevents leaking the
-/// temporary diff workspace down any error path.
-struct TempDirGuard
-{
-    wxString path;
-
-    ~TempDirGuard()
-    {
-        if( !path.IsEmpty() )
-            wxFileName::Rmdir( path, wxPATH_RMDIR_RECURSIVE );
-    }
-};
 
 } // namespace
 
@@ -256,34 +209,27 @@ void DIALOG_GIT_MR_REVIEW::openFileDiff( long aListIndex )
     const wxString base = m_comboBase->GetValue();
     const wxString head = m_comboHead->GetValue();
 
-    // Non-recursive Mkdir keeps the creation atomic. wxPATH_MKDIR_FULL would
-    // silently accept an attacker-precreated leaf, reintroducing the TOCTOU
-    // hole the previous CreateTempFileName + remove + Mkdir pattern had.
-    const wxString tempBase =
-            wxStandardPaths::Get().GetTempDir() + wxFileName::GetPathSeparator()
-            + wxS( "kicad_diff_" )
-            + wxString::Format( wxS( "%lu_" ),
-                                static_cast<unsigned long>( wxGetProcessId() ) );
+    // The shared workspace owns a private scratch directory and cleans it up on scope exit. It
+    // checks out the whole tree for a schematic so its sub-sheets resolve, instead of a lone blob.
+    GIT_DIFF_WORKSPACE workspace;
 
-    const unsigned millis = static_cast<unsigned>( wxGetLocalTimeMillis().GetLo() );
-    wxString       tmpRoot;
-
-    for( int attempt = 0; attempt < 16 && tmpRoot.IsEmpty(); ++attempt )
-    {
-        wxString candidate = tempBase + wxString::Format( wxS( "%d_%u" ), attempt, millis );
-
-        if( wxFileName::Mkdir( candidate, 0700, 0 ) )
-            tmpRoot = candidate;
-    }
-
-    if( tmpRoot.IsEmpty() )
+    if( !workspace.IsOk() )
     {
         wxMessageBox( _( "Could not create a temporary directory." ), _( "Compare File" ),
                       wxOK | wxICON_ERROR, this );
         return;
     }
 
-    TempDirGuard tempGuard{ tmpRoot };
+    // libgit2 is not safe for concurrent use of one repository, so serialize repository access
+    // on the git action lock while extracting the blobs. It is unlocked before the diff opens.
+    std::unique_lock<std::mutex> lock = m_common->TryLockAction();
+
+    if( !lock.owns_lock() )
+    {
+        wxMessageBox( _( "Another git operation is in progress. Try again in a moment." ), _( "Compare File" ),
+                      wxOK | wxICON_INFORMATION, this );
+        return;
+    }
 
     const bool     hasBase  = file.status != KIGIT::FILE_CHANGE_STATUS::ADDED;
     const bool     hasHead  = file.status != KIGIT::FILE_CHANGE_STATUS::REMOVED;
@@ -294,33 +240,25 @@ void DIALOG_GIT_MR_REVIEW::openFileDiff( long aListIndex )
 
     if( prettyFootprint )
     {
-        // Build minimal .pretty directories on each side so FP_LIB_DIFFER can
-        // operate. The footprint's name inside the library is the filename
-        // without extension; both sides keep the same name.
-        wxFileName srcFn( file.path );
-        const wxString fpFile = srcFn.GetFullName();
+        // FP_LIB_DIFFER needs a .pretty directory on each side. The footprint's name in the
+        // library is the filename without extension.
+        const wxString sep = wxFileName::GetPathSeparator();
+        const wxString fpFile = wxFileName( file.path ).GetFullName();
 
-        wxString dirA = tmpRoot + wxFileName::GetPathSeparator() + wxS( "base.pretty" );
-        wxString dirB = tmpRoot + wxFileName::GetPathSeparator() + wxS( "head.pretty" );
+        wxString dirA = workspace.Root() + sep + wxS( "base.pretty" );
+        wxString dirB = workspace.Root() + sep + wxS( "head.pretty" );
 
         if( hasBase && !wxFileName::Mkdir( dirA, 0700, wxPATH_MKDIR_FULL ) )
-        {
             return;
-        }
 
         if( hasHead && !wxFileName::Mkdir( dirB, 0700, wxPATH_MKDIR_FULL ) )
-        {
             return;
-        }
 
         if( hasBase )
         {
-            wxString blobPath = dirA + wxFileName::GetPathSeparator() + fpFile;
-
-            if( !writeRefBlobToFile( m_repo, base, basePath, blobPath ) )
+            if( !KIGIT::PROJECT_GIT_UTILS::WriteBlobToFile( m_repo, base, basePath, dirA + sep + fpFile ) )
             {
-                wxMessageBox( wxString::Format( _( "Could not extract %s from %s." ),
-                                                basePath, base ),
+                wxMessageBox( wxString::Format( _( "Could not extract %s from %s." ), basePath, base ),
                               _( "Compare File" ), wxOK | wxICON_ERROR, this );
                 return;
             }
@@ -330,12 +268,9 @@ void DIALOG_GIT_MR_REVIEW::openFileDiff( long aListIndex )
 
         if( hasHead )
         {
-            wxString blobPath = dirB + wxFileName::GetPathSeparator() + fpFile;
-
-            if( !writeRefBlobToFile( m_repo, head, file.path, blobPath ) )
+            if( !KIGIT::PROJECT_GIT_UTILS::WriteBlobToFile( m_repo, head, file.path, dirB + sep + fpFile ) )
             {
-                wxMessageBox( wxString::Format( _( "Could not extract %s from %s." ),
-                                                file.path, head ),
+                wxMessageBox( wxString::Format( _( "Could not extract %s from %s." ), file.path, head ),
                               _( "Compare File" ), wxOK | wxICON_ERROR, this );
                 return;
             }
@@ -345,17 +280,13 @@ void DIALOG_GIT_MR_REVIEW::openFileDiff( long aListIndex )
     }
     else
     {
-        wxFileName srcName( file.path );
-
         if( hasBase )
         {
-            pathA = tmpRoot + wxFileName::GetPathSeparator() + wxS( "base_" )
-                    + srcName.GetFullName();
+            pathA = workspace.Materialize( m_repo, base, basePath, kind );
 
-            if( !writeRefBlobToFile( m_repo, base, basePath, pathA ) )
+            if( pathA.IsEmpty() )
             {
-                wxMessageBox( wxString::Format( _( "Could not extract %s from %s." ),
-                                                basePath, base ),
+                wxMessageBox( wxString::Format( _( "Could not extract %s from %s." ), basePath, base ),
                               _( "Compare File" ), wxOK | wxICON_ERROR, this );
                 return;
             }
@@ -363,21 +294,21 @@ void DIALOG_GIT_MR_REVIEW::openFileDiff( long aListIndex )
 
         if( hasHead )
         {
-            pathB = tmpRoot + wxFileName::GetPathSeparator() + wxS( "head_" )
-                    + srcName.GetFullName();
+            pathB = workspace.Materialize( m_repo, head, file.path, kind );
 
-            if( !writeRefBlobToFile( m_repo, head, file.path, pathB ) )
+            if( pathB.IsEmpty() )
             {
-                wxMessageBox( wxString::Format( _( "Could not extract %s from %s." ),
-                                                file.path, head ),
+                wxMessageBox( wxString::Format( _( "Could not extract %s from %s." ), file.path, head ),
                               _( "Compare File" ), wxOK | wxICON_ERROR, this );
                 return;
             }
         }
     }
 
-    // pathA empty for ADDED / pathB empty for REMOVED — the kiface synthesizes
-    // an empty document for the missing side.
+    lock.unlock();
+
+    // pathA empty for ADDED, pathB empty for REMOVED. The kiface synthesizes an empty
+    // document for the missing side.
     const wxString labelA = wxString::Format( wxS( "%s:%s" ), base, basePath );
     const wxString labelB = wxString::Format( wxS( "%s:%s" ), head, file.path );
 

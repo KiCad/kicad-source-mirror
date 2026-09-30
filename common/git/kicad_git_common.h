@@ -477,7 +477,6 @@ protected:
     friend class GIT_PULL_HANDLER;
     friend class GIT_CLONE_HANDLER;
     friend class LIBGIT_BACKEND;
-    friend class PROJECT_TREE_PANE;
 
 private:
     void updatePublicKeys();

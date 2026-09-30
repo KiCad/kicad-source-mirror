@@ -21,16 +21,11 @@
 #ifndef PROJECT_TREE_H
 #define PROJECT_TREE_H
 
-#include <memory>
-
-#include <git/kicad_git_common.h>
-
 #include <wx/treectrl.h>
 
 #include "tree_file_type.h"
 
 class PROJECT_TREE_PANE;
-struct git_repository;
 
 /** PROJECT_TREE
  * This is the class to show (as a tree) the files in the project directory
@@ -42,7 +37,6 @@ class PROJECT_TREE : public wxTreeCtrl
 private:
     PROJECT_TREE_PANE*            m_projectTreePane;
     wxImageList*                  m_statusImageList;
-    std::shared_ptr<KIGIT_COMMON> m_gitCommon;
 
 public:
     PROJECT_TREE_PANE* GetProjectTreePane() const { return m_projectTreePane; }
@@ -53,21 +47,6 @@ public:
     void LoadIcons();
 
     void GetItemsRecursively( const wxTreeItemId& aParentId, std::vector<wxTreeItemId>& aItems );
-
-    void SetGitRepo( git_repository* aRepo )    { m_gitCommon->SetRepo( aRepo ); }
-    git_repository* GetGitRepo() const          { return m_gitCommon->GetRepo(); }
-
-    KIGIT_COMMON* GitCommon() const             { return m_gitCommon.get(); }
-
-    /// Shared handle for background workers so the common outlives a concurrent TakeGitCommon().
-    std::shared_ptr<KIGIT_COMMON> GitCommonPtr() const { return m_gitCommon; }
-
-    std::shared_ptr<KIGIT_COMMON> TakeGitCommon()
-    {
-        auto old = std::move( m_gitCommon );
-        m_gitCommon = std::make_shared<KIGIT_COMMON>( nullptr );
-        return old;
-    }
 
 private:
     /* overridden sort function */

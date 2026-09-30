@@ -34,6 +34,7 @@
 #include <system_error>
 #include <wx/msgdlg.h>
 #include <kiplatform/policy.h>
+#include <dialogs/git/git_credentials_prompt.h>
 #include <kiplatform/secrets.h>
 #include <kiplatform/ui.h>
 #include <confirm.h>
@@ -415,11 +416,10 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
     if( !pro.IsOk() )
         return -1;
 
-    PROJECT_TREE_PANE *pane = static_cast<PROJECT_TREE_PANE*>( m_frame->GetToolCanvas() );
+    // No open project owns the repository being cloned, so use a scratch session.
+    KIGIT_COMMON cloneCommon( nullptr );
 
-
-    GIT_CLONE_HANDLER cloneHandler( pane->m_TreeProject->GitCommon() );
-    pane->m_TreeProject->GitCommon()->SetShuttingDown( false );
+    GIT_CLONE_HANDLER cloneHandler( &cloneCommon );
 
     cloneHandler.SetRemote( dlg.GetFullURL() );
     cloneHandler.SetClonePath( pro.GetPath() );
@@ -427,16 +427,23 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
     cloneHandler.SetPassword( dlg.GetPassword() );
     cloneHandler.SetSSHKey( dlg.GetRepoSSHPath() );
 
-    cloneHandler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( m_frame, _( "Clone Repository" ), 1,
-                                                                              PR_NO_ABORT ) );
+    cloneHandler.SetProgressReporter(
+            std::make_unique<WX_PROGRESS_REPORTER>( m_frame, _( "Clone Repository" ), 1, PR_CAN_ABORT ) );
 
     if( !cloneHandler.PerformClone() )
     {
-        DisplayErrorMessage( m_frame, cloneHandler.GetErrorString() );
+        // Cancelling from the progress dialog is not an error.
+        if( !cloneHandler.IsThisOperationCancelled() )
+            DisplayErrorMessage( m_frame, cloneHandler.GetErrorString() );
+
         return -1;
     }
 
     std::vector<wxString> projects = cloneHandler.GetProjectDirs();
+
+    // The project opens its own handle when it loads below, this one is done.
+    git_repository_free( cloneCommon.GetRepo() );
+    cloneCommon.SetRepo( nullptr );
 
     if( projects.empty() )
     {
@@ -448,6 +455,10 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
     // TODO: Look into spare checkout to allow the user to pick a partial repository
     wxString dest = pro.GetPath() + wxFileName::GetPathSeparator() + projects.front();
     m_frame->LoadProject( dest );
+
+    // A machine cloning for the first time usually has no git identity yet. Asking now makes
+    // the first commit work instead of failing.
+    KIGIT::EnsureGitIdentity( m_frame, Prj().GetGitCommon().get() );
 
     KIPLATFORM::SECRETS::StoreSecret( dlg.GetRepoURL(), dlg.GetUsername(), dlg.GetPassword() );
     Prj().GetLocalSettings().m_GitRepoUsername = dlg.GetUsername();
@@ -790,6 +801,13 @@ int KICAD_MANAGER_CONTROL::ToggleLocalHistory( const TOOL_EVENT& aEvent )
 }
 
 
+int KICAD_MANAGER_CONTROL::ToggleGitCommitPane( const TOOL_EVENT& aEvent )
+{
+    m_frame->ToggleGitCommitPane();
+    return 0;
+}
+
+
 int KICAD_MANAGER_CONTROL::ViewDroppedViewers( const TOOL_EVENT& aEvent )
 {
     if( aEvent.Parameter<wxString*>() )
@@ -1120,6 +1138,7 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::ExploreProject,     KICAD_MANAGER_ACTIONS::openProjectDirectory.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::RestoreLocalHistory, KICAD_MANAGER_ACTIONS::restoreLocalHistory.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ToggleLocalHistory, KICAD_MANAGER_ACTIONS::showLocalHistory.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ToggleGitCommitPane, ACTIONS::showGitCommitPane.MakeEvent() );
 
     Go( &KICAD_MANAGER_CONTROL::Refresh,            ACTIONS::zoomRedraw.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::UpdateMenu,         ACTIONS::updateMenu.MakeEvent() );
