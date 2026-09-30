@@ -60,7 +60,7 @@ public:
 
     wxString GetName() const override { return m_fpname; }
 
-    int GetPinCount() override { return GetNumberedPadCount(); }
+    int GetPinCount() const override { return GetNumberedPadCount(); }
 
     LIB_ID GetLIB_ID() const override
     {
@@ -84,6 +84,14 @@ public:
      * Lets ScoreTerms() cache normalization across calls.
      */
     std::vector<SEARCH_TERM>& GetSearchTerms() override;
+
+    unsigned GetNumberedPadCount() const
+    {
+        if( !m_loaded )
+            return 0;
+
+        return m_numbered_pad_count;
+    }
 
     unsigned GetNumberedPadCount()
     {

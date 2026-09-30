@@ -127,62 +127,60 @@ wxString LIB_SYMBOL::getShownDescription( RESOLUTION_CONTEXT aContext, int aDept
 wxString LIB_SYMBOL::GetShownDescription( RESOLUTION_CONTEXT aContext, int aDepth ) const
 {
     if( aContext == FOR_GUI )
+    {
+        if( m_cachesDirty )
+            rebuildCaches();
+
         return m_shownDescriptionCache;
+    }
 
     return getShownDescription( aContext, aDepth );
 }
 
 
-void LIB_SYMBOL::cacheShownDescription()
+void LIB_SYMBOL::rebuildCaches() const
 {
+    m_cachesDirty = false;
+
+    //
+    // m_shownDescriptionCache
+    //
     m_shownDescriptionCache = getShownDescription( FOR_GUI, 0 );
-}
 
+    //
+    // m_chooserFieldsCache
+    //
+    m_chooserFieldsCache.clear();
 
-void LIB_SYMBOL::SetDescription( const wxString& aDescription )
-{
-    GetDescriptionField().SetText( aDescription );
-    cacheShownDescription();
-    cacheSearchTerms();
-}
+    for( const SCH_ITEM& item : m_drawings[SCH_FIELD_T] )
+    {
+        const SCH_FIELD* field = static_cast<const SCH_FIELD*>( &item );
 
+        if( field->ShowInChooser() )
+            m_chooserFieldsCache[field->GetName()] = field->EDA_TEXT::GetShownText( FOR_GUI );
+    }
 
-void LIB_SYMBOL::SetKeyWords( const wxString& aKeyWords )
-{
-    m_keyWords = aKeyWords;
-    cacheSearchTerms();
-}
+    // If the user has a field named "Keywords", then prefer that.  Otherwise add the KiCad
+    // keywords.
+    const wxString localizedKeywords = _( "Keywords" );
 
+    if( !m_chooserFieldsCache.contains( localizedKeywords ) )
+        m_chooserFieldsCache[localizedKeywords] = GetShownKeyWords( FOR_GUI );
 
-wxString LIB_SYMBOL::GetShownKeyWords( RESOLUTION_CONTEXT aContext, int aDepth ) const
-{
-    if( aContext == RAW_VALUE )
-        return GetKeyWords();
+    //
+    // m_pinCountCache
+    //
+    m_pinCountCache = 0;
 
-    wxString text = GetKeyWords();
+    for( SCH_PIN* pin : GetGraphicalPins( 0 /* all units */, 1 /* single body style */ ) )
+    {
+        int pinCount = pin->GetStackedPinCount();
+        m_pinCountCache += pinCount;
+    }
 
-    std::function<bool( wxString* )> libSymbolResolver =
-            [&]( wxString* token ) -> bool
-            {
-                return ResolveTextVar( token, aDepth + 1 );
-            };
-
-    text = ResolveTextVars( text, &libSymbolResolver, aDepth );
-
-    return text;
-}
-
-
-enum SEARCH_TERM_CACHE_INDEX
-{
-    STCI_LIB_NICKNAME = 0,
-    STCI_LIB_SYMBOL_NAME,
-    STCI_LIB_ID
-};
-
-
-void LIB_SYMBOL::cacheSearchTerms()
-{
+    //
+    // m_searchTermsCache
+    //
     m_searchTermsCache.clear();
     m_searchTermsCache.reserve( 6 );
 
@@ -210,30 +208,54 @@ void LIB_SYMBOL::cacheSearchTerms()
 }
 
 
-void LIB_SYMBOL::GetChooserFields( std::map<wxString, wxString>& aColumnMap )
+void LIB_SYMBOL::SetDescription( const wxString& aDescription )
 {
-    aColumnMap = m_chooserFieldsCache;
+    GetDescriptionField().SetText( aDescription );
+    m_cachesDirty = true;
 }
 
 
-void LIB_SYMBOL::cacheChooserFields()
+void LIB_SYMBOL::SetKeyWords( const wxString& aKeyWords )
 {
-    m_chooserFieldsCache.clear();
+    m_keyWords = aKeyWords;
+    m_cachesDirty = true;
+}
 
-    for( SCH_ITEM& item : m_drawings[SCH_FIELD_T] )
-    {
-        SCH_FIELD* field = static_cast<SCH_FIELD*>( &item );
 
-        if( field->ShowInChooser() )
-            m_chooserFieldsCache[field->GetName()] = field->EDA_TEXT::GetShownText( FOR_GUI );
-    }
+wxString LIB_SYMBOL::GetShownKeyWords( RESOLUTION_CONTEXT aContext, int aDepth ) const
+{
+    if( aContext == RAW_VALUE )
+        return GetKeyWords();
 
-    // If the user has a field named "Keywords", then prefer that.  Otherwise add the KiCad
-    // keywords.
-    const wxString localizedKeywords = _( "Keywords" );
+    wxString text = GetKeyWords();
 
-    if( !m_chooserFieldsCache.contains( localizedKeywords ) )
-        m_chooserFieldsCache[localizedKeywords] = GetShownKeyWords( FOR_GUI );
+    std::function<bool( wxString* )> libSymbolResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return ResolveTextVar( token, aDepth + 1 );
+            };
+
+    text = ResolveTextVars( text, &libSymbolResolver, aDepth );
+
+    return text;
+}
+
+
+std::vector<SEARCH_TERM>& LIB_SYMBOL::GetSearchTerms()
+{
+    if( m_cachesDirty )
+        rebuildCaches();
+
+    return m_searchTermsCache;
+}
+
+
+void LIB_SYMBOL::GetChooserFields( std::map<wxString, wxString>& aColumnMap )
+{
+    if( m_cachesDirty )
+        rebuildCaches();
+
+    aColumnMap = m_chooserFieldsCache;
 }
 
 
@@ -282,13 +304,7 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, LEGACY_SYMBO
     SetParent( aParent );
     SetLib( aLibrary );
 
-    // SetParent() regenerates these caches
-#if 0
-    cacheShownDescription();
-    cachePinCount();
-    cacheSearchTerms();
-    cacheChooserFields();
-#endif
+    m_cachesDirty = true;
 }
 
 
@@ -339,14 +355,7 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, LEGACY_SYMBOL_LIB* aLibrary, 
     }
 
     SetParent( aSymbol.m_parent.lock().get() );
-
-    // SetParent() regenerates these caches
-#if 0
-    m_searchTermsCache = aSymbol.m_searchTermsCache;
-    m_pinCountCache = aSymbol.m_pinCountCache;
-    m_shownDescriptionCache = aSymbol.m_shownDescriptionCache;
-    m_chooserFieldsCache = aSymbol.m_chooserFieldsCache;
-#endif
+    m_cachesDirty = true;
 }
 
 
@@ -602,6 +611,7 @@ bool LIB_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbol& aI
         SetAssociatedFootprints( std::move( associatedFootprints ) );
     }
 
+    m_cachesDirty = true;
     return true;
 }
 
@@ -662,13 +672,7 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
 
     EMBEDDED_FILES::operator=( aSymbol );
 
-    // SetParent() regenerates these caches
-#if 0
-    m_searchTermsCache = aSymbol.m_searchTermsCache;
-    m_pinCountCache = aSymbol.m_pinCountCache;
-    m_shownDescriptionCache = aSymbol.m_shownDescriptionCache;
-    m_chooserFieldsCache = aSymbol.m_chooserFieldsCache;
-#endif
+    m_cachesDirty = true;
 
     return *this;
 }
@@ -822,11 +826,7 @@ void LIB_SYMBOL::SetName( const wxString& aName )
     m_name = aName;
     m_libId.SetLibItemName( aName );
 
-    if( m_searchTermsCache.empty() )
-        cacheSearchTerms();
-
-    m_searchTermsCache[STCI_LIB_SYMBOL_NAME].Text = aName;
-    m_searchTermsCache[STCI_LIB_ID].Text = GetLIB_ID().Format().wx_str();
+    m_cachesDirty = true;
 }
 
 
@@ -834,11 +834,7 @@ void LIB_SYMBOL::SetLibId( const LIB_ID& aLibId )
 {
     m_libId = aLibId;
 
-    if( m_searchTermsCache.empty() )
-        cacheSearchTerms();
-
-    m_searchTermsCache[STCI_LIB_NICKNAME].Text = aLibId.GetLibNickname().wx_str();
-    m_searchTermsCache[STCI_LIB_ID].Text = GetLIB_ID().Format().wx_str();
+    m_cachesDirty = true;
 }
 
 
@@ -881,15 +877,11 @@ void LIB_SYMBOL::SetParent( LIB_SYMBOL* aParent )
         m_parent.reset();
     }
 
-    // Regenerate caches.  Even ones that don't have inheritance semantics today might tomorrow.
-    cacheShownDescription();
-    cachePinCount();
-    cacheSearchTerms();
-    cacheChooserFields();
+    m_cachesDirty = true;
 }
 
 
-wxString LIB_SYMBOL::GetFootprint()
+wxString LIB_SYMBOL::GetFootprint() const
 {
     if( !GetField( FIELD_T::FOOTPRINT ) )
         return wxEmptyString;
@@ -1063,11 +1055,7 @@ std::unique_ptr<LIB_SYMBOL> LIB_SYMBOL::Flatten() const
         retv->m_pinMaps = GetEffectivePinMaps();
         retv->m_associatedFootprints = GetEffectiveAssociatedFootprints();
 
-        retv->cacheShownDescription();
-        retv->cachePinCount();
-        retv->cacheSearchTerms();
-        retv->cacheChooserFields();
-
+        retv->m_cachesDirty = true;
         retv->m_parent.reset();
     }
     else
@@ -1083,10 +1071,7 @@ void LIB_SYMBOL::SetLib( LEGACY_SYMBOL_LIB* aLibrary )
 {
     m_library = aLibrary;
 
-    if( m_searchTermsCache.empty() )
-        cacheSearchTerms();
-
-    m_searchTermsCache[STCI_LIB_NICKNAME].Text = GetLibraryName();
+    m_cachesDirty = true;
 }
 
 
@@ -1127,6 +1112,8 @@ void LIB_SYMBOL::SetLocalPower()
     }
 
     m_options = ENTRY_LOCAL_POWER;
+
+    m_cachesDirty = true;
 }
 
 
@@ -1164,6 +1151,8 @@ void LIB_SYMBOL::SetGlobalPower()
     }
 
     m_options = ENTRY_GLOBAL_POWER;
+
+    m_cachesDirty = true;
 }
 
 
@@ -1195,6 +1184,8 @@ void LIB_SYMBOL::SetNormal()
     }
 
     m_options = ENTRY_NORMAL;
+
+    m_cachesDirty = true;
 }
 
 
@@ -1481,8 +1472,7 @@ void LIB_SYMBOL::RemoveDrawItem( SCH_ITEM* aItem )
         if( &*i == aItem )
         {
             items.erase( i );
-            cachePinCount();
-            cacheChooserFields();
+            m_cachesDirty = true;
             break;
         }
     }
@@ -1500,8 +1490,7 @@ void LIB_SYMBOL::AddDrawItem( SCH_ITEM* aItem, bool aSort )
         if( aSort )
             m_drawings.sort();
 
-        cachePinCount();
-        cacheChooserFields();
+        m_cachesDirty = true;
     }
 }
 
@@ -1628,21 +1617,12 @@ std::vector<LIB_SYMBOL::LOGICAL_PIN> LIB_SYMBOL::GetLogicalPins( int aUnit, int 
 }
 
 
-int LIB_SYMBOL::GetPinCount()
+int LIB_SYMBOL::GetPinCount() const
 {
+    if( m_cachesDirty )
+        rebuildCaches();
+
     return m_pinCountCache;
-}
-
-
-void LIB_SYMBOL::cachePinCount()
-{
-    m_pinCountCache = 0;
-
-    for( SCH_PIN* pin : GetGraphicalPins( 0 /* all units */, 1 /* single body style */ ) )
-    {
-        int pinCount = pin->GetStackedPinCount();
-        m_pinCountCache += pinCount;
-    }
 }
 
 
@@ -1838,19 +1818,14 @@ const BOX2I LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aBodyStyle, bool aInc
 
 void LIB_SYMBOL::RefreshLibraryTreeCaches()
 {
-    // cacheSearchTerms() reads the shown-description cache, so refresh it first.
-    cacheShownDescription();
-    cachePinCount();
-    cacheSearchTerms();
-    cacheChooserFields();
+    rebuildCaches();
 }
 
 
 void LIB_SYMBOL::deleteAllUserFields()
 {
     m_drawings[SCH_FIELD_T].clear();
-    cacheSearchTerms();
-    cacheChooserFields();
+    m_cachesDirty = true;
 }
 
 
@@ -1874,9 +1849,7 @@ void LIB_SYMBOL::SetFields( const std::vector<SCH_FIELD>& aFieldsList )
     }
 
     m_drawings.sort();
-    cacheShownDescription();
-    cacheSearchTerms();
-    cacheChooserFields();
+    m_cachesDirty = true;
 }
 
 
@@ -2177,6 +2150,9 @@ void LIB_SYMBOL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunctio
 {
     for( SCH_ITEM& item : m_drawings )
         aFunction( &item );
+
+    // We don't know what this did, so better to be safe than sorry
+    m_cachesDirty = true;
 }
 
 
@@ -2363,7 +2339,7 @@ void LIB_SYMBOL::SetUnitCount( int aCount, bool aDuplicateDrawItems )
 
     m_drawings.sort();
     m_unitCount = aCount;
-    cacheSearchTerms();
+    m_cachesDirty = true;
 }
 
 
@@ -2455,6 +2431,8 @@ void LIB_SYMBOL::SetBodyStyleCount( int aCount, bool aDuplicateDrawItems, bool a
     // A caller that already cleared the De Morgan flag or the body style names reports a
     // previous count of 1, so the deletion cannot be conditional on the count dropping
     PruneBodyStyleDrawItems( aCount );
+
+    m_cachesDirty = true;
 }
 
 
@@ -2561,7 +2539,9 @@ std::vector<LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
         if( aReporter )                                                                                                \
             aReporter->Report( msg );                                                                                  \
     }
+
 #define ITEM_DESC( item ) ( item )->GetItemDescription( &unitsProvider, false )
+
 
 LIB_SYMBOL_ATTRIBUTES LIB_SYMBOL::ComparisonAttributes() const
 {
@@ -2570,6 +2550,7 @@ LIB_SYMBOL_ATTRIBUTES LIB_SYMBOL::ComparisonAttributes() const
              m_excludedFromBoard, m_excludedFromPosFiles, m_DNP, m_unitsLocked, m_unitDisplayNames,
              m_bodyStyleNames, m_duplicatePinNumbersAreJumpers };
 }
+
 
 bool LIB_SYMBOL_ATTRIBUTES::Matches( const LIB_SYMBOL_ATTRIBUTES& aOther, int aCompareFlags ) const
 {
@@ -2597,6 +2578,7 @@ bool LIB_SYMBOL_ATTRIBUTES::Matches( const LIB_SYMBOL_ATTRIBUTES& aOther, int aC
                 || excludedFromPosFiles == aOther.excludedFromPosFiles )
            && ( !( aCompareFlags & FLAGS::DNP ) || dnp == aOther.dnp );
 }
+
 
 int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aReporter ) const
 {

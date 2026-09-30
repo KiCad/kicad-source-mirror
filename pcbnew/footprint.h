@@ -485,7 +485,7 @@ public:
     wxString GetName() const override { return m_fpid.GetLibItemName(); }
     wxString GetLibNickname() const override { return m_fpid.GetLibNickname(); }
     wxString GetDesc() override { return GetLibDescription(); }
-    int GetPinCount() override { return static_cast<int>( GetNumberedPadCount() ); }
+    int GetPinCount() const override { return static_cast<int>( GetNumberedPadCount() ); }
     std::vector<SEARCH_TERM>& GetSearchTerms() override;
 
     wxString GetLibDescription() const { return m_libDescription; }

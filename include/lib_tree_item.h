@@ -65,12 +65,12 @@ public:
     /**
      * For items with footprint fields.
      */
-    virtual wxString GetFootprint() { return wxEmptyString; }
+    virtual wxString GetFootprint() const { return wxEmptyString; }
 
     /**
      * The pin count for symbols or the unique pad count for footprints.
      */
-    virtual int GetPinCount() { return 0; }
+    virtual int GetPinCount() const { return 0; }
 
     /**
      * For items with units, return the number of units.
