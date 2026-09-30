@@ -225,11 +225,13 @@ bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY& aTarge
     wxString         failReason;
     bool             fail = false;
 
+#ifdef DIFF_PLACER_EXTRA_VERBOSE
     PNS_DBG( dbg, AddShape, &p, RED, 20000,
              wxString::Format( "init+ prefDiag %d (dims %s) %s/%s cl %d %d %d", aPrefDiagonal ? 1 : 0, m_dims.Format(),
                                aEntry.GetName(), aTarget.GetName(), m_dims.MinClearance(),
                                aEntry.Dimensions().MinClearance(), aTarget.Dimensions().MinClearance() ) );
     PNS_DBG( dbg, AddShape, &n, BLUE, 20000, wxT( "init-" ) );
+#endif
 
     SHAPE_LINE_CHAIN sum_n, sum_p;
     m_p = p;
@@ -367,7 +369,7 @@ bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY& aTarge
     if( entryIsStraight && targetIsStraight )
         aAspectRatio = 1.0;
 
-
+#ifdef DIFF_PLACER_EXTRA_VERBOSE
     PNS_DBG( dbg, BeginGroup,
              wxString::Format( "fit-%s-%s-%s fail=%d gap=[%s] prioE=%d prioT=%d d=%d eis=%d tis=%d cpr=%.2f ar =%.2f v "
                                "%d %d %d fv %d",
@@ -380,7 +382,7 @@ bool DIFF_PAIR::BuildInitial( const DP_GATEWAY& aEntry, const DP_GATEWAY& aTarge
     PNS_DBG( dbg, AddShape, &m_n, BLUE, 100000, wxT( "-" ) );
 
     PNS_DBGN( dbg, EndGroup );
-
+#endif
 
     return !fail;
 }
