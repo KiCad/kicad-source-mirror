@@ -188,8 +188,12 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
 bool generateSchematicNetlist( const wxString& aFilename, std::string& aNetlist, KIWAY* aKiway )
 {
     std::unique_ptr<SCHEMATIC> schematic = readSchematicFromFile( aFilename.ToStdString() );
+
+    if( !schematic )
+        return false;
+
     NETLIST_EXPORTER_KICAD exporter( schematic.get(), aKiway );
-    STRING_FORMATTER formatter;
+    STRING_FORMATTER       formatter;
 
     exporter.Format( &formatter, GNL_ALL | GNL_OPT_KICAD );
     aNetlist = formatter.GetString();
