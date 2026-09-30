@@ -2408,8 +2408,16 @@ void LIB_SYMBOL::SetBodyStyleCount( int aCount, bool aDuplicateDrawItems, bool a
 
         for( SCH_ITEM& item : m_drawings )
         {
-            if( item.Type() != SCH_PIN_T && !aDuplicateDrawItems )
-                continue;
+            if( item.Type() == SCH_PIN_T )
+            {
+                if( !aDuplicatePins )
+                    continue;
+            }
+            else
+            {
+                if( !aDuplicateDrawItems )
+                    continue;
+            }
 
             if( item.m_bodyStyle == BODY_STYLE::BASE )
             {
