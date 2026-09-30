@@ -2208,6 +2208,7 @@ void SCH_GLOBALLABEL::Serialize( google::protobuf::Any& aContainer ) const
     if( const SCH_FIELD* field = GetField( FIELD_T::INTERSHEET_REFS ) )
         field->Serialize( *label.mutable_intersheet_refs_field(), schIUScale );
 
+    kiapi::common::PackCustomProperties( label.mutable_custom_properties(), *this );
     aContainer.PackFrom( label );
 }
 
