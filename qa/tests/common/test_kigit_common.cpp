@@ -288,9 +288,8 @@ BOOST_AUTO_TEST_CASE( HasPushAndPullRemoteFindsOrigin )
 }
 
 
-// GetDifferentFiles previously walked unbounded history when no upstream OID was available
-// and dumped every file in the root commit's tree into the modified set, falsely flagging
-// every file as ahead of the remote.  With no upstream configured, both sets must be empty.
+// Walking unbounded history with no upstream OID dumped the whole root-commit tree into the
+// modified set, falsely flagging every file as ahead of the remote.
 BOOST_AUTO_TEST_CASE( GetDifferentFilesEmptyWithoutUpstream )
 {
     GitInitGuard libgit;
@@ -311,13 +310,8 @@ BOOST_AUTO_TEST_CASE( GetDifferentFilesEmptyWithoutUpstream )
 }
 
 
-// Regression test for the root-commit dump that this commit fixes.  Set up an upstream
-// tracking ref whose history is disjoint from the local HEAD's history (separate root
-// commits, no shared ancestors).  Pre-fix, get_modified_files() walked the local history
-// past the unrelated upstream and reached the local root commit.  Because the root commit
-// has no parent, the code dumped *every* file in its tree into the AHEAD set, including
-// files like "untouched.txt" that were neither created nor modified relative to the
-// upstream's view.  The fix bails out before we can include these phantom changes.
+// With disjoint histories the walk ran past the upstream to the local root commit, and a root
+// commit has no parent, so its whole tree landed in the AHEAD set.
 BOOST_AUTO_TEST_CASE( GetDifferentFilesHandlesUnrelatedHistories )
 {
     GitInitGuard libgit;
@@ -412,20 +406,15 @@ BOOST_AUTO_TEST_CASE( GetDifferentFilesHandlesUnrelatedHistories )
     // With unrelated histories there is no merge base, so the implementation cannot
     // attribute changes to either side.  Pre-fix, the revwalk reached both root commits
     // and dumped both trees in full; the new merge-base approach short-circuits and
-    // reports no AHEAD/BEHIND files in this ambiguous state.  In particular, the
-    // never-touched-locally "untouched.txt" must not appear in the AHEAD set.
-    BOOST_CHECK_MESSAGE( local.find( wxS( "untouched.txt" ) ) == local.end(),
-                         "untouched.txt should not be reported as AHEAD when the local and "
-                         "remote histories share no ancestor" );
-    BOOST_CHECK_MESSAGE( remote.find( wxS( "untouched.txt" ) ) == remote.end(),
-                         "untouched.txt should not be reported as BEHIND when the local "
-                         "and remote histories share no ancestor" );
+    // reports nothing on either side in this ambiguous state.
+    BOOST_CHECK_MESSAGE( local.empty(), "no files should be reported as AHEAD when the local and remote "
+                                        "histories share no ancestor" );
+    BOOST_CHECK_MESSAGE( remote.empty(), "no files should be reported as BEHIND when the local and remote "
+                                         "histories share no ancestor" );
 }
 
 
-// When local has commits ahead of a real upstream, only files that actually changed in those
-// local commits should be reported as AHEAD.  Files that exist in both trees unchanged must
-// not show up as ahead.  This is the common-case behaviour the issue reproducer exercises.
+// Files present unchanged in both trees must not show up as ahead.
 BOOST_AUTO_TEST_CASE( GetDifferentFilesReportsOnlyTouchedFilesWhenAhead )
 {
     GitInitGuard libgit;
@@ -570,6 +559,82 @@ BOOST_AUTO_TEST_CASE( PrivateKeyEncryptionRejectsNonKeys )
 
     BOOST_CHECK_MESSAGE( !KIGIT::IsPrivateKeyEncrypted( "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKB0 t\n" ),
                          "A public key is not an encrypted private key" );
+}
+
+
+// A file changed only on the remote tip, with the local branch still at the shared base, must
+// land in the BEHIND (remote) set and not in the AHEAD (local) set.
+BOOST_AUTO_TEST_CASE( GetDifferentFilesReportsRemoteOnlyFilesWhenBehind )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "untouched.txt", "stable\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    git_reference* head = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_head( &head, repo ), GIT_OK );
+    KIGIT::GitReferencePtr headPtr( head );
+
+    git_oid baseOid = *git_reference_target( head );
+
+    git_commit* baseCommit = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &baseCommit, repo, &baseOid ), GIT_OK );
+    KIGIT::GitCommitPtr baseCommitPtr( baseCommit );
+
+    // Build a tree that adds remote_only.txt on top of the base, then commit it without moving
+    // HEAD so the local branch stays behind.
+    {
+        wxFileName    extra( tmp.path, wxS( "remote_only.txt" ) );
+        std::ofstream f( extra.GetFullPath().utf8_string() );
+        f << "from remote\n";
+    }
+
+    git_index* index = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+    KIGIT::GitIndexPtr indexPtr( index );
+    BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, "remote_only.txt" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
+
+    git_oid treeOid;
+    BOOST_REQUIRE_EQUAL( git_index_write_tree( &treeOid, index ), GIT_OK );
+
+    git_tree* tree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_tree_lookup( &tree, repo, &treeOid ), GIT_OK );
+    KIGIT::GitTreePtr treePtr( tree );
+
+    git_signature* sig = nullptr;
+    BOOST_REQUIRE_EQUAL( git_signature_now( &sig, "QA Test", "qa@example.com" ), GIT_OK );
+    KIGIT::GitSignaturePtr sigPtr( sig );
+
+    const git_commit* parents[1] = { baseCommit };
+    git_oid           remoteOid;
+    BOOST_REQUIRE_EQUAL(
+            git_commit_create( &remoteOid, repo, nullptr, sig, sig, nullptr, "add remote_only", tree, 1, parents ),
+            GIT_OK );
+
+    git_remote* origin = nullptr;
+    BOOST_REQUIRE_EQUAL( git_remote_create( &origin, repo, "origin", "git@example.com:repo.git" ), GIT_OK );
+    KIGIT::GitRemotePtr originPtr( origin );
+
+    git_reference* upstream_ref = nullptr;
+    BOOST_REQUIRE_EQUAL(
+            git_reference_create( &upstream_ref, repo, "refs/remotes/origin/main", &remoteOid, true, nullptr ),
+            GIT_OK );
+    KIGIT::GitReferencePtr upstreamRefPtr( upstream_ref );
+
+    git_config* cfg = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_config( &cfg, repo ), GIT_OK );
+    KIGIT::GitConfigPtr cfgPtr( cfg );
+    BOOST_REQUIRE_EQUAL( git_config_set_string( cfg, "branch.main.remote", "origin" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_config_set_string( cfg, "branch.main.merge", "refs/heads/main" ), GIT_OK );
+
+    KIGIT_COMMON common( repo );
+    auto [local, remote] = common.GetDifferentFiles();
+
+    BOOST_CHECK( local.empty() );
+    BOOST_CHECK_MESSAGE( remote.find( wxS( "remote_only.txt" ) ) != remote.end(),
+                         "remote_only.txt should be reported as BEHIND" );
 }
 
 
@@ -720,6 +785,36 @@ BOOST_AUTO_TEST_CASE( IsWithinProjectPathHandlesMixedSeparators )
 
 
 // The pull gate refuses over uncommitted tracked changes, but untracked files must not block
+// getting changes, since a merge leaves them alone.
+BOOST_AUTO_TEST_CASE( HasUncommittedTrackedChangesIgnoresUntracked )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_CHECK( !common.HasUncommittedTrackedChanges() );
+
+    // An untracked file alone does not count.
+    {
+        wxFileName    fn( tmp.path, wxS( "notes.txt" ) );
+        std::ofstream f( fn.GetFullPath().utf8_string() );
+        f << "scratch\n";
+    }
+
+    BOOST_CHECK( !common.HasUncommittedTrackedChanges() );
+
+    // A modified tracked file does.
+    {
+        wxFileName    fn( tmp.path, wxS( "file.txt" ) );
+        std::ofstream f( fn.GetFullPath().utf8_string() );
+        f << "v2\n";
+    }
+
+    BOOST_CHECK( common.HasUncommittedTrackedChanges() );
+}
 
 
 BOOST_AUTO_TEST_SUITE_END()

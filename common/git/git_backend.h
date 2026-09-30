@@ -91,8 +91,8 @@ public:
 
     virtual bool HasChangedFiles( GIT_STATUS_HANDLER* aHandler ) = 0;
 
-    virtual std::map<wxString, FileStatus> GetFileStatus( GIT_STATUS_HANDLER* aHandler,
-                                                          const wxString& aPathspec ) = 0;
+    virtual std::map<wxString, FileStatus> GetFileStatus( GIT_STATUS_HANDLER* aHandler, const wxString& aPathspec,
+                                                          bool aChangedOnly ) = 0;
 
     virtual wxString GetCurrentBranchName( GIT_STATUS_HANDLER* aHandler ) = 0;
 

@@ -618,8 +618,8 @@ bool LIBGIT_BACKEND::HasChangedFiles( GIT_STATUS_HANDLER* aHandler )
 }
 
 
-std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER* aHandler,
-                                                              const wxString& aPathspec )
+std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER* aHandler, const wxString& aPathspec,
+                                                              bool aChangedOnly )
 {
     std::map<wxString, FileStatus> fileStatusMap;
     git_repository* repo = aHandler->GetRepo();
@@ -630,8 +630,12 @@ std::map<wxString, FileStatus> LIBGIT_BACKEND::GetFileStatus( GIT_STATUS_HANDLER
     git_status_options status_options;
     git_status_init_options( &status_options, GIT_STATUS_OPTIONS_VERSION );
     status_options.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
-    status_options.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED | GIT_STATUS_OPT_INCLUDE_UNMODIFIED
-                           | GIT_STATUS_OPT_RECURSE_UNTRACKED_DIRS;
+    status_options.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED | GIT_STATUS_OPT_RECURSE_UNTRACKED_DIRS;
+
+    // Per-file icons need an entry for every tracked file, so an icon clears when a file goes
+    // back to unmodified. Listing only changes does not, and costs a walk of the whole repo.
+    if( !aChangedOnly )
+        status_options.flags |= GIT_STATUS_OPT_INCLUDE_UNMODIFIED;
 
     std::string pathspec_str;
     std::vector<const char*> pathspec_ptrs;

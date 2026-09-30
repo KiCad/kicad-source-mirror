@@ -183,6 +183,26 @@ wxString KIGIT_COMMON::GetPassword()
 }
 
 
+bool KIGIT_COMMON::HasUncommittedTrackedChanges() const
+{
+    if( !m_repo )
+        return false;
+
+    git_status_options statusOpts;
+    git_status_init_options( &statusOpts, GIT_STATUS_OPTIONS_VERSION );
+    statusOpts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+
+    git_status_list* statusList = nullptr;
+
+    if( git_status_list_new( &statusList, m_repo, &statusOpts ) != GIT_OK )
+        return false;
+
+    KIGIT::GitStatusListPtr statusListPtr( statusList );
+
+    return git_status_list_entrycount( statusList ) > 0;
+}
+
+
 std::vector<wxString> KIGIT_COMMON::GetBranchNames() const
 {
     if( !m_repo )

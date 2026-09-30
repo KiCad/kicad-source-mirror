@@ -28,6 +28,7 @@
 #include "kicad_git_memory.h"
 #include <wx/string.h>
 #include <string_utils.h>
+#include <wildcards_and_files_ext.h>
 
 #ifndef __WINDOWS__
 #include <climits>
@@ -244,6 +245,48 @@ bool PROJECT_GIT_UTILS::IsWithinProjectPath( const wxString& aAbsPath, const wxS
     // The project can be reached through a symlink the repository path does not share, and then
     // the two only line up once both are resolved.
     return pathIsUnder( canonicalDir( aAbsPath ), canonicalDir( aProjectPath ) );
+}
+
+
+bool PROJECT_GIT_UTILS::IsTransientGitFile( const wxFileName& aFile, const wxString& aProjectName )
+{
+    if( aFile.GetExt().CmpNoCase( FILEEXT::LockFileExtension ) == 0 )
+        return true;
+
+    // The backup suffix lands on the full name, as in "board.kicad_pcb-bak", so it cannot be
+    // matched against the extension.
+    if( aFile.GetFullName().StartsWith( FILEEXT::LockFilePrefix )
+        || aFile.GetFullName().EndsWith( FILEEXT::BackupFileSuffix ) )
+    {
+        return true;
+    }
+
+    // In the default .gitignore, but a repository that came with its own never got those
+    // entries.
+    if( aFile.GetFullName().StartsWith( wxS( "_autosave-" ) ) || aFile.GetFullName() == wxS( "fp-info-cache" ) )
+        return true;
+
+    // Archived project backups
+    if( !aProjectName.IsEmpty() )
+    {
+        wxString backups = aProjectName + wxT( "-backups" );
+
+        for( const wxString& dir : aFile.GetDirs() )
+        {
+            if( dir == backups )
+                return true;
+        }
+    }
+
+    // Local project history. Any component, since .history holds a git repository of its own
+    // and its internals sit several levels down.
+    for( const wxString& dir : aFile.GetDirs() )
+    {
+        if( dir.StartsWith( wxS( ".history" ) ) )
+            return true;
+    }
+
+    return false;
 }
 
 

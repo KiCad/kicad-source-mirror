@@ -50,9 +50,11 @@ public:
     /**
      * Get detailed file status for all files in the specified path
      * @param aPathspec Path specification to filter files (empty for all files)
+     * @param aChangedOnly Omit unmodified tracked files, for callers that only list changes
      * @return Map of absolute file paths to their status information
      */
-    std::map<wxString, FileStatus> GetFileStatus( const wxString& aPathspec = wxEmptyString );
+    std::map<wxString, FileStatus> GetFileStatus( const wxString& aPathspec = wxEmptyString,
+                                                  bool            aChangedOnly = false );
 
     /**
      * Get the current branch name

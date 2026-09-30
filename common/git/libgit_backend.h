@@ -48,8 +48,8 @@ public:
 
     bool HasChangedFiles( GIT_STATUS_HANDLER* aHandler ) override;
 
-    std::map<wxString, FileStatus> GetFileStatus( GIT_STATUS_HANDLER* aHandler,
-                                                  const wxString& aPathspec ) override;
+    std::map<wxString, FileStatus> GetFileStatus( GIT_STATUS_HANDLER* aHandler, const wxString& aPathspec,
+                                                  bool aChangedOnly ) override;
 
     wxString GetCurrentBranchName( GIT_STATUS_HANDLER* aHandler ) override;
 

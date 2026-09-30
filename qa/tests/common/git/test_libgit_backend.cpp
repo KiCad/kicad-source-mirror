@@ -520,14 +520,8 @@ BOOST_AUTO_TEST_CASE( GetUpstreamShorthand_NoUpstreamFallsBackToRemoteSlashBranc
 }
 
 
-/**
- * Regression for the spurious clock icon after a message-only amend: when HEAD
- * and the upstream tracking ref point at different commit OIDs but the commits
- * share an identical tree, no file should be reported as AHEAD or BEHIND.
- *
- * Without the content-aware filter in GetDifferentFiles, the AHEAD set would
- * contain every file touched by the local commit relative to the merge-base.
- */
+// A message-only amend leaves HEAD and upstream at different OIDs with identical trees. Without
+// the content-aware filter every file touched since the merge-base showed a clock icon.
 BOOST_AUTO_TEST_CASE( GetDifferentFiles_SameTreeAmendHidesAheadFiles )
 {
     BOOST_TEST_REQUIRE( ready() );
@@ -586,11 +580,7 @@ BOOST_AUTO_TEST_CASE( GetDifferentFiles_SameTreeAmendHidesAheadFiles )
 }
 
 
-/**
- * Positive control: if the amend genuinely changes the file content, the file
- * should still appear in the AHEAD set.  Verifies the content-aware filter
- * doesn't over-filter.
- */
+// Positive control for the content-aware filter, which must not over-filter.
 BOOST_AUTO_TEST_CASE( GetDifferentFiles_DifferentTreeAmendKeepsAheadFile )
 {
     BOOST_TEST_REQUIRE( ready() );
@@ -1147,6 +1137,49 @@ BOOST_AUTO_TEST_CASE( ProjectGitCommon_ReleaseDefersFreeWhileActionMutexHeld )
 
     BOOST_CHECK_EQUAL( GetGitBackend()->OrphanRegistry().TrackedCount(), 0 );
     BOOST_CHECK( common->GetRepo() == nullptr );
+}
+
+
+BOOST_AUTO_TEST_CASE( IsTransientGitFile_ExcludesTransientFilesOnly )
+{
+    using KIGIT::PROJECT_GIT_UTILS;
+
+    // Real design files are kept.
+    BOOST_CHECK( !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/board.kicad_pcb" ), wxT( "proj" ) ) );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/lib.kicad_sym" ), wxT( "proj" ) ) );
+
+    // Backup files are excluded.
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile(
+            wxFileName( "proj/board.kicad_pcb" + FILEEXT::BackupFileSuffix ), wxT( "proj" ) ) );
+
+    // Lock files are excluded.
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile(
+            wxFileName( wxString::Format( "proj/board.%s", FILEEXT::LockFileExtension ) ), wxT( "proj" ) ) );
+
+    // The archived backups directory is excluded.
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "root/proj-backups/board.zip" ), wxT( "proj" ) ) );
+
+    // A directory whose name merely ends with the project's own is not that project's backups.
+    BOOST_CHECK( !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "root/data-proj-backups/board.kicad_pcb" ),
+                                                         wxT( "proj" ) ) );
+
+    // The local history directory is excluded.
+    BOOST_CHECK(
+            PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/.history/board.kicad_pcb" ), wxT( "proj" ) ) );
+
+    // .history holds a git repository of its own, so its internals sit deeper than one level.
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/.history/.git/objects/ab/cdef" ),
+                                                        wxT( "proj" ) ) );
+
+    // A repository that already had a .gitignore of its own never receives KiCad's entries, so
+    // the checklist has to recognise these on its own.
+    BOOST_CHECK(
+            PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/_autosave-board.kicad_pcb" ), wxT( "proj" ) ) );
+    BOOST_CHECK( PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/fp-info-cache" ), wxT( "proj" ) ) );
+
+    // A design file that merely mentions one of those names is still a design file.
+    BOOST_CHECK(
+            !PROJECT_GIT_UTILS::IsTransientGitFile( wxFileName( "proj/fp-info-cache.kicad_pcb" ), wxT( "proj" ) ) );
 }
 
 

@@ -123,6 +123,10 @@ public:
     // Returns true if the repository has local commits that have not been pushed
     bool HasLocalCommits() const;
 
+    // True when tracked files hold uncommitted changes, staged or not. Untracked files do not
+    // count: a merge leaves them alone.
+    bool HasUncommittedTrackedChanges() const;
+
     // Returns true if the repository has a remote that can be pushed to pulled from
     bool HasPushAndPullRemote() const;
 
