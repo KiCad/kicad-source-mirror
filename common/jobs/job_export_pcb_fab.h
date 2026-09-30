@@ -44,6 +44,7 @@ public:
     UNITS                 m_units = UNITS::MM;
     int                   m_precision = 6;
     bool                  m_checkZonesBeforeExport = false;
+    wxString              m_colMfgPn;
 
 protected:
     explicit JOB_EXPORT_PCB_FAB( const std::string& aType );

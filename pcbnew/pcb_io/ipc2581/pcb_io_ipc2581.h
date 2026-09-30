@@ -390,6 +390,7 @@ private:
     wxString                m_distpn;       //<! If set, field name containing the distributor part number
     wxString                m_dist;         //<! If set, field name containing the distributor name
     wxString                m_bomRev;       //<! BOM revision string for the BomHeader element
+    wxString                m_variantName;  //<! BOM population variant or board current
 
     // Node pointer to the main enterprise node to be used for adding
     // enterprises later when forming the AVL

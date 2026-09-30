@@ -1985,6 +1985,25 @@ wxString GetDefaultVariantName()
 }
 
 
+wxString GetVariantFileToken( const wxString& aVariantName )
+{
+    if( aVariantName.IsEmpty() || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 )
+        return wxString();
+
+    wxString token = aVariantName;
+    ReplaceIllegalFileNameChars( token, '_' );
+    return token;
+}
+
+
+wxString ExpandVariantOutputPath( const wxString& aPath, const wxString& aVariantToken )
+{
+    wxString expanded = aPath;
+    expanded.Replace( wxS( "${VARIANT}" ), aVariantToken );
+    return expanded;
+}
+
+
 int SortVariantNames( const wxString& aLhs, const wxString& aRhs )
 {
     if( ( aLhs == defaultVariantName ) && ( aRhs != defaultVariantName ) )

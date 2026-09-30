@@ -635,16 +635,11 @@ BOOST_AUTO_TEST_CASE( OdbPpUnfilledCircleAnnulus )
     wxFileName tempDir = MakeTempDir();
     wxFileName odbRoot = ExportOdbTree( board.get(), tempDir );
 
-    // Every circle in the project is 2 mm across with a 0.1 mm stroke, so the ring spans radius
+    // Each copper circle is 2 mm across with a 0.1 mm stroke, so the ring spans radius
     // 0.95 mm to 1.05 mm
-    for( const wxString& layerDir : { wxString( wxT( "f.cu" ) ), wxString( wxT( "edge.cuts" ) ) } )
-    {
-        wxString contents = ReadOdbLayerFeatures( odbRoot, layerDir );
-
-        BOOST_CHECK_MESSAGE( contents.Contains( wxT( "donut_r2100.0x1900.0" ) ),
-                             "Wrong annulus on " + layerDir + ", features file holds:\n"
-                                     + contents );
-    }
+    wxString contents = ReadOdbLayerFeatures( odbRoot, wxT( "f.cu" ) );
+    BOOST_CHECK_MESSAGE( contents.Contains( wxT( "donut_r2100.0x1900.0" ) ),
+                         "Wrong copper annulus, features file holds:\n" + contents );
 
     wxFileName::Rmdir( odbRoot.GetFullPath(), wxPATH_RMDIR_RECURSIVE );
     wxFileName::Rmdir( tempDir.GetFullPath(), wxPATH_RMDIR_RECURSIVE );

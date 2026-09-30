@@ -76,6 +76,7 @@ namespace CLI
 #define ARG_CHECK_ZONES_DESC "Check and refill zones if required"
 #define ARG_FAB_UNITS "--units"
 #define ARG_PRECISION "--precision"
+#define ARG_BOM_COL_MFG_PN "--bom-col-mfg-pn"
 
 struct PCB_EXPORT_BASE_COMMAND : public COMMAND
 {

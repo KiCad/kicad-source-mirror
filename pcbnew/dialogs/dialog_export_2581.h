@@ -19,11 +19,8 @@
 
 #ifndef IPC2581_EXPORT_DIALOG_H
 #define IPC2581_EXPORT_DIALOG_H
-#include <optional>
-#include <vector>
-
 #include "dialog_export_2581_base.h"
-#include "dialog_export_2581_bom.h"
+#include "panel_fab_export_content.h"
 #include <pcb_io/ipc2581/ipc2581_function_mode.h>
 
 class BOARD;
@@ -70,35 +67,16 @@ public:
         return m_cbCompress->GetValue();
     }
 
-    IPC2581::MODE GetDataSet() const
-    {
-        return static_cast<IPC2581::MODE>( m_choiceDataSet->GetSelection() );
-    }
+    IPC2581::MODE GetDataSet() const { return m_contentPanel->GetDataSet(); }
 
-    wxString GetNetNamePolicy() const
-    {
-        return m_choiceNetNames->GetSelection() == 1 ? wxT( "anonymize" ) : wxT( "include" );
-    }
+    wxString GetNetNamePolicy() const { return m_contentPanel->GetNetNamePolicy(); }
 
-    wxString GetRefDesPolicy() const
-    {
-        return m_choiceRefDes->GetSelection() == 1 ? wxT( "omit" ) : wxT( "include" );
-    }
+    wxString GetRefDesPolicy() const { return m_contentPanel->GetRefDesPolicy(); }
 
 private:
     void onBrowseClicked( wxCommandEvent& event ) override;
     void onCompressCheck( wxCommandEvent& event ) override;
-    void onDataSetChange( wxCommandEvent& event ) override;
-    void onCustomizeClick( wxCommandEvent& event ) override;
-    void onBomFieldsClick( wxCommandEvent& event ) override;
     void onOKClick( wxCommandEvent& event ) override;
-
-    /// Set the includes line and the BOM Fields button from the function mode
-    void updateContentSummary();
-
-    IPC2581::SECTION_SET resolvedSections() const;
-
-    static std::vector<std::pair<IPC2581::SECTION, wxString>> sectionLabels();
 
     /// Keep the dialog selections  A job keeps them on the job
     void saveToProject();
@@ -110,9 +88,6 @@ private:
 
     PCB_EDIT_FRAME*         m_parent;
     JOB_EXPORT_PCB_IPC2581* m_job;
-    IPC2581_BOM_FIELDS      m_bomFields;
-    /// Set when the user selects the sections  An empty value is then a true selection
-    std::optional<wxString> m_sectionKey;
 };
 
 #endif // IPC2581_EXPORT_DIALOG_H

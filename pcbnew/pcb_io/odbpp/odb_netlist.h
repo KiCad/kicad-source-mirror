@@ -29,7 +29,6 @@ struct ODB_NET_RECORD
     bool        smd;
     bool        hole;
     bool        is_via;
-    wxString    netname;
     std::string refdes;
     int         drill_radius;
     bool        mechanical;
@@ -53,18 +52,20 @@ struct ODB_NET_RECORD
 
 
 class BOARD;
+class PCB_IO_ODBPP;
 struct ODB_FORMAT;
 class ODB_NET_LIST
 {
 public:
-    ODB_NET_LIST( BOARD* aBoard ) : m_board( aBoard ) {}
+    ODB_NET_LIST( BOARD* aBoard, PCB_IO_ODBPP* aPlugin ) : m_board( aBoard ), m_plugin( aPlugin ) {}
 
     virtual ~ODB_NET_LIST() {}
 
     void Write( std::ostream& aStream, const ODB_FORMAT& aFormat );
 
 private:
-    BOARD*      m_board;
+    BOARD*        m_board;
+    PCB_IO_ODBPP* m_plugin;
     std::string ComputePadAccessSide( BOARD* aBoard, LSET aLayerMask );
     std::string ComputeViaAccessSide( BOARD* aBoard, int top_layer, int bottom_layer );
 

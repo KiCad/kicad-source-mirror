@@ -18,7 +18,9 @@
  */
 
 #include "odb_export_job.h"
+#include "odb_entity.h"
 #include "odb_util.h"
+#include "pcb_io_odbpp.h"
 
 #include <thread_pool.h>
 #include <gestfich.h>
@@ -26,11 +28,14 @@
 #include <algorithm>
 #include <array>
 #include <filesystem>
+#include <set>
 
 #include <wx/dir.h>
 
 #include <board.h>
 #include <reporter.h>
+#include <confirm.h>
+#include <kidialog.h>
 #include <paths.h>
 #include <pcb_edit_frame.h>
 #include <progress_reporter.h>
@@ -39,6 +44,7 @@
 #include <jobs/job_export_pcb_odb.h>
 #include <pcb_io/pcb_io_mgr.h>
 #include <locale_io.h>
+#include <string_utils.h>
 
 
 namespace
@@ -118,6 +124,64 @@ bool containsBoardFile( const std::filesystem::path& aTarget, const wxString& aB
     }
 
     return false;
+}
+
+
+wxString odbProductBase( const JOB_EXPORT_PCB_ODB& aJob, const BOARD* aBoard )
+{
+    if( !aJob.m_productName.IsEmpty() )
+    {
+        wxString requested = ODB::GenLegalEntityName( aJob.m_productName );
+
+        if( !requested.IsEmpty() )
+            return requested;
+    }
+
+    wxString boardName = wxFileName( aBoard->GetFileName() ).GetName();
+
+    if( boardName.IsEmpty() )
+        boardName = wxFileName( aJob.m_filename ).GetName();
+
+    wxString product = ODB::GenLegalEntityName( boardName );
+
+    if( product.IsEmpty() )
+        product = wxS( "odb" );
+
+    return product;
+}
+
+
+std::map<std::string, UTF8> odbJobProperties( const JOB_EXPORT_PCB_ODB& aJob, const BOARD* aBoard,
+                                              const wxString& aVariant, const wxString& aProductName )
+{
+    std::map<std::string, UTF8> props;
+    props["units"] = aJob.m_units == JOB_EXPORT_PCB_FAB::UNITS::MM ? "mm" : "inch";
+    props["sigfig"] = wxString::Format( "%d", aJob.m_precision );
+    props["variant"] = aVariant.ToUTF8().data();
+    props["mpn"] = aJob.m_colMfgPn.ToUTF8().data();
+    props["origin"] = aJob.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::AUX    ? "aux"
+                      : aJob.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::GRID ? "grid"
+                                                                          : "absolute";
+    props["net_names"] = aJob.m_netNamePolicy == wxS( "anonymize" ) ? "anonymize" : "include";
+
+    switch( aJob.m_dataSet )
+    {
+    case JOB_EXPORT_PCB_ODB::DATA_SET::FABRICATION: props["data_set"] = "fabrication"; break;
+    case JOB_EXPORT_PCB_ODB::DATA_SET::ASSEMBLY: props["data_set"] = "assembly"; break;
+    case JOB_EXPORT_PCB_ODB::DATA_SET::TEST: props["data_set"] = "test"; break;
+    case JOB_EXPORT_PCB_ODB::DATA_SET::STACKUP: props["data_set"] = "stackup"; break;
+    default: props["data_set"] = "all"; break;
+    }
+
+    props["sections"] = aJob.m_sections.ToUTF8().data();
+    props["layers"] = nlohmann::json( aJob.m_layerOverrides ).dump();
+
+    wxString product = aProductName.IsEmpty() ? odbProductBase( aJob, aBoard ) : aProductName;
+
+    if( !aProductName.IsEmpty() || !aJob.m_productName.IsEmpty() )
+        props["product_model_name"] = product.ToUTF8().data();
+
+    return props;
 }
 
 
@@ -306,9 +370,51 @@ bool CommitOdbDirectory( const wxString& aSource, const wxString& aTarget,
 } // namespace
 
 
-wxFileName ResolveOdbOutputPath( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard )
+bool OdbVariantFileTokensCollide( const std::vector<wxString>&                      aTokens,
+                                  const std::function<wxString( const wxString& )>& aLocaleFold )
 {
-    wxString outputPath = aJob.GetFullOutputPath( aBoard->GetProject() );
+    std::set<wxString> localeFolded;
+    std::set<wxString> asciiFolded;
+
+    for( const wxString& token : aTokens )
+    {
+        wxString ascii = token;
+
+        for( size_t ii = 0; ii < ascii.size(); ++ii )
+        {
+            wxUniChar character = ascii[ii];
+
+            if( character >= 'A' && character <= 'Z' )
+                ascii[ii] = static_cast<wxChar>( character.GetValue() - 'A' + 'a' );
+        }
+
+        bool newLocale = localeFolded.insert( aLocaleFold( token ) ).second;
+        bool newAscii = asciiFolded.insert( ascii ).second;
+
+        if( !newLocale || !newAscii )
+            return true;
+    }
+
+    return false;
+}
+
+
+static ODB_EXPORT_RESULT generateOneODBPackage( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard,
+                                                PCB_EDIT_FRAME* aParentFrame,
+                                                PROGRESS_REPORTER* aProgressReporter, REPORTER* aReporter,
+                                                wxString outputPath, const wxString& aVariant,
+                                                const wxString& aProductName )
+{
+    LOCALE_IO         toggle;
+    ODB_EXPORT_RESULT result;
+
+    if( !aBoard )
+    {
+        if( aReporter )
+            aReporter->Report( _( "No board for ODB++ export." ), RPT_SEVERITY_ERROR );
+
+        return result;
+    }
 
     if( outputPath.IsEmpty() )
         outputPath = wxFileName( aJob.m_filename ).GetPath();
@@ -330,26 +436,7 @@ wxFileName ResolveOdbOutputPath( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard )
     if( outputFn.GetPath().IsEmpty() && outputFn.HasName() )
         outputFn.MakeAbsolute();
 
-    return outputFn;
-}
-
-
-bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter,
-                         REPORTER* aReporter )
-{
-    LOCALE_IO toggle;
-
-    if( !aBoard )
-    {
-        if( aReporter )
-            aReporter->Report( _( "No board for ODB++ export." ), RPT_SEVERITY_ERROR );
-
-        return false;
-    }
-
-    wxFileName outputFn = ResolveOdbOutputPath( aJob, aBoard );
-    bool       compressed = aJob.m_compressionMode != JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE;
-    wxString   msg;
+    wxString msg;
 
     if( !PATHS::EnsurePathExists( outputFn.GetFullPath(), true ) )
     {
@@ -358,7 +445,7 @@ bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS
         if( aReporter )
             aReporter->Report( msg, RPT_SEVERITY_ERROR );
 
-        return false;
+        return result;
     }
 
     if( outputFn.IsDir() && !outputFn.IsDirWritable() )
@@ -368,7 +455,7 @@ bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS
         if( aReporter )
             aReporter->Report( msg, RPT_SEVERITY_ERROR );
 
-        return false;
+        return result;
     }
 
     if( compressed )
@@ -382,14 +469,26 @@ bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS
             if( aReporter )
                 aReporter->Report( msg, RPT_SEVERITY_ERROR );
 
-            return false;
+            return result;
+        }
+
+        if( outputFn.Exists() && aParentFrame )
+        {
+            msg = wxString::Format( _( "Output file '%s' already exists. Do you want to overwrite it?" ),
+                                    outputFn.GetFullPath() );
+            KIDIALOG confirm( aParentFrame, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            confirm.SetOKLabel( _( "Overwrite" ) );
+
+            if( confirm.ShowModal() != wxID_OK )
+                return result;
         }
     }
     else
     {
         wxString replaceError;
 
-        if( !canReplaceOdbDirectory( outputFn.GetFullPath(), aBoard->GetFileName(), aJob.m_filename, replaceError ) )
+        if( !canReplaceOdbDirectory( outputFn.GetFullPath(), aBoard->GetFileName(),
+                                     aJob.m_filename, replaceError ) )
         {
             if( aReporter )
             {
@@ -397,7 +496,21 @@ bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS
                                                      outputFn.GetFullPath(), replaceError ), RPT_SEVERITY_ERROR );
             }
 
-            return false;
+            return result;
+        }
+
+        wxDir existing( outputFn.GetFullPath() );
+
+        if( existing.IsOpened() && ( existing.HasFiles() || existing.HasSubDirs() ) && aParentFrame )
+        {
+            msg = wxString::Format( _( "Output directory '%s' already exists and is not empty. "
+                                       "Do you want to overwrite it?" ),
+                                    outputFn.GetFullPath() );
+            KIDIALOG confirm( aParentFrame, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+            confirm.SetOKLabel( _( "Overwrite" ) );
+
+            if( confirm.ShowModal() != wxID_OK )
+                return result;
         }
     }
 
@@ -410,14 +523,13 @@ bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS
         if( aReporter )
             aReporter->Report( _( "Cannot create temporary output directory." ), RPT_SEVERITY_ERROR );
 
-        return false;
+        return result;
     }
 
     wxString treePath = temporary.Path();
 
-    std::map<std::string, UTF8> props;
-    props["units"] = aJob.m_units == JOB_EXPORT_PCB_FAB::UNITS::MM ? "mm" : "inch";
-    props["sigfig"] = wxString::Format( "%d", aJob.m_precision );
+    std::map<std::string, UTF8> props = odbJobProperties( aJob, aBoard, aVariant, aProductName );
+    wxString                    product = aProductName.IsEmpty() ? odbProductBase( aJob, aBoard ) : aProductName;
 
     auto saveFile = [&]() -> bool
     {
@@ -441,18 +553,22 @@ bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS
         }
     };
 
-    auto future = GetKiCadThreadPool().submit_task( saveFile );
+    thread_pool&       pool = GetKiCadThreadPool();
+    auto               future = pool.submit_task( saveFile );
+    std::future_status status = future.wait_for( std::chrono::milliseconds( 250 ) );
 
-    while( future.wait_for( std::chrono::milliseconds( 250 ) ) != std::future_status::ready )
+    while( status != std::future_status::ready )
     {
         if( aProgressReporter )
             aProgressReporter->KeepRefreshing();
+
+        status = future.wait_for( std::chrono::milliseconds( 250 ) );
     }
 
     try
     {
         if( !future.get() )
-            return false;
+            return result;
     }
     catch( const std::exception& error )
     {
@@ -462,23 +578,13 @@ bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS
                                RPT_SEVERITY_ERROR );
         }
 
-        return false;
+        return result;
     }
 
     if( compressed )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Compressing output" ) );
-
-        wxString boardName = wxFileName( aBoard->GetFileName() ).GetName();
-
-        if( boardName.IsEmpty() )
-            boardName = wxFileName( aJob.m_filename ).GetName();
-
-        wxString product = ODB::GenLegalEntityName( boardName );
-
-        if( product.IsEmpty() )
-            product = wxS( "odb" );
 
         ARCHIVE_FORMAT format = aJob.m_compressionMode == JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ
                                 ? ARCHIVE_FORMAT::TGZ : ARCHIVE_FORMAT::ZIP;
@@ -493,7 +599,7 @@ bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS
                                    RPT_SEVERITY_ERROR );
             }
 
-            return false;
+            return result;
         }
     }
     else
@@ -509,12 +615,299 @@ bool GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PROGRESS
                                                      outputFn.GetFullPath(), commitError ), RPT_SEVERITY_ERROR );
             }
 
-            return false;
+            return result;
         }
     }
 
     if( aProgressReporter )
         aProgressReporter->SetCurrentProgress( 1 );
 
-    return true;
+    result.m_ok = true;
+    result.m_outputs.push_back( outputFn.GetFullPath() );
+    return result;
+}
+
+
+ODB_EXPORT_RESULT GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBoard, PCB_EDIT_FRAME* aParentFrame,
+                                      PROGRESS_REPORTER* aProgressReporter, REPORTER* aReporter )
+{
+    ODB_EXPORT_RESULT result;
+
+    if( !aBoard )
+        return generateOneODBPackage( aJob, aBoard, aParentFrame, aProgressReporter, aReporter,
+                                      wxString(), wxString(), wxString() );
+
+    std::vector<wxString> variants = aJob.m_variantNames.empty()
+                                     ? std::vector<wxString>{ aBoard->GetCurrentVariant() } : aJob.m_variantNames;
+    wxString rawPath = aJob.GetWorkingOutputPath().IsEmpty() ? aJob.GetConfiguredOutputPath()
+                                                            : aJob.GetWorkingOutputPath();
+    bool separate = aJob.m_variantPackaging == JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING::SEPARATE
+                    && variants.size() > 1;
+    std::set<wxString> productNames;
+    std::vector<wxString> separateProducts;
+    std::vector<wxString> separateTokens;
+    ODB::VARIANT_NAMES legalNames = ODB::VARIANT_NAMES::Build( aBoard->GetVariantNames() );
+    wxString productBase = odbProductBase( aJob, aBoard );
+
+    if( aReporter && !legalNames.m_renamed.empty() )
+    {
+        wxString renamed;
+
+        for( const wxString& name : legalNames.m_renamed )
+            renamed += wxString::Format( wxS( " '%s'" ), name );
+
+        aReporter->Report( wxString::Format( _( "ODB++ variant names adjusted after conversion:%s" ), renamed ),
+                           RPT_SEVERITY_WARNING );
+    }
+
+    if( aReporter && !legalNames.m_listsFit )
+        aReporter->Report( _( "ODB++ variant list exceeds 1000 characters; list attributes omitted." ),
+                           RPT_SEVERITY_WARNING );
+
+    for( wxString& variant : variants )
+    {
+        if( variant.CmpNoCase( GetDefaultVariantName() ) == 0 )
+            variant.clear();
+
+        if( !variant.IsEmpty() && !aBoard->HasVariant( variant ) )
+        {
+            if( aReporter )
+                aReporter->Report( wxString::Format( _( "Unknown board variant '%s'." ), variant ),
+                                   RPT_SEVERITY_ERROR );
+
+            return result;
+        }
+
+        for( const wxString& boardVariant : aBoard->GetVariantNames() )
+        {
+            if( variant.CmpNoCase( boardVariant ) == 0 )
+            {
+                variant = boardVariant;
+                break;
+            }
+        }
+
+        if( separate )
+        {
+            wxString token = GetVariantFileToken( variant );
+
+            if( token.IsEmpty() )
+                token = wxS( "default" );
+
+            separateTokens.push_back( token );
+
+            wxString legal = variant.IsEmpty() ? wxString( wxS( "default" ) )
+                                                : legalNames.LegalName( variant );
+            wxString suffix = legal.Left( 62 );
+            auto productFor = [&]( const wxString& aSuffix )
+            {
+                return productBase.Left( 63 - aSuffix.length() ) + wxS( "_" ) + aSuffix;
+            };
+            wxString product = productFor( suffix );
+            int      duplicate = 2;
+
+            while( !productNames.insert( product ).second )
+            {
+                wxString number = wxString::Format( wxS( "_%d" ), duplicate++ );
+                suffix = legal.Left( 62 - number.length() ) + number;
+                product = productFor( suffix );
+            }
+
+            separateProducts.push_back( product );
+        }
+    }
+
+    if( separate
+        && OdbVariantFileTokensCollide( separateTokens,
+                                        []( const wxString& aToken )
+                                        {
+                                            return aToken.Lower();
+                                        } ) )
+    {
+        if( aReporter )
+            aReporter->Report( _( "ODB++ variant output names collide after conversion." ), RPT_SEVERITY_ERROR );
+
+        return result;
+    }
+
+    if( !separate )
+    {
+        wxString path = aJob.ResolveOutputPath( ExpandVariantOutputPath( rawPath,
+                                                                        GetVariantFileToken( variants.front() ) ),
+                                               aJob.GetOutputPathIsDirectory(), aBoard->GetProject() );
+        return generateOneODBPackage( aJob, aBoard, aParentFrame, aProgressReporter, aReporter,
+                                      path, variants.front(), wxString() );
+    }
+
+    if( rawPath.IsEmpty() )
+        rawPath = wxS( "odb" );
+
+    for( size_t index = 0; index < variants.size(); ++index )
+    {
+        const wxString& variant = variants[index];
+        const wxString& fileToken = separateTokens[index];
+
+        wxString path = rawPath;
+
+        if( path.Contains( wxS( "${VARIANT}" ) ) )
+        {
+            path = ExpandVariantOutputPath( path, fileToken );
+        }
+        else
+        {
+            while( !path.IsEmpty() && wxFileName::IsPathSeparator( path.Last() ) )
+                path.RemoveLast();
+
+            wxFileName outputFn( path );
+            outputFn.SetName( outputFn.GetName() + wxS( "-" ) + fileToken );
+            path = outputFn.GetFullPath();
+        }
+
+        path = aJob.ResolveOutputPath( path, aJob.GetOutputPathIsDirectory(), aBoard->GetProject() );
+        ODB_EXPORT_RESULT one = generateOneODBPackage( aJob, aBoard, aParentFrame, aProgressReporter,
+                                                       aReporter, path, variant, separateProducts[index] );
+        result.m_outputs.insert( result.m_outputs.end(), one.m_outputs.begin(), one.m_outputs.end() );
+
+        if( !one.m_ok )
+            return result;
+    }
+
+    result.m_ok = true;
+    return result;
+}
+
+
+wxString UpdateOdbVariantOutputPath( const wxString& aPath, bool aDirectory, bool aSeparate,
+                                     bool aRemoveAutomaticSuffix )
+{
+    if( aPath.IsEmpty() )
+        return aPath;
+
+    const wxString suffix = wxS( "-${VARIANT}" );
+
+    if( aDirectory )
+    {
+        wxString component = aPath;
+
+        while( !component.IsEmpty() && wxFileName::IsPathSeparator( component.Last() ) )
+            component.RemoveLast();
+
+        wxString separators = aPath.Mid( component.length() );
+
+        if( aRemoveAutomaticSuffix && component.EndsWith( suffix ) )
+            component.RemoveLast( suffix.length() );
+
+        if( aSeparate && !component.EndsWith( suffix ) )
+            component += suffix;
+
+        return component + ( separators.IsEmpty() ? wxString( wxFileName::GetPathSeparator() ) : separators );
+    }
+
+    int      separator = std::max( aPath.Find( '/', true ), aPath.Find( '\\', true ) );
+    int      dot = aPath.Find( '.', true );
+    size_t   stemEnd = dot > separator ? static_cast<size_t>( dot ) : aPath.length();
+    wxString stem = aPath.Left( stemEnd );
+
+    if( aRemoveAutomaticSuffix && stem.EndsWith( suffix ) )
+        stem.RemoveLast( suffix.length() );
+
+    if( aSeparate && !stem.EndsWith( suffix ) )
+        stem += suffix;
+
+    return stem + aPath.Mid( stemEnd );
+}
+
+
+IPC2581::SECTION_SET OdbDefaultSections( IPC2581::MODE aMode )
+{
+    IPC2581::SECTION_SET defaults;
+
+    if( aMode == IPC2581::MODE::USERDEF )
+    {
+        defaults.set();
+        defaults.Set( IPC2581::SECTION::DFX, false );
+    }
+    else
+    {
+        defaults = IPC2581::RequiredSections( aMode ) | IPC2581::RecommendedOptionalSections( aMode );
+    }
+
+    return defaults;
+}
+
+
+wxString OdbSectionKeyForSelection( IPC2581::MODE aMode, const IPC2581::SECTION_SET& aSelection )
+{
+    if( aSelection == OdbDefaultSections( aMode ) )
+        return wxString();
+
+    return IPC2581::SectionKeyString( aSelection );
+}
+
+
+wxString OdbPreviewReferenceName( const wxString& aReference, const std::vector<ODB_MATRIX_PREVIEW_ROW>& aRows )
+{
+    auto reference = std::find_if( aRows.begin(), aRows.end(),
+                                   [&]( const ODB_MATRIX_PREVIEW_ROW& aCandidate )
+                                   {
+                                       return aCandidate.m_matrix.m_id == aReference;
+                                   } );
+
+    return reference == aRows.end() ? aReference : reference->m_matrix.m_name;
+}
+
+
+std::vector<ODB_MATRIX_PREVIEW_ROW> PreviewOdbMatrix( BOARD* aBoard, const JOB_EXPORT_PCB_ODB& aJob )
+{
+    if( !aBoard )
+        return {};
+
+    std::map<std::string, UTF8> props = odbJobProperties( aJob, aBoard, aBoard->GetCurrentVariant(), wxString() );
+    props["layers"] = "[]";
+    PCB_IO_ODBPP plugin;
+    plugin.ConfigureExport( *aBoard, &props );
+    ODB_MATRIX_ENTITY matrix( aBoard, &plugin );
+    matrix.InitEntityData();
+    std::vector<ODB_MATRIX_PREVIEW_ROW> preview;
+    preview.reserve( matrix.GetMatrixLayers().size() );
+
+    for( const ODB_MATRIX_ENTITY::MATRIX_LAYER& layer : matrix.GetMatrixLayers() )
+    {
+        ODB_MATRIX_PREVIEW_ROW row;
+        row.m_matrix.m_row = static_cast<int>( layer.m_rowNumber );
+        row.m_matrix.m_name = layer.m_layerName;
+        row.m_matrix.m_type = wxString::FromUTF8( ODB::Enum2String( layer.m_type ) );
+        row.m_matrix.m_context = wxString::FromUTF8( ODB::Enum2String( layer.m_context ) );
+        row.m_matrix.m_polarity = wxString::FromUTF8( ODB::Enum2String( layer.m_polarity ) );
+        row.m_matrix.m_id = wxString::Format( "%u", layer.m_uid );
+
+        if( layer.m_span )
+        {
+            row.m_matrix.m_startName = layer.m_span->first;
+            row.m_matrix.m_endName = layer.m_span->second;
+        }
+
+        if( layer.m_addType )
+            row.m_matrix.m_addType = wxString::FromUTF8( ODB::Enum2String( *layer.m_addType ) );
+
+        if( layer.m_diType )
+            row.m_matrix.m_dielectricType = wxString::FromUTF8( ODB::Enum2String( *layer.m_diType ) );
+
+        if( layer.m_ref )
+            row.m_matrix.m_ref = wxString::Format( "%u", *layer.m_ref );
+
+        if( layer.m_cuTop )
+            row.m_matrix.m_cuTop = wxString::Format( "%u", *layer.m_cuTop );
+
+        if( layer.m_cuBottom )
+            row.m_matrix.m_cuBottom = wxString::Format( "%u", *layer.m_cuBottom );
+
+        row.m_boardLayer = layer.m_info.m_layer;
+        row.m_editable = layer.m_info.m_role == ODB_LAYER_ROLE::BOARD_LAYER && row.m_boardLayer != UNDEFINED_LAYER;
+        row.m_displayLayer = row.m_editable ? aBoard->GetLayerName( row.m_boardLayer )
+                                            : wxString::Format( "(%s)", row.m_matrix.m_type.Lower() );
+        preview.push_back( std::move( row ) );
+    }
+
+    return preview;
 }

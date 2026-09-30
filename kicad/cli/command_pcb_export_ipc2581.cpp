@@ -33,7 +33,6 @@
 #define ARG_COMPRESS "--compress"
 
 #define ARG_BOM_COL_INT_ID "--bom-col-int-id"
-#define ARG_BOM_COL_MFG_PN "--bom-col-mfg-pn"
 #define ARG_BOM_COL_MFG "--bom-col-mfg"
 #define ARG_BOM_COL_DIST_PN "--bom-col-dist-pn"
 #define ARG_BOM_COL_DIST "--bom-col-dist"
@@ -65,12 +64,6 @@ CLI::PCB_EXPORT_IPC2581_COMMAND::PCB_EXPORT_IPC2581_COMMAND() :
             .default_value( std::string() )
             .help( std::string(
                     "Name of the part field to use for the Bill of Material Internal Id Column" ) )
-            .metavar( "FIELD_NAME" );
-
-    m_argParser.add_argument( ARG_BOM_COL_MFG_PN )
-            .default_value( std::string() )
-            .help( std::string( "Name of the part field to use for the Bill of "
-                                "Material Manufacturer Part Number Column" ) )
             .metavar( "FIELD_NAME" );
 
     m_argParser.add_argument( ARG_BOM_COL_MFG )
@@ -151,8 +144,6 @@ int CLI::PCB_EXPORT_IPC2581_COMMAND::doPerform( KIWAY& aKiway )
 
     ipc2581Job->m_colInternalId =
             From_UTF8( m_argParser.get<std::string>( ARG_BOM_COL_INT_ID ).c_str() );
-    ipc2581Job->m_colMfgPn =
-            From_UTF8( m_argParser.get<std::string>( ARG_BOM_COL_MFG_PN ).c_str() );
     ipc2581Job->m_colMfg = From_UTF8( m_argParser.get<std::string>( ARG_BOM_COL_MFG ).c_str() );
     ipc2581Job->m_colDistPn =
             From_UTF8( m_argParser.get<std::string>( ARG_BOM_COL_DIST_PN ).c_str() );

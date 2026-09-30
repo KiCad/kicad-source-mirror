@@ -61,6 +61,8 @@ public:
     void SaveBoard( const wxString& aFileName, BOARD& aBoard,
                     const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
+    void ConfigureExport( BOARD& aBoard, const std::map<std::string, UTF8>* aProperties );
+
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
         return IO_BASE::IO_FILE_DESC( _HKI( "ODB++ Production File" ), { "ZIP" }, {}, true, false, true );
@@ -82,6 +84,9 @@ public:
     static int MaxPrecision() { return 16; }
 
     const ODB_FORMAT& GetFormat() const { return m_format; }
+
+    uint32_t NewUid() { return ++m_maxUid; }
+    uint32_t MaxUid() const { return m_maxUid; }
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override { return 0; }
 
@@ -138,6 +143,23 @@ public:
         return m_via_trace_subnets;
     }
 
+    void RecordNetTieFeature( const BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, const wxString& aLayerName,
+                              size_t aIndex )
+    {
+        m_netTieFeatures.try_emplace( std::make_pair( aItem, aLayer ), aLayerName, aIndex );
+    }
+
+    const std::map<std::pair<const BOARD_ITEM*, PCB_LAYER_ID>, std::pair<wxString, size_t>>&
+    GetNetTieFeatures() const
+    {
+        return m_netTieFeatures;
+    }
+
+    const wxString& GetLegalNetName( int aNetCode ) const
+    {
+        return m_netNames.at( aNetCode );
+    }
+
 
     std::shared_ptr<ODB_TREE_WRITER> m_writer;
 
@@ -163,6 +185,7 @@ private:
 
     BOARD* m_board;
     ODB_FORMAT m_format;
+    uint32_t   m_maxUid = 0;
 
     std::vector<std::shared_ptr<FOOTPRINT>> m_loaded_footprints;
 
@@ -181,9 +204,13 @@ private:
 
     std::map<const PAD*, EDA_DATA::SUB_NET_TOEPRINT*> m_topeprint_subnets;
 
+    std::map<int, wxString> m_netNames;
+
     std::map<std::pair<PCB_LAYER_ID, ZONE*>, EDA_DATA::SUB_NET_PLANE*> m_plane_subnets;
 
     std::map<PCB_TRACK*, EDA_DATA::SUB_NET*> m_via_trace_subnets;
+
+    std::map<std::pair<const BOARD_ITEM*, PCB_LAYER_ID>, std::pair<wxString, size_t>> m_netTieFeatures;
 
     std::vector<std::shared_ptr<ODB_ENTITY_BASE>> m_entities;
 };

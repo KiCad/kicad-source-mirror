@@ -27,15 +27,49 @@
 #include <jobs/job_pcb_render.h>
 #include <json_common.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
+#include <string_utils.h>
 
 #include <filesystem>
 #include <fstream>
+#include <clocale>
 
 
 // Regression coverage for issue #24092: variant fields on JOBSET-resident jobs
 // must round-trip through ToJson/FromJson.
 
 BOOST_AUTO_TEST_SUITE( JobExportPcbVariants )
+
+BOOST_AUTO_TEST_CASE( OdbVariantFileTokenKeepsNamesAndRemovesSeparators )
+{
+    BOOST_CHECK_EQUAL( GetVariantFileToken( wxS( "Variant A" ) ), wxString( wxS( "Variant A" ) ) );
+    BOOST_CHECK_EQUAL( GetVariantFileToken( wxS( "A/B" ) ), wxString( wxS( "A_B" ) ) );
+    BOOST_CHECK_EQUAL( GetVariantFileToken( GetDefaultVariantName() ), wxString() );
+    BOOST_CHECK_EQUAL( ExpandVariantOutputPath( wxS( "bom-${VARIANT}.csv" ), wxString() ),
+                       wxString( wxS( "bom-.csv" ) ) );
+    BOOST_CHECK_EQUAL( ExpandVariantOutputPath( wxS( "out-${VARIANT}.zip" ),
+                                                GetVariantFileToken( wxS( "A/B" ) ) ),
+                       wxString( wxS( "out-A_B.zip" ) ) );
+    BOOST_CHECK_EQUAL( ExpandVariantOutputPath( wxS( "bom-${VARIANT}.csv" ), wxS( "A/B" ) ),
+                       wxString( wxS( "bom-A/B.csv" ) ) );
+}
+
+BOOST_AUTO_TEST_CASE( OdbLegacyVariantKeyStillLoads )
+{
+    JOB_EXPORT_PCB_ODB job;
+    job.FromJson( nlohmann::json{ { "variant", "Variant A" } } );
+    BOOST_REQUIRE_EQUAL( job.m_variantNames.size(), 1u );
+    BOOST_CHECK_EQUAL( job.m_variantNames.front(), wxString( wxS( "Variant A" ) ) );
+    BOOST_CHECK( job.m_variantPackaging == JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING::SEPARATE );
+
+    job.m_variantPackaging = JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING::COMBINED;
+    nlohmann::json json;
+    job.ToJson( json );
+    BOOST_CHECK_EQUAL( json.at( "variant_packaging" ).get<std::string>(), "combined" );
+
+    JOB_EXPORT_PCB_ODB loaded;
+    loaded.FromJson( json );
+    BOOST_CHECK( loaded.m_variantPackaging == JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING::COMBINED );
+}
 
 
 BOOST_AUTO_TEST_CASE( FabJobMissingKeysKeepDefaults )
@@ -103,6 +137,97 @@ BOOST_AUTO_TEST_CASE( FabV10JobsLoadUnchanged )
 
     BOOST_CHECK( odbRoundTrip.contains( "variant_names" ) );
     BOOST_CHECK( ipcRoundTrip.contains( "variant_names" ) );
+    BOOST_CHECK( odb.m_colMfgPn.IsEmpty() );
+    BOOST_CHECK( ipc.m_colMfgPn.IsEmpty() );
+    BOOST_CHECK( odb.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::ABSOLUTE_COORDS );
+    BOOST_CHECK( odb.m_productName.IsEmpty() );
+    BOOST_CHECK( odb.m_dataSet == JOB_EXPORT_PCB_ODB::DATA_SET::ALL );
+    BOOST_CHECK( odb.m_sections.IsEmpty() );
+    BOOST_CHECK_EQUAL( odb.m_netNamePolicy, wxString( wxS( "include" ) ) );
+    BOOST_CHECK( odb.m_layerOverrides.empty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( OdbMappedMpnFieldRoundTrips )
+{
+    JOB_EXPORT_PCB_ODB job;
+    job.m_colMfgPn = wxS( "MPN" );
+    nlohmann::json json;
+    job.ToJson( json );
+    BOOST_CHECK_EQUAL( json.at( "field_bom_map.mfg_pn" ).get<std::string>(), "MPN" );
+
+    JOB_EXPORT_PCB_ODB loaded;
+    loaded.FromJson( json );
+    BOOST_CHECK_EQUAL( loaded.m_colMfgPn, wxString( wxS( "MPN" ) ) );
+
+    JOB_EXPORT_PCB_IPC2581 ipc;
+    ipc.FromJson( nlohmann::json{ { "field_bom_map.mfg_pn", "IPC-MPN" } } );
+    nlohmann::json ipcJson;
+    ipc.ToJson( ipcJson );
+    BOOST_CHECK_EQUAL( ipcJson.at( "field_bom_map.mfg_pn" ).get<std::string>(), "IPC-MPN" );
+}
+
+
+BOOST_AUTO_TEST_CASE( OdbExportOptionsRoundTrip )
+{
+    nlohmann::json     options = { { "origin", "aux" },
+                                   { "product_name", "Fab Rev A" },
+                                   { "data_set", "assembly" },
+                                   { "sections", "ACOP" },
+                                   { "net_names", "anonymize" },
+                                   { "layers", nlohmann::json::array( { { { "layer", "F.Cu" },
+                                                                          { "include", false },
+                                                                          { "odb_name", "front_copper" },
+                                                                          { "odb_type", "SIGNAL" } } } ) } };
+    JOB_EXPORT_PCB_ODB job;
+    job.FromJson( options );
+    nlohmann::json roundTrip;
+    job.ToJson( roundTrip );
+
+    for( auto it = options.begin(); it != options.end(); ++it )
+        BOOST_CHECK_MESSAGE( roundTrip.contains( it.key() ) && roundTrip[it.key()] == it.value(), it.key() );
+
+    JOB_EXPORT_PCB_ODB loaded;
+    loaded.FromJson( roundTrip );
+    nlohmann::json again;
+    loaded.ToJson( again );
+    BOOST_CHECK( roundTrip == again );
+}
+
+
+BOOST_AUTO_TEST_CASE( OdbInvalidLayerOverrideRetainsAutomaticMetadata )
+{
+    JOB_EXPORT_PCB_ODB job;
+    job.FromJson( nlohmann::json{
+            { "layers", nlohmann::json::array( { { { "layer", "F.Cu" }, { "include", "not-a-boolean" } },
+                                                 { { "layer", "B.Cu" }, { "odb_name", 12 } },
+                                                 { { "layer", "In1.Cu" }, { "odb_type", false } } } ) } } );
+
+    BOOST_REQUIRE_EQUAL( job.m_layerOverrides.size(), 3u );
+
+    for( const ODB_LAYER_OVERRIDE& override : job.m_layerOverrides )
+        BOOST_CHECK( override.m_layer == UNDEFINED_LAYER );
+}
+
+
+BOOST_AUTO_TEST_CASE( OdbLayerOverrideUtf8IgnoresProcessLocale )
+{
+    JOB_EXPORT_PCB_ODB job;
+    job.m_layerOverrides.push_back( { F_Cu, true, wxString::FromUTF8( "Résumé_日本" ), wxS( "SIGNAL" ) } );
+    nlohmann::json json;
+
+    {
+        struct RESTORE_LOCALE
+        {
+            std::string m_previous = std::setlocale( LC_CTYPE, nullptr );
+            ~RESTORE_LOCALE() { std::setlocale( LC_CTYPE, m_previous.c_str() ); }
+        } restoreLocale;
+
+        BOOST_REQUIRE( std::setlocale( LC_CTYPE, "C" ) );
+        job.ToJson( json );
+    }
+
+    BOOST_CHECK_EQUAL( json.at( "layers" ).at( 0 ).at( "odb_name" ).get<std::string>(), "Résumé_日本" );
 }
 
 

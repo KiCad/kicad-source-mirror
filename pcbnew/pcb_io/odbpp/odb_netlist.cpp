@@ -31,6 +31,7 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
+#include <exporters/fab_model/fab_pin.h>
 #include <vector>
 #include <cctype>
 #include <odb_netlist.h>
@@ -81,10 +82,6 @@ void ODB_NET_LIST::InitPadNetPoints( BOARD*                                     
             // It could be a mask only pad, we only handle pads with copper here
             if( !net_point.side.empty() && net_point.side != "I" )
             {
-                if( pad->GetNetCode() == 0 )
-                    net_point.netname = "$NONE$";
-                else
-                    net_point.netname = pad->GetNetname();
                 // net_point.pin = pad->GetNumber();
                 net_point.refdes = footprint->GetReference();
                 const VECTOR2I& drill = pad->GetDrillSize();
@@ -107,8 +104,7 @@ void ODB_NET_LIST::InitPadNetPoints( BOARD*                                     
                 // if( net_point.rotation < 0 )
                 //     net_point.rotation += 360;
 
-                // always output NET end point as net test point
-                net_point.epoint = "e";
+                net_point.epoint = GetFabPadRole( *pad ) == FAB_PAD_ROLE::TESTPOINT ? "t" : "e";
 
                 // the value indicates which sides are *not* accessible
                 net_point.soldermask = 3;
@@ -181,11 +177,6 @@ void ODB_NET_LIST::InitViaNetPoints( BOARD*                                     
                 net_point.smd = false;
                 net_point.hole = true;
 
-                if( net->GetNetCode() == 0 )
-                    net_point.netname = "$NONE$";
-                else
-                    net_point.netname = net->GetNetname();
-
                 net_point.refdes = "VIA";
                 net_point.is_via = true;
                 net_point.drill_radius = via->GetDrillValue() / 2;
@@ -223,7 +214,7 @@ void ODB_NET_LIST::WriteNetPointRecords( std::map<size_t, std::vector<ODB_NET_RE
 
     for( const auto& [key, vec] : aRecords )
     {
-        aStream << "$" << key << " " << ODB::GenLegalNetName( vec.front().netname ) << std::endl;
+        aStream << "$" << key << " " << m_plugin->GetLegalNetName( static_cast<int>( key ) ) << std::endl;
     }
 
     aStream << "#" << std::endl << "#Netlist points" << std::endl << "#" << std::endl;
@@ -239,8 +230,9 @@ void ODB_NET_LIST::WriteNetPointRecords( std::map<size_t, std::vector<ODB_NET_RE
             else
                 aStream << "0.002";
 
-            aStream << " " << ODB::Data2String( aFormat, net_point.x_location ) << " "
-                    << ODB::Data2String( aFormat, net_point.y_location ) << " " << net_point.side << " ";
+            aStream << " " << ODB::Data2String( aFormat, net_point.x_location - aFormat.m_originOffset.x ) << " "
+                    << ODB::Data2String( aFormat, net_point.y_location + aFormat.m_originOffset.y ) << " "
+                    << net_point.side << " ";
 
             if( !net_point.hole )
                 aStream << ODB::Data2String( aFormat, net_point.x_size ) << " "

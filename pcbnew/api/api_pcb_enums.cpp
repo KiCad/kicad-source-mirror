@@ -1980,6 +1980,92 @@ JOB_EXPORT_PCB_ODB::ODB_COMPRESSION FromProtoEnum( OdbCompression aValue )
 
 
 template<>
+OdbVariantPackaging ToProtoEnum( JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING aValue )
+{
+    switch( aValue )
+    {
+    case JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING::SEPARATE: return OdbVariantPackaging::ODBVP_SEPARATE;
+    case JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING::COMBINED: return OdbVariantPackaging::ODBVP_COMBINED;
+    default:
+        wxCHECK_MSG( false, OdbVariantPackaging::ODBVP_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING>" );
+    }
+}
+
+
+template <>
+OdbOrigin ToProtoEnum( JOB_EXPORT_PCB_ODB::ORIGIN aValue )
+{
+    switch( aValue )
+    {
+    case JOB_EXPORT_PCB_ODB::ORIGIN::ABSOLUTE_COORDS: return OdbOrigin::ODBO_ABSOLUTE;
+    case JOB_EXPORT_PCB_ODB::ORIGIN::AUX: return OdbOrigin::ODBO_AUX;
+    case JOB_EXPORT_PCB_ODB::ORIGIN::GRID: return OdbOrigin::ODBO_GRID;
+    default: wxCHECK_MSG( false, OdbOrigin::ODBO_UNKNOWN, "Unhandled ODB++ origin" );
+    }
+}
+
+
+template <>
+JOB_EXPORT_PCB_ODB::ORIGIN FromProtoEnum( OdbOrigin aValue )
+{
+    switch( aValue )
+    {
+    case OdbOrigin::ODBO_AUX: return JOB_EXPORT_PCB_ODB::ORIGIN::AUX;
+    case OdbOrigin::ODBO_GRID: return JOB_EXPORT_PCB_ODB::ORIGIN::GRID;
+    case OdbOrigin::ODBO_ABSOLUTE:
+    case OdbOrigin::ODBO_UNKNOWN:
+    default: return JOB_EXPORT_PCB_ODB::ORIGIN::ABSOLUTE_COORDS;
+    }
+}
+
+
+template <>
+OdbDataSet ToProtoEnum( JOB_EXPORT_PCB_ODB::DATA_SET aValue )
+{
+    switch( aValue )
+    {
+    case JOB_EXPORT_PCB_ODB::DATA_SET::ALL: return OdbDataSet::ODBDS_ALL;
+    case JOB_EXPORT_PCB_ODB::DATA_SET::FABRICATION: return OdbDataSet::ODBDS_FABRICATION;
+    case JOB_EXPORT_PCB_ODB::DATA_SET::ASSEMBLY: return OdbDataSet::ODBDS_ASSEMBLY;
+    case JOB_EXPORT_PCB_ODB::DATA_SET::TEST: return OdbDataSet::ODBDS_TEST;
+    case JOB_EXPORT_PCB_ODB::DATA_SET::STACKUP: return OdbDataSet::ODBDS_STACKUP;
+    default: wxCHECK_MSG( false, OdbDataSet::ODBDS_UNKNOWN, "Unhandled ODB++ data set" );
+    }
+}
+
+
+template <>
+JOB_EXPORT_PCB_ODB::DATA_SET FromProtoEnum( OdbDataSet aValue )
+{
+    switch( aValue )
+    {
+    case OdbDataSet::ODBDS_FABRICATION: return JOB_EXPORT_PCB_ODB::DATA_SET::FABRICATION;
+    case OdbDataSet::ODBDS_ASSEMBLY: return JOB_EXPORT_PCB_ODB::DATA_SET::ASSEMBLY;
+    case OdbDataSet::ODBDS_TEST: return JOB_EXPORT_PCB_ODB::DATA_SET::TEST;
+    case OdbDataSet::ODBDS_STACKUP: return JOB_EXPORT_PCB_ODB::DATA_SET::STACKUP;
+    case OdbDataSet::ODBDS_ALL:
+    case OdbDataSet::ODBDS_UNKNOWN:
+    default: return JOB_EXPORT_PCB_ODB::DATA_SET::ALL;
+    }
+}
+
+
+template<>
+JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING FromProtoEnum( OdbVariantPackaging aValue )
+{
+    switch( aValue )
+    {
+    case OdbVariantPackaging::ODBVP_COMBINED: return JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING::COMBINED;
+    case OdbVariantPackaging::ODBVP_SEPARATE:
+    case OdbVariantPackaging::ODBVP_UNKNOWN:
+    default:
+        return JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING::SEPARATE;
+    }
+}
+
+
+template<>
 StatsOutputFormat ToProtoEnum( JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT aValue )
 {
     switch( aValue )

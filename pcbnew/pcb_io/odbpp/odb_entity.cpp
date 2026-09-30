@@ -19,6 +19,8 @@
  */
 
 
+#include <algorithm>
+#include <tuple>
 #include <base_units.h>
 #include <optional>
 #include <board.h>
@@ -29,6 +31,8 @@
 #include <connectivity/connectivity_algo.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <exporters/fab_model/fab_item_order.h>
+#include <exporters/fab_model/fab_drill.h>
+#include <exporters/fab_model/fab_pin.h>
 #include <font/font.h>
 #include <footprint.h>
 #include <hash_eda.h>
@@ -91,6 +95,9 @@ ODB_MISC_ENTITY::ODB_MISC_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin ) :
                { wxS( "CREATION_DATE" ), wxDateTime::Now().Format( "%Y%m%d.%H%M%S" ) },
                { wxS( "SAVE_DATE" ), wxDateTime::Now().Format( "%Y%m%d.%H%M%S" ) },
                { wxS( "SAVE_APP" ), wxString::Format( wxS( "KiCad EDA %s" ), GetBuildVersion() ) } };
+
+    if( !m_plugin->GetFormat().m_productModelName.IsEmpty() )
+        m_info.emplace_back( wxS( "PRODUCT_MODEL_NAME" ), m_plugin->GetFormat().m_productModelName );
 }
 
 
@@ -104,12 +111,41 @@ void ODB_MISC_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
     {
         twriter.WriteEquationLine( info.first, info.second );
     }
+
+    twriter.WriteEquationLine( "MAX_UID", static_cast<int>( m_plugin->MaxUid() ) );
+
+    GenerateUserAttrFile( writer );
+
+    if( !m_board->GetVariantNames().empty() )
+        GenerateAttrListFile( writer );
+}
+
+
+void ODB_MISC_ENTITY::GenerateAttrListFile( ODB_TREE_WRITER& writer )
+{
+    auto attrlist = writer.CreateFileProxy( "attrlist" );
+    attrlist.GetStream() << "UNITS=" << m_plugin->GetFormat().m_unitsStr << '\n';
+
+    if( m_plugin->GetFormat().m_variantNames.m_listsFit )
+        attrlist.GetStream() << ".variant_list="
+                             << m_plugin->GetFormat().m_variantNames.Join( m_board->GetVariantNames() ).ToStdString()
+                             << '\n';
+}
+
+
+void ODB_MISC_ENTITY::GenerateUserAttrFile( ODB_TREE_WRITER& writer )
+{
+    auto userAttrs = writer.CreateFileProxy( "userattr" );
+    std::ostream& attrs = userAttrs.GetStream();
+    attrs << "UNITS=" << m_plugin->GetFormat().m_unitsStr << '\n';
+    attrs << "TEXT {\nNAME=material\nENTITY=LAYER\nMIN_LEN=0\nMAX_LEN=64\nOPTIONS=\nGROUP=Product\n}\n";
 }
 
 
 void ODB_MATRIX_ENTITY::AddStep( const wxString& aStepName )
 {
-    m_matrixSteps.emplace( ODB::GenLegalEntityName( aStepName ), m_col++ );
+    m_matrixSteps.emplace( ODB::GenLegalEntityName( aStepName ),
+                           std::make_pair( m_col++, m_plugin->NewUid() ) );
 }
 
 
@@ -158,6 +194,8 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
 
             if( stackup_item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
             {
+                matrix.m_dielectricName = stackup_item->GetMaterial( sublayer_id );
+
                 if( stackup_item->GetTypeName() == KEY_CORE )
                     matrix.m_diType.emplace( ODB_DIELECTRIC_TYPE::CORE );
                 else
@@ -178,6 +216,10 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
         }
     }
 
+    AddDrillMatrixLayer();
+
+    AddRoutMatrixLayer();
+
     for( PCB_LAYER_ID layer : m_board->GetEnabledLayers().Seq() )
     {
         if( added_layers.find( layer ) != added_layers.end() )
@@ -188,13 +230,279 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
         AddMatrixLayerField( matrix, layer );
     }
 
-    AddDrillMatrixLayer();
-
     AddAuxilliaryMatrixLayer();
 
     AddCOMPMatrixLayer( B_Cu );
 
+    const ODB_FORMAT& format = m_plugin->GetFormat();
+    bool              filtered = format.m_sections.has_value() || !format.m_layerOverrides.empty();
+    auto isCopper = []( const MATRIX_LAYER& aLayer )
+    {
+        return aLayer.m_type == ODB_TYPE::SIGNAL || aLayer.m_type == ODB_TYPE::POWER_GROUND
+               || aLayer.m_type == ODB_TYPE::MIXED;
+    };
+    std::map<const BOARD_STACKUP_ITEM*, std::pair<PCB_LAYER_ID, PCB_LAYER_ID>> adjacentCopper;
+
+    if( filtered )
+    {
+        for( size_t index = 0; index < m_matrixLayers.size(); ++index )
+        {
+            const MATRIX_LAYER& layer = m_matrixLayers[index];
+
+            if( layer.m_diType != ODB_DIELECTRIC_TYPE::CORE )
+                continue;
+
+            auto& [top, bottom] = adjacentCopper[layer.m_info.m_stackupItem];
+            top = UNDEFINED_LAYER;
+            bottom = UNDEFINED_LAYER;
+
+            for( size_t probe = index; probe-- > 0; )
+            {
+                const MATRIX_LAYER& neighbor = m_matrixLayers[probe];
+
+                if( neighbor.m_info.m_stackupItem == layer.m_info.m_stackupItem )
+                    continue;
+
+                if( isCopper( neighbor ) )
+                    top = neighbor.m_info.m_layer;
+
+                break;
+            }
+
+            for( size_t probe = index + 1; probe < m_matrixLayers.size(); ++probe )
+            {
+                const MATRIX_LAYER& neighbor = m_matrixLayers[probe];
+
+                if( neighbor.m_info.m_stackupItem == layer.m_info.m_stackupItem )
+                    continue;
+
+                if( isCopper( neighbor ) )
+                    bottom = neighbor.m_info.m_layer;
+
+                break;
+            }
+        }
+    }
+
+    if( filtered )
+    {
+        auto sectionFor = []( const MATRIX_LAYER& aLayer )
+        {
+            using SECTION = IPC2581::SECTION;
+
+            if( aLayer.m_info.m_role == ODB_LAYER_ROLE::COMPONENT )
+                return SECTION::COMPONENTS;
+
+            if( aLayer.m_info.m_role == ODB_LAYER_ROLE::DRILL || aLayer.m_info.m_role == ODB_LAYER_ROLE::BACKDRILL
+                || aLayer.m_info.m_role == ODB_LAYER_ROLE::ROUT )
+            {
+                return SECTION::DRILL_ROUT;
+            }
+
+            if( aLayer.m_info.m_role == ODB_LAYER_ROLE::VIA_PROTECTION )
+                return SECTION::MISC_FAB;
+
+            switch( aLayer.m_type )
+            {
+            case ODB_TYPE::SIGNAL:
+            case ODB_TYPE::POWER_GROUND:
+            case ODB_TYPE::MIXED:
+                return IsExternalCopperLayer( aLayer.m_info.m_layer ) ? SECTION::OUTER_COPPER : SECTION::INNER_COPPER;
+            case ODB_TYPE::DIELECTRIC: return SECTION::DIELECTRIC;
+            case ODB_TYPE::SOLDER_MASK: return SECTION::SOLDERMASK;
+            case ODB_TYPE::SOLDER_PASTE: return SECTION::SOLDERPASTE;
+            case ODB_TYPE::SILK_SCREEN: return SECTION::SILKSCREEN;
+            default: return SECTION::DOCUMENTATION;
+            }
+        };
+
+        std::set<PCB_LAYER_ID> excluded;
+
+        for( const ODB_LAYER_OVERRIDE& override : format.m_layerOverrides )
+        {
+            if( !override.m_include )
+                excluded.insert( override.m_layer );
+        }
+
+        std::erase_if( m_matrixLayers,
+                       [&]( const MATRIX_LAYER& aLayer )
+                       {
+                           return !format.Includes( sectionFor( aLayer ) )
+                                  || excluded.contains( aLayer.m_info.m_layer );
+                       } );
+
+        std::set<wxString> usedNames;
+
+        for( const MATRIX_LAYER& layer : m_matrixLayers )
+            usedNames.insert( layer.m_layerName );
+
+        for( MATRIX_LAYER& layer : m_matrixLayers )
+        {
+            for( const ODB_LAYER_OVERRIDE& override : format.m_layerOverrides )
+            {
+                if( layer.m_info.m_role != ODB_LAYER_ROLE::BOARD_LAYER || layer.m_info.m_layer != override.m_layer )
+                {
+                    continue;
+                }
+
+                if( !override.m_odbName.IsEmpty() )
+                {
+                    wxString name = ODB::GenLegalEntityName( override.m_odbName );
+
+                    if( name.IsEmpty() || ( name != layer.m_layerName && usedNames.contains( name ) ) )
+                    {
+                        m_plugin->Report( _( "ODB++ layer name override is empty or collides; using automatic name." ),
+                                          RPT_SEVERITY_WARNING );
+                    }
+                    else
+                    {
+                        usedNames.erase( layer.m_layerName );
+                        layer.m_layerName = name;
+                        usedNames.insert( name );
+                    }
+                }
+
+                if( !override.m_odbType.IsEmpty() )
+                {
+                    std::string           type = override.m_odbType.ToStdString();
+                    std::vector<ODB_TYPE> allowed = ODB::OverridableLayerTypes( layer.m_info.m_layer );
+                    auto                  it = std::find_if( allowed.begin(), allowed.end(),
+                                                             [&]( ODB_TYPE aType )
+                                                             {
+                                                                 return ODB::Enum2String( aType ) == type;
+                                                             } );
+
+                    if( it != allowed.end() )
+                        layer.m_type = *it;
+                    else if( ODB::Enum2String( layer.m_type ) != type )
+                        m_plugin->Report( _( "Invalid ODB++ layer type override; using automatic type." ),
+                                          RPT_SEVERITY_WARNING );
+                }
+            }
+        }
+    }
+
     EnsureUniqueLayerNames();
+
+    if( filtered )
+    {
+        std::map<PCB_LAYER_ID, wxString> namesByLayer;
+
+        for( const MATRIX_LAYER& layer : m_matrixLayers )
+        {
+            if( layer.m_info.m_role == ODB_LAYER_ROLE::BOARD_LAYER && layer.m_info.m_layer != UNDEFINED_LAYER )
+            {
+                namesByLayer[layer.m_info.m_layer] = layer.m_layerName;
+            }
+        }
+
+        std::erase_if( m_matrixLayers,
+                       [&]( MATRIX_LAYER& aLayer )
+                       {
+                           if( !aLayer.m_span )
+                               return false;
+
+                           PCB_LAYER_ID start = F_Cu;
+                           PCB_LAYER_ID end = B_Cu;
+
+                           if( aLayer.m_info.m_drillSpan )
+                           {
+                               start = aLayer.m_info.m_drillSpan->TopLayer();
+                               end = aLayer.m_info.m_drillSpan->BottomLayer();
+                           }
+                           else if( aLayer.m_info.m_auxKey )
+                           {
+                               start = std::get<1>( *aLayer.m_info.m_auxKey );
+                               end = std::get<2>( *aLayer.m_info.m_auxKey );
+                           }
+
+                           if( namesByLayer.contains( start ) && namesByLayer.contains( end ) )
+                           {
+                               aLayer.m_span = { namesByLayer.at( start ), namesByLayer.at( end ) };
+                               return false;
+                           }
+
+                           bool through =
+                                   aLayer.m_info.m_role == ODB_LAYER_ROLE::ROUT
+                                   || ( aLayer.m_info.m_role == ODB_LAYER_ROLE::DRILL && start == F_Cu && end == B_Cu );
+
+                           if( through )
+                           {
+                               aLayer.m_span = { wxEmptyString, wxEmptyString };
+                               return false;
+                           }
+
+                           m_plugin->Report( _( "ODB++ partial drill layer omitted because a span layer is excluded." ),
+                                             RPT_SEVERITY_WARNING );
+                           return true;
+                       } );
+
+        for( size_t index = 0; index < m_matrixLayers.size(); ++index )
+            m_matrixLayers[index].m_rowNumber = static_cast<uint32_t>( index + 1 );
+    }
+
+    std::map<PCB_LAYER_ID, uint32_t> copperIds;
+
+    for( MATRIX_LAYER& layer : m_matrixLayers )
+    {
+        layer.m_uid = m_plugin->NewUid();
+
+        if( isCopper( layer ) )
+        {
+            copperIds[layer.m_info.m_layer] = layer.m_uid;
+        }
+    }
+
+    for( size_t i = 0; i < m_matrixLayers.size(); ++i )
+    {
+        MATRIX_LAYER& layer = m_matrixLayers[i];
+        PCB_LAYER_ID brdLayer = layer.m_info.m_layer;
+
+        // A misc layer retyped as mask, paste or silk has no physical side to reference
+        if( layer.m_context == ODB_CONTEXT::BOARD
+            && ( layer.m_type == ODB_TYPE::SOLDER_MASK || layer.m_type == ODB_TYPE::SOLDER_PASTE
+                 || layer.m_type == ODB_TYPE::SILK_SCREEN ) )
+        {
+            PCB_LAYER_ID copper = m_board->IsFrontLayer( brdLayer ) ? F_Cu : B_Cu;
+
+            if( auto it = copperIds.find( copper ); it != copperIds.end() )
+                layer.m_ref = it->second;
+        }
+
+        if( layer.m_diType != ODB_DIELECTRIC_TYPE::CORE )
+            continue;
+
+        if( filtered )
+        {
+            auto [top, bottom] = adjacentCopper.at( layer.m_info.m_stackupItem );
+
+            if( auto it = copperIds.find( top ); it != copperIds.end() )
+                layer.m_cuTop = it->second;
+
+            if( auto it = copperIds.find( bottom ); it != copperIds.end() )
+                layer.m_cuBottom = it->second;
+
+            continue;
+        }
+
+        for( size_t top = i; top-- > 0; )
+        {
+            if( isCopper( m_matrixLayers[top] ) )
+            {
+                layer.m_cuTop = m_matrixLayers[top].m_uid;
+                break;
+            }
+        }
+
+        for( size_t bottom = i + 1; bottom < m_matrixLayers.size(); ++bottom )
+        {
+            if( isCopper( m_matrixLayers[bottom] ) )
+            {
+                layer.m_cuBottom = m_matrixLayers[bottom].m_uid;
+                break;
+            }
+        }
+    }
 
     std::vector<ODB_LAYER_NAME>& names = m_plugin->GetLayerNameList();
     names.clear();
@@ -232,7 +540,6 @@ void ODB_MATRIX_ENTITY::AddMatrixLayerField( MATRIX_LAYER& aMLayer, PCB_LAYER_ID
 
     case B_CrtYd:
     case F_CrtYd:
-    case Edge_Cuts:
     case B_Fab:
     case F_Fab:
     case F_Adhes:
@@ -294,7 +601,12 @@ void ODB_MATRIX_ENTITY::AddMatrixLayerField( MATRIX_LAYER& aMLayer, PCB_LAYER_ID
     default:
         if( IsCopperLayer( aLayer ) )
         {
-            aMLayer.m_type = ODB_TYPE::SIGNAL;
+            switch( m_board->GetLayerType( aLayer ) )
+            {
+            case LT_POWER: aMLayer.m_type = ODB_TYPE::POWER_GROUND; break;
+            case LT_MIXED: aMLayer.m_type = ODB_TYPE::MIXED; break;
+            default:       aMLayer.m_type = ODB_TYPE::SIGNAL; break;
+            }
         }
         else
         {
@@ -434,6 +746,17 @@ void ODB_MATRIX_ENTITY::AddDrillMatrixLayer()
 
     for( const auto& entry : drill_layers )
         InitDrillMatrix( entry.first );
+}
+
+
+void ODB_MATRIX_ENTITY::AddRoutMatrixLayer()
+{
+    MATRIX_LAYER matrix( m_row++, wxS( "rout" ) );
+    matrix.m_type = ODB_TYPE::ROUT;
+    matrix.m_info.m_role = ODB_LAYER_ROLE::ROUT;
+    matrix.m_span.emplace( ODB::GenLegalEntityName( m_board->GetLayerName( F_Cu ) ),
+                           ODB::GenLegalEntityName( m_board->GetLayerName( B_Cu ) ) );
+    m_matrixLayers.push_back( matrix );
 }
 
 
@@ -610,10 +933,11 @@ void ODB_MATRIX_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
 
     ODB_TEXT_WRITER twriter( fileproxy.GetStream() );
 
-    for( const auto& [step_name, column] : m_matrixSteps )
+    for( const auto& [step_name, entry] : m_matrixSteps )
     {
         const auto array_proxy = twriter.MakeArrayProxy( "STEP" );
-        twriter.WriteEquationLine( "COL", column );
+        twriter.WriteEquationLine( "COL", entry.first );
+        twriter.WriteEquationLine( "ID", static_cast<int>( entry.second ) );
         twriter.WriteEquationLine( "NAME", step_name );
     }
 
@@ -621,6 +945,7 @@ void ODB_MATRIX_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
     {
         const auto array_proxy = twriter.MakeArrayProxy( "LAYER" );
         twriter.WriteEquationLine( "ROW", layer.m_rowNumber );
+        twriter.WriteEquationLine( "ID", static_cast<int>( layer.m_uid ) );
         twriter.write_line_enum( "CONTEXT", layer.m_context );
         twriter.write_line_enum( "TYPE", layer.m_type );
 
@@ -636,15 +961,19 @@ void ODB_MATRIX_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
         if( layer.m_diType.has_value() )
         {
             twriter.write_line_enum( "DIELECTRIC_TYPE", layer.m_diType.value() );
-            // twriter.WriteEquationLine( "DIELECTRIC_NAME", wxEmptyString );
 
-            // Can be used with DIELECTRIC_TYPE=CORE
-            // twriter.WriteEquationLine( "CU_TOP", wxEmptyString );
-            // twriter.WriteEquationLine( "CU_BOTTOM", wxEmptyString );
+            if( !layer.m_dielectricName.IsEmpty() )
+                twriter.WriteEquationLine( "DIELECTRIC_NAME", layer.m_dielectricName );
+
+            if( layer.m_cuTop )
+                twriter.WriteEquationLine( "CU_TOP", static_cast<int>( *layer.m_cuTop ) );
+
+            if( layer.m_cuBottom )
+                twriter.WriteEquationLine( "CU_BOTTOM", static_cast<int>( *layer.m_cuBottom ) );
         }
 
-        // Only applies to: soldermask, silkscreen, solderpaste and specifies the relevant cu layer
-        // twriter.WriteEquationLine( "REF", wxEmptyString );
+        if( layer.m_ref )
+            twriter.WriteEquationLine( "REF", static_cast<int>( *layer.m_ref ) );
 
         if( layer.m_span.has_value() )
         {
@@ -661,6 +990,7 @@ ODB_LAYER_ENTITY::ODB_LAYER_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin, std::m
                                     const ODB_LAYER_NAME& aLayer ) :
         ODB_ENTITY_BASE( aBoard, aPlugin ),
         m_layerItems( aMap ),
+        m_layerID( aLayer.m_layer ),
         m_layer( aLayer )
 {
     m_featuresMgr = std::make_unique<FEATURES_MANAGER>( aBoard, aPlugin, aLayer.m_name, aLayer.m_role, aLayer.m_auxType,
@@ -670,6 +1000,12 @@ ODB_LAYER_ENTITY::ODB_LAYER_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin, std::m
 
 void ODB_LAYER_ENTITY::InitEntityData()
 {
+    if( m_layer.m_role == ODB_LAYER_ROLE::ROUT )
+    {
+        InitRoutData();
+        return;
+    }
+
     if( m_layer.m_role == ODB_LAYER_ROLE::DRILL || m_layer.m_role == ODB_LAYER_ROLE::BACKDRILL )
     {
         InitDrillData();
@@ -711,26 +1047,46 @@ void ODB_LAYER_ENTITY::InitFeatureData()
 }
 
 
+void ODB_LAYER_ENTITY::InitRoutData()
+{
+    SHAPE_POLY_SET outlines;
+    bool hasOutline = m_board->GetBoardPolygonOutlines( outlines, false, nullptr, true );
+
+    if( !hasOutline || outlines.OutlineCount() == 0 )
+    {
+        m_plugin->Report( _( "Board outline is not closed; ODB++ rout layer has no board contour." ),
+                          RPT_SEVERITY_WARNING );
+    }
+
+    int chain = 1;
+    bool edgePlated = m_board->GetDesignSettings().GetStackupDescriptor().m_EdgePlating;
+
+    for( int island = 0; hasOutline && island < outlines.OutlineCount(); ++island )
+    {
+        m_featuresMgr->AddRoutContour( outlines.COutline( island ), chain++, edgePlated );
+
+        for( int hole = 0; hole < outlines.HoleCount( island ); ++hole )
+            m_featuresMgr->AddRoutContour( outlines.CHole( island, hole ), chain++, edgePlated );
+    }
+
+    for( const auto& [span, items] : m_plugin->GetSlotHolesMap() )
+    {
+        for( BOARD_ITEM* item : items )
+        {
+            if( item->Type() == PCB_PAD_T )
+                m_featuresMgr->AddRoutSlot( *static_cast<PAD*>( item ), chain++ );
+        }
+    }
+}
+
+
 ODB_COMPONENT& ODB_LAYER_ENTITY::InitComponentData( const FOOTPRINT*         aFp,
                                                     const EDA_DATA::PACKAGE& aPkg )
 {
-    if( m_layer.m_name == ODB::GenLegalEntityName( "COMP_+_BOT" ) )
-    {
-        if( !m_compBot.has_value() )
-        {
-            m_compBot.emplace( m_plugin );
-        }
-        return m_compBot.value().AddComponent( aFp, aPkg );
-    }
-    else
-    {
-        if( !m_compTop.has_value() )
-        {
-            m_compTop.emplace( m_plugin );
-        }
+    if( !m_components.has_value() )
+        m_components.emplace( m_plugin );
 
-        return m_compTop.value().AddComponent( aFp, aPkg );
-    }
+    return m_components->AddComponent( aFp, aPkg );
 }
 
 
@@ -779,7 +1135,9 @@ void ODB_LAYER_ENTITY::InitDrillData()
 
                 m_tools.value().AddDrillTool( m_plugin->GetFormat(),
                                                padIsNPTH ? wxT( "NON_PLATED" ) : wxT( "PLATED" ),
-                                               std::min( pad->GetDrillSizeX(), pad->GetDrillSizeY() ) );
+                                               std::min( pad->GetDrillSizeX(), pad->GetDrillSizeY() ),
+                                               !padIsNPTH && GetFabPadRole( *pad ) == FAB_PAD_ROLE::PRESSFIT
+                                                       ? wxT( "PRESS_FIT" ) : wxT( "STANDARD" ) );
 
                 m_layerItems[pad->GetNetCode()].push_back( item );
             }
@@ -819,7 +1177,9 @@ void ODB_LAYER_ENTITY::InitDrillData()
                 }
                 else
                 {
-                    m_tools.value().AddDrillTool( m_plugin->GetFormat(), wxT( "VIA" ), via->GetDrillValue() );
+                    m_tools.value().AddDrillTool( m_plugin->GetFormat(), wxT( "VIA" ), via->GetDrillValue(),
+                                                   via->GetViaType() == VIATYPE::MICROVIA ? wxT( "LASER" )
+                                                                                        : wxT( "STANDARD" ) );
                 }
 
                 m_layerItems[via->GetNetCode()].push_back( item );
@@ -843,6 +1203,9 @@ void ODB_LAYER_ENTITY::InitDrillData()
 
                 wxString typeLabel = ( padIsNPTH || isNonPlatedLayer ) ? wxT( "NON_PLATED" ) : wxT( "PLATED" );
                 wxString type2 = isBackdrillLayer ? wxT( "BLIND" ) : wxT( "STANDARD" );
+
+                if( typeLabel == wxT( "PLATED" ) && GetFabPadRole( *pad ) == FAB_PAD_ROLE::PRESSFIT )
+                    type2 = wxT( "PRESS_FIT" );
 
                 m_tools.value().AddDrillTool( m_plugin->GetFormat(), typeLabel, drillSize, type2 );
 
@@ -899,10 +1262,8 @@ void ODB_LAYER_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
 
     GenFeatures( writer );
 
-    if( m_compTop.has_value() || m_compBot.has_value() )
-    {
+    if( m_components.has_value() )
         GenComponents( writer );
-    }
 
     if( m_tools.has_value() )
     {
@@ -915,14 +1276,7 @@ void ODB_LAYER_ENTITY::GenComponents( ODB_TREE_WRITER& writer )
 {
     auto fileproxy = writer.CreateFileProxy( "components" );
 
-    if( m_compTop.has_value() )
-    {
-        m_compTop->Write( fileproxy.GetStream() );
-    }
-    else if( m_compBot.has_value() )
-    {
-        m_compBot->Write( fileproxy.GetStream() );
-    }
+    m_components->Write( fileproxy.GetStream() );
 }
 
 
@@ -939,11 +1293,25 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
     auto fileproxy = writer.CreateFileProxy( "attrlist" );
 
     std::ostream& ost = fileproxy.GetStream();
+    ost << "UNITS=" << m_plugin->GetFormat().m_unitsStr << '\n';
 
     if( m_layer.m_drillSpan
         && IsCopperLayerLowerThan( m_layer.m_drillSpan->m_StartLayer, m_layer.m_drillSpan->m_EndLayer ) )
     {
         ost << ".drill_layer_direction=bottom2top" << std::endl;
+    }
+
+    if( m_layer.m_role == ODB_LAYER_ROLE::BACKDRILL && m_layer.m_drillSpan )
+    {
+        const ODB_DRILL_SPAN& span = *m_layer.m_drillSpan;
+        PCB_LAYER_ID stop = FabBackdrillMustNotCut( m_board->GetEnabledLayers().CuStack(),
+                                                    span.m_StartLayer, span.m_EndLayer );
+
+        if( stop != UNDEFINED_LAYER )
+        {
+            ost << ".backdrill_penetrate_stop_layer="
+                << ODB::GenLegalEntityName( m_board->GetLayerName( stop ) ).ToStdString() << std::endl;
+        }
     }
 
     BOARD_DESIGN_SETTINGS& dsnSettings = m_board->GetDesignSettings();
@@ -1008,7 +1376,7 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
 
         if( !material.IsEmpty() )
         {
-            ost << ".material=" << ODB::GenLegalEntityName( material ).ToStdString() << std::endl;
+            ost << "material=" << ODB::GenLegalEntityName( material ).ToStdString() << std::endl;
         }
     }
 }
@@ -1035,26 +1403,15 @@ void ODB_STEP_ENTITY::InitEdaData()
 
     for( const NETINFO_ITEM* net : nets )
     {
-        m_edaData.AddNET( net );
+        m_edaData.AddNET( net, m_plugin->GetLegalNetName( net->GetNetCode() ) );
     }
 
     // for CMP
     size_t j = 0;
+    bool   writeComponents = m_plugin->GetFormat().Includes( IPC2581::SECTION::COMPONENTS );
 
     for( const FOOTPRINT* fp : m_board->Footprints() )
     {
-        wxString compName = ODB::GenLegalEntityName( "COMP_+_TOP" );
-        if( fp->IsFlipped() )
-            compName = ODB::GenLegalEntityName( "COMP_+_BOT" );
-
-        auto iter = m_layerEntityMap.find( compName );
-
-        if( iter == m_layerEntityMap.end() )
-        {
-            wxLogTrace( traceOdbppIo, wxT( "Failed to add component data" ) );
-            return;
-        }
-
         // ODBPP only need unique PACKAGE in PKG record in eda/data file.
         // the PKG index can repeat to be ref in CMP record in component file.
         std::shared_ptr<FOOTPRINT> fp_pkg = m_edaData.GetEdaFootprints().at( j );
@@ -1063,10 +1420,25 @@ void ODB_STEP_ENTITY::InitEdaData()
         const EDA_DATA::PACKAGE& eda_pkg =
                 m_edaData.GetPackage( hash_fp_item( fp_pkg.get(), HASH_POS | REL_COORD ) );
 
-        if( fp->Pads().empty() )
+        bool hasCourtyard = std::any_of( fp->GraphicalItems().begin(), fp->GraphicalItems().end(),
+                                         []( const BOARD_ITEM* item )
+                                         {
+                                             return item->IsOnLayer( F_CrtYd ) || item->IsOnLayer( B_CrtYd );
+                                         } );
+
+        if( fp->Pads().empty() && !hasCourtyard && !ODB::HasShownModel( fp ) )
             continue;
 
-        ODB_COMPONENT& comp = iter->second->InitComponentData( fp, eda_pkg );
+        ODB_COMPONENT* comp = nullptr;
+
+        if( writeComponents )
+        {
+            wxString compName = ODB::GenLegalEntityName( fp->IsFlipped() ? wxS( "COMP_+_BOT" ) : wxS( "COMP_+_TOP" ) );
+            auto     iter = m_layerEntityMap.find( compName );
+
+            if( iter != m_layerEntityMap.end() )
+                comp = &iter->second->InitComponentData( fp, eda_pkg );
+        }
 
         for( int i = 0; i < (int) fp->Pads().size(); ++i )
         {
@@ -1075,15 +1447,17 @@ void ODB_STEP_ENTITY::InitEdaData()
 
             EDA_DATA::SUB_NET_TOEPRINT& subnet = eda_net.AddSubnet<EDA_DATA::SUB_NET_TOEPRINT>(
                     &m_edaData,
-                    fp->IsFlipped() ? EDA_DATA::SUB_NET_TOEPRINT::SIDE::BOTTOM
-                                    : EDA_DATA::SUB_NET_TOEPRINT::SIDE::TOP,
-                    comp.m_index, comp.m_toeprints.size() );
+                    fp->IsFlipped() ? EDA_DATA::SUB_NET_TOEPRINT::SIDE::BOTTOM : EDA_DATA::SUB_NET_TOEPRINT::SIDE::TOP,
+                    comp ? comp->m_index : 0, comp ? comp->m_toeprints.size() : i );
 
             m_plugin->GetPadSubnetMap().emplace( pad, &subnet );
 
+            if( !comp )
+                continue;
+
             const std::shared_ptr<EDA_DATA::PIN> pin = eda_pkg.GetEdaPkgPin( i );
             const EDA_DATA::PIN&                 pin_ref = *pin;
-            auto&                                toep = comp.m_toeprints.emplace_back( pin_ref );
+            auto&                                toep = comp->m_toeprints.emplace_back( pin_ref );
 
             toep.m_net_num = eda_net.m_index;
             toep.m_subnet_num = subnet.m_index;
@@ -1141,16 +1515,38 @@ void ODB_STEP_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
     writer.CreateEntityDirectory( step_root, "eda" );
     GenerateEdaFiles( writer );
 
-    writer.CreateEntityDirectory( step_root, "netlists/cadnet" );
-    GenerateNetlistsFiles( writer );
+    if( m_plugin->GetFormat().Includes( IPC2581::SECTION::PHYSICAL_NET ) )
+    {
+        writer.CreateEntityDirectory( step_root, "netlists/cadnet" );
+        GenerateNetlistsFiles( writer );
+    }
 
     writer.SetCurrentPath( step_root );
     GenerateProfileFile( writer );
 
     GenerateStepHeaderFile( writer );
+    GenerateAttrListFile( writer );
+}
 
-    //TODO: system attributes
-    // GenerateAttrListFile( writer );
+
+void ODB_STEP_ENTITY::GenerateAttrListFile( ODB_TREE_WRITER& writer )
+{
+    auto attrlist = writer.CreateFileProxy( "attrlist" );
+    BOARD_DESIGN_SETTINGS& settings = m_board->GetDesignSettings();
+    BOARD_STACKUP& stackup = settings.GetStackupDescriptor();
+    stackup.SynchronizeWithBoard( &settings );
+    int thickness = stackup.BuildBoardThicknessFromStackup();
+    const ODB_FORMAT& format = m_plugin->GetFormat();
+    attrlist.GetStream() << "UNITS=" << format.m_unitsStr << '\n';
+    attrlist.GetStream() << ".board_thickness="
+                         << ODB::Double2String( format, format.m_scale * thickness * 1000.0 ) << '\n';
+
+    wxString selected = format.m_variantNames.SelectedName( format.m_variantName );
+
+    if( !selected.IsEmpty() )
+    {
+        attrlist.GetStream() << ".current_variant=" << selected.ToStdString() << '\n';
+    }
 }
 
 
@@ -1179,14 +1575,6 @@ void ODB_STEP_ENTITY::GenerateProfileFile( ODB_TREE_WRITER& writer )
             largest = ii;
             largestArea = area;
         }
-    }
-
-    if( count > 1 )
-    {
-        m_plugin->Report( wxString::Format( _( "ODB++ profile uses the largest of %d board outline islands; "
-                                               "other islands are omitted." ),
-                                            count ),
-                          RPT_SEVERITY_WARNING );
     }
 
     if( !m_profile->AddContour( board_outline, largest ) )
@@ -1236,11 +1624,110 @@ void ODB_STEP_ENTITY::GenerateLayerFiles( ODB_TREE_WRITER& writer )
 }
 
 
+namespace
+{
+struct SHORT_SHAPE
+{
+    std::set<int> m_nets;
+    wxString      m_layer;
+    size_t        m_featureIndex;
+};
+
+
+std::vector<SHORT_SHAPE> CollectNetTieShorts( BOARD* aBoard, PCB_IO_ODBPP* aPlugin )
+{
+    std::vector<SHORT_SHAPE> shortShapes;
+
+    for( const auto& [shapeLayer, feature] : aPlugin->GetNetTieFeatures() )
+    {
+        const auto* shape = static_cast<const PCB_SHAPE*>( shapeLayer.first );
+        PCB_LAYER_ID layer = shapeLayer.second;
+        const FOOTPRINT* footprint = shape->GetParentFootprint();
+        std::map<wxString, int> groups = footprint->MapPadNumbersToNetTieGroups();
+        auto copper = shape->GetEffectiveShape( layer );
+        std::set<int> netCodes;
+        int group = -1;
+        bool invalidGroup = false;
+
+        // The DRC net tie cache lists permitted nets, not physical pad contact
+        for( const PAD* pad : footprint->Pads() )
+        {
+            if( pad->GetNetCode() <= 0 || !pad->GetLayerSet()[layer]
+                || !pad->GetEffectiveShape( layer )->Collide( copper.get() ) )
+            {
+                continue;
+            }
+
+            auto padGroup = groups.find( pad->GetNumber() );
+            int currentGroup = padGroup == groups.end() ? -1 : padGroup->second;
+
+            if( currentGroup < 0 || ( group >= 0 && group != currentGroup ) )
+                invalidGroup = true;
+
+            group = currentGroup;
+            netCodes.insert( pad->GetNetCode() );
+        }
+
+        if( invalidGroup )
+        {
+            wxLogTrace( traceOdbppIo, wxT( "Net tie shape touches pads outside one group" ) );
+            continue;
+        }
+
+        if( netCodes.size() >= 2 )
+            shortShapes.push_back( { std::move( netCodes ), feature.first, feature.second } );
+    }
+
+    for( const FOOTPRINT* footprint : aBoard->Footprints() )
+    {
+        if( !footprint->IsNetTie() )
+            continue;
+
+        bool hasCopperShape = std::any_of( footprint->GraphicalItems().begin(),
+                                           footprint->GraphicalItems().end(),
+                                           []( const BOARD_ITEM* item )
+                                           {
+                                               return item->Type() == PCB_SHAPE_T
+                                                       && ( item->GetLayerSet() & LSET::AllCuMask() ).any();
+                                           } );
+
+        if( !hasCopperShape )
+            wxLogTrace( traceOdbppIo, wxT( "Net tie has no copper shape for shortf" ) );
+    }
+
+    std::sort( shortShapes.begin(), shortShapes.end(), []( const SHORT_SHAPE& left, const SHORT_SHAPE& right )
+               { return std::tie( left.m_layer, left.m_featureIndex )
+                        < std::tie( right.m_layer, right.m_featureIndex ); } );
+
+    return shortShapes;
+}
+}
+
+
 void ODB_STEP_ENTITY::GenerateEdaFiles( ODB_TREE_WRITER& writer )
 {
+    std::vector<SHORT_SHAPE> shortShapes;
+
+    if( m_plugin->GetFormat().m_writeEdaNets )
+        shortShapes = CollectNetTieShorts( m_board, m_plugin );
+
+    if( !shortShapes.empty() )
+    {
+        m_edaData.AssignNetUids( *m_plugin );
+
+        for( const SHORT_SHAPE& shape : shortShapes )
+            m_edaData.AddShort( shape.m_nets, shape.m_layer, shape.m_featureIndex, m_plugin->NewUid() );
+    }
+
     auto fileproxy = writer.CreateFileProxy( "data" );
 
     m_edaData.Write( fileproxy.GetStream(), m_plugin->GetFormat() );
+
+    if( m_edaData.HasShorts() )
+    {
+        auto shorts = writer.CreateFileProxy( "shortf" );
+        m_edaData.WriteShortf( shorts.GetStream(), m_plugin->GetFormat() );
+    }
 }
 
 

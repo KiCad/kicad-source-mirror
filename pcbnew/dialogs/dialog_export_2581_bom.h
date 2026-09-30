@@ -40,7 +40,9 @@ struct IPC2581_BOM_FIELDS
 class DIALOG_EXPORT_2581_BOM : public DIALOG_EXPORT_2581_BOM_BASE
 {
 public:
-    DIALOG_EXPORT_2581_BOM( wxWindow* aParent, BOARD* aBoard, const IPC2581_BOM_FIELDS& aFields );
+    /// @param aMfgPnOnly shows only the manufacturer part number, which is all ODB++ exports
+    DIALOG_EXPORT_2581_BOM( wxWindow* aParent, BOARD* aBoard, const IPC2581_BOM_FIELDS& aFields,
+                            bool aMfgPnOnly = false );
 
     const IPC2581_BOM_FIELDS& GetFields() const { return m_fields; }
 

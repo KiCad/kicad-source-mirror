@@ -10,7 +10,10 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class PANEL_FAB_EXPORT_CONTENT;
 class STD_BITMAP_BUTTON;
+class WX_GRID;
+class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -26,8 +29,13 @@ class STD_BITMAP_BUTTON;
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/choice.h>
 #include <wx/spinctrl.h>
+#include <wx/checkbox.h>
+#include <wx/gbsizer.h>
+#include <wx/panel.h>
+#include <wx/grid.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -44,12 +52,26 @@ class DIALOG_EXPORT_ODBPP_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblBrdFile;
 		wxTextCtrl* m_outputFileName;
 		STD_BITMAP_BUTTON* m_browseButton;
+		wxStaticText* m_fileFormatLabel;
+		wxStaticLine* m_staticline1;
 		wxStaticText* m_lblUnits;
 		wxChoice* m_choiceUnits;
 		wxStaticText* m_lblPrecision;
 		wxSpinCtrl* m_precision;
+		wxStaticText* m_lblVersion;
+		wxChoice* m_versionChoice;
+		wxCheckBox* m_refillZones;
 		wxStaticText* m_lblCompress;
 		wxChoice* m_choiceCompress;
+		wxStaticText* m_lblProductName;
+		wxTextCtrl* m_productName;
+		wxStaticText* m_lblOrigin;
+		wxChoice* m_choiceOrigin;
+		PANEL_FAB_EXPORT_CONTENT* m_contentPanel;
+		wxStaticText* m_layersLabel;
+		wxStaticLine* m_layersLine;
+		WX_GRID* m_layers;
+		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
@@ -62,7 +84,7 @@ class DIALOG_EXPORT_ODBPP_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_EXPORT_ODBPP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export ODB++"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxBORDER_DEFAULT );
+		DIALOG_EXPORT_ODBPP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export ODB++"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_EXPORT_ODBPP_BASE();
 

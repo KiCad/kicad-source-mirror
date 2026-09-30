@@ -1266,62 +1266,7 @@ int BOARD_EDITOR_CONTROL::GenIPC2581File( const TOOL_EVENT& aEvent )
 int BOARD_EDITOR_CONTROL::GenerateODBPPFiles( const TOOL_EVENT& aEvent )
 {
     DIALOG_EXPORT_ODBPP dlg( m_frame );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return 0;
-
-    // Refill zones if they are out-of-date so the export matches the current layout.
-    m_toolMgr->GetTool<ZONE_FILLER_TOOL>()->CheckAllZones( m_frame );
-
-    JOB_EXPORT_PCB_ODB job;
-
-    job.SetConfiguredOutputPath( dlg.GetOutputPath() );
-    job.m_filename = m_frame->GetBoard()->GetFileName();
-    job.m_compressionMode = static_cast<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>( dlg.GetCompressFormat() );
-
-    job.m_precision = dlg.GetPrecision();
-    job.m_units = dlg.GetUnitsString() == "mm" ? JOB_EXPORT_PCB_FAB::UNITS::MM
-                                               : JOB_EXPORT_PCB_FAB::UNITS::INCH;
-
-    wxFileName outputFn = ResolveOdbOutputPath( job, m_frame->GetBoard() );
-    wxString   outputPath = outputFn.GetFullPath();
-
-    auto confirmOverwrite = [&]( const wxString& aMsg )
-    {
-        KIDIALOG confirm( m_frame, aMsg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-        confirm.SetOKLabel( _( "Overwrite" ) );
-        return confirm.ShowModal() == wxID_OK;
-    };
-
-    if( job.m_compressionMode != JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::NONE )
-    {
-        if( outputFn.Exists()
-            && !confirmOverwrite( wxString::Format( _( "Output file '%s' already exists. Do you want to "
-                                                       "overwrite it?" ),
-                                                    outputPath ) ) )
-        {
-            return 0;
-        }
-    }
-    else if( wxDirExists( outputPath ) && ( wxDir( outputPath ).HasFiles() || wxDir( outputPath ).HasSubDirs() ) )
-    {
-        if( !confirmOverwrite( wxString::Format( _( "Output directory '%s' already exists and is not empty. "
-                                                    "Do you want to overwrite it?" ),
-                                                 outputPath ) ) )
-        {
-            return 0;
-        }
-    }
-
-    WX_PROGRESS_REPORTER progressReporter( m_frame, _( "Generate ODB++ Files" ), 3, PR_CAN_ABORT );
-    WX_STRING_REPORTER reporter;
-
-    bool ok = ::GenerateODBPPFiles( job, m_frame->GetBoard(), &progressReporter, &reporter );
-
-    if( !ok && reporter.HasMessage() )
-        DisplayError( m_frame, reporter.GetMessages() );
-    else if( reporter.HasMessage() )
-        DisplayInfoMessage( m_frame, _( "ODB++ export finished with warnings." ), reporter.GetMessages() );
+    dlg.ShowModal();
 
     return 0;
 }

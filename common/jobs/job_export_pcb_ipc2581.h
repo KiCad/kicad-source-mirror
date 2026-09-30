@@ -45,7 +45,6 @@ public:
     bool            m_compress;
 
     wxString        m_colInternalId;
-    wxString        m_colMfgPn;
     wxString        m_colMfg;
     wxString        m_colDistPn;
     wxString        m_colDist;

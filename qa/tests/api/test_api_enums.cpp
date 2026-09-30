@@ -559,6 +559,25 @@ BOOST_AUTO_TEST_CASE( OdbCompression )
     testEnums<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION, kiapi::board::jobs::OdbCompression>();
 }
 
+BOOST_AUTO_TEST_CASE( OdbVariantPackaging )
+{
+    testEnums<JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING, kiapi::board::jobs::OdbVariantPackaging>();
+}
+
+BOOST_AUTO_TEST_CASE( OdbOrigin )
+{
+    testEnums<JOB_EXPORT_PCB_ODB::ORIGIN, kiapi::board::jobs::OdbOrigin>();
+    BOOST_CHECK( FromProtoEnum<JOB_EXPORT_PCB_ODB::ORIGIN>( kiapi::board::jobs::ODBO_UNKNOWN )
+                 == JOB_EXPORT_PCB_ODB::ORIGIN::ABSOLUTE_COORDS );
+}
+
+BOOST_AUTO_TEST_CASE( OdbDataSet )
+{
+    testEnums<JOB_EXPORT_PCB_ODB::DATA_SET, kiapi::board::jobs::OdbDataSet>();
+    BOOST_CHECK( FromProtoEnum<JOB_EXPORT_PCB_ODB::DATA_SET>( kiapi::board::jobs::ODBDS_UNKNOWN )
+                 == JOB_EXPORT_PCB_ODB::DATA_SET::ALL );
+}
+
 BOOST_AUTO_TEST_CASE( StatsOutputFormat )
 {
     testEnums<JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT, kiapi::board::jobs::StatsOutputFormat>();

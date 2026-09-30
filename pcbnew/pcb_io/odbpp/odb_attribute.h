@@ -65,12 +65,24 @@ struct BooleanAttribute : AttributeBase<bool, TYPE::BOOLEAN>
 };
 
 template <typename T>
+struct IntegerAttribute : AttributeBase<int, TYPE::INTEGER>
+{
+    using AttributeBase<int, TYPE::INTEGER>::AttributeBase;
+};
+
+template <typename T>
 struct TextAttribute : AttributeBase<std::string, TYPE::TEXT>
 {
     constexpr TextAttribute( const std::string& t ) :
-            AttributeBase<std::string, TYPE::TEXT>( ODB::GenLegalEntityName( t ).ToStdString() )
+            AttributeBase<std::string, TYPE::TEXT>( ODB::GenLegalEntityName( wxString::FromUTF8( t ) ).ToStdString() )
     {
     }
+};
+
+template <typename T>
+struct ListTextAttribute : AttributeBase<std::string, TYPE::TEXT>
+{
+    using AttributeBase<std::string, TYPE::TEXT>::AttributeBase;
 };
 
 template <typename T>
@@ -165,6 +177,10 @@ struct IsSymbol : std::false_type
 
 #define DEFINE_TEXT_ATTR( NAME ) DEFINE_ATTR_SIMPLE( NAME, TextAttribute, TYPE::TEXT, #NAME )
 
+#define DEFINE_LIST_TEXT_ATTR( NAME ) DEFINE_ATTR_SIMPLE( NAME, ListTextAttribute, TYPE::TEXT, #NAME )
+
+#define DEFINE_INTEGER_ATTR( NAME ) DEFINE_ATTR_SIMPLE( NAME, IntegerAttribute, TYPE::INTEGER, #NAME )
+
 #define DEFINE_OPTION_ATTR( NAME )                                                                 \
     struct NAME##_t                                                                                \
     {                                                                                              \
@@ -214,6 +230,9 @@ USED_BY_FEATURE_ENTITY( NET_POINT )
 DEFINE_BOOLEAN_ATTR( ROUT_PLATED )
 USED_BY_FEATURE_ENTITY( ROUT_PLATED )
 
+DEFINE_INTEGER_ATTR( ROUT_CHAIN )
+USED_BY_FEATURE_ENTITY( ROUT_CHAIN )
+
 DEFINE_BOOLEAN_ATTR( MECHANICAL )
 
 DEFINE_BOOLEAN_ATTR( MOUNT_HOLE )
@@ -225,6 +244,9 @@ USED_BY_FEATURE_ENTITY( TEAR_DROP )
 DEFINE_BOOLEAN_ATTR( TEST_POINT )
 USED_BY_FEATURE_ENTITY( TEST_POINT )
 
+DEFINE_BOOLEAN_ATTR( VIA_IN_PAD )
+USED_BY_FEATURE_ENTITY( VIA_IN_PAD )
+
 // TEXT ATTRIBUTES
 DEFINE_TEXT_ATTR( STRING )
 USED_BY_FEATURE_ENTITY( STRING )
@@ -235,12 +257,21 @@ USED_BY_FEATURE_ENTITY( GEOMETRY )
 DEFINE_TEXT_ATTR( NET_NAME )
 USED_BY_FEATURE_ENTITY( NET_NAME )
 
+DEFINE_TEXT_ATTR( IPC_VIA_TYPE_TOP )
+USED_BY_FEATURE_ENTITY( IPC_VIA_TYPE_TOP )
+
+DEFINE_TEXT_ATTR( IPC_VIA_TYPE_BOTTOM )
+USED_BY_FEATURE_ENTITY( IPC_VIA_TYPE_BOTTOM )
+
 
 // FLOAT ATTRIBUTES
 DEFINE_FLOAT_ATTR( BOARD_THICKNESS, 1 ) // 0.0~10.0
 
 DEFINE_FLOAT_ATTR( STRING_ANGLE, 1 ) // 0.0~360.0
 USED_BY_FEATURE_ENTITY( STRING_ANGLE )
+
+DEFINE_FLOAT_ATTR( COMP_HEIGHT, 6 )
+USED_BY_CMP_ENTITY( COMP_HEIGHT )
 
 
 // OPTION ATTRIBUTES
@@ -294,6 +325,9 @@ USED_BY_CMP_ENTITY( COMP_MOUNT_TYPE )
 
 DEFINE_BOOLEAN_ATTR( NO_POP )
 USED_BY_CMP_ENTITY( NO_POP )
+
+DEFINE_LIST_TEXT_ATTR( COMP_VARIANT_LIST )
+USED_BY_CMP_ENTITY( COMP_VARIANT_LIST )
 } // namespace ODB_ATTR
 
 
@@ -372,6 +406,18 @@ private:
     std::string AttrValue2String( ODB_ATTR::TextAttribute<T> a )
     {
         return std::to_string( GetAttrTextNumber( a.value ) );
+    }
+
+    template <typename T>
+    std::string AttrValue2String( ODB_ATTR::ListTextAttribute<T> a )
+    {
+        return std::to_string( GetTextIndex( m_attrTexts, m_attrTextVec, a.value ) );
+    }
+
+    template <typename T>
+    std::string AttrValue2String( ODB_ATTR::IntegerAttribute<T> a )
+    {
+        return std::to_string( a.value );
     }
 
 

@@ -24,6 +24,7 @@
 
 #include <list>
 #include <memory>
+#include <set>
 
 #include "odb_attribute.h"
 #include "odb_feature.h"
@@ -31,6 +32,7 @@
 
 class PAD;
 class PKG_OUTLINE;
+class PCB_IO_ODBPP;
 
 class EDA_DATA : public ATTR_MANAGER
 {
@@ -38,7 +40,12 @@ public:
     EDA_DATA();
 
     void                                    Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const;
+    void                                    WriteShortf( std::ostream& ost, const ODB_FORMAT& aFormat ) const;
     size_t                                  GetLyrIdx( const wxString& aLayerName );
+    void                                    AssignNetUids( PCB_IO_ODBPP& aPlugin );
+    bool                                    AddShort( const std::set<int>& aNetCodes, const wxString& aLayer,
+                                                      size_t aFeatureIndex, uint32_t aUid );
+    bool                                    HasShorts() const { return !m_shorts.empty(); }
     std::vector<std::shared_ptr<FOOTPRINT>> GetEdaFootprints() const { return m_eda_footprints; }
 
     class FEATURE_ID
@@ -156,6 +163,7 @@ public:
 
         const size_t                        m_index;
         wxString                            m_name;
+        uint32_t                            m_uid = 0;
         std::list<std::unique_ptr<SUB_NET>> subnets;
 
         template <typename T, typename... Args>
@@ -167,10 +175,10 @@ public:
             return r;
         }
 
-        void Write( std::ostream& ost ) const;
+        void Write( std::ostream& ost, bool aIncludeComponents ) const;
     };
 
-    void AddNET( const NETINFO_ITEM* aNet );
+    void AddNET( const NETINFO_ITEM* aNet, const wxString& aName );
     NET& GetNet( size_t aNetcode ) { return nets_map.at( aNetcode ); }
 
     class PIN
@@ -255,8 +263,17 @@ public:
     const PACKAGE& GetPackage( size_t aHash ) const { return packages_map.at( aHash ); }
 
 private:
+    struct SHORT_NET
+    {
+        std::set<uint32_t> m_netUids;
+        size_t             m_layerIndex;
+        size_t             m_featureIndex;
+        uint32_t           m_uid;
+    };
+
     std::map<size_t, NET> nets_map;
-    std::list<const NET*> nets;
+    std::list<NET*> nets;
+    std::vector<SHORT_NET> m_shorts;
 
     std::map<size_t, PACKAGE> packages_map; //hash value, package
     std::list<const PACKAGE*> packages;

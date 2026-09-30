@@ -95,7 +95,7 @@ protected:
     /**
      * Set up the list of variants to output arguement.
      */
-    void addVariantsArg();
+    void addVariantsArg( bool aRequireOutputToken = true );
 
     /**
      * The internal handler that should be overloaded to implement command specific
@@ -156,6 +156,7 @@ protected:
      * Whether or not the input argument for variant names was added for parsing.
      */
     bool                     m_hasVariantArg;
+    bool                     m_variantsRequireOutputToken;
 
     /**
      * The list of variant names to output.

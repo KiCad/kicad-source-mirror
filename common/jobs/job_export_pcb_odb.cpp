@@ -21,6 +21,49 @@
 #include <jobs/job_registry.h>
 #include <i18n_utility.h>
 #include <wildcards_and_files_ext.h>
+#include <lset.h>
+#include <json_conversions.h>
+
+
+void nlohmann::adl_serializer<ODB_LAYER_OVERRIDE>::from_json( const json& aJson, ODB_LAYER_OVERRIDE& aOverride )
+{
+    aOverride = {};
+
+    if( !aJson.is_object() || !aJson.contains( "layer" ) || !aJson["layer"].is_string() )
+        return;
+
+    if( ( aJson.contains( "include" ) && !aJson["include"].is_boolean() )
+        || ( aJson.contains( "odb_name" ) && !aJson["odb_name"].is_string() )
+        || ( aJson.contains( "odb_type" ) && !aJson["odb_type"].is_string() ) )
+    {
+        return;
+    }
+
+    wxString layerName = aJson["layer"].get<wxString>();
+    aOverride.m_layer = static_cast<PCB_LAYER_ID>( LSET::NameToLayer( layerName ) );
+
+    if( aJson.contains( "include" ) )
+        aOverride.m_include = aJson["include"].get<bool>();
+
+    if( aJson.contains( "odb_name" ) )
+        aOverride.m_odbName = aJson["odb_name"].get<wxString>();
+
+    if( aJson.contains( "odb_type" ) )
+        aOverride.m_odbType = aJson["odb_type"].get<wxString>();
+}
+
+
+void nlohmann::adl_serializer<ODB_LAYER_OVERRIDE>::to_json( json& aJson, const ODB_LAYER_OVERRIDE& aOverride )
+{
+    aJson = { { "layer", LSET::Name( aOverride.m_layer ) }, { "include", aOverride.m_include } };
+
+    if( !aOverride.m_odbName.IsEmpty() )
+        aJson["odb_name"] = aOverride.m_odbName;
+
+    if( !aOverride.m_odbType.IsEmpty() )
+        aJson["odb_type"] = aOverride.m_odbType;
+}
+
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION,
                               {
@@ -29,13 +72,42 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::ODB_COMPRESSION,
                                       { JOB_EXPORT_PCB_ODB::ODB_COMPRESSION::TGZ, "tgz" },
                               } )
 
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING,
+                              {
+                                      { JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING::SEPARATE, "separate" },
+                                      { JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING::COMBINED, "combined" },
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::ORIGIN,
+                              {
+                                      { JOB_EXPORT_PCB_ODB::ORIGIN::ABSOLUTE_COORDS, "absolute" },
+                                      { JOB_EXPORT_PCB_ODB::ORIGIN::AUX, "aux" },
+                                      { JOB_EXPORT_PCB_ODB::ORIGIN::GRID, "grid" },
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::DATA_SET,
+                              {
+                                      { JOB_EXPORT_PCB_ODB::DATA_SET::ALL, "all" },
+                                      { JOB_EXPORT_PCB_ODB::DATA_SET::FABRICATION, "fabrication" },
+                                      { JOB_EXPORT_PCB_ODB::DATA_SET::ASSEMBLY, "assembly" },
+                                      { JOB_EXPORT_PCB_ODB::DATA_SET::TEST, "test" },
+                                      { JOB_EXPORT_PCB_ODB::DATA_SET::STACKUP, "stackup" },
+                              } )
+
 
 JOB_EXPORT_PCB_ODB::JOB_EXPORT_PCB_ODB() :
         JOB_EXPORT_PCB_FAB( "odb" ),
         m_compressionMode( ODB_COMPRESSION::ZIP )
 {
-    m_params.emplace_back( new JOB_PARAM<ODB_COMPRESSION>( "compression", &m_compressionMode,
-                                                           m_compressionMode ) );
+    m_params.emplace_back( new JOB_PARAM<ODB_COMPRESSION>( "compression", &m_compressionMode, m_compressionMode ) );
+    m_params.emplace_back(
+            new JOB_PARAM<VARIANT_PACKAGING>( "variant_packaging", &m_variantPackaging, m_variantPackaging ) );
+    m_params.emplace_back( new JOB_PARAM<ORIGIN>( "origin", &m_origin, m_origin ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "product_name", &m_productName, m_productName ) );
+    m_params.emplace_back( new JOB_PARAM<DATA_SET>( "data_set", &m_dataSet, m_dataSet ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "sections", &m_sections, m_sections ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "net_names", &m_netNamePolicy, m_netNamePolicy ) );
+    m_params.emplace_back( new JOB_PARAM_LIST<ODB_LAYER_OVERRIDE>( "layers", &m_layerOverrides, m_layerOverrides ) );
 }
 
 

@@ -27,11 +27,21 @@
 
 
 DIALOG_EXPORT_2581_BOM::DIALOG_EXPORT_2581_BOM( wxWindow* aParent, BOARD* aBoard,
-                                                const IPC2581_BOM_FIELDS& aFields ) :
+                                                const IPC2581_BOM_FIELDS& aFields, bool aMfgPnOnly ) :
         DIALOG_EXPORT_2581_BOM_BASE( aParent ),
         m_fields( aFields )
 {
     m_textDistributor->SetSize( m_choiceDistPN->GetSize() );
+
+    if( aMfgPnOnly )
+    {
+        for( wxWindow* window : std::initializer_list<wxWindow*>{ m_lblBomRev, m_textBomRev, m_lblOEM, m_oemRef,
+                                                                  m_staticText7, m_choiceMfg, m_staticText8,
+                                                                  m_choiceDistPN, m_staticText9, m_textDistributor } )
+        {
+            window->Hide();
+        }
+    }
 
     std::set<wxString> options;
 

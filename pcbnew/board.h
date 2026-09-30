@@ -554,6 +554,7 @@ public:
 
     void GetContextualTextVars( wxArrayString* aVars ) const;
     bool ResolveTextVar( wxString* token, int aDepth ) const;
+    bool ResolveTextVar( wxString* token, const wxString& aVariantName, int aDepth ) const;
 
     /// Visibility settings stored in board prior to 6.0, only used for loading legacy files
     LSET    m_LegacyVisibleLayers;

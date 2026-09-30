@@ -290,6 +290,40 @@ BOOST_AUTO_TEST_CASE( CompressedExportKeepsXmlAtArchiveRoot )
 }
 
 
+BOOST_AUTO_TEST_CASE( Ipc2581VariantPropertySelectsPopulation )
+{
+    std::unique_ptr<BOARD> board = LoadBoard( "variant_test/variant_test.kicad_pcb" );
+    BOOST_REQUIRE( board );
+    BOOST_REQUIRE( board->HasVariant( wxS( "Variant A" ) ) );
+    wxString                 current = board->GetCurrentVariant();
+    KI_TEST::SCOPED_TEMP_DIR dir( wxT( "ipc_variant_property" ) );
+    wxString                 output = wxString( ( dir.Path() / "variant.xml" ).wstring() );
+    JOB_EXPORT_PCB_IPC2581   job;
+    job.m_variantNames = { wxS( "Variant A" ) };
+    job.SetConfiguredOutputPath( output );
+    WX_STRING_REPORTER reporter;
+    BOOST_REQUIRE_MESSAGE( DIALOG_EXPORT_2581::GenerateFile( job, board.get(), nullptr, &reporter ),
+                           reporter.GetMessages().ToStdString() );
+    BOOST_CHECK_EQUAL( board->GetCurrentVariant(), current );
+    wxXmlDocument document;
+    BOOST_REQUIRE( document.Load( output ) );
+    std::vector<wxXmlNode*> refdes;
+    CollectXmlElements( document.GetRoot(), wxS( "RefDes" ), refdes );
+    bool found = false;
+
+    for( wxXmlNode* node : refdes )
+    {
+        if( node->GetAttribute( wxS( "name" ) ) == wxS( "R2" ) )
+        {
+            BOOST_CHECK_EQUAL( node->GetAttribute( wxS( "populate" ) ), wxString( wxS( "true" ) ) );
+            found = true;
+        }
+    }
+
+    BOOST_CHECK( found );
+}
+
+
 /**
  * Test that surface finish is exported correctly (Issue #22690)
  *

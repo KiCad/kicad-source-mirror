@@ -82,6 +82,9 @@ public:
     void AddFeatureArc( const VECTOR2I& aStart, const VECTOR2I& aEnd, const VECTOR2I& aCenter,
                         uint64_t aWidth, ODB_DIRECTION aDirection );
 
+    void AddRoutContour( const SHAPE_LINE_CHAIN& aContour, int aChain, bool aPlated );
+    void AddRoutSlot( const PAD& aPad, int aChain );
+
     void AddPadCircle( const VECTOR2I& aCenter, uint64_t aDiameter );
 
     void AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer );
@@ -187,6 +190,9 @@ private:
         }
     }
 
+    void tagRoutFeatures( size_t aFirst, int aChain, bool aPlated );
+    void addViaDrillAttributes( ODB_FEATURE& aFeature, const PCB_VIA* aVia );
+
     std::map<wxString, uint32_t> m_circleSymMap; // diameter -> symbol index
     std::map<wxString, uint32_t> m_roundDonutSymMap;
     std::map<wxString, uint32_t> m_padSymMap;  // name -> symbol index
@@ -223,10 +229,10 @@ private:
     ODB_LAYER_ROLE                    m_role;
     std::optional<ODB_AUX_LAYER_TYPE> m_auxType;
     std::optional<ODB_DRILL_SPAN>     m_drillSpan;
+    std::optional<std::map<const PCB_VIA*, std::pair<int, int>>> m_viaDrillTypes;
     uint32_t                          m_symIndex = 0;
 
     std::list<std::unique_ptr<ODB_FEATURE>>      m_featuresList;
-    std::map<BOARD_ITEM*, std::vector<uint32_t>> m_featureIDMap;
 };
 
 

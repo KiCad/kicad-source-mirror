@@ -35,6 +35,8 @@ JOB_EXPORT_PCB_FAB::JOB_EXPORT_PCB_FAB( const std::string& aType ) : JOB( aType,
     m_params.emplace_back( new JOB_PARAM_LIST<wxString>( "variant_names", &m_variantNames, m_variantNames ) );
     m_params.emplace_back( new JOB_PARAM<bool>( "check_zones", &m_checkZonesBeforeExport,
                                                  m_checkZonesBeforeExport ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.mfg_pn", &m_colMfgPn,
+                                                     m_colMfgPn ) );
 }
 
 

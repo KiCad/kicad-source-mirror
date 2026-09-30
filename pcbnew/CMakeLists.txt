@@ -78,6 +78,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_export_2581_base.cpp
     dialogs/dialog_export_2581_bom.cpp
     dialogs/dialog_export_2581_bom_base.cpp
+    dialogs/panel_fab_export_content.cpp
+    dialogs/panel_fab_export_content_base.cpp
     dialogs/dialog_export_idf.cpp
     dialogs/dialog_export_idf_base.cpp
     dialogs/dialog_export_step.cpp

@@ -20,6 +20,7 @@
 
 #include <import_net_names.h>
 #include <richio.h>
+#include <string_utils.h>
 #include <wx/crt.h>
 #include <wx/dir.h>
 #include <wx/zipstrm.h>
@@ -980,8 +981,7 @@ int PCBNEW_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
         if( hasVariantPlaceholder )
         {
-            wxString variantPath = configuredPath;
-            variantPath.Replace( wxS( "${VARIANT}" ), variantName );
+            wxString variantPath = ExpandVariantOutputPath( configuredPath, variantName );
             aBomJob->SetConfiguredOutputPath( variantPath );
             outPath = aBomJob->GetFullOutputPath( board->GetProject() );
             aBomJob->SetConfiguredOutputPath( configuredPath );
@@ -2994,19 +2994,6 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 }
 
 
-BOARD* PCBNEW_JOBS_HANDLER::prepareFabBoard( const JOB_EXPORT_PCB_FAB& aJob )
-{
-    BOARD* board = getBoard( aJob.m_filename );
-
-    if( board && !aJob.m_variantNames.empty() )
-    {
-        board->SetCurrentVariant( aJob.m_variantNames.front() );
-    }
-
-    return board;
-}
-
-
 void PCBNEW_JOBS_HANDLER::refillFabZones( const JOB_EXPORT_PCB_FAB& aJob, BOARD* aBoard )
 {
     if( !aJob.m_checkZonesBeforeExport )
@@ -3032,10 +3019,21 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     if( job == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    BOARD* brd = prepareFabBoard( *job );
+    BOARD* brd = getBoard( job->m_filename );
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+    struct VARIANT_RESTORE
+    {
+        BOARD*   m_board;
+        wxString m_variant;
+
+        ~VARIANT_RESTORE() { m_board->SetCurrentVariant( m_variant ); }
+    } restore{ brd, brd->GetCurrentVariant() };
+
+    if( !job->m_variantNames.empty() )
+        brd->SetCurrentVariant( job->m_variantNames.front() );
 
     if( job->GetConfiguredOutputPath().IsEmpty() )
     {
@@ -3163,7 +3161,7 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
     if( job == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    BOARD* brd = prepareFabBoard( *job );
+    BOARD* brd = getBoard( job->m_filename );
 
     if( !brd )
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
@@ -3193,18 +3191,21 @@ int PCBNEW_JOBS_HANDLER::JobExportOdb( JOB* aJob )
         }
     }
 
-    wxString outPath = resolveJobOutputPath( job, brd );
+    resolveJobOutputPath( job, brd );
 
     // The helper handles output path creation, so hand it a job that already has fully-resolved
     // token context (title block and project overrides applied above).
     refillFabZones( *job, brd );
 
-    bool ok = ::GenerateODBPPFiles( *job, brd, m_progressReporter, m_reporter );
+    ODB_EXPORT_RESULT result = ::GenerateODBPPFiles( *job, brd, nullptr, m_progressReporter, m_reporter );
 
-    if( ok )
-        aJob->AddOutput( outPath );
+    if( result.m_ok )
+    {
+        for( const wxString& path : result.m_outputs )
+            aJob->AddOutput( path );
+    }
 
-    if( !ok || m_reporter->HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
+    if( !result.m_ok || m_reporter->HasMessageOfSeverity( RPT_SEVERITY_ERROR ) )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     return CLI::EXIT_CODES::SUCCESS;

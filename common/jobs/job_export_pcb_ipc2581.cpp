@@ -34,7 +34,6 @@ JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581() :
         m_version( IPC2581_VERSION::C ),
         m_compress( false ),
         m_colInternalId(),
-        m_colMfgPn(),
         m_colMfg(),
         m_colDistPn(),
         m_colDist(),
@@ -45,8 +44,6 @@ JOB_EXPORT_PCB_IPC2581::JOB_EXPORT_PCB_IPC2581() :
     m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.internal_id",
                                                     &m_colInternalId,
                                                     m_colInternalId ) );
-    m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.mfg_pn",
-                                                    &m_colMfgPn, m_colMfgPn ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.mfg", &m_colMfg, m_colMfg ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.dist_pn",
                                                     &m_colDistPn,

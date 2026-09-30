@@ -22,17 +22,89 @@
 #include <algorithm>
 #include <filesystem>
 #include <locale>
+#include <set>
 #include "odb_util.h"
 #include <string_utils.h>
 #include <wx/chartype.h>
 #include <wx/dir.h>
 #include <wx/regex.h>
+#include <board.h>
+#include <drill/drill_operation.h>
+#include <footprint.h>
+#include <pad.h>
 #include <pcb_track.h>
 #include "odb_defines.h"
 #include "pcb_io_odbpp.h"
 
 namespace ODB
 {
+
+int IpcViaType( const DRILL_OPERATION& aOperation, bool aTop )
+{
+    bool covered = aTop ? aOperation.m_TopCovered : aOperation.m_BottomCovered;
+    bool plugged = aTop ? aOperation.m_TopPlugged : aOperation.m_BottomPlugged;
+    bool tented = aTop ? aOperation.m_TopTented : aOperation.m_BottomTented;
+
+    // IPC-4761 type VII requires filling, so capping alone cannot select it
+    if( aOperation.m_Filled )
+    {
+        if( aOperation.m_Capped )
+            return 7;
+
+        return tented || covered ? 6 : 5;
+    }
+
+    if( plugged )
+        return tented || covered ? 4 : 3;
+
+    if( covered )
+        return 2;
+
+    return tented ? 1 : 0;
+}
+
+
+bool ViaInPad( const PCB_VIA& aVia )
+{
+    const BOARD* board = aVia.GetBoard();
+
+    if( !board )
+        return false;
+
+    std::shared_ptr<SHAPE_SEGMENT> hole = aVia.GetEffectiveHoleShape();
+
+    if( !hole )
+        return false;
+
+    BOX2I holeBox = hole->BBox();
+
+    // Copper pours do not make ordinary stitching vias via-in-pad
+    for( FOOTPRINT* footprint : board->Footprints() )
+    {
+        if( !footprint->GetBoundingBox( false ).Intersects( holeBox ) )
+            continue;
+
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( pad->GetAttribute() == PAD_ATTRIB::NPTH || !pad->GetBoundingBox().Intersects( holeBox ) )
+                continue;
+
+            for( PCB_LAYER_ID layer : { F_Cu, B_Cu } )
+            {
+                if( !aVia.IsOnLayer( layer ) || !pad->IsOnLayer( layer ) )
+                    continue;
+
+                std::shared_ptr<SHAPE> copper = pad->GetEffectiveShape( layer );
+
+                if( copper && copper->Collide( hole.get(), 0 ) )
+                    return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 
 const PADSTACK::DRILL_PROPS* MatchBackdrill( const PCB_VIA& aVia, PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd )
 {
@@ -67,6 +139,17 @@ int BackdrillDiameter( const PADSTACK::DRILL_PROPS& aDrill )
 }
 
 
+std::vector<ODB_TYPE> OverridableLayerTypes( PCB_LAYER_ID aLayer )
+{
+    if( IsCopperLayer( aLayer ) )
+        return { ODB_TYPE::SIGNAL, ODB_TYPE::POWER_GROUND, ODB_TYPE::MIXED };
+
+    // Component, drill, rout and dielectric rows carry structure a drawing layer cannot supply
+    return { ODB_TYPE::SILK_SCREEN, ODB_TYPE::SOLDER_MASK, ODB_TYPE::SOLDER_PASTE,
+             ODB_TYPE::DOCUMENT,    ODB_TYPE::MASK,        ODB_TYPE::CONDUCTIVE_PASTE };
+}
+
+
 wxString GenODBString( const wxString& aStr )
 {
     wxString str;
@@ -89,6 +172,24 @@ wxString GenODBString( const wxString& aStr )
 }
 
 
+static wxUniChar NextCharacter( const wxString& aStr, size_t& aIndex )
+{
+    wxUniChar    character = aStr[aIndex];
+    unsigned int code = character.GetValue();
+
+    // Windows wxString stores supplementary characters as surrogate pairs
+    if( code >= 0xD800 && code <= 0xDBFF && aIndex + 1 < aStr.size() )
+    {
+        unsigned int next = aStr[aIndex + 1].GetValue();
+
+        if( next >= 0xDC00 && next <= 0xDFFF )
+            ++aIndex;
+    }
+
+    return character;
+}
+
+
 wxString GenLegalNetName( const wxString& aStr )
 {
     wxString out;
@@ -96,17 +197,8 @@ wxString GenLegalNetName( const wxString& aStr )
 
     for( size_t ii = 0; ii < aStr.size(); ++ii )
     {
-        wxUniChar    c = aStr[ii];
+        wxUniChar    c = NextCharacter( aStr, ii );
         unsigned int code = c.GetValue();
-
-        // Windows wxString stores supplementary characters as surrogate pairs
-        if( code >= 0xD800 && code <= 0xDBFF && ii + 1 < aStr.size() )
-        {
-            unsigned int next = aStr[ii + 1].GetValue();
-
-            if( next >= 0xDC00 && next <= 0xDFFF )
-                ++ii;
-        }
 
         if( ( code >= 33 && code <= 126 ) && code != ';' )
         {
@@ -129,12 +221,12 @@ wxString GenLegalComponentName( const wxString& aStr )
 
     for( size_t ii = 0; ii < aStr.Len(); ++ii )
     {
-        wxUniChar ch = aStr[ii];
+        unsigned int code = NextCharacter( aStr, ii ).GetValue();
 
         // ODB++ component names must be printable ASCII (33-126), no spaces or semicolons
-        if( ch >= 33 && ch <= 126 && ch != ';' )
+        if( code >= 33 && code <= 126 && code != ';' )
         {
-            out.append( 1, static_cast<char>( ch.IsAscii() ? ch.GetValue() : '_' ) );
+            out.append( 1, static_cast<char>( code ) );
         }
         else
         {
@@ -151,20 +243,23 @@ wxString GenLegalComponentName( const wxString& aStr )
 // product, model, step, layer, symbol, and attribute.
 wxString GenLegalEntityName( const wxString& aStr )
 {
-    std::string str = aStr.ToStdString();
-    wxString    out;
-    out.reserve( str.size() );
+    wxString out;
+    out.reserve( aStr.size() );
 
-    for( auto c : str )
+    for( size_t ii = 0; ii < aStr.size(); ++ii )
     {
-        if( isalpha( c ) )
-            c = tolower( c );
-        else if( isdigit( c ) || c == '-' || c == '_' || c == '+' || c == '.' )
-            ;
-        else
-            c = '_';
+        unsigned int code = NextCharacter( aStr, ii ).GetValue();
+        char         character;
 
-        out.append( 1, c );
+        if( code >= 'A' && code <= 'Z' )
+            character = static_cast<char>( code - 'A' + 'a' );
+        else if( ( code >= 'a' && code <= 'z' ) || ( code >= '0' && code <= '9' ) || code == '-' || code == '_'
+                 || code == '+' || code == '.' )
+            character = static_cast<char>( code );
+        else
+            character = '_';
+
+        out.append( 1, character );
     }
 
     if( out.length() > 64 )
@@ -183,6 +278,82 @@ wxString GenLegalEntityName( const wxString& aStr )
     }
 
     return out;
+}
+
+
+VARIANT_NAMES VARIANT_NAMES::Build( const std::vector<wxString>& aNames )
+{
+    VARIANT_NAMES result;
+    std::set<wxString> used;
+
+    for( const wxString& name : aNames )
+    {
+        wxString original = ODB::GenLegalEntityName( name );
+        wxString base = original;
+
+        if( base.IsEmpty() )
+            base = wxS( "variant" );
+
+        wxString legal = base;
+        int      suffixNumber = 2;
+
+        while( !used.insert( legal ).second )
+        {
+            wxString suffix = wxString::Format( wxS( "_%d" ), suffixNumber++ );
+            legal = base.Left( 64 - suffix.length() ) + suffix;
+        }
+
+        if( original.IsEmpty() || legal != base )
+            result.m_renamed.push_back( name );
+
+        result.m_names.emplace_back( name, legal );
+    }
+
+    result.m_listsFit = result.Join( aNames ).length() <= 1000;
+    return result;
+}
+
+
+wxString VARIANT_NAMES::LegalName( const wxString& aName ) const
+{
+    for( const auto& [source, legal] : m_names )
+    {
+        if( source.CmpNoCase( aName ) == 0 )
+            return legal;
+    }
+
+    return ODB::GenLegalEntityName( aName );
+}
+
+
+wxString VARIANT_NAMES::SelectedName( const wxString& aName ) const
+{
+    if( !m_listsFit )
+        return wxString();
+
+    for( const auto& [source, legal] : m_names )
+    {
+        if( source.CmpNoCase( aName ) == 0 )
+            return legal;
+    }
+
+    return wxString();
+}
+
+
+wxString VARIANT_NAMES::Join( const std::vector<wxString>& aNames ) const
+{
+    wxString result;
+
+    for( const wxString& name : aNames )
+    {
+        if( !result.IsEmpty() )
+            result += ':';
+
+        result += LegalName( name );
+    }
+
+    return result;
 }
 
 
@@ -226,7 +397,13 @@ wxString Data2String( const ODB_FORMAT& aFormat, double aVal )
 
 std::pair<wxString, wxString> AddXY( const ODB_FORMAT& aFormat, const VECTOR2I& aVec )
 {
-    // TODO: to deal with user preference x y increment setting
+    return { Double2String( aFormat, aFormat.m_scale * ( aVec.x - aFormat.m_originOffset.x ) ),
+             Double2String( aFormat, -aFormat.m_scale * ( aVec.y - aFormat.m_originOffset.y ) ) };
+}
+
+
+std::pair<wxString, wxString> AddRelativeXY( const ODB_FORMAT& aFormat, const VECTOR2I& aVec )
+{
     return { Double2String( aFormat, aFormat.m_scale * aVec.x ),
              Double2String( aFormat, -aFormat.m_scale * aVec.y ) };
 }

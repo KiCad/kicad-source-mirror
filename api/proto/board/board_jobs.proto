@@ -530,6 +530,39 @@ enum OdbCompression
     ODBC_TGZ = 3;
 }
 
+enum OdbVariantPackaging
+{
+    ODBVP_UNKNOWN = 0;
+    ODBVP_SEPARATE = 1;
+    ODBVP_COMBINED = 2;
+}
+
+enum OdbOrigin
+{
+    ODBO_UNKNOWN = 0;
+    ODBO_ABSOLUTE = 1;
+    // Drill and place file origin
+    ODBO_AUX = 2;
+    ODBO_GRID = 3;
+}
+
+enum OdbDataSet
+{
+    ODBDS_UNKNOWN = 0;
+    ODBDS_ALL = 1;
+    ODBDS_FABRICATION = 2;
+    ODBDS_ASSEMBLY = 3;
+    ODBDS_TEST = 4;
+    ODBDS_STACKUP = 5;
+}
+
+enum FabNetNamePolicy
+{
+    FNNP_UNKNOWN = 0;
+    FNNP_INCLUDE = 1;
+    FNNP_ANONYMIZE = 2;
+}
+
 // Exports a board to ODB++ format.  Returns RunJobResponse.
 message RunBoardJobExportODB
 {
@@ -543,6 +576,13 @@ message RunBoardJobExportODB
     optional int32 precision = 5;
     OdbCompression compression = 6;
     optional bool check_zones = 7;
+    repeated string variant_names = 8;
+    OdbVariantPackaging variant_packaging = 9;
+    string manufacturer_part_number_column = 10;
+    OdbOrigin origin = 11;
+    string product_name = 12;
+    OdbDataSet data_set = 13;
+    FabNetNamePolicy net_names = 14;
 }
 
 // Board statistics output format.

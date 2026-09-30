@@ -2828,6 +2828,38 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportIp
 }
 
 
+void ApplyOdbJobRequest( const RunBoardJobExportODB& aRequest, JOB_EXPORT_PCB_ODB& aJob )
+{
+    aJob.m_drawingSheet = wxString::FromUTF8( aRequest.drawing_sheet() );
+
+    if( aRequest.variant_names_size() > 0 )
+    {
+        for( const std::string& name : aRequest.variant_names() )
+            aJob.m_variantNames.push_back( wxString::FromUTF8( name ) );
+    }
+    else if( !aRequest.variant().empty() )
+    {
+        aJob.m_variantNames.push_back( wxString::FromUTF8( aRequest.variant() ) );
+    }
+
+    aJob.m_variantPackaging = FromProtoEnum<JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING>(
+            aRequest.variant_packaging() );
+
+    if( aRequest.has_precision() )
+        aJob.m_precision = aRequest.precision();
+
+    aJob.m_units = FromProtoEnum<JOB_EXPORT_PCB_FAB::UNITS>( aRequest.units() );
+    aJob.m_checkZonesBeforeExport = aRequest.check_zones();
+    aJob.m_compressionMode = FromProtoEnum<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>( aRequest.compression() );
+    aJob.m_colMfgPn = wxString::FromUTF8( aRequest.manufacturer_part_number_column() );
+    aJob.m_origin = FromProtoEnum<JOB_EXPORT_PCB_ODB::ORIGIN>( aRequest.origin() );
+    aJob.m_productName = wxString::FromUTF8( aRequest.product_name() );
+    aJob.m_dataSet = FromProtoEnum<JOB_EXPORT_PCB_ODB::DATA_SET>( aRequest.data_set() );
+    aJob.m_netNamePolicy =
+            aRequest.net_names() == FabNetNamePolicy::FNNP_ANONYMIZE ? wxS( "anonymize" ) : wxS( "include" );
+}
+
+
 HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportODB(
         const HANDLER_CONTEXT<RunBoardJobExportODB>& aCtx )
 {
@@ -2841,24 +2873,13 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportOD
     job.m_filename = pcbContext()->GetCurrentFileName();
     job.SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
-    job.m_drawingSheet = wxString::FromUTF8( aCtx.Request.drawing_sheet() );
-    if( !aCtx.Request.variant().empty() )
-    {
-        job.m_variantNames.push_back( wxString::FromUTF8( aCtx.Request.variant() ) );
-    }
-
-    if( aCtx.Request.has_precision() )
-        job.m_precision = aCtx.Request.precision();
-
     if( std::optional<ApiResponseStatus> unitError =
             ValidateUnitsInchMm( aCtx.Request.units(), "RunBoardJobExportODB" ) )
     {
         return tl::unexpected( *unitError );
     }
 
-    job.m_units = FromProtoEnum<JOB_EXPORT_PCB_FAB::UNITS>( aCtx.Request.units() );
-    job.m_checkZonesBeforeExport = aCtx.Request.check_zones();
-    job.m_compressionMode = FromProtoEnum<JOB_EXPORT_PCB_ODB::ODB_COMPRESSION>( aCtx.Request.compression() );
+    ApplyOdbJobRequest( aCtx.Request, job );
 
     return ExecuteBoardJob( pcbContext(), job );
 }

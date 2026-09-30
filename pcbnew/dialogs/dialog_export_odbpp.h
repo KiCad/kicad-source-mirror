@@ -20,29 +20,17 @@
 #pragma once
 
 #include "dialog_export_odbpp_base.h"
+#include <jobs/job_export_pcb_odb.h>
+#include <pcb_io/odbpp/odb_export_job.h>
 
 class PCB_EDIT_FRAME;
-class JOB_EXPORT_PCB_ODB;
 
 class DIALOG_EXPORT_ODBPP : public DIALOG_EXPORT_ODBPP_BASE
 {
 public:
     DIALOG_EXPORT_ODBPP( PCB_EDIT_FRAME* aParent );
     DIALOG_EXPORT_ODBPP( JOB_EXPORT_PCB_ODB* aJob, PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent );
-
-    wxString GetOutputPath() const { return m_outputFileName->GetValue(); }
-
-    wxString GetUnitsString() const
-    {
-        if( m_choiceUnits->GetSelection() == 0 )
-            return wxT( "mm" );
-        else
-            return wxT( "inch" );
-    }
-
-    int GetPrecision() const { return m_precision->GetValue(); }
-
-    int GetCompressFormat() const { return m_choiceCompress->GetSelection(); }
+    ~DIALOG_EXPORT_ODBPP() override;
 
 private:
     void onBrowseClicked( wxCommandEvent& event ) override;
@@ -50,6 +38,13 @@ private:
     void onOKClick( wxCommandEvent& event ) override;
 
     void OnFmtChoiceOptionChanged();
+    void updatePrecisionRange();
+    void updateVariantFilename();
+    void refreshLayerRows();
+    /// Fold the grid's edits for the rows on screen into the layer overrides
+    void harvestLayerOverrides();
+    void setupControls();
+    void populateJob( JOB_EXPORT_PCB_ODB& aJob ) const;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
@@ -57,4 +52,7 @@ private:
 private:
     PCB_EDIT_FRAME*     m_parent;
     JOB_EXPORT_PCB_ODB* m_job;
+    std::vector<ODB_LAYER_OVERRIDE>     m_layerOverrides;
+    std::vector<ODB_MATRIX_PREVIEW_ROW> m_previewRows;
+    bool                                m_autoVariantSuffix = false;
 };

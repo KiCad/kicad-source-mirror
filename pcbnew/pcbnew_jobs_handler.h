@@ -96,7 +96,6 @@ public:
 
 private:
     BOARD* getBoard( const wxString& aPath = wxEmptyString );
-    BOARD* prepareFabBoard( const JOB_EXPORT_PCB_FAB& aJob );
     void refillFabZones( const JOB_EXPORT_PCB_FAB& aJob, BOARD* aBoard );
     LSEQ convertLayerArg( wxString& aLayerString, BOARD* aBoard ) const;
 

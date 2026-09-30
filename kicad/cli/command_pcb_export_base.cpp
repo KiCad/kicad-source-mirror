@@ -54,6 +54,12 @@ void CLI::PCB_EXPORT_BASE_COMMAND::addCommonLayersArg()
 
 void CLI::PCB_EXPORT_BASE_COMMAND::addFabExportArgs()
 {
+    m_argParser.add_argument( ARG_BOM_COL_MFG_PN )
+            .default_value( std::string() )
+            .help( std::string( "Name of the part field to use for the Bill of Material "
+                                "Manufacturer Part Number Column" ) )
+            .metavar( "FIELD_NAME" );
+
     m_argParser.add_argument( ARG_PRECISION )
             .help( std::string( "Precision" ) )
             .scan<'i', int>()
@@ -76,6 +82,7 @@ void CLI::PCB_EXPORT_BASE_COMMAND::applyFabExportArgs( JOB_EXPORT_PCB_FAB& aJob 
     aJob.m_variantNames = m_argVariantNames;
     aJob.m_precision = m_argParser.get<int>( ARG_PRECISION );
     aJob.m_checkZonesBeforeExport = m_argParser.get<bool>( ARG_CHECK_ZONES );
+    aJob.m_colMfgPn = From_UTF8( m_argParser.get<std::string>( ARG_BOM_COL_MFG_PN ).c_str() );
     std::string units = m_argParser.get<std::string>( ARG_FAB_UNITS );
     aJob.m_units = units == "in" ? JOB_EXPORT_PCB_FAB::UNITS::INCH : JOB_EXPORT_PCB_FAB::UNITS::MM;
 }

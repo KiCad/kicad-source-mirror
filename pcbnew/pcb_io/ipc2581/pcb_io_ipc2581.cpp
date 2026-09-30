@@ -32,6 +32,7 @@
 #include <connectivity/connectivity_algo.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <exporters/fab_model/fab_item_order.h>
+#include <exporters/fab_model/fab_drill.h>
 #include <exporters/fab_model/fab_pin.h>
 #include <font/font.h>
 #include <footprint.h>
@@ -1920,7 +1921,7 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
 
         // TODO: The options are "ELECTRICAL", "MECHANICAL", "PROGRAMMABLE", "DOCUMENT", "MATERIAL"
         //      We need to figure out how to determine this.
-        const wxString variantName = m_board ? m_board->GetCurrentVariant() : wxString();
+        const wxString& variantName = m_variantName;
 
         if( entry->m_pads == 0 || fp_it->GetExcludedFromBOMForVariant( variantName ) )
             entry->m_type = "DOCUMENT";
@@ -2969,39 +2970,7 @@ void PCB_IO_IPC2581::ensureBackdrillSpecs( const wxString& aPadstackName, const 
     BOARD_STACKUP&         stackup = dsnSettings.GetStackupDescriptor();
     stackup.SynchronizeWithBoard( &dsnSettings );
 
-    // KiCad's DRILL_PROPS.end is the must-cut layer (deepest copper the drill
-    // must pass through, per the UI label "backdrill must-cut"). IPC-2581
-    // requires the must-not-cut layer, which is the next enabled copper layer
-    // past the must-cut layer going inward (away from the drill start surface).
     LSEQ cuStack = m_board->GetEnabledLayers().CuStack();
-
-    auto computeMustNotCutLayer = [&]( const PADSTACK::DRILL_PROPS& aDrill ) -> PCB_LAYER_ID
-    {
-        auto it = std::find( cuStack.begin(), cuStack.end(), aDrill.end );
-
-        if( it == cuStack.end() )
-            return UNDEFINED_LAYER;
-
-        if( aDrill.start == F_Cu )
-        {
-            ++it;
-
-            if( it == cuStack.end() )
-                return UNDEFINED_LAYER;
-
-            return *it;
-        }
-
-        if( aDrill.start == B_Cu )
-        {
-            if( it == cuStack.begin() )
-                return UNDEFINED_LAYER;
-
-            return *( --it );
-        }
-
-        return UNDEFINED_LAYER;
-    };
 
     auto createSpec = [&]( const PADSTACK::DRILL_PROPS& aDrill,
                            const wxString& aSpecName ) -> wxString
@@ -3014,7 +2983,7 @@ void PCB_IO_IPC2581::ensureBackdrillSpecs( const wxString& aPadstackName, const 
         if( startLayer == m_layer_name_map.end() )
             return wxString();
 
-        PCB_LAYER_ID mustNotCut = computeMustNotCutLayer( aDrill );
+        PCB_LAYER_ID mustNotCut = FabBackdrillMustNotCut( cuStack, aDrill.start, aDrill.end );
         auto         mustNotCutEntry = m_layer_name_map.find( mustNotCut );
 
         wxXmlNode* specNode = appendNode( m_cad_header_node, "Spec" );
@@ -4894,6 +4863,7 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD& aBoard,
     m_lastAppendedNode = nullptr;
 
     m_board = &aBoard;
+    m_variantName = aBoard.GetCurrentVariant();
     m_padstack_backdrill_specs.clear();
     m_backdrill_spec_nodes.clear();
     m_backdrill_spec_used.clear();
@@ -4942,6 +4912,9 @@ void PCB_IO_IPC2581::SaveBoard( const wxString& aFileName, BOARD& aBoard,
 
     if( !aProperties )
         aProperties = &emptyProperties;
+
+    if( auto it = aProperties->find( "variant" ); it != aProperties->end() )
+        m_variantName = it->second.wx_str();
 
     if( auto it = aProperties->find( "units" ); it != aProperties->end() )
     {

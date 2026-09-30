@@ -2,6 +2,7 @@
 #define _ODB_UTIL_H_
 
 #include <map>
+#include <optional>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -10,6 +11,8 @@
 #include <layer_ids.h>
 #include <padstack.h>
 #include <base_units.h>
+#include <exporters/fab_model/fab_sections.h>
+#include <jobs/job_export_pcb_odb.h>
 #include <wx/string.h>
 #include "pcb_shape.h"
 #include <wx/filename.h>
@@ -21,6 +24,22 @@ enum class ODB_POLARITY
     NEGATIVE
 };
 
+namespace ODB
+{
+struct VARIANT_NAMES
+{
+    static VARIANT_NAMES Build( const std::vector<wxString>& aNames );
+
+    wxString LegalName( const wxString& aName ) const;
+    wxString SelectedName( const wxString& aName ) const;
+    wxString Join( const std::vector<wxString>& aNames ) const;
+
+    std::vector<std::pair<wxString, wxString>> m_names;
+    std::vector<wxString>                      m_renamed;
+    bool                                       m_listsFit = true;
+};
+} // namespace ODB
+
 struct ODB_FORMAT
 {
     // Internal units to output units for data values
@@ -30,6 +49,20 @@ struct ODB_FORMAT
     double      m_symbolScale = 1.0 / PL_IU_PER_MM;
     int         m_sigfig = 6;
     std::string m_unitsStr = "MM";
+    wxString    m_variantName;
+    wxString    m_productModelName;
+    wxString    m_mpnField;
+    VECTOR2I    m_originOffset{ 0, 0 };
+    bool        m_anonymizeNets = false;
+    bool        m_writeEdaNets = true;
+    std::optional<IPC2581::SECTION_SET> m_sections;
+    std::vector<ODB_LAYER_OVERRIDE> m_layerOverrides;
+    ODB::VARIANT_NAMES m_variantNames;
+
+    bool Includes( IPC2581::SECTION aSection ) const
+    {
+        return !m_sections || m_sections->Contains( aSection );
+    }
 };
 
 enum class ODB_CONTEXT
@@ -102,6 +135,7 @@ enum class ODB_LAYER_ROLE
     DRILL,
     BACKDRILL,
     VIA_PROTECTION,
+    ROUT,
     COMPONENT
 };
 
@@ -163,11 +197,18 @@ struct ODB_DRILL_SPAN
 };
 
 class PCB_VIA;
+struct DRILL_OPERATION;
 
 namespace ODB
 {
+int IpcViaType( const DRILL_OPERATION& aOperation, bool aTop );
+bool ViaInPad( const PCB_VIA& aVia );
+
 const PADSTACK::DRILL_PROPS* MatchBackdrill( const PCB_VIA& aVia, PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd );
 int                          BackdrillDiameter( const PADSTACK::DRILL_PROPS& aDrill );
+
+/// Matrix types a layer override may assign to @a aLayer
+std::vector<ODB_TYPE> OverridableLayerTypes( PCB_LAYER_ID aLayer );
 
 wxString GenODBString( const wxString& aStr );
 
@@ -188,6 +229,7 @@ wxString Data2String( const ODB_FORMAT& aFormat, double aVal );
 wxString SymDouble2String( const ODB_FORMAT& aFormat, double aVal );
 
 std::pair<wxString, wxString> AddXY( const ODB_FORMAT& aFormat, const VECTOR2I& aVec );
+std::pair<wxString, wxString> AddRelativeXY( const ODB_FORMAT& aFormat, const VECTOR2I& aVec );
 
 VECTOR2I GetShapePosition( const PCB_SHAPE& aShape );
 

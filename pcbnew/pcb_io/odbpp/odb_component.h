@@ -31,6 +31,14 @@
 
 class ODB_COMPONENT;
 class PCB_IO_ODBPP;
+struct S3DMODEL;
+class FP_3DMODEL;
+
+namespace ODB
+{
+double ModelHeightAboveBoard( const S3DMODEL& aModel, const FP_3DMODEL& aPlacement );
+bool HasShownModel( const FOOTPRINT* aFp );
+}
 
 class COMPONENTS_MANAGER : public ATTR_MANAGER
 {

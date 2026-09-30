@@ -685,6 +685,12 @@ void BOARD::GetContextualTextVars( wxArrayString* aVars ) const
 
 bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
 {
+    return ResolveTextVar( token, GetCurrentVariant(), aDepth );
+}
+
+
+bool BOARD::ResolveTextVar( wxString* token, const wxString& aVariantName, int aDepth ) const
+{
     if( token->Contains( ':' ) )
     {
         wxString    remainder;
@@ -695,7 +701,7 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
         {
             FOOTPRINT* refFP = static_cast<FOOTPRINT*>( refItem );
 
-            if( refFP->ResolveTextVar( &remainder, aDepth + 1 ) )
+            if( refFP->ResolveTextVar( &remainder, aVariantName, aDepth + 1 ) )
             {
                 *token = std::move( remainder );
                 return true;
@@ -712,7 +718,7 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
                 {
                     wxString remainderCopy = remainder;
 
-                    if( footprint->ResolveTextVar( &remainderCopy, aDepth + 1 ) )
+                    if( footprint->ResolveTextVar( &remainderCopy, aVariantName, aDepth + 1 ) )
                     {
                         *token = std::move( remainderCopy );
                     }
@@ -746,12 +752,12 @@ bool BOARD::ResolveTextVar( wxString* token, int aDepth ) const
     }
     else if( token->IsSameAs( wxT( "VARIANT" ) ) )
     {
-        *token = GetCurrentVariant();
+        *token = aVariantName;
         return true;
     }
     else if( token->IsSameAs( wxT( "VARIANT_DESC" ) ) )
     {
-        *token = GetVariantDescription( GetCurrentVariant() );
+        *token = GetVariantDescription( aVariantName );
         return true;
     }
     else if( token->IsSameAs( wxT( "PROJECTNAME" ) ) && GetProject() )

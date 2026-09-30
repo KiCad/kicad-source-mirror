@@ -1065,6 +1065,8 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/board_tables/generated_table_schema.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drill/drill_enumerator.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/exporters/fab_model/fab_pin.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/exporters/fab_model/fab_drill.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/exporters/fab_model/fab_sections.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drill/drill_symbol_profile.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drill/drill_chart_model.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drill/drill_chart_template.cpp

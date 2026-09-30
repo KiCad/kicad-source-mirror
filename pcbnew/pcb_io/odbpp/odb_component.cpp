@@ -21,14 +21,111 @@
 #include <wx/regex.h>
 #include <wx/log.h>
 
+#include <algorithm>
+#include <cmath>
+#include <mutex>
+
+#include <3d_cache/3d_cache.h>
+#include <3d_math.h>
+#include <base_units.h>
 #include <board.h>
+#include <footprint_library_adapter.h>
 #include <footprint.h>
+#include <libraries/library_manager.h>
+#include <pad.h>
+#include <pcb_field.h>
+#include <plugins/3dapi/c3dmodel.h>
+#include <project_pcb.h>
+#include <exporters/fab_model/fab_pin.h>
 
 #include "odb_component.h"
 #include "odb_util.h"
 #include "hash_eda.h"
 #include "pcb_io_odbpp.h"
 #include <trace_helpers.h>
+
+double ODB::ModelHeightAboveBoard( const S3DMODEL& aModel, const FP_3DMODEL& aPlacement )
+{
+    glm::mat4 transform = CalcModelMatrix( SFVEC3F( aPlacement.m_Offset.x, aPlacement.m_Offset.y,
+                                                     aPlacement.m_Offset.z ),
+                                           SFVEC3F( aPlacement.m_Rotation.x, aPlacement.m_Rotation.y,
+                                                     aPlacement.m_Rotation.z ),
+                                           SFVEC3F( aPlacement.m_Scale.x, aPlacement.m_Scale.y,
+                                                     aPlacement.m_Scale.z ) );
+    double height = 0.0;
+
+    for( unsigned int meshIndex = 0; meshIndex < aModel.m_MeshesSize; ++meshIndex )
+    {
+        const SMESH& mesh = aModel.m_Meshes[meshIndex];
+
+        for( unsigned int vertexIndex = 0; vertexIndex < mesh.m_VertexSize; ++vertexIndex )
+        {
+            const SFVEC3F& vertex = mesh.m_Positions[vertexIndex];
+            double z = ( transform * glm::vec4( vertex.x, vertex.y, vertex.z, 1.0f ) ).z;
+
+            if( std::isfinite( z ) )
+                height = std::max( height, z );
+        }
+    }
+
+    return height;
+}
+
+
+bool ODB::HasShownModel( const FOOTPRINT* aFp )
+{
+    return std::any_of( aFp->Models().begin(), aFp->Models().end(),
+                        []( const FP_3DMODEL& model )
+                        {
+                            return model.m_Show && !model.m_Filename.IsEmpty();
+                        } );
+}
+
+
+namespace
+{
+double componentModelHeight( const FOOTPRINT* aFp )
+{
+    if( !ODB::HasShownModel( aFp ) )
+        return 0.0;
+
+    const BOARD* board = aFp->GetBoard();
+
+    if( !board || !board->GetProject() )
+        return 0.0;
+
+    static std::mutex cacheMutex;
+    std::lock_guard<std::mutex> lock( cacheMutex );
+    PROJECT* project = board->GetProject();
+    S3D_CACHE* cache = PROJECT_PCB::Get3DCacheManager( project );
+    wxString basePath;
+
+    if( FOOTPRINT_LIBRARY_ADAPTER* adapter = PROJECT_PCB::FootprintLibAdapter( project ) )
+    {
+        std::optional<LIBRARY_TABLE_ROW*> row = adapter->GetRow( aFp->GetFPID().GetLibNickname() );
+
+        if( row )
+            basePath = LIBRARY_MANAGER::GetFullURI( *row, true );
+    }
+
+    double height = 0.0;
+
+    for( const FP_3DMODEL& placement : aFp->Models() )
+    {
+        if( !placement.m_Show || placement.m_Filename.IsEmpty() )
+            continue;
+
+        std::vector<const EMBEDDED_FILES*> embeddedFiles = { aFp->GetEmbeddedFiles(),
+                                                               board->GetEmbeddedFiles() };
+        S3DMODEL* model = cache->GetModel( placement.m_Filename, basePath, std::move( embeddedFiles ) );
+
+        if( model )
+            height = std::max( height, ODB::ModelHeightAboveBoard( *model, placement ) );
+    }
+
+    return height;
+}
+}
 
 
 ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
@@ -55,11 +152,38 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
     wxString originalRef = aFp->GetReference();
     comp.m_comp_name = ODB::GenLegalComponentName( originalRef );
 
-    comp.m_part_name = wxString::Format( "%s_%s", aFp->GetFPID().GetFullLibraryName(),
-                                         aFp->GetFPID().GetLibItemName().wx_str() );
+    const ODB_FORMAT& format = m_plugin->GetFormat();
+    PCB_FIELD* mappedField = format.m_mpnField.IsEmpty() ? nullptr : aFp->GetField( format.m_mpnField );
+
+    if( mappedField && !mappedField->GetText().IsEmpty() )
+        comp.m_part_name = mappedField->GetShownText( format.m_variantName, RESOLVED );
+
+    if( comp.m_part_name.IsEmpty() )
+        comp.m_part_name = wxString::Format( "%s_%s", aFp->GetFPID().GetFullLibraryName(),
+                                             aFp->GetFPID().GetLibItemName().wx_str() );
 
     // ODB++ cannot handle spaces in these fields
     ODB::RemoveWhitespace( comp.m_part_name );
+    comp.m_part_name = ODB::GenLegalComponentName( comp.m_part_name );
+
+    double heightMm = componentModelHeight( aFp );
+
+    if( heightMm <= 0.0 )
+    {
+        if( PCB_FIELD* heightField = aFp->GetField( wxS( "Height" ) ); heightField
+            && !heightField->GetText().IsEmpty() )
+        {
+            wxString value = heightField->GetShownText( format.m_variantName, RESOLVED );
+            double heightIU = EDA_UNIT_UTILS::UI::DoubleValueFromString( pcbIUScale, EDA_UNITS::MM, value );
+            heightMm = pcbIUScale.IUTomm( heightIU );
+        }
+    }
+
+    if( std::isfinite( heightMm ) && heightMm > 0.0 )
+    {
+        double outputHeight = format.m_unitsStr == "INCH" ? heightMm / 25.4 : heightMm;
+        AddSystemAttribute( comp, ODB_ATTR::COMP_HEIGHT{ outputHeight } );
+    }
 
     if( comp.m_comp_name.IsEmpty() )
     {
@@ -113,19 +237,44 @@ ODB_COMPONENT& COMPONENTS_MANAGER::AddComponent( const FOOTPRINT*         aFp,
         ODB::RemoveWhitespace( key );
 
         // A PRP record is one line
-        wxString value = field->GetShownText( RESOLVED );
+        wxString value = field->GetShownText( m_plugin->GetFormat().m_variantName, RESOLVED );
         value.Replace( wxS( "\r" ), wxEmptyString );
         value.Replace( wxS( "\n" ), wxS( " " ) );
 
         comp.m_prp[key] = wxString::Format( "'%s'", value );
     }
 
-    if( aFp->GetDNPForVariant( aFp->GetBoard() ? aFp->GetBoard()->GetCurrentVariant() : wxString() ) )
+    if( aFp->GetDNPForVariant( m_plugin->GetFormat().m_variantName ) )
     {
         AddSystemAttribute( comp, ODB_ATTR::NO_POP{ true } );
     }
 
-    if( aFp->GetAttributes() & FP_SMD )
+    if( const BOARD* board = aFp->GetBoard(); board && !board->GetVariantNames().empty()
+        && m_plugin->GetFormat().m_variantNames.m_listsFit )
+    {
+        std::vector<wxString> included;
+
+        for( const wxString& variant : board->GetVariantNames() )
+        {
+            if( !aFp->GetDNPForVariant( variant ) )
+                included.push_back( variant );
+        }
+
+        AddSystemAttribute( comp, ODB_ATTR::COMP_VARIANT_LIST{
+                m_plugin->GetFormat().m_variantNames.Join( included ).ToStdString() } );
+    }
+
+    bool hasPressFitPad = std::any_of( aFp->Pads().begin(), aFp->Pads().end(),
+                                       []( const PAD* aPad )
+                                       {
+                                           return GetFabPadRole( *aPad ) == FAB_PAD_ROLE::PRESSFIT;
+                                       } );
+
+    if( hasPressFitPad )
+    {
+        AddSystemAttribute( comp, ODB_ATTR::COMP_MOUNT_TYPE::PRESSFIT );
+    }
+    else if( aFp->GetAttributes() & FP_SMD )
     {
         AddSystemAttribute( comp, ODB_ATTR::COMP_MOUNT_TYPE::MT_SMD );
     }
@@ -158,8 +307,8 @@ void COMPONENTS_MANAGER::Write( std::ostream& ost ) const
 void ODB_COMPONENT::Write( std::ostream& ost ) const
 {
     ost << "# CMP " << m_index << std::endl;
-    ost << "CMP " << m_pkg_ref << " " << m_center.first << " " << m_center.second << " " << m_rot
-        << " " << m_mirror << " " << m_comp_name << " " << m_part_name;
+    ost << "CMP " << m_pkg_ref << " " << m_center.first << " " << m_center.second << " " << m_rot << " " << m_mirror
+        << " " << m_comp_name.utf8_string() << " " << m_part_name.utf8_string();
 
     WriteAttributes( ost );
 
@@ -167,7 +316,7 @@ void ODB_COMPONENT::Write( std::ostream& ost ) const
 
     for( const auto& [key, value] : m_prp )
     {
-        ost << "PRP " << key << " " << value << std::endl;
+        ost << "PRP " << key.utf8_string() << " " << value.utf8_string() << std::endl;
     }
 
     for( const auto& toep : m_toeprints )
@@ -181,7 +330,6 @@ void ODB_COMPONENT::Write( std::ostream& ost ) const
 
 void ODB_COMPONENT::TOEPRINT::Write( std::ostream& ost ) const
 {
-    ost << "TOP " << m_pin_num << " " << m_center.first << " " << m_center.second << " " << m_rot
-        << " " << m_mirror << " " << m_net_num << " " << m_subnet_num << " " << m_toeprint_name
-        << std::endl;
+    ost << "TOP " << m_pin_num << " " << m_center.first << " " << m_center.second << " " << m_rot << " " << m_mirror
+        << " " << m_net_num << " " << m_subnet_num << " " << m_toeprint_name.utf8_string() << std::endl;
 }

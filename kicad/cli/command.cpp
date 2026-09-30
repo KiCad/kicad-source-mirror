@@ -34,7 +34,8 @@ CLI::COMMAND::COMMAND( const std::string& aName ) :
         m_hasOutputArg( false ),
         m_hasDrawingSheetArg( false ),
         m_hasDefineArg( false ),
-        m_hasVariantArg( false )
+        m_hasVariantArg( false ),
+        m_variantsRequireOutputToken( true )
 
 {
     m_argParser.add_argument( ARG_HELP_SHORT, ARG_HELP )
@@ -104,7 +105,8 @@ int CLI::COMMAND::Perform( KIWAY& aKiway )
         for( const auto& name : variantNames )
             m_argVariantNames.push_back( From_UTF8( name ) );
 
-        if( m_argVariantNames.size() > 1 && m_hasOutputArg && !m_argOutput.IsEmpty() )
+        if( m_variantsRequireOutputToken && m_argVariantNames.size() > 1 && m_hasOutputArg
+            && !m_argOutput.IsEmpty() )
         {
             if( !m_argOutput.Contains( wxS( "${VARIANT}" ) ) )
             {
@@ -224,9 +226,10 @@ void CLI::COMMAND::addDefineArg()
 }
 
 
-void CLI::COMMAND::addVariantsArg()
+void CLI::COMMAND::addVariantsArg( bool aRequireOutputToken )
 {
     m_hasVariantArg = true;
+    m_variantsRequireOutputToken = aRequireOutputToken;
 
     m_argParser.add_argument( ARG_VARIANT )
             .default_value( std::vector<std::string>() )

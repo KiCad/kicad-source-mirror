@@ -97,6 +97,11 @@ public:
         std::optional<std::pair<wxString, wxString>> m_span; // !< start, end
         std::optional<ODB_SUBTYPE>                   m_addType;
         std::optional<ODB_DIELECTRIC_TYPE>           m_diType;
+        std::optional<uint32_t>                      m_ref;
+        std::optional<uint32_t>                      m_cuTop;
+        std::optional<uint32_t>                      m_cuBottom;
+        wxString                                     m_dielectricName;
+        uint32_t                                     m_uid = 0;
 
         uint32_t     m_rowNumber;
         wxString     m_layerName;
@@ -116,16 +121,19 @@ public:
     virtual void InitEntityData() override;
     void         InitMatrixLayerData();
 
+    const std::vector<MATRIX_LAYER>& GetMatrixLayers() const { return m_matrixLayers; }
+
     void AddStep( const wxString& aStepName );
     void AddMatrixLayerField( MATRIX_LAYER& aMLayer, PCB_LAYER_ID aLayer );
     void AddDrillMatrixLayer();
+    void AddRoutMatrixLayer();
     void AddAuxilliaryMatrixLayer();
     void AddCOMPMatrixLayer( PCB_LAYER_ID aCompSide );
 
     void EnsureUniqueLayerNames();
 
 private:
-    std::map<wxString, unsigned int> m_matrixSteps;
+    std::map<wxString, std::pair<unsigned int, uint32_t>> m_matrixSteps;
     std::vector<MATRIX_LAYER>        m_matrixLayers;
     unsigned int                     m_row = 1;
     unsigned int                     m_col = 1;
@@ -141,13 +149,13 @@ public:
     inline virtual std::string GetEntityName() override { return "misc"; }
 
     //TODO
-    // bool AddAttrList();
     // bool AddSysAttrFiles();
     virtual void GenerateFiles( ODB_TREE_WRITER& writer ) override;
+    void GenerateUserAttrFile( ODB_TREE_WRITER& writer );
+    void GenerateAttrListFile( ODB_TREE_WRITER& writer );
 
 private:
     std::vector<std::pair<wxString, wxString>> m_info;
-    // ODB_ATTRLIST m_attrlist;
 };
 
 class FEATURES_MANAGER;
@@ -156,7 +164,7 @@ class ODB_STEP_ENTITY : public ODB_ENTITY_BASE
 {
 public:
     ODB_STEP_ENTITY( BOARD* aBoard, PCB_IO_ODBPP* aPlugin ) :
-            ODB_ENTITY_BASE( aBoard, aPlugin ), m_profile( nullptr ), m_netlist( aBoard )
+            ODB_ENTITY_BASE( aBoard, aPlugin ), m_profile( nullptr ), m_netlist( aBoard, aPlugin )
     {
     }
 
@@ -180,6 +188,7 @@ public:
     void         GenerateNetlistsFiles( ODB_TREE_WRITER& writer );
     void         GenerateProfileFile( ODB_TREE_WRITER& writer );
     void         GenerateStepHeaderFile( ODB_TREE_WRITER& writer );
+    void         GenerateAttrListFile( ODB_TREE_WRITER& writer );
 
     virtual void GenerateFiles( ODB_TREE_WRITER& writer ) override;
 
@@ -206,6 +215,7 @@ public:
     virtual void               InitEntityData() override;
     void                       InitFeatureData();
     void                       InitDrillData();
+    void                       InitRoutData();
     void                       InitAuxilliaryData();
 
     ODB_COMPONENT& InitComponentData( const FOOTPRINT* aFp, const EDA_DATA::PACKAGE& aPkg );
@@ -223,11 +233,11 @@ public:
 
 private:
     std::map<int, std::vector<BOARD_ITEM*>> m_layerItems;
+    PCB_LAYER_ID                            m_layerID;
     ODB_LAYER_NAME                          m_layer;
     // ODB_ATTRLIST m_attrList;
     std::optional<ODB_DRILL_TOOLS>    m_tools;
-    std::optional<COMPONENTS_MANAGER> m_compTop;
-    std::optional<COMPONENTS_MANAGER> m_compBot;
+    std::optional<COMPONENTS_MANAGER> m_components;
     std::unique_ptr<FEATURES_MANAGER> m_featuresMgr;
 };
 

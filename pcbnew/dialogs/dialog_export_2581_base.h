@@ -10,6 +10,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class PANEL_FAB_EXPORT_CONTENT;
 class STD_BITMAP_BUTTON;
 class WX_HTML_REPORT_PANEL;
 
@@ -58,18 +59,7 @@ class DIALOG_EXPORT_2581_BASE : public DIALOG_SHIM
 		wxStaticText* m_lblVersion;
 		wxChoice* m_versionChoice;
 		wxCheckBox* m_cbCompress;
-		wxStaticText* m_columnsLabel;
-		wxStaticLine* m_staticline2;
-		wxStaticText* m_lblDataSet;
-		wxChoice* m_choiceDataSet;
-		wxStaticText* m_lblNetNames;
-		wxChoice* m_choiceNetNames;
-		wxStaticText* m_lblRefDes;
-		wxChoice* m_choiceRefDes;
-		wxStaticText* m_lblIncludes;
-		wxBoxSizer* bSizerContentButtons;
-		wxButton* m_btnCustomize;
-		wxButton* m_btnBomFields;
+		PANEL_FAB_EXPORT_CONTENT* m_contentPanel;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
@@ -78,9 +68,6 @@ class DIALOG_EXPORT_2581_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void onBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCompressCheck( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onDataSetChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onCustomizeClick( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onBomFieldsClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOKClick( wxCommandEvent& event ) { event.Skip(); }
 
 

@@ -37,6 +37,8 @@
 #include "zone.h"
 #include "board.h"
 #include "board_design_settings.h"
+#include <drill/drill_enumerator.h>
+#include <drill/drill_operation.h>
 #include "geometry/eda_angle.h"
 #include "geometry/shape_circle.h"
 #include "geometry/shape_ellipse.h"
@@ -44,6 +46,7 @@
 #include "geometry/shape_segment.h"
 #include "geometry/shape_poly_set.h"
 #include "odb_eda_data.h"
+#include <exporters/fab_model/fab_pin.h>
 #include "pcb_io_odbpp.h"
 #include <callback_gal.h>
 #include <string_utils.h>
@@ -69,6 +72,66 @@ void FEATURES_MANAGER::AddFeatureArc( const VECTOR2I& aStart, const VECTOR2I& aE
                          ODB::AddXY( fmt, aCenter ),
                          AddCircleSymbol( ODB::SymDouble2String( fmt, aWidth ) ),
                          aDirection );
+}
+
+
+void FEATURES_MANAGER::AddRoutContour( const SHAPE_LINE_CHAIN& aContour, int aChain, bool aPlated )
+{
+    size_t first = FeatureCount();
+    int at = 0;
+
+    if( aContour.PointCount() < 2 )
+        return;
+
+    do
+    {
+        int next = aContour.NextShape( at );
+
+        if( next < 0 )
+            next = 0;
+
+        if( aContour.IsArcStart( at ) )
+        {
+            const SHAPE_ARC& arc = aContour.Arc( aContour.ArcIndex( at ) );
+            AddFeatureArc( arc.GetP0(), arc.GetP1(), arc.GetCenter(), 0,
+                           arc.IsClockwise() ? ODB_DIRECTION::CCW : ODB_DIRECTION::CW );
+        }
+        else if( aContour.CPoint( at ) != aContour.CPoint( next ) )
+        {
+            AddFeatureLine( aContour.CPoint( at ), aContour.CPoint( next ), 0 );
+        }
+
+        at = next;
+    } while( at != 0 );
+
+    tagRoutFeatures( first, aChain, aPlated );
+}
+
+
+void FEATURES_MANAGER::AddRoutSlot( const PAD& aPad, int aChain )
+{
+    std::shared_ptr<SHAPE_SEGMENT> hole = aPad.GetEffectiveHoleShape();
+
+    if( !hole || hole->GetSeg().A == hole->GetSeg().B )
+        return;
+
+    size_t first = FeatureCount();
+    AddFeatureLine( hole->GetSeg().A, hole->GetSeg().B, hole->GetWidth() );
+
+    tagRoutFeatures( first, aChain, aPad.GetAttribute() == PAD_ATTRIB::PTH );
+}
+
+
+void FEATURES_MANAGER::tagRoutFeatures( size_t aFirst, int aChain, bool aPlated )
+{
+    forEachNewFeature( aFirst,
+                       [&]( ODB_FEATURE& aFeature, size_t )
+                       {
+                           AddSystemAttribute( aFeature, ODB_ATTR::ROUT_CHAIN{ aChain } );
+
+                           if( aPlated )
+                               AddSystemAttribute( aFeature, ODB_ATTR::ROUT_PLATED{ true } );
+                       } );
 }
 
 
@@ -441,6 +504,47 @@ void FEATURES_MANAGER::AddPadShape( const PAD& aPad, PCB_LAYER_ID aLayer )
 }
 
 
+void FEATURES_MANAGER::addViaDrillAttributes( ODB_FEATURE& aFeature, const PCB_VIA* aVia )
+{
+    if( m_role != ODB_LAYER_ROLE::DRILL || !m_drillSpan )
+        return;
+
+    if( !m_viaDrillTypes )
+    {
+        m_viaDrillTypes.emplace();
+        DRILL_QUERY query;
+        query.m_Span = DRILL_SPAN( m_drillSpan->m_StartLayer, m_drillSpan->m_EndLayer, false, false );
+
+        for( const DRILL_OPERATION& operation : EnumerateDrillOperations( *m_board, query ) )
+        {
+            if( operation.m_SourceItem && operation.m_Kind == DRILL_OP_KIND::PRIMARY_DRILL
+                && operation.m_SourceItem->Type() == PCB_VIA_T )
+            {
+                m_viaDrillTypes->emplace(
+                        static_cast<const PCB_VIA*>( operation.m_SourceItem ),
+                        std::make_pair( ODB::IpcViaType( operation, true ), ODB::IpcViaType( operation, false ) ) );
+            }
+        }
+    }
+
+    auto it = m_viaDrillTypes->find( aVia );
+
+    if( it == m_viaDrillTypes->end() )
+        return;
+
+    const auto& [topType, bottomType] = it->second;
+
+    if( topType )
+        AddSystemAttribute( aFeature, ODB_ATTR::IPC_VIA_TYPE_TOP{ std::to_string( topType ) } );
+
+    if( bottomType )
+        AddSystemAttribute( aFeature, ODB_ATTR::IPC_VIA_TYPE_BOTTOM{ std::to_string( bottomType ) } );
+
+    if( ODB::ViaInPad( *aVia ) )
+        AddSystemAttribute( aFeature, ODB_ATTR::VIA_IN_PAD{ true } );
+}
+
+
 void FEATURES_MANAGER::AddTrack( PCB_LAYER_ID aLayer, PCB_TRACK* track )
 {
     auto iter = GetODBPlugin()->GetViaTraceSubnetMap().find( track );
@@ -523,6 +627,12 @@ void FEATURES_MANAGER::AddTrack( PCB_LAYER_ID aLayer, PCB_TRACK* track )
                         subnet->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::HOLE, m_layerName, index );
                         AddSystemAttribute( feature, m_role == ODB_LAYER_ROLE::BACKDRILL ? ODB_ATTR::DRILL::NON_PLATED
                                                                                          : ODB_ATTR::DRILL::VIA );
+
+                        addViaDrillAttributes( feature, via );
+
+                        if( via->GetViaType() == VIATYPE::MICROVIA && m_role == ODB_LAYER_ROLE::DRILL )
+                            AddSystemAttribute( feature, ODB_ATTR::VIA_TYPE::LASER );
+
                         AddSystemAttribute(
                                 feature,
                                 ODB_ATTR::GEOMETRY{ "VIA_RoundD" + std::to_string( via->GetWidth( aLayer ) ) } );
@@ -614,7 +724,7 @@ void FEATURES_MANAGER::AddText( PCB_LAYER_ID aLayer, BOARD_ITEM* item, RESOLUTIO
 
                 auto tagString = [&]( ODB_FEATURE& aFeature, size_t )
                 {
-                    AddSystemAttribute( aFeature, ODB_ATTR::STRING{ aTextString.ToStdString() } );
+                    AddSystemAttribute( aFeature, ODB_ATTR::STRING{ aTextString.utf8_string() } );
                 };
 
                 auto push_pts =
@@ -753,7 +863,7 @@ void FEATURES_MANAGER::AddText( PCB_LAYER_ID aLayer, BOARD_ITEM* item, RESOLUTIO
             forEachNewFeature( first,
                                [&]( ODB_FEATURE& feature, size_t )
                                {
-                                   AddSystemAttribute( feature, ODB_ATTR::STRING{ shownText.ToStdString() } );
+                                   AddSystemAttribute( feature, ODB_ATTR::STRING{ shownText.utf8_string() } );
                                } );
         }
     }
@@ -849,12 +959,28 @@ void FEATURES_MANAGER::AddPad( PCB_LAYER_ID aLayer, PAD* pad )
 
         size_t first = FeatureCount();
         AddPadShape( *pad, aLayer );
+        FAB_PAD_ROLE role = GetFabPadRole( *pad );
 
         forEachNewFeature( first,
                            [&]( ODB_FEATURE& feature, size_t index )
                            {
                                iter->second->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::COPPER, m_layerName, index );
-                               AddSystemAttribute( feature, ODB_ATTR::PAD_USAGE::TOEPRINT );
+
+                               switch( role )
+                               {
+                               case FAB_PAD_ROLE::FIDUCIAL_GLOBAL:
+                                   AddSystemAttribute( feature, ODB_ATTR::PAD_USAGE::G_FIDUCIAL );
+                                   break;
+                               case FAB_PAD_ROLE::FIDUCIAL_LOCAL:
+                                   AddSystemAttribute( feature, ODB_ATTR::PAD_USAGE::L_FIDUCIAL );
+                                   break;
+                               default:
+                                   AddSystemAttribute( feature, ODB_ATTR::PAD_USAGE::TOEPRINT );
+                                   break;
+                               }
+
+                               if( role == FAB_PAD_ROLE::TESTPOINT )
+                                   AddSystemAttribute( feature, ODB_ATTR::TEST_POINT{ true } );
 
                                if( !pad->HasHole() )
                                    AddSystemAttribute( feature, ODB_ATTR::SMD{ true } );
@@ -884,6 +1010,9 @@ void FEATURES_MANAGER::AddPad( PCB_LAYER_ID aLayer, PAD* pad )
                                        iter->second->AddFeatureID( EDA_DATA::FEATURE_ID::TYPE::HOLE, m_layerName,
                                                                    index );
                                        AddSystemAttribute( feature, ODB_ATTR::DRILL::PLATED );
+
+                                       if( GetFabPadRole( *pad ) == FAB_PAD_ROLE::PRESSFIT )
+                                           AddSystemAttribute( feature, ODB_ATTR::PLATED_TYPE::PRESS_FIT );
                                    } );
             }
             else
@@ -892,6 +1021,9 @@ void FEATURES_MANAGER::AddPad( PCB_LAYER_ID aLayer, PAD* pad )
                                    [&]( ODB_FEATURE& feature, size_t )
                                    {
                                        AddSystemAttribute( feature, ODB_ATTR::DRILL::NON_PLATED );
+
+                                       if( GetFabPadRole( *pad ) == FAB_PAD_ROLE::TOOLING_HOLE )
+                                           AddSystemAttribute( feature, ODB_ATTR::PAD_USAGE::TOOLING_HOLE );
                                    } );
             }
         }
@@ -921,8 +1053,21 @@ void FEATURES_MANAGER::InitFeatureList( PCB_LAYER_ID aLayer, std::vector<BOARD_I
             break;
 
         case PCB_SHAPE_T:
+        {
+            size_t first = FeatureCount();
             AddShape( aLayer, static_cast<PCB_SHAPE*>( item ) );
+            const FOOTPRINT* footprint = item->GetParentFootprint();
+
+            if( footprint && footprint->IsNetTie() && IsCopperLayer( aLayer ) )
+            {
+                if( FeatureCount() == first + 1 )
+                    GetODBPlugin()->RecordNetTieFeature( item, aLayer, m_layerName, first );
+                else
+                    wxLogTrace( traceOdbppIo, wxT( "Net tie shape did not produce one copper feature" ) );
+            }
+
             break;
+        }
 
         case PCB_TEXT_T:
         case PCB_FIELD_T:
