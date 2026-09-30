@@ -2092,7 +2092,8 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, std::vector<BOARD_ITEM
             return m_toolMgr->RunSynchronousAction( PCB_ACTIONS::move, aCommit );
     }
 
-    return true;
+    // An empty selection cannot start interactive placement.
+    return aSkipMove;
 }
 
 
