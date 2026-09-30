@@ -657,6 +657,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "lib_view.show_pin_electrical_type",
             &m_LibViewPanel.show_pin_electrical_type, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "lib_view.show_pin_numbers",
+            &m_LibViewPanel.show_pin_numbers, true ) );
+
     m_params.emplace_back( new PARAM<wxString>( "system.last_symbol_lib_dir",
             &m_lastSymbolLibDir, "" ) );
 
