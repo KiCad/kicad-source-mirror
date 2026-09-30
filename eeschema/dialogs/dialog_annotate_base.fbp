@@ -165,7 +165,7 @@
                     <property name="permission">none</property>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxLEFT|wxRIGHT</property>
+                      <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                       <property name="proportion">0</property>
                       <object class="wxRadioButton" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -230,7 +230,7 @@
                     </object>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxLEFT|wxRIGHT</property>
+                      <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                       <property name="proportion">0</property>
                       <object class="wxRadioButton" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -725,7 +725,7 @@
                     <property name="permission">none</property>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxLEFT|wxRIGHT</property>
+                      <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                       <property name="proportion">0</property>
                       <object class="wxRadioButton" expanded="true">
                         <property name="BottomDockable">1</property>
@@ -791,7 +791,7 @@
                     </object>
                     <object class="sizeritem" expanded="true">
                       <property name="border">5</property>
-                      <property name="flag">wxLEFT|wxRIGHT</property>
+                      <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
                       <property name="proportion">0</property>
                       <object class="wxRadioButton" expanded="true">
                         <property name="BottomDockable">1</property>
