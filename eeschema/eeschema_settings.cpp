@@ -416,6 +416,9 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "find_replace.search_current_sheet_only",
             &m_FindReplaceExtra.search_current_sheet_only, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "find_replace.search_selected_only",
+            &m_FindReplaceExtra.search_selected_only, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "find_replace.replace_references",
             &m_FindReplaceExtra.replace_references, false ) );
 
