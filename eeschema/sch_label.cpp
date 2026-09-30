@@ -2102,20 +2102,23 @@ bool SCH_DIRECTIVE_LABEL::IsDangling() const
 
 bool SCH_DIRECTIVE_LABEL::IncrementLabel( int aIncrement )
 {
+    bool success = true;
+
     for( SCH_FIELD& field : m_fields )
     {
-        if( field.GetUntranslatedName() == wxT( "Netclass" ) || field.GetUntranslatedName() == wxT( "Component Class" ) )
+        if( field.GetUntranslatedName() == wxT( "Netclass" )
+                || field.GetUntranslatedName() == wxT( "Component Class" ) )
         {
             wxString text = field.GetText();
 
             if( IncrementString( text, aIncrement ) )
-            {
                 field.SetText( text );
-            }
+            else
+                success = false;
         }
     }
 
-    return true;
+    return success;
 }
 
 
