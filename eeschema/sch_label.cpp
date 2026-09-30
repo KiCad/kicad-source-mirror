@@ -1660,6 +1660,8 @@ bool unpackLabel( const LabelProto& aInput, SCH_LABEL_BASE& aLabel )
 {
     using namespace kiapi::schematic;
 
+    static wxString intersheetRefsName = ::GetDefaultFieldName( FIELD_T::INTERSHEET_REFS, UNTRANSLATED );
+
     // Published rows and the item index hold this identity, so they must not outlive the change
     if( SCH_SCREEN* screen = aLabel.GetParentScreen() )
         screen->BumpConnectivityRevision();
@@ -1673,10 +1675,42 @@ bool unpackLabel( const LabelProto& aInput, SCH_LABEL_BASE& aLabel )
     aLabel.SetSpinStyle( FromProtoEnum<SPIN_STYLE::SPIN, types::SchematicLabelSpinStyle>( aInput.spin_style() ) );
     aLabel.SetPosition( kiapi::common::UnpackVector2( aInput.position(), schIUScale ) );
     aLabel.SetFieldsAutoplaced( aInput.fields_autoplaced() ? AUTOPLACE_AUTO : AUTOPLACE_NONE );
-    aLabel.GetFields().clear();
+
+    {
+        aLabel.GetFields().clear();
+
+        if( aLabel.GetMandatoryFieldCount() > 0 )
+        {
+            switch( aLabel.Type() )
+            {
+            case SCH_GLOBAL_LABEL_T:
+                aLabel.GetFields().emplace_back( SCH_FIELD( &aLabel, FIELD_T::INTERSHEET_REFS, intersheetRefsName ) );
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
 
     for( const types::SchematicField& field : aInput.fields() )
     {
+        // Don't duplicate mandatory fields.
+        if( aLabel.GetMandatoryFieldCount() > 0 )
+        {
+            switch( aLabel.Type() )
+            {
+            case SCH_GLOBAL_LABEL_T:
+                if( wxString::FromUTF8( field.name() ) == intersheetRefsName )
+                    continue;
+
+                break;
+
+            default:
+                break;
+            }
+        }
+
         aLabel.GetFields().emplace_back( &aLabel, FIELD_T::USER );
         aLabel.GetFields().back().Deserialize( field, schIUScale );
     }
@@ -2131,9 +2165,8 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const VECTOR2I& pos, const wxString& text ) :
 
     SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
 
-    m_fields.emplace_back(
-            SCH_FIELD( this, FIELD_T::INTERSHEET_REFS,
-                       ::GetDefaultFieldName( FIELD_T::INTERSHEET_REFS, UNTRANSLATED ) ) );
+    m_fields.emplace_back( SCH_FIELD( this, FIELD_T::INTERSHEET_REFS,
+                                      ::GetDefaultFieldName( FIELD_T::INTERSHEET_REFS, UNTRANSLATED ) ) );
     m_fields.back().SetText( wxT( "${INTERSHEET_REFS}" ) );
     m_fields.back().SetVisible( false );
     m_fields.back().SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
