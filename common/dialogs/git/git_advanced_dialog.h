@@ -151,6 +151,9 @@ private:
     void onStashSave();
     void runRemoteAction( const std::function<bool( KIGIT_COMMON& )>& aMutation, const wxString& aError );
     void restoreSelectedStash( bool aRemoveAfterApply );
+
+    /// The stash shown on aRow, by its commit, or empty when the row is gone.
+    wxString stashIdForRow( long aRow ) const;
     void onStashApply();
     void onStashPop();
     void onStashDrop();
@@ -191,6 +194,10 @@ private:
     /// The git session this window is currently listening to for refreshes. Weak so a project
     /// reload can replace the session and this window follows it instead of pinning the old one.
     std::weak_ptr<KIGIT_COMMON> m_listenerSession;
+
+    /// The stash commit behind each row of the Stashes page, since a row's index is only valid
+    /// for the listing it came from.
+    std::vector<wxString> m_stashIds;
 
     /// Author email for each history row, so a fetched avatar can find its rows.
     std::vector<wxString> m_historyEmails;
