@@ -110,6 +110,9 @@ void CONNECTION_SUBGRAPH::RemoveItem( SCH_ITEM* aItem )
         m_driver_connection = nullptr;
     }
 
+    if( aItem == m_no_connect )
+        m_no_connect = nullptr;
+
     if( aItem->Type() == SCH_SHEET_PIN_T )
         m_hier_pins.erase( static_cast<SCH_SHEET_PIN*>( aItem ) );
 
