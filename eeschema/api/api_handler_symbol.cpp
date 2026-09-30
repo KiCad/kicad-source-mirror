@@ -21,6 +21,7 @@
 
 #include <api/api_sch_utils.h>
 #include <api/api_utils.h>
+#include <view/view.h>
 #include <fmt.h>
 #include <magic_enum.hpp>
 #include <base_units.h>
@@ -643,12 +644,18 @@ HANDLER_RESULT<types::ItemRequestStatus> API_HANDLER_SYMBOL::handleCreateUpdateI
             symbol->AddDrawItem( newItem, false );
             created.release();
             newItem->Serialize( responseItem );
+
+            if( m_frame && frame()->GetCanvas() )
+                frame()->GetCanvas()->GetView()->Add( newItem );
         }
         else
         {
             SCH_ITEM* updated = existingItem;
             updated->SwapItemData( newItem );
             updated->Serialize( responseItem );
+
+            if( m_frame && frame()->GetCanvas() )
+                frame()->GetCanvas()->GetView()->Update( updated, KIGFX::GEOMETRY );
         }
 
         aItemHandler( status, responseItem );
@@ -703,6 +710,10 @@ void API_HANDLER_SYMBOL::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>
         }
 
         commit->Modify( symbol, screen );
+
+        if( m_frame && frame()->GetCanvas() )
+            frame()->GetCanvas()->GetView()->Remove( item );
+
         symbol->RemoveDrawItem( item );
         status = ItemDeletionStatus::IDS_OK;
     }
