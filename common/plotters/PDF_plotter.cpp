@@ -1136,8 +1136,8 @@ void PDF_PLOTTER::ClosePage()
             const BOX2I&    box = bookmarkPair.first;
             const wxString& ref = bookmarkPair.second;
 
-            VECTOR2I bottomLeft = iuToPdfUserSpace( box.GetPosition() );
-            VECTOR2I topRight = iuToPdfUserSpace( box.GetEnd() );
+            VECTOR2I bottomLeft = userToDeviceCoordinates( box.GetPosition() );
+            VECTOR2I topRight = userToDeviceCoordinates( box.GetEnd() );
 
             actionHandle = emitGoToAction( pageHandle, bottomLeft, topRight );
 
