@@ -1996,7 +1996,9 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
     auto xform = m_currentManager->GetTransformation();
 
     glm::vec4 v0 = xform * glm::vec4( -w / 2, -h / 2, 0.0, 0.0 );
-    glm::vec4 v1 = xform * glm::vec4( w / 2, h / 2, 0.0, 0.0 );
+    glm::vec4 v1 = xform * glm::vec4( w / 2, -h / 2, 0.0, 0.0 );
+    glm::vec4 v2 = xform * glm::vec4( w / 2, h / 2, 0.0, 0.0 );
+    glm::vec4 v3 = xform * glm::vec4( -w / 2, h / 2, 0.0, 0.0 );
     glm::vec4 trans = xform[3];
 
     auto texture_id = m_bitmapCache->RequestBitmap( &aBitmap );
@@ -2040,13 +2042,13 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap, double alphaBlend )
     glVertex3f( v0.x, v0.y, m_layerDepth );
     glColor4f( 1.0, 1.0, 1.0, alpha );
     glTexCoord2f( texEndX,  texStartY);
-    glVertex3f( v1.x, v0.y, m_layerDepth );
-    glColor4f( 1.0, 1.0, 1.0, alpha );
-    glTexCoord2f( texEndX, texEndY);
     glVertex3f( v1.x, v1.y, m_layerDepth );
     glColor4f( 1.0, 1.0, 1.0, alpha );
+    glTexCoord2f( texEndX, texEndY);
+    glVertex3f( v2.x, v2.y, m_layerDepth );
+    glColor4f( 1.0, 1.0, 1.0, alpha );
     glTexCoord2f( texStartX, texEndY);
-    glVertex3f( v0.x, v1.y, m_layerDepth );
+    glVertex3f( v3.x, v3.y, m_layerDepth );
     glEnd();
 
     glBindTexture( GL_TEXTURE_2D, 0 );
