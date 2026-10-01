@@ -141,6 +141,9 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( EDA_BASE_FRAME* aParent ) :
 
 GIT_COMMIT_PANE::~GIT_COMMIT_PANE()
 {
+    // The window's Pull and Push run through this pane, so it goes when the pane goes.
+    GIT_ADVANCED_DIALOG::CloseForPane( this );
+
     // A transfer still running holds this pane, so stop it and wait. The wait ends at the
     // transfer's next callback, or at the network timeouts while it is still connecting.
     bool transferInFlight = m_networkBusy;
@@ -388,7 +391,7 @@ void GIT_COMMIT_PANE::onOpenAdvanced( wxCommandEvent& aEvent )
 {
     // The window belongs to the session, not to this panel, so all three frames raise the
     // same one.
-    GIT_ADVANCED_DIALOG::ShowForFrame( m_frame );
+    GIT_ADVANCED_DIALOG::ShowForFrame( m_frame, this );
 }
 
 
@@ -712,6 +715,55 @@ void GIT_COMMIT_PANE::onPull( wxCommandEvent& aEvent )
         return;
     }
 
+    Pull();
+}
+
+
+bool GIT_COMMIT_PANE::transferCanStart()
+{
+    // The advanced window reaches these too, with this panel's own labels out of sight, so
+    // the refusal is a message box.
+    if( m_networkBusy )
+    {
+        DisplayInfoMessage( this, _( "A transfer is already running." ) );
+        return false;
+    }
+
+    if( m_operationInProgress )
+    {
+        DisplayInfoMessage( this, wxString::Format( _( "Finish or abandon the %s in progress first." ),
+                                                    operationNoun() ) );
+        return false;
+    }
+
+    // The panel disables its own buttons for this, but the advanced window's reach here too.
+    if( m_headDetached )
+    {
+        DisplayInfoMessage( this, _( "This project is showing an old snapshot rather than a branch, so there "
+                                     "is nothing to send or receive. In the Advanced Git window, choose "
+                                     "Branches and double click a branch to go back to it." ) );
+        return false;
+    }
+
+    return true;
+}
+
+
+void GIT_COMMIT_PANE::Pull()
+{
+    syncListener();
+
+    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
+
+    if( !common->GetRepo() || !transferCanStart() )
+        return;
+
+    if( !m_hasRemote )
+    {
+        DisplayInfoMessage( this, _( "No remote is configured to get changes from." ) );
+        return;
+    }
+
     {
         std::unique_lock<std::mutex> probe = common->TryLockAction();
 
@@ -728,6 +780,41 @@ void GIT_COMMIT_PANE::onPull( wxCommandEvent& aEvent )
         return;
 
     submitPull( common, false );
+}
+
+
+void GIT_COMMIT_PANE::Push()
+{
+    syncListener();
+
+    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
+
+    if( !common->GetRepo() || !transferCanStart() )
+        return;
+
+    if( !m_hasRemote )
+    {
+        DisplayInfoMessage( this, _( "No remote is configured to push to." ) );
+        return;
+    }
+
+    if( !m_hasUnpushedCommits )
+    {
+        DisplayInfoMessage( this, _( "There are no commits to push." ) );
+        return;
+    }
+
+    {
+        std::unique_lock<std::mutex> probe = common->TryLockAction();
+
+        if( !probe.owns_lock() )
+        {
+            setBusy( false, _( "Another git operation is in progress." ) );
+            return;
+        }
+    }
+
+    submitPush( common );
 }
 
 

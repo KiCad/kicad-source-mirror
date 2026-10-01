@@ -54,6 +54,14 @@ public:
     /// Reload the advanced window when it is open, for a preferences change it also shows.
     void ReloadAdvancedWindow();
 
+    /// Get changes from the remote, as the Get Changes button does. The advanced window's
+    /// Pull button lands here, so one place owns the merge and its conflict handling.
+    void Pull();
+
+    /// Push the local commits, as the Push button does. The advanced window's Push button
+    /// lands here too.
+    void Push();
+
 private:
     void onCommit( wxCommandEvent& aEvent );
     void onCommitOnly( wxCommandEvent& aEvent );
@@ -77,6 +85,9 @@ private:
 
     /// Set the status line text and wrap it to the current panel width.
     void setStatusText( const wxString& aText );
+
+    /// False, with a message, while a transfer is running or a merge waits to be finished.
+    bool transferCanStart();
 
     /// Clear the list and disable every control while version control is off.
     void showDisabledState();

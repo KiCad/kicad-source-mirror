@@ -38,37 +38,45 @@
 class EDA_BASE_FRAME;
 #include <git/git_editor_snapshot.h>
 
+enum class BITMAPS : unsigned int;
+class GIT_COMMIT_PANE;
 class KIGIT_COMMON;
 struct KIGIT_COMMIT_INFO;
 class WX_TREEBOOK;
 class wxDataViewListCtrl;
+class wxButton;
 class wxCheckBox;
+class wxChoice;
 class wxListCtrl;
 class wxStaticText;
 class wxTextCtrl;
 
 
 /**
- * The advanced Git window: a non-modal dialog with a sidebar of pages (History, Branches,
- * Remotes, Stashes, Tags, Settings) over the live repository. Committing, pushing and pulling
- * stay in the docked Version Control panel. Branch, tag, remote, stash and identity management
- * happen here.
+ * The advanced Git window: a non-modal dialog with a top bar naming the repository and branch
+ * and a sidebar of pages (History, Branches, Remotes, Stashes, Tags, Settings) over the live
+ * repository. Committing, pushing and pulling stay in the docked Version Control panel. Branch,
+ * tag, remote, stash and identity management happen here.
  */
 class GIT_ADVANCED_DIALOG : public DIALOG_SHIM
 {
 public:
-    GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent );
+    GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane );
     ~GIT_ADVANCED_DIALOG() override;
 
     /// Raise the one window for this session, creating it on first use. The manager and both
     /// editors share it, so a working area never has two windows disagreeing about the repository.
-    static void ShowForFrame( EDA_BASE_FRAME* aParent );
+    /// The pane that opens it runs the window's Pull and Push.
+    static void ShowForFrame( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane );
 
     /// The live window, or null when none is open.
     static GIT_ADVANCED_DIALOG* Active();
 
     /// Close the live window, for when the project it was filled from goes away.
     static void CloseActive();
+
+    /// Close the live window if the given pane opened it, for when that pane goes away.
+    static void CloseForPane( GIT_COMMIT_PANE* aPane );
 
     void ReloadPages();
 
@@ -110,6 +118,15 @@ private:
 
     /// Force push the current branch from the Branches page, after an explicit confirmation.
     void onForcePush();
+
+    /// Fill the top bar's repository name and branch list.
+    void populateTopBar();
+
+    /// Fetch from the remote on a worker, then refresh every surface.
+    void onFetch();
+
+    /// Make a top bar button with its icon.
+    wxButton* makeBarButton( BITMAPS aIcon, const wxString& aLabel, const std::function<void()>& aHandler );
 
     /// Restore the project as it was at the given commit, recorded as a new commit on top of
     /// the current head. Offered from the History page's context menu.
@@ -176,7 +193,12 @@ private:
     std::thread                        m_pushWorker;
     std::shared_ptr<std::atomic<bool>> m_pushCancel;
 
+    /// The fetch the top bar started, and its token, so closing can stop it and wait.
+    std::thread                        m_fetchWorker;
+    std::shared_ptr<std::atomic<bool>> m_fetchCancel;
+
     EDA_BASE_FRAME*     m_parent;
+    GIT_COMMIT_PANE*    m_pane;
     WX_TREEBOOK*        m_book;
     wxDataViewListCtrl* m_historyList;
     wxListCtrl*         m_branchesList;
@@ -186,6 +208,11 @@ private:
     wxTextCtrl*         m_repoUserName;
     wxTextCtrl*         m_repoUserEmail;
     wxStaticText*       m_repoRemoteUrl;
+    wxStaticText*       m_repoName;
+    wxChoice*           m_branchChoice;
+    wxButton*           m_fetchButton;
+    wxButton*           m_pullButton;
+    wxButton*           m_pushButton;
 
     /// Move the refresh listener onto the project's current git session, in case a project
     /// reload has replaced it since the window opened.

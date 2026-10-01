@@ -31,9 +31,11 @@
 #include <wx/bmpbndl.h>
 #include <wx/button.h>
 #include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/dataview.h>
 #include <wx/dcgraph.h>
 #include <wx/dcmemory.h>
+#include <wx/filename.h>
 #include <wx/image.h>
 #include <wx/listctrl.h>
 #include <wx/mstream.h>
@@ -54,6 +56,7 @@
 #include <git/git_branch_handler.h>
 #include <git/git_commit_handler.h>
 #include <git/git_config_handler.h>
+#include <git/git_pull_handler.h>
 #include <git/git_push_handler.h>
 #include <git/kicad_git_common.h>
 #include <kicad_curl/kicad_curl_easy.h>
@@ -63,6 +66,7 @@
 #include <project.h>
 #include <settings/common_settings.h>
 #include <thread>
+#include <widgets/git_commit_pane.h>
 #include <widgets/ui_common.h>
 #include <widgets/wx_treebook.h>
 
@@ -417,10 +421,11 @@ wxWindow* makeRepositoryPage( wxWindow* aBook, wxTextCtrl** aName, wxTextCtrl** 
 } // namespace
 
 
-GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
+GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane ) :
         DIALOG_SHIM( aParent, wxID_ANY, _( "Git" ), wxDefaultPosition, wxSize( 780, 560 ),
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER, wxT( "GitAdvancedDialog" ) ),
         m_parent( aParent ),
+        m_pane( aPane ),
         m_book( nullptr ),
         m_historyList( nullptr ),
         m_branchesList( nullptr ),
@@ -429,7 +434,12 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
         m_tagsList( nullptr ),
         m_repoUserName( nullptr ),
         m_repoUserEmail( nullptr ),
-        m_repoRemoteUrl( nullptr )
+        m_repoRemoteUrl( nullptr ),
+        m_repoName( nullptr ),
+        m_branchChoice( nullptr ),
+        m_fetchButton( nullptr ),
+        m_pullButton( nullptr ),
+        m_pushButton( nullptr )
 {
     m_hash_key = "GitAdvancedDialog";
 
@@ -612,6 +622,51 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
                               switchToBranch( m_branchesList->GetItemText( aEvent.GetIndex(), 0 ) );
                           } );
 
+    // The top bar names the repository and branch and holds the remote actions. Pull and Push
+    // run through the docked panel, which owns the merge and its conflict handling.
+    wxBoxSizer* topBar = new wxBoxSizer( wxHORIZONTAL );
+
+    m_repoName = new wxStaticText( this, wxID_ANY, wxEmptyString );
+    m_repoName->SetFont( m_repoName->GetFont().Bold() );
+    m_branchChoice = new wxChoice( this, wxID_ANY );
+
+    m_fetchButton = makeBarButton( BITMAPS::git_fetch, _( "Fetch" ),
+                                   [this]()
+                                   {
+                                       onFetch();
+                                   } );
+    m_pullButton = makeBarButton( BITMAPS::git_pull, _( "Pull" ),
+                                  [this]()
+                                  {
+                                      m_pane->Pull();
+                                  } );
+    m_pushButton = makeBarButton( BITMAPS::git_push, _( "Push" ),
+                                  [this]()
+                                  {
+                                      m_pane->Push();
+                                  } );
+
+    topBar->Add( new wxStaticText( this, wxID_ANY, _( "Repository:" ) ), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 4 );
+    topBar->Add( m_repoName, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 16 );
+    topBar->Add( new wxStaticText( this, wxID_ANY, _( "Branch:" ) ), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 4 );
+    topBar->Add( m_branchChoice, 0, wxALIGN_CENTER_VERTICAL );
+    topBar->AddStretchSpacer();
+    topBar->Add( m_fetchButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 4 );
+    topBar->Add( m_pullButton, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 4 );
+    topBar->Add( m_pushButton, 0, wxALIGN_CENTER_VERTICAL );
+
+    m_branchChoice->Bind( wxEVT_CHOICE,
+                          [this]( wxCommandEvent& )
+                          {
+                              switchToBranch( m_branchChoice->GetStringSelection() );
+
+                              // A refused switch leaves the choice on a branch the tree is not
+                              // on, so put it back on the real one.
+                              ReloadPages();
+                          } );
+
+    mainSizer->Add( topBar, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+
     mainSizer->Add( m_book, 1, wxEXPAND | wxALL, 4 );
 
     wxStdDialogButtonSizer* buttons = new wxStdDialogButtonSizer();
@@ -676,11 +731,11 @@ GIT_ADVANCED_DIALOG* GIT_ADVANCED_DIALOG::Active()
 }
 
 
-void GIT_ADVANCED_DIALOG::ShowForFrame( EDA_BASE_FRAME* aParent )
+void GIT_ADVANCED_DIALOG::ShowForFrame( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane )
 {
     if( !activeDialog() )
     {
-        GIT_ADVANCED_DIALOG* dialog = new GIT_ADVANCED_DIALOG( aParent );
+        GIT_ADVANCED_DIALOG* dialog = new GIT_ADVANCED_DIALOG( aParent, aPane );
 
         dialog->Bind( wxEVT_CLOSE_WINDOW,
                       [dialog]( wxCloseEvent& )
@@ -715,19 +770,32 @@ void GIT_ADVANCED_DIALOG::CloseActive()
 }
 
 
+void GIT_ADVANCED_DIALOG::CloseForPane( GIT_COMMIT_PANE* aPane )
+{
+    if( activeDialog() && activeDialog()->m_pane == aPane )
+        CloseActive();
+}
+
+
 GIT_ADVANCED_DIALOG::~GIT_ADVANCED_DIALOG()
 {
     if( activeDialog() == this )
         setActiveDialog( nullptr );
 
-    // A push still running holds this window, so stop it and wait.
-    bool pushStarted = m_pushWorker.joinable();
+    // A push or fetch still running holds this window, so stop it and wait.
+    bool transferStarted = m_pushWorker.joinable() || m_fetchWorker.joinable();
 
     if( m_pushCancel )
         m_pushCancel->store( true );
 
-    if( pushStarted )
+    if( m_fetchCancel )
+        m_fetchCancel->store( true );
+
+    if( m_pushWorker.joinable() )
         m_pushWorker.join();
+
+    if( m_fetchWorker.joinable() )
+        m_fetchWorker.join();
 
     m_avatarCancel = true;
 
@@ -739,7 +807,7 @@ GIT_ADVANCED_DIALOG::~GIT_ADVANCED_DIALOG()
         session->RemoveRefreshListener( this );
 
         // The completion queued on this window goes with it, so the others are told here.
-        if( pushStarted )
+        if( transferStarted )
             session->NotifyRefreshListeners();
     }
 }
@@ -780,6 +848,7 @@ void GIT_ADVANCED_DIALOG::ReloadPages()
         return;
     }
 
+    populateTopBar();
     populateHistory();
     populateBranches();
     populateRemotes();
@@ -1312,6 +1381,133 @@ void GIT_ADVANCED_DIALOG::onForcePush()
                             }
 
                             DisplayErrorMessage( this, _( "Force push failed." ), error );
+                        } );
+            } );
+}
+
+
+wxButton* GIT_ADVANCED_DIALOG::makeBarButton( BITMAPS aIcon, const wxString& aLabel,
+                                              const std::function<void()>& aHandler )
+{
+    wxButton* button = new wxButton( this, wxID_ANY, aLabel );
+    button->SetBitmap( KiBitmapBundle( aIcon ) );
+    button->Bind( wxEVT_BUTTON,
+                  [aHandler]( wxCommandEvent& )
+                  {
+                      aHandler();
+                  } );
+    return button;
+}
+
+
+void GIT_ADVANCED_DIALOG::populateTopBar()
+{
+    // The caller holds the git action lock.
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    wxString                      current = common->GetCurrentBranchName();
+    wxFileName                    root = wxFileName::DirName( common->GetGitRootDirectory() );
+
+    m_repoName->SetLabel( root.GetDirs().empty() ? root.GetFullPath() : root.GetDirs().Last() );
+
+    m_branchChoice->Clear();
+
+    // Only a local branch can be checked out from here. Remote ones are on the Branches page.
+    for( const auto& [name, isRemote] : common->GetAllBranches() )
+    {
+        if( !isRemote )
+            m_branchChoice->Append( name );
+    }
+
+    m_branchChoice->SetStringSelection( current );
+    m_branchChoice->InvalidateBestSize();
+    Layout();
+}
+
+
+void GIT_ADVANCED_DIALOG::onFetch()
+{
+    if( !sessionStillCurrent() )
+        return;
+
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+
+    if( !common->GetRepo() )
+        return;
+
+    {
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            return;
+        }
+
+        if( !common->HasPushAndPullRemote() )
+        {
+            DisplayInfoMessage( this, _( "No remote is configured to fetch from." ) );
+            return;
+        }
+    }
+
+    m_fetchButton->SetLabel( _( "Fetching..." ) );
+    m_fetchButton->Disable();
+    Layout();
+
+    // Never the shared compute pool. A libgit2 network read parked there stalls DRC, zone
+    // filling and library loading.
+    KIGIT_COMMON::CANCEL_TOKEN token = KIGIT_COMMON::NewCancelToken();
+    m_fetchCancel = token;
+
+    if( m_fetchWorker.joinable() )
+        m_fetchWorker.join();
+
+    m_fetchWorker = std::thread(
+            [this, common, token]()
+            {
+                common->ClearAuthFailure();
+
+                GIT_PULL_HANDLER handler( common.get() );
+                handler.SetCancelToken( token );
+                bool     fetched = handler.PerformFetch();
+                wxString error = handler.GetErrorStrings().empty() ? wxString() : handler.GetErrorString();
+                bool     authFailure = common->WasAuthFailure();
+
+                // This operation's own token, so a fetch that never became active cannot
+                // consume a cancel belonging to the transfer that is running.
+                bool cancelled = handler.IsThisOperationCancelled();
+
+                CallAfter(
+                        [this, common, fetched, error, authFailure, cancelled]()
+                        {
+                            m_fetchButton->SetLabel( _( "Fetch" ) );
+                            m_fetchButton->Enable();
+                            Layout();
+
+                            if( cancelled )
+                                return;
+
+                            if( fetched )
+                            {
+                                common->NotifyRefreshListeners();
+                                return;
+                            }
+
+                            if( authFailure && KIGIT::PromptForCredentials( this, common.get(), &m_parent->Prj() ) )
+                            {
+                                onFetch();
+                                return;
+                            }
+
+                            // A held lock comes back as a failure with no message.
+                            if( error.IsEmpty() )
+                            {
+                                DisplayInfoMessage( this, _( "Another git operation is in progress. "
+                                                             "Try again in a moment." ) );
+                                return;
+                            }
+
+                            DisplayErrorMessage( this, _( "Fetch failed." ), error );
                         } );
             } );
 }

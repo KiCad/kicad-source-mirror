@@ -73,10 +73,13 @@ set( BMAPS_SMALL
     git_changed_ahead
     git_conflict
     git_delete
+    git_fetch
     git_good_check
     git_history
     git_modified
     git_out_of_date
+    git_pull
+    git_push
     git_remotes
     git_repository
     git_stashes
