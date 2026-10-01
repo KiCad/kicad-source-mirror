@@ -10,6 +10,7 @@
 # John Beard <john.j.beard@gmail.com>, 2025.
 # Luca Mattii <luca@glgprograms.it>, 2025, 2026.
 # Giuseppe Finizia <giuseppe.finizia@gmail.com>, 2026.
+# Integration <bot-kicad-integration@bots.noreply.weblate.org>, 2026.
 #
 # db: Usare le maiuscole con moderazione: vanno usate per i nomi propri e all'inizio
 # db: di una frase: negli altri casi può risultare molto inelegante
@@ -117,8 +118,9 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-29 19:51+0000\n"
-"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"PO-Revision-Date: 2026-10-01 05:01+0000\n"
+"Last-Translator: Integration <bot-kicad-integration@bots.noreply.weblate.org>"
+"\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
 "Language: it\n"
@@ -59348,7 +59350,7 @@ msgstr "(la piazzola deve avere una dimensione positiva)"
 #: pcbnew/pad.cpp:3457
 #, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "(la dimensione del foro piazzola PTH deve essere maggiore di %)"
+msgstr "(la dimensione del foro piazzola PTH deve essere maggiore di %s)"
 
 #: pcbnew/pad.cpp:3480
 msgid "(PTH pad hole leaves no copper)"
