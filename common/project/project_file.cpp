@@ -514,7 +514,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
     fromLegacyString( aCfg, "LastNetListRead",           "pcbnew.last_paths.netlist" );
     fromLegacyString( aCfg, "LastSTEPExportPath",        "pcbnew.last_paths.step" );
     fromLegacyString( aCfg, "LastIDFExportPath",         "pcbnew.last_paths.idf" );
-    fromLegacyString( aCfg, "LastVRMLExportPath",        "pcbnew.last_paths.vmrl" );
+    fromLegacyString( aCfg, "LastVRMLExportPath",        "pcbnew.last_paths.vrml" );
     fromLegacyString( aCfg, "LastSpecctraDSNExportPath", "pcbnew.last_paths.specctra_dsn" );
     fromLegacyString( aCfg, "LastGenCADExportPath",      "pcbnew.last_paths.gencad" );
 
