@@ -39,7 +39,19 @@
 class SCH_IO_DATABASE_CYCLE_DETECTION_FIXTURE
 {
 public:
-    SCH_IO_DATABASE_CYCLE_DETECTION_FIXTURE() = default;
+    SCH_IO_DATABASE_CYCLE_DETECTION_FIXTURE()
+    {
+        // s_inProgressLoads is static per thread, make sure any prior tests tidied up
+        // after themselves.
+        BOOST_REQUIRE_MESSAGE( SCH_IO_DATABASE::s_inProgressLoads.empty(),
+                               "s_inProgressLoads is not empty at test start" );
+    }
+
+    ~SCH_IO_DATABASE_CYCLE_DETECTION_FIXTURE()
+    {
+        // Do not leak our in-progress loads into subsequent tests.
+        SCH_IO_DATABASE::s_inProgressLoads.clear();
+    }
 
     /// Drive loadSymbolFromRow with aInProgressKey already marked in-progress, simulating the
     /// second entry of a recursive load.
@@ -49,7 +61,7 @@ public:
                                                  const DATABASE_CONNECTION::ROW& aRow,
                                                  const wxString& aInProgressKey )
     {
-        aPlugin.m_inProgressLoads.insert( aInProgressKey );
+        aPlugin.s_inProgressLoads.insert( aInProgressKey );
         return aPlugin.loadSymbolFromRow( aSymbolName, aTable, aRow );
     }
 
@@ -65,12 +77,12 @@ public:
 
     bool IsInProgressEmpty( const SCH_IO_DATABASE& aPlugin ) const
     {
-        return aPlugin.m_inProgressLoads.empty();
+        return aPlugin.s_inProgressLoads.empty();
     }
 
     std::size_t InProgressSize( const SCH_IO_DATABASE& aPlugin ) const
     {
-        return aPlugin.m_inProgressLoads.size();
+        return aPlugin.s_inProgressLoads.size();
     }
 };
 
@@ -130,7 +142,6 @@ BOOST_AUTO_TEST_CASE( RaiiGuardBalancesInProgressSet )
     row[table.symbols_col] = std::string( "SomeLib:R-001" );
 
     SCH_IO_DATABASE_CYCLE_DETECTION_FIXTURE fixture;
-    BOOST_REQUIRE( fixture.IsInProgressEmpty( plugin ) );
 
     std::unique_ptr<LIB_SYMBOL> symbol = fixture.Invoke( plugin, wxS( "R-001" ), table, row );
 

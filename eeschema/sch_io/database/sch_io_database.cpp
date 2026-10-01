@@ -43,6 +43,9 @@
 #include <dialog_database_lib_settings.h>
 
 
+thread_local std::unordered_set<wxString> SCH_IO_DATABASE::s_inProgressLoads;
+
+
 SCH_IO_DATABASE::SCH_IO_DATABASE() :
         SCH_IO( wxS( "Database library" ) ),
         m_adapter( nullptr ),
@@ -728,14 +731,14 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
                 if( owns )
                     set->erase( key );
             }
-        } guard{ &m_inProgressLoads, {}, false };
+        } guard{ &s_inProgressLoads, {}, false };
 
         bool cycle = false;
 
         if( symbolId.IsValid() )
         {
             guard.key = symbolId.Format().wx_str();
-            guard.owns = m_inProgressLoads.insert( guard.key ).second;
+            guard.owns = s_inProgressLoads.insert( guard.key ).second;
             cycle = !guard.owns;
 
             if( cycle )
