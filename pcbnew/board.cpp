@@ -1306,7 +1306,10 @@ BOARD_DESIGN_SETTINGS& BOARD::GetDesignSettings() const
 
 void BOARD::SetDesignSettings( const BOARD_DESIGN_SETTINGS& aSettings )
 {
+    std::unique_lock<std::shared_mutex> writeLock( m_CachesMutex );
+
     *m_designSettings = aSettings;
+    m_maxClearanceValue.reset();
 }
 
 
