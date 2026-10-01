@@ -588,8 +588,7 @@ bool PROJECT_LOCAL_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce
 {
     wxASSERT( m_project );
 
-    Set( "meta.filename",
-         m_project->GetProjectName() + "." + FILEEXT::ProjectLocalSettingsFileExtension );
+    Set( "meta.filename", m_project->GetProjectName() + "." + FILEEXT::ProjectLocalSettingsFileExtension );
 
     // Even if parameters were not modified, we should resave after migration
     bool force = aForce || m_wasMigrated;
@@ -606,6 +605,7 @@ bool PROJECT_LOCAL_SETTINGS::SaveAs( const wxString& aDirectory, const wxString&
 {
     Set( "meta.filename", aFile + "." + FILEEXT::ProjectLocalSettingsFileExtension );
     SetFilename( aFile );
+    SetReadOnly( false );
 
     // If we're actually going ahead and doing the save, the flag that keeps code from doing the
     // save should be cleared at this point.
