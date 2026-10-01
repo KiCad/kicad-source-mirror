@@ -61,9 +61,7 @@ bool DIALOG_GRID_SETTINGS::TransferDataToWindow()
         m_textName->SetValue( m_grid.name );
         m_checkLinked->SetValue( linked );
         m_gridSizeX.SetDoubleValue( grid.x );
-
-        if( !linked )
-            m_gridSizeY.SetDoubleValue( grid.y );
+        m_gridSizeY.SetDoubleValue( grid.y );
 
         m_textY->Enable( !linked );
     }
@@ -101,5 +99,8 @@ bool DIALOG_GRID_SETTINGS::TransferDataFromWindow()
 
 void DIALOG_GRID_SETTINGS::OnLinkedChecked( wxCommandEvent& event )
 {
+    if( !m_checkLinked->IsChecked() && m_textY->GetValue().IsEmpty() )
+        m_gridSizeY.SetDoubleValue( m_gridSizeX.GetDoubleValue() );
+
     m_textY->Enable( !m_checkLinked->IsChecked() );
 }
