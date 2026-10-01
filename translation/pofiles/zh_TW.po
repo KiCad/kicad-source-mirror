@@ -17,13 +17,15 @@
 # Shuwn Hsu <shuwn@sray.dev>, 2025, 2026.
 # Vic <zz99681254z@gmail.com>, 2025, 2026.
 # Che-Hsien Su <jonassu1101@gmail.com>, 2026.
+# Integration <bot-kicad-integration@bots.noreply.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-26 16:23+0000\n"
-"Last-Translator: pominglee <pominglee@gmail.com>\n"
+"PO-Revision-Date: 2026-10-01 05:01+0000\n"
+"Last-Translator: Integration <bot-kicad-integration@bots.noreply.weblate.org>"
+"\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -9719,12 +9721,12 @@ msgstr "在偏移 0x%06zX 處意外結束：還需要 1 位元組。"
 #: common/io/diptrace/diptrace_binary_reader.cpp:377
 #, c-format
 msgid "Unreasonable string length %d at offset 0x%06zX."
-msgstr "偏移 0x%06zX 處的字串長度 %d 不合理。"
+msgstr "偏移 0x%2$06zX 處的字串長度 %1$d 不合理。"
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:402
 #, c-format
 msgid "Unreasonable v37 string length %d at offset 0x%06zX."
-msgstr "偏移 0x%06zX 處的 v37 字串長度 %d 不合理。"
+msgstr "偏移 0x%2$06zX 處的 v37 字串長度 %1$d 不合理。"
 
 #: common/io/diptrace/diptrace_binary_reader.cpp:533
 #, c-format
@@ -14955,12 +14957,12 @@ msgstr "正在顯示 %s 與 %s 之間的手動鏈。使用重新整理可恢復�
 msgid ""
 "All %zu net chain paths between %s and %s are already committed as net "
 "chains."
-msgstr "%s 與 %s 之間全部 %zu 條網路鏈路徑皆已提交為網路鏈。"
+msgstr "%2$s 與 %3$s 之間全部 %1$zu 條網路鏈路徑皆已提交為網路鏈。"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:533
 #, c-format
 msgid "Showing %zu path(s) between %s and %s. Use Refresh to restore all."
-msgstr "正在顯示 %s 與 %s 之間的 %zu 條路徑。使用重新整理可恢復全部。"
+msgstr "正在顯示 %2$s 與 %3$s 之間的 %1$zu 條路徑。使用重新整理可恢復全部。"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:751
 #: eeschema/dialogs/dialog_create_net_chain.cpp:768
@@ -20428,7 +20430,7 @@ msgstr "網路鏈名稱「%s」含有無效字元。"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:359
 #, c-format
 msgid "Duplicate net chain name '%s' on row %zu."
-msgstr "第 %zu 列的網路鏈名稱「%s」重複。"
+msgstr "第 %2$zu 列的網路鏈名稱「%1$s」重複。"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:375
 #, c-format
@@ -20444,7 +20446,7 @@ msgstr "網路鏈類別"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:382
 #, c-format
 msgid "Duplicate class name '%s' on row %zu."
-msgstr "第 %zu 列的類別名稱「%s」重複。"
+msgstr "第 %2$zu 列的類別名稱「%1$s」重複。"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:590
 #, c-format
@@ -21184,7 +21186,7 @@ msgstr "儲存合併後的專案檔失敗：%s\n"
 #: eeschema/eeschema_jobs_handler.cpp:2441 pcbnew/pcbnew_jobs_handler.cpp:4059
 #, c-format
 msgid "Merge completed with %zu unresolved conflict(s) in %s\n"
-msgstr "合併完成，%s 中仍有 %zu 個未解決衝突\n"
+msgstr "合併完成，%2$s 中仍有 %1$zu 個未解決衝突\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2464 kicad/cli/command_mergetool.cpp:117
 #: pcbnew/pcbnew_jobs_handler.cpp:4384
@@ -21199,7 +21201,7 @@ msgstr "儲存合併後的符號庫失敗：%s\n"
 #: eeschema/eeschema_jobs_handler.cpp:2566
 #, c-format
 msgid "Symbol library merge completed with %zu unresolved conflict(s) in %s\n"
-msgstr "符號庫合併完成，%s 中仍有 %zu 個未解決衝突\n"
+msgstr "符號庫合併完成，%2$s 中仍有 %1$zu 個未解決衝突\n"
 
 #: eeschema/eeschema_settings.cpp:69 eeschema/tools/sch_actions.cpp:1213
 msgid "Net Navigator"
@@ -23373,7 +23375,7 @@ msgstr "'未知' 或 '意外'的記錄 ID %d在 %s 中被發現。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:2117
 #, c-format
 msgid "Symbol '%s' in sheet '%s' at index %d replaced with symbol \"%s\"."
-msgstr "圖頁「%s」中索引 %d 的符號「%s」已替換為符號「%s」。"
+msgstr "圖頁「%2$s」中索引 %3$d 的符號「%1$s」已替換為符號「%4$s」。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:2339
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4697
@@ -23796,31 +23798,33 @@ msgstr "DipTrace 匯入：找到 %zu 個元件，但檔頭宣告為 %d。"
 #, c-format
 msgid ""
 "DipTrace import: invalid component extra-tail length %u at offset 0x%06zX."
-msgstr "DipTrace 匯入：偏移 0x%06zX 的元件額外結尾長度 %u 無效。"
+msgstr "DipTrace 匯入：偏移 0x%2$06zX 的元件額外結尾長度 %1$u 無效。"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1093
 #, c-format
 msgid "Invalid pin count %d at component offset 0x%06zX."
-msgstr "偏移 0x%06zX 的元件接腳數 %d 無效。"
+msgstr "偏移 0x%2$06zX 的元件接腳數 %1$d 無效。"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1167
 #, c-format
 msgid ""
 "DipTrace import: failed to parse pin %d in component at 0x%06zX (offset "
 "0x%06zX): %s"
-msgstr "DipTrace 匯入：解析偏移 0x%06zX 元件的接腳 %d 失敗（偏移 0x%06zX）：%s"
+msgstr ""
+"DipTrace 匯入：解析偏移 0x%2$06zX 元件的接腳 %1$d 失敗（偏移 0x%3$06zX）"
+"：%4$s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1289
 #, c-format
 msgid ""
 "DipTrace import: invalid component shape point count %d at offset 0x%06zX."
-msgstr "DipTrace 匯入：偏移 0x%06zX 的元件外形點數 %d 無效。"
+msgstr "DipTrace 匯入：偏移 0x%2$06zX 的元件外形點數 %1$d 無效。"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:1917
 #, c-format
 msgid ""
 "DipTrace import: invalid embedded pattern %s count %d at offset 0x%06zX."
-msgstr "DipTrace 匯入：偏移 0x%06zX 的內嵌圖案 %s 數量 %d 無效。"
+msgstr "DipTrace 匯入：偏移 0x%3$06zX 的內嵌圖案 %1$s 數量 %2$d 無效。"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2204
 #, c-format
@@ -23838,25 +23842,25 @@ msgstr "DipTrace 匯入：解析匯流排入口 %d 失敗：%s"
 msgid ""
 "DipTrace import: invalid wire-net name for net index %d at offset 0x%06zX: "
 "%s."
-msgstr "DipTrace 匯入：偏移 0x%06zX 網路索引 %d 的走線網路名稱無效：%s。"
+msgstr "DipTrace 匯入：偏移 0x%2$06zX 網路索引 %1$d 的走線網路名稱無效：%3$s。"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3751
 #, c-format
 msgid ""
 "DipTrace import: invalid wire-net pin count %d for net '%s' at offset "
 "0x%06zX."
-msgstr "DipTrace 匯入：偏移 0x%06zX 網路「%s」的走線網路接腳數 %d 無效。"
+msgstr "DipTrace 匯入：偏移 0x%3$06zX 網路「%2$s」的走線網路接腳數 %1$d 無效。"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3763
 #, c-format
 msgid "DipTrace import: invalid wire count %d for net '%s' at offset 0x%06zX."
-msgstr "DipTrace 匯入：偏移 0x%06zX 網路「%s」的走線數 %d 無效。"
+msgstr "DipTrace 匯入：偏移 0x%3$06zX 網路「%2$s」的走線數 %1$d 無效。"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3795
 #, c-format
 msgid ""
 "DipTrace import: invalid wire point count %d for net '%s' at offset 0x%06zX."
-msgstr "DipTrace 匯入：偏移 0x%06zX 網路「%s」的走線點數 %d 無效。"
+msgstr "DipTrace 匯入：偏移 0x%3$06zX 網路「%2$s」的走線點數 %1$d 無效。"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:4210
 #, c-format
@@ -23869,8 +23873,8 @@ msgid ""
 "DipTrace import: loaded %zu components, %zu buses, %zu net-port labels from "
 "version %d file with %d sheets."
 msgstr ""
-"DipTrace 匯入：已從版本 %d、共 %d 張圖頁的檔案載入 %zu 個元件、%zu 條匯流"
-"排、%zu 個網路埠標籤。"
+"DipTrace 匯入：已從版本 %4$d、共 %5$d 張圖頁的檔案載入 %1$zu 個元件、%2$zu 條"
+"匯流排、%3$zu 個網路埠標籤。"
 
 #: eeschema/sch_io/diptrace/sch_io_diptrace.h:54
 msgid "DipTrace schematic files"
@@ -24303,7 +24307,7 @@ msgstr "無法建立符號庫路徑「%s」。"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:933
 #, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
-msgstr "在元件庫「%s」中找不到相關符號。"
+msgstr "在元件庫「%2$s」中找不到衍生符號 %1$s 的父符號"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:284
 #, c-format
@@ -32925,7 +32929,7 @@ msgstr "無效的 Gerber 檔案: 缺少 G74 或 G75 弧線命令"
 #: gerbview/rs274x.cpp:228
 #, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: '%s'"
-msgstr "RS274X：第 %d 行無效的 GERBER 格式命令「%c」：「%s」"
+msgstr "RS274X：第 %2$d 行無效的 GERBER 格式命令「%1$c」：「%3$s」"
 
 #: gerbview/rs274x.cpp:231
 #, c-format
@@ -59113,7 +59117,7 @@ msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在 Altium 層 (%d) 上發現非銅焊盤 %s，沒有 KiCad 等效項。它已移至 KiCad "
+"在 Altium 層 (%2$d) 上發現非銅焊盤 %1$s，沒有 KiCad 等效項。它已移至 KiCad "
 "Eco1_User 圖層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4524
@@ -59123,9 +59127,9 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"正在載入 “%s” 庫：\n"
-"在 Altium 層 (%d) 上發現封裝 %s 非銅焊盤 %s，沒有 KiCad 等效項。它已移至 "
-"KiCad Eco1_User 圖層。"
+"正在載入 “%1$s” 庫：\n"
+"在 Altium 層 (%4$d) 上發現封裝 %2$s 非銅焊盤 %3$s，沒有 KiCad 等效項。它已移"
+"至 KiCad Eco1_User 圖層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4539
 #, c-format
@@ -59133,8 +59137,8 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在 Altium 層 (%d) 上發現封裝 %s 非銅焊盤 %s，沒有 KiCad 等效項。它已移至 "
-"KiCad Eco1_User 圖層。"
+"在 Altium 層 (%3$d) 上發現封裝 %1$s 非銅焊盤 %2$s，沒有 KiCad 等效項。它已移"
+"至 KiCad Eco1_User 圖層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4567
 #, c-format
@@ -59746,7 +59750,7 @@ msgstr "全部元件數量: %d。"
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1354
 #, c-format
 msgid "DipTrace: invalid pattern-name group count %d at offset 0x%06zX"
-msgstr "DipTrace：偏移 0x%06zX 的圖案名稱群組數 %d 無效"
+msgstr "DipTrace：偏移 0x%2$06zX 的圖案名稱群組數 %1$d 無效"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1365
 #, c-format
@@ -59756,7 +59760,7 @@ msgstr "DipTrace：圖案名稱區塊數 %d 無效"
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1380
 #, c-format
 msgid "DipTrace: invalid pattern-style group count %d at offset 0x%06zX"
-msgstr "DipTrace：偏移 0x%06zX 的圖案樣式群組數 %d 無效"
+msgstr "DipTrace：偏移 0x%2$06zX 的圖案樣式群組數 %1$d 無效"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1400
 #, c-format
@@ -59781,7 +59785,7 @@ msgstr "DipTrace：偏移 0x%06zX 的規則集轉換標記無效"
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:2085
 #, c-format
 msgid "DipTrace: invalid component flag byte %u at boundary 0x%06zX"
-msgstr "DipTrace：邊界 0x%06zX 的元件旗標位元組 %u 無效"
+msgstr "DipTrace：邊界 0x%2$06zX 的元件旗標位元組 %1$u 無效"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3314
 #, c-format
@@ -59791,21 +59795,21 @@ msgstr "DipTrace：文字物件 [%d] 解析錯誤：%s"
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3393
 #, c-format
 msgid "DipTrace import: invalid net name for net index %d at offset 0x%06zX."
-msgstr "DipTrace 匯入：偏移 0x%06zX 網路索引 %d 的網路名稱無效。"
+msgstr "DipTrace 匯入：偏移 0x%2$06zX 網路索引 %1$d 的網路名稱無效。"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3678
 #, c-format
 msgid ""
 "DipTrace import: invalid route-chain node count %d for net '%s' at offset "
 "0x%06zX."
-msgstr "DipTrace 匯入：偏移 0x%06zX 網路「%s」的走線鏈節點數 %d 無效。"
+msgstr "DipTrace 匯入：偏移 0x%3$06zX 網路「%2$s」的走線鏈節點數 %1$d 無效。"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:3696
 #, c-format
 msgid ""
 "DipTrace import: route-chain node count %d for net '%s' overruns record at "
 "offset 0x%06zX."
-msgstr "DipTrace 匯入：偏移 0x%06zX 網路「%s」的走線鏈節點數 %d 超出紀錄。"
+msgstr "DipTrace 匯入：偏移 0x%3$06zX 網路「%2$s」的走線鏈節點數 %1$d 超出紀錄。"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:4422
 #, c-format
@@ -60033,7 +60037,7 @@ msgstr "未知的焊盤形狀名 '%s', 位於層 '%s' 的列 %zu。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:801
 #, c-format
 msgid "No user layer to put layer %s"
-msgstr "將選定層添加到匹配層列表。"
+msgstr "沒有可放置圖層 %s 的使用者圖層"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1014
 #, c-format
@@ -60117,7 +60121,7 @@ msgstr "期望蝕刻數據在銅層上。在層 '%s' 上找到列"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3657
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr "在圖層 %s 上，網路 %s 的區域中存在無效的孔洞，包含 %d 個點"
+msgstr "在圖層 %2$s 上，網路 %3$s 的區域中存在無效的孔洞，包含 %1$d 個點"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3699
 #, c-format
@@ -60129,7 +60133,7 @@ msgstr "輪廓似乎不連續：上一個點是 %s，下一段的起點是 %s"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3715
 #, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "無效的圖紙接腳名"
+msgstr "覆銅邊框中的形狀類型 %d 無效"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:116
 #, c-format
@@ -62294,7 +62298,7 @@ msgstr "儲存合併後的封裝庫失敗：%s\n"
 #, c-format
 msgid ""
 "Footprint library merge completed with %zu unresolved conflict(s) in %s\n"
-msgstr "封裝庫合併完成，%s 中仍有 %zu 個未解決衝突\n"
+msgstr "封裝庫合併完成，%2$s 中仍有 %1$zu 個未解決衝突\n"
 
 #: pcbnew/pcbnew_printout.cpp:106
 msgid "Multiple Layers"
@@ -64397,7 +64401,7 @@ msgstr "重複數量"
 #: pcbnew/tools/multichannel_tool.cpp:1056
 #, c-format
 msgid "Copied to %d Rule Areas."
-msgstr "轉換為規則區域"
+msgstr "已複製到 %d 個規則區域。"
 
 #: pcbnew/tools/multichannel_tool.cpp:2098
 msgid "Target Rule Area shares components with the reference area"
