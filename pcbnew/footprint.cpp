@@ -2812,7 +2812,7 @@ bool FOOTPRINT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
     else
     {
         // If the rect does not intersect the bounding box, skip any tests
-        if( !aRect.Intersects( GetBoundingBox( false ) ) )
+        if( !arect.Intersects( GetBoundingBox( false ) ) )
             return false;
 
         // If there are no pads, zones, or drawings, allow intersection with text
