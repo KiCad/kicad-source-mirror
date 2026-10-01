@@ -77,7 +77,8 @@ void TWISTEDPAIR::Analyse()
     const double theta_rad = std::atan( twist * M_PI * Dout );
     const double theta_deg = theta_rad * ( 180.0 / M_PI );
 
-    const double epsEff = epsrEnv + ( 0.25 + 0.0007 * theta_deg * theta_deg ) * ( epsr - epsrEnv );
+    const double beta = 0.25 + 0.0007 * theta_deg * theta_deg;
+    const double epsEff = epsrEnv + beta * ( epsr - epsrEnv );
     SetParameter( TCP::EPSILON_EFF, epsEff );
 
     const double z0 = ( TC::ZF0 / M_PI / std::sqrt( epsEff ) ) * std::acosh( Dout / Din );
@@ -94,8 +95,12 @@ void TWISTEDPAIR::Analyse()
     SetParameter( TCP::LOSS_CONDUCTOR, TC::LOG2DB * len / currentDepth / sigma / M_PI / z0
                                                / ( Din - currentDepth ) );
 
+    // Only the insulation is lossy, so tan delta carries its filling factor (Garg and Bahl,
+    // "Microstrip Lines and Slotlines" eq. 2.80).  The fit can exceed 1 at tight twist
+    const double lossFraction = std::min( 1.0, beta * epsr / epsEff );
+
     SetParameter( TCP::LOSS_DIELECTRIC,
-                  TC::LOG2DB * len * M_PI / TC::C0 * freq * std::sqrt( epsEff ) * tand );
+                  TC::LOG2DB * len * M_PI / TC::C0 * freq * std::sqrt( epsEff ) * tand * lossFraction );
 
     SetParameter( TCP::ANG_L, 2.0 * M_PI * len * std::sqrt( epsEff ) * freq / TC::C0 );
 
