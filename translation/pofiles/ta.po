@@ -7,15 +7,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-08-09 14:51+0000\n"
-"Last-Translator: Naveenkumar SEKAR <naveenatmit@gmail.com>\n"
+"PO-Revision-Date: 2026-10-01 05:02+0000\n"
+"Last-Translator: Integration <bot-kicad-integration@bots.noreply.weblate.org>"
+"\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/kicad/v10/ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 #: common/dialogs/panel_embedded_files.cpp:383
@@ -21510,8 +21511,8 @@ msgid ""
 "Unable to read file '%s'.\n"
 "'%s' at line %d, column %d, offset %d"
 msgstr ""
-"'%s' கோப்பைப் படிக்க முடியவில்லை. \n"
-"வரி %d இல் '%s', நெடுவரிசை %d, ஆஃப்செட் %d"
+"'%1$s' கோப்பைப் படிக்க முடியவில்லை. \n"
+"வரி %3$d இல் '%2$s', நெடுவரிசை %4$d, ஆஃப்செட் %5$d"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1087
 #, c-format
@@ -37540,7 +37541,7 @@ msgstr "(குறிப்பு வடிவமைப்பாளர் இர
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:382
 #, c-format
 msgid "<br/>%d %s at %s (rounded to %s)"
-msgstr "<br/>%s இல் %d %s (%s க்கு வட்டமானது)"
+msgstr "<br/>%3$s இல் %1$d %2$s (%4$s க்கு வட்டமானது)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:403
 msgid "Selected options resulted in errors! Change them and try again."
@@ -48771,7 +48772,7 @@ msgstr "தடயத்தில் '%s' என்ற குறியீட்�
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:244
 #, c-format
 msgid "Field '%s' differs (PCB: '%s', Schematic: '%s')"
-msgstr "புலங்கள்' வேறுபடுகின்றன (PCB', திட்டவட்டமான: '%s')"
+msgstr "புலம் '%s' வேறுபடுகிறது (PCB: '%s', திட்டவட்டமான: '%s')"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:274
 msgid "No corresponding pin found in schematic"
@@ -51264,7 +51265,7 @@ msgstr "மாறுபாடு %s இல் %s புலம் '%s' ஐ '%s' �
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1596
 #, c-format
 msgid "Change %s field '%s' to '%s' on variant %s."
-msgstr "மாறுபாடு %s இல் '%s' புலத்தை '%s' ஆக மாற்றவும்."
+msgstr "மாறுபாடு %4$s இல் %1$s இன் '%2$s' புலத்தை '%3$s' ஆக மாற்றவும்."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1607
 #, c-format
@@ -53352,8 +53353,8 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
-"%z இல் x, y, அல்லது சுழற்சி தரவைக் காணவில்லை %s ரீஃப்டெச்க்கான. இது ஒரு இடமில்லாத "
-"அங்கமாக இருக்கலாம்."
+"%zu இல் x, y, அல்லது சுழற்சி தரவைக் காணவில்லை %s ரீஃப்டெச்க்கான. இது ஒரு இடமில்லாத அங்கமாக "
+"இருக்கலாம்."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2721
 #, c-format
