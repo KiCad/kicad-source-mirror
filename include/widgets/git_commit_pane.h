@@ -33,6 +33,7 @@
 class EDA_BASE_FRAME;
 class GIT_ADVANCED_DIALOG;
 class KIGIT_COMMON;
+enum class GitOperation;
 class wxCommandEvent;
 class wxDataViewEvent;
 
@@ -104,6 +105,12 @@ private:
     /// Set what the commit buttons say, and whether they are enabled, for the current state.
     void updateCommitButton();
 
+    /// The noun for the operation in progress, for messages.
+    wxString operationNoun() const;
+
+    /// The label the network button carries while an operation is in progress.
+    wxString abandonLabel() const;
+
     /// True when the schematic or board editor holds unsaved changes. Those are committable
     /// even with a clean working tree, because the commit flow saves the editors first.
     bool anyEditorDirty() const;
@@ -126,6 +133,9 @@ private:
 
     /// True while a merge or rebase is in progress. The network button then reads Abandon.
     bool m_operationInProgress;
+
+    /// Which operation, so the button and the explanation can name it.
+    GitOperation m_operation;
 
     /// True when an open editor held unsaved changes at the last refresh.
     bool m_editorsDirty;

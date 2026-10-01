@@ -67,6 +67,18 @@ struct KIGIT_TAG_INFO
 };
 
 
+// The kind of operation a repository can be left in the middle of.
+enum class GitOperation
+{
+    None,
+    Merge,
+    Rebase,
+    CherryPick,
+    Revert,
+    Other
+};
+
+
 // Outcome of restoring an old version as a new commit.
 enum class RestoreResult
 {
@@ -258,6 +270,9 @@ public:
 
     /// True while a merge, rebase, cherry-pick or revert is in progress, which refuses commits.
     bool IsOperationInProgress() const;
+
+    /// Which operation that is, so the panel can name it.
+    GitOperation OperationInProgress() const;
 
     /// Drop that operation and return to the last commit. The caller holds the action lock.
     bool AbandonOperation( wxString& aError );

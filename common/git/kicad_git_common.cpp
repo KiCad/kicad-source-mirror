@@ -1064,6 +1064,28 @@ bool KIGIT_COMMON::IsOperationInProgress() const
 }
 
 
+GitOperation KIGIT_COMMON::OperationInProgress() const
+{
+    if( !m_repo )
+        return GitOperation::None;
+
+    switch( git_repository_state( m_repo ) )
+    {
+    case GIT_REPOSITORY_STATE_NONE: return GitOperation::None;
+    case GIT_REPOSITORY_STATE_MERGE: return GitOperation::Merge;
+    case GIT_REPOSITORY_STATE_REBASE:
+    case GIT_REPOSITORY_STATE_REBASE_INTERACTIVE:
+    case GIT_REPOSITORY_STATE_REBASE_MERGE:
+    case GIT_REPOSITORY_STATE_APPLY_MAILBOX_OR_REBASE: return GitOperation::Rebase;
+    case GIT_REPOSITORY_STATE_CHERRYPICK:
+    case GIT_REPOSITORY_STATE_CHERRYPICK_SEQUENCE: return GitOperation::CherryPick;
+    case GIT_REPOSITORY_STATE_REVERT:
+    case GIT_REPOSITORY_STATE_REVERT_SEQUENCE: return GitOperation::Revert;
+    default: return GitOperation::Other;
+    }
+}
+
+
 bool KIGIT_COMMON::AbandonOperation( wxString& aError )
 {
     return GetGitBackend()->AbandonOperation( m_repo, aError );

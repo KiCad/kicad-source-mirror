@@ -1218,6 +1218,43 @@ BOOST_AUTO_TEST_CASE( PerformPull_UnbornBranchAdoptsRemoteHistory )
 
 
 // A merge left in progress refuses every commit until it is cleared.
+// The panel names the operation it offers to abandon, so the session has to tell which it is.
+BOOST_AUTO_TEST_CASE( OperationInProgressNamesTheMerge )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    git_oid base;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &base, repo, "HEAD" ), GIT_OK );
+
+    git_oid side = createDetachedCommit( repo, base, wxT( "file.txt" ), "side\n", "Side change" );
+    createCommit( repo, wxT( "file.txt" ), wxT( "local\n" ), wxT( "Local change" ) );
+
+    {
+        git_annotated_commit* sideCommit = nullptr;
+        BOOST_REQUIRE_EQUAL( git_annotated_commit_lookup( &sideCommit, repo, &side ), GIT_OK );
+
+        const git_annotated_commit* heads[1] = { sideCommit };
+        git_checkout_options        checkoutOpts = GIT_CHECKOUT_OPTIONS_INIT;
+        checkoutOpts.checkout_strategy = GIT_CHECKOUT_SAFE | GIT_CHECKOUT_ALLOW_CONFLICTS;
+
+        BOOST_REQUIRE_EQUAL( git_merge( repo, heads, 1, nullptr, &checkoutOpts ), GIT_OK );
+        git_annotated_commit_free( sideCommit );
+    }
+
+    KIGIT_COMMON common( repo );
+    wxString     error;
+
+    BOOST_CHECK( common.OperationInProgress() == GitOperation::Merge );
+    BOOST_REQUIRE( common.AbandonOperation( error ) );
+    BOOST_CHECK( common.OperationInProgress() == GitOperation::None );
+
+    git_repository_free( repo );
+}
+
+
 BOOST_AUTO_TEST_CASE( AbandonOperation_ClearsInterruptedMerge )
 {
     BOOST_TEST_REQUIRE( ready() );

@@ -107,6 +107,7 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( EDA_BASE_FRAME* aParent ) :
         m_headDetached( false ),
         m_remoteAhead( false ),
         m_operationInProgress( false ),
+        m_operation( GitOperation::None ),
         m_editorsDirty( false ),
         m_networkBusy( false )
 {
@@ -220,6 +221,7 @@ void GIT_COMMIT_PANE::RefreshFileList()
     m_hasRemote = common->GetRepo() && common->HasPushAndPullRemote();
     m_headDetached = common->GetRepo() && common->IsHeadDetached();
     m_operationInProgress = common->GetRepo() && common->IsOperationInProgress();
+    m_operation = common->GetRepo() ? common->OperationInProgress() : GitOperation::None;
     m_remoteAhead = common->GetRepo() && common->HasUpstreamCommits();
 
     // Without a remote there is nowhere to push to, so local commits are not waiting for it.
@@ -270,9 +272,10 @@ void GIT_COMMIT_PANE::RefreshFileList()
 
     if( m_operationInProgress )
     {
-        setStatusText( _( "This project is in the middle of a merge or rebase that was started outside "
-                          "KiCad or interrupted. Abandon it to go back to the last commit, or finish it "
-                          "with the program that started it." ) );
+        setStatusText( wxString::Format( _( "This project is in the middle of a %s that was started outside "
+                                            "KiCad or interrupted. Abandon it to go back to the last commit, "
+                                            "or finish it with the program that started it." ),
+                                         operationNoun() ) );
         m_emptyLabel->Show( true );
     }
     else if( m_headDetached )
@@ -325,6 +328,7 @@ void GIT_COMMIT_PANE::showDisabledState()
     m_hasRemote = false;
     m_headDetached = false;
     m_operationInProgress = false;
+    m_operation = GitOperation::None;
     m_remoteAhead = false;
     m_editorsDirty = false;
 
@@ -410,6 +414,32 @@ void GIT_COMMIT_PANE::updateMessageVisibility( bool aHasChanges )
 }
 
 
+wxString GIT_COMMIT_PANE::operationNoun() const
+{
+    switch( m_operation )
+    {
+    case GitOperation::Merge:      return _( "merge" );
+    case GitOperation::Rebase:     return _( "rebase" );
+    case GitOperation::CherryPick: return _( "cherry-pick" );
+    case GitOperation::Revert:     return _( "revert" );
+    default: return _( "git operation" );
+    }
+}
+
+
+wxString GIT_COMMIT_PANE::abandonLabel() const
+{
+    switch( m_operation )
+    {
+    case GitOperation::Merge:      return _( "Abandon Merge" );
+    case GitOperation::Rebase:     return _( "Abandon Rebase" );
+    case GitOperation::CherryPick: return _( "Abandon Cherry-pick" );
+    case GitOperation::Revert:     return _( "Abandon Revert" );
+    default: return _( "Abandon Operation" );
+    }
+}
+
+
 void GIT_COMMIT_PANE::updateCommitButton()
 {
     // While a transfer runs the busy state owns the controls. Checklist or message edits
@@ -421,7 +451,7 @@ void GIT_COMMIT_PANE::updateCommitButton()
     {
         m_commitButton->Enable( false );
         m_commitOnlyButton->Enable( false );
-        m_pullButton->SetLabel( _( "Abandon Merge" ) );
+        m_pullButton->SetLabel( abandonLabel() );
         m_pullButton->Enable( true );
         return;
     }
@@ -712,11 +742,40 @@ void GIT_COMMIT_PANE::abandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon )
         return;
     }
 
-    if( !IsOK( this, _( "Abandon the merge and go back to the last commit?\n\n"
-                        "Changes made to the files since that commit are discarded." ) ) )
+    std::vector<wxString> outside;
+
     {
-        return;
+        std::unique_lock<std::mutex> probe = aCommon->TryLockAction();
+
+        if( !probe.owns_lock() )
+        {
+            setBusy( false, _( "Another git operation is in progress. Try again in a moment." ) );
+            return;
+        }
+
+        // Going back to the last commit covers the whole repository, so work in a sibling
+        // project goes too and has to be named before the user agrees.
+        outside = ChangedTrackedFilesOutsideProject( m_frame->Prj() );
     }
+
+    wxString question = wxString::Format( _( "Abandon the %s and go back to the last commit?\n\n"
+                                             "Changes made to the files since that commit are discarded." ),
+                                          operationNoun() );
+
+    if( !outside.empty() )
+    {
+        wxString listed;
+
+        for( const wxString& path : outside )
+            listed += wxS( "\n    " ) + path;
+
+        question += wxString::Format( _( "\n\nThis also discards uncommitted changes elsewhere in this "
+                                         "repository:%s" ),
+                                      listed );
+    }
+
+    if( !IsOK( this, question ) )
+        return;
 
     EDITOR_SNAPSHOT docsBefore = CaptureOpenEditorDocs( m_frame->Kiway() );
     wxString        error;
@@ -736,7 +795,7 @@ void GIT_COMMIT_PANE::abandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon )
 
     if( !ok )
     {
-        DisplayErrorMessage( this, _( "Could not abandon the merge." ), error );
+        DisplayErrorMessage( this, wxString::Format( _( "Could not abandon the %s." ), operationNoun() ), error );
         return;
     }
 
