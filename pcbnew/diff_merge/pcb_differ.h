@@ -29,11 +29,21 @@
 
 class BOARD;
 class BOARD_ITEM;
+class EDA_ITEM;
 class FOOTPRINT;
 
 
 namespace KICAD_DIFF
 {
+
+/// Fields match by parent footprint and untranslated name, including after a library refresh.
+/// Include the parent in the field ID because canvas lookups use only the final path component.
+/// Other items retain their UUIDs.
+KIID PcbDiffItemId( const EDA_ITEM& aItem );
+
+/// Resolve an actual UUID or a footprint field's diff ID on a board.
+/// Return nullptr when the board or item is missing.
+BOARD_ITEM* FindPcbDiffItem( const BOARD* aBoard, const KIID& aId );
 
 /**
  * Diff two already-parsed BOARDs and produce a DOCUMENT_DIFF.

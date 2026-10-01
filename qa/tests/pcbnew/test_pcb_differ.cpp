@@ -30,6 +30,7 @@
 #include <board.h>
 #include <board_item.h>
 #include <pad.h>
+#include <pcb_field.h>
 #include <pcb_track.h>
 #include <footprint.h>
 #include <settings/settings_manager.h>
@@ -248,6 +249,76 @@ BOOST_AUTO_TEST_CASE( ChildEditOnFootprintNestsUnderFootprintRecord )
     BOOST_CHECK( result.changes[0].children[0].kind == CHANGE_KIND::MODIFIED );
     BOOST_CHECK_EQUAL( result.changes[0].children[0].id.back().AsString().ToStdString(),
                        pad->m_Uuid.AsString().ToStdString() );
+}
+
+
+BOOST_AUTO_TEST_CASE( FieldMatchesAfterUuidChanges )
+{
+    BOOST_REQUIRE( !m_before->Footprints().empty() );
+    FOOTPRINT* beforeFp = m_before->Footprints().front();
+    auto*      afterFp = dynamic_cast<FOOTPRINT*>( m_after->ResolveItem( beforeFp->m_Uuid, true ) );
+    BOOST_REQUIRE( afterFp );
+
+    PCB_FIELD& beforeField = beforeFp->Value();
+    PCB_FIELD& afterField = afterFp->Value();
+    afterField.SetUuid( KIID() );
+
+    // A library refresh may assign a new UUID without changing the field itself.
+    PCB_DIFFER unchangedDiffer( m_before.get(), m_after.get() );
+    BOOST_CHECK( unchangedDiffer.Diff().Empty() );
+
+    afterField.SetText( wxS( "QA_CHANGED_VALUE" ) );
+    PCB_DIFFER    differ( m_before.get(), m_after.get() );
+    DOCUMENT_DIFF diff = differ.Diff();
+
+    BOOST_REQUIRE_EQUAL( diff.changes.size(), 1u );
+    BOOST_REQUIRE_EQUAL( diff.changes[0].children.size(), 1u );
+    const ITEM_CHANGE& change = diff.changes[0].children[0];
+    BOOST_CHECK( change.kind == CHANGE_KIND::MODIFIED );
+    BOOST_REQUIRE_EQUAL( change.id.size(), 2u );
+    BOOST_CHECK( change.id.at( 0 ) == beforeFp->m_Uuid );
+
+    // The same diff ID must find each side's field despite their different actual UUIDs.
+    BOOST_CHECK( FindPcbDiffItem( m_before.get(), change.id.back() ) == &beforeField );
+    BOOST_CHECK( FindPcbDiffItem( m_after.get(), change.id.back() ) == &afterField );
+    BOOST_CHECK( FindPcbDiffItem( m_before.get(), beforeField.m_Uuid ) == &beforeField );
+    BOOST_CHECK( FindPcbDiffItem( m_after.get(), afterField.m_Uuid ) == &afterField );
+}
+
+
+BOOST_AUTO_TEST_CASE( SameNamedFieldsHaveDistinctDiffIdsAcrossFootprints )
+{
+    int changed = 0;
+
+    for( FOOTPRINT* fp : m_after->Footprints() )
+    {
+        fp->Value().SetText( wxS( "QA_VALUE_" ) + fp->GetReference() );
+
+        if( ++changed == 2 )
+            break;
+    }
+
+    BOOST_REQUIRE_EQUAL( changed, 2 );
+    PCB_DIFFER    differ( m_before.get(), m_after.get() );
+    DOCUMENT_DIFF diff = differ.Diff();
+
+    BOOST_REQUIRE_EQUAL( diff.changes.size(), 2u );
+    BOOST_REQUIRE_EQUAL( diff.changes[0].children.size(), 1u );
+    BOOST_REQUIRE_EQUAL( diff.changes[1].children.size(), 1u );
+    const ITEM_CHANGE& first = diff.changes[0].children[0];
+    const ITEM_CHANGE& second = diff.changes[1].children[0];
+    BOOST_REQUIRE_EQUAL( first.id.size(), 2u );
+    BOOST_REQUIRE_EQUAL( second.id.size(), 2u );
+
+    // Canvas lookups use only the last path component, so the parent paths alone are insufficient.
+    BOOST_CHECK( first.id.back() != second.id.back() );
+
+    for( const ITEM_CHANGE& parent : diff.changes )
+    {
+        auto* fp = dynamic_cast<FOOTPRINT*>( m_after->ResolveItem( parent.id.back(), true ) );
+        BOOST_REQUIRE( fp );
+        BOOST_CHECK( FindPcbDiffItem( m_after.get(), parent.children[0].id.back() ) == &fp->Value() );
+    }
 }
 
 

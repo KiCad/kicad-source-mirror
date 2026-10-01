@@ -10,6 +10,7 @@
  */
 
 #include <diff_merge/pcb_diff_canvas_context.h>
+#include <diff_merge/pcb_differ.h>
 
 #include <board.h>
 #include <board_item.h>
@@ -42,7 +43,7 @@ public:
     {
     }
 
-    /// Uuids of items the canvas has muted. Shared with the dimmer callback so
+    /// Diff IDs of items the canvas has muted. Shared with the dimmer callback so
     /// hiding a change drops its category color back to neutral grey.
     std::shared_ptr<std::set<KIID>> DimmedSet() const { return m_dimmed; }
 
@@ -52,7 +53,7 @@ public:
 
         if( edaItem )
         {
-            KIID key = edaItem->m_Uuid;
+            KIID key = KICAD_DIFF::PcbDiffItemId( *edaItem );
 
             if( m_overrides.count( key ) == 0 )
             {
@@ -190,6 +191,7 @@ void ConfigurePcbDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, BOARD* aReferen
 
     std::shared_ptr<std::set<KIID>> dimmed = painter->DimmedSet();
     aCanvas.SetContextPainter( std::move( painter ) );
+    aCanvas.SetItemIdGetter( PcbDiffItemId );
 
     aCanvas.SetItemDimmer(
             [dimmed]( KIGFX::VIEW_ITEM* aItem, bool aDim )
@@ -200,9 +202,9 @@ void ConfigurePcbDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, BOARD* aReferen
                     return;
 
                 if( aDim )
-                    dimmed->insert( eda->m_Uuid );
+                    dimmed->insert( PcbDiffItemId( *eda ) );
                 else
-                    dimmed->erase( eda->m_Uuid );
+                    dimmed->erase( PcbDiffItemId( *eda ) );
             } );
 
     std::vector<KIGFX::VIEW_ITEM*> items;
@@ -234,7 +236,7 @@ void ConfigurePcbDiffCanvasContext( WIDGET_DIFF_CANVAS& aCanvas, BOARD* aReferen
         if( !edaItem )
             continue;
 
-        auto it = aCategories.find( edaItem->m_Uuid );
+        auto it = aCategories.find( PcbDiffItemId( *edaItem ) );
 
         if( it != aCategories.end() )
             itemCategories[viewItem] = it->second;

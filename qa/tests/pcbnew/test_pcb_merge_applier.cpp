@@ -515,9 +515,8 @@ BOOST_AUTO_TEST_CASE( MergePropsResolutionKindsAndFailedCount )
 
 // Characterize footprint-child resolution by KIID. The applier's internal
 // item lookup must resolve not only top-level items but also footprint
-// children (pads, fields, graphics, zones) under their own UUIDs, because the
-// child-MERGE_PROPS post-pass looks up each child on ours/theirs/ancestor by
-// its UUID. This test hand-builds a MERGE_PROPS action targeting a pad inside
+// children (pads, fields, graphics, zones) when supplied their actual UUIDs.
+// This test hand-builds a MERGE_PROPS action targeting a pad inside
 // a footprint and verifies the resolution lands, proving the applier resolved
 // the pad child on the source boards by KIID. Behavior-preserving safety net
 // for the BOARD::ResolveItem delegation refactor.
@@ -778,6 +777,125 @@ BOOST_AUTO_TEST_CASE( ChildDeleteResolutionRemovesChildFromMerge )
 
         for( PAD* pad : mergedFp->Pads() )
             BOOST_CHECK( !pad || pad->m_Uuid != padUuid );
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( FieldReplacementPreservesVariantOverrides )
+{
+    BOOST_REQUIRE( !m_ancestor->Footprints().empty() );
+    const KIID fpUuid = m_ancestor->Footprints().front()->m_Uuid;
+
+    for( BOARD* board : { m_ancestor.get(), m_ours.get(), m_theirs.get() } )
+    {
+        auto* fp = dynamic_cast<FOOTPRINT*>( board->ResolveItem( fpUuid, true ) );
+        BOOST_REQUIRE( fp );
+
+        for( const wxString& name : { wxS( "Production" ), wxS( "Prototype" ) } )
+        {
+            FOOTPRINT_VARIANT variant( name );
+            variant.SetFieldValue( wxS( "Value" ), name + wxS( " value" ) );
+            variant.SetFieldValue( wxS( "Reference" ), name + wxS( " reference" ) );
+            fp->SetVariant( variant );
+        }
+    }
+
+    for( BOARD* source : { m_ours.get(), m_theirs.get() } )
+    {
+        auto* fp = dynamic_cast<FOOTPRINT*>( source->ResolveItem( fpUuid, true ) );
+        BOOST_REQUIRE( fp );
+        const wxString text = source == m_ours.get() ? wxS( "QA_OURS" ) : wxS( "QA_THEIRS" );
+        fp->Value().SetText( text );
+        fp->Value().SetUuid( KIID() );
+
+        PCB_DIFFER    differ( m_ancestor.get(), source );
+        DOCUMENT_DIFF diff = differ.Diff();
+        BOOST_REQUIRE_EQUAL( diff.changes.size(), 1u );
+        BOOST_REQUIRE_EQUAL( diff.changes[0].children.size(), 1u );
+
+        // Leave the parent at the ancestor version so only the child resolution can apply the edit.
+        ITEM_RESOLUTION action;
+        action.id = diff.changes[0].children[0].id;
+        action.kind = source == m_ours.get() ? ITEM_RES::TAKE_OURS : ITEM_RES::TAKE_THEIRS;
+        MERGE_PLAN plan;
+        plan.actions.push_back( action );
+
+        PCB_MERGE_APPLIER      applier( m_ancestor.get(), m_ours.get(), m_theirs.get(), plan );
+        std::unique_ptr<BOARD> merged = applier.Apply();
+        BOOST_REQUIRE( merged );
+        auto* mergedFp = dynamic_cast<FOOTPRINT*>( merged->ResolveItem( fpUuid, true ) );
+        BOOST_REQUIRE( mergedFp );
+        BOOST_CHECK_EQUAL( mergedFp->GetValue(), text );
+        BOOST_CHECK( mergedFp->Value().GetParent() == mergedFp );
+        BOOST_CHECK( merged->ResolveItem( mergedFp->Value().m_Uuid, true ) == &mergedFp->Value() );
+
+        for( const wxString& name : { wxS( "Production" ), wxS( "Prototype" ) } )
+        {
+            const FOOTPRINT_VARIANT* variant = mergedFp->GetVariant( name );
+            BOOST_REQUIRE( variant );
+            BOOST_CHECK_EQUAL( variant->GetFieldValue( wxS( "Value" ) ), name + wxS( " value" ) );
+            BOOST_CHECK_EQUAL( variant->GetFieldValue( wxS( "Reference" ) ), name + wxS( " reference" ) );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( FieldDeletionRemovesOnlyItsVariantOverrides )
+{
+    BOOST_REQUIRE( !m_ancestor->Footprints().empty() );
+    const KIID     fpUuid = m_ancestor->Footprints().front()->m_Uuid;
+    const wxString fieldName = wxS( "QA_RemovedField" );
+
+    for( BOARD* board : { m_ancestor.get(), m_ours.get(), m_theirs.get() } )
+    {
+        auto* fp = dynamic_cast<FOOTPRINT*>( board->ResolveItem( fpUuid, true ) );
+        BOOST_REQUIRE( fp );
+        auto* field = new PCB_FIELD( fp, FIELD_T::USER, fieldName );
+        field->SetText( wxS( "Original text" ) );
+        fp->Add( field );
+
+        for( const wxString& name : { wxS( "Production" ), wxS( "Prototype" ) } )
+        {
+            FOOTPRINT_VARIANT variant( name );
+            variant.SetFieldValue( fieldName, name + wxS( " field" ) );
+            variant.SetFieldValue( wxS( "Value" ), name + wxS( " value" ) );
+            fp->SetVariant( variant );
+        }
+    }
+
+    auto* oursFp = dynamic_cast<FOOTPRINT*>( m_ours->ResolveItem( fpUuid, true ) );
+    BOOST_REQUIRE( oursFp );
+    PCB_FIELD* removedField = oursFp->GetField( fieldName );
+    BOOST_REQUIRE( removedField );
+    oursFp->Remove( removedField );
+    delete removedField;
+
+    PCB_DIFFER    differ( m_ancestor.get(), m_ours.get() );
+    DOCUMENT_DIFF diff = differ.Diff();
+    BOOST_REQUIRE_EQUAL( diff.changes.size(), 1u );
+    BOOST_REQUIRE_EQUAL( diff.changes[0].children.size(), 1u );
+    BOOST_CHECK( diff.changes[0].children[0].kind == CHANGE_KIND::REMOVED );
+
+    // Keep the ancestor's footprint and variants, then apply only the field deletion.
+    ITEM_RESOLUTION action;
+    action.id = diff.changes[0].children[0].id;
+    action.kind = ITEM_RES::DELETE_ITEM;
+    MERGE_PLAN plan;
+    plan.actions.push_back( action );
+
+    PCB_MERGE_APPLIER      applier( m_ancestor.get(), m_ours.get(), m_theirs.get(), plan );
+    std::unique_ptr<BOARD> merged = applier.Apply();
+    BOOST_REQUIRE( merged );
+    auto* mergedFp = dynamic_cast<FOOTPRINT*>( merged->ResolveItem( fpUuid, true ) );
+    BOOST_REQUIRE( mergedFp );
+    BOOST_CHECK( mergedFp->GetField( fieldName ) == nullptr );
+
+    for( const wxString& name : { wxS( "Production" ), wxS( "Prototype" ) } )
+    {
+        const FOOTPRINT_VARIANT* variant = mergedFp->GetVariant( name );
+        BOOST_REQUIRE( variant );
+        BOOST_CHECK( !variant->HasFieldValue( fieldName ) );
+        BOOST_CHECK_EQUAL( variant->GetFieldValue( wxS( "Value" ) ), name + wxS( " value" ) );
     }
 }
 

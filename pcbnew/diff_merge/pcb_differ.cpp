@@ -52,6 +52,42 @@
 namespace KICAD_DIFF
 {
 
+KIID PcbDiffItemId( const EDA_ITEM& aItem )
+{
+    if( const PCB_FIELD* field = dynamic_cast<const PCB_FIELD*>( &aItem ) )
+    {
+        if( const FOOTPRINT* fp = field->GetParentFootprint() )
+            return KIID::FromDeterministicString( fp->m_Uuid.AsString() + wxS( ":" ) + field->GetUntranslatedName() );
+    }
+
+    return aItem.m_Uuid;
+}
+
+
+BOARD_ITEM* FindPcbDiffItem( const BOARD* aBoard, const KIID& aId )
+{
+    if( !aBoard )
+        return nullptr;
+
+    // ResolveItem uses the board's UUID cache for top-level items and footprint children.
+    // Request nullptr on a miss instead of the DELETED_BOARD_ITEM sentinel so field diff
+    // IDs reach the name-based lookup below and missing items still return nullptr.
+    if( BOARD_ITEM* item = aBoard->ResolveItem( aId, /* aAllowNullptrReturn */ true ) )
+        return item;
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+    {
+        for( PCB_FIELD* field : fp->GetFields() )
+        {
+            if( PcbDiffItemId( *field ) == aId )
+                return field;
+        }
+    }
+
+    return nullptr;
+}
+
+
 PCB_DIFFER::PCB_DIFFER( const BOARD* aBefore, const BOARD* aAfter, const wxString& aPath ) :
         m_before( aBefore ),
         m_after( aAfter ),
@@ -269,9 +305,8 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
     if( !aBefore || !aAfter )
         return children;
 
-    // Collect child items keyed by (parent_footprint_uuid, child_uuid) so the
-    // identifier is globally meaningful — child UUIDs alone are not
-    // sufficiently unique to be used as merge-engine keys outside their parent.
+    // Keep the parent footprint in the path so consumers can group child changes
+    // and the merge applier can locate their destination footprint.
     std::vector<ITEM_DESCRIPTOR>           beforeDesc;
     std::vector<ITEM_DESCRIPTOR>           afterDesc;
     std::map<KIID_PATH, const BOARD_ITEM*> beforeMap;
@@ -282,11 +317,7 @@ std::vector<ITEM_CHANGE> PCB_DIFFER::diffFootprintChildren( const FOOTPRINT* aBe
         ITEM_DESCRIPTOR d = makeDescriptor( aChild );
         d.id = KIID_PATH();
         d.id.push_back( aFp->m_Uuid );
-
-        if( const PCB_FIELD* field = dynamic_cast<const PCB_FIELD*>( aChild ) )
-            d.id.push_back( KIID::FromDeterministicString( field->GetUntranslatedName() ) );
-        else
-            d.id.push_back( aChild->m_Uuid );
+        d.id.push_back( PcbDiffItemId( *aChild ) );
 
         return d;
     };

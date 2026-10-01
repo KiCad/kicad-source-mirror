@@ -20,6 +20,7 @@
 
 #include "pcb_merge_applier.h"
 #include "applier_helpers.h"
+#include "pcb_differ.h"
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -58,15 +59,7 @@ PCB_MERGE_APPLIER::PCB_MERGE_APPLIER( const BOARD* aAncestor, const BOARD* aOurs
 
 const BOARD_ITEM* PCB_MERGE_APPLIER::findItem( const BOARD* aBoard, const KIID& aId ) const
 {
-    if( !aBoard )
-        return nullptr;
-
-    // The board maintains its own KIID->item cache (m_itemByIdCache) and
-    // resolves top-level items plus footprint children (pads, fields,
-    // graphics, zones), a superset of what this applier needs.  Request
-    // nullptr-on-missing rather than the DELETED_BOARD_ITEM sentinel so the
-    // lookup keeps its original "not found = nullptr" contract.
-    return aBoard->ResolveItem( aId, /* aAllowNullptrReturn */ true );
+    return FindPcbDiffItem( aBoard, aId );
 }
 
 
@@ -675,7 +668,7 @@ std::unique_ptr<BOARD> PCB_MERGE_APPLIER::Apply()
 
     // Child-level resolution post-pass. The merge engine emits actions for
     // footprint children (pads, fields, graphics, zones) with KIID_PATHs of
-    // the form [parent_uuid, child_uuid]. The top-level loop above brings
+    // the form [parent_uuid, child_diff_id]. The top-level loop above brings
     // children along when the parent footprint is cloned, but does NOT apply
     // per-child resolutions. This pass finds the cloned child on the result
     // board and adds/removes/merges it per its resolution.
@@ -748,7 +741,7 @@ std::unique_ptr<BOARD> PCB_MERGE_APPLIER::Apply()
         {
             for( PCB_FIELD* f : parentFp->GetFields() )
             {
-                if( f && f->m_Uuid == childUuid )
+                if( f && ( f->m_Uuid == childUuid || PcbDiffItemId( *f ) == childUuid ) )
                 {
                     targetChild = f;
                     break;
@@ -756,19 +749,32 @@ std::unique_ptr<BOARD> PCB_MERGE_APPLIER::Apply()
             }
         }
 
-        // Replace the parent's current child (if any) with a clone of the
-        // chosen side's child, or add it when the ours-based parent clone does
-        // not carry it.  Used by the take-a-side child resolutions below.
+        // Adopt the chosen side's child, updating existing fields in place and
+        // cloning other children. Used by the take-a-side child resolutions below.
         auto adoptChildFrom = [&]( const BOARD* aSide )
         {
+            const BOARD_ITEM* src = findItem( aSide, childUuid );
+
+            if( targetChild && src && targetChild->Type() == PCB_FIELD_T )
+            {
+                // Remove() deletes the field's variant overrides. Keep the existing field
+                // and its ownership when replacing its contents with the chosen side's.
+                EDA_GROUP* parentGroup = targetChild->GetParentGroup();
+
+                targetChild->CopyFrom( src );
+                targetChild->SetParent( parentFp );
+                targetChild->SetParentGroup( parentGroup );
+                targetChild->ClearEditFlags();
+                parentFp->InvalidateGeometryCaches();
+                return;
+            }
+
             if( targetChild )
             {
                 parentFp->Remove( targetChild );
                 delete targetChild;
                 targetChild = nullptr;
             }
-
-            const BOARD_ITEM* src = findItem( aSide, childUuid );
 
             if( !src )
                 return;
@@ -791,8 +797,7 @@ std::unique_ptr<BOARD> PCB_MERGE_APPLIER::Apply()
             if( !targetChild )
                 break;
 
-            // Footprint children carry globally-unique UUIDs, so the per-board
-            // index keys them directly — no parent-scoped scan needed.
+            // Resolve the same diff identity on each side, including name-based field IDs.
             const BOARD_ITEM* oursChild     = findItem( m_ours, childUuid );
             const BOARD_ITEM* theirsChild   = findItem( m_theirs, childUuid );
             const BOARD_ITEM* ancestorChild = findItem( m_ancestor, childUuid );

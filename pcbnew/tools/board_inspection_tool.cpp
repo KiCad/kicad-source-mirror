@@ -2050,7 +2050,7 @@ PCB_DIFF_VIEW buildPcbDiffView( BOARD* aLive, BOARD* aOther, const wxString& aOt
         if( color != theme.removed )
             continue;
 
-        if( BOARD_ITEM* found = aLive->ResolveItem( kiid, /*aAllowNullptrReturn=*/true ) )
+        if( BOARD_ITEM* found = KICAD_DIFF::FindPcbDiffItem( aLive, kiid ) )
         {
             if( BOARD_ITEM* clone = dynamic_cast<BOARD_ITEM*>( found->Clone() ) )
                 view.clones.emplace_back( clone );

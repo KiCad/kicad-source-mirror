@@ -145,9 +145,7 @@ public:
     const REPORT& GetReport() const { return m_report; }
 
 private:
-    /// Locate an item (top-level or footprint child) by UUID on one of the
-    /// source boards.  Delegates to BOARD::ResolveItem, which maintains its own
-    /// KIID->item cache and resolves footprint children under their own UUIDs.
+    /// Locate an item by UUID or a footprint field's name-based diff ID on a source board.
     const BOARD_ITEM* findItem( const BOARD* aBoard, const KIID& aId ) const;
 
     /// Clone a board item using its virtual Clone(); returns nullptr if the

@@ -224,7 +224,7 @@ void WIDGET_DIFF_CANVAS::HighlightChange( std::optional<KIID_PATH> aChangeId )
         {
             EDA_ITEM* eda = dynamic_cast<EDA_ITEM*>( item );
 
-            if( !eda || eda->m_Uuid != *focusKiid )
+            if( !eda || getItemId( *eda ) != *focusKiid )
                 continue;
 
             const BOX2I bb = item->ViewBBox();
@@ -322,7 +322,7 @@ void WIDGET_DIFF_CANVAS::refreshItemDimming()
     if( !m_itemDimmer )
         return;
 
-    // Item Uuids of the hidden changes (a change id's last element is its item).
+    // Item IDs of the hidden changes (a change id's last element is its item).
     std::set<KIID> hiddenItems;
 
     for( const KIID_PATH& path : m_hiddenChanges )
@@ -337,11 +337,17 @@ void WIDGET_DIFF_CANVAS::refreshItemDimming()
             continue;
 
         EDA_ITEM*  eda = dynamic_cast<EDA_ITEM*>( item );
-        const bool hidden = eda && hiddenItems.count( eda->m_Uuid ) > 0;
+        const bool hidden = eda && hiddenItems.count( getItemId( *eda ) ) > 0;
 
         m_itemDimmer( item, hidden );
         m_view->Update( item, KIGFX::REPAINT );
     }
+}
+
+
+KIID WIDGET_DIFF_CANVAS::getItemId( const EDA_ITEM& aItem ) const
+{
+    return m_itemIdGetter ? m_itemIdGetter( aItem ) : aItem.m_Uuid;
 }
 
 

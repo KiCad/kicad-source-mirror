@@ -35,6 +35,8 @@
 #include <set>
 #include <vector>
 
+class EDA_ITEM;
+
 
 namespace KIGFX
 {
@@ -97,6 +99,10 @@ public:
     /// Tag context items by change category so SetCategoryVisible can hide /
     /// show them in lockstep with the diff-category checkboxes.
     void SetItemCategories( std::map<KIGFX::VIEW_ITEM*, KICAD_DIFF::CATEGORY> aMap );
+
+    /// Override context item identity when a differ uses IDs other than the item UUID.
+    using ITEM_ID_GETTER = std::function<KIID( const EDA_ITEM& )>;
+    void SetItemIdGetter( const ITEM_ID_GETTER& aGetter ) { m_itemIdGetter = aGetter; }
 
     /// Kiface-supplied callback that dims/undims a context item.
     using DIMMER = std::function<void( KIGFX::VIEW_ITEM*, bool aDim )>;
@@ -168,6 +174,8 @@ private:
     /// Dim context items that are hidden, or unfocused while a highlight is active.
     void refreshItemDimming();
 
+    KIID getItemId( const EDA_ITEM& aItem ) const;
+
     /// Hit test in screen coordinates → topmost SCENE_SHAPE under the cursor.
     const KICAD_DIFF::SCENE_SHAPE* shapeAt( const wxPoint& aScreenPoint ) const;
 
@@ -191,6 +199,7 @@ private:
     PICK_HANDLER             m_pickHandler;
     ITEM_HANDLER                        m_dclickHandler;
     DIMMER                              m_itemDimmer;
+    ITEM_ID_GETTER                      m_itemIdGetter;
     std::unique_ptr<HIGHLIGHT_BOX_ITEM> m_highlightBox;
     std::unique_ptr<HIGHLIGHT_BOX_ITEM> m_hoverBox;
 
