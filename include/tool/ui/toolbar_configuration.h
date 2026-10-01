@@ -190,8 +190,15 @@ class KICOMMON_API TOOLBAR_CONFIGURATION
 {
 public:
 
-    TOOLBAR_CONFIGURATION() {}
-    virtual ~TOOLBAR_CONFIGURATION() {}
+    TOOLBAR_CONFIGURATION()
+    {
+        // If this ever has to be reallocated, it risks invalidating any TOOLBAR_ITEM_REFs
+        // currently held.
+        m_toolbarItems.reserve( 200 );
+    }
+
+    virtual ~TOOLBAR_CONFIGURATION()
+    {}
 
     TOOLBAR_ITEM_REF AppendAction( const std::string& aActionName )
     {
