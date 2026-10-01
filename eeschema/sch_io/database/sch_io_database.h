@@ -149,9 +149,11 @@ private:
     /// LIB_SYMBOL cache when a re-query returns identical data.
     size_t m_cacheSignature;
 
-    /// LIB_IDs whose resolution is in flight, used to break self-referential cycles where a row's
-    /// Symbols column points back into the same database library (issue #24249).
-    std::unordered_set<wxString> m_inProgressLoads;
+    /// LIB_IDs whose resolution is in flight on the calling thread, used to break self-referential
+    /// cycles where a row's Symbols column points back into the same database library (issue #24249).
+    /// The recursion is synchronous, so the chain is per thread; sharing the set would let concurrent
+    /// loads of the same symbol report a false cycle and would race on the container itself.
+    static thread_local std::unordered_set<wxString> s_inProgressLoads;
 
     /// Re-entrancy guard for cacheLib(), tripped when a self-referential load routes back through
     /// the adapter into LoadSymbol mid-build.
