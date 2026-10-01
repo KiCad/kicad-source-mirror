@@ -49,7 +49,7 @@ public:
                                                  const DATABASE_CONNECTION::ROW& aRow,
                                                  const wxString& aInProgressKey )
     {
-        aPlugin.m_inProgressLoads.insert( aInProgressKey );
+        aPlugin.s_inProgressLoads.insert( aInProgressKey );
         return aPlugin.loadSymbolFromRow( aSymbolName, aTable, aRow );
     }
 
@@ -65,12 +65,12 @@ public:
 
     bool IsInProgressEmpty( const SCH_IO_DATABASE& aPlugin ) const
     {
-        return aPlugin.m_inProgressLoads.empty();
+        return aPlugin.s_inProgressLoads.empty();
     }
 
     std::size_t InProgressSize( const SCH_IO_DATABASE& aPlugin ) const
     {
-        return aPlugin.m_inProgressLoads.size();
+        return aPlugin.s_inProgressLoads.size();
     }
 };
 
