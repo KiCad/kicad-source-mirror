@@ -68,8 +68,8 @@ std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
 {
     // returns a string compatible with PDF string convention from a unicode string.
     // if the initial text is only ASCII7, return the text between ( and ) for a good readability
-    // if the initial text is no ASCII7, return the text between < and >
-    // and encoded using 16 bits hexa (4 digits) by wide char (unicode 16)
+    // if the initial text contains non ASCII7, return the text between < and > encoded using 16
+    // bit hexadecimal (4 digits) per wide char (unicode 16)
     std::string result;
 
     // Is aText only ASCII7 ?
