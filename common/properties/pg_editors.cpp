@@ -444,7 +444,9 @@ bool PG_RATIO_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aP
         }
         else
         {
-            double dblValue;
+            // One could argue that 1.0 would be a better default for a ratio, but we currently
+            // only use this for solder paste margins, where 0.0 makes more sense.
+            double dblValue = 0.0;
             textVal.ToDouble( &dblValue );
             std::optional<double> result( dblValue );
             changed = ( aVariant.IsNull() || result != variantData->Value() );
@@ -458,7 +460,9 @@ bool PG_RATIO_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aP
     }
     else
     {
-        double result;
+        // One could argue that 1.0 would be a better default for a ratio, but we currently
+        // only use this for solder paste margins, where 0.0 makes more sense.
+        double result = 0.0;
         textVal.ToDouble( &result );
         changed = ( aVariant.IsNull() || result != aVariant.GetDouble() );
 
@@ -469,8 +473,7 @@ bool PG_RATIO_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aP
         }
     }
 
-    // Changing unspecified always causes event (returning
-    // true here should be enough to trigger it).
+    // Changing unspecified always causes event (returning true here should be enough to trigger it).
     if( !changed && aVariant.IsNull() )
         changed = true;
 
@@ -501,8 +504,7 @@ void PG_RATIO_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) 
     }
     else if( !aProperty->IsValueUnspecified() )
     {
-        wxFAIL_MSG( wxT( "PG_RATIO_EDITOR should only be used with scale-free numeric "
-                         "properties!" ) );
+        wxFAIL_MSG( wxT( "PG_RATIO_EDITOR should only be used with scale-free numeric properties!" ) );
     }
 }
 
@@ -544,9 +546,8 @@ wxPGWindowList PG_FPID_EDITOR::CreateControls( wxPropertyGrid* aGrid, wxPGProper
     buttons->Add( KiBitmap( BITMAPS::small_library ) );
     buttons->Finalize( aGrid, aPos );
     wxSize textSize = buttons->GetPrimarySize();
-    wxWindow* textCtrl = aGrid->GenerateEditorTextCtrl( aPos, textSize,
-                                                       aProperty->GetValueAsString(), nullptr, 0,
-                                                       aProperty->GetMaxLength() );
+    wxWindow* textCtrl = aGrid->GenerateEditorTextCtrl( aPos, textSize, aProperty->GetValueAsString(),
+                                                        nullptr, 0, aProperty->GetMaxLength() );
     wxPGWindowList ret( textCtrl, buttons );
     return ret;
 }
