@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-09-29 19:51+0000\n"
+"PO-Revision-Date: 2026-10-02 07:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.10\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -16444,7 +16444,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:848
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:184
 msgid "Do not populate"
-msgstr "未実装"
+msgstr "'未実装(DNP)'"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:76
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:177
@@ -17967,8 +17967,8 @@ msgstr ""
 msgid ""
 "Update symbol attribute flags like Do Not Populate to match the footprint."
 msgstr ""
-"フットプリントと一致するように、未実装(DNP) などのシンボル属性フラグを更新し"
-"ます。"
+"フットプリントと一致するように、'未実装(DNP)' などのシンボル属性フラグを更新"
+"します。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:83
 msgid "Prefer symbol unit swaps over label swaps"
@@ -22494,7 +22494,7 @@ msgstr "部品表(BOM)から除外"
 #: pcbnew/widgets/pcb_properties_panel.cpp:617
 #: pcbnew/widgets/pcb_properties_panel.cpp:712
 msgid "Do not Populate"
-msgstr "未実装"
+msgstr "'未実装(DNP)'"
 
 #: eeschema/sch_screen.cpp:749 eeschema/sch_screen.cpp:851
 #, c-format
@@ -26018,7 +26018,7 @@ msgstr "%s の値を '%s' から '%s' に変更します。"
 #: eeschema/tools/backannotate.cpp:868
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "%s の'DNP(未実装)'の設定を '%s' から '%s' に変更します。"
+msgstr "%s の'未実装(DNP)'の設定を '%s' から '%s' に変更します。"
 
 #: eeschema/tools/backannotate.cpp:882
 #, c-format
@@ -26944,7 +26944,7 @@ msgstr "部品位置情報ファイルから除外する属性を設定"
 
 #: eeschema/tools/sch_actions.cpp:1104
 msgid "Set the do not populate attribute"
-msgstr "DNP(未実装)の属性を設定"
+msgstr "'未実装(DNP)'の属性を設定"
 
 #: eeschema/tools/sch_actions.cpp:1111
 msgid "Open the library symbol in the Symbol Editor"
@@ -30328,7 +30328,7 @@ msgstr "フットプリント タイプが’未指定'のコンポーネント�
 
 #: kicad/cli/command_pcb_export_3d.cpp:93
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
-msgstr "'DNP(未実装)'が指定されたコンポーネントの 3D モデルを除く"
+msgstr "'未実装(DNP)'が指定されたコンポーネントの 3D モデルを除く"
 
 #: kicad/cli/command_pcb_export_3d.cpp:103
 msgid "Use Grid Origin for output origin"
@@ -30809,7 +30809,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_pos.cpp:82
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:110
 msgid "Exclude all footprints with the Do Not Populate flag set"
-msgstr "DNP(未実装)が指定されたすべてのフットプリントを除外"
+msgstr "'未実装(DNP)'が指定されたすべてのフットプリントを除外"
 
 #: kicad/cli/command_pcb_export_pos.cpp:86
 msgid "Include board edge layer (Gerber only)"
@@ -39342,7 +39342,7 @@ msgstr "出力単位:"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:250
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:120
 msgid "Ignore 'Do not populate' components"
-msgstr "'DNP(未実装)'の部品を無視"
+msgstr "'未実装(DNP)'の部品を無視"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:87
 #: pcbnew/dialogs/dialog_export_step_base.cpp:255
@@ -39716,7 +39716,7 @@ msgstr "ユーザー定義の原点"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:251
 msgid "Do not show components marked 'Do not populate'"
-msgstr "'DNP(未実装)'と指定された部品を表示しない"
+msgstr "'未実装(DNP)'と指定された部品を表示しない"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:256
 msgid "Do not show components with Footprint Type 'Unspecified'"
