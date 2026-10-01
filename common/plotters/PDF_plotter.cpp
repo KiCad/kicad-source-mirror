@@ -1182,13 +1182,16 @@ bool PDF_PLOTTER::StartPlot( const wxString& aPageNumber, const wxString& aPageN
     wxASSERT( m_outputFile );
 
     // First things first: the customary null object
+    m_pageHandles.clear();
     m_xrefTable.clear();
     m_xrefTable.push_back( 0 );
+    m_pageNumbers.clear();
     m_hyperlinksInPage.clear();
     m_hyperlinkMenusInPage.clear();
     m_hyperlinkHandles.clear();
     m_hyperlinkMenuHandles.clear();
     m_bookmarksInPage.clear();
+    m_imageHandles.clear();
     m_totalOutlineNodes = 0;
     m_usedBase14Fonts = false;
 
