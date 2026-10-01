@@ -200,6 +200,9 @@ const std::vector<KIGFX::VIEW_ITEM*> SELECTION::updateDrawList() const
 
 bool SELECTION::AreAllItemsIdentical() const
 {
+    if( m_items.empty() )
+        return true;
+
     return std::all_of( m_items.begin() + 1, m_items.end(),
             [&]( const EDA_ITEM* r )
             {
