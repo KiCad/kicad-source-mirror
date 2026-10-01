@@ -2153,7 +2153,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
         aGerberJob->SetWorkingOutputPath( fn.GetFullName() );
     }
 
-    wxString outPath = resolveJobOutputPath( aJob, brd );
+    wxString outPath = resolveJobOutputPath( aJob, brd, &aGerberJob->m_drawingSheet );
 
     if( aGerberJob->m_checkZonesBeforePlot )
     {
