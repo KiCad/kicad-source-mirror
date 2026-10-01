@@ -116,8 +116,9 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-25 11:51+0000\n"
-"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"PO-Revision-Date: 2026-10-01 05:02+0000\n"
+"Last-Translator: Integration <bot-kicad-integration@bots.noreply.weblate.org>"
+"\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -51981,7 +51982,7 @@ msgstr "(la piazzola deve avere una dimensione positiva)"
 #: pcbnew/pad.cpp:3025
 #, c-format
 msgid "(PTH pad hole size must be larger than %s)"
-msgstr "(la dimensione del foro piazzola PTH deve essere maggiore di %)"
+msgstr "(la dimensione del foro piazzola PTH deve essere maggiore di %s)"
 
 #: pcbnew/pad.cpp:3048
 msgid "(PTH pad hole leaves no copper)"
