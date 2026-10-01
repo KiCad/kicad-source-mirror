@@ -540,6 +540,9 @@ void PDF_PLOTTER::PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFi
 
 void PDF_PLOTTER::PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, int aWidth, void* aData )
 {
+    if( aFill == FILL_T::NO_FILL && aWidth == 0 )
+        return;
+
     SetCurrentLineWidth( aWidth );
 
     std::set<size_t>      handledArcs;
