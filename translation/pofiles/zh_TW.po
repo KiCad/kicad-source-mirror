@@ -22,8 +22,9 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-25 13:36+0000\n"
-"Last-Translator: pominglee <pominglee@gmail.com>\n"
+"PO-Revision-Date: 2026-10-01 05:02+0000\n"
+"Last-Translator: Integration <bot-kicad-integration@bots.noreply.weblate.org>"
+"\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -20900,7 +20901,7 @@ msgstr "'未知' 或 '意外'的記錄 ID %d在 %s 中被發現。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1965
 #, c-format
 msgid "Symbol '%s' in sheet '%s' at index %d replaced with symbol \"%s\"."
-msgstr "圖頁「%s」中索引 %d 的符號「%s」已替換為符號「%s」。"
+msgstr "圖頁「%2$s」中索引 %3$d 的符號「%1$s」已替換為符號「%4$s」。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:2165
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4337
@@ -21606,7 +21607,7 @@ msgstr "無法建立符號庫路徑「%s」。"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_lib_cache.cpp:865
 #, c-format
 msgid "No parent for extended symbol %s found in library '%s'"
-msgstr "在元件庫「%s」中找不到相關符號。"
+msgstr "在元件庫「%2$s」中找不到衍生符號 %1$s 的父符號"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:261
 #, c-format
@@ -29131,7 +29132,7 @@ msgstr "無效的 Gerber 檔案: 缺少 G74 或 G75 弧線命令"
 #: gerbview/rs274x.cpp:232
 #, c-format
 msgid "RS274X: Invalid GERBER format command '%c' at line %d: '%s'"
-msgstr "RS274X：第 %d 行無效的 GERBER 格式命令「%c」：「%s」"
+msgstr "RS274X：第 %2$d 行無效的 GERBER 格式命令「%1$c」：「%3$s」"
 
 #: gerbview/rs274x.cpp:235
 #, c-format
@@ -52036,7 +52037,7 @@ msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在 Altium 層 (%d) 上發現非銅焊盤 %s，沒有 KiCad 等效項。它已移至 KiCad "
+"在 Altium 層 (%2$d) 上發現非銅焊盤 %1$s，沒有 KiCad 等效項。它已移至 KiCad "
 "Eco1_User 圖層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4369
@@ -52046,9 +52047,9 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"正在載入 “%s” 庫：\n"
-"在 Altium 層 (%d) 上發現封裝 %s 非銅焊盤 %s，沒有 KiCad 等效項。它已移至 "
-"KiCad Eco1_User 圖層。"
+"正在載入 “%1$s” 庫：\n"
+"在 Altium 層 (%4$d) 上發現封裝 %2$s 非銅焊盤 %3$s，沒有 KiCad 等效項。它已移"
+"至 KiCad Eco1_User 圖層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4384
 #, c-format
@@ -52056,8 +52057,8 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在 Altium 層 (%d) 上發現封裝 %s 非銅焊盤 %s，沒有 KiCad 等效項。它已移至 "
-"KiCad Eco1_User 圖層。"
+"在 Altium 層 (%3$d) 上發現封裝 %1$s 非銅焊盤 %2$s，沒有 KiCad 等效項。它已移"
+"至 KiCad Eco1_User 圖層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4412
 #, c-format
@@ -52728,7 +52729,7 @@ msgstr "未知的焊盤形狀名 '%s', 位於層 '%s' 的列 %zu。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:810
 #, c-format
 msgid "No user layer to put layer %s"
-msgstr "將選定層添加到匹配層列表。"
+msgstr "沒有可放置圖層 %s 的使用者圖層"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1023
 #, c-format
@@ -52822,7 +52823,7 @@ msgstr "在圖層 %s 的多邊形中遇到未處理的形狀類型 %d，序列 %
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3684
 #, c-format
 msgid "Invalid hole with %d points in zone on layer %s with net %s"
-msgstr "在圖層 %s 上，網路 %s 的區域中存在無效的孔洞，包含 %d 個點"
+msgstr "在圖層 %2$s 上，網路 %3$s 的區域中存在無效的孔洞，包含 %1$d 個點"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3726
 #, c-format
@@ -52834,7 +52835,7 @@ msgstr "輪廓似乎不連續：上一個點是 %s，下一段的起點是 %s"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:3742
 #, c-format
 msgid "Invalid shape type %d in zone outline"
-msgstr "無效的圖紙接腳名"
+msgstr "覆銅邊框中的形狀類型 %d 無效"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:124
 msgid "Could not read file "
@@ -56451,7 +56452,7 @@ msgstr "重複數量"
 #: pcbnew/tools/multichannel_tool.cpp:1052
 #, c-format
 msgid "Copied to %d Rule Areas."
-msgstr "轉換為規則區域"
+msgstr "已複製到 %d 個規則區域。"
 
 #: pcbnew/tools/multichannel_tool.cpp:2089
 msgid "Target Rule Area shares components with the reference area"
