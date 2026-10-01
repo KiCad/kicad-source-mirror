@@ -94,6 +94,11 @@ VECTOR2I SELECTION::GetCenter() const
     static const std::vector<KICAD_T> textTypes = { SCH_TEXT_T, SCH_LABEL_LOCATE_ANY_T };
     bool                              hasOnlyText = true;
 
+    // GetCenter() has no meaning for an empty selection, but that's no reason to go on and
+    // divide by zero
+    if( m_items.empty() )
+        return VECTOR2I();
+
     // If the selection contains only texts calculate the center as the mean of all positions
     // instead of using the center of the total bounding box. Otherwise rotating the selection will
     // also translate it.
