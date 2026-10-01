@@ -244,26 +244,26 @@ double TRANSLINE_CALCULATION_BASE::WanHoorfarQ2( double aU, double aHBarTop )
         return std::max( 0.0, 1.0 - q1 - correction );
     }
 
-    // Narrow strip.  Wan-Hoorfar eq (6), (7), (8), (13).  b_j is the strip-geometry
-    // constant; the arccos term encodes the same field-capture geometry as the wide-strip
-    // branch but fit against the narrow-strip conformal mapping.
-    const double logEighth = std::log( 0.125 * aU );
+    // Narrow strip.  Wan-Hoorfar eq (6), (8), (13) with b_j the strip-geometry constant
+    // The printed ln(0.125 w) is a sign typo, Table I needs ln(8 / w)
+    const double logStrip = std::log( 8.0 / aU );
 
-    if( !std::isfinite( logEighth ) || logEighth == 0.0 )
+    if( !std::isfinite( logStrip ) || logStrip <= 0.0 )
         return 0.0;
 
-    const double q1 = 0.5 + 0.9 / ( M_PI * logEighth );
+    const double q1 = 0.5 + 0.9 / ( M_PI * logStrip );
     const double bj = ( aHBarTop + 1.0 ) / ( aHBarTop + 0.25 * aU - 1.0 );
 
     if( bj <= 0.0 || !std::isfinite( bj ) )
         return 0.0;
 
-    const double acosArg = std::sqrt( bj / aHBarTop ) * ( aHBarTop - 1.0 + 0.125 * aU );
+    const double acosArg = std::sqrt( bj ) * ( aHBarTop - 1.0 + 0.125 * aU ) / aHBarTop;
 
-    if( acosArg < -1.0 || acosArg > 1.0 )
+    if( !std::isfinite( acosArg ) )
         return 0.0;
 
-    const double correction = ( std::log( bj ) * std::acos( acosArg ) ) / ( 4.0 * logEighth );
+    const double correction = ( std::log( bj ) * std::acos( std::clamp( acosArg, -1.0, 1.0 ) ) )
+                              / ( 4.0 * logStrip );
     return std::max( 0.0, 1.0 - q1 - correction );
 }
 

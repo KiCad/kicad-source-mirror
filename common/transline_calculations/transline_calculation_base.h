@@ -240,12 +240,14 @@ public:
                                                          double aF ) const;
 
     /**
-     * Wan-Hoorfar 2000 eq. (12) / (13): filling factor q_2 for the second dielectric layer
-     * of a multilayer microstrip with normalised strip width aU = w/h and normalised
-     * cumulative layer boundary aHBarTop = h_2/h (so aHBarTop = 1 corresponds to the
-     * top of the substrate and aHBarTop > 1 means a mask of thickness (aHBarTop - 1) * h
-     * sits on top).  This is the corrected form valid for any number of layers, replacing
-     * Svacina's original eq (3) / (7) which is only correct for two-layer structures.
+     * Filling factor q_2 for the second dielectric layer of a multilayer microstrip with
+     * normalised strip width aU = w/h and normalised cumulative layer boundary
+     * aHBarTop = h_2/h (so aHBarTop = 1 corresponds to the top of the substrate and
+     * aHBarTop > 1 means a mask of thickness (aHBarTop - 1) * h sits on top).
+     *
+     * Wan-Hoorfar 2000 eq. (12) for wide strips (aU >= 1) and eq. (13) for narrow strips.
+     * The letter prints the narrow-strip logarithm as ln(0.125 * w), but its Table I is
+     * only reproduced with ln(8 / w), which is also the form in Svacina 1992.
      */
     static double WanHoorfarQ2( double aU, double aHBarTop );
 
