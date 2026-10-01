@@ -248,6 +248,11 @@ option( KICAD_USE_PCH
     "Enable precompiled header support"
     ON )
 
+option( KICAD_UNITY_BUILD_WXFB
+    "Compile wxFormBuilder generated sources in batches, without the precompiled header"
+    ON )
+mark_as_advanced( KICAD_UNITY_BUILD_WXFB )
+
 # Advanced option to make link maps (only available on linux)
 cmake_dependent_option( KICAD_MAKE_LINK_MAPS
     "Create link maps for artifacts"
@@ -1127,6 +1132,12 @@ add_subdirectory( utils )
 
 if( KICAD_BUILD_QA_TESTS )
     add_subdirectory( qa )
+endif()
+
+# Must follow every directory that defines targets
+if( KICAD_UNITY_BUILD_WXFB )
+    include( WxFormBuilderUnity )
+    kicad_unity_wxformbuilder_sources()
 endif()
 
 # Demos

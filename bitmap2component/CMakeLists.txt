@@ -18,7 +18,6 @@ set( BITMAP2COMPONENT_SRCS
     bitmap2cmp_panel_base.cpp
     bitmap2cmp_frame.cpp
     bitmap2cmp_panel.cpp
-    bitmap2cmp_panel_base.cpp
     )
 
 set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIES

@@ -703,6 +703,10 @@ if( KICAD_USE_PCH )
             <wx/wx.h> )
 endif()
 
+# Its header redefines the control ID macros of dialog_annotate_base.h with different values
+set_source_files_properties( dialogs/panel_eeschema_annotation_options_base.cpp
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON )
+
 target_include_directories( eeschema_kiface_objects
     PUBLIC
         .
