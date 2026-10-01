@@ -20,13 +20,15 @@
 # xXx <xxx_xxx_xxxxxxxxx@mail.ru>, 2026.
 # sergio <sergio@outerface.net>, 2026.
 # МАН69К <weblate@mah69k.net>, 2026.
+# Integration <bot-kicad-integration@bots.noreply.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-08-18 11:29+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2026-10-01 05:01+0000\n"
+"Last-Translator: Integration <bot-kicad-integration@bots.noreply.weblate.org>"
+"\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ru/>\n"
 "Language: ru\n"
@@ -35,7 +37,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -9643,7 +9645,7 @@ msgstr "Не удалось создать каталог истории: %s"
 #: common/history_lock.cpp:158
 #, c-format
 msgid "History repository is locked by %s@%s"
-msgstr "Каталог истории заблокирован"
+msgstr "Репозиторий истории заблокирован пользователем %s@%s"
 
 #: common/history_lock.cpp:168
 #, fuzzy
@@ -22766,7 +22768,7 @@ msgstr "Количество графических элементов отли�
 #: eeschema/lib_symbol.cpp:2700
 #, c-format
 msgid "Graphic item differs: %s; %s."
-msgstr "Графический элемент отличается: %s"
+msgstr "Графический элемент отличается: %s; %s."
 
 #: eeschema/lib_symbol.cpp:2717
 #, c-format
