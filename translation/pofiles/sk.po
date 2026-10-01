@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-09-30 08:29+0000\n"
+"PO-Revision-Date: 2026-10-02 07:51+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.10\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -9750,7 +9750,7 @@ msgstr "Neočakávaná cesta v spätnom volaní."
 
 #: common/oauth/oauth_loopback_server.cpp:153
 msgid "OAuth callback state did not match."
-msgstr "Stav spätného volania OAuth nesúhlasí."
+msgstr "Stav spätného volania OAuth nezodpovedá."
 
 #: common/oauth/oauth_loopback_server.cpp:163
 msgid "Authorization server returned an OAuth error."
@@ -12293,7 +12293,7 @@ msgstr "Súbor Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:554
 msgid "Specctra Session file"
-msgstr "Súbor relácie Specctra"
+msgstr "Súbor Specctra relácie"
 
 #: common/wildcards_and_files_ext.cpp:561
 msgid "IPC-D-356 Test Files"
@@ -16256,7 +16256,7 @@ msgstr "Hľadať iba v aktuálnom &výbere"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:105
 msgid "Replace matches in reference designators"
-msgstr "Nahradiť zhody v referenčných označeniach"
+msgstr "Nahradiť zodpovedajúce v referenčných označeniach"
 
 #: eeschema/dialogs/dialog_sch_find_base.cpp:110
 #: pcbnew/dialogs/dialog_find_base.cpp:88
@@ -28060,7 +28060,7 @@ msgstr "Upozornenia symbolu"
 
 #: eeschema/tools/sch_inspection_tool.cpp:324
 msgid "Select a symbol to diff against its library equivalent."
-msgstr "Vybrať symbol pre porovnanie s jeho ekvivalentom v knižnici."
+msgstr "Vybrať symbol na porovnanie s jeho ekvivalentom v knižnici."
 
 #: eeschema/tools/sch_inspection_tool.cpp:346
 #, c-format
@@ -30414,7 +30414,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_3d.cpp:182
 msgid "Only include copper items belonging to nets matching this wildcard"
 msgstr ""
-"Zahrnúť iba medené prvky patriace sspojom zodpovedajúcim tomuto zástupnému "
+"Zahrnúť iba medené prvky patriace spojom zodpovedajúcim tomuto zástupnému "
 "znaku"
 
 #: kicad/cli/command_pcb_export_3d.cpp:189
@@ -32513,8 +32513,8 @@ msgid ""
 "Resources file hash doesn't match and will not be used. Repository may be "
 "corrupted."
 msgstr ""
-"Hash súboru zdrojů nie je správný a nebude použit. Repozitár může být "
-"poškodený."
+"Hash súboru zdrojov sa nezhoduje a nebude použitý. Úložisko môže byť "
+"poškodené."
 
 #: kicad/pcm/pcm.cpp:815
 msgid "Local file"
@@ -39136,7 +39136,7 @@ msgstr "Aktualizovať puzdrá zodpovedajúce referenčnému označeniu:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:39
 msgid "Update footprints matching value:"
-msgstr "Aktualizovať hodnotu zhody puzdier:"
+msgstr "Aktualizovať puzdrá s hodnotu:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:45
 msgid "Update footprints with library id:"
@@ -41479,7 +41479,8 @@ msgstr "Používanie referenčných označení na zhodu symbolov a puzdier.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:223
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
-msgstr "Používanie pečiatok (jedinečných ID) na zhodu symbolov a puzdier.\n"
+msgstr ""
+"Použitie časových značiek (jedinečných ID) k prepojeniu symbolov a puzdier.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:26
 msgid "Netlist file:"
@@ -41592,11 +41593,11 @@ msgstr "Vrstvy KiCad"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:60
 msgid "Add selected layers to matched layers list."
-msgstr "Pridať vybrané vrstvy do zoznamu zhodných vrstiev."
+msgstr "Pridať vybrané vrstvy do zoznamu priradených vrstiev."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:65
 msgid "Remove selected layers from matched layers list."
-msgstr "Odstrániť vybrané vrstvy zo zoznamu zhodných vrstiev."
+msgstr "Odstrániť vybrané vrstvy zo zoznamu priradených vrstiev."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:69
 msgid "<<"
@@ -41604,11 +41605,11 @@ msgstr "<<"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:70
 msgid "Remove all matched layers."
-msgstr "Odstráňte všetky zhodné vrstvy."
+msgstr "Odstráňte všetky zodpovedajúce vrstvy."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:78
 msgid "Matched Layers"
-msgstr "Zhodné vrstvy"
+msgstr "Zodpovedajúce vrstvy"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:94
 msgid "Auto-Match Layers"
@@ -44211,15 +44212,15 @@ msgstr "Odstrániť riadok"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:106
 msgid "Highlight matching footprints"
-msgstr "Zvýrazniť zodpovedajúce puzdra"
+msgstr "Zvýrazniť zodpovedajúce puzdrá"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:116
 msgid "Match all"
-msgstr "Zodpovedať všetkým"
+msgstr "Zhoda všetkých"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:120
 msgid "Match any"
-msgstr "Zodpovedať ľubovoľnému"
+msgstr "Akákoľvek zhoda"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:167
 msgid "Import references"
@@ -47614,11 +47615,11 @@ msgstr "'Keepout' vrstva/y sa nezhoduje/ú."
 #: pcbnew/drc/drc_engine.cpp:2225
 #, c-format
 msgid "Rule layer '%s' not matched; rule ignored."
-msgstr "Pravidlo vrstvy '%s' nebolo splnené; pravidlo ignorované."
+msgstr "Pravidlo vrstvy '%s' nezodpovedá; pravidlo ignorované."
 
 #: pcbnew/drc/drc_engine.cpp:1752 pcbnew/drc/drc_engine.cpp:1773
 msgid "Rule layer not matched; rule ignored."
-msgstr "Pravidlo vrstvy nebolo splnené; pravidlo ignorované."
+msgstr "Pravidlo vrstvy nezodpovedá; pravidlo ignorované."
 
 #: pcbnew/drc/drc_engine.cpp:1764
 msgid "Constraint layer not matched."
@@ -54044,12 +54045,12 @@ msgstr "Spúšťanie importu DPS PADS"
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:521
 #, c-format
 msgid "Footprint '%s' not found in decal list, part skipped"
-msgstr "Puzdro '%s' sa nenašlo v decal zozname, súčiastka vynechaná"
+msgstr "Puzdro '%s' sa nenašlo v zozname puzdier, súčiastka vynechaná"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1094
 #, c-format
 msgid "Skipping decal item on unmapped layer %d"
-msgstr "Preskakujem položku decal na nemapovanej vrstve %d"
+msgstr "Preskakujem puzdro na nemapovanej vrstve %d"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads.cpp:1410
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:508
@@ -55040,9 +55041,8 @@ msgid "Post-machining"
 msgstr "Dodatočné obrábanie"
 
 #: pcbnew/pcb_track.cpp:3258
-#, fuzzy
 msgid "Automatically Update Net"
-msgstr "Automaticky aktualizovať prekovy spojov"
+msgstr "Automaticky aktualizovať spoj"
 
 #: pcbnew/pcb_track.cpp:3268 pcbnew/widgets/pcb_properties_panel.cpp:669
 msgid "Layer Top"
@@ -55199,9 +55199,8 @@ msgid "Loading Footprint Libraries"
 msgstr "Načítavanie knižníc puzdier"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:455
-#, fuzzy
 msgid "Failed to load board"
-msgstr "Nepodarilo sa načítať dosku\n"
+msgstr "Nepodarilo sa načítať dosku"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:527
 #, c-format
@@ -55514,10 +55513,9 @@ msgstr ""
 "alebo +/-."
 
 #: pcbnew/router/pns_dragger.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to drag arc tracks of %.1f degrees or greater."
-msgstr ""
-"Nepodarilo sa zmeniť veľkosť oblúkových spojov s hodnotou %s alebo väčšou."
+msgstr "Nie je možné presúvať oblúkové spoje s uhlom %.1f stupňa alebo väčším."
 
 #: pcbnew/router/pns_kicad_iface.cpp:1111
 #: pcbnew/router/pns_kicad_iface.cpp:1227 pcbnew/router/router_tool.cpp:919
@@ -56058,7 +56056,7 @@ msgstr "Zamykanie"
 
 #: pcbnew/tools/board_editor_control.cpp:615
 msgid "Specctra Session File"
-msgstr "Súbor relácie Specctra"
+msgstr "Súbor Specctra relácie"
 
 #: pcbnew/tools/board_editor_control.cpp:642
 msgid "Specctra DSN File"
@@ -57214,9 +57212,8 @@ msgid "Copied to %d Rule Areas."
 msgstr "Skopírované do %d oblastí pravidiel."
 
 #: pcbnew/tools/multichannel_tool.cpp:2134
-#, fuzzy
 msgid "Target Rule Area shares components with the reference area"
-msgstr "Súbory knižníc súčiastok"
+msgstr "Cieľová oblasť pravidiel zdieľa súčiastky s referenčnou oblasťou"
 
 #: pcbnew/tools/multichannel_tool.cpp:2137
 msgid ""
@@ -57226,12 +57223,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/tools/multichannel_tool.cpp:2140
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Shared components:\n"
 "%s"
 msgstr ""
-"Súčiastky cieľovej oblasti:\n"
+"Zdieľané súčiastky:\n"
 "%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:2278
@@ -58156,11 +58153,11 @@ msgstr "Načítať netlist a aktualizovať prepojenia na doske"
 
 #: pcbnew/tools/pcb_actions.cpp:1256
 msgid "Import Specctra Session..."
-msgstr "Importovať reláciu Specctra..."
+msgstr "Importovať Specctra reláciu..."
 
 #: pcbnew/tools/pcb_actions.cpp:1257
 msgid "Import routed Specctra session (*.ses) file"
-msgstr "Importovať súbor relácie routera Specctra (*.ses)"
+msgstr "Importovať súbor Specctra relácie (*.ses)"
 
 #: pcbnew/tools/pcb_actions.cpp:1263
 msgid "Export Specctra DSN..."
@@ -58168,7 +58165,7 @@ msgstr "Exportovať Specctra DSN..."
 
 #: pcbnew/tools/pcb_actions.cpp:1264
 msgid "Export Specctra DSN routing info"
-msgstr "Exportovať informácie routra Specctra DSN"
+msgstr "Exportovať informácie Specctra DSN routra"
 
 #: pcbnew/tools/pcb_actions.cpp:1270
 msgid "Gerbers (.gbr)..."
@@ -60921,9 +60918,8 @@ msgid "Removing isolated copper islands..."
 msgstr "Odstraňovanie izolovaných medené ostrovčekov..."
 
 #: pcbnew/zone_filler.cpp:1214
-#, fuzzy
 msgid "Refilling overlapping zones..."
-msgstr "Znova vyplnenie všetkých zón..."
+msgstr "Opätovné vypĺňanie prekrývajúcich sa zón..."
 
 #: pcbnew/zone_filler.cpp:1375
 #, c-format
