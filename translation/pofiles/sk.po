@@ -9,13 +9,15 @@
 # John Beard <john.j.beard@gmail.com>, 2025.
 # EdizonTN <EdizonTN@users.noreply.hosted.weblate.org>, 2025.
 # EdizonTN <edizontn@gmail.com>, 2026.
+# Integration <bot-kicad-integration@bots.noreply.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-09-30 08:29+0000\n"
-"Last-Translator: EdizonTN <edizontn@gmail.com>\n"
+"PO-Revision-Date: 2026-10-01 05:01+0000\n"
+"Last-Translator: Integration <bot-kicad-integration@bots.noreply.weblate.org>"
+"\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
 "Language: sk\n"
@@ -61767,7 +61769,7 @@ msgstr "Symbol '%s' sa nenašiel v gEDA knižniciach."
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:944
 #, c-format
 msgid "Route net '%s' not found, skipping"
-msgstr "Routovaný spoj '%s' sa nenašiel v '%s', bol vynechaný"
+msgstr "Routovaný spoj '%s' sa nenašiel, bol vynechaný"
 
 #: pcbnew/pcb_io/pads/pcb_io_pads_binary.cpp:965
 #, c-format
