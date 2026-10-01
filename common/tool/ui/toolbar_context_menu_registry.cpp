@@ -53,7 +53,7 @@ KICOMMON_API void TOOLBAR_CONTEXT_MENU_REGISTRY::RegisterGroupMenuFactory( const
 KICOMMON_API TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY
 TOOLBAR_CONTEXT_MENU_REGISTRY::GetMenuFactory( const std::string& aActionName )
 {
-    auto& menus = getActionMenus();
+    std::map<std::string, TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY>& menus = getActionMenus();
     auto it = menus.find( aActionName );
 
     if( it != menus.end() )
@@ -66,7 +66,7 @@ TOOLBAR_CONTEXT_MENU_REGISTRY::GetMenuFactory( const std::string& aActionName )
 KICOMMON_API TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY
 TOOLBAR_CONTEXT_MENU_REGISTRY::GetGroupMenuFactory( const std::string& aGroupName )
 {
-    auto& menus = getGroupMenus();
+    std::map<std::string, TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY>& menus = getGroupMenus();
     auto it = menus.find( aGroupName );
 
     if( it != menus.end() )

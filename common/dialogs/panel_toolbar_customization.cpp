@@ -317,7 +317,7 @@ bool PANEL_TOOLBAR_CUSTOMIZATION::TransferDataFromWindow()
 
     for( auto& [loc, config] : m_toolbars )
     {
-        auto& items = config.m_toolbarItems;
+        std::vector<TOOLBAR_ITEM>& items = config.m_toolbarItems;
 
         items.erase( std::remove_if( items.begin(), items.end(),
                     [&]( const TOOLBAR_ITEM& item )
@@ -1082,7 +1082,7 @@ void PANEL_TOOLBAR_CUSTOMIZATION::removeControlFromOtherToolbars( const std::str
         if( loc == m_currentToolbar )
             continue;
 
-        auto& items = config.m_toolbarItems;
+        std::vector<TOOLBAR_ITEM>& items = config.m_toolbarItems;
 
         items.erase( std::remove_if( items.begin(), items.end(),
                     [&]( const TOOLBAR_ITEM& item )

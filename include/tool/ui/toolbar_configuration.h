@@ -111,8 +111,7 @@ public:
      * @param aFactory Factory function that creates the context menu
      * @return Reference to parent configuration for continued chaining
      */
-    TOOLBAR_CONFIGURATION& WithContextMenu(
-            TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY aFactory );
+    TOOLBAR_CONFIGURATION& WithContextMenu( TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY aFactory );
 
     /// Allow implicit conversion back to TOOLBAR_CONFIGURATION for chaining
     operator TOOLBAR_CONFIGURATION&() { return m_parent; }
@@ -167,12 +166,11 @@ public:
      * @param aFactory Factory function that creates the context menu
      * @return Reference for continued chaining
      */
-    TOOLBAR_GROUP_CONFIG& AddContextMenu(
-            TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY aFactory )
+    TOOLBAR_GROUP_CONFIG& AddContextMenu( TOOLBAR_CONTEXT_MENU_REGISTRY::MENU_FACTORY aFactory )
     {
         // Register the factory globally using the group name
-        TOOLBAR_CONTEXT_MENU_REGISTRY::RegisterGroupMenuFactory(
-                m_groupName.ToStdString(), std::move( aFactory ) );
+        TOOLBAR_CONTEXT_MENU_REGISTRY::RegisterGroupMenuFactory( m_groupName.ToStdString(),
+                                                                 std::move( aFactory ) );
         return *this;
     }
 
