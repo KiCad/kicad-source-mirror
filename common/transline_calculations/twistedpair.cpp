@@ -129,12 +129,12 @@ void TWISTEDPAIR::SetAnalysisResults()
     const double Din = GetParameter( TCP::PHYS_DIAM_IN );
     const double Dout = GetParameter( TCP::PHYS_DIAM_OUT );
 
-    const bool Z0_invalid = !std::isfinite( Z0 ) || Z0 < 0;
+    const bool Z0_invalid = !std::isfinite( Z0 ) || Z0 <= 0;
     const bool angL_invalid = !std::isfinite( angL ) || angL < 0;
     const bool len_invalid = !std::isfinite( len ) || len < 0;
     const bool Din_invalid = !std::isfinite( Din ) || Din <= 0.0;
     const bool Dout_invalid = !std::isfinite( Dout ) || Dout <= 0.0;
-    const bool geometry_invalid = Din > Dout;
+    const bool geometry_invalid = Din >= Dout;
 
     SetAnalysisResult( TCP::Z0, Z0, Z0_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
     SetAnalysisResult( TCP::ANG_L, angL, angL_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
@@ -159,12 +159,12 @@ void TWISTEDPAIR::SetSynthesisResults()
     const double Din = GetParameter( TCP::PHYS_DIAM_IN );
     const double Dout = GetParameter( TCP::PHYS_DIAM_OUT );
 
-    const bool Z0_invalid = !std::isfinite( Z0 ) || Z0 < 0;
+    const bool Z0_invalid = !std::isfinite( Z0 ) || Z0 <= 0;
     const bool angL_invalid = !std::isfinite( angL ) || angL < 0;
     const bool len_invalid = !std::isfinite( len ) || len < 0;
     const bool Din_invalid = !std::isfinite( Din ) || Din <= 0.0;
     const bool Dout_invalid = !std::isfinite( Dout ) || Dout <= 0.0;
-    const bool geometry_invalid = Din > Dout;
+    const bool geometry_invalid = Din >= Dout;
 
     const TRANSLINE_STATUS Din_status = ( m_synthesizeTarget == TCP::PHYS_DIAM_IN )
                                                 ? ( Din_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK )
