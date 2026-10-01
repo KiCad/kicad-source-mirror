@@ -1371,8 +1371,8 @@ static void plotBackgroundColor( BOARD* aBoard, const PCB_PLOT_PARAMS* aPlotOpts
     {
         aPlotter->SetColor( aPlotOpts->GetBackgroundColor() );
 
-        // Use plotter page size and offset so background matches the plotted output.
-        VECTOR2I end = plotOffset + pageSizeIU;
+        // Undo the viewport scale so the background fills the physical page.
+        VECTOR2I end = plotOffset + pageSizeIU / aPlotter->GetPlotScale();
 
         aPlotter->Rect( plotOffset, end, FILL_T::FILLED_SHAPE, 1.0 );
     }

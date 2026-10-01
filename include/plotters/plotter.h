@@ -619,6 +619,11 @@ public:
      */
     VECTOR2I GetPlotOffsetUserUnits() {return m_plotOffset; }
 
+    /**
+     * @return the plot scale set by SetViewport().
+     */
+    double GetPlotScale() const { return m_plotScale; }
+
 
 protected:
     /**
