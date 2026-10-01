@@ -500,8 +500,6 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
                 m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
             }
 
-            aEvent.Skip();
-
             // Refresh the zoom level and mouse position on message panel
             // (mouse position has not changed, only the zoom level has changed):
             refreshMouse( true );
