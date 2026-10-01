@@ -75,3 +75,49 @@ std::vector<WORKSPACE_DETAIL_ROW> WorkspaceDetailRows( const MDW_CAPABILITIES& a
 
     return rows;
 }
+
+
+std::vector<WORKSPACE_ACTION> WorkspaceItemActions( const WORKSPACE_ACTION_FACTS& aFacts )
+{
+    using ID = WORKSPACE_ACTION::ID;
+
+    std::vector<WORKSPACE_ACTION> actions;
+
+    if( aFacts.localFile )
+        actions.push_back( { ID::OPEN, _( "Open" ), true, wxString() } );
+
+    // A part is claimed through Revise in its editor, so only design files offer these
+    if( !aFacts.member )
+    {
+        if( aFacts.inPlace )
+        {
+            if( aFacts.locking )
+            {
+                MDW_CLAIM_ACTION claim = MdwClaimActions( aFacts.lock ).front();
+
+                actions.push_back( { ID::EDITING, claim.label, claim.enabled, wxString() } );
+            }
+        }
+        else
+        {
+            const MDW_LOCK_INFO& lock = aFacts.lock;
+
+            actions.push_back( { ID::CHECK_OUT, _( "Check Out" ), !lock.is_locked, wxString() } );
+            actions.push_back( { ID::CHECK_IN, _( "Check In..." ),
+                                 !lock.is_locked || lock.locked_by_me || lock.advisory, wxString() } );
+        }
+    }
+
+    if( !aFacts.transitions.empty() )
+    {
+        bool denied = aFacts.transition.state() == kiapi::workspace::PS_DENIED;
+
+        actions.push_back( { ID::CHANGE_STATE, _( "Change State..." ), !denied,
+                             denied ? wxString::FromUTF8( aFacts.transition.reason() ) : wxString() } );
+    }
+
+    if( aFacts.localFile )
+        actions.push_back( { ID::SHOW_IN_FOLDER, _( "Show in Folder" ), true, wxString() } );
+
+    return actions;
+}

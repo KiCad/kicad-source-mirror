@@ -23,6 +23,7 @@
 #include <dialogs/git/workspace_detail.h>
 
 #include <mdw/client/mdw_lifecycle.h>
+#include <mdw/mdw_claim_text.h>
 #include <widgets/mdw_member_index.h>
 
 #include <wx/intl.h>
@@ -173,6 +174,199 @@ BOOST_AUTO_TEST_CASE( FolderAndLastChangeRows )
     BOOST_CHECK_EQUAL( find( rows, _( "Folder" ) )->value, wxS( "Parts/Power" ) );
     BOOST_CHECK( find( rows, _( "Last change" ) ) );
     BOOST_CHECK_EQUAL( rows.back().label, _( "Last change" ) );
+}
+
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+namespace
+{
+using ID = WORKSPACE_ACTION::ID;
+
+
+const WORKSPACE_ACTION* action( const std::vector<WORKSPACE_ACTION>& aActions, ID aId )
+{
+    for( const WORKSPACE_ACTION& a : aActions )
+    {
+        if( a.id == aId )
+            return &a;
+    }
+
+    return nullptr;
+}
+
+
+WORKSPACE_ACTION_FACTS gitDesignFile()
+{
+    WORKSPACE_ACTION_FACTS facts;
+    facts.locking = true;
+    facts.inPlace = true;
+    facts.localFile = true;
+    facts.lock.known = true;
+    return facts;
+}
+
+
+MDW_LOCK_INFO heldByOther()
+{
+    MDW_LOCK_INFO lock;
+    lock.known = true;
+    lock.is_locked = true;
+    lock.locked_by_me = false;
+    lock.advisory = true;
+    lock.owner_display_name = wxS( "dave" );
+    return lock;
+}
+} // namespace
+
+
+BOOST_AUTO_TEST_SUITE( WorkspaceActions )
+
+
+BOOST_AUTO_TEST_CASE( GitDesignFileOffersEditing )
+{
+    WORKSPACE_ACTION_FACTS facts = gitDesignFile();
+
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+    const WORKSPACE_ACTION*       editing = action( actions, ID::EDITING );
+
+    BOOST_REQUIRE( editing );
+    BOOST_CHECK_EQUAL( editing->label, MdwClaimActions( facts.lock ).front().label );
+    BOOST_CHECK( editing->allowed );
+    BOOST_CHECK( !action( actions, ID::CHECK_OUT ) );
+    BOOST_CHECK( !action( actions, ID::CHECK_IN ) );
+    BOOST_REQUIRE( actions.size() == 3 );
+    BOOST_CHECK( actions[0].id == ID::OPEN );
+    BOOST_CHECK( actions[1].id == ID::EDITING );
+    BOOST_CHECK( actions[2].id == ID::SHOW_IN_FOLDER );
+}
+
+
+BOOST_AUTO_TEST_CASE( ClaimedByOtherFollowsClaimActions )
+{
+    WORKSPACE_ACTION_FACTS facts = gitDesignFile();
+    facts.lock = heldByOther();
+
+    const MDW_CLAIM_ACTION claim = MdwClaimActions( facts.lock ).front();
+    BOOST_REQUIRE( !claim.enabled );
+
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+    const WORKSPACE_ACTION*       editing = action( actions, ID::EDITING );
+
+    BOOST_REQUIRE( editing );
+    BOOST_CHECK_EQUAL( editing->label, claim.label );
+    BOOST_CHECK( !editing->allowed );
+}
+
+
+BOOST_AUTO_TEST_CASE( UploadBackendOffersCheckOutAndIn )
+{
+    WORKSPACE_ACTION_FACTS facts;
+    facts.locking = true;
+    facts.localFile = true;
+    facts.lock.known = true;
+
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+
+    BOOST_CHECK( !action( actions, ID::EDITING ) );
+    BOOST_REQUIRE( action( actions, ID::CHECK_OUT ) );
+    BOOST_REQUIRE( action( actions, ID::CHECK_IN ) );
+    BOOST_CHECK( action( actions, ID::CHECK_OUT )->allowed );
+    BOOST_CHECK( action( actions, ID::CHECK_IN )->allowed );
+
+    // A claim held by someone else blocks check out and check in, and ours or an advisory one does not
+    facts.lock = heldByOther();
+    facts.lock.advisory = false;
+    actions = WorkspaceItemActions( facts );
+    BOOST_CHECK( !action( actions, ID::CHECK_OUT )->allowed );
+    BOOST_CHECK( !action( actions, ID::CHECK_IN )->allowed );
+
+    facts.lock.advisory = true;
+    actions = WorkspaceItemActions( facts );
+    BOOST_CHECK( !action( actions, ID::CHECK_OUT )->allowed );
+    BOOST_CHECK( action( actions, ID::CHECK_IN )->allowed );
+
+    facts.lock.advisory = false;
+    facts.lock.locked_by_me = true;
+    actions = WorkspaceItemActions( facts );
+    BOOST_CHECK( !action( actions, ID::CHECK_OUT )->allowed );
+    BOOST_CHECK( action( actions, ID::CHECK_IN )->allowed );
+}
+
+
+BOOST_AUTO_TEST_CASE( NoLockingOffersNoEditingAction )
+{
+    WORKSPACE_ACTION_FACTS facts = gitDesignFile();
+    facts.locking = false;
+
+    BOOST_CHECK( !action( WorkspaceItemActions( facts ), ID::EDITING ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( NoTransitionsNoChangeState )
+{
+    WORKSPACE_ACTION_FACTS facts = gitDesignFile();
+
+    BOOST_CHECK( !action( WorkspaceItemActions( facts ), ID::CHANGE_STATE ) );
+
+    facts.transitions.emplace_back();
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+    const WORKSPACE_ACTION*       change = action( actions, ID::CHANGE_STATE );
+
+    BOOST_REQUIRE( change );
+    BOOST_CHECK( change->allowed );
+    BOOST_CHECK_EQUAL( change->label, _( "Change State..." ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( DeniedTransitionCarriesTheReason )
+{
+    WORKSPACE_ACTION_FACTS facts = gitDesignFile();
+    facts.transitions.emplace_back();
+    facts.transition.set_state( kiapi::workspace::PS_DENIED );
+    facts.transition.set_reason( "Only approvers may change state" );
+
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+    const WORKSPACE_ACTION*       change = action( actions, ID::CHANGE_STATE );
+
+    BOOST_REQUIRE( change );
+    BOOST_CHECK( !change->allowed );
+    BOOST_CHECK_EQUAL( change->reason, wxString( "Only approvers may change state" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( MemberOffersOpenAndChangeStateOnly )
+{
+    WORKSPACE_ACTION_FACTS facts = gitDesignFile();
+    facts.member = true;
+    facts.transitions.emplace_back();
+
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+
+    BOOST_CHECK( !action( actions, ID::EDITING ) );
+    BOOST_CHECK( !action( actions, ID::CHECK_OUT ) );
+    BOOST_CHECK( !action( actions, ID::CHECK_IN ) );
+    BOOST_CHECK( action( actions, ID::OPEN ) );
+    BOOST_CHECK( action( actions, ID::CHANGE_STATE ) );
+
+    facts.inPlace = false;
+    actions = WorkspaceItemActions( facts );
+    BOOST_CHECK( !action( actions, ID::CHECK_OUT ) );
+    BOOST_CHECK( !action( actions, ID::CHECK_IN ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( MissingFileOffersNoOpen )
+{
+    WORKSPACE_ACTION_FACTS facts = gitDesignFile();
+    facts.localFile = false;
+
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+
+    BOOST_CHECK( !action( actions, ID::OPEN ) );
+    BOOST_CHECK( !action( actions, ID::SHOW_IN_FOLDER ) );
+    BOOST_CHECK( action( actions, ID::EDITING ) );
 }
 
 

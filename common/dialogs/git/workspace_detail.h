@@ -54,4 +54,42 @@ KICOMMON_API std::vector<WORKSPACE_DETAIL_ROW> WorkspaceDetailRows( const MDW_CA
                                                                     const wxString& aFolderPath,
                                                                     const wxDateTime& aNow );
 
+
+
+/// One command the Workspace page offers for the selected item
+struct WORKSPACE_ACTION
+{
+    enum class ID
+    {
+        OPEN,
+        EDITING,
+        CHECK_OUT,
+        CHECK_IN,
+        CHANGE_STATE,
+        SHOW_IN_FOLDER
+    };
+
+    ID       id;
+    wxString label;  ///< EDITING's from MdwClaimActions, the others fixed
+    bool     allowed = true;
+    wxString reason; ///< Why not allowed, when the source gave one
+};
+
+
+/// What decides the actions an item offers
+struct WORKSPACE_ACTION_FACTS
+{
+    bool          locking = false;   ///< Source advertises LOCKING
+    bool          inPlace = false;   ///< Files are edited in place and committed, not checked out and in
+    bool          member = false;    ///< A team library part, not a design file
+    bool          localFile = false; ///< The checkout or library copy exists on disk
+    MDW_LOCK_INFO lock;
+    std::vector<kiapi::workspace::LifecycleTransition> transitions; ///< Empty when unread or not supported
+    kiapi::workspace::Permission                       transition;  ///< The item's permission to transition
+};
+
+
+/// The actions an item offers, in menu order, with those not allowed kept so a menu can say why
+KICOMMON_API std::vector<WORKSPACE_ACTION> WorkspaceItemActions( const WORKSPACE_ACTION_FACTS& aFacts );
+
 #endif // WORKSPACE_DETAIL_H
