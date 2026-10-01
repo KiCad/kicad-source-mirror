@@ -801,8 +801,6 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
             st->pendingWait = false;
             st->waitEvents.clear();
 
-            bool passEvent = st->wakeupEvent.PassEvent();
-
             wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::dispatchInternal - Waking tool %s for event: %s" ),
                         st->theTool->GetName(), aEvent.Format() );
 
@@ -816,7 +814,7 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
             }
 
             // If the tool did not request the event be passed to other tools, we're done
-            if( !passEvent )
+            if( !st->wakeupEvent.PassEvent() )
             {
                 wxLogTrace( kicadTraceToolStack,
                             wxS( "TOOL_MANAGER::dispatchInternal - tool %s stopped passing event: %s" ),
