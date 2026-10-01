@@ -18,6 +18,8 @@
  */
 
 #include <dialogs/git/git_advanced_dialog.h>
+
+#include <bitmaps.h>
 #include <dialogs/git/git_status_entries.h>
 
 #include <memory>
@@ -455,7 +457,17 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
     m_book->SetFont( KIUI::GetControlFont( this ) );
     m_book->SetFitToCurrentPage( true );
 
-    m_book->AddPage( makeHistoryPage( m_book, &m_historyList ), _( "History" ), true );
+    // One icon per page, in page order, as the About dialog does for its tabs.
+    wxVector<wxBitmapBundle> pageIcons;
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_history, 16 ) );
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_branches, 16 ) );
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_remotes, 16 ) );
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_stashes, 16 ) );
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_tags, 16 ) );
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_repository, 16 ) );
+    m_book->SetImages( pageIcons );
+
+    m_book->AddPage( makeHistoryPage( m_book, &m_historyList ), _( "History" ), true, 0 );
 
     wxWindow* branchesPage = makeBranchesPage( m_book, &m_branchesList );
     addButtonRow( branchesPage, { { _( "New Branch..." ),
@@ -472,7 +484,7 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
                                     {
                                         onForcePush();
                                     } } } );
-    m_book->AddPage( branchesPage, _( "Branches" ) );
+    m_book->AddPage( branchesPage, _( "Branches" ), false, 1 );
 
     wxWindow* remotesPage = makeRemotesPage( m_book, &m_remotesList );
     addButtonRow( remotesPage, { { _( "Add..." ),
@@ -489,7 +501,7 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
                                    {
                                        onRemoveRemote();
                                    } } } );
-    m_book->AddPage( remotesPage, _( "Remotes" ) );
+    m_book->AddPage( remotesPage, _( "Remotes" ), false, 2 );
 
     wxWindow* stashesPage = makeStashesPage( m_book, &m_stashesList );
     addButtonRow( stashesPage, { { _( "Stash Changes..." ),
@@ -511,7 +523,7 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
                                    {
                                        onStashDrop();
                                    } } } );
-    m_book->AddPage( stashesPage, _( "Stashes" ) );
+    m_book->AddPage( stashesPage, _( "Stashes" ), false, 3 );
 
     wxWindow* tagsPage = makeTagsPage( m_book, &m_tagsList );
     addButtonRow( tagsPage, { { _( "New Tag..." ),
@@ -528,14 +540,14 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent ) :
                                 {
                                     onDeleteTag();
                                 } } } );
-    m_book->AddPage( tagsPage, _( "Tags" ) );
+    m_book->AddPage( tagsPage, _( "Tags" ), false, 4 );
 
     wxWindow* repositoryPage = makeRepositoryPage( m_book, &m_repoUserName, &m_repoUserEmail, &m_repoRemoteUrl );
     addButtonRow( repositoryPage, { { _( "Save" ), [this]()
                                     {
                                         onSaveRepositoryConfig();
                                     } } } );
-    m_book->AddPage( repositoryPage, _( "Repository" ) );
+    m_book->AddPage( repositoryPage, _( "Repository" ), false, 5 );
 
     // Double-clicking a commit shows what it changed against its parent.
     m_historyList->SetToolTip( _( "Double click a commit to see what it changed. Right click for more." ) );

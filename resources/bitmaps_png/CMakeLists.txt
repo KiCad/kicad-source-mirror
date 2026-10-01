@@ -69,12 +69,18 @@ set( BMAPS_SMALL
     e_96
     e_192
     git_add
+    git_branches
     git_changed_ahead
     git_conflict
     git_delete
     git_good_check
+    git_history
     git_modified
     git_out_of_date
+    git_remotes
+    git_repository
+    git_stashes
+    git_tags
     icon_eeschema_16
     icon_gerbview_16
     icon_kicad_16
