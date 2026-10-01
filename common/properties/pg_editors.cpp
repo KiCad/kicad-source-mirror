@@ -237,14 +237,14 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
         else
         {
             PGPROPERTY_ANGLE* angleProp = static_cast<PGPROPERTY_ANGLE*>( aProperty );
-            double             scaledValue = angle.AsDegrees() * angleProp->GetScale();
+            double            scaledValue = angle.AsDegrees() * angleProp->GetScale();
 
             changed = ( aVariant.IsNull() || scaledValue != aVariant.GetDouble() );
 
             if( changed )
             {
                 aVariant = scaledValue;
-                m_unitBinder->SetValue( angle.AsDegrees() );
+                m_unitBinder->SetDoubleValue( angle.AsDegrees() );
             }
         }
     }
@@ -276,7 +276,7 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
         }
         else
         {
-            result = std::optional<int>( m_unitBinder->GetValue() );
+            result = std::optional<int>( m_unitBinder->GetIntValue() );
             changed = ( aVariant.IsNull() || result != variantData->Value() );
 
             if( changed )
@@ -298,8 +298,7 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
         }
     }
 
-    // Changing unspecified always causes event (returning
-    // true here should be enough to trigger it).
+    // Changing unspecified always causes event (returning true here should be enough to trigger it).
     if( !changed && aVariant.IsNull() )
         changed = true;
 
