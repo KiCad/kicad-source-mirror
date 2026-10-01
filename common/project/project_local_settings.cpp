@@ -33,7 +33,6 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         JSON_SETTINGS( aFilename, SETTINGS_LOC::PROJECT, projectLocalSettingsVersion,
                        /* aCreateIfMissing = */ true, /* aCreateIfDefault = */ false,
                        /* aWriteFile = */ true ),
-        // clang-format off: suggestion is less readable.
         m_ActiveLayer( UNDEFINED_LAYER ),
         m_ContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL ),
         m_NetColorMode( NET_COLOR_MODE::RATSNEST ),
@@ -50,7 +49,6 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
         m_GitIntegrationDisabled( false ),
         m_project( aProject ),
         m_wasMigrated( false )
-// clang-format on: suggestion is less readable.
 {
     // Keep old files around
     m_deleteLegacyAfterMigration = false;
@@ -556,14 +554,9 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 if( Contains( ptr ) )
                 {
                     if( At( ptr ).is_array() && !At( ptr ).empty() )
-                    {
-                        At( ptr ).push_back(
-                                VisibilityLayerToString( VISIBILITY_LAYER::VIA_STITCHING ) );
-                    }
+                        At( ptr ).push_back( VisibilityLayerToString( VISIBILITY_LAYER::VIA_STITCHING ) );
                     else
-                    {
                         At( "board" ).erase( "visible_items" );
-                    }
 
                     m_wasMigrated = true;
                 }
@@ -624,16 +617,14 @@ const PROJECT_FILE_STATE* PROJECT_LOCAL_SETTINGS::GetFileState( const wxString& 
                             } );
 
     if( it != m_files.end() )
-    {
         return &( *it );
-    }
 
     return nullptr;
 }
 
 
-void PROJECT_LOCAL_SETTINGS::SaveFileState( const wxString& aFileName,
-                                            const WINDOW_SETTINGS* aWindowCfg, bool aOpen )
+void PROJECT_LOCAL_SETTINGS::SaveFileState( const wxString& aFileName, const WINDOW_SETTINGS* aWindowCfg,
+                                            bool aOpen )
 {
     auto it = std::find_if( m_files.begin(), m_files.end(),
                             [&aFileName]( const PROJECT_FILE_STATE& a )

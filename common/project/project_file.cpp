@@ -719,8 +719,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
 
                     if( tokens.size() == 2 )
                     {
-                        wxLogTrace( traceSettings, wxT( "%d: %s = %s" ), sheet, tokens[0],
-                                    tokens[1] );
+                        wxLogTrace( traceSettings, wxT( "%d: %s = %s" ), sheet, tokens[0], tokens[1] );
                         arr.push_back( nlohmann::json::array( { tokens[0], tokens[1] } ) );
                     }
                 }
@@ -843,16 +842,14 @@ bool PROJECT_FILE::LoadFromFile( const wxString& aDirectory )
                     continue;
 
                 // Try the project-name-based filename
-                wxString expectedFile =
-                        projectName + wxS( "." ) + FILEEXT::KiCadSchematicFileExtension;
+                wxString expectedFile = projectName + wxS( "." ) + FILEEXT::KiCadSchematicFileExtension;
 
                 wxFileName candidateFile( projectPath, expectedFile );
 
                 if( candidateFile.FileExists() )
                 {
                     wxLogTrace( traceSettings,
-                                wxT( "PROJECT_FILE: Fixing stale top_level_sheets reference "
-                                     "'%s' -> '%s'" ),
+                                wxT( "PROJECT_FILE: Fixing stale top_level_sheets reference '%s' -> '%s'" ),
                                 sheetInfo.filename, expectedFile );
 
                     sheetInfo.filename = expectedFile;
