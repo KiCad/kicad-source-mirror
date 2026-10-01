@@ -381,6 +381,10 @@ protected:
 
     static int               s_traceBurst;
 
+    /// Count of OpenGL canvases destroyed so far, and the count this canvas last acted on
+    static int               s_glCanvasesClosed;
+    int                      m_seenGlCanvasesClosed;
+
     /// Flag to indicate whether the panel should take focus at certain times (when moused over,
     /// and on various mouse/key events)
     bool                     m_stealsFocus;

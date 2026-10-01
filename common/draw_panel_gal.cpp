@@ -30,6 +30,7 @@
 #include <scoped_set_reset.h>
 #include <settings/app_settings.h>
 #include <trace_helpers.h>
+#include <advanced_config.h>
 
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
@@ -131,6 +132,7 @@ wxString visibilityDetail( wxWindow* aWindow )
 
 
 int EDA_DRAW_PANEL_GAL::s_traceBurst = 0;
+int EDA_DRAW_PANEL_GAL::s_glCanvasesClosed = 0;
 
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
@@ -161,6 +163,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_burstPaints( 0 ),
         m_paintEvents( 0 ),
         m_repaintCalls( 0 ),
+        m_seenGlCanvasesClosed( s_glCanvasesClosed ),
         m_stealsFocus( true ),
         m_statusPopup( nullptr )
 {
@@ -253,6 +256,10 @@ EDA_DRAW_PANEL_GAL::~EDA_DRAW_PANEL_GAL()
     wxLogTrace( traceGalContext, wxS( "Canvas %p destroyed" ), this );
 
     StartTraceBurst();
+
+    // Only a canvas going away counts, so a rebuild cannot set off another rebuild
+    if( m_backend == GAL_TYPE_OPENGL )
+        ++s_glCanvasesClosed;
 
     // Ensure EDA_DRAW_PANEL_GAL::onShowEvent is not fired during Dtor process
     Disconnect( wxEVT_SHOW, wxShowEventHandler( EDA_DRAW_PANEL_GAL::onShowEvent ) );
@@ -381,6 +388,28 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
         tracePaintState( PAINT_REENTRANT );
         return false;
     }
+
+#ifdef __WXMSW__
+    if( m_seenGlCanvasesClosed != s_glCanvasesClosed )
+    {
+        m_seenGlCanvasesClosed = s_glCanvasesClosed;
+
+        // Some drivers stop presenting this canvas once a sibling OpenGL window is destroyed, and
+        // only a fresh window and context bring it back
+        if( m_backend == GAL_TYPE_OPENGL && ADVANCED_CFG::GetCfg().m_GLRebuildAfterSiblingClose )
+        {
+            wxLogTrace( traceGalContext, wxS( "Canvas %s rebuilding after a sibling OpenGL canvas closed" ),
+                        traceName() );
+
+            GAL_TYPE backend = m_backend;
+            m_backend = GAL_TYPE_NONE;
+            SwitchBackend( backend );
+            StartDrawing();
+
+            return false;
+        }
+    }
+#endif
 
     // The context may have become current since the size change was deferred
     if( m_pendingResize )
