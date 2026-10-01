@@ -1613,6 +1613,45 @@ BOOST_AUTO_TEST_CASE( GetFileStatusMatchesPathspecLiterally )
 }
 
 
+// The panel can only say the remote moved on if the session can tell.
+BOOST_AUTO_TEST_CASE( HasUpstreamCommitsSeesTheRemoteMoveOn )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_REQUIRE( common.AddRemote( wxT( "origin" ), wxT( "https://example.com/x.git" ) ) );
+
+    git_reference* head = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_head( &head, repo ), GIT_OK );
+
+    wxString    branch = wxString::FromUTF8( git_reference_shorthand( head ) );
+    std::string trackingRef = ( wxT( "refs/remotes/origin/" ) + branch ).utf8_string();
+    std::string upstreamName = ( wxT( "origin/" ) + branch ).utf8_string();
+    git_oid     base = *git_reference_target( head );
+
+    git_reference* tracking = nullptr;
+    BOOST_REQUIRE_EQUAL( git_reference_create( &tracking, repo, trackingRef.c_str(), &base, 0, nullptr ), GIT_OK );
+    git_reference_free( tracking );
+    BOOST_REQUIRE_EQUAL( git_branch_set_upstream( head, upstreamName.c_str() ), GIT_OK );
+
+    // In step with the upstream.
+    BOOST_CHECK( !common.HasUpstreamCommits() );
+
+    // The upstream moves on.
+    git_oid remoteTip = createDetachedCommit( repo, base, wxT( "file.txt" ), "remote\n", "Remote change" );
+    BOOST_REQUIRE_EQUAL( git_reference_create( &tracking, repo, trackingRef.c_str(), &remoteTip, 1, nullptr ), GIT_OK );
+    git_reference_free( tracking );
+
+    BOOST_CHECK( common.HasUpstreamCommits() );
+
+    git_reference_free( head );
+    git_repository_free( repo );
+}
+
+
 // Rebuilding the index from HEAD would drop the conflict stages before libgit2's unmerged-index
 // guard could see them, recording the markers as resolved content.
 BOOST_AUTO_TEST_CASE( Commit_RefusesConflictedRepository )

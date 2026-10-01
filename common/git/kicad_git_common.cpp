@@ -673,6 +673,39 @@ bool KIGIT_COMMON::IsHeadDetached() const
 }
 
 
+bool KIGIT_COMMON::HasUpstreamCommits() const
+{
+    if( !m_repo )
+        return false;
+
+    git_reference* head = nullptr;
+
+    if( git_repository_head( &head, m_repo ) != GIT_OK )
+        return false;
+
+    KIGIT::GitReferencePtr headPtr( head );
+    git_reference*         upstream = nullptr;
+
+    if( git_branch_upstream( &upstream, head ) != GIT_OK )
+        return false;
+
+    KIGIT::GitReferencePtr upstreamPtr( upstream );
+    const git_oid*         headOid = git_reference_target( head );
+    const git_oid*         upstreamOid = git_reference_target( upstream );
+
+    if( !headOid || !upstreamOid )
+        return false;
+
+    size_t ahead = 0;
+    size_t behind = 0;
+
+    if( git_graph_ahead_behind( &ahead, &behind, m_repo, headOid, upstreamOid ) != GIT_OK )
+        return false;
+
+    return behind > 0;
+}
+
+
 size_t KIGIT_COMMON::GetUnmergedCommitCount( const wxString& aBranch ) const
 {
     if( !m_repo )

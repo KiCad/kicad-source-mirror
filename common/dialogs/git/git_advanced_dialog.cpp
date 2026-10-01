@@ -758,7 +758,7 @@ void GIT_ADVANCED_DIALOG::ReloadPages()
     syncListener();
 
     // Reading the repository takes the shared lock. Retry shortly rather than wait, because the
-    // background fetch can hold it for a network round trip without broadcasting a refresh.
+    // background fetch can hold it for a network round trip.
     std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
     std::unique_lock<std::mutex>  lock = common->TryLockAction();
 

@@ -105,6 +105,7 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( EDA_BASE_FRAME* aParent ) :
         m_hasUnpushedCommits( false ),
         m_hasRemote( false ),
         m_headDetached( false ),
+        m_remoteAhead( false ),
         m_operationInProgress( false ),
         m_editorsDirty( false ),
         m_networkBusy( false )
@@ -205,7 +206,7 @@ void GIT_COMMIT_PANE::RefreshFileList()
     std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
 
     // Retry shortly rather than wait, since a background fetch can hold the lock for a whole
-    // network round trip without broadcasting a refresh.
+    // network round trip.
     std::unique_lock<std::mutex> lock = common->TryLockAction();
 
     if( !lock.owns_lock() )
@@ -219,6 +220,7 @@ void GIT_COMMIT_PANE::RefreshFileList()
     m_hasRemote = common->GetRepo() && common->HasPushAndPullRemote();
     m_headDetached = common->GetRepo() && common->IsHeadDetached();
     m_operationInProgress = common->GetRepo() && common->IsOperationInProgress();
+    m_remoteAhead = common->GetRepo() && common->HasUpstreamCommits();
 
     // Without a remote there is nowhere to push to, so local commits are not waiting for it.
     m_hasUnpushedCommits = hasLocalCommits && m_hasRemote;
@@ -295,6 +297,8 @@ void GIT_COMMIT_PANE::RefreshFileList()
                               "the project in the project manager and choose Version Control." ) );
         else if( m_editorsDirty )
             setStatusText( _( "The open editors have unsaved changes. Committing saves them first." ) );
+        else if( m_remoteAhead )
+            setStatusText( _( "The remote has changes this project does not. Get Changes brings them in." ) );
         else if( m_hasUnpushedCommits )
             setStatusText( _( "Committed changes are waiting to be pushed." ) );
         else
@@ -321,6 +325,7 @@ void GIT_COMMIT_PANE::showDisabledState()
     m_hasRemote = false;
     m_headDetached = false;
     m_operationInProgress = false;
+    m_remoteAhead = false;
     m_editorsDirty = false;
 
     m_shownPaths.clear();
@@ -430,6 +435,13 @@ void GIT_COMMIT_PANE::updateCommitButton()
     }
 
     m_pullButton->SetLabel( _( "Get Changes" ) );
+
+    // The empty state label only shows when there is nothing to commit, so the button carries
+    // the notice the rest of the time.
+    if( m_remoteAhead )
+        m_pullButton->SetToolTip( _( "The remote has commits this project does not have." ) );
+    else
+        m_pullButton->UnsetToolTip();
 
     bool hasCheckedChanges = !m_checklist->GetCheckedPaths().empty();
     bool amend = m_amendCheckbox->IsShown() && m_amendCheckbox->IsChecked();

@@ -182,6 +182,9 @@ public:
     // Returns true if the repository has local commits that have not been pushed
     bool HasLocalCommits() const;
 
+    /// True when the upstream branch has commits the current branch does not.
+    bool HasUpstreamCommits() const;
+
     /// True when HEAD points at a commit rather than a branch, as after checking out a tag.
     bool IsHeadDetached() const;
 

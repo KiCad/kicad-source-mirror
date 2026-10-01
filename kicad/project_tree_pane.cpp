@@ -2418,9 +2418,13 @@ void PROJECT_TREE_PANE::onGitSyncTimer( wxTimerEvent& aEvent )
                                     // Only schedule the follow-up work if not cancelled
                                     if( !common->IsShuttingDown() )
                                         CallAfter(
-                                                [this]()
+                                                [this, common]()
                                                 {
                                                     gitStatusTimerHandler();
+
+                                                    // The panels show whether the remote is ahead, and the fetch
+                                                    // just moved the remote refs.
+                                                    common->NotifyRefreshListeners();
                                                 } );
                                 } );
 
