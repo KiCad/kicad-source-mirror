@@ -279,6 +279,9 @@ int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
     {
         if( group->GetItems().size() < 2 )
         {
+            if( group->GetItems().size() == 1 )
+                m_commit->Modify( *group->GetItems().begin(), m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
+
             group->RemoveAll();
             m_commit->Remove( group->AsEdaItem(), m_frame->GetScreen() );
         }
