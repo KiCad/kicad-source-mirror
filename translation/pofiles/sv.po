@@ -11,13 +11,15 @@
 # Joakim Lundborg <joakim.lundborg@gmail.com>, 2025, 2026.
 # Johan Heikkilä <johan.heikkila@gmail.com>, 2025, 2026.
 # Stefan Bjornelund the Gnome <stefan.bjornelund.gnome@gmail.com>, 2025, 2026.
+# Integration <bot-kicad-integration@bots.noreply.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
-"PO-Revision-Date: 2026-03-18 20:48+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2026-10-01 05:01+0000\n"
+"Last-Translator: Integration <bot-kicad-integration@bots.noreply.weblate.org>"
+"\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
 "source/sv/>\n"
 "Language: sv\n"
@@ -25,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -61015,7 +61017,7 @@ msgid ""
 "Missing X, Y, or rotation data in row %zu for refdes %s. This may be an "
 "unplaced component."
 msgstr ""
-"Saknat X, Y eller rotationsdata i rad %z för referensbeteckning %s. Detta "
+"Saknat X, Y eller rotationsdata i rad %zu för referensbeteckning %s. Detta "
 "kan vara en icke utplacerad komponent."
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:2711
