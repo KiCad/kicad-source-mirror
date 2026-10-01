@@ -102,6 +102,9 @@ void InitializeBoardStatisticsData( BOARD_STATISTICS_DATA& aData );
 
 void ComputeBoardStatistics( BOARD* aBoard, const BOARD_STATISTICS_OPTIONS& aOptions, BOARD_STATISTICS_DATA& aData );
 
+/// Format a minimum distance, or "unknown" when no qualifying measurement was found.
+wxString FormatBoardStatisticsMinimum( int aValue, const UNITS_PROVIDER& aUnitsProvider );
+
 wxString FormatBoardStatisticsReport( const BOARD_STATISTICS_DATA& aData, BOARD* aBoard,
                                       const UNITS_PROVIDER& aUnitsProvider, const wxString& aProjectName,
                                       const wxString& aBoardName );

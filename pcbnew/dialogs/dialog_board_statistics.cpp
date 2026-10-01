@@ -337,13 +337,11 @@ void DIALOG_BOARD_STATISTICS::updateWidgets()
     m_gridBoard->SetCellValue( ROW_BACK_COPPER_AREA, COL_AMOUNT,
                                m_frame->MessageTextFromValue( m_statsData.backCopperArea, true, EDA_DATA_TYPE::AREA ) );
 
-    m_gridBoard->SetCellValue(
-            ROW_MIN_CLEARANCE, COL_AMOUNT,
-            m_frame->MessageTextFromValue( m_statsData.minClearanceTrackToTrack, true, EDA_DATA_TYPE::DISTANCE ) );
+    m_gridBoard->SetCellValue( ROW_MIN_CLEARANCE, COL_AMOUNT,
+                               FormatBoardStatisticsMinimum( m_statsData.minClearanceTrackToTrack, *m_frame ) );
 
-    m_gridBoard->SetCellValue(
-            ROW_MIN_TRACK_WIDTH, COL_AMOUNT,
-            m_frame->MessageTextFromValue( m_statsData.minTrackWidth, true, EDA_DATA_TYPE::DISTANCE ) );
+    m_gridBoard->SetCellValue( ROW_MIN_TRACK_WIDTH, COL_AMOUNT,
+                               FormatBoardStatisticsMinimum( m_statsData.minTrackWidth, *m_frame ) );
 
     m_gridBoard->SetCellValue(
             ROW_BOARD_THICKNESS, COL_AMOUNT,
@@ -351,9 +349,8 @@ void DIALOG_BOARD_STATISTICS::updateWidgets()
 
     updateDrillGrid();
 
-    m_gridBoard->SetCellValue(
-            ROW_MIN_DRILL_DIAMETER, COL_AMOUNT,
-            m_frame->MessageTextFromValue( m_statsData.minDrillSize, true, EDA_DATA_TYPE::DISTANCE ) );
+    m_gridBoard->SetCellValue( ROW_MIN_DRILL_DIAMETER, COL_AMOUNT,
+                               FormatBoardStatisticsMinimum( m_statsData.minDrillSize, *m_frame ) );
 
     m_gridComponents->AutoSize();
     m_gridPads->AutoSize();
