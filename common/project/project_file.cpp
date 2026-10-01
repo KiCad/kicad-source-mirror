@@ -643,7 +643,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
         wxString keyBase = "ViaDiameter";
         wxString key     = keyBase;
         double   diameter;
-        double   drill   = 1.0;
+        double   drill;
 
         nlohmann::json vias = nlohmann::json::array();
 
@@ -652,6 +652,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
         while( aCfg->Read( key, &diameter ) )
         {
             key = "ViaDrill";
+            drill = 1.0;
             aCfg->Read( key << idx, &drill );
 
             nlohmann::json via = { { "diameter", diameter }, { "drill", drill } };
@@ -669,8 +670,8 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
         wxString keyBase = "dPairWidth";
         wxString key     = keyBase;
         double   width;
-        double   gap     = 1.0;
-        double   via_gap = 1.0;
+        double   gap;
+        double   via_gap;
 
         nlohmann::json pairs = nlohmann::json::array();
 
@@ -679,9 +680,11 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
         while( aCfg->Read( key, &width ) )
         {
             key = "dPairGap";
+            gap = 1.0;
             aCfg->Read( key << idx, &gap );
 
             key = "dPairViaGap";
+            via_gap = 1.0;
             aCfg->Read( key << idx, &via_gap );
 
             nlohmann::json pair = { { "width", width }, { "gap", gap }, { "via_gap", via_gap } };
