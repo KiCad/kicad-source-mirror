@@ -20,6 +20,8 @@
 #include <transline_calculations/twistedpair.h>
 #include <transline_calculations/units.h>
 
+#include <algorithm>
+
 
 namespace TC = TRANSLINE_CALCULATIONS;
 using TCP = TRANSLINE_PARAMETERS;
@@ -84,11 +86,13 @@ void TWISTEDPAIR::Analyse()
     const double skinDepth = GetParameter( TCP::SKIN_DEPTH );
     const double sigma = GetParameter( TCP::SIGMA );
 
-    // Thin-wire conductor and dielectric attenuation.  Lefferson 1971 does not cover loss;
-    // these are the standard parallel-wire forms summarised in Wadell, "Transmission Line
-    // Design Handbook", Artech House 1991, §3.2.3 (Twisted Pair).
-    SetParameter( TCP::LOSS_CONDUCTOR, ( TC::LOG2DB / 2.0 ) * len / skinDepth / sigma / M_PI / z0
-                                               / ( Din - skinDepth ) );
+    // Capping the depth at the wire radius makes the annulus the full cross-section at DC
+    const double currentDepth = std::min( skinDepth, Din / 2.0 );
+
+    // Lefferson 1971 does not cover loss.  Conductor loss is R/(2*Z0) with R the skin
+    // resistance of both wires (Pozar, "Microwave Engineering" 4th ed., Table 2.1)
+    SetParameter( TCP::LOSS_CONDUCTOR, TC::LOG2DB * len / currentDepth / sigma / M_PI / z0
+                                               / ( Din - currentDepth ) );
 
     SetParameter( TCP::LOSS_DIELECTRIC,
                   TC::LOG2DB * len * M_PI / TC::C0 * freq * std::sqrt( epsEff ) * tand );
