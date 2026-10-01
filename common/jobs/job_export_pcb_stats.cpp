@@ -23,6 +23,15 @@
 #include <wildcards_and_files_ext.h>
 #include <wx/filename.h>
 
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT,
+                              {
+                                      { JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT::REPORT, "report" },
+                                      { JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT::JSON, "json" },
+                                      // Legacy jobsets stored numeric enum values.
+                                      { JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT::REPORT, 0 },
+                                      { JOB_EXPORT_PCB_STATS::OUTPUT_FORMAT::JSON, 1 },
+                              } )
+
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_STATS::UNITS, {
                                                                    { JOB_EXPORT_PCB_STATS::UNITS::INCH, "in" },
                                                                    { JOB_EXPORT_PCB_STATS::UNITS::MM, "mm" },
