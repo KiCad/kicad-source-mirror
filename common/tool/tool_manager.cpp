@@ -791,8 +791,9 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
             st->pendingWait = false;
             st->waitEvents.clear();
 
-            wxLogTrace( kicadTraceToolStack,
-                        wxS( "TOOL_MANAGER::dispatchInternal - Waking tool %s for event: %s" ),
+            bool passEvent = st->wakeupEvent.PassEvent();
+
+            wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::dispatchInternal - Waking tool %s for event: %s" ),
                         st->theTool->GetName(), aEvent.Format() );
 
             setActiveState( st );
@@ -805,11 +806,10 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
             }
 
             // If the tool did not request the event be passed to other tools, we're done
-            if( !st->wakeupEvent.PassEvent() )
+            if( !passEvent )
             {
                 wxLogTrace( kicadTraceToolStack,
-                            wxS( "TOOL_MANAGER::dispatchInternal - tool %s stopped passing "
-                                 "event: %s" ),
+                            wxS( "TOOL_MANAGER::dispatchInternal - tool %s stopped passing event: %s" ),
                             st->theTool->GetName(), aEvent.Format() );
 
                 return true;
@@ -850,8 +850,7 @@ bool TOOL_MANAGER::dispatchInternal( TOOL_EVENT& aEvent )
                     st->cofunc = new COROUTINE<int, const TOOL_EVENT&>( std::move( func_copy ) );
 
                     wxLogTrace( kicadTraceToolStack,
-                                wxS( "TOOL_MANAGER::dispatchInternal - Running tool %s for "
-                                     "event: %s" ),
+                                wxS( "TOOL_MANAGER::dispatchInternal - Running tool %s for event: %s" ),
                                 st->theTool->GetName(), aEvent.Format() );
 
                     // got match? Run the handler.
