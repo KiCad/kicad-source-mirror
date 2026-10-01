@@ -600,7 +600,7 @@ bool ROUTER::Finish()
     } while( placer->CurrentEnd() != moveResultPoint && triesLeft );
 
     // If we've made it, fix the route and we're done
-    if( moveResultPoint == otherEnd && otherEndLayers.Overlaps( GetCurrentLayer() ) )
+    if( placer->CurrentEnd() == otherEnd && otherEndLayers.Overlaps( GetCurrentLayer() ) )
     {
         bool forceFinish = false;
         bool allowViolations = false;
