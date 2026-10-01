@@ -583,46 +583,49 @@ protected:
 
     std::string encodeByteString( const std::string& aBytes );
 
-    int m_pageTreeHandle;           ///< Handle to the root of the page tree object.
-    int m_fontResDictHandle;        ///< Font resource dictionary.
-    int m_imgResDictHandle;         ///< Image resource dictionary.
-    int m_jsNamesHandle;            ///< Handle for Names dictionary with JS.
-    std::vector<int> m_pageHandles; ///< Handles to the page objects.
-    int m_pageStreamHandle;         ///< Handle of the page content object.
-    int m_streamLengthHandle;       ///< Handle to the deferred stream length.
+protected:
+    int               m_pageTreeHandle;           ///< Handle to the root of the page tree object.
+    int               m_fontResDictHandle;        ///< Font resource dictionary.
+    int               m_imgResDictHandle;         ///< Image resource dictionary.
+    int               m_jsNamesHandle;            ///< Handle for Names dictionary with JS.
+    std::vector<int>  m_pageHandles;              ///< Handles to the page objects.
+    int               m_pageStreamHandle;         ///< Handle of the page content object.
+    int               m_streamLengthHandle;       ///< Handle to the deferred stream length.
 
-    wxString m_workFilename;
-    wxString m_pageName;
-    wxString m_parentPageName;
+    wxString          m_workFilename;
+    wxString          m_pageName;
+    wxString          m_parentPageName;
 
-    FILE* m_workFile;               ///< Temporary file to construct the stream before zipping.
-    std::vector<long> m_xrefTable;  ///< The PDF xref offset table.
+    FILE*             m_workFile;                 ///< Temporary file to construct the stream before zipping.
+
+    /// The PDF xref offset table.
+    std::vector<long>                                           m_xrefTable;
 
     /// List of user-space page numbers for resolving internal hyperlinks.
-    std::vector<wxString>                                  m_pageNumbers;
+    std::vector<wxString>                                       m_pageNumbers;
 
     /// List of loaded hyperlinks in current page.
-    std::vector<std::pair<BOX2I, wxString>>                m_hyperlinksInPage;
-    std::vector<std::pair<BOX2I, std::vector<wxString>>>   m_hyperlinkMenusInPage;
+    std::vector<std::pair<BOX2I, wxString>>                     m_hyperlinksInPage;
+    std::vector<std::pair<BOX2I, std::vector<wxString>>>        m_hyperlinkMenusInPage;
 
     /// Handles for all the hyperlink objects that will be deferred.
-    std::map<int, std::pair<BOX2D, wxString>>              m_hyperlinkHandles;
-    std::map<int, std::pair<BOX2D, std::vector<wxString>>> m_hyperlinkMenuHandles;
+    std::map<int, std::pair<BOX2D, wxString>>                   m_hyperlinkHandles;
+    std::map<int, std::pair<BOX2D, std::vector<wxString>>>      m_hyperlinkMenuHandles;
 
-    std::map<wxString, std::vector<std::pair<BOX2I, wxString>>>      m_bookmarksInPage;
+    std::map<wxString, std::vector<std::pair<BOX2I, wxString>>> m_bookmarksInPage;
 
-    std::map<int, wxImage> m_imageHandles;
+    std::map<int, wxImage>                                      m_imageHandles;
 
     std::unique_ptr<OUTLINE_NODE> m_outlineRoot;        ///< Root outline node.
     int                           m_totalOutlineNodes;  ///< Total number of outline nodes.
 
-    int  m_3dModelHandle;
-    bool m_3dExportMode;
+    int                           m_3dModelHandle;
+    bool                          m_3dExportMode;
 
     /// Set when the non-embeddable font fallback references the base-14 /KicadFont* resources.
-    bool m_usedBase14Fonts;
+    bool                          m_usedBase14Fonts;
 
-    std::unique_ptr<PDF_STROKE_FONT_MANAGER> m_strokeFontManager;
+    std::unique_ptr<PDF_STROKE_FONT_MANAGER>  m_strokeFontManager;
     std::unique_ptr<PDF_OUTLINE_FONT_MANAGER> m_outlineFontManager;
 };
 
