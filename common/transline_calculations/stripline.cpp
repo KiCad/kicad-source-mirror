@@ -82,26 +82,23 @@ void STRIPLINE::SetAnalysisResults()
     const double ANG_L = GetParameter( TCP::ANG_L );
     const double L = GetParameter( TCP::PHYS_LEN );
     const double W = GetParameter( TCP::PHYS_WIDTH );
+    const double A = GetParameter( TCP::STRIPLINE_A );
+    const double T = GetParameter( TCP::T );
+    const double H = GetParameter( TCP::H );
 
     const bool Z0_invalid = !std::isfinite( Z0 ) || Z0 < 0;
     const bool ANG_L_invalid = !std::isfinite( ANG_L ) || ANG_L < 0;
     const bool L_invalid = !std::isfinite( L ) || L < 0;
     const bool W_invalid = !std::isfinite( W ) || W <= 0;
+    const bool ATH_invalid = !std::isfinite( A ) || !std::isfinite( T ) || A + T >= H;
 
-    bool invalid = false;
-
-    if( GetParameter( TCP::STRIPLINE_A ) + GetParameter( TCP::T ) >= GetParameter( TCP::H ) )
-        invalid = true;
-
-    SetAnalysisResult( TCP::Z0, Z0, Z0_invalid || invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
+    SetAnalysisResult( TCP::Z0, Z0, Z0_invalid || ATH_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
     SetAnalysisResult( TCP::ANG_L, ANG_L, ANG_L_invalid ? TRANSLINE_STATUS::TS_ERROR : TRANSLINE_STATUS::OK );
     SetAnalysisResult( TCP::PHYS_LEN, L, L_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
     SetAnalysisResult( TCP::PHYS_WIDTH, W, W_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::STRIPLINE_A, GetParameter( TCP::STRIPLINE_A ),
-                       invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::T, GetParameter( TCP::T ), invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::H, GetParameter( TCP::H ), invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
-    SetAnalysisResult( TCP::Z0, GetParameter( TCP::Z0 ), invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
+    SetAnalysisResult( TCP::STRIPLINE_A, A, ATH_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
+    SetAnalysisResult( TCP::T, T, ATH_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
+    SetAnalysisResult( TCP::H, H, ATH_invalid ? TRANSLINE_STATUS::WARNING : TRANSLINE_STATUS::OK );
 }
 
 
