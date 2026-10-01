@@ -402,11 +402,19 @@ protected:
             else if( pv.CheckType<std::optional<int>>() )
             {
                 auto* data = static_cast<STD_OPTIONAL_INT_VARIANT_DATA*>( var.GetData() );
+
+                if( !data->Value().has_value() )
+                    return;
+
                 a = data->Value();
             }
             else if( pv.CheckType<std::optional<double>>() )
             {
                 auto* data = static_cast<STD_OPTIONAL_DOUBLE_VARIANT_DATA*>( var.GetData() );
+
+                if( !data->Value().has_value() )
+                    return;
+
                 a = data->Value();
             }
             else if( pv.CheckType<EDA_ANGLE>() )
