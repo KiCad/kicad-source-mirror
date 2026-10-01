@@ -17,9 +17,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-01 05:01+0000\n"
-"Last-Translator: Integration <bot-kicad-"
-"integration@bots.noreply.weblate.org>\n"
+"PO-Revision-Date: 2026-10-02 06:51+0000\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
 "Language: ja\n"
@@ -27,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.10\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -7459,9 +7458,10 @@ msgid "Unknown exception during backend switch"
 msgstr "バックエンド切り替え中にプログラムが予期しない致命的なエラーに遭遇"
 
 #: common/draw_panel_gal.cpp:322
-#, fuzzy
 msgid "The graphics driver keeps resetting, falling back to software rendering"
-msgstr "OpenGL を使用できないため、ソフトウェア レンダリングに切り替えます"
+msgstr ""
+"グラフィックスドライバーが繰り返しリセットされため、ソフトウェア レンダリング"
+"に切り替えます"
 
 #: common/draw_panel_gal.cpp:556
 msgid "Unknown exception"
@@ -9995,9 +9995,9 @@ msgstr ""
 "りません。"
 
 #: common/io/idf/idf_parser.cpp:3259
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid output path: %s"
-msgstr "不正出力フォーマット: %s\n"
+msgstr "不正な出力パス: %s"
 
 #: common/io/idf/idf_parser.cpp:3270 common/io/idf/idf_parser.cpp:3284
 #, fuzzy, c-format
@@ -10005,9 +10005,9 @@ msgid "Cannot overwrite file: %s"
 msgstr "ファイル '%s' を開くことができません"
 
 #: common/io/idf/idf_parser.cpp:3299
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing IDF file: %s"
-msgstr "ファイル '%s' への書き込みがエラーしました。"
+msgstr "IDFファイルへの書き込みがエラー: %s"
 
 #: common/io/pcad/s_expr_loader.cpp:194 common/io/pcad/s_expr_loader.cpp:199
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1301
@@ -18484,7 +18484,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:866
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:180
 msgid "Do not populate"
-msgstr "未実装"
+msgstr "'未実装(DNP)'"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:58
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:161
@@ -19878,8 +19878,8 @@ msgstr ""
 msgid ""
 "Update symbol attribute flags like Do Not Populate to match the footprint."
 msgstr ""
-"フットプリントと一致するように、未実装(DNP) などのシンボル属性フラグを更新し"
-"ます。"
+"フットプリントと一致するように、'未実装(DNP)' などのシンボル属性フラグを更新"
+"します。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:83
 msgid "Prefer symbol unit swaps over label swaps"
@@ -20551,11 +20551,11 @@ msgstr "ピン シンボルのサイズ:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:133
 msgid "Show 'Do not populate' markers"
-msgstr "'DNP(未実装)'マーカーを表示"
+msgstr "'未実装(DNP)'マーカーを表示"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:135
 msgid "Draw a cross over symbols marked 'Do not populate'"
-msgstr "'DNP(未実装)'とマークしたシンボルにバツを描画"
+msgstr "'未実装(DNP)'とマークしたシンボルにバツを描画"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:142
 #: eeschema/erc/erc_item.cpp:37
@@ -20960,7 +20960,7 @@ msgstr "'基板から除外' の属性を比較"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:98
 msgid "Compare do not populate flags"
-msgstr "未実装(DNP)フラグを比較"
+msgstr "'未実装(DNP)'フラグを比較"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:101
 msgid "Compare exlucde from bill of materials flags"
@@ -25170,11 +25170,13 @@ msgstr ""
 "成された大枠を使用します。"
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol '%s' duplicates the name of another library item and was left out "
 "of the library."
-msgstr "シンボル '%s' は変換できすライブラリ(%s) から除外されました。"
+msgstr ""
+"シンボル名 '%s' は他のライブラリのアイテムと重複しているためライブラリから除"
+"外されました。"
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1017
 #, c-format
@@ -25762,7 +25764,7 @@ msgstr "部品表(BOM)から除外"
 #: pcbnew/widgets/pcb_properties_panel.cpp:1195
 #: pcbnew/widgets/pcb_properties_panel.cpp:1428
 msgid "Do not Populate"
-msgstr "未実装"
+msgstr "'未実装(DNP)'"
 
 #: eeschema/sch_screen.cpp:781 eeschema/sch_screen.cpp:883
 #, c-format
@@ -29603,7 +29605,7 @@ msgstr "%s の値を '%s' から '%s' に変更します。"
 #: eeschema/tools/backannotate.cpp:924
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "%s の'DNP(未実装)'の設定を '%s' から '%s' に変更します。"
+msgstr "%s の'未実装(DNP)'の設定を '%s' から '%s' に変更します。"
 
 #: eeschema/tools/backannotate.cpp:938
 #, c-format
@@ -30770,7 +30772,7 @@ msgstr "部品位置情報ファイルから除外する属性を設定"
 
 #: eeschema/tools/sch_actions.cpp:1319
 msgid "Set the do not populate attribute"
-msgstr "DNP(未実装)の属性を設定"
+msgstr "'未実装(DNP)'の属性を設定"
 
 #: eeschema/tools/sch_actions.cpp:1326
 msgid "Open the library symbol in the Symbol Editor"
@@ -34803,7 +34805,7 @@ msgstr "フットプリント タイプが’未指定'のコンポーネント�
 
 #: kicad/cli/command_pcb_export_3d.cpp:93
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
-msgstr "'DNP(未実装)'が指定されたコンポーネントの 3D モデルを除く"
+msgstr "'未実装(DNP)'が指定されたコンポーネントの 3D モデルを除く"
 
 #: kicad/cli/command_pcb_export_3d.cpp:103
 msgid "Use Grid Origin for output origin"
@@ -35246,9 +35248,8 @@ msgid "Exclude components with 'Unspecified' footprint type"
 msgstr "フットプリント タイプが’未指定'のコンポーネントの 3D モデルを除く"
 
 #: kicad/cli/command_pcb_export_idf.cpp:74
-#, fuzzy
 msgid "Exclude components with 'Do not populate' attribute"
-msgstr "'DNP(未実装)'が指定されたコンポーネントの 3D モデルを除く"
+msgstr "'未実装(DNP)'が指定されたコンポーネントを除外する"
 
 #: kicad/cli/command_pcb_export_idf.cpp:78
 msgid "Only use explicitly-set footprint heights to create IDFv3 shapes"
@@ -35360,7 +35361,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_pos.cpp:82
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:110
 msgid "Exclude all footprints with the Do Not Populate flag set"
-msgstr "DNP(未実装)が指定されたすべてのフットプリントを除外"
+msgstr "'未実装(DNP)'が指定されたすべてのフットプリントを除外"
 
 #: kicad/cli/command_pcb_export_pos.cpp:86
 msgid "Include board edge layer (Gerber only)"
@@ -39914,23 +39915,20 @@ msgid "Show maximum hole size"
 msgstr "部品実装用接着剤 (Adhesive) を表示"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:248
-#, fuzzy
 msgid "Recommended pad size:"
-msgstr "パッドを再結合"
+msgstr "推奨パッドサイズ :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:288
 msgid "IPC-2222B Summary"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:314
-#, fuzzy
 msgid "Min. hole diameter"
-msgstr "最小穴径: "
+msgstr "最小穴径"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:315
-#, fuzzy
 msgid "Max. hole diameter"
-msgstr "最小穴径: "
+msgstr "最大穴径"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:63
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:147
@@ -44513,9 +44511,9 @@ msgid "Design Rules Checker"
 msgstr "デザインルール チェッカー(DRC)"
 
 #: pcbnew/dialogs/dialog_drill_groups.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Shape %d"
-msgstr "形状"
+msgstr "形状 %d"
 
 #: pcbnew/dialogs/dialog_drill_groups.cpp:77
 msgid "From / To"
@@ -44531,9 +44529,8 @@ msgid "Sites"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:22
-#, fuzzy
 msgid "Profile:"
-msgstr "プロファイル名"
+msgstr "プロファイル:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:30
 #, fuzzy
@@ -44546,9 +44543,8 @@ msgid "Selected group"
 msgstr "選択対象のみ(&S)"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:73
-#, fuzzy
 msgid "Mark:"
-msgstr "マーカー"
+msgstr "マーク:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:77
 #, fuzzy
@@ -45111,9 +45107,9 @@ msgid "File %s already exists."
 msgstr "ファイル %s はすでに存在します。"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Files %s and %s already exist."
-msgstr "ファイル %s はすでに存在します。"
+msgstr "ファイル %s と %s はすでに存在します。"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:321
 #, fuzzy
@@ -45188,7 +45184,7 @@ msgstr "コンポーネント:ピンがありません"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:250
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:120
 msgid "Ignore 'Do not populate' components"
-msgstr "'DNP(未実装)'の部品を無視"
+msgstr "'未実装(DNP)'の部品を無視"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:137
 #: pcbnew/dialogs/dialog_export_step_base.cpp:255
@@ -45568,7 +45564,7 @@ msgstr "ユーザー定義の原点"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:251
 msgid "Do not show components marked 'Do not populate'"
-msgstr "'DNP(未実装)'と指定された部品を表示しない"
+msgstr "'未実装(DNP)'と指定された部品を表示しない"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:256
 msgid "Do not show components with Footprint Type 'Unspecified'"
@@ -45853,9 +45849,9 @@ msgid "Syntax error in expression"
 msgstr "式に構文エラー"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:1124
-#, fuzzy, c-format
+#, c-format
 msgid "No value to match: %s"
-msgstr "%s にマッチするアイテムは見つかりませんでした。"
+msgstr "一致する値が見つかりません : %s"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:1126
 #, c-format
@@ -46835,9 +46831,8 @@ msgid "Min Width"
 msgstr "線幅"
 
 #: pcbnew/dialogs/dialog_generated_table_properties.cpp:299
-#, fuzzy
 msgid "A table needs at least one column."
-msgstr "少なくとも１つのソースを有効にする必要があります"
+msgstr "テーブルには一つ以上のカラムが必要です。"
 
 #: pcbnew/dialogs/dialog_generated_table_properties.cpp:305
 msgid "The columns are too wide in total."
@@ -46869,9 +46864,8 @@ msgid "Border width:"
 msgstr "ボーダー幅:"
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:176
-#, fuzzy
 msgid "Separator width:"
-msgstr "セパレーターの幅"
+msgstr "セパレーターの幅 :"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:31
 msgid "Click on items to highlight them on the board."
@@ -47788,9 +47782,9 @@ msgid "Footprint Fields Table ('%s' Library)"
 msgstr "フットプリント フィールド テーブル (ライブラリ '%s')"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprints from library '%s': %s"
-msgstr "フットプリント '%s' をライブラリ %s から読み込み中にエラー: %s"
+msgstr "フットプリントをライブラリ %s から読み込み中にエラー: %s"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:248
 #, c-format
@@ -47834,9 +47828,8 @@ msgid "The start and end layers must be different."
 msgstr "ソース 1 とソース 2 は別のものでなければなりません。"
 
 #: pcbnew/dialogs/dialog_microvia_stack.cpp:92
-#, fuzzy
 msgid "Select a start and an end layer present on this board."
-msgstr "ビアの開始レイヤーと終了レイヤーは同じにできません"
+msgstr "この基板上の始点レイヤーと終点レイヤーを選択してください。"
 
 #: pcbnew/dialogs/dialog_microvia_stack.cpp:98
 #, fuzzy
@@ -50437,9 +50430,8 @@ msgid "Via Stitching Properties"
 msgstr "ビア ステッチングのプロパティ"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:39
-#, fuzzy
 msgid "Stitch Net:"
-msgstr "ステッチング"
+msgstr "ステッチ ネット :"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:75
 msgid "Normal Grid"
@@ -50480,9 +50472,8 @@ msgid "Guard"
 msgstr "ガード"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:114
-#, fuzzy
 msgid "Guard Net:"
-msgstr "ガード対象のネット"
+msgstr "ガード ネット :"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.h:85
 msgid "Via Stitch Properties"
@@ -52651,7 +52642,6 @@ msgstr ""
 "\n"
 
 #: pcbnew/dialogs/panel_setup_rules_help_3items.h:2
-#, fuzzy
 msgid ""
 "### Items\n"
 "\n"
@@ -52672,6 +52662,8 @@ msgstr ""
 " * `B` &nbsp;&nbsp; _評価中の２つ目のアイテム(バイナリテスト用)_\n"
 " * `L` &nbsp;&nbsp; _評価中の現在のレイヤー_\n"
 "\n"
+"'hole_size' のような単一のアイテム条件では、2番目のアイテムはありません。\n"
+"これらの条件で`B`を使うのはエラーです。\n"
 "<br>\n"
 "\n"
 
@@ -58803,9 +58795,9 @@ msgid "Added %s 'exclude from simulation' attribute."
 msgstr "%s に製造属性 '部品表(BOM)から除外' を追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:854
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from simulation' attribute."
-msgstr "%s の製造属性 '部品表(BOM)から除外' を削除しました。"
+msgstr "%s の 'Simulationから除外' の属性を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:874
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1538
@@ -59833,9 +59825,9 @@ msgid "Show Totals"
 msgstr "詳細を表示"
 
 #: pcbnew/pcb_drill_map.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Drill Map on %s"
-msgstr "ドリル穴"
+msgstr "%s のドリル マップ"
 
 #: pcbnew/pcb_drill_map.cpp:222
 #, fuzzy
@@ -60122,9 +60114,9 @@ msgid "File is empty: %s"
 msgstr "ファイル '%s' は空"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load Allegro board from file: %s"
-msgstr "Allegroのデータから基板の構築に失敗しました"
+msgstr "ファイルからAllegro基板の読み込みに失敗しました: %s"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:173
 msgid "Failed to build board from Allegro data"
@@ -63789,8 +63781,8 @@ msgstr "マージされたフットプリント ライブラリ の保存に失�
 msgid ""
 "Footprint library merge completed with %zu unresolved conflict(s) in %s\n"
 msgstr ""
-"フットプリント ライブラリのマージが完了しました。%2$s に未解決の衝突が %1$zu "
-"個あります\n"
+"フットプリント ライブラリのマージが完了しましたが、%zu 個の未解決の衝突が %s "
+"に残っています\n"
 
 #: pcbnew/pcbnew_printout.cpp:106
 msgid "Multiple Layers"
