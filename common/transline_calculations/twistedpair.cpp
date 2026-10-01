@@ -90,9 +90,15 @@ void TWISTEDPAIR::Analyse()
     // Capping the depth at the wire radius makes the annulus the full cross-section at DC
     const double currentDepth = std::min( skinDepth, Din / 2.0 );
 
+    // Proximity factor for parallel wires (Wadell, "Transmission Line Design Handbook",
+    // section 3.3.1, eq. 3.3.1.4).  It is a skin-effect result, so fade it out towards DC
+    const double spacing = Dout / Din;
+    const double proximity = spacing / std::sqrt( spacing * spacing - 1.0 );
+    const double crowding = 1.0 + ( proximity - 1.0 ) * ( 1.0 - 2.0 * currentDepth / Din );
+
     // Lefferson 1971 does not cover loss.  Conductor loss is R/(2*Z0) with R the skin
     // resistance of both wires (Pozar, "Microwave Engineering" 4th ed., Table 2.1)
-    SetParameter( TCP::LOSS_CONDUCTOR, TC::LOG2DB * len / currentDepth / sigma / M_PI / z0
+    SetParameter( TCP::LOSS_CONDUCTOR, TC::LOG2DB * len * crowding / currentDepth / sigma / M_PI / z0
                                                / ( Din - currentDepth ) );
 
     // Only the insulation is lossy, so tan delta carries its filling factor (Garg and Bahl,
