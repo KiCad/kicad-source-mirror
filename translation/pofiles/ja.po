@@ -11,13 +11,15 @@
 # dsa-t <dudesuchamazing@gmail.com>, 2024, 2025, 2026.
 # Yutaro Urata2 <yutarourata03@gmail.com>, 2024, 2026.
 # John Beard <john.j.beard@gmail.com>, 2025.
+# Integration <bot-kicad-integration@bots.noreply.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-25 23:31+0300\n"
 "PO-Revision-Date: 2026-10-01 05:01+0000\n"
-"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
+"Last-Translator: Integration <bot-kicad-integration@bots.noreply.weblate.org>"
+"\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
 "Language: ja\n"
@@ -4089,7 +4091,7 @@ msgstr "差異は検出されませんでした。"
 #: common/dialogs/dialog_kicad_diff.cpp:557
 #, c-format
 msgid "%zu change(s) detected."
-msgstr "%z 個の変更が検出されました。"
+msgstr "%zu 個の変更が検出されました。"
 
 #: common/dialogs/dialog_kicad_diff.cpp:345
 msgid "Show Change"
@@ -63420,8 +63422,8 @@ msgstr "マージされたフットプリント ライブラリ の保存に失�
 msgid ""
 "Footprint library merge completed with %zu unresolved conflict(s) in %s\n"
 msgstr ""
-"%z 個のフットプリント ライブラリのマージが修了し、未解決の衝突が存在します "
-"%s\n"
+"フットプリント ライブラリのマージが完了しました。%2$s に未解決の衝突が %1$zu "
+"個あります\n"
 
 #: pcbnew/pcbnew_printout.cpp:106
 msgid "Multiple Layers"
