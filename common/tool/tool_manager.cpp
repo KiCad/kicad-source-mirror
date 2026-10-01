@@ -656,22 +656,24 @@ void TOOL_MANAGER::ResetTools( TOOL_BASE::RESET_REASON aReason )
 
 void TOOL_MANAGER::InitTools()
 {
-    for( auto it = m_toolOrder.begin(); it != m_toolOrder.end(); /* iter inside */ )
+    for( auto it = m_toolOrder.begin(); it != m_toolOrder.end(); ++it )
     {
         TOOL_BASE* tool = *it;
+
         wxASSERT( m_toolState.count( tool ) );
         TOOL_STATE* state = m_toolState[tool];
         setActiveState( state );
-        ++it;   // keep the iterator valid if the element is going to be erased
 
         if( !tool->Init() )
         {
-            wxLogTrace( kicadTraceToolStack,
-                        wxS( "TOOL_MANAGER initialization of tool '%s' failed" ),
+            wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER initialization of tool '%s' failed" ),
                         tool->GetName() );
 
             // Unregister the tool
             setActiveState( nullptr );
+
+            m_toolOrder.erase( it );
+
             m_toolState.erase( tool );
             m_toolNameIndex.erase( tool->GetName() );
             m_toolIdIndex.erase( tool->GetId() );
@@ -679,8 +681,16 @@ void TOOL_MANAGER::InitTools()
 
             delete state;
             delete tool;
+            *it = nullptr;
         }
     }
+
+    // Clear out any tools that failed to initialize
+    std::erase_if( m_toolOrder,
+                   []( const TOOL_BASE* aTool )
+                   {
+                       return aTool == nullptr;
+                   } );
 
     m_actionMgr->UpdateHotKeys( true );
 
