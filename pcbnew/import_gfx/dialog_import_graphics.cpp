@@ -290,8 +290,13 @@ bool DIALOG_IMPORT_GRAPHICS::TransferDataFromWindow()
                 if( !sourceLayers.empty() )
                 {
                     LSET permittedLayers = getPermittedImportLayers( m_parent );
-                    m_importer->SetLayerMap( DIALOG_MAP_LAYERS::RunModal(
-                            this, buildDxfLayerDescriptions( sourceLayers, permittedLayers ) ) );
+                    std::map<wxString, PCB_LAYER_ID> layerMap = DIALOG_MAP_LAYERS::RunModal(
+                            this, buildDxfLayerDescriptions( sourceLayers, permittedLayers ) );
+
+                    if( layerMap.empty() )
+                        return false;
+
+                    m_importer->SetLayerMap( layerMap );
                 }
             }
 

@@ -352,7 +352,8 @@ DIALOG_MAP_LAYERS::RunModal( wxWindow* aParent, const std::vector<INPUT_LAYER_DE
 
     while( !dataOk )
     {
-        dlg.ShowModal();
+        if( dlg.ShowModal() != wxID_OK )
+            return {};
 
         // If the user accepted with no mappings, apply suggested AutoMapLayer values.
         if( dlg.m_matched_layers_map.empty() )
