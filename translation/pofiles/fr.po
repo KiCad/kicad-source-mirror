@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 23:31+0300\n"
+"POT-Creation-Date: 2026-09-30 22:14-0700\n"
 "PO-Revision-Date: 2026-07-27 14:02+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/kicad/v10/fr/>\n"
@@ -1790,7 +1790,7 @@ msgid "Image Converter"
 msgstr "Convertisseur d'Image"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Convertisseur d'Image KiCad"
 
@@ -2302,7 +2302,7 @@ msgid "&No"
 msgstr "&Non"
 
 #: common/design_block_io.cpp:68
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -3281,6 +3281,7 @@ msgstr "Nom Projet"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1800
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "PCB"
 msgstr "PCB"
 
@@ -3289,6 +3290,7 @@ msgstr "PCB"
 #: eeschema/widgets/hierarchy_pane.cpp:832
 #: eeschema/widgets/hierarchy_pane.cpp:838
 #: eeschema/widgets/symbol_diff_widget.cpp:44
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Schematic"
 msgstr "Schématique"
 
@@ -3982,8 +3984,8 @@ msgstr "Auteur:"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: kicad/dialogs/dialog_edit_cfg.cpp:181
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:136
-#: pcbnew/tools/multichannel_tool.cpp:2070
-#: pcbnew/tools/multichannel_tool.cpp:2197
+#: pcbnew/tools/multichannel_tool.cpp:2115
+#: pcbnew/tools/multichannel_tool.cpp:2242
 msgid "OK"
 msgstr "OK"
 
@@ -6443,31 +6445,31 @@ msgstr "Déplacer vers le Haut"
 msgid "Move Down"
 msgstr "Déplacer vers le Bas"
 
-#: common/draw_panel_gal.cpp:303 common/draw_panel_gal.cpp:794
+#: common/draw_panel_gal.cpp:313 common/draw_panel_gal.cpp:817
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Impossible d'utiliser OpenGL, utilise le moteur logiciel"
 
-#: common/draw_panel_gal.cpp:310 common/draw_panel_gal.cpp:536
+#: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:559
 msgid "Graphics error"
 msgstr "Graphics error"
 
-#: common/draw_panel_gal.cpp:314 common/draw_panel_gal.cpp:318
+#: common/draw_panel_gal.cpp:324 common/draw_panel_gal.cpp:328
 msgid "Graphics error during recovery"
 msgstr "Erreur graphique pendant la récupération"
 
-#: common/draw_panel_gal.cpp:319
+#: common/draw_panel_gal.cpp:329
 msgid "Unknown exception during backend switch"
 msgstr "Exception inconnue lors du changement de backend"
 
-#: common/draw_panel_gal.cpp:536
+#: common/draw_panel_gal.cpp:559
 msgid "Unknown exception"
 msgstr "Exception inconnue"
 
-#: common/draw_panel_gal.cpp:801
+#: common/draw_panel_gal.cpp:824
 msgid "Could not use OpenGL"
 msgstr "Impossible d’utiliser OpenGL"
 
-#: common/draw_panel_gal.cpp:829
+#: common/draw_panel_gal.cpp:852
 msgid "Error switching GAL backend"
 msgstr "Erreur en commutant au backend GAL"
 
@@ -8228,8 +8230,8 @@ msgid ""
 "Could not create a commit signature.  Set user.name and user.email in your "
 "git configuration."
 msgstr ""
-"Impossible de créer une signature de commit.  Définissez user.name et user."
-"email dans votre configuration git."
+"Impossible de créer une signature de commit.  Définissez user.name et "
+"user.email dans votre configuration git."
 
 #: common/git/libgit_backend.cpp:1557
 #, c-format
@@ -8306,7 +8308,7 @@ msgstr ""
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
 #: pcbnew/dialogs/panel_setup_rules.cpp:142
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:997
-#: pcbnew/tools/edit_tool.cpp:2903
+#: pcbnew/tools/edit_tool.cpp:2907
 msgid "Cut"
 msgstr "Couper"
 
@@ -8353,7 +8355,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_rules.cpp:145
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:589
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1000
-#: pcbnew/tools/edit_tool.cpp:2873 pcbnew/tools/edit_tool.cpp:2916
+#: pcbnew/tools/edit_tool.cpp:2877 pcbnew/tools/edit_tool.cpp:2920
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -8718,8 +8720,8 @@ msgid ""
 "file. Cannot find project.json or device.json."
 msgstr ""
 "'%s' ne semble pas être un fichier de projet ou de librairie EasyEDA "
-"(JLCEDA) Pro valide. Impossible de trouver le fichier project.json ou device."
-"json."
+"(JLCEDA) Pro valide. Impossible de trouver le fichier project.json ou "
+"device.json."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:220
 #, c-format
@@ -9573,12 +9575,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Unités manquantes pour '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1256
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Non correspondance de type entre '%s' et %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1262
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Non correspondance de type entre %lf et '%s'"
 
@@ -10718,7 +10718,7 @@ msgstr "Coller les éléments depuis le presse-papier avec options"
 
 #: common/tool/actions.cpp:395 common/widgets/listbox_tricks.cpp:211
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1836
-#: pcbnew/tools/edit_tool.cpp:3256
+#: pcbnew/tools/edit_tool.cpp:3260
 msgid "Duplicate"
 msgstr "Duplication"
 
@@ -10739,7 +10739,7 @@ msgid "Delete clicked items"
 msgstr "Supprimer les éléments cliqués"
 
 #: common/tool/actions.cpp:425 eeschema/tools/sch_edit_tool.cpp:3389
-#: pcbnew/tools/edit_tool.cpp:2618
+#: pcbnew/tools/edit_tool.cpp:2622
 msgid "Left Justify"
 msgstr "Justification à Gauche"
 
@@ -10748,7 +10748,7 @@ msgid "Left-justify fields and text items"
 msgstr "Justifier à gauche les champs et les textes"
 
 #: common/tool/actions.cpp:432 eeschema/tools/sch_edit_tool.cpp:3391
-#: pcbnew/tools/edit_tool.cpp:2620
+#: pcbnew/tools/edit_tool.cpp:2624
 msgid "Center Justify"
 msgstr "Justification au Centre"
 
@@ -10757,7 +10757,7 @@ msgid "Center-justify fields and text items"
 msgstr "Centrer les champs et les textes"
 
 #: common/tool/actions.cpp:439 eeschema/tools/sch_edit_tool.cpp:3393
-#: pcbnew/tools/edit_tool.cpp:2622
+#: pcbnew/tools/edit_tool.cpp:2626
 msgid "Right Justify"
 msgstr "Justification à Droite"
 
@@ -10774,7 +10774,7 @@ msgid "Collapse All"
 msgstr "Tout Réduire"
 
 #: common/tool/actions.cpp:460 eeschema/tools/sch_tool_base.h:239
-#: pcbnew/tools/edit_tool.cpp:3354
+#: pcbnew/tools/edit_tool.cpp:3358
 msgid "Increment"
 msgstr "Incrément"
 
@@ -13264,8 +13264,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -13353,8 +13353,8 @@ msgstr ""
 "serait la suivante :\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "Sous Linux, si le script de génération souhaité pour une nomenclature CSV "
@@ -17411,6 +17411,7 @@ msgid "Code"
 msgstr "Code"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Enregistrer {} dans le champ Valeur comme \"{}\""
 
@@ -20676,8 +20677,8 @@ msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
-"Erreur dans l'analyse du modèle '%s', mauvais nombre de nœuds '?' dans Sim."
-"NodesFormat par rapport aux connexions"
+"Erreur dans l'analyse du modèle '%s', mauvais nombre de nœuds '?' dans "
+"Sim.NodesFormat par rapport aux connexions"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:693
 #, c-format
@@ -21801,9 +21802,9 @@ msgid ""
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
 "Nom de la bibliothèque d'empreintes liée aux symboles de cette bibliothèque. "
-"Vous devez créer une entrée distincte pour le fichier CADSTAR PCB Archive (*."
-"cpa) dans les tables de librairie d'empreintes. Si aucun nom n'est spécifié, "
-"'cadstarpcblib' est supposé être utilisé."
+"Vous devez créer une entrée distincte pour le fichier CADSTAR PCB Archive "
+"(*.cpa) dans les tables de librairie d'empreintes. Si aucun nom n'est "
+"spécifié, 'cadstarpcblib' est supposé être utilisé."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:279
 #, c-format
@@ -23397,8 +23398,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23449,9 +23450,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23800,8 +23801,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23852,9 +23853,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -24738,8 +24739,8 @@ msgstr "Erreur en création du fichier de sortie temporaire"
 
 #: eeschema/sim/kibis/kibis.cpp:851
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
-"pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
+"chen.pdf"
 msgstr ""
 "Kibis ne supporte pas encore les valeurs DUT. https://ibis.org/summits/"
 "nov16a/chen.pdf"
@@ -28213,13 +28214,13 @@ msgstr "Changer Pour"
 
 #: eeschema/tools/sch_edit_tool.cpp:1288
 #: eeschema/tools/symbol_editor_edit_tool.cpp:603
-#: pcbnew/tools/edit_tool.cpp:2368
+#: pcbnew/tools/edit_tool.cpp:2372
 msgid "Rotate"
 msgstr "Rotation"
 
 #: eeschema/tools/sch_edit_tool.cpp:1504 gerbview/gerber_draw_item.cpp:724
 #: pcbnew/pcb_tablecell.cpp:261 pcbnew/pcb_text.cpp:348
-#: pcbnew/pcb_textbox.cpp:500 pcbnew/tools/edit_tool.cpp:2537
+#: pcbnew/pcb_textbox.cpp:500 pcbnew/tools/edit_tool.cpp:2541
 msgid "Mirror"
 msgstr "Miroir"
 
@@ -28676,12 +28677,12 @@ msgid "Place Pin"
 msgstr "Placer Pin"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:851
-#: pcbnew/tools/edit_tool.cpp:2908
+#: pcbnew/tools/edit_tool.cpp:2912
 msgid "Hide Field"
 msgstr "Cacher Champ"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:853
-#: pcbnew/tools/edit_tool.cpp:2910
+#: pcbnew/tools/edit_tool.cpp:2914
 msgid "Hide Fields"
 msgstr "Cacher Champs"
 
@@ -29936,7 +29937,7 @@ msgid "Clear Recent Job Files"
 msgstr "Effacer Liste Fichiers Job Récents"
 
 #: gerbview/gerbview_frame.cpp:97
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
 msgid "KiCad Gerber Viewer"
 msgstr "Visualisateur Gerber KiCad"
 
@@ -32600,8 +32601,8 @@ msgstr "Projet PADS..."
 #: kicad/menubar.cpp:150
 msgid "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)"
 msgstr ""
-"Importer la schématique PADS Logic et le fichier PADS ASCII PCB (*.asc, *."
-"txt)"
+"Importer la schématique PADS Logic et le fichier PADS ASCII PCB (*.asc, "
+"*.txt)"
 
 #: kicad/menubar.cpp:153
 msgid "gEDA / Lepton EDA Project..."
@@ -34368,8 +34369,8 @@ msgstr "Montrer le Bloc Titre en Mode Edition"
 #: pagelayout_editor/tools/pl_actions.cpp:127
 msgid "Text placeholders are shown as ${keyword} tokens"
 msgstr ""
-"Les \"espaces réservés\" de texte sont affichés sous la forme de mots clés "
-"${keyword}"
+"Les \"espaces réservés\" de texte sont affichés sous la forme de mots clés $"
+"{keyword}"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:541
 msgid "Error writing objects to clipboard"
@@ -37911,8 +37912,8 @@ msgstr "(pas d'ID de librairie)"
 #, c-format
 msgid "Library link mismatch: %s expects '%s' but candidate %s is '%s'."
 msgstr ""
-"Différence des liens de librairie : %s attend '%s' mais le candidat %s est « "
-"%s »."
+"Différence des liens de librairie : %s attend '%s' mais le candidat %s est "
+"« %s »."
 
 #: pcbnew/connectivity/topo_match.cpp:1210
 #, c-format
@@ -40606,8 +40607,8 @@ msgstr "Marge pâte à souder:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:375
 msgid ""
 "Local solder paste clearance for this footprint.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
 "Marge locale de la pâte à souder pour cette empreinte.\n"
@@ -40816,8 +40817,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
 msgid ""
 "Solder paste clearance relative to pad size.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "Marge de la pâte à souder par rapport à la taille du pad.\n"
@@ -42715,8 +42716,8 @@ msgstr "Propriétés par Défaut du Pad pour Ajouter Pad"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
 msgid ""
 "Local solder paste clearance for this pad.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
 "Marge locale de la pâte à souder pour ce pad.\n"
@@ -43592,8 +43593,8 @@ msgstr ""
 "exacte en sortie postscript.\n"
 "Cette correction est prévue pour compenser les erreurs de largeur de piste "
 "et des dimensions de pads et vias.\n"
-"La correction raisonnable doit être dans la gamme [-(MinTrackWidth-1), "
-"+(MinClearanceValue-1)]."
+"La correction raisonnable doit être dans la gamme [-(MinTrackWidth-1), +"
+"(MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:324
 msgid "Force A4 output"
@@ -46105,9 +46106,9 @@ msgid ""
 msgstr ""
 "### Documentation\n"
 "\n"
-"Pour la documentation complète, voir [https://docs.kicad.org](https://go."
-"kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules)."
+"Pour la documentation complète, voir [https://docs.kicad.org](https://"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -46171,8 +46172,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -46432,8 +46433,8 @@ msgstr ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -46813,8 +46814,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -47190,13 +47191,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -47350,13 +47351,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -52164,8 +52165,8 @@ msgstr "Traitement du symbole \"%s:%s\"."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2105
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
-"Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full "
+"'Library:Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Avertissement : %s l'empreinte '%s' n'a pas de nom de librairie. Utilisez le "
 "format complet « Librairie:Empreinte » pour éviter les notifications de mise "
@@ -53052,8 +53053,8 @@ msgid ""
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
 "Ce fichier ne semble pas être dans un format PCB Binary Version 6.0 valide. "
-"Dans Altium Designer, assurez-vous d'enregistrer sous \"PCB Binary Files (*."
-"PcbDoc)\"."
+"Dans Altium Designer, assurez-vous d'enregistrer sous \"PCB Binary Files "
+"(*.PcbDoc)\"."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:740
 #, c-format
@@ -55262,8 +55263,8 @@ msgid ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
-"function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>$"
+"{refdes:function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -55565,8 +55566,8 @@ msgstr ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
-"function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>$"
+"{refdes:function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -57628,7 +57629,7 @@ msgstr "Simplifier les Polygones"
 msgid "Heal Shapes"
 msgstr "Soigner Formes"
 
-#: pcbnew/tools/edit_tool.cpp:2541
+#: pcbnew/tools/edit_tool.cpp:2545
 msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
@@ -57636,7 +57637,7 @@ msgstr ""
 "Les empreintes ne peuvent pas être mises en miroir. Utilisez Retourner pour "
 "les déplacer sur l'autre face du circuit imprimé."
 
-#: pcbnew/tools/edit_tool.cpp:2546
+#: pcbnew/tools/edit_tool.cpp:2550
 msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
@@ -57644,33 +57645,33 @@ msgstr ""
 "Les groupes contenant des empreintes ou d'autres éléments ne pouvant être "
 "mis en miroir ont été ignorés."
 
-#: pcbnew/tools/edit_tool.cpp:2719 pcbnew/tools/pcb_actions.cpp:686
+#: pcbnew/tools/edit_tool.cpp:2723 pcbnew/tools/pcb_actions.cpp:686
 msgid "Change Side / Flip"
 msgstr "Changer Côté / Retourner"
 
-#: pcbnew/tools/edit_tool.cpp:2912
+#: pcbnew/tools/edit_tool.cpp:2916
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr ""
 "Utiliser le dialogue Propriétés de l'Empreinte pour supprimer des champs."
 
-#: pcbnew/tools/edit_tool.cpp:3077
+#: pcbnew/tools/edit_tool.cpp:3081
 msgid "Move Exactly"
 msgstr "Déplacer Exactement"
 
-#: pcbnew/tools/edit_tool.cpp:3252
+#: pcbnew/tools/edit_tool.cpp:3256
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "%d élément(s) dupliqué(s)"
 
-#: pcbnew/tools/edit_tool.cpp:3576
+#: pcbnew/tools/edit_tool.cpp:3580
 msgid "Select reference point for the copy..."
 msgstr "Sélectionnez le point de référence pour la copie..."
 
-#: pcbnew/tools/edit_tool.cpp:3576 pcbnew/tools/edit_tool.cpp:3592
+#: pcbnew/tools/edit_tool.cpp:3580 pcbnew/tools/edit_tool.cpp:3596
 msgid "Selection copied"
 msgstr "Sélection copiée"
 
-#: pcbnew/tools/edit_tool.cpp:3577
+#: pcbnew/tools/edit_tool.cpp:3581
 msgid "Copy canceled"
 msgstr "Copie annulée"
 
@@ -57916,63 +57917,63 @@ msgid "(none)"
 msgstr "(aucun)"
 
 #: pcbnew/tools/multichannel_tool.cpp:139
-#: pcbnew/tools/multichannel_tool.cpp:2227
+#: pcbnew/tools/multichannel_tool.cpp:2272
 msgid "Topology mismatch"
 msgstr "Incompatibilité de topologie"
 
-#: pcbnew/tools/multichannel_tool.cpp:733
+#: pcbnew/tools/multichannel_tool.cpp:767
 msgid "Select a reference Rule Area to copy from..."
 msgstr ""
 "Sélectionnez une zone à règles de référence à partir de laquelle effectuer "
 "une copie..."
 
-#: pcbnew/tools/multichannel_tool.cpp:752
+#: pcbnew/tools/multichannel_tool.cpp:786
 msgid "No Rule Areas to repeat layout to have been found."
 msgstr ""
 "Aucune zone de règles pour répéter le placement/routage n'a été trouvée."
 
-#: pcbnew/tools/multichannel_tool.cpp:848
+#: pcbnew/tools/multichannel_tool.cpp:882
 msgid "Checking Rule Area compatibility..."
 msgstr "Vérification de la compatibilité de la zone à règles..."
 
-#: pcbnew/tools/multichannel_tool.cpp:873
+#: pcbnew/tools/multichannel_tool.cpp:907
 #, c-format
 msgid "Resolving topology %d of %d (%d/%d components)"
 msgstr "Résolution de la topologie %d de %d (composants %d/%d)"
 
-#: pcbnew/tools/multichannel_tool.cpp:923
+#: pcbnew/tools/multichannel_tool.cpp:957
 #, c-format
 msgid "Rule Area topologies do not match: %s"
 msgstr "Les topologies des zones  à règles ne correspondent pas : %s"
 
-#: pcbnew/tools/multichannel_tool.cpp:948
-#: pcbnew/tools/multichannel_tool.cpp:1012
+#: pcbnew/tools/multichannel_tool.cpp:983
+#: pcbnew/tools/multichannel_tool.cpp:1047
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr ""
 "La copie du contenu de la zone de règles a échoué entre les zones de règles "
 "'%s' et '%s'."
 
-#: pcbnew/tools/multichannel_tool.cpp:971
+#: pcbnew/tools/multichannel_tool.cpp:1006
 msgid "Target group does not have a group."
 msgstr "Le groupe cible n'a pas de groupe."
 
-#: pcbnew/tools/multichannel_tool.cpp:986
-#: pcbnew/tools/multichannel_tool.cpp:1049
+#: pcbnew/tools/multichannel_tool.cpp:1021
+#: pcbnew/tools/multichannel_tool.cpp:1094
 msgid "Repeat layout"
 msgstr "Répéter placement/routage"
 
-#: pcbnew/tools/multichannel_tool.cpp:1052
+#: pcbnew/tools/multichannel_tool.cpp:1097
 #, c-format
 msgid "Copied to %d Rule Areas."
 msgstr "Copié sur %d Zones à Règles."
 
-#: pcbnew/tools/multichannel_tool.cpp:2089
+#: pcbnew/tools/multichannel_tool.cpp:2134
 msgid "Target Rule Area shares components with the reference area"
 msgstr ""
 "La Surface à Règles cible partage des composants avec la surface de référence"
 
-#: pcbnew/tools/multichannel_tool.cpp:2092
+#: pcbnew/tools/multichannel_tool.cpp:2137
 msgid ""
 "This target Rule Area selects the same components as the reference area. "
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
@@ -57983,7 +57984,7 @@ msgstr ""
 "Règles sur elle-même. Donnez à chaque Surface à Règles de placement une "
 "feuille, une classe de composants ou un groupe distinct."
 
-#: pcbnew/tools/multichannel_tool.cpp:2095
+#: pcbnew/tools/multichannel_tool.cpp:2140
 #, c-format
 msgid ""
 "Shared components:\n"
@@ -57992,12 +57993,12 @@ msgstr ""
 "Composants partagés:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2233
+#: pcbnew/tools/multichannel_tool.cpp:2278
 #, c-format
 msgid "Reference area total components: %d"
 msgstr "Nombre total de composants dans la zone de référence : %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:2234
+#: pcbnew/tools/multichannel_tool.cpp:2279
 #, c-format
 msgid ""
 "Reference area components:\n"
@@ -58006,19 +58007,19 @@ msgstr ""
 "Composants de la zone de référence :\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2237
+#: pcbnew/tools/multichannel_tool.cpp:2282
 #, c-format
 msgid "Target area total components: %d"
 msgstr "Nombre total de composants dans la zone cible : %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:2238
+#: pcbnew/tools/multichannel_tool.cpp:2283
 #, c-format
 msgid ""
 "Target area components:\n"
 "%s"
 msgstr "Composants de la zone cible : %s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2290
+#: pcbnew/tools/multichannel_tool.cpp:2335
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
@@ -58027,7 +58028,7 @@ msgstr ""
 "n'a qu'une seule ou aucune feuille hiérarchique, groupe ou classe de "
 "composants."
 
-#: pcbnew/tools/multichannel_tool.cpp:2522
+#: pcbnew/tools/multichannel_tool.cpp:2567
 msgid "Auto-generate placement rule areas"
 msgstr "Générer automatiquement zones à règles de placement"
 
@@ -61835,95 +61836,104 @@ msgstr "freins thermiques pour pads traversants"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] chargement échouée: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Converter;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Bitmap to Component Converter"
 msgstr "Convertisseur Bitmap en Composant"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
 "Créer un composant à partir d’une image bitmap pour une utilisation avec "
 "KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "Editeur de Schématique KiCad (indépendant)."
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "Schematic Capture Tool"
 msgstr "Outil de Capture Schématique"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Editeur de schématique indépendant pour les schémas KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
 msgstr "Visionneuse de fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "View Gerber files"
 msgstr "Visualiser fichiers Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber ;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
 msgid "Projectmanager;"
 msgstr "Projectmanager;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
 msgstr "Suite CAO Electronique"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "Calculateur pour PCB KiCad"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "PCB;Calculator;"
 msgstr "PCB;Calculateur;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Calculatrice pour divers calculs liés à l’électronique"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint ;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Editeur de PCB KiCad (indépendant)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
 msgstr "Éditeur de circuit imprimé"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Éditeur indépendant de circuits imprimés pour les C.I. KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite d’outils pour la conception schématique et des circuits imprimés"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
+msgid "EDA"
+msgstr ""
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
+#, fuzzy
+msgid "Circuit board"
+msgstr "Circuit imprimé"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -61993,10 +62003,6 @@ msgstr "Impossible d'ouvrir/créer le chemin '%s'."
 
 #~ msgid "Empty sheet pin name"
 #~ msgstr "Nom de pin de feuille vide"
-
-#, fuzzy
-#~ msgid "Circuit board"
-#~ msgstr "Circuit imprimé"
 
 #~ msgid "Library not found in library table"
 #~ msgstr "Librairie introuvable dans la table des librairies"
@@ -63096,8 +63102,8 @@ msgstr "Impossible d'ouvrir/créer le chemin '%s'."
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Resultant Nets</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -63148,9 +63154,9 @@ msgstr "Impossible d'ouvrir/créer le chemin '%s'."
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -63236,8 +63242,8 @@ msgstr "Impossible d'ouvrir/créer le chemin '%s'."
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Resultant Nets</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -63288,9 +63294,9 @@ msgstr "Impossible d'ouvrir/créer le chemin '%s'."
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 23:31+0300\n"
+"POT-Creation-Date: 2026-09-30 22:14-0700\n"
 "PO-Revision-Date: 2026-04-24 15:29+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/v10/lt/"
@@ -1794,7 +1794,7 @@ msgid "Image Converter"
 msgstr "Vaizdų konverteris"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "KiCad vaizdų konverteris"
 
@@ -2307,7 +2307,7 @@ msgid "&No"
 msgstr "&Ne"
 
 #: common/design_block_io.cpp:68
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -3276,6 +3276,7 @@ msgstr "Projekto pavadinimas"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1800
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "PCB"
 msgstr "Spausdintinė plokštė"
 
@@ -3284,6 +3285,7 @@ msgstr "Spausdintinė plokštė"
 #: eeschema/widgets/hierarchy_pane.cpp:832
 #: eeschema/widgets/hierarchy_pane.cpp:838
 #: eeschema/widgets/symbol_diff_widget.cpp:44
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Schematic"
 msgstr "Schema"
 
@@ -3973,8 +3975,8 @@ msgstr "Autorius:"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: kicad/dialogs/dialog_edit_cfg.cpp:181
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:136
-#: pcbnew/tools/multichannel_tool.cpp:2070
-#: pcbnew/tools/multichannel_tool.cpp:2197
+#: pcbnew/tools/multichannel_tool.cpp:2115
+#: pcbnew/tools/multichannel_tool.cpp:2242
 msgid "OK"
 msgstr "Gerai"
 
@@ -6406,34 +6408,34 @@ msgstr "Perkelti aukštyn"
 msgid "Move Down"
 msgstr "Perkelti žemyn"
 
-#: common/draw_panel_gal.cpp:303 common/draw_panel_gal.cpp:794
+#: common/draw_panel_gal.cpp:313 common/draw_panel_gal.cpp:817
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Nepavyko naudoti OpenGL, pereinama prie programinės atvaizdavimo"
 
-#: common/draw_panel_gal.cpp:310 common/draw_panel_gal.cpp:536
+#: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:559
 msgid "Graphics error"
 msgstr "Grafikos klaida"
 
-#: common/draw_panel_gal.cpp:314 common/draw_panel_gal.cpp:318
+#: common/draw_panel_gal.cpp:324 common/draw_panel_gal.cpp:328
 #, fuzzy
 msgid "Graphics error during recovery"
 msgstr "Grafikos klaida"
 
-#: common/draw_panel_gal.cpp:319
+#: common/draw_panel_gal.cpp:329
 #, fuzzy
 msgid "Unknown exception during backend switch"
 msgstr "OCC išimtis kuriant paviršių: %s"
 
-#: common/draw_panel_gal.cpp:536
+#: common/draw_panel_gal.cpp:559
 #, fuzzy
 msgid "Unknown exception"
 msgstr "Nežinomas valymo veiksmas"
 
-#: common/draw_panel_gal.cpp:801
+#: common/draw_panel_gal.cpp:824
 msgid "Could not use OpenGL"
 msgstr "Nepavyko naudoti OpenGL"
 
-#: common/draw_panel_gal.cpp:829
+#: common/draw_panel_gal.cpp:852
 msgid "Error switching GAL backend"
 msgstr "Klaida perjungiant GAL posistemę"
 
@@ -7603,8 +7605,8 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Bazinis kelias, kuriame yra vietinės sistemos korpusų bibliotekos (aplankai ."
-"pretty)."
+"Bazinis kelias, kuriame yra vietinės sistemos korpusų bibliotekos "
+"(aplankai .pretty)."
 
 #: common/env_vars.cpp:129
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -8267,7 +8269,7 @@ msgstr ""
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
 #: pcbnew/dialogs/panel_setup_rules.cpp:142
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:997
-#: pcbnew/tools/edit_tool.cpp:2903
+#: pcbnew/tools/edit_tool.cpp:2907
 msgid "Cut"
 msgstr "Iškirpti"
 
@@ -8311,7 +8313,7 @@ msgstr "Įklijuoti iškarpinės langelius į matricą nuo esamo langelio"
 #: pcbnew/dialogs/panel_setup_rules.cpp:145
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:589
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1000
-#: pcbnew/tools/edit_tool.cpp:2873 pcbnew/tools/edit_tool.cpp:2916
+#: pcbnew/tools/edit_tool.cpp:2877 pcbnew/tools/edit_tool.cpp:2920
 msgid "Delete"
 msgstr "Pašalinti"
 
@@ -9525,12 +9527,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Trūksta „%s“ vienetų | (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1256
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Tipų neatitikimas tarp '%s' ir %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1262
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Tipų neatitikimas tarp %lf ir '%s'"
 
@@ -10649,7 +10649,7 @@ msgstr "Įklijuoti elementą (-us) iš iškarpinės su parinktimis"
 
 #: common/tool/actions.cpp:395 common/widgets/listbox_tricks.cpp:211
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1836
-#: pcbnew/tools/edit_tool.cpp:3256
+#: pcbnew/tools/edit_tool.cpp:3260
 msgid "Duplicate"
 msgstr "Dubliuoti"
 
@@ -10670,7 +10670,7 @@ msgid "Delete clicked items"
 msgstr "Pašalinti spustelėtus elementus"
 
 #: common/tool/actions.cpp:425 eeschema/tools/sch_edit_tool.cpp:3389
-#: pcbnew/tools/edit_tool.cpp:2618
+#: pcbnew/tools/edit_tool.cpp:2622
 msgid "Left Justify"
 msgstr "Lygiuoti kairėje"
 
@@ -10679,7 +10679,7 @@ msgid "Left-justify fields and text items"
 msgstr "Lygiuoti laukus ir teksto elementus kairėje"
 
 #: common/tool/actions.cpp:432 eeschema/tools/sch_edit_tool.cpp:3391
-#: pcbnew/tools/edit_tool.cpp:2620
+#: pcbnew/tools/edit_tool.cpp:2624
 msgid "Center Justify"
 msgstr "Lygiuoti centre"
 
@@ -10688,7 +10688,7 @@ msgid "Center-justify fields and text items"
 msgstr "Lygiuoti laukus ir teksto elementus centre"
 
 #: common/tool/actions.cpp:439 eeschema/tools/sch_edit_tool.cpp:3393
-#: pcbnew/tools/edit_tool.cpp:2622
+#: pcbnew/tools/edit_tool.cpp:2626
 msgid "Right Justify"
 msgstr "Lygiuoti dešinėje"
 
@@ -10705,7 +10705,7 @@ msgid "Collapse All"
 msgstr "Sutraukti viską"
 
 #: common/tool/actions.cpp:460 eeschema/tools/sch_tool_base.h:239
-#: pcbnew/tools/edit_tool.cpp:3354
+#: pcbnew/tools/edit_tool.cpp:3358
 msgid "Increment"
 msgstr "Padidinti"
 
@@ -13156,8 +13156,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -13236,8 +13236,8 @@ msgstr ""
 "\\Users\\naudotojas\\kicad\\mano_python_skriptas.py`, komandų eilutė būtų:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\naudotojas\\kicad\\mano_python_skriptas.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\naudotojas\\kicad\\mano_python_skriptas.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "Linux sistemoje, jei norimas CSV BOM generatoriaus skriptas yra `/home/"
@@ -17259,6 +17259,7 @@ msgid "Code"
 msgstr "Kodas"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Išsaugoti {} Nominalo lauke kaip „{}“"
 
@@ -20473,8 +20474,8 @@ msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
-"Klaida analizuojant modelį '%s', neteisingas mazgų skaičius '?' Sim."
-"NodesFormat, palyginti su ryšiais"
+"Klaida analizuojant modelį '%s', neteisingas mazgų skaičius '?' "
+"Sim.NodesFormat, palyginti su ryšiais"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:693
 #, c-format
@@ -23152,8 +23153,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23204,9 +23205,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23555,8 +23556,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Rezultatasant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23607,9 +23608,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -24479,8 +24480,8 @@ msgstr "Klaida kuriant laikiną išvesties failą"
 
 #: eeschema/sim/kibis/kibis.cpp:851
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
-"pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
+"chen.pdf"
 msgstr ""
 "Kibis dar nepalaiko DUT reikšmių. https://ibis.org/summits/nov16a/chen.pdf"
 
@@ -27872,13 +27873,13 @@ msgstr "Keisti į"
 
 #: eeschema/tools/sch_edit_tool.cpp:1288
 #: eeschema/tools/symbol_editor_edit_tool.cpp:603
-#: pcbnew/tools/edit_tool.cpp:2368
+#: pcbnew/tools/edit_tool.cpp:2372
 msgid "Rotate"
 msgstr "Pasukti"
 
 #: eeschema/tools/sch_edit_tool.cpp:1504 gerbview/gerber_draw_item.cpp:724
 #: pcbnew/pcb_tablecell.cpp:261 pcbnew/pcb_text.cpp:348
-#: pcbnew/pcb_textbox.cpp:500 pcbnew/tools/edit_tool.cpp:2537
+#: pcbnew/pcb_textbox.cpp:500 pcbnew/tools/edit_tool.cpp:2541
 msgid "Mirror"
 msgstr "Atspindėti"
 
@@ -28333,12 +28334,12 @@ msgid "Place Pin"
 msgstr "Patalpinti išvadą"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:851
-#: pcbnew/tools/edit_tool.cpp:2908
+#: pcbnew/tools/edit_tool.cpp:2912
 msgid "Hide Field"
 msgstr "Slėpti lauką"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:853
-#: pcbnew/tools/edit_tool.cpp:2910
+#: pcbnew/tools/edit_tool.cpp:2914
 msgid "Hide Fields"
 msgstr "Slėpti laukus"
 
@@ -29590,7 +29591,7 @@ msgid "Clear Recent Job Files"
 msgstr "Valyti naujausius užduočių failus"
 
 #: gerbview/gerbview_frame.cpp:97
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber žiūryklė"
 
@@ -31081,8 +31082,8 @@ msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
-"Nustatyti pasukimo tašką plokštės centro atžvilgiu centimetrais, formatas 'X,"
-"Y,Z' pvz.: '-10,2,0'"
+"Nustatyti pasukimo tašką plokštės centro atžvilgiu centimetrais, formatas "
+"'X,Y,Z' pvz.: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:299
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
@@ -32219,8 +32220,8 @@ msgstr "PADS projektas..."
 #: kicad/menubar.cpp:150
 msgid "Import PADS Logic schematic and PADS ASCII PCB (*.asc, *.txt)"
 msgstr ""
-"Importuoti PADS Logic schemą ir PADS ASCII spausdintinę plokštę (*.asc, *."
-"txt)"
+"Importuoti PADS Logic schemą ir PADS ASCII spausdintinę plokštę (*.asc, "
+"*.txt)"
 
 #: kicad/menubar.cpp:153
 msgid "gEDA / Lepton EDA Project..."
@@ -40161,8 +40162,8 @@ msgstr "Litavimo pastos saugos tarpas:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:375
 msgid ""
 "Local solder paste clearance for this footprint.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
 "Vietinis litavimo pastos saugos tarpas šiam korpusui.\n"
@@ -40369,8 +40370,8 @@ msgstr "Leisti sujungtas litavimo kaukės diafragmas tarp aikštelių"
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
 msgid ""
 "Solder paste clearance relative to pad size.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "Litavimo pastos saugos tarpas, palyginti su aikštelės dydžiu.\n"
@@ -42254,8 +42255,8 @@ msgstr "Numatytosios aikštelės savybės aikštelių pridėjimo įrankiui"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
 msgid ""
 "Local solder paste clearance for this pad.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
 "Vietinis litavimo pastos saugos tarpas šiai aikštelei.\n"
@@ -45670,8 +45671,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -45931,8 +45932,8 @@ msgstr ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -46312,17 +46313,17 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
 "### Savybės\n"
 "\n"
 "Daugelis objektų savybių yra prieinamos pasirinktinių taisyklių išraiškoms "
-"tikrinti. Žr. visą dokumentaciją [https://docs.kicad.org](https://go.kicad."
-"org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules) "
-"visam sąrašui.\n"
+"tikrinti. Žr. visą dokumentaciją [https://docs.kicad.org](https://"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules) visam sąrašui.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -46689,13 +46690,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -46849,13 +46850,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -51629,8 +51630,8 @@ msgstr "Apdorojamas simbolis '%s:%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2105
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
-"Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full "
+"'Library:Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Įspėjimas: %s korpuso '%s' nepavadintos bibliotekos pavadinimas. Naudokite "
 "visą 'Biblioteka:Korpusas' formatą, kad išvengtumėte pasikartojančių "
@@ -54259,8 +54260,8 @@ msgid ""
 "Footprint Libraries..."
 msgstr ""
 "Pasirinktas failas turi kelis korpusus. Bus importuotas tik pirmasis.\n"
-"Norėdami įkelti visus korpusus, pridėkite jį kaip biblioteką per Nustatymai -"
-"> Tvarkyti korpusų bibliotekas..."
+"Norėdami įkelti visus korpusus, pridėkite jį kaip biblioteką per Nustatymai "
+"-> Tvarkyti korpusų bibliotekas..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -54677,8 +54678,8 @@ msgid ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
-"function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>$"
+"{refdes:function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -54980,8 +54981,8 @@ msgstr ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
-"function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>$"
+"{refdes:function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -57030,44 +57031,44 @@ msgstr "Supaprastinti daugiakampius"
 msgid "Heal Shapes"
 msgstr "Gydyti formas"
 
-#: pcbnew/tools/edit_tool.cpp:2541
+#: pcbnew/tools/edit_tool.cpp:2545
 msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2546
+#: pcbnew/tools/edit_tool.cpp:2550
 msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2719 pcbnew/tools/pcb_actions.cpp:686
+#: pcbnew/tools/edit_tool.cpp:2723 pcbnew/tools/pcb_actions.cpp:686
 msgid "Change Side / Flip"
 msgstr "Keisti pusę / Apversti"
 
-#: pcbnew/tools/edit_tool.cpp:2912
+#: pcbnew/tools/edit_tool.cpp:2916
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr "Naudokite korpuso savybių dialogą laukams pašalinti."
 
-#: pcbnew/tools/edit_tool.cpp:3077
+#: pcbnew/tools/edit_tool.cpp:3081
 msgid "Move Exactly"
 msgstr "Perkelti tiksliai"
 
-#: pcbnew/tools/edit_tool.cpp:3252
+#: pcbnew/tools/edit_tool.cpp:3256
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Dubliuota %d element(ų)"
 
-#: pcbnew/tools/edit_tool.cpp:3576
+#: pcbnew/tools/edit_tool.cpp:3580
 msgid "Select reference point for the copy..."
 msgstr "Pasirinkite kopijavimo atskaitos tašką..."
 
-#: pcbnew/tools/edit_tool.cpp:3576 pcbnew/tools/edit_tool.cpp:3592
+#: pcbnew/tools/edit_tool.cpp:3580 pcbnew/tools/edit_tool.cpp:3596
 msgid "Selection copied"
 msgstr "Žymėjimas nukopijuotas"
 
-#: pcbnew/tools/edit_tool.cpp:3577
+#: pcbnew/tools/edit_tool.cpp:3581
 msgid "Copy canceled"
 msgstr "Kopijavimas atšauktas"
 
@@ -57310,68 +57311,68 @@ msgid "(none)"
 msgstr "(nėra)"
 
 #: pcbnew/tools/multichannel_tool.cpp:139
-#: pcbnew/tools/multichannel_tool.cpp:2227
+#: pcbnew/tools/multichannel_tool.cpp:2272
 msgid "Topology mismatch"
 msgstr "Topologijos neatitikimas"
 
-#: pcbnew/tools/multichannel_tool.cpp:733
+#: pcbnew/tools/multichannel_tool.cpp:767
 msgid "Select a reference Rule Area to copy from..."
 msgstr "Pasirinkite etaloninę taisyklių sritį, iš kurios kopijuoti..."
 
-#: pcbnew/tools/multichannel_tool.cpp:752
+#: pcbnew/tools/multichannel_tool.cpp:786
 msgid "No Rule Areas to repeat layout to have been found."
 msgstr ""
 "Nerasta jokių taisyklių sričių, į kurias būtų galima pakartoti išdėstymą."
 
-#: pcbnew/tools/multichannel_tool.cpp:848
+#: pcbnew/tools/multichannel_tool.cpp:882
 msgid "Checking Rule Area compatibility..."
 msgstr "Tikrinama taisyklių srities suderinamumas..."
 
-#: pcbnew/tools/multichannel_tool.cpp:873
+#: pcbnew/tools/multichannel_tool.cpp:907
 #, c-format
 msgid "Resolving topology %d of %d (%d/%d components)"
 msgstr "Sprendžiama topologija %d iš %d (%d/%d komponentų)"
 
-#: pcbnew/tools/multichannel_tool.cpp:923
+#: pcbnew/tools/multichannel_tool.cpp:957
 #, c-format
 msgid "Rule Area topologies do not match: %s"
 msgstr "Taisyklių sričių topologijos nesutampa: %s"
 
-#: pcbnew/tools/multichannel_tool.cpp:948
-#: pcbnew/tools/multichannel_tool.cpp:1012
+#: pcbnew/tools/multichannel_tool.cpp:983
+#: pcbnew/tools/multichannel_tool.cpp:1047
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr ""
 "Taisyklių srities turinio kopijavimas nepavyko tarp taisyklių sričių '%s' ir "
 "'%s'."
 
-#: pcbnew/tools/multichannel_tool.cpp:971
+#: pcbnew/tools/multichannel_tool.cpp:1006
 msgid "Target group does not have a group."
 msgstr "Paskirties grupė neturi grupės."
 
-#: pcbnew/tools/multichannel_tool.cpp:986
-#: pcbnew/tools/multichannel_tool.cpp:1049
+#: pcbnew/tools/multichannel_tool.cpp:1021
+#: pcbnew/tools/multichannel_tool.cpp:1094
 msgid "Repeat layout"
 msgstr "Pakartoti išdėstymą"
 
-#: pcbnew/tools/multichannel_tool.cpp:1052
+#: pcbnew/tools/multichannel_tool.cpp:1097
 #, c-format
 msgid "Copied to %d Rule Areas."
 msgstr "Nukopijuota į %d taisyklių sričių."
 
-#: pcbnew/tools/multichannel_tool.cpp:2089
+#: pcbnew/tools/multichannel_tool.cpp:2134
 #, fuzzy
 msgid "Target Rule Area shares components with the reference area"
 msgstr "Файлы библиотеки компонентов"
 
-#: pcbnew/tools/multichannel_tool.cpp:2092
+#: pcbnew/tools/multichannel_tool.cpp:2137
 msgid ""
 "This target Rule Area selects the same components as the reference area. "
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
 "Area a distinct sheet, component class or group."
 msgstr ""
 
-#: pcbnew/tools/multichannel_tool.cpp:2095
+#: pcbnew/tools/multichannel_tool.cpp:2140
 #, fuzzy, c-format
 msgid ""
 "Shared components:\n"
@@ -57380,12 +57381,12 @@ msgstr ""
 "Tikslinės srities komponentai:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2233
+#: pcbnew/tools/multichannel_tool.cpp:2278
 #, c-format
 msgid "Reference area total components: %d"
 msgstr "Bendras etaloninės srities komponentų skaičius: %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:2234
+#: pcbnew/tools/multichannel_tool.cpp:2279
 #, c-format
 msgid ""
 "Reference area components:\n"
@@ -57394,12 +57395,12 @@ msgstr ""
 "Etaloninės srities komponentai:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2237
+#: pcbnew/tools/multichannel_tool.cpp:2282
 #, c-format
 msgid "Target area total components: %d"
 msgstr "Bendras tikslinės srities komponentų skaičius: %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:2238
+#: pcbnew/tools/multichannel_tool.cpp:2283
 #, c-format
 msgid ""
 "Target area components:\n"
@@ -57408,7 +57409,7 @@ msgstr ""
 "Tikslinės srities komponentai:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2290
+#: pcbnew/tools/multichannel_tool.cpp:2335
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
@@ -57416,7 +57417,7 @@ msgstr ""
 "Nepavyksta automatiškai generuoti jokių išdėstymo sričių, nes schemoje yra "
 "tik vienas arba nė vieno hierarchinio lapo, grupės ar komponentų klasės."
 
-#: pcbnew/tools/multichannel_tool.cpp:2522
+#: pcbnew/tools/multichannel_tool.cpp:2567
 msgid "Auto-generate placement rule areas"
 msgstr "Automatiškai generuoti išdėstymo taisyklių sritis"
 
@@ -61176,94 +61177,102 @@ msgstr "terminiai reljefai PTH"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] įkėlimas nepavyko: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Rastras;Konverteris;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Bitmap to Component Converter"
 msgstr "Rastro į komponentą konverteris"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Sukurti komponentą iš rastro naudojimui su KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad schemų redaktorius (savarankiškas)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "Schematic Capture Tool"
 msgstr "Schemų kūrimo įrankis"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Savarankiškas schemų redaktorius KiCad schemoms"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
 msgstr "Gerber failų žiūryklė"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "View Gerber files"
 msgstr "Peržiūrėti Gerber failus"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;Plokštė;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
 msgid "Projectmanager;"
 msgstr "Projektovaldė;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
 msgstr "EDA komplektas"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 "Schemų projektavimo ir spausdintinių plokščių išdėstymo įrankių rinkinys"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "KiCad spausdintinės plokštės skaičiuotuvas"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "PCB;Calculator;"
 msgstr "Plokštė;Skaičiuotuvas;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB Calculator"
 msgstr "Spausdintinės plokštės skaičiuotuvas"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Skaičiuotuvas įvairiems su elektronika susijusiems skaičiavimams"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;Plokštė;Schema;Išdėstymas;Projektavimas;Redaktorius;Korpusas;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad spausdintinės plokštės redaktorius (savarankiškas)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
 msgstr "Spausdintinės plokštės išdėstymo redaktorius"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Savarankiškas spausdintinių plokščių redaktorius KiCad plokštėms"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "EDA komplektas schemoms ir spausdintinių plokščių projektavimui"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
+msgid "Circuit board"
+msgstr "Spausdintinė plokštė"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -61333,12 +61342,6 @@ msgstr "Nepavyko sukurti vartotojo skriptų kelio %s."
 
 #~ msgid "Empty sheet pin name"
 #~ msgstr "Tuščias lapo išvado pavadinimas"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Spausdintinė plokštė"
 
 #~ msgid "Library not found in library table"
 #~ msgstr "Biblioteka nerasta bibliotekų lentelėje"
@@ -62322,8 +62325,8 @@ msgstr "Nepavyko sukurti vartotojo skriptų kelio %s."
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Resultant Nets</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -62374,9 +62377,9 @@ msgstr "Nepavyko sukurti vartotojo skriptų kelio %s."
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -68058,8 +68061,8 @@ msgstr "Nepavyko sukurti vartotojo skriptų kelio %s."
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+#~ "pcb.xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -68168,15 +68171,15 @@ msgstr "Nepavyko sukurti vartotojo skriptų kelio %s."
 #~ "„Windows“ komandų eilutė yra tokia.\n"
 #~ "\n"
 #~ "\"\n"
-#~ "f: /kicad/bin/xsltproc.exe -o \"%O\" f: /kicad/bin/plugins/myconverter."
-#~ "xsl \"%I\"\n"
+#~ "f: /kicad/bin/xsltproc.exe -o \"%O\" f: /kicad/bin/plugins/"
+#~ "myconverter.xsl \"%I\"\n"
 #~ "\"\n"
 #~ "\n"
 #~ "„Linux“ komanda tampa tokia.\n"
 #~ "\n"
 #~ "\"\n"
-#~ "xsltproc -o \"%O\" / usr / local / kicad / bin / plugins / myconverter ."
-#~ "xsl \"%I\"\n"
+#~ "xsltproc -o \"%O\" / usr / local / kicad / bin / plugins / "
+#~ "myconverter .xsl \"%I\"\n"
 #~ "\"\n"
 #~ "kur `myconverter.xsl` yra stiliaus lapas, kurį taikote.\n"
 #~ "\n"
@@ -68247,8 +68250,8 @@ msgstr "Nepavyko sukurti vartotojo skriptų kelio %s."
 #~ "\n"
 #~ "„Linux“:\n"
 #~ "\"\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+#~ "pcb.xsl \"%I\"\n"
 #~ "\"\n"
 #~ "\n"
 #~ "Ankstesniuose pavyzdžiuose daroma prielaida, kad „xsltproc“ yra įdiegtas "
@@ -74459,8 +74462,8 @@ msgstr "Nepavyko sukurti vartotojo skriptų kelio %s."
 #~ "file"
 #~ msgstr ""
 #~ "Используйте этот атрибут для SMD компонентов.\n"
-#~ "Компоненты только с таким атрибутом попадут в файл списка позиций посад."
-#~ "мест"
+#~ "Компоненты только с таким атрибутом попадут в файл списка позиций "
+#~ "посад.мест"
 
 #, fuzzy
 #~ msgid ""
@@ -76809,8 +76812,8 @@ msgstr "Nepavyko sukurti vartotojo skriptų kelio %s."
 #, fuzzy
 #~ msgid "Cannot add new symbol \"%s:%s\" due to missing footprint \"%s\".\n"
 #~ msgstr ""
-#~ "Не удалось добавить новый компонент \"%s:%s\" из-за отсутствия посад."
-#~ "места \"%s\".\n"
+#~ "Не удалось добавить новый компонент \"%s:%s\" из-за отсутствия "
+#~ "посад.места \"%s\".\n"
 
 #, fuzzy
 #~ msgid "Replacing symbol \"%s:%s\" footprint \"%s\" with \"%s\".\n"
@@ -76993,8 +76996,8 @@ msgstr "Nepavyko sukurti vartotojo skriptų kelio %s."
 #~ " - <b>MicroVia Diameter</b> (%f %s) &lt; <b>MicroVia Min Diameter</b> (%f "
 #~ "%s)<br>"
 #~ msgstr ""
-#~ "%s: <b>диаметр перех.микроотв.</b> &lt; <b>минимального диаметра перех."
-#~ "микроотв.</b><br>"
+#~ "%s: <b>диаметр перех.микроотв.</b> &lt; <b>минимального диаметра "
+#~ "перех.микроотв.</b><br>"
 
 #, fuzzy
 #~ msgid ""
@@ -77007,8 +77010,8 @@ msgstr "Nepavyko sukurti vartotojo skriptų kelio %s."
 #~ " - <b>MicroVia Drill</b> (%f %s) &lt; <b>MicroVia Min Drill</b> (%f "
 #~ "%s)<br>"
 #~ msgstr ""
-#~ "%s: <b>сверло перех.микроотв.</b> &lt; <b>минимального сверла перех."
-#~ "микроотв.</b><br>"
+#~ "%s: <b>сверло перех.микроотв.</b> &lt; <b>минимального сверла "
+#~ "перех.микроотв.</b><br>"
 
 #~ msgid "<b>Extra Track %d Size</b> %s &lt; <b>Min Track Size</b><br>"
 #~ msgstr ""
@@ -77020,8 +77023,8 @@ msgstr "Nepavyko sukurti vartotojo skriptų kelio %s."
 #, fuzzy
 #~ msgid "<b>Extra Via %d Size</b> %s &lt; <b>Min Via Size</b><br>"
 #~ msgstr ""
-#~ "<b>Экстра размер перех.отв. %d </b> %s &lt; <b>минимального размера перех."
-#~ "отв.</b><br>"
+#~ "<b>Экстра размер перех.отв. %d </b> %s &lt; <b>минимального размера "
+#~ "перех.отв.</b><br>"
 
 #~ msgid "<b>No via drill size define in row %d</b><br>"
 #~ msgstr "<b>Grąžtas  perėjimui nenurodytas %d eilutėje</b><br>"

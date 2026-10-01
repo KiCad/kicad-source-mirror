@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 23:31+0300\n"
+"POT-Creation-Date: 2026-09-30 22:14-0700\n"
 "PO-Revision-Date: 2026-09-28 18:35+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
@@ -1795,7 +1795,7 @@ msgid "Image Converter"
 msgstr "Kuvatiedostojen muuntaminen"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "KiCad kuvamuokkain"
 
@@ -2302,7 +2302,7 @@ msgid "&No"
 msgstr "&Ei"
 
 #: common/design_block_io.cpp:68
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad (ohjelma)"
@@ -3270,6 +3270,7 @@ msgstr "Projektin nimi"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1800
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "PCB"
 msgstr "Piirilevy"
 
@@ -3278,6 +3279,7 @@ msgstr "Piirilevy"
 #: eeschema/widgets/hierarchy_pane.cpp:832
 #: eeschema/widgets/hierarchy_pane.cpp:838
 #: eeschema/widgets/symbol_diff_widget.cpp:44
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Schematic"
 msgstr "Kytkentäkaavio"
 
@@ -3969,8 +3971,8 @@ msgstr "Tekijä:"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: kicad/dialogs/dialog_edit_cfg.cpp:181
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:136
-#: pcbnew/tools/multichannel_tool.cpp:2070
-#: pcbnew/tools/multichannel_tool.cpp:2197
+#: pcbnew/tools/multichannel_tool.cpp:2115
+#: pcbnew/tools/multichannel_tool.cpp:2242
 msgid "OK"
 msgstr "Hyväksy"
 
@@ -6404,31 +6406,31 @@ msgstr "Siirrä ylös"
 msgid "Move Down"
 msgstr "Siirrä alas"
 
-#: common/draw_panel_gal.cpp:303 common/draw_panel_gal.cpp:794
+#: common/draw_panel_gal.cpp:313 common/draw_panel_gal.cpp:817
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "OpenGL: ää ei voitu käyttää, palataan takaisin ohjelmistorenderöintiin"
 
-#: common/draw_panel_gal.cpp:310 common/draw_panel_gal.cpp:536
+#: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:559
 msgid "Graphics error"
 msgstr "Grafiikkavirhe"
 
-#: common/draw_panel_gal.cpp:314 common/draw_panel_gal.cpp:318
+#: common/draw_panel_gal.cpp:324 common/draw_panel_gal.cpp:328
 msgid "Graphics error during recovery"
 msgstr "Grafiikkavirhe palautuksen aikana"
 
-#: common/draw_panel_gal.cpp:319
+#: common/draw_panel_gal.cpp:329
 msgid "Unknown exception during backend switch"
 msgstr "Tuntematon poikkeus taustajärjestelmän vaihdon aikana"
 
-#: common/draw_panel_gal.cpp:536
+#: common/draw_panel_gal.cpp:559
 msgid "Unknown exception"
 msgstr "Tuntematon poikkeus"
 
-#: common/draw_panel_gal.cpp:801
+#: common/draw_panel_gal.cpp:824
 msgid "Could not use OpenGL"
 msgstr "OpenGL: ää ei voitu käyttää"
 
-#: common/draw_panel_gal.cpp:829
+#: common/draw_panel_gal.cpp:852
 msgid "Error switching GAL backend"
 msgstr "Virhe vaihdettaessa GAL-taustajärjestelmää"
 
@@ -8262,7 +8264,7 @@ msgstr ""
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
 #: pcbnew/dialogs/panel_setup_rules.cpp:142
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:997
-#: pcbnew/tools/edit_tool.cpp:2903
+#: pcbnew/tools/edit_tool.cpp:2907
 msgid "Cut"
 msgstr "Leikkaa"
 
@@ -8306,7 +8308,7 @@ msgstr "Liitä leikepöydän solut matriisiin nykyisessä solussa"
 #: pcbnew/dialogs/panel_setup_rules.cpp:145
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:589
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1000
-#: pcbnew/tools/edit_tool.cpp:2873 pcbnew/tools/edit_tool.cpp:2916
+#: pcbnew/tools/edit_tool.cpp:2877 pcbnew/tools/edit_tool.cpp:2920
 msgid "Delete"
 msgstr "Poista"
 
@@ -8371,7 +8373,8 @@ msgstr ""
 
 #: common/history_lock.cpp:333
 msgid "Cannot re-open history repository without the file lock"
-msgstr "Historiasäiliön avaaminen uudelleen ilman tiedostolukitusta epäonnistui"
+msgstr ""
+"Historiasäiliön avaaminen uudelleen ilman tiedostolukitusta epäonnistui"
 
 #: common/hotkey_store.cpp:44
 msgid "Accept Autocomplete"
@@ -9520,12 +9523,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Puuttuvat yksiköt: %s | (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1256
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Tyypin yhteensopimattomuus '%s' ja %lf välillä"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1262
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Tyypin yhteensopimattomuus %lf ja '%s' välillä"
 
@@ -10653,7 +10654,7 @@ msgstr "Liitä kohde leikepöydältä vaihtoehdoilla"
 
 #: common/tool/actions.cpp:395 common/widgets/listbox_tricks.cpp:211
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1836
-#: pcbnew/tools/edit_tool.cpp:3256
+#: pcbnew/tools/edit_tool.cpp:3260
 msgid "Duplicate"
 msgstr "Monista"
 
@@ -10674,7 +10675,7 @@ msgid "Delete clicked items"
 msgstr "Poista napsautetut kohteet"
 
 #: common/tool/actions.cpp:425 eeschema/tools/sch_edit_tool.cpp:3389
-#: pcbnew/tools/edit_tool.cpp:2618
+#: pcbnew/tools/edit_tool.cpp:2622
 msgid "Left Justify"
 msgstr "Tasaa vasemmalle"
 
@@ -10683,7 +10684,7 @@ msgid "Left-justify fields and text items"
 msgstr "Tasaa kentät ja tekstikohteet vasemmalle"
 
 #: common/tool/actions.cpp:432 eeschema/tools/sch_edit_tool.cpp:3391
-#: pcbnew/tools/edit_tool.cpp:2620
+#: pcbnew/tools/edit_tool.cpp:2624
 msgid "Center Justify"
 msgstr "Tasaa keskelle"
 
@@ -10692,7 +10693,7 @@ msgid "Center-justify fields and text items"
 msgstr "Tasaa kentät ja tekstikohteet keskelle"
 
 #: common/tool/actions.cpp:439 eeschema/tools/sch_edit_tool.cpp:3393
-#: pcbnew/tools/edit_tool.cpp:2622
+#: pcbnew/tools/edit_tool.cpp:2626
 msgid "Right Justify"
 msgstr "Tasaa oikealle"
 
@@ -10709,7 +10710,7 @@ msgid "Collapse All"
 msgstr "Kokoa kaikki"
 
 #: common/tool/actions.cpp:460 eeschema/tools/sch_tool_base.h:239
-#: pcbnew/tools/edit_tool.cpp:3354
+#: pcbnew/tools/edit_tool.cpp:3358
 msgid "Increment"
 msgstr "Lisäys"
 
@@ -13164,8 +13165,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -13192,8 +13193,8 @@ msgstr ""
 "\n"
 "# 2. Käyttö\n"
 "\n"
-"Valitse muodostuskomentosarja **BOM-luettelon muodostuskomentosarjat** -"
-"luettelosta. Valitun muodostuskomentosarjan tiedot näkyvät valintaikkunan "
+"Valitse muodostuskomentosarja **BOM-luettelon muodostuskomentosarjat** "
+"-luettelosta. Valitun muodostuskomentosarjan tiedot näkyvät valintaikkunan "
 "oikealla puolella.\n"
 "\n"
 "Napsauttamalla **Luo**-painiketta luodaan BOM-tiedosto valitulla "
@@ -13250,8 +13251,8 @@ msgstr ""
 "komentorivi olisi:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "Linuxissa, jos haluttu muodostuskomentosarja CSV-muotoiselle BOM-luettelolle "
@@ -17272,6 +17273,7 @@ msgid "Code"
 msgstr "Koodi"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Tallenna {} Arvo-kenttään nimellä \"{}\""
 
@@ -20487,8 +20489,8 @@ msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
-"Virhe jäsennettäessä mallia '%s', väärä määrä solmuja '?' Sim."
-"NodesFormatissa verrattuna yhteyksiin"
+"Virhe jäsennettäessä mallia '%s', väärä määrä solmuja '?' "
+"Sim.NodesFormatissa verrattuna yhteyksiin"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:693
 #, c-format
@@ -23168,8 +23170,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23220,9 +23222,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23577,8 +23579,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Väylän määritys</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Tuloksena syntyvät verkot</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23629,9 +23631,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -24510,8 +24512,8 @@ msgstr "Virhe luotaessa väliaikaista tulostetiedostoa"
 
 #: eeschema/sim/kibis/kibis.cpp:851
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
-"pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
+"chen.pdf"
 msgstr ""
 "Kibis ei vielä tue DUT-arvoja. https://ibis.org/summits/nov16a/chen.pdf"
 
@@ -25344,8 +25346,8 @@ msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
 msgstr ""
-"Info: <b>Piilotettu tehonasta %s</b> %s sijainnissa <b>(%s, %s)</b> ,"
-"yksikössä %c, runkotyylillä %s."
+"Info: <b>Piilotettu tehonasta %s</b> %s sijainnissa <b>(%s, %s)</"
+"b> ,yksikössä %c, runkotyylillä %s."
 
 #: eeschema/symbol_checker.cpp:332
 #, c-format
@@ -27902,13 +27904,13 @@ msgstr "Muuta"
 
 #: eeschema/tools/sch_edit_tool.cpp:1288
 #: eeschema/tools/symbol_editor_edit_tool.cpp:603
-#: pcbnew/tools/edit_tool.cpp:2368
+#: pcbnew/tools/edit_tool.cpp:2372
 msgid "Rotate"
 msgstr "Käännä"
 
 #: eeschema/tools/sch_edit_tool.cpp:1504 gerbview/gerber_draw_item.cpp:724
 #: pcbnew/pcb_tablecell.cpp:261 pcbnew/pcb_text.cpp:348
-#: pcbnew/pcb_textbox.cpp:500 pcbnew/tools/edit_tool.cpp:2537
+#: pcbnew/pcb_textbox.cpp:500 pcbnew/tools/edit_tool.cpp:2541
 msgid "Mirror"
 msgstr "Peilaa"
 
@@ -28356,12 +28358,12 @@ msgid "Place Pin"
 msgstr "Aseta nasta"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:851
-#: pcbnew/tools/edit_tool.cpp:2908
+#: pcbnew/tools/edit_tool.cpp:2912
 msgid "Hide Field"
 msgstr "Piilota kenttä"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:853
-#: pcbnew/tools/edit_tool.cpp:2910
+#: pcbnew/tools/edit_tool.cpp:2914
 msgid "Hide Fields"
 msgstr "Piilota kentät"
 
@@ -28410,8 +28412,8 @@ msgstr "Tämä sijainnin on jo varannut toinen nasta, yksikössä %d."
 #: eeschema/tools/symbol_editor_pin_tool.cpp:271
 msgid "Disable the 'Synchronized Pins Mode' option to avoid this message."
 msgstr ""
-"Vältä tämä viesti poistamalla käytöstä 'Synkronoidut nastat -tila' -"
-"asetuksen."
+"Vältä tämä viesti poistamalla käytöstä 'Synkronoidut nastat -tila' "
+"-asetuksen."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:272
 msgid "Place Pin Anyway"
@@ -29611,7 +29613,7 @@ msgid "Clear Recent Job Files"
 msgstr "Tyhjennä viimeisimmät työtiedostot"
 
 #: gerbview/gerbview_frame.cpp:97
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber-katseluohjelma"
 
@@ -36095,8 +36097,8 @@ msgstr ""
 "K)<sup>0,725</sup>___</center>\n"
 "missä:<br>\n"
 "___I___ on suurin virta A<br>\n"
-"___&Delta;T___ on lämpötilan nousu ympäristön lämpötilan yläpuolelle &deg;"
-"C<br>\n"
+"___&Delta;T___ on lämpötilan nousu ympäristön lämpötilan yläpuolelle "
+"&deg;C<br>\n"
 "___W___ on leveys mil<br>\n"
 "___H___ on paksuus (korkeus) mil<br>\n"
 "___K___ on 0,024 sisäisille kappaleille tai 0,048 ulkoisille kappaleille\n"
@@ -40158,8 +40160,8 @@ msgstr "Juotospastan eristysväli:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:375
 msgid ""
 "Local solder paste clearance for this footprint.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
 "Paikallinen juotospastan eristysväli tälle jalanjäljelle..\n"
@@ -40367,8 +40369,8 @@ msgstr "Salli sillatut juotosmaskiaukot anturoiden väliin"
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
 msgid ""
 "Solder paste clearance relative to pad size.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "Juotospastan välys suhteessa anturan kokoon.\n"
@@ -42254,8 +42256,8 @@ msgstr "Oletusanturan ominaisuudet lisää antura työkalulle"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
 msgid ""
 "Local solder paste clearance for this pad.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
 "Tämän anturan paikallinen juotospastan välys.\n"
@@ -45617,8 +45619,8 @@ msgstr ""
 "### Dokumentaatio\n"
 "\n"
 "Täydellinen dokumentaatio löytyy osoitteesta [https://docs.kicad.org]"
-"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules)."
+"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -45660,8 +45662,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -46026,8 +46028,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -46035,8 +46037,8 @@ msgstr ""
 "\n"
 "Monet objektien ominaisuudet ovat testattavissa mukautetuissa "
 "sääntölausekkeissa. Katso koko luettelo osoitteesta [https://docs.kicad.org]"
-"(https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules).\n"
+"(https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules).\n"
 "<br><br><br>\n"
 "\n"
 
@@ -46234,13 +46236,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -46394,13 +46396,13 @@ msgstr ""
 "\n"
 "    (rule \"Eri verkkojen läpivientien välinen etäisyys\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Eri verkkojen anturojen välinen eristysväli\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Läpivientireiän ja vedon välinen eristysväli\"\n"
@@ -49288,8 +49290,8 @@ msgid ""
 "This error may indicate insufficient memory. Consider disabling 'Fuse "
 "Shapes', reducing the number of vias/components, or freeing system memory.\n"
 msgstr ""
-"Tämä virhe voi johtua riittämättömästä muistista. Harkitse 'Yhdistä muodot' -"
-"asetuksen poistamista käytöstä, läpivientien/komponenttien määrän "
+"Tämä virhe voi johtua riittämättömästä muistista. Harkitse 'Yhdistä muodot' "
+"-asetuksen poistamista käytöstä, läpivientien/komponenttien määrän "
 "vähentämistä tai järjestelmämuistin vapauttamista.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:1393
@@ -51183,8 +51185,8 @@ msgstr "Käsitellään symbolia '%s: %s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2105
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
-"Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full "
+"'Library:Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Varoitus: %s-jalanjäljeltä '%s' puuttuu kirjaston nimi. Käytä täydellistä "
 "'Kirjasto:Jalanjälki'-muotoa välttääksesi toistuvat päivitysilmoitukset."
@@ -54246,8 +54248,8 @@ msgid ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
-"function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>$"
+"{refdes:function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -56595,7 +56597,7 @@ msgstr "Yksinkertaista monikulmiot"
 msgid "Heal Shapes"
 msgstr "Paranna muotoja"
 
-#: pcbnew/tools/edit_tool.cpp:2541
+#: pcbnew/tools/edit_tool.cpp:2545
 msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
@@ -56603,7 +56605,7 @@ msgstr ""
 "Jalanjälkiä ei voi peilata. Siirrä ne piirilevyn toiselle puolelle Käännä-"
 "toiminnolla."
 
-#: pcbnew/tools/edit_tool.cpp:2546
+#: pcbnew/tools/edit_tool.cpp:2550
 msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
@@ -56611,32 +56613,32 @@ msgstr ""
 "Ryhmät, jotka sisältävät jalanjälkiä tai muita peilauskelvottomia kohteita, "
 "ohitettiin."
 
-#: pcbnew/tools/edit_tool.cpp:2719 pcbnew/tools/pcb_actions.cpp:686
+#: pcbnew/tools/edit_tool.cpp:2723 pcbnew/tools/pcb_actions.cpp:686
 msgid "Change Side / Flip"
 msgstr "Vaihda puolta / käännä"
 
-#: pcbnew/tools/edit_tool.cpp:2912
+#: pcbnew/tools/edit_tool.cpp:2916
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr "Käytä jalanjäljen ominaisuudet -ikkunaa kenttien poistamiseen."
 
-#: pcbnew/tools/edit_tool.cpp:3077
+#: pcbnew/tools/edit_tool.cpp:3081
 msgid "Move Exactly"
 msgstr "Liiku tarkalleen"
 
-#: pcbnew/tools/edit_tool.cpp:3252
+#: pcbnew/tools/edit_tool.cpp:3256
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Monistettiin %d kohde(tta)"
 
-#: pcbnew/tools/edit_tool.cpp:3576
+#: pcbnew/tools/edit_tool.cpp:3580
 msgid "Select reference point for the copy..."
 msgstr "Valitse viitepiste kopiointia varten..."
 
-#: pcbnew/tools/edit_tool.cpp:3576 pcbnew/tools/edit_tool.cpp:3592
+#: pcbnew/tools/edit_tool.cpp:3580 pcbnew/tools/edit_tool.cpp:3596
 msgid "Selection copied"
 msgstr "Valinta kopioitu"
 
-#: pcbnew/tools/edit_tool.cpp:3577
+#: pcbnew/tools/edit_tool.cpp:3581
 msgid "Copy canceled"
 msgstr "Kopiointi peruutettu"
 
@@ -56877,59 +56879,59 @@ msgid "(none)"
 msgstr "(ei mitään)"
 
 #: pcbnew/tools/multichannel_tool.cpp:139
-#: pcbnew/tools/multichannel_tool.cpp:2227
+#: pcbnew/tools/multichannel_tool.cpp:2272
 msgid "Topology mismatch"
 msgstr "Topologian yhteensopimattomuus"
 
-#: pcbnew/tools/multichannel_tool.cpp:733
+#: pcbnew/tools/multichannel_tool.cpp:767
 msgid "Select a reference Rule Area to copy from..."
 msgstr "Valitse viitesääntöalue kopiointia varten..."
 
-#: pcbnew/tools/multichannel_tool.cpp:752
+#: pcbnew/tools/multichannel_tool.cpp:786
 msgid "No Rule Areas to repeat layout to have been found."
 msgstr "Asettelun toistamiseen tarkoitettuja sääntöalueita ei löytynyt."
 
-#: pcbnew/tools/multichannel_tool.cpp:848
+#: pcbnew/tools/multichannel_tool.cpp:882
 msgid "Checking Rule Area compatibility..."
 msgstr "Tarkistetaan sääntöalueen yhteensopivuutta..."
 
-#: pcbnew/tools/multichannel_tool.cpp:873
+#: pcbnew/tools/multichannel_tool.cpp:907
 #, c-format
 msgid "Resolving topology %d of %d (%d/%d components)"
 msgstr "Ratkaistaan topologiaa %d / %d (%d / %d komponenttia)"
 
-#: pcbnew/tools/multichannel_tool.cpp:923
+#: pcbnew/tools/multichannel_tool.cpp:957
 #, c-format
 msgid "Rule Area topologies do not match: %s"
 msgstr "Sääntöalueen topologiat eivät täsmää: %s"
 
-#: pcbnew/tools/multichannel_tool.cpp:948
-#: pcbnew/tools/multichannel_tool.cpp:1012
+#: pcbnew/tools/multichannel_tool.cpp:983
+#: pcbnew/tools/multichannel_tool.cpp:1047
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr ""
 "Sääntöalueen sisällön kopiointi epäonnistui sääntöalueiden '%s' ja '%s' "
 "välillä."
 
-#: pcbnew/tools/multichannel_tool.cpp:971
+#: pcbnew/tools/multichannel_tool.cpp:1006
 msgid "Target group does not have a group."
 msgstr "Kohderyhmällä ei ole ryhmää."
 
-#: pcbnew/tools/multichannel_tool.cpp:986
-#: pcbnew/tools/multichannel_tool.cpp:1049
+#: pcbnew/tools/multichannel_tool.cpp:1021
+#: pcbnew/tools/multichannel_tool.cpp:1094
 msgid "Repeat layout"
 msgstr "Toista asettelu"
 
-#: pcbnew/tools/multichannel_tool.cpp:1052
+#: pcbnew/tools/multichannel_tool.cpp:1097
 #, c-format
 msgid "Copied to %d Rule Areas."
 msgstr "Kopioitu %d sääntöalueelle."
 
-#: pcbnew/tools/multichannel_tool.cpp:2089
+#: pcbnew/tools/multichannel_tool.cpp:2134
 msgid "Target Rule Area shares components with the reference area"
 msgstr "Kohdesääntöalue jakaa komponentteja viitealueen kanssa"
 
-#: pcbnew/tools/multichannel_tool.cpp:2092
+#: pcbnew/tools/multichannel_tool.cpp:2137
 msgid ""
 "This target Rule Area selects the same components as the reference area. "
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
@@ -56939,7 +56941,7 @@ msgstr ""
 "toisto ei voi kopioida sääntöaluetta itsensä päälle. Anna jokaiselle "
 "sijoituksen sääntöalueelle erillinen sivu, komponenttiluokka tai ryhmä."
 
-#: pcbnew/tools/multichannel_tool.cpp:2095
+#: pcbnew/tools/multichannel_tool.cpp:2140
 #, c-format
 msgid ""
 "Shared components:\n"
@@ -56948,12 +56950,12 @@ msgstr ""
 "Jaetut komponentit:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2233
+#: pcbnew/tools/multichannel_tool.cpp:2278
 #, c-format
 msgid "Reference area total components: %d"
 msgstr ""
 
-#: pcbnew/tools/multichannel_tool.cpp:2234
+#: pcbnew/tools/multichannel_tool.cpp:2279
 #, c-format
 msgid ""
 "Reference area components:\n"
@@ -56962,12 +56964,12 @@ msgstr ""
 "Referenssialueen komponentit:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2237
+#: pcbnew/tools/multichannel_tool.cpp:2282
 #, c-format
 msgid "Target area total components: %d"
 msgstr "Kohdealueen komponenttimäärä: %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:2238
+#: pcbnew/tools/multichannel_tool.cpp:2283
 #, c-format
 msgid ""
 "Target area components:\n"
@@ -56976,7 +56978,7 @@ msgstr ""
 "Kohdealueen komponentit:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2290
+#: pcbnew/tools/multichannel_tool.cpp:2335
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
@@ -56984,7 +56986,7 @@ msgstr ""
 "Sijoitusalueita ei voi luoda automaattisesti, koska kytkentäkaaviossa on "
 "vain yksi, tai ei yhtään, hierarkkista sivua, ryhmää tai komponentin luokkaa."
 
-#: pcbnew/tools/multichannel_tool.cpp:2522
+#: pcbnew/tools/multichannel_tool.cpp:2567
 msgid "Auto-generate placement rule areas"
 msgstr "Luo sijoittelusääntöalueet automaattisesti"
 
@@ -60764,93 +60766,101 @@ msgstr "lämpökevennykset PTH-anturoille"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] lataus epäonnistui: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bittikartta;Kuvamuunnin;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Bitmap to Component Converter"
 msgstr "Luo komponentti kuvasta"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Luo komponentti bittikartasta käytettäväksi KiCadin kanssa"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad Kytkentäkaavioeditori (Itsenäinen)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "Schematic Capture Tool"
 msgstr "Kytkentäkaavion Kaappaustyökalu"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Itsenäinen kytkentäkaavioeditori KiCad kytkentäkaavioille"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
 msgstr "eeskeema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
 msgstr "Gerber tiedostokatselin"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "View Gerber files"
 msgstr "Näytä Gerber-tiedostot"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
 msgid "Projectmanager;"
 msgstr "Projektinhallinta;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
 msgstr "EDA Paketti"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Paketti työkaluja kytkentäkaavio- ja piirilevysuunnitteluun"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "KiCad Laskintyökalut"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "PCB;Calculator;"
 msgstr "PCB;Laskin;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB Calculator"
 msgstr "PCB laskintyökalu"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Laskin erilaisiin elektroniikkaan liittyviin laskelmiin"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Kytkentäkaavio; Asettelu;Suunnittelu;Editori;Jalanjälki;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad piirilevyeditori (Itsenäinen)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
 msgstr "Piirilevyeditori"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Itsenäinen piirilevyeditori KiCad alustoille"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "EDA-ohjelmisto kytkentäkaavioiden ja piirilevyjen suunnitteluun"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
+msgid "Circuit board"
+msgstr "Piirilevy"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -60921,12 +60931,6 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 
 #~ msgid "Empty sheet pin name"
 #~ msgstr "Sivunastan nimi on tyhjä"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Piirilevy"
 
 #~ msgid "Library not found in library table"
 #~ msgstr "Kirjastoa ei löydy kirjastotaulukosta"
@@ -61816,8 +61820,8 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "kotikansioosi.\n"
 #~ "Sinun on ensin määritettävä kirjastotaulukko sisältämään kaikki "
 #~ "jalanjälkikirjastot, jotka eivät sisälly KiCadiin.\n"
-#~ "Katso lisätietoja CvPcb-dokumentaation \"Jalanjälkikirjastotaulukko\" -"
-#~ "osiosta."
+#~ "Katso lisätietoja CvPcb-dokumentaation \"Jalanjälkikirjastotaulukko\" "
+#~ "-osiosta."
 
 #~ msgid ""
 #~ "An error occurred attempting to load the global footprint library table."
@@ -61949,8 +61953,8 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Resultant Nets</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -62001,9 +62005,9 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -62089,8 +62093,8 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Väylämäärittely</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Resultant Nets</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -62141,9 +62145,9 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -66852,8 +66856,8 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A."
-#~ "enclosedByArea('Shield*')\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
+#~ "\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -66985,13 +66989,13 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -67075,8 +67079,9 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "\n"
 #~ "### Documentation\n"
 #~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://docs."
-#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+#~ "For the full documentation see [https://docs.kicad.org](https://"
+#~ "docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
+#~ "pcbnew.html#custom_design_rules)."
 #~ msgstr ""
 #~ "### Huipputason lausekkeet\n"
 #~ "\n"
@@ -67417,8 +67422,8 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "\n"
 #~ "### Dokumentaatio\n"
 #~ "\n"
-#~ "Täydellinen dokumentaatio, katso [https://docs.kicad.org](https://docs."
-#~ "kicad.org/GetMajorMinorVersion/pcbnew/#custom_design_rules)."
+#~ "Täydellinen dokumentaatio, katso [https://docs.kicad.org](https://"
+#~ "docs.kicad.org/GetMajorMinorVersion/pcbnew/#custom_design_rules)."
 
 #, c-format
 #~ msgid "Choose Footprint (%d items loaded)"
@@ -68071,8 +68076,8 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ msgid ""
 #~ "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
 #~ msgstr ""
-#~ "Ota käyttöön <b> virheenkorjauksen </b> kirjaaminen Symbol * () -"
-#~ "toiminnoille tässä SCH_PLUGIN -ohjelmassa."
+#~ "Ota käyttöön <b> virheenkorjauksen </b> kirjaaminen Symbol * () "
+#~ "-toiminnoille tässä SCH_PLUGIN -ohjelmassa."
 
 #~ msgid "Regular expression <b>symbol name</b> filter."
 #~ msgstr "Säännöllisen lausekkeen <b> symbolin nimen </b> suodatin."
@@ -68656,8 +68661,8 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A."
-#~ "enclosedByArea('Shield*')\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
+#~ "\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -68777,13 +68782,13 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -69494,8 +69499,8 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+#~ "pcb.xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -69555,8 +69560,8 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "pystyy ottamaan XML: n syötteeksi.\n"
 #~ "\n"
 #~ "XSLT itse on XML-kieli, joka soveltuu XML-muunnoksiin. On ilmainen "
-#~ "ohjelma nimeltä xsltproc, jonka voit ladata ja asentaa. `Xsltproc` -"
-#~ "ohjelmaa voidaan käyttää Intermediate XML netlist -tulotiedoston "
+#~ "ohjelma nimeltä xsltproc, jonka voit ladata ja asentaa. `Xsltproc` "
+#~ "-ohjelmaa voidaan käyttää Intermediate XML netlist -tulotiedoston "
 #~ "lukemiseen, tyylisivun käyttämiseen syötteen muuntamiseen ja tulosten "
 #~ "tallentamiseen ulostulotiedostoon. `Xsltproc`: n käyttö vaatii "
 #~ "tyylitaulukotiedoston, joka käyttää XSLT-käytäntöjä. Koko "
@@ -69584,8 +69589,8 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "\n"
 #~ "Kun napsautat generointipainiketta, tapahtuu seuraava:\n"
 #~ "\n"
-#~ "1. Eeschema luo välilaskutiedostotiedoston \\ *. Xml, esimerkiksi `test."
-#~ "xml`.\n"
+#~ "1. Eeschema luo välilaskutiedostotiedoston \\ *. Xml, esimerkiksi "
+#~ "`test.xml`.\n"
 #~ "2. Eeschema suorittaa komentosarjan komentoriviltä lopullisen "
 #~ "tulostustiedoston luomiseksi.\n"
 #~ "\n"
@@ -69602,15 +69607,15 @@ msgstr "Polkua '%s' ei voitu avata/luoda."
 #~ "Windowsissa komentorivi on seuraava.\n"
 #~ "\n"
 #~ "``\n"
-#~ "f: /kicad/bin/xsltproc.exe -o \"% O\" f: /kicad/bin/plugins/myconverter."
-#~ "xsl \"% I\"\n"
+#~ "f: /kicad/bin/xsltproc.exe -o \"% O\" f: /kicad/bin/plugins/"
+#~ "myconverter.xsl \"% I\"\n"
 #~ "``\n"
 #~ "\n"
 #~ "Linuxissa komennosta tulee seuraava.\n"
 #~ "\n"
 #~ "``\n"
-#~ "xsltproc -o \"% O\" / usr / local / kicad / bin / plugins / myconverter ."
-#~ "xsl \"% I\"\n"
+#~ "xsltproc -o \"% O\" / usr / local / kicad / bin / plugins / "
+#~ "myconverter .xsl \"% I\"\n"
 #~ "``\n"
 #~ "missä `myconverter.xsl` on käyttämäsi tyylitaulukko.\n"
 #~ "\n"

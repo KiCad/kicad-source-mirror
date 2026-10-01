@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 23:31+0300\n"
+"POT-Creation-Date: 2026-09-30 22:14-0700\n"
 "PO-Revision-Date: 2026-04-24 15:40+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v10/th/>\n"
@@ -1753,7 +1753,7 @@ msgid "Image Converter"
 msgstr "ตัวแปลงรูป"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "โปรแกรมแปลงรูปภาพ KiCad"
 
@@ -2260,7 +2260,7 @@ msgid "&No"
 msgstr "(&N)ไม่ใช่"
 
 #: common/design_block_io.cpp:68
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "คีแคด"
@@ -3217,6 +3217,7 @@ msgstr "ชื่อโครงการ"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1800
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "PCB"
 msgstr "PCB"
 
@@ -3225,6 +3226,7 @@ msgstr "PCB"
 #: eeschema/widgets/hierarchy_pane.cpp:832
 #: eeschema/widgets/hierarchy_pane.cpp:838
 #: eeschema/widgets/symbol_diff_widget.cpp:44
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Schematic"
 msgstr "วงจร"
 
@@ -3910,8 +3912,8 @@ msgstr "ผู้แต่ง:"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: kicad/dialogs/dialog_edit_cfg.cpp:181
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:136
-#: pcbnew/tools/multichannel_tool.cpp:2070
-#: pcbnew/tools/multichannel_tool.cpp:2197
+#: pcbnew/tools/multichannel_tool.cpp:2115
+#: pcbnew/tools/multichannel_tool.cpp:2242
 msgid "OK"
 msgstr "ตกลง"
 
@@ -6288,34 +6290,34 @@ msgstr "เลื่อนขึ้น"
 msgid "Move Down"
 msgstr "เลื่อนลง"
 
-#: common/draw_panel_gal.cpp:303 common/draw_panel_gal.cpp:794
+#: common/draw_panel_gal.cpp:313 common/draw_panel_gal.cpp:817
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "ไม่สามารถใช้ OpenGL, กลับไปใช้เรนเดอร์ด้วยซอฟต์แวร์"
 
-#: common/draw_panel_gal.cpp:310 common/draw_panel_gal.cpp:536
+#: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:559
 msgid "Graphics error"
 msgstr "ข้อผิดพลาดด้านกราฟิก"
 
-#: common/draw_panel_gal.cpp:314 common/draw_panel_gal.cpp:318
+#: common/draw_panel_gal.cpp:324 common/draw_panel_gal.cpp:328
 #, fuzzy
 msgid "Graphics error during recovery"
 msgstr "ข้อผิดพลาดด้านกราฟิก"
 
-#: common/draw_panel_gal.cpp:319
+#: common/draw_panel_gal.cpp:329
 #, fuzzy
 msgid "Unknown exception during backend switch"
 msgstr "ข้อยกเว้น OCC ขณะสร้างหน้า: %s"
 
-#: common/draw_panel_gal.cpp:536
+#: common/draw_panel_gal.cpp:559
 #, fuzzy
 msgid "Unknown exception"
 msgstr "การล้างที่ไม่รู้จัก"
 
-#: common/draw_panel_gal.cpp:801
+#: common/draw_panel_gal.cpp:824
 msgid "Could not use OpenGL"
 msgstr "ไม่สามารถใช้ OpenGL"
 
-#: common/draw_panel_gal.cpp:829
+#: common/draw_panel_gal.cpp:852
 msgid "Error switching GAL backend"
 msgstr "ข้อผิดพลาดในการสลับ GAL backend"
 
@@ -8137,7 +8139,7 @@ msgstr ""
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
 #: pcbnew/dialogs/panel_setup_rules.cpp:142
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:997
-#: pcbnew/tools/edit_tool.cpp:2903
+#: pcbnew/tools/edit_tool.cpp:2907
 msgid "Cut"
 msgstr "ตัด"
 
@@ -8181,7 +8183,7 @@ msgstr "วางสำเนาจากเซลส์คลิปบอร์
 #: pcbnew/dialogs/panel_setup_rules.cpp:145
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:589
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1000
-#: pcbnew/tools/edit_tool.cpp:2873 pcbnew/tools/edit_tool.cpp:2916
+#: pcbnew/tools/edit_tool.cpp:2877 pcbnew/tools/edit_tool.cpp:2920
 msgid "Delete"
 msgstr "ลบ"
 
@@ -8538,8 +8540,8 @@ msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
-"'%s' ไม่ดูเหมือนไฟล์โครงการหรือไลบรารี EasyEDA (JLCEDA) Pro ที่ถูกต้อง ไม่พบ project."
-"json หรือ device.json"
+"'%s' ไม่ดูเหมือนไฟล์โครงการหรือไลบรารี EasyEDA (JLCEDA) Pro ที่ถูกต้อง ไม่พบ "
+"project.json หรือ device.json"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:220
 #, c-format
@@ -9390,12 +9392,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "ไม่พบหน่วยสำหรับ '%s'|(%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1256
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "ประเภทไม่เหมือนกันระหว่าง '%s' และ %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1262
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "ประเภทไม่เหมือนกันระหว่าง %lf และ '%s'"
 
@@ -10497,7 +10497,7 @@ msgstr "วางรายการจากคลิปบอร์ดพร้
 
 #: common/tool/actions.cpp:395 common/widgets/listbox_tricks.cpp:211
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1836
-#: pcbnew/tools/edit_tool.cpp:3256
+#: pcbnew/tools/edit_tool.cpp:3260
 msgid "Duplicate"
 msgstr "ทำซ้ำ"
 
@@ -10518,7 +10518,7 @@ msgid "Delete clicked items"
 msgstr "ลบชิ้นส่วนที่คลิก"
 
 #: common/tool/actions.cpp:425 eeschema/tools/sch_edit_tool.cpp:3389
-#: pcbnew/tools/edit_tool.cpp:2618
+#: pcbnew/tools/edit_tool.cpp:2622
 msgid "Left Justify"
 msgstr "จัดชิดซ้าย"
 
@@ -10527,7 +10527,7 @@ msgid "Left-justify fields and text items"
 msgstr "จัดชิดซ้ายสำหรับฟิลด์และรายการข้อความ"
 
 #: common/tool/actions.cpp:432 eeschema/tools/sch_edit_tool.cpp:3391
-#: pcbnew/tools/edit_tool.cpp:2620
+#: pcbnew/tools/edit_tool.cpp:2624
 msgid "Center Justify"
 msgstr "จัดกึ่งกลาง"
 
@@ -10536,7 +10536,7 @@ msgid "Center-justify fields and text items"
 msgstr "จัดกึ่งกลางสำหรับฟิลด์และรายการข้อความ"
 
 #: common/tool/actions.cpp:439 eeschema/tools/sch_edit_tool.cpp:3393
-#: pcbnew/tools/edit_tool.cpp:2622
+#: pcbnew/tools/edit_tool.cpp:2626
 msgid "Right Justify"
 msgstr "จัดชิดขวา"
 
@@ -10553,7 +10553,7 @@ msgid "Collapse All"
 msgstr "ย่อทั้งหมด"
 
 #: common/tool/actions.cpp:460 eeschema/tools/sch_tool_base.h:239
-#: pcbnew/tools/edit_tool.cpp:3354
+#: pcbnew/tools/edit_tool.cpp:3358
 msgid "Increment"
 msgstr "เพิ่มค่า"
 
@@ -12971,8 +12971,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -13041,8 +13041,8 @@ msgstr ""
 "\\Users\\username\\kicad\\my_python_script.py` บรรทัดคำสั่งจะเป็น:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "บน Linux หากสคริปต์ตัวสร้างที่ต้องการสำหรับ CSV BOM คือ `/home/username/kicad/"
@@ -15938,8 +15938,8 @@ msgid ""
 "The following changes are recommended to update the project."
 msgstr ""
 "วงจรนี้สร้างขึ้นโดยใช้ไลบรารีสัญลักษณ์ที่เก่ากว่า ซึ่งอาจทำลายวงจรได้ "
-"สัญลักษณ์บางตัวอาจต้องเชื่อมโยงกับชื่อสัญลักษณ์อื่นแทน สัญลักษณ์บางตัวอาจจำเป็นต้อง "
-"\"กู้ภัย\" (สำเนาและเปลี่ยนชื่อ) ลงในไลบรารีใหม่\n"
+"สัญลักษณ์บางตัวอาจต้องเชื่อมโยงกับชื่อสัญลักษณ์อื่นแทน สัญลักษณ์บางตัวอาจจำเป็นต้อง \"กู้ภัย\" "
+"(สำเนาและเปลี่ยนชื่อ) ลงในไลบรารีใหม่\n"
 "\n"
 "ขอแนะนำให้ทำการเปลี่ยนแปลงต่อไปนี้ เพื่ออัปเดตโครงการ"
 
@@ -17017,6 +17017,7 @@ msgid "Code"
 msgstr "โค้ด"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "บันทึก {} ในฟิลด์ค่าเป็น \"{}\""
 
@@ -22795,8 +22796,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -22847,9 +22848,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23196,8 +23197,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>นิยามบัส</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>เน็ตที่ได้</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23248,9 +23249,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23263,10 +23264,9 @@ msgstr ""
 "<p><b>ฟังก์ชันขา:</b> ค้นหาตำแหน่งหน่วยที่ถูกต้องโดยอัตโนมัติ สำหรับสัญลักษณ์หลายหน่วย "
 "ฟังก์ชันอย่าง <samp>NET_NAME(pin)</samp> ทำงานได้แม้ขาจะอยู่ในหน่วยอื่นบนชีต</p>\n"
 "<p><b>การอ้างอิงเซลล์ตาราง:</b> ฟังก์ชัน <samp>CELL()</samp> "
-"ใช้งานได้เฉพาะในเซลล์ตารางเท่านั้น ใช้ <samp>${CELL(\"A0\")}</samp> หรือ "
-"<samp>${CELL(row, col)}</samp> เพื่ออ้างอิงเซลล์อื่นในตารางเดียวกัน "
-"หมายเลขแถวและคอลัมน์เริ่มต้นที่ 0 (A0 คือแถวแรก คอลัมน์แรก) CELL คืนค่าที่ประเมิน/แสดงผลแล้ว "
-"ไม่ใช่ข้อความดิบในเซลล์</p>\n"
+"ใช้งานได้เฉพาะในเซลล์ตารางเท่านั้น ใช้ <samp>${CELL(\"A0\")}</samp> หรือ <samp>$"
+"{CELL(row, col)}</samp> เพื่ออ้างอิงเซลล์อื่นในตารางเดียวกัน หมายเลขแถวและคอลัมน์เริ่มต้นที่ "
+"0 (A0 คือแถวแรก คอลัมน์แรก) CELL คืนค่าที่ประเมิน/แสดงผลแล้ว ไม่ใช่ข้อความดิบในเซลล์</p>\n"
 "<p><b>ตัวแปรซ้อน:</b> ตัวแปรสามารถมีตัวแปรอื่นอยู่ภายในได้ ตัวแปรภายในจะถูกขยายก่อน "
 "ความลึกสูงสุดของการซ้อน: 6 ระดับ</p>\n"
 "<p><b>ข้อความข้อผิดพลาด:</b></p>\n"
@@ -24108,8 +24108,8 @@ msgstr "ข้อผิดพลาดขณะสร้างไฟล์เอ
 
 #: eeschema/sim/kibis/kibis.cpp:851
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
-"pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
+"chen.pdf"
 msgstr "Kibis ยังไม่รองรับค่า DUT https://ibis.org/summits/nov16a/chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:956
@@ -27426,13 +27426,13 @@ msgstr "เปลี่ยนเป็น"
 
 #: eeschema/tools/sch_edit_tool.cpp:1288
 #: eeschema/tools/symbol_editor_edit_tool.cpp:603
-#: pcbnew/tools/edit_tool.cpp:2368
+#: pcbnew/tools/edit_tool.cpp:2372
 msgid "Rotate"
 msgstr "หมุน"
 
 #: eeschema/tools/sch_edit_tool.cpp:1504 gerbview/gerber_draw_item.cpp:724
 #: pcbnew/pcb_tablecell.cpp:261 pcbnew/pcb_text.cpp:348
-#: pcbnew/pcb_textbox.cpp:500 pcbnew/tools/edit_tool.cpp:2537
+#: pcbnew/pcb_textbox.cpp:500 pcbnew/tools/edit_tool.cpp:2541
 msgid "Mirror"
 msgstr "กลับกระจก"
 
@@ -27865,12 +27865,12 @@ msgid "Place Pin"
 msgstr "วางขา"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:851
-#: pcbnew/tools/edit_tool.cpp:2908
+#: pcbnew/tools/edit_tool.cpp:2912
 msgid "Hide Field"
 msgstr "ซ่อนฟิลด์"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:853
-#: pcbnew/tools/edit_tool.cpp:2910
+#: pcbnew/tools/edit_tool.cpp:2914
 msgid "Hide Fields"
 msgstr "ซ่อนฟิลด์ทั้งหมด"
 
@@ -29110,7 +29110,7 @@ msgid "Clear Recent Job Files"
 msgstr "ล้างไฟล์บันทึกงานล่าสุด"
 
 #: gerbview/gerbview_frame.cpp:97
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
 msgid "KiCad Gerber Viewer"
 msgstr "โปรแกรมดูเกอร์เบอร์ KiCad"
 
@@ -39434,8 +39434,8 @@ msgstr "ระยะห่างโซลเดอร์เพสต์:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:375
 msgid ""
 "Local solder paste clearance for this footprint.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
 "ระยะห่างโซลเดอร์เพสต์เฉพาะที่สำหรับฟุ้ทพรินท์นี้\n"
@@ -39639,8 +39639,8 @@ msgstr "อนุญาตให้เปิดช่องหน้ากาก
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
 msgid ""
 "Solder paste clearance relative to pad size.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "ระยะห่างโซลเดอร์เพสต์สัมพัทธ์กับขนาดแพ็ด\n"
@@ -41497,8 +41497,8 @@ msgstr "คุณสมบัติปริยายแพ็ดสำหรั
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
 msgid ""
 "Local solder paste clearance for this pad.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
 "ระยะห่างโซลเดอร์เพสต์เฉพาะที่สำหรับแพ็ดนี้\n"
@@ -42345,8 +42345,8 @@ msgid ""
 msgstr ""
 "ตั้งค่าการแก้ไขความกว้างส่วนกลาง สำหรับเอาต์พุต PostScript ที่แน่นอน\n"
 "การแก้ไขความกว้างเหล่านี้ มีไว้เพื่อชดเชยความกว้างของแทร็ก รวมถึงข้อผิดพลาดของแพ็ดและเวีย\n"
-"ค่าการแก้ไขความกว้างที่เหมาะสมต้องอยู่ในช่วง [-(MinTrackWidth-1), "
-"+(MinClearanceValue-1)]"
+"ค่าการแก้ไขความกว้างที่เหมาะสมต้องอยู่ในช่วง [-(MinTrackWidth-1), +"
+"(MinClearanceValue-1)]"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:324
 msgid "Force A4 output"
@@ -44812,8 +44812,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -45073,8 +45073,8 @@ msgstr ""
 "| "
 "ตรวจสอบความกว้างของวงแหวนบนเวีย<br>                                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                     "
 "| "
 "ตรวจสอบนิพจน์ที่กำหนด<br>                                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -45124,8 +45124,8 @@ msgstr ""
 "| `edge_clearance`          | min/opt/"
 "max                                                                                                           "
 "| ตรวจสอบระยะห่างระหว่างอุปกรณ์และขอบบอร์ด<br><br>อาจมองได้ว่าเป็น "
-"\"ค่าความคลาดเคลื่อนการกัด\" เนื่องจากขอบบอร์ดรวมรายการกราฟิกทั้งหมดบนเลเยอร์ `Edge."
-"Cuts` และรูแพ็ดรูปรี (ดู `physical_hole_clearance` "
+"\"ค่าความคลาดเคลื่อนการกัด\" เนื่องจากขอบบอร์ดรวมรายการกราฟิกทั้งหมดบนเลเยอร์ "
+"`Edge.Cuts` และรูแพ็ดรูปรี (ดู `physical_hole_clearance` "
 "สำหรับค่าความคลาดเคลื่อนการเจาะ)<br>                                                                                                                                                    "
 "|\n"
 "| `length`                  | min/"
@@ -45412,8 +45412,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -45774,13 +45774,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -45934,13 +45934,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -50647,8 +50647,8 @@ msgstr "กําลังประมวลผลสัญลักษณ์ '%
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2105
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
-"Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full "
+"'Library:Footprint' format to avoid repeated update notifications."
 msgstr ""
 "คำเตือน: ฟุ้ทพรินท์ %s '%s' ไม่มีชื่อไลบรารี ใช้รูปแบบ 'Library:Footprint' "
 "แบบเต็มเพื่อหลีกเลี่ยงการแจ้งเตือนการอัปเดตซ้ำ"
@@ -53591,8 +53591,8 @@ msgid ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
-"function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>$"
+"{refdes:function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -53893,8 +53893,8 @@ msgstr ""
 "<p></p>\n"
 "<i>โปรดทราบว่ามาร์กอัปมีความสำคัญกว่าการขยายตัวแปร</i>\n"
 "<p></p>\n"
-"<p><b>การอ้างอิงไขว้ฟุ้ทพรินท์:</b> อ้างอิงฟิลด์และแพ็ดบนฟุ้ทพรินท์อื่นโดยใช้ไวยากรณ์ "
-"<samp>${refdes:field}</samp> หรือ <samp>${refdes:function(pad)}</samp></p>\n"
+"<p><b>การอ้างอิงไขว้ฟุ้ทพรินท์:</b> อ้างอิงฟิลด์และแพ็ดบนฟุ้ทพรินท์อื่นโดยใช้ไวยากรณ์ <samp>$"
+"{refdes:field}</samp> หรือ <samp>${refdes:function(pad)}</samp></p>\n"
 "<p><b>ตัวแปรซ้อน:</b> ตัวแปรสามารถมีตัวแปรอื่นอยู่ด้วย ตัวแปรชั้นในจะถูกขยายก่อน "
 "ความลึกสูงสุดของการซ้อน: 10 ระดับ</p>\n"
 "<p><b>ข้อความแสดงข้อผิดพลาด:</b></p>\n"
@@ -55915,44 +55915,44 @@ msgstr "ลดความซับซ้อนรูปหลายเหลี
 msgid "Heal Shapes"
 msgstr "ซ่อมแซมรูปร่าง"
 
-#: pcbnew/tools/edit_tool.cpp:2541
+#: pcbnew/tools/edit_tool.cpp:2545
 msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2546
+#: pcbnew/tools/edit_tool.cpp:2550
 msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
 msgstr ""
 
-#: pcbnew/tools/edit_tool.cpp:2719 pcbnew/tools/pcb_actions.cpp:686
+#: pcbnew/tools/edit_tool.cpp:2723 pcbnew/tools/pcb_actions.cpp:686
 msgid "Change Side / Flip"
 msgstr "เปลี่ยน ด้าน/พลิก"
 
-#: pcbnew/tools/edit_tool.cpp:2912
+#: pcbnew/tools/edit_tool.cpp:2916
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr "ใช้กล่องโต้ตอบคุณสมบัติฟุ้ทพรินท์เพื่อลบฟิลด์"
 
-#: pcbnew/tools/edit_tool.cpp:3077
+#: pcbnew/tools/edit_tool.cpp:3081
 msgid "Move Exactly"
 msgstr "เลื่อนตำแหน่งแน่นอน"
 
-#: pcbnew/tools/edit_tool.cpp:3252
+#: pcbnew/tools/edit_tool.cpp:3256
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "ซ้ำกัน %d ชิ้นส่วน"
 
-#: pcbnew/tools/edit_tool.cpp:3576
+#: pcbnew/tools/edit_tool.cpp:3580
 msgid "Select reference point for the copy..."
 msgstr "เลือกจุดอ้างอิงสําหรับสําเนา..."
 
-#: pcbnew/tools/edit_tool.cpp:3576 pcbnew/tools/edit_tool.cpp:3592
+#: pcbnew/tools/edit_tool.cpp:3580 pcbnew/tools/edit_tool.cpp:3596
 msgid "Selection copied"
 msgstr "สำเนาการเลือกแล้ว"
 
-#: pcbnew/tools/edit_tool.cpp:3577
+#: pcbnew/tools/edit_tool.cpp:3581
 msgid "Copy canceled"
 msgstr "ยกเลิกสำเนาแล้ว"
 
@@ -56184,65 +56184,65 @@ msgid "(none)"
 msgstr "(ไม่มี)"
 
 #: pcbnew/tools/multichannel_tool.cpp:139
-#: pcbnew/tools/multichannel_tool.cpp:2227
+#: pcbnew/tools/multichannel_tool.cpp:2272
 msgid "Topology mismatch"
 msgstr "โทโพโลยีไม่ตรงกัน"
 
-#: pcbnew/tools/multichannel_tool.cpp:733
+#: pcbnew/tools/multichannel_tool.cpp:767
 msgid "Select a reference Rule Area to copy from..."
 msgstr "เลือกพื้นที่กฎอ้างอิงสำหรับคัดลอก..."
 
-#: pcbnew/tools/multichannel_tool.cpp:752
+#: pcbnew/tools/multichannel_tool.cpp:786
 msgid "No Rule Areas to repeat layout to have been found."
 msgstr "ไม่พบพื้นที่กฎสำหรับทำซ้ำเลย์เอาต์"
 
-#: pcbnew/tools/multichannel_tool.cpp:848
+#: pcbnew/tools/multichannel_tool.cpp:882
 msgid "Checking Rule Area compatibility..."
 msgstr "กำลังตรวจสอบความเข้ากันได้ของพื้นที่กฎ..."
 
-#: pcbnew/tools/multichannel_tool.cpp:873
+#: pcbnew/tools/multichannel_tool.cpp:907
 #, c-format
 msgid "Resolving topology %d of %d (%d/%d components)"
 msgstr "แก้ไขโทโพโลยี %d จาก %d (%d/%d อุปกรณ์)"
 
-#: pcbnew/tools/multichannel_tool.cpp:923
+#: pcbnew/tools/multichannel_tool.cpp:957
 #, c-format
 msgid "Rule Area topologies do not match: %s"
 msgstr "โทโพโลยีของพื้นที่กฎไม่ตรงกัน: %s"
 
-#: pcbnew/tools/multichannel_tool.cpp:948
-#: pcbnew/tools/multichannel_tool.cpp:1012
+#: pcbnew/tools/multichannel_tool.cpp:983
+#: pcbnew/tools/multichannel_tool.cpp:1047
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr "การคัดลอกเนื้อหาพื้นที่กฎระหว่าง '%s' และ '%s' ล้มเหลว"
 
-#: pcbnew/tools/multichannel_tool.cpp:971
+#: pcbnew/tools/multichannel_tool.cpp:1006
 msgid "Target group does not have a group."
 msgstr "กลุ่มเป้าหมายไม่มีกลุ่ม"
 
-#: pcbnew/tools/multichannel_tool.cpp:986
-#: pcbnew/tools/multichannel_tool.cpp:1049
+#: pcbnew/tools/multichannel_tool.cpp:1021
+#: pcbnew/tools/multichannel_tool.cpp:1094
 msgid "Repeat layout"
 msgstr "ทำซ้ำเลย์เอาต์"
 
-#: pcbnew/tools/multichannel_tool.cpp:1052
+#: pcbnew/tools/multichannel_tool.cpp:1097
 #, c-format
 msgid "Copied to %d Rule Areas."
 msgstr "คัดลอกไปยัง %d พื้นที่กฎ"
 
-#: pcbnew/tools/multichannel_tool.cpp:2089
+#: pcbnew/tools/multichannel_tool.cpp:2134
 #, fuzzy
 msgid "Target Rule Area shares components with the reference area"
 msgstr "ไฟล์ตำแหน่งอุปกรณ์"
 
-#: pcbnew/tools/multichannel_tool.cpp:2092
+#: pcbnew/tools/multichannel_tool.cpp:2137
 msgid ""
 "This target Rule Area selects the same components as the reference area. "
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
 "Area a distinct sheet, component class or group."
 msgstr ""
 
-#: pcbnew/tools/multichannel_tool.cpp:2095
+#: pcbnew/tools/multichannel_tool.cpp:2140
 #, fuzzy, c-format
 msgid ""
 "Shared components:\n"
@@ -56251,12 +56251,12 @@ msgstr ""
 "อุปกรณ์ในพื้นที่เป้าหมาย:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2233
+#: pcbnew/tools/multichannel_tool.cpp:2278
 #, c-format
 msgid "Reference area total components: %d"
 msgstr "อุปกรณ์รวมในพื้นที่อ้างอิง: %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:2234
+#: pcbnew/tools/multichannel_tool.cpp:2279
 #, c-format
 msgid ""
 "Reference area components:\n"
@@ -56265,12 +56265,12 @@ msgstr ""
 "อุปกรณ์ในพื้นที่อ้างอิง:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2237
+#: pcbnew/tools/multichannel_tool.cpp:2282
 #, c-format
 msgid "Target area total components: %d"
 msgstr "อุปกรณ์รวมในพื้นที่เป้าหมาย: %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:2238
+#: pcbnew/tools/multichannel_tool.cpp:2283
 #, c-format
 msgid ""
 "Target area components:\n"
@@ -56279,7 +56279,7 @@ msgstr ""
 "อุปกรณ์ในพื้นที่เป้าหมาย:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2290
+#: pcbnew/tools/multichannel_tool.cpp:2335
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
@@ -56287,7 +56287,7 @@ msgstr ""
 "ไม่สามารถสร้างพื้นที่การจัดวางโดยอัตโนมัติได้เนื่องจากวงจรมีแผ่นกระดาษลำดับชั้น กลุ่ม "
 "หรือคลาสอุปกรณ์เพียงหนึ่งรายการหรือไม่มีเลย"
 
-#: pcbnew/tools/multichannel_tool.cpp:2522
+#: pcbnew/tools/multichannel_tool.cpp:2567
 msgid "Auto-generate placement rule areas"
 msgstr "สร้างพื้นที่กฎการวางอัตโนมัติ"
 
@@ -59979,93 +59979,101 @@ msgstr "เทอร์มอลรีลีฟสำหรับ PTH"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] โหลดล้มเหลว: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Converter;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Bitmap to Component Converter"
 msgstr "ผู้เปลี่ยนบิทแมบเป็นอุปกรณ์"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "สร้างอุปกรณ์ขึ้นมาจากบิทแมปสำหรับใช้งานใน KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "เครื่องมือแก้ไขวงจร KiCad (ทำงานเดี่ยว)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "Schematic Capture Tool"
 msgstr "เครื่องมือจับภาพวงจร"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "ตัวแก้ไขแผนผังวงจรแบบโดดเดี่ยว สำหรับวงจร KiCad"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
 msgstr "Eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
 msgstr "โปรแกรมดูไฟล์เกอร์เบอร์"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "View Gerber files"
 msgstr "ดูไฟล์เกอร์เบอร์"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
 msgid "Projectmanager;"
 msgstr "Projectmanager;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
 msgstr "ชุดเครื่องมือ EDA"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "ชุดเครื่องมือสำหรับออกแบบวงจรและออกแบบวงจรพิมพ์"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "เครื่องคิดเลข PCB ของ KiCad"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "PCB;Calculator;"
 msgstr "PCB;Calculator;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB Calculator"
 msgstr "เครื่องคิดเลข PCB"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "เครื่องคิดเลขสำหรับการคำนวณที่เกี่ยวข้องกับอิเล็กทรอนิกส์ต่างๆ"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;ฟุ้ทพรินท์;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "เครื่องมือแก้ไข PCB KiCad (โดดเดี่ยว)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
 msgstr "เครื่องมือออกแบบ PCB"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "เครื่องมือแก้ไขวงจรพิมพ์สำหรับบอร์ด KiCad"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "ชุดเครื่องมือ EDA สำหรับการออกแบบวงจรและแผ่นวงจรพิมพ์"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
+msgid "Circuit board"
+msgstr "วงจรพิมพ์"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -60133,12 +60141,6 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 
 #~ msgid "Empty sheet pin name"
 #~ msgstr "ชื่อชีตขาว่างเปล่า"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "วงจรพิมพ์"
 
 #~ msgid "Library not found in library table"
 #~ msgstr "ไม่พบไลบรารีในตารางไลบรารี"
@@ -60369,8 +60371,8 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "The minimum through-hole size. If set, this can only be reduced by custom "
 #~ "rules."
 #~ msgstr ""
-#~ "ขนาดต่ำสุดของรูเจาะเวีย  หากตั้งค่าไว้,นี่เป็นค่าต่ำสุดซึ่งไม่สามารถลดลงไปอีก ตามเน็ตคลาส,"
-#~ "กฎที่กำหนดเอง,หรือการตั้งค่าอื่นๆ"
+#~ "ขนาดต่ำสุดของรูเจาะเวีย  หากตั้งค่าไว้,นี่เป็นค่าต่ำสุดซึ่งไม่สามารถลดลงไปอีก "
+#~ "ตามเน็ตคลาส,กฎที่กำหนดเอง,หรือการตั้งค่าอื่นๆ"
 
 #, fuzzy
 #~ msgid "Minimum Length"
@@ -61087,8 +61089,8 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Resultant Nets</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -61139,9 +61141,9 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -61227,8 +61229,8 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Resultant Nets</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -61279,9 +61281,9 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -65618,8 +65620,8 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A."
-#~ "enclosedByArea('Shield*')\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
+#~ "\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -65751,13 +65753,13 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -65841,8 +65843,9 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "\n"
 #~ "### Documentation\n"
 #~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://docs."
-#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+#~ "For the full documentation see [https://docs.kicad.org](https://"
+#~ "docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
+#~ "pcbnew.html#custom_design_rules)."
 #~ msgstr ""
 #~ "### Top-level Clauses\n"
 #~ "\n"
@@ -65961,8 +65964,8 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A."
-#~ "enclosedByArea('Shield*')\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
+#~ "\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -66082,13 +66085,13 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -66172,8 +66175,8 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "\n"
 #~ "### เอกสาร\n"
 #~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://docs."
-#~ "kicad.org/GetMajorMinorVersion/pcbnew/#custom_design_rules)."
+#~ "For the full documentation see [https://docs.kicad.org](https://"
+#~ "docs.kicad.org/GetMajorMinorVersion/pcbnew/#custom_design_rules)."
 
 #, c-format
 #~ msgid "Choose Footprint (%d items loaded)"
@@ -67321,8 +67324,8 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+#~ "pcb.xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -67508,8 +67511,8 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+#~ "pcb.xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -68714,9 +68717,7 @@ msgstr "ไม่สามารถสร้างพาธสคริปต์
 #~ msgid ""
 #~ "Better performance, exact export fidelity, and more complete filling near "
 #~ "higher-priority zones."
-#~ msgstr ""
-#~ "ประสิทธิภาพที่ดีขึ้น,"
-#~ "ความเที่ยงตรงในการส่งออกและการเทที่สมบูรณ์ยิ่งขึ้นกับโซนที่มีลำดับความสำคัญสูงกว่า"
+#~ msgstr "ประสิทธิภาพที่ดีขึ้น,ความเที่ยงตรงในการส่งออกและการเทที่สมบูรณ์ยิ่งขึ้นกับโซนที่มีลำดับความสำคัญสูงกว่า"
 
 #~ msgid ""
 #~ "Check this option to allow symbols with multiple units to have different\n"

@@ -24,10 +24,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 23:31+0300\n"
+"POT-Creation-Date: 2026-09-30 22:14-0700\n"
 "PO-Revision-Date: 2026-10-01 05:02+0000\n"
-"Last-Translator: Integration <bot-kicad-integration@bots.noreply.weblate.org>"
-"\n"
+"Last-Translator: Integration <bot-kicad-"
+"integration@bots.noreply.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v10/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -1813,7 +1813,7 @@ msgid "Image Converter"
 msgstr "Преобразователь изображений"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
 msgstr "Преобразователь изображений KiCad"
 
@@ -2321,7 +2321,7 @@ msgid "&No"
 msgstr "Нет"
 
 #: common/design_block_io.cpp:68
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -3291,6 +3291,7 @@ msgstr "Имя проекта"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1800
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "PCB"
 msgstr "Печатная плата"
 
@@ -3299,6 +3300,7 @@ msgstr "Печатная плата"
 #: eeschema/widgets/hierarchy_pane.cpp:832
 #: eeschema/widgets/hierarchy_pane.cpp:838
 #: eeschema/widgets/symbol_diff_widget.cpp:44
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Schematic"
 msgstr "Схема"
 
@@ -3999,8 +4001,8 @@ msgstr "Автор:"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:147
 #: kicad/dialogs/dialog_edit_cfg.cpp:181
 #: pcbnew/dialogs/dialog_multichannel_repeat_layout.cpp:136
-#: pcbnew/tools/multichannel_tool.cpp:2070
-#: pcbnew/tools/multichannel_tool.cpp:2197
+#: pcbnew/tools/multichannel_tool.cpp:2115
+#: pcbnew/tools/multichannel_tool.cpp:2242
 msgid "OK"
 msgstr "OK"
 
@@ -6429,33 +6431,33 @@ msgstr "Переместить выше"
 msgid "Move Down"
 msgstr "Переместить ниже"
 
-#: common/draw_panel_gal.cpp:303 common/draw_panel_gal.cpp:794
+#: common/draw_panel_gal.cpp:313 common/draw_panel_gal.cpp:817
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr ""
 "Нет возможности использовать OpenGL, изображение будет формироваться только "
 "программными средствами"
 
-#: common/draw_panel_gal.cpp:310 common/draw_panel_gal.cpp:536
+#: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:559
 msgid "Graphics error"
 msgstr "Графическая ошибка"
 
-#: common/draw_panel_gal.cpp:314 common/draw_panel_gal.cpp:318
+#: common/draw_panel_gal.cpp:324 common/draw_panel_gal.cpp:328
 msgid "Graphics error during recovery"
 msgstr "Графическая ошибка при восстановлении"
 
-#: common/draw_panel_gal.cpp:319
+#: common/draw_panel_gal.cpp:329
 msgid "Unknown exception during backend switch"
 msgstr "Неизвестное исключение при смене бэкенда"
 
-#: common/draw_panel_gal.cpp:536
+#: common/draw_panel_gal.cpp:559
 msgid "Unknown exception"
 msgstr "Неизвестное исключение"
 
-#: common/draw_panel_gal.cpp:801
+#: common/draw_panel_gal.cpp:824
 msgid "Could not use OpenGL"
 msgstr "Не удаётся использовать OpenGL"
 
-#: common/draw_panel_gal.cpp:829
+#: common/draw_panel_gal.cpp:852
 msgid "Error switching GAL backend"
 msgstr "Ошибка переключения GAL бэкенда"
 
@@ -8290,7 +8292,7 @@ msgstr ""
 #: common/widgets/listbox_tricks.cpp:209 eeschema/tools/sch_actions.cpp:244
 #: pcbnew/dialogs/panel_setup_rules.cpp:142
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:997
-#: pcbnew/tools/edit_tool.cpp:2903
+#: pcbnew/tools/edit_tool.cpp:2907
 msgid "Cut"
 msgstr "Вырезать"
 
@@ -8335,7 +8337,7 @@ msgstr "Вставить элементы из буфера обмена в те
 #: pcbnew/dialogs/panel_setup_rules.cpp:145
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:589
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:1000
-#: pcbnew/tools/edit_tool.cpp:2873 pcbnew/tools/edit_tool.cpp:2916
+#: pcbnew/tools/edit_tool.cpp:2877 pcbnew/tools/edit_tool.cpp:2920
 msgid "Delete"
 msgstr "Удалить"
 
@@ -9552,12 +9554,10 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Отсутствуют ед.изм. для '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1256
-#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Несоответствие типов между '%s' и %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1262
-#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Несоответствие типов между %lf и '%s'"
 
@@ -10674,7 +10674,7 @@ msgstr "Вставить элементы из буфера с опциями"
 
 #: common/tool/actions.cpp:395 common/widgets/listbox_tricks.cpp:211
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1836
-#: pcbnew/tools/edit_tool.cpp:3256
+#: pcbnew/tools/edit_tool.cpp:3260
 msgid "Duplicate"
 msgstr "Дублировать"
 
@@ -10695,7 +10695,7 @@ msgid "Delete clicked items"
 msgstr "Удаление элементов щелчком мыши"
 
 #: common/tool/actions.cpp:425 eeschema/tools/sch_edit_tool.cpp:3389
-#: pcbnew/tools/edit_tool.cpp:2618
+#: pcbnew/tools/edit_tool.cpp:2622
 msgid "Left Justify"
 msgstr "Выровнять по левому краю"
 
@@ -10704,7 +10704,7 @@ msgid "Left-justify fields and text items"
 msgstr "Выровнять поля и текстовые элементы по левому краю"
 
 #: common/tool/actions.cpp:432 eeschema/tools/sch_edit_tool.cpp:3391
-#: pcbnew/tools/edit_tool.cpp:2620
+#: pcbnew/tools/edit_tool.cpp:2624
 msgid "Center Justify"
 msgstr "Выровнять по центру"
 
@@ -10713,7 +10713,7 @@ msgid "Center-justify fields and text items"
 msgstr "Выровнять поля и текстовые элементы по центру"
 
 #: common/tool/actions.cpp:439 eeschema/tools/sch_edit_tool.cpp:3393
-#: pcbnew/tools/edit_tool.cpp:2622
+#: pcbnew/tools/edit_tool.cpp:2626
 msgid "Right Justify"
 msgstr "Выровнять по правому краю"
 
@@ -10730,7 +10730,7 @@ msgid "Collapse All"
 msgstr "Свернуть все"
 
 #: common/tool/actions.cpp:460 eeschema/tools/sch_tool_base.h:239
-#: pcbnew/tools/edit_tool.cpp:3354
+#: pcbnew/tools/edit_tool.cpp:3358
 msgid "Increment"
 msgstr "Увеличить"
 
@@ -13194,8 +13194,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -13275,8 +13275,8 @@ msgstr ""
 "такой:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "```\n"
 "\n"
 "В Linux, если желаемый скрипт генератора для CSV BOM - `/home/username/kicad/"
@@ -17289,6 +17289,7 @@ msgid "Code"
 msgstr "Код"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
+#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Хранить {} в поле 'Значение' как \"{}\""
 
@@ -20493,8 +20494,8 @@ msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
-"Ошибка при разборе модели «%s», неправильное количество узлов «?» в Sim."
-"NodesFormat по сравнению с соединениями"
+"Ошибка при разборе модели «%s», неправильное количество узлов «?» в "
+"Sim.NodesFormat по сравнению с соединениями"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:693
 #, c-format
@@ -23180,8 +23181,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23232,9 +23233,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -24104,8 +24105,8 @@ msgstr "Ошибка при создании временного выходно
 
 #: eeschema/sim/kibis/kibis.cpp:851
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
-"pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
+"chen.pdf"
 msgstr ""
 "Kibis пока не поддерживает значения DUT. https://ibis.org/summits/nov16a/"
 "chen.pdf"
@@ -27507,13 +27508,13 @@ msgstr "Заменить на"
 
 #: eeschema/tools/sch_edit_tool.cpp:1288
 #: eeschema/tools/symbol_editor_edit_tool.cpp:603
-#: pcbnew/tools/edit_tool.cpp:2368
+#: pcbnew/tools/edit_tool.cpp:2372
 msgid "Rotate"
 msgstr "Повернуть"
 
 #: eeschema/tools/sch_edit_tool.cpp:1504 gerbview/gerber_draw_item.cpp:724
 #: pcbnew/pcb_tablecell.cpp:261 pcbnew/pcb_text.cpp:348
-#: pcbnew/pcb_textbox.cpp:500 pcbnew/tools/edit_tool.cpp:2537
+#: pcbnew/pcb_textbox.cpp:500 pcbnew/tools/edit_tool.cpp:2541
 msgid "Mirror"
 msgstr "Отразить"
 
@@ -27961,12 +27962,12 @@ msgid "Place Pin"
 msgstr "Разместить вывод"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:851
-#: pcbnew/tools/edit_tool.cpp:2908
+#: pcbnew/tools/edit_tool.cpp:2912
 msgid "Hide Field"
 msgstr "Скрыть поле"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:853
-#: pcbnew/tools/edit_tool.cpp:2910
+#: pcbnew/tools/edit_tool.cpp:2914
 msgid "Hide Fields"
 msgstr "Скрыть поля"
 
@@ -29219,7 +29220,7 @@ msgid "Clear Recent Job Files"
 msgstr "Очистить список недавних файлов заданий"
 
 #: gerbview/gerbview_frame.cpp:97
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
 msgid "KiCad Gerber Viewer"
 msgstr "Просмотр Gerber-файлов KiCad"
 
@@ -39772,8 +39773,8 @@ msgstr "Зазор паяльной пасты:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:375
 msgid ""
 "Local solder paste clearance for this footprint.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
 "Локальный зазор паяльной пасты для этого посад. места.\n"
@@ -39981,8 +39982,8 @@ msgstr "Разрешить слияние вырезов в паяльной м�
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
 msgid ""
 "Solder paste clearance relative to pad size.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "Зазор паяльной пасты относительно размера площадки.\n"
@@ -41874,8 +41875,8 @@ msgstr "Свойства по умолчанию для новых конт. п�
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
 msgid ""
 "Local solder paste clearance for this pad.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
-"g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
+"(e.g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
 "Локальный зазор паяльной пасты для этой площадки.\n"
@@ -45228,8 +45229,9 @@ msgid ""
 msgstr ""
 "### Документация\n"
 "\n"
-"Полная документация приведена в [https://docs.kicad.org](https://go.kicad."
-"org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+"Полная документация приведена в [https://docs.kicad.org](https://"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -45293,8 +45295,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                     "
+"| `assertion`               | "
+"\"&lt;expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -45554,8 +45556,8 @@ msgstr ""
 "| Проверяет ширину контактных поясков перех.отв."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | \"&lt;"
-"выражение>\"                                                                                                      "
+"| `assertion`               | "
+"\"&lt;выражение>\"                                                                                                      "
 "| Проверяет заданное выражение."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                    "
 "|\n"
@@ -45585,8 +45587,9 @@ msgstr ""
 "| `courtyard_clearance`     | "
 "min                                                                                                                   "
 "| Проверяет зазор между областями установки посад.мест и генерирует ошибку, "
-"если любые две области находятся ближе, чем расстояние `min`. Если посад."
-"место не имеет формы области установки, это ограничение не генерирует ошибок."
+"если любые две области находятся ближе, чем расстояние `min`. Если "
+"посад.место не имеет формы области установки, это ограничение не генерирует "
+"ошибок."
 "<br>                                                                                                                                                                                                               "
 "|\n"
 "| `creepage`                | "
@@ -45639,12 +45642,12 @@ msgstr ""
 "|\n"
 "| `hole_size`               | min/opt/"
 "max                                                                                                           "
-"| Проверяет размер (диаметр) просверленного отверстия в конт.пл. или перех."
-"отв. Для овальных отверстий меньший (минорный) диаметр будет проверяться по "
-"значению `min` (если указано), а больший (мажорный) диаметр будет "
-"проверяться по значению `max` (если указано). Значение `opt` используется "
-"интерактивным трассировщиком как размер отверстия перех.отв. по умолчанию "
-"для цепей, соответствующих условию правила."
+"| Проверяет размер (диаметр) просверленного отверстия в конт.пл. или "
+"перех.отв. Для овальных отверстий меньший (минорный) диаметр будет "
+"проверяться по значению `min` (если указано), а больший (мажорный) диаметр "
+"будет проверяться по значению `max` (если указано). Значение `opt` "
+"используется интерактивным трассировщиком как размер отверстия перех.отв. по "
+"умолчанию для цепей, соответствующих условию правила."
 "<br>                                                                    |\n"
 "| `hole_to_hole`            | "
 "min                                                                                                                   "
@@ -45795,8 +45798,8 @@ msgstr ""
 "max                                                                                                           "
 "| Проверяет диаметр перех.отв. Ошибка будет выдана для каждого перех.отв., "
 "диаметр которого ниже `min` (если указано) или выше `max` (если указано). "
-"Значение `opt` используется интерактивным трассировщиком как диаметр перех."
-"отв. по умолчанию для цепей, соответствующих условию правила."
+"Значение `opt` используется интерактивным трассировщиком как диаметр "
+"перех.отв. по умолчанию для цепей, соответствующих условию правила."
 "<br>                                                                                                                                                      "
 "|\n"
 "| `zone_connection`         | "
@@ -45955,17 +45958,17 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
 "### Свойства\n"
 "\n"
 "Многие свойства объектов доступны для проверки в выражениях пользовательских "
-"правил. Смотрите полную документацию на [https://docs.kicad.org](https://go."
-"kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
-"html#custom_design_rules) для полного списка.\n"
+"правил. Смотрите полную документацию на [https://docs.kicad.org](https://"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
+"pcbnew.html#custom_design_rules) для полного списка.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -46183,8 +46186,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<имя_цепи>')\n"
-"Истина, если `A` относится к цепи, которая является частью указанной диф."
-"пары.\n"
+"Истина, если `A` относится к цепи, которая является частью указанной "
+"диф.пары.\n"
 "Например, `inDiffPair('/CLK')` соответствует цепям `/CLK_P` и `/CLK_N`.\n"
 "<br><br>\n"
 "\n"
@@ -46277,13 +46280,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -46437,13 +46440,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+"B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -51209,8 +51212,8 @@ msgstr "Обработка компонента '%s:%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2105
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
-"Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full "
+"'Library:Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Предупреждение: Для посад. места %s '%s' не указано имя библиотеки. "
 "Используйте полный формат 'Библиотека:Посадочное_место' для избежания "
@@ -54284,8 +54287,8 @@ msgid ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
-"function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>$"
+"{refdes:function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -54923,8 +54926,8 @@ msgid ""
 "Unable to find complementary differential pair nets. Make sure the names of "
 "the nets belonging to a differential pair end with either N/P or +/-."
 msgstr ""
-"Не удалось найти второй проводник диф.пары. Проверьте, что имена цепей диф."
-"пары заканчиваются на N/P или +/-."
+"Не удалось найти второй проводник диф.пары. Проверьте, что имена цепей "
+"диф.пары заканчиваются на N/P или +/-."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:550
 msgid ""
@@ -56335,7 +56338,7 @@ msgstr "Упростить полигоны"
 msgid "Heal Shapes"
 msgstr "Вылечить фигуры"
 
-#: pcbnew/tools/edit_tool.cpp:2541
+#: pcbnew/tools/edit_tool.cpp:2545
 msgid ""
 "Footprints cannot be mirrored. Use Flip to move them to the other side of "
 "the board."
@@ -56343,7 +56346,7 @@ msgstr ""
 "Посад. места нельзя отражать. Используйте «Перевернуть», чтобы переместить "
 "их на другую сторону платы."
 
-#: pcbnew/tools/edit_tool.cpp:2546
+#: pcbnew/tools/edit_tool.cpp:2550
 msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
@@ -56351,33 +56354,33 @@ msgstr ""
 "Группы, содержащие посад. места или другие элементы, которые невозможно "
 "отразить, были пропущены."
 
-#: pcbnew/tools/edit_tool.cpp:2719 pcbnew/tools/pcb_actions.cpp:686
+#: pcbnew/tools/edit_tool.cpp:2723 pcbnew/tools/pcb_actions.cpp:686
 msgid "Change Side / Flip"
 msgstr "Сменить сторону/перевернуть"
 
-#: pcbnew/tools/edit_tool.cpp:2912
+#: pcbnew/tools/edit_tool.cpp:2916
 msgid "Use the Footprint Properties dialog to remove fields."
 msgstr ""
 "Используйте диалоговое окно «Свойства посадочного места» для удаления полей."
 
-#: pcbnew/tools/edit_tool.cpp:3077
+#: pcbnew/tools/edit_tool.cpp:3081
 msgid "Move Exactly"
 msgstr "Переместить точно"
 
-#: pcbnew/tools/edit_tool.cpp:3252
+#: pcbnew/tools/edit_tool.cpp:3256
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "Дублировано %d элемент(ов)"
 
-#: pcbnew/tools/edit_tool.cpp:3576
+#: pcbnew/tools/edit_tool.cpp:3580
 msgid "Select reference point for the copy..."
 msgstr "Выбор опорной точку для копии..."
 
-#: pcbnew/tools/edit_tool.cpp:3576 pcbnew/tools/edit_tool.cpp:3592
+#: pcbnew/tools/edit_tool.cpp:3580 pcbnew/tools/edit_tool.cpp:3596
 msgid "Selection copied"
 msgstr "Выделение скопировано"
 
-#: pcbnew/tools/edit_tool.cpp:3577
+#: pcbnew/tools/edit_tool.cpp:3581
 msgid "Copy canceled"
 msgstr "Копирование отменено"
 
@@ -56621,59 +56624,59 @@ msgid "(none)"
 msgstr "(нет)"
 
 #: pcbnew/tools/multichannel_tool.cpp:139
-#: pcbnew/tools/multichannel_tool.cpp:2227
+#: pcbnew/tools/multichannel_tool.cpp:2272
 msgid "Topology mismatch"
 msgstr "Несоответствие топологии"
 
-#: pcbnew/tools/multichannel_tool.cpp:733
+#: pcbnew/tools/multichannel_tool.cpp:767
 msgid "Select a reference Rule Area to copy from..."
 msgstr "Выберите эталонную область правил для копирования..."
 
-#: pcbnew/tools/multichannel_tool.cpp:752
+#: pcbnew/tools/multichannel_tool.cpp:786
 msgid "No Rule Areas to repeat layout to have been found."
 msgstr "Не найдено ни одной области правил для повторения раскладки."
 
-#: pcbnew/tools/multichannel_tool.cpp:848
+#: pcbnew/tools/multichannel_tool.cpp:882
 msgid "Checking Rule Area compatibility..."
 msgstr "Проверка совместимости областей правил..."
 
-#: pcbnew/tools/multichannel_tool.cpp:873
+#: pcbnew/tools/multichannel_tool.cpp:907
 #, c-format
 msgid "Resolving topology %d of %d (%d/%d components)"
 msgstr "Разрешение топологии %d из %d (%d/%d компонентов)"
 
-#: pcbnew/tools/multichannel_tool.cpp:923
+#: pcbnew/tools/multichannel_tool.cpp:957
 #, c-format
 msgid "Rule Area topologies do not match: %s"
 msgstr "Топологии областей правил не совпадают: %s"
 
-#: pcbnew/tools/multichannel_tool.cpp:948
-#: pcbnew/tools/multichannel_tool.cpp:1012
+#: pcbnew/tools/multichannel_tool.cpp:983
+#: pcbnew/tools/multichannel_tool.cpp:1047
 #, c-format
 msgid "Copy Rule Area contents failed between rule areas '%s' and '%s'."
 msgstr ""
 "Не удалось скопировать содержимое области правил между областями правил '%s' "
 "и '%s'."
 
-#: pcbnew/tools/multichannel_tool.cpp:971
+#: pcbnew/tools/multichannel_tool.cpp:1006
 msgid "Target group does not have a group."
 msgstr "Целевая группа не имеет группы."
 
-#: pcbnew/tools/multichannel_tool.cpp:986
-#: pcbnew/tools/multichannel_tool.cpp:1049
+#: pcbnew/tools/multichannel_tool.cpp:1021
+#: pcbnew/tools/multichannel_tool.cpp:1094
 msgid "Repeat layout"
 msgstr "Повтор разводки"
 
-#: pcbnew/tools/multichannel_tool.cpp:1052
+#: pcbnew/tools/multichannel_tool.cpp:1097
 #, c-format
 msgid "Copied to %d Rule Areas."
 msgstr "Скопировано в %d областей правил."
 
-#: pcbnew/tools/multichannel_tool.cpp:2089
+#: pcbnew/tools/multichannel_tool.cpp:2134
 msgid "Target Rule Area shares components with the reference area"
 msgstr "Целевая зона правил имеет общие компоненты с эталонной зоной"
 
-#: pcbnew/tools/multichannel_tool.cpp:2092
+#: pcbnew/tools/multichannel_tool.cpp:2137
 msgid ""
 "This target Rule Area selects the same components as the reference area. "
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
@@ -56684,7 +56687,7 @@ msgstr ""
 "саму себя. Для каждой области правил размещения следует использовать "
 "отдельный лист, класс компонентов или группу."
 
-#: pcbnew/tools/multichannel_tool.cpp:2095
+#: pcbnew/tools/multichannel_tool.cpp:2140
 #, c-format
 msgid ""
 "Shared components:\n"
@@ -56693,12 +56696,12 @@ msgstr ""
 "Общие компоненты:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2233
+#: pcbnew/tools/multichannel_tool.cpp:2278
 #, c-format
 msgid "Reference area total components: %d"
 msgstr "Эталонная область, всего компонентов: %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:2234
+#: pcbnew/tools/multichannel_tool.cpp:2279
 #, c-format
 msgid ""
 "Reference area components:\n"
@@ -56707,12 +56710,12 @@ msgstr ""
 "Компоненты эталонной области:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2237
+#: pcbnew/tools/multichannel_tool.cpp:2282
 #, c-format
 msgid "Target area total components: %d"
 msgstr "Целевая область, всего компонентов: %d"
 
-#: pcbnew/tools/multichannel_tool.cpp:2238
+#: pcbnew/tools/multichannel_tool.cpp:2283
 #, c-format
 msgid ""
 "Target area components:\n"
@@ -56721,7 +56724,7 @@ msgstr ""
 "Компоненты целевой области:\n"
 "%s"
 
-#: pcbnew/tools/multichannel_tool.cpp:2290
+#: pcbnew/tools/multichannel_tool.cpp:2335
 msgid ""
 "Cannot auto-generate any placement areas because the schematic has only one "
 "or no hierarchical sheets, groups, or component classes."
@@ -56730,7 +56733,7 @@ msgstr ""
 "имеет только один или ни одного иерархического листа, группы или класса "
 "компонентов."
 
-#: pcbnew/tools/multichannel_tool.cpp:2522
+#: pcbnew/tools/multichannel_tool.cpp:2567
 msgid "Auto-generate placement rule areas"
 msgstr "Автоматическая генерация областей правил размещения"
 
@@ -57380,8 +57383,8 @@ msgstr "Удалить неиспользуемые конт. пл..."
 msgid ""
 "Remove or restore the unconnected inner layers on through hole pads and vias"
 msgstr ""
-"Удалить или восстановить не подключённые внутренние слои из сквозных конт."
-"пл. и перех. отв."
+"Удалить или восстановить не подключённые внутренние слои из сквозных "
+"конт.пл. и перех. отв."
 
 #: pcbnew/tools/pcb_actions.cpp:1023
 msgid "Assign a different footprint from the library"
@@ -60493,93 +60496,101 @@ msgstr "терморазгрузка для PTH"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] загрузка не удалась: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Converter;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "Bitmap to Component Converter"
 msgstr "Конвертер растрового изображения в компонент"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Создание компонентов KiCad из растровых изображений"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "Редактор схем KiCad (автономно)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "Schematic Capture Tool"
 msgstr "Редактор электрических схем"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Редактирование электрических схем KiCad в автономном режиме"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "Gerber File Viewer"
 msgstr "Просмотр Gerber-файлов"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "View Gerber files"
 msgstr "Просмотреть Gerber-файлы"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
 msgid "Projectmanager;"
 msgstr "Projectmanager;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 msgid "EDA Suite"
 msgstr "САПР"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Комплекс инструментов для составления схем и трассировки печатных плат"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
 msgid "KiCad PCB Calculator"
 msgstr "Калькулятор печатных плат KiCad"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "PCB;Calculator;"
 msgstr "PCB;Calculator;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
 msgstr "Калькулятор для вычисления различных электрических параметров"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "Редактор печатных плат KiCad (автономно)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "PCB layout editor"
 msgstr "Редактор печатных плат"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Редактирование печатных плат KiCad в автономном режиме"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "САПР для составления схем и трассировки печатных плат"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
+msgid "EDA"
+msgstr "EDA"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
+msgid "Circuit board"
+msgstr "Circuit board"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -60649,12 +60660,6 @@ msgstr "Не удалось создать путь пользовательск
 
 #~ msgid "Empty sheet pin name"
 #~ msgstr "Пустое имя вывода листа"
-
-#~ msgid "EDA"
-#~ msgstr "EDA"
-
-#~ msgid "Circuit board"
-#~ msgstr "Circuit board"
 
 #~ msgid "Library not found in library table"
 #~ msgstr "Библиотека не найдена в таблице библиотек"
@@ -61730,8 +61735,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Resultant Nets</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -61782,9 +61787,9 @@ msgstr "Не удалось создать путь пользовательск
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -61870,8 +61875,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Определения шин</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;&nbsp;&nbsp;</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "</th>\n"
 #~ "        <th>Результирующие цепи</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -61922,9 +61927,9 @@ msgstr "Не удалось создать путь пользовательск
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -65420,8 +65425,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "Cannot generate clearance report on footprint with multiple pads.  Select "
 #~ "a single pad."
 #~ msgstr ""
-#~ "Нельзя сформировать отчёт о зазорах для посад.мест с несколькими конт."
-#~ "пл.  Выберите одну конт.пл."
+#~ "Нельзя сформировать отчёт о зазорах для посад.мест с несколькими "
+#~ "конт.пл.  Выберите одну конт.пл."
 
 #~ msgid "Set border width to 0 to use schematic's default symbol line width."
 #~ msgstr "Установите 0 для использования толщины линии по умолчанию."
@@ -65875,8 +65880,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
 #~ msgstr ""
 #~ "<b>Вывод-дубликат %s</b> %s с координатами <b>(%.3f, %.3f)</b>, "
-#~ "конфликтует с выводом %s%s, координаты <b>(%.3f, %.3f)</b> в доп."
-#~ "обозначении."
+#~ "конфликтует с выводом %s%s, координаты <b>(%.3f, %.3f)</b> в "
+#~ "доп.обозначении."
 
 #, c-format
 #~ msgid ""
@@ -65900,8 +65905,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
 #~ "converted."
 #~ msgstr ""
-#~ "<b>Вывод %s не по сетке</b> %s с координатами <b>(%.3s, %.3s)</b> в доп."
-#~ "обозначении части %c."
+#~ "<b>Вывод %s не по сетке</b> %s с координатами <b>(%.3s, %.3s)</b> в "
+#~ "доп.обозначении части %c."
 
 #~ msgid "Convert"
 #~ msgstr "Преобразовать"
@@ -66579,8 +66584,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A."
-#~ "enclosedByArea('Shield*')\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
+#~ "\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -66712,13 +66717,13 @@ msgstr "Не удалось создать путь пользовательск
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -66802,8 +66807,9 @@ msgstr "Не удалось создать путь пользовательск
 #~ "\n"
 #~ "### Documentation\n"
 #~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://docs."
-#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+#~ "For the full documentation see [https://docs.kicad.org](https://"
+#~ "docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
+#~ "pcbnew.html#custom_design_rules)."
 #~ msgstr ""
 #~ "### Определения верхнего уровня\n"
 #~ "\n"
@@ -66922,8 +66928,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A."
-#~ "enclosedByArea('Shield*')\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
+#~ "\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -66957,13 +66963,13 @@ msgstr "Не удалось создать путь пользовательск
 #~ "<br><br>\n"
 #~ "\n"
 #~ "    A.intersectsFrontCourtyard('<обозначения_посад.мест>')\n"
-#~ "Истина если любая часть `A` лежит в области установки указанных посад."
-#~ "мест. сверху.\n"
+#~ "Истина если любая часть `A` лежит в области установки указанных "
+#~ "посад.мест. сверху.\n"
 #~ "<br><br>\n"
 #~ "\n"
 #~ "    A.intersectsBackCourtyard('<обозначения_посад.мест>')\n"
-#~ "Истина если любая часть `A` лежит в области установки указанных посад."
-#~ "мест. снизу.\n"
+#~ "Истина если любая часть `A` лежит в области установки указанных "
+#~ "посад.мест. снизу.\n"
 #~ "<br><br>\n"
 #~ "\n"
 #~ "    A.intersectsArea('<имя_зоны>')\n"
@@ -67046,13 +67052,13 @@ msgstr "Не удалось создать путь пользовательск
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -68240,8 +68246,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A."
-#~ "enclosedByArea('Shield*')\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
+#~ "\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -68361,13 +68367,13 @@ msgstr "Не удалось создать путь пользовательск
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -68566,8 +68572,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A."
-#~ "enclosedByArea('Shield*')\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
+#~ "\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -68601,13 +68607,13 @@ msgstr "Не удалось создать путь пользовательск
 #~ "<br><br>\n"
 #~ "\n"
 #~ "    A.intersectsFrontCourtyard('<обозначения_посад.мест>')\n"
-#~ "Истина если любая часть `A` лежит в области установки указанных посад."
-#~ "мест. сверху.\n"
+#~ "Истина если любая часть `A` лежит в области установки указанных "
+#~ "посад.мест. сверху.\n"
 #~ "<br><br>\n"
 #~ "\n"
 #~ "    A.intersectsBackCourtyard('<обозначения_посад.мест>')\n"
-#~ "Истина если любая часть `A` лежит в области установки указанных посад."
-#~ "мест. снизу.\n"
+#~ "Истина если любая часть `A` лежит в области установки указанных "
+#~ "посад.мест. снизу.\n"
 #~ "<br><br>\n"
 #~ "\n"
 #~ "    A.intersectsArea('<имя_зоны>')\n"
@@ -68690,13 +68696,13 @@ msgstr "Не удалось создать путь пользовательск
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-#~ "Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
+#~ "B.Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -69075,8 +69081,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+#~ "pcb.xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -69264,8 +69270,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "\n"
 #~ "Для Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-#~ "xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+#~ "pcb.xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "На приведённых выше примерах предполагается что `xsltproc` установлен на "
@@ -72045,8 +72051,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "Microvias can only be placed between the outer layers (F.Cu/B.Cu) and the "
 #~ "ones directly adjacent to them."
 #~ msgstr ""
-#~ "Перех.микроотв. могут быть размещены только между внешними слоями (F.Cu/B."
-#~ "Cu) и теми, которые непосредственно прилегают к ним."
+#~ "Перех.микроотв. могут быть размещены только между внешними слоями (F.Cu/"
+#~ "B.Cu) и теми, которые непосредственно прилегают к ним."
 
 #, c-format
 #~ msgid "Page layout description file \"%s\" not found."
@@ -73291,11 +73297,11 @@ msgstr "Не удалось создать путь пользовательск
 #~ "<p>The directory <b>must</b> have a <b>.pretty</b> file extension because "
 #~ "the format of the save is pretty.</p>"
 #~ msgstr ""
-#~ "Установите это свойство для каталога, в котором должны сохраняться посад."
-#~ "места в формате \"pretty\", при внесении изменений в данную библиотеку. "
-#~ "Посад.места сохранённые в этот каталог, будет иметь приоритет над посад."
-#~ "местами с тем же именем из github репозитория. Эти сохранённые посад."
-#~ "места можно отправить специалисту по обслуживанию библиотек для "
+#~ "Установите это свойство для каталога, в котором должны сохраняться "
+#~ "посад.места в формате \"pretty\", при внесении изменений в данную "
+#~ "библиотеку. Посад.места сохранённые в этот каталог, будет иметь приоритет "
+#~ "над посад.местами с тем же именем из github репозитория. Эти сохранённые "
+#~ "посад.места можно отправить специалисту по обслуживанию библиотек для "
 #~ "обновления. <p>Каталог <b>должен</b> иметь расширение <b>.pretty</b>, так "
 #~ "как формат сохранения - pretty.</p>"
 
@@ -74118,8 +74124,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ "file"
 #~ msgstr ""
 #~ "Используйте этот атрибут для SMD компонентов.\n"
-#~ "Компоненты только с таким атрибутом попадут в файл списка позиций посад."
-#~ "мест"
+#~ "Компоненты только с таким атрибутом попадут в файл списка позиций "
+#~ "посад.мест"
 
 #~ msgid ""
 #~ "Use this attribute for \"virtual\" footprints drawn on board\n"
@@ -74134,8 +74140,8 @@ msgstr "Не удалось создать путь пользовательск
 
 #~ msgid "Include footprints with SMD pads even if not marked Surface Mount"
 #~ msgstr ""
-#~ "Включить посад.места с SMD конт.пл. даже если они не помечены как посад."
-#~ "места поверхностного монтажа"
+#~ "Включить посад.места с SMD конт.пл. даже если они не помечены как "
+#~ "посад.места поверхностного монтажа"
 
 #~ msgid "Error: the pad is not on a copper layer and has a hole"
 #~ msgstr "Ошибка: конт.пл. не на медном слое и содержит отв."
@@ -74954,13 +74960,13 @@ msgstr "Не удалось создать путь пользовательск
 #~ "new set of links between symbols and footprints, and then updates the "
 #~ "footprints accordingly."
 #~ msgstr ""
-#~ "Первый метод следует по существующим связям между компонентами и посад."
-#~ "местами, обновляя посад.места на основе изменений соответствующих "
+#~ "Первый метод следует по существующим связям между компонентами и "
+#~ "посад.местами, обновляя посад.места на основе изменений соответствующих "
 #~ "компонентов схемы.\n"
 #~ "\n"
-#~ "Второй метод использует обозначение для сопоставления компонента с посад."
-#~ "местом, создавая при этом новую связь, и затем выполняет соответствующие "
-#~ "обновления."
+#~ "Второй метод использует обозначение для сопоставления компонента с "
+#~ "посад.местом, создавая при этом новую связь, и затем выполняет "
+#~ "соответствующие обновления."
 
 #~ msgid "All supported library formats|"
 #~ msgstr "Все поддерживаемые форматы библиотек|"
@@ -75384,8 +75390,8 @@ msgstr "Не удалось создать путь пользовательск
 #~ msgstr ""
 #~ "\n"
 #~ "\n"
-#~ "Менеджер компонентов не поддерживает компоненты с незаданным поз."
-#~ "обозначением.\n"
+#~ "Менеджер компонентов не поддерживает компоненты с незаданным "
+#~ "поз.обозначением.\n"
 #~ "\n"
 #~ "Менеджер компонентов будет закрыт."
 
