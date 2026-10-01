@@ -3341,8 +3341,6 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     if( item->Type() != PCB_TRACE_T && item->Type() != PCB_ARC_T )
         return 0;
 
-    m_toolMgr->RunAction( ACTIONS::selectionClear );
-
     Activate();
 
     // Snapping uses ViewGetLOD(), which uses the layerVisibilityCache.  Make sure it's up-to-date.
@@ -3382,6 +3380,8 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
         if( dlg.ShowModal() == wxID_CANCEL )
             return 0;
     }
+
+    m_toolMgr->RunAction( ACTIONS::selectionClear );
 
     frame()->UndoRedoBlock( true );
     breakTrack();
