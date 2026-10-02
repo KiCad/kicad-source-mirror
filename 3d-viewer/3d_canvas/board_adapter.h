@@ -525,6 +525,7 @@ public:
     static KIGFX::COLOR4D                 g_DefaultSilkscreen;
     static KIGFX::COLOR4D                 g_DefaultSolderMask;
     static KIGFX::COLOR4D                 g_DefaultSolderPaste;
+    static KIGFX::COLOR4D                 g_DefaultAdhesive;
     static KIGFX::COLOR4D                 g_DefaultSurfaceFinish;
     static KIGFX::COLOR4D                 g_DefaultBoardBody;
     static KIGFX::COLOR4D                 g_DefaultComments;
@@ -542,13 +543,14 @@ public:
 
     SFVEC4F                 m_BgColorBot;           ///< background bottom color
     SFVEC4F                 m_BgColorTop;           ///< background top color
-    SFVEC4F                 m_BoardBodyColor;       ///< in realistic mode: FR4 board color
-    SFVEC4F                 m_SolderMaskColorBot;   ///< in realistic mode: solder mask color ( bot )
-    SFVEC4F                 m_SolderMaskColorTop;   ///< in realistic mode: solder mask color ( top )
-    SFVEC4F                 m_SolderPasteColor;     ///< in realistic mode: solder paste color
-    SFVEC4F                 m_SilkScreenColorBot;   ///< in realistic mode: SilkScreen color ( bot )
-    SFVEC4F                 m_SilkScreenColorTop;   ///< in realistic mode: SilkScreen color ( top )
-    SFVEC4F                 m_CopperColor;          ///< in realistic mode: copper color
+    SFVEC4F                 m_BoardBodyColor;
+    SFVEC4F                 m_SolderMaskColorBot;
+    SFVEC4F                 m_SolderMaskColorTop;
+    SFVEC4F                 m_SolderPasteColor;
+    SFVEC4F                 m_AdhesiveColor;
+    SFVEC4F                 m_SilkScreenColorBot;
+    SFVEC4F                 m_SilkScreenColorTop;
+    SFVEC4F                 m_CopperColor;
     SFVEC4F                 m_UserDrawingsColor;
     SFVEC4F                 m_UserCommentsColor;
     SFVEC4F                 m_ECO1Color;

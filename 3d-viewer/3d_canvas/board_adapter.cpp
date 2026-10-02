@@ -64,6 +64,7 @@ KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultBackgroundBot;
 KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultSilkscreen;
 KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultSolderMask;
 KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultSolderPaste;
+KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultAdhesive;
 KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultSurfaceFinish;
 KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultBoardBody;
 KIGFX::COLOR4D   BOARD_ADAPTER::g_DefaultComments;
@@ -209,19 +210,20 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
         ADD_COLOR( g_BoardColors, 146,  99,  47, 0.83, wxT( "Brown 3" ) );
         ADD_COLOR( g_BoardColors, 213, 213, 213,  1.0, wxT( "Aluminum" ) );
 
-        g_DefaultBackgroundTop = COLOR4D(  0.80, 0.80, 0.90, 1.0 );
-        g_DefaultBackgroundBot = COLOR4D(  0.40, 0.40, 0.50, 1.0 );
+        g_DefaultBackgroundTop =  COLOR4D(  0.80, 0.80, 0.90, 1.0 );
+        g_DefaultBackgroundBot =  COLOR4D(  0.40, 0.40, 0.50, 1.0 );
 
-        g_DefaultSilkscreen =    COLOR4D( 0.94, 0.94, 0.94,  1.0 );
-        g_DefaultSolderMask =    COLOR4D( 0.08, 0.20, 0.14, 0.83 );
-        g_DefaultSolderPaste =   COLOR4D( 0.50, 0.50, 0.50,  1.0 );
-        g_DefaultSurfaceFinish = COLOR4D( 0.75, 0.61, 0.23,  1.0 );
-        g_DefaultBoardBody =     COLOR4D( 0.43, 0.45, 0.30, 0.90 );
+        g_DefaultSilkscreen =     COLOR4D( 0.94, 0.94, 0.94,  1.0 );
+        g_DefaultSolderMask =     COLOR4D( 0.08, 0.20, 0.14, 0.83 );
+        g_DefaultSolderPaste =    COLOR4D( 0.50, 0.50, 0.50,  1.0 );
+        g_DefaultAdhesive =       COLOR4D( 0.70, 0.11, 0.17,  1.0 );
+        g_DefaultSurfaceFinish =  COLOR4D( 0.75, 0.61, 0.23,  1.0 );
+        g_DefaultBoardBody =      COLOR4D( 0.43, 0.45, 0.30, 0.90 );
 
-        g_DefaultComments =      COLOR4D( 0.85, 0.85, 0.85,  1.0 );
-        g_DefaultECOs =          COLOR4D( 0.70, 0.10, 0.10,  1.0 );
+        g_DefaultComments =       COLOR4D( 0.85, 0.85, 0.85,  1.0 );
+        g_DefaultECOs =           COLOR4D( 0.70, 0.10, 0.10,  1.0 );
 
-        g_DefaultFabColor =      COLOR4D( 0.60, 0.60, 0.60, 1.0 );
+        g_DefaultFabColor =       COLOR4D( 0.60, 0.60, 0.60, 1.0 );
         g_DefaultCourtyardColor = COLOR4D( 1.000, 0.149, 0.886, 1.0 );
 
         g_ColorsLoaded = true;
@@ -606,6 +608,7 @@ void BOARD_ADAPTER::CreateLayers( std::shared_ptr<REPORTER> aStatusReporter, std
     m_BgColorTop         = to_SFVEC4F( colors[ LAYER_3D_BACKGROUND_TOP ] );
     m_BgColorBot         = to_SFVEC4F( colors[ LAYER_3D_BACKGROUND_BOTTOM ] );
     m_SolderPasteColor   = to_SFVEC4F( colors[ LAYER_3D_SOLDERPASTE ] );
+    m_AdhesiveColor      = to_SFVEC4F( colors[ LAYER_3D_ADHESIVE ] );
     m_SilkScreenColorBot = to_SFVEC4F( colors[ LAYER_3D_SILKSCREEN_BOTTOM ] );
     m_SilkScreenColorTop = to_SFVEC4F( colors[ LAYER_3D_SILKSCREEN_TOP ] );
     m_SolderMaskColorBot = to_SFVEC4F( colors[ LAYER_3D_SOLDERMASK_BOTTOM ] );
@@ -640,6 +643,7 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetDefaultColors() const
     colors[ LAYER_3D_SOLDERMASK_TOP ]    = BOARD_ADAPTER::g_DefaultSolderMask;
     colors[ LAYER_3D_SOLDERMASK_BOTTOM ] = BOARD_ADAPTER::g_DefaultSolderMask;
     colors[ LAYER_3D_SOLDERPASTE ]       = BOARD_ADAPTER::g_DefaultSolderPaste;
+    colors[ LAYER_3D_ADHESIVE ]          = BOARD_ADAPTER::g_DefaultAdhesive;
     colors[ LAYER_3D_USER_DRAWINGS ]     = BOARD_ADAPTER::g_DefaultComments;
     colors[ LAYER_3D_USER_COMMENTS ]     = BOARD_ADAPTER::g_DefaultComments;
     colors[ LAYER_3D_USER_ECO1 ]         = BOARD_ADAPTER::g_DefaultECOs;

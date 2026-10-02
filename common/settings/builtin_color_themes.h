@@ -232,7 +232,7 @@ static const std::map<int, COLOR4D> s_defaultTheme =
             { Eco2_User,                    CSS_COLOR( 216, 200, 82,  1 ) },
             { Edge_Cuts,                    CSS_COLOR( 208, 210, 205, 1 ) },
             { Margin,                       CSS_COLOR( 255, 38,  226, 1 ) },
-            { B_CrtYd,                      CSS_COLOR( 38,  233,  255, 1 ) },
+            { B_CrtYd,                      CSS_COLOR( 38,  233, 255, 1 ) },
             { F_CrtYd,                      CSS_COLOR( 255, 38,  226, 1 ) },
             { B_Fab,                        CSS_COLOR( 88,  93,  132, 1 ) },
             { F_Fab,                        CSS_COLOR( 175, 175, 175, 1 ) },
@@ -290,7 +290,16 @@ static const std::map<int, COLOR4D> s_defaultTheme =
             { LAYER_3D_SILKSCREEN_TOP,      COLOR4D( 0.9, 0.9, 0.9, 1.0 ) },
             { LAYER_3D_SOLDERMASK_BOTTOM,   COLOR4D( 0.08, 0.2, 0.14, 0.83 ) },
             { LAYER_3D_SOLDERMASK_TOP,      COLOR4D( 0.08, 0.2, 0.14, 0.83 ) },
-            { LAYER_3D_SOLDERPASTE,         COLOR4D( 0.5, 0.5, 0.5, 1.0 ) }
+            { LAYER_3D_SOLDERPASTE,         COLOR4D( 0.5, 0.5, 0.5, 1.0 ) },
+            { LAYER_3D_ADHESIVE,            CSS_COLOR( 180, 20,  30,  1 ) },
+            { LAYER_3D_USER_COMMENTS,       CSS_COLOR( 89,  148, 220, 1 ) },
+            { LAYER_3D_USER_DRAWINGS,       CSS_COLOR( 194, 194, 194, 1 ) },
+            { LAYER_3D_USER_ECO1,           CSS_COLOR( 180, 219, 210, 1 ) },
+            { LAYER_3D_USER_ECO2,           CSS_COLOR( 216, 200, 82,  1 ) },
+            { LAYER_3D_F_FAB,               CSS_COLOR( 175, 175, 175, 1 ) },
+            { LAYER_3D_B_FAB,               CSS_COLOR( 88,  93,  132, 1 ) },
+            { LAYER_3D_F_COURTYARD,         CSS_COLOR( 255, 38,  226, 1 ) },
+            { LAYER_3D_B_COURTYARD,         CSS_COLOR( 38,  233, 255, 1 ) }
         };
 
 // These are looping colors used higher-order copper layers
@@ -450,7 +459,7 @@ static const std::map<int, COLOR4D> s_classicTheme =
             { LAYER_DRC_ERROR,              COLOR4D( PURERED ).WithAlpha( 0.8 ) },
             { LAYER_DRC_WARNING,            COLOR4D( PUREGREEN ).WithAlpha( 0.8 ) },
             { LAYER_DRC_EXCLUSION,          COLOR4D( WHITE ) },
-            { LAYER_DRC_HIGHLIGHTED,         COLOR4D( PUREMAGENTA ) },
+            { LAYER_DRC_HIGHLIGHTED,        COLOR4D( PUREMAGENTA ) },
             { LAYER_GRID,                   COLOR4D( DARKGRAY ) },
             { LAYER_GRID_AXES,              COLOR4D( BLUE ) },
             { LAYER_PAD_PLATEDHOLES,        COLOR4D( YELLOW ) },
@@ -573,7 +582,16 @@ static const std::map<int, COLOR4D> s_classicTheme =
             { LAYER_3D_SILKSCREEN_TOP,      COLOR4D( 0.9, 0.9, 0.9, 1.0 ) },
             { LAYER_3D_SOLDERMASK_BOTTOM,   COLOR4D( 0.08, 0.2, 0.14, 0.83 ) },
             { LAYER_3D_SOLDERMASK_TOP,      COLOR4D( 0.08, 0.2, 0.14, 0.83 ) },
-            { LAYER_3D_SOLDERPASTE,         COLOR4D( 0.5, 0.5, 0.5, 1.0 ) }
+            { LAYER_3D_SOLDERPASTE,         COLOR4D( 0.5, 0.5, 0.5, 1.0 ) },
+            { LAYER_3D_ADHESIVE,            COLOR4D( RED ) },
+            { LAYER_3D_USER_COMMENTS,       COLOR4D( BLUE ) },
+            { LAYER_3D_USER_DRAWINGS,       COLOR4D( LIGHTGRAY ) },
+            { LAYER_3D_USER_ECO1,           COLOR4D( GREEN ) },
+            { LAYER_3D_USER_ECO2,           COLOR4D( YELLOW ) },
+            { LAYER_3D_F_FAB,               COLOR4D( DARKGRAY ) },
+            { LAYER_3D_B_FAB,               COLOR4D( BLUE ) },
+            { LAYER_3D_F_COURTYARD,         COLOR4D( LIGHTGRAY ) },
+            { LAYER_3D_B_COURTYARD,         COLOR4D( DARKGRAY ) }
         };
 
 #endif

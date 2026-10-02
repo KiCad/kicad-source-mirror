@@ -68,6 +68,7 @@ LAYER_PRESET_3D::LAYER_PRESET_3D( const wxString& aName ) :
     colors[ LAYER_3D_SOLDERMASK_TOP ]    = BOARD_ADAPTER::g_DefaultSolderMask;
     colors[ LAYER_3D_SOLDERMASK_BOTTOM ] = BOARD_ADAPTER::g_DefaultSolderMask;
     colors[ LAYER_3D_SOLDERPASTE ]       = BOARD_ADAPTER::g_DefaultSolderPaste;
+    colors[ LAYER_3D_ADHESIVE ]          = BOARD_ADAPTER::g_DefaultAdhesive;
     colors[ LAYER_3D_USER_DRAWINGS ]     = BOARD_ADAPTER::g_DefaultComments;
     colors[ LAYER_3D_USER_COMMENTS ]     = BOARD_ADAPTER::g_DefaultComments;
     colors[ LAYER_3D_USER_ECO1 ]         = BOARD_ADAPTER::g_DefaultECOs;
