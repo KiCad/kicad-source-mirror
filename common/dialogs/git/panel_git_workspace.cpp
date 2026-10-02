@@ -24,8 +24,10 @@
 #include <dialogs/git/git_status_entries.h>
 #include <dialogs/git/git_ui_utils.h>
 #include <dialogs/git/panel_mdw_versions.h>
+#include <dialogs/git/workspace_detail.h>
 #include <dialogs/git/workspace_item_files.h>
 #include <dialogs/git/workspace_search_query.h>
+#include <dialogs/git/workspace_tree.h>
 #include <confirm.h>
 #include <kidialog.h>
 #include <eda_base_frame.h>
@@ -45,6 +47,7 @@
 #include <project/project_local_settings.h>
 #include <settings/settings_manager.h>
 #include <widgets/mdw_editing.h>
+#include <widgets/wx_dataviewctrl.h>
 
 #include <wx/app.h>
 #include <wx/event.h>
@@ -67,8 +70,20 @@ struct LISTING
 {
     MDW_RESULT                   status = MDW_RESULT::Ok();
     std::vector<MDW_ITEM_INFO>   items;
+    std::vector<MDW_FOLDER>      folders;
     std::map<wxString, wxString> folderNames;
 };
+
+
+size_t countItems( const WORKSPACE_TREE_NODE& aNode )
+{
+    size_t count = aNode.kind == WORKSPACE_TREE_NODE::KIND::ITEM ? 1 : 0;
+
+    for( const WORKSPACE_TREE_NODE& child : aNode.children )
+        count += countItems( child );
+
+    return count;
+}
 
 
 struct CHECKOUT
@@ -96,10 +111,24 @@ PANEL_GIT_WORKSPACE::PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG
     m_shownBinding = bindingKey();
     updateSearchHint();
 
-    m_itemsList->AppendColumn( _( "Name" ), wxLIST_FORMAT_LEFT, FromDIP( 200 ) );
-    m_itemsList->AppendColumn( _( "Editing" ), wxLIST_FORMAT_LEFT, FromDIP( 100 ) );
-    m_itemsList->AppendColumn( _( "Last Change" ), wxLIST_FORMAT_LEFT, FromDIP( 110 ) );
-    m_itemsList->AppendColumn( _( "Folder" ), wxLIST_FORMAT_LEFT, FromDIP( 140 ) );
+    m_model = new WORKSPACE_TREE_MODEL();
+    m_model->SetCellText(
+            [this]( const WORKSPACE_TREE_NODE& aNode, unsigned aColumn )
+            {
+                return cellText( aNode, aColumn );
+            } );
+    m_itemsTree->AssociateModel( m_model.get() );
+
+    m_itemsTree->AppendTextColumn( _( "Name" ), WORKSPACE_TREE_MODEL::COL_NAME, wxDATAVIEW_CELL_INERT, FromDIP( 200 ),
+                                   wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE );
+    m_stateColumn = m_itemsTree->AppendTextColumn( _( "State" ), WORKSPACE_TREE_MODEL::COL_STATE, wxDATAVIEW_CELL_INERT,
+                                                   FromDIP( 130 ), wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE );
+    m_editingColumn =
+            m_itemsTree->AppendTextColumn( _( "Editing" ), WORKSPACE_TREE_MODEL::COL_EDITING, wxDATAVIEW_CELL_INERT,
+                                           FromDIP( 100 ), wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE );
+    m_itemsTree->AppendTextColumn( _( "Last Change" ), WORKSPACE_TREE_MODEL::COL_LAST_CHANGE, wxDATAVIEW_CELL_INERT,
+                                   FromDIP( 110 ), wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE );
+    showColumns();
 
     m_editingButton->SetToolTip( _( "Signals editing intent to teammates; others can still edit." ) );
 
@@ -181,10 +210,14 @@ PANEL_GIT_WORKSPACE::PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG
                     return;
 
                 if( aEvent.type == MDW_EVENT_TYPE::ITEM_LOCKED || aEvent.type == MDW_EVENT_TYPE::ITEM_UNLOCKED
-                    || aEvent.type == MDW_EVENT_TYPE::LOCKS_CHANGED
-                    || aEvent.type == MDW_EVENT_TYPE::REVISION_RELEASED )
+                    || aEvent.type == MDW_EVENT_TYPE::LOCKS_CHANGED )
                 {
                     onLockChanged();
+                }
+                else if( aEvent.type == MDW_EVENT_TYPE::REVISION_RELEASED )
+                {
+                    // The State column reads the listing, so a release needs it read again
+                    Populate();
                 }
                 else if( aEvent.type == MDW_EVENT_TYPE::CAPABILITIES_CHANGED )
                 {
@@ -201,16 +234,14 @@ PANEL_GIT_WORKSPACE::PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG
                                m_query->Retry();
                        } );
 
-    m_itemsList->Bind( wxEVT_LIST_ITEM_SELECTED,
-                       [this]( wxListEvent& aEvent )
+    m_itemsTree->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED,
+                       [this]( wxDataViewEvent& )
                        {
-                           showDetail( m_items[m_shown[aEvent.GetIndex()]] );
-                       } );
+                           const WORKSPACE_TREE_NODE* node = m_model->NodeOf( m_itemsTree->GetSelection() );
 
-    m_itemsList->Bind( wxEVT_LIST_ITEM_DESELECTED,
-                       [this]( wxListEvent& )
-                       {
-                           if( m_itemsList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED ) == -1 )
+                           if( node && node->kind == WORKSPACE_TREE_NODE::KIND::ITEM && node->item < m_items.size() )
+                               showDetail( m_items[node->item] );
+                           else
                                hideDetail();
                        } );
 
@@ -228,7 +259,11 @@ PANEL_GIT_WORKSPACE::PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG
 }
 
 
-PANEL_GIT_WORKSPACE::~PANEL_GIT_WORKSPACE() = default;
+PANEL_GIT_WORKSPACE::~PANEL_GIT_WORKSPACE()
+{
+    // The control outlives this panel's members during teardown, and its cells call back into them
+    m_itemsTree->AssociateModel( nullptr );
+}
 
 
 wxString PANEL_GIT_WORKSPACE::bindingKey() const
@@ -256,9 +291,14 @@ bool PANEL_GIT_WORKSPACE::followBinding()
     m_items.clear();
     m_pendingSelect.clear();
     m_lastGood = wxDateTime();
+    m_expanded.reset();
+
+    // An old tree left in the model would be snapshotted and reselected as if it were the new workspace's
+    m_model->Reset( WORKSPACE_TREE_NODE() );
+
     forgetListing();
     hideDetail();
-    fillList();
+    fillTree();
 
     if( m_search->GetValue().IsEmpty() )
         Populate();
@@ -285,13 +325,19 @@ void PANEL_GIT_WORKSPACE::onSearch()
 
             m_items = sameSession ? m_listing : std::vector<MDW_ITEM_INFO>();
             m_lastGood = sameSession ? m_listingTime : wxDateTime();
+
+            if( !sameSession )
+            {
+                m_folders.clear();
+                m_folderNames.clear();
+            }
         }
 
         m_queryStatus = WORKSPACE_SEARCH_QUERY::STATUS();
         m_queryHasMore = false;
         applyQueryStatus();
 
-        fillList();
+        fillTree();
 
         if( searched )
             Populate();
@@ -311,7 +357,7 @@ void PANEL_GIT_WORKSPACE::onSearch()
         m_items.clear();
         m_queryStatus = WORKSPACE_SEARCH_QUERY::STATUS();
         m_queryHasMore = false;
-        fillList();
+        fillTree();
         applyQueryStatus();
         replaced = true;
     }
@@ -331,7 +377,7 @@ void PANEL_GIT_WORKSPACE::onSearch()
         if( replaced )
             Populate();
         else
-            fillList();
+            fillTree();
 
         return;
     }
@@ -356,15 +402,10 @@ void PANEL_GIT_WORKSPACE::onSearch()
                         if( aStatus.result.IsOk() && !aStatus.searching )
                             m_lastGood = wxDateTime::Now();
 
-                        if( aFirstPage )
-                        {
-                            fillList();
-                        }
-                        else if( !aRows.empty() )
+                        if( aFirstPage || !aRows.empty() )
                         {
                             // Reselecting the open row would reload its detail and drop unsaved edits
-                            wxEventBlocker blocker( m_itemsList );
-                            fillList();
+                            fillTree( aFirstPage );
                         }
                         else
                         {
@@ -400,17 +441,7 @@ void PANEL_GIT_WORKSPACE::applyQueryStatus()
 
     // An update without rows still has to clear the grey a stale one left
     if( m_query )
-        greyRows( m_queryStatus.stale );
-}
-
-
-void PANEL_GIT_WORKSPACE::greyRows( bool aGrey )
-{
-    const wxColour colour = aGrey ? wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT )
-                                  : m_itemsList->GetTextColour();
-
-    for( long row = 0; row < m_itemsList->GetItemCount(); ++row )
-        m_itemsList->SetItemTextColour( row, colour );
+        m_model->SetGreyed( m_queryStatus.stale );
 }
 
 
@@ -438,7 +469,7 @@ void PANEL_GIT_WORKSPACE::showOffline()
     ++m_listFetch;
     m_listStale = true;
     setItemCount( offline.text );
-    greyRows( true );
+    m_model->SetGreyed( true );
 }
 
 
@@ -492,7 +523,7 @@ void PANEL_GIT_WORKSPACE::Populate()
         m_lastGood = wxDateTime();
         m_items.clear();
         forgetListing();
-        fillList();
+        fillTree();
         setItemCount( _( "This project is not connected to a design workspace." ) );
         return;
     }
@@ -540,10 +571,13 @@ void PANEL_GIT_WORKSPACE::Populate()
 
                 std::deque<wxString> folders;
 
-                for( const MDW_FOLDER& folder : roots )
+                // The walk knows each folder's parent, whether or not the backend filled it in
+                for( MDW_FOLDER& folder : roots )
                 {
+                    folder.parent_folder_id.clear();
                     listing.folderNames[folder.folder_id] = WorkspaceFolderName( wxEmptyString, folder );
                     folders.push_back( folder.folder_id );
+                    listing.folders.push_back( std::move( folder ) );
                 }
 
                 while( listing.status.IsOk() && !folders.empty() )
@@ -570,11 +604,13 @@ void PANEL_GIT_WORKSPACE::Populate()
                             listing.items.push_back( std::move( item ) );
                     }
 
-                    for( const MDW_FOLDER& child : children )
+                    for( MDW_FOLDER& child : children )
                     {
+                        child.parent_folder_id = folder;
                         listing.folderNames[child.folder_id] =
                                 WorkspaceFolderName( listing.folderNames[folder], child );
                         folders.push_back( child.folder_id );
+                        listing.folders.push_back( std::move( child ) );
                     }
                 }
 
@@ -606,7 +642,7 @@ void PANEL_GIT_WORKSPACE::Populate()
                     m_listStale = true;
                     m_items.clear();
                     forgetListing();
-                    fillList();
+                    fillTree();
                     setItemCount( MdwErrorMessage( aListing.status ) );
                     m_itemCount->SetToolTip( MdwErrorText( aListing.status ) );
                     return;
@@ -617,10 +653,11 @@ void PANEL_GIT_WORKSPACE::Populate()
                 m_listingTime = m_lastGood;
                 m_listingSession = weak;
                 m_listing = aListing.items;
+                m_folders = std::move( aListing.folders );
                 m_folderNames = std::move( aListing.folderNames );
                 m_items = std::move( aListing.items );
                 m_versions->RefreshChanges();
-                fillList();
+                fillTree();
             } );
 }
 
@@ -641,68 +678,162 @@ wxString PANEL_GIT_WORKSPACE::folderText( const MDW_ITEM_INFO& aItem ) const
 void PANEL_GIT_WORKSPACE::forgetListing()
 {
     m_listing.clear();
+    m_folders.clear();
+    m_folderNames.clear();
     m_listingTime = wxDateTime();
     m_listingSession.reset();
 }
 
 
-void PANEL_GIT_WORKSPACE::fillList()
+void PANEL_GIT_WORKSPACE::fillTree( bool aRefreshDetail )
 {
-    // A provider already matched its rows, possibly on fields the list does not show
-    wxString search = m_query ? wxString() : m_search->GetValue().Lower();
-    wxString keep = m_pendingSelect.IsEmpty() ? m_selected : m_pendingSelect;
+    // A provider already matched its rows, possibly on fields the tree does not show
+    wxString                          filter = m_query ? wxString() : m_search->GetValue();
+    std::optional<WORKSPACE_TREE_KEY> keep;
 
-    m_itemsList->DeleteAllItems();
-    m_shown.clear();
+    if( !m_pendingSelect.IsEmpty() )
+        keep.emplace( WORKSPACE_TREE_NODE::KIND::ITEM, m_pendingSelect );
+    else if( const WORKSPACE_TREE_NODE* shown = m_model->NodeOf( m_itemsTree->GetSelection() ) )
+        keep.emplace( shown->kind, shown->key );
 
-    for( size_t ii = 0; ii < m_items.size(); ++ii )
+    // Only the full tree records what is open, so a search's expanded matches do not stick
+    if( !m_treeFiltered && !m_model->Root().children.empty() )
     {
-        const MDW_ITEM_INFO& item = m_items[ii];
+        m_expanded.emplace();
+        rememberExpanded( m_model->Root() );
+    }
 
-        if( !search.IsEmpty() && !item.display_name.Lower().Contains( search )
-            && !folderText( item ).Lower().Contains( search ) )
+    showColumns();
+
+    const std::vector<MDW_FOLDER> noFolders;
+    const WORKSPACE_TREE_NODE*    selected = nullptr;
+
+    {
+        // The rebuild drops and restores the selection, which is no change to the detail
+        wxEventBlocker blocker( m_itemsTree, wxEVT_DATAVIEW_SELECTION_CHANGED );
+
+        // Rows the source searched for have no folders of their own, so they stand flat at the root
+        m_model->Reset( BuildWorkspaceTree( m_query ? noFolders : m_folders, m_items, {}, filter ) );
+        m_treeFiltered = m_query || !filter.IsEmpty();
+
+        if( m_treeFiltered )
         {
-            continue;
+            m_itemsTree->ExpandAll();
+        }
+        else if( m_expanded )
+        {
+            restoreExpanded( m_model->Root() );
+        }
+        else
+        {
+            // Opened for the first time, a project kept wholly in folders would show only their names
+            for( const WORKSPACE_TREE_NODE& child : m_model->Root().children )
+                m_itemsTree->Expand( m_model->ItemOf( child ) );
         }
 
-        long row = m_itemsList->InsertItem( m_itemsList->GetItemCount(), item.display_name );
+        std::vector<const WORKSPACE_TREE_NODE*> path;
 
-        m_itemsList->SetItem( row, 1, editingText( item.item_id ) );
-        m_itemsList->SetItem( row, 2, item.modified.IsValid() ? item.modified.FormatDate() : wxString() );
-        m_itemsList->SetItem( row, 3, folderText( item ) );
-        m_shown.push_back( ii );
+        if( keep )
+            path = WorkspaceTreePath( m_model->Root(), *keep );
 
-        if( item.item_id == keep )
+        if( !path.empty() )
         {
+            selected = path.back();
+            path.pop_back();
+
+            for( const WORKSPACE_TREE_NODE* ancestor : path )
+                m_itemsTree->Expand( m_model->ItemOf( *ancestor ) );
+
+            wxDataViewItem item = m_model->ItemOf( *selected );
+
             m_pendingSelect.clear();
-            m_itemsList->SetItemState( row, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
-            m_itemsList->EnsureVisible( row );
+            m_itemsTree->Select( item );
+            EnsureVisibleIfEnabled( m_itemsTree, item );
         }
     }
 
-    // Folder takes room only once an item sits in one
-    bool inFolder = std::any_of( m_items.begin(), m_items.end(),
-                                 []( const MDW_ITEM_INFO& aItem )
-                                 {
-                                     return !aItem.folder_id.IsEmpty();
-                                 } );
-
-    if( !inFolder )
-        m_itemsList->SetColumnWidth( 3, 0 );
-    else if( m_itemsList->GetColumnWidth( 3 ) == 0 )
-        m_itemsList->SetColumnWidth( 3, FromDIP( 140 ) );
+    size_t count = countItems( m_model->Root() );
 
     // A listing that failed or went offline keeps its line, and its rows stay grey
     if( m_query || !m_listStale )
-        setItemCount( wxString::Format( wxPLURAL( "%zu file", "%zu files", m_shown.size() ), m_shown.size() ) );
+        setItemCount( wxString::Format( wxPLURAL( "%zu file", "%zu files", count ), count ) );
 
     if( m_query )
         applyQueryStatus();
     else
-        greyRows( m_listStale );
+        m_model->SetGreyed( m_listStale );
 
-    if( m_itemsList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED ) == -1 )
+    if( !selected || selected->kind != WORKSPACE_TREE_NODE::KIND::ITEM || selected->item >= m_items.size() )
         hideDetail();
+    else if( aRefreshDetail )
+        showDetail( m_items[selected->item] );
+}
+
+
+void PANEL_GIT_WORKSPACE::rememberExpanded( const WORKSPACE_TREE_NODE& aNode )
+{
+    // A folder inside a closed one is not shown open, so the walk stops at the closed one
+    for( const WORKSPACE_TREE_NODE& child : aNode.children )
+    {
+        if( !child.children.empty() && m_itemsTree->IsExpanded( m_model->ItemOf( child ) ) )
+        {
+            m_expanded->emplace( child.kind, child.key );
+            rememberExpanded( child );
+        }
+    }
+}
+
+
+void PANEL_GIT_WORKSPACE::restoreExpanded( const WORKSPACE_TREE_NODE& aNode )
+{
+    for( const WORKSPACE_TREE_NODE& child : aNode.children )
+    {
+        if( !child.children.empty() && m_expanded->count( { child.kind, child.key } ) )
+        {
+            m_itemsTree->Expand( m_model->ItemOf( child ) );
+            restoreExpanded( child );
+        }
+    }
+}
+
+
+void PANEL_GIT_WORKSPACE::showColumns()
+{
+    std::shared_ptr<MDW_SOURCE> source = MDW_CLIENT::Get().ProjectSource();
+
+    m_caps = source ? source->Capabilities() : MDW_CAPABILITIES();
+    m_stateColumn->SetHidden( !m_caps.Has( MDW_CAPABILITY_GROUP::LIFECYCLE ) );
+    m_editingColumn->SetHidden( !m_caps.Has( MDW_CAPABILITY_GROUP::LOCKING ) );
+}
+
+
+wxString PANEL_GIT_WORKSPACE::cellText( const WORKSPACE_TREE_NODE& aNode, unsigned aColumn ) const
+{
+    // m_items can change just ahead of the rebuild that drops this node
+    if( aNode.kind != WORKSPACE_TREE_NODE::KIND::ITEM || aNode.item >= m_items.size() )
+        return aColumn == WORKSPACE_TREE_MODEL::COL_NAME ? aNode.name : wxString();
+
+    const MDW_ITEM_INFO& item = m_items[aNode.item];
+
+    switch( aColumn )
+    {
+    case WORKSPACE_TREE_MODEL::COL_NAME:
+    {
+        // A row outside the folder tree would otherwise look the same as its namesakes elsewhere
+        bool     outside = m_query || ( !item.folder_id.IsEmpty() && !m_folderNames.count( item.folder_id ) );
+        wxString folder = outside ? folderText( item ) : wxString();
+
+        return folder.IsEmpty() ? aNode.name : aNode.name + wxS( "  (" ) + folder + wxS( ")" );
+    }
+
+    case WORKSPACE_TREE_MODEL::COL_STATE: return WorkspaceStateCell( m_caps, item.state, item.revision_label );
+    case WORKSPACE_TREE_MODEL::COL_EDITING:
+        // A team library's locking shows the column, which says nothing of a design source without it
+        return m_caps.Has( MDW_CAPABILITY_GROUP::LOCKING ) ? editingText( item.item_id ) : wxString();
+    case WORKSPACE_TREE_MODEL::COL_LAST_CHANGE:
+        return item.modified.IsValid() ? item.modified.FormatDate() : wxString();
+    default: return wxString();
+    }
 }
 
 
@@ -805,9 +936,7 @@ void PANEL_GIT_WORKSPACE::showLock()
 
 void PANEL_GIT_WORKSPACE::onLockChanged()
 {
-    for( size_t row = 0; row < m_shown.size(); ++row )
-        m_itemsList->SetItem( static_cast<long>( row ), 1, editingText( m_items[m_shown[row]].item_id ) );
-
+    m_model->RefreshCells();
     showLock();
 }
 
@@ -834,6 +963,9 @@ unsigned PANEL_GIT_WORKSPACE::detailGates() const
 
 void PANEL_GIT_WORKSPACE::onCapabilitiesChanged()
 {
+    showColumns();
+    m_model->RefreshCells();
+
     // Both the backend and the re-read announce a change
     if( m_selected.IsEmpty() || detailGates() == m_detailGates )
         return;
@@ -873,7 +1005,7 @@ void PANEL_GIT_WORKSPACE::onEditing()
                    wxEmptyString,
                    [this]()
                    {
-                       fillList();
+                       fillTree();
                    } );
 }
 

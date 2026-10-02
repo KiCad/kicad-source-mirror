@@ -23,6 +23,9 @@
 #include <dialogs/git/panel_git_workspace_base.h>
 #include <mdw/client/mdw_item.h>
 #include <dialogs/git/workspace_search_query.h>
+#include <dialogs/git/workspace_tree_model.h>
+#include <mdw/client/mdw_capabilities.h>
+#include <mdw/client/mdw_navigation.h>
 #include <mdw/client/mdw_subscription.h>
 
 #include <wx/datetime.h>
@@ -30,6 +33,8 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <optional>
+#include <set>
 #include <vector>
 
 class EDA_BASE_FRAME;
@@ -49,20 +54,32 @@ public:
     PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG* aDialog, EDA_BASE_FRAME* aFrame );
     ~PANEL_GIT_WORKSPACE();
 
-    /// Read the workspace's files and claims on the session's worker, then fill the list.
+    /// Read the workspace's folders, files and claims on the session's worker, then fill the tree.
     void Populate();
 
-    /// Select aItemId once the list holds it, now or after the next Populate().
+    /// Select and reveal aItemId once the tree holds it, now or after the next Populate().
     void SelectItem( const wxString& aItemId );
 
 private:
     std::shared_ptr<MDW_SESSION> session() const;
 
-    /// The folder column text for aItem.
+    /// The folder path shown for aItem.
     wxString folderText( const MDW_ITEM_INFO& aItem ) const;
 
-    /// Fill the list from m_items, keeping the rows whose name or folder matches the search.
-    void fillList();
+    /**
+     * Rebuild the tree from m_folders and m_items, keeping the rows whose name or folder matches the search, the
+     * expanded folders and the selection. aRefreshDetail false leaves the detail of a still selected item alone.
+     */
+    void fillTree( bool aRefreshDetail = true );
+
+    /// The text of aNode's cell in aColumn, a WORKSPACE_TREE_MODEL::COLUMN.
+    wxString cellText( const WORKSPACE_TREE_NODE& aNode, unsigned aColumn ) const;
+
+    /// Show the State and Editing columns only when the bound backend offers lifecycle and locking.
+    void showColumns();
+
+    void rememberExpanded( const WORKSPACE_TREE_NODE& aNode );
+    void restoreExpanded( const WORKSPACE_TREE_NODE& aNode );
 
     wxString bindingKey() const;
 
@@ -76,7 +93,7 @@ private:
     /// Ask the source's search, when it offers one, or filter the listed rows.
     void onSearch();
 
-    /// Show the provider's last status, its links and its stale greying over the listed rows.
+    /// Show the provider's last status, its links and its stale greying over the shown rows.
     void applyQueryStatus();
 
     /// True when a reconnect has put a new source in place of the one m_query was made for.
@@ -87,8 +104,6 @@ private:
 
     /// Grey the shown rows and note when they were last good, for a session that went offline.
     void showOffline();
-
-    void greyRows( bool aGrey );
 
     /// Name the bound source in the empty search box when it searches on the server.
     void updateSearchHint();
@@ -132,7 +147,7 @@ private:
     GIT_ADVANCED_DIALOG*         m_dialog;
     EDA_BASE_FRAME*              m_frame;
     std::vector<MDW_ITEM_INFO>   m_items;
-    std::vector<size_t>          m_shown;             ///< m_items index of each list row
+    std::vector<MDW_FOLDER>      m_folders;           ///< Every folder of the last listing
     wxString                     m_selected;          ///< Item id in the detail pane
     MDW_ITEM_INFO                m_selectedItem;      ///< The item in the detail pane, as last listed
     wxString                     m_pendingSelect;     ///< SelectItem() target not yet listed
@@ -155,6 +170,13 @@ private:
     bool                       m_queryHasMore = false;
     std::weak_ptr<MDW_SOURCE>  m_querySource;
     int                        m_sashPos = 0;
+
+    wxObjectDataPtr<WORKSPACE_TREE_MODEL> m_model;
+    wxDataViewColumn*                     m_stateColumn = nullptr;
+    wxDataViewColumn*                     m_editingColumn = nullptr;
+    MDW_CAPABILITIES                      m_caps;                 ///< The bound backend's, as the columns show
+    std::optional<std::set<WORKSPACE_TREE_KEY>> m_expanded;       ///< Folders open in the full tree, once seen
+    bool                                  m_treeFiltered = false; ///< The tree shows search results
 
     MDW_SUBSCRIPTION           m_connections;   ///< Greys the rows offline and reads them again once online
     MDW_SUBSCRIPTION           m_events;        ///< Follows lock and capability changes after the listing

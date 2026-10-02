@@ -27,8 +27,8 @@ PANEL_GIT_WORKSPACE_BASE::PANEL_GIT_WORKSPACE_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bitemListPanelSizer;
 	bitemListPanelSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_itemsList = new wxListCtrl( m_itemListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT|wxLC_SINGLE_SEL );
-	bitemListPanelSizer->Add( m_itemsList, 1, wxEXPAND, 0 );
+	m_itemsTree = new WX_DATAVIEWCTRL( m_itemListPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxDV_ROW_LINES|wxDV_SINGLE );
+	bitemListPanelSizer->Add( m_itemsTree, 1, wxEXPAND, 0 );
 
 	wxBoxSizer* bStatusSizer;
 	bStatusSizer = new wxBoxSizer( wxHORIZONTAL );

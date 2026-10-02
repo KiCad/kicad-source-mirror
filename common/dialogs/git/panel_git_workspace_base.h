@@ -12,6 +12,7 @@
 #include <wx/intl.h>
 class PANEL_MDW_VERSIONS;
 
+#include "widgets/wx_dataviewctrl.h"
 #include "widgets/wx_splitter_window.h"
 #include <wx/string.h>
 #include <wx/textctrl.h>
@@ -19,7 +20,7 @@ class PANEL_MDW_VERSIONS;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/listctrl.h>
+#include <wx/dataview.h>
 #include <wx/stattext.h>
 #include <wx/hyperlink.h>
 #include <wx/sizer.h>
@@ -43,7 +44,7 @@ class PANEL_GIT_WORKSPACE_BASE : public wxPanel
 		wxTextCtrl* m_search;
 		WX_SPLITTER_WINDOW* m_workspaceSplitter;
 		wxPanel* m_itemListPanel;
-		wxListCtrl* m_itemsList;
+		WX_DATAVIEWCTRL* m_itemsTree;
 		wxStaticText* m_itemCount;
 		wxHyperlinkCtrl* m_moreLink;
 		wxHyperlinkCtrl* m_retryLink;

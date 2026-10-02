@@ -180,12 +180,13 @@ private:
     void buildFolder( size_t aFolder, bool aKeepAll, std::vector<NODE>& aOut ) const
     {
         const MDW_FOLDER& folder = m_folders[aFolder];
-        bool              keepAll = aKeepAll || matches( folder.display_name, m_filter );
+        const wxString&   name = folder.display_name.IsEmpty() ? folder.folder_id : folder.display_name;
+        bool              keepAll = aKeepAll || matches( name, m_filter );
 
         NODE node;
         node.kind = NODE::KIND::FOLDER;
         node.key = folder.folder_id;
-        node.name = folder.display_name;
+        node.name = name;
 
         for( size_t child : m_childFolders[aFolder] )
             buildFolder( child, keepAll, node.children );
@@ -255,13 +256,13 @@ void buildLibraries( const std::vector<WORKSPACE_TREE_LIBRARY>& aLibraries, cons
 }
 
 
-bool findPath( const NODE& aNode, const wxString& aKey, std::vector<wxString>& aPath )
+bool findPath( const NODE& aNode, const WORKSPACE_TREE_KEY& aKey, std::vector<const NODE*>& aPath )
 {
     for( const NODE& child : aNode.children )
     {
-        aPath.push_back( child.key );
+        aPath.push_back( &child );
 
-        if( child.key == aKey || findPath( child, aKey, aPath ) )
+        if( ( child.kind == aKey.first && child.key == aKey.second ) || findPath( child, aKey, aPath ) )
             return true;
 
         aPath.pop_back();
@@ -285,9 +286,10 @@ WORKSPACE_TREE_NODE BuildWorkspaceTree( const std::vector<MDW_FOLDER>& aFolders,
 }
 
 
-std::vector<wxString> WorkspaceTreePath( const WORKSPACE_TREE_NODE& aRoot, const wxString& aKey )
+std::vector<const WORKSPACE_TREE_NODE*> WorkspaceTreePath( const WORKSPACE_TREE_NODE& aRoot,
+                                                           const WORKSPACE_TREE_KEY&  aKey )
 {
-    std::vector<wxString> path;
+    std::vector<const WORKSPACE_TREE_NODE*> path;
 
     findPath( aRoot, aKey, path );
     return path;

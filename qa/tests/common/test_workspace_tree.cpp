@@ -24,6 +24,9 @@
 
 namespace
 {
+using KIND = WORKSPACE_TREE_NODE::KIND;
+
+
 MDW_FOLDER folder( const wxString& aId, const wxString& aName, const wxString& aParent = wxEmptyString )
 {
     MDW_FOLDER f;
@@ -217,6 +220,19 @@ BOOST_AUTO_TEST_CASE( FilterKeepsAncestorsOfMatches )
 }
 
 
+BOOST_AUTO_TEST_CASE( UnnamedFolderShowsAndFiltersByItsId )
+{
+    std::vector<MDW_FOLDER>    folders = { folder( wxT( "Elec" ), wxEmptyString ) };
+    std::vector<MDW_ITEM_INFO> items = { item( wxT( "1" ), wxT( "a.md" ), wxT( "Elec" ) ) };
+
+    WORKSPACE_TREE_NODE root = BuildWorkspaceTree( folders, items, {}, wxT( "elec" ) );
+
+    BOOST_REQUIRE_EQUAL( root.children.size(), 1u );
+    BOOST_CHECK_EQUAL( root.children[0].name, wxT( "Elec" ) );
+    BOOST_CHECK_EQUAL( countKey( root, wxT( "1" ) ), 1 );
+}
+
+
 BOOST_AUTO_TEST_CASE( FilterOnFolderKeepsItsSubtree )
 {
     WORKSPACE_TREE_NODE root = BuildWorkspaceTree( { folder( wxT( "e" ), wxT( "Elec" ) ),
@@ -289,9 +305,32 @@ BOOST_AUTO_TEST_CASE( PathLeadsToANestedItem )
                                                    { item( wxT( "b.kicad_pcb" ), wxT( "b.kicad_pcb" ), wxT( "s" ) ) },
                                                    {}, wxEmptyString );
 
-    BOOST_CHECK( WorkspaceTreePath( root, wxT( "b.kicad_pcb" ) )
-                 == ( std::vector<wxString>{ wxT( "e" ), wxT( "s" ), wxT( "b.kicad_pcb" ) } ) );
-    BOOST_CHECK( WorkspaceTreePath( root, wxT( "missing" ) ).empty() );
+    std::vector<wxString> keys;
+
+    for( const WORKSPACE_TREE_NODE* node : WorkspaceTreePath( root, { KIND::ITEM, wxT( "b.kicad_pcb" ) } ) )
+        keys.push_back( node->key );
+
+    BOOST_CHECK( keys == ( std::vector<wxString>{ wxT( "e" ), wxT( "s" ), wxT( "b.kicad_pcb" ) } ) );
+    BOOST_CHECK( WorkspaceTreePath( root, { KIND::ITEM, wxT( "missing" ) } ).empty() );
+}
+
+
+// A file named like a member's key must not take the member's place when the selection comes back after a rebuild
+BOOST_AUTO_TEST_CASE( PathTellsAFileFromAMemberWithItsKey )
+{
+    const wxString         key = wxT( "sym:passives/R" );
+    WORKSPACE_TREE_LIBRARY passives{ wxT( "sym:passives" ), wxT( "passives" ), true, { wxT( "R" ) } };
+    WORKSPACE_TREE_NODE    root = BuildWorkspaceTree( {}, { item( key, wxT( "R" ) ) }, { passives }, wxEmptyString );
+
+    std::vector<const WORKSPACE_TREE_NODE*> member = WorkspaceTreePath( root, { KIND::MEMBER, key } );
+    std::vector<const WORKSPACE_TREE_NODE*> file = WorkspaceTreePath( root, { KIND::ITEM, key } );
+
+    BOOST_REQUIRE_EQUAL( member.size(), 3u );
+    BOOST_CHECK( member.back()->kind == KIND::MEMBER );
+    BOOST_CHECK( member.front()->kind == KIND::LIBRARIES );
+
+    BOOST_REQUIRE_EQUAL( file.size(), 1u );
+    BOOST_CHECK( file.back()->kind == KIND::ITEM );
 }
 
 

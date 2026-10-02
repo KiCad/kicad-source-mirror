@@ -28,6 +28,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <utility>
 #include <vector>
 
 
@@ -76,7 +77,13 @@ KICOMMON_API WORKSPACE_TREE_NODE BuildWorkspaceTree( const std::vector<MDW_FOLDE
                                                      const std::vector<WORKSPACE_TREE_LIBRARY>& aLibraries,
                                                      const wxString& aFilter, bool aItemsMatched = false );
 
-/// Keys from the root to aKey, for expanding a selection; empty when the tree does not hold it
-KICOMMON_API std::vector<wxString> WorkspaceTreePath( const WORKSPACE_TREE_NODE& aRoot, const wxString& aKey );
+/// A row as the page remembers it across rebuilds. Keys are unique only within a kind, since a file may be named
+/// like a member's "<library key>/<member>"
+using WORKSPACE_TREE_KEY = std::pair<WORKSPACE_TREE_NODE::KIND, wxString>;
+
+/// The nodes from the top of aRoot down to the aKind node with aKey, for expanding a selection; empty when the tree
+/// does not hold it
+KICOMMON_API std::vector<const WORKSPACE_TREE_NODE*> WorkspaceTreePath( const WORKSPACE_TREE_NODE& aRoot,
+                                                                        const WORKSPACE_TREE_KEY&  aKey );
 
 #endif // WORKSPACE_TREE_H
