@@ -488,6 +488,20 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
                 #endif
 
                     focus->HandleWindowEvent( keyEvent );
+
+                    // A native text box types from the platform key event, which the menu
+                    // took, so the character has to be put in by hand. A shifted key other
+                    // than a letter is left alone, since its character depends on the layout.
+                    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( focus );
+                    bool         isLetter = keyCode >= 'A' && keyCode <= 'Z';
+
+                    if( textEntry && textEntry->IsEditable() && keyEvent.GetSkipped() && !keyEvent.ControlDown()
+                        && !keyEvent.AltDown() && keyCode >= WXK_SPACE && keyCode < WXK_START
+                        && ( isLetter || !keyEvent.ShiftDown() ) )
+                    {
+                        textEntry->WriteText( wxString( wxUniChar( keyEvent.m_keyCode ) ) );
+                        return;
+                    }
                 }
 
                 // Don't bubble-up dangerous actions; the target may be behind a modeless dialog.
