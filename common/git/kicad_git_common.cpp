@@ -1105,6 +1105,53 @@ std::vector<wxString> KIGIT_COMMON::GetRecentCommitMessages( size_t aMax ) const
 }
 
 
+namespace
+{
+
+// The id of the tree entry at aPath in aCommit's tree, or empty when there is none.
+std::string treeEntryIdAt( git_commit* aCommit, const char* aPath )
+{
+    git_tree* tree = nullptr;
+
+    if( git_commit_tree( &tree, aCommit ) != GIT_OK )
+        return {};
+
+    KIGIT::GitTreePtr treePtr( tree );
+    git_tree_entry*   entry = nullptr;
+
+    if( git_tree_entry_bypath( &entry, tree, aPath ) != GIT_OK )
+        return {};
+
+    KIGIT::GitTreeEntryPtr entryPtr( entry );
+
+    return git_oid_tostr_s( git_tree_entry_id( entry ) );
+}
+
+
+// True when aCommit changed what sits at aPath, judged against its first parent. A folder works
+// like a file, since a folder's entry id changes with anything under it.
+bool commitTouchesPath( git_commit* aCommit, const std::string& aPath )
+{
+    std::string after = treeEntryIdAt( aCommit, aPath.c_str() );
+    std::string before;
+
+    if( git_commit_parentcount( aCommit ) > 0 )
+    {
+        git_commit* parent = nullptr;
+
+        if( git_commit_parent( &parent, aCommit, 0 ) == GIT_OK )
+        {
+            KIGIT::GitCommitPtr parentPtr( parent );
+            before = treeEntryIdAt( parent, aPath.c_str() );
+        }
+    }
+
+    return after != before;
+}
+
+} // namespace
+
+
 std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax, const KIGIT_HISTORY_FILTER& aFilter ) const
 {
     std::vector<KIGIT_COMMIT_INFO> commits;
@@ -1149,6 +1196,7 @@ std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax, cons
 
     std::map<std::string, std::vector<wxString>> refNames = collectRefNames( m_repo );
     wxString                                     search = aFilter.search.Lower();
+    std::string                                  path = aFilter.path.utf8_string();
     git_oid                                      oid;
 
     while( commits.size() < aMax && git_revwalk_next( &oid, walker ) == GIT_OK )
@@ -1159,6 +1207,9 @@ std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax, cons
             continue;
 
         KIGIT::GitCommitPtr commitPtr( commit );
+
+        if( !path.empty() && !commitTouchesPath( commit, path ) )
+            continue;
 
         KIGIT_COMMIT_INFO info;
         info.hash = shortHashOf( &oid );

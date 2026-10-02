@@ -1060,12 +1060,28 @@ void GIT_COMMIT_PANE::onChecklistContextMenu( wxDataViewEvent& aEvent )
         return;
 
     wxMenu menu;
-    menu.Append( 1, _( "Discard Changes" ) );
+    menu.Append( 1, _( "Show History for This File" ) );
+    menu.AppendSeparator();
+    menu.Append( 2, _( "Discard Changes" ) );
 
-    if( GetPopupMenuSelectionFromUser( menu ) != 1 )
-        return;
+    switch( GetPopupMenuSelectionFromUser( menu ) )
+    {
+    case 1:
+        // From the Changes page the window is already open, so it only turns to History.
+        if( GIT_ADVANCED_DIALOG* dialog = m_inAdvancedWindow ? GIT_ADVANCED_DIALOG::Active() : nullptr )
+            dialog->ShowHistoryForFile( path );
+        else
+            GIT_ADVANCED_DIALOG::ShowHistoryForFile( m_frame, this, path );
 
-    discardFile( m_frame->Prj().GetGitCommon(), path );
+        break;
+
+    case 2:
+        discardFile( m_frame->Prj().GetGitCommon(), path );
+        break;
+
+    default:
+        break;
+    }
 }
 
 

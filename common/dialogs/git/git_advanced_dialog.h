@@ -83,6 +83,13 @@ public:
     /// The live window, or null when none is open.
     static GIT_ADVANCED_DIALOG* Active();
 
+    /// Open the window on its History page, narrowed to the commits that changed aPath.
+    static void ShowHistoryForFile( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane, const wxString& aPath );
+
+    /// Turn to the History page narrowed to aPath, a file or folder relative to the repository
+    /// root. Empty shows every commit again.
+    void ShowHistoryForFile( const wxString& aPath );
+
     /// Close the live window, for when the project it was filled from goes away.
     static void CloseActive();
 
@@ -292,6 +299,8 @@ private:
     wxSearchCtrl*       m_historySearch;
     wxChoice*           m_historyBranch;
     wxCheckBox*         m_historyShowRefs;
+    wxBoxSizer*         m_historyPathRow;
+    wxStaticText*       m_historyPathLabel;
     wxSplitterWindow*   m_historySplitter;
     wxDataViewListCtrl* m_historyList;
     wxDataViewColumn*   m_historyRefsColumn;
@@ -392,6 +401,9 @@ private:
 
     /// The branch the History page is narrowed to, or empty for every branch.
     wxString m_historyBranchName;
+
+    /// The file or folder the history is narrowed to, or empty for all of it.
+    wxString m_historyPath;
 
     /// The commit the detail pane shows, so a refresh can put the selection back on it.
     wxString m_detailHash;

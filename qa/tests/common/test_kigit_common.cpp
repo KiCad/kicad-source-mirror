@@ -1833,6 +1833,59 @@ BOOST_AUTO_TEST_CASE( GetStashDetailNamesBranchCommitAndFiles )
 }
 
 
+// The History page can be narrowed to one file or folder. A commit stays listed when the tree
+// entry at that path differs from its parent's, so a folder catches changes anywhere under it.
+BOOST_AUTO_TEST_CASE( GetRecentCommitsFiltersByPath )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    // The shared helper takes a bare file name, so the nested files are written here.
+    auto writeNested = [&]( const char* aRelPath, const char* aContent )
+    {
+        std::ofstream f( ( tmp.path + wxS( "/" ) + aRelPath ).utf8_string() );
+        f << aContent;
+    };
+
+    wxFileName::Mkdir( tmp.path + wxS( "/sub" ) );
+    writeNested( "sub/a.txt", "a\n" );
+    commitWorkingFile( repo, "sub/a.txt", "add a" );
+    writeFile( tmp.path, "file.txt", "v2\n" );
+    commitWorkingFile( repo, "file.txt", "edit file" );
+    writeNested( "sub/b.txt", "b\n" );
+    commitWorkingFile( repo, "sub/b.txt", "add b" );
+
+    KIGIT_COMMON         common( repo );
+    KIGIT_HISTORY_FILTER filter;
+
+    filter.path = wxS( "file.txt" );
+    std::vector<KIGIT_COMMIT_INFO> commits = common.GetRecentCommits( 50, filter );
+    BOOST_REQUIRE_EQUAL( commits.size(), 2 );
+    BOOST_CHECK_EQUAL( commits[0].summary, wxS( "edit file" ) );
+    BOOST_CHECK_EQUAL( commits[1].summary, wxS( "initial" ) );
+
+    filter.path = wxS( "sub" );
+    commits = common.GetRecentCommits( 50, filter );
+    BOOST_REQUIRE_EQUAL( commits.size(), 2 );
+    BOOST_CHECK_EQUAL( commits[0].summary, wxS( "add b" ) );
+    BOOST_CHECK_EQUAL( commits[1].summary, wxS( "add a" ) );
+
+    filter.path = wxS( "sub/a.txt" );
+    BOOST_CHECK_EQUAL( common.GetRecentCommits( 50, filter ).size(), 1 );
+
+    filter.path = wxS( "nowhere.txt" );
+    BOOST_CHECK( common.GetRecentCommits( 50, filter ).empty() );
+
+    // The search still applies on top of the path.
+    filter.path = wxS( "sub" );
+    filter.search = wxS( "add b" );
+    BOOST_CHECK_EQUAL( common.GetRecentCommits( 50, filter ).size(), 1 );
+}
+
+
 // The Tags page shows a tag's message, author and date. An annotated tag has its own, a
 // lightweight tag borrows the commit's.
 // An amend or a rebase leaves a commit's author time behind its committer time. The History

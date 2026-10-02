@@ -94,6 +94,7 @@ struct KIGIT_HISTORY_FILTER
 {
     wxString branch; ///< One branch, local or remote, or empty for every branch and HEAD.
     wxString search; ///< Keep only commits whose summary, author or hash contains this.
+    wxString path;   ///< Keep only commits that changed this file or folder, relative to the root.
 };
 
 

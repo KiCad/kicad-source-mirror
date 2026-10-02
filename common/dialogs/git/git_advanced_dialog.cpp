@@ -388,6 +388,8 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
         m_historySearch( nullptr ),
         m_historyBranch( nullptr ),
         m_historyShowRefs( nullptr ),
+        m_historyPathRow( nullptr ),
+        m_historyPathLabel( nullptr ),
         m_historySplitter( nullptr ),
         m_historyList( nullptr ),
         m_historyRefsColumn( nullptr ),
@@ -849,6 +851,29 @@ wxWindow* GIT_ADVANCED_DIALOG::buildHistoryPage( wxWindow* aBook )
     filters->Add( m_historyShowRefs, 0, wxALIGN_CENTER_VERTICAL );
     sizer->Add( filters, 0, wxEXPAND | wxALL, 4 );
 
+    // Shown while the list is narrowed to one file or folder.
+    m_historyPathRow = new wxBoxSizer( wxHORIZONTAL );
+    // A long path shortens in the middle rather than widening the window.
+    m_historyPathLabel = new wxStaticText( panel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                           wxST_ELLIPSIZE_MIDDLE );
+    m_historyPathLabel->SetFont( m_historyPathLabel->GetFont().Bold() );
+
+    wxButton* showAll = new wxButton( panel, wxID_ANY, _( "Show All Commits" ), wxDefaultPosition, wxDefaultSize,
+                                      wxBU_EXACTFIT );
+
+    m_historyPathRow->Add( new wxStaticText( panel, wxID_ANY, _( "Showing commits that changed" ) ), 0,
+                           wxALIGN_CENTER_VERTICAL | wxRIGHT, 6 );
+    m_historyPathRow->Add( m_historyPathLabel, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 12 );
+    m_historyPathRow->Add( showAll, 0, wxALIGN_CENTER_VERTICAL );
+    sizer->Add( m_historyPathRow, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 4 );
+    m_historyPathRow->ShowItems( false );
+
+    showAll->Bind( wxEVT_BUTTON,
+                   [this]( wxCommandEvent& )
+                   {
+                       ShowHistoryForFile( wxEmptyString );
+                   } );
+
     m_historySplitter = new wxSplitterWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                               wxSP_LIVE_UPDATE | wxSP_3DSASH );
     m_historySplitter->SetMinimumPaneSize( panel->FromDIP( 200 ) );
@@ -989,7 +1014,18 @@ wxPanel* GIT_ADVANCED_DIALOG::buildCommitDetailPane( wxWindow* aParent )
     m_commitFiles->Bind( wxEVT_LIST_ITEM_SELECTED,
                          [this]( wxListEvent& aEvent )
                          {
-                             showFileDiff( m_commitFiles->GetItemText( aEvent.GetIndex(), 0 ) );
+                             if( !m_fillingHistory )
+                                 showFileDiff( m_commitFiles->GetItemText( aEvent.GetIndex(), 0 ) );
+                         } );
+
+    m_commitFiles->Bind( wxEVT_LIST_ITEM_RIGHT_CLICK,
+                         [this]( wxListEvent& aEvent )
+                         {
+                             wxMenu menu;
+                             menu.Append( 1, _( "Show History for This File" ) );
+
+                             if( GetPopupMenuSelectionFromUser( menu ) == 1 )
+                                 ShowHistoryForFile( m_commitFiles->GetItemText( aEvent.GetIndex(), 0 ) );
                          } );
 
     // Double-clicking opens the full comparison window for it.
@@ -1010,7 +1046,27 @@ KIGIT_HISTORY_FILTER GIT_ADVANCED_DIALOG::historyFilter() const
     KIGIT_HISTORY_FILTER filter;
     filter.branch = m_historyBranchName;
     filter.search = m_historySearch->GetValue();
+    filter.path = m_historyPath;
     return filter;
+}
+
+
+void GIT_ADVANCED_DIALOG::ShowHistoryForFile( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane, const wxString& aPath )
+{
+    ShowForFrame( aParent, aPane );
+    g_activeDialog->ShowHistoryForFile( aPath );
+}
+
+
+void GIT_ADVANCED_DIALOG::ShowHistoryForFile( const wxString& aPath )
+{
+    m_historyPath = aPath;
+    m_historyPathLabel->SetLabel( aPath );
+    m_historyPathRow->ShowItems( !aPath.IsEmpty() );
+    m_historySearch->GetParent()->Layout();
+
+    m_book->SetSelection( 1 );
+    reloadHistory();
 }
 
 
@@ -1149,6 +1205,26 @@ void GIT_ADVANCED_DIALOG::fillCommitDetail( const KIGIT_COMMIT_DETAIL& aDetail )
         {
             m_commitFiles->SetItem( idx, 2, wxString::Format( wxS( "%d" ), file.added ) );
             m_commitFiles->SetItem( idx, 3, wxString::Format( wxS( "%d" ), file.removed ) );
+        }
+    }
+
+    // The caller holds the git action lock and the render needs it too, so the file is picked
+    // with the handler quiet and the render follows once the lock is free.
+    if( !m_historyPath.IsEmpty() )
+    {
+        long row = m_commitFiles->FindItem( -1, m_historyPath );
+
+        if( row != wxNOT_FOUND )
+        {
+            m_fillingHistory = true;
+            m_commitFiles->SetItemState( row, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+            m_fillingHistory = false;
+
+            CallAfter(
+                    [this, path = m_historyPath]()
+                    {
+                        showFileDiff( path );
+                    } );
         }
     }
 
