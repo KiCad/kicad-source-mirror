@@ -53,14 +53,14 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
         m_appSettingsSchemaVersion( aSchemaVersion )
 {
     // Build parameters list:
-    m_params.emplace_back(
-            new PARAM<int>( "find_replace.match_mode", &m_FindReplace.match_mode, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "find_replace.match_mode",
+            &m_FindReplace.match_mode, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "find_replace.match_case", &m_FindReplace.match_case, false ) );
+    m_params.emplace_back( new PARAM<bool>( "find_replace.match_case",
+            &m_FindReplace.match_case, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "find_replace.search_and_replace",
-                                            &m_FindReplace.search_and_replace, false ) );
+            &m_FindReplace.search_and_replace, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "find_replace.find_string",
             &m_FindReplace.find_string, wxS( "" ) ) );
@@ -102,7 +102,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_DesignBlockChooserPanel.keep_annotations, false ) );
 
     m_params.emplace_back( new PARAM_LIST<wxString>( "design_block_chooser.lib_tree.columns",
-                                                     &m_DesignBlockChooserPanel.tree.columns, {} ) );
+            &m_DesignBlockChooserPanel.tree.columns, {} ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>(
             "design_block_chooser.lib_tree.column_widths",
@@ -136,7 +136,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.back()->SetClearUnknownKeys();
 
     m_params.emplace_back( new PARAM_LIST<wxString>( "design_block_chooser.lib_tree.open_libs",
-                                                     &m_DesignBlockChooserPanel.tree.open_libs, {} ) );
+            &m_DesignBlockChooserPanel.tree.open_libs, {} ) );
 
     m_params.emplace_back( new PARAM<float>( "graphics.highlight_factor",
             &m_Graphics.highlight_factor, 0.5f, 0.0, 1.0f ) );
@@ -147,7 +147,8 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM<int>( "color_picker.default_tab",
             &m_ColorPicker.default_tab, 0 ) );
 
-    m_params.emplace_back( new PARAM_LIST<wxString>( "lib_tree.columns", &m_LibTree.columns, {} ) );
+    m_params.emplace_back( new PARAM_LIST<wxString>( "lib_tree.columns",
+            &m_LibTree.columns, {} ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "lib_tree.column_widths",
             [&]() -> nlohmann::json
@@ -239,7 +240,8 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_System.file_history, {} ) );
 
     if( m_filename == wxS( "pl_editor" )
-        || ( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) ) )
+        || m_filename == wxS( "eeschema"
+        || m_filename == wxS( "symbol_editor" ) )
     {
         m_params.emplace_back( new PARAM<int>( "system.units",
                 &m_System.units, static_cast<int>( EDA_UNITS::MILS ) ) );
@@ -257,7 +259,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_System.last_imperial_units, static_cast<int>( EDA_UNITS::MILS ) ) );
 
     m_params.emplace_back( new PARAM<bool>( "system.show_import_issues",
-                                            &m_System.show_import_issues, true ) );
+            &m_System.show_import_issues, true ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "plugins.actions",
             [&]() -> nlohmann::json
@@ -285,8 +287,8 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
 
                     for( const auto& pair : entry.items() )
                     {
-                        m_Plugins.actions.emplace_back( std::make_pair(
-                                wxString( pair.key().c_str(), wxConvUTF8 ), pair.value() ) );
+                        m_Plugins.actions.emplace_back( std::make_pair( wxString( pair.key().c_str(), wxConvUTF8 ),
+                                                                        pair.value() ) );
                     }
                 }
             },
@@ -422,10 +424,8 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
     ret &= fromLegacy<int>(  aCfg, aFrame + "Pos_x",                aJsonPath + ".pos_x" );
     ret &= fromLegacy<int>(  aCfg, aFrame + "Pos_y",                aJsonPath + ".pos_y" );
 
-    ret &= fromLegacy<bool>( aCfg, frameGDO + "ForceDisplayCursor",
-                             cursorPath + ".always_show_cursor" );
-    ret &= fromLegacy<int>( aCfg, frameGDO + "CursorFullscreen",
-                             cursorPath + ".cross_hair_mode" );
+    ret &= fromLegacy<bool>( aCfg, frameGDO + "ForceDisplayCursor", cursorPath + ".always_show_cursor" );
+    ret &= fromLegacy<int>( aCfg, frameGDO + "CursorFullscreen",    cursorPath + ".cross_hair_mode" );
 
     ret &= fromLegacy<int>(  aCfg, aFrame + "_LastGridSize",        gridPath + ".last_size" );
 
@@ -452,9 +452,11 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".mru_path",
             &aWindow->mru_path, wxS( "" ) ) );
 
-    m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_x", &aWindow->state.size_x, aDefaultWidth ) );
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_x",
+            &aWindow->state.size_x, aDefaultWidth ) );
 
-    m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_y", &aWindow->state.size_y, aDefaultHeight ) );
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".size_y",
+            &aWindow->state.size_y, aDefaultHeight ) );
 
     m_params.emplace_back( new PARAM<wxString>( aJsonPath + ".perspective",
             &aWindow->perspective, wxS( "" ) ) );
@@ -462,9 +464,11 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     m_params.emplace_back( new PARAM<nlohmann::json>( aJsonPath + ".aui_state",
             &aWindow->aui_state, nlohmann::json() ) );
 
-    m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_x", &aWindow->state.pos_x, 0 ) );
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_x",
+            &aWindow->state.pos_x, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_y", &aWindow->state.pos_y, 0 ) );
+    m_params.emplace_back( new PARAM<int>( aJsonPath + ".pos_y",
+            &aWindow->state.pos_y, 0 ) );
 
     m_params.emplace_back( new PARAM<unsigned int>( aJsonPath + ".display",
             &aWindow->state.display, 0 ) );
@@ -478,20 +482,14 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
     int defaultGridIdx;
 
     if( ( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) ) )
-    {
         defaultGridIdx = 1;
-    }
     else if( m_filename == wxS( "pl_editor" ) )
-    {
         defaultGridIdx = 4;
-    }
     else
-    {
         defaultGridIdx = 15;
-    }
 
-    m_params.emplace_back( new PARAM_LIST<GRID>( aJsonPath + ".grid.sizes", &aWindow->grid.grids,
-                                                 DefaultGridSizeList(), true /* resetIfEmpty */ ) );
+    m_params.emplace_back( new PARAM_LIST<GRID>( aJsonPath + ".grid.sizes",
+            &aWindow->grid.grids, DefaultGridSizeList(), true /* resetIfEmpty */ ) );
 
     m_params.emplace_back( new PARAM<int>( aJsonPath + ".grid.last_size",
             &aWindow->grid.last_size_idx, defaultGridIdx ) );
