@@ -80,10 +80,10 @@ wxString UpdateOdbVariantOutputPath( const wxString& aPath, bool aDirectory, boo
                                      bool aRemoveAutomaticSuffix );
 
 /// Use an empty section key when Customize matches the data set default
-wxString OdbSectionKeyForSelection( IPC2581::MODE aMode, const IPC2581::SECTION_SET& aSelection );
+wxString OdbSectionKeyForSelection( FAB::MODE aMode, const FAB::SECTION_SET& aSelection );
 
 /// Sections a data set exports when no section key is given
-IPC2581::SECTION_SET OdbDefaultSections( IPC2581::MODE aMode );
+FAB::SECTION_SET OdbDefaultSections( FAB::MODE aMode );
 
 /// Matrix name of the row whose ID is aReference
 wxString OdbPreviewReferenceName( const wxString& aReference, const std::vector<ODB_MATRIX_PREVIEW_ROW>& aRows );

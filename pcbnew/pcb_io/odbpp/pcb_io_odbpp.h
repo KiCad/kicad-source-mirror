@@ -23,7 +23,6 @@
 #define _PCB_IO_ODBPP_H_
 
 #include <pcb_io/pcb_io.h>
-#include <pcb_io/pcb_io_mgr.h>
 #include <pcb_io/common/plugin_common_layer_mapping.h>
 
 #include <layer_ids.h> // PCB_LAYER_ID
@@ -61,7 +60,10 @@ public:
     void SaveBoard( const wxString& aFileName, BOARD& aBoard,
                     const std::map<std::string, UTF8>* aProperties = nullptr ) override;
 
-    void ConfigureExport( BOARD& aBoard, const std::map<std::string, UTF8>* aProperties );
+    /// Write the product model tree at @a aFileName  Throw IO_ERROR when the write fails
+    void Export( const wxString& aFileName, BOARD& aBoard, const ODB_EXPORT_OPTIONS& aOptions );
+
+    void ConfigureExport( BOARD& aBoard, const ODB_EXPORT_OPTIONS& aOptions );
 
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {

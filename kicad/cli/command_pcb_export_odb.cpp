@@ -31,15 +31,13 @@
 #define ARG_VARIANT_PACKAGING "--variant-packaging"
 #define ARG_ORIGIN "--origin"
 #define ARG_PRODUCT_NAME "--product-name"
-#define ARG_DATA_SET "--data-set"
-#define ARG_NET_NAMES "--net-names"
 
 CLI::PCB_EXPORT_ODB_COMMAND::PCB_EXPORT_ODB_COMMAND() :
         PCB_EXPORT_BASE_COMMAND( "odb" )
 {
     addDrawingSheetArg();
     addDefineArg();
-    addFabExportArgs();
+    addFabExportArgs( JOB_EXPORT_PCB_ODB() );
 
     m_argParser.add_description( std::string( "Export the PCB in ODB++ format" ) );
 
@@ -62,16 +60,6 @@ CLI::PCB_EXPORT_ODB_COMMAND::PCB_EXPORT_ODB_COMMAND() :
             .default_value( std::string() )
             .help( std::string( "ODB++ product model name" ) )
             .metavar( "NAME" );
-
-    m_argParser.add_argument( ARG_DATA_SET )
-            .default_value( std::string( "all" ) )
-            .help( std::string( "ODB++ data set" ) )
-            .choices( "all", "fabrication", "assembly", "test", "stackup" );
-
-    m_argParser.add_argument( ARG_NET_NAMES )
-            .default_value( std::string( "include" ) )
-            .help( std::string( "Export net names or anonymous names preserving connectivity" ) )
-            .choices( "include", "anonymize" );
 
     addVariantsArg( false );
 }
@@ -111,19 +99,6 @@ int CLI::PCB_EXPORT_ODB_COMMAND::doPerform( KIWAY& aKiway )
         job->m_origin = JOB_EXPORT_PCB_ODB::ORIGIN::GRID;
 
     job->m_productName = From_UTF8( m_argParser.get<std::string>( ARG_PRODUCT_NAME ).c_str() );
-
-    std::string dataSet = m_argParser.get<std::string>( ARG_DATA_SET );
-
-    if( dataSet == "fabrication" )
-        job->m_dataSet = JOB_EXPORT_PCB_ODB::DATA_SET::FABRICATION;
-    else if( dataSet == "assembly" )
-        job->m_dataSet = JOB_EXPORT_PCB_ODB::DATA_SET::ASSEMBLY;
-    else if( dataSet == "test" )
-        job->m_dataSet = JOB_EXPORT_PCB_ODB::DATA_SET::TEST;
-    else if( dataSet == "stackup" )
-        job->m_dataSet = JOB_EXPORT_PCB_ODB::DATA_SET::STACKUP;
-
-    job->m_netNamePolicy = From_UTF8( m_argParser.get<std::string>( ARG_NET_NAMES ).c_str() );
 
     LOCALE_IO dummy;
     return aKiway.ProcessJob( KIWAY::FACE_PCB, job.get() );

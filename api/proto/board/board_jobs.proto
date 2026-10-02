@@ -489,6 +489,45 @@ enum Ipc2581Version
     IPC2581V_C = 2;
 }
 
+// Data set of a fabrication export, per the IPC-2581 function mode table.
+enum FabDataSet
+{
+    FDS_UNKNOWN = 0;
+    FDS_USERDEF = 1;
+    FDS_BOM = 2;
+    FDS_STACKUP = 3;
+    FDS_FABRICATION = 4;
+    FDS_ASSEMBLY = 5;
+    FDS_TEST = 6;
+    FDS_STENCIL = 7;
+    FDS_DFX = 8;
+}
+
+enum FabNetNamePolicy
+{
+    FNNP_UNKNOWN = 0;
+    FNNP_INCLUDE = 1;
+    // Opaque names that keep the connections
+    FNNP_ANONYMIZE = 2;
+}
+
+enum Ipc2581RefDes
+{
+    IPC2581RD_UNKNOWN = 0;
+    IPC2581RD_INCLUDE = 1;
+    IPC2581RD_OMIT = 2;
+}
+
+// Content selection shared by the ODB++ and IPC-2581 exports.
+message FabExportContent
+{
+    FabDataSet data_set = 1;
+
+    // Section key letters that replace the optional sections of the data set
+    string sections = 2;
+    FabNetNamePolicy net_names = 3;
+}
+
 // Exports a board to IPC-2581 format.  Returns RunJobResponse.
 message RunBoardJobExportIpc2581
 {
@@ -510,6 +549,8 @@ message RunBoardJobExportIpc2581
     string distributor_column = 12;
     string bom_revision = 13;
     optional bool check_zones = 14;
+    FabExportContent content = 15;
+    Ipc2581RefDes ref_des = 16;
 }
 
 // Exports a board netlist in IPC-D-356 format.  Returns RunJobResponse.
@@ -546,22 +587,6 @@ enum OdbOrigin
     ODBO_GRID = 3;
 }
 
-enum OdbDataSet
-{
-    ODBDS_UNKNOWN = 0;
-    ODBDS_ALL = 1;
-    ODBDS_FABRICATION = 2;
-    ODBDS_ASSEMBLY = 3;
-    ODBDS_TEST = 4;
-    ODBDS_STACKUP = 5;
-}
-
-enum FabNetNamePolicy
-{
-    FNNP_UNKNOWN = 0;
-    FNNP_INCLUDE = 1;
-    FNNP_ANONYMIZE = 2;
-}
 
 // Exports a board to ODB++ format.  Returns RunJobResponse.
 message RunBoardJobExportODB
@@ -581,8 +606,7 @@ message RunBoardJobExportODB
     string manufacturer_part_number_column = 10;
     OdbOrigin origin = 11;
     string product_name = 12;
-    OdbDataSet data_set = 13;
-    FabNetNamePolicy net_names = 14;
+    FabExportContent content = 13;
 }
 
 // Board statistics output format.

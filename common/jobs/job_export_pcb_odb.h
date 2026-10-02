@@ -51,6 +51,8 @@ public:
 
     void SetDefaultOutputPath( const wxString& aReferenceName );
 
+    bool SupportsDataSet( DATA_SET aDataSet ) const override;
+
     enum class ODB_COMPRESSION
     {
         NONE,
@@ -71,23 +73,11 @@ public:
         GRID
     };
 
-    enum class DATA_SET
-    {
-        ALL,
-        FABRICATION,
-        ASSEMBLY,
-        TEST,
-        STACKUP
-    };
-
 public:
     ODB_COMPRESSION                 m_compressionMode;
     VARIANT_PACKAGING               m_variantPackaging = VARIANT_PACKAGING::SEPARATE;
     ORIGIN                          m_origin = ORIGIN::ABSOLUTE_COORDS;
     wxString                        m_productName;
-    DATA_SET                        m_dataSet = DATA_SET::ALL;
-    wxString                        m_sections;
-    wxString                        m_netNamePolicy = wxS( "include" );
     std::vector<ODB_LAYER_OVERRIDE> m_layerOverrides;
 };
 

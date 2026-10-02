@@ -22,7 +22,6 @@
 #include <set>
 
 #include "pcb_io_odbpp.h"
-#include "odb_export_job.h"
 #include "progress_reporter.h"
 #include "odb_util.h"
 #include "odb_attribute.h"
@@ -219,131 +218,74 @@ std::vector<FOOTPRINT*> PCB_IO_ODBPP::GetImportedCachedLibraryFootprints()
 }
 
 
-void PCB_IO_ODBPP::ConfigureExport( BOARD& aBoard, const std::map<std::string, UTF8>* aProperties )
+void PCB_IO_ODBPP::ConfigureExport( BOARD& aBoard, const ODB_EXPORT_OPTIONS& aOptions )
 {
     m_board = &aBoard;
-
     // A second export on this plugin starts with the default format
     m_format = ODB_FORMAT();
     m_format.m_variantName = aBoard.GetCurrentVariant();
     m_format.m_variantNames = ODB::VARIANT_NAMES::Build( aBoard.GetVariantNames() );
 
-    if( aProperties )
+    if( aOptions.m_variant )
     {
-        if( auto it = aProperties->find( "variant" ); it != aProperties->end() )
-        {
-            wxString requested = wxString::FromUTF8( it->second.c_str() );
-            m_format.m_variantName = requested.CmpNoCase( GetDefaultVariantName() ) == 0
-                                     ? wxString() : requested;
-        }
-
-        if( auto it = aProperties->find( "product_model_name" ); it != aProperties->end() )
-            m_format.m_productModelName = wxString::FromUTF8( it->second.c_str() );
-
-        if( auto it = aProperties->find( "mpn" ); it != aProperties->end() )
-            m_format.m_mpnField = wxString::FromUTF8( it->second.c_str() );
-
-        if( auto it = aProperties->find( "origin" ); it != aProperties->end() )
-        {
-            if( it->second == "aux" )
-                m_format.m_originOffset = aBoard.GetDesignSettings().GetAuxOrigin();
-            else if( it->second == "grid" )
-                m_format.m_originOffset = aBoard.GetDesignSettings().GetGridOrigin();
-        }
-
-        if( auto it = aProperties->find( "net_names" ); it != aProperties->end() )
-            m_format.m_anonymizeNets = it->second == "anonymize";
-
-        IPC2581::SECTION_SET sections;
-        bool                 filterSections = false;
-
-        if( auto it = aProperties->find( "data_set" ); it != aProperties->end() && it->second != "all" )
-        {
-            std::optional<IPC2581::MODE> mode = IPC2581::ModeFromToken( wxString::FromUTF8( it->second.c_str() ) );
-
-            if( !mode )
-                THROW_IO_ERROR( _( "Unknown ODB++ data set." ) );
-
-            sections = OdbDefaultSections( *mode );
-            filterSections = true;
-        }
-
-        if( auto it = aProperties->find( "sections" ); it != aProperties->end() && !it->second.empty() )
-        {
-            if( !IPC2581::SectionSetFromKeyString( wxString::FromUTF8( it->second.c_str() ), sections ) )
-                THROW_IO_ERROR( _( "Unknown ODB++ section key." ) );
-
-            filterSections = true;
-        }
-
-        if( filterSections )
-        {
-            if( sections.Contains( IPC2581::SECTION::COMPONENTS ) && !sections.Contains( IPC2581::SECTION::PACKAGES ) )
-            {
-                sections.Set( IPC2581::SECTION::PACKAGES );
-                Report( _( "ODB++ package section added because components reference packages." ),
-                        RPT_SEVERITY_WARNING );
-            }
-
-            m_format.m_sections = sections;
-        }
-
-        if( auto it = aProperties->find( "layers" ); it != aProperties->end() )
-        {
-            nlohmann::json layers = nlohmann::json::parse( it->second.c_str(), nullptr, false );
-
-            if( !layers.is_array() )
-                THROW_IO_ERROR( _( "Invalid ODB++ layer overrides." ) );
-
-            for( const nlohmann::json& entry : layers )
-            {
-                ODB_LAYER_OVERRIDE override = entry.get<ODB_LAYER_OVERRIDE>();
-
-                if( override.m_layer == UNDEFINED_LAYER )
-                {
-                    Report( _( "Ignoring invalid ODB++ layer override." ), RPT_SEVERITY_WARNING );
-                    continue;
-                }
-
-                m_format.m_layerOverrides.push_back( std::move( override ) );
-            }
-        }
-
-        if( auto it = aProperties->find( "units" ); it != aProperties->end() )
-        {
-            // Only INCH needs setting here; MM is already the default set above
-            if( it->second == "inch" )
-            {
-                m_format.m_unitsStr = "INCH";
-                m_format.m_scale = ( 1.0 / 25.4 ) / PCB_IU_PER_MM;
-                m_format.m_symbolScale = ( 1.0 / 25.4 ) / PL_IU_PER_MM;
-            }
-        }
-
-        if( auto it = aProperties->find( "sigfig" ); it != aProperties->end() )
-        {
-            int requested = std::stoi( it->second );
-            int precisionFloor = MinPrecision( m_format.m_unitsStr == "INCH" );
-
-            m_format.m_sigfig = std::clamp( requested, precisionFloor, MaxPrecision() );
-
-            if( requested < precisionFloor )
-            {
-                Report( wxString::Format( _( "ODB++ precision %d is below the minimum of %d for these units; "
-                                             "using %d." ), requested, precisionFloor, m_format.m_sigfig ),
-                        RPT_SEVERITY_WARNING );
-            }
-            else if( requested > MaxPrecision() )
-            {
-                Report( wxString::Format( _( "ODB++ precision %d is above the maximum of %d; using %d." ),
-                                          requested, MaxPrecision(), m_format.m_sigfig ), RPT_SEVERITY_WARNING );
-            }
-        }
+        m_format.m_variantName = aOptions.m_variant->CmpNoCase( GetDefaultVariantName() ) == 0
+                                 ? wxString() : *aOptions.m_variant;
     }
 
-    bool componentNets = m_format.Includes( IPC2581::SECTION::COMPONENTS );
-    bool logicalNets = m_format.Includes( IPC2581::SECTION::LOGICAL_NET );
-    bool shortNets = !componentNets && !logicalNets && m_format.Includes( IPC2581::SECTION::PHYSICAL_NET )
+    m_format.m_productModelName = aOptions.m_productModelName;
+    m_format.m_mpnField = aOptions.m_mpnField;
+    m_format.m_anonymizeNets = aOptions.m_anonymizeNets;
+    m_format.m_sections = aOptions.m_sections;
+
+    if( aOptions.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::AUX )
+        m_format.m_originOffset = aBoard.GetDesignSettings().GetAuxOrigin();
+    else if( aOptions.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::GRID )
+        m_format.m_originOffset = aBoard.GetDesignSettings().GetGridOrigin();
+
+    if( m_format.m_sections && m_format.m_sections->Contains( FAB::SECTION::COMPONENTS )
+        && !m_format.m_sections->Contains( FAB::SECTION::PACKAGES ) )
+    {
+        m_format.m_sections->Set( FAB::SECTION::PACKAGES );
+        Report( _( "ODB++ package section added because components reference packages." ),
+                RPT_SEVERITY_WARNING );
+    }
+
+    for( const ODB_LAYER_OVERRIDE& override : aOptions.m_layerOverrides )
+    {
+        if( override.m_layer == UNDEFINED_LAYER )
+        {
+            Report( _( "Ignoring invalid ODB++ layer override." ), RPT_SEVERITY_WARNING );
+            continue;
+        }
+
+        m_format.m_layerOverrides.push_back( override );
+    }
+
+    if( aOptions.m_inch )
+    {
+        m_format.m_unitsStr = "INCH";
+        m_format.m_scale = ( 1.0 / 25.4 ) / PCB_IU_PER_MM;
+        m_format.m_symbolScale = ( 1.0 / 25.4 ) / PL_IU_PER_MM;
+    }
+
+    int precisionFloor = MinPrecision( aOptions.m_inch );
+    m_format.m_sigfig = std::clamp( aOptions.m_precision, precisionFloor, MaxPrecision() );
+
+    if( aOptions.m_precision < precisionFloor )
+    {
+        Report( wxString::Format( _( "ODB++ precision %d is below the minimum of %d for these units; "
+                                     "using %d." ), aOptions.m_precision, precisionFloor, m_format.m_sigfig ),
+                RPT_SEVERITY_WARNING );
+    }
+    else if( aOptions.m_precision > MaxPrecision() )
+    {
+        Report( wxString::Format( _( "ODB++ precision %d is above the maximum of %d; using %d." ),
+                                  aOptions.m_precision, MaxPrecision(), m_format.m_sigfig ), RPT_SEVERITY_WARNING );
+    }
+
+    bool componentNets = m_format.Includes( FAB::SECTION::COMPONENTS );
+    bool logicalNets = m_format.Includes( FAB::SECTION::LOGICAL_NET );
+    bool shortNets = !componentNets && !logicalNets && m_format.Includes( FAB::SECTION::PHYSICAL_NET )
                      && HasIntentionalShorts( aBoard );
     m_format.m_writeEdaNets = componentNets || logicalNets || shortNets;
 
@@ -352,10 +294,27 @@ void PCB_IO_ODBPP::ConfigureExport( BOARD& aBoard, const std::map<std::string, U
 }
 
 
-void PCB_IO_ODBPP::SaveBoard( const wxString& aFileName, BOARD& aBoard, const std::map<std::string, UTF8>* aProperties )
+void PCB_IO_ODBPP::Export( const wxString& aFileName, BOARD& aBoard, const ODB_EXPORT_OPTIONS& aOptions )
 {
-    ConfigureExport( aBoard, aProperties );
+    ConfigureExport( aBoard, aOptions );
 
     if( !ExportODB( aFileName ) )
         THROW_IO_ERROR( _( "ODB++ export failed. See the messages above for the cause." ) );
+}
+
+
+void PCB_IO_ODBPP::SaveBoard( const wxString& aFileName, BOARD& aBoard, const std::map<std::string, UTF8>* aProperties )
+{
+    ODB_EXPORT_OPTIONS options;
+
+    if( aProperties )
+    {
+        if( auto it = aProperties->find( "units" ); it != aProperties->end() )
+            options.m_inch = it->second == "inch";
+
+        if( auto it = aProperties->find( "sigfig" ); it != aProperties->end() )
+            options.m_precision = std::stoi( it->second );
+    }
+
+    Export( aFileName, aBoard, options );
 }

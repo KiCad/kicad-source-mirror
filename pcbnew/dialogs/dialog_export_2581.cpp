@@ -19,81 +19,24 @@
 
 #include "dialogs/dialog_export_2581.h"
 
-#include <set>
-#include <map>
-#include <vector>
-
 #include <wx/choicdlg.h>
 #include <wx/filedlg.h>
-#include <wx/filefn.h>
 #include <kiplatform/ui.h>
 
 #include <board.h>
-#include <gestfich.h>
-#include <footprint.h>
-#include <kiway_holder.h>
-#include <paths.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew_settings.h>
-#include <pgm_base.h>
 #include <project.h>
 #include <project/project_file.h>
+#include <pcb_io/ipc2581/ipc2581_export_job.h>
 #include <pcb_io/ipc2581/pcb_io_ipc2581.h>
-#include <pcb_io/pcb_io_mgr.h>
 #include <widgets/wx_html_report_panel.h>
 #include <widgets/wx_progress_reporters.h>
-#include <settings/settings_manager.h>
 #include <tools/zone_filler_tool.h>
 #include <tool/tool_manager.h>
 #include <string_utils.h>
 #include <widgets/std_bitmap_button.h>
 #include <jobs/job_export_pcb_ipc2581.h>
 #include <wx_filename.h>
-
-
-namespace
-{
-class TEMP_IPC_EXPORT
-{
-public:
-    bool Create( bool aDirectory, const wxString& aFileName )
-    {
-        m_root = wxFileName::CreateTempFileName( wxS( "pcbnew_ipc" ) );
-
-        if( m_root.IsEmpty() )
-            return false;
-
-        if( !aDirectory )
-        {
-            m_file = m_root;
-            return true;
-        }
-
-        if( !wxRemoveFile( m_root ) || !wxFileName::Mkdir( m_root, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
-            return false;
-
-        m_isDirectory = true;
-        m_file = wxFileName( m_root, aFileName ).GetFullPath();
-        return true;
-    }
-
-    ~TEMP_IPC_EXPORT()
-    {
-        if( m_isDirectory && wxDirExists( m_root ) )
-            wxFileName::Rmdir( m_root, wxPATH_RMDIR_RECURSIVE );
-        else if( wxFileExists( m_root ) )
-            wxRemoveFile( m_root );
-    }
-
-    const wxString& File() const { return m_file; }
-    const wxString& Root() const { return m_root; }
-
-private:
-    wxString m_root;
-    wxString m_file;
-    bool     m_isDirectory = false;
-};
-} // namespace
 
 
 DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent ) :
@@ -254,136 +197,10 @@ void DIALOG_EXPORT_2581::onOKClick( wxCommandEvent& event )
     WX_PROGRESS_REPORTER progress( this, _( "Generate IPC-2581 File" ),
                                    PCB_IO_IPC2581::EXPORT_PHASES, PR_CAN_ABORT );
 
-    if( !GenerateFile( job, m_parent->GetBoard(), &progress, &reporter ) )
+    if( !GenerateIpc2581File( job, m_parent->GetBoard(), &progress, &reporter ) )
         return;
 
     reporter.Report( _( "IPC-2581 file generated successfully." ), RPT_SEVERITY_ACTION );
-}
-
-
-bool DIALOG_EXPORT_2581::GenerateFile( JOB_EXPORT_PCB_IPC2581& aJob, BOARD* aBoard,
-                                       PROGRESS_REPORTER* aProgressReporter, REPORTER* aReporter )
-{
-    wxCHECK( aBoard, false );
-    wxString outPath = aJob.GetFullOutputPath( aBoard->GetProject() );
-
-    if( !PATHS::EnsurePathExists( outPath, true ) )
-    {
-        if( aReporter )
-            aReporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
-
-        return false;
-    }
-
-    std::map<std::string, UTF8> props;
-    props["units"] = aJob.m_units == JOB_EXPORT_PCB_FAB::UNITS::MM ? "mm" : "inch";
-    props["sigfig"] = wxString::Format( "%d", aJob.m_precision );
-    props["version"] = aJob.m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C ? "C" : "B";
-    props["OEMRef"] = aJob.m_colInternalId;
-    props["mpn"] = aJob.m_colMfgPn;
-    props["mfg"] = aJob.m_colMfg;
-    props["dist"] = aJob.m_colDist;
-    props["distpn"] = aJob.m_colDistPn;
-
-    if( !aJob.m_variantNames.empty() )
-        props["variant"] = aJob.m_variantNames.front();
-
-    if( !aJob.m_mode.IsEmpty() )
-        props["mode"] = aJob.m_mode;
-
-    if( !aJob.m_sections.IsEmpty() )
-        props["sections"] = aJob.m_sections;
-
-    if( !aJob.m_netNamePolicy.IsEmpty() )
-        props["netnames"] = aJob.m_netNamePolicy;
-
-    if( !aJob.m_refDesPolicy.IsEmpty() )
-        props["refdes"] = aJob.m_refDesPolicy;
-
-    wxString bomRev = aJob.m_bomRev;
-
-    if( bomRev.IsEmpty() && aBoard->GetProject() )
-    {
-        const IP2581_BOM& bomSettings = aBoard->GetProject()->GetProjectFile().m_IP2581Bom;
-        bomRev = bomSettings.bomRev;
-
-        if( bomRev.IsEmpty() )
-            bomRev = bomSettings.schRevision;
-    }
-
-    if( !bomRev.IsEmpty() )
-        props["bomrev"] = bomRev;
-
-    wxFileName xmlName = outPath;
-    xmlName.SetExt( FILEEXT::Ipc2581FileExtension );
-    TEMP_IPC_EXPORT temporary;
-
-    if( !temporary.Create( aJob.m_compress, xmlName.GetFullName() ) )
-    {
-        if( aReporter )
-            aReporter->Report( _( "Cannot create temporary IPC-2581 output." ), RPT_SEVERITY_ERROR );
-
-        return false;
-    }
-
-    wxString tempFile = temporary.File();
-
-    try
-    {
-        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::IPC2581 ) );
-        pi->SetProgressReporter( aProgressReporter );
-        pi->SetReporter( aReporter );
-        pi->SaveBoard( tempFile, *aBoard, &props );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        if( aReporter )
-        {
-            aReporter->Report( wxString::Format( _( "Error generating IPC-2581 file '%s'.\n%s" ),
-                                                  aJob.m_filename,
-                                                  ioe.What() ),
-                                RPT_SEVERITY_ERROR );
-        }
-
-        return false;
-    }
-
-    if( aJob.m_compress )
-    {
-        wxString error;
-
-        if( !WriteDirectoryArchive( temporary.Root(), outPath, ARCHIVE_FORMAT::ZIP, wxEmptyString, &error ) )
-        {
-            if( aReporter )
-            {
-                aReporter->Report( wxString::Format( _( "Cannot write IPC-2581 archive '%s'.\n%s" ),
-                                                     outPath, error ), RPT_SEVERITY_ERROR );
-            }
-
-            return false;
-        }
-
-        aJob.AddOutput( outPath );
-        return true;
-    }
-
-    // If save succeeded, replace the original with what we just wrote
-    if( !wxRenameFile( tempFile, outPath ) )
-    {
-        if( aReporter )
-        {
-            aReporter->Report( wxString::Format( _( "Error generating IPC-2581 file '%s'.\n"
-                                                     "Failed to rename temporary file '%s." ),
-                                                  outPath,
-                                                  tempFile ),
-                                RPT_SEVERITY_ERROR );
-        }
-
-        return false;
-    }
-
-    aJob.AddOutput( outPath );
-    return true;
 }
 
 
@@ -438,8 +255,12 @@ bool DIALOG_EXPORT_2581::TransferDataToWindow()
         if( !prj.m_IP2581Bom.sections.IsEmpty() )
             m_contentPanel->SetSectionKey( prj.m_IP2581Bom.sections );
 
-        m_contentPanel->SetNetNamePolicy( prj.m_IP2581Bom.netNames );
-        m_contentPanel->SetRefDesPolicy( prj.m_IP2581Bom.refDes );
+        m_contentPanel->SetNetNames( prj.m_IP2581Bom.netNames == wxS( "anonymize" )
+                                             ? JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE
+                                             : JOB_EXPORT_PCB_FAB::NET_NAMES::INCLUDE );
+        m_contentPanel->SetRefDes( prj.m_IP2581Bom.refDes == wxS( "omit" )
+                                           ? JOB_EXPORT_PCB_IPC2581::REF_DES::OMIT
+                                           : JOB_EXPORT_PCB_IPC2581::REF_DES::INCLUDE );
     }
     else
     {
@@ -450,14 +271,13 @@ bool DIALOG_EXPORT_2581::TransferDataToWindow()
         bomFields.m_dist = m_job->m_colDist;
         bomFields.m_revision = m_job->m_bomRev;
 
-        if( std::optional<IPC2581::MODE> mode = IPC2581::ModeFromToken( m_job->m_mode ) )
-            m_contentPanel->SetDataSet( *mode );
+        m_contentPanel->SetDataSet( m_job->m_dataSet );
 
         if( !m_job->m_sections.IsEmpty() )
             m_contentPanel->SetSectionKey( m_job->m_sections );
 
-        m_contentPanel->SetNetNamePolicy( m_job->m_netNamePolicy );
-        m_contentPanel->SetRefDesPolicy( m_job->m_refDesPolicy );
+        m_contentPanel->SetNetNames( m_job->m_netNames );
+        m_contentPanel->SetRefDes( m_job->m_refDes );
         m_contentPanel->SetVariantNames( m_job->m_variantNames );
     }
 
@@ -478,10 +298,12 @@ void DIALOG_EXPORT_2581::saveToProject()
     prj.m_IP2581Bom.distPN = bomFields.m_distPn;
     prj.m_IP2581Bom.dist = bomFields.m_dist;
     prj.m_IP2581Bom.bomRev = bomFields.m_revision;
-    prj.m_IP2581Bom.mode = IPC2581::ModeToken( GetDataSet() );
+    prj.m_IP2581Bom.mode = IPC2581::ModeToken( m_contentPanel->GetDataSet() );
     prj.m_IP2581Bom.sections = m_contentPanel->GetSectionKey().value_or( wxString() );
-    prj.m_IP2581Bom.netNames = GetNetNamePolicy();
-    prj.m_IP2581Bom.refDes = GetRefDesPolicy();
+    prj.m_IP2581Bom.netNames = m_contentPanel->GetNetNames() == JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE
+                                       ? wxS( "anonymize" ) : wxS( "include" );
+    prj.m_IP2581Bom.refDes = m_contentPanel->GetRefDes() == JOB_EXPORT_PCB_IPC2581::REF_DES::OMIT
+                                     ? wxS( "omit" ) : wxS( "include" );
 }
 
 
@@ -505,9 +327,9 @@ bool DIALOG_EXPORT_2581::TransferDataFromWindow()
                                                         : JOB_EXPORT_PCB_FAB::UNITS::INCH;
         m_job->m_precision = m_precision->GetValue();
         m_job->m_compress = GetCompress();
-        m_job->m_mode = IPC2581::ModeToken( GetDataSet() );
-        m_job->m_netNamePolicy = GetNetNamePolicy();
-        m_job->m_refDesPolicy = GetRefDesPolicy();
+        m_job->m_dataSet = m_contentPanel->GetDataSet();
+        m_job->m_netNames = m_contentPanel->GetNetNames();
+        m_job->m_refDes = m_contentPanel->GetRefDes();
 
         m_job->m_sections = m_contentPanel->GetSectionKey().value_or( wxString() );
         m_job->m_variantNames = m_contentPanel->GetVariantNames();

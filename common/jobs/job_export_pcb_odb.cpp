@@ -85,15 +85,6 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::ORIGIN,
                                       { JOB_EXPORT_PCB_ODB::ORIGIN::GRID, "grid" },
                               } )
 
-NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_ODB::DATA_SET,
-                              {
-                                      { JOB_EXPORT_PCB_ODB::DATA_SET::ALL, "all" },
-                                      { JOB_EXPORT_PCB_ODB::DATA_SET::FABRICATION, "fabrication" },
-                                      { JOB_EXPORT_PCB_ODB::DATA_SET::ASSEMBLY, "assembly" },
-                                      { JOB_EXPORT_PCB_ODB::DATA_SET::TEST, "test" },
-                                      { JOB_EXPORT_PCB_ODB::DATA_SET::STACKUP, "stackup" },
-                              } )
-
 
 JOB_EXPORT_PCB_ODB::JOB_EXPORT_PCB_ODB() :
         JOB_EXPORT_PCB_FAB( "odb" ),
@@ -104,10 +95,25 @@ JOB_EXPORT_PCB_ODB::JOB_EXPORT_PCB_ODB() :
             new JOB_PARAM<VARIANT_PACKAGING>( "variant_packaging", &m_variantPackaging, m_variantPackaging ) );
     m_params.emplace_back( new JOB_PARAM<ORIGIN>( "origin", &m_origin, m_origin ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "product_name", &m_productName, m_productName ) );
-    m_params.emplace_back( new JOB_PARAM<DATA_SET>( "data_set", &m_dataSet, m_dataSet ) );
-    m_params.emplace_back( new JOB_PARAM<wxString>( "sections", &m_sections, m_sections ) );
-    m_params.emplace_back( new JOB_PARAM<wxString>( "net_names", &m_netNamePolicy, m_netNamePolicy ) );
     m_params.emplace_back( new JOB_PARAM_LIST<ODB_LAYER_OVERRIDE>( "layers", &m_layerOverrides, m_layerOverrides ) );
+}
+
+
+bool JOB_EXPORT_PCB_ODB::SupportsDataSet( DATA_SET aDataSet ) const
+{
+    switch( aDataSet )
+    {
+    case DATA_SET::USERDEF:
+    case DATA_SET::STACKUP:
+    case DATA_SET::FABRICATION:
+    case DATA_SET::ASSEMBLY:
+    case DATA_SET::TEST:
+        return true;
+
+    // An ODB++ product has no BOM-only or stencil-only form
+    default:
+        return false;
+    }
 }
 
 

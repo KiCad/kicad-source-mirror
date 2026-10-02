@@ -127,6 +127,7 @@
 #include <dialogs/dialog_export_2581.h>
 #include <dialogs/dialog_export_idf.h>
 #include <dialogs/dialog_export_odbpp.h>
+#include <pcb_io/ipc2581/ipc2581_export_job.h>
 #include <pcb_io/odbpp/odb_export_job.h>
 #include <dialogs/dialog_export_step.h>
 #include <dialogs/dialog_footprint_fields_table.h>
@@ -3053,7 +3054,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
 
     refillFabZones( *job, brd );
 
-    if( !DIALOG_EXPORT_2581::GenerateFile( *job, brd, m_progressReporter, m_reporter ) )
+    if( !GenerateIpc2581File( *job, brd, m_progressReporter, m_reporter ) )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
     return CLI::EXIT_CODES::SUCCESS;

@@ -33,7 +33,7 @@
 
 #include <pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.h>
 #include <pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
-#include <pcbnew/dialogs/dialog_export_2581.h>
+#include <pcbnew/pcb_io/ipc2581/ipc2581_export_job.h>
 
 #include <board.h>
 #include <board_design_settings.h>
@@ -65,6 +65,18 @@
 
 namespace
 {
+
+void CollectXmlElements( wxXmlNode* aNode, const wxString& aName, std::vector<wxXmlNode*>& aResult )
+{
+    for( wxXmlNode* node = aNode; node; node = node->GetNext() )
+    {
+        if( node->GetName() == aName )
+            aResult.push_back( node );
+
+        CollectXmlElements( node->GetChildren(), aName, aResult );
+    }
+}
+
 
 /**
  * Check if xmllint is available on this system
@@ -277,7 +289,7 @@ BOOST_AUTO_TEST_CASE( CompressedExportKeepsXmlAtArchiveRoot )
     job.SetConfiguredOutputPath( output );
 
     WX_STRING_REPORTER reporter;
-    BOOST_REQUIRE_MESSAGE( DIALOG_EXPORT_2581::GenerateFile( job, board.get(), nullptr, &reporter ),
+    BOOST_REQUIRE_MESSAGE( GenerateIpc2581File( job, board.get(), nullptr, &reporter ),
                            reporter.GetMessages().ToStdString() );
 
     wxFFileInputStream input( output );
@@ -302,7 +314,7 @@ BOOST_AUTO_TEST_CASE( Ipc2581VariantPropertySelectsPopulation )
     job.m_variantNames = { wxS( "Variant A" ) };
     job.SetConfiguredOutputPath( output );
     WX_STRING_REPORTER reporter;
-    BOOST_REQUIRE_MESSAGE( DIALOG_EXPORT_2581::GenerateFile( job, board.get(), nullptr, &reporter ),
+    BOOST_REQUIRE_MESSAGE( GenerateIpc2581File( job, board.get(), nullptr, &reporter ),
                            reporter.GetMessages().ToStdString() );
     BOOST_CHECK_EQUAL( board->GetCurrentVariant(), current );
     wxXmlDocument document;

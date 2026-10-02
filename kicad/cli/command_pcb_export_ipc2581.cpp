@@ -26,7 +26,6 @@
 #include <wx/crt.h>
 
 #include <macros.h>
-#include <wx/tokenzr.h>
 
 #include <locale_io.h>
 
@@ -38,8 +37,6 @@
 #define ARG_BOM_COL_DIST "--bom-col-dist"
 #define ARG_BOM_REV "--bom-rev"
 #define ARG_MODE "--mode"
-#define ARG_SECTIONS "--sections"
-#define ARG_NET_NAMES "--net-names"
 #define ARG_REF_DES "--ref-des"
 
 CLI::PCB_EXPORT_IPC2581_COMMAND::PCB_EXPORT_IPC2581_COMMAND() :
@@ -47,7 +44,8 @@ CLI::PCB_EXPORT_IPC2581_COMMAND::PCB_EXPORT_IPC2581_COMMAND() :
 {
     addDrawingSheetArg();
     addDefineArg();
-    addFabExportArgs();
+    // Existing scripts pass --mode
+    addFabExportArgs( JOB_EXPORT_PCB_IPC2581(), ARG_MODE );
 
     m_argParser.add_description( std::string( "Export the PCB in IPC-2581 format" ) );
 
@@ -90,27 +88,6 @@ CLI::PCB_EXPORT_IPC2581_COMMAND::PCB_EXPORT_IPC2581_COMMAND() :
                                 "Defaults to schematic revision from the project file" ) )
             .metavar( "REVISION" );
 
-    // An absent mode keeps the content that KiCad wrote before the function modes
-    // An explicit userdef does not keep it
-    m_argParser.add_argument( ARG_MODE )
-            .default_value( std::string() )
-            .help( std::string( "Data set to export, per the IPC-2581 function mode table: "
-                                "userdef, bom, stackup, fabrication, assembly, test or "
-                                "stencil" ) )
-            .metavar( "DATA_SET" );
-
-    m_argParser.add_argument( ARG_SECTIONS )
-            .default_value( std::string() )
-            .help( std::string( "Override the optional sections of the chosen data set, as "
-                                "IPC-2581 section key letters" ) )
-            .metavar( "SECTION_KEY" );
-
-    m_argParser.add_argument( ARG_NET_NAMES )
-            .default_value( std::string( "include" ) )
-            .help( std::string( "Whether net names are exported as authored or replaced "
-                                "with opaque names that preserve connectivity" ) )
-            .choices( "include", "anonymize" );
-
     m_argParser.add_argument( ARG_REF_DES )
             .default_value( std::string( "include" ) )
             .help( std::string( "Whether reference designators are exported" ) )
@@ -151,12 +128,9 @@ int CLI::PCB_EXPORT_IPC2581_COMMAND::doPerform( KIWAY& aKiway )
             From_UTF8( m_argParser.get<std::string>( ARG_BOM_COL_DIST ).c_str() );
     ipc2581Job->m_bomRev =
             From_UTF8( m_argParser.get<std::string>( ARG_BOM_REV ).c_str() );
-    ipc2581Job->m_mode = From_UTF8( m_argParser.get<std::string>( ARG_MODE ).c_str() );
-
-    ipc2581Job->m_sections = From_UTF8( m_argParser.get<std::string>( ARG_SECTIONS ).c_str() );
-
-    ipc2581Job->m_netNamePolicy = From_UTF8( m_argParser.get<std::string>( ARG_NET_NAMES ).c_str() );
-    ipc2581Job->m_refDesPolicy = From_UTF8( m_argParser.get<std::string>( ARG_REF_DES ).c_str() );
+    ipc2581Job->m_refDes = m_argParser.get<std::string>( ARG_REF_DES ) == "omit"
+                                   ? JOB_EXPORT_PCB_IPC2581::REF_DES::OMIT
+                                   : JOB_EXPORT_PCB_IPC2581::REF_DES::INCLUDE;
 
     LOCALE_IO dummy;
     return aKiway.ProcessJob( KIWAY::FACE_PCB, ipc2581Job.get() );

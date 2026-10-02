@@ -19,11 +19,34 @@
 
 #include <jobs/job_export_pcb_fab.h>
 
+#include <magic_enum.hpp>
+
 
 NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_FAB::UNITS,
                               {
                                       { JOB_EXPORT_PCB_FAB::UNITS::INCH, "in" },
                                       { JOB_EXPORT_PCB_FAB::UNITS::MM, "mm" },
+                              } )
+
+
+// The null entry comes first so that an unknown token loads as COUNT
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_FAB::DATA_SET,
+                              {
+                                      { JOB_EXPORT_PCB_FAB::DATA_SET::COUNT, nullptr },
+                                      { JOB_EXPORT_PCB_FAB::DATA_SET::USERDEF, "userdef" },
+                                      { JOB_EXPORT_PCB_FAB::DATA_SET::BOM, "bom" },
+                                      { JOB_EXPORT_PCB_FAB::DATA_SET::STACKUP, "stackup" },
+                                      { JOB_EXPORT_PCB_FAB::DATA_SET::FABRICATION, "fabrication" },
+                                      { JOB_EXPORT_PCB_FAB::DATA_SET::ASSEMBLY, "assembly" },
+                                      { JOB_EXPORT_PCB_FAB::DATA_SET::TEST, "test" },
+                                      { JOB_EXPORT_PCB_FAB::DATA_SET::STENCIL, "stencil" },
+                                      { JOB_EXPORT_PCB_FAB::DATA_SET::DFX, "dfx" },
+                              } )
+
+NLOHMANN_JSON_SERIALIZE_ENUM( JOB_EXPORT_PCB_FAB::NET_NAMES,
+                              {
+                                      { JOB_EXPORT_PCB_FAB::NET_NAMES::INCLUDE, "include" },
+                                      { JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE, "anonymize" },
                               } )
 
 
@@ -37,6 +60,29 @@ JOB_EXPORT_PCB_FAB::JOB_EXPORT_PCB_FAB( const std::string& aType ) : JOB( aType,
                                                  m_checkZonesBeforeExport ) );
     m_params.emplace_back( new JOB_PARAM<wxString>( "field_bom_map.mfg_pn", &m_colMfgPn,
                                                      m_colMfgPn ) );
+    m_params.emplace_back( new JOB_PARAM<DATA_SET>( "data_set", &m_dataSet, m_dataSet ) );
+    m_params.emplace_back( new JOB_PARAM<wxString>( "sections", &m_sections, m_sections ) );
+    m_params.emplace_back( new JOB_PARAM<NET_NAMES>( "net_names", &m_netNames, m_netNames ) );
+}
+
+
+JOB_EXPORT_PCB_FAB::DATA_SET JOB_EXPORT_PCB_FAB::DataSetFromToken( const wxString& aToken )
+{
+    if( aToken.IsEmpty() )
+        return DATA_SET::USERDEF;
+
+    // The magic_enum comparison folds ASCII only, so tr_TR cannot break FABRICATION
+    return magic_enum::enum_cast<DATA_SET>( std::string( aToken.ToUTF8() ), magic_enum::case_insensitive )
+            .value_or( DATA_SET::COUNT );
+}
+
+
+std::string JOB_EXPORT_PCB_FAB::DataSetToken( DATA_SET aDataSet )
+{
+    nlohmann::json token = aDataSet;
+
+    // COUNT has no token, and the CLI asks from a static constructor where a throw aborts
+    return token.is_string() ? token.get<std::string>() : std::string();
 }
 
 

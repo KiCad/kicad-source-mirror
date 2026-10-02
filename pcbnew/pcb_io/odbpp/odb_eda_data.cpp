@@ -461,14 +461,14 @@ void EDA_DATA::Write( std::ostream& ost, const ODB_FORMAT& aFormat ) const
         for( const auto& net : nets )
         {
             ost << "#NET " << net->m_index << std::endl;
-            net->Write( ost, aFormat.Includes( IPC2581::SECTION::COMPONENTS ) );
+            net->Write( ost, aFormat.Includes( FAB::SECTION::COMPONENTS ) );
         }
     }
 
     size_t i = 0;
     for( const auto* pkg : packages )
     {
-        if( !aFormat.Includes( IPC2581::SECTION::PACKAGES ) )
+        if( !aFormat.Includes( FAB::SECTION::PACKAGES ) )
             break;
 
         ost << "# PKG " << i << std::endl;

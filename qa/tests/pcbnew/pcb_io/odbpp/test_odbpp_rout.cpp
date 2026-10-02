@@ -33,7 +33,6 @@
 #include <board_stackup_manager/board_stackup.h>
 #include <geometry/shape_poly_set.h>
 #include <reporter.h>
-#include <jobs/job_export_pcb_odb.h>
 #include <pcbnew/pcb_io/odbpp/pcb_io_odbpp.h>
 
 #include "odb_test_utils.h"
@@ -300,15 +299,14 @@ BOOST_AUTO_TEST_CASE( OdbLayerTypeOverrides )
 {
     std::unique_ptr<BOARD> board = LoadBoard( "issue24089/issue24089.kicad_pcb" );
     BOOST_REQUIRE( board );
-    std::vector<ODB_LAYER_OVERRIDE> overrides = { { F_SilkS, true, wxEmptyString, wxS( "DOCUMENT" ) },
-                                                  { Dwgs_User, true, wxEmptyString, wxS( "SOLDER_MASK" ) },
-                                                  { In1_Cu, true, wxEmptyString, wxS( "SIGNAL" ) },
-                                                  { B_Cu, true, wxEmptyString, wxS( "SILK_SCREEN" ) } };
-    std::map<std::string, UTF8>     props;
-    props["layers"] = nlohmann::json( overrides ).dump();
     KI_TEST::SCOPED_TEMP_DIR dir( wxT( "odb_layer_type_overrides" ) );
     PCB_IO_ODBPP             plugin;
-    BOOST_REQUIRE_NO_THROW( plugin.SaveBoard( wxString::FromUTF8( dir.Path().string() ), *board, &props ) );
+    ODB_EXPORT_OPTIONS       options;
+    options.m_layerOverrides = { { F_SilkS, true, wxEmptyString, wxS( "DOCUMENT" ) },
+                                 { Dwgs_User, true, wxEmptyString, wxS( "SOLDER_MASK" ) },
+                                 { In1_Cu, true, wxEmptyString, wxS( "SIGNAL" ) },
+                                 { B_Cu, true, wxEmptyString, wxS( "SILK_SCREEN" ) } };
+    BOOST_REQUIRE_NO_THROW( plugin.Export( wxString::FromUTF8( dir.Path().string() ), *board, options ) );
     std::vector<FIELDS> rows = MatrixLayers( dir.Path() );
 
     const FIELDS* silk = FindRow( rows, "f.silkscreen" );

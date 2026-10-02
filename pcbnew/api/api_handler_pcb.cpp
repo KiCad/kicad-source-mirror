@@ -2806,6 +2806,8 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportIp
     job.m_units = FromProtoEnum<JOB_EXPORT_PCB_FAB::UNITS>( aCtx.Request.units() );
     job.m_checkZonesBeforeExport = aCtx.Request.check_zones();
     job.m_version = FromProtoEnum<JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION>( aCtx.Request.version() );
+    job.m_refDes = FromProtoEnum<JOB_EXPORT_PCB_IPC2581::REF_DES>( aCtx.Request.ref_des() );
+    ApplyFabExportContent( aCtx.Request.content(), job );
 
     return ExecuteBoardJob( pcbContext(), job );
 }
@@ -2825,6 +2827,14 @@ HANDLER_RESULT<types::RunJobResponse> API_HANDLER_PCB::handleRunBoardJobExportIp
     job.SetConfiguredOutputPath( wxString::FromUTF8( aCtx.Request.job_settings().output_path() ) );
 
     return ExecuteBoardJob( pcbContext(), job );
+}
+
+
+void ApplyFabExportContent( const FabExportContent& aContent, JOB_EXPORT_PCB_FAB& aJob )
+{
+    aJob.m_dataSet = FromProtoEnum<JOB_EXPORT_PCB_FAB::DATA_SET>( aContent.data_set() );
+    aJob.m_sections = wxString::FromUTF8( aContent.sections() );
+    aJob.m_netNames = FromProtoEnum<JOB_EXPORT_PCB_FAB::NET_NAMES>( aContent.net_names() );
 }
 
 
@@ -2854,9 +2864,7 @@ void ApplyOdbJobRequest( const RunBoardJobExportODB& aRequest, JOB_EXPORT_PCB_OD
     aJob.m_colMfgPn = wxString::FromUTF8( aRequest.manufacturer_part_number_column() );
     aJob.m_origin = FromProtoEnum<JOB_EXPORT_PCB_ODB::ORIGIN>( aRequest.origin() );
     aJob.m_productName = wxString::FromUTF8( aRequest.product_name() );
-    aJob.m_dataSet = FromProtoEnum<JOB_EXPORT_PCB_ODB::DATA_SET>( aRequest.data_set() );
-    aJob.m_netNamePolicy =
-            aRequest.net_names() == FabNetNamePolicy::FNNP_ANONYMIZE ? wxS( "anonymize" ) : wxS( "include" );
+    ApplyFabExportContent( aRequest.content(), aJob );
 }
 
 

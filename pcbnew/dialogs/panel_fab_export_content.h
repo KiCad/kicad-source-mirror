@@ -27,6 +27,7 @@
 
 #include <dialogs/dialog_export_2581_bom.h>
 #include <exporters/fab_model/fab_sections.h>
+#include <jobs/job_export_pcb_ipc2581.h>
 
 class BOARD;
 
@@ -47,22 +48,22 @@ public:
     void Configure( FAB_CONTENT_FORMAT aFormat, BOARD* aBoard );
     void SetContentChanged( std::function<void()> aCallback ) { m_contentChanged = std::move( aCallback ); }
 
-    IPC2581::MODE                  GetDataSet() const;
-    void                           SetDataSet( IPC2581::MODE aMode );
-    wxString                       GetNetNamePolicy() const;
-    void                           SetNetNamePolicy( const wxString& aPolicy );
-    wxString                       GetRefDesPolicy() const;
-    void                           SetRefDesPolicy( const wxString& aPolicy );
-    const std::optional<wxString>& GetSectionKey() const { return m_sectionKey; }
-    void                           SetSectionKey( const std::optional<wxString>& aKey );
-    std::vector<wxString>          GetVariantNames() const;
-    void                           SetVariantNames( const std::vector<wxString>& aNames );
-    bool                           IsCombinedVariantOutput() const { return m_variantOutput->GetSelection() == 1; }
-    void                           SetCombinedVariantOutput( bool aCombined );
-    const IPC2581_BOM_FIELDS&      GetBomFields() const { return m_bomFields; }
-    void                           SetBomFields( const IPC2581_BOM_FIELDS& aFields ) { m_bomFields = aFields; }
+    FAB::MODE                       GetDataSet() const;
+    void                            SetDataSet( FAB::MODE aMode );
+    JOB_EXPORT_PCB_FAB::NET_NAMES   GetNetNames() const;
+    void                            SetNetNames( JOB_EXPORT_PCB_FAB::NET_NAMES aNetNames );
+    JOB_EXPORT_PCB_IPC2581::REF_DES GetRefDes() const;
+    void                            SetRefDes( JOB_EXPORT_PCB_IPC2581::REF_DES aRefDes );
+    const std::optional<wxString>&  GetSectionKey() const { return m_sectionKey; }
+    void                            SetSectionKey( const std::optional<wxString>& aKey );
+    std::vector<wxString>           GetVariantNames() const;
+    void                            SetVariantNames( const std::vector<wxString>& aNames );
+    bool                            IsCombinedVariantOutput() const { return m_variantOutput->GetSelection() == 1; }
+    void                            SetCombinedVariantOutput( bool aCombined );
+    const IPC2581_BOM_FIELDS&       GetBomFields() const { return m_bomFields; }
+    void                            SetBomFields( const IPC2581_BOM_FIELDS& aFields ) { m_bomFields = aFields; }
 
-    IPC2581::SECTION_SET ResolvedSections() const;
+    FAB::SECTION_SET ResolvedSections() const;
 
 private:
     void onDataSetChange( wxCommandEvent& aEvent ) override;
@@ -75,13 +76,13 @@ private:
     void updateVariantOutput();
     void changed();
 
-    FAB_CONTENT_FORMAT         m_format = FAB_CONTENT_FORMAT::IPC2581;
-    BOARD*                     m_board = nullptr;
-    IPC2581_BOM_FIELDS         m_bomFields;
-    std::vector<IPC2581::MODE> m_modes;
-    std::vector<wxString>      m_selectedVariants;
+    FAB_CONTENT_FORMAT      m_format = FAB_CONTENT_FORMAT::IPC2581;
+    BOARD*                  m_board = nullptr;
+    IPC2581_BOM_FIELDS      m_bomFields;
+    std::vector<FAB::MODE>  m_modes;
+    std::vector<wxString>   m_selectedVariants;
     /// Set after Customize  An empty IPC-2581 key is a true empty selection
-    std::optional<wxString>    m_sectionKey;
-    std::function<void()>      m_contentChanged;
-    int                        m_selectedChoice = 0;
+    std::optional<wxString> m_sectionKey;
+    std::function<void()>   m_contentChanged;
+    int                     m_selectedChoice = 0;
 };

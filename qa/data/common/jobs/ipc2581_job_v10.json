@@ -8,12 +8,8 @@
   "field_bom_map.internal_id": "Internal ID",
   "field_bom_map.mfg": "",
   "field_bom_map.mfg_pn": "",
-  "mode": "",
-  "net_names": "",
   "output_filename": "legacy-ipc.zip",
   "precision": 5,
-  "ref_des": "",
-  "sections": "",
   "units": "in",
   "variant": "V10-IPC",
   "version": "B"

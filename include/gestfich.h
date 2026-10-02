@@ -52,6 +52,32 @@ enum class ARCHIVE_FORMAT
     TGZ
 };
 
+/// Give @a aPath to std::filesystem without a detour through the C locale
+KICOMMON_API std::filesystem::path ToFsPath( const wxString& aPath );
+
+KICOMMON_API wxString FromFsPath( const std::filesystem::path& aPath );
+
+/// A temporary file or directory that is removed when the object goes out of scope
+class KICOMMON_API SCOPED_TEMP_PATH
+{
+public:
+    SCOPED_TEMP_PATH() = default;
+    SCOPED_TEMP_PATH( const SCOPED_TEMP_PATH& ) = delete;
+    SCOPED_TEMP_PATH& operator=( const SCOPED_TEMP_PATH& ) = delete;
+    ~SCOPED_TEMP_PATH();
+
+    /// Create an empty file with a unique name after @a aPrefix
+    bool MakeFile( const wxString& aPrefix );
+
+    /// Create an empty directory with a unique name after @a aPrefix
+    bool MakeDirectory( const wxString& aPrefix );
+
+    const wxString& Path() const { return m_path; }
+
+private:
+    wxString m_path;
+};
+
 using ARCHIVE_STREAM_FACTORY = std::function<std::unique_ptr<wxOutputStream>( wxFFile& )>;
 
 /** Write directory entries in sorted archive path order, using the archive root when aTopDir is empty. */

@@ -33,10 +33,19 @@ public:
 
     void SetDefaultOutputPath( const wxString& aReferenceName );
 
+    void FromJson( const nlohmann::json& aJson ) override;
+    bool SupportsDataSet( DATA_SET aDataSet ) const override;
+
     enum class IPC2581_VERSION
     {
         B,
         C
+    };
+
+    enum class REF_DES
+    {
+        INCLUDE,
+        OMIT
     };
 
 public:
@@ -50,19 +59,7 @@ public:
     wxString        m_colDist;
     wxString        m_bomRev;
 
-    /// Table 4 function mode token such as FABRICATION  An empty value keeps the
-    /// content that KiCad wrote before
-    wxString        m_mode;
-
-    /// Table 4 section key that replaces the optional sections of the function mode
-    /// An empty value lets the function mode select them
-    wxString        m_sections;
-
-    /// Set to include or to anonymize  An anonymous name keeps the connections
-    wxString        m_netNamePolicy;
-
-    /// Set to include or to omit
-    wxString        m_refDesPolicy;
+    REF_DES         m_refDes = REF_DES::INCLUDE;
 };
 
 #endif

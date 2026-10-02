@@ -25,7 +25,9 @@
 #include <optional>
 #include <wx/string.h>
 
-namespace IPC2581
+#include <jobs/job_export_pcb_fab.h>
+
+namespace FAB
 {
 
 /**
@@ -57,20 +59,8 @@ enum class SECTION
     COUNT
 };
 
-/// Columns of Table 4
-enum class MODE
-{
-    USERDEF,
-    BOM,
-    STACKUP,
-    FABRICATION,
-    ASSEMBLY,
-    TEST,
-    STENCIL,
-    DFX,
-
-    COUNT
-};
+/// Columns of Table 4  The job owns the enum so that every layer shares one type
+using MODE = JOB_EXPORT_PCB_FAB::DATA_SET;
 
 /// Table 4 cell values N O and Y
 enum class SECTION_RULE
@@ -149,6 +139,6 @@ wxString ModeToken( MODE aMode );
 /// Read a Table 4 function mode token in upper case or in lower case
 std::optional<MODE> ModeFromToken( const wxString& aToken );
 
-} // namespace IPC2581
+} // namespace FAB
 
 #endif

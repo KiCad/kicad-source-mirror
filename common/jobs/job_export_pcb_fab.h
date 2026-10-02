@@ -35,6 +35,40 @@ public:
         INCH    // Not IN because a Windows header defines it as a macro
     };
 
+    /**
+     * Columns of the IPC-2581C function mode table, Table 4 p 80
+     *
+     * The order indexes that table.  COUNT also marks a token that no data set matches
+     */
+    enum class DATA_SET
+    {
+        USERDEF,
+        BOM,
+        STACKUP,
+        FABRICATION,
+        ASSEMBLY,
+        TEST,
+        STENCIL,
+        DFX,
+
+        COUNT
+    };
+
+    /// An anonymous name keeps the connections
+    enum class NET_NAMES
+    {
+        INCLUDE,
+        ANONYMIZE
+    };
+
+    /// Read a data set token in upper case or in lower case  An empty token is USERDEF
+    static DATA_SET DataSetFromToken( const wxString& aToken );
+
+    /// Lower case token that the job file and the CLI use for @a aDataSet  Empty when it has none
+    static std::string DataSetToken( DATA_SET aDataSet );
+
+    virtual bool SupportsDataSet( DATA_SET aDataSet ) const = 0;
+
     void FromJson( const nlohmann::json& aJson ) override;
     void ToJson( nlohmann::json& aJson ) const override;
 
@@ -45,6 +79,12 @@ public:
     int                   m_precision = 6;
     bool                  m_checkZonesBeforeExport = false;
     wxString              m_colMfgPn;
+    DATA_SET              m_dataSet = DATA_SET::USERDEF;
+
+    /// Section key that replaces the optional sections of the data set
+    /// An empty value lets the data set select them
+    wxString              m_sections;
+    NET_NAMES             m_netNames = NET_NAMES::INCLUDE;
 
 protected:
     explicit JOB_EXPORT_PCB_FAB( const std::string& aType );

@@ -40,6 +40,22 @@ struct VARIANT_NAMES
 };
 } // namespace ODB
 
+/// What a caller asks of one ODB++ export
+struct ODB_EXPORT_OPTIONS
+{
+    bool                            m_inch = false;
+    int                             m_precision = 6;
+    /// Unset exports the current variant of the board
+    std::optional<wxString>         m_variant;
+    wxString                        m_mpnField;
+    wxString                        m_productModelName;
+    JOB_EXPORT_PCB_ODB::ORIGIN      m_origin = JOB_EXPORT_PCB_ODB::ORIGIN::ABSOLUTE_COORDS;
+    bool                            m_anonymizeNets = false;
+    /// Unset exports every section
+    std::optional<FAB::SECTION_SET> m_sections;
+    std::vector<ODB_LAYER_OVERRIDE> m_layerOverrides;
+};
+
 struct ODB_FORMAT
 {
     // Internal units to output units for data values
@@ -55,11 +71,11 @@ struct ODB_FORMAT
     VECTOR2I    m_originOffset{ 0, 0 };
     bool        m_anonymizeNets = false;
     bool        m_writeEdaNets = true;
-    std::optional<IPC2581::SECTION_SET> m_sections;
+    std::optional<FAB::SECTION_SET> m_sections;
     std::vector<ODB_LAYER_OVERRIDE> m_layerOverrides;
     ODB::VARIANT_NAMES m_variantNames;
 
-    bool Includes( IPC2581::SECTION aSection ) const
+    bool Includes( FAB::SECTION aSection ) const
     {
         return !m_sections || m_sections->Contains( aSection );
     }

@@ -906,10 +906,7 @@ bool WriteDirectoryArchive( const wxString& aSourceDir, const wxString& aArchive
 }
 
 
-namespace
-{
-
-std::filesystem::path toFsPath( const wxString& aPath )
+std::filesystem::path ToFsPath( const wxString& aPath )
 {
 #ifdef __WXMSW__
     return std::filesystem::path( std::wstring( aPath.wc_str() ) );
@@ -917,6 +914,52 @@ std::filesystem::path toFsPath( const wxString& aPath )
     return std::filesystem::path( aPath.utf8_string() );
 #endif
 }
+
+
+wxString FromFsPath( const std::filesystem::path& aPath )
+{
+#ifdef __WXMSW__
+    return wxString( aPath.wstring() );
+#else
+    std::u8string utf8 = aPath.u8string();
+    return wxString::FromUTF8( reinterpret_cast<const char*>( utf8.data() ), utf8.size() );
+#endif
+}
+
+
+SCOPED_TEMP_PATH::~SCOPED_TEMP_PATH()
+{
+    if( wxDirExists( m_path ) )
+        wxFileName::Rmdir( m_path, wxPATH_RMDIR_RECURSIVE );
+    else if( wxFileExists( m_path ) )
+        wxRemoveFile( m_path );
+}
+
+
+bool SCOPED_TEMP_PATH::MakeFile( const wxString& aPrefix )
+{
+    m_path = wxFileName::CreateTempFileName( aPrefix );
+    return !m_path.IsEmpty();
+}
+
+
+bool SCOPED_TEMP_PATH::MakeDirectory( const wxString& aPrefix )
+{
+    if( !MakeFile( aPrefix ) || !wxRemoveFile( m_path ) )
+        return false;
+
+    // A non-recursive Mkdir fails on a leaf that someone created after the remove
+    if( wxFileName::Mkdir( m_path, wxS_DIR_DEFAULT, 0 ) )
+        return true;
+
+    // That leaf is not ours to delete
+    m_path.clear();
+    return false;
+}
+
+
+namespace
+{
 
 
 // Best-effort canonicalisation.  Empty path means "couldn't resolve"
@@ -1006,7 +1049,7 @@ void traverseLoopSafe( const wxString& aRoot, wxArrayString& aOutput, bool aColl
 
 
 DIR_LOOP_GUARD::DIR_LOOP_GUARD( const wxString& aRoot, DIR_LOOP_POLICY aPolicy ) :
-        m_root( canonicalPath( toFsPath( aRoot ) ) ),
+        m_root( canonicalPath( ToFsPath( aRoot ) ) ),
         m_policy( aPolicy )
 {
     m_visited.reserve( 256 );
@@ -1018,7 +1061,7 @@ DIR_LOOP_GUARD::DIR_LOOP_GUARD( const wxString& aRoot, DIR_LOOP_POLICY aPolicy )
 
 bool DIR_LOOP_GUARD::ShouldDescend( const wxString& aDir )
 {
-    const std::filesystem::path raw = toFsPath( aDir );
+    const std::filesystem::path raw = ToFsPath( aDir );
     std::filesystem::path       key;
 
     if( m_policy == DIR_LOOP_POLICY::CONFINE_TO_ROOT )

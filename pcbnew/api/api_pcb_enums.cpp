@@ -2021,32 +2021,90 @@ JOB_EXPORT_PCB_ODB::ORIGIN FromProtoEnum( OdbOrigin aValue )
 
 
 template <>
-OdbDataSet ToProtoEnum( JOB_EXPORT_PCB_ODB::DATA_SET aValue )
+FabDataSet ToProtoEnum( JOB_EXPORT_PCB_FAB::DATA_SET aValue )
 {
     switch( aValue )
     {
-    case JOB_EXPORT_PCB_ODB::DATA_SET::ALL: return OdbDataSet::ODBDS_ALL;
-    case JOB_EXPORT_PCB_ODB::DATA_SET::FABRICATION: return OdbDataSet::ODBDS_FABRICATION;
-    case JOB_EXPORT_PCB_ODB::DATA_SET::ASSEMBLY: return OdbDataSet::ODBDS_ASSEMBLY;
-    case JOB_EXPORT_PCB_ODB::DATA_SET::TEST: return OdbDataSet::ODBDS_TEST;
-    case JOB_EXPORT_PCB_ODB::DATA_SET::STACKUP: return OdbDataSet::ODBDS_STACKUP;
-    default: wxCHECK_MSG( false, OdbDataSet::ODBDS_UNKNOWN, "Unhandled ODB++ data set" );
+    case JOB_EXPORT_PCB_FAB::DATA_SET::USERDEF: return FabDataSet::FDS_USERDEF;
+    case JOB_EXPORT_PCB_FAB::DATA_SET::BOM: return FabDataSet::FDS_BOM;
+    case JOB_EXPORT_PCB_FAB::DATA_SET::STACKUP: return FabDataSet::FDS_STACKUP;
+    case JOB_EXPORT_PCB_FAB::DATA_SET::FABRICATION: return FabDataSet::FDS_FABRICATION;
+    case JOB_EXPORT_PCB_FAB::DATA_SET::ASSEMBLY: return FabDataSet::FDS_ASSEMBLY;
+    case JOB_EXPORT_PCB_FAB::DATA_SET::TEST: return FabDataSet::FDS_TEST;
+    case JOB_EXPORT_PCB_FAB::DATA_SET::STENCIL: return FabDataSet::FDS_STENCIL;
+    case JOB_EXPORT_PCB_FAB::DATA_SET::DFX: return FabDataSet::FDS_DFX;
+    default: wxCHECK_MSG( false, FabDataSet::FDS_UNKNOWN, "Unhandled fabrication data set" );
     }
 }
 
 
 template <>
-JOB_EXPORT_PCB_ODB::DATA_SET FromProtoEnum( OdbDataSet aValue )
+JOB_EXPORT_PCB_FAB::DATA_SET FromProtoEnum( FabDataSet aValue )
 {
     switch( aValue )
     {
-    case OdbDataSet::ODBDS_FABRICATION: return JOB_EXPORT_PCB_ODB::DATA_SET::FABRICATION;
-    case OdbDataSet::ODBDS_ASSEMBLY: return JOB_EXPORT_PCB_ODB::DATA_SET::ASSEMBLY;
-    case OdbDataSet::ODBDS_TEST: return JOB_EXPORT_PCB_ODB::DATA_SET::TEST;
-    case OdbDataSet::ODBDS_STACKUP: return JOB_EXPORT_PCB_ODB::DATA_SET::STACKUP;
-    case OdbDataSet::ODBDS_ALL:
-    case OdbDataSet::ODBDS_UNKNOWN:
-    default: return JOB_EXPORT_PCB_ODB::DATA_SET::ALL;
+    case FabDataSet::FDS_BOM: return JOB_EXPORT_PCB_FAB::DATA_SET::BOM;
+    case FabDataSet::FDS_STACKUP: return JOB_EXPORT_PCB_FAB::DATA_SET::STACKUP;
+    case FabDataSet::FDS_FABRICATION: return JOB_EXPORT_PCB_FAB::DATA_SET::FABRICATION;
+    case FabDataSet::FDS_ASSEMBLY: return JOB_EXPORT_PCB_FAB::DATA_SET::ASSEMBLY;
+    case FabDataSet::FDS_TEST: return JOB_EXPORT_PCB_FAB::DATA_SET::TEST;
+    case FabDataSet::FDS_STENCIL: return JOB_EXPORT_PCB_FAB::DATA_SET::STENCIL;
+    case FabDataSet::FDS_DFX: return JOB_EXPORT_PCB_FAB::DATA_SET::DFX;
+    case FabDataSet::FDS_USERDEF:
+    case FabDataSet::FDS_UNKNOWN: return JOB_EXPORT_PCB_FAB::DATA_SET::USERDEF;
+
+    // A value from a newer client must not turn into the broadest data set
+    default: return JOB_EXPORT_PCB_FAB::DATA_SET::COUNT;
+    }
+}
+
+
+template <>
+FabNetNamePolicy ToProtoEnum( JOB_EXPORT_PCB_FAB::NET_NAMES aValue )
+{
+    switch( aValue )
+    {
+    case JOB_EXPORT_PCB_FAB::NET_NAMES::INCLUDE: return FabNetNamePolicy::FNNP_INCLUDE;
+    case JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE: return FabNetNamePolicy::FNNP_ANONYMIZE;
+    default: wxCHECK_MSG( false, FabNetNamePolicy::FNNP_UNKNOWN, "Unhandled net name policy" );
+    }
+}
+
+
+template <>
+JOB_EXPORT_PCB_FAB::NET_NAMES FromProtoEnum( FabNetNamePolicy aValue )
+{
+    switch( aValue )
+    {
+    case FabNetNamePolicy::FNNP_ANONYMIZE: return JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE;
+    case FabNetNamePolicy::FNNP_INCLUDE:
+    case FabNetNamePolicy::FNNP_UNKNOWN:
+    default: return JOB_EXPORT_PCB_FAB::NET_NAMES::INCLUDE;
+    }
+}
+
+
+template <>
+Ipc2581RefDes ToProtoEnum( JOB_EXPORT_PCB_IPC2581::REF_DES aValue )
+{
+    switch( aValue )
+    {
+    case JOB_EXPORT_PCB_IPC2581::REF_DES::INCLUDE: return Ipc2581RefDes::IPC2581RD_INCLUDE;
+    case JOB_EXPORT_PCB_IPC2581::REF_DES::OMIT: return Ipc2581RefDes::IPC2581RD_OMIT;
+    default: wxCHECK_MSG( false, Ipc2581RefDes::IPC2581RD_UNKNOWN, "Unhandled reference designator policy" );
+    }
+}
+
+
+template <>
+JOB_EXPORT_PCB_IPC2581::REF_DES FromProtoEnum( Ipc2581RefDes aValue )
+{
+    switch( aValue )
+    {
+    case Ipc2581RefDes::IPC2581RD_OMIT: return JOB_EXPORT_PCB_IPC2581::REF_DES::OMIT;
+    case Ipc2581RefDes::IPC2581RD_INCLUDE:
+    case Ipc2581RefDes::IPC2581RD_UNKNOWN:
+    default: return JOB_EXPORT_PCB_IPC2581::REF_DES::INCLUDE;
     }
 }
 

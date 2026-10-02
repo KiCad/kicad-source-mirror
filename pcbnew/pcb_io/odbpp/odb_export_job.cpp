@@ -40,64 +40,13 @@
 #include <pcb_edit_frame.h>
 #include <progress_reporter.h>
 #include <project.h>
-#include <io/io_mgr.h>
 #include <jobs/job_export_pcb_odb.h>
-#include <pcb_io/pcb_io_mgr.h>
 #include <locale_io.h>
 #include <string_utils.h>
 
 
 namespace
 {
-class TEMP_ODB_DIRECTORY
-{
-public:
-    bool Create( const wxString& aPrefix = wxS( "kicad-odb" ) )
-    {
-        m_path = wxFileName::CreateTempFileName( aPrefix );
-
-        if( m_path.IsEmpty() || !wxRemoveFile( m_path ) )
-            return false;
-
-        return wxFileName::Mkdir( m_path, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-    }
-
-    ~TEMP_ODB_DIRECTORY()
-    {
-        if( wxDirExists( m_path ) )
-            wxFileName::Rmdir( m_path, wxPATH_RMDIR_RECURSIVE );
-        else if( wxFileExists( m_path ) )
-            wxRemoveFile( m_path );
-    }
-
-    const wxString& Path() const { return m_path; }
-
-private:
-    wxString m_path;
-};
-
-
-std::filesystem::path toFsPath( const wxString& aPath )
-{
-#ifdef __WXMSW__
-    return std::filesystem::path( std::wstring( aPath.wc_str() ) );
-#else
-    return std::filesystem::path( aPath.utf8_string() );
-#endif
-}
-
-
-wxString fromFsPath( const std::filesystem::path& aPath )
-{
-#ifdef __WXMSW__
-    return wxString( aPath.wstring() );
-#else
-    std::u8string utf8 = aPath.u8string();
-    return wxString::FromUTF8( reinterpret_cast<const char*>( utf8.data() ), utf8.size() );
-#endif
-}
-
-
 bool containsBoardFile( const std::filesystem::path& aTarget, const wxString& aBoardFile )
 {
     namespace fs = std::filesystem;
@@ -105,7 +54,7 @@ bool containsBoardFile( const std::filesystem::path& aTarget, const wxString& aB
     if( aBoardFile.IsEmpty() )
         return false;
 
-    fs::path        file = toFsPath( aBoardFile );
+    fs::path        file = ToFsPath( aBoardFile );
     std::error_code ec;
 
     if( !fs::exists( file, ec ) )
@@ -151,37 +100,30 @@ wxString odbProductBase( const JOB_EXPORT_PCB_ODB& aJob, const BOARD* aBoard )
 }
 
 
-std::map<std::string, UTF8> odbJobProperties( const JOB_EXPORT_PCB_ODB& aJob, const BOARD* aBoard,
-                                              const wxString& aVariant, const wxString& aProductName )
+/// aProductModelName is empty when the product keeps the name the plugin derives
+ODB_EXPORT_OPTIONS odbJobOptions( const JOB_EXPORT_PCB_ODB& aJob, const wxString& aVariant,
+                                  const wxString& aProductModelName )
 {
-    std::map<std::string, UTF8> props;
-    props["units"] = aJob.m_units == JOB_EXPORT_PCB_FAB::UNITS::MM ? "mm" : "inch";
-    props["sigfig"] = wxString::Format( "%d", aJob.m_precision );
-    props["variant"] = aVariant.ToUTF8().data();
-    props["mpn"] = aJob.m_colMfgPn.ToUTF8().data();
-    props["origin"] = aJob.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::AUX    ? "aux"
-                      : aJob.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::GRID ? "grid"
-                                                                          : "absolute";
-    props["net_names"] = aJob.m_netNamePolicy == wxS( "anonymize" ) ? "anonymize" : "include";
+    ODB_EXPORT_OPTIONS options;
+    options.m_inch = aJob.m_units == JOB_EXPORT_PCB_FAB::UNITS::INCH;
+    options.m_precision = aJob.m_precision;
+    options.m_variant = aVariant;
+    options.m_mpnField = aJob.m_colMfgPn;
+    options.m_productModelName = aProductModelName;
+    options.m_origin = aJob.m_origin;
+    options.m_anonymizeNets = aJob.m_netNames == JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE;
+    options.m_layerOverrides = aJob.m_layerOverrides;
 
-    switch( aJob.m_dataSet )
-    {
-    case JOB_EXPORT_PCB_ODB::DATA_SET::FABRICATION: props["data_set"] = "fabrication"; break;
-    case JOB_EXPORT_PCB_ODB::DATA_SET::ASSEMBLY: props["data_set"] = "assembly"; break;
-    case JOB_EXPORT_PCB_ODB::DATA_SET::TEST: props["data_set"] = "test"; break;
-    case JOB_EXPORT_PCB_ODB::DATA_SET::STACKUP: props["data_set"] = "stackup"; break;
-    default: props["data_set"] = "all"; break;
-    }
+    // USERDEF with no section key keeps the unfiltered matrix
+    if( aJob.m_dataSet != JOB_EXPORT_PCB_FAB::DATA_SET::USERDEF )
+        options.m_sections = OdbDefaultSections( aJob.m_dataSet );
 
-    props["sections"] = aJob.m_sections.ToUTF8().data();
-    props["layers"] = nlohmann::json( aJob.m_layerOverrides ).dump();
+    FAB::SECTION_SET sections;
 
-    wxString product = aProductName.IsEmpty() ? odbProductBase( aJob, aBoard ) : aProductName;
+    if( !aJob.m_sections.IsEmpty() && FAB::SectionSetFromKeyString( aJob.m_sections, sections ) )
+        options.m_sections = sections;
 
-    if( !aProductName.IsEmpty() || !aJob.m_productName.IsEmpty() )
-        props["product_model_name"] = product.ToUTF8().data();
-
-    return props;
+    return options;
 }
 
 
@@ -189,7 +131,7 @@ bool canReplaceOdbDirectory( const wxString& aTarget, const wxString& aBoardFile
                              const wxString& aJobFile, wxString& aError )
 {
     namespace fs = std::filesystem;
-    fs::path        target = toFsPath( aTarget );
+    fs::path        target = ToFsPath( aTarget );
     std::error_code ec;
 
     if( !fs::exists( target, ec ) )
@@ -241,7 +183,7 @@ bool canReplaceOdbDirectory( const wxString& aTarget, const wxString& aBoardFile
 
         if( std::find( allowed.begin(), allowed.end(), name ) == allowed.end() )
         {
-            aError = wxString::Format( _( "Output directory contains unrelated entry '%s'" ), fromFsPath( name ) );
+            aError = wxString::Format( _( "Output directory contains unrelated entry '%s'" ), FromFsPath( name ) );
             return false;
         }
 
@@ -275,13 +217,13 @@ bool canReplaceOdbDirectory( const wxString& aTarget, const wxString& aBoardFile
 
         if( regular )
         {
-            wxString extension = fromFsPath( nested->path().extension() ).Lower();
+            wxString extension = FromFsPath( nested->path().extension() ).Lower();
 
             if( extension.StartsWith( wxS( ".kicad_" ) ) || extension == wxS( ".pro" )
                 || extension == wxS( ".sch" ) || extension == wxS( ".pcb" ) )
             {
                 aError = wxString::Format( _( "Output directory contains project file '%s'" ),
-                                            fromFsPath( nested->path().filename() ) );
+                                            FromFsPath( nested->path().filename() ) );
                 return false;
             }
         }
@@ -301,8 +243,8 @@ bool CommitOdbDirectory( const wxString& aSource, const wxString& aTarget,
                          REPORTER* aReporter, wxString& aError )
 {
     namespace fs = std::filesystem;
-    fs::path        source = toFsPath( aSource );
-    fs::path        target = toFsPath( aTarget );
+    fs::path        source = ToFsPath( aSource );
+    fs::path        target = ToFsPath( aTarget );
     std::error_code ec;
 
     if( !canReplaceOdbDirectory( aTarget, aBoardFile, aJobFile, aError ) )
@@ -332,7 +274,7 @@ bool CommitOdbDirectory( const wxString& aSource, const wxString& aTarget,
         return false;
     }
 
-    fs::path backupPath = toFsPath( backup );
+    fs::path backupPath = ToFsPath( backup );
     fs::rename( target, backupPath, ec );
 
     if( ec )
@@ -423,10 +365,10 @@ static ODB_EXPORT_RESULT generateOneODBPackage( const JOB_EXPORT_PCB_ODB& aJob, 
 
     if( !compressed && !outputPath.IsEmpty() )
     {
-        std::filesystem::path directory = toFsPath( outputPath );
+        std::filesystem::path directory = ToFsPath( outputPath );
 
         if( directory.filename().empty() && directory != directory.root_path() )
-            outputPath = fromFsPath( directory.parent_path() );
+            outputPath = FromFsPath( directory.parent_path() );
     }
 
     wxFileName outputFn( outputPath );
@@ -514,11 +456,11 @@ static ODB_EXPORT_RESULT generateOneODBPackage( const JOB_EXPORT_PCB_ODB& aJob, 
         }
     }
 
-    TEMP_ODB_DIRECTORY temporary;
-    wxString           prefix = compressed ? wxString( wxS( "kicad-odb" ) )
-                                           : outputFn.GetFullPath() + wxS( ".kicad-temp-" );
+    SCOPED_TEMP_PATH temporary;
+    wxString         prefix = compressed ? wxString( wxS( "kicad-odb" ) )
+                                         : outputFn.GetFullPath() + wxS( ".kicad-temp-" );
 
-    if( !temporary.Create( prefix ) )
+    if( !temporary.MakeDirectory( prefix ) )
     {
         if( aReporter )
             aReporter->Report( _( "Cannot create temporary output directory." ), RPT_SEVERITY_ERROR );
@@ -528,17 +470,19 @@ static ODB_EXPORT_RESULT generateOneODBPackage( const JOB_EXPORT_PCB_ODB& aJob, 
 
     wxString treePath = temporary.Path();
 
-    std::map<std::string, UTF8> props = odbJobProperties( aJob, aBoard, aVariant, aProductName );
-    wxString                    product = aProductName.IsEmpty() ? odbProductBase( aJob, aBoard ) : aProductName;
+    wxString product = aProductName.IsEmpty() ? odbProductBase( aJob, aBoard ) : aProductName;
+    bool     named = !aProductName.IsEmpty() || !aJob.m_productName.IsEmpty();
+
+    ODB_EXPORT_OPTIONS options = odbJobOptions( aJob, aVariant, named ? product : wxString() );
 
     auto saveFile = [&]() -> bool
     {
         try
         {
-            IO_RELEASER<PCB_IO> plugin( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::ODBPP ) );
-            plugin->SetReporter( aReporter );
-            plugin->SetProgressReporter( aProgressReporter );
-            plugin->SaveBoard( treePath, *aBoard, &props );
+            PCB_IO_ODBPP plugin;
+            plugin.SetReporter( aReporter );
+            plugin.SetProgressReporter( aProgressReporter );
+            plugin.Export( treePath, *aBoard, options );
             return true;
         }
         catch( const IO_ERROR& error )
@@ -636,6 +580,24 @@ ODB_EXPORT_RESULT GenerateODBPPFiles( const JOB_EXPORT_PCB_ODB& aJob, BOARD* aBo
     if( !aBoard )
         return generateOneODBPackage( aJob, aBoard, aParentFrame, aProgressReporter, aReporter,
                                       wxString(), wxString(), wxString() );
+
+    if( !aJob.SupportsDataSet( aJob.m_dataSet ) )
+    {
+        if( aReporter )
+            aReporter->Report( _( "Unsupported ODB++ data set." ), RPT_SEVERITY_ERROR );
+
+        return result;
+    }
+
+    FAB::SECTION_SET sections;
+
+    if( !FAB::SectionSetFromKeyString( aJob.m_sections, sections ) )
+    {
+        if( aReporter )
+            aReporter->Report( _( "Unknown ODB++ section key." ), RPT_SEVERITY_ERROR );
+
+        return result;
+    }
 
     std::vector<wxString> variants = aJob.m_variantNames.empty()
                                      ? std::vector<wxString>{ aBoard->GetCurrentVariant() } : aJob.m_variantNames;
@@ -818,30 +780,30 @@ wxString UpdateOdbVariantOutputPath( const wxString& aPath, bool aDirectory, boo
 }
 
 
-IPC2581::SECTION_SET OdbDefaultSections( IPC2581::MODE aMode )
+FAB::SECTION_SET OdbDefaultSections( FAB::MODE aMode )
 {
-    IPC2581::SECTION_SET defaults;
+    FAB::SECTION_SET defaults;
 
-    if( aMode == IPC2581::MODE::USERDEF )
+    if( aMode == FAB::MODE::USERDEF )
     {
         defaults.set();
-        defaults.Set( IPC2581::SECTION::DFX, false );
+        defaults.Set( FAB::SECTION::DFX, false );
     }
     else
     {
-        defaults = IPC2581::RequiredSections( aMode ) | IPC2581::RecommendedOptionalSections( aMode );
+        defaults = FAB::RequiredSections( aMode ) | FAB::RecommendedOptionalSections( aMode );
     }
 
     return defaults;
 }
 
 
-wxString OdbSectionKeyForSelection( IPC2581::MODE aMode, const IPC2581::SECTION_SET& aSelection )
+wxString OdbSectionKeyForSelection( FAB::MODE aMode, const FAB::SECTION_SET& aSelection )
 {
     if( aSelection == OdbDefaultSections( aMode ) )
         return wxString();
 
-    return IPC2581::SectionKeyString( aSelection );
+    return FAB::SectionKeyString( aSelection );
 }
 
 
@@ -862,10 +824,10 @@ std::vector<ODB_MATRIX_PREVIEW_ROW> PreviewOdbMatrix( BOARD* aBoard, const JOB_E
     if( !aBoard )
         return {};
 
-    std::map<std::string, UTF8> props = odbJobProperties( aJob, aBoard, aBoard->GetCurrentVariant(), wxString() );
-    props["layers"] = "[]";
+    ODB_EXPORT_OPTIONS options = odbJobOptions( aJob, aBoard->GetCurrentVariant(), wxString() );
+    options.m_layerOverrides.clear();
     PCB_IO_ODBPP plugin;
-    plugin.ConfigureExport( *aBoard, &props );
+    plugin.ConfigureExport( *aBoard, options );
     ODB_MATRIX_ENTITY matrix( aBoard, &plugin );
     matrix.InitEntityData();
     std::vector<ODB_MATRIX_PREVIEW_ROW> preview;

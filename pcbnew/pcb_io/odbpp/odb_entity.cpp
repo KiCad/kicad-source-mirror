@@ -288,7 +288,7 @@ void ODB_MATRIX_ENTITY::InitMatrixLayerData()
     {
         auto sectionFor = []( const MATRIX_LAYER& aLayer )
         {
-            using SECTION = IPC2581::SECTION;
+            using SECTION = FAB::SECTION;
 
             if( aLayer.m_info.m_role == ODB_LAYER_ROLE::COMPONENT )
                 return SECTION::COMPONENTS;
@@ -1408,7 +1408,7 @@ void ODB_STEP_ENTITY::InitEdaData()
 
     // for CMP
     size_t j = 0;
-    bool   writeComponents = m_plugin->GetFormat().Includes( IPC2581::SECTION::COMPONENTS );
+    bool   writeComponents = m_plugin->GetFormat().Includes( FAB::SECTION::COMPONENTS );
 
     for( const FOOTPRINT* fp : m_board->Footprints() )
     {
@@ -1515,7 +1515,7 @@ void ODB_STEP_ENTITY::GenerateFiles( ODB_TREE_WRITER& writer )
     writer.CreateEntityDirectory( step_root, "eda" );
     GenerateEdaFiles( writer );
 
-    if( m_plugin->GetFormat().Includes( IPC2581::SECTION::PHYSICAL_NET ) )
+    if( m_plugin->GetFormat().Includes( FAB::SECTION::PHYSICAL_NET ) )
     {
         writer.CreateEntityDirectory( step_root, "netlists/cadnet" );
         GenerateNetlistsFiles( writer );

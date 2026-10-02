@@ -141,10 +141,57 @@ BOOST_AUTO_TEST_CASE( FabV10JobsLoadUnchanged )
     BOOST_CHECK( ipc.m_colMfgPn.IsEmpty() );
     BOOST_CHECK( odb.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::ABSOLUTE_COORDS );
     BOOST_CHECK( odb.m_productName.IsEmpty() );
-    BOOST_CHECK( odb.m_dataSet == JOB_EXPORT_PCB_ODB::DATA_SET::ALL );
+    BOOST_CHECK( odb.m_dataSet == JOB_EXPORT_PCB_FAB::DATA_SET::USERDEF );
     BOOST_CHECK( odb.m_sections.IsEmpty() );
-    BOOST_CHECK_EQUAL( odb.m_netNamePolicy, wxString( wxS( "include" ) ) );
+    BOOST_CHECK( odb.m_netNames == JOB_EXPORT_PCB_FAB::NET_NAMES::INCLUDE );
     BOOST_CHECK( odb.m_layerOverrides.empty() );
+    BOOST_CHECK( ipc.m_dataSet == JOB_EXPORT_PCB_FAB::DATA_SET::USERDEF );
+    BOOST_CHECK( ipc.m_netNames == JOB_EXPORT_PCB_FAB::NET_NAMES::INCLUDE );
+    BOOST_CHECK( ipc.m_refDes == JOB_EXPORT_PCB_IPC2581::REF_DES::INCLUDE );
+}
+
+
+// Nightlies kept the IPC-2581 function mode under "mode" and wrote empty strings by default
+BOOST_AUTO_TEST_CASE( Ipc2581NightlyContentKeysStillLoad )
+{
+    using DATA_SET = JOB_EXPORT_PCB_FAB::DATA_SET;
+
+    JOB_EXPORT_PCB_IPC2581 job;
+    job.FromJson( nlohmann::json{ { "mode", "FABRICATION" },
+                                  { "sections", "KE" },
+                                  { "net_names", "anonymize" },
+                                  { "ref_des", "omit" } } );
+    BOOST_CHECK( job.m_dataSet == DATA_SET::FABRICATION );
+    BOOST_CHECK_EQUAL( job.m_sections, wxString( wxS( "KE" ) ) );
+    BOOST_CHECK( job.m_netNames == JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE );
+    BOOST_CHECK( job.m_refDes == JOB_EXPORT_PCB_IPC2581::REF_DES::OMIT );
+
+    nlohmann::json json;
+    job.ToJson( json );
+    BOOST_CHECK_EQUAL( json.at( "data_set" ).get<std::string>(), "fabrication" );
+    BOOST_CHECK( !json.contains( "mode" ) );
+
+    JOB_EXPORT_PCB_IPC2581 reloaded;
+    reloaded.FromJson( json );
+    BOOST_CHECK( reloaded.m_dataSet == DATA_SET::FABRICATION );
+
+    JOB_EXPORT_PCB_IPC2581 unset;
+    unset.FromJson( nlohmann::json{ { "mode", "" }, { "net_names", "" }, { "ref_des", "" } } );
+    BOOST_CHECK( unset.m_dataSet == DATA_SET::USERDEF );
+    BOOST_CHECK( unset.m_netNames == JOB_EXPORT_PCB_FAB::NET_NAMES::INCLUDE );
+    BOOST_CHECK( unset.m_refDes == JOB_EXPORT_PCB_IPC2581::REF_DES::INCLUDE );
+
+    // An unknown token must not turn into the broadest data set
+    JOB_EXPORT_PCB_IPC2581 bogus;
+    bogus.FromJson( nlohmann::json{ { "mode", "bogus" } } );
+    BOOST_CHECK( bogus.m_dataSet == DATA_SET::COUNT );
+
+    BOOST_CHECK( JOB_EXPORT_PCB_FAB::DataSetToken( DATA_SET::COUNT ).empty() );
+    BOOST_CHECK_EQUAL( JOB_EXPORT_PCB_FAB::DataSetToken( DATA_SET::FABRICATION ), "fabrication" );
+
+    JOB_EXPORT_PCB_ODB bogusOdb;
+    bogusOdb.FromJson( nlohmann::json{ { "data_set", "bogus" } } );
+    BOOST_CHECK( bogusOdb.m_dataSet == DATA_SET::COUNT );
 }
 
 

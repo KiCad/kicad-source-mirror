@@ -21,7 +21,9 @@
 
 #include <array>
 
-namespace IPC2581
+#include <magic_enum.hpp>
+
+namespace FAB
 {
 
 namespace
@@ -61,14 +63,6 @@ constexpr std::array<std::array<SECTION_RULE, MODE_COUNT>, SECTION_COUNT> TABLE_
 constexpr std::array<char, SECTION_COUNT> SECTION_KEYS = {
     'K', 'B', 'C', 'A', 'S', 'U', 'M', 'P', 'L', 'R', 'D', 'O', 'I', 'E', 'F', 'G', 'Y', 'X'
 };
-
-constexpr std::array<const char*, MODE_COUNT> MODE_TOKENS = {
-    "USERDEF", "BOM", "STACKUP", "FABRICATION", "ASSEMBLY", "TEST", "STENCIL", "DFX"
-};
-
-// A new function mode in the middle of MODE moves each token after it
-static_assert( MODE_TOKENS[static_cast<size_t>( MODE::DFX )][0] == 'D',
-               "MODE_TOKENS is out of step with MODE" );
 
 SECTION_SET sectionsWithRule( MODE aMode, SECTION_RULE aRule )
 {
@@ -215,32 +209,20 @@ bool SectionSetFromKeyString( const wxString& aKey, SECTION_SET& aResult )
 
 wxString ModeToken( MODE aMode )
 {
-    return wxString::FromAscii( MODE_TOKENS[static_cast<size_t>( aMode )] );
+    std::string_view name = magic_enum::enum_name( aMode );
+    return wxString::FromAscii( name.data(), name.size() );
 }
 
 
 std::optional<MODE> ModeFromToken( const wxString& aToken )
 {
-    // wxString::Upper() uses the locale
-    // In tr_TR it changes i to a dotted capital and no lowercase name agrees
-    wxString token;
+    if( aToken.IsEmpty() )
+        return std::nullopt;
 
-    for( wxUniChar ch : aToken )
-    {
-        if( ch >= 'a' && ch <= 'z' )
-            token << static_cast<wxChar>( ch - 'a' + 'A' );
-        else
-            token << ch;
-    }
+    MODE mode = JOB_EXPORT_PCB_FAB::DataSetFromToken( aToken );
 
-    for( size_t ii = 0; ii < MODE_COUNT; ++ii )
-    {
-        if( token == wxString::FromAscii( MODE_TOKENS[ii] ) )
-            return static_cast<MODE>( ii );
-    }
-
-    return std::nullopt;
+    return mode == MODE::COUNT ? std::nullopt : std::optional<MODE>( mode );
 }
 
 
-} // namespace IPC2581
+} // namespace FAB

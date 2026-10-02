@@ -571,11 +571,28 @@ BOOST_AUTO_TEST_CASE( OdbOrigin )
                  == JOB_EXPORT_PCB_ODB::ORIGIN::ABSOLUTE_COORDS );
 }
 
-BOOST_AUTO_TEST_CASE( OdbDataSet )
+BOOST_AUTO_TEST_CASE( FabDataSet )
 {
-    testEnums<JOB_EXPORT_PCB_ODB::DATA_SET, kiapi::board::jobs::OdbDataSet>();
-    BOOST_CHECK( FromProtoEnum<JOB_EXPORT_PCB_ODB::DATA_SET>( kiapi::board::jobs::ODBDS_UNKNOWN )
-                 == JOB_EXPORT_PCB_ODB::DATA_SET::ALL );
+    // COUNT marks an unrecognised token and has no API value
+    testEnums<JOB_EXPORT_PCB_FAB::DATA_SET, kiapi::board::jobs::FabDataSet>( true );
+    BOOST_CHECK( FromProtoEnum<JOB_EXPORT_PCB_FAB::DATA_SET>( kiapi::board::jobs::FDS_UNKNOWN )
+                 == JOB_EXPORT_PCB_FAB::DATA_SET::USERDEF );
+    BOOST_CHECK( FromProtoEnum<JOB_EXPORT_PCB_FAB::DATA_SET>( static_cast<kiapi::board::jobs::FabDataSet>( 99 ) )
+                 == JOB_EXPORT_PCB_FAB::DATA_SET::COUNT );
+}
+
+BOOST_AUTO_TEST_CASE( FabNetNamePolicy )
+{
+    testEnums<JOB_EXPORT_PCB_FAB::NET_NAMES, kiapi::board::jobs::FabNetNamePolicy>();
+    BOOST_CHECK( FromProtoEnum<JOB_EXPORT_PCB_FAB::NET_NAMES>( kiapi::board::jobs::FNNP_UNKNOWN )
+                 == JOB_EXPORT_PCB_FAB::NET_NAMES::INCLUDE );
+}
+
+BOOST_AUTO_TEST_CASE( Ipc2581RefDes )
+{
+    testEnums<JOB_EXPORT_PCB_IPC2581::REF_DES, kiapi::board::jobs::Ipc2581RefDes>();
+    BOOST_CHECK( FromProtoEnum<JOB_EXPORT_PCB_IPC2581::REF_DES>( kiapi::board::jobs::IPC2581RD_UNKNOWN )
+                 == JOB_EXPORT_PCB_IPC2581::REF_DES::INCLUDE );
 }
 
 BOOST_AUTO_TEST_CASE( StatsOutputFormat )

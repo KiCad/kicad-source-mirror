@@ -173,22 +173,24 @@ BOOST_AUTO_TEST_CASE( OdbJobRequestMapsExportOptions )
     kiapi::board::jobs::RunBoardJobExportODB request;
     request.set_origin( kiapi::board::jobs::ODBO_GRID );
     request.set_product_name( "board product" );
-    request.set_data_set( kiapi::board::jobs::ODBDS_ASSEMBLY );
-    request.set_net_names( kiapi::board::jobs::FNNP_ANONYMIZE );
+    request.mutable_content()->set_data_set( kiapi::board::jobs::FDS_ASSEMBLY );
+    request.mutable_content()->set_sections( "KP" );
+    request.mutable_content()->set_net_names( kiapi::board::jobs::FNNP_ANONYMIZE );
 
     JOB_EXPORT_PCB_ODB job;
     ApplyOdbJobRequest( request, job );
     BOOST_CHECK( job.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::GRID );
     BOOST_CHECK_EQUAL( job.m_productName, wxString( wxS( "board product" ) ) );
-    BOOST_CHECK( job.m_dataSet == JOB_EXPORT_PCB_ODB::DATA_SET::ASSEMBLY );
-    BOOST_CHECK_EQUAL( job.m_netNamePolicy, wxString( wxS( "anonymize" ) ) );
+    BOOST_CHECK( job.m_dataSet == JOB_EXPORT_PCB_FAB::DATA_SET::ASSEMBLY );
+    BOOST_CHECK_EQUAL( job.m_sections, wxString( wxS( "KP" ) ) );
+    BOOST_CHECK( job.m_netNames == JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE );
 
     kiapi::board::jobs::RunBoardJobExportODB legacy;
     JOB_EXPORT_PCB_ODB                       defaultJob;
     ApplyOdbJobRequest( legacy, defaultJob );
     BOOST_CHECK( defaultJob.m_origin == JOB_EXPORT_PCB_ODB::ORIGIN::ABSOLUTE_COORDS );
-    BOOST_CHECK( defaultJob.m_dataSet == JOB_EXPORT_PCB_ODB::DATA_SET::ALL );
-    BOOST_CHECK_EQUAL( defaultJob.m_netNamePolicy, wxString( wxS( "include" ) ) );
+    BOOST_CHECK( defaultJob.m_dataSet == JOB_EXPORT_PCB_FAB::DATA_SET::USERDEF );
+    BOOST_CHECK( defaultJob.m_netNames == JOB_EXPORT_PCB_FAB::NET_NAMES::INCLUDE );
 }
 
 

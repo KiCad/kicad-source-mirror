@@ -68,30 +68,6 @@ wxArrayString overridableTypeNames( PCB_LAYER_ID aLayer )
     return names;
 }
 
-JOB_EXPORT_PCB_ODB::DATA_SET toDataSet( IPC2581::MODE aMode )
-{
-    switch( aMode )
-    {
-    case IPC2581::MODE::FABRICATION: return JOB_EXPORT_PCB_ODB::DATA_SET::FABRICATION;
-    case IPC2581::MODE::ASSEMBLY: return JOB_EXPORT_PCB_ODB::DATA_SET::ASSEMBLY;
-    case IPC2581::MODE::TEST: return JOB_EXPORT_PCB_ODB::DATA_SET::TEST;
-    case IPC2581::MODE::STACKUP: return JOB_EXPORT_PCB_ODB::DATA_SET::STACKUP;
-    default: return JOB_EXPORT_PCB_ODB::DATA_SET::ALL;
-    }
-}
-
-
-IPC2581::MODE fromDataSet( JOB_EXPORT_PCB_ODB::DATA_SET aDataSet )
-{
-    switch( aDataSet )
-    {
-    case JOB_EXPORT_PCB_ODB::DATA_SET::FABRICATION: return IPC2581::MODE::FABRICATION;
-    case JOB_EXPORT_PCB_ODB::DATA_SET::ASSEMBLY: return IPC2581::MODE::ASSEMBLY;
-    case JOB_EXPORT_PCB_ODB::DATA_SET::TEST: return IPC2581::MODE::TEST;
-    case JOB_EXPORT_PCB_ODB::DATA_SET::STACKUP: return IPC2581::MODE::STACKUP;
-    default: return IPC2581::MODE::USERDEF;
-    }
-}
 } // namespace
 
 
@@ -191,10 +167,10 @@ bool DIALOG_EXPORT_ODBPP::TransferDataToWindow()
     m_choiceOrigin->SetSelection( static_cast<int>( settings.m_origin ) );
     m_productName->SetValue( settings.m_productName );
     m_refillZones->SetValue( m_job ? settings.m_checkZonesBeforeExport : true );
-    m_contentPanel->SetDataSet( fromDataSet( settings.m_dataSet ) );
+    m_contentPanel->SetDataSet( settings.m_dataSet );
     m_contentPanel->SetSectionKey( settings.m_sections.IsEmpty() ? std::optional<wxString>()
                                                                  : std::optional<wxString>( settings.m_sections ) );
-    m_contentPanel->SetNetNamePolicy( settings.m_netNamePolicy );
+    m_contentPanel->SetNetNames( settings.m_netNames );
     m_contentPanel->SetVariantNames( settings.m_variantNames );
     m_contentPanel->SetCombinedVariantOutput( settings.m_variantPackaging
                                               == JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING::COMBINED );
@@ -240,9 +216,9 @@ void DIALOG_EXPORT_ODBPP::populateJob( JOB_EXPORT_PCB_ODB& aJob ) const
     aJob.m_origin = static_cast<JOB_EXPORT_PCB_ODB::ORIGIN>( m_choiceOrigin->GetSelection() );
     aJob.m_productName = m_productName->GetValue();
     aJob.m_checkZonesBeforeExport = m_refillZones->GetValue();
-    aJob.m_dataSet = toDataSet( m_contentPanel->GetDataSet() );
+    aJob.m_dataSet = m_contentPanel->GetDataSet();
     aJob.m_sections = m_contentPanel->GetSectionKey().value_or( wxEmptyString );
-    aJob.m_netNamePolicy = m_contentPanel->GetNetNamePolicy();
+    aJob.m_netNames = m_contentPanel->GetNetNames();
     aJob.m_variantNames = m_contentPanel->GetVariantNames();
     aJob.m_variantPackaging = m_contentPanel->IsCombinedVariantOutput()
                                       ? JOB_EXPORT_PCB_ODB::VARIANT_PACKAGING::COMBINED

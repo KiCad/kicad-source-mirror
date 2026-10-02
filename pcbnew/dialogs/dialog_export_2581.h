@@ -21,12 +21,8 @@
 #define IPC2581_EXPORT_DIALOG_H
 #include "dialog_export_2581_base.h"
 #include "panel_fab_export_content.h"
-#include <pcb_io/ipc2581/ipc2581_function_mode.h>
 
-class BOARD;
 class PCB_EDIT_FRAME;
-class PROGRESS_REPORTER;
-class REPORTER;
 class JOB_EXPORT_PCB_IPC2581;
 
 class DIALOG_EXPORT_2581 : public DIALOG_EXPORT_2581_BASE
@@ -34,10 +30,6 @@ class DIALOG_EXPORT_2581 : public DIALOG_EXPORT_2581_BASE
 public:
     DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent );
     DIALOG_EXPORT_2581( JOB_EXPORT_PCB_IPC2581* aJob, PCB_EDIT_FRAME* aEditFrame, wxWindow* aParent );
-
-    // Generate the actual IPC-2581 file; shared between dialog and CLI
-    static bool GenerateFile( JOB_EXPORT_PCB_IPC2581& aJob, BOARD* aBoard,
-                              PROGRESS_REPORTER* aProgressReporter, REPORTER* aReporter );
 
     wxString GetOutputPath() const
     {
@@ -66,12 +58,6 @@ public:
     {
         return m_cbCompress->GetValue();
     }
-
-    IPC2581::MODE GetDataSet() const { return m_contentPanel->GetDataSet(); }
-
-    wxString GetNetNamePolicy() const { return m_contentPanel->GetNetNamePolicy(); }
-
-    wxString GetRefDesPolicy() const { return m_contentPanel->GetRefDesPolicy(); }
 
 private:
     void onBrowseClicked( wxCommandEvent& event ) override;

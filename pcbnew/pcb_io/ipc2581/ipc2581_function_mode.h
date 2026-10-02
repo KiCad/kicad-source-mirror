@@ -32,6 +32,9 @@
 namespace IPC2581
 {
 
+// The function mode table is the vocabulary that ODB++ shares
+using namespace FAB;
+
 /// Schema revision  The two revisions declare different identity constraints
 enum class REVISION
 {

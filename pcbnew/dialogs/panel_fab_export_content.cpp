@@ -31,16 +31,16 @@ namespace
 {
 struct SECTION_ROW
 {
-    IPC2581::SECTION m_section;
-    wxString         m_label;
-    wxString         m_odb;
-    wxString         m_ipc;
+    FAB::SECTION m_section;
+    wxString     m_label;
+    wxString     m_odb;
+    wxString     m_ipc;
 };
 
 
 std::vector<SECTION_ROW> sectionRows()
 {
-    using SECTION = IPC2581::SECTION;
+    using SECTION = FAB::SECTION;
 
     return {
         { SECTION::BOM_AVL, _( "BOM" ), wxS( "components PRP, boms/" ), wxS( "Bom, Avl" ) },
@@ -68,8 +68,8 @@ std::vector<SECTION_ROW> sectionRows()
 class DIALOG_FAB_CUSTOMIZE : public DIALOG_FAB_CUSTOMIZE_BASE
 {
 public:
-    DIALOG_FAB_CUSTOMIZE( wxWindow* aParent, FAB_CONTENT_FORMAT aFormat, IPC2581::MODE aMode,
-                          const IPC2581::SECTION_SET& aCurrent ) :
+    DIALOG_FAB_CUSTOMIZE( wxWindow* aParent, FAB_CONTENT_FORMAT aFormat, FAB::MODE aMode,
+                          const FAB::SECTION_SET& aCurrent ) :
             DIALOG_FAB_CUSTOMIZE_BASE( aParent ),
             m_original( aCurrent )
     {
@@ -77,13 +77,13 @@ public:
         m_sections->AppendToggleColumn( wxEmptyString, wxDATAVIEW_CELL_ACTIVATABLE, 36 );
         m_sections->AppendTextColumn( _( "Section" ), wxDATAVIEW_CELL_INERT, 170 );
         m_sections->AppendTextColumn( odb ? _( "ODB++" ) : _( "IPC-2581" ), wxDATAVIEW_CELL_INERT, 260 );
-        IPC2581::SECTION_SET optional = IPC2581::OptionalSections( aMode );
+        FAB::SECTION_SET optional = FAB::OptionalSections( aMode );
 
         for( const SECTION_ROW& row : sectionRows() )
         {
             m_rows.push_back( row.m_section );
             // A preset allows changes only to its optional sections
-            m_editable.push_back( ( odb && aMode == IPC2581::MODE::USERDEF ) || optional.Contains( row.m_section ) );
+            m_editable.push_back( ( odb && aMode == FAB::MODE::USERDEF ) || optional.Contains( row.m_section ) );
             wxVector<wxVariant> values;
             values.push_back( wxVariant( aCurrent.Contains( row.m_section ) ) );
             values.push_back( wxVariant( row.m_label ) );
@@ -108,9 +108,9 @@ public:
         finishDialogSettings();
     }
 
-    IPC2581::SECTION_SET Selected() const
+    FAB::SECTION_SET Selected() const
     {
-        IPC2581::SECTION_SET selected;
+        FAB::SECTION_SET selected;
 
         for( size_t index = 0; index < m_rows.size(); ++index )
         {
@@ -145,10 +145,10 @@ private:
         m_restoring = false;
     }
 
-    std::vector<IPC2581::SECTION> m_rows;
-    std::vector<bool>             m_editable;
-    IPC2581::SECTION_SET          m_original;
-    bool                          m_restoring = false;
+    std::vector<FAB::SECTION> m_rows;
+    std::vector<bool>         m_editable;
+    FAB::SECTION_SET          m_original;
+    bool                      m_restoring = false;
 };
 } // namespace
 
@@ -170,24 +170,24 @@ void PANEL_FAB_EXPORT_CONTENT::Configure( FAB_CONTENT_FORMAT aFormat, BOARD* aBo
     m_choiceDataSet->Clear();
     m_modes.clear();
 
-    auto addMode = [&]( IPC2581::MODE aMode, const wxString& aLabel )
+    auto addMode = [&]( FAB::MODE aMode, const wxString& aLabel )
     {
         m_modes.push_back( aMode );
         m_choiceDataSet->Append( aLabel );
     };
 
-    addMode( IPC2581::MODE::USERDEF, _( "All data (user-defined)" ) );
+    addMode( FAB::MODE::USERDEF, _( "All data (user-defined)" ) );
 
     if( !odb )
-        addMode( IPC2581::MODE::BOM, _( "Bill of materials" ) );
+        addMode( FAB::MODE::BOM, _( "Bill of materials" ) );
 
-    addMode( IPC2581::MODE::STACKUP, _( "Stackup" ) );
-    addMode( IPC2581::MODE::FABRICATION, _( "Fabrication" ) );
-    addMode( IPC2581::MODE::ASSEMBLY, _( "Assembly" ) );
-    addMode( IPC2581::MODE::TEST, _( "Test" ) );
+    addMode( FAB::MODE::STACKUP, _( "Stackup" ) );
+    addMode( FAB::MODE::FABRICATION, _( "Fabrication" ) );
+    addMode( FAB::MODE::ASSEMBLY, _( "Assembly" ) );
+    addMode( FAB::MODE::TEST, _( "Test" ) );
 
     if( !odb )
-        addMode( IPC2581::MODE::STENCIL, _( "Stencil" ) );
+        addMode( FAB::MODE::STENCIL, _( "Stencil" ) );
 
     m_choiceDataSet->SetSelection( 0 );
     m_choiceVariant->Clear();
@@ -223,15 +223,15 @@ void PANEL_FAB_EXPORT_CONTENT::Configure( FAB_CONTENT_FORMAT aFormat, BOARD* aBo
 }
 
 
-IPC2581::MODE PANEL_FAB_EXPORT_CONTENT::GetDataSet() const
+FAB::MODE PANEL_FAB_EXPORT_CONTENT::GetDataSet() const
 {
     int selection = m_choiceDataSet->GetSelection();
     return selection >= 0 && static_cast<size_t>( selection ) < m_modes.size() ? m_modes[selection]
-                                                                               : IPC2581::MODE::USERDEF;
+                                                                               : FAB::MODE::USERDEF;
 }
 
 
-void PANEL_FAB_EXPORT_CONTENT::SetDataSet( IPC2581::MODE aMode )
+void PANEL_FAB_EXPORT_CONTENT::SetDataSet( FAB::MODE aMode )
 {
     auto it = std::find( m_modes.begin(), m_modes.end(), aMode );
     m_choiceDataSet->SetSelection( it == m_modes.end() ? 0 : static_cast<int>( it - m_modes.begin() ) );
@@ -239,27 +239,29 @@ void PANEL_FAB_EXPORT_CONTENT::SetDataSet( IPC2581::MODE aMode )
 }
 
 
-wxString PANEL_FAB_EXPORT_CONTENT::GetNetNamePolicy() const
+JOB_EXPORT_PCB_FAB::NET_NAMES PANEL_FAB_EXPORT_CONTENT::GetNetNames() const
 {
-    return m_choiceNetNames->GetSelection() == 1 ? wxS( "anonymize" ) : wxS( "include" );
+    return m_choiceNetNames->GetSelection() == 1 ? JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE
+                                                 : JOB_EXPORT_PCB_FAB::NET_NAMES::INCLUDE;
 }
 
 
-void PANEL_FAB_EXPORT_CONTENT::SetNetNamePolicy( const wxString& aPolicy )
+void PANEL_FAB_EXPORT_CONTENT::SetNetNames( JOB_EXPORT_PCB_FAB::NET_NAMES aNetNames )
 {
-    m_choiceNetNames->SetSelection( aPolicy == wxS( "anonymize" ) ? 1 : 0 );
+    m_choiceNetNames->SetSelection( aNetNames == JOB_EXPORT_PCB_FAB::NET_NAMES::ANONYMIZE ? 1 : 0 );
 }
 
 
-wxString PANEL_FAB_EXPORT_CONTENT::GetRefDesPolicy() const
+JOB_EXPORT_PCB_IPC2581::REF_DES PANEL_FAB_EXPORT_CONTENT::GetRefDes() const
 {
-    return m_choiceRefDes->GetSelection() == 1 ? wxS( "omit" ) : wxS( "include" );
+    return m_choiceRefDes->GetSelection() == 1 ? JOB_EXPORT_PCB_IPC2581::REF_DES::OMIT
+                                               : JOB_EXPORT_PCB_IPC2581::REF_DES::INCLUDE;
 }
 
 
-void PANEL_FAB_EXPORT_CONTENT::SetRefDesPolicy( const wxString& aPolicy )
+void PANEL_FAB_EXPORT_CONTENT::SetRefDes( JOB_EXPORT_PCB_IPC2581::REF_DES aRefDes )
 {
-    m_choiceRefDes->SetSelection( aPolicy == wxS( "omit" ) ? 1 : 0 );
+    m_choiceRefDes->SetSelection( aRefDes == JOB_EXPORT_PCB_IPC2581::REF_DES::OMIT ? 1 : 0 );
 }
 
 
@@ -328,15 +330,15 @@ void PANEL_FAB_EXPORT_CONTENT::SetCombinedVariantOutput( bool aCombined )
 }
 
 
-IPC2581::SECTION_SET PANEL_FAB_EXPORT_CONTENT::ResolvedSections() const
+FAB::SECTION_SET PANEL_FAB_EXPORT_CONTENT::ResolvedSections() const
 {
-    IPC2581::MODE        mode = GetDataSet();
-    IPC2581::SECTION_SET selected;
+    FAB::MODE        mode = GetDataSet();
+    FAB::SECTION_SET selected;
 
-    if( m_sectionKey && IPC2581::SectionSetFromKeyString( *m_sectionKey, selected ) )
+    if( m_sectionKey && FAB::SectionSetFromKeyString( *m_sectionKey, selected ) )
     {
-        if( m_format == FAB_CONTENT_FORMAT::ODBPP && selected.Contains( IPC2581::SECTION::COMPONENTS ) )
-            selected.Set( IPC2581::SECTION::PACKAGES );
+        if( m_format == FAB_CONTENT_FORMAT::ODBPP && selected.Contains( FAB::SECTION::COMPONENTS ) )
+            selected.Set( FAB::SECTION::PACKAGES );
 
         // Table 4 by itself only gives the schema sections
         return m_format == FAB_CONTENT_FORMAT::ODBPP
@@ -348,14 +350,14 @@ IPC2581::SECTION_SET PANEL_FAB_EXPORT_CONTENT::ResolvedSections() const
         return OdbDefaultSections( mode );
 
     // Table 4 by itself only gives the schema sections
-    return IPC2581::ResolveSections( IPC2581::REVISION::C, mode, IPC2581::RecommendedOptionalSections( mode ) )
+    return IPC2581::ResolveSections( IPC2581::REVISION::C, mode, FAB::RecommendedOptionalSections( mode ) )
             .m_included;
 }
 
 
 void PANEL_FAB_EXPORT_CONTENT::updateSummary()
 {
-    IPC2581::SECTION_SET sections = ResolvedSections();
+    FAB::SECTION_SET sections = ResolvedSections();
     wxString             summary = _( "Includes: " );
     wxString             line = summary;
     int                  lines = 1;
@@ -384,8 +386,8 @@ void PANEL_FAB_EXPORT_CONTENT::updateSummary()
     m_lblIncludes->SetLabel( summary );
     m_lblIncludes->SetMinSize( wxSize( -1, lines * GetCharHeight() + 5 ) );
     m_btnBomFields->Enable(
-            sections.Contains( IPC2581::SECTION::BOM_AVL )
-            || ( m_format == FAB_CONTENT_FORMAT::ODBPP && sections.Contains( IPC2581::SECTION::COMPONENTS ) ) );
+            sections.Contains( FAB::SECTION::BOM_AVL )
+            || ( m_format == FAB_CONTENT_FORMAT::ODBPP && sections.Contains( FAB::SECTION::COMPONENTS ) ) );
     Layout();
 
     if( GetParent() )
@@ -489,7 +491,7 @@ void PANEL_FAB_EXPORT_CONTENT::onCustomizeClick( wxCommandEvent& aEvent )
         return;
 
     m_sectionKey = m_format == FAB_CONTENT_FORMAT::ODBPP ? OdbSectionKeyForSelection( GetDataSet(), dialog.Selected() )
-                                                         : IPC2581::SectionKeyString( dialog.Selected() );
+                                                         : FAB::SectionKeyString( dialog.Selected() );
 
     if( m_format == FAB_CONTENT_FORMAT::ODBPP && m_sectionKey->IsEmpty() )
         m_sectionKey.reset();
