@@ -198,6 +198,22 @@ public:
         }
     }
 
+    bool GetAttr( const wxDataViewItem& aItem, unsigned int aCol, wxDataViewItemAttr& aAttr ) const override
+    {
+        CHECKLIST_NODE* node = toNode( aItem );
+
+        if( !node || node->isSection || aCol != COL_STATUS )
+            return false;
+
+        const FILE_CHECKLIST_ENTRY& row = m_data.Rows( node->section )[node->index];
+
+        if( !row.statusColour.IsOk() )
+            return false;
+
+        aAttr.SetColour( row.statusColour );
+        return true;
+    }
+
     bool SetValue( const wxVariant& aVariant, const wxDataViewItem& aItem, unsigned int aCol ) override
     {
         CHECKLIST_NODE* node = toNode( aItem );

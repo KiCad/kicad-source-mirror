@@ -40,6 +40,7 @@
 #include <confirm.h>
 #include <dialogs/git/dialog_text_diff.h>
 #include <diff_merge/diff_doc_kind.h>
+#include <diff_merge/diff_scene.h>
 #include <diff_merge/merge_dispatch.h>
 #include <git/text_diff.h>
 #include <git/git_compare_handler.h>
@@ -49,6 +50,7 @@
 #include <git/git_status_handler.h>
 #include <git/project_git_utils.h>
 #include <kiway.h>
+#include <kiplatform/ui.h>
 #include <mail_type.h>
 #include <pgm_base.h>
 #include <project.h>
@@ -59,26 +61,40 @@
 
 
 // False for a status that is not a working-tree change worth showing.
-static bool statusToDisplay( KIGIT_COMMON::GIT_STATUS aStatus, wxString& aWord, BITMAPS& aIcon )
+// The status word, its icon, and its colour, which is the one the diff draws that kind of
+// change with, lifted a little on a dark background.
+static bool statusToDisplay( KIGIT_COMMON::GIT_STATUS aStatus, wxString& aWord, BITMAPS& aIcon, wxColour& aColour )
 {
+    KICAD_DIFF::DIFF_COLOR_THEME theme;
+    bool                         dark = KIPLATFORM::UI::IsDarkTheme();
+
+    auto colour = [dark]( const KIGFX::COLOR4D& aBase )
+    {
+        return ( dark ? aBase.Brightened( 0.4 ) : aBase ).ToColour();
+    };
+
     switch( aStatus )
     {
     case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_MODIFIED:
         aWord = _( "Modified" );
         aIcon = BITMAPS::git_modified;
+        aColour = colour( theme.modified );
         return true;
     case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_ADDED:
     case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_UNTRACKED:
         aWord = _( "New" );
         aIcon = BITMAPS::git_add;
+        aColour = colour( theme.added );
         return true;
     case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_DELETED:
         aWord = _( "Deleted" );
         aIcon = BITMAPS::git_delete;
+        aColour = colour( theme.removed );
         return true;
     case KIGIT_COMMON::GIT_STATUS::GIT_STATUS_CONFLICTED:
         aWord = _( "Conflict" );
         aIcon = BITMAPS::git_conflict;
+        aColour = colour( theme.conflict );
         return true;
     default: return false;
     }
@@ -129,8 +145,9 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( PROJECT& aProject )
     {
         wxString word;
         BITMAPS  icon = BITMAPS::INVALID_BITMAP;
+        wxColour colour;
 
-        if( !statusToDisplay( fileStatus.status, word, icon ) )
+        if( !statusToDisplay( fileStatus.status, word, icon, colour ) )
             continue;
 
         if( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( path, projectPath ) )
@@ -166,6 +183,7 @@ std::vector<FILE_CHECKLIST_ENTRY> BuildGitChangeEntries( PROJECT& aProject )
         entry.path = relativePath;
         entry.label = wxFileName( relativePath ).GetFullName();
         entry.status = word;
+        entry.statusColour = colour;
         entry.icon = icon;
         entry.checked = true;
         entries.push_back( entry );
