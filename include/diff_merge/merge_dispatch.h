@@ -30,6 +30,10 @@
 
 #include <wx/string.h>
 
+#include <memory>
+
+class WIDGET_DIFF_CANVAS;
+
 
 class KIWAY;
 class REPORTER;
@@ -38,6 +42,8 @@ class wxWindow;
 
 namespace KICAD_DIFF
 {
+
+struct DOCUMENT_DIFF;
 
 /**
  * Run a 3-way document/library merge by calling the owning kiface's
@@ -63,6 +69,31 @@ KICOMMON_API int DispatchMerge( KIWAY& aKiway, DOC_KIND aKind, const wxString& a
 KICOMMON_API int DispatchOpenDiffDialog( KIWAY& aKiway, DOC_KIND aKind, const wxString& aFileA,
                                          const wxString& aFileB, const wxString& aLabelA,
                                          const wxString& aLabelB, wxWindow* aParent,
+                                         REPORTER* aReporter = nullptr );
+
+
+/**
+ * Keeps the documents drawn on a pair of diff canvases alive. Deleting it takes them off the
+ * canvases first, so delete it before the canvases go.
+ */
+class KICOMMON_API DIFF_CANVAS_CONTEXT
+{
+public:
+    virtual ~DIFF_CANVAS_CONTEXT() = default;
+};
+
+
+/**
+ * Diff two files in the owning kiface through its KIFACE_ATTACH_DIFF_CANVASES export. The
+ * kiface draws the first file on aBefore and the second on aAfter with its own painter, and
+ * fills aDiff with the changes between them.
+ *
+ * @return what keeps the documents alive, or null when the kiface is unavailable or a file
+ *         could not be loaded, with the reason in aReporter.
+ */
+KICOMMON_API std::unique_ptr<DIFF_CANVAS_CONTEXT>
+             DispatchAttachDiffCanvases( KIWAY& aKiway, DOC_KIND aKind, const wxString& aFileA, const wxString& aFileB,
+                                         WIDGET_DIFF_CANVAS& aBefore, WIDGET_DIFF_CANVAS& aAfter, DOCUMENT_DIFF& aDiff,
                                          REPORTER* aReporter = nullptr );
 
 } // namespace KICAD_DIFF

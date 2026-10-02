@@ -746,7 +746,8 @@ std::map<std::string, std::vector<wxString>> collectRefNames( git_repository* aR
     if( git_reference_iterator_new( &iter, aRepo ) != GIT_OK )
         return names;
 
-    git_reference* ref = nullptr;
+    KIGIT::GitReferenceIteratorPtr iterPtr( iter );
+    git_reference*                 ref = nullptr;
 
     // Iteration is by ref name, which puts local branches before remote ones and tags last.
     while( git_reference_next( &ref, iter ) == GIT_OK )
@@ -767,7 +768,6 @@ std::map<std::string, std::vector<wxString>> collectRefNames( git_repository* aR
         names[hash].push_back( wxString::FromUTF8( git_reference_shorthand( ref ) ) );
     }
 
-    git_reference_iterator_free( iter );
     return names;
 }
 
@@ -866,8 +866,13 @@ std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax, cons
 
         std::string fullHash = git_oid_tostr_s( &oid );
 
-        if( !search.IsEmpty() && !info.summary.Lower().Contains( search ) && !info.author.Lower().Contains( search )
-            && !info.email.Lower().Contains( search ) && !wxString( fullHash ).Contains( search ) )
+        auto matches = [&]( const wxString& aText )
+        {
+            return aText.Lower().Contains( search );
+        };
+
+        if( !search.IsEmpty() && !matches( info.summary ) && !matches( info.author ) && !matches( info.email )
+            && !matches( fullHash ) )
         {
             continue;
         }

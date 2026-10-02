@@ -140,4 +140,15 @@ void ShowGitFileDiff( EDA_BASE_FRAME* aFrame, const wxString& aRelativePath );
 void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxWindow* aParentWindow = nullptr,
                         const wxString& aRelativePath = wxEmptyString );
 
+/**
+ * Write both sides of one file a commit changed into aWorkspace, the parent's version and the
+ * commit's. A side the file does not exist on comes back as an empty path.
+ *
+ * @return false, with aError set, when the repository is busy, the commit did not change the
+ *         file, or a side could not be read.
+ */
+bool MaterializeCommitFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aCommitHash,
+                            const wxString& aRelativePath, wxString* aBefore, wxString* aAfter,
+                            KICAD_DIFF::DOC_KIND* aKind, wxString* aError );
+
 #endif // GIT_STATUS_ENTRIES_H

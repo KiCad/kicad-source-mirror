@@ -110,7 +110,10 @@ static int eeschemaMergeExport( int aKind, const wxString& aAncestor, const wxSt
 static int eeschemaOpenDiffDialogExport( int aKind, const wxString& aFileA, const wxString& aFileB,
                                          const wxString& aLabelA, const wxString& aLabelB,
                                          wxWindow* aParent, REPORTER* aReporter );
-
+static KICAD_DIFF::DIFF_CANVAS_CONTEXT*
+eeschemaAttachDiffCanvasesExport( int aKind, const wxString& aFileA, const wxString& aFileB,
+                                  WIDGET_DIFF_CANVAS* aBefore, WIDGET_DIFF_CANVAS* aAfter,
+                                  KICAD_DIFF::DOCUMENT_DIFF* aDiff, REPORTER* aReporter );
 
 
 // TODO: This should move out of this file
@@ -761,7 +764,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
             case KIFACE_OPEN_DIFF_DIALOG:
                 return reinterpret_cast<void*>( &eeschemaOpenDiffDialogExport );
-        }
+
+            case KIFACE_ATTACH_DIFF_CANVASES: return reinterpret_cast<void*>( &eeschemaAttachDiffCanvasesExport );
+            }
 
         return nullptr;
     }
@@ -838,6 +843,17 @@ int eeschemaOpenDiffDialogExport( int aKind, const wxString& aFileA, const wxStr
 {
     return kiface.JobHandler()->OpenDiffDialog( static_cast<KICAD_DIFF::DOC_KIND>( aKind ), aFileA,
                                                 aFileB, aLabelA, aLabelB, aParent, aReporter );
+}
+
+
+KICAD_DIFF::DIFF_CANVAS_CONTEXT* eeschemaAttachDiffCanvasesExport( int aKind, const wxString& aFileA,
+                                                                   const wxString& aFileB, WIDGET_DIFF_CANVAS* aBefore,
+                                                                   WIDGET_DIFF_CANVAS*        aAfter,
+                                                                   KICAD_DIFF::DOCUMENT_DIFF* aDiff,
+                                                                   REPORTER*                  aReporter )
+{
+    return kiface.JobHandler()->AttachDiffCanvases( static_cast<KICAD_DIFF::DOC_KIND>( aKind ), aFileA, aFileB, aBefore,
+                                                    aAfter, *aDiff, aReporter );
 }
 
 } // namespace

@@ -160,6 +160,13 @@ public:
     using ITEM_HANDLER = std::function<void( KIGFX::VIEW_ITEM* )>;
     void SetDoubleClickHandler( ITEM_HANDLER aHandler ) { m_dclickHandler = std::move( aHandler ); }
 
+    /// Let a left drag pan the view, for a canvas with nothing to select by dragging.
+    void SetLeftDragPans( bool aPan ) { m_leftDragPans = aPan; }
+
+    /// Make ZoomToFit frame this box instead of the whole document, or everything again when
+    /// cleared. Set it before SetScene, which fits as soon as the canvas has a size.
+    void SetFocusBox( std::optional<BOX2I> aBox ) { m_focusBox = std::move( aBox ); }
+
 private:
     /// Rebuild the overlay from the render scene + current highlight state.
     /// aOverlayOnly marks only the overlay target dirty (for hover/highlight
@@ -184,6 +191,7 @@ private:
     std::optional<BOX2I> highlightedBBox() const;
 
     void onLeftDown( wxMouseEvent& aEvent );
+    void onLeftUp( wxMouseEvent& aEvent );
     void onDoubleClick( wxMouseEvent& aEvent );
     void onMotion( wxMouseEvent& aEvent );
     void onLeave( wxMouseEvent& aEvent );
@@ -225,6 +233,12 @@ private:
     /// True when a ZoomToFit was requested before the canvas had a real
     /// size — the next onSize will retry the fit and clear this.
     bool m_zoomToFitPending = false;
+
+    bool     m_leftDragPans = false;
+    bool     m_leftPanning = false;
+    VECTOR2D m_leftPanLast;
+
+    std::optional<BOX2I> m_focusBox;
 };
 
 #endif // KICAD_WIDGET_DIFF_CANVAS_H

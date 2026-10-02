@@ -58,6 +58,62 @@ BOOST_AUTO_TEST_CASE( PaintOrderIsExhaustiveAndUnique )
 }
 
 
+// SplitSceneBySide ------------------------------------------------------------
+
+// A side by side view draws the old document plain, and the new document with every change
+// marked. The fit area is shared so the halves line up.
+BOOST_AUTO_TEST_CASE( SplitSceneBySideKeepsEachHalfToItsOwnDocument )
+{
+    DIFF_SCENE scene;
+    scene.docKind = DOC_KIND::SCH;
+    scene.documentBBox = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( 100, 100 ) );
+
+    SCENE_SHAPE added;
+    added.label = wxS( "a" );
+    scene.addedShapes.push_back( added );
+    SCENE_SHAPE removed;
+    removed.label = wxS( "r" );
+    scene.removedShapes.push_back( removed );
+    SCENE_SHAPE modified;
+    modified.label = wxS( "m" );
+    scene.modifiedShapes.push_back( modified );
+    SCENE_SHAPE conflict;
+    conflict.label = wxS( "c" );
+    scene.conflictShapes.push_back( conflict );
+
+    DOCUMENT_SEGMENT before;
+    before.start = VECTOR2I( 0, 0 );
+    before.end = VECTOR2I( 10, 0 );
+    scene.referenceGeometry.segments.push_back( before );
+
+    DOCUMENT_CIRCLE after;
+    after.center = VECTOR2I( 5, 5 );
+    after.radius = 2;
+    scene.comparisonGeometry.circles.push_back( after );
+
+    SIDE_BY_SIDE_SCENES sides = SplitSceneBySide( scene );
+
+    BOOST_CHECK( sides.reference.addedShapes.empty() );
+    BOOST_CHECK( sides.reference.removedShapes.empty() );
+    BOOST_CHECK( sides.reference.modifiedShapes.empty() );
+    BOOST_CHECK( sides.reference.conflictShapes.empty() );
+    BOOST_CHECK_EQUAL( sides.reference.referenceGeometry.segments.size(), 1u );
+    BOOST_CHECK( sides.reference.comparisonGeometry.Empty() );
+
+    BOOST_REQUIRE_EQUAL( sides.comparison.addedShapes.size(), 1u );
+    BOOST_REQUIRE_EQUAL( sides.comparison.removedShapes.size(), 1u );
+    BOOST_REQUIRE_EQUAL( sides.comparison.modifiedShapes.size(), 1u );
+    BOOST_REQUIRE_EQUAL( sides.comparison.conflictShapes.size(), 1u );
+    BOOST_CHECK( sides.comparison.referenceGeometry.Empty() );
+    BOOST_CHECK_EQUAL( sides.comparison.comparisonGeometry.circles.size(), 1u );
+
+    BOOST_CHECK( sides.reference.docKind == DOC_KIND::SCH );
+    BOOST_CHECK( sides.comparison.docKind == DOC_KIND::SCH );
+    BOOST_CHECK( sides.reference.documentBBox == scene.documentBBox );
+    BOOST_CHECK( sides.comparison.documentBBox == scene.documentBBox );
+}
+
+
 // ShapesFor ------------------------------------------------------------------
 
 BOOST_AUTO_TEST_CASE( ShapesForReturnsCorrectListPerCategory )

@@ -442,6 +442,24 @@ DIFF_SCENE BuildScene( const DOCUMENT_DIFF& aDiff, const DIFF_COLOR_THEME& aThem
 }
 
 
+SIDE_BY_SIDE_SCENES SplitSceneBySide( const DIFF_SCENE& aScene )
+{
+    SIDE_BY_SIDE_SCENES sides;
+
+    sides.reference = aScene;
+    sides.reference.addedShapes.clear();
+    sides.reference.removedShapes.clear();
+    sides.reference.modifiedShapes.clear();
+    sides.reference.conflictShapes.clear();
+    sides.reference.comparisonGeometry = {};
+
+    sides.comparison = aScene;
+    sides.comparison.referenceGeometry = {};
+
+    return sides;
+}
+
+
 void ExpandBBoxToGeometry( DIFF_SCENE& aScene )
 {
     std::optional<BOX2I> unionBBox;

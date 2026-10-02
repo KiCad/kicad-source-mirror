@@ -25,6 +25,12 @@
 #include <dialog_shim.h>
 #include <git/text_diff.h>
 
+class wxStyledTextCtrl;
+
+/// Fill aCtrl with a line diff, added and removed lines in the diff colours, and make it read only.
+void FillTextDiffControl( wxStyledTextCtrl* aCtrl, const std::vector<KIGIT::TEXT_DIFF_LINE>& aLines );
+
+
 /// Read-only line diff, for the file types that have no visual diff.
 class DIALOG_TEXT_DIFF : public DIALOG_SHIM
 {

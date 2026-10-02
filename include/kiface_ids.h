@@ -76,6 +76,14 @@ enum KIFACE_ADDR_ID : int
     /// DIALOG_KICAD_DIFF modally. Replaces the former JOB_OPEN_DIFF_DIALOG.
     KIFACE_OPEN_DIFF_DIALOG,
 
+    /// KICAD_DIFF::DIFF_CANVAS_CONTEXT* (*)( int aKind, const wxString& aFileA, const wxString& aFileB,
+    ///          WIDGET_DIFF_CANVAS* aBefore, WIDGET_DIFF_CANVAS* aAfter,
+    ///          KICAD_DIFF::DOCUMENT_DIFF* aDiff, REPORTER* aReporter )
+    /// aKind is a KICAD_DIFF::DOC_KIND. Loads the two files, fills aDiff, and draws the first
+    /// file in aBefore and the second in aAfter with the kiface's own painter. Returns what
+    /// keeps the documents alive while the canvases show them, or null on failure.
+    KIFACE_ATTACH_DIFF_CANVASES,
+
     KIFACE_TEST_FOOTPRINT_LINK,
     KIFACE_TEST_FOOTPRINT_LINK_NO_LIBRARY,
     KIFACE_TEST_FOOTPRINT_LINK_LIBRARY_NOT_ENABLED,

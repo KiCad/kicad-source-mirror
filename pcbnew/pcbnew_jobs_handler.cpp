@@ -4698,9 +4698,107 @@ int PCBNEW_JOBS_HANDLER::JobFpDiff( JOB* aJob )
 // Dispatched from the project manager / PR-review dialog via KIWAY.
 // ============================================================================
 #include <dialogs/dialog_kicad_diff.h>
+#include <diff_merge/merge_dispatch.h>
 #include <diff_merge/pcb_diff_canvas_context.h>
+#include <widgets/widget_diff_canvas.h>
 #include <diff_merge/pcb_geometry_extractor.h>
 #include <jobs/scratch_doc.h>
+
+
+// Both boards of a diff, kept while the caller draws them.
+struct PCB_DIFF_SIDES
+{
+    SCRATCH_DOC<BOARD>        a;
+    SCRATCH_DOC<BOARD>        b;
+    BOARD                     emptyA;
+    BOARD                     emptyB;
+    BOARD*                    boardA = nullptr;
+    BOARD*                    boardB = nullptr;
+    KICAD_DIFF::DOCUMENT_DIFF diff;
+};
+
+
+static int loadPcbDiffSides( SETTINGS_MANAGER& aMgr, REPORTER& aReporter, const wxString& aFileA,
+                             const wxString& aFileB, PCB_DIFF_SIDES& aSides )
+{
+    aSides.a = loadScratchBoard( aMgr, aFileA, /* aInitializeAfterLoad */ false );
+    aSides.b = loadScratchBoard( aMgr, aFileB, /* aInitializeAfterLoad */ false );
+
+    if( !aSides.a.doc && !aFileA.IsEmpty() )
+    {
+        aReporter.Report( wxString::Format( _( "Failed to load %s\n" ), aFileA ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    if( !aSides.b.doc && !aFileB.IsEmpty() )
+    {
+        aReporter.Report( wxString::Format( _( "Failed to load %s\n" ), aFileB ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    // An ADDED or REMOVED side is an empty board, so the differ still produces a per-item
+    // list rather than failing on an empty input file.
+    aSides.boardA = aSides.a.doc ? aSides.a.doc.get() : &aSides.emptyA;
+    aSides.boardB = aSides.b.doc ? aSides.b.doc.get() : &aSides.emptyB;
+
+    KICAD_DIFF::PCB_DIFFER differ( aSides.boardA, aSides.boardB, aFileB );
+    aSides.diff = differ.Diff();
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+// The two boards a window outside the kiface shows, taken off their canvases before they go.
+class PCB_DIFF_CANVAS_CONTEXT : public KICAD_DIFF::DIFF_CANVAS_CONTEXT
+{
+public:
+    PCB_DIFF_CANVAS_CONTEXT( WIDGET_DIFF_CANVAS* aBefore, WIDGET_DIFF_CANVAS* aAfter ) :
+            m_before( aBefore ),
+            m_after( aAfter )
+    {
+    }
+
+    ~PCB_DIFF_CANVAS_CONTEXT() override
+    {
+        m_before->SetContextItems( {} );
+        m_after->SetContextItems( {} );
+    }
+
+    PCB_DIFF_SIDES m_sides;
+
+private:
+    WIDGET_DIFF_CANVAS* m_before;
+    WIDGET_DIFF_CANVAS* m_after;
+};
+
+
+KICAD_DIFF::DIFF_CANVAS_CONTEXT*
+PCBNEW_JOBS_HANDLER::AttachDiffCanvases( KICAD_DIFF::DOC_KIND aKind, const wxString& aFileA, const wxString& aFileB,
+                                         WIDGET_DIFF_CANVAS* aBefore, WIDGET_DIFF_CANVAS* aAfter,
+                                         KICAD_DIFF::DOCUMENT_DIFF& aDiff, REPORTER* aReporter )
+{
+    SCOPED_SET_RESET<REPORTER*> reporterGuard( m_reporter, aReporter ? aReporter : m_reporter );
+
+    if( aKind != KICAD_DIFF::DOC_KIND::PCB )
+        return nullptr;
+
+    auto context = std::make_unique<PCB_DIFF_CANVAS_CONTEXT>( aBefore, aAfter );
+
+    if( loadPcbDiffSides( Pgm().GetSettingsManager(), *m_reporter, aFileA, aFileB, context->m_sides )
+        != CLI::EXIT_CODES::SUCCESS )
+    {
+        return nullptr;
+    }
+
+    const KICAD_DIFF::DIFF_COLOR_THEME theme;
+
+    KICAD_DIFF::ConfigurePcbDiffCanvasContext( *aBefore, context->m_sides.boardA, nullptr, theme.reference, {}, {},
+                                               {} );
+    KICAD_DIFF::ConfigurePcbDiffCanvasContext( *aAfter, nullptr, context->m_sides.boardB, theme.reference, {}, {}, {} );
+
+    aDiff = context->m_sides.diff;
+    return context.release();
+}
 
 
 int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxString& aFileA,
@@ -4716,11 +4814,6 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
     wxWindow* parent = aParent ? aParent : ( wxTheApp ? wxTheApp->GetTopWindow() : nullptr );
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-
-    auto loadBoardScratch = [&]( const wxString& aPath )
-    {
-        return loadScratchBoard( mgr, aPath, /* aInitializeAfterLoad */ false );
-    };
 
     KICAD_DIFF::DOCUMENT_DIFF     result;
     KICAD_DIFF::DOCUMENT_GEOMETRY refGeometry;
@@ -4747,36 +4840,17 @@ int PCBNEW_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxStr
     {
     case KICAD_DIFF::DOC_KIND::PCB:
     {
-        SCRATCH_DOC<BOARD> a = loadBoardScratch( aFileA );
-        SCRATCH_DOC<BOARD> b = loadBoardScratch( aFileB );
+        PCB_DIFF_SIDES sides;
 
-        // Synthesize empty boards for ADDED / REMOVED sides so the differ
-        // can still produce a meaningful per-item list rather than failing
-        // on an empty input file.
-        BOARD emptyA;
-        BOARD emptyB;
+        if( int rc = loadPcbDiffSides( mgr, *m_reporter, aFileA, aFileB, sides ); rc != CLI::EXIT_CODES::SUCCESS )
+            return rc;
 
-        if( !a.doc && !aFileA.IsEmpty() )
-        {
-            m_reporter->Report( wxString::Format( _( "Failed to load %s\n" ), aFileA ), RPT_SEVERITY_ERROR );
-            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-        }
+        BOARD* boardA = sides.boardA;
+        BOARD* boardB = sides.boardB;
+        result = std::move( sides.diff );
 
-        if( !b.doc && !aFileB.IsEmpty() )
-        {
-            m_reporter->Report( wxString::Format( _( "Failed to load %s\n" ), aFileB ), RPT_SEVERITY_ERROR );
-            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-        }
-
-        BOARD* boardA = a.doc ? a.doc.get() : &emptyA;
-        BOARD* boardB = b.doc ? b.doc.get() : &emptyB;
-
-        KICAD_DIFF::PCB_DIFFER differ( boardA, boardB, aFileB );
-        result = differ.Diff();
-
-        // Extract background geometry so the dialog's canvas shows the
-        // actual board outline + footprint footprints beneath the diff
-        // bbox rectangles. Theme defaults: muted blue (ref) / gold (comp).
+        // Background geometry, so the dialog's canvas shows the board outline and footprints
+        // beneath the change rectangles.
         const KICAD_DIFF::DIFF_COLOR_THEME theme;
         refGeometry = KICAD_DIFF::ExtractBoardGeometry( *boardA, theme.reference );
         compGeometry = KICAD_DIFF::ExtractBoardGeometry( *boardB, theme.comparison );

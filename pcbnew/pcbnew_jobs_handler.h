@@ -38,6 +38,14 @@ class TOOL_MANAGER;
 class REPORTER;
 class wxWindow;
 
+class WIDGET_DIFF_CANVAS;
+
+namespace KICAD_DIFF
+{
+class DIFF_CANVAS_CONTEXT;
+struct DOCUMENT_DIFF;
+} // namespace KICAD_DIFF
+
 class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
 {
 public:
@@ -81,6 +89,13 @@ public:
     int OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxString& aFileA, const wxString& aFileB,
                         const wxString& aLabelA, const wxString& aLabelB, wxWindow* aParent,
                         REPORTER* aReporter );
+
+    /// Diff two boards for a window outside the kiface, drawing the first on aBefore and the
+    /// second on aAfter. The result keeps both loaded while the canvases show them.
+    KICAD_DIFF::DIFF_CANVAS_CONTEXT* AttachDiffCanvases( KICAD_DIFF::DOC_KIND aKind, const wxString& aFileA,
+                                                         const wxString& aFileB, WIDGET_DIFF_CANVAS* aBefore,
+                                                         WIDGET_DIFF_CANVAS* aAfter, KICAD_DIFF::DOCUMENT_DIFF& aDiff,
+                                                         REPORTER* aReporter );
 
 private:
     int runPcbMerge( const wxString& aAncestor, const wxString& aOurs, const wxString& aTheirs,

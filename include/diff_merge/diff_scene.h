@@ -320,6 +320,20 @@ KICOMMON_API void ExpandBBoxToGeometry( DIFF_SCENE& aScene );
 
 
 /**
+ * The two halves of a side by side view. The reference half shows what was there, plain. The
+ * comparison half shows what is there now, with every change marked on it. The documentBBox
+ * goes to both, so the halves fit the same area.
+ */
+struct KICOMMON_API SIDE_BY_SIDE_SCENES
+{
+    DIFF_SCENE reference;
+    DIFF_SCENE comparison;
+};
+
+KICOMMON_API SIDE_BY_SIDE_SCENES SplitSceneBySide( const DIFF_SCENE& aScene );
+
+
+/**
  * Compute the tight bounding box of a DOCUMENT_GEOMETRY, inflating each
  * primitive by half its stroke so the bbox actually contains the rendered
  * pixels.

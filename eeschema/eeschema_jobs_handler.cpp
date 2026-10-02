@@ -2911,9 +2911,124 @@ int EESCHEMA_JOBS_HANDLER::JobSymDiff( JOB* aJob )
 // Dispatched from the project manager / PR-review dialog via KIWAY.
 // ============================================================================
 #include <dialogs/dialog_kicad_diff.h>
+#include <diff_merge/merge_dispatch.h>
 #include <diff_merge/sch_diff_canvas_context.h>
+#include <widgets/widget_diff_canvas.h>
 #include <diff_merge/sch_geometry_extractor.h>
 #include <jobs/scratch_doc.h>
+
+
+// Both schematics of a diff, kept while the caller draws them.
+struct SCH_DIFF_SIDES
+{
+    SCRATCH_DOC<SCHEMATIC>    a;
+    SCRATCH_DOC<SCHEMATIC>    b;
+    SCRATCH_DOC<SCHEMATIC>    emptyA;
+    SCRATCH_DOC<SCHEMATIC>    emptyB;
+    SCHEMATIC*                schA = nullptr;
+    SCHEMATIC*                schB = nullptr;
+    KICAD_DIFF::DOCUMENT_DIFF diff;
+};
+
+
+static int loadSchDiffSides( SETTINGS_MANAGER& aMgr, REPORTER& aReporter, const wxString& aFileA,
+                             const wxString& aFileB, SCH_DIFF_SIDES& aSides )
+{
+    aSides.a = loadScratchSchematic( aMgr, aFileA );
+    aSides.b = loadScratchSchematic( aMgr, aFileB );
+
+    if( !aSides.a.doc && !aFileA.IsEmpty() )
+    {
+        aReporter.Report( wxString::Format( _( "Failed to load %s\n" ), aFileA ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    if( !aSides.b.doc && !aFileB.IsEmpty() )
+    {
+        aReporter.Report( wxString::Format( _( "Failed to load %s\n" ), aFileB ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+    }
+
+    // Synthesize empty SCHEMATICs for any missing side so SCH_DIFFER sees a valid empty
+    // document. Each empty side needs its own defaults-only project: a bare PROJECT has no
+    // PROJECT_FILE, and SCHEMATIC::SetProject dereferences GetProjectFile().
+    if( !aSides.a.doc )
+        aSides.emptyA = emptyScratchSchematic( aMgr, wxT( "kicad_diff_empty_a" ) );
+
+    if( !aSides.b.doc )
+        aSides.emptyB = emptyScratchSchematic( aMgr, wxT( "kicad_diff_empty_b" ) );
+
+    aSides.schA = aSides.a.doc ? aSides.a.doc.get() : aSides.emptyA.doc.get();
+    aSides.schB = aSides.b.doc ? aSides.b.doc.get() : aSides.emptyB.doc.get();
+
+    KICAD_DIFF::SCH_DIFFER differ( aSides.schA, aSides.schB, aFileB );
+    aSides.diff = differ.Diff();
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+// The two schematics a window outside the kiface shows, taken off their canvases before they go.
+class SCH_DIFF_CANVAS_CONTEXT : public KICAD_DIFF::DIFF_CANVAS_CONTEXT
+{
+public:
+    SCH_DIFF_CANVAS_CONTEXT( WIDGET_DIFF_CANVAS* aBefore, WIDGET_DIFF_CANVAS* aAfter ) :
+            m_before( aBefore ),
+            m_after( aAfter )
+    {
+    }
+
+    ~SCH_DIFF_CANVAS_CONTEXT() override
+    {
+        // The painter keeps a schematic pointer, so give the canvases one that points at nothing.
+        const KICAD_DIFF::DIFF_COLOR_THEME theme;
+
+        for( WIDGET_DIFF_CANVAS* canvas : { m_before, m_after } )
+        {
+            canvas->SetContextItems( {} );
+            canvas->SetContextPainter(
+                    KICAD_DIFF::MakeSchDiffContextPainter( canvas->GetGAL(), nullptr, theme.reference ) );
+        }
+    }
+
+    SCH_DIFF_SIDES m_sides;
+
+private:
+    WIDGET_DIFF_CANVAS* m_before;
+    WIDGET_DIFF_CANVAS* m_after;
+};
+
+
+KICAD_DIFF::DIFF_CANVAS_CONTEXT*
+EESCHEMA_JOBS_HANDLER::AttachDiffCanvases( KICAD_DIFF::DOC_KIND aKind, const wxString& aFileA, const wxString& aFileB,
+                                           WIDGET_DIFF_CANVAS* aBefore, WIDGET_DIFF_CANVAS* aAfter,
+                                           KICAD_DIFF::DOCUMENT_DIFF& aDiff, REPORTER* aReporter )
+{
+    SCOPED_SET_RESET<REPORTER*> reporterGuard( m_reporter, aReporter ? aReporter : m_reporter );
+
+    if( aKind != KICAD_DIFF::DOC_KIND::SCH )
+        return nullptr;
+
+    auto context = std::make_unique<SCH_DIFF_CANVAS_CONTEXT>( aBefore, aAfter );
+
+    if( loadSchDiffSides( Pgm().GetSettingsManager(), *m_reporter, aFileA, aFileB, context->m_sides )
+        != CLI::EXIT_CODES::SUCCESS )
+    {
+        return nullptr;
+    }
+
+    const KICAD_DIFF::DIFF_COLOR_THEME theme;
+    SCHEMATIC*                         schA = context->m_sides.schA;
+    SCHEMATIC*                         schB = context->m_sides.schB;
+
+    KICAD_DIFF::ConfigureSchDiffCanvasContext( *aBefore, schA, nullptr, theme.reference, {}, {}, {}, schA->RootScreen(),
+                                               nullptr );
+    KICAD_DIFF::ConfigureSchDiffCanvasContext( *aAfter, nullptr, schB, theme.reference, {}, {}, {}, nullptr,
+                                               schB->RootScreen() );
+
+    aDiff = context->m_sides.diff;
+    return context.release();
+}
 
 
 int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxString& aFileA,
@@ -2936,40 +3051,17 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
     {
     case KICAD_DIFF::DOC_KIND::SCH:
     {
-        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+        SCH_DIFF_SIDES sides;
 
-        SCRATCH_DOC<SCHEMATIC> a = loadScratchSchematic( mgr, aFileA );
-        SCRATCH_DOC<SCHEMATIC> b = loadScratchSchematic( mgr, aFileB );
-
-        if( !a.doc && !aFileA.IsEmpty() )
+        if( int rc = loadSchDiffSides( Pgm().GetSettingsManager(), *m_reporter, aFileA, aFileB, sides );
+            rc != CLI::EXIT_CODES::SUCCESS )
         {
-            m_reporter->Report( wxString::Format( _( "Failed to load %s\n" ), aFileA ), RPT_SEVERITY_ERROR );
-            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+            return rc;
         }
 
-        if( !b.doc && !aFileB.IsEmpty() )
-        {
-            m_reporter->Report( wxString::Format( _( "Failed to load %s\n" ), aFileB ), RPT_SEVERITY_ERROR );
-            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
-        }
-
-        // Synthesize empty SCHEMATICs for any missing side so SCH_DIFFER sees a valid empty
-        // document. Each empty side needs its own defaults-only project: a bare PROJECT has no
-        // PROJECT_FILE, and SCHEMATIC::SetProject dereferences GetProjectFile().
-        SCRATCH_DOC<SCHEMATIC> emptyA;
-        SCRATCH_DOC<SCHEMATIC> emptyB;
-
-        if( !a.doc )
-            emptyA = emptyScratchSchematic( mgr, wxT( "kicad_diff_empty_a" ) );
-
-        if( !b.doc )
-            emptyB = emptyScratchSchematic( mgr, wxT( "kicad_diff_empty_b" ) );
-
-        SCHEMATIC* schA = a.doc ? a.doc.get() : emptyA.doc.get();
-        SCHEMATIC* schB = b.doc ? b.doc.get() : emptyB.doc.get();
-
-        KICAD_DIFF::SCH_DIFFER differ( schA, schB, aFileB );
-        result = differ.Diff();
+        SCHEMATIC* schA = sides.schA;
+        SCHEMATIC* schB = sides.schB;
+        result = std::move( sides.diff );
 
         const KICAD_DIFF::DIFF_COLOR_THEME theme;
         refGeometry = KICAD_DIFF::ExtractSchematicGeometry( *schA, theme.reference );

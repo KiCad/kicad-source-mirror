@@ -104,6 +104,7 @@ WIDGET_DIFF_CANVAS::WIDGET_DIFF_CANVAS( wxWindow* aParent, GAL_TYPE aBackend, wx
     SetMinSize( wxSize( -1, 100 ) );
 
     Bind( wxEVT_LEFT_DOWN, &WIDGET_DIFF_CANVAS::onLeftDown, this );
+    Bind( wxEVT_LEFT_UP, &WIDGET_DIFF_CANVAS::onLeftUp, this );
     Bind( wxEVT_LEFT_DCLICK, &WIDGET_DIFF_CANVAS::onDoubleClick, this );
     Bind( wxEVT_MOTION, &WIDGET_DIFF_CANVAS::onMotion, this );
     Bind( wxEVT_LEAVE_WINDOW, &WIDGET_DIFF_CANVAS::onLeave, this );
@@ -396,13 +397,13 @@ void WIDGET_DIFF_CANVAS::ZoomToFit()
         return;
     }
 
-    BOX2I bb = m_scene.documentBBox;
+    BOX2I bb = m_focusBox ? *m_focusBox : m_scene.documentBBox;
     bool  haveBox = bb.GetWidth() > 0 && bb.GetHeight() > 0;
 
     // Also frame the context items so the whole board fits, not just the changes.
     for( KIGFX::VIEW_ITEM* item : m_contextGroupItems )
     {
-        if( !item )
+        if( !item || m_focusBox )
             continue;
 
         BOX2I ib = item->ViewBBox();
@@ -562,8 +563,21 @@ void WIDGET_DIFF_CANVAS::onLeftDown( wxMouseEvent& aEvent )
     SetFocus();
     aEvent.Skip();
 
+    if( m_leftDragPans )
+    {
+        m_leftPanning = true;
+        m_leftPanLast = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
+    }
+
     if( m_pickHandler )
         m_pickHandler( picked );
+}
+
+
+void WIDGET_DIFF_CANVAS::onLeftUp( wxMouseEvent& aEvent )
+{
+    aEvent.Skip();
+    m_leftPanning = false;
 }
 
 
@@ -613,6 +627,18 @@ void WIDGET_DIFF_CANVAS::onMotion( wxMouseEvent& aEvent )
 {
     aEvent.Skip();
 
+    // The view controls pan on the middle button only, so the left drag is done here.
+    if( m_leftPanning && aEvent.Dragging() && aEvent.LeftIsDown() )
+    {
+        VECTOR2D pos( aEvent.GetX(), aEvent.GetY() );
+        VECTOR2D delta = m_view->ToWorld( pos, false ) - m_view->ToWorld( m_leftPanLast, false );
+
+        m_view->SetCenter( m_view->GetCenter() - delta );
+        m_leftPanLast = pos;
+        Refresh();
+        return;
+    }
+
     std::optional<KIID_PATH>       hovered;
     const KICAD_DIFF::SCENE_SHAPE* shape = shapeAt( aEvent.GetPosition() );
 
@@ -643,6 +669,7 @@ void WIDGET_DIFF_CANVAS::onMotion( wxMouseEvent& aEvent )
 void WIDGET_DIFF_CANVAS::onLeave( wxMouseEvent& aEvent )
 {
     aEvent.Skip();
+    m_leftPanning = false;
 
     if( !m_hover && !m_hoverBox->shown )
         return;

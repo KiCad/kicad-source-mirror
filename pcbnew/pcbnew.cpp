@@ -311,6 +311,9 @@ static int pcbnewMergeExport( int aKind, const wxString& aAncestor, const wxStri
 static int pcbnewOpenDiffDialogExport( int aKind, const wxString& aFileA, const wxString& aFileB,
                                        const wxString& aLabelA, const wxString& aLabelB,
                                        wxWindow* aParent, REPORTER* aReporter );
+static KICAD_DIFF::DIFF_CANVAS_CONTEXT*
+pcbnewAttachDiffCanvasesExport( int aKind, const wxString& aFileA, const wxString& aFileB, WIDGET_DIFF_CANVAS* aBefore,
+                                WIDGET_DIFF_CANVAS* aAfter, KICAD_DIFF::DOCUMENT_DIFF* aDiff, REPORTER* aReporter );
 
 
 static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
@@ -654,6 +657,8 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
         case KIFACE_OPEN_DIFF_DIALOG:
             return reinterpret_cast<void*>( &pcbnewOpenDiffDialogExport );
 
+        case KIFACE_ATTACH_DIFF_CANVASES: return reinterpret_cast<void*>( &pcbnewAttachDiffCanvasesExport );
+
         default:
             return nullptr;
         }
@@ -733,6 +738,16 @@ int pcbnewOpenDiffDialogExport( int aKind, const wxString& aFileA, const wxStrin
 {
     return kiface.JobHandler()->OpenDiffDialog( static_cast<KICAD_DIFF::DOC_KIND>( aKind ), aFileA,
                                                 aFileB, aLabelA, aLabelB, aParent, aReporter );
+}
+
+
+KICAD_DIFF::DIFF_CANVAS_CONTEXT* pcbnewAttachDiffCanvasesExport( int aKind, const wxString& aFileA,
+                                                                 const wxString& aFileB, WIDGET_DIFF_CANVAS* aBefore,
+                                                                 WIDGET_DIFF_CANVAS*        aAfter,
+                                                                 KICAD_DIFF::DOCUMENT_DIFF* aDiff, REPORTER* aReporter )
+{
+    return kiface.JobHandler()->AttachDiffCanvases( static_cast<KICAD_DIFF::DOC_KIND>( aKind ), aFileA, aFileB, aBefore,
+                                                    aAfter, *aDiff, aReporter );
 }
 
 } // namespace

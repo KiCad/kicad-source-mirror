@@ -750,18 +750,9 @@ void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxW
         return;
     }
 
-    struct DESIGN_FILE
-    {
-        wxString             path;
-        wxString             parentPath;
-        KICAD_DIFF::DOC_KIND kind;
-        bool                 hasParent;
-        bool                 hasCommit;
-    };
-
-    std::vector<DESIGN_FILE> designFiles;
-    wxString                 parentRef;
-    bool                     busy = false;
+    std::vector<wxString> changedPaths;
+    wxString              parentRef;
+    bool                  busy = false;
 
     {
         // Hold the git action lock only while reading, then release it before any modal dialog.
@@ -789,19 +780,7 @@ void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxW
             }
 
             for( const KIGIT::CHANGED_FILE& file : KIGIT::CompareRefs( repo, parentRef, aCommitHash ) )
-            {
-                KICAD_DIFF::DOC_KIND kind = KICAD_DIFF::DocKindFromExtension( file.path );
-
-                DESIGN_FILE df;
-                df.path = file.path;
-
-                // Materialize only the side that exists.
-                df.hasParent = file.status != KIGIT::FILE_CHANGE_STATUS::ADDED;
-                df.hasCommit = file.status != KIGIT::FILE_CHANGE_STATUS::REMOVED;
-                df.parentPath = file.oldPath.IsEmpty() ? file.path : file.oldPath;
-                df.kind = kind;
-                designFiles.push_back( df );
-            }
+                changedPaths.push_back( file.path );
         }
     }
 
@@ -811,7 +790,7 @@ void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxW
         return;
     }
 
-    if( designFiles.empty() )
+    if( changedPaths.empty() )
     {
         DisplayInfoMessage( aFrame, _( "This commit has no file changes to show." ) );
         return;
@@ -821,31 +800,14 @@ void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxW
 
     // The diff viewer shows one file at a time, so let the user pick which one unless the
     // caller already did.
-    const DESIGN_FILE* chosen = &designFiles.front();
+    wxString chosen = aRelativePath.IsEmpty() ? changedPaths.front() : aRelativePath;
 
-    if( !aRelativePath.IsEmpty() )
-    {
-        chosen = nullptr;
-
-        for( const DESIGN_FILE& df : designFiles )
-        {
-            if( df.path == aRelativePath )
-                chosen = &df;
-        }
-
-        if( !chosen )
-        {
-            DisplayInfoMessage( diffParent,
-                                wxString::Format( _( "This commit did not change '%s'." ), aRelativePath ) );
-            return;
-        }
-    }
-    else if( designFiles.size() > 1 )
+    if( aRelativePath.IsEmpty() && changedPaths.size() > 1 )
     {
         wxArrayString choices;
 
-        for( const DESIGN_FILE& df : designFiles )
-            choices.Add( df.path );
+        for( const wxString& path : changedPaths )
+            choices.Add( path );
 
         int sel = wxGetSingleChoiceIndex( _( "This commit changed more than one file. "
                                              "Select one to compare:" ),
@@ -854,57 +816,93 @@ void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxW
         if( sel < 0 )
             return;
 
-        chosen = &designFiles[sel];
+        chosen = changedPaths[sel];
     }
 
-    // Materialize only the chosen file, taking the lock again for the file writes.
-    wxString before, after;
-    bool     busyMaterialize = false;
-    bool     repoGone = false;
+    wxString             before;
+    wxString             after;
+    wxString             error;
+    KICAD_DIFF::DOC_KIND kind;
 
+    if( !MaterializeCommitFile( aFrame, workspace, aCommitHash, chosen, &before, &after, &kind, &error ) )
     {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
+        if( !error.IsEmpty() )
+            DisplayInfoMessage( diffParent, error );
 
-        if( !lock.owns_lock() )
+        return;
+    }
+
+    presentFileDiff( aFrame->Kiway(), kind, chosen, before, after, wxString::Format( _( "Parent of %s" ), aCommitHash ),
+                     aCommitHash, diffParent );
+}
+
+
+bool MaterializeCommitFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aCommitHash,
+                            const wxString& aRelativePath, wxString* aBefore, wxString* aAfter,
+                            KICAD_DIFF::DOC_KIND* aKind, wxString* aError )
+{
+    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
+    std::unique_lock<std::mutex>  lock = common->TryLockAction();
+
+    if( !lock.owns_lock() )
+    {
+        *aError = _( "Another git operation is in progress. Try again in a moment." );
+        return false;
+    }
+
+    // The caller may have run a chooser since it last looked, so the project may have closed.
+    git_repository* repo = common->GetRepo();
+
+    if( !repo )
+        return false;
+
+    // A root commit has no "<hash>^". An empty base ref compares it against the empty tree, so
+    // its files show as added.
+    wxString    parentRef;
+    git_object* commitObj = nullptr;
+
+    if( git_revparse_single( &commitObj, repo, aCommitHash.utf8_string().c_str() ) == GIT_OK )
+    {
+        if( git_object_type( commitObj ) == GIT_OBJECT_COMMIT
+            && git_commit_parentcount( reinterpret_cast<git_commit*>( commitObj ) ) > 0 )
         {
-            busyMaterialize = true;
+            parentRef = aCommitHash + wxT( "^" );
         }
-        else
+
+        git_object_free( commitObj );
+    }
+
+    for( const KIGIT::CHANGED_FILE& file : KIGIT::CompareRefs( repo, parentRef, aCommitHash ) )
+    {
+        if( file.path != aRelativePath )
+            continue;
+
+        *aKind = KICAD_DIFF::DocKindFromExtension( file.path );
+        aBefore->clear();
+        aAfter->clear();
+
+        // Only the side that exists is written out.
+        bool hasParent = file.status != KIGIT::FILE_CHANGE_STATUS::ADDED;
+        bool hasCommit = file.status != KIGIT::FILE_CHANGE_STATUS::REMOVED;
+
+        if( hasParent )
         {
-            // The chooser ran its own event loop, so the project may have closed since. Re-read
-            // the handle rather than reusing the one captured before it.
-            git_repository* liveRepo = common->GetRepo();
-
-            if( !liveRepo )
-            {
-                repoGone = true;
-            }
-            else
-            {
-                if( chosen->hasParent )
-                    before = workspace.Materialize( liveRepo, parentRef, chosen->parentPath, chosen->kind );
-
-                if( chosen->hasCommit )
-                    after = workspace.Materialize( liveRepo, aCommitHash, chosen->path, chosen->kind );
-            }
+            *aBefore = aWorkspace.Materialize( repo, parentRef, file.oldPath.IsEmpty() ? file.path : file.oldPath,
+                                               *aKind );
         }
+
+        if( hasCommit )
+            *aAfter = aWorkspace.Materialize( repo, aCommitHash, file.path, *aKind );
+
+        if( ( hasParent && aBefore->IsEmpty() ) || ( hasCommit && aAfter->IsEmpty() ) )
+        {
+            *aError = _( "Could not read this commit's file contents." );
+            return false;
+        }
+
+        return true;
     }
 
-    if( busyMaterialize )
-    {
-        DisplayInfoMessage( aFrame, _( "Another git operation is in progress. Try again in a moment." ) );
-        return;
-    }
-
-    if( repoGone )
-        return;
-
-    if( ( chosen->hasParent && before.IsEmpty() ) || ( chosen->hasCommit && after.IsEmpty() ) )
-    {
-        DisplayInfoMessage( aFrame, _( "Could not read this commit's file contents." ) );
-        return;
-    }
-
-    presentFileDiff( aFrame->Kiway(), chosen->kind, chosen->path, before, after,
-                     wxString::Format( _( "Parent of %s" ), aCommitHash ), aCommitHash, diffParent );
+    *aError = wxString::Format( _( "This commit did not change '%s'." ), aRelativePath );
+    return false;
 }

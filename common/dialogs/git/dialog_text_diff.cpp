@@ -31,15 +31,12 @@ static constexpr int STYLE_ADDED = 1;
 static constexpr int STYLE_REMOVED = 2;
 
 
-DIALOG_TEXT_DIFF::DIALOG_TEXT_DIFF( wxWindow* aParent, const wxString& aTitle,
-                                    const std::vector<KIGIT::TEXT_DIFF_LINE>& aLines ) :
-        DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxSize( 780, 560 ),
-                     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+void FillTextDiffControl( wxStyledTextCtrl* aCtrl, const std::vector<KIGIT::TEXT_DIFF_LINE>& aLines )
 {
-    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+    wxStyledTextCtrl* stc = aCtrl;
 
-    wxStyledTextCtrl* stc = new wxStyledTextCtrl( this, wxID_ANY );
-
+    stc->SetReadOnly( false );
+    stc->ClearAll();
     stc->StyleSetFont( wxSTC_STYLE_DEFAULT, KIUI::GetMonospacedUIFont() );
 
     // Scintilla ignores the desktop theme, and StyleClearAll copies the default style onto
@@ -76,6 +73,18 @@ DIALOG_TEXT_DIFF::DIALOG_TEXT_DIFF( wxWindow* aParent, const wxString& aTitle,
     }
 
     stc->SetReadOnly( true );
+}
+
+
+DIALOG_TEXT_DIFF::DIALOG_TEXT_DIFF( wxWindow* aParent, const wxString& aTitle,
+                                    const std::vector<KIGIT::TEXT_DIFF_LINE>& aLines ) :
+        DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxSize( 780, 560 ),
+                     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+{
+    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+
+    wxStyledTextCtrl* stc = new wxStyledTextCtrl( this, wxID_ANY );
+    FillTextDiffControl( stc, aLines );
     mainSizer->Add( stc, 1, wxEXPAND | wxALL, 5 );
 
     wxStdDialogButtonSizer* buttons = new wxStdDialogButtonSizer();

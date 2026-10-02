@@ -22,6 +22,8 @@
 #include <bitmaps.h>
 #include <dialogs/git/git_status_entries.h>
 
+#include <algorithm>
+#include <fstream>
 #include <memory>
 #include <vector>
 
@@ -45,6 +47,7 @@
 #include <wx/splitter.h>
 #include <wx/srchctrl.h>
 #include <wx/stattext.h>
+#include <wx/stc/stc.h>
 #include <wx/textctrl.h>
 #include <wx/richmsgdlg.h>
 #include <wx/textdlg.h>
@@ -52,8 +55,13 @@
 
 #include <picosha2.h>
 
+#include <cli/exit_codes.h>
 #include <confirm.h>
+#include <diff_merge/diff_scene.h>
+#include <diff_merge/merge_dispatch.h>
+#include <dialogs/git/dialog_text_diff.h>
 #include <eda_base_frame.h>
+#include <eda_draw_frame.h>
 #include <frame_type.h>
 #include <dialogs/git/git_credentials_prompt.h>
 #include <git/git_branch_handler.h>
@@ -62,15 +70,20 @@
 #include <git/git_pull_handler.h>
 #include <git/git_push_handler.h>
 #include <git/kicad_git_common.h>
+#include <git/text_diff.h>
 #include <kicad_curl/kicad_curl_easy.h>
+#include <kiplatform/ui.h>
 #include <kiway.h>
 #include <kiway_player.h>
 #include <pgm_base.h>
 #include <project.h>
+#include <reporter.h>
 #include <settings/common_settings.h>
 #include <thread>
+#include <view/view.h>
 #include <widgets/git_commit_pane.h>
 #include <widgets/ui_common.h>
+#include <widgets/widget_diff_canvas.h>
 #include <widgets/wx_treebook.h>
 
 
@@ -321,6 +334,31 @@ wxString joinNames( const std::vector<wxString>& aNames )
 }
 
 
+// Where to open the before and after canvases: on the first change, padded to a readable size.
+std::optional<BOX2I> firstChangeBox( const KICAD_DIFF::DIFF_SCENE& aScene, KICAD_DIFF::DOC_KIND aKind )
+{
+    for( const std::vector<KICAD_DIFF::SCENE_SHAPE>* shapes :
+         { &aScene.modifiedShapes, &aScene.addedShapes, &aScene.removedShapes } )
+    {
+        if( shapes->empty() )
+            continue;
+
+        BOX2I box = shapes->front().bbox;
+
+        if( box.GetWidth() <= 0 || box.GetHeight() <= 0 )
+            continue;
+
+        int minSide = KICAD_DIFF::IuScaleForDocKind( aKind ).mmToIU( 50 );
+        int padX = static_cast<int>( minSide - box.GetWidth() ) / 2;
+        int padY = static_cast<int>( minSide - box.GetHeight() ) / 2;
+        box.Inflate( std::max( 0, padX ), std::max( 0, padY ) );
+        return box;
+    }
+
+    return std::nullopt;
+}
+
+
 wxString fileStatusLabel( KIGIT::FILE_CHANGE_STATUS aStatus )
 {
     switch( aStatus )
@@ -425,32 +463,43 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
         m_parent( aParent ),
         m_pane( aPane ),
         m_book( nullptr ),
-        m_historyList( nullptr ),
-        m_historyRefsColumn( nullptr ),
-        m_historySplitter( nullptr ),
-        m_commitDetail( nullptr ),
+        m_repoName( nullptr ),
+        m_branchChoice( nullptr ),
+        m_fetchButton( nullptr ),
+        m_pullButton( nullptr ),
+        m_pushButton( nullptr ),
         m_historySearch( nullptr ),
         m_historyBranch( nullptr ),
         m_historyShowRefs( nullptr ),
+        m_historySplitter( nullptr ),
+        m_historyList( nullptr ),
+        m_historyRefsColumn( nullptr ),
+        m_commitDetail( nullptr ),
         m_commitTitle( nullptr ),
         m_commitAvatar( nullptr ),
         m_commitAuthor( nullptr ),
         m_commitMessage( nullptr ),
         m_commitStats( nullptr ),
+        m_commitFileCount( nullptr ),
+        m_commitAdded( nullptr ),
+        m_commitRemoved( nullptr ),
+        m_detailSplitter( nullptr ),
         m_commitFiles( nullptr ),
-        m_historySashPos( 0 ),
+        m_fileDiff( nullptr ),
+        m_fileDiffNote( nullptr ),
+        m_canvasSplitter( nullptr ),
+        m_beforeLabel( nullptr ),
+        m_afterLabel( nullptr ),
+        m_beforeCanvas( nullptr ),
+        m_afterCanvas( nullptr ),
+        m_textDiff( nullptr ),
         m_branchesList( nullptr ),
         m_remotesList( nullptr ),
         m_stashesList( nullptr ),
         m_tagsList( nullptr ),
         m_repoUserName( nullptr ),
         m_repoUserEmail( nullptr ),
-        m_repoRemoteUrl( nullptr ),
-        m_repoName( nullptr ),
-        m_branchChoice( nullptr ),
-        m_fetchButton( nullptr ),
-        m_pullButton( nullptr ),
-        m_pushButton( nullptr )
+        m_repoRemoteUrl( nullptr )
 {
     m_hash_key = "GitAdvancedDialog";
 
@@ -802,6 +851,9 @@ GIT_ADVANCED_DIALOG::~GIT_ADVANCED_DIALOG()
     if( activeDialog() == this )
         setActiveDialog( nullptr );
 
+    // The canvases still point at these documents, so they go first.
+    m_diffContext.reset();
+
     // A push or fetch still running holds this window, so stop it and wait.
     bool transferStarted = m_pushWorker.joinable() || m_fetchWorker.joinable();
 
@@ -883,78 +935,31 @@ wxWindow* GIT_ADVANCED_DIALOG::buildHistoryPage( wxWindow* aBook )
     wxPanel*    panel = new wxPanel( aBook );
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
-    wxBoxSizer* filters = new wxBoxSizer( wxHORIZONTAL );
-
     m_historySearch = new wxSearchCtrl( panel, wxID_ANY );
     m_historySearch->SetDescriptiveText( _( "Search history" ) );
     m_historyBranch = new wxChoice( panel, wxID_ANY );
     m_historyShowRefs = new wxCheckBox( panel, wxID_ANY, _( "Show refs" ) );
     m_historyShowRefs->SetValue( true );
 
+    wxBoxSizer* filters = new wxBoxSizer( wxHORIZONTAL );
     filters->Add( m_historySearch, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 8 );
     filters->Add( m_historyBranch, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 8 );
     filters->Add( m_historyShowRefs, 0, wxALIGN_CENTER_VERTICAL );
     sizer->Add( filters, 0, wxEXPAND | wxALL, 4 );
 
-    wxSplitterWindow* splitter = new wxSplitterWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                                       wxSP_LIVE_UPDATE | wxSP_3DSASH );
-    splitter->SetMinimumPaneSize( panel->FromDIP( 200 ) );
-    splitter->SetSashGravity( 0.6 );
-    m_historySplitter = splitter;
+    m_historySplitter = new wxSplitterWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                              wxSP_LIVE_UPDATE | wxSP_3DSASH );
+    m_historySplitter->SetMinimumPaneSize( panel->FromDIP( 200 ) );
+    m_historySplitter->SetSashGravity( 0.6 );
     m_historySashPos = panel->FromDIP( 460 );
 
-    // A custom renderer draws the avatar at full size and fixes the row height, since the
-    // native icon renderer caps the icon size.
-    wxDataViewListCtrl* list = new wxDataViewListCtrl( splitter, wxID_ANY );
-
-    int rowHeight = list->FromDIP( 28 );
-    int gap = list->FromDIP( 6 );
-
-    // The row height must be set explicitly. A renderer's reported size does not grow the row.
-    list->SetRowHeight( rowHeight );
-
-    list->AppendColumn( new wxDataViewColumn( _( "Description" ), new HISTORY_AVATAR_RENDERER( rowHeight, gap ), 0,
-                                              list->FromDIP( 320 ), wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE ),
-                        wxT( "wxDataViewIconText" ) );
-    list->AppendTextColumn( _( "Author" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 120 ) );
-    list->AppendTextColumn( _( "Date" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 90 ) );
-    list->AppendTextColumn( _( "Commit" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 90 ) );
-    m_historyRefsColumn = list->AppendTextColumn( _( "Refs" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 120 ) );
-    m_historyList = list;
-
-    wxPanel*    detail = new wxPanel( splitter );
-    wxBoxSizer* detailSizer = new wxBoxSizer( wxVERTICAL );
-    m_commitDetail = detail;
-
-    m_commitTitle = new wxStaticText( detail, wxID_ANY, wxEmptyString );
-    m_commitTitle->SetFont( m_commitTitle->GetFont().Bold() );
-    m_commitAvatar = new wxStaticBitmap( detail, wxID_ANY, wxNullBitmap );
-    m_commitAuthor = new wxStaticText( detail, wxID_ANY, wxEmptyString );
-
-    wxBoxSizer* authorRow = new wxBoxSizer( wxHORIZONTAL );
-    authorRow->Add( m_commitAvatar, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 6 );
-    authorRow->Add( m_commitAuthor, 1, wxALIGN_CENTER_VERTICAL );
-    m_commitMessage = new wxTextCtrl( detail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                                      wxTE_MULTILINE | wxTE_READONLY );
-    m_commitMessage->SetMinSize( detail->FromDIP( wxSize( -1, 90 ) ) );
-    m_commitStats = new wxStaticText( detail, wxID_ANY, wxEmptyString );
-    m_commitFiles = new wxListCtrl( detail, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL );
-    m_commitFiles->AppendColumn( _( "File" ), wxLIST_FORMAT_LEFT, detail->FromDIP( 220 ) );
-    m_commitFiles->AppendColumn( _( "Status" ), wxLIST_FORMAT_LEFT, detail->FromDIP( 90 ) );
-    m_commitFiles->AppendColumn( wxS( "+" ), wxLIST_FORMAT_RIGHT, detail->FromDIP( 50 ) );
-    m_commitFiles->AppendColumn( wxS( "-" ), wxLIST_FORMAT_RIGHT, detail->FromDIP( 50 ) );
-
-    detailSizer->Add( m_commitTitle, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
-    detailSizer->Add( authorRow, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
-    detailSizer->Add( m_commitMessage, 0, wxEXPAND | wxALL, 8 );
-    detailSizer->Add( m_commitStats, 0, wxEXPAND | wxLEFT | wxRIGHT, 8 );
-    detailSizer->Add( m_commitFiles, 1, wxEXPAND | wxALL, 8 );
-    detail->SetSizer( detailSizer );
+    m_historyList = buildHistoryList( m_historySplitter );
+    m_commitDetail = buildCommitDetailPane( m_historySplitter );
 
     // The detail pane appears once a commit is selected.
-    splitter->Initialize( list );
-    detail->Hide();
-    sizer->Add( splitter, 1, wxEXPAND | wxALL, 4 );
+    m_historySplitter->Initialize( m_historyList );
+    m_commitDetail->Hide();
+    sizer->Add( m_historySplitter, 1, wxEXPAND | wxALL, 4 );
     panel->SetSizer( sizer );
 
     // Walking the whole history for a search text that matches nothing takes a moment in a big
@@ -979,17 +984,113 @@ wxWindow* GIT_ADVANCED_DIALOG::buildHistoryPage( wxWindow* aBook )
                                  m_historyRefsColumn->SetHidden( !m_historyShowRefs->IsChecked() );
                              } );
 
-    list->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED,
-                [this]( wxDataViewEvent& )
-                {
-                    if( m_fillingHistory )
-                        return;
+    m_historyList->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED,
+                         [this]( wxDataViewEvent& )
+                         {
+                             if( m_fillingHistory )
+                                 return;
 
-                    int row = m_historyList->GetSelectedRow();
-                    showCommitDetail( row == wxNOT_FOUND ? wxString() : m_historyList->GetTextValue( row, 3 ) );
-                } );
+                             int row = m_historyList->GetSelectedRow();
+                             wxString hash = row == wxNOT_FOUND ? wxString() : m_historyList->GetTextValue( row, 3 );
+                             showCommitDetail( hash );
+                         } );
 
-    // Double-clicking a changed file compares that file against the parent commit.
+    return panel;
+}
+
+
+wxDataViewListCtrl* GIT_ADVANCED_DIALOG::buildHistoryList( wxWindow* aParent )
+{
+    // A custom renderer draws the avatar at full size and fixes the row height, since the
+    // native icon renderer caps the icon size.
+    wxDataViewListCtrl* list = new wxDataViewListCtrl( aParent, wxID_ANY );
+
+    int rowHeight = list->FromDIP( 28 );
+    int gap = list->FromDIP( 6 );
+
+    // The row height must be set explicitly. A renderer's reported size does not grow the row.
+    list->SetRowHeight( rowHeight );
+
+    list->AppendColumn( new wxDataViewColumn( _( "Description" ), new HISTORY_AVATAR_RENDERER( rowHeight, gap ), 0,
+                                              list->FromDIP( 320 ), wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE ),
+                        wxT( "wxDataViewIconText" ) );
+    list->AppendTextColumn( _( "Author" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 120 ) );
+    list->AppendTextColumn( _( "Date" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 90 ) );
+    list->AppendTextColumn( _( "Commit" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 90 ) );
+    m_historyRefsColumn = list->AppendTextColumn( _( "Refs" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 120 ) );
+
+    return list;
+}
+
+
+wxPanel* GIT_ADVANCED_DIALOG::buildCommitDetailPane( wxWindow* aParent )
+{
+    wxPanel*    detail = new wxPanel( aParent );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    m_commitTitle = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_commitTitle->SetFont( m_commitTitle->GetFont().Bold() );
+    m_commitAvatar = new wxStaticBitmap( detail, wxID_ANY, wxNullBitmap );
+    m_commitAuthor = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_commitMessage = new wxTextCtrl( detail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                      wxTE_MULTILINE | wxTE_READONLY );
+    m_commitMessage->SetMinSize( detail->FromDIP( wxSize( -1, 90 ) ) );
+    m_commitStats = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_commitFileCount = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_commitAdded = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_commitRemoved = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+
+    // The line counts take the colours the diff uses, lifted a little on a dark background.
+    KICAD_DIFF::DIFF_COLOR_THEME theme;
+    bool                         dark = KIPLATFORM::UI::IsDarkTheme();
+    m_commitAdded->SetForegroundColour( ( dark ? theme.added.Brightened( 0.4 ) : theme.added ).ToColour() );
+    m_commitRemoved->SetForegroundColour( ( dark ? theme.removed.Brightened( 0.4 ) : theme.removed ).ToColour() );
+
+    // The file list above, and once a file is picked, what the commit did to it below.
+    m_detailSplitter = new wxSplitterWindow( detail, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                             wxSP_LIVE_UPDATE | wxSP_3DSASH );
+    m_detailSplitter->SetMinimumPaneSize( detail->FromDIP( 60 ) );
+    m_detailSplitter->SetSashGravity( 0.0 );
+    m_detailSashPos = detail->FromDIP( 140 );
+
+    m_commitFiles = new wxListCtrl( m_detailSplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                    wxLC_REPORT | wxLC_SINGLE_SEL );
+    m_commitFiles->AppendColumn( _( "File" ), wxLIST_FORMAT_LEFT, detail->FromDIP( 220 ) );
+    m_commitFiles->AppendColumn( _( "Status" ), wxLIST_FORMAT_LEFT, detail->FromDIP( 90 ) );
+    m_commitFiles->AppendColumn( wxS( "+" ), wxLIST_FORMAT_RIGHT, detail->FromDIP( 50 ) );
+    m_commitFiles->AppendColumn( wxS( "-" ), wxLIST_FORMAT_RIGHT, detail->FromDIP( 50 ) );
+
+    m_fileDiff = buildFileDiffArea( m_detailSplitter );
+    m_detailSplitter->Initialize( m_commitFiles );
+    m_fileDiff->Hide();
+
+    wxBoxSizer* authorRow = new wxBoxSizer( wxHORIZONTAL );
+    authorRow->Add( m_commitAvatar, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 6 );
+    authorRow->Add( m_commitAuthor, 1, wxALIGN_CENTER_VERTICAL );
+
+    // The parent on the left, the counts kept at the right edge as the window resizes.
+    wxBoxSizer* statsRow = new wxBoxSizer( wxHORIZONTAL );
+    statsRow->Add( m_commitStats, 0, wxALIGN_CENTER_VERTICAL );
+    statsRow->AddStretchSpacer();
+    statsRow->Add( m_commitFileCount, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 12 );
+    statsRow->Add( m_commitAdded, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 8 );
+    statsRow->Add( m_commitRemoved, 0, wxALIGN_CENTER_VERTICAL );
+
+    sizer->Add( m_commitTitle, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( authorRow, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_commitMessage, 0, wxEXPAND | wxALL, 8 );
+    sizer->Add( statsRow, 0, wxEXPAND | wxLEFT | wxRIGHT, 8 );
+    sizer->Add( m_detailSplitter, 1, wxEXPAND | wxALL, 8 );
+    detail->SetSizer( sizer );
+
+    // Picking a changed file shows what the commit did to it under the list.
+    m_commitFiles->Bind( wxEVT_LIST_ITEM_SELECTED,
+                         [this]( wxListEvent& aEvent )
+                         {
+                             showFileDiff( m_commitFiles->GetItemText( aEvent.GetIndex(), 0 ) );
+                         } );
+
+    // Double-clicking opens the full comparison window for it.
     m_commitFiles->SetToolTip( _( "Double click a file to see what the commit changed in it." ) );
     m_commitFiles->Bind( wxEVT_LIST_ITEM_ACTIVATED,
                          [this]( wxListEvent& aEvent )
@@ -998,7 +1099,33 @@ wxWindow* GIT_ADVANCED_DIALOG::buildHistoryPage( wxWindow* aBook )
                                                 m_commitFiles->GetItemText( aEvent.GetIndex(), 0 ) );
                          } );
 
-    return panel;
+    return detail;
+}
+
+
+wxPanel* GIT_ADVANCED_DIALOG::buildFileDiffArea( wxWindow* aParent )
+{
+    wxPanel*    area = new wxPanel( aParent );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    // One of these shows at a time: a note, the two drawings, or the line diff.
+    m_fileDiffNote = new wxStaticText( area, wxID_ANY, wxEmptyString );
+    m_canvasSplitter = new wxSplitterWindow( area, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                             wxSP_LIVE_UPDATE | wxSP_3DSASH );
+    m_canvasSplitter->SetMinimumPaneSize( area->FromDIP( 60 ) );
+    m_canvasSplitter->SetSashGravity( 0.5 );
+    m_textDiff = new wxStyledTextCtrl( area, wxID_ANY );
+
+    sizer->Add( m_fileDiffNote, 0, wxEXPAND | wxALL, 4 );
+    sizer->Add( m_canvasSplitter, 1, wxEXPAND );
+    sizer->Add( m_textDiff, 1, wxEXPAND );
+    area->SetSizer( sizer );
+
+    m_fileDiffNote->Hide();
+    m_canvasSplitter->Hide();
+    m_textDiff->Hide();
+
+    return area;
 }
 
 
@@ -1108,14 +1235,22 @@ void GIT_ADVANCED_DIALOG::fillCommitDetail( const KIGIT_COMMIT_DETAIL& aDetail )
 
     if( showAvatars )
         requestAvatar( aDetail.email, diameter );
+
     m_commitMessage->ChangeValue( aDetail.message );
 
     wxString parents = aDetail.parents.empty() ? _( "No parent" )
                                                : wxString::Format( _( "Parent: %s" ), joinNames( aDetail.parents ) );
 
-    m_commitStats->SetLabel( wxString::Format( _( "%s    Changed files: %d    +%d  -%d" ), parents,
-                                               static_cast<int>( aDetail.files.size() ), aDetail.added,
-                                               aDetail.removed ) );
+    m_detailParent = aDetail.parents.empty() ? wxString() : aDetail.parents.front();
+    hideFileDiff();
+
+    int      fileCount = static_cast<int>( aDetail.files.size() );
+    wxString files = fileCount == 1 ? _( "1 changed file" ) : wxString::Format( _( "%d changed files" ), fileCount );
+
+    m_commitStats->SetLabel( parents );
+    m_commitFileCount->SetLabel( files );
+    m_commitAdded->SetLabel( wxString::Format( wxS( "+%d" ), aDetail.added ) );
+    m_commitRemoved->SetLabel( wxString::Format( wxS( "-%d" ), aDetail.removed ) );
 
     m_commitFiles->DeleteAllItems();
 
@@ -1156,12 +1291,261 @@ void GIT_ADVANCED_DIALOG::clearCommitDetail()
         m_historySplitter->Unsplit( m_commitDetail );
     }
 
+    hideFileDiff();
     m_detailEmail.clear();
     m_commitTitle->SetLabel( wxEmptyString );
     m_commitAuthor->SetLabel( wxEmptyString );
     m_commitMessage->ChangeValue( wxEmptyString );
     m_commitStats->SetLabel( wxEmptyString );
+    m_commitFileCount->SetLabel( wxEmptyString );
+    m_commitAdded->SetLabel( wxEmptyString );
+    m_commitRemoved->SetLabel( wxEmptyString );
     m_commitFiles->DeleteAllItems();
+}
+
+
+void GIT_ADVANCED_DIALOG::destroyDiffCanvases()
+{
+    // The documents come off the canvases before the canvases go.
+    m_diffContext.reset();
+
+    if( !m_beforeCanvas )
+        return;
+
+    // The splitter keeps its pane pointers through DestroyChildren, and its best size reads
+    // them, so take the panes out of it first.
+    m_canvasSplitter->Unsplit();
+    m_canvasSplitter->Initialize( nullptr );
+    m_canvasSplitter->DestroyChildren();
+    m_beforeCanvas = nullptr;
+    m_afterCanvas = nullptr;
+    m_beforeLabel = nullptr;
+    m_afterLabel = nullptr;
+}
+
+
+void GIT_ADVANCED_DIALOG::hideFileDiff()
+{
+    destroyDiffCanvases();
+
+    if( m_detailSplitter->IsSplit() )
+    {
+        m_detailSashPos = m_detailSplitter->GetSashPosition();
+        m_detailSplitter->Unsplit( m_fileDiff );
+    }
+}
+
+
+void GIT_ADVANCED_DIALOG::showFileDiffArea()
+{
+    if( !m_detailSplitter->IsSplit() )
+        m_detailSplitter->SplitHorizontally( m_commitFiles, m_fileDiff, m_detailSashPos );
+
+    m_fileDiff->Layout();
+}
+
+
+void GIT_ADVANCED_DIALOG::showFileDiffNote( const wxString& aNote )
+{
+    destroyDiffCanvases();
+    m_fileDiffNote->SetLabel( aNote );
+    m_fileDiffNote->Show();
+    m_canvasSplitter->Hide();
+    m_textDiff->Hide();
+    showFileDiffArea();
+}
+
+
+void GIT_ADVANCED_DIALOG::ensureDiffCanvases()
+{
+    if( m_beforeCanvas )
+        return;
+
+    // The editor's own backend where there is one. The project manager has no canvas.
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
+
+    if( EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( m_parent ) )
+    {
+        if( frame->GetCanvas() )
+            backend = frame->GetCanvas()->GetBackend();
+    }
+
+    auto makeSide = [&]( wxStaticText** aLabel, WIDGET_DIFF_CANVAS** aCanvas )
+    {
+        wxPanel*    side = new wxPanel( m_canvasSplitter );
+        wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+        *aLabel = new wxStaticText( side, wxID_ANY, wxEmptyString );
+        *aCanvas = new WIDGET_DIFF_CANVAS( side, backend );
+
+        sizer->Add( *aLabel, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 4 );
+        sizer->Add( *aCanvas, 1, wxEXPAND );
+        side->SetSizer( sizer );
+        return side;
+    };
+
+    wxPanel* before = makeSide( &m_beforeLabel, &m_beforeCanvas );
+    wxPanel* after = makeSide( &m_afterLabel, &m_afterCanvas );
+
+    m_canvasSplitter->SplitVertically( before, after );
+
+    // There is nothing to select here, so the left button pans like the middle one.
+    m_beforeCanvas->SetLeftDragPans( true );
+    m_afterCanvas->SetLeftDragPans( true );
+
+    followDiffCanvas( m_beforeCanvas, m_afterCanvas );
+    followDiffCanvas( m_afterCanvas, m_beforeCanvas );
+}
+
+
+void GIT_ADVANCED_DIALOG::followDiffCanvas( WIDGET_DIFF_CANVAS* aLead, WIDGET_DIFF_CANVAS* aFollower )
+{
+    // The view controls handle the event after this, so the copy waits until they have.
+    auto onInput = [this, aLead, aFollower]( wxMouseEvent& aEvent )
+    {
+        aEvent.Skip();
+
+        CallAfter(
+                [this, aLead, aFollower]()
+                {
+                    // The canvases may have gone with a file change before this ran.
+                    if( aLead != m_beforeCanvas && aLead != m_afterCanvas )
+                        return;
+
+                    KIGFX::VIEW* lead = aLead->GetView();
+                    KIGFX::VIEW* follower = aFollower->GetView();
+
+                    if( follower->GetScale() == lead->GetScale() && follower->GetCenter() == lead->GetCenter() )
+                        return;
+
+                    follower->SetScale( lead->GetScale() );
+                    follower->SetCenter( lead->GetCenter() );
+                    aFollower->Refresh();
+                } );
+    };
+
+    aLead->Bind( wxEVT_MOTION, onInput );
+    aLead->Bind( wxEVT_MOUSEWHEEL, onInput );
+    aLead->Bind( wxEVT_MAGNIFY, onInput );
+    aLead->Bind( wxEVT_LEFT_UP, onInput );
+    aLead->Bind( wxEVT_MIDDLE_UP, onInput );
+}
+
+
+void GIT_ADVANCED_DIALOG::showFileDiff( const wxString& aPath )
+{
+    if( aPath.IsEmpty() || m_detailHash.IsEmpty() )
+    {
+        hideFileDiff();
+        return;
+    }
+
+    GIT_DIFF_WORKSPACE workspace;
+
+    if( !workspace.IsOk() )
+    {
+        showFileDiffNote( _( "Could not create a temporary directory for the diff." ) );
+        return;
+    }
+
+    wxBusyCursor busy;
+
+    wxString             before;
+    wxString             after;
+    wxString             error;
+    KICAD_DIFF::DOC_KIND kind = KICAD_DIFF::DOC_KIND::UNKNOWN;
+
+    if( !MaterializeCommitFile( m_parent, workspace, m_detailHash, aPath, &before, &after, &kind, &error ) )
+    {
+        showFileDiffNote( error );
+        return;
+    }
+
+    bool shown = false;
+
+    if( kind == KICAD_DIFF::DOC_KIND::UNKNOWN )
+        shown = showTextDiff( before, after );
+    else if( kind == KICAD_DIFF::DOC_KIND::SCH || kind == KICAD_DIFF::DOC_KIND::PCB )
+        shown = showDrawingDiff( kind, before, after );
+    else
+        showFileDiffNote( _( "Double click the file to open its comparison." ) );
+
+    if( shown )
+        showFileDiffArea();
+}
+
+
+bool GIT_ADVANCED_DIALOG::showTextDiff( const wxString& aBefore, const wxString& aAfter )
+{
+    auto readAll = []( const wxString& aFile ) -> std::string
+    {
+        if( aFile.IsEmpty() )
+            return std::string();
+
+        std::ifstream in( aFile.fn_str(), std::ios::binary );
+        return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    };
+
+    std::string contentA = readAll( aBefore );
+    std::string contentB = readAll( aAfter );
+
+    if( KIGIT::TextLooksBinary( contentA ) || KIGIT::TextLooksBinary( contentB ) )
+    {
+        showFileDiffNote( _( "This is not a plain text file, so there is no comparison to show." ) );
+        return false;
+    }
+
+    destroyDiffCanvases();
+    FillTextDiffControl( m_textDiff,
+                         KIGIT::BuildTextDiff( KIGIT::SplitTextLines( contentA ), KIGIT::SplitTextLines( contentB ) ) );
+    m_fileDiffNote->Hide();
+    m_canvasSplitter->Hide();
+    m_textDiff->Show();
+    return true;
+}
+
+
+bool GIT_ADVANCED_DIALOG::showDrawingDiff( KICAD_DIFF::DOC_KIND aKind, const wxString& aBefore,
+                                           const wxString& aAfter )
+{
+    ensureDiffCanvases();
+
+    // The old documents come off the canvases before the new ones go on.
+    m_diffContext.reset();
+
+    KICAD_DIFF::DOCUMENT_DIFF diff;
+    WX_STRING_REPORTER        reporter;
+
+    m_diffContext = KICAD_DIFF::DispatchAttachDiffCanvases( m_parent->Kiway(), aKind, aBefore, aAfter,
+                                                            *m_beforeCanvas, *m_afterCanvas, diff, &reporter );
+
+    if( !m_diffContext )
+    {
+        showFileDiffNote( reporter.HasMessage() ? reporter.GetMessages() : _( "Could not compare this file." ) );
+        return false;
+    }
+
+    KICAD_DIFF::DIFF_COLOR_THEME theme;
+    KICAD_DIFF::DIFF_SCENE       scene = KICAD_DIFF::BuildScene( diff, theme );
+    scene.docKind = aKind;
+
+    // Both sides open on the same change. The user pans from there and the other side follows.
+    std::optional<BOX2I> focus = firstChangeBox( scene, aKind );
+    m_beforeCanvas->SetFocusBox( focus );
+    m_afterCanvas->SetFocusBox( focus );
+
+    KICAD_DIFF::SIDE_BY_SIDE_SCENES sides = KICAD_DIFF::SplitSceneBySide( scene );
+
+    m_beforeLabel->SetLabel( m_detailParent.IsEmpty() ? _( "Before: nothing" )
+                                                      : wxString::Format( _( "Before: %s" ), m_detailParent ) );
+    m_afterLabel->SetLabel( wxString::Format( _( "After: %s" ), m_detailHash ) );
+    m_beforeCanvas->SetScene( std::move( sides.reference ) );
+    m_afterCanvas->SetScene( std::move( sides.comparison ) );
+
+    m_fileDiffNote->Hide();
+    m_textDiff->Hide();
+    m_canvasSplitter->Show();
+    return true;
 }
 
 

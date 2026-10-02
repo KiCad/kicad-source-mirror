@@ -92,4 +92,28 @@ int DispatchOpenDiffDialog( KIWAY& aKiway, DOC_KIND aKind, const wxString& aFile
     return fn( static_cast<int>( aKind ), aFileA, aFileB, aLabelA, aLabelB, aParent, aReporter );
 }
 
+
+std::unique_ptr<DIFF_CANVAS_CONTEXT> DispatchAttachDiffCanvases( KIWAY& aKiway, DOC_KIND aKind, const wxString& aFileA,
+                                                                 const wxString& aFileB, WIDGET_DIFF_CANVAS& aBefore,
+                                                                 WIDGET_DIFF_CANVAS& aAfter, DOCUMENT_DIFF& aDiff,
+                                                                 REPORTER* aReporter )
+{
+    typedef DIFF_CANVAS_CONTEXT* ( *ATTACH_FN )( int, const wxString&, const wxString&, WIDGET_DIFF_CANVAS*,
+                                                 WIDGET_DIFF_CANVAS*, DOCUMENT_DIFF*, REPORTER* );
+
+    KIFACE* kiface = aKiway.KiFACE( faceForKind( aKind ) );
+
+    if( !kiface )
+        return nullptr;
+
+    ATTACH_FN fn = reinterpret_cast<ATTACH_FN>( kiface->IfaceOrAddress( KIFACE_ATTACH_DIFF_CANVASES ) );
+
+    if( !fn )
+        return nullptr;
+
+    return std::unique_ptr<DIFF_CANVAS_CONTEXT>(
+            fn( static_cast<int>( aKind ), aFileA, aFileB, &aBefore, &aAfter, &aDiff, aReporter ) );
+}
+
+
 } // namespace KICAD_DIFF

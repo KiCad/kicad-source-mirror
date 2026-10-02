@@ -99,6 +99,14 @@ using GitPatchPtr = std::unique_ptr<git_patch,
                                        })>;
 
 /**
+* @brief A unique pointer for git_reference_iterator objects with automatic cleanup.
+*/
+using GitReferenceIteratorPtr = std::unique_ptr<git_reference_iterator,
+                                                   decltype([](git_reference_iterator* aIter) {
+                                                       git_reference_iterator_free(aIter);
+                                                   })>;
+
+/**
 * @brief A unique pointer for git_signature objects with automatic cleanup.
 */
 using GitSignaturePtr = std::unique_ptr<git_signature,
