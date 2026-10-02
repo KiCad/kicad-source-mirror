@@ -45,6 +45,7 @@ struct KIGIT_BRANCH_DETAIL;
 struct KIGIT_COMMIT_DETAIL;
 struct KIGIT_COMMIT_INFO;
 struct KIGIT_HISTORY_FILTER;
+struct KIGIT_STASH_DETAIL;
 class GIT_FILE_DIFF_AREA;
 class WX_TREEBOOK;
 class wxButton;
@@ -129,6 +130,15 @@ private:
     /// The Remotes page: the list beside the selected remote's detail.
     wxWindow* buildRemotesPage( wxWindow* aBook );
     wxPanel*  buildRemoteDetailPane( wxWindow* aParent );
+
+    /// The Stashes page: the list beside the selected stash's detail.
+    wxWindow* buildStashesPage( wxWindow* aBook );
+    wxPanel*  buildStashDetailPane( wxWindow* aParent );
+
+    /// Fill the detail pane with the stash aId names, or hide it when the id is empty or gone.
+    void showStashDetail( const wxString& aId );
+    void fillStashDetail( const KIGIT_STASH_DETAIL& aDetail );
+    void hideStashDetail();
 
     /// Fill the detail pane with aRemote, or hide it when the name is empty.
     void showRemoteDetail( const wxString& aRemote );
@@ -315,8 +325,18 @@ private:
     wxTextCtrl*       m_remoteUrl;
     wxStaticText*     m_remoteFetched;
 
+    // Stashes page
+    wxSplitterWindow* m_stashesSplitter;
+    wxListCtrl*       m_stashesList;
+    wxStaticText*     m_stashCount;
+    wxPanel*          m_stashDetail;
+    wxStaticText*     m_stashWhen;
+    wxStaticText*     m_stashBranch;
+    wxStaticText*     m_stashCommit;
+    wxTextCtrl*       m_stashMessage;
+    wxListCtrl*       m_stashFiles;
+
     // The other pages
-    wxListCtrl*   m_stashesList;
     wxListCtrl*   m_tagsList;
     wxTextCtrl*   m_repoUserName;
     wxTextCtrl*   m_repoUserEmail;
@@ -382,6 +402,12 @@ private:
 
     /// True while the remote list is being refilled, when its selection events are its own.
     bool m_fillingRemotes = false;
+
+    /// Where the user left the sash between the stash list and its detail pane.
+    int m_stashSashPos = 0;
+
+    /// True while the stash list is being refilled, when its selection events are its own.
+    bool m_fillingStashes = false;
 
     /// Waits for the user to pause typing in the search box before walking the history again.
     wxTimer m_historySearchTimer;

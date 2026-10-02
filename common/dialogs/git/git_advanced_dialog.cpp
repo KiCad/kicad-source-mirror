@@ -362,18 +362,6 @@ wxString fileStatusLabel( KIGIT::FILE_CHANGE_STATUS aStatus )
 }
 
 
-wxWindow* makeStashesPage( wxWindow* aBook, wxListCtrl** aOutList )
-{
-    LIST_PAGE page = makeListPage( aBook );
-
-    page.list->AppendColumn( _( "Description" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 400 ) );
-    page.list->AppendColumn( _( "Date" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 130 ) );
-
-    *aOutList = page.list;
-    return page.panel;
-}
-
-
 wxWindow* makeTagsPage( wxWindow* aBook, wxListCtrl** aOutList )
 {
     LIST_PAGE page = makeListPage( aBook );
@@ -470,7 +458,15 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
         m_remoteTitle( nullptr ),
         m_remoteUrl( nullptr ),
         m_remoteFetched( nullptr ),
+        m_stashesSplitter( nullptr ),
         m_stashesList( nullptr ),
+        m_stashCount( nullptr ),
+        m_stashDetail( nullptr ),
+        m_stashWhen( nullptr ),
+        m_stashBranch( nullptr ),
+        m_stashCommit( nullptr ),
+        m_stashMessage( nullptr ),
+        m_stashFiles( nullptr ),
         m_tagsList( nullptr ),
         m_repoUserName( nullptr ),
         m_repoUserEmail( nullptr ),
@@ -541,25 +537,11 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
                                    } } } );
     m_book->AddPage( remotesPage, _( "Remotes" ), false, 3 );
 
-    wxWindow* stashesPage = makeStashesPage( m_book, &m_stashesList );
+    wxWindow* stashesPage = buildStashesPage( m_book );
     addButtonRow( stashesPage, { { _( "Stash Changes..." ),
                                    [this]()
                                    {
                                        onStashSave();
-                                   } },
-                                 { _( "Apply" ),
-                                   [this]()
-                                   {
-                                       onStashApply();
-                                   } },
-                                 { _( "Pop" ),
-                                   [this]()
-                                   {
-                                       onStashPop();
-                                   } },
-                                 { _( "Drop" ), [this]()
-                                   {
-                                       onStashDrop();
                                    } } } );
     m_book->AddPage( stashesPage, _( "Stashes" ), false, 4 );
 
@@ -1971,17 +1953,195 @@ void GIT_ADVANCED_DIALOG::populateStashes()
         return;
 
     // The caller holds the git action lock.
-    m_stashesList->DeleteAllItems();
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    long     selectedRow = m_stashesList->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+    wxString selected = stashIdForRow( selectedRow );
+    long     selectRow = wxNOT_FOUND;
 
+    m_fillingStashes = true;
+    m_stashesList->DeleteAllItems();
     m_stashIds.clear();
 
-    for( const KIGIT_STASH_INFO& s : m_parent->Prj().GetGitCommon()->GetStashes() )
+    for( const KIGIT_STASH_INFO& s : common->GetStashes() )
     {
         long idx = m_stashesList->InsertItem( m_stashesList->GetItemCount(), s.message );
         m_stashesList->SetItem( idx, 1, relativeDate( s.when ) );
         m_stashesList->SetItemData( idx, static_cast<long>( s.index ) );
         m_stashIds.push_back( s.id );
+
+        // Keep the selection on the same stash, or start on the newest.
+        if( s.id == selected || ( selected.IsEmpty() && idx == 0 ) )
+            selectRow = idx;
     }
+
+    int shown = m_stashesList->GetItemCount();
+    m_stashCount->SetLabel( shown == 1 ? _( "1 stash" ) : wxString::Format( _( "%d stashes" ), shown ) );
+
+    if( selectRow != wxNOT_FOUND )
+    {
+        m_stashesList->SetItemState( selectRow, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+        fillStashDetail( common->GetStashDetail( stashIdForRow( selectRow ) ) );
+    }
+    else
+    {
+        hideStashDetail();
+    }
+
+    m_fillingStashes = false;
+}
+
+
+wxWindow* GIT_ADVANCED_DIALOG::buildStashesPage( wxWindow* aBook )
+{
+    wxPanel*    panel = new wxPanel( aBook );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    m_stashesSplitter = new wxSplitterWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                              wxSP_LIVE_UPDATE | wxSP_3DSASH );
+    m_stashesSplitter->SetMinimumPaneSize( panel->FromDIP( 200 ) );
+    m_stashesSplitter->SetSashGravity( 0.6 );
+    m_stashSashPos = panel->FromDIP( 460 );
+
+    wxPanel*    listPanel = new wxPanel( m_stashesSplitter );
+    wxBoxSizer* listSizer = new wxBoxSizer( wxVERTICAL );
+
+    m_stashesList = new wxListCtrl( listPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                    wxLC_REPORT | wxLC_SINGLE_SEL );
+    m_stashesList->AppendColumn( _( "Description" ), wxLIST_FORMAT_LEFT, listPanel->FromDIP( 360 ) );
+    m_stashesList->AppendColumn( _( "Date" ), wxLIST_FORMAT_LEFT, listPanel->FromDIP( 100 ) );
+    m_stashCount = new wxStaticText( listPanel, wxID_ANY, wxEmptyString );
+
+    listSizer->Add( m_stashesList, 1, wxEXPAND );
+    listSizer->Add( m_stashCount, 0, wxLEFT | wxTOP, 4 );
+    listPanel->SetSizer( listSizer );
+
+    m_stashDetail = buildStashDetailPane( m_stashesSplitter );
+
+    // The detail pane appears once a stash is selected.
+    m_stashesSplitter->Initialize( listPanel );
+    m_stashDetail->Hide();
+    sizer->Add( m_stashesSplitter, 1, wxEXPAND | wxALL, 4 );
+    panel->SetSizer( sizer );
+
+    m_stashesList->Bind( wxEVT_LIST_ITEM_SELECTED,
+                         [this]( wxListEvent& aEvent )
+                         {
+                             if( !m_fillingStashes )
+                                 showStashDetail( stashIdForRow( aEvent.GetIndex() ) );
+                         } );
+
+    return panel;
+}
+
+
+wxPanel* GIT_ADVANCED_DIALOG::buildStashDetailPane( wxWindow* aParent )
+{
+    wxPanel*    detail = new wxPanel( aParent );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    wxStaticText* title = new wxStaticText( detail, wxID_ANY, _( "Stash Details" ) );
+    title->SetFont( title->GetFont().Bold() );
+    m_stashWhen = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_stashBranch = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_stashCommit = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_stashMessage = new wxTextCtrl( detail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                     wxTE_MULTILINE | wxTE_READONLY );
+    m_stashMessage->SetMinSize( detail->FromDIP( wxSize( -1, 60 ) ) );
+    m_stashFiles = new wxListCtrl( detail, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                   wxLC_REPORT | wxLC_SINGLE_SEL | wxLC_NO_HEADER );
+    m_stashFiles->AppendColumn( _( "File" ), wxLIST_FORMAT_LEFT, detail->FromDIP( 300 ) );
+
+    wxButton* apply = new wxButton( detail, wxID_ANY, _( "Apply Stash" ) );
+    wxButton* pop = new wxButton( detail, wxID_ANY, _( "Pop Stash" ) );
+    wxButton* drop = new wxButton( detail, wxID_ANY, _( "Drop Stash" ) );
+    markDestructive( drop );
+
+    wxBoxSizer* restore = new wxBoxSizer( wxHORIZONTAL );
+    restore->Add( apply, 1, wxRIGHT, 4 );
+    restore->Add( pop, 1 );
+
+    sizer->Add( title, 0, wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_stashWhen, 0, wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_stashBranch, 0, wxLEFT | wxRIGHT | wxTOP, 4 );
+    sizer->Add( m_stashCommit, 0, wxLEFT | wxRIGHT | wxTOP, 4 );
+    sizer->Add( new wxStaticText( detail, wxID_ANY, _( "Message:" ) ), 0, wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_stashMessage, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( new wxStaticText( detail, wxID_ANY, _( "Changes:" ) ), 0, wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_stashFiles, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( restore, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( drop, 0, wxEXPAND | wxALL, 8 );
+    detail->SetSizer( sizer );
+
+    apply->Bind( wxEVT_BUTTON,
+                 [this]( wxCommandEvent& )
+                 {
+                     onStashApply();
+                 } );
+    pop->Bind( wxEVT_BUTTON,
+               [this]( wxCommandEvent& )
+               {
+                   onStashPop();
+               } );
+    drop->Bind( wxEVT_BUTTON,
+                [this]( wxCommandEvent& )
+                {
+                    onStashDrop();
+                } );
+
+    return detail;
+}
+
+
+void GIT_ADVANCED_DIALOG::showStashDetail( const wxString& aId )
+{
+    if( aId.IsEmpty() )
+    {
+        hideStashDetail();
+        return;
+    }
+
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    std::unique_lock<std::mutex>  lock = common->TryLockAction();
+
+    // The reload keeps the selection and fills the pane then.
+    if( !lock.owns_lock() )
+    {
+        m_reloadRetryTimer.Start( 1000, wxTIMER_ONE_SHOT );
+        return;
+    }
+
+    fillStashDetail( common->GetStashDetail( aId ) );
+}
+
+
+void GIT_ADVANCED_DIALOG::fillStashDetail( const KIGIT_STASH_DETAIL& aDetail )
+{
+    if( !aDetail.found )
+    {
+        hideStashDetail();
+        return;
+    }
+
+    m_stashWhen->SetLabel( wxString::Format( _( "Stashed: %s" ), relativeDate( aDetail.when ) ) );
+    m_stashBranch->SetLabel( wxString::Format( _( "Branch: %s" ), aDetail.branch ) );
+    m_stashCommit->SetLabel( wxString::Format( _( "Commit: %s" ), aDetail.baseHash ) );
+    m_stashMessage->ChangeValue( aDetail.message );
+
+    m_stashFiles->DeleteAllItems();
+
+    for( const wxString& file : aDetail.files )
+        m_stashFiles->InsertItem( m_stashFiles->GetItemCount(), file );
+
+    if( !m_stashesSplitter->IsSplit() )
+        m_stashesSplitter->SplitVertically( m_stashesList->GetParent(), m_stashDetail, m_stashSashPos );
+
+    m_stashDetail->Layout();
+}
+
+
+void GIT_ADVANCED_DIALOG::hideStashDetail()
+{
+    unsplitKeepingSash( m_stashesSplitter, m_stashDetail, m_stashSashPos );
 }
 
 

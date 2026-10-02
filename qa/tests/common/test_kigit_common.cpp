@@ -1721,6 +1721,58 @@ BOOST_AUTO_TEST_CASE( GetWorkingTreeLineStatsCountsEditsAndNewFiles )
 }
 
 
+// The detail pane shows what a stash holds: the branch and commit it was taken on, its message
+// and the files it changes, a new file included.
+BOOST_AUTO_TEST_CASE( GetStashDetailNamesBranchCommitAndFiles )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+
+    std::vector<KIGIT_COMMIT_INFO> commits = common.GetRecentCommits( 1 );
+    BOOST_REQUIRE_EQUAL( commits.size(), 1u );
+
+    writeFile( tmp.path, "file.txt", "v2\n" );
+    writeFile( tmp.path, "new.txt", "n\n" );
+
+    {
+        git_index* index = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+        KIGIT::GitIndexPtr indexPtr( index );
+        BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, "new.txt" ), GIT_OK );
+        BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
+    }
+
+    BOOST_REQUIRE( common.StashSave( wxS( "connector work" ) ) );
+
+    std::vector<KIGIT_STASH_INFO> stashes = common.GetStashes();
+    BOOST_REQUIRE_EQUAL( stashes.size(), 1u );
+
+    KIGIT_STASH_DETAIL detail = common.GetStashDetail( stashes[0].id );
+    BOOST_REQUIRE( detail.found );
+    BOOST_CHECK_EQUAL( detail.message.ToStdString(), "connector work" );
+    BOOST_CHECK_EQUAL( detail.branch.ToStdString(), "main" );
+    BOOST_CHECK_EQUAL( detail.baseHash.ToStdString(), commits[0].hash.ToStdString() );
+    BOOST_CHECK( detail.when.IsValid() );
+
+    std::vector<std::string> files;
+
+    for( const wxString& f : detail.files )
+        files.push_back( f.ToStdString() );
+
+    std::sort( files.begin(), files.end() );
+    BOOST_REQUIRE_EQUAL( files.size(), 2u );
+    BOOST_CHECK_EQUAL( files[0], "file.txt" );
+    BOOST_CHECK_EQUAL( files[1], "new.txt" );
+
+    BOOST_CHECK( !common.GetStashDetail( wxS( "0000000000000000000000000000000000000000" ) ).found );
+}
+
+
 // The stored connection string must not carry the secret. A scp-style git@host is left intact.
 BOOST_AUTO_TEST_CASE( SetRemoteStripsUrlUserinfo )
 {

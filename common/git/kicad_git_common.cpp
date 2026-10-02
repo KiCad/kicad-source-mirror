@@ -416,6 +416,119 @@ wxDateTime KIGIT_COMMON::GetLastFetchTime() const
 }
 
 
+KIGIT_STASH_DETAIL KIGIT_COMMON::GetStashDetail( const wxString& aId ) const
+{
+    KIGIT_STASH_DETAIL detail;
+
+    if( !m_repo )
+        return detail;
+
+    git_oid oid;
+
+    if( git_oid_fromstr( &oid, aId.utf8_string().c_str() ) != GIT_OK )
+        return detail;
+
+    git_commit* commit = nullptr;
+
+    if( git_commit_lookup( &commit, m_repo, &oid ) != GIT_OK )
+        return detail;
+
+    KIGIT::GitCommitPtr commitPtr( commit );
+
+    detail.found = true;
+    detail.when = wxDateTime( static_cast<time_t>( git_commit_time( commit ) ) );
+
+    // Git writes "WIP on <branch>: <commit> <subject>", or "On <branch>: <message>" for a
+    // message of the user's own. The branch is kept apart from the rest.
+    wxString raw;
+
+    if( const char* message = git_commit_message( commit ) )
+        raw = wxString::FromUTF8( message );
+
+    raw.Trim();
+    detail.message = raw;
+
+    wxString rest;
+
+    if( raw.StartsWith( wxS( "WIP on " ), &rest ) || raw.StartsWith( wxS( "On " ), &rest ) )
+    {
+        int colon = rest.Find( wxS( ": " ) );
+
+        if( colon != wxNOT_FOUND )
+        {
+            detail.branch = rest.Left( colon );
+            detail.message = rest.Mid( colon + 2 );
+        }
+    }
+
+    // The first parent is the commit the stash was taken on. A third parent, when there is
+    // one, holds the untracked files.
+    git_commit* base = nullptr;
+
+    if( git_commit_parent( &base, commit, 0 ) != GIT_OK )
+        return detail;
+
+    KIGIT::GitCommitPtr basePtr( base );
+    detail.baseHash = shortHashOf( git_commit_id( base ) );
+
+    git_tree* baseTree = nullptr;
+    git_tree* stashTree = nullptr;
+
+    if( git_commit_tree( &baseTree, base ) != GIT_OK || git_commit_tree( &stashTree, commit ) != GIT_OK )
+        return detail;
+
+    KIGIT::GitTreePtr baseTreePtr( baseTree );
+    KIGIT::GitTreePtr stashTreePtr( stashTree );
+    git_diff*         diff = nullptr;
+
+    if( git_diff_tree_to_tree( &diff, m_repo, baseTree, stashTree, nullptr ) == GIT_OK )
+    {
+        KIGIT::GitDiffPtr diffPtr( diff );
+
+        KIGIT::CollectDiffDeltas( diff,
+                                  [&detail]( const git_diff_delta& aDelta )
+                                  {
+                                      const char* path =
+                                              aDelta.new_file.path ? aDelta.new_file.path : aDelta.old_file.path;
+                                      detail.files.push_back( wxString::FromUTF8( path ) );
+                                  } );
+    }
+
+    if( git_commit_parentcount( commit ) > 2 )
+    {
+        git_commit* untracked = nullptr;
+
+        if( git_commit_parent( &untracked, commit, 2 ) == GIT_OK )
+        {
+            KIGIT::GitCommitPtr untrackedPtr( untracked );
+            git_tree*           untrackedTree = nullptr;
+
+            if( git_commit_tree( &untrackedTree, untracked ) == GIT_OK )
+            {
+                KIGIT::GitTreePtr untrackedTreePtr( untrackedTree );
+
+                git_tree_walk(
+                        untrackedTree, GIT_TREEWALK_PRE,
+                        []( const char* aRoot, const git_tree_entry* aEntry, void* aPayload ) -> int
+                        {
+                            if( git_tree_entry_type( aEntry ) == GIT_OBJECT_BLOB )
+                            {
+                                auto* files = static_cast<std::vector<wxString>*>( aPayload );
+                                files->push_back( wxString::FromUTF8( aRoot )
+                                                  + wxString::FromUTF8( git_tree_entry_name( aEntry ) ) );
+                            }
+
+                            return 0;
+                        },
+                        &detail.files );
+            }
+        }
+    }
+
+    return detail;
+}
+
+
 std::pair<int, int> KIGIT_COMMON::GetWorkingTreeLineStats( const std::set<wxString>& aPaths ) const
 {
     if( !m_repo )

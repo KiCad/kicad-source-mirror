@@ -824,7 +824,9 @@ void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxW
         return;
     }
 
-    if( changedPaths.empty() )
+    // A caller that named a file knows its own list, which for a stash also holds the files
+    // that were untracked. Those are not in the diff above.
+    if( aRelativePath.IsEmpty() && changedPaths.empty() )
     {
         DisplayInfoMessage( aFrame, _( "This commit has no file changes to show." ) );
         return;
@@ -891,14 +893,15 @@ bool MaterializeCommitFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspa
     // its files show as added.
     wxString    parentRef;
     git_object* commitObj = nullptr;
+    unsigned    parentCount = 0;
 
     if( git_revparse_single( &commitObj, repo, aCommitHash.utf8_string().c_str() ) == GIT_OK )
     {
-        if( git_object_type( commitObj ) == GIT_OBJECT_COMMIT
-            && git_commit_parentcount( reinterpret_cast<git_commit*>( commitObj ) ) > 0 )
-        {
+        if( git_object_type( commitObj ) == GIT_OBJECT_COMMIT )
+            parentCount = git_commit_parentcount( reinterpret_cast<git_commit*>( commitObj ) );
+
+        if( parentCount > 0 )
             parentRef = aCommitHash + wxT( "^" );
-        }
 
         git_object_free( commitObj );
     }
@@ -930,6 +933,17 @@ bool MaterializeCommitFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspa
         }
 
         return true;
+    }
+
+    // A stash keeps the files that were untracked when it was taken in a third parent, so they
+    // are missing from the diff above. Nothing came before them, so only one side has content.
+    if( parentCount > 2 )
+    {
+        aSides.kind = KICAD_DIFF::DocKindFromExtension( aRelativePath );
+        aSides.after = aWorkspace.Materialize( repo, aCommitHash + wxT( "^3" ), aRelativePath, aSides.kind );
+
+        if( !aSides.after.IsEmpty() )
+            return true;
     }
 
     aSides.error = wxString::Format( _( "This commit did not change '%s'." ), aRelativePath );

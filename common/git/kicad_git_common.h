@@ -50,6 +50,18 @@ struct KIGIT_COMMIT_INFO
 };
 
 
+// What the Stashes page's detail pane shows about one stash.
+struct KIGIT_STASH_DETAIL
+{
+    bool                  found = false;
+    wxString              message;  ///< What was stashed, without the "WIP on branch:" prefix.
+    wxString              branch;   ///< The branch the stash was taken on, as its message records it.
+    wxString              baseHash; ///< Short hash of the commit the stash was taken on.
+    wxDateTime            when;
+    std::vector<wxString> files; ///< Paths the stash changes, new files included.
+};
+
+
 // One branch, as the Branches page lists it.
 struct KIGIT_BRANCH_INFO
 {
@@ -297,6 +309,9 @@ public:
 
     // The stashes in the repository, in the order git reports them (newest first).
     std::vector<KIGIT_STASH_INFO> GetStashes() const;
+
+    // One stash in full, by its commit id. Not found leaves the result's found flag clear.
+    KIGIT_STASH_DETAIL GetStashDetail( const wxString& aId ) const;
 
     // The tags in the repository, each resolved to the commit it points at.
     std::vector<KIGIT_TAG_INFO> GetTags() const;
