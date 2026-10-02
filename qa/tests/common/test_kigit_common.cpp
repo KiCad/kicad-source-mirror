@@ -32,6 +32,7 @@
 #include <wx/stdpaths.h>
 
 #include <chrono>
+#include <algorithm>
 #include <fstream>
 #include <iterator>
 #include <memory>
@@ -249,6 +250,14 @@ std::string readWorkingFile( const wxFileName& aFile )
 {
     std::ifstream in( aFile.GetFullPath().utf8_string() );
     return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+}
+
+
+void writeFile( const wxString& aRepoPath, const wxString& aFileName, const char* aContent )
+{
+    wxFileName    fn( aRepoPath, aFileName );
+    std::ofstream f( fn.GetFullPath().utf8_string() );
+    f << aContent;
 }
 
 } // namespace
@@ -871,6 +880,177 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsReturnsNewestFirst )
     // The maximum is honored.
     BOOST_CHECK_EQUAL( common.GetRecentCommits( 1 ).size(), 1u );
     BOOST_CHECK_EQUAL( common.GetRecentCommits( 0 ).size(), 0u );
+}
+
+
+// The History page can narrow the log to one branch or to a search text. With no branch named
+// the walk covers every branch, so a commit on a side branch shows up too.
+BOOST_AUTO_TEST_CASE( GetRecentCommitsFiltersByBranchAndSearch )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    // A side branch with one commit of its own, then back on main for one more.
+    git_oid headOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, repo, "HEAD" ), GIT_OK );
+
+    git_commit* headCommit = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &headCommit, repo, &headOid ), GIT_OK );
+    KIGIT::GitCommitPtr headPtr( headCommit );
+
+    git_reference* side = nullptr;
+    BOOST_REQUIRE_EQUAL( git_branch_create( &side, repo, "side", headCommit, 0 ), GIT_OK );
+    KIGIT::GitReferencePtr sidePtr( side );
+
+    BOOST_REQUIRE_EQUAL( git_repository_set_head( repo, "refs/heads/side" ), GIT_OK );
+    writeFile( tmp.path, "side.txt", "side\n" );
+    commitWorkingFile( repo, "side.txt", "side work" );
+
+    BOOST_REQUIRE_EQUAL( git_repository_set_head( repo, "refs/heads/main" ), GIT_OK );
+    writeFile( tmp.path, "file.txt", "v2\n" );
+    commitWorkingFile( repo, "file.txt", "main work" );
+
+    KIGIT_COMMON common( repo );
+
+    auto summaries = []( const std::vector<KIGIT_COMMIT_INFO>& aCommits )
+    {
+        std::vector<std::string> out;
+
+        for( const KIGIT_COMMIT_INFO& c : aCommits )
+            out.push_back( c.summary.ToStdString() );
+
+        return out;
+    };
+
+    // Every branch: the side commit is there along with main's.
+    std::vector<std::string> all = summaries( common.GetRecentCommits( 10 ) );
+    BOOST_REQUIRE_EQUAL( all.size(), 3u );
+    BOOST_CHECK( std::find( all.begin(), all.end(), "side work" ) != all.end() );
+    BOOST_CHECK( std::find( all.begin(), all.end(), "main work" ) != all.end() );
+
+    // One branch: only what it reaches.
+    KIGIT_HISTORY_FILTER onMain;
+    onMain.branch = wxS( "main" );
+    std::vector<std::string> mainOnly = summaries( common.GetRecentCommits( 10, onMain ) );
+    BOOST_REQUIRE_EQUAL( mainOnly.size(), 2u );
+    BOOST_CHECK_EQUAL( mainOnly[0], "main work" );
+    BOOST_CHECK_EQUAL( mainOnly[1], "initial" );
+
+    // Search matches the summary, case insensitively, and the hash.
+    KIGIT_HISTORY_FILTER search;
+    search.search = wxS( "SIDE" );
+    std::vector<KIGIT_COMMIT_INFO> found = common.GetRecentCommits( 10, search );
+    BOOST_REQUIRE_EQUAL( found.size(), 1u );
+    BOOST_CHECK_EQUAL( found[0].summary.ToStdString(), "side work" );
+
+    search.search = found[0].hash.Left( 6 );
+    BOOST_REQUIRE_EQUAL( common.GetRecentCommits( 10, search ).size(), 1u );
+
+    search.search = wxS( "nothing like this" );
+    BOOST_CHECK( common.GetRecentCommits( 10, search ).empty() );
+}
+
+
+// Each commit carries the names of the refs that point at it, so the list can show where HEAD,
+// the branches and the tags are.
+BOOST_AUTO_TEST_CASE( GetRecentCommitsNamesRefsOnEachCommit )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    git_oid firstOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &firstOid, repo, "HEAD" ), GIT_OK );
+
+    git_object* first = nullptr;
+    BOOST_REQUIRE_EQUAL( git_object_lookup( &first, repo, &firstOid, GIT_OBJECT_COMMIT ), GIT_OK );
+    KIGIT::GitObjectPtr firstPtr( first );
+
+    git_oid tagOid;
+    BOOST_REQUIRE_EQUAL( git_tag_create_lightweight( &tagOid, repo, "v1.0", first, 0 ), GIT_OK );
+
+    writeFile( tmp.path, "file.txt", "v2\n" );
+    commitWorkingFile( repo, "file.txt", "second" );
+
+    KIGIT_COMMON common( repo );
+
+    std::vector<KIGIT_COMMIT_INFO> commits = common.GetRecentCommits( 10 );
+    BOOST_REQUIRE_EQUAL( commits.size(), 2u );
+
+    // The newest commit is HEAD and main. The first one carries only the tag.
+    BOOST_REQUIRE_EQUAL( commits[0].refs.size(), 2u );
+    BOOST_CHECK_EQUAL( commits[0].refs[0].ToStdString(), "HEAD" );
+    BOOST_CHECK_EQUAL( commits[0].refs[1].ToStdString(), "main" );
+
+    BOOST_REQUIRE_EQUAL( commits[1].refs.size(), 1u );
+    BOOST_CHECK_EQUAL( commits[1].refs[0].ToStdString(), "v1.0" );
+}
+
+
+// The detail pane shows one commit with its message, parent and per-file line counts.
+BOOST_AUTO_TEST_CASE( GetCommitDetailCountsLinesPerFile )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "one\ntwo\nthree\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    // Change one line of the existing file and add a new file in the same commit.
+    writeFile( tmp.path, "file.txt", "one\n2\nthree\n" );
+    writeFile( tmp.path, "new.txt", "a\nb\n" );
+
+    {
+        git_index* index = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+        KIGIT::GitIndexPtr indexPtr( index );
+        BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, "new.txt" ), GIT_OK );
+        BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
+    }
+
+    commitWorkingFile( repo, "file.txt", "edit and add\n\nWith a body line." );
+
+    KIGIT_COMMON common( repo );
+
+    std::vector<KIGIT_COMMIT_INFO> commits = common.GetRecentCommits( 10 );
+    BOOST_REQUIRE_EQUAL( commits.size(), 2u );
+
+    KIGIT_COMMIT_DETAIL detail = common.GetCommitDetail( commits[0].hash );
+    BOOST_REQUIRE( detail.found );
+    BOOST_CHECK_EQUAL( detail.shortHash.ToStdString(), commits[0].hash.ToStdString() );
+    BOOST_CHECK_EQUAL( detail.hash.length(), 40u );
+    BOOST_CHECK_EQUAL( detail.message.ToStdString(), "edit and add\n\nWith a body line." );
+    BOOST_CHECK_EQUAL( detail.author.ToStdString(), "QA Test" );
+    BOOST_REQUIRE_EQUAL( detail.parents.size(), 1u );
+    BOOST_CHECK_EQUAL( detail.parents[0].ToStdString(), commits[1].hash.ToStdString() );
+    BOOST_CHECK_EQUAL( detail.refs.size(), 2u );
+
+    BOOST_REQUIRE_EQUAL( detail.files.size(), 2u );
+    BOOST_CHECK_EQUAL( detail.files[0].path.ToStdString(), "file.txt" );
+    BOOST_CHECK( detail.files[0].status == KIGIT::FILE_CHANGE_STATUS::MODIFIED );
+    BOOST_CHECK_EQUAL( detail.files[0].added, 1 );
+    BOOST_CHECK_EQUAL( detail.files[0].removed, 1 );
+    BOOST_CHECK_EQUAL( detail.files[1].path.ToStdString(), "new.txt" );
+    BOOST_CHECK( detail.files[1].status == KIGIT::FILE_CHANGE_STATUS::ADDED );
+    BOOST_CHECK_EQUAL( detail.files[1].added, 2 );
+    BOOST_CHECK_EQUAL( detail.files[1].removed, 0 );
+    BOOST_CHECK_EQUAL( detail.added, 3 );
+    BOOST_CHECK_EQUAL( detail.removed, 1 );
+
+    // A root commit has no parent, so everything it holds counts as added.
+    KIGIT_COMMIT_DETAIL root = common.GetCommitDetail( commits[1].hash );
+    BOOST_REQUIRE( root.found );
+    BOOST_CHECK( root.parents.empty() );
+    BOOST_REQUIRE_EQUAL( root.files.size(), 1u );
+    BOOST_CHECK( root.files[0].status == KIGIT::FILE_CHANGE_STATUS::ADDED );
+    BOOST_CHECK_EQUAL( root.files[0].added, 3 );
+
+    BOOST_CHECK( !common.GetCommitDetail( wxS( "0000000000ab" ) ).found );
 }
 
 

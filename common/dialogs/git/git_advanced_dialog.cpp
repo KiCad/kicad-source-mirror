@@ -41,6 +41,9 @@
 #include <wx/mstream.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
+#include <wx/statbmp.h>
+#include <wx/splitter.h>
+#include <wx/srchctrl.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/richmsgdlg.h>
@@ -307,33 +310,28 @@ LIST_PAGE makeListPage( wxWindow* aBook )
 }
 
 
-wxWindow* makeHistoryPage( wxWindow* aBook, wxDataViewListCtrl** aOutList )
+wxString joinNames( const std::vector<wxString>& aNames )
 {
-    wxPanel*    panel = new wxPanel( aBook );
-    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+    wxString joined;
 
-    // A custom renderer draws the avatar at full size and fixes the row height, since the
-    // native icon renderer caps the icon size.
-    wxDataViewListCtrl* list = new wxDataViewListCtrl( panel, wxID_ANY );
+    for( const wxString& name : aNames )
+        joined += ( joined.IsEmpty() ? wxString() : wxString( wxS( ", " ) ) ) + name;
 
-    int rowHeight = list->FromDIP( 28 );
-    int gap = list->FromDIP( 6 );
+    return joined;
+}
 
-    // The row height must be set explicitly. A renderer's reported size does not grow the row.
-    list->SetRowHeight( rowHeight );
 
-    list->AppendColumn( new wxDataViewColumn( _( "Description" ), new HISTORY_AVATAR_RENDERER( rowHeight, gap ), 0,
-                                              list->FromDIP( 320 ), wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE ),
-                        wxT( "wxDataViewIconText" ) );
-    list->AppendTextColumn( _( "Author" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 120 ) );
-    list->AppendTextColumn( _( "Date" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 90 ) );
-    list->AppendTextColumn( _( "Commit" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 90 ) );
-
-    sizer->Add( list, 1, wxEXPAND | wxALL, 4 );
-    panel->SetSizer( sizer );
-
-    *aOutList = list;
-    return panel;
+wxString fileStatusLabel( KIGIT::FILE_CHANGE_STATUS aStatus )
+{
+    switch( aStatus )
+    {
+    case KIGIT::FILE_CHANGE_STATUS::ADDED:      return _( "added" );
+    case KIGIT::FILE_CHANGE_STATUS::REMOVED:    return _( "removed" );
+    case KIGIT::FILE_CHANGE_STATUS::RENAMED:    return _( "renamed" );
+    case KIGIT::FILE_CHANGE_STATUS::COPIED:     return _( "copied" );
+    case KIGIT::FILE_CHANGE_STATUS::TYPECHANGE: return _( "type changed" );
+    default:                                    return _( "modified" );
+    }
 }
 
 
@@ -428,6 +426,19 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
         m_pane( aPane ),
         m_book( nullptr ),
         m_historyList( nullptr ),
+        m_historyRefsColumn( nullptr ),
+        m_historySplitter( nullptr ),
+        m_commitDetail( nullptr ),
+        m_historySearch( nullptr ),
+        m_historyBranch( nullptr ),
+        m_historyShowRefs( nullptr ),
+        m_commitTitle( nullptr ),
+        m_commitAvatar( nullptr ),
+        m_commitAuthor( nullptr ),
+        m_commitMessage( nullptr ),
+        m_commitStats( nullptr ),
+        m_commitFiles( nullptr ),
+        m_historySashPos( 0 ),
         m_branchesList( nullptr ),
         m_remotesList( nullptr ),
         m_stashesList( nullptr ),
@@ -451,6 +462,15 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
                 ReloadPages();
             },
             m_reloadRetryTimer.GetId() );
+
+    m_historySearchTimer.SetOwner( this );
+    Bind(
+            wxEVT_TIMER,
+            [this]( wxTimerEvent& )
+            {
+                reloadHistory();
+            },
+            m_historySearchTimer.GetId() );
 
     m_historyScrollTimer.SetOwner( this );
     Bind(
@@ -477,7 +497,7 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
     pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_repository, 16 ) );
     m_book->SetImages( pageIcons );
 
-    m_book->AddPage( makeHistoryPage( m_book, &m_historyList ), _( "History" ), true, 0 );
+    m_book->AddPage( buildHistoryPage( m_book ), _( "History" ), true, 0 );
 
     wxWindow* branchesPage = makeBranchesPage( m_book, &m_branchesList );
     addButtonRow( branchesPage, { { _( "New Branch..." ),
@@ -858,20 +878,339 @@ void GIT_ADVANCED_DIALOG::ReloadPages()
 }
 
 
+wxWindow* GIT_ADVANCED_DIALOG::buildHistoryPage( wxWindow* aBook )
+{
+    wxPanel*    panel = new wxPanel( aBook );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    wxBoxSizer* filters = new wxBoxSizer( wxHORIZONTAL );
+
+    m_historySearch = new wxSearchCtrl( panel, wxID_ANY );
+    m_historySearch->SetDescriptiveText( _( "Search history" ) );
+    m_historyBranch = new wxChoice( panel, wxID_ANY );
+    m_historyShowRefs = new wxCheckBox( panel, wxID_ANY, _( "Show refs" ) );
+    m_historyShowRefs->SetValue( true );
+
+    filters->Add( m_historySearch, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, 8 );
+    filters->Add( m_historyBranch, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 8 );
+    filters->Add( m_historyShowRefs, 0, wxALIGN_CENTER_VERTICAL );
+    sizer->Add( filters, 0, wxEXPAND | wxALL, 4 );
+
+    wxSplitterWindow* splitter = new wxSplitterWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                                       wxSP_LIVE_UPDATE | wxSP_3DSASH );
+    splitter->SetMinimumPaneSize( panel->FromDIP( 200 ) );
+    splitter->SetSashGravity( 0.6 );
+    m_historySplitter = splitter;
+    m_historySashPos = panel->FromDIP( 460 );
+
+    // A custom renderer draws the avatar at full size and fixes the row height, since the
+    // native icon renderer caps the icon size.
+    wxDataViewListCtrl* list = new wxDataViewListCtrl( splitter, wxID_ANY );
+
+    int rowHeight = list->FromDIP( 28 );
+    int gap = list->FromDIP( 6 );
+
+    // The row height must be set explicitly. A renderer's reported size does not grow the row.
+    list->SetRowHeight( rowHeight );
+
+    list->AppendColumn( new wxDataViewColumn( _( "Description" ), new HISTORY_AVATAR_RENDERER( rowHeight, gap ), 0,
+                                              list->FromDIP( 320 ), wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE ),
+                        wxT( "wxDataViewIconText" ) );
+    list->AppendTextColumn( _( "Author" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 120 ) );
+    list->AppendTextColumn( _( "Date" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 90 ) );
+    list->AppendTextColumn( _( "Commit" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 90 ) );
+    m_historyRefsColumn = list->AppendTextColumn( _( "Refs" ), wxDATAVIEW_CELL_INERT, list->FromDIP( 120 ) );
+    m_historyList = list;
+
+    wxPanel*    detail = new wxPanel( splitter );
+    wxBoxSizer* detailSizer = new wxBoxSizer( wxVERTICAL );
+    m_commitDetail = detail;
+
+    m_commitTitle = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_commitTitle->SetFont( m_commitTitle->GetFont().Bold() );
+    m_commitAvatar = new wxStaticBitmap( detail, wxID_ANY, wxNullBitmap );
+    m_commitAuthor = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+
+    wxBoxSizer* authorRow = new wxBoxSizer( wxHORIZONTAL );
+    authorRow->Add( m_commitAvatar, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 6 );
+    authorRow->Add( m_commitAuthor, 1, wxALIGN_CENTER_VERTICAL );
+    m_commitMessage = new wxTextCtrl( detail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                      wxTE_MULTILINE | wxTE_READONLY );
+    m_commitMessage->SetMinSize( detail->FromDIP( wxSize( -1, 90 ) ) );
+    m_commitStats = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_commitFiles = new wxListCtrl( detail, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL );
+    m_commitFiles->AppendColumn( _( "File" ), wxLIST_FORMAT_LEFT, detail->FromDIP( 220 ) );
+    m_commitFiles->AppendColumn( _( "Status" ), wxLIST_FORMAT_LEFT, detail->FromDIP( 90 ) );
+    m_commitFiles->AppendColumn( wxS( "+" ), wxLIST_FORMAT_RIGHT, detail->FromDIP( 50 ) );
+    m_commitFiles->AppendColumn( wxS( "-" ), wxLIST_FORMAT_RIGHT, detail->FromDIP( 50 ) );
+
+    detailSizer->Add( m_commitTitle, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    detailSizer->Add( authorRow, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    detailSizer->Add( m_commitMessage, 0, wxEXPAND | wxALL, 8 );
+    detailSizer->Add( m_commitStats, 0, wxEXPAND | wxLEFT | wxRIGHT, 8 );
+    detailSizer->Add( m_commitFiles, 1, wxEXPAND | wxALL, 8 );
+    detail->SetSizer( detailSizer );
+
+    // The detail pane appears once a commit is selected.
+    splitter->Initialize( list );
+    detail->Hide();
+    sizer->Add( splitter, 1, wxEXPAND | wxALL, 4 );
+    panel->SetSizer( sizer );
+
+    // Walking the whole history for a search text that matches nothing takes a moment in a big
+    // repository, so wait for the typing to pause.
+    m_historySearch->Bind( wxEVT_TEXT,
+                           [this]( wxCommandEvent& )
+                           {
+                               m_historySearchTimer.Start( 300, wxTIMER_ONE_SHOT );
+                           } );
+
+    m_historyBranch->Bind( wxEVT_CHOICE,
+                           [this]( wxCommandEvent& )
+                           {
+                               int sel = m_historyBranch->GetSelection();
+                               m_historyBranchName = sel > 0 ? m_historyBranch->GetString( sel ) : wxString();
+                               reloadHistory();
+                           } );
+
+    m_historyShowRefs->Bind( wxEVT_CHECKBOX,
+                             [this]( wxCommandEvent& )
+                             {
+                                 m_historyRefsColumn->SetHidden( !m_historyShowRefs->IsChecked() );
+                             } );
+
+    list->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED,
+                [this]( wxDataViewEvent& )
+                {
+                    if( m_fillingHistory )
+                        return;
+
+                    int row = m_historyList->GetSelectedRow();
+                    showCommitDetail( row == wxNOT_FOUND ? wxString() : m_historyList->GetTextValue( row, 3 ) );
+                } );
+
+    // Double-clicking a changed file compares that file against the parent commit.
+    m_commitFiles->SetToolTip( _( "Double click a file to see what the commit changed in it." ) );
+    m_commitFiles->Bind( wxEVT_LIST_ITEM_ACTIVATED,
+                         [this]( wxListEvent& aEvent )
+                         {
+                             ShowGitCommitDiff( m_parent, m_detailHash, this,
+                                                m_commitFiles->GetItemText( aEvent.GetIndex(), 0 ) );
+                         } );
+
+    return panel;
+}
+
+
+KIGIT_HISTORY_FILTER GIT_ADVANCED_DIALOG::historyFilter() const
+{
+    KIGIT_HISTORY_FILTER filter;
+    filter.branch = m_historyBranchName;
+    filter.search = m_historySearch->GetValue();
+    return filter;
+}
+
+
+void GIT_ADVANCED_DIALOG::reloadHistory()
+{
+    m_historyLimit = 50;
+
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    std::unique_lock<std::mutex>  lock = common->TryLockAction();
+
+    if( !lock.owns_lock() )
+    {
+        m_reloadRetryTimer.Start( 1000, wxTIMER_ONE_SHOT );
+        return;
+    }
+
+    populateHistory();
+}
+
+
+void GIT_ADVANCED_DIALOG::populateHistoryBranches( const std::vector<std::pair<wxString, bool>>& aBranches )
+{
+    m_historyBranch->Clear();
+    m_historyBranch->Append( _( "All Branches" ) );
+
+    for( const auto& [name, isRemote] : aBranches )
+        m_historyBranch->Append( name );
+
+    if( m_historyBranchName.IsEmpty() || !m_historyBranch->SetStringSelection( m_historyBranchName ) )
+    {
+        m_historyBranch->SetSelection( 0 );
+
+        // The branch the list was narrowed to is gone, so the list is empty. Show everything.
+        if( !m_historyBranchName.IsEmpty() )
+        {
+            m_historyBranchName.clear();
+            populateHistory();
+        }
+    }
+
+    m_historyBranch->InvalidateBestSize();
+    m_historyBranch->GetParent()->Layout();
+}
+
+
+void GIT_ADVANCED_DIALOG::showCommitDetail( const wxString& aHash )
+{
+    m_detailHash = aHash;
+
+    if( aHash.IsEmpty() )
+    {
+        clearCommitDetail();
+        return;
+    }
+
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    std::unique_lock<std::mutex>  lock = common->TryLockAction();
+
+    // The reload puts the selection back on this commit and fills the pane then.
+    if( !lock.owns_lock() )
+    {
+        m_reloadRetryTimer.Start( 1000, wxTIMER_ONE_SHOT );
+        return;
+    }
+
+    fillCommitDetail( common->GetCommitDetail( aHash ) );
+}
+
+
+void GIT_ADVANCED_DIALOG::fillCommitDetail( const KIGIT_COMMIT_DETAIL& aDetail )
+{
+    if( !aDetail.found )
+    {
+        clearCommitDetail();
+        return;
+    }
+
+    wxString title = aDetail.shortHash;
+
+    for( const wxString& ref : aDetail.refs )
+        title += wxS( "  [" ) + ref + wxS( "]" );
+
+    m_commitTitle->SetLabel( title );
+    m_commitAuthor->SetLabel( wxString::Format( wxS( "%s <%s>, %s" ), aDetail.author, aDetail.email,
+                                                relativeDate( aDetail.when ) ) );
+
+    // The same size the list uses, so a photo fetched for a row serves the pane too.
+    bool showAvatars = Pgm().GetCommonSettings()->m_Git.showContributorAvatars;
+    int  diameter = m_historyList->FromDIP( 20 );
+    auto cached = m_avatarCache.find( aDetail.email );
+
+    m_detailEmail = aDetail.email;
+
+    if( showAvatars && cached != m_avatarCache.end() && cached->second.IsOk() )
+        m_commitAvatar->SetBitmap( cached->second );
+    else
+        m_commitAvatar->SetBitmap( makeAvatarBitmap( m_commitDetail, aDetail.author, diameter, diameter ) );
+
+    if( showAvatars )
+        requestAvatar( aDetail.email, diameter );
+    m_commitMessage->ChangeValue( aDetail.message );
+
+    wxString parents = aDetail.parents.empty() ? _( "No parent" )
+                                               : wxString::Format( _( "Parent: %s" ), joinNames( aDetail.parents ) );
+
+    m_commitStats->SetLabel( wxString::Format( _( "%s    Changed files: %d    +%d  -%d" ), parents,
+                                               static_cast<int>( aDetail.files.size() ), aDetail.added,
+                                               aDetail.removed ) );
+
+    m_commitFiles->DeleteAllItems();
+
+    for( const KIGIT_COMMIT_FILE& file : aDetail.files )
+    {
+        long idx = m_commitFiles->InsertItem( m_commitFiles->GetItemCount(), file.path );
+
+        wxString status = fileStatusLabel( file.status );
+
+        if( !file.oldPath.IsEmpty() )
+            status = wxString::Format( _( "%s from %s" ), status, file.oldPath );
+
+        m_commitFiles->SetItem( idx, 1, status );
+
+        if( file.binary )
+        {
+            m_commitFiles->SetItem( idx, 2, _( "binary" ) );
+        }
+        else
+        {
+            m_commitFiles->SetItem( idx, 2, wxString::Format( wxS( "%d" ), file.added ) );
+            m_commitFiles->SetItem( idx, 3, wxString::Format( wxS( "%d" ), file.removed ) );
+        }
+    }
+
+    if( !m_historySplitter->IsSplit() )
+        m_historySplitter->SplitVertically( m_historyList, m_commitDetail, m_historySashPos );
+
+    m_commitDetail->Layout();
+}
+
+
+void GIT_ADVANCED_DIALOG::clearCommitDetail()
+{
+    if( m_historySplitter->IsSplit() )
+    {
+        m_historySashPos = m_historySplitter->GetSashPosition();
+        m_historySplitter->Unsplit( m_commitDetail );
+    }
+
+    m_detailEmail.clear();
+    m_commitTitle->SetLabel( wxEmptyString );
+    m_commitAuthor->SetLabel( wxEmptyString );
+    m_commitMessage->ChangeValue( wxEmptyString );
+    m_commitStats->SetLabel( wxEmptyString );
+    m_commitFiles->DeleteAllItems();
+}
+
+
 void GIT_ADVANCED_DIALOG::populateHistory()
 {
     if( !m_historyList )
         return;
 
     // The caller holds the git action lock.
-    std::vector<KIGIT_COMMIT_INFO> commits = m_parent->Prj().GetGitCommon()->GetRecentCommits( m_historyLimit );
+    std::vector<KIGIT_COMMIT_INFO> commits =
+            m_parent->Prj().GetGitCommon()->GetRecentCommits( m_historyLimit, historyFilter() );
 
+    // Emptying the list drops its selection, which clears the shown hash, so keep it aside.
+    wxString shown = m_detailHash;
+
+    m_fillingHistory = true;
     m_historyList->DeleteAllItems();
     m_historyEmails.clear();
 
     appendHistoryRows( commits, 0 );
 
     m_historyComplete = commits.size() < m_historyLimit;
+
+    // Put the selection back on the commit the detail pane showed, if it is still listed, or
+    // start on the newest commit so the pane is never empty while there is something to show.
+    m_detailHash.clear();
+
+    for( int row = 0; row < m_historyList->GetItemCount() && !shown.IsEmpty(); ++row )
+    {
+        if( m_historyList->GetTextValue( row, 3 ) == shown )
+        {
+            m_historyList->SelectRow( row );
+            m_detailHash = shown;
+            break;
+        }
+    }
+
+    if( m_detailHash.IsEmpty() && m_historyList->GetItemCount() > 0 )
+    {
+        m_historyList->SelectRow( 0 );
+        m_detailHash = m_historyList->GetTextValue( 0, 3 );
+    }
+
+    m_fillingHistory = false;
+
+    if( m_detailHash.IsEmpty() )
+        clearCommitDetail();
+    else
+        fillCommitDetail( m_parent->Prj().GetGitCommon()->GetCommitDetail( m_detailHash ) );
 
     // Scrolling near the end grows the window. Poll for it, because native wxDataViewCtrl
     // ports deliver no portable scroll events.
@@ -909,6 +1248,7 @@ void GIT_ADVANCED_DIALOG::appendHistoryRows( const std::vector<KIGIT_COMMIT_INFO
         row.push_back( wxVariant( c.author ) );
         row.push_back( wxVariant( relativeDate( c.when ) ) );
         row.push_back( wxVariant( c.hash ) );
+        row.push_back( wxVariant( joinNames( c.refs ) ) );
         m_historyList->AppendItem( row );
 
         m_historyEmails.push_back( c.email );
@@ -952,7 +1292,7 @@ void GIT_ADVANCED_DIALOG::onHistoryScrollTick()
 
     m_historyLimit += 50;
 
-    std::vector<KIGIT_COMMIT_INFO> commits = common->GetRecentCommits( m_historyLimit );
+    std::vector<KIGIT_COMMIT_INFO> commits = common->GetRecentCommits( m_historyLimit, historyFilter() );
 
     lock.unlock();
 
@@ -1013,6 +1353,9 @@ void GIT_ADVANCED_DIALOG::applyAvatar( const wxString& aEmail, int aDiameter, co
     wxBitmap circle = makeCircularBitmap( image, aDiameter );
     m_avatarCache[aEmail] = circle;
 
+    if( aEmail == m_detailEmail )
+        m_commitAvatar->SetBitmap( circle );
+
     for( unsigned row = 0; row < m_historyEmails.size(); ++row )
     {
         if( m_historyEmails[row] != aEmail )
@@ -1041,9 +1384,11 @@ void GIT_ADVANCED_DIALOG::populateBranches()
     std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
     wxString                      current = common->GetCurrentBranchName();
 
+    std::vector<std::pair<wxString, bool>> branches = common->GetAllBranches();
+
     m_branchesList->DeleteAllItems();
 
-    for( const auto& [name, isRemote] : common->GetAllBranches() )
+    for( const auto& [name, isRemote] : branches )
     {
         long     idx = m_branchesList->InsertItem( m_branchesList->GetItemCount(), name );
         wxString status;
@@ -1055,6 +1400,8 @@ void GIT_ADVANCED_DIALOG::populateBranches()
 
         m_branchesList->SetItem( idx, 1, status );
     }
+
+    populateHistoryBranches( branches );
 }
 
 

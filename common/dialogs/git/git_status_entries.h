@@ -137,6 +137,7 @@ void ShowGitFileDiff( EDA_BASE_FRAME* aFrame, const wxString& aRelativePath );
  * @param aParentWindow Window to parent the diff to, or null to use aFrame. Pass the calling
  *                      dialog so it stays open behind the diff instead of being dismissed.
  */
-void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxWindow* aParentWindow = nullptr );
+void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxWindow* aParentWindow = nullptr,
+                        const wxString& aRelativePath = wxEmptyString );
 
 #endif // GIT_STATUS_ENTRIES_H

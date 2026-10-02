@@ -41,13 +41,20 @@ class EDA_BASE_FRAME;
 enum class BITMAPS : unsigned int;
 class GIT_COMMIT_PANE;
 class KIGIT_COMMON;
+struct KIGIT_COMMIT_DETAIL;
 struct KIGIT_COMMIT_INFO;
+struct KIGIT_HISTORY_FILTER;
 class WX_TREEBOOK;
+class wxDataViewColumn;
 class wxDataViewListCtrl;
 class wxButton;
 class wxCheckBox;
 class wxChoice;
 class wxListCtrl;
+class wxPanel;
+class wxSearchCtrl;
+class wxSplitterWindow;
+class wxStaticBitmap;
 class wxStaticText;
 class wxTextCtrl;
 
@@ -81,8 +88,25 @@ public:
     void ReloadPages();
 
 private:
+    /// The History page: filters above a list of commits beside the selected commit's detail.
+    wxWindow* buildHistoryPage( wxWindow* aBook );
+
     /// Fill the History list from the repository's recent commits, up to the current window.
     void populateHistory();
+
+    /// Restart the history at the first window after the search or branch filter changed.
+    void reloadHistory();
+
+    /// Offer every branch in the History page's branch filter, keeping the current choice.
+    void populateHistoryBranches( const std::vector<std::pair<wxString, bool>>& aBranches );
+
+    /// The search text and branch the History page is narrowed to.
+    KIGIT_HISTORY_FILTER historyFilter() const;
+
+    /// Fill the detail pane with aHash, or clear it when the hash is empty or gone.
+    void showCommitDetail( const wxString& aHash );
+    void fillCommitDetail( const KIGIT_COMMIT_DETAIL& aDetail );
+    void clearCommitDetail();
 
     /// Append rows for aCommits starting at aFrom, without clearing, so growing the history
     /// window keeps the scroll position.
@@ -201,6 +225,18 @@ private:
     GIT_COMMIT_PANE*    m_pane;
     WX_TREEBOOK*        m_book;
     wxDataViewListCtrl* m_historyList;
+    wxDataViewColumn*   m_historyRefsColumn;
+    wxSplitterWindow*   m_historySplitter;
+    wxPanel*            m_commitDetail;
+    wxSearchCtrl*       m_historySearch;
+    wxChoice*           m_historyBranch;
+    wxCheckBox*         m_historyShowRefs;
+    wxStaticText*       m_commitTitle;
+    wxStaticBitmap*     m_commitAvatar;
+    wxStaticText*       m_commitAuthor;
+    wxTextCtrl*         m_commitMessage;
+    wxStaticText*       m_commitStats;
+    wxListCtrl*         m_commitFiles;
     wxListCtrl*         m_branchesList;
     wxListCtrl*         m_remotesList;
     wxListCtrl*         m_stashesList;
@@ -242,8 +278,26 @@ private:
     /// How many commits the History page currently shows at most. Grows as the user scrolls.
     size_t m_historyLimit = 50;
 
+    /// The branch the History page is narrowed to, or empty for every branch.
+    wxString m_historyBranchName;
+
+    /// The commit the detail pane shows, so a refresh can put the selection back on it.
+    wxString m_detailHash;
+
+    /// Its author's email, so a web avatar that arrives later lands on the pane too.
+    wxString m_detailEmail;
+
+    /// Where the user left the sash, so the pane comes back at the same width.
+    int m_historySashPos;
+
+    /// Waits for the user to pause typing in the search box before walking the history again.
+    wxTimer m_historySearchTimer;
+
     /// True once a load returned fewer commits than asked for, meaning everything is shown.
     bool m_historyComplete = false;
+
+    /// True while the history list is being refilled, when its selection events are its own.
+    bool m_fillingHistory = false;
 
     /// Polls whether the user scrolled near the end of the history, which is the one portable
     /// way to notice scrolling on every wxDataViewCtrl port, native ones included.

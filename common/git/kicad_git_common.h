@@ -20,6 +20,7 @@
 #ifndef _GIT_COMMON_H_
 #define _GIT_COMMON_H_
 
+#include <git/git_compare_handler.h>
 #include <git/kicad_git_errors.h>
 #include <import_export.h>
 
@@ -40,11 +41,50 @@ class LIBGIT_BACKEND;
 // One entry in the commit history, as shown by the advanced git window's History page.
 struct KIGIT_COMMIT_INFO
 {
-    wxString   hash;    ///< Short commit hash.
-    wxString   summary; ///< First line of the commit message.
-    wxString   author;  ///< Author name.
-    wxString   email;   ///< Author email, used to look up a web avatar.
-    wxDateTime when;    ///< Commit time.
+    wxString              hash;    ///< Short commit hash.
+    wxString              summary; ///< First line of the commit message.
+    wxString              author;  ///< Author name.
+    wxString              email;   ///< Author email, used to look up a web avatar.
+    wxDateTime            when;    ///< Commit time.
+    std::vector<wxString> refs;    ///< HEAD, branches and tags at this commit, in that order.
+};
+
+
+// Which commits the History page walks.
+struct KIGIT_HISTORY_FILTER
+{
+    wxString branch; ///< One branch, local or remote, or empty for every branch and HEAD.
+    wxString search; ///< Keep only commits whose summary, author or hash contains this.
+};
+
+
+// One file a commit changed, with its line counts against the parent.
+struct KIGIT_COMMIT_FILE
+{
+    wxString                  path;
+    wxString                  oldPath; ///< For a rename or copy, where the file came from.
+    KIGIT::FILE_CHANGE_STATUS status = KIGIT::FILE_CHANGE_STATUS::MODIFIED;
+    int                       added = 0;
+    int                       removed = 0;
+    bool                      binary = false;
+};
+
+
+// Everything the History page's detail pane shows about one commit.
+struct KIGIT_COMMIT_DETAIL
+{
+    bool                           found = false;
+    wxString                       hash; ///< Full commit hash.
+    wxString                       shortHash;
+    wxString                       message; ///< Full message, body included.
+    wxString                       author;
+    wxString                       email;
+    wxDateTime                     when;
+    std::vector<wxString>          parents; ///< Short hashes.
+    std::vector<wxString>          refs;    ///< As in KIGIT_COMMIT_INFO.
+    std::vector<KIGIT_COMMIT_FILE> files;
+    int                            added = 0;
+    int                            removed = 0;
 };
 
 
@@ -208,8 +248,12 @@ public:
     // count: a merge leaves them alone.
     bool HasUncommittedTrackedChanges() const;
 
-    // The most recent commits on the current branch, newest first, up to aMax of them.
-    std::vector<KIGIT_COMMIT_INFO> GetRecentCommits( size_t aMax = 50 ) const;
+    // The most recent commits aFilter selects, newest first, up to aMax of them.
+    std::vector<KIGIT_COMMIT_INFO> GetRecentCommits( size_t aMax = 50, const KIGIT_HISTORY_FILTER& aFilter = {} ) const;
+
+    // One commit in full, with the files it changed against its first parent. A root commit's
+    // files all count as added. Not found leaves the result's found flag clear.
+    KIGIT_COMMIT_DETAIL GetCommitDetail( const wxString& aHash ) const;
 
     // The full message of the commit HEAD points at, body and trailers included. The amend
     // prefill uses this, so accepting the suggestion does not truncate the message to its

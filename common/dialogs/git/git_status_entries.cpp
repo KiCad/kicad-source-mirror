@@ -733,7 +733,8 @@ void ShowGitFileDiff( EDA_BASE_FRAME* aFrame, const wxString& aRelativePath )
 }
 
 
-void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxWindow* aParentWindow )
+void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxWindow* aParentWindow,
+                        const wxString& aRelativePath )
 {
     std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
     git_repository*               repo = common->GetRepo();
@@ -818,10 +819,28 @@ void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxW
 
     wxWindow* diffParent = aParentWindow ? aParentWindow : static_cast<wxWindow*>( aFrame );
 
-    // The diff viewer shows one file at a time, so let the user pick which one.
+    // The diff viewer shows one file at a time, so let the user pick which one unless the
+    // caller already did.
     const DESIGN_FILE* chosen = &designFiles.front();
 
-    if( designFiles.size() > 1 )
+    if( !aRelativePath.IsEmpty() )
+    {
+        chosen = nullptr;
+
+        for( const DESIGN_FILE& df : designFiles )
+        {
+            if( df.path == aRelativePath )
+                chosen = &df;
+        }
+
+        if( !chosen )
+        {
+            DisplayInfoMessage( diffParent,
+                                wxString::Format( _( "This commit did not change '%s'." ), aRelativePath ) );
+            return;
+        }
+    }
+    else if( designFiles.size() > 1 )
     {
         wxArrayString choices;
 

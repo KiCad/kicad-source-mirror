@@ -91,6 +91,14 @@ using GitDiffPtr = std::unique_ptr<git_diff,
                                       })>;
 
 /**
+* @brief A unique pointer for git_patch objects with automatic cleanup.
+*/
+using GitPatchPtr = std::unique_ptr<git_patch,
+                                       decltype([](git_patch* aPatch) {
+                                           git_patch_free(aPatch);
+                                       })>;
+
+/**
 * @brief A unique pointer for git_signature objects with automatic cleanup.
 */
 using GitSignaturePtr = std::unique_ptr<git_signature,

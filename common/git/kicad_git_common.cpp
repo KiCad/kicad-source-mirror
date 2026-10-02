@@ -451,14 +451,13 @@ std::vector<wxString> KIGIT_COMMON::GetProjectDirs()
     std::sort( projDirs.begin(), projDirs.end(),
                []( const wxString& a, const wxString& b )
                {
-                    int a_freq = a.Freq( wxFileName::GetPathSeparator() );
-                    int b_freq = b.Freq( wxFileName::GetPathSeparator() );
+                   int a_freq = a.Freq( wxFileName::GetPathSeparator() );
+                   int b_freq = b.Freq( wxFileName::GetPathSeparator() );
 
-                    if( a_freq == b_freq )
-                        return a < b;
-                    else
-                        return a_freq < b_freq;
-
+                   if( a_freq == b_freq )
+                       return a < b;
+                   else
+                       return a_freq < b_freq;
                } );
 
     return projDirs;
@@ -500,30 +499,27 @@ std::pair<std::set<wxString>, std::set<wxString>> KIGIT_COMMON::GetDifferentFile
     if( !head_oid || !remote_oid )
         return modified_files;
 
-    auto load_tree =
-            [this]( const git_oid* aOid ) -> git_tree*
-            {
-                git_commit* commit = nullptr;
+    auto load_tree = [this]( const git_oid* aOid ) -> git_tree*
+    {
+        git_commit* commit = nullptr;
 
-                if( git_commit_lookup( &commit, m_repo, aOid ) != GIT_OK )
-                {
-                    wxLogTrace( traceGit, "Failed to lookup commit for diff: %s",
-                                KIGIT_COMMON::GetLastGitError() );
-                    return nullptr;
-                }
+        if( git_commit_lookup( &commit, m_repo, aOid ) != GIT_OK )
+        {
+            wxLogTrace( traceGit, "Failed to lookup commit for diff: %s", KIGIT_COMMON::GetLastGitError() );
+            return nullptr;
+        }
 
-                KIGIT::GitCommitPtr commitPtr( commit );
-                git_tree*           tree = nullptr;
+        KIGIT::GitCommitPtr commitPtr( commit );
+        git_tree*           tree = nullptr;
 
-                if( git_commit_tree( &tree, commit ) != GIT_OK )
-                {
-                    wxLogTrace( traceGit, "Failed to get commit tree for diff: %s",
-                                KIGIT_COMMON::GetLastGitError() );
-                    return nullptr;
-                }
+        if( git_commit_tree( &tree, commit ) != GIT_OK )
+        {
+            wxLogTrace( traceGit, "Failed to get commit tree for diff: %s", KIGIT_COMMON::GetLastGitError() );
+            return nullptr;
+        }
 
-                return tree;
-            };
+        return tree;
+    };
 
     git_tree*         head_tree = load_tree( head_oid );
     KIGIT::GitTreePtr headTreePtr( head_tree );
@@ -543,8 +539,7 @@ std::pair<std::set<wxString>, std::set<wxString>> KIGIT_COMMON::GetDifferentFile
 
     if( git_merge_base( &base_oid, m_repo, head_oid, remote_oid ) != GIT_OK )
     {
-        wxLogTrace( traceGit, "No merge base between local and remote: %s",
-                    KIGIT_COMMON::GetLastGitError() );
+        wxLogTrace( traceGit, "No merge base between local and remote: %s", KIGIT_COMMON::GetLastGitError() );
         return modified_files;
     }
 
@@ -733,7 +728,77 @@ size_t KIGIT_COMMON::GetUnmergedCommitCount( const wxString& aBranch ) const
 }
 
 
-std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax ) const
+namespace
+{
+
+// The refs pointing at each commit, keyed by the commit's full hash, HEAD first.
+std::map<std::string, std::vector<wxString>> collectRefNames( git_repository* aRepo )
+{
+    std::map<std::string, std::vector<wxString>> names;
+
+    git_oid headOid;
+
+    if( git_reference_name_to_id( &headOid, aRepo, "HEAD" ) == GIT_OK )
+        names[git_oid_tostr_s( &headOid )].push_back( wxS( "HEAD" ) );
+
+    git_reference_iterator* iter = nullptr;
+
+    if( git_reference_iterator_new( &iter, aRepo ) != GIT_OK )
+        return names;
+
+    git_reference* ref = nullptr;
+
+    // Iteration is by ref name, which puts local branches before remote ones and tags last.
+    while( git_reference_next( &ref, iter ) == GIT_OK )
+    {
+        KIGIT::GitReferencePtr refPtr( ref );
+
+        if( !git_reference_is_branch( ref ) && !git_reference_is_remote( ref ) && !git_reference_is_tag( ref ) )
+            continue;
+
+        git_object* target = nullptr;
+
+        if( git_reference_peel( &target, ref, GIT_OBJECT_COMMIT ) != GIT_OK )
+            continue;
+
+        KIGIT::GitObjectPtr targetPtr( target );
+
+        std::string hash = git_oid_tostr_s( git_object_id( target ) );
+        names[hash].push_back( wxString::FromUTF8( git_reference_shorthand( ref ) ) );
+    }
+
+    git_reference_iterator_free( iter );
+    return names;
+}
+
+
+wxString shortHashOf( const git_oid* aOid )
+{
+    // A 7-char abbreviation can be ambiguous in a large repository, which makes a later
+    // revparse of the hash fail. Twelve characters is what git uses for big repos.
+    char shortHash[13] = { 0 };
+    git_oid_tostr( shortHash, sizeof( shortHash ), aOid );
+    return wxString::FromUTF8( shortHash );
+}
+
+
+KIGIT::FILE_CHANGE_STATUS deltaStatus( git_delta_t aDelta )
+{
+    switch( aDelta )
+    {
+    case GIT_DELTA_ADDED: return KIGIT::FILE_CHANGE_STATUS::ADDED;
+    case GIT_DELTA_DELETED: return KIGIT::FILE_CHANGE_STATUS::REMOVED;
+    case GIT_DELTA_RENAMED: return KIGIT::FILE_CHANGE_STATUS::RENAMED;
+    case GIT_DELTA_COPIED: return KIGIT::FILE_CHANGE_STATUS::COPIED;
+    case GIT_DELTA_TYPECHANGE: return KIGIT::FILE_CHANGE_STATUS::TYPECHANGE;
+    default: return KIGIT::FILE_CHANGE_STATUS::MODIFIED;
+    }
+}
+
+} // namespace
+
+
+std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax, const KIGIT_HISTORY_FILTER& aFilter ) const
 {
     std::vector<KIGIT_COMMIT_INFO> commits;
 
@@ -748,10 +813,33 @@ std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax ) con
     KIGIT::GitRevWalkPtr walkerPtr( walker );
     git_revwalk_sorting( walker, GIT_SORT_TIME );
 
-    if( git_revwalk_push_head( walker ) != GIT_OK )
-        return commits;
+    if( aFilter.branch.IsEmpty() )
+    {
+        git_revwalk_push_head( walker );
+        git_revwalk_push_glob( walker, "refs/heads/*" );
+        git_revwalk_push_glob( walker, "refs/remotes/*" );
+    }
+    else
+    {
+        // The short name as the Branches page lists it, local or remote, resolved as git would.
+        git_reference* ref = nullptr;
 
-    git_oid oid;
+        if( git_reference_dwim( &ref, m_repo, aFilter.branch.utf8_string().c_str() ) != GIT_OK )
+            return commits;
+
+        KIGIT::GitReferencePtr refPtr( ref );
+        git_object*            target = nullptr;
+
+        if( git_reference_peel( &target, ref, GIT_OBJECT_COMMIT ) != GIT_OK )
+            return commits;
+
+        KIGIT::GitObjectPtr targetPtr( target );
+        git_revwalk_push( walker, git_object_id( target ) );
+    }
+
+    std::map<std::string, std::vector<wxString>> refNames = collectRefNames( m_repo );
+    wxString                                     search = aFilter.search.Lower();
+    git_oid                                      oid;
 
     while( commits.size() < aMax && git_revwalk_next( &oid, walker ) == GIT_OK )
     {
@@ -763,12 +851,7 @@ std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax ) con
         KIGIT::GitCommitPtr commitPtr( commit );
 
         KIGIT_COMMIT_INFO info;
-
-        // A 7-char abbreviation can be ambiguous in a large repository, which makes a later
-        // revparse of the hash fail. Twelve characters is what git uses for big repos.
-        char shortHash[13] = { 0 };
-        git_oid_tostr( shortHash, sizeof( shortHash ), &oid );
-        info.hash = wxString::FromUTF8( shortHash );
+        info.hash = shortHashOf( &oid );
 
         if( const char* summary = git_commit_summary( commit ) )
             info.summary = wxString::FromUTF8( summary );
@@ -781,10 +864,141 @@ std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax ) con
 
         info.when = wxDateTime( static_cast<time_t>( git_commit_time( commit ) ) );
 
+        std::string fullHash = git_oid_tostr_s( &oid );
+
+        if( !search.IsEmpty() && !info.summary.Lower().Contains( search ) && !info.author.Lower().Contains( search )
+            && !info.email.Lower().Contains( search ) && !wxString( fullHash ).Contains( search ) )
+        {
+            continue;
+        }
+
+        auto named = refNames.find( fullHash );
+
+        if( named != refNames.end() )
+            info.refs = named->second;
+
         commits.push_back( info );
     }
 
     return commits;
+}
+
+
+KIGIT_COMMIT_DETAIL KIGIT_COMMON::GetCommitDetail( const wxString& aHash ) const
+{
+    KIGIT_COMMIT_DETAIL detail;
+
+    if( !m_repo )
+        return detail;
+
+    git_object* obj = nullptr;
+
+    if( git_revparse_single( &obj, m_repo, aHash.utf8_string().c_str() ) != GIT_OK )
+        return detail;
+
+    KIGIT::GitObjectPtr objPtr( obj );
+
+    if( git_object_type( obj ) != GIT_OBJECT_COMMIT )
+        return detail;
+
+    git_commit*    commit = reinterpret_cast<git_commit*>( obj );
+    const git_oid* oid = git_commit_id( commit );
+
+    detail.found = true;
+    detail.hash = wxString::FromUTF8( git_oid_tostr_s( oid ) );
+    detail.shortHash = shortHashOf( oid );
+
+    if( const char* message = git_commit_message( commit ) )
+        detail.message = wxString::FromUTF8( message );
+
+    detail.message.Trim();
+
+    if( const git_signature* author = git_commit_author( commit ) )
+    {
+        detail.author = wxString::FromUTF8( author->name );
+        detail.email = wxString::FromUTF8( author->email );
+    }
+
+    detail.when = wxDateTime( static_cast<time_t>( git_commit_time( commit ) ) );
+
+    for( unsigned ii = 0; ii < git_commit_parentcount( commit ); ++ii )
+        detail.parents.push_back( shortHashOf( git_commit_parent_id( commit, ii ) ) );
+
+    std::map<std::string, std::vector<wxString>> refNames = collectRefNames( m_repo );
+    auto                                         named = refNames.find( git_oid_tostr_s( oid ) );
+
+    if( named != refNames.end() )
+        detail.refs = named->second;
+
+    git_tree* tree = nullptr;
+
+    if( git_commit_tree( &tree, commit ) != GIT_OK )
+        return detail;
+
+    KIGIT::GitTreePtr treePtr( tree );
+
+    // A root commit diffs against the empty tree, so its files all count as added.
+    KIGIT::GitTreePtr parentTree;
+
+    if( git_commit_parentcount( commit ) > 0 )
+    {
+        git_commit* parent = nullptr;
+
+        if( git_commit_parent( &parent, commit, 0 ) == GIT_OK )
+        {
+            KIGIT::GitCommitPtr parentPtr( parent );
+            git_tree*           raw = nullptr;
+
+            if( git_commit_tree( &raw, parent ) == GIT_OK )
+                parentTree.reset( raw );
+        }
+    }
+
+    git_diff* diff = nullptr;
+
+    if( git_diff_tree_to_tree( &diff, m_repo, parentTree.get(), tree, nullptr ) != GIT_OK )
+        return detail;
+
+    KIGIT::GitDiffPtr diffPtr( diff );
+
+    git_diff_find_options findOpts;
+    git_diff_find_options_init( &findOpts, GIT_DIFF_FIND_OPTIONS_VERSION );
+    findOpts.flags = GIT_DIFF_FIND_RENAMES | GIT_DIFF_FIND_COPIES;
+    git_diff_find_similar( diff, &findOpts );
+
+    for( size_t ii = 0; ii < git_diff_num_deltas( diff ); ++ii )
+    {
+        git_patch* patch = nullptr;
+
+        if( git_patch_from_diff( &patch, diff, ii ) != GIT_OK )
+            continue;
+
+        KIGIT::GitPatchPtr    patchPtr( patch );
+        const git_diff_delta* delta = git_patch_get_delta( patch );
+
+        KIGIT_COMMIT_FILE file;
+        file.path = wxString::FromUTF8( delta->new_file.path ? delta->new_file.path : delta->old_file.path );
+        file.status = deltaStatus( delta->status );
+        file.binary = ( delta->flags & GIT_DIFF_FLAG_BINARY ) != 0;
+
+        if( delta->status == GIT_DELTA_RENAMED || delta->status == GIT_DELTA_COPIED )
+            file.oldPath = wxString::FromUTF8( delta->old_file.path );
+
+        size_t added = 0;
+        size_t removed = 0;
+
+        if( git_patch_line_stats( nullptr, &added, &removed, patch ) == GIT_OK )
+        {
+            file.added = static_cast<int>( added );
+            file.removed = static_cast<int>( removed );
+        }
+
+        detail.added += file.added;
+        detail.removed += file.removed;
+        detail.files.push_back( file );
+    }
+
+    return detail;
 }
 
 
