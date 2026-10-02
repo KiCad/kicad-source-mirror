@@ -1244,9 +1244,9 @@ void GIT_ADVANCED_DIALOG::showFileDiff( const wxString& aPath )
         return;
     }
 
-    wxString beforeLabel = m_detailParent.IsEmpty() ? _( "Before: nothing" )
-                                                    : wxString::Format( _( "Before: %s" ), m_detailParent );
-    wxString afterLabel = wxString::Format( _( "After: %s" ), m_detailHash );
+    wxString beforeLabel = m_detailParent.IsEmpty() ? _( "BASE (nothing)" )
+                                                    : wxString::Format( _( "BASE (%s)" ), m_detailParent );
+    wxString afterLabel = wxString::Format( _( "WORKING (%s)" ), m_detailHash );
 
     m_fileDiff->ShowFile(
             [&]( GIT_DIFF_WORKSPACE& aWorkspace, GIT_FILE_SIDES& aSides )
@@ -1306,12 +1306,16 @@ void GIT_ADVANCED_DIALOG::showWorkingDiff( const wxString& aPath )
         return;
     }
 
+    // The top bar already names the branch the working tree is on.
+    wxString branch = m_branchChoice->GetStringSelection();
+    wxString baseLabel = branch.IsEmpty() ? _( "BASE (HEAD)" ) : wxString::Format( _( "BASE (%s)" ), branch );
+
     m_workingDiff->ShowFile(
             [&]( GIT_DIFF_WORKSPACE& aWorkspace, GIT_FILE_SIDES& aSides )
             {
                 return MaterializeWorkingFile( m_parent, aWorkspace, aPath, aSides );
             },
-            _( "Committed (HEAD)" ), _( "Working copy" ) );
+            baseLabel, _( "WORKING (changes)" ) );
 
     if( !m_changesSplitter->IsSplit() )
         m_changesSplitter->SplitHorizontally( m_changesPane, m_workingDiff, m_changesSashPos );
