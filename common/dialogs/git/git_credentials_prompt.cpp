@@ -89,7 +89,40 @@ bool KIGIT::EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon )
         }
     }
 
-    wxDialog dlg( aParent, wxID_ANY, _( "Introduce Yourself" ) );
+    wxString name = wxGetUserName();
+    wxString email;
+
+    if( !PromptGitIdentity( aParent, _( "Introduce Yourself" ), name, email ) )
+        return false;
+
+    bool saved = false;
+
+    {
+        std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            DisplayErrorMessage( aParent, _( "Another git operation is in progress, so the name and email were "
+                                             "not saved. Try again in a moment." ) );
+            return false;
+        }
+
+        saved = aCommon->SetUserConfig( name, email );
+    }
+
+    if( !saved )
+    {
+        DisplayErrorMessage( aParent, _( "Could not save the name and email to the repository." ) );
+        return false;
+    }
+
+    return true;
+}
+
+
+bool KIGIT::PromptGitIdentity( wxWindow* aParent, const wxString& aTitle, wxString& aName, wxString& aEmail )
+{
+    wxDialog dlg( aParent, wxID_ANY, aTitle );
 
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -101,11 +134,11 @@ bool KIGIT::EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon )
     fields->AddGrowableCol( 1 );
 
     fields->Add( new wxStaticText( &dlg, wxID_ANY, _( "Name:" ) ), 0, wxALIGN_CENTER_VERTICAL );
-    wxTextCtrl* nameCtrl = new wxTextCtrl( &dlg, wxID_ANY, wxGetUserName(), wxDefaultPosition, wxSize( 320, -1 ) );
+    wxTextCtrl* nameCtrl = new wxTextCtrl( &dlg, wxID_ANY, aName, wxDefaultPosition, wxSize( 320, -1 ) );
     fields->Add( nameCtrl, 1, wxEXPAND );
 
     fields->Add( new wxStaticText( &dlg, wxID_ANY, _( "Email:" ) ), 0, wxALIGN_CENTER_VERTICAL );
-    wxTextCtrl* emailCtrl = new wxTextCtrl( &dlg, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 320, -1 ) );
+    wxTextCtrl* emailCtrl = new wxTextCtrl( &dlg, wxID_ANY, aEmail, wxDefaultPosition, wxSize( 320, -1 ) );
     fields->Add( emailCtrl, 1, wxEXPAND );
 
     mainSizer->Add( fields, 1, wxEXPAND | wxLEFT | wxRIGHT, 10 );
@@ -137,20 +170,9 @@ bool KIGIT::EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon )
         break;
     }
 
-    std::unique_lock<std::mutex> lock = aCommon->TryLockAction();
-
-    if( !lock.owns_lock() )
-    {
-        DisplayErrorMessage( aParent, _( "Another git operation is in progress, so the name and email were "
-                                         "not saved. Try again in a moment." ) );
-        return false;
-    }
-
-    if( !aCommon->SetUserConfig( nameCtrl->GetValue().Trim(), emailCtrl->GetValue().Trim() ) )
-    {
-        DisplayErrorMessage( aParent, _( "Could not save the name and email to the repository." ) );
-        return false;
-    }
-
+    aName = nameCtrl->GetValue();
+    aName.Trim( true ).Trim( false );
+    aEmail = emailCtrl->GetValue();
+    aEmail.Trim( true ).Trim( false );
     return true;
 }

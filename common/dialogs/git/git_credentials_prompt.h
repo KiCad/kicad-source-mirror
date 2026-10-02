@@ -49,6 +49,14 @@ bool PromptForCredentials( wxWindow* aParent, KIGIT_COMMON* aCommon, PROJECT* aP
  */
 bool EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon );
 
+/**
+ * Ask for the name and email to record commits with. @p aName and @p aEmail hold the starting
+ * values and receive the answer.
+ *
+ * @return False when the user cancelled.
+ */
+bool PromptGitIdentity( wxWindow* aParent, const wxString& aTitle, wxString& aName, wxString& aEmail );
+
 } // namespace KIGIT
 
 #endif // GIT_CREDENTIALS_PROMPT_H

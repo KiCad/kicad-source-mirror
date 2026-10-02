@@ -44,7 +44,7 @@ class wxStaticText;
 /**
  * Docked panel for committing: the branch to commit to, a summary and description, the commit
  * options, the changed files with a checkbox each, the commit and Get Changes buttons, and a
- * button that opens the advanced Git window.
+ * gear holding the commit settings and the advanced Git window.
  */
 class GIT_COMMIT_PANE : public GIT_COMMIT_PANE_BASE
 {
@@ -52,7 +52,7 @@ public:
     GIT_COMMIT_PANE( EDA_BASE_FRAME* aParent );
 
     /// The same panel inside another window, such as the advanced window's Changes page. The
-    /// button that opens the advanced window is left out there.
+    /// gear's entry for opening that window is left out there.
     GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame );
     ~GIT_COMMIT_PANE() override;
 
@@ -107,7 +107,10 @@ private:
     void onMessageChanged( wxCommandEvent& aEvent );
     void onIdle( wxIdleEvent& aEvent );
     void onSize( wxSizeEvent& aEvent );
-    void onOpenAdvanced( wxCommandEvent& aEvent );
+
+    /// The gear's menu: the advanced window and the author.
+    void onSettings( wxCommandEvent& aEvent );
+    void setAuthor();
 
     /// Set the status line text and wrap it to the current panel width.
     void setStatusText( const wxString& aText );
@@ -183,6 +186,9 @@ private:
 
     /// The widest row's minimum width, measured before anything is hidden.
     int m_minDockWidth = 0;
+
+    /// True on the advanced window's Changes page, false in the docked panel.
+    bool m_inAdvancedWindow = false;
 
     bool m_hasUnpushedCommits;
 

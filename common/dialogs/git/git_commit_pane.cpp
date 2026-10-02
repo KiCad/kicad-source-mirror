@@ -43,6 +43,7 @@
 
 #include <wx/choicdlg.h>
 
+#include <bitmaps.h>
 #include <confirm.h>
 #include <dialogs/git/git_credentials_prompt.h>
 #include <diff_merge/merge_dispatch.h>
@@ -63,6 +64,17 @@
 #include <thread>
 #include <wildcards_and_files_ext.h>
 #include <widgets/file_checklist_ctrl.h>
+#include <widgets/std_bitmap_button.h>
+
+
+namespace
+{
+enum
+{
+    ID_OPEN_ADVANCED = wxID_HIGHEST + 1,
+    ID_SET_AUTHOR
+};
+}
 
 
 // Make aName at HEAD and move onto it, so the next commit lands there. The caller holds the git
@@ -198,7 +210,8 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
                                  } );
     }
 
-    m_advancedButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onOpenAdvanced, this );
+    m_settingsButton->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
+    m_settingsButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onSettings, this );
     m_commitButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onCommit, this );
     m_commitAndPushItem = m_commitButton->GetSplitButtonMenu()->Append( wxID_ANY, _( "Commit and Push" ) );
     m_commitButton->GetSplitButtonMenu()->Bind( wxEVT_MENU, &GIT_COMMIT_PANE::onCommitAndPush, this,
@@ -247,13 +260,12 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
             },
             m_refreshRetryTimer.GetId() );
 
-    // Inside the advanced window the button would only raise the window it is in, and the
-    // page is wide enough for the list and the message side by side.
-    if( aParent != aFrame )
-    {
-        m_advancedButton->Hide();
+    // Inside the advanced window the page is wide enough for the list and the message side
+    // by side.
+    m_inAdvancedWindow = aParent != aFrame;
+
+    if( m_inAdvancedWindow )
         layoutWide();
-    }
 
     // Sized by hand, or a long branch name would set the width of the whole row. Wide enough
     // for an ordinary name, with the tooltip carrying the rest when one is longer.
@@ -492,8 +504,8 @@ void GIT_COMMIT_PANE::RefreshFileList()
     else if( m_headDetached )
     {
         setStatusText( _( "This project is showing an old snapshot rather than a branch, so it cannot be "
-                          "committed or pushed from here. Open Advanced, choose Branches and double click a "
-                          "branch to go back to it." ) );
+                          "committed or pushed from here. In the Advanced Git window, choose Branches "
+                          "and double click a branch to go back to it." ) );
         m_emptyLabel->Show( true );
     }
     else if( hasChanges )
@@ -550,6 +562,7 @@ void GIT_COMMIT_PANE::showDisabledState()
     m_changesRow->ShowItems( false );
     m_branchChoice->Clear();
     m_branchRow->ShowItems( false );
+    m_settingsButton->Show();
 
     m_canAmend = false;
     m_amendCheckbox->SetValue( false );
@@ -602,11 +615,82 @@ void GIT_COMMIT_PANE::onSize( wxSizeEvent& aEvent )
 }
 
 
-void GIT_COMMIT_PANE::onOpenAdvanced( wxCommandEvent& aEvent )
+void GIT_COMMIT_PANE::onSettings( wxCommandEvent& aEvent )
 {
-    // The window belongs to the session, not to this panel, so all three frames raise the
-    // same one.
-    GIT_ADVANCED_DIALOG::ShowForFrame( m_frame, this );
+    wxMenu menu;
+
+    // Inside the advanced window the entry would only raise the window it is in.
+    if( !m_inAdvancedWindow )
+    {
+        menu.Append( ID_OPEN_ADVANCED, _( "Open Advanced Git Window..." ) );
+        menu.Bind( wxEVT_MENU,
+                   [this]( wxCommandEvent& )
+                   {
+                       // The window belongs to the session, not to this panel, so all three
+                       // frames raise the same one.
+                       GIT_ADVANCED_DIALOG::ShowForFrame( m_frame, this );
+                   },
+                   ID_OPEN_ADVANCED );
+    }
+
+    menu.Append( ID_SET_AUTHOR, _( "Set Author..." ) );
+    menu.Bind( wxEVT_MENU,
+               [this]( wxCommandEvent& )
+               {
+                   setAuthor();
+               },
+               ID_SET_AUTHOR );
+
+    PopupMenu( &menu );
+}
+
+
+void GIT_COMMIT_PANE::setAuthor()
+{
+    std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
+
+    if( !common->GetRepo() )
+        return;
+
+    wxString name;
+    wxString email;
+
+    {
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+            return;
+        }
+
+        GitUserConfig userConfig = GIT_CONFIG_HANDLER( common.get() ).GetUserConfig();
+        name = userConfig.authorName;
+        email = userConfig.authorEmail;
+    }
+
+    if( !KIGIT::PromptGitIdentity( this, _( "Set Author" ), name, email ) )
+        return;
+
+    std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+    if( !lock.owns_lock() )
+    {
+        DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
+        return;
+    }
+
+    bool saved = common->SetUserConfig( name, email );
+    lock.unlock();
+
+    if( !saved )
+    {
+        DisplayErrorMessage( this, _( "Could not save the name and email to the repository." ) );
+        return;
+    }
+
+    // The Repository page shows the same name and email.
+    common->NotifyRefreshListeners();
 }
 
 
@@ -846,6 +930,9 @@ void GIT_COMMIT_PANE::populateBranches( KIGIT_COMMON& aCommon )
 {
     m_branchChoice->Clear();
     m_branchRow->ShowItems( aCommon.GetRepo() != nullptr );
+
+    // The advanced window is reachable without a repository, as the old button was.
+    m_settingsButton->Show();
 
     if( !aCommon.GetRepo() )
         return;

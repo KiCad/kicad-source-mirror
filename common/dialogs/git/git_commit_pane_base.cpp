@@ -5,6 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
+#include "widgets/std_bitmap_button.h"
+
 #include "git_commit_pane_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -33,6 +35,11 @@ GIT_COMMIT_PANE_BASE::GIT_COMMIT_PANE_BASE( wxWindow* parent, wxWindowID id, con
 	m_recentMessages = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_recentMessagesChoices, 0 );
 	m_recentMessages->SetSelection( 0 );
 	m_branchRow->Add( m_recentMessages, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 4 );
+
+	m_settingsButton = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_settingsButton->SetToolTip( _("Commit settings and the advanced window") );
+
+	m_branchRow->Add( m_settingsButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 4 );
 
 
 	bMainSizer->Add( m_branchRow, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 4 );
@@ -105,15 +112,6 @@ GIT_COMMIT_PANE_BASE::GIT_COMMIT_PANE_BASE( wxWindow* parent, wxWindowID id, con
 
 
 	bMainSizer->Add( bCommitSizer, 0, wxEXPAND, 0 );
-
-	wxBoxSizer* bActionSizer;
-	bActionSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	m_advancedButton = new wxButton( this, wxID_ANY, _("Advanced..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bActionSizer->Add( m_advancedButton, 1, wxALL, 4 );
-
-
-	bMainSizer->Add( bActionSizer, 0, wxEXPAND, 0 );
 
 
 	this->SetSizer( bMainSizer );

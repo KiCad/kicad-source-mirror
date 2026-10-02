@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -17,14 +19,15 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/choice.h>
+#include <wx/bmpbuttn.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/statbox.h>
-#include <wx/button.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <widgets/file_checklist_ctrl.h>
 #include <widgets/split_button.h>
 #include <wx/panel.h>
@@ -42,6 +45,7 @@ class GIT_COMMIT_PANE_BASE : public wxPanel
 		wxBoxSizer* m_branchRow;
 		wxChoice* m_branchChoice;
 		wxChoice* m_recentMessages;
+		STD_BITMAP_BUTTON* m_settingsButton;
 		wxTextCtrl* m_summary;
 		wxStaticText* m_summaryCount;
 		wxTextCtrl* m_description;
@@ -57,7 +61,6 @@ class GIT_COMMIT_PANE_BASE : public wxPanel
 		FILE_CHECKLIST_CTRL* m_checklist;
 		SPLIT_BUTTON* m_commitButton;
 		wxButton* m_pullButton;
-		wxButton* m_advancedButton;
 
 	public:
 
