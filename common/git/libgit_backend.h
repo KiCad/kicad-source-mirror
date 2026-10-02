@@ -75,7 +75,7 @@ public:
     PullResult PerformPull( GIT_PULL_HANDLER* aHandler ) override;
 
     git_repository* GetRepositoryForFile( const char* aFilename, wxString* aError ) override;
-    int CreateBranch( git_repository* aRepo, const wxString& aBranchName ) override;
+    int             CreateBranch( git_repository* aRepo, const wxString& aBranchName, const wxString& aFrom ) override;
     bool RemoveVCS( git_repository*& aRepo, const wxString& aProjectPath,
                     bool aRemoveGitDir, wxString* aErrors ) override;
 

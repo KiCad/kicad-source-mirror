@@ -315,14 +315,95 @@ std::vector<wxString> KIGIT_COMMON::GetBranchNames() const
 }
 
 
+namespace
+{
+
+// The refs pointing at each commit, keyed by the commit's full hash, HEAD first.
+std::map<std::string, std::vector<wxString>> collectRefNames( git_repository* aRepo )
+{
+    std::map<std::string, std::vector<wxString>> names;
+
+    git_oid headOid;
+
+    if( git_reference_name_to_id( &headOid, aRepo, "HEAD" ) == GIT_OK )
+        names[git_oid_tostr_s( &headOid )].push_back( wxS( "HEAD" ) );
+
+    git_reference_iterator* iter = nullptr;
+
+    if( git_reference_iterator_new( &iter, aRepo ) != GIT_OK )
+        return names;
+
+    KIGIT::GitReferenceIteratorPtr iterPtr( iter );
+    git_reference*                 ref = nullptr;
+
+    // Iteration is by ref name, which puts local branches before remote ones and tags last.
+    while( git_reference_next( &ref, iter ) == GIT_OK )
+    {
+        KIGIT::GitReferencePtr refPtr( ref );
+
+        if( !git_reference_is_branch( ref ) && !git_reference_is_remote( ref ) && !git_reference_is_tag( ref ) )
+            continue;
+
+        git_object* target = nullptr;
+
+        if( git_reference_peel( &target, ref, GIT_OBJECT_COMMIT ) != GIT_OK )
+            continue;
+
+        KIGIT::GitObjectPtr targetPtr( target );
+
+        std::string hash = git_oid_tostr_s( git_object_id( target ) );
+        names[hash].push_back( wxString::FromUTF8( git_reference_shorthand( ref ) ) );
+    }
+
+    return names;
+}
+
+
+wxString shortHashOf( const git_oid* aOid )
+{
+    // A 7-char abbreviation can be ambiguous in a large repository, which makes a later
+    // revparse of the hash fail. Twelve characters is what git uses for big repos.
+    char shortHash[13] = { 0 };
+    git_oid_tostr( shortHash, sizeof( shortHash ), aOid );
+    return wxString::FromUTF8( shortHash );
+}
+
+
+KIGIT::FILE_CHANGE_STATUS deltaStatus( git_delta_t aDelta )
+{
+    switch( aDelta )
+    {
+    case GIT_DELTA_ADDED: return KIGIT::FILE_CHANGE_STATUS::ADDED;
+    case GIT_DELTA_DELETED: return KIGIT::FILE_CHANGE_STATUS::REMOVED;
+    case GIT_DELTA_RENAMED: return KIGIT::FILE_CHANGE_STATUS::RENAMED;
+    case GIT_DELTA_COPIED: return KIGIT::FILE_CHANGE_STATUS::COPIED;
+    case GIT_DELTA_TYPECHANGE: return KIGIT::FILE_CHANGE_STATUS::TYPECHANGE;
+    default: return KIGIT::FILE_CHANGE_STATUS::MODIFIED;
+    }
+}
+
+} // namespace
+
+
 std::vector<std::pair<wxString, bool>> KIGIT_COMMON::GetAllBranches() const
+{
+    std::vector<std::pair<wxString, bool>> branches;
+
+    for( const KIGIT_BRANCH_INFO& branch : GetBranches() )
+        branches.emplace_back( branch.name, branch.isRemote );
+
+    return branches;
+}
+
+
+std::vector<KIGIT_BRANCH_INFO> KIGIT_COMMON::GetBranches() const
 {
     if( !m_repo )
         return {};
 
-    std::pair<wxString, bool>                            current;
-    std::multimap<git_time_t, std::pair<wxString, bool>> localByTime;
-    std::multimap<git_time_t, std::pair<wxString, bool>> remoteByTime;
+    KIGIT_BRANCH_INFO                            current;
+    std::multimap<git_time_t, KIGIT_BRANCH_INFO> localByTime;
+    std::multimap<git_time_t, KIGIT_BRANCH_INFO> remoteByTime;
 
     git_branch_iterator* branchIterator = nullptr;
 
@@ -372,19 +453,25 @@ std::vector<std::pair<wxString, bool>> KIGIT_COMMON::GetAllBranches() const
 
         KIGIT::GitCommitPtr commitPtr( commit );
         git_time_t          commitTime = git_commit_time( commit );
-        bool                isRemote = ( branchType == GIT_BRANCH_REMOTE );
 
-        if( !isRemote && git_branch_is_head( branchReference ) )
-            current = { branchName, false };
-        else if( isRemote )
-            remoteByTime.emplace( commitTime, std::make_pair( wxString( branchName ), true ) );
+        KIGIT_BRANCH_INFO info;
+        info.name = wxString::FromUTF8( branchName );
+        info.isRemote = branchType == GIT_BRANCH_REMOTE;
+        info.isCurrent = !info.isRemote && git_branch_is_head( branchReference );
+        info.tipHash = shortHashOf( commitId );
+        info.when = wxDateTime( static_cast<time_t>( commitTime ) );
+
+        if( info.isCurrent )
+            current = info;
+        else if( info.isRemote )
+            remoteByTime.emplace( commitTime, info );
         else
-            localByTime.emplace( commitTime, std::make_pair( wxString( branchName ), false ) );
+            localByTime.emplace( commitTime, info );
     }
 
-    std::vector<std::pair<wxString, bool>> branches;
+    std::vector<KIGIT_BRANCH_INFO> branches;
 
-    if( !current.first.IsEmpty() )
+    if( !current.name.IsEmpty() )
         branches.push_back( current );
 
     for( auto rit = localByTime.rbegin(); rit != localByTime.rend(); ++rit )
@@ -394,6 +481,66 @@ std::vector<std::pair<wxString, bool>> KIGIT_COMMON::GetAllBranches() const
         branches.push_back( rit->second );
 
     return branches;
+}
+
+
+KIGIT_BRANCH_DETAIL KIGIT_COMMON::GetBranchDetail( const wxString& aBranch ) const
+{
+    KIGIT_BRANCH_DETAIL detail;
+
+    if( !m_repo )
+        return detail;
+
+    // The short name as the Branches page lists it, local or remote, resolved as git would.
+    git_reference* ref = nullptr;
+
+    if( git_reference_dwim( &ref, m_repo, aBranch.utf8_string().c_str() ) != GIT_OK )
+        return detail;
+
+    KIGIT::GitReferencePtr refPtr( ref );
+    git_object*            target = nullptr;
+
+    if( git_reference_peel( &target, ref, GIT_OBJECT_COMMIT ) != GIT_OK )
+        return detail;
+
+    KIGIT::GitObjectPtr targetPtr( target );
+    git_commit*         commit = reinterpret_cast<git_commit*>( target );
+
+    detail.found = true;
+    detail.name = aBranch;
+    detail.tipHash = shortHashOf( git_commit_id( commit ) );
+    detail.when = wxDateTime( static_cast<time_t>( git_commit_time( commit ) ) );
+
+    if( const git_signature* author = git_commit_author( commit ) )
+    {
+        detail.author = wxString::FromUTF8( author->name );
+        detail.email = wxString::FromUTF8( author->email );
+    }
+
+    if( const char* message = git_commit_message( commit ) )
+        detail.message = wxString::FromUTF8( message );
+
+    detail.message.Trim();
+
+    // Only a local branch tracks another. A remote-tracking branch has nothing to compare with.
+    git_reference* upstream = nullptr;
+
+    if( !git_reference_is_branch( ref ) || git_branch_upstream( &upstream, ref ) != GIT_OK )
+        return detail;
+
+    KIGIT::GitReferencePtr upstreamPtr( upstream );
+    const char*            upstreamName = "";
+
+    if( git_branch_name( &upstreamName, upstream ) == GIT_OK )
+        detail.upstream = wxString::FromUTF8( upstreamName );
+
+    const git_oid* local = git_reference_target( ref );
+    const git_oid* remote = git_reference_target( upstream );
+
+    if( local && remote )
+        git_graph_ahead_behind( &detail.ahead, &detail.behind, m_repo, local, remote );
+
+    return detail;
 }
 
 
@@ -728,76 +875,6 @@ size_t KIGIT_COMMON::GetUnmergedCommitCount( const wxString& aBranch ) const
 }
 
 
-namespace
-{
-
-// The refs pointing at each commit, keyed by the commit's full hash, HEAD first.
-std::map<std::string, std::vector<wxString>> collectRefNames( git_repository* aRepo )
-{
-    std::map<std::string, std::vector<wxString>> names;
-
-    git_oid headOid;
-
-    if( git_reference_name_to_id( &headOid, aRepo, "HEAD" ) == GIT_OK )
-        names[git_oid_tostr_s( &headOid )].push_back( wxS( "HEAD" ) );
-
-    git_reference_iterator* iter = nullptr;
-
-    if( git_reference_iterator_new( &iter, aRepo ) != GIT_OK )
-        return names;
-
-    KIGIT::GitReferenceIteratorPtr iterPtr( iter );
-    git_reference*                 ref = nullptr;
-
-    // Iteration is by ref name, which puts local branches before remote ones and tags last.
-    while( git_reference_next( &ref, iter ) == GIT_OK )
-    {
-        KIGIT::GitReferencePtr refPtr( ref );
-
-        if( !git_reference_is_branch( ref ) && !git_reference_is_remote( ref ) && !git_reference_is_tag( ref ) )
-            continue;
-
-        git_object* target = nullptr;
-
-        if( git_reference_peel( &target, ref, GIT_OBJECT_COMMIT ) != GIT_OK )
-            continue;
-
-        KIGIT::GitObjectPtr targetPtr( target );
-
-        std::string hash = git_oid_tostr_s( git_object_id( target ) );
-        names[hash].push_back( wxString::FromUTF8( git_reference_shorthand( ref ) ) );
-    }
-
-    return names;
-}
-
-
-wxString shortHashOf( const git_oid* aOid )
-{
-    // A 7-char abbreviation can be ambiguous in a large repository, which makes a later
-    // revparse of the hash fail. Twelve characters is what git uses for big repos.
-    char shortHash[13] = { 0 };
-    git_oid_tostr( shortHash, sizeof( shortHash ), aOid );
-    return wxString::FromUTF8( shortHash );
-}
-
-
-KIGIT::FILE_CHANGE_STATUS deltaStatus( git_delta_t aDelta )
-{
-    switch( aDelta )
-    {
-    case GIT_DELTA_ADDED: return KIGIT::FILE_CHANGE_STATUS::ADDED;
-    case GIT_DELTA_DELETED: return KIGIT::FILE_CHANGE_STATUS::REMOVED;
-    case GIT_DELTA_RENAMED: return KIGIT::FILE_CHANGE_STATUS::RENAMED;
-    case GIT_DELTA_COPIED: return KIGIT::FILE_CHANGE_STATUS::COPIED;
-    case GIT_DELTA_TYPECHANGE: return KIGIT::FILE_CHANGE_STATUS::TYPECHANGE;
-    default: return KIGIT::FILE_CHANGE_STATUS::MODIFIED;
-    }
-}
-
-} // namespace
-
-
 std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax, const KIGIT_HISTORY_FILTER& aFilter ) const
 {
     std::vector<KIGIT_COMMIT_INFO> commits;
@@ -811,7 +888,10 @@ std::vector<KIGIT_COMMIT_INFO> KIGIT_COMMON::GetRecentCommits( size_t aMax, cons
         return commits;
 
     KIGIT::GitRevWalkPtr walkerPtr( walker );
-    git_revwalk_sorting( walker, GIT_SORT_TIME );
+
+    // Time order, but a child always before its parent, so two tips made in the same second
+    // still list in a fixed order.
+    git_revwalk_sorting( walker, GIT_SORT_TIME | GIT_SORT_TOPOLOGICAL );
 
     if( aFilter.branch.IsEmpty() )
     {
@@ -1157,12 +1237,12 @@ std::vector<std::pair<wxString, wxString>> KIGIT_COMMON::GetRemotes() const
 }
 
 
-bool KIGIT_COMMON::CreateBranch( const wxString& aName )
+bool KIGIT_COMMON::CreateBranch( const wxString& aName, const wxString& aFrom )
 {
     if( !m_repo || aName.IsEmpty() )
         return false;
 
-    return GetGitBackend()->CreateBranch( m_repo, aName ) == 0;
+    return GetGitBackend()->CreateBranch( m_repo, aName, aFrom ) == 0;
 }
 
 

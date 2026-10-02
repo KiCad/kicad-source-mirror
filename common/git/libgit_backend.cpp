@@ -2586,25 +2586,29 @@ git_repository* LIBGIT_BACKEND::GetRepositoryForFile( const char* aFilename, wxS
 }
 
 
-int LIBGIT_BACKEND::CreateBranch( git_repository* aRepo, const wxString& aBranchName )
+int LIBGIT_BACKEND::CreateBranch( git_repository* aRepo, const wxString& aBranchName, const wxString& aFrom )
 {
-    git_oid head_oid;
+    // The start point is a branch name as git would read it, local or remote, or HEAD.
+    std::string start = aFrom.IsEmpty() ? std::string( "HEAD" ) : aFrom.utf8_string();
+    git_object* startObj = nullptr;
 
-    if( int error = git_reference_name_to_id( &head_oid, aRepo, "HEAD" ); error != GIT_OK )
+    if( int error = git_revparse_single( &startObj, aRepo, start.c_str() ); error != GIT_OK )
     {
-        wxLogTrace( traceGit, "Failed to lookup HEAD reference: %s", KIGIT_COMMON::GetLastGitError() );
+        wxLogTrace( traceGit, "Failed to resolve branch start point '%s': %s", start, KIGIT_COMMON::GetLastGitError() );
         return error;
     }
 
-    git_commit* commit = nullptr;
+    KIGIT::GitObjectPtr startPtr( startObj );
+    git_object*         peeled = nullptr;
 
-    if( int error = git_commit_lookup( &commit, aRepo, &head_oid ); error != GIT_OK )
+    if( int error = git_object_peel( &peeled, startObj, GIT_OBJECT_COMMIT ); error != GIT_OK )
     {
         wxLogTrace( traceGit, "Failed to lookup commit: %s", KIGIT_COMMON::GetLastGitError() );
         return error;
     }
 
-    KIGIT::GitCommitPtr commitPtr( commit );
+    KIGIT::GitObjectPtr peeledPtr( peeled );
+    git_commit*         commit = reinterpret_cast<git_commit*>( peeled );
     git_reference*      branchRef = nullptr;
 
     if( int error = git_branch_create( &branchRef, aRepo, aBranchName.mb_str(), commit, 0 ); error != GIT_OK )

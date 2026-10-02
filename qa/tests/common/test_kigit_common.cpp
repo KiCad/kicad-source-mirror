@@ -1516,6 +1516,117 @@ BOOST_AUTO_TEST_CASE( GetAllBranchesKeepsBranchesSharingACommitTime )
 }
 
 
+// The Branches page lists every branch with the commit it points at, the current one first.
+BOOST_AUTO_TEST_CASE( GetBranchesCarriesTipAndCurrent )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_REQUIRE( common.CreateBranch( "older" ) );
+
+    writeFile( tmp.path, "file.txt", "v2\n" );
+    commitWorkingFile( repo, "file.txt", "second" );
+
+    std::vector<KIGIT_COMMIT_INFO> commits = common.GetRecentCommits( 10 );
+    BOOST_REQUIRE_EQUAL( commits.size(), 2u );
+
+    auto hashOf = [&]( const char* aSummary )
+    {
+        for( const KIGIT_COMMIT_INFO& c : commits )
+        {
+            if( c.summary == aSummary )
+                return c.hash.ToStdString();
+        }
+
+        return std::string();
+    };
+
+    std::vector<KIGIT_BRANCH_INFO> branches = common.GetBranches();
+    BOOST_REQUIRE_EQUAL( branches.size(), 2u );
+
+    BOOST_CHECK_EQUAL( branches[0].name.ToStdString(), "main" );
+    BOOST_CHECK( branches[0].isCurrent );
+    BOOST_CHECK( !branches[0].isRemote );
+    BOOST_CHECK_EQUAL( branches[0].tipHash.ToStdString(), hashOf( "second" ) );
+    BOOST_CHECK( branches[0].when.IsValid() );
+
+    BOOST_CHECK_EQUAL( branches[1].name.ToStdString(), "older" );
+    BOOST_CHECK( !branches[1].isCurrent );
+    BOOST_CHECK_EQUAL( branches[1].tipHash.ToStdString(), hashOf( "initial" ) );
+}
+
+
+// The detail pane shows a branch's tip commit and how far it is from the branch it tracks.
+BOOST_AUTO_TEST_CASE( GetBranchDetailReportsTipAndUpstream )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_REQUIRE( common.CreateBranch( "base" ) );
+
+    writeFile( tmp.path, "file.txt", "v2\n" );
+    commitWorkingFile( repo, "file.txt", "second\n\nWith a body." );
+
+    // Track the local branch, which git allows, so no remote is needed to see ahead and behind.
+    git_reference* main = nullptr;
+    BOOST_REQUIRE_EQUAL( git_branch_lookup( &main, repo, "main", GIT_BRANCH_LOCAL ), GIT_OK );
+    KIGIT::GitReferencePtr mainPtr( main );
+    BOOST_REQUIRE_EQUAL( git_branch_set_upstream( main, "base" ), GIT_OK );
+
+    KIGIT_BRANCH_DETAIL detail = common.GetBranchDetail( wxS( "main" ) );
+    BOOST_REQUIRE( detail.found );
+    BOOST_CHECK_EQUAL( detail.name.ToStdString(), "main" );
+    BOOST_CHECK_EQUAL( detail.tipHash.ToStdString(), common.GetRecentCommits( 1 )[0].hash.ToStdString() );
+    BOOST_CHECK_EQUAL( detail.author.ToStdString(), "QA Test" );
+    BOOST_CHECK_EQUAL( detail.email.ToStdString(), "qa@example.com" );
+    BOOST_CHECK_EQUAL( detail.message.ToStdString(), "second\n\nWith a body." );
+    BOOST_CHECK_EQUAL( detail.upstream.ToStdString(), "base" );
+    BOOST_CHECK_EQUAL( detail.ahead, 1u );
+    BOOST_CHECK_EQUAL( detail.behind, 0u );
+
+    KIGIT_BRANCH_DETAIL base = common.GetBranchDetail( wxS( "base" ) );
+    BOOST_REQUIRE( base.found );
+    BOOST_CHECK( base.upstream.IsEmpty() );
+    BOOST_CHECK_EQUAL( base.message.ToStdString(), "initial" );
+
+    BOOST_CHECK( !common.GetBranchDetail( wxS( "nowhere" ) ).found );
+}
+
+
+// New Branch in the detail pane starts the branch where the selected one is, not at HEAD.
+BOOST_AUTO_TEST_CASE( CreateBranchStartsAtTheGivenBranch )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_REQUIRE( common.CreateBranch( "base" ) );
+
+    writeFile( tmp.path, "file.txt", "v2\n" );
+    commitWorkingFile( repo, "file.txt", "second" );
+
+    BOOST_REQUIRE( common.CreateBranch( "feature", "base" ) );
+
+    KIGIT_BRANCH_DETAIL feature = common.GetBranchDetail( wxS( "feature" ) );
+    KIGIT_BRANCH_DETAIL base = common.GetBranchDetail( wxS( "base" ) );
+    BOOST_REQUIRE( feature.found && base.found );
+    BOOST_CHECK_EQUAL( feature.tipHash.ToStdString(), base.tipHash.ToStdString() );
+
+    BOOST_CHECK( !common.CreateBranch( "orphan", "nowhere" ) );
+}
+
+
 // The stored connection string must not carry the secret. A scp-style git@host is left intact.
 BOOST_AUTO_TEST_CASE( SetRemoteStripsUrlUserinfo )
 {

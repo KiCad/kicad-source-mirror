@@ -56,7 +56,7 @@ int PROJECT_GIT_UTILS::CreateBranch( git_repository* aRepo, const wxString& aBra
     if( !backend )
         return -1;
 
-    return backend->CreateBranch( aRepo, aBranchName );
+    return backend->CreateBranch( aRepo, aBranchName, wxEmptyString );
 }
 
 

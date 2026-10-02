@@ -336,6 +336,18 @@ void unsplitKeepingSash( wxSplitterWindow* aSplitter, wxWindow* aPane, int& aSas
 }
 
 
+// Paint a button's text the diff's red, for one that throws something away. Markup is what
+// reaches the native button title on every platform, where a foreground colour does not.
+void markDestructive( wxButton* aButton )
+{
+    KICAD_DIFF::DIFF_COLOR_THEME theme;
+    wxColour colour = ( KIPLATFORM::UI::IsDarkTheme() ? theme.removed.Brightened( 0.4 ) : theme.removed ).ToColour();
+
+    aButton->SetLabelMarkup( wxString::Format( wxS( "<span foreground='%s'>%s</span>" ),
+                                               colour.GetAsString( wxC2S_HTML_SYNTAX ), aButton->GetLabel() ) );
+}
+
+
 wxString fileStatusLabel( KIGIT::FILE_CHANGE_STATUS aStatus )
 {
     switch( aStatus )
@@ -347,18 +359,6 @@ wxString fileStatusLabel( KIGIT::FILE_CHANGE_STATUS aStatus )
     case KIGIT::FILE_CHANGE_STATUS::TYPECHANGE: return _( "type changed" );
     default:                                    return _( "modified" );
     }
-}
-
-
-wxWindow* makeBranchesPage( wxWindow* aBook, wxListCtrl** aOutList )
-{
-    LIST_PAGE page = makeListPage( aBook );
-
-    page.list->AppendColumn( _( "Branch" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 300 ) );
-    page.list->AppendColumn( _( "Status" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 120 ) );
-
-    *aOutList = page.list;
-    return page.panel;
 }
 
 
@@ -466,7 +466,16 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
         m_changesSplitter( nullptr ),
         m_changesPane( nullptr ),
         m_workingDiff( nullptr ),
+        m_branchSearch( nullptr ),
+        m_branchesSplitter( nullptr ),
         m_branchesList( nullptr ),
+        m_branchCount( nullptr ),
+        m_branchDetail( nullptr ),
+        m_branchTitle( nullptr ),
+        m_branchCommit( nullptr ),
+        m_branchAuthor( nullptr ),
+        m_branchMessage( nullptr ),
+        m_branchSync( nullptr ),
         m_remotesList( nullptr ),
         m_stashesList( nullptr ),
         m_tagsList( nullptr ),
@@ -523,18 +532,9 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
     m_book->AddPage( buildChangesPage( m_book ), _( "Changes" ), true, 0 );
     m_book->AddPage( buildHistoryPage( m_book ), _( "History" ), false, 1 );
 
-    wxWindow* branchesPage = makeBranchesPage( m_book, &m_branchesList );
-    addButtonRow( branchesPage, { { _( "New Branch..." ),
+    wxWindow* branchesPage = buildBranchesPage( m_book );
+    addButtonRow( branchesPage, { { _( "Force Push..." ),
                                     [this]()
-                                    {
-                                        onNewBranch();
-                                    } },
-                                  { _( "Delete" ),
-                                    [this]()
-                                    {
-                                        onDeleteBranch();
-                                    } },
-                                  { _( "Force Push..." ), [this]()
                                     {
                                         onForcePush();
                                     } } } );
@@ -1550,27 +1550,242 @@ void GIT_ADVANCED_DIALOG::populateBranches()
         return;
 
     // The caller holds the git action lock.
-    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
-    wxString                      current = common->GetCurrentBranchName();
+    std::shared_ptr<KIGIT_COMMON>  common = m_parent->Prj().GetGitCommon();
+    std::vector<KIGIT_BRANCH_INFO> branches = common->GetBranches();
+    wxString                       search = m_branchSearch->GetValue().Lower();
+    wxString                       selected = selectedText( m_branchesList, 0 );
+    wxString                       current;
+    long                           selectRow = wxNOT_FOUND;
 
-    std::vector<std::pair<wxString, bool>> branches = common->GetAllBranches();
-
+    m_fillingBranches = true;
     m_branchesList->DeleteAllItems();
 
-    for( const auto& [name, isRemote] : branches )
+    for( const KIGIT_BRANCH_INFO& branch : branches )
     {
-        long     idx = m_branchesList->InsertItem( m_branchesList->GetItemCount(), name );
-        wxString status;
+        if( branch.isCurrent )
+            current = branch.name;
 
-        if( name == current )
-            status = _( "current" );
-        else if( isRemote )
-            status = _( "remote" );
+        if( !search.IsEmpty() && !branch.name.Lower().Contains( search ) )
+            continue;
 
-        m_branchesList->SetItem( idx, 1, status );
+        long idx = m_branchesList->InsertItem( m_branchesList->GetItemCount(), branch.name );
+
+        if( branch.isCurrent )
+            m_branchesList->SetItem( idx, 1, _( "current" ) );
+        else if( branch.isRemote )
+            m_branchesList->SetItem( idx, 1, _( "remote" ) );
+
+        m_branchesList->SetItem( idx, 2, branch.tipHash );
+        m_branchesList->SetItem( idx, 3, relativeDate( branch.when ) );
+
+        // Keep the selection where it was, or start on the current branch.
+        if( branch.name == selected || ( selected.IsEmpty() && branch.isCurrent ) )
+            selectRow = idx;
     }
 
-    populateHistoryBranches( branches );
+    int shown = m_branchesList->GetItemCount();
+    m_branchCount->SetLabel( shown == 1 ? _( "1 branch" ) : wxString::Format( _( "%d branches" ), shown ) );
+
+    if( selectRow != wxNOT_FOUND )
+    {
+        m_branchesList->SetItemState( selectRow, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+        fillBranchDetail( common->GetBranchDetail( m_branchesList->GetItemText( selectRow, 0 ) ) );
+    }
+    else
+    {
+        hideBranchDetail();
+    }
+
+    m_fillingBranches = false;
+
+    std::vector<std::pair<wxString, bool>> names;
+
+    for( const KIGIT_BRANCH_INFO& branch : branches )
+        names.emplace_back( branch.name, branch.isRemote );
+
+    populateHistoryBranches( names );
+}
+
+
+wxWindow* GIT_ADVANCED_DIALOG::buildBranchesPage( wxWindow* aBook )
+{
+    wxPanel*    panel = new wxPanel( aBook );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    m_branchSearch = new wxSearchCtrl( panel, wxID_ANY );
+    m_branchSearch->SetDescriptiveText( _( "Search branches" ) );
+    sizer->Add( m_branchSearch, 0, wxEXPAND | wxALL, 4 );
+
+    m_branchesSplitter = new wxSplitterWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                               wxSP_LIVE_UPDATE | wxSP_3DSASH );
+    m_branchesSplitter->SetMinimumPaneSize( panel->FromDIP( 200 ) );
+    m_branchesSplitter->SetSashGravity( 0.6 );
+    m_branchSashPos = panel->FromDIP( 460 );
+
+    wxPanel*    listPanel = new wxPanel( m_branchesSplitter );
+    wxBoxSizer* listSizer = new wxBoxSizer( wxVERTICAL );
+
+    m_branchesList = new wxListCtrl( listPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                     wxLC_REPORT | wxLC_SINGLE_SEL );
+    m_branchesList->AppendColumn( _( "Branch" ), wxLIST_FORMAT_LEFT, listPanel->FromDIP( 220 ) );
+    m_branchesList->AppendColumn( _( "Status" ), wxLIST_FORMAT_LEFT, listPanel->FromDIP( 70 ) );
+    m_branchesList->AppendColumn( _( "Commit" ), wxLIST_FORMAT_LEFT, listPanel->FromDIP( 100 ) );
+    m_branchesList->AppendColumn( _( "Date" ), wxLIST_FORMAT_LEFT, listPanel->FromDIP( 90 ) );
+    m_branchCount = new wxStaticText( listPanel, wxID_ANY, wxEmptyString );
+
+    listSizer->Add( m_branchesList, 1, wxEXPAND );
+    listSizer->Add( m_branchCount, 0, wxLEFT | wxTOP, 4 );
+    listPanel->SetSizer( listSizer );
+
+    m_branchDetail = buildBranchDetailPane( m_branchesSplitter );
+
+    // The detail pane appears once a branch is selected.
+    m_branchesSplitter->Initialize( listPanel );
+    m_branchDetail->Hide();
+    sizer->Add( m_branchesSplitter, 1, wxEXPAND | wxALL, 4 );
+    panel->SetSizer( sizer );
+
+    m_branchSearch->Bind( wxEVT_TEXT,
+                          [this]( wxCommandEvent& )
+                          {
+                              reloadBranches();
+                          } );
+
+    m_branchesList->Bind( wxEVT_LIST_ITEM_SELECTED,
+                          [this]( wxListEvent& aEvent )
+                          {
+                              if( !m_fillingBranches )
+                                  showBranchDetail( m_branchesList->GetItemText( aEvent.GetIndex(), 0 ) );
+                          } );
+
+    return panel;
+}
+
+
+wxPanel* GIT_ADVANCED_DIALOG::buildBranchDetailPane( wxWindow* aParent )
+{
+    wxPanel*    detail = new wxPanel( aParent );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    m_branchTitle = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_branchTitle->SetFont( m_branchTitle->GetFont().Bold() );
+    m_branchCommit = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_branchAuthor = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_branchMessage = new wxTextCtrl( detail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                      wxTE_MULTILINE | wxTE_READONLY );
+    m_branchMessage->SetMinSize( detail->FromDIP( wxSize( -1, 90 ) ) );
+    m_branchSync = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+
+    wxButton* newBranch = new wxButton( detail, wxID_ANY, _( "New Branch..." ) );
+    wxButton* deleteBranch = new wxButton( detail, wxID_ANY, _( "Delete Branch" ) );
+    markDestructive( deleteBranch );
+
+    wxBoxSizer* buttons = new wxBoxSizer( wxHORIZONTAL );
+    buttons->Add( newBranch, 1, wxRIGHT, 4 );
+    buttons->Add( deleteBranch, 1 );
+
+    sizer->Add( m_branchTitle, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_branchCommit, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_branchAuthor, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 4 );
+    sizer->Add( new wxStaticText( detail, wxID_ANY, _( "Message:" ) ), 0, wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_branchMessage, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_branchSync, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->AddStretchSpacer();
+    sizer->Add( buttons, 0, wxEXPAND | wxALL, 8 );
+    detail->SetSizer( sizer );
+
+    newBranch->Bind( wxEVT_BUTTON,
+                     [this]( wxCommandEvent& )
+                     {
+                         onNewBranch();
+                     } );
+    deleteBranch->Bind( wxEVT_BUTTON,
+                        [this]( wxCommandEvent& )
+                        {
+                            onDeleteBranch();
+                        } );
+
+    return detail;
+}
+
+
+void GIT_ADVANCED_DIALOG::reloadBranches()
+{
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    std::unique_lock<std::mutex>  lock = common->TryLockAction();
+
+    if( !lock.owns_lock() )
+    {
+        m_reloadRetryTimer.Start( 1000, wxTIMER_ONE_SHOT );
+        return;
+    }
+
+    populateBranches();
+}
+
+
+void GIT_ADVANCED_DIALOG::showBranchDetail( const wxString& aBranch )
+{
+    if( aBranch.IsEmpty() )
+    {
+        hideBranchDetail();
+        return;
+    }
+
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    std::unique_lock<std::mutex>  lock = common->TryLockAction();
+
+    // The reload keeps the selection and fills the pane then.
+    if( !lock.owns_lock() )
+    {
+        m_reloadRetryTimer.Start( 1000, wxTIMER_ONE_SHOT );
+        return;
+    }
+
+    fillBranchDetail( common->GetBranchDetail( aBranch ) );
+}
+
+
+void GIT_ADVANCED_DIALOG::fillBranchDetail( const KIGIT_BRANCH_DETAIL& aDetail )
+{
+    if( !aDetail.found )
+    {
+        hideBranchDetail();
+        return;
+    }
+
+    m_branchTitle->SetLabel( wxString::Format( _( "Branch: %s" ), aDetail.name ) );
+    m_branchCommit->SetLabel(
+            wxString::Format( _( "Commit: %s, %s" ), aDetail.tipHash, relativeDate( aDetail.when ) ) );
+    m_branchAuthor->SetLabel( wxString::Format( _( "Author: %s <%s>" ), aDetail.author, aDetail.email ) );
+    m_branchMessage->ChangeValue( aDetail.message );
+
+    wxString sync;
+
+    if( aDetail.upstream.IsEmpty() )
+        sync = _( "Not tracking a remote branch." );
+    else if( aDetail.ahead == 0 && aDetail.behind == 0 )
+        sync = wxString::Format( _( "Up to date with %s." ), aDetail.upstream );
+    else if( aDetail.behind == 0 )
+        sync = wxString::Format( _( "%zu commits ahead of %s." ), aDetail.ahead, aDetail.upstream );
+    else if( aDetail.ahead == 0 )
+        sync = wxString::Format( _( "%zu commits behind %s." ), aDetail.behind, aDetail.upstream );
+    else
+        sync = wxString::Format( _( "%zu commits ahead and %zu behind %s." ), aDetail.ahead, aDetail.behind,
+                                 aDetail.upstream );
+
+    m_branchSync->SetLabel( sync );
+
+    if( !m_branchesSplitter->IsSplit() )
+        m_branchesSplitter->SplitVertically( m_branchesList->GetParent(), m_branchDetail, m_branchSashPos );
+
+    m_branchDetail->Layout();
+}
+
+
+void GIT_ADVANCED_DIALOG::hideBranchDetail()
+{
+    unsplitKeepingSash( m_branchesSplitter, m_branchDetail, m_branchSashPos );
 }
 
 
@@ -2342,15 +2557,19 @@ wxString GIT_ADVANCED_DIALOG::selectedText( wxListCtrl* aList, int aColumn ) con
 
 void GIT_ADVANCED_DIALOG::onNewBranch()
 {
-    wxString name = wxGetTextFromUser( _( "New branch name:" ), _( "New Branch" ), wxEmptyString, this );
+    // The new branch starts where the selected one is, so a branch can be made off any other.
+    wxString from = selectedText( m_branchesList, 0 );
+    wxString prompt = from.IsEmpty() ? _( "New branch name:" )
+                                     : wxString::Format( _( "New branch from '%s', name:" ), from );
+    wxString name = wxGetTextFromUser( prompt, _( "New Branch" ), wxEmptyString, this );
 
     if( name.IsEmpty() )
         return;
 
     runGitAction(
-            [name]( KIGIT_COMMON& aCommon )
+            [name, from]( KIGIT_COMMON& aCommon )
             {
-                return aCommon.CreateBranch( name );
+                return aCommon.CreateBranch( name, from );
             },
             wxString::Format( _( "Could not create branch '%s'." ), name ) );
 }

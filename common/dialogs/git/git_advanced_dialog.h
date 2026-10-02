@@ -41,6 +41,7 @@ class EDA_BASE_FRAME;
 enum class BITMAPS : unsigned int;
 class GIT_COMMIT_PANE;
 class KIGIT_COMMON;
+struct KIGIT_BRANCH_DETAIL;
 struct KIGIT_COMMIT_DETAIL;
 struct KIGIT_COMMIT_INFO;
 struct KIGIT_HISTORY_FILTER;
@@ -117,6 +118,18 @@ private:
 
     /// The Changes page: the docked panel's commit controls with the selected file's diff below.
     wxWindow* buildChangesPage( wxWindow* aBook );
+
+    /// The Branches page: a searchable list beside the selected branch's detail.
+    wxWindow* buildBranchesPage( wxWindow* aBook );
+    wxPanel*  buildBranchDetailPane( wxWindow* aParent );
+
+    /// Refill the branch list after the search text changed.
+    void reloadBranches();
+
+    /// Fill the detail pane with aBranch, or hide it when the name is empty or gone.
+    void showBranchDetail( const wxString& aBranch );
+    void fillBranchDetail( const KIGIT_BRANCH_DETAIL& aDetail );
+    void hideBranchDetail();
 
     /// Show the working copy of aPath against its committed version, or hide that area.
     void showWorkingDiff( const wxString& aPath );
@@ -273,8 +286,19 @@ private:
     GIT_COMMIT_PANE*    m_changesPane;
     GIT_FILE_DIFF_AREA* m_workingDiff;
 
+    // Branches page
+    wxSearchCtrl*     m_branchSearch;
+    wxSplitterWindow* m_branchesSplitter;
+    wxListCtrl*       m_branchesList;
+    wxStaticText*     m_branchCount;
+    wxPanel*          m_branchDetail;
+    wxStaticText*     m_branchTitle;
+    wxStaticText*     m_branchCommit;
+    wxStaticText*     m_branchAuthor;
+    wxTextCtrl*       m_branchMessage;
+    wxStaticText*     m_branchSync;
+
     // The other pages
-    wxListCtrl*   m_branchesList;
     wxListCtrl*   m_remotesList;
     wxListCtrl*   m_stashesList;
     wxListCtrl*   m_tagsList;
@@ -330,6 +354,12 @@ private:
 
     /// Where the user left the sash between the Changes page's list and its diff area.
     int m_changesSashPos = 0;
+
+    /// Where the user left the sash between the branch list and its detail pane.
+    int m_branchSashPos = 0;
+
+    /// True while the branch list is being refilled, when its selection events are its own.
+    bool m_fillingBranches = false;
 
     /// Waits for the user to pause typing in the search box before walking the history again.
     wxTimer m_historySearchTimer;
