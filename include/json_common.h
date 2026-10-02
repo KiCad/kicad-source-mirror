@@ -155,6 +155,11 @@ struct std::char_traits<wxUniChar>
 #include <nlohmann/json.hpp>
 #include <kicommon.h>
 
+
+#define ALLOW_EXCEPTIONS true
+#define IGNORE_COMMENTS true
+
+
 /**
  * This is simply a "stub" meant to inform MSVC when compiling shared libraries that it can find
  * template instances in kicommon of nlohmann::json's various templates

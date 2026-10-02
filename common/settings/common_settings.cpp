@@ -805,12 +805,10 @@ bool COMMON_SETTINGS::migrateSchema6to7()
     try
     {
         std::ifstream eeschemaFile( eeschemaPath.GetFullPath().fn_str() );
-        nlohmann::json eeschemaSettings = nlohmann::json::parse( eeschemaFile, nullptr,
-                                                                 /* allow_exceptions = */ true,
-                                                                 /* ignore_comments  = */ true );
+        nlohmann::json eeschemaSettings = nlohmann::json::parse( eeschemaFile, nullptr, ALLOW_EXCEPTIONS,
+                                                                 IGNORE_COMMENTS );
 
-        const nlohmann::json::json_pointer fieldNamesPointer(
-                "/drawing/field_names"_json_pointer );
+        const nlohmann::json::json_pointer fieldNamesPointer( "/drawing/field_names"_json_pointer );
 
         if( eeschemaSettings.contains( fieldNamesPointer )
                 && eeschemaSettings.at( fieldNamesPointer ).is_string() )

@@ -115,9 +115,7 @@ API_PLUGIN_CONFIG::API_PLUGIN_CONFIG( API_PLUGIN& aParent, const wxFileName& aCo
 
     try
     {
-        js = nlohmann::json::parse( fstream, nullptr,
-                                    /* allow_exceptions = */ true,
-                                    /* ignore_comments  = */ true );
+        js = nlohmann::json::parse( fstream, nullptr, ALLOW_EXCEPTIONS, IGNORE_COMMENTS );
     }
     catch( const std::exception& e )
     {
