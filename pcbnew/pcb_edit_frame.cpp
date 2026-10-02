@@ -895,6 +895,7 @@ void PCB_EDIT_FRAME::SetBoard( BOARD* aBoard, bool aBuildConnectivity, PROGRESS_
 
     PCB_BASE_EDIT_FRAME::SetBoard( aBoard, aReporter );
 
+    aBoard->AddListener( this );
     aBoard->SetProject( &Prj() );
 
     if( aBuildConnectivity )
@@ -2416,7 +2417,7 @@ void PCB_EDIT_FRAME::OnModify()
 
     // A generated table reports the board, so any edit may already have made it wrong
     // A drill chart compares a counter but a stackup table regenerates its text, ~100 us at 32 layers
-    RefreshGeneratedTables();
+    RefreshGeneratedTables( *GetBoard() );
 
     Update3DView( true, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
 
@@ -2425,40 +2426,26 @@ void PCB_EDIT_FRAME::OnModify()
 }
 
 
-int PCB_EDIT_FRAME::RefreshGeneratedTables()
+void PCB_EDIT_FRAME::OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aItems )
 {
+    bool rebuilt = false;
+
+    for( BOARD_ITEM* item : aItems )
+    {
+        if( !IsGeneratedTableType( item->Type() ) )
+            continue;
+
+        rebuilt = true;
+
+        if( GetCanvas() )
+            GetCanvas()->GetView()->Update( item );
+    }
+
+    // The rebuild may have freed selected cells, which can no longer be asked what they were
     PCB_SELECTION_TOOL* selTool = m_toolManager ? m_toolManager->GetTool<PCB_SELECTION_TOOL>() : nullptr;
-    bool                holdsGeneratedCells = false;
 
-    // Read before the refresh, which may free the cells. Skipping the rebuild otherwise avoids
-    // a whole-board walk on every edit that only makes a drill chart stale
-    if( selTool )
-    {
-        const PCB_SELECTION& selection = selTool->GetSelection();
-        holdsGeneratedCells = std::any_of( selection.begin(), selection.end(), IsGeneratedTableCell );
-    }
-
-    const int rebuilt = ::RefreshGeneratedTables( *GetBoard() );
-
-    if( rebuilt == 0 )
-        return 0;
-
-    // No commit held the tables, so the rebuild may have freed selected cells
-    if( holdsGeneratedCells )
+    if( rebuilt && selTool && !selTool->GetSelection().Empty() )
         selTool->RebuildSelection();
-
-    // Nor did one update the view, which would keep drawing the old cells. Tables are few, so
-    // every one is updated rather than tracking which were stale
-    if( GetCanvas() )
-    {
-        for( BOARD_ITEM* item : GetBoard()->Drawings() )
-        {
-            if( IsGeneratedTableType( item->Type() ) )
-                GetCanvas()->GetView()->Update( item );
-        }
-    }
-
-    return rebuilt;
 }
 
 

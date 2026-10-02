@@ -50,6 +50,9 @@ enum class GENERATED_TABLE_UNITS
  */
 constexpr int GENERATED_TABLE_MAX_COLUMN_WIDTH = 1000 * 1000000;
 
+/// The most digits a generated table prints after the decimal point
+constexpr int GENERATED_TABLE_MAX_PRECISION = 6;
+
 
 /**
  * A column set can be no wider than this in total, summed after each column is clamped to

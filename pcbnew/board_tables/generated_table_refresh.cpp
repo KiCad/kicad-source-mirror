@@ -40,8 +40,8 @@ int RefreshGeneratedTables( BOARD& aBoard )
 {
     // Pending state is committed only once every table has rebuilt, so a table that throws
     // cannot leave half a profile behind
-    GENERATED_TABLE_REFRESH refresh( aBoard );
-    int                     rebuilt = 0;
+    GENERATED_TABLE_REFRESH  refresh( aBoard );
+    std::vector<BOARD_ITEM*> rebuilt;
 
     for( BOARD_ITEM* item : aBoard.Drawings() )
     {
@@ -54,11 +54,16 @@ int RefreshGeneratedTables( BOARD& aBoard )
             continue;
 
         table->RebuildCells( aBoard, &refresh );
-        rebuilt++;
+        rebuilt.push_back( table );
     }
 
-    if( rebuilt )
-        refresh.Commit();
+    if( rebuilt.empty() )
+        return 0;
 
-    return rebuilt;
+    refresh.Commit();
+
+    // No commit carried the rebuild, so this is how the editor learns its view and selection are out of date
+    aBoard.OnItemsChanged( rebuilt );
+
+    return static_cast<int>( rebuilt.size() );
 }

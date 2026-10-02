@@ -1421,9 +1421,6 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
         wxString oldVariant = board->GetCurrentVariant();
         board->SetCurrentVariant( getSelectedVariant() );
 
-        // Before the plotter's own refresh, which cannot keep the editor's selection and view in step
-        m_editFrame->RefreshGeneratedTables();
-
         PCB_PLOTTER pcbPlotter( m_editFrame->GetBoard(), &reporter, m_plotOpts );
 
         LSEQ layersToPlot = m_plotOpts.GetLayerSelection().UIOrder();

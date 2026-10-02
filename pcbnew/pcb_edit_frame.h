@@ -23,6 +23,7 @@
 
 #include "pcb_base_edit_frame.h"
 #include "zones.h"
+#include <board.h>
 #include <mail_type.h>
 #include <settings/app_settings.h>
 #include <variant>
@@ -81,7 +82,7 @@ wxDECLARE_EVENT( EDA_EVT_PCB_LAST_SCH_SHEET_CHANGED, wxCommandEvent );
  *
  * See also class PCB_BASE_FRAME(): Basic class for Pcbnew and GerbView.
  */
-class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
+class PCB_EDIT_FRAME : public PCB_BASE_EDIT_FRAME, public BOARD_LISTENER
 {
 public:
     virtual ~PCB_EDIT_FRAME();
@@ -289,14 +290,9 @@ public:
     void OnModify() override;
 
     /**
-     * Rebuild every stale generated table on the board, keeping the selection and view in step.
-     *
-     * Call this rather than the board-level function whenever the board is the one being edited,
-     * since a rebuild outside a commit can free table cells the selection still holds.
-     *
-     * @return the number of tables rebuilt.
+     * Keep the selection and view in step with generated tables rebuilt outside a commit.
      */
-    int RefreshGeneratedTables();
+    void OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aItems ) override;
 
     /**
      * Change the currently active layer to \a aLayer and also update the #APPEARANCE_CONTROLS.

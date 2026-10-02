@@ -296,30 +296,6 @@ void API_HANDLER_BOARD::deleteItemsInternal( std::map<KIID, ItemDeletionStatus>&
 }
 
 
-void API_HANDLER_BOARD::refreshGeneratedTables()
-{
-    ::RefreshGeneratedTables( *board() );
-}
-
-
-void API_HANDLER_BOARD::prepareGeneratedTablesForSave()
-{
-    // An open commit edits holes in place without telling the board, so the drill counter would miss them
-    if( !m_activeClients.empty() )
-        board()->BumpDrillModelGeneration();
-
-    refreshGeneratedTables();
-}
-
-
-void API_HANDLER_BOARD::onCommitDropped()
-{
-    // A save during the commit may have rebuilt tables from the edits just discarded
-    board()->BumpDrillModelGeneration();
-    refreshGeneratedTables();
-}
-
-
 GENERATOR_TOOL* API_HANDLER_BOARD::ensureGeneratorTool() const
 {
     TOOL_MANAGER* mgr = toolManager();
@@ -1494,8 +1470,6 @@ HANDLER_RESULT<SavedDocumentResponse> API_HANDLER_BOARD::handleSaveDocumentToStr
     SavedDocumentResponse response;
     response.mutable_document()->CopyFrom( aCtx.Request.document() );
 
-    prepareGeneratedTablesForSave();
-
     CLIPBOARD_IO io;
     io.SetWriter(
         [&]( const wxString& aData )
@@ -1515,7 +1489,7 @@ HANDLER_RESULT<SavedSelectionResponse> API_HANDLER_BOARD::handleSaveSelectionToS
     if( std::optional<ApiResponseStatus> headless = checkForHeadless( "SaveSelectionToString" ) )
         return tl::unexpected( *headless );
 
-    prepareGeneratedTablesForSave();
+    RefreshGeneratedTables( *board() );
 
     SavedSelectionResponse response;
 

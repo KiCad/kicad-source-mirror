@@ -275,8 +275,6 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSaveDocument(
         return tl::unexpected( e );
     }
 
-    prepareGeneratedTablesForSave();
-
     if( !pcbContext()->SaveBoard() )
     {
         ApiResponseStatus e;
@@ -377,8 +375,6 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSaveCopyOfDocument(
     }
 
     BOARD* board = this->board();
-
-    prepareGeneratedTablesForSave();
 
     if( board->GetFileName().Matches( boardPath.GetFullPath() ) )
     {
@@ -1471,21 +1467,6 @@ void API_HANDLER_PCB::onModified()
         frame()->OnModify();
         frame()->UpdateUserInterface();
     }
-    else
-    {
-        // OnModify refreshes them in the editor. Headless nothing else would
-        refreshGeneratedTables();
-    }
-}
-
-
-void API_HANDLER_PCB::refreshGeneratedTables()
-{
-    // The frame also updates the view and any selection holding a rebuilt cell
-    if( frame() )
-        frame()->RefreshGeneratedTables();
-    else
-        API_HANDLER_BOARD::refreshGeneratedTables();
 }
 
 

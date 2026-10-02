@@ -94,7 +94,7 @@ private:
  * Bring every generated table on the board up to date and return how many were rebuilt.
  *
  * A generated table is derived data. Anything that reads one calls this first, so a table can
- * never show a board that has moved on.
+ * never show a board that has moved on. The board's listeners are told which tables were rebuilt.
  */
 int RefreshGeneratedTables( BOARD& aBoard );
 

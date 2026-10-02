@@ -23,6 +23,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <board.h>
+#include <board_tables/generated_table_refresh.h>
 #include <component_classes/component_class_manager.h>
 #include <footprint.h>
 #include <lset.h>
@@ -115,6 +116,10 @@ BOARD* BOARD_COMMIT::GetBoard() const
 
 COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType, BASE_SCREEN* aScreen, RECURSE_MODE aRecurse )
 {
+    // A modified item is edited in place before the push tells the board, and a save can read it in between
+    if( BOARD* board = GetBoard(); board && ( aChangeType & CHT_TYPE ) == CHT_MODIFY && aItem->IsBOARD_ITEM() )
+        board->bumpDrillModelFor( { static_cast<BOARD_ITEM*>( aItem ) } );
+
     if( aRecurse == RECURSE_MODE::RECURSE )
     {
         if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( aItem ) )
@@ -883,6 +888,9 @@ EDA_ITEM* BOARD_COMMIT::MakeImage( EDA_ITEM* aItem )
 void BOARD_COMMIT::Revert()
 {
     RevertToCheckpoint( 0 );
+
+    // A save during the commit may have rebuilt tables from the edits just discarded
+    RefreshGeneratedTables( *GetBoard() );
 }
 
 

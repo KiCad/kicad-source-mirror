@@ -22,6 +22,7 @@
 #include <wx/log.h>
 
 #include <board.h>
+#include <board_tables/generated_table_refresh.h>
 #include <build_version.h>
 #include <core/ignore.h>
 #include <footprint.h>
@@ -517,6 +518,9 @@ void CLIPBOARD_IO::SaveBoard( const wxString& aFileName, BOARD& aBoard,
     init( aProperties );
 
     m_board = &aBoard; // after init()
+
+    // An open API commit edits items without telling the board, so its tables can be stale
+    RefreshGeneratedTables( aBoard );
 
     m_formatter.Print( "(kicad_pcb (version %d) (generator \"pcbnew\") (generator_version %s)",
                   SEXPR_BOARD_FILE_VERSION,

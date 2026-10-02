@@ -23,6 +23,7 @@
 #include <base_screen.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <board_tables/generated_table_refresh.h>
 #include <drawing_sheet/ds_data_model.h>
 #include <drc/drc_engine.h>
 #include <filename_resolver.h>
@@ -183,6 +184,7 @@ bool BOARD_LOADER::SaveBoard( wxString& aFileName, BOARD& aBoard, PCB_IO_MGR::PC
     aBoard.BuildConnectivity();
     aBoard.SynchronizeNetsAndNetClasses( false );
     aBoard.SynchronizeProperties();
+    RefreshGeneratedTables( aBoard );
 
     try
     {

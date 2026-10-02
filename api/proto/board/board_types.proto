@@ -1735,6 +1735,8 @@ message DrillChart
   repeated DrillChartColumn columns = 3;
 
   kiapi.common.types.Units units = 4;
+
+  // Digits after the decimal point, from 0 to 6.  A value outside that range is rejected.
   int32 precision = 5;
 
   bool show_totals = 6;
@@ -2122,6 +2124,8 @@ message StackupTable
   repeated StackupTableColumn columns = 2;
 
   kiapi.common.types.Units units = 3;
+
+  // Digits after the decimal point, from 0 to 6.  A value outside that range is rejected.
   int32 precision = 4;
 
   map<int32, string> row_keys = 5;

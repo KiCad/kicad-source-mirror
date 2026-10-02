@@ -34,6 +34,7 @@
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <board_loader.h>
+#include <board_tables/generated_table_refresh.h>
 #include <3d_viewer/eda_3d_viewer_frame.h>
 #include <footprint_import_reconciler.h>
 #include <import_design_rules.h>
@@ -1073,6 +1074,8 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
         GetBoard()->SynchronizeNetsAndNetClasses( false );
     }
 
+    RefreshGeneratedTables( *GetBoard() );
+
     wxString   lowerTxt;
 
     // On Windows, ensure the target file is writeable by clearing problematic attributes like
@@ -1175,6 +1178,7 @@ bool PCB_EDIT_FRAME::SavePcbCopy( const wxString& aFileName, bool aCreateProject
 
     GetBoard()->SynchronizeNetsAndNetClasses( false );
     GetBoard()->SynchronizeProperties();
+    RefreshGeneratedTables( *GetBoard() );
 
     // On Windows, ensure the target file is writeable by clearing problematic attributes like
     // hidden or read-only. This can happen when files are synced via cloud services.

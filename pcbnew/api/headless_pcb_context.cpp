@@ -21,6 +21,7 @@
 #include <api/headless_pcb_context.h>
 #include <board.h>
 #include <board_loader.h>
+#include <board_tables/generated_table_refresh.h>
 #include <common.h>
 #include <component_classes/component_class_manager.h>
 #include <drc/drc_engine.h>
@@ -92,6 +93,16 @@ wxString HEADLESS_PCB_CONTEXT::GetCurrentFileName() const
         return wxEmptyString;
 
     return m_board->GetFileName();
+}
+
+
+void HEADLESS_PCB_CONTEXT::SetContentModified( bool aModified )
+{
+    m_contentModified = aModified;
+
+    // The editor does this from OnModify
+    if( aModified && m_board )
+        RefreshGeneratedTables( *m_board );
 }
 
 

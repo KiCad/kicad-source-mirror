@@ -629,20 +629,6 @@ BOARD* PCBNEW_JOBS_HANDLER::getBoard( const wxString& aPath )
 }
 
 
-int PCBNEW_JOBS_HANDLER::refreshGeneratedTables( BOARD* aBoard )
-{
-    if( Pgm().IsGUI() )
-    {
-        PCB_EDIT_FRAME* editFrame = (PCB_EDIT_FRAME*) m_kiway->Player( FRAME_PCB_EDITOR, false );
-
-        if( editFrame && editFrame->GetBoard() == aBoard )
-            return editFrame->RefreshGeneratedTables();
-    }
-
-    return RefreshGeneratedTables( *aBoard );
-}
-
-
 LSEQ PCBNEW_JOBS_HANDLER::convertLayerArg( wxString& aLayerString, BOARD* aBoard ) const
 {
     std::map<wxString, LSET> layerUserMasks;
@@ -1587,8 +1573,6 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aSvgJob, *m_reporter );
 
-    refreshGeneratedTables( brd );
-
     PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
 
     return plotJob( aSvgJob, plotter, layersToPlot, outPath, isSingle, isSingle );
@@ -1630,8 +1614,6 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, aDxfJob, *m_reporter );
 
-    refreshGeneratedTables( brd );
-
     PCB_PLOTTER plotter( brd, m_reporter, plotOpts );
 
     return plotJob( aDxfJob, plotter, layersToPlot, outPath, isSingle, isSingle );
@@ -1670,8 +1652,6 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
 
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, pdfJob, *m_reporter );
-
-    refreshGeneratedTables( brd );
 
     PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
 
@@ -1713,8 +1693,6 @@ int PCBNEW_JOBS_HANDLER::JobExportPng( JOB* aJob )
 
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, pngJob, *m_reporter );
-
-    refreshGeneratedTables( brd );
 
     PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
 
@@ -1762,8 +1740,6 @@ int PCBNEW_JOBS_HANDLER::JobExportPs( JOB* aJob )
 
     PCB_PLOT_PARAMS plotOpts;
     PCB_PLOTTER::PlotJobToPlotOpts( plotOpts, psJob, *m_reporter );
-
-    refreshGeneratedTables( brd );
 
     PCB_PLOTTER pcbPlotter( brd, m_reporter, plotOpts );
 
@@ -1854,7 +1830,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     LSET layersToPlot = LSET( aGerberJob->ResolvePlotLayers( brd->GetEnabledLayers() ) ) & brd->GetEnabledLayers();
 
     // Once for the run, not per file, so an update rebuilds each chart once
-    refreshGeneratedTables( brd );
+    RefreshGeneratedTables( *brd );
 
     for( PCB_LAYER_ID layer : layersToPlot.UIOrder() )
     {
@@ -2315,7 +2291,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     // We are feeding it one layer at the start here to silence a logic check
 
     // It drives StartPlotBoard directly rather than PCB_PLOTTER::Plot, so it refreshes on its own
-    refreshGeneratedTables( brd );
+    RefreshGeneratedTables( *brd );
 
     PLOTTER* plotter = StartPlotBoard( brd, &plotOpts, layer, layerName, outPath, sheetName, sheetPath );
     bool     success = false;
@@ -3350,7 +3326,7 @@ int PCBNEW_JOBS_HANDLER::JobUpgrade( JOB* aJob )
 
         // A chart is derived data, so the upgrade brings every one up to date and saves if
         // that changed anything
-        if( refreshGeneratedTables( brd ) > 0 )
+        if( RefreshGeneratedTables( *brd ) > 0 )
             shouldSave = true;
 
         if( shouldSave )

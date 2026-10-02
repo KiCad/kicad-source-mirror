@@ -144,8 +144,6 @@ protected:
 
     virtual void onModified() {}
 
-    virtual void onCommitDropped() {}
-
 protected:
     std::map<std::string, std::pair<KIID, std::unique_ptr<COMMIT>>> m_commits;
 

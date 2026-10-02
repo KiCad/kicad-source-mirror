@@ -72,7 +72,7 @@ void PackGeneratedTable( const PCB_GENERATED_TABLE& aTable, MSG& aMsg )
 /**
  * The reverse of PackGeneratedTable. False, possibly with aTable partly updated, when the
  * message puts the table on a manufacturing layer, names a column the table's schema does
- * not know, or leaves no usable column set.
+ * not know, leaves no usable column set, or asks for a precision outside the supported range.
  */
 template <typename MSG>
 bool UnpackGeneratedTable( const MSG& aMsg, PCB_GENERATED_TABLE& aTable )
@@ -147,6 +147,10 @@ bool UnpackGeneratedTable( const MSG& aMsg, PCB_GENERATED_TABLE& aTable )
 
     for( const auto& [row, key] : aMsg.row_keys() )
         aTable.RowKeys()[row] = key;
+
+    // Refused rather than clamped, so a client never reads back a value it did not send
+    if( aMsg.precision() < 0 || aMsg.precision() > GENERATED_TABLE_MAX_PRECISION )
+        return false;
 
     aTable.SetPrecision( aMsg.precision() );
 

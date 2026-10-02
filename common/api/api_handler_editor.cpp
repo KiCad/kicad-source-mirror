@@ -125,7 +125,6 @@ HANDLER_RESULT<EndCommitResponse> API_HANDLER_EDITOR::handleEndCommit(
         commit->Revert();
         m_commits.erase( aCtx.ClientName );
         m_activeClients.erase( aCtx.ClientName );
-        onCommitDropped();
         break;
     }
 

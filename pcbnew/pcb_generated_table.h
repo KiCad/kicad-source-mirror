@@ -104,7 +104,7 @@ public:
      * Clamped. The value reaches a "%.*f" format, where a hostile file asking for two
      * billion decimals would try to allocate gigabytes.
      */
-    void SetPrecision( int aPrecision ) { m_precision = std::clamp( aPrecision, 0, 6 ); }
+    void SetPrecision( int aPrecision ) { m_precision = std::clamp( aPrecision, 0, GENERATED_TABLE_MAX_PRECISION ); }
 
     /**
      * The first data row's height, with RowHeightsDiffer saying whether it speaks for every data
