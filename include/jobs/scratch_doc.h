@@ -28,6 +28,7 @@
 #include <memory>
 #include <utility>
 
+#include <kiid.h>
 #include <project.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
@@ -241,6 +242,14 @@ SCRATCH_DOC<DOC> LoadScratchDoc( SETTINGS_MANAGER& aMgr, const wxString& aDocPat
     wxFileName pro( aDocPath );
     pro.SetExt( FILEEXT::ProjectFileExtension );
     pro.MakeAbsolute();
+
+    // A document bound to the editor's live project would share and then tear down its
+    // settings, so a live path gets a scratch project of its own.
+    if( PROJECT* active = aMgr.GetProject( pro.GetFullPath() ); active && active == &aMgr.Prj() )
+    {
+        pro = wxFileName( wxFileName::GetTempDir(), wxS( "kicad_scratch_" ) + KIID().AsString() );
+        pro.SetExt( FILEEXT::ProjectFileExtension );
+    }
 
     // LoadProject returns true both when newly loaded AND when already
     // present in the manager (see SETTINGS_MANAGER::LoadProject line 970).
