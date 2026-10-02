@@ -16,14 +16,16 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <widgets/file_checklist_ctrl.h>
+#include <wx/choice.h>
+#include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
+#include <wx/statbox.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/sizer.h>
+#include <widgets/file_checklist_ctrl.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -33,21 +35,34 @@
 ///////////////////////////////////////////////////////////////////////////////
 class GIT_COMMIT_PANE_BASE : public wxPanel
 {
-private:
-protected:
-    wxStaticText*        m_emptyLabel;
-    FILE_CHECKLIST_CTRL* m_checklist;
-    wxTextCtrl*          m_message;
-    wxCheckBox*          m_amendCheckbox;
-    wxButton*            m_commitOnlyButton;
-    wxButton*            m_commitButton;
-    wxButton*            m_pullButton;
-    wxButton*            m_advancedButton;
+	private:
 
-public:
-    GIT_COMMIT_PANE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
-                          const wxSize& size = wxSize( 500, 300 ), long style = wxTAB_TRAVERSAL,
-                          const wxString& name = wxEmptyString );
+	protected:
+		wxBoxSizer* m_branchRow;
+		wxChoice* m_branchChoice;
+		wxTextCtrl* m_summary;
+		wxStaticText* m_summaryCount;
+		wxTextCtrl* m_description;
+		wxStaticBoxSizer* m_optionsSizer;
+		wxCheckBox* m_amendCheckbox;
+		wxCheckBox* m_signOffCheckbox;
+		wxCheckBox* m_newBranchCheckbox;
+		wxTextCtrl* m_newBranchName;
+		wxBoxSizer* m_changesRow;
+		wxStaticText* m_changesLabel;
+		wxButton* m_showDiffButton;
+		wxStaticText* m_emptyLabel;
+		FILE_CHECKLIST_CTRL* m_checklist;
+		wxButton* m_commitOnlyButton;
+		wxButton* m_commitButton;
+		wxButton* m_pullButton;
+		wxButton* m_advancedButton;
 
-    ~GIT_COMMIT_PANE_BASE();
+	public:
+
+		GIT_COMMIT_PANE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,360 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
+
+		~GIT_COMMIT_PANE_BASE();
+
 };
+

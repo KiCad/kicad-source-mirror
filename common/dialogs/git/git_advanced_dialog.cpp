@@ -1227,6 +1227,20 @@ wxWindow* GIT_ADVANCED_DIALOG::buildChangesPage( wxWindow* aBook )
     sizer->Add( m_changesSplitter, 1, wxEXPAND | wxALL, 4 );
     panel->SetSizer( sizer );
 
+    // The docked panel and this page are two forms on one project, so the message starts from
+    // what the panel already holds and goes back to it as the user types. This window closes
+    // with the panel, so the panel is always there to write to.
+    if( m_pane )
+    {
+        m_changesPane->SetCommitMessage( m_pane->GetCommitMessage() );
+
+        m_changesPane->SetMessageChangedHandler(
+                [this]()
+                {
+                    m_pane->SetCommitMessage( m_changesPane->GetCommitMessage() );
+                } );
+    }
+
     m_changesPane->SetFileSelectedHandler(
             [this]( const wxString& aPath )
             {
@@ -2314,74 +2328,7 @@ void GIT_ADVANCED_DIALOG::switchToBranch( const wxString& aBranch )
     if( !sessionStillCurrent() )
         return;
 
-    if( aBranch.IsEmpty() )
-        return;
-
-    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
-    wxString                      current;
-
-    // Reading the current branch touches the repository, so do it under the lock too.
-    {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
-
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
-            return;
-        }
-
-        current = common->GetCurrentBranchName();
-    }
-
-    if( aBranch == current )
-        return;
-
-    // Switching refuses over uncommitted work, so saving the editors first would only turn
-    // unsaved edits into the very changes that block it. Ask for a commit up front instead.
-    if( !refuseOverUncommittedWork() )
-        return;
-
-    if( !IsOK( this, wxString::Format( _( "Switch to branch '%s'? This replaces the project files "
-                                          "on disk with that branch's version." ),
-                                       aBranch ) ) )
-    {
-        return;
-    }
-
-    if( !confirmWorkingTreeChange() )
-        return;
-
-    BranchResult result = BranchResult::Error;
-    wxString     resultError;
-
-    {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
-
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
-            return;
-        }
-
-        GIT_BRANCH_HANDLER handler( common.get() );
-        result = handler.SwitchToBranch( aBranch );
-        resultError = handler.GetErrorString();
-    }
-
-    if( result == BranchResult::Conflict )
-    {
-        DisplayInfoMessage( this, resultError );
-        return;
-    }
-
-    if( result != BranchResult::Success )
-    {
-        DisplayErrorMessage( this, wxString::Format( _( "Could not switch to branch '%s'." ), aBranch ),
-                             KIGIT_COMMON::GetLastGitError() );
-        return;
-    }
-
-    finishWorkingTreeChange();
+    SwitchProjectToBranch( m_parent, this, aBranch );
 }
 
 
@@ -2674,30 +2621,7 @@ void GIT_ADVANCED_DIALOG::onFetch()
 
 bool GIT_ADVANCED_DIALOG::refuseOverUncommittedWork()
 {
-    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
-    bool                          dirty = false;
-
-    {
-        std::unique_lock<std::mutex> lock = common->TryLockAction();
-
-        if( !lock.owns_lock() )
-        {
-            DisplayInfoMessage( this, _( "Another git operation is in progress. Try again in a moment." ) );
-            return false;
-        }
-
-        dirty = common->HasUncommittedTrackedChanges();
-    }
-
-    if( dirty || DocumentEditorsDirty( m_parent->Kiway() )
-        || !LibraryEditorsWithUnsavedChanges( m_parent->Kiway() ).empty() )
-    {
-        DisplayInfoMessage( this, _( "There are changes that are not committed yet, and this would run over "
-                                     "them. Commit them first, or set them aside with Stash Changes." ) );
-        return false;
-    }
-
-    return true;
+    return ProjectClearOfUncommittedWork( m_parent, this );
 }
 
 

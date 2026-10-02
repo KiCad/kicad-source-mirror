@@ -44,6 +44,7 @@
 #include <diff_merge/merge_dispatch.h>
 #include <git/text_diff.h>
 #include <git/git_compare_handler.h>
+#include <git/git_branch_handler.h>
 #include <eda_base_frame.h>
 #include <frame_type.h>
 #include <git/kicad_git_common.h>
@@ -397,6 +398,112 @@ void ReloadOpenEditors( KIWAY& aKiway, const EDITOR_SNAPSHOT& aBefore )
 
         aKiway.ExpressMail( doc.frameType, doc.reloadMail, payload );
     }
+}
+
+
+bool ProjectClearOfUncommittedWork( EDA_BASE_FRAME* aFrame, wxWindow* aParent )
+{
+    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
+    bool                          dirty = false;
+
+    {
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            DisplayInfoMessage( aParent, _( "Another git operation is in progress. Try again in a moment." ) );
+            return false;
+        }
+
+        dirty = common->HasUncommittedTrackedChanges();
+    }
+
+    if( dirty || DocumentEditorsDirty( aFrame->Kiway() )
+        || !LibraryEditorsWithUnsavedChanges( aFrame->Kiway() ).empty() )
+    {
+        DisplayInfoMessage( aParent, _( "There are changes that are not committed yet, and this would run over "
+                                        "them. Commit them first, or set them aside with Stash Changes." ) );
+        return false;
+    }
+
+    return true;
+}
+
+
+bool SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxString& aBranch )
+{
+    if( aBranch.IsEmpty() )
+        return false;
+
+    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
+    wxString                      current;
+
+    // Reading the current branch touches the repository, so do it under the lock too.
+    {
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            DisplayInfoMessage( aParent, _( "Another git operation is in progress. Try again in a moment." ) );
+            return false;
+        }
+
+        current = common->GetCurrentBranchName();
+    }
+
+    if( aBranch == current )
+        return false;
+
+    // Switching refuses over uncommitted work, so saving the editors first would only turn
+    // unsaved edits into the very changes that block it. Ask for a commit up front instead.
+    if( !ProjectClearOfUncommittedWork( aFrame, aParent ) )
+        return false;
+
+    if( !IsOK( aParent, wxString::Format( _( "Switch to branch '%s'? This replaces the project files "
+                                             "on disk with that branch's version." ),
+                                          aBranch ) ) )
+    {
+        return false;
+    }
+
+    // Save rather than close: a close would take the frame hosting the caller with it.
+    if( !PrepareEditorsForGitOperation( aFrame, GIT_EDITOR_PREP::WORKING_TREE ) )
+        return false;
+
+    EDITOR_SNAPSHOT docsBefore = CaptureOpenEditorDocs( aFrame->Kiway() );
+    BranchResult    result = BranchResult::Error;
+    wxString        resultError;
+
+    {
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            DisplayInfoMessage( aParent, _( "Another git operation is in progress. Try again in a moment." ) );
+            return false;
+        }
+
+        GIT_BRANCH_HANDLER handler( common.get() );
+        result = handler.SwitchToBranch( aBranch );
+        resultError = handler.GetErrorString();
+    }
+
+    if( result == BranchResult::Conflict )
+    {
+        DisplayInfoMessage( aParent, resultError );
+        return false;
+    }
+
+    if( result != BranchResult::Success )
+    {
+        DisplayErrorMessage( aParent, wxString::Format( _( "Could not switch to branch '%s'." ), aBranch ),
+                             KIGIT_COMMON::GetLastGitError() );
+        return false;
+    }
+
+    ReloadOpenEditors( aFrame->Kiway(), docsBefore );
+    common->NotifyRefreshListeners();
+    return true;
 }
 
 

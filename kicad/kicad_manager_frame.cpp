@@ -261,6 +261,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
                                                .Layer( 1 )
                                                .Position( 2 )
                                                .Caption( _( "Version Control" ) )
+                                               .MinSize( wxSize( m_gitCommitPane->GetMinDockWidth(), -1 ) )
                                                .PaneBorder( false )
                                                .Floatable( false )
                                                .Movable( false )

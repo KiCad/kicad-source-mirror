@@ -37,11 +37,13 @@ class KIGIT_COMMON;
 enum class GitOperation;
 class wxCommandEvent;
 class wxDataViewEvent;
+class wxStaticText;
 
 
 /**
- * Docked panel that lists the current project's changed files with a checkbox each, plus a
- * message field, a Commit and Push button, and a button that opens the advanced Git window.
+ * Docked panel for committing: the branch to commit to, a summary and description, the commit
+ * options, the changed files with a checkbox each, the commit and Get Changes buttons, and a
+ * button that opens the advanced Git window.
  */
 class GIT_COMMIT_PANE : public GIT_COMMIT_PANE_BASE
 {
@@ -55,6 +57,13 @@ public:
 
     /// Called with the path of the file the user selects in the list, or empty when none is.
     void SetFileSelectedHandler( std::function<void( const wxString& )> aHandler );
+
+    /// The message as typed. A second form on the same project shows the same text.
+    wxString GetCommitMessage() const;
+    void     SetCommitMessage( const wxString& aMessage );
+
+    /// Called when the user edits the message, so another form can follow along.
+    void SetMessageChangedHandler( std::function<void()> aHandler ) { m_messageChangedHandler = aHandler; }
 
     /// Read the project's git status and repopulate the list.
     void RefreshFileList();
@@ -70,6 +79,9 @@ public:
     /// lands here too.
     void Push();
 
+    /// The width the panel needs so its widest row fits, for the dock that holds it.
+    int GetMinDockWidth() const { return m_minDockWidth; }
+
 private:
     void onCommit( wxCommandEvent& aEvent );
     void onCommitOnly( wxCommandEvent& aEvent );
@@ -78,6 +90,9 @@ private:
     /// Drop an in-progress merge or rebase and return the project to its last commit.
     void abandonOperation( std::shared_ptr<KIGIT_COMMON> aCommon );
     void onAmendToggled( wxCommandEvent& aEvent );
+    void onNewBranchToggled( wxCommandEvent& aEvent );
+    void onBranchChosen( wxCommandEvent& aEvent );
+    void onShowDiff( wxCommandEvent& aEvent );
     void onFileActivated( wxDataViewEvent& aEvent );
     void onChecklistContextMenu( wxDataViewEvent& aEvent );
     void discardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aPath );
@@ -101,8 +116,18 @@ private:
     /// with a heading over the message and a summary of the working tree under it.
     void layoutWide();
 
-    /// Refresh the summary box's file and line counts, where the wide layout has one.
+    /// Refresh the staged count in the changes heading, and the summary box where the wide
+    /// layout has one.
     void updateSummary();
+
+    /// Fill the branch dropdown with the local branches, the current one selected. The caller
+    /// holds the git action lock.
+    void populateBranches( KIGIT_COMMON& aCommon );
+
+    /// Where the platform has no hint for a multi line box, a label lies over the description
+    /// box while it is empty.
+    void updateDescriptionHint();
+    void setDescription( const wxString& aText );
 
     /// Clear the list and disable every control while version control is off.
     void showDisabledState();
@@ -131,6 +156,9 @@ private:
     /// Set what the commit buttons say, and whether they are enabled, for the current state.
     void updateCommitButton();
 
+    /// Show how many of the summary's 72 columns are left.
+    void updateSummaryCount();
+
     /// The noun for the operation in progress, for messages.
     wxString operationNoun() const;
 
@@ -146,6 +174,9 @@ private:
     void syncListener();
 
     EDA_BASE_FRAME* m_frame;
+
+    /// The widest row's minimum width, measured before anything is hidden.
+    int m_minDockWidth = 0;
 
     bool m_hasUnpushedCommits;
 
@@ -165,6 +196,13 @@ private:
 
     /// True when an open editor held unsaved changes at the last refresh.
     bool m_editorsDirty;
+
+    /// True while the last commit is unpushed, so it may still be amended from here.
+    bool m_canAmend = false;
+
+    /// The description box's hint, a label laid over it while it is empty. Null where the box
+    /// shows its own.
+    wxStaticText* m_descriptionHint = nullptr;
 
     /// True while a push or pull worker is running. The Get Changes button then reads Cancel
     /// and requests cancellation of the running transfer.
@@ -195,6 +233,9 @@ private:
     /// On-disk identity of the open documents, taken before a pull so only the ones the merge
     /// rewrote are reloaded afterwards.
     EDITOR_SNAPSHOT m_docsBeforePull;
+
+    /// Told when the message is edited. Empty unless an owning window asked.
+    std::function<void()> m_messageChangedHandler;
 
     std::function<void( const wxString& )> m_fileSelectedHandler;
 

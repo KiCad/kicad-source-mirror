@@ -333,9 +333,20 @@ public:
     // One tag in full. Not found leaves the result's found flag clear.
     KIGIT_TAG_DETAIL GetTagDetail( const wxString& aName ) const;
 
+    /// True while the repository has no commits, so HEAD names a branch that does not exist yet.
+    bool IsHeadUnborn() const;
+
     // The caller holds the action lock, as with the query methods above.
     // Create aName at the tip of aFrom, a local or remote branch, or at HEAD when aFrom is empty.
     bool CreateBranch( const wxString& aName, const wxString& aFrom = wxEmptyString );
+
+    /**
+     * Point HEAD at a branch that does not exist yet, so the first commit creates it.
+     *
+     * Only meaningful while the repository has no commits. With no commit to start it at, a
+     * branch cannot be created any other way.
+     */
+    bool StartUnbornBranch( const wxString& aName );
     bool DeleteBranch( const wxString& aName );
 
     /// Set the uncommitted tracked changes aside as a new stash, as git stash push would.
@@ -709,6 +720,17 @@ APIEXPORT git_tree* ResolveRefToTree( git_repository* aRepo, const wxString& aRe
  */
 APIEXPORT void CollectDiffDeltas( git_diff*                                           aDiff,
                                   const std::function<void( const git_diff_delta& )>& aCallback );
+
+/**
+ * Join a summary line, an optional description and an optional sign-off into one commit
+ * message. @p aSignOff is the "Name <email>" to put after "Signed-off-by:", or empty for none.
+ * A message that already ends with that sign-off does not get it twice.
+ */
+APIEXPORT wxString ComposeCommitMessage( const wxString& aSummary, const wxString& aDescription,
+                                         const wxString& aSignOff );
+
+/// Split a commit message into its first line and the description after the first blank line.
+APIEXPORT void SplitCommitMessage( const wxString& aMessage, wxString& aSummary, wxString& aDescription );
 
 } // namespace KIGIT
 

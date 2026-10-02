@@ -35,6 +35,7 @@
 #include <wx/filename.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
+#include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/stattext.h>
@@ -49,6 +50,7 @@
 #include <diff_merge/diff_scene.h>
 #include <reporter.h>
 #include <git/kicad_git_common.h>
+#include <git/git_branch_handler.h>
 #include <git/git_commit_handler.h>
 #include <git/git_config_handler.h>
 #include <git/git_pull_handler.h>
@@ -61,6 +63,59 @@
 #include <thread>
 #include <wildcards_and_files_ext.h>
 #include <widgets/file_checklist_ctrl.h>
+
+
+// Make aName at HEAD and move onto it, so the next commit lands there. The caller holds the git
+// action lock. A failure leaves nothing behind and says why in aError and aDetail.
+static bool moveToNewBranch( KIGIT_COMMON& aCommon, const wxString& aName, wxString& aError, wxString& aDetail )
+{
+    GIT_BRANCH_HANDLER branchHandler( &aCommon );
+
+    // With no commits there is nothing to branch from, so the first commit makes the branch.
+    if( aCommon.IsHeadUnborn() )
+    {
+        if( !aCommon.StartUnbornBranch( aName ) )
+        {
+            aError = wxString::Format( _( "Could not start branch '%s'." ), aName );
+            aDetail = KIGIT_COMMON::GetLastGitError();
+            return false;
+        }
+
+        return true;
+    }
+
+    if( !aCommon.CreateBranch( aName ) )
+    {
+        aError = wxString::Format( _( "Could not create branch '%s'." ), aName );
+        aDetail = KIGIT_COMMON::GetLastGitError();
+        return false;
+    }
+
+    if( branchHandler.SwitchToBranch( aName ) != BranchResult::Success )
+    {
+        aError = wxString::Format( _( "Could not switch to the new branch '%s'." ), aName );
+        aDetail = branchHandler.GetErrorString();
+        aCommon.DeleteBranch( aName );
+        return false;
+    }
+
+    return true;
+}
+
+
+// Go back to aPrevious and drop aName, after the commit meant for it failed. The caller holds
+// the git action lock.
+static void dropNewBranch( KIGIT_COMMON& aCommon, const wxString& aName, const wxString& aPrevious )
+{
+    // Before the first commit there was no branch to come back to, and the name is only where
+    // HEAD points.
+    if( aPrevious.IsEmpty() )
+        return;
+
+    GIT_BRANCH_HANDLER branchHandler( &aCommon );
+    branchHandler.SwitchToBranch( aPrevious );
+    aCommon.DeleteBranch( aName );
+}
 
 
 // Claim a name for the version a conflict is about to replace. An earlier copy beside the same
@@ -122,14 +177,44 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
         m_editorsDirty( false ),
         m_networkBusy( false )
 {
-    m_message->SetHint( _( "Summarize your changes" ) );
+    m_summary->SetHint( _( "Summarize your changes..." ) );
+    m_newBranchName->SetHint( _( "Branch name" ) );
+    updateSummaryCount();
+
+    // Only a platform without a native hint for a multi line box gets the label laid over it.
+    if( !m_description->SetHint( _( "Extended Description (optional)" ) ) )
+    {
+        m_descriptionHint = new wxStaticText( this, wxID_ANY, _( "Extended Description (optional)" ) );
+        m_descriptionHint->SetForegroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_GRAYTEXT ) );
+        m_descriptionHint->Bind( wxEVT_LEFT_DOWN,
+                                 [this]( wxMouseEvent& )
+                                 {
+                                     m_description->SetFocus();
+                                 } );
+    }
 
     m_advancedButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onOpenAdvanced, this );
     m_commitButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onCommit, this );
     m_commitOnlyButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onCommitOnly, this );
     m_pullButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onPull, this );
     m_amendCheckbox->Bind( wxEVT_CHECKBOX, &GIT_COMMIT_PANE::onAmendToggled, this );
-    m_message->Bind( wxEVT_TEXT, &GIT_COMMIT_PANE::onMessageChanged, this );
+    m_summary->Bind( wxEVT_TEXT, &GIT_COMMIT_PANE::onMessageChanged, this );
+    m_newBranchName->Bind( wxEVT_TEXT,
+                           [this]( wxCommandEvent& )
+                           {
+                               updateCommitButton();
+                           } );
+    m_newBranchCheckbox->Bind( wxEVT_CHECKBOX, &GIT_COMMIT_PANE::onNewBranchToggled, this );
+    m_branchChoice->Bind( wxEVT_CHOICE, &GIT_COMMIT_PANE::onBranchChosen, this );
+    m_showDiffButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onShowDiff, this );
+    m_description->Bind( wxEVT_TEXT,
+                         [this]( wxCommandEvent& )
+                         {
+                             updateDescriptionHint();
+
+                             if( m_messageChangedHandler )
+                                 m_messageChangedHandler();
+                         } );
     m_checklist->Bind( wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &GIT_COMMIT_PANE::onChecklistChanged, this );
     m_checklist->SetToolTip( _( "Double click a file to see what changed in it. Right click for more." ) );
     m_checklist->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &GIT_COMMIT_PANE::onFileActivated, this );
@@ -137,6 +222,8 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     m_checklist->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED,
                        [this]( wxDataViewEvent& )
                        {
+                           m_showDiffButton->Enable( m_checklist->GetSelection().IsOk() );
+
                            if( m_fileSelectedHandler )
                                m_fileSelectedHandler( m_checklist->GetItemPath( m_checklist->GetSelection() ) );
                        } );
@@ -160,6 +247,14 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
         layoutWide();
     }
 
+    // Sized by hand, or a long branch name would set the width of the whole row. Wide enough
+    // for an ordinary name, with the tooltip carrying the rest when one is longer.
+    m_branchChoice->SetMinSize( FromDIP( wxSize( 170, -1 ) ) );
+    KIPLATFORM::UI::EllipsizeChoiceBox( m_branchChoice );
+
+    // Measured while every control is still shown.
+    m_minDockWidth = GetSizer()->CalcMin().x;
+
     RefreshFileList();
 }
 
@@ -167,9 +262,10 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
 void GIT_COMMIT_PANE::layoutWide()
 {
     wxSizer* column = GetSizer();
+    column->Detach( m_changesRow );
     column->Detach( m_emptyLabel );
     column->Detach( m_checklist );
-    column->GetItem( m_message )->SetProportion( 1 );
+    column->GetItem( m_description )->SetProportion( 1 );
     column->SetMinSize( FromDIP( wxSize( 280, -1 ) ) );
 
     wxStaticText* heading = new wxStaticText( this, wxID_ANY, _( "Commit Message" ) );
@@ -196,18 +292,19 @@ void GIT_COMMIT_PANE::layoutWide()
     summary->Add( m_summaryFiles, 0, wxLEFT | wxRIGHT | wxTOP, 4 );
     summary->Add( lines, 0, wxALL, 4 );
 
-    // Under the amend box, which sits right after the message.
-    size_t afterAmend = 0;
+    // Under the commit options box.
+    size_t afterOptions = column->GetItemCount();
 
     for( size_t ii = 0; ii < column->GetItemCount(); ++ii )
     {
-        if( column->GetItem( ii )->GetWindow() == m_amendCheckbox )
-            afterAmend = ii + 1;
+        if( column->GetItem( ii )->GetSizer() == m_optionsSizer )
+            afterOptions = ii + 1;
     }
 
-    column->Insert( afterAmend, summary, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    column->Insert( afterOptions, summary, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
 
     wxBoxSizer* files = new wxBoxSizer( wxVERTICAL );
+    files->Add( m_changesRow, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
     files->Add( m_emptyLabel, 0, wxALL, 8 );
     files->Add( m_checklist, 1, wxALL | wxEXPAND, 4 );
 
@@ -330,6 +427,8 @@ void GIT_COMMIT_PANE::RefreshFileList()
         m_lineStats = common->GetWorkingTreeLineStats( changed );
     }
 
+    populateBranches( *common );
+
     lock.unlock();
 
     // Edits still only in an editor's memory are not in the git status yet, but the commit flow
@@ -338,11 +437,9 @@ void GIT_COMMIT_PANE::RefreshFileList()
 
     // Amending is offered only while the last commit has not been pushed, so an already
     // published commit can never be rewritten from here.
-    bool canAmend = hasLocalCommits && !m_headDetached && !m_operationInProgress;
+    m_canAmend = hasLocalCommits && !m_headDetached && !m_operationInProgress;
 
-    m_amendCheckbox->Show( canAmend );
-
-    if( !canAmend )
+    if( !m_canAmend )
         m_amendCheckbox->SetValue( false );
 
     // A file the user unticked must stay unticked across a refresh, or returning to the project
@@ -369,6 +466,7 @@ void GIT_COMMIT_PANE::RefreshFileList()
     bool hasChanges = !entries.empty();
 
     m_checklist->Show( hasChanges );
+    m_changesRow->ShowItems( hasChanges );
 
     // The message field also has to be there for a message-only amend and for committing
     // unsaved editor changes, when the list itself is empty.
@@ -416,6 +514,7 @@ void GIT_COMMIT_PANE::RefreshFileList()
 
     updateCommitButton();
     Layout();
+    updateDescriptionHint();
 }
 
 
@@ -439,9 +538,12 @@ void GIT_COMMIT_PANE::showDisabledState()
     m_shownPaths.clear();
     m_checklist->SetEntries( {} );
     m_checklist->Show( false );
+    m_changesRow->ShowItems( false );
+    m_branchChoice->Clear();
+    m_branchRow->ShowItems( false );
 
+    m_canAmend = false;
     m_amendCheckbox->SetValue( false );
-    m_amendCheckbox->Show( false );
     updateMessageVisibility( false );
 
     setStatusText( _( "Version control is turned off in Preferences." ) );
@@ -465,6 +567,9 @@ void GIT_COMMIT_PANE::setStatusText( const wxString& aText )
 void GIT_COMMIT_PANE::onIdle( wxIdleEvent& aEvent )
 {
     aEvent.Skip();
+
+    // Every layout path moves the box, so the hint follows it from here.
+    updateDescriptionHint();
 
     // Editing does not announce itself to the pane, so watch for the unsaved editor state
     // changing while the pane is visible. The refresh runs only on the transition.
@@ -513,8 +618,19 @@ bool GIT_COMMIT_PANE::anyEditorDirty() const
 void GIT_COMMIT_PANE::updateMessageVisibility( bool aHasChanges )
 {
     // A commit is possible with listed changes, unsaved editor changes, or an amend. Both callers
-    // share this, so the field cannot disappear while the buttons still ask for a message.
-    m_message->Show( aHasChanges || m_editorsDirty || ( m_amendCheckbox->IsShown() && m_amendCheckbox->IsChecked() ) );
+    // share this, so the fields cannot disappear while the buttons still ask for a message.
+    bool show = aHasChanges || m_editorsDirty || ( m_canAmend && m_amendCheckbox->IsChecked() );
+
+    m_summary->Show( show );
+    m_summaryCount->Show( show );
+    m_description->Show( show );
+
+    // The options box stays for a message only amend, with just the amend tick in it.
+    m_optionsSizer->ShowItems( show || m_canAmend );
+    m_amendCheckbox->Show( m_canAmend );
+    m_signOffCheckbox->Show( show );
+    m_newBranchCheckbox->Show( show );
+    m_newBranchName->Show( show );
 }
 
 
@@ -578,8 +694,14 @@ void GIT_COMMIT_PANE::updateCommitButton()
         m_pullButton->UnsetToolTip();
 
     bool hasCheckedChanges = !m_checklist->GetCheckedPaths().empty();
-    bool amend = m_amendCheckbox->IsShown() && m_amendCheckbox->IsChecked();
-    bool hasMessage = !m_message->GetValue().Trim().IsEmpty();
+    bool amend = m_canAmend && m_amendCheckbox->IsChecked();
+    bool newBranch = !amend && m_newBranchCheckbox->IsChecked();
+    bool hasMessage = !m_summary->GetValue().Trim().IsEmpty();
+    bool hasBranchName = !newBranch || !m_newBranchName->GetValue().Trim().IsEmpty();
+
+    // An amend stays on the branch its commit is on.
+    m_newBranchCheckbox->Enable( !amend );
+    m_newBranchName->Enable( newBranch );
 
     if( amend )
     {
@@ -594,9 +716,9 @@ void GIT_COMMIT_PANE::updateCommitButton()
         // Unsaved editor changes count because the commit flow saves them first, then commits
         // what the save produced.
         m_commitButton->SetLabel( _( "Commit and Push" ) );
-        m_commitButton->Enable( hasMessage );
+        m_commitButton->Enable( hasMessage && hasBranchName );
         m_commitOnlyButton->SetLabel( _( "Commit" ) );
-        m_commitOnlyButton->Enable( hasMessage );
+        m_commitOnlyButton->Enable( hasMessage && hasBranchName );
     }
     else if( m_hasUnpushedCommits )
     {
@@ -618,9 +740,118 @@ void GIT_COMMIT_PANE::updateCommitButton()
 }
 
 
+void GIT_COMMIT_PANE::updateSummaryCount()
+{
+    // Git tools show the first line whole up to 72 columns.
+    int left = 72 - static_cast<int>( m_summary->GetValue().length() );
+    m_summaryCount->SetLabel( wxString::Format( wxS( "%d" ), left ) );
+}
+
+
 void GIT_COMMIT_PANE::onMessageChanged( wxCommandEvent& aEvent )
 {
+    updateSummaryCount();
     updateCommitButton();
+
+    if( m_messageChangedHandler )
+        m_messageChangedHandler();
+}
+
+
+wxString GIT_COMMIT_PANE::GetCommitMessage() const
+{
+    return KIGIT::ComposeCommitMessage( m_summary->GetValue(), m_description->GetValue(), wxEmptyString );
+}
+
+
+void GIT_COMMIT_PANE::SetCommitMessage( const wxString& aMessage )
+{
+    wxString summary;
+    wxString description;
+
+    KIGIT::SplitCommitMessage( aMessage, summary, description );
+
+    // ChangeValue rather than SetValue, so filling one form does not echo back into the other.
+    m_summary->ChangeValue( summary );
+    setDescription( description );
+    updateSummaryCount();
+    updateCommitButton();
+}
+
+
+void GIT_COMMIT_PANE::onNewBranchToggled( wxCommandEvent& aEvent )
+{
+    updateCommitButton();
+
+    if( m_newBranchCheckbox->IsChecked() )
+        m_newBranchName->SetFocus();
+}
+
+
+void GIT_COMMIT_PANE::onBranchChosen( wxCommandEvent& aEvent )
+{
+    SwitchProjectToBranch( m_frame, this, m_branchChoice->GetStringSelection() );
+
+    // A refused switch leaves the choice on a branch the project is not on.
+    RefreshFileList();
+}
+
+
+void GIT_COMMIT_PANE::onShowDiff( wxCommandEvent& aEvent )
+{
+    wxString path = m_checklist->GetItemPath( m_checklist->GetSelection() );
+
+    if( !path.IsEmpty() )
+        ShowGitFileDiff( m_frame, path );
+}
+
+
+void GIT_COMMIT_PANE::populateBranches( KIGIT_COMMON& aCommon )
+{
+    m_branchChoice->Clear();
+    m_branchRow->ShowItems( aCommon.GetRepo() != nullptr );
+
+    if( !aCommon.GetRepo() )
+        return;
+
+    // Only a local branch can take a commit.
+    for( const auto& [name, isRemote] : aCommon.GetAllBranches() )
+    {
+        if( !isRemote )
+            m_branchChoice->Append( name );
+    }
+
+    wxString current = aCommon.GetCurrentBranchName();
+
+    m_branchChoice->SetStringSelection( current );
+    m_branchChoice->Enable( !m_networkBusy && !m_headDetached && !m_operationInProgress );
+
+    // The box ellipsizes, so the whole name is only readable here.
+    m_branchChoice->SetToolTip( current );
+}
+
+
+void GIT_COMMIT_PANE::updateDescriptionHint()
+{
+    if( !m_descriptionHint )
+        return;
+
+    // Over the box's top left corner, where typed text would start.
+    bool    show = m_description->IsShown() && m_description->IsEmpty();
+    wxPoint at = m_description->GetPosition() + wxPoint( FromDIP( 6 ), FromDIP( 4 ) );
+
+    if( m_descriptionHint->IsShown() != show )
+        m_descriptionHint->Show( show );
+
+    if( m_descriptionHint->GetPosition() != at )
+        m_descriptionHint->SetPosition( at );
+}
+
+
+void GIT_COMMIT_PANE::setDescription( const wxString& aText )
+{
+    m_description->ChangeValue( aText );
+    updateDescriptionHint();
 }
 
 
@@ -633,21 +864,26 @@ void GIT_COMMIT_PANE::onChecklistChanged( wxDataViewEvent& aEvent )
 
 void GIT_COMMIT_PANE::updateSummary()
 {
-    if( !m_summaryFiles )
-        return;
-
     // A ticked file is staged for the commit, an unticked one is left out.
     int staged = static_cast<int>( m_checklist->GetCheckedPaths().size() );
     int unstaged = static_cast<int>( m_shownPaths.size() ) - staged;
 
-    wxString stagedText = staged == 1 ? _( "1 file will be committed" )
-                                      : wxString::Format( _( "%d files will be committed" ), staged );
-    wxString unstagedText = unstaged == 1 ? _( "1 left out" )
-                                          : wxString::Format( _( "%d left out" ), unstaged );
+    m_changesLabel->SetLabel( wxString::Format( _( "Changes to Commit (%d of %d)" ), staged,
+                                                static_cast<int>( m_shownPaths.size() ) ) );
+    m_showDiffButton->Enable( m_checklist->GetSelection().IsOk() );
 
-    m_summaryFiles->SetLabel( wxString::Format( wxS( "%s, %s" ), stagedText, unstagedText ) );
-    m_summaryAdded->SetLabel( wxString::Format( wxS( "+%d" ), m_lineStats.first ) );
-    m_summaryRemoved->SetLabel( wxString::Format( wxS( "-%d" ), m_lineStats.second ) );
+    if( m_summaryFiles )
+    {
+        wxString stagedText = staged == 1 ? _( "1 file will be committed" )
+                                          : wxString::Format( _( "%d files will be committed" ), staged );
+        wxString unstagedText = unstaged == 1 ? _( "1 left out" )
+                                              : wxString::Format( _( "%d left out" ), unstaged );
+
+        m_summaryFiles->SetLabel( wxString::Format( wxS( "%s, %s" ), stagedText, unstagedText ) );
+        m_summaryAdded->SetLabel( wxString::Format( wxS( "+%d" ), m_lineStats.first ) );
+        m_summaryRemoved->SetLabel( wxString::Format( wxS( "-%d" ), m_lineStats.second ) );
+    }
+
     Layout();
 }
 
@@ -1019,7 +1255,8 @@ void GIT_COMMIT_PANE::onAmendToggled( wxCommandEvent& aEvent )
 {
     // Ticking the box offers the last commit's message as the starting point, since an amend
     // usually keeps or touches up the existing text.
-    if( m_amendCheckbox->IsChecked() && m_message->GetValue().Trim().IsEmpty() )
+    if( m_amendCheckbox->IsChecked() && m_summary->GetValue().Trim().IsEmpty()
+        && m_description->GetValue().Trim().IsEmpty() )
     {
         std::shared_ptr<KIGIT_COMMON> common = m_frame->Prj().GetGitCommon();
         std::unique_lock<std::mutex>  lock = common->TryLockAction();
@@ -1029,7 +1266,12 @@ void GIT_COMMIT_PANE::onAmendToggled( wxCommandEvent& aEvent )
             wxString last = common->GetLastCommitMessage();
 
             if( !last.IsEmpty() )
-                m_message->SetValue( last.Trim() );
+            {
+                wxString summary, description;
+                KIGIT::SplitCommitMessage( last, summary, description );
+                m_summary->SetValue( summary );
+                setDescription( description );
+            }
         }
     }
 
@@ -1049,7 +1291,10 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
     if( !common->GetRepo() )
         return;
 
-    const bool amend = m_amendCheckbox->IsShown() && m_amendCheckbox->IsChecked();
+    const bool amend = m_canAmend && m_amendCheckbox->IsChecked();
+    const bool newBranch = !amend && m_newBranchCheckbox->IsChecked();
+    wxString   branchName = m_newBranchName->GetValue();
+    branchName.Trim( true ).Trim( false );
 
     std::vector<wxString> files = m_checklist->GetCheckedPaths();
 
@@ -1138,8 +1383,11 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
     if( !KIGIT::EnsureGitIdentity( this, common.get() ) )
         return;
 
-    CommitResult result;
+    CommitResult result = CommitResult::Error;
     wxString     error;
+    wxString     branchError;
+    wxString     branchDetail;
+    wxString     previousBranch;
 
     {
         // Committing writes to the repository, so hold the shared lock across it. If another
@@ -1154,21 +1402,40 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
 
         GIT_CONFIG_HANDLER configHandler( common.get() );
         GitUserConfig      userConfig = configHandler.GetUserConfig();
+        wxString           signOff;
 
-        GIT_COMMIT_HANDLER commitHandler( common->GetRepo() );
+        if( m_signOffCheckbox->IsChecked() )
+            signOff = wxString::Format( wxS( "%s <%s>" ), userConfig.authorName, userConfig.authorEmail );
 
-        if( amend )
+        wxString message = KIGIT::ComposeCommitMessage( m_summary->GetValue(), m_description->GetValue(), signOff );
+
+        // The new branch starts at HEAD, so switching to it leaves the working tree as it is.
+        if( newBranch )
+            previousBranch = common->GetCurrentBranchName();
+
+        if( !newBranch || moveToNewBranch( *common, branchName, branchError, branchDetail ) )
         {
-            result = commitHandler.PerformAmend( files, m_message->GetValue(), userConfig.authorName,
-                                                 userConfig.authorEmail );
-        }
-        else
-        {
-            result = commitHandler.PerformCommit( files, m_message->GetValue(), userConfig.authorName,
-                                                  userConfig.authorEmail );
-        }
+            GIT_COMMIT_HANDLER commitHandler( common->GetRepo() );
 
-        error = commitHandler.GetErrorString();
+            if( amend )
+                result = commitHandler.PerformAmend( files, message, userConfig.authorName, userConfig.authorEmail );
+            else
+                result = commitHandler.PerformCommit( files, message, userConfig.authorName, userConfig.authorEmail );
+
+            error = commitHandler.GetErrorString();
+
+            bool committed = result == CommitResult::Success || result == CommitResult::SuccessIndexStale;
+
+            // A failed commit must not leave the project on an empty new branch.
+            if( newBranch && !committed )
+                dropNewBranch( *common, branchName, previousBranch );
+        }
+    }
+
+    if( !branchError.IsEmpty() )
+    {
+        DisplayErrorMessage( this, branchError, branchDetail );
+        return;
     }
 
     // The commit exists on this path, so saying it failed would invite a second one.
@@ -1182,8 +1449,11 @@ void GIT_COMMIT_PANE::doCommit( bool aAndPush )
         return;
     }
 
-    m_message->Clear();
+    m_summary->Clear();
+    setDescription( wxEmptyString );
     m_amendCheckbox->SetValue( false );
+    m_newBranchCheckbox->SetValue( false );
+    m_newBranchName->Clear();
     common->NotifyRefreshListeners();
 
     if( aAndPush )
@@ -1200,7 +1470,12 @@ void GIT_COMMIT_PANE::setBusy( bool aBusy, const wxString& aStatus )
     m_commitButton->Enable( !aBusy );
     m_commitOnlyButton->Enable( !aBusy );
     m_amendCheckbox->Enable( !aBusy );
-    m_message->Enable( !aBusy );
+    m_signOffCheckbox->Enable( !aBusy );
+    m_newBranchCheckbox->Enable( !aBusy );
+    m_newBranchName->Enable( !aBusy && m_newBranchCheckbox->IsChecked() );
+    m_branchChoice->Enable( !aBusy && !m_headDetached && !m_operationInProgress );
+    m_summary->Enable( !aBusy );
+    m_description->Enable( !aBusy );
     m_frame->SetStatusText( aStatus );
 
     // The frame status bar is overwritten within seconds by the editors, so an outcome shown

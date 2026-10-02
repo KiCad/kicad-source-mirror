@@ -1426,6 +1426,30 @@ std::vector<std::pair<wxString, wxString>> KIGIT_COMMON::GetRemotes() const
 }
 
 
+bool KIGIT_COMMON::IsHeadUnborn() const
+{
+    return m_repo && git_repository_head_unborn( m_repo ) == 1;
+}
+
+
+bool KIGIT_COMMON::StartUnbornBranch( const wxString& aName )
+{
+    if( !m_repo || aName.IsEmpty() || !IsHeadUnborn() )
+        return false;
+
+    // Pointing HEAD at a name does not check it the way creating a branch does, so a name git
+    // would refuse has to be caught here.
+    int valid = 0;
+
+    if( git_branch_name_is_valid( &valid, aName.utf8_string().c_str() ) != GIT_OK || !valid )
+        return false;
+
+    wxString ref = wxS( "refs/heads/" ) + aName;
+
+    return git_repository_set_head( m_repo, ref.utf8_string().c_str() ) == GIT_OK;
+}
+
+
 bool KIGIT_COMMON::CreateBranch( const wxString& aName, const wxString& aFrom )
 {
     if( !m_repo || aName.IsEmpty() )
@@ -2521,6 +2545,51 @@ void CollectDiffDeltas( git_diff*                                           aDif
 
         aCallback( *delta );
     }
+}
+
+
+wxString ComposeCommitMessage( const wxString& aSummary, const wxString& aDescription, const wxString& aSignOff )
+{
+    wxString message = aSummary;
+    message.Replace( wxS( "\r\n" ), wxS( "\n" ) );
+    message.Trim( true ).Trim( false );
+
+    wxString description = aDescription;
+    description.Replace( wxS( "\r\n" ), wxS( "\n" ) );
+    description.Trim( true ).Trim( false );
+
+    if( !description.IsEmpty() )
+        message << wxS( "\n\n" ) << description;
+
+    if( !aSignOff.IsEmpty() )
+    {
+        wxString trailer = wxS( "Signed-off-by: " ) + aSignOff;
+        bool     signedOff = false;
+
+        // An amended message already carries its own sign off line.
+        for( wxString line : wxSplit( message, '\n' ) )
+        {
+            if( line.Trim() == trailer )
+                signedOff = true;
+        }
+
+        if( !signedOff )
+            message << wxS( "\n\n" ) << trailer;
+    }
+
+    return message;
+}
+
+
+void SplitCommitMessage( const wxString& aMessage, wxString& aSummary, wxString& aDescription )
+{
+    wxString message = aMessage;
+    message.Replace( wxS( "\r\n" ), wxS( "\n" ) );
+    message.Trim( true ).Trim( false );
+
+    aSummary = message.BeforeFirst( '\n' );
+    aDescription = message.AfterFirst( '\n' );
+    aDescription.Trim( false );
 }
 
 } // namespace KIGIT

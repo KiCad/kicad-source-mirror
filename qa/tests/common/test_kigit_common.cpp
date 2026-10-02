@@ -22,6 +22,7 @@
 #include <git/kicad_git_common.h>
 #include <git/kicad_git_memory.h>
 #include <git/project_git_utils.h>
+#include <git/git_branch_handler.h>
 #include <qa_utils/scoped_git_backend.h>
 
 #include <git2.h>
@@ -992,6 +993,65 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsNamesRefsOnEachCommit )
 
 
 // The detail pane shows one commit with its message, parent and per-file line counts.
+// A project just put under version control has no commits. There is nothing to branch from, so
+// naming a branch means pointing HEAD at it and letting the first commit create it.
+BOOST_AUTO_TEST_CASE( StartUnbornBranchNamesTheBranchTheFirstCommitWillCreate )
+{
+    SCOPED_GIT_BACKEND libgit;
+    ScopedTempDir      tmp;
+
+    git_repository*             repo = nullptr;
+    git_repository_init_options opts = GIT_REPOSITORY_INIT_OPTIONS_INIT;
+    opts.flags = GIT_REPOSITORY_INIT_MKPATH;
+    opts.initial_head = "main";
+
+    BOOST_REQUIRE_EQUAL( git_repository_init_ext( &repo, tmp.path.utf8_string().c_str(), &opts ), GIT_OK );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+
+    BOOST_REQUIRE( common.IsHeadUnborn() );
+
+    // There is no commit to start a branch at, which is why the method below exists.
+    BOOST_CHECK( !common.CreateBranch( wxS( "rev-a" ) ) );
+
+    // A name git itself would refuse must be refused here too, or the first commit creates a
+    // branch no git tool can name.
+    BOOST_CHECK( !common.StartUnbornBranch( wxS( "-leading" ) ) );
+    BOOST_CHECK( !common.StartUnbornBranch( wxS( "has space" ) ) );
+    BOOST_CHECK( !common.StartUnbornBranch( wxS( "bad..name" ) ) );
+
+    BOOST_REQUIRE( common.StartUnbornBranch( wxS( "rev-a" ) ) );
+
+    git_reference* head = nullptr;
+    BOOST_REQUIRE_EQUAL( git_reference_lookup( &head, repo, "HEAD" ), GIT_OK );
+    KIGIT::GitReferencePtr headPtr( head );
+
+    BOOST_CHECK_EQUAL( std::string( git_reference_symbolic_target( head ) ), "refs/heads/rev-a" );
+    BOOST_CHECK( common.IsHeadUnborn() );
+}
+
+
+// The History page shows a commit's whole message in its detail pane, summary line and body.
+BOOST_AUTO_TEST_CASE( GetCommitDetailCarriesTheWholeMessage )
+{
+    SCOPED_GIT_BACKEND libgit;
+    ScopedTempDir      tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    writeFile( tmp.path, "file.txt", "v2\n" );
+    commitWorkingFile( repo, "file.txt", "Route the power rails\n\nBody line one.\nBody line two.\n" );
+
+    KIGIT_COMMON        common( repo );
+    KIGIT_COMMIT_DETAIL detail = common.GetCommitDetail( common.GetRecentCommits( 1 )[0].hash );
+
+    BOOST_REQUIRE( detail.found );
+    BOOST_CHECK_EQUAL( detail.message.ToStdString(), "Route the power rails\n\nBody line one.\nBody line two." );
+}
+
+
 BOOST_AUTO_TEST_CASE( GetCommitDetailCountsLinesPerFile )
 {
     GitInitGuard  libgit;
@@ -1889,6 +1949,82 @@ BOOST_AUTO_TEST_CASE( GetTagDetailReadsAnnotatedAndLightweightTags )
     BOOST_CHECK( tags[3].hash.IsEmpty() && !tags[3].when.IsValid() );
 
     BOOST_CHECK( !common.GetTagDetail( wxS( "nowhere" ) ).found );
+}
+
+
+// The docked panel composes the message from a summary line, a description box and a sign off
+// tick, and takes an amended commit's message apart again to refill those boxes.
+BOOST_AUTO_TEST_CASE( ComposeAndSplitCommitMessage )
+{
+    wxString signOff = wxS( "QA Test <qa@example.com>" );
+
+    BOOST_CHECK_EQUAL( KIGIT::ComposeCommitMessage( wxS( "  Fix the thing  " ), wxEmptyString, wxEmptyString ),
+                       wxS( "Fix the thing" ) );
+    BOOST_CHECK_EQUAL( KIGIT::ComposeCommitMessage( wxS( "Fix" ), wxS( "Why it broke.\n" ), wxEmptyString ),
+                       wxS( "Fix\n\nWhy it broke." ) );
+    BOOST_CHECK_EQUAL( KIGIT::ComposeCommitMessage( wxS( "Fix" ), wxEmptyString, signOff ),
+                       wxS( "Fix\n\nSigned-off-by: QA Test <qa@example.com>" ) );
+    BOOST_CHECK_EQUAL( KIGIT::ComposeCommitMessage( wxS( "Fix" ), wxS( "Why." ), signOff ),
+                       wxS( "Fix\n\nWhy.\n\nSigned-off-by: QA Test <qa@example.com>" ) );
+
+    // An amended message already carries its sign off, even with a trailer after it, and
+    // someone else's sign off is not ours.
+    wxString signedOff = wxS( "Why.\n\nSigned-off-by: QA Test <qa@example.com>" );
+    wxString coauthor = wxS( "\nCo-authored-by: X <x@example.com>" );
+    wxString other = wxS( "Signed-off-by: Other <o@example.com>" );
+
+    BOOST_CHECK_EQUAL( KIGIT::ComposeCommitMessage( wxS( "Fix" ), signedOff, signOff ), wxS( "Fix\n\n" ) + signedOff );
+    BOOST_CHECK_EQUAL( KIGIT::ComposeCommitMessage( wxS( "Fix" ), signedOff + wxS( "\n" ), signOff ),
+                       wxS( "Fix\n\n" ) + signedOff );
+    BOOST_CHECK_EQUAL( KIGIT::ComposeCommitMessage( wxS( "Fix" ), signedOff + coauthor, signOff ),
+                       wxS( "Fix\n\n" ) + signedOff + coauthor );
+    BOOST_CHECK_EQUAL( KIGIT::ComposeCommitMessage( wxS( "Fix" ), other, signOff ),
+                       wxS( "Fix\n\n" ) + other + wxS( "\n\nSigned-off-by: QA Test <qa@example.com>" ) );
+
+    wxString summary, description;
+
+    KIGIT::SplitCommitMessage( wxS( "Fix\n\nWhy it broke.\nAnd how.\n" ), summary, description );
+    BOOST_CHECK_EQUAL( summary, wxS( "Fix" ) );
+    BOOST_CHECK_EQUAL( description, wxS( "Why it broke.\nAnd how." ) );
+
+    KIGIT::SplitCommitMessage( wxS( "Just a line\n" ), summary, description );
+    BOOST_CHECK_EQUAL( summary, wxS( "Just a line" ) );
+    BOOST_CHECK( description.IsEmpty() );
+
+    // A two line message with no blank line keeps its second line as the description.
+    KIGIT::SplitCommitMessage( wxS( "First\nSecond" ), summary, description );
+    BOOST_CHECK_EQUAL( summary, wxS( "First" ) );
+    BOOST_CHECK_EQUAL( description, wxS( "Second" ) );
+
+    // A message read back from a Windows checkout can carry carriage returns.
+    KIGIT::SplitCommitMessage( wxS( "Fix\r\n\r\nWhy.\r\n" ), summary, description );
+    BOOST_CHECK_EQUAL( summary, wxS( "Fix" ) );
+    BOOST_CHECK_EQUAL( description, wxS( "Why." ) );
+}
+
+
+// Committing to a new branch creates it at HEAD and switches before the commit. The switch
+// must leave the uncommitted work in place, since the two branches share the same tree.
+BOOST_AUTO_TEST_CASE( SwitchToBranchAtHeadKeepsUncommittedChanges )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    writeFile( tmp.path, "file.txt", "v2\n" );
+
+    KIGIT_COMMON common( repo );
+    BOOST_REQUIRE( common.CreateBranch( "topic" ) );
+
+    GIT_BRANCH_HANDLER handler( &common );
+    BOOST_REQUIRE_MESSAGE( handler.SwitchToBranch( wxS( "topic" ) ) == BranchResult::Success,
+                           handler.GetErrorString() );
+
+    BOOST_CHECK_EQUAL( common.GetCurrentBranchName(), wxS( "topic" ) );
+    BOOST_CHECK_EQUAL( readWorkingFile( wxFileName( tmp.path, "file.txt" ) ), "v2\n" );
+    BOOST_CHECK( common.HasUncommittedTrackedChanges() );
 }
 
 

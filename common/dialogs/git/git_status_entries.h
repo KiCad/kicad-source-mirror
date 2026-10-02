@@ -118,6 +118,19 @@ EDITOR_SNAPSHOT CaptureOpenEditorDocs( KIWAY& aKiway );
 void ReloadOpenEditors( KIWAY& aKiway, const EDITOR_SNAPSHOT& aBefore = {} );
 
 /**
+ * True when nothing in the project is waiting to be committed. Otherwise tells the user, since
+ * an operation that rewrites the working tree would run over that work.
+ */
+bool ProjectClearOfUncommittedWork( EDA_BASE_FRAME* aFrame, wxWindow* aParent );
+
+/**
+ * Switch the project to the local branch aBranch, after the user confirms and the open editors
+ * are saved. Refused over uncommitted work. On success the editors reload and every git
+ * surface is told to refresh. Returns true when the switch happened.
+ */
+bool SwitchProjectToBranch( EDA_BASE_FRAME* aFrame, wxWindow* aParent, const wxString& aBranch );
+
+/**
  * Open the diff for a changed file, comparing the committed version at HEAD with the working
  * copy. Design files open the visual diff, other text files a line diff, and a new file is
  * compared against an empty committed side. Binary content gets a message instead.
