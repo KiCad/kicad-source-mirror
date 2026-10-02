@@ -1952,6 +1952,46 @@ BOOST_AUTO_TEST_CASE( GetTagDetailReadsAnnotatedAndLightweightTags )
 }
 
 
+// The docked panel's Recent messages dropdown offers earlier messages to start from. Newest
+// first, a message that was used twice listed once, and only what HEAD can reach.
+BOOST_AUTO_TEST_CASE( GetRecentCommitMessagesListsDistinctMessagesNewestFirst )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    writeFile( tmp.path, "file.txt", "v2\n" );
+    commitWorkingFile( repo, "file.txt", "Update BOM\n\nSecond pass.\n" );
+    writeFile( tmp.path, "file.txt", "v3\n" );
+    commitWorkingFile( repo, "file.txt", "Route power\n" );
+    writeFile( tmp.path, "file.txt", "v4\n" );
+    commitWorkingFile( repo, "file.txt", "Update BOM\n\nSecond pass.\n" );
+    writeFile( tmp.path, "file.txt", "v5\n" );
+    commitWorkingFile( repo, "file.txt", "   \n\n" );
+
+    KIGIT_COMMON          common( repo );
+    std::vector<wxString> messages = common.GetRecentCommitMessages( 10 );
+
+    // The blank message is not offered.
+    BOOST_REQUIRE_EQUAL( messages.size(), 3 );
+    BOOST_CHECK_EQUAL( messages[0], wxS( "Update BOM\n\nSecond pass." ) );
+    BOOST_CHECK_EQUAL( messages[1], wxS( "Route power" ) );
+    BOOST_CHECK_EQUAL( messages[2], wxS( "initial" ) );
+
+    BOOST_CHECK_EQUAL( common.GetRecentCommitMessages( 1 ).size(), 1 );
+    BOOST_CHECK( KIGIT_COMMON( nullptr ).GetRecentCommitMessages( 10 ).empty() );
+
+    // A repository with no commit yet has nothing to offer either.
+    ScopedTempDir   empty;
+    git_repository* unborn = nullptr;
+    BOOST_REQUIRE_EQUAL( git_repository_init( &unborn, empty.path.utf8_string().c_str(), 0 ), GIT_OK );
+    KIGIT::GitRepositoryPtr unbornPtr( unborn );
+    BOOST_CHECK( KIGIT_COMMON( unborn ).GetRecentCommitMessages( 10 ).empty() );
+}
+
+
 // The docked panel composes the message from a summary line, a description box and a sign off
 // tick, and takes an amended commit's message apart again to refill those boxes.
 BOOST_AUTO_TEST_CASE( ComposeAndSplitCommitMessage )

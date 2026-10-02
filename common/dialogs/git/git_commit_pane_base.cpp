@@ -24,7 +24,15 @@ GIT_COMMIT_PANE_BASE::GIT_COMMIT_PANE_BASE( wxWindow* parent, wxWindowID id, con
 	wxArrayString m_branchChoiceChoices;
 	m_branchChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_branchChoiceChoices, 0 );
 	m_branchChoice->SetSelection( 0 );
-	m_branchRow->Add( m_branchChoice, 1, wxALIGN_CENTER_VERTICAL, 0 );
+	m_branchRow->Add( m_branchChoice, 0, wxALIGN_CENTER_VERTICAL, 0 );
+
+
+	m_branchRow->Add( 0, 0, 1, wxEXPAND, 0 );
+
+	wxArrayString m_recentMessagesChoices;
+	m_recentMessages = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_recentMessagesChoices, 0 );
+	m_recentMessages->SetSelection( 0 );
+	m_branchRow->Add( m_recentMessages, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 4 );
 
 
 	bMainSizer->Add( m_branchRow, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 4 );

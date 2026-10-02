@@ -40,6 +40,7 @@ class GIT_COMMIT_PANE_BASE : public wxPanel
 	protected:
 		wxBoxSizer* m_branchRow;
 		wxChoice* m_branchChoice;
+		wxChoice* m_recentMessages;
 		wxTextCtrl* m_summary;
 		wxStaticText* m_summaryCount;
 		wxTextCtrl* m_description;

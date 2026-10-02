@@ -92,6 +92,7 @@ private:
     void onAmendToggled( wxCommandEvent& aEvent );
     void onNewBranchToggled( wxCommandEvent& aEvent );
     void onBranchChosen( wxCommandEvent& aEvent );
+    void onRecentMessage( wxCommandEvent& aEvent );
     void onShowDiff( wxCommandEvent& aEvent );
     void onFileActivated( wxDataViewEvent& aEvent );
     void onChecklistContextMenu( wxDataViewEvent& aEvent );
@@ -123,6 +124,9 @@ private:
     /// Fill the branch dropdown with the local branches, the current one selected. The caller
     /// holds the git action lock.
     void populateBranches( KIGIT_COMMON& aCommon );
+
+    /// Fill the Recent messages dropdown from the log. The caller holds the git action lock.
+    void populateRecentMessages( KIGIT_COMMON& aCommon );
 
     /// Where the platform has no hint for a multi line box, a label lies over the description
     /// box while it is empty.
@@ -203,6 +207,9 @@ private:
     /// The description box's hint, a label laid over it while it is empty. Null where the box
     /// shows its own.
     wxStaticText* m_descriptionHint = nullptr;
+
+    /// The full messages behind the Recent messages dropdown, in its order after the caption.
+    std::vector<wxString> m_recentMessageTexts;
 
     /// True while a push or pull worker is running. The Get Changes button then reads Cancel
     /// and requests cancellation of the running transfer.

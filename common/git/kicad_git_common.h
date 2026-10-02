@@ -309,6 +309,9 @@ public:
     // count: a merge leaves them alone.
     bool HasUncommittedTrackedChanges() const;
 
+    // The full messages of the newest commits from HEAD, newest first, with repeats dropped.
+    std::vector<wxString> GetRecentCommitMessages( size_t aMax ) const;
+
     // The most recent commits aFilter selects, newest first, up to aMax of them.
     std::vector<KIGIT_COMMIT_INFO> GetRecentCommits( size_t aMax = 50, const KIGIT_HISTORY_FILTER& aFilter = {} ) const;
 

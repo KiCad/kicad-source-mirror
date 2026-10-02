@@ -179,6 +179,11 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
 {
     m_summary->SetHint( _( "Summarize your changes..." ) );
     m_newBranchName->SetHint( _( "Branch name" ) );
+
+    // Sized by hand, or the longest message would set the width of the whole row.
+    m_recentMessages->SetMinSize( FromDIP( wxSize( 170, -1 ) ) );
+    KIPLATFORM::UI::EllipsizeChoiceBox( m_recentMessages );
+
     updateSummaryCount();
 
     // Only a platform without a native hint for a multi line box gets the label laid over it.
@@ -206,6 +211,7 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
                            } );
     m_newBranchCheckbox->Bind( wxEVT_CHECKBOX, &GIT_COMMIT_PANE::onNewBranchToggled, this );
     m_branchChoice->Bind( wxEVT_CHOICE, &GIT_COMMIT_PANE::onBranchChosen, this );
+    m_recentMessages->Bind( wxEVT_CHOICE, &GIT_COMMIT_PANE::onRecentMessage, this );
     m_showDiffButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onShowDiff, this );
     m_description->Bind( wxEVT_TEXT,
                          [this]( wxCommandEvent& )
@@ -428,6 +434,7 @@ void GIT_COMMIT_PANE::RefreshFileList()
     }
 
     populateBranches( *common );
+    populateRecentMessages( *common );
 
     lock.unlock();
 
@@ -828,6 +835,44 @@ void GIT_COMMIT_PANE::populateBranches( KIGIT_COMMON& aCommon )
 
     // The box ellipsizes, so the whole name is only readable here.
     m_branchChoice->SetToolTip( current );
+}
+
+
+void GIT_COMMIT_PANE::populateRecentMessages( KIGIT_COMMON& aCommon )
+{
+    m_recentMessageTexts = aCommon.GetRepo() ? aCommon.GetRecentCommitMessages( 10 ) : std::vector<wxString>();
+
+    // A dropdown always shows its selection, so the first entry is the caption.
+    m_recentMessages->Clear();
+    m_recentMessages->Append( _( "Recent messages" ) );
+
+    for( const wxString& message : m_recentMessageTexts )
+    {
+        wxString line = message.BeforeFirst( '\n' );
+
+        if( line.length() > 40 )
+            line = line.Left( 37 ) + wxS( "..." );
+
+        m_recentMessages->Append( line );
+    }
+
+    m_recentMessages->SetSelection( 0 );
+    m_recentMessages->Show( !m_recentMessageTexts.empty() );
+}
+
+
+void GIT_COMMIT_PANE::onRecentMessage( wxCommandEvent& aEvent )
+{
+    int      picked = m_recentMessages->GetSelection() - 1;
+    wxString summary, description;
+
+    // The caption entry starts the message over.
+    if( picked >= 0 && picked < static_cast<int>( m_recentMessageTexts.size() ) )
+        KIGIT::SplitCommitMessage( m_recentMessageTexts[picked], summary, description );
+
+    m_summary->SetValue( summary );
+    setDescription( description );
+    m_recentMessages->SetSelection( 0 );
 }
 
 
@@ -1474,6 +1519,7 @@ void GIT_COMMIT_PANE::setBusy( bool aBusy, const wxString& aStatus )
     m_newBranchCheckbox->Enable( !aBusy );
     m_newBranchName->Enable( !aBusy && m_newBranchCheckbox->IsChecked() );
     m_branchChoice->Enable( !aBusy && !m_headDetached && !m_operationInProgress );
+    m_recentMessages->Enable( !aBusy );
     m_summary->Enable( !aBusy );
     m_description->Enable( !aBusy );
     m_frame->SetStatusText( aStatus );

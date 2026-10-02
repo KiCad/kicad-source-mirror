@@ -36,6 +36,7 @@
 #include <wx/utils.h>
 #include <cstring>
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -1057,6 +1058,50 @@ size_t KIGIT_COMMON::GetUnmergedCommitCount( const wxString& aBranch ) const
         return 0;
 
     return ahead;
+}
+
+
+std::vector<wxString> KIGIT_COMMON::GetRecentCommitMessages( size_t aMax ) const
+{
+    std::vector<wxString> messages;
+
+    if( !m_repo )
+        return messages;
+
+    git_revwalk* walker = nullptr;
+
+    if( git_revwalk_new( &walker, m_repo ) != GIT_OK )
+        return messages;
+
+    KIGIT::GitRevWalkPtr walkerPtr( walker );
+    git_revwalk_sorting( walker, GIT_SORT_TIME | GIT_SORT_TOPOLOGICAL );
+
+    if( git_revwalk_push_head( walker ) != GIT_OK )
+        return messages;
+
+    std::set<wxString> seen;
+    git_oid            oid;
+
+    while( messages.size() < aMax && git_revwalk_next( &oid, walker ) == GIT_OK )
+    {
+        git_commit* commit = nullptr;
+
+        if( git_commit_lookup( &commit, m_repo, &oid ) != GIT_OK )
+            continue;
+
+        KIGIT::GitCommitPtr commitPtr( commit );
+        wxString            message;
+
+        if( const char* text = git_commit_message( commit ) )
+            message = wxString::FromUTF8( text );
+
+        message.Trim();
+
+        if( !message.IsEmpty() && seen.insert( message ).second )
+            messages.push_back( message );
+    }
+
+    return messages;
 }
 
 
