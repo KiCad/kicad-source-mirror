@@ -25,6 +25,8 @@
 #include <cctype>
 #include <wx/string.h>
 
+#include "string_utils.h"
+
 namespace calc_parser
 {
 thread_local ERROR_COLLECTOR* g_errorCollector = nullptr;
@@ -922,15 +924,15 @@ RESULT<VALUE> EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const
     // String functions (return strings!)
     else if( name == "upper" && argc == 1 )
     {
-        std::string str = VALUE_UTILS::ToString( argValues[0] );
-        std::transform( str.begin(), str.end(), str.begin(), ::toupper );
-        return MakeValue<VALUE>( str );
+        // Use wxString case conversion, which handles all UTF-8, including multi-byte chars
+        wxString str = From_UTF8( VALUE_UTILS::ToString( argValues[0] ) );
+        return MakeValue<VALUE>( str.Upper().ToStdString() );
     }
     else if( name == "lower" && argc == 1 )
     {
-        std::string str = VALUE_UTILS::ToString( argValues[0] );
-        std::transform( str.begin(), str.end(), str.begin(), ::tolower );
-        return MakeValue<VALUE>( str );
+        // Use wxString case conversion, which handles all UTF-8, including multi-byte chars
+        wxString str = From_UTF8( VALUE_UTILS::ToString( argValues[0] ) );
+        return MakeValue<VALUE>( str.Lower().ToStdString() );
     }
     else if( name == "concat" && argc >= 2 )
     {
