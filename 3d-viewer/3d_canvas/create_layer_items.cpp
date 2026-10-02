@@ -41,6 +41,7 @@
 #include <pcb_shape.h>
 #include <pcb_track.h>
 #include <zone.h>
+#include <pcb_painter.h>        // for PCB_RENDER_SETTINGS
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
 #include <core/profile.h>
@@ -71,6 +72,44 @@ void buildPadOutlineAsPolygon( const PAD* aPad, PCB_LAYER_ID aLayer, SHAPE_POLY_
         }
     }
 }
+
+// Draw a PCB_SHAPE outline according to the line style
+void drawPcbShapeWithStyle( const PCB_SHAPE* aDrwShape, SHAPE_POLY_SET* aLayerPoly, int aInflate = 0 )
+{
+    LINE_STYLE lineStyle = aDrwShape->GetStroke().GetLineStyle();
+    int maxError = aDrwShape->GetMaxError();
+
+    if( lineStyle <= LINE_STYLE::FIRST_TYPE )
+    {
+        aDrwShape->TransformShapeToPolygon( *aLayerPoly, PCB_LAYER_ID::UNDEFINED_LAYER,
+                                             aInflate, maxError, ERROR_OUTSIDE, false ) ;
+        return;
+    }
+
+    std::vector<SHAPE*> shapes = aDrwShape->MakeEffectiveShapesForStroking( aDrwShape->GetWidth() );
+
+    const PCB_PLOT_PARAMS&     plotParams = aDrwShape->GetBoard()->GetPlotOptions();
+    KIGFX::PCB_RENDER_SETTINGS renderSettings;
+
+    renderSettings.SetDashLengthRatio( plotParams.GetDashedLineDashRatio() );
+    renderSettings.SetGapLengthRatio( plotParams.GetDashedLineGapRatio() );
+
+    int minSegCount = 8;
+
+    for( SHAPE* shape : shapes )
+    {
+        int lineWidth = aDrwShape->GetWidth() + (2*aInflate);
+        STROKE_PARAMS::Stroke( shape, lineStyle, lineWidth, &renderSettings,
+                [&]( const VECTOR2I& a, const VECTOR2I& b )
+                {
+                    TransformOvalToPolygon( *aLayerPoly, a, b, aDrwShape->GetWidth(), maxError,
+                                             ERROR_OUTSIDE, minSegCount );
+               } );
+    }
+
+    for( SHAPE* shape : shapes )
+        delete shape;
+};
 
 
 void transformFPShapesToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
@@ -145,9 +184,13 @@ void transformFPTextToPolySet( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
             {
                 // border
                 if( textbox->IsBorderEnabled() )
-                    textbox->PCB_SHAPE::TransformShapeToPolygon( aBuffer, aLayer, 0, aMaxError, aErrorLoc );
+                {
+                    // we use the box polygonal shape to honor the box rotation and line style
+                    PCB_SHAPE tb_box = textbox->GetPolygonalBoxShape();
+                    drawPcbShapeWithStyle( &tb_box, &aBuffer );
+                }
 
-                // text
+                // Text itself
                 textbox->TransformTextToPolySet( aBuffer, 0, aMaxError, aErrorLoc );
             }
         }
@@ -1571,7 +1614,7 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
                     if( IsSolderMaskLayer( layer ) && shape->HasSolderMask() )
                         margin = shape->GetSolderMaskExpansion();
 
-                    item->TransformShapeToPolySet( *layerPoly, layer, margin, item->GetMaxError(), ERROR_INSIDE );
+                    drawPcbShapeWithStyle( shape, layerPoly, margin );
                     break;
                 }
 
@@ -1589,8 +1632,9 @@ void BOARD_ADAPTER::createLayers( std::shared_ptr<REPORTER> aStatusReporter, std
 
                     if( textbox->IsBorderEnabled() )
                     {
-                        textbox->PCB_SHAPE::TransformShapeToPolygon( *layerPoly, layer, 0, textbox->GetMaxError(),
-                                                                     ERROR_INSIDE );
+                        // we use the box polygonal shape to honor the box rotation and line style
+                        PCB_SHAPE tb_box = textbox->GetPolygonalBoxShape();
+                        drawPcbShapeWithStyle( &tb_box, layerPoly );
                     }
 
                     textbox->TransformTextToPolySet( *layerPoly, 0, textbox->GetMaxError(), ERROR_INSIDE );

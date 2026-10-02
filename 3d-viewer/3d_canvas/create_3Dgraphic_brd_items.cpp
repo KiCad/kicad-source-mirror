@@ -249,7 +249,7 @@ void BOARD_ADAPTER::addFootprintShapes( const FOOTPRINT* aFootprint, CONTAINER_2
             PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( item );
 
             if( textbox->GetLayer() == aLayerId )
-                addShape( textbox, aContainer, aFootprint );
+                addShape( textbox, aContainer, textbox );
 
             break;
         }
