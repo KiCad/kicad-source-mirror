@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-01 05:01+0000\n"
+"PO-Revision-Date: 2026-10-02 12:21+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -47,7 +47,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.10\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -10127,19 +10127,19 @@ msgstr ""
 "Dokumente finden."
 
 #: common/io/idf/idf_parser.cpp:3259
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid output path: %s"
-msgstr "Ungültiges Ausgabeformat: %s\n"
+msgstr "Ungültiger Ausgabepfad: %s"
 
 #: common/io/idf/idf_parser.cpp:3270 common/io/idf/idf_parser.cpp:3284
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot overwrite file: %s"
-msgstr "Kann Datei \"%s\" nicht öffnen"
+msgstr "Kann Datei \"%s\" nicht überschreiben"
 
 #: common/io/idf/idf_parser.cpp:3299
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing IDF file: %s"
-msgstr "Beim Schreiben der Datei \"%s\" ist ein Fehler aufgetreten."
+msgstr "Fehler beim Schreiben der IDF-Datei: %s"
 
 #: common/io/pcad/s_expr_loader.cpp:194 common/io/pcad/s_expr_loader.cpp:199
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1301
@@ -17691,9 +17691,8 @@ msgstr "Footprintfilter löschen"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:676
 #: eeschema/dialogs/panel_footprint_filters.cpp:410
-#, fuzzy
 msgid "Matching footprints:"
-msgstr ": %i passende Footprints"
+msgstr "Passende Footprints:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:678
 msgid ""
@@ -17701,6 +17700,9 @@ msgid ""
 "filter.\n"
 "When no filter is selected, matches for all filters are shown."
 msgstr ""
+"Footprints aus den verfügbaren Footprintbibliotheken die dem ausgewählten "
+"Filter entsprechen.\n"
+"Wenn kein Filter ausgewählt ist, werden Treffer für alle Filter angezeigt."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:138
 msgid "Library Symbol Properties"
@@ -17709,16 +17711,14 @@ msgstr "Bibliothekssymbol-Eigenschaften"
 #: eeschema/dialogs/dialog_line_properties.cpp:44
 #: eeschema/dialogs/dialog_shape_properties.cpp:46
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1035
-#, fuzzy
 msgid "Start Shape:"
-msgstr "Einfacher Einstieg:"
+msgstr "Anfangsform:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:53
 #: eeschema/dialogs/dialog_shape_properties.cpp:55
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1044
-#, fuzzy
 msgid "End Shape:"
-msgstr "Form:"
+msgstr "Endform:"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:79
 #: eeschema/dialogs/dialog_line_properties.cpp:80
@@ -17747,9 +17747,9 @@ msgstr "Stärke:"
 #: eeschema/dialogs/dialog_line_properties.cpp:152
 #: eeschema/dialogs/dialog_shape_properties.cpp:156
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "Set line ending sizes to 0 for automatic (%g× line width)."
-msgstr "Formgrößen von 0 = auto (%g× Linienbreite)."
+msgstr "Linienendgröße für \"automatisch\" auf 0 setzen (%g× Linienbreite)."
 
 #: eeschema/dialogs/dialog_line_properties.cpp:418
 msgid "Edit Line"
@@ -17829,19 +17829,16 @@ msgid "Alternate Pin Name"
 msgstr "Alternativer Pinname"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:187
-#, fuzzy
 msgid "Alternate Pin Function Definitions"
-msgstr "Alternative Pinfunktionsdefinitionen"
+msgstr "Alternative Pin-Funktionsdefinitionen"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:200
-#, fuzzy
 msgid "Electrical Type "
-msgstr "Elektrischer Typ"
+msgstr "Elektrischer Typ "
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:201
-#, fuzzy
 msgid "Graphic Style "
-msgstr "Grafische Darstellung"
+msgstr "Grafische Darstellung "
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:384
 msgid "Exit sync pins mode"
@@ -21829,6 +21826,9 @@ msgid ""
 "%zu sheets were written, but only '%s' is reachable: top-level sheets are "
 "recorded in a project file. Use 'kicad-cli import' to create one.\n"
 msgstr ""
+"%zu Schaltplanblätter wurden geschrieben, aber nur \"%s\" ist/sind "
+"erreichbar: Top-Level-Schaltplanblätter werden in einer Projektdatei "
+"aufgezeichnet. Verwenden Sie \"kicad-cli import\", um Eines zu erstellen.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1867
 #: eeschema/eeschema_jobs_handler.cpp:1873
@@ -21856,9 +21856,8 @@ msgid "Unsupported document kind for this dispatcher.\n"
 msgstr "Dispatcher unterstützt diesen Dokumenttyp nicht.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2198
-#, fuzzy
 msgid "Failed to load one or more input schematics\n"
-msgstr "Konnte Schaltplan nicht laden\n"
+msgstr "Laden eines oder mehrerer Eingabe-Schaltpläne ist gescheitert\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2213
 #, fuzzy
@@ -21878,17 +21877,16 @@ msgstr ""
 #: eeschema/eeschema_jobs_handler.cpp:2268
 #, fuzzy
 msgid "Merge applier failed to produce a schematic\n"
-msgstr "Konnte Schaltplan nicht laden\n"
+msgstr "Zusammenführungsanwendung scheiterte bei der Schaltplanerstellung\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2277
-#, fuzzy
 msgid ""
 "Merge contains hierarchical sheet structure changes that sch merge cannot "
 "apply\n"
 msgstr ""
 "Zusammenführung enthält Änderungen in den hierarchischen "
 "Schaltplanblattstrukturen, die von der sch-Zusammenführung nicht angewendet "
-"werden kann\n"
+"werden können\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2319
 #, fuzzy, c-format
@@ -25403,14 +25401,12 @@ msgid "Invalid table: no cells defined"
 msgstr "Ungültige Tabelle: keine Zellen definiert"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5974
-#, fuzzy
 msgid "Invalid table: column count must be positive"
-msgstr "Ungültige Tabelle: keine Zellen definiert"
+msgstr "Ungültige Tabelle: Spaltenanzahl muss positiv sein"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5980
-#, fuzzy
 msgid "Invalid table: incomplete row"
-msgstr "Ungültige Tabelle: keine Zellen definiert"
+msgstr "Ungültige Tabelle: unvollständige Zeilen"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:6203
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8313
@@ -25506,24 +25502,31 @@ msgid ""
 "The legacy design cache could not be read past 0x%zx (%s); the remaining "
 "symbols fall back to placeholders."
 msgstr ""
+"Der veraltete Design-Zwischenspeicher konnte nicht ab 0x%zx (%s) gelesen "
+"werden; Die verbleibenden Symbole werden durch Platzhalter ersetzt."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid "Converting page '%s'..."
-msgstr "Installiere Paket \"%s\"."
+msgstr "Konvertiere Seite \"%s\" ..."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:2826
 msgid "OrCAD interface has no surviving source wire for label placement."
 msgstr ""
+"OrCAD-Schnittstelle verfügt über keine verbleibende Verbindung für die "
+"Platzierung eines Bezeichners."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3009
+#, fuzzy
 msgid "OrCAD native connectivity joins distinct source nets."
-msgstr ""
+msgstr "OrCADs native Verbindungen verbinden unterschiedliche Quellnetze."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3199
 #, c-format
 msgid "Cannot place OrCAD net repair '%s' without a wire intersection."
 msgstr ""
+"Kann keine OrCAD-Netzreparatur \"%s\" ohne eine Verbindungsüberschneidung "
+"platzieren."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3233
 #, c-format
@@ -25531,32 +25534,40 @@ msgid ""
 "OrCAD net repair joins source nets '%s' and '%s' at '%s' on sheet '%s' (net "
 "'%s')."
 msgstr ""
+"OrCAD-Netzreparatur verbindet die Quellnetze \"%s\" und \"%s\" bei \"%s\" "
+"auf Schaltplanblatt \"%s\" (Netz \"%s\")."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3255
 #, c-format
 msgid "OrCAD source net '%s' remains disconnected after local repair:%s"
 msgstr ""
+"OrCAD-Quellnetz \"%s\" bleibt nach der lokalen Reparatur unverbunden: %s"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3367
 #, c-format
 msgid "Cannot uniquely map OrCAD source pin %zu of '%s'."
-msgstr ""
+msgstr "Kann den OrCAD-Quellpin %zu nicht eindeutig zu \"%s\" zuordnen."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3686
 #, c-format
 msgid "Cannot place OrCAD label '%s' without a wire intersection."
 msgstr ""
+"Kann OrCAD-Bezeichner \"%s\" nicht ohne Verbindungsüberschneidung platzieren."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3706
 #, c-format
 msgid "Cannot place OrCAD interface '%s' clear of wires and pins."
 msgstr ""
+"Kann OrCAD-Schnittstelle \"%s\" nicht frei von Verbindungen und Pins "
+"platzieren."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:6170
 #, c-format
 msgid ""
 "Page '%s': cannot determine the source net for interface '%s' at (%d, %d)."
 msgstr ""
+"Seite \"%s\": Kann das Quellnetz für Interface \"%s\" bei (%d, %d) nicht "
+"bestimmen."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:7245
 #, c-format
@@ -25568,24 +25579,28 @@ msgstr ""
 "verbunden; übersprungen."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:7260
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Page '%s': cannot place off-page connector '%s' at (%d, %d) without a wire "
 "intersection."
 msgstr ""
-"Seite \"%s\": Off-Page-Verbinder bei (%d, %d) ist im Ursprungsdesign nicht "
-"verbunden; übersprungen."
+"Seite \"%s\": Kann keinen Off-Page-Verbinder \"%s\" bei (%d, %d) ohne "
+"Verbindungsüberschneidung platzieren."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:7349
 #, c-format
 msgid ""
 "Page '%s': cannot place port '%s' at (%d, %d) without a wire intersection."
 msgstr ""
+"Seite \"%s\": Kann den Port \"%s\" bei (%d, %d) nicht ohne "
+"Verbindungsüberschneidung platzieren."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:7849
-#, fuzzy, c-format
+#, c-format
 msgid "An embedded picture could not be decoded and was skipped (%s)."
-msgstr "Lage \"%s\" konnte nicht zugeordnet werden und wird übersprungen."
+msgstr ""
+"Ein eingebettetes Bild konnte nicht dekodiert werden und wurde übersprungen "
+"(%s)."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:718
 #, c-format
@@ -25597,17 +25612,21 @@ msgstr ""
 "Instanz(en)."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol '%s' duplicates the name of another library item and was left out "
 "of the library."
-msgstr "Es konnten keine Symbole aus der Bibliothek geladen werden."
+msgstr ""
+"Das Symbol \"%s\" überschneidet sich mit dem Namen eines anderen "
+"Bibliothekselements und wurde daher aus der Bibliothek entfernt."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol '%s' could not be converted and was left out of the library (%s)."
-msgstr "Es konnten keine Symbole aus der Bibliothek geladen werden."
+msgstr ""
+"Das Symbol \"%s\" konnte nicht umgewandelt werden und wurde daher aus der "
+"Bibliothek (%s) entfernt."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1608
 #, c-format
@@ -25621,6 +25640,8 @@ msgid ""
 "Native power units for '%s' have ambiguous package identity; their symbol "
 "definitions were kept separate."
 msgstr ""
+"Native Stromversorgungseinheiten für \"%s\" haben mehrdeutige Package-"
+"Identitäten; Ihre Symboldefinitionen wurden getrennt gehalten."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:2895
 #, c-format
@@ -25644,19 +25665,21 @@ msgid "OrCAD stream size exceeds the compound file"
 msgstr "Die OrCAD-Streamgröße überschreitet die zusammengesetzte Datei"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:315
-#, c-format
+#, c-format, fuzzy
 msgid "The OrCAD CIS variant '%s' has no definition stream."
-msgstr ""
+msgstr "Die OrCAD CIS-Variante \"%s\" hat keinen Definitionsstream."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:328
 #, c-format
 msgid "The OrCAD CIS variant '%s' references an unknown property group."
 msgstr ""
+"Die OrCAD CIS-Variante \"%s\" verweist auf eine unbekannte "
+"Eigenschaftsgruppe."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Using OrCAD CIS variant '%s'."
-msgstr "Variante \"%s\" hinzugefügt."
+msgstr "Verwende OrCAD CIS-Variante \"%s\"."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:451
 #, c-format
@@ -25664,22 +25687,27 @@ msgid ""
 "'%s' contains a complete OrCAD Capture design and cannot be loaded as a "
 "hierarchical sheet. Use File > Import > Non-KiCad Schematic... instead."
 msgstr ""
+"\"%s\" enthält einen vollständigen OrCAD Capture-Design und kann nicht als "
+"hierarchisches Schaltplanblatt geladen werden. Verwenden Sie stattdessen "
+"Datei -> Importieren -> Nicht-KiCad Schaltplan ..."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:460
-#, fuzzy
 msgid "The OrCAD file could not be read."
-msgstr "Datei konnte nicht geöffnet werden."
+msgstr "Die OrCAD-Datei konnte nicht gelesen werden."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:518
 msgid ""
 "The file does not contain the 'Library' stream of an OrCAD Capture design."
 msgstr ""
+"Die Datei enthält keinen \"Bibliothek\"-Stream eines OrCAD Capture-Designs."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:537
 msgid ""
 "The design has no 'Cache' stream; placeholder symbols will be synthesized "
 "for all parts."
 msgstr ""
+"Das Design hat keinen \"Cache\"-Stream; Für alle Bauteile werden "
+"Platzhaltersymbole generiert."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:564
 #, c-format
@@ -25691,6 +25719,8 @@ msgid ""
 "The file does not contain a 'Views' storage; it is not a supported OrCAD "
 "Capture design."
 msgstr ""
+"Die Datei enthält keine \"Views\"-Speicherung; Dieses OrCAD Capture-Design "
+"wird nicht unterstützt."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:617
 #, c-format
@@ -25698,17 +25728,20 @@ msgid ""
 "The schematic folder directory could not be read (%s); all stored folders "
 "are imported."
 msgstr ""
+"Das Verzeichnis der Schaltplanordner konnte nicht gelesen werden (%s); Alle "
+"gespeicherten Ordner werden importiert."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:629
-#, fuzzy
 msgid "The design contains no schematic folders."
-msgstr "Designblock hat keinen Schaltplan der eingefügt werden könnte."
+msgstr "Das Design enthält keinen Schaltplanordner."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:653
 msgid ""
 "The design does not name its root schematic; the first schematic folder is "
 "used instead."
 msgstr ""
+"Das Design benennt keinen Stammschaltplan; stattdessen wird der erste "
+"Schaltplanordner verwendet."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:658
 #, c-format
@@ -25716,6 +25749,8 @@ msgid ""
 "The design names '%s' as its root schematic, but no such folder is present; "
 "the first schematic folder is used instead."
 msgstr ""
+"Das Design nennt \"%s\" als Stammschaltplan, aber hierzu gibt es keinen "
+"Ordner; Stattdessen wird der erste Schaltplanordner verwendet."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:714
 #, c-format
@@ -25723,6 +25758,8 @@ msgid ""
 "The page display order for schematic folder '%s' could not be read (%s); "
 "pages are imported in name order."
 msgstr ""
+"Die Reihenfolge der Seitenanzeige für Schaltplanordner \"%s\" konnte nicht "
+"gelesen werden (%s); Seiten werden in der Reihenfolge ihrer Namen importiert."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:749
 #, c-format
@@ -25730,18 +25767,20 @@ msgid "Page '%s' could not be parsed and was skipped: %s"
 msgstr "Seite \"%s\" konnte nicht geparst werden und wurde übersprungen: %s"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:781
-#, fuzzy
 msgid "No schematic pages could be read from the design."
-msgstr "Es konnten keine Symbole aus der Bibliothek geladen werden."
+msgstr "Es konnten keine Schaltplanseiten von dem Design gelesen werden."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:888
 msgid "The file is not an OrCAD Capture library (no 'Library' stream)."
 msgstr ""
+"Die Datei ist keine OrCAD Capture-Bibliothek (kein \"Bibliothek\"-Stream)."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:929
-#, fuzzy, c-format
+#, c-format
 msgid "The library stream '%s' could not be read and was skipped (%s)."
-msgstr "Seite \"%s\" konnte nicht geparst werden und wurde übersprungen: %s"
+msgstr ""
+"Der Bibliotheksstream \"%s\" konnte nicht gelesen werden und wurde "
+"übersprungen (%s)."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:979
 #, c-format
@@ -25749,16 +25788,19 @@ msgid ""
 "The OrCAD library could not be fully parsed (%s); some symbols may be "
 "missing."
 msgstr ""
+"Die OrCAD-Bibliothek konnte nicht vollständig geparst werden (%s); einige "
+"Symbole könnten fehlen."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.h:78
-#, fuzzy
 msgid "OrCAD Capture symbol library files"
-msgstr "KiCad Symbolbibliothekdateien"
+msgstr "OrCAD Capture-Symbolbibliothekdateien"
 
 #: eeschema/sch_io/pads/pads_sch_parser.cpp:2111
 #, c-format
 msgid "BUSSES line %llu: unsupported record, %s. The bus was skipped."
 msgstr ""
+"BUSSES Zeile %llu: nichtunterstützter Datensatz, %s. Der Bus wurde "
+"übersprungen."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:374
 #, c-format
@@ -25766,6 +25808,9 @@ msgid ""
 "'%s' contains a complete PADS Logic schematic and cannot be loaded as a "
 "hierarchical sheet. Use File > Import > Non-KiCad Schematic... instead."
 msgstr ""
+"\"%s\" enthält einen vollständigen PADS Logic-Schaltplan und kann nicht als "
+"hierarchisches Schaltplanblatt geladen werden. Verwenden Sie stattdessen "
+"Datei -> Importieren -> Nicht-KiCad Schaltplan ..."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:426
 #, c-format
@@ -25773,14 +25818,14 @@ msgid "Failed to parse PADS file: %s"
 msgstr "Fehler beim Parsen der PADS-Datei: %s"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1306
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid PADS Logic binary schematic."
-msgstr "Die Datei \"%s\" ist kein gültiger gEDA-Schaltplan."
+msgstr "\"%s\" ist kein gültiger PADS Logic-Binärschaltplan."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1337
 #, c-format
 msgid " (%zu occurrences)"
-msgstr ""
+msgstr " (%zu Vorkommnisse)"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1428
 #, c-format
@@ -25802,7 +25847,7 @@ msgstr "PADS Logic-Bibliotheksdateien"
 
 #: eeschema/sch_io/pcad/pcad_sch_parser.cpp:257
 msgid "Empty P-CAD document"
-msgstr ""
+msgstr "Leeres P-CAD Dokument"
 
 #: eeschema/sch_io/pcad/sch_io_pcad.cpp:1254
 #, c-format
@@ -25810,14 +25855,12 @@ msgid "Symbol definition '%s' for '%s' not found."
 msgstr "Symboldefinition \"%s\" für \"%s\" wurde nicht gefunden."
 
 #: eeschema/sch_io/pcad/sch_io_pcad.h:56
-#, fuzzy
 msgid "P-CAD schematic files"
-msgstr "PADS Logic-Schaltplandateien"
+msgstr "P-CAD-Schaltplandateien"
 
 #: eeschema/sch_io/pcad/sch_io_pcad.h:61
-#, fuzzy
 msgid "P-CAD schematic and library files"
-msgstr "PADS Logic-Bibliotheksdateien"
+msgstr "P-CAD-Schaltplan- und Bibliotheksdateien"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:54 pcbnew/pcb_io/pcb_io_mgr.cpp:58
 #, c-format
@@ -25835,9 +25878,8 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Unbekannter SCH_FILE_T-Wert: %d"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:256
-#, fuzzy
 msgid "Unrecognized library type"
-msgstr "Unbekannte Lage \"%s\""
+msgstr "Unbekannter Bibliothekstyp"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:284
 #, c-format
@@ -25845,9 +25887,9 @@ msgid "Loading symbol library '%s'"
 msgstr "Lade Symbolbibliothek \"%s\""
 
 #: eeschema/sch_io/sch_io_mgr.cpp:319
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' Convert err: \"%s\""
-msgstr "Bibliothek \"%s\": %s"
+msgstr "Bibliothek \"%s\" - Konvertierungsfehler: %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:325
 #, c-format
@@ -25855,14 +25897,14 @@ msgid "Error loading library '%s': %s"
 msgstr "Fehler beim Laden der Bibliothek \"%s\": %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s': unknown error"
-msgstr "Fehler beim Laden der Bibliothek \"%s\""
+msgstr "Fehler beim Laden der Bibliothek \"%s\": unbekannter Fehler"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:347 eeschema/sch_io/sch_io_mgr.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving symbol '%s': %s"
-msgstr "Fehler beim Einlesen des Symbols \"%s\": %s"
+msgstr "Fehler beim Speichern des Symbols \"%s\": %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:359
 #, c-format
@@ -34851,34 +34893,36 @@ msgid "Failed to start API server\n"
 msgstr "Starten des API-Servers fehlgeschlagen\n"
 
 #: kicad/cli/command_diff_base.h:71
-#, fuzzy
 msgid "Output format: json, text, png, or svg (default: json)"
-msgstr "Ausgabeformat: png, text oder json (Standard: png)"
+msgstr "Ausgabeformat: json, text, png oder svg (Standard: json)"
 
 #: kicad/cli/command_diff_base.h:76
 msgid ""
 "Output file path; required for png/svg, otherwise prints to stdout if omitted"
 msgstr ""
+"Ausgabedateipfad; erforderlich für png/svg, andernfalls erfolgt die Ausgabe "
+"über stdout, wenn weggelassen"
 
 #: kicad/cli/command_diff_base.h:81
-#, fuzzy
 msgid ""
 "Only set exit code (0=identical, 5=differences found, non-zero on error), no "
 "output"
-msgstr "Nur exit-Code festlegen (0=identisch, 1=abweichend), keine Ausgabe"
+msgstr ""
+"Nur exit-Code festlegen (0=identisch, 5=Unterschiede gefunden, nicht-Null "
+"bei Fehler), keine Ausgabe"
 
 #: kicad/cli/command_diff_base.h:108
+#, fuzzy
 msgid "--output is required for png/svg formats\n"
-msgstr ""
+msgstr "--output erforderlich für png/svg-Formate\n"
 
 #: kicad/cli/command_export_bom.cpp:38
 msgid "Generate a Bill of Materials (BOM)"
 msgstr "Erstellt eine Stückliste (BoM)"
 
 #: kicad/cli/command_export_bom.cpp:196
-#, fuzzy
 msgid "Input file does not exist or is not accessible\n"
-msgstr "Platinendatei existiert nicht oder ist nicht zugreifbar\n"
+msgstr "Eingabedatei existiert nicht oder ist nicht zugänglich\n"
 
 #: kicad/cli/command_fp.h:31
 msgid "Footprint and Footprint Libraries"
@@ -34889,14 +34933,12 @@ msgid "Diff two .pretty footprint library directories"
 msgstr "Zwei .pretty-Footprint-Bibliotheksverzeichnisse vergleiche"
 
 #: kicad/cli/command_fp_diff.cpp:29
-#, fuzzy
 msgid "Reference .pretty directory"
-msgstr "Einstellungsverzeichnis öffnen"
+msgstr ".pretty-Referenzverzeichnis"
 
 #: kicad/cli/command_fp_diff.cpp:30
-#, fuzzy
 msgid "Comparison .pretty directory"
-msgstr "Projektverzeichnis"
+msgstr ".pretty-Vergleichsverzeichnis"
 
 #: kicad/cli/command_fp_export.h:32 kicad/cli/command_sym_export.h:33
 msgid "Export utilities (svg)"
@@ -34931,7 +34973,6 @@ msgstr ""
 "Versionierung"
 
 #: kicad/cli/command_gerber.h:33
-#, fuzzy
 msgid ""
 "View and compare existing Gerber/Excellon files. To export Gerbers from a "
 "PCB, use 'pcb export gerbers'"
@@ -40403,7 +40444,7 @@ msgstr "Rundung"
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:271
 #, c-format
 msgid "%s – %s mm"
-msgstr ""
+msgstr "%s – %s mm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:260
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:38
@@ -40414,18 +40455,17 @@ msgstr "Rechteckig"
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:261
 #, c-format
 msgid "%s – %s mm x %s – %s mm"
-msgstr ""
+msgstr "%s – %s mm x %s – %s mm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:266
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:110
-#, fuzzy
 msgid "Standard:"
-msgstr "Standard"
+msgstr "Standard:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:267
 #, fuzzy
 msgid "Production level:"
-msgstr "ODB++ Produktionsdatei"
+msgstr "Produktionsebene:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:268
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:34
@@ -40444,9 +40484,8 @@ msgid "Effective lead size:"
 msgstr "Effektive %s:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:276
-#, fuzzy
 msgid "Minimum hole size:"
-msgstr "Mindestbohrdurchmesser:"
+msgstr "Minimale Löchgröße:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:276
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:277
@@ -40456,17 +40495,16 @@ msgstr "Mindestbohrdurchmesser:"
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:282
 #, c-format
 msgid "%s mm"
-msgstr ""
+msgstr "%s mm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:277
-#, fuzzy
 msgid "Maximum hole size:"
-msgstr "Maximale Größe der Sicherungskopien:"
+msgstr "Maximale Lochgröße:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:278
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:237
 msgid "Recommended hole size:"
-msgstr ""
+msgstr "Empfohlene Lochgröße:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:279
 #, fuzzy
@@ -40475,24 +40513,21 @@ msgstr "Loch-Freiraum-Verstoß"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:281
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:173
-#, fuzzy
 msgid "Annular ring:"
-msgstr "Restringe:"
+msgstr "Restring:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:282
-#, fuzzy
 msgid "Pad diameter:"
-msgstr "Via-Durchmesser:"
+msgstr "Pad-Durchmesser:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:333
-#, fuzzy
 msgid "Copy the report to the clipboard"
-msgstr "Kopiere aktuelle 3D-Ansicht in Zwischenablage"
+msgstr "Das Protokoll in die Zwischenablage kopieren"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:415
-#, fuzzy, c-format
+#, c-format
 msgid "%s Summary"
-msgstr "Zusammenfassung"
+msgstr "%s Zusammenfassung"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:459
 #, fuzzy, c-format
@@ -40505,9 +40540,8 @@ msgid "Minimum lead diameter + %smm"
 msgstr "Min. Lochdurchmesser"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:485
-#, fuzzy
 msgid "Side length:"
-msgstr "Pinlänge:"
+msgstr "Seitenlänge:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:490
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:64
@@ -40536,8 +40570,9 @@ msgid "Hole size standard"
 msgstr "Lochgröße X:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:122
+#, fuzzy
 msgid "Level:"
-msgstr ""
+msgstr "Ebene:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:134
 #, fuzzy
@@ -40551,7 +40586,7 @@ msgstr "Rundung"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:149
 msgid "Nearest"
-msgstr ""
+msgstr "Am nächsten"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:165
 #, fuzzy
@@ -40559,9 +40594,8 @@ msgid "Annular ring"
 msgstr "Restringe:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:194
-#, fuzzy
 msgid "Result"
-msgstr "Ergebnisse"
+msgstr "Ergebniss"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:211
 #, fuzzy
@@ -40569,33 +40603,28 @@ msgid "Show minimum lead size"
 msgstr "Mindestbohrdurchmesser:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:214
-#, fuzzy
 msgid "Show minimum hole size"
-msgstr "Platinen-Minimum-Loch"
+msgstr "Minimale Lochgröße anzeigen"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:217
-#, fuzzy
 msgid "Show maximum hole size"
-msgstr "Kleber anzeigen"
+msgstr "Maximale Lochgröße anzeigen"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:248
-#, fuzzy
 msgid "Recommended pad size:"
-msgstr "Pad neu kombinieren"
+msgstr "Empfohlene Padgröße:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:288
 msgid "IPC-2222B Summary"
-msgstr ""
+msgstr "IPC-2222B Zusammenfassung"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:314
-#, fuzzy
 msgid "Min. hole diameter"
-msgstr "Min Lochdurchmesser: "
+msgstr "Min. Lochdurchmesser"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:315
-#, fuzzy
 msgid "Max. hole diameter"
-msgstr "Min Lochdurchmesser: "
+msgstr "Max. Lochdurchmesser"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:63
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:147
@@ -42251,9 +42280,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_board.cpp:1411
-#, fuzzy
 msgid "Flipped items via API"
-msgstr "Mittels API gelöschte Elemente"
+msgstr "Mittels API gewendete Elemente"
 
 #: pcbnew/api/api_handler_pcb.cpp:1906 pcbnew/tools/zone_filler_tool.cpp:158
 #: pcbnew/tools/zone_filler_tool.cpp:239 pcbnew/tools/zone_filler_tool.cpp:431
@@ -42263,12 +42291,11 @@ msgstr "Zone(n) ausfüllen"
 #: pcbnew/api/api_handler_pcb.cpp:2176
 #, fuzzy
 msgid "API injected DRC marker"
-msgstr "DRC-Marker durchsuchen"
+msgstr "API gespeiste DRC-Marker"
 
 #: pcbnew/api/api_handler_pcb.cpp:3402
-#, fuzzy
 msgid "Placed footprint via API"
-msgstr "Footprint platzieren"
+msgstr "Footprint mittels API platziert"
 
 #: pcbnew/api/headless_pcb_context.cpp:204 pcbnew/netlist_reader/netlist.cpp:60
 #, c-format
@@ -43442,85 +43469,72 @@ msgid "radius"
 msgstr "Radius"
 
 #: pcbnew/constraints/pcb_constraint.cpp:197
-#, fuzzy
 msgid "vertex"
-msgstr "Invertiert"
+msgstr "Eckpunkt"
 
 #: pcbnew/constraints/pcb_constraint.cpp:208
 msgid "Coincident"
-msgstr ""
+msgstr "Zusammenfallend"
 
 #: pcbnew/constraints/pcb_constraint.cpp:211 pcbnew/tools/pcb_actions.cpp:68
 msgid "Parallel"
-msgstr ""
+msgstr "Parallel"
 
 #: pcbnew/constraints/pcb_constraint.cpp:212 pcbnew/tools/pcb_actions.cpp:78
 msgid "Perpendicular"
-msgstr ""
+msgstr "Senkrecht"
 
 #: pcbnew/constraints/pcb_constraint.cpp:213 pcbnew/tools/pcb_actions.cpp:98
-#, fuzzy
 msgid "Collinear"
-msgstr "Kollision"
+msgstr "Kolinear"
 
 #: pcbnew/constraints/pcb_constraint.cpp:214
-#, fuzzy
 msgid "Symmetric"
 msgstr "Symmetrisch"
 
 #: pcbnew/constraints/pcb_constraint.cpp:215
-#, fuzzy
 msgid "Equal length"
-msgstr "Kabellänge"
+msgstr "Gleiche Länge"
 
 #: pcbnew/constraints/pcb_constraint.cpp:216
-#, fuzzy
 msgid "Equal radius"
-msgstr "Radius"
+msgstr "Gleicher Radius"
 
 #: pcbnew/constraints/pcb_constraint.cpp:217
-#, fuzzy
 msgid "Point on line"
-msgstr "Kreispunkt"
+msgstr "Punkt auf Linie"
 
 #: pcbnew/constraints/pcb_constraint.cpp:218
-#, fuzzy
 msgid "Midpoint"
 msgstr "Mittelpunkt"
 
 #: pcbnew/constraints/pcb_constraint.cpp:219
-#, fuzzy
 msgid "Fixed position"
-msgstr "Rasterposition"
+msgstr "Feste Position"
 
 #: pcbnew/constraints/pcb_constraint.cpp:220
-#, fuzzy
 msgid "Fixed length"
-msgstr "Die-Länge"
+msgstr "Feste Länge"
 
 #: pcbnew/constraints/pcb_constraint.cpp:221 pcbnew/tools/pcb_actions.cpp:158
-#, fuzzy
 msgid "Concentric"
-msgstr "Zentrum"
+msgstr "Konzentrisch"
 
 #: pcbnew/constraints/pcb_constraint.cpp:222
 msgid "Fixed radius"
 msgstr "Fester Radius"
 
 #: pcbnew/constraints/pcb_constraint.cpp:223
-#, fuzzy
 msgid "Angular dimension"
-msgstr "Hinweislinienbemaßung hinzufügen"
+msgstr "Winkelbemaßung"
 
 #: pcbnew/constraints/pcb_constraint.cpp:224 pcbnew/tools/pcb_actions.cpp:118
-#, fuzzy
 msgid "Tangent"
-msgstr "Tangens des Verlustwinkels"
+msgstr "Tangente"
 
 #: pcbnew/constraints/pcb_constraint.cpp:225
-#, fuzzy
 msgid "Arc angle"
-msgstr "Leiterbahnwinkel"
+msgstr "Bogenwinkel"
 
 #: pcbnew/constraints/pcb_constraint.cpp:226
 #: pcbnew/constraints/pcb_constraint.cpp:229 pcbnew/pad.cpp:3825
@@ -43528,9 +43542,9 @@ msgid "Undefined"
 msgstr "Undefiniert"
 
 #: pcbnew/constraints/pcb_constraint.cpp:390
-#, fuzzy, c-format
+#, c-format
 msgid "Constraint: %s (%zu members)"
-msgstr "Gruppe \"%s\", %zu Mitglieder"
+msgstr "Einschränkung: %s (%zu Mitglieder)"
 
 #: pcbnew/constraints/pcb_constraint.cpp:431
 #, c-format
@@ -43543,16 +43557,15 @@ msgid "vertex %lld"
 msgstr "Eckpunkt %lld"
 
 #: pcbnew/constraints/pcb_constraint.cpp:493
-#, fuzzy
 msgid "Constraint Properties"
-msgstr "Footprint-Eigenschaften"
+msgstr "Einschränkung-Eigenschaften"
 
 #: pcbnew/constraints/pcb_constraint.cpp:497
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:419
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:111
 #: pcbnew/pcb_dimension.cpp:2110
 msgid "Driving"
-msgstr ""
+msgstr "Treibend"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:502
 msgid "(multiple board outlines not supported)"
@@ -43590,7 +43603,7 @@ msgid "(arc has null or very small size: %d nm)"
 msgstr "(Bogen hat keine oder sehr kleine Größe: %d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:1281
-#, fuzzy, c-format
+#, c-format
 msgid "(ellipse has null or very small radii: major=%d nm, minor=%d nm)"
 msgstr ""
 "(Ellipse hat keinen oder sehr kleine Radien: großer=%d nm, kleiner=%d nm)"
@@ -43610,7 +43623,6 @@ msgid "Barcode Error"
 msgstr "Barcodefehler"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:251
-#, fuzzy
 msgid "Modify Barcode"
 msgstr "Barcode verändern"
 
@@ -59378,12 +59390,10 @@ msgid "If not checked: use interactive placement."
 msgstr "Wenn nicht gewählt: interaktive Platzierung verwenden."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:154
-#, fuzzy
 msgid "Current layer"
 msgstr "Aktuelle Lage"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
-#, fuzzy
 msgid "Map layers"
 msgstr "Lagen zuordnen"
 
@@ -59451,9 +59461,8 @@ msgid "Footprint..."
 msgstr "Footprint ..."
 
 #: pcbnew/menubar_footprint_editor.cpp:77
-#, fuzzy
 msgid "Footprint as &SVG..."
-msgstr "Footprints ..."
+msgstr "Footprint als &SVG ..."
 
 #: pcbnew/menubar_footprint_editor.cpp:78
 msgid "View as &PNG..."
@@ -60325,15 +60334,13 @@ msgid "Press-fit"
 msgstr "Einpress"
 
 #: pcbnew/pad.cpp:2294
-#, fuzzy
 msgid "(mixed shapes)"
-msgstr "Gefüllte Form"
+msgstr "(gemischte Formen)"
 
 #: pcbnew/pad.cpp:2299 pcbnew/pad.cpp:2304 pcbnew/pad.cpp:2306
 #: pcbnew/pcb_track.cpp:2817
-#, fuzzy
 msgid "(mixed)"
-msgstr "gemischt"
+msgstr "(gemischt)"
 
 #: pcbnew/pad.cpp:2321
 msgid "Length in Package"
@@ -62208,9 +62215,9 @@ msgid "DipTrace: invalid legacy board version suffix"
 msgstr "DipTrace: ungültiges Suffix einer veralteten Platinenversion"
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1218
-#, fuzzy, c-format
+#, c-format
 msgid "DipTrace import: invalid outline vertex count %d."
-msgstr "DipTrace-Import: ungültige Bauteilanzahl %d."
+msgstr "DipTrace-Import: ungültige Anzahl von Umrisseckpunkten %d."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1257
 #, fuzzy, c-format
@@ -66180,9 +66187,8 @@ msgstr ""
 "werden soll."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1953
-#, fuzzy
 msgid "Choose Board to Compare With"
-msgstr "Zu importierendes Projekt auswählen"
+msgstr "Platine für Vergleich auswählen"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1979
 #, fuzzy
@@ -66219,31 +66225,26 @@ msgstr "Fehler (fehlendes Element)"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:216
 #: pcbnew/widgets/constraint_list_view.cpp:87
-#, fuzzy
 msgid "Over-constrained"
-msgstr "Uneingeschränkt"
+msgstr "Überbestimmt"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:218
 #: pcbnew/widgets/constraint_list_view.cpp:89
-#, fuzzy
 msgid "Redundant"
-msgstr "Entferne redundante Vias"
+msgstr "Redundant"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:220
 #: pcbnew/widgets/constraint_list_view.cpp:38
-#, fuzzy
 msgid "State"
 msgstr "Status"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:524
-#, fuzzy
 msgid "Remove Geometric Constraint"
-msgstr "Relative Dielektrizitätskonstante"
+msgstr "Geometrische Einschränkung entfernen"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:665
-#, fuzzy
 msgid "Add Geometric Constraint"
-msgstr "Schaltplanseiten-Bedingung hinzufügen"
+msgstr "Geometrische Einschränkung hinzufügen"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:683
 msgid ""
@@ -66265,9 +66266,8 @@ msgstr ""
 #: pcbnew/tools/constraint_edit_tool.cpp:781
 #: pcbnew/tools/constraint_edit_tool.cpp:800
 #: pcbnew/tools/constraint_edit_tool.cpp:821 pcbnew/tools/drawing_tool.cpp:212
-#, fuzzy
 msgid "Apply Geometric Constraint"
-msgstr "Relative Dielektrizitätskonstante"
+msgstr "Geometrische Einschränkung anwenden"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:848
 msgid "A geometric constraint could not be satisfied by this edit."
@@ -66275,9 +66275,8 @@ msgstr ""
 
 #: pcbnew/tools/constraint_edit_tool.cpp:1151
 #: pcbnew/tools/constraint_edit_tool.cpp:1526
-#, fuzzy
 msgid "An identical geometric constraint already exists."
-msgstr "Eine Element mit Aliasname \"%s\" existiert bereits."
+msgstr "Es existiert bereits eine identische geometrische Einschränkung."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:1270
 #, c-format
@@ -66285,9 +66284,8 @@ msgid "Cannot form a %s constraint from those items."
 msgstr "Kann keine %s-Einschränkung aus diesen Elementen erzeugen."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:1640 pcbnew/tools/pcb_actions.cpp:271
-#, fuzzy
 msgid "Remove Geometric Constraints"
-msgstr "Relative Dielektrizitätskonstante"
+msgstr "Geometrische Einschränkungen entfernen"
 
 #: pcbnew/tools/convert_tool.cpp:81
 msgid "Copy line width of first object"
@@ -67142,7 +67140,6 @@ msgstr ""
 "Bauteilklasse hat."
 
 #: pcbnew/tools/multichannel_tool.cpp:2530
-#, fuzzy
 msgid "Auto-generate Placement Rule Areas"
 msgstr "Platzierungsregelflächen automatisch erzeugen"
 
@@ -67213,9 +67210,8 @@ msgid "Constrain the two selected segments to be perpendicular"
 msgstr "Konvertiert das ausgewählte Liniensegment in einen Bogen"
 
 #: pcbnew/tools/pcb_actions.cpp:88
-#, fuzzy
 msgid "Equal Length"
-msgstr "Volle Länge"
+msgstr "Gleiche Länge"
 
 #: pcbnew/tools/pcb_actions.cpp:89
 msgid "Constrain the two selected segments to be of equal length"
@@ -67227,9 +67223,8 @@ msgid "Constrain the two selected segments to be collinear"
 msgstr "Konvertiert das ausgewählte Liniensegment in einen Bogen"
 
 #: pcbnew/tools/pcb_actions.cpp:108
-#, fuzzy
 msgid "Angular Dimension"
-msgstr "Bemaßung hinzufügen"
+msgstr "Winkelbemaßung"
 
 #: pcbnew/tools/pcb_actions.cpp:109
 #, fuzzy
@@ -67252,9 +67247,8 @@ msgid "Constrain the selected segment to be vertical"
 msgstr "Konvertiert das ausgewählte Liniensegment in einen Bogen"
 
 #: pcbnew/tools/pcb_actions.cpp:148
-#, fuzzy
 msgid "Fixed Length"
-msgstr "Die-Länge"
+msgstr "Feste Länge"
 
 #: pcbnew/tools/pcb_actions.cpp:149
 #, fuzzy
@@ -67266,9 +67260,8 @@ msgid "Constrain the two selected circles, arcs or ellipses to share a center"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:168
-#, fuzzy
 msgid "Equal Radius"
-msgstr "Große Halbachse"
+msgstr "Gleicher Radius"
 
 #: pcbnew/tools/pcb_actions.cpp:169
 msgid "Constrain the two selected circles or arcs to be of equal radius"
@@ -67280,12 +67273,11 @@ msgstr "Fester Radius"
 
 #: pcbnew/tools/pcb_actions.cpp:179
 msgid "Lock the selected circle or arc to its current radius"
-msgstr ""
+msgstr "Den ausgewählten Kreis oder Bogen auf seinen aktuellen Radius fixieren"
 
 #: pcbnew/tools/pcb_actions.cpp:188
-#, fuzzy
 msgid "Arc Angle"
-msgstr "Bogen-Endwinkel"
+msgstr "Bogenwinkel"
 
 #: pcbnew/tools/pcb_actions.cpp:189
 #, fuzzy
@@ -67303,7 +67295,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Coincident..."
-msgstr "Koinzidenz..."
+msgstr "Koinzidenz ..."
 
 #: pcbnew/tools/pcb_actions.cpp:209
 msgid "Click two shape endpoints to make them coincide"
@@ -67311,50 +67303,56 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:218
 msgid "Point on Line..."
-msgstr "Punkt auf Linie..."
+msgstr "Punkt auf Linie ..."
 
 #: pcbnew/tools/pcb_actions.cpp:219
 msgid "Click an endpoint, then a segment or circle, to put the point on it"
 msgstr ""
+"Klicken Sie auf einen Endpunkt und anschließend auf ein Segment oder einen "
+"Kreis, um den Punkt darauf zu platzieren"
 
 #: pcbnew/tools/pcb_actions.cpp:228
-#, fuzzy
 msgid "Midpoint..."
-msgstr "Mittelpunkt verschieben ..."
+msgstr "Mittelpunkt ..."
 
 #: pcbnew/tools/pcb_actions.cpp:229
 msgid "Click an endpoint, then a segment, to put the point at its midpoint"
 msgstr ""
+"Klicken Sie auf einen Endpunkt und anschließend auf ein Segment, um den "
+"Punkt an dessen Mittelpunkt zu setzen"
 
 #: pcbnew/tools/pcb_actions.cpp:238
 msgid "Symmetric..."
-msgstr "Symmetrisch..."
+msgstr "Symmetrisch ..."
 
 #: pcbnew/tools/pcb_actions.cpp:239
 msgid "Click two endpoints, then a segment axis, to mirror them across it"
 msgstr ""
+"Klicken Sie auf zwei Endpunkte und anschließend auf eine Segmentachse, um "
+"sie an dieser zu spiegeln"
 
 #: pcbnew/tools/pcb_actions.cpp:248
-#, fuzzy
 msgid "Always Show Geometric Constraints"
-msgstr "Fadenkreuz immer anzeigen"
+msgstr "Geometrische Einschränkungen immer anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:249
 msgid "Always show the geometric-constraint diagnostics overlay"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:256
+#, fuzzy
 msgid "Show Geometric Constraints on Hover Only"
-msgstr ""
+msgstr "Geometrische Einschränkungen nur beim \"Darüberfahren\" anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:257
 msgid "Reveal a shape's geometric constraints only while hovering it"
 msgstr ""
+"Geometrische Einschränkungen einer Form nur beim Überfahren mit der Maus "
+"anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:264
-#, fuzzy
 msgid "Geometric Constraints..."
-msgstr "Längenbeschränkungen werden geprüft ..."
+msgstr "Geometrische Einschränkungen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:265
 msgid "List, locate and delete the board's geometric constraints"
@@ -67366,18 +67364,16 @@ msgid "Remove geometric constraints referencing the selected items"
 msgstr "Außenlinien um gewähltes Element erzeugen"
 
 #: pcbnew/tools/pcb_actions.cpp:279
-#, fuzzy
 msgid "Show/hide the geometric constraints panel"
-msgstr "Suchfeld anzeigen/ausblenden"
+msgstr "Das Panel für geometrische Einschränkungen anzeigen/ausblenden"
 
 #: pcbnew/tools/pcb_actions.cpp:285
-#, fuzzy
 msgid "Automatic Constraints"
-msgstr "Einschränkungen"
+msgstr "Automatische Einschränkungen"
 
 #: pcbnew/tools/pcb_actions.cpp:286
 msgid "Automatically add geometric constraints while drawing"
-msgstr ""
+msgstr "Geometrische Einschränkungen beim Zeichenvorgang automatisch hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:293
 msgid "Create Rule Area from Selection..."
@@ -67422,12 +67418,12 @@ msgstr "Außenlinien um gewähltes Element erzeugen"
 #: pcbnew/tools/pcb_actions.cpp:354
 #, fuzzy
 msgid "Draw Via Stitch area"
-msgstr "Einen elliptischen Bogen zeichnen"
+msgstr "Via-Nahtbereich zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:355
 #, fuzzy
 msgid "Draw a via stitch area"
-msgstr "Einen elliptischen Bogen zeichnen"
+msgstr "Einen Via-Nahtbereich zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:382
 msgid "Draw an ellipse"
@@ -69814,6 +69810,8 @@ msgstr "Bohrdiagramm platzieren"
 #, c-format
 msgid "Layer '%s' is hidden; nothing will be shown until you make it visible."
 msgstr ""
+"Lage \"%s\" ist ausgeblendet; Es wird nichts angezeigt, bevor Sie sie nicht "
+"einblenden."
 
 #: pcbnew/tools/pcb_control.cpp:3117
 msgid "Every documentation layer already has a drill map."
