@@ -78,17 +78,11 @@ static const wxChar* const traceGalXorMode = wxT( "KICAD_GAL_XOR_MODE" );
 
 static wxGLAttributes getGLAttribs()
 {
-#ifdef __WXMSW__
-    // A copy swap cannot be presented by flipping, which keeps the canvas off the compositor's overlay planes
-    if( ADVANCED_CFG::GetCfg().m_GLSwapCopy )
-    {
-        static const int WGL_SWAP_METHOD = 0x2007;
-        static const int WGL_SWAP_COPY = 0x2029;
+    wxGLAttributes copyAttribs;
+    copyAttribs.RGBA().DoubleBuffer().Depth( 8 );
 
-        wxGLAttributes copyAttribs;
-        copyAttribs.RGBA().DoubleBuffer().Depth( 8 );
-        copyAttribs.AddAttribute( WGL_SWAP_METHOD );
-        copyAttribs.AddAttribute( WGL_SWAP_COPY );
+    if( HIDPI_GL_CANVAS::AddSwapCopyAttributes( copyAttribs ) )
+    {
         copyAttribs.EndList();
 
         if( wxGLCanvas::IsDisplaySupported( copyAttribs ) )
@@ -96,7 +90,6 @@ static wxGLAttributes getGLAttribs()
 
         wxLogTrace( traceGalContext, wxS( "No copy-swap pixel format available, using the default" ) );
     }
-#endif
 
     wxGLAttributes attribs;
     attribs.RGBA().DoubleBuffer().Depth( 8 ).EndList();
@@ -380,32 +373,19 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
         m_tempBuffer( 0 ),
         m_isContextLocked( false ),
         m_isContextValid( false ),
-        m_lockClientCookie( 0 ),
-        m_swapTraceBudget( 0 ),
-        m_swapCount( 0 )
+        m_lockClientCookie( 0 )
 {
 #ifdef __WXMSW__
-    if( ADVANCED_CFG::GetCfg().m_GLLayeredCanvas )
+    if( wxLog::IsAllowedTraceMask( traceGalContext ) )
     {
-        // A layered window is always composited, so the driver cannot hand it to an overlay plane
-        LONG_PTR exStyle = ::GetWindowLongPtr( GetHWND(), GWL_EXSTYLE );
-        ::SetWindowLongPtr( GetHWND(), GWL_EXSTYLE, exStyle | WS_EX_LAYERED );
-        BOOL layered = ::SetLayeredWindowAttributes( GetHWND(), 0, 255, LWA_ALPHA );
+        PIXELFORMATDESCRIPTOR pfd = {};
+        int                   pixelFormat = ::GetPixelFormat( GetHDC() );
 
-        wxLogTrace( traceGalContext, wxS( "OPENGL_GAL %p layered window requested, result %d, error %lu" ), this,
-                    layered, layered ? 0UL : ::GetLastError() );
+        ::DescribePixelFormat( GetHDC(), pixelFormat, sizeof( pfd ), &pfd );
+
+        wxLogTrace( traceGalContext, wxS( "OPENGL_GAL %p pixel format %d, swap copy %d, swap exchange %d" ), this,
+                    pixelFormat, ( pfd.dwFlags & PFD_SWAP_COPY ) != 0, ( pfd.dwFlags & PFD_SWAP_EXCHANGE ) != 0 );
     }
-
-    PIXELFORMATDESCRIPTOR pfd = {};
-    int                   pixelFormat = ::GetPixelFormat( GetHDC() );
-
-    ::DescribePixelFormat( GetHDC(), pixelFormat, sizeof( pfd ), &pfd );
-
-    wxLogTrace( traceGalContext, wxS( "OPENGL_GAL %p pixel format %d, swap copy %d, swap exchange %d, "
-                                      "composition %d, layered %d" ),
-                this, pixelFormat, ( pfd.dwFlags & PFD_SWAP_COPY ) != 0, ( pfd.dwFlags & PFD_SWAP_EXCHANGE ) != 0,
-                ( pfd.dwFlags & PFD_SUPPORT_COMPOSITION ) != 0,
-                ( ::GetWindowLongPtr( GetHWND(), GWL_EXSTYLE ) & WS_EX_LAYERED ) != 0 );
 #endif
 
     if( m_glMainContext == nullptr )
@@ -910,31 +890,8 @@ void OPENGL_GAL::EndDrawing()
     cntComposite.Stop();
 
     cntSwap.Start();
-    bool swapped = SwapBuffers();
+    SwapBuffers();
     cntSwap.Stop();
-
-    ++m_swapCount;
-
-    // A frame drawn but never shown looks healthy everywhere else, so report where the swap went
-    if( m_swapTraceBudget > 0 || m_swapCount % 100 == 0 )
-    {
-        if( m_swapTraceBudget > 0 )
-            --m_swapTraceBudget;
-
-        GLenum glErr = glGetError();
-
-#ifdef __WXMSW__
-        HWND dcWindow = ::WindowFromDC( ::wglGetCurrentDC() );
-        bool ownContext = ::wglGetCurrentContext() == m_glPrivContext->GetGLRC();
-
-        wxLogTrace( traceGalContext, wxS( "OPENGL_GAL %p swap %d returned %d, glError 0x%x, DC window %p, "
-                                          "own window %p, own context current %d" ),
-                    this, m_swapCount, swapped, (unsigned) glErr, dcWindow, GetHWND(), ownContext );
-#else
-        wxLogTrace( traceGalContext, wxS( "OPENGL_GAL %p swap %d returned %d, glError 0x%x" ), this,
-                    m_swapCount, swapped, (unsigned) glErr );
-#endif
-    }
 
     cntTotal.Stop();
 

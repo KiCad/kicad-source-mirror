@@ -408,30 +408,10 @@ public:
     bool m_DrawBoundingBoxes;
 
     /**
-     * Rebuild every OpenGL canvas after another OpenGL canvas is destroyed.
-     *
-     * Workaround for drivers that stop presenting a canvas once a sibling OpenGL window goes away.
-     * Only used on Windows.
-     *
-     * Setting name: "GLRebuildAfterSiblingClose"
-     * Valid values: 0 or 1
-     * Default value: 1
-     */
-    bool m_GLRebuildAfterSiblingClose;
-
-    /**
-     * Create OpenGL canvases as layered windows, which the compositor cannot move to an overlay plane.
-     * Only used on Windows.
-     *
-     * Setting name: "GLLayeredCanvas"
-     * Valid values: 0 or 1
-     * Default value: 1
-     */
-    bool m_GLLayeredCanvas;
-
-    /**
      * Ask for an OpenGL pixel format that swaps by copying rather than by flipping.
-     * Only used on Windows.
+     *
+     * Some Intel drivers stop showing a flip-swapped canvas after a sibling OpenGL window is
+     * destroyed, although every swap succeeds.  Only used on Windows.
      *
      * Setting name: "GLSwapCopy"
      * Valid values: 0 or 1

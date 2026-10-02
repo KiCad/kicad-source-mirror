@@ -26,6 +26,7 @@
 
 #include <gal/hidpi_gl_canvas.h>
 
+#include <advanced_config.h>
 #include <dpi_scaling.h>
 
 
@@ -36,6 +37,26 @@ HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( const KIGFX::VC_SETTINGS& aSettings, wxWindow*
         wxGLCanvas( aParent, aGLAttribs, aId, aPos, aSize, aStyle, aName, aPalette ),
         m_settings( aSettings )
 {
+}
+
+
+bool HIDPI_GL_CANVAS::AddSwapCopyAttributes( wxGLAttributes& aAttribs )
+{
+#ifdef __WXMSW__
+    if( !ADVANCED_CFG::GetCfg().m_GLSwapCopy )
+        return false;
+
+    // WGL_ARB_pixel_format names, which wx does not define
+    static const int WGL_SWAP_METHOD = 0x2007;
+    static const int WGL_SWAP_COPY = 0x2029;
+
+    aAttribs.AddAttribute( WGL_SWAP_METHOD );
+    aAttribs.AddAttribute( WGL_SWAP_COPY );
+    return true;
+#else
+    wxUnusedVar( aAttribs );
+    return false;
+#endif
 }
 
 

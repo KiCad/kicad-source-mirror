@@ -33,7 +33,6 @@
 #include <wx/evtloop.h>
 #include <wx/socket.h>
 #include <core/raii.h>
-#include <class_draw_panel_gal.h>
 #include <trace_helpers.h>
 #include <wx/log.h>
 
@@ -142,8 +141,6 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
 
     wxLogTrace( traceGalContext, wxS( "Modal frame '%s' %p loop ended, result %d" ), GetTitle(), this,
                 m_modal_ret_val );
-
-    EDA_DRAW_PANEL_GAL::StartTraceBurst();
 
     if( aResult )
         *aResult = m_modal_string;

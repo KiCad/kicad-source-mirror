@@ -302,14 +302,6 @@ protected:
     /// Canvas pointer and owning window title, to tell canvases apart in traces
     wxString traceName() const;
 
-    /// Trace a paint that returned early because nothing changed, but only during a trace burst
-    void traceUnchangedSkip();
-
-public:
-    /// Make every canvas trace its next few paints and swaps in full, e.g. after a sibling canvas goes away
-    static void StartTraceBurst();
-
-protected:
 
     wxWindow*                m_parent;           ///< Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)
@@ -370,20 +362,6 @@ protected:
 
     /// Refresh timer retries while the GAL is not yet initialized
     int                      m_enableRetries;
-
-    /// Trace burst generation this canvas has seen, and paints left to trace in full
-    int                      m_seenTraceBurst;
-    int                      m_burstPaints;
-
-    /// Paint events received and DoRePaint calls made, reported in traces
-    int                      m_paintEvents;
-    int                      m_repaintCalls;
-
-    static int               s_traceBurst;
-
-    /// Count of OpenGL canvases destroyed so far, and the count this canvas last acted on
-    static int               s_glCanvasesClosed;
-    int                      m_seenGlCanvasesClosed;
 
     /// Flag to indicate whether the panel should take focus at certain times (when moused over,
     /// and on various mouse/key events)

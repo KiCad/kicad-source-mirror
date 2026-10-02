@@ -118,9 +118,6 @@ public:
 
     void SetMinLineWidth( float aLineWidth ) override;
 
-    /// Trace the next few buffer swaps in full, to show whether drawn frames reach the window
-    void SetSwapTraceBudget( int aSwaps ) { m_swapTraceBudget = aSwaps; }
-
     // ---------------
     // Drawing methods
     // ---------------
@@ -393,8 +390,6 @@ private:
     bool                    m_isContextLocked;          ///< Used for assertion checking
     bool                    m_isContextValid;           ///< Did the last lock make us current?
     int                     m_lockClientCookie;
-    int                     m_swapTraceBudget;          ///< Swaps left to trace in full
-    int                     m_swapCount;                ///< Swaps made, for the trace heartbeat
     GLint                   ufm_worldPixelSize;
     GLint                   ufm_screenPixelSize;
     GLint                   ufm_pixelSizeMultiplier;

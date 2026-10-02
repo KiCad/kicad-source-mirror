@@ -93,8 +93,6 @@ static const wxChar UsePdfPrint[] = wxT( "UsePdfPrint" );
 static const wxChar SmallDrillMarkSize[] = wxT( "SmallDrillMarkSize" );
 static const wxChar HotkeysDumper[] = wxT( "HotkeysDumper" );
 static const wxChar DrawBoundingBoxes[] = wxT( "DrawBoundingBoxes" );
-static const wxChar GLRebuildAfterSiblingClose[] = wxT( "GLRebuildAfterSiblingClose" );
-static const wxChar GLLayeredCanvas[] = wxT( "GLLayeredCanvas" );
 static const wxChar GLSwapCopy[] = wxT( "GLSwapCopy" );
 static const wxChar ShowPcbnewExportNetlist[] = wxT( "ShowPcbnewExportNetlist" );
 static const wxChar Skip3DModelFileCache[] = wxT( "Skip3DModelFileCache" );
@@ -269,8 +267,6 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_SmallDrillMarkSize = 0.35;
     m_HotkeysDumper = false;
     m_DrawBoundingBoxes = false;
-    m_GLRebuildAfterSiblingClose = true;
-    m_GLLayeredCanvas = true;
     m_GLSwapCopy = true;
     m_MsgPanelShowUuids = 0;
     m_ShowPcbnewExportNetlist = false;
@@ -508,13 +504,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::DrawBoundingBoxes, &m_DrawBoundingBoxes,
                                                            m_DrawBoundingBoxes ) );
-
-    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::GLRebuildAfterSiblingClose,
-                                                           &m_GLRebuildAfterSiblingClose,
-                                                           m_GLRebuildAfterSiblingClose ) );
-
-    m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::GLLayeredCanvas, &m_GLLayeredCanvas,
-                                                           m_GLLayeredCanvas ) );
 
     m_entries.push_back( std::make_unique<PARAM_CFG_BOOL>( true, AC_KEYS::GLSwapCopy, &m_GLSwapCopy,
                                                            m_GLSwapCopy ) );
