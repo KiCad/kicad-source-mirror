@@ -363,16 +363,18 @@ BOOST_AUTO_TEST_CASE( RealWorldScenarios )
 BOOST_AUTO_TEST_CASE( CallbackVariableResolution )
 {
     // Create evaluator with custom callback
-    auto variableCallback = []( const std::string& varName ) -> calc_parser::Result<calc_parser::Value> {
-        if( varName == "dynamic_value" )
-            return calc_parser::MakeValue<calc_parser::Value>( 42.0 );
-        else if( varName == "dynamic_string" )
-            return calc_parser::MakeValue<calc_parser::Value>( std::string("Hello from callback") );
-        else if( varName == "computed_value" )
-            return calc_parser::MakeValue<calc_parser::Value>( std::sin( 3.14159 / 4 ) * 100.0 );  // Should be about 70.7
-        else
-            return calc_parser::MakeError<calc_parser::Value>( "Variable '" + varName + "' not found in callback" );
-    };
+    auto variableCallback =
+            []( const std::string& varName ) -> calc_parser::RESULT<calc_parser::VALUE>
+            {
+                if( varName == "dynamic_value" )
+                    return calc_parser::MakeValue<calc_parser::VALUE>( 42.0 );
+                else if( varName == "dynamic_string" )
+                    return calc_parser::MakeValue<calc_parser::VALUE>( std::string( "Hello from callback" ) );
+                else if( varName == "computed_value" )
+                    return calc_parser::MakeValue<calc_parser::VALUE>( std::sin( 3.14159 / 4 ) * 100.0 );  // Should be about 70.7
+                else
+                    return calc_parser::MakeError<calc_parser::VALUE>( "Variable '" + varName + "' not found in callback" );
+            };
 
     EXPRESSION_EVALUATOR evaluator( variableCallback, false );
 

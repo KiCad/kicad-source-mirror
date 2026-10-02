@@ -113,7 +113,7 @@ public:
         return totalDays;
     }
 
-    static auto ParseDate( const std::string& aDateStr ) -> std::optional<int>
+    static std::optional<int> ParseDate( const std::string& aDateStr )
     {
         std::istringstream iss( aDateStr );
         std::string        token;
@@ -518,22 +518,22 @@ public:
 };
 
 
-EVAL_VISITOR::EVAL_VISITOR( VariableCallback aVariableCallback, ERROR_COLLECTOR& aErrorCollector ) :
+EVAL_VISITOR::EVAL_VISITOR( VAR_CALLBACK aVariableCallback, ERROR_COLLECTOR& aErrorCollector ) :
         m_variableCallback( std::move( aVariableCallback ) ),
         m_errors( aErrorCollector ),
         m_gen( m_rd() )
 {
 }
 
-auto EVAL_VISITOR::operator()( const NODE& aNode ) const -> Result<Value>
+RESULT<VALUE> EVAL_VISITOR::operator()( const NODE& aNode ) const
 {
     switch( aNode.type )
     {
-    case NodeType::Number: return MakeValue<Value>( std::get<double>( aNode.data ) );
+    case NODE_TYPE::Number: return MakeValue<VALUE>( std::get<double>( aNode.data ) );
 
-    case NodeType::String: return MakeValue<Value>( std::get<std::string>( aNode.data ) );
+    case NODE_TYPE::String: return MakeValue<VALUE>( std::get<std::string>( aNode.data ) );
 
-    case NodeType::Var:
+    case NODE_TYPE::Var:
     {
         const auto& varName = std::get<std::string>( aNode.data );
 
@@ -541,17 +541,17 @@ auto EVAL_VISITOR::operator()( const NODE& aNode ) const -> Result<Value>
         if( m_variableCallback )
             return m_variableCallback( varName );
 
-        return MakeError<Value>( fmt::format( "No variable resolver configured for: {}", varName ) );
+        return MakeError<VALUE>( fmt::format( "No variable resolver configured for: {}", varName ) );
     }
 
-    case NodeType::BinOp:
+    case NODE_TYPE::BinOp:
     {
         const auto& binop = std::get<BIN_OP_DATA>( aNode.data );
         auto        leftResult = binop.left->Accept( *this );
         if( !leftResult )
             return leftResult;
 
-        auto rightResult = binop.right ? binop.right->Accept( *this ) : MakeValue<Value>( 0.0 );
+        auto rightResult = binop.right ? binop.right->Accept( *this ) : MakeValue<VALUE>( 0.0 );
         if( !rightResult )
             return rightResult;
 
@@ -564,7 +564,7 @@ auto EVAL_VISITOR::operator()( const NODE& aNode ) const -> Result<Value>
             // If either operand is a string, concatenate
             if( std::holds_alternative<std::string>( leftVal ) || std::holds_alternative<std::string>( rightVal ) )
             {
-                return MakeValue<Value>( VALUE_UTILS::ConcatStrings( leftVal, rightVal ) );
+                return MakeValue<VALUE>( VALUE_UTILS::ConcatStrings( leftVal, rightVal ) );
             }
         }
 
@@ -579,7 +579,7 @@ auto EVAL_VISITOR::operator()( const NODE& aNode ) const -> Result<Value>
             {
                 bool   equal = std::get<std::string>( leftVal ) == std::get<std::string>( rightVal );
                 double result = ( binop.op == 3 ) ? ( equal ? 1.0 : 0.0 ) : ( equal ? 0.0 : 1.0 );
-                return MakeValue<Value>( result );
+                return MakeValue<VALUE>( result );
             }
         }
 
@@ -587,151 +587,157 @@ auto EVAL_VISITOR::operator()( const NODE& aNode ) const -> Result<Value>
         return VALUE_UTILS::ArithmeticOp( leftResult.GetValue(), rightResult.GetValue(), binop.op );
     }
 
-    case NodeType::Function:
+    case NODE_TYPE::Function:
     {
         const auto& func = std::get<FUNC_DATA>( aNode.data );
         return evaluateFunction( func );
     }
 
-    default: return MakeError<Value>( "Cannot evaluate this node type" );
+    default: return MakeError<VALUE>( "Cannot evaluate this node type" );
     }
 }
 
-auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Value>
+
+RESULT<VALUE> EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const
 {
-    const auto& name = aFunc.name;
-    const auto& args = aFunc.args;
+    const std::string&                        name = aFunc.name;
+    const std::vector<std::unique_ptr<NODE>>& args = aFunc.args;
 
     // Zero-argument functions
     if( args.empty() )
     {
         if( name == "today" )
-            return MakeValue<Value>( static_cast<double>( DATE_UTILS::GetCurrentDays() ) );
+        {
+            return MakeValue<VALUE>( static_cast<double>( DATE_UTILS::GetCurrentDays() ) );
+        }
         else if( name == "now" )
-            return MakeValue<Value>( DATE_UTILS::GetCurrentTimestamp() );
+        {
+            return MakeValue<VALUE>( DATE_UTILS::GetCurrentTimestamp() );
+        }
         else if( name == "random" )
         {
             if( TEXT_EVAL::ENVIRONMENT* environment = TEXT_EVAL::ENVIRONMENT::Current() )
                 environment->RecordRandomUse();
 
             std::uniform_real_distribution<double> dis( 0.0, 1.0 );
-            return MakeValue<Value>( dis( m_gen ) );
+            return MakeValue<VALUE>( dis( m_gen ) );
         }
     }
 
     // Evaluate arguments to mixed types
-    std::vector<Value> argValues;
+    std::vector<VALUE> argValues;
     argValues.reserve( args.size() );
 
-    for( const auto& arg : args )
+    for( const std::unique_ptr<NODE>& arg : args )
     {
-        auto result = arg->Accept( *this );
+        RESULT<VALUE> result = arg->Accept( *this );
+
         if( !result )
             return result;
 
         argValues.push_back( result.GetValue() );
     }
 
-    const auto argc = argValues.size();
+    const size_t argc = argValues.size();
 
     // String formatting functions (return strings!)
     if( name == "format" && argc >= 1 )
     {
-        const auto& numResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const RESULT<double>& numResult = VALUE_UTILS::ToDouble( argValues[0] );
 
         if( !numResult )
-            return MakeError<Value>( numResult.GetError() );
+            return MakeError<VALUE>( numResult.GetError() );
 
         const auto& value = numResult.GetValue();
         int         decimals = 2;
 
         if( argc > 1 )
         {
-            const auto& decResult = VALUE_UTILS::ToDouble( argValues[1] );
+            const RESULT<double>& decResult = VALUE_UTILS::ToDouble( argValues[1] );
 
             if( decResult )
                 decimals = static_cast<int>( decResult.GetValue() );
         }
 
-        return MakeValue<Value>( fmt::format( "{:.{}f}", value, decimals ) );
+        return MakeValue<VALUE>( fmt::format( "{:.{}f}", value, decimals ) );
     }
     else if( name == "currency" && argc >= 1 )
     {
-        const auto& numResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const RESULT<double>& numResult = VALUE_UTILS::ToDouble( argValues[0] );
 
         if( !numResult )
-            return MakeError<Value>( numResult.GetError() );
+            return MakeError<VALUE>( numResult.GetError() );
 
-        const auto& amount = numResult.GetValue();
-        const auto& symbol = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "$";
+        const auto&        amount = numResult.GetValue();
+        const std::string& symbol = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "$";
 
-        return MakeValue<Value>( fmt::format( "{}{:.2f}", symbol, amount ) );
+        return MakeValue<VALUE>( fmt::format( "{}{:.2f}", symbol, amount ) );
     }
     else if( name == "fixed" && argc >= 1 )
     {
-        const auto& numResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const RESULT<double>& numResult = VALUE_UTILS::ToDouble( argValues[0] );
 
         if( !numResult )
-            return MakeError<Value>( numResult.GetError() );
+            return MakeError<VALUE>( numResult.GetError() );
 
         const auto& value = numResult.GetValue();
         int         decimals = 2;
 
         if( argc > 1 )
         {
-            const auto& decResult = VALUE_UTILS::ToDouble( argValues[1] );
+            const RESULT<double>& decResult = VALUE_UTILS::ToDouble( argValues[1] );
 
             if( decResult )
                 decimals = static_cast<int>( decResult.GetValue() );
         }
 
-        return MakeValue<Value>( fmt::format( "{:.{}f}", value, decimals ) );
+        return MakeValue<VALUE>( fmt::format( "{:.{}f}", value, decimals ) );
     }
 
     // Date formatting functions (return strings!)
     else if( name == "dateformat" && argc >= 1 )
     {
-        const auto& dateResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const RESULT<double>& dateResult = VALUE_UTILS::ToDouble( argValues[0] );
 
         if( !dateResult )
-            return MakeError<Value>( dateResult.GetError() );
+            return MakeError<VALUE>( dateResult.GetError() );
 
-        const auto& days = static_cast<int>( dateResult.GetValue() );
-        const auto& format = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "ISO";
+        const auto&        days = static_cast<int>( dateResult.GetValue() );
+        const std::string& format = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "ISO";
 
-        return MakeValue<Value>( DATE_UTILS::FormatDate( days, format ) );
+        return MakeValue<VALUE>( DATE_UTILS::FormatDate( days, format ) );
     }
     else if( name == "datestring" && argc == 1 )
     {
-        const auto& dateStr = VALUE_UTILS::ToString( argValues[0] );
-        const auto& daysResult = DATE_UTILS::ParseDate( dateStr );
+        const std::string&       dateStr = VALUE_UTILS::ToString( argValues[0] );
+        const std::optional<int> daysResult = DATE_UTILS::ParseDate( dateStr );
 
         if( !daysResult )
-            return MakeError<Value>( "Invalid date format: " + dateStr );
+            return MakeError<VALUE>( "Invalid date format: " + dateStr );
 
-        return MakeValue<Value>( static_cast<double>( daysResult.value() ) );
+        return MakeValue<VALUE>( static_cast<double>( daysResult.value() ) );
     }
     else if( name == "weekdayname" && argc == 1 )
     {
-        const auto& dateResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const RESULT<double>& dateResult = VALUE_UTILS::ToDouble( argValues[0] );
 
         if( !dateResult )
-            return MakeError<Value>( dateResult.GetError() );
+            return MakeError<VALUE>( dateResult.GetError() );
 
-        const auto& days = static_cast<int>( dateResult.GetValue() );
-        return MakeValue<Value>( DATE_UTILS::GetWeekdayName( days ) );
+        const int& days = static_cast<int>( dateResult.GetValue() );
+        return MakeValue<VALUE>( DATE_UTILS::GetWeekdayName( days ) );
     }
     else if( name == "timeformat" && argc >= 1 )
     {
-        const auto& timeResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const RESULT<double>& timeResult = VALUE_UTILS::ToDouble( argValues[0] );
 
         if( !timeResult )
-            return MakeError<Value>( timeResult.GetError() );
+            return MakeError<VALUE>( timeResult.GetError() );
 
-        const auto& timestamp = timeResult.GetValue();
-        const auto& format = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "ISO";
+        const auto&        timestamp = timeResult.GetValue();
+        const std::string& format = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "ISO";
 
-        return MakeValue<Value>( DATE_UTILS::FormatTime( timestamp, format ) );
+        return MakeValue<VALUE>( DATE_UTILS::FormatTime( timestamp, format ) );
     }
 
     // VCS functions (return strings!)
@@ -748,13 +754,13 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         if( argc == 1 )
         {
-            const auto& lenResult = VALUE_UTILS::ToDouble( argValues[0] );
+            const RESULT<double>& lenResult = VALUE_UTILS::ToDouble( argValues[0] );
 
             if( lenResult )
                 length = static_cast<int>( lenResult.GetValue() );
         }
 
-        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitHash( ".", length ) ) );
+        return MakeValue<VALUE>( vcsResult( TEXT_EVAL_VCS::GetCommitHash( ".", length ) ) );
     }
     else if( name == "vcsnearestlabel" && argc <= 2 )
     {
@@ -766,13 +772,13 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         if( argc >= 2 )
         {
-            auto tagsResult = VALUE_UTILS::ToDouble( argValues[1] );
+            RESULT<double> tagsResult = VALUE_UTILS::ToDouble( argValues[1] );
 
             if( tagsResult )
                 anyTags = tagsResult.GetValue() != 0.0;
         }
 
-        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetNearestTag( match, anyTags ) ) );
+        return MakeValue<VALUE>( vcsResult( TEXT_EVAL_VCS::GetNearestTag( match, anyTags ) ) );
     }
     else if( name == "vcslabeldistance" && argc <= 2 )
     {
@@ -784,13 +790,13 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         if( argc >= 2 )
         {
-            const auto& tagsResult = VALUE_UTILS::ToDouble( argValues[1] );
+            const RESULT<double>& tagsResult = VALUE_UTILS::ToDouble( argValues[1] );
 
             if( tagsResult )
                 anyTags = tagsResult.GetValue() != 0.0;
         }
 
-        return MakeValue<Value>( std::to_string( TEXT_EVAL_VCS::GetDistanceFromTag( match, anyTags ) ) );
+        return MakeValue<VALUE>( std::to_string( TEXT_EVAL_VCS::GetDistanceFromTag( match, anyTags ) ) );
     }
     else if( name == "vcsdirty" && argc <= 1 )
     {
@@ -798,13 +804,13 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         if( argc == 1 )
         {
-            const auto& utResult = VALUE_UTILS::ToDouble( argValues[0] );
+            const RESULT<double>& utResult = VALUE_UTILS::ToDouble( argValues[0] );
 
             if( utResult )
                 includeUntracked = utResult.GetValue() != 0.0;
         }
 
-        return MakeValue<Value>( TEXT_EVAL_VCS::IsDirty( includeUntracked ) ? "1" : "0" );
+        return MakeValue<VALUE>( TEXT_EVAL_VCS::IsDirty( includeUntracked ) ? "1" : "0" );
     }
     else if( name == "vcsdirtysuffix" && argc <= 2 )
     {
@@ -816,33 +822,33 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         if( argc >= 2 )
         {
-            auto utResult = VALUE_UTILS::ToDouble( argValues[1] );
+            RESULT<double> utResult = VALUE_UTILS::ToDouble( argValues[1] );
 
             if( utResult )
                 includeUntracked = utResult.GetValue() != 0.0;
         }
 
-        return MakeValue<Value>( TEXT_EVAL_VCS::IsDirty( includeUntracked ) ? suffix : "" );
+        return MakeValue<VALUE>( TEXT_EVAL_VCS::IsDirty( includeUntracked ) ? suffix : "" );
     }
     else if( name == "vcsauthor" && argc == 0 )
     {
-        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetAuthor( "." ) ) );
+        return MakeValue<VALUE>( vcsResult( TEXT_EVAL_VCS::GetAuthor( "." ) ) );
     }
     else if( name == "vcsauthoremail" && argc == 0 )
     {
-        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetAuthorEmail( "." ) ) );
+        return MakeValue<VALUE>( vcsResult( TEXT_EVAL_VCS::GetAuthorEmail( "." ) ) );
     }
     else if( name == "vcscommitter" && argc == 0 )
     {
-        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitter( "." ) ) );
+        return MakeValue<VALUE>( vcsResult( TEXT_EVAL_VCS::GetCommitter( "." ) ) );
     }
     else if( name == "vcscommitteremail" && argc == 0 )
     {
-        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitterEmail( "." ) ) );
+        return MakeValue<VALUE>( vcsResult( TEXT_EVAL_VCS::GetCommitterEmail( "." ) ) );
     }
     else if( name == "vcsbranch" && argc == 0 )
     {
-        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetBranch() ) );
+        return MakeValue<VALUE>( vcsResult( TEXT_EVAL_VCS::GetBranch() ) );
     }
     else if( name == "vcscommitdate" && argc <= 1 )
     {
@@ -854,10 +860,10 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
         int64_t timestamp = TEXT_EVAL_VCS::GetCommitTimestamp( "." );
 
         if( timestamp == 0 )
-            return MakeValue<Value>( vcsResult( std::string() ) );
+            return MakeValue<VALUE>( vcsResult( std::string() ) );
 
         int days = static_cast<int>( timestamp / ( 24 * 3600 ) );
-        return MakeValue<Value>( DATE_UTILS::FormatDate( days, format ) );
+        return MakeValue<VALUE>( DATE_UTILS::FormatDate( days, format ) );
     }
 
     // VCS file functions (file-specific versions)
@@ -868,33 +874,33 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
 
         if( argc == 2 )
         {
-            const auto& lenResult = VALUE_UTILS::ToDouble( argValues[1] );
+            const RESULT<double>& lenResult = VALUE_UTILS::ToDouble( argValues[1] );
 
             if( lenResult )
                 length = static_cast<int>( lenResult.GetValue() );
         }
 
-        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitHash( filePath, length ) ) );
+        return MakeValue<VALUE>( vcsResult( TEXT_EVAL_VCS::GetCommitHash( filePath, length ) ) );
     }
     else if( name == "vcsfileauthor" && argc == 1 )
     {
         const std::string& filePath = VALUE_UTILS::ToString( argValues[0] );
-        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetAuthor( filePath ) ) );
+        return MakeValue<VALUE>( vcsResult( TEXT_EVAL_VCS::GetAuthor( filePath ) ) );
     }
     else if( name == "vcsfileauthoremail" && argc == 1 )
     {
         const std::string& filePath = VALUE_UTILS::ToString( argValues[0] );
-        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetAuthorEmail( filePath ) ) );
+        return MakeValue<VALUE>( vcsResult( TEXT_EVAL_VCS::GetAuthorEmail( filePath ) ) );
     }
     else if( name == "vcsfilecommitter" && argc == 1 )
     {
         const std::string& filePath = VALUE_UTILS::ToString( argValues[0] );
-        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitter( filePath ) ) );
+        return MakeValue<VALUE>( vcsResult( TEXT_EVAL_VCS::GetCommitter( filePath ) ) );
     }
     else if( name == "vcsfilecommitteremail" && argc == 1 )
     {
         const std::string& filePath = VALUE_UTILS::ToString( argValues[0] );
-        return MakeValue<Value>( vcsResult( TEXT_EVAL_VCS::GetCommitterEmail( filePath ) ) );
+        return MakeValue<VALUE>( vcsResult( TEXT_EVAL_VCS::GetCommitterEmail( filePath ) ) );
     }
     else if( name == "vcsfilecommitdate" && argc >= 1 && argc <= 2 )
     {
@@ -907,10 +913,10 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
         int64_t timestamp = TEXT_EVAL_VCS::GetCommitTimestamp( filePath );
 
         if( timestamp == 0 )
-            return MakeValue<Value>( vcsResult( std::string() ) );
+            return MakeValue<VALUE>( vcsResult( std::string() ) );
 
         int days = static_cast<int>( timestamp / ( 24 * 3600 ) );
-        return MakeValue<Value>( DATE_UTILS::FormatDate( days, format ) );
+        return MakeValue<VALUE>( DATE_UTILS::FormatDate( days, format ) );
     }
 
     // String functions (return strings!)
@@ -918,50 +924,50 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
     {
         std::string str = VALUE_UTILS::ToString( argValues[0] );
         std::transform( str.begin(), str.end(), str.begin(), ::toupper );
-        return MakeValue<Value>( str );
+        return MakeValue<VALUE>( str );
     }
     else if( name == "lower" && argc == 1 )
     {
         std::string str = VALUE_UTILS::ToString( argValues[0] );
         std::transform( str.begin(), str.end(), str.begin(), ::tolower );
-        return MakeValue<Value>( str );
+        return MakeValue<VALUE>( str );
     }
     else if( name == "concat" && argc >= 2 )
     {
         std::string result;
 
-        for( const auto& val : argValues )
+        for( const VALUE& val : argValues )
             result += VALUE_UTILS::ToString( val );
 
-        return MakeValue<Value>( result );
+        return MakeValue<VALUE>( result );
     }
     else if( name == "beforefirst" && argc == 2 )
     {
         wxString result = VALUE_UTILS::ToString( argValues[0] );
 
         result = result.BeforeFirst( VALUE_UTILS::ToChar( argValues[1] ) );
-        return MakeValue<Value>( result.ToStdString() );
+        return MakeValue<VALUE>( result.ToStdString() );
     }
     else if( name == "beforelast" && argc == 2 )
     {
         wxString result = VALUE_UTILS::ToString( argValues[0] );
 
         result = result.BeforeLast( VALUE_UTILS::ToChar( argValues[1] ) );
-        return MakeValue<Value>( result.ToStdString() );
+        return MakeValue<VALUE>( result.ToStdString() );
     }
     else if( name == "afterfirst" && argc == 2 )
     {
         wxString result = VALUE_UTILS::ToString( argValues[0] );
 
         result = result.AfterFirst( VALUE_UTILS::ToChar( argValues[1] ) );
-        return MakeValue<Value>( result.ToStdString() );
+        return MakeValue<VALUE>( result.ToStdString() );
     }
     else if( name == "afterlast" && argc == 2 )
     {
         wxString result = VALUE_UTILS::ToString( argValues[0] );
 
         result = result.AfterLast( VALUE_UTILS::ToChar( argValues[1] ) );
-        return MakeValue<Value>( result.ToStdString() );
+        return MakeValue<VALUE>( result.ToStdString() );
     }
     else if( name == "replace" && argc == 3 )
     {
@@ -971,20 +977,20 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
         if( !search.IsEmpty() )
             result.Replace( search, VALUE_UTILS::ToString( argValues[2] ) );
 
-        return MakeValue<Value>( result.ToStdString() );
+        return MakeValue<VALUE>( result.ToStdString() );
     }
 
     // Conditional functions (handle mixed types)
     if( name == "if" && argc == 3 )
     {
         // Convert only the condition to a number
-        const auto& conditionResult = VALUE_UTILS::ToDouble( argValues[0] );
+        const RESULT<double>& conditionResult = VALUE_UTILS::ToDouble( argValues[0] );
 
         if( !conditionResult )
-            return MakeError<Value>( conditionResult.GetError() );
+            return MakeError<VALUE>( conditionResult.GetError() );
 
         const auto& condition = conditionResult.GetValue() != 0.0;
-        return MakeValue<Value>( condition ? argValues[1] : argValues[2] );
+        return MakeValue<VALUE>( condition ? argValues[1] : argValues[2] );
     }
 
     // E-series functions (handle value as number, series as string)
@@ -993,10 +999,10 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
         const auto& valueResult = VALUE_UTILS::ToDouble( argValues[0] );
 
         if( !valueResult )
-            return MakeError<Value>( valueResult.GetError() );
+            return MakeError<VALUE>( valueResult.GetError() );
 
         const auto&           value = valueResult.GetValue();
-        const auto&           series = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "E24";
+        const std::string     series = argc > 1 ? VALUE_UTILS::ToString( argValues[1] ) : "E24";
         std::optional<double> result;
 
         if( name == "enearest" )
@@ -1007,127 +1013,147 @@ auto EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Va
             result = ESERIES_UTILS::FindDown( value, series );
 
         if( !result )
-            return MakeError<Value>( fmt::format( "Invalid E-series: {}", series ) );
+            return MakeError<VALUE>( fmt::format( "Invalid E-series: {}", series ) );
 
-        return MakeValue<Value>( result.value() );
+        return MakeValue<VALUE>( result.value() );
     }
 
     // Mathematical functions (return numbers) - convert args to doubles first
     std::vector<double> numArgs;
 
-    for( const auto& val : argValues )
+    for( const VALUE& val : argValues )
     {
-        const auto& numResult = VALUE_UTILS::ToDouble( val );
+        const RESULT<double>& numResult = VALUE_UTILS::ToDouble( val );
 
         if( !numResult )
-            return MakeError<Value>( numResult.GetError() );
+            return MakeError<VALUE>( numResult.GetError() );
 
         numArgs.push_back( numResult.GetValue() );
     }
 
     // Mathematical function implementations
     if( name == "abs" && argc == 1 )
-        return MakeValue<Value>( std::abs( numArgs[0] ) );
+    {
+        return MakeValue<VALUE>( std::abs( numArgs[0] ) );
+    }
     else if( name == "sum" && argc >= 1 )
-        return MakeValue<Value>( std::accumulate( numArgs.begin(), numArgs.end(), 0.0 ) );
+    {
+        return MakeValue<VALUE>( std::accumulate( numArgs.begin(), numArgs.end(), 0.0 ) );
+    }
     else if( name == "round" && argc >= 1 )
     {
-        const auto& value = numArgs[0];
-        const auto& precision = argc > 1 ? static_cast<int>( numArgs[1] ) : 0;
-        const auto& multiplier = std::pow( 10.0, precision );
-        return MakeValue<Value>( std::round( value * multiplier ) / multiplier );
+        const double value = numArgs[0];
+        const int    precision = argc > 1 ? static_cast<int>( numArgs[1] ) : 0;
+        const double multiplier = std::pow( 10.0, precision );
+        return MakeValue<VALUE>( std::round( value * multiplier ) / multiplier );
     }
     else if( name == "sqrt" && argc == 1 )
     {
         if( numArgs[0] < 0 )
-            return MakeError<Value>( "Square root of negative number" );
+            return MakeError<VALUE>( "Square root of negative number" );
 
-        return MakeValue<Value>( std::sqrt( numArgs[0] ) );
+        return MakeValue<VALUE>( std::sqrt( numArgs[0] ) );
     }
     else if( name == "pow" && argc == 2 )
-        return MakeValue<Value>( std::pow( numArgs[0], numArgs[1] ) );
+    {
+        return MakeValue<VALUE>( std::pow( numArgs[0], numArgs[1] ) );
+    }
     else if( name == "floor" && argc == 1 )
-        return MakeValue<Value>( std::floor( numArgs[0] ) );
+    {
+        return MakeValue<VALUE>( std::floor( numArgs[0] ) );
+    }
     else if( name == "ceil" && argc == 1 )
-        return MakeValue<Value>( std::ceil( numArgs[0] ) );
+    {
+        return MakeValue<VALUE>( std::ceil( numArgs[0] ) );
+    }
     else if( name == "min" && argc >= 1 )
-        return MakeValue<Value>( *std::min_element( numArgs.begin(), numArgs.end() ) );
+    {
+        return MakeValue<VALUE>( *std::min_element( numArgs.begin(), numArgs.end() ) );
+    }
     else if( name == "max" && argc >= 1 )
-        return MakeValue<Value>( *std::max_element( numArgs.begin(), numArgs.end() ) );
+    {
+        return MakeValue<VALUE>( *std::max_element( numArgs.begin(), numArgs.end() ) );
+    }
     else if( name == "avg" && argc >= 1 )
     {
         const auto sum = std::accumulate( numArgs.begin(), numArgs.end(), 0.0 );
-        return MakeValue<Value>( sum / static_cast<double>( argc ) );
+        return MakeValue<VALUE>( sum / static_cast<double>( argc ) );
     }
     else if( name == "shunt" && argc == 2 )
     {
-        const auto r1 = numArgs[0];
-        const auto r2 = numArgs[1];
-        const auto sum = r1 + r2;
+        const double r1 = numArgs[0];
+        const double r2 = numArgs[1];
+        const double sum = r1 + r2;
 
         // Calculate parallel resistance: (r1*r2)/(r1+r2)
         // If sum is not positive, return 0.0 (handles edge cases like shunt(0,0))
         if( sum > 0.0 )
-            return MakeValue<Value>( ( r1 * r2 ) / sum );
+            return MakeValue<VALUE>( ( r1 * r2 ) / sum );
         else
-            return MakeValue<Value>( 0.0 );
+            return MakeValue<VALUE>( 0.0 );
     }
     else if( name == "db" && argc == 1 )
     {
         // Power ratio to dB: 10*log10(ratio)
         if( numArgs[0] <= 0.0 )
-            return MakeError<Value>( "db() argument must be positive" );
+            return MakeError<VALUE>( "db() argument must be positive" );
 
-        return MakeValue<Value>( 10.0 * std::log10( numArgs[0] ) );
+        return MakeValue<VALUE>( 10.0 * std::log10( numArgs[0] ) );
     }
     else if( name == "dbv" && argc == 1 )
     {
         // Voltage/current ratio to dB: 20*log10(ratio)
         if( numArgs[0] <= 0.0 )
-            return MakeError<Value>( "dbv() argument must be positive" );
+            return MakeError<VALUE>( "dbv() argument must be positive" );
 
-        return MakeValue<Value>( 20.0 * std::log10( numArgs[0] ) );
+        return MakeValue<VALUE>( 20.0 * std::log10( numArgs[0] ) );
     }
     else if( name == "fromdb" && argc == 1 )
     {
         // dB to power ratio: 10^(dB/10)
-        return MakeValue<Value>( std::pow( 10.0, numArgs[0] / 10.0 ) );
+        return MakeValue<VALUE>( std::pow( 10.0, numArgs[0] / 10.0 ) );
     }
     else if( name == "fromdbv" && argc == 1 )
     {
         // dB to voltage/current ratio: 10^(dB/20)
-        return MakeValue<Value>( std::pow( 10.0, numArgs[0] / 20.0 ) );
+        return MakeValue<VALUE>( std::pow( 10.0, numArgs[0] / 20.0 ) );
     }
 
-    return MakeError<Value>( fmt::format( "Unknown function: {} with {} arguments", name, argc ) );
+    return MakeError<VALUE>( fmt::format( "Unknown function: {} with {} arguments", name, argc ) );
 }
 
-auto DOC_PROCESSOR::Process( const DOC& aDoc, VariableCallback aVariableCallback ) -> std::pair<std::string, bool>
-{
-    std::string  result;
-    auto         localErrors = ERROR_COLLECTOR{};
-    EVAL_VISITOR evaluator{ std::move( aVariableCallback ), localErrors };
-    bool         hadErrors = aDoc.HasErrors();
 
-    for( const auto& node : aDoc.GetNodes() )
+std::pair<std::string, bool> DOC_PROCESSOR::Process( const DOC& aDoc, VAR_CALLBACK aVariableCallback )
+{
+    std::string     result;
+    ERROR_COLLECTOR localErrors = ERROR_COLLECTOR{};
+    EVAL_VISITOR    evaluator{ std::move( aVariableCallback ), localErrors };
+    bool            hadErrors = aDoc.HasErrors();
+
+    for( const std::unique_ptr<NODE>& node : aDoc.GetNodes() )
     {
         switch( node->type )
         {
-        case NodeType::Text: result += std::get<std::string>( node->data ); break;
+        case NODE_TYPE::Text:
+            result += std::get<std::string>( node->data );
+            break;
 
-        case NodeType::Calc:
+        case NODE_TYPE::Calc:
         {
-            const auto& calcData = std::get<BIN_OP_DATA>( node->data );
-            auto        evalResult = calcData.left->Accept( evaluator );
+            const auto&   calcData = std::get<BIN_OP_DATA>( node->data );
+            RESULT<VALUE> evalResult = calcData.left->Accept( evaluator );
 
             if( evalResult )
+            {
                 result += VALUE_UTILS::ToString( evalResult.GetValue() );
+            }
             else
             {
                 // Don't add error formatting to result - errors go to error vector only
                 // The higher level will return original input unchanged if there are errors
                 hadErrors = true;
             }
+
             break;
         }
 
@@ -1141,13 +1167,13 @@ auto DOC_PROCESSOR::Process( const DOC& aDoc, VariableCallback aVariableCallback
     return { std::move( result ), hadErrors || localErrors.HasErrors() };
 }
 
-auto DOC_PROCESSOR::ProcessWithDetails( const DOC& aDoc, VariableCallback aVariableCallback )
-        -> std::tuple<std::string, std::vector<std::string>, bool>
-{
-    auto [result, hadErrors] = Process( aDoc, std::move( aVariableCallback ) );
-    auto allErrors = aDoc.GetErrors();
 
-    return { std::move( result ), std::move( allErrors ), hadErrors };
+std::tuple<std::string, std::vector<std::string>, bool> DOC_PROCESSOR::ProcessWithDetails( const DOC& aDoc,
+                                                                                           VAR_CALLBACK aCallback )
+{
+    auto [result, hadErrors] = Process( aDoc, std::move( aCallback ) );
+
+    return { std::move( result ), aDoc.GetErrors(), hadErrors };
 }
 
 } // namespace calc_parser

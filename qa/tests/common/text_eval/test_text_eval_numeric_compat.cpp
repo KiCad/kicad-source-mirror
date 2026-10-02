@@ -340,12 +340,14 @@ BOOST_AUTO_TEST_CASE( UnitSupport )
     BOOST_CHECK( !evaluator_mm.HasErrors() );
 
     // Test unit constructor with variable callback
-    auto callback = [](const std::string& varName) -> calc_parser::Result<calc_parser::Value> {
-        if (varName == "width") {
-            return calc_parser::MakeValue<calc_parser::Value>(10.0);
-        }
-        return calc_parser::MakeError<calc_parser::Value>("Variable not found: " + varName);
-    };
+    auto callback =
+            []( const std::string& varName ) -> calc_parser::RESULT<calc_parser::VALUE>
+            {
+                if (varName == "width") {
+                    return calc_parser::MakeValue<calc_parser::VALUE>(10.0);
+                }
+                return calc_parser::MakeError<calc_parser::VALUE>("Variable not found: " + varName);
+            };
 
     EXPRESSION_EVALUATOR evaluator_callback( EDA_UNITS::MM, callback, false );
     BOOST_CHECK_EQUAL( evaluator_callback.GetDefaultUnits(), EDA_UNITS::MM );

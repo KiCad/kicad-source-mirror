@@ -50,7 +50,7 @@ namespace KI_EVAL
 #include <span>
 
 // // Token type enum matching the generated parser
-enum class TextEvalToken : int
+enum class TEXT_EVAL_TOKEN : int
 {
     ENDS = KI_EVAL_LT - 1,
     LT = KI_EVAL_LT,
@@ -346,7 +346,7 @@ namespace KIEVAL_UNIT_CONV
 {
 
 // Internal unit enum matching NUMERIC_EVALUATOR
-enum class Unit
+enum class UNIT
 {
     Invalid,
     UM,
@@ -364,54 +364,54 @@ enum class Unit
 };
 
 // Convert EDA_UNITS to internal Unit enum
-Unit edaUnitsToInternal( EDA_UNITS aUnits )
+UNIT edaUnitsToInternal( EDA_UNITS aUnits )
 {
     switch( aUnits )
     {
-    case EDA_UNITS::MM: return Unit::MM;
-    case EDA_UNITS::MILS: return Unit::Mil;
-    case EDA_UNITS::INCH: return Unit::Inch;
-    case EDA_UNITS::DEGREES: return Unit::Degrees;
-    case EDA_UNITS::FS: return Unit::Femtoseconds;
-    case EDA_UNITS::PS: return Unit::Picoseconds;
-    case EDA_UNITS::PS_PER_INCH: return Unit::PsPerInch;
-    case EDA_UNITS::PS_PER_CM: return Unit::PsPerCm;
-    case EDA_UNITS::PS_PER_MM: return Unit::PsPerMm;
-    case EDA_UNITS::UM: return Unit::UM;
-    case EDA_UNITS::CM: return Unit::CM;
-    case EDA_UNITS::UNSCALED: return Unit::SI;
-    default: return Unit::MM;
+    case EDA_UNITS::MM: return UNIT::MM;
+    case EDA_UNITS::MILS: return UNIT::Mil;
+    case EDA_UNITS::INCH: return UNIT::Inch;
+    case EDA_UNITS::DEGREES: return UNIT::Degrees;
+    case EDA_UNITS::FS: return UNIT::Femtoseconds;
+    case EDA_UNITS::PS: return UNIT::Picoseconds;
+    case EDA_UNITS::PS_PER_INCH: return UNIT::PsPerInch;
+    case EDA_UNITS::PS_PER_CM: return UNIT::PsPerCm;
+    case EDA_UNITS::PS_PER_MM: return UNIT::PsPerMm;
+    case EDA_UNITS::UM: return UNIT::UM;
+    case EDA_UNITS::CM: return UNIT::CM;
+    case EDA_UNITS::UNSCALED: return UNIT::SI;
+    default: return UNIT::MM;
     }
 }
 
 // Parse unit from string using centralized registry
-Unit parseUnit( const std::string& aUnitStr )
+UNIT parseUnit( const std::string& aUnitStr )
 {
     auto evalUnit = text_eval_units::UnitRegistry::parseUnit( aUnitStr );
 
     // Convert text_eval_units::Unit to KIEVAL_UNIT_CONV::Unit
     switch( evalUnit )
     {
-    case text_eval_units::Unit::MM: return Unit::MM;
-    case text_eval_units::Unit::CM: return Unit::CM;
-    case text_eval_units::Unit::INCH: return Unit::Inch;
-    case text_eval_units::Unit::INCH_QUOTE: return Unit::Inch;
-    case text_eval_units::Unit::MIL: return Unit::Mil;
-    case text_eval_units::Unit::THOU: return Unit::Mil;
-    case text_eval_units::Unit::UM: return Unit::UM;
-    case text_eval_units::Unit::DEG: return Unit::Degrees;
-    case text_eval_units::Unit::DEGREE_SYMBOL: return Unit::Degrees;
-    case text_eval_units::Unit::PS: return Unit::Picoseconds;
-    case text_eval_units::Unit::FS: return Unit::Femtoseconds;
-    case text_eval_units::Unit::PS_PER_IN: return Unit::PsPerInch;
-    case text_eval_units::Unit::PS_PER_CM: return Unit::PsPerCm;
-    case text_eval_units::Unit::PS_PER_MM: return Unit::PsPerMm;
-    default: return Unit::Invalid;
+    case text_eval_units::Unit::MM: return UNIT::MM;
+    case text_eval_units::Unit::CM: return UNIT::CM;
+    case text_eval_units::Unit::INCH: return UNIT::Inch;
+    case text_eval_units::Unit::INCH_QUOTE: return UNIT::Inch;
+    case text_eval_units::Unit::MIL: return UNIT::Mil;
+    case text_eval_units::Unit::THOU: return UNIT::Mil;
+    case text_eval_units::Unit::UM: return UNIT::UM;
+    case text_eval_units::Unit::DEG: return UNIT::Degrees;
+    case text_eval_units::Unit::DEGREE_SYMBOL: return UNIT::Degrees;
+    case text_eval_units::Unit::PS: return UNIT::Picoseconds;
+    case text_eval_units::Unit::FS: return UNIT::Femtoseconds;
+    case text_eval_units::Unit::PS_PER_IN: return UNIT::PsPerInch;
+    case text_eval_units::Unit::PS_PER_CM: return UNIT::PsPerCm;
+    case text_eval_units::Unit::PS_PER_MM: return UNIT::PsPerMm;
+    default: return UNIT::Invalid;
     }
 }
 
 // Get conversion factor from one unit to another (based on numeric_evaluator logic)
-double getConversionFactor( Unit aFromUnit, Unit aToUnit )
+double getConversionFactor( UNIT aFromUnit, UNIT aToUnit )
 {
     if( aFromUnit == aToUnit )
         return 1.0;
@@ -420,22 +420,22 @@ double getConversionFactor( Unit aFromUnit, Unit aToUnit )
     double toMM = 1.0;
     switch( aFromUnit )
     {
-    case Unit::Inch: toMM = 25.4; break;
-    case Unit::Mil: toMM = 25.4 / 1000.0; break;
-    case Unit::UM: toMM = 1.0 / 1000.0; break;
-    case Unit::MM: toMM = 1.0; break;
-    case Unit::CM: toMM = 10.0; break;
+    case UNIT::Inch: toMM = 25.4; break;
+    case UNIT::Mil: toMM = 25.4 / 1000.0; break;
+    case UNIT::UM: toMM = 1.0 / 1000.0; break;
+    case UNIT::MM: toMM = 1.0; break;
+    case UNIT::CM: toMM = 10.0; break;
     default: return 1.0; // No conversion for other units
     }
 
     double fromMM = 1.0;
     switch( aToUnit )
     {
-    case Unit::Inch: fromMM = 1.0 / 25.4; break;
-    case Unit::Mil: fromMM = 1000.0 / 25.4; break;
-    case Unit::UM: fromMM = 1000.0; break;
-    case Unit::MM: fromMM = 1.0; break;
-    case Unit::CM: fromMM = 1.0 / 10.0; break;
+    case UNIT::Inch: fromMM = 1.0 / 25.4; break;
+    case UNIT::Mil: fromMM = 1000.0 / 25.4; break;
+    case UNIT::UM: fromMM = 1000.0; break;
+    case UNIT::MM: fromMM = 1.0; break;
+    case UNIT::CM: fromMM = 1.0 / 10.0; break;
     default: return 1.0; // No conversion for other units
     }
 
@@ -453,27 +453,15 @@ double convertToDefaultUnits( double aValue, const std::string& aUnitStr, EDA_UN
 class KIEVAL_TEXT_TOKENIZER
 {
 private:
-    enum class TOKENIZER_CONTEXT
-    {
-        TEXT,      // Regular text content - alphabetic should be TEXT tokens
-        EXPRESSION // Inside @{...} or ${...} - alphabetic should be IDENTIFIER tokens
-    };
-
-    std::u32string                m_text;
-    size_t                        m_pos{ 0 };
-    size_t                        m_line{ 1 };
-    size_t                        m_column{ 1 };
-    TOKENIZER_CONTEXT             m_context{ TOKENIZER_CONTEXT::TEXT };
-    int                           m_braceNestingLevel{ 0 }; // Track nesting level of expressions
-    calc_parser::ERROR_COLLECTOR* m_errorCollector{ nullptr };
-    EDA_UNITS                     m_defaultUnits{ EDA_UNITS::MM }; // Add default units for conversion
-
     using CLASSIFIER = utf8_utils::CHARACTER_CLASSIFIER;
     using SI_HANDLER = utf8_utils::SI_PREFIX_HANDLER;
 
-    [[nodiscard]] char32_t current_char() const noexcept { return m_pos < m_text.size() ? m_text[m_pos] : U'\0'; }
+    char32_t current_char() const noexcept
+    {
+        return m_pos < m_text.size() ? m_text[m_pos] : U'\0';
+    }
 
-    [[nodiscard]] char32_t peek_char( size_t offset = 1 ) const noexcept
+    char32_t peek_char( size_t offset = 1 ) const noexcept
     {
         size_t peek_pos = m_pos + offset;
         return peek_pos < m_text.size() ? m_text[peek_pos] : U'\0';
@@ -492,6 +480,7 @@ private:
             {
                 ++m_column;
             }
+
             ++m_pos;
         }
     }
@@ -511,7 +500,7 @@ private:
         }
     }
 
-    [[nodiscard]] static calc_parser::TOKEN_TYPE make_string_token( std::string value ) noexcept
+    static calc_parser::TOKEN_TYPE make_string_token( const std::string &value ) noexcept
     {
         calc_parser::TOKEN_TYPE token{};
         token.isString = true;
@@ -521,7 +510,7 @@ private:
         return token;
     }
 
-    [[nodiscard]] static constexpr calc_parser::TOKEN_TYPE make_number_token( double value ) noexcept
+    static constexpr calc_parser::TOKEN_TYPE make_number_token( double value ) noexcept
     {
         calc_parser::TOKEN_TYPE token{};
         token.isString = false;
@@ -529,7 +518,7 @@ private:
         return token;
     }
 
-    [[nodiscard]] calc_parser::TOKEN_TYPE parse_string_literal( char32_t quote_char )
+    calc_parser::TOKEN_TYPE parse_string_literal( char32_t quote_char )
     {
         advance_position(); // Skip opening quote
 
@@ -547,13 +536,27 @@ private:
 
                 switch( escaped )
                 {
-                case U'n': content.push_back( U'\n' ); break;
-                case U't': content.push_back( U'\t' ); break;
-                case U'r': content.push_back( U'\r' ); break;
-                case U'\\': content.push_back( U'\\' ); break;
-                case U'"': content.push_back( U'"' ); break;
-                case U'\'': content.push_back( U'\'' ); break;
-                case U'0': content.push_back( U'\0' ); break;
+                case U'n':
+                    content.push_back( U'\n' );
+                    break;
+                case U't':
+                    content.push_back( U'\t' );
+                    break;
+                case U'r':
+                    content.push_back( U'\r' );
+                    break;
+                case U'\\':
+                    content.push_back( U'\\' );
+                    break;
+                case U'"':
+                    content.push_back( U'"' );
+                    break;
+                case U'\'':
+                    content.push_back( U'\'' );
+                    break;
+                case U'0':
+                    content.push_back( U'\0' );
+                    break;
                 case U'x':
                 {
                     // Hexadecimal escape \xHH
@@ -562,7 +565,8 @@ private:
                     for( int i = 0; i < 2 && m_pos < m_text.size(); ++i )
                     {
                         char32_t hex_char = current_char();
-                        if( ( hex_char >= U'0' && hex_char <= U'9' ) || ( hex_char >= U'A' && hex_char <= U'F' )
+                        if( ( hex_char >= U'0' && hex_char <= U'9' )
+                            || ( hex_char >= U'A' && hex_char <= U'F' )
                             || ( hex_char >= U'a' && hex_char <= U'f' ) )
                         {
                             hex.push_back( hex_char );
@@ -578,8 +582,8 @@ private:
                     {
                         try
                         {
-                            auto hex_str = utf8_utils::UTF8_CONVERTER::to_utf8( hex );
-                            auto value = std::stoul( hex_str, nullptr, 16 );
+                            std::string   hex_str = utf8_utils::UTF8_CONVERTER::to_utf8( hex );
+                            unsigned long value = std::stoul( hex_str, nullptr, 16 );
 
                             if( value <= 0x10FFFF )
                                 content.push_back( static_cast<char32_t>( value ) );
@@ -628,7 +632,7 @@ private:
         return make_string_token( utf8_utils::UTF8_CONVERTER::to_utf8( content ) );
     }
 
-    [[nodiscard]] calc_parser::TOKEN_TYPE parse_number()
+    calc_parser::TOKEN_TYPE parse_number()
     {
         std::u32string number_text;
         number_text.reserve( 32 );
@@ -680,9 +684,9 @@ private:
                 if( !potential_unit.empty() )
                 {
                     std::string            unit_str = utf8_utils::UTF8_CONVERTER::to_utf8( potential_unit );
-                    KIEVAL_UNIT_CONV::Unit parsed_unit = KIEVAL_UNIT_CONV::parseUnit( unit_str );
+                    KIEVAL_UNIT_CONV::UNIT parsed_unit = KIEVAL_UNIT_CONV::parseUnit( unit_str );
 
-                    if( parsed_unit != KIEVAL_UNIT_CONV::Unit::Invalid )
+                    if( parsed_unit != KIEVAL_UNIT_CONV::UNIT::Invalid )
                     {
                         // This is a valid unit - don't treat the first character as SI prefix
                         // The unit parsing will happen later
@@ -730,10 +734,9 @@ private:
                 if( temp_pos < m_text.size() )
                 {
                     char32_t next = m_text[temp_pos];
+
                     if( next == U'+' || next == U'-' || CLASSIFIER::is_digit( next ) )
-                    {
                         is_scientific = true;
-                    }
                 }
 
                 if( is_scientific )
@@ -796,9 +799,9 @@ private:
                 if( !potential_unit.empty() )
                 {
                     std::string            unit_str = utf8_utils::UTF8_CONVERTER::to_utf8( potential_unit );
-                    KIEVAL_UNIT_CONV::Unit parsed_unit = KIEVAL_UNIT_CONV::parseUnit( unit_str );
+                    KIEVAL_UNIT_CONV::UNIT parsed_unit = KIEVAL_UNIT_CONV::parseUnit( unit_str );
 
-                    if( parsed_unit == KIEVAL_UNIT_CONV::Unit::Invalid && SI_HANDLER::is_si_prefix( c ) )
+                    if( parsed_unit == KIEVAL_UNIT_CONV::UNIT::Invalid && SI_HANDLER::is_si_prefix( c ) )
                     {
                         // Not a valid unit, so treat as SI prefix
                         multiplier = SI_HANDLER::get_multiplier( c );
@@ -815,8 +818,8 @@ private:
         }
 
         // Convert to double safely
-        auto   number_str = utf8_utils::UTF8_CONVERTER::to_utf8( number_text );
-        double value = 0.0;
+        std::string number_str = utf8_utils::UTF8_CONVERTER::to_utf8( number_text );
+        double      value = 0.0;
 
         try
         {
@@ -847,10 +850,9 @@ private:
         {
             // Skip any whitespace between number and unit
             size_t whitespace_start = m_pos;
+
             while( m_pos < m_text.size() && CLASSIFIER::is_whitespace( current_char() ) )
-            {
                 advance_position();
-            }
 
             // Parse potential unit suffix
             std::u32string unit_text;
@@ -876,9 +878,9 @@ private:
             {
                 // Convert unit text to string and try to parse it
                 std::string            unit_str = utf8_utils::UTF8_CONVERTER::to_utf8( unit_text );
-                KIEVAL_UNIT_CONV::Unit parsed_unit = KIEVAL_UNIT_CONV::parseUnit( unit_str );
+                KIEVAL_UNIT_CONV::UNIT parsed_unit = KIEVAL_UNIT_CONV::parseUnit( unit_str );
 
-                if( parsed_unit != KIEVAL_UNIT_CONV::Unit::Invalid )
+                if( parsed_unit != KIEVAL_UNIT_CONV::UNIT::Invalid )
                 {
                     // Successfully parsed unit - convert value to default units
                     double converted_value = KIEVAL_UNIT_CONV::convertToDefaultUnits( value, unit_str, m_defaultUnits );
@@ -900,7 +902,7 @@ private:
         return make_number_token( value );
     }
 
-    [[nodiscard]] calc_parser::TOKEN_TYPE parse_identifier()
+    calc_parser::TOKEN_TYPE parse_identifier()
     {
         std::u32string identifier;
         identifier.reserve( 64 );
@@ -914,7 +916,7 @@ private:
         return make_string_token( utf8_utils::UTF8_CONVERTER::to_utf8( identifier ) );
     }
 
-    [[nodiscard]] calc_parser::TOKEN_TYPE parse_text_content()
+    calc_parser::TOKEN_TYPE parse_text_content()
     {
         std::u32string text;
         text.reserve( 256 );
@@ -926,9 +928,7 @@ private:
 
             // Stop at special sequences
             if( ( current == U'@' && next == U'{' ) || ( current == U'$' && next == U'{' ) )
-            {
                 break;
-            }
 
             text.push_back( current );
             advance_position();
@@ -946,14 +946,12 @@ public:
         m_text = utf8_utils::UTF8_CONVERTER::to_utf32( input );
     }
 
-    [[nodiscard]] TextEvalToken get_next_token( calc_parser::TOKEN_TYPE& token_value )
+    TEXT_EVAL_TOKEN get_next_token( calc_parser::TOKEN_TYPE& token_value )
     {
         token_value = calc_parser::TOKEN_TYPE{};
 
         if( m_pos >= m_text.size() )
-        {
-            return TextEvalToken::ENDS;
-        }
+            return TEXT_EVAL_TOKEN::ENDS;
 
         // Only skip whitespace in expression context
         if( m_context == TOKENIZER_CONTEXT::EXPRESSION )
@@ -961,9 +959,7 @@ public:
             skip_whitespace();
 
             if( m_pos >= m_text.size() )
-            {
-                return TextEvalToken::ENDS;
-            }
+                return TEXT_EVAL_TOKEN::ENDS;
         }
 
         char32_t current = current_char();
@@ -976,7 +972,7 @@ public:
             m_context = TOKENIZER_CONTEXT::EXPRESSION; // Switch to expression context
             m_braceNestingLevel++;                     // Increment nesting level
             token_value = make_string_token( "@{" );
-            return TextEvalToken::AT_OPEN;
+            return TEXT_EVAL_TOKEN::AT_OPEN;
         }
 
         if( current == U'$' && next == U'{' )
@@ -985,7 +981,7 @@ public:
             m_context = TOKENIZER_CONTEXT::EXPRESSION; // Switch to expression context
             m_braceNestingLevel++;                     // Increment nesting level
             token_value = make_string_token( "${" );
-            return TextEvalToken::DOLLAR_OPEN;
+            return TEXT_EVAL_TOKEN::DOLLAR_OPEN;
         }
 
         // Handle closing brace specially to manage context correctly
@@ -993,13 +989,15 @@ public:
         {
             advance_position();
             m_braceNestingLevel--; // Decrement nesting level
+
             if( m_braceNestingLevel <= 0 )
             {
                 m_braceNestingLevel = 0;             // Clamp to zero
                 m_context = TOKENIZER_CONTEXT::TEXT; // Switch back to text context only when fully unnested
             }
+
             token_value = make_string_token( "}" );
-            return TextEvalToken::CLOSE_BRACE;
+            return TEXT_EVAL_TOKEN::CLOSE_BRACE;
         }
 
         // Multi-character comparison operators
@@ -1007,43 +1005,43 @@ public:
         {
             advance_position( 2 );
             token_value = make_string_token( "<=" );
-            return TextEvalToken::LE;
+            return TEXT_EVAL_TOKEN::LE;
         }
         if( current == U'>' && next == U'=' )
         {
             advance_position( 2 );
             token_value = make_string_token( ">=" );
-            return TextEvalToken::GE;
+            return TEXT_EVAL_TOKEN::GE;
         }
         if( current == U'=' && next == U'=' )
         {
             advance_position( 2 );
             token_value = make_string_token( "==" );
-            return TextEvalToken::EQ;
+            return TEXT_EVAL_TOKEN::EQ;
         }
         if( current == U'!' && next == U'=' )
         {
             advance_position( 2 );
             token_value = make_string_token( "!=" );
-            return TextEvalToken::NE;
+            return TEXT_EVAL_TOKEN::NE;
         }
 
         // Single character tokens using structured binding
         // Single character tokens (only in expression context)
         if( m_context == TOKENIZER_CONTEXT::EXPRESSION )
         {
-            static constexpr std::array<std::pair<char32_t, TextEvalToken>, 11> single_char_tokens{
-                { { U'(', TextEvalToken::LPAREN },
-                  { U')', TextEvalToken::RPAREN },
-                  { U'+', TextEvalToken::PLUS },
-                  { U'-', TextEvalToken::MINUS },
-                  { U'*', TextEvalToken::MULTIPLY },
-                  { U'/', TextEvalToken::DIVIDE },
-                  { U'%', TextEvalToken::MODULO },
-                  { U'^', TextEvalToken::POWER },
-                  { U',', TextEvalToken::COMMA },
-                  { U'<', TextEvalToken::LT },
-                  { U'>', TextEvalToken::GT } }
+            static constexpr std::array<std::pair<char32_t, TEXT_EVAL_TOKEN>, 11> single_char_tokens{
+                { { U'(', TEXT_EVAL_TOKEN::LPAREN },
+                  { U')', TEXT_EVAL_TOKEN::RPAREN },
+                  { U'+', TEXT_EVAL_TOKEN::PLUS },
+                  { U'-', TEXT_EVAL_TOKEN::MINUS },
+                  { U'*', TEXT_EVAL_TOKEN::MULTIPLY },
+                  { U'/', TEXT_EVAL_TOKEN::DIVIDE },
+                  { U'%', TEXT_EVAL_TOKEN::MODULO },
+                  { U'^', TEXT_EVAL_TOKEN::POWER },
+                  { U',', TEXT_EVAL_TOKEN::COMMA },
+                  { U'<', TEXT_EVAL_TOKEN::LT },
+                  { U'>', TEXT_EVAL_TOKEN::GT } }
             };
 
             if( auto it = std::ranges::find_if( single_char_tokens,
@@ -1063,13 +1061,13 @@ public:
         if( current == U'"' || current == U'\'' )
         {
             token_value = parse_string_literal( current );
-            return TextEvalToken::STRING;
+            return TEXT_EVAL_TOKEN::STRING;
         }
 
         if( CLASSIFIER::is_digit( current ) || ( current == U'.' && CLASSIFIER::is_digit( next ) ) )
         {
             token_value = parse_number();
-            return TextEvalToken::NUMBER;
+            return TEXT_EVAL_TOKEN::NUMBER;
         }
 
         // Context-aware handling of alphabetic content
@@ -1079,25 +1077,42 @@ public:
             {
                 // In expression context, alphabetic content is an identifier
                 token_value = parse_identifier();
-                return TextEvalToken::IDENTIFIER;
+                return TEXT_EVAL_TOKEN::IDENTIFIER;
             }
             else
             {
                 // In text context, alphabetic content is part of regular text
                 token_value = parse_text_content();
-                return TextEvalToken::TEXT;
+                return TEXT_EVAL_TOKEN::TEXT;
             }
         }
 
         // Default to text content
         token_value = parse_text_content();
-        return token_value.text[0] == U'\0' ? TextEvalToken::ENDS : TextEvalToken::TEXT;
+        return token_value.text[0] == U'\0' ? TEXT_EVAL_TOKEN::ENDS : TEXT_EVAL_TOKEN::TEXT;
     }
 
-    [[nodiscard]] bool             has_more_tokens() const noexcept { return m_pos < m_text.size(); }
-    [[nodiscard]] constexpr size_t get_line() const noexcept { return m_line; }
-    [[nodiscard]] constexpr size_t get_column() const noexcept { return m_column; }
+    bool             has_more_tokens() const noexcept { return m_pos < m_text.size(); }
+    constexpr size_t get_line() const noexcept { return m_line; }
+    constexpr size_t get_column() const noexcept { return m_column; }
+
+private:
+    enum class TOKENIZER_CONTEXT
+    {
+        TEXT,      // Regular text content - alphabetic should be TEXT tokens
+        EXPRESSION // Inside @{...} or ${...} - alphabetic should be IDENTIFIER tokens
+    };
+
+    std::u32string                m_text;
+    size_t                        m_pos{ 0 };
+    size_t                        m_line{ 1 };
+    size_t                        m_column{ 1 };
+    TOKENIZER_CONTEXT             m_context{ TOKENIZER_CONTEXT::TEXT };
+    int                           m_braceNestingLevel{ 0 }; // Track nesting level of expressions
+    calc_parser::ERROR_COLLECTOR* m_errorCollector{ nullptr };
+    EDA_UNITS                     m_defaultUnits{ EDA_UNITS::MM }; // Add default units for conversion
 };
+
 
 EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( bool aClearVariablesOnEvaluate ) :
         m_clearVariablesOnEvaluate( aClearVariablesOnEvaluate ),
@@ -1107,7 +1122,8 @@ EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( bool aClearVariablesOnEvaluate ) :
     m_lastErrors = std::make_unique<calc_parser::ERROR_COLLECTOR>();
 }
 
-EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( VariableCallback aVariableCallback, bool aClearVariablesOnEvaluate ) :
+
+EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( VAR_CALLBACK aVariableCallback, bool aClearVariablesOnEvaluate ) :
         m_clearVariablesOnEvaluate( aClearVariablesOnEvaluate ),
         m_customCallback( std::move( aVariableCallback ) ),
         m_useCustomCallback( true ),
@@ -1115,6 +1131,7 @@ EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( VariableCallback aVariableCallback, 
 {
     m_lastErrors = std::make_unique<calc_parser::ERROR_COLLECTOR>();
 }
+
 
 EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( EDA_UNITS aUnits, bool aClearVariablesOnEvaluate ) :
         m_clearVariablesOnEvaluate( aClearVariablesOnEvaluate ),
@@ -1124,7 +1141,8 @@ EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( EDA_UNITS aUnits, bool aClearVariabl
     m_lastErrors = std::make_unique<calc_parser::ERROR_COLLECTOR>();
 }
 
-EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( EDA_UNITS aUnits, VariableCallback aVariableCallback,
+
+EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( EDA_UNITS aUnits, VAR_CALLBACK aVariableCallback,
                                             bool aClearVariablesOnEvaluate ) :
         m_clearVariablesOnEvaluate( aClearVariablesOnEvaluate ),
         m_customCallback( std::move( aVariableCallback ) ),
@@ -1134,7 +1152,9 @@ EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( EDA_UNITS aUnits, VariableCallback a
     m_lastErrors = std::make_unique<calc_parser::ERROR_COLLECTOR>();
 }
 
+
 EXPRESSION_EVALUATOR::~EXPRESSION_EVALUATOR() = default;
+
 
 EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( const EXPRESSION_EVALUATOR& aOther ) :
         m_variables( aOther.m_variables ),
@@ -1144,6 +1164,7 @@ EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( const EXPRESSION_EVALUATOR& aOther )
         m_defaultUnits( aOther.m_defaultUnits )
 {
     m_lastErrors = std::make_unique<calc_parser::ERROR_COLLECTOR>();
+
     if( aOther.m_lastErrors )
     {
         // Copy error state
@@ -1193,53 +1214,63 @@ EXPRESSION_EVALUATOR& EXPRESSION_EVALUATOR::operator=( EXPRESSION_EVALUATOR&& aO
         m_useCustomCallback = aOther.m_useCustomCallback;
         m_defaultUnits = aOther.m_defaultUnits;
     }
+
     return *this;
 }
 
-void EXPRESSION_EVALUATOR::SetVariableCallback( VariableCallback aCallback )
+
+void EXPRESSION_EVALUATOR::SetVariableCallback( VAR_CALLBACK aCallback )
 {
     m_customCallback = std::move( aCallback );
     m_useCustomCallback = true;
 }
 
+
 void EXPRESSION_EVALUATOR::ClearVariableCallback()
 {
-    m_customCallback = VariableCallback{};
+    m_customCallback = VAR_CALLBACK{};
     m_useCustomCallback = false;
 }
+
 
 bool EXPRESSION_EVALUATOR::HasVariableCallback() const
 {
     return m_useCustomCallback && m_customCallback;
 }
 
+
 void EXPRESSION_EVALUATOR::SetDefaultUnits( EDA_UNITS aUnits )
 {
     m_defaultUnits = aUnits;
 }
+
 
 EDA_UNITS EXPRESSION_EVALUATOR::GetDefaultUnits() const
 {
     return m_defaultUnits;
 }
 
+
 void EXPRESSION_EVALUATOR::SetVariable( const wxString& aName, double aValue )
 {
     std::string name = wxStringToStdString( aName );
-    m_variables[name] = calc_parser::Value{ aValue };
+    m_variables[name] = calc_parser::VALUE{ aValue };
 }
+
 
 void EXPRESSION_EVALUATOR::SetVariable( const wxString& aName, const wxString& aValue )
 {
     std::string name = wxStringToStdString( aName );
     std::string value = wxStringToStdString( aValue );
-    m_variables[name] = calc_parser::Value{ value };
+    m_variables[name] = calc_parser::VALUE{ value };
 }
+
 
 void EXPRESSION_EVALUATOR::SetVariable( const std::string& aName, const std::string& aValue )
 {
-    m_variables[aName] = calc_parser::Value{ aValue };
+    m_variables[aName] = calc_parser::VALUE{ aValue };
 }
+
 
 bool EXPRESSION_EVALUATOR::RemoveVariable( const wxString& aName )
 {
@@ -1247,10 +1278,12 @@ bool EXPRESSION_EVALUATOR::RemoveVariable( const wxString& aName )
     return m_variables.erase( name ) > 0;
 }
 
+
 void EXPRESSION_EVALUATOR::ClearVariables()
 {
     m_variables.clear();
 }
+
 
 bool EXPRESSION_EVALUATOR::HasVariable( const wxString& aName ) const
 {
@@ -1258,10 +1291,12 @@ bool EXPRESSION_EVALUATOR::HasVariable( const wxString& aName ) const
     return m_variables.find( name ) != m_variables.end();
 }
 
+
 wxString EXPRESSION_EVALUATOR::GetVariable( const wxString& aName ) const
 {
     std::string name = wxStringToStdString( aName );
     auto        it = m_variables.find( name );
+
     if( it != m_variables.end() )
     {
         if( std::holds_alternative<double>( it->second ) )
@@ -1278,8 +1313,10 @@ wxString EXPRESSION_EVALUATOR::GetVariable( const wxString& aName ) const
             return stdStringToWxString( std::get<std::string>( it->second ) );
         }
     }
+
     return wxString{};
 }
+
 
 std::vector<wxString> EXPRESSION_EVALUATOR::GetVariableNames() const
 {
@@ -1292,17 +1329,20 @@ std::vector<wxString> EXPRESSION_EVALUATOR::GetVariableNames() const
     return names;
 }
 
+
 void EXPRESSION_EVALUATOR::SetVariables( const std::unordered_map<wxString, double>& aVariables )
 {
     for( const auto& [name, value] : aVariables )
         SetVariable( name, value );
 }
 
+
 void EXPRESSION_EVALUATOR::SetVariables( const std::unordered_map<wxString, wxString>& aVariables )
 {
     for( const auto& [name, value] : aVariables )
         SetVariable( name, value );
 }
+
 
 wxString EXPRESSION_EVALUATOR::Evaluate( const wxString& aInput )
 {
@@ -1311,12 +1351,14 @@ wxString EXPRESSION_EVALUATOR::Evaluate( const wxString& aInput )
     return Evaluate( aInput, emptyNumVars, emptyStringVars );
 }
 
+
 wxString EXPRESSION_EVALUATOR::Evaluate( const wxString&                             aInput,
                                          const std::unordered_map<wxString, double>& aTempVariables )
 {
     std::unordered_map<wxString, wxString> emptyStringVars;
     return Evaluate( aInput, aTempVariables, emptyStringVars );
 }
+
 
 wxString EXPRESSION_EVALUATOR::Evaluate( const wxString&                               aInput,
                                          const std::unordered_map<wxString, double>&   aTempNumericVars,
@@ -1329,21 +1371,18 @@ wxString EXPRESSION_EVALUATOR::Evaluate( const wxString&                        
     wxString processedInput = expandVariablesOutsideExpressions( aInput, aTempNumericVars, aTempStringVars );
 
     // Convert processed input to std::string
-    std::string input = wxStringToStdString( processedInput ); // Create combined callback for all variable sources
-    auto        combinedCallback = createCombinedCallback( &aTempNumericVars, &aTempStringVars );
+    std::string  input = wxStringToStdString( processedInput ); // Create combined callback for all variable sources
+    VAR_CALLBACK combinedCallback = createCombinedCallback( &aTempNumericVars, &aTempStringVars );
 
     // Evaluate using parser
     auto [result, hadErrors] = evaluateWithParser( input, combinedCallback );
 
     // Update error state if evaluation had errors
     if( hadErrors && !m_lastErrors )
-    {
         m_lastErrors = std::make_unique<calc_parser::ERROR_COLLECTOR>();
-    }
+
     if( hadErrors )
-    {
         m_lastErrors->AddError( "Evaluation failed" );
-    }
 
     // Clear variables if requested
     if( m_clearVariablesOnEvaluate )
@@ -1374,21 +1413,23 @@ size_t EXPRESSION_EVALUATOR::GetErrorCount() const
     return m_lastErrors->GetErrors().size();
 }
 
+
 std::vector<wxString> EXPRESSION_EVALUATOR::GetErrors() const
 {
     std::vector<wxString> result;
 
     if( m_lastErrors )
     {
-        const auto& errors = m_lastErrors->GetErrors();
+        const std::vector<std::string>& errors = m_lastErrors->GetErrors();
         result.reserve( errors.size() );
 
-        for( const auto& error : errors )
+        for( const std::string& error : errors )
             result.push_back( stdStringToWxString( error ) );
     }
 
     return result;
 }
+
 
 void EXPRESSION_EVALUATOR::ClearErrors()
 {
@@ -1396,15 +1437,18 @@ void EXPRESSION_EVALUATOR::ClearErrors()
         m_lastErrors->Clear();
 }
 
+
 void EXPRESSION_EVALUATOR::SetClearVariablesOnEvaluate( bool aEnable )
 {
     m_clearVariablesOnEvaluate = aEnable;
 }
 
+
 bool EXPRESSION_EVALUATOR::GetClearVariablesOnEvaluate() const
 {
     return m_clearVariablesOnEvaluate;
 }
+
 
 bool EXPRESSION_EVALUATOR::TestExpression( const wxString& aExpression )
 {
@@ -1412,10 +1456,11 @@ bool EXPRESSION_EVALUATOR::TestExpression( const wxString& aExpression )
     wxString testInput = "@{" + aExpression + "}";
 
     // Create a minimal callback that returns errors for all variables
-    auto testCallback = []( const std::string& aVarName ) -> calc_parser::Result<calc_parser::Value>
-    {
-        return calc_parser::MakeError<calc_parser::Value>( "Test mode - no variables available" );
-    };
+    auto testCallback =
+            []( const std::string& aVarName ) -> calc_parser::RESULT<calc_parser::VALUE>
+            {
+                return calc_parser::MakeError<calc_parser::VALUE>( "Test mode - no variables available" );
+            };
 
     // Try to parse it
     std::string input = wxStringToStdString( testInput );
@@ -1453,6 +1498,7 @@ size_t EXPRESSION_EVALUATOR::CountExpressions( const wxString& aInput ) const
     return count;
 }
 
+
 std::vector<wxString> EXPRESSION_EVALUATOR::ExtractExpressions( const wxString& aInput ) const
 {
     std::vector<wxString> expressions;
@@ -1477,19 +1523,23 @@ std::vector<wxString> EXPRESSION_EVALUATOR::ExtractExpressions( const wxString& 
     return expressions;
 }
 
+
 std::string EXPRESSION_EVALUATOR::wxStringToStdString( const wxString& aWxStr ) const
 {
     return aWxStr.ToStdString( wxConvUTF8 );
 }
+
 
 wxString EXPRESSION_EVALUATOR::stdStringToWxString( const std::string& aStdStr ) const
 {
     return wxString( aStdStr.c_str(), wxConvUTF8 );
 }
 
+
 wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
-        const wxString& aInput, const std::unordered_map<wxString, double>& aTempNumericVars,
-        const std::unordered_map<wxString, wxString>& aTempStringVars ) const
+                                                const wxString& aInput,
+                                                const std::unordered_map<wxString, double>& aTempNumericVars,
+                                                const std::unordered_map<wxString, wxString>& aTempStringVars ) const
 {
     wxString result = aInput;
     size_t   pos = 0;
@@ -1515,19 +1565,19 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
         }
 
         if( braceCount == 0 )
-        {
             expressionRanges.emplace_back( start, searchPos ); // searchPos is after '}'
-        }
 
         pos = searchPos;
     }
 
     // Now find and replace ${variable} patterns that are NOT inside @{} expressions
     pos = 0;
+
     while( ( pos = result.find( "${", pos ) ) != std::string::npos )
     {
         // Check if this ${} is inside any @{} expression
         bool insideExpression = false;
+
         for( const auto& range : expressionRanges )
         {
             if( pos >= range.first && pos < range.second )
@@ -1542,6 +1592,7 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
             // Special case: if this variable is immediately followed by unit text,
             // we should expand it to allow proper unit parsing
             size_t closePos = result.find( "}", pos + 2 );
+
             if( closePos != std::string::npos )
             {
                 // Check what comes after the closing brace
@@ -1552,6 +1603,7 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
                 {
                     // Check if followed by any supported unit strings using centralized registry
                     const auto units = text_eval_units::UnitRegistry::getAllUnitStrings();
+
                     for( const auto& unit : units )
                     {
                         if( afterBrace + unit.length() <= result.length()
@@ -1579,6 +1631,7 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
 
         // Find the closing brace
         size_t closePos = result.find( "}", pos + 2 );
+
         if( closePos == std::string::npos )
         {
             pos += 2; // Invalid ${} pattern, skip
@@ -1592,6 +1645,7 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
 
         // Check temporary string variables first
         auto stringIt = aTempStringVars.find( varName );
+
         if( stringIt != aTempStringVars.end() )
         {
             replacement = stringIt->second;
@@ -1601,6 +1655,7 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
         {
             // Check temporary numeric variables
             auto numIt = aTempNumericVars.find( varName );
+
             if( numIt != aTempNumericVars.end() )
             {
                 replacement = wxString::FromDouble( numIt->second );
@@ -1611,9 +1666,11 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
                 // Check instance variables
                 std::string stdVarName = wxStringToStdString( varName );
                 auto        instIt = m_variables.find( stdVarName );
+
                 if( instIt != m_variables.end() )
                 {
-                    const calc_parser::Value& value = instIt->second;
+                    const calc_parser::VALUE& value = instIt->second;
+
                     if( std::holds_alternative<std::string>( value ) )
                     {
                         replacement = stdStringToWxString( std::get<std::string>( value ) );
@@ -1639,6 +1696,7 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
             // Variable not found, record error but leave ${variable} unchanged
             if( !m_lastErrors )
                 m_lastErrors = std::make_unique<calc_parser::ERROR_COLLECTOR>();
+
             m_lastErrors->AddError( fmt::format( "Undefined variable: {}", wxStringToStdString( varName ) ) );
             pos = closePos + 1;
         }
@@ -1647,128 +1705,134 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
     return result;
 }
 
-EXPRESSION_EVALUATOR::VariableCallback
+EXPRESSION_EVALUATOR::VAR_CALLBACK
 EXPRESSION_EVALUATOR::createCombinedCallback( const std::unordered_map<wxString, double>*   aTempNumericVars,
                                               const std::unordered_map<wxString, wxString>* aTempStringVars ) const
 {
-    return [this, aTempNumericVars,
-            aTempStringVars]( const std::string& aVarName ) -> calc_parser::Result<calc_parser::Value>
-    {
-        // Priority 1: Custom callback (if set)
-        if( m_useCustomCallback && m_customCallback )
-        {
-            auto customResult = m_customCallback( aVarName );
-            if( customResult.HasValue() )
-                return customResult;
-
-            // If custom callback returned an error, continue to fallback options
-            // unless the error indicates a definitive "not found" vs "lookup failed"
-            // For simplicity, we'll always try fallbacks
-        }
-
-        // Priority 2: Temporary string variables
-        if( aTempStringVars )
-        {
-            wxString wxVarName = stdStringToWxString( aVarName );
-            if( auto it = aTempStringVars->find( wxVarName ); it != aTempStringVars->end() )
+    return  [this, aTempNumericVars,  aTempStringVars]
+            ( const std::string& aVarName ) -> calc_parser::RESULT<calc_parser::VALUE>
             {
-                std::string stdValue = wxStringToStdString( it->second );
-                return calc_parser::MakeValue<calc_parser::Value>( stdValue );
-            }
-        }
-
-        // Priority 3: Temporary numeric variables
-        if( aTempNumericVars )
-        {
-            wxString wxVarName = stdStringToWxString( aVarName );
-            if( auto it = aTempNumericVars->find( wxVarName ); it != aTempNumericVars->end() )
-            {
-                return calc_parser::MakeValue<calc_parser::Value>( it->second );
-            }
-        }
-
-        // Priority 4: Stored variables
-        if( auto it = m_variables.find( aVarName ); it != m_variables.end() )
-        {
-            return calc_parser::MakeValue<calc_parser::Value>( it->second );
-        }
-
-        // Priority 5: Use KiCad's ExpandTextVars for system/project variables
-        try
-        {
-            wxString varName = stdStringToWxString( aVarName );
-            wxString testString = wxString::Format( "${%s}", varName );
-
-            // Create a resolver that will return true if the variable was found
-            bool                             wasResolved = false;
-            std::function<bool( wxString* )> resolver =
-                    [&wasResolved]( wxString* token ) -> bool
-                    {
-                        // If we get here, ExpandTextVars found the variable and wants to resolve it
-                        // For our purposes, we just want to know if it exists, so return false
-                        // to keep the original ${varname} format, and set our flag
-                        wasResolved = true;
-                        return false; // Don't replace, just detect
-                    };
-
-            wxString expandedResult = ExpandTextVars( testString, &resolver, INTERNAL );
-
-            if( wasResolved )
-            {
-                // Variable exists in KiCad's system, now get its actual value
-                std::function<bool( wxString* )> valueResolver =
-                        []( wxString* token ) -> bool
-                        {
-                            // Let ExpandTextVars resolve this normally
-                            // We'll get the resolved value in token
-                            return false; // Use default resolution
-                        };
-
-                wxString resolvedValue = ExpandTextVars( testString, &valueResolver, INTERNAL );
-
-                // Check if it was actually resolved (not still ${varname})
-                if( resolvedValue != testString )
+                // Priority 1: Custom callback (if set)
+                if( m_useCustomCallback && m_customCallback )
                 {
-                    std::string resolvedStd = wxStringToStdString( resolvedValue );
+                    auto customResult = m_customCallback( aVarName );
 
-                    // Try to parse as number first
-                    try
+                    if( customResult.HasValue() )
+                        return customResult;
+
+                    // If custom callback returned an error, continue to fallback options
+                    // unless the error indicates a definitive "not found" vs "lookup failed"
+                    // For simplicity, we'll always try fallbacks
+                }
+
+                // Priority 2: Temporary string variables
+                if( aTempStringVars )
+                {
+                    wxString wxVarName = stdStringToWxString( aVarName );
+
+                    if( auto it = aTempStringVars->find( wxVarName ); it != aTempStringVars->end() )
                     {
-                        double numValue;
-                        auto   result = fast_float::from_chars( resolvedStd.data(),
-                                                                resolvedStd.data() + resolvedStd.size(), numValue );
-
-                        if( result.ec != std::errc() || result.ptr != resolvedStd.data() + resolvedStd.size() )
-                            throw std::invalid_argument( fmt::format( "Cannot convert '{}' to number", resolvedStd ) );
-
-                        return calc_parser::MakeValue<calc_parser::Value>( numValue );
-                    }
-                    catch( ... )
-                    {
-                        // Not a number, return as string
-                        return calc_parser::MakeValue<calc_parser::Value>( resolvedStd );
+                        std::string stdValue = wxStringToStdString( it->second );
+                        return calc_parser::MakeValue<calc_parser::VALUE>( stdValue );
                     }
                 }
-            }
-        }
-        catch( const std::exception& )
-        {
-            // ExpandTextVars failed, continue to error
-        }
 
-        // Priority 6: If custom callback was tried and failed, return its error
-        if( m_useCustomCallback && m_customCallback )
-        {
-            return m_customCallback( aVarName ); // Return the original error
-        }
+                // Priority 3: Temporary numeric variables
+                if( aTempNumericVars )
+                {
+                    wxString wxVarName = stdStringToWxString( aVarName );
 
-        // No variable found anywhere
-        return calc_parser::MakeError<calc_parser::Value>( fmt::format( "Undefined variable: {}", aVarName ) );
-    };
+                    if( auto it = aTempNumericVars->find( wxVarName ); it != aTempNumericVars->end() )
+                        return calc_parser::MakeValue<calc_parser::VALUE>( it->second );
+                }
+
+                // Priority 4: Stored variables
+                if( auto it = m_variables.find( aVarName ); it != m_variables.end() )
+                {
+                    return calc_parser::MakeValue<calc_parser::VALUE>( it->second );
+                }
+
+                // Priority 5: Use KiCad's ExpandTextVars for system/project variables
+                try
+                {
+                    wxString varName = stdStringToWxString( aVarName );
+                    wxString testString = wxString::Format( "${%s}", varName );
+
+                    // Create a resolver that will return true if the variable was found
+                    bool                             wasResolved = false;
+                    std::function<bool( wxString* )> resolver =
+                            [&wasResolved]( wxString* token ) -> bool
+                            {
+                                // If we get here, ExpandTextVars found the variable and wants to resolve it
+                                // For our purposes, we just want to know if it exists, so return false
+                                // to keep the original ${varname} format, and set our flag
+                                wasResolved = true;
+                                return false; // Don't replace, just detect
+                            };
+
+                    wxString expandedResult = ExpandTextVars( testString, &resolver, INTERNAL );
+
+                    if( wasResolved )
+                    {
+                        // Variable exists in KiCad's system, now get its actual value
+                        std::function<bool( wxString* )> valueResolver =
+                                []( wxString* token ) -> bool
+                                {
+                                    // Let ExpandTextVars resolve this normally
+                                    // We'll get the resolved value in token
+                                    return false; // Use default resolution
+                                };
+
+                        wxString resolvedValue = ExpandTextVars( testString, &valueResolver, INTERNAL );
+
+                        // Check if it was actually resolved (not still ${varname})
+                        if( resolvedValue != testString )
+                        {
+                            std::string resolvedStd = wxStringToStdString( resolvedValue );
+
+                            // Try to parse as number first
+                            try
+                            {
+                                double numValue;
+                                auto   result = fast_float::from_chars( resolvedStd.data(),
+                                                                        resolvedStd.data() + resolvedStd.size(),
+                                                                        numValue );
+
+                                if( result.ec != std::errc()
+                                        || result.ptr != resolvedStd.data() + resolvedStd.size() )
+                                {
+                                    throw std::invalid_argument( fmt::format( "Cannot convert '{}' to number",
+                                                                              resolvedStd ) );
+                                }
+
+                                return calc_parser::MakeValue<calc_parser::VALUE>( numValue );
+                            }
+                            catch( ... )
+                            {
+                                // Not a number, return as string
+                                return calc_parser::MakeValue<calc_parser::VALUE>( resolvedStd );
+                            }
+                        }
+                    }
+                }
+                catch( const std::exception& )
+                {
+                    // ExpandTextVars failed, continue to error
+                }
+
+                // Priority 6: If custom callback was tried and failed, return its error
+                if( m_useCustomCallback && m_customCallback )
+                {
+                    return m_customCallback( aVarName ); // Return the original error
+                }
+
+                // No variable found anywhere
+                return calc_parser::MakeError<calc_parser::VALUE>( fmt::format( "Undefined variable: {}", aVarName ) );
+            };
 }
 
 std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithParser( const std::string& aInput,
-                                                                       VariableCallback   aVariableCallback )
+                                                                       VAR_CALLBACK   aVariableCallback )
 {
     try
     {
@@ -1788,23 +1852,21 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithParser( const std
     catch( const std::bad_alloc& )
     {
         if( m_lastErrors )
-        {
             m_lastErrors->AddError( "Out of memory" );
-        }
+
         return { aInput, true };
     }
     catch( const std::exception& e )
     {
         if( m_lastErrors )
-        {
             m_lastErrors->AddError( fmt::format( "Exception: {}", e.what() ) );
-        }
+
         return { aInput, true };
     }
 }
 
 std::pair<std::string, bool>
-EXPRESSION_EVALUATOR::evaluateWithPartialErrorRecovery( const std::string& aInput, VariableCallback aVariableCallback )
+EXPRESSION_EVALUATOR::evaluateWithPartialErrorRecovery( const std::string& aInput, VAR_CALLBACK aVariableCallback )
 {
     std::string result = aInput;
     bool        hadAnyErrors = false;
@@ -1825,13 +1887,10 @@ EXPRESSION_EVALUATOR::evaluateWithPartialErrorRecovery( const std::string& aInpu
         while( searchPos < result.length() && braceCount > 0 )
         {
             if( result[searchPos] == '{' )
-            {
                 braceCount++;
-            }
             else if( result[searchPos] == '}' )
-            {
                 braceCount--;
-            }
+
             searchPos++;
         }
 
@@ -1903,7 +1962,7 @@ EXPRESSION_EVALUATOR::evaluateWithPartialErrorRecovery( const std::string& aInpu
 }
 
 std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const std::string& aInput,
-                                                                           VariableCallback   aVariableCallback )
+                                                                           VAR_CALLBACK aVariableCallback )
 {
     if( aInput.empty() )
     {
@@ -1911,18 +1970,19 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
     }
 
     // RAII guard for error collector cleanup
-    struct ErrorCollectorGuard
+    struct ERROR_COLLECTOR_GUARD
     {
-        ~ErrorCollectorGuard() { calc_parser::g_errorCollector = nullptr; }
+        ~ERROR_COLLECTOR_GUARD()
+        {
+            calc_parser::g_errorCollector = nullptr;
+        }
     } guard;
 
     try
     {
         // Clear previous errors
         if( m_lastErrors )
-        {
             m_lastErrors->Clear();
-        }
 
         // Set up error collector
         calc_parser::g_errorCollector = m_lastErrors.get();
@@ -1931,10 +1991,11 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
         KIEVAL_TEXT_TOKENIZER tokenizer{ aInput, m_lastErrors.get(), m_defaultUnits };
 
         // Create parser deleter function
-        auto parser_deleter = []( void* p )
-        {
-            KI_EVAL::ParseFree( p, free );
-        };
+        auto parser_deleter =
+                []( void* p )
+                {
+                    KI_EVAL::ParseFree( p, free );
+                };
 
         // Allocate parser with RAII cleanup
         std::unique_ptr<void, decltype( parser_deleter )> parser{ KI_EVAL::ParseAlloc( malloc ), parser_deleter };
@@ -1942,9 +2003,8 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
         if( !parser )
         {
             if( m_lastErrors )
-            {
                 m_lastErrors->AddError( "Failed to allocate parser" );
-            }
+
             return { aInput, true };
         }
 
@@ -1952,25 +2012,23 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
         calc_parser::DOC* document = nullptr;
 
         calc_parser::TOKEN_TYPE token_value;
-        TextEvalToken           token_type;
+        TEXT_EVAL_TOKEN         token_type;
 
         do
         {
             token_type = tokenizer.get_next_token( token_value );
 
             // Send token to parser
-            KI_EVAL::Parse( parser.get(), static_cast<int>( token_type ), token_value, &document );
+            KI_EVAL::Parse( parser.get(), (int) token_type, token_value, &document );
 
             // Early exit on errors
             if( m_lastErrors && m_lastErrors->HasErrors() )
-            {
                 break;
-            }
 
-        } while( token_type != TextEvalToken::ENDS && tokenizer.has_more_tokens() );
+        } while( token_type != TEXT_EVAL_TOKEN::ENDS && tokenizer.has_more_tokens() );
 
         // Finalize parsing
-        KI_EVAL::Parse( parser.get(), static_cast<int>( TextEvalToken::ENDS ), calc_parser::TOKEN_TYPE{}, &document );
+        KI_EVAL::Parse( parser.get(), (int) TEXT_EVAL_TOKEN::ENDS, calc_parser::TOKEN_TYPE{}, &document );
 
         // Process document if parsing succeeded
         if( document && ( !m_lastErrors || !m_lastErrors->HasErrors() ) )
@@ -1997,17 +2055,15 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
     catch( const std::bad_alloc& )
     {
         if( m_lastErrors )
-        {
             m_lastErrors->AddError( "Out of memory" );
-        }
+
         return { aInput, true };
     }
     catch( const std::exception& e )
     {
         if( m_lastErrors )
-        {
             m_lastErrors->AddError( fmt::format( "Exception: {}", e.what() ) );
-        }
+
         return { aInput, true };
     }
 }
@@ -2058,7 +2114,7 @@ bool NUMERIC_EVALUATOR_COMPAT::Process( const wxString& aString )
     wxString processedExpression = aString;
 
     // Get all variable names that are currently defined
-    auto varNames = m_evaluator.GetVariableNames();
+    std::vector<wxString> varNames = m_evaluator.GetVariableNames();
 
     // Sort variable names by length (longest first) to avoid partial replacements
     std::sort( varNames.begin(), varNames.end(),
@@ -2068,7 +2124,7 @@ bool NUMERIC_EVALUATOR_COMPAT::Process( const wxString& aString )
                } );
 
     // Replace bare variable names with ${variable} syntax
-    for( const auto& varName : varNames )
+    for( const wxString& varName : varNames )
     {
         // Create a regex to match the variable name as a whole word
         // This avoids replacing parts of other words
@@ -2088,6 +2144,7 @@ bool NUMERIC_EVALUATOR_COMPAT::Process( const wxString& aString )
             if( pos > 0 )
             {
                 wxChar before = processedExpression[pos - 1];
+
                 if( wxIsalnum( before ) || before == '_' || before == '$' )
                     isWholeWord = false;
             }
@@ -2096,6 +2153,7 @@ bool NUMERIC_EVALUATOR_COMPAT::Process( const wxString& aString )
             if( isWholeWord && pos + varName.length() < processedExpression.length() )
             {
                 wxChar after = processedExpression[pos + varName.length()];
+
                 if( wxIsalnum( after ) || after == '_' )
                     isWholeWord = false;
             }

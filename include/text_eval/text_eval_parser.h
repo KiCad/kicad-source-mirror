@@ -47,7 +47,7 @@
 
 namespace calc_parser
 {
-    using Value = std::variant<double, std::string>;
+    using VALUE = std::variant<double, std::string>;
 
     // Simple token type for parser compatibility
     struct TOKEN_TYPE
@@ -92,12 +92,13 @@ namespace calc_parser
     {
     public:
         // Convert Value to double (for arithmetic operations)
-        static auto ToDouble( const Value& aVal ) -> Result<double>
+        static RESULT<double> ToDouble( const VALUE& aVal )
         {
             if( std::holds_alternative<double>( aVal ) )
                 return MakeValue( std::get<double>( aVal ) );
 
             const auto& str = std::get<std::string>( aVal );
+
             try
             {
                 double value;
@@ -115,7 +116,7 @@ namespace calc_parser
         }
 
         // Convert Value to string (for display/concatenation)
-        static auto ToString( const Value& aVal ) -> std::string
+        static std::string ToString( const VALUE& aVal )
         {
             if( std::holds_alternative<std::string>( aVal ) )
                 return std::get<std::string>( aVal );
@@ -133,7 +134,7 @@ namespace calc_parser
             return fmt::format( "{}", num );
         }
 
-        static auto ToChar( const Value& aVal ) -> char
+        static char ToChar( const VALUE& aVal )
         {
             std::string str = ToString( aVal );
 
@@ -144,7 +145,7 @@ namespace calc_parser
         }
 
         // Check if Value represents a "truthy" value for conditionals
-        static auto IsTruthy( const Value& aVal ) -> bool
+        static bool IsTruthy( const VALUE& aVal )
         {
             if( std::holds_alternative<double>( aVal ) )
                 return std::get<double>( aVal ) != 0.0;
@@ -153,46 +154,60 @@ namespace calc_parser
         }
 
         // arithmetic operation with type coercion
-        static auto ArithmeticOp( const Value& aLeft, const Value& aRight, char aOp ) -> Result<Value>
+        static RESULT<VALUE> ArithmeticOp( const VALUE& aLeft, const VALUE& aRight, char aOp )
         {
             auto leftNum = ToDouble( aLeft );
             auto rightNum = ToDouble( aRight );
 
-            if( !leftNum ) return MakeError<Value>( leftNum.GetError() );
-            if( !rightNum ) return MakeError<Value>( rightNum.GetError() );
+            if( !leftNum )
+                return MakeError<VALUE>( leftNum.GetError() );
+
+            if( !rightNum )
+                return MakeError<VALUE>( rightNum.GetError() );
 
             const auto leftVal = leftNum.GetValue();
             const auto rightVal = rightNum.GetValue();
 
             switch( aOp )
             {
-            case '+': return MakeValue<Value>( leftVal + rightVal );
-            case '-': return MakeValue<Value>( leftVal - rightVal );
-            case '*': return MakeValue<Value>( leftVal * rightVal );
+            case '+':
+                return MakeValue<VALUE>( leftVal + rightVal );
+            case '-':
+                return MakeValue<VALUE>( leftVal - rightVal );
+            case '*':
+                return MakeValue<VALUE>( leftVal * rightVal );
             case '/':
                 if( rightVal == 0.0 )
-                    return MakeError<Value>( "Division by zero" );
-                return MakeValue<Value>( leftVal / rightVal );
+                    return MakeError<VALUE>( "Division by zero" );
+                return MakeValue<VALUE>( leftVal / rightVal );
             case '%':
                 if( rightVal == 0.0 )
-                    return MakeError<Value>( "Modulo by zero" );
-                return MakeValue<Value>( std::fmod( leftVal, rightVal ) );
-            case '^': return MakeValue<Value>( std::pow( leftVal, rightVal ) );
-            case '<': return MakeValue<Value>( leftVal < rightVal ? 1.0 : 0.0 );
-            case '>': return MakeValue<Value>( leftVal > rightVal ? 1.0 : 0.0 );
-            case 1: return MakeValue<Value>( leftVal <= rightVal ? 1.0 : 0.0 );  // <=
-            case 2: return MakeValue<Value>( leftVal >= rightVal ? 1.0 : 0.0 );  // >=
-            case 3: return MakeValue<Value>( leftVal == rightVal ? 1.0 : 0.0 );  // ==
-            case 4: return MakeValue<Value>( leftVal != rightVal ? 1.0 : 0.0 );  // !=
+                    return MakeError<VALUE>( "Modulo by zero" );
+
+                return MakeValue<VALUE>( std::fmod( leftVal, rightVal ) );
+            case '^':
+                return MakeValue<VALUE>( std::pow( leftVal, rightVal ) );
+            case '<':
+                return MakeValue<VALUE>( leftVal < rightVal ? 1.0 : 0.0 );
+            case '>':
+                return MakeValue<VALUE>( leftVal > rightVal ? 1.0 : 0.0 );
+            case 1:
+                return MakeValue<VALUE>( leftVal <= rightVal ? 1.0 : 0.0 );  // <=
+            case 2:
+                return MakeValue<VALUE>( leftVal >= rightVal ? 1.0 : 0.0 );  // >=
+            case 3:
+                return MakeValue<VALUE>( leftVal == rightVal ? 1.0 : 0.0 );  // ==
+            case 4:
+                return MakeValue<VALUE>( leftVal != rightVal ? 1.0 : 0.0 );  // !=
             default:
-                return MakeError<Value>( "Unknown operator" );
+                return MakeError<VALUE>( "Unknown operator" );
             }
         }
 
         // String concatenation (special case of '+' for strings)
-        static auto ConcatStrings( const Value& aLeft, const Value& aRight ) -> Value
+        static VALUE ConcatStrings( const VALUE& aLeft, const VALUE& aRight )
         {
-            return Value{ ToString( aLeft ) + ToString( aRight ) };
+            return VALUE{ ToString( aLeft ) + ToString( aRight ) };
         }
     };
 
@@ -201,148 +216,148 @@ namespace calc_parser
     class PARSE_CONTEXT;
 
     // AST Node types - supporting mixed values
-    enum class NodeType { Text, Calc, Var, Number, String, BinOp, Function };
+    enum class NODE_TYPE { Text, Calc, Var, Number, String, BinOp, Function };
 
     struct BIN_OP_DATA
     {
-        std::unique_ptr<NODE> left;
-        std::unique_ptr<NODE> right;
-        char op;
-
         BIN_OP_DATA( std::unique_ptr<NODE> aLeft, char aOperation, std::unique_ptr<NODE> aRight ) :
                 left( std::move( aLeft ) ),
                 right( std::move( aRight ) ),
                 op( aOperation )
         {}
+
+        std::unique_ptr<NODE> left;
+        std::unique_ptr<NODE> right;
+        char                  op;
     };
 
     struct FUNC_DATA
     {
-        std::string name;
-        std::vector<std::unique_ptr<NODE>> args;
-
         FUNC_DATA( std::string aName, std::vector<std::unique_ptr<NODE>> aArguments ) :
                 name( std::move( aName ) ),
                 args( std::move( aArguments ) )
         {}
+
+        std::string                        name;
+        std::vector<std::unique_ptr<NODE>> args;
     };
 
     class NODE
     {
     public:
-        NodeType type;
+        NODE_TYPE type;
         std::variant<std::string, double, BIN_OP_DATA, FUNC_DATA> data;
 
         // Factory methods for type safety
-        static auto CreateText( std::string aText ) -> std::unique_ptr<NODE>
+        static std::unique_ptr<NODE> CreateText( std::string aText )
         {
             auto node = std::make_unique<NODE>();
-            node->type = NodeType::Text;
+            node->type = NODE_TYPE::Text;
             node->data = std::move( aText );
             return node;
         }
 
-        static auto CreateCalc( std::unique_ptr<NODE> aExpr ) -> std::unique_ptr<NODE>
+        static std::unique_ptr<NODE> CreateCalc( std::unique_ptr<NODE> aExpr )
         {
             auto node = std::make_unique<NODE>();
-            node->type = NodeType::Calc;
+            node->type = NODE_TYPE::Calc;
             node->data = BIN_OP_DATA( std::move( aExpr ), '=', nullptr );
             return node;
         }
 
-        static auto CreateVar( std::string aName ) -> std::unique_ptr<NODE>
+        static std::unique_ptr<NODE> CreateVar( std::string aName )
         {
             auto node = std::make_unique<NODE>();
-            node->type = NodeType::Var;
+            node->type = NODE_TYPE::Var;
             node->data = std::move( aName );
             return node;
         }
 
-        static auto CreateNumber( double aValue ) -> std::unique_ptr<NODE>
+        static std::unique_ptr<NODE> CreateNumber( double aValue )
         {
             auto node = std::make_unique<NODE>();
-            node->type = NodeType::Number;
+            node->type = NODE_TYPE::Number;
             node->data = aValue;
             return node;
         }
 
-        static auto CreateString( std::string aValue ) -> std::unique_ptr<NODE>
+        static std::unique_ptr<NODE> CreateString( std::string aValue )
         {
             auto node = std::make_unique<NODE>();
-            node->type = NodeType::String;
+            node->type = NODE_TYPE::String;
             node->data = std::move( aValue );
             return node;
         }
 
-        static auto CreateBinOp( std::unique_ptr<NODE> aLeft, char aOp, std::unique_ptr<NODE> aRight ) -> std::unique_ptr<NODE>
+        static std::unique_ptr<NODE> CreateBinOp( std::unique_ptr<NODE> aLeft, char aOp, std::unique_ptr<NODE> aRight )
         {
             auto node = std::make_unique<NODE>();
-            node->type = NodeType::BinOp;
+            node->type = NODE_TYPE::BinOp;
             node->data = BIN_OP_DATA( std::move( aLeft ), aOp, std::move( aRight ) );
             return node;
         }
 
-        static auto CreateFunction( std::string aName, std::vector<std::unique_ptr<NODE>> aArgs ) -> std::unique_ptr<NODE>
+        static std::unique_ptr<NODE> CreateFunction( std::string aName, std::vector<std::unique_ptr<NODE>> aArgs )
         {
             auto node = std::make_unique<NODE>();
-            node->type = NodeType::Function;
+            node->type = NODE_TYPE::Function;
             node->data = FUNC_DATA( std::move( aName ), std::move( aArgs ) );
             return node;
         }
 
         // Raw pointer factory methods for parser use
-        static auto CreateTextRaw( std::string aText ) -> NODE*
+        static NODE* CreateTextRaw( std::string aText )
         {
-            auto node = new NODE();
-            node->type = NodeType::Text;
+            NODE* node = new NODE();
+            node->type = NODE_TYPE::Text;
             node->data = std::move( aText );
             return node;
         }
 
-        static auto CreateCalcRaw( NODE* aExpr ) -> NODE*
+        static NODE* CreateCalcRaw( NODE* aExpr )
         {
             auto node = new NODE();
-            node->type = NodeType::Calc;
+            node->type = NODE_TYPE::Calc;
             node->data = BIN_OP_DATA( std::unique_ptr<NODE>( aExpr ), '=', nullptr );
             return node;
         }
 
-        static auto CreateVarRaw( std::string aName ) -> NODE*
+        static NODE* CreateVarRaw( std::string aName )
         {
-            auto node = new NODE();
-            node->type = NodeType::Var;
+            NODE* node = new NODE();
+            node->type = NODE_TYPE::Var;
             node->data = std::move( aName );
             return node;
         }
 
-        static auto CreateNumberRaw( double aValue ) -> NODE*
+        static NODE* CreateNumberRaw( double aValue )
         {
-            auto node = new NODE();
-            node->type = NodeType::Number;
+            NODE* node = new NODE();
+            node->type = NODE_TYPE::Number;
             node->data = aValue;
             return node;
         }
 
-        static auto CreateStringRaw( std::string aValue ) -> NODE*
+        static NODE* CreateStringRaw( std::string aValue )
         {
-            auto node = new NODE();
-            node->type = NodeType::String;
+            NODE* node = new NODE();
+            node->type = NODE_TYPE::String;
             node->data = std::move( aValue );
             return node;
         }
 
-        static auto CreateBinOpRaw( NODE* aLeft, char aOp, NODE* aRight ) -> NODE*
+        static NODE* CreateBinOpRaw( NODE* aLeft, char aOp, NODE* aRight )
         {
-            auto node = new NODE();
-            node->type = NodeType::BinOp;
+            NODE* node = new NODE();
+            node->type = NODE_TYPE::BinOp;
             node->data = BIN_OP_DATA( std::unique_ptr<NODE>( aLeft ), aOp, std::unique_ptr<NODE>( aRight ) );
             return node;
         }
 
-        static auto CreateFunctionRaw( std::string aName, std::vector<std::unique_ptr<NODE>>* aArgs ) -> NODE*
+        static NODE* CreateFunctionRaw( std::string aName, std::vector<std::unique_ptr<NODE>>* aArgs )
         {
-            auto node = new NODE();
-            node->type = NodeType::Function;
+            NODE* node = new NODE();
+            node->type = NODE_TYPE::Function;
             node->data = FUNC_DATA( std::move( aName ), std::move( *aArgs ) );
             delete aArgs;
             return node;
@@ -350,7 +365,7 @@ namespace calc_parser
 
         // Mixed-type evaluation
         template<typename Visitor>
-        auto Accept( Visitor&& aVisitor ) const -> Result<Value>
+        RESULT<VALUE> Accept( Visitor&& aVisitor ) const
         {
             return std::forward<Visitor>( aVisitor )( *this );
         }
@@ -359,26 +374,27 @@ namespace calc_parser
     class DOC
     {
     public:
-        std::vector<std::unique_ptr<NODE>> nodes;
-        mutable ERROR_COLLECTOR errors;
-
-        auto AddNode( std::unique_ptr<NODE> aNode ) -> void
+        void AddNode( std::unique_ptr<NODE> aNode )
         {
             nodes.emplace_back( std::move( aNode ) );
         }
 
-        auto AddNodeRaw( NODE* aNode ) -> void
+        void AddNodeRaw( NODE* aNode )
         {
             nodes.emplace_back( std::unique_ptr<NODE>( aNode ) );
         }
 
-        auto HasErrors() const -> bool { return errors.HasErrors(); }
-        auto GetErrors() const -> const std::vector<std::string>& { return errors.GetErrors(); }
-        auto GetErrorSummary() const -> std::string { return errors.GetAllMessages(); }
+        bool HasErrors() const { return errors.HasErrors(); }
+        const std::vector<std::string>& GetErrors() const { return errors.GetErrors(); }
+        std::string GetErrorSummary() const { return errors.GetAllMessages(); }
 
-        auto GetNodes() const -> const auto& { return nodes; }
+        const std::vector<std::unique_ptr<NODE>>& GetNodes() const { return nodes; }
         auto begin() const { return nodes.begin(); }
         auto end() const { return nodes.end(); }
+
+    private:
+        std::vector<std::unique_ptr<NODE>> nodes;
+        mutable ERROR_COLLECTOR            errors;
     };
 
     // Global error collector for parser callbacks
@@ -411,13 +427,7 @@ namespace calc_parser
     {
     public:
         // Callback function type for variable resolution
-        using VariableCallback = std::function<Result<Value>(const std::string& aVariableName)>;
-
-    private:
-        VariableCallback m_variableCallback;
-        [[maybe_unused]] ERROR_COLLECTOR& m_errors;
-        mutable std::random_device m_rd;
-        mutable std::mt19937 m_gen;
+        using VAR_CALLBACK = std::function<RESULT<VALUE>(const std::string& aVariableName)>;
 
     public:
         /**
@@ -425,20 +435,26 @@ namespace calc_parser
          * @param aVariableCallback Function to call when resolving variables
          * @param aErrorCollector Error collector for storing errors
          */
-        explicit EVAL_VISITOR( VariableCallback aVariableCallback, ERROR_COLLECTOR& aErrorCollector );
+        explicit EVAL_VISITOR( VAR_CALLBACK aVariableCallback, ERROR_COLLECTOR& aErrorCollector );
 
         // Visitor methods for evaluating different node types
-        auto operator()( const NODE& aNode ) const -> Result<Value>;
+        RESULT<VALUE> operator()( const NODE& aNode ) const;
 
     private:
-        auto evaluateFunction( const FUNC_DATA& aFunc ) const -> Result<Value>;
+        RESULT<VALUE> evaluateFunction( const FUNC_DATA& aFunc ) const;
+
+    private:
+        VAR_CALLBACK               m_variableCallback;
+        ERROR_COLLECTOR&           m_errors;
+        mutable std::random_device m_rd;
+        mutable std::mt19937       m_gen;
     };
 
     // Enhanced document processor supporting callback-based variable resolution
     class KICOMMON_API DOC_PROCESSOR
     {
     public:
-        using VariableCallback = EVAL_VISITOR::VariableCallback;
+        using VAR_CALLBACK = EVAL_VISITOR::VAR_CALLBACK;
 
         /**
          * @brief Process document using callback for variable resolution
@@ -446,17 +462,16 @@ namespace calc_parser
          * @param aVariableCallback Function to resolve variables
          * @return Pair of (result_string, had_errors)
          */
-        static auto Process( const DOC& aDoc, VariableCallback aVariableCallback )
-                            -> std::pair<std::string, bool>;
+        static std::pair<std::string, bool> Process( const DOC& aDoc, VAR_CALLBACK aVariableCallback );
 
         /**
          * @brief Process document with detailed error reporting
          * @param aDoc Document to process
-         * @param aVariableCallback Function to resolve variables
+         * @param aCallback Function to resolve variables
          * @return Tuple of (result_string, error_messages, had_errors)
          */
-        static auto ProcessWithDetails( const DOC& aDoc, VariableCallback aVariableCallback )
-                                       -> std::tuple<std::string, std::vector<std::string>, bool>;
+        static std::tuple<std::string, std::vector<std::string>, bool> ProcessWithDetails( const DOC& aDoc,
+                                                                                           VAR_CALLBACK aCallback );
     };
 
 

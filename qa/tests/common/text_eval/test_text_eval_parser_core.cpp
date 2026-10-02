@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_SUITE( TextEvalParserLowLevel )
  */
 auto CreateTestVariableResolver()
 {
-    auto variables = std::make_shared<std::unordered_map<std::string, Value>>();
+    auto variables = std::make_shared<std::unordered_map<std::string, VALUE>>();
 
     // Set up some test variables
     (*variables)["x"] = 10.0;
@@ -50,14 +50,15 @@ auto CreateTestVariableResolver()
     (*variables)["name"] = std::string("KiCad");
     (*variables)["pi"] = 3.14159;
 
-    return [variables]( const std::string& varName ) -> Result<Value>
-    {
-        auto it = variables->find( varName );
-        if( it != variables->end() )
-            return MakeValue( it->second );
+    return [variables]( const std::string& varName ) -> RESULT<VALUE>
+           {
+               auto it = variables->find( varName );
 
-        return MakeError<Value>( "Variable not found: " + varName );
-    };
+               if( it != variables->end() )
+                   return MakeValue( it->second );
+
+               return MakeError<VALUE>( "Variable not found: " + varName );
+           };
 }
 
 /**
@@ -67,50 +68,50 @@ BOOST_AUTO_TEST_CASE( ValueUtils )
 {
     // Test ToDouble conversion
     {
-        Value numVal = 42.5;
+        VALUE numVal = 42.5;
         auto result = calc_parser::VALUE_UTILS::ToDouble( numVal );
         BOOST_CHECK( result.HasValue() );
         BOOST_CHECK_CLOSE( result.GetValue(), 42.5, 0.001 );
     }
 
     {
-        Value strVal = std::string("123.45");
+        VALUE strVal = std::string("123.45");
         auto result = calc_parser::VALUE_UTILS::ToDouble( strVal );
         BOOST_CHECK( result.HasValue() );
         BOOST_CHECK_CLOSE( result.GetValue(), 123.45, 0.001 );
     }
 
     {
-        Value invalidStr = std::string("not_a_number");
+        VALUE invalidStr = std::string("not_a_number");
         auto result = calc_parser::VALUE_UTILS::ToDouble( invalidStr );
         BOOST_CHECK( result.HasError() );
     }
 
     // Test ToString conversion
     {
-        Value numVal = 42.0;
+        VALUE numVal = 42.0;
         auto result = calc_parser::VALUE_UTILS::ToString( numVal );
         BOOST_CHECK_EQUAL( result, "42" );
     }
 
     {
-        Value strVal = std::string("Hello");
+        VALUE strVal = std::string("Hello");
         auto result = calc_parser::VALUE_UTILS::ToString( strVal );
         BOOST_CHECK_EQUAL( result, "Hello" );
     }
 
     // Test IsTruthy
     {
-        BOOST_CHECK( calc_parser::VALUE_UTILS::IsTruthy( Value{1.0} ) );
-        BOOST_CHECK( !calc_parser::VALUE_UTILS::IsTruthy( Value{0.0} ) );
-        BOOST_CHECK( calc_parser::VALUE_UTILS::IsTruthy( Value{std::string("non-empty")} ) );
-        BOOST_CHECK( !calc_parser::VALUE_UTILS::IsTruthy( Value{std::string("")} ) );
+        BOOST_CHECK( calc_parser::VALUE_UTILS::IsTruthy( VALUE{1.0} ) );
+        BOOST_CHECK( !calc_parser::VALUE_UTILS::IsTruthy( VALUE{0.0} ) );
+        BOOST_CHECK( calc_parser::VALUE_UTILS::IsTruthy( VALUE{std::string("non-empty")} ) );
+        BOOST_CHECK( !calc_parser::VALUE_UTILS::IsTruthy( VALUE{std::string("")} ) );
     }
 
     // Test ArithmeticOp
     {
-        Value left = 10.0;
-        Value right = 3.0;
+        VALUE left = 10.0;
+        VALUE right = 3.0;
 
         auto addResult = calc_parser::VALUE_UTILS::ArithmeticOp( left, right, '+' );
         BOOST_CHECK( addResult.HasValue() );
@@ -139,8 +140,8 @@ BOOST_AUTO_TEST_CASE( ValueUtils )
 
     // Test division by zero
     {
-        Value left = 10.0;
-        Value right = 0.0;
+        VALUE left = 10.0;
+        VALUE right = 0.0;
 
         auto divResult = calc_parser::VALUE_UTILS::ArithmeticOp( left, right, '/' );
         BOOST_CHECK( divResult.HasError() );
@@ -151,15 +152,15 @@ BOOST_AUTO_TEST_CASE( ValueUtils )
 
     // Test ConcatStrings
     {
-        Value left = std::string("Hello ");
-        Value right = std::string("World");
+        VALUE left = std::string("Hello ");
+        VALUE right = std::string("World");
         auto result = calc_parser::VALUE_UTILS::ConcatStrings( left, right );
         BOOST_CHECK_EQUAL( std::get<std::string>( result ), "Hello World" );
     }
 
     {
-        Value left = 42.0;
-        Value right = std::string(" items");
+        VALUE left = 42.0;
+        VALUE right = std::string(" items");
         auto result = calc_parser::VALUE_UTILS::ConcatStrings( left, right );
         BOOST_CHECK_EQUAL( std::get<std::string>( result ), "42 items" );
     }
@@ -173,21 +174,21 @@ BOOST_AUTO_TEST_CASE( NodeCreation )
     // Test number node
     {
         auto node = NODE::CreateNumber( 42.5 );
-        BOOST_CHECK( node->type == NodeType::Number );
+        BOOST_CHECK( node->type == NODE_TYPE::Number );
         BOOST_CHECK_CLOSE( std::get<double>( node->data ), 42.5, 0.001 );
     }
 
     // Test string node
     {
         auto node = NODE::CreateString( "Hello World" );
-        BOOST_CHECK( node->type == NodeType::String );
+        BOOST_CHECK( node->type == NODE_TYPE::String );
         BOOST_CHECK_EQUAL( std::get<std::string>( node->data ), "Hello World" );
     }
 
     // Test variable node
     {
         auto node = NODE::CreateVar( "testVar" );
-        BOOST_CHECK( node->type == NodeType::Var );
+        BOOST_CHECK( node->type == NODE_TYPE::Var );
         BOOST_CHECK_EQUAL( std::get<std::string>( node->data ), "testVar" );
     }
 
@@ -197,7 +198,7 @@ BOOST_AUTO_TEST_CASE( NodeCreation )
         auto right = NODE::CreateNumber( 5.0 );
         auto binOp = NODE::CreateBinOp( std::move( left ), '+', std::move( right ) );
 
-        BOOST_CHECK( binOp->type == NodeType::BinOp );
+        BOOST_CHECK( binOp->type == NODE_TYPE::BinOp );
         const auto& binOpData = std::get<BIN_OP_DATA>( binOp->data );
         BOOST_CHECK( binOpData.op == '+' );
         BOOST_CHECK( binOpData.left != nullptr );
@@ -210,7 +211,7 @@ BOOST_AUTO_TEST_CASE( NodeCreation )
         args.push_back( NODE::CreateNumber( 5.0 ) );
 
         auto funcNode = NODE::CreateFunction( "abs", std::move( args ) );
-        BOOST_CHECK( funcNode->type == NodeType::Function );
+        BOOST_CHECK( funcNode->type == NODE_TYPE::Function );
 
         const auto& funcData = std::get<FUNC_DATA>( funcNode->data );
         BOOST_CHECK_EQUAL( funcData.name, "abs" );
