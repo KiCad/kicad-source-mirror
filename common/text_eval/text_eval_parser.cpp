@@ -318,8 +318,8 @@ public:
 
     static auto FormatTime( double aSecondsSinceEpoch, const std::string& aFormat ) -> std::string
     {
-        auto      timeT = static_cast<time_t>( aSecondsSinceEpoch );
-        struct tm tmBuf;
+        time_t    timeT = static_cast<time_t>( aSecondsSinceEpoch );
+        struct tm tmBuf = {};
 
 #ifdef _WIN32
         localtime_s( &tmBuf, &timeT );
