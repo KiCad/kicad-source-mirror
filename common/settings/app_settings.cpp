@@ -240,7 +240,7 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_System.file_history, {} ) );
 
     if( m_filename == wxS( "pl_editor" )
-        || m_filename == wxS( "eeschema"
+        || m_filename == wxS( "eeschema" )
         || m_filename == wxS( "symbol_editor" ) )
     {
         m_params.emplace_back( new PARAM<int>( "system.units",
@@ -298,10 +298,11 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
             &m_ColorTheme, COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT ) );
 
     m_params.emplace_back( new PARAM<bool>( "appearance.custom_toolbars",
-                &m_CustomToolbars, false ) );
+            &m_CustomToolbars, false ) );
 
-    m_params.emplace_back( new PARAM_ENUM<ARC_DRAW_MODE>( "editing.arc_draw_mode", &m_ArcDrawMode,
-            ARC_DRAW_MODE::CENTER_START_END, ARC_DRAW_MODE::CENTER_START_END, ARC_DRAW_MODE::START_DIR_END ) );
+    m_params.emplace_back( new PARAM_ENUM<ARC_DRAW_MODE>( "editing.arc_draw_mode",
+            &m_ArcDrawMode, ARC_DRAW_MODE::CENTER_START_END, ARC_DRAW_MODE::CENTER_START_END,
+            ARC_DRAW_MODE::START_DIR_END ) );
 
     addParamsForWindow( &m_Window, "window" );
 
@@ -333,8 +334,7 @@ bool APP_SETTINGS_BASE::MigrateFromLegacy( wxConfigBase* aCfg )
 
     migrateFindReplace( aCfg );
 
-    ret &= fromLegacy<int>(    aCfg, "P22LIB_TREE_MODEL_ADAPTERSelectorColumnWidth",
-                                                            "lib_tree.column_width" );
+    ret &= fromLegacy<int>(    aCfg, "P22LIB_TREE_MODEL_ADAPTERSelectorColumnWidth", "lib_tree.column_width" );
 
     ret &= fromLegacy<bool>(   aCfg, "PrintMonochrome",     "printing.monochrome" );
     ret &= fromLegacy<double>( aCfg, "PrintScale",          "printing.scale" );
@@ -437,7 +437,9 @@ bool APP_SETTINGS_BASE::migrateWindowConfig( wxConfigBase* aCfg, const std::stri
     ret &= fromLegacy<double>( aCfg, frameGDO + "GridMaxDensity",   gridPath + ".min_spacing" );
     ret &= fromLegacy<bool>(   aCfg, frameGDO + "ShowGrid",         gridPath + ".show" );
     ret &= fromLegacy<int>(    aCfg, frameGDO + "GridStyle",        gridPath + ".style" );
-    ret &= fromLegacyColor(    aCfg, frameGDO + "GridColor",        gridPath + ".color" );
+
+    // Grid colors have moved to COLOR_SETTINGS
+    //ret &= fromLegacyColor(    aCfg, frameGDO + "GridColor",      gridPath + ".color" );
 
     return ret;
 }
