@@ -49,8 +49,9 @@ void LEGACY_NETLIST_READER::LoadNetlist()
         {
             is_comment = true;
 
-            if( m_loadFootprintFilters && state == 0
-              && (strncasecmp( line, "{ Allowed footprints", 20 ) == 0) )
+            if( m_loadFootprintFilters
+                    && state == 0
+                    && strncasecmp( line, "{ Allowed footprints", 20 ) == 0 )
             {
                 loadFootprintFilters();
                 continue;
@@ -58,6 +59,8 @@ void LEGACY_NETLIST_READER::LoadNetlist()
 
             if( ( line = strchr( line, '}' ) ) == nullptr )
                 continue;
+            else
+                is_comment = false;
         }
 
         if( *line == '(' )
