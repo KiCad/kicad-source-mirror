@@ -36,6 +36,7 @@ class GIT_ADVANCED_DIALOG;
 class KIGIT_COMMON;
 enum class GitOperation;
 class wxCommandEvent;
+class wxMenuItem;
 class wxDataViewEvent;
 class wxStaticText;
 
@@ -83,8 +84,9 @@ public:
     int GetMinDockWidth() const { return m_minDockWidth; }
 
 private:
+    /// The split button's main half. It commits, or pushes when that is all there is to do.
     void onCommit( wxCommandEvent& aEvent );
-    void onCommitOnly( wxCommandEvent& aEvent );
+    void onCommitAndPush( wxCommandEvent& aEvent );
     void onPull( wxCommandEvent& aEvent );
 
     /// Drop an in-progress merge or rebase and return the project to its last commit.
@@ -99,7 +101,7 @@ private:
     void discardFile( std::shared_ptr<KIGIT_COMMON> aCommon, const wxString& aPath );
 
     /// Commit the checked files (or amend the last commit when the amend box is ticked), then
-    /// push when aAndPush is set. Both commit buttons land here.
+    /// push when aAndPush is set. Both halves of the commit button land here.
     void doCommit( bool aAndPush );
     void onChecklistChanged( wxDataViewEvent& aEvent );
     void onMessageChanged( wxCommandEvent& aEvent );
@@ -210,6 +212,12 @@ private:
 
     /// The full messages behind the Recent messages dropdown, in its order after the caption.
     std::vector<wxString> m_recentMessageTexts;
+
+    /// The arrow menu's entry, relabelled with the main button.
+    wxMenuItem* m_commitAndPushItem = nullptr;
+
+    /// True while the main button reads Push, with nothing left to commit.
+    bool m_commitButtonPushes = false;
 
     /// True while a push or pull worker is running. The Get Changes button then reads Cancel
     /// and requests cancellation of the running transfer.

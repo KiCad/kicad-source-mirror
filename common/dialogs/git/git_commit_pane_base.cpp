@@ -97,20 +97,17 @@ GIT_COMMIT_PANE_BASE::GIT_COMMIT_PANE_BASE( wxWindow* parent, wxWindowID id, con
 	wxBoxSizer* bCommitSizer;
 	bCommitSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_commitOnlyButton = new wxButton( this, wxID_ANY, _("Commit"), wxDefaultPosition, wxDefaultSize, 0 );
-	bCommitSizer->Add( m_commitOnlyButton, 1, wxALL, 4 );
-
-	m_commitButton = new wxButton( this, wxID_ANY, _("Commit and Push"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_commitButton = new SPLIT_BUTTON( this, wxID_ANY, _( "Commit" ), wxDefaultPosition );
 	bCommitSizer->Add( m_commitButton, 1, wxALL, 4 );
+
+	m_pullButton = new wxButton( this, wxID_ANY, _("Get Changes"), wxDefaultPosition, wxDefaultSize, 0 );
+	bCommitSizer->Add( m_pullButton, 1, wxALL, 4 );
 
 
 	bMainSizer->Add( bCommitSizer, 0, wxEXPAND, 0 );
 
 	wxBoxSizer* bActionSizer;
 	bActionSizer = new wxBoxSizer( wxHORIZONTAL );
-
-	m_pullButton = new wxButton( this, wxID_ANY, _("Get Changes"), wxDefaultPosition, wxDefaultSize, 0 );
-	bActionSizer->Add( m_pullButton, 1, wxALL, 4 );
 
 	m_advancedButton = new wxButton( this, wxID_ANY, _("Advanced..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bActionSizer->Add( m_advancedButton, 1, wxALL, 4 );

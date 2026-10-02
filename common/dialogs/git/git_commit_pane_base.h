@@ -26,6 +26,7 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <widgets/file_checklist_ctrl.h>
+#include <widgets/split_button.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -54,8 +55,7 @@ class GIT_COMMIT_PANE_BASE : public wxPanel
 		wxButton* m_showDiffButton;
 		wxStaticText* m_emptyLabel;
 		FILE_CHECKLIST_CTRL* m_checklist;
-		wxButton* m_commitOnlyButton;
-		wxButton* m_commitButton;
+		SPLIT_BUTTON* m_commitButton;
 		wxButton* m_pullButton;
 		wxButton* m_advancedButton;
 

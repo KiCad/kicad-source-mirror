@@ -200,7 +200,9 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
 
     m_advancedButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onOpenAdvanced, this );
     m_commitButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onCommit, this );
-    m_commitOnlyButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onCommitOnly, this );
+    m_commitAndPushItem = m_commitButton->GetSplitButtonMenu()->Append( wxID_ANY, _( "Commit and Push" ) );
+    m_commitButton->GetSplitButtonMenu()->Bind( wxEVT_MENU, &GIT_COMMIT_PANE::onCommitAndPush, this,
+                                                m_commitAndPushItem->GetId() );
     m_pullButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onPull, this );
     m_amendCheckbox->Bind( wxEVT_CHECKBOX, &GIT_COMMIT_PANE::onAmendToggled, this );
     m_summary->Bind( wxEVT_TEXT, &GIT_COMMIT_PANE::onMessageChanged, this );
@@ -677,7 +679,6 @@ void GIT_COMMIT_PANE::updateCommitButton()
     if( m_operationInProgress )
     {
         m_commitButton->Enable( false );
-        m_commitOnlyButton->Enable( false );
         m_pullButton->SetLabel( abandonLabel() );
         m_pullButton->Enable( true );
         return;
@@ -686,7 +687,6 @@ void GIT_COMMIT_PANE::updateCommitButton()
     if( m_headDetached )
     {
         m_commitButton->Enable( false );
-        m_commitOnlyButton->Enable( false );
         m_pullButton->Enable( false );
         return;
     }
@@ -710,36 +710,65 @@ void GIT_COMMIT_PANE::updateCommitButton()
     m_newBranchCheckbox->Enable( !amend );
     m_newBranchName->Enable( newBranch );
 
+    wxString mainLabel = _( "Commit" );
+    wxString menuLabel = _( "Commit and Push" );
+    bool     mainEnabled = false;
+    bool     menuEnabled = false;
+    m_commitButtonPushes = false;
+
+    // A disabled button with nothing said about it reads as broken, so each state the user can
+    // act on names what it is waiting for.
+    wxString blocked;
+
     if( amend )
     {
         // A message-only amend needs no checked files, just a message.
-        m_commitButton->SetLabel( _( "Amend and Push" ) );
-        m_commitButton->Enable( hasMessage );
-        m_commitOnlyButton->SetLabel( _( "Amend" ) );
-        m_commitOnlyButton->Enable( hasMessage );
+        mainLabel = _( "Amend" );
+        menuLabel = _( "Amend and Push" );
+        mainEnabled = hasMessage;
+        menuEnabled = hasMessage;
+
+        if( !hasMessage )
+            blocked = _( "Write a summary to amend the last commit." );
     }
     else if( hasCheckedChanges || m_editorsDirty )
     {
         // Unsaved editor changes count because the commit flow saves them first, then commits
         // what the save produced.
-        m_commitButton->SetLabel( _( "Commit and Push" ) );
-        m_commitButton->Enable( hasMessage && hasBranchName );
-        m_commitOnlyButton->SetLabel( _( "Commit" ) );
-        m_commitOnlyButton->Enable( hasMessage && hasBranchName );
+        mainEnabled = hasMessage && hasBranchName;
+        menuEnabled = hasMessage && hasBranchName;
+
+        if( !hasMessage )
+            blocked = _( "Write a summary to commit." );
+        else if( !hasBranchName )
+            blocked = _( "Name the new branch, or untick Create a new branch." );
     }
     else if( m_hasUnpushedCommits )
     {
-        m_commitButton->SetLabel( _( "Push" ) );
-        m_commitButton->Enable( true );
-        m_commitOnlyButton->SetLabel( _( "Commit" ) );
-        m_commitOnlyButton->Enable( false );
+        mainLabel = _( "Push" );
+        mainEnabled = true;
+        m_commitButtonPushes = true;
     }
-    else
+    else if( !m_shownPaths.empty() )
     {
-        m_commitButton->SetLabel( _( "Commit and Push" ) );
-        m_commitButton->Enable( false );
-        m_commitOnlyButton->SetLabel( _( "Commit" ) );
-        m_commitOnlyButton->Enable( false );
+        blocked = _( "Tick a file to commit it." );
+    }
+
+    m_commitButton->SetLabel( mainLabel );
+    m_commitButton->Enable( mainEnabled );
+    m_commitAndPushItem->SetItemLabel( menuLabel );
+    m_commitAndPushItem->Enable( menuEnabled );
+
+    if( !blocked.IsEmpty() )
+        setStatusText( blocked );
+
+    // With nothing listed the empty state owns the line and has already set its own text.
+    bool showReason = !blocked.IsEmpty() || m_shownPaths.empty();
+
+    if( m_emptyLabel->IsShown() != showReason )
+    {
+        m_emptyLabel->Show( showReason );
+        Layout();
     }
 
     // Pushing and pulling need a remote. Committing does not.
@@ -1083,13 +1112,13 @@ void GIT_COMMIT_PANE::onFileActivated( wxDataViewEvent& aEvent )
 
 void GIT_COMMIT_PANE::onCommit( wxCommandEvent& aEvent )
 {
-    doCommit( true );
+    doCommit( m_commitButtonPushes );
 }
 
 
-void GIT_COMMIT_PANE::onCommitOnly( wxCommandEvent& aEvent )
+void GIT_COMMIT_PANE::onCommitAndPush( wxCommandEvent& aEvent )
 {
-    doCommit( false );
+    doCommit( true );
 }
 
 
@@ -1513,7 +1542,6 @@ void GIT_COMMIT_PANE::setBusy( bool aBusy, const wxString& aStatus )
     m_networkBusy = aBusy;
 
     m_commitButton->Enable( !aBusy );
-    m_commitOnlyButton->Enable( !aBusy );
     m_amendCheckbox->Enable( !aBusy );
     m_signOffCheckbox->Enable( !aBusy );
     m_newBranchCheckbox->Enable( !aBusy );
