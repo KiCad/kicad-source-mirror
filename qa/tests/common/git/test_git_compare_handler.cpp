@@ -35,6 +35,8 @@
 #include <fstream>
 #include <map>
 
+#include <qa_utils/scoped_git_backend.h>
+
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 #include <wx/utils.h>
@@ -55,8 +57,6 @@ struct GIT_COMPARE_FIXTURE
             m_repo( nullptr ),
             m_ready( false )
     {
-        git_libgit2_init();
-
         wxString tmp = wxStandardPaths::Get().GetTempDir() + wxFileName::GetPathSeparator()
                        + wxString::Format( wxS( "kicad_qa_cmp_%lu_%ld" ),
                                            static_cast<unsigned long>( wxGetProcessId() ),
@@ -76,8 +76,6 @@ struct GIT_COMPARE_FIXTURE
 
         if( !m_repoPath.IsEmpty() )
             wxFileName::Rmdir( m_repoPath, wxPATH_RMDIR_RECURSIVE );
-
-        git_libgit2_shutdown();
     }
 
 
@@ -192,9 +190,10 @@ private:
     }
 
 
-    git_repository* m_repo;
-    wxString        m_repoPath;
-    bool            m_ready;
+    SCOPED_GIT_BACKEND m_backend;
+    git_repository*    m_repo;
+    wxString           m_repoPath;
+    bool               m_ready;
 
     static long s_counter;
 };
@@ -312,8 +311,11 @@ BOOST_AUTO_TEST_CASE( CompareRefs_EmptyBaseComparesAgainstEmptyTree )
     for( const KIGIT::CHANGED_FILE& f : changes )
         byPath[f.path] = f.status;
 
-    BOOST_CHECK( byPath.at( wxT( "a.txt" ) ) == KIGIT::FILE_CHANGE_STATUS::ADDED );
-    BOOST_CHECK( byPath.at( wxT( "b.txt" ) ) == KIGIT::FILE_CHANGE_STATUS::ADDED );
+    BOOST_REQUIRE_EQUAL( changes.size(), 2u );
+    BOOST_REQUIRE( byPath.count( wxT( "a.txt" ) ) );
+    BOOST_REQUIRE( byPath.count( wxT( "b.txt" ) ) );
+    BOOST_CHECK( byPath[wxT( "a.txt" )] == KIGIT::FILE_CHANGE_STATUS::ADDED );
+    BOOST_CHECK( byPath[wxT( "b.txt" )] == KIGIT::FILE_CHANGE_STATUS::ADDED );
 }
 
 

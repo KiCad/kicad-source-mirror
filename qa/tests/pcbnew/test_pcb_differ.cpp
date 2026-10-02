@@ -161,6 +161,8 @@ BOOST_AUTO_TEST_CASE( WidthChangeProducesPropertyDelta )
 
 BOOST_AUTO_TEST_CASE( TitleBlockEditSurfacesAsDocumentChange )
 {
+    // Both sides are set here, so the fixture's own revision cannot hide a missing delta.
+    m_before->GetTitleBlock().SetRevision( wxS( "A" ) );
     m_after->GetTitleBlock().SetRevision( wxS( "B" ) );
 
     PCB_DIFFER    differ( m_before.get(), m_after.get() );
@@ -174,9 +176,10 @@ BOOST_AUTO_TEST_CASE( TitleBlockEditSurfacesAsDocumentChange )
 
     for( const PROPERTY_DELTA& d : result.changes[0].properties )
     {
-        if( d.name.Lower().Contains( wxS( "revision" ) ) )
+        if( d.name == DOC_PROP_REVISION )
         {
             foundRevisionDelta = true;
+            BOOST_CHECK_EQUAL( d.before.AsString().ToStdString(), "A" );
             BOOST_CHECK_EQUAL( d.after.AsString().ToStdString(), "B" );
         }
     }

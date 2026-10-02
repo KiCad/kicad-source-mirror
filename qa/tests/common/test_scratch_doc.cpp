@@ -24,10 +24,12 @@
 #include <settings/settings_manager.h>
 
 #include <wx/filename.h>
+#include <wx/utils.h>
 
 #include <filesystem>
 #include <fstream>
 #include <memory>
+#include <string>
 
 
 BOOST_AUTO_TEST_SUITE( ScratchDoc )
@@ -38,7 +40,8 @@ BOOST_AUTO_TEST_SUITE( ScratchDoc )
 BOOST_AUTO_TEST_CASE( LivePathGetsItsOwnScratchProject )
 {
     std::error_code       ec;
-    std::filesystem::path dir = std::filesystem::temp_directory_path( ec ) / "kicad_qa_scratch_doc_live";
+    std::filesystem::path dir = std::filesystem::temp_directory_path( ec )
+                                / ( "kicad_qa_scratch_doc_live_" + std::to_string( wxGetProcessId() ) );
 
     std::filesystem::remove_all( dir, ec );
     std::filesystem::create_directories( dir, ec );
@@ -54,6 +57,21 @@ BOOST_AUTO_TEST_CASE( LivePathGetsItsOwnScratchProject )
     }
 
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+
+    // However the test ends, later tests must not inherit this project as the active one.
+    struct ACTIVE_PROJECT_RESET
+    {
+        SETTINGS_MANAGER&     mgr;
+        std::filesystem::path dir;
+
+        ~ACTIVE_PROJECT_RESET()
+        {
+            std::error_code ignored;
+            mgr.LoadProject( "" );
+            std::filesystem::remove_all( dir, ignored );
+        }
+    } reset{ mgr, dir };
+
     BOOST_REQUIRE( mgr.LoadProject( wxString( proPath.string() ) ) );
 
     PROJECT* live = &mgr.Prj();
@@ -84,9 +102,6 @@ BOOST_AUTO_TEST_CASE( LivePathGetsItsOwnScratchProject )
     BOOST_CHECK( mgr.GetProject( scratchPath ) == nullptr );
     BOOST_CHECK_EQUAL( &mgr.Prj(), live );
     BOOST_CHECK_EQUAL( mgr.GetProject( wxString( proPath.string() ) ), live );
-
-    mgr.LoadProject( "" );
-    std::filesystem::remove_all( dir, ec );
 }
 
 
@@ -95,7 +110,8 @@ BOOST_AUTO_TEST_CASE( LivePathGetsItsOwnScratchProject )
 BOOST_AUTO_TEST_CASE( OtherPathLoadsAndUnloadsItsProject )
 {
     std::error_code       ec;
-    std::filesystem::path dir = std::filesystem::temp_directory_path( ec ) / "kicad_qa_scratch_doc_other";
+    std::filesystem::path dir = std::filesystem::temp_directory_path( ec )
+                                / ( "kicad_qa_scratch_doc_other_" + std::to_string( wxGetProcessId() ) );
 
     std::filesystem::remove_all( dir, ec );
     std::filesystem::create_directories( dir, ec );

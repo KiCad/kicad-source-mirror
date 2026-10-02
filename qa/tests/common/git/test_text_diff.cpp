@@ -100,28 +100,48 @@ BOOST_AUTO_TEST_CASE( SplitHandlesLineEndings )
     BOOST_CHECK_EQUAL( dos[1], wxT( "b" ) );
 
     BOOST_REQUIRE_EQUAL( noFinalNewline.size(), 2 );
+    BOOST_CHECK_EQUAL( noFinalNewline[0], wxT( "a" ) );
     BOOST_CHECK_EQUAL( noFinalNewline[1], wxT( "b" ) );
 
     BOOST_CHECK( KIGIT::SplitTextLines( "" ).empty() );
 }
 
 
-BOOST_AUTO_TEST_CASE( AsymmetricChangedRegionsDiffCorrectly )
+// A tall narrow pair exercises the row-major indexing of the table. A line shared between the
+// two sides must be found whichever side is the tall one.
+BOOST_AUTO_TEST_CASE( TallNarrowTableFindsSharedLine )
 {
-    // A tall narrow change and its mirror exercise the row-major indexing of the table.
     std::vector<wxString> many;
     std::vector<wxString> one = { wxT( "only" ) };
 
     for( int ii = 0; ii < 500; ii++ )
-        many.push_back( wxString::Format( wxT( "line %d" ), ii ) );
+        many.push_back( ii == 250 ? wxString( wxT( "only" ) ) : wxString::Format( wxT( "line %d" ), ii ) );
 
     std::vector<TEXT_DIFF_LINE> removed = KIGIT::BuildTextDiff( many, one );
     std::vector<TEXT_DIFF_LINE> added = KIGIT::BuildTextDiff( one, many );
 
-    BOOST_CHECK_EQUAL( removed.size(), many.size() + one.size() );
-    BOOST_CHECK_EQUAL( added.size(), many.size() + one.size() );
+    for( const std::vector<TEXT_DIFF_LINE>& diff : { removed, added } )
+    {
+        int context = 0;
 
-    // A shared line in the middle of an otherwise different pair must still be found.
+        for( const TEXT_DIFF_LINE& line : diff )
+        {
+            if( line.kind == TEXT_DIFF_KIND::CONTEXT )
+            {
+                context++;
+                BOOST_CHECK_EQUAL( line.text, wxString( wxT( "only" ) ) );
+            }
+        }
+
+        BOOST_CHECK_EQUAL( diff.size(), many.size() );
+        BOOST_CHECK_EQUAL( context, 1 );
+    }
+}
+
+
+// A shared line in the middle of an otherwise different pair is kept as context.
+BOOST_AUTO_TEST_CASE( SharedLineInTheMiddleIsContext )
+{
     std::vector<wxString> left = { wxT( "a" ), wxT( "shared" ), wxT( "b" ) };
     std::vector<wxString> right = { wxT( "c" ), wxT( "shared" ), wxT( "d" ) };
 

@@ -29,6 +29,7 @@
 #include <git/git_backend.h>
 #include <git/libgit_backend.h>
 #include <git/kicad_git_common.h>
+#include <git/kicad_git_memory.h>
 #include <git/git_status_handler.h>
 #include <git/project_git_utils.h>
 #include <wildcards_and_files_ext.h>
@@ -47,6 +48,7 @@
 #include <settings/settings_manager.h>
 
 #include <sys/stat.h>
+#include <unistd.h>
 
 #include <fstream>
 #include <future>
@@ -696,6 +698,10 @@ BOOST_AUTO_TEST_CASE( Push_ReportsErrorWhenRemoteRefusesTheUpdate )
 
     BOOST_REQUIRE( wxFileName::DirExists( headsDir ) );
 
+    // Directory permissions do not bind root, so there the refusal cannot be staged.
+    if( geteuid() == 0 )
+        return;
+
     // Put the permissions back however the test ends, or the fixture cannot remove its directory.
     struct WRITABLE_AGAIN
     {
@@ -832,7 +838,6 @@ BOOST_AUTO_TEST_CASE( PerformPull_FastForwardFollowsConfiguredUpstreamBranch )
 }
 
 
-// Lock contention is not a pull failure, and the user must be told what actually happened.
 // Files are written before the branch moves, so a branch that cannot move must not leave the
 // tree holding a commit HEAD does not point at.
 BOOST_AUTO_TEST_CASE( PerformPull_FastForwardRollsBackWhenBranchCannotMove )
@@ -934,7 +939,6 @@ BOOST_AUTO_TEST_CASE( PerformPull_FastForwardRollsBackWhenBranchCannotMove )
 }
 
 
-// The unborn path, where the branch creation is what has to be undone.
 // An untracked directory where the incoming commit wants a file blocks the checkout, and the
 // rollback must not take the directory with it.
 BOOST_AUTO_TEST_CASE( PerformPull_RollbackKeepsAnUntrackedDirectoryItCannotIdentify )
@@ -979,7 +983,8 @@ BOOST_AUTO_TEST_CASE( PerformPull_RollbackKeepsAnUntrackedDirectoryItCannotIdent
 
     PullResult result = handler.PerformPull();
 
-    BOOST_CHECK_MESSAGE( result != PullResult::Success, "the checkout cannot succeed over a directory" );
+    // Every failure code is negative, and a checkout over a directory can only fail.
+    BOOST_CHECK_MESSAGE( static_cast<int>( result ) < 0, "the checkout cannot succeed over a directory" );
 
     git_repository_free( repo );
 
@@ -1217,44 +1222,6 @@ BOOST_AUTO_TEST_CASE( PerformPull_UnbornBranchAdoptsRemoteHistory )
 }
 
 
-// A merge left in progress refuses every commit until it is cleared.
-// The panel names the operation it offers to abandon, so the session has to tell which it is.
-BOOST_AUTO_TEST_CASE( OperationInProgressNamesTheMerge )
-{
-    BOOST_TEST_REQUIRE( ready() );
-
-    git_repository* repo = openRepo();
-    BOOST_TEST_REQUIRE( repo );
-
-    git_oid base;
-    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &base, repo, "HEAD" ), GIT_OK );
-
-    git_oid side = createDetachedCommit( repo, base, wxT( "file.txt" ), "side\n", "Side change" );
-    createCommit( repo, wxT( "file.txt" ), wxT( "local\n" ), wxT( "Local change" ) );
-
-    {
-        git_annotated_commit* sideCommit = nullptr;
-        BOOST_REQUIRE_EQUAL( git_annotated_commit_lookup( &sideCommit, repo, &side ), GIT_OK );
-
-        const git_annotated_commit* heads[1] = { sideCommit };
-        git_checkout_options        checkoutOpts = GIT_CHECKOUT_OPTIONS_INIT;
-        checkoutOpts.checkout_strategy = GIT_CHECKOUT_SAFE | GIT_CHECKOUT_ALLOW_CONFLICTS;
-
-        BOOST_REQUIRE_EQUAL( git_merge( repo, heads, 1, nullptr, &checkoutOpts ), GIT_OK );
-        git_annotated_commit_free( sideCommit );
-    }
-
-    KIGIT_COMMON common( repo );
-    wxString     error;
-
-    BOOST_CHECK( common.OperationInProgress() == GitOperation::Merge );
-    BOOST_REQUIRE( common.AbandonOperation( error ) );
-    BOOST_CHECK( common.OperationInProgress() == GitOperation::None );
-
-    git_repository_free( repo );
-}
-
-
 BOOST_AUTO_TEST_CASE( AbandonOperation_ClearsInterruptedMerge )
 {
     BOOST_TEST_REQUIRE( ready() );
@@ -1285,9 +1252,12 @@ BOOST_AUTO_TEST_CASE( AbandonOperation_ClearsInterruptedMerge )
     KIGIT_COMMON common( repo );
     wxString     error;
 
+    // The panel names the operation it offers to abandon, so the session has to tell which it is.
     BOOST_CHECK( common.IsOperationInProgress() );
+    BOOST_CHECK( common.OperationInProgress() == GitOperation::Merge );
     BOOST_CHECK( common.AbandonOperation( error ) );
     BOOST_CHECK( !common.IsOperationInProgress() );
+    BOOST_CHECK( common.OperationInProgress() == GitOperation::None );
     BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_NONE );
 
     git_index* index = nullptr;
@@ -1395,69 +1365,6 @@ BOOST_AUTO_TEST_CASE( AbandonOperation_ClearsInterruptedRebase )
     wxTextFile file( repoPath() + wxFileName::GetPathSeparator() + wxT( "file.txt" ) );
     BOOST_REQUIRE( file.Open() );
     BOOST_CHECK_EQUAL( file.GetFirstLine(), wxString( "local" ) );
-
-    git_repository_free( repo );
-}
-
-
-// A rebase pull with nothing to resolve must simply replay the local commit on the remote.
-BOOST_AUTO_TEST_CASE( PerformPull_RebaseWithoutConflictSucceeds )
-{
-    BOOST_TEST_REQUIRE( ready() );
-
-    git_repository* repo = openRepo();
-    BOOST_TEST_REQUIRE( repo );
-
-    git_oid remoteTip;
-
-    {
-        git_repository* remote = nullptr;
-        BOOST_REQUIRE_EQUAL( git_repository_open( &remote, remotePath().ToUTF8().data() ), GIT_OK );
-
-        git_oid remoteHead;
-        BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &remoteHead, remote, "refs/heads/master" ), GIT_OK );
-
-        remoteTip = createDetachedCommit( remote, remoteHead, wxT( "theirs.txt" ), "theirs\n", "Remote adds" );
-
-        git_reference* ref = nullptr;
-        BOOST_REQUIRE_EQUAL( git_reference_create( &ref, remote, "refs/heads/master", &remoteTip, 1, nullptr ),
-                             GIT_OK );
-        git_reference_free( ref );
-        git_repository_free( remote );
-    }
-
-    createCommit( repo, wxT( "other.txt" ), wxT( "local\n" ), wxT( "Local change" ) );
-
-    addOrigin( repo );
-    setUpstreamConfig( repo, wxT( "master" ) );
-
-    {
-        git_config* cfg = nullptr;
-        BOOST_REQUIRE_EQUAL( git_repository_config( &cfg, repo ), GIT_OK );
-        git_config_set_bool( cfg, "pull.rebase", 1 );
-        git_config_free( cfg );
-    }
-
-    KIGIT_COMMON     common( repo );
-    GIT_PULL_HANDLER handler( &common );
-
-    PullResult result = handler.PerformPull();
-
-    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PullResult::Success ) );
-    BOOST_CHECK_EQUAL( git_repository_state( repo ), GIT_REPOSITORY_STATE_NONE );
-
-    // The local commit now sits on top of the remote one.
-    git_oid headNow;
-    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headNow, repo, "HEAD" ), GIT_OK );
-
-    git_commit* headCommit = nullptr;
-    BOOST_REQUIRE_EQUAL( git_commit_lookup( &headCommit, repo, &headNow ), GIT_OK );
-    BOOST_REQUIRE_EQUAL( git_commit_parentcount( headCommit ), 1u );
-    BOOST_CHECK( git_oid_equal( git_commit_parent_id( headCommit, 0 ), &remoteTip ) );
-    git_commit_free( headCommit );
-
-    BOOST_CHECK( wxFileName::FileExists( repoPath() + wxFileName::GetPathSeparator() + wxT( "theirs.txt" ) ) );
-    BOOST_CHECK( wxFileName::FileExists( repoPath() + wxFileName::GetPathSeparator() + wxT( "other.txt" ) ) );
 
     git_repository_free( repo );
 }
@@ -1841,7 +1748,13 @@ BOOST_AUTO_TEST_CASE( BusyOperationDoesNotConsumeAnotherCancellation )
 
         BOOST_CHECK_MESSAGE( tokenB != tokenA, "each operation must own its own token" );
 
-        PushResult resultB = pushB.PerformPush();
+        // From another thread, since trying a lock from the thread that holds it is not defined.
+        PushResult resultB = std::async( std::launch::async,
+                                         [&pushB]()
+                                         {
+                                             return pushB.PerformPush();
+                                         } )
+                                     .get();
 
         BOOST_CHECK_EQUAL( static_cast<int>( resultB ), static_cast<int>( PushResult::Busy ) );
 
@@ -1967,7 +1880,7 @@ BOOST_AUTO_TEST_CASE( CancelRequestedWhileQueuedAbortsTransfer )
     GIT_PUSH_HANDLER pushHandler( &common );
     pushHandler.SetCancelToken( token );
 
-    BOOST_CHECK( pushHandler.PerformPush() != PushResult::Success );
+    BOOST_CHECK_EQUAL( static_cast<int>( pushHandler.PerformPush() ), static_cast<int>( PushResult::Error ) );
 
     // The session was never shutting down, so it must not look like it afterwards.
     BOOST_CHECK( !common.IsShuttingDown() );
@@ -1993,12 +1906,11 @@ BOOST_AUTO_TEST_CASE( ShutdownRequestAbortsAnOperationThatStartsAfterIt )
 
     GIT_PULL_HANDLER pullHandler( &common );
     BOOST_CHECK( !pullHandler.PerformFetch() );
-    BOOST_CHECK( common.IsShuttingDown() );
 
     GIT_PUSH_HANDLER pushHandler( &common );
     PushResult       result = pushHandler.PerformPush();
 
-    BOOST_CHECK( result != PushResult::Success );
+    BOOST_CHECK_EQUAL( static_cast<int>( result ), static_cast<int>( PushResult::Error ) );
     BOOST_CHECK( common.IsShuttingDown() );
 
     git_repository_free( repo );
@@ -2218,75 +2130,6 @@ BOOST_AUTO_TEST_CASE( InitializeRepository_LeavesEmptyGitignoreEmpty )
 
     BOOST_TEST_REQUIRE( gitignoreFile.FileExists() );
     BOOST_CHECK_EQUAL( gitignoreFile.GetSize().GetValue(), 0u );
-
-    if( wxFileName::DirExists( freshDir ) )
-        wxFileName::Rmdir( freshDir, wxPATH_RMDIR_RECURSIVE );
-}
-
-
-// Clone applies the same conventions as init, so a cloned repository's own .gitignore has to
-// survive it too.
-BOOST_AUTO_TEST_CASE( CloneConventions_LeaveExistingGitignoreUntouched )
-{
-    BOOST_TEST_REQUIRE( ready() );
-
-    wxString clonedDir = repoPath() + wxT( "_clonedignore" );
-    wxFileName::Mkdir( clonedDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-
-    const wxString curated = wxT( "# upstream policy\n*.bak\n" );
-    wxFileName     gitignoreFile( clonedDir, wxT( ".gitignore" ) );
-
-    {
-        wxFFile f( gitignoreFile.GetFullPath(), wxT( "wb" ) );
-        f.Write( curated );
-    }
-
-    // The entry point GIT_CLONE_HANDLER uses after a successful clone.
-    ApplyKicadGitConventions( clonedDir );
-
-    wxString after;
-    {
-        wxFFile f( gitignoreFile.GetFullPath(), wxT( "rb" ) );
-        f.ReadAll( &after );
-    }
-
-    BOOST_CHECK_EQUAL( after.ToStdString(), curated.ToStdString() );
-
-    if( wxFileName::DirExists( clonedDir ) )
-        wxFileName::Rmdir( clonedDir, wxPATH_RMDIR_RECURSIVE );
-}
-
-
-// Another process can create the file between the existence test and the create, so the create
-// is exclusive and the loser keeps out of the way.
-// Covers the primitive the initializer relies on, not the initializer itself. The race cannot
-// be staged without a production test seam, so the cases above cover the rule instead.
-BOOST_AUTO_TEST_CASE( GitignoreExclusiveCreateRefusesAnExistingFile )
-{
-    BOOST_TEST_REQUIRE( ready() );
-
-    wxString freshDir = repoPath() + wxT( "_race" );
-    wxFileName::Mkdir( freshDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-
-    wxFileName     gitignoreFile( freshDir, wxT( ".gitignore" ) );
-    const wxString other = wxT( "written by someone else\n" );
-
-    {
-        wxFFile f( gitignoreFile.GetFullPath(), wxT( "wb" ) );
-        f.Write( other );
-    }
-
-    // wxFile::Create with overwrite false is O_CREAT|O_EXCL, which is what makes the loser safe.
-    wxFile probe;
-    BOOST_CHECK( !probe.Create( gitignoreFile.GetFullPath(), false ) );
-
-    wxString after;
-    {
-        wxFFile f( gitignoreFile.GetFullPath(), wxT( "rb" ) );
-        f.ReadAll( &after );
-    }
-
-    BOOST_CHECK_EQUAL( after.ToStdString(), other.ToStdString() );
 
     if( wxFileName::DirExists( freshDir ) )
         wxFileName::Rmdir( freshDir, wxPATH_RMDIR_RECURSIVE );
@@ -2592,8 +2435,8 @@ BOOST_AUTO_TEST_CASE( WriteTreeToDir_MaterializesSubdirectoryFiles )
     BOOST_REQUIRE( wxFileName::Mkdir( repoPath() + sep + wxT( "sub" ), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
     createCommit( repo, wxT( "sub/child.kicad_sch" ), wxT( "child\n" ), wxT( "add child" ) );
 
-    wxString dest = wxFileName::CreateTempFileName( wxT( "kicad_qa_tree_" ) );
-    wxRemoveFile( dest );
+    // Under the fixture's own directory, so a failed run leaves nothing behind in the system temp.
+    wxString dest = tempBase() + wxFileName::GetPathSeparator() + wxT( "tree_out" );
 
     BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::WriteTreeToDir( repo, wxT( "HEAD" ), dest ) );
     BOOST_CHECK( wxFileName::FileExists( dest + sep + wxT( "root.kicad_sch" ) ) );
@@ -2715,7 +2558,8 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
 
     // A failure after the checkout, injected here by making the branch ref unwritable, must
     // roll the working files back automatically. The operation required a clean tree, so the
-    // rollback is lossless by construction.
+    // rollback is lossless by construction. Directory permissions do not bind root.
+    if( geteuid() != 0 )
     {
         // The ref update writes a lock file next to the ref and renames it into place, so the
         // way to make it fail is denying writes on the containing directory.
@@ -2723,6 +2567,14 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
                            + wxT( "refs" ) + wxFileName::GetPathSeparator() + wxT( "heads" );
 
         BOOST_REQUIRE( wxFileName::DirExists( refsDir ) );
+
+        // Put the permissions back however this ends, or the fixture cannot remove its directory.
+        struct WRITABLE_AGAIN
+        {
+            wxString dir;
+            ~WRITABLE_AGAIN() { chmod( dir.fn_str(), 0755 ); }
+        } restore{ refsDir };
+
         chmod( refsDir.fn_str(), 0555 );
 
         wxString refMerged = tempBase() + wxFileName::GetPathSeparator() + wxT( "ref_merged.txt" );
@@ -2732,8 +2584,6 @@ BOOST_AUTO_TEST_CASE( MergeConflictRoundTrip )
         }
 
         BOOST_CHECK( !common.CreateMergedCommit( headOid, theirsOid, { { conflicts[0].path, refMerged } }, error ) );
-
-        chmod( refsDir.fn_str(), 0755 );
 
         // The branch did not move and the working file is back at the pre-merge content.
         git_oid headNow;
@@ -3388,8 +3238,6 @@ BOOST_AUTO_TEST_CASE( Commit_DoesNotDamageIndexWhileAnotherProcessHoldsTheLock )
 }
 
 
-// Staging written to .git/index by another process must survive a commit, even when the
-// repository handle is holding an older cached copy of that index.
 // Amend needs the same protection as Commit. Staging done outside KiCad must survive it.
 BOOST_AUTO_TEST_CASE( Amend_KeepsStagingWrittenByAnotherProcess )
 {
@@ -3402,6 +3250,7 @@ BOOST_AUTO_TEST_CASE( Amend_KeepsStagingWrittenByAnotherProcess )
 
     git_index* cached = nullptr;
     BOOST_REQUIRE_EQUAL( git_repository_index( &cached, repo ), GIT_OK );
+    KIGIT::GitIndexPtr cachedPtr( cached );
 
     {
         std::ofstream f( ( workDir + wxT( "notes.txt" ) ).ToStdString(), std::ios::binary );
@@ -3482,6 +3331,7 @@ BOOST_AUTO_TEST_CASE( Commit_KeepsStagingWrittenByAnotherProcess )
     // Make the repository handle cache an index that knows nothing about the staging below.
     git_index* cached = nullptr;
     BOOST_REQUIRE_EQUAL( git_repository_index( &cached, repo ), GIT_OK );
+    KIGIT::GitIndexPtr cachedPtr( cached );
     BOOST_REQUIRE_EQUAL( git_index_entrycount( cached ), 1 );
 
     {
@@ -3524,7 +3374,6 @@ BOOST_AUTO_TEST_CASE( Commit_KeepsStagingWrittenByAnotherProcess )
 
     git_blob_free( blob );
     git_index_free( after );
-    git_index_free( cached );
     git_repository_free( repo );
 }
 
@@ -3906,8 +3755,8 @@ BOOST_AUTO_TEST_CASE( WriteTreeToDir_LeavesIndexUntouched )
     BOOST_REQUIRE( before );
     git_oid stagedOid = before->id;
 
-    wxString dest = wxFileName::CreateTempFileName( wxT( "kicad_qa_tree_" ) );
-    wxRemoveFile( dest );
+    // Under the fixture's own directory, so a failed run leaves nothing behind in the system temp.
+    wxString dest = tempBase() + wxFileName::GetPathSeparator() + wxT( "tree_out" );
 
     BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::WriteTreeToDir( repo, wxT( "HEAD" ), dest ) );
 

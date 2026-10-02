@@ -159,10 +159,13 @@ BOOST_AUTO_TEST_CASE( AppendTitleBlockDeltas_ReportsEachChangedField )
 
     BOOST_REQUIRE_EQUAL( deltas.size(), 3u );
     BOOST_CHECK( deltas[0].name == DOC_PROP_TITLE );
+    BOOST_CHECK_EQUAL( deltas[0].before.AsString().ToStdString(), "Board" );
     BOOST_CHECK_EQUAL( deltas[0].after.AsString().ToStdString(), "Board v2" );
     BOOST_CHECK( deltas[1].name == DOC_PROP_REVISION );
     BOOST_CHECK_EQUAL( deltas[1].before.AsString().ToStdString(), "" );
+    BOOST_CHECK_EQUAL( deltas[1].after.AsString().ToStdString(), "B" );
     BOOST_CHECK( deltas[2].name == DocPropComment( 2 ) );
+    BOOST_CHECK_EQUAL( deltas[2].before.AsString().ToStdString(), "third" );
     BOOST_CHECK_EQUAL( deltas[2].after.AsString().ToStdString(), "third, edited" );
 }
 
