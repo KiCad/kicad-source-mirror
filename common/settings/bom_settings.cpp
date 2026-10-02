@@ -27,8 +27,10 @@
 // Implementations for BOM_FMT_PRESET
 bool BOM_FIELD::operator==( const BOM_FIELD& rhs ) const
 {
-    return this->name == rhs.name && this->label == rhs.label && this->show == rhs.show
-           && this->groupBy == rhs.groupBy;
+    return this->name == rhs.name
+            && this->label == rhs.label
+            && this->show == rhs.show
+            && this->groupBy == rhs.groupBy;
 }
 
 
@@ -47,7 +49,10 @@ bool operator<( const BOM_FIELD& lhs, const BOM_FIELD& rhs )
 void to_json( nlohmann::json& j, const BOM_FIELD& f )
 {
     j = nlohmann::json{
-        { "name", f.name }, { "label", f.label }, { "show", f.show }, { "group_by", f.groupBy }
+        { "name", f.name },
+        { "label", f.label },
+        { "show", f.show },
+        { "group_by", f.groupBy }
     };
 }
 
@@ -210,18 +215,23 @@ BOM_PRESET BOM_PRESET::Attributes()
 
 std::vector<BOM_PRESET> BOM_PRESET::BuiltInPresets()
 {
-    return { BOM_PRESET::DefaultEditing(), BOM_PRESET::GroupedByValue(),
-             BOM_PRESET::GroupedByValueFootprint(), BOM_PRESET::Attributes() };
+    return { BOM_PRESET::DefaultEditing(),
+             BOM_PRESET::GroupedByValue(),
+             BOM_PRESET::GroupedByValueFootprint(),
+             BOM_PRESET::Attributes() };
 }
 
 
 //Implementations for BOM_FMT_PRESET
 bool BOM_FMT_PRESET::operator==( const BOM_FMT_PRESET& rhs ) const
 {
-    return this->name == rhs.name && this->readOnly == rhs.readOnly
+    return this->name == rhs.name
+           && this->readOnly == rhs.readOnly
            && this->fieldDelimiter == rhs.fieldDelimiter
-           && this->stringDelimiter == rhs.stringDelimiter && this->refDelimiter == rhs.refDelimiter
-           && this->refRangeDelimiter == rhs.refRangeDelimiter && this->keepTabs == rhs.keepTabs
+           && this->stringDelimiter == rhs.stringDelimiter
+           && this->refDelimiter == rhs.refDelimiter
+           && this->refRangeDelimiter == rhs.refRangeDelimiter
+           && this->keepTabs == rhs.keepTabs
            && this->keepLineBreaks == rhs.keepLineBreaks
            && this->includeByteOrderMark == rhs.includeByteOrderMark;
 }
