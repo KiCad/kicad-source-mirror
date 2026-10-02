@@ -362,18 +362,6 @@ wxString fileStatusLabel( KIGIT::FILE_CHANGE_STATUS aStatus )
 }
 
 
-wxWindow* makeRemotesPage( wxWindow* aBook, wxListCtrl** aOutList )
-{
-    LIST_PAGE page = makeListPage( aBook );
-
-    page.list->AppendColumn( _( "Name" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 110 ) );
-    page.list->AppendColumn( _( "URL" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 420 ) );
-
-    *aOutList = page.list;
-    return page.panel;
-}
-
-
 wxWindow* makeStashesPage( wxWindow* aBook, wxListCtrl** aOutList )
 {
     LIST_PAGE page = makeListPage( aBook );
@@ -476,7 +464,12 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
         m_branchAuthor( nullptr ),
         m_branchMessage( nullptr ),
         m_branchSync( nullptr ),
+        m_remotesSplitter( nullptr ),
         m_remotesList( nullptr ),
+        m_remoteDetail( nullptr ),
+        m_remoteTitle( nullptr ),
+        m_remoteUrl( nullptr ),
+        m_remoteFetched( nullptr ),
         m_stashesList( nullptr ),
         m_tagsList( nullptr ),
         m_repoUserName( nullptr ),
@@ -540,20 +533,11 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
                                     } } } );
     m_book->AddPage( branchesPage, _( "Branches" ), false, 2 );
 
-    wxWindow* remotesPage = makeRemotesPage( m_book, &m_remotesList );
-    addButtonRow( remotesPage, { { _( "Add..." ),
+    wxWindow* remotesPage = buildRemotesPage( m_book );
+    addButtonRow( remotesPage, { { _( "Add Remote..." ),
                                    [this]()
                                    {
                                        onAddRemote();
-                                   } },
-                                 { _( "Edit URL..." ),
-                                   [this]()
-                                   {
-                                       onEditRemote();
-                                   } },
-                                 { _( "Remove" ), [this]()
-                                   {
-                                       onRemoveRemote();
                                    } } } );
     m_book->AddPage( remotesPage, _( "Remotes" ), false, 3 );
 
@@ -1795,13 +1779,165 @@ void GIT_ADVANCED_DIALOG::populateRemotes()
         return;
 
     // The caller holds the git action lock.
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    wxString                      selected = selectedText( m_remotesList, 0 );
+    long                          selectRow = wxNOT_FOUND;
+
+    m_fillingRemotes = true;
     m_remotesList->DeleteAllItems();
 
-    for( const auto& [name, url] : m_parent->Prj().GetGitCommon()->GetRemotes() )
+    for( const auto& [name, url] : common->GetRemotes() )
     {
         long idx = m_remotesList->InsertItem( m_remotesList->GetItemCount(), name );
         m_remotesList->SetItem( idx, 1, url );
+
+        // Keep the selection where it was, or start on the first remote.
+        if( name == selected || ( selected.IsEmpty() && idx == 0 ) )
+            selectRow = idx;
     }
+
+    if( selectRow != wxNOT_FOUND )
+    {
+        m_remotesList->SetItemState( selectRow, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+        fillRemoteDetail( m_remotesList->GetItemText( selectRow, 0 ), common->GetLastFetchTime() );
+    }
+    else
+    {
+        hideRemoteDetail();
+    }
+
+    m_fillingRemotes = false;
+}
+
+
+wxWindow* GIT_ADVANCED_DIALOG::buildRemotesPage( wxWindow* aBook )
+{
+    wxPanel*    panel = new wxPanel( aBook );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    m_remotesSplitter = new wxSplitterWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                              wxSP_LIVE_UPDATE | wxSP_3DSASH );
+    m_remotesSplitter->SetMinimumPaneSize( panel->FromDIP( 200 ) );
+    m_remotesSplitter->SetSashGravity( 0.6 );
+    m_remoteSashPos = panel->FromDIP( 460 );
+
+    m_remotesList = new wxListCtrl( m_remotesSplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                    wxLC_REPORT | wxLC_SINGLE_SEL );
+    m_remotesList->AppendColumn( _( "Name" ), wxLIST_FORMAT_LEFT, panel->FromDIP( 110 ) );
+    m_remotesList->AppendColumn( _( "URL" ), wxLIST_FORMAT_LEFT, panel->FromDIP( 340 ) );
+
+    m_remoteDetail = buildRemoteDetailPane( m_remotesSplitter );
+
+    // The detail pane appears once a remote is selected.
+    m_remotesSplitter->Initialize( m_remotesList );
+    m_remoteDetail->Hide();
+    sizer->Add( m_remotesSplitter, 1, wxEXPAND | wxALL, 4 );
+    panel->SetSizer( sizer );
+
+    m_remotesList->Bind( wxEVT_LIST_ITEM_SELECTED,
+                         [this]( wxListEvent& aEvent )
+                         {
+                             if( !m_fillingRemotes )
+                                 showRemoteDetail( m_remotesList->GetItemText( aEvent.GetIndex(), 0 ) );
+                         } );
+
+    return panel;
+}
+
+
+wxPanel* GIT_ADVANCED_DIALOG::buildRemoteDetailPane( wxWindow* aParent )
+{
+    wxPanel*    detail = new wxPanel( aParent );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    m_remoteTitle = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_remoteTitle->SetFont( m_remoteTitle->GetFont().Bold() );
+    m_remoteUrl = new wxTextCtrl( detail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+    m_remoteFetched = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+
+    wxButton* editUrl = new wxButton( detail, wxID_ANY, _( "Edit URL..." ) );
+    wxButton* remove = new wxButton( detail, wxID_ANY, _( "Remove Remote" ) );
+    markDestructive( remove );
+
+    wxBoxSizer* buttons = new wxBoxSizer( wxHORIZONTAL );
+    buttons->Add( editUrl, 1, wxRIGHT, 4 );
+    buttons->Add( remove, 1 );
+
+    sizer->Add( m_remoteTitle, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( new wxStaticText( detail, wxID_ANY, _( "URL:" ) ), 0, wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_remoteUrl, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_remoteFetched, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->AddStretchSpacer();
+    sizer->Add( buttons, 0, wxEXPAND | wxALL, 8 );
+    detail->SetSizer( sizer );
+
+    editUrl->Bind( wxEVT_BUTTON,
+                   [this]( wxCommandEvent& )
+                   {
+                       onEditRemote();
+                   } );
+    remove->Bind( wxEVT_BUTTON,
+                  [this]( wxCommandEvent& )
+                  {
+                      onRemoveRemote();
+                  } );
+
+    return detail;
+}
+
+
+void GIT_ADVANCED_DIALOG::showRemoteDetail( const wxString& aRemote )
+{
+    if( aRemote.IsEmpty() )
+    {
+        hideRemoteDetail();
+        return;
+    }
+
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    std::unique_lock<std::mutex>  lock = common->TryLockAction();
+
+    // The reload keeps the selection and fills the pane then.
+    if( !lock.owns_lock() )
+    {
+        m_reloadRetryTimer.Start( 1000, wxTIMER_ONE_SHOT );
+        return;
+    }
+
+    fillRemoteDetail( aRemote, common->GetLastFetchTime() );
+}
+
+
+void GIT_ADVANCED_DIALOG::fillRemoteDetail( const wxString& aRemote, const wxDateTime& aFetched )
+{
+    // The list already holds the address.
+    wxString url;
+
+    for( long row = 0; row < m_remotesList->GetItemCount(); ++row )
+    {
+        if( m_remotesList->GetItemText( row, 0 ) == aRemote )
+            url = m_remotesList->GetItemText( row, 1 );
+    }
+
+    m_remoteTitle->SetLabel( wxString::Format( _( "Remote: %s" ), aRemote ) );
+    m_remoteUrl->ChangeValue( url );
+
+    // Git records fetches in FETCH_HEAD and nothing about pulls or pushes, so only that one
+    // can be shown.
+    m_remoteFetched->SetLabel( aFetched.IsValid()
+                                       ? wxString::Format( _( "Last fetch: %s" ), relativeDate( aFetched ) )
+                                       : _( "Not fetched yet." ) );
+
+    if( !m_remotesSplitter->IsSplit() )
+        m_remotesSplitter->SplitVertically( m_remotesList, m_remoteDetail, m_remoteSashPos );
+
+    m_remoteDetail->Layout();
+}
+
+
+void GIT_ADVANCED_DIALOG::hideRemoteDetail()
+{
+    unsplitKeepingSash( m_remotesSplitter, m_remoteDetail, m_remoteSashPos );
 }
 
 

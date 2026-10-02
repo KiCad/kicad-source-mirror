@@ -126,6 +126,15 @@ private:
     /// Refill the branch list after the search text changed.
     void reloadBranches();
 
+    /// The Remotes page: the list beside the selected remote's detail.
+    wxWindow* buildRemotesPage( wxWindow* aBook );
+    wxPanel*  buildRemoteDetailPane( wxWindow* aParent );
+
+    /// Fill the detail pane with aRemote, or hide it when the name is empty.
+    void showRemoteDetail( const wxString& aRemote );
+    void fillRemoteDetail( const wxString& aRemote, const wxDateTime& aFetched );
+    void hideRemoteDetail();
+
     /// Fill the detail pane with aBranch, or hide it when the name is empty or gone.
     void showBranchDetail( const wxString& aBranch );
     void fillBranchDetail( const KIGIT_BRANCH_DETAIL& aDetail );
@@ -298,8 +307,15 @@ private:
     wxTextCtrl*       m_branchMessage;
     wxStaticText*     m_branchSync;
 
+    // Remotes page
+    wxSplitterWindow* m_remotesSplitter;
+    wxListCtrl*       m_remotesList;
+    wxPanel*          m_remoteDetail;
+    wxStaticText*     m_remoteTitle;
+    wxTextCtrl*       m_remoteUrl;
+    wxStaticText*     m_remoteFetched;
+
     // The other pages
-    wxListCtrl*   m_remotesList;
     wxListCtrl*   m_stashesList;
     wxListCtrl*   m_tagsList;
     wxTextCtrl*   m_repoUserName;
@@ -360,6 +376,12 @@ private:
 
     /// True while the branch list is being refilled, when its selection events are its own.
     bool m_fillingBranches = false;
+
+    /// Where the user left the sash between the remote list and its detail pane.
+    int m_remoteSashPos = 0;
+
+    /// True while the remote list is being refilled, when its selection events are its own.
+    bool m_fillingRemotes = false;
 
     /// Waits for the user to pause typing in the search box before walking the history again.
     wxTimer m_historySearchTimer;

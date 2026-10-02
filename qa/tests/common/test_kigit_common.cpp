@@ -1627,6 +1627,32 @@ BOOST_AUTO_TEST_CASE( CreateBranchStartsAtTheGivenBranch )
 }
 
 
+// The Remotes page shows when the repository last fetched. Git leaves that in FETCH_HEAD, which
+// a repository that never fetched does not have.
+BOOST_AUTO_TEST_CASE( GetLastFetchTimeReadsFetchHead )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    BOOST_CHECK( !common.GetLastFetchTime().IsValid() );
+
+    wxFileName fetchHead( wxString::FromUTF8( git_repository_path( repo ) ), wxS( "FETCH_HEAD" ) );
+
+    {
+        std::ofstream f( fetchHead.GetFullPath().utf8_string() );
+        f << "0000000000000000000000000000000000000000\t\tbranch 'main' of https://example.com/x.git\n";
+    }
+
+    wxDateTime when = common.GetLastFetchTime();
+    BOOST_REQUIRE( when.IsValid() );
+    BOOST_CHECK( ( wxDateTime::Now() - when ).GetMinutes() < 5 );
+}
+
+
 // The stored connection string must not carry the secret. A scp-style git@host is left intact.
 BOOST_AUTO_TEST_CASE( SetRemoteStripsUrlUserinfo )
 {

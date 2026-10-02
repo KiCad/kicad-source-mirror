@@ -383,6 +383,9 @@ public:
     /// Returns every remote as a (name, URL) pair.
     std::vector<std::pair<wxString, wxString>> GetRemotes() const;
 
+    // When the repository last fetched, from any remote. Invalid when it never has.
+    wxDateTime GetLastFetchTime() const;
+
     /// Returns GetRemotename() when non-empty, otherwise "origin".  Centralizes the
     /// fallback policy used by push/pull/fetch paths.
     wxString GetRemoteNameOrDefault() const;

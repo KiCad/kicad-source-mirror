@@ -396,6 +396,26 @@ std::vector<std::pair<wxString, bool>> KIGIT_COMMON::GetAllBranches() const
 }
 
 
+wxDateTime KIGIT_COMMON::GetLastFetchTime() const
+{
+    if( !m_repo )
+        return wxDateTime();
+
+    const char* gitDir = git_repository_path( m_repo );
+
+    if( !gitDir )
+        return wxDateTime();
+
+    // Git rewrites FETCH_HEAD on every fetch, so its timestamp is the last one.
+    wxFileName fetchHead( wxString::FromUTF8( gitDir ), wxS( "FETCH_HEAD" ) );
+
+    if( !fetchHead.FileExists() )
+        return wxDateTime();
+
+    return fetchHead.GetModificationTime();
+}
+
+
 std::vector<KIGIT_BRANCH_INFO> KIGIT_COMMON::GetBranches() const
 {
     if( !m_repo )
