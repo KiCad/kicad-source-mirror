@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-09-28 18:35+0000\n"
+"PO-Revision-Date: 2026-10-02 21:48+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.10\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -7351,7 +7351,7 @@ msgstr "Kulman säde"
 #: eeschema/sch_tablecell.cpp:439 pcbnew/pcb_tablecell.cpp:355
 #: pcbnew/pcb_textbox.cpp:858
 msgid "Line Width"
-msgstr "Viivan paksuus"
+msgstr "Viivan leveys"
 
 #: common/eda_shape.cpp:2990 eeschema/sch_tablecell.cpp:441
 #: pcbnew/pcb_shape.cpp:1018 pcbnew/pcb_tablecell.cpp:357
@@ -55121,9 +55121,9 @@ msgstr ""
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:221
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open plugin directory '%s'."
-msgstr "Kohdehakemistoa '%s'. ei voi luoda."
+msgstr "Liitännäishakemistoa ’%s’ ei voitu avata."
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:222
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:230
@@ -55139,9 +55139,9 @@ msgid "The plugin directory '%s' does not exist.  Create it?"
 msgstr "Lisäosahakemistoa '%s' ei ole olemassa.  Luodaanko se?"
 
 #: pcbnew/python/scripting/pcb_scripting_tool.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create plugin directory '%s'."
-msgstr "Kohdehakemistoa '%s'. ei voi luoda."
+msgstr "Liitännäishakemistoa ’%s’ ei voitu luoda."
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:83
 msgid "Exception on python action plugin code"
