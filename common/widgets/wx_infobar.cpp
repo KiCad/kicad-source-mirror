@@ -96,10 +96,17 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
 
     sizer->SetItemMinSize( (size_t) 0, iconSize.x, sy );
 
-    // Forcefully remove all existing buttons added by the wx constructors.
-    // The default close button doesn't work with the AUI manager update scheme, so this
-    // ensures any close button displayed is ours.
-    RemoveAllButtons();
+    // The default close button doesn't work with the AUI manager update scheme, so take it out
+    // of the layout to ensure any close button displayed is ours.  It must not be destroyed
+    // because wxInfoBarGeneric keeps a private pointer to it and recolors it on every system
+    // color change.
+    wxSizerItem* lastItem = sizer->GetItem( sizer->GetItemCount() - 1 );
+
+    if( wxWindow* defaultCloseButton = lastItem ? lastItem->GetWindow() : nullptr )
+    {
+        sizer->Detach( defaultCloseButton );
+        defaultCloseButton->Hide();
+    }
 
     Layout();
 
