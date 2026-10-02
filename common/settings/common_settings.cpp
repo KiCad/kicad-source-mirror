@@ -605,13 +605,11 @@ bool COMMON_SETTINGS::migrateSchema1to2()
     try
     {
         prefer_selection = m_internals->at( v1_pointer );
-        m_internals->at( nlohmann::json::json_pointer( "/input"_json_pointer ) )
-                .erase( "prefer_select_to_drag" );
+        m_internals->at( nlohmann::json::json_pointer( "/input"_json_pointer ) ).erase( "prefer_select_to_drag" );
     }
     catch( ... )
     {
-        wxLogTrace( traceSettings,
-                    wxT( "COMMON_SETTINGS::Migrate 1->2: prefer_select_to_drag not found" ) );
+        wxLogTrace( traceSettings, wxT( "COMMON_SETTINGS::Migrate 1->2: prefer_select_to_drag not found" ) );
     }
 
     if( prefer_selection )
@@ -762,8 +760,7 @@ bool COMMON_SETTINGS::migrateSchema4to5()
     }
     catch( ... )
     {
-        wxLogTrace( traceSettings,
-                    wxT( "COMMON_SETTINGS::Migrate 4->5: dialog.controls not found" ) );
+        wxLogTrace( traceSettings, wxT( "COMMON_SETTINGS::Migrate 4->5: dialog.controls not found" ) );
     }
 
     return true;
@@ -786,8 +783,7 @@ bool COMMON_SETTINGS::migrateSchema5to6()
     }
     catch( ... )
     {
-        wxLogTrace( traceSettings,
-                    wxT( "COMMON_SETTINGS::Migrate 5->6: failed to set auto_backup.format" ) );
+        wxLogTrace( traceSettings, wxT( "COMMON_SETTINGS::Migrate 5->6: failed to set auto_backup.format" ) );
     }
 
     return true;
@@ -809,10 +805,9 @@ bool COMMON_SETTINGS::migrateSchema6to7()
     try
     {
         std::ifstream eeschemaFile( eeschemaPath.GetFullPath().fn_str() );
-        nlohmann::json eeschemaSettings =
-                nlohmann::json::parse( eeschemaFile, nullptr,
-                                       /* allow_exceptions = */ true,
-                                       /* ignore_comments  = */ true );
+        nlohmann::json eeschemaSettings = nlohmann::json::parse( eeschemaFile, nullptr,
+                                                                 /* allow_exceptions = */ true,
+                                                                 /* ignore_comments  = */ true );
 
         const nlohmann::json::json_pointer fieldNamesPointer(
                 "/drawing/field_names"_json_pointer );
@@ -826,8 +821,7 @@ bool COMMON_SETTINGS::migrateSchema6to7()
     }
     catch( ... )
     {
-        wxLogTrace( traceSettings,
-                    wxT( "COMMON_SETTINGS::Migrate 6->7: failed to import field name templates" ) );
+        wxLogTrace( traceSettings, wxT( "COMMON_SETTINGS::Migrate 6->7: failed to import field name templates" ) );
     }
 
     return true;
@@ -919,27 +913,25 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 void COMMON_SETTINGS::InitializeEnvironment()
 {
     auto addVar =
-        [&]( const wxString& aKey, const wxString& aDefault )
-        {
-            m_Env.vars[aKey] = ENV_VAR_ITEM( aKey, aDefault, aDefault );
-
-            wxString envValue;
-
-            if( wxGetEnv( aKey, &envValue ) == true && !envValue.IsEmpty() )
+            [&]( const wxString& aKey, const wxString& aDefault )
             {
-                m_Env.vars[aKey].SetValue( envValue );
-                m_Env.vars[aKey].SetDefinedExternally();
-                wxLogTrace( traceEnvVars,
-                            wxS( "InitializeEnvironment: Entry %s defined externally as %s" ), aKey,
-                            envValue );
-            }
-            else
-            {
-                wxLogTrace( traceEnvVars, wxS( "InitializeEnvironment: Setting entry %s to "
-                                               "default %s" ),
-                            aKey, aDefault );
-            }
-        };
+                m_Env.vars[aKey] = ENV_VAR_ITEM( aKey, aDefault, aDefault );
+
+                wxString envValue;
+
+                if( wxGetEnv( aKey, &envValue ) == true && !envValue.IsEmpty() )
+                {
+                    m_Env.vars[aKey].SetValue( envValue );
+                    m_Env.vars[aKey].SetDefinedExternally();
+                    wxLogTrace( traceEnvVars, wxS( "InitializeEnvironment: Entry %s defined externally as %s" ),
+                                aKey, envValue );
+                }
+                else
+                {
+                    wxLogTrace( traceEnvVars, wxS( "InitializeEnvironment: Setting entry %s to default %s" ),
+                                aKey, aDefault );
+                }
+            };
 
     addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "FOOTPRINT_DIR" ) ), PATHS::GetStockFootprintsPath() );
     addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ), PATHS::GetStock3dmodelsPath() );
@@ -1028,10 +1020,12 @@ bool COMMON_SETTINGS::readLegacy3DResolverCfg( const wxString&                  
         // Don't add KICADn_3DMODEL_DIR, one of its legacy equivalents, or KIPRJMOD from a
         // config file.  They're system variables which are defined at runtime.
         wxString versionedPath = wxString::Format( wxS( "${%s}" ),
-                                       ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ) );
+                                                   ENV_VAR::GetVersionedEnvVarName( wxS( "3DMODEL_DIR" ) ) );
 
-        if( al.m_Alias == versionedPath || al.m_Alias == wxS( "${KIPRJMOD}" )
-            || al.m_Alias == wxS( "$(KIPRJMOD)" ) || al.m_Alias == wxS( "${KISYS3DMOD}" )
+        if( al.m_Alias == versionedPath
+            || al.m_Alias == wxS( "${KIPRJMOD}" )
+            || al.m_Alias == wxS( "$(KIPRJMOD)" )
+            || al.m_Alias == wxS( "${KISYS3DMOD}" )
             || al.m_Alias == wxS( "$(KISYS3DMOD)" ) )
         {
             continue;
@@ -1052,8 +1046,7 @@ bool COMMON_SETTINGS::readLegacy3DResolverCfg( const wxString&                  
 }
 
 
-bool COMMON_SETTINGS::getLegacy3DHollerith( const std::string& aString, size_t& aIndex,
-                                            wxString& aResult )
+bool COMMON_SETTINGS::getLegacy3DHollerith( const std::string& aString, size_t& aIndex, wxString& aResult )
 {
     aResult.clear();
 
