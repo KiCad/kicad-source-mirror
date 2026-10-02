@@ -94,8 +94,6 @@ struct NETLIST_GROUP
     std::vector<KIID_PATH> members;
 };
 
-typedef boost::ptr_vector< NETLIST_GROUP > NETLIST_GROUPS;
-
 
 struct COMPONENT_VARIANT
 {
@@ -293,9 +291,6 @@ private:
 };
 
 
-typedef boost::ptr_vector< COMPONENT > COMPONENTS;
-
-
 /**
  * Store information read from a netlist along with the flags used to update the NETLIST in the
  * #BOARD.
@@ -317,7 +312,18 @@ public:
     /**
      * Remove all components from the netlist.
      */
-    void Clear() { m_components.clear(); }
+    void Clear()
+    {
+        m_components.clear();
+        m_groups.clear();
+        m_netSignals.clear();
+        m_netChainTerminals.clear();
+        m_netChainNetClasses.clear();
+        m_netChainColors.clear();
+        m_signalChainClasses.clear();
+        m_variantNames.clear();
+        m_variantDescriptions.clear();
+    }
 
     /**
      * @return the number of components in the netlist.
@@ -560,13 +566,13 @@ public:
     }
 
 private:
-    COMPONENTS m_components;          // Components found in the netlist.
-    NETLIST_GROUPS m_groups;          // Groups found in the netlist.
-    std::map<wxString, wxString> m_netSignals;
+    boost::ptr_vector<COMPONENT>     m_components;          // Components found in the netlist.
+    boost::ptr_vector<NETLIST_GROUP> m_groups;              // Groups found in the netlist.
+    std::map<wxString, wxString>     m_netSignals;
     std::map<wxString, std::vector<std::pair<wxString, wxString>>> m_netChainTerminals;
-    std::map<wxString, wxString> m_netChainNetClasses;
-    std::map<wxString, wxString> m_netChainColors;
-    std::map<wxString, wxString> m_signalChainClasses;
+    std::map<wxString, wxString>     m_netChainNetClasses;
+    std::map<wxString, wxString>     m_netChainColors;
+    std::map<wxString, wxString>     m_signalChainClasses;
 
     std::vector<wxString>            m_variantNames;         // Variant names in order.
     std::map<wxString, wxString>     m_variantDescriptions;  // Variant descriptions.

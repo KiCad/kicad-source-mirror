@@ -87,8 +87,6 @@ struct NETLIST_GROUP
     std::vector<KIID> members;
 };
 
-typedef boost::ptr_vector< NETLIST_GROUP > NETLIST_GROUPS;
-
 
 /**
  * Store all of the related component information found in a netlist.
@@ -267,9 +265,6 @@ protected:
 };
 
 
-typedef boost::ptr_vector< COMPONENT > COMPONENTS;
-
-
 /**
  * Store information read from a netlist along with the flags used to update the NETLIST in the
  * #BOARD.
@@ -293,7 +288,11 @@ public:
     /**
      * Remove all components from the netlist.
      */
-    void Clear() { m_components.clear(); }
+    void Clear()
+    {
+        m_components.clear();
+        m_groups.clear();
+    }
 
     /**
      * @return the number of components in the netlist.
@@ -389,8 +388,8 @@ public:
     }
 
 protected:
-    COMPONENTS m_components;          // Components found in the netlist.
-    NETLIST_GROUPS m_groups;          // Groups found in the netlist.
+    boost::ptr_vector<COMPONENT>     m_components;          // Components found in the netlist.
+    boost::ptr_vector<NETLIST_GROUP> m_groups;              // Groups found in the netlist.
 
     bool       m_findByTimeStamp;     // Associate components by KIID (or refdes if false)
     bool       m_replaceFootprints;   // Update footprints to match footprints defined in netlist
