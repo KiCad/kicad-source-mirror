@@ -77,13 +77,12 @@ bool CVPCB_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
     ret &= migrateWindowConfig( aCfg, "FootprintViewerFrame", "footprint_viewer" );
 
-    ret &= fromLegacy<bool>( aCfg, "FootprintViewerFrameDiPadFi", "footprint_viewer.pad_fill" );
-    ret &= fromLegacy<bool>( aCfg, "FootprintViewerFrameDiPadNu", "footprint_viewer.pad_numbers" );
-    ret &= fromLegacy<bool>(
-            aCfg, "FootprintViewerFrameDiModTx", "footprint_viewer.footprint_text_fill" );
+    ret &= fromLegacy<bool>( aCfg, "FootprintViewerFrameDiPadFi", "footprint_viewer.show_pad_fill" );
+    ret &= fromLegacy<bool>( aCfg, "FootprintViewerFrameDiPadNu", "footprint_viewer.show_pad_number" );
+    ret &= fromLegacy<bool>( aCfg, "FootprintViewerFrameDiModTx", "footprint_viewer.show_text_fill" );
 
-    ret &= fromLegacy<bool>( aCfg, "FootprintViewerFrameAutoZoom",   "footprint_viewer.auto_zoom" );
-    ret &= fromLegacy<double>( aCfg, "FootprintViewerFrameZoom",     "footprint_viewer.zoom" );
+    ret &= fromLegacy<bool>( aCfg, "FootprintViewerFrameAutoZoom", "footprint_viewer.autozoom" );
+    ret &= fromLegacy<double>( aCfg, "FootprintViewerFrameZoom", "footprint_viewer.zoom" );
 
     return ret;
 }
