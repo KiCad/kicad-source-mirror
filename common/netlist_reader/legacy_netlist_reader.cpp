@@ -96,7 +96,7 @@ COMPONENT* LEGACY_NETLIST_READER::loadComponent( char* aText )
     wxString value;             // the component value read from netlist
     wxString reference;         // the component schematic reference designator read from netlist
     wxString name;              // the name of component that was placed in the schematic
-    char     line[1024];
+    char     line[4096];
 
     strncpy( line, aText, sizeof(line)-1 );
     line[sizeof(line)-1] = '\0';

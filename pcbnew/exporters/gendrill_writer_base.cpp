@@ -695,7 +695,7 @@ bool GENDRILL_WRITER_BASE::genDrillMapFile( const wxString& aFullFileName, PLOT_
 
     int      plotX, plotY, TextWidth;
     int      intervalle = 0;
-    char     line[1024];
+    char     line[4096];
     wxString msg;
     int      textmarginaftersymbol = pcbIUScale.mmToIU( 2 );
 

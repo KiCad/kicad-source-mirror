@@ -319,7 +319,7 @@ bool GERBER_PLOTTER::StartPlot( const wxString& aPageNumber )
 
 bool GERBER_PLOTTER::EndPlot()
 {
-    char     line[1024];
+    char     line[4096];
 
     wxASSERT( m_outputFile );
 
