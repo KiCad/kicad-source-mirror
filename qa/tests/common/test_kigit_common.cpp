@@ -255,8 +255,7 @@ std::string readWorkingFile( const wxFileName& aFile )
 
 void writeFile( const wxString& aRepoPath, const wxString& aFileName, const char* aContent )
 {
-    wxFileName    fn( aRepoPath, aFileName );
-    std::ofstream f( fn.GetFullPath().utf8_string() );
+    std::ofstream f( ( aRepoPath + wxS( "/" ) + aFileName ).utf8_string() );
     f << aContent;
 }
 
@@ -1054,6 +1053,50 @@ BOOST_AUTO_TEST_CASE( GetCommitDetailCountsLinesPerFile )
 }
 
 
+// The changes list leaves out other projects in the repository, and KiCad's own lock and
+// backup files. The line counts sit beside that list, so they must cover the same files.
+BOOST_AUTO_TEST_CASE( WorkingTreeLineStatsCountOnlyTheFilesGiven )
+{
+    SCOPED_GIT_BACKEND libgit;
+    ScopedTempDir      tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "readme.txt", "root\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    BOOST_REQUIRE( wxFileName::Mkdir( tmp.path + wxS( "/mine" ) ) );
+    BOOST_REQUIRE( wxFileName::Mkdir( tmp.path + wxS( "/theirs" ) ) );
+    writeFile( tmp.path, wxS( "mine/board.txt" ), "one\ntwo\n" );
+    writeFile( tmp.path, wxS( "theirs/board.txt" ), "one\ntwo\n" );
+
+    {
+        git_index* index = nullptr;
+        BOOST_REQUIRE_EQUAL( git_repository_index( &index, repo ), GIT_OK );
+        KIGIT::GitIndexPtr indexPtr( index );
+        BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, "mine/board.txt" ), GIT_OK );
+        BOOST_REQUIRE_EQUAL( git_index_add_bypath( index, "theirs/board.txt" ), GIT_OK );
+        BOOST_REQUIRE_EQUAL( git_index_write( index ), GIT_OK );
+    }
+
+    commitWorkingFile( repo, wxS( "readme.txt" ), "two projects\n" );
+
+    // One line added in this project, three in the other, and an untracked lock file.
+    writeFile( tmp.path, wxS( "mine/board.txt" ), "one\ntwo\nthree\n" );
+    writeFile( tmp.path, wxS( "theirs/board.txt" ), "one\ntwo\na\nb\nc\n" );
+    writeFile( tmp.path, wxS( "mine/~board.lck" ), "locked\n" );
+
+    KIGIT_COMMON common( repo );
+
+    std::pair<int, int> mine = common.GetWorkingTreeLineStats( { wxS( "mine/board.txt" ) } );
+    BOOST_CHECK_EQUAL( mine.first, 1 );
+    BOOST_CHECK_EQUAL( mine.second, 0 );
+
+    // A path that did not change contributes nothing, and an unlisted one is not counted.
+    std::pair<int, int> none = common.GetWorkingTreeLineStats( { wxS( "readme.txt" ) } );
+    BOOST_CHECK_EQUAL( none.first, 0 );
+    BOOST_CHECK_EQUAL( none.second, 0 );
+}
+
+
 // WriteBlobToFile materializes a file's committed content, used to feed the diff viewer.
 BOOST_AUTO_TEST_CASE( WriteBlobToFileExtractsCommittedContent )
 {
@@ -1650,6 +1693,31 @@ BOOST_AUTO_TEST_CASE( GetLastFetchTimeReadsFetchHead )
     wxDateTime when = common.GetLastFetchTime();
     BOOST_REQUIRE( when.IsValid() );
     BOOST_CHECK( ( wxDateTime::Now() - when ).GetMinutes() < 5 );
+}
+
+
+// The Changes page sums the lines the working tree adds and removes, a new file counting as
+// all added.
+BOOST_AUTO_TEST_CASE( GetWorkingTreeLineStatsCountsEditsAndNewFiles )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "one\ntwo\nthree\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+
+    std::pair<int, int> clean = common.GetWorkingTreeLineStats( { wxS( "file.txt" ) } );
+    BOOST_CHECK_EQUAL( clean.first, 0 );
+    BOOST_CHECK_EQUAL( clean.second, 0 );
+
+    writeFile( tmp.path, "file.txt", "one\n2\nthree\n" );
+    writeFile( tmp.path, "new.txt", "a\nb\n" );
+
+    std::pair<int, int> dirty = common.GetWorkingTreeLineStats( { wxS( "file.txt" ), wxS( "new.txt" ) } );
+    BOOST_CHECK_EQUAL( dirty.first, 3 );
+    BOOST_CHECK_EQUAL( dirty.second, 1 );
 }
 
 

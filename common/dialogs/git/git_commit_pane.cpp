@@ -35,6 +35,9 @@
 #include <wx/filename.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
+#include <wx/sizer.h>
+#include <wx/statbox.h>
+#include <wx/stattext.h>
 #include <wx/textctrl.h>
 
 #include <wx/choicdlg.h>
@@ -42,6 +45,8 @@
 #include <confirm.h>
 #include <dialogs/git/git_credentials_prompt.h>
 #include <diff_merge/merge_dispatch.h>
+#include <kiplatform/ui.h>
+#include <diff_merge/diff_scene.h>
 #include <reporter.h>
 #include <git/kicad_git_common.h>
 #include <git/git_commit_handler.h>
@@ -167,6 +172,41 @@ void GIT_COMMIT_PANE::layoutWide()
     column->GetItem( m_message )->SetProportion( 1 );
     column->SetMinSize( FromDIP( wxSize( 280, -1 ) ) );
 
+    wxStaticText* heading = new wxStaticText( this, wxID_ANY, _( "Commit Message" ) );
+    heading->SetFont( heading->GetFont().Bold() );
+    column->Insert( 0, heading, 0, wxLEFT | wxRIGHT | wxTOP, 8 );
+
+    // The summary takes the diff's colours for its line counts, lifted a little on a dark
+    // background.
+    wxStaticBoxSizer* summary = new wxStaticBoxSizer( wxVERTICAL, this, _( "Summary" ) );
+    wxWindow*         box = summary->GetStaticBox();
+
+    m_summaryFiles = new wxStaticText( box, wxID_ANY, wxEmptyString );
+    m_summaryAdded = new wxStaticText( box, wxID_ANY, wxEmptyString );
+    m_summaryRemoved = new wxStaticText( box, wxID_ANY, wxEmptyString );
+
+    KICAD_DIFF::DIFF_COLOR_THEME theme;
+    bool                         dark = KIPLATFORM::UI::IsDarkTheme();
+    m_summaryAdded->SetForegroundColour( ( dark ? theme.added.Brightened( 0.4 ) : theme.added ).ToColour() );
+    m_summaryRemoved->SetForegroundColour( ( dark ? theme.removed.Brightened( 0.4 ) : theme.removed ).ToColour() );
+
+    wxBoxSizer* lines = new wxBoxSizer( wxHORIZONTAL );
+    lines->Add( m_summaryAdded, 0, wxRIGHT, 8 );
+    lines->Add( m_summaryRemoved, 0 );
+    summary->Add( m_summaryFiles, 0, wxLEFT | wxRIGHT | wxTOP, 4 );
+    summary->Add( lines, 0, wxALL, 4 );
+
+    // Under the amend box, which sits right after the message.
+    size_t afterAmend = 0;
+
+    for( size_t ii = 0; ii < column->GetItemCount(); ++ii )
+    {
+        if( column->GetItem( ii )->GetWindow() == m_amendCheckbox )
+            afterAmend = ii + 1;
+    }
+
+    column->Insert( afterAmend, summary, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+
     wxBoxSizer* files = new wxBoxSizer( wxVERTICAL );
     files->Add( m_emptyLabel, 0, wxALL, 8 );
     files->Add( m_checklist, 1, wxALL | wxEXPAND, 4 );
@@ -278,6 +318,18 @@ void GIT_COMMIT_PANE::RefreshFileList()
     // Without a remote there is nowhere to push to, so local commits are not waiting for it.
     m_hasUnpushedCommits = hasLocalCommits && m_hasRemote;
 
+    m_lineStats = { 0, 0 };
+
+    if( common->GetRepo() && m_summaryFiles )
+    {
+        std::set<wxString> changed;
+
+        for( const FILE_CHECKLIST_ENTRY& entry : entries )
+            changed.insert( entry.path );
+
+        m_lineStats = common->GetWorkingTreeLineStats( changed );
+    }
+
     lock.unlock();
 
     // Edits still only in an editor's memory are not in the git status yet, but the commit flow
@@ -312,6 +364,7 @@ void GIT_COMMIT_PANE::RefreshFileList()
         m_shownPaths.insert( entry.path );
 
     m_checklist->SetEntries( entries );
+    updateSummary();
 
     bool hasChanges = !entries.empty();
 
@@ -574,6 +627,28 @@ void GIT_COMMIT_PANE::onMessageChanged( wxCommandEvent& aEvent )
 void GIT_COMMIT_PANE::onChecklistChanged( wxDataViewEvent& aEvent )
 {
     updateCommitButton();
+    updateSummary();
+}
+
+
+void GIT_COMMIT_PANE::updateSummary()
+{
+    if( !m_summaryFiles )
+        return;
+
+    // A ticked file is staged for the commit, an unticked one is left out.
+    int staged = static_cast<int>( m_checklist->GetCheckedPaths().size() );
+    int unstaged = static_cast<int>( m_shownPaths.size() ) - staged;
+
+    wxString stagedText = staged == 1 ? _( "1 file will be committed" )
+                                      : wxString::Format( _( "%d files will be committed" ), staged );
+    wxString unstagedText = unstaged == 1 ? _( "1 left out" )
+                                          : wxString::Format( _( "%d left out" ), unstaged );
+
+    m_summaryFiles->SetLabel( wxString::Format( wxS( "%s, %s" ), stagedText, unstagedText ) );
+    m_summaryAdded->SetLabel( wxString::Format( wxS( "+%d" ), m_lineStats.first ) );
+    m_summaryRemoved->SetLabel( wxString::Format( wxS( "-%d" ), m_lineStats.second ) );
+    Layout();
 }
 
 

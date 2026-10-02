@@ -97,8 +97,12 @@ private:
     /// False, with a message, while a transfer is running or a merge waits to be finished.
     bool transferCanStart();
 
-    /// Put the file list beside the commit controls instead of above them, for a wide host.
+    /// Put the file list beside the commit controls instead of above them, for a wide host,
+    /// with a heading over the message and a summary of the working tree under it.
     void layoutWide();
+
+    /// Refresh the summary box's file and line counts, where the wide layout has one.
+    void updateSummary();
 
     /// Clear the list and disable every control while version control is off.
     void showDisabledState();
@@ -193,6 +197,14 @@ private:
     EDITOR_SNAPSHOT m_docsBeforePull;
 
     std::function<void( const wxString& )> m_fileSelectedHandler;
+
+    // The summary box of the wide layout. Null in the docked panel.
+    wxStaticText* m_summaryFiles = nullptr;
+    wxStaticText* m_summaryAdded = nullptr;
+    wxStaticText* m_summaryRemoved = nullptr;
+
+    /// Lines the working tree adds and removes against HEAD, read at the last refresh.
+    std::pair<int, int> m_lineStats;
 
     /// Re-runs RefreshFileList once when it had to skip because another git operation held the
     /// action lock. The background fetch can hold it for a whole network round trip and does

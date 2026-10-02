@@ -416,6 +416,58 @@ wxDateTime KIGIT_COMMON::GetLastFetchTime() const
 }
 
 
+std::pair<int, int> KIGIT_COMMON::GetWorkingTreeLineStats( const std::set<wxString>& aPaths ) const
+{
+    if( !m_repo )
+        return { 0, 0 };
+
+    // An unborn repository has no HEAD tree, and then everything in the tree is new.
+    KIGIT::GitTreePtr headTree;
+    git_object*       headObj = nullptr;
+
+    if( git_revparse_single( &headObj, m_repo, "HEAD^{tree}" ) == GIT_OK )
+        headTree.reset( reinterpret_cast<git_tree*>( headObj ) );
+
+    git_diff_options opts;
+    git_diff_options_init( &opts, GIT_DIFF_OPTIONS_VERSION );
+    opts.flags = GIT_DIFF_INCLUDE_UNTRACKED | GIT_DIFF_RECURSE_UNTRACKED_DIRS | GIT_DIFF_SHOW_UNTRACKED_CONTENT;
+
+    git_diff* diff = nullptr;
+
+    if( git_diff_tree_to_workdir_with_index( &diff, m_repo, headTree.get(), &opts ) != GIT_OK )
+        return { 0, 0 };
+
+    KIGIT::GitDiffPtr   diffPtr( diff );
+    std::pair<int, int> total{ 0, 0 };
+
+    for( size_t ii = 0; ii < git_diff_num_deltas( diff ); ++ii )
+    {
+        git_patch* patch = nullptr;
+
+        if( git_patch_from_diff( &patch, diff, ii ) != GIT_OK )
+            continue;
+
+        KIGIT::GitPatchPtr    patchPtr( patch );
+        const git_diff_delta* delta = git_patch_get_delta( patch );
+        const char*           path = delta->new_file.path ? delta->new_file.path : delta->old_file.path;
+
+        if( !path || aPaths.count( wxString::FromUTF8( path ) ) == 0 )
+            continue;
+
+        size_t added = 0;
+        size_t removed = 0;
+
+        if( git_patch_line_stats( nullptr, &added, &removed, patch ) == GIT_OK )
+        {
+            total.first += static_cast<int>( added );
+            total.second += static_cast<int>( removed );
+        }
+    }
+
+    return total;
+}
+
+
 std::vector<KIGIT_BRANCH_INFO> KIGIT_COMMON::GetBranches() const
 {
     if( !m_repo )

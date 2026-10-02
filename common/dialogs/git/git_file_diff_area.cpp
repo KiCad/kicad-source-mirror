@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <fstream>
 #include <optional>
+#include <utility>
 
 #include <wx/sizer.h>
 #include <wx/splitter.h>
@@ -89,7 +90,8 @@ GIT_FILE_DIFF_AREA::GIT_FILE_DIFF_AREA( wxWindow* aParent, EDA_BASE_FRAME* aFram
         m_afterLabel( nullptr ),
         m_beforeCanvas( nullptr ),
         m_afterCanvas( nullptr ),
-        m_textDiff( nullptr )
+        m_textDiff( nullptr ),
+        m_legend( nullptr )
 {
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -101,13 +103,29 @@ GIT_FILE_DIFF_AREA::GIT_FILE_DIFF_AREA( wxWindow* aParent, EDA_BASE_FRAME* aFram
     m_canvasSplitter->SetSashGravity( 0.5 );
     m_textDiff = new wxStyledTextCtrl( this, wxID_ANY );
 
+    // What the marks on the drawings mean, in the colours they are drawn with.
+    KICAD_DIFF::DIFF_COLOR_THEME theme;
+    m_legend = new wxBoxSizer( wxHORIZONTAL );
+
+    for( const auto& [colour, label] : { std::make_pair( theme.added, _( "Added" ) ),
+                                         std::make_pair( theme.removed, _( "Removed" ) ),
+                                         std::make_pair( theme.modified, _( "Modified" ) ) } )
+    {
+        wxPanel* swatch = new wxPanel( this, wxID_ANY, wxDefaultPosition, FromDIP( wxSize( 12, 12 ) ) );
+        swatch->SetBackgroundColour( colour.ToColour() );
+        m_legend->Add( swatch, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 4 );
+        m_legend->Add( new wxStaticText( this, wxID_ANY, label ), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 16 );
+    }
+
     sizer->Add( m_note, 0, wxEXPAND | wxALL, 4 );
     sizer->Add( m_canvasSplitter, 1, wxEXPAND );
+    sizer->Add( m_legend, 0, wxLEFT | wxTOP, 4 );
     sizer->Add( m_textDiff, 1, wxEXPAND );
     SetSizer( sizer );
 
     m_note->Hide();
     m_canvasSplitter->Hide();
+    sizer->Show( m_legend, false );
     m_textDiff->Hide();
 }
 
@@ -155,6 +173,7 @@ void GIT_FILE_DIFF_AREA::showNote( const wxString& aNote )
     m_note->SetLabel( aNote );
     m_note->Show();
     m_canvasSplitter->Hide();
+    GetSizer()->Show( m_legend, false );
     m_textDiff->Hide();
     Layout();
 }
@@ -193,6 +212,7 @@ bool GIT_FILE_DIFF_AREA::showTextDiff( const wxString& aBefore, const wxString& 
                          KIGIT::BuildTextDiff( KIGIT::SplitTextLines( contentA ), KIGIT::SplitTextLines( contentB ) ) );
     m_note->Hide();
     m_canvasSplitter->Hide();
+    GetSizer()->Show( m_legend, false );
     m_textDiff->Show();
     return true;
 }
@@ -238,6 +258,7 @@ bool GIT_FILE_DIFF_AREA::showDrawingDiff( KICAD_DIFF::DOC_KIND aKind, const wxSt
     m_note->Hide();
     m_textDiff->Hide();
     m_canvasSplitter->Show();
+    GetSizer()->Show( m_legend, true );
     return true;
 }
 

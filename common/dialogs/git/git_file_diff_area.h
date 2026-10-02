@@ -82,6 +82,7 @@ private:
     WIDGET_DIFF_CANVAS* m_beforeCanvas;
     WIDGET_DIFF_CANVAS* m_afterCanvas;
     wxStyledTextCtrl*   m_textDiff;
+    wxSizer*            m_legend;
 
     /// The documents the two canvases draw, held by the kiface that loaded them. Reset before
     /// the canvases go.

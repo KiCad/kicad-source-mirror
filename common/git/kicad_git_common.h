@@ -386,6 +386,10 @@ public:
     // When the repository last fetched, from any remote. Invalid when it never has.
     wxDateTime GetLastFetchTime() const;
 
+    // Lines added and removed in the working tree against HEAD, new files included. Only for
+    // aPaths, relative to the repository root, so the count matches the list beside it.
+    std::pair<int, int> GetWorkingTreeLineStats( const std::set<wxString>& aPaths ) const;
+
     /// Returns GetRemotename() when non-empty, otherwise "origin".  Centralizes the
     /// fallback policy used by push/pull/fetch paths.
     wxString GetRemoteNameOrDefault() const;
