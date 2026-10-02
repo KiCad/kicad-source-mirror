@@ -895,11 +895,13 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     if( std::optional<bool> value = Get<bool>( "input.center_on_zoom" ) )
         Set( "input.center_on_zoom", !( *value ) );
 
-    ret &= fromLegacy<int>( aCfg, "OpenGLAntialiasingMode", "graphics.opengl_antialiasing_mode" );
-    ret &= fromLegacy<int>( aCfg, "CairoAntialiasingMode",  "graphics.cairo_antialiasing_mode" );
+    ret &= fromLegacy<int>( aCfg, "OpenGLAntialiasingMode",   "graphics.antialiasing_mode" );
+
+    // Cairo anti-aliasing modes no longer supported
+    //ret &= fromLegacy<int>( aCfg, "CairoAntialiasingMode",  "graphics.cairo_antialiasing_mode" );
 
     ret &= fromLegacy<int>(  aCfg, "AutoSaveInterval",        "system.local_history_debounce" );
-    ret &= fromLegacyString( aCfg, "Editor",                  "system.editor_name" );
+    ret &= fromLegacyString( aCfg, "Editor",                  "system.text_editor" );
     ret &= fromLegacy<int>(  aCfg, "FileHistorySize",         "system.file_history_size" );
     ret &= fromLegacyString( aCfg, "LanguageID",              "system.language" );
     ret &= fromLegacyString( aCfg, "PdfBrowserName",          "system.pdf_viewer_name" );
