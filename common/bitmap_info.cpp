@@ -34,6 +34,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::git_add].emplace_back( BITMAPS::git_add, wxT( "git_add_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::git_branches].emplace_back( BITMAPS::git_branches, wxT( "git_branches_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::git_changed_ahead].emplace_back( BITMAPS::git_changed_ahead, wxT( "git_changed_ahead_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::git_changes].emplace_back( BITMAPS::git_changes, wxT( "git_changes_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::git_conflict].emplace_back( BITMAPS::git_conflict, wxT( "git_conflict_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::git_delete].emplace_back( BITMAPS::git_delete, wxT( "git_delete_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::git_fetch].emplace_back( BITMAPS::git_fetch, wxT( "git_fetch_16.png" ), 16, wxT( "light" ) );
@@ -127,6 +128,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::git_add].emplace_back( BITMAPS::git_add, wxT( "git_add_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::git_branches].emplace_back( BITMAPS::git_branches, wxT( "git_branches_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::git_changed_ahead].emplace_back( BITMAPS::git_changed_ahead, wxT( "git_changed_ahead_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::git_changes].emplace_back( BITMAPS::git_changes, wxT( "git_changes_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::git_conflict].emplace_back( BITMAPS::git_conflict, wxT( "git_conflict_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::git_delete].emplace_back( BITMAPS::git_delete, wxT( "git_delete_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::git_fetch].emplace_back( BITMAPS::git_fetch, wxT( "git_fetch_dark_16.png" ), 16, wxT( "dark" ) );
@@ -220,6 +222,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::git_add].emplace_back( BITMAPS::git_add, wxT( "git_add_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::git_branches].emplace_back( BITMAPS::git_branches, wxT( "git_branches_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::git_changed_ahead].emplace_back( BITMAPS::git_changed_ahead, wxT( "git_changed_ahead_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::git_changes].emplace_back( BITMAPS::git_changes, wxT( "git_changes_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::git_conflict].emplace_back( BITMAPS::git_conflict, wxT( "git_conflict_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::git_delete].emplace_back( BITMAPS::git_delete, wxT( "git_delete_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::git_fetch].emplace_back( BITMAPS::git_fetch, wxT( "git_fetch_32.png" ), 32, wxT( "light" ) );
@@ -313,6 +316,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::git_add].emplace_back( BITMAPS::git_add, wxT( "git_add_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::git_branches].emplace_back( BITMAPS::git_branches, wxT( "git_branches_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::git_changed_ahead].emplace_back( BITMAPS::git_changed_ahead, wxT( "git_changed_ahead_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::git_changes].emplace_back( BITMAPS::git_changes, wxT( "git_changes_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::git_conflict].emplace_back( BITMAPS::git_conflict, wxT( "git_conflict_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::git_delete].emplace_back( BITMAPS::git_delete, wxT( "git_delete_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::git_fetch].emplace_back( BITMAPS::git_fetch, wxT( "git_fetch_dark_32.png" ), 32, wxT( "dark" ) );

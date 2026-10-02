@@ -20,10 +20,10 @@
 #include <dialogs/git/git_advanced_dialog.h>
 
 #include <bitmaps.h>
+#include <dialogs/git/git_file_diff_area.h>
 #include <dialogs/git/git_status_entries.h>
 
 #include <algorithm>
-#include <fstream>
 #include <memory>
 #include <vector>
 
@@ -47,7 +47,6 @@
 #include <wx/splitter.h>
 #include <wx/srchctrl.h>
 #include <wx/stattext.h>
-#include <wx/stc/stc.h>
 #include <wx/textctrl.h>
 #include <wx/richmsgdlg.h>
 #include <wx/textdlg.h>
@@ -55,13 +54,9 @@
 
 #include <picosha2.h>
 
-#include <cli/exit_codes.h>
 #include <confirm.h>
 #include <diff_merge/diff_scene.h>
-#include <diff_merge/merge_dispatch.h>
-#include <dialogs/git/dialog_text_diff.h>
 #include <eda_base_frame.h>
-#include <eda_draw_frame.h>
 #include <frame_type.h>
 #include <dialogs/git/git_credentials_prompt.h>
 #include <git/git_branch_handler.h>
@@ -70,20 +65,16 @@
 #include <git/git_pull_handler.h>
 #include <git/git_push_handler.h>
 #include <git/kicad_git_common.h>
-#include <git/text_diff.h>
 #include <kicad_curl/kicad_curl_easy.h>
 #include <kiplatform/ui.h>
 #include <kiway.h>
 #include <kiway_player.h>
 #include <pgm_base.h>
 #include <project.h>
-#include <reporter.h>
 #include <settings/common_settings.h>
 #include <thread>
-#include <view/view.h>
 #include <widgets/git_commit_pane.h>
 #include <widgets/ui_common.h>
-#include <widgets/widget_diff_canvas.h>
 #include <widgets/wx_treebook.h>
 
 
@@ -334,28 +325,14 @@ wxString joinNames( const std::vector<wxString>& aNames )
 }
 
 
-// Where to open the before and after canvases: on the first change, padded to a readable size.
-std::optional<BOX2I> firstChangeBox( const KICAD_DIFF::DIFF_SCENE& aScene, KICAD_DIFF::DOC_KIND aKind )
+// Close a splitter's second pane, keeping the sash where the user left it for next time.
+void unsplitKeepingSash( wxSplitterWindow* aSplitter, wxWindow* aPane, int& aSashPos )
 {
-    for( const std::vector<KICAD_DIFF::SCENE_SHAPE>* shapes :
-         { &aScene.modifiedShapes, &aScene.addedShapes, &aScene.removedShapes } )
-    {
-        if( shapes->empty() )
-            continue;
+    if( !aSplitter->IsSplit() )
+        return;
 
-        BOX2I box = shapes->front().bbox;
-
-        if( box.GetWidth() <= 0 || box.GetHeight() <= 0 )
-            continue;
-
-        int minSide = KICAD_DIFF::IuScaleForDocKind( aKind ).mmToIU( 50 );
-        int padX = static_cast<int>( minSide - box.GetWidth() ) / 2;
-        int padY = static_cast<int>( minSide - box.GetHeight() ) / 2;
-        box.Inflate( std::max( 0, padX ), std::max( 0, padY ) );
-        return box;
-    }
-
-    return std::nullopt;
+    aSashPos = aSplitter->GetSashPosition();
+    aSplitter->Unsplit( aPane );
 }
 
 
@@ -486,13 +463,9 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
         m_detailSplitter( nullptr ),
         m_commitFiles( nullptr ),
         m_fileDiff( nullptr ),
-        m_fileDiffNote( nullptr ),
-        m_canvasSplitter( nullptr ),
-        m_beforeLabel( nullptr ),
-        m_afterLabel( nullptr ),
-        m_beforeCanvas( nullptr ),
-        m_afterCanvas( nullptr ),
-        m_textDiff( nullptr ),
+        m_changesSplitter( nullptr ),
+        m_changesPane( nullptr ),
+        m_workingDiff( nullptr ),
         m_branchesList( nullptr ),
         m_remotesList( nullptr ),
         m_stashesList( nullptr ),
@@ -538,6 +511,7 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
 
     // One icon per page, in page order, as the About dialog does for its tabs.
     wxVector<wxBitmapBundle> pageIcons;
+    pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_changes, 16 ) );
     pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_history, 16 ) );
     pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_branches, 16 ) );
     pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_remotes, 16 ) );
@@ -546,7 +520,8 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
     pageIcons.push_back( KiBitmapBundleDef( BITMAPS::git_repository, 16 ) );
     m_book->SetImages( pageIcons );
 
-    m_book->AddPage( buildHistoryPage( m_book ), _( "History" ), true, 0 );
+    m_book->AddPage( buildChangesPage( m_book ), _( "Changes" ), true, 0 );
+    m_book->AddPage( buildHistoryPage( m_book ), _( "History" ), false, 1 );
 
     wxWindow* branchesPage = makeBranchesPage( m_book, &m_branchesList );
     addButtonRow( branchesPage, { { _( "New Branch..." ),
@@ -563,7 +538,7 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
                                     {
                                         onForcePush();
                                     } } } );
-    m_book->AddPage( branchesPage, _( "Branches" ), false, 1 );
+    m_book->AddPage( branchesPage, _( "Branches" ), false, 2 );
 
     wxWindow* remotesPage = makeRemotesPage( m_book, &m_remotesList );
     addButtonRow( remotesPage, { { _( "Add..." ),
@@ -580,7 +555,7 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
                                    {
                                        onRemoveRemote();
                                    } } } );
-    m_book->AddPage( remotesPage, _( "Remotes" ), false, 2 );
+    m_book->AddPage( remotesPage, _( "Remotes" ), false, 3 );
 
     wxWindow* stashesPage = makeStashesPage( m_book, &m_stashesList );
     addButtonRow( stashesPage, { { _( "Stash Changes..." ),
@@ -602,7 +577,7 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
                                    {
                                        onStashDrop();
                                    } } } );
-    m_book->AddPage( stashesPage, _( "Stashes" ), false, 3 );
+    m_book->AddPage( stashesPage, _( "Stashes" ), false, 4 );
 
     wxWindow* tagsPage = makeTagsPage( m_book, &m_tagsList );
     addButtonRow( tagsPage, { { _( "New Tag..." ),
@@ -619,14 +594,14 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
                                 {
                                     onDeleteTag();
                                 } } } );
-    m_book->AddPage( tagsPage, _( "Tags" ), false, 4 );
+    m_book->AddPage( tagsPage, _( "Tags" ), false, 5 );
 
     wxWindow* repositoryPage = makeRepositoryPage( m_book, &m_repoUserName, &m_repoUserEmail, &m_repoRemoteUrl );
     addButtonRow( repositoryPage, { { _( "Save" ), [this]()
                                     {
                                         onSaveRepositoryConfig();
                                     } } } );
-    m_book->AddPage( repositoryPage, _( "Repository" ), false, 5 );
+    m_book->AddPage( repositoryPage, _( "Repository" ), false, 6 );
 
     // Double-clicking a commit shows what it changed against its parent.
     m_historyList->SetToolTip( _( "Double click a commit to see what it changed. Right click for more." ) );
@@ -851,9 +826,6 @@ GIT_ADVANCED_DIALOG::~GIT_ADVANCED_DIALOG()
     if( activeDialog() == this )
         setActiveDialog( nullptr );
 
-    // The canvases still point at these documents, so they go first.
-    m_diffContext.reset();
-
     // A push or fetch still running holds this window, so stop it and wait.
     bool transferStarted = m_pushWorker.joinable() || m_fetchWorker.joinable();
 
@@ -1060,7 +1032,7 @@ wxPanel* GIT_ADVANCED_DIALOG::buildCommitDetailPane( wxWindow* aParent )
     m_commitFiles->AppendColumn( wxS( "+" ), wxLIST_FORMAT_RIGHT, detail->FromDIP( 50 ) );
     m_commitFiles->AppendColumn( wxS( "-" ), wxLIST_FORMAT_RIGHT, detail->FromDIP( 50 ) );
 
-    m_fileDiff = buildFileDiffArea( m_detailSplitter );
+    m_fileDiff = new GIT_FILE_DIFF_AREA( m_detailSplitter, m_parent );
     m_detailSplitter->Initialize( m_commitFiles );
     m_fileDiff->Hide();
 
@@ -1100,32 +1072,6 @@ wxPanel* GIT_ADVANCED_DIALOG::buildCommitDetailPane( wxWindow* aParent )
                          } );
 
     return detail;
-}
-
-
-wxPanel* GIT_ADVANCED_DIALOG::buildFileDiffArea( wxWindow* aParent )
-{
-    wxPanel*    area = new wxPanel( aParent );
-    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-
-    // One of these shows at a time: a note, the two drawings, or the line diff.
-    m_fileDiffNote = new wxStaticText( area, wxID_ANY, wxEmptyString );
-    m_canvasSplitter = new wxSplitterWindow( area, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                             wxSP_LIVE_UPDATE | wxSP_3DSASH );
-    m_canvasSplitter->SetMinimumPaneSize( area->FromDIP( 60 ) );
-    m_canvasSplitter->SetSashGravity( 0.5 );
-    m_textDiff = new wxStyledTextCtrl( area, wxID_ANY );
-
-    sizer->Add( m_fileDiffNote, 0, wxEXPAND | wxALL, 4 );
-    sizer->Add( m_canvasSplitter, 1, wxEXPAND );
-    sizer->Add( m_textDiff, 1, wxEXPAND );
-    area->SetSizer( sizer );
-
-    m_fileDiffNote->Hide();
-    m_canvasSplitter->Hide();
-    m_textDiff->Hide();
-
-    return area;
 }
 
 
@@ -1285,12 +1231,7 @@ void GIT_ADVANCED_DIALOG::fillCommitDetail( const KIGIT_COMMIT_DETAIL& aDetail )
 
 void GIT_ADVANCED_DIALOG::clearCommitDetail()
 {
-    if( m_historySplitter->IsSplit() )
-    {
-        m_historySashPos = m_historySplitter->GetSashPosition();
-        m_historySplitter->Unsplit( m_commitDetail );
-    }
-
+    unsplitKeepingSash( m_historySplitter, m_commitDetail, m_historySashPos );
     hideFileDiff();
     m_detailEmail.clear();
     m_commitTitle->SetLabel( wxEmptyString );
@@ -1304,131 +1245,10 @@ void GIT_ADVANCED_DIALOG::clearCommitDetail()
 }
 
 
-void GIT_ADVANCED_DIALOG::destroyDiffCanvases()
-{
-    // The documents come off the canvases before the canvases go.
-    m_diffContext.reset();
-
-    if( !m_beforeCanvas )
-        return;
-
-    // The splitter keeps its pane pointers through DestroyChildren, and its best size reads
-    // them, so take the panes out of it first.
-    m_canvasSplitter->Unsplit();
-    m_canvasSplitter->Initialize( nullptr );
-    m_canvasSplitter->DestroyChildren();
-    m_beforeCanvas = nullptr;
-    m_afterCanvas = nullptr;
-    m_beforeLabel = nullptr;
-    m_afterLabel = nullptr;
-}
-
-
 void GIT_ADVANCED_DIALOG::hideFileDiff()
 {
-    destroyDiffCanvases();
-
-    if( m_detailSplitter->IsSplit() )
-    {
-        m_detailSashPos = m_detailSplitter->GetSashPosition();
-        m_detailSplitter->Unsplit( m_fileDiff );
-    }
-}
-
-
-void GIT_ADVANCED_DIALOG::showFileDiffArea()
-{
-    if( !m_detailSplitter->IsSplit() )
-        m_detailSplitter->SplitHorizontally( m_commitFiles, m_fileDiff, m_detailSashPos );
-
-    m_fileDiff->Layout();
-}
-
-
-void GIT_ADVANCED_DIALOG::showFileDiffNote( const wxString& aNote )
-{
-    destroyDiffCanvases();
-    m_fileDiffNote->SetLabel( aNote );
-    m_fileDiffNote->Show();
-    m_canvasSplitter->Hide();
-    m_textDiff->Hide();
-    showFileDiffArea();
-}
-
-
-void GIT_ADVANCED_DIALOG::ensureDiffCanvases()
-{
-    if( m_beforeCanvas )
-        return;
-
-    // The editor's own backend where there is one. The project manager has no canvas.
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
-
-    if( EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( m_parent ) )
-    {
-        if( frame->GetCanvas() )
-            backend = frame->GetCanvas()->GetBackend();
-    }
-
-    auto makeSide = [&]( wxStaticText** aLabel, WIDGET_DIFF_CANVAS** aCanvas )
-    {
-        wxPanel*    side = new wxPanel( m_canvasSplitter );
-        wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-
-        *aLabel = new wxStaticText( side, wxID_ANY, wxEmptyString );
-        *aCanvas = new WIDGET_DIFF_CANVAS( side, backend );
-
-        sizer->Add( *aLabel, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 4 );
-        sizer->Add( *aCanvas, 1, wxEXPAND );
-        side->SetSizer( sizer );
-        return side;
-    };
-
-    wxPanel* before = makeSide( &m_beforeLabel, &m_beforeCanvas );
-    wxPanel* after = makeSide( &m_afterLabel, &m_afterCanvas );
-
-    m_canvasSplitter->SplitVertically( before, after );
-
-    // There is nothing to select here, so the left button pans like the middle one.
-    m_beforeCanvas->SetLeftDragPans( true );
-    m_afterCanvas->SetLeftDragPans( true );
-
-    followDiffCanvas( m_beforeCanvas, m_afterCanvas );
-    followDiffCanvas( m_afterCanvas, m_beforeCanvas );
-}
-
-
-void GIT_ADVANCED_DIALOG::followDiffCanvas( WIDGET_DIFF_CANVAS* aLead, WIDGET_DIFF_CANVAS* aFollower )
-{
-    // The view controls handle the event after this, so the copy waits until they have.
-    auto onInput = [this, aLead, aFollower]( wxMouseEvent& aEvent )
-    {
-        aEvent.Skip();
-
-        CallAfter(
-                [this, aLead, aFollower]()
-                {
-                    // The canvases may have gone with a file change before this ran.
-                    if( aLead != m_beforeCanvas && aLead != m_afterCanvas )
-                        return;
-
-                    KIGFX::VIEW* lead = aLead->GetView();
-                    KIGFX::VIEW* follower = aFollower->GetView();
-
-                    if( follower->GetScale() == lead->GetScale() && follower->GetCenter() == lead->GetCenter() )
-                        return;
-
-                    follower->SetScale( lead->GetScale() );
-                    follower->SetCenter( lead->GetCenter() );
-                    aFollower->Refresh();
-                } );
-    };
-
-    aLead->Bind( wxEVT_MOTION, onInput );
-    aLead->Bind( wxEVT_MOUSEWHEEL, onInput );
-    aLead->Bind( wxEVT_MAGNIFY, onInput );
-    aLead->Bind( wxEVT_LEFT_UP, onInput );
-    aLead->Bind( wxEVT_MIDDLE_UP, onInput );
+    m_fileDiff->Clear();
+    unsplitKeepingSash( m_detailSplitter, m_fileDiff, m_detailSashPos );
 }
 
 
@@ -1440,112 +1260,77 @@ void GIT_ADVANCED_DIALOG::showFileDiff( const wxString& aPath )
         return;
     }
 
-    GIT_DIFF_WORKSPACE workspace;
+    wxString beforeLabel = m_detailParent.IsEmpty() ? _( "Before: nothing" )
+                                                    : wxString::Format( _( "Before: %s" ), m_detailParent );
+    wxString afterLabel = wxString::Format( _( "After: %s" ), m_detailHash );
 
-    if( !workspace.IsOk() )
-    {
-        showFileDiffNote( _( "Could not create a temporary directory for the diff." ) );
-        return;
-    }
+    m_fileDiff->ShowFile(
+            [&]( GIT_DIFF_WORKSPACE& aWorkspace, GIT_FILE_SIDES& aSides )
+            {
+                return MaterializeCommitFile( m_parent, aWorkspace, m_detailHash, aPath, aSides );
+            },
+            beforeLabel, afterLabel );
 
-    wxBusyCursor busy;
-
-    wxString             before;
-    wxString             after;
-    wxString             error;
-    KICAD_DIFF::DOC_KIND kind = KICAD_DIFF::DOC_KIND::UNKNOWN;
-
-    if( !MaterializeCommitFile( m_parent, workspace, m_detailHash, aPath, &before, &after, &kind, &error ) )
-    {
-        showFileDiffNote( error );
-        return;
-    }
-
-    bool shown = false;
-
-    if( kind == KICAD_DIFF::DOC_KIND::UNKNOWN )
-        shown = showTextDiff( before, after );
-    else if( kind == KICAD_DIFF::DOC_KIND::SCH || kind == KICAD_DIFF::DOC_KIND::PCB )
-        shown = showDrawingDiff( kind, before, after );
-    else
-        showFileDiffNote( _( "Double click the file to open its comparison." ) );
-
-    if( shown )
-        showFileDiffArea();
+    if( !m_detailSplitter->IsSplit() )
+        m_detailSplitter->SplitHorizontally( m_commitFiles, m_fileDiff, m_detailSashPos );
 }
 
 
-bool GIT_ADVANCED_DIALOG::showTextDiff( const wxString& aBefore, const wxString& aAfter )
+wxWindow* GIT_ADVANCED_DIALOG::buildChangesPage( wxWindow* aBook )
 {
-    auto readAll = []( const wxString& aFile ) -> std::string
-    {
-        if( aFile.IsEmpty() )
-            return std::string();
+    wxPanel*    panel = new wxPanel( aBook );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
-        std::ifstream in( aFile.fn_str(), std::ios::binary );
-        return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
-    };
+    // The commit controls above, and once a file is picked, its changes below.
+    m_changesSplitter = new wxSplitterWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                              wxSP_LIVE_UPDATE | wxSP_3DSASH );
+    m_changesSplitter->SetMinimumPaneSize( panel->FromDIP( 120 ) );
+    m_changesSplitter->SetSashGravity( 0.5 );
+    m_changesSashPos = panel->FromDIP( 260 );
 
-    std::string contentA = readAll( aBefore );
-    std::string contentB = readAll( aAfter );
+    m_changesPane = new GIT_COMMIT_PANE( m_changesSplitter, m_parent );
+    m_workingDiff = new GIT_FILE_DIFF_AREA( m_changesSplitter, m_parent );
 
-    if( KIGIT::TextLooksBinary( contentA ) || KIGIT::TextLooksBinary( contentB ) )
-    {
-        showFileDiffNote( _( "This is not a plain text file, so there is no comparison to show." ) );
-        return false;
-    }
+    m_changesSplitter->Initialize( m_changesPane );
+    m_workingDiff->Hide();
 
-    destroyDiffCanvases();
-    FillTextDiffControl( m_textDiff,
-                         KIGIT::BuildTextDiff( KIGIT::SplitTextLines( contentA ), KIGIT::SplitTextLines( contentB ) ) );
-    m_fileDiffNote->Hide();
-    m_canvasSplitter->Hide();
-    m_textDiff->Show();
-    return true;
+    sizer->Add( m_changesSplitter, 1, wxEXPAND | wxALL, 4 );
+    panel->SetSizer( sizer );
+
+    m_changesPane->SetFileSelectedHandler(
+            [this]( const wxString& aPath )
+            {
+                showWorkingDiff( aPath );
+            } );
+
+    return panel;
 }
 
 
-bool GIT_ADVANCED_DIALOG::showDrawingDiff( KICAD_DIFF::DOC_KIND aKind, const wxString& aBefore,
-                                           const wxString& aAfter )
+void GIT_ADVANCED_DIALOG::hideWorkingDiff()
 {
-    ensureDiffCanvases();
+    m_workingDiff->Clear();
+    unsplitKeepingSash( m_changesSplitter, m_workingDiff, m_changesSashPos );
+}
 
-    // The old documents come off the canvases before the new ones go on.
-    m_diffContext.reset();
 
-    KICAD_DIFF::DOCUMENT_DIFF diff;
-    WX_STRING_REPORTER        reporter;
-
-    m_diffContext = KICAD_DIFF::DispatchAttachDiffCanvases( m_parent->Kiway(), aKind, aBefore, aAfter,
-                                                            *m_beforeCanvas, *m_afterCanvas, diff, &reporter );
-
-    if( !m_diffContext )
+void GIT_ADVANCED_DIALOG::showWorkingDiff( const wxString& aPath )
+{
+    if( aPath.IsEmpty() || !m_parent->Prj().GetGitCommon()->GetRepo() )
     {
-        showFileDiffNote( reporter.HasMessage() ? reporter.GetMessages() : _( "Could not compare this file." ) );
-        return false;
+        hideWorkingDiff();
+        return;
     }
 
-    KICAD_DIFF::DIFF_COLOR_THEME theme;
-    KICAD_DIFF::DIFF_SCENE       scene = KICAD_DIFF::BuildScene( diff, theme );
-    scene.docKind = aKind;
+    m_workingDiff->ShowFile(
+            [&]( GIT_DIFF_WORKSPACE& aWorkspace, GIT_FILE_SIDES& aSides )
+            {
+                return MaterializeWorkingFile( m_parent, aWorkspace, aPath, aSides );
+            },
+            _( "Committed (HEAD)" ), _( "Working copy" ) );
 
-    // Both sides open on the same change. The user pans from there and the other side follows.
-    std::optional<BOX2I> focus = firstChangeBox( scene, aKind );
-    m_beforeCanvas->SetFocusBox( focus );
-    m_afterCanvas->SetFocusBox( focus );
-
-    KICAD_DIFF::SIDE_BY_SIDE_SCENES sides = KICAD_DIFF::SplitSceneBySide( scene );
-
-    m_beforeLabel->SetLabel( m_detailParent.IsEmpty() ? _( "Before: nothing" )
-                                                      : wxString::Format( _( "Before: %s" ), m_detailParent ) );
-    m_afterLabel->SetLabel( wxString::Format( _( "After: %s" ), m_detailHash ) );
-    m_beforeCanvas->SetScene( std::move( sides.reference ) );
-    m_afterCanvas->SetScene( std::move( sides.comparison ) );
-
-    m_fileDiffNote->Hide();
-    m_textDiff->Hide();
-    m_canvasSplitter->Show();
-    return true;
+    if( !m_changesSplitter->IsSplit() )
+        m_changesSplitter->SplitHorizontally( m_changesPane, m_workingDiff, m_changesSashPos );
 }
 
 

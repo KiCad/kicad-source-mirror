@@ -34,7 +34,6 @@
 #include <wx/timer.h>
 
 #include <dialog_shim.h>
-#include <diff_merge/diff_doc_kind.h>
 
 class EDA_BASE_FRAME;
 #include <git/git_editor_snapshot.h>
@@ -45,7 +44,7 @@ class KIGIT_COMMON;
 struct KIGIT_COMMIT_DETAIL;
 struct KIGIT_COMMIT_INFO;
 struct KIGIT_HISTORY_FILTER;
-class WIDGET_DIFF_CANVAS;
+class GIT_FILE_DIFF_AREA;
 class WX_TREEBOOK;
 class wxButton;
 class wxCheckBox;
@@ -58,20 +57,14 @@ class wxSearchCtrl;
 class wxSplitterWindow;
 class wxStaticBitmap;
 class wxStaticText;
-class wxStyledTextCtrl;
 class wxTextCtrl;
-
-namespace KICAD_DIFF
-{
-class DIFF_CANVAS_CONTEXT;
-}
 
 
 /**
  * The advanced Git window: a non-modal dialog with a top bar naming the repository and branch
  * and a sidebar of pages (History, Branches, Remotes, Stashes, Tags, Repository) over the live
- * repository. Committing, pushing and pulling stay in the docked Version Control panel. Branch,
- * tag, remote, stash and identity management happen here.
+ * repository. The Changes page carries the same commit controls as the docked Version Control
+ * panel, and branch, tag, remote, stash and identity management happen here.
  */
 class GIT_ADVANCED_DIALOG : public DIALOG_SHIM
 {
@@ -100,7 +93,6 @@ private:
     wxWindow*           buildHistoryPage( wxWindow* aBook );
     wxDataViewListCtrl* buildHistoryList( wxWindow* aParent );
     wxPanel*            buildCommitDetailPane( wxWindow* aParent );
-    wxPanel*            buildFileDiffArea( wxWindow* aParent );
 
     /// Fill the History list from the repository's recent commits, up to the current window.
     void populateHistory();
@@ -119,26 +111,16 @@ private:
     void fillCommitDetail( const KIGIT_COMMIT_DETAIL& aDetail );
     void clearCommitDetail();
 
-    /// Show what the selected commit did to aPath under the file list: the old and new drawing
-    /// side by side for a schematic or board, a line diff for a text file.
+    /// Show what the selected commit did to aPath under the file list, or hide that area.
     void showFileDiff( const wxString& aPath );
-    bool showTextDiff( const wxString& aBefore, const wxString& aAfter );
-    bool showDrawingDiff( KICAD_DIFF::DOC_KIND aKind, const wxString& aBefore, const wxString& aAfter );
     void hideFileDiff();
 
-    /// Put one message in the diff area instead of a comparison.
-    void showFileDiffNote( const wxString& aNote );
+    /// The Changes page: the docked panel's commit controls with the selected file's diff below.
+    wxWindow* buildChangesPage( wxWindow* aBook );
 
-    /// Open the area under the file list, at the height the user last gave it.
-    void showFileDiffArea();
-
-    /// The two drawing canvases exist only while a drawing is compared. Each holds a GAL
-    /// context, and a hidden one still paints over the text diff on macOS.
-    void ensureDiffCanvases();
-    void destroyDiffCanvases();
-
-    /// Give aFollower the view of aLead, so panning or zooming one moves both.
-    void followDiffCanvas( WIDGET_DIFF_CANVAS* aLead, WIDGET_DIFF_CANVAS* aFollower );
+    /// Show the working copy of aPath against its committed version, or hide that area.
+    void showWorkingDiff( const wxString& aPath );
+    void hideWorkingDiff();
 
     /// Append rows for aCommits starting at aFrom, without clearing, so growing the history
     /// window keeps the scroll position.
@@ -282,18 +264,14 @@ private:
     wxStaticText*     m_commitFileCount;
     wxStaticText*     m_commitAdded;
     wxStaticText*     m_commitRemoved;
-    wxSplitterWindow* m_detailSplitter;
-    wxListCtrl*       m_commitFiles;
+    wxSplitterWindow*   m_detailSplitter;
+    wxListCtrl*         m_commitFiles;
+    GIT_FILE_DIFF_AREA* m_fileDiff;
 
-    // What the commit did to the selected file, under its file list
-    wxPanel*            m_fileDiff;
-    wxStaticText*       m_fileDiffNote;
-    wxSplitterWindow*   m_canvasSplitter;
-    wxStaticText*       m_beforeLabel;
-    wxStaticText*       m_afterLabel;
-    WIDGET_DIFF_CANVAS* m_beforeCanvas;
-    WIDGET_DIFF_CANVAS* m_afterCanvas;
-    wxStyledTextCtrl*   m_textDiff;
+    // Changes page
+    wxSplitterWindow*   m_changesSplitter;
+    GIT_COMMIT_PANE*    m_changesPane;
+    GIT_FILE_DIFF_AREA* m_workingDiff;
 
     // The other pages
     wxListCtrl*   m_branchesList;
@@ -350,9 +328,8 @@ private:
     /// The first parent of the shown commit, which the diff area's before side names.
     wxString m_detailParent;
 
-    /// The documents the two canvases draw, held by the kiface that loaded them. Reset before
-    /// the canvases go.
-    std::unique_ptr<KICAD_DIFF::DIFF_CANVAS_CONTEXT> m_diffContext;
+    /// Where the user left the sash between the Changes page's list and its diff area.
+    int m_changesSashPos = 0;
 
     /// Waits for the user to pause typing in the search box before walking the history again.
     wxTimer m_historySearchTimer;

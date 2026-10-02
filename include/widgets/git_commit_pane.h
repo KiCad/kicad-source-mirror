@@ -21,6 +21,7 @@
 #define GIT_COMMIT_PANE_H
 
 #include <atomic>
+#include <functional>
 #include <memory>
 #include <thread>
 #include <set>
@@ -46,7 +47,14 @@ class GIT_COMMIT_PANE : public GIT_COMMIT_PANE_BASE
 {
 public:
     GIT_COMMIT_PANE( EDA_BASE_FRAME* aParent );
+
+    /// The same panel inside another window, such as the advanced window's Changes page. The
+    /// button that opens the advanced window is left out there.
+    GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame );
     ~GIT_COMMIT_PANE() override;
+
+    /// Called with the path of the file the user selects in the list, or empty when none is.
+    void SetFileSelectedHandler( std::function<void( const wxString& )> aHandler );
 
     /// Read the project's git status and repopulate the list.
     void RefreshFileList();
@@ -88,6 +96,9 @@ private:
 
     /// False, with a message, while a transfer is running or a merge waits to be finished.
     bool transferCanStart();
+
+    /// Put the file list beside the commit controls instead of above them, for a wide host.
+    void layoutWide();
 
     /// Clear the list and disable every control while version control is off.
     void showDisabledState();
@@ -180,6 +191,8 @@ private:
     /// On-disk identity of the open documents, taken before a pull so only the ones the merge
     /// rewrote are reloaded afterwards.
     EDITOR_SNAPSHOT m_docsBeforePull;
+
+    std::function<void( const wxString& )> m_fileSelectedHandler;
 
     /// Re-runs RefreshFileList once when it had to skip because another git operation held the
     /// action lock. The background fetch can hold it for a whole network round trip and does

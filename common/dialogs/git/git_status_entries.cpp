@@ -676,13 +676,8 @@ static void presentFileDiff( KIWAY& aKiway, KICAD_DIFF::DOC_KIND aKind, const wx
 
 void ShowGitFileDiff( EDA_BASE_FRAME* aFrame, const wxString& aRelativePath )
 {
-    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
-    git_repository*               repo = common->GetRepo();
-
-    if( !repo )
+    if( !aFrame->Prj().GetGitCommon()->GetRepo() )
         return;
-
-    KICAD_DIFF::DOC_KIND kind = KICAD_DIFF::DocKindFromExtension( aRelativePath );
 
     GIT_DIFF_WORKSPACE workspace;
 
@@ -692,44 +687,65 @@ void ShowGitFileDiff( EDA_BASE_FRAME* aFrame, const wxString& aRelativePath )
         return;
     }
 
-    wxString committed;
-    wxString workingFile;
-    bool     inHead = true;
+    GIT_FILE_SIDES sides;
+
+    if( !MaterializeWorkingFile( aFrame, workspace, aRelativePath, sides ) )
+    {
+        DisplayInfoMessage( aFrame, sides.error );
+        return;
+    }
+
+    presentFileDiff( aFrame->Kiway(), sides.kind, aRelativePath, sides.before, sides.after, _( "BASE (HEAD)" ),
+                     _( "WORKING (changes)" ), aFrame );
+}
+
+
+bool MaterializeWorkingFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aRelativePath,
+                             GIT_FILE_SIDES& aSides )
+{
+    std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
+
+    aSides.kind = KICAD_DIFF::DocKindFromExtension( aRelativePath );
+
+    bool inHead = true;
 
     {
-        // Hold the git action lock only while reading, then release it before the modal diff.
+        // Hold the git action lock only while reading, then release it before any modal dialog.
         std::unique_lock<std::mutex> lock = common->TryLockAction();
 
         if( !lock.owns_lock() )
         {
-            DisplayInfoMessage( aFrame, _( "Another git operation is in progress. Try again in a moment." ) );
-            return;
+            aSides.error = _( "Another git operation is in progress. Try again in a moment." );
+            return false;
         }
 
+        git_repository* repo = common->GetRepo();
+
+        if( !repo )
+            return false;
+
         GIT_STATUS_HANDLER handler( common.get() );
-        workingFile = handler.GetWorkingDirectory() + aRelativePath;
+        aSides.after = handler.GetWorkingDirectory() + aRelativePath;
 
         // A new file has no committed version, so that side stays empty and shows as added.
         if( common->IsPathInHead( aRelativePath ) )
-            committed = workspace.Materialize( repo, wxT( "HEAD" ), aRelativePath, kind );
+            aSides.before = aWorkspace.Materialize( repo, wxT( "HEAD" ), aRelativePath, aSides.kind );
         else
             inHead = false;
     }
 
-    if( inHead && committed.IsEmpty() )
+    if( inHead && aSides.before.IsEmpty() )
     {
-        DisplayInfoMessage( aFrame,
-                            wxString::Format( _( "Could not read the committed version of '%s'." ), aRelativePath ) );
-        return;
+        aSides.error = wxString::Format( _( "Could not read the committed version of '%s'." ), aRelativePath );
+        return false;
     }
 
     // A deleted file has no working copy, so an empty path makes the loader synthesize an empty
     // document instead of failing on a file that is gone.
-    if( !wxFileName::FileExists( workingFile ) )
-        workingFile.clear();
+    if( !wxFileName::FileExists( aSides.after ) )
+        aSides.after.clear();
 
-    presentFileDiff( aFrame->Kiway(), kind, aRelativePath, committed, workingFile, _( "Committed (HEAD)" ),
-                     _( "Working copy" ), aFrame );
+    return true;
 }
 
 
@@ -819,34 +835,31 @@ void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxW
         chosen = changedPaths[sel];
     }
 
-    wxString             before;
-    wxString             after;
-    wxString             error;
-    KICAD_DIFF::DOC_KIND kind;
+    GIT_FILE_SIDES sides;
 
-    if( !MaterializeCommitFile( aFrame, workspace, aCommitHash, chosen, &before, &after, &kind, &error ) )
+    if( !MaterializeCommitFile( aFrame, workspace, aCommitHash, chosen, sides ) )
     {
-        if( !error.IsEmpty() )
-            DisplayInfoMessage( diffParent, error );
+        if( !sides.error.IsEmpty() )
+            DisplayInfoMessage( diffParent, sides.error );
 
         return;
     }
 
-    presentFileDiff( aFrame->Kiway(), kind, chosen, before, after, wxString::Format( _( "Parent of %s" ), aCommitHash ),
-                     aCommitHash, diffParent );
+    presentFileDiff( aFrame->Kiway(), sides.kind, chosen, sides.before, sides.after,
+                     wxString::Format( _( "BASE (parent of %s)" ), aCommitHash ),
+                     wxString::Format( _( "WORKING (%s)" ), aCommitHash ), diffParent );
 }
 
 
 bool MaterializeCommitFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aCommitHash,
-                            const wxString& aRelativePath, wxString* aBefore, wxString* aAfter,
-                            KICAD_DIFF::DOC_KIND* aKind, wxString* aError )
+                            const wxString& aRelativePath, GIT_FILE_SIDES& aSides )
 {
     std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon();
     std::unique_lock<std::mutex>  lock = common->TryLockAction();
 
     if( !lock.owns_lock() )
     {
-        *aError = _( "Another git operation is in progress. Try again in a moment." );
+        aSides.error = _( "Another git operation is in progress. Try again in a moment." );
         return false;
     }
 
@@ -877,9 +890,7 @@ bool MaterializeCommitFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspa
         if( file.path != aRelativePath )
             continue;
 
-        *aKind = KICAD_DIFF::DocKindFromExtension( file.path );
-        aBefore->clear();
-        aAfter->clear();
+        aSides.kind = KICAD_DIFF::DocKindFromExtension( file.path );
 
         // Only the side that exists is written out.
         bool hasParent = file.status != KIGIT::FILE_CHANGE_STATUS::ADDED;
@@ -887,22 +898,22 @@ bool MaterializeCommitFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspa
 
         if( hasParent )
         {
-            *aBefore = aWorkspace.Materialize( repo, parentRef, file.oldPath.IsEmpty() ? file.path : file.oldPath,
-                                               *aKind );
+            wxString parentPath = file.oldPath.IsEmpty() ? file.path : file.oldPath;
+            aSides.before = aWorkspace.Materialize( repo, parentRef, parentPath, aSides.kind );
         }
 
         if( hasCommit )
-            *aAfter = aWorkspace.Materialize( repo, aCommitHash, file.path, *aKind );
+            aSides.after = aWorkspace.Materialize( repo, aCommitHash, file.path, aSides.kind );
 
-        if( ( hasParent && aBefore->IsEmpty() ) || ( hasCommit && aAfter->IsEmpty() ) )
+        if( ( hasParent && aSides.before.IsEmpty() ) || ( hasCommit && aSides.after.IsEmpty() ) )
         {
-            *aError = _( "Could not read this commit's file contents." );
+            aSides.error = _( "Could not read this commit's file contents." );
             return false;
         }
 
         return true;
     }
 
-    *aError = wxString::Format( _( "This commit did not change '%s'." ), aRelativePath );
+    aSides.error = wxString::Format( _( "This commit did not change '%s'." ), aRelativePath );
     return false;
 }

@@ -256,6 +256,7 @@ enum class BITMAPS : unsigned int
     git_fetch,
     git_pull,
     git_push,
+    git_changes,
     grid,
     grid_override,
     grid_select,

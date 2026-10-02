@@ -100,8 +100,14 @@ static bool reserveRecoveryFile( const wxString& aPreferredPath, wxString& aPath
 
 
 GIT_COMMIT_PANE::GIT_COMMIT_PANE( EDA_BASE_FRAME* aParent ) :
+        GIT_COMMIT_PANE( aParent, aParent )
+{
+}
+
+
+GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
         GIT_COMMIT_PANE_BASE( aParent ),
-        m_frame( aParent ),
+        m_frame( aFrame ),
         m_hasUnpushedCommits( false ),
         m_hasRemote( false ),
         m_headDetached( false ),
@@ -123,6 +129,12 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( EDA_BASE_FRAME* aParent ) :
     m_checklist->SetToolTip( _( "Double click a file to see what changed in it. Right click for more." ) );
     m_checklist->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &GIT_COMMIT_PANE::onFileActivated, this );
     m_checklist->Bind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, &GIT_COMMIT_PANE::onChecklistContextMenu, this );
+    m_checklist->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED,
+                       [this]( wxDataViewEvent& )
+                       {
+                           if( m_fileSelectedHandler )
+                               m_fileSelectedHandler( m_checklist->GetItemPath( m_checklist->GetSelection() ) );
+                       } );
     Bind( wxEVT_SIZE, &GIT_COMMIT_PANE::onSize, this );
     Bind( wxEVT_IDLE, &GIT_COMMIT_PANE::onIdle, this );
 
@@ -135,7 +147,43 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( EDA_BASE_FRAME* aParent ) :
             },
             m_refreshRetryTimer.GetId() );
 
+    // Inside the advanced window the button would only raise the window it is in, and the
+    // page is wide enough for the list and the message side by side.
+    if( aParent != aFrame )
+    {
+        m_advancedButton->Hide();
+        layoutWide();
+    }
+
     RefreshFileList();
+}
+
+
+void GIT_COMMIT_PANE::layoutWide()
+{
+    wxSizer* column = GetSizer();
+    column->Detach( m_emptyLabel );
+    column->Detach( m_checklist );
+    column->GetItem( m_message )->SetProportion( 1 );
+    column->SetMinSize( FromDIP( wxSize( 280, -1 ) ) );
+
+    wxBoxSizer* files = new wxBoxSizer( wxVERTICAL );
+    files->Add( m_emptyLabel, 0, wxALL, 8 );
+    files->Add( m_checklist, 1, wxALL | wxEXPAND, 4 );
+
+    wxBoxSizer* row = new wxBoxSizer( wxHORIZONTAL );
+    row->Add( files, 1, wxEXPAND );
+    row->Add( column, 0, wxEXPAND );
+
+    // The old sizer lives on as the right column.
+    SetSizer( row, false );
+    Layout();
+}
+
+
+void GIT_COMMIT_PANE::SetFileSelectedHandler( std::function<void( const wxString& )> aHandler )
+{
+    m_fileSelectedHandler = std::move( aHandler );
 }
 
 

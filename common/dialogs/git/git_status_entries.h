@@ -140,15 +140,29 @@ void ShowGitFileDiff( EDA_BASE_FRAME* aFrame, const wxString& aRelativePath );
 void ShowGitCommitDiff( EDA_BASE_FRAME* aFrame, const wxString& aCommitHash, wxWindow* aParentWindow = nullptr,
                         const wxString& aRelativePath = wxEmptyString );
 
+/// The two sides of one file, written out for a comparison.
+struct GIT_FILE_SIDES
+{
+    wxString             before; ///< Empty when the file did not exist on that side.
+    wxString             after;
+    KICAD_DIFF::DOC_KIND kind = KICAD_DIFF::DOC_KIND::UNKNOWN;
+    wxString             error;  ///< Why the sides could not be written, when they could not.
+};
+
 /**
  * Write both sides of one file a commit changed into aWorkspace, the parent's version and the
- * commit's. A side the file does not exist on comes back as an empty path.
- *
- * @return false, with aError set, when the repository is busy, the commit did not change the
- *         file, or a side could not be read.
+ * commit's. False, with the error set, when the repository is busy, the commit did not change
+ * the file, or a side could not be read.
  */
 bool MaterializeCommitFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aCommitHash,
-                            const wxString& aRelativePath, wxString* aBefore, wxString* aAfter,
-                            KICAD_DIFF::DOC_KIND* aKind, wxString* aError );
+                            const wxString& aRelativePath, GIT_FILE_SIDES& aSides );
+
+/**
+ * Write the committed version of a file into aWorkspace and name its working copy beside it.
+ * False, with the error set, when the repository is busy or the committed side could not be
+ * read.
+ */
+bool MaterializeWorkingFile( EDA_BASE_FRAME* aFrame, GIT_DIFF_WORKSPACE& aWorkspace, const wxString& aRelativePath,
+                             GIT_FILE_SIDES& aSides );
 
 #endif // GIT_STATUS_ENTRIES_H

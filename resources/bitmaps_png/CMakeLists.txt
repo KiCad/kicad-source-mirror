@@ -71,6 +71,7 @@ set( BMAPS_SMALL
     git_add
     git_branches
     git_changed_ahead
+    git_changes
     git_conflict
     git_delete
     git_fetch
