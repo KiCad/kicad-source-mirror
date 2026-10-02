@@ -29,6 +29,7 @@ set( QA_GERBVIEW_SRCS
 
     # Gerbview-specific tests
     test_step_and_repeat.cpp
+    test_export_clear_polarity.cpp
 
     # Shared between programs, but dependent on the BIU
     ${CMAKE_SOURCE_DIR}/qa/tests/common/test_format_units.cpp
