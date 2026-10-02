@@ -27,6 +27,7 @@ set( QA_GERBVIEW_SRCS
 
     # Gerbview-specific tests
     test_step_and_repeat.cpp
+    test_export_clear_polarity.cpp
 )
 
 if( WIN32 )

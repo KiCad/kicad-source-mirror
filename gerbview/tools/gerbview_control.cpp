@@ -142,7 +142,7 @@ int GERBVIEW_CONTROL::ExportToPcbnew( const TOOL_EVENT& aEvent )
 
     m_frame->SetMruPath( fileName.GetPath() );
 
-    GBR_TO_PCB_EXPORTER gbr_exporter( m_frame, fileName.GetFullPath() );
+    GBR_TO_PCB_EXPORTER gbr_exporter( m_frame->GetGerberLayout()->GetImagesList(), m_frame, fileName.GetFullPath() );
 
     gbr_exporter.ExportPcb( layerdlg.GetLayersLookUpTable(), layerdlg.GetCopperLayersCount() );
 

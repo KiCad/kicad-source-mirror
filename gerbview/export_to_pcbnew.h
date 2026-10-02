@@ -50,8 +50,18 @@ struct EXPORT_VIA
 };
 
 
+struct CLEAR_SHAPE
+{
+    size_t         m_Index;
+    BOX2I          m_BBox;
+    SHAPE_POLY_SET m_Shape;
+};
+
+
 class GERBER_DRAW_ITEM;
-class GERBVIEW_FRAME;
+class GERBER_FILE_IMAGE;
+class GERBER_FILE_IMAGE_LIST;
+class wxWindow;
 
 
 /**
@@ -60,7 +70,7 @@ class GERBVIEW_FRAME;
 class GBR_TO_PCB_EXPORTER
 {
 public:
-    GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME* aFrame, const wxString& aFileName );
+    GBR_TO_PCB_EXPORTER( GERBER_FILE_IMAGE_LIST* aImages, wxWindow* aParent, const wxString& aFileName );
     ~GBR_TO_PCB_EXPORTER();
 
     /**
@@ -96,9 +106,20 @@ private:
      * Write a non copper line or arc to the board file.
      *
      * @param aGbrItem is the Gerber item (line, arc) to export.
+     * @param aIndex is the position of the item in its image's item list.
      * @param aLayer is the technical layer to use.
      */
-    void export_non_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer );
+    void export_non_copper_item( const GERBER_DRAW_ITEM* aGbrItem, size_t aIndex, int aLayer );
+
+    /**
+     * Convert every clear polarity item of an image to a polygon, in file order.
+     */
+    void collect_clear_shapes( const GERBER_FILE_IMAGE* aImage );
+
+    /**
+     * Write a dark region to the board file, minus the clear items drawn after it.
+     */
+    void write_trimmed_polygon( const GERBER_DRAW_ITEM* aGbrItem, size_t aIndex, int aLayer );
 
     /**
      * Write a non copper arc to the board file.
@@ -149,9 +170,10 @@ private:
      * Write a track (or via) to the board file.
      *
      * @param aGbrItem is the Gerber item (line, arc, flashed) to export.
+     * @param aIndex is the position of the item in its image's item list.
      * @param aLayer is the copper layer to use.
      */
-    void export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer );
+    void export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, size_t aIndex, int aLayer );
 
     /**
      * Write a synthetic pad to the board file.
@@ -203,10 +225,12 @@ private:
     }
 
 private:
-    GERBVIEW_FRAME*          m_gerbview_frame;   // the main gerber frame
+    GERBER_FILE_IMAGE_LIST*  m_images;           // the loaded Gerber layers
+    wxWindow*                m_parent;           // parent for error dialogs
     wxString                 m_pcb_file_name;    // BOARD file to write to
     FILE*                    m_fp;               // the board file
     int                      m_pcbCopperLayersCount;
     std::vector<EXPORT_VIA>  m_vias;
     std::vector<EXPORT_SLOT> m_slots;
+    std::vector<CLEAR_SHAPE> m_clearShapes;
 };

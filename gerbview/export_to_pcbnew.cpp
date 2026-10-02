@@ -27,7 +27,6 @@
 #include <lset.h>
 #include <macros.h>
 #include <trigo.h>
-#include <gerbview_frame.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <build_version.h>
@@ -37,9 +36,11 @@
 #include <convert_basic_shapes_to_polygon.h>
 
 
-GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBVIEW_FRAME* aFrame, const wxString& aFileName )
+GBR_TO_PCB_EXPORTER::GBR_TO_PCB_EXPORTER( GERBER_FILE_IMAGE_LIST* aImages, wxWindow* aParent,
+                                          const wxString& aFileName )
 {
-    m_gerbview_frame    = aFrame;
+    m_images = aImages;
+    m_parent = aParent;
     m_pcb_file_name     = aFileName;
     m_fp                = nullptr;
     m_pcbCopperLayersCount = 2;
@@ -59,7 +60,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
     {
         wxString msg;
         msg.Printf( _( "Failed to create file '%s'." ), m_pcb_file_name );
-        DisplayError( m_gerbview_frame, msg );
+        DisplayError( m_parent, msg );
         return false;
     }
 
@@ -67,8 +68,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
 
     writePcbHeader( aLayerLookUpTable );
 
-    // create an image of gerber data
-    GERBER_FILE_IMAGE_LIST* images = m_gerbview_frame->GetGerberLayout()->GetImagesList();
+    GERBER_FILE_IMAGE_LIST* images = m_images;
 
     // First collect all the holes.  We'll use these to generate pads, vias, etc.
     for( unsigned layer = 0; layer < images->ImagesMaxCount(); ++layer )
@@ -107,8 +107,12 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
         if( !IsPcbLayer( pcb_layer_number ) || IsCopperLayer( pcb_layer_number ) )
             continue;
 
-        for( GERBER_DRAW_ITEM* gerb_item : gerber->GetItems() )
-            export_non_copper_item( gerb_item, pcb_layer_number );
+        collect_clear_shapes( gerber );
+
+        const GERBER_DRAW_ITEMS& items = gerber->GetItems();
+
+        for( size_t ii = 0; ii < items.size(); ++ii )
+            export_non_copper_item( items[ii], ii, pcb_layer_number );
     }
 
     // Copper layers
@@ -124,8 +128,12 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
         if( !IsCopperLayer( pcb_layer_number ) )
             continue;
 
-        for( GERBER_DRAW_ITEM* gerb_item : gerber->GetItems() )
-            export_copper_item( gerb_item, pcb_layer_number );
+        collect_clear_shapes( gerber );
+
+        const GERBER_DRAW_ITEMS& items = gerber->GetItems();
+
+        for( size_t ii = 0; ii < items.size(); ++ii )
+            export_copper_item( items[ii], ii, pcb_layer_number );
     }
 
     // Now write out the holes we collected earlier as vias
@@ -143,7 +151,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( const int* aLayerLookUpTable, int aCopperLa
 }
 
 
-void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
+void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrItem, size_t aIndex, int aLayer )
 {
     if( aGbrItem->GetLayerPolarity() )
         return;
@@ -161,9 +169,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrIt
 
     switch( aGbrItem->m_ShapeType )
     {
-    case GBR_POLYGON:
-        writePcbPolygon( aGbrItem->m_ShapeAsPolygon, aLayer );
-        break;
+    case GBR_POLYGON: write_trimmed_polygon( aGbrItem, aIndex, aLayer ); break;
 
     case GBR_SPOT_CIRCLE:
     {
@@ -351,7 +357,7 @@ void GBR_TO_PCB_EXPORTER::export_slot( const EXPORT_SLOT& aSlot )
 }
 
 
-void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, int aLayer )
+void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, size_t aIndex, int aLayer )
 {
     if( aGbrItem->GetLayerPolarity() )
         return;
@@ -377,7 +383,7 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, 
         // The current way is use a polygon, as the zone export
         // is experimental and only for tests.
 #if 1
-        writePcbPolygon( aGbrItem->m_ShapeAsPolygon, aLayer );
+        write_trimmed_polygon( aGbrItem, aIndex, aLayer );
 #else
         // Only for tests:
         writePcbZoneItem( aGbrItem, aLayer );
@@ -580,6 +586,114 @@ void GBR_TO_PCB_EXPORTER::writePcbHeader( const int* aLayerLookUpTable )
     }
 
     fprintf( m_fp, "\t)\n\n" );
+}
+
+
+void GBR_TO_PCB_EXPORTER::collect_clear_shapes( const GERBER_FILE_IMAGE* aImage )
+{
+    const int maxError = gerbIUScale.mmToIU( 0.005 );
+
+    m_clearShapes.clear();
+
+    const GERBER_DRAW_ITEMS& items = aImage->GetItems();
+
+    for( size_t ii = 0; ii < items.size(); ++ii )
+    {
+        const GERBER_DRAW_ITEM* item = items[ii];
+
+        if( !item->GetLayerPolarity() )
+            continue;
+
+        D_CODE*        code = item->GetDcodeDescr();
+        SHAPE_POLY_SET shape;
+
+        switch( item->m_ShapeType )
+        {
+        case GBR_POLYGON: shape = item->m_ShapeAsPolygon; break;
+
+        case GBR_SEGMENT:
+            if( code && code->m_ApertType == APT_RECT )
+            {
+                item->ConvertSegmentToPolygon( &shape );
+            }
+            else
+            {
+                TransformOvalToPolygon( shape, item->m_Start, item->m_End, item->m_Size.x, maxError, ERROR_OUTSIDE );
+            }
+
+            break;
+
+        case GBR_ARC:
+        {
+            VECTOR2I centre = item->m_ArcCentre;
+
+            if( item->m_Start == item->m_End )
+            {
+                TransformRingToPolygon( shape, centre, KiROUND( item->m_Start.Distance( centre ) ), item->m_Size.x,
+                                        maxError, ERROR_OUTSIDE );
+                break;
+            }
+
+            double a = atan2( (double) ( item->m_Start.y - centre.y ), (double) ( item->m_Start.x - centre.x ) );
+            double b = atan2( (double) ( item->m_End.y - centre.y ), (double) ( item->m_End.x - centre.x ) );
+
+            if( a > b )
+                b += 2 * M_PI;
+
+            VECTOR2I mid = GetRotated( item->m_Start, centre, -EDA_ANGLE( ( b - a ) / 2, RADIANS_T ) );
+
+            TransformArcToPolygon( shape, item->m_Start, mid, item->m_End, item->m_Size.x, maxError, ERROR_OUTSIDE );
+            break;
+        }
+
+        case GBR_CIRCLE:
+            TransformRingToPolygon( shape, item->m_Start, KiROUND( item->m_Start.Distance( item->m_End ) ),
+                                    item->m_Size.x, maxError, ERROR_OUTSIDE );
+            break;
+
+        default:
+            if( code )
+            {
+                code->ConvertShapeToPolygon( item );
+                shape = code->m_Polygon;
+                shape.Move( item->m_Start );
+            }
+
+            break;
+        }
+
+        if( shape.IsEmpty() )
+            continue;
+
+        BOX2I bbox = shape.BBox();
+        m_clearShapes.push_back( { ii, bbox, std::move( shape ) } );
+    }
+}
+
+
+void GBR_TO_PCB_EXPORTER::write_trimmed_polygon( const GERBER_DRAW_ITEM* aGbrItem, size_t aIndex, int aLayer )
+{
+    SHAPE_POLY_SET polygon = aGbrItem->m_ShapeAsPolygon;
+    BOX2I          bbox = polygon.BBox();
+    SHAPE_POLY_SET clearMask;
+
+    for( const CLEAR_SHAPE& clear : m_clearShapes )
+    {
+        if( clear.m_Index > aIndex && clear.m_BBox.Intersects( bbox ) )
+            clearMask.Append( clear.m_Shape );
+    }
+
+    if( clearMask.IsEmpty() )
+    {
+        writePcbPolygon( polygon, aLayer );
+        return;
+    }
+
+    polygon.BooleanSubtract( clearMask );
+    polygon.Fracture();
+
+    for( int ii = 0; ii < polygon.OutlineCount(); ++ii )
+        writePcbPolygon( SHAPE_POLY_SET( polygon.COutline( ii ) ), aLayer );
 }
 
 
