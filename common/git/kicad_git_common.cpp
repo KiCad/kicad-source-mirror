@@ -1337,27 +1337,31 @@ std::vector<KIGIT_TAG_INFO> KIGIT_COMMON::GetTags() const
 
     for( size_t i = 0; i < tagNames.count; ++i )
     {
-        KIGIT_TAG_INFO info;
-        info.name = wxString::FromUTF8( tagNames.strings[i] );
+        wxString         tagName = wxString::FromUTF8( tagNames.strings[i] );
+        KIGIT_TAG_DETAIL detail = GetTagDetail( tagName );
+        KIGIT_TAG_INFO   info;
+        info.name = tagName;
 
-        // Peel to the commit so lightweight and annotated tags resolve the same way.
-        git_object* target = nullptr;
-        wxString    spec = info.name + wxT( "^{commit}" );
-
-        if( git_revparse_single( &target, m_repo, spec.utf8_string().c_str() ) == GIT_OK )
+        // A tag on a tree or blob has no commit to show, but it is still a tag.
+        if( detail.found )
         {
-            KIGIT::GitObjectPtr targetPtr( target );
-
-            char shortHash[13] = { 0 };
-            git_oid_tostr( shortHash, sizeof( shortHash ), git_object_id( target ) );
-            info.hash = wxString::FromUTF8( shortHash );
-
-            if( const char* summary = git_commit_summary( reinterpret_cast<git_commit*>( target ) ) )
-                info.summary = wxString::FromUTF8( summary );
+            info.hash = detail.hash;
+            info.summary = detail.message.BeforeFirst( '\n' );
+            info.when = detail.when;
         }
 
         tags.push_back( info );
     }
+
+    // Newest first, as the History page lists commits. A tag with no date goes last.
+    std::stable_sort( tags.begin(), tags.end(),
+                      []( const KIGIT_TAG_INFO& a, const KIGIT_TAG_INFO& b )
+                      {
+                          if( !a.when.IsValid() || !b.when.IsValid() )
+                              return a.when.IsValid();
+
+                          return a.when > b.when;
+                      } );
 
     return tags;
 }
@@ -1461,9 +1465,72 @@ bool KIGIT_COMMON::StashDrop( size_t aIndex )
 }
 
 
-bool KIGIT_COMMON::CreateTag( const wxString& aName )
+bool KIGIT_COMMON::CreateTag( const wxString& aName, const wxString& aMessage )
 {
-    return GetGitBackend()->CreateTag( m_repo, aName );
+    return GetGitBackend()->CreateTag( m_repo, aName, aMessage );
+}
+
+
+KIGIT_TAG_DETAIL KIGIT_COMMON::GetTagDetail( const wxString& aName ) const
+{
+    KIGIT_TAG_DETAIL detail;
+
+    if( !m_repo )
+        return detail;
+
+    git_object* obj = nullptr;
+    wxString    spec = wxS( "refs/tags/" ) + aName;
+
+    if( git_revparse_single( &obj, m_repo, spec.utf8_string().c_str() ) != GIT_OK )
+        return detail;
+
+    KIGIT::GitObjectPtr objPtr( obj );
+
+    // An annotated tag is its own object on the way to the commit, with a message and a tagger
+    // of its own.
+    git_object* peeled = nullptr;
+
+    if( git_object_peel( &peeled, obj, GIT_OBJECT_COMMIT ) != GIT_OK )
+        return detail;
+
+    KIGIT::GitObjectPtr peeledPtr( peeled );
+    git_commit*         commit = reinterpret_cast<git_commit*>( peeled );
+
+    detail.found = true;
+    detail.name = aName;
+    detail.hash = shortHashOf( git_commit_id( commit ) );
+
+    const char*          message = nullptr;
+    const git_signature* who = nullptr;
+
+    if( git_object_type( obj ) == GIT_OBJECT_TAG )
+    {
+        git_tag* tag = reinterpret_cast<git_tag*>( obj );
+        message = git_tag_message( tag );
+        who = git_tag_tagger( tag );
+    }
+
+    if( !message )
+        message = git_commit_message( commit );
+
+    bool annotated = who != nullptr;
+
+    if( !who )
+        who = git_commit_author( commit );
+
+    if( message )
+        detail.message = wxString::FromUTF8( message );
+
+    detail.message.Trim();
+
+    if( who )
+    {
+        detail.author = wxString::FromUTF8( who->name );
+        detail.email = wxString::FromUTF8( who->email );
+        detail.when = wxDateTime( static_cast<time_t>( annotated ? who->when.time : git_commit_time( commit ) ) );
+    }
+
+    return detail;
 }
 
 

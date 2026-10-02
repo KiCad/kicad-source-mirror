@@ -86,7 +86,7 @@ public:
     bool StashPop( git_repository* aRepo, size_t aIndex ) override;
     bool StashDrop( git_repository* aRepo, size_t aIndex ) override;
 
-    bool CreateTag( git_repository* aRepo, const wxString& aName ) override;
+    bool CreateTag( git_repository* aRepo, const wxString& aName, const wxString& aMessage ) override;
     bool DeleteTag( git_repository* aRepo, const wxString& aName ) override;
     bool CheckoutTag( git_repository* aRepo, const wxString& aName ) override;
 

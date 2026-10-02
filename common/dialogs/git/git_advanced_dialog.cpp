@@ -291,29 +291,6 @@ private:
 };
 
 
-// The stock wxListCtrl keeps these pages looking like the rest of KiCad.
-struct LIST_PAGE
-{
-    wxPanel*    panel;
-    wxListCtrl* list;
-    wxBoxSizer* sizer;
-};
-
-
-LIST_PAGE makeListPage( wxWindow* aBook )
-{
-    LIST_PAGE page;
-    page.panel = new wxPanel( aBook );
-    page.sizer = new wxBoxSizer( wxVERTICAL );
-
-    page.list = new wxListCtrl( page.panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL );
-
-    page.sizer->Add( page.list, 1, wxEXPAND | wxALL, 4 );
-    page.panel->SetSizer( page.sizer );
-    return page;
-}
-
-
 wxString joinNames( const std::vector<wxString>& aNames )
 {
     wxString joined;
@@ -359,19 +336,6 @@ wxString fileStatusLabel( KIGIT::FILE_CHANGE_STATUS aStatus )
     case KIGIT::FILE_CHANGE_STATUS::TYPECHANGE: return _( "type changed" );
     default:                                    return _( "modified" );
     }
-}
-
-
-wxWindow* makeTagsPage( wxWindow* aBook, wxListCtrl** aOutList )
-{
-    LIST_PAGE page = makeListPage( aBook );
-
-    page.list->AppendColumn( _( "Tag" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 90 ) );
-    page.list->AppendColumn( _( "Commit" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 90 ) );
-    page.list->AppendColumn( _( "Description" ), wxLIST_FORMAT_LEFT, page.list->FromDIP( 330 ) );
-
-    *aOutList = page.list;
-    return page.panel;
 }
 
 
@@ -467,7 +431,15 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
         m_stashCommit( nullptr ),
         m_stashMessage( nullptr ),
         m_stashFiles( nullptr ),
+        m_tagsSplitter( nullptr ),
         m_tagsList( nullptr ),
+        m_tagCount( nullptr ),
+        m_tagDetail( nullptr ),
+        m_tagTitle( nullptr ),
+        m_tagCommit( nullptr ),
+        m_tagAuthor( nullptr ),
+        m_tagWhen( nullptr ),
+        m_tagMessage( nullptr ),
         m_repoUserName( nullptr ),
         m_repoUserEmail( nullptr ),
         m_repoRemoteUrl( nullptr )
@@ -545,20 +517,12 @@ GIT_ADVANCED_DIALOG::GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PA
                                    } } } );
     m_book->AddPage( stashesPage, _( "Stashes" ), false, 4 );
 
-    wxWindow* tagsPage = makeTagsPage( m_book, &m_tagsList );
-    addButtonRow( tagsPage, { { _( "New Tag..." ),
+    // Creating a tag must work with none to select, so it lives outside the detail pane.
+    wxWindow* tagsPage = buildTagsPage( m_book );
+    addButtonRow( tagsPage, { { _( "Create Tag..." ),
                                 [this]()
                                 {
                                     onNewTag();
-                                } },
-                              { _( "Check Out" ),
-                                [this]()
-                                {
-                                    onCheckoutTag();
-                                } },
-                              { _( "Delete" ), [this]()
-                                {
-                                    onDeleteTag();
                                 } } } );
     m_book->AddPage( tagsPage, _( "Tags" ), false, 5 );
 
@@ -2151,14 +2115,178 @@ void GIT_ADVANCED_DIALOG::populateTags()
         return;
 
     // The caller holds the git action lock.
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    wxString                      selected = selectedText( m_tagsList, 0 );
+    long                          selectRow = wxNOT_FOUND;
+
+    m_fillingTags = true;
     m_tagsList->DeleteAllItems();
 
-    for( const KIGIT_TAG_INFO& t : m_parent->Prj().GetGitCommon()->GetTags() )
+    for( const KIGIT_TAG_INFO& t : common->GetTags() )
     {
         long idx = m_tagsList->InsertItem( m_tagsList->GetItemCount(), t.name );
         m_tagsList->SetItem( idx, 1, t.hash );
-        m_tagsList->SetItem( idx, 2, t.summary );
+        m_tagsList->SetItem( idx, 2, relativeDate( t.when ) );
+
+        if( t.name == selected || ( selected.IsEmpty() && idx == 0 ) )
+            selectRow = idx;
     }
+
+    int shown = m_tagsList->GetItemCount();
+    m_tagCount->SetLabel( shown == 1 ? _( "1 tag" ) : wxString::Format( _( "%d tags" ), shown ) );
+
+    if( selectRow != wxNOT_FOUND )
+    {
+        m_tagsList->SetItemState( selectRow, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+        fillTagDetail( common->GetTagDetail( m_tagsList->GetItemText( selectRow, 0 ) ) );
+    }
+    else
+    {
+        hideTagDetail();
+    }
+
+    m_fillingTags = false;
+}
+
+
+wxWindow* GIT_ADVANCED_DIALOG::buildTagsPage( wxWindow* aBook )
+{
+    wxPanel*    panel = new wxPanel( aBook );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    m_tagsSplitter = new wxSplitterWindow( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                           wxSP_LIVE_UPDATE | wxSP_3DSASH );
+    m_tagsSplitter->SetMinimumPaneSize( panel->FromDIP( 200 ) );
+    m_tagsSplitter->SetSashGravity( 0.6 );
+    m_tagSashPos = panel->FromDIP( 460 );
+
+    wxPanel*    listPanel = new wxPanel( m_tagsSplitter );
+    wxBoxSizer* listSizer = new wxBoxSizer( wxVERTICAL );
+
+    m_tagsList = new wxListCtrl( listPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL );
+    m_tagsList->AppendColumn( _( "Tag" ), wxLIST_FORMAT_LEFT, listPanel->FromDIP( 220 ) );
+    m_tagsList->AppendColumn( _( "Commit" ), wxLIST_FORMAT_LEFT, listPanel->FromDIP( 100 ) );
+    m_tagsList->AppendColumn( _( "Date" ), wxLIST_FORMAT_LEFT, listPanel->FromDIP( 110 ) );
+
+    listSizer->Add( m_tagsList, 1, wxEXPAND );
+    listPanel->SetSizer( listSizer );
+
+    m_tagDetail = buildTagDetailPane( m_tagsSplitter );
+
+    // The detail pane appears once a tag is selected.
+    m_tagsSplitter->Initialize( listPanel );
+    m_tagDetail->Hide();
+    sizer->Add( m_tagsSplitter, 1, wxEXPAND | wxALL, 4 );
+
+    // The count runs under both panes, as a status bar would.
+    m_tagCount = new wxStaticText( panel, wxID_ANY, wxEmptyString );
+    sizer->Add( m_tagCount, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 8 );
+    panel->SetSizer( sizer );
+
+    m_tagsList->Bind( wxEVT_LIST_ITEM_SELECTED,
+                      [this]( wxListEvent& aEvent )
+                      {
+                          if( !m_fillingTags )
+                              showTagDetail( m_tagsList->GetItemText( aEvent.GetIndex(), 0 ) );
+                      } );
+
+    return panel;
+}
+
+
+wxPanel* GIT_ADVANCED_DIALOG::buildTagDetailPane( wxWindow* aParent )
+{
+    wxPanel*    detail = new wxPanel( aParent );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+
+    m_tagTitle = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_tagTitle->SetFont( m_tagTitle->GetFont().Bold() );
+    m_tagCommit = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_tagAuthor = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_tagWhen = new wxStaticText( detail, wxID_ANY, wxEmptyString );
+    m_tagMessage = new wxTextCtrl( detail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                   wxTE_MULTILINE | wxTE_READONLY );
+    m_tagMessage->SetMinSize( detail->FromDIP( wxSize( -1, 90 ) ) );
+
+    wxButton* checkout = new wxButton( detail, wxID_ANY, _( "Check Out" ) );
+    wxButton* remove = new wxButton( detail, wxID_ANY, _( "Delete Tag" ) );
+    markDestructive( remove );
+
+    wxBoxSizer* buttons = new wxBoxSizer( wxHORIZONTAL );
+    buttons->AddStretchSpacer();
+    buttons->Add( checkout, 0, wxRIGHT, 4 );
+    buttons->Add( remove, 0 );
+
+    sizer->Add( m_tagTitle, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_tagCommit, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_tagAuthor, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 4 );
+    sizer->Add( m_tagWhen, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 4 );
+    sizer->Add( new wxStaticText( detail, wxID_ANY, _( "Message:" ) ), 0, wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( m_tagMessage, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 8 );
+    sizer->Add( buttons, 0, wxEXPAND | wxALL, 8 );
+    detail->SetSizer( sizer );
+
+    checkout->Bind( wxEVT_BUTTON,
+                    [this]( wxCommandEvent& )
+                    {
+                        onCheckoutTag();
+                    } );
+    remove->Bind( wxEVT_BUTTON,
+                  [this]( wxCommandEvent& )
+                  {
+                      onDeleteTag();
+                  } );
+
+    return detail;
+}
+
+
+void GIT_ADVANCED_DIALOG::showTagDetail( const wxString& aTag )
+{
+    if( aTag.IsEmpty() )
+    {
+        hideTagDetail();
+        return;
+    }
+
+    std::shared_ptr<KIGIT_COMMON> common = m_parent->Prj().GetGitCommon();
+    std::unique_lock<std::mutex>  lock = common->TryLockAction();
+
+    // The reload keeps the selection and fills the pane then.
+    if( !lock.owns_lock() )
+    {
+        m_reloadRetryTimer.Start( 1000, wxTIMER_ONE_SHOT );
+        return;
+    }
+
+    fillTagDetail( common->GetTagDetail( aTag ) );
+}
+
+
+void GIT_ADVANCED_DIALOG::fillTagDetail( const KIGIT_TAG_DETAIL& aDetail )
+{
+    if( !aDetail.found )
+    {
+        hideTagDetail();
+        return;
+    }
+
+    m_tagTitle->SetLabel( wxString::Format( _( "Tag: %s" ), aDetail.name ) );
+    m_tagCommit->SetLabel( wxString::Format( _( "Commit: %s" ), aDetail.hash ) );
+    m_tagAuthor->SetLabel( wxString::Format( _( "Author: %s <%s>" ), aDetail.author, aDetail.email ) );
+    m_tagWhen->SetLabel( wxString::Format( _( "Date: %s" ), relativeDate( aDetail.when ) ) );
+    m_tagMessage->ChangeValue( aDetail.message );
+
+    if( !m_tagsSplitter->IsSplit() )
+        m_tagsSplitter->SplitVertically( m_tagsList->GetParent(), m_tagDetail, m_tagSashPos );
+
+    m_tagDetail->Layout();
+}
+
+
+void GIT_ADVANCED_DIALOG::hideTagDetail()
+{
+    unsplitKeepingSash( m_tagsSplitter, m_tagDetail, m_tagSashPos );
 }
 
 
@@ -3118,15 +3246,23 @@ void GIT_ADVANCED_DIALOG::onStashDrop()
 
 void GIT_ADVANCED_DIALOG::onNewTag()
 {
-    wxString name = wxGetTextFromUser( _( "New tag name:" ), _( "New Tag" ), wxEmptyString, this );
+    wxString name = wxGetTextFromUser( _( "New tag name:" ), _( "Create Tag" ), wxEmptyString, this );
 
     if( name.IsEmpty() )
         return;
 
+    // A message makes the tag annotated.
+    wxTextEntryDialog messageDlg( this, _( "Tag message, or leave empty for a plain tag:" ), _( "Create Tag" ) );
+
+    if( messageDlg.ShowModal() != wxID_OK )
+        return;
+
+    wxString message = messageDlg.GetValue();
+
     runGitAction(
-            [name]( KIGIT_COMMON& aCommon )
+            [name, message]( KIGIT_COMMON& aCommon )
             {
-                return aCommon.CreateTag( name );
+                return aCommon.CreateTag( name, message );
             },
             wxString::Format( _( "Could not create tag '%s'." ), name ) );
 }

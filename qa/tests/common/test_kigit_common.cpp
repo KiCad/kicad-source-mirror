@@ -1773,6 +1773,125 @@ BOOST_AUTO_TEST_CASE( GetStashDetailNamesBranchCommitAndFiles )
 }
 
 
+// The Tags page shows a tag's message, author and date. An annotated tag has its own, a
+// lightweight tag borrows the commit's.
+// An amend or a rebase leaves a commit's author time behind its committer time. The History
+// page dates a commit by the committer time, so the Tags page has to agree.
+BOOST_AUTO_TEST_CASE( GetTagDetailDatesALightweightTagByCommitterTime )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    git_signature* authored = nullptr;
+    BOOST_REQUIRE_EQUAL( git_signature_new( &authored, "QA Test", "qa@example.com", 1000, 0 ), GIT_OK );
+    KIGIT::GitSignaturePtr authoredPtr( authored );
+
+    git_signature* committed = nullptr;
+    BOOST_REQUIRE_EQUAL( git_signature_new( &committed, "QA Test", "qa@example.com", 2000, 0 ), GIT_OK );
+    KIGIT::GitSignaturePtr committedPtr( committed );
+
+    git_oid headOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, repo, "HEAD" ), GIT_OK );
+
+    git_commit* parent = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_lookup( &parent, repo, &headOid ), GIT_OK );
+    KIGIT::GitCommitPtr parentPtr( parent );
+
+    git_tree* tree = nullptr;
+    BOOST_REQUIRE_EQUAL( git_commit_tree( &tree, parent ), GIT_OK );
+    KIGIT::GitTreePtr tree_ptr( tree );
+
+    const git_commit* parents[1] = { parent };
+    git_oid           commitOid;
+    BOOST_REQUIRE_EQUAL(
+            git_commit_create( &commitOid, repo, "HEAD", authored, committed, nullptr, "rebased", tree, 1, parents ),
+            GIT_OK );
+
+    git_object* target = nullptr;
+    BOOST_REQUIRE_EQUAL( git_revparse_single( &target, repo, "HEAD" ), GIT_OK );
+    KIGIT::GitObjectPtr targetPtr( target );
+
+    git_oid tagOid;
+    BOOST_REQUIRE_EQUAL( git_tag_create_lightweight( &tagOid, repo, "rebased", target, 0 ), GIT_OK );
+
+    KIGIT_COMMON     common( repo );
+    KIGIT_TAG_DETAIL detail = common.GetTagDetail( wxS( "rebased" ) );
+
+    BOOST_REQUIRE( detail.found );
+    BOOST_CHECK_EQUAL( detail.when.GetTicks(), 2000 );
+    BOOST_CHECK_EQUAL( common.GetRecentCommits( 1 )[0].when.GetTicks(), detail.when.GetTicks() );
+}
+
+
+BOOST_AUTO_TEST_CASE( GetTagDetailReadsAnnotatedAndLightweightTags )
+{
+    GitInitGuard  libgit;
+    ScopedTempDir tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "file.txt", "v1\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    KIGIT_COMMON common( repo );
+    wxString     head = common.GetRecentCommits( 1 )[0].hash;
+
+    // A different tagger from the commit author, so the detail must come from the tag object.
+    BOOST_REQUIRE( common.SetUserConfig( wxS( "Tag Maker" ), wxS( "tags@example.com" ) ) );
+    BOOST_REQUIRE( common.CreateTag( "v1.0", "Release v1.0\n\n- Add mounting holes" ) );
+    BOOST_REQUIRE( common.CreateTag( "beta-1" ) );
+
+    git_object* tagObject = nullptr;
+    BOOST_REQUIRE_EQUAL( git_revparse_single( &tagObject, repo, "refs/tags/v1.0" ), GIT_OK );
+    KIGIT::GitObjectPtr tagObjectPtr( tagObject );
+    BOOST_CHECK_EQUAL( git_object_type( tagObject ), GIT_OBJECT_TAG );
+
+    KIGIT_TAG_DETAIL annotated = common.GetTagDetail( wxS( "v1.0" ) );
+    BOOST_REQUIRE( annotated.found );
+    BOOST_CHECK_EQUAL( annotated.name.ToStdString(), "v1.0" );
+    BOOST_CHECK_EQUAL( annotated.hash.ToStdString(), head.ToStdString() );
+    BOOST_CHECK_EQUAL( annotated.message.ToStdString(), "Release v1.0\n\n- Add mounting holes" );
+    BOOST_CHECK_EQUAL( annotated.author.ToStdString(), "Tag Maker" );
+    BOOST_CHECK_EQUAL( annotated.email.ToStdString(), "tags@example.com" );
+    BOOST_CHECK( annotated.when.IsValid() );
+
+    KIGIT_TAG_DETAIL lightweight = common.GetTagDetail( wxS( "beta-1" ) );
+    BOOST_REQUIRE( lightweight.found );
+    BOOST_CHECK_EQUAL( lightweight.name.ToStdString(), "beta-1" );
+    BOOST_CHECK_EQUAL( lightweight.hash.ToStdString(), head.ToStdString() );
+    BOOST_CHECK_EQUAL( lightweight.message.ToStdString(), "initial" );
+    BOOST_CHECK_EQUAL( lightweight.author.ToStdString(), "QA Test" );
+    BOOST_CHECK( lightweight.when.IsValid() );
+
+    // An old tag made long ago, and a tag on a tree, which has no commit and so no date.
+    git_object* commitObject = nullptr;
+    BOOST_REQUIRE_EQUAL( git_revparse_single( &commitObject, repo, "HEAD" ), GIT_OK );
+    KIGIT::GitObjectPtr commitObjectPtr( commitObject );
+
+    git_signature* oldSig = nullptr;
+    BOOST_REQUIRE_EQUAL( git_signature_new( &oldSig, "QA Test", "qa@example.com", 1000, 0 ), GIT_OK );
+    KIGIT::GitSignaturePtr oldSigPtr( oldSig );
+
+    git_oid oid;
+    BOOST_REQUIRE_EQUAL( git_tag_create( &oid, repo, "old", commitObject, oldSig, "old tag", 0 ), GIT_OK );
+
+    git_object* treeObject = nullptr;
+    BOOST_REQUIRE_EQUAL( git_revparse_single( &treeObject, repo, "HEAD^{tree}" ), GIT_OK );
+    KIGIT::GitObjectPtr treeObjectPtr( treeObject );
+    BOOST_REQUIRE_EQUAL( git_tag_create_lightweight( &oid, repo, "tree-tag", treeObject, 0 ), GIT_OK );
+
+    std::vector<KIGIT_TAG_INFO> tags = common.GetTags();
+    BOOST_REQUIRE_EQUAL( tags.size(), 4 );
+    BOOST_CHECK( tags[0].name == wxS( "v1.0" ) || tags[0].name == wxS( "beta-1" ) );
+    BOOST_CHECK_EQUAL( tags[2].name.ToStdString(), "old" );
+    BOOST_CHECK_EQUAL( tags[3].name.ToStdString(), "tree-tag" );
+    BOOST_CHECK( tags[3].hash.IsEmpty() && !tags[3].when.IsValid() );
+
+    BOOST_CHECK( !common.GetTagDetail( wxS( "nowhere" ) ).found );
+}
+
+
 // The stored connection string must not carry the secret. A scp-style git@host is left intact.
 BOOST_AUTO_TEST_CASE( SetRemoteStripsUrlUserinfo )
 {

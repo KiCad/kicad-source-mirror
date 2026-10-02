@@ -46,6 +46,7 @@ struct KIGIT_COMMIT_DETAIL;
 struct KIGIT_COMMIT_INFO;
 struct KIGIT_HISTORY_FILTER;
 struct KIGIT_STASH_DETAIL;
+struct KIGIT_TAG_DETAIL;
 class GIT_FILE_DIFF_AREA;
 class WX_TREEBOOK;
 class wxButton;
@@ -139,6 +140,15 @@ private:
     void showStashDetail( const wxString& aId );
     void fillStashDetail( const KIGIT_STASH_DETAIL& aDetail );
     void hideStashDetail();
+
+    /// The Tags page: the list beside the selected tag's detail.
+    wxWindow* buildTagsPage( wxWindow* aBook );
+    wxPanel*  buildTagDetailPane( wxWindow* aParent );
+
+    /// Fill the detail pane with aTag, or hide it when the name is empty or gone.
+    void showTagDetail( const wxString& aTag );
+    void fillTagDetail( const KIGIT_TAG_DETAIL& aDetail );
+    void hideTagDetail();
 
     /// Fill the detail pane with aRemote, or hide it when the name is empty.
     void showRemoteDetail( const wxString& aRemote );
@@ -336,8 +346,18 @@ private:
     wxTextCtrl*       m_stashMessage;
     wxListCtrl*       m_stashFiles;
 
+    // Tags page
+    wxSplitterWindow* m_tagsSplitter;
+    wxListCtrl*       m_tagsList;
+    wxStaticText*     m_tagCount;
+    wxPanel*          m_tagDetail;
+    wxStaticText*     m_tagTitle;
+    wxStaticText*     m_tagCommit;
+    wxStaticText*     m_tagAuthor;
+    wxStaticText*     m_tagWhen;
+    wxTextCtrl*       m_tagMessage;
+
     // The other pages
-    wxListCtrl*   m_tagsList;
     wxTextCtrl*   m_repoUserName;
     wxTextCtrl*   m_repoUserEmail;
     wxStaticText* m_repoRemoteUrl;
@@ -408,6 +428,12 @@ private:
 
     /// True while the stash list is being refilled, when its selection events are its own.
     bool m_fillingStashes = false;
+
+    /// Where the user left the sash between the tag list and its detail pane.
+    int m_tagSashPos = 0;
+
+    /// True while the tag list is being refilled, when its selection events are its own.
+    bool m_fillingTags = false;
 
     /// Waits for the user to pause typing in the search box before walking the history again.
     wxTimer m_historySearchTimer;

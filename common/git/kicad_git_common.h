@@ -140,9 +140,23 @@ struct KIGIT_STASH_INFO
 // One entry in the tag list, as shown by the advanced git window's Tags page.
 struct KIGIT_TAG_INFO
 {
-    wxString name;    ///< Tag name.
-    wxString hash;    ///< Short hash of the tagged commit.
-    wxString summary; ///< First line of the tagged commit message.
+    wxString   name;    ///< Tag name.
+    wxString   hash;    ///< Short hash of the tagged commit.
+    wxString   summary; ///< First line of the tagged commit message.
+    wxDateTime when;    ///< When the tag was made, or the commit for a lightweight tag.
+};
+
+
+// What the Tags page's detail pane shows about one tag.
+struct KIGIT_TAG_DETAIL
+{
+    bool       found = false; ///< False when no tag of that name points at a commit.
+    wxString   name;          ///< The tag name.
+    wxString   hash;          ///< Short hash of the tagged commit.
+    wxDateTime when;          ///< When the tag was made, or the commit for a lightweight tag.
+    wxString   author;        ///< Who made the tag, or the commit for a lightweight tag.
+    wxString   email;         ///< Their email.
+    wxString   message;       ///< The tag's own message, or the commit's for a lightweight tag.
 };
 
 
@@ -316,6 +330,9 @@ public:
     // The tags in the repository, each resolved to the commit it points at.
     std::vector<KIGIT_TAG_INFO> GetTags() const;
 
+    // One tag in full. Not found leaves the result's found flag clear.
+    KIGIT_TAG_DETAIL GetTagDetail( const wxString& aName ) const;
+
     // The caller holds the action lock, as with the query methods above.
     // Create aName at the tip of aFrom, a local or remote branch, or at HEAD when aFrom is empty.
     bool CreateBranch( const wxString& aName, const wxString& aFrom = wxEmptyString );
@@ -327,7 +344,8 @@ public:
     bool StashPop( size_t aIndex );
     bool StashDrop( size_t aIndex );
 
-    bool CreateTag( const wxString& aName );
+    // Tag HEAD. With a message the tag is annotated and carries it, otherwise it is lightweight.
+    bool CreateTag( const wxString& aName, const wxString& aMessage = wxEmptyString );
     bool DeleteTag( const wxString& aName );
     bool CheckoutTag( const wxString& aName );
 

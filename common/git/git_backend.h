@@ -137,7 +137,7 @@ public:
     virtual bool StashPop( git_repository* aRepo, size_t aIndex ) = 0;
     virtual bool StashDrop( git_repository* aRepo, size_t aIndex ) = 0;
 
-    virtual bool CreateTag( git_repository* aRepo, const wxString& aName ) = 0;
+    virtual bool CreateTag( git_repository* aRepo, const wxString& aName, const wxString& aMessage ) = 0;
     virtual bool DeleteTag( git_repository* aRepo, const wxString& aName ) = 0;
     virtual bool CheckoutTag( git_repository* aRepo, const wxString& aName ) = 0;
 

@@ -2732,7 +2732,7 @@ bool LIBGIT_BACKEND::StashDrop( git_repository* aRepo, size_t aIndex )
 }
 
 
-bool LIBGIT_BACKEND::CreateTag( git_repository* aRepo, const wxString& aName )
+bool LIBGIT_BACKEND::CreateTag( git_repository* aRepo, const wxString& aName, const wxString& aMessage )
 {
     if( !aRepo || aName.IsEmpty() )
         return false;
@@ -2743,9 +2743,22 @@ bool LIBGIT_BACKEND::CreateTag( git_repository* aRepo, const wxString& aName )
         return false;
 
     KIGIT::GitObjectPtr targetPtr( target );
+    git_oid             oid;
 
-    git_oid oid;
-    return git_tag_create_lightweight( &oid, aRepo, aName.utf8_string().c_str(), target, 0 ) == GIT_OK;
+    if( aMessage.IsEmpty() )
+        return git_tag_create_lightweight( &oid, aRepo, aName.utf8_string().c_str(), target, 0 ) == GIT_OK;
+
+    // An annotated tag carries the message, and who made it, from the repository's identity.
+    git_signature* tagger = nullptr;
+
+    if( git_signature_default( &tagger, aRepo ) != GIT_OK )
+        return false;
+
+    KIGIT::GitSignaturePtr taggerPtr( tagger );
+    std::string            name = aName.utf8_string();
+    std::string            message = aMessage.utf8_string();
+
+    return git_tag_create( &oid, aRepo, name.c_str(), target, tagger, message.c_str(), 0 ) == GIT_OK;
 }
 
 
