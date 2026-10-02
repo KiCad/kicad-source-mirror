@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-10-01 05:01+0000\n"
+"PO-Revision-Date: 2026-10-02 21:48+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -43,7 +43,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.10\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -26455,7 +26455,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:87 pcbnew/tools/pcb_actions.cpp:2338
 msgid "Create Corner"
-msgstr "Eckpunkt hinzufügen"
+msgstr "Ecke erstellen"
 
 #: eeschema/tools/sch_actions.cpp:93 eeschema/tools/sch_point_editor.cpp:1504
 #: pcbnew/tools/pcb_actions.cpp:2345
@@ -29075,9 +29075,8 @@ msgid "Excl. Board"
 msgstr "Von Platine ausschl."
 
 #: eeschema/widgets/search_handlers.cpp:169
-#, fuzzy
 msgid "Excl. Pos Files"
-msgstr "Von Positionsdateien ausschließen"
+msgstr "Von Positionsdateien ausschl."
 
 #: eeschema/widgets/search_handlers.cpp:481
 msgid "Hierarchical"
@@ -29766,7 +29765,7 @@ msgstr "Zip-Datei \"%s\" kann nicht geöffnet werden."
 #: gerbview/files.cpp:481
 #, fuzzy, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
-msgstr "<b>Temporäre Datei \"%s\" kann nicht erstellt werden.</b>"
+msgstr "Temporäre Datei \"%s\" kann nicht zum Entpacken erstellt werden."
 
 #: gerbview/files.cpp:510
 #, c-format
@@ -29779,9 +29778,9 @@ msgid "<b>Unable to create temporary file '%s'.</b>"
 msgstr "<b>Temporäre Datei \"%s\" kann nicht erstellt werden.</b>"
 
 #: gerbview/files.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to write temporary file '%s'.</b>"
-msgstr "<b>Temporäre Datei \"%s\" kann nicht erstellt werden.</b>"
+msgstr "<b>Temporäre Datei \"%s\" kann nicht geschrieben werden.</b>"
 
 #: gerbview/files.cpp:603
 #, c-format
@@ -36869,9 +36868,8 @@ msgid "Deleted items via API"
 msgstr "Mittels API gelöschte Elemente"
 
 #: pcbnew/api/api_handler_pcb.cpp:1724
-#, fuzzy
 msgid "Flipped items via API"
-msgstr "Mittels API gelöschte Elemente"
+msgstr "Mittels API gewendete Elemente"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:813
 msgid "Autoplacing components..."
