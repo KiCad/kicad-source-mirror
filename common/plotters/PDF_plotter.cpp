@@ -380,13 +380,8 @@ void PDF_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T aFill, int w
     // If diameter is less than width, switch to filled mode
     if( aFill == FILL_T::NO_FILL && diametre < GetCurrentLineWidth() )
     {
-        // SetCurrentLineWidth enforces a minimum, so we only put everything above
-        // said minimum into the radius.
-        SetCurrentLineWidth( 0 );
-        int diff = width - GetCurrentLineWidth();
-
         aFill = FILL_T::FILLED_SHAPE;
-        radius += diff / 2.0;
+        radius = userToDeviceSize( ( diametre / 2.0 ) + ( width / 2.0 ) );
     }
 
     /* OK. Here's a trick. PDF doesn't support circles or circular angles, that's
