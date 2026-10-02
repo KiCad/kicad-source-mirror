@@ -644,15 +644,15 @@ const std::vector<GRID> APP_SETTINGS_BASE::DefaultGridSizeList() const
                  GRID{ wxEmptyString, wxS( "0.2 mil" ), wxS( "0.2 mil" ) },
                  GRID{ wxEmptyString, wxS( "0.1 mil" ), wxS( "0.1 mil" ) },
                  GRID{ wxEmptyString, wxS( "5.0 mm" ), wxS( "5.0 mm" ) },
-                 GRID{ wxEmptyString, wxS( "1.5 mm" ), wxS( "2.5 mm" ) },
+                 GRID{ wxEmptyString, wxS( "2.5 mm" ), wxS( "2.5 mm" ) },
                  GRID{ wxEmptyString, wxS( "1.0 mm" ), wxS( "1.0 mm" ) },
                  GRID{ wxEmptyString, wxS( "0.5 mm" ), wxS( "0.5 mm" ) },
                  GRID{ wxEmptyString, wxS( "0.25 mm" ), wxS( "0.25 mm" ) },
                  GRID{ wxEmptyString, wxS( "0.2 mm" ), wxS( "0.2 mm" ) },
                  GRID{ wxEmptyString, wxS( "0.1 mm" ), wxS( "0.1 mm" ) },
-                 GRID{ wxEmptyString, wxS( "0.05 mm" ), wxS( "0.0 mm" ) },
-                 GRID{ wxEmptyString, wxS( "0.025 mm" ), wxS( "0.0 mm" ) },
-                 GRID{ wxEmptyString, wxS( "0.01 mm" ), wxS( "0.0 mm" ) } };
+                 GRID{ wxEmptyString, wxS( "0.05 mm" ), wxS( "0.05 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.025 mm" ), wxS( "0.025 mm" ) },
+                 GRID{ wxEmptyString, wxS( "0.01 mm" ), wxS( "0.01 mm" ) } };
     }
     else
     {
