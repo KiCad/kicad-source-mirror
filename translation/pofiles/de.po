@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-02 12:21+0000\n"
+"PO-Revision-Date: 2026-10-02 21:48+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -25657,7 +25657,7 @@ msgstr ""
 msgid ""
 "Page %s: %s pin positions mismatch (orientation %d); geometry may be off."
 msgstr ""
-"Seite %s: %s Pinpositionen weiche ab (Ausrichtung %d); Geometrie ist u.U. "
+"Seite %s: %s Pinpositionen weichen ab (Ausrichtung %d); Geometrie ist u.U. "
 "fehlerhaft."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:82
@@ -29747,9 +29747,8 @@ msgstr "[vom Schaltplan]"
 #: eeschema/symbol_editor/toolbars_symbol_editor.cpp:98
 #: eeschema/toolbars_sch_editor.cpp:132
 #: pcbnew/toolbars_footprint_editor.cpp:155 pcbnew/toolbars_pcb_editor.cpp:309
-#, fuzzy
 msgid "Text objects"
-msgstr "Texteigenschaften"
+msgstr "Textobjekte"
 
 #: eeschema/symbol_import_reconciler.cpp:297
 #, c-format
@@ -29770,6 +29769,8 @@ msgid ""
 "A symbol library named '%s' is already registered; leaving imported symbols "
 "unresolved."
 msgstr ""
+"Eine Symbolbibliothek namens \"%s\" ist bereits registriert; importierte "
+"Symbole bleiben ungeklärt."
 
 #: eeschema/symbol_import_reconciler.cpp:421
 #, fuzzy
@@ -30246,7 +30247,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:99 pcbnew/tools/pcb_actions.cpp:2790
 msgid "Create Corner"
-msgstr "Eckpunkt hinzufügen"
+msgstr "Ecke erstellen"
 
 #: eeschema/tools/sch_actions.cpp:105 eeschema/tools/sch_point_editor.cpp:1756
 #: pcbnew/tools/pcb_actions.cpp:2797
@@ -30341,32 +30342,34 @@ msgstr "Aktuelle Bibliothek in einer neuen Datei speichern"
 #: eeschema/tools/sch_actions.cpp:202
 #, fuzzy
 msgid "Save Library As Packed..."
-msgstr "Bibliothek speichern unter ..."
+msgstr "Bibliothek gepackt speichern ..."
 
 #: eeschema/tools/sch_actions.cpp:203
-#, fuzzy
 msgid "Save the current unpacked library to a new packed library file"
-msgstr "Aktuelle Bibliothek in einer neuen Datei speichern"
+msgstr ""
+"Aktuelle ungepackte Bibliothek in einer neuen gepackten Bibliotheksdatei "
+"speichern"
 
 #: eeschema/tools/sch_actions.cpp:209
 #, fuzzy
 msgid "Save Library As Unpacked..."
-msgstr "Bibliothek speichern unter ..."
+msgstr "Bibliothek ungepackt speichern ..."
 
 #: eeschema/tools/sch_actions.cpp:210
-#, fuzzy
 msgid "Save the current packed library to a new unpacked library folder"
-msgstr "Aktuelle Bibliothek in einer neuen Datei speichern"
+msgstr ""
+"Aktuelle gepackte Bibliothek in einem neuen ungepackten Bibliotheksordner "
+"speichern"
 
 #: eeschema/tools/sch_actions.cpp:215 pcbnew/tools/pcb_actions.cpp:1344
-#, fuzzy
 msgid "Compare Library with File..."
-msgstr "Datei committen ..."
+msgstr "Bibliothek mit Datei vergleichen ..."
 
 #: eeschema/tools/sch_actions.cpp:216
-#, fuzzy
 msgid "Diff the current symbol library against another .kicad_sym file"
-msgstr "Aktuelle Bibliothek in einer neuen Datei speichern"
+msgstr ""
+"Unterschiede zwischen der aktuellen Symbolbibliothek und einer anderen "
+".kicad_sym-Datei finden"
 
 #: eeschema/tools/sch_actions.cpp:223
 msgid "New Symbol..."
@@ -30464,32 +30467,32 @@ msgstr "Vererbung aus dem Symbol entfernen"
 #: eeschema/tools/sch_actions.cpp:323
 #, fuzzy
 msgid "Next Symbol Tab"
-msgstr "Nächste Symboleinheit"
+msgstr "Nächster Symbolreiter"
 
 #: eeschema/tools/sch_actions.cpp:324
 #, fuzzy
 msgid "Switch to the next open symbol tab"
-msgstr "Zur Registerkarte \"Systemvorlagen\" wechseln"
+msgstr "Zum nächsten offenen Symbolreiter wechseln"
 
 #: eeschema/tools/sch_actions.cpp:329
 #, fuzzy
 msgid "Previous Symbol Tab"
-msgstr "Vorherige Symboleinheit"
+msgstr "Vorheriger Symbolreiter"
 
 #: eeschema/tools/sch_actions.cpp:330
 #, fuzzy
 msgid "Switch to the previous open symbol tab"
-msgstr "Leiterbahn auf vorherige aktive Kupferlage verschieben"
+msgstr "Zum vorherigen offenen Symbolreiter wechseln"
 
 #: eeschema/tools/sch_actions.cpp:335
 #, fuzzy
 msgid "Close Symbol Tab"
-msgstr "Symbol wählen"
+msgstr "Symbolreiter schließen"
 
 #: eeschema/tools/sch_actions.cpp:336
 #, fuzzy
 msgid "Close the active symbol tab"
-msgstr "Bauteilbetrachter schließen"
+msgstr "Den aktiven Symbolreiter schließen"
 
 #: eeschema/tools/sch_actions.cpp:341 eeschema/tools/sch_actions.cpp:1332
 msgid "Bulk Edit Symbol Fields..."
@@ -32850,7 +32853,7 @@ msgstr "Eine Bibliothek wählen um sie mit einer Datei zu vergleichen."
 
 #: eeschema/tools/symbol_editor_control.cpp:1150
 msgid "Choose Library to Compare With"
-msgstr ""
+msgstr "Bibliothek für Vergleich auswählen"
 
 #: eeschema/tools/symbol_editor_control.cpp:1163
 msgid "Select a KiCad symbol library file (.kicad_sym)."
@@ -32861,9 +32864,9 @@ msgstr "Wähle eine KiCad Symbolbibliothekdatei (.kicad_sym)."
 #: pcbnew/tools/board_inspection_tool.cpp:2130
 #: pcbnew/tools/footprint_editor_control.cpp:748
 #: pcbnew/tools/footprint_editor_control.cpp:753
-#, fuzzy, c-format
+#, c-format, fuzzy
 msgid "Failed to load %s: %s"
-msgstr "Fehler beim Laden der Seite \"%s\": %s"
+msgstr "Konnte %s nicht laden: %s"
 
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:293
 msgid "Place Pin"
@@ -33036,14 +33039,12 @@ msgid "Enter page number for sheet path %s"
 msgstr "Seitennummer für Blattpfad %s eingeben"
 
 #: eeschema/widgets/hierarchy_pane.cpp:694
-#, fuzzy
 msgid "Change Page Number"
-msgstr "Seitennummer bearbeiten"
+msgstr "Seitennummer ändern"
 
 #: eeschema/widgets/hierarchy_pane.cpp:762
-#, fuzzy
 msgid "Rename Sheet"
-msgstr "Netz umbenennen"
+msgstr "Schaltplanblatt umbenennen"
 
 #: eeschema/widgets/hierarchy_pane.cpp:853
 #, c-format
@@ -33318,9 +33319,8 @@ msgstr ""
 #: pcbnew/widgets/pcb_properties_panel.cpp:641
 #: pcbnew/widgets/pcb_properties_panel.cpp:660
 #: pcbnew/widgets/pcb_properties_panel.cpp:783
-#, fuzzy
 msgid "Add Custom Property"
-msgstr "Benutzerdefinierte Gruppe hinzufügen ..."
+msgstr "Anwenderdefinierte Eigenschaft hinzufügen"
 
 #: eeschema/widgets/sch_properties_panel.cpp:82
 msgid "Edit Pin Map..."
@@ -33333,25 +33333,22 @@ msgstr "Eigenschaften bearbeiten"
 
 #: eeschema/widgets/sch_properties_panel.cpp:667
 #: pcbnew/widgets/pcb_properties_panel.cpp:628
-#, fuzzy
 msgid "Rename Property"
-msgstr "Netz umbenennen"
+msgstr "Eigenschaft umbenennen"
 
 #: eeschema/widgets/sch_properties_panel.cpp:692
 #: eeschema/widgets/sch_properties_panel.cpp:885
 #: pcbnew/widgets/pcb_properties_panel.cpp:653
 #: pcbnew/widgets/pcb_properties_panel.cpp:817
-#, fuzzy
 msgid "Remove Field"
-msgstr "Feld entfernen..."
+msgstr "Feld entfernen"
 
 #: eeschema/widgets/sch_properties_panel.cpp:698
 #: eeschema/widgets/sch_properties_panel.cpp:910
 #: pcbnew/widgets/pcb_properties_panel.cpp:659
 #: pcbnew/widgets/pcb_properties_panel.cpp:839
-#, fuzzy
 msgid "Remove Custom Property"
-msgstr "Alle benutzerdefinierten Gruppen löschen"
+msgstr "Anwenderdefinierte Eigenschaft entfernen"
 
 #: eeschema/widgets/search_handlers.cpp:176
 msgid "Excl. Sim"
@@ -33366,9 +33363,8 @@ msgid "Excl. Board"
 msgstr "Von Platine ausschl."
 
 #: eeschema/widgets/search_handlers.cpp:179
-#, fuzzy
 msgid "Excl. Pos Files"
-msgstr "Von Positionsdateien ausschließen"
+msgstr "Von Positionsdateien ausschl."
 
 #: eeschema/widgets/search_handlers.cpp:493
 msgid "Hierarchical"
@@ -34063,7 +34059,7 @@ msgstr "Zip-Datei \"%s\" kann nicht geöffnet werden."
 #: gerbview/files.cpp:506
 #, fuzzy, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
-msgstr "<b>Temporäre Datei \"%s\" kann nicht erstellt werden.</b>"
+msgstr "Temporäre Datei \"%s\" kann nicht zum Entpacken erstellt werden."
 
 #: gerbview/files.cpp:539
 #, c-format
@@ -34076,9 +34072,9 @@ msgid "<b>Unable to create temporary file '%s'.</b>"
 msgstr "<b>Temporäre Datei \"%s\" kann nicht erstellt werden.</b>"
 
 #: gerbview/files.cpp:605
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to write temporary file '%s'.</b>"
-msgstr "<b>Temporäre Datei \"%s\" kann nicht erstellt werden.</b>"
+msgstr "<b>Temporäre Datei \"%s\" kann nicht geschrieben werden.</b>"
 
 #: gerbview/files.cpp:630
 #, c-format
