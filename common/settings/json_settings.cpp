@@ -347,8 +347,7 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
     m_modified = false;
 
     // A missing backing file leaves the store empty, which must not count as synchronized
-    if( success )
-        m_fileSynced = true;
+    m_fileSynced = success;
 
     // Skip writeback when running QA tests
     bool doWrite = m_writeFile && !wxGetEnv( wxT( "KICAD_INHIBIT_SETTINGS_WRITES" ), nullptr );
