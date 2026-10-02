@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-09-28 17:24+0000\n"
+"PO-Revision-Date: 2026-10-02 14:12+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
 "source/fi/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.10\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -7477,11 +7477,12 @@ msgstr "Monistettu ID"
 
 #: common/draw_panel_gal.cpp:244
 msgid "The graphics driver was reset and OpenGL could not be restored"
-msgstr ""
+msgstr "Näytönohjaimen ajuri nollautui, eikä OpenGL-tilaa voitu palauttaa"
 
 #: common/draw_panel_gal.cpp:245
 msgid "Restart KiCad to use accelerated graphics again."
 msgstr ""
+"Käynnistä KiCad uudelleen käyttääksesi kiihdytettyä grafiikkaa uudelleen."
 
 #: common/draw_panel_gal.cpp:249 common/draw_panel_gal.cpp:825
 #: common/draw_panel_gal.cpp:868
@@ -7501,9 +7502,10 @@ msgid "Unknown exception during backend switch"
 msgstr "Tuntematon poikkeus taustajärjestelmän vaihdon aikana"
 
 #: common/draw_panel_gal.cpp:322
-#, fuzzy
 msgid "The graphics driver keeps resetting, falling back to software rendering"
-msgstr "OpenGL: ää ei voitu käyttää, palataan takaisin ohjelmistorenderöintiin"
+msgstr ""
+"Näytönohjaimen ajuri nollautuu jatkuvasti ja siirtyy käyttämään "
+"ohjelmistopohjaista renderöintiä"
 
 #: common/draw_panel_gal.cpp:556
 msgid "Unknown exception"
@@ -8539,7 +8541,7 @@ msgstr "Kaaren lopetuskulma"
 #: pcbnew/pcb_tablecell.cpp:369 pcbnew/pcb_textbox.cpp:1072
 #: pcbnew/tools/match_properties.cpp:109
 msgid "Line Width"
-msgstr "Viivan paksuus"
+msgstr "Viivan leveys"
 
 #: common/eda_shape.cpp:4705 eeschema/sch_tablecell.cpp:491
 #: pcbnew/pcb_shape.cpp:1968 pcbnew/pcb_tablecell.cpp:371
@@ -10044,19 +10046,19 @@ msgstr ""
 "tiedostoja ei löydy."
 
 #: common/io/idf/idf_parser.cpp:3259
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid output path: %s"
-msgstr "Virheellinen lähdön muoto: %s\n"
+msgstr "Virheellinen tulostuspolku: %s"
 
 #: common/io/idf/idf_parser.cpp:3270 common/io/idf/idf_parser.cpp:3284
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot overwrite file: %s"
-msgstr "Tiedostoa %s ei voi avata"
+msgstr "Tiedostoa %s ei voitu korvata"
 
 #: common/io/idf/idf_parser.cpp:3299
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing IDF file: %s"
-msgstr "Virhe kirjoitettaessa tiedostoon '%s'."
+msgstr "Virhe kirjoitettaessa IDF-tiedostoa: %s"
 
 #: common/io/pcad/s_expr_loader.cpp:194 common/io/pcad/s_expr_loader.cpp:199
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1301
@@ -10180,14 +10182,12 @@ msgid "Export IDFv3"
 msgstr "Vie IDFv3"
 
 #: common/jobs/job_export_pcb_idf.cpp:69
-#, fuzzy
 msgid "Export IDFv3 Job Settings"
-msgstr "Vie DXF työasetukset"
+msgstr "Vie IDFv3-työn asetukset"
 
 #: common/jobs/job_export_pcb_idf.cpp:83
-#, fuzzy
 msgid "PCB: Export IDFv3"
-msgstr "PCB: Vie DXF"
+msgstr "Piirilevy: Vie IDFv3"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:81
 #: pcbnew/dialogs/dialog_export_2581_base.h:89
@@ -12491,14 +12491,12 @@ msgid "Switch arc posture between clockwise and counter-clockwise"
 msgstr "Vaihda kaaren suuntaa myötäpäivän ja vastapäivän välillä"
 
 #: common/tool/actions.cpp:615
-#, fuzzy
 msgid "Cycle Arc Drawing Mode"
-msgstr "Vaihda kaaren muokkaustila"
+msgstr "Vaihda kaaren piirtotilaa"
 
 #: common/tool/actions.cpp:616
-#, fuzzy
 msgid "Switch to the next method of drawing arcs"
-msgstr "Vaihda toiseen tapaan muokataksesi kaaria"
+msgstr "Vaihda seuraavaan kaaren piirtotilaan"
 
 #: common/tool/actions.cpp:622
 msgid "Delete Last Point"
@@ -13188,14 +13186,14 @@ msgstr ""
 "Lahjoittaksesi KiCad projektiin, vieraile %s"
 
 #: common/tool/common_control.cpp:455
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create plugin directory '%s'."
-msgstr "Kohdehakemistoa '%s'. ei voi luoda."
+msgstr "Liitännäishakemistoa ’%s’ ei voitu luoda."
 
 #: common/tool/common_control.cpp:463
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open plugin directory '%s'."
-msgstr "Kohdehakemistoa '%s'. ei voi luoda."
+msgstr "Liitännäishakemistoa ’%s’ ei voitu avata."
 
 #: common/tool/common_tools.cpp:627
 msgid "Footprint Browser"
@@ -15519,11 +15517,11 @@ msgstr ""
 "%s"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:756
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remap symbol %s to '%s': the new symbol has too few units."
 msgstr ""
-"Verkkoa ”%s” ei voi nimetä uudelleen nimelle ”%s”: toisella verkolla on jo "
-"sama nimi."
+"Symbolia %s ei voida kohdistaa uudelleen symboliin ’%s’: uudessa symbolissa "
+"on liian vähän yksiköitä."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 msgid "Current Library Reference"
@@ -17596,9 +17594,11 @@ msgstr "Paksuus:"
 #: eeschema/dialogs/dialog_line_properties.cpp:152
 #: eeschema/dialogs/dialog_shape_properties.cpp:156
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "Set line ending sizes to 0 for automatic (%g× line width)."
-msgstr "Muodon koko 0 = automaattinen (%g × viivan leveys)."
+msgstr ""
+"Aseta viivan pääteiden kooksi 0 automaattista kokoa varten (%g × viivan "
+"leveys)."
 
 #: eeschema/dialogs/dialog_line_properties.cpp:418
 msgid "Edit Line"
@@ -21337,14 +21337,14 @@ msgid "Keep White Space"
 msgstr "Säilytä tyhjät välit"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Field name template '%s' already exists as a mandatory field."
-msgstr "Nimikenttä %s on jo olemassa."
+msgstr "Kentän nimen malli ’%s’ on jo olemassa pakollisena kenttänä."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Field name template '%s' already exists."
-msgstr "Nimikenttä %s on jo olemassa."
+msgstr "Kentän nimen malli ’%s’ on jo olemassa."
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
@@ -25075,14 +25075,12 @@ msgid "Invalid table: no cells defined"
 msgstr "Virheellinen taulukko: ei määriteltyjä soluja"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5974
-#, fuzzy
 msgid "Invalid table: column count must be positive"
-msgstr "Virheellinen taulukko: ei määriteltyjä soluja"
+msgstr "Virheellinen taulukko: sarakkeiden määrän on oltava positiivinen"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5980
-#, fuzzy
 msgid "Invalid table: incomplete row"
-msgstr "Virheellinen taulukko: ei määriteltyjä soluja"
+msgstr "Virheellinen taulukko: puutteellinen rivi"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:6203
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8313
@@ -25281,11 +25279,13 @@ msgstr ""
 "paikkamerkki %d esiintymän perusteella."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol '%s' duplicates the name of another library item and was left out "
 "of the library."
-msgstr "Symbolia '%s' ei voitu muuntaa, ja se jätettiin pois kirjastosta (%s)."
+msgstr ""
+"Symboli ’%s’ käyttää saman nimistä kirjastokohdetta kuin toinen ja jätettiin "
+"pois kirjastosta."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1017
 #, c-format
@@ -25331,14 +25331,14 @@ msgid "OrCAD stream size exceeds the compound file"
 msgstr "OrCAD-datavirran koko ylittää yhdistelmätiedoston rajan"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "The OrCAD CIS variant '%s' has no definition stream."
-msgstr "Valitulla OrCAD CIS -muunnelmalla ei ole määritysvirtaa."
+msgstr "OrCAD CIS -variantilla ’%s’ ei ole määritysvirtaa."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:328
-#, fuzzy, c-format
+#, c-format
 msgid "The OrCAD CIS variant '%s' references an unknown property group."
-msgstr "Valittu OrCAD CIS -muunnelma viittaa tuntemattomaan ominaisuusryhmään."
+msgstr "OrCAD CIS -variantti ’%s’ viittaa tuntemattomaan ominaisuusryhmään."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:372
 #, c-format
@@ -25346,14 +25346,14 @@ msgid "Using OrCAD CIS variant '%s'."
 msgstr "Käytetään OrCAD CIS -varianttia '%s'."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' contains a complete OrCAD Capture design and cannot be loaded as a "
 "hierarchical sheet. Use File > Import > Non-KiCad Schematic... instead."
 msgstr ""
-"%s sisältää täydellisen PADS Logic -kytkentäkaavion, eikä sitä voida ladata "
-"hierarkkisena sivuna. Käytä sen sijaan valintaa Tiedosto > Tuo > Muu kuin "
-"KiCad-kytkentäkaavio...."
+"’%s’ sisältää kokonaisen OrCAD Capture -suunnittelun, eikä sitä voida ladata "
+"hierarkkisena kaaviosivuna. Käytä sen sijaan toimintoa Tiedosto > Tuo > Muu "
+"kuin KiCad-kytkentäkaavio..."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:460
 msgid "The OrCAD file could not be read."
@@ -28815,9 +28815,8 @@ msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>Tehosymbolissa tulisi olla vain yksi yksikkö</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:262
-#, fuzzy
 msgid "<b>A Power Symbol should have exactly one pin</b><br><br>"
-msgstr "<b>Tehosymbolissa tulisi olla vain yksi nasta</b><br><br>"
+msgstr "<b>A Tehosymbolissa tulisi olla vain yksi nasta</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:269
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -30405,49 +30404,58 @@ msgstr "Piirrä kaaria"
 
 #: eeschema/tools/sch_actions.cpp:782 pcbnew/tools/pcb_actions.cpp:409
 msgid "Draw Arc: Center, Start, End"
-msgstr ""
+msgstr "Piirrä kaari: keskipiste, alku, loppu"
 
 #: eeschema/tools/sch_actions.cpp:783 pcbnew/tools/pcb_actions.cpp:410
 msgid "Draw arcs by clicking the center, the start point, then the end point"
 msgstr ""
+"Piirrä kaaria napsauttamalla ensin keskipistettä, sitten alkupistettä ja "
+"lopuksi loppupistettä"
 
 #: eeschema/tools/sch_actions.cpp:792 pcbnew/tools/pcb_actions.cpp:419
 msgid "Draw Arc: Start, End, Midpoint"
-msgstr ""
+msgstr "Piirrä kaari: alku, loppu, keskipiste"
 
 #: eeschema/tools/sch_actions.cpp:793 pcbnew/tools/pcb_actions.cpp:420
 msgid ""
 "Draw arcs by clicking the start point, the end point, then a point on the arc"
 msgstr ""
+"Piirrä kaaria napsauttamalla ensin alkupistettä, sitten loppupistettä ja "
+"lopuksi pistettä kaarella"
 
 #: eeschema/tools/sch_actions.cpp:802 pcbnew/tools/pcb_actions.cpp:429
 msgid "Draw Arc: Start, End, Center"
-msgstr ""
+msgstr "Piirrä kaari: alku, loppu, keskipiste"
 
 #: eeschema/tools/sch_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:430
 msgid "Draw arcs by clicking the start point, the end point, then the center"
 msgstr ""
+"Piirrä kaaria napsauttamalla ensin alkupistettä, sitten loppupistettä ja "
+"lopuksi keskipistettä"
 
 #: eeschema/tools/sch_actions.cpp:812 pcbnew/tools/pcb_actions.cpp:439
-#, fuzzy
 msgid "Draw Arc: Tangent"
-msgstr "Piirrä suorakulmiot"
+msgstr "Piirrä kaari: Tangentti"
 
 #: eeschema/tools/sch_actions.cpp:813 pcbnew/tools/pcb_actions.cpp:440
 msgid ""
 "Draw arcs tangent to the previous arc or to the line or arc ending at the "
 "start point"
 msgstr ""
+"Piirrä kaaria tangentiaalisesti edelliseen kaareen tai alkupisteeseen "
+"päättyvään viivaan tai kaareen"
 
 #: eeschema/tools/sch_actions.cpp:822 pcbnew/tools/pcb_actions.cpp:449
 msgid "Draw Arc: Start, Direction, End"
-msgstr ""
+msgstr "Piirrä kaari: alku, suunta, loppu"
 
 #: eeschema/tools/sch_actions.cpp:823 pcbnew/tools/pcb_actions.cpp:450
 msgid ""
 "Draw arcs by clicking the start point, a point giving the start direction, "
 "then the end point"
 msgstr ""
+"Piirrä kaaria napsauttamalla ensin alkupistettä, sitten alkusuunnan "
+"määrittävää pistettä ja lopuksi loppupistettä"
 
 #: eeschema/tools/sch_actions.cpp:847 pcbnew/tools/pcb_actions.cpp:475
 msgid "Draw Bezier Curve"
@@ -35358,51 +35366,42 @@ msgid "No longer supported as of KiCad 10.0."
 msgstr "Ei enää tuettu KiCad 10.0:sta alkaen."
 
 #: kicad/cli/command_pcb_export_idf.cpp:45
-#, fuzzy
 msgid "Export the PCB in IDFv3 format"
-msgstr "Vie piirilevy GenCAD-muodossa"
+msgstr "Vie piirilevy IDFv3-muodossa"
 
 #: kicad/cli/command_pcb_export_idf.cpp:49
-#, fuzzy
 msgid "Output units"
-msgstr "Lähtöyksiköt:"
+msgstr "Tulostusyksiköt"
 
 #: kicad/cli/command_pcb_export_idf.cpp:54
-#, fuzzy
 msgid "Coordinate system origin for the board"
-msgstr "Koordinaatti origon asetukset"
+msgstr "Piirilevyn koordinaatiston origo"
 
 #: kicad/cli/command_pcb_export_idf.cpp:60
-#, fuzzy
 msgid "User-specified board origin X"
-msgstr "Käyttäjän määrittelemä alkupiste"
+msgstr "Käyttäjän määrittämä piirilevyn origo X"
 
 #: kicad/cli/command_pcb_export_idf.cpp:66
-#, fuzzy
 msgid "User-specified board origin Y"
-msgstr "Käyttäjän määrittelemä alkupiste"
+msgstr "Käyttäjän määrittämä piirilevyn origo Y"
 
 #: kicad/cli/command_pcb_export_idf.cpp:70
-#, fuzzy
 msgid "Exclude components with 'Unspecified' footprint type"
-msgstr ""
-"Sulje pois 3D-mallit komponenteille, joissa on \"määrittelemätön\" "
-"jalanjälkityyppi"
+msgstr "Jätä pois komponentit, joiden jalanjäljen tyyppi on ’Määrittelemätön'"
 
 #: kicad/cli/command_pcb_export_idf.cpp:74
-#, fuzzy
 msgid "Exclude components with 'Do not populate' attribute"
-msgstr ""
-"Sulje pois 3D-mallit komponenteille, joissa on \"Älä sijoita\" attribuutti"
+msgstr "Jätä pois komponentit, joilla on ’Älä asenna’ -määrite"
 
 #: kicad/cli/command_pcb_export_idf.cpp:78
 msgid "Only use explicitly-set footprint heights to create IDFv3 shapes"
 msgstr ""
+"Käytä IDFv3-muotojen luomiseen vain erikseen asetettuja jalanjälkien "
+"korkeuksia"
 
 #: kicad/cli/command_pcb_export_idf.cpp:83
-#, fuzzy
 msgid "Footprint field to export as the part number to the IDF library"
-msgstr "Määritelty jalanjälki viedään kirjastoon"
+msgstr "Jalanjäljen kenttä, joka viedään osanumerona IDF-kirjastoon"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:36
 msgid "Generate PDF from a list of layers"
@@ -45297,14 +45296,13 @@ msgid "File %s already exists."
 msgstr "Tiedosto %s on jo olemassa."
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Files %s and %s already exist."
-msgstr "Tiedosto %s on jo olemassa."
+msgstr "Tiedostot %s ja %s ovat jo olemassa."
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:321
-#, fuzzy
 msgid "IDF Export"
-msgstr "Vie 3D"
+msgstr "IDF-vienti"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
@@ -45324,9 +45322,8 @@ msgid "Output units:"
 msgstr "Lähtöyksiköt:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:59
-#, fuzzy
 msgid "Coordinate Origin"
-msgstr "Koordinaatti origon asetukset"
+msgstr "Koordinaatiston origo"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:66
 #: pcbnew/dialogs/dialog_export_step_base.cpp:189
@@ -45366,9 +45363,8 @@ msgid "Y position:"
 msgstr "Y sijainti:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:132
-#, fuzzy
 msgid "Component options"
-msgstr "Komponentti: ei nastaa"
+msgstr "Komponenttiasetukset"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:134
 #: pcbnew/dialogs/dialog_export_step_base.cpp:250
@@ -45384,7 +45380,7 @@ msgstr "Ohita \"määrittämättömät\" komponentit"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:140
 msgid "Calculate component height from 3D models"
-msgstr ""
+msgstr "Laske komponentin korkeus 3D-malleista"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:142
 msgid ""
@@ -45392,23 +45388,24 @@ msgid ""
 "exported with the height from its tallest visible 3D model.  When disabled, "
 "footprints without an explicit height will not be included in the IDF file."
 msgstr ""
+"Kun tämä on käytössä, kaikki jalanjäljet, joille ei ole erikseen määritetty "
+"korkeutta, viedään käyttäen sen korkeimman näkyvän 3D-mallin korkeutta.  Kun "
+"tämä on poissa käytöstä, jalanjälkiä ilman erikseen määritettyä korkeutta ei "
+"sisällytetä IDF-tiedostoon."
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:149
-#, fuzzy
 msgid "Part number field:"
-msgstr "Anturan numero:"
+msgstr "Osanumerokenttä:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:151
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:158
-#, fuzzy
 msgid ""
 "Which footprint field to export as the part number in the IDF library file"
-msgstr "Määritelty jalanjälki viedään kirjastoon"
+msgstr "Mikä jalanjäljen kenttä viedään osanumerona IDF-kirjastotiedostoon"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:172
-#, fuzzy
 msgid "Log"
-msgstr "Lukitseminen"
+msgstr "Tapahtumaloki"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:126
 msgid "zip files"
@@ -46575,7 +46572,6 @@ msgid "Solder paste relative clearance:"
 msgstr "Juotospastan suhteellinen välys:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:388
-#, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -46588,15 +46584,16 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Tämä on paikallinen välyssuhde, jota käytetään prosentteina anturan "
-"leveydestä ja korkeudesta tälle jalanjäljelle.\n"
-"Arvo 10 tarkoittaa, että vaakasuoran välyksen arvo on 10% o anturan "
-"leveydestä ja pystysuoran välyksen arvo on 10 % o anturan korkeudesta.\n"
-"Lopullinen välysarvo on tämän arvon ja absoluuttisen välysarvon summa.\n"
-"Negatiivinen arvo tarkoittaa pienempää kaavainaukon kokoa, kuin anturan "
-"koko.\n"
-"Tämä arvo voidaan ohittaa antura-anturalta pohjalta. Anturan ominaisuuksissa "
-"Paikallinen Välys ja asetukset välilehdeltä."
+"Tämä on paikallinen eristysvälin suhde. Se lasketaan prosentteina tämän "
+"jalanjäljen anturan leveydestä ja korkeudesta.\n"
+"Arvo 10 tarkoittaa, että vaakasuuntainen eristysväli on 10 prosenttia "
+"anturan leveydestä. Pystysuuntainen eristysväli on 10 prosenttia anturan "
+"korkeudesta.\n"
+"Lopullinen eristysväli on tämän arvon ja absoluuttisen eristysvälin summa.\n"
+"Negatiivinen arvo tarkoittaa, että stensiilin aukon koko on pienempi kuin "
+"anturan koko.\n"
+"Tämä arvo voidaan ohittaa anturakohtaisesti anturan ominaisuuksien ’"
+"Paikalliset eristysvälit ja asetukset’ -välilehdellä."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:426
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:228
@@ -47015,18 +47012,16 @@ msgid "Heading"
 msgstr "Otsikko"
 
 #: pcbnew/dialogs/dialog_generated_table_properties.cpp:98
-#, fuzzy
 msgid "Min Width"
-msgstr "Viivan paksuus"
+msgstr "Minimi leveys"
 
 #: pcbnew/dialogs/dialog_generated_table_properties.cpp:299
-#, fuzzy
 msgid "A table needs at least one column."
-msgstr "Poraustaulukossa on oltava vähintään yksi sarake."
+msgstr "Taulukko tarvitsee vähintään yhden sarakkeen."
 
 #: pcbnew/dialogs/dialog_generated_table_properties.cpp:305
 msgid "The columns are too wide in total."
-msgstr ""
+msgstr "Sarakkeet ovat kokonaisuudessaan liian leveitä."
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:57
 msgid "Decimal places:"
@@ -50918,9 +50913,8 @@ msgid "Show totals row"
 msgstr "Näytä yhteenvetorivi"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:63
-#, fuzzy
 msgid "Group holes by"
-msgstr "Reikien ryhmittelyperuste:"
+msgstr "Reikien ryhmittelyperuste"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
@@ -50967,6 +50961,8 @@ msgstr "Jälkikoneistus"
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:68
 msgid "Grouping is shared by every drill chart and drill map on the board"
 msgstr ""
+"Ryhmittely on yhteinen kaikille piirilevyn porauskaavioille ja "
+"porauskartoille"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:82
 msgid "Import Template..."
@@ -56952,13 +56948,12 @@ msgid "Conditions"
 msgstr "Ehdot"
 
 #: pcbnew/drill/drill_chart_template.cpp:37
-#, fuzzy
 msgid "SYM"
-msgstr "SMD"
+msgstr "SYMBOLI"
 
 #: pcbnew/drill/drill_chart_template.cpp:39
 msgid "DRILL DIA"
-msgstr ""
+msgstr "PORA Ø"
 
 #: pcbnew/drill/drill_chart_template.cpp:40
 msgid "Drill diameter"
@@ -56966,7 +56961,7 @@ msgstr "Poran halkaisija"
 
 #: pcbnew/drill/drill_chart_template.cpp:41
 msgid "SLOT W x L"
-msgstr ""
+msgstr "HAHLO L x P"
 
 #: pcbnew/drill/drill_chart_template.cpp:42
 msgid "Slot size"
@@ -56974,12 +56969,11 @@ msgstr "Uran koko"
 
 #: pcbnew/drill/drill_chart_template.cpp:43
 msgid "PLATED"
-msgstr ""
+msgstr "KUPAROITU"
 
 #: pcbnew/drill/drill_chart_template.cpp:45
-#, fuzzy
 msgid "OPS"
-msgstr "OP"
+msgstr "TYÖVAIHEET"
 
 #: pcbnew/drill/drill_chart_template.cpp:46
 msgid "Operation count"
@@ -56987,7 +56981,7 @@ msgstr "Toimenpiteiden määrä"
 
 #: pcbnew/drill/drill_chart_template.cpp:47
 msgid "SITE COUNT"
-msgstr ""
+msgstr "MÄÄRÄ"
 
 #: pcbnew/drill/drill_chart_template.cpp:48
 msgid "Site count"
@@ -56995,21 +56989,19 @@ msgstr "Kohteiden lukumäärä"
 
 #: pcbnew/drill/drill_chart_template.cpp:49
 msgid "FROM / TO"
-msgstr ""
+msgstr "MISTÄ / MIHIN"
 
 #: pcbnew/drill/drill_chart_template.cpp:51
-#, fuzzy
 msgid "OPERATION"
-msgstr "kierto"
+msgstr "OPERAATIO"
 
 #: pcbnew/drill/drill_chart_template.cpp:52
 msgid "Operation"
 msgstr "Toiminto"
 
 #: pcbnew/drill/drill_chart_template.cpp:53
-#, fuzzy
 msgid "PROTECTION"
-msgstr "kierto"
+msgstr "SUOJAUS"
 
 #: pcbnew/drill/drill_chart_template.cpp:54
 msgid "Protection"
@@ -57017,16 +57009,15 @@ msgstr "Toiminto"
 
 #: pcbnew/drill/drill_chart_template.cpp:55
 msgid "BACKDRILL STUB"
-msgstr ""
+msgstr "VASTAPORAUKSEN TYNKÄ"
 
 #: pcbnew/drill/drill_chart_template.cpp:56
 msgid "Backdrill stub"
 msgstr "Vastaporauksen tynkä"
 
 #: pcbnew/drill/drill_chart_template.cpp:57
-#, fuzzy
 msgid "ASPECT RATIO"
-msgstr "kierto"
+msgstr "KOKOSUHDE"
 
 #: pcbnew/drill/drill_chart_template.cpp:58
 msgid "Aspect ratio"
@@ -57034,7 +57025,7 @@ msgstr "Kuvasuhde"
 
 #: pcbnew/drill/drill_chart_template.cpp:59
 msgid "DESCRIPTION"
-msgstr ""
+msgstr "KUVAUS"
 
 #: pcbnew/drill/drill_chart_template.cpp:122
 #, c-format
@@ -57120,42 +57111,38 @@ msgid "Export Hyperlynx Layout"
 msgstr "Vie Hyperlynx-asettelu"
 
 #: pcbnew/exporters/export_idf.cpp:558
-#, fuzzy, c-format
+#, c-format
 msgid "Exported IDF model for footprint %s"
-msgstr "Ota käyttöön pursotettu 3D-malli tälle jalanjäljelle"
+msgstr "IDF-malli vietiin jalanjäljelle %s"
 
 #: pcbnew/exporters/export_idf.cpp:575 pcbnew/exporters/export_idf.cpp:596
 #: pcbnew/exporters/export_idf.cpp:645 pcbnew/exporters/export_idf.cpp:685
-#, fuzzy, c-format
+#, c-format
 msgid "Could not generate extruded body for %s"
-msgstr ""
-"Pursotettua kappaletta kohteelle %s ei voitu lisätä.\n"
-"OpenCASCADE-virhe: %s\n"
+msgstr "Kohteelle %s ei voitu luoda pursotettua kappaletta"
 
 #: pcbnew/exporters/export_idf.cpp:891
-#, fuzzy
 msgid "could not add drill for pad"
-msgstr "Arkiston päätä ei voitu hakea"
+msgstr "Anturalle ei voitu lisätä porausta"
 
 #: pcbnew/exporters/export_idf.cpp:1010
-#, fuzzy, c-format
+#, c-format
 msgid "Exported extruded body for footprint %s"
-msgstr "Ota käyttöön pursotettu 3D-malli tälle jalanjäljelle"
+msgstr "Pursotettu kappale vietiin jalanjäljelle %s"
 
 #: pcbnew/exporters/export_idf.cpp:1099
-#, fuzzy
 msgid "Exporting board shape"
-msgstr "Vie piirilevyn kerrosrakennetaulukko"
+msgstr "Vietään piirilevyn muotoa"
 
 #: pcbnew/exporters/export_idf.cpp:1139
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote IDF board file to %s"
-msgstr "Kirjoitti levytiedoston: \"%s\""
+msgstr "IDF-piirilevytiedosto kirjoitettiin kohteeseen %s"
 
 #: pcbnew/exporters/export_idf.cpp:1141
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote IDF library file to %s"
-msgstr "Kirjoitti levytiedoston: \"%s\""
+msgstr "IDF-kirjastotiedosto kirjoitettiin kohteeseen %s"
 
 #: pcbnew/exporters/exporter_vrml.cpp:805
 msgid "VRML Export Failed: Could not add holes to contours."
@@ -60248,9 +60235,8 @@ msgid "%s field of %s (%s)"
 msgstr "%s kenttä %s (%s)"
 
 #: pcbnew/pcb_generated_table.cpp:445
-#, fuzzy
 msgid "Table Generator"
-msgstr "Generaattori"
+msgstr "Taulukon luontityökalu"
 
 #: pcbnew/pcb_generated_table.cpp:451
 msgid "Decimal Places"
@@ -62254,14 +62240,14 @@ msgid "Invalid drill map: not on a documentation layer"
 msgstr "Virheellinen porauskartta: ei ole dokumentaatiokerroksella"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5477
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid %s: bad column set"
-msgstr "Virheellinen porauskaavio: virheellinen sarakeryhmä"
+msgstr "Virheellinen %s: virheellinen sarakejoukko"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5485
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid %s: not on a documentation layer"
-msgstr "Virheellinen porauskartta: ei ole dokumentaatiokerroksella"
+msgstr "Virheellinen %s: ei ole dokumentaatiotasolla"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6091
 #, c-format
@@ -63890,14 +63876,12 @@ msgid "Failed to create IPC-D-356 file\n"
 msgstr "IPC-D-356-tiedoston luominen epäonnistui\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3113
-#, fuzzy
 msgid "Internal error\n"
-msgstr "Sisäinen virhe"
+msgstr "Sisäinen virhe\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3122
-#, fuzzy
 msgid "Successfully created IDFv3 files\n"
-msgstr "Svg-tiedoston luominen onnistui"
+msgstr "IDFv3-tiedostojen luominen onnistui\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3220
 msgid "Successfully saved board file using the latest format\n"
