@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-02 21:48+0000\n"
+"PO-Revision-Date: 2026-10-03 08:52+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -47,7 +47,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2248,9 +2248,9 @@ msgstr "Abschnitt \"Aktionen\" ist ungültig: %s"
 
 #: common/api/api_plugin_manager.cpp:102 common/api/api_plugin_manager.cpp:148
 #: pcbnew/footprint_wizard.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Plugin action '%s'"
-msgstr "Plugin-Aktion \"%s\": %s"
+msgstr "Plugin-Aktion \"%s\""
 
 #: common/api/api_plugin_manager.cpp:114
 #, c-format
@@ -7550,10 +7550,12 @@ msgstr "ID duplizieren"
 #: common/draw_panel_gal.cpp:244
 msgid "The graphics driver was reset and OpenGL could not be restored"
 msgstr ""
+"Der Grafiktreiber wurde zurückgesetzt und OpenGL konnte nicht "
+"wiederhergestellt werden"
 
 #: common/draw_panel_gal.cpp:245
 msgid "Restart KiCad to use accelerated graphics again."
-msgstr ""
+msgstr "Starten Sie KiCad neu, um wieder die beschleunigte Grafik zu verwenden."
 
 #: common/draw_panel_gal.cpp:249 common/draw_panel_gal.cpp:825
 #: common/draw_panel_gal.cpp:868
@@ -17171,9 +17173,8 @@ msgid "Symbol Name"
 msgstr "Symbolname"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:650
-#, fuzzy
 msgid "Parent Symbol"
-msgstr "Übergeordnetes Symbol:"
+msgstr "Übergeordnetes Symbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:651
 #, fuzzy
@@ -19779,9 +19780,8 @@ msgstr ""
 "die für Bestückungsautomaten verwendet werden, aufgenommen werden sollen."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:232
-#, fuzzy
 msgid "Passthrough:"
-msgstr "Durchkontaktierung"
+msgstr "Durchkontaktierung:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 #, fuzzy
@@ -20702,19 +20702,19 @@ msgid "Failed to query matching footprints."
 msgstr "Passende Footprints hervorheben"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Matching footprints (%zu+):"
-msgstr "Fehlender Footprint %s (%s)"
+msgstr "Passende Footprints (%zu+):"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Matching footprints (%zu):"
-msgstr "Fehlender Footprint %s (%s)"
+msgstr "Passende Footprints (%zu):"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "Loading footprint libraries (%d%%)..."
-msgstr "Lade Footprintbibliothek-Tabelle ..."
+msgstr "Lade Footprintbibliotheken (%d%%) ..."
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:505
 #: pcbnew/tools/pcb_actions.cpp:910
@@ -21571,12 +21571,12 @@ msgstr "Leerzeichen beibehalten"
 #: eeschema/dialogs/panel_template_fieldnames.cpp:245
 #, fuzzy, c-format
 msgid "Field name template '%s' already exists as a mandatory field."
-msgstr "Feldname \"%s\" ist bereits vorhanden."
+msgstr "Feldnamenvorlage \"%s\" ist bereits als obligatorisches Feld vorhanden."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Field name template '%s' already exists."
-msgstr "Feldname \"%s\" ist bereits vorhanden."
+msgstr "Feldnamenvorlage \"%s\" ist bereits vorhanden."
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
@@ -21605,7 +21605,9 @@ msgstr "Fehler beim Speichern des Zeichnungsblattes \"%s\": %s"
 #: eeschema/eeschema_helpers.cpp:163
 #, fuzzy, c-format
 msgid "Schematic '%s' has a malformed root sheet instance path."
-msgstr "Schaltplan \"%s\" ist bereits geöffnet durch \"%s\" auf \"%s\"."
+msgstr ""
+"Schaltplan \"%s\" hat einen fehlerhaften Instanzpfad zum "
+"Stammschaltplanblatt."
 
 #: eeschema/eeschema_helpers.cpp:189
 #, c-format
@@ -32427,9 +32429,9 @@ msgid "Net chain name:"
 msgstr "Netzkettenname:"
 
 #: eeschema/tools/sch_editor_control.cpp:1631
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to rename net chain '%s' to '%s'."
-msgstr "Verzeichnis \"%s\" kann nicht erstellt werden."
+msgstr "Konnte Netzkette \"%s\" nicht in \"%s\" umbenennen."
 
 #: eeschema/tools/sch_editor_control.cpp:1667
 #, fuzzy
@@ -32437,9 +32439,9 @@ msgid "No potential net chain connects the selected pins."
 msgstr "Keine potenzielle Netzkette verbindet die ausgewählten Pins."
 
 #: eeschema/tools/sch_editor_control.cpp:1676
-#, fuzzy, c-format
+#, c-format
 msgid "The selected pins are already in net chain '%s'."
-msgstr "Das ausgewählte Verzeichnis ist bereits ein Git-Projekt."
+msgstr "Die ausgewählten Pins befinden sich bereits in der Netzkette \"%s\"."
 
 #: eeschema/tools/sch_editor_control.cpp:1686
 #: eeschema/tools/sch_selection_tool.cpp:431
@@ -34557,14 +34559,12 @@ msgid "Show Inactive Layers Normally"
 msgstr "Anzeige zu inaktiven Lagen"
 
 #: gerbview/tools/gerbview_actions.cpp:264
-#, fuzzy
 msgid "Dim Inactive Layers"
-msgstr "Inaktive Lagen:"
+msgstr "Inaktive Lagen abblenden"
 
 #: gerbview/tools/gerbview_actions.cpp:270
-#, fuzzy
 msgid "Hide Inactive Layers"
-msgstr "Inaktive Lagen:"
+msgstr "Inaktive Lagen ausblenden"
 
 #: gerbview/tools/gerbview_control.cpp:121
 msgid "None of the Gerber layers contain any data"
@@ -35829,9 +35829,8 @@ msgid "Export the PCB in IDFv3 format"
 msgstr "PCB in Gencad-Format exportieren"
 
 #: kicad/cli/command_pcb_export_idf.cpp:49
-#, fuzzy
 msgid "Output units"
-msgstr "Ausgabeeinheiten:"
+msgstr "Ausgabeeinheiten"
 
 #: kicad/cli/command_pcb_export_idf.cpp:54
 #, fuzzy
@@ -37153,7 +37152,7 @@ msgstr "gEDA / Lepton EDA-PCB suchen"
 #: kicad/import_proj.cpp:718
 #, c-format
 msgid "Import the associated Allegro board '%s'?"
-msgstr ""
+msgstr "Die zugehörige Allegro-Platine \"%s\" importieren?"
 
 #: kicad/import_proj.cpp:720
 msgid "Import an associated Allegro board file?"
@@ -37161,12 +37160,11 @@ msgstr "Zugehörige Allegro-Platinendatei importieren?"
 
 #: kicad/import_proj.cpp:722
 msgid "Import Allegro Board"
-msgstr ""
+msgstr "Allegro-Platine importieren"
 
 #: kicad/import_proj.cpp:730
-#, fuzzy
 msgid "Locate Allegro Board"
-msgstr "Platine drehen"
+msgstr "Allegro-Platine finden"
 
 #: kicad/import_project.cpp:69
 msgid "The selected file does not appear to be a PADS ASCII schematic or PCB."
@@ -37501,7 +37499,7 @@ msgstr "OrCAD -Projekt ..."
 #: kicad/menubar.cpp:164
 msgid "Import OrCAD schematic (*.dsn) and optional Allegro board (*.brd)"
 msgstr ""
-"OrCAD-Schaltplan (*.dsn) und optionale Allegro.Platine (*.brd) importieren"
+"OrCAD-Schaltplan (*.dsn) und optionale Allegro-Platine (*.brd) importieren"
 
 #: kicad/menubar.cpp:193
 msgid "Edit Advanced Config..."
@@ -40528,12 +40526,12 @@ msgstr "%s Zusammenfassung"
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:459
 #, fuzzy, c-format
 msgid "Maximum lead diameter + %smm"
-msgstr "Min. Lochdurchmesser"
+msgstr "Maximaler Drahtdurchmesser + %smm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:463
 #, fuzzy, c-format
 msgid "Minimum lead diameter + %smm"
-msgstr "Min. Lochdurchmesser"
+msgstr "Minimaler Drahtdurchmesser + %smm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:485
 msgid "Side length:"
@@ -40546,14 +40544,12 @@ msgid "Size X:"
 msgstr "Größe X:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:53
-#, fuzzy
 msgid "Min"
-msgstr "Min:"
+msgstr "Min"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:57
-#, fuzzy
 msgid "Max"
-msgstr "Max:"
+msgstr "Max"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:78
 #: pcbnew/dialogs/dialog_barcode_properties_base.cpp:122
@@ -40561,9 +40557,8 @@ msgid "Size Y:"
 msgstr "Größe Y:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:102
-#, fuzzy
 msgid "Hole size standard"
-msgstr "Lochgröße X:"
+msgstr "Lochgrößenstandard"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:122
 #, fuzzy
@@ -40571,23 +40566,20 @@ msgid "Level:"
 msgstr "Ebene:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:134
-#, fuzzy
 msgid "Round to:"
-msgstr "Rundung"
+msgstr "Aufrunden auf:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:145
-#, fuzzy
 msgid "Rounding:"
-msgstr "Rundung"
+msgstr "Runden:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:149
 msgid "Nearest"
 msgstr "Am nächsten"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:165
-#, fuzzy
 msgid "Annular ring"
-msgstr "Restringe:"
+msgstr "Restring"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:194
 msgid "Result"
@@ -40596,7 +40588,7 @@ msgstr "Ergebniss"
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:211
 #, fuzzy
 msgid "Show minimum lead size"
-msgstr "Mindestbohrdurchmesser:"
+msgstr "Mindestdrahtgröße anzeigen"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:214
 msgid "Show minimum hole size"
@@ -45275,9 +45267,9 @@ msgid "Design Rules Checker"
 msgstr "Designregeln überprüfen (DRC)"
 
 #: pcbnew/dialogs/dialog_drill_groups.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid "Shape %d"
-msgstr "Form"
+msgstr "Form %d"
 
 #: pcbnew/dialogs/dialog_drill_groups.cpp:77
 msgid "From / To"
@@ -45293,9 +45285,8 @@ msgid "Sites"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:22
-#, fuzzy
 msgid "Profile:"
-msgstr "Profilname"
+msgstr "Profil:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:30
 #, fuzzy
@@ -45310,7 +45301,7 @@ msgstr "Nur &Auswahl"
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:73
 #, fuzzy
 msgid "Mark:"
-msgstr "Marker"
+msgstr "Markierung:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:77
 #, fuzzy
@@ -45319,9 +45310,8 @@ msgstr "Muster"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:77
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
-#, fuzzy
 msgid "Hole size text"
-msgstr "Lochgröße X:"
+msgstr "Lochgrößentext"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:83
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
@@ -45889,9 +45879,9 @@ msgid "File %s already exists."
 msgstr "Datei \"%s\" existiert bereits."
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Files %s and %s already exist."
-msgstr "Datei \"%s\" existiert bereits."
+msgstr "Dateien %s und %s existieren bereits."
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:321
 #, fuzzy
@@ -47658,9 +47648,8 @@ msgid "Row separators"
 msgstr "Zeilentrenner"
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:155
-#, fuzzy
 msgid "Column separators"
-msgstr "Zusammenführungs-Trennzeichen:"
+msgstr "Spalten-Trennzeichen"
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:165
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:217
@@ -47668,9 +47657,8 @@ msgid "Border width:"
 msgstr "Rahmenbreite:"
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:176
-#, fuzzy
 msgid "Separator width:"
-msgstr "Trennerbreite"
+msgstr "Trennzeichenbreite:"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:31
 msgid "Click on items to highlight them on the board."
@@ -48616,11 +48604,9 @@ msgid "Footprint Fields Table ('%s' Library)"
 msgstr "Symbolfelder-Tabelle (\"%s\" Bibliothek)"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:241
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading footprints from library '%s': %s"
-msgstr ""
-"Bei dem Versuch, den Footprint %s aus der Bibliothek \"%s\" zu laden, ist "
-"ein Fehler aufgetreten: %s"
+msgstr "Fehler beim Laden von Footprints aus der Bibliothek \"%s\": %s"
 
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:248
 #, c-format
@@ -48700,9 +48686,8 @@ msgstr "Lagenaufbau der Platine"
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:51
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:69
 #: pcbnew/generators/pcb_via_stack.cpp:1598
-#, fuzzy
 msgid "Staggered"
-msgstr "Staffelung:"
+msgstr "Gestaffelt"
 
 #: pcbnew/dialogs/dialog_microvia_stack_base.cpp:60
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:310
@@ -51308,9 +51293,8 @@ msgid "Via Stitching Properties"
 msgstr "Via-Eigenschaften"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:39
-#, fuzzy
 msgid "Stitch Net:"
-msgstr "Wechseln"
+msgstr "Nahtnetz:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:75
 #, fuzzy
@@ -51353,9 +51337,8 @@ msgid "Guard"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:114
-#, fuzzy
 msgid "Guard Net:"
-msgstr "Netz verbergen"
+msgstr "Schutznetz:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.h:85
 #, fuzzy
@@ -51593,9 +51576,8 @@ msgid "Show totals row"
 msgstr "Alle Fehler zeigen"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:63
-#, fuzzy
 msgid "Group holes by"
-msgstr "Gruppieren nach:"
+msgstr "Löcher gruppieren nach"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
@@ -55380,7 +55362,7 @@ msgstr "Prüfe %s max. Versatz: %s."
 #: pcbnew/drc/drc_engine.cpp:1488
 #, fuzzy, c-format
 msgid "Checking %s max microvia aspect ratio: %.3f."
-msgstr "Prüfe %s max. ungekoppelte Länge: %s."
+msgstr "Prüfe %s max. Microvia-Seitenverhältnis: %.3f."
 
 #: pcbnew/drc/drc_engine.cpp:1494
 #, c-format
@@ -57894,17 +57876,15 @@ msgid "Export Hyperlynx Layout"
 msgstr "Hyperlynx-Layout exportieren"
 
 #: pcbnew/exporters/export_idf.cpp:558
-#, fuzzy, c-format
+#, c-format
 msgid "Exported IDF model for footprint %s"
-msgstr "Für diesen Footprint extrudierte 3D-Körper aktivieren"
+msgstr "Exportiertes IDF-Modell für Footprint %s"
 
 #: pcbnew/exporters/export_idf.cpp:575 pcbnew/exporters/export_idf.cpp:596
 #: pcbnew/exporters/export_idf.cpp:645 pcbnew/exporters/export_idf.cpp:685
-#, fuzzy, c-format
+#, c-format
 msgid "Could not generate extruded body for %s"
-msgstr ""
-"Konnte 3D-Modell für %s nicht hinzufügen.\n"
-"OpenCASCADE-Fehler: %s\n"
+msgstr "Konnte keinen extrudierten Körper für %s erzeugen"
 
 #: pcbnew/exporters/export_idf.cpp:891
 #, fuzzy
@@ -57912,9 +57892,9 @@ msgid "could not add drill for pad"
 msgstr "Konnte Repository-Head nicht abrufen"
 
 #: pcbnew/exporters/export_idf.cpp:1010
-#, fuzzy, c-format
+#, c-format
 msgid "Exported extruded body for footprint %s"
-msgstr "Für diesen Footprint extrudierte 3D-Körper aktivieren"
+msgstr "Exportierter extrudierter Körper für Footprint %s"
 
 #: pcbnew/exporters/export_idf.cpp:1099
 #, fuzzy
@@ -58907,9 +58887,9 @@ msgstr ""
 "verweisen"
 
 #: pcbnew/footprint_libraries_utils.cpp:898
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' could not be saved to library '%s'."
-msgstr "Footprint \"%s\" nicht in Bibliothek \"%s\" gefunden."
+msgstr "Footprint \"%s\" konnte nicht in Bibliothek \"%s\" gespeichert werden."
 
 #: pcbnew/footprint_libraries_utils.cpp:929
 #: pcbnew/footprint_viewer_frame.cpp:748
@@ -58972,7 +58952,7 @@ msgstr ""
 #: pcbnew/footprint_wizard.cpp:119
 #, fuzzy
 msgid "could not parse wizard info"
-msgstr "Konnte Datei nicht lesen "
+msgstr "konnte Assistenteninfo nicht parsen"
 
 #: pcbnew/footprint_wizard.cpp:133 pcbnew/footprint_wizard.cpp:153
 msgid "Unexpected error with footprint wizard"
@@ -59272,9 +59252,8 @@ msgid "Microvia Stack Properties"
 msgstr "Via-Eigenschaften"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1630
-#, fuzzy
 msgid "End Layer"
-msgstr "Endlage:"
+msgstr "Endlage"
 
 #: pcbnew/generators/pcb_via_stack.cpp:1642
 #, fuzzy
@@ -61174,7 +61153,7 @@ msgstr "Unbekannte Platineneinheiten: %d"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2692
 msgid "Parsing Allegro objects"
-msgstr "Allegroobjekte parsen"
+msgstr "Allegro-Objekte parsen"
 
 #: pcbnew/pcb_io/allegro/convert/allegro_parser.cpp:2901
 #, c-format
@@ -61198,13 +61177,13 @@ msgid "File is empty: %s"
 msgstr "Datei ist leer: \"%s\""
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load Allegro board from file: %s"
-msgstr "Platinenerstellung aus Allegrodaten fehlgeschlagen"
+msgstr "Laden der Allegro-Platine aus der Datei %s ist fehlgeschlagen"
 
 #: pcbnew/pcb_io/allegro/pcb_io_allegro.cpp:173
 msgid "Failed to build board from Allegro data"
-msgstr "Platinenerstellung aus Allegrodaten fehlgeschlagen"
+msgstr "Platinenerstellung aus Allegro-Daten fehlgeschlagen"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:662
 #, c-format
@@ -61708,9 +61687,10 @@ msgid "Autotrax import: %d pad(s) with a target shape were skipped."
 msgstr ""
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Autotrax import: %d pad(s) on unsupported layers were skipped."
-msgstr "Pad hat nicht unterstützen Typ; es wurde übersprungen."
+msgstr ""
+"Autotrax-Import: %d Pad(s) auf nicht unterstützten Lagen wurden übersprungen."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:212
 #, c-format
@@ -61728,7 +61708,8 @@ msgstr ""
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:715
 #, fuzzy, c-format
 msgid "Autotrax import: net '%s' node '%s' matches no pad."
-msgstr "Autotrax-Import, Zeile %d: %s"
+msgstr ""
+"Autotrax-Import: Der Knoten \"%s\" im Netz \"%s\" entspricht keinem Pad."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:721
 #, c-format
@@ -63113,12 +63094,12 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5477
 #, fuzzy, c-format
 msgid "Invalid %s: bad column set"
-msgstr "Ungültiges Bohrdiagramm: fehlerhafte Spaltenauswahl"
+msgstr "Ungültig %s: falscher Spaltenbereich"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5485
 #, fuzzy, c-format
 msgid "Invalid %s: not on a documentation layer"
-msgstr "Nicht zu bestückende Bauteile auf Fabrikationslagen markieren"
+msgstr "Ungültig %s: Nicht auf einer Dokumentationslage"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6091
 #, c-format
@@ -64571,7 +64552,7 @@ msgstr "Fehlendes Lagenname-Argument für %s."
 #: pcbnew/pcbexpr_functions.cpp:1783
 #, fuzzy, c-format
 msgid "Missing component class name argument to %s."
-msgstr "Fehlendes Bauteilklassenname-Argument für hasComponentClass()"
+msgstr "Fehlendes Bauteilklassenname-Argument zu %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1833 pcbnew/pcbexpr_functions.cpp:1877
 #, fuzzy, c-format
@@ -64749,14 +64730,12 @@ msgid "Failed to create IPC-D-356 file\n"
 msgstr "Konnte IPC-D-356-Datei nicht erstellen.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3113
-#, fuzzy
 msgid "Internal error\n"
-msgstr "Interner Fehler"
+msgstr "Interner Fehler\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3122
-#, fuzzy
 msgid "Successfully created IDFv3 files\n"
-msgstr "SVG-Datei erfolgreich erstellt"
+msgstr "IDFv3-Dateien erfolgreich erstellt\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3220
 msgid "Successfully saved board file using the latest format\n"
@@ -64819,7 +64798,7 @@ msgstr "Unerwarteter Abbruch: %s\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:3603
 #, fuzzy, c-format
 msgid "Failed to load board: %s\n"
-msgstr "Fehler beim Laden der Platine.\n"
+msgstr "Laden der Platine ist fehlgeschlagen: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3632
 #, c-format
@@ -65563,7 +65542,7 @@ msgstr "Ungültige Tabelle: keine Zellen definiert"
 #: pcbnew/toolbars_pcb_editor.cpp:789
 #, fuzzy, c-format
 msgid "Microvia stack: %s"
-msgstr "Mikro-Via %s auf %s"
+msgstr "Mikrovia-Stapel: %s"
 
 #: pcbnew/toolbars_pcb_editor.cpp:792
 #, fuzzy
@@ -66724,9 +66703,8 @@ msgid "Error renaming footprint"
 msgstr "Bei der Umbenennung des Footprints trat ein Fehler auf"
 
 #: pcbnew/tools/footprint_editor_control.cpp:640
-#, fuzzy
 msgid "No footprint to export"
-msgstr "Keine Footprints zu exportieren!"
+msgstr "Kein Footprint zum Exportieren"
 
 #: pcbnew/tools/footprint_editor_control.cpp:677
 msgid "Select a library to compare against another."
@@ -66927,9 +66905,8 @@ msgid "Some of the items could not be outset."
 msgstr "Um manche Elemente konnten keine Außenlinien erstellt werden."
 
 #: pcbnew/tools/match_properties.cpp:58
-#, fuzzy
 msgid "Tracks and Arcs"
-msgstr "Leiterbahn (Bogen)"
+msgstr "Leiterbahnen und Bögen"
 
 #: pcbnew/tools/match_properties.cpp:63
 #, fuzzy
@@ -66937,89 +66914,81 @@ msgid "Text Boxes"
 msgstr "Textfeld"
 
 #: pcbnew/tools/match_properties.cpp:69
-#, fuzzy
 msgid "Table Cells"
-msgstr "Tabellenzelle"
+msgstr "Tabellenzellen"
 
 #: pcbnew/tools/match_properties.cpp:70
-#, fuzzy
 msgid "Targets"
-msgstr "Ziel"
+msgstr "Ziele"
 
 #: pcbnew/tools/match_properties.cpp:71
-#, fuzzy
 msgid "Reference Images"
-msgstr "Referenzbild"
+msgstr "Referenzbilder"
 
 #: pcbnew/tools/match_properties.cpp:72
-#, fuzzy
 msgid "Barcodes"
-msgstr "Barcode"
+msgstr "Barcodes"
 
 #: pcbnew/tools/match_properties.cpp:242
-#, fuzzy
 msgid "Common to Several Kinds"
-msgstr "Von allen Einheiten gemeinsam genutzt"
+msgstr "Mehreren Arten gemeinsam"
 
 #: pcbnew/tools/match_properties.cpp:441
 msgid "The source and target have no properties in common."
-msgstr ""
+msgstr "Die Quell und das Ziel weisen keine gemeinsamen Eigenschaften auf."
 
 #: pcbnew/tools/match_properties.cpp:479
-#, fuzzy, c-format
+#, c-format
 msgid "Could not apply property '%s' to the target item."
-msgstr "Referenz \"%s\" konnte keinem Commit oder Baum zugeordnet werden."
+msgstr "Konnte die Eigenschaft \"%s\" nicht auf das Zielelement anwenden."
 
 #: pcbnew/tools/match_properties.cpp:511
-#, fuzzy, c-format
+#, c-format
 msgid "The value for property '%s' is not valid for the target item."
-msgstr ""
-"Die Footprint-Bibliothek \"%s\" ist in der aktuellen Konfiguration nicht "
-"aktiviert."
+msgstr "Der Wert von Eigenschaft \"%s\" ist für das Zielelement nicht zulässig."
 
 #: pcbnew/tools/match_properties_tool.cpp:58
-#, fuzzy
 msgid "Match Properties Settings"
-msgstr "Pad-Eigenschaften Warnungen"
+msgstr "Eigenschaftenabgleich-Einstellungen"
 
 #: pcbnew/tools/match_properties_tool.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Properties copied from %s:"
-msgstr "Von %s abgerufen."
+msgstr "Eigenschaften kopiert von %s:"
 
 #: pcbnew/tools/match_properties_tool.cpp:140
-#, fuzzy
 msgid "Check All"
-msgstr "Prüf' mich!"
+msgstr "Alles auswählen"
 
 #: pcbnew/tools/match_properties_tool.cpp:141
-#, fuzzy
 msgid "Uncheck All"
 msgstr "Alles abwählen"
 
 #: pcbnew/tools/match_properties_tool.cpp:227
 msgid "Nothing to copy.  The target already matches the source."
 msgstr ""
+"Es gibt nichts zu kopieren.  Das Ziel stimmt bereits mit der Quelle überein."
 
 #: pcbnew/tools/match_properties_tool.cpp:235 pcbnew/tools/pcb_actions.cpp:1236
-#, fuzzy
 msgid "Match Properties"
-msgstr "Grundlegende Eigenschaften"
+msgstr "Eigenschaftenabgleich"
 
 #: pcbnew/tools/match_properties_tool.cpp:248
 msgid "Select one item to copy properties from."
-msgstr ""
+msgstr "Wählen Sie ein Element, um die Eigenschaften von ihm zu kopieren."
 
 #: pcbnew/tools/match_properties_tool.cpp:256
-#, fuzzy
 msgid "The selected source item has no properties to match."
-msgstr "Ausgewählte Gruppe enthält keine platzierbaren Footprints."
+msgstr ""
+"Das ausgewählte Quellelement hat keine Eigenschaften für einen Abgleich."
 
 #: pcbnew/tools/match_properties_tool.cpp:264
 msgid ""
 "No properties are enabled for this kind of item.  Press <ctrl>+<,> to choose "
 "some."
 msgstr ""
+"Für diese Art von Element sind keine Eigenschaften aktiviert.  Drücken Sie "
+"<Strg>+<,> um einige auszuwählen."
 
 #: pcbnew/tools/match_properties_tool.cpp:307
 #, c-format
@@ -67027,10 +66996,13 @@ msgid ""
 "Click or drag over the items to copy to.\n"
 "%d properties enabled; <ctrl>+<,> for settings."
 msgstr ""
+"Klicken Sie auf oder ziehen Sie über die Elemente, in die Sie kopieren "
+"möchten.\n"
+"%d Eigenschaften aktiviert; <Strg>+<,> für Einstellungen."
 
 #: pcbnew/tools/match_properties_tool.cpp:375
 msgid "The Match Properties source no longer exists."
-msgstr ""
+msgstr "Die Quelle für den Eigenschaftenabgleich besteht nicht mehr."
 
 #: pcbnew/tools/multichannel_tool.cpp:140
 msgid "Topology mismatch"
@@ -67071,7 +67043,6 @@ msgstr "Die Zielgruppe hat keine Gruppe."
 
 #: pcbnew/tools/multichannel_tool.cpp:1025
 #: pcbnew/tools/multichannel_tool.cpp:1097
-#, fuzzy
 msgid "Repeat Layout"
 msgstr "Layout wiederholen"
 
@@ -67081,9 +67052,8 @@ msgid "Copied to %d Rule Areas."
 msgstr "In %d Regelbereiche kopiert."
 
 #: pcbnew/tools/multichannel_tool.cpp:2142
-#, fuzzy
 msgid "Target Rule Area shares components with the reference area"
-msgstr "Komponenten mit Platzierungsregelbereichen gruppieren"
+msgstr "Zielregelbereich hat gemeinsame Bauteile mit dem Referenzbereich"
 
 #: pcbnew/tools/multichannel_tool.cpp:2145
 msgid ""
@@ -67091,21 +67061,24 @@ msgid ""
 "Repeat layout cannot copy a Rule Area onto itself. Give each placement Rule "
 "Area a distinct sheet, component class or group."
 msgstr ""
+"Dieser \"Ziel\"-Regelbereich wählt dieselben Bauteile wie der "
+"Referenzbereich aus. \"Layout wiederholen\" kann keinen Regelbereich auf "
+"sich selbst kopieren. Geben Sie jedem \"Platzierung\"-Regelbereich ein "
+"eindeutiges Schaltplanblatt, Bauteilklasse oder Gruppe."
 
 #: pcbnew/tools/multichannel_tool.cpp:2148
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Shared components:\n"
 "%s"
 msgstr ""
-"Zielbereich-Komponenten:\n"
+"Gemeinsame Bauteile:\n"
 "%s"
 
 #: pcbnew/tools/multichannel_tool.cpp:2275
-#, fuzzy
 msgid "The components in the two areas could not be paired up."
 msgstr ""
-"Für einige der Dateien des Projektes konnte keine Sicherungskopie angelegt "
+"Die Bauteile in den beiden Bereichen konnten nicht miteinander abgeglichen "
 "werden."
 
 #: pcbnew/tools/multichannel_tool.cpp:2282
