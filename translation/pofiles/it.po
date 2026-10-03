@@ -118,7 +118,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-02 06:51+0000\n"
+"PO-Revision-Date: 2026-10-03 17:11+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -127,7 +127,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Poedit-Basepath: /home/marco/git/github/kicad/kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: kicad\n"
@@ -9714,9 +9714,9 @@ msgid "History repository is locked by %s@%s"
 msgstr "Il repository della cronologia è bloccato da %s@%s"
 
 #: common/history_lock.cpp:168
-#, fuzzy
 msgid "History repository is locked by an older KiCad instance."
-msgstr "Il repository della cronologia è bloccato da %s@%s"
+msgstr ""
+"Il repository della cronologia è bloccato da una vecchia istanza di KiCad."
 
 #: common/history_lock.cpp:181
 #, c-format
@@ -9746,9 +9746,9 @@ msgstr ""
 "corso?): %s"
 
 #: common/history_lock.cpp:312
-#, fuzzy
 msgid "Cannot re-open history repository without the file lock"
-msgstr "Impossibile rimuovere il file temporaneo di uscita"
+msgstr ""
+"Impossibile riaprire il repository della cronologia senza il blocco del file"
 
 #: common/hotkey_store.cpp:39
 msgid "Accept Autocomplete"
@@ -10175,19 +10175,19 @@ msgstr ""
 "ed .elibu."
 
 #: common/io/idf/idf_parser.cpp:3259
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid output path: %s"
-msgstr "Formato rapporto non valido: %s\n"
+msgstr "Percorso d'uscita non valido: %s"
 
 #: common/io/idf/idf_parser.cpp:3270 common/io/idf/idf_parser.cpp:3284
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot overwrite file: %s"
-msgstr "Impossibile aprire il file \"%s\""
+msgstr "Impossibile sovrascrivere il file: %s"
 
 #: common/io/idf/idf_parser.cpp:3299
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing IDF file: %s"
-msgstr "Errore nello scrivere il file '%s'."
+msgstr "Errore nello scrivere il file IDF: %s"
 
 #: common/io/pcad/s_expr_loader.cpp:194 common/io/pcad/s_expr_loader.cpp:199
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1301
@@ -10311,14 +10311,12 @@ msgid "Export IDFv3"
 msgstr "Esporta IDFv3"
 
 #: common/jobs/job_export_pcb_idf.cpp:69
-#, fuzzy
 msgid "Export IDFv3 Job Settings"
-msgstr "Impostazioni lavoro Esporta DXF"
+msgstr "Impostazioni lavoro Esporta IDFv3"
 
 #: common/jobs/job_export_pcb_idf.cpp:83
-#, fuzzy
 msgid "PCB: Export IDFv3"
-msgstr "C.S: esporta DXF"
+msgstr "C.S: Esporta IDFv3"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:81
 #: pcbnew/dialogs/dialog_export_2581_base.h:89
@@ -11340,6 +11338,8 @@ msgid ""
 "Could not restore local history '%s'. The previous history is preserved at "
 "'%s'."
 msgstr ""
+"Impossibile ripristinare la cronologia locale '%s'. La cronologia precedente "
+"è conservata in '%s'."
 
 #: common/local_history.cpp:2737
 msgid "Cannot restore - the following files are open by another user:"
@@ -11371,26 +11371,24 @@ msgstr ""
 #: common/model_preview_manager.cpp:107
 msgid "3D model previews require setup for this KiCad version."
 msgstr ""
+"Le anteprime dei modelli 3D richiedono una configurazione per questa "
+"versione di KiCad."
 
 #: common/model_preview_manager.cpp:108
-#, fuzzy
 msgid "3D Model Previews"
-msgstr "Modelli 3D"
+msgstr "Anteprime modelli 3D"
 
 #: common/model_preview_manager.cpp:109
-#, fuzzy
 msgid "Set Up Previews"
-msgstr "Anteprima di stampa"
+msgstr "Impostazione anteprime"
 
 #: common/model_preview_manager.cpp:109
-#, fuzzy
 msgid "Skip This Version"
-msgstr "&Salta questa versione"
+msgstr "Salta questa versione"
 
 #: common/model_preview_manager.cpp:123
-#, fuzzy
 msgid "Could not set up 3D model previews."
-msgstr "Impossibile scrivere i file di tracciatura nella cartella '%s'."
+msgstr "Impossibile impostare le anteprime dei modelli 3D."
 
 #: common/netclass.cpp:345 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1275 pcbnew/zone.cpp:1166
@@ -11698,6 +11696,8 @@ msgid ""
 "Refusing to extract file '%s': the archive entry points outside of the "
 "destination directory."
 msgstr ""
+"Estrazione del file '%s' rifiutata: la voce dell'archivio punta fuori dalla "
+"cartella di destinazione."
 
 #: common/project/project_archiver.cpp:177 kicad/pcm/pcm_task_manager.cpp:252
 #: kicad/pcm/pcm_task_manager.cpp:313
@@ -11770,18 +11770,16 @@ msgid "Open file"
 msgstr "Apri file"
 
 #: common/pth_hole_size.cpp:94
-#, fuzzy
 msgid "A (General)"
-msgstr "Generale"
+msgstr "A (Generale)"
 
 #: common/pth_hole_size.cpp:95
 msgid "B (Moderate)"
-msgstr ""
+msgstr "B (Moderato)"
 
 #: common/pth_hole_size.cpp:96
-#, fuzzy
 msgid "C (High density)"
-msgstr "Intensità luci"
+msgstr "C (Alta densità)"
 
 #: common/rc_item.cpp:526 eeschema/erc/erc_item.cpp:440
 msgid "Excluded warning: "
@@ -11949,9 +11947,9 @@ msgid "Cannot flush '%s' to disk: %s"
 msgstr "Impossibile scaricare '%s' su disco: %s"
 
 #: common/richio.cpp:652
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot close '%s': %s"
-msgstr "Impossibile importare il simbolo '%s': %s"
+msgstr "Impossibile chiudere '%s': %s"
 
 #: common/richio.cpp:724
 #, c-format
@@ -12638,14 +12636,12 @@ msgid "Switch arc posture between clockwise and counter-clockwise"
 msgstr "Cambia la postura dell'arco tra orario e antiorario."
 
 #: common/tool/actions.cpp:615
-#, fuzzy
 msgid "Cycle Arc Drawing Mode"
-msgstr "Modalità di modifica archi ciclica"
+msgstr "Modalità ciclica disegno archi"
 
 #: common/tool/actions.cpp:616
-#, fuzzy
 msgid "Switch to the next method of drawing arcs"
-msgstr "Passa ad un metodo differente per modificare gli archi"
+msgstr "Passa al successivo metodo di disegno archi"
 
 #: common/tool/actions.cpp:622
 msgid "Delete Last Point"
@@ -13529,9 +13525,9 @@ msgstr ""
 "blocchi progetto nella libreria."
 
 #: common/widgets/design_block_pane.cpp:314
-#, fuzzy, c-format
+#, c-format
 msgid "Design block library '%s' could not be deleted."
-msgstr "Impossibile aprire la libreria blocchi progetto '%s'."
+msgstr "Impossibile eliminare la libreria blocchi progetto '%s'."
 
 #: common/widgets/design_block_pane.cpp:325
 #, c-format
@@ -14623,42 +14619,36 @@ msgid "Deleted items via API"
 msgstr "Elementi cancellati tramite API"
 
 #: eeschema/api/api_handler_sch.cpp:2131 eeschema/sch_edit_frame.cpp:1970
-#, fuzzy
 msgid "Unable to rebuild schematic connectivity."
-msgstr "Fallito caricamento impostazioni schema."
+msgstr "Impossibile ricostruire la connettività dello schema."
 
 #: eeschema/api/api_handler_sch.cpp:2821 eeschema/toolbars_sch_editor.cpp:435
-#, fuzzy
 msgid "Add Variant"
-msgstr "Aggiungi variante..."
+msgstr "Aggiungi variante"
 
 #: eeschema/api/api_handler_sch.cpp:2881
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1160
 #: eeschema/sch_edit_frame.cpp:3417
-#, fuzzy
 msgid "Delete Variant"
-msgstr "Cancella ultimo punto"
+msgstr "Elimina variante"
 
 #: eeschema/api/api_handler_sch.cpp:2964
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1240
 #: eeschema/sch_edit_frame.cpp:3521
-#, fuzzy
 msgid "Rename Variant"
-msgstr "Rinomina variante progetto"
+msgstr "Rinomina variante"
 
 #: eeschema/api/api_handler_sch.cpp:3052 eeschema/sch_edit_frame.cpp:3590
-#, fuzzy
 msgid "Copy Variant"
-msgstr "Copia variante progetto"
+msgstr "Copia variante"
 
 #: eeschema/api/api_handler_sch.cpp:3093 eeschema/sch_edit_frame.cpp:3328
 msgid "Edit Variant Description"
 msgstr "Modifica descrizione variante"
 
 #: eeschema/api/api_handler_sch.cpp:3267
-#, fuzzy
 msgid "Placed symbol via API"
-msgstr "Piazza simbolo"
+msgstr "Simbolo piazzato tramite API"
 
 #: eeschema/bom_plugins.cpp:45
 #, c-format
@@ -15678,6 +15668,8 @@ msgstr ""
 #, c-format
 msgid "Cannot remap symbol %s to '%s': the new symbol has too few units."
 msgstr ""
+"Impossibile rimappare il simbolo %s su '%s': il nuovo simbolo ha un numero "
+"insufficiente di unità."
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 msgid "Current Library Reference"
@@ -17086,13 +17078,12 @@ msgid "Pin Table"
 msgstr "Tabella pin"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:141
-#, fuzzy
 msgid "Use Parent Value"
-msgstr "Usa i valori netclass"
+msgstr "Usa valore genitore"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:142
 msgid "Remove the local override and inherit the parent's value"
-msgstr ""
+msgstr "Rimuovi la sovrascrittura locale ed eredita il valore del genitore"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:146
 msgid "Create Derived Symbol"
@@ -17175,9 +17166,9 @@ msgid "No symbols could be loaded from the library."
 msgstr "Impossibile caricare alcun simbolo dalla libreria."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid reference for symbol '%s'."
-msgstr "La mappa pin '%s' fa riferimento a un pin simbolo sconosciuto '%s'"
+msgstr "Riferimento non valido per il simbolo '%s'."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:649
 #: eeschema/dialogs/dialog_rescue_each.cpp:113
@@ -17185,14 +17176,12 @@ msgid "Symbol Name"
 msgstr "Nome simbolo"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:650
-#, fuzzy
 msgid "Parent Symbol"
-msgstr "Simbolo genitore:"
+msgstr "Simbolo genitore"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:651
-#, fuzzy
 msgid "Root Symbol"
-msgstr "Simboli remoti"
+msgstr "Simbolo radice"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:662
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:402
@@ -17289,6 +17278,7 @@ msgstr "Deriva da simbolo esistente:"
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:57
 msgid "(Preface filter with ‘::’ to include only base symbols in list.)"
 msgstr ""
+"(Anteponi ‘::’ al filtro per includere nell'elenco solo i simboli di base.)"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:61
 msgid "Default reference designator:"
@@ -17428,9 +17418,9 @@ msgid "Pin '%s' in jumper pin group %d does not exist in this symbol."
 msgstr "Il pin '%s' nel gruppo ponticelli %d non esiste in questo simbolo."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:861
-#, fuzzy, c-format
+#, c-format
 msgid "(Pins %s.)"
-msgstr "Plugin (%d)"
+msgstr "(Pin %s.)"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:887
 #, c-format
@@ -17700,9 +17690,8 @@ msgstr "Cancella filtro impronte"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:676
 #: eeschema/dialogs/panel_footprint_filters.cpp:410
-#, fuzzy
 msgid "Matching footprints:"
-msgstr ": %i riscontri impronte"
+msgstr "Impronte corrispondenti:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:678
 msgid ""
