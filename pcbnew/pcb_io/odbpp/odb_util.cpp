@@ -478,11 +478,11 @@ void ODB_TREE_WRITER::CreateEntityDirectory( const wxString& aPareDir,
 ODB_FILE_WRITER::ODB_FILE_WRITER( ODB_TREE_WRITER& aTreeWriter, const wxString& aFileName ) :
         m_treeWriter( aTreeWriter )
 {
-    CreateFile( aFileName );
+    CreateODBFile( aFileName );
 }
 
 
-void ODB_FILE_WRITER::CreateFile( const wxString& aFileName )
+void ODB_FILE_WRITER::CreateODBFile( const wxString& aFileName )
 {
     if( aFileName.IsEmpty() || m_treeWriter.GetCurrentPath().IsEmpty() )
         return;

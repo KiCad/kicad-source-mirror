@@ -323,7 +323,7 @@ public:
     ODB_FILE_WRITER( ODB_FILE_WRITER const& ) = delete;
     ODB_FILE_WRITER& operator=( ODB_FILE_WRITER const& ) = delete;
 
-    void                 CreateFile( const wxString& aFileName );
+    void                 CreateODBFile( const wxString& aFileName );
     bool                 CloseFile();
     inline std::ostream& GetStream() { return m_ostream; }
 
