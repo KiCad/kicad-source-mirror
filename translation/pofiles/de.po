@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-03 17:11+0000\n"
+"PO-Revision-Date: 2026-10-03 21:41+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -3154,7 +3154,7 @@ msgid ""
 "characters."
 msgstr ""
 "Um sicher zu stellen, dass Namen von Variablen auf allen Plattformen gültig "
-"sind werden für das Namensfeld nur Großbuchstaben, Zahlen und der "
+"sind, werden für das Namensfeld nur Großbuchstaben, Zahlen und der "
 "Unterstrich akzeptiert."
 
 #: common/dialogs/dialog_configure_paths_base.cpp:23
@@ -15458,18 +15458,17 @@ msgstr ""
 #: eeschema/dialogs/dialog_create_net_chain_base.cpp:80
 #: eeschema/dialogs/panel_setup_net_chains.cpp:619
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:87
-#, fuzzy
 msgid "Member Nets"
 msgstr "Mitgliedsnetze"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:778
-#, fuzzy, c-format
+#, c-format
 msgid "Member Nets — %s (%zu) [%s]"
 msgstr "Mitgliedsnetze — %s (%zu) [%s]"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:783
 #: eeschema/dialogs/panel_setup_net_chains.cpp:627
-#, fuzzy, c-format
+#, c-format
 msgid "Member Nets — %s (%zu)"
 msgstr "Mitgliedsnetze — %s (%zu)"
 
@@ -17021,7 +17020,7 @@ msgstr "Nach Einheit filtern:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:178
 msgid "Filter by body style:"
-msgstr "Nach Pinkörper filtern:"
+msgstr "Nach Symbolform filtern:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:186
 msgid "Filter by selection"
@@ -17068,9 +17067,8 @@ msgid "Pin Table"
 msgstr "Pin-Tabelle"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:141
-#, fuzzy
 msgid "Use Parent Value"
-msgstr "Verwende Werte der Netzklasse"
+msgstr "Übergeordneten Wert verwenden"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:142
 msgid "Remove the local override and inherit the parent's value"
@@ -17123,9 +17121,8 @@ msgid "Related Symbols Only"
 msgstr "Nur zugehörige Symbole"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:354
-#, fuzzy
 msgid "Symbol Names"
-msgstr "Symbolname"
+msgstr "Symbolnamen"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:356
 #, c-format
@@ -17159,9 +17156,9 @@ msgid "No symbols could be loaded from the library."
 msgstr "Es konnten keine Symbole aus der Bibliothek geladen werden."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:554
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid reference for symbol '%s'."
-msgstr "Konnte den Footprint für das Bauteil \"%s\" nicht finden."
+msgstr "Ungültige Referenz für das Symbol \"%s\"."
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:649
 #: eeschema/dialogs/dialog_rescue_each.cpp:113
@@ -17173,9 +17170,8 @@ msgid "Parent Symbol"
 msgstr "Übergeordnetes Symbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:651
-#, fuzzy
 msgid "Root Symbol"
-msgstr "Entfernte Symbole"
+msgstr "Stammsymbol"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:662
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:402
@@ -17389,9 +17385,8 @@ msgid "Delete extra units from symbol?"
 msgstr "Zusätzliche Einheiten des Symbols ebenfalls entfernen?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:601
-#, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "Benutzerdefinierte Symbolstile müssen mindestens 2 Einträge haben"
+msgstr "Benutzerdefinierte Symbolformen müssen mindestens 2 Einträge haben"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:607
 msgid "Delete extra body styles from symbol?"
@@ -19515,18 +19510,16 @@ msgid "Model"
 msgstr "Modell"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:247
-#, fuzzy
 msgid "Decomposition:"
-msgstr "X Position:"
+msgstr "Aufteilung:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:251
 msgid "Whole device"
 msgstr "Ganzes Bauelement"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:251
-#, fuzzy
 msgid "Repeat per unit"
-msgstr "Anzahl Wiederholungen"
+msgstr "Pro Einheit wiederholen"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:257
 msgid "Shared model pins:"
@@ -19584,9 +19577,8 @@ msgstr " (%d Elemente geladen)"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:152
 #: eeschema/dialogs/dialog_symbol_properties.cpp:439
 #: eeschema/tools/sch_actions.cpp:1058
-#, fuzzy
 msgid "Set Variant Symbol..."
-msgstr "Symbol bearbeiten ..."
+msgstr "Variantensymbol festlegen ..."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:159
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:260
@@ -19780,9 +19772,8 @@ msgid "Passthrough:"
 msgstr "Durchkontaktierung:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
-#, fuzzy
 msgid "Block"
-msgstr "Taktanschluss"
+msgstr "Blockieren"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 msgid "Force"
@@ -20362,9 +20353,8 @@ msgid "S&how hidden pins"
 msgstr "Verborgene Pins anz&eigen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:114
-#, fuzzy
 msgid "Show original pin numbers when remapped"
-msgstr "Pinnummern ein-/ausblenden"
+msgstr "Ursprüngliche Pinnummern nach einer Neuzuordnung anzeigen"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:117
 #: eeschema/dialogs/panel_sym_display_options_base.cpp:38
@@ -20570,9 +20560,8 @@ msgstr ""
 "\"Lokal\" wird neue Spannungssymbole zu lokalen Spannungssymbolen umwandeln."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:161
-#, fuzzy
 msgid "Clicking on a pin selects the symbol"
-msgstr "Footprint den ausgewählten Symbolen zuordnen"
+msgstr "Klicken auf einen Pin wählt das Symbol aus"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 msgid ""
@@ -20717,14 +20706,12 @@ msgid "Open in Footprint Editor"
 msgstr "Im Footprinteditor öffnen"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:510
-#, fuzzy
 msgid "Assign to Footprint Field"
-msgstr "Footprint zuweisen"
+msgstr "Dem Footprintfeld zuweisen"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:512
-#, fuzzy
 msgid "Copy Footprint Name"
-msgstr "Footprintname"
+msgstr "Footprintname kopieren"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:554
 msgid "Add Footprint Filter"
@@ -20828,14 +20815,13 @@ msgid "Pin symbol size:"
 msgstr "Pin-Symbolgröße:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:133
-#, fuzzy
 msgid "Show 'Do not populate' markers"
-msgstr "Nicht zu bestückende Bauteile ignorieren"
+msgstr "\"Nicht bestücken\"-Attribute anzeigen"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:135
-#, fuzzy
 msgid "Draw a cross over symbols marked 'Do not populate'"
-msgstr "Keine Bauteile anzeigen, die als \"nicht zu bestücken\" markiert sind"
+msgstr ""
+"Ein Kreuz auf Symbolen zeichnen, die mit \"Nicht bestücken\" markiert sind"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:142
 #: eeschema/erc/erc_item.cpp:37
@@ -21032,9 +21018,8 @@ msgid "PA"
 msgstr "PA"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:48
-#, fuzzy
 msgid "Committed"
-msgstr "C&ommit"
+msgstr "Comittet"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:49
 #, fuzzy
@@ -21057,9 +21042,9 @@ msgid "%zu nets"
 msgstr "%zu Netze"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Net chain on row %zu cannot have an empty name."
-msgstr "Netzkette in Zeile %zu kann keinen leeren Namen haben."
+msgstr "Netzkette in Zeile %zu darf keinen leeren Namen haben."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:352
 #, c-format
@@ -21072,14 +21057,13 @@ msgid "Duplicate net chain name '%s' on row %zu."
 msgstr "Doppelter Netzkettenname \"%s\" in Zeile %zu."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "Class on row %zu cannot have an empty name."
-msgstr "Klasse in Zeile %zu kann keinen leeren Namen haben."
+msgstr "Klasse in Zeile %zu darf keinen leeren Namen haben."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:376
 #: eeschema/dialogs/panel_setup_net_chains.cpp:383
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:202
-#, fuzzy
 msgid "Net Chain Classes"
 msgstr "Netzkettenklassen"
 
@@ -21089,12 +21073,11 @@ msgid "Duplicate class name '%s' on row %zu."
 msgstr "Doppelter Netzklassenname \"%s\" in Zeile %zu."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:590
-#, fuzzy, c-format
+#, c-format
 msgid "Delete net chain '%s'?"
 msgstr "Netzkette \"%s\" löschen?"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:591
-#, fuzzy
 msgid "Delete Net Chain"
 msgstr "Netzkette löschen"
 
@@ -21104,30 +21087,25 @@ msgid "Member Nets (%zu)"
 msgstr "Mitgliedsnetze (%zu)"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:646
-#, fuzzy
 msgid "New net chain class name:"
 msgstr "Neuer Netzkettenklassenname:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:646
 #: eeschema/dialogs/panel_setup_net_chains.cpp:655
-#, fuzzy
 msgid "Add Class"
 msgstr "Klasse hinzufügen"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:655
 #: eeschema/dialogs/panel_setup_net_chains.cpp:688
-#, fuzzy
 msgid "That class name is empty or already in use."
 msgstr "Dieser Klassenname ist leer oder wird bereits verwendet."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:679
-#, fuzzy
 msgid "Rename net chain class:"
 msgstr "Netzkettenklasse umbenennen:"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:679
 #: eeschema/dialogs/panel_setup_net_chains.cpp:688
-#, fuzzy
 msgid "Rename Class"
 msgstr "Klasse umbenennen"
 
@@ -21140,7 +21118,6 @@ msgstr ""
 "nicht klassifiziert eingestuft."
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:720
-#, fuzzy
 msgid "Delete Class"
 msgstr "Klasse löschen"
 
@@ -21151,7 +21128,6 @@ msgid "Members"
 msgstr "Mitglieder"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:60
-#, fuzzy
 msgid "Net Chain Class"
 msgstr "Netzkettenklasse"
 
@@ -21160,12 +21136,10 @@ msgid "Colour"
 msgstr "Farbe"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:105
-#, fuzzy
 msgid "Delete the selected committed net chain"
 msgstr "Die ausgewählte committete Netzkette löschen"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:116
-#, fuzzy
 msgid "Chains"
 msgstr "Ketten"
 
@@ -21194,10 +21168,9 @@ msgid "Add a new net chain class"
 msgstr "Neue Netzkettenklasse hinzufügen"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:183
-#, fuzzy
 msgid "Rename the selected class (updates every chain that uses it)"
 msgstr ""
-"Die ausgewählte Klasse umbenennen (aktualisiert jede Kette, die diesen "
+"Die ausgewählte Klasse umbenennen (aktualisiert jede Kette, die diese "
 "verwendet)"
 
 #: eeschema/dialogs/panel_setup_net_chains_base.cpp:191
@@ -21223,59 +21196,58 @@ msgid "Check for missing fields"
 msgstr "Auf fehlende Felder prüfen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:36
-#, fuzzy
 msgid "Check for extra fields"
-msgstr "Auf Aktualisierungen prüfen"
+msgstr "Auf zusätzliche Felder prüfen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:39
 #, fuzzy
 msgid "Compare non-reference field text"
-msgstr "Feldtexte aktualisieren/zurücksetzen"
+msgstr "Nicht referenzierten Feldtext vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:42
 #, fuzzy
 msgid "Compare field visibilities"
-msgstr "Feld-Sichtbarkeiten aktualisieren"
+msgstr "Feld-Sichtbarkeiten vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:45
 #, fuzzy
 msgid "Compare field text sizes and styles"
-msgstr "Textgrößen und -stile aktualisieren/zurücksetzen"
+msgstr "Feldtextgrößen und -stile vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:48
 #, fuzzy
 msgid "Compare field positions"
-msgstr "Feld-Positionen aktualisieren"
+msgstr "Feld-Positionen vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:69
 #, fuzzy
 msgid "Compare pin name/number visibilities"
-msgstr "Pinnamen/-nummern-Sichtbarkeiten aktualisieren"
+msgstr "Pinnamen/-nummern-Sichtbarkeiten vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:72
 #, fuzzy
 msgid "Compare alternate pin functions"
-msgstr "Zurücksetzen der alternativen Pinfunktion"
+msgstr "Alternative Pinfunktionen vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:94
 #, fuzzy
 msgid "Compare exclude from board flags"
-msgstr "Entfernt Attribut \"Von Simulation ausschließen\""
+msgstr "\"Von Platine ausschließen\"-Attribute vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:98
 #, fuzzy
 msgid "Compare do not populate flags"
-msgstr "Das Nicht-bestücken-Attribut löschen"
+msgstr "\"Nicht bestücken\"-Attribute vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:101
 #, fuzzy
 msgid "Compare exlucde from bill of materials flags"
-msgstr "Entfernt das Attribut \"Von Stückliste ausschließen\""
+msgstr "\"Von Stückliste ausschließen\"-Attribute vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:104
 #, fuzzy
 msgid "Compare exclude from position file flags"
-msgstr "von Positionsdateien ausschließen"
+msgstr "\"Von Positionsdateien ausschließen\"-Attribute vergleichen"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:41
 #: eeschema/dialogs/panel_simulator_preferences.cpp:62
@@ -31972,26 +31944,23 @@ msgid "Rename Design Variant..."
 msgstr "Designvariante umbenennen..."
 
 #: eeschema/tools/sch_actions.cpp:2021
-#, fuzzy
 msgid "Rename an existing design variant."
-msgstr "Eine bestehende Designvariante aus dem Schaltplan entfernen."
+msgstr "Eine bestehende Designvariante umbennen."
 
 #: eeschema/tools/sch_actions.cpp:2026
 msgid "Copy Design Variant..."
 msgstr "Designvariante kopieren..."
 
 #: eeschema/tools/sch_actions.cpp:2027
-#, fuzzy
 msgid "Create a copy of an existing design variant."
-msgstr "Die Beschreibung einer vorhandenen Designvariante bearbeiten."
+msgstr "Eine Kopie einer bestehenden Designvariante erstellen."
 
 #: eeschema/tools/sch_actions.h:35
-#, fuzzy
 msgid ""
 "Alternate pin functions are not available on symbols with multiple body "
 "styles."
 msgstr ""
-"Alternative Pinbelegungen sind für Symbole mit mehreren Symbolformen nicht "
+"Alternative Pinfunktionen sind für Symbole mit mehreren Symbolformen nicht "
 "verfügbar."
 
 #: eeschema/tools/sch_actions.h:38
@@ -31999,6 +31968,8 @@ msgid ""
 "Multiple body styles are not supported on symbols with alternate pin "
 "functions."
 msgstr ""
+"Mehrere Symbolformen werden bei Symbolen mit alternativen Pinfunktionen "
+"nicht unterstützt."
 
 #: eeschema/tools/sch_align_tool.cpp:358
 #: pcbnew/tools/align_distribute_tool.cpp:432
