@@ -33,6 +33,7 @@
 #include <zone.h>
 #include <pcb_shape.h>
 #include <pcb_target.h>
+#include <pcb_textbox.h>
 #include <pcb_dimension.h>
 #include <pcbplot.h>
 #include <plotters/plotter.h>
@@ -40,6 +41,7 @@
 #include <plotters/plotter_gerber.h>
 #include <plotters/plotter_png.h>
 #include <plotters/plotters_pslike.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <pcb_painter.h>
 #include <gbr_metadata.h>
 #include <advanced_config.h>
@@ -1032,6 +1034,46 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotte
     // individual shapes.
     SHAPE_POLY_SET exactPolys;
 
+    // Plot a non filled basic PCB_SHAPE, according to the line style
+    auto handlePcbShape =
+            [&]( const PCB_SHAPE& aPcbShape )
+            {
+                LINE_STYLE lineStyle = aPcbShape.GetStroke().GetLineStyle();
+
+                if( lineStyle <= LINE_STYLE::FIRST_TYPE )
+                {
+                    if( inflate != 0 )
+                        aPcbShape.TransformShapeToPolySet( exactPolys, aLayer, 0, maxError, ERROR_OUTSIDE );
+
+                    aPcbShape.TransformShapeToPolySet( *aResult, aLayer, inflate, maxError, ERROR_OUTSIDE );
+                }
+                else
+                {
+                    int thickness = aPcbShape.GetWidth();
+                    std::vector<SHAPE*> shapes = aPcbShape.MakeEffectiveShapesForStroking( thickness );
+                    int minSegCount = 8;
+
+                    for( SHAPE* shape : shapes )
+                    {
+                        STROKE_PARAMS::Stroke( shape, lineStyle, thickness, aPlotter->RenderSettings(),
+                                               [&]( const VECTOR2I& a, const VECTOR2I& b )
+                                               {
+                                                    if( inflate != 0 )
+                                                    {
+                                                        TransformOvalToPolygon( exactPolys, a, b,
+                                                            thickness, maxError, ERROR_OUTSIDE, minSegCount );
+                                                    }
+
+                                                    TransformOvalToPolygon( *aResult, a, b,
+                                                        thickness+inflate, maxError, ERROR_OUTSIDE, minSegCount );
+                                               } );
+                    }
+
+                    for( SHAPE* shape : shapes )
+                        delete shape;
+                }
+            };
+
     auto handleFPTextItem =
             [&]( const PCB_TEXT& aText )
             {
@@ -1048,6 +1090,21 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotte
                     aText.TransformTextToPolySet( exactPolys, 0, maxError, ERROR_OUTSIDE );
 
                 aText.TransformTextToPolySet( *aResult, inflate, maxError, ERROR_OUTSIDE );
+            };
+
+    auto handleTextBoxItem =
+            [&]( const PCB_TEXTBOX& aTextBox )
+            {
+                if( inflate != 0 )
+                    aTextBox.TransformTextToPolySet( exactPolys, 0, maxError, ERROR_OUTSIDE );
+
+                aTextBox.TransformTextToPolySet( *aResult, inflate, maxError, ERROR_OUTSIDE );
+
+                if( !aTextBox.IsKnockout() )   // must plot box outline around text
+                {
+                    PCB_SHAPE shapebox = aTextBox.GetPolygonalBoxShape();
+                    handlePcbShape( shapebox );
+                }
             };
 
     // Generate polygons with arcs inside the shape or exact shape to minimize shape changes
@@ -1084,12 +1141,21 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotte
                     {
                         handleFPTextItem( static_cast<const PCB_TEXT&>( *item ) );
                     }
+                    else if( item->Type() == PCB_TEXTBOX_T )
+                    {
+                        handleTextBoxItem( static_cast<const PCB_TEXTBOX&>( *item ) );
+                    }
                     else
                     {
-                        if( inflate != 0 )
-                            item->TransformShapeToPolySet( exactPolys, aLayer, 0, maxError, ERROR_OUTSIDE );
+                        if( const PCB_SHAPE* pcb_shape = dynamic_cast< const PCB_SHAPE*>( item ) )
+                            handlePcbShape( *pcb_shape );
+                        else    // Shold not occur
+                        {
+                            if( inflate != 0 )
+                                item->TransformShapeToPolySet( exactPolys, aLayer, 0, maxError, ERROR_OUTSIDE );
 
-                        item->TransformShapeToPolySet( *aResult, aLayer, inflate, maxError, ERROR_OUTSIDE );
+                            item->TransformShapeToPolySet( *aResult, aLayer, inflate, maxError, ERROR_OUTSIDE );
+                        }
                     }
                 }
             }
@@ -1123,14 +1189,23 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotte
 
                     text->TransformTextToPolySet( *aResult, inflate, maxError, ERROR_OUTSIDE );
                 }
+                else if( item->Type() == PCB_TEXTBOX_T )
+                {
+                    handleTextBoxItem( static_cast<const PCB_TEXTBOX&>( *item ) );
+                }
                 else
                 {
-                    if( inflate != 0 )
-                        item->TransformShapeToPolySet( exactPolys, aLayer, 0, maxError, ERROR_OUTSIDE,
-                                                       aPlotter->RenderSettings() );
+                    if( const PCB_SHAPE* pcb_shape = dynamic_cast< const PCB_SHAPE*>( item ) )
+                        handlePcbShape( *pcb_shape );
+                    else    // Shold not occur
+                    {
+                        if( inflate != 0 )
+                            item->TransformShapeToPolySet( exactPolys, aLayer, 0, maxError, ERROR_OUTSIDE,
+                                                           aPlotter->RenderSettings() );
 
-                    item->TransformShapeToPolySet( *aResult, aLayer, inflate, maxError,
-                                                    ERROR_OUTSIDE, aPlotter->RenderSettings() );
+                        item->TransformShapeToPolySet( *aResult, aLayer, inflate, maxError,
+                                                        ERROR_OUTSIDE, aPlotter->RenderSettings() );
+                    }
                 }
             }
         }

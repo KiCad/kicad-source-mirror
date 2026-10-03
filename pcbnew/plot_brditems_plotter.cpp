@@ -500,7 +500,12 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItem( const BOARD_ITEM* item )
         PlotText( textbox, textbox->GetLayer(), textbox->IsKnockout(), textbox->GetFontMetrics() );
 
         if( textbox->IsBorderEnabled() )
-            PlotShape( textbox );
+        {
+            // PlotShape works only for textbox rotated by 0 or 180 degrees.
+            // This is not always the case so use the polygonal shape of the box of the text box.
+            PCB_SHAPE dummy = textbox->GetPolygonalBoxShape();
+            PlotShape( &dummy );
+        }
 
         m_plotter->SetTextMode( GetTextMode() );
         break;
@@ -694,7 +699,12 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
                       textbox->GetFontMetrics() );
 
             if( textbox->IsBorderEnabled() )
-                PlotShape( textbox );
+            {
+                // PlotShape works only for textbox rotated by 0 or 180 degrees.
+                // This is not always the case so use the polygonal shape
+                PCB_SHAPE dummy = textbox->GetPolygonalBoxShape();
+                PlotShape( &dummy );
+            }
 
             m_plotter->SetTextMode( GetTextMode() );
             break;
