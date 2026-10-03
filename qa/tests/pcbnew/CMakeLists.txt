@@ -473,6 +473,8 @@ set( PCBNEW_ZONE_TESTS
 :RegressionDiffNetOverlappingZones\
 :RegressionThermalReliefsToNowhere\
 :OffCenterTeardropSymmetry\
+:CrossingTrackTeardropOnViaStaysOnTrack\
+:CrossingTrackTeardropOnPadStaysOnTrack\
 :RegressionKeepoutBoundaryMissingFill\
 :HatchZoneViaConnectionRespectsSetting\
 :RegressionCascadingIslandRefill\
@@ -565,6 +567,8 @@ set( PCBNEW_EXCLUDED_FROM_OTHER
 :!RegressionDiffNetOverlappingZones\
 :!RegressionThermalReliefsToNowhere\
 :!OffCenterTeardropSymmetry\
+:!CrossingTrackTeardropOnViaStaysOnTrack\
+:!CrossingTrackTeardropOnPadStaysOnTrack\
 :!RegressionKeepoutBoundaryMissingFill\
 :!HatchZoneViaConnectionRespectsSetting\
 :!RegressionCascadingIslandRefill\

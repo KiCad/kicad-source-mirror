@@ -257,10 +257,9 @@ private:
     /// pairing are far apart, so it has one home.
     static KIID maskUuidFor( const KIID& aCopperUuid );
 
-    /// Set aStub up as the segment from one end of aTrack to aEnd, for a track that crosses
-    /// the pad or via it connects to.
-    static void buildCrossingStub( PCB_TRACK& aStub, const PCB_TRACK* aTrack,
-                                   const VECTOR2I& aEnd );
+    /// Set aStub up as the segment from one end of aTrack to the point of aTrack nearest
+    /// aCrossedPos, for a track that crosses the pad or via it connects to.
+    static void buildCrossingStub( PCB_TRACK& aStub, const PCB_TRACK* aTrack, const VECTOR2I& aCrossedPos );
 
     /**
      * Creates a teardrop (a ZONE item) from its polygonal shape, track netcode and layer

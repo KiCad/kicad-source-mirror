@@ -78,8 +78,7 @@ KIID TEARDROP_MANAGER::maskUuidFor( const KIID& aCopperUuid )
 }
 
 
-void TEARDROP_MANAGER::buildCrossingStub( PCB_TRACK& aStub, const PCB_TRACK* aTrack,
-                                          const VECTOR2I& aEnd )
+void TEARDROP_MANAGER::buildCrossingStub( PCB_TRACK& aStub, const PCB_TRACK* aTrack, const VECTOR2I& aCrossedPos )
 {
     // Copying aTrack would slice a PCB_ARC while the copy kept PCB_ARC_T, so the arc branches
     // would read a mid-point that is not there.
@@ -88,7 +87,20 @@ void TEARDROP_MANAGER::buildCrossingStub( PCB_TRACK& aStub, const PCB_TRACK* aTr
     aStub.SetNet( aTrack->GetNet() );
     aStub.SetHasSolderMask( aTrack->HasSolderMask() );
     aStub.SetLocalSolderMaskMargin( aTrack->GetLocalSolderMaskMargin() );
-    aStub.SetEnd( aEnd );
+
+    // Aim the stub along the track centreline. The crossed centre can sit anywhere within the
+    // track width, and the teardrop follows the stub.
+    if( aTrack->Type() == PCB_ARC_T )
+    {
+        const PCB_ARC* arc = static_cast<const PCB_ARC*>( aTrack );
+        SHAPE_ARC      shape( arc->GetStart(), arc->GetMid(), arc->GetEnd(), 0 );
+
+        aStub.SetEnd( shape.NearestPoint( aCrossedPos ) );
+    }
+    else
+    {
+        aStub.SetEnd( SEG( aTrack->GetStart(), aTrack->GetEnd() ).NearestPoint( aCrossedPos ) );
+    }
 }
 
 

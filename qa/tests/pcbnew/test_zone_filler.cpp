@@ -2186,6 +2186,115 @@ BOOST_FIXTURE_TEST_CASE( OffCenterTeardropSymmetry, ZONE_FILL_TEST_FIXTURE )
 }
 
 
+// 0.1 mm beside the track axis and inside the 0.15 mm half width, so the track crosses the item.
+static const VECTOR2I crossedPosition( pcbIUScale.mmToIU( 0.1 ), pcbIUScale.mmToIU( 10 ) );
+
+
+static PCB_TRACK* addCrossingTrack( BOARD& aBoard )
+{
+    PCB_TRACK* track = new PCB_TRACK( &aBoard );
+    track->SetLayer( F_Cu );
+    track->SetWidth( pcbIUScale.mmToIU( 0.3 ) );
+    track->SetStart( VECTOR2I( 0, 0 ) );
+    track->SetEnd( VECTOR2I( 0, pcbIUScale.mmToIU( 20 ) ) );
+    aBoard.Add( track );
+    track->SetNetCode( 1 );
+
+    return track;
+}
+
+
+static void checkCrossingTrackTeardropsStayOnCopper( BOARD& aBoard, const PCB_TRACK* aTrack,
+                                                     const BOARD_ITEM* aCrossed )
+{
+    aBoard.BuildConnectivity();
+
+    TOOL_MANAGER toolMgr;
+    toolMgr.SetEnvironment( &aBoard, nullptr, nullptr, nullptr, nullptr );
+
+    KI_TEST::DUMMY_TOOL* dummyTool = new KI_TEST::DUMMY_TOOL();
+    toolMgr.RegisterTool( dummyTool );
+
+    BOARD_COMMIT     commit( dummyTool );
+    TEARDROP_MANAGER teardropMgr( &aBoard, &toolMgr );
+    teardropMgr.UpdateTeardrops( commit, nullptr, nullptr, true );
+
+    if( !commit.Empty() )
+        commit.Push( _( "Add teardrops" ), SKIP_UNDO | SKIP_SET_DIRTY );
+
+    // A straight edged teardrop has five corners. Two sit on the track, two on the crossed item
+    // and one behind its centre. The pad hit test uses an inscribed polygon, so allow its error.
+    int tolerance = std::max( aBoard.GetDesignSettings().m_MaxError, pcbIUScale.mmToIU( 0.001 ) );
+    int teardrops = 0;
+
+    for( ZONE* zone : aBoard.Zones() )
+    {
+        if( !zone->IsTeardropArea() )
+            continue;
+
+        teardrops++;
+
+        for( const VECTOR2I& pt : zone->Outline()->COutline( 0 ).CPoints() )
+        {
+            BOOST_CHECK_MESSAGE( aTrack->HitTest( pt, tolerance ) || aCrossed->HitTest( pt, tolerance ),
+                                 wxString::Format( "Teardrop corner (%.3f, %.3f) mm lies outside both "
+                                                   "the track and the crossed item",
+                                                   pcbIUScale.IUTomm( pt.x ), pcbIUScale.IUTomm( pt.y ) ) );
+        }
+    }
+
+    BOOST_CHECK_EQUAL( teardrops, 2 );
+}
+
+
+BOOST_AUTO_TEST_CASE( CrossingTrackTeardropOnViaStaysOnTrack )
+{
+    BOARD board;
+    board.Add( new NETINFO_ITEM( &board, wxT( "N1" ), 1 ) );
+
+    PCB_TRACK* track = addCrossingTrack( board );
+
+    PCB_VIA* via = new PCB_VIA( &board );
+    via->SetPadstackMode( PADSTACK::MODE::NORMAL );
+    via->SetPosition( crossedPosition );
+    via->SetLayerPair( F_Cu, B_Cu );
+    via->SetDrill( pcbIUScale.mmToIU( 0.3 ) );
+    via->SetWidth( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 1.0 ) );
+    via->GetTeardropParams().m_Enabled = true;
+    via->GetTeardropParams().m_CurvedEdges = false;
+    board.Add( via );
+    via->SetNetCode( 1 );
+
+    checkCrossingTrackTeardropsStayOnCopper( board, track, via );
+}
+
+
+BOOST_AUTO_TEST_CASE( CrossingTrackTeardropOnPadStaysOnTrack )
+{
+    BOARD board;
+    board.Add( new NETINFO_ITEM( &board, wxT( "N1" ), 1 ) );
+
+    PCB_TRACK* track = addCrossingTrack( board );
+
+    FOOTPRINT* footprint = new FOOTPRINT( &board );
+    PAD*       pad = new PAD( footprint );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+    pad->SetAttribute( PAD_ATTRIB::PTH );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+    pad->SetLayerSet( LSET::AllCuMask() );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) ) );
+    pad->SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( 0.3 ), pcbIUScale.mmToIU( 0.3 ) ) );
+    pad->SetPosition( crossedPosition );
+    pad->GetTeardropParams().m_Enabled = true;
+    pad->GetTeardropParams().m_CurvedEdges = false;
+    footprint->Add( pad );
+    board.Add( footprint );
+    pad->SetNetCode( 1 );
+
+    checkCrossingTrackTeardropsStayOnCopper( board, track, pad );
+}
+
+
 /**
  * Teardrop on an elongated rectangular pad should not extend outside the pad boundary.
  *
