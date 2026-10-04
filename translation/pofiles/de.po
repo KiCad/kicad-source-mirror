@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-04 10:08+0000\n"
+"PO-Revision-Date: 2026-10-04 22:19+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -22234,9 +22234,8 @@ msgid "Checking for undefined netclasses..."
 msgstr "Prüfe auf undefinierte Netzklassen ..."
 
 #: eeschema/erc/erc.cpp:3572
-#, fuzzy
 msgid "Checking variant symbols..."
-msgstr "Prüfe Via-Löcher ..."
+msgstr "Prüfe Variantensymbole ..."
 
 #: eeschema/erc/erc_item.cpp:39 pcbnew/dialogs/panel_edit_options_base.cpp:340
 #: pcbnew/drc/drc_item.cpp:45
@@ -22315,15 +22314,12 @@ msgid "Power pins are similar"
 msgstr "Stromversorgungs-Pins sind ähnlich"
 
 #: eeschema/erc/erc_item.cpp:123
-#, fuzzy
 msgid "Power pin and label are similar"
-msgstr ""
-"Stromversorgungs-Pin und Bezeichner sind ähnlich (Groß-/Kleinschreibung "
-"unterschiedlich)"
+msgstr "Stromversorgungs-Pin und Bezeichner sind ähnlich"
 
 #: eeschema/erc/erc_item.cpp:127
 msgid "Global label only appears once in the schematic"
-msgstr "Globaler Bezeichner ist nur einmal Schaltplan vorhanden"
+msgstr "Globaler Bezeichner ist nur einmal im Schaltplan vorhanden"
 
 #: eeschema/erc/erc_item.cpp:131
 msgid "Local and global labels have same name"
@@ -22472,14 +22468,12 @@ msgid "Bus Entry needed"
 msgstr "Buszugang erforderlich"
 
 #: eeschema/erc/erc_item.cpp:270
-#, fuzzy
 msgid "Variant symbol not found in libraries"
-msgstr "Footprint nicht in Bibliotheken gefunden"
+msgstr "Variantensymbol nicht in Bibliotheken gefunden"
 
 #: eeschema/erc/erc_item.cpp:274
-#, fuzzy
 msgid "Variant symbol is not pin-compatible"
-msgstr "Symbol ist nicht annotiert"
+msgstr "Variantensymbol ist nicht pinkompatibel"
 
 #: eeschema/erc/erc_item.cpp:404 eeschema/erc/erc_item.cpp:514
 #: eeschema/sch_sheet_path.cpp:56 include/board_item.h:612
@@ -22897,9 +22891,8 @@ msgid "Unit %s"
 msgstr "Einheit %s"
 
 #: eeschema/lib_symbol.cpp:2605
-#, fuzzy
 msgid "Name differs."
-msgstr "%s Name weicht ab."
+msgstr "Name weicht ab."
 
 #: eeschema/lib_symbol.cpp:2614
 msgid "Library ID differs."
@@ -22908,7 +22901,7 @@ msgstr "Bibliothek-ID weicht ab."
 #: eeschema/lib_symbol.cpp:2627
 #, fuzzy
 msgid "Symbol parent differs."
-msgstr "Pin-Namen-Offsets weichen ab."
+msgstr "Übergeordnetes Symbol weicht ab."
 
 #: eeschema/lib_symbol.cpp:2637
 msgid "Power flag differs."
@@ -22961,22 +22954,22 @@ msgstr "Schriftart des Feldes \"%s\" weicht ab."
 #: eeschema/lib_symbol.cpp:2801
 #, fuzzy, c-format
 msgid "Field '%s' text sizes differ."
-msgstr "%s Textgröße weicht ab."
+msgstr "Textgrößen des Feldes \"%s\" weichen ab."
 
 #: eeschema/lib_symbol.cpp:2810
 #, fuzzy, c-format
 msgid "Field '%s' text styles differ."
-msgstr "%s Textgröße weicht ab."
+msgstr "Textstile des Feldes \"%s\" weichen ab."
 
 #: eeschema/lib_symbol.cpp:2822
 #, fuzzy, c-format
 msgid "Field '%s' visibility flags differ."
-msgstr "\"%s\" Einstellungen weichen ab."
+msgstr "Sichtbarkeitsmarkierungen des Feldes \"%s\" weichen ab."
 
 #: eeschema/lib_symbol.cpp:2831
 #, fuzzy, c-format
 msgid "Field '%s' name shown flags differ."
-msgstr "\"%s\" Einstellungen weichen ab."
+msgstr "Namensanzeigemarkierungen des Feldes \"%s\" weichen ab."
 
 #: eeschema/lib_symbol.cpp:2841
 #, c-format
@@ -22986,7 +22979,7 @@ msgstr "Sichtbarkeit des Feldes \"%s\" weicht ab."
 #: eeschema/lib_symbol.cpp:2856
 #, fuzzy, c-format
 msgid "Field '%s' positions differ."
-msgstr "%s Position weicht ab."
+msgstr "Positionen des Feldes \"%s\" weichen ab."
 
 #: eeschema/lib_symbol.cpp:2879
 #, c-format
@@ -23029,32 +23022,31 @@ msgstr "Pin-Namen-Offsets weichen ab."
 
 #: eeschema/lib_symbol.cpp:2967
 msgid "Show pin names settings differ."
-msgstr "Pin-Namen-Anzeigen-Einstellungen weichen ab."
+msgstr "\"Pinnamen anzeigen\"-Einstellungen weichen ab."
 
 #: eeschema/lib_symbol.cpp:2976
 msgid "Show pin numbers settings differ."
-msgstr "Pin-Nummern-Anzeigen-Einstellungen weichen ab."
+msgstr "\"Pinnummern anzeigen\"-Einstellungen weichen ab."
 
 #: eeschema/lib_symbol.cpp:2988
 msgid "Exclude from simulation settings differ."
-msgstr "Von-Simulation-ausschließen-Einstellung weichen ab."
+msgstr "\"Von Simulation ausschließen\"-Einstellung weichen ab."
 
 #: eeschema/lib_symbol.cpp:3000
 msgid "Exclude from bill of materials settings differ."
-msgstr "Von-Stückliste-ausschließen-Einstellungen weichen ab."
+msgstr "\"Von Stückliste ausschließen\"-Einstellungen weichen ab."
 
 #: eeschema/lib_symbol.cpp:3012
 msgid "Exclude from board settings differ."
-msgstr "Von-Platine-Ausschließen-Einstellungen weichen ab."
+msgstr "\"Von Platine ausschließen\"-Einstellungen weichen ab."
 
 #: eeschema/lib_symbol.cpp:3024
-#, fuzzy
 msgid "Do not populate settings differ."
-msgstr "Pin-Namen-Anzeigen-Einstellungen weichen ab."
+msgstr "\"Nicht bestücken\"-Einstellungen weichen ab."
 
 #: eeschema/lib_symbol.cpp:3036
 msgid "Exclude from position files settings differ."
-msgstr "Von-Positionsdateien-ausschließen-Einstellungen weichen ab."
+msgstr "\"Von Positionsdateien ausschließen\"-Einstellungen weichen ab."
 
 #: eeschema/lib_symbol.cpp:3269 eeschema/symbol_editor/symbol_editor.cpp:1873
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:347
@@ -23135,9 +23127,9 @@ msgid "Library '%s': %s"
 msgstr "Bibliothek \"%s\": %s"
 
 #: eeschema/libraries/legacy_cache_reconcile.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' could not be loaded."
-msgstr "Konnte die Datei \"%s\" nicht erstellen."
+msgstr "Bibliothek \"%s\" konnte nicht geladen werden."
 
 #: eeschema/libraries/legacy_symbol_library.cpp:559
 #, c-format
@@ -23870,17 +23862,15 @@ msgstr "Gruppen-Designblock-Verknüpfung setzen"
 
 #: eeschema/sch_design_block_utils.cpp:504
 #: pcbnew/pcb_design_block_utils.cpp:534
-#, fuzzy
 msgid "The selection contains more than one group linked to this design block."
 msgstr ""
-"%d ausgewählte(s) Element(e) übersprungen, die keine mit einem Designblock "
-"verknüpften Gruppen sind."
+"Die Auswahl enthält mehr als eine Gruppe, die mit diesem Designblock "
+"verknüpft ist."
 
 #: eeschema/sch_design_block_utils.cpp:638
 #: pcbnew/pcb_design_block_utils.cpp:617
-#, fuzzy
 msgid "Update Design Block Group"
-msgstr "Designblock von Platine aktualisieren"
+msgstr "Designblockgruppe aktualisieren"
 
 #: eeschema/sch_edit_frame.cpp:182
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
@@ -24127,7 +24117,7 @@ msgstr "Importiere %s"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1369
 #, c-format
 msgid "Error parsing Altium schematic: %s"
-msgstr "Fehler beim Parsen des Altiumschaltplans: %s"
+msgstr "Fehler beim Parsen des Altium-Schaltplans: %s"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1434
 #, c-format
@@ -36417,13 +36407,12 @@ msgid "Import a non-KiCad schematic file to KiCad format"
 msgstr "Nicht-KiCad-Schaltplandatei in KiCad-Format importieren"
 
 #: kicad/cli/command_sch_import.cpp:44
-#, fuzzy
 msgid ""
 "Input format hint: auto, altium, eagle, cadstar, easyeda, easyedapro, "
 "ltspice, pads, diptrace, pcad, orcad (default: auto)"
 msgstr ""
-"Hinweis zum Eingabeformat: auto, pads, altium, eagle, cadstar, fabmaster, "
-"pcad, solidworks (Standard: auto)"
+"Hinweis zum Eingabeformat: auto, altium, eagle, cadstar, easyeda, "
+"easyedapro, ltspice, pads, diptrace, pcad, orcad (Standard: auto)"
 
 #: kicad/cli/command_sch_upgrade.cpp:31
 msgid "Upgrade the schematic file's format to the latest one"
@@ -37406,7 +37395,7 @@ msgstr "Nicht-KiCad-Projekt importieren ..."
 
 #: kicad/menubar.cpp:122
 msgid "Altium Project..."
-msgstr "Altium Project ..."
+msgstr "Altium-Project ..."
 
 #: kicad/menubar.cpp:123
 msgid "Import Altium Schematic and PCB (*.PrjPcb)"
@@ -61397,8 +61386,7 @@ msgid ""
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "Fehler beim Laden der Bibliothek \"%s\":\n"
-"Pad %s im Footprint %s ist nicht als mehrlagig markiert, ist jedoch ein TH-"
-"Pad."
+"Footprint %s Pad % ist nicht als mehrlagig markiert, ist jedoch ein TH-Pad."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4181
 #, c-format
@@ -61413,13 +61401,13 @@ msgid ""
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 "Fehler beim Laden der Bibliothek \"%s\":\n"
-"Pad %s im Footprint %s hat quadratisches Loch (noch nicht unterstützt)."
+"Footprint %s Pad %s hat ein quadratisches Loch (noch nicht unterstützt)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4223
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
-"In Footprint %s hat Pad %s ein quadratisches Loch (noch nicht unterstützt)."
+"Footprint %s Pad %s hat ein quadratisches Loch (noch nicht unterstützt)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4253
 #, c-format
@@ -61448,12 +61436,12 @@ msgid ""
 "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr ""
 "Fehler beim Laden der Bibliothek \"%s\":\n"
-"Pad %s im Footprint %s verwendet ein Loch unbekannter Art %d."
+"Footprint %s Pad %s verwendet ein Loch unbekannter Art %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4302
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "Footprint %s Pad %s verwendet ein Loch von unbekannter Art %d."
+msgstr "Footprint %s Pad %s verwendet ein Loch unbekannter Art %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4369
 #, c-format
@@ -61486,7 +61474,7 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "Fehler beim Laden der Bibliothek \"%s\":\n"
-"Kupferfreies Pad %s im Footprint %s auf Altium-Lage %d hat kein KiCad-"
+"Footprint %s mit kupferlosen Pad %s auf Altium-Lage %d hat kein KiCad-"
 "Äquivalent. Es wurde auf die KiCad-Lage auf Eco1_User verschoben."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4539
@@ -61495,7 +61483,7 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Kupferfreies Pad %s im Footprint %s auf Altium-Lage %d hat kein KiCad-"
+"Footprint %s mit kupferlosen Pad %s auf Altium-Lage %d hat kein KiCad-"
 "Äquivalent. Es wurde auf die KiCad-Lage auf Eco1_User verschoben."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:4567
