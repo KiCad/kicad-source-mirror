@@ -38,8 +38,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-04 22:19+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2026-10-05 00:02+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -31098,7 +31098,7 @@ msgstr "Symbol-Pin-Zuordnungen ..."
 
 #: eeschema/tools/sch_actions.cpp:1168
 msgid "Edit the symbol's pin-to-pad maps and associated footprints"
-msgstr ""
+msgstr "Die \"Pin zu Pad\"-Zuordnungen und zugehörigen Footprints bearbeiten"
 
 #: eeschema/tools/sch_actions.cpp:1174
 msgid "Pin Table..."
@@ -31855,7 +31855,7 @@ msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:1941
 msgid "Smith Chart"
-msgstr ""
+msgstr "Smith-Diagramm"
 
 #: eeschema/tools/sch_actions.cpp:1942
 msgid "Show S-parameter results on a Smith chart"
@@ -36428,19 +36428,16 @@ msgid "Symbol and Symbol Libraries"
 msgstr "Symbol und Symbolbibliotheken"
 
 #: kicad/cli/command_sym_diff.cpp:28
-#, fuzzy
 msgid "Diff two .kicad_sym symbol libraries"
-msgstr "KiCad Symbolbibliothekdateien"
+msgstr "Vergleich von zwei .kicad_sym-Symbolbibliotheken"
 
 #: kicad/cli/command_sym_diff.cpp:29
-#, fuzzy
 msgid "Reference .kicad_sym file"
-msgstr "Ordner mit .kicad_sym-Dateien"
+msgstr ".kicad_sym-Referenzdatei"
 
 #: kicad/cli/command_sym_diff.cpp:30
-#, fuzzy
 msgid "Comparison .kicad_sym file"
-msgstr "Symbol (.kicad_sym-Datei)"
+msgstr ".kicad_sym-Vergleichsdatei"
 
 #: kicad/cli/command_sym_export_svg.cpp:44
 msgid "Exports the symbol or entire symbol library to SVG"
@@ -36492,8 +36489,8 @@ msgstr "Versionsinfo-Format (plain, commit, about)"
 #, c-format
 msgid "Invalid output format '%s' (expected 'json', 'text', 'png', or 'svg')\n"
 msgstr ""
-"Ungültiges Ausgabeformat \"%s\" (erwartet wurde \"json\", \"text\", \"png\" "
-"oder \"svg\")\n"
+"Ungültiges Ausgabeformat \"%s\" (\"json\", \"text\", \"png\" oder \"svg\" "
+"erwartet)\n"
 
 #: kicad/dialogs/dialog_archive_job_settings_base.cpp:24
 msgid "Archive file:"
@@ -36592,7 +36589,7 @@ msgstr "<Wert zur Laufzeit gesetzt>"
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:64
 #, fuzzy
 msgid "Expanded command:"
-msgstr "Starte Befehl:"
+msgstr "Erweiterter Befehl:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:88
 msgid "Record output messages"
@@ -36689,7 +36686,7 @@ msgstr "Vorlagen-Verzeichnis auswählen"
 #: kicad/dialogs/dialog_template_selector.cpp:1389
 #, fuzzy
 msgid "(no other directory)"
-msgstr "Eingabeverzeichnis"
+msgstr "(kein anderes Verzeichnis)"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:28
 msgid "Recent project templates"
@@ -36710,7 +36707,7 @@ msgstr "Systemspezifische Vorlagen"
 #: kicad/dialogs/dialog_template_selector_base.cpp:64
 #, fuzzy
 msgid "Other Templates"
-msgstr "Benutzervorlagen"
+msgstr "Andere Vorlagen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:74
 msgid "Browse for templates in another directory"
@@ -36718,7 +36715,7 @@ msgstr "In anderem Verzeichnis nach Vorlagen suchen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:79
 msgid "Stop showing templates from the browsed directory"
-msgstr ""
+msgstr "Anzeigen von Vorlagen im durchsuchten Verzeichnis beenden"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:125
 msgid "Go Back"
@@ -51520,12 +51517,12 @@ msgstr "Bohrtabellenvorlage exportieren"
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:40
 #, fuzzy
 msgid "Slots"
-msgstr "Slot"
+msgstr "Schlitze"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:44
 #, fuzzy
 msgid "Backdrills"
-msgstr "Backdrill"
+msgstr "Backdrills"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:48 pcbnew/pad.cpp:2272
 msgid "Castellated"
@@ -51534,7 +51531,7 @@ msgstr "Castellated (Halbloch)"
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:55
 #, fuzzy
 msgid "Show totals row"
-msgstr "Alle Fehler zeigen"
+msgstr "Zeilensumme anzeigen"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:63
 msgid "Group holes by"
@@ -51550,14 +51547,13 @@ msgstr "Lochgröße"
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
 #, fuzzy
 msgid "Slot shape"
-msgstr "Importierte Form"
+msgstr "Schlitzform"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
 #: pcbnew/drill/drill_chart_template.cpp:44
-#, fuzzy
 msgid "Plating"
-msgstr "Platin"
+msgstr "Beschichtung"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
@@ -51570,19 +51566,18 @@ msgstr "Lagen"
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
 #, fuzzy
 msgid "Drill operation"
-msgstr "Bohrursprung"
+msgstr "Bohrvorgang"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
 #, fuzzy
 msgid "Hole function"
-msgstr "Knotenpunkte einfügen"
+msgstr "Lochfunktion"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27
-#, fuzzy
 msgid "IPC-4761 protection"
-msgstr "Projektion"
+msgstr "Schutz gemäß IPC-4761"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:65
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:27 pcbnew/pcb_track.cpp:3579
@@ -51594,14 +51589,12 @@ msgid "Grouping is shared by every drill chart and drill map on the board"
 msgstr "Gruppierung gilt für jede Bohrtabelle und Bohrplan auf der Platine"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:82
-#, fuzzy
 msgid "Import Template..."
-msgstr "Netzliste importieren ..."
+msgstr "Vorlage importieren ..."
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:85
-#, fuzzy
 msgid "Export Template..."
-msgstr "Bild exportieren ..."
+msgstr "Vorlage exportieren ..."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:33
 msgid "Constrain actions to H, V, 45 degrees"
