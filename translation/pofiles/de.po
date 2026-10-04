@@ -39,7 +39,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
 "PO-Revision-Date: 2026-10-04 22:19+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -21203,7 +21203,6 @@ msgid "Compare non-reference field text"
 msgstr "Nicht referenzierten Feldtext vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:42
-#, fuzzy
 msgid "Compare field visibilities"
 msgstr "Feld-Sichtbarkeiten vergleichen"
 
