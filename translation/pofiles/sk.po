@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-10-02 07:51+0000\n"
+"PO-Revision-Date: 2026-10-04 22:51+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.10\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -10846,7 +10846,7 @@ msgstr ""
 
 #: common/tool/actions.cpp:614
 msgid "Cycle Arc Editing Mode"
-msgstr "Prepnúť režim úprav oblúka"
+msgstr "Cyklicky prepínať režim úprav oblúka"
 
 #: common/tool/actions.cpp:615
 msgid "Switch to a different method of editing arcs"
@@ -11232,8 +11232,8 @@ msgstr "Režim zobrazenia jednej vrstvy (3-stavový)"
 #: common/tool/actions.cpp:1217
 msgid "Cycle inactive layers between normal, dimmed, and hidden"
 msgstr ""
-"Prepínať zobrazenie neaktívnych vrstiev medzi normálnym, tlmeným a skrytým "
-"zobrazením"
+"Cyklicky prepínať zobrazenie neaktívnych vrstiev medzi normálnym, tlmeným a "
+"skrytým zobrazením"
 
 #: common/tool/actions.cpp:1223
 msgid "Draw Bounding Boxes"
@@ -26775,7 +26775,7 @@ msgstr "Nájsť vybraný spoj v navigátore spojov"
 
 #: eeschema/tools/sch_actions.cpp:913
 msgid "Cycle Body Style"
-msgstr "Cyklovať štýl tela"
+msgstr "Cyklicky prepínať štýl tela"
 
 #: eeschema/tools/sch_actions.cpp:914
 msgid "Switch between De Morgan (or other) representations"
@@ -27027,14 +27027,14 @@ msgstr "Nájsť v projekte staré symboly a premenovať/zachovať ich"
 
 #: eeschema/tools/sch_actions.cpp:1180
 msgid "Remap Legacy Library Symbols..."
-msgstr "Znova priradiť symboly staršej verzie knižnice..."
+msgstr "Premapovať symboly staršej verzie knižnice..."
 
 #: eeschema/tools/sch_actions.cpp:1181
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr ""
-"Znova priradiť referencie symbolov v schémach starších verzií, na tabuľku "
+"Premapovať referencie symbolov v schémach starších verzií, na tabuľku "
 "knižnice symbolov"
 
 #: eeschema/tools/sch_actions.cpp:1188
@@ -50898,11 +50898,11 @@ msgstr "Veľkosť medzery:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:63
 msgid "Stub Size:"
-msgstr "Veľkosť pahýľa:"
+msgstr "Veľkosť odbočky:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:70
 msgid "Arc Stub Radius Value:"
-msgstr "Hodnota polomeru oblúku oblúku:"
+msgstr "Hodnota polomeru oblúkovej odbočky:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:81
 #: pcbnew/microwave/microwave_footprint.cpp:96
@@ -57582,14 +57582,12 @@ msgid "Open in Footprint Editor"
 msgstr "Otvoriť v editore puzdier"
 
 #: pcbnew/tools/pcb_actions.cpp:573
-#, fuzzy
 msgid "Toggle the exclude from bill of materials attribute"
-msgstr "Vylúčiť z kusovníka"
+msgstr "Prepnúť atribút 'vylúčiť zo zoznamu materiálu'"
 
 #: pcbnew/tools/pcb_actions.cpp:579
-#, fuzzy
 msgid "Toggle the exclude from position files attribute"
-msgstr "Prepnúť atribút vylúčenia zo simulácie"
+msgstr "Prepnúť atribút 'vylúčiť z polohových súborov'"
 
 #: pcbnew/tools/pcb_actions.cpp:587
 msgid ""
@@ -57709,7 +57707,7 @@ msgstr "Prepnúť spoj na predchádzajúcu povolenú mednenú vrstvu"
 
 #: pcbnew/tools/pcb_actions.cpp:767
 msgid "Adds arcs tangent to the selected straight track segments"
-msgstr "Pridá oblúky tangentové k vybraným priamym segmentom dráhy"
+msgstr "Pridá oblúky dotyčné k vybraným priamym segmentom spoja"
 
 #: pcbnew/tools/pcb_actions.cpp:772
 msgid "Fillet Lines..."
@@ -57996,19 +57994,19 @@ msgstr "Vytvoriť medzeru danej dĺžky pre mikrovlnné aplikácie"
 
 #: pcbnew/tools/pcb_actions.cpp:1096
 msgid "Draw Microwave Stubs"
-msgstr "Kresliť mikrovlnné pahýle"
+msgstr "Kresliť mikrovlnné odbočky"
 
 #: pcbnew/tools/pcb_actions.cpp:1097
 msgid "Create stub of specified length for microwave applications"
-msgstr "Vytvoriť pahýľ danej dĺžky pre mikrovlnné aplikácie"
+msgstr "Vytvoriť odbočku danej dĺžky pre mikrovlnné aplikácie"
 
 #: pcbnew/tools/pcb_actions.cpp:1105
 msgid "Draw Microwave Arc Stubs"
-msgstr "Kresliť mikrovlnné oblúkové pahýle"
+msgstr "Kresliť mikrovlnné oblúkové odbočky"
 
 #: pcbnew/tools/pcb_actions.cpp:1106
 msgid "Create stub (arc) of specified size for microwave applications"
-msgstr "Vytvoriť pahýľ (oblúk) danej veľkosti pre mikrovlnné aplikácie"
+msgstr "Vytvoriť odbočku (oblúk) danej veľkosti pre mikrovlnné aplikácie"
 
 #: pcbnew/tools/pcb_actions.cpp:1114
 msgid "Draw Microwave Polygonal Shapes"
@@ -58482,7 +58480,7 @@ msgstr "Režim vzdušných spojov (3-stavový)"
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
 msgstr ""
-"Prepínanie medzi zobrazením vzdušných spojov pre všetky vrstvy, len "
+"Cyklicky prepínať medzi zobrazením vzdušných spojov pre všetky vrstvy, len "
 "viditeľné vrstvy a žiadne"
 
 #: pcbnew/tools/pcb_actions.cpp:1720
@@ -58494,8 +58492,8 @@ msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
 msgstr ""
-"Prepínanie medzi farebným nastavením spojov a triedy spojov pre všetky "
-"spoje, iba vzdušné spoje a žiadne"
+"Cyklicky prepínať medzi farebným nastavením spojov a triedy spojov pre "
+"všetky spoje, iba vzdušné spoje a žiadne"
 
 #: pcbnew/tools/pcb_actions.cpp:1728
 msgid "Sketch Tracks"
@@ -58571,7 +58569,7 @@ msgstr "Prepnúť zobrazenie zóny"
 
 #: pcbnew/tools/pcb_actions.cpp:1806
 msgid "Cycle between showing zone fills and just their outlines"
-msgstr "Prepínať medzi zobrazením výplní zón a len ich obrysov"
+msgstr "Cyklicky prepínať medzi zobrazením výplní zón a len ich obrysov"
 
 #: pcbnew/tools/pcb_actions.cpp:1813
 msgid "Automatic zoom"
@@ -58743,11 +58741,11 @@ msgstr "Zvyšuje priehľadnosť aktuálnej vrstvy"
 
 #: pcbnew/tools/pcb_actions.cpp:2184
 msgid "Cycle Layer Pair Presets"
-msgstr "Prepínať predvoľby párov vrstiev"
+msgstr "Cyklicky prepínať predvoľby párov vrstiev"
 
 #: pcbnew/tools/pcb_actions.cpp:2185
 msgid "Cycle between preset layer pairs"
-msgstr "Prepínať medzi predvoľbami párov vrstiev"
+msgstr "Cyklicky prepínať medzi predvoľbami párov vrstiev"
 
 #: pcbnew/tools/pcb_actions.cpp:2196
 msgid "Show Board Statistics"
@@ -59108,11 +59106,11 @@ msgstr "Prepnutie routera do režimu obchádzania"
 
 #: pcbnew/tools/pcb_actions.cpp:2616
 msgid "Cycle Router Mode"
-msgstr "Prepínať režim routera"
+msgstr "Cyklicky prepínať režim routera"
 
 #: pcbnew/tools/pcb_actions.cpp:2617
 msgid "Cycle router to the next mode"
-msgstr "Prepnutie routera na nasledujúci režim"
+msgstr "Cyklicky prepínať router na nasledujúci režim"
 
 #: pcbnew/tools/pcb_actions.cpp:2622
 msgid "Set Layer Pair..."
