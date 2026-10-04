@@ -66,6 +66,7 @@ enum drill_G_code_t {
     DRILL_G_ZEROSET,
     DRILL_G_ROUT,
     DRILL_G_DRILL,
+    DRILL_G_DRILL_IN_HEADER,                // a G05 in file header (unusual, but happens
     DRILL_G_SLOT,
     DRILL_G_ZERO_SET,
     DRILL_G_LINEARMOVE,

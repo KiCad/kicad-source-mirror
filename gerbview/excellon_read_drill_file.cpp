@@ -89,10 +89,10 @@ static VECTOR2I computeCenter( VECTOR2I aStart, VECTOR2I aEnd, int& aRadius, boo
     end.x = double(aEnd.x - aStart.x);
     end.y = double(aEnd.y - aStart.y);
 
-    // Be sure aRadius/2 > dist between aStart and aEnd
-    double min_radius = end.EuclideanNorm() * 2;
+    // Be sure circle diameter (aRadius * 2) > dist between aStart and aEnd
+    double min_radius = end.EuclideanNorm() / 2;
 
-    if( min_radius <= aRadius )
+    if( min_radius >= aRadius )
     {
         // Adjust the radius and the arc center for a 180 deg arc between end points
         aRadius = KiROUND( min_radius );
@@ -223,6 +223,11 @@ static EXCELLON_CMD excellonHeaderCmdList[] =
     // Keep this item after all commands starting by 'T':
     { "T",      DRILL_TOOL_INFORMATION,       0 },  // Tool Information
     { "",       DRILL_M_UNKNOWN,              0 }   // last item in list
+};
+
+static EXCELLON_CMD excellonAcceptedIHeaderUnusualCmdList[] =
+{
+    { "G05",    DRILL_G_DRILL_IN_HEADER,      0 }  // Drill Mode, found in header
 };
 
 static EXCELLON_CMD excellon_G_CmdList[] =
@@ -580,6 +585,27 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
         }
     }
 
+    // Commang not found: if parsing the header, looks for accepted ususual command in header
+    if( !cmd && m_State == EXCELLON_IMAGE::READ_HEADER_STATE )
+    {
+
+        for( unsigned ii = 0; ; ii++ )
+        {
+            EXCELLON_CMD* candidate = &excellonAcceptedIHeaderUnusualCmdList[ii];
+            int len = candidate->m_Name.size();
+
+            if( len == 0 )                                                  // End of list reached
+                break;
+
+            if( candidate->m_Name.compare( 0, len, text, len ) == 0 )       // found.
+            {
+                cmd   = candidate;
+                text += len;
+                break;
+            }
+        }
+    }
+
     if( !cmd )
     {
         msg.Printf( _( "Unknown Excellon command &lt;%s&gt;" ), text );
@@ -604,6 +630,13 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
         if( m_RouteModeOn )
             FinishRouteCommand();
 
+        break;
+
+    case DRILL_G_DRILL_IN_HEADER:  // unusual in a header but can be found inside header
+        m_SlotOn = false;
+        m_RouteModeOn = false;
+        m_RoutePositions.clear();
+        m_LastArcDataType = ARC_INFO_TYPE_NONE;
         break;
 
     case DRILL_M_MESSAGE:
