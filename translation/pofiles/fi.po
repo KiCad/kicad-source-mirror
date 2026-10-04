@@ -21,15 +21,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-10-02 21:48+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"PO-Revision-Date: 2026-10-04 22:51+0000\n"
+"Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -2397,9 +2397,10 @@ msgid "Board file '%s' could not be saved as design block at '%s'."
 msgstr "Piirilevytiedostoa '%s' ei voitu tallentaa suunnittelulohkoksi '%s'."
 
 #: common/design_block_io.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design block metadata '%s': %s"
-msgstr "Suunnittelulohkokirjastotiedoston '%s' tallentaminen epäonnistui."
+msgstr ""
+"Suunnittelulohkokirjastotiedoston metadatan tallentaminen epäonnistui '%s':%s"
 
 #: common/design_block_io.cpp:505
 #, c-format
@@ -10141,19 +10142,16 @@ msgstr ""
 "OAuth-metatiedon täytyy sisältää authorization_endpoint ja token_endpoint."
 
 #: common/remote_provider_models.cpp:55
-#, fuzzy
 msgid "authorization_endpoint"
-msgstr "Päätepiste X"
+msgstr "authorization_endpoint"
 
 #: common/remote_provider_models.cpp:60
-#, fuzzy
 msgid "token_endpoint"
-msgstr "Päätepiste X"
+msgstr "token_endpoint"
 
 #: common/remote_provider_models.cpp:66
-#, fuzzy
 msgid "revocation_endpoint"
-msgstr "Päätepiste X"
+msgstr "revocation_endpoint"
 
 #: common/remote_provider_models.cpp:98
 #, c-format
@@ -10223,9 +10221,9 @@ msgid "Cannot close '%s': %s"
 msgstr "Kohteen '%s' sulkeminen epäonnistui:%s"
 
 #: common/richio.cpp:728
-#, fuzzy, c-format
+#, c-format
 msgid "Write failed to '%s': %s"
-msgstr "Rebasen käynnistäminen epäonnistui: %s"
+msgstr "Kirjoitus epäonnistui kohteessa '%s':%s"
 
 #: common/settings/bom_settings.cpp:126
 msgid "Default Editing"
@@ -13798,14 +13796,14 @@ msgstr "Poissulkemiskommentti"
 #: eeschema/dialogs/dialog_erc.cpp:972
 #: eeschema/dialogs/dialog_schematic_setup.cpp:107
 msgid "Pin Conflicts Map"
-msgstr "Nastojen Ristiriita Kartta"
+msgstr "Nastojen ristiriitakartta"
 
 #: eeschema/dialogs/dialog_erc.cpp:976 eeschema/dialogs/dialog_erc.cpp:1114
 #: eeschema/dialogs/dialog_schematic_setup.cpp:100
 #: pcbnew/dialogs/dialog_board_setup.cpp:247 pcbnew/dialogs/dialog_drc.cpp:1034
 #: pcbnew/dialogs/dialog_drc.cpp:1076
 msgid "Violation Severity"
-msgstr "Rikkomuksen Vakavuus"
+msgstr "Rikkomuksen vakavuus"
 
 #: eeschema/dialogs/dialog_erc.cpp:980
 #: eeschema/dialogs/dialog_label_properties_base.cpp:207
@@ -13884,13 +13882,13 @@ msgstr "Muokkaa ohitettuja testejä"
 #: pcbnew/dialogs/dialog_drc_base.cpp:168
 #, c-format
 msgid "Ignored Tests (%s)"
-msgstr "Ohitetut Testit (%s)"
+msgstr "Ohitetut testit (%s)"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:164
 #: pcbnew/dialogs/dialog_drc_base.cpp:210
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:56
 msgid "Exclusions"
-msgstr "Poisto"
+msgstr "Poissuljetut"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:187
 #: pcbnew/dialogs/dialog_drc_base.cpp:230
@@ -15014,18 +15012,16 @@ msgid "Pin Table"
 msgstr "Nastataulukko"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:107
-#, fuzzy
 msgid "Revert symbol"
-msgstr "Muunna Symboli"
+msgstr "Palauta symboli"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:108
 msgid "Revert the symbol to its last saved state"
 msgstr "Palauta symboli viimeksi tallennettuun versioon"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:109
-#, fuzzy
 msgid "Clear cell"
-msgstr "Välys"
+msgstr "Tyhjennä solu"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:110
 msgid "Clear the cell value"
@@ -19096,9 +19092,9 @@ msgstr ""
 "Tiedostoa ’%s’ ei voi kopioida, koska uusi pääsivun tiedosto korvaa sen."
 
 #: eeschema/eeschema_config.cpp:207
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save drawing sheet '%s': %s"
-msgstr "Sivun lataaminen epäonnistui '%s':%s"
+msgstr "Piirustusarkin tallentaminen epäonnistui '%s':%s"
 
 #: eeschema/eeschema_helpers.cpp:194 eeschema/files-io.cpp:361
 #: eeschema/picksymbol.cpp:127
@@ -19616,9 +19612,8 @@ msgid "Local and global labels have same name"
 msgstr "Paikallisella ja globaalilla nimiöllä on sama nimi"
 
 #: eeschema/erc/erc_item.cpp:135
-#, fuzzy
 msgid "Local and global power symbols have same name"
-msgstr "Paikallisella ja globaalilla nimiöllä on sama nimi"
+msgstr "Paikallisella ja globaalilla tehosymbolilla on sama nimi"
 
 #: eeschema/erc/erc_item.cpp:139
 msgid "Different footprint assigned in another unit of the symbol"
@@ -31554,8 +31549,9 @@ msgid "Browse for templates in another directory"
 msgstr "tämän mallipohjan hakemiston sisällä."
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:79
+#, fuzzy
 msgid "Stop showing templates from the browsed directory"
-msgstr ""
+msgstr "Lopeta pohjien näyttäminen selatusta hakemistosta"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:125
 msgid "Go Back"
@@ -39026,7 +39022,7 @@ msgstr "Kesto: %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:318
 msgid "Report All Errors for Each Track"
-msgstr "Raportoi kaikki virheet jokaisesta johdinraidasta"
+msgstr "Ilmoita kaikki virheet yksittäisestä johtimesta"
 
 #: pcbnew/dialogs/dialog_drc.cpp:319
 msgid "If unchecked, only the first error will be reported for each track"
@@ -39073,7 +39069,7 @@ msgstr "Peruutettu %s jälkeen"
 #: pcbnew/dialogs/dialog_drc.cpp:495
 #, c-format
 msgid "Completed in %s"
-msgstr "Valmistuu ajassa %s"
+msgstr "Valmistui ajassa %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:760
 #, c-format
@@ -39112,17 +39108,17 @@ msgstr "Raporttitiedosto '%s' luotu <br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1463
 msgid "not run"
-msgstr "älä käynnistä"
+msgstr "ei-ajettu"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:135
 #, c-format
 msgid "Unconnected Items (%s)"
-msgstr "Kytkemättömät Kohteet (%s)"
+msgstr "Kytkemättömät kohteet (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:150
 #, c-format
 msgid "Schematic Parity (%s)"
-msgstr "Kytkentäkaavion Pariteetti (%s)"
+msgstr "Kytkentäkaavion pariteetti (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.h:110 pcbnew/tools/pcb_actions.cpp:463
 msgid "Design Rules Checker"
@@ -47592,7 +47588,7 @@ msgstr "Tekstin korkeus alueen ulkopuolella"
 
 #: pcbnew/drc/drc_item.cpp:261
 msgid "Text thickness out of range"
-msgstr "Tekstin paksuus alueen ulkopuolella"
+msgstr "Tekstin paksuus rajojen ulkopuolella"
 
 #: pcbnew/drc/drc_item.cpp:265
 msgid "Track length out of range"
@@ -51869,8 +51865,8 @@ msgstr "Uusi piirilevytiedosto on tallentamatta"
 #, c-format
 msgid "%d WRL 3D model could not be matched to an equivalent STEP model."
 msgid_plural "%d WRL 3D models could not be matched to equivalent STEP models."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d WRL 3D-mallia ei voitu täsmätä vastaavaan STEP-malliin."
+msgstr[1] "%d WRL 3D-malleja ei voitu täsmätä vastaaviin STEP-malleihin."
 
 #: pcbnew/pcb_edit_frame.cpp:1939
 msgid "Show options"
@@ -52187,7 +52183,7 @@ msgstr "Ladataan verkkoja..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2678
 #, c-format
 msgid "Altium net %zu has no name; imported as '%s'."
-msgstr ""
+msgstr "Altium verkolla %zu ei ole nimeä, tuotu nimellä '%s'."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2699
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3005
@@ -52454,7 +52450,7 @@ msgstr "Ladataan suorakulmioita..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:5856
 msgid "Ignored a keep-out area with no restrictions."
-msgstr ""
+msgstr "Ohitettiin pidä-ulkona alue, jossa ei ollut rajoituksia."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:38
 msgid "Altium Circuit Maker PCB files"
@@ -56953,7 +56949,7 @@ msgstr ""
 #: pcbnew/tools/multichannel_tool.cpp:2278
 #, c-format
 msgid "Reference area total components: %d"
-msgstr ""
+msgstr "Referenssialueen komponenttien määrä: %d"
 
 #: pcbnew/tools/multichannel_tool.cpp:2279
 #, c-format
@@ -59181,7 +59177,7 @@ msgstr "Virhe ladattaessa piirilevyä."
 #: pcbnew/tools/pcb_control.cpp:2232
 #, c-format
 msgid "Board changed from %d to %d copper layers, stackup updated."
-msgstr ""
+msgstr "Levy muuttui %d kerroksesta %d kerroksiseksi, kerrosrakenne päivitetty."
 
 #: pcbnew/tools/pcb_control.cpp:2309
 msgid "Append Board"
