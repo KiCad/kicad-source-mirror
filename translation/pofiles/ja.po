@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-02 06:51+0000\n"
+"PO-Revision-Date: 2026-10-04 10:08+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1743,11 +1743,13 @@ msgstr "揃え解除"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:581
 msgid "Click the model face that sits on the board. Press Esc to cancel."
-msgstr ""
+msgstr "基板上にあるモデル面をクリックしてください。キャンセルはEscキーを押す。"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:614
 msgid "Click the footprint pad for that contact. Press Esc to cancel."
 msgstr ""
+"その接続先のフットプリントパッドをクリックしてください。キャンセルはEscキーを"
+"押す。"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:715
 #, c-format
@@ -6475,6 +6477,8 @@ msgid ""
 "Native gestures use two-finger movement to pan and pinch to zoom. Mouse "
 "wheel mappings remain active in both modes."
 msgstr ""
+"ネイティブのジェスチャーは2本指の動きでパンしピンチでズームします。マウスの操"
+"作はどちらのモードでも有効です。"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:217
 msgid "Vertical touchpad or scroll wheel movement:"
@@ -29613,9 +29617,9 @@ msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "%s の'部品表(BOM)から除外'を '%s' から '%s' に変更します。"
 
 #: eeschema/tools/backannotate.cpp:952
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from simulation' from '%s' to '%s'."
-msgstr "%s の'部品位置情報ファイルから除外'を '%s' から '%s' に変更します。"
+msgstr "%s の'シミュレーションから除外'を '%s' から '%s' に変更します。"
 
 #: eeschema/tools/backannotate.cpp:966
 #, c-format
@@ -39772,9 +39776,8 @@ msgid "Standard:"
 msgstr "標準:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:267
-#, fuzzy
 msgid "Production level:"
-msgstr "ODB++ 製造ファイル"
+msgstr "IPC 製造 レベル :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:268
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:34
@@ -39819,7 +39822,7 @@ msgstr "最大リードに対する穴のクリアランス :"
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:281
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:173
 msgid "Annular ring:"
-msgstr "アニュラーリング:"
+msgstr "環状リング:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:282
 msgid "Pad diameter:"
@@ -39890,9 +39893,8 @@ msgid "Nearest"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:165
-#, fuzzy
 msgid "Annular ring"
-msgstr "アニュラーリング:"
+msgstr "環状リング:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:194
 #, fuzzy
@@ -40558,7 +40560,7 @@ msgstr "ビア パッドの直径:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "ビアを取り囲むパッドの直径 (円環状)"
+msgstr "ビアを取り囲むパッドの直径 (環状リング)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
@@ -47412,7 +47414,7 @@ msgstr "ビア サイズ:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:196
 msgid "Via annular rings:"
-msgstr "ビア アニュラーリング:"
+msgstr "ビア 環状リング:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1266
@@ -50193,7 +50195,7 @@ msgstr "ベリード"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:377
 msgid "Annular rings:"
-msgstr "アニュラーリング:"
+msgstr "環状リング:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:387
 msgid "Protection features:"
@@ -51316,8 +51318,8 @@ msgid ""
 "The minimum annular ring width. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"アニュラーリングの最小幅。設定されている場合、カスタムルールによってのみ小さ"
-"くできます。"
+"環状リングの最小幅。設定されている場合、カスタムルールによってのみ小さくでき"
+"ます。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:125
 msgid "Minimum via diameter:"
@@ -52664,6 +52666,7 @@ msgstr ""
 "\n"
 "'hole_size' のような単一のアイテム条件では、2番目のアイテムはありません。\n"
 "これらの条件で`B`を使うのはエラーです。\n"
+"\n"
 "<br>\n"
 "\n"
 
@@ -53974,9 +53977,8 @@ msgid "no"
 msgstr "いいえ"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:117
-#, fuzzy
 msgid "Preset name:"
-msgstr "部品表(BOM)プリセット名:"
+msgstr "プリセット名:"
 
 #: pcbnew/dialogs/panel_setup_via_stacks.cpp:117
 msgid "New Microvia Stack Preset"
@@ -54372,9 +54374,9 @@ msgid "Checking %s max microvia stack depth: %s."
 msgstr "%s の 最大遅延差（スキュー）を確認中: %s。"
 
 #: pcbnew/drc/drc_engine.cpp:1488
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s max microvia aspect ratio: %.3f."
-msgstr "%s の最大非結合長を確認中: %s。"
+msgstr "%s の最大マイクロビア アスペクト比を確認中: %.3f。"
 
 #: pcbnew/drc/drc_engine.cpp:1494
 #, c-format
@@ -55083,7 +55085,7 @@ msgstr "深刻度の名前がありません。"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:72
 msgid "Checking pad & via annular rings..."
-msgstr "パッドとビアのアニュラーリングを確認中..."
+msgstr "パッドとビアの環状リングを確認中..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:339
 #, c-format
@@ -56368,9 +56370,8 @@ msgid "Minimum number of thermal relief spokes connecting a pad to its zone"
 msgstr "パッドをそのゾーンに接続するサーマルリリーフスポークの最小数"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:202
-#, fuzzy
 msgid "Largest number of microvias allowed stacked on one another."
-msgstr "一致したネット上での最大許容ビア数"
+msgstr "ひとつのマイクロビアに積み重ねることができる最大数。"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:217
 msgid ""
@@ -56705,9 +56706,8 @@ msgid "OPS"
 msgstr "OP"
 
 #: pcbnew/drill/drill_chart_template.cpp:46
-#, fuzzy
 msgid "Operation count"
-msgstr "DC動作点"
+msgstr "オペレーション数"
 
 #: pcbnew/drill/drill_chart_template.cpp:47
 msgid "SITE COUNT"
@@ -56845,27 +56845,24 @@ msgid "Export Hyperlynx Layout"
 msgstr "HyperLynx レイアウトをエクスポート"
 
 #: pcbnew/exporters/export_idf.cpp:558
-#, fuzzy, c-format
+#, c-format
 msgid "Exported IDF model for footprint %s"
-msgstr "この フットプリント に対して 押し出し3Dモデルを有効にする"
+msgstr "フットプリント %s のエクスポートされたIDFモデル"
 
 #: pcbnew/exporters/export_idf.cpp:575 pcbnew/exporters/export_idf.cpp:596
 #: pcbnew/exporters/export_idf.cpp:645 pcbnew/exporters/export_idf.cpp:685
-#, fuzzy, c-format
+#, c-format
 msgid "Could not generate extruded body for %s"
-msgstr ""
-"%s 用の押し出し3Dモデルが追加できませんでした。\n"
-"OpenCASCADE のエラー: %s\n"
+msgstr "%s の押し出しボディを生成できませんでした"
 
 #: pcbnew/exporters/export_idf.cpp:891
-#, fuzzy
 msgid "could not add drill for pad"
-msgstr "リポジトリのHEADを取得できません"
+msgstr "パッドにドリルを追加できませんでした"
 
 #: pcbnew/exporters/export_idf.cpp:1010
-#, fuzzy, c-format
+#, c-format
 msgid "Exported extruded body for footprint %s"
-msgstr "この フットプリント に対して 押し出し3Dモデルを有効にする"
+msgstr "フットプリント %s の押し出しボディをエクスポートした"
 
 #: pcbnew/exporters/export_idf.cpp:1099
 #, fuzzy
@@ -57405,9 +57402,8 @@ msgid "File format is not supported"
 msgstr "ファイルフォーマットはサポートされていません"
 
 #: pcbnew/files.cpp:732
-#, fuzzy
 msgid "Invalid imported net-name map."
-msgstr "不正なプロパティ名"
+msgstr "不正なインポート済のネット名マップ。"
 
 #: pcbnew/files.cpp:735
 msgid "Cannot apply imported net-name map to the board."
@@ -57483,7 +57479,6 @@ msgstr "部品表(BOM)から除外"
 
 #: pcbnew/footprint.cpp:2653
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1641
-#, fuzzy
 msgid "exclude from simulation"
 msgstr "シミュレーションから除外"
 
@@ -57910,9 +57905,8 @@ msgstr ""
 "数値の検索語はパッドカウントに対しても一致します。"
 
 #: pcbnew/footprint_wizard.cpp:119
-#, fuzzy
 msgid "could not parse wizard info"
-msgstr "ファイル \"%s\" を読み込みできません "
+msgstr "ウィザード情報を解釈できませんでした"
 
 #: pcbnew/footprint_wizard.cpp:133 pcbnew/footprint_wizard.cpp:153
 msgid "Unexpected error with footprint wizard"
@@ -58780,24 +58774,24 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "%s の製造属性 '部品表(BOM)から除外' を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:838
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from simulation' attribute."
-msgstr "%s に '部品表(BOM)から除外 'の製造属性を設定します。"
+msgstr "%s に 'シミュレーションから除外 'の属性を設定します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:840
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from simulation' attribute."
-msgstr "%s の '部品表(BOM)から除外 'の製造属性を削除します。"
+msgstr "%s の 'シミュレーションから除外 'の属性を削除します。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from simulation' attribute."
-msgstr "%s に製造属性 '部品表(BOM)から除外' を追加しました。"
+msgstr "%s に属性 'シミュレーションから除外' を追加しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:854
 #, c-format
 msgid "Removed %s 'exclude from simulation' attribute."
-msgstr "%s の 'Simulationから除外' の属性を削除しました。"
+msgstr "%s の 'シミュレーションから除外' の属性を削除しました。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:874
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1538
@@ -60623,9 +60617,11 @@ msgid "Autotrax import: %d pad(s) with a target shape were skipped."
 msgstr ""
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid "Autotrax import: %d pad(s) on unsupported layers were skipped."
-msgstr "パッドのタイプはサポートされていないため、スキップされました。"
+msgstr ""
+"Autotraxインポート: %d個のパッドはサポートされていないレイヤー上のため"
+"スキップされました。"
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:212
 #, c-format
@@ -60641,9 +60637,9 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:715
-#, fuzzy, c-format
+#, c-format
 msgid "Autotrax import: net '%s' node '%s' matches no pad."
-msgstr "Autotrax インポート、%d 行: %s"
+msgstr "Autotraxインポート: ネット '%s' ノード '%s' はパッドに一致しません。"
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:721
 #, c-format
@@ -60653,9 +60649,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:846
-#, fuzzy
 msgid "Autotrax import: keepout layer used as the board outline."
-msgstr "基板外形でシルクレイヤーをクリップしない"
+msgstr "Autotraxのインポート：基板外形として禁止領域レイヤーが使われました。"
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:854 pcbnew/zone.cpp:2416
 msgid "Keepout"
@@ -61323,9 +61318,8 @@ msgid "No PCB was found in the project to import."
 msgstr "フットプリントにデータシートが見つかりません。"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:189
-#, fuzzy
 msgid "Failed to load the project data."
-msgstr "%s プロジェクトの読み込みに失敗しました"
+msgstr "プロジェクトデータの読み込みに失敗しました。"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:440
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:490
@@ -63136,7 +63130,7 @@ msgstr "ビア %s (%s 上)"
 
 #: pcbnew/pcb_track.cpp:749
 msgid "removed annular ring"
-msgstr "削除されたアニュラーリング"
+msgstr "削除された環状リング"
 
 #: pcbnew/pcb_track.cpp:2076
 msgid "Via diameter is too small."
@@ -66521,9 +66515,8 @@ msgid "Toggle the exclude from bill of materials attribute"
 msgstr "'部品表(BOM)から除外' の設定を切り替え"
 
 #: pcbnew/tools/pcb_actions.cpp:930
-#, fuzzy
 msgid "Toggle the exclude from simulation attribute"
-msgstr "[シミュレーションから除外]の属性を削除"
+msgstr "'シミュレーションから除外' の属性をトグル"
 
 #: pcbnew/tools/pcb_actions.cpp:936
 msgid "Toggle the exclude from position files attribute"
