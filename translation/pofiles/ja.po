@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-10-02 07:51+0000\n"
+"PO-Revision-Date: 2026-10-04 22:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -35496,7 +35496,7 @@ msgstr "ビア パッドの直径:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "ビアを取り囲むパッドの直径 (円環状)"
+msgstr "ビアを取り囲むパッドの直径 (環状リング)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
@@ -41361,7 +41361,7 @@ msgstr "ビア サイズ:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:196
 msgid "Via annular rings:"
-msgstr "ビア アニュラーリング:"
+msgstr "ビア 環状リング:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:200
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1219
@@ -43865,7 +43865,7 @@ msgstr "終了レイヤー:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:377
 msgid "Annular rings:"
-msgstr "アニュラーリング:"
+msgstr "環状リング:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:387
 msgid "Protection features:"
@@ -44741,8 +44741,8 @@ msgid ""
 "The minimum annular ring width. If set, this can only be reduced by custom "
 "rules."
 msgstr ""
-"アニュラーリングの最小幅。設定されている場合、カスタムルールによってのみ小さ"
-"くできます。"
+"環状リングの最小幅。設定されている場合、カスタムルールによってのみ小さくでき"
+"ます。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:125
 msgid "Minimum via diameter:"
@@ -48090,7 +48090,7 @@ msgstr "深刻度の名前がありません。"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:76
 msgid "Checking pad & via annular rings..."
-msgstr "パッドとビアのアニュラーリングを確認中..."
+msgstr "パッドとビアの環状リングを確認中..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:339
 #, c-format
@@ -54882,7 +54882,7 @@ msgstr "ビア %s (%s 上)"
 
 #: pcbnew/pcb_track.cpp:682
 msgid "removed annular ring"
-msgstr "削除されたアニュラーリング"
+msgstr "削除された環状リング"
 
 #: pcbnew/pcb_track.cpp:1859
 msgid "Via diameter is too small."
