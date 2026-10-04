@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-07-26 13:15+0000\n"
+"PO-Revision-Date: 2026-10-04 10:08+0000\n"
 "Last-Translator: Zbigniew Gibek <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
 "source/pl/>\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2555,7 +2555,7 @@ msgstr ""
 #: common/design_block_io.cpp:461
 #, c-format
 msgid "Cannot save design block metadata '%s': %s"
-msgstr "Nie można zapisać metadanych bloku projektowego '%s':%s"
+msgstr "Nie można zapisać metadanych bloku projektowego '%s': %s"
 
 #: common/design_block_io.cpp:469
 #, c-format
@@ -8379,9 +8379,8 @@ msgid "Unrecognized"
 msgstr "Nierozpoznany"
 
 #: common/eda_shape.cpp:1498
-#, fuzzy
 msgid "Connected Lines"
-msgstr "Połączone elementy:"
+msgstr "Linia łamana"
 
 #: common/eda_shape.cpp:1506
 msgid "Curve"
@@ -8602,7 +8601,6 @@ msgid "Line Color"
 msgstr "Kolor linii"
 
 #: common/eda_shape.cpp:4729
-#, fuzzy
 msgid "Arc angle must not be zero."
 msgstr "Kąt łuku nie może być zerowy."
 
@@ -9530,7 +9528,7 @@ msgid "Rebase commit failed: %s"
 msgstr "Nie udało się zatwierdzić rebase: %s"
 
 #: common/git/libgit_backend.cpp:1618
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed: %s"
 msgstr "Nie udało się ukończyć rebase: %s"
 
@@ -9676,9 +9674,8 @@ msgid "Failed to acquire git index lock (another operation in progress?): %s"
 msgstr "Błąd podczas zablokowania indeksu git (inna operacja w trakcie?): %s"
 
 #: common/history_lock.cpp:312
-#, fuzzy
 msgid "Cannot re-open history repository without the file lock"
-msgstr "Nie można usunąć tymczasowego pliku wyjściowego"
+msgstr "Nie można ponownie otworzyć repozytorium historii bez blokady pliku"
 
 #: common/hotkey_store.cpp:39
 msgid "Accept Autocomplete"
@@ -11639,6 +11636,8 @@ msgid ""
 "Refusing to extract file '%s': the archive entry points outside of the "
 "destination directory."
 msgstr ""
+"Odmowa wypakowania pliku '%s': wpis w archiwum wskazuje na lokalizację poza "
+"katalogiem docelowym."
 
 #: common/project/project_archiver.cpp:177 kicad/pcm/pcm_task_manager.cpp:252
 #: kicad/pcm/pcm_task_manager.cpp:313
@@ -11696,9 +11695,9 @@ msgstr "Nie można zarchiwizować pliku '%s'."
 
 #: common/project/project_archiver.cpp:356
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1770
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s': %s"
-msgstr "Nie można zarchiwizować pliku '%s'."
+msgstr "Nie można zarchiwizować pliku '%s': %s"
 
 #: common/project/project_archiver.cpp:384
 #, c-format
@@ -11888,17 +11887,17 @@ msgstr "Przekroczona długość linii"
 #: common/richio.cpp:645
 #, c-format
 msgid "Cannot flush '%s' to disk: %s"
-msgstr "Nie można przelać '%s' na dysk: %s"
+msgstr "Nie można opróżnić '%s' na dysk: %s"
 
 #: common/richio.cpp:652
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot close '%s': %s"
-msgstr "Nie można zapisać płytki '%s': %s"
+msgstr "Nie można zamknąć '%s': %s"
 
 #: common/richio.cpp:724
 #, c-format
 msgid "Write failed to '%s': %s"
-msgstr "Nie udało się zapisać do '%s':%s"
+msgstr "Nie udało się zapisać '%s': %s"
 
 #: common/settings/bom_settings.cpp:127
 msgid "Default Editing"
@@ -13760,18 +13759,18 @@ msgid "Restore Defaults"
 msgstr "Przywróć domyślne"
 
 #: common/widgets/widget_hotkey_list.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Both bindings are kept, "
 "but only one runs per key press. Continue?"
 msgstr ""
-"'%s' jest obecnie przydzielony do '%s' w sekcji '%s'. Czy chcesz zmienić ten "
-"przydział?"
+"'%s' jest obecnie przydzielony do '%s' w sekcji '%s'. Oba przypisania "
+"zostają zachowane, ale przy każdym naciśnięciu klawisza wykonywane jest "
+"tylko jedno z nich. Kontynuować?"
 
 #: common/widgets/widget_hotkey_list.cpp:529
-#, fuzzy
 msgid "Hotkey conflict"
-msgstr "Lista skrótów klawiszowych"
+msgstr "Konflikt skrótów klawiszowych"
 
 #: common/widgets/widget_hotkey_list.cpp:542
 msgid "Command"
@@ -18765,9 +18764,8 @@ msgid "%s Properties"
 msgstr "Właściwości %s"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:129
-#, fuzzy
 msgid "Sheet pin name can not be empty."
-msgstr "Nazwa pinu nie może być pusta."
+msgstr "Nazwa pinu arkusza nie może być pusta."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:162
 msgid "Edit Sheet Pin Properties"
@@ -21550,7 +21548,7 @@ msgstr ""
 #: eeschema/eeschema_config.cpp:231
 #, c-format
 msgid "Failed to save drawing sheet '%s': %s"
-msgstr "Nie można zapisać arkusza rysunkowego '%s':%s"
+msgstr "Nie można zapisać arkusza '%s':%s"
 
 #: eeschema/eeschema_helpers.cpp:163
 #, fuzzy, c-format
@@ -22299,7 +22297,7 @@ msgstr "Lokalne i globalne etykiety posiadają te same nazwy"
 
 #: eeschema/erc/erc_item.cpp:135
 msgid "Local and global power symbols have same name"
-msgstr "Lokalne i globalne symbole zasilania posiadają te same nazwy"
+msgstr "Lokalne i globalne symbole zasialania posiadają te same nazwy"
 
 #: eeschema/erc/erc_item.cpp:139
 msgid "Different footprint assigned in another unit of the symbol"
@@ -22767,9 +22765,8 @@ msgstr "Nie wybrano pliku!"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:177
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:235
-#, fuzzy
 msgid "Import scale must be a positive number."
-msgstr "Skala musi być liczbą dodatnią."
+msgstr "Importowana skala musi być liczbą dodatnią."
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:213
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:308
@@ -23827,17 +23824,14 @@ msgstr "Ustaw łącze do grupy bloku projektowego"
 
 #: eeschema/sch_design_block_utils.cpp:504
 #: pcbnew/pcb_design_block_utils.cpp:534
-#, fuzzy
 msgid "The selection contains more than one group linked to this design block."
 msgstr ""
-"Pominięto %d wybranych elementów, które nie są grupami powiązanymi z blokiem "
-"projektu."
+"Zaznaczenie obejmuje więcej niż jedną grupę powiązaną z tym blokiem projektu."
 
 #: eeschema/sch_design_block_utils.cpp:638
 #: pcbnew/pcb_design_block_utils.cpp:617
-#, fuzzy
 msgid "Update Design Block Group"
-msgstr "Aktualizuj blok projektowy z płytki"
+msgstr "Aktualizuj grupę bloków projektu"
 
 #: eeschema/sch_edit_frame.cpp:182
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
@@ -24041,7 +24035,7 @@ msgstr "Pokaż nazwę pola"
 #, c-format
 msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
 msgstr ""
-"Ponownie połączono %d zaimportowanych przypisań footprintów do biblioteki "
+"Ponownie powiązano %d zaimportowanych przypisań footprintów z biblioteką "
 "'%s'."
 
 #: eeschema/sch_group.cpp:422 pcbnew/pcb_group.cpp:495
@@ -24888,9 +24882,9 @@ msgid "Error retrieving data from HTTP library %s: %s"
 msgstr "Wystąpił błąd podczas pobierania danych z biblioteki HTTP %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving part %s from HTTP library: %s"
-msgstr "Wystąpił błąd podczas pobierania danych z biblioteki HTTP %s: %s"
+msgstr "Błąd podczas pobierania części %s z biblioteki HTTP: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:540
 #, c-format
@@ -33817,9 +33811,9 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "Archiwum zip '%s' nie może zostać otwarte."
 
 #: gerbview/files.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
-msgstr "<b>Nie można utworzyć pliku tymczasowego '%s'.</b>"
+msgstr "Nie można utworzyć pliku tymczasowego by rozpakować '%s'."
 
 #: gerbview/files.cpp:539
 #, c-format
@@ -33832,9 +33826,9 @@ msgid "<b>Unable to create temporary file '%s'.</b>"
 msgstr "<b>Nie można utworzyć pliku tymczasowego '%s'.</b>"
 
 #: gerbview/files.cpp:605
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to write temporary file '%s'.</b>"
-msgstr "<b>Nie można utworzyć pliku tymczasowego '%s'.</b>"
+msgstr "<b>Nie można zapisać w pliku tymczasowym '%s'.</b>"
 
 #: gerbview/files.cpp:630
 #, c-format
@@ -36448,9 +36442,8 @@ msgid "Select Templates Directory"
 msgstr "Wybierz folder z szablonami"
 
 #: kicad/dialogs/dialog_template_selector.cpp:1389
-#, fuzzy
 msgid "(no other directory)"
-msgstr "Folder wejściowy"
+msgstr "(brak innych folderów)"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:28
 msgid "Recent project templates"
@@ -36469,17 +36462,16 @@ msgid "System Templates"
 msgstr "Szablony systemowe"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:64
-#, fuzzy
 msgid "Other Templates"
-msgstr "Szablony użytkownika"
+msgstr "Pozostałe szablony"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:74
 msgid "Browse for templates in another directory"
-msgstr "Przeglądaj w poszukiwaniu szablonów w innym folderze"
+msgstr "Przegląda inne foldery w poszukiwaniu szablonów"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:79
 msgid "Stop showing templates from the browsed directory"
-msgstr ""
+msgstr "Zatrzymaj wyświetlanie szablonów z przeglądanego katalogu"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:125
 msgid "Go Back"
@@ -36611,7 +36603,7 @@ msgstr "Wybierz wszystkie zadania"
 #: kicad/dialogs/panel_jobset.cpp:707
 #, c-format
 msgid "This version of KiCad does not support the '%s' job type."
-msgstr "Ta wersja programu KiCad nie wspiera zadania typu '%s'."
+msgstr "Ta wersja programu KiCad nie wspiera zadań typu '%s'."
 
 #: kicad/dialogs/panel_jobset.cpp:754
 msgid "Job Types"
@@ -37733,7 +37725,7 @@ msgstr "Instalacja pakietu '%s'."
 msgid ""
 "Package archive entry '%s' would be extracted outside of the package "
 "directory."
-msgstr ""
+msgstr "Element archiwum pakietu '%s' zostałby wypakowany poza katalog pakietu."
 
 #: kicad/pcm/pcm_task_manager.cpp:343
 msgid "Aborting package installation."
@@ -41938,9 +41930,8 @@ msgid "mi/h"
 msgstr "mil/h"
 
 #: pcbnew/api/api_handler_board.cpp:1411
-#, fuzzy
 msgid "Flipped items via API"
-msgstr "Usunięte elementy poprzez API"
+msgstr "Elementy odwrócone przez API"
 
 #: pcbnew/api/api_handler_pcb.cpp:1906 pcbnew/tools/zone_filler_tool.cpp:158
 #: pcbnew/tools/zone_filler_tool.cpp:239 pcbnew/tools/zone_filler_tool.cpp:431
@@ -42129,7 +42120,7 @@ msgstr "Nie można zapisać płytki '%s': %s"
 #: pcbnew/board_loader.cpp:199
 #, c-format
 msgid "Unexpected error saving board '%s': %s"
-msgstr "Nieoczekiwany błąd podczas zapisywania płytki '%s':%s"
+msgstr "Niespodziewany błąd podczas zapisu płytki '%s':%s"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:390
 #, c-format
@@ -52550,7 +52541,7 @@ msgstr "Reguły projektowe nie mogą być dodane jeśli nie ma projektu"
 #: pcbnew/dialogs/panel_setup_rules.cpp:1140
 #, c-format
 msgid "Cannot save design rules to '%s': %s"
-msgstr "Nie można zapisać reguł projektowych do '%s':%s"
+msgstr "Nie można zapisać reguł projektu w '%s': %s"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
 msgid "DRC Rules"
@@ -54220,9 +54211,8 @@ msgid "Tuning profile must have a name"
 msgstr "Profil dostrojenia musi posiadać nazwę"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:934
-#, fuzzy
 msgid "Tuning profile name already in use"
-msgstr "Profil dostrojenia musi posiadać nazwę"
+msgstr "Profil dostrojenia posiada nazwę która jest już w użyciu"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:950
 msgid "Duplicated signal layer configuration in tuning profile"
@@ -54913,13 +54903,13 @@ msgstr ""
 "Prześwit z klas sieci mają zastosowanie tylko między elementami z miedzi."
 
 #: pcbnew/drc/drc_engine.cpp:1693 pcbnew/drc/drc_engine.cpp:1699
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Constraint ignored."
 msgstr "%s nie jest elementem miedzianym.  Reguła zignorowana."
 
 #: pcbnew/drc/drc_engine.cpp:1710
 msgid "Keepout belongs to the footprint under test; constraint ignored."
-msgstr ""
+msgstr "Obszar chroniony należy do badanego obrysu; ograniczenie zignorowano."
 
 #: pcbnew/drc/drc_engine.cpp:1766
 msgid "Keepout constraint not met."
@@ -55547,9 +55537,9 @@ msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s min. szerokość pierścienia %s; rzeczywiście %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min annular width %s; actual %s on %s)"
-msgstr "(%s min. szerokość pierścienia %s; rzeczywiście %s)"
+msgstr "(%s min. szerokość pierścienia %s; obecnie %s na %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:356
 #, c-format
@@ -56426,9 +56416,9 @@ msgid "(%s min diameter %s; actual %s)"
 msgstr "(%s min. rozmiar %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min diameter %s; actual %s on %s)"
-msgstr "(%s min. rozmiar %s; obecnie %s)"
+msgstr "(%s min. rozmiar %s; obecnie %s na %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:147
 #, c-format
@@ -56436,9 +56426,9 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s maks. rozmiar %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max diameter %s; actual %s on %s)"
-msgstr "(%s maks. rozmiar %s; obecnie %s)"
+msgstr "(%s maks. rozmiar %s; obecnie %s na %s)"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:168
 #, c-format
@@ -56558,10 +56548,8 @@ msgid "Tolerance must be greater than or equal to 0"
 msgstr "Tolerancja musi być większa lub równa 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:93
-#, fuzzy
 msgid "Tolerance is too large: resulting minimum length is negative"
-msgstr ""
-"Tolerancja jest zbyt duża: wynikowa minimalna długość nie jest dodatnia"
+msgstr "Tolerancja jest zbyt duża: wynikowa minimalna długość jest ujemna"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:155
 msgid "Maximum length difference between matched tracks"
@@ -56585,9 +56573,8 @@ msgid "Maximum Skew must be greater than or equal to 0"
 msgstr "Maksymalna odchyłka musi być większa lub równa 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:91
-#, fuzzy
 msgid "Time domain (ps)"
-msgstr "Parametry domeny czasowej"
+msgstr "Domena czasowa (ps)"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:92
 msgid "The values are picoseconds instead of a length"
@@ -56948,14 +56935,12 @@ msgid "Maximum length over which the pair may run uncoupled"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:77
-#, fuzzy
 msgid "Optimum Width must be greater than or equal to 0"
-msgstr "Optymalna szerokość musi być większa niż 0"
+msgstr "Optymalna szerokość musi być większy lub równy 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:80
-#, fuzzy
 msgid "Optimum Gap must be greater than or equal to 0"
-msgstr "Maksymalna odchyłka musi być większa lub równa 0"
+msgstr "Maksymalny odstęp musi być większy lub równy 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:98
 msgid "Gap Tolerance must be greater than or equal to 0"
@@ -57635,6 +57620,8 @@ msgid ""
 "Board stackup does not define a board thickness; exporting a %.3f mm board "
 "body."
 msgstr ""
+"Struktura warstw płytki nie określa jej grubości; eksportowanie korpusu "
+"płytki o grubości %.3f mm."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1876
 #, c-format
@@ -58204,6 +58191,8 @@ msgid ""
 "Imported footprint '%s' has conflicting placed definitions; keeping the "
 "first."
 msgstr ""
+"Importowany obrys '%s' zawiera sprzeczne definicje rozmieszczenia; zachowano "
+"pierwszą z nich."
 
 #: pcbnew/footprint_import_reconciler.cpp:294
 #, c-format
@@ -58220,32 +58209,36 @@ msgid ""
 msgstr ""
 
 #: pcbnew/footprint_import_reconciler.cpp:381
-#, fuzzy
 msgid "Cannot reconcile imported footprints: no KiCad footprint writer."
 msgstr ""
-"Nie można usunąć nieużywanego footprintu %s (footprint jest zablokowany)."
+"Nie można uzgodnić zaimportowanych footprintów: brak modułu zapisu "
+"footprintów programu KiCad."
 
 #: pcbnew/footprint_import_reconciler.cpp:426
 #, c-format
 msgid "Error writing imported footprint cache '%s': %s"
-msgstr ""
-"Błąd podczas zapisu zaimportowanej pamięci podręcznej footprintów '%s': %s"
+msgstr "Błąd zapisu pamięci podręcznej zaimportowanych footprintów '%s': %s"
 
 #: pcbnew/footprint_import_reconciler.cpp:448
 #, c-format
 msgid ""
 "A library already exists at '%s'; leaving imported footprints unresolved."
 msgstr ""
+"Biblioteka pod nazwą '%s' już istnieje; zaimportowane obrysy pozostawiono "
+"nierozwiązane."
 
 #: pcbnew/footprint_import_reconciler.cpp:459
 #, c-format
 msgid "Could not publish imported footprint cache to '%s'."
 msgstr ""
-"Nie można opublikować zaimportowanej pamięci podręcznej footprintu do '%s'."
+"Nie udało się opublikować pamięci podręcznej zaimportowanych footprintów w "
+"'%s'."
 
 #: pcbnew/footprint_import_reconciler.cpp:481
 msgid "Cannot register imported footprint cache: no project library table."
 msgstr ""
+"Nie można zarejestrować zaimportowanej pamięci podręcznej footprintów: brak "
+"tabeli bibliotek projektu."
 
 #: pcbnew/footprint_import_reconciler.cpp:506
 #, fuzzy
@@ -60706,6 +60699,8 @@ msgid ""
 "Board outline has %d vertices outside the coordinate range; they were "
 "dropped."
 msgstr ""
+"Obrys płytki zawiera %d wierzchołków wykraczających poza zakres "
+"współrzędnych; zostały one odrzucone."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1721
 #, c-format
@@ -60788,7 +60783,7 @@ msgstr "Wczytywanie sieci..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2839
 #, c-format
 msgid "Altium net %zu has no name; imported as '%s'."
-msgstr ""
+msgstr "Sieć projektu Altium %zu nie ma nazwy; zaimportowano ją jako '%s'."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2860
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3166
@@ -60801,6 +60796,8 @@ msgid ""
 "Polygon on layer '%s' has %d vertices outside the coordinate range; they "
 "were dropped."
 msgstr ""
+"Wielokąt na warstwie '%s' ma %d wierzchołków poza zakresem współrzędnych; "
+"zostały one odrzucone."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2910
 #, c-format
@@ -60817,6 +60814,8 @@ msgid ""
 "Altium rule '%s' applies to netclass '%s', which this board does not define. "
 "Its constraint is not imported."
 msgstr ""
+"Reguła Altium '%s' dotyczy klasy sieci '%s', która nie jest zdefiniowana na "
+"tej płytce. Jej ograniczenie nie zostanie zaimportowane."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3146
 msgid "Loading board regions..."
@@ -61061,6 +61060,7 @@ msgstr "Wczytywanie prostokątów..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:6014
 msgid "Ignored a keep-out area with no restrictions."
 msgstr ""
+"Zignorowano strefę chronioną, dla której nie obowiązywały żadne ograniczenia."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:34
 msgid "Altium Circuit Maker PCB files"
@@ -63816,9 +63816,8 @@ msgid "Via Properties"
 msgstr "Właściwości przelotki"
 
 #: pcbnew/pcb_track.cpp:3583
-#, fuzzy
 msgid "Automatically Update Net"
-msgstr "Automatycznie uaktualniaj nazwy sieci na przelotkach"
+msgstr "Automatyczna aktualizacja sieci"
 
 #: pcbnew/pcb_track.cpp:3595 pcbnew/widgets/pcb_properties_panel.cpp:1356
 msgid "Layer Top"
@@ -64885,6 +64884,8 @@ msgid ""
 "%d session item(s) were skipped due to unresolved reference, layer, or "
 "padstack."
 msgstr ""
+"Pominięto %d elementów sesji z powodu nierozwiązanych odniesień, warstw lub "
+"stosów pól (padstacków)."
 
 #: pcbnew/toolbars_footprint_editor.cpp:159 pcbnew/toolbars_pcb_editor.cpp:313
 msgid "Dimension objects"
@@ -69142,6 +69143,8 @@ msgstr "Błąd podczas odczytywania płytki."
 #, c-format
 msgid "Board changed from %d to %d copper layers, stackup updated."
 msgstr ""
+"Liczba warstw miedzi na płytce zmieniona z %d na %d, zaktualizowano "
+"strukturę warstw."
 
 #: pcbnew/tools/pcb_control.cpp:2333
 msgid "Append Board"
