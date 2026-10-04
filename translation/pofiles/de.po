@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-10-04 22:51+0000\n"
+"PO-Revision-Date: 2026-10-05 00:02+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -31836,7 +31836,7 @@ msgstr "Vorlagen-Verzeichnis auswählen"
 #: kicad/dialogs/dialog_template_selector.cpp:1393
 #, fuzzy
 msgid "(no other directory)"
-msgstr "Eingabeverzeichnis"
+msgstr "(kein anderes Verzeichnis)"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:28
 msgid "Recent project templates"
@@ -31857,7 +31857,7 @@ msgstr "Systemspezifische Vorlagen"
 #: kicad/dialogs/dialog_template_selector_base.cpp:64
 #, fuzzy
 msgid "Other Templates"
-msgstr "Benutzervorlagen"
+msgstr "Andere Vorlagen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:74
 #, fuzzy
@@ -31865,9 +31865,8 @@ msgid "Browse for templates in another directory"
 msgstr "in Verzeichnis der Vorlage hinzugefügt werden."
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:79
-#, fuzzy
 msgid "Stop showing templates from the browsed directory"
-msgstr "Alle Versionskontrolle-Dateien aus dem Projektverzeichnis löschen."
+msgstr "Anzeigen von Vorlagen im durchsuchten Verzeichnis beenden"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:125
 msgid "Go Back"
