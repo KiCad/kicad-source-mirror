@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-03 21:41+0000\n"
+"PO-Revision-Date: 2026-10-04 10:08+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -1811,7 +1811,7 @@ msgstr ""
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:715
 #, c-format
 msgid "Solution %d of %d, press Align to cycle."
-msgstr ""
+msgstr "Lösung %d von %d, drücken Sie \"Ausrichten\" zum Wechseln"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:1151
 msgid "3D Preview Options"
@@ -8185,14 +8185,12 @@ msgstr "Tabelle"
 
 #: common/eda_item.cpp:590 pcbnew/dialogs/dialog_board_setup.cpp:141
 #: pcbnew/pcb_drill_chart.cpp:150
-#, fuzzy
 msgid "Drill Chart"
-msgstr "Bohrlochmarkierungen:"
+msgstr "Bohrtabelle"
 
 #: common/eda_item.cpp:591 pcbnew/pcb_drill_map.cpp:220
-#, fuzzy
 msgid "Drill Map"
-msgstr "Bohrung X"
+msgstr "Bohrplan"
 
 #: common/eda_item.cpp:592 common/eda_item.cpp:623
 #: eeschema/sch_tablecell.cpp:406 pcbnew/pcb_tablecell.cpp:267
@@ -28044,8 +28042,9 @@ msgid "Invalid ramp data"
 msgstr "Ungültige Rampen-Daten"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1757
+#, fuzzy
 msgid "[Series MOSFET] outside of [Model] context."
-msgstr ""
+msgstr "[Series MOSFET] außerhalb vom [Model] Kontext."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1770
 #, fuzzy
@@ -28269,8 +28268,9 @@ msgid "Invalid model type for a driver."
 msgstr "Ungültiger Modelltyp für einen Treiber."
 
 #: eeschema/sim/kibis/kibis.cpp:1554
+#, fuzzy
 msgid "Series model has no [Series Pin Mapping] partner pin."
-msgstr ""
+msgstr "\"Series\"-Modell hat keinen [Series Pin Mapping] Partner-Pin."
 
 #: eeschema/sim/kibis/kibis.cpp:1606
 msgid "Invalid model type for a device"
@@ -28589,7 +28589,8 @@ msgstr "Mehrfach genutzter Pin \"%s\" ist mit mehr als einem Netz verbunden."
 #, c-format, fuzzy
 msgid "Model '%s' pin '%s' is neither shared nor assigned to any unit."
 msgstr ""
-"Modell \"%s\" Pin \"%s\" ist weder Teil noch irgendeiner Einheit zugewiesen."
+"Modell \"%s\" Pin \"%s\" ist weder Teil einer Einheit, noch irgendeiner "
+"Einheit zugewiesen."
 
 #: eeschema/sim/sim_model_multiunit.cpp:349
 msgid "Repeat-per-unit decomposition produced no instances."
@@ -30779,49 +30780,59 @@ msgstr "Kreisbögen zeichnen"
 
 #: eeschema/tools/sch_actions.cpp:782 pcbnew/tools/pcb_actions.cpp:409
 msgid "Draw Arc: Center, Start, End"
-msgstr ""
+msgstr "Bogen zeichnen: Mittelpunkt, Start, Ende"
 
 #: eeschema/tools/sch_actions.cpp:783 pcbnew/tools/pcb_actions.cpp:410
 msgid "Draw arcs by clicking the center, the start point, then the end point"
 msgstr ""
+"Bögen zeichnen, indem Sie auf den Mittelpunkt, den Startpunkt und zuletzt "
+"auf den Endpunkt klicken"
 
 #: eeschema/tools/sch_actions.cpp:792 pcbnew/tools/pcb_actions.cpp:419
 msgid "Draw Arc: Start, End, Midpoint"
-msgstr ""
+msgstr "Bogen zeichnen: Start, Ende, Mitte"
 
 #: eeschema/tools/sch_actions.cpp:793 pcbnew/tools/pcb_actions.cpp:420
 msgid ""
 "Draw arcs by clicking the start point, the end point, then a point on the arc"
 msgstr ""
+"Bögen zeichnen, indem Sie auf den Startpunkt, den Endpunkt und zuletzt auf "
+"einen Punkt auf dem Bogen klicken"
 
 #: eeschema/tools/sch_actions.cpp:802 pcbnew/tools/pcb_actions.cpp:429
 msgid "Draw Arc: Start, End, Center"
-msgstr ""
+msgstr "Bogen zeichnen: Start, Ende, Mittelpunkt"
 
 #: eeschema/tools/sch_actions.cpp:803 pcbnew/tools/pcb_actions.cpp:430
 msgid "Draw arcs by clicking the start point, the end point, then the center"
 msgstr ""
+"Bögen zeichnen, indem Sie auf den Startpunkt, den Endpunkt und zuletzt auf "
+"den Mittelpunkt klicken"
 
 #: eeschema/tools/sch_actions.cpp:812 pcbnew/tools/pcb_actions.cpp:439
-#, fuzzy
 msgid "Draw Arc: Tangent"
-msgstr "Rechtecke zeichnen"
+msgstr "Bogen zeichnen: Tangente"
 
 #: eeschema/tools/sch_actions.cpp:813 pcbnew/tools/pcb_actions.cpp:440
+#, fuzzy
 msgid ""
 "Draw arcs tangent to the previous arc or to the line or arc ending at the "
 "start point"
 msgstr ""
+"Bögen zeichnen: tangential zum vorherigen Bogen oder zur Gerade bzw. einem "
+"Bogen, der am Startpunkt endet"
 
 #: eeschema/tools/sch_actions.cpp:822 pcbnew/tools/pcb_actions.cpp:449
 msgid "Draw Arc: Start, Direction, End"
-msgstr ""
+msgstr "Bogen zeichnen: Start, Richtung, Ende"
 
 #: eeschema/tools/sch_actions.cpp:823 pcbnew/tools/pcb_actions.cpp:450
 msgid ""
 "Draw arcs by clicking the start point, a point giving the start direction, "
 "then the end point"
 msgstr ""
+"Bögen zeichnen, indem Sie auf den Startpunkt, einen Punkt, der die Richtung "
+"vorgibt, und zuletzt auf den Endpunkt klicken"
 
 #: eeschema/tools/sch_actions.cpp:847 pcbnew/tools/pcb_actions.cpp:475
 msgid "Draw Bezier Curve"
@@ -51507,18 +51518,16 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_drill_chart_options.cpp:113
 msgid "Import Drill Chart Template"
-msgstr ""
+msgstr "Bohrtabellenvorlage importieren"
 
 #: pcbnew/dialogs/panel_drill_chart_options.cpp:114
 #: pcbnew/dialogs/panel_drill_chart_options.cpp:146
-#, fuzzy
 msgid "Drill chart templates"
-msgstr "Feldnamen-Vorlagen"
+msgstr "Bohrtabellen-Vorlagen"
 
 #: pcbnew/dialogs/panel_drill_chart_options.cpp:145
-#, fuzzy
 msgid "Export Drill Chart Template"
-msgstr "Bohrdaten exportieren"
+msgstr "Bohrtabellenvorlage exportieren"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:40
 #, fuzzy
@@ -51594,7 +51603,7 @@ msgstr "Nachbearbeitung"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:68
 msgid "Grouping is shared by every drill chart and drill map on the board"
-msgstr ""
+msgstr "Gruppierung gilt für jede Bohrtabelle und Bohrplan auf der Platine"
 
 #: pcbnew/dialogs/panel_drill_chart_options_base.cpp:82
 #, fuzzy
@@ -54093,8 +54102,8 @@ msgstr ""
 "```\n"
 "> Wahr, wenn `A` vollständig innerhalb des Zonenumrisses liegt.\n"
 "\n"
-"> Anmerkung: Dies ist ein potentiell aufwendigerer Aufruf als "
-"`intersectsArea()`.\n"
+"> Anmerkung: Dies ist ein potentiell aufwendigerer Aufruf als `intersectsArea"
+"()`.\n"
 "Wenn möglich, sollte letzteres verwendet werden.\n"
 "\n"
 "\n"
@@ -54207,8 +54216,8 @@ msgstr ""
 "\n"
 "> Die oben aufgeführte Footprintreferenz kann folgendes sein:\n"
 "\n"
-"> 1. Ein Referenzbezeichner, möglicherweise mit den Platzhaltern `*` und `?"
-"`\n"
+"> 1. Ein Referenzbezeichner, möglicherweise mit den Platzhaltern `*` und "
+"`?`\n"
 "> 2. Ein Footprint-Bibliotheksbezeichner wie z.B. `LibName:FootprintName`. "
 "In diesem Fall\n"
 "   muss der Bibliotheksbezeichner einen Doppelpunkt `:` enthalten, um den "
@@ -54248,12 +54257,10 @@ msgstr ""
 "    A.isStackedVia()\n"
 "```\n"
 "> Wahr, wenn `A` ein Microvia ist, das auf einem anderen Microvia zu liegen "
-"kommt\n"
-"oder von einem anderen getroffen wird.\n"
+"kommt oder von einem anderen getroffen wird.\n"
 "\n"
 "> Der Test prüft auf Lochüberlappung, so zählt ein versetztes Paar immer "
-"dann,\n"
-"wenn sich die Löcher berühren.\n"
+"dann, wenn sich die Löcher berühren.\n"
 "\n"
 "\n"
 "```\n"
@@ -60830,12 +60837,11 @@ msgstr "Textrahmen"
 #: pcbnew/pcb_drill_chart.cpp:144
 #, c-format
 msgid "Drill Chart (%d rows)"
-msgstr ""
+msgstr "Bohrtabelle (%d Zeilen)"
 
 #: pcbnew/pcb_drill_chart.cpp:496
-#, fuzzy
 msgid "Drill Chart Properties"
-msgstr "Via-Eigenschaften"
+msgstr "Bohrtabellen-Eigenschaften"
 
 #: pcbnew/pcb_drill_chart.cpp:498
 #, fuzzy
@@ -60845,7 +60851,7 @@ msgstr "Details anzeigen"
 #: pcbnew/pcb_drill_map.cpp:214
 #, fuzzy, c-format
 msgid "Drill Map on %s"
-msgstr "Bohrlöcher"
+msgstr "Bohrplan auf %s"
 
 #: pcbnew/pcb_drill_map.cpp:222
 #, fuzzy
@@ -60853,9 +60859,8 @@ msgid "Spans"
 msgstr "Spanisch"
 
 #: pcbnew/pcb_drill_map.cpp:386
-#, fuzzy
 msgid "Drill Map Properties"
-msgstr "Via-Eigenschaften"
+msgstr "Bohrplan-Eigenschaften"
 
 #: pcbnew/pcb_drill_map.cpp:390 pcbnew/zone_layer_properties_grid.h:49
 msgid "Offset X"
@@ -63047,7 +63052,7 @@ msgstr "Kann den Footprint-Text-Typ %s nicht verarbeiten"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5315
 msgid "Invalid drill map: not on a documentation layer"
-msgstr ""
+msgstr "Ungültiger Bohrplan: Nicht auf einer Dokumentationslage"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5477
 #, fuzzy, c-format
@@ -67385,18 +67390,16 @@ msgstr ""
 "Auf einer Grafiklage eine Tabelle mit dem Lagenaufbau der Platine hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:511
-#, fuzzy
 msgid "Add Drill Chart"
-msgstr "Grafischen Kreisbogen hinzufügen"
+msgstr "Bohrtabelle hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:512
 msgid "Add a drill chart that tracks the board's holes"
-msgstr ""
+msgstr "Eine Bohrtabelle hinzufügen, die die Löcher der Platine verzeichnet"
 
 #: pcbnew/tools/pcb_actions.cpp:519
-#, fuzzy
 msgid "Add Drill Map"
-msgstr "Pin hinzufügen"
+msgstr "Bohrplan hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:520
 msgid "Draw drill symbols at the holes on a documentation layer"
@@ -69727,10 +69730,11 @@ msgstr "Platinenlagenaufbau einfügen"
 #: pcbnew/tools/pcb_control.cpp:2994
 msgid "No documentation layer is enabled to hold a drill chart."
 msgstr ""
+"Es ist keine Dokumentationslage zum Anlegen einer Bohrtabelle aktiviert."
 
 #: pcbnew/tools/pcb_control.cpp:2995
 msgid "Place Drill Chart"
-msgstr "Bohrdiagramm platzieren"
+msgstr "Bohrtabelle platzieren"
 
 #: pcbnew/tools/pcb_control.cpp:3025
 #, c-format
@@ -69741,11 +69745,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:3117
 msgid "Every documentation layer already has a drill map."
-msgstr ""
+msgstr "Auf jeder Dokumentationslage befindet sich bereits einen Bohrplan."
 
 #: pcbnew/tools/pcb_control.cpp:3130
 msgid "Place Drill Map"
-msgstr "Bohrkarte platzieren"
+msgstr "Bohrplan platzieren"
 
 #: pcbnew/tools/pcb_control.cpp:3284
 msgid "Embed 3D Models"
