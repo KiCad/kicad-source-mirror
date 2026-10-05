@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
 "PO-Revision-Date: 2026-10-06 01:51+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: Karl SCHUH <k.schuh@schuh-tv.at>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -19244,7 +19244,7 @@ msgstr ""
 #: eeschema/eeschema_config.cpp:207
 #, fuzzy, c-format
 msgid "Failed to save drawing sheet '%s': %s"
-msgstr "Fehler beim Laden der Seite \"%s\": %s"
+msgstr "Fehler beim Speichern der Seite \"%s\": %s"
 
 #: eeschema/eeschema_helpers.cpp:194 eeschema/files-io.cpp:361
 #: eeschema/picksymbol.cpp:127
@@ -21976,7 +21976,7 @@ msgstr "Fehler beim Herunterladen von Daten aus der HTTP-Bibliothek %s: %s"
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:468
 #, fuzzy, c-format
 msgid "Error retrieving part %s from HTTP library: %s"
-msgstr "Fehler beim Herunterladen von Daten aus der HTTP-Bibliothek %s: %s"
+msgstr "Fehler beim Laden von Teil %s aus der HTTP-Bibliothek: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:541
 #, c-format
@@ -25749,7 +25749,7 @@ msgid ""
 "Could not overwrite the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Konnte die Bibliotheksdatei \"%s\" nicht erstellen.\n"
+"Konnte die Bibliotheksdatei \"%s\" nicht überschreiben.\n"
 "Bitte Schreibberechtigungen kontrollieren und erneut versuchen."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1233
@@ -29763,7 +29763,7 @@ msgstr "Zip-Datei \"%s\" kann nicht geöffnet werden."
 #: gerbview/files.cpp:481
 #, fuzzy, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
-msgstr "Temporäre Datei \"%s\" kann nicht zum Entpacken erstellt werden."
+msgstr "Temporäre Datei zum Entpacken von \"%s\" kann nicht erstellt werden."
 
 #: gerbview/files.cpp:510
 #, c-format
