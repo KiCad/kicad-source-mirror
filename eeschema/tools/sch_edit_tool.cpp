@@ -2854,12 +2854,7 @@ int SCH_EDIT_TOOL::CycleBodyStyle( const TOOL_EVENT& aEvent )
         return 0;
 
     SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
-    SCH_COMMIT  commit( m_toolMgr );
-
-    if( !symbol->IsNew() )
-        commit.Modify( symbol, m_frame->GetScreen() );
-
-    int nextBodyStyle = symbol->GetBodyStyle() + 1;
+    int         nextBodyStyle = symbol->GetBodyStyle() + 1;
 
     if( nextBodyStyle > symbol->GetBodyStyleCount() )
         nextBodyStyle = 1;
@@ -2868,9 +2863,6 @@ int SCH_EDIT_TOOL::CycleBodyStyle( const TOOL_EVENT& aEvent )
 
     if( symbol->IsNew() )
         m_toolMgr->PostAction( ACTIONS::refreshPreview );
-
-    if( !commit.Empty() )
-        commit.Push( _( "Change Body Style" ) );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( ACTIONS::selectionClear );
