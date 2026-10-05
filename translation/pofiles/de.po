@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-05 12:02+0000\n"
+"PO-Revision-Date: 2026-10-05 20:17+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -36106,10 +36106,13 @@ msgid "File path for import report (default: stdout)"
 msgstr "Dateipfad für Importbericht (Standard: stdout)"
 
 #: kicad/cli/command_pcb_import.cpp:62
+#, fuzzy
 msgid ""
 "JSON file mapping source layer names to KiCad layer names; unmapped layers "
 "use the automatic best-guess"
 msgstr ""
+"JSON-Datei, die die Namen der Quelllagen den KiCad-Lagen zuordnet; für nicht "
+"zugeordnete Lagen wird automatisch die bestmögliche Schätzung verwendet"
 
 #: kicad/cli/command_pcb_import.cpp:111 kicad/cli/command_sch_import.cpp:94
 #, c-format
@@ -36516,8 +36519,9 @@ msgstr ""
 "wird mit Bezug auf das Arbeitsverzeichnis aufgelöst."
 
 #: kicad/dialogs/dialog_archive_job_settings_base.cpp:40
+#, fuzzy
 msgid "Include extra files (legacy and output files)"
-msgstr ""
+msgstr "Zusätzliche Dateien einbeziehen (Veraltete und Ausgabedateien)"
 
 #: kicad/dialogs/dialog_archive_job_settings_base.h:45
 #, fuzzy
@@ -37493,8 +37497,11 @@ msgid "Compare Project Branches..."
 msgstr "Projektzweige vergleichen ..."
 
 #: kicad/menubar.cpp:245
+#, fuzzy
 msgid "Review the file changes between two git refs in the current project"
 msgstr ""
+"Die Dateiänderungen zwischen zwei git-Referenzen im aktuellen Projekt "
+"überprüfen"
 
 #: kicad/menubar.cpp:250
 msgid "Edit Local File..."
@@ -37976,11 +37983,13 @@ msgid "Installing package '%s'."
 msgstr "Installiere Paket \"%s\"."
 
 #: kicad/pcm/pcm_task_manager.cpp:266 kicad/pcm/pcm_task_manager.cpp:292
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Package archive entry '%s' would be extracted outside of the package "
 "directory."
 msgstr ""
+"Paket-Archiveintrag \"%s\" würde außerhalb des Paketverzeichnisses entpackt "
+"werden."
 
 #: kicad/pcm/pcm_task_manager.cpp:343
 msgid "Aborting package installation."
@@ -43271,7 +43280,7 @@ msgstr ""
 
 #: pcbnew/connectivity/topo_match.cpp:363
 msgid "No compatible component found in the target area."
-msgstr "In der Zielfläche wurde kein kompatibles Bauteil gefunden."
+msgstr "Im Zielbereich wurde kein kompatibles Bauteil gefunden."
 
 #: pcbnew/connectivity/topo_match.cpp:655
 #: pcbnew/connectivity/topo_match.cpp:1388
@@ -43288,45 +43297,51 @@ msgstr ""
 "\"%s\"."
 
 #: pcbnew/connectivity/topo_match.cpp:744
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Footprint '%s' in the reference area (%s) appears as '%s' in the target area "
 "(%s)."
 msgstr ""
+"Footprint \"%s\" im Referenzbereich (%s) erscheint als \"%s\" im Zielbereich "
+"(%s)."
 
 #: pcbnew/connectivity/topo_match.cpp:771
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Footprint '%s' is used by %s in the target area but by nothing in the "
 "reference area."
 msgstr ""
+"Footprint \"%s\" wird im Zielbereich von %s verwendet, im Referenzbereich "
+"jedoch von nichts."
 
 #: pcbnew/connectivity/topo_match.cpp:777
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Footprint '%s' is used by %s in the reference area but by nothing in the "
 "target area."
 msgstr ""
+"Footprint \"%s\" wird im Referenzbereich von %s verwendet, im Zielbereich "
+"jedoch von nichts."
 
 #: pcbnew/connectivity/topo_match.cpp:787
-#, c-format
+#, c-format, fuzzy
 msgid "Footprint '%s': %d in the reference area, %d in the target area."
-msgstr ""
+msgstr "Footprint \"%s\": %d im Referenzbereich, %d im Zielbereich."
 
 #: pcbnew/connectivity/topo_match.cpp:837
 #, fuzzy
 msgid "Neither area has any footprints to match."
-msgstr "Ausgewählte Gruppe enthält keine platzierbaren Footprints."
+msgstr "Keine der zwei Bereiche enthält übereinstimmende Footprints."
 
 #: pcbnew/connectivity/topo_match.cpp:839
 #, fuzzy
 msgid "The reference area has no footprints to match."
-msgstr "Ausgewählte Gruppe enthält keine platzierbaren Footprints."
+msgstr "Der Referenzbereich enthält keine übereinstimmenden Footprints."
 
 #: pcbnew/connectivity/topo_match.cpp:841
 #, fuzzy
 msgid "The target area has no footprints to match."
-msgstr "Ausgewählte Gruppe enthält keine platzierbaren Footprints."
+msgstr "Der Zielbereich enthält keine übereinstimmenden Footprints."
 
 #: pcbnew/connectivity/topo_match.cpp:850
 #, c-format
@@ -43334,11 +43349,14 @@ msgid "The reference area has %d components and the target area has %d."
 msgstr "Der Referenzbereich enthält %d Komponenten, der Zielbereich %d."
 
 #: pcbnew/connectivity/topo_match.cpp:966
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Gave up after %d attempts to pair up the two areas. Either their connections "
 "differ, or too many components are interchangeable to tell apart."
 msgstr ""
+"Nach %d Versuchen aufgegeben, die zwei Bereiche anzugleichen. Entweder "
+"unterscheiden sich ihre Anschlüsse oder es gibt zu viele austauschbare "
+"Bauteile, um sie voneinander unterscheiden zu können."
 
 #: pcbnew/connectivity/topo_match.cpp:1365
 #, c-format
@@ -43366,66 +43384,72 @@ msgid "Component pads differ between %s and %s."
 msgstr "Pads der Bauteile %s und %s unterscheiden sich."
 
 #: pcbnew/constraints/constraint_builder.cpp:285
-#, c-format
+#, c-format, fuzzy
 msgid "%s needs two line segments.  Click them to constrain."
-msgstr ""
+msgstr "%s benötigt zwei Liniensegmente.  Zum Einschränken auf sie klicken."
 
 #: pcbnew/constraints/constraint_builder.cpp:290
-#, c-format
+#, c-format, fuzzy
 msgid "%s needs two line segments of nonzero length.  Click them to constrain."
 msgstr ""
+"%s benötigt zwei Liniensegmente mit einer Länge größer Null.  Zum "
+"Einschränken auf sie klicken."
 
 #: pcbnew/constraints/constraint_builder.cpp:295
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "%s needs one line segment, or two anchor points.  Click them to constrain."
 msgstr ""
+"%s benötigt ein Liniensegment oder zwei Aufhängepunkte.  Zum Einschränken "
+"auf sie klicken."
 
 #: pcbnew/constraints/constraint_builder.cpp:299
-#, c-format
+#, c-format, fuzzy
 msgid "%s needs one line segment.  Click it to constrain."
-msgstr ""
+msgstr "%s benötigt ein Liniensegment.  Zum Einschränken auf ihn klicken."
 
 #: pcbnew/constraints/constraint_builder.cpp:304
-#, c-format
+#, c-format, fuzzy
 msgid "%s needs two arcs, circles or ellipses.  Click them to constrain."
 msgstr ""
+"%s benötigt zwei Bögen, Kreise oder Ellipsen.  Zum Einschränken auf sie "
+"klicken."
 
 #: pcbnew/constraints/constraint_builder.cpp:308
-#, c-format
+#, c-format, fuzzy
 msgid "%s needs two arcs or circles.  Click them to constrain."
-msgstr ""
+msgstr "%s benötigt zwei Bögen oder Kreise.  Zum Einschränken auf sie klicken."
 
 #: pcbnew/constraints/constraint_builder.cpp:312
-#, c-format
+#, c-format, fuzzy
 msgid "%s needs one arc or circle.  Click it to constrain."
-msgstr ""
+msgstr "%s benötigt einen Bogen oder Kreis.  Zum Einschränken auf ihn klicken."
 
 #: pcbnew/constraints/constraint_builder.cpp:316
-#, c-format
+#, c-format, fuzzy
 msgid "%s needs one arc.  Click it to constrain."
-msgstr ""
+msgstr "%s benötigt einen Bogen.  Zum Einschränken auf ihn klicken."
 
 #: pcbnew/constraints/constraint_builder.cpp:321
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "%s needs a line and a curve, or two arcs or circles.  Click them to "
 "constrain."
 msgstr ""
+"%s benötigt eine Linie und eine Kurve, oder zwei Bögen oder Kreise.  Zum "
+"Einschränken auf sie klicken."
 
 #: pcbnew/constraints/pcb_constraint.cpp:192
 msgid "start"
 msgstr "Start"
 
 #: pcbnew/constraints/pcb_constraint.cpp:193
-#, fuzzy
 msgid "end"
 msgstr "Ende"
 
 #: pcbnew/constraints/pcb_constraint.cpp:194
-#, fuzzy
 msgid "mid"
-msgstr "gemischt"
+msgstr "Mitte"
 
 #: pcbnew/constraints/pcb_constraint.cpp:195
 msgid "center"
@@ -43453,7 +43477,7 @@ msgstr "Senkrecht"
 
 #: pcbnew/constraints/pcb_constraint.cpp:213 pcbnew/tools/pcb_actions.cpp:98
 msgid "Collinear"
-msgstr "Kolinear"
+msgstr "Kollinear"
 
 #: pcbnew/constraints/pcb_constraint.cpp:214
 msgid "Symmetric"
@@ -44327,27 +44351,25 @@ msgstr "Leiterbahnen und Vias aufräumen"
 #: pcbnew/dialogs/dialog_constraint_list_base.h:48
 #: pcbnew/menubar_pcb_editor.cpp:352 pcbnew/pcb_edit_frame.cpp:423
 #: pcbnew/tools/pcb_actions.cpp:278
-#, fuzzy
 msgid "Geometric Constraints"
-msgstr "Einschränkungen"
+msgstr "Geometrische Einschränkungen"
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:105
 msgid "Enter an arc angle between 0 and 360 degrees."
 msgstr "Einen Bogenwinkel zwischen 0 und 360 eingeben."
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:120
-#, fuzzy
 msgid "Enter a value greater than zero."
-msgstr "Linienbreite muss größer als Null sein."
+msgstr "Einen Wert größer als Null eingeben."
 
 #: pcbnew/dialogs/dialog_constraint_value.cpp:148
-#, fuzzy
 msgid "Edit Geometric Constraint"
-msgstr "Relative Dielektrizitätskonstante"
+msgstr "Geometrische Einschränkungen bearbeiten"
 
 #: pcbnew/dialogs/dialog_constraint_value_base.cpp:36
+#, fuzzy
 msgid "Driving (locks the geometry)"
-msgstr ""
+msgstr "Steuernd (sperrt die Geometrie)"
 
 #: pcbnew/dialogs/dialog_constraint_value_base.h:46
 msgid "Constraint Value"
@@ -44793,8 +44815,9 @@ msgstr ""
 "Es wurde auf die erste mögliche Lage platziert."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:358
+#, fuzzy
 msgid "Enter a positive length for a driving dimension."
-msgstr ""
+msgstr "Eine positive Länge für eine steuernde Bemaßung."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:359
 msgid "Invalid Value"
@@ -44807,21 +44830,22 @@ msgstr "Bemaßungseinstellungen"
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:416
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:111
 #: pcbnew/pcb_dimension.cpp:2109
+#, fuzzy
 msgid "Driven"
-msgstr ""
+msgstr "Gesteuert"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:421
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:111
 #: pcbnew/pcb_dimension.cpp:2111
 #, fuzzy
 msgid "Arbitrary"
-msgstr "Bibliothek"
+msgstr "Beliebig"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:528
 #: pcbnew/widgets/pcb_properties_panel.cpp:1319
 #, fuzzy
 msgid "Apply Dimension Length"
-msgstr "Bemaßungslinie"
+msgstr "Bemaßungslänge anwenden"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:22
 msgid "Leader Format"
@@ -44847,10 +44871,14 @@ msgid "Measured value of this dimension"
 msgstr "Messwert dieser Bemaßung"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:115
+#, fuzzy
 msgid ""
 "Driven follows the measured geometry; Driving forces the geometry to the "
 "entered length; Arbitrary shows custom text"
 msgstr ""
+"\"Gesteuert\" folgt der gemessenen Geometrie; \"Steuern\" passt die "
+"Geometrie der eingegebenen Länge an; \"Beliebig\" zeigt anwenderdefinierten "
+"Text"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:127
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
@@ -45251,8 +45279,9 @@ msgid "Shape %d"
 msgstr "Form %d"
 
 #: pcbnew/dialogs/dialog_drill_groups.cpp:77
+#, fuzzy
 msgid "From / To"
-msgstr ""
+msgstr "Von / Nach"
 
 #: pcbnew/dialogs/dialog_drill_groups.cpp:78
 #, fuzzy
@@ -45270,12 +45299,11 @@ msgstr "Profil:"
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:30
 #, fuzzy
 msgid "Freeze assignments"
-msgstr "Netzzuordnungen zurücksetzen"
+msgstr "Zuweisungen einfrieren"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:65
-#, fuzzy
 msgid "Selected group"
-msgstr "Nur &Auswahl"
+msgstr "Ausgewählte Gruppe"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:73
 #, fuzzy
@@ -45283,9 +45311,8 @@ msgid "Mark:"
 msgstr "Markierung:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:77
-#, fuzzy
 msgid "Letter"
-msgstr "Muster"
+msgstr "Buchstabe"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:77
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
@@ -45298,9 +45325,8 @@ msgid "Shape:"
 msgstr "Form:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:90
-#, fuzzy
 msgid "Letter:"
-msgstr "Zentrum:"
+msgstr "Buchstabe:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:110
 #, fuzzy
@@ -45310,7 +45336,7 @@ msgstr "Auf Leiterplatte auswählen"
 #: pcbnew/dialogs/dialog_drill_groups_base.h:67
 #, fuzzy
 msgid "Drill Groups"
-msgstr "Bohrlöcher"
+msgstr "Bohrgruppen"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -45411,8 +45437,9 @@ msgid "*** library footprint not found ***"
 msgstr "*** Bibliothek-Footprint nicht gefunden ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:405
+#, fuzzy
 msgid ": (shifted/rotated to match pad positions)"
-msgstr ""
+msgstr ": (verschoben/gedreht, um Padpositionen anzupassen)"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:407
 msgid ": (no changes)"
@@ -45485,10 +45512,13 @@ msgid "Reset scale"
 msgstr "Ansicht zurücksetzen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:146
+#, fuzzy
 msgid ""
 "Reset the footprint scale to 1 when changing to a different library "
 "footprint. Unchecked: keep the existing scale."
 msgstr ""
+"Beim Wechsel zu einem anderen Bibliothek-Footprint die Footprintskala auf 1 "
+"zurücksetzen. Nicht gesetzt: die bestehende Skalierung beibehalten."
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:150
 msgid "Match pad positions"
@@ -45643,8 +45673,9 @@ msgid "Includes: %s"
 msgstr "Enthält: %s"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:440
+#, fuzzy
 msgid "This data set has no optional sections to choose from."
-msgstr ""
+msgstr "Dieser Datensatz hat keine optionalen Abschnitte für eine Auswahl."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:441
 #: pcbnew/dialogs/dialog_export_2581.cpp:446
@@ -45652,8 +45683,9 @@ msgid "Customize Content"
 msgstr "Inhalt anpassen"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:445
+#, fuzzy
 msgid "Choose the optional sections to include."
-msgstr ""
+msgstr "Wählen Sie die optionalen Abschnitte aus, die Sie einfügen möchten."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:29
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:28
@@ -45726,14 +45758,18 @@ msgid "Assembly"
 msgstr "Hintere Montageansicht"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
+#, fuzzy
 msgid "Stencil"
-msgstr ""
+msgstr "Schablone"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:129
+#, fuzzy
 msgid ""
 "Which sections of the design the file carries, per the IPC-2581 function "
 "mode table"
 msgstr ""
+"Welche Abschnitte des Designs die Datei enthält, gemäß der IPC-2581 "
+"Funktionsmodustabelle"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:133
 #: pcbnew/dialogs/panel_display_options_base.cpp:118
@@ -45746,10 +45782,13 @@ msgid "Anonymize"
 msgstr "Anonym"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
+#, fuzzy
 msgid ""
 "Anonymized names keep connectivity for netlist compare without carrying the "
 "design intent"
 msgstr ""
+"Anonymisierte Namen gewährleisten die Konnektivität beim "
+"Netzlistenvergleich, ohne die Designabsicht zu übertragen"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
 msgid "Reference designators:"
@@ -45762,11 +45801,15 @@ msgid "Omit"
 msgstr "Auslassen"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
+#, fuzzy
 msgid ""
 "Omits the designator from the component, BOM and artwork metadata. Reference "
 "text drawn on silkscreen is artwork the fabricator must reproduce and is "
 "always kept."
 msgstr ""
+"Läßt den Bezeichner des Bauteils, BOM und Grafik-Metadaten weg. Auf dem "
+"Bestückungsdruck gezeichneter Referenztext ist Grafik, die der Fertiger "
+"reproduzieren muss und bleibt stets erhalten."
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:160
 #, fuzzy
@@ -45944,15 +45987,21 @@ msgid "Ignore 'Unspecified' components"
 msgstr "Unbestimmte Bauteile ignorieren"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:140
+#, fuzzy
 msgid "Calculate component height from 3D models"
-msgstr ""
+msgstr "Bauteilhöhe aus 3D-Modell berechnen"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:142
+#, fuzzy
 msgid ""
 "When enabled, any footprint with an explicit height not specified will be "
 "exported with the height from its tallest visible 3D model.  When disabled, "
 "footprints without an explicit height will not be included in the IDF file."
 msgstr ""
+"Wenn aktiviert, wird jeder Footprint, für den keine explizite Höhe angegeben "
+"wurde, mit der im 3D-Modell größten sichtbaren Höhe exportiert.  Wenn "
+"deaktiviert, werden Footprints ohne einer expliziten Höhe von der IDF-Datei "
+"ausgeschlossen."
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:149
 #, fuzzy
@@ -46613,9 +46662,9 @@ msgid "No value to match: %s"
 msgstr "Kein übereinstimmender Wert für: %s"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:1126
-#, c-format
+#, c-format, fuzzy
 msgid "%zu rows have no value to match"
-msgstr ""
+msgstr "%zu Zeile(n) enthält/enthalten keinen übereinstimmenden Wert"
 
 #: pcbnew/dialogs/dialog_find_by_properties.cpp:1137
 msgid "Expression is empty"
@@ -47303,11 +47352,15 @@ msgid "Select pad data file"
 msgstr "Pindaten-Datei auswählen"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1342
+#, fuzzy
 msgid ""
 "Complex padstacks cannot be exported via CSV.\n"
 "\n"
 "They will be skipped."
 msgstr ""
+"Komplexe Padaufbauten können nicht über CSV exportiert werden.\n"
+"\n"
+"Sie werden übersprungen."
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table.cpp:1343
 #, fuzzy
@@ -47607,8 +47660,9 @@ msgid "A table needs at least one column."
 msgstr "Eine Tabelle benötigt mindestens eine Spalte."
 
 #: pcbnew/dialogs/dialog_generated_table_properties.cpp:305
+#, fuzzy
 msgid "The columns are too wide in total."
-msgstr ""
+msgstr "Die Gesamtbreite der Spalten ist zu groß."
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:57
 #, fuzzy
@@ -48325,8 +48379,9 @@ msgid "Polar"
 msgstr "Polarität"
 
 #: pcbnew/dialogs/dialog_grid_item_properties_base.cpp:147
+#, fuzzy
 msgid "Major tick every:"
-msgstr ""
+msgstr "Hauptmarkierung alle:"
 
 #: pcbnew/dialogs/dialog_grid_item_properties_base.cpp:156
 #, fuzzy
@@ -51303,8 +51358,9 @@ msgstr "Wechseln"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:111
 #: pcbnew/generators/pcb_via_stitch.cpp:1736
+#, fuzzy
 msgid "Guard"
-msgstr ""
+msgstr "Schutz"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:114
 msgid "Guard Net:"
@@ -51873,8 +51929,9 @@ msgid "Overall height is not a valid number."
 msgstr "Der Wert von %s muss eine gültige Zahl sein."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1045
+#, fuzzy
 msgid "Standoff height is not a valid number."
-msgstr ""
+msgstr "Abstandshöhe hat keine gültige Zahl."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1098
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1103
@@ -51918,8 +51975,11 @@ msgid "3D Model(s)"
 msgstr "3D-Modell(e)"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:81
+#, fuzzy
 msgid "Choose the folder used when opening the 3D model picker"
 msgstr ""
+"Wählen Sie den Ordner, der beim Öffnen der 3D-Modellauswahl verwendet werden "
+"soll"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:98
 msgid "Enable extruded 3D model for this footprint"
@@ -52417,11 +52477,12 @@ msgstr "Importierte Form"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
 msgid "Letters"
-msgstr ""
+msgstr "Buchstaben"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
+#, fuzzy
 msgid "Curated shapes, then letters"
-msgstr ""
+msgstr "Kuratierte Formen, dann Buchstaben"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:57
 #, fuzzy
@@ -52434,12 +52495,14 @@ msgid "Symbol line width:"
 msgstr "Minimale Linienbreite:"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:82
+#, fuzzy
 msgid "Keep existing symbol assignments when holes change"
-msgstr ""
+msgstr "Bestehende Symbolzuweisungen beibehalten, auch wenn sich Löcher ändern"
 
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:89
+#, fuzzy
 msgid "Close and Edit Drill Groups..."
-msgstr ""
+msgstr "Schliessen und Bohrgruppen bearbeiten ..."
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
 msgid "When Adding Footprints to Board"
@@ -54942,7 +55005,7 @@ msgstr "Eine Schaltplan mit dem Namen \"%s\" existiert bereits."
 
 #: pcbnew/dialogs/panel_setup_via_stacks_base.cpp:49
 msgid "Add..."
-msgstr ""
+msgstr "Hinzufügen ..."
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:19
 msgid "Zone Hatched Fill Offsets"
@@ -54953,15 +55016,19 @@ msgid "Use solid fills for hatched zones"
 msgstr "Für schraffierte Zonen vollflächige Füllung verwenden"
 
 #: pcbnew/dialogs/panel_setup_zone_hatch_offsets_base.cpp:62
+#, fuzzy
 msgid ""
 "Prototype zone fill mode fills hatched zones as solid to improve performance "
 "on large boards. This local setting takes effect the next time zones are "
 "filled."
 msgstr ""
+"Prototyp-Zonenfüllmodus füllt schraffierte Zonen vollflächig, um die "
+"Leistung auf großen Platinen zu verbessern. Diese lokale Einstellung wird "
+"beim nächsten Füllen von Zonen wirksam."
 
 #: pcbnew/dialogs/panel_setup_zones_base.cpp:16
 msgid "Default Properties for New Zones"
-msgstr "Standardeigenschaften neue Zonen"
+msgstr "Standardeigenschaften neuer Zonen"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:414
 msgid "Thermal spoke width cannot be smaller than the minimum width."
@@ -55737,8 +55804,9 @@ msgid "Footprint field does not match symbol field"
 msgstr "Footprintfeld stimmt nicht mit dem des Symbols überein"
 
 #: pcbnew/drc/drc_item.cpp:221
+#, fuzzy
 msgid "Via-stitching zones overlap for same net"
-msgstr ""
+msgstr "Via-Nahtzonen überlappen dasselbe Netz"
 
 #: pcbnew/drc/drc_item.cpp:225
 msgid "Footprint not found in libraries"
@@ -55798,8 +55866,10 @@ msgstr ""
 "geroutet"
 
 #: pcbnew/drc/drc_item.cpp:289
+#, fuzzy
 msgid "Net chain nets do not have consistent tuning profile assignment"
 msgstr ""
+"Netze von Netzketten haben keine einheitliche Zuweisung im Abstimmungsprofil"
 
 #: pcbnew/drc/drc_item.cpp:293
 msgid "Skew between tracks out of range"
@@ -55830,8 +55900,9 @@ msgid "Through hole pad has no hole"
 msgstr "Durchlochpad hat kein Loch"
 
 #: pcbnew/drc/drc_item.cpp:322
+#, fuzzy
 msgid "Footprint with pads is scaled (physical part size unchanged)"
-msgstr ""
+msgstr "Footprint mit Pads ist skaliert (physische Bauteilgröße unverändert)"
 
 #: pcbnew/drc/drc_item.cpp:326
 msgid "Mirrored text on front layer"
@@ -55966,9 +56037,11 @@ msgid "'layer' keyword already present."
 msgstr "Schlüsselwort \"layer\" bereits vorhanden."
 
 #: pcbnew/drc/drc_rule_parser.cpp:402
-#, c-format
+#, c-format, fuzzy
 msgid "Item 'B' is not available for a single-item constraint in rule '%s'."
 msgstr ""
+"Element \"B\" ist für eine Einzelelement-Einschränkung in Regel \"%s\" nicht "
+"verfügbar."
 
 #: pcbnew/drc/drc_rule_parser.cpp:420
 msgid "Missing component class name."
@@ -56739,9 +56812,9 @@ msgid "Checking net chain tuning profiles..."
 msgstr "Prüfe auf fehlende Abstimmungsprofile ..."
 
 #: pcbnew/drc/drc_test_provider_net_chain_tuning_profiles.cpp:86
-#, c-format
+#, c-format, fuzzy
 msgid "Net chain %s nets have multiple tuning profiles assigned"
-msgstr ""
+msgstr "Netze der Netzkette %s haben mehrere zugewiesene Abstimmungsprofile"
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:91
 msgid "Gathering physical items..."
@@ -56939,14 +57012,14 @@ msgid "(%s max diameter %s; actual %s on %s)"
 msgstr "(%s maximaler Durchmesser %s; tatsächlich %s auf %s)"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:168
-#, c-format
+#, c-format, fuzzy
 msgid "Stack is %d hops deep, limit is %d"
-msgstr ""
+msgstr "Stapel ist %d Stufen hoch, Grenze ist %d"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:292
-#, c-format
+#, c-format, fuzzy
 msgid "The stackup gives the dielectric between %s and %s as core"
-msgstr ""
+msgstr "Das Dielektrikum ergibt sich aus dem Aufbau zwischen %s und %s als Kern"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:337
 #, c-format
