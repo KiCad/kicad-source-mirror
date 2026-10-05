@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-05 20:17+0000\n"
+"PO-Revision-Date: 2026-10-05 22:54+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -57115,12 +57115,13 @@ msgstr "Erneutes Laden der Designregeln schlug fehl: %s"
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:151
 #, fuzzy
 msgid "Optimum routed length"
-msgstr "Optimale Länge"
+msgstr "Optimale geroutete Lönge"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:57
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:153
+#, fuzzy
 msgid "Allowed deviation above or below the optimum length"
-msgstr ""
+msgstr "Erlaubte Abweichung über oder unter der optimalen Länge"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:85
 msgid "Optimum Length must be greater than 0"
@@ -57133,11 +57134,12 @@ msgstr "Die Toleranz muss größer oder gleich 0 sein"
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:93
 #, fuzzy
 msgid "Tolerance is too large: resulting minimum length is negative"
-msgstr "Toleranz ist zu groß: Die resultierende Mindestlänge ist nicht positiv"
+msgstr "Toleranz ist zu groß: Die resultierende Mindestlänge ist negativ"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:155
+#, fuzzy
 msgid "Maximum length difference between matched tracks"
-msgstr ""
+msgstr "Maximale Längendifferenz zwischen abgestimmten Leiterbahnen"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:156
 msgid "Within diff pairs"
@@ -57146,7 +57148,8 @@ msgstr "Innerh. Differenzialpaaren"
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:157
 #, fuzzy
 msgid "Limit skew between the two tracks of each differential pair"
-msgstr "Anpassen von Versatz und Abstimmung eines differenziellem Signalpaares"
+msgstr ""
+"Versatz zwischen zwei Leiterbahnen eines jeden Differenzpaares begrenzen"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:215
 msgid "At least one constraint must be defined"
@@ -57159,11 +57162,12 @@ msgstr "Der maximale Versatz muss größer oder gleich als 0 sein"
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:91
 #, fuzzy
 msgid "Time domain (ps)"
-msgstr "Zeitbereichsparameter"
+msgstr "Zeitdomäne (ps)"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:92
+#, fuzzy
 msgid "The values are picoseconds instead of a length"
-msgstr ""
+msgstr "Die Werte sind in Picosekunden anstatt einer Länge"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:60
 msgid "Allow 0°"
@@ -57172,7 +57176,7 @@ msgstr "0° zulassen"
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:61
 #, fuzzy
 msgid "Allow footprints placed at 0 degrees"
-msgstr "Footprintreferenzen anzeigen"
+msgstr "Footprints mit 0 Grad zulassen"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:62
 msgid "Allow 90°"
@@ -57181,7 +57185,7 @@ msgstr "90° zulassen"
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:63
 #, fuzzy
 msgid "Allow footprints placed at 90 degrees"
-msgstr "Footprintreferenzen anzeigen"
+msgstr "Footprints mit 90 Grad zulassen"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:64
 msgid "Allow 180°"
@@ -57190,7 +57194,7 @@ msgstr "180° zulassen"
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:65
 #, fuzzy
 msgid "Allow footprints placed at 180 degrees"
-msgstr "Footprintreferenzen anzeigen"
+msgstr "Footprints mit 180 Grad zulassen"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:66
 msgid "Allow 270°"
@@ -57199,7 +57203,7 @@ msgstr "270° zulassen"
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:67
 #, fuzzy
 msgid "Allow footprints placed at 270 degrees"
-msgstr "Footprintreferenzen anzeigen"
+msgstr "Footprints mit 270 Grad zulassen"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:68
 msgid "Allow All"
@@ -57208,7 +57212,7 @@ msgstr "Alles zulassen"
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:69
 #, fuzzy
 msgid "Allow footprints at any orientation"
-msgstr "Footprints der Platinenvorderseite anzeigen"
+msgstr "Footprints mit beliebiger Orientierung zulassen"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:112
 msgid "At least one orientation must be selected"
@@ -57259,8 +57263,9 @@ msgid "Object B"
 msgstr "Objekt B"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:60
+#, fuzzy
 msgid "Which of the two compared objects this condition applies to"
-msgstr ""
+msgstr "Für welches der zwei verglichenen Objekte diese Bedingung zutrifft"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:68
 #: pcbnew/drc/rule_editor/drc_re_object_selector_panel.cpp:26
@@ -57289,16 +57294,17 @@ msgstr "Benutzerdefinierte Abfrage"
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:76
 #, fuzzy
 msgid "How items are matched by this condition"
-msgstr "Diese Bedingung entfernen"
+msgstr "Wie Elemente anhand dieser Bedingung zugeordnet werden"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:82
+#, fuzzy
 msgid "Net an item must belong to"
-msgstr ""
+msgstr "Netz, zu dem ein Element gehören muss"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:89
 #, fuzzy
 msgid "Net class an item must belong to"
-msgstr "Mindestens ein Via-Typ muss ausgewählt werden"
+msgstr "Netzklasse, zu der ein Element gehören muss"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_row_panel.cpp:96
 msgid "Rule area an item must be inside"
@@ -57357,7 +57363,7 @@ msgstr "Die Mindesttextdicke muss größer als 0 sein"
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:35
 #, fuzzy
 msgid "Minimum clearance between copper items and the board edge"
-msgstr "Mindestabstand zwischen Punkten, um diese als getrennt zu behandeln"
+msgstr "Mindestabstand zwischen Kupferelementen und der Platinenkante"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:47
 msgid "Minimum clearance between copper items and hole edges"
@@ -57370,12 +57376,12 @@ msgstr "Minimaler Freiraum zwischen Footprint-Abstandsflächen"
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:73
 #, fuzzy
 msgid "Minimum clearance between items regardless of net"
-msgstr "Mindestabstand zwischen Punkten, um diese als getrennt zu behandeln"
+msgstr "Mindestabstand zwischen Elementen, unabhängig vom Netz"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:86
 #, fuzzy
 msgid "Minimum creepage distance between conductors along the board surface"
-msgstr "Mindestabstand zwischen Punkten, um diese als getrennt zu behandeln"
+msgstr "Mindestkriechstrecke zwischen Leitern entlang der Platinenoberfläche"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:98
 msgid "Minimum hole diameter"
@@ -57384,28 +57390,31 @@ msgstr "Min. Lochdurchmesser"
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:110
 #, fuzzy
 msgid "Minimum distance between hole edges"
-msgstr "Abstand zwischen Spalten"
+msgstr "Mindestabstand zwischen Lochkanten"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:124
 msgid "Maximum number of vias allowed on a matched net"
 msgstr "Maximalanzahl von Vias in einem zugehörigen Netz"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:137
+#, fuzzy
 msgid "Minimum width of the copper ring around a hole"
-msgstr ""
+msgstr "Mindestbreite des Kupferrings um ein Loch"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:150
 #, fuzzy
 msgid "Minimum clearance between copper items on different nets"
-msgstr "Mindestabstand zwischen Punkten, um diese als getrennt zu behandeln"
+msgstr "Mindestabstand zwischen Kupferelementen verschiedener Netze"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:161
+#, fuzzy
 msgid "Minimum width of any copper connection"
-msgstr ""
+msgstr "Mindestbreite sämtlicher Kupferverbindungen"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:174
+#, fuzzy
 msgid "Minimum width of solder mask left between two mask openings"
-msgstr ""
+msgstr "Mindestbreite von Lötstoppmaskenstegen"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:188
 msgid "Minimum number of thermal relief spokes connecting a pad to its zone"
