@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-05 00:05+0000\n"
+"PO-Revision-Date: 2026-10-05 00:07+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -32268,6 +32268,9 @@ msgid ""
 "Change Symbol is not available when a design variant is active. Use Set "
 "Variant Symbol or switch to the default variant first."
 msgstr ""
+"\"Symbol ändern\" ist in einer aktiven Designvariante nicht verfügbar. "
+"Verwenden Sie \"Variantensymbol festlegen\" oder wechseln Sie zuerst zur "
+"Standardvariante."
 
 #: eeschema/tools/sch_edit_tool.cpp:2760
 #, c-format
