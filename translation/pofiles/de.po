@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-10-05 00:02+0000\n"
+"PO-Revision-Date: 2026-10-06 01:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -33021,11 +33021,13 @@ msgid "Installing package '%s'."
 msgstr "Installiere Paket \"%s\"."
 
 #: kicad/pcm/pcm_task_manager.cpp:266 kicad/pcm/pcm_task_manager.cpp:292
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Package archive entry '%s' would be extracted outside of the package "
 "directory."
 msgstr ""
+"Paket-Archiveintrag \"%s\" würde außerhalb des Paketverzeichnisses entpackt "
+"werden."
 
 #: kicad/pcm/pcm_task_manager.cpp:343
 msgid "Aborting package installation."
@@ -37818,7 +37820,7 @@ msgstr ""
 
 #: pcbnew/connectivity/topo_match.cpp:367
 msgid "No compatible component found in the target area."
-msgstr "In der Zielfläche wurde kein kompatibles Bauteil gefunden."
+msgstr "Im Zielbereich wurde kein kompatibles Bauteil gefunden."
 
 #: pcbnew/connectivity/topo_match.cpp:661
 msgid "One or both of the areas has no components assigned."
@@ -47708,7 +47710,7 @@ msgstr "Versätze für schraffierte Zonenfüllung"
 
 #: pcbnew/dialogs/panel_setup_zones_base.cpp:16
 msgid "Default Properties for New Zones"
-msgstr "Standardeigenschaften neue Zonen"
+msgstr "Standardeigenschaften neuer Zonen"
 
 #: pcbnew/dialogs/panel_zone_properties.cpp:418
 msgid "Thermal spoke width cannot be smaller than the minimum width."
@@ -49670,7 +49672,7 @@ msgstr "Die Toleranz muss größer oder gleich 0 sein"
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:96
 #, fuzzy
 msgid "Tolerance is too large: resulting minimum length is negative"
-msgstr "Toleranz ist zu groß: Die resultierende Mindestlänge ist nicht positiv"
+msgstr "Toleranz ist zu groß: Die resultierende Mindestlänge ist negativ"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:157
 msgid "Within diff pairs"
@@ -49687,7 +49689,7 @@ msgstr "Der maximale Versatz muss größer oder gleich als 0 sein"
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:95
 #, fuzzy
 msgid "Time domain (ps)"
-msgstr "Zeitbereichsparameter"
+msgstr "Zeitdomäne (ps)"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:64
 msgid "Allow 0°"
@@ -53118,9 +53120,9 @@ msgid "Loading nets..."
 msgstr "Lade Netze ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2678
-#, c-format
+#, c-format, fuzzy
 msgid "Altium net %zu has no name; imported as '%s'."
-msgstr ""
+msgstr "Altium-Netz %zu hat keinen Namen; als \"%s\" importiert."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2699
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3005
@@ -53128,11 +53130,13 @@ msgid "Loading polygons..."
 msgstr "Lade Polygone ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2710
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Polygon on layer '%s' has %d vertices outside the coordinate range; they "
 "were dropped."
 msgstr ""
+"Polygon auf Lage \"%s\" hat %d Eckpunkte außerhalb des Koordinatenbereichs; "
+"sie wurden verworfen."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2749
 #, c-format
@@ -53144,11 +53148,13 @@ msgid "Loading rules..."
 msgstr "Lade Regeln ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2967
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Altium rule '%s' applies to netclass '%s', which this board does not define. "
 "Its constraint is not imported."
 msgstr ""
+"Altium-Regel \"%s\" gilt für Netzklasse \"%s\", welche diese Platine nicht "
+"definiert. Ihre Einschränkung wird nicht importiert."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2985
 msgid "Loading board regions..."
@@ -54531,11 +54537,13 @@ msgid "Undefined Layers Warning"
 msgstr "Warnung zu undefinierten Lagen"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1503
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "One or more items were found on undefined layers (%s). Open the board in the "
 "PCB Editor to resolve."
 msgstr ""
+"Ein oder mehrere Elemente wurden auf undefinierten Lagen gefunden (%s). Zur "
+"Problembehebung die Platine im PCB-Editor öffnen."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1594
 #, c-format
@@ -56652,11 +56660,13 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "Ein wire_via verweist auf den fehlenden Padstack \"%s\"."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:593
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "%d session item(s) were skipped due to unresolved reference, layer, or "
 "padstack."
 msgstr ""
+"%d Sitzungselement(e) wurden wegen unaufgelöster Referenz, Lage oder "
+"Padstack übersprungen."
 
 #: pcbnew/toolbars_footprint_editor.cpp:125 pcbnew/toolbars_pcb_editor.cpp:284
 msgid "Dimension objects"
@@ -57597,10 +57607,13 @@ msgstr ""
 "auf die andere Seite der Platine zu verschieben."
 
 #: pcbnew/tools/edit_tool.cpp:2550
+#, fuzzy
 msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
 msgstr ""
+"Gruppen die Footprints oder andere Elemente beinhalten, die nicht gespiegelt "
+"werden können, wurden übersprungen."
 
 #: pcbnew/tools/edit_tool.cpp:2723 pcbnew/tools/pcb_actions.cpp:686
 msgid "Change Side / Flip"
@@ -60203,7 +60216,7 @@ msgstr "Fehler beim Einlesen der Platine."
 #: pcbnew/tools/pcb_control.cpp:2232
 #, c-format
 msgid "Board changed from %d to %d copper layers, stackup updated."
-msgstr ""
+msgstr "Platine von %d zu %d Kupferlagen geändert, Lagenaufbau aktualisiert."
 
 #: pcbnew/tools/pcb_control.cpp:2309
 msgid "Append Board"
