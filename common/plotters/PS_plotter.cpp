@@ -320,7 +320,7 @@ void PSLIKE_PLOTTER::computeTextParameters( const VECTOR2I&          aPos,
     VECTOR2I start_pos = aPos;
 
     // This is an approximation of the text bounds (in IUs)
-    int tw = returnPostscriptTextWidth( aText, aSize.x, aItalic, aWidth );
+    int tw = returnPostscriptTextWidth( aText, aSize.x, aItalic, aBold );
     int th = aSize.y;
     int dx = 0, dy = 0;
 
