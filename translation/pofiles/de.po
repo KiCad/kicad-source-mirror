@@ -38,8 +38,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-05 09:41+0000\n"
-"Last-Translator: Karl SCHUH <k.schuh@schuh-tv.at>\n"
+"PO-Revision-Date: 2026-10-05 12:02+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -35244,8 +35244,9 @@ msgid "'Theirs' file"
 msgstr "\"Deren\" Datei"
 
 #: kicad/cli/command_mergetool.cpp:103
+#, fuzzy
 msgid "Output path; extension picks the document type"
-msgstr ""
+msgstr "Ausgabepfad; Dateierweiterung bestimmt den Dokumenttyp"
 
 #: kicad/cli/command_mergetool.cpp:126
 #, c-format
@@ -35836,8 +35837,11 @@ msgid "Exclude components with 'Do not populate' attribute"
 msgstr "3D-Modelle von Bauteilen mit Attribut \"Nicht bestücken\" ausschließen"
 
 #: kicad/cli/command_pcb_export_idf.cpp:78
+#, fuzzy
 msgid "Only use explicitly-set footprint heights to create IDFv3 shapes"
 msgstr ""
+"Verwenden Sie zum Erstellen von IDFv3-Formen ausschließlich explizit "
+"festgelegte Footprint-Höhen."
 
 #: kicad/cli/command_pcb_export_idf.cpp:83
 #, fuzzy
@@ -35895,9 +35899,12 @@ msgid "Resolution in dots per inch (default %d)"
 msgstr "Auflösung in DPI (Standard: %d)"
 
 #: kicad/cli/command_pcb_export_png.cpp:109
+#, fuzzy
 msgid ""
 "Use the color theme background color instead of a transparent background"
 msgstr ""
+"Verwenden Sie die Hintergrundfarbe aus dem Farbthema anstatt eines "
+"transparenten Hintergrunds."
 
 #: kicad/cli/command_pcb_export_png.cpp:147
 #: kicad/cli/command_sch_export_plot.cpp:222
@@ -35997,45 +36004,43 @@ msgstr "A4 Papiergröße erzwingen."
 #: kicad/cli/command_pcb_export_stackup.cpp:41
 #, fuzzy
 msgid "Export a board stackup report"
-msgstr "Statistikbericht zur Platine erstellen"
+msgstr "Bericht für Lagenaufbau exportieren"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:45
-#, fuzzy
 msgid "Output file format; valid options: csv, json"
-msgstr "Ausgabedateiformat, Optionen: json, report"
+msgstr "Ausgabedateiformat; gültige Optionen: csv, json"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:50
-#, fuzzy
 msgid "CSV units; valid options: in, mm"
-msgstr "Einheiten in Berichten; gültige Optionen: in, mm"
+msgstr "CSV-Einheiten; gültige Optionen: in, mm"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:53
 msgid "Omit color from the CSV export"
-msgstr ""
+msgstr "Farben beim CSV-Export weglassen"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:56
 msgid "Omit material from the CSV export"
-msgstr ""
+msgstr "Material beim CSV-Export weglassen"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:60
 msgid "Omit thickness from the CSV export"
-msgstr ""
+msgstr "Dicke beim CSV-Export weglassen"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:64
 msgid "Omit Epsilon R from the CSV export"
-msgstr ""
+msgstr "Epsilon-R beim CSV-Export weglassen"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:68
 msgid "Omit loss tangent from the CSV export"
-msgstr ""
+msgstr "Verlustwinkel beim CSV-Export weglassen"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:72
 msgid "Omit board finish from the CSV export"
-msgstr ""
+msgstr "Platinenendbearbeitung beim CSV-Export weglassen"
 
 #: kicad/cli/command_pcb_export_stackup.cpp:76
 msgid "Omit board options from the CSV export"
-msgstr ""
+msgstr "Platinenoptionen beim CSV-Export weglassen"
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
 msgid "Generate a board statistics report"
@@ -61275,9 +61280,9 @@ msgid "Loading nets..."
 msgstr "Lade Netze ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2839
-#, c-format
+#, c-format, fuzzy
 msgid "Altium net %zu has no name; imported as '%s'."
-msgstr ""
+msgstr "Altium-Netz %zu hat keinen Namen; als \"%s\" importiert."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2860
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3166
@@ -61285,11 +61290,13 @@ msgid "Loading polygons..."
 msgstr "Lade Polygone ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2871
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Polygon on layer '%s' has %d vertices outside the coordinate range; they "
 "were dropped."
 msgstr ""
+"Polygon auf Lage \"%s\" hat %d Eckpunkte außerhalb des Koordinatenbereichs; "
+"sie wurden verworfen."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2910
 #, c-format
@@ -61301,11 +61308,13 @@ msgid "Loading rules..."
 msgstr "Lade Regeln ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3128
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Altium rule '%s' applies to netclass '%s', which this board does not define. "
 "Its constraint is not imported."
 msgstr ""
+"Altium-Regel \"%s\" gilt für Netzklasse \"%s\", welche diese Platine nicht "
+"definiert. Ihre Einschränkung wird nicht importiert."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3146
 msgid "Loading board regions..."
@@ -61633,9 +61642,9 @@ msgid "'%s' is not a valid Protel Autotrax file."
 msgstr "\"%s\" ist keine gültige Protel-Autotrax-Datei."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:198
-#, c-format
+#, c-format, fuzzy
 msgid "Autotrax import: %d pad(s) with a target shape were skipped."
-msgstr ""
+msgstr "Autotrax-Import: %d Pad(s) mit einer Zielfrom wurden übersprungen."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:205
 #, c-format
@@ -61649,25 +61658,30 @@ msgid ""
 "Autotrax import: %d pad(s) ask for a ground or power plane connection, which "
 "is not imported."
 msgstr ""
+"Autotrax-Import: %d Pad(s) erfordern eine Masse- oder Powerplaneverbindung, "
+"die jedoch nicht importiert wurde."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:220
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Autotrax import: %d item(s) on a layer with no KiCad equivalent were skipped."
 msgstr ""
+"Autotrax-Import: %d Element(e) auf einer Lage ohne KiCad-Equivalent wurden "
+"übersprungen."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:715
 #, fuzzy, c-format
 msgid "Autotrax import: net '%s' node '%s' matches no pad."
-msgstr ""
-"Autotrax-Import: Der Knoten \"%s\" im Netz \"%s\" entspricht keinem Pad."
+msgstr "Autotrax-Import: Netz \"%s\" Knoten \"%s\" passt zu keinem Pad."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:721
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Autotrax import: net '%s' node '%s' matches pads in more than one footprint "
 "and was not connected."
 msgstr ""
+"Autotrax-Import: Netz \"%s\" Knoten \"%s\" stimmt mit mehr als einem "
+"Footprint überein und wurde nicht verbunden."
 
 #: pcbnew/pcb_io/autotrax/pcb_io_autotrax.cpp:846
 #, fuzzy
@@ -62653,8 +62667,9 @@ msgid "gEDA / Lepton EDA PCB footprint library directory"
 msgstr "gEDA / Lepton EDA PCB Footprint-Bibliotheksverzeichnis"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:381
+#, fuzzy
 msgid "Cannot produce this IPC-2581 data set."
-msgstr ""
+msgstr "Kann diesen IPC-2581 Datensatz nicht erstellen."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:391
 #, fuzzy
@@ -62662,18 +62677,24 @@ msgid "No IPC-2581 content selected."
 msgstr "Keine verbundenen Netze ausgewählt."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:407
+#, fuzzy
 msgid "Cannot export assembly data without outer copper layers."
-msgstr ""
+msgstr "Bestückungsdaten können ohne Kupferaussenlagen nicht exportiert werden."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:415
+#, fuzzy
 msgid "Cannot export physical netlist without outer copper layers."
 msgstr ""
+"Physikalische Netzliste kann ohne Kupferaussenlagen nicht exportiert werden."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:448
+#, fuzzy
 msgid ""
 "Component assembly data cannot be exported without component packages in "
 "IPC-2581B."
 msgstr ""
+"Bestückungsdaten für Bauteile können in IPC-2581B nicht ohne Bauteilgehäuse "
+"exportiert werden."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:541
 msgid "Generating content section"
@@ -62997,11 +63018,13 @@ msgid "Undefined Layers Warning"
 msgstr "Warnung zu undefinierten Lagen"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1589
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "One or more items were found on undefined layers (%s). Open the board in the "
 "PCB Editor to resolve."
 msgstr ""
+"Ein oder mehrere Elemente wurden auf undefinierten Lagen gefunden (%s). Zur "
+"Problembehebung die Platine im PCB-Editor öffnen."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1702
 #, c-format
@@ -63175,11 +63198,13 @@ msgid "ODB++ Production File"
 msgstr "ODB++ Produktionsdatei"
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:219
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "The PADS file declares %d copper layers; KiCad supports %d, so the layers "
 "past that share the last inner layer."
 msgstr ""
+"Die PADS-Datei gibt %d Kupferlagen vor; KiCad unterstützt %d, daher nutzen "
+"die darüber liegenden Lagen die letzte innere Lage gemeinsam."
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:447
 #, c-format
@@ -63196,18 +63221,22 @@ msgid "Skipping keepout with no valid layers"
 msgstr "Überspringe Sperrfläche ohne gültige Lage"
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:767
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Skipped design rule for differential pair '%s'; a net name ends with a "
 "backslash."
 msgstr ""
+"Designregel für Differentialpaar \"%s\" übersprungen; ein Netzname endet mit "
+"einem Backslash."
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:802
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Design rules for the imported differential pairs were not written; '%s' "
 "already exists."
 msgstr ""
+"Es wurden keine Designregeln für die importierten Differentialpaare "
+"geschrieben; \"%s\" existiert bereits."
 
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:804
 #: pcbnew/pcb_io/pads/pads_pcb_converter.cpp:825
@@ -63288,9 +63317,9 @@ msgid "COPPER item on unmapped layer %d"
 msgstr "KUPFER-Element auf nicht zugeordneter Lage %d, nutze Standardwert F.Cu"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:91
-#, c-format
+#, c-format, fuzzy
 msgid "Undefined P-CAD layer %u substituted with the drawings layer."
-msgstr ""
+msgstr "Undefinierte P-CAD Lage %u durch Zeichnungslage ersetzt."
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:885
 msgid "KiCad only supports 32 signal layers."
@@ -64694,9 +64723,9 @@ msgid "Board file was not updated\n"
 msgstr "Platinendatei wurde nicht aktualisiert\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3378
-#, c-format
+#, c-format, fuzzy
 msgid "No PCB importer recognizes the file format of '%s'\n"
-msgstr ""
+msgstr "Kein PCB-Import erkennt das Dateiformat von \"%s\"\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3403
 #, fuzzy, c-format
@@ -64774,8 +64803,9 @@ msgid "Failed to load one or more input boards\n"
 msgstr "Fehler beim Laden der Platine.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3953
+#, fuzzy
 msgid "Merge applier failed to produce a board\n"
-msgstr ""
+msgstr "Zusammenführungsanwendung konnte keine Platine erstellen\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3966
 #, c-format
@@ -65386,11 +65416,13 @@ msgid "A wire_via refers to missing padstack '%s'."
 msgstr "Ein wire_via verweist auf den fehlenden Padstack \"%s\"."
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:552
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "%d session item(s) were skipped due to unresolved reference, layer, or "
 "padstack."
 msgstr ""
+"%d Sitzungselement(e) wurden wegen unaufgelöster Referenz, Lage oder "
+"Padstack übersprungen."
 
 #: pcbnew/toolbars_footprint_editor.cpp:159 pcbnew/toolbars_pcb_editor.cpp:313
 msgid "Dimension objects"
@@ -66168,21 +66200,30 @@ msgid "Add Geometric Constraint"
 msgstr "Geometrische Einschränkung hinzufügen"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:683
+#, fuzzy
 msgid ""
 "All items referenced by this constraint are locked, so the constraint cannot "
 "move any geometry."
 msgstr ""
+"Alle von dieser Einschränkung betroffenen Elemente sind gesperrt, weswegen "
+"keine der Geometrien bewegt werden kann."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:698
+#, fuzzy
 msgid ""
 "The new geometric constraint conflicts with existing constraints and could "
 "not be satisfied."
 msgstr ""
+"Die neue geometrische Einschränkung steht mit bestehenden Einschränkungen in "
+"Konflikt und konnte nicht erfüllt werden."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:706
+#, fuzzy
 msgid ""
 "The new geometric constraint could not be applied to the referenced items."
 msgstr ""
+"Die neue geometrische Einschränkung konnte nicht auf die Referenzelemente "
+"angewendet werden."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:781
 #: pcbnew/tools/constraint_edit_tool.cpp:800
@@ -66191,8 +66232,11 @@ msgid "Apply Geometric Constraint"
 msgstr "Geometrische Einschränkung anwenden"
 
 #: pcbnew/tools/constraint_edit_tool.cpp:848
+#, fuzzy
 msgid "A geometric constraint could not be satisfied by this edit."
 msgstr ""
+"Eine geometrische Einschränkung konnte durch diese Bearbeitung nicht erfüllt "
+"werden."
 
 #: pcbnew/tools/constraint_edit_tool.cpp:1151
 #: pcbnew/tools/constraint_edit_tool.cpp:1526
@@ -66495,10 +66539,13 @@ msgstr ""
 "auf die andere Seite der Platine zu verschieben."
 
 #: pcbnew/tools/edit_tool.cpp:2826
+#, fuzzy
 msgid ""
 "Groups containing footprints or other items that cannot be mirrored were "
 "skipped."
 msgstr ""
+"Gruppen die Footprints oder andere Elemente beinhalten, die nicht gespiegelt "
+"werden können, wurden übersprungen."
 
 #: pcbnew/tools/edit_tool.cpp:3001 pcbnew/tools/pcb_actions.cpp:1050
 msgid "Change Side / Flip"
@@ -66562,12 +66609,17 @@ msgstr "Alle verbundenen Pads tauschen"
 #: pcbnew/tools/edit_tool_move_fct.cpp:117
 msgid "Cannot swap nets: connected items would receive conflicting nets."
 msgstr ""
+"Kann Netze nicht tauschen: Verbundene Elemente wären mit in Konflikt "
+"stehenden Netzen verbunden."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:144
+#, fuzzy
 msgid ""
 "Cannot swap nets of locked pads or connected copper unless Override Locks is "
 "enabled."
 msgstr ""
+"Kann Netze von gesperrten Pads oder verbundenem Kupfer nicht tauschen, es "
+"sei denn \"Sperren ignorieren\" ist aktiv."
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:387
 #: pcbnew/tools/edit_tool_move_fct.cpp:429 pcbnew/tools/pcb_actions.cpp:1079
