@@ -200,14 +200,14 @@ bool SCH_EDIT_FRAME::ReadyToNetlist( const wxString& aAnnotateMessage, bool* aUs
     // Symbols must be annotated
     if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
                        {},
-                       ANNOTATE_ALL, true, SYMBOL_FILTER_NON_POWER ) )
+                       ANNOTATE_ALL, true ) )
     {
         // Schematic must be annotated: call Annotate dialog and tell the user why.
         ModalAnnotate( aAnnotateMessage );
 
         if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
                            {},
-                           ANNOTATE_ALL, true, SYMBOL_FILTER_NON_POWER ) )
+                           ANNOTATE_ALL, true ) )
         {
             return false;
         }

@@ -432,11 +432,10 @@ public:
      * @param aAnnotateScope See #ANNOTATE_SCOPE_T Check the current sheet only if true.
      *                       Otherwise check the entire schematic.
      * @param aRecursive
-     * @param aSymbolFilter
      * @return Number of annotation errors found.
      */
     int CheckAnnotate( ANNOTATION_ERROR_HANDLER aErrorHandler, ANNOTATE_SCOPE_T aAnnotateScope,
-                       bool aRecursive, SYMBOL_FILTER aSymbolFilter );
+                       bool aRecursive );
 
     /**
      * Run a modal version of the annotate dialog for a specific purpose.
