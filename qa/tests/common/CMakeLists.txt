@@ -69,6 +69,7 @@ set( QA_COMMON_SRCS
     test_outline_font.cpp
     test_dxf_plotter.cpp
     test_gerber_plotter.cpp
+    test_pdf_circle_plot.cpp
     test_pdf_unicode_plot.cpp
     test_kiid.cpp
     test_layer_ids.cpp
