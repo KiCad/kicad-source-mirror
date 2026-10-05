@@ -2620,6 +2620,9 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 
     for( SCH_ITEM* sch_item : autoplaceItems )
     {
+        if( sch_item->IsLocked() )
+            continue;
+
         if( !moving && !sch_item->IsNew() )
             commit.Modify( sch_item, m_frame->GetScreen() );
 
