@@ -2644,6 +2644,25 @@ wxString SCH_PAINTER::expandLibItemTextVars( const wxString& aSourceText, const 
 }
 
 
+// A selected or brightened symbol or pin shows on the shadow layer, a pin's operating point on the
+// current layer, and nothing else of a symbol is drawn there
+static bool symbolDrawsOnOverlay( const SCH_SYMBOL* aSymbol, int aLayer )
+{
+    const bool shadows = aLayer == LAYER_SELECTION_SHADOWS;
+
+    if( shadows && ( aSymbol->IsBrightened() || aSymbol->IsSelected() ) )
+        return true;
+
+    for( const std::unique_ptr<SCH_PIN>& pin : aSymbol->GetRawPins() )
+    {
+        if( shadows ? pin->IsBrightened() || pin->IsSelected() : !pin->GetOperatingPoint().IsEmpty() )
+            return true;
+    }
+
+    return false;
+}
+
+
 void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
 {
     auto t1 = std::chrono::high_resolution_clock::now();
@@ -2683,10 +2702,11 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     if( isFieldsLayer( aLayer ) )
         return;
 
-    if( drawingShadows && !( aSymbol->IsBrightened() || aSymbol->IsSelected() ) )
+    // The library copy below is most of a symbol's draw; skip it on overlay layers it adds nothing to
+    if( ( drawingShadows || aLayer == LAYER_OP_CURRENTS ) && !m_schSettings.GetDrawBoundingBoxes()
+        && !symbolDrawsOnOverlay( aSymbol, aLayer ) )
     {
-        // Don't exit here; symbol may still have selected pins
-        // return;
+        return;
     }
 
     int unit = m_schematic ? aSymbol->GetUnitSelection( &m_schematic->CurrentSheet() ) : 1;
