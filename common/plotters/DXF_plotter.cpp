@@ -751,7 +751,10 @@ std::string DXF_PLOTTER::emitEntityHandle( const char* aEntityType, const char* 
                 "330\n{}\n"
                 "100\nAcDbEntity\n"
                 "  8\n{}\n",
-                aEntityType, handle, owner, aLayerName );
+                aEntityType,
+                handle,
+                owner,
+                aLayerName );
 
     if( aSubclass )
         fmt::print( m_outputFile, "100\n{}\n", aSubclass );
@@ -772,7 +775,9 @@ std::string DXF_PLOTTER::emitSymbolTableHeader( const char* aTableName, int aCou
                 "330\n0\n"
                 "100\nAcDbSymbolTable\n"
                 " 70\n{}\n",
-                aTableName, handle, aCount );
+                aTableName,
+                handle,
+                aCount );
 
     return handle;
 }
@@ -870,8 +875,7 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
         { "DOTTED",     "Dotted .  .  .  .",      2, 0.2,  " 49\n0.0\n 74\n0\n 49\n-0.2\n 74\n0\n"  },
     };
 
-    std::string ltypeTableHandle = emitSymbolTableHeader( "LTYPE",
-                                                          static_cast<int>( std::size( ltypes ) ) );
+    std::string ltypeTableHandle = emitSymbolTableHeader( "LTYPE", static_cast<int>( std::size( ltypes ) ) );
 
     for( const LtypePattern& lt : ltypes )
     {
@@ -889,7 +893,8 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
                     " 73\n{}\n"
                     " 40\n{}\n"
                     "{}",
-                    nextHandle(), ltypeTableHandle,
+                    nextHandle(),
+                    ltypeTableHandle,
                     lt.name, lt.description, lt.elementCount, lt.patternLength, lt.dashes );
     }
 
@@ -921,7 +926,8 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
                     // The standard ISO font (when kicad is built with it the dxf text in
                     // acad matches *perfectly*)
                     "  3\nisocp.shx\n",
-                    nextHandle(), styleTableHandle,
+                    nextHandle(),
+                    styleTableHandle,
                     style_name[i],
                     i < 2 ? 0 : DXF_OBLIQUE_ANGLE );
     }
@@ -1014,8 +1020,10 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
                     "  2\n{}\n"
                     " 70\n0\n"
                     " 62\n{}\n",
-                    nextHandle(), layerTableHandle,
-                    TO_UTF8( layerName ), colorNumber );
+                    nextHandle(),
+                    layerTableHandle,
+                    TO_UTF8( layerName ),
+                    colorNumber );
 
         if( hasActualColor )
         {
@@ -1068,7 +1076,8 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
                 " 70\n0\n"
                 "  0\n"
                 "ENDTAB\n",
-                nextHandle(), dimstyleTableHandle );
+                nextHandle(),
+                dimstyleTableHandle );
 
     // R2004 mandates three empty layout blocks (*Model_Space, *Paper_Space,
     // *Paper_Space0); each BLOCK_RECORD entry carries a 340 hard-pointer to its
@@ -1105,7 +1114,10 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
                     " 70\n0\n"
                     "280\n1\n"
                     "281\n0\n",
-                    l.blockRecordHandle, blockRecordTableHandle, l.blockName, l.layoutHandle );
+                    l.blockRecordHandle,
+                    blockRecordTableHandle,
+                    l.blockName,
+                    l.layoutHandle );
     }
 
     fmt::print( m_outputFile,
@@ -1146,10 +1158,13 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
                     "{}"
                     "  8\n0\n"
                     "100\nAcDbBlockEnd\n",
-                    nextHandle(), l.blockRecordHandle,
+                    nextHandle(),
+                    l.blockRecordHandle,
                     l.isPaperSpace ? " 67\n1\n" : "",
-                    l.blockName, l.blockName,
-                    nextHandle(), l.blockRecordHandle,
+                    l.blockName,
+                    l.blockName,
+                    nextHandle(),
+                    l.blockRecordHandle,
                     l.isPaperSpace ? " 67\n1\n" : "" );
     }
 
@@ -1193,7 +1208,9 @@ void DXF_PLOTTER::writeObjectsSection()
                 "350\n{}\n"
                 "  3\nACAD_PLOTSTYLENAME\n"
                 "350\n{}\n",
-                m_namedObjectDictHandle, acadGroupDictHandle, m_layoutDictHandle,
+                m_namedObjectDictHandle,
+                acadGroupDictHandle,
+                m_layoutDictHandle,
                 m_plotStyleNameDictHandle );
 
     // ACAD_GROUP - empty, but the named-object root requires it.
@@ -1204,7 +1221,8 @@ void DXF_PLOTTER::writeObjectsSection()
                 "330\n{}\n"
                 "100\nAcDbDictionary\n"
                 "281\n1\n",
-                acadGroupDictHandle, m_namedObjectDictHandle );
+                acadGroupDictHandle,
+                m_namedObjectDictHandle );
 
     // ACDBDICTIONARYWDFLT is a dictionary with a default entry; the 340 points to the
     // same Normal placeholder as the dict's "Normal" entry, and every LAYER's 390
@@ -1220,8 +1238,10 @@ void DXF_PLOTTER::writeObjectsSection()
                 "350\n{}\n"
                 "100\nAcDbDictionaryWithDefault\n"
                 "340\n{}\n",
-                m_plotStyleNameDictHandle, m_namedObjectDictHandle,
-                m_plotStyleNormalHandle, m_plotStyleNormalHandle );
+                m_plotStyleNameDictHandle,
+                m_namedObjectDictHandle,
+                m_plotStyleNormalHandle,
+                m_plotStyleNormalHandle );
 
     // ACDBPLACEHOLDER carries no payload; it just gives the "Normal" plot style a
     // handle that LAYER's 390 can resolve.
@@ -1230,7 +1250,8 @@ void DXF_PLOTTER::writeObjectsSection()
                 "ACDBPLACEHOLDER\n"
                 "  5\n{}\n"
                 "330\n{}\n",
-                m_plotStyleNormalHandle, m_plotStyleNameDictHandle );
+                m_plotStyleNormalHandle,
+                m_plotStyleNameDictHandle );
 
     // ACAD_LAYOUT names every LAYOUT object emitted below.
     fmt::print( m_outputFile,
@@ -1240,14 +1261,16 @@ void DXF_PLOTTER::writeObjectsSection()
                 "330\n{}\n"
                 "100\nAcDbDictionary\n"
                 "281\n1\n",
-                m_layoutDictHandle, m_namedObjectDictHandle );
+                m_layoutDictHandle,
+                m_namedObjectDictHandle );
 
     for( const DxfLayout& l : m_dxfLayouts )
     {
         fmt::print( m_outputFile,
                     "  3\n{}\n"
                     "350\n{}\n",
-                    l.name, l.layoutHandle );
+                    l.name,
+                    l.layoutHandle );
     }
 
     // The 4/<name> and 44/45 (width/height) fields are correlated and must change
@@ -1302,10 +1325,12 @@ void DXF_PLOTTER::writeObjectsSection()
                     " 17\n0.0\n 27\n1.0\n 37\n0.0\n"
                     " 76\n0\n"
                     "330\n{}\n",
-                    l.layoutHandle, m_layoutDictHandle,
+                    l.layoutHandle,
+                    m_layoutDictHandle,
                     PAPER_NAME, PAPER_WIDTH_MM, PAPER_HEIGHT_MM,
                     plotLayoutFlag,
-                    l.name, static_cast<int>( i ),
+                    l.name,
+                    static_cast<int>( i ),
                     PAPER_WIDTH_MM, PAPER_HEIGHT_MM,
                     l.blockRecordHandle );
     }
@@ -1351,8 +1376,7 @@ void DXF_PLOTTER::SetColor( const COLOR4D& color )
 }
 
 
-void DXF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width,
-                        int aCornerRadius )
+void DXF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width, int aCornerRadius )
 {
     wxASSERT( m_outputFile );
 
@@ -1396,18 +1420,19 @@ void DXF_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, int
     VECTOR2D centre_dev = userToDeviceCoordinates( centre );
 
     wxString cLayerName = GetCurrentLayerName( DXF_LAYER_OUTPUT_MODE::Current_Layer_Name );
-
     std::string layer = TO_UTF8( cLayerName );
+    const char* lineStyleName = getDXFLineType( static_cast<LINE_STYLE>( m_currentLineType ) );
 
     if( radius > 0 )
     {
         if( fill == FILL_T::NO_FILL )
         {
             emitEntityHandle( "CIRCLE", "AcDbCircle", layer );
-            fmt::print( m_outputFile, " 10\n{}\n 20\n{}\n 30\n0\n 40\n{}\n",
+            fmt::print( m_outputFile, " 10\n{}\n 20\n{}\n 30\n0\n 40\n{}\n 6\n{}\n",
                         formatCoord( centre_dev.x ),
                         formatCoord( centre_dev.y ),
-                        formatCoord( radius ) );
+                        formatCoord( radius ),
+                        lineStyleName );
         }
         else if( fill == FILL_T::FILLED_SHAPE )
         {
@@ -1578,7 +1603,7 @@ void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
         // DXF LINE
         wxString    cLayerName = GetCurrentLayerName( DXF_LAYER_OUTPUT_MODE::Current_Layer_Name );
         std::string layer = TO_UTF8( cLayerName );
-        const char* lname = getDXFLineType( static_cast<LINE_STYLE>( m_currentLineType ) );
+        const char* lineStyleName = getDXFLineType( static_cast<LINE_STYLE>( m_currentLineType ) );
 
         // The linetype name (6) sits on the AcDbEntity side, before the AcDbLine
         // marker.  Emitted inline so group 6 can interleave between the two markers.
@@ -1591,7 +1616,10 @@ void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
                     "  6\n{}\n"
                     "100\nAcDbLine\n"
                     " 10\n{}\n 20\n{}\n 30\n0\n 11\n{}\n 21\n{}\n 31\n0\n",
-                    nextHandle(), m_modelSpaceHandle, layer, lname,
+                    nextHandle(),
+                    m_modelSpaceHandle,
+                    layer,
+                    lineStyleName,
                     formatCoord( pen_lastpos_dev.x ),
                     formatCoord( pen_lastpos_dev.y ),
                     formatCoord( pos_dev.x ),
@@ -1633,17 +1661,20 @@ void DXF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     // (angle pair).  Reversing them trips AutoCAD's AcDb validator.
     wxString    cLayerName = GetCurrentLayerName( DXF_LAYER_OUTPUT_MODE::Current_Layer_Name );
     std::string layer = TO_UTF8( cLayerName );
+    const char* lineStyleName = getDXFLineType( static_cast<LINE_STYLE>( m_currentLineType ) );
 
     emitEntityHandle( "ARC", "AcDbCircle", layer );
     fmt::print( m_outputFile,
                 " 10\n{}\n 20\n{}\n 30\n0\n 40\n{}\n"
                 "100\nAcDbArc\n"
-                " 50\n{:.8f}\n 51\n{:.8f}\n",
+                " 50\n{:.8f}\n 51\n{:.8f}\n"
+                " 6\n{}\n",
                 formatCoord( centre_device.x ),
                 formatCoord( centre_device.y ),
                 formatCoord( radius_device ),
                 startAngle.AsDegrees(),
-                endAngle.AsDegrees() );
+                endAngle.AsDegrees(),
+                lineStyleName );
 }
 
 
