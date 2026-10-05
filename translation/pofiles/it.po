@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-10-03 21:41+0000\n"
+"PO-Revision-Date: 2026-10-06 01:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -16709,9 +16709,8 @@ msgid "%s Properties"
 msgstr "Proprietà %s"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:133
-#, fuzzy
 msgid "Sheet pin name can not be empty."
-msgstr "Il nome pin non può essere vuoto."
+msgstr "Il nome pin foglio non può essere vuoto."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:166
 msgid "Edit Sheet Pin Properties"
@@ -21378,9 +21377,9 @@ msgid "Show Field Name"
 msgstr "Mostra nome campo"
 
 #: eeschema/sch_footprint_field_reconciler.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
-msgstr "Cambia assegnamento impronta %s da \"%s\" a \"%s\"."
+msgstr "Ricollegate %d assegnazioni di impronte importate alla libreria '%s'."
 
 #: eeschema/sch_group.cpp:349 pcbnew/pcb_group.cpp:429
 #, c-format
