@@ -810,9 +810,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
             field.name = fieldName;
             field.show = !fieldName.StartsWith( wxT( "__" ), &field.name );
-
-            field.groupBy = alg::contains( aBomJob->m_fieldsGroupBy, field.name )
-                            || alg::contains( aBomJob->m_fieldsGroupBy, rawFieldName );
+            field.name = normalizeFieldName( field.name );
 
             if( ( aBomJob->m_fieldsLabels.size() > i ) && !aBomJob->m_fieldsLabels[i].IsEmpty() )
                 field.label = aBomJob->m_fieldsLabels[i];
@@ -823,6 +821,31 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
             preset.fieldsOrdered.emplace_back( field );
             i++;
+        }
+
+        for( const wxString& rawFieldName : aBomJob->m_fieldsGroupBy )
+        {
+            wxString fieldName = rawFieldName;
+            fieldName.StartsWith( wxT( "__" ), &fieldName );
+            fieldName = normalizeFieldName( fieldName );
+
+            if( fieldName.IsEmpty() )
+                continue;
+
+            bool fieldAlreadyPresent = false;
+
+            for( BOM_FIELD& field : preset.fieldsOrdered )
+            {
+                if( field.name == fieldName )
+                {
+                    field.groupBy = true;
+                    fieldAlreadyPresent = true;
+                    break;
+                }
+            }
+
+            if( !fieldAlreadyPresent )
+                preset.fieldsOrdered.push_back( { fieldName, GetGeneratedFieldDisplayName( fieldName ), false, true } );
         }
 
         preset.sortAsc = aBomJob->m_sortAsc;
