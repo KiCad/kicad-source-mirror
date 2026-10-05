@@ -940,8 +940,6 @@ protected:
      */
     void sendNetlistToCvpcb();
 
-    void onSize( wxSizeEvent& aEvent );
-
     void saveProjectSettings() override;
 
     void onCloseSymbolDiffDialog( wxCommandEvent& aEvent );

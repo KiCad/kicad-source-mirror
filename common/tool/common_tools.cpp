@@ -321,17 +321,11 @@ int COMMON_TOOLS::ZoomFitSelection( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
 {
-    KIGFX::VIEW*        view   = getView();
     EDA_DRAW_PANEL_GAL* canvas = m_frame->GetCanvas();
     EDA_DRAW_FRAME*     frame  = getEditFrame<EDA_DRAW_FRAME>();
 
     BOX2I    bBox = frame->GetDocumentExtents();
     BOX2I    defaultBox = canvas->GetDefaultViewBBox();
-
-    view->SetScale( 1.0 );  // The best scale will be determined later, but this initial
-                            // value ensures all view parameters are up to date (especially
-                            // at init time)
-    VECTOR2D screenSize = view->ToWorld( ToVECTOR2I( canvas->GetClientSize() ), false );
 
     // Currently "Zoom to Objects" is only supported in Eeschema & Pcbnew.  Support for other
     // programs in the suite can be added as needed.
@@ -365,25 +359,7 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
         bBox = defaultBox;
 
-    VECTOR2D vsize = bBox.GetSize();
-    double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
-                                                fabs( vsize.y / screenSize.y ) );
-
-    // if the scale isn't finite (most likely due to an empty canvas)
-    // simply just make sure we are centered and quit out of trying to zoom to fit
-    if( !std::isfinite( scale ) )
-    {
-        view->SetCenter( VECTOR2D( 0, 0 ) );
-        canvas->Refresh();
-        return 0;
-    }
-
-    // Reserve enough margin to limit the amount of the view that might be obscured behind the
-    // infobar.
-    double margin_scale_factor = 1.04;
-
-    if( canvas->GetClientSize().y < 768 )
-        margin_scale_factor = 1.10;
+    std::optional<double> marginScale;
 
     if( aFitType == ZOOM_FIT_ALL )
     {
@@ -392,19 +368,16 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
         if( frame->IsType( FRAME_FOOTPRINT_VIEWER )
                 || frame->IsType( FRAME_SCH_VIEWER ) )
         {
-            margin_scale_factor = 1.30;
+            marginScale = 1.30;
         }
         else if( frame->IsType( FRAME_SCH_SYMBOL_EDITOR )
                 || frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
         {
-            margin_scale_factor = 1.48;
+            marginScale = 1.48;
         }
     }
 
-    view->SetScale( scale / margin_scale_factor );
-    view->SetCenter( bBox.Centre() );
-    canvas->Refresh();
-
+    canvas->ZoomToFit( bBox, marginScale );
     return 0;
 }
 
