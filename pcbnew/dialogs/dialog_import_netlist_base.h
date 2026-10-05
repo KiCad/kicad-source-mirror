@@ -50,7 +50,6 @@ class DIALOG_IMPORT_NETLIST_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbUpdateFootprints;
 		wxCheckBox* m_cbTransferGroups;
 		wxCheckBox* m_cbOverrideLocks;
-		wxCheckBox* m_cbDeleteShortingTracks;
 		WX_HTML_REPORT_PANEL* m_MessageWindow;
 		wxBoxSizer* m_buttonsSizer;
 		wxStdDialogButtonSizer* m_sdbSizer;

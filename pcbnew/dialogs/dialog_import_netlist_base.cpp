@@ -64,9 +64,6 @@ DIALOG_IMPORT_NETLIST_BASE::DIALOG_IMPORT_NETLIST_BASE( wxWindow* parent, wxWind
 	m_cbOverrideLocks = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete/replace footprints even if locked"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizer1->Add( m_cbOverrideLocks, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_cbDeleteShortingTracks = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Delete tracks shorting multiple nets"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer1->Add( m_cbDeleteShortingTracks, 0, wxBOTTOM, 5 );
-
 
 	bUpperSizer->Add( sbSizer1, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
@@ -112,7 +109,6 @@ DIALOG_IMPORT_NETLIST_BASE::DIALOG_IMPORT_NETLIST_BASE( wxWindow* parent, wxWind
 	m_cbUpdateFootprints->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbTransferGroups->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbOverrideLocks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
-	m_cbDeleteShortingTracks->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizerApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::onUpdatePCB ), NULL, this );
 	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::onImportNetlist ), NULL, this );
 }
@@ -127,7 +123,6 @@ DIALOG_IMPORT_NETLIST_BASE::~DIALOG_IMPORT_NETLIST_BASE()
 	m_cbUpdateFootprints->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbTransferGroups->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_cbOverrideLocks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
-	m_cbDeleteShortingTracks->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::OnOptionChanged ), NULL, this );
 	m_sdbSizerApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::onUpdatePCB ), NULL, this );
 	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_NETLIST_BASE::onImportNetlist ), NULL, this );
 
