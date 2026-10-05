@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-05 00:11+0000\n"
+"PO-Revision-Date: 2026-10-05 09:41+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -32289,29 +32289,29 @@ msgstr ""
 
 #: eeschema/tools/sch_edit_tool.cpp:2785
 msgid "Choose a symbol with equivalent pins and pin positions."
-msgstr ""
+msgstr "Wählen Sie ein Symbol mit äquivalenten Pins und Pinpositionen."
 
 #: eeschema/tools/sch_edit_tool.cpp:2786
 msgid "Variant Symbol Compatibility"
-msgstr ""
+msgstr "Variantensymbol-Kompatibilität"
 
 #: eeschema/tools/sch_edit_tool.cpp:2799
-#, fuzzy
 msgid "Set Variant Symbol"
-msgstr "Textvariablen"
+msgstr "Variantensymbol festlegen"
 
 #: eeschema/tools/sch_edit_tool.cpp:2956 eeschema/tools/sch_edit_tool.cpp:3013
 #: eeschema/tools/symbol_editor_edit_tool.cpp:875
 #: pcbnew/tools/edit_tool.cpp:2354
 msgid "Use Properties panel to edit properties common to selected items."
 msgstr ""
+"Verwenden Sie das Eigenschaftspanel, um gemeinsame Eigenschaften der "
+"ausgewählten Elemente zu bearbeiten."
 
 #: eeschema/tools/sch_edit_tool.cpp:3005
 #: eeschema/tools/symbol_editor_edit_tool.cpp:867
 #: pcbnew/tools/edit_tool.cpp:2346
-#, fuzzy
 msgid "Show Properties panel"
-msgstr "Eigenschaftsverwaltung anzeigen"
+msgstr "Eigenschaftspanel anzeigen"
 
 #: eeschema/tools/sch_edit_tool.cpp:3139
 msgid "Edit Sheet Properties"
@@ -32430,9 +32430,9 @@ msgid "Create Net Chain between %s:%s and %s:%s"
 msgstr "Netzkette zwischen %s:%s und %s:%s erstellen"
 
 #: eeschema/tools/sch_editor_control.cpp:1758
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create net chain '%s'."
-msgstr "Konnte \"%s\" nicht erstellen."
+msgstr "Konnte Netzkette \"%s\" nicht erstellen."
 
 #: eeschema/tools/sch_editor_control.cpp:2359 pcbnew/tools/pcb_control.cpp:1173
 msgid ""
@@ -32475,6 +32475,8 @@ msgid ""
 "Bulk Edit Symbol Library Links is not available when a design variant is "
 "active. Switch to the default variant first."
 msgstr ""
+"\"Mehrere Symbolbibliothek-Verknüpfungen bearbeiten\" ist in einer aktiven "
+"Desginvariante nicht verfügbar. Wechseln Sie zuerst zur Standardvariante."
 
 #: eeschema/tools/sch_editor_control.cpp:3665
 #, c-format
@@ -32583,9 +32585,8 @@ msgid "Visual"
 msgstr "Visuell"
 
 #: eeschema/tools/sch_inspection_tool.cpp:596
-#, fuzzy
 msgid "Choose Schematic to Compare With"
-msgstr "Schaltplan auswählen"
+msgstr "Schaltplan für Vergleich auswählen"
 
 #: eeschema/tools/sch_inspection_tool.cpp:607
 msgid "Select a KiCad s-expression schematic file (.kicad_sch)."
@@ -32922,32 +32923,34 @@ msgstr "Pin wiederholen"
 #: eeschema/variant_symbol_utils.cpp:57
 #, c-format
 msgid "Candidate has %d unit(s), base requires %d"
-msgstr ""
+msgstr "Kandidat hat %d Einheit(en), Basis benötigt %d"
 
 #: eeschema/variant_symbol_utils.cpp:68
 #, c-format
 msgid "Candidate has %d body style(s), base requires %d"
-msgstr ""
+msgstr "Kandidat hat %d Symbolform(en), Basis benötigt %d"
 
 #: eeschema/variant_symbol_utils.cpp:125
 #, c-format
 msgid "Unit %d, body style %d: pin '%s' not found in candidate"
 msgstr ""
+"Einheit %d, Symbolform %d: Pin \"%s\" wurde nicht im Kandidaten gefunden"
 
 #: eeschema/variant_symbol_utils.cpp:142
 #, c-format
 msgid "Unit %d, body style %d: pin '%s' position mismatch (%d,%d) vs (%d,%d)"
 msgstr ""
+"Einheit %d, Symbolform %d: Pin \"%s\" Positionskonflikt (%d,%d) vs (%d,%d)"
 
 #: eeschema/variant_symbol_utils.cpp:158
 #, c-format
 msgid "Unit %d, body style %d: pin '%s' type mismatch ('%s' vs '%s')"
-msgstr ""
+msgstr "Einheit %d, Symbolform %d: Pin \"%s\" Typkonflikt (\"%s\" vs \"%s\")"
 
 #: eeschema/variant_symbol_utils.cpp:177
 #, c-format
 msgid "Unit %d, body style %d: candidate has extra pin '%s'"
-msgstr ""
+msgstr "Einheit %d, Symbolform %d: Kandidat hat extra Pin \"%s\""
 
 #: eeschema/widgets/filedlg_hook_save_project.h:36
 msgid "Create a new project for this schematic"
@@ -34906,7 +34909,7 @@ msgstr "Footprint und Footprint-Bibliotheken"
 
 #: kicad/cli/command_fp_diff.cpp:28
 msgid "Diff two .pretty footprint library directories"
-msgstr "Zwei .pretty-Footprint-Bibliotheksverzeichnisse vergleiche"
+msgstr "Zwei .pretty-Footprint-Bibliotheksverzeichnisse vergleichen"
 
 #: kicad/cli/command_fp_diff.cpp:29
 msgid "Reference .pretty directory"
@@ -35178,7 +35181,7 @@ msgstr ""
 #: kicad/cli/command_import.cpp:262
 #, c-format
 msgid "No board or schematic importer recognizes the file: %s\n"
-msgstr ""
+msgstr "Kein Platinen- oder Schaltplanimport erkennt diese Datei: %s\n"
 
 #: kicad/cli/command_import.cpp:282
 msgid "No inputs could be imported\n"
@@ -35223,17 +35226,25 @@ msgstr ""
 "definiert sind, frei lassen"
 
 #: kicad/cli/command_mergetool.cpp:82
+#, fuzzy
 msgid ""
 "Three-way merge driver for `git mergetool`. Detects PCB vs schematic vs "
 "library item from the output extension, opens the resolution dialog in the "
 "GUI kicad binary for any unresolved conflicts where available, and writes "
 "the merged file."
 msgstr ""
+"Dreiwege-Zusammenführungstreiber für \"git_mergetool\". Erkennt PCB vs. "
+"Schaltplan vs. Bibliothekelement anhand der Ausgabeerweiterung, öffnet wo "
+"immer möglich den Auflösungsdialog in der GUI-kicad-binär für jeden "
+"ungelösten Konflikt und schreibt die zusammengeführte Datei."
 
 #: kicad/cli/command_mergetool.cpp:89
+#, fuzzy
 msgid ""
 "Common-ancestor file (.kicad_pcb, .kicad_sch, .kicad_sym, or .kicad_mod)"
 msgstr ""
+"\"Gemeinsame Vorfahren\"-Datei (.kicad_pcb, .kicad_sch, .kicad_sym oder "
+".kicad_mod)"
 
 #: kicad/cli/command_mergetool.cpp:94
 msgid "'Ours' file"
@@ -35272,14 +35283,12 @@ msgstr ""
 "SVG ausgeben"
 
 #: kicad/cli/command_pcb_diff.cpp:29
-#, fuzzy
 msgid "Reference PCB file"
-msgstr "DipTrace PCB-Dateien"
+msgstr "PCB-Referenzdatei"
 
 #: kicad/cli/command_pcb_diff.cpp:30
-#, fuzzy
 msgid "Comparison PCB file"
-msgstr "Fabmaster PCB-Dateien"
+msgstr "PCB-Vergleichsdatei"
 
 #: kicad/cli/command_pcb_drc.cpp:49
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -36279,16 +36288,16 @@ msgstr "Schaltplan"
 #: kicad/cli/command_sch_diff.cpp:28
 msgid "Diff two .kicad_sch files and emit JSON, text, PNG, or SVG"
 msgstr ""
+"Unterschiede zweier .kicad_sch-Dateien finden und als JSON, text, PNG oder "
+"SVG ausgeben"
 
 #: kicad/cli/command_sch_diff.cpp:29
-#, fuzzy
 msgid "Reference schematic file"
-msgstr "DipTrace Schaltplandateien"
+msgstr "Schaltplan-Referenzdatei"
 
 #: kicad/cli/command_sch_diff.cpp:30
-#, fuzzy
 msgid "Comparison schematic file"
-msgstr "KiCad S-Expression Schaltplandateien"
+msgstr "Schaltplan-Vergleichsdatei"
 
 #: kicad/cli/command_sch_erc.cpp:45
 msgid ""
@@ -36436,7 +36445,7 @@ msgstr "Symbol und Symbolbibliotheken"
 
 #: kicad/cli/command_sym_diff.cpp:28
 msgid "Diff two .kicad_sym symbol libraries"
-msgstr "Vergleich von zwei .kicad_sym-Symbolbibliotheken"
+msgstr "Zwei .kicad_sym-Symbolbibliotheken vergleichen"
 
 #: kicad/cli/command_sym_diff.cpp:29
 msgid "Reference .kicad_sym file"
@@ -67120,25 +67129,26 @@ msgstr "Erzeugt aus der Auswahl eine Kupferzone"
 #: pcbnew/tools/pcb_actions.cpp:69
 #, fuzzy
 msgid "Constrain the two selected segments to be parallel"
-msgstr "Konvertiert das ausgewählte Liniensegment in einen Bogen"
+msgstr "Zwei ausgewählte Segmente auf Parallelität beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:79
 #, fuzzy
 msgid "Constrain the two selected segments to be perpendicular"
-msgstr "Konvertiert das ausgewählte Liniensegment in einen Bogen"
+msgstr "Zwei ausgewählte Segmente auf Orthogonalität beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:88
 msgid "Equal Length"
 msgstr "Gleiche Länge"
 
 #: pcbnew/tools/pcb_actions.cpp:89
+#, fuzzy
 msgid "Constrain the two selected segments to be of equal length"
-msgstr ""
+msgstr "Zwei ausgewählte Segmente auf gleiche Länge beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:99
 #, fuzzy
 msgid "Constrain the two selected segments to be collinear"
-msgstr "Konvertiert das ausgewählte Liniensegment in einen Bogen"
+msgstr "Zwei ausgewählte Segmente auf Kolliniearität beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:108
 msgid "Angular Dimension"
@@ -67147,22 +67157,25 @@ msgstr "Winkelbemaßung"
 #: pcbnew/tools/pcb_actions.cpp:109
 #, fuzzy
 msgid "Constrain the angle between the two selected segments"
-msgstr "Eine neue Netzkette erstellen, die zwei ausgewählte Pins verbindet"
+msgstr "Den Winkel zwischen zwei ausgewählten Segmenten beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:119
+#, fuzzy
 msgid ""
 "Constrain the selected line and curve, or two curves, to touch tangentially"
 msgstr ""
+"Die ausgewählte Linie und Kurve oder zwei Kurven auf tangentiale Berührung "
+"beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:129
 #, fuzzy
 msgid "Constrain the selected segment to be horizontal"
-msgstr "Konvertiert das ausgewählte Liniensegment in einen Bogen"
+msgstr "Das ausgewählte Segment auf horizontale Lage beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 #, fuzzy
 msgid "Constrain the selected segment to be vertical"
-msgstr "Konvertiert das ausgewählte Liniensegment in einen Bogen"
+msgstr "Das ausgewählte Segment auf vertikale Lage beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:148
 msgid "Fixed Length"
@@ -67171,19 +67184,23 @@ msgstr "Feste Länge"
 #: pcbnew/tools/pcb_actions.cpp:149
 #, fuzzy
 msgid "Lock the selected segment to its current length"
-msgstr "Zeigt das selektierte Netz im Netznavigator"
+msgstr "Das ausgewählte Segment mit seiner aktuellen Länge sperren"
 
 #: pcbnew/tools/pcb_actions.cpp:159
+#, fuzzy
 msgid "Constrain the two selected circles, arcs or ellipses to share a center"
 msgstr ""
+"Zwei ausgewählte Kreise, Bögen oder Ellipsen auf ein gemeinsames Zentrum "
+"beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:168
 msgid "Equal Radius"
 msgstr "Gleicher Radius"
 
 #: pcbnew/tools/pcb_actions.cpp:169
+#, fuzzy
 msgid "Constrain the two selected circles or arcs to be of equal radius"
-msgstr ""
+msgstr "Zwei ausgewählte Kreise oder Bögen auf denselben Radius beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:178
 msgid "Fixed Radius"
@@ -67200,24 +67217,28 @@ msgstr "Bogenwinkel"
 #: pcbnew/tools/pcb_actions.cpp:189
 #, fuzzy
 msgid "Drive the selected arc's swept angle"
-msgstr "Die ausgewählte committete Netzkette löschen"
+msgstr "Schwenkwinkel des ausgewählten Bogens steuern"
 
 #: pcbnew/tools/pcb_actions.cpp:198
+#, fuzzy
 msgid "Fix in Place..."
-msgstr ""
+msgstr "An Ort und Stelle befestigen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:199
 msgid ""
 "Click a point to pin it where it is, grounding the shapes constrained to it"
 msgstr ""
+"Einen Punkt anklicken, um ihn an dieser Stelle zu fixieren und die daran "
+"angebundenen Formen zu verankern"
 
 #: pcbnew/tools/pcb_actions.cpp:208
 msgid "Coincident..."
 msgstr "Koinzidenz ..."
 
 #: pcbnew/tools/pcb_actions.cpp:209
+#, fuzzy
 msgid "Click two shape endpoints to make them coincide"
-msgstr ""
+msgstr "Auf zwei Formendpunkte klicken, um sie aufeinanderzulegen"
 
 #: pcbnew/tools/pcb_actions.cpp:218
 msgid "Point on Line..."
@@ -67254,8 +67275,10 @@ msgid "Always Show Geometric Constraints"
 msgstr "Geometrische Einschränkungen immer anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:249
+#, fuzzy
 msgid "Always show the geometric-constraint diagnostics overlay"
 msgstr ""
+"Die Überlagerung zur geometrisch eingeschränkten Diagnose immer anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:256
 #, fuzzy
@@ -67275,11 +67298,14 @@ msgstr "Geometrische Einschränkungen ..."
 #: pcbnew/tools/pcb_actions.cpp:265
 msgid "List, locate and delete the board's geometric constraints"
 msgstr ""
+"Geometrische Einschränkungen der Platine auflisten, lokalisieren und löschen"
 
 #: pcbnew/tools/pcb_actions.cpp:272
 #, fuzzy
 msgid "Remove geometric constraints referencing the selected items"
-msgstr "Außenlinien um gewähltes Element erzeugen"
+msgstr ""
+"Geometrische Einschränkungen entfernen, die sich auf ausgewählte Elemente "
+"beziehen"
 
 #: pcbnew/tools/pcb_actions.cpp:279
 msgid "Show/hide the geometric constraints panel"
@@ -67390,16 +67416,15 @@ msgstr "Bohrplan hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:520
 msgid "Draw drill symbols at the holes on a documentation layer"
-msgstr ""
+msgstr "Bohrsymbole an den Löchern auf einer Dokumentationslage zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:527
 msgid "Drill Groups..."
-msgstr "Bohrgruppen..."
+msgstr "Bohrgruppen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:528
-#, fuzzy
 msgid "Inspect drill groups and assign symbols"
-msgstr "Vorheriges nicht zugeordnetes Symbol auswählen"
+msgstr "Bohrgruppen inspizieren und Symbole zuweisen"
 
 #: pcbnew/tools/pcb_actions.cpp:533
 msgid "Place Point"
@@ -67498,17 +67523,21 @@ msgid "Place free-standing vias"
 msgstr "Freistehende Vias platzieren"
 
 #: pcbnew/tools/pcb_actions.cpp:694
+#, fuzzy
 msgid "Place a stacked or staggered microvia stack"
-msgstr ""
+msgstr "Einen gestapelten oder versetzten Microviastapel platzieren"
 
 #: pcbnew/tools/pcb_actions.cpp:702
 #, fuzzy
 msgid "Create Stack from Selection"
-msgstr "Leiterbahnen aus Auswahl erzeugen"
+msgstr "Stapel aus Auswahl erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:703
+#, fuzzy
 msgid "Wrap the selected microvias and traces into a microvia stack"
 msgstr ""
+"Fast die ausgewählten Microvias zusammen und überführt sie in einen "
+"Microviastapel"
 
 #: pcbnew/tools/pcb_actions.cpp:722
 msgid "Add a Zone Cutout"
@@ -67843,15 +67872,18 @@ msgstr "Löscht gewählte Element(e) und Kupferverbindungen"
 #: pcbnew/tools/pcb_actions.cpp:1237
 msgid "Copy selected properties from a source item to compatible target items"
 msgstr ""
+"Ausgewählte Eigenschaften von einem Quellelement zu kompatiblen "
+"Zielelementen kopieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1245
-#, fuzzy
 msgid "Match Properties Settings..."
-msgstr "Seitenvorschau einstellen ..."
+msgstr "Eigenschaftenabgleich-Einstellungen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1246
 msgid "Choose the properties copied by Match Properties"
 msgstr ""
+"Die Eigenschaften auswählen, die beim \"Eigenschaftenabgleich\" kopiert "
+"wurden"
 
 #: pcbnew/tools/pcb_actions.cpp:1255
 msgid "Create Array..."
@@ -68885,22 +68917,22 @@ msgstr ""
 "aus der Bibliothek anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:2642
-#, fuzzy
 msgid "Compare Board with File..."
-msgstr "Nicht-KiCad Platinendatei ..."
+msgstr "Platine mit Datei vergleichen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2643
 msgid "Diff the current PCB against another .kicad_pcb file"
-msgstr ""
+msgstr "Die aktuelle Platine mit einer anderen .kicad_pcb-Datei vergleichen"
 
 #: pcbnew/tools/pcb_actions.cpp:2649
-#, fuzzy
 msgid "Compare Board with Local History..."
-msgstr "Fasse lokalen Verlauf zusammen ..."
+msgstr "Platine mit lokalem Verlauf vergleichen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:2650
 msgid "Diff the current PCB against the most recent local-history snapshot"
 msgstr ""
+"Die aktuelle Platine mit dem neuesten Stand aus dem lokalen Verlauf "
+"vergleichen"
 
 #: pcbnew/tools/pcb_actions.cpp:2656
 msgid "Show Footprint Associations"
@@ -69361,11 +69393,11 @@ msgstr "Ausgewählte Pads nacheinander versuchen, automatisch zu verbinden."
 
 #: pcbnew/tools/pcb_actions.cpp:3180
 msgid "Optimize Selected Track(s)"
-msgstr ""
+msgstr "Ausgewählte Leiterbahn(en) optimieren"
 
 #: pcbnew/tools/pcb_actions.cpp:3181
 msgid "Simplify selected routed track(s)."
-msgstr ""
+msgstr "Ausgewählte geroutete Leiterbahn(en) vereinfachen."
 
 #: pcbnew/tools/pcb_actions.cpp:3188
 msgid "Cancel Current Item"
@@ -69591,7 +69623,7 @@ msgstr "(unbenannte Gruppe)"
 
 #: pcbnew/tools/pcb_control.cpp:1726
 msgid "the layout could not be copied onto the group"
-msgstr ""
+msgstr "das Layout konnte nicht auf die Gruppe kopiert werden"
 
 #: pcbnew/tools/pcb_control.cpp:1744
 #, c-format
@@ -69637,7 +69669,7 @@ msgstr "Fehler beim Einlesen der Platine."
 #: pcbnew/tools/pcb_control.cpp:2255
 #, c-format
 msgid "Board changed from %d to %d copper layers, stackup updated."
-msgstr ""
+msgstr "Platine von %d zu %d Kupferlagen geändert, Lagenaufbau aktualisiert."
 
 #: pcbnew/tools/pcb_control.cpp:2333
 msgid "Append Board"
@@ -70993,6 +71025,8 @@ msgid ""
 "%d footprint(s) in the selection have pads. Scaling changes the drawn pad "
 "positions but not the physical part. Continue?"
 msgstr ""
+"%d Footprint(s) in der Auswahl haben Pads. Skalierung verändert die "
+"gezeichneten Padpositionen, aber nicht das physische Bauteil. Fortsetzen?"
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:1034
 msgid "Scale footprint with pads?"
