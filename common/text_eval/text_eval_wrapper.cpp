@@ -1332,11 +1332,13 @@ wxString EXPRESSION_EVALUATOR::GetVariable( const wxString& aName ) const
         if( std::holds_alternative<double>( it->second ) )
         {
             double val = std::get<double>( it->second );
+
             // Smart formatting - whole numbers don't need decimal places
             if( val == std::floor( val ) && std::abs( val ) < 1e15 )
                 return wxString::Format( "%.0f", val );
+            // Otherwise match highest precision from EDA_UNIT_UTILS::UI::StringFromValue()
             else
-                return wxString::Format( "%g", val );
+                return wxString::Format( "%.10g", val );
         }
         else
         {
