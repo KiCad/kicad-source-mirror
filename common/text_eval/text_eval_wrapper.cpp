@@ -44,10 +44,12 @@ namespace KI_EVAL
 #endif
 } // namespace KI_EVAL
 
+
 #include <wx/log.h>
 #include <algorithm>
 #include <regex>
 #include <span>
+
 
 // // Token type enum matching the generated parser
 enum class TEXT_EVAL_TOKEN : int
@@ -78,6 +80,7 @@ enum class TEXT_EVAL_TOKEN : int
     DOLLAR_OPEN = KI_EVAL_DOLLAR_OPEN,
 };
 
+
 // UTF-8 <-> UTF-32 conversion utilities
 namespace utf8_utils
 {
@@ -86,12 +89,16 @@ namespace utf8_utils
 template <typename T>
 concept Utf8Byte = std::same_as<T, char> || std::same_as<T, unsigned char> || std::same_as<T, std::byte>;
 
+
 // UTF-8 validation and conversion
 class UTF8_CONVERTER
 {
 private:
     // UTF-8 byte classification using bit operations
-    static constexpr bool is_ascii( std::byte b ) noexcept { return ( b & std::byte{ 0x80 } ) == std::byte{ 0x00 }; }
+    static constexpr bool is_ascii( std::byte b ) noexcept
+    {
+        return ( b & std::byte{ 0x80 } ) == std::byte{ 0x00 };
+    }
 
     static constexpr bool is_continuation( std::byte b ) noexcept
     {
@@ -102,12 +109,16 @@ private:
     {
         if( is_ascii( first ) )
             return 1;
+
         if( ( first & std::byte{ 0xE0 } ) == std::byte{ 0xC0 } )
             return 2;
+
         if( ( first & std::byte{ 0xF0 } ) == std::byte{ 0xE0 } )
             return 3;
+
         if( ( first & std::byte{ 0xF8 } ) == std::byte{ 0xF0 } )
             return 4;
+
         return 0; // Invalid
     }
 
@@ -264,8 +275,10 @@ public:
     }
 };
 
+
 template <typename T>
 concept UnicodeCodepoint = std::same_as<T, char32_t>;
+
 
 struct CHARACTER_CLASSIFIER
 {
@@ -280,7 +293,10 @@ struct CHARACTER_CLASSIFIER
                || cp == U'\u3000';
     }
 
-    static constexpr bool is_digit( UnicodeCodepoint auto cp ) noexcept { return cp >= U'0' && cp <= U'9'; }
+    static constexpr bool is_digit( UnicodeCodepoint auto cp ) noexcept
+    {
+        return cp >= U'0' && cp <= U'9';
+    }
 
     static constexpr bool is_ascii_alpha( UnicodeCodepoint auto cp ) noexcept
     {
@@ -293,8 +309,12 @@ struct CHARACTER_CLASSIFIER
         return is_ascii_alpha( cp ) || ( cp >= 0x80 && cp <= 0x10FFFF && cp != 0xFFFD );
     }
 
-    static constexpr bool is_alnum( UnicodeCodepoint auto cp ) noexcept { return is_alpha( cp ) || is_digit( cp ); }
+    static constexpr bool is_alnum( UnicodeCodepoint auto cp ) noexcept
+    {
+        return is_alpha( cp ) || is_digit( cp );
+    }
 };
+
 
 struct SI_PREFIX_HANDLER
 {
@@ -341,9 +361,11 @@ struct SI_PREFIX_HANDLER
 };
 } // namespace utf8_utils
 
+
 // Unit conversion utilities for the text evaluator
 namespace KIEVAL_UNIT_CONV
 {
+
 
 // Internal unit enum matching NUMERIC_EVALUATOR
 enum class UNIT
@@ -363,26 +385,28 @@ enum class UNIT
     PsPerMm
 };
 
+
 // Convert EDA_UNITS to internal Unit enum
 UNIT edaUnitsToInternal( EDA_UNITS aUnits )
 {
     switch( aUnits )
     {
-    case EDA_UNITS::MM: return UNIT::MM;
-    case EDA_UNITS::MILS: return UNIT::Mil;
-    case EDA_UNITS::INCH: return UNIT::Inch;
-    case EDA_UNITS::DEGREES: return UNIT::Degrees;
-    case EDA_UNITS::FS: return UNIT::Femtoseconds;
-    case EDA_UNITS::PS: return UNIT::Picoseconds;
+    case EDA_UNITS::MM:          return UNIT::MM;
+    case EDA_UNITS::MILS:        return UNIT::Mil;
+    case EDA_UNITS::INCH:        return UNIT::Inch;
+    case EDA_UNITS::DEGREES:     return UNIT::Degrees;
+    case EDA_UNITS::FS:          return UNIT::Femtoseconds;
+    case EDA_UNITS::PS:          return UNIT::Picoseconds;
     case EDA_UNITS::PS_PER_INCH: return UNIT::PsPerInch;
-    case EDA_UNITS::PS_PER_CM: return UNIT::PsPerCm;
-    case EDA_UNITS::PS_PER_MM: return UNIT::PsPerMm;
-    case EDA_UNITS::UM: return UNIT::UM;
-    case EDA_UNITS::CM: return UNIT::CM;
-    case EDA_UNITS::UNSCALED: return UNIT::SI;
-    default: return UNIT::MM;
+    case EDA_UNITS::PS_PER_CM:   return UNIT::PsPerCm;
+    case EDA_UNITS::PS_PER_MM:   return UNIT::PsPerMm;
+    case EDA_UNITS::UM:          return UNIT::UM;
+    case EDA_UNITS::CM:          return UNIT::CM;
+    case EDA_UNITS::UNSCALED:    return UNIT::SI;
+    default:                     return UNIT::MM;
     }
 }
+
 
 // Parse unit from string using centralized registry
 UNIT parseUnit( const std::string& aUnitStr )
@@ -392,21 +416,21 @@ UNIT parseUnit( const std::string& aUnitStr )
     // Convert text_eval_units::Unit to KIEVAL_UNIT_CONV::Unit
     switch( evalUnit )
     {
-    case text_eval_units::Unit::MM: return UNIT::MM;
-    case text_eval_units::Unit::CM: return UNIT::CM;
-    case text_eval_units::Unit::INCH: return UNIT::Inch;
-    case text_eval_units::Unit::INCH_QUOTE: return UNIT::Inch;
-    case text_eval_units::Unit::MIL: return UNIT::Mil;
-    case text_eval_units::Unit::THOU: return UNIT::Mil;
-    case text_eval_units::Unit::UM: return UNIT::UM;
-    case text_eval_units::Unit::DEG: return UNIT::Degrees;
+    case text_eval_units::Unit::MM:            return UNIT::MM;
+    case text_eval_units::Unit::CM:            return UNIT::CM;
+    case text_eval_units::Unit::INCH:          return UNIT::Inch;
+    case text_eval_units::Unit::INCH_QUOTE:    return UNIT::Inch;
+    case text_eval_units::Unit::MIL:           return UNIT::Mil;
+    case text_eval_units::Unit::THOU:          return UNIT::Mil;
+    case text_eval_units::Unit::UM:            return UNIT::UM;
+    case text_eval_units::Unit::DEG:           return UNIT::Degrees;
     case text_eval_units::Unit::DEGREE_SYMBOL: return UNIT::Degrees;
-    case text_eval_units::Unit::PS: return UNIT::Picoseconds;
-    case text_eval_units::Unit::FS: return UNIT::Femtoseconds;
-    case text_eval_units::Unit::PS_PER_IN: return UNIT::PsPerInch;
-    case text_eval_units::Unit::PS_PER_CM: return UNIT::PsPerCm;
-    case text_eval_units::Unit::PS_PER_MM: return UNIT::PsPerMm;
-    default: return UNIT::Invalid;
+    case text_eval_units::Unit::PS:            return UNIT::Picoseconds;
+    case text_eval_units::Unit::FS:            return UNIT::Femtoseconds;
+    case text_eval_units::Unit::PS_PER_IN:     return UNIT::PsPerInch;
+    case text_eval_units::Unit::PS_PER_CM:     return UNIT::PsPerCm;
+    case text_eval_units::Unit::PS_PER_MM:     return UNIT::PsPerMm;
+    default:                                   return UNIT::Invalid;
     }
 }
 
@@ -418,29 +442,32 @@ double getConversionFactor( UNIT aFromUnit, UNIT aToUnit )
 
     // Convert to MM first, then to target unit
     double toMM = 1.0;
+
     switch( aFromUnit )
     {
-    case UNIT::Inch: toMM = 25.4; break;
-    case UNIT::Mil: toMM = 25.4 / 1000.0; break;
-    case UNIT::UM: toMM = 1.0 / 1000.0; break;
-    case UNIT::MM: toMM = 1.0; break;
-    case UNIT::CM: toMM = 10.0; break;
-    default: return 1.0; // No conversion for other units
+    case UNIT::Inch: toMM = 25.4;          break;
+    case UNIT::Mil:  toMM = 25.4 / 1000.0; break;
+    case UNIT::UM:   toMM = 1.0 / 1000.0;  break;
+    case UNIT::MM:   toMM = 1.0;           break;
+    case UNIT::CM:   toMM = 10.0;          break;
+    default:         return 1.0; // No conversion for other units
     }
 
     double fromMM = 1.0;
+
     switch( aToUnit )
     {
-    case UNIT::Inch: fromMM = 1.0 / 25.4; break;
-    case UNIT::Mil: fromMM = 1000.0 / 25.4; break;
-    case UNIT::UM: fromMM = 1000.0; break;
-    case UNIT::MM: fromMM = 1.0; break;
-    case UNIT::CM: fromMM = 1.0 / 10.0; break;
-    default: return 1.0; // No conversion for other units
+    case UNIT::Inch: fromMM = 1.0 / 25.4;    break;
+    case UNIT::Mil:  fromMM = 1000.0 / 25.4; break;
+    case UNIT::UM:   fromMM = 1000.0;        break;
+    case UNIT::MM:   fromMM = 1.0;           break;
+    case UNIT::CM:   fromMM = 1.0 / 10.0;    break;
+    default:         return 1.0; // No conversion for other units
     }
 
     return toMM * fromMM;
 }
+
 
 // Convert a value with units to the default units using centralized registry
 double convertToDefaultUnits( double aValue, const std::string& aUnitStr, EDA_UNITS aDefaultUnits )
@@ -1173,6 +1200,7 @@ EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( const EXPRESSION_EVALUATOR& aOther )
     }
 }
 
+
 EXPRESSION_EVALUATOR& EXPRESSION_EVALUATOR::operator=( const EXPRESSION_EVALUATOR& aOther )
 {
     if( this != &aOther )
@@ -1193,6 +1221,7 @@ EXPRESSION_EVALUATOR& EXPRESSION_EVALUATOR::operator=( const EXPRESSION_EVALUATO
     return *this;
 }
 
+
 EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( EXPRESSION_EVALUATOR&& aOther ) noexcept :
         m_variables( std::move( aOther.m_variables ) ),
         m_lastErrors( std::move( aOther.m_lastErrors ) ),
@@ -1202,6 +1231,7 @@ EXPRESSION_EVALUATOR::EXPRESSION_EVALUATOR( EXPRESSION_EVALUATOR&& aOther ) noex
         m_defaultUnits( aOther.m_defaultUnits )
 {
 }
+
 
 EXPRESSION_EVALUATOR& EXPRESSION_EVALUATOR::operator=( EXPRESSION_EVALUATOR&& aOther ) noexcept
 {
@@ -1392,10 +1422,12 @@ wxString EXPRESSION_EVALUATOR::Evaluate( const wxString&                        
     return stdStringToWxString( result );
 }
 
+
 bool EXPRESSION_EVALUATOR::HasErrors() const
 {
     return m_lastErrors && m_lastErrors->HasErrors();
 }
+
 
 wxString EXPRESSION_EVALUATOR::GetErrorSummary() const
 {
@@ -1404,6 +1436,7 @@ wxString EXPRESSION_EVALUATOR::GetErrorSummary() const
 
     return stdStringToWxString( m_lastErrors->GetAllMessages() );
 }
+
 
 size_t EXPRESSION_EVALUATOR::GetErrorCount() const
 {
@@ -1463,15 +1496,15 @@ bool EXPRESSION_EVALUATOR::TestExpression( const wxString& aExpression )
             };
 
     // Try to parse it
+    m_lastErrors->Clear();
     std::string input = wxStringToStdString( testInput );
     auto [result, hadErrors] = evaluateWithParser( input, testCallback );
 
     // Check if there were parsing errors (ignore evaluation errors for undefined variables)
     if( m_lastErrors )
     {
-        const auto& errors = m_lastErrors->GetErrors();
         // Filter out "Test mode - no variables available" errors, look for syntax errors
-        for( const auto& error : errors )
+        for( const std::string& error : m_lastErrors->GetErrors() )
         {
             if( error.find( "Syntax error" ) != std::string::npos
                 || error.find( "Parser failed" ) != std::string::npos )
@@ -1483,6 +1516,7 @@ bool EXPRESSION_EVALUATOR::TestExpression( const wxString& aExpression )
 
     return true; // No syntax errors found
 }
+
 
 size_t EXPRESSION_EVALUATOR::CountExpressions( const wxString& aInput ) const
 {
@@ -1705,6 +1739,7 @@ wxString EXPRESSION_EVALUATOR::expandVariablesOutsideExpressions(
     return result;
 }
 
+
 EXPRESSION_EVALUATOR::VAR_CALLBACK
 EXPRESSION_EVALUATOR::createCombinedCallback( const std::unordered_map<wxString, double>*   aTempNumericVars,
                                               const std::unordered_map<wxString, wxString>* aTempStringVars ) const
@@ -1831,6 +1866,7 @@ EXPRESSION_EVALUATOR::createCombinedCallback( const std::unordered_map<wxString,
             };
 }
 
+
 std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithParser( const std::string& aInput,
                                                                        VAR_CALLBACK   aVariableCallback )
 {
@@ -1864,6 +1900,7 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithParser( const std
         return { aInput, true };
     }
 }
+
 
 std::pair<std::string, bool>
 EXPRESSION_EVALUATOR::evaluateWithPartialErrorRecovery( const std::string& aInput, VAR_CALLBACK aVariableCallback )
@@ -1960,6 +1997,7 @@ EXPRESSION_EVALUATOR::evaluateWithPartialErrorRecovery( const std::string& aInpu
 
     return { std::move( result ), hadAnyErrors };
 }
+
 
 std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const std::string& aInput,
                                                                            VAR_CALLBACK aVariableCallback )
@@ -2068,13 +2106,16 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
     }
 }
 
+
 NUMERIC_EVALUATOR_COMPAT::NUMERIC_EVALUATOR_COMPAT( EDA_UNITS aUnits ) :
         m_evaluator( aUnits ),
         m_lastValid( false )
 {
 }
 
+
 NUMERIC_EVALUATOR_COMPAT::~NUMERIC_EVALUATOR_COMPAT() = default;
+
 
 void NUMERIC_EVALUATOR_COMPAT::Clear()
 {
@@ -2084,25 +2125,30 @@ void NUMERIC_EVALUATOR_COMPAT::Clear()
     m_evaluator.ClearErrors();
 }
 
+
 void NUMERIC_EVALUATOR_COMPAT::SetDefaultUnits( EDA_UNITS aUnits )
 {
     m_evaluator.SetDefaultUnits( aUnits );
 }
+
 
 void NUMERIC_EVALUATOR_COMPAT::LocaleChanged()
 {
     // No-op: EXPRESSION_EVALUATOR handles locale properly internally
 }
 
+
 bool NUMERIC_EVALUATOR_COMPAT::IsValid() const
 {
     return m_lastValid;
 }
 
+
 wxString NUMERIC_EVALUATOR_COMPAT::Result() const
 {
     return m_lastResult;
 }
+
 
 bool NUMERIC_EVALUATOR_COMPAT::Process( const wxString& aString )
 {
@@ -2194,15 +2240,18 @@ bool NUMERIC_EVALUATOR_COMPAT::Process( const wxString& aString )
     return true;
 }
 
+
 wxString NUMERIC_EVALUATOR_COMPAT::OriginalText() const
 {
     return m_lastInput;
 }
 
+
 void NUMERIC_EVALUATOR_COMPAT::SetVar( const wxString& aString, double aValue )
 {
     m_evaluator.SetVariable( aString, aValue );
 }
+
 
 double NUMERIC_EVALUATOR_COMPAT::GetVar( const wxString& aString )
 {
@@ -2220,10 +2269,12 @@ double NUMERIC_EVALUATOR_COMPAT::GetVar( const wxString& aString )
     return result;
 }
 
+
 void NUMERIC_EVALUATOR_COMPAT::RemoveVar( const wxString& aString )
 {
     m_evaluator.RemoveVariable( aString );
 }
+
 
 void NUMERIC_EVALUATOR_COMPAT::ClearVar()
 {
