@@ -777,6 +777,18 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
 }
 
 
+bool ROUTER::areWeLengthTuning() const
+{
+    if( m_state != ROUTE_TRACK )
+        return false;
+
+    if( m_mode == PNS_MODE_TUNE_DIFF_PAIR_SKEW || m_mode == PNS_MODE_TUNE_DIFF_PAIR || m_mode == PNS_MODE_TUNE_SINGLE )
+        return true;
+
+    return false;
+}
+
+
 void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging )
 {
     NODE::ITEM_VECTOR removed, added;
@@ -789,8 +801,7 @@ void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging )
     // by design can never generate clearance violations. Since markViolations() calls multiple
     // collision/clearance queries, it can be extremely expensive with certain custom DRC rules
     // (rule area/courtyard-based, see issue #24052 for examples)
-    if( m_mode == PNS_MODE_ROUTE_SINGLE ||
-        m_mode == PNS_MODE_ROUTE_DIFF_PAIR )
+    if( !areWeLengthTuning() )
     {
         markViolations( aNode, aCurrent, removed );
     }
