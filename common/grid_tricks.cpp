@@ -450,6 +450,7 @@ void GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
         wxTheClipboard->Close();
     }
 
+    appendPopupMenuItems( menu );
     m_grid->PopupMenu( &menu );
 }
 

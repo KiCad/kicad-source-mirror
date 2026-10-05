@@ -145,6 +145,79 @@ void FIELDS_TABLE_GRID_TRICKS::showPopupMenu( wxMenu& aMenu, wxGridEvent& aEvent
 }
 
 
+void FIELDS_TABLE_GRID_TRICKS::appendPopupMenuItems( wxMenu& aMenu )
+{
+    if( m_dialog->m_variantListBox->GetCount() < 2 )
+        return;
+
+    // Snapshot the selection before showing the menu, which can change the grid selection.
+    std::vector<wxGridCellCoords> cells;
+    bool                          hasSelection = m_grid->IsSelection();
+
+    if( m_grid->IsEditable() )
+    {
+        for( int row = 0; row < m_grid->GetNumberRows(); ++row )
+        {
+            for( int col = 0; col < m_grid->GetNumberCols(); ++col )
+            {
+                bool selected = hasSelection ? m_grid->IsInSelection( row, col )
+                                             : row == m_grid->GetGridCursorRow() && col == m_grid->GetGridCursorCol();
+
+                if( selected && m_grid->IsColShown( col ) && m_dataModel->CanCopyCellFromVariant( row, col ) )
+                {
+                    cells.emplace_back( row, col );
+                }
+            }
+        }
+    }
+
+    wxMenu* variantsMenu = new wxMenu;
+
+    for( unsigned int i = 0; i < m_dialog->m_variantListBox->GetCount(); ++i )
+    {
+        wxString name = m_dialog->m_variantListBox->GetString( i );
+        wxString variant = name == GetDefaultVariantName() ? wxString() : name;
+        wxString label = name;
+        label.Replace( wxS( "&" ), wxS( "&&" ) );
+
+        wxMenuItem* item = variantsMenu->Append( wxID_ANY, label );
+        item->Enable( !cells.empty() && variant != m_dataModel->GetCurrentVariant() );
+
+        variantsMenu->Bind(
+                wxEVT_COMMAND_MENU_SELECTED,
+                [this, variant, cells]( wxCommandEvent& )
+                {
+                    copyFromVariant( variant, cells );
+                },
+                item->GetId() );
+    }
+
+    aMenu.AppendSeparator();
+    aMenu.AppendSubMenu( variantsMenu, _( "Copy from Variant" ) )->Enable( !cells.empty() );
+}
+
+
+void FIELDS_TABLE_GRID_TRICKS::copyFromVariant( const wxString& aVariant, const std::vector<wxGridCellCoords>& aCells )
+{
+    if( !m_grid->CommitPendingChanges( false ) || aCells.empty() )
+        return;
+
+    for( const wxGridCellCoords& cell : aCells )
+        m_dataModel->CopyCellFromVariant( cell.GetRow(), cell.GetCol(), aVariant );
+
+    if( m_dataModel->IsEdited() )
+        m_dialog->OnModify();
+    else
+        m_dialog->ClearModify();
+
+    // One change event records the entire copy as a single dialog undo step.
+    wxGridEvent event( m_grid->GetId(), wxEVT_GRID_CELL_CHANGED, m_grid, aCells.front().GetRow(),
+                       aCells.front().GetCol() );
+    m_grid->GetEventHandler()->ProcessEvent( event );
+    m_grid->ForceRefresh();
+}
+
+
 void FIELDS_TABLE_GRID_TRICKS::doPopupSelection( wxCommandEvent& aEvent )
 {
     int row = m_grid->GetGridCursorRow();

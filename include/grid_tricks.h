@@ -107,6 +107,7 @@ protected:
 
     virtual bool handleDoubleClick( wxGridEvent& aEvent );
     virtual void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent );
+    virtual void appendPopupMenuItems( wxMenu& aMenu ) {}
     virtual void doPopupSelection( wxCommandEvent& event );
 
     bool isTextEntry( int aRow, int aCol );
