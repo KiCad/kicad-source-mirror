@@ -84,6 +84,8 @@ public:
     const SCH_REFERENCE_LIST& GetReferenceList() const { return m_symbolsList; }
 
 private:
+    void setCellValues( int aRow, int aCol, const std::vector<wxString>& aValues ) override;
+
     bool fieldSupportsVariants( const wxString& aFieldName ) const override;
 
     bool unitMatch( const SCH_REFERENCE& lhItem, const SCH_REFERENCE& rhItem ) override;

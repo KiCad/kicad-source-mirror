@@ -1169,6 +1169,15 @@ protected:
         field.m_variants[fieldVariant( aFieldName, m_currentVariant )].m_value = aValue;
     }
 
+    /// Write one value per item represented by the cell. Models may propagate shared storage.
+    virtual void setCellValues( int aRow, int aCol, const std::vector<wxString>& aValues )
+    {
+        std::span<const ITEM_TYPE> items = m_rows[aRow].GetCellItems();
+
+        for( size_t i = 0; i < items.size(); ++i )
+            setStoredFieldValue( items[i], m_cols[aCol].m_fieldName, aValues[i] );
+    }
+
     /**
      * Makes sure a field is at least marked present-but-empty without changing its value
      * if it has one already

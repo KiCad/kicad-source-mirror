@@ -166,48 +166,7 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::SetValue( int aRow, int aCol, const w
     if( aValue == INDETERMINATE_STATE )
         return;
 
-    const SYMBOL_FIELDS_TABLE_DATA_MODEL_ROW& row = m_rows[aRow];
-    const wxString&                           fieldName = m_cols[aCol].m_fieldName;
-
-    std::set<const SCH_SYMBOL*> editedSymbols;
-
-    for( const SCH_REFERENCE& ref : row.m_items )
-        editedSymbols.insert( ref.GetSymbol() );
-
-    // Field presence is on the symbol object and applies to all instances.
-    // Before editing one path, ensure every instance for that symbol has this field
-    // marked present at least.
-    for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
-    {
-        const SCH_REFERENCE& ref = m_symbolsList[ii];
-
-        if( !editedSymbols.contains( ref.GetSymbol() ) )
-            continue;
-
-        wxString unused;
-
-        if( !getStoredFieldValue( ref, fieldName, unused ) )
-            ensureStoredFieldPresent( ref, fieldName );
-    }
-
-    for( const SCH_REFERENCE& ref : row.m_items )
-        setStoredFieldValue( ref, fieldName, aValue );
-
-    // ApplyData walks every path a symbol is reachable through, so an edit to storage those
-    // paths have in common must also reach the ones the current scope and filter hide
-    if( storageIsSharedAcrossPaths( fieldName ) )
-    {
-        for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
-        {
-            const SCH_REFERENCE& ref = m_symbolsList[ii];
-
-            if( !editedSymbols.contains( ref.GetSymbol() ) )
-                continue;
-
-            setStoredFieldValue( ref, fieldName, aValue );
-        }
-    }
-
+    setCellValues( aRow, aCol, std::vector<wxString>( m_rows[aRow].GetCellItems().size(), aValue ) );
     m_edited = true;
 }
 
@@ -292,6 +251,52 @@ void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::RevertRow( int aRow )
     }
 
     FIELDS_TABLE_DATA_MODEL<SCH_REFERENCE>::RevertRow( aRow );
+}
+
+
+void SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::setCellValues( int aRow, int aCol, const std::vector<wxString>& aValues )
+{
+    std::span<const SCH_REFERENCE> items = m_rows[aRow].GetCellItems();
+    const wxString&                fieldName = m_cols[aCol].m_fieldName;
+
+    std::map<const SCH_SYMBOL*, wxString> editedSymbols;
+
+    for( size_t i = 0; i < items.size(); ++i )
+        editedSymbols[items[i].GetSymbol()] = aValues[i];
+
+    // Field presence is on the symbol object and applies to all instances.
+    // Before editing one path, ensure every instance for that symbol has this field
+    // marked present at least.
+    for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
+    {
+        const SCH_REFERENCE& ref = m_symbolsList[ii];
+
+        if( !editedSymbols.contains( ref.GetSymbol() ) )
+            continue;
+
+        wxString unused;
+
+        if( !getStoredFieldValue( ref, fieldName, unused ) )
+            ensureStoredFieldPresent( ref, fieldName );
+    }
+
+    for( size_t i = 0; i < items.size(); ++i )
+        setStoredFieldValue( items[i], fieldName, aValues[i] );
+
+    // ApplyData walks every path a symbol is reachable through, so an edit to storage those
+    // paths have in common must also reach the ones the current scope and filter hide
+    if( storageIsSharedAcrossPaths( fieldName ) )
+    {
+        for( unsigned ii = 0; ii < m_symbolsList.GetCount(); ++ii )
+        {
+            const SCH_REFERENCE& ref = m_symbolsList[ii];
+
+            auto it = editedSymbols.find( ref.GetSymbol() );
+
+            if( it != editedSymbols.end() )
+                setStoredFieldValue( ref, fieldName, it->second );
+        }
+    }
 }
 
 
