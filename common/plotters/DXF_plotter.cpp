@@ -1969,7 +1969,8 @@ void DXF_PLOTTER::Text( const VECTOR2I&        aPos,
     {
         TEXT_ATTRIBUTES attrs;
         attrs.m_Halign = aH_justify;
-        attrs.m_Valign =aV_justify;
+        attrs.m_Valign = aV_justify;
+        attrs.m_Size = aSize;
         attrs.m_StrokeWidth = aWidth;
         attrs.m_Angle = aOrient;
         attrs.m_Italic = aItalic;
