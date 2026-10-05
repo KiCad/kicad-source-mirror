@@ -1416,7 +1416,7 @@ void DXF_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
 void DXF_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, int width )
 {
     wxASSERT( m_outputFile );
-    double   radius = userToDeviceSize( diameter / 2 );
+    double   radius = userToDeviceSize( diameter / 2.0 );
     VECTOR2D centre_dev = userToDeviceCoordinates( centre );
 
     wxString cLayerName = GetCurrentLayerName( DXF_LAYER_OUTPUT_MODE::Current_Layer_Name );
