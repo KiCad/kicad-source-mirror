@@ -371,40 +371,7 @@ int COMMON_TOOLS::doZoomFit( ZOOM_FIT_TYPE_T aFitType )
 
 int COMMON_TOOLS::ZoomFitBox( const BOX2I& aBox, std::optional<double> aMarginScale )
 {
-    KIGFX::VIEW*        view   = getView();
-    EDA_DRAW_PANEL_GAL* canvas = m_frame->GetCanvas();
-    BOX2I               bBox   = aBox;
-
-    view->SetScale( 1.0 );  // The best scale will be determined later, but this initial
-                            // value ensures all view parameters are up to date (especially
-                            // at init time)
-    VECTOR2D screenSize = view->ToWorld( ToVECTOR2I( canvas->GetClientSize() ), false );
-
-    // A box with no extent (an empty screen or a lone point) has nothing to fit
-    if( bBox.GetWidth() == 0 && bBox.GetHeight() == 0 )
-        bBox = canvas->GetDefaultViewBBox();
-
-    VECTOR2D vsize = bBox.GetSize();
-    double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
-                                                fabs( vsize.y / screenSize.y ) );
-
-    // if the scale isn't finite (most likely due to an empty canvas)
-    // simply just make sure we are centered and quit out of trying to zoom to fit
-    if( !std::isfinite( scale ) )
-    {
-        view->SetCenter( VECTOR2D( 0, 0 ) );
-        canvas->Refresh();
-        return 0;
-    }
-
-    // Reserve enough margin to limit the amount of the view that might be obscured behind the
-    // infobar.
-    double margin_scale_factor = aMarginScale.value_or( canvas->GetClientSize().y < 768 ? 1.10 : 1.04 );
-
-    view->SetScale( scale / margin_scale_factor );
-    view->SetCenter( bBox.Centre() );
-    canvas->Refresh();
-
+    m_frame->GetCanvas()->ZoomToFit( aBox, aMarginScale );
     return 0;
 }
 

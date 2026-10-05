@@ -506,10 +506,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     GetToolManager()->PostAction( ACTIONS::zoomFitScreen );
 
-    // This is used temporarily to fix a client size issue on GTK that causes zoom to fit
-    // to calculate the wrong zoom size.  See PCB_EDIT_FRAME::onSize().
-    Bind( wxEVT_SIZE, &PCB_EDIT_FRAME::onSize, this );
-
     Bind( wxEVT_IDLE,
           [this]( wxIdleEvent& aEvent )
           {
@@ -2897,21 +2893,6 @@ bool PCB_EDIT_FRAME::PropertiesShown()
 bool PCB_EDIT_FRAME::NetInspectorShown()
 {
     return m_auimgr.GetPane( NetInspectorPanelName() ).IsShown();
-}
-
-
-void PCB_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
-{
-    if( IsShownOnScreen() )
-    {
-        // We only need this until the frame is done resizing and the final client size is
-        // established.
-        Unbind( wxEVT_SIZE, &PCB_EDIT_FRAME::onSize, this );
-        GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
-    }
-
-    // Skip() is called in the base class.
-    EDA_DRAW_FRAME::OnSize( aEvent );
 }
 
 

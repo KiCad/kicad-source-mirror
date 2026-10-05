@@ -442,10 +442,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_netNavigator->Bind( wxEVT_TREE_SEL_CHANGED, &SCH_EDIT_FRAME::onNetNavigatorSelection, this );
     m_netNavigator->Bind( wxEVT_SIZE, &SCH_EDIT_FRAME::onResizeNetNavigator, this );
 
-    // This is used temporarily to fix a client size issue on GTK that causes zoom to fit
-    // to calculate the wrong zoom size.  See SCH_EDIT_FRAME::onSize().
-    Bind( wxEVT_SIZE, &SCH_EDIT_FRAME::onSize, this );
-
     setupUnits( eeconfig() );
 
     // Net list generator
@@ -2387,23 +2383,6 @@ SELECTION& SCH_EDIT_FRAME::GetCurrentSelection()
 {
     return m_toolManager->GetTool<SCH_SELECTION_TOOL>()->GetSelection();
 }
-
-void SCH_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
-{
-    // doCloseWindow() destroys the tool manager and then updates the AUI layout, which can
-    // dispatch a deferred size event back to this still-bound handler.
-    if( IsShown() && GetToolManager() )
-    {
-        // We only need this until the frame is done resizing and the final client size is
-        // established.
-        Unbind( wxEVT_SIZE, &SCH_EDIT_FRAME::onSize, this );
-        GetToolManager()->RunAction( ACTIONS::zoomFitScreen );
-    }
-
-    // Skip() is called in the base class.
-    EDA_DRAW_FRAME::OnSize( aEvent );
-}
-
 
 bool SCH_EDIT_FRAME::SaveSymbolToSchematic( const LIB_SYMBOL& aSymbol,
                                             const KIID& aSchematicSymbolUUID )

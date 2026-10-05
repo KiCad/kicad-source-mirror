@@ -29,8 +29,10 @@
 #include <wx/grid.h> // needed for MSVC to see wxScrolledCanvas indirectly exported
 #include <math/box2.h>
 #include <math/vector2d.h>
+#include <view/automatic_fit.h>
 #include <widgets/msgpanel.h>
 #include <memory>
+#include <optional>
 #include <mutex>
 #include <chrono>
 
@@ -276,6 +278,15 @@ public:
     virtual BOX2I GetDefaultViewBBox() const { return BOX2I(); }
 
     /**
+     * Scale and centre the view on @a aBox, and fit it again whenever the canvas changes size
+     * until something else zooms or pans.
+     *
+     * @param aMarginScale is how much larger than the box the view is. By default a little
+     *                     more on a short canvas, where the infobar covers a larger share.
+     */
+    void ZoomToFit( const BOX2I& aBox, std::optional<double> aMarginScale = std::nullopt );
+
+    /**
      * Used to forward events to the canvas from popups, etc.
      */
     void OnEvent( wxEvent& aEvent );
@@ -392,6 +403,9 @@ protected:
     /// Flag to indicate that focus should be regained on the next mouse event. It is a workaround
     /// for cases when the panel loses keyboard focus, so it does not react to hotkeys anymore.
     bool                     m_lostFocus;
+
+    /// What the last ZoomToFit() left, refitted on a resize until the view is zoomed or panned
+    KIGFX::AUTOMATIC_FIT     m_automaticFit;
 
     /// Set after an OpenGL recovery attempt to prevent infinite retry loops
     bool                     m_glRecoveryAttempted;
