@@ -23,6 +23,7 @@
 #ifndef CACHED_CONTAINER_H_
 #define CACHED_CONTAINER_H_
 
+#include <gal/gal.h>
 #include <gal/opengl/vertex_container.h>
 #include <map>
 #include <set>
@@ -39,7 +40,7 @@ class SHADER;
  * enables fast reuse of that data.
  */
 
-class CACHED_CONTAINER : public VERTEX_CONTAINER
+class GAL_API CACHED_CONTAINER : public VERTEX_CONTAINER
 {
 public:
     CACHED_CONTAINER( unsigned int aSize = DEFAULT_SIZE );

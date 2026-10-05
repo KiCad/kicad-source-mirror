@@ -28,6 +28,7 @@
 #ifndef VERTEX_CONTAINER_H_
 #define VERTEX_CONTAINER_H_
 
+#include <gal/gal.h>
 #include <gal/opengl/vertex_common.h>
 
 namespace KIGFX
@@ -35,7 +36,7 @@ namespace KIGFX
 class VERTEX_ITEM;
 class SHADER;
 
-class VERTEX_CONTAINER
+class GAL_API VERTEX_CONTAINER
 {
 public:
     /**

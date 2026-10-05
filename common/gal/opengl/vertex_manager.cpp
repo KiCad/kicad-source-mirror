@@ -60,6 +60,18 @@ VERTEX_MANAGER::VERTEX_MANAGER( bool aCached ) :
 }
 
 
+VERTEX_MANAGER::VERTEX_MANAGER( std::shared_ptr<VERTEX_CONTAINER> aContainer ) :
+        m_container( std::move( aContainer ) ),
+        m_noTransform( true ),
+        m_transform( 1.0f ),
+        m_reserved( nullptr ),
+        m_reservedSpace( 0 )
+{
+    for( unsigned int i = 0; i < SHADER_STRIDE; ++i )
+        m_shader[i] = 0.0f;
+}
+
+
 void VERTEX_MANAGER::Abandon()
 {
     m_container->Abandon();

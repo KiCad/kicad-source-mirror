@@ -30,6 +30,7 @@
 #define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/glm.hpp>
+#include <gal/gal.h>
 #include <gal/opengl/vertex_common.h>
 #include <gal/color4d.h>
 #include <stack>
@@ -46,7 +47,7 @@ class GPU_MANAGER;
  * Class to control vertex container and GPU with possibility of emulating old-style OpenGL
  * 1.0 state machine using modern OpenGL methods.
  */
-class VERTEX_MANAGER
+class GAL_API VERTEX_MANAGER
 {
 public:
     /**
@@ -54,6 +55,12 @@ public:
      *                does not change every frame, it is better to store vertices in GPU memory.
      */
     VERTEX_MANAGER( bool aCached );
+
+    /**
+     * Build a manager around a container made elsewhere and no GPU manager, so it can hold
+     * vertices but not draw them. Lets the containers be tested without an OpenGL context.
+     */
+    explicit VERTEX_MANAGER( std::shared_ptr<VERTEX_CONTAINER> aContainer );
 
     /**
      * Give up ownership of the container's GL objects without deleting them.

@@ -157,6 +157,22 @@ VERTEX* CACHED_CONTAINER::Allocate( unsigned int aSize )
 void CACHED_CONTAINER::Delete( VERTEX_ITEM* aItem )
 {
     assert( aItem != nullptr );
+
+    // The item being edited joins m_items only in FinishItem(), which an exception out of
+    // Allocate() skips, so it gives back the chunk reserved for it here
+    if( aItem == m_item )
+    {
+        if( m_chunkSize > 0 )
+            addFreeChunk( m_chunkOffset, m_chunkSize );
+
+        aItem->setSize( 0 );
+        m_items.erase( aItem );
+        m_item = nullptr;
+        m_chunkSize = 0;
+        m_chunkOffset = 0;
+        return;
+    }
+
     assert( m_items.find( aItem ) != m_items.end() || aItem->GetSize() == 0 );
 
     int size = aItem->GetSize();
@@ -207,6 +223,15 @@ void CACHED_CONTAINER::Clear()
         ( *it )->setSize( 0 );
 
     m_items.clear();
+
+    // An item left mid-edit by a failed allocation is not in m_items
+    if( m_item )
+    {
+        m_item->setSize( 0 );
+        m_item = nullptr;
+        m_chunkSize = 0;
+        m_chunkOffset = 0;
+    }
 
     // Now there is only free space left
     m_freeChunks.clear();

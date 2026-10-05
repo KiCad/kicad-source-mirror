@@ -28,6 +28,7 @@
 #ifndef VERTEX_ITEM_H_
 #define VERTEX_ITEM_H_
 
+#include <gal/gal.h>
 #include <gal/opengl/vertex_common.h>
 #include <gal/color4d.h>
 #include <cstddef>
@@ -36,7 +37,7 @@ namespace KIGFX
 {
 class VERTEX_MANAGER;
 
-class VERTEX_ITEM
+class GAL_API VERTEX_ITEM
 {
 public:
     friend class CACHED_CONTAINER;
