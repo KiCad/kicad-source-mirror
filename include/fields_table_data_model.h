@@ -859,7 +859,13 @@ protected:
      *
      * Returns true if the attribute is forced on by a sheet
      */
-    virtual bool attributeForcedOnBySheet( const ITEM_TYPE& aItem, const wxString& aAttributeName ) const
+    bool attributeForcedOnBySheet( const ITEM_TYPE& aItem, const wxString& aAttributeName ) const
+    {
+        return attributeForcedOnBySheet( aItem, aAttributeName, m_currentVariant );
+    }
+
+    virtual bool attributeForcedOnBySheet( const ITEM_TYPE& aItem, const wxString& aAttributeName,
+                                           const wxString& aVariantName ) const
     {
         return false;
     }
@@ -1272,10 +1278,15 @@ protected:
 
     FIELD_STORE_VALUE& storedField( const ITEM_TYPE& aItem, const wxString& aFieldName )
     {
+        return storedField( aItem, aFieldName, m_currentVariant );
+    }
+
+    FIELD_STORE_VALUE& storedField( const ITEM_TYPE& aItem, const wxString& aFieldName, const wxString& aVariantName )
+    {
         auto& fields = m_dataStore[getDataStoreKey( aItem )];
         auto [fieldIt, newField] = fields.try_emplace( aFieldName );
         FIELD_STORE_VALUE& field = fieldIt->second;
-        wxString           variant = fieldVariant( aFieldName, m_currentVariant );
+        wxString           variant = fieldVariant( aFieldName, aVariantName );
         auto [valueIt, newVariant] = field.m_variants.try_emplace( variant );
 
         if( newVariant )

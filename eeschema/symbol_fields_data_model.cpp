@@ -424,18 +424,19 @@ wxString SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::getAttributeValue( const SCH_REFE
 
 
 bool SYMBOL_FIELDS_EDITOR_GRID_DATA_MODEL::attributeForcedOnBySheet( const SCH_REFERENCE& aRef,
-                                                                     const wxString&      aAttributeName ) const
+                                                                     const wxString&      aAttributeName,
+                                                                     const wxString&      aVariantName ) const
 {
     const SCH_SHEET_PATH& path = aRef.GetSheetPath();
 
     if( aAttributeName == wxS( "${DNP}" ) )
-        return path.GetDNP( m_currentVariant );
+        return path.GetDNP( aVariantName );
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOARD}" ) )
-        return path.GetExcludedFromBoard( m_currentVariant );
+        return path.GetExcludedFromBoard( aVariantName );
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_BOM}" ) )
-        return path.GetExcludedFromBOM( m_currentVariant );
+        return path.GetExcludedFromBOM( aVariantName );
     else if( aAttributeName == wxS( "${EXCLUDE_FROM_SIM}" ) )
-        return path.GetExcludedFromSim( m_currentVariant );
+        return path.GetExcludedFromSim( aVariantName );
 
     return false;
 }
