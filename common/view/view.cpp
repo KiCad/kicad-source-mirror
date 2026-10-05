@@ -494,7 +494,7 @@ void VIEW::SetRequired( int aLayerId, int aRequiredId, bool aRequired )
     if( aRequired )
         m_layers[aLayerId].requiredLayers.insert( aRequiredId );
     else
-        m_layers[aLayerId].requiredLayers.erase( aRequired );
+        m_layers[aLayerId].requiredLayers.erase( aRequiredId );
 }
 
 
