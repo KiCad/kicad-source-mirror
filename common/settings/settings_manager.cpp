@@ -1306,10 +1306,11 @@ bool SETTINGS_MANAGER::SaveProject( const wxString& aFullPath, PROJECT* aProject
     PROJECT_FILE* project     = m_project_files.at( path );
     wxString      projectPath = aProject->GetProjectPath();
 
-    project->SaveToFile( projectPath );
+    // Local settings are best efforts; don't report errors
     aProject->GetLocalSettings().SaveToFile( projectPath );
 
-    return true;
+    // Project file is "real" data; report all save errors
+    return project->SaveToFile( projectPath );
 }
 
 
