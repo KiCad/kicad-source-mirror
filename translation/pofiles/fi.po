@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-10-04 22:51+0000\n"
-"Last-Translator: MHeis <manuheiskanen22@gmail.com>\n"
+"PO-Revision-Date: 2026-10-06 01:51+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v10/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -31549,9 +31549,8 @@ msgid "Browse for templates in another directory"
 msgstr "tämän mallipohjan hakemiston sisällä."
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:79
-#, fuzzy
 msgid "Stop showing templates from the browsed directory"
-msgstr "Lopeta pohjien näyttäminen selatusta hakemistosta"
+msgstr "Lopeta mallien näyttäminen selatusta kansiosta"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:125
 msgid "Go Back"
