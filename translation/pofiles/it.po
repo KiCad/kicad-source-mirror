@@ -118,7 +118,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-05 09:41+0000\n"
+"PO-Revision-Date: 2026-10-05 22:54+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -22284,11 +22284,8 @@ msgid "Power pins are similar"
 msgstr "I pin di potenza sono simili"
 
 #: eeschema/erc/erc_item.cpp:123
-#, fuzzy
 msgid "Power pin and label are similar"
-msgstr ""
-"I pin di potenza e le etichette sono simili (differenze solo nei caratteri "
-"maiuscoli/minuscoli)"
+msgstr "I pin di potenza e le etichette sono simili"
 
 #: eeschema/erc/erc_item.cpp:127
 msgid "Global label only appears once in the schematic"
@@ -22836,6 +22833,7 @@ msgstr "Importa file grafico vettoriale"
 #, c-format
 msgid "Ambiguous imported net name '%s'; board net rename omitted."
 msgstr ""
+"Nome di net importata ambiguo '%s'; rinomina della net sulla scheda omessa."
 
 #: eeschema/import_net_map.cpp:81
 #, c-format
@@ -22843,6 +22841,8 @@ msgid ""
 "Imported net name '%s' is claimed by more than one source net; board net "
 "rename omitted."
 msgstr ""
+"Il nome di net importata '%s' è dichiarato da più di una net sorgente; "
+"rinomina della net sulla scheda omessa."
 
 #: eeschema/lib_symbol.cpp:796 eeschema/sch_symbol.cpp:1381
 #, c-format
@@ -23250,18 +23250,18 @@ msgid "Failed to create file '%s'.\n"
 msgstr "Fallita creazione file '%s'.\n"
 
 #: eeschema/netlist_exporters/netlist_exporter_base.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to export schematic: %s"
-msgstr "Fallito il salvataggio dello schema \"%s\""
+msgstr "Fallita l'esportazione dello schema: %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_base.cpp:98
 msgid "Connectivity changed while preparing the netlist."
-msgstr ""
+msgstr "Connettività cambiata durante la preparazione della netlist."
 
 #: eeschema/netlist_exporters/netlist_exporter_base.cpp:103
 #: eeschema/netlist_exporters/netlist_exporter_base.cpp:120
 msgid "Connectivity contains an unknown sheet instance."
-msgstr ""
+msgstr "La connettività contiene un'istanza di foglio sconosciuta."
 
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:125
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:145
@@ -24010,9 +24010,9 @@ msgid "Show Field Name"
 msgstr "Mostra nome campo"
 
 #: eeschema/sch_footprint_field_reconciler.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Re-linked %d imported footprint assignment(s) to library '%s'."
-msgstr "Cambia assegnamento impronta %s da \"%s\" a \"%s\"."
+msgstr "Ricollegate %d assegnazioni di impronte importate alla libreria '%s'."
 
 #: eeschema/sch_group.cpp:422 pcbnew/pcb_group.cpp:495
 #, c-format
@@ -24148,10 +24148,12 @@ msgid "Embedded file '%s' not found in storage."
 msgstr "File incorporato '%s' non trovato nello storage."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5010
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not write a temporary file while extracting the embedded image '%s'."
-msgstr "Impossibile creare cartella temporanea risultati."
+msgstr ""
+"Impossibile scrivere un file temporaneo durante l'estrazione dell'immagine "
+"incorporata '%s'."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5032
 #, c-format
