@@ -162,6 +162,11 @@ bool PNG_PLOTTER::SaveFile( const wxString& aPath )
 
 void PNG_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 {
+    if( aWidth == DO_NOT_SET_LINE_WIDTH )
+        return;
+    else if( aWidth == USE_DEFAULT_LINE_WIDTH )
+        aWidth = m_renderSettings->GetDefaultPenWidth();
+
     if( aWidth == m_currentPenWidth )
         return;
 
