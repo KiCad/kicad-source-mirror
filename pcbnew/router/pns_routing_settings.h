@@ -164,6 +164,9 @@ public:
     double DiffPairGapCouplingRecognitionThreshold() const { return m_diffPairGapCouplingRecognitionThreshold; }
     double DiffPairWidthToMiterRatio() const { return m_diffPairWidthToMiterRatio; }
 
+    void SetKeepDPCouplingWhenDragging( bool aSet ) { m_keepDPCouplingWhenDragging = aSet; }
+    bool GetKeepDPCouplingWhenDragging() const { return m_keepDPCouplingWhenDragging; }
+
 private:
     bool m_shoveVias;
     bool m_startDiagonal;
@@ -181,6 +184,7 @@ private:
     bool m_autoPosture;
     bool m_fixAllSegments;
     bool m_restrictAngles;
+    bool m_keepDPCouplingWhenDragging;
 
     DIRECTION_45::CORNER_MODE m_cornerMode;
 
