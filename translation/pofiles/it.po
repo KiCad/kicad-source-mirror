@@ -118,7 +118,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-04 22:19+0000\n"
+"PO-Revision-Date: 2026-10-05 09:41+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -17747,9 +17747,10 @@ msgstr "Spessore:"
 #: eeschema/dialogs/dialog_line_properties.cpp:152
 #: eeschema/dialogs/dialog_shape_properties.cpp:156
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "Set line ending sizes to 0 for automatic (%g× line width)."
-msgstr "Dimensioni forma pari a 0 = auto (%g × larghezza linea)."
+msgstr ""
+"Imposta dimensioni fine linea a 0 per automatico (%g × larghezza linea)."
 
 #: eeschema/dialogs/dialog_line_properties.cpp:418
 msgid "Edit Line"
@@ -17825,19 +17826,16 @@ msgid "Alternate Pin Name"
 msgstr "Nome pin alternativo"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:187
-#, fuzzy
 msgid "Alternate Pin Function Definitions"
 msgstr "Definizioni funzioni pin alternative"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:200
-#, fuzzy
 msgid "Electrical Type "
-msgstr "Tipo elettrico"
+msgstr "Tipo elettrico "
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:201
-#, fuzzy
 msgid "Graphic Style "
-msgstr "Stile grafico"
+msgstr "Stile grafico "
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:384
 msgid "Exit sync pins mode"
@@ -18786,9 +18784,8 @@ msgid "%s Properties"
 msgstr "Proprietà %s"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:129
-#, fuzzy
 msgid "Sheet pin name can not be empty."
-msgstr "Il nome pin non può essere vuoto."
+msgstr "Il nome pin foglio non può essere vuoto."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:162
 msgid "Edit Sheet Pin Properties"
@@ -19763,9 +19760,8 @@ msgstr ""
 "file di posizionamento esportati utilizzati per le macchine pick and place"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:232
-#, fuzzy
 msgid "Passthrough:"
-msgstr "Passante"
+msgstr "Passante:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:236
 msgid "Block"
@@ -20683,24 +20679,23 @@ msgid "Never show Rescue Symbols tool"
 msgstr "Mai mostrare strumento recupera simboli"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:367
-#, fuzzy
 msgid "Failed to query matching footprints."
-msgstr "Evidenzia impronte corrispondenti"
+msgstr "Impossibile interrogare per impronte corrispondenti."
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Matching footprints (%zu+):"
-msgstr "Impronta mancante %s (%s)"
+msgstr "Impronte corrispondenti (%zu+):"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Matching footprints (%zu):"
-msgstr "Impronta mancante %s (%s)"
+msgstr "Impronta corrispondenti (%zu):"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:413
-#, fuzzy, c-format
+#, c-format
 msgid "Loading footprint libraries (%d%%)..."
-msgstr "Caricamento tabella librerie impronte..."
+msgstr "Caricamento librerie impronte (%d%%)..."
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:505
 #: pcbnew/tools/pcb_actions.cpp:910
@@ -20708,14 +20703,12 @@ msgid "Open in Footprint Editor"
 msgstr "Apri nell'editor impronte"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:510
-#, fuzzy
 msgid "Assign to Footprint Field"
-msgstr "Assegna impronta"
+msgstr "Assegna a campo impronta"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:512
-#, fuzzy
 msgid "Copy Footprint Name"
-msgstr "Nome impronta"
+msgstr "Copia nome impronta"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:554
 msgid "Add Footprint Filter"
@@ -20819,14 +20812,12 @@ msgid "Pin symbol size:"
 msgstr "Dimensione simbolo del pin:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:133
-#, fuzzy
 msgid "Show 'Do not populate' markers"
-msgstr "Ignora componenti 'Non popolare'"
+msgstr "Mostra marcatori 'Non popolare'"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:135
-#, fuzzy
 msgid "Draw a cross over symbols marked 'Do not populate'"
-msgstr "Non mostrare componenti marcati 'Non popolare'"
+msgstr "Disegna una croce sopra i simboli marcati 'Non popolare'"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:142
 #: eeschema/erc/erc_item.cpp:37
@@ -21520,14 +21511,14 @@ msgid "Keep White Space"
 msgstr "Mantieni spazi bianchi"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Field name template '%s' already exists as a mandatory field."
-msgstr "Il nome campo '%s' esiste già."
+msgstr "Il modello nome campo '%s' esiste già come campo obbligatorio."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Field name template '%s' already exists."
-msgstr "Il nome campo '%s' esiste già."
+msgstr "Il modello nome campo '%s' esiste già."
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
@@ -21554,14 +21545,17 @@ msgid "Failed to save drawing sheet '%s': %s"
 msgstr "Impossibile salvare il foglio di disegno '%s': %s"
 
 #: eeschema/eeschema_helpers.cpp:163
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' has a malformed root sheet instance path."
-msgstr "Lo schema '%s' è già aperto da '%s' su '%s'."
+msgstr ""
+"Lo schema '%s' presenta un percorso dell'istanza del foglio radice "
+"malformato."
 
 #: eeschema/eeschema_helpers.cpp:189
 #, c-format
 msgid "Schematic '%s' is a hierarchical subsheet; load its root schematic."
 msgstr ""
+"Lo schema '%s' è un sottofoglio gerarchico; caricare il suo schema radice."
 
 #: eeschema/eeschema_helpers.cpp:263 eeschema/files-io.cpp:375
 #: eeschema/picksymbol.cpp:132
@@ -21779,6 +21773,9 @@ msgid ""
 "%zu sheets were written, but only '%s' is reachable: top-level sheets are "
 "recorded in a project file. Use 'kicad-cli import' to create one.\n"
 msgstr ""
+"Sono stati scritti %zu fogli, ma solo '%s' è raggiungibile: i fogli di "
+"livello superiore sono registrati in un file di progetto. Usare 'kicad-cli "
+"import' per crearne uno.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1867
 #: eeschema/eeschema_jobs_handler.cpp:1873
@@ -22041,7 +22038,7 @@ msgstr "Il pin %s è connesso sia a %s che a %s"
 
 #: eeschema/erc/erc.cpp:2321
 msgid "Bus vector and bus group are graphically connected"
-msgstr ""
+msgstr "Il vettore bus e il gruppo bus sono collegati graficamente"
 
 #: eeschema/erc/erc.cpp:2506
 #, c-format
@@ -22243,6 +22240,8 @@ msgstr "Duplica pin con net diverse"
 #: eeschema/erc/erc_item.cpp:67
 msgid "Wired hidden power input pin also connects globally by name"
 msgstr ""
+"Il pin di ingresso potenza cablato e nascosto si collega anch'esso "
+"globalmente tramite nome"
 
 #: eeschema/erc/erc_item.cpp:71 eeschema/erc/erc_item.cpp:75
 msgid "Conflict problem between pins"
@@ -22278,11 +22277,11 @@ msgstr "Etichetta connessa solo a un pin"
 
 #: eeschema/erc/erc_item.cpp:115
 msgid "Labels are similar"
-msgstr ""
+msgstr "Le etichette sono simili"
 
 #: eeschema/erc/erc_item.cpp:119
 msgid "Power pins are similar"
-msgstr ""
+msgstr "I pin di potenza sono simili"
 
 #: eeschema/erc/erc_item.cpp:123
 #, fuzzy
