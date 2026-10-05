@@ -39,7 +39,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
 "PO-Revision-Date: 2026-10-05 09:41+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"Last-Translator: Karl SCHUH <k.schuh@schuh-tv.at>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -8654,7 +8654,6 @@ msgstr "Quadrat"
 #: common/eda_shape.cpp:4792 eeschema/dialogs/dialog_line_properties.cpp:106
 #: eeschema/dialogs/dialog_shape_properties.cpp:108 eeschema/sch_line.cpp:1370
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1099
-#, fuzzy
 msgid "Open Arrow"
 msgstr "Offener Pfeil"
 
@@ -11728,7 +11727,6 @@ msgid "B (Moderate)"
 msgstr "B (Moderat)"
 
 #: common/pth_hole_size.cpp:96
-#, fuzzy
 msgid "C (High density)"
 msgstr "C (Hohe Dichte)"
 
@@ -21207,19 +21205,17 @@ msgid "Compare field visibilities"
 msgstr "Feld-Sichtbarkeiten vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:45
-#, fuzzy
 msgid "Compare field text sizes and styles"
 msgstr "Feldtextgrößen und -stile vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:48
-#, fuzzy
 msgid "Compare field positions"
 msgstr "Feld-Positionen vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:69
 #, fuzzy
 msgid "Compare pin name/number visibilities"
-msgstr "Pinnamen/-nummern-Sichtbarkeiten vergleichen"
+msgstr "Pinnamen-/Nummern-Sichtbarkeiten vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:72
 #, fuzzy
@@ -21232,12 +21228,10 @@ msgid "Compare exclude from board flags"
 msgstr "\"Von Platine ausschließen\"-Attribute vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:98
-#, fuzzy
 msgid "Compare do not populate flags"
 msgstr "\"Nicht bestücken\"-Attribute vergleichen"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:101
-#, fuzzy
 msgid "Compare exlucde from bill of materials flags"
 msgstr "\"Von Stückliste ausschließen\"-Attribute vergleichen"
 
@@ -21562,9 +21556,9 @@ msgstr ""
 "überschrieben wird."
 
 #: eeschema/eeschema_config.cpp:231
-#, c-format
+#, c-format, fuzzy
 msgid "Failed to save drawing sheet '%s': %s"
-msgstr "Fehler beim Speichern des Zeichnungsblattes \"%s\": %s"
+msgstr "Fehler beim Speichern der Seite \"%s\": %s"
 
 #: eeschema/eeschema_helpers.cpp:163
 #, fuzzy, c-format
@@ -22898,7 +22892,6 @@ msgid "Library ID differs."
 msgstr "Bibliothek-ID weicht ab."
 
 #: eeschema/lib_symbol.cpp:2627
-#, fuzzy
 msgid "Symbol parent differs."
 msgstr "Übergeordnetes Symbol weicht ab."
 
@@ -24967,7 +24960,7 @@ msgstr "Fehler beim Herunterladen von Daten aus der HTTP-Bibliothek %s: %s"
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:468
 #, fuzzy, c-format
 msgid "Error retrieving part %s from HTTP library: %s"
-msgstr "Fehler beim Herunterladen von Daten aus der HTTP-Bibliothek %s: %s"
+msgstr "Fehler beim Laden von Teil %s aus der HTTP-Bibliothek: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:540
 #, c-format
@@ -29376,7 +29369,7 @@ msgid ""
 "Could not overwrite the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Konnte die Bibliotheksdatei \"%s\" nicht erstellen.\n"
+"Konnte die Bibliotheksdatei \"%s\" nicht überschreiben.\n"
 "Bitte Schreibberechtigungen kontrollieren und erneut versuchen."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1381
@@ -30441,22 +30434,18 @@ msgid "Switch to the next open symbol tab"
 msgstr "Zum nächsten offenen Symbolreiter wechseln"
 
 #: eeschema/tools/sch_actions.cpp:329
-#, fuzzy
 msgid "Previous Symbol Tab"
 msgstr "Vorheriger Symbolreiter"
 
 #: eeschema/tools/sch_actions.cpp:330
-#, fuzzy
 msgid "Switch to the previous open symbol tab"
 msgstr "Zum vorherigen offenen Symbolreiter wechseln"
 
 #: eeschema/tools/sch_actions.cpp:335
-#, fuzzy
 msgid "Close Symbol Tab"
 msgstr "Symbolreiter schließen"
 
 #: eeschema/tools/sch_actions.cpp:336
-#, fuzzy
 msgid "Close the active symbol tab"
 msgstr "Den aktiven Symbolreiter schließen"
 
@@ -32847,7 +32836,7 @@ msgstr "Wähle eine KiCad Symbolbibliothekdatei (.kicad_sym)."
 #: pcbnew/tools/board_inspection_tool.cpp:2130
 #: pcbnew/tools/footprint_editor_control.cpp:748
 #: pcbnew/tools/footprint_editor_control.cpp:753
-#, c-format, fuzzy
+#, c-format
 msgid "Failed to load %s: %s"
 msgstr "Konnte %s nicht laden: %s"
 
@@ -34044,7 +34033,7 @@ msgstr "Zip-Datei \"%s\" kann nicht geöffnet werden."
 #: gerbview/files.cpp:506
 #, fuzzy, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
-msgstr "Temporäre Datei \"%s\" kann nicht zum Entpacken erstellt werden."
+msgstr "Temporäre Datei zum Entpacken von \"%s\" kann nicht erstellt werden."
 
 #: gerbview/files.cpp:539
 #, c-format
@@ -40509,12 +40498,12 @@ msgid "%s Summary"
 msgstr "%s Zusammenfassung"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "Maximum lead diameter + %smm"
 msgstr "Maximaler Drahtdurchmesser + %smm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:463
-#, fuzzy, c-format
+#, c-format
 msgid "Minimum lead diameter + %smm"
 msgstr "Minimaler Drahtdurchmesser + %smm"
 
@@ -60846,7 +60835,7 @@ msgid "Show Totals"
 msgstr "Details anzeigen"
 
 #: pcbnew/pcb_drill_map.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Drill Map on %s"
 msgstr "Bohrplan auf %s"
 
@@ -64509,7 +64498,7 @@ msgid "Missing netclass name argument to %s."
 msgstr "Fehlendes Lagenname-Argument für %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1783
-#, fuzzy, c-format
+#, c-format
 msgid "Missing component class name argument to %s."
 msgstr "Fehlendes Bauteilklassenname-Argument zu %s."
 
