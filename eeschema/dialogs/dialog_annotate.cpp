@@ -249,9 +249,8 @@ void DIALOG_ANNOTATE::OnAnnotateClick( wxCommandEvent& event )
     bool resetAnnotation = m_rbReset_Annotations->GetValue();
     bool regroupUnits = resetAnnotation && m_checkRegroupUnits->GetValue();
 
-    m_Parent->AnnotateSymbols( &commit, GetScope(), GetSortOrder(), GetAnnotateAlgo(),
-                               m_checkRecursive->GetValue(), GetStartNumber(), resetAnnotation,
-                               regroupUnits, true, reporter, SYMBOL_FILTER_NON_POWER );
+    m_Parent->AnnotateSymbols( &commit, GetScope(), GetSortOrder(), GetAnnotateAlgo(), m_checkRecursive->GetValue(),
+                               GetStartNumber(), resetAnnotation, regroupUnits, true, reporter );
 
     commit.Push( _( "Annotate" ) );
 

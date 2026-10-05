@@ -47,9 +47,6 @@
 bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileName,
                                        unsigned aNetlistOptions, REPORTER* aReporter )
 {
-    // Ensure all power symbols have a valid reference
-    Schematic().Hierarchy().AnnotatePowerSymbols();
-
     if( !ReadyToNetlist( _( "Exporting netlist requires a fully annotated schematic." ) ) )
         return false;
 
@@ -200,19 +197,20 @@ bool SCH_EDIT_FRAME::ReadyToNetlist( const wxString& aAnnotateMessage, bool* aUs
     if( aUserCancelled )
         *aUserCancelled = false;
 
-    // Ensure all power symbols have a valid reference
-    Schematic().Hierarchy().AnnotatePowerSymbols();
-
     // Symbols must be annotated
-    if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {},
+    if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
+                       {},
                        ANNOTATE_ALL, true, SYMBOL_FILTER_NON_POWER ) )
     {
         // Schematic must be annotated: call Annotate dialog and tell the user why.
         ModalAnnotate( aAnnotateMessage );
 
-        if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* ) {},
+        if( CheckAnnotate( []( ERCE_T, const wxString&, SCH_REFERENCE*, SCH_REFERENCE* )
+                           {},
                            ANNOTATE_ALL, true, SYMBOL_FILTER_NON_POWER ) )
+        {
             return false;
+        }
     }
 
     // Test duplicate sheet names:

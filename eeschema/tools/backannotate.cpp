@@ -272,7 +272,7 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
 
     SCH_SHEET_LIST sheets = m_frame->Schematic().Hierarchy();
     sheets.GetSymbols( m_refs, SYMBOL_FILTER_NON_POWER );
-    sheets.GetMultiUnitSymbols( m_multiUnitsRefs, SYMBOL_FILTER_ALL );
+    sheets.GetMultiUnitSymbols( m_multiUnitsRefs, SYMBOL_FILTER_NON_POWER );
 
     getChangeList();
     checkForUnusedSymbols();

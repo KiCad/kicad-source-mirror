@@ -488,7 +488,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
-    sch->Hierarchy().GetSymbols( referenceList, SYMBOL_FILTER_ALL );
+    sch->Hierarchy().GetSymbols( referenceList, SYMBOL_FILTER_NON_POWER );
 
     if( referenceList.GetCount() > 0 )
     {
@@ -973,7 +973,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 
     // Annotation warning check
     SCH_REFERENCE_LIST referenceList;
-    sch->Hierarchy().GetSymbols( referenceList, SYMBOL_FILTER_ALL );
+    sch->Hierarchy().GetSymbols( referenceList, SYMBOL_FILTER_NON_POWER );
 
     if( referenceList.GetCount() > 0 )
     {

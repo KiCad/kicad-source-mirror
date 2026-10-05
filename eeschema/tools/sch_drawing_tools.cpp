@@ -957,23 +957,7 @@ int SCH_DRAWING_TOOLS::ImportSheet( const TOOL_EVENT& aEvent )
                                                   true /* recursive */,
                                                   schSettings.m_AnnotateStartNum,
                                                   true /* aResetAnnotation */,
-                                                  false, false, reporter, SYMBOL_FILTER_NON_POWER );
-                    }
-
-                    if( placingDesignBlock )
-                    {
-                        NULL_REPORTER reporter;
-
-                        if( placeAsGroup )
-                            selectionTool->AddItemToSel( group );
-                        else
-                            selectionTool->AddItemsToSel( &newItems, true );
-
-                        m_frame->AnnotateSymbols( &commit, ANNOTATE_SELECTION,
-                                                  (ANNOTATE_ORDER_T) schSettings.m_AnnotateSortOrder,
-                                                  (ANNOTATE_ALGO_T) schSettings.m_AnnotateMethod, true /* recursive */,
-                                                  schSettings.m_AnnotateStartNum, true /* aResetAnnotation */, false,
-                                                  false, reporter, SYMBOL_FILTER_POWER );
+                                                  false, false, reporter );
                     }
 
                     // Annotation will clear selection, so we need to restore it
@@ -3054,41 +3038,21 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 // The cached hierarchy was built before this sheet was added.
                 m_frame->Schematic().RefreshHierarchy();
 
-                bool annotateNonPowerSymbols = cfg->m_AnnotatePanel.automatic
-                                               && !( ( isDrawSheetCopy || isDrawSheetFromDesignBlock )
-                                                     && cfg->m_DesignBlockChooserPanel.keep_annotations );
-                bool annotatePowerSymbols = isDrawSheetFromDesignBlock;
-
-                if( annotateNonPowerSymbols || annotatePowerSymbols )
+                if( cfg->m_AnnotatePanel.automatic && !( ( isDrawSheetCopy || isDrawSheetFromDesignBlock )
+                                                         && cfg->m_DesignBlockChooserPanel.keep_annotations ) )
                 {
                     // Annotation will remove this from selection, but we add it back later
                     m_selectionTool->AddItemToSel( sheet );
 
                     NULL_REPORTER reporter;
 
-                    if( annotateNonPowerSymbols )
-                    {
-                        m_frame->AnnotateSymbols( &c, ANNOTATE_SELECTION,
-                                                  (ANNOTATE_ORDER_T) schSettings.m_AnnotateSortOrder,
-                                                  (ANNOTATE_ALGO_T) schSettings.m_AnnotateMethod, true, /* recursive */
-                                                  schSettings.m_AnnotateStartNum, true,                 /* reset */
-                                                  false,                                                /* regroup */
-                                                  false,                                                /* repair */
-                                                  reporter, SYMBOL_FILTER_NON_POWER );
-                    }
-
-                    if( annotatePowerSymbols )
-                    {
-                        m_selectionTool->AddItemToSel( sheet );
-
-                        m_frame->AnnotateSymbols( &c, ANNOTATE_SELECTION,
-                                                  (ANNOTATE_ORDER_T) schSettings.m_AnnotateSortOrder,
-                                                  (ANNOTATE_ALGO_T) schSettings.m_AnnotateMethod, true, /* recursive */
-                                                  schSettings.m_AnnotateStartNum, true,                 /* reset */
-                                                  false,                                                /* regroup */
-                                                  false,                                                /* repair */
-                                                  reporter, SYMBOL_FILTER_POWER );
-                    }
+                    m_frame->AnnotateSymbols( &c, ANNOTATE_SELECTION,
+                                              (ANNOTATE_ORDER_T) schSettings.m_AnnotateSortOrder,
+                                              (ANNOTATE_ALGO_T) schSettings.m_AnnotateMethod, true, /* recursive */
+                                              schSettings.m_AnnotateStartNum, true,                 /* reset */
+                                              false,                                                /* regroup */
+                                              false,                                                /* repair */
+                                              reporter );
                 }
 
                 if( isDrawSheetFromDesignBlock && cfg->m_DesignBlockChooserPanel.place_as_group )

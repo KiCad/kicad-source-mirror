@@ -220,7 +220,7 @@ void CollectOtherUnits( const wxString& aRef, int aUnit, const LIB_ID& aLibId, S
                         std::vector<SCH_SYMBOL*>* otherUnits )
 {
     SCH_REFERENCE_LIST symbols;
-    aSheet.GetSymbols( symbols, SYMBOL_FILTER_ALL );
+    aSheet.GetSymbols( symbols, SYMBOL_FILTER_NON_POWER );
 
     for( int i = 0; i < (int) symbols.GetCount(); i++ )
     {

@@ -796,7 +796,7 @@ void SCH_FIELD::OnScintillaCharAdded( SCINTILLA_TRICKS* aScintillaTricks, wxStyl
                 SCH_REFERENCE_LIST refs;
                 SCH_SYMBOL*        refSymbol = nullptr;
 
-                schematic->Hierarchy().GetSymbols( refs, SYMBOL_FILTER_ALL );
+                schematic->Hierarchy().GetSymbols( refs, SYMBOL_FILTER_NON_POWER );
 
                 for( size_t jj = 0; jj < refs.GetCount(); jj++ )
                 {

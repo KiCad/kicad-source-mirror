@@ -37,7 +37,7 @@
 void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 {
     SCH_REFERENCE_LIST references;
-    Schematic().Hierarchy().GetSymbols( references, SYMBOL_FILTER_ALL );
+    Schematic().Hierarchy().GetSymbols( references, SYMBOL_FILTER_NON_POWER );
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
@@ -225,7 +225,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( ANNOTATE_SCOPE_T aAnnotateScope, bool aRe
 void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnnotateScope,
                                       ANNOTATE_ORDER_T aSortOption, ANNOTATE_ALGO_T aAlgoOption, bool aRecursive,
                                       int aStartNumber, bool aResetAnnotation, bool aRegroupUnits,
-                                      bool aRepairTimestamps, REPORTER& aReporter, SYMBOL_FILTER aSymbolFilter )
+                                      bool aRepairTimestamps, REPORTER& aReporter )
 {
     SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
     SCH_SELECTION&      selection = selTool->GetSelection();
@@ -301,23 +301,23 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
         switch( aAnnotateScope )
         {
         case ANNOTATE_ALL:
-            sheets.GetMultiUnitSymbols( lockedSymbols, aSymbolFilter );
+            sheets.GetMultiUnitSymbols( lockedSymbols, SYMBOL_FILTER_NON_POWER );
             break;
 
         case ANNOTATE_CURRENT_SHEET:
-            currentSheet.GetMultiUnitSymbols( lockedSymbols, aSymbolFilter );
+            currentSheet.GetMultiUnitSymbols( lockedSymbols, SYMBOL_FILTER_NON_POWER );
 
             if( aRecursive )
-                subSheets.GetMultiUnitSymbols( lockedSymbols, aSymbolFilter );
+                subSheets.GetMultiUnitSymbols( lockedSymbols, SYMBOL_FILTER_NON_POWER );
 
             break;
 
         case ANNOTATE_SELECTION:
             for( SCH_SYMBOL* symbol : selectedSymbols )
-                currentSheet.AppendMultiUnitSymbol( lockedSymbols, symbol, aSymbolFilter );
+                currentSheet.AppendMultiUnitSymbol( lockedSymbols, symbol, SYMBOL_FILTER_NON_POWER );
 
             if( aRecursive )
-                selectedSheets.GetMultiUnitSymbols( lockedSymbols, aSymbolFilter );
+                selectedSheets.GetMultiUnitSymbols( lockedSymbols, SYMBOL_FILTER_NON_POWER );
 
             break;
         }
@@ -363,23 +363,23 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
     switch( aAnnotateScope )
     {
     case ANNOTATE_ALL:
-        sheets.GetSymbols( references, aSymbolFilter );
+        sheets.GetSymbols( references, SYMBOL_FILTER_NON_POWER );
         break;
 
     case ANNOTATE_CURRENT_SHEET:
-        currentSheet.GetSymbols( references, aSymbolFilter );
+        currentSheet.GetSymbols( references, SYMBOL_FILTER_NON_POWER );
 
         if( aRecursive )
-            subSheets.GetSymbolsWithinPath( references, currentSheet, aSymbolFilter );
+            subSheets.GetSymbolsWithinPath( references, currentSheet, SYMBOL_FILTER_NON_POWER );
 
         break;
 
     case ANNOTATE_SELECTION:
         for( SCH_SYMBOL* symbol : selectedSymbols )
-            currentSheet.AppendSymbol( references, symbol, aSymbolFilter );
+            currentSheet.AppendSymbol( references, symbol, SYMBOL_FILTER_NON_POWER );
 
         if( aRecursive )
-            selectedSheets.GetSymbolsWithinPath( references, currentSheet, aSymbolFilter );
+            selectedSheets.GetSymbolsWithinPath( references, currentSheet, SYMBOL_FILTER_NON_POWER );
 
         break;
     }
@@ -398,7 +398,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
     if( aAnnotateScope != ANNOTATE_ALL )
     {
         SCH_REFERENCE_LIST allRefs;
-        sheets.GetSymbols( allRefs, aSymbolFilter );
+        sheets.GetSymbols( allRefs, SYMBOL_FILTER_NON_POWER );
 
         for( size_t i = 0; i < allRefs.GetCount(); i++ )
         {
@@ -483,7 +483,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T aAnn
                 {
                     aReporter.Report( aMsg, RPT_SEVERITY_ERROR );
                 },
-                aAnnotateScope, aRecursive, aSymbolFilter ) )
+                aAnnotateScope, aRecursive, SYMBOL_FILTER_NON_POWER ) )
     {
         aReporter.ReportTail( _( "Annotation complete." ), RPT_SEVERITY_ACTION );
     }

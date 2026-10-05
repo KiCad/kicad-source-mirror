@@ -655,16 +655,6 @@ public:
     void FillItemMap( std::map<KIID, EDA_ITEM*>& aMap );
 
     /**
-     * Silently annotate the not yet annotated power symbols of the entire hierarchy of the
-     * sheet path list.
-     *
-     * It is called before creating a netlist, to annotate power symbols, without prompting
-     * the user about not annotated or duplicate for these symbols, if only these symbols
-     * need annotation ( a very frequent case ).
-     */
-    void AnnotatePowerSymbols();
-
-    /**
      * Add a #SCH_REFERENCE object to \a aReferences for each symbol in the list of sheets.
      *
      * @param aReferences List of references to populate.

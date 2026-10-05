@@ -240,7 +240,7 @@ void DIALOG_TABLE_PROPERTIES::getContextualTextVars( const wxString& aCrossRef, 
         SCH_REFERENCE_LIST refs;
         SCH_SYMBOL*        refSymbol = nullptr;
 
-        m_frame->Schematic().Hierarchy().GetSymbols( refs, SYMBOL_FILTER_ALL );
+        m_frame->Schematic().Hierarchy().GetSymbols( refs, SYMBOL_FILTER_NON_POWER );
 
         for( int jj = 0; jj < (int) refs.GetCount(); jj++ )
         {

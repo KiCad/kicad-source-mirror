@@ -166,8 +166,6 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
         screen->MigrateSimModels();
 
-    sheets.AnnotatePowerSymbols();
-
     // NOTE: This is required for multi-unit symbols to be correct
     for( SCH_SHEET_PATH& sheet : sheets )
         sheet.UpdateAllScreenReferences();

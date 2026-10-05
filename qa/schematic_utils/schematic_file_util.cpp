@@ -87,7 +87,7 @@ std::unique_ptr<SCHEMATIC> ReadSchematicFromStream( std::istream& aStream, PROJE
     SCH_SHEET_LIST sheets = schematic->BuildSheetListSortedByPageNumbers();
     sheets.UpdateSymbolInstanceData( schematic->RootScreen()->GetSymbolInstances() );
     sheets.UpdateSheetInstanceData( schematic->RootScreen()->GetSheetInstances() );
-    sheets.AnnotatePowerSymbols();
+
     for( SCH_SHEET_PATH& sheet : sheets )
         sheet.UpdateAllScreenReferences();
 
@@ -162,8 +162,6 @@ void LoadSchematic( SETTINGS_MANAGER& aSettingsManager, const wxString& aRelPath
             screen->MigrateSimModels();
     }
 
-
-    sheets.AnnotatePowerSymbols();
 
     // NOTE: This is required for multi-unit symbols to be correct
     // Normally called from SCH_EDIT_FRAME::FixupJunctions() but could be refactored

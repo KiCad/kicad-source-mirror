@@ -342,8 +342,6 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
     screens.PruneOrphanedSymbolInstances( projectName, sheetList );
     screens.PruneOrphanedSheetInstances( projectName, sheetList );
 
-    sheetList.AnnotatePowerSymbols();
-
     if( sheetList.AllSheetPageNumbersEmpty() )
         sheetList.SetInitialPageNumbers();
     else

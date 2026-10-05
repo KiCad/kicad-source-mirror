@@ -3232,7 +3232,7 @@ HANDLER_RESULT<PlaceFromLibraryResponse> API_HANDLER_SCH::handlePlaceSymbolFromL
     {
         SCH_REFERENCE      newReference( symbol.get(), targetPath );
         SCH_REFERENCE_LIST existingRefs;
-        hierarchy.GetSymbols( existingRefs, SYMBOL_FILTER_ALL );
+        hierarchy.GetSymbols( existingRefs, SYMBOL_FILTER_NON_POWER );
 
         bool annotate = newReference.AlwaysAnnotate();
 

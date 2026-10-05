@@ -3344,8 +3344,6 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         m_screens.DeleteAllMarkers( MARKER_BASE::MARKER_ERC, true );
     }
 
-    m_sheetList.AnnotatePowerSymbols();
-
     if( aEditFrame )
     {
         if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
