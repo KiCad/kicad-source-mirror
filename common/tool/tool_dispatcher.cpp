@@ -795,6 +795,12 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         wxLogTrace( kicadTraceToolStack, wxS( "TOOL_DISPATCHER::DispatchWxEvent - Handled: %s  %s" ),
                     ( handled ? wxS( "true" ) : wxS( "false" ) ), evt->Format() );
     }
+    else if( type == KIGFX::WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE )
+    {
+        // A zoom anchored at the cursor leaves the cursor's world position where it was, so no
+        // motion follows, yet the zoom the status bar shows has changed
+        m_toolMgr->UpdateUI( TOOL_EVENT( TC_MOUSE, TA_MOUSE_MOTION ) );
+    }
 
     // pass the event to the GUI, it might still be interested in it
     // Note wxEVT_CHAR_HOOK event is already skipped for special keys not used by KiCad
