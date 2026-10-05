@@ -469,15 +469,16 @@ void PROPERTY_MANAGER::PropertyChanged( INSPECTABLE* aObject, PROPERTY_BASE* aPr
 
     callListeners( objectClass.m_id );
 
-    for( CLASS_DESC& superClass : objectClass.m_bases )
-        callListeners( superClass.m_id );
+    for( const std::reference_wrapper<CLASS_DESC>& superClass : objectClass.m_bases )
+        callListeners( superClass.get().m_id );
 }
 
 
 PROPERTY_COMMIT_HANDLER::PROPERTY_COMMIT_HANDLER( COMMIT* aCommit )
 {
-    wxCHECK2_MSG( PROPERTY_MANAGER::Instance().m_managedCommit == nullptr,
-                  return, wxT( "Can't have more than one managed commit at a time!" ) );
+    // This is a hard failure.  wxCHECK2() will just allow us to crash later in a less-pertinent place
+    wxASSERT_MSG( PROPERTY_MANAGER::Instance().m_managedCommit == nullptr,
+                  wxT( "Can't have more than one managed commit at a time!" ) );
 
     PROPERTY_MANAGER::Instance().m_managedCommit = aCommit;
     m_ownsCommit = true;
@@ -513,7 +514,9 @@ void PROPERTY_MANAGER::UnregisterListener( TYPE_ID aType, PROPERTY_LISTENER_HAND
     auto& vec = it->second;
     vec.erase( std::remove_if( vec.begin(), vec.end(),
                                [aHandle]( const auto& aPair )
-                               { return aPair.first == aHandle; } ),
+                               {
+                                   return aPair.first == aHandle;
+                               } ),
                vec.end() );
 }
 
