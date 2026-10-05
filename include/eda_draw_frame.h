@@ -250,6 +250,11 @@ public:
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
 
     /**
+     * Show the current zoom in the zoom wxchoice, as a preset or as its own entry.
+     */
+    void SyncZoomSelectBox();
+
+    /**
      * Rebuild the grid combobox to respond to any changes in the GUI (units, user
      * grid changes, etc.)
      */

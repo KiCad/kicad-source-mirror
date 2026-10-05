@@ -423,6 +423,12 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 
 void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 {
+    SyncZoomSelectBox();
+}
+
+
+void EDA_DRAW_FRAME::SyncZoomSelectBox()
+{
     if( m_zoomSelectBox == nullptr )
         return;
 
@@ -785,6 +791,10 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
         return;
 
     SetStatusText( GetZoomLevelIndicator(), 1 );
+
+    // Update-UI events come at most every m_UpdateUIEventInterval, so the last step of a zoom
+    // could leave the box one step behind the status bar until the mouse moves
+    SyncZoomSelectBox();
 
     // Absolute and relative cursor positions are handled by overloading this function and
     // handling the internal to user units conversion at the appropriate level.
