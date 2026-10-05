@@ -58,6 +58,9 @@ public:
             m_model->import_path = path.GetPath();
         }
 
+        if( m_lblPathError->IsShown() )
+            return false;
+
         return true;
     }
 
@@ -163,9 +166,8 @@ void PANEL_STARTWIZARD_SETTINGS::OnDefaultSelected( wxCommandEvent& event )
 
 bool PANEL_STARTWIZARD_SETTINGS::validatePath()
 {
-    SETTINGS_MANAGER& manager = Pgm().GetSettingsManager();
     wxString path = m_cbPath->GetValue();
-    bool valid = manager.IsSettingsPathValid( path );
+    bool valid = SETTINGS_MANAGER::IsSettingsPathValid( path );
 
     showPathError( !valid );
 
