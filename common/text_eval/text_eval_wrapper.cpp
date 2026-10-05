@@ -306,7 +306,7 @@ struct CHARACTER_CLASSIFIER
     static constexpr bool is_alpha( UnicodeCodepoint auto cp ) noexcept
     {
         // Basic Latin + extended Unicode letter ranges
-        return is_ascii_alpha( cp ) || ( cp >= 0x80 && cp <= 0x10FFFF && cp != 0xFFFD );
+        return is_ascii_alpha( cp ) || ( cp >= 0x80 && cp <= 0x10FFFF && cp != 0xFFFD && !is_whitespace( cp ) );
     }
 
     static constexpr bool is_alnum( UnicodeCodepoint auto cp ) noexcept
