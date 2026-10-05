@@ -42,16 +42,20 @@ DESIGN_BLOCK_TREE_MODEL_ADAPTER::Create( EDA_BASE_FRAME* aParent, DESIGN_BLOCK_L
 }
 
 
-DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent,
+DESIGN_BLOCK_TREE_MODEL_ADAPTER::DESIGN_BLOCK_TREE_MODEL_ADAPTER( EDA_BASE_FRAME*               aParent,
                                                                   DESIGN_BLOCK_LIBRARY_ADAPTER* aLibs,
-                                                                  APP_SETTINGS_BASE::LIB_TREE& aSettings,
-                                                                  TOOL_INTERACTIVE* aContextMenuTool ) :
-        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_design_block_libs" ),
-                                Kiface().KifaceSettings()->m_DesignBlockChooserPanel.tree ),
+                                                                  APP_SETTINGS_BASE::LIB_TREE&  aSettings,
+                                                                  TOOL_INTERACTIVE*             aContextMenuTool ) :
+        LIB_TREE_MODEL_ADAPTER( aParent, wxT( "pinned_design_block_libs" ), aSettings ),
         m_libs( aLibs ),
         m_frame( aParent ),
         m_contextMenuTool( aContextMenuTool )
 {
+    auto width = m_cfg.column_widths.find( wxT( "Item" ) );
+
+    // Leave part of Description visible in the default 300-pixel docked pane.
+    if( width == m_cfg.column_widths.end() || !IsValidColumnWidth( width->second ) )
+        m_colWidths[wxT( "Item" )] = 225;
 }
 
 

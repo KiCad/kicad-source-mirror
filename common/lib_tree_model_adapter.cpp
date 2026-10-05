@@ -677,7 +677,7 @@ void LIB_TREE_MODEL_ADAPTER::FinishTreeInitialization()
     }
 
     int remainingWidth = m_widget->GetSize().x - totalWidth;
-    header = m_columns[idx]->GetTitle();
+    header = m_colIdxMap[idx];
 
     m_columns[idx]->SetWidth( std::max( m_colWidths[header], remainingWidth ) );
 }
@@ -690,25 +690,18 @@ void LIB_TREE_MODEL_ADAPTER::RefreshTree()
     // user's scroll position (which re-attaching or deleting/re-inserting columns does).
     static int walk = 1;
 
-    std::vector<int> widths;
-
-    for( const wxDataViewColumn* col : m_columns )
-        widths.emplace_back( col->GetWidth() );
-
-    wxASSERT( widths.size() );
+    wxASSERT( !m_columns.empty() );
 
     // Only use the widths read back if they are non-zero.
     // GTK returns the displayed width of the column, which is not calculated immediately
-    if( widths[0] > 0 )
+    if( m_columns[0]->GetWidth() > 0 )
     {
-        size_t i = 0;
-
         for( const auto& [ colName, colPtr ] : m_colNameMap )
         {
-            if( i >= widths.size() )
-                break;
+            if( !colPtr )
+                continue;
 
-            int width = widths[i++];
+            int width = colPtr->GetWidth();
 
             // Keep the prior sane width if a DPI change handed back a corrupt one.
             if( IsValidColumnWidth( width ) )
