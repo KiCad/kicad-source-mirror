@@ -1184,8 +1184,7 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
         {
             int radius = aShape->GetCornerRadius();
 
-            if( radius == 0 && m_plotter->GetPlotterType() == PLOT_FORMAT::DXF &&
-                GetDXFPlotMode() == SKETCH )
+            if( radius == 0 && m_plotter->GetPlotterType() == PLOT_FORMAT::DXF && GetDXFPlotMode() == SKETCH )
             {
                 std::vector<VECTOR2I> pts = aShape->GetRectCorners();
                 m_plotter->ThickRect( pts[0], pts[2], thickness, getMetadata() );
