@@ -1434,10 +1434,14 @@ bool SETTINGS_MANAGER::unloadProjectFile( PROJECT* aProject, bool aSave )
 
         bool saveLocalSettings = aSave && aProject->GetLocalSettings().ShouldAutoSave();
 
+        // Local settings are best-efforts.  No error is returned here.
         FlushAndRelease( &aProject->GetLocalSettings(), saveLocalSettings );
 
         if( aSave )
-            ( *it )->SaveToFile( projectPath );
+        {
+            if( !( *it )->SaveToFile( projectPath ) )
+                return false;
+        }
 
         m_settings.erase( it );
     }
