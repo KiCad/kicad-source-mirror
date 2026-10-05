@@ -2007,14 +2007,23 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
         return { std::string{}, false };
     }
 
-    // RAII guard for error collector cleanup
-    struct ERROR_COLLECTOR_GUARD
+    calc_parser::DOC* document = nullptr;
+
+    // RAII guard for error collector and parser document cleanup
+    struct RAII_GUARD
     {
-        ~ERROR_COLLECTOR_GUARD()
+        RAII_GUARD( calc_parser::DOC* aDocument ) :
+                m_document( aDocument )
+        {}
+
+        ~RAII_GUARD()
         {
             calc_parser::g_errorCollector = nullptr;
+            delete m_document;
         }
-    } guard;
+
+        calc_parser::DOC* m_document;
+    } guard( document );
 
     try
     {
@@ -2047,8 +2056,6 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
         }
 
         // Parse document
-        calc_parser::DOC* document = nullptr;
-
         calc_parser::TOKEN_TYPE token_value;
         TEXT_EVAL_TOKEN         token_type;
 
@@ -2071,23 +2078,18 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
         // Process document if parsing succeeded
         if( document && ( !m_lastErrors || !m_lastErrors->HasErrors() ) )
         {
-            calc_parser::DOC_PROCESSOR processor;
-            auto [result, had_errors] = processor.Process( *document, std::move( aVariableCallback ) );
+            auto [result, had_errors] = calc_parser::DOC_PROCESSOR::Process( *document,
+                                                                             std::move( aVariableCallback ) );
 
             // If processing had any evaluation errors, return original input unchanged
             // This preserves the original expression syntax while still reporting errors
             if( had_errors )
-            {
-                delete document;
                 return { aInput, true };
-            }
 
-            delete document;
             return { std::move( result ), had_errors };
         }
 
         // Cleanup and return original on error
-        delete document;
         return { aInput, true };
     }
     catch( const std::bad_alloc& )
