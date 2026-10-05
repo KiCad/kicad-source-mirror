@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-05 00:03+0000\n"
+"PO-Revision-Date: 2026-10-05 00:05+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -30992,13 +30992,14 @@ msgstr ""
 "Symbol aktualisieren, um alle Änderungen aus der Bibliothek zu übernehmen."
 
 #: eeschema/tools/sch_actions.cpp:1059
-#, fuzzy
 msgid "Assign an alternate library symbol for this design variant"
-msgstr "Anderes Symbol aus der Bibliothek zuweisen"
+msgstr "Alternatives Bibliothekssymbol dieser Designvariante zuweisen"
 
 #: eeschema/tools/sch_actions.cpp:1066
 msgid "Remove the variant symbol override and revert to the base symbol"
 msgstr ""
+"Die Variantensymbolüberschreibung entfernen und wieder das Basissymbol "
+"einsetzen"
 
 #: eeschema/tools/sch_actions.cpp:1072 pcbnew/tools/pcb_actions.cpp:1835
 msgid "Assign Netclass..."
