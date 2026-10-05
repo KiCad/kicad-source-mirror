@@ -43,13 +43,14 @@
 # Deleted User <hamburger1024@users.noreply.hosted.weblate.org>, 2026.
 # Yao Zi <me@ziyao.cc>, 2026.
 # Stereo Optimal <stereo-optimal0m@icloud.com>, 2026.
+# cicur <cicur@proton.me>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-09-10 15:05+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2026-10-05 09:41+0000\n"
+"Last-Translator: cicur <cicur@proton.me>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -57,7 +58,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2538,7 +2539,7 @@ msgstr "无法将电路板文件 '%s' 作为设计图块保存到 '%s'。"
 #: common/design_block_io.cpp:461
 #, c-format
 msgid "Cannot save design block metadata '%s': %s"
-msgstr "无法保存设计图块元数据文件 '%s': %s"
+msgstr "无法保存设计图块元数据 '%s': %s"
 
 #: common/design_block_io.cpp:469
 #, c-format
@@ -4875,9 +4876,8 @@ msgid "Commit message cannot be empty"
 msgstr "提交消息不能为空"
 
 #: common/dialogs/git/dialog_git_commit.cpp:233
-#, fuzzy
 msgid "Select at least one file to commit"
-msgstr "选择至少一个要反向批注的属性。"
+msgstr "请选择至少一个要提交的文件"
 
 #: common/dialogs/git/dialog_git_credentials.cpp:67
 msgid "Key passphrase:"
@@ -8242,9 +8242,8 @@ msgid "Unrecognized"
 msgstr "无法识别"
 
 #: common/eda_shape.cpp:1498
-#, fuzzy
 msgid "Connected Lines"
-msgstr "已连接项:"
+msgstr "接续线"
 
 #: common/eda_shape.cpp:1506
 msgid "Curve"
@@ -8460,9 +8459,8 @@ msgid "Line Color"
 msgstr "线条颜色"
 
 #: common/eda_shape.cpp:4729
-#, fuzzy
 msgid "Arc angle must not be zero."
-msgstr "弧的度数必须大于 0"
+msgstr "弧线的度数不能为0。"
 
 #: common/eda_shape.cpp:4764
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:217
@@ -9354,9 +9352,9 @@ msgid "Rebase commit failed: %s"
 msgstr "变基提交失败: %s"
 
 #: common/git/libgit_backend.cpp:1618
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed: %s"
-msgstr "变基完成失败: %s"
+msgstr "变基失败: %s"
 
 #: common/git/libgit_backend.cpp:1626
 #, c-format
@@ -9496,9 +9494,8 @@ msgid "Failed to acquire git index lock (another operation in progress?): %s"
 msgstr "获取 Git 索引锁失败 (是否有其他操作正在进行?): %s"
 
 #: common/history_lock.cpp:312
-#, fuzzy
 msgid "Cannot re-open history repository without the file lock"
-msgstr "无法移除临时输出文件"
+msgstr "无法在无文件锁的情况下重新打开历史仓库"
 
 #: common/hotkey_store.cpp:39
 msgid "Accept Autocomplete"
@@ -11088,20 +11085,19 @@ msgid "Restore Failed"
 msgstr "还原失败"
 
 #: common/local_history.cpp:2784
-#, fuzzy, c-format
+#, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "重置为远程版本。"
+msgstr "要将工程还原为%s的版本吗？"
 
 #: common/local_history.cpp:2786
-#, fuzzy
 msgid "Restore Version"
-msgstr "正在恢复会话"
+msgstr "还原版本"
 
 #: common/local_history.cpp:2789
 msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
-msgstr ""
+msgstr "当前文件将被备份以便撤销还原操作。不属于此版本的文件将不会被修改。"
 
 #: common/model_preview_manager.cpp:107
 msgid "3D model previews require setup for this KiCad version."
@@ -11421,7 +11417,7 @@ msgstr "正在提取文件 '%s'。"
 msgid ""
 "Refusing to extract file '%s': the archive entry points outside of the "
 "destination directory."
-msgstr ""
+msgstr "拒绝提取文件 '%s'：归档条目指向了目标目录之外的位置。"
 
 #: common/project/project_archiver.cpp:177 kicad/pcm/pcm_task_manager.cpp:252
 #: kicad/pcm/pcm_task_manager.cpp:313
@@ -11665,9 +11661,9 @@ msgid "Cannot flush '%s' to disk: %s"
 msgstr "无法将 '%s' 刷新到磁盘: %s"
 
 #: common/richio.cpp:652
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot close '%s': %s"
-msgstr "无法保存电路板 '%s': %s"
+msgstr "无法关闭 '%s': %s"
 
 #: common/richio.cpp:724
 #, c-format
@@ -17004,9 +17000,8 @@ msgid "Delete extra units from symbol?"
 msgstr "是否删除符号中多余的单元?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:601
-#, fuzzy
 msgid "Custom body styles must have at least 2 entries"
-msgstr "符号必须至少有一个图形样式"
+msgstr "自定义图形样式需要至少 2 个条目"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:607
 msgid "Delete extra body styles from symbol?"
@@ -18361,9 +18356,8 @@ msgid "%s Properties"
 msgstr "%s 属性"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:129
-#, fuzzy
 msgid "Sheet pin name can not be empty."
-msgstr "引脚名不能为空。"
+msgstr "图纸引脚名不能为空。"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:162
 msgid "Edit Sheet Pin Properties"
@@ -22229,9 +22223,8 @@ msgstr "没有选中的文件!"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:177
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:235
-#, fuzzy
 msgid "Import scale must be a positive number."
-msgstr "缩放比例值必须为正数。"
+msgstr "导入缩放比例必须为正数。"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:213
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:308
