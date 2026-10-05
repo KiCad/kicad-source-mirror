@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-05 00:02+0000\n"
+"PO-Revision-Date: 2026-10-05 00:03+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -31859,7 +31859,7 @@ msgstr "Smith-Diagramm"
 
 #: eeschema/tools/sch_actions.cpp:1942
 msgid "Show S-parameter results on a Smith chart"
-msgstr ""
+msgstr "S-Parameter in einem Smith-Diagramm anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:1947
 msgid "Dark Mode Plots"
