@@ -249,7 +249,8 @@ wxString COMPONENT_CLASS_ASSIGNMENT_DATA::GetAssignmentInDRCLanguage() const
                 std::ranges::transform( refs, refs.begin(),
                                         []( const wxString& aRef )
                                         {
-                                            return wxString::Format( wxT( "A.Reference == '%s'" ), aRef );
+                                            return wxString::Format( wxT( "A.Reference == '%s'" ),
+                                                                     aRef.Strip( wxString::both ) );
                                         } );
 
                 wxString refsExpr = refs[0];
