@@ -76,6 +76,7 @@ set( QA_COMMON_SRCS
     test_kicad_stroke_font.cpp
     test_dxf_plotter.cpp
     test_gerber_plotter.cpp
+    test_pdf_circle_plot.cpp
     test_pdf_unicode_plot.cpp
     test_png_plotter.cpp
     test_render_utils.cpp
