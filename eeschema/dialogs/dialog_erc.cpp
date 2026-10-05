@@ -57,12 +57,10 @@ wxDEFINE_EVENT( EDA_EVT_CLOSE_ERC_DIALOG, wxCommandEvent );
 
 
 // Route marker exclusion through the provider so its cached severity counts stay in sync.
-static void setMarkerExcluded( const std::shared_ptr<RC_ITEMS_PROVIDER>& aProvider,
-                               SCH_MARKER* aMarker, bool aExcluded,
-                               const wxString& aComment = wxEmptyString )
+static void setMarkerExcluded( const std::shared_ptr<RC_ITEMS_PROVIDER>& aProvider, SCH_MARKER* aMarker,
+                               bool aExcluded, const wxString& aComment = wxEmptyString )
 {
-    static_cast<SHEETLIST_ERC_ITEMS_PROVIDER&>( *aProvider ).SetMarkerExcluded( aMarker, aExcluded,
-                                                                                aComment );
+    static_cast<SHEETLIST_ERC_ITEMS_PROVIDER&>( *aProvider ).SetMarkerExcluded( aMarker, aExcluded, aComment );
 }
 
 
@@ -187,11 +185,11 @@ void DIALOG_ERC::UpdateAnnotationWarning()
         {
             m_infoBar->RemoveAllButtons();
             m_infoBar->AddLink( _( "Show Annotation dialog" ),
-                          [&]( wxHyperlinkEvent& aEvent )
-                          {
-                              wxHtmlLinkEvent htmlEvent( aEvent.GetId(), wxHtmlLinkInfo( aEvent.GetURL() ) );
-                              OnLinkClicked( htmlEvent );
-                          } );
+                                [&]( wxHyperlinkEvent& aEvent )
+                                {
+                                    wxHtmlLinkEvent htmlEvent( aEvent.GetId(), wxHtmlLinkInfo( aEvent.GetURL() ) );
+                                    OnLinkClicked( htmlEvent );
+                                } );
 
             m_infoBar->ShowMessage( _( "Schematic is not fully annotated. ERC results will be incomplete." ) );
         }
@@ -641,11 +639,15 @@ void DIALOG_ERC::OnERCItemSelected( wxDataViewEvent& aEvent )
             case RC_TREE_NODE::MAIN_ITEM:
                 if( ercItem->MainItemHasSheetPath() )
                     sheet = ercItem->GetMainItemSheetPath();
+
                 break;
+
             case RC_TREE_NODE::AUX_ITEM:
                 if( ercItem->AuxItemHasSheetPath() )
                     sheet = ercItem->GetAuxItemSheetPath();
+
                 break;
+
             default:
                 break;
             }
