@@ -78,10 +78,10 @@ nlohmann::json PARAM_LAYER_PRESET::presetsToJson()
 
 void PARAM_LAYER_PRESET::jsonToPresets( const nlohmann::json& aJson )
 {
+    m_presets->clear();
+
     if( aJson.empty() || !aJson.is_array() )
         return;
-
-    m_presets->clear();
 
     for( const nlohmann::json& preset : aJson )
     {
@@ -216,10 +216,10 @@ nlohmann::json PARAM_VIEWPORT::viewportsToJson()
 
 void PARAM_VIEWPORT::jsonToViewports( const nlohmann::json& aJson )
 {
+    m_viewports->clear();
+
     if( aJson.empty() || !aJson.is_array() )
         return;
-
-    m_viewports->clear();
 
     for( const nlohmann::json& viewport : aJson )
     {
@@ -292,10 +292,10 @@ nlohmann::json PARAM_VIEWPORT3D::viewportsToJson()
 
 void PARAM_VIEWPORT3D::jsonToViewports( const nlohmann::json& aJson )
 {
+    m_viewports->clear();
+
     if( aJson.empty() || !aJson.is_array() )
         return;
-
-    m_viewports->clear();
 
     for( const nlohmann::json& viewport : aJson )
     {
