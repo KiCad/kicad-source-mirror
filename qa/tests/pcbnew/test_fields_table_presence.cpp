@@ -317,6 +317,59 @@ BOOST_AUTO_TEST_CASE( DiscardingModelAfterVariantSwitchLeavesBoardUnchanged )
 }
 
 
+BOOST_AUTO_TEST_CASE( CopyUsesStagedSourceValuesForDefaultAndNamedVariants )
+{
+    const wxString name = GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );
+    m_footprint->SetValue( wxS( "base" ) );
+    AddTestColumn( name );
+    m_model.SetCurrentVariant( wxS( "A" ) );
+    m_model.SetValue( 0, m_col, wxS( "A staged" ) );
+    m_model.SetCurrentVariant( wxS( "B" ) );
+    m_model.CopyCellFromVariant( 0, m_col, wxS( "A" ) );
+    BOOST_CHECK_EQUAL( m_model.GetValue( 0, m_col ), wxS( "A staged" ) );
+
+    m_model.SetCurrentVariant( wxEmptyString );
+    m_model.CopyCellFromVariant( 0, m_col, wxS( "B" ) );
+    BOOST_CHECK_EQUAL( m_model.GetValue( 0, m_col ), wxS( "A staged" ) );
+    m_model.SetValue( 0, m_col, wxS( "default staged" ) );
+    m_model.SetCurrentVariant( wxS( "A" ) );
+    m_model.CopyCellFromVariant( 0, m_col, GetDefaultVariantName() );
+    BOOST_CHECK_EQUAL( m_model.GetValue( 0, m_col ), wxS( "default staged" ) );
+    BOOST_CHECK_EQUAL( m_footprint->GetValue(), wxS( "base" ) );
+
+    Apply();
+    BOOST_CHECK_EQUAL( m_footprint->GetValue(), wxS( "default staged" ) );
+    BOOST_CHECK_EQUAL( m_footprint->GetFieldValueForVariant( wxS( "A" ), name ), wxS( "default staged" ) );
+    BOOST_CHECK_EQUAL( m_footprint->GetFieldValueForVariant( wxS( "B" ), name ), wxS( "A staged" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( CopyGroupedCellPreservesEachFootprintsSourceValue )
+{
+    const wxString name = GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );
+    m_footprint->SetValue( wxS( "base" ) );
+    m_footprint->AddVariant( wxS( "A" ) )->SetFieldValue( name, wxS( "first" ) );
+    AddTestColumn( name );
+    FOOTPRINT* other = new FOOTPRINT( &m_board );
+    other->SetReference( wxS( "U2" ) );
+    other->SetValue( wxS( "base" ) );
+    other->AddVariant( wxS( "A" ) )->SetFieldValue( name, wxS( "second" ) );
+    m_board.Add( other );
+    m_model.AddReferences( FOOTPRINT_REFERENCE_LIST{ FOOTPRINT_REF( *other ) } );
+    m_model.SetGroupingEnabled( true );
+    m_model.SetGroupColumn( m_col, true );
+    m_model.RebuildRows();
+    BOOST_REQUIRE_EQUAL( m_model.GetNumberRows(), 1 );
+    BOOST_REQUIRE_EQUAL( m_model.GetRowReferences( 0 ).size(), 2u );
+
+    m_model.CopyCellFromVariant( 0, m_col, wxS( "A" ) );
+    BOOST_CHECK_EQUAL( m_model.GetValue( 0, m_col ), INDETERMINATE_STATE );
+    Apply();
+    BOOST_CHECK_EQUAL( m_footprint->GetValue(), wxS( "first" ) );
+    BOOST_CHECK_EQUAL( other->GetValue(), wxS( "second" ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( ApplyingBaseEditDoesNotCreateUntouchedVariantOverride )
 {
     const wxString name = GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED );

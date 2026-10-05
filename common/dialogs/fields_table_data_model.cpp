@@ -496,6 +496,12 @@ bool FIELDS_TABLE_DATA_MODEL_BASE::IsCellReadOnly( int aRow, int aCol )
 }
 
 
+bool FIELDS_TABLE_DATA_MODEL_BASE::CanCopyCellFromVariant( int aRow, int aCol )
+{
+    return !IsCellReadOnly( aRow, aCol ) && fieldSupportsVariants( m_cols[aCol].m_fieldName );
+}
+
+
 bool FIELDS_TABLE_DATA_MODEL_BASE::CanClearCell( int aRow, int aCol )
 {
     wxCHECK( aRow >= 0 && aRow < GetNumberRows(), false );

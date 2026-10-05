@@ -248,6 +248,9 @@ public:
 
     virtual void ClearCell( int aRow, int aCol ) = 0;
     bool         CanClearCell( int aRow, int aCol );
+    bool         CanCopyCellFromVariant( int aRow, int aCol );
+    /// Copy each item's raw source value into the displayed variant, retaining staged edits.
+    virtual void CopyCellFromVariant( int aRow, int aCol, const wxString& aVariantName ) = 0;
     virtual bool IsCellClear( int aRow, int aCol ) = 0;
     virtual bool IsCellEdited( int aRow, int aCol ) = 0;
     /// Return true if any cell in the row has been edited.
@@ -443,6 +446,32 @@ public:
             clearStoredField( item, fieldName );
 
         m_edited = true;
+    }
+
+
+    void CopyCellFromVariant( int aRow, int aCol, const wxString& aVariantName ) override
+    {
+        if( !CanCopyCellFromVariant( aRow, aCol ) )
+            return;
+
+        const wxString& fieldName = m_cols[aCol].m_fieldName;
+        wxString        variant = aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0 ? wxString() : aVariantName;
+        std::vector<wxString> values;
+
+        // Read every source before writing: grouped items may have different source values.
+        for( const ITEM_TYPE& item : m_rows[aRow].GetCellItems() )
+        {
+            FIELD_STORE_VALUE& field = storedField( item, fieldName, variant );
+            wxString           value = field.m_present ? field.m_variants[variant].m_value : wxString();
+
+            if( ColIsAttribute( aCol ) && attributeForcedOnBySheet( item, fieldName, variant ) )
+                value = wxS( "1" );
+
+            values.push_back( value );
+        }
+
+        setCellValues( aRow, aCol, values );
+        updateEditedState();
     }
 
 

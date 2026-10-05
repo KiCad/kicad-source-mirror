@@ -34,6 +34,7 @@
 #include <sch_field.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_reference_list.h>
+#include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <schematic.h>
@@ -277,6 +278,49 @@ BOOST_FIXTURE_TEST_CASE( SheetScopedVariantEditStaysOnItsPath, ISSUE25112_FIXTUR
     BOOST_CHECK_EQUAL( m_symbol->GetField( FIELD_T::FOOTPRINT )->GetText( &m_scopePath, variant ), newFootprint );
     BOOST_CHECK_EQUAL( m_symbol->GetField( FIELD_T::FOOTPRINT )->GetText( &m_siblingPath, variant ), baseFootprint );
     BOOST_CHECK_EQUAL( m_symbol->GetField( FIELD_T::FOOTPRINT )->GetText(), baseFootprint );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( CopyVariantToDefaultReachesHiddenSharedSheetPaths, ISSUE25112_FIXTURE )
+{
+    const wxString fieldName = GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED );
+    const wxString copied = wxS( "Resistor_SMD:R_0603_1608Metric" );
+    auto           model = MakeScopedModel( wxS( "A" ), fieldName );
+    model->SetValue( m_row, m_col, copied );
+    model->SetCurrentVariant( wxEmptyString );
+    model->CopyCellFromVariant( m_row, m_col, wxS( "A" ) );
+
+    BOOST_CHECK_EQUAL( model->GetValue( m_row, m_col ), copied );
+    BOOST_CHECK( m_symbol->GetField( FIELD_T::FOOTPRINT )->GetText() != copied );
+    Apply( *model );
+    BOOST_CHECK_EQUAL( m_symbol->GetField( FIELD_T::FOOTPRINT )->GetText(), copied );
+    BOOST_CHECK_EQUAL( m_symbol->GetField( FIELD_T::FOOTPRINT )->GetText( &m_siblingPath ), copied );
+}
+
+
+BOOST_FIXTURE_TEST_CASE( CopyUsesSourceVariantsInheritedAttributes, ISSUE25112_FIXTURE )
+{
+    auto           model = MakeScopedModel( wxEmptyString, wxS( "${DNP}" ) );
+    SCH_SHEET_PATH parent = m_scopePath;
+    SCH_SHEET*     sheet = parent.Last();
+    parent.pop_back();
+    SCH_SHEET_VARIANT variant( wxS( "Source" ) );
+    variant.m_DNP = true;
+    sheet->AddVariant( parent, variant );
+
+    BOOST_REQUIRE( !m_scopePath.GetDNP() );
+    BOOST_REQUIRE( m_scopePath.GetDNP( wxS( "Source" ) ) );
+    BOOST_REQUIRE( model->CanCopyCellFromVariant( m_row, m_col ) );
+    model->CopyCellFromVariant( m_row, m_col, wxS( "Source" ) );
+    BOOST_CHECK_EQUAL( model->GetValue( m_row, m_col ), wxS( "1" ) );
+    BOOST_CHECK( !m_symbol->GetDNP() );
+
+    model->SetCurrentVariant( wxS( "Source" ) );
+    BOOST_CHECK( !model->CanCopyCellFromVariant( m_row, m_col ) );
+    model->CopyCellFromVariant( m_row, m_col, wxEmptyString );
+    model->SetCurrentVariant( wxEmptyString );
+    Apply( *model );
+    BOOST_CHECK( m_symbol->GetDNP() );
 }
 
 
