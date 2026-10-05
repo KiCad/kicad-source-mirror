@@ -866,13 +866,16 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
     // Both are zero-element solid patterns; the actual appearance is inherited from
     // the owning block or layer at render time.
     static const LtypePattern ltypes[] = {
-        { "ByBlock",    "",                       0, 0.0,  ""                                  },
-        { "ByLayer",    "",                       0, 0.0,  ""                                  },
-        { "CONTINUOUS", "Solid line",             0, 0.0,  ""                                  },
+        { "ByBlock",    "",                       0, 0.0,  ""                                        },
+        { "ByLayer",    "",                       0, 0.0,  ""                                        },
+        { "CONTINUOUS", "Solid line",             0, 0.0,  ""                                        },
         { "DASHDOT",    "Dash Dot ____ _ ____ _", 4, 2.0,  " 49\n1.25\n 74\n0\n 49\n-0.25\n 74\n0\n"
-                                                          " 49\n0.25\n 74\n0\n 49\n-0.25\n 74\n0\n" },
-        { "DASHED",     "Dashed __ __ __ __ __",  2, 0.75, " 49\n0.5\n 74\n0\n 49\n-0.25\n 74\n0\n" },
-        { "DOTTED",     "Dotted .  .  .  .",      2, 0.2,  " 49\n0.0\n 74\n0\n 49\n-0.2\n 74\n0\n"  },
+                                                           " 49\n0.25\n 74\n0\n 49\n-0.25\n 74\n0\n" },
+        { "DASHED",     "Dashed __ __ __ __ __",  2, 0.75, " 49\n0.50\n 74\n0\n 49\n-0.25\n 74\n0\n" },
+        { "DOTTED",     "Dotted .  .  .  .",      2, 0.2,  " 49\n0.00\n 74\n0\n 49\n-0.20\n 74\n0\n" },
+        { "DIVIDE",     "Divide ____ _ _ ____",   6, 2.5,  " 49\n1.25\n 74\n0\n 49\n-0.25\n 74\n0\n"
+                                                           " 49\n0.25\n 74\n0\n 49\n-0.25\n 74\n0\n"
+                                                           " 49\n0.25\n 74\n0\n 49\n-0.25\n 74\n0\n" },
     };
 
     std::string ltypeTableHandle = emitSymbolTableHeader( "LTYPE", static_cast<int>( std::size( ltypes ) ) );
