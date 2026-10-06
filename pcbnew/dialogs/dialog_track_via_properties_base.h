@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,6 +11,7 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class PCB_LAYER_BOX_SELECTOR;
+class VIA_CROSS_SECTION_PREVIEW;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -113,6 +114,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxChoice* m_annularRingsCtrl;
 		wxStaticText* m_protectionPresetsLabel;
 		wxChoice* m_protectionFeatures;
+		VIA_CROSS_SECTION_PREVIEW* m_viaPreview;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_backdrillLabel;
 		wxChoice* m_backdrillChoice;
@@ -180,7 +182,9 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onPadstackModeChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onEditLayerChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaEdit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onProtectionFeaturesChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBackdrillChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onMachiningEdit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTopPostMachineChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBottomPostMachineChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTeardropsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }

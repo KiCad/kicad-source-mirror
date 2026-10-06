@@ -242,27 +242,29 @@ protected:
         }
     };
 
-    void setViaConfiguration( PCB_VIA* aVia, const IPC4761_PRESET& aPreset )
+    void setViaConfiguration( PADSTACK& aStack, const IPC4761_PRESET& aPreset )
     {
         if( aPreset < IPC4761_PRESET::CUSTOM ) // Do not change custom feaure list.
         {
             const IPC4761_CONFIGURATION config = m_IPC4761Presets.at( aPreset );
 
-            setSurfaceProtection( aVia->Padstack().FrontOuterLayers().has_solder_mask,
-                                  aVia->Padstack().BackOuterLayers().has_solder_mask,
+            setSurfaceProtection( aStack.FrontOuterLayers().has_solder_mask, aStack.BackOuterLayers().has_solder_mask,
                                   config.tent );
 
-            setSurfaceProtection( aVia->Padstack().FrontOuterLayers().has_plugging,
-                                  aVia->Padstack().BackOuterLayers().has_plugging,
+            setSurfaceProtection( aStack.FrontOuterLayers().has_plugging, aStack.BackOuterLayers().has_plugging,
                                   config.plug );
 
-            setSurfaceProtection( aVia->Padstack().FrontOuterLayers().has_covering,
-                                  aVia->Padstack().BackOuterLayers().has_covering,
+            setSurfaceProtection( aStack.FrontOuterLayers().has_covering, aStack.BackOuterLayers().has_covering,
                                   config.cover );
 
-            setDrillProtection( aVia->Padstack().Drill().is_filled, config.fill );
+            setDrillProtection( aStack.Drill().is_filled, config.fill );
 
-            setDrillProtection( aVia->Padstack().Drill().is_capped, config.cap );
+            setDrillProtection( aStack.Drill().is_capped, config.cap );
         }
+    }
+
+    void setViaConfiguration( PCB_VIA* aVia, const IPC4761_PRESET& aPreset )
+    {
+        setViaConfiguration( aVia->Padstack(), aPreset );
     }
 };

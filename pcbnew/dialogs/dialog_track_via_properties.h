@@ -58,6 +58,8 @@ private:
     void onBackdrillChange( wxCommandEvent& aEvent ) override;
     void onTopPostMachineChange( wxCommandEvent& aEvent ) override;
     void onBottomPostMachineChange( wxCommandEvent& aEvent ) override;
+    void onProtectionFeaturesChange( wxCommandEvent& aEvent ) override;
+    void onMachiningEdit( wxCommandEvent& aEvent ) override;
 
     void onUnitsChanged( wxCommandEvent& aEvent );
     void onTeardropsUpdateUi( wxUpdateUIEvent& event ) override;
@@ -67,6 +69,44 @@ private:
 
     int getLayerDepth();
     void afterPadstackModeChanged();
+
+    /// Copper layers as ordinals, 0 for the front and the copper count minus one for the back
+    int          copperOrdinal( PCB_LAYER_ID aLayer ) const;
+    PCB_LAYER_ID copperLayer( int aOrdinal ) const;
+
+    /// The copper layers the edited via spans, as read from the type and layer controls
+    struct VIA_SPAN
+    {
+        int  m_Top;          ///< ordinal of the first copper layer
+        int  m_Bottom;       ///< ordinal of the last copper layer
+        bool m_Through;      ///< the type control says through, or is mixed
+        bool m_ReachesFront; ///< the span starts on the front copper
+        bool m_ReachesBack;  ///< the span ends on the back copper
+    };
+
+    VIA_SPAN viaSpan() const;
+
+    /// The controls of one post machining side
+    struct POST_MACHINE_CONTROLS
+    {
+        wxChoice*     m_Mode;
+        wxStaticText* m_ModeLabel;
+        UNIT_BINDER&  m_Size;
+        wxStaticText* m_SizeLabel;
+        UNIT_BINDER&  m_AngleOrDepth;
+        wxStaticText* m_AngleOrDepthLabel;
+        wxStaticText* m_AngleOrDepthUnits;
+    };
+
+    POST_MACHINE_CONTROLS postMachineControls( bool aFront );
+
+    /// Enable the fields that depend on a choice, without touching the preview. A default is
+    /// filled in only for a user event, so populating the dialog keeps the values it read.
+    void syncBackdrillControls( bool aFromUserEvent );
+    void syncPostMachineControls( bool aFront, bool aFromUserEvent );
+
+    void updateViaMachiningControls();
+    void updateViaPreview();
 
     /// Get data from the PCB board and display it to dialog
     bool TransferDataToWindow() override;
