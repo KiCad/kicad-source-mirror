@@ -105,7 +105,7 @@ bool EDA_UNIT_UTILS::FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS
         aUnits = EDA_UNITS::UM;
     else if( unit == wxT( "mm" ) )
         aUnits = EDA_UNITS::MM;
-    if( unit == wxT( "cm" ) )
+    else if( unit == wxT( "cm" ) )
         aUnits = EDA_UNITS::CM;
     else if( unit == wxT( "mi" ) || unit == wxT( "th" ) ) // "mils" or "thou"
         aUnits = EDA_UNITS::MILS;
