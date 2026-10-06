@@ -1966,6 +1966,10 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTopPostMachineChange( wxCommandEvent& aEvent
     m_topPostMachineSize1Label->Enable( enable );
     m_topPostMachineSize2Label->Enable( enable );
 
+    // The second field holds an angle for a countersink and a depth for a counterbore, so a
+    // value left over from the other mode is replaced rather than reread in the new units
+    bool wasAngle = m_topPostMachineSize2.GetUnits() == EDA_UNITS::DEGREES;
+
     if( selection == 1 ) // Countersink
     {
         m_topPostMachineSize2Label->SetLabel( _( "Angle:" ) );
@@ -1977,6 +1981,9 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTopPostMachineChange( wxCommandEvent& aEvent
         m_topPostMachineSize2Label->SetLabel( _( "Depth:" ) );
         m_topPostMachineSize2Units->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
         m_topPostMachineSize2.SetUnits( m_frame->GetUserUnits() );
+
+        if( wasAngle )
+            m_topPostMachineSize2.SetValue( wxEmptyString );
     }
     else
     {
@@ -1990,7 +1997,7 @@ void DIALOG_TRACK_VIA_PROPERTIES::onTopPostMachineChange( wxCommandEvent& aEvent
     {
         if( selection == 1 )
         {
-            if( m_topPostMachineSize2.IsIndeterminate() || m_topPostMachineSize2.GetDoubleValue() == 0 )
+            if( !wasAngle || m_topPostMachineSize2.IsIndeterminate() || m_topPostMachineSize2.GetDoubleValue() == 0 )
                 m_topPostMachineSize2.SetDoubleValue( 82.0 );
         }
     }
@@ -2008,6 +2015,8 @@ void DIALOG_TRACK_VIA_PROPERTIES::onBottomPostMachineChange( wxCommandEvent& aEv
     m_bottomPostMachineSize1Label->Enable( enable );
     m_bottomPostMachineSize2Label->Enable( enable );
 
+    bool wasAngle = m_bottomPostMachineSize2.GetUnits() == EDA_UNITS::DEGREES;
+
     if( selection == 1 ) // Countersink
     {
         m_bottomPostMachineSize2Label->SetLabel( _( "Angle:" ) );
@@ -2019,6 +2028,9 @@ void DIALOG_TRACK_VIA_PROPERTIES::onBottomPostMachineChange( wxCommandEvent& aEv
         m_bottomPostMachineSize2Label->SetLabel( _( "Depth:" ) );
         m_bottomPostMachineSize2Units->SetLabel( EDA_UNIT_UTILS::GetLabel( m_frame->GetUserUnits() ) );
         m_bottomPostMachineSize2.SetUnits( m_frame->GetUserUnits() );
+
+        if( wasAngle )
+            m_bottomPostMachineSize2.SetValue( wxEmptyString );
     }
 
     // Initialize values if this was a user event that turned on post machining
@@ -2026,8 +2038,11 @@ void DIALOG_TRACK_VIA_PROPERTIES::onBottomPostMachineChange( wxCommandEvent& aEv
     {
         if( selection == 1 )
         {
-            if( m_bottomPostMachineSize2.IsIndeterminate() || m_bottomPostMachineSize2.GetDoubleValue() == 0 )
+            if( !wasAngle || m_bottomPostMachineSize2.IsIndeterminate()
+                || m_bottomPostMachineSize2.GetDoubleValue() == 0 )
+            {
                 m_bottomPostMachineSize2.SetDoubleValue( 82.0 );
+            }
         }
     }
 }

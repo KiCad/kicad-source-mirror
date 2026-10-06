@@ -67,6 +67,8 @@ public:
      */
     virtual void SetUnits( EDA_UNITS aUnits );
 
+    EDA_UNITS GetUnits() const { return m_units; }
+
     bool UnitsInvariant() const
     {
         return m_units == EDA_UNITS::UNSCALED || m_units == EDA_UNITS::DEGREES || m_units == EDA_UNITS::PERCENT;
