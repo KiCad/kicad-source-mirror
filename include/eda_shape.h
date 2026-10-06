@@ -523,6 +523,8 @@ public:
                 break;
             }
         }
+
+        m_hatchingDirty = true;
     }
 
     void SetPolyPoints( const std::vector<VECTOR2I>& aPoints );

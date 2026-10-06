@@ -2296,6 +2296,8 @@ void EDA_SHAPE::SetPolyPoints( const std::vector<VECTOR2I>& aPoints )
 
     for( const VECTOR2I& p : aPoints )
         GetPolyShape().Append( p.x, p.y );
+
+    m_hatchingDirty = true;
 }
 
 
