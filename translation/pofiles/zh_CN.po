@@ -45,7 +45,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 22:14-0700\n"
+"POT-Creation-Date: 2026-10-06 23:06+0300\n"
 "PO-Revision-Date: 2026-10-06 20:04+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -1799,7 +1799,7 @@ msgid "Image Converter"
 msgstr "图片转换器"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "KiCad 图片转换器"
 
@@ -2284,10 +2284,10 @@ msgstr "信息"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:990
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:589
 #: pcbnew/footprint_libraries_utils.cpp:396
-#: pcbnew/footprint_libraries_utils.cpp:1142
+#: pcbnew/footprint_libraries_utils.cpp:1154
 #: pcbnew/pcb_design_block_utils.cpp:59 pcbnew/pcb_design_block_utils.cpp:73
 #: pcbnew/router/router_tool.cpp:2089 pcbnew/router/router_tool.cpp:2858
-#: pcbnew/tools/footprint_editor_control.cpp:481 pcbnew/zone_filler.cpp:1647
+#: pcbnew/tools/footprint_editor_control.cpp:484 pcbnew/zone_filler.cpp:1647
 #: pcbnew/zone_filler.cpp:1664
 msgid "Confirmation"
 msgstr "确认"
@@ -2301,7 +2301,7 @@ msgid "&No"
 msgstr "否 (&N)"
 
 #: common/design_block_io.cpp:68
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2411,21 +2411,21 @@ msgstr "无法删除设计图块文件夹 '%s'。"
 
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:156
-#: pcbnew/footprint_library_adapter.cpp:538
+#: pcbnew/footprint_library_adapter.cpp:540
 #, c-format
 msgid "Nested table '%s' not found."
 msgstr "找不到网表 '%s'。"
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:163
-#: pcbnew/footprint_library_adapter.cpp:545
+#: pcbnew/footprint_library_adapter.cpp:547
 #, c-format
 msgid "Unknown library type %s "
 msgstr "未知的库类型 %s "
 
 #: common/design_block_library_adapter.cpp:84
 #: eeschema/libraries/symbol_library_adapter.cpp:168
-#: pcbnew/footprint_library_adapter.cpp:550
+#: pcbnew/footprint_library_adapter.cpp:552
 msgid "Internal error"
 msgstr "内部错误"
 
@@ -2433,7 +2433,7 @@ msgstr "内部错误"
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1049
 #: eeschema/generate_alias_info.cpp:41 eeschema/lib_symbol.cpp:206
 #: eeschema/lib_symbol.cpp:2752 eeschema/sch_symbol.cpp:2788
-#: eeschema/sch_symbol.cpp:3397 eeschema/sch_symbol.cpp:3982
+#: eeschema/sch_symbol.cpp:3398 eeschema/sch_symbol.cpp:3983
 #: eeschema/symbol_editor/symbol_editor.cpp:1778
 #: eeschema/symbol_viewer_frame.cpp:398 pcbnew/footprint.cpp:4929
 #: pcbnew/generate_footprint_info.cpp:39 pcbnew/plot_board_layers.cpp:201
@@ -2458,7 +2458,7 @@ msgstr "从库 '%2$s' 加载设计图块 %1$s 时出错。"
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:42
-#: pcbnew/footprint_libraries_utils.cpp:1343
+#: pcbnew/footprint_libraries_utils.cpp:1355
 msgid "Description"
 msgstr "描述"
 
@@ -2535,7 +2535,7 @@ msgstr "3D 模型"
 #: common/dialog_about/AboutDialog_main.cpp:1090
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#: eeschema/sch_symbol.cpp:3407
+#: eeschema/sch_symbol.cpp:3408
 #: eeschema/widgets/panel_sch_selection_filter.cpp:228
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:33
 #: eeschema/widgets/search_handlers.cpp:158
@@ -2972,7 +2972,7 @@ msgstr "默认字段"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:376
 #: eeschema/fields_grid_table.cpp:526 eeschema/lib_symbol.cpp:2743
 #: eeschema/sch_symbol.cpp:1494 eeschema/sch_symbol.cpp:2747
-#: eeschema/sch_symbol.cpp:2796 eeschema/sch_symbol.cpp:3971
+#: eeschema/sch_symbol.cpp:2796 eeschema/sch_symbol.cpp:3972
 #: eeschema/sim/simulator_frame_ui.cpp:748
 #: eeschema/sim/simulator_frame_ui.cpp:3219
 #: eeschema/sim/simulator_frame_ui.cpp:3260
@@ -3007,7 +3007,7 @@ msgstr "数值"
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:31
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:33
-#: pcbnew/footprint_libraries_utils.cpp:1017
+#: pcbnew/footprint_libraries_utils.cpp:1029
 msgid "Name:"
 msgstr "名称:"
 
@@ -3255,7 +3255,6 @@ msgstr "工程名称"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1800
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "PCB"
 msgstr "PCB"
 
@@ -3264,7 +3263,6 @@ msgstr "PCB"
 #: eeschema/widgets/hierarchy_pane.cpp:832
 #: eeschema/widgets/hierarchy_pane.cpp:838
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Schematic"
 msgstr "原理图"
 
@@ -4978,9 +4976,9 @@ msgstr "文件 '%s' 已存在。"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:523
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:203
 #: pcbnew/footprint_libraries_utils.cpp:397
-#: pcbnew/footprint_libraries_utils.cpp:1143
+#: pcbnew/footprint_libraries_utils.cpp:1155
 #: pcbnew/pcb_design_block_utils.cpp:59 pcbnew/pcb_design_block_utils.cpp:73
-#: pcbnew/tools/footprint_editor_control.cpp:483
+#: pcbnew/tools/footprint_editor_control.cpp:486
 msgid "Overwrite"
 msgstr "覆盖"
 
@@ -6274,7 +6272,7 @@ msgstr "插入分隔符"
 #: common/dialogs/rule_editor_dialog_base.cpp:185 common/tool/actions.cpp:93
 #: eeschema/symbol_editor/symbol_editor.cpp:806
 #: eeschema/widgets/tuner_slider_base.cpp:130
-#: pcbnew/footprint_libraries_utils.cpp:1013
+#: pcbnew/footprint_libraries_utils.cpp:1025
 msgid "Save"
 msgstr "保存"
 
@@ -6306,31 +6304,31 @@ msgstr "上移"
 msgid "Move Down"
 msgstr "下移"
 
-#: common/draw_panel_gal.cpp:313 common/draw_panel_gal.cpp:817
+#: common/draw_panel_gal.cpp:303 common/draw_panel_gal.cpp:794
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "无法使用 OpenGL, 回退到软件渲染"
 
-#: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:559
+#: common/draw_panel_gal.cpp:310 common/draw_panel_gal.cpp:536
 msgid "Graphics error"
 msgstr "Graphics 错误"
 
-#: common/draw_panel_gal.cpp:324 common/draw_panel_gal.cpp:328
+#: common/draw_panel_gal.cpp:314 common/draw_panel_gal.cpp:318
 msgid "Graphics error during recovery"
 msgstr "恢复期间出现图形错误"
 
-#: common/draw_panel_gal.cpp:329
+#: common/draw_panel_gal.cpp:319
 msgid "Unknown exception during backend switch"
 msgstr "切换后端时发生未知异常"
 
-#: common/draw_panel_gal.cpp:559
+#: common/draw_panel_gal.cpp:536
 msgid "Unknown exception"
 msgstr "未知异常"
 
-#: common/draw_panel_gal.cpp:824
+#: common/draw_panel_gal.cpp:801
 msgid "Could not use OpenGL"
 msgstr "无法使用 OpenGL"
 
-#: common/draw_panel_gal.cpp:852
+#: common/draw_panel_gal.cpp:829
 msgid "Error switching GAL backend"
 msgstr "切换 GAL 后端出错"
 
@@ -7388,7 +7386,7 @@ msgstr "向下"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:534 eeschema/sch_field.cpp:1769
 #: eeschema/sch_pin.cpp:1444 eeschema/sch_pin.cpp:2052
-#: eeschema/sch_symbol.cpp:3944 eeschema/sch_tablecell.cpp:447
+#: eeschema/sch_symbol.cpp:3945 eeschema/sch_tablecell.cpp:447
 #: eeschema/sch_text.cpp:781 eeschema/sch_textbox.cpp:631
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
@@ -8945,11 +8943,11 @@ msgstr "全局标签"
 msgid "Hierarchical labels"
 msgstr "层次标签"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3958
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3959
 msgid "Pin numbers"
 msgstr "引脚编号"
 
-#: common/layer_id.cpp:80 eeschema/sch_symbol.cpp:3962
+#: common/layer_id.cpp:80 eeschema/sch_symbol.cpp:3963
 msgid "Pin names"
 msgstr "引脚名"
 
@@ -9388,10 +9386,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "缺失 '%s' | (%s) 的单位"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1256
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "'%s' 和 %lf 之间类型不匹配"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1262
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf 和 '%s'之间类型不匹配"
 
@@ -10078,7 +10078,7 @@ msgstr "编辑默认值"
 #: eeschema/dialogs/dialog_rescue_each.cpp:125
 #: eeschema/dialogs/dialog_sim_model_base.cpp:274 eeschema/lib_symbol.cpp:2740
 #: eeschema/sch_symbol.cpp:2744 eeschema/sch_symbol.cpp:2793
-#: eeschema/sch_symbol.cpp:3968 eeschema/widgets/search_handlers.cpp:160
+#: eeschema/sch_symbol.cpp:3969 eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 #: pcbnew/footprint.cpp:4917 pcbnew/widgets/search_handlers.cpp:140
@@ -10100,7 +10100,7 @@ msgstr "按值和封装分组"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:77
 #: eeschema/lib_symbol.cpp:2783 eeschema/menubar.cpp:162
 #: eeschema/sch_rule_area.cpp:452 eeschema/sch_sheet.cpp:2155
-#: eeschema/sch_symbol.cpp:4036 eeschema/tools/sch_edit_tool.cpp:763
+#: eeschema/sch_symbol.cpp:4037 eeschema/tools/sch_edit_tool.cpp:763
 #: pcbnew/footprint.cpp:4939 pcbnew/tools/edit_tool.cpp:560
 msgid "Attributes"
 msgstr "特性"
@@ -10271,7 +10271,7 @@ msgstr "在编辑器中创建一个新的文件"
 #: common/tool/actions.cpp:54 eeschema/sch_base_frame.cpp:739
 #: eeschema/symbol_editor/symbol_editor.cpp:816
 #: pcbnew/footprint_libraries_utils.cpp:441
-#: pcbnew/footprint_libraries_utils.cpp:1027
+#: pcbnew/footprint_libraries_utils.cpp:1039
 msgid "New Library..."
 msgstr "新建库..."
 
@@ -11605,7 +11605,7 @@ msgstr "电路板"
 #: eeschema/sch_base_frame.cpp:673 eeschema/sch_symbol.cpp:2770
 #: eeschema/sch_symbol.cpp:2774 eeschema/sch_symbol.cpp:2807
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:2165
-#: pcbnew/footprint_libraries_utils.cpp:1342
+#: pcbnew/footprint_libraries_utils.cpp:1354
 msgid "Library"
 msgstr "库"
 
@@ -12962,8 +12962,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -13030,8 +13030,8 @@ msgstr ""
 "\\Users\\username\\kicad\\my_python_script.py`, 则命令行为:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "在 Linux 上, 如果用于生成 CSV BOM 的脚本为 `/home/username/kicad/"
@@ -14418,7 +14418,7 @@ msgstr "显示语法帮助窗口"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/lib_symbol.cpp:2738 eeschema/sch_symbol.cpp:3966
+#: eeschema/lib_symbol.cpp:2738 eeschema/sch_symbol.cpp:3967
 #: eeschema/widgets/sch_properties_panel.cpp:436
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
@@ -14607,14 +14607,14 @@ msgstr "名称文字大小"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:105
 #: eeschema/dialogs/dialog_sim_model.cpp:650 eeschema/sch_field.cpp:1735
 #: eeschema/sch_item.cpp:818 eeschema/sch_item.cpp:882
-#: eeschema/sch_symbol.cpp:4002
+#: eeschema/sch_symbol.cpp:4003
 msgid "Unit"
 msgstr "单位"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:82
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:106
 #: eeschema/sch_field.cpp:1736 eeschema/sch_item.cpp:821
-#: eeschema/sch_item.cpp:904 eeschema/sch_symbol.cpp:4019
+#: eeschema/sch_item.cpp:904 eeschema/sch_symbol.cpp:4020
 #: eeschema/tools/sch_edit_tool.cpp:148
 msgid "Body Style"
 msgstr "图形样式"
@@ -14898,13 +14898,13 @@ msgstr "从物料清单中移除"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1053
 #: eeschema/sch_rule_area.cpp:459 eeschema/sch_sheet.cpp:2160
-#: eeschema/sch_symbol.cpp:4038
+#: eeschema/sch_symbol.cpp:4039
 msgid "Exclude From Simulation"
 msgstr "不参与电路仿真"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1054
 #: eeschema/sch_rule_area.cpp:454 eeschema/sch_sheet.cpp:2157
-#: eeschema/sch_symbol.cpp:1495 eeschema/sch_symbol.cpp:4046
+#: eeschema/sch_symbol.cpp:1495 eeschema/sch_symbol.cpp:4047
 msgid "Exclude From Board"
 msgstr "不在电路板中绘制"
 
@@ -16995,7 +16995,6 @@ msgid "Code"
 msgstr "代码"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "将数值字段中的 {} 另存为 \"{}\""
 
@@ -20526,7 +20525,7 @@ msgstr ""
 
 #: eeschema/sch_bitmap.cpp:308 eeschema/sch_group.cpp:458
 #: eeschema/sch_pin.cpp:2044 eeschema/sch_shape.cpp:605
-#: eeschema/sch_symbol.cpp:3936 pcbnew/board_item.cpp:493
+#: eeschema/sch_symbol.cpp:3937 pcbnew/board_item.cpp:493
 #: pcbnew/pcb_group.cpp:543 pcbnew/pcb_point.cpp:232 pcbnew/pcb_shape.cpp:1014
 #: pcbnew/pcb_tablecell.cpp:334 pcbnew/pcb_track.cpp:3209
 #: pcbnew/widgets/pcb_properties_panel.cpp:563
@@ -20537,7 +20536,7 @@ msgstr "位置 X"
 
 #: eeschema/sch_bitmap.cpp:313 eeschema/sch_group.cpp:459
 #: eeschema/sch_pin.cpp:2048 eeschema/sch_shape.cpp:607
-#: eeschema/sch_symbol.cpp:3939 pcbnew/board_item.cpp:496
+#: eeschema/sch_symbol.cpp:3940 pcbnew/board_item.cpp:496
 #: pcbnew/pcb_group.cpp:544 pcbnew/pcb_point.cpp:233 pcbnew/pcb_shape.cpp:1016
 #: pcbnew/pcb_tablecell.cpp:335 pcbnew/pcb_track.cpp:3213
 #: pcbnew/widgets/pcb_properties_panel.cpp:564 pcbnew/zone.cpp:2023
@@ -21195,8 +21194,8 @@ msgid ""
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
-"与此库中符号相关的封装库的名称。您应该在封装库表中为 CADSTAR PCB Archive "
-"(*.cpa) 文件创建一个单独的条目。如果没有指定, 则假定它为 'cadstarpcblib'。"
+"与此库中符号相关的封装库的名称。您应该在封装库表中为 CADSTAR PCB Archive (*."
+"cpa) 文件创建一个单独的条目。如果没有指定, 则假定它为 'cadstarpcblib'。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:279
 #, c-format
@@ -22141,7 +22140,7 @@ msgid "Schematic rule area"
 msgstr "原理图规则域"
 
 #: eeschema/sch_rule_area.cpp:464 eeschema/sch_sheet.cpp:2164
-#: eeschema/sch_symbol.cpp:1496 eeschema/sch_symbol.cpp:4042
+#: eeschema/sch_symbol.cpp:1496 eeschema/sch_symbol.cpp:4043
 #: pcbnew/footprint.cpp:4946 pcbnew/widgets/pcb_properties_panel.cpp:605
 #: pcbnew/widgets/pcb_properties_panel.cpp:619
 #: pcbnew/widgets/pcb_properties_panel.cpp:717
@@ -22149,7 +22148,7 @@ msgid "Exclude From Bill of Materials"
 msgstr "不在物料清单中显示"
 
 #: eeschema/sch_rule_area.cpp:469 eeschema/sch_sheet.cpp:2168
-#: eeschema/sch_symbol.cpp:1498 eeschema/sch_symbol.cpp:4054
+#: eeschema/sch_symbol.cpp:1498 eeschema/sch_symbol.cpp:4055
 #: eeschema/tools/sch_actions.cpp:1103 pcbnew/footprint.cpp:4949
 #: pcbnew/widgets/pcb_properties_panel.cpp:604
 #: pcbnew/widgets/pcb_properties_panel.cpp:617
@@ -22289,7 +22288,7 @@ msgstr "(删除项目)"
 msgid "Hierarchical Sheet Pin '%s'"
 msgstr "层次图纸引脚 '%s'"
 
-#: eeschema/sch_symbol.cpp:1497 eeschema/sch_symbol.cpp:4050
+#: eeschema/sch_symbol.cpp:1497 eeschema/sch_symbol.cpp:4051
 #: pcbnew/footprint.cpp:4943 pcbnew/widgets/pcb_properties_panel.cpp:606
 #: pcbnew/widgets/pcb_properties_panel.cpp:621
 #: pcbnew/widgets/pcb_properties_panel.cpp:722
@@ -22325,25 +22324,25 @@ msgstr "未定义库!"
 msgid "Symbol not found in %s!"
 msgstr "在 %s 中找不到符号!"
 
-#: eeschema/sch_symbol.cpp:3081
+#: eeschema/sch_symbol.cpp:3082
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "符号 %s [%s]"
 
-#: eeschema/sch_symbol.cpp:3945
+#: eeschema/sch_symbol.cpp:3946
 msgid "Mirror X"
 msgstr "X 轴镜像"
 
-#: eeschema/sch_symbol.cpp:3947
+#: eeschema/sch_symbol.cpp:3948
 msgid "Mirror Y"
 msgstr "Y 轴镜像"
 
-#: eeschema/sch_symbol.cpp:3974 eeschema/widgets/search_handlers.cpp:171
+#: eeschema/sch_symbol.cpp:3975 eeschema/widgets/search_handlers.cpp:171
 #: pcbnew/footprint.cpp:4923 pcbnew/widgets/search_handlers.cpp:145
 msgid "Library Link"
 msgstr "库链接"
 
-#: eeschema/sch_symbol.cpp:3978 eeschema/widgets/search_handlers.cpp:172
+#: eeschema/sch_symbol.cpp:3979 eeschema/widgets/search_handlers.cpp:172
 #: pcbnew/footprint.cpp:4926 pcbnew/plot_board_layers.cpp:198
 #: pcbnew/widgets/search_handlers.cpp:146
 msgid "Library Description"
@@ -22754,8 +22753,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -22806,9 +22805,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23155,8 +23154,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>总线定义</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>生成的网络</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23207,9 +23206,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -24062,8 +24061,8 @@ msgstr "创建临时输出文件时出错"
 
 #: eeschema/sim/kibis/kibis.cpp:851
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr "Kibis 尚未支持 DUT 值。https://ibis.org/summits/nov16a/chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:956
@@ -25148,12 +25147,12 @@ msgid "Save Symbol As"
 msgstr "将符号保存为"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:805
-#: pcbnew/footprint_libraries_utils.cpp:1012
+#: pcbnew/footprint_libraries_utils.cpp:1024
 msgid "Save in library:"
 msgstr "保存在库:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:909
-#: pcbnew/footprint_libraries_utils.cpp:1109
+#: pcbnew/footprint_libraries_utils.cpp:1121
 msgid "A library must be specified."
 msgstr "必须指定一个库。"
 
@@ -25265,7 +25264,7 @@ msgid "Delete All Listed Symbols"
 msgstr "删除所有列出的符号"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1434 pcbnew/files.cpp:318
-#: pcbnew/footprint_libraries_utils.cpp:1201
+#: pcbnew/footprint_libraries_utils.cpp:1213
 #, c-format
 msgid "Revert '%s' to last version saved?"
 msgstr "是否放弃变更, 并将 '%s' 重置为上一保存版本?"
@@ -27748,13 +27747,13 @@ msgid "Symbol library '%s' not found."
 msgstr "符号库 '%s' 未找到。"
 
 #: eeschema/tools/symbol_editor_control.cpp:420
-#: pcbnew/tools/footprint_editor_control.cpp:649
+#: pcbnew/tools/footprint_editor_control.cpp:652
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
 msgstr "通用设置中文件管理器的参数 '%F' 缺失/不完整。"
 
 #: eeschema/tools/symbol_editor_control.cpp:448
-#: pcbnew/tools/footprint_editor_control.cpp:674
+#: pcbnew/tools/footprint_editor_control.cpp:677
 msgid "No text editor selected in KiCad. Please choose one."
 msgstr "未在 KiCad 中配置任何文本编辑器, 请选择一个。"
 
@@ -27918,7 +27917,7 @@ msgid "Enter name for new top-level sheet:"
 msgstr "输入新的顶层图纸名称:"
 
 #: eeschema/widgets/hierarchy_pane.cpp:565
-#: pcbnew/footprint_libraries_utils.cpp:1230
+#: pcbnew/footprint_libraries_utils.cpp:1242
 msgid "Untitled"
 msgstr "无标题"
 
@@ -29048,7 +29047,7 @@ msgid "Clear Recent Job Files"
 msgstr "清除最近的 Job 文件"
 
 #: gerbview/gerbview_frame.cpp:97
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber 查看器"
 
@@ -30825,7 +30824,7 @@ msgid "Enter name for the new template:"
 msgstr "输入新的模板名称:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:374
-#: pcbnew/tools/footprint_editor_control.cpp:416
+#: pcbnew/tools/footprint_editor_control.cpp:419
 msgid "_copy"
 msgstr "_复制(copy)"
 
@@ -37326,7 +37325,7 @@ msgstr "单位:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:49
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:309
-#: pcbnew/footprint_libraries_utils.cpp:970
+#: pcbnew/footprint_libraries_utils.cpp:982
 msgid "Update Footprint"
 msgstr "更新封装"
 
@@ -39345,8 +39344,8 @@ msgstr "锡膏间距:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:375
 msgid ""
 "Local solder paste clearance for this footprint.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
 "此封装的局部锡膏间距。\n"
@@ -39550,8 +39549,8 @@ msgstr "允许焊盘之间存在桥接的阻焊开窗"
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
 msgid ""
 "Solder paste clearance relative to pad size.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "相对于焊盘尺寸的锡膏层间隙。\n"
@@ -39611,8 +39610,8 @@ msgid "Footprint Properties"
 msgstr "封装属性"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:501
-#: pcbnew/footprint_libraries_utils.cpp:1115
-#: pcbnew/tools/footprint_editor_control.cpp:471
+#: pcbnew/footprint_libraries_utils.cpp:1127
+#: pcbnew/tools/footprint_editor_control.cpp:474
 msgid "Footprint must have a name."
 msgstr "封装必须要有一个名称。"
 
@@ -39622,7 +39621,7 @@ msgid "Footprint name may not contain '%s'."
 msgstr "封装名称可能不包含 '%s'。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:519
-#: pcbnew/tools/footprint_editor_control.cpp:478
+#: pcbnew/tools/footprint_editor_control.cpp:481
 #, c-format
 msgid "Footprint '%s' already exists in library '%s'."
 msgstr "封装 '%s' 已存在于库 '%s' 中。"
@@ -41392,8 +41391,8 @@ msgstr "焊盘添加工具的默认焊盘属性"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
 msgid ""
 "Local solder paste clearance for this pad.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
 "此焊盘的局部锡膏间距。\n"
@@ -44690,8 +44689,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -45210,9 +45209,9 @@ msgstr ""
 "将规则加载到图形编辑器时, 约束会自动映射到适当的编辑面板。包含多个约束的规则"
 "可能会拆分到多个面板中, 每个面板显示该规则的一部分约束。\n"
 "\n"
-"系统会优先匹配\"过孔样式\" (`via_diameter` + `hole_size`) 和\"差分对布线\" "
-"(`track_width` + `diff_pair_gap`) 等多约束面板, 其余约束则由单约束面板处理。"
-"无法映射的约束会显示在\"自定义规则\"面板中。\n"
+"系统会优先匹配\"过孔样式\" (`via_diameter` + `hole_size`) 和\"差分对布线"
+"\" (`track_width` + `diff_pair_gap`) 等多约束面板, 其余约束则由单约束面板处"
+"理。无法映射的约束会显示在\"自定义规则\"面板中。\n"
 "\n"
 "在图形编辑器中未被修改的规则, 在保存时会保留其原始文本格式。\n"
 "<br><br><br>\n"
@@ -45241,8 +45240,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -45625,13 +45624,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -45785,13 +45784,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -49389,7 +49388,7 @@ msgid "Footprint exported to file '%s'."
 msgstr "已导出封装到文件 '%s'。"
 
 #: pcbnew/footprint_libraries_utils.cpp:469
-#: pcbnew/footprint_libraries_utils.cpp:1165 pcbnew/tools/pcb_control.cpp:156
+#: pcbnew/footprint_libraries_utils.cpp:1177 pcbnew/tools/pcb_control.cpp:156
 msgid "New Footprint Library"
 msgstr "新建封装库"
 
@@ -49419,12 +49418,17 @@ msgstr "导出封装到库:"
 msgid "Update board footprints to link to exported footprints"
 msgstr "更新电路板中的封装以链接到已导出的封装"
 
-#: pcbnew/footprint_libraries_utils.cpp:861
+#: pcbnew/footprint_libraries_utils.cpp:842
+#, fuzzy, c-format
+msgid "Footprint '%s' could not be saved to library '%s'."
+msgstr "在库 '%2$s' 中找不到封装 '%1$s'"
+
+#: pcbnew/footprint_libraries_utils.cpp:873
 #: pcbnew/footprint_viewer_frame.cpp:752
 msgid "No board currently open."
 msgstr "当前未打开任何电路板。"
 
-#: pcbnew/footprint_libraries_utils.cpp:890
+#: pcbnew/footprint_libraries_utils.cpp:902
 msgid ""
 "Unable to find the footprint on the main board.\n"
 "Cannot save."
@@ -49432,31 +49436,31 @@ msgstr ""
 "无法在主电路板上找到封装。\n"
 "无法保存。"
 
-#: pcbnew/footprint_libraries_utils.cpp:898
+#: pcbnew/footprint_libraries_utils.cpp:910
 #: pcbnew/footprint_viewer_frame.cpp:761
 msgid "Previous footprint placement still in progress."
 msgstr "封装布置未完成。"
 
-#: pcbnew/footprint_libraries_utils.cpp:983
+#: pcbnew/footprint_libraries_utils.cpp:995
 #: pcbnew/footprint_viewer_frame.cpp:802
 msgid "Insert Footprint"
 msgstr "插入封装"
 
-#: pcbnew/footprint_libraries_utils.cpp:1001
+#: pcbnew/footprint_libraries_utils.cpp:1013
 msgid "Save Footprint As"
 msgstr "将封装另存为"
 
-#: pcbnew/footprint_libraries_utils.cpp:1138
+#: pcbnew/footprint_libraries_utils.cpp:1150
 #, c-format
 msgid "Footprint %s already exists in %s."
 msgstr "封装 %s 已存在于 %s 中。"
 
-#: pcbnew/footprint_libraries_utils.cpp:1185
+#: pcbnew/footprint_libraries_utils.cpp:1197
 #, c-format
 msgid "Footprint '%s' replaced in '%s'"
 msgstr "封装 '%s' 在 '%s' 中被替换"
 
-#: pcbnew/footprint_libraries_utils.cpp:1186
+#: pcbnew/footprint_libraries_utils.cpp:1198
 #, c-format
 msgid "Footprint '%s' added to '%s'"
 msgstr "封装 '%s' 被添加到 '%s'"
@@ -49770,7 +49774,7 @@ msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
 msgstr "当前电路板将丢失, 此操作无法撤消。是否继续?"
 
-#: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:254
+#: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:257
 msgid "The current footprint has been modified.  Save changes?"
 msgstr "当前封装已被修改。是否保存变更?"
 
@@ -50509,8 +50513,8 @@ msgstr "正在处理符号 '%s:%s'。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2105
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "警告: %s 封装 '%s' 缺少库名称。请使用完整的 '库:封装' 格式, 以避免重复出现更"
 "新通知。"
@@ -53450,8 +53454,8 @@ msgid ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>$"
-"{refdes:function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
+"function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -53752,8 +53756,8 @@ msgstr ""
 "<p></p>\n"
 "<i>请注意, 标记语法的优先级高于变量展开。</i>\n"
 "<p></p>\n"
-"<p><b>封装交叉引用:</b> 使用 <samp>${refdes:field}</samp> 或 <samp>$"
-"{refdes:function(pad)}</samp> 语法引用其他封装的字段和焊盘。</p>\n"
+"<p><b>封装交叉引用:</b> 使用 <samp>${refdes:field}</samp> 或 <samp>${refdes:"
+"function(pad)}</samp> 语法引用其他封装的字段和焊盘。</p>\n"
 "<p><b>嵌套变量:</b> 变量可包含其他变量, 内层变量优先展开, 最大嵌套深度为 10 "
 "层。</p>\n"
 "<p><b>错误消息:</b></p>\n"
@@ -54965,7 +54969,7 @@ msgid "Failed to export netlist to '%s': %s"
 msgstr "无法绘制到 '%s'。\n"
 
 #: pcbnew/tools/board_editor_control.cpp:763
-#: pcbnew/tools/footprint_editor_control.cpp:960
+#: pcbnew/tools/footprint_editor_control.cpp:963
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "已替换 %d 个重复标识。\n"
@@ -54977,7 +54981,7 @@ msgid "Orphaned net %s re-parented.\n"
 msgstr "孤立网络 %s 重新成为父级。\n"
 
 #: pcbnew/tools/board_editor_control.cpp:819
-#: pcbnew/tools/footprint_editor_control.cpp:967
+#: pcbnew/tools/footprint_editor_control.cpp:970
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "已修复 %d 个潜在问题。"
@@ -55899,19 +55903,19 @@ msgid ""
 "library is read-only."
 msgstr "封装无法添加到选定的库 ('%s')。该库是只读的。"
 
-#: pcbnew/tools/footprint_editor_control.cpp:464
+#: pcbnew/tools/footprint_editor_control.cpp:467
 msgid "Change Footprint Name"
 msgstr "更改封装名"
 
-#: pcbnew/tools/footprint_editor_control.cpp:534
+#: pcbnew/tools/footprint_editor_control.cpp:537
 msgid "Error renaming footprint"
 msgstr "重命名封装出错"
 
-#: pcbnew/tools/footprint_editor_control.cpp:713
+#: pcbnew/tools/footprint_editor_control.cpp:716
 msgid "No datasheet found in the footprint."
 msgstr "在封装中找不到数据手册。"
 
-#: pcbnew/tools/footprint_editor_control.cpp:972
+#: pcbnew/tools/footprint_editor_control.cpp:975
 msgid "No footprint problems found."
 msgstr "未发现封装问题。"
 
@@ -59815,101 +59819,93 @@ msgstr "用于电镀孔 (PTH) 的缓释热焊盘 (花焊盘)"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] 加载失败: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Converter;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "将位图转换成元件"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "从位图创建用于 KiCad 的元件"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad 原理图编辑器 (独立版)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "原理图绘制工具"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "独立版的 KiCad 原理图编辑器"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Gerber 查看器"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "查看 Gerber 文件"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Projectmanager;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "EDA 套件"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "用于原理图设计和电路板布局的工具套件"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "KiCad PCB 计算器"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "PCB;Calculator;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "PCB 计算器"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "用于各种电子相关计算的计算器"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad PCB 编辑器 (独立版)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "PCB 布局编辑器"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "独立版的 KiCad 电路板编辑器"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "用于原理图和电路板设计的电子设计自动化套件"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
-msgid "Circuit board"
-msgstr "电路板"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -59973,6 +59969,12 @@ msgstr "无法创建进程"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "无法创建用户脚本路径 %s。"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "电路板"
 
 #~ msgid "Empty sheet pin name"
 #~ msgstr "空的图纸引脚名"
@@ -61025,8 +61027,8 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;&nbsp;&nbsp;</th>\n"
 #~ "        <th>Resultant Nets</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -61077,9 +61079,9 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -61165,8 +61167,8 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>总线定义</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;&nbsp;&nbsp;</th>\n"
 #~ "        <th>合成网络</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -61217,9 +61219,9 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ "        <td>&nbsp;<br><samp>成员{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-#~ "<samp>成员.D<sub>1</sub>, 成员.D<sub>2</sub>, 成员.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>成员."
+#~ "D<sub>1</sub>, 成员.D<sub>2</sub>, 成员.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -65567,8 +65569,8 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ "\n"
 #~ "    (rule HV_unshielded\n"
 #~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A.enclosedByArea('Shield*')"
-#~ "\"))\n"
+#~ "       (condition \"A.NetClass == 'HV' && !A."
+#~ "enclosedByArea('Shield*')\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule heavy_thermals\n"
@@ -65700,13 +65702,13 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ "\n"
 #~ "    (rule \"Distance between Vias of Different Nets\"\n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"\n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"\n"
@@ -65790,9 +65792,8 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ "\n"
 #~ "### Documentation\n"
 #~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://"
-#~ "docs.kicad.org/GetMajorMinorVersion/en/pcbnew/"
-#~ "pcbnew.html#custom_design_rules)."
+#~ "For the full documentation see [https://docs.kicad.org](https://docs."
+#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 #~ msgstr ""
 #~ "### Top-level Clauses\n"
 #~ "### 顶层语句\n"
@@ -66098,14 +66099,14 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ "    (rule \"Distance between Vias of Different Nets\"  \n"
 #~ "#    (rule \"不同网络的过孔的间距\"  \n"
 #~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "    (rule \"Clearance between Pads of Different Nets\"  \n"
 #~ "#    (rule \"不同网络的焊盘的间距\"  \n"
 #~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != "
-#~ "B.Net\"))\n"
+#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B."
+#~ "Net\"))\n"
 #~ "\n"
 #~ "\n"
 #~ "    (rule \"Via Hole to Track Clearance\"  \n"
@@ -67467,8 +67468,8 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -67550,8 +67551,8 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ "\n"
 #~ "## 4.2 - 通过命令行生成网表文件\n"
 #~ "\n"
-#~ "假设我们正在使用程序 `xsltproc.exe` 将样式表应用于中间文件，则 "
-#~ "`xsltproc.exe` 将通过以下命令执行。\n"
+#~ "假设我们正在使用程序 `xsltproc.exe` 将样式表应用于中间文件，则 `xsltproc."
+#~ "exe` 将通过以下命令执行。\n"
 #~ "\n"
 #~ "```\n"
 #~ "xsltproc.exe -o <输出文件名> <样式表文件名> <输入要转换的 XML 文件>\n"
@@ -67630,8 +67631,8 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ "\n"
 #~ "在 Linux 上：\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "以上示例假定 `xsltproc` 已安装在 Windows 下的 PC 上和 xsl 文件位于 "
@@ -72599,15 +72600,15 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ "Missing disallowed type.|  Expected 'track', 'via', 'micro_via', "
 #~ "'blind_via', 'pad', 'zone', 'text', 'graphic' or 'hole'."
 #~ msgstr ""
-#~ "缺少不允许的类型。| 应为“布线”、“过孔”、“微孔”、“盲孔”、“焊盘”、“区域”、"
-#~ "“文本”、“图形”或“通孔”。"
+#~ "缺少不允许的类型。| 应为“布线”、“过孔”、“微孔”、“盲孔”、“焊盘”、“区"
+#~ "域”、“文本”、“图形”或“通孔”。"
 
 #~ msgid ""
 #~ "Unrecognized item '%s'.|  Expected 'track', 'via', 'micro_via', "
 #~ "'blind_via', 'pad', 'zone', 'text', 'graphic' or 'hole'."
 #~ msgstr ""
-#~ "无法识别的项目 ‘%s’。|应为“布线”、“过孔”、“微孔”、“盲孔”、“焊盘”、“区域”、"
-#~ "“文本”、“图形”或“通孔”。"
+#~ "无法识别的项目 ‘%s’。|应为“布线”、“过孔”、“微孔”、“盲孔”、“焊盘”、“区"
+#~ "域”、“文本”、“图形”或“通孔”。"
 
 #~ msgid ""
 #~ "Unrecognized item '%s'.| Expected 'constraint', 'condition' or 'disallow'."
@@ -74697,14 +74698,14 @@ msgstr "无法创建用户脚本路径 %s。"
 #~ msgid ""
 #~ "DXF only:\n"
 #~ "Check to plot all layers in polygon mode.\n"
-#~ "Uncheck to plot in sketch mode layers that don't support polygons "
-#~ "(*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
+#~ "Uncheck to plot in sketch mode layers that don't support polygons (*."
+#~ "SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
 #~ "and plot in polygon mode other layers (*.Cu, *.Adhes, *.Paste, *.Mask)"
 #~ msgstr ""
 #~ "仅限 DXF：\n"
 #~ "勾选以多边形模式绘制所有图层。\n"
-#~ "取消勾选不支持多边形的草图模式图层(*.SilkS, *_User, Edge.Cuts, Margin, "
-#~ "*.CrtYd, *.Fab)\n"
+#~ "取消勾选不支持多边形的草图模式图层(*.SilkS, *_User, Edge.Cuts, Margin, *."
+#~ "CrtYd, *.Fab)\n"
 #~ "并在多边形模式下绘制其他图层 (*.Cu, *.Adhes, *.Paste, *.Mask)"
 
 #~ msgid "Save changes to footprint before closing?"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 22:14-0700\n"
+"POT-Creation-Date: 2026-10-06 23:06+0300\n"
 "PO-Revision-Date: 2026-04-24 17:24+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/v10/et/>\n"
@@ -1761,7 +1761,7 @@ msgid "Image Converter"
 msgstr "Pildimuundur"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "KiCad pildimuundur"
 
@@ -2256,10 +2256,10 @@ msgstr "Teave"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:990
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:589
 #: pcbnew/footprint_libraries_utils.cpp:396
-#: pcbnew/footprint_libraries_utils.cpp:1142
+#: pcbnew/footprint_libraries_utils.cpp:1154
 #: pcbnew/pcb_design_block_utils.cpp:59 pcbnew/pcb_design_block_utils.cpp:73
 #: pcbnew/router/router_tool.cpp:2089 pcbnew/router/router_tool.cpp:2858
-#: pcbnew/tools/footprint_editor_control.cpp:481 pcbnew/zone_filler.cpp:1647
+#: pcbnew/tools/footprint_editor_control.cpp:484 pcbnew/zone_filler.cpp:1647
 #: pcbnew/zone_filler.cpp:1664
 msgid "Confirmation"
 msgstr "Kinnitus"
@@ -2273,7 +2273,7 @@ msgid "&No"
 msgstr "&Ei"
 
 #: common/design_block_io.cpp:68
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2385,21 +2385,21 @@ msgstr "Disainiploki kausta '%s' ei saanud kustutada."
 
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:156
-#: pcbnew/footprint_library_adapter.cpp:538
+#: pcbnew/footprint_library_adapter.cpp:540
 #, c-format
 msgid "Nested table '%s' not found."
 msgstr "Pesastatud tabelit '%s' ei leitud."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:163
-#: pcbnew/footprint_library_adapter.cpp:545
+#: pcbnew/footprint_library_adapter.cpp:547
 #, c-format
 msgid "Unknown library type %s "
 msgstr "Tundmatu teegi tüüp %s "
 
 #: common/design_block_library_adapter.cpp:84
 #: eeschema/libraries/symbol_library_adapter.cpp:168
-#: pcbnew/footprint_library_adapter.cpp:550
+#: pcbnew/footprint_library_adapter.cpp:552
 msgid "Internal error"
 msgstr "Sisemine viga"
 
@@ -2407,7 +2407,7 @@ msgstr "Sisemine viga"
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1049
 #: eeschema/generate_alias_info.cpp:41 eeschema/lib_symbol.cpp:206
 #: eeschema/lib_symbol.cpp:2752 eeschema/sch_symbol.cpp:2788
-#: eeschema/sch_symbol.cpp:3397 eeschema/sch_symbol.cpp:3982
+#: eeschema/sch_symbol.cpp:3398 eeschema/sch_symbol.cpp:3983
 #: eeschema/symbol_editor/symbol_editor.cpp:1778
 #: eeschema/symbol_viewer_frame.cpp:398 pcbnew/footprint.cpp:4929
 #: pcbnew/generate_footprint_info.cpp:39 pcbnew/plot_board_layers.cpp:201
@@ -2432,7 +2432,7 @@ msgstr "Viga disainiploki %s laadimisel teegist '%s'."
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:42
-#: pcbnew/footprint_libraries_utils.cpp:1343
+#: pcbnew/footprint_libraries_utils.cpp:1355
 msgid "Description"
 msgstr "Kirjeldus"
 
@@ -2511,7 +2511,7 @@ msgstr "3D mudelid"
 #: common/dialog_about/AboutDialog_main.cpp:1090
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#: eeschema/sch_symbol.cpp:3407
+#: eeschema/sch_symbol.cpp:3408
 #: eeschema/widgets/panel_sch_selection_filter.cpp:228
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:33
 #: eeschema/widgets/search_handlers.cpp:158
@@ -2955,7 +2955,7 @@ msgstr "Vaikeväljad"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:376
 #: eeschema/fields_grid_table.cpp:526 eeschema/lib_symbol.cpp:2743
 #: eeschema/sch_symbol.cpp:1494 eeschema/sch_symbol.cpp:2747
-#: eeschema/sch_symbol.cpp:2796 eeschema/sch_symbol.cpp:3971
+#: eeschema/sch_symbol.cpp:2796 eeschema/sch_symbol.cpp:3972
 #: eeschema/sim/simulator_frame_ui.cpp:748
 #: eeschema/sim/simulator_frame_ui.cpp:3219
 #: eeschema/sim/simulator_frame_ui.cpp:3260
@@ -2990,7 +2990,7 @@ msgstr "Väärtus"
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:31
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:33
-#: pcbnew/footprint_libraries_utils.cpp:1017
+#: pcbnew/footprint_libraries_utils.cpp:1029
 msgid "Name:"
 msgstr "Nimi:"
 
@@ -3238,7 +3238,6 @@ msgstr "Projekti nimi"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1800
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "PCB"
 msgstr "PCB"
 
@@ -3247,7 +3246,6 @@ msgstr "PCB"
 #: eeschema/widgets/hierarchy_pane.cpp:832
 #: eeschema/widgets/hierarchy_pane.cpp:838
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Schematic"
 msgstr "Ahelaskeem"
 
@@ -5002,9 +5000,9 @@ msgstr "Fail '%s' on juba olemas."
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:523
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:203
 #: pcbnew/footprint_libraries_utils.cpp:397
-#: pcbnew/footprint_libraries_utils.cpp:1143
+#: pcbnew/footprint_libraries_utils.cpp:1155
 #: pcbnew/pcb_design_block_utils.cpp:59 pcbnew/pcb_design_block_utils.cpp:73
-#: pcbnew/tools/footprint_editor_control.cpp:483
+#: pcbnew/tools/footprint_editor_control.cpp:486
 msgid "Overwrite"
 msgstr "Kirjuta üle"
 
@@ -6327,7 +6325,7 @@ msgstr "Lisa eraldaja"
 #: common/dialogs/rule_editor_dialog_base.cpp:185 common/tool/actions.cpp:93
 #: eeschema/symbol_editor/symbol_editor.cpp:806
 #: eeschema/widgets/tuner_slider_base.cpp:130
-#: pcbnew/footprint_libraries_utils.cpp:1013
+#: pcbnew/footprint_libraries_utils.cpp:1025
 msgid "Save"
 msgstr "Salvesta"
 
@@ -6359,35 +6357,35 @@ msgstr "Liiguta üles"
 msgid "Move Down"
 msgstr "Liiguta alla"
 
-#: common/draw_panel_gal.cpp:313 common/draw_panel_gal.cpp:817
+#: common/draw_panel_gal.cpp:303 common/draw_panel_gal.cpp:794
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr ""
 "OpenGL-i ei saanud kasutada, langetakse tagasi tarkvaralisele renderdamisele"
 
-#: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:559
+#: common/draw_panel_gal.cpp:310 common/draw_panel_gal.cpp:536
 msgid "Graphics error"
 msgstr "Graafika viga"
 
-#: common/draw_panel_gal.cpp:324 common/draw_panel_gal.cpp:328
+#: common/draw_panel_gal.cpp:314 common/draw_panel_gal.cpp:318
 #, fuzzy
 msgid "Graphics error during recovery"
 msgstr "Graafika viga"
 
-#: common/draw_panel_gal.cpp:329
+#: common/draw_panel_gal.cpp:319
 #, fuzzy
 msgid "Unknown exception during backend switch"
 msgstr "OCC erand pinna ehitamisel: %s"
 
-#: common/draw_panel_gal.cpp:559
+#: common/draw_panel_gal.cpp:536
 #, fuzzy
 msgid "Unknown exception"
 msgstr "Tundmatu puhastustoiming"
 
-#: common/draw_panel_gal.cpp:824
+#: common/draw_panel_gal.cpp:801
 msgid "Could not use OpenGL"
 msgstr "OpenGL-i ei saanud kasutada"
 
-#: common/draw_panel_gal.cpp:852
+#: common/draw_panel_gal.cpp:829
 msgid "Error switching GAL backend"
 msgstr "Viga GAL-taustarakenduse vahetamisel"
 
@@ -7447,7 +7445,7 @@ msgstr "All"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:534 eeschema/sch_field.cpp:1769
 #: eeschema/sch_pin.cpp:1444 eeschema/sch_pin.cpp:2052
-#: eeschema/sch_symbol.cpp:3944 eeschema/sch_tablecell.cpp:447
+#: eeschema/sch_symbol.cpp:3945 eeschema/sch_tablecell.cpp:447
 #: eeschema/sch_text.cpp:781 eeschema/sch_textbox.cpp:631
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
@@ -9029,11 +9027,11 @@ msgstr "Globaalsed sildid"
 msgid "Hierarchical labels"
 msgstr "Hierarhilised sildid"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3958
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3959
 msgid "Pin numbers"
 msgstr "Klemmide numbrid"
 
-#: common/layer_id.cpp:80 eeschema/sch_symbol.cpp:3962
+#: common/layer_id.cpp:80 eeschema/sch_symbol.cpp:3963
 msgid "Pin names"
 msgstr "Klemmide nimed"
 
@@ -9472,10 +9470,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Puuduvad ühikud '%s' jaoks (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1256
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Tüübi mittevastavus '%s' ja %lf vahel"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1262
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Tüübi mittevastavus %lf ja '%s' vahel"
 
@@ -10169,7 +10169,7 @@ msgstr "Vaikimisi redigeerimine"
 #: eeschema/dialogs/dialog_rescue_each.cpp:125
 #: eeschema/dialogs/dialog_sim_model_base.cpp:274 eeschema/lib_symbol.cpp:2740
 #: eeschema/sch_symbol.cpp:2744 eeschema/sch_symbol.cpp:2793
-#: eeschema/sch_symbol.cpp:3968 eeschema/widgets/search_handlers.cpp:160
+#: eeschema/sch_symbol.cpp:3969 eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 #: pcbnew/footprint.cpp:4917 pcbnew/widgets/search_handlers.cpp:140
@@ -10191,7 +10191,7 @@ msgstr "Rühmitatud väärtuse ja trükkplaadijälje järgi"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:77
 #: eeschema/lib_symbol.cpp:2783 eeschema/menubar.cpp:162
 #: eeschema/sch_rule_area.cpp:452 eeschema/sch_sheet.cpp:2155
-#: eeschema/sch_symbol.cpp:4036 eeschema/tools/sch_edit_tool.cpp:763
+#: eeschema/sch_symbol.cpp:4037 eeschema/tools/sch_edit_tool.cpp:763
 #: pcbnew/footprint.cpp:4939 pcbnew/tools/edit_tool.cpp:560
 msgid "Attributes"
 msgstr "Atribuudid"
@@ -10365,7 +10365,7 @@ msgstr "Loo redaktoris uus dokument"
 #: common/tool/actions.cpp:54 eeschema/sch_base_frame.cpp:739
 #: eeschema/symbol_editor/symbol_editor.cpp:816
 #: pcbnew/footprint_libraries_utils.cpp:441
-#: pcbnew/footprint_libraries_utils.cpp:1027
+#: pcbnew/footprint_libraries_utils.cpp:1039
 msgid "New Library..."
 msgstr "Uus teek..."
 
@@ -11708,7 +11708,7 @@ msgstr "Trükkplaat"
 #: eeschema/sch_base_frame.cpp:673 eeschema/sch_symbol.cpp:2770
 #: eeschema/sch_symbol.cpp:2774 eeschema/sch_symbol.cpp:2807
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:2165
-#: pcbnew/footprint_libraries_utils.cpp:1342
+#: pcbnew/footprint_libraries_utils.cpp:1354
 msgid "Library"
 msgstr "Teek"
 
@@ -13097,8 +13097,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -13176,8 +13176,8 @@ msgstr ""
 "\\Users\\username\\kicad\\my_python_script.py`, oleks käsurida:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "Linuxis, kui soovitud generaatorskript CSV BOM-i jaoks on `/home/username/"
@@ -14577,7 +14577,7 @@ msgstr "Näita süntaksi abiakent"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/lib_symbol.cpp:2738 eeschema/sch_symbol.cpp:3966
+#: eeschema/lib_symbol.cpp:2738 eeschema/sch_symbol.cpp:3967
 #: eeschema/widgets/sch_properties_panel.cpp:436
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
@@ -14766,14 +14766,14 @@ msgstr "Nime teksti suurus"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:105
 #: eeschema/dialogs/dialog_sim_model.cpp:650 eeschema/sch_field.cpp:1735
 #: eeschema/sch_item.cpp:818 eeschema/sch_item.cpp:882
-#: eeschema/sch_symbol.cpp:4002
+#: eeschema/sch_symbol.cpp:4003
 msgid "Unit"
 msgstr "Osa"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:82
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:106
 #: eeschema/sch_field.cpp:1736 eeschema/sch_item.cpp:821
-#: eeschema/sch_item.cpp:904 eeschema/sch_symbol.cpp:4019
+#: eeschema/sch_item.cpp:904 eeschema/sch_symbol.cpp:4020
 #: eeschema/tools/sch_edit_tool.cpp:148
 msgid "Body Style"
 msgstr "Kere stiil"
@@ -15059,13 +15059,13 @@ msgstr "Välista BOM-ist"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1053
 #: eeschema/sch_rule_area.cpp:459 eeschema/sch_sheet.cpp:2160
-#: eeschema/sch_symbol.cpp:4038
+#: eeschema/sch_symbol.cpp:4039
 msgid "Exclude From Simulation"
 msgstr "Välista simulatsioonist"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1054
 #: eeschema/sch_rule_area.cpp:454 eeschema/sch_sheet.cpp:2157
-#: eeschema/sch_symbol.cpp:1495 eeschema/sch_symbol.cpp:4046
+#: eeschema/sch_symbol.cpp:1495 eeschema/sch_symbol.cpp:4047
 msgid "Exclude From Board"
 msgstr "Välista trükkplaadilt"
 
@@ -17194,7 +17194,6 @@ msgid "Code"
 msgstr "Kood"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Salvesta {} välja Väärtus kui \"{}\""
 
@@ -20803,7 +20802,7 @@ msgstr ""
 
 #: eeschema/sch_bitmap.cpp:308 eeschema/sch_group.cpp:458
 #: eeschema/sch_pin.cpp:2044 eeschema/sch_shape.cpp:605
-#: eeschema/sch_symbol.cpp:3936 pcbnew/board_item.cpp:493
+#: eeschema/sch_symbol.cpp:3937 pcbnew/board_item.cpp:493
 #: pcbnew/pcb_group.cpp:543 pcbnew/pcb_point.cpp:232 pcbnew/pcb_shape.cpp:1014
 #: pcbnew/pcb_tablecell.cpp:334 pcbnew/pcb_track.cpp:3209
 #: pcbnew/widgets/pcb_properties_panel.cpp:563
@@ -20814,7 +20813,7 @@ msgstr "Asukoht X"
 
 #: eeschema/sch_bitmap.cpp:313 eeschema/sch_group.cpp:459
 #: eeschema/sch_pin.cpp:2048 eeschema/sch_shape.cpp:607
-#: eeschema/sch_symbol.cpp:3939 pcbnew/board_item.cpp:496
+#: eeschema/sch_symbol.cpp:3940 pcbnew/board_item.cpp:496
 #: pcbnew/pcb_group.cpp:544 pcbnew/pcb_point.cpp:233 pcbnew/pcb_shape.cpp:1016
 #: pcbnew/pcb_tablecell.cpp:335 pcbnew/pcb_track.cpp:3213
 #: pcbnew/widgets/pcb_properties_panel.cpp:564 pcbnew/zone.cpp:2023
@@ -22459,7 +22458,7 @@ msgid "Schematic rule area"
 msgstr "Ahelaskeemi reeglipiirkond"
 
 #: eeschema/sch_rule_area.cpp:464 eeschema/sch_sheet.cpp:2164
-#: eeschema/sch_symbol.cpp:1496 eeschema/sch_symbol.cpp:4042
+#: eeschema/sch_symbol.cpp:1496 eeschema/sch_symbol.cpp:4043
 #: pcbnew/footprint.cpp:4946 pcbnew/widgets/pcb_properties_panel.cpp:605
 #: pcbnew/widgets/pcb_properties_panel.cpp:619
 #: pcbnew/widgets/pcb_properties_panel.cpp:717
@@ -22467,7 +22466,7 @@ msgid "Exclude From Bill of Materials"
 msgstr "Välista materjalide loetelust"
 
 #: eeschema/sch_rule_area.cpp:469 eeschema/sch_sheet.cpp:2168
-#: eeschema/sch_symbol.cpp:1498 eeschema/sch_symbol.cpp:4054
+#: eeschema/sch_symbol.cpp:1498 eeschema/sch_symbol.cpp:4055
 #: eeschema/tools/sch_actions.cpp:1103 pcbnew/footprint.cpp:4949
 #: pcbnew/widgets/pcb_properties_panel.cpp:604
 #: pcbnew/widgets/pcb_properties_panel.cpp:617
@@ -22611,7 +22610,7 @@ msgstr "(Kustutatud element)"
 msgid "Hierarchical Sheet Pin '%s'"
 msgstr "Hierarhilise lehe klemm '%s'"
 
-#: eeschema/sch_symbol.cpp:1497 eeschema/sch_symbol.cpp:4050
+#: eeschema/sch_symbol.cpp:1497 eeschema/sch_symbol.cpp:4051
 #: pcbnew/footprint.cpp:4943 pcbnew/widgets/pcb_properties_panel.cpp:606
 #: pcbnew/widgets/pcb_properties_panel.cpp:621
 #: pcbnew/widgets/pcb_properties_panel.cpp:722
@@ -22647,25 +22646,25 @@ msgstr "Teeki pole defineeritud!"
 msgid "Symbol not found in %s!"
 msgstr "Sümbolit ei leitud asukohast %s!"
 
-#: eeschema/sch_symbol.cpp:3081
+#: eeschema/sch_symbol.cpp:3082
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Sümbol %s [%s]"
 
-#: eeschema/sch_symbol.cpp:3945
+#: eeschema/sch_symbol.cpp:3946
 msgid "Mirror X"
 msgstr "Peegeldus X"
 
-#: eeschema/sch_symbol.cpp:3947
+#: eeschema/sch_symbol.cpp:3948
 msgid "Mirror Y"
 msgstr "Peegeldus Y"
 
-#: eeschema/sch_symbol.cpp:3974 eeschema/widgets/search_handlers.cpp:171
+#: eeschema/sch_symbol.cpp:3975 eeschema/widgets/search_handlers.cpp:171
 #: pcbnew/footprint.cpp:4923 pcbnew/widgets/search_handlers.cpp:145
 msgid "Library Link"
 msgstr "Teegi link"
 
-#: eeschema/sch_symbol.cpp:3978 eeschema/widgets/search_handlers.cpp:172
+#: eeschema/sch_symbol.cpp:3979 eeschema/widgets/search_handlers.cpp:172
 #: pcbnew/footprint.cpp:4926 pcbnew/plot_board_layers.cpp:198
 #: pcbnew/widgets/search_handlers.cpp:146
 msgid "Library Description"
@@ -23076,8 +23075,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23128,9 +23127,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23485,8 +23484,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Siini definitsioon</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Tulemuseks saadavad ühendusniidid</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23537,9 +23536,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23555,10 +23554,11 @@ msgstr ""
 "<samp>NET_NAME(pin)</samp> isegi siis, kui klemm asub erinevas ühikus "
 "sellest, mis on praegusel lehel.</p>\n"
 "<p><b>Tabeli lahtri viited:</b> Funktsioon <samp>CELL()</samp> töötab ainult "
-"tabeli lahtrites. Kasutage <samp>${CELL(\"A0\")}</samp> või <samp>$"
-"{CELL(rida, veerg)}</samp> sama tabeli teistele lahtritele viitamiseks. "
-"Ridade ja veergude numbrid on 0-põhised (A0 on esimene rida, esimene veerg). "
-"CELL tagastab arvutatud/kuvatud väärtuse, mitte lahtri toordat.</p>\n"
+"tabeli lahtrites. Kasutage <samp>${CELL(\"A0\")}</samp> või "
+"<samp>${CELL(rida, veerg)}</samp> sama tabeli teistele lahtritele "
+"viitamiseks. Ridade ja veergude numbrid on 0-põhised (A0 on esimene rida, "
+"esimene veerg). CELL tagastab arvutatud/kuvatud väärtuse, mitte lahtri "
+"toordat.</p>\n"
 "<p><b>Pesastatud muutujad:</b> Muutujad võivad sisaldada teisi muutujaid. "
 "Sisemised muutujad asendatakse esimesena. Maksimaalne pesastamise sügavus: 6 "
 "taset.</p>\n"
@@ -24411,8 +24411,8 @@ msgstr "Viga ajutise väljundfaili loomisel"
 
 #: eeschema/sim/kibis/kibis.cpp:851
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 "Kibis ei toeta DUT väärtusi veel. https://ibis.org/summits/nov16a/chen.pdf"
 
@@ -25529,12 +25529,12 @@ msgid "Save Symbol As"
 msgstr "Salvesta sümbol nimega"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:805
-#: pcbnew/footprint_libraries_utils.cpp:1012
+#: pcbnew/footprint_libraries_utils.cpp:1024
 msgid "Save in library:"
 msgstr "Salvesta teeki:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:909
-#: pcbnew/footprint_libraries_utils.cpp:1109
+#: pcbnew/footprint_libraries_utils.cpp:1121
 msgid "A library must be specified."
 msgstr "Teek peab olema määratud."
 
@@ -25649,7 +25649,7 @@ msgid "Delete All Listed Symbols"
 msgstr "Kustuta kõik loetletud sümbolid"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1434 pcbnew/files.cpp:318
-#: pcbnew/footprint_libraries_utils.cpp:1201
+#: pcbnew/footprint_libraries_utils.cpp:1213
 #, c-format
 msgid "Revert '%s' to last version saved?"
 msgstr "Taastada '%s' viimati salvestatud versioon?"
@@ -28184,13 +28184,13 @@ msgid "Symbol library '%s' not found."
 msgstr "Sümboli teeki '%s' ei leitud."
 
 #: eeschema/tools/symbol_editor_control.cpp:420
-#: pcbnew/tools/footprint_editor_control.cpp:649
+#: pcbnew/tools/footprint_editor_control.cpp:652
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
 msgstr "Puuduv/vigane failihalduri argument '%F' ühistes seadetes."
 
 #: eeschema/tools/symbol_editor_control.cpp:448
-#: pcbnew/tools/footprint_editor_control.cpp:674
+#: pcbnew/tools/footprint_editor_control.cpp:677
 msgid "No text editor selected in KiCad. Please choose one."
 msgstr "KiCadis pole tekstiredaktorit valitud. Palun valige üks."
 
@@ -28355,7 +28355,7 @@ msgid "Enter name for new top-level sheet:"
 msgstr "Sisesta uue tipptaseme lehe nimi:"
 
 #: eeschema/widgets/hierarchy_pane.cpp:565
-#: pcbnew/footprint_libraries_utils.cpp:1230
+#: pcbnew/footprint_libraries_utils.cpp:1242
 msgid "Untitled"
 msgstr "Pealkirjata"
 
@@ -29501,7 +29501,7 @@ msgid "Clear Recent Job Files"
 msgstr "Tühjenda viimati avatud tööfailid"
 
 #: gerbview/gerbview_frame.cpp:97
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad Gerber-vaatur"
 
@@ -31359,7 +31359,7 @@ msgid "Enter name for the new template:"
 msgstr "Sisesta uue malli nimi:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:374
-#: pcbnew/tools/footprint_editor_control.cpp:416
+#: pcbnew/tools/footprint_editor_control.cpp:419
 msgid "_copy"
 msgstr "_koopia"
 
@@ -37970,7 +37970,7 @@ msgstr "Ühikud:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:49
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:309
-#: pcbnew/footprint_libraries_utils.cpp:970
+#: pcbnew/footprint_libraries_utils.cpp:982
 msgid "Update Footprint"
 msgstr "Uuenda komponendi trükkplaadijälge"
 
@@ -40024,8 +40024,8 @@ msgstr "Jootepasta isoleervahemik:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:375
 msgid ""
 "Local solder paste clearance for this footprint.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
 "Selle komponendi trükkplaadijälje kohalik jootepasta isoleervahemik.\n"
@@ -40233,8 +40233,8 @@ msgstr "Luba ühendatud jootemaski avaused jootepadide vahel"
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
 msgid ""
 "Solder paste clearance relative to pad size.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "Jootepasta isoleervahemik jootepadi suuruse suhtes.\n"
@@ -40299,8 +40299,8 @@ msgid "Footprint Properties"
 msgstr "Komponendi trükkplaadijälje omadused"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:501
-#: pcbnew/footprint_libraries_utils.cpp:1115
-#: pcbnew/tools/footprint_editor_control.cpp:471
+#: pcbnew/footprint_libraries_utils.cpp:1127
+#: pcbnew/tools/footprint_editor_control.cpp:474
 msgid "Footprint must have a name."
 msgstr "Komponendi trükkplaadijäljel peab olema nimi."
 
@@ -40310,7 +40310,7 @@ msgid "Footprint name may not contain '%s'."
 msgstr "Komponendi trükkplaadijälje nimi ei tohi sisaldada '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:519
-#: pcbnew/tools/footprint_editor_control.cpp:478
+#: pcbnew/tools/footprint_editor_control.cpp:481
 #, c-format
 msgid "Footprint '%s' already exists in library '%s'."
 msgstr "Komponendi trükkplaadijälg '%s' on juba teegis '%s' olemas."
@@ -42129,8 +42129,8 @@ msgstr "Jootepadi lisamise tööriista vaikimisi jootepadi omadused"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
 msgid ""
 "Local solder paste clearance for this pad.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
 "Selle jootepadi kohalik jootepasta isoleervahemik.\n"
@@ -45471,9 +45471,8 @@ msgid ""
 msgstr ""
 "### Dokumentatsioon\n"
 "\n"
-"Täieliku dokumentatsiooni leiate [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules)."
+"Täieliku dokumentatsiooni leiate [https://docs.kicad.org](https://go.kicad."
+"org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -45537,8 +45536,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -45798,8 +45797,8 @@ msgstr ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -46179,8 +46178,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -46188,8 +46187,8 @@ msgstr ""
 "\n"
 "Paljud objektide omadused on saadaval kohandatud reeglite avaldistes "
 "testimiseks. Vaata täielikku dokumentatsiooni [https://docs.kicad.org]"
-"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) täieliku loendi saamiseks.\n"
+"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) täieliku loendi saamiseks.\n"
 "<br><br><br>\n"
 "\n"
 
@@ -46458,8 +46457,8 @@ msgstr ""
 "> Ülaltoodud `footprint_identifier` võib olla üks järgmistest:\n"
 "\n"
 "> 1. Viitetähis, mis võib sisaldada metamärke `*` ja `?`\n"
-"> 2. Komponendi trükkplaadijälje teegi identifikaator, nt "
-"`LibName:FootprintName`. Sel juhul\n"
+"> 2. Komponendi trükkplaadijälje teegi identifikaator, nt `LibName:"
+"FootprintName`. Sel juhul\n"
 "   peab teegi identifikaator sisaldama `:` märki teegi nime eraldamiseks\n"
 "   komponendi trükkplaadijälje nimest, ja mõlemad nimed võivad sisaldada "
 "metamärke.\n"
@@ -46553,13 +46552,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -46713,13 +46712,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -50349,7 +50348,7 @@ msgid "Footprint exported to file '%s'."
 msgstr "Komponendijälg eksporditud faili '%s'."
 
 #: pcbnew/footprint_libraries_utils.cpp:469
-#: pcbnew/footprint_libraries_utils.cpp:1165 pcbnew/tools/pcb_control.cpp:156
+#: pcbnew/footprint_libraries_utils.cpp:1177 pcbnew/tools/pcb_control.cpp:156
 msgid "New Footprint Library"
 msgstr "Uus komponendijälje teek"
 
@@ -50380,12 +50379,17 @@ msgid "Update board footprints to link to exported footprints"
 msgstr ""
 "Uuenda trükkplaadi komponendijäljed viitama eksporditud komponentjälgedele"
 
-#: pcbnew/footprint_libraries_utils.cpp:861
+#: pcbnew/footprint_libraries_utils.cpp:842
+#, fuzzy, c-format
+msgid "Footprint '%s' could not be saved to library '%s'."
+msgstr "Komponendi trükkplaadijälge '%s' ei leitud teegist '%s'"
+
+#: pcbnew/footprint_libraries_utils.cpp:873
 #: pcbnew/footprint_viewer_frame.cpp:752
 msgid "No board currently open."
 msgstr "Trükkplaat pole avatud."
 
-#: pcbnew/footprint_libraries_utils.cpp:890
+#: pcbnew/footprint_libraries_utils.cpp:902
 msgid ""
 "Unable to find the footprint on the main board.\n"
 "Cannot save."
@@ -50393,31 +50397,31 @@ msgstr ""
 "Trükkplaadijälge ei leitud põhiplaadilt.\n"
 "Salvestamine pole võimalik."
 
-#: pcbnew/footprint_libraries_utils.cpp:898
+#: pcbnew/footprint_libraries_utils.cpp:910
 #: pcbnew/footprint_viewer_frame.cpp:761
 msgid "Previous footprint placement still in progress."
 msgstr "Eelmine komponendijälje paigutamine on veel pooleli."
 
-#: pcbnew/footprint_libraries_utils.cpp:983
+#: pcbnew/footprint_libraries_utils.cpp:995
 #: pcbnew/footprint_viewer_frame.cpp:802
 msgid "Insert Footprint"
 msgstr "Lisa komponendijälg"
 
-#: pcbnew/footprint_libraries_utils.cpp:1001
+#: pcbnew/footprint_libraries_utils.cpp:1013
 msgid "Save Footprint As"
 msgstr "Salvesta komponendijälg nimega"
 
-#: pcbnew/footprint_libraries_utils.cpp:1138
+#: pcbnew/footprint_libraries_utils.cpp:1150
 #, c-format
 msgid "Footprint %s already exists in %s."
 msgstr "Komponendijälg %s on juba olemas teegis %s."
 
-#: pcbnew/footprint_libraries_utils.cpp:1185
+#: pcbnew/footprint_libraries_utils.cpp:1197
 #, c-format
 msgid "Footprint '%s' replaced in '%s'"
 msgstr "Komponendijälg '%s' asendatud teegis '%s'"
 
-#: pcbnew/footprint_libraries_utils.cpp:1186
+#: pcbnew/footprint_libraries_utils.cpp:1198
 #, c-format
 msgid "Footprint '%s' added to '%s'"
 msgstr "Komponendijälg '%s' lisatud teeki '%s'"
@@ -50733,7 +50737,7 @@ msgstr ""
 "Praegune trükkplaat läheb kaotsi ja seda toimingut ei saa tagasi võtta. Kas "
 "jätkata?"
 
-#: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:254
+#: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:257
 msgid "The current footprint has been modified.  Save changes?"
 msgstr "Praegust komponendijälge on muudetud. Salvesta muudatused?"
 
@@ -51029,8 +51033,8 @@ msgstr "%s ei saa uuendada (trükkplaadijälge '%s' ei leitud)."
 #, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
 msgstr ""
-"Komponendi %s trükkplaadijälge '%s' ei saa muuta trükkplaadijäljeks '%s' "
-"(trükkplaadijälg on lukustatud)."
+"Komponendi %s trükkplaadijälge '%s' ei saa muuta trükkplaadijäljeks "
+"'%s' (trükkplaadijälg on lukustatud)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:354
 #, c-format
@@ -51477,8 +51481,8 @@ msgstr "Sümboli '%s:%s' töötlemine."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2105
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Hoiatus: %s trükkplaadijälje '%s' teegi nimi puudub. Kasutage täisvormi "
 "'Teek:Trükkplaadijälg', et vältida korduvaid uuendusteateid."
@@ -52357,8 +52361,8 @@ msgid ""
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
 "See fail ei paista olevat kehtivas PCB Binary Version 6.0 formaadis. "
-"Veenduge Altium Designeris, et salvestate failina \"PCB Binary Files "
-"(*.PcbDoc)\"."
+"Veenduge Altium Designeris, et salvestate failina \"PCB Binary Files (*."
+"PcbDoc)\"."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:740
 #, c-format
@@ -54505,8 +54509,8 @@ msgid ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>$"
-"{refdes:function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
+"function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -54808,8 +54812,8 @@ msgstr ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>$"
-"{refdes:function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
+"function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -56041,7 +56045,7 @@ msgid "Failed to export netlist to '%s': %s"
 msgstr "Joonestamine faili '%s' ebaõnnestus.\n"
 
 #: pcbnew/tools/board_editor_control.cpp:763
-#: pcbnew/tools/footprint_editor_control.cpp:960
+#: pcbnew/tools/footprint_editor_control.cpp:963
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d duplikaat-ID-d asendatud.\n"
@@ -56053,7 +56057,7 @@ msgid "Orphaned net %s re-parented.\n"
 msgstr "Orbühendusniit %s uuesti omistatud.\n"
 
 #: pcbnew/tools/board_editor_control.cpp:819
-#: pcbnew/tools/footprint_editor_control.cpp:967
+#: pcbnew/tools/footprint_editor_control.cpp:970
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d potentsiaalset probleemi parandatud."
@@ -57005,19 +57009,19 @@ msgstr ""
 "Komponendi trükkplaadijälge ei saanud lisada valitud teeki ('%s'). See teek "
 "on kirjutuskaitstud."
 
-#: pcbnew/tools/footprint_editor_control.cpp:464
+#: pcbnew/tools/footprint_editor_control.cpp:467
 msgid "Change Footprint Name"
 msgstr "Muuda komponendi trükkplaadijälje nime"
 
-#: pcbnew/tools/footprint_editor_control.cpp:534
+#: pcbnew/tools/footprint_editor_control.cpp:537
 msgid "Error renaming footprint"
 msgstr "Viga trükkplaadijälje ümbernimetamisel"
 
-#: pcbnew/tools/footprint_editor_control.cpp:713
+#: pcbnew/tools/footprint_editor_control.cpp:716
 msgid "No datasheet found in the footprint."
 msgstr "Trükkplaadijäljes ei leitud andmelehte."
 
-#: pcbnew/tools/footprint_editor_control.cpp:972
+#: pcbnew/tools/footprint_editor_control.cpp:975
 msgid "No footprint problems found."
 msgstr "Trükkplaadijälje probleeme ei leitud."
 
@@ -61008,102 +61012,94 @@ msgstr "soojustõkkekujundid PTH jaoks"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] laadimine ebaõnnestus: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Teisendaja;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "Bittrasterist komponendiks teisendaja"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Loob bittrastrist komponendi KiCadis kasutamiseks"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad ahelaskeemiredaktor (iseseisev)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "Ahelaskeemi jäädvustamise tööriist"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Iseseisev ahelaskeemiredaktor KiCadi ahelaskeemide jaoks"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Gerber-failide vaatur"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "Kuva Gerber-faile"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Projektihaldur;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "EDA Suite"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr ""
 "Tööriistakomplekt ahelaskeemide kavandamiseks ja trükkplaatide paigutamiseks"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "KiCad trükkplaadi kalkulaator"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "PCB;Kalkulaator;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "Trükkplaadi kalkulaator"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "Kalkulaator mitmesuguste elektroonikaga seotud arvutuste jaoks"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Trükkplaat;Paigutus;Disain;Redaktor;Komponent;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad trükkplaadiredaktor (iseseisev)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "Trükkplaadi paigutuse redaktor"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Iseseisev trükkplaadiredaktor KiCadi trükkplaatide jaoks"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "EDA-komplekt ahelaskeemide ja trükkplaatide kavandamiseks"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
-msgid "Circuit board"
-msgstr "Trükkplaat"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -61171,6 +61167,12 @@ msgstr "Faili '%s' ei õnnestunud luua."
 #, fuzzy, c-format
 msgid "Could not create user scripting path %s."
 msgstr "Ei suudetud avada/luua teed '%s'."
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Trükkplaat"
 
 #~ msgid "Empty sheet pin name"
 #~ msgstr "Tühi lehe klemmi nimi"

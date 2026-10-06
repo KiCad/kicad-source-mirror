@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 22:14-0700\n"
+"POT-Creation-Date: 2026-10-06 23:06+0300\n"
 "PO-Revision-Date: 2026-04-24 16:42+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Hindi <https://hosted.weblate.org/projects/kicad/v10/hi/>\n"
@@ -1749,7 +1749,7 @@ msgid "Image Converter"
 msgstr "इमेज कन्वर्टर"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "KiCad इमेज कन्वर्टर"
 
@@ -2243,10 +2243,10 @@ msgstr "जानकारी"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:990
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:589
 #: pcbnew/footprint_libraries_utils.cpp:396
-#: pcbnew/footprint_libraries_utils.cpp:1142
+#: pcbnew/footprint_libraries_utils.cpp:1154
 #: pcbnew/pcb_design_block_utils.cpp:59 pcbnew/pcb_design_block_utils.cpp:73
 #: pcbnew/router/router_tool.cpp:2089 pcbnew/router/router_tool.cpp:2858
-#: pcbnew/tools/footprint_editor_control.cpp:481 pcbnew/zone_filler.cpp:1647
+#: pcbnew/tools/footprint_editor_control.cpp:484 pcbnew/zone_filler.cpp:1647
 #: pcbnew/zone_filler.cpp:1664
 msgid "Confirmation"
 msgstr "पुष्टि"
@@ -2260,7 +2260,7 @@ msgid "&No"
 msgstr "&नहीं"
 
 #: common/design_block_io.cpp:68
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2370,21 +2370,21 @@ msgstr "डिज़ाइन ब्लॉक फ़ोल्डर '%s' हट�
 
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:156
-#: pcbnew/footprint_library_adapter.cpp:538
+#: pcbnew/footprint_library_adapter.cpp:540
 #, c-format
 msgid "Nested table '%s' not found."
 msgstr "नेस्टेड टेबल '%s' नहीं मिली।"
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:163
-#: pcbnew/footprint_library_adapter.cpp:545
+#: pcbnew/footprint_library_adapter.cpp:547
 #, c-format
 msgid "Unknown library type %s "
 msgstr "अज्ञात लाइब्रेरी प्रकार %s "
 
 #: common/design_block_library_adapter.cpp:84
 #: eeschema/libraries/symbol_library_adapter.cpp:168
-#: pcbnew/footprint_library_adapter.cpp:550
+#: pcbnew/footprint_library_adapter.cpp:552
 msgid "Internal error"
 msgstr "आंतरिक त्रुटि"
 
@@ -2392,7 +2392,7 @@ msgstr "आंतरिक त्रुटि"
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1049
 #: eeschema/generate_alias_info.cpp:41 eeschema/lib_symbol.cpp:206
 #: eeschema/lib_symbol.cpp:2752 eeschema/sch_symbol.cpp:2788
-#: eeschema/sch_symbol.cpp:3397 eeschema/sch_symbol.cpp:3982
+#: eeschema/sch_symbol.cpp:3398 eeschema/sch_symbol.cpp:3983
 #: eeschema/symbol_editor/symbol_editor.cpp:1778
 #: eeschema/symbol_viewer_frame.cpp:398 pcbnew/footprint.cpp:4929
 #: pcbnew/generate_footprint_info.cpp:39 pcbnew/plot_board_layers.cpp:201
@@ -2417,7 +2417,7 @@ msgstr "लाइब्रेरी '%2$s' से डिज़ाइन ब्�
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:42
-#: pcbnew/footprint_libraries_utils.cpp:1343
+#: pcbnew/footprint_libraries_utils.cpp:1355
 msgid "Description"
 msgstr "विवरण"
 
@@ -2496,7 +2496,7 @@ msgstr "3D मॉडल"
 #: common/dialog_about/AboutDialog_main.cpp:1090
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#: eeschema/sch_symbol.cpp:3407
+#: eeschema/sch_symbol.cpp:3408
 #: eeschema/widgets/panel_sch_selection_filter.cpp:228
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:33
 #: eeschema/widgets/search_handlers.cpp:158
@@ -2936,7 +2936,7 @@ msgstr "डिफ़ॉल्ट फ़ील्ड"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:376
 #: eeschema/fields_grid_table.cpp:526 eeschema/lib_symbol.cpp:2743
 #: eeschema/sch_symbol.cpp:1494 eeschema/sch_symbol.cpp:2747
-#: eeschema/sch_symbol.cpp:2796 eeschema/sch_symbol.cpp:3971
+#: eeschema/sch_symbol.cpp:2796 eeschema/sch_symbol.cpp:3972
 #: eeschema/sim/simulator_frame_ui.cpp:748
 #: eeschema/sim/simulator_frame_ui.cpp:3219
 #: eeschema/sim/simulator_frame_ui.cpp:3260
@@ -2971,7 +2971,7 @@ msgstr "मान"
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:31
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:33
-#: pcbnew/footprint_libraries_utils.cpp:1017
+#: pcbnew/footprint_libraries_utils.cpp:1029
 msgid "Name:"
 msgstr "नाम:"
 
@@ -3219,7 +3219,6 @@ msgstr "प्रोजेक्ट नाम"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1800
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "PCB"
 msgstr "PCB"
 
@@ -3228,7 +3227,6 @@ msgstr "PCB"
 #: eeschema/widgets/hierarchy_pane.cpp:832
 #: eeschema/widgets/hierarchy_pane.cpp:838
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Schematic"
 msgstr "स्कीमैटिक"
 
@@ -4961,9 +4959,9 @@ msgstr "फ़ाइल '%s' पहले से मौजूद है।"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:523
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:203
 #: pcbnew/footprint_libraries_utils.cpp:397
-#: pcbnew/footprint_libraries_utils.cpp:1143
+#: pcbnew/footprint_libraries_utils.cpp:1155
 #: pcbnew/pcb_design_block_utils.cpp:59 pcbnew/pcb_design_block_utils.cpp:73
-#: pcbnew/tools/footprint_editor_control.cpp:483
+#: pcbnew/tools/footprint_editor_control.cpp:486
 msgid "Overwrite"
 msgstr "अधिलेखित करें"
 
@@ -6270,7 +6268,7 @@ msgstr "विभाजक डालें"
 #: common/dialogs/rule_editor_dialog_base.cpp:185 common/tool/actions.cpp:93
 #: eeschema/symbol_editor/symbol_editor.cpp:806
 #: eeschema/widgets/tuner_slider_base.cpp:130
-#: pcbnew/footprint_libraries_utils.cpp:1013
+#: pcbnew/footprint_libraries_utils.cpp:1025
 msgid "Save"
 msgstr "सहेजें"
 
@@ -6302,34 +6300,34 @@ msgstr "ऊपर ले जाएँ"
 msgid "Move Down"
 msgstr "नीचे ले जाएँ"
 
-#: common/draw_panel_gal.cpp:313 common/draw_panel_gal.cpp:817
+#: common/draw_panel_gal.cpp:303 common/draw_panel_gal.cpp:794
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "OpenGL उपयोग नहीं किया जा सका, सॉफ़्टवेयर रेंडरिंग पर वापस जाया जा रहा है"
 
-#: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:559
+#: common/draw_panel_gal.cpp:310 common/draw_panel_gal.cpp:536
 msgid "Graphics error"
 msgstr "ग्राफ़िक्स त्रुटि"
 
-#: common/draw_panel_gal.cpp:324 common/draw_panel_gal.cpp:328
+#: common/draw_panel_gal.cpp:314 common/draw_panel_gal.cpp:318
 #, fuzzy
 msgid "Graphics error during recovery"
 msgstr "ग्राफ़िक्स त्रुटि"
 
-#: common/draw_panel_gal.cpp:329
+#: common/draw_panel_gal.cpp:319
 #, fuzzy
 msgid "Unknown exception during backend switch"
 msgstr "फेस बनाते समय OCC अपवाद: %s"
 
-#: common/draw_panel_gal.cpp:559
+#: common/draw_panel_gal.cpp:536
 #, fuzzy
 msgid "Unknown exception"
 msgstr "अज्ञात क्लीनअप क्रिया"
 
-#: common/draw_panel_gal.cpp:824
+#: common/draw_panel_gal.cpp:801
 msgid "Could not use OpenGL"
 msgstr "OpenGL उपयोग नहीं किया जा सका"
 
-#: common/draw_panel_gal.cpp:852
+#: common/draw_panel_gal.cpp:829
 msgid "Error switching GAL backend"
 msgstr "GAL बैकेंड बदलने में त्रुटि"
 
@@ -7389,7 +7387,7 @@ msgstr "नीचे"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:534 eeschema/sch_field.cpp:1769
 #: eeschema/sch_pin.cpp:1444 eeschema/sch_pin.cpp:2052
-#: eeschema/sch_symbol.cpp:3944 eeschema/sch_tablecell.cpp:447
+#: eeschema/sch_symbol.cpp:3945 eeschema/sch_tablecell.cpp:447
 #: eeschema/sch_text.cpp:781 eeschema/sch_textbox.cpp:631
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
@@ -7536,8 +7534,8 @@ msgid ""
 msgstr ""
 "KiCad द्वारा आंतरिक रूप से परिभाषित (संपादित नहीं किया जा सकता) और वर्तमान में लोड की "
 "गई प्रोजेक्ट फ़ाइल के निरपेक्ष पथ पर सेट। इस पर्यावरण चर का उपयोग वर्तमान में लोड किए गए "
-"प्रोजेक्ट के सापेक्ष फ़ाइलें और पथ परिभाषित करने के लिए किया जा सकता है। उदाहरण के लिए, $"
-"{KIPRJMOD}/libs/footprints.pretty को footprints.pretty नामक प्रोजेक्ट-विशिष्ट "
+"प्रोजेक्ट के सापेक्ष फ़ाइलें और पथ परिभाषित करने के लिए किया जा सकता है। उदाहरण के लिए, "
+"${KIPRJMOD}/libs/footprints.pretty को footprints.pretty नामक प्रोजेक्ट-विशिष्ट "
 "फ़ुटप्रिंट लाइब्रेरी वाले फ़ोल्डर के रूप में परिभाषित किया जा सकता है।"
 
 #: common/env_vars.cpp:150
@@ -8558,8 +8556,8 @@ msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
-"'%s' एक मान्य EasyEDA (JLCEDA) Pro प्रोजेक्ट या लाइब्रेरी फ़ाइल नहीं लगती। "
-"project.json या device.json नहीं मिला।"
+"'%s' एक मान्य EasyEDA (JLCEDA) Pro प्रोजेक्ट या लाइब्रेरी फ़ाइल नहीं लगती। project."
+"json या device.json नहीं मिला।"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:220
 #, c-format
@@ -8967,11 +8965,11 @@ msgstr "वैश्विक लेबल"
 msgid "Hierarchical labels"
 msgstr "पदानुक्रमित लेबल"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3958
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3959
 msgid "Pin numbers"
 msgstr "पिन संख्याएँ"
 
-#: common/layer_id.cpp:80 eeschema/sch_symbol.cpp:3962
+#: common/layer_id.cpp:80 eeschema/sch_symbol.cpp:3963
 msgid "Pin names"
 msgstr "पिन नाम"
 
@@ -9410,10 +9408,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "'%s' के लिए इकाइयाँ अनुपलब्ध| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1256
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "'%s' और %lf के बीच प्रकार बेमेल"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1262
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf और '%s' के बीच प्रकार बेमेल"
 
@@ -10105,7 +10105,7 @@ msgstr "डिफ़ॉल्ट संपादन"
 #: eeschema/dialogs/dialog_rescue_each.cpp:125
 #: eeschema/dialogs/dialog_sim_model_base.cpp:274 eeschema/lib_symbol.cpp:2740
 #: eeschema/sch_symbol.cpp:2744 eeschema/sch_symbol.cpp:2793
-#: eeschema/sch_symbol.cpp:3968 eeschema/widgets/search_handlers.cpp:160
+#: eeschema/sch_symbol.cpp:3969 eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 #: pcbnew/footprint.cpp:4917 pcbnew/widgets/search_handlers.cpp:140
@@ -10127,7 +10127,7 @@ msgstr "मान और फ़ुटप्रिंट द्वारा स�
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:77
 #: eeschema/lib_symbol.cpp:2783 eeschema/menubar.cpp:162
 #: eeschema/sch_rule_area.cpp:452 eeschema/sch_sheet.cpp:2155
-#: eeschema/sch_symbol.cpp:4036 eeschema/tools/sch_edit_tool.cpp:763
+#: eeschema/sch_symbol.cpp:4037 eeschema/tools/sch_edit_tool.cpp:763
 #: pcbnew/footprint.cpp:4939 pcbnew/tools/edit_tool.cpp:560
 msgid "Attributes"
 msgstr "गुणधर्म"
@@ -10301,7 +10301,7 @@ msgstr "संपादक में नया दस्तावेज़ ब�
 #: common/tool/actions.cpp:54 eeschema/sch_base_frame.cpp:739
 #: eeschema/symbol_editor/symbol_editor.cpp:816
 #: pcbnew/footprint_libraries_utils.cpp:441
-#: pcbnew/footprint_libraries_utils.cpp:1027
+#: pcbnew/footprint_libraries_utils.cpp:1039
 msgid "New Library..."
 msgstr "नई लाइब्रेरी..."
 
@@ -11637,7 +11637,7 @@ msgstr "बोर्ड"
 #: eeschema/sch_base_frame.cpp:673 eeschema/sch_symbol.cpp:2770
 #: eeschema/sch_symbol.cpp:2774 eeschema/sch_symbol.cpp:2807
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:2165
-#: pcbnew/footprint_libraries_utils.cpp:1342
+#: pcbnew/footprint_libraries_utils.cpp:1354
 msgid "Library"
 msgstr "लाइब्रेरी"
 
@@ -13005,8 +13005,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -13074,12 +13074,12 @@ msgstr ""
 "\\Users\\username\\kicad\\my_python_script.py` है:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
-"Linux पर, यदि CSV BOM के लिए स्क्रिप्ट `/home/username/kicad/"
-"my_python_script.py` है:\n"
+"Linux पर, यदि CSV BOM के लिए स्क्रिप्ट `/home/username/kicad/my_python_script."
+"py` है:\n"
 "\n"
 "```\n"
 "python /home/username/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
@@ -14470,7 +14470,7 @@ msgstr "सिंटैक्स सहायता विंडो दिखा
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/lib_symbol.cpp:2738 eeschema/sch_symbol.cpp:3966
+#: eeschema/lib_symbol.cpp:2738 eeschema/sch_symbol.cpp:3967
 #: eeschema/widgets/sch_properties_panel.cpp:436
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
@@ -14659,14 +14659,14 @@ msgstr "नाम पाठ आकार"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:105
 #: eeschema/dialogs/dialog_sim_model.cpp:650 eeschema/sch_field.cpp:1735
 #: eeschema/sch_item.cpp:818 eeschema/sch_item.cpp:882
-#: eeschema/sch_symbol.cpp:4002
+#: eeschema/sch_symbol.cpp:4003
 msgid "Unit"
 msgstr "इकाई"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:82
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:106
 #: eeschema/sch_field.cpp:1736 eeschema/sch_item.cpp:821
-#: eeschema/sch_item.cpp:904 eeschema/sch_symbol.cpp:4019
+#: eeschema/sch_item.cpp:904 eeschema/sch_symbol.cpp:4020
 #: eeschema/tools/sch_edit_tool.cpp:148
 msgid "Body Style"
 msgstr "बॉडी शैली"
@@ -14951,13 +14951,13 @@ msgstr "BOM से बाहर करें"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1053
 #: eeschema/sch_rule_area.cpp:459 eeschema/sch_sheet.cpp:2160
-#: eeschema/sch_symbol.cpp:4038
+#: eeschema/sch_symbol.cpp:4039
 msgid "Exclude From Simulation"
 msgstr "अनुकरण से बाहर करें"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1054
 #: eeschema/sch_rule_area.cpp:454 eeschema/sch_sheet.cpp:2157
-#: eeschema/sch_symbol.cpp:1495 eeschema/sch_symbol.cpp:4046
+#: eeschema/sch_symbol.cpp:1495 eeschema/sch_symbol.cpp:4047
 msgid "Exclude From Board"
 msgstr "बोर्ड से बाहर करें"
 
@@ -17064,7 +17064,6 @@ msgid "Code"
 msgstr "कोड"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "मान फ़ील्ड में {} को \"{}\" के रूप में सहेजें"
 
@@ -20629,7 +20628,7 @@ msgstr ""
 
 #: eeschema/sch_bitmap.cpp:308 eeschema/sch_group.cpp:458
 #: eeschema/sch_pin.cpp:2044 eeschema/sch_shape.cpp:605
-#: eeschema/sch_symbol.cpp:3936 pcbnew/board_item.cpp:493
+#: eeschema/sch_symbol.cpp:3937 pcbnew/board_item.cpp:493
 #: pcbnew/pcb_group.cpp:543 pcbnew/pcb_point.cpp:232 pcbnew/pcb_shape.cpp:1014
 #: pcbnew/pcb_tablecell.cpp:334 pcbnew/pcb_track.cpp:3209
 #: pcbnew/widgets/pcb_properties_panel.cpp:563
@@ -20640,7 +20639,7 @@ msgstr "स्थिति X"
 
 #: eeschema/sch_bitmap.cpp:313 eeschema/sch_group.cpp:459
 #: eeschema/sch_pin.cpp:2048 eeschema/sch_shape.cpp:607
-#: eeschema/sch_symbol.cpp:3939 pcbnew/board_item.cpp:496
+#: eeschema/sch_symbol.cpp:3940 pcbnew/board_item.cpp:496
 #: pcbnew/pcb_group.cpp:544 pcbnew/pcb_point.cpp:233 pcbnew/pcb_shape.cpp:1016
 #: pcbnew/pcb_tablecell.cpp:335 pcbnew/pcb_track.cpp:3213
 #: pcbnew/widgets/pcb_properties_panel.cpp:564 pcbnew/zone.cpp:2023
@@ -22277,7 +22276,7 @@ msgid "Schematic rule area"
 msgstr "स्कीमैटिक नियम क्षेत्र"
 
 #: eeschema/sch_rule_area.cpp:464 eeschema/sch_sheet.cpp:2164
-#: eeschema/sch_symbol.cpp:1496 eeschema/sch_symbol.cpp:4042
+#: eeschema/sch_symbol.cpp:1496 eeschema/sch_symbol.cpp:4043
 #: pcbnew/footprint.cpp:4946 pcbnew/widgets/pcb_properties_panel.cpp:605
 #: pcbnew/widgets/pcb_properties_panel.cpp:619
 #: pcbnew/widgets/pcb_properties_panel.cpp:717
@@ -22285,7 +22284,7 @@ msgid "Exclude From Bill of Materials"
 msgstr "सामग्री सूची से बाहर रखें"
 
 #: eeschema/sch_rule_area.cpp:469 eeschema/sch_sheet.cpp:2168
-#: eeschema/sch_symbol.cpp:1498 eeschema/sch_symbol.cpp:4054
+#: eeschema/sch_symbol.cpp:1498 eeschema/sch_symbol.cpp:4055
 #: eeschema/tools/sch_actions.cpp:1103 pcbnew/footprint.cpp:4949
 #: pcbnew/widgets/pcb_properties_panel.cpp:604
 #: pcbnew/widgets/pcb_properties_panel.cpp:617
@@ -22429,7 +22428,7 @@ msgstr "(हटाई गई मद)"
 msgid "Hierarchical Sheet Pin '%s'"
 msgstr "पदानुक्रमित शीट पिन '%s'"
 
-#: eeschema/sch_symbol.cpp:1497 eeschema/sch_symbol.cpp:4050
+#: eeschema/sch_symbol.cpp:1497 eeschema/sch_symbol.cpp:4051
 #: pcbnew/footprint.cpp:4943 pcbnew/widgets/pcb_properties_panel.cpp:606
 #: pcbnew/widgets/pcb_properties_panel.cpp:621
 #: pcbnew/widgets/pcb_properties_panel.cpp:722
@@ -22465,25 +22464,25 @@ msgstr "कोई लाइब्रेरी परिभाषित नही
 msgid "Symbol not found in %s!"
 msgstr "%s में प्रतीक नहीं मिला!"
 
-#: eeschema/sch_symbol.cpp:3081
+#: eeschema/sch_symbol.cpp:3082
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "प्रतीक %s [%s]"
 
-#: eeschema/sch_symbol.cpp:3945
+#: eeschema/sch_symbol.cpp:3946
 msgid "Mirror X"
 msgstr "X दर्पण"
 
-#: eeschema/sch_symbol.cpp:3947
+#: eeschema/sch_symbol.cpp:3948
 msgid "Mirror Y"
 msgstr "Y दर्पण"
 
-#: eeschema/sch_symbol.cpp:3974 eeschema/widgets/search_handlers.cpp:171
+#: eeschema/sch_symbol.cpp:3975 eeschema/widgets/search_handlers.cpp:171
 #: pcbnew/footprint.cpp:4923 pcbnew/widgets/search_handlers.cpp:145
 msgid "Library Link"
 msgstr "लाइब्रेरी लिंक"
 
-#: eeschema/sch_symbol.cpp:3978 eeschema/widgets/search_handlers.cpp:172
+#: eeschema/sch_symbol.cpp:3979 eeschema/widgets/search_handlers.cpp:172
 #: pcbnew/footprint.cpp:4926 pcbnew/plot_board_layers.cpp:198
 #: pcbnew/widgets/search_handlers.cpp:146
 msgid "Library Description"
@@ -22894,8 +22893,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -22946,9 +22945,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23297,8 +23296,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23349,9 +23348,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -24213,11 +24212,11 @@ msgstr "अस्थायी आउटपुट फ़ाइल बनाते
 
 #: eeschema/sim/kibis/kibis.cpp:851
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
-"Kibis अभी DUT मानों का समर्थन नहीं करता। https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis अभी DUT मानों का समर्थन नहीं करता। https://ibis.org/summits/nov16a/chen."
+"pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:956
 msgid "Model has only one waveform pair, reduced accuracy"
@@ -25319,12 +25318,12 @@ msgid "Save Symbol As"
 msgstr "प्रतीक इस रूप में सहेजें"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:805
-#: pcbnew/footprint_libraries_utils.cpp:1012
+#: pcbnew/footprint_libraries_utils.cpp:1024
 msgid "Save in library:"
 msgstr "इस लाइब्रेरी में सहेजें:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:909
-#: pcbnew/footprint_libraries_utils.cpp:1109
+#: pcbnew/footprint_libraries_utils.cpp:1121
 msgid "A library must be specified."
 msgstr "एक लाइब्रेरी निर्दिष्ट करना आवश्यक है।"
 
@@ -25438,7 +25437,7 @@ msgid "Delete All Listed Symbols"
 msgstr "सूचीबद्ध सभी प्रतीक हटाएँ"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1434 pcbnew/files.cpp:318
-#: pcbnew/footprint_libraries_utils.cpp:1201
+#: pcbnew/footprint_libraries_utils.cpp:1213
 #, c-format
 msgid "Revert '%s' to last version saved?"
 msgstr "'%s' को अंतिम सहेजे गए संस्करण पर वापस लाएँ?"
@@ -27944,13 +27943,13 @@ msgid "Symbol library '%s' not found."
 msgstr "प्रतीक लाइब्रेरी '%s' नहीं मिली।"
 
 #: eeschema/tools/symbol_editor_control.cpp:420
-#: pcbnew/tools/footprint_editor_control.cpp:649
+#: pcbnew/tools/footprint_editor_control.cpp:652
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
 msgstr "सामान्य सेटिंग्स में फ़ाइल एक्सप्लोरर तर्क '%F' अनुपलब्ध/अनुचित है।"
 
 #: eeschema/tools/symbol_editor_control.cpp:448
-#: pcbnew/tools/footprint_editor_control.cpp:674
+#: pcbnew/tools/footprint_editor_control.cpp:677
 msgid "No text editor selected in KiCad. Please choose one."
 msgstr "KiCad में कोई टेक्स्ट एडिटर चयनित नहीं है। कृपया एक चुनें।"
 
@@ -28114,7 +28113,7 @@ msgid "Enter name for new top-level sheet:"
 msgstr "नई शीर्ष-स्तरीय शीट के लिए नाम दर्ज करें:"
 
 #: eeschema/widgets/hierarchy_pane.cpp:565
-#: pcbnew/footprint_libraries_utils.cpp:1230
+#: pcbnew/footprint_libraries_utils.cpp:1242
 msgid "Untitled"
 msgstr "अशीर्षक"
 
@@ -29248,7 +29247,7 @@ msgid "Clear Recent Job Files"
 msgstr "हाल की जॉब फ़ाइलें साफ़ करें"
 
 #: gerbview/gerbview_frame.cpp:97
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad गर्बर व्यूअर"
 
@@ -29879,8 +29878,8 @@ msgid ""
 msgstr ""
 "आउटपुट करने के लिए वेरिएंट नाम, एकाधिक वेरिएंट निर्दिष्ट करने के लिए कई बार उपयोग किया "
 "जा सकता है।\n"
-"एकाधिक वेरिएंट निर्दिष्ट करते समय, प्रत्येक वेरिएंट के लिए अलग फ़ाइलें बनाने हेतु आउटपुट पथ में $"
-"{VARIANT} उपयोग करें।\n"
+"एकाधिक वेरिएंट निर्दिष्ट करते समय, प्रत्येक वेरिएंट के लिए अलग फ़ाइलें बनाने हेतु आउटपुट पथ में "
+"${VARIANT} उपयोग करें।\n"
 "जब कोई --variant तर्क नहीं दिया जाता तो डिफ़ॉल्ट वेरिएंट आउटपुट होता है।"
 
 #: kicad/cli/command.h:32
@@ -31061,7 +31060,7 @@ msgid "Enter name for the new template:"
 msgstr "नए टेम्पलेट के लिए नाम दर्ज करें:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:374
-#: pcbnew/tools/footprint_editor_control.cpp:416
+#: pcbnew/tools/footprint_editor_control.cpp:419
 msgid "_copy"
 msgstr "_प्रतिलिपि"
 
@@ -37618,7 +37617,7 @@ msgstr "इकाइयाँ:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:49
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:309
-#: pcbnew/footprint_libraries_utils.cpp:970
+#: pcbnew/footprint_libraries_utils.cpp:982
 msgid "Update Footprint"
 msgstr "फ़ुटप्रिंट अद्यतन करें"
 
@@ -39656,8 +39655,8 @@ msgstr "सोल्डर पेस्ट क्लीयरेंस:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:375
 msgid ""
 "Local solder paste clearance for this footprint.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
 "इस फ़ुटप्रिंट के लिए स्थानीय सोल्डर पेस्ट क्लीयरेंस।\n"
@@ -39862,8 +39861,8 @@ msgstr "पैड के बीच ब्रिज्ड सोल्डर म�
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
 msgid ""
 "Solder paste clearance relative to pad size.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "पैड आकार के सापेक्ष सोल्डर पेस्ट क्लीयरेंस।\n"
@@ -39924,8 +39923,8 @@ msgid "Footprint Properties"
 msgstr "फ़ुटप्रिंट गुण"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:501
-#: pcbnew/footprint_libraries_utils.cpp:1115
-#: pcbnew/tools/footprint_editor_control.cpp:471
+#: pcbnew/footprint_libraries_utils.cpp:1127
+#: pcbnew/tools/footprint_editor_control.cpp:474
 msgid "Footprint must have a name."
 msgstr "फ़ुटप्रिंट का नाम होना आवश्यक है।"
 
@@ -39935,7 +39934,7 @@ msgid "Footprint name may not contain '%s'."
 msgstr "फ़ुटप्रिंट नाम में '%s' नहीं हो सकता।"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:519
-#: pcbnew/tools/footprint_editor_control.cpp:478
+#: pcbnew/tools/footprint_editor_control.cpp:481
 #, c-format
 msgid "Footprint '%s' already exists in library '%s'."
 msgstr "फ़ुटप्रिंट '%s' लाइब्रेरी '%s' में पहले से मौजूद है।"
@@ -41721,8 +41720,8 @@ msgstr "पैड जोड़ें टूल के लिए डिफ़ॉ�
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
 msgid ""
 "Local solder paste clearance for this pad.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
 "इस पैड के लिए स्थानीय सोल्डर पेस्ट क्लीयरेंस।\n"
@@ -45063,8 +45062,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -45324,8 +45323,8 @@ msgstr ""
 "| वायाओं पर एनुलर रिंग की चौड़ाई जाँचता है।"
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| दिए गए व्यंजक की जाँच करता है।"
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -45684,8 +45683,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -46054,13 +46053,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -46214,13 +46213,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -49817,7 +49816,7 @@ msgid "Footprint exported to file '%s'."
 msgstr "फ़ुटप्रिंट फ़ाइल '%s' में निर्यात हुआ।"
 
 #: pcbnew/footprint_libraries_utils.cpp:469
-#: pcbnew/footprint_libraries_utils.cpp:1165 pcbnew/tools/pcb_control.cpp:156
+#: pcbnew/footprint_libraries_utils.cpp:1177 pcbnew/tools/pcb_control.cpp:156
 msgid "New Footprint Library"
 msgstr "नई फ़ुटप्रिंट लाइब्रेरी"
 
@@ -49847,12 +49846,17 @@ msgstr "फ़ुटप्रिंट लाइब्रेरी में न
 msgid "Update board footprints to link to exported footprints"
 msgstr "निर्यात किए गए फ़ुटप्रिंट से लिंक करने के लिए बोर्ड फ़ुटप्रिंट अद्यतन करें"
 
-#: pcbnew/footprint_libraries_utils.cpp:861
+#: pcbnew/footprint_libraries_utils.cpp:842
+#, fuzzy, c-format
+msgid "Footprint '%s' could not be saved to library '%s'."
+msgstr "फ़ुटप्रिंट '%s' लाइब्रेरी '%s' में नहीं मिला"
+
+#: pcbnew/footprint_libraries_utils.cpp:873
 #: pcbnew/footprint_viewer_frame.cpp:752
 msgid "No board currently open."
 msgstr "कोई बोर्ड वर्तमान में खुला नहीं है।"
 
-#: pcbnew/footprint_libraries_utils.cpp:890
+#: pcbnew/footprint_libraries_utils.cpp:902
 msgid ""
 "Unable to find the footprint on the main board.\n"
 "Cannot save."
@@ -49860,31 +49864,31 @@ msgstr ""
 "मुख्य बोर्ड पर फ़ुटप्रिंट नहीं मिला।\n"
 "सहेजा नहीं जा सकता।"
 
-#: pcbnew/footprint_libraries_utils.cpp:898
+#: pcbnew/footprint_libraries_utils.cpp:910
 #: pcbnew/footprint_viewer_frame.cpp:761
 msgid "Previous footprint placement still in progress."
 msgstr "पिछला फ़ुटप्रिंट प्लेसमेंट अभी भी प्रगति में है।"
 
-#: pcbnew/footprint_libraries_utils.cpp:983
+#: pcbnew/footprint_libraries_utils.cpp:995
 #: pcbnew/footprint_viewer_frame.cpp:802
 msgid "Insert Footprint"
 msgstr "फ़ुटप्रिंट डालें"
 
-#: pcbnew/footprint_libraries_utils.cpp:1001
+#: pcbnew/footprint_libraries_utils.cpp:1013
 msgid "Save Footprint As"
 msgstr "फ़ुटप्रिंट इस रूप में सहेजें"
 
-#: pcbnew/footprint_libraries_utils.cpp:1138
+#: pcbnew/footprint_libraries_utils.cpp:1150
 #, c-format
 msgid "Footprint %s already exists in %s."
 msgstr "फ़ुटप्रिंट %s पहले से %s में मौजूद है।"
 
-#: pcbnew/footprint_libraries_utils.cpp:1185
+#: pcbnew/footprint_libraries_utils.cpp:1197
 #, c-format
 msgid "Footprint '%s' replaced in '%s'"
 msgstr "फ़ुटप्रिंट '%s' को '%s' में बदला गया"
 
-#: pcbnew/footprint_libraries_utils.cpp:1186
+#: pcbnew/footprint_libraries_utils.cpp:1198
 #, c-format
 msgid "Footprint '%s' added to '%s'"
 msgstr "फ़ुटप्रिंट '%s' को '%s' में जोड़ा गया"
@@ -50196,7 +50200,7 @@ msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
 msgstr "वर्तमान बोर्ड खो जाएगा और यह ऑपरेशन वापस नहीं किया जा सकता। जारी रखें?"
 
-#: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:254
+#: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:257
 msgid "The current footprint has been modified.  Save changes?"
 msgstr "वर्तमान फ़ुटप्रिंट संशोधित किया गया है।  परिवर्तन सहेजें?"
 
@@ -50930,8 +50934,8 @@ msgstr "प्रतीक '%s:%s' प्रोसेस हो रहा है
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2105
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "चेतावनी: %s फ़ुटप्रिंट '%s' में लाइब्रेरी नाम अनुपलब्ध है। बार-बार अद्यतन सूचनाओं से बचने के "
 "लिए पूर्ण 'Library:Footprint' प्रारूप उपयोग करें।"
@@ -53903,8 +53907,8 @@ msgid ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>$"
-"{refdes:function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
+"function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -54206,8 +54210,8 @@ msgstr ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>$"
-"{refdes:function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
+"function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -55424,7 +55428,7 @@ msgid "Failed to export netlist to '%s': %s"
 msgstr "'%s' पर प्लॉट करने में विफल।\n"
 
 #: pcbnew/tools/board_editor_control.cpp:763
-#: pcbnew/tools/footprint_editor_control.cpp:960
+#: pcbnew/tools/footprint_editor_control.cpp:963
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d डुप्लिकेट ID बदले गए।\n"
@@ -55436,7 +55440,7 @@ msgid "Orphaned net %s re-parented.\n"
 msgstr "अनाथ नेट %s पुनः-पैरेंट किया गया।\n"
 
 #: pcbnew/tools/board_editor_control.cpp:819
-#: pcbnew/tools/footprint_editor_control.cpp:967
+#: pcbnew/tools/footprint_editor_control.cpp:970
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d संभावित समस्याएँ सुधारी गईं।"
@@ -56365,19 +56369,19 @@ msgid ""
 "library is read-only."
 msgstr "फ़ुटप्रिंट चयनित लाइब्रेरी ('%s') में नहीं जोड़ा जा सका। यह लाइब्रेरी केवल-पठनीय है।"
 
-#: pcbnew/tools/footprint_editor_control.cpp:464
+#: pcbnew/tools/footprint_editor_control.cpp:467
 msgid "Change Footprint Name"
 msgstr "फ़ुटप्रिंट नाम बदलें"
 
-#: pcbnew/tools/footprint_editor_control.cpp:534
+#: pcbnew/tools/footprint_editor_control.cpp:537
 msgid "Error renaming footprint"
 msgstr "फ़ुटप्रिंट नाम बदलने में त्रुटि"
 
-#: pcbnew/tools/footprint_editor_control.cpp:713
+#: pcbnew/tools/footprint_editor_control.cpp:716
 msgid "No datasheet found in the footprint."
 msgstr "फ़ुटप्रिंट में कोई डेटाशीट नहीं मिली।"
 
-#: pcbnew/tools/footprint_editor_control.cpp:972
+#: pcbnew/tools/footprint_editor_control.cpp:975
 msgid "No footprint problems found."
 msgstr "कोई फ़ुटप्रिंट समस्या नहीं मिली।"
 
@@ -60313,101 +60317,93 @@ msgstr "PTH के लिए थर्मल रिलीफ़"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] लोड विफल: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;बिटमैप;कन्वर्टर;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "बिटमैप से कॉम्पोनेंट कन्वर्टर"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "KiCad के साथ उपयोग के लिए बिटमैप से घटक बनाएँ"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad स्कीमैटिक संपादक (स्टैंडअलोन)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "स्कीमैटिक कैप्चर टूल"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "KiCad स्कीमैटिक के लिए स्टैंडअलोन स्कीमैटिक संपादक"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Gerber फ़ाइल दर्शक"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "Gerber फ़ाइलें देखें"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Projectmanager;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "EDA सूट"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "स्कीमैटिक डिज़ाइन और सर्किट बोर्ड लेआउट के लिए उपकरण सूट"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "KiCad PCB कैलकुलेटर"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "PCB;Calculator;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "PCB कैलकुलेटर"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "विभिन्न इलेक्ट्रॉनिक्स संबंधी गणनाओं के लिए कैलकुलेटर"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad PCB संपादक (स्टैंडअलोन)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "PCB लेआउट संपादक"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "KiCad बोर्ड के लिए स्टैंडअलोन सर्किट बोर्ड संपादक"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "स्कीमैटिक और सर्किट बोर्ड डिज़ाइन के लिए EDA सूट"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
-msgid "Circuit board"
-msgstr "सर्किट बोर्ड"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -60472,6 +60468,12 @@ msgstr "प्रक्रिया नहीं बनाई जा सकी"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "उपयोगकर्ता स्क्रिप्टिंग पथ %s नहीं बनाया जा सका।"
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "सर्किट बोर्ड"
 
 #~ msgid "Empty sheet pin name"
 #~ msgstr "खाली शीट पिन नाम"

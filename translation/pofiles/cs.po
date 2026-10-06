@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 22:14-0700\n"
+"POT-Creation-Date: 2026-10-06 23:06+0300\n"
 "PO-Revision-Date: 2026-09-22 00:36+0000\n"
 "Last-Translator: Tomas0015 <tom.bezanyi@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v10/cs/>\n"
@@ -1790,7 +1790,7 @@ msgid "Image Converter"
 msgstr "Převod obrázků"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "KiCad převod obrázků"
 
@@ -2281,10 +2281,10 @@ msgstr "Informace"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:990
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:589
 #: pcbnew/footprint_libraries_utils.cpp:396
-#: pcbnew/footprint_libraries_utils.cpp:1142
+#: pcbnew/footprint_libraries_utils.cpp:1154
 #: pcbnew/pcb_design_block_utils.cpp:59 pcbnew/pcb_design_block_utils.cpp:73
 #: pcbnew/router/router_tool.cpp:2089 pcbnew/router/router_tool.cpp:2858
-#: pcbnew/tools/footprint_editor_control.cpp:481 pcbnew/zone_filler.cpp:1647
+#: pcbnew/tools/footprint_editor_control.cpp:484 pcbnew/zone_filler.cpp:1647
 #: pcbnew/zone_filler.cpp:1664
 msgid "Confirmation"
 msgstr "Potvrzení"
@@ -2298,7 +2298,7 @@ msgid "&No"
 msgstr "&Ne"
 
 #: common/design_block_io.cpp:68
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2408,21 +2408,21 @@ msgstr "Složka '%s' návrhových bloků nelze odstranit."
 
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:156
-#: pcbnew/footprint_library_adapter.cpp:538
+#: pcbnew/footprint_library_adapter.cpp:540
 #, c-format
 msgid "Nested table '%s' not found."
 msgstr "Vnořená tabulka '%s' nenalezena."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:163
-#: pcbnew/footprint_library_adapter.cpp:545
+#: pcbnew/footprint_library_adapter.cpp:547
 #, c-format
 msgid "Unknown library type %s "
 msgstr "Neznámý typ knihovny %s "
 
 #: common/design_block_library_adapter.cpp:84
 #: eeschema/libraries/symbol_library_adapter.cpp:168
-#: pcbnew/footprint_library_adapter.cpp:550
+#: pcbnew/footprint_library_adapter.cpp:552
 msgid "Internal error"
 msgstr "Interní chyba"
 
@@ -2430,7 +2430,7 @@ msgstr "Interní chyba"
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1049
 #: eeschema/generate_alias_info.cpp:41 eeschema/lib_symbol.cpp:206
 #: eeschema/lib_symbol.cpp:2752 eeschema/sch_symbol.cpp:2788
-#: eeschema/sch_symbol.cpp:3397 eeschema/sch_symbol.cpp:3982
+#: eeschema/sch_symbol.cpp:3398 eeschema/sch_symbol.cpp:3983
 #: eeschema/symbol_editor/symbol_editor.cpp:1778
 #: eeschema/symbol_viewer_frame.cpp:398 pcbnew/footprint.cpp:4929
 #: pcbnew/generate_footprint_info.cpp:39 pcbnew/plot_board_layers.cpp:201
@@ -2455,7 +2455,7 @@ msgstr "Chyba načítání návrhového bloku %s z knihovny '%s'."
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:42
-#: pcbnew/footprint_libraries_utils.cpp:1343
+#: pcbnew/footprint_libraries_utils.cpp:1355
 msgid "Description"
 msgstr "Popis"
 
@@ -2534,7 +2534,7 @@ msgstr "3D modely"
 #: common/dialog_about/AboutDialog_main.cpp:1090
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#: eeschema/sch_symbol.cpp:3407
+#: eeschema/sch_symbol.cpp:3408
 #: eeschema/widgets/panel_sch_selection_filter.cpp:228
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:33
 #: eeschema/widgets/search_handlers.cpp:158
@@ -2979,7 +2979,7 @@ msgstr "Výchozí pole"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:376
 #: eeschema/fields_grid_table.cpp:526 eeschema/lib_symbol.cpp:2743
 #: eeschema/sch_symbol.cpp:1494 eeschema/sch_symbol.cpp:2747
-#: eeschema/sch_symbol.cpp:2796 eeschema/sch_symbol.cpp:3971
+#: eeschema/sch_symbol.cpp:2796 eeschema/sch_symbol.cpp:3972
 #: eeschema/sim/simulator_frame_ui.cpp:748
 #: eeschema/sim/simulator_frame_ui.cpp:3219
 #: eeschema/sim/simulator_frame_ui.cpp:3260
@@ -3014,7 +3014,7 @@ msgstr "Hodnota"
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:31
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:33
-#: pcbnew/footprint_libraries_utils.cpp:1017
+#: pcbnew/footprint_libraries_utils.cpp:1029
 msgid "Name:"
 msgstr "Název:"
 
@@ -3262,7 +3262,6 @@ msgstr "Název projektu"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1800
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "PCB"
 msgstr "DPS"
 
@@ -3271,7 +3270,6 @@ msgstr "DPS"
 #: eeschema/widgets/hierarchy_pane.cpp:832
 #: eeschema/widgets/hierarchy_pane.cpp:838
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Schematic"
 msgstr "Schéma"
 
@@ -5022,9 +5020,9 @@ msgstr "Soubor '%s' již existuje."
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:523
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:203
 #: pcbnew/footprint_libraries_utils.cpp:397
-#: pcbnew/footprint_libraries_utils.cpp:1143
+#: pcbnew/footprint_libraries_utils.cpp:1155
 #: pcbnew/pcb_design_block_utils.cpp:59 pcbnew/pcb_design_block_utils.cpp:73
-#: pcbnew/tools/footprint_editor_control.cpp:483
+#: pcbnew/tools/footprint_editor_control.cpp:486
 msgid "Overwrite"
 msgstr "Přepsat"
 
@@ -6347,7 +6345,7 @@ msgstr "Vložit oddělovač"
 #: common/dialogs/rule_editor_dialog_base.cpp:185 common/tool/actions.cpp:93
 #: eeschema/symbol_editor/symbol_editor.cpp:806
 #: eeschema/widgets/tuner_slider_base.cpp:130
-#: pcbnew/footprint_libraries_utils.cpp:1013
+#: pcbnew/footprint_libraries_utils.cpp:1025
 msgid "Save"
 msgstr "Uložit"
 
@@ -6379,34 +6377,34 @@ msgstr "Posunout nahoru"
 msgid "Move Down"
 msgstr "Přesunout dolů"
 
-#: common/draw_panel_gal.cpp:313 common/draw_panel_gal.cpp:817
+#: common/draw_panel_gal.cpp:303 common/draw_panel_gal.cpp:794
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "OpenGL nelze použít, návrat k softwarovému rendrování"
 
-#: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:559
+#: common/draw_panel_gal.cpp:310 common/draw_panel_gal.cpp:536
 msgid "Graphics error"
 msgstr "Chyba grafiky"
 
-#: common/draw_panel_gal.cpp:324 common/draw_panel_gal.cpp:328
+#: common/draw_panel_gal.cpp:314 common/draw_panel_gal.cpp:318
 #, fuzzy
 msgid "Graphics error during recovery"
 msgstr "Chyba grafiky"
 
-#: common/draw_panel_gal.cpp:329
+#: common/draw_panel_gal.cpp:319
 #, fuzzy
 msgid "Unknown exception during backend switch"
 msgstr "Výjimka OCC při vytváření plochy: %s"
 
-#: common/draw_panel_gal.cpp:559
+#: common/draw_panel_gal.cpp:536
 #, fuzzy
 msgid "Unknown exception"
 msgstr "Neznámá metoda čištění"
 
-#: common/draw_panel_gal.cpp:824
+#: common/draw_panel_gal.cpp:801
 msgid "Could not use OpenGL"
 msgstr "Nelze použít OpenGL"
 
-#: common/draw_panel_gal.cpp:852
+#: common/draw_panel_gal.cpp:829
 msgid "Error switching GAL backend"
 msgstr "Chyba při přepínání podpůrné vrstvy GAL"
 
@@ -7466,7 +7464,7 @@ msgstr "Dolní"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:534 eeschema/sch_field.cpp:1769
 #: eeschema/sch_pin.cpp:1444 eeschema/sch_pin.cpp:2052
-#: eeschema/sch_symbol.cpp:3944 eeschema/sch_tablecell.cpp:447
+#: eeschema/sch_symbol.cpp:3945 eeschema/sch_tablecell.cpp:447
 #: eeschema/sch_text.cpp:781 eeschema/sch_textbox.cpp:631
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
@@ -7576,8 +7574,8 @@ msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr ""
-"Základní cesta k lokálně instalovanému systému knihoven pouzder "
-"(složky .pretty)."
+"Základní cesta k lokálně instalovanému systému knihoven pouzder (složky ."
+"pretty)."
 
 #: common/env_vars.cpp:129
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
@@ -7615,8 +7613,8 @@ msgid ""
 msgstr ""
 "Vnitřně definován v KiCadu (nelze editovat) a je nastaven na absolutní cestu "
 "momentálně načteného projektu. Tato proměnná prostředí může být použita k "
-"definování souborů a cest relativně k načtenému projektu. Například $"
-"{KIPRJMOD}/libs/footprints.pretty může být definován jako složka obsahující "
+"definování souborů a cest relativně k načtenému projektu. Například "
+"${KIPRJMOD}/libs/footprints.pretty může být definován jako složka obsahující "
 "knihovnu pouzder s názvem footprints.pretty, použitých v projektu."
 
 #: common/env_vars.cpp:150
@@ -9048,11 +9046,11 @@ msgstr "Globální označení"
 msgid "Hierarchical labels"
 msgstr "Hierarchická označení"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3958
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3959
 msgid "Pin numbers"
 msgstr "Číslo vývodů"
 
-#: common/layer_id.cpp:80 eeschema/sch_symbol.cpp:3962
+#: common/layer_id.cpp:80 eeschema/sch_symbol.cpp:3963
 msgid "Pin names"
 msgstr "Názvy vývodů"
 
@@ -9491,10 +9489,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Chybějící jednotky pro '%s'| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1256
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "Neshoda typu mezi '%s' a %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1262
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "Neshoda typu mezi %lf a '%s'"
 
@@ -10185,7 +10185,7 @@ msgstr "Výchozí úpravy"
 #: eeschema/dialogs/dialog_rescue_each.cpp:125
 #: eeschema/dialogs/dialog_sim_model_base.cpp:274 eeschema/lib_symbol.cpp:2740
 #: eeschema/sch_symbol.cpp:2744 eeschema/sch_symbol.cpp:2793
-#: eeschema/sch_symbol.cpp:3968 eeschema/widgets/search_handlers.cpp:160
+#: eeschema/sch_symbol.cpp:3969 eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 #: pcbnew/footprint.cpp:4917 pcbnew/widgets/search_handlers.cpp:140
@@ -10207,7 +10207,7 @@ msgstr "Seskupeno podle hodnoty a pouzdra"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:77
 #: eeschema/lib_symbol.cpp:2783 eeschema/menubar.cpp:162
 #: eeschema/sch_rule_area.cpp:452 eeschema/sch_sheet.cpp:2155
-#: eeschema/sch_symbol.cpp:4036 eeschema/tools/sch_edit_tool.cpp:763
+#: eeschema/sch_symbol.cpp:4037 eeschema/tools/sch_edit_tool.cpp:763
 #: pcbnew/footprint.cpp:4939 pcbnew/tools/edit_tool.cpp:560
 msgid "Attributes"
 msgstr "Atributy"
@@ -10381,7 +10381,7 @@ msgstr "Vytvořit nový dokument v editoru"
 #: common/tool/actions.cpp:54 eeschema/sch_base_frame.cpp:739
 #: eeschema/symbol_editor/symbol_editor.cpp:816
 #: pcbnew/footprint_libraries_utils.cpp:441
-#: pcbnew/footprint_libraries_utils.cpp:1027
+#: pcbnew/footprint_libraries_utils.cpp:1039
 msgid "New Library..."
 msgstr "Nová knihovna..."
 
@@ -11729,7 +11729,7 @@ msgstr "Deska"
 #: eeschema/sch_base_frame.cpp:673 eeschema/sch_symbol.cpp:2770
 #: eeschema/sch_symbol.cpp:2774 eeschema/sch_symbol.cpp:2807
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:2165
-#: pcbnew/footprint_libraries_utils.cpp:1342
+#: pcbnew/footprint_libraries_utils.cpp:1354
 msgid "Library"
 msgstr "Knihovny"
 
@@ -12489,8 +12489,8 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"Přiřazení pouzdra ze seznamu sítí schématu a asociačního souboru pouzder "
-"(.cmp) jsou v konfliktu.\n"
+"Přiřazení pouzdra ze seznamu sítí schématu a asociačního souboru pouzder (."
+"cmp) jsou v konfliktu.\n"
 "\n"
 "Zvolte prosím přiřazení."
 
@@ -13106,8 +13106,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -14510,7 +14510,7 @@ msgstr "Zobrazit okno nápovědy k syntaxi"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/lib_symbol.cpp:2738 eeschema/sch_symbol.cpp:3966
+#: eeschema/lib_symbol.cpp:2738 eeschema/sch_symbol.cpp:3967
 #: eeschema/widgets/sch_properties_panel.cpp:436
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
@@ -14699,14 +14699,14 @@ msgstr "Velikost textu názvu"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:105
 #: eeschema/dialogs/dialog_sim_model.cpp:650 eeschema/sch_field.cpp:1735
 #: eeschema/sch_item.cpp:818 eeschema/sch_item.cpp:882
-#: eeschema/sch_symbol.cpp:4002
+#: eeschema/sch_symbol.cpp:4003
 msgid "Unit"
 msgstr "Jednotka"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:82
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:106
 #: eeschema/sch_field.cpp:1736 eeschema/sch_item.cpp:821
-#: eeschema/sch_item.cpp:904 eeschema/sch_symbol.cpp:4019
+#: eeschema/sch_item.cpp:904 eeschema/sch_symbol.cpp:4020
 #: eeschema/tools/sch_edit_tool.cpp:148
 msgid "Body Style"
 msgstr "Styl těla"
@@ -14992,13 +14992,13 @@ msgstr "Vyloučit z kusovníku"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1053
 #: eeschema/sch_rule_area.cpp:459 eeschema/sch_sheet.cpp:2160
-#: eeschema/sch_symbol.cpp:4038
+#: eeschema/sch_symbol.cpp:4039
 msgid "Exclude From Simulation"
 msgstr "Vyloučit ze simulace"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1054
 #: eeschema/sch_rule_area.cpp:454 eeschema/sch_sheet.cpp:2157
-#: eeschema/sch_symbol.cpp:1495 eeschema/sch_symbol.cpp:4046
+#: eeschema/sch_symbol.cpp:1495 eeschema/sch_symbol.cpp:4047
 msgid "Exclude From Board"
 msgstr "Vyloučit z desky"
 
@@ -17121,7 +17121,6 @@ msgid "Code"
 msgstr "Kód"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "Uložit {} v poli Hodnota jako \"{}\""
 
@@ -20724,7 +20723,7 @@ msgstr ""
 
 #: eeschema/sch_bitmap.cpp:308 eeschema/sch_group.cpp:458
 #: eeschema/sch_pin.cpp:2044 eeschema/sch_shape.cpp:605
-#: eeschema/sch_symbol.cpp:3936 pcbnew/board_item.cpp:493
+#: eeschema/sch_symbol.cpp:3937 pcbnew/board_item.cpp:493
 #: pcbnew/pcb_group.cpp:543 pcbnew/pcb_point.cpp:232 pcbnew/pcb_shape.cpp:1014
 #: pcbnew/pcb_tablecell.cpp:334 pcbnew/pcb_track.cpp:3209
 #: pcbnew/widgets/pcb_properties_panel.cpp:563
@@ -20735,7 +20734,7 @@ msgstr "Pozice X"
 
 #: eeschema/sch_bitmap.cpp:313 eeschema/sch_group.cpp:459
 #: eeschema/sch_pin.cpp:2048 eeschema/sch_shape.cpp:607
-#: eeschema/sch_symbol.cpp:3939 pcbnew/board_item.cpp:496
+#: eeschema/sch_symbol.cpp:3940 pcbnew/board_item.cpp:496
 #: pcbnew/pcb_group.cpp:544 pcbnew/pcb_point.cpp:233 pcbnew/pcb_shape.cpp:1016
 #: pcbnew/pcb_tablecell.cpp:335 pcbnew/pcb_track.cpp:3213
 #: pcbnew/widgets/pcb_properties_panel.cpp:564 pcbnew/zone.cpp:2023
@@ -22384,7 +22383,7 @@ msgid "Schematic rule area"
 msgstr "Oblast pravidel schématu"
 
 #: eeschema/sch_rule_area.cpp:464 eeschema/sch_sheet.cpp:2164
-#: eeschema/sch_symbol.cpp:1496 eeschema/sch_symbol.cpp:4042
+#: eeschema/sch_symbol.cpp:1496 eeschema/sch_symbol.cpp:4043
 #: pcbnew/footprint.cpp:4946 pcbnew/widgets/pcb_properties_panel.cpp:605
 #: pcbnew/widgets/pcb_properties_panel.cpp:619
 #: pcbnew/widgets/pcb_properties_panel.cpp:717
@@ -22392,7 +22391,7 @@ msgid "Exclude From Bill of Materials"
 msgstr "Vyloučit z rozpisky materiálu"
 
 #: eeschema/sch_rule_area.cpp:469 eeschema/sch_sheet.cpp:2168
-#: eeschema/sch_symbol.cpp:1498 eeschema/sch_symbol.cpp:4054
+#: eeschema/sch_symbol.cpp:1498 eeschema/sch_symbol.cpp:4055
 #: eeschema/tools/sch_actions.cpp:1103 pcbnew/footprint.cpp:4949
 #: pcbnew/widgets/pcb_properties_panel.cpp:604
 #: pcbnew/widgets/pcb_properties_panel.cpp:617
@@ -22536,7 +22535,7 @@ msgstr "(Smazaná položka)"
 msgid "Hierarchical Sheet Pin '%s'"
 msgstr "Vývod hierarchického listu '%s'"
 
-#: eeschema/sch_symbol.cpp:1497 eeschema/sch_symbol.cpp:4050
+#: eeschema/sch_symbol.cpp:1497 eeschema/sch_symbol.cpp:4051
 #: pcbnew/footprint.cpp:4943 pcbnew/widgets/pcb_properties_panel.cpp:606
 #: pcbnew/widgets/pcb_properties_panel.cpp:621
 #: pcbnew/widgets/pcb_properties_panel.cpp:722
@@ -22572,25 +22571,25 @@ msgstr "Žádná knihovna není definována!"
 msgid "Symbol not found in %s!"
 msgstr "Symbol nebyl nalezen v %s!"
 
-#: eeschema/sch_symbol.cpp:3081
+#: eeschema/sch_symbol.cpp:3082
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Symbol %s [%s]"
 
-#: eeschema/sch_symbol.cpp:3945
+#: eeschema/sch_symbol.cpp:3946
 msgid "Mirror X"
 msgstr "Zrcadlit X"
 
-#: eeschema/sch_symbol.cpp:3947
+#: eeschema/sch_symbol.cpp:3948
 msgid "Mirror Y"
 msgstr "Zrcadlit Y"
 
-#: eeschema/sch_symbol.cpp:3974 eeschema/widgets/search_handlers.cpp:171
+#: eeschema/sch_symbol.cpp:3975 eeschema/widgets/search_handlers.cpp:171
 #: pcbnew/footprint.cpp:4923 pcbnew/widgets/search_handlers.cpp:145
 msgid "Library Link"
 msgstr "Propojení knihovny"
 
-#: eeschema/sch_symbol.cpp:3978 eeschema/widgets/search_handlers.cpp:172
+#: eeschema/sch_symbol.cpp:3979 eeschema/widgets/search_handlers.cpp:172
 #: pcbnew/footprint.cpp:4926 pcbnew/plot_board_layers.cpp:198
 #: pcbnew/widgets/search_handlers.cpp:146
 msgid "Library Description"
@@ -23002,8 +23001,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23054,9 +23053,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23116,25 +23115,25 @@ msgstr ""
 "<br><samp>150K</samp></td>\\n    </tr>\\n    <tr>\\n        <td><br></"
 "td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>${ROW}</samp> (v "
 "tabulkách)</td>\\n        <td></td>\\n        <td>&nbsp;<br><samp>0, 1, 2..."
-"</samp> (od 0)</td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>$"
-"{COL}</samp> (v tabulkách)</td>\\n        <td></td>\\n        <td>&nbsp;"
-"<br><samp>0, 1, 2...</samp> (od 0)</td>\\n    </tr>\\n    <tr>\\n        "
-"<td>&nbsp;<br><samp>${ADDR}</samp> (v tabulkách)</td>\\n        <td></"
-"td>\\n        <td>&nbsp;<br><samp>A0, B1, C2...</samp> (od 0)</td>\\n    </"
-"tr>\\n    <tr>\\n        <td><br></td>\\n    </tr>\\n    <tr>\\n        "
-"<td>&nbsp;<br><samp>@{expression}</samp></td>\\n        <td></td>\\n        "
-"<td>&nbsp;<br><samp><i>evaluated_result</i></samp></td>\\n    </tr>\\n    "
-"<tr>\\n        <td>&nbsp;<br><samp>@{2 + 3}</samp></td>\\n        <td></"
-"td>\\n        <td>&nbsp;<br><samp>5</samp></td>\\n    </tr>\\n    "
-"<tr>\\n        <td>&nbsp;<br><samp>@{${ROW} + 1}</samp></td>\\n        <td></"
-"td>\\n        <td>&nbsp;<br><samp>4</samp> (when ROW=3)</td>\\n    </"
-"tr>\\n    <tr>\\n        <td><br></td>\\n    </tr>\\n    <tr>\\n        "
-"<th>Porovnání řetězců a podmíněný text</th>\\n        <th></th>\\n        "
-"<th></th>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>@{\"text\" == "
-"\"text\"}</samp></td>\\n        <td></td>\\n        <td>&nbsp;<br><samp>1</"
-"samp></td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>@{\"text\" !"
-"= \"other\"}</samp></td>\\n        <td></td>\\n        <td>&nbsp;"
-"<br><samp>1</samp></td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;"
+"</samp> (od 0)</td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;"
+"<br><samp>${COL}</samp> (v tabulkách)</td>\\n        <td></td>\\n        "
+"<td>&nbsp;<br><samp>0, 1, 2...</samp> (od 0)</td>\\n    </tr>\\n    "
+"<tr>\\n        <td>&nbsp;<br><samp>${ADDR}</samp> (v tabulkách)</"
+"td>\\n        <td></td>\\n        <td>&nbsp;<br><samp>A0, B1, C2...</samp> "
+"(od 0)</td>\\n    </tr>\\n    <tr>\\n        <td><br></td>\\n    </tr>\\n    "
+"<tr>\\n        <td>&nbsp;<br><samp>@{expression}</samp></td>\\n        <td></"
+"td>\\n        <td>&nbsp;<br><samp><i>evaluated_result</i></samp></td>\\n    "
+"</tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>@{2 + 3}</samp></"
+"td>\\n        <td></td>\\n        <td>&nbsp;<br><samp>5</samp></td>\\n    </"
+"tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>@{${ROW} + 1}</samp></"
+"td>\\n        <td></td>\\n        <td>&nbsp;<br><samp>4</samp> (when ROW=3)</"
+"td>\\n    </tr>\\n    <tr>\\n        <td><br></td>\\n    </tr>\\n    "
+"<tr>\\n        <th>Porovnání řetězců a podmíněný text</th>\\n        <th></"
+"th>\\n        <th></th>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;"
+"<br><samp>@{\"text\" == \"text\"}</samp></td>\\n        <td></td>\\n        "
+"<td>&nbsp;<br><samp>1</samp></td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;"
+"<br><samp>@{\"text\" != \"other\"}</samp></td>\\n        <td></td>\\n        "
+"<td>&nbsp;<br><samp>1</samp></td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;"
 "<br><samp>@{if(condition, true_val, false_val)}</samp></td>\\n        <td></"
 "td>\\n        <td>&nbsp;<br><samp>Podmíněné zobrazení textu</samp></"
 "td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>@{if(\"${LAYER}\" "
@@ -23164,8 +23163,8 @@ msgstr ""
 "td>\\n        <td>&nbsp;<br><samp>Název spoje připojeného k vývodu</samp></"
 "td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>${R1:NET_NAME(1)}</"
 "samp></td>\\n        <td></td>\\n        <td>&nbsp;<br><samp>VCC</samp></"
-"td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>$"
-"{refdes:PIN_NAME(pin)}</samp></td>\\n        <td></td>\\n        <td>&nbsp;"
+"td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>${refdes:"
+"PIN_NAME(pin)}</samp></td>\\n        <td></td>\\n        <td>&nbsp;"
 "<br><samp>Název vývodu nebo vybraná alternativa</samp></td>\\n    </"
 "tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>${U1:PIN_NAME(5)}</samp></"
 "td>\\n        <td></td>\\n        <td>&nbsp;<br><samp>USART1_TX</samp> "
@@ -23187,8 +23186,8 @@ msgstr ""
 "td>\\n        <td>&nbsp;<br><samp>GND</samp> nebo <samp>NC</samp></td>\\n    "
 "</tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>${refdes:NET_CLASS(pin)}</"
 "samp></td>\\n        <td></td>\\n        <td>&nbsp;<br><samp>Třída spojů pro "
-"vývod</samp></td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>$"
-"{J1:NET_CLASS(1)}</samp></td>\\n        <td></td>\\n        <td>&nbsp;"
+"vývod</samp></td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>${J1:"
+"NET_CLASS(1)}</samp></td>\\n        <td></td>\\n        <td>&nbsp;"
 "<br><samp>Power</samp></td>\\n    </tr>\\n    <tr>\\n        <td><br></"
 "td>\\n    </tr>\\n    <tr>\\n        <th>Escape sekvence</th>\\n        "
 "<th></th>\\n        <th></th>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;"
@@ -23200,8 +23199,8 @@ msgstr ""
 "<td></td>\\n        <td>&nbsp;<br><samp>@{x+y}</samp> (nevyhodnoceno)</"
 "td>\\n    </tr>\\n    <tr>\\n        <td><br></td>\\n    </tr>\\n    "
 "<tr>\\n        <th>Vnořené proměnné</th>\\n        <th></th>\\n        <th></"
-"th>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>${J1:REFERENCE(@{$"
-"{ROW}+2})}</samp></td>\\n        <td></td>\\n        <td>&nbsp;"
+"th>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>${J1:"
+"REFERENCE(@{${ROW}+2})}</samp></td>\\n        <td></td>\\n        <td>&nbsp;"
 "<br><samp>J1B</samp> (when ROW=0, pin 2 in unit B)</td>\\n    </tr>\\n    "
 "<tr>\\n        <td>&nbsp;<br><samp>${J1:NET_NAME(${COL})}</samp></"
 "td>\\n        <td></td>\\n        <td>&nbsp;<br><samp>Dynamické vyhledání "
@@ -23219,16 +23218,16 @@ msgstr ""
 "td>\\n        <td></td>\\n        <td>&nbsp;<br><samp>Hodnota z buňky výše "
 "(pokud ROW > 0)</samp></td>\\n    </tr>\\n    <tr>\\n        <td><br></"
 "td>\\n    </tr>\\n    <tr>\\n        <td><br></td>\\n    </tr>\\n    "
-"<tr>\\n        <th>Definice sběrnice</th>\\n        "
-"<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\\n        <th>Výsledné spoje</th>\\n    </tr>\\n    <tr>\\n        "
-"<td>&nbsp;<br><samp>prefix[m..n]</samp></td>\\n        <td></td>\\n        "
-"<td>&nbsp;<br><samp>prefixm to prefixn</samp></td>\\n    </tr>\\n    "
-"<tr>\\n        <td>&nbsp;<br><samp>D[0..7]</samp></td>\\n        <td></"
-"td>\\n        <td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></"
-"td>\\n    </tr>\\n    <tr>\\n        <td><br></td>\\n    </tr>\\n    "
-"<tr>\\n        <td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\\n        "
-"<td></td>\\n        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\\n    </"
+"<tr>\\n        <th>Definice sběrnice</th>\\n        <th>&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>\\n        "
+"<th>Výsledné spoje</th>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;"
+"<br><samp>prefix[m..n]</samp></td>\\n        <td></td>\\n        <td>&nbsp;"
+"<br><samp>prefixm to prefixn</samp></td>\\n    </tr>\\n    <tr>\\n        "
+"<td>&nbsp;<br><samp>D[0..7]</samp></td>\\n        <td></td>\\n        "
+"<td>&nbsp;<br><samp>D0, D1, D2, D3, D4, D5, D6, D7</samp></td>\\n    </"
+"tr>\\n    <tr>\\n        <td><br></td>\\n    </tr>\\n    <tr>\\n        "
+"<td>&nbsp;<br><samp>{net1 net2 ...}</samp></td>\\n        <td></"
+"td>\\n        <td>&nbsp;<br><samp>net1, net2, ...</samp></td>\\n    </"
 "tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>{SCL SDA}</samp></td>\\n        "
 "<td></td>\\n        <td>&nbsp;<br><samp>SCL, SDA</samp></td>\\n    </"
 "tr>\\n    <tr>\\n        <td><br></td>\\n    </tr>\\n    <tr>\\n        "
@@ -23240,29 +23239,28 @@ msgstr ""
 "<tr>\\n        <td>&nbsp;<br><samp>MEM{D[1..2] LATCH}</samp></td>\\n        "
 "<td></td>\\n        <td>&nbsp;<br> <samp>MEM.D1, MEM.D2, MEM.LATCH</samp> </"
 "td>\\n    </tr>\\n    <tr>\\n        <td>&nbsp;<br><samp>MEM{D_{[1..2]} "
-"~{LATCH}}</samp></td>\\n        <td></td>\\n        <td> "
-"<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\\n    </"
-"tr>\\n    <tr>\\n        <td><br></td>\\n    </tr>\\n</table>\\n<p></"
-"p>\\n<p></p>\\n<i>Značkování má přednost před definicemi sběrnice.</"
-"i>\\n<p></p>\\n<p><b>Funkce vývodů:</b> Automaticky naleznou správné "
-"umístění jednotky. U vícejednotkových symbolů funkce jako "
+"~{LATCH}}</samp></td>\\n        <td></td>\\n        <td> <samp>&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;</u></samp><br> <samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</"
+"samp> </td>\\n    </tr>\\n    <tr>\\n        <td><br></td>\\n    </tr>\\n</"
+"table>\\n<p></p>\\n<p></p>\\n<i>Značkování má přednost před definicemi "
+"sběrnice.</i>\\n<p></p>\\n<p><b>Funkce vývodů:</b> Automaticky naleznou "
+"správné umístění jednotky. U vícejednotkových symbolů funkce jako "
 "<samp>NET_NAME(pin)</samp> fungují i v případě, že vývod je v jiné jednotce "
 "než ta na aktuálním listu.</p>\\n<p><b>Odkazy na buňky tabulky:</b> Funkce "
-"<samp>CELL()</samp> funguje pouze v buňkách tabulky. Pomocí <samp>$"
-"{CELL(\"A0\")}</samp> nebo <samp>${CELL(row, col)}</samp> lze odkazovat na "
-"jiné buňky ve stejné tabulce. Čísla řádků a sloupců jsou od nuly (A0 je "
-"první řádek, první sloupec). CELL vrací vyhodnocenou/zobrazenou hodnotu, "
-"nikoli nezpracovaný text buňky.</p>\\n<p><b>Vnořené proměnné:</b> Proměnné "
-"mohou obsahovat další proměnné. Vnitřní proměnné jsou rozvinuty jako první. "
-"Maximální hloubka vnořování: 6 úrovní.</p>\\n<p><b>Chybová hlášení:</b></"
-"p>\\n<ul>\\n<li><samp>&lt;UNRESOLVED: token&gt;</samp> - Proměnnou nebo "
-"funkci nelze přeložit</li>\\n<li><samp>&lt;Unit X not placed&gt;</samp> - "
-"Vývod je v jednotce, která není umístěna na žádném listu</"
-"li>\\n<li><samp>&lt;Unresolved: Cell X not found&gt;</samp> - Adresa buňky "
-"je mimo hranice tabulky</li>\\n</ul>\\n\n"
+"<samp>CELL()</samp> funguje pouze v buňkách tabulky. Pomocí "
+"<samp>${CELL(\"A0\")}</samp> nebo <samp>${CELL(row, col)}</samp> lze "
+"odkazovat na jiné buňky ve stejné tabulce. Čísla řádků a sloupců jsou od "
+"nuly (A0 je první řádek, první sloupec). CELL vrací vyhodnocenou/zobrazenou "
+"hodnotu, nikoli nezpracovaný text buňky.</p>\\n<p><b>Vnořené proměnné:</b> "
+"Proměnné mohou obsahovat další proměnné. Vnitřní proměnné jsou rozvinuty "
+"jako první. Maximální hloubka vnořování: 6 úrovní.</p>\\n<p><b>Chybová "
+"hlášení:</b></p>\\n<ul>\\n<li><samp>&lt;UNRESOLVED: token&gt;</samp> - "
+"Proměnnou nebo funkci nelze přeložit</li>\\n<li><samp>&lt;Unit X not "
+"placed&gt;</samp> - Vývod je v jednotce, která není umístěna na žádném "
+"listu</li>\\n<li><samp>&lt;Unresolved: Cell X not found&gt;</samp> - Adresa "
+"buňky je mimo hranice tabulky</li>\\n</ul>\\n\n"
 "\n"
 
 #: eeschema/sch_textbox.cpp:363
@@ -24108,8 +24106,8 @@ msgstr "Chyba při vytváření dočasného výstupního souboru"
 
 #: eeschema/sim/kibis/kibis.cpp:851
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 "Kibis zatím nepodporuje hodnoty DUT. https://ibis.org/summits/nov16a/chen.pdf"
 
@@ -25223,12 +25221,12 @@ msgid "Save Symbol As"
 msgstr "Uložit symbol jako"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:805
-#: pcbnew/footprint_libraries_utils.cpp:1012
+#: pcbnew/footprint_libraries_utils.cpp:1024
 msgid "Save in library:"
 msgstr "Uložit v knihovně:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:909
-#: pcbnew/footprint_libraries_utils.cpp:1109
+#: pcbnew/footprint_libraries_utils.cpp:1121
 msgid "A library must be specified."
 msgstr "Musí být zadána knihovna."
 
@@ -25343,7 +25341,7 @@ msgid "Delete All Listed Symbols"
 msgstr "Smazat všechny uvedené symboly"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1434 pcbnew/files.cpp:318
-#: pcbnew/footprint_libraries_utils.cpp:1201
+#: pcbnew/footprint_libraries_utils.cpp:1213
 #, c-format
 msgid "Revert '%s' to last version saved?"
 msgstr "Vrátit '%s' na poslední uloženou verzi?"
@@ -27866,14 +27864,14 @@ msgid "Symbol library '%s' not found."
 msgstr "Knihovna symbolů '%s' nebyla nalezena."
 
 #: eeschema/tools/symbol_editor_control.cpp:420
-#: pcbnew/tools/footprint_editor_control.cpp:649
+#: pcbnew/tools/footprint_editor_control.cpp:652
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
 msgstr ""
 "Chybějící nebo chybný argument průzkumníku souborů '%F' v obecném nastavení."
 
 #: eeschema/tools/symbol_editor_control.cpp:448
-#: pcbnew/tools/footprint_editor_control.cpp:674
+#: pcbnew/tools/footprint_editor_control.cpp:677
 msgid "No text editor selected in KiCad. Please choose one."
 msgstr "V KiCad není vybrán žádný textový editor. Vyberte prosím některý."
 
@@ -28039,7 +28037,7 @@ msgid "Enter name for new top-level sheet:"
 msgstr "Zadejte název nového listu nejvyšší úrovně:"
 
 #: eeschema/widgets/hierarchy_pane.cpp:565
-#: pcbnew/footprint_libraries_utils.cpp:1230
+#: pcbnew/footprint_libraries_utils.cpp:1242
 msgid "Untitled"
 msgstr "Bez názvu"
 
@@ -29176,7 +29174,7 @@ msgid "Clear Recent Job Files"
 msgstr "Vymazat poslední soubory Job"
 
 #: gerbview/gerbview_frame.cpp:97
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad prohlížeč gerber"
 
@@ -30648,8 +30646,8 @@ msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
-"Nastavit bod otáčení relativně ke středu desky v centimetrech, formát "
-"'X,Y,Z' např.: '-10,2,0'"
+"Nastavit bod otáčení relativně ke středu desky v centimetrech, formát 'X,Y,"
+"Z' např.: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:299
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
@@ -31025,7 +31023,7 @@ msgid "Enter name for the new template:"
 msgstr "Zadejte název nové šablony:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:374
-#: pcbnew/tools/footprint_editor_control.cpp:416
+#: pcbnew/tools/footprint_editor_control.cpp:419
 msgid "_copy"
 msgstr "_kopírovat"
 
@@ -37627,7 +37625,7 @@ msgstr "Jednotky:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:49
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:309
-#: pcbnew/footprint_libraries_utils.cpp:970
+#: pcbnew/footprint_libraries_utils.cpp:982
 msgid "Update Footprint"
 msgstr "Aktualizovat pouzdro"
 
@@ -39674,8 +39672,8 @@ msgstr "Vůle pájecí pasty:"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:375
 msgid ""
 "Local solder paste clearance for this footprint.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
 "Lokální odsazení pájecí pasty pro toto pouzdro.\n"
@@ -39880,8 +39878,8 @@ msgstr "Povolit přemostěné otvory nepájivé masky mezi ploškami"
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
 msgid ""
 "Solder paste clearance relative to pad size.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "Odsazení pájecí pasty relativně k velikosti plošky.\n"
@@ -39943,8 +39941,8 @@ msgid "Footprint Properties"
 msgstr "Vlastnosti pouzdra"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:501
-#: pcbnew/footprint_libraries_utils.cpp:1115
-#: pcbnew/tools/footprint_editor_control.cpp:471
+#: pcbnew/footprint_libraries_utils.cpp:1127
+#: pcbnew/tools/footprint_editor_control.cpp:474
 msgid "Footprint must have a name."
 msgstr "Pouzdro musí mít název."
 
@@ -39954,7 +39952,7 @@ msgid "Footprint name may not contain '%s'."
 msgstr "Název pouzdra nesmí obsahovat '%s'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:519
-#: pcbnew/tools/footprint_editor_control.cpp:478
+#: pcbnew/tools/footprint_editor_control.cpp:481
 #, c-format
 msgid "Footprint '%s' already exists in library '%s'."
 msgstr "Pouzdro '%s' již v knihovně '%s' existuje."
@@ -41760,8 +41758,8 @@ msgstr "Výchozí vlastnosti plošky pro přidání nástroje plošky"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
 msgid ""
 "Local solder paste clearance for this pad.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
 "Lokální izolační mezera pájecí pasty pro tuto plošku.\n"
@@ -42623,8 +42621,8 @@ msgstr ""
 "Nastavit globální korekci šířky pro přesný postscriptový výstup.\n"
 "Tato korekce šířky je určena ke kompenzování šířky spojů a také k chybám "
 "velikosti plošek a prokovů.\n"
-"Vhodná hodnota korekce šířky musí být v rozsahu [-(MinTrackWidth-1), +"
-"(MinClearanceValue-1)]."
+"Vhodná hodnota korekce šířky musí být v rozsahu [-(MinTrackWidth-1), "
+"+(MinClearanceValue-1)]."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:324
 msgid "Force A4 output"
@@ -45086,9 +45084,8 @@ msgid ""
 msgstr ""
 "### Dokumentace\n"
 "\n"
-"Úplná dokumentace je uvedena na [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules)."
+"Úplná dokumentace je uvedena na [https://docs.kicad.org](https://go.kicad."
+"org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_rules_help_1clauses.h:2
 msgid ""
@@ -45152,8 +45149,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -45413,8 +45410,8 @@ msgstr ""
 "| Kontroluje šířku prstenců na prokovech."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Kontroluje zadaný výraz."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -45793,8 +45790,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -45802,8 +45799,8 @@ msgstr ""
 "\n"
 "Mnoho vlastností objektů je dostupných pro testování ve výrazech vlastních "
 "pravidel. Úplný seznam naleznete v dokumentaci na [https://docs.kicad.org]"
-"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules).\n"
+"(https://go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules).\n"
 "<br><br><br>\n"
 "\n"
 
@@ -46171,13 +46168,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -46331,13 +46328,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -49960,7 +49957,7 @@ msgid "Footprint exported to file '%s'."
 msgstr "Pouzdro exportováno do souboru '%s'."
 
 #: pcbnew/footprint_libraries_utils.cpp:469
-#: pcbnew/footprint_libraries_utils.cpp:1165 pcbnew/tools/pcb_control.cpp:156
+#: pcbnew/footprint_libraries_utils.cpp:1177 pcbnew/tools/pcb_control.cpp:156
 msgid "New Footprint Library"
 msgstr "Nová knihovna pouzder"
 
@@ -49990,12 +49987,17 @@ msgstr "Exportovat pouzdra do knihovny:"
 msgid "Update board footprints to link to exported footprints"
 msgstr "Aktualizovat pouzdra desky, aby se propojily s exportovanými pouzdry"
 
-#: pcbnew/footprint_libraries_utils.cpp:861
+#: pcbnew/footprint_libraries_utils.cpp:842
+#, fuzzy, c-format
+msgid "Footprint '%s' could not be saved to library '%s'."
+msgstr "Pouzdro '%s' nebylo nalezeno v knihovně '%s'"
+
+#: pcbnew/footprint_libraries_utils.cpp:873
 #: pcbnew/footprint_viewer_frame.cpp:752
 msgid "No board currently open."
 msgstr "Není otevřená žádná deska."
 
-#: pcbnew/footprint_libraries_utils.cpp:890
+#: pcbnew/footprint_libraries_utils.cpp:902
 msgid ""
 "Unable to find the footprint on the main board.\n"
 "Cannot save."
@@ -50003,31 +50005,31 @@ msgstr ""
 "Nelze najít pouzdro na hlavní desce.\n"
 "Nelze uložit."
 
-#: pcbnew/footprint_libraries_utils.cpp:898
+#: pcbnew/footprint_libraries_utils.cpp:910
 #: pcbnew/footprint_viewer_frame.cpp:761
 msgid "Previous footprint placement still in progress."
 msgstr "Předchozí umisťování pouzdra stále probíhá."
 
-#: pcbnew/footprint_libraries_utils.cpp:983
+#: pcbnew/footprint_libraries_utils.cpp:995
 #: pcbnew/footprint_viewer_frame.cpp:802
 msgid "Insert Footprint"
 msgstr "Vložit pouzdro"
 
-#: pcbnew/footprint_libraries_utils.cpp:1001
+#: pcbnew/footprint_libraries_utils.cpp:1013
 msgid "Save Footprint As"
 msgstr "Uložit pouzdro jako"
 
-#: pcbnew/footprint_libraries_utils.cpp:1138
+#: pcbnew/footprint_libraries_utils.cpp:1150
 #, c-format
 msgid "Footprint %s already exists in %s."
 msgstr "Pouzdro %s již existuje v %s."
 
-#: pcbnew/footprint_libraries_utils.cpp:1185
+#: pcbnew/footprint_libraries_utils.cpp:1197
 #, c-format
 msgid "Footprint '%s' replaced in '%s'"
 msgstr "Pouzdro '%s' nahrazeno v '%s'"
 
-#: pcbnew/footprint_libraries_utils.cpp:1186
+#: pcbnew/footprint_libraries_utils.cpp:1198
 #, c-format
 msgid "Footprint '%s' added to '%s'"
 msgstr "Pouzdro '%s' přidáno do '%s'"
@@ -50341,7 +50343,7 @@ msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
 msgstr "Aktuální deska bude ztracena a tuto operaci nelze vrátiti. Pokračovat?"
 
-#: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:254
+#: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:257
 msgid "The current footprint has been modified.  Save changes?"
 msgstr "Otevřené pouzdro bylo upraveno.  Uložit změny?"
 
@@ -51078,8 +51080,8 @@ msgstr "Zpracování symbolu '%s:%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2105
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "Varování: pouzdru %s '%s' chybí název knihovny. Pro zamezení opakovaných "
 "upozornění na aktualizaci použijte formát 'Knihovna:Pouzdro'."
@@ -53685,8 +53687,8 @@ msgid ""
 "Footprint Libraries..."
 msgstr ""
 "Vybraný soubor obsahuje více pouzder. Importováno bude pouze první z nich.\n"
-"Chcete-li načíst všechna pouzdra, přidejte jej jako knihovnu přes Předvolby "
-"-> Spravovat knihovny pouzder..."
+"Chcete-li načíst všechna pouzdra, přidejte jej jako knihovnu přes Předvolby -"
+"> Spravovat knihovny pouzder..."
 
 #: pcbnew/pcb_io/pcb_io.cpp:175
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
@@ -54102,8 +54104,8 @@ msgid ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>$"
-"{refdes:function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
+"function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -54405,8 +54407,8 @@ msgstr ""
 "<i>Značení má přednost před rozvojem proměnných.</i>\n"
 "<p></p>\n"
 "<p><b>Křížové odkazy pouzdra:</b> Referenční pole a plošky jiných pouzder se "
-"odkazují pomocí syntaxe <samp>${refdes:field}</samp> nebo <samp>$"
-"{refdes:function(pad)}</samp>.</p>\n"
+"odkazují pomocí syntaxe <samp>${refdes:field}</samp> nebo <samp>${refdes:"
+"function(pad)}</samp>.</p>\n"
 "<p><b>Vnořené proměnné:</b> Proměnné mohou obsahovat jiné proměnné. Vnitřní "
 "proměnné jsou rozvinuty jako první. Maximální hloubka vnoření: 10 úrovní.</"
 "p>\n"
@@ -55637,7 +55639,7 @@ msgid "Failed to export netlist to '%s': %s"
 msgstr "Nepodařilo se načíst '%s'.\n"
 
 #: pcbnew/tools/board_editor_control.cpp:763
-#: pcbnew/tools/footprint_editor_control.cpp:960
+#: pcbnew/tools/footprint_editor_control.cpp:963
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d duplicitní ID byly nahrazeny.\n"
@@ -55649,7 +55651,7 @@ msgid "Orphaned net %s re-parented.\n"
 msgstr "Osiřelý spoj %s byl přeřazen.\n"
 
 #: pcbnew/tools/board_editor_control.cpp:819
-#: pcbnew/tools/footprint_editor_control.cpp:967
+#: pcbnew/tools/footprint_editor_control.cpp:970
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d opraveny potenciální problémy."
@@ -56587,19 +56589,19 @@ msgstr ""
 "Pouzdro nelze přidat do vybrané knihovny ('%s'). Tato knihovna je pouze pro "
 "čtení."
 
-#: pcbnew/tools/footprint_editor_control.cpp:464
+#: pcbnew/tools/footprint_editor_control.cpp:467
 msgid "Change Footprint Name"
 msgstr "Změnit název pouzdra"
 
-#: pcbnew/tools/footprint_editor_control.cpp:534
+#: pcbnew/tools/footprint_editor_control.cpp:537
 msgid "Error renaming footprint"
 msgstr "Chyba při přejmenování pouzdra"
 
-#: pcbnew/tools/footprint_editor_control.cpp:713
+#: pcbnew/tools/footprint_editor_control.cpp:716
 msgid "No datasheet found in the footprint."
 msgstr "V pouzdru nebyl nalezen žádný datový list."
 
-#: pcbnew/tools/footprint_editor_control.cpp:972
+#: pcbnew/tools/footprint_editor_control.cpp:975
 msgid "No footprint problems found."
 msgstr "Nenalezeny problémy s pouzdry."
 
@@ -60577,101 +60579,93 @@ msgstr "teplotní profily pro PTH"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] načtení se nezdařilo: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Konvertor;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "Konvertor bitmapy na součástky"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "Vytvořit komponentu z bitmapy pro použití s KiCadem"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad editor schémat (Samostatně)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "Schematický nástroj pro zachycení"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "Samostatný editor schémat pro KiCad schémata"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "Prohlížeč gerber souboru"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "Zobrazit soubory Gerber"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;DPS;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Manažer projektu;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "EDA Suite"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "Sada nástrojů pro návrh schématu a desek s plošnými spoji"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "KiCad DPS kalkulátor"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "Kalkulátor DPS;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "Kalkulátor DPS"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "Kalkulačka pro různé výpočty související s elektronikou"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;DPS;Obvod;Rozvržení;Návrh;Editor;Pouzdro;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad DPS editor (Samostatně)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "Editor návrhu DPS"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "Samostatný editor desky pro KiCad desky"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "EDA suite pro schémata a návrh desky plošných spojů"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
-msgid "Circuit board"
-msgstr "Deska s plošnými spoji"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -60737,6 +60731,12 @@ msgstr "Proces nebylo možné vytvořit"
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "Deska s plošnými spoji"
 
 #~ msgid "Empty sheet pin name"
 #~ msgstr "Prázdný název vývodu listu"
@@ -61719,8 +61719,8 @@ msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Bus Definition</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;&nbsp;&nbsp;</th>\n"
 #~ "        <th>Resultant Nets</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -61771,9 +61771,9 @@ msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -61859,8 +61859,8 @@ msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <th>Definice sběrnice</th>\n"
-#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-#~ "</th>\n"
+#~ "        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;&nbsp;&nbsp;</th>\n"
 #~ "        <th>Výsledné sítě</th>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
@@ -61911,9 +61911,9 @@ msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
 #~ "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}</samp></td>\n"
 #~ "        <td></td>\n"
 #~ "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-#~ "&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-#~ "<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+#~ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+#~ "&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+#~ "sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 #~ "    </tr>\n"
 #~ "    <tr>\n"
 #~ "        <td><br></td>\n"
@@ -67609,8 +67609,8 @@ msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
 #~ "\n"
 #~ "On Linux:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "The above examples assume `xsltproc` is installed on your PC under "
@@ -67701,8 +67701,8 @@ msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
 #~ "\n"
 #~ "Jakmile kliknete na tlačítko generovat, stane se toto:\n"
 #~ "\n"
-#~ "1. Eeschema vytvoří přechodný soubor netlistu \\*. Xml, například "
-#~ "`test.xml`.\n"
+#~ "1. Eeschema vytvoří přechodný soubor netlistu \\*. Xml, například `test."
+#~ "xml`.\n"
 #~ "2. Eeschema spustí skript z příkazového řádku a vytvoří finální výstupní "
 #~ "soubor.\n"
 #~ "\n"
@@ -67797,8 +67797,8 @@ msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
 #~ "\n"
 #~ "V Linuxu:\n"
 #~ "```\n"
-#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
-#~ "pcb.xsl \"%I\"\n"
+#~ "xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
+#~ "xsl \"%I\"\n"
 #~ "```\n"
 #~ "\n"
 #~ "Výše uvedené příklady předpokládají, že je ` xsltproc` nainstalován na "
@@ -71468,8 +71468,8 @@ msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
 
 #~ msgid "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer"
 #~ msgstr ""
-#~ "Nepodporovaná vrstva Eagle '%s' (%d), konvertuji do vrstvy kresby "
-#~ "(Dwgs.User)"
+#~ "Nepodporovaná vrstva Eagle '%s' (%d), konvertuji do vrstvy kresby (Dwgs."
+#~ "User)"
 
 #~ msgid "unknown graphic type: %d"
 #~ msgstr "neznámý grafický typ: %d"
@@ -74027,17 +74027,17 @@ msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
 #~ msgid ""
 #~ "DXF only:\n"
 #~ "Check to plot all layers in polygon mode.\n"
-#~ "Uncheck to plot in sketch mode layers that don't support polygons "
-#~ "(*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
+#~ "Uncheck to plot in sketch mode layers that don't support polygons (*."
+#~ "SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *.Fab)\n"
 #~ "and plot in polygon mode other layers (*.Cu, *.Adhes, *.Paste, *.Mask)"
 #~ msgstr ""
 #~ "Pouze DXF:\n"
 #~ "Zaškrtněte pro vykreslení všech vrstev v režimu mnohoúhelníků.\n"
 #~ "Zrušte zaškrtnutí pro vykreslení ve vrstvách režimu obrysů, které "
-#~ "nepodporují mnohoúhelníky (*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, "
-#~ "*.Fab)\n"
-#~ "a vykreslení ostatních vrstev v režimu mnohoúhelníků (*.Cu, *.Adhes, "
-#~ "*.Paste, *.Mask)"
+#~ "nepodporují mnohoúhelníky (*.SilkS, *_User, Edge.Cuts, Margin, *.CrtYd, *."
+#~ "Fab)\n"
+#~ "a vykreslení ostatních vrstev v režimu mnohoúhelníků (*.Cu, *.Adhes, *."
+#~ "Paste, *.Mask)"
 
 #~ msgid "Dimension Text Properties"
 #~ msgstr "Vlastnosti rozměru textu"
@@ -75438,16 +75438,16 @@ msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
 #~ "<b>KIPRJMOD</b> is internally defined by KiCad (cannot be edited) and is "
 #~ "set to the absolute path of the currently loaded project file.  This "
 #~ "environment variable can be used to define files and paths relative to "
-#~ "the currently loaded project.  For instance, ${KIPRJMOD}/libs/"
-#~ "footprints.pretty can be defined as a folder containing a project "
-#~ "specific footprint library named footprints.pretty."
+#~ "the currently loaded project.  For instance, ${KIPRJMOD}/libs/footprints."
+#~ "pretty can be defined as a folder containing a project specific footprint "
+#~ "library named footprints.pretty."
 #~ msgstr ""
 #~ "<b>KIPRJMOD</b> je vnitřně definován v KiCadu (proto nelze editovat) a je "
 #~ "nastaven na absolutní cestu momentálně načteného projektu. Tato proměnná "
 #~ "prostředí může být použita k definování souborů a cest relativně k "
 #~ "načtenému projektu. Např. ${KIPRJMOD}/libs/footprints.pretty může být "
-#~ "definován jako složka obsahující knihovnu pouzder s názvem "
-#~ "footprints.pretty, použitých v projektu."
+#~ "definován jako složka obsahující knihovnu pouzder s názvem footprints."
+#~ "pretty, použitých v projektu."
 
 #~ msgid ""
 #~ "<b>KICAD_TEMPLATE_DIR</b> is required and is the path containing the "
@@ -75486,9 +75486,9 @@ msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
 #~ "Proměnné prostředí se používá jako náhrada řetěžců.<br>Proměnné prostředí "
 #~ "se primárně používá pro cesty, aby byla zajištěna přenositelnost KiCad "
 #~ "mezi platformami.<br><br>Je-li proměnná prostředí definována jako "
-#~ "<b>MYLIBPATH</b> s hodnotou <b>e:/kicad_libs</b>, název knihovny <b>$"
-#~ "{MYLIBPATH}/mylib.lib</b> je rozšířen do tvaru <b>e:/kicad_libs/"
-#~ "mylib.lib</b><br><br><b>Pozn.:</b><br>V názvech proměnných prostředí jsou "
+#~ "<b>MYLIBPATH</b> s hodnotou <b>e:/kicad_libs</b>, název knihovny "
+#~ "<b>${MYLIBPATH}/mylib.lib</b> je rozšířen do tvaru <b>e:/kicad_libs/mylib."
+#~ "lib</b><br><br><b>Pozn.:</b><br>V názvech proměnných prostředí jsou "
 #~ "dovoleny pouze znaky <b>ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_</b> a název "
 #~ "proměnné prostředí nesmí začínat číslicí (0-9)."
 
@@ -82731,11 +82731,11 @@ msgstr "Nelze vytvořit uživatelskou cestu skriptů %s."
 #~ msgstr "Okraje desky"
 
 #~ msgid ""
-#~ "Gerber files (.%s .gbr .gbx .lgr .ger .pho)|*."
-#~ "%s;*.gbr;*.gbx;*.lgr;*.ger;*.pho|"
+#~ "Gerber files (.%s .gbr .gbx .lgr .ger .pho)|*.%s;*.gbr;*.gbx;*.lgr;*.ger;"
+#~ "*.pho|"
 #~ msgstr ""
-#~ "Soubory Gerber (.%s .gbr .gbx .lgr .ger .pho)|*."
-#~ "%s;*.gbr;*.gbx;*.lgr;*.ger;*.pho|"
+#~ "Soubory Gerber (.%s .gbr .gbx .lgr .ger .pho)|*.%s;*.gbr;*.gbx;*.lgr;*."
+#~ "ger;*.pho|"
 
 #~ msgid "Copy Block (shift mouse)"
 #~ msgstr "Kopírovat blok (shift + myš)"

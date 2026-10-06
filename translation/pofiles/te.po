@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-30 22:14-0700\n"
+"POT-Creation-Date: 2026-10-06 23:06+0300\n"
 "PO-Revision-Date: 2026-04-24 17:03+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Telugu <https://hosted.weblate.org/projects/kicad/v10/te/>\n"
@@ -1750,7 +1750,7 @@ msgid "Image Converter"
 msgstr "చిత్రం మార్పిడి సాధనం"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
 msgid "KiCad Image Converter"
 msgstr "KiCad చిత్రం మార్పిడి సాధనం"
 
@@ -2240,10 +2240,10 @@ msgstr "సమాచారం"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:990
 #: pcbnew/drc/rule_editor/dialog_drc_rule_editor.cpp:589
 #: pcbnew/footprint_libraries_utils.cpp:396
-#: pcbnew/footprint_libraries_utils.cpp:1142
+#: pcbnew/footprint_libraries_utils.cpp:1154
 #: pcbnew/pcb_design_block_utils.cpp:59 pcbnew/pcb_design_block_utils.cpp:73
 #: pcbnew/router/router_tool.cpp:2089 pcbnew/router/router_tool.cpp:2858
-#: pcbnew/tools/footprint_editor_control.cpp:481 pcbnew/zone_filler.cpp:1647
+#: pcbnew/tools/footprint_editor_control.cpp:484 pcbnew/zone_filler.cpp:1647
 #: pcbnew/zone_filler.cpp:1664
 msgid "Confirmation"
 msgstr "నిర్ధారణ"
@@ -2257,7 +2257,7 @@ msgid "&No"
 msgstr "&కాదు"
 
 #: common/design_block_io.cpp:68
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:11
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:7
 msgid "KiCad"
 msgstr "KiCad"
@@ -2367,21 +2367,21 @@ msgstr "డిజైన్ బ్లాక్ ఫోల్డర్ '%s' తొ�
 
 #: common/design_block_library_adapter.cpp:72
 #: eeschema/libraries/symbol_library_adapter.cpp:156
-#: pcbnew/footprint_library_adapter.cpp:538
+#: pcbnew/footprint_library_adapter.cpp:540
 #, c-format
 msgid "Nested table '%s' not found."
 msgstr "నెస్టెడ్ పట్టిక '%s' కనుగొనబడలేదు."
 
 #: common/design_block_library_adapter.cpp:79
 #: eeschema/libraries/symbol_library_adapter.cpp:163
-#: pcbnew/footprint_library_adapter.cpp:545
+#: pcbnew/footprint_library_adapter.cpp:547
 #, c-format
 msgid "Unknown library type %s "
 msgstr "తెలియని లైబ్రరీ రకం %s "
 
 #: common/design_block_library_adapter.cpp:84
 #: eeschema/libraries/symbol_library_adapter.cpp:168
-#: pcbnew/footprint_library_adapter.cpp:550
+#: pcbnew/footprint_library_adapter.cpp:552
 msgid "Internal error"
 msgstr "అంతర్గత లోపం"
 
@@ -2389,7 +2389,7 @@ msgstr "అంతర్గత లోపం"
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1049
 #: eeschema/generate_alias_info.cpp:41 eeschema/lib_symbol.cpp:206
 #: eeschema/lib_symbol.cpp:2752 eeschema/sch_symbol.cpp:2788
-#: eeschema/sch_symbol.cpp:3397 eeschema/sch_symbol.cpp:3982
+#: eeschema/sch_symbol.cpp:3398 eeschema/sch_symbol.cpp:3983
 #: eeschema/symbol_editor/symbol_editor.cpp:1778
 #: eeschema/symbol_viewer_frame.cpp:398 pcbnew/footprint.cpp:4929
 #: pcbnew/generate_footprint_info.cpp:39 pcbnew/plot_board_layers.cpp:201
@@ -2414,7 +2414,7 @@ msgstr "లైబ్రరీ '%s' నుండి డిజైన్ బ్ల�
 #: kicad/pcm/dialogs/panel_package_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:42
-#: pcbnew/footprint_libraries_utils.cpp:1343
+#: pcbnew/footprint_libraries_utils.cpp:1355
 msgid "Description"
 msgstr "వివరణ"
 
@@ -2493,7 +2493,7 @@ msgstr "3D మాదిరులు"
 #: common/dialog_about/AboutDialog_main.cpp:1090
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#: eeschema/sch_symbol.cpp:3407
+#: eeschema/sch_symbol.cpp:3408
 #: eeschema/widgets/panel_sch_selection_filter.cpp:228
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:33
 #: eeschema/widgets/search_handlers.cpp:158
@@ -2933,7 +2933,7 @@ msgstr "డిఫాల్ట్ ఫీల్డ్‌లు"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:376
 #: eeschema/fields_grid_table.cpp:526 eeschema/lib_symbol.cpp:2743
 #: eeschema/sch_symbol.cpp:1494 eeschema/sch_symbol.cpp:2747
-#: eeschema/sch_symbol.cpp:2796 eeschema/sch_symbol.cpp:3971
+#: eeschema/sch_symbol.cpp:2796 eeschema/sch_symbol.cpp:3972
 #: eeschema/sim/simulator_frame_ui.cpp:748
 #: eeschema/sim/simulator_frame_ui.cpp:3219
 #: eeschema/sim/simulator_frame_ui.cpp:3260
@@ -2968,7 +2968,7 @@ msgstr "విలువ"
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:31
 #: pcbnew/dialogs/panel_setup_tuning_profile_info_base.cpp:31
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor_base.cpp:33
-#: pcbnew/footprint_libraries_utils.cpp:1017
+#: pcbnew/footprint_libraries_utils.cpp:1029
 msgid "Name:"
 msgstr "పేరు:"
 
@@ -3216,7 +3216,6 @@ msgstr "ప్రాజెక్ట్ పేరు"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1800
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "PCB"
 msgstr "PCB"
 
@@ -3225,7 +3224,6 @@ msgstr "PCB"
 #: eeschema/widgets/hierarchy_pane.cpp:832
 #: eeschema/widgets/hierarchy_pane.cpp:838
 #: eeschema/widgets/symbol_diff_widget.cpp:44
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
 msgid "Schematic"
 msgstr "స్కీమాటిక్"
 
@@ -4951,9 +4949,9 @@ msgstr "ఫైల్ '%s' ఇప్పటికే ఉంది."
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:523
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:203
 #: pcbnew/footprint_libraries_utils.cpp:397
-#: pcbnew/footprint_libraries_utils.cpp:1143
+#: pcbnew/footprint_libraries_utils.cpp:1155
 #: pcbnew/pcb_design_block_utils.cpp:59 pcbnew/pcb_design_block_utils.cpp:73
-#: pcbnew/tools/footprint_editor_control.cpp:483
+#: pcbnew/tools/footprint_editor_control.cpp:486
 msgid "Overwrite"
 msgstr "ఓవర్‌రైట్ చేయి"
 
@@ -6260,7 +6258,7 @@ msgstr "విభాజకం చొప్పించు"
 #: common/dialogs/rule_editor_dialog_base.cpp:185 common/tool/actions.cpp:93
 #: eeschema/symbol_editor/symbol_editor.cpp:806
 #: eeschema/widgets/tuner_slider_base.cpp:130
-#: pcbnew/footprint_libraries_utils.cpp:1013
+#: pcbnew/footprint_libraries_utils.cpp:1025
 msgid "Save"
 msgstr "భద్రపరచు"
 
@@ -6292,34 +6290,34 @@ msgstr "పైకి తరలించు"
 msgid "Move Down"
 msgstr "కిందికి తరలించు"
 
-#: common/draw_panel_gal.cpp:313 common/draw_panel_gal.cpp:817
+#: common/draw_panel_gal.cpp:303 common/draw_panel_gal.cpp:794
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "ఓపెన్‌జిఎల్ ఉపయోగించలేకపోయింది, సాఫ్ట్‌వేర్ రెండరింగ్‌కు వెనుదిరుగుతోంది"
 
-#: common/draw_panel_gal.cpp:320 common/draw_panel_gal.cpp:559
+#: common/draw_panel_gal.cpp:310 common/draw_panel_gal.cpp:536
 msgid "Graphics error"
 msgstr "గ్రాఫిక్స్ లోపం"
 
-#: common/draw_panel_gal.cpp:324 common/draw_panel_gal.cpp:328
+#: common/draw_panel_gal.cpp:314 common/draw_panel_gal.cpp:318
 #, fuzzy
 msgid "Graphics error during recovery"
 msgstr "గ్రాఫిక్స్ లోపం"
 
-#: common/draw_panel_gal.cpp:329
+#: common/draw_panel_gal.cpp:319
 #, fuzzy
 msgid "Unknown exception during backend switch"
 msgstr "ముఖం నిర్మించేటప్పుడు OCC మినహాయింపు: %s"
 
-#: common/draw_panel_gal.cpp:559
+#: common/draw_panel_gal.cpp:536
 #, fuzzy
 msgid "Unknown exception"
 msgstr "తెలియని శుభ్రపరిచే చర్య"
 
-#: common/draw_panel_gal.cpp:824
+#: common/draw_panel_gal.cpp:801
 msgid "Could not use OpenGL"
 msgstr "ఓపెన్‌జిఎల్ ఉపయోగించలేకపోయింది"
 
-#: common/draw_panel_gal.cpp:852
+#: common/draw_panel_gal.cpp:829
 msgid "Error switching GAL backend"
 msgstr "GAL బ్యాక్‌ఎండ్ మార్చడంలో లోపం"
 
@@ -7379,7 +7377,7 @@ msgstr "దిగువభాగం"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:534 eeschema/sch_field.cpp:1769
 #: eeschema/sch_pin.cpp:1444 eeschema/sch_pin.cpp:2052
-#: eeschema/sch_symbol.cpp:3944 eeschema/sch_tablecell.cpp:447
+#: eeschema/sch_symbol.cpp:3945 eeschema/sch_tablecell.cpp:447
 #: eeschema/sch_text.cpp:781 eeschema/sch_textbox.cpp:631
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:59
@@ -7524,9 +7522,9 @@ msgid ""
 msgstr ""
 "KiCad అంతర్గతంగా నిర్వచించబడింది (సవరించలేరు) మరియు ప్రస్తుతం లోడ్ చేయబడిన ప్రాజెక్ట్ ఫైల్ యొక్క "
 "సంపూర్ణ మార్గానికి సెట్ చేయబడింది. ఈ పర్యావరణ వేరియబుల్ ప్రస్తుతం లోడ్ చేయబడిన ప్రాజెక్ట్‌కు సంబంధించి "
-"ఫైళ్ళు మరియు మార్గాలను నిర్వచించడానికి ఉపయోగించవచ్చు. ఉదాహరణకు, ${KIPRJMOD}/libs/"
-"footprints.pretty అనే ఫోల్డర్‌ను footprints.pretty అనే పేరుతో ప్రాజెక్ట్ నిర్దిష్ట ఫుట్‌ప్రింట్ "
-"లైబ్రరీని కలిగి ఉన్న ఫోల్డర్‌గా నిర్వచించవచ్చు."
+"ఫైళ్ళు మరియు మార్గాలను నిర్వచించడానికి ఉపయోగించవచ్చు. ఉదాహరణకు, ${KIPRJMOD}/libs/footprints."
+"pretty అనే ఫోల్డర్‌ను footprints.pretty అనే పేరుతో ప్రాజెక్ట్ నిర్దిష్ట ఫుట్‌ప్రింట్ లైబ్రరీని కలిగి ఉన్న "
+"ఫోల్డర్‌గా నిర్వచించవచ్చు."
 
 #: common/env_vars.cpp:150
 msgid "A directory containing system-wide scripts installed with KiCad."
@@ -8951,11 +8949,11 @@ msgstr "సార్వత్రిక లేబుళ్ళు"
 msgid "Hierarchical labels"
 msgstr "క్రమానుగత లేబుళ్ళు"
 
-#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3958
+#: common/layer_id.cpp:79 eeschema/sch_symbol.cpp:3959
 msgid "Pin numbers"
 msgstr "పిన్ సంఖ్యలు"
 
-#: common/layer_id.cpp:80 eeschema/sch_symbol.cpp:3962
+#: common/layer_id.cpp:80 eeschema/sch_symbol.cpp:3963
 msgid "Pin names"
 msgstr "పిన్ పేర్లు"
 
@@ -9394,10 +9392,12 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "'%s' కోసం యూనిట్లు లేవు| (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1256
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
 msgstr "'%s' మరియు %lf మధ్య రకం వ్యత్యాసం"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1262
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
 msgstr "%lf మరియు '%s' మధ్య రకం వ్యత్యాసం"
 
@@ -10083,7 +10083,7 @@ msgstr "డిఫాల్ట్ సవరణ"
 #: eeschema/dialogs/dialog_rescue_each.cpp:125
 #: eeschema/dialogs/dialog_sim_model_base.cpp:274 eeschema/lib_symbol.cpp:2740
 #: eeschema/sch_symbol.cpp:2744 eeschema/sch_symbol.cpp:2793
-#: eeschema/sch_symbol.cpp:3968 eeschema/widgets/search_handlers.cpp:160
+#: eeschema/sch_symbol.cpp:3969 eeschema/widgets/search_handlers.cpp:160
 #: eeschema/widgets/search_handlers.cpp:259
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:142
 #: pcbnew/footprint.cpp:4917 pcbnew/widgets/search_handlers.cpp:140
@@ -10105,7 +10105,7 @@ msgstr "విలువ మరియు ఫుట్‌ప్రింట్ ఆ
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:77
 #: eeschema/lib_symbol.cpp:2783 eeschema/menubar.cpp:162
 #: eeschema/sch_rule_area.cpp:452 eeschema/sch_sheet.cpp:2155
-#: eeschema/sch_symbol.cpp:4036 eeschema/tools/sch_edit_tool.cpp:763
+#: eeschema/sch_symbol.cpp:4037 eeschema/tools/sch_edit_tool.cpp:763
 #: pcbnew/footprint.cpp:4939 pcbnew/tools/edit_tool.cpp:560
 msgid "Attributes"
 msgstr "లక్షణాలు"
@@ -10277,7 +10277,7 @@ msgstr "సవరణ సాధనంలో కొత్త పత్రం స�
 #: common/tool/actions.cpp:54 eeschema/sch_base_frame.cpp:739
 #: eeschema/symbol_editor/symbol_editor.cpp:816
 #: pcbnew/footprint_libraries_utils.cpp:441
-#: pcbnew/footprint_libraries_utils.cpp:1027
+#: pcbnew/footprint_libraries_utils.cpp:1039
 msgid "New Library..."
 msgstr "కొత్త లైబ్రరీ..."
 
@@ -11611,7 +11611,7 @@ msgstr "బోర్డు"
 #: eeschema/sch_base_frame.cpp:673 eeschema/sch_symbol.cpp:2770
 #: eeschema/sch_symbol.cpp:2774 eeschema/sch_symbol.cpp:2807
 #: eeschema/widgets/symbol_diff_widget.cpp:45 pcbnew/footprint.cpp:2165
-#: pcbnew/footprint_libraries_utils.cpp:1342
+#: pcbnew/footprint_libraries_utils.cpp:1354
 msgid "Library"
 msgstr "లైబ్రరీ"
 
@@ -12976,8 +12976,8 @@ msgid ""
 "\\Users\\username\\kicad\\my_python_script.py`, the command line would be:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "On Linux, if the desired generator script for a CSV BOM is `/home/username/"
@@ -13045,8 +13045,8 @@ msgstr ""
 "\\Users\\username\\kicad\\my_python_script.py` అయితే, కమాండ్ లైన్ ఇలా ఉంటుంది:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" "
-"\"%O.csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "Linux లో, CSV BOM కోసం కావలసిన జనరేటర్ స్క్రిప్ట్ `/home/username/kicad/"
@@ -14436,7 +14436,7 @@ msgstr "వాక్యనిర్మాణ సహాయ విండో చూ
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:31
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:33
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:28
-#: eeschema/lib_symbol.cpp:2738 eeschema/sch_symbol.cpp:3966
+#: eeschema/lib_symbol.cpp:2738 eeschema/sch_symbol.cpp:3967
 #: eeschema/widgets/sch_properties_panel.cpp:436
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:27
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:27
@@ -14625,14 +14625,14 @@ msgstr "పేరు వచన పరిమాణం"
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:105
 #: eeschema/dialogs/dialog_sim_model.cpp:650 eeschema/sch_field.cpp:1735
 #: eeschema/sch_item.cpp:818 eeschema/sch_item.cpp:882
-#: eeschema/sch_symbol.cpp:4002
+#: eeschema/sch_symbol.cpp:4003
 msgid "Unit"
 msgstr "యూనిట్"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:82
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:106
 #: eeschema/sch_field.cpp:1736 eeschema/sch_item.cpp:821
-#: eeschema/sch_item.cpp:904 eeschema/sch_symbol.cpp:4019
+#: eeschema/sch_item.cpp:904 eeschema/sch_symbol.cpp:4020
 #: eeschema/tools/sch_edit_tool.cpp:148
 msgid "Body Style"
 msgstr "శరీర శైలి"
@@ -14916,13 +14916,13 @@ msgstr "BOM నుండి మినహాయించు"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1053
 #: eeschema/sch_rule_area.cpp:459 eeschema/sch_sheet.cpp:2160
-#: eeschema/sch_symbol.cpp:4038
+#: eeschema/sch_symbol.cpp:4039
 msgid "Exclude From Simulation"
 msgstr "అనుకరణ నుండి మినహాయించు"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:1054
 #: eeschema/sch_rule_area.cpp:454 eeschema/sch_sheet.cpp:2157
-#: eeschema/sch_symbol.cpp:1495 eeschema/sch_symbol.cpp:4046
+#: eeschema/sch_symbol.cpp:1495 eeschema/sch_symbol.cpp:4047
 msgid "Exclude From Board"
 msgstr "బోర్డు నుండి మినహాయించు"
 
@@ -17019,7 +17019,6 @@ msgid "Code"
 msgstr "కోడ్"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:226
-#, c++-format
 msgid "Save {} in Value field as \"{}\""
 msgstr "విలువ ఫీల్డ్‌లో \"{}\"గా {} భద్రపరచు"
 
@@ -20572,7 +20571,7 @@ msgstr ""
 
 #: eeschema/sch_bitmap.cpp:308 eeschema/sch_group.cpp:458
 #: eeschema/sch_pin.cpp:2044 eeschema/sch_shape.cpp:605
-#: eeschema/sch_symbol.cpp:3936 pcbnew/board_item.cpp:493
+#: eeschema/sch_symbol.cpp:3937 pcbnew/board_item.cpp:493
 #: pcbnew/pcb_group.cpp:543 pcbnew/pcb_point.cpp:232 pcbnew/pcb_shape.cpp:1014
 #: pcbnew/pcb_tablecell.cpp:334 pcbnew/pcb_track.cpp:3209
 #: pcbnew/widgets/pcb_properties_panel.cpp:563
@@ -20583,7 +20582,7 @@ msgstr "స్థానం X"
 
 #: eeschema/sch_bitmap.cpp:313 eeschema/sch_group.cpp:459
 #: eeschema/sch_pin.cpp:2048 eeschema/sch_shape.cpp:607
-#: eeschema/sch_symbol.cpp:3939 pcbnew/board_item.cpp:496
+#: eeschema/sch_symbol.cpp:3940 pcbnew/board_item.cpp:496
 #: pcbnew/pcb_group.cpp:544 pcbnew/pcb_point.cpp:233 pcbnew/pcb_shape.cpp:1016
 #: pcbnew/pcb_tablecell.cpp:335 pcbnew/pcb_track.cpp:3213
 #: pcbnew/widgets/pcb_properties_panel.cpp:564 pcbnew/zone.cpp:2023
@@ -22204,7 +22203,7 @@ msgid "Schematic rule area"
 msgstr "స్కీమాటిక్ నియమ ప్రాంతం"
 
 #: eeschema/sch_rule_area.cpp:464 eeschema/sch_sheet.cpp:2164
-#: eeschema/sch_symbol.cpp:1496 eeschema/sch_symbol.cpp:4042
+#: eeschema/sch_symbol.cpp:1496 eeschema/sch_symbol.cpp:4043
 #: pcbnew/footprint.cpp:4946 pcbnew/widgets/pcb_properties_panel.cpp:605
 #: pcbnew/widgets/pcb_properties_panel.cpp:619
 #: pcbnew/widgets/pcb_properties_panel.cpp:717
@@ -22212,7 +22211,7 @@ msgid "Exclude From Bill of Materials"
 msgstr "మెటీరియల్ జాబితా నుండి మినహాయించు"
 
 #: eeschema/sch_rule_area.cpp:469 eeschema/sch_sheet.cpp:2168
-#: eeschema/sch_symbol.cpp:1498 eeschema/sch_symbol.cpp:4054
+#: eeschema/sch_symbol.cpp:1498 eeschema/sch_symbol.cpp:4055
 #: eeschema/tools/sch_actions.cpp:1103 pcbnew/footprint.cpp:4949
 #: pcbnew/widgets/pcb_properties_panel.cpp:604
 #: pcbnew/widgets/pcb_properties_panel.cpp:617
@@ -22355,7 +22354,7 @@ msgstr "(తొలగించిన అంశం)"
 msgid "Hierarchical Sheet Pin '%s'"
 msgstr "క్రమానుగత షీట్ పిన్ '%s'"
 
-#: eeschema/sch_symbol.cpp:1497 eeschema/sch_symbol.cpp:4050
+#: eeschema/sch_symbol.cpp:1497 eeschema/sch_symbol.cpp:4051
 #: pcbnew/footprint.cpp:4943 pcbnew/widgets/pcb_properties_panel.cpp:606
 #: pcbnew/widgets/pcb_properties_panel.cpp:621
 #: pcbnew/widgets/pcb_properties_panel.cpp:722
@@ -22391,25 +22390,25 @@ msgstr "లైబ్రరీ నిర్వచించబడలేదు!"
 msgid "Symbol not found in %s!"
 msgstr "%s లో చిహ్నం కనుగొనబడలేదు!"
 
-#: eeschema/sch_symbol.cpp:3081
+#: eeschema/sch_symbol.cpp:3082
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "చిహ్నం %s [%s]"
 
-#: eeschema/sch_symbol.cpp:3945
+#: eeschema/sch_symbol.cpp:3946
 msgid "Mirror X"
 msgstr "X అద్దం చిత్రం"
 
-#: eeschema/sch_symbol.cpp:3947
+#: eeschema/sch_symbol.cpp:3948
 msgid "Mirror Y"
 msgstr "Y అద్దం చిత్రం"
 
-#: eeschema/sch_symbol.cpp:3974 eeschema/widgets/search_handlers.cpp:171
+#: eeschema/sch_symbol.cpp:3975 eeschema/widgets/search_handlers.cpp:171
 #: pcbnew/footprint.cpp:4923 pcbnew/widgets/search_handlers.cpp:145
 msgid "Library Link"
 msgstr "లైబ్రరీ లింక్"
 
-#: eeschema/sch_symbol.cpp:3978 eeschema/widgets/search_handlers.cpp:172
+#: eeschema/sch_symbol.cpp:3979 eeschema/widgets/search_handlers.cpp:172
 #: pcbnew/footprint.cpp:4926 pcbnew/plot_board_layers.cpp:198
 #: pcbnew/widgets/search_handlers.cpp:146
 msgid "Library Description"
@@ -22820,8 +22819,8 @@ msgid ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -22872,9 +22871,9 @@ msgid ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23223,8 +23222,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Bus Definition</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resultant Nets</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -23275,9 +23274,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -23290,10 +23289,10 @@ msgstr ""
 "<p><b>పిన్ విధులు:</b> సరైన యూనిట్ ప్లేస్‌మెంట్ స్వయంచాలకంగా కనుగొంటాయి. బహు-యూనిట్ చిహ్నాల కోసం, "
 "<samp>NET_NAME(pin)</samp> వంటి విధులు పిన్ వేరే యూనిట్లో ఉన్నా పని చేస్తాయి.</p>\n"
 "<p><b>పట్టిక సెల్ సూచనలు:</b> <samp>CELL()</samp> విధి పట్టిక సెల్‌లలో మాత్రమే పని చేస్తుంది. "
-"అదే పట్టికలో ఇతర సెల్లను సూచించడానికి <samp>${CELL(\"A0\")}</samp> లేదా <samp>$"
-"{CELL(row, col)}</samp> ఉపయోగించండి. వరుస మరియు నిలువు వరుస సంఖ్యలు 0-ఆధారిత (A0 మొదటి "
-"వరుస, మొదటి నిలువు వరుస). CELL మూల సెల్ వచనాన్ని కాకుండా మూల్యాంకనం చేయబడిన/ప్రదర్శిత విలువను "
-"అందిస్తుంది.</p>\n"
+"అదే పట్టికలో ఇతర సెల్లను సూచించడానికి <samp>${CELL(\"A0\")}</samp> లేదా "
+"<samp>${CELL(row, col)}</samp> ఉపయోగించండి. వరుస మరియు నిలువు వరుస సంఖ్యలు 0-ఆధారిత "
+"(A0 మొదటి వరుస, మొదటి నిలువు వరుస). CELL మూల సెల్ వచనాన్ని కాకుండా మూల్యాంకనం చేయబడిన/ప్రదర్శిత "
+"విలువను అందిస్తుంది.</p>\n"
 "<p><b>నెస్టెడ్ వేరియబుల్‌లు:</b> వేరియబుల్‌లు ఇతర వేరియబుల్‌లను కలిగి ఉండవచ్చు. లోపలి వేరియబుల్‌లు "
 "మొదట విస్తరించబడతాయి. గరిష్ట నెస్టింగ్ లోతు: 6 స్థాయిలు.</p>\n"
 "<p><b>లోపం సందేశాలు:</b></p>\n"
@@ -24136,8 +24135,8 @@ msgstr "తాత్కాలిక అవుట్‌పుట్ ఫైల్ 
 
 #: eeschema/sim/kibis/kibis.cpp:851
 msgid ""
-"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/"
-"chen.pdf"
+"Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
+"pdf"
 msgstr ""
 "Kibis ఇంకా DUT విలువలకు మద్దతు ఇవ్వలేదు. https://ibis.org/summits/nov16a/chen.pdf"
 
@@ -25232,12 +25231,12 @@ msgid "Save Symbol As"
 msgstr "చిహ్నాన్ని వేరే పేరుతో సేవ్ చేయి"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:805
-#: pcbnew/footprint_libraries_utils.cpp:1012
+#: pcbnew/footprint_libraries_utils.cpp:1024
 msgid "Save in library:"
 msgstr "లైబ్రరీలో సేవ్ చేయి:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:909
-#: pcbnew/footprint_libraries_utils.cpp:1109
+#: pcbnew/footprint_libraries_utils.cpp:1121
 msgid "A library must be specified."
 msgstr "లైబ్రరీ పేర్కొనాలి."
 
@@ -25349,7 +25348,7 @@ msgid "Delete All Listed Symbols"
 msgstr "జాబితా చేసిన అన్ని చిహ్నాలు తొలగించు"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1434 pcbnew/files.cpp:318
-#: pcbnew/footprint_libraries_utils.cpp:1201
+#: pcbnew/footprint_libraries_utils.cpp:1213
 #, c-format
 msgid "Revert '%s' to last version saved?"
 msgstr "'%s' ను చివరిసారి భద్రపరచిన సంస్కరణకు రీవర్ట్ చేయాలా?"
@@ -27854,13 +27853,13 @@ msgid "Symbol library '%s' not found."
 msgstr "చిహ్న లైబ్రరీ '%s' కనుగొనబడలేదు."
 
 #: eeschema/tools/symbol_editor_control.cpp:420
-#: pcbnew/tools/footprint_editor_control.cpp:649
+#: pcbnew/tools/footprint_editor_control.cpp:652
 #, c-format
 msgid "Missing/malformed file explorer argument '%F' in common settings."
 msgstr "సాధారణ సెట్టింగులలో ఫైల్ ఎక్స్‌ప్లోరర్ ఆర్గుమెంట్ '%F' లేదు/తప్పుగా ఉంది."
 
 #: eeschema/tools/symbol_editor_control.cpp:448
-#: pcbnew/tools/footprint_editor_control.cpp:674
+#: pcbnew/tools/footprint_editor_control.cpp:677
 msgid "No text editor selected in KiCad. Please choose one."
 msgstr "KiCad లో వచన సవరణ సాధనం ఎంచుకోబడలేదు. దయచేసి ఒకటి ఎంచుకోండి."
 
@@ -28024,7 +28023,7 @@ msgid "Enter name for new top-level sheet:"
 msgstr "కొత్త అగ్రస్థాయి షీట్ పేరు నమోదు చేయి:"
 
 #: eeschema/widgets/hierarchy_pane.cpp:565
-#: pcbnew/footprint_libraries_utils.cpp:1230
+#: pcbnew/footprint_libraries_utils.cpp:1242
 msgid "Untitled"
 msgstr "శీర్షిక లేనిది"
 
@@ -29156,7 +29155,7 @@ msgid "Clear Recent Job Files"
 msgstr "ఇటీవలి జాబ్ ఫైళ్ళు తొలగించు"
 
 #: gerbview/gerbview_frame.cpp:97
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
 msgid "KiCad Gerber Viewer"
 msgstr "KiCad గెర్బర్ వ్యూయర్"
 
@@ -29785,8 +29784,8 @@ msgid ""
 "When no --variant argument is provided, the default variant is output."
 msgstr ""
 "అవుట్‌పుట్ చేయాల్సిన వేరియంట్ పేరు(లు), బహుళ వేరియంట్లు పేర్కొనడానికి పలుసార్లు ఉపయోగించవచ్చు.\n"
-"బహుళ వేరియంట్లు పేర్కొన్నప్పుడు, ప్రతి వేరియంట్‌కు వేర్వేరు ఫైళ్ళు రూపొందించడానికి అవుట్‌పుట్ మార్గంలో $"
-"{VARIANT} ఉపయోగించండి.\n"
+"బహుళ వేరియంట్లు పేర్కొన్నప్పుడు, ప్రతి వేరియంట్‌కు వేర్వేరు ఫైళ్ళు రూపొందించడానికి అవుట్‌పుట్ మార్గంలో "
+"${VARIANT} ఉపయోగించండి.\n"
 "--variant వాదన అందించకపోతే డిఫాల్ట్ వేరియంట్ అవుట్‌పుట్ అవుతుంది."
 
 #: kicad/cli/command.h:32
@@ -30948,7 +30947,7 @@ msgid "Enter name for the new template:"
 msgstr "కొత్త టెంప్లేట్ పేరు నమోదు చేయండి:"
 
 #: kicad/dialogs/dialog_template_selector.cpp:374
-#: pcbnew/tools/footprint_editor_control.cpp:416
+#: pcbnew/tools/footprint_editor_control.cpp:419
 msgid "_copy"
 msgstr "_copy"
 
@@ -37497,7 +37496,7 @@ msgstr "యూనిట్లు:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:49
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:309
-#: pcbnew/footprint_libraries_utils.cpp:970
+#: pcbnew/footprint_libraries_utils.cpp:982
 msgid "Update Footprint"
 msgstr "ఫుట్‌ప్రింట్ నవీకరించు"
 
@@ -39523,8 +39522,8 @@ msgstr "సోల్డర్ పేస్ట్ క్లియరెన్స�
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:375
 msgid ""
 "Local solder paste clearance for this footprint.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "If blank, the global value is used."
 msgstr ""
 "ఈ ఫుట్‌ప్రింట్‌కు స్థానిక సోల్డర్ పేస్ట్ క్లియరెన్స్.\n"
@@ -39729,8 +39728,8 @@ msgstr "ప్యాడ్‌ల మధ్య సేతుబద్ధమైన 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:157
 msgid ""
 "Solder paste clearance relative to pad size.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "ప్యాడ్ పరిమాణానికి సాపేక్షంగా సోల్డర్ పేస్ట్ క్లియరెన్స్.\n"
@@ -39791,8 +39790,8 @@ msgid "Footprint Properties"
 msgstr "ఫుట్‌ప్రింట్ లక్షణాలు"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:501
-#: pcbnew/footprint_libraries_utils.cpp:1115
-#: pcbnew/tools/footprint_editor_control.cpp:471
+#: pcbnew/footprint_libraries_utils.cpp:1127
+#: pcbnew/tools/footprint_editor_control.cpp:474
 msgid "Footprint must have a name."
 msgstr "ఫుట్‌ప్రింట్‌కు పేరు ఉండాలి."
 
@@ -39802,7 +39801,7 @@ msgid "Footprint name may not contain '%s'."
 msgstr "ఫుట్‌ప్రింట్ పేరులో '%s' ఉండకూడదు."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:519
-#: pcbnew/tools/footprint_editor_control.cpp:478
+#: pcbnew/tools/footprint_editor_control.cpp:481
 #, c-format
 msgid "Footprint '%s' already exists in library '%s'."
 msgstr "ఫుట్‌ప్రింట్ '%s' లైబ్రరీ '%s'లో ఇప్పటికే ఉంది."
@@ -41588,8 +41587,8 @@ msgstr "ప్యాడ్ జోడించు సాధనానికి డ
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1030
 msgid ""
 "Local solder paste clearance for this pad.\n"
-"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both "
-"(e.g., -0.1mm - 5%).\n"
+"Enter an absolute value (e.g., -0.1mm), a percentage (e.g., -5%), or both (e."
+"g., -0.1mm - 5%).\n"
 "If blank, the footprint or global value is used."
 msgstr ""
 "ఈ ప్యాడ్‌కు స్థానిక సోల్డర్ పేస్ట్ క్లియరెన్స్.\n"
@@ -44910,8 +44909,8 @@ msgid ""
 "| Checks the width of annular rings on vias."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| Checks the given expression."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -45171,8 +45170,8 @@ msgstr ""
 "| వయాలపై వలయాకార రింగుల వెడల్పును తనిఖీ చేస్తుంది."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                                          "
 "|\n"
-"| `assertion`               | "
-"\"&lt;expression>\"                                                                                                     "
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
 "| ఇచ్చిన వ్యక్తీకరణను తనిఖీ చేస్తుంది."
 "<br>                                                                                                                                                                                                                                                                                                                                                                                                                        "
 "|\n"
@@ -45492,8 +45491,8 @@ msgid ""
 "\n"
 "Many properties of objects are available for testing in custom rule "
 "expressions. See the full documentation at [https://docs.kicad.org](https://"
-"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/"
-"pcbnew.html#custom_design_rules) for the complete list.\n"
+"go.kicad.org/docs/GetMajorMinorVersion/en/pcbnew/pcbnew."
+"html#custom_design_rules) for the complete list.\n"
 "<br><br><br>\n"
 "\n"
 msgstr ""
@@ -45855,13 +45854,13 @@ msgid ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -46015,13 +46014,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != "
-"B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -49623,7 +49622,7 @@ msgid "Footprint exported to file '%s'."
 msgstr "ఫుట్‌ప్రింట్ '%s' ఫైల్‌కు ఎగుమతి చేయబడింది."
 
 #: pcbnew/footprint_libraries_utils.cpp:469
-#: pcbnew/footprint_libraries_utils.cpp:1165 pcbnew/tools/pcb_control.cpp:156
+#: pcbnew/footprint_libraries_utils.cpp:1177 pcbnew/tools/pcb_control.cpp:156
 msgid "New Footprint Library"
 msgstr "కొత్త ఫుట్‌ప్రింట్ లైబ్రరీ"
 
@@ -49653,12 +49652,17 @@ msgstr "ఫుట్‌ప్రింట్లను లైబ్రరీక�
 msgid "Update board footprints to link to exported footprints"
 msgstr "ఎగుమతి చేసిన ఫుట్‌ప్రింట్లతో లింక్ చేయడానికి బోర్డు ఫుట్‌ప్రింట్లను నవీకరించు"
 
-#: pcbnew/footprint_libraries_utils.cpp:861
+#: pcbnew/footprint_libraries_utils.cpp:842
+#, fuzzy, c-format
+msgid "Footprint '%s' could not be saved to library '%s'."
+msgstr "లైబ్రరీ '%s' లో ఫుట్‌ప్రింట్ '%s' కనుగొనబడలేదు"
+
+#: pcbnew/footprint_libraries_utils.cpp:873
 #: pcbnew/footprint_viewer_frame.cpp:752
 msgid "No board currently open."
 msgstr "ప్రస్తుతం బోర్డు తెరవబడలేదు."
 
-#: pcbnew/footprint_libraries_utils.cpp:890
+#: pcbnew/footprint_libraries_utils.cpp:902
 msgid ""
 "Unable to find the footprint on the main board.\n"
 "Cannot save."
@@ -49666,31 +49670,31 @@ msgstr ""
 "మెయిన్ బోర్డులో ఫుట్‌ప్రింట్ కనుగొనలేకపోయింది.\n"
 "భద్రపరచడం సాధ్యం కాదు."
 
-#: pcbnew/footprint_libraries_utils.cpp:898
+#: pcbnew/footprint_libraries_utils.cpp:910
 #: pcbnew/footprint_viewer_frame.cpp:761
 msgid "Previous footprint placement still in progress."
 msgstr "మునుపటి ఫుట్‌ప్రింట్ అమర్చడం ఇంకా పూర్తికాలేదు."
 
-#: pcbnew/footprint_libraries_utils.cpp:983
+#: pcbnew/footprint_libraries_utils.cpp:995
 #: pcbnew/footprint_viewer_frame.cpp:802
 msgid "Insert Footprint"
 msgstr "ఫుట్‌ప్రింట్ చొప్పించు"
 
-#: pcbnew/footprint_libraries_utils.cpp:1001
+#: pcbnew/footprint_libraries_utils.cpp:1013
 msgid "Save Footprint As"
 msgstr "ఫుట్‌ప్రింట్‌ను వేరే పేరుతో భద్రపరచు"
 
-#: pcbnew/footprint_libraries_utils.cpp:1138
+#: pcbnew/footprint_libraries_utils.cpp:1150
 #, c-format
 msgid "Footprint %s already exists in %s."
 msgstr "ఫుట్‌ప్రింట్ %s ఇప్పటికే %s లో ఉంది."
 
-#: pcbnew/footprint_libraries_utils.cpp:1185
+#: pcbnew/footprint_libraries_utils.cpp:1197
 #, c-format
 msgid "Footprint '%s' replaced in '%s'"
 msgstr "'%s' లో ఫుట్‌ప్రింట్ '%s' భర్తీ చేయబడింది"
 
-#: pcbnew/footprint_libraries_utils.cpp:1186
+#: pcbnew/footprint_libraries_utils.cpp:1198
 #, c-format
 msgid "Footprint '%s' added to '%s'"
 msgstr "'%s' కి ఫుట్‌ప్రింట్ '%s' జోడించబడింది"
@@ -50002,7 +50006,7 @@ msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
 msgstr "ప్రస్తుత బోర్డు కోల్పోతుంది మరియు ఈ చర్య రద్దు చేయలేదు. కొనసాగించాలా?"
 
-#: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:254
+#: pcbnew/initpcb.cpp:120 pcbnew/tools/footprint_editor_control.cpp:257
 msgid "The current footprint has been modified.  Save changes?"
 msgstr "ప్రస్తుత ఫుట్‌ప్రింట్ మార్చబడింది. మార్పులు భద్రపరచాలా?"
 
@@ -50736,8 +50740,8 @@ msgstr "చిహ్నం '%s:%s' ప్రాసెస్ చేస్తో�
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2105
 #, c-format
 msgid ""
-"Warning: %s footprint '%s' is missing a library name. Use the full "
-"'Library:Footprint' format to avoid repeated update notifications."
+"Warning: %s footprint '%s' is missing a library name. Use the full 'Library:"
+"Footprint' format to avoid repeated update notifications."
 msgstr ""
 "హెచ్చరిక: %s ఫుట్‌ప్రింట్ '%s' లో లైబ్రరీ పేరు లేదు. పదేపదే నవీకరణ నోటిఫికేషన్‌లు నివారించడానికి పూర్తి "
 "'Library:Footprint' ఆకృతి ఉపయోగించండి."
@@ -53696,8 +53700,8 @@ msgid ""
 "<i>Note that markup has precedence over variable expansion.</i>\n"
 "<p></p>\n"
 "<p><b>Footprint Cross-References:</b> Reference fields and pads on other "
-"footprints using <samp>${refdes:field}</samp> or <samp>$"
-"{refdes:function(pad)}</samp> syntax.</p>\n"
+"footprints using <samp>${refdes:field}</samp> or <samp>${refdes:"
+"function(pad)}</samp> syntax.</p>\n"
 "<p><b>Nested Variables:</b> Variables can contain other variables. Inner "
 "variables are expanded first. Maximum nesting depth: 10 levels.</p>\n"
 "<p><b>Error Messages:</b></p>\n"
@@ -53998,9 +54002,9 @@ msgstr ""
 "<p></p>\n"
 "<i>మార్కప్ చరరాశి విస్తరణకంటే ముందు అమలవుతుందని గమనించండి.</i>\n"
 "<p></p>\n"
-"<p><b>ఫుట్‌ప్రింట్ క్రాస్-రిఫరెన్సులు:</b> <samp>${refdes:field}</samp> లేదా <samp>$"
-"{refdes:function(pad)}</samp> వాక్యనిర్మాణం ఉపయోగించి ఇతర ఫుట్‌ప్రింట్‌లలోని రిఫరెన్స్ ఫీల్డ్‌లు "
-"మరియు ప్యాడ్‌లను సూచించవచ్చు.</p>\n"
+"<p><b>ఫుట్‌ప్రింట్ క్రాస్-రిఫరెన్సులు:</b> <samp>${refdes:field}</samp> లేదా "
+"<samp>${refdes:function(pad)}</samp> వాక్యనిర్మాణం ఉపయోగించి ఇతర ఫుట్‌ప్రింట్‌లలోని రిఫరెన్స్ "
+"ఫీల్డ్‌లు మరియు ప్యాడ్‌లను సూచించవచ్చు.</p>\n"
 "<p><b>గూడు చరరాశులు:</b> చరరాశులలో ఇతర చరరాశులు ఉండవచ్చు. లోపలి చరరాశులు ముందు "
 "విస్తరించబడతాయి. గరిష్ట గూడు లోతు: 10 స్థాయిలు.</p>\n"
 "<p><b>లోపం సందేశాలు:</b></p>\n"
@@ -55216,7 +55220,7 @@ msgid "Failed to export netlist to '%s': %s"
 msgstr "'%s' కు ప్లాట్ చేయడం విఫలమైంది.\n"
 
 #: pcbnew/tools/board_editor_control.cpp:763
-#: pcbnew/tools/footprint_editor_control.cpp:960
+#: pcbnew/tools/footprint_editor_control.cpp:963
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d నకిలీ IDలు భర్తీ చేయబడ్డాయి.\n"
@@ -55228,7 +55232,7 @@ msgid "Orphaned net %s re-parented.\n"
 msgstr "అనాధ నెట్ %s పునఃపేరెంట్ చేయబడింది.\n"
 
 #: pcbnew/tools/board_editor_control.cpp:819
-#: pcbnew/tools/footprint_editor_control.cpp:967
+#: pcbnew/tools/footprint_editor_control.cpp:970
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d సంభావ్య సమస్యలు పరిష్కరించబడ్డాయి."
@@ -56155,19 +56159,19 @@ msgid ""
 "library is read-only."
 msgstr "ఎంచుకున్న లైబ్రరీకి ('%s') ఫుట్‌ప్రింట్ జోడించలేకపోయింది. ఈ లైబ్రరీ చదవడానికి మాత్రమే."
 
-#: pcbnew/tools/footprint_editor_control.cpp:464
+#: pcbnew/tools/footprint_editor_control.cpp:467
 msgid "Change Footprint Name"
 msgstr "ఫుట్‌ప్రింట్ పేరు మార్చు"
 
-#: pcbnew/tools/footprint_editor_control.cpp:534
+#: pcbnew/tools/footprint_editor_control.cpp:537
 msgid "Error renaming footprint"
 msgstr "ఫుట్‌ప్రింట్ పేరు మార్చడంలో లోపం"
 
-#: pcbnew/tools/footprint_editor_control.cpp:713
+#: pcbnew/tools/footprint_editor_control.cpp:716
 msgid "No datasheet found in the footprint."
 msgstr "ఫుట్‌ప్రింట్‌లో డేటాషీట్ కనుగొనబడలేదు."
 
-#: pcbnew/tools/footprint_editor_control.cpp:972
+#: pcbnew/tools/footprint_editor_control.cpp:975
 msgid "No footprint problems found."
 msgstr "ఫుట్‌ప్రింట్ సమస్యలు కనుగొనబడలేదు."
 
@@ -60104,101 +60108,93 @@ msgstr "PTH కోసం థర్మల్ రిలీఫ్‌లు"
 msgid "[INFO] load failed: %s"
 msgstr "[INFO] లోడ్ విఫలమైంది: %s"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:5
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Converter;"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
 msgstr "బిట్‌మ్యాప్ నుండి భాగం మార్పిడి సాధనం"
 
-#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
+#: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr "KiCad కోసం బిట్‌మ్యాప్ నుండి భాగం రూపొందించు"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:10
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
 msgstr "KiCad స్కీమాటిక్ సవరణ సాధనం (స్వతంత్ర)"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
 msgid "Schematic Capture Tool"
 msgstr "స్కీమాటిక్ క్యాప్చర్ సాధనం"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:12
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
 msgid "Standalone schematic editor for KiCad schematics"
 msgstr "KiCad స్కీమాటిక్‌ల కోసం స్వతంత్ర స్కీమాటిక్ సవరణ సాధనం"
 
-#: resources/linux/launchers/org.kicad.eeschema.desktop.in:13
+#: resources/linux/launchers/org.kicad.eeschema.desktop.in:14
 msgid "eeschema"
 msgstr "eeschema"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
 msgid "Gerber File Viewer"
 msgstr "గెర్బర్ ఫైల్ వ్యూయర్"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:12
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
 msgid "View Gerber files"
 msgstr "గెర్బర్ ఫైళ్ళు చూడు"
 
-#: resources/linux/launchers/org.kicad.gerbview.desktop.in:13
+#: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
 msgstr "gerbview;PCB;Gerber;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:9
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
 msgstr "Projectmanager;"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:12
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
 msgstr "EDA సూట్"
 
-#: resources/linux/launchers/org.kicad.kicad.desktop.in:13
+#: resources/linux/launchers/org.kicad.kicad.desktop.in:14
 msgid "Suite of tools for schematic design and circuit board layout"
 msgstr "స్కీమాటిక్ డిజైన్ మరియు సర్క్యూట్ బోర్డు లేఅవుట్ కోసం సాధనాల సమాహారం"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:9
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
 msgid "KiCad PCB Calculator"
 msgstr "KiCad PCB కాల్క్యులేటర్"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:10
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
 msgid "PCB;Calculator;"
 msgstr "PCB;Calculator;"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
 msgstr "PCB కాల్క్యులేటర్"
 
-#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
 msgstr "వివిధ ఎలక్ట్రానిక్స్ సంబంధిత గణనల కోసం కాల్క్యులేటర్"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:4
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 msgstr "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
 msgstr "KiCad PCB సవరణ సాధనం (స్వతంత్ర)"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
 msgid "PCB layout editor"
 msgstr "PCB లేఅవుట్ సవరణ సాధనం"
 
-#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:13
+#: resources/linux/launchers/org.kicad.pcbnew.desktop.in:14
 msgid "Standalone circuit board editor for KiCad boards"
 msgstr "KiCad బోర్డుల కోసం స్వతంత్ర సర్క్యూట్ బోర్డు సవరణ సాధనం"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:14
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "స్కీమాటిక్ మరియు సర్క్యూట్ బోర్డు డిజైన్ కోసం EDA సూట్"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
-msgid "Circuit board"
-msgstr "సర్క్యూట్ బోర్డు"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:50
 msgid ""
@@ -60263,6 +60259,12 @@ msgstr "ప్రక్రియను సృష్టించలేకపో�
 #, c-format
 msgid "Could not create user scripting path %s."
 msgstr "వినియోగదారు స్క్రిప్టింగ్ మార్గం %s సృష్టించలేకపోయింది."
+
+#~ msgid "EDA"
+#~ msgstr "EDA"
+
+#~ msgid "Circuit board"
+#~ msgstr "సర్క్యూట్ బోర్డు"
 
 #~ msgid "Empty sheet pin name"
 #~ msgstr "ఖాళీ షీట్ పిన్ పేరు"
