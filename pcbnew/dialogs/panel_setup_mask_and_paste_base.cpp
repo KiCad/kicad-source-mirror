@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -106,26 +106,6 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	m_allowBridges->SetToolTip( _("Disable DRC error checking for solder mask aperture bridging between pads in the same footprint.") );
 
 	gbSizer1->Add( m_allowBridges, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), wxTOP|wxLEFT, 5 );
-
-	wxBoxSizer* bSizer6;
-	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
-
-	m_stTenting = new wxStaticText( this, wxID_ANY, _("Tent vias:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_stTenting->Wrap( -1 );
-	bSizer6->Add( m_stTenting, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-
-	m_tentViasFront = new wxCheckBox( this, wxID_ANY, _("Front"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tentViasFront->SetToolTip( _("Tented: vias are covered with solder mask.\nNot tented: vias are not covered with solder mask.") );
-
-	bSizer6->Add( m_tentViasFront, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-
-	m_tentViasBack = new wxCheckBox( this, wxID_ANY, _("Back"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_tentViasBack->SetToolTip( _("Tented: vias are covered with solder mask.\nNot tented: vias are not covered with solder mask.") );
-
-	bSizer6->Add( m_tentViasBack, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-
-
-	gbSizer1->Add( bSizer6, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
 	bSizer3->Add( gbSizer1, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );

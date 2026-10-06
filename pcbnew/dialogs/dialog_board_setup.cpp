@@ -400,7 +400,7 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
     if( m_initComplete )
     {
         if( m_currentPage == m_physicalStackupPage || page == m_physicalStackupPage || page == m_netclassesPage
-            || page == m_tuningProfilesPage || page == m_zonesPage )
+            || page == m_tuningProfilesPage || page == m_zonesPage || page == m_boardFinishPage )
         {
             m_layers = RESOLVE_PAGE( PANEL_SETUP_LAYERS, m_layersPage );
             m_physicalStackup = RESOLVE_PAGE( PANEL_SETUP_BOARD_STACKUP, m_physicalStackupPage );
@@ -434,6 +434,12 @@ void DIALOG_BOARD_SETUP::onPageChanged( wxBookCtrlEvent& aEvent )
         else if( page == m_zonesPage )
         {
             m_zones->SyncCopperLayers( m_physicalStackup->GetCopperLayerCount() );
+        }
+
+        if( page == m_boardFinishPage )
+        {
+            m_physicalStackup->OnLayersOptionsChanged( m_layers->GetUILayerMask() );
+            m_boardFinish->SetStackup( m_physicalStackup->GetStackup(), m_physicalStackup->GetCopperLayerCount() );
         }
 
         if( Prj().IsReadOnly() )

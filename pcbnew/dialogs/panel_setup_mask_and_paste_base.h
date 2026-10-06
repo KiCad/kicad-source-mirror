@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a-dirty)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -52,9 +52,6 @@ class PANEL_SETUP_MASK_AND_PASTE_BASE : public wxPanel
 		wxTextCtrl* m_maskToCopperClearanceCtrl;
 		wxStaticText* m_maskToCopperClearanceUnits;
 		wxCheckBox* m_allowBridges;
-		wxStaticText* m_stTenting;
-		wxCheckBox* m_tentViasFront;
-		wxCheckBox* m_tentViasBack;
 		wxStaticText* m_stSolderPasteSettings;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_pasteMarginLabel;

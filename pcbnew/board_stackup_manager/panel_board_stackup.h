@@ -111,6 +111,9 @@ public:
     /// @return the number of copper layers configured for the board stackup
     int GetCopperLayerCount() const;
 
+    /// @return the stackup as currently edited on this page
+    const BOARD_STACKUP& GetStackup() const { return m_stackup; }
+
     /// @return the BOARD_STACKUP_ITEM managed by the row aRow
     BOARD_STACKUP_ITEM* GetStackupItem( int aRow );
 

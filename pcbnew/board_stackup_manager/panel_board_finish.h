@@ -20,7 +20,10 @@
 
 #pragma once
 
+#include <optional>
+#include <vector>
 #include <board.h>
+#include <widgets/via_cross_section_geometry.h>
 #include "panel_board_finish_base.h"
 
 class PAGED_DIALOG;
@@ -35,16 +38,35 @@ public:
 
     void ImportSettingsFrom( BOARD* aBoard );
 
+    void SetStackup( const BOARD_STACKUP& aStackup, int aCopperLayerCount );
+
     // Called by wxWidgets: transfer current settings stored in m_stackup to the board
     bool TransferDataFromWindow() override;
 
     bool TransferDataFromWindow( BOARD_STACKUP& aStackup );
 
 private:
+    /// A via protection checkbox, the board setting it edits and the preview flag it drives
+    struct VIA_PROTECTION_CONTROL
+    {
+        wxCheckBox* PANEL_SETUP_BOARD_FINISH_BASE::* m_CheckBox;
+        bool BOARD_DESIGN_SETTINGS::* m_Setting;
+        std::optional<bool> VIA_CROSS_SECTION_GEOMETRY::STATE::* m_State;
+    };
+
+    static const std::vector<VIA_PROTECTION_CONTROL>& viaProtectionControls();
+
     void synchronizeWithBoard();
+
+    /// Grey out the features that cannot be built with the ones selected
+    void enableViaProtection();
+    void updateViaPreview();
+    void onViaProtectionChanged( wxCommandEvent& aEvent );
 
 private:
     PCB_EDIT_FRAME*         m_frame;
     BOARD*                  m_board;
     BOARD_DESIGN_SETTINGS*  m_brdSettings;
+    BOARD_STACKUP           m_stackup;
+    int                     m_copperLayerCount;
 };

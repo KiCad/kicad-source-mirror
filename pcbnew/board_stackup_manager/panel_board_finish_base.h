@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class VIA_CROSS_SECTION_PREVIEW;
+
 #include <wx/string.h>
 #include <wx/checkbox.h>
 #include <wx/gdicmn.h>
@@ -19,6 +21,7 @@
 #include <wx/stattext.h>
 #include <wx/choice.h>
 #include <wx/sizer.h>
+#include <wx/statbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -36,6 +39,21 @@ class PANEL_SETUP_BOARD_FINISH_BASE : public wxPanel
 		wxChoice* m_choiceFinish;
 		wxStaticText* m_staticTextEdgeConn;
 		wxChoice* m_choiceEdgeConn;
+		wxStaticText* m_viaProtectionHint;
+		wxStaticText* m_fillViasLabel;
+		wxCheckBox* m_fillVias;
+		wxStaticText* m_capViasLabel;
+		wxCheckBox* m_capVias;
+		wxStaticText* m_plugViasLabel;
+		wxCheckBox* m_plugViasFront;
+		wxCheckBox* m_plugViasBack;
+		wxStaticText* m_tentViasLabel;
+		wxCheckBox* m_tentViasFront;
+		wxCheckBox* m_tentViasBack;
+		wxStaticText* m_coverViasLabel;
+		wxCheckBox* m_coverViasFront;
+		wxCheckBox* m_coverViasBack;
+		VIA_CROSS_SECTION_PREVIEW* m_viaPreview;
 
 	public:
 
