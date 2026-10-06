@@ -455,6 +455,14 @@ bool EDA_TEXT::Replace( const EDA_SEARCH_DATA& aSearchData )
 }
 
 
+void EDA_TEXT::SetAttributes( const TEXT_ATTRIBUTES& aTextAttrs )
+{
+    m_attributes = aTextAttrs;
+    ClearRenderCache();
+    ClearBoundingBoxCache();
+}
+
+
 void EDA_TEXT::SetFont( KIFONT::FONT* aFont )
 {
     m_attributes.m_Font = aFont;
