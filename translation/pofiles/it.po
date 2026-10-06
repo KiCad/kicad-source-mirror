@@ -118,7 +118,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-05 22:54+0000\n"
+"PO-Revision-Date: 2026-10-06 08:54+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -24161,6 +24161,8 @@ msgid ""
 "Failed to read embedded image '%s'. The image data may be corrupt or in an "
 "unsupported format."
 msgstr ""
+"Impossibile leggere l'immagine incorporata '%s'. I dati dell'immagine "
+"potrebbero essere danneggiati o in un formato non supportato."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:5049
 #, c-format
@@ -24318,13 +24320,13 @@ msgstr ""
 "assiciata ad essa). La parte non è stata caricata nella libreria KiCad."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded."
 msgstr ""
-"Il simbolo \"%s\" che fa riferimento alla parte \"%s\" non si trova nella "
-"libraria. Il simbolo non è stato caricato"
+"Il simbolo '%s' che fa riferimento alla parte '%s' non si trova nella "
+"libreria. Il simbolo non è stato caricato."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:837
 #, c-format
@@ -24411,14 +24413,14 @@ msgstr ""
 "aggiustamento manuale."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2280
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Net %s references unknown terminal %s on symbol %s. The net was not properly "
 "loaded and may require manual fixing."
 msgstr ""
-"La connessione %s si riferisce an un elemento di connessione sconosciuto %s. "
-"La connessione non è stata caricata correttamente e potrebbe necessitare di "
-"aggiustamento manuale."
+"La net %s si riferisce a un terminale sconosciuto %s sul simbolo %s. La net "
+"non è stata caricata correttamente e potrebbe necessitare di aggiustamento "
+"manuale."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2337
 #, fuzzy, c-format
