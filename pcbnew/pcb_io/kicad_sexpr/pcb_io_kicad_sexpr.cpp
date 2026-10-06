@@ -2426,6 +2426,11 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                 {
                     m_out->Print( "(options" );
 
+                    if( aPad->GetCustomShapeInZoneOpt() == CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL )
+                        m_out->Print( "(clearance convexhull)" );
+                    else
+                        m_out->Print( "(clearance outline)" );
+
                     // Output the anchor pad shape (circle/rect)
                     m_out->Print( "(anchor %s)", anchorShape( aLayer ) );
 
