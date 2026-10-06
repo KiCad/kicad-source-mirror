@@ -2239,6 +2239,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     for( const std::unique_ptr<SCH_ITEM>& item : sourceItems )
     {
         SCH_ITEM* newItem = item->Duplicate( IGNORE_PARENT_GROUP );
+        int       commitCheckpoint = commit.Checkpoint();
         bool      restore_state = false;
 
         // Ensure newItem has a suitable parent: the current screen, because an item from
@@ -2327,13 +2328,9 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
         }
 
         if( restore_state )
-        {
-            commit.Revert();
-        }
+            commit.RevertToCheckpoint( commitCheckpoint );
         else
-        {
             newItems.Add( newItem );
-        }
     }
 
     if( !newItems.Empty() )
