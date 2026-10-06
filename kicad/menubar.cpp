@@ -160,6 +160,11 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
                      ID_IMPORT_DIPTRACE_PROJECT,
                      BITMAPS::import_project );
 
+    importMenu->Add( _( "Easy-PC / DesignSpark PCB Project..." ),
+                     _( "Import Easy-PC or DesignSpark PCB project, schematic and PCB (*.prj, *.sch, *.pcb)" ),
+                     ID_IMPORT_EASYPC_PROJECT,
+                     BITMAPS::import_project );
+
     importMenu->Add( _( "OrCAD Project..." ),
                      _( "Import OrCAD schematic (*.dsn) and optional Allegro board (*.brd)" ),
                      ID_IMPORT_ORCAD_PROJECT,

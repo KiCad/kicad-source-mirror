@@ -51,7 +51,8 @@ public:
         CADSTAR,
         FABMASTER,
         PCAD,
-        SOLIDWORKS
+        SOLIDWORKS,
+        EASYPC
     };
 
     wxString             m_inputFile;

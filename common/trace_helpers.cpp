@@ -66,6 +66,7 @@ const wxChar* const traceModelPreview = wxT( "KICAD_MODEL_PREVIEW" );
 const wxChar* const traceDiffMerge = wxT( "KICAD_DIFF_MERGE" );
 const wxChar* const traceEagleIo = wxT( "KICAD_EAGLE_IO" );
 const wxChar* const traceDiptraceIo = wxT( "KICAD_DIPTRACE_IO" );
+const wxChar* const traceEasyPc = wxT( "KICAD_EASYPC_IO" );
 const wxChar* const traceCadstarIo = wxT( "KICAD_CADSTAR_IO" );
 const wxChar* const traceFabmaster = wxT( "KICAD_FABMASTER" );
 const wxChar* const traceAltiumIo = wxT( "KICAD_ALTIUM_IO" );

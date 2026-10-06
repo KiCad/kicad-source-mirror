@@ -73,6 +73,7 @@ public:
         DIPTRACE,
         AUTOTRAX,
         PADS_BINARY,
+        EASYPC,       ///< Easy-PC / DesignSpark PCB
         // add your type here.
 
         // etc.

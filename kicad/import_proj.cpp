@@ -20,6 +20,7 @@
 
 #include "import_proj.h"
 #include <import_proj_properties.h>
+#include <confirm.h>
 #include <kidialog.h>
 #include <wildcards_and_files_ext.h>
 #include <macros.h>
@@ -50,6 +51,8 @@
 #include <io/easyedapro/easyedapro_v3_parser.h>
 #include <io/common/plugin_common_choose_project.h>
 #include <io/pads/pads_common.h>
+#include <io/easypc/easypc_classes_project.h>
+#include <io/easypc/easypc_document.h>
 #include <dialogs/dialog_import_choose_project.h>
 
 #include <wx/log.h>
@@ -744,6 +747,61 @@ void IMPORT_PROJ_HELPER::OrcadProjectHandler()
 }
 
 
+void IMPORT_PROJ_HELPER::EasyPcProjectHandler()
+{
+    wxFileName schFile;
+    wxFileName pcbFile;
+    wxString   projectPcb;
+
+    if( m_InputFile.GetExt().CmpNoCase( wxS( "prj" ) ) == 0 )
+    {
+        schFile = m_InputFile;
+
+        try
+        {
+            std::unique_ptr<EASYPC::PROJECT_DOCUMENT> doc = EASYPC::LoadProject( m_InputFile.GetFullPath() );
+            const EASYPC::SOURCE_PROJECT&             project = *doc->Project;
+
+            if( !project.Boards.empty() )
+            {
+                projectPcb = project.Boards.front()->Name;
+                pcbFile.Assign( EASYPC::ResolveProjectItem( m_InputFile.GetFullPath(), projectPcb ) );
+            }
+        }
+        catch( const IO_ERROR& e )
+        {
+            DisplayErrorMessage( m_frame, _( "Cannot read the Easy-PC project." ), e.What() );
+            return;
+        }
+    }
+    else if( m_InputFile.GetExt().CmpNoCase( wxS( "pcb" ) ) == 0 )
+    {
+        pcbFile = m_InputFile;
+        schFile = findSiblingByExt( m_InputFile, wxS( "sch" ) );
+    }
+    else
+    {
+        schFile = m_InputFile;
+        pcbFile = findSiblingByExt( m_InputFile, wxS( "pcb" ) );
+    }
+
+    // Sources are imported in place: a project's sheets are found relative to the .prj
+    if( schFile.IsOk() && schFile.FileExists() )
+        doImport( schFile.GetFullPath(), FRAME_SCH, SCH_IO_MGR::SCH_EASYPC );
+
+    if( pcbFile.IsOk() && pcbFile.FileExists() )
+    {
+        doImport( pcbFile.GetFullPath(), FRAME_PCB_EDITOR, PCB_IO_MGR::EASYPC );
+    }
+    else if( !projectPcb.IsEmpty() )
+    {
+        DisplayErrorMessage( m_frame, wxString::Format( _( "The board '%s' named by the Easy-PC project was not "
+                                                           "found." ),
+                                                        projectPcb ) );
+    }
+}
+
+
 void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcbFileType )
 {
     m_properties.clear();
@@ -772,6 +830,11 @@ void IMPORT_PROJ_HELPER::ImportFiles( int aImportedSchFileType, int aImportedPcb
     else if( aImportedSchFileType == SCH_IO_MGR::SCH_ORCAD )
     {
         OrcadProjectHandler();
+        return;
+    }
+    else if( aImportedSchFileType == SCH_IO_MGR::SCH_EASYPC )
+    {
+        EasyPcProjectHandler();
         return;
     }
     else if( aImportedSchFileType == SCH_IO_MGR::SCH_GEDA )

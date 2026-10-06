@@ -363,6 +363,12 @@ wxString FILEEXT::DipTraceFilesWildcard()
 }
 
 
+wxString FILEEXT::EasyPcFilesWildcard()
+{
+    return _( "Easy-PC / DesignSpark PCB files" ) + AddFileExtListToFilter( { "prj", "sch", "pcb" } );
+}
+
+
 wxString FILEEXT::OrCadSchematicFilesWildcard()
 {
     return _( "OrCAD Capture schematic files" ) + AddFileExtListToFilter( { "dsn" } );

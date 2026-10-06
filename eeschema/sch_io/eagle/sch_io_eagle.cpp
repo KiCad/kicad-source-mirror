@@ -1886,7 +1886,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     {
         Report( wxString::Format( wxS( "Eagle library '%s' not found while looking up symbol for "
                                        "deviceset '%s', device '%s', and gate '%s." ),
-                                  libName, epart->deviceset, epart->device, aInstance->gate ) );
+                                  libName, epart->deviceset, epart->device, aInstance->gate ), RPT_SEVERITY_WARNING );
         return;
     }
 
@@ -1896,7 +1896,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
     {
         Report( wxString::Format( wxS( "Symbol not found for deviceset '%s', device '%s', and "
                                        "gate '%s in library '%s'." ),
-                                  epart->deviceset, epart->device, aInstance->gate, libName ) );
+                                  epart->deviceset, epart->device, aInstance->gate, libName ), RPT_SEVERITY_WARNING );
         return;
     }
 
@@ -2155,7 +2155,8 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
 
             if( eLibIt == m_eagleDoc->drawing->schematic->libraries.end() )
             {
-                Report( wxString::Format( wxS( "Library '%s' not found in schematic." ), epart->library ) );
+                Report( wxString::Format( wxS( "Library '%s' not found in schematic." ), epart->library ),
+                        RPT_SEVERITY_WARNING );
                 continue;
             }
 
@@ -2165,7 +2166,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
             {
                 Report( wxString::Format( wxS( "Device set '%s' not found in library '%s'." ),
                                           epart->deviceset,
-                                          epart->library ) );
+                                          epart->library ), RPT_SEVERITY_WARNING );
                 continue;
             }
 
@@ -2176,7 +2177,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
                 Report( wxString::Format( wxS( "Device '%s' not found in device set '%s' in library '%s'." ),
                                           epart->device,
                                           epart->deviceset,
-                                          epart->library ) );
+                                          epart->library ), RPT_SEVERITY_WARNING );
                 continue;
             }
 
@@ -2189,7 +2190,7 @@ void SCH_IO_EAGLE::loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
                                           variant->technology.value(),
                                           epart->device,
                                           epart->deviceset,
-                                          epart->library ) );
+                                          epart->library ), RPT_SEVERITY_WARNING );
                 continue;
             }
 
@@ -2285,7 +2286,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRAR
                 {
                     Report( wxString::Format( wxS( "Eagle symbol '%s' not found in library '%s'." ),
                                               egate->symbol,
-                                              aLibrary->GetName() ) );
+                                              aLibrary->GetName() ), RPT_SEVERITY_WARNING );
                     continue;
                 }
 

@@ -107,11 +107,67 @@ bool LoadLayerMapFile( const wxString& aFile, std::map<wxString, wxString>& aMap
 }
 
 
-void WriteImportReport( REPORTER* aReporter, IMPORT_REPORT_FORMAT aFormat,
+REPORTER& IMPORT_MESSAGE_COLLECTOR::Report( const wxString& aText, SEVERITY aSeverity )
+{
+    REPORTER::Report( aText, aSeverity );
+
+    wxString text = aText;
+    text.Trim();
+
+    if( aSeverity == RPT_SEVERITY_WARNING )
+        m_warnings.push_back( text );
+    else if( aSeverity == RPT_SEVERITY_ERROR )
+        m_errors.push_back( text );
+
+    return *this;
+}
+
+
+void IMPORT_MESSAGE_COLLECTOR::Clear()
+{
+    REPORTER::Clear();
+    m_warnings.clear();
+    m_errors.clear();
+}
+
+
+IMPORT_MESSAGE_COLLECTOR::~IMPORT_MESSAGE_COLLECTOR()
+{
+    forward();
+}
+
+
+void IMPORT_MESSAGE_COLLECTOR::forward()
+{
+    for( const wxString& warning : m_warnings )
+        m_jobReporter.Report( warning + wxS( "\n" ), RPT_SEVERITY_WARNING );
+
+    for( const wxString& error : m_errors )
+        m_jobReporter.Report( error + wxS( "\n" ), RPT_SEVERITY_ERROR );
+
+    Clear();
+}
+
+
+void IMPORT_MESSAGE_COLLECTOR::Flush( IMPORT_REPORT_FORMAT aFormat, IMPORT_REPORT_DATA& aData )
+{
+    if( aFormat == IMPORT_REPORT_FORMAT::NONE )
+    {
+        forward();
+        return;
+    }
+
+    aData.m_warnings.insert( aData.m_warnings.end(), m_warnings.begin(), m_warnings.end() );
+    aData.m_errors.insert( aData.m_errors.end(), m_errors.begin(), m_errors.end() );
+    Clear();
+}
+
+
+bool WriteImportReport( REPORTER* aReporter, IMPORT_REPORT_FORMAT aFormat,
                         const wxString& aReportFile, const IMPORT_REPORT_DATA& aData )
 {
     if( aFormat == IMPORT_REPORT_FORMAT::NONE )
-        return;
+        return true;
 
     wxString output;
 
@@ -171,26 +227,34 @@ void WriteImportReport( REPORTER* aReporter, IMPORT_REPORT_FORMAT aFormat,
             for( const wxString& warning : aData.m_warnings )
                 output += wxString::Format( wxS( "  - %s\n" ), warning );
         }
-    }
 
-    if( !aReportFile.IsEmpty() )
-    {
-        wxFile file( aReportFile, wxFile::write );
+        if( !aData.m_errors.empty() )
+        {
+            output += wxS( "\nErrors:\n" );
 
-        if( file.IsOpened() )
-        {
-            file.Write( output );
-            file.Close();
-        }
-        else if( aReporter )
-        {
-            aReporter->Report( wxString::Format( _( "Failed to write import report to '%s'\n" ),
-                                                 aReportFile ),
-                               RPT_SEVERITY_ERROR );
+            for( const wxString& error : aData.m_errors )
+                output += wxString::Format( wxS( "  - %s\n" ), error );
         }
     }
-    else if( aReporter )
+
+    if( aReportFile.IsEmpty() )
     {
-        aReporter->Report( output + wxS( "\n" ), RPT_SEVERITY_INFO );
+        if( aReporter )
+            aReporter->Report( output + wxS( "\n" ), RPT_SEVERITY_INFO );
+
+        return true;
     }
+
+    wxFile file( aReportFile, wxFile::write );
+    bool   written = file.IsOpened() && file.Write( output );
+
+    written = file.Close() && written;
+
+    if( !written && aReporter )
+    {
+        aReporter->Report( wxString::Format( _( "Failed to write import report to '%s'\n" ), aReportFile ),
+                           RPT_SEVERITY_ERROR );
+    }
+
+    return written;
 }

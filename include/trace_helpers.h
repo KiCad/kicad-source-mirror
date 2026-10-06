@@ -312,6 +312,13 @@ extern KICOMMON_API const wxChar* const traceEagleIo;
 extern KICOMMON_API const wxChar* const traceDiptraceIo;
 
 /*
+ * Flag to enable Easy-PC / DesignSpark PCB I/O debug tracing.
+ *
+ * Use "KICAD_EASYPC_IO" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceEasyPc;
+
+/*
  * Flag to enable CADSTAR I/O debug tracing.
  *
  * Use "KICAD_CADSTAR_IO" to enable.

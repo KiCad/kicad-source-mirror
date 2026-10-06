@@ -242,6 +242,14 @@ void KICAD_MANAGER_FRAME::OnImportDipTraceFiles( wxCommandEvent& event )
 }
 
 
+void KICAD_MANAGER_FRAME::OnImportEasyPcFiles( wxCommandEvent& event )
+{
+    ImportNonKiCadProject( _( "Import Easy-PC / DesignSpark PCB Project Files" ),
+                           FILEEXT::EasyPcFilesWildcard(), { "prj", "sch" }, { "pcb" },
+                           SCH_IO_MGR::SCH_EASYPC, PCB_IO_MGR::EASYPC );
+}
+
+
 void KICAD_MANAGER_FRAME::OnImportOrcadFiles( wxCommandEvent& event )
 {
     // OrCAD handler imports .dsn schematic then offers associated Allegro board, so no

@@ -782,6 +782,18 @@ set( COMMON_IO_SRCS
     # DipTrace
     io/diptrace/diptrace_binary_reader.cpp
 
+    # Easy-PC / DesignSpark PCB
+    io/easypc/easypc_archive.cpp
+    io/easypc/easypc_classes_connectivity.cpp
+    io/easypc/easypc_classes_geometry.cpp
+    io/easypc/easypc_classes_library.cpp
+    io/easypc/easypc_classes_root.cpp
+    io/easypc/easypc_classes_styles.cpp
+    io/easypc/easypc_design_settings.cpp
+    io/easypc/easypc_document.cpp
+    io/easypc/easypc_file.cpp
+    io/easypc/easypc_text_metrics.cpp
+
     # P-CAD
     io/pcad/s_expr_loader.cpp
 

@@ -22,12 +22,11 @@
 
 #include <kicommon.h>
 #include <json_common.h>
+#include <reporter.h>
 #include <wx/string.h>
 #include <map>
 #include <utility>
 #include <vector>
-
-class REPORTER;
 
 /**
  * Output format for the report shared by the board and schematic import jobs.
@@ -72,6 +71,41 @@ struct KICOMMON_API IMPORT_REPORT_DATA
 
 
 /**
+ * Reporter handed to an importer during an import job.  It keeps the importer's warnings and errors
+ * so the job can place them in its report, and drops informational and debug messages.  Messages
+ * still held when it is destroyed, e.g. after a failed load, are forwarded to the job's reporter.
+ */
+class KICOMMON_API IMPORT_MESSAGE_COLLECTOR : public REPORTER
+{
+public:
+    explicit IMPORT_MESSAGE_COLLECTOR( REPORTER& aJobReporter ) :
+            m_jobReporter( aJobReporter )
+    { }
+
+    ~IMPORT_MESSAGE_COLLECTOR() override;
+
+    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+
+    bool HasMessage() const override { return !m_warnings.empty() || !m_errors.empty(); }
+
+    void Clear() override;
+
+    /**
+     * Move the collected messages into @p aData when a report will be written, otherwise forward
+     * them to the job's reporter.
+     */
+    void Flush( IMPORT_REPORT_FORMAT aFormat, IMPORT_REPORT_DATA& aData );
+
+private:
+    void forward();
+
+    REPORTER&             m_jobReporter;
+    std::vector<wxString> m_warnings;
+    std::vector<wxString> m_errors;
+};
+
+
+/**
  * Parse the user-facing report format name ("none", "json" or "text") into its enum.
  *
  * @return false if the name is not recognized, leaving @p aFormat untouched.
@@ -102,8 +136,10 @@ KICOMMON_API bool LoadLayerMapFile( const wxString& aFile, std::map<wxString, wx
 /**
  * Emit an import report in the requested format to @p aReportFile, or to @p aReporter (at INFO
  * severity) when no file is given.  A NONE format is a no-op.
+ *
+ * @return false if @p aReportFile could not be written, after reporting why at ERROR severity.
  */
-KICOMMON_API void WriteImportReport( REPORTER* aReporter, IMPORT_REPORT_FORMAT aFormat,
+KICOMMON_API bool WriteImportReport( REPORTER* aReporter, IMPORT_REPORT_FORMAT aFormat,
                                      const wxString& aReportFile, const IMPORT_REPORT_DATA& aData );
 
 #endif

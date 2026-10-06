@@ -43,6 +43,7 @@
 #include <sch_io/diptrace/sch_io_diptrace.h>
 #include <sch_io/pcad/sch_io_pcad.h>
 #include <sch_io/orcad/sch_io_orcad.h>
+#include <sch_io/easypc/sch_io_easypc.h>
 #include <common.h>     // for ExpandEnvVarSubstitutions
 #include <ki_exception.h>
 
@@ -91,6 +92,7 @@ SCH_IO* SCH_IO_MGR::FindPlugin( SCH_FILE_T aFileType )
     case SCH_DIPTRACE:        return new SCH_IO_DIPTRACE();
     case SCH_PCAD:            return new SCH_IO_PCAD();
     case SCH_ORCAD:           return new SCH_IO_ORCAD();
+    case SCH_EASYPC:          return new SCH_IO_EASYPC();
     default:                  return nullptr;
     }
 }
@@ -120,6 +122,7 @@ const wxString SCH_IO_MGR::ShowType( SCH_FILE_T aFileType )
     case SCH_DIPTRACE:        return wxString( wxT( "DipTrace" ) );
     case SCH_PCAD:            return wxString( wxT( "P-CAD" ) );
     case SCH_ORCAD:           return wxString( wxT( "OrCAD" ) );
+    case SCH_EASYPC:          return wxString( wxT( "Easy-PC" ) );
     case SCH_NESTED_TABLE:    return LIBRARY_TABLE_ROW::TABLE_TYPE_NAME;
     default:                  return wxString::Format( _( "Unknown SCH_FILE_T value: %d" ), aFileType );
     }
@@ -164,6 +167,8 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::EnumFromStr( const wxString& aType )
         return SCH_PCAD;
     else if( aType == wxT( "OrCAD" ) )
         return SCH_ORCAD;
+    else if( aType == wxT( "Easy-PC" ) )
+        return SCH_EASYPC;
     else if( aType == LIBRARY_TABLE_ROW::TABLE_TYPE_NAME )
         return SCH_NESTED_TABLE;
 

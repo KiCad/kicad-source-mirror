@@ -49,6 +49,7 @@
 #include <pcb_io/pads/pcb_io_pads.h>
 #include <pcb_io/sprint_layout/pcb_io_sprint_layout.h>
 #include <pcb_io/diptrace/pcb_io_diptrace.h>
+#include <pcb_io/easypc/pcb_io_easypc.h>
 #include <pcb_io/autotrax/pcb_io_autotrax.h>
 #include <pcb_io/pads/pcb_io_pads_binary.h>
 #include <reporter.h>
@@ -423,6 +424,11 @@ static PCB_IO_MGR::REGISTER_PLUGIN registerDipTracePlugin(
         PCB_IO_MGR::DIPTRACE,
         wxT( "DipTrace" ),
         []() -> PCB_IO* { return new PCB_IO_DIPTRACE; } );
+
+static PCB_IO_MGR::REGISTER_PLUGIN registerEasyPcPlugin(
+        PCB_IO_MGR::EASYPC,
+        wxT( "Easy-PC" ),
+        []() -> PCB_IO* { return new PCB_IO_EASYPC; } );
 
 static PCB_IO_MGR::REGISTER_PLUGIN registerAutotraxPlugin(
         PCB_IO_MGR::AUTOTRAX,

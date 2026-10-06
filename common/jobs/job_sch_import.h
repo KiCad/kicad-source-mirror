@@ -51,7 +51,8 @@ public:
         PADS,
         DIPTRACE,
         PCAD,
-        ORCAD
+        ORCAD,
+        EASYPC
     };
 
     wxString             m_inputFile;

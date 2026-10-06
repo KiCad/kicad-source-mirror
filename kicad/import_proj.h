@@ -98,6 +98,14 @@ private:
      * @brief Imports the OrCAD schematic, then offers to import an associated Allegro board.
      */
     void OrcadProjectHandler();
+
+    /**
+     * @brief Imports an Easy-PC / DesignSpark project, or a schematic and board pair.
+     *
+     * A .prj names its sheets and its single PCB; the schematic importer reads every sheet from the .prj itself
+     * and the board is the PCB item.  A .sch or .pcb pairs with the sibling of the same name.
+     */
+    void EasyPcProjectHandler();
 };
 
 #endif

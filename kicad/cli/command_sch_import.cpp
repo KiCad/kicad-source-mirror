@@ -42,7 +42,7 @@ CLI::SCH_IMPORT_COMMAND::SCH_IMPORT_COMMAND() : COMMAND( "import" )
     m_argParser.add_argument( ARG_FORMAT )
             .default_value( std::string( "auto" ) )
             .help( UTF8STDSTR( _( "Input format hint: auto, altium, eagle, cadstar, easyeda, "
-                                  "easyedapro, ltspice, pads, diptrace, pcad, orcad "
+                                  "easyedapro, ltspice, pads, diptrace, pcad, orcad, easypc "
                                   "(default: auto)" ) ) )
             .metavar( "FORMAT" );
 
@@ -89,6 +89,8 @@ int CLI::SCH_IMPORT_COMMAND::doPerform( KIWAY& aKiway )
         importJob->m_format = JOB_SCH_IMPORT::FORMAT::PCAD;
     else if( format == wxS( "orcad" ) )
         importJob->m_format = JOB_SCH_IMPORT::FORMAT::ORCAD;
+    else if( format == wxS( "easypc" ) )
+        importJob->m_format = JOB_SCH_IMPORT::FORMAT::EASYPC;
     else
     {
         wxFprintf( stderr, _( "Invalid format: %s\n" ), format );

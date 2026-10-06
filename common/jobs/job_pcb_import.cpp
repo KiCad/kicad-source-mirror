@@ -31,7 +31,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM( JOB_PCB_IMPORT::FORMAT,
                                   { JOB_PCB_IMPORT::FORMAT::CADSTAR, "cadstar" },
                                   { JOB_PCB_IMPORT::FORMAT::FABMASTER, "fabmaster" },
                                   { JOB_PCB_IMPORT::FORMAT::PCAD, "pcad" },
-                                  { JOB_PCB_IMPORT::FORMAT::SOLIDWORKS, "solidworks" }
+                                  { JOB_PCB_IMPORT::FORMAT::SOLIDWORKS, "solidworks" },
+                                  { JOB_PCB_IMPORT::FORMAT::EASYPC, "easypc" }
                               } )
 
 

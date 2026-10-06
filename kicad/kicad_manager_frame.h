@@ -139,6 +139,11 @@ public:
     void OnImportDipTraceFiles( wxCommandEvent& event );
 
     /**
+     *  Open dialog to import an Easy-PC / DesignSpark PCB project, schematic or board.
+     */
+    void OnImportEasyPcFiles( wxCommandEvent& event );
+
+    /**
      *  Open dialog to import an OrCAD schematic file.
      */
     void OnImportOrcadFiles( wxCommandEvent& event );

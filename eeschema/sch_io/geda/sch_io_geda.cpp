@@ -3646,7 +3646,7 @@ LIB_SYMBOL* SCH_IO_GEDA::getOrLoadSymbol( const wxString& aBasename )
         if( !suggestion.IsEmpty() )
             msg += wxString::Format( _( " Did you mean '%s'?" ), suggestion );
 
-        m_reporter->Report( msg );
+        m_reporter->Report( msg, RPT_SEVERITY_WARNING );
     }
 
     return m_libSymbols[aBasename].get();

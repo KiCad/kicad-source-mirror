@@ -249,7 +249,7 @@ void LTSPICE_SCHEMATIC::GetAscAndAsyFilePaths( const wxDir& aDir, bool aRecursiv
                             m_reporter->Report( wxString::Format( _( "File at '%s' was ignored. Using previously "
                                                                      "found file at '%s' instead." ),
                                                                   path.GetFullPath(),
-                                                                  aMapToLogTo.at( aKey ) ) );
+                                                                  aMapToLogTo.at( aKey ) ), RPT_SEVERITY_WARNING );
                         }
                     }
                     else
