@@ -2985,6 +2985,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 {
                     sheetFields.emplace_back( sheet, FIELD_T::USER, fieldName );
                     sheetFields.back().SetText( fieldValue );
+                    sheetFields.back().SetTextPos( sheet->GetPosition() );
                     sheetFields.back().SetVisible( false );
                 }
             }
