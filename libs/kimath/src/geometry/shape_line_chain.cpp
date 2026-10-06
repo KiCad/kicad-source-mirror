@@ -2729,7 +2729,7 @@ void SHAPE_LINE_CHAIN::RemoveDuplicatePoints()
     }
     else if( PointCount() == 3 )
     {
-        if( m_points[0] == m_points[1] )
+        if( m_points[0] == m_points[1] || m_points[1] == m_points[2] )
             Remove( 1 );
 
         return;
