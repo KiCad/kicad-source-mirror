@@ -1188,8 +1188,8 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
     case SHAPE_T::SEGMENT:
         m_out->Print( "(%s_line (start %s) (end %s)",
                       prefix.c_str(),
-                      formatInternalUnits( aShape->GetLibraryStart(), parentFP ).c_str(),
-                      formatInternalUnits( aShape->GetLibraryEnd(), parentFP ).c_str() );
+                      formatInternalUnits( aShape->GetLibraryStart() ).c_str(),
+                      formatInternalUnits( aShape->GetLibraryEnd() ).c_str() );
         break;
 
     case SHAPE_T::RECTANGLE:

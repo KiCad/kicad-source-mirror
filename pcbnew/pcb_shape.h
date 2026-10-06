@@ -274,6 +274,8 @@ public:
             m_libArcMid = aArcMid;
     }
 
+    void OverrideLibCornerRadius( int aCornerRadius ) { m_libCornerRadius = aCornerRadius; }
+
     void OverrideLibBezier( const VECTOR2I& aC1, const VECTOR2I& aC2 )
     {
         m_libBezierC1 = aC1;

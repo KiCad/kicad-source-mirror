@@ -4290,6 +4290,9 @@ PCB_SHAPE* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_SHAPE( BOARD_ITEM* aParent )
 
         shape->OverrideLibCoords( libStart, libEnd, libArcMid );
 
+        if( shape->GetShape() == SHAPE_T::RECTANGLE )
+            shape->OverrideLibCornerRadius( shape->GetCornerRadius() );
+
         if( shape->GetShape() == SHAPE_T::BEZIER )
             shape->OverrideLibBezier( shape->GetBezierC1(), shape->GetBezierC2() );
 
