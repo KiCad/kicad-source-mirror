@@ -505,12 +505,16 @@ std::vector<SCH_HIERLABEL*> GetUnplacedSheetPinLabels( const SCH_SHEET& aSheet )
         return {};
 
     std::vector<SCH_HIERLABEL*> labels;
+    std::set<wxString>          names;
+
+    for( SCH_SHEET_PIN* pin : aSheet.GetPins() )
+        names.insert( pin->GetText() );
 
     for( EDA_ITEM* item : aSheet.GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
     {
         SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
 
-        if( !aSheet.HasPin( label->GetText() ) )
+        if( names.insert( label->GetText() ).second )
             labels.push_back( label );
     }
 

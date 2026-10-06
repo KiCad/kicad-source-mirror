@@ -133,7 +133,7 @@ std::set<wxString> GetSheetNamesFromPaths( const std::set<wxString>& aSheetPaths
 wxString UniqueSheetName( SCH_SCREEN* aScreen, const wxString& aBaseName );
 
 /**
- * Return sheet hierarchical labels whose names do not already have a sheet pin.
+ * Return one sheet hierarchical label per name that does not already have a sheet pin.
  */
 std::vector<SCH_HIERLABEL*> GetUnplacedSheetPinLabels( const SCH_SHEET& aSheet );
 
