@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -73,6 +73,11 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 	m_checkAutoAnnotate = new wxCheckBox( this, wxID_ANY, _("Automatically annotate symbols"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer5->Add( m_checkAutoAnnotate, 0, wxALL, 5 );
+
+	m_checkAutoPlaceSheetPins = new wxCheckBox( this, wxID_ANY, _("Automatically place sheet pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkAutoPlaceSheetPins->SetToolTip( _("Place pins for hierarchical labels when placing sheets or design blocks as sheets.") );
+
+	bSizer5->Add( m_checkAutoPlaceSheetPins, 0, wxALL, 5 );
 
 	m_checkAllowUnconstrainedPinSwaps = new wxCheckBox( this, wxID_ANY, _("Allow unconstrained pin swaps"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkAllowUnconstrainedPinSwaps->SetToolTip( _("Allows swapping symbol pins' positions. May cause invalid design changes; use with caution.") );

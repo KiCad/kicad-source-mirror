@@ -121,6 +121,7 @@ void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aC
     m_cbAutoStartWires->SetValue( aCfg->m_Drawing.auto_start_wires );
     m_escClearsNetHighlight->SetValue( aCfg->m_Input.esc_clears_net_highlight );
     m_checkAutoAnnotate->SetValue( aCfg->m_AnnotatePanel.automatic );
+    m_checkAutoPlaceSheetPins->SetValue( aCfg->m_Drawing.auto_place_sheet_pins );
     m_checkAllowUnconstrainedPinSwaps->SetValue( aCfg->m_Input.allow_unconstrained_pin_swaps );
 
     m_choicePower->SetSelection( static_cast<int>( aCfg->m_Drawing.new_power_symbols ) );
@@ -162,6 +163,7 @@ bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
         cfg->m_Drawing.auto_start_wires = m_cbAutoStartWires->GetValue();
         cfg->m_Input.esc_clears_net_highlight = m_escClearsNetHighlight->GetValue();
         cfg->m_AnnotatePanel.automatic = m_checkAutoAnnotate->GetValue();
+        cfg->m_Drawing.auto_place_sheet_pins = m_checkAutoPlaceSheetPins->GetValue();
         cfg->m_Input.allow_unconstrained_pin_swaps = m_checkAllowUnconstrainedPinSwaps->GetValue();
     }
 

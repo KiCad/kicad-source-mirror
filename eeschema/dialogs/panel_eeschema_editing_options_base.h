@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,6 +48,7 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		wxCheckBox* m_cbAutoStartWires;
 		wxCheckBox* m_escClearsNetHighlight;
 		wxCheckBox* m_checkAutoAnnotate;
+		wxCheckBox* m_checkAutoPlaceSheetPins;
 		wxCheckBox* m_checkAllowUnconstrainedPinSwaps;
 		wxStaticText* m_staticText26;
 		wxStaticLine* m_staticline4;
@@ -55,11 +56,11 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		COLOR_SWATCH* m_borderColorSwatch;
 		wxStaticText* m_backgroundColorLabel;
 		COLOR_SWATCH* m_backgroundColorSwatch;
-        wxStaticText* m_selectionLabel;
-        wxStaticLine* m_staticline5;
-        wxCheckBox* m_cbPinSelectionOpt;
-        wxStaticText* m_powerSymbolLabel;
+		wxStaticText* m_powerSymbolLabel;
 		wxChoice* m_choicePower;
+		wxStaticText* m_selectionLabel;
+		wxStaticLine* m_staticline5;
+		wxCheckBox* m_cbPinSelectionOpt;
 		wxSimplebook* m_leftClickCmdsBook;
 		wxPanel* m_pageWinLin;
 		wxStaticText* m_leftClickLabel;

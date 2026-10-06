@@ -3024,6 +3024,9 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             {
                 m_view->ClearPreview();
 
+                if( ( isDrawSheetCopy || isDrawSheetFromDesignBlock ) && cfg->m_Drawing.auto_place_sheet_pins )
+                    AutoPlaceSheetPins( sheet, GetUnplacedSheetPinLabels( *sheet ) );
+
                 sheet->AutoplaceFields( m_frame->GetScreen(), AUTOPLACE_AUTO );
 
                 // Use the commit we were provided or make our own
