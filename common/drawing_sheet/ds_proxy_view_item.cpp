@@ -127,9 +127,16 @@ void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
         viewport.SetOrigin( left, viewport.GetTop() );
     }
 
-    DS_PAINTER ws_painter( gal );
-    auto       ws_settings = static_cast<DS_RENDER_SETTINGS*>( ws_painter.GetSettings() );
+    if( !m_painter || m_painterGal != gal )
+    {
+        m_painter = std::make_unique<DS_PAINTER>( gal );
+        m_painterGal = gal;
+    }
 
+    DS_PAINTER& ws_painter = *m_painter;
+    auto        ws_settings = static_cast<DS_RENDER_SETTINGS*>( ws_painter.GetSettings() );
+
+    // Colors and font follow the theme, so they are cheap to set on every draw
     ws_settings->SetNormalColor( settings->GetLayerColor( m_colorLayer ) );
     ws_settings->SetSelectedColor( settings->GetLayerColor( LAYER_SELECT_OVERLAY ) );
     ws_settings->SetBrightenedColor( settings->GetLayerColor( LAYER_BRIGHTENED ) );
