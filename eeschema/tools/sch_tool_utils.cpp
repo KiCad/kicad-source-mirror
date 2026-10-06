@@ -580,7 +580,7 @@ void AutoPlaceSheetPins( SCH_SHEET* aSheet, const std::vector<SCH_HIERLABEL*>& a
         aSheet->SetSize( VECTOR2I( aSheet->GetSize().x, needBot - topY ) );
 
     auto placeColumn =
-            [&]( const std::vector<SCH_HIERLABEL*>& aColumn, int aX, int aStartY )
+            [&]( const std::vector<SCH_HIERLABEL*>& aColumn, int aX, int aStartY, SHEET_SIDE aSide )
             {
                 int y = KiROUND( (double) aStartY / grid ) * grid;
 
@@ -594,13 +594,14 @@ void AutoPlaceSheetPins( SCH_SHEET* aSheet, const std::vector<SCH_HIERLABEL*>& a
                     pin->ClearSelected();
                     pin->SetText( label->GetText() );
                     pin->SetShape( label->GetShape() );
+                    pin->SetSide( aSide );
                     aSheet->AddPin( pin );
                     pin->AutoplaceFields( aSheet->GetParentScreen(), AUTOPLACE_AUTO );
                 }
             };
 
-    placeColumn( leftLabels, leftX, leftY );
-    placeColumn( rightLabels, rightX, rightY );
+    placeColumn( leftLabels, leftX, leftY, SHEET_SIDE::LEFT );
+    placeColumn( rightLabels, rightX, rightY, SHEET_SIDE::RIGHT );
 }
 
 
