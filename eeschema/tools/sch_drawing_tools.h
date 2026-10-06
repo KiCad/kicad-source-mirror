@@ -93,8 +93,6 @@ private:
     /// Try finding any hierlabel that does not have a sheet pin associated with it
     SCH_HIERLABEL* importHierLabel( SCH_SHEET* aSheet );
 
-    std::vector<SCH_HIERLABEL*> importHierLabels( SCH_SHEET* aSheet );
-
     std::vector<PICKED_SYMBOL> m_symbolHistoryList;
     std::vector<PICKED_SYMBOL> m_powerHistoryList;
     std::vector<LIB_ID>        m_designBlockHistoryList;

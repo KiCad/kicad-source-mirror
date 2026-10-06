@@ -3266,7 +3266,7 @@ int SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins( const TOOL_EVENT& aEvent )
     if( !sheet )
         return 0;
 
-    std::vector<SCH_HIERLABEL*> labels = importHierLabels( sheet );
+    std::vector<SCH_HIERLABEL*> labels = GetUnplacedSheetPinLabels( *sheet );
 
     if( labels.empty() )
     {
@@ -3286,76 +3286,7 @@ int SCH_DRAWING_TOOLS::AutoPlaceAllSheetPins( const TOOL_EVENT& aEvent )
     SCH_COMMIT commit( m_toolMgr );
     commit.Modify( sheet, m_frame->GetScreen() );
 
-    // Vertical pitch big enough to keep pin text from touching, snapped to grid.
-    const int grid = schIUScale.MilsToIU( 50 );
-    int       textSize = sheet->Schematic()->Settings().m_DefaultTextSize;
-    int       pitch = std::max( KiROUND( textSize * 2.0 ), schIUScale.MilsToIU( 100 ) );
-    pitch = KiROUND( (double) pitch / grid ) * grid;
-
-    const int margin = pitch;
-    int       leftX = sheet->GetPosition().x;
-    int       rightX = sheet->GetPosition().x + sheet->GetSize().x;
-    int       topY = sheet->GetPosition().y;
-
-    // Stack new pins below whatever is already on each edge, without moving it.
-    int leftY = topY + margin - pitch;
-    int rightY = topY + margin - pitch;
-
-    for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-    {
-        if( pin->GetSide() == SHEET_SIDE::RIGHT )
-            rightY = std::max( rightY, pin->GetPosition().y );
-        else if( pin->GetSide() == SHEET_SIDE::LEFT )
-            leftY = std::max( leftY, pin->GetPosition().y );
-    }
-
-    // New pins: outputs on the right edge, everything else on the left.
-    std::vector<SCH_HIERLABEL*> leftLabels;
-    std::vector<SCH_HIERLABEL*> rightLabels;
-
-    for( SCH_HIERLABEL* label : labels )
-    {
-        if( label->GetShape() == LABEL_FLAG_SHAPE::L_OUTPUT )
-            rightLabels.push_back( label );
-        else
-            leftLabels.push_back( label );
-    }
-
-    auto byText =
-            []( const SCH_HIERLABEL* a, const SCH_HIERLABEL* b )
-            {
-                return a->GetText() < b->GetText();
-            };
-
-    std::sort( leftLabels.begin(), leftLabels.end(), byText );
-    std::sort( rightLabels.begin(), rightLabels.end(), byText );
-
-    // Grow the sheet if the new pins would run past the bottom edge.
-    int botLeft = leftY + (int) leftLabels.size() * pitch;
-    int botRight = rightY + (int) rightLabels.size() * pitch;
-    int needBot = std::max( botLeft, botRight ) + margin;
-
-    if( needBot > topY + sheet->GetSize().y )
-        sheet->SetSize( VECTOR2I( sheet->GetSize().x, needBot - topY ) );
-
-    auto placeColumn =
-            [&]( std::vector<SCH_HIERLABEL*>& aLabels, int aX, int aStartY )
-            {
-                int y = KiROUND( (double) aStartY / grid ) * grid;
-
-                for( SCH_HIERLABEL* label : aLabels )
-                {
-                    y += pitch;
-
-                    SCH_SHEET_PIN* pin = createNewSheetPinFromLabel( sheet, VECTOR2I( aX, y ), label );
-                    pin->ClearFlags( IS_NEW | IS_MOVING );
-                    sheet->AddPin( pin );
-                    pin->AutoplaceFields( m_frame->GetScreen(), AUTOPLACE_AUTO );
-                }
-            };
-
-    placeColumn( leftLabels, leftX, leftY );
-    placeColumn( rightLabels, rightX, rightY );
+    AutoPlaceSheetPins( sheet, labels );
 
     commit.Push( _( "Auto-place Sheet Pins" ) );
     return 0;
@@ -3440,25 +3371,6 @@ SCH_HIERLABEL* SCH_DRAWING_TOOLS::importHierLabel( SCH_SHEET* aSheet )
     }
 
     return nullptr;
-}
-
-
-std::vector<SCH_HIERLABEL*> SCH_DRAWING_TOOLS::importHierLabels( SCH_SHEET* aSheet )
-{
-    if( !aSheet->GetScreen() )
-        return {};
-
-    std::vector<SCH_HIERLABEL*> labels;
-
-    for( EDA_ITEM* item : aSheet->GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
-    {
-        SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
-
-        if( !aSheet->HasPin( label->GetText() ) )
-            labels.push_back( label );
-    }
-
-    return labels;
 }
 
 

@@ -29,6 +29,8 @@ class SCHEMATIC;
 class SCH_REFERENCE;
 class SCH_REFERENCE_LIST;
 class SCH_SCREEN;
+class SCH_SHEET;
+class SCH_HIERLABEL;
 class SCH_SYMBOL;
 class SCH_PIN;
 class SCHEMATIC;
@@ -129,6 +131,20 @@ std::set<wxString> GetSheetNamesFromPaths( const std::set<wxString>& aSheetPaths
  * exists on aScreen. Case insensitive, like the ERC duplicate sheet name check.
  */
 wxString UniqueSheetName( SCH_SCREEN* aScreen, const wxString& aBaseName );
+
+/**
+ * Return sheet hierarchical labels whose names do not already have a sheet pin.
+ */
+std::vector<SCH_HIERLABEL*> GetUnplacedSheetPinLabels( const SCH_SHEET& aSheet );
+
+/**
+ * Import and auto-place sheet pins for the given labels, growing the sheet as needed.
+ * Outputs go on the right edge, and all other pins go on the left.
+ *
+ * The labels should come from GetUnplacedSheetPinLabels(). Caller must save the sheet
+ * for undo before calling this on an existing sheet.
+ */
+void AutoPlaceSheetPins( SCH_SHEET* aSheet, const std::vector<SCH_HIERLABEL*>& aLabels );
 
 /**
  * Return aBaseName, or aBaseName + smallest free integer if a group with that name already

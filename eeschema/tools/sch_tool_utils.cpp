@@ -30,10 +30,12 @@
 #include <schematic.h>
 #include <sch_sheet_path.h>
 #include <sch_sheet.h>
+#include <sch_sheet_pin.h>
 #include <sch_screen.h>
 #include <sch_group.h>
 #include <kiid.h>
 
+#include <algorithm>
 #include <limits>
 
 #include <wx/arrstr.h>
@@ -494,6 +496,107 @@ wxString UniqueSheetName( SCH_SCREEN* aScreen, const wxString& aBaseName )
     }
 
     return aBaseName;
+}
+
+
+std::vector<SCH_HIERLABEL*> GetUnplacedSheetPinLabels( const SCH_SHEET& aSheet )
+{
+    if( !aSheet.GetScreen() )
+        return {};
+
+    std::vector<SCH_HIERLABEL*> labels;
+
+    for( EDA_ITEM* item : aSheet.GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
+    {
+        SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
+
+        if( !aSheet.HasPin( label->GetText() ) )
+            labels.push_back( label );
+    }
+
+    return labels;
+}
+
+
+void AutoPlaceSheetPins( SCH_SHEET* aSheet, const std::vector<SCH_HIERLABEL*>& aLabels )
+{
+    if( aLabels.empty() )
+        return;
+
+    // Vertical pitch big enough to keep pin text from touching, snapped to grid.
+    const int grid = schIUScale.MilsToIU( 50 );
+    int       textSize = aSheet->Schematic()->Settings().m_DefaultTextSize;
+    int       pitch = std::max( KiROUND( textSize * 2.0 ), schIUScale.MilsToIU( 100 ) );
+    pitch = KiROUND( (double) pitch / grid ) * grid;
+
+    const int margin = pitch;
+    int       leftX = aSheet->GetPosition().x;
+    int       rightX = aSheet->GetPosition().x + aSheet->GetSize().x;
+    int       topY = aSheet->GetPosition().y;
+
+    // Stack new pins below whatever is already on each edge, without moving it.
+    int leftY = topY + margin - pitch;
+    int rightY = topY + margin - pitch;
+
+    for( SCH_SHEET_PIN* pin : aSheet->GetPins() )
+    {
+        if( pin->GetSide() == SHEET_SIDE::RIGHT )
+            rightY = std::max( rightY, pin->GetPosition().y );
+        else if( pin->GetSide() == SHEET_SIDE::LEFT )
+            leftY = std::max( leftY, pin->GetPosition().y );
+    }
+
+    // New pins: outputs on the right edge, everything else on the left.
+    std::vector<SCH_HIERLABEL*> leftLabels;
+    std::vector<SCH_HIERLABEL*> rightLabels;
+
+    for( SCH_HIERLABEL* label : aLabels )
+    {
+        if( label->GetShape() == LABEL_FLAG_SHAPE::L_OUTPUT )
+            rightLabels.push_back( label );
+        else
+            leftLabels.push_back( label );
+    }
+
+    auto byText =
+            []( const SCH_HIERLABEL* a, const SCH_HIERLABEL* b )
+            {
+                return a->GetText() < b->GetText();
+            };
+
+    std::sort( leftLabels.begin(), leftLabels.end(), byText );
+    std::sort( rightLabels.begin(), rightLabels.end(), byText );
+
+    // Grow the sheet if the new pins would run past the bottom edge.
+    int botLeft = leftY + (int) leftLabels.size() * pitch;
+    int botRight = rightY + (int) rightLabels.size() * pitch;
+    int needBot = std::max( botLeft, botRight ) + margin;
+
+    if( needBot > topY + aSheet->GetSize().y )
+        aSheet->SetSize( VECTOR2I( aSheet->GetSize().x, needBot - topY ) );
+
+    auto placeColumn =
+            [&]( const std::vector<SCH_HIERLABEL*>& aColumn, int aX, int aStartY )
+            {
+                int y = KiROUND( (double) aStartY / grid ) * grid;
+
+                for( SCH_HIERLABEL* label : aColumn )
+                {
+                    y += pitch;
+
+                    SCH_SHEET_PIN* pin = new SCH_SHEET_PIN( aSheet );
+                    pin->SetTextSize( VECTOR2I( textSize, textSize ) );
+                    pin->SetPosition( VECTOR2I( aX, y ) );
+                    pin->ClearSelected();
+                    pin->SetText( label->GetText() );
+                    pin->SetShape( label->GetShape() );
+                    aSheet->AddPin( pin );
+                    pin->AutoplaceFields( aSheet->GetParentScreen(), AUTOPLACE_AUTO );
+                }
+            };
+
+    placeColumn( leftLabels, leftX, leftY );
+    placeColumn( rightLabels, rightX, rightY );
 }
 
 
