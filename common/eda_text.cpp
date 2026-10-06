@@ -115,6 +115,8 @@ EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
     m_shown_text_has_text_var_refs = aText.m_shown_text_has_text_var_refs;
     m_text_var_refs = aText.m_text_var_refs;
 
+    m_hyperlink = aText.m_hyperlink;
+
     m_attributes = aText.m_attributes;
     m_pos = aText.m_pos;
     m_visible = aText.m_visible;
@@ -144,6 +146,9 @@ EDA_TEXT& EDA_TEXT::operator=( const EDA_TEXT& aText )
     m_shown_text = aText.m_shown_text;
     m_shown_text_has_text_var_refs = aText.m_shown_text_has_text_var_refs;
     m_text_var_refs = aText.m_text_var_refs;
+
+    m_hyperlink = aText.m_hyperlink;
+    m_activeUrl = wxEmptyString;
 
     m_attributes = aText.m_attributes;
     m_pos = aText.m_pos;
@@ -1237,6 +1242,11 @@ int EDA_TEXT::Compare( const EDA_TEXT* aOther ) const
     if( val != 0 )
         return val;
 
+    val = m_hyperlink.Cmp( aOther->m_hyperlink );
+
+    if( val != 0 )
+        return val;
+
     return m_text.Cmp( aOther->m_text );
 }
 
@@ -1301,6 +1311,9 @@ double EDA_TEXT::Similarity( const EDA_TEXT& aOther ) const
     double retval = 1.0;
 
     if( !( m_attributes == aOther.m_attributes ) )
+        retval *= 0.9;
+
+    if( !m_hyperlink.IsSameAs( aOther.m_hyperlink, false ) )
         retval *= 0.9;
 
     if( m_pos != aOther.m_pos )

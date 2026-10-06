@@ -505,7 +505,7 @@ protected:
     /**
      * A hyperlink URL.  If empty, this text object is not a hyperlink.
      */
-    wxString m_hyperlink;
+    wxString         m_hyperlink;
 
     mutable wxString m_activeUrl;
 
@@ -518,7 +518,7 @@ private:
     // (connection graph, API server, painters) see immutable storage without a
     // lock. Extracted from raw m_text (not m_shown_text) so backslash-escaped
     // ${...} literals do not fabricate dependency edges.
-    std::vector<TEXT_VAR_REF_KEY> m_text_var_refs;
+    std::vector<TEXT_VAR_REF_KEY>                       m_text_var_refs;
 
     std::reference_wrapper<const EDA_IU_SCALE>          m_IuScale;
 
@@ -531,7 +531,7 @@ private:
     };
 
     mutable std::map<int, BBOX_CACHE_ENTRY> m_bbox_cache;
-    mutable std::mutex m_bbox_cacheMutex;
+    mutable std::mutex                      m_bbox_cacheMutex;
 
     TEXT_ATTRIBUTES  m_attributes;
     wxString         m_unresolvedFontName;
