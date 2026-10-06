@@ -2115,7 +2115,7 @@ bool SHAPE_LINE_CHAIN::CheckClearance( const VECTOR2I& aP, const int aDist ) con
     if( !PointCount() )
         return false;
     else if( PointCount() == 1 )
-        return m_points[0] == aP;
+        return m_points[0].Distance( aP ) <= aDist;
 
     for( int i = 0; i < SegmentCount(); i++ )
     {
