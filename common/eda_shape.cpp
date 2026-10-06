@@ -656,8 +656,8 @@ void EDA_SHAPE::SetRectangle( const long long int& aHeight, const long long int&
     switch ( m_shape )
     {
     case SHAPE_T::RECTANGLE:
-        m_rectangleHeight = aHeight;
-        m_rectangleWidth = aWidth;
+        SetRectangleHeight( aHeight );
+        SetRectangleWidth( aWidth );
         break;
 
     default:
