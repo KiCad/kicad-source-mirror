@@ -157,6 +157,12 @@ bool KIPLATFORM::UI::AllowIconsInMenus()
 }
 
 
+bool KIPLATFORM::UI::SupportsKeyState()
+{
+    return true;
+}
+
+
 wxPoint KIPLATFORM::UI::GetMousePosition()
 {
     return wxGetMousePosition();
