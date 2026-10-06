@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-06 08:54+0000\n"
+"PO-Revision-Date: 2026-10-06 20:04+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -9503,7 +9503,7 @@ msgstr "Konnte Repository-Head nicht abrufen."
 
 #: common/git/libgit_backend.cpp:1527
 msgid "Could not look up the commits to merge."
-msgstr "Abrufen der zu zusammenführenden git Commits ist fehlgeschlagen."
+msgstr "Abrufen der zusammenzuführenden git Commits ist fehlgeschlagen."
 
 #: common/git/libgit_backend.cpp:1536 common/git/libgit_backend.cpp:1567
 msgid ""
@@ -10486,7 +10486,7 @@ msgstr "Gerber: Info"
 #: common/jobs/job_import_utils.cpp:59
 #, fuzzy, c-format
 msgid "Could not open layer map file '%s'"
-msgstr "Konnte die Bibliotheksdatei \"%s\" nicht finden"
+msgstr "Konnte Lagenzuordnungsdatei \"%s\" nicht öffnen"
 
 #: common/jobs/job_import_utils.cpp:67
 #, c-format
@@ -25494,7 +25494,7 @@ msgstr ""
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3367
 #, c-format
 msgid "Cannot uniquely map OrCAD source pin %zu of '%s'."
-msgstr "Kann den OrCAD-Quellpin %zu nicht eindeutig zu \"%s\" zuordnen."
+msgstr "Kann den OrCAD-Quellpin %zu von \"%s\" nicht eindeutig zuordnen."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3686
 #, c-format
@@ -28353,8 +28353,8 @@ msgid ""
 "Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
 "invalid netlist. The simulator will be reset."
 msgstr ""
-"Die Simulation ist abgestürzt (%s). Der Grund dafür ist meistens Fehler in "
-"ngspice oder eine ungültige Netzliste. Der Simulator wird zurückgesetzt."
+"Die Simulation ist abgestürzt (%s). Der Grund dafür ist meistens ein Fehler "
+"in ngspice oder eine ungültige Netzliste. Der Simulator wird zurückgesetzt."
 
 #: eeschema/sim/ngspice.cpp:556
 msgid "Unable to load ngspice shared library. Please check your install."
@@ -28436,9 +28436,9 @@ msgid "Unknown simulation model pin '%s'"
 msgstr "Unbekannter Pin \"%s\" im Simulationsmodell"
 
 #: eeschema/sim/sim_model.cpp:825 eeschema/sim/sim_model_ngspice.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model parameter '%s'"
-msgstr "Unbekannter Pin \"%s\" im Simulationsmodell"
+msgstr "Unbekannter Parameter \"%s\" im Simulationsmodell"
 
 #: eeschema/sim/sim_model_ibis.cpp:85
 #, c-format
@@ -29132,9 +29132,8 @@ msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>Ein Spannungssymbol sollte nur eine Einheit haben</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:262
-#, fuzzy
 msgid "<b>A Power Symbol should have exactly one pin</b><br><br>"
-msgstr "<b>Ein Spannungssymbol sollte nur einen Pin haben</b><br><br>"
+msgstr "<b>Ein Spannungssymbol sollte genau einen Pin haben</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:269
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -29294,7 +29293,7 @@ msgid "Discard Changes"
 msgstr "Änderungen verwerfen"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1111
-#, fuzzy, c-format
+#, c-format
 msgid "Editing %s from schematic.  Saving will update the schematic only."
 msgstr ""
 "Bearbeite Symbol %s aus Schaltplan. Beim Speichern wird nur der Schaltplan "
@@ -29707,8 +29706,8 @@ msgstr "Textobjekte"
 msgid ""
 "Imported symbol '%s' has conflicting placed definitions; keeping the first."
 msgstr ""
-"Importiertes Symbol \"%s\" weist widersprüchliche Platzierungsdefinitonen "
-"auf; das Erste wird beibehalten."
+"Importiertes Symbol \"%s\" enthält widersprüchliche "
+"Platzierungsdefinitionen; das Erste wird beibehalten."
 
 #: eeschema/symbol_import_reconciler.cpp:329
 #, c-format
@@ -33944,7 +33943,7 @@ msgstr "Zip-Dateien"
 
 #: gerbview/files.cpp:118
 msgid "Job files"
-msgstr "Gerber-Jobdateien"
+msgstr "Auftragsdateien"
 
 #: gerbview/files.cpp:213
 msgid "Open Autodetected File(s)"
@@ -34188,7 +34187,7 @@ msgstr "Liste der zuletzt verwendeten Bohrdateien leeren"
 #: gerbview/gerbview_frame.cpp:81 gerbview/menubar.cpp:108
 #: gerbview/menubar.cpp:115
 msgid "Clear Recent Job Files"
-msgstr "Liste der zuletzt verwendeten Jobdateien leeren"
+msgstr "Liste der zuletzt verwendeten Auftragsdateien leeren"
 
 #: gerbview/gerbview_frame.cpp:97
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
@@ -34220,7 +34219,7 @@ msgstr ""
 
 #: gerbview/job_file_reader.cpp:186
 msgid "Open Gerber Job File"
-msgstr "Gerber-Jobdatei öffnen"
+msgstr "Gerber-Auftragsdatei öffnen"
 
 #: gerbview/menubar.cpp:64 gerbview/menubar.cpp:71
 msgid "Clear Recent Gerber Files"
@@ -34236,7 +34235,7 @@ msgstr "Zuletzt verwendete Bohrdatei öffnen"
 
 #: gerbview/menubar.cpp:114
 msgid "Open Recent Job File"
-msgstr "Zuletzt verwendete Jobdatei öffnen"
+msgstr "Zuletzt verwendete Auftragsdatei öffnen"
 
 #: gerbview/menubar.cpp:135
 msgid "Open Recent Zip File"
@@ -34247,9 +34246,8 @@ msgid "&Units"
 msgstr "&Einheiten"
 
 #: gerbview/menubar.cpp:200
-#, fuzzy
 msgid "&Inactive Layer View Mode"
-msgstr "Anzeigemodus für inaktive Lagen"
+msgstr "Anzeigemodus für &inaktive Lagen"
 
 #: gerbview/readgerb.cpp:60
 #, c-format
@@ -34373,7 +34371,7 @@ msgstr "Excellon-Bohrdatei(en) auf einer neuen Lage öffnen."
 
 #: gerbview/tools/gerbview_actions.cpp:62
 msgid "Open Gerber Job File..."
-msgstr "Gerber-Jobdatei öffnen ..."
+msgstr "Gerber-Auftragsdatei öffnen ..."
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open a Gerber job file and its associated gerber plot files"
@@ -34927,7 +34925,7 @@ msgstr "Spezifischer Footprint für den Export innerhalb der Bibliothek"
 
 #: kicad/cli/command_fp_export_svg.cpp:95
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "Footprint-Bibliothek existiert nicht oder ist nicht erreichbar\n"
+msgstr "Footprint-Bibliothek existiert nicht oder ist nicht zugänglich\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:36
 msgid "Upgrades the footprint library to the current kicad version format"
@@ -35709,7 +35707,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_svg.cpp:189
 #: kicad/cli/command_pcb_upgrade.cpp:47
 msgid "Board file does not exist or is not accessible\n"
-msgstr "Platinendatei existiert nicht oder ist nicht zugreifbar\n"
+msgstr "Platinendatei existiert nicht oder ist nicht zugänglich\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:189
 #: kicad/cli/command_pcb_export_svg.cpp:201
@@ -36361,9 +36359,7 @@ msgstr ""
 #: kicad/cli/command_sch_export_pythonbom.cpp:51
 #: kicad/cli/command_sch_upgrade.cpp:47
 msgid "Schematic file does not exist or is not accessible\n"
-msgstr ""
-"Schaltplandatei existiert nicht oder es kann nicht darauf zugegriffen "
-"werden\n"
+msgstr "Schaltplandatei existiert nicht oder ist nicht zugänglich\n"
 
 #: kicad/cli/command_sch_export_plot.cpp:65
 msgid "Color theme to use (will default to schematic settings)"
@@ -36474,7 +36470,7 @@ msgstr "Verborgene Felder darstellen"
 
 #: kicad/cli/command_sym_export_svg.cpp:86
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr "Symboldatei existiert nicht oder kann nicht geöffnet werden\n"
+msgstr "Symboldatei existiert nicht oder ist nicht zugänglich\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:39
 msgid "Upgrades the symbol library to the current kicad version format"
@@ -36488,7 +36484,7 @@ msgstr ""
 
 #: kicad/cli/command_sym_upgrade.cpp:61
 msgid "Symbol library does not exist or is not accessible\n"
-msgstr "Symboldatei existiert nicht oder ist nicht verfügbar\n"
+msgstr "Symbolbibliothek existiert nicht oder ist nicht zugänglich\n"
 
 #: kicad/cli/command_version.cpp:35
 msgid "Reports the version info in various formats"
@@ -41641,9 +41637,8 @@ msgid "Resistor Calculator"
 msgstr "Widerstandsrechner"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:171
-#, fuzzy
 msgid "Footprint design"
-msgstr "Footprint-Bemaßungen"
+msgstr "Footprint-Design"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:173
 #, fuzzy
@@ -42145,12 +42140,10 @@ msgstr ""
 "angesteuert)"
 
 #: pcb_calculator/transline_ident.cpp:368
-#, fuzzy
 msgid "Common-mode Impedance (Zcomm):"
 msgstr "Gleichtaktimpedanz (Zcomm):"
 
 #: pcb_calculator/transline_ident.cpp:369
-#, fuzzy
 msgid "Coupling coefficient (kc):"
 msgstr "Koppelkoeffizient (kc):"
 
@@ -42158,7 +42151,7 @@ msgstr "Koppelkoeffizient (kc):"
 #, fuzzy
 msgid "Distance from track to closest ground plane (default: centered)"
 msgstr ""
-"Abstand von der Leiterbahn bis zur nächstliegenden Massefläche (Standard: "
+"Abstand zwischen Leiterbahn und nächstliegender Massefläche (Standard: "
 "zentriert)"
 
 #: pcb_calculator/transline_ident.cpp:413
@@ -43331,7 +43324,7 @@ msgstr "Footprint \"%s\": %d im Referenzbereich, %d im Zielbereich."
 #: pcbnew/connectivity/topo_match.cpp:837
 #, fuzzy
 msgid "Neither area has any footprints to match."
-msgstr "Keine der zwei Bereiche enthält übereinstimmende Footprints."
+msgstr "Keiner der zwei Bereiche enthält übereinstimmende Footprints."
 
 #: pcbnew/connectivity/topo_match.cpp:839
 #, fuzzy
@@ -45906,9 +45899,8 @@ msgid "Files %s and %s already exist."
 msgstr "Dateien %s und %s existieren bereits."
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:321
-#, fuzzy
 msgid "IDF Export"
-msgstr "3D-Export"
+msgstr "IDF-Export"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
@@ -45928,9 +45920,8 @@ msgid "Output units:"
 msgstr "Ausgabeeinheiten:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:59
-#, fuzzy
 msgid "Coordinate Origin"
-msgstr "Koordinatensursprung-Optionen"
+msgstr "Koordinatensursprung"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:66
 #: pcbnew/dialogs/dialog_export_step_base.cpp:189
@@ -46013,7 +46004,9 @@ msgstr "Padnummer:"
 #, fuzzy
 msgid ""
 "Which footprint field to export as the part number in the IDF library file"
-msgstr "Spezifischer Footprint für den Export innerhalb der Bibliothek"
+msgstr ""
+"Welches Footprint-Feld, das als Bauteilnummer in die IDF-Bibliothek "
+"exportiert werden soll"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:172
 #, fuzzy
@@ -46371,7 +46364,7 @@ msgstr "Benutzerdefinierter Ursprung"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:251
 msgid "Do not show components marked 'Do not populate'"
-msgstr "Keine Bauteile anzeigen, die als \"nicht zu bestücken\" markiert sind"
+msgstr "Keine Bauteile anzeigen, die mit \"Nicht bestücken\" markiert sind"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:256
 msgid "Do not show components with Footprint Type 'Unspecified'"
@@ -46758,7 +46751,7 @@ msgstr "Übernehmen, Schaltplan speichern && Fortfahren"
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:454
 #, fuzzy
 msgid "Include 'DNP' Footprints"
-msgstr "&Footprints einbeziehen"
+msgstr "\"DNP\"-Footprints einschließen"
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:559
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:455
@@ -46767,15 +46760,15 @@ msgid ""
 "Show footprints marked 'DNP' in the table.  This setting also controls "
 "whether or not 'DNP' footprints are included on export."
 msgstr ""
-"Symbole mit \"nicht-bestücken\"-Markierung in Tabelle anzeigen.  Diese "
-"Einstellung steuert ebenfalls, ob \"nicht-bestücken\"-Symbole exportiert "
+"Footprints mit \"Nicht bestücken\"-Markierung in Tabelle anzeigen.  Diese "
+"Einstellung steuert ebenfalls, ob \"Nicht bestücken\"-Symbole exportiert "
 "werden."
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:564
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:460
 #, fuzzy
 msgid "Include 'Exclude from BOM' Footprints"
-msgstr "\"Von Stückliste ausschließen\"-Symbole einschließen"
+msgstr "\"Von Stückliste ausschließen\"-Footprints einschließen"
 
 #: pcbnew/dialogs/dialog_footprint_fields_table.cpp:565
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:461
@@ -46784,8 +46777,8 @@ msgid ""
 "Show footprints marked 'Exclude from BOM' in the table.  Footprints marked "
 "'Exclude from BOM' are never included on export."
 msgstr ""
-"Symbole mit \"Von Stückliste ausschließen\"-Markierung in Tabelle anzeigen.  "
-"Symbole mit dieser Markierung werden niemals exportiert."
+"Footprints mit \"Von Stückliste ausschließen\"-Markierung in Tabelle "
+"anzeigen.  Symbole mit dieser Markierung werden niemals exportiert."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:73
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:173
@@ -47412,14 +47405,12 @@ msgid "Pad->Die Delay"
 msgstr "Pad→Die Verzögerung"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:145
-#, fuzzy
 msgid "Replace all existing pads"
-msgstr "Alle vorhandenen Pins ersetzen"
+msgstr "Alle vorhandenen Pads ersetzen"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.cpp:148
-#, fuzzy
 msgid "Append to existing pads"
-msgstr "An vorhandene Pins anhängen"
+msgstr "An vorhandene Pads anhängen"
 
 #: pcbnew/dialogs/dialog_fp_edit_pad_table_base.h:77
 msgid "Pad Table"
@@ -47512,7 +47503,8 @@ msgstr "Alle Footprints mit Durchlochpads ausschließen"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:113
 msgid "Exclude all footprints with the Exclude from BOM flag set"
-msgstr "Alle Footprints mit \"nicht bestücken\"-Kennzeichnung ausschließen"
+msgstr ""
+"Alle Footprints mit \"Von Stückliste ausschließen\"-Markierung ausschließen"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:116
 msgid "Include board edge layer"
@@ -47665,9 +47657,8 @@ msgid "The columns are too wide in total."
 msgstr "Die Gesamtbreite der Spalten ist zu groß."
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:57
-#, fuzzy
 msgid "Decimal places:"
-msgstr "Möglicher Ersatz:"
+msgstr "Dezimalstellen:"
 
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:147
 #, fuzzy
@@ -47879,7 +47870,7 @@ msgstr "Alle Teardrops entfernen, ungeachtet der Filteroptionen"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:131
 msgid "Edit default values in Board Setup"
-msgstr "Standardwerte in Platineneinstellungen bearbeiten"
+msgstr "Standardwerte in Platinenkonfiguration bearbeiten"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:149
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:694
@@ -50011,7 +50002,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:235
 msgid "Generate Gerber job file"
-msgstr "Gerber-Job-Datei erstellen"
+msgstr "Gerber-Auftragsdatei erstellen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
 msgid ""
@@ -51254,7 +51245,7 @@ msgstr "&Behalte äußere Lagen"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:57
 msgid "Unused Pads"
-msgstr "Unbenutzte Pads"
+msgstr "Ungenutzte Pads"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
 msgid "Apply design block layouts to new groups"
@@ -51322,9 +51313,8 @@ msgid "Stitch Net:"
 msgstr "Nahtnetz:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:75
-#, fuzzy
 msgid "Normal Grid"
-msgstr "Normal"
+msgstr "Normales Raster"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:76
 msgid "Staggered Grid"
@@ -51348,7 +51338,7 @@ msgstr "Konfigurieren"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:105
 msgid "Mode:"
-msgstr "Farbmodus:"
+msgstr "Modus:"
 
 #: pcbnew/dialogs/dialog_via_stitch_properties_base.cpp:110
 #: pcbnew/generators/pcb_via_stitch.cpp:1735
@@ -51939,25 +51929,21 @@ msgstr "Abstandshöhe hat keine gültige Zahl."
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1167
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1190
 msgid "Export Extruded Body"
-msgstr "Extrudierten Köroer exportieren"
+msgstr "Extrudierten Körper exportieren"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1116
-#, fuzzy
 msgid "No extrusion outline could be generated for this footprint."
-msgstr "Für dieses Footprint kann kein Extrusionsumriss erstellt werden."
+msgstr "Für diesen Footprint kann kein Extrusionsumriss erstellt werden."
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1123
-#, fuzzy
 msgid "Export Extruded 3D Body"
 msgstr "Extrudierten 3D-Körper exportieren"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1124
-#, fuzzy
 msgid "GLB files"
 msgstr "GLB-Dateien"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:1125
-#, fuzzy
 msgid "BREP files"
 msgstr "BREP-Dateien"
 
@@ -51986,7 +51972,6 @@ msgid "Enable extruded 3D model for this footprint"
 msgstr "Für diesen Footprint extrudierte 3D-Körper aktivieren"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:107
-#, fuzzy
 msgid "Show extruded 3D model"
 msgstr "Extrudiertes 3D-Modell anzeigen"
 
@@ -51995,7 +51980,6 @@ msgid "Overall height:"
 msgstr "Gesamthöhe:"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:132
-#, fuzzy
 msgid "Standoff height:"
 msgstr "Abstandshöhe:"
 
@@ -52023,9 +52007,8 @@ msgid "Metal"
 msgstr "Metadaten"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model_base.cpp:188
-#, fuzzy
 msgid "Export generated 3D model"
-msgstr "3D-Modell exportieren"
+msgstr "Erzeugtes 3D-Modell exportieren"
 
 #: pcbnew/dialogs/panel_fp_user_layer_names.cpp:288
 #, c-format
@@ -56074,9 +56057,8 @@ msgid "Missing assertion expression."
 msgstr "Fehlender Zusicherungsausdruck."
 
 #: pcbnew/drc/drc_rule_parser.cpp:768
-#, fuzzy
 msgid "Item 'B' is not available in assertion expressions."
-msgstr "Fehlender Zusicherungsausdruck."
+msgstr "Element \"B\" ist in Zuweisungsausdrücken nicht verfügbar."
 
 #: pcbnew/drc/drc_rule_parser.cpp:795
 msgid "within_diff_pairs option invalid for constraint type."
@@ -64757,7 +64739,7 @@ msgstr "Platzierungsdaten nach \"%s\" geschrieben.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2590
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "Footprint-Bibliothek-Pfad existiert nicht oder ist nicht erreichbar\n"
+msgstr "Footprint-Bibliothek-Pfad existiert nicht oder ist nicht zugänglich\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2630
 msgid "Unable to save library\n"
