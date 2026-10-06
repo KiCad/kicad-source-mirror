@@ -1514,14 +1514,19 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                 }
                 else
                 {
-                    // mirror within parent sheet
                     SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
                     SCH_SHEET*     sheet = pin->GetParent();
 
+                    for( SCH_ITEM* ncItem : screen->Items().Overlapping( SCH_NO_CONNECT_T, pin->GetTextPos() ) )
+                        noConnects[pin] = static_cast<SCH_NO_CONNECT*>( ncItem );
+
+                    // mirror within parent sheet
                     if( vertical )
                         pin->MirrorVertically( sheet->GetBoundingBox().GetCenter().y );
                     else
                         pin->MirrorHorizontally( sheet->GetBoundingBox().GetCenter().x );
+
+                    pin->SetFieldsAutoplaced( AUTOPLACE_NONE );
                 }
             }
             else if( item->Type() == SCH_FIELD_T )
@@ -1536,12 +1541,27 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                 // Now that we're re-justifying a field, they're no longer autoplaced.
                 static_cast<SCH_ITEM*>( field->GetParent() )->SetFieldsAutoplaced( AUTOPLACE_NONE );
             }
+            else if( item->Type() == SCH_SHEET_T )
+            {
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+                noConnects = sheet->GetNoConnects();
+
+                if( vertical )
+                    sheet->MirrorVertically( mirrorPoint.y );
+                else
+                    sheet->MirrorHorizontally( mirrorPoint.x );
+
+                sheet->SetFieldsAutoplaced( AUTOPLACE_NONE );
+            }
             else
             {
                 if( vertical )
                     item->MirrorVertically( mirrorPoint.y );
                 else
                     item->MirrorHorizontally( mirrorPoint.x );
+
+                item->SetFieldsAutoplaced( AUTOPLACE_NONE );
             }
 
             connections |= item->IsConnectable();
