@@ -1976,15 +1976,16 @@ int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP, int aIndex ) const
             return sum;
         }
         else
+        {
             sum += seg.Length();
+        }
     }
 
     return -1;
 }
 
 
-bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aPt, int aAccuracy,
-                                    bool aUseBBoxCache ) const
+bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aPt, int aAccuracy, bool aUseBBoxCache ) const
 {
     if( aUseBBoxCache && GetCachedBBox() && !GetCachedBBox()->Contains( aPt ) )
         return false;
