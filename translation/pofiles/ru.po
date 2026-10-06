@@ -26,9 +26,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-01 05:01+0000\n"
-"Last-Translator: Integration <bot-kicad-"
-"integration@bots.noreply.weblate.org>\n"
+"PO-Revision-Date: 2026-10-06 20:04+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
 "source/ru/>\n"
 "Language: ru\n"
@@ -37,7 +36,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.10.1.dev0\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2561,9 +2560,9 @@ msgid "Board file '%s' could not be saved as design block at '%s'."
 msgstr "Файл платы '%s' не может быть сохранен как дизайн-блок в '%s'."
 
 #: common/design_block_io.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design block metadata '%s': %s"
-msgstr "Не удалось сохранить файл библиотеки дизайн-блоков '%s'."
+msgstr "Не удалось сохранить метаданные дизайн-блока '%s': %s"
 
 #: common/design_block_io.cpp:469
 #, c-format
@@ -8414,9 +8413,8 @@ msgid "Unrecognized"
 msgstr "Неизвестно"
 
 #: common/eda_shape.cpp:1498
-#, fuzzy
 msgid "Connected Lines"
-msgstr "Подключаемые элементы:"
+msgstr "Ломаная линия"
 
 #: common/eda_shape.cpp:1506
 msgid "Curve"
@@ -8638,7 +8636,6 @@ msgid "Line Color"
 msgstr "Цвет линии"
 
 #: common/eda_shape.cpp:4729
-#, fuzzy
 msgid "Arc angle must not be zero."
 msgstr "Угол дуги не может быть нулевым."
 
@@ -9561,9 +9558,9 @@ msgid "Rebase commit failed: %s"
 msgstr "Не удалось выполнить коммит при перебазировании: %s"
 
 #: common/git/libgit_backend.cpp:1618
-#, fuzzy, c-format
+#, c-format
 msgid "Rebase failed: %s"
-msgstr "Не удалось завершить перебазирование: %s"
+msgstr "Не удалось перебазировать: %s"
 
 #: common/git/libgit_backend.cpp:1626
 #, c-format
@@ -9710,9 +9707,8 @@ msgstr ""
 "операция?): %s"
 
 #: common/history_lock.cpp:312
-#, fuzzy
 msgid "Cannot re-open history repository without the file lock"
-msgstr "Невозможно удалить временный выходной файл"
+msgstr "Невозможно переоткрыть репозиторий истории без блокировщика файлов"
 
 #: common/hotkey_store.cpp:39
 msgid "Accept Autocomplete"
@@ -11680,6 +11676,8 @@ msgid ""
 "Refusing to extract file '%s': the archive entry points outside of the "
 "destination directory."
 msgstr ""
+"Невозможно извлечь файл '%s': запись архива ссылается на директорию вне "
+"папки назначения."
 
 #: common/project/project_archiver.cpp:177 kicad/pcm/pcm_task_manager.cpp:252
 #: kicad/pcm/pcm_task_manager.cpp:313
@@ -11927,19 +11925,19 @@ msgid "Line length exceeded"
 msgstr "Превышена длина строки"
 
 #: common/richio.cpp:645
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot flush '%s' to disk: %s"
-msgstr "Не удалось поместить '%s' в корзину."
+msgstr "Не удалось сбросить '%s' на диск: %s"
 
 #: common/richio.cpp:652
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot close '%s': %s"
-msgstr "Не удалось импортировать символ '%s': %s"
+msgstr "Не удалось закрыть '%s': %s"
 
 #: common/richio.cpp:724
-#, fuzzy, c-format
+#, c-format
 msgid "Write failed to '%s': %s"
-msgstr "Не удалось начать перебазирование: %s"
+msgstr "Ошибка записи на '%s': %s"
 
 #: common/settings/bom_settings.cpp:127
 msgid "Default Editing"
@@ -13814,17 +13812,17 @@ msgid "Restore Defaults"
 msgstr "Вернуть по умолчанию"
 
 #: common/widgets/widget_hotkey_list.cpp:523
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Both bindings are kept, "
 "but only one runs per key press. Continue?"
 msgstr ""
-"'%s' уже назначено для '%s' в секции '%s'. Уверены в изменении назначения?"
+"'%s' уже назначено для '%s' в секции '%s'. Оба назначения сохранены, но "
+"будет срабатывать только одно. Продолжить?"
 
 #: common/widgets/widget_hotkey_list.cpp:529
-#, fuzzy
 msgid "Hotkey conflict"
-msgstr "Перечень горячих клавиш"
+msgstr "Конфликт горячих клавиш"
 
 #: common/widgets/widget_hotkey_list.cpp:542
 msgid "Command"
@@ -18774,9 +18772,8 @@ msgid "%s Properties"
 msgstr "Свойства %s"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:129
-#, fuzzy
 msgid "Sheet pin name can not be empty."
-msgstr "Имя вывода не может быть пустым."
+msgstr "Имя вывода листа не может быть пустым."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:162
 msgid "Edit Sheet Pin Properties"
@@ -21551,9 +21548,9 @@ msgstr ""
 "корневого листа."
 
 #: eeschema/eeschema_config.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save drawing sheet '%s': %s"
-msgstr "Не удалось загрузить страницу '%s': %s"
+msgstr "Не удалось сохранить форматную рамку '%s': %s"
 
 #: eeschema/eeschema_helpers.cpp:163
 #, fuzzy, c-format
@@ -22291,9 +22288,8 @@ msgid "Local and global labels have same name"
 msgstr "Локальные и глобальные метки имеют одинаковые имена"
 
 #: eeschema/erc/erc_item.cpp:135
-#, fuzzy
 msgid "Local and global power symbols have same name"
-msgstr "Локальные и глобальные метки имеют одинаковые имена"
+msgstr "Локальные и глобальные символы питания имеют одинаковые имена"
 
 #: eeschema/erc/erc_item.cpp:139
 msgid "Different footprint assigned in another unit of the symbol"
@@ -23804,17 +23800,14 @@ msgstr "Установить ссылку на дизайн-блок для гр
 
 #: eeschema/sch_design_block_utils.cpp:504
 #: pcbnew/pcb_design_block_utils.cpp:534
-#, fuzzy
 msgid "The selection contains more than one group linked to this design block."
 msgstr ""
-"Пропущено %d выбранных элементов, не являющихся группами, связанными с "
-"дизайн-блоком."
+"Выделение содержит более одной группы, привязанной к этому дизайн-блоку."
 
 #: eeschema/sch_design_block_utils.cpp:638
 #: pcbnew/pcb_design_block_utils.cpp:617
-#, fuzzy
 msgid "Update Design Block Group"
-msgstr "Обновить дизайн-блок из платы"
+msgstr "Обновить группу дизайн-блока"
 
 #: eeschema/sch_edit_frame.cpp:182
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:57
@@ -24847,9 +24840,9 @@ msgid "Error retrieving data from HTTP library %s: %s"
 msgstr "Ошибка получения данных из HTTP-библиотеки %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving part %s from HTTP library: %s"
-msgstr "Ошибка получения данных из HTTP-библиотеки %s: %s"
+msgstr "Ошибка получения части %s из HTTP-библиотеки: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:540
 #, c-format
@@ -33341,9 +33334,9 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "Не удаётся открыть Zip файл '%s'."
 
 #: gerbview/files.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
-msgstr "<b>Не удаётся создать временный файл '%s'.</b>"
+msgstr "Не удалось создать временный файл для распаковки '%s'."
 
 #: gerbview/files.cpp:539
 #, c-format
@@ -33353,12 +33346,12 @@ msgstr "Пропускается файл '%s' (gerber job файл)."
 #: gerbview/files.cpp:583
 #, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "<b>Не удаётся создать временный файл '%s'.</b>"
+msgstr "<b>Не удалось создать временный файл '%s'.</b>"
 
 #: gerbview/files.cpp:605
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Unable to write temporary file '%s'.</b>"
-msgstr "<b>Не удаётся создать временный файл '%s'.</b>"
+msgstr "<b>Не удалось записать временный файл '%s'.</b>"
 
 #: gerbview/files.cpp:630
 #, c-format
@@ -35962,9 +35955,8 @@ msgid "Select Templates Directory"
 msgstr "Выбор каталога шаблонов"
 
 #: kicad/dialogs/dialog_template_selector.cpp:1389
-#, fuzzy
 msgid "(no other directory)"
-msgstr "Входной каталог"
+msgstr "(нет других каталогов)"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:28
 msgid "Recent project templates"
@@ -35983,18 +35975,16 @@ msgid "System Templates"
 msgstr "Системные шаблоны"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:64
-#, fuzzy
 msgid "Other Templates"
-msgstr "Шаблоны пользователя"
+msgstr "Другие шаблоны"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:74
-#, fuzzy
 msgid "Browse for templates in another directory"
-msgstr "внутри каталога этого шаблона."
+msgstr "Вывод шаблонов из другого каталога"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:79
 msgid "Stop showing templates from the browsed directory"
-msgstr ""
+msgstr "Не выводить шаблоны из другого каталога"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:125
 msgid "Go Back"
@@ -36121,9 +36111,9 @@ msgid "Select all jobs"
 msgstr "Выбрать все задания"
 
 #: kicad/dialogs/panel_jobset.cpp:707
-#, fuzzy, c-format
+#, c-format
 msgid "This version of KiCad does not support the '%s' job type."
-msgstr "В данной установке KiCad не включена поддержка API."
+msgstr "Данная версии KiCad не поддерживает тип задания '%s'."
 
 #: kicad/dialogs/panel_jobset.cpp:754
 msgid "Job Types"
@@ -37237,6 +37227,7 @@ msgid ""
 "Package archive entry '%s' would be extracted outside of the package "
 "directory."
 msgstr ""
+"Содержимое архива пакета '%s' будет извлечено за пределы каталога пакета."
 
 #: kicad/pcm/pcm_task_manager.cpp:343
 msgid "Aborting package installation."
@@ -41605,9 +41596,9 @@ msgid "Cannot save board '%s': %s"
 msgstr "Не удалось импортировать символ '%s': %s"
 
 #: pcbnew/board_loader.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected error saving board '%s': %s"
-msgstr "Ошибка загрузки платы '%s': %s"
+msgstr "Непредвиденная ошибка при сохранении платы '%s': %s"
 
 #: pcbnew/board_stackup_manager/board_stackup.cpp:390
 #, c-format
@@ -52088,12 +52079,9 @@ msgid "Design rules cannot be added without a project"
 msgstr "Правила проектирования не могут быть добавлены без проекта"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:1140
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot save design rules to '%s': %s"
-msgstr ""
-"Невозможно сохранить из-за ошибок проверки в правиле '%s':\n"
-"\n"
-"%s"
+msgstr "Не удалось сохранить правила DRC в '%s': %s"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
 msgid "DRC Rules"
@@ -53640,9 +53628,8 @@ msgid "Tuning profile must have a name"
 msgstr "Профиль подстройки должен иметь имя"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:934
-#, fuzzy
 msgid "Tuning profile name already in use"
-msgstr "Профиль подстройки должен иметь имя"
+msgstr "Имя профиля подстройки уже используется"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:950
 msgid "Duplicated signal layer configuration in tuning profile"
@@ -54327,21 +54314,23 @@ msgid "Netclass clearances apply only between copper items."
 msgstr "Зазоры классов цепей действуют только между медными элементами."
 
 #: pcbnew/drc/drc_engine.cpp:1693 pcbnew/drc/drc_engine.cpp:1699
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Constraint ignored."
-msgstr "%s не содержит меди.  Правило проигнорировано."
+msgstr "%s не содержит меди.  Ограничение проигнорировано."
 
 #: pcbnew/drc/drc_engine.cpp:1710
 msgid "Keepout belongs to the footprint under test; constraint ignored."
 msgstr ""
+"Зона запрета принадлежит проверяемому посад. месту; ограничение "
+"проигнорировано."
 
 #: pcbnew/drc/drc_engine.cpp:1766
 msgid "Keepout constraint not met."
-msgstr "Ограничения зоны запрета не нарушаются."
+msgstr "Нарушено ограничение зоны запрета."
 
 #: pcbnew/drc/drc_engine.cpp:1768
 msgid "Disallow constraint not met."
-msgstr "Заданные ограничения не нарушаются."
+msgstr "Нарушено условие запрета размещения."
 
 #: pcbnew/drc/drc_engine.cpp:1790
 msgid "Keepout layer(s) not matched."
@@ -54960,9 +54949,9 @@ msgid "(%s min annular width %s; actual %s)"
 msgstr "(%s мин. ширина пояска %s; текущая %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:346
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min annular width %s; actual %s on %s)"
-msgstr "(%s мин. ширина пояска %s; текущая %s)"
+msgstr "(%s мин. ширина пояска %s; текущая %s на %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:356
 #, c-format
@@ -55836,9 +55825,9 @@ msgid "(%s min diameter %s; actual %s)"
 msgstr "(%s мин. диаметр %s; текущий %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min diameter %s; actual %s on %s)"
-msgstr "(%s мин. диаметр %s; текущий %s)"
+msgstr "(%s мин. диаметр %s; текущий %s на %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:147
 #, c-format
@@ -55846,9 +55835,9 @@ msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s макс. диаметр %s; текущий %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max diameter %s; actual %s on %s)"
-msgstr "(%s макс. диаметр %s; текущий %s)"
+msgstr "(%s макс. диаметр %s; текущий %s на %s)"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:168
 #, c-format
@@ -55968,9 +55957,8 @@ msgid "Tolerance must be greater than or equal to 0"
 msgstr "Допуск должен быть больше или равен 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:93
-#, fuzzy
 msgid "Tolerance is too large: resulting minimum length is negative"
-msgstr "Допуск слишком велик: результирующая минимальная длина не положительна"
+msgstr "Допуск слишком велик: результирующая минимальная длина отрицательна"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:155
 msgid "Maximum length difference between matched tracks"
@@ -55994,9 +55982,8 @@ msgid "Maximum Skew must be greater than or equal to 0"
 msgstr "Максимальный перекос должен быть больше или равен 0"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:91
-#, fuzzy
 msgid "Time domain (ps)"
-msgstr "Параметры основной надписи"
+msgstr "Временная область (пс)"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:92
 msgid "The values are picoseconds instead of a length"
@@ -56357,14 +56344,12 @@ msgid "Maximum length over which the pair may run uncoupled"
 msgstr ""
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:77
-#, fuzzy
 msgid "Optimum Width must be greater than or equal to 0"
-msgstr "Оптимальная ширина должна быть больше 0"
+msgstr "Оптимальная ширина должна быть больше или равна 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:80
-#, fuzzy
 msgid "Optimum Gap must be greater than or equal to 0"
-msgstr "Максимальный перекос должен быть больше или равен 0"
+msgstr "Оптимальный зазор быть больше или равен 0"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:98
 msgid "Gap Tolerance must be greater than or equal to 0"
@@ -57042,6 +57027,8 @@ msgid ""
 "Board stackup does not define a board thickness; exporting a %.3f mm board "
 "body."
 msgstr ""
+"В структуре слоёв платы не задана её толщина; экспорт тела платы толщиной "
+"%.3f мм."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1876
 #, c-format
@@ -60127,6 +60114,8 @@ msgid ""
 "Board outline has %d vertices outside the coordinate range; they were "
 "dropped."
 msgstr ""
+"Контур платы содержит %d вершин за пределами диапазона координат; они были "
+"отброшены."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1721
 #, c-format
@@ -60209,7 +60198,7 @@ msgstr "Загрузка цепей..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2839
 #, c-format
 msgid "Altium net %zu has no name; imported as '%s'."
-msgstr ""
+msgstr "Цепь Altium %zu не имеет имени; импортирована как '%s'."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2860
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3166
@@ -60222,6 +60211,8 @@ msgid ""
 "Polygon on layer '%s' has %d vertices outside the coordinate range; they "
 "were dropped."
 msgstr ""
+"Полигон на слое '%s' содержит %d вершин за пределами диапазона координат; "
+"они были отброшены."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2910
 #, c-format
@@ -60238,6 +60229,8 @@ msgid ""
 "Altium rule '%s' applies to netclass '%s', which this board does not define. "
 "Its constraint is not imported."
 msgstr ""
+"Правило Altium '%s' применяется к классу цепей '%s', который не определён на "
+"этой плате. Его ограничение не импортировано."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3146
 msgid "Loading board regions..."
@@ -60475,7 +60468,7 @@ msgstr "Загрузка прямоугольников..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:6014
 msgid "Ignored a keep-out area with no restrictions."
-msgstr ""
+msgstr "Проигнорирована зона запрета без ограничений."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:34
 msgid "Altium Circuit Maker PCB files"
@@ -62916,9 +62909,8 @@ msgid "Via Properties"
 msgstr "Свойства перех. отв."
 
 #: pcbnew/pcb_track.cpp:3583
-#, fuzzy
 msgid "Automatically Update Net"
-msgstr "Автоматически обновлять цепи перех. отв."
+msgstr "Автоматически обновлять цепь"
 
 #: pcbnew/pcb_track.cpp:3595 pcbnew/widgets/pcb_properties_panel.cpp:1356
 msgid "Layer Top"
@@ -63973,6 +63965,8 @@ msgid ""
 "%d session item(s) were skipped due to unresolved reference, layer, or "
 "padstack."
 msgstr ""
+"Пропущено объектов сессии: %d (из-за неразрешённых ссылок, слоёв или стеков "
+"контактных площадок)."
 
 #: pcbnew/toolbars_footprint_editor.cpp:159 pcbnew/toolbars_pcb_editor.cpp:313
 msgid "Dimension objects"
@@ -64102,9 +64096,9 @@ msgid "KiCad board netlist files"
 msgstr "Файлы списка цепей KiCad"
 
 #: pcbnew/tools/board_editor_control.cpp:774
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to export netlist to '%s': %s"
-msgstr "Не удалось загрузить страницу '%s': %s"
+msgstr "Не удалось экспортировать список цепей в '%s': %s"
 
 #: pcbnew/tools/board_editor_control.cpp:808
 #: pcbnew/tools/footprint_editor_control.cpp:1128
@@ -68202,6 +68196,7 @@ msgstr "Ошибка загрузки платы."
 #, c-format
 msgid "Board changed from %d to %d copper layers, stackup updated."
 msgstr ""
+"Количество медных слоёв платы изменено с %d на %d, структура слоёв обновлена."
 
 #: pcbnew/tools/pcb_control.cpp:2333
 msgid "Append Board"
