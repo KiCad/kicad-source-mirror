@@ -3149,11 +3149,21 @@ void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos )
 {
     VECTOR2I pos = aSheet->GetPosition();
     VECTOR2I size = aPos - pos;
+    VECTOR2I minSize( schIUScale.MilsToIU( MIN_SHEET_WIDTH ), schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) );
 
-    size.x = std::max( size.x, schIUScale.MilsToIU( MIN_SHEET_WIDTH ) );
-    size.y = std::max( size.y, schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) );
+    size.x = std::max( size.x, minSize.x );
+    size.y = std::max( size.y, minSize.y );
 
     VECTOR2I grid = m_frame->GetNearestGridPosition( pos + size );
+    VECTOR2I gridSize = getView()->GetGAL()->GetGridSize();
+
+    // Keep the corner on-grid without letting inward rounding violate the minimum size.
+    if( grid.x - pos.x < minSize.x )
+        grid.x += gridSize.x;
+
+    if( grid.y - pos.y < minSize.y )
+        grid.y += gridSize.y;
+
     aSheet->Resize( VECTOR2I( grid.x - pos.x, grid.y - pos.y ) );
 }
 
