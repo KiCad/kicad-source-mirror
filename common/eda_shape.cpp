@@ -1853,13 +1853,13 @@ bool EDA_SHAPE::hitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
 bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    BOX2I arect = aRect;
-    arect.Normalize();
-    arect.Inflate( aAccuracy );
+    BOX2I rect = aRect;
+    rect.Normalize();
+    rect.Inflate( aAccuracy );
 
     if( hasLineEnding( m_startEnding, m_endEnding ) )
     {
-        SHAPE_LINE_CHAIN selection = KIGEOM::BoxToLineChain( arect );
+        SHAPE_LINE_CHAIN selection = KIGEOM::BoxToLineChain( rect );
         SHAPE_COMPOUND   shape( MakeEffectiveShapesWithLineEndings( GetEffectiveWidth() ) );
 
         return KIGEOM::ShapeHitTest( selection, shape, aContained );
@@ -1876,24 +1876,24 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
                 {
                     VECTOR2I vertex = outline.GetPoint( ii );
 
-                    // Test if the point is within aRect
-                    if( arect.Contains( vertex ) )
+                    // Test if the point is within rect
+                    if( rect.Contains( vertex ) )
                         return true;
 
                     if( ii + 1 < count )
                     {
                         VECTOR2I vertexNext = outline.GetPoint( ii + 1 );
 
-                        // Test if this edge intersects aRect
-                        if( arect.Intersects( vertex, vertexNext ) )
+                        // Test if this edge intersects rect
+                        if( rect.Intersects( vertex, vertexNext ) )
                             return true;
                     }
                     else if( outline.IsClosed() )
                     {
                         VECTOR2I vertexNext = outline.GetPoint( 0 );
 
-                        // Test if this edge intersects aRect
-                        if( arect.Intersects( vertex, vertexNext ) )
+                        // Test if this edge intersects rect
+                        if( rect.Intersects( vertex, vertexNext ) )
                             return true;
                     }
                 }
@@ -1907,45 +1907,45 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
         // Test if area intersects or contains the circle:
         if( aContained )
         {
-            return arect.Contains( bbox );
+            return rect.Contains( bbox );
         }
         else
         {
             // If the rectangle does not intersect the bounding box, this is a much quicker test
-            if( !arect.Intersects( bbox ) )
+            if( !rect.Intersects( bbox ) )
                 return false;
             else
-                return arect.IntersectsCircleEdge( getCenter(), GetRadius(), GetWidth() );
+                return rect.IntersectsCircleEdge( getCenter(), GetRadius(), GetWidth() );
         }
 
     case SHAPE_T::ARC:
         // Test for full containment of this arc in the rect
         if( aContained )
         {
-            return arect.Contains( bbox );
+            return rect.Contains( bbox );
         }
         // Test if the rect crosses the arc
         else
         {
-            if( !arect.Intersects( bbox ) )
+            if( !rect.Intersects( bbox ) )
                 return false;
 
             if( IsAnyFill() )
             {
-                return ( arect.Intersects( getCenter(), GetStart() )
-                      || arect.Intersects( getCenter(), GetEnd() )
-                      || arect.IntersectsCircleEdge( getCenter(), GetRadius(), GetWidth() ) );
+                return ( rect.Intersects( getCenter(), GetStart() )
+                      || rect.Intersects( getCenter(), GetEnd() )
+                      || rect.IntersectsCircleEdge( getCenter(), GetRadius(), GetWidth() ) );
             }
             else
             {
-                return arect.IntersectsCircleEdge( getCenter(), GetRadius(), GetWidth() );
+                return rect.IntersectsCircleEdge( getCenter(), GetRadius(), GetWidth() );
             }
         }
 
     case SHAPE_T::RECTANGLE:
         if( aContained )
         {
-            return arect.Contains( bbox );
+            return rect.Contains( bbox );
         }
         else if( m_cornerRadius > 0 )
         {
@@ -1954,7 +1954,7 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
             rr.TransformToPolygon( poly, getMaxError() );
 
             // Account for the width of the line
-            arect.Inflate( GetWidth() / 2 );
+            rect.Inflate( GetWidth() / 2 );
 
             return checkOutline( poly.Outline( 0 ) );
         }
@@ -1963,39 +1963,39 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
             std::vector<VECTOR2I> pts = GetRectCorners();
 
             // Account for the width of the lines
-            arect.Inflate( GetWidth() / 2 );
-            return ( arect.Intersects( pts[0], pts[1] )
-                  || arect.Intersects( pts[1], pts[2] )
-                  || arect.Intersects( pts[2], pts[3] )
-                  || arect.Intersects( pts[3], pts[0] ) );
+            rect.Inflate( GetWidth() / 2 );
+            return ( rect.Intersects( pts[0], pts[1] )
+                  || rect.Intersects( pts[1], pts[2] )
+                  || rect.Intersects( pts[2], pts[3] )
+                  || rect.Intersects( pts[3], pts[0] ) );
         }
 
     case SHAPE_T::SEGMENT:
         if( aContained )
         {
-            return arect.Contains( GetStart() ) && aRect.Contains( GetEnd() );
+            return rect.Contains( GetStart() ) && rect.Contains( GetEnd() );
         }
         else
         {
             // Account for the width of the line
-            arect.Inflate( GetWidth() / 2 );
-            return arect.Intersects( GetStart(), GetEnd() );
+            rect.Inflate( GetWidth() / 2 );
+            return rect.Intersects( GetStart(), GetEnd() );
         }
 
     case SHAPE_T::POLY:
         if( aContained )
         {
-            return arect.Contains( bbox );
+            return rect.Contains( bbox );
         }
         else
         {
-            // Fast test: if aRect is outside the polygon bounding box,
+            // Fast test: if rect is outside the polygon bounding box,
             // rectangles cannot intersect
-            if( !arect.Intersects( bbox ) )
+            if( !rect.Intersects( bbox ) )
                 return false;
 
             // Account for the width of the line
-            arect.Inflate( GetWidth() / 2 );
+            rect.Inflate( GetWidth() / 2 );
 
             for( int ii = 0; ii < GetPolyShape().OutlineCount(); ++ii )
             {
@@ -2009,17 +2009,17 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
     case SHAPE_T::BEZIER:
         if( aContained )
         {
-            return arect.Contains( bbox );
+            return rect.Contains( bbox );
         }
         else
         {
-            // Fast test: if aRect is outside the polygon bounding box,
+            // Fast test: if rect is outside the polygon bounding box,
             // rectangles cannot intersect
-            if( !arect.Intersects( bbox ) )
+            if( !rect.Intersects( bbox ) )
                 return false;
 
             // Account for the width of the line
-            arect.Inflate( GetWidth() / 2 );
+            rect.Inflate( GetWidth() / 2 );
             const std::vector<VECTOR2I>* pts = &m_bezierPoints;
             std::vector<VECTOR2I> updatedBezierPoints;
 
@@ -2035,12 +2035,12 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
                 VECTOR2I vertex = ( *pts )[ii - 1];
                 VECTOR2I vertexNext = ( *pts )[ii];
 
-                // Test if the point is within aRect
-                if( arect.Contains( vertex ) )
+                // Test if the point is within rect
+                if( rect.Contains( vertex ) )
                     return true;
 
-                // Test if this edge intersects aRect
-                if( arect.Intersects( vertex, vertexNext ) )
+                // Test if this edge intersects rect
+                if( rect.Intersects( vertex, vertexNext ) )
                     return true;
             }
 
@@ -2051,9 +2051,9 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
     case SHAPE_T::ELLIPSE_ARC:
     {
         if( aContained )
-            return arect.Contains( bbox );
+            return rect.Contains( bbox );
 
-        if( !arect.Intersects( bbox ) )
+        if( !rect.Intersects( bbox ) )
             return false;
 
         SHAPE_ELLIPSE e = buildShapeEllipse();
@@ -2062,7 +2062,7 @@ bool EDA_SHAPE::hitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
         const SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( tessError );
 
         // Account for the width of the line
-        arect.Inflate( GetWidth() / 2 );
+        rect.Inflate( GetWidth() / 2 );
         return checkOutline( chain );
     }
 
