@@ -46,8 +46,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-10-06 01:51+0000\n"
-"Last-Translator: cicur <cicur@proton.me>\n"
+"PO-Revision-Date: 2026-10-06 20:04+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/kicad/v10/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -9511,7 +9511,7 @@ msgstr "还原失败"
 #: common/local_history.cpp:2393
 #, c-format
 msgid "Restore the project to the version from %s?"
-msgstr "要将工程还原为%s的版本吗？"
+msgstr "将工程回滚到 %s 时的版本?"
 
 #: common/local_history.cpp:2395
 msgid "Restore Version"
@@ -9521,7 +9521,9 @@ msgstr "还原版本"
 msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
-msgstr "当前文件将被备份以便撤销还原操作。不属于此版本的文件将不会被修改。"
+msgstr ""
+"系统会先备份您当前的文件, 以便您可以撤销还原操作。不属于此版本的文件将保持不"
+"变。"
 
 #: common/netclass.cpp:319 pcbnew/component_classes/component_class.cpp:67
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1228 pcbnew/zone.cpp:1028
@@ -9817,7 +9819,7 @@ msgstr "正在提取文件 '%s'。"
 msgid ""
 "Refusing to extract file '%s': the archive entry points outside of the "
 "destination directory."
-msgstr "拒绝提取文件 '%s'：归档条目指向了目标目录之外的位置。"
+msgstr "无法提取文件“%s”：该归档条目指向了目标目录之外的位置。"
 
 #: common/project/project_archiver.cpp:177 kicad/pcm/pcm_task_manager.cpp:252
 #: kicad/pcm/pcm_task_manager.cpp:313
@@ -10055,7 +10057,7 @@ msgstr "超出了行长度限制"
 #: common/richio.cpp:649
 #, c-format
 msgid "Cannot flush '%s' to disk: %s"
-msgstr "无法将 '%s' 刷新到磁盘: %s"
+msgstr "无法将 '%s' 写入磁盘: %s"
 
 #: common/richio.cpp:656
 #, c-format
