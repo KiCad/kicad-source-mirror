@@ -99,7 +99,8 @@ const std::vector<KIGFX::VIEW_ITEM*> PCB_SELECTION::updateDrawList() const
                 }
             };
 
-    for( EDA_ITEM* item : m_items )
+    // m_items is ordered by address, which would make the draw order vary from run to run
+    for( EDA_ITEM* item : GetItemsSortedBySelectionOrder() )
         addItem( item );
 
     return items;

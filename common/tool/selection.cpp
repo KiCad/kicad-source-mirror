@@ -196,7 +196,8 @@ const std::vector<KIGFX::VIEW_ITEM*> SELECTION::updateDrawList() const
 {
     std::vector<VIEW_ITEM*> items;
 
-    for( EDA_ITEM* item : m_items )
+    // m_items is ordered by address, which would make the draw order vary from run to run
+    for( EDA_ITEM* item : GetItemsSortedBySelectionOrder() )
         items.push_back( item );
 
     return items;
