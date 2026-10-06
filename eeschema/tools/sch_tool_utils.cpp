@@ -577,7 +577,7 @@ void AutoPlaceSheetPins( SCH_SHEET* aSheet, const std::vector<SCH_HIERLABEL*>& a
     int needBot = std::max( botLeft, botRight ) + margin;
 
     if( needBot > topY + aSheet->GetSize().y )
-        aSheet->SetSize( VECTOR2I( aSheet->GetSize().x, needBot - topY ) );
+        aSheet->Resize( VECTOR2I( aSheet->GetSize().x, needBot - topY ) );
 
     auto placeColumn =
             [&]( const std::vector<SCH_HIERLABEL*>& aColumn, int aX, int aStartY, SHEET_SIDE aSide )
