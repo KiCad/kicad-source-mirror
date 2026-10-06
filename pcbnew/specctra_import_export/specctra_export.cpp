@@ -1004,7 +1004,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 
                     window->SetShape( cutout );
 
-                    cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ zone->GetLayer() ] ];
+                    cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ layer ] ];
                 }
 
                 isStartContour = iterator.IsEndContour();
