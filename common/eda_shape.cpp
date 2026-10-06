@@ -616,6 +616,8 @@ void EDA_SHAPE::SetCornerRadius( int aRadius )
     {
         m_cornerRadius = aRadius;
     }
+
+    m_hatchingDirty = true;
 }
 
 
