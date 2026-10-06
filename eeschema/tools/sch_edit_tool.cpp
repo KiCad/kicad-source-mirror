@@ -2225,7 +2225,12 @@ int SCH_EDIT_TOOL::SwapUnitLabels( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 {
-    const std::vector<std::unique_ptr<SCH_ITEM>>& sourceItems = m_frame->GetRepeatItems();
+    // This MUST be a copy as finalizing the SCH_ACTIONS::move lower down will reset m_frame's
+    // m_items_to_repeat member variable.
+    std::vector<std::unique_ptr<SCH_ITEM>> sourceItems;
+
+    for( const std::unique_ptr<SCH_ITEM>& item : m_frame->GetRepeatItems() )
+        sourceItems.emplace_back( std::make_unique<SCH_ITEM>( *item ) );
 
     if( sourceItems.empty() )
         return 0;
