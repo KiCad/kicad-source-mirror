@@ -46,6 +46,7 @@
 #include <geometry/shape_arc.h>
 #include <drc/drc_engine.h>
 #include <pcb_painter.h>
+#include <pcbnew_settings.h>
 #include <trigo.h>
 #include <properties/property_validators.h>
 #include <properties/property.h>
@@ -2589,6 +2590,20 @@ double PCB_VIA::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
             {
                 return LOD_HIDE;
             }
+        }
+    }
+
+    // The painter draws a via copper layer only where the via flashes
+    if( IsViaCopperLayer( aLayer ) && !FlashLayer( aLayer - LAYER_VIA_COPPER_START ) )
+        return LOD_HIDE;
+
+    // The painter draws clearance outlines only for this display mode and never when printing
+    if( IsClearanceLayer( aLayer ) )
+    {
+        if( renderSettings->IsPrinting() || !pcbconfig()
+            || pcbconfig()->m_Display.m_TrackClearance != SHOW_WITH_VIA_ALWAYS )
+        {
+            return LOD_HIDE;
         }
     }
 

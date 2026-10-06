@@ -37,6 +37,7 @@
 
 class EDA_ITEM;
 class PCB_DISPLAY_OPTIONS;
+class PCBNEW_SETTINGS;
 class PCB_VIEWERS_SETTINGS_BASE;
 class BOARD_ITEM;
 class PCB_ARC;
@@ -66,6 +67,12 @@ class TEXT_ATTRIBUTES;
 class PCB_BOARD_OUTLINE;
 class PCB_GRID_ITEM;
 struct DRILL_SYMBOL_ENTRY;
+
+/**
+ * @return the Pcbnew settings the painter reads its display options from, or nullptr without them.
+ */
+PCBNEW_SETTINGS* pcbconfig();
+
 
 namespace KIFONT
 {
