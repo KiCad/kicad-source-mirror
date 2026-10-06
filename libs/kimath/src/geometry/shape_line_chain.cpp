@@ -1956,7 +1956,7 @@ int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP, int aIndex ) const
     for( int i = 0; i < SegmentCount(); i++ )
     {
         const SEG seg = CSegment( i );
-        bool indexMatch = true;
+        bool indexMatch = false;
 
         if( aIndex >= 0 )
         {
