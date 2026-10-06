@@ -1785,11 +1785,25 @@ void PCB_SHAPE::swapData( BOARD_ITEM* aImage )
     std::swap( m_hasSolderMask, image->m_hasSolderMask );
     std::swap( m_solderMaskMargin, image->m_solderMaskMargin );
     std::swap( m_customProperties, image->m_customProperties );
+
+    std::swap( m_libStart, image->m_libStart );
+    std::swap( m_libEnd, image->m_libEnd );
+    std::swap( m_libCornerRadius, image->m_libCornerRadius );
+    std::swap( m_libArcMid, image->m_libArcMid );
+    std::swap( m_libBezierC1, image->m_libBezierC1 );
+    std::swap( m_libBezierC2, image->m_libBezierC2 );
+    std::swap( m_libPoly, image->m_libPoly );
+    std::swap( m_libEllipseCenter, image->m_libEllipseCenter );
+    std::swap( m_libEllipseMajorRadius, image->m_libEllipseMajorRadius );
+    std::swap( m_libEllipseMinorRadius, image->m_libEllipseMinorRadius );
+    std::swap( m_libEllipseRotation, image->m_libEllipseRotation );
+    std::swap( m_libEllipseStartAngle, image->m_libEllipseStartAngle );
+    std::swap( m_libEllipseEndAngle, image->m_libEllipseEndAngle );
+    std::swap( m_libShape, image->m_libShape );
 }
 
 
-bool PCB_SHAPE::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
-                                          const BOARD_ITEM* aSecond ) const
+bool PCB_SHAPE::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const
 {
     if( aFirst->Type() != aSecond->Type() )
         return aFirst->Type() < aSecond->Type();
