@@ -315,9 +315,6 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, RESOLUTION_CONTEX
         FinalizeTextVarExpansion( text, aContext );
     }
 
-    if( m_id == FIELD_T::SHEET_FILENAME && aContext == FOR_CANVAS && !IsNameShown() )
-        text = _( "File:" ) + wxS( " " ) + text;
-
     return text;
 }
 
