@@ -374,22 +374,22 @@ protected:
     bool               m_hasSolderMask;
     std::optional<int> m_solderMaskMargin;
 
-    VECTOR2I m_libStart;
-    VECTOR2I m_libEnd;
+    VECTOR2I           m_libStart;
+    VECTOR2I           m_libEnd;
 
-    VECTOR2I m_libArcMid;
+    VECTOR2I           m_libArcMid;
 
-    VECTOR2I m_libBezierC1;
-    VECTOR2I m_libBezierC2;
+    VECTOR2I           m_libBezierC1;
+    VECTOR2I           m_libBezierC2;
 
-    SHAPE_POLY_SET m_libPoly;
+    SHAPE_POLY_SET     m_libPoly;
 
-    VECTOR2I  m_libEllipseCenter;
-    int       m_libEllipseMajorRadius;
-    int       m_libEllipseMinorRadius;
-    EDA_ANGLE m_libEllipseRotation;
-    EDA_ANGLE m_libEllipseStartAngle;
-    EDA_ANGLE m_libEllipseEndAngle;
+    VECTOR2I           m_libEllipseCenter;
+    int                m_libEllipseMajorRadius;
+    int                m_libEllipseMinorRadius;
+    EDA_ANGLE          m_libEllipseRotation;
+    EDA_ANGLE          m_libEllipseStartAngle;
+    EDA_ANGLE          m_libEllipseEndAngle;
 
-    SHAPE_T m_libShape;
+    SHAPE_T            m_libShape;
 };

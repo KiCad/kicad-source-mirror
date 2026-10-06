@@ -1164,15 +1164,14 @@ void PCB_SHAPE::rebakeFromTransform( const TRANSFORM_TRS& xform )
 
             if( isArc )
             {
-                libEllipse = std::make_unique<SHAPE_ELLIPSE>(
-                        m_libEllipseCenter, m_libEllipseMajorRadius, m_libEllipseMinorRadius,
-                        m_libEllipseRotation, m_libEllipseStartAngle, m_libEllipseEndAngle );
+                libEllipse = std::make_unique<SHAPE_ELLIPSE>( m_libEllipseCenter, m_libEllipseMajorRadius,
+                                                              m_libEllipseMinorRadius, m_libEllipseRotation,
+                                                              m_libEllipseStartAngle, m_libEllipseEndAngle );
             }
             else
             {
-                libEllipse = std::make_unique<SHAPE_ELLIPSE>(
-                        m_libEllipseCenter, m_libEllipseMajorRadius, m_libEllipseMinorRadius,
-                        m_libEllipseRotation );
+                libEllipse = std::make_unique<SHAPE_ELLIPSE>( m_libEllipseCenter, m_libEllipseMajorRadius,
+                                                              m_libEllipseMinorRadius, m_libEllipseRotation );
             }
 
             SHAPE_LINE_CHAIN chain = libEllipse->ConvertToPolyline( getMaxError() );
