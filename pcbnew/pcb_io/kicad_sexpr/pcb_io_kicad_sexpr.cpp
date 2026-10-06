@@ -1188,8 +1188,8 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_SHAPE* aShape ) const
     case SHAPE_T::SEGMENT:
         m_out->Print( "(%s_line (start %s) (end %s)",
                       prefix.c_str(),
-                      formatInternalUnits( aShape->GetStart(), parentFP ).c_str(),
-                      formatInternalUnits( aShape->GetEnd(), parentFP ).c_str() );
+                      formatInternalUnits( aShape->GetLibraryStart(), parentFP ).c_str(),
+                      formatInternalUnits( aShape->GetLibraryEnd(), parentFP ).c_str() );
         break;
 
     case SHAPE_T::RECTANGLE:
@@ -2280,14 +2280,14 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad ) const
                         if( primitive->IsProxyItem() )
                         {
                             m_out->Print( "(gr_vector (start %s) (end %s)",
-                                          formatInternalUnits( primitive->GetStart() ).c_str(),
-                                          formatInternalUnits( primitive->GetEnd() ).c_str() );
+                                          formatInternalUnits( primitive->GetLibraryStart() ).c_str(),
+                                          formatInternalUnits( primitive->GetLibraryEnd() ).c_str() );
                         }
                         else
                         {
                             m_out->Print( "(gr_line (start %s) (end %s)",
-                                          formatInternalUnits( primitive->GetStart() ).c_str(),
-                                          formatInternalUnits( primitive->GetEnd() ).c_str() );
+                                          formatInternalUnits( primitive->GetLibraryStart() ).c_str(),
+                                          formatInternalUnits( primitive->GetLibraryEnd() ).c_str() );
                         }
                         break;
 
