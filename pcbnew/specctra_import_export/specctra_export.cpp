@@ -59,6 +59,8 @@
 #include <mmh3_hash.h>
 #include <pcbnew_settings.h>
 
+#include "fmt/xchar.h"
+
 
 using namespace DSN;
 
@@ -612,7 +614,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
                 else if( layer == copperCount - 1 )
                     uniqifier += 'B';
                 else
-                    uniqifier += char('0' + layer); // layer index char
+                    uniqifier += fmt::format( "{}", layer );
             }
         }
     }
