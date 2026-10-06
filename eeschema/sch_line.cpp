@@ -294,7 +294,8 @@ double SCH_LINE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
     if( aLayer == LAYER_OP_VOLTAGES )
     {
-        if( m_start == m_end )
+        // Nothing is drawn without a value, and a threshold per wire would redraw a kept canvas on every zoom
+        if( m_start == m_end || m_operatingPoint.IsEmpty() )
             return LOD_HIDE;
 
         const int height = std::abs( m_end.y - m_start.y );
