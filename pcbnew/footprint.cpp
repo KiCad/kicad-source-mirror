@@ -3329,8 +3329,12 @@ std::vector<int> FOOTPRINT::ViewGetLayers() const
 
 double FOOTPRINT::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
 {
-    if( aLayer == LAYER_CONFLICTS_SHADOW && IsConflicting() )
+    if( aLayer == LAYER_CONFLICTS_SHADOW )
     {
+        // The painter draws nothing here for a footprint that is not in conflict
+        if( !IsConflicting() )
+            return LOD_HIDE;
+
         // The locked shadow shape is shown only if the footprint itself is visible
         if( ( m_layer == F_Cu ) && aView->IsLayerVisible( LAYER_FOOTPRINTS_FR ) )
             return LOD_SHOW;
