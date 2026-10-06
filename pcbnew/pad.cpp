@@ -2845,6 +2845,28 @@ double PAD::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) const
             return LOD_HIDE;
     }
 
+    // Selection and net highlight draw a pad on layers where it otherwise draws nothing
+    const bool drawnRegardless = IsSelected() || renderSettings.IsPrinting()
+                                 || ( renderSettings.IsHighlightEnabled()
+                                      && renderSettings.GetHighlightNetCodes().contains( GetNetCode() ) );
+
+    if( !drawnRegardless )
+    {
+        // The painter draws a pad copper layer only where the pad flashes, plus the post-machining
+        // indicator of a layer that has one
+        if( IsPadCopperLayer( aLayer ) )
+        {
+            const PCB_LAYER_ID copperLayer = ToLAYER_ID( aLayer - LAYER_PAD_COPPER_START );
+
+            if( !FlashLayer( copperLayer ) && GetPostMachiningKnockout( copperLayer ) <= 0 )
+                return LOD_HIDE;
+        }
+
+        // The painter draws clearance outlines only when the pad clearance option is on
+        if( IsClearanceLayer( aLayer ) && pcbconfig() && !pcbconfig()->m_Display.m_PadClearance )
+            return LOD_HIDE;
+    }
+
     if( IsHoleLayer( aLayer ) )
     {
         LSET visiblePhysical = board->GetVisibleLayers();
