@@ -388,6 +388,18 @@ bool KIPLATFORM::UI::AllowIconsInMenus()
 }
 
 
+bool KIPLATFORM::UI::SupportsKeyState()
+{
+#ifdef GDK_WINDOWING_X11
+    GdkDisplay* display = gdk_display_get_default();
+
+    return display && GDK_IS_X11_DISPLAY( display );
+#else
+    return false;
+#endif
+}
+
+
 #if defined( GDK_WINDOWING_WAYLAND ) && defined( KICAD_WAYLAND )
 
 static bool wayland_warp_pointer( GtkWidget* aWidget, GdkDisplay* aDisplay, GdkWindow* aWindow,

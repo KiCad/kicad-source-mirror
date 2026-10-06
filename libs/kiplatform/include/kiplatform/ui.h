@@ -149,6 +149,12 @@ namespace KIPLATFORM
         bool AllowIconsInMenus();
 
         /**
+         * Return whether wxGetKeyState() can query ordinary keys, beyond modifiers and lock keys.
+         * On GTK, this requires an active X11 display.
+         */
+        bool SupportsKeyState();
+
+        /**
          * Returns the mouse position in screen coordinates.
          * If we've just warped the cursor, returns the new coordinates.
          */

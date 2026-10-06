@@ -537,10 +537,12 @@ const int MAX_MOUSE_BUTTON = 0x04;
 
 bool TOOL_DISPATCHER::isStaleAutoRepeat( const wxKeyEvent& aKeyEvent )
 {
-    int key = aKeyEvent.GetKeyCode();
+    // On Wayland, wxGetKeyState() only supports modifiers and lock keys.  Keep all hotkey
+    // events when the backend cannot determine whether an ordinary key is still held.
+    if( !KIPLATFORM::UI::SupportsKeyState() )
+        return false;
 
-    // wxGetKeyState answers reliably for letters, digits and the named WXK_ codes used as
-    // hotkeys; modifier-only keys never reach here.
+    int  key = aKeyEvent.GetKeyCode();
     bool keyIsDown = key > MAX_MOUSE_BUTTON && wxGetKeyState( static_cast<wxKeyCode>( key ) );
 
     return ShouldDropAutoRepeat( key, wxGetLocalTimeMillis(), keyIsDown, m_lastKeyCode, m_lastKeyTime );
@@ -565,7 +567,8 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     wxEventType type = aEvent.GetEventType();
 
-    if( m_lastKeyCode > MAX_MOUSE_BUTTON && !wxGetKeyState( static_cast<wxKeyCode>( m_lastKeyCode ) ) )
+    if( m_lastKeyCode > MAX_MOUSE_BUTTON && KIPLATFORM::UI::SupportsKeyState()
+        && !wxGetKeyState( static_cast<wxKeyCode>( m_lastKeyCode ) ) )
         m_lastKeyCode = 0;
 
     // Sometimes there is no window that has the focus (it happens when another PCB_BASE_FRAME
