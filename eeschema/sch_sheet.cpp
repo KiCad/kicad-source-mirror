@@ -914,6 +914,10 @@ int bumpToNextGrid( const int aVal, const int aDirection )
     int base = aVal / gridSize;
     int excess = abs( aVal % gridSize );
 
+    // Use floor division for negative coordinates between grid lines.
+    if( aVal < 0 && excess > 0 )
+        --base;
+
     if( aDirection > 0 )
     {
         return ( base + 1 ) * gridSize;
