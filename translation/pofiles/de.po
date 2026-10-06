@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:13-0700\n"
-"PO-Revision-Date: 2026-10-05 22:54+0000\n"
+"PO-Revision-Date: 2026-10-06 08:54+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -57427,11 +57427,16 @@ msgid "Largest number of microvias allowed stacked on one another."
 msgstr "Maximalanzahl von Vias in einem zugehörigen Netz"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:217
+#, fuzzy
 msgid ""
 "The largest hole depth divided by hole width you allow.\n"
 "A 0.1 mm hole drilled 0.075 mm deep gives 0.75.\n"
 "Most fabs allow 0.75 to 1.0. A deeper hole is harder to plate."
 msgstr ""
+"Die größte Lochtiefe geteilt durch die zulässige Lochbreite.\n"
+"Ein 0,1mm Loch gebohrt mit 0,075mm Tiefe ergibt 0,75.\n"
+"Die meisten Fabs erlauben 0,75 bis 1,0. Ein tieferes Loch ist schwieriger zu "
+"beschichten."
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:231
 #, fuzzy
@@ -57443,13 +57448,14 @@ msgid "Minimum outer diameter of vias"
 msgstr "Mindestaußendurchmesser für Vias"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:256
+#, fuzzy
 msgid "Minimum clearance between silkscreen items"
-msgstr ""
+msgstr "Mindestabstand zwischen Bestückungsdruckelementen"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:269
 #, fuzzy
 msgid "Minimum clearance between silkscreen and solder mask openings"
-msgstr "Bestückungsdruck an Lötstoppmasken-Kanten beschneiden"
+msgstr "Mindestabstand zwischen Bestückungsdruck und Lötstoppmaske"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:282
 msgid "Distance the solder mask opening extends beyond the pad"
@@ -57470,7 +57476,7 @@ msgstr "Oberste Lage zulassen"
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:54
 #, fuzzy
 msgid "Allow matched items on the front copper layer"
-msgstr "Wenn eine vorderseitige Kupferlage benötigt wird"
+msgstr "Übereinstimmende Elemente auf der vorderseitigen Kupferlage zulassen"
 
 #: pcbnew/drc/rule_editor/drc_re_permitted_layers_constraint_data.h:55
 msgid "Allow bottom Layer"
@@ -57486,8 +57492,9 @@ msgstr "Mindestens eine Lage muss ausgewählt werden"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:56
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:62
+#, fuzzy
 msgid "Allowed deviation above or below the optimum width"
-msgstr ""
+msgstr "Abweichung über oder unter der optimalen Breite zulassen"
 
 #: pcbnew/drc/rule_editor/drc_re_routing_width_constraint_data.h:66
 msgid "Optimum Width must be greater than 0"
@@ -57504,20 +57511,24 @@ msgid "Width Tolerance must be less than Optimum Width"
 msgstr "Die Breitentoleranz muss kleiner als die optimale Breite sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:60
+#, fuzzy
 msgid "Optimum width of each track in the pair"
-msgstr ""
+msgstr "Optimale Breite jeder Leiterbahn eines Paares"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:64
+#, fuzzy
 msgid "Optimum gap between the two tracks of the pair"
-msgstr ""
+msgstr "Optimaler Spalt zwischen den zwei Leiterbahnen eines Paares"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:66
+#, fuzzy
 msgid "Allowed deviation above or below the optimum gap"
-msgstr ""
+msgstr "Abweichung über oder unter der optimalen Spaltbreite zulassen"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:68
+#, fuzzy
 msgid "Maximum length over which the pair may run uncoupled"
-msgstr ""
+msgstr "Maximallänge über die ein Paar ungekoppelt laufen darf"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:77
 #, fuzzy
@@ -57549,22 +57560,22 @@ msgstr "Mindestens eine Einschränkung muss angegeben werden"
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:70
 #, fuzzy
 msgid "Smallest allowed via diameter"
-msgstr "Via-Bohrdurchmesser muss kleiner als der Via-Durchmesser sein"
+msgstr "Kleinster erlaubter Via-Durchmesser"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:71
 #, fuzzy
 msgid "Largest allowed via diameter"
-msgstr "Via-Bohrdurchmesser muss kleiner als der Via-Durchmesser sein"
+msgstr "Größter erlaubter Via-Durchmesser"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:74
 #, fuzzy
 msgid "Smallest allowed via hole diameter"
-msgstr "Durchmesser des metallisierten Via-Lochs"
+msgstr "Kleinster erlaubter Via-Lochdurchmesser"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:75
 #, fuzzy
 msgid "Largest allowed via hole diameter"
-msgstr "Durchmesser des metallisierten Via-Lochs"
+msgstr "Größter erlaubter Via-Lochdurchmesser"
 
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:78
 msgid "Restrict this rule to a single via type"
@@ -57599,20 +57610,24 @@ msgstr ""
 "sein"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:57
+#, fuzzy
 msgid "Forbid through vias under surface mount pads"
-msgstr ""
+msgstr "Durchgehende Vias unter SMD-Pads verbieten"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:59
+#, fuzzy
 msgid "Forbid micro vias under surface mount pads"
-msgstr ""
+msgstr "Microvias unter SMD-Pads verbieten"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:61
+#, fuzzy
 msgid "Forbid blind vias under surface mount pads"
-msgstr ""
+msgstr "Blinde Vias unter SMD-Pads verbieten"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:63
+#, fuzzy
 msgid "Forbid buried vias under surface mount pads"
-msgstr ""
+msgstr "Vergrabene Vias unter SMD-Pads verbieten"
 
 #: pcbnew/drc/rule_editor/drc_re_vias_under_smd_constraint_data.h:73
 msgid "At least one via type must be selected"
@@ -57673,12 +57688,10 @@ msgid "Please select at least one option from %s list."
 msgstr "Bitte mindestens eine Option aus der Liste %s auswählen."
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header_base.cpp:30
-#, fuzzy
 msgid "Rule Type"
 msgstr "Regeltyp"
 
 #: pcbnew/drc/rule_editor/panel_drc_group_header_base.cpp:31
-#, fuzzy
 msgid "Rule Name"
 msgstr "Regelname"
 
@@ -57687,12 +57700,14 @@ msgid "Name of this rule, must be unique"
 msgstr "Regelname, muss eindeutig sein"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:119
+#, fuzzy
 msgid "Optional comment stored with the rule"
-msgstr ""
+msgstr "Optionaler Kommentar mit der Regel gespeichert"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:122
+#, fuzzy
 msgid "Layers this rule applies to"
-msgstr ""
+msgstr "Lagen, auf die diese Regel zutrifft"
 
 #: pcbnew/drc/rule_editor/panel_drc_rule_editor.cpp:444
 msgid "Rule name must be unique."
@@ -57744,16 +57759,15 @@ msgstr "Bedingungen"
 #: pcbnew/drill/drill_chart_template.cpp:37
 #, fuzzy
 msgid "SYM"
-msgstr "SMD"
+msgstr "SYM"
 
 #: pcbnew/drill/drill_chart_template.cpp:39
 msgid "DRILL DIA"
 msgstr ""
 
 #: pcbnew/drill/drill_chart_template.cpp:40
-#, fuzzy
 msgid "Drill diameter"
-msgstr "Min. Bohrdurchmesser"
+msgstr "Bohrdurchmesser"
 
 #: pcbnew/drill/drill_chart_template.cpp:41
 msgid "SLOT W x L"
@@ -57765,8 +57779,9 @@ msgid "Slot size"
 msgstr "Großformat mit Seitenrändern"
 
 #: pcbnew/drill/drill_chart_template.cpp:43
+#, fuzzy
 msgid "PLATED"
-msgstr ""
+msgstr "BESCHICHTET"
 
 #: pcbnew/drill/drill_chart_template.cpp:45
 #, fuzzy
@@ -57788,8 +57803,9 @@ msgid "Site count"
 msgstr "Anzahl Löcher"
 
 #: pcbnew/drill/drill_chart_template.cpp:49
+#, fuzzy
 msgid "FROM / TO"
-msgstr ""
+msgstr "VON / NACH"
 
 #: pcbnew/drill/drill_chart_template.cpp:51
 msgid "OPERATION"
@@ -57819,8 +57835,9 @@ msgid "Backdrill stub"
 msgstr "Obers. Backdrill"
 
 #: pcbnew/drill/drill_chart_template.cpp:57
+#, fuzzy
 msgid "ASPECT RATIO"
-msgstr ""
+msgstr "SEITENVERHÄLTNIS"
 
 #: pcbnew/drill/drill_chart_template.cpp:58
 #, fuzzy
@@ -57828,8 +57845,9 @@ msgid "Aspect ratio"
 msgstr "Verhältnis"
 
 #: pcbnew/drill/drill_chart_template.cpp:59
+#, fuzzy
 msgid "DESCRIPTION"
-msgstr ""
+msgstr "BESCHREIBUNG"
 
 #: pcbnew/drill/drill_chart_template.cpp:122
 #, fuzzy, c-format
@@ -58202,11 +58220,13 @@ msgid "OCC exception creating countersink: %s"
 msgstr "OCC-Ausnahme während der Erstellung einer konischen Senkung: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1746
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Board stackup does not define a board thickness; exporting a %.3f mm board "
 "body."
 msgstr ""
+"Lagenaufbau gibt keine Platinendicke an; exportiere eine Platine mit %.3fmm "
+"Dicke."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1876
 #, c-format
@@ -58403,10 +58423,13 @@ msgid "Could not transfer model data from file '%s'."
 msgstr "Konnte Modelldaten von Datei \"%s\" nicht übertragen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:4165
+#, fuzzy
 msgid ""
 "Could not post-process GLB line primitives; the exported model may not "
 "import in strict glTF viewers."
 msgstr ""
+"Konnte GLB-Linienprimitive nicht nachbearbeiten; das exportierte Modell kann "
+"möglicherweise nicht in reine glTF-Viewer importiert werden."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:4316
 #: pcbnew/exporters/step/step_pcb_model.cpp:4363
@@ -58488,8 +58511,9 @@ msgid "Invalid imported net-name map."
 msgstr "Ungültiger Eigenschaftsname"
 
 #: pcbnew/files.cpp:735
+#, fuzzy
 msgid "Cannot apply imported net-name map to the board."
-msgstr ""
+msgstr "Kann importierte Netznamenzuordnung nicht auf die Platine anwenden."
 
 #: pcbnew/files.cpp:747 pcbnew/files.cpp:760
 #, c-format
@@ -58771,25 +58795,32 @@ msgid "Footprint library not enabled."
 msgstr "Footprintbibliothek nicht aktiviert."
 
 #: pcbnew/footprint_import_reconciler.cpp:266
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Imported footprint '%s' has conflicting placed definitions; keeping the "
 "first."
 msgstr ""
+"Importiertes Footprint \"%s\" enthält widersprüchliche "
+"Platzierungsdefinitionen; behalte die Erste."
 
 #: pcbnew/footprint_import_reconciler.cpp:294
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Imported footprint '%s' from '%s' was renamed to '%s' because another "
 "library supplies a different footprint of that name."
 msgstr ""
+"Importiertes Footprint \"%s\" von \"%s\" wurde zu \"%s\" umbenannt, weil "
+"eine andere Bibliothek ein anderes Footprint mit diesem Namen zur Verfügung "
+"stellt."
 
 #: pcbnew/footprint_import_reconciler.cpp:370
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "A footprint library named '%s' is already registered; leaving imported "
 "footprints unresolved."
 msgstr ""
+"Eine Footprint-Bibliothek namens \"%s\" ist bereits registriert; importierte "
+"Footprints bleiben ungeklärt."
 
 #: pcbnew/footprint_import_reconciler.cpp:381
 #, fuzzy
@@ -58803,10 +58834,12 @@ msgid "Error writing imported footprint cache '%s': %s"
 msgstr "Fehler beim Schreiben des importierten Footprintcache \"%s\": %s"
 
 #: pcbnew/footprint_import_reconciler.cpp:448
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "A library already exists at '%s'; leaving imported footprints unresolved."
 msgstr ""
+"Eine Bibliothek existiert bereits bei \"%s\"; importierte Footprints bleiben "
+"ungeklärt."
 
 #: pcbnew/footprint_import_reconciler.cpp:459
 #, c-format
@@ -59269,10 +59302,13 @@ msgid "Tuning"
 msgstr "Abstimmung"
 
 #: pcbnew/generators/pcb_via_stack.cpp:677
+#, fuzzy
 msgid ""
 "The selected microvias have different diameters or hole sizes. A microvia "
 "stack uses one size for every hop."
 msgstr ""
+"Die ausgewählten Microvias haben unterschiedliche Durchmesser oder "
+"Lochgrößen. Ein Microviastapel verwendet eine Größe für jede Stufe."
 
 #: pcbnew/generators/pcb_via_stack.cpp:1189
 msgid "The microvia stack layers are not present on this board."
@@ -59677,17 +59713,22 @@ msgid ""
 "Cannot rename net '%s' to '%s': net zero and empty names are reserved for "
 "unconnected items."
 msgstr ""
+"Kann Netz nicht von \"%s\" in \"%s\" umbenennen: Netz Null und leere Namen "
+"sind für unverbundene Elemente reserviert."
 
 #: pcbnew/netinfo_list.cpp:367
 #, c-format
 msgid "Cannot rename net '%s' to '%s': another net would have the same name."
 msgstr ""
+"Kann Netz nicht von \"%s\" in \"%s\" umbenennen: ein anderes Netz hätte "
+"denselben Namen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:93
 #, fuzzy, c-format
 msgid "Net chain assignment '%s' on net '%s' cleared by netlist update."
 msgstr ""
-"Netzkettenzuweisung \"%s\" auf Netz \"%s\" durch Netzlistenupdate gelöscht."
+"Netzkettenzuweisung \"%s\" auf Netz \"%s\" durch Netzlistenaktualisierung "
+"gelöscht."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:209
 #, c-format
@@ -61093,7 +61134,7 @@ msgstr "Generator"
 
 #: pcbnew/pcb_generated_table.cpp:451
 msgid "Decimal Places"
-msgstr ""
+msgstr "Dezimalstellen"
 
 #: pcbnew/pcb_generator.cpp:171 pcbnew/pcb_generator.cpp:208
 msgid "Update Order"
@@ -65100,10 +65141,13 @@ msgid "Place Microvia Stack at Track End"
 msgstr ""
 
 #: pcbnew/router/router_tool.cpp:239
+#, fuzzy
 msgid ""
 "Drops the active microvia stack preset at the end of the currently routed "
 "track and continues on the target layer."
 msgstr ""
+"Setzt den aktiven Microviastapel am Ende der momentan gerouteten Leiterbahn "
+"ab und fährt auf der Ziellage fort."
 
 #: pcbnew/router/router_tool.cpp:249
 msgid "Select Layer and Place Through Via..."
