@@ -1466,16 +1466,19 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         case SCH_SHEET_T:
         {
-            noConnects = static_cast<SCH_SHEET*>( item )->GetNoConnects();
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+            noConnects = sheet->GetNoConnects();
 
             // Mirror the sheet on itself. Sheets do not have a anchor point.
-            VECTOR2I mirrorPoint = m_frame->GetNearestHalfGridPosition( item->GetBoundingBox().Centre() );
+            VECTOR2I mirrorPoint = m_frame->GetNearestHalfGridPosition( sheet->GetBoundingBox().Centre() );
 
             if( vertical )
-                item->MirrorVertically( mirrorPoint.y );
+                sheet->MirrorVertically( mirrorPoint.y );
             else
-                item->MirrorHorizontally( mirrorPoint.x );
+                sheet->MirrorHorizontally( mirrorPoint.x );
 
+            sheet->SetFieldsAutoplaced( AUTOPLACE_NONE );
             break;
         }
 
@@ -1485,6 +1488,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             else
                 item->MirrorHorizontally( item->GetPosition().x );
 
+            item->SetFieldsAutoplaced( AUTOPLACE_NONE );
             break;
         }
 
