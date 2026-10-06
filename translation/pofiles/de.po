@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-09-30 22:14-0700\n"
-"PO-Revision-Date: 2026-10-06 01:51+0000\n"
-"Last-Translator: Karl SCHUH <k.schuh@schuh-tv.at>\n"
+"PO-Revision-Date: 2026-10-06 20:04+0000\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -8253,7 +8253,7 @@ msgstr "Konnte Repository-Head nicht abrufen."
 
 #: common/git/libgit_backend.cpp:1539
 msgid "Could not look up the commits to merge."
-msgstr "Abrufen der zu zusammenführenden git Commits ist fehlgeschlagen."
+msgstr "Abrufen der zusammenzuführenden git Commits ist fehlgeschlagen."
 
 #: common/git/libgit_backend.cpp:1548 common/git/libgit_backend.cpp:1580
 msgid ""
@@ -24861,8 +24861,8 @@ msgid ""
 "Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
 "invalid netlist. The simulator will be reset."
 msgstr ""
-"Die Simulation ist abgestürzt (%s). Der Grund dafür ist meistens Fehler in "
-"ngspice oder eine ungültige Netzliste. Der Simulator wird zurückgesetzt."
+"Die Simulation ist abgestürzt (%s). Der Grund dafür ist meistens ein Fehler "
+"in ngspice oder eine ungültige Netzliste. Der Simulator wird zurückgesetzt."
 
 #: eeschema/sim/ngspice.cpp:558
 msgid "Unable to load ngspice shared library. Please check your install."
@@ -29674,7 +29674,7 @@ msgstr "Zip-Dateien"
 
 #: gerbview/files.cpp:110
 msgid "Job files"
-msgstr "Gerber-Jobdateien"
+msgstr "Auftragsdateien"
 
 #: gerbview/files.cpp:205
 msgid "Open Autodetected File(s)"
@@ -29907,7 +29907,7 @@ msgstr "Liste der zuletzt verwendeten Bohrdateien leeren"
 #: gerbview/gerbview_frame.cpp:81 gerbview/menubar.cpp:112
 #: gerbview/menubar.cpp:119
 msgid "Clear Recent Job Files"
-msgstr "Liste der zuletzt verwendeten Jobdateien leeren"
+msgstr "Liste der zuletzt verwendeten Auftragsdateien leeren"
 
 #: gerbview/gerbview_frame.cpp:97
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:10
@@ -29939,7 +29939,7 @@ msgstr ""
 
 #: gerbview/job_file_reader.cpp:190
 msgid "Open Gerber Job File"
-msgstr "Gerber-Jobdatei öffnen"
+msgstr "Gerber-Auftragsdatei öffnen"
 
 #: gerbview/menubar.cpp:68 gerbview/menubar.cpp:75
 msgid "Clear Recent Gerber Files"
@@ -29955,7 +29955,7 @@ msgstr "Zuletzt verwendete Bohrdatei öffnen"
 
 #: gerbview/menubar.cpp:118
 msgid "Open Recent Job File"
-msgstr "Zuletzt verwendete Jobdatei öffnen"
+msgstr "Zuletzt verwendete Auftragsdatei öffnen"
 
 #: gerbview/menubar.cpp:139
 msgid "Open Recent Zip File"
@@ -30091,7 +30091,7 @@ msgstr "Excellon-Bohrdatei(en) auf einer neuen Lage öffnen."
 
 #: gerbview/tools/gerbview_actions.cpp:62
 msgid "Open Gerber Job File..."
-msgstr "Gerber-Jobdatei öffnen ..."
+msgstr "Gerber-Auftragsdatei öffnen ..."
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open a Gerber job file and its associated gerber plot files"
@@ -30579,7 +30579,7 @@ msgstr "Spezifischer Footprint für den Export innerhalb der Bibliothek"
 
 #: kicad/cli/command_fp_export_svg.cpp:92
 msgid "Footprint library does not exist or is not accessible\n"
-msgstr "Footprint-Bibliothek existiert nicht oder ist nicht erreichbar\n"
+msgstr "Footprint-Bibliothek existiert nicht oder ist nicht zugänglich\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:36
 msgid "Upgrades the footprint library to the current kicad version format"
@@ -31043,7 +31043,7 @@ msgstr ""
 #: kicad/cli/command_pcb_export_svg.cpp:186
 #: kicad/cli/command_pcb_upgrade.cpp:47
 msgid "Board file does not exist or is not accessible\n"
-msgstr "Platinendatei existiert nicht oder ist nicht zugreifbar\n"
+msgstr "Platinendatei existiert nicht oder ist nicht zugänglich\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:186
 #: kicad/cli/command_pcb_export_svg.cpp:198
@@ -31550,9 +31550,7 @@ msgstr "Erstellt eine Stückliste (BoM)"
 #: kicad/cli/command_sch_export_pythonbom.cpp:51
 #: kicad/cli/command_sch_upgrade.cpp:47
 msgid "Schematic file does not exist or is not accessible\n"
-msgstr ""
-"Schaltplandatei existiert nicht oder es kann nicht darauf zugegriffen "
-"werden\n"
+msgstr "Schaltplandatei existiert nicht oder ist nicht zugänglich\n"
 
 #: kicad/cli/command_sch_export_netlist.cpp:35
 msgid "Export a netlist"
@@ -31651,7 +31649,7 @@ msgstr "Verborgene Felder darstellen"
 
 #: kicad/cli/command_sym_export_svg.cpp:86
 msgid "Symbol file does not exist or is not accessible\n"
-msgstr "Symboldatei existiert nicht oder kann nicht geöffnet werden\n"
+msgstr "Symboldatei existiert nicht oder ist nicht zugänglich\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:39
 msgid "Upgrades the symbol library to the current kicad version format"
@@ -31665,7 +31663,7 @@ msgstr ""
 
 #: kicad/cli/command_sym_upgrade.cpp:61
 msgid "Symbol library does not exist or is not accessible\n"
-msgstr "Symboldatei existiert nicht oder ist nicht verfügbar\n"
+msgstr "Symbolbibliothek existiert nicht oder ist nicht zugänglich\n"
 
 #: kicad/cli/command_version.cpp:35
 msgid "Reports the version info in various formats"
@@ -40250,7 +40248,7 @@ msgstr "Benutzerdefinierter Ursprung"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:251
 msgid "Do not show components marked 'Do not populate'"
-msgstr "Keine Bauteile anzeigen, die als \"nicht zu bestücken\" markiert sind"
+msgstr "Keine Bauteile anzeigen, die mit \"Nicht bestücken\" markiert sind"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:256
 msgid "Do not show components with Footprint Type 'Unspecified'"
@@ -41224,7 +41222,8 @@ msgstr "Alle Footprints mit Durchlochpads ausschließen"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:113
 msgid "Exclude all footprints with the Exclude from BOM flag set"
-msgstr "Alle Footprints mit \"nicht bestücken\"-Kennzeichnung ausschließen"
+msgstr ""
+"Alle Footprints mit \"Von Stückliste ausschließen\"-Markierung ausschließen"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:116
 msgid "Include board edge layer"
@@ -41548,7 +41547,7 @@ msgstr "Alle Teardrops entfernen, ungeachtet der Filteroptionen"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:131
 msgid "Edit default values in Board Setup"
-msgstr "Standardwerte in Platineneinstellungen bearbeiten"
+msgstr "Standardwerte in Platinenkonfiguration bearbeiten"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:149
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:671
@@ -43425,7 +43424,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:235
 msgid "Generate Gerber job file"
-msgstr "Gerber-Job-Datei erstellen"
+msgstr "Gerber-Auftragsdatei erstellen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
 msgid ""
@@ -44618,7 +44617,7 @@ msgstr "&Behalte äußere Lagen"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers_base.h:57
 msgid "Unused Pads"
-msgstr "Unbenutzte Pads"
+msgstr "Ungenutzte Pads"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:35
 msgid "Apply design block layouts to new groups"
@@ -50309,11 +50308,13 @@ msgid "OCC exception creating countersink: %s"
 msgstr "OCC-Ausnahme während der Erstellung einer konischen Senkung: %s"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1749
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Board stackup does not define a board thickness; exporting a %.3f mm board "
 "body."
 msgstr ""
+"Lagenaufbau gibt keine Platinendicke an; exportiere eine Platine mit %.3fmm "
+"Dicke."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1788
 #, c-format
@@ -50510,10 +50511,13 @@ msgid "Could not transfer model data from file '%s'."
 msgstr "Konnte Modelldaten von Datei \"%s\" nicht übertragen."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:4006
+#, fuzzy
 msgid ""
 "Could not post-process GLB line primitives; the exported model may not "
 "import in strict glTF viewers."
 msgstr ""
+"Konnte GLB-Linienprimitive nicht nachbearbeiten; das exportierte Modell kann "
+"möglicherweise nicht in reine glTF-Viewer importiert werden."
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:4157
 #: pcbnew/exporters/step/step_pcb_model.cpp:4204
@@ -50870,11 +50874,13 @@ msgid "Footprint library not enabled."
 msgstr "Footprintbibliothek nicht aktiviert."
 
 #: pcbnew/footprint_import_reconciler.cpp:201
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Imported footprint '%s' has conflicting placed definitions; keeping the "
 "first."
 msgstr ""
+"Importiertes Footprint \"%s\" enthält widersprüchliche "
+"Platzierungsdefinitionen; behalte die Erste."
 
 #: pcbnew/footprint_import_reconciler.cpp:270
 #, fuzzy
@@ -50888,10 +50894,12 @@ msgid "Error writing imported footprint cache '%s': %s"
 msgstr "Fehler beim Schreiben des importierten Footprintcache \"%s\": %s"
 
 #: pcbnew/footprint_import_reconciler.cpp:335
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "A library already exists at '%s'; leaving imported footprints unresolved."
 msgstr ""
+"Eine Bibliothek existiert bereits bei \"%s\"; importierte Footprints bleiben "
+"ungeklärt."
 
 #: pcbnew/footprint_import_reconciler.cpp:346
 #, c-format
@@ -55951,7 +55959,7 @@ msgstr "Platzierungsdaten nach \"%s\" geschrieben.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2085
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "Footprint-Bibliothek-Pfad existiert nicht oder ist nicht erreichbar\n"
+msgstr "Footprint-Bibliothek-Pfad existiert nicht oder ist nicht zugänglich\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2125
 msgid "Unable to save library\n"
