@@ -55,6 +55,15 @@ using namespace KIGFX;
 const wxEventType WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE = wxNewEventType();
 
 
+// Windows merges the notches turned while the canvas was busy into one event.  Elsewhere the
+// rotation is continuous and its magnitude is a scroll speed, so it is never read as a notch count
+#ifdef __WXMSW__
+static constexpr int MERGED_WHEEL_NOTCH = 120;      // WHEEL_DELTA
+#else
+static constexpr int MERGED_WHEEL_NOTCH = 0;
+#endif
+
+
 static std::unique_ptr<ZOOM_CONTROLLER> GetZoomControllerForPlatform( bool aAcceleration )
 {
 #ifdef __WXMAC__
@@ -67,9 +76,16 @@ static std::unique_ptr<ZOOM_CONTROLLER> GetZoomControllerForPlatform( bool aAcce
     return std::make_unique<CONSTANT_ZOOM_CONTROLLER>( CONSTANT_ZOOM_CONTROLLER::GTK3_SCALE );
 #else
     if( aAcceleration )
-        return std::make_unique<ACCELERATING_ZOOM_CONTROLLER>();
+    {
+        return std::make_unique<ACCELERATING_ZOOM_CONTROLLER>(
+                ACCELERATING_ZOOM_CONTROLLER::DEFAULT_ACCELERATION_SCALE,
+                ACCELERATING_ZOOM_CONTROLLER::DEFAULT_TIMEOUT, nullptr, MERGED_WHEEL_NOTCH );
+    }
     else
-        return std::make_unique<CONSTANT_ZOOM_CONTROLLER>( CONSTANT_ZOOM_CONTROLLER::MSW_SCALE );
+    {
+        return std::make_unique<CONSTANT_ZOOM_CONTROLLER>( CONSTANT_ZOOM_CONTROLLER::MSW_SCALE,
+                                                           MERGED_WHEEL_NOTCH );
+    }
 #endif
 }
 
@@ -204,14 +220,15 @@ void WX_VIEW_CONTROLS::LoadSettings()
     {
         if( cfg->m_Input.zoom_acceleration )
         {
-            m_zoomController =
-                    std::make_unique<ACCELERATING_ZOOM_CONTROLLER>( cfg->m_Input.zoom_speed );
+            m_zoomController = std::make_unique<ACCELERATING_ZOOM_CONTROLLER>(
+                    cfg->m_Input.zoom_speed, ACCELERATING_ZOOM_CONTROLLER::DEFAULT_TIMEOUT, nullptr,
+                    MERGED_WHEEL_NOTCH );
         }
         else
         {
             double scale = CONSTANT_ZOOM_CONTROLLER::MANUAL_SCALE_FACTOR * cfg->m_Input.zoom_speed;
 
-            m_zoomController = std::make_unique<CONSTANT_ZOOM_CONTROLLER>( scale );
+            m_zoomController = std::make_unique<CONSTANT_ZOOM_CONTROLLER>( scale, MERGED_WHEEL_NOTCH );
         }
     }
 }

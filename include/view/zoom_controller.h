@@ -94,10 +94,12 @@ public:
      * @param aTimestampProv a provider for timestamps. If null, a default will be provided,
      *                       which is the main steady_clock (this is probably what you want
      *                       for real usage).
+     * @param aNotch the rotation of one wheel notch on platforms that merge several notches into
+     *               one event, or 0 where the rotation is continuous and is never multiplied.
      */
     ACCELERATING_ZOOM_CONTROLLER( double aScale = DEFAULT_ACCELERATION_SCALE,
                                   const TIMEOUT& aAccTimeout = DEFAULT_TIMEOUT,
-                                  TIMESTAMP_PROVIDER* aTimestampProv = nullptr );
+                                  TIMESTAMP_PROVIDER* aTimestampProv = nullptr, int aNotch = 0 );
 
     double GetScaleForRotation( int aRotation ) override;
 
@@ -129,6 +131,9 @@ private:
 
     /// A multiplier for the minimum zoom step size
     double m_scale;
+
+    /// The rotation of one wheel notch, or 0 when merged notches are not compensated.
+    int m_notch;
 };
 
 
@@ -142,8 +147,10 @@ public:
     /**
      * @param aScale a scaling parameter that adjusts the magnitude of the scroll. This factor
      *               might be dependent on the platform for comfort.
+     * @param aNotch the rotation of one wheel notch on platforms that merge several notches into
+     *               one event, or 0 where the rotation is continuous and is only capped.
      */
-    CONSTANT_ZOOM_CONTROLLER( double aScale );
+    CONSTANT_ZOOM_CONTROLLER( double aScale, int aNotch = 0 );
 
     double GetScaleForRotation( int aRotation ) override;
 
@@ -162,6 +169,9 @@ public:
 private:
     /// The scale factor set by the constructor.
     double m_scale;
+
+    /// The rotation of one wheel notch, or 0 when merged notches are not compensated.
+    int m_notch;
 };
 
 } // namespace KIGFX

@@ -29,8 +29,20 @@
 #include <wx/log.h>
 
 #include <algorithm>
+#include <cmath>
 
 using namespace KIGFX;
+
+
+// Notches carried by one wheel event, where aNotch is the rotation of a single notch
+// A zero aNotch means the rotation is a scroll speed, so the event counts as one notch
+static double notchCount( int aRotation, int aNotch )
+{
+    if( aNotch <= 0 || std::abs( aRotation ) < aNotch )
+        return 1.0;
+
+    return std::abs( aRotation ) / double( aNotch );
+}
 
 
 /**
@@ -48,9 +60,10 @@ public:
 
 
 ACCELERATING_ZOOM_CONTROLLER::ACCELERATING_ZOOM_CONTROLLER(
-        double aScale, const TIMEOUT& aAccTimeout, TIMESTAMP_PROVIDER* aTimestampProv ) :
+        double aScale, const TIMEOUT& aAccTimeout, TIMESTAMP_PROVIDER* aTimestampProv, int aNotch ) :
         m_accTimeout( aAccTimeout ),
-        m_scale( aScale )
+        m_scale( aScale ),
+        m_notch( aNotch )
 {
     if( aTimestampProv )
     {
@@ -99,6 +112,9 @@ double ACCELERATING_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
     }
     m_prevRotationPositive = aRotation > 0;
 
+    if( notchCount( aRotation, m_notch ) > 1.0 )
+        zoomScale = std::pow( zoomScale, notchCount( aRotation, m_notch ) );
+
     wxLogTrace( traceZoomScroll, wxString::Format( "  Zoom factor: %f", zoomScale ) );
 
     return zoomScale;
@@ -113,7 +129,9 @@ constexpr double GAL_API CONSTANT_ZOOM_CONTROLLER::MSW_SCALE;
 #endif
 
 
-CONSTANT_ZOOM_CONTROLLER::CONSTANT_ZOOM_CONTROLLER( double aScale ) : m_scale( aScale )
+CONSTANT_ZOOM_CONTROLLER::CONSTANT_ZOOM_CONTROLLER( double aScale, int aNotch ) :
+        m_scale( aScale ),
+        m_notch( aNotch )
 {
 }
 
@@ -122,11 +140,17 @@ double CONSTANT_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
 {
     wxLogTrace( traceZoomScroll, wxString::Format( "Rot %d", aRotation ) );
 
+    const int rotation = aRotation;
+
     aRotation = ( aRotation > 0 ) ? std::min( aRotation, 100 ) : std::max( aRotation, -100 );
 
     double dscale = aRotation * m_scale;
 
     double zoom_scale = ( aRotation > 0 ) ? ( 1 + dscale ) : 1 / ( 1 - dscale );
+
+    // A notch saturates the clamp, so each further notch of a merged event zooms by that factor again
+    if( notchCount( rotation, m_notch ) > 1.0 )
+        zoom_scale = std::pow( zoom_scale, notchCount( rotation, m_notch ) );
 
     wxLogTrace( traceZoomScroll, wxString::Format( "  Zoom factor: %f", zoom_scale ) );
 
