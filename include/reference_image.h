@@ -79,7 +79,13 @@ public:
     void SetWidth( int aWidth );
     void SetHeight( int aHeight );
 
-    void Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
+    /**
+     *
+     * @param aCentre
+     * @param aFlipDirection LEFT_RIGHT or TOP_BOTTOM
+     * @return false if the flip would put the coordinates out-of-bounds
+     */
+    bool Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection );
 
     void Rotate( const VECTOR2I& aCenter, const EDA_ANGLE& aAngle );
 

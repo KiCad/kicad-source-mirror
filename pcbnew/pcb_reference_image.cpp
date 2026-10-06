@@ -230,12 +230,13 @@ bool PCB_REFERENCE_IMAGE::Deserialize( const google::protobuf::Any& aContainer )
 
 void PCB_REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
-    m_referenceImage.Flip( aCentre, aFlipDirection );
-
-    if( GetBoard() )
-        SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
-    else
-        SetLayer( FlipLayer( GetLayer() ) );
+    if( m_referenceImage.Flip( aCentre, aFlipDirection ) )
+    {
+        if( GetBoard() )
+            SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+        else
+            SetLayer( FlipLayer( GetLayer() ) );
+    }
 }
 
 

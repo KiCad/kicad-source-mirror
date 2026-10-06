@@ -261,7 +261,7 @@ void REFERENCE_IMAGE::scaleBy( double aRatio )
 }
 
 
-void REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
+bool REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     VECTOR2I newPos = m_pos;
     MIRROR( newPos, aCentre, aFlipDirection );
@@ -269,12 +269,13 @@ void REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirecti
     const BOX2D newBox = BOX2D::ByCenter( newPos, m_bitmapBase->GetSize() );
 
     if( !IsBOX2Safe( newBox ) )
-        return;
+        return false;
 
     m_pos = newPos;
     m_bitmapBase->Mirror( aFlipDirection );
 
     MIRROR( m_transformOriginOffset, VECTOR2I( 0, 0 ), aFlipDirection );
+    return true;
 }
 
 
