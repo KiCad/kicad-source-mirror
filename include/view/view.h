@@ -286,6 +286,15 @@ public:
     }
 
     /**
+     * @param aLod is the level of detail an item reports from VIEW_ITEM::ViewGetLOD().
+     * @return true if an item with that level of detail is shown at the current scale.
+     */
+    inline bool IsShownAtScale( double aLod ) const
+    {
+        return aLod < m_scale;
+    }
+
+    /**
      * Set limits for view area.
      *
      * @param aBoundary is the box that limits view area.

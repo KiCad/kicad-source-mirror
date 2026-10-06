@@ -198,9 +198,16 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
 
             for( VIEW_ITEM* item : layer_item_map[ layer ] )
             {
+                const double lod = item->ViewGetLOD( layer, aView );
+
                 // Ignore LOD scale for selected items, but don't ignore things explicitly
                 // hidden.
-                if( item->ViewGetLOD( layer, aView ) == LOD_HIDE )
+                if( lod == LOD_HIDE )
+                    continue;
+
+                // Net names are drawn on their own layers and are what dominates a large selection,
+                // so they keep following the zoom level as they do when not selected
+                if( IsNetnameLayer( layer ) && !aView->IsShownAtScale( lod ) )
                     continue;
 
                 if( !painter->Draw( item, layer ) )
