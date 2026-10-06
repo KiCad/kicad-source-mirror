@@ -5191,7 +5191,17 @@ void PCB_SELECTION_TOOL::FilterCollectorForLockedItems( GENERAL_COLLECTOR& aColl
 
 void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollector, bool aMultiselect ) const
 {
-    std::unordered_set<EDA_ITEM*> toAdd;
+    std::unordered_set<EDA_ITEM*> toAddSet;
+
+    // Groups are appended in the order found so the selection order does not depend on addresses
+    std::vector<EDA_ITEM*> toAdd;
+
+    auto queueGroup =
+            [&]( EDA_ITEM* aGroup )
+            {
+                if( toAddSet.insert( aGroup ).second )
+                    toAdd.push_back( aGroup );
+            };
 
     // Set CANDIDATE on all parents which are included in the GENERAL_COLLECTOR.  This
     // algorithm is O(3n), whereas checking for the parent inclusion could potentially be O(n^2).
@@ -5249,7 +5259,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForHierarchy( GENERAL_COLLECTOR& aCollec
             {
                 if( top->AsEdaItem() != item )
                 {
-                    toAdd.insert( top->AsEdaItem() );
+                    queueGroup( top->AsEdaItem() );
                     top->AsEdaItem()->SetFlags( CANDIDATE );
 
                     aCollector.Remove( item );
