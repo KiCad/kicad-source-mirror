@@ -469,6 +469,10 @@ bool EDA_TEXT::ResolveFont( const std::vector<wxString>* aEmbeddedFonts )
     {
         m_attributes.m_Font = KIFONT::FONT::GetFont( m_unresolvedFontName, IsBold(), IsItalic(), aEmbeddedFonts );
 
+        // The resolved font may not be the same as the original font, so we want to continue to
+        // use the existing glyph cache to preserve the existing geometry (important on the board,
+        // even if not so much on the schematic).  We need to update the font so that KiCad will
+        // decide the cache is still valid.  (It will get regenerated if the user edits the text.)
         if( m_render_cache && !m_render_cache->glyphs.empty() )
             m_render_cache->font = m_attributes.m_Font;
 
