@@ -92,7 +92,17 @@ bool TRANSFORM_TRS::IsUniformScale() const
 
 double TRANSFORM_TRS::ApplyLinearScale( double aLength ) const
 {
-    return aLength * 0.5 * ( m_scaleX + m_scaleY );
+    double scale = IsUniformScale() ? m_scaleX : ( m_scaleX + m_scaleY ) / 2;
+
+    return aLength * scale;
+}
+
+
+double TRANSFORM_TRS::InverseApplyLinearScale( double aLength ) const
+{
+    double scale = IsUniformScale() ? m_scaleX : ( m_scaleX + m_scaleY ) / 2;
+
+    return aLength / scale;
 }
 
 

@@ -197,6 +197,8 @@ public:
     void SetStart( const VECTOR2I& aStart ) override;
     void SetEnd( const VECTOR2I& aEnd ) override;
 
+    void SetCornerRadius( int aCornerRadius ) override;
+
     // Stroke width is stored in lib units. Scale-aware accessors apply the
     // parent footprint scale on read / strip it on write so callers see the
     // runtime width as before.
@@ -227,6 +229,7 @@ public:
     VECTOR2I GetLibraryStart() const { return m_libStart; }
     VECTOR2I GetLibraryEnd() const { return m_libEnd; }
     SHAPE_T  GetLibraryShape() const { return m_libShape; }
+    int      GetLibraryCornerRadius() const { return m_libCornerRadius; }
 
     VECTOR2I  GetLibraryEllipseCenter() const      { return m_libEllipseCenter; }
     int       GetLibraryEllipseMajorRadius() const { return m_libEllipseMajorRadius; }
@@ -376,6 +379,8 @@ protected:
 
     VECTOR2I           m_libStart;
     VECTOR2I           m_libEnd;
+
+    int                m_libCornerRadius;
 
     VECTOR2I           m_libArcMid;
 

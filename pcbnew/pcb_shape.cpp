@@ -172,6 +172,7 @@ PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T aItemType, SHAPE_T aShapeType
         EDA_SHAPE( aShapeType, pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), FILL_T::NO_FILL ),
         m_libStart( 0, 0 ),
         m_libEnd( 0, 0 ),
+        m_libCornerRadius( 0 ),
         m_libArcMid( 0, 0 ),
         m_libBezierC1( 0, 0 ),
         m_libBezierC2( 0, 0 ),
@@ -192,6 +193,7 @@ PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, SHAPE_T shapetype ) :
         EDA_SHAPE( shapetype, pcbIUScale.mmToIU( DEFAULT_LINE_WIDTH ), FILL_T::NO_FILL ),
         m_libStart( 0, 0 ),
         m_libEnd( 0, 0 ),
+        m_libCornerRadius( 0 ),
         m_libArcMid( 0, 0 ),
         m_libBezierC1( 0, 0 ),
         m_libBezierC2( 0, 0 ),
@@ -959,6 +961,13 @@ void PCB_SHAPE::SetEnd( const VECTOR2I& aEnd )
 }
 
 
+void PCB_SHAPE::SetCornerRadius( int aCornerRadius )
+{
+    EDA_SHAPE::SetCornerRadius( aCornerRadius );
+    syncLibCoords();
+}
+
+
 void PCB_SHAPE::OnFootprintRescaled( double aRatioX, double aRatioY, double aLinearFactor, const VECTOR2I& aAnchor,
                                      const EDA_ANGLE& aParentRotate )
 {
@@ -1197,7 +1206,8 @@ void PCB_SHAPE::rebakeFromTransform( const TRANSFORM_TRS& xform )
         const VECTOR2I c3 = xform.Apply( m_libEnd );
         const VECTOR2I c4 = xform.Apply( VECTOR2I( m_libStart.x, m_libEnd.y ) );
 
-        if( xform.GetRotate().IsCardinal() )
+        if( xform.GetRotate().IsCardinal()
+                && ( m_libCornerRadius == 0 || xform.IsUniformScale() ) )
         {
             m_shape = SHAPE_T::RECTANGLE;
             BOX2I bbox( c1, VECTOR2I( 0, 0 ) );
@@ -1206,6 +1216,8 @@ void PCB_SHAPE::rebakeFromTransform( const TRANSFORM_TRS& xform )
             bbox.Merge( c4 );
             EDA_SHAPE::SetStart( bbox.GetOrigin() );
             EDA_SHAPE::SetEnd( bbox.GetEnd() );
+
+            EDA_SHAPE::SetCornerRadius( xform.ApplyLinearScale( m_libCornerRadius ) );
         }
         else
         {
@@ -1213,7 +1225,7 @@ void PCB_SHAPE::rebakeFromTransform( const TRANSFORM_TRS& xform )
             SHAPE_POLY_SET& poly = GetPolyShape();
             poly.RemoveAllContours();
 
-            if( m_cornerRadius > 0 )
+            if( m_libCornerRadius > 0 )
             {
                 SHAPE_POLY_SET rounded;
                 VECTOR2I       libCenter = ( m_libStart + m_libEnd ) / 2;
@@ -1468,6 +1480,13 @@ void PCB_SHAPE::syncLibCoords()
         m_libStart = xform.InverseApply( GetStart() );
         m_libEnd = xform.InverseApply( GetEnd() );
 
+        if( m_shape == SHAPE_T::RECTANGLE )
+        {
+            // We assume xform is uniform scale.  If not, we should have been turned into a
+            // polygon.
+            m_libCornerRadius = xform.InverseApplyLinearScale( GetCornerRadius() );
+        }
+
         if( m_shape == SHAPE_T::ARC )
             m_libArcMid = xform.InverseApply( GetArcMid() );
 
@@ -1481,6 +1500,9 @@ void PCB_SHAPE::syncLibCoords()
     {
         m_libStart = GetStart();
         m_libEnd = GetEnd();
+
+        if( m_shape == SHAPE_T::RECTANGLE )
+            m_libCornerRadius = GetCornerRadius();
 
         if( m_shape == SHAPE_T::ARC )
             m_libArcMid = GetArcMid();

@@ -58,6 +58,7 @@ public:
     bool IsUniformScale() const;
 
     double ApplyLinearScale( double aLength ) const;
+    double InverseApplyLinearScale( double aLength ) const;
 
     const VECTOR2I&  GetTranslate() const { return m_translate; }
     const EDA_ANGLE& GetRotate() const { return m_rotate; }

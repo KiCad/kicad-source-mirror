@@ -597,7 +597,7 @@ public:
 
     void SetRectangle( const long long int& aHeight, const long long int& aWidth );
 
-    void SetCornerRadius( int aRadius );
+    virtual void SetCornerRadius( int aRadius );
     int GetCornerRadius() const;
 
     bool IsClockwiseArc() const;
