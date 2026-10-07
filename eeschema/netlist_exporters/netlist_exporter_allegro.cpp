@@ -332,7 +332,7 @@ bool NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         wxString footprintText = sym->GetFootprintFieldText( &sheetPath, RAW_VALUE, m_exportVariant );
         wxString deviceType = valueText + wxT( "_" ) + footprintText;
 
-        while( deviceType.GetChar(deviceType.Length() - 1 ) == '_' )
+        while( deviceType.Length() > 0 && deviceType.GetChar( deviceType.Length() - 1 ) == '_' )
             deviceType.RemoveLast();
 
         deviceType = formatDevice( deviceType );
@@ -773,8 +773,9 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
 
 wxString NETLIST_EXPORTER_ALLEGRO::removeTailDigits( wxString aString )
 {
-    while( aString.GetChar( aString.Length() - 1 ) >= '0'
-           && aString.GetChar( aString.Length() - 1 ) <= '9' )
+    while( aString.Length() > 0
+            && aString.GetChar( aString.Length() - 1 ) >= '0'
+            && aString.GetChar( aString.Length() - 1 ) <= '9' )
     {
         aString.RemoveLast();
     }
@@ -787,8 +788,9 @@ unsigned int NETLIST_EXPORTER_ALLEGRO::extractTailNumber( wxString aString )
 {
     wxString numString;
 
-    while( aString.GetChar( aString.Length() - 1 ) >= '0'
-           && aString.GetChar( aString.Length() - 1 ) <= '9' )
+    while( aString.Length() > 0
+            && aString.GetChar( aString.Length() - 1 ) >= '0'
+            && aString.GetChar( aString.Length() - 1 ) <= '9' )
     {
         numString.insert( 0, aString.GetChar( aString.Length() - 1 ) );
         aString.RemoveLast();
