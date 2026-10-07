@@ -74,7 +74,7 @@ static bool NearestPoints( const SHAPE_CIRCLE& aA, const SHAPE_CIRCLE& aB,
 
 
 /**
- * Find the nearest points between a circle and a rectangle.
+ * Find the nearest points between a (solid) circle and a (solid) rectangle.
  *
  * @param aCircle the circle
  * @param aRect the rectangle
