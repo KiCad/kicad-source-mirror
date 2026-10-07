@@ -38,12 +38,12 @@ fi
 
 # Skip if no display server is reachable.  We try DISPLAY first (a normal
 # desktop session), then xvfb-run (CI virtual display).
-RUNNER=""
+RUNNER=()
 
 if [ -n "${DISPLAY:-}" ]; then
-    RUNNER=""   # use the existing display
+    RUNNER=()   # use the existing display
 elif command -v xvfb-run >/dev/null 2>&1; then
-    RUNNER="xvfb-run -a --server-args=-screen 0 1024x768x24"
+    RUNNER=(xvfb-run -a "--server-args=-screen 0 1024x768x24")
 else
     echo "SKIP: no DISPLAY and xvfb-run not available; cannot exercise GUI re-exec" >&2
     exit 0
@@ -97,7 +97,7 @@ EOF
 export KICAD_MERGETOOL_AUTO="$AUTO_RES"
 
 set +e
-$RUNNER "$KICAD_CLI" mergetool "$ANCESTOR" "$OURS" "$THEIRS" --output "$MERGED" 2>&1
+"${RUNNER[@]}" "$KICAD_CLI" mergetool "$ANCESTOR" "$OURS" "$THEIRS" --output "$MERGED" 2>&1
 exit_code=$?
 set -e
 
@@ -143,7 +143,7 @@ cp "$FIXTURE_FOOTPRINT" "$FP_OURS"
 cp "$FIXTURE_FOOTPRINT" "$FP_THEIRS"
 
 set +e
-$RUNNER "$KICAD_CLI" mergetool "$FP_ANCESTOR" "$FP_OURS" "$FP_THEIRS" --output "$FP_MERGED" 2>&1
+"${RUNNER[@]}" "$KICAD_CLI" mergetool "$FP_ANCESTOR" "$FP_OURS" "$FP_THEIRS" --output "$FP_MERGED" 2>&1
 exit_code=$?
 set -e
 
