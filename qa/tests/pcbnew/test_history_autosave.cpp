@@ -99,7 +99,7 @@ struct SCOPED_PROJECT_LOAD
 
 void writeTextFile( const wxString& aPath, const wxString& aContents )
 {
-    wxFFile f( aPath, wxT( "w" ) );
+    wxFFile f( aPath, wxT( "wb" ) );
     BOOST_REQUIRE( f.IsOpened() );
     f.Write( aContents );
     f.Close();
@@ -601,6 +601,8 @@ BOOST_AUTO_TEST_CASE( FirstAutosaveSkipsCommitWhenStagedMatchesDisk )
 
     // Mutating this between calls simulates the user editing the in-memory document.
     std::string inMemoryContent = "(kicad_pcb (version 20240108))\n";
+    BOOST_REQUIRE_EQUAL( readTextFile( path + wxFileName::GetPathSeparator() + wxS( "p.kicad_pcb" ) ),
+                         inMemoryContent );
 
     auto saver = [&inMemoryContent]( const wxString&, std::vector<HISTORY_FILE_DATA>& aFileData )
     {
