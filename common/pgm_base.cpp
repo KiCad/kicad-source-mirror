@@ -737,7 +737,7 @@ void PGM_BASE::SetLanguagePath()
 #endif
     wxLocale::AddCatalogLookupPathPrefix( PATHS::GetLocaleDataPath() );
 
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    if( PATHS::RunningFromBuildDir() )
     {
         wxFileName fn( Pgm().GetExecutablePath() );
         fn.RemoveLastDir();

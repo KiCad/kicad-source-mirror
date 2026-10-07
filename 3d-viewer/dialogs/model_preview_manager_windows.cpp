@@ -20,6 +20,7 @@
 
 #include <model_preview_manager.h>
 #include <model_preview_manager_windows_internal.h>
+#include <paths.h>
 
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
@@ -84,7 +85,7 @@ READ_RESULT ReadClassString( const wxString& aKey, const wchar_t* aValueName, wx
 
 wxString BundledHandlerPath()
 {
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    if( PATHS::RunningFromBuildDir() )
     {
         wxFileName fn( wxStandardPaths::Get().GetExecutablePath() );
         fn.AppendDir( wxS( ".." ) );

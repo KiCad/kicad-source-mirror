@@ -52,6 +52,7 @@
 #include <core/map_helpers.h>
 #include <settings/settings_manager.h>
 #include <jobs/job_export_pcb_3d.h>
+#include <paths.h>
 
 #include <wx/filefn.h>
 
@@ -596,7 +597,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             appK2S.AppendDir( wxT( "MacOS" ) );
         }
     #else
-        if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+        if( PATHS::RunningFromBuildDir() )
         {
             appK2S.RemoveLastDir();
             appK2S.AppendDir( "kicad" );

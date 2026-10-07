@@ -247,6 +247,21 @@ public:
      */
     static wxString ResolveSiblingExecutable( const wxString& aBaseName );
 
+    /**
+     * Return the CMake build root for a KiCad executable path, or an empty string outside a build tree.
+     */
+    static wxString FindKiCadBuildRoot( const wxString& aExecutablePath );
+
+    /**
+     * The build root of the running executable, or empty outside a KiCad build tree.
+     */
+    static const wxString& GetBuildRoot();
+
+    /**
+     * True when KiCad runs from its build tree or KICAD_RUN_FROM_BUILD_DIR is set.
+     */
+    static bool RunningFromBuildDir();
+
 private:
     // we are a static helper
     PATHS() {}

@@ -520,7 +520,7 @@ int API_PLUGIN_MANAGER::doInvokeAction( const wxString& aIdentifier,
         env.env[wxS( "SYSTEMROOT" )] = systemRoot;
 
         if( Pgm().GetCommonSettings()->m_Api.python_interpreter == FindKicadFile( "pythonw.exe" )
-            || wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+            || PATHS::RunningFromBuildDir() )
         {
             wxLogTrace( traceApi, "Configured Python is the KiCad one; erasing path overrides..." );
             env.env.erase( "PYTHONHOME" );
@@ -894,7 +894,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
         env.env[wxS( "SYSTEMROOT" )] = systemRoot;
 
         if( Pgm().GetCommonSettings()->m_Api.python_interpreter == FindKicadFile( "pythonw.exe" )
-            || wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+            || PATHS::RunningFromBuildDir() )
         {
             wxLogTrace( traceApi, "Configured Python is the KiCad one; erasing path overrides..." );
             env.env.erase( "PYTHONHOME" );
@@ -986,7 +986,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
 
             if( Pgm().GetCommonSettings()->m_Api.python_interpreter
                         == FindKicadFile( "pythonw.exe" )
-                || wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+                || PATHS::RunningFromBuildDir() )
             {
                 wxLogTrace( traceApi,
                             "Configured Python is the KiCad one; erasing path overrides..." );

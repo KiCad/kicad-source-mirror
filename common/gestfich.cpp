@@ -53,6 +53,7 @@
 #include <unordered_set>
 #include <vector>
 #include <core/kicad_algo.h>
+#include <paths.h>
 
 void QuoteString( wxString& string )
 {
@@ -76,7 +77,7 @@ wxString FindKicadFile( const wxString& shortname )
     if( wxFileExists( fullFileName ) )
         return fullFileName;
 
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    if( PATHS::RunningFromBuildDir() )
     {
         wxFileName buildDir( Pgm().GetExecutablePath(), shortname );
 

@@ -145,48 +145,7 @@ wxString PATHS::GetDefaultUserProjectsPath()
 }
 
 
-#if !defined( __WXMAC__ ) && !defined( __WXMSW__ )
-/**
- * Get the CMake build root directory for the current executable
- * (which assumes the executable is in a build directory).
- *
- * This is done because not all executable are located at the same
- * depth in the build directory.
- */
-static wxString getBuildDirectoryRoot()
-{
-    // We don't have a perfect way to spot a build directory (e.g. when archived as artifacts in
-    // CI) but we can assume that the build directory will have a schemas directory that contains
-    // JSON files, as that's one of the things that we use this path for.
-    const auto looksLikeBuildDir = []( const wxFileName& aPath ) -> bool
-    {
-        const wxDir schema_dir( aPath.GetPathWithSep() + wxT( "schemas" ) );
-
-        if( !schema_dir.IsOpened() )
-            return false;
-
-        wxString   filename;
-        const bool found = schema_dir.GetFirst( &filename, wxT( "*.json" ), wxDIR_FILES );
-        return found;
-    };
-
-    const wxString execPath = PATHS::GetExecutablePath();
-    wxFileName     fn = execPath;
-
-    // Climb the directory tree until we find a directory that looks like a build directory
-    // Normally we expect to climb one or two levels only.
-    while( fn.GetDirCount() > 0 && !looksLikeBuildDir( fn ) )
-    {
-        fn.RemoveLastDir();
-    }
-
-    wxASSERT_MSG(
-            fn.GetDirCount() > 0,
-            wxString::Format( wxT( "Could not find build root directory above %s" ), execPath ) );
-
-    return fn.GetPath();
-}
-#elif defined( __WXMAC__ )
+#if defined( __WXMAC__ )
 /**
  * Get the main .app bundle root with symlinks resolved.
  * Handles both main KiCad binaries and aux binaries inside the bundle.
@@ -234,7 +193,7 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
 {
     wxString path;
 
-    if( aRespectRunFromBuildDir && wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    if( aRespectRunFromBuildDir && RunningFromBuildDir() )
     {
         // Allow debugging from build dir by placing relevant files/folders in the build root
 #if defined( __WXMAC__ )
@@ -246,7 +205,10 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
 #elif defined( __WXMSW__ )
         path = getWindowsKiCadRoot();
 #else
-        path = getBuildDirectoryRoot();
+        path = GetBuildRoot();
+
+        wxASSERT_MSG( !path.IsEmpty(), wxString::Format( wxT( "Could not find build root directory above %s" ),
+                                                         GetExecutablePath() ) );
 #endif
     }
     else if( wxGetEnv( wxT( "KICAD_STOCK_DATA_HOME" ), &path ) && !path.IsEmpty() )
@@ -395,7 +357,7 @@ wxString PATHS::GetStockPlugins3DPath()
     wxFileName fn;
 
 #if defined( __WXMSW__ )
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    if( RunningFromBuildDir() )
     {
         fn.AssignDir( getWindowsKiCadRoot() );
     }
@@ -412,7 +374,7 @@ wxString PATHS::GetStockPlugins3DPath()
 #else
     wxString envPath;
 
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    if( RunningFromBuildDir() )
     {
         fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
         fn.AppendDir( wxT( ".." ) );
@@ -722,4 +684,59 @@ wxString PATHS::ResolveSiblingExecutable( const wxString& aBaseName )
         return wxEmptyString;
 
     return sibling.GetFullPath();
+}
+
+
+const wxString& PATHS::GetBuildRoot()
+{
+    static const wxString buildRoot = FindKiCadBuildRoot( GetExecutablePath() );
+
+    return buildRoot;
+}
+
+
+bool PATHS::RunningFromBuildDir()
+{
+    return wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) || !GetBuildRoot().IsEmpty();
+}
+
+
+wxString PATHS::FindKiCadBuildRoot( const wxString& aExecutablePath )
+{
+#if !defined( __WXMAC__ ) && !defined( __WXMSW__ )
+    if( aExecutablePath.IsEmpty() )
+        return wxEmptyString;
+
+    // We don't have a perfect way to spot a build directory (e.g. when archived as artifacts in
+    // CI) but we can assume that the build directory will have a schemas directory that contains
+    // JSON files, as that's one of the things that we use this path for.
+    const auto looksLikeBuildDir = []( const wxFileName& aPath ) -> bool
+    {
+        const wxDir schemaDir( aPath.GetPathWithSep() + wxT( "schemas" ) );
+
+        if( !schemaDir.IsOpened() )
+            return false;
+
+        wxString filename;
+        return schemaDir.GetFirst( &filename, wxT( "*.json" ), wxDIR_FILES );
+    };
+
+    wxFileName fn;
+
+    if( aExecutablePath.EndsWith( wxT( "/" ) ) || aExecutablePath.EndsWith( wxT( "\\" ) ) )
+        fn.AssignDir( aExecutablePath );
+    else
+        fn.Assign( aExecutablePath );
+
+    while( fn.GetDirCount() > 0 && !looksLikeBuildDir( fn ) )
+        fn.RemoveLastDir();
+
+    if( fn.GetDirCount() == 0 )
+        return wxEmptyString;
+
+    return fn.GetPath();
+#else
+    wxUnusedVar( aExecutablePath );
+    return wxEmptyString;
+#endif
 }

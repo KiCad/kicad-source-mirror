@@ -26,6 +26,7 @@
 #include <kiway.h>
 #include <kiway_player.h>
 #include <kiway_mail.h>
+#include <paths.h>
 #include <pgm_base.h>
 #include <config.h>
 #include <id.h>
@@ -157,7 +158,7 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
     // To speed up development, it's sometimes nice to run kicad from inside
     // the build path.  In that case, each program will be in a subdirectory.
     // To find the DSOs, we need to go up one directory and then enter a subdirectory.
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    if( PATHS::RunningFromBuildDir() )
     {
 #ifdef __WXMAC__
         // On Mac, all of the kifaces are placed in the kicad.app bundle, even though the individual
@@ -185,8 +186,15 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
             default:             dirName = name + 1;              break;
         }
 
-        fn.RemoveLastDir();
+        const wxString& buildRoot = PATHS::GetBuildRoot();
+
+        if( !buildRoot.IsEmpty() )
+            fn.AssignDir( buildRoot );
+        else
+            fn.RemoveLastDir();
+
         fn.AppendDir( dirName );
+        fn.SetName( name );
 #endif
     }
 
@@ -224,13 +232,22 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         wxString dname = dso_search_path( aFaceId );
 
         // Insert DLL search path for kicad_3dsg from build dir
-        if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+        const wxString& buildRoot = PATHS::GetBuildRoot();
+
+        if( PATHS::RunningFromBuildDir() )
         {
-            wxFileName myPath = wxStandardPaths::Get().GetExecutablePath();
+            wxFileName myPath;
+
+            if( !buildRoot.IsEmpty() )
+                myPath.AssignDir( buildRoot );
+            else
+                myPath.Assign( wxStandardPaths::Get().GetExecutablePath() );
 
             if( !myPath.GetPath().EndsWith( wxT( "pcbnew" ) ) )
             {
-                myPath.RemoveLastDir();
+                if( buildRoot.IsEmpty() )
+                    myPath.RemoveLastDir();
+
                 myPath.AppendDir( wxT( "pcbnew" ) );
                 KIPLATFORM::APP::AddDynamicLibrarySearchPath( myPath.GetPath() );
             }

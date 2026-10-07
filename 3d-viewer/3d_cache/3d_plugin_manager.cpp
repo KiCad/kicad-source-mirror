@@ -121,7 +121,7 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     wxFileName          fn;
 
 #ifndef __WXMAC__
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    if( PATHS::RunningFromBuildDir() )
     {
         // set up to work from the build directory
         fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
@@ -151,7 +151,7 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     fn.AssignDir( PATHS::GetStockPlugins3DPath() );
     checkPluginPath( std::string( fn.GetPathWithSep().ToUTF8() ), searchpaths );
 #else
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    if( PATHS::RunningFromBuildDir() )
     {
     	// Exe will be at <build_dir>/pcbnew/pcbnew.app/Contents/MacOS/pcbnew for standalone
     	// Plugin will be at <build_dir>/kicad/KiCad.app/Contents/PlugIns/3d
@@ -325,7 +325,7 @@ void S3D_PLUGIN_MANAGER::checkPluginName( const wxString& aPath,
     }
 
     // prevent loading non-plugin dlls
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    if( PATHS::RunningFromBuildDir() )
     {
         if( !path.GetName().StartsWith( "s3d_plugin" )
             && !path.GetName().StartsWith( "libs3d_plugin" ) )

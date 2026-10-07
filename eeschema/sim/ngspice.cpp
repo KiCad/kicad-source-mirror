@@ -511,7 +511,7 @@ void NGSPICE::init_dll()
     std::vector<std::string> dllPaths = { "/usr/local/lib" };
 #endif
 
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    if( PATHS::RunningFromBuildDir() )
         dllPaths.emplace_back( NGSPICE_DLL_DIR );
 
 #if defined(__WINDOWS__) || (__WXMAC__)
