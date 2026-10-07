@@ -237,6 +237,7 @@ private:
     void ParseUnionNamesData( const ALTIUM_PCB_COMPOUND_FILE& aAltiumPcbFile, const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void HelperCreateTuningPatterns();
     void HelperSetFootprintMountingStyles();
+    void HelperSetFootprintStackups();
 
     /// Rebuild the composite netclasses and point every net at its effective netclass.
     void HelperAssignNetclassesToNets();

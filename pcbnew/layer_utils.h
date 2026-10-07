@@ -62,6 +62,21 @@ inline wxString AccumulateNames( const LSET& aLayers, const BOARD* aBoard )
 LSET GetAllFootprintLayers( const FOOTPRINT& aFootprint );
 
 /**
+ * Return the layers the footprint's items actually occupy.
+ *
+ * Unlike GetAllFootprintLayers(), a through-hole pad stored as the "*.Cu" wildcard
+ * contributes only the copper layers its padstack explicitly defines, because it adapts
+ * to whatever copper stackup it is placed on.
+ */
+LSET GetUsedFootprintLayers( const FOOTPRINT& aFootprint );
+
+/**
+ * Return the smallest even copper layer count whose stackup contains every copper layer in
+ * aLayers.
+ */
+int MinimalCopperLayerCount( const LSET& aLayers );
+
+/**
  * Compute the set of footprint-used layers that would be orphaned if the footprint's
  * allowed layer set is restricted to aCustomUserLayers (plus the tech and user masks).
  *

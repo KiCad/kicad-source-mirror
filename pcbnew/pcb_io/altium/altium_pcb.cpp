@@ -33,6 +33,7 @@
 #include <project/net_settings.h>
 #include <footprint.h>
 #include <layer_range.h>
+#include <layer_utils.h>
 #include <pcb_dimension.h>
 #include <pad.h>
 #include <pcb_shape.h>
@@ -747,6 +748,7 @@ void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&              altiumPcbFi
     // Components6 is parsed before Pads6, so the mounting style can only be derived once every
     // pad has been attached to its footprint.
     HelperSetFootprintMountingStyles();
+    HelperSetFootprintStackups();
 
     // fixup zone priorities since Altium stores them in the opposite order
     for( ZONE* zone : m_polygons )
@@ -875,6 +877,46 @@ void ALTIUM_PCB::Parse( const ALTIUM_PCB_COMPOUND_FILE&              altiumPcbFi
 }
 
 
+// Altium addresses each mid layer directly, while the default footprint stackup has one inner
+// layer that hides deeper items and spreads an In1 keepout to every inner layer
+static void altiumSetFootprintStackup( FOOTPRINT* aFootprint, const LSET& aDrawnCopper, int aMinCopperLayers )
+{
+    if( ( aDrawnCopper & LSET::InternalCuMask() ).none() )
+        return;
+
+    int copperCount = std::max( aMinCopperLayers, LAYER_UTILS::MinimalCopperLayerCount( aDrawnCopper ) );
+    const LSET stackupCopper = LSET::AllCuMask( copperCount );
+
+    for( ZONE* zone : aFootprint->Zones() )
+    {
+        LSET layers = zone->GetLayerSet();
+
+        if( ( layers & LSET::AllCuMask() ).count() > 1 )
+            zone->SetLayerSet( layers & ( stackupCopper | ~LSET::AllCuMask() ) );
+    }
+
+    // Every drawn layer is in the stackup, so copper outside it is a multi-layer expansion copy
+    std::vector<BOARD_ITEM*> outsideStackup;
+
+    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
+    {
+        if( IsCopperLayer( item->GetLayer() ) && !stackupCopper.test( item->GetLayer() ) )
+            outsideStackup.push_back( item );
+    }
+
+    for( BOARD_ITEM* item : outsideStackup )
+    {
+        aFootprint->Remove( item );
+        delete item;
+    }
+
+    LSET userLayers = LAYER_UTILS::GetAllFootprintLayers( *aFootprint ) & LSET::UserDefinedLayersMask();
+
+    aFootprint->SetStackupMode( FOOTPRINT_STACKUP::CUSTOM_LAYERS );
+    aFootprint->SetStackupLayers( stackupCopper | userLayers );
+}
+
+
 std::unique_ptr<FOOTPRINT> ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE& altiumLibFile,
                                                        const wxString&           aFootprintName )
 {
@@ -970,6 +1012,18 @@ std::unique_ptr<FOOTPRINT> ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE&
         field->SetTextThickness( defaultTextThickness );
     }
 
+    // Multi-layer records expand to every copper layer here, so only a record's own layer counts
+    LSET drawnCopper;
+
+    auto noteLayer =
+            [&]( ALTIUM_LAYER aLayer )
+            {
+                PCB_LAYER_ID klayer = GetKicadLayer( aLayer );
+
+                if( IsCopperLayer( klayer ) )
+                    drawnCopper.set( klayer );
+            };
+
     for( int primitiveIndex = 0; parser.GetRemainingBytes() >= 4; primitiveIndex++ )
     {
         ALTIUM_RECORD recordtype = static_cast<ALTIUM_RECORD>( parser.Peek<uint8_t>() );
@@ -979,42 +1033,50 @@ std::unique_ptr<FOOTPRINT> ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE&
         case ALTIUM_RECORD::ARC:
         {
             AARC6 arc( parser );
+            noteLayer( arc.layer );
             ConvertArcs6ToFootprintItem( footprint.get(), arc, primitiveIndex, false );
             break;
         }
         case ALTIUM_RECORD::PAD:
         {
             APAD6 pad( parser );
+            noteLayer( pad.layer );
             ConvertPads6ToFootprintItem( footprint.get(), pad );
             break;
         }
         case ALTIUM_RECORD::VIA:
         {
             AVIA6 via( parser );
+            noteLayer( via.layer_start );
+            noteLayer( via.layer_end );
             ConvertVias6ToFootprintItem( footprint.get(), via );
             break;
         }
         case ALTIUM_RECORD::TRACK:
         {
             ATRACK6 track( parser );
+            noteLayer( track.layer );
             ConvertTracks6ToFootprintItem( footprint.get(), track, primitiveIndex, false );
             break;
         }
         case ALTIUM_RECORD::TEXT:
         {
             ATEXT6 text( parser, m_unicodeStrings );
+            noteLayer( text.layer );
             ConvertTexts6ToFootprintItem( footprint.get(), text );
             break;
         }
         case ALTIUM_RECORD::FILL:
         {
             AFILL6 fill( parser );
+            noteLayer( fill.layer );
             ConvertFills6ToFootprintItem( footprint.get(), fill, false );
             break;
         }
         case ALTIUM_RECORD::REGION:
         {
             AREGION6 region( parser, false );
+            noteLayer( region.layer );
             ConvertShapeBasedRegions6ToFootprintItem( footprint.get(), region, primitiveIndex );
             break;
         }
@@ -1240,6 +1302,8 @@ std::unique_ptr<FOOTPRINT> ALTIUM_PCB::ParseFootprint( ALTIUM_PCB_COMPOUND_FILE&
     // as KiCad's footprint checker.  Unlike the board importer this can be done here, because a
     // library footprint's pads are converted inline above.
     footprint->SetAttributes( footprint->GetAttributes() | footprint->GetLikelyAttribute() );
+
+    altiumSetFootprintStackup( footprint.get(), drawnCopper, 2 );
 
     if( parser.HasParsingError() )
         THROW_IO_ERRORF( wxT( "%s stream was not parsed correctly" ), FormatPath( streamName ) );
@@ -5267,6 +5331,32 @@ void ALTIUM_PCB::HelperCreateTuningPatterns()
         m_reporter->Report( wxString::Format( _( "Imported %d length-tuning pattern(s)." ),
                                               created ),
                             RPT_SEVERITY_INFO );
+    }
+}
+
+
+void ALTIUM_PCB::HelperSetFootprintStackups()
+{
+    for( FOOTPRINT* footprint : m_components )
+    {
+        if( !footprint )
+            continue;
+
+        LSET drawnCopper;
+
+        // Board copper is bounded by the board, so single-layer items are the drawn layers
+        footprint->RunOnChildren(
+                [&]( BOARD_ITEM* aItem )
+                {
+                    LSET copper = aItem->GetLayerSet() & LSET::AllCuMask();
+
+                    if( copper.count() == 1 )
+                        drawnCopper |= copper;
+                },
+                RECURSE_MODE::RECURSE );
+
+        // A bottom-side footprint's inner items are mirrored through the board's stackup
+        altiumSetFootprintStackup( footprint, drawnCopper, m_board->GetCopperLayerCount() );
     }
 }
 

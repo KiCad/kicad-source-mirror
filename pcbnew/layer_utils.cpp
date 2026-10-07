@@ -19,6 +19,8 @@
 
 #include "layer_utils.h"
 
+#include <algorithm>
+
 #include <pad.h>
 
 
@@ -54,8 +56,7 @@ LSET LAYER_UTILS::GetAllFootprintLayers( const FOOTPRINT& aFootprint )
 }
 
 
-LSET LAYER_UTILS::GetOrphanedFootprintLayers( const FOOTPRINT& aFootprint,
-                                              const LSET&      aCustomUserLayers )
+LSET LAYER_UTILS::GetUsedFootprintLayers( const FOOTPRINT& aFootprint )
 {
     LSET usedLayers{};
 
@@ -72,7 +73,8 @@ LSET LAYER_UTILS::GetOrphanedFootprintLayers( const FOOTPRINT& aFootprint,
                     const PAD* pad = static_cast<const PAD*>( aSubItem );
                     LSET       copper = itemLayers & LSET::AllCuMask();
 
-                    if( copper.count() > 1 )
+                    // A blind span such as F.Cu..In2.Cu is a real layer choice, not the wildcard
+                    if( copper.count() > 1 && copper == LSET::AllCuMask( copper.count() ) )
                     {
                         for( PCB_LAYER_ID layer : copper )
                         {
@@ -85,6 +87,28 @@ LSET LAYER_UTILS::GetOrphanedFootprintLayers( const FOOTPRINT& aFootprint,
                 usedLayers |= itemLayers;
             },
             RECURSE_MODE::RECURSE );
+
+    return usedLayers;
+}
+
+
+int LAYER_UTILS::MinimalCopperLayerCount( const LSET& aLayers )
+{
+    const LSET innerCopper = aLayers & LSET::InternalCuMask();
+    int        copperCount = 2;
+
+    for( PCB_LAYER_ID layer : innerCopper )
+        copperCount = std::max( copperCount, static_cast<int>( CopperLayerToOrdinal( layer ) ) + 2 );
+
+    // Stackups only come in even copper counts
+    return copperCount + copperCount % 2;
+}
+
+
+LSET LAYER_UTILS::GetOrphanedFootprintLayers( const FOOTPRINT& aFootprint,
+                                              const LSET&      aCustomUserLayers )
+{
+    LSET usedLayers = GetUsedFootprintLayers( aFootprint );
 
     usedLayers &= ~aCustomUserLayers;
     usedLayers &= ~LSET::AllTechMask();

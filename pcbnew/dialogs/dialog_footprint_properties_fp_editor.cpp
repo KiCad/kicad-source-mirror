@@ -379,7 +379,14 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     {
         m_cbCustomLayers->SetValue( false );
 
-        m_copperLayerCount->SetSelection( 0 );
+        // Seed the inactive custom controls so switching to them keeps every layer in use
+        const LSET usedLayers = LAYER_UTILS::GetUsedFootprintLayers( *m_footprint );
+        const LSET usedUserLayers = usedLayers & LSET::UserDefinedLayersMask();
+
+        for( PCB_LAYER_ID userLayer : usedUserLayers )
+            m_customUserLayers->push_back( userLayer );
+
+        m_copperLayerCount->SetSelection( LAYER_UTILS::MinimalCopperLayerCount( usedLayers ) / 2 - 1 );
         break;
     }
     case FOOTPRINT_STACKUP::CUSTOM_LAYERS:
