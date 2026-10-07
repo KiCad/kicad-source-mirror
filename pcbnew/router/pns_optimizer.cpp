@@ -203,14 +203,17 @@ void OPTIMIZER::ClearCache( bool aStaticOnly )
         return;
     }
 
-    for( auto i = m_cacheTags.begin(); i!= m_cacheTags.end(); ++i )
+    for( const std::pair<ITEM* const, CACHED_ITEM>& entry : m_cacheTags )
     {
-        if( i->second.m_isStatic )
-        {
-            m_cache.Remove( i->first );
-            m_cacheTags.erase( i->first );
-        }
+        if( entry.second.m_isStatic )
+            m_cache.Remove( entry.first );
     }
+
+    std::erase_if( m_cacheTags,
+                   []( const std::pair<ITEM* const, CACHED_ITEM>& entry )
+                   {
+                       return entry.second.m_isStatic;
+                   } );
 }
 
 
