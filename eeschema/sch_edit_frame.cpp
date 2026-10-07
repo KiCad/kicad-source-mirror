@@ -536,9 +536,9 @@ void SCH_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
     wxLogTrace( traceCrossProbeFlash, "Timer(SCH) fired: phase=%d running=%d items=%zu", m_crossProbeFlashPhase,
                 (int) m_crossProbeFlashing, m_crossProbeFlashItems.size() );
 
-    if( !m_crossProbeFlashing )
+    if( !m_crossProbeFlashing || !GetToolManager() )
     {
-        wxLogTrace( traceCrossProbeFlash, "Timer fired but not flashing (ignored)" );
+        wxLogTrace( traceCrossProbeFlash, "Timer fired without active flashing or tools (ignored)" );
         return;
     }
 
@@ -594,6 +594,9 @@ void SCH_EDIT_FRAME::OnCrossProbeFlashTimer( wxTimerEvent& aEvent )
 
 SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 {
+    m_crossProbeFlashing = false;
+    m_crossProbeFlashTimer.Stop();
+
     m_connectivitySubscription.Reset();
 
     // Ensure that teardowns without doCloseWindow are fully unregistered
@@ -1259,6 +1262,9 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 
 void SCH_EDIT_FRAME::doCloseWindow()
 {
+    m_crossProbeFlashing = false;
+    m_crossProbeFlashTimer.Stop();
+
     Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
     wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED, &SCH_EDIT_FRAME::onPluginAvailabilityChanged, this );
 
