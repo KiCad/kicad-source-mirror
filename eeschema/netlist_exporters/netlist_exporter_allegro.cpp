@@ -276,17 +276,19 @@ bool NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         m_orderedSymbolsSheetpath.pop_front();
         m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>>( groupCount, first_ele ) );
 
-        for( auto it = m_orderedSymbolsSheetpath.begin(); it != m_orderedSymbolsSheetpath.end(); ++it )
+        for( auto it = m_orderedSymbolsSheetpath.begin(); it != m_orderedSymbolsSheetpath.end(); )
         {
             if( it->first->GetValue( &it->second, RAW_VALUE, m_exportVariant )
                 != first_ele.first->GetValue( &first_ele.second, RAW_VALUE, m_exportVariant ) )
             {
+                ++it;
                 continue;
             }
 
             if( it->first->GetFootprintFieldText( &it->second, RAW_VALUE, m_exportVariant )
                 != first_ele.first->GetFootprintFieldText( &first_ele.second, RAW_VALUE, m_exportVariant ) )
             {
+                ++it;
                 continue;
             }
 
@@ -295,15 +297,16 @@ bool NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
             if( removeTailDigits( ref1 ) == removeTailDigits( ref2 ) )
             {
-                m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>>( groupCount,
-                                                                                                  ( *it ) ) );
+                m_componentGroups.insert( std::pair<int, std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>>( groupCount, *it ) );
                 it = m_orderedSymbolsSheetpath.erase( it );
 
                 if( m_orderedSymbolsSheetpath.size() == 0 )
                     break;
                 else
-                    it--;   // we want to test the new it element, so compensate the next ++it
+                    continue;   // Don't increment iterator; we want the item that replaced the erased one
             }
+
+            ++it;
         }
 
         groupCount++;
