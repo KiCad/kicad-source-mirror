@@ -306,7 +306,8 @@ BOOST_AUTO_TEST_CASE( RegeneratingAViaStackDoesNotDoubleStageItsHops )
     board.Add( stack );
     stack->Regenerate( &board, nullptr );
 
-    std::vector<BOARD_ITEM*> original( stack->GetBoardItems().begin(), stack->GetBoardItems().end() );
+    const auto originalItems = stack->GetBoardItems();
+    std::vector<BOARD_ITEM*> original( originalItems.begin(), originalItems.end() );
     BOOST_REQUIRE_EQUAL( original.size(), 2u );
 
     BOARD_COMMIT commit( &mgr, true, false );
@@ -351,7 +352,8 @@ BOOST_AUTO_TEST_CASE( UpdateOutsideAnEditIsInert )
     board.Add( stack );
     stack->Regenerate( &board, nullptr );
 
-    std::vector<BOARD_ITEM*> before( stack->GetBoardItems().begin(), stack->GetBoardItems().end() );
+    const auto beforeItems = stack->GetBoardItems();
+    std::vector<BOARD_ITEM*> before( beforeItems.begin(), beforeItems.end() );
     BOOST_REQUIRE_EQUAL( before.size(), 2u );
 
     BOARD_COMMIT commit( &mgr, true, false );
@@ -359,7 +361,8 @@ BOOST_AUTO_TEST_CASE( UpdateOutsideAnEditIsInert )
     // No EditStart, so IN_EDIT is not set.
     BOOST_CHECK( !stack->Update( nullptr, &board, &commit ) );
 
-    std::vector<BOARD_ITEM*> after( stack->GetBoardItems().begin(), stack->GetBoardItems().end() );
+    const auto afterItems = stack->GetBoardItems();
+    std::vector<BOARD_ITEM*> after( afterItems.begin(), afterItems.end() );
 
     BOOST_REQUIRE_EQUAL( after.size(), before.size() );
     BOOST_CHECK_MESSAGE( std::set<BOARD_ITEM*>( before.begin(), before.end() )
