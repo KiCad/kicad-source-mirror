@@ -2196,9 +2196,9 @@ void LINE_PLACER::removeAntennas( NODE* aNode, const ITEM* aEndItem, const VECTO
         if( link->Anchor( 0 ) != aJoin && link->Anchor( 1 ) != aJoin )
             continue;
 
-        VECTOR2I far = link->Anchor( 0 ) == aJoin ? link->Anchor( 1 ) : link->Anchor( 0 );
+        VECTOR2I farEnd = link->Anchor( 0 ) == aJoin ? link->Anchor( 1 ) : link->Anchor( 0 );
 
-        if( reachesAnchor( aNode->FindJoint( far, link ), false, false ) )
+        if( reachesAnchor( aNode->FindJoint( farEnd, link ), false, false ) )
         {
             hasAnchoredSide = true;
             continue;
@@ -2220,9 +2220,9 @@ void LINE_PLACER::removeAntennas( NODE* aNode, const ITEM* aEndItem, const VECTO
             }
 
             branch.push_back( link );
-            far = link->Anchor( 0 ) == from ? link->Anchor( 1 ) : link->Anchor( 0 );
+            farEnd = link->Anchor( 0 ) == from ? link->Anchor( 1 ) : link->Anchor( 0 );
 
-            const JOINT* end = aNode->FindJoint( far, link );
+            const JOINT* end = aNode->FindJoint( farEnd, link );
 
             if( !end )
                 break;
@@ -2244,7 +2244,7 @@ void LINE_PLACER::removeAntennas( NODE* aNode, const ITEM* aEndItem, const VECTO
                     next = static_cast<LINKED_ITEM*>( adjacent );
             }
 
-            from = far;
+            from = farEnd;
             link = next;
         }
     }
