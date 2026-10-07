@@ -280,9 +280,22 @@ int ExecuteCommandThroughShell( const wxString& aCommand, wxProcess* aProcess )
     wxExecuteEnv env;
     wxGetEnvMap( &env.env );
 
-    // Prepend the app bin path so that KiCad's python is used by default
+    // Preserve Windows PATH spelling while putting KiCad's Python first.
     wxString binPath = wxFileName( wxStandardPaths::Get().GetExecutablePath() ).GetPath();
-    env.env["PATH"] = binPath + wxS( ';' ) + env.env["PATH"];
+    bool     foundPath = false;
+
+    for( auto& entry : env.env )
+    {
+        if( entry.first.CmpNoCase( wxS( "PATH" ) ) == 0 )
+        {
+            entry.second = binPath + wxS( ';' ) + entry.second;
+            foundPath = true;
+            break;
+        }
+    }
+
+    if( !foundPath )
+        env.env["PATH"] = binPath;
 
     // The array form of wxExecute is unusable with cmd.exe. wx joins the argv elements back into a
     // single command line, wrapping any element containing spaces in double quotes and escaping
