@@ -762,8 +762,12 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
         for( const NET_NODE& netNode : netNodes )
         {
             wxString refText = netNode.m_Pin->GetParentSymbol()->GetRef( &netNode.m_Sheet );
-            wxString pinText = netNode.m_Pin->GetShownNumber();
-            nets.push_back( refText + wxString( "." ) + pinText );
+
+            // Emit the resolved footprint pad number(s), not the raw symbol pin number, so a
+            // remapped pin's net lands on the right pad when the board reads this netlist
+            // (issue #2282).  Shared with the PIN_INFO path via resolvePadNumbers.
+            for( const wxString& num :  resolvePadNumbers( netNode.m_Pin, netNode.m_Sheet ) )
+                nets.push_back( refText + wxString( "." ) + num );
         }
 
         fmt::print( m_f, "{}", fmt::join( nets, ",\n\t" ) );
