@@ -33,8 +33,7 @@
 /* Generate CADSTAR net list. */
 static wxString StartLine( wxT( "." ) );
 
-bool NETLIST_EXPORTER_CADSTAR::writeNetlist( const wxString& aOutFileName,
-                                             unsigned /* aNetlistOptions */,
+bool NETLIST_EXPORTER_CADSTAR::writeNetlist( const wxString& aOutFileName, unsigned /* aNetlistOptions */,
                                              REPORTER& aReporter )
 {
     int ret = 0;
@@ -74,10 +73,11 @@ bool NETLIST_EXPORTER_CADSTAR::writeNetlist( const wxString& aOutFileName,
             for( EDA_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
                 sheetItems.push_back( item );
 
-            auto pred = []( const EDA_ITEM* item1, const EDA_ITEM* item2 )
-            {
-                return item1->m_Uuid < item2->m_Uuid;
-            };
+            auto pred =
+                    []( const EDA_ITEM* item1, const EDA_ITEM* item2 )
+                    {
+                        return item1->m_Uuid < item2->m_Uuid;
+                    };
 
             std::sort( sheetItems.begin(), sheetItems.end(), pred );
 

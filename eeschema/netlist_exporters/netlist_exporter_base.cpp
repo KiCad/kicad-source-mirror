@@ -54,7 +54,7 @@ NETLIST_EXPORTER_BASE::CONNECTIVITY_SCOPE::~CONNECTIVITY_SCOPE()
 }
 
 bool NETLIST_EXPORTER_BASE::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
-                                        REPORTER& aReporter )
+                                          REPORTER& aReporter )
 {
     try
     {
@@ -105,11 +105,11 @@ void NETLIST_EXPORTER_BASE::rebuildConnectivity()
             m_exportItemNets[*sheet->second].emplace( key.item, view->Name() );
         }
 
-        for( const auto& group : facade.GetNetMap() )
+        for( const SCH_CONNECTIVITY::NET_GROUP& group : facade.GetNetMap() )
         {
             EXPORT_NET result{ group.name, false, {} };
 
-            for( const auto& net : group.instances )
+            for( const SCH_CONNECTIVITY::NET_VIEW& net : group.instances )
             {
                 if( !net.IsNet() )
                     continue;
@@ -136,12 +136,14 @@ void NETLIST_EXPORTER_BASE::rebuildConnectivity()
 
     for( const SCH_SHEET_PATH& path : m_exportSheets )
     {
-        auto& itemNets = m_exportItemNets[path];
-        auto collect = [&]( SCH_ITEM* item )
-        {
-            if( SCH_CONNECTION* connection = item->Connection( &path ) )
-                itemNets.emplace( item->m_Uuid, connection->Name() );
-        };
+        std::unordered_map<KIID, wxString>& itemNets = m_exportItemNets[path];
+
+        auto collect =
+                [&]( SCH_ITEM* item )
+                {
+                    if( SCH_CONNECTION* connection = item->Connection( &path ) )
+                        itemNets.emplace( item->m_Uuid, connection->Name() );
+                };
 
         for( SCH_ITEM* item : path.LastScreen()->Items() )
         {
@@ -172,7 +174,7 @@ void NETLIST_EXPORTER_BASE::rebuildConnectivity()
 }
 
 std::optional<wxString> NETLIST_EXPORTER_BASE::itemNetName( const SCH_ITEM& aItem,
-                                                          const SCH_SHEET_PATH& aPath ) const
+                                                            const SCH_SHEET_PATH& aPath ) const
 {
     const auto sheet = m_exportItemNets.find( aPath );
 
@@ -185,18 +187,15 @@ std::optional<wxString> NETLIST_EXPORTER_BASE::itemNetName( const SCH_ITEM& aIte
 
 
 // a "less than" test on two LIB_SYMBOLs (.m_name wxStrings)
-bool LIB_SYMBOL_LESS_THAN::operator()( LIB_SYMBOL* const& libsymbol1,
-                                       LIB_SYMBOL* const& libsymbol2 ) const
+bool LIB_SYMBOL_LESS_THAN::operator()( LIB_SYMBOL* const& libsymbol1, LIB_SYMBOL* const& libsymbol2 ) const
 {
     // Use case specific GetName() wxString compare
     return libsymbol1->GetLibId() < libsymbol2->GetLibId();
 }
 
 
-wxString NETLIST_EXPORTER_BASE::MakeCommandLine( const wxString& aFormatString,
-                                                 const wxString& aNetlistFile,
-                                                 const wxString& aFinalFile,
-                                                 const wxString& aProjectPath )
+wxString NETLIST_EXPORTER_BASE::MakeCommandLine( const wxString& aFormatString, const wxString& aNetlistFile,
+                                                 const wxString& aFinalFile, const wxString& aProjectPath )
 {
     // Expand format symbols in the command line:
     // %B => base filename of selected output file, minus path and extension.
@@ -204,10 +203,10 @@ wxString NETLIST_EXPORTER_BASE::MakeCommandLine( const wxString& aFormatString,
     // %I => full filename of the input file (the intermediate net file).
     // %O => complete filename and path (but without extension) of the user chosen output file.
 
-    wxString   ret  = aFormatString;
-    wxFileName in   = aNetlistFile;
-    wxFileName out  = aFinalFile;
-    wxString str_out  = out.GetFullPath();
+    wxString   ret     = aFormatString;
+    wxFileName in      = aNetlistFile;
+    wxFileName out     = aFinalFile;
+    wxString   str_out = out.GetFullPath();
 
     ret.Replace( "%P", aProjectPath, true );
     ret.Replace( "%B", out.GetName(), true );
@@ -229,8 +228,7 @@ wxString NETLIST_EXPORTER_BASE::MakeCommandLine( const wxString& aFormatString,
 }
 
 
-SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem,
-                                                   const SCH_SHEET_PATH& aSheetPath )
+SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem, const SCH_SHEET_PATH& aSheetPath )
 {
     wxCHECK( aItem, nullptr );
 
@@ -275,8 +273,7 @@ SCH_SYMBOL* NETLIST_EXPORTER_BASE::findNextSymbol( EDA_ITEM* aItem,
 }
 
 
-std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
-                                                            const SCH_SHEET_PATH& aSheetPath )
+std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheetPath )
 {
     std::vector<PIN_INFO> pins;
 
@@ -310,7 +307,7 @@ std::vector<PIN_INFO> NETLIST_EXPORTER_BASE::CreatePinList( SCH_SYMBOL* aSymbol,
     {
         for( const SCH_PIN* pin : aSymbol->GetPins( &aSheetPath ) )
         {
-            if( const auto netName = itemNetName( *pin, aSheetPath ) )
+            if( const std::optional<wxString> netName = itemNetName( *pin, aSheetPath ) )
                 appendResolvedPins( pins, pin, aSheetPath, *netName );
         }
     }
@@ -394,7 +391,7 @@ const std::set<wxString>& NETLIST_EXPORTER_BASE::footprintPads( const wxString& 
 void NETLIST_EXPORTER_BASE::appendResolvedPins( std::vector<PIN_INFO>& aPins, const SCH_PIN* aPin,
                                                 const SCH_SHEET_PATH& aSheetPath, const wxString& aNetName )
 {
-    const wxString baseName = aPin->GetShownName();
+    const wxString& baseName = aPin->GetShownName();
 
     for( const wxString& padNum : resolvePadNumbers( aPin, aSheetPath ) )
     {
@@ -431,8 +428,10 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins( std::vector<PIN_INFO>& aPins )
             // the same pad on *different* nets - must survive so it stays visible and is flagged
             // by ERC (issue #2282).  Shared multi-unit pins and jumpers carry the same source pin
             // number, so they still collapse below as before.
-            if( aPins[idxBest].netName != aPins[jj].netName && !aPins[idxBest].srcPin.IsEmpty()
-                && !aPins[jj].srcPin.IsEmpty() && aPins[idxBest].srcPin != aPins[jj].srcPin )
+            if( aPins[idxBest].netName != aPins[jj].netName
+                    && !aPins[idxBest].srcPin.IsEmpty()
+                    && !aPins[jj].srcPin.IsEmpty()
+                    && aPins[idxBest].srcPin != aPins[jj].srcPin )
             {
                 continue;
             }
@@ -457,8 +456,7 @@ void NETLIST_EXPORTER_BASE::eraseDuplicatePins( std::vector<PIN_INFO>& aPins )
 }
 
 
-void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol,
-                                                  const SCH_SHEET_PATH& aSheetPath,
+void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol, const SCH_SHEET_PATH& aSheetPath,
                                                   std::vector<PIN_INFO>& aPins )
 {
     const wxString ref = aSchSymbol->GetRef( &aSheetPath );
@@ -467,14 +465,14 @@ void NETLIST_EXPORTER_BASE::findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol,
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
         {
-            auto* symbol = static_cast<SCH_SYMBOL*>( item );
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             if( symbol->GetRef( &sheet ).CmpNoCase( ref ) != 0 )
                 continue;
 
             for( const SCH_PIN* pin : symbol->GetPins( &sheet ) )
             {
-                if( const auto netName = itemNetName( *pin, sheet ) )
+                if( const std::optional<wxString> netName = itemNetName( *pin, sheet ) )
                     appendResolvedPins( aPins, pin, sheet, *netName );
             }
         }
