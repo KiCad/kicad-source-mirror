@@ -2837,6 +2837,39 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
                     m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
             };
 
+    auto updateGraphicToCursor = [&]( const VECTOR2I& aCursorPos, LEADER_MODE aAngleSnap )
+    {
+        VECTOR2I clampedCursorPos = aCursorPos;
+
+        if( shape == SHAPE_T::CIRCLE || shape == SHAPE_T::ARC )
+            clampedCursorPos = getClampedRadiusEnd( twoPointMgr.GetOrigin(), aCursorPos );
+        else
+            clampedCursorPos = getClampedDifferenceEnd( twoPointMgr.GetOrigin(), aCursorPos );
+
+        if( started && aAngleSnap != LEADER_MODE::DIRECT )
+        {
+            const VECTOR2I lineVector( clampedCursorPos - VECTOR2I( twoPointMgr.GetOrigin() ) );
+
+            VECTOR2I newEnd;
+
+            if( aAngleSnap == LEADER_MODE::DEG90 )
+                newEnd = GetVectorSnapped90( lineVector );
+            else
+                newEnd = GetVectorSnapped45( lineVector, ( shape == SHAPE_T::RECTANGLE ) );
+
+            m_controls->ForceCursorPosition( true, VECTOR2I( twoPointMgr.GetEnd() ) );
+            twoPointMgr.SetEnd( twoPointMgr.GetOrigin() + newEnd );
+            twoPointMgr.SetAngleSnap( aAngleSnap );
+        }
+        else
+        {
+            twoPointMgr.SetEnd( clampedCursorPos );
+            twoPointMgr.SetAngleSnap( LEADER_MODE::DIRECT );
+        }
+
+        updateSegmentFromGeometryMgr( twoPointMgr, graphic );
+    };
+
     m_controls->ShowCursor( true );
     m_controls->ForceCursorPosition( false );
     // Set initial cursor
@@ -3036,6 +3069,9 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
             }
             else
             {
+                // The click decides the shape, wherever the last motion event left it
+                updateGraphicToCursor( cursorPos, angleSnap );
+
                 // Check if the shape needs more clicks
                 if( graphic->ContinueEdit( cursorPos ) )
                 {
@@ -3115,35 +3151,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
             }
             else
             {
-                VECTOR2I clampedCursorPos = cursorPos;
-
-                if( shape == SHAPE_T::CIRCLE || shape == SHAPE_T::ARC )
-                    clampedCursorPos = getClampedRadiusEnd( twoPointMgr.GetOrigin(), cursorPos );
-                else
-                    clampedCursorPos = getClampedDifferenceEnd( twoPointMgr.GetOrigin(), cursorPos );
-
-                // constrained lines
-                if( started && angleSnap != LEADER_MODE::DIRECT )
-                {
-                    const VECTOR2I lineVector( clampedCursorPos - VECTOR2I( twoPointMgr.GetOrigin() ) );
-
-                    VECTOR2I newEnd;
-                    if( angleSnap == LEADER_MODE::DEG90 )
-                        newEnd = GetVectorSnapped90( lineVector );
-                    else
-                        newEnd = GetVectorSnapped45( lineVector, ( shape == SHAPE_T::RECTANGLE ) );
-
-                    m_controls->ForceCursorPosition( true, VECTOR2I( twoPointMgr.GetEnd() ) );
-                    twoPointMgr.SetEnd( twoPointMgr.GetOrigin() + newEnd );
-                    twoPointMgr.SetAngleSnap( angleSnap );
-                }
-                else
-                {
-                    twoPointMgr.SetEnd( clampedCursorPos );
-                    twoPointMgr.SetAngleSnap( LEADER_MODE::DIRECT );
-                }
-
-                updateSegmentFromGeometryMgr( twoPointMgr, graphic );
+                updateGraphicToCursor( cursorPos, angleSnap );
                 m_view->Update( &m_preview );
                 m_view->Update( &twoPointAsst );
             }
