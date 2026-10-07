@@ -40,6 +40,12 @@ def get_output_path( kitest: KiTestFixture, test_name: str, filename: str ) -> P
     if output_path.exists():
         output_path.unlink()
 
+    if test_name == "eagle" and output_path.suffix == ".kicad_sch":
+        symbol_lib = output_path.with_name( f"{output_path.stem}-eagle-import.kicad_sym" )
+
+        if symbol_lib.exists():
+            symbol_lib.unlink()
+
     return output_path
 
 
