@@ -93,7 +93,7 @@ private:
      * Write the $PACKAGES section
      *
      */
-    void toAllegroPackages();
+    bool toAllegroPackages();
 
     /**
      * Write the $NETS section

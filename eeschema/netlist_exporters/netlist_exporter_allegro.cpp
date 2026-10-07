@@ -72,7 +72,7 @@ bool NETLIST_EXPORTER_ALLEGRO::writeNetlist( const wxString& aOutFileName, unsig
         extractComponentsInfo();
 
         // Start with package definitions, which we create from component groups.
-        toAllegroPackages();
+        success &= toAllegroPackages();
 
         // Write out package properties. NOTE: Allegro doesn't recognize much...
         toAllegroPackageProperties();
@@ -264,7 +264,7 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
 }
 
 
-void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
+bool NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 {
     int groupCount = 1;
     wxString deviceFileCreatingError = wxString( "" );
@@ -510,7 +510,12 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
     }
 
     if( !deviceFileCreatingError.IsEmpty() )
+    {
         DisplayError( nullptr, deviceFileCreatingError );
+        return false;
+    }
+
+    return true;
 }
 
 
