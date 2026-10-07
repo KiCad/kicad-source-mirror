@@ -3248,6 +3248,10 @@ int PCBNEW_JOBS_HANDLER::JobUpgrade( JOB* aJob )
     {
         IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::FindPlugin( PCB_IO_MGR::KICAD_SEXP ) );
         BOARD*              brd = getBoard( job->m_filename );
+
+        if( !brd )
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
         if( brd->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION )
             shouldSave = true;
 
