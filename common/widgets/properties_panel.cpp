@@ -909,10 +909,12 @@ void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
     {
         m_grid->CommitChangesFromEditor();
 
-        CallAfter( [this]()
-                   {
-                       m_grid->SelectProperty( m_grid->GetSelectedProperty(), true );
-                   } );
+        CallAfter(
+                [this]()
+                {
+                    if( wxPGProperty* prop = m_grid->GetSelectedProperty() )
+                        m_grid->SelectProperty( prop, true );
+                } );
     }
 
     aEvent.Skip();
