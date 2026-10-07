@@ -304,9 +304,7 @@ BOOST_AUTO_TEST_CASE( IntrospectedColorProperties )
             };
 
     checkColor( COLOR4D( 0.25, 0.5, 0.75, 0.5 ), wxT( "rgba(64, 128, 191, 0.502)" ) );
-#ifndef __WXMAC__   // WXMAC doesn't have colour names initialized when run headless
-    checkColor( COLOR4D( wxString( wxT( "red" ) ) ), wxT( "rgb(255, 0, 0)" ) );
-#endif
+    checkColor( COLOR4D( 1.0, 0.0, 0.0, 1.0 ), wxT( "rgb(255, 0, 0)" ) );
 }
 
 
