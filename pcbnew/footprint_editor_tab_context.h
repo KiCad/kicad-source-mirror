@@ -148,8 +148,10 @@ public:
     BOARD* GetBoard() const { return m_board.get(); }
 
     const wxString& GetLibNickname() const  { return m_libNickname; }
+    void SetLibNickname( const wxString& aNickname ) { m_libNickname = aNickname; }
+
     const wxString& GetFootprintName() const { return m_footprintName; }
-    void SetFootprintName( const wxString& aName ) { m_footprintName = aName; }
+    void SetFootprintName( const wxString& aFootprintName ) { m_footprintName = aFootprintName; }
 
     /**
      * Baseline clone captured at load, used to detect edits and to revert.

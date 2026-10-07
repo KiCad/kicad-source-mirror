@@ -887,6 +887,7 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 
         m_activeTab->SetOriginalFootprintCopy( std::unique_ptr<FOOTPRINT>( fp_copy ) );
         m_activeTab->SetFootprintNameWhenLoaded( m_footprintNameWhenLoaded );
+        m_activeTab->SetLibNickname( aFootprint->GetFPID().GetLibNickname() );
         m_activeTab->SetFootprintName( aFootprint->GetFPID().GetLibItemName() );
     }
 
@@ -1480,7 +1481,8 @@ void FOOTPRINT_EDIT_FRAME::RenameFootprintTab( const LIB_ID& aOldId, const LIB_I
     if( idx < static_cast<int>( m_tabContexts.size() ) )
     {
         // A tab switch restores the context's baseline onto the frame, so it must track the rename too
-        // or the next save would delete the pre-rename library entry
+        // or the next save would delete the pre-renamed library entry
+        m_tabContexts[idx]->SetLibNickname( newLib );
         m_tabContexts[idx]->SetFootprintName( newName );
         m_tabContexts[idx]->SetFootprintNameWhenLoaded( newName );
     }
