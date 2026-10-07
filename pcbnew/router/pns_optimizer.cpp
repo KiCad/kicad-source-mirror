@@ -1319,8 +1319,8 @@ bool OPTIMIZER::fanoutCleanup( LINE* aLine )
     return false;
 }
 
-int findCoupledVertices( const VECTOR2I& aVertex, const SEG& aOrigSeg,
-                         const SHAPE_LINE_CHAIN& aCoupled, DIFF_PAIR* aPair, int* aIndices )
+int findCoupledVertices( const VECTOR2I& aVertex, const SEG& aOrigSeg, const SHAPE_LINE_CHAIN& aCoupled,
+                         DIFF_PAIR* aPair, std::vector<int>* aIndices )
 {
     int count = 0;
 
@@ -1336,7 +1336,7 @@ int findCoupledVertices( const VECTOR2I& aVertex, const SEG& aOrigSeg,
 
             if( aPair->GapConstraint().Matches( dist ) )
             {
-               *aIndices++ = i;
+               aIndices->push_back( i );
                count++;
             }
         }
@@ -1369,10 +1369,11 @@ bool coupledBypass( NODE* aNode, DIFF_PAIR* aPair, bool aRefIsP, const SHAPE_LIN
                     const SHAPE_LINE_CHAIN& aRefBypass, const SHAPE_LINE_CHAIN& aCoupled,
                     SHAPE_LINE_CHAIN& aNewCoupled )
 {
-    int              vStartIdx[1024]; // fixme: possible overflow
-    int              nStarts = findCoupledVertices( aRefBypass.CPoint( 0 ),
-                                                    aRefBypass.CSegment( 0 ),
-                                                    aCoupled, aPair, vStartIdx );
+    std::vector<int> vStartIdx;
+    vStartIdx.reserve( 1024 );
+
+    int              nStarts = findCoupledVertices( aRefBypass.CPoint( 0 ), aRefBypass.CSegment( 0 ), aCoupled,
+                                                    aPair, &vStartIdx );
     DIRECTION_45     dir( aRefBypass.CSegment( 0 ) );
 
     int64_t          bestLength = -1;
@@ -1388,14 +1389,13 @@ bool coupledBypass( NODE* aNode, DIFF_PAIR* aPair, bool aRefIsP, const SHAPE_LIN
 
             if( delta > 1 )
             {
-                const VECTOR2I& vs = aCoupled.CPoint( vStartIdx[i] );
-                SHAPE_LINE_CHAIN bypass = dir.BuildInitialTrace( vs, aCoupled.CPoint(j),
-                                                                 dir.IsDiagonal() );
+                const VECTOR2I&  vs = aCoupled.CPoint( vStartIdx[i] );
+                SHAPE_LINE_CHAIN bypass = dir.BuildInitialTrace( vs, aCoupled.CPoint(j), dir.IsDiagonal() );
 
-                bool tmp;                
-                int64_t coupledLength;
+                bool             tmp;
+                int64_t          coupledLength;
                 
-                std::tie(coupledLength, tmp)= aPair->CoupledLength( aRef, bypass );
+                std::tie( coupledLength, tmp ) = aPair->CoupledLength( aRef, bypass );
 
                 SHAPE_LINE_CHAIN newCoupled = aCoupled;
 
@@ -1407,8 +1407,7 @@ bool coupledBypass( NODE* aNode, DIFF_PAIR* aPair, bool aRefIsP, const SHAPE_LIN
                 else
                     newCoupled.Replace( ei, si, bypass.Reverse() );
 
-                if( coupledLength > bestLength && verifyDpBypass( aNode, aPair, aRefIsP, aRef,
-                                                                  newCoupled) )
+                if( coupledLength > bestLength && verifyDpBypass( aNode, aPair, aRefIsP, aRef, newCoupled) )
                 {
                     bestBypass = std::move( newCoupled );
                     bestLength = coupledLength;
