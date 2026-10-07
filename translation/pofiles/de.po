@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-06 20:04+0000\n"
+"PO-Revision-Date: 2026-10-07 21:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -42993,7 +42993,7 @@ msgid ""
 "Mechanical specifies a through-hole pad that is used for mechanical support"
 msgstr ""
 "Optionale Eigenschaft zum Angeben eines speziellen Zwecks oder einer "
-"Einschränkung in Herstellungsdateien:\n"
+"Einschränkung in Fertigungsdateien:\n"
 "Das BGA-Attribut gilt für Pads in BGA-Footprints\n"
 "Passermarke lokal ist eine Referenz für den übergeordneten Footprint\n"
 "Passermarke global ist eine Referenz für die gesamte Platine\n"
@@ -43304,12 +43304,12 @@ msgstr "Entfernt Bestückungsdruck aus Bereichen ohne Lötstopplack"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:124
 msgid "Indicate DNP on fabrication layers"
-msgstr "Nicht zu bestückende Bauteile auf Fabrikationslagen markieren"
+msgstr "Nicht zu bestückende Bauteile auf Fertigungslagen markieren"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:125
 msgid "Hide or cross-out DNP footprints on fabrication layers"
 msgstr ""
-"Nicht zu bestückende Bauteile auf Fabrikationslagen verstecken oder "
+"Nicht zu bestückende Bauteile auf Fertigungslagen verstecken oder "
 "durchstreichen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:129
@@ -43328,7 +43328,7 @@ msgstr "Durchstreichen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Sketch pads on fabrication layers"
-msgstr "Pads auf Fabrikationslagen skizzieren"
+msgstr "Pads auf Fertigungslagen skizzieren"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:138
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
@@ -48982,7 +48982,7 @@ msgstr "%s Padtyp weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:362
 #, c-format
 msgid "%s fabrication property differs."
-msgstr "%s Fabrikationseigenschaft weicht ab."
+msgstr "%s Fertigungseigenschaft weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:367
 #, c-format
@@ -53406,8 +53406,9 @@ msgid "Loading rectangles..."
 msgstr "Lade Rechtecke ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:5856
+#, fuzzy
 msgid "Ignored a keep-out area with no restrictions."
-msgstr ""
+msgstr "Eine Sperrfläche ohne Einschränkungen ignoriert."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:38
 msgid "Altium Circuit Maker PCB files"
@@ -58016,7 +58017,7 @@ msgstr "Pad-Eigenschaften einfügen"
 
 #: pcbnew/tools/pad_tool.cpp:268
 msgid "Push Pad Settings"
-msgstr "Übertrage Pad-Einstellungen"
+msgstr "Pad-Einstellungen übertragen"
 
 #: pcbnew/tools/pad_tool.cpp:400
 #, c-format
