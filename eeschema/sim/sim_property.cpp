@@ -179,8 +179,12 @@ bool SIM_STRING_PROPERTY::allowEval() const
 }
 
 
+#if wxCHECK_VERSION( 3, 3, 0 )
 bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText,
-                                         int aArgFlags ) const
+                                         wxPGPropValFormatFlags aArgFlags ) const
+#else
+bool SIM_STRING_PROPERTY::StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags ) const
+#endif
 {
     if( m_disabled )
         return false;

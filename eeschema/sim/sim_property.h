@@ -92,8 +92,12 @@ public:
 
     wxValidator* DoGetValidator() const override;
 
-    bool StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 )
-        const override;
+#if wxCHECK_VERSION( 3, 3, 0 )
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+                        wxPGPropValFormatFlags aArgFlags = wxPGPropValFormatFlags::Null ) const override;
+#else
+    bool StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 ) const override;
+#endif
 
     bool OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event ) override;
 
