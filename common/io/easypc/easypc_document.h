@@ -36,6 +36,7 @@
 #include <vector>
 
 #include <wx/string.h>
+#include <wx/arrstr.h> // for MSVC to see std::vector<wxString> is exported from wx
 
 #include <io/easypc/easypc_archive.h>
 #include <io/easypc/easypc_classes_project.h>
