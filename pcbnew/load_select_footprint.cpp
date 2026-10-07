@@ -104,8 +104,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
     // of replacing the working document; re-editing the same footprint focuses the existing tab.
     wxCHECK( m_tabsPanel, false );
 
-    const wxString instanceKey =
-            FOOTPRINT_EDITOR_TAB_CONTEXT::MakeInstanceTabKey( aFootprint->m_Uuid );
+    const wxString instanceKey = FOOTPRINT_EDITOR_TAB_CONTEXT::MakeInstanceTabKey( aFootprint->m_Uuid );
     const bool     createdNewTab = m_tabsPanel->FindTab( instanceKey ) < 0;
 
     FOOTPRINT_EDITOR_TAB_CONTEXT* ctx = findOrCreateFootprintInstanceTab( aFootprint );
@@ -130,6 +129,11 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
     // A re-focused instance tab keeps its live edit history; only a freshly opened tab starts clean.
     if( createdNewTab )
     {
+        // For revert:
+        m_originalFootprintCopy.reset( static_cast<FOOTPRINT*>( aFootprint->Clone() ) );
+        m_originalFootprintCopy->SetParent( nullptr );
+
+        // For undo/redo:
         ClearUndoRedoList();
         GetScreen()->SetContentModified( false );
     }
