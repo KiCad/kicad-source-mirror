@@ -136,7 +136,7 @@ static bool NearestPoints( const SHAPE_CIRCLE& aCircle, const SHAPE_RECT& aRect,
 
 
 /**
- * Find the nearest points between a circle and a line segment.
+ * Find the nearest points between a (solid) circle and a line segment.
  *
  * @param aCircle the circle
  * @param aSeg the segment
