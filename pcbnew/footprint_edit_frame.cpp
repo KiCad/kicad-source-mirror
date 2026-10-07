@@ -1523,6 +1523,10 @@ void FOOTPRINT_EDIT_FRAME::RefreshLibraryFootprintTab( const FOOTPRINT& aFootpri
     FOOTPRINT_EDITOR_TAB_CONTEXT* ctx = m_tabContexts[idx].get();
     FOOTPRINT_EDITOR_TAB_CONTEXT* originalActive = m_activeTab;
 
+    // If we have our own unsaved changes, then leave it be.
+    if( ctx->IsModified() )
+        return;
+
     activateFootprintTab( ctx );
 
     // The old history contains pointers into the footprint ReloadFootprint is about to delete.

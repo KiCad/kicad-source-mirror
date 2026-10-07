@@ -352,8 +352,8 @@ bool DIALOG_LIB_FOOTPRINT_FIELDS_TABLE::TransferDataFromWindow()
     bool allChangesApplied = m_dataModel->ApplyData(
             [&]( FOOTPRINT& aFootprint )
             {
-                bool saved =
-                        m_parent->SaveFootprintInLibrary( &aFootprint, aFootprint.GetFPID().GetUniStringLibNickname() );
+                bool saved = m_parent->SaveFootprintInLibrary( &aFootprint,
+                                                               aFootprint.GetFPID().GetUniStringLibNickname() );
 
                 libraryChanged |= saved;
 
