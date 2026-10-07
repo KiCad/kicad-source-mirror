@@ -23,7 +23,7 @@
 #include <wx/filename.h>
 
 #include <downgrade_scan.h>
-#include <pcbnew_utils/board_test_utils.h>
+#include <qa_utils/temporary_directory.h>
 
 
 BOOST_AUTO_TEST_SUITE( BoardDowngrade )

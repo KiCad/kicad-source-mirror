@@ -41,6 +41,7 @@
 #include <pcb_track_types.h>
 
 #include <pcbnew_utils/board_file_utils.h>
+#include <qa_utils/temporary_directory.h>
 
 class BOARD;
 class BOARD_ITEM;
