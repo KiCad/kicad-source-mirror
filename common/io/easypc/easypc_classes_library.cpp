@@ -18,6 +18,7 @@
  */
 
 #include <io/easypc/easypc_classes_library.h>
+#include <wx/arrstr.h> // Imports wx's std::vector<wxString> specialization on MSVC.
 
 
 namespace EASYPC
