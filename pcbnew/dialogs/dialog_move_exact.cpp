@@ -21,7 +21,6 @@
 #include <dialogs/dialog_move_exact.h>
 #include <math/box2.h>
 #include <math/util.h>      // for KiROUND
-#include <widgets/tab_traversal.h>
 #include <pcb_edit_frame.h>
 #include <trigo.h>
 

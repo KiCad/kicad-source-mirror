@@ -21,7 +21,6 @@
 
 #include <math/util.h>      // for KiROUND
 #include <tools/pcb_actions.h>
-#include <widgets/tab_traversal.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <tools/pcb_picker_tool.h>
