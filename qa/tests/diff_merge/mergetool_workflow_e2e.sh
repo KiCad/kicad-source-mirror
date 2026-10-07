@@ -88,18 +88,19 @@ cp "$FIXTURE_BOARD" "$OURS"
 cp "$FIXTURE_BOARD" "$THEIRS"
 
 # Make ours and theirs differ from ancestor: bump a numeric value in each.
-# Use sed to mutate a trace width on each side (different values) so the
-# auto-resolver has to choose.  Robust to fixture changes -- if neither
-# mutation fires we still get a no-op merge which is also a valid test
-# outcome (exit 0 with no diff).
-sed 's/(width 0\.2)/(width 0.21)/' "$OURS" > "$OURS.next" && mv "$OURS.next" "$OURS"
-sed 's/(width 0\.2)/(width 0.22)/' "$THEIRS" > "$THEIRS.next" && mv "$THEIRS.next" "$THEIRS"
+# The two divergent Edge.Cuts stroke widths require the auto-resolver to choose a side.
+sed '/1546372c-4518-4c49-b994-211020ea3f32/s/(width 0\.2032)/(width 0.21)/' "$OURS" > "$OURS.next" && mv "$OURS.next" "$OURS"
+sed '/1546372c-4518-4c49-b994-211020ea3f32/s/(width 0\.2032)/(width 0.22)/' "$THEIRS" > "$THEIRS.next" && mv "$THEIRS.next" "$THEIRS"
 
-# Write an auto-resolution file selecting TAKE_OURS as the default strategy.
+if cmp -s "$ANCESTOR" "$OURS" || cmp -s "$ANCESTOR" "$THEIRS" || cmp -s "$OURS" "$THEIRS"; then
+    echo "FAIL: fixture did not produce divergent merge inputs" >&2
+    exit 1
+fi
+
+# Resolve the conflict on the modified Edge.Cuts line by its fixture UUID.
 cat > "$AUTO_RES" <<'EOF'
 {
-    "schema_version": 1,
-    "strategy": "take_ours"
+    "/1546372c-4518-4c49-b994-211020ea3f32": "take_ours"
 }
 EOF
 
@@ -127,6 +128,11 @@ fi
 if ! head -c 200 "$MERGED" | grep -q "kicad_pcb"; then
     echo "FAIL: merged output doesn't look like a .kicad_pcb file" >&2
     head -c 500 "$MERGED" >&2
+    exit 1
+fi
+
+if ! grep -q '(width 0.21)' "$MERGED" || grep -q '(width 0.22)' "$MERGED"; then
+    echo "FAIL: merged board did not select ours for the divergent Edge.Cuts stroke" >&2
     exit 1
 fi
 
