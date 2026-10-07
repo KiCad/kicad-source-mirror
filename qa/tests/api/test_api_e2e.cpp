@@ -611,7 +611,7 @@ BOOST_FIXTURE_TEST_CASE( CreateDocument, API_SERVER_E2E_FIXTURE )
 
             BOOST_CHECK( document.type() == aType );
             BOOST_CHECK( document.project().name() == projectWithExt.GetName() );
-            BOOST_CHECK( document.project().path() == projectWithExt.GetPath( true ) );
+            BOOST_CHECK( document.project().path() == projectWithExt.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME ) );
 
             kiapi::common::ApiResponse response;
             kiapi::common::commands::GetDocumentModifiedState state;
@@ -755,7 +755,7 @@ BOOST_FIXTURE_TEST_CASE( SaveDocumentAs, API_SERVER_E2E_FIXTURE )
             // PackProject which uses GetProjectPath() including the separator
             wxString expectedProjectPath = ( aType == kiapi::common::types::DOCTYPE_PCB )
                                                    ? newProjectFile.GetPath()
-                                                   : newProjectFile.GetPath( true );
+                                                   : newProjectFile.GetPath( wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME );
 
             BOOST_CHECK_EQUAL( renamedDoc.project().path(), expectedProjectPath.ToStdString() );
             BOOST_CHECK_EQUAL( renamedDoc.project().name(), newProjectFile.GetName().ToStdString() );
