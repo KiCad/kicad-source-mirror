@@ -1429,8 +1429,10 @@ void PCB_TUNING_PATTERN::EditFinish( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD
             // we need to special-case this here and restore the original width.
             if( !withinBounds( item ) )
             {
-                if( PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( item ) )
+                if( item->IsType( { PCB_TRACE_T, PCB_ARC_T } ) )
                 {
+                    PCB_TRACK* newTrack = static_cast<PCB_TRACK*>( item );
+
                     if( m_assembledLineWidth != newTrack->GetWidth() )
                         newTrack->SetWidth( m_assembledLineWidth );
                 }
@@ -2506,10 +2508,13 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
             if( !netclass )
                 netclass = track->GetEffectiveNetClass();
 
-            if( !width )
-                width = track->GetWidth();
-            else if( width != track->GetWidth() )
-                mixedWidth = true;
+            if( track->IsType( { PCB_TRACE_T, PCB_ARC_T } ) )
+            {
+                if( !width )
+                    width = track->GetWidth();
+                else if( width != track->GetWidth() )
+                    mixedWidth = true;
+            }
         }
     }
 

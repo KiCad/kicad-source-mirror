@@ -31,6 +31,7 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK* aItem, PICKED_ITEMS_LIST* 
                                            bool aUseDesignRules )
 {
     PCB_VIA* via = dynamic_cast<PCB_VIA*>( aItem );
+    int      current_width = via ? via->GetWidth( PADSTACK::ALL_LAYERS ) : aItem->GetWidth();
     int      new_width = -1;
     int      new_drill = -1;
 
@@ -75,12 +76,12 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( PCB_TRACK* aItem, PICKED_ITEMS_LIST* 
     }
 
     if( new_width <= 0 )
-        new_width = aItem->GetWidth();
+        new_width = current_width;
 
     if( via && new_drill <= 0 )
         new_drill = via->GetDrillValue();
 
-    if( aItem->GetWidth() != new_width || ( via && via->GetDrillValue() != new_drill ) )
+    if( current_width != new_width || ( via && via->GetDrillValue() != new_drill ) )
     {
         ITEM_PICKER picker( nullptr, aItem, UNDO_REDO::CHANGED );
         picker.SetLink( aItem->Clone() );

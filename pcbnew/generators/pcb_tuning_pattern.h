@@ -352,8 +352,8 @@ public:
     int GetWidth() const
     {
         for( BOARD_ITEM* item : GetBoardItems() )
-            if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
-                return track->GetWidth();
+            if( item->IsType( { PCB_TRACE_T, PCB_ARC_T } ) )
+                return static_cast<PCB_TRACK*>( item )->GetWidth();
 
         return m_trackWidth;
     }

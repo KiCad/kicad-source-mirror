@@ -2495,7 +2495,9 @@ const BOX2I PCB_TRACK::ViewBBox() const
     }
     else
     {
-        bbox.Inflate( GetWidth() );     // Add a bit extra for safety
+        // Add a bit extra for safety.
+        const PCB_VIA* via = dynamic_cast<const PCB_VIA*>( this );
+        bbox.Inflate( via ? via->GetWidth( PADSTACK::ALL_LAYERS ) : GetWidth() );
     }
 
     return bbox;
