@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-07 09:39+0000\n"
+"PO-Revision-Date: 2026-10-08 10:24+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -9021,18 +9021,16 @@ msgid "Cannot create temporary archive file"
 msgstr "一時的アーカイブ ファイルを作成できません"
 
 #: common/gestfich.cpp:880
-#, fuzzy
 msgid "Write error"
-msgstr "ファイル出力エラー"
+msgstr "書き込みエラー"
 
 #: common/gestfich.cpp:884
 msgid "Cannot flush or close temporary file"
 msgstr "一時的ファイルをフラッシュあるいは閉じることができません"
 
 #: common/gestfich.cpp:893
-#, fuzzy
 msgid "Cannot replace archive"
-msgstr "Zipアーカイブ '%s' を読み取れません"
+msgstr "アーカイブを置き換えることができませんでした"
 
 #: common/gestfich.cpp:899
 msgid ""
@@ -10037,9 +10035,9 @@ msgid "Invalid output path: %s"
 msgstr "不正な出力パス: %s"
 
 #: common/io/idf/idf_parser.cpp:3270 common/io/idf/idf_parser.cpp:3284
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot overwrite file: %s"
-msgstr "ファイル '%s' を開くことができません"
+msgstr "ファイルを上書きできません: %s"
 
 #: common/io/idf/idf_parser.cpp:3299
 #, c-format
@@ -10168,14 +10166,12 @@ msgid "Export IDFv3"
 msgstr "IDFv3のエクスポート"
 
 #: common/jobs/job_export_pcb_idf.cpp:69
-#, fuzzy
 msgid "Export IDFv3 Job Settings"
-msgstr "DXFのエクスポートジョブ設定"
+msgstr "IDFv3のエクスポートジョブ設定"
 
 #: common/jobs/job_export_pcb_idf.cpp:83
-#, fuzzy
 msgid "PCB: Export IDFv3"
-msgstr "PCB: DXF としてエクスポート"
+msgstr "PCB: IDFv3 としてエクスポート"
 
 #: common/jobs/job_export_pcb_ipc2581.cpp:82
 #: pcbnew/dialogs/dialog_export_2581_base.h:76
@@ -12480,14 +12476,12 @@ msgid "Switch arc posture between clockwise and counter-clockwise"
 msgstr "円弧の姿勢を時計回り反時計回りと切り替える"
 
 #: common/tool/actions.cpp:615
-#, fuzzy
 msgid "Cycle Arc Drawing Mode"
-msgstr "円弧編集モードの切り替え"
+msgstr "円弧描画モードの切り替え"
 
 #: common/tool/actions.cpp:616
-#, fuzzy
 msgid "Switch to the next method of drawing arcs"
-msgstr "円弧の編集方法を切り替え"
+msgstr "次の円弧の描画方法に切り替える"
 
 #: common/tool/actions.cpp:622
 msgid "Delete Last Point"
@@ -15505,6 +15499,8 @@ msgstr ""
 #, c-format
 msgid "Cannot remap symbol %s to '%s': the new symbol has too few units."
 msgstr ""
+"シンボル %s を %s に再マッピングできません:新しい シンボルのユニット数が少な"
+"すぎます。"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 msgid "Current Library Reference"
@@ -16997,14 +16993,12 @@ msgid "Symbol Name"
 msgstr "シンボル名"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:650
-#, fuzzy
 msgid "Parent Symbol"
-msgstr "親シンボル:"
+msgstr "親シンボル"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:651
-#, fuzzy
 msgid "Root Symbol"
-msgstr "遠隔シンボル"
+msgstr "ルートシンボル"
 
 #: eeschema/dialogs/dialog_lib_fields_table.cpp:662
 #: pcbnew/dialogs/dialog_lib_footprint_fields_table.cpp:402
@@ -17510,7 +17504,6 @@ msgstr "フットプリント フィルターを削除"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:676
 #: eeschema/dialogs/panel_footprint_filters.cpp:410
-#, fuzzy
 msgid "Matching footprints:"
 msgstr "一致するフットプリント:"
 
@@ -17564,9 +17557,9 @@ msgstr "太さ:"
 #: eeschema/dialogs/dialog_line_properties.cpp:152
 #: eeschema/dialogs/dialog_shape_properties.cpp:156
 #: pcbnew/dialogs/dialog_shape_properties.cpp:1364
-#, fuzzy, c-format
+#, c-format
 msgid "Set line ending sizes to 0 for automatic (%g× line width)."
-msgstr "形状サイズが0の場合は自動 (%g x 線幅)。"
+msgstr "線端サイズが0の場合は自動 (%g x 線幅)。"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:418
 msgid "Edit Line"
@@ -17642,7 +17635,6 @@ msgid "Alternate Pin Name"
 msgstr "代替ピン名"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:187
-#, fuzzy
 msgid "Alternate Pin Function Definitions"
 msgstr "代替ピン機能定義"
 
@@ -20293,9 +20285,8 @@ msgid "Automatically annotate symbols"
 msgstr "シンボルの自動アノテーション"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
-#, fuzzy
 msgid "Automatically place sheet pins"
-msgstr "次のフットプリントを自動配置"
+msgstr "シートピンを自動配置"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:78
 #, fuzzy
@@ -20495,14 +20486,12 @@ msgid "Open in Footprint Editor"
 msgstr "フットプリント エディターで開く"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:510
-#, fuzzy
 msgid "Assign to Footprint Field"
-msgstr "フットプリントを割り当て"
+msgstr "フットプリントフィールドに割り当て"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:512
-#, fuzzy
 msgid "Copy Footprint Name"
-msgstr "フットプリント名"
+msgstr "フットプリント名をコピー"
 
 #: eeschema/dialogs/panel_footprint_filters.cpp:554
 msgid "Add Footprint Filter"
@@ -21302,14 +21291,14 @@ msgid "Keep White Space"
 msgstr "空白文字を保持する"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "Field name template '%s' already exists as a mandatory field."
-msgstr "フィールド名 '%s' は既に存在します。"
+msgstr "フィールド名テンプレート '%s' は必須フィールドとしてすでに存在しています。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Field name template '%s' already exists."
-msgstr "フィールド名 '%s' は既に存在します。"
+msgstr "フィールド名テンプレート '%s' は既に存在します。"
 
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:44
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:40
@@ -21343,7 +21332,7 @@ msgstr "回路図 ’%s’ のルート用紙インスタンスパスが正し�
 #: eeschema/eeschema_helpers.cpp:189
 #, c-format
 msgid "Schematic '%s' is a hierarchical subsheet; load its root schematic."
-msgstr ""
+msgstr "回路図 '%s' は階層化された副用紙です;ルートの回路図を読み込んでください。"
 
 #: eeschema/eeschema_helpers.cpp:263 eeschema/files-io.cpp:375
 #: eeschema/picksymbol.cpp:132
