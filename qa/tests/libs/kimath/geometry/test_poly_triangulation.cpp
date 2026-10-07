@@ -351,7 +351,9 @@ BOOST_AUTO_TEST_CASE( FractureEdgeIndexMatchesLinearScan )
             zone.Fracture( false );
     }
 
+#if wxUSE_LOG_TRACE
     BOOST_REQUIRE( trace.Contains( wxS( "Using fracture edge index" ) ) );
+#endif
 
     for( size_t zone = 0; zone < linear.size(); ++zone )
     {
