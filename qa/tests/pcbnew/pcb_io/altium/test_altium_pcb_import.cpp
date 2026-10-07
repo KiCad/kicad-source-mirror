@@ -1551,7 +1551,8 @@ BOOST_AUTO_TEST_CASE( ComponentCopperRegionNets )
         {
             PCB_LAYER_ID copperLayer = pad->IsOnLayer( F_Cu ) ? F_Cu : B_Cu;
 
-            if( pad->GetShape( copperLayer ) != PAD_SHAPE::CUSTOM || !pad->GetNumber().IsEmpty() )
+            // Region pads sit on a 1 IU anchor, and one that touches its pad takes that number
+            if( pad->GetShape( copperLayer ) != PAD_SHAPE::CUSTOM || pad->GetSize( copperLayer ).x > 1 )
                 continue;
 
             regionCount++;
@@ -1566,6 +1567,35 @@ BOOST_AUTO_TEST_CASE( ComponentCopperRegionNets )
 
     BOOST_REQUIRE_GT( regionCount, 0 );
     BOOST_CHECK_GT( connectedCount, 0 );
+}
+
+
+// Netted component copper must join the pad it touches, or it is left behind when the part moves
+BOOST_AUTO_TEST_CASE( ComponentCopperJoinsItsPad )
+{
+    std::string dataPath =
+            KI_TEST::GetPcbnewTestDataDir() + "plugins/altium/issue24456/Fastino_Ground_Isolator.PcbDoc";
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    m_altiumPlugin.LoadBoard( dataPath, board.get(), nullptr );
+
+    int joined = 0;
+
+    for( FOOTPRINT* footprint : board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            PCB_LAYER_ID copperLayer = pad->IsOnLayer( F_Cu ) ? F_Cu : B_Cu;
+
+            if( pad->GetShape( copperLayer ) == PAD_SHAPE::CUSTOM && pad->GetSize( copperLayer ).x <= 1
+                && pad->GetNetCode() > 0 && !pad->GetNumber().IsEmpty() )
+            {
+                joined++;
+            }
+        }
+    }
+
+    BOOST_CHECK_GT( joined, 0 );
 }
 
 
