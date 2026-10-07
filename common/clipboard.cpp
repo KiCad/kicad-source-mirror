@@ -36,13 +36,14 @@ bool SaveClipboard( const std::string& aTextUTF8 )
     if( wxTheClipboard->Open() )
     {
         // Store the UTF8 string as Unicode string in clipboard:
-        wxTheClipboard->SetData(
+        bool saved = wxTheClipboard->SetData(
                 new wxTextDataObject( wxString( aTextUTF8.c_str(), wxConvUTF8 ) ) );
 
-        wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
-        wxTheClipboard->Close();
+        if( saved )
+            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
 
-        return true;
+        wxTheClipboard->Close();
+        return saved;
     }
 
     return false;
@@ -102,11 +103,13 @@ bool SaveClipboard( const std::string& aTextUTF8, const std::vector<CLIPBOARD_MI
             data->Add( custom );
         }
 
-        wxTheClipboard->SetData( data );
-        wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
-        wxTheClipboard->Close();
+        bool saved = wxTheClipboard->SetData( data );
 
-        return true;
+        if( saved )
+            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
+
+        wxTheClipboard->Close();
+        return saved;
     }
 
     return false;
@@ -242,11 +245,13 @@ bool SaveTabularDataToClipboard( const std::vector<std::vector<wxString>>& aData
         // even with wxCustomDataObject( wxDataFormat( "mime/type" ) ), which just ends up as
         // wxDF_PRIVATE, and wxDF_SYLK/DIF aren't mapped on GTK.
 
-        wxTheClipboard->SetData( data );
-        wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
-        wxTheClipboard->Close();
+        bool saved = wxTheClipboard->SetData( data );
 
-        return true;
+        if( saved )
+            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
+
+        wxTheClipboard->Close();
+        return saved;
     }
 
     return false;
