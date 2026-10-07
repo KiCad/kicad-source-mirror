@@ -604,18 +604,19 @@ void EDA_DRAW_PANEL_GAL::ZoomToFit( const BOX2I& aBox, std::optional<double> aMa
     KIGFX::VIEW* view = m_view;
     BOX2I        bBox = aBox;
 
-    view->SetScale( 1.0 );  // The best scale will be determined later, but this initial
-                            // value ensures all view parameters are up to date (especially
-                            // at init time)
-    VECTOR2D screenSize = view->ToWorld( ToVECTOR2I( GetClientSize() ), false );
+    // The GAL's world units may have changed since the view was attached.
+    m_gal->ComputeWorldScreenMatrix();
+
+    // Avoid a temporary zoom that dirties retained targets before the fitted scale is known.
+    VECTOR2D screenSize = view->ToWorld( ToVECTOR2I( GetClientSize() ), false ) * view->GetScale();
 
     // A box with no extent (an empty screen or a lone point) has nothing to fit
     if( bBox.GetWidth() == 0 && bBox.GetHeight() == 0 )
         bBox = GetDefaultViewBBox();
 
     VECTOR2D vsize = bBox.GetSize();
-    double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
-                                                fabs( vsize.y / screenSize.y ) );
+    double scale = 1.0 / std::max( fabs( vsize.x / screenSize.x ),
+                                   fabs( vsize.y / screenSize.y ) );
 
     // if the scale isn't finite (most likely due to an empty canvas)
     // simply just make sure we are centered and quit out of trying to zoom to fit
