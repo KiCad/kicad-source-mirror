@@ -19,6 +19,9 @@
  */
 
 #include "import_proj.h"
+
+#include <list>
+
 #include <import_proj_properties.h>
 #include <confirm.h>
 #include <kidialog.h>
@@ -87,11 +90,23 @@ void IMPORT_PROJ_HELPER::FindEmptyTargetDir()
 
 class SCOPED_FILE_REMOVER
 {
-    wxString m_file;
-
 public:
-    SCOPED_FILE_REMOVER( const wxString& aFile ) : m_file( aFile ) {}
-    ~SCOPED_FILE_REMOVER() { wxRemoveFile( m_file ); }
+    SCOPED_FILE_REMOVER( const wxString& aFile ) :
+            m_file( aFile )
+    {
+    }
+
+    ~SCOPED_FILE_REMOVER()
+    {
+        wxRemoveFile( m_file );
+    }
+
+    // No copy operations allowed or the destructor might remove files multiple times.
+    SCOPED_FILE_REMOVER( SCOPED_FILE_REMOVER const& ) = delete;
+    SCOPED_FILE_REMOVER& operator=( SCOPED_FILE_REMOVER const& ) = delete;
+
+private:
+    wxString m_file;
 };
 
 
@@ -116,7 +131,7 @@ void IMPORT_PROJ_HELPER::ImportIndividualFile( KICAD_T aFT, int aImportedFileTyp
     default: return;
     }
 
-    std::vector<SCOPED_FILE_REMOVER> copiedFiles;
+    std::list<SCOPED_FILE_REMOVER> copiedFiles;
 
     for( wxString ext : neededExts )
     {
@@ -406,7 +421,7 @@ void IMPORT_PROJ_HELPER::ImportPadsFiles()
     if( !related.HasPcb() && !related.HasSchematic() )
         return;
 
-    std::vector<SCOPED_FILE_REMOVER> copiedFiles;
+    std::list<SCOPED_FILE_REMOVER> copiedFiles;
 
     auto copyAndImport = [&]( const wxString& sourceFile, FRAME_T frameType, int fileType )
     {
