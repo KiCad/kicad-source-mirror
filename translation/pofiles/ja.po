@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-04 10:08+0000\n"
+"PO-Revision-Date: 2026-10-07 09:39+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -2153,12 +2153,12 @@ msgstr "APIからの変更"
 #: common/api/api_plugin.cpp:58
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr "プラグイン設定が '%s' で不正: %s"
+msgstr "'%s' のプラグイン設定が無効: %s"
 
 #: common/api/api_plugin.cpp:73
 #, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "不正なプラグイン ランタイム: %s"
+msgstr "無効なプラグイン ランタイム: %s"
 
 #: common/api/api_plugin.cpp:105
 msgid "could not read plugin configuration file"
@@ -2177,12 +2177,12 @@ msgstr "必須キーが欠落しているか無効: %s"
 #: common/api/api_plugin.cpp:168
 #, c-format
 msgid "identifier '%s' is invalid"
-msgstr "識別子 '%s' が不正"
+msgstr "識別子 '%s' が無効"
 
 #: common/api/api_plugin.cpp:195
 #, c-format
 msgid "actions section is invalid: %s"
-msgstr "アクション セレクションが不正: %s"
+msgstr "アクション セレクションが無効: %s"
 
 #: common/api/api_plugin_manager.cpp:102 common/api/api_plugin_manager.cpp:148
 #: pcbnew/footprint_wizard.cpp:118
@@ -3261,9 +3261,8 @@ msgid "Clear the cell value"
 msgstr "セルの値をクリア"
 
 #: common/dialogs/dialog_fields_table.cpp:196
-#, fuzzy
 msgid "Copy from Variant"
-msgstr "バリアントのコピー"
+msgstr "バリアントからコピー"
 
 #: common/dialogs/dialog_fields_table.cpp:328
 #: common/dialogs/eda_list_dialog.cpp:45 common/dialogs/eda_list_dialog.cpp:71
@@ -3947,7 +3946,7 @@ msgstr "グリッド設定"
 #: common/dialogs/dialog_group_properties.cpp:90
 #, c-format
 msgid "Invalid library link: '%s'"
-msgstr "不正なライブラリリンク: '%s'"
+msgstr "無効なライブラリリンク: '%s'"
 
 #: common/dialogs/dialog_group_properties.cpp:126
 msgid "Edit Group Properties"
@@ -4952,7 +4951,7 @@ msgstr "秘密鍵 '%s' を開くことができません"
 
 #: common/dialogs/git/dialog_git_repository.cpp:388
 msgid "Invalid SSH Key"
-msgstr "不正なSSH鍵"
+msgstr "無効なSSH鍵"
 
 #: common/dialogs/git/dialog_git_repository.cpp:389
 msgid "The selected file is not a valid SSH private key"
@@ -5225,7 +5224,7 @@ msgstr "レンダリング エンジン"
 
 #: common/dialogs/panel_common_settings_base.cpp:35
 msgid "Accelerated Graphics"
-msgstr "アクセラレーター グラフィックス"
+msgstr "グラフィックス描画の高速化"
 
 #: common/dialogs/panel_common_settings_base.cpp:36
 msgid "Hardware-accelerated graphics (recommended)"
@@ -7444,11 +7443,13 @@ msgstr "重複 ID"
 
 #: common/draw_panel_gal.cpp:244
 msgid "The graphics driver was reset and OpenGL could not be restored"
-msgstr ""
+msgstr "グラフィックドライバーがリセットされOpenGLが復元できませんでした"
 
 #: common/draw_panel_gal.cpp:245
 msgid "Restart KiCad to use accelerated graphics again."
 msgstr ""
+"再びグラフィックス描画の高速化を使用するにはKiCadを終了して再起動してください"
+"。"
 
 #: common/draw_panel_gal.cpp:249 common/draw_panel_gal.cpp:825
 #: common/draw_panel_gal.cpp:868
@@ -7683,7 +7684,7 @@ msgstr "区切り文字で囲まれていません"
 
 #: common/dsnlexer.cpp:872
 msgid "Invalid floating point number"
-msgstr "不正な浮動小数点数"
+msgstr "無効な浮動小数点数"
 
 #: common/eda_base_frame.cpp:485
 #, c-format
@@ -8968,7 +8969,7 @@ msgstr "ファイル '%s' をコピーできません。"
 
 #: common/gestfich.cpp:453
 msgid "Invalid directory name, cannot remove root"
-msgstr "不正なディレクトリ名、ルート ディレクトリは削除できません"
+msgstr "無効なディレクトリ名、ルート ディレクトリは削除できません"
 
 #: common/gestfich.cpp:461
 #, c-format
@@ -9016,9 +9017,8 @@ msgid "Could not read file: %s"
 msgstr "ファイル %s を読み込めません"
 
 #: common/gestfich.cpp:842
-#, fuzzy
 msgid "Cannot create temporary archive file"
-msgstr "テンポラリ入力ファイルを削除できません"
+msgstr "一時的アーカイブ ファイルを作成できません"
 
 #: common/gestfich.cpp:880
 #, fuzzy
@@ -9026,9 +9026,8 @@ msgid "Write error"
 msgstr "ファイル出力エラー"
 
 #: common/gestfich.cpp:884
-#, fuzzy
 msgid "Cannot flush or close temporary file"
-msgstr "テンポラリ入力ファイルを削除できません"
+msgstr "一時的ファイルをフラッシュあるいは閉じることができません"
 
 #: common/gestfich.cpp:893
 #, fuzzy
@@ -9036,11 +9035,12 @@ msgid "Cannot replace archive"
 msgstr "Zipアーカイブ '%s' を読み取れません"
 
 #: common/gestfich.cpp:899
-#, fuzzy
 msgid ""
 "\n"
 "Cannot remove temporary archive file"
-msgstr "テンポラリ入力ファイルを削除できません"
+msgstr ""
+"\n"
+"一時的アーカイブ ファイルを削除できません"
 
 #: common/git/kicad_git_common.cpp:991
 #, c-format
@@ -9078,7 +9078,7 @@ msgstr "認証できません"
 
 #: common/git/kicad_git_errors.cpp:36
 msgid "Invalid repository."
-msgstr "不正なリポジトリです。"
+msgstr "無効なリポジトリです。"
 
 #: common/git/kicad_git_errors.cpp:37
 msgid "Failed to commit changes."
@@ -9350,7 +9350,7 @@ msgstr "マージを解析できません"
 
 #: common/git/libgit_backend.cpp:1214
 msgid "Invalid HEAD.  Cannot merge."
-msgstr "不正なHEADです。  マージできません。"
+msgstr "無効なHEADです。  マージできません。"
 
 #: common/git/libgit_backend.cpp:1240
 msgid "Could not access repository configuration"
@@ -9741,7 +9741,7 @@ msgstr "mil"
 
 #: common/import_gfx/dxf_import_plugin.cpp:1612
 msgid "Invalid spline definition encountered"
-msgstr "不正なスプラインの定義が検出されました"
+msgstr "無効なスプラインの定義が検出されました"
 
 #: common/import_gfx/dxf_import_plugin.h:223
 #, c-format
@@ -9959,7 +9959,7 @@ msgstr "Eagle バイナリ ファイルに回路図セクションが見つか�
 #: common/io/eagle/eagle_parser.cpp:525
 #, c-format
 msgid "Invalid Arc with radius %0.2f and angle %0.2f"
-msgstr "不正な円弧 (半径 %0.2f 、角度 %0.2f )"
+msgstr "無効な円弧 (半径 %0.2f 、角度 %0.2f )"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:34
 #, c-format
@@ -9999,7 +9999,7 @@ msgstr "Zipアーカイブ '%s' を読み取れません"
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:333
 #, c-format
 msgid "Invalid DOCHEAD in '%s' at line %d"
-msgstr "不正なDOCHEAD エントリ '%s'の %d 行"
+msgstr "無効なDOCHEAD エントリ '%s'の %d 行"
 
 #: common/io/easyedapro/easyedapro_v3_parser.cpp:341
 #, c-format
@@ -18053,7 +18053,7 @@ msgstr "ライブラリの接頭辞:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:131
 msgid "Prefix that will be applied to the generated libraries."
-msgstr "生成されるライブラリに適用される接頭辞。"
+msgstr "生成されたライブラリに適用される接頭辞。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:139
 msgid "Add libraries to:"
@@ -45125,9 +45125,9 @@ msgid "Generate ODB++ Files"
 msgstr "ODB++ ファイルを生成"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:480
-#, fuzzy, c-format
+#, c-format
 msgid "Generated %s"
-msgstr "生成"
+msgstr "生成された %s"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:31
 #, fuzzy
@@ -50922,14 +50922,13 @@ msgid "Stencil"
 msgstr "ステンシル"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Current (%s)"
-msgstr "電流 (I):"
+msgstr "現在 (%s)"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:226
-#, fuzzy
 msgid "Selected variants…"
-msgstr "バリアントを削除"
+msgstr "バリアントを選択した…"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:227
 #, fuzzy
@@ -50938,14 +50937,12 @@ msgstr "バリアント"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:385
 #: pcbnew/dialogs/panel_fab_export_content.cpp:402
-#, fuzzy
 msgid "Includes: "
-msgstr "含む:"
+msgstr "含む: "
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:472
-#, fuzzy
 msgid "Choose the variants to export"
-msgstr "エクスポートするフットプリントがありません！"
+msgstr "エクスポートするバリアントを選択"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:472
 #, fuzzy
@@ -51030,9 +51027,8 @@ msgid "BOM Fields..."
 msgstr "部品表(BOM)フィールド..."
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:140
-#, fuzzy
 msgid "Choose the optional sections to include"
-msgstr "含めるオプションのセクションを選択する。"
+msgstr "含めるオプションのセクションを選択"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.h:92
 msgid "Customize Content"
@@ -57989,7 +57985,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:898
 #, c-format
 msgid "Footprint '%s' could not be saved to library '%s'."
-msgstr "フットプリント '%s' をライブラリ'%s' に保存出来ません。"
+msgstr "フットプリント '%s' をライブラリ'%s'に保存できませんでした。"
 
 #: pcbnew/footprint_libraries_utils.cpp:929
 #: pcbnew/footprint_viewer_frame.cpp:748
@@ -61765,11 +61761,13 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot write IPC-2581 archive '%s'.\n"
 "%s"
-msgstr "Zipアーカイブ '%s' を読み取れません"
+msgstr ""
+"IPC-2581 アーカイブ '%s' を書き込みできません。\n"
+"%s"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:169
 #, fuzzy, c-format
@@ -62165,14 +62163,14 @@ msgid "Invalid drill map: not on a documentation layer"
 msgstr ""
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5477
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid %s: bad column set"
-msgstr "不正なドリル フォーマットです\n"
+msgstr "無効 %s: 不正カラムセット"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5485
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid %s: not on a documentation layer"
-msgstr "基板製造用レイヤーに未実装(DNP)を表示する"
+msgstr "無効 %s: ドキュメントレイヤーにありません"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6091
 #, c-format
@@ -62305,9 +62303,8 @@ msgid "ODB++ partial drill layer omitted because a span layer is excluded."
 msgstr ""
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1357
-#, fuzzy
 msgid "Failed to generate ODB++ stackup."
-msgstr "基板積層構造のシリアライズに失敗しました。\n"
+msgstr "ODB++積層構造の生成に失敗しました。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1430
 msgid "Board outline is not closed; ODB++ rout layer has no board contour."
@@ -62319,39 +62316,35 @@ msgid "Output path is not a directory"
 msgstr "出力ファイルまたはディレクトリ"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:165
-#, fuzzy
 msgid "Output directory is not an ODB++ product"
-msgstr "選択したディレクトリはGit プロジェクトではありません。"
+msgstr "出力ディレクトリはOBP++プロダクトではありません"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory contains unrelated entry '%s'"
-msgstr "出力ディレクトリ '%s' を作成しました。"
+msgstr "出力ディレクトリに無関係なエントリー '%s' が含まれる"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:202
-#, fuzzy
 msgid "Output directory contains the source board"
-msgstr "出力ディレクトリ '%s' を作成しました。"
+msgstr "出力ディレクトリに元の基板を含む"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory contains project file '%s'"
-msgstr "出力ディレクトリ '%s' を作成しました。"
+msgstr "出力ディレクトリにプロジェクト ファイル '%s' を含む"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:274
-#, fuzzy
 msgid "Cannot create temporary backup path"
-msgstr "一時的な出力ディレクトリを作成できませんでした。"
+msgstr "テンポラリバックアップパスを作成できません"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove previous ODB++ directory '%s': %s"
-msgstr "出力ディレクトリ '%s' を削除できませんでした。"
+msgstr "前のOBP++ディレクトリ '%s' を削除できません: %s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:357
-#, fuzzy
 msgid "No board for ODB++ export."
-msgstr "ODB++ としてエクスポート"
+msgstr "ODB++ エクスポート基板がありません。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:420
 #, fuzzy, c-format
@@ -62359,11 +62352,13 @@ msgid "Output file '%s' already exists. Do you want to overwrite it?"
 msgstr "出力ファイル '%s' はすでに存在します。このファイルを上書きしますか？"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot use ODB++ directory '%s'.\n"
 "%s"
-msgstr "出力ディレクトリ '%s' を作成できませんでした。"
+msgstr ""
+"ODB++ ディレクトリ '%s' が使えません。\n"
+"%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:449
 #, c-format
@@ -62396,18 +62391,22 @@ msgid "Compressing output"
 msgstr "出力を圧縮"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:542
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot write ODB++ archive '%s'.\n"
 "%s"
-msgstr "Zipアーカイブ '%s' を読み取れません"
+msgstr ""
+"ODB++アーカイブ '%s' を書き込みできません。\n"
+"%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:559
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot replace ODB++ directory '%s'.\n"
 "%s"
-msgstr "出力ディレクトリ '%s' を作成できませんでした。"
+msgstr ""
+"ODB++ディレクトリ '%s' を置き換えることができません。\n"
+"%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:588
 #, fuzzy
@@ -62415,9 +62414,8 @@ msgid "Unsupported ODB++ data set."
 msgstr "サポートされていないリモートの3Dモデル タイプ。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:598
-#, fuzzy
 msgid "Unknown ODB++ section key."
-msgstr "プログラムが予期しない致命的なエラーに遭遇"
+msgstr "不明なODB++セクションキー。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:622
 #, c-format
@@ -62429,9 +62427,9 @@ msgid "ODB++ variant list exceeds 1000 characters; list attributes omitted."
 msgstr ""
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown board variant '%s'."
-msgstr "不明な基板の長さ単位 %d"
+msgstr "不明な基板のバリアント '%s'."
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:691
 msgid "ODB++ variant output names collide after conversion."
@@ -63789,14 +63787,14 @@ msgid "Missing diff-pair name argument to %s."
 msgstr "%s への差動ペア名引数がありません。"
 
 #: pcbnew/pcbexpr_functions.cpp:1505
-#, fuzzy, c-format
+#, c-format
 msgid "Missing net-chain name argument to %s"
-msgstr "%s へのシート名引数がありません。"
+msgstr "%s へのネット チェーン名引数がありません"
 
 #: pcbnew/pcbexpr_functions.cpp:1577
-#, fuzzy, c-format
+#, c-format
 msgid "Missing netclass name argument to %s"
-msgstr "'%s' へのレイヤー名引数がありません。"
+msgstr "%s へのネットクラス名引数がありません"
 
 #: pcbnew/pcbexpr_functions.cpp:1639
 #, c-format
@@ -63809,9 +63807,9 @@ msgid "Missing netclass name argument to %s."
 msgstr "'%s' へのレイヤー名引数がありません。"
 
 #: pcbnew/pcbexpr_functions.cpp:1783
-#, fuzzy, c-format
+#, c-format
 msgid "Missing component class name argument to %s."
-msgstr "hasComponentClass() へのコンポーネントクラス名の引数がありません"
+msgstr "%s へのコンポーネント クラス名引数がありません。"
 
 #: pcbnew/pcbexpr_functions.cpp:1833 pcbnew/pcbexpr_functions.cpp:1877
 #, fuzzy, c-format
@@ -63986,14 +63984,12 @@ msgid "Failed to create IPC-D-356 file\n"
 msgstr "IPC-D-356ファイルの作成に失敗しました\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3166
-#, fuzzy
 msgid "Internal error\n"
-msgstr "内部エラー"
+msgstr "内部エラー\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3175
-#, fuzzy
 msgid "Successfully created IDFv3 files\n"
-msgstr "svgファイルの作成に成功しました"
+msgstr "IDFv3ファイルの作成に成功しました\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3262
 msgid "Successfully saved board file using the latest format\n"
@@ -64049,14 +64045,14 @@ msgstr ""
 "め無視されます"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3639
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected cancellation: %s\n"
-msgstr "予期しないファイル拡張子: '%s'."
+msgstr "想定外のキャンセル: '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3645
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load board: %s\n"
-msgstr "基板の読み取りに失敗しました\n"
+msgstr "基板の読み込みに失敗しました: %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3674
 #, c-format
@@ -64068,9 +64064,9 @@ msgstr ""
 "一致していないため無視されます"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3700
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write imported design rules to '%s'\n"
-msgstr "デザイン ルール を '%s' に書き込みできませんでした。"
+msgstr "'%s' にインポートされたデザイン ルールを書き込みできませんでした\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:3706
 #, c-format
@@ -64158,9 +64154,8 @@ msgstr ""
 "トが N/P もしくは +/- で終わる名前であるか確認してください。"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:729
-#, fuzzy
 msgid "Can't find a suitable starting point for the diff pair"
-msgstr "組となるネット \"%s\" の最適な開始位置を見つけることができません。"
+msgstr "差動ペアの最適な開始位置を見つけることができません"
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:93
 #: pcbnew/router/pns_meander_placer.cpp:73
@@ -64780,9 +64775,9 @@ msgid "Microvia stack: none defined"
 msgstr "不正テーブル: セルが定義されていません"
 
 #: pcbnew/toolbars_pcb_editor.cpp:789
-#, fuzzy, c-format
+#, c-format
 msgid "Microvia stack: %s"
-msgstr "マイクロビア %s (%s 上)"
+msgstr "マイクロビア スタック: %s"
 
 #: pcbnew/toolbars_pcb_editor.cpp:792
 #, fuzzy
@@ -65930,9 +65925,8 @@ msgid "Error renaming footprint"
 msgstr "フットプリントのリネーム中にエラー"
 
 #: pcbnew/tools/footprint_editor_control.cpp:640
-#, fuzzy
 msgid "No footprint to export"
-msgstr "エクスポートするフットプリントがありません！"
+msgstr "エクスポートするフットプリントがありません"
 
 #: pcbnew/tools/footprint_editor_control.cpp:677
 msgid "Select a library to compare against another."
@@ -65996,9 +65990,8 @@ msgid "Zone Manager"
 msgstr "ゾーン マネージャー"
 
 #: pcbnew/tools/graphic_edit_tool.cpp:128
-#, fuzzy
 msgid "More than one shape meets this one here."
-msgstr "このバスまたはネットに与えられた複数の名前"
+msgstr "この形状に複数の形状が合致します。"
 
 #: pcbnew/tools/graphic_edit_tool.cpp:130
 msgid "That shape is too small or too near a full circle to work with."
@@ -66187,14 +66180,13 @@ msgid "Match Properties Settings"
 msgstr "パッド プロパティ 警告"
 
 #: pcbnew/tools/match_properties_tool.cpp:65
-#, fuzzy, c-format
+#, c-format
 msgid "Properties copied from %s:"
-msgstr "%s のプロパティ"
+msgstr "%s からコピーしたプロパティ :"
 
 #: pcbnew/tools/match_properties_tool.cpp:140
-#, fuzzy
 msgid "Check All"
-msgstr "チェックして!"
+msgstr "すべてチェック"
 
 #: pcbnew/tools/match_properties_tool.cpp:141
 #, fuzzy
@@ -66655,9 +66647,8 @@ msgid "Draw drill symbols at the holes on a documentation layer"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:527
-#, fuzzy
 msgid "Drill Groups..."
-msgstr "ドリル クリアランス...\n"
+msgstr "ドリル グループ..."
 
 #: pcbnew/tools/pcb_actions.cpp:528
 #, fuzzy
@@ -70169,9 +70160,8 @@ msgid "All spans"
 msgstr "すべてのページ"
 
 #: pcbnew/widgets/pcb_properties_panel.cpp:1406
-#, fuzzy
 msgid " (backdrill)"
-msgstr "バックドリルなし"
+msgstr " (バックドリル)"
 
 #: pcbnew/widgets/search_handlers.cpp:363
 msgid "Textbox"
