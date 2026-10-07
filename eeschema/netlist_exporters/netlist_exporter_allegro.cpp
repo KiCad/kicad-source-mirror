@@ -332,10 +332,8 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         wxString footprintText = sym->GetFootprintFieldText( &sheetPath, RAW_VALUE, m_exportVariant );
         wxString deviceType = valueText + wxString("_") + footprintText;
 
-        while( deviceType.GetChar(deviceType.Length()-1) == '_' )
-        {
+        while( deviceType.GetChar(deviceType.Length() - 1 ) == '_' )
             deviceType.RemoveLast();
-        }
 
         deviceType = formatDevice( deviceType );
 
@@ -386,9 +384,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         for( const wxString& fp : footprintArray )
         {
             if( ( fp.Find( '*' ) != wxNOT_FOUND ) || ( fp.Find( '?' ) != wxNOT_FOUND ) )
-            {
                 continue;
-            }
 
             footprintAlt.Add( fp.AfterLast( ':' ) );
         }
@@ -435,24 +431,16 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         fmt::print( d, "PINCOUNT {}\n", pinCount );
 
         if( pinCount > 0 )
-        {
             fmt::print( d, "{}", TO_UTF8( formatFunction( "main", pinList ) ) );
-        }
 
         if( !value.IsEmpty() )
-        {
             fmt::print( d, "PACKAGEPROP VALUE {}\n", TO_UTF8( value ) );
-        }
 
         if( !tol.IsEmpty() )
-        {
             fmt::print( d, "PACKAGEPROP TOL {}\n", TO_UTF8( tol ) );
-        }
 
         if( !footprintAlt.IsEmpty() )
-        {
             fmt::print( d, "PACKAGEPROP ALT_SYMBOLS '({})'\n", fmt::join( footprintAlt, "," ) );
-        }
 
         wxArrayString propArray;
         propArray.Add( "PART_NUMBER" );
@@ -461,18 +449,14 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         wxString data = getGroupField( groupIndex, propArray );
 
         if(!data.IsEmpty())
-        {
             fmt::print( d, "PACKAGEPROP {} {}\n", TO_UTF8( propArray[0] ), TO_UTF8( data ) );
-        }
 
         propArray.clear();
         propArray.Add( "HEIGHT" );
         data = getGroupField( groupIndex, propArray );
 
         if(!data.IsEmpty())
-        {
             fmt::print( d, "PACKAGEPROP {} {}\n", TO_UTF8( propArray[0] ), TO_UTF8( data ) );
-        }
 
         fmt::print( d, "END\n" );
 
@@ -501,18 +485,22 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         }
         else if( tolerance.IsEmpty() )
         {
-            fmt::print( m_f, "! '{}' ! '{}' ; ", TO_UTF8( deviceType ), TO_UTF8( value ) );
+            fmt::print( m_f, "! '{}' ! '{}' ; ",
+                        TO_UTF8( deviceType ),
+                        TO_UTF8( value ) );
         }
         else
         {
-            fmt::print( m_f, "! '{}' ! '{}' ! {} ; ", TO_UTF8( deviceType ), TO_UTF8( value ),
-                     TO_UTF8( tolerance ) );
+            fmt::print( m_f, "! '{}' ! '{}' ! {} ; ",
+                        TO_UTF8( deviceType ),
+                        TO_UTF8( value ),
+                        TO_UTF8( tolerance ) );
         }
 
-        std::vector<std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>> symbolSheetpaths =
-                iter->second.m_symbolSheetpaths;
+        std::vector<std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>> symbolSheetpaths = iter->second.m_symbolSheetpaths;
 
         std::vector<wxString> refTexts;
+
         for( const auto& [ sym, sheetPath ] : symbolSheetpaths)
             refTexts.push_back( sym->GetRef( &sheetPath ) );
 
@@ -577,12 +565,13 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatFunction( wxString aName, std::vector<S
         str.Printf( ",\n\t%s", TO_UTF8( pinName ) );
         out_str += str;
     }
+
     out_str += wxString( "\n" );
 
     str.Printf( wxT( "FUNCTION %s %s " ), TO_UTF8( aName ), TO_UTF8( aName ) );
     out_str += str;
 
-    for( auto pin : aPinList )
+    for( const SCH_PIN* pin : aPinList )
     {
         str.Printf( ",\n\t%s", TO_UTF8( pin->GetNumber() ) );
         out_str += str;
@@ -779,8 +768,8 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
 
 wxString NETLIST_EXPORTER_ALLEGRO::removeTailDigits( wxString aString )
 {
-    while( ( aString.GetChar( aString.Length() - 1 ) >= '0' )
-           && ( aString.GetChar( aString.Length() - 1 ) <= '9' ) )
+    while( aString.GetChar( aString.Length() - 1 ) >= '0'
+           && aString.GetChar( aString.Length() - 1 ) <= '9' )
     {
         aString.RemoveLast();
     }
@@ -793,8 +782,8 @@ unsigned int NETLIST_EXPORTER_ALLEGRO::extractTailNumber( wxString aString )
 {
     wxString numString;
 
-    while( ( aString.GetChar( aString.Length() - 1 ) >= '0' )
-           && ( aString.GetChar( aString.Length() - 1 ) <= '9' ) )
+    while( aString.GetChar( aString.Length() - 1 ) >= '0'
+           && aString.GetChar( aString.Length() - 1 ) <= '9' )
     {
         numString.insert( 0, aString.GetChar( aString.Length() - 1 ) );
         aString.RemoveLast();
