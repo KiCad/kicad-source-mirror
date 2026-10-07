@@ -19,14 +19,43 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <memory>
+
 #include <wx/ffile.h>
 #include <wx/filename.h>
 
+#include <board.h>
+#include <board_design_settings.h>
+#include <zone_settings.h>
+
 #include <downgrade_scan.h>
+#include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <settings/settings_manager.h>
 #include <qa_utils/temporary_directory.h>
 
 
 BOOST_AUTO_TEST_SUITE( BoardDowngrade )
+
+
+BOOST_AUTO_TEST_CASE( BoardZoneDefaultsRoundTripAndDowngrade )
+{
+    SETTINGS_MANAGER settingsManager;
+    BOARD            board;
+    board.GetDesignSettings().m_ZoneLayerProperties[F_Cu].hatching_offset = VECTOR2I( 100000, 200000 );
+    board.GetDesignSettings().m_ZoneLayerProperties[B_Cu].hatching_offset = VECTOR2I( 300000, 400000 );
+
+    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_board_zone_defaults" );
+    const std::string            src = ( tmp.GetPath() / "source.kicad_pcb" ).string();
+    PCB_IO_KICAD_SEXPR           io;
+    io.SaveBoard( src, board );
+    std::unique_ptr<BOARD> current( io.LoadBoard( src, nullptr ) );
+    BOOST_REQUIRE( current );
+    const auto& loadedDefaults = current->GetDesignSettings().m_ZoneLayerProperties;
+    BOOST_REQUIRE_EQUAL( loadedDefaults.size(), 2 );
+    BOOST_CHECK( loadedDefaults.at( F_Cu ).hatching_offset == VECTOR2I( 100000, 200000 ) );
+    BOOST_CHECK( loadedDefaults.at( B_Cu ).hatching_offset == VECTOR2I( 300000, 400000 ) );
+    BOOST_CHECK( current->GetDesignSettings().GetDefaultZoneSettings().m_LayerProperties.empty() );
+}
 
 
 // The staged library downgrade converts and verifies every file before any original is

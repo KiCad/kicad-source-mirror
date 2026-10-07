@@ -3270,9 +3270,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 
             break;
         }
-        case T_zone_defaults:
-            parseZoneDefaults( bds.GetDefaultZoneSettings() );
-            break;
+        case T_zone_defaults: parseZoneDefaults( bds.m_ZoneLayerProperties ); break;
 
         default:
             Unexpected( CurText() );
@@ -3290,7 +3288,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 }
 
 
-void PCB_IO_KICAD_SEXPR_PARSER::parseZoneDefaults( ZONE_SETTINGS& aZoneSettings )
+void PCB_IO_KICAD_SEXPR_PARSER::parseZoneDefaults( std::map<PCB_LAYER_ID, ZONE_LAYER_PROPERTIES>& aProperties )
 {
     for( T token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
@@ -3301,9 +3299,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseZoneDefaults( ZONE_SETTINGS& aZoneSettings 
 
         switch( token )
         {
-        case T_property:
-            parseZoneLayerProperty( aZoneSettings.m_LayerProperties );
-            break;
+        case T_property: parseZoneLayerProperty( aProperties ); break;
         default:
             Unexpected( CurText() );
         }
