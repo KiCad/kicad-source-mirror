@@ -476,9 +476,7 @@ bool KEEP_TOPOLOGY_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aO
 
 bool OPTIMIZER::checkColliding( ITEM* aItem, bool aUpdateCache )
 {
-    CACHE_VISITOR v( aItem, m_world, m_collisionKindMask );
-
-    return static_cast<bool>( m_world->CheckColliding( aItem ) );
+    return static_cast<bool>( m_world->CheckColliding( aItem, m_collisionKindMask ) );
 }
 
 
