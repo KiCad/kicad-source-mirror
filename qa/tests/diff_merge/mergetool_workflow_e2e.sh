@@ -27,6 +27,15 @@ if [ -z "$KICAD_CLI" ] || [ ! -x "$KICAD_CLI" ]; then
     exit 2
 fi
 
+run_mergetool()
+{
+    if [ "${#RUNNER[@]}" -gt 0 ]; then
+        "${RUNNER[@]}" "$@"
+    else
+        "$@"
+    fi
+}
+
 # Skip if the kicad GUI binary isn't next to kicad-cli.  The CLI mergetool
 # entry point re-execs into it; without that this workflow can't complete.
 kicad_bin="$(dirname "$KICAD_CLI")/kicad"
@@ -83,8 +92,8 @@ cp "$FIXTURE_BOARD" "$THEIRS"
 # auto-resolver has to choose.  Robust to fixture changes -- if neither
 # mutation fires we still get a no-op merge which is also a valid test
 # outcome (exit 0 with no diff).
-sed -i 's/(width 0\.2)/(width 0.21)/' "$OURS"     || true
-sed -i 's/(width 0\.2)/(width 0.22)/' "$THEIRS"   || true
+sed 's/(width 0\.2)/(width 0.21)/' "$OURS" > "$OURS.next" && mv "$OURS.next" "$OURS"
+sed 's/(width 0\.2)/(width 0.22)/' "$THEIRS" > "$THEIRS.next" && mv "$THEIRS.next" "$THEIRS"
 
 # Write an auto-resolution file selecting TAKE_OURS as the default strategy.
 cat > "$AUTO_RES" <<'EOF'
@@ -97,7 +106,7 @@ EOF
 export KICAD_MERGETOOL_AUTO="$AUTO_RES"
 
 set +e
-"${RUNNER[@]}" "$KICAD_CLI" mergetool "$ANCESTOR" "$OURS" "$THEIRS" --output "$MERGED" 2>&1
+run_mergetool "$KICAD_CLI" mergetool "$ANCESTOR" "$OURS" "$THEIRS" --output "$MERGED" 2>&1
 exit_code=$?
 set -e
 
@@ -143,7 +152,7 @@ cp "$FIXTURE_FOOTPRINT" "$FP_OURS"
 cp "$FIXTURE_FOOTPRINT" "$FP_THEIRS"
 
 set +e
-"${RUNNER[@]}" "$KICAD_CLI" mergetool "$FP_ANCESTOR" "$FP_OURS" "$FP_THEIRS" --output "$FP_MERGED" 2>&1
+run_mergetool "$KICAD_CLI" mergetool "$FP_ANCESTOR" "$FP_OURS" "$FP_THEIRS" --output "$FP_MERGED" 2>&1
 exit_code=$?
 set -e
 
