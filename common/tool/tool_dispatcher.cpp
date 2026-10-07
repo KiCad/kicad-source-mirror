@@ -37,6 +37,7 @@
 #include <tool/action_menu.h>
 #include <view/view.h>
 #include <view/wx_view_controls.h>
+#include <geometry/geometry_utils.h>
 #include <eda_draw_frame.h>
 #include <core/kicad_algo.h>
 
@@ -616,8 +617,17 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
         if( m_toolMgr->GetViewControls() )
         {
-            pos = m_toolMgr->GetViewControls()->GetMousePosition();
-            m_lastMousePosScreen = m_toolMgr->GetViewControls()->GetMousePosition( false );
+            if( type == wxEVT_MOTION || isMouseClick( type ) )
+            {
+                const wxPoint eventPos = me->GetPosition();
+                m_lastMousePosScreen = VECTOR2D( eventPos.x, eventPos.y );
+                pos = GetClampedCoords( m_toolMgr->GetView()->ToWorld( m_lastMousePosScreen ) );
+            }
+            else
+            {
+                pos = m_toolMgr->GetViewControls()->GetMousePosition();
+                m_lastMousePosScreen = m_toolMgr->GetViewControls()->GetMousePosition( false );
+            }
 
             if( pos != m_lastMousePos )
             {

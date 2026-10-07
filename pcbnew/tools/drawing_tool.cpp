@@ -2878,7 +2878,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic, std
         }
 
         grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
-        cursorPos = m_controls->GetMousePosition();
+        cursorPos = evt->HasPosition() ? evt->Position() : m_controls->GetMousePosition();
         cursorPos = GetClampedCoords( grid.ResolveSnap( cursorPos, { m_layer }, GRID_GRAPHICS ).position,
                                       COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
