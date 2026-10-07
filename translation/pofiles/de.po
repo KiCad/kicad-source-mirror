@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-06 20:04+0000\n"
+"PO-Revision-Date: 2026-10-07 09:39+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -765,11 +765,11 @@ msgstr "ECO2-Lage anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "Show front fabrication layer"
-msgstr "Vordere Fabrikationslage anzeigen"
+msgstr "Vordere Fertigungslage anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "Show back fabrication layer"
-msgstr "Hintere Fabrikationslage anzeigen"
+msgstr "Hintere Fertigungslage anzeigen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:74
 msgid "Show front courtyard layer"
@@ -1811,7 +1811,7 @@ msgstr ""
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:715
 #, c-format
 msgid "Solution %d of %d, press Align to cycle."
-msgstr "Lösung %d von %d, drücken Sie \"Ausrichten\" zum Wechseln"
+msgstr "Lösung %d von %d, zum Wechseln drücken Sie \"Ausrichten\"."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:1151
 msgid "3D Preview Options"
@@ -9145,16 +9145,17 @@ msgid "Cannot flush or close temporary file"
 msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen"
 
 #: common/gestfich.cpp:893
-#, fuzzy
 msgid "Cannot replace archive"
-msgstr "Kann ZIP-Archiv \"%s\" nicht lesen"
+msgstr "Kann Archiv nicht ersetzen"
 
 #: common/gestfich.cpp:899
 #, fuzzy
 msgid ""
 "\n"
 "Cannot remove temporary archive file"
-msgstr "Kann temporäre Datei \"%s\" nicht in \"%s\" umbenennen"
+msgstr ""
+"\n"
+"Kann temporäre Archivdatei nicht entfernen"
 
 #: common/git/kicad_git_common.cpp:991
 #, c-format
@@ -20557,8 +20558,8 @@ msgid ""
 "Place pins for hierarchical labels when placing sheets or design blocks as "
 "sheets."
 msgstr ""
-"Hierarchischer Bezeichner %s hat keinen entsprechenden Schaltplanpin im "
-"übergeordneten Schaltplanblatt"
+"Platzieren Sie Pins für hierarchische Bezeichner, wenn Sie Schaltplanblätter "
+"oder Designblöcke als Schaltplanblätter einfügen."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:82
 msgid "Allow unconstrained pin swaps"
@@ -28634,12 +28635,13 @@ msgid "Repeat-per-unit decomposition produced no instances."
 msgstr ""
 
 #: eeschema/sim/sim_plot_tab.cpp:550
+#, fuzzy
 msgid "Normalized Z/Z0 (ports differ)"
-msgstr ""
+msgstr "Normalisiertes Z/Z0 (unterschiedliche Ports)"
 
 #: eeschema/sim/sim_plot_tab.cpp:552
 msgid "Normalized Z/Z0"
-msgstr "Normalisiert Z/Z0"
+msgstr "Normalisiertes Z/Z0"
 
 #: eeschema/sim/sim_plot_tab.cpp:1169
 #, c-format
@@ -35896,7 +35898,7 @@ msgstr "3D-Modelle von Bauteilen mit Attribut \"Nicht bestücken\" ausschließen
 msgid "Only use explicitly-set footprint heights to create IDFv3 shapes"
 msgstr ""
 "Verwenden Sie zum Erstellen von IDFv3-Formen ausschließlich explizit "
-"festgelegte Footprint-Höhen."
+"festgelegte Footprint-Höhen"
 
 #: kicad/cli/command_pcb_export_idf.cpp:83
 #, fuzzy
@@ -35958,8 +35960,8 @@ msgstr "Auflösung in DPI (Standard: %d)"
 msgid ""
 "Use the color theme background color instead of a transparent background"
 msgstr ""
-"Verwenden Sie die Hintergrundfarbe aus dem Farbthema anstatt eines "
-"transparenten Hintergrunds."
+"Verwenden Sie anstatt eines transparenten Hintergrunds die Hintergrundfarbe "
+"aus dem Farbthema"
 
 #: kicad/cli/command_pcb_export_png.cpp:147
 #: kicad/cli/command_sch_export_plot.cpp:222
@@ -45889,9 +45891,9 @@ msgid "Generate ODB++ Files"
 msgstr "ODB++-Dateien erzeugen"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:480
-#, fuzzy, c-format
+#, c-format
 msgid "Generated %s"
-msgstr "Erstellen"
+msgstr "Erzeugt %s"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:31
 #, fuzzy
@@ -49414,7 +49416,7 @@ msgid ""
 "Mechanical specifies a through-hole pad that is used for mechanical support"
 msgstr ""
 "Optionale Eigenschaft zum Angeben eines speziellen Zwecks oder einer "
-"Einschränkung in Herstellungsdateien:\n"
+"Einschränkung in Fertigungsdateien:\n"
 "Das BGA-Attribut gilt für Pads in BGA-Footprints\n"
 "Passermarke lokal ist eine Referenz für den übergeordneten Footprint\n"
 "Passermarke global ist eine Referenz für die gesamte Platine\n"
@@ -49744,12 +49746,12 @@ msgstr "Entfernt Bestückungsdruck aus Bereichen ohne Lötstopplack"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:124
 msgid "Indicate DNP on fabrication layers"
-msgstr "Nicht zu bestückende Bauteile auf Fabrikationslagen markieren"
+msgstr "Nicht zu bestückende Bauteile auf Fertigungslagen markieren"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:125
 msgid "Hide or cross-out DNP footprints on fabrication layers"
 msgstr ""
-"Nicht zu bestückende Bauteile auf Fabrikationslagen verstecken oder "
+"Nicht zu bestückende Bauteile auf Fertigungslagen verstecken oder "
 "durchstreichen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:129
@@ -49768,7 +49770,7 @@ msgstr "Durchstreichen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:137
 msgid "Sketch pads on fabrication layers"
-msgstr "Pads auf Fabrikationslagen skizzieren"
+msgstr "Pads auf Fertigungslagen skizzieren"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:138
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
@@ -51716,28 +51718,25 @@ msgid "misc fab layers"
 msgstr "Sichtbare Lagen"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:63
-#, fuzzy
 msgid "logical netlist"
-msgstr "Eine Netzliste exportieren"
+msgstr "Logische Netzliste"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:64
-#, fuzzy
 msgid "physical netlist"
-msgstr "Eeschema Netzliste"
+msgstr "Physische Netzliste"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:79
 #, fuzzy
 msgid "Section"
-msgstr "Auswahl"
+msgstr "Abschnitt"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:80
 msgid "ODB++"
-msgstr ""
+msgstr "ODB++"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:80
-#, fuzzy
 msgid "IPC-2581"
-msgstr "IPC-2581 exportieren"
+msgstr "IPC-2581"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:98
 msgid ""
@@ -51747,13 +51746,12 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:101
 #: pcbnew/dialogs/panel_fab_export_content.cpp:397
-#, fuzzy
 msgid "board metadata"
-msgstr "Metadaten durchsuchen"
+msgstr "Platinen-Metadaten"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:109
 msgid "intentional shorts"
-msgstr ""
+msgstr "Beabsichtigte Kurzschlüsse"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:196
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:34
@@ -51774,15 +51772,13 @@ msgstr "Lagenaufbau der Platine"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:202
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:34
-#, fuzzy
 msgid "Fabrication"
-msgstr "Fertigungs-Lage"
+msgstr "Fertigung"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:203
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:34
-#, fuzzy
 msgid "Assembly"
-msgstr "Hintere Montageansicht"
+msgstr "Bestückung"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:207
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:34
@@ -51791,35 +51787,31 @@ msgid "Stencil"
 msgstr "Schablone"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Current (%s)"
-msgstr "Strom (I):"
+msgstr "Aktuell (%s)"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:226
-#, fuzzy
 msgid "Selected variants…"
-msgstr "Variante löschen"
+msgstr "Ausgewählte Varianten …"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:227
-#, fuzzy
 msgid "All variants"
-msgstr "Varianten"
+msgstr "Alle Varianten"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:385
 #: pcbnew/dialogs/panel_fab_export_content.cpp:402
 #, fuzzy
 msgid "Includes: "
-msgstr "Enthalten:"
+msgstr "Enthalten: "
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:472
-#, fuzzy
 msgid "Choose the variants to export"
-msgstr "Keine Footprints zu exportieren!"
+msgstr "Varianten für den Export auswählen"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:472
-#, fuzzy
 msgid "Selected variants"
-msgstr "Variante löschen"
+msgstr "Ausgewählte Varianten"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:17
 msgid "Content"
@@ -51839,9 +51831,8 @@ msgstr ""
 "Funktionsmodustabelle"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:46
-#, fuzzy
 msgid "Anonymize"
-msgstr "Anonym"
+msgstr "Anonymisieren"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:50
 #, fuzzy
@@ -51853,42 +51844,39 @@ msgstr ""
 "Netzlistenvergleich, ohne die Designabsicht zu übertragen"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:62
-#, fuzzy
 msgid "Select a board variant for this export"
-msgstr "Verzeichnis für Dateiexport wählen"
+msgstr "Eine Platinen-Variante für diesen Export auswählen"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:66
 msgid "Reference designators:"
 msgstr "Referenzbezeichner:"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:74
-#, fuzzy
 msgid ""
 "Omits the designator from the component, BOM and artwork metadata. Reference "
 "text drawn on silkscreen is artwork the fabricator must reproduce and is "
 "always kept."
 msgstr ""
-"Läßt den Bezeichner des Bauteils, BOM und Grafik-Metadaten weg. Auf dem "
-"Bestückungsdruck gezeichneter Referenztext ist Grafik, die der Fertiger "
-"reproduzieren muss und bleibt stets erhalten."
+"Läßt den Bezeichner des Bauteils, BOM und Grafik-Metadaten weg. Auf "
+"Bestückungsdruck gezeichneter Referenztext besteht aus Grafikelementen, die "
+"der Fertiger reproduzieren muss und bleibt stets erhalten."
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:81
-#, fuzzy
 msgid "One package per variant"
-msgstr "%d Paketaktualisierung(en) verfügbar"
+msgstr "Ein Gehäuse pro Variante"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:81
 msgid "One package, all variants inside"
 msgstr ""
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:83
-#, fuzzy
 msgid "Variant output"
-msgstr "Fertigungsdaten"
+msgstr "Variantenausgabe"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:87
+#, fuzzy
 msgid "${VARIANT} is replaced per package"
-msgstr ""
+msgstr "${VARIANT} wird je nach Gehäuse ersetzt"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:91
 #, fuzzy
@@ -51903,12 +51891,12 @@ msgstr "Benutzerdefiniert ..."
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:103
 #, fuzzy
 msgid "BOM Fields..."
-msgstr "Feld hinzufügen..."
+msgstr "BOM-Felder ..."
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:140
 #, fuzzy
 msgid "Choose the optional sections to include"
-msgstr "Wählen Sie die optionalen Abschnitte aus, die Sie einfügen möchten."
+msgstr "Wählen Sie die optionalen Abschnitte aus, die Sie einfügen möchten"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.h:92
 msgid "Customize Content"
@@ -56502,7 +56490,7 @@ msgstr "%s Padtyp weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:372
 #, c-format
 msgid "%s fabrication property differs."
-msgstr "%s Fabrikationseigenschaft weicht ab."
+msgstr "%s Fertigungseigenschaft weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:377
 #, c-format
@@ -57553,7 +57541,7 @@ msgstr ""
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:202
 #, fuzzy
 msgid "Largest number of microvias allowed stacked on one another."
-msgstr "Maximalanzahl von Vias in einem zugehörigen Netz"
+msgstr "Maximalanzahl von Microvias, die übereinander gestapelt werden dürfen."
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:217
 #, fuzzy
@@ -57920,7 +57908,7 @@ msgstr "OP"
 #: pcbnew/drill/drill_chart_template.cpp:46
 #, fuzzy
 msgid "Operation count"
-msgstr "DC-Arbeitspunkt"
+msgstr "Anzahl der Vorgänge"
 
 #: pcbnew/drill/drill_chart_template.cpp:47
 msgid "SITE COUNT"
@@ -58637,7 +58625,7 @@ msgstr "Dateiformat wird nicht unterstützt"
 #: pcbnew/files.cpp:733
 #, fuzzy
 msgid "Invalid imported net-name map."
-msgstr "Ungültiger Eigenschaftsname"
+msgstr "Ungültige importierte Netznamen-Zuordnung."
 
 #: pcbnew/files.cpp:736
 #, fuzzy
@@ -61039,7 +61027,7 @@ msgstr ""
 #: pcbnew/pcb_dimension.cpp:2225 pcbnew/widgets/pcb_properties_panel.cpp:1229
 #, fuzzy
 msgid "Value Mode"
-msgstr "Virtuelle Modelle"
+msgstr "Wertmodus"
 
 #: pcbnew/pcb_dimension.cpp:2253
 msgid "Units Format"
@@ -61083,9 +61071,8 @@ msgid "Drill Chart Properties"
 msgstr "Bohrtabellen-Eigenschaften"
 
 #: pcbnew/pcb_drill_chart.cpp:498
-#, fuzzy
 msgid "Show Totals"
-msgstr "Details anzeigen"
+msgstr "Summen anzeigen"
 
 #: pcbnew/pcb_drill_map.cpp:214
 #, c-format
@@ -61802,8 +61789,9 @@ msgid "Loading rectangles..."
 msgstr "Lade Rechtecke ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:6014
+#, fuzzy
 msgid "Ignored a keep-out area with no restrictions."
-msgstr ""
+msgstr "Eine Sperrfläche ohne Einschränkungen ignoriert."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:34
 msgid "Altium Circuit Maker PCB files"
@@ -62922,7 +62910,7 @@ msgstr "Unbekannte Modus-Zeichenkette: „%s“."
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:120
 #, fuzzy
 msgid "Cannot create temporary IPC-2581 output."
-msgstr "Temporäres Ausgabeverzeichnis kann nicht erstellt werden."
+msgstr "Kann temporäre IPC-2581-Ausgabe nicht erstellen."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:136
 #, c-format
@@ -62934,11 +62922,13 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot write IPC-2581 archive '%s'.\n"
 "%s"
-msgstr "Kann ZIP-Archiv \"%s\" nicht lesen"
+msgstr ""
+"Kann IPC-2581-Archiv \"%s\" nicht schreiben.\n"
+"%s"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:169
 #, fuzzy, c-format
@@ -63475,12 +63465,17 @@ msgid "Failed to generate ODB++ metadata."
 msgstr "Fehler beim Lesen von Bilddaten."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:595
+#, fuzzy
 msgid "ODB++ layer name override is empty or collides; using automatic name."
 msgstr ""
+"ODB++-Lagennamenüberschreibung ist leer oder kollidiert; verwende "
+"automatische Namensvergabe."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:619
+#, fuzzy
 msgid "Invalid ODB++ layer type override; using automatic type."
 msgstr ""
+"Ungültige ODB++-Lagentypüberschreibung; verwende automatische Typvergabe."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:676
 msgid "ODB++ partial drill layer omitted because a span layer is excluded."
@@ -63489,11 +63484,14 @@ msgstr ""
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1357
 #, fuzzy
 msgid "Failed to generate ODB++ stackup."
-msgstr "Speichern der Platine ist fehlgeschlagen.\n"
+msgstr "Erstellung des ODB++-Lagenaufbaus ist fehlgeschlagen."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1430
+#, fuzzy
 msgid "Board outline is not closed; ODB++ rout layer has no board contour."
 msgstr ""
+"Platinenumriss ist nicht geschlossen; ODB++-Routelage hat keine "
+"Platinenkontur."
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:148
 #, fuzzy
@@ -63503,37 +63501,36 @@ msgstr "Ausgabedatei oder -verzeichnis"
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:165
 #, fuzzy
 msgid "Output directory is not an ODB++ product"
-msgstr "Das ausgewählte Verzeichnis ist kein Git-Projekt."
+msgstr "Ausgabeverzeichnis ist kein ODB++-Produkt"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:187
 #, fuzzy, c-format
 msgid "Output directory contains unrelated entry '%s'"
-msgstr "Ausgabeverzeichnis \"%s\" wurde erstellt."
+msgstr "Ausgabeverzeichnis enthält den unabhängigen Eintrag \"%s\""
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:202
 #, fuzzy
 msgid "Output directory contains the source board"
-msgstr "Ausgabeverzeichnis \"%s\" wurde erstellt."
+msgstr "Ausgabeverzeichnis enthält die Ursprungsplatine"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory contains project file '%s'"
-msgstr "Ausgabeverzeichnis \"%s\" wurde erstellt."
+msgstr "Ausgabeverzeichnis enthält die Projektdatei \"%s\""
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:274
 #, fuzzy
 msgid "Cannot create temporary backup path"
-msgstr "Temporäres Ausgabeverzeichnis kann nicht erstellt werden."
+msgstr "Kann temporären Sicherungspfad nicht erstellen"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:305
 #, fuzzy, c-format
 msgid "Cannot remove previous ODB++ directory '%s': %s"
-msgstr "Vorhandenes Ausgabeverzeichnis \"%s\" kann nicht entfernt werden."
+msgstr "Kann vorheriges ODB++-Verzeichnis \"%s\" nicht entfernen: %s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:357
-#, fuzzy
 msgid "No board for ODB++ export."
-msgstr "ODB++-Export"
+msgstr "Keine Platine für ODB++-Export."
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:420
 #, fuzzy, c-format
@@ -63546,7 +63543,9 @@ msgstr ""
 msgid ""
 "Cannot use ODB++ directory '%s'.\n"
 "%s"
-msgstr "Kann das Ausgabeverzeichnis \"%s\" nicht erstellen."
+msgstr ""
+"Kann ODB++-Verzeichnis \"%s\" nicht verwenden.\n"
+"%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:449
 #, c-format
@@ -63571,9 +63570,9 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:522
-#, c-format
+#, c-format, fuzzy
 msgid "Exception in ODB++ generation: %s"
-msgstr ""
+msgstr "Ausnahme in ODB++-Erstellung: %s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:532
 msgid "Compressing output"
@@ -63584,14 +63583,18 @@ msgstr "Komprimiere Ausgabe"
 msgid ""
 "Cannot write ODB++ archive '%s'.\n"
 "%s"
-msgstr "Kann ZIP-Archiv \"%s\" nicht lesen"
+msgstr ""
+"Kann ODB++-Archiv \"%s\" nicht schreiben.\n"
+"%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:559
 #, fuzzy, c-format
 msgid ""
 "Cannot replace ODB++ directory '%s'.\n"
 "%s"
-msgstr "Kann das Ausgabeverzeichnis \"%s\" nicht erstellen."
+msgstr ""
+"Kann ODB++-Verzeichnis \"%s\" nicht ersetzen.\n"
+"%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:588
 #, fuzzy
@@ -63601,25 +63604,29 @@ msgstr "3D-Modell Nutzdatentyp wird nicht unterstützt."
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:598
 #, fuzzy
 msgid "Unknown ODB++ section key."
-msgstr "Unbekannte Ausnahme"
+msgstr "Unbekannter ODB++-Abschnittsschlüssel."
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:622
-#, c-format
+#, c-format, fuzzy
 msgid "ODB++ variant names adjusted after conversion:%s"
-msgstr ""
+msgstr "Nach der Konvertierung angepasste ODB++-Variantennamen: %s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:627
+#, fuzzy
 msgid "ODB++ variant list exceeds 1000 characters; list attributes omitted."
 msgstr ""
+"ODB++-Variantenliste ist länger als 1000 Zeichen; Listenattribute wurden "
+"weggelassen."
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown board variant '%s'."
-msgstr "Unbekannte Platineneinheiten: %d"
+msgstr "Unbekannte Platinenvariante \"%s\"."
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:691
+#, fuzzy
 msgid "ODB++ variant output names collide after conversion."
-msgstr ""
+msgstr "Namen der ODB++-Varianten kollidieren nach der Konvertierung."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:166
 msgid "Creating ODB++ Structure"
@@ -63634,19 +63641,23 @@ msgid "ODB++ package section added because components reference packages."
 msgstr ""
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:268
+#, fuzzy
 msgid "Ignoring invalid ODB++ layer override."
-msgstr ""
+msgstr "Ungültige ODB++-Lagenüberschreibung ignoriert."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:287
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "ODB++ precision %d is below the minimum of %d for these units; using %d."
 msgstr ""
+"ODB++-Genauigkeit %d befindet sich für diese Einheiten unter dem Minimum von "
+"%d; verwende %d."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:293
-#, c-format
+#, c-format, fuzzy
 msgid "ODB++ precision %d is above the maximum of %d; using %d."
 msgstr ""
+"ODB++-Genauigkeit %d befindet sich über dem Maximum von %d; verwende %d."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:304
 msgid "ODB++ fabrication data includes EDA nets for intentional shorts."
@@ -65073,7 +65084,7 @@ msgstr "Platinenstatistik nach \"%s\" geschrieben.\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:2065
 #, fuzzy
 msgid "Failed to serialize board stackup\n"
-msgstr "Speichern der Platine ist fehlgeschlagen.\n"
+msgstr "Serialisierung des Lagenaufbaus der Platine fehlgeschlagen\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:2132
 #, fuzzy, c-format
@@ -67746,7 +67757,7 @@ msgstr "Koinzidenz ..."
 #: pcbnew/tools/pcb_actions.cpp:209
 #, fuzzy
 msgid "Click two shape endpoints to make them coincide"
-msgstr "Auf zwei Formendpunkte klicken, um sie aufeinanderzulegen"
+msgstr "Auf zwei Form-Endpunkte klicken, um sie aufeinanderzulegen"
 
 #: pcbnew/tools/pcb_actions.cpp:218
 msgid "Point on Line..."
@@ -67786,17 +67797,18 @@ msgstr "Geometrische Einschränkungen immer anzeigen"
 #, fuzzy
 msgid "Always show the geometric-constraint diagnostics overlay"
 msgstr ""
-"Die Überlagerung zur geometrisch eingeschränkten Diagnose immer anzeigen"
+"Die Überlagerung mit der Diagnose zu geometrischen Einschränkungen immer "
+"anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:256
-#, fuzzy
 msgid "Show Geometric Constraints on Hover Only"
-msgstr "Geometrische Einschränkungen nur beim \"Darüberfahren\" anzeigen"
+msgstr "Geometrische Einschränkungen nur bei Mausberührung anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:257
+#, fuzzy
 msgid "Reveal a shape's geometric constraints only while hovering it"
 msgstr ""
-"Geometrische Einschränkungen einer Form nur beim Überfahren mit der Maus "
+"Geometrische Einschränkungen einer Form nur während der Mauszeiger-Überfahrt "
 "anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:264
@@ -67812,8 +67824,8 @@ msgstr ""
 #, fuzzy
 msgid "Remove geometric constraints referencing the selected items"
 msgstr ""
-"Geometrische Einschränkungen entfernen, die sich auf ausgewählte Elemente "
-"beziehen"
+"Geometrische Einschränkungen entfernen, die auf die ausgewählten Elemente "
+"verweisen"
 
 #: pcbnew/tools/pcb_actions.cpp:279
 msgid "Show/hide the geometric constraints panel"
@@ -68463,14 +68475,12 @@ msgid "Export edited footprint to file"
 msgstr "Bearbeiteten Footprint in Datei exportieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1337
-#, fuzzy
 msgid "Export Current Footprint as SVG..."
-msgstr "Aktuellen Footprint exportieren ..."
+msgstr "Aktuellen Footprint als SVG exportieren ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1338
-#, fuzzy
 msgid "Export the current footprint to an SVG file"
-msgstr "Exportiere den aktuellen Footprint in eine Datei"
+msgstr "Den aktuellen Footprint in eine SVG-Datei exportieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1345
 #, fuzzy
@@ -68480,12 +68490,11 @@ msgstr "Öffnet den ausgewählten Footprint in der Footprint-Anzeige"
 #: pcbnew/tools/pcb_actions.cpp:1351 pcbnew/tools/pcb_actions.cpp:1669
 #, fuzzy
 msgid "Bulk Edit Footprint Fields..."
-msgstr "Footprintfeld ..."
+msgstr "Sammelbearbeitung von Footprintfeldern ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1352
-#, fuzzy
 msgid "Edit a table of fields from all footprints in the library"
-msgstr "Eine Tabelle mit Feldern aller Symbole in der Bibliothek bearbeiten"
+msgstr "Eine Tabelle mit Feldern aller Footprints in der Bibliothek bearbeiten"
 
 #: pcbnew/tools/pcb_actions.cpp:1358
 msgid "Footprint Properties..."
@@ -68813,9 +68822,8 @@ msgid "Export Specctra DSN routing info"
 msgstr "Exportiert Specctra DSN Routing Informationen"
 
 #: pcbnew/tools/pcb_actions.cpp:1670
-#, fuzzy
 msgid "Edit a table of fields from all footprints in the board"
-msgstr "Eine Tabelle mit Feldern aller Symbole in der Bibliothek bearbeiten"
+msgstr "Eine Tabelle mit Feldern aller Footprints auf der Platine bearbeiten"
 
 #: pcbnew/tools/pcb_actions.cpp:1676
 msgid "Gerbers (.gbr)..."
@@ -70273,7 +70281,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:3117
 msgid "Every documentation layer already has a drill map."
-msgstr "Auf jeder Dokumentationslage befindet sich bereits einen Bohrplan."
+msgstr "Auf jeder Dokumentationslage befindet sich bereits ein Bohrplan."
 
 #: pcbnew/tools/pcb_control.cpp:3130
 msgid "Place Drill Map"
