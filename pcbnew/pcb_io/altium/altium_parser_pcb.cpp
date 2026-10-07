@@ -1308,7 +1308,9 @@ AVIA6::AVIA6( ALTIUM_BINARY_PARSER& aReader )
     is_test_fab_bottom = ( flags2 & 0x01 ) != 0;
 
     net = aReader.Read<uint16_t>();
-    aReader.Skip( 8 );
+    aReader.Skip( 2 ); // polygon
+    component = aReader.Read<uint16_t>();
+    aReader.Skip( 4 );
     position = aReader.ReadVector2IPos();
     diameter = aReader.ReadKicadUnit();
     holesize = aReader.ReadKicadUnit();

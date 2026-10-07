@@ -857,6 +857,7 @@ struct AVIA6
     bool is_test_fab_bottom = false;
 
     uint16_t net = 0;
+    uint16_t component = ALTIUM_COMPONENT_NONE;
 
     VECTOR2I position;
     uint32_t pos_tolerance = 2147483640; // 2147483640 is N/A

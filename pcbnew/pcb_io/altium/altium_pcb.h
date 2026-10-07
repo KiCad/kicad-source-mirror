@@ -88,6 +88,7 @@ class BOARD;
 class BOARD_ITEM;
 class EDA_TEXT;
 class FP_SHAPE;
+class PAD;
 class PCB_SHAPE;
 class PCB_TEXTBOX;
 class FOOTPRINT;
@@ -223,7 +224,8 @@ private:
     void ConvertPads6ToFootprintItemOnNonCopper( FOOTPRINT* aFootprint, const APAD6& aElem );
     void ParseVias6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                          const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    void ConvertVias6ToFootprintItem( FOOTPRINT* aFootprint, const AVIA6& aElem );
+    void ConvertVias6ToBoardItem( const AVIA6& aElem );
+    PAD* ConvertVias6ToFootprintItem( FOOTPRINT* aFootprint, const AVIA6& aElem );
     void ParseTracks6Data( const ALTIUM_PCB_COMPOUND_FILE&     aAltiumPcbFile,
                            const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPrimitiveIndex );
@@ -238,6 +240,17 @@ private:
     void HelperCreateTuningPatterns();
     void HelperSetFootprintMountingStyles();
     void HelperSetFootprintStackups();
+
+    /**
+     * Hold netted copper a component draws until its pads exist.
+     *
+     * @param aFallback places the copper on the board when no pad of its net touches it.
+     */
+    void HelperDeferComponentCopper( FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer, uint16_t aNet,
+                                     std::unique_ptr<PCB_SHAPE> aShape, std::function<void()> aFallback );
+
+    /// Join deferred component copper and vias to the same-net pads they touch.
+    void HelperFoldComponentCopperIntoPads();
 
     /// Rebuild the composite netclasses and point every net at its effective netclass.
     void HelperAssignNetclassesToNets();
@@ -261,6 +274,7 @@ private:
     void ConvertFills6ToBoardItem( const AFILL6& aElem );
     void ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFILL6& aElem,
                                        const bool aIsBoardImport );
+    void ConvertFills6ToPcbShape( const AFILL6& aElem, PCB_SHAPE* aShape );
     void ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER_ID aLayer );
     void ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const AFILL6& aElem,
                                               PCB_LAYER_ID aLayer );
@@ -372,6 +386,18 @@ private:
     std::vector<ASMARTUNION6>                  m_tuningUnions;
     std::map<uint32_t, wxString>               m_unionNames;
     std::map<int, std::vector<BOARD_ITEM*>>    m_unionToBoardItems;
+
+    struct PENDING_COMPONENT_COPPER
+    {
+        FOOTPRINT*                 footprint;
+        PCB_LAYER_ID               layer;
+        int                        netcode;
+        std::unique_ptr<PCB_SHAPE> shape;        ///< Board coordinates, released once folded
+        std::function<void()>      fallback;
+    };
+
+    std::vector<PENDING_COMPONENT_COPPER>          m_pendingComponentCopper;
+    std::vector<std::pair<FOOTPRINT*, AVIA6>>      m_pendingComponentVias;
 
     std::map<ALTIUM_LAYER, ZONE*>        m_outer_plane;
 
