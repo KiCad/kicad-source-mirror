@@ -29,11 +29,7 @@ function( sign_kicad_bundle target signing_id use_secure_timestamp use_hardened_
 
     # add all the files in Contents/MacOS/
     # But we've gotta sign kicad-cli before signing kicad, at least on x86_64
-    set( kicad_bins "${target}/Contents/MacOS/dxf2idf"
-            "${target}/Contents/MacOS/idf2vrml"
-            "${target}/Contents/MacOS/idfcyl"
-            "${target}/Contents/MacOS/idfrect"
-            "${target}/Contents/MacOS/kicad-cli"
+    set( kicad_bins "${target}/Contents/MacOS/kicad-cli"
             "${target}/Contents/MacOS/kicad")
 
     if( use_sentry )
