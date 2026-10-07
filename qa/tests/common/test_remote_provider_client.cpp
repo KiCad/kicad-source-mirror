@@ -127,9 +127,8 @@ struct BUILD_DIR_FIXTURE
     {
         m_runFromBuildDirWasSet = wxGetEnv( wxS( "KICAD_RUN_FROM_BUILD_DIR" ), &m_oldRunFromBuildDir );
 
-#ifdef __WXMAC__
-        // KICAD_RUN_FROM_BUILD_DIR doesn't work for the JSON schema in bare QA binaries.
-        // Instead we can hack the data home location
+#if defined( __WXMAC__ ) || defined( __WXMSW__ )
+        // Bare QA binaries need the source schema directory as their data home.
         wxUnsetEnv( wxS( "KICAD_RUN_FROM_BUILD_DIR" ) );
 
         wxFileName resourcesDir = wxFileName::DirName( wxString::FromUTF8( QA_SRC_ROOT ) );
@@ -149,7 +148,7 @@ struct BUILD_DIR_FIXTURE
         else
             wxUnsetEnv( wxS( "KICAD_RUN_FROM_BUILD_DIR" ) );
 
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) || defined( __WXMSW__ )
         if( m_stockDataHomeWasSet )
             wxSetEnv( wxS( "KICAD_STOCK_DATA_HOME" ), m_oldStockDataHome );
         else
@@ -159,7 +158,7 @@ struct BUILD_DIR_FIXTURE
 
     bool     m_runFromBuildDirWasSet = false;
     wxString m_oldRunFromBuildDir;
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) || defined( __WXMSW__ )
     bool     m_stockDataHomeWasSet = false;
     wxString m_oldStockDataHome;
 #endif

@@ -20,6 +20,7 @@
 #include <boost/test/unit_test.hpp>
 #include <qa_utils/file_utils.h>
 
+#include <algorithm>
 #include <string>
 
 #include <wx/filename.h>
@@ -69,6 +70,8 @@ BOOST_AUTO_TEST_CASE( R2000HandlesAndTableSkeleton )
     buffer.resize( static_cast<size_t>( len ) );
     BOOST_REQUIRE_EQUAL( file.Read( buffer.data(), len ), static_cast<size_t>( len ) );
     file.Close();
+
+    buffer.erase( std::remove( buffer.begin(), buffer.end(), '\r' ), buffer.end() );
 
     // AC1018 makes the 420 true-color tag legal; $HANDSEED must exist for strict
     // R2000+ readers.

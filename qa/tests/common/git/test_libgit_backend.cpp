@@ -163,9 +163,8 @@ struct GIT_BACKEND_FIXTURE
     /// Add an `origin` remote pointing at the bare remote on disk.
     bool addOrigin( git_repository* aRepo )
     {
-        wxString    fileUrl = wxS( "file://" ) + m_remotePath;
         git_remote* remote = nullptr;
-        int         rc = git_remote_create( &remote, aRepo, "origin", fileUrl.ToUTF8().data() );
+        int rc = git_remote_create( &remote, aRepo, "origin", m_remotePath.ToUTF8().data() );
 
         if( remote )
             git_remote_free( remote );
@@ -268,10 +267,8 @@ private:
         git_clone_init_options( &opts, GIT_CLONE_OPTIONS_VERSION );
         opts.bare = 1;
 
-        wxString sourceUrl = wxS( "file://" ) + m_repoPath;
-
         git_repository* bare = nullptr;
-        int             rc = git_clone( &bare, sourceUrl.ToUTF8().data(), m_remotePath.ToUTF8().data(), &opts );
+        int rc = git_clone( &bare, m_repoPath.ToUTF8().data(), m_remotePath.ToUTF8().data(), &opts );
 
         if( bare )
             git_repository_free( bare );
