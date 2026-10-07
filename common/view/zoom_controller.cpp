@@ -34,14 +34,18 @@
 using namespace KIGFX;
 
 
-// Notches carried by one wheel event, where aNotch is the rotation of a single notch
-// A zero aNotch means the rotation is a scroll speed, so the event counts as one notch
-static double notchCount( int aRotation, int aNotch )
+// Bounds the zoom of a single event however many notches it reports
+static constexpr double MAX_MERGED_NOTCHES = 10.0;
+
+
+// Notches carried by one wheel event, where aWheelDelta is the rotation of a single notch
+// A zero aWheelDelta means the rotation is a scroll distance, so the event counts as one notch
+static double notchCount( int aRotation, int aWheelDelta )
 {
-    if( aNotch <= 0 || std::abs( aRotation ) < aNotch )
+    if( aWheelDelta <= 0 )
         return 1.0;
 
-    return std::abs( aRotation ) / double( aNotch );
+    return std::clamp( std::abs( double( aRotation ) ) / aWheelDelta, 1.0, MAX_MERGED_NOTCHES );
 }
 
 
@@ -60,10 +64,9 @@ public:
 
 
 ACCELERATING_ZOOM_CONTROLLER::ACCELERATING_ZOOM_CONTROLLER(
-        double aScale, const TIMEOUT& aAccTimeout, TIMESTAMP_PROVIDER* aTimestampProv, int aNotch ) :
+        double aScale, const TIMEOUT& aAccTimeout, TIMESTAMP_PROVIDER* aTimestampProv ) :
         m_accTimeout( aAccTimeout ),
-        m_scale( aScale ),
-        m_notch( aNotch )
+        m_scale( aScale )
 {
     if( aTimestampProv )
     {
@@ -79,7 +82,7 @@ ACCELERATING_ZOOM_CONTROLLER::ACCELERATING_ZOOM_CONTROLLER(
 }
 
 
-double ACCELERATING_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
+double ACCELERATING_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation, int aWheelDelta )
 {
     // The minimal step value when changing the current zoom level
     const double minStep = 1.05;
@@ -112,8 +115,8 @@ double ACCELERATING_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
     }
     m_prevRotationPositive = aRotation > 0;
 
-    if( notchCount( aRotation, m_notch ) > 1.0 )
-        zoomScale = std::pow( zoomScale, notchCount( aRotation, m_notch ) );
+    if( notchCount( aRotation, aWheelDelta ) > 1.0 )
+        zoomScale = std::pow( zoomScale, notchCount( aRotation, aWheelDelta ) );
 
     wxLogTrace( traceZoomScroll, wxString::Format( "  Zoom factor: %f", zoomScale ) );
 
@@ -129,28 +132,20 @@ constexpr double GAL_API CONSTANT_ZOOM_CONTROLLER::MSW_SCALE;
 #endif
 
 
-CONSTANT_ZOOM_CONTROLLER::CONSTANT_ZOOM_CONTROLLER( double aScale, int aNotch ) :
-        m_scale( aScale ),
-        m_notch( aNotch )
+CONSTANT_ZOOM_CONTROLLER::CONSTANT_ZOOM_CONTROLLER( double aScale ) : m_scale( aScale )
 {
 }
 
 
-double CONSTANT_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
+double CONSTANT_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation, int aWheelDelta )
 {
     wxLogTrace( traceZoomScroll, wxString::Format( "Rot %d", aRotation ) );
 
-    const int rotation = aRotation;
-
-    aRotation = ( aRotation > 0 ) ? std::min( aRotation, 100 ) : std::max( aRotation, -100 );
-
-    double dscale = aRotation * m_scale;
-
-    double zoom_scale = ( aRotation > 0 ) ? ( 1 + dscale ) : 1 / ( 1 - dscale );
-
-    // A notch saturates the clamp, so each further notch of a merged event zooms by that factor again
-    if( notchCount( rotation, m_notch ) > 1.0 )
-        zoom_scale = std::pow( zoom_scale, notchCount( rotation, m_notch ) );
+    // One notch is worth at most 100 units, and each further notch of a merged event zooms by it again
+    const double stepCap = aWheelDelta > 0 ? std::min( aWheelDelta, 100 ) : 100;
+    const double oneStep = std::min( std::abs( double( aRotation ) ), stepCap );
+    const double factor = std::pow( 1.0 + oneStep * m_scale, notchCount( aRotation, aWheelDelta ) );
+    const double zoom_scale = aRotation > 0 ? factor : 1.0 / factor;
 
     wxLogTrace( traceZoomScroll, wxString::Format( "  Zoom factor: %f", zoom_scale ) );
 
