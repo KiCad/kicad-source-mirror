@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-04 22:51+0000\n"
+"PO-Revision-Date: 2026-10-07 21:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v10/ja/>\n"
 "Language: ja\n"
@@ -2055,12 +2055,12 @@ msgstr "APIからの変更"
 #: common/api/api_plugin.cpp:60
 #, c-format
 msgid "invalid plugin configuration at '%s': %s"
-msgstr "プラグイン設定が '%s' で不正: %s"
+msgstr "'%s' のプラグイン設定が無効: %s"
 
 #: common/api/api_plugin.cpp:80
 #, c-format
 msgid "invalid plugin runtime: %s"
-msgstr "不正なプラグイン ランタイム: %s"
+msgstr "無効なプラグイン ランタイム: %s"
 
 #: common/api/api_plugin.cpp:112
 msgid "could not read plugin configuration file"
@@ -2079,12 +2079,12 @@ msgstr "必須キーが欠落しているか無効: %s"
 #: common/api/api_plugin.cpp:174
 #, c-format
 msgid "identifier '%s' is invalid"
-msgstr "識別子 '%s' が不正"
+msgstr "識別子 '%s' が無効"
 
 #: common/api/api_plugin.cpp:201
 #, c-format
 msgid "actions section is invalid: %s"
-msgstr "アクション セレクションが不正: %s"
+msgstr "アクション セレクションが無効: %s"
 
 #: common/api/api_plugin_manager.cpp:101
 #, c-format
@@ -3180,7 +3180,7 @@ msgstr "グリッド設定"
 #: common/dialogs/dialog_group_properties.cpp:115
 #, c-format
 msgid "Invalid library link: '%s'"
-msgstr "不正なライブラリリンク: '%s'"
+msgstr "無効なライブラリリンク: '%s'"
 
 #: common/dialogs/dialog_group_properties.cpp:138
 msgid "Edit Group Properties"
@@ -4055,7 +4055,7 @@ msgstr "秘密鍵 '%s' を開くことができません"
 
 #: common/dialogs/git/dialog_git_repository.cpp:392
 msgid "Invalid SSH Key"
-msgstr "不正なSSH鍵"
+msgstr "無効なSSH鍵"
 
 #: common/dialogs/git/dialog_git_repository.cpp:393
 msgid "The selected file is not a valid SSH private key"
@@ -4328,7 +4328,7 @@ msgstr "レンダリング エンジン"
 
 #: common/dialogs/panel_common_settings_base.cpp:35
 msgid "Accelerated Graphics"
-msgstr "アクセラレーター グラフィックス"
+msgstr "グラフィックス描画の高速化"
 
 #: common/dialogs/panel_common_settings_base.cpp:36
 msgid "Hardware-accelerated graphics (recommended)"
@@ -6594,7 +6594,7 @@ msgstr "区切り文字で囲まれていません"
 
 #: common/dsnlexer.cpp:876
 msgid "Invalid floating point number"
-msgstr "不正な浮動小数点数"
+msgstr "無効な浮動小数点数"
 
 #: common/eda_base_frame.cpp:496
 #, c-format
@@ -7720,7 +7720,7 @@ msgstr "ファイル '%s' をコピーできません。"
 
 #: common/gestfich.cpp:452
 msgid "Invalid directory name, cannot remove root"
-msgstr "不正なディレクトリ名、ルート ディレクトリは削除できません"
+msgstr "無効なディレクトリ名、ルート ディレクトリは削除できません"
 
 #: common/gestfich.cpp:460
 #, c-format
@@ -7803,7 +7803,7 @@ msgstr "認証できません"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Invalid repository."
-msgstr "不正なリポジトリです。"
+msgstr "無効なリポジトリです。"
 
 #: common/git/kicad_git_errors.cpp:41
 msgid "Failed to commit changes."
@@ -8075,7 +8075,7 @@ msgstr "マージを解析できません"
 
 #: common/git/libgit_backend.cpp:1223
 msgid "Invalid HEAD.  Cannot merge."
-msgstr "不正なHEADです。  マージできません。"
+msgstr "無効なHEADです。  マージできません。"
 
 #: common/git/libgit_backend.cpp:1249
 msgid "Could not access repository configuration"
@@ -8472,7 +8472,7 @@ msgstr "mil"
 
 #: common/import_gfx/dxf_import_plugin.cpp:1583
 msgid "Invalid spline definition encountered"
-msgstr "不正なスプラインの定義が検出されました"
+msgstr "無効なスプラインの定義が検出されました"
 
 #: common/import_gfx/dxf_import_plugin.h:224
 #, c-format
@@ -8612,7 +8612,7 @@ msgstr "不正なサイズ %lld: 大きすぎます"
 #: common/io/eagle/eagle_parser.cpp:532
 #, c-format
 msgid "Invalid Arc with radius %0.2f and angle %0.2f"
-msgstr "不正な円弧 (半径 %0.2f 、角度 %0.2f )"
+msgstr "無効な円弧 (半径 %0.2f 、角度 %0.2f )"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
 #, c-format
@@ -16052,7 +16052,7 @@ msgstr "ライブラリの接頭辞:"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:131
 msgid "Prefix that will be applied to the generated libraries."
-msgstr "生成されるライブラリに適用される接頭辞。"
+msgstr "生成されたライブラリに適用される接頭辞。"
 
 #: eeschema/dialogs/dialog_remote_symbol_config.cpp:139
 msgid "Add libraries to:"
@@ -50350,9 +50350,9 @@ msgstr ""
 "す"
 
 #: pcbnew/footprint_libraries_utils.cpp:842
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' could not be saved to library '%s'."
-msgstr "フットプリント '%s' がライブラリ'%s'に見つかりません"
+msgstr "フットプリント '%s' をライブラリ'%s'に保存できませんでした。"
 
 #: pcbnew/footprint_libraries_utils.cpp:873
 #: pcbnew/footprint_viewer_frame.cpp:752
