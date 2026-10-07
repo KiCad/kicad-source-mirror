@@ -199,7 +199,7 @@ void DisplayError( wxWindow* aParent, const wxString& aText )
 
     if( !wxTheApp->IsGUI() )
     {
-        wxFprintf( stderr, aText );
+        wxFprintf( stderr, wxS( "%s" ), aText );
         return;
     }
 
@@ -224,7 +224,7 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxStri
 
     if( !wxTheApp->IsGUI() )
     {
-        wxFprintf( stderr, aText );
+        wxFprintf( stderr, wxS( "%s" ), aText );
         return;
     }
 

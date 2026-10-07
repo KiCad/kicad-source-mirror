@@ -46,7 +46,7 @@ void CLI_PROGRESS_REPORTER::Report( const wxString& aMessage )
 void CLI_PROGRESS_REPORTER::printLine( const wxString& aMessage )
 {
     if( aMessage.EndsWith( wxS( "\n" ) ) )
-        wxFprintf( stdout, aMessage );
+        wxFprintf( stdout, wxS( "%s" ), aMessage );
     else
-        wxFprintf( stdout, aMessage + wxS( "\n" ) );
+        wxFprintf( stdout, wxS( "%s" ), aMessage + wxS( "\n" ) );
 }

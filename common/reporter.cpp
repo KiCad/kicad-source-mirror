@@ -246,9 +246,9 @@ REPORTER& CLI_REPORTER::Report( const wxString& aMsg, SEVERITY aSeverity )
 #endif
 
     if( aMsg.EndsWith( wxS( "\n" ) ) )
-        wxFprintf( target, aMsg );
+        wxFprintf( target, wxS( "%s" ), aMsg );
     else
-        wxFprintf( target, aMsg + wxS( "\n" ) );
+        wxFprintf( target, wxS( "%s" ), aMsg + wxS( "\n" ) );
 
     // Needed  after wxPrintf (or printf) to be sure the message is immediately printed
     // (i.e. not stored in some i/o buffer)
