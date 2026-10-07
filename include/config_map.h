@@ -17,10 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CONFIG_MAP__H_
-#define CONFIG_MAP__H_
+#pragma once
 
 #include <map>
+#include <utility>
+#include <vector>
+
 
 namespace UTIL
 {
@@ -106,6 +108,4 @@ static CFG_NATIVE_VAL<MAP> GetValFromConfig( const MAP& aMap, long aConf )
     return aVal;
 }
 
-}
-
-#endif /* CONFIG_MAP__H_ */
+} // namespace UTIL
