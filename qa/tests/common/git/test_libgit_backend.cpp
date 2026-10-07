@@ -322,6 +322,13 @@ BOOST_AUTO_TEST_CASE( IsWithinProjectPath_ScopesToProjectDirectory )
     BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "/repo/proj-extra/f.txt" ),
                                                                  wxT( "/repo/proj" ) ) );
 
+#ifdef __WINDOWS__
+    BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "C:\\repo\\proj/file.kicad_sch" ),
+                                                                 wxT( "C:\\repo\\proj\\" ) ) );
+    BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "C:\\repo\\proj-extra/file.kicad_sch" ),
+                                                                  wxT( "C:\\repo\\proj\\" ) ) );
+#endif
+
     // An empty project path matches nothing rather than the whole repository.
     BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( wxT( "/repo/proj/f.txt" ), wxEmptyString ) );
 }

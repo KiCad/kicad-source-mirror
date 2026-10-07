@@ -185,12 +185,22 @@ bool PROJECT_GIT_UTILS::IsWithinProjectPath( const wxString& aAbsPath, const wxS
     if( aProjectPath.IsEmpty() )
         return false;
 
+    wxString absPath = aAbsPath;
     wxString projectPath = aProjectPath;
 
-    if( !projectPath.EndsWith( wxT( "/" ) ) && !projectPath.EndsWith( wxT( "\\" ) ) )
+#ifdef __WINDOWS__
+    absPath.Replace( wxT( "\\" ), wxT( "/" ) );
+    projectPath.Replace( wxT( "\\" ), wxT( "/" ) );
+#endif
+
+    if( !projectPath.EndsWith( wxT( "/" ) ) )
         projectPath += wxT( "/" );
 
-    return aAbsPath.StartsWith( projectPath );
+#ifdef __WINDOWS__
+    return absPath.Lower().StartsWith( projectPath.Lower() );
+#else
+    return absPath.StartsWith( projectPath );
+#endif
 }
 
 } // namespace KIGIT
