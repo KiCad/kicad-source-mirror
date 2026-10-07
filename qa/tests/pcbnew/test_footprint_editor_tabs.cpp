@@ -106,7 +106,7 @@ BOOST_AUTO_TEST_CASE( ReusedPreviewTabBoardOutlivesInstall )
     BOOST_REQUIRE_EQUAL( contexts.size(), 1u );
     BOOST_CHECK_EQUAL( contexts[0].get(), newRaw );
     BOOST_CHECK_EQUAL( installed, newRaw );
-    BOOST_CHECK_EQUAL( contexts[0]->GetName(), wxS( "B" ) );
+    BOOST_CHECK_EQUAL( contexts[0]->GetFootprintName(), wxS( "B" ) );
 }
 
 

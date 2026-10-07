@@ -55,7 +55,7 @@ public:
         UNSAVED         ///< An imported footprint with no library home yet, session-only
     };
 
-    FOOTPRINT_EDITOR_TAB_CONTEXT( const wxString& aLib, const wxString& aName,
+    FOOTPRINT_EDITOR_TAB_CONTEXT( const wxString& aLibNickname, const wxString& aFootprintName,
                                   std::unique_ptr<BOARD> aBoard );
 
     /**
@@ -105,7 +105,7 @@ public:
         {
         case KIND::BOARD_INSTANCE: return MakeInstanceTabKey( m_sourceUuid );
         case KIND::UNSAVED:        return MakeUnsavedTabKey( m_sessionId );
-        default:                   return m_lib + wxT( ":" ) + m_name;
+        default:                   return m_libNickname + wxT( ":" ) + m_footprintName;
         }
     }
 
@@ -117,7 +117,7 @@ public:
      * The key changes with the kind, so the caller must re-key the tab strip entry using the key it
      * captured before this call.
      */
-    void PromoteToLibrary( const wxString& aLib, const wxString& aName );
+    void PromoteToLibrary( const wxString& aLibNickname, const wxString& aFootprintName );
 
     /**
      * True for a tab that is session-only and not yet saved.
@@ -147,9 +147,9 @@ public:
      */
     BOARD* GetBoard() const { return m_board.get(); }
 
-    const wxString& GetLib() const  { return m_lib; }
-    const wxString& GetName() const { return m_name; }
-    void SetName( const wxString& aName ) { m_name = aName; }
+    const wxString& GetLibNickname() const  { return m_libNickname; }
+    const wxString& GetFootprintName() const { return m_footprintName; }
+    void SetFootprintName( const wxString& aName ) { m_footprintName = aName; }
 
     /**
      * Baseline clone captured at load, used to detect edits and to revert.
@@ -163,8 +163,8 @@ public:
 private:
     FOOTPRINT_EDITOR_TAB_CONTEXT( KIND aKind, std::unique_ptr<BOARD> aBoard );
 
-    wxString                   m_lib;
-    wxString                   m_name;
+    wxString                   m_libNickname;
+    wxString                   m_footprintName;
     std::unique_ptr<BOARD>     m_board;
     std::unique_ptr<FOOTPRINT> m_originalFootprintCopy;
     wxString                   m_footprintNameWhenLoaded;

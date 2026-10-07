@@ -25,13 +25,13 @@
 #include <footprint.h>
 
 
-FOOTPRINT_EDITOR_TAB_CONTEXT::FOOTPRINT_EDITOR_TAB_CONTEXT( const wxString& aLib,
-                                                            const wxString& aName,
+FOOTPRINT_EDITOR_TAB_CONTEXT::FOOTPRINT_EDITOR_TAB_CONTEXT( const wxString& aLibNickname,
+                                                            const wxString& aFootprintName,
                                                             std::unique_ptr<BOARD> aBoard ) :
-        m_lib( aLib ),
-        m_name( aName ),
+        m_libNickname( aLibNickname ),
+        m_footprintName( aFootprintName ),
         m_board( std::move( aBoard ) ),
-        m_footprintNameWhenLoaded( aName )
+        m_footprintNameWhenLoaded( aFootprintName )
 {
 }
 
@@ -80,22 +80,22 @@ wxString FOOTPRINT_EDITOR_TAB_CONTEXT::GetDisplayName( bool aShortForm ) const
         return _( "<unnamed>" );
 
     default:
-        return m_name;
+        return m_footprintName;
     }
 }
 
 
-void FOOTPRINT_EDITOR_TAB_CONTEXT::PromoteToLibrary( const wxString& aLib, const wxString& aName )
+void FOOTPRINT_EDITOR_TAB_CONTEXT::PromoteToLibrary( const wxString& aLibNickname, const wxString& aFootprintName )
 {
     wxCHECK( m_kind == KIND::UNSAVED, /* void */ );
 
     m_kind = KIND::LIBRARY;
-    m_lib = aLib;
-    m_name = aName;
-    m_footprintNameWhenLoaded = aName;
+    m_libNickname = aLibNickname;
+    m_footprintName = aFootprintName;
+    m_footprintNameWhenLoaded = aFootprintName;
 
     if( m_originalFootprintCopy )
-        m_originalFootprintCopy->SetFPID( LIB_ID( aLib, aName ) );
+        m_originalFootprintCopy->SetFPID( LIB_ID( aLibNickname, aFootprintName ) );
 }
 
 

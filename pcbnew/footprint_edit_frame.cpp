@@ -887,7 +887,7 @@ void FOOTPRINT_EDIT_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
 
         m_activeTab->SetOriginalFootprintCopy( std::unique_ptr<FOOTPRINT>( fp_copy ) );
         m_activeTab->SetFootprintNameWhenLoaded( m_footprintNameWhenLoaded );
-        m_activeTab->SetName( aFootprint->GetFPID().GetLibItemName() );
+        m_activeTab->SetFootprintName( aFootprint->GetFPID().GetLibItemName() );
     }
 
     PCB_BASE_EDIT_FRAME::AddFootprintToBoard( aFootprint );
@@ -1481,7 +1481,7 @@ void FOOTPRINT_EDIT_FRAME::RenameFootprintTab( const LIB_ID& aOldId, const LIB_I
     {
         // A tab switch restores the context's baseline onto the frame, so it must track the rename too
         // or the next save would delete the pre-rename library entry
-        m_tabContexts[idx]->SetName( newName );
+        m_tabContexts[idx]->SetFootprintName( newName );
         m_tabContexts[idx]->SetFootprintNameWhenLoaded( newName );
     }
 
@@ -1798,7 +1798,7 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
             const bool preview = i < entries.size() && entries[i].preview;
 
-            cfg->m_OpenTabs.push_back( { ctx->GetLib(), ctx->GetName(), preview } );
+            cfg->m_OpenTabs.push_back( { ctx->GetLibNickname(), ctx->GetFootprintName(), preview } );
 
             if( ctx == m_activeTab )
                 cfg->m_ActiveTab = ctx->GetTabKey();
