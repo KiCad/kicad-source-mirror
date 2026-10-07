@@ -81,7 +81,8 @@ bool AutoDecodeCSV( const wxString& aInput, std::vector<std::vector<wxString>>& 
     std::istringstream inputStream( aInput.ToStdString() );
 
     rapidcsv::Document doc( inputStream, rapidcsv::LabelParams( -1, -1 ),
-                            rapidcsv::SeparatorParams( delimiter, trimCells ), rapidcsv::ConverterParams(),
+                            rapidcsv::SeparatorParams( delimiter, trimCells, rapidcsv::sPlatformHasCR, true ),
+                            rapidcsv::ConverterParams(),
                             rapidcsv::LineReaderParams( skipCommentLines, commentPrefix, skipEmptyLines ) );
 
     // Read the data into aData
