@@ -25,11 +25,11 @@ class PANEL_MDW_VERSIONS;
 #include <wx/hyperlink.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
+#include <wx/splitter.h>
 #include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/splitter.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -50,13 +50,9 @@ class PANEL_GIT_WORKSPACE_BASE : public wxPanel
 		wxHyperlinkCtrl* m_retryLink;
 		wxPanel* m_itemDetail;
 		wxStaticText* m_itemTitle;
-		wxStaticText* m_itemFolder;
-		wxStaticText* m_itemEditing;
-		wxStaticText* m_itemLastChange;
+		wxFlexGridSizer* m_detailRows;
 		PANEL_MDW_VERSIONS* m_versions;
-		wxButton* m_checkOutButton;
-		wxButton* m_checkInButton;
-		wxButton* m_editingButton;
+		wxBoxSizer* m_actionSizer;
 		wxButton* m_connectLibraryButton;
 
 	public:

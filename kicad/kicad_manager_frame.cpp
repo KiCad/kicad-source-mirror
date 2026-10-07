@@ -23,6 +23,7 @@
 #include "pcm.h"
 #include "pgm_kicad.h"
 #include "project_tree.h"
+#include "project_tree_item.h"
 #include "project_tree_pane.h"
 #include <dialogs/dialog_git_mr_review.h>
 #include <widgets/git_commit_pane.h>
@@ -57,8 +58,10 @@
 #include <kiway_mail.h>
 #include <launch_ext.h>
 #include <lockfile.h>
+#include <mail_type.h>
 #include <notifications_manager.h>
 #include <reporter.h>
+#include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <sch_file_versions.h>
 #include <settings/common_settings.h>
@@ -84,6 +87,8 @@
 #include <wx/filedlg.h>
 #include <wx/dnd.h>
 #include <wx/process.h>
+#include <wx/regex.h>
+#include <wx/textfile.h>
 #include <algorithm>
 #include <atomic>
 #include <update_manager.h>
@@ -1775,6 +1780,208 @@ void KICAD_MANAGER_FRAME::ShowWorkspaceItem( const wxString& aItemId )
 {
     if( m_gitCommitPane )
         m_gitCommitPane->ShowWorkspaceItem( aItemId );
+}
+
+
+bool KICAD_MANAGER_FRAME::OpenProjectTreeFile( const wxString& aPath )
+{
+    TREE_FILE_TYPE type = PROJECT_TREE_PANE::FileType( aPath );
+
+    if( type == TREE_FILE_TYPE::UNKNOWN )
+        return false;
+
+    // The tree's root is the open project, whose activation does nothing
+    if( type == TREE_FILE_TYPE::LEGACY_PROJECT || type == TREE_FILE_TYPE::JSON_PROJECT )
+    {
+        if( aPath != GetProjectFileName() )
+            LoadProject( aPath );
+
+        return true;
+    }
+
+    OpenProjectTreeFile( aPath, type );
+    return true;
+}
+
+
+/**
+ * Scan a schematic file hierarchy to collect all sheet file paths.
+ *
+ * This performs a lightweight text scan of schematic files to find sheet references
+ * without fully loading the schematic. Used to determine if a file is part of the
+ * project hierarchy before deciding how to open it.
+ *
+ * @param aRootSchematic Full path to the root schematic file
+ * @param aSheetFiles Set to populate with all schematic file paths in the hierarchy
+ */
+static void ScanSchematicHierarchy( const wxString& aRootSchematic,
+                                    std::set<wxString>& aSheetFiles )
+{
+    if( aSheetFiles.count( aRootSchematic ) )
+        return;
+
+    aSheetFiles.insert( aRootSchematic );
+
+    wxTextFile file;
+
+    if( !file.Open( aRootSchematic ) )
+        return;
+
+    wxFileName rootFn( aRootSchematic );
+    wxString   rootDir = rootFn.GetPath();
+
+    // Look for: (property "Sheetfile" "filename.kicad_sch"
+    wxRegEx sheetfileRe( "\\(property\\s+\"Sheetfile\"\\s+\"([^\"]+)\"" );
+
+    for( wxString line = file.GetFirstLine(); !file.Eof(); line = file.GetNextLine() )
+    {
+        if( sheetfileRe.Matches( line ) )
+        {
+            wxString sheetFile = sheetfileRe.GetMatch( line, 1 );
+
+            // Resolve relative path
+            wxFileName sheetFn( sheetFile );
+
+            if( !sheetFn.IsAbsolute() )
+                sheetFn.MakeAbsolute( rootDir );
+
+            wxString fullPath = sheetFn.GetFullPath();
+
+            if( wxFileExists( fullPath ) )
+                ScanSchematicHierarchy( fullPath, aSheetFiles );
+        }
+    }
+}
+
+
+void KICAD_MANAGER_FRAME::OpenProjectTreeFile( const wxString& aPath, TREE_FILE_TYPE aType )
+{
+    wxString      fullFileName = aPath;
+    std::string   packet;
+    TOOL_MANAGER* toolMgr = GetToolManager();
+    KIWAY&        kiway = Kiway();
+
+    switch( aType )
+    {
+    case TREE_FILE_TYPE::JOBSET_FILE:
+        OpenJobsFile( fullFileName );
+
+        break;
+
+    case TREE_FILE_TYPE::LEGACY_SCHEMATIC:
+    case TREE_FILE_TYPE::SEXPR_SCHEMATIC:
+    {
+        wxString rootSchematic = SchFileName();
+
+        if( rootSchematic.IsEmpty() )
+            rootSchematic = SchLegacyFileName();
+
+        if( fullFileName == rootSchematic )
+        {
+            toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSchematic );
+        }
+        else
+        {
+            // Check if this file is part of the project hierarchy by scanning the schematic files
+            std::set<wxString> hierarchyFiles;
+
+            if( !rootSchematic.IsEmpty() && wxFileExists( rootSchematic ) )
+                ScanSchematicHierarchy( rootSchematic, hierarchyFiles );
+
+            // Flat designs keep every page in its own top-level sheet file
+            for( const TOP_LEVEL_SHEET_INFO& info : Prj().GetProjectFile().GetTopLevelSheets() )
+            {
+                wxFileName topSheet( info.filename );
+                topSheet.MakeAbsolute( Prj().GetProjectPath() );
+
+                if( topSheet.FileExists() )
+                    ScanSchematicHierarchy( topSheet.GetFullPath(), hierarchyFiles );
+            }
+
+            bool isInHierarchy = hierarchyFiles.count( fullFileName ) > 0;
+
+            if( isInHierarchy )
+            {
+                // Open root schematic and navigate to the target sheet
+                KIWAY_PLAYER* schFrame = kiway.Player( FRAME_SCH, false );
+
+                if( !schFrame )
+                {
+                    // Launch eeschema with the root schematic
+                    toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSchematic );
+                    schFrame = kiway.Player( FRAME_SCH, false );
+                }
+
+                if( schFrame )
+                {
+                    packet = fullFileName.ToStdString();
+                    kiway.ExpressMail( FRAME_SCH, MAIL_SCH_NAVIGATE_TO_SHEET, packet );
+                }
+            }
+            else
+            {
+                // Not in hierarchy, open as standalone schematic
+                toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::editOtherSch, &fullFileName );
+            }
+        }
+
+        break;
+    }
+
+    case TREE_FILE_TYPE::LEGACY_PCB:
+    case TREE_FILE_TYPE::SEXPR_PCB:
+        // Boards not part of the project are opened in a separate process.
+        if( fullFileName == PcbFileName() || fullFileName == PcbLegacyFileName() )
+            toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editPCB );
+        else
+            toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::editOtherPCB, &fullFileName );
+
+        break;
+
+    case TREE_FILE_TYPE::GERBER:
+    case TREE_FILE_TYPE::GERBER_JOB_FILE:
+    case TREE_FILE_TYPE::DRILL:
+    case TREE_FILE_TYPE::DRILL_NC:
+    case TREE_FILE_TYPE::DRILL_XNC:
+        toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::viewGerbers, &fullFileName );
+        break;
+
+    case TREE_FILE_TYPE::HTML:
+        wxLaunchDefaultBrowser( fullFileName );
+        break;
+
+    case TREE_FILE_TYPE::PDF:
+        OpenPDF( fullFileName );
+        break;
+
+    case TREE_FILE_TYPE::NET:
+    case TREE_FILE_TYPE::TXT:
+    case TREE_FILE_TYPE::MD:
+    case TREE_FILE_TYPE::REPORT:
+        toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::openTextEditor, &fullFileName );
+        break;
+
+    case TREE_FILE_TYPE::DRAWING_SHEET:
+        toolMgr->RunAction<wxString*>( KICAD_MANAGER_ACTIONS::editDrawingSheet, &fullFileName );
+        break;
+
+    case TREE_FILE_TYPE::FOOTPRINT_FILE:
+        toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editFootprints );
+        packet = fullFileName.ToStdString();
+        kiway.ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_FP_EDIT, packet );
+        break;
+
+    case TREE_FILE_TYPE::SCHEMATIC_LIBFILE:
+    case TREE_FILE_TYPE::SEXPR_SYMBOL_LIB_FILE:
+        toolMgr->RunAction( KICAD_MANAGER_ACTIONS::editSymbols );
+        packet = fullFileName.ToStdString();
+        kiway.ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_LIB_EDIT, packet );
+        break;
+
+    default:
+        wxLaunchDefaultApplication( fullFileName );
+        break;
+    }
 }
 
 

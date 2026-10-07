@@ -22,10 +22,12 @@
 
 #include <dialogs/git/panel_git_workspace_base.h>
 #include <mdw/client/mdw_item.h>
+#include <dialogs/git/workspace_detail.h>
 #include <dialogs/git/workspace_search_query.h>
 #include <dialogs/git/workspace_tree_model.h>
 #include <mdw/client/mdw_capabilities.h>
 #include <mdw/client/mdw_navigation.h>
+#include <mdw/client/mdw_op.h>
 #include <mdw/client/mdw_subscription.h>
 
 #include <wx/datetime.h>
@@ -35,11 +37,14 @@
 #include <memory>
 #include <optional>
 #include <set>
+#include <utility>
 #include <vector>
 
 class EDA_BASE_FRAME;
 class GIT_ADVANCED_DIALOG;
 class MDW_SESSION;
+class wxButton;
+class wxDataViewEvent;
 
 
 /**
@@ -111,8 +116,28 @@ private:
     void showDetail( const MDW_ITEM_INFO& aItem );
     void hideDetail();
 
-    /// Show the selected item's lock in the detail line and its buttons.
-    void showLock();
+    /// Fill the detail rows and the action buttons from the selected item, its lock and its local changes.
+    void showState();
+
+    /// The selected item's actions, with a check out or check in still running also disabled.
+    std::vector<WORKSPACE_ACTION> itemActions() const;
+
+    /// Make the buttons match aActions, keeping the ones already shown when only their state changed.
+    void showActions( const std::vector<WORKSPACE_ACTION>& aActions );
+
+    /// Offer the actions of the item under the pointer, which becomes the selected one.
+    void onContextMenu( wxDataViewEvent& aEvent );
+
+    void runAction( WORKSPACE_ACTION::ID aId );
+
+    /// Read the lifecycle states the selected item can move to, when the source has lifecycles.
+    void readTransitions();
+
+    /// The file the selected item is edited in, as recorded at check out or else as the source suggests.
+    wxString selectedPath() const;
+
+    /// Draw every cell again after a change the model was not told about, the cheapest way the platform allows.
+    void refreshCells();
 
     /// Refresh every row's Editing cell and the detail after a lock changed.
     void onLockChanged();
@@ -125,6 +150,17 @@ private:
     wxString editingText( const wxString& aItemId ) const;
 
     void onEditing();
+
+    /// Remove another user's claim on the selected item, after asking for the reason they are told.
+    void onReleaseClaim();
+
+    void onChangeState();
+    void onOpen();
+
+    /// The project manager window, which opens files as its tree does, or null when KiCad runs without one.
+    EDA_BASE_FRAME* projectManager() const;
+
+    void onShowInFolder();
 
     /// Check-out and check-in for workspaces whose files are not committed through git.
     void onCheckOut();
@@ -177,6 +213,14 @@ private:
     MDW_CAPABILITIES                      m_caps;                 ///< The bound backend's, as the columns show
     std::optional<std::set<WORKSPACE_TREE_KEY>> m_expanded;       ///< Folders open in the full tree, once seen
     bool                                  m_treeFiltered = false; ///< The tree shows search results
+
+    std::vector<kiapi::workspace::LifecycleTransition> m_transitions; ///< The selected item's, empty until read
+    MDW_OP                                             m_transitionsOp;
+    bool                                               m_transitionsReading = false; ///< m_transitionsOp runs
+    MDW_OP                                             m_transitionOp;
+    bool                                               m_transitionPending = false; ///< m_transitionOp runs
+
+    std::vector<std::pair<WORKSPACE_ACTION::ID, wxButton*>> m_actionButtons;
 
     MDW_SUBSCRIPTION           m_connections;   ///< Greys the rows offline and reads them again once online
     MDW_SUBSCRIPTION           m_events;        ///< Follows lock and capability changes after the listing

@@ -179,6 +179,43 @@ void PANEL_MDW_VERSIONS::Clear()
     m_rowKeys.clear();
     m_list->DeleteAllItems();
     updateCompare();
+    showModified( std::nullopt );
+}
+
+
+std::optional<bool> PANEL_MDW_VERSIONS::knownModified() const
+{
+    if( !wxFileName::FileExists( m_checkoutPath ) )
+        return std::nullopt;
+
+    if( m_changesState == CHANGES::KNOWN )
+        return m_modified.contains( m_item.item_id );
+
+    if( m_changesState != CHANGES::UNSUPPORTED || m_revisions.empty() )
+        return std::nullopt;
+
+    // Only a finished comparison with the newest version as it is now answers
+    auto it = m_newest.find( m_item.item_id );
+
+    if( it == m_newest.end() || it->second.revisionId != m_revisions.front().revision_id
+        || it->second.modified != wxFileName( m_checkoutPath ).GetModificationTime() )
+    {
+        return std::nullopt;
+    }
+
+    return it->second.differs;
+}
+
+
+void PANEL_MDW_VERSIONS::showModified( std::optional<bool> aModified )
+{
+    if( aModified == m_shownModified )
+        return;
+
+    m_shownModified = aModified;
+
+    if( m_modifiedChanged )
+        m_modifiedChanged();
 }
 
 
@@ -309,6 +346,10 @@ void PANEL_MDW_VERSIONS::applyWorkingCopy()
     if( m_changesState == CHANGES::UNREAD || m_changesState == CHANGES::READING )
     {
         fillList();
+
+        if( m_changesState == CHANGES::UNREAD )
+            showModified( std::nullopt );
+
         return;
     }
 
@@ -324,6 +365,7 @@ void PANEL_MDW_VERSIONS::applyWorkingCopy()
 
     m_workingCopy = differs ? m_checkoutPath : wxString();
     fillList();
+    showModified( knownModified() );
 }
 
 

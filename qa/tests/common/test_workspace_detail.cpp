@@ -203,6 +203,7 @@ WORKSPACE_ACTION_FACTS gitDesignFile()
     facts.locking = true;
     facts.inPlace = true;
     facts.localFile = true;
+    facts.openable = true;
     facts.lock.known = true;
     return facts;
 }
@@ -257,6 +258,38 @@ BOOST_AUTO_TEST_CASE( ClaimedByOtherFollowsClaimActions )
     BOOST_REQUIRE( editing );
     BOOST_CHECK_EQUAL( editing->label, claim.label );
     BOOST_CHECK( !editing->allowed );
+    BOOST_CHECK_EQUAL( editing->reason, wxString::Format( _( "Being edited by %s" ), wxS( "dave" ) ) );
+
+    // The holder's claim can be released from the same list
+    const WORKSPACE_ACTION* release = action( actions, ID::RELEASE_CLAIM );
+
+    BOOST_REQUIRE( release );
+    BOOST_CHECK_EQUAL( release->label, MdwClaimRelease( facts.lock )->label );
+    BOOST_CHECK( release->allowed );
+    BOOST_CHECK( editing + 1 == release );
+}
+
+
+BOOST_AUTO_TEST_CASE( BlockedCheckOutAndInSayWhoHoldsTheItem )
+{
+    WORKSPACE_ACTION_FACTS facts;
+    facts.locking = true;
+    facts.localFile = true;
+    facts.lock = heldByOther();
+    facts.lock.advisory = false;
+
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+    const wxString                heldBy = wxString::Format( _( "Being edited by %s" ), wxS( "dave" ) );
+
+    BOOST_CHECK_EQUAL( action( actions, ID::CHECK_OUT )->reason, heldBy );
+    BOOST_CHECK_EQUAL( action( actions, ID::CHECK_IN )->reason, heldBy );
+    BOOST_CHECK( !action( actions, ID::RELEASE_CLAIM ) );
+
+    facts.lock.locked_by_me = true;
+    actions = WorkspaceItemActions( facts );
+    BOOST_CHECK_EQUAL( action( actions, ID::CHECK_OUT )->reason,
+                       wxString::Format( _( "Being edited by %s" ), _( "you" ) ) );
+    BOOST_CHECK( action( actions, ID::CHECK_IN )->reason.IsEmpty() );
 }
 
 
@@ -336,6 +369,33 @@ BOOST_AUTO_TEST_CASE( DeniedTransitionCarriesTheReason )
 }
 
 
+BOOST_AUTO_TEST_CASE( EveryTransitionDeniedLeavesNothingToChoose )
+{
+    WORKSPACE_ACTION_FACTS facts = gitDesignFile();
+
+    kiapi::workspace::LifecycleTransition release;
+    release.mutable_permission()->set_state( kiapi::workspace::PS_DENIED );
+    release.mutable_permission()->set_reason( "Needs a review" );
+    facts.transitions.push_back( release );
+
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+    const WORKSPACE_ACTION*       change = action( actions, ID::CHANGE_STATE );
+
+    BOOST_REQUIRE( change );
+    BOOST_CHECK( !change->allowed );
+    BOOST_CHECK_EQUAL( change->reason, wxString( "Needs a review" ) );
+
+    // One state still open is enough to offer the choice
+    facts.transitions.emplace_back();
+    actions = WorkspaceItemActions( facts );
+    change = action( actions, ID::CHANGE_STATE );
+
+    BOOST_REQUIRE( change );
+    BOOST_CHECK( change->allowed );
+    BOOST_CHECK( change->reason.IsEmpty() );
+}
+
+
 BOOST_AUTO_TEST_CASE( MemberOffersOpenAndChangeStateOnly )
 {
     WORKSPACE_ACTION_FACTS facts = gitDesignFile();
@@ -354,6 +414,32 @@ BOOST_AUTO_TEST_CASE( MemberOffersOpenAndChangeStateOnly )
     actions = WorkspaceItemActions( facts );
     BOOST_CHECK( !action( actions, ID::CHECK_OUT ) );
     BOOST_CHECK( !action( actions, ID::CHECK_IN ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( HostThatCannotOpenOffersNoOpen )
+{
+    WORKSPACE_ACTION_FACTS facts = gitDesignFile();
+    facts.openable = false;
+
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+
+    BOOST_CHECK( !action( actions, ID::OPEN ) );
+    BOOST_CHECK( action( actions, ID::SHOW_IN_FOLDER ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( ChangeStateWaitsForTheTransitionsRead )
+{
+    WORKSPACE_ACTION_FACTS facts = gitDesignFile();
+    facts.transitionsReading = true;
+
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+    const WORKSPACE_ACTION*       change = action( actions, ID::CHANGE_STATE );
+
+    BOOST_REQUIRE( change );
+    BOOST_CHECK( !change->allowed );
+    BOOST_CHECK_EQUAL( change->reason, _( "Reading states..." ) );
 }
 
 

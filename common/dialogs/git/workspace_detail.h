@@ -63,6 +63,7 @@ struct WORKSPACE_ACTION
     {
         OPEN,
         EDITING,
+        RELEASE_CLAIM, ///< Remove another user's claim
         CHECK_OUT,
         CHECK_IN,
         CHANGE_STATE,
@@ -70,9 +71,9 @@ struct WORKSPACE_ACTION
     };
 
     ID       id;
-    wxString label;  ///< EDITING's from MdwClaimActions, the others fixed
+    wxString label; ///< EDITING's and RELEASE_CLAIM's from MdwClaimActions, the others fixed
     bool     allowed = true;
-    wxString reason; ///< Why not allowed, when the source gave one
+    wxString reason; ///< Why not allowed, naming who holds the item or giving the source's refusal
 };
 
 
@@ -83,9 +84,13 @@ struct WORKSPACE_ACTION_FACTS
     bool          inPlace = false;   ///< Files are edited in place and committed, not checked out and in
     bool          member = false;    ///< A team library part, not a design file
     bool          localFile = false; ///< The checkout or library copy exists on disk
+    bool          openable = false;  ///< The host can open the file as the project tree does
     MDW_LOCK_INFO lock;
     std::vector<kiapi::workspace::LifecycleTransition> transitions; ///< Empty when unread or not supported
-    kiapi::workspace::Permission                       transition;  ///< The item's permission to transition
+    bool transitionsReading = false; ///< The transitions are being read and none are known yet
+
+    /// The item's permission to transition. The Workspace page does not fill it yet.
+    kiapi::workspace::Permission transition;
 };
 
 

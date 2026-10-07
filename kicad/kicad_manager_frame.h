@@ -22,6 +22,7 @@
 #define KICAD_H
 
 #include <kiway_player.h>
+#include "tree_file_type.h"
 
 #include <mdw/client/mdw_subscription.h>
 
@@ -67,6 +68,11 @@ public:
 
     /// Show aItemId in the project's design workspace.
     void ShowWorkspaceItem( const wxString& aItemId );
+
+    bool OpenProjectTreeFile( const wxString& aPath ) override;
+
+    /// Open aPath, of type aType, as activating its tree item does, for any type but a project or directory
+    void OpenProjectTreeFile( const wxString& aPath, TREE_FILE_TYPE aType );
 
     /// Open the advanced Git window on its History page, run through the docked panel.
     void ShowGitHistory();

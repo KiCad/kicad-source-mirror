@@ -30,12 +30,15 @@
 #include <dialogs/git/workspace_tree.h>
 #include <confirm.h>
 #include <kidialog.h>
+#include <kiway.h>
 #include <eda_base_frame.h>
+#include <launch_ext.h>
 #include <mdw/mdw_claim_text.h>
 #include <mdw/mdw_framework.h>
 #include <mdw/mdw_lock_tracker.h>
 #include <mdw/client/mdw_client.h>
 #include <mdw/client/mdw_paged_read.h>
+#include <mdw/client/mdw_part.h>
 #include <mdw/client/mdw_project_file.h>
 #include <mdw/client/mdw_revision.h>
 #include <mdw/client/mdw_source.h>
@@ -47,10 +50,14 @@
 #include <project/project_local_settings.h>
 #include <settings/settings_manager.h>
 #include <widgets/mdw_editing.h>
+#include <widgets/mdw_part_controller.h>
 #include <widgets/wx_dataviewctrl.h>
+#include <wildcards_and_files_ext.h>
 
 #include <wx/app.h>
+#include <wx/button.h>
 #include <wx/event.h>
+#include <wx/menu.h>
 #include <wx/filefn.h>
 #include <wx/filename.h>
 #include <wx/textdlg.h>
@@ -130,19 +137,11 @@ PANEL_GIT_WORKSPACE::PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG
                                    FromDIP( 110 ), wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE );
     showColumns();
 
-    m_editingButton->SetToolTip( _( "Signals editing intent to teammates; others can still edit." ) );
-
-    m_checkOutButton->Bind( wxEVT_BUTTON,
-                            [this]( wxCommandEvent& )
-                            {
-                                onCheckOut();
-                            } );
-
-    m_checkInButton->Bind( wxEVT_BUTTON,
-                           [this]( wxCommandEvent& )
-                           {
-                               onCheckIn();
-                           } );
+    m_versions->SetModifiedChanged(
+            [this]()
+            {
+                showState();
+            } );
 
     KIGIT::KeepDetailWidth( m_workspaceSplitter );
 
@@ -245,11 +244,11 @@ PANEL_GIT_WORKSPACE::PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG
                                hideDetail();
                        } );
 
-    m_editingButton->Bind( wxEVT_BUTTON,
-                           [this]( wxCommandEvent& )
-                           {
-                               onEditing();
-                           } );
+    m_itemsTree->Bind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU,
+                       [this]( wxDataViewEvent& aEvent )
+                       {
+                           onContextMenu( aEvent );
+                       } );
 
     m_connectLibraryButton->Bind( wxEVT_BUTTON,
                                   [this]( wxCommandEvent& )
@@ -863,81 +862,302 @@ void PANEL_GIT_WORKSPACE::showDetail( const MDW_ITEM_INFO& aItem )
     if( !current )
         return;
 
-    std::shared_ptr<MDW_WORKSPACE_SERVICE> service = current->Service();
-    bool                                   locking = service && service->Supports( MDW_CAPABILITY_GROUP::LOCKING );
+    // Another item's states would be offered as this one's until the read lands
+    if( aItem.item_id != m_selected )
+        m_transitions.clear();
 
     m_detailGates = detailGates();
     m_selected = aItem.item_id;
     m_selectedItem = aItem;
     m_itemTitle->SetLabel( aItem.display_name );
-    m_itemFolder->SetLabel( wxString::Format( _( "Folder: %s" ),
-                                              aItem.folder_id.IsEmpty() ? _( "(top)" ) : folderText( aItem ) ) );
-    m_itemEditing->Show( locking );
-    m_itemLastChange->SetLabel( aItem.modified.IsValid()
-                                        ? wxString::Format( _( "Last change: %s" ), aItem.modified.FormatDate() )
-                                        : wxString() );
 
-    bool inPlace = editsInPlace();
-
-    m_checkOutButton->Show( !inPlace );
-    m_checkInButton->Show( !inPlace );
-    m_editingButton->Show( locking && inPlace );
-
-    showLock();
+    readTransitions();
 
     if( !m_workspaceSplitter->IsSplit() )
         m_workspaceSplitter->SplitVertically( m_itemListPanel, m_itemDetail, m_sashPos );
 
+    std::shared_ptr<MDW_WORKSPACE_SERVICE> service = current->Service();
     bool revisions = service && service->Supports( MDW_CAPABILITY_GROUP::REVISIONS );
 
     m_versions->Show( revisions );
-    m_itemDetail->Layout();
 
-    if( !revisions )
+    if( revisions )
+    {
+        MDW_ITEM_REF item;
+        item.item_id = aItem.item_id;
+
+        m_versions->SetItem( MDW_CLIENT::Get().ProjectSource(), item, m_frame->Prj().GetProjectDirectory(),
+                             WorkspaceWorkingFiles( m_frame->Prj().GetLocalSettings().WorkspaceItems(),
+                                                    m_frame->Prj().GetProjectPath(), aItem ),
+                             m_frame, wxString() );
+    }
+    else
     {
         m_versions->Clear();
-        return;
     }
 
-    MDW_ITEM_REF item;
-    item.item_id = aItem.item_id;
-
-    m_versions->SetItem( MDW_CLIENT::Get().ProjectSource(), item, m_frame->Prj().GetProjectDirectory(),
-                         WorkspaceWorkingFiles( m_frame->Prj().GetLocalSettings().WorkspaceItems(),
-                                                m_frame->Prj().GetProjectPath(), aItem ),
-                         m_frame, wxString() );
+    // After the versions, whose local changes for the previous item would otherwise show
+    showState();
 }
 
 
-void PANEL_GIT_WORKSPACE::showLock()
+wxString PANEL_GIT_WORKSPACE::selectedPath() const
+{
+    PROJECT& project = m_frame->Prj();
+
+    // After a rename on the server the file being edited is still the one recorded at check out
+    return WorkspaceCheckinPath( project.GetLocalSettings().WorkspaceItems(), project.GetProjectPath(),
+                                 m_selectedItem );
+}
+
+
+void PANEL_GIT_WORKSPACE::readTransitions()
+{
+    std::shared_ptr<MDW_SOURCE> source = MDW_CLIENT::Get().ProjectSource();
+
+    if( !source || !source->Has( MDW_CAPABILITY_GROUP::LIFECYCLE ) )
+    {
+        m_transitionsOp = MDW_OP();
+        m_transitionsReading = false;
+        m_transitions.clear();
+        return;
+    }
+
+    using TRANSITIONS = std::vector<kiapi::workspace::LifecycleTransition>;
+
+    MDW_ITEM_REF item;
+    item.item_id = m_selected;
+
+    MDW_PART part( source, item );
+
+    m_transitionsReading = true;
+    m_transitionsOp =
+            part.Transitions( wxEmptyString,
+                              [this, itemId = m_selected]( const MDW_RESULT& aResult, const TRANSITIONS& aTransitions )
+                              {
+                                  if( itemId != m_selected )
+                                      return;
+
+                                  m_transitionsReading = false;
+
+                                  // NOT_SUPPORTED, as the git design source answers, offers no states
+                                  m_transitions = aResult.IsOk() ? aTransitions : TRANSITIONS();
+                                  showState();
+                              } );
+}
+
+
+void PANEL_GIT_WORKSPACE::showState()
 {
     std::shared_ptr<MDW_SESSION> current = session();
 
     if( !current || m_selected.IsEmpty() )
         return;
 
-    MDW_LOCK_INFO    lock = current->LockTracker().Get( m_selected );
-    wxString         editing = editingText( m_selected );
-    MDW_CLAIM_ACTION claim = MdwClaimActions( lock ).front();
+    MDW_LOCK_INFO lock = current->LockTracker().Get( m_selected );
+    wxString      folder = m_selectedItem.folder_id.IsEmpty() ? wxString() : folderText( m_selectedItem );
 
-    if( !lock.is_locked && !lock.known )
-        m_itemEditing->SetLabel( editing );
-    else
-        m_itemEditing->SetLabel( wxString::Format( _( "Editing: %s" ), editing.IsEmpty() ? _( "nobody" ) : editing ) );
+    m_itemDetail->Freeze();
+    m_detailRows->Clear( true );
 
-    m_checkOutButton->Enable( m_checkOutPending.expired() && !lock.is_locked );
-    m_checkInButton->Enable( m_checkInPending.expired() && ( !lock.is_locked || lock.locked_by_me || lock.advisory ) );
-    m_editingButton->SetLabel( claim.label );
-    m_editingButton->Enable( claim.enabled );
+    std::vector<WORKSPACE_DETAIL_ROW> rows =
+            WorkspaceDetailRows( m_caps, m_selectedItem, lock, m_versions->Modified(), folder, wxDateTime::Now() );
+
+    for( const WORKSPACE_DETAIL_ROW& row : rows )
+    {
+        m_detailRows->Add( new wxStaticText( m_itemDetail, wxID_ANY, row.label ), 0, wxALIGN_TOP );
+        m_detailRows->Add( new wxStaticText( m_itemDetail, wxID_ANY, row.value ), 0, wxEXPAND );
+    }
+
+    showActions( itemActions() );
 
     m_itemDetail->Layout();
+    m_itemDetail->Thaw();
+}
+
+
+std::vector<WORKSPACE_ACTION> PANEL_GIT_WORKSPACE::itemActions() const
+{
+    using ID = WORKSPACE_ACTION::ID;
+
+    std::shared_ptr<MDW_SESSION> current = session();
+
+    if( !current || m_selected.IsEmpty() )
+        return {};
+
+    const wxString         path = selectedPath();
+    WORKSPACE_ACTION_FACTS facts;
+    facts.locking = m_caps.Has( MDW_CAPABILITY_GROUP::LOCKING );
+    facts.inPlace = editsInPlace();
+    facts.localFile = wxFileName::FileExists( path );
+    facts.lock = current->LockTracker().Get( m_selected );
+    facts.transitions = m_transitions;
+
+    // A re-read of states already shown keeps them, so the command does not blink off and on
+    facts.transitionsReading = m_transitionsReading && m_transitions.empty();
+
+    // Opening a project would close the window that owns this page while its handler runs
+    wxString ext = wxFileName( path ).GetExt();
+    bool     project = ext.IsSameAs( FILEEXT::ProjectFileExtension, false )
+                   || ext.IsSameAs( FILEEXT::LegacyProjectFileExtension, false );
+
+    facts.openable = projectManager() && !project;
+
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+
+    // A second request while one runs would take, upload or move the item twice
+    for( WORKSPACE_ACTION& action : actions )
+    {
+        if( action.id == ID::CHECK_OUT && !m_checkOutPending.expired() )
+        {
+            action.allowed = false;
+            action.reason = _( "Checking out..." );
+        }
+        else if( action.id == ID::CHECK_IN && !m_checkInPending.expired() )
+        {
+            action.allowed = false;
+            action.reason = _( "Checking in..." );
+        }
+        else if( action.id == ID::CHANGE_STATE && m_transitionPending )
+        {
+            action.allowed = false;
+            action.reason = _( "Changing state..." );
+        }
+    }
+
+    return actions;
+}
+
+
+void PANEL_GIT_WORKSPACE::showActions( const std::vector<WORKSPACE_ACTION>& aActions )
+{
+    bool same = std::ranges::equal( aActions, m_actionButtons,
+                                    []( const WORKSPACE_ACTION& aAction, const auto& aButton )
+                                    {
+                                        return aAction.id == aButton.first;
+                                    } );
+
+    if( !same )
+    {
+        m_actionSizer->Clear( true );
+        m_actionButtons.clear();
+        m_actionSizer->AddStretchSpacer();
+
+        for( const WORKSPACE_ACTION& action : aActions )
+        {
+            wxButton* button = new wxButton( m_itemDetail, wxID_ANY, action.label );
+
+            // Deferred, since an action can refresh the detail and delete this button inside its own click
+            button->Bind( wxEVT_BUTTON,
+                          [this, id = action.id]( wxCommandEvent& )
+                          {
+                              CallAfter(
+                                      [this, id]()
+                                      {
+                                          runAction( id );
+                                      } );
+                          } );
+
+            m_actionSizer->Add( button, 0, wxLEFT, FromDIP( 4 ) );
+            m_actionButtons.emplace_back( action.id, button );
+        }
+    }
+
+    for( size_t ii = 0; ii < aActions.size(); ++ii )
+    {
+        const WORKSPACE_ACTION& action = aActions[ii];
+        wxButton*               button = m_actionButtons[ii].second;
+        wxString                tip = action.reason;
+
+        if( tip.IsEmpty() && action.id == WORKSPACE_ACTION::ID::EDITING )
+            tip = _( "Signals editing intent to teammates; others can still edit." );
+
+        button->SetLabel( action.label );
+        button->Enable( action.allowed );
+        button->SetToolTip( tip );
+    }
+}
+
+
+void PANEL_GIT_WORKSPACE::onContextMenu( wxDataViewEvent& aEvent )
+{
+    const WORKSPACE_TREE_NODE* node = m_model->NodeOf( aEvent.GetItem() );
+
+    if( !node || node->kind != WORKSPACE_TREE_NODE::KIND::ITEM || node->item >= m_items.size() )
+        return;
+
+    // The actions act on the selected item, and a right click does not select on every platform
+    if( m_itemsTree->GetSelection() != aEvent.GetItem() )
+    {
+        m_itemsTree->Select( aEvent.GetItem() );
+        showDetail( m_items[node->item] );
+    }
+
+    std::vector<WORKSPACE_ACTION> actions = itemActions();
+
+    if( actions.empty() )
+        return;
+
+    wxMenu menu;
+
+    for( size_t ii = 0; ii < actions.size(); ++ii )
+    {
+        const WORKSPACE_ACTION& action = actions[ii];
+        wxString                text = action.label;
+
+        // A popup's help string shows nowhere in a dialog, and the editing label already names the holder
+        if( !action.allowed && !action.reason.IsEmpty() && action.id != WORKSPACE_ACTION::ID::EDITING )
+        {
+            wxString reason = action.reason;
+
+            // A menu label reads a single ampersand as a mnemonic marker
+            reason.Replace( wxS( "&" ), wxS( "&&" ) );
+            text = wxString::Format( _( "%s (%s)" ), action.label, reason );
+        }
+
+        menu.Append( wxID_HIGHEST + 1 + static_cast<int>( ii ), text, action.reason )->Enable( action.allowed );
+    }
+
+    int chosen = GetPopupMenuSelectionFromUser( menu ) - wxID_HIGHEST - 1;
+
+    if( chosen >= 0 && chosen < static_cast<int>( actions.size() ) )
+        runAction( actions[chosen].id );
+}
+
+
+void PANEL_GIT_WORKSPACE::runAction( WORKSPACE_ACTION::ID aId )
+{
+    using ID = WORKSPACE_ACTION::ID;
+
+    switch( aId )
+    {
+    case ID::OPEN: onOpen(); break;
+    case ID::EDITING: onEditing(); break;
+    case ID::RELEASE_CLAIM: onReleaseClaim(); break;
+    case ID::CHECK_OUT: onCheckOut(); break;
+    case ID::CHECK_IN: onCheckIn(); break;
+    case ID::CHANGE_STATE: onChangeState(); break;
+    case ID::SHOW_IN_FOLDER: onShowInFolder(); break;
+    }
+}
+
+
+void PANEL_GIT_WORKSPACE::refreshCells()
+{
+#ifdef __WXMAC__
+    // The native outline view caches its cells and reads them again only for the rows it is told changed
+    m_model->RefreshCells();
+#else
+    // The generic control looks up each changed row from the root, which is quadratic over a large workspace
+    m_itemsTree->Refresh();
+#endif
 }
 
 
 void PANEL_GIT_WORKSPACE::onLockChanged()
 {
-    m_model->RefreshCells();
-    showLock();
+    refreshCells();
+    showState();
 }
 
 
@@ -963,12 +1183,24 @@ unsigned PANEL_GIT_WORKSPACE::detailGates() const
 
 void PANEL_GIT_WORKSPACE::onCapabilitiesChanged()
 {
-    showColumns();
-    m_model->RefreshCells();
+    bool lifecycle = m_caps.Has( MDW_CAPABILITY_GROUP::LIFECYCLE );
 
-    // Both the backend and the re-read announce a change
-    if( m_selected.IsEmpty() || detailGates() == m_detailGates )
+    showColumns();
+    refreshCells();
+
+    if( m_selected.IsEmpty() )
         return;
+
+    // Both the backend and the re-read announce a change, and only a new gate needs the versions read again
+    if( detailGates() == m_detailGates )
+    {
+        // LIFECYCLE coming or going changes whether the item has states to offer
+        if( lifecycle != m_caps.Has( MDW_CAPABILITY_GROUP::LIFECYCLE ) )
+            readTransitions();
+
+        showState();
+        return;
+    }
 
     MDW_ITEM_INFO selected = m_selectedItem;
     showDetail( selected );
@@ -979,6 +1211,9 @@ void PANEL_GIT_WORKSPACE::hideDetail()
 {
     m_selected.clear();
     m_selectedItem = MDW_ITEM_INFO();
+    m_transitionsOp = MDW_OP();
+    m_transitionsReading = false;
+    m_transitions.clear();
     m_versions->Clear();
 
     if( m_workspaceSplitter->IsSplit() )
@@ -1007,6 +1242,128 @@ void PANEL_GIT_WORKSPACE::onEditing()
                    {
                        fillTree();
                    } );
+}
+
+
+void PANEL_GIT_WORKSPACE::onReleaseClaim()
+{
+    std::shared_ptr<MDW_SESSION> current = session();
+
+    if( !current || m_selected.IsEmpty() )
+        return;
+
+    // The claim may have changed hands since the command was offered
+    std::optional<MDW_CLAIM_ACTION> release = MdwClaimRelease( current->LockTracker().Get( m_selected ) );
+
+    if( !release )
+        return;
+
+    MDW_ITEM_REF item;
+    item.item_id = m_selected;
+
+    MdwRunClaimAction( this, MDW_CLIENT::Get().ProjectSource(), item, *release,
+                       [this]()
+                       {
+                           fillTree();
+                       } );
+}
+
+
+void PANEL_GIT_WORKSPACE::onChangeState()
+{
+    std::shared_ptr<MDW_SOURCE> source = MDW_CLIENT::Get().ProjectSource();
+
+    if( !source || m_selected.IsEmpty() || m_transitions.empty() || m_transitionPending )
+        return;
+
+    const wxString                                           itemId = m_selected;
+    const wxString                                           name = m_selectedItem.display_name;
+    const std::vector<kiapi::workspace::LifecycleTransition> transitions = m_transitions;
+    std::vector<MDW_PART_ACTION>                             actions;
+
+    for( const kiapi::workspace::LifecycleTransition& transition : transitions )
+    {
+        bool denied = transition.permission().state() == kiapi::workspace::PS_DENIED;
+
+        MDW_PART_ACTION action( MDW_PART_ACTION::ID::TRANSITION,
+                                denied ? MDW_PART_ACTION::STATE::DENIED : MDW_PART_ACTION::STATE::ALLOWED,
+                                wxString::FromUTF8( transition.permission().reason() ) );
+        action.target = wxString::FromUTF8( transition.target_state_id() );
+        action.label = wxString::FromUTF8( transition.display_name() );
+        actions.push_back( action );
+    }
+
+    wxWeakRef<PANEL_GIT_WORKSPACE> self( this );
+    std::optional<wxString>        target = MdwChooseTransition( this, name, actions );
+
+    if( !self || IsBeingDeleted() || !target )
+        return;
+
+    std::optional<wxString> comment = MdwTransitionComment( this, name, transitions, *target );
+
+    if( !self || IsBeingDeleted() || !comment )
+        return;
+
+    MDW_ITEM_REF item;
+    item.item_id = itemId;
+
+    MDW_PART part( source, item );
+
+    m_transitionPending = true;
+    m_transitionOp = part.Transition( wxEmptyString, *target, *comment,
+                                      [this, name, itemId]( const MDW_RESULT& aResult, const MDW_TRANSITION& )
+                                      {
+                                          wxString what =
+                                                  wxString::Format( _( "Could not change the state of %s." ), name );
+
+                                          m_transitionPending = false;
+
+                                          if( !aResult.IsOk() )
+                                              MdwReportFailure( this, what, aResult );
+
+                                          // The states offered were those of the old state, so they are read again
+                                          if( aResult.IsOk() && itemId == m_selected )
+                                          {
+                                              m_transitions.clear();
+                                              readTransitions();
+                                          }
+
+                                          showState();
+                                          Populate();
+                                      } );
+    showState();
+}
+
+
+void PANEL_GIT_WORKSPACE::onOpen()
+{
+    wxString path = selectedPath();
+
+    if( path.IsEmpty() )
+        return;
+
+    EDA_BASE_FRAME* manager = projectManager();
+
+    if( !manager || !manager->OpenProjectTreeFile( path ) )
+        DisplayErrorMessage( this, wxString::Format( _( "KiCad cannot open '%s'." ), path ) );
+}
+
+
+EDA_BASE_FRAME* PANEL_GIT_WORKSPACE::projectManager() const
+{
+    EDA_BASE_FRAME* top = dynamic_cast<EDA_BASE_FRAME*>( m_frame->Kiway().GetTop() );
+
+    // Only the project manager has the file tree whose double click Open matches
+    return top && top->GetFrameType() == KICAD_MAIN_FRAME_T ? top : nullptr;
+}
+
+
+void PANEL_GIT_WORKSPACE::onShowInFolder()
+{
+    wxString path = selectedPath();
+
+    if( !path.IsEmpty() )
+        LaunchExternal( wxFileName( path ).GetPath() );
 }
 
 
@@ -1085,7 +1442,7 @@ void PANEL_GIT_WORKSPACE::checkOut( const wxString& aItemId, const wxString& aDe
 
     auto pending = std::make_shared<int>( 0 );
     m_checkOutPending = pending;
-    m_checkOutButton->Disable();
+    showState();
 
     // The app owns the completion so the project learns of the new file even if this window closes first
     current->RunAsync<CHECKOUT>(
@@ -1120,8 +1477,11 @@ void PANEL_GIT_WORKSPACE::checkOut( const wxString& aItemId, const wxString& aDe
                 wxWeakRef<PANEL_GIT_WORKSPACE> panel( lifetime.lock().get() );
                 wxWindow*                      parent = panel && !panel->IsBeingDeleted() ? panel.get() : nullptr;
 
-                if( panel )
+                if( parent )
+                {
                     panel->m_checkOutPending.reset();
+                    panel->showState();
+                }
 
                 if( !aCheckout.status.IsOk() )
                 {
@@ -1219,7 +1579,7 @@ void PANEL_GIT_WORKSPACE::checkIn( const MDW_CHECKIN_REQUEST& aRequest, const MD
 
     auto pending = std::make_shared<int>( 0 );
     m_checkInPending = pending;
-    m_checkInButton->Disable();
+    showState();
 
     // The app owns the completion so the file's new base is recorded even if this window closes first
     current->RunAsync<CHECKIN>(
@@ -1312,8 +1672,11 @@ void PANEL_GIT_WORKSPACE::checkIn( const MDW_CHECKIN_REQUEST& aRequest, const MD
                 wxWeakRef<PANEL_GIT_WORKSPACE> panel( lifetime.lock().get() );
                 wxWindow*                      parent = panel && !panel->IsBeingDeleted() ? panel.get() : nullptr;
 
-                if( panel )
+                if( parent )
+                {
                     panel->m_checkInPending.reset();
+                    panel->showState();
+                }
 
                 if( parent && !aCheckin.since.empty() )
                 {

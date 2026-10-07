@@ -79,6 +79,12 @@ public:
     /// Forget the item and end any read or download of it.
     void Clear();
 
+    /// Whether the item's checkout file differs from its versions, unset while that is not known.
+    std::optional<bool> Modified() const { return m_shownModified; }
+
+    /// Call aChanged after Modified() gives a new answer.
+    void SetModifiedChanged( std::function<void()> aChanged ) { m_modifiedChanged = std::move( aChanged ); }
+
 private:
     enum class CHANGES
     {
@@ -108,6 +114,12 @@ private:
     void readChanges();
     void forgetChanges();
     void applyWorkingCopy();
+
+    /// Modified() as the reads so far settle it
+    std::optional<bool> knownModified() const;
+
+    /// Make aModified the answer of Modified(), telling m_modifiedChanged when it is new
+    void showModified( std::optional<bool> aModified );
 
     /// True when the checkout file differs from the newest version, which is downloaded once to find out
     bool differsFromNewest();
@@ -178,6 +190,8 @@ private:
     wxString                            m_newestFor;
     std::map<wxString, NEWEST>          m_newest;
     MDW_OP                              m_newerOp;
+    std::optional<bool>                 m_shownModified; ///< What Modified() answers
+    std::function<void()>               m_modifiedChanged;
 };
 
 #endif // PANEL_MDW_VERSIONS_H

@@ -1392,37 +1392,68 @@ void MDW_PART_CONTROLLER::Transition( const wxString& aTargetStateId )
         return;
     }
 
-    auto chosen = std::ranges::find_if( m_state.transitions,
+    std::optional<wxString> comment =
+            MdwTransitionComment( dynamic_cast<wxWindow*>( m_owner ), m_name, m_state.transitions, aTargetStateId );
+
+    if( comment )
+        transition( aTargetStateId, *comment );
+}
+
+
+std::optional<wxString> MdwTransitionComment( wxWindow* aParent, const wxString& aName,
+                                              const std::vector<kiapi::workspace::LifecycleTransition>& aTransitions,
+                                              const wxString&                                           aTargetStateId )
+{
+    auto chosen = std::ranges::find_if( aTransitions,
                                         [&]( const kiapi::workspace::LifecycleTransition& aTransition )
                                         {
                                             return aTransition.target_state_id() == aTargetStateId.utf8_string();
                                         } );
 
-    wxString comment;
+    if( chosen == aTransitions.end() || !chosen->requires_comment() )
+        return wxString();
 
-    if( chosen != m_state.transitions.end() && chosen->requires_comment() )
-    {
-        wxTextEntryDialog dlg( dynamic_cast<wxWindow*>( m_owner ),
-                               wxString::Format( _( "Why is %s moving to %s?" ), m_name,
-                                                 wxString::FromUTF8( chosen->display_name() ) ),
-                               _( "Change State" ), wxEmptyString, wxOK | wxCANCEL | wxTE_MULTILINE );
+    wxTextEntryDialog dlg(
+            aParent,
+            wxString::Format( _( "Why is %s moving to %s?" ), aName, wxString::FromUTF8( chosen->display_name() ) ),
+            _( "Change State" ), wxEmptyString, wxOK | wxCANCEL | wxTE_MULTILINE );
 
-        if( dlg.ShowModal() != wxID_OK )
-            return;
+    if( dlg.ShowModal() != wxID_OK )
+        return std::nullopt;
 
-        comment = dlg.GetValue();
-    }
-
-    transition( aTargetStateId, comment );
+    return dlg.GetValue();
 }
 
 
 void MDW_PART_CONTROLLER::chooseTransition()
 {
+    std::vector<MDW_PART_ACTION> actions = Actions();
+
+    bool any = std::ranges::any_of( actions,
+                                    []( const MDW_PART_ACTION& aAction )
+                                    {
+                                        return aAction.id == MDW_PART_ACTION::ID::TRANSITION && aAction.Allowed();
+                                    } );
+
+    if( !any )
+    {
+        setOutcome( wxString::Format( _( "%s cannot change state now." ), m_name ) );
+        changed();
+        return;
+    }
+
+    if( std::optional<wxString> state = MdwChooseTransition( dynamic_cast<wxWindow*>( m_owner ), m_name, actions ) )
+        Transition( *state );
+}
+
+
+std::optional<wxString> MdwChooseTransition( wxWindow* aParent, const wxString& aName,
+                                             const std::vector<MDW_PART_ACTION>& aActions )
+{
     wxArrayString         names;
     std::vector<wxString> states;
 
-    for( const MDW_PART_ACTION& action : Actions() )
+    for( const MDW_PART_ACTION& action : aActions )
     {
         if( action.id == MDW_PART_ACTION::ID::TRANSITION && action.Allowed() )
         {
@@ -1432,17 +1463,14 @@ void MDW_PART_CONTROLLER::chooseTransition()
     }
 
     if( states.empty() )
-    {
-        setOutcome( wxString::Format( _( "%s cannot change state now." ), m_name ) );
-        changed();
-        return;
-    }
+        return std::nullopt;
 
-    wxSingleChoiceDialog dlg( dynamic_cast<wxWindow*>( m_owner ), wxString::Format( _( "Move %s to:" ), m_name ),
-                              _( "Change State" ), names );
+    wxSingleChoiceDialog dlg( aParent, wxString::Format( _( "Move %s to:" ), aName ), _( "Change State" ), names );
 
-    if( dlg.ShowModal() == wxID_OK )
-        Transition( states[dlg.GetSelection()] );
+    if( dlg.ShowModal() != wxID_OK )
+        return std::nullopt;
+
+    return states[dlg.GetSelection()];
 }
 
 

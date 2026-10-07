@@ -26,6 +26,8 @@
 
 #include <wx/intl.h>
 
+#include <algorithm>
+
 
 wxString WorkspaceStateCell( const MDW_CAPABILITIES& aCaps, const MDW_LIFECYCLE_STATE& aState,
                              const wxString& aRevisionLabel )
@@ -81,9 +83,15 @@ std::vector<WORKSPACE_ACTION> WorkspaceItemActions( const WORKSPACE_ACTION_FACTS
 {
     using ID = WORKSPACE_ACTION::ID;
 
+    const MDW_LOCK_INFO&          lock = aFacts.lock;
     std::vector<WORKSPACE_ACTION> actions;
 
-    if( aFacts.localFile )
+    // The same words as MdwClaimLabel without the time, so a greyed command says who holds the item
+    const wxString heldBy = lock.is_locked ? wxString::Format( _( "Being edited by %s" ),
+                                                               lock.locked_by_me ? _( "you" ) : MdwClaimHolder( lock ) )
+                                           : wxString();
+
+    if( aFacts.localFile && aFacts.openable )
         actions.push_back( { ID::OPEN, _( "Open" ), true, wxString() } );
 
     // A part is claimed through Revise in its editor, so only design files offer these
@@ -93,27 +101,49 @@ std::vector<WORKSPACE_ACTION> WorkspaceItemActions( const WORKSPACE_ACTION_FACTS
         {
             if( aFacts.locking )
             {
-                MDW_CLAIM_ACTION claim = MdwClaimActions( aFacts.lock ).front();
+                for( const MDW_CLAIM_ACTION& claim : MdwClaimActions( lock ) )
+                {
+                    ID id = claim.kind == MDW_CLAIM_ACTION::KIND::RELEASE ? ID::RELEASE_CLAIM : ID::EDITING;
 
-                actions.push_back( { ID::EDITING, claim.label, claim.enabled, wxString() } );
+                    actions.push_back( { id, claim.label, claim.enabled, claim.enabled ? wxString() : heldBy } );
+                }
             }
         }
         else
         {
-            const MDW_LOCK_INFO& lock = aFacts.lock;
+            bool checkOut = !lock.is_locked;
+            bool checkIn = !lock.is_locked || lock.locked_by_me || lock.advisory;
 
-            actions.push_back( { ID::CHECK_OUT, _( "Check Out" ), !lock.is_locked, wxString() } );
-            actions.push_back( { ID::CHECK_IN, _( "Check In..." ),
-                                 !lock.is_locked || lock.locked_by_me || lock.advisory, wxString() } );
+            actions.push_back( { ID::CHECK_OUT, _( "Check Out" ), checkOut, checkOut ? wxString() : heldBy } );
+            actions.push_back( { ID::CHECK_IN, _( "Check In..." ), checkIn, checkIn ? wxString() : heldBy } );
         }
     }
 
-    if( !aFacts.transitions.empty() )
+    if( aFacts.transitionsReading )
     {
-        bool denied = aFacts.transition.state() == kiapi::workspace::PS_DENIED;
+        actions.push_back( { ID::CHANGE_STATE, _( "Change State..." ), false, _( "Reading states..." ) } );
+    }
+    else if( !aFacts.transitions.empty() )
+    {
+        using kiapi::workspace::PS_DENIED;
 
-        actions.push_back( { ID::CHANGE_STATE, _( "Change State..." ), !denied,
-                             denied ? wxString::FromUTF8( aFacts.transition.reason() ) : wxString() } );
+        auto open = std::ranges::find_if( aFacts.transitions,
+                                          []( const kiapi::workspace::LifecycleTransition& aTransition )
+                                          {
+                                              return aTransition.permission().state() != PS_DENIED;
+                                          } );
+
+        // Every state refusing the move leaves nothing to choose, so the first refusal says why
+        std::string reason;
+
+        if( aFacts.transition.state() == PS_DENIED )
+            reason = aFacts.transition.reason();
+        else if( open == aFacts.transitions.end() )
+            reason = aFacts.transitions.front().permission().reason();
+
+        bool allowed = aFacts.transition.state() != PS_DENIED && open != aFacts.transitions.end();
+
+        actions.push_back( { ID::CHANGE_STATE, _( "Change State..." ), allowed, wxString::FromUTF8( reason ) } );
     }
 
     if( aFacts.localFile )

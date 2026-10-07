@@ -64,40 +64,23 @@ PANEL_GIT_WORKSPACE_BASE::PANEL_GIT_WORKSPACE_BASE( wxWindow* parent, wxWindowID
 
 	bitemDetailSizer->Add( m_itemTitle, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
 
-	m_itemFolder = new wxStaticText( m_itemDetail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_itemFolder->Wrap( -1 );
-	bitemDetailSizer->Add( m_itemFolder, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
+	m_detailRows = new wxFlexGridSizer( 0, 2, 4, 12 );
+	m_detailRows->AddGrowableCol( 1 );
+	m_detailRows->SetFlexibleDirection( wxBOTH );
+	m_detailRows->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_itemEditing = new wxStaticText( m_itemDetail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_itemEditing->Wrap( -1 );
-	bitemDetailSizer->Add( m_itemEditing, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
 
-	m_itemLastChange = new wxStaticText( m_itemDetail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_itemLastChange->Wrap( -1 );
-	bitemDetailSizer->Add( m_itemLastChange, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
+	bitemDetailSizer->Add( m_detailRows, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
 
 	m_versions = new PANEL_MDW_VERSIONS( m_itemDetail, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_versions->SetMinSize( wxSize( -1,120 ) );
 
 	bitemDetailSizer->Add( m_versions, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 8 );
 
-	wxBoxSizer* bButtons;
-	bButtons = new wxBoxSizer( wxHORIZONTAL );
+	m_actionSizer = new wxBoxSizer( wxHORIZONTAL );
 
 
-	bButtons->Add( 0, 0, 1, wxEXPAND, 0 );
-
-	m_checkOutButton = new wxButton( m_itemDetail, wxID_ANY, _("Check Out"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtons->Add( m_checkOutButton, 0, wxRIGHT, 4 );
-
-	m_checkInButton = new wxButton( m_itemDetail, wxID_ANY, _("Check In..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtons->Add( m_checkInButton, 0, wxRIGHT, 4 );
-
-	m_editingButton = new wxButton( m_itemDetail, wxID_ANY, _("Start Editing"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtons->Add( m_editingButton, 0, wxRIGHT, 4 );
-
-
-	bitemDetailSizer->Add( bButtons, 0, wxEXPAND|wxALL, 8 );
+	bitemDetailSizer->Add( m_actionSizer, 0, wxEXPAND|wxALL, 8 );
 
 
 	m_itemDetail->SetSizer( bitemDetailSizer );

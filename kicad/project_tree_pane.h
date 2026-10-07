@@ -90,6 +90,9 @@ public:
      */
     void WaitForGitOperations();
 
+    /// The type the tree gives aPath by its extension, UNKNOWN for one it does not list
+    static TREE_FILE_TYPE FileType( const wxString& aPath );
+
 protected:
     static wxString GetFileExt( TREE_FILE_TYPE type );
 

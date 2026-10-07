@@ -485,6 +485,13 @@ public:
      */
     virtual wxString GetCurrentFileName() const { return wxEmptyString; }
 
+    /**
+     * Open the file aPath as the project manager's file tree opens it on a double click.
+     *
+     * @return false when this frame has no such tree or the tree does not list files of that type.
+     */
+    virtual bool OpenProjectTreeFile( const wxString& aPath ) { return false; }
+
     virtual void RecreateToolbars();
 
     /**

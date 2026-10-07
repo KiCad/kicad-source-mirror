@@ -106,6 +106,20 @@ KICOMMON_API MDW_OP MdwRestorePart( const MDW_PART_TARGET& aTarget, const wxStri
                                     MDW_DONE<MDW_NONE> aDone );
 
 
+/// The state aName moves to, chosen over aParent among the allowed TRANSITION entries of aActions. Nothing on cancel
+KICOMMON_API std::optional<wxString> MdwChooseTransition( wxWindow* aParent, const wxString& aName,
+                                                          const std::vector<MDW_PART_ACTION>& aActions );
+
+/**
+ * The comment moving aName to aTargetStateId needs, asked over aParent when that state's entry in aTransitions requires
+ * one. Empty when none is required, nothing on cancel.
+ */
+KICOMMON_API std::optional<wxString>
+MdwTransitionComment( wxWindow* aParent, const wxString& aName,
+                      const std::vector<kiapi::workspace::LifecycleTransition>& aTransitions,
+                      const wxString& aTargetStateId );
+
+
 /// One part a release lists, as the editor holding it describes it
 struct KICOMMON_API MDW_RELEASE_ITEM
 {

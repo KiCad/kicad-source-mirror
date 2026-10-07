@@ -542,7 +542,26 @@ std::vector<wxString> getProjects( const wxDir& dir )
 }
 
 
+TREE_FILE_TYPE PROJECT_TREE_PANE::FileType( const wxString& aPath )
+{
+    wxRegEx reg;
 
+    for( int i = static_cast<int>( TREE_FILE_TYPE::LEGACY_PROJECT ); i < static_cast<int>( TREE_FILE_TYPE::MAX ); i++ )
+    {
+        wxString ext = GetFileExt( (TREE_FILE_TYPE) i );
+
+        if( ext == wxT( "" ) )
+            continue;
+
+        if( reg.Compile( wxString::FromAscii( "^.*\\." ) + ext + wxString::FromAscii( "$" ), wxRE_ICASE )
+            && reg.Matches( aPath ) )
+        {
+            return (TREE_FILE_TYPE) i;
+        }
+    }
+
+    return TREE_FILE_TYPE::UNKNOWN;
+}
 
 
 wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
@@ -585,21 +604,7 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
         if( !addFile )
             return wxTreeItemId();
 
-        for( int i = static_cast<int>( TREE_FILE_TYPE::LEGACY_PROJECT );
-                i < static_cast<int>( TREE_FILE_TYPE::MAX ); i++ )
-        {
-            wxString ext = GetFileExt( (TREE_FILE_TYPE) i );
-
-            if( ext == wxT( "" ) )
-                continue;
-
-            if( reg.Compile( wxString::FromAscii( "^.*\\." ) + ext + wxString::FromAscii( "$" ), wxRE_ICASE )
-                    && reg.Matches( aName ) )
-            {
-                type = (TREE_FILE_TYPE) i;
-                break;
-            }
-        }
+        type = FileType( aName );
     }
 
     wxString   file = wxFileNameFromPath( aName );
