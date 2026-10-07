@@ -76,7 +76,12 @@ SCH_IO_HTTP_LIB::SCH_IO_HTTP_LIB() :
 
 void SCH_IO_HTTP_LIB::stopBackgroundRefresh()
 {
-    m_refreshRunning = false;
+    // The wait predicate and shutdown need the same mutex to avoid a lost wakeup.
+    {
+        std::lock_guard lock( m_refreshMutex );
+        m_refreshRunning = false;
+    }
+
     m_refreshCV.notify_all();
 
     if( m_refreshThread.joinable() )
