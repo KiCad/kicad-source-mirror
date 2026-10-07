@@ -32,11 +32,23 @@
 #include <wx/file.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
-#include <wx/datetime.h>
+#include <wx/utils.h>
 
 
 using namespace KICAD_DIFF;
 using nlohmann::json;
+
+
+namespace
+{
+wxString patchTempDir()
+{
+    static unsigned counter = 0;
+    return wxStandardPaths::Get().GetTempDir() + wxFILE_SEP_PATH
+           + wxString::Format( wxS( "kicad_patch_%ld_%u" ), static_cast<long>( wxGetProcessId() ),
+                               ++counter );
+}
+}
 
 
 BOOST_AUTO_TEST_SUITE( ProjectFilePatch )
@@ -199,10 +211,7 @@ BOOST_AUTO_TEST_CASE( ApplyPatchDrawingSheetSchematicDoesNotTouchPcbnew )
 // requested fields treated as identity copies).
 BOOST_AUTO_TEST_CASE( ApplyPatchesNoExistingFileWritesSource )
 {
-    wxString tmpDir = wxStandardPaths::Get().GetTempDir() + wxFILE_SEP_PATH
-                      + wxS( "kicad_patch_" )
-                      + wxString::Format( wxS( "%d" ),
-                                          static_cast<int>( wxDateTime::Now().GetValue().GetValue() & 0xffffff ) );
+    wxString tmpDir = patchTempDir();
     BOOST_REQUIRE( wxFileName::Mkdir( tmpDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
     const wxString outputPath = tmpDir + wxFILE_SEP_PATH + wxS( "test.kicad_pro" );
@@ -221,6 +230,7 @@ BOOST_AUTO_TEST_CASE( ApplyPatchesNoExistingFileWritesSource )
     json parsed = json::parse( content.ToStdString() );
     BOOST_CHECK_EQUAL( parsed["board"]["design_settings"]["rule_severities"]["k"], "error" );
 
+    in.Close();
     wxRemoveFile( outputPath );
     wxFileName::Rmdir( tmpDir );
 }
@@ -228,10 +238,7 @@ BOOST_AUTO_TEST_CASE( ApplyPatchesNoExistingFileWritesSource )
 
 BOOST_AUTO_TEST_CASE( ApplyPatchesEmptyPropertySetDoesNotCreateOutput )
 {
-    wxString tmpDir = wxStandardPaths::Get().GetTempDir() + wxFILE_SEP_PATH
-                      + wxS( "kicad_patch_" )
-                      + wxString::Format( wxS( "%d" ),
-                                          static_cast<int>( wxDateTime::Now().GetValue().GetValue() & 0xffffff ) );
+    wxString tmpDir = patchTempDir();
     BOOST_REQUIRE( wxFileName::Mkdir( tmpDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
     const wxString outputPath = tmpDir + wxFILE_SEP_PATH + wxS( "test.kicad_pro" );
@@ -254,10 +261,7 @@ BOOST_AUTO_TEST_CASE( ApplyPatchesEmptyPropertySetDoesNotCreateOutput )
 // fields are updated, all others preserved verbatim.
 BOOST_AUTO_TEST_CASE( ApplyPatchesPreservesExistingNonTargetFields )
 {
-    wxString tmpDir = wxStandardPaths::Get().GetTempDir() + wxFILE_SEP_PATH
-                      + wxS( "kicad_patch_" )
-                      + wxString::Format( wxS( "%d" ),
-                                          static_cast<int>( wxDateTime::Now().GetValue().GetValue() & 0xffffff ) );
+    wxString tmpDir = patchTempDir();
     BOOST_REQUIRE( wxFileName::Mkdir( tmpDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
     const wxString outputPath = tmpDir + wxFILE_SEP_PATH + wxS( "test.kicad_pro" );
@@ -287,6 +291,7 @@ BOOST_AUTO_TEST_CASE( ApplyPatchesPreservesExistingNonTargetFields )
     BOOST_CHECK( !parsed["board"]["design_settings"]["rule_severities"].contains( "old" ) );
     BOOST_CHECK_EQUAL( parsed["text_variables"]["USER_VAR"], "user value" );
 
+    in.Close();
     wxRemoveFile( outputPath );
     wxFileName::Rmdir( tmpDir );
 }
@@ -294,10 +299,7 @@ BOOST_AUTO_TEST_CASE( ApplyPatchesPreservesExistingNonTargetFields )
 
 BOOST_AUTO_TEST_CASE( ApplyPatchesMissingRequestedSourceFieldFails )
 {
-    wxString tmpDir = wxStandardPaths::Get().GetTempDir() + wxFILE_SEP_PATH
-                      + wxS( "kicad_patch_" )
-                      + wxString::Format( wxS( "%d" ),
-                                          static_cast<int>( wxDateTime::Now().GetValue().GetValue() & 0xffffff ) );
+    wxString tmpDir = patchTempDir();
     BOOST_REQUIRE( wxFileName::Mkdir( tmpDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
 
     const wxString outputPath = tmpDir + wxFILE_SEP_PATH + wxS( "test.kicad_pro" );
@@ -321,6 +323,7 @@ BOOST_AUTO_TEST_CASE( ApplyPatchesMissingRequestedSourceFieldFails )
     json parsed = json::parse( content.ToStdString() );
     BOOST_CHECK_EQUAL( parsed["text_variables"]["USER_VAR"], "user value" );
 
+    in.Close();
     wxRemoveFile( outputPath );
     wxFileName::Rmdir( tmpDir );
 }

@@ -65,6 +65,11 @@ kicad_add_boost_test( qa_diff_merge qa_diff_merge )
 
 setup_qa_env( qa_diff_merge )
 
+if( MSVC )
+    set_property( TEST qa_diff_merge APPEND PROPERTY ENVIRONMENT
+                  "FONTCONFIG_PATH=${CMAKE_SOURCE_DIR}/qa/resources/windows/fonts/" )
+endif()
+
 # End-to-end smoke for the `kicad-cli mergetool` Phase 9 entry point.
 # Runs the shell script against the just-built kicad-cli binary so the
 # argument-handling and exit-code-translation contract stays honored.
