@@ -732,7 +732,10 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
 
         if( aCurrentOnly && rcItem != current_item )
         {
-            lastGood = i;
+            // Only displayed rows can become the new selection.
+            if( i < (int) m_tree.size() )
+                lastGood = i;
+
             continue;
         }
 
