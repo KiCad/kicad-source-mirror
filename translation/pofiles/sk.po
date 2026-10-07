@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-04 22:51+0000\n"
+"PO-Revision-Date: 2026-10-07 21:51+0000\n"
 "Last-Translator: EdizonTN <edizontn@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -2664,7 +2664,7 @@ msgstr "&Pomocník"
 #: common/dialogs/dialog_rc_job.cpp:27
 #: pcbnew/dialogs/dialog_board_stats_job.cpp:28
 msgid "Report"
-msgstr "Protokol"
+msgstr "Súhrn"
 
 #: common/dialogs/dialog_assign_netclass.cpp:213
 msgid "<b>Currently matching nets:</b>"
@@ -4700,7 +4700,7 @@ msgstr ""
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
-msgstr "Súhlasím s odosielaním anonymných protokolov"
+msgstr "Súhlasím s odosielaním anonymných súhrnov"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
 msgid "Reset Unique Id"
@@ -6216,11 +6216,10 @@ msgstr ""
 "tímu, aby pomohol identifikovať a opraviť chyby a zlepšiť výkon.\n"
 "\n"
 "Keď je povolený zber údajov, KiCad bude automaticky odosielať protokoly o "
-"pádoch alebo iných významných udalostiach. Tieto protokoly obsahujú "
-"technické podrobnosti o stave softvéru KiCad v čase hlásenia. Nezhromažďujú "
-"sa žiadne osobné identifikačné údaje (PII) a vaše návrhové súbory, ako sú "
-"schémy, dosky plošných spojov a knižnice, sa v rámci tohto procesu nikdy "
-"nezdieľajú."
+"pádoch alebo iných významných udalostiach. Tieto súhrny obsahujú technické "
+"podrobnosti o stave softvéru KiCad v čase hlásenia. Nezhromažďujú sa žiadne "
+"osobné identifikačné údaje (PII) a vaše návrhové súbory, ako sú schémy, "
+"dosky plošných spojov a knižnice, sa v rámci tohto procesu nikdy nezdieľajú."
 
 #: common/dialogs/panel_startwizard_privacy_base.cpp:42
 msgid "Enable anonymous data collection"
@@ -12025,12 +12024,12 @@ msgstr "Upozornenie:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:459
 #: pcbnew/dialogs/dialog_drc.cpp:1097
 msgid "Save Report File"
-msgstr "Uložiť súbor protokolu"
+msgstr "Uložiť súbor so súhrnom"
 
 #: common/widgets/wx_html_report_panel.cpp:332
 #, c-format
 msgid "Cannot write report to file '%s'."
-msgstr "Nie je možné zapísať protokol do súboru '%s'."
+msgstr "Nie je možné zapísať súhrn do súboru '%s'."
 
 #: common/widgets/wx_html_report_panel.cpp:333
 msgid "File save error"
@@ -12228,7 +12227,7 @@ msgstr "Súbory Json"
 
 #: common/wildcards_and_files_ext.cpp:457
 msgid "Report files"
-msgstr "Súbory protokolov"
+msgstr "Súbory so súhrnmi"
 
 #: common/wildcards_and_files_ext.cpp:463
 msgid "Component placement files"
@@ -13769,7 +13768,7 @@ msgstr "Formátovanie"
 #: eeschema/dialogs/dialog_erc.cpp:1186 pcbnew/dialogs/dialog_gendrill.cpp:428
 #, c-format
 msgid "Report file '%s' created."
-msgstr "Súbor protokolu '%s' vytvorený."
+msgstr "Súbor so súhrnom '%s' vytvorený."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:76
 #: pcbnew/dialogs/dialog_drc_base.cpp:90
@@ -14378,7 +14377,7 @@ msgstr "Upraviť vlastnosti textu a grafiku"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:31
 msgid "Ibis parser log"
-msgstr "Log analyzátoru Ibis"
+msgstr "Protokol parseru Ibis"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
@@ -19174,12 +19173,12 @@ msgstr "Nájdených %d porušení\n"
 #: eeschema/eeschema_jobs_handler.cpp:1368
 #, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr "Nepodarilo sa uložiť ERC protokol do %s\n"
+msgstr "Nepodarilo sa uložiť súhrn ERC do %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1373
 #, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "ERC protokol uložený do %s\n"
+msgstr "Súhrn ERC uložený do %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1405
 msgid "Schematic file was not updated\n"
@@ -30234,16 +30233,16 @@ msgstr ""
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
 msgstr ""
 "Spustí kontrolu pravidiel návrhu (DRC) na doske plošných spojov a vytvorí "
-"protokol"
+"súhrnný prehľad"
 
 #: kicad/cli/command_pcb_drc.cpp:54 kicad/cli/command_pcb_export_stats.cpp:40
 #: kicad/cli/command_sch_erc.cpp:50
 msgid "Output file format, options: json, report"
-msgstr "Formát výstupného súboru. možnosti: json, textový protokol"
+msgstr "Formát výstupného súboru. možnosti: json, textový súhrn"
 
 #: kicad/cli/command_pcb_drc.cpp:67 kicad/cli/command_sch_erc.cpp:55
 msgid "Report units; valid options: in, mm, mils"
-msgstr "Jednotky protokolu; platné možnosti: in, mm, mil"
+msgstr "Jednotky v súhrnnom prehľade; platné možnosti: in, mm, mil"
 
 #: kicad/cli/command_pcb_drc.cpp:71
 msgid ""
@@ -30300,7 +30299,7 @@ msgstr "Zadané jednotky sú neplatné\n"
 #: kicad/cli/command_pcb_drc.cpp:171 kicad/cli/command_pcb_export_stats.cpp:86
 #: kicad/cli/command_sch_erc.cpp:148
 msgid "Invalid report format\n"
-msgstr "Neplatný formát protokolu\n"
+msgstr "Neplatný formát súhrnu\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
@@ -30508,15 +30507,15 @@ msgstr "Generovať samostatné súbory pre NPTH a PTH otvory"
 
 #: kicad/cli/command_pcb_export_drill.cpp:92
 msgid "Generate map / summary of drill hits"
-msgstr "Generovať mapy / súhrn použitých priemerov vrtákov"
+msgstr "Vygenerovať mapu / súhrn vŕtaných otvorov"
 
 #: kicad/cli/command_pcb_export_drill.cpp:96
 msgid "Generate report of drill hits"
-msgstr "Generovať protokol použitých priemerov vrtákov"
+msgstr "Generovať súhrn vŕtaných otvorov"
 
 #: kicad/cli/command_pcb_export_drill.cpp:101
 msgid "Report output file path"
-msgstr "Výstupná cesta pre protokol"
+msgstr "Výstupná cesta pre súhrn"
 
 #: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Generate a file specifically for tenting"
@@ -30564,8 +30563,8 @@ msgid ""
 "Warning: Report path supplied without --generate-report, no report will be "
 "generated\n"
 msgstr ""
-"Upozornenie: ak je cesta k protokolu zadaná bez --generate-report, "
-"nevygeneruje sa žiadna výsledná správa\n"
+"Upozornenie: ak je cesta k súhrnu zadaná bez --generate-report, nevygeneruje "
+"sa žiadna výsledný súhrn\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
@@ -30868,11 +30867,11 @@ msgstr "Vynútiť formát papiera A4."
 
 #: kicad/cli/command_pcb_export_stats.cpp:36
 msgid "Generate a board statistics report"
-msgstr "Generovať protokol štatistiky dosky"
+msgstr "Generovať súhrn so štatistikou dosky"
 
 #: kicad/cli/command_pcb_export_stats.cpp:45
 msgid "Report units; valid options: in, mm"
-msgstr "Jednotky protokolu, platné možnosti: in, mm"
+msgstr "Jednotky v súhrne; platné možnosti: in, mm"
 
 #: kicad/cli/command_pcb_export_stats.cpp:49
 msgid "Exclude footprints without pads"
@@ -30927,11 +30926,11 @@ msgstr ""
 
 #: kicad/cli/command_pcb_import.cpp:50
 msgid "Import report format: none, json, text (default: none)"
-msgstr "Formát protokolu importu: none, json, text (predvolené: none)"
+msgstr "Formát súhrnu importu: none, json, text (predvolené: none)"
 
 #: kicad/cli/command_pcb_import.cpp:55
 msgid "File path for import report (default: stdout)"
-msgstr "Cesta k súboru protokolu importu (predvolené: stdout)"
+msgstr "Cesta k súboru so súhrnom importu (predvolené: stdout)"
 
 #: kicad/cli/command_pcb_import.cpp:103
 #, c-format
@@ -30941,7 +30940,7 @@ msgstr "Neplatný formát: %s\n"
 #: kicad/cli/command_pcb_import.cpp:123
 #, c-format
 msgid "Invalid report format: %s\n"
-msgstr "Neplatný formát protokolu: %s\n"
+msgstr "Neplatný formát súhrnu: %s\n"
 
 #: kicad/cli/command_pcb_render.cpp:221
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
@@ -31096,8 +31095,7 @@ msgstr "Schémy"
 #: kicad/cli/command_sch_erc.cpp:45
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
-msgstr ""
-"Spustí kontrolu elektrických pravidiel (ERC) na schéme a vytvorí protokol"
+msgstr "Spustí kontrolu elektrických pravidiel (ERC) na schéme a vytvorí súhrn"
 
 #: kicad/cli/command_sch_erc.cpp:58
 msgid ""
@@ -37566,7 +37564,7 @@ msgstr "(Vylúčené %s z prečíslovania.)"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:343
 msgid "Change Log"
-msgstr "Denník zmien"
+msgstr "Protokol so zmenami"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
 msgid "Front Footprints"
@@ -42534,7 +42532,7 @@ msgstr "Pridať teardropy na prepojenia spoja s plôškou"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:677
 msgid "Allow teardrops to span 2 track segments"
-msgstr "Povoliť teardropu presahovať 2 segmenty spoja"
+msgstr "Povoliť teardropu preklenúť 2 segmenty spoja"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:679
 msgid ""
@@ -46902,7 +46900,7 @@ msgstr "Predvolené vlastnosti pre obdĺžnikové tvary"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:506
 msgid "Allow teardrop to span track segments"
-msgstr "Povoliť teardropu presahovať segmenty spoja"
+msgstr "Povoliť teardropu preklenúť segmenty spoja"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:359
 msgid "Properties for Track-to-Track Teardrops"
@@ -55811,7 +55809,7 @@ msgstr "Režim rohov spoja"
 
 #: pcbnew/router/router_tool.cpp:703
 msgid "Save router log"
-msgstr "Uložiť súbor denníka routera"
+msgstr "Uložiť protokol routera"
 
 #: pcbnew/router/router_tool.cpp:1318
 msgid "Via needs 2 different layers."
