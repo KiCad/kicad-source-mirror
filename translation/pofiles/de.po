@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-07 09:39+0000\n"
+"PO-Revision-Date: 2026-10-08 10:24+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -64996,9 +64996,9 @@ msgid "Missing field name argument to %s."
 msgstr "Fehlendes Feldname-Argument für %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1702 pcbnew/pcbexpr_functions.cpp:1744
-#, fuzzy, c-format
+#, c-format
 msgid "Missing netclass name argument to %s."
-msgstr "Fehlendes Lagenname-Argument für %s."
+msgstr "Fehlendes Netzklassenname-Argument für %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1783
 #, c-format
@@ -65006,9 +65006,9 @@ msgid "Missing component class name argument to %s."
 msgstr "Fehlendes Bauteilklassenname-Argument zu %s."
 
 #: pcbnew/pcbexpr_functions.cpp:1833 pcbnew/pcbexpr_functions.cpp:1877
-#, fuzzy, c-format
+#, c-format
 msgid "Missing property name argument to %s."
-msgstr "Fehlendes Gruppenname-Argument für %s."
+msgstr "Fehlendes Eigenschaftsname-Argument für %s."
 
 #: pcbnew/pcbnew.cpp:1349 pcbnew/pcbnew.cpp:1362
 msgid "Loading Footprint Libraries"
@@ -65021,16 +65021,15 @@ msgstr "Fehler beim Laden der Platine"
 #: pcbnew/pcbnew_jobs_handler.cpp:672
 #, c-format
 msgid "Invalid layer name '%s'\n"
-msgstr "Ungültiger Lagenname ‚%s‘\n"
+msgstr "Ungültiger Lagenname \"%s\"\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:709
-#, fuzzy
 msgid ""
 "Warning: board has unannotated footprints, please use the PCB editor to "
 "annotate them\n"
 msgstr ""
-"Warnung: Schaltplan hat Annotationsfehler, die mit dem Schaltplaneditor "
-"behoben werden müssen\n"
+"Warnung: Platine enthält nicht annotierte Footprints. Bitte annotieren Sie "
+"diese mithilfe des PCB-Editors\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1080 pcbnew/pcbnew_jobs_handler.cpp:1151
 #: pcbnew/pcbnew_jobs_handler.cpp:1198
@@ -67183,11 +67182,11 @@ msgstr "Kein Footprint zum Exportieren"
 
 #: pcbnew/tools/footprint_editor_control.cpp:677
 msgid "Select a library to compare against another."
-msgstr "Wählen Sie eine Bibliothek, um sie miteinander zu vergleichen."
+msgstr "Wählen Sie eine Bibliothek, um sie mit einer anderen zu vergleichen."
 
 #: pcbnew/tools/footprint_editor_control.cpp:702
 msgid "Choose .pretty Folder to Compare With"
-msgstr ".pretty-Ordner zum Vergleich auswählen"
+msgstr ".pretty-Ordner für Vergleich auswählen"
 
 #: pcbnew/tools/footprint_editor_control.cpp:715
 msgid "Select a KiCad footprint library folder (ends with .pretty)."
@@ -67195,7 +67194,8 @@ msgstr "Wählen Sie einen KiCad-Footprintbibliotheksordner (endet mit .pretty)."
 
 #: pcbnew/tools/footprint_editor_control.cpp:722
 msgid "Select a different .pretty folder than the active library."
-msgstr "Ein anderes .pretty-Verzeichnis als die aktive Bibliothek auswählen."
+msgstr ""
+"Wählen Sie einen von der aktiven Bibliothek verschiedenen .pretty-Ordner."
 
 #: pcbnew/tools/footprint_editor_control.cpp:881
 msgid "No datasheet found in the footprint."
@@ -67595,7 +67595,7 @@ msgstr "Pad-Eigenschaften einfügen"
 
 #: pcbnew/tools/pad_tool.cpp:283
 msgid "Push Pad Settings"
-msgstr "Übertrage Pad-Einstellungen"
+msgstr "Pad-Einstellungen übertragen"
 
 #: pcbnew/tools/pad_tool.cpp:417
 #, c-format
@@ -68026,13 +68026,13 @@ msgstr "Gefüllte Zonen zeichnen"
 #: pcbnew/tools/pcb_actions.cpp:672
 #, fuzzy
 msgid "Draw Copper Thieving Zone"
-msgstr "Kupferzone"
+msgstr "Kupferentnahmezone zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:673
 #, fuzzy
 msgid "Add a non-electrical thieving zone for plating-balance copper"
 msgstr ""
-"Eine nicht-elektrische Thieving-Zone für eine ausbalancierte "
+"Eine nicht-elektrische Entnahmezone für eine ausbalancierte "
 "Kupferbeschichtung hinzufügen"
 
 #: pcbnew/tools/pcb_actions.cpp:684
@@ -68362,13 +68362,19 @@ msgid "Extend lines to meet each other"
 msgstr "Linien verlängern bis sie sich treffen"
 
 #: pcbnew/tools/pcb_actions.cpp:1183
+#, fuzzy
 msgid "Hover a graphical line or arc to extend it until it meets another"
 msgstr ""
+"Bewegen Sie den Mauszeiger über eine graphische Linie oder Bogen, um die "
+"Grafik so weit zu verlängern, bis sie auf eine andere trifft"
 
 #: pcbnew/tools/pcb_actions.cpp:1190
+#, fuzzy
 msgid ""
 "Hover the part of a graphical shape to remove between the nearest crossings"
 msgstr ""
+"Bewegen Sie den Mauszeiger über den Teil einer grafischen Form (zwischen den "
+"nächstgelegenen Schnittpunkten) den Sie entfernen möchten"
 
 #: pcbnew/tools/pcb_actions.cpp:1197
 msgid "Merge selected polygons into a single polygon"
@@ -71303,19 +71309,19 @@ msgstr "Ein neues Projekt für diese Platine erstellen"
 
 #: pcbnew/widgets/footprint_wizard_properties_panel.cpp:285
 #: pcbnew/widgets/footprint_wizard_properties_panel.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "%s must be at most %s."
-msgstr "%s muss mindestens %s sein."
+msgstr "%s darf höchstens %s betragen."
 
 #: pcbnew/widgets/footprint_wizard_properties_panel.cpp:294
-#, fuzzy, c-format
+#, c-format
 msgid "%s must be a multiple of %s."
-msgstr "%s muss mindestens %s sein."
+msgstr "%s muss ein Vielfaches von %s sein."
 
 #: pcbnew/widgets/footprint_wizard_properties_panel.cpp:331
-#, fuzzy, c-format
+#, c-format
 msgid "%s does not match the required format '%s'."
-msgstr "Footprint \"%s\" stimmt nicht mit Kopie in Bibliothek \"%s\" überein."
+msgstr "%s entspricht nicht dem erforderlichen Format \"%s\"."
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:35
 msgid "Omit extra information"
@@ -71340,9 +71346,8 @@ msgstr "Kein Footprint ausgewählt"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:237
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
-#, fuzzy
 msgid "Grid Items"
-msgstr "Gruppieren"
+msgstr "Rasterelemente"
 
 #: pcbnew/widgets/pcb_design_block_pane.cpp:109
 msgid ""
@@ -71761,30 +71766,32 @@ msgstr "Glättungsstärke"
 #: pcbnew/zone.cpp:2546
 #, fuzzy
 msgid "Thieving Pattern"
-msgstr "Abstimmungsmuster"
+msgstr "Entnahme-Muster"
 
 #: pcbnew/zone.cpp:2551
+#, fuzzy
 msgid "Thieving Element Size"
-msgstr ""
+msgstr "Entnahme-Elementgröße"
 
 #: pcbnew/zone.cpp:2561
 #, fuzzy
 msgid "Thieving Gap"
-msgstr "Thermischer Abstand"
+msgstr "Entnahme-Spalt"
 
 #: pcbnew/zone.cpp:2567
 #, fuzzy
 msgid "Thieving Line Width"
-msgstr "Linienbreite"
+msgstr "Entnahme-Linienbreite"
 
 #: pcbnew/zone.cpp:2575
+#, fuzzy
 msgid "Thieving Stagger"
-msgstr ""
+msgstr "Entnahme-Staffelung"
 
 #: pcbnew/zone.cpp:2580
 #, fuzzy
 msgid "Thieving Orientation"
-msgstr "Textausrichtung"
+msgstr "Entnahme-Ausrichtung"
 
 #: pcbnew/zone.cpp:2586
 msgid "Remove Islands"
