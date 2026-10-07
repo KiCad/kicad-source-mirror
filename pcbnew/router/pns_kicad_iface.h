@@ -107,6 +107,7 @@ public:
     long long GetNetBoardLength( PNS::NET_HANDLE aNet ) const override;
     void RemoveBoardConnected( const std::vector<const PNS::ITEM*>& aJoined,
                                std::set<PNS::ITEM*>& aItems ) const override;
+    bool TouchesCopperZone( const PNS::ITEM* aItem ) const override;
 
     void SetStartLayerFromPCBNew( PCB_LAYER_ID aLayer );
     void SetStartLayerFromPNS( int aLayer ) { m_startLayer = aLayer; }

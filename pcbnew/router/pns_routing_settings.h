@@ -78,10 +78,10 @@ public:
     /// Enable/disable shoving vias.
     void SetShoveVias( bool aShoveVias ) { m_shoveVias = aShoveVias; }
 
-    /// Return true if loop (redundant track) removal is on.
+    /// Return true if loop removal and completed-route dangling-tail cleanup are enabled.
     bool RemoveLoops() const { return m_removeLoops; }
 
-    /// Enable/disable loop (redundant track) removal.
+    /// Enable/disable loop removal and completed-route dangling-tail cleanup.
     void SetRemoveLoops( bool aRemoveLoops ) { m_removeLoops = aRemoveLoops; }
 
     /// Return true if suggesting the finish of currently placed track is on.

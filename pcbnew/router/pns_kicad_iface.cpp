@@ -3219,6 +3219,46 @@ void PNS_KICAD_IFACE_BASE::RemoveBoardConnected( const std::vector<const PNS::IT
 }
 
 
+bool PNS_KICAD_IFACE_BASE::TouchesCopperZone( const PNS::ITEM* aItem ) const
+{
+    if( !m_board || !aItem || !aItem->Net() )
+        return true;
+
+    PCB_LAYER_ID layer = GetBoardLayerFromPNSLayer( aItem->Layer() );
+    const SHAPE* shape = aItem->Shape( aItem->Layer() );
+
+    if( layer == UNDEFINED_LAYER || !shape )
+        return true;
+
+    const BOX2I bbox = shape->BBox();
+
+    // Teardrops hug existing joints and carry no connectivity of their own
+    auto touches = [&]( const ZONE* aZone )
+    {
+        return !aZone->GetIsRuleArea() && !aZone->IsTeardropArea() && aZone->GetNet() == aItem->Net()
+               && aZone->IsOnLayer( layer ) && aZone->GetBoundingBox().Intersects( bbox )
+               && aZone->Outline()->Collide( shape );
+    };
+
+    for( const ZONE* zone : m_board->Zones() )
+    {
+        if( touches( zone ) )
+            return true;
+    }
+
+    for( const FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( const ZONE* zone : footprint->Zones() )
+        {
+            if( touches( zone ) )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+
 void PNS_KICAD_IFACE_BASE::SetStartLayerFromPCBNew( PCB_LAYER_ID aLayer )
 {
     m_startLayer = GetPNSLayerFromBoardLayer( aLayer );

@@ -27,6 +27,7 @@
 #include "pns_arc.h"
 #include "pns_node.h"
 
+#include <core/kicad_algo.h>
 #include <core/minoptmax.h>
 
 #include <geometry/shape_arc.h>
@@ -576,6 +577,12 @@ bool SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP )
         return false;
     }
 
+    // Shove may have already replaced aSeg in this branch, so splitting it would resurrect it
+    const JOINT* owner = aNode->FindJoint( aSeg->Anchor( 0 ), aSeg );
+
+    if( !owner || !alg::contains( owner->LinkList(), aSeg ) )
+        return false;
+
     SEGMENT* s_old = static_cast<SEGMENT*>( aSeg );
 
     if( s_old->Seg().Distance( aP ) > 100 )
@@ -614,6 +621,11 @@ bool SplitAdjacentArcs( NODE* aNode, ITEM* aArc, const VECTOR2I& aP )
     const JOINT* jt = aNode->FindJoint( aP, aArc );
 
     if( jt && jt->LinkCount() >= 1 )
+        return false;
+
+    const JOINT* owner = aNode->FindJoint( aArc->Anchor( 0 ), aArc );
+
+    if( !owner || !alg::contains( owner->LinkList(), aArc ) )
         return false;
 
     ARC*             a_old = static_cast<ARC*>( aArc );

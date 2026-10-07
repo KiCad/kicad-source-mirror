@@ -144,6 +144,9 @@ enum DRAG_MODE
      */
     virtual void RemoveBoardConnected( const std::vector<const ITEM*>& aJoined, std::set<ITEM*>& aItems ) const {}
 
+    /** Copper zones are absent from NODE joints, so tail pruning must keep items that touch one. */
+    virtual bool TouchesCopperZone( const ITEM* aItem ) const { return true; }
+
     /**
      * Return the layer span a via placed with @a aSizes occupies.  A through via always spans
      * the whole board; the layer pair only selects the span of blind, buried and micro vias.
