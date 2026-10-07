@@ -1132,13 +1132,29 @@ void FOOTPRINT_EDIT_FRAME::installFootprintTabBoard( FOOTPRINT_EDITOR_TAB_CONTEX
 }
 
 
-static std::unique_ptr<BOARD> makeFpHolderBoard()
+static std::unique_ptr<BOARD> makeFpHolderBoard( FOOTPRINT_EDITOR_SETTINGS* aCfg )
 {
     auto board = std::make_unique<BOARD>();
     board->SetBoardUse( BOARD_USE::FPHOLDER );
     board->GetDesignSettings().m_NetSettings->GetDefaultNetclass()->SetClearance( 0 );
     board->GetDesignSettings().m_SolderMaskExpansion = 0;
     board->SetVisibleAlls();
+
+    // Get our own settings; aCfg will be the PCBNEW_SETTINGS because we're part of the pcbnew
+    // compile unit
+    if( aCfg )
+    {
+        board->GetDesignSettings() = aCfg->m_DesignSettings;
+
+        for( auto& [source_name, dest_name] : aCfg->m_DesignSettings.m_UserLayerNames )
+        {
+            wxString wx_source_name = source_name;
+            PCB_LAYER_ID layer = static_cast<PCB_LAYER_ID>( LSET::NameToLayer( wx_source_name ) );
+
+            if( IsUserLayer( layer ) )
+                board->SetLayerName( layer, dest_name );
+        }
+    }
 
     return board;
 }
@@ -1156,7 +1172,7 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintTab( co
         return m_tabContexts[existing].get();
     }
 
-    auto ctx = std::make_unique<FOOTPRINT_EDITOR_TAB_CONTEXT>( lib, name, makeFpHolderBoard() );
+    auto ctx = std::make_unique<FOOTPRINT_EDITOR_TAB_CONTEXT>( lib, name, makeFpHolderBoard( GetSettings() ) );
     ctx->SetPreview( aAsPreview );
 
     FOOTPRINT_EDITOR_TAB_CONTEXT* raw = ctx.get();
@@ -1227,7 +1243,7 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanc
     if( int existing = m_tabsPanel->FindTab( key ); existing >= 0 )
         return m_tabContexts[existing].get();
 
-    std::unique_ptr<BOARD> board = makeFpHolderBoard();
+    std::unique_ptr<BOARD> board = makeFpHolderBoard( GetSettings() );
     board->GetDesignSettings().m_DRCSeverities[DRCE_MISSING_COURTYARD] = RPT_SEVERITY_WARNING;
 
     auto ctx = std::make_unique<FOOTPRINT_EDITOR_TAB_CONTEXT>( sourceUuid, reference, std::move( board ) );
@@ -1297,8 +1313,8 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanc
 
 FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::CreateUnsavedFootprintTab()
 {
-    std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT> ctx =
-            FOOTPRINT_EDITOR_TAB_CONTEXT::MakeUnsaved( makeFpHolderBoard() );
+    std::unique_ptr<BOARD>                        board = makeFpHolderBoard( GetSettings() );
+    std::unique_ptr<FOOTPRINT_EDITOR_TAB_CONTEXT> ctx = FOOTPRINT_EDITOR_TAB_CONTEXT::MakeUnsaved( std::move( board ) );
 
     const wxString                key = ctx->GetTabKey();
     FOOTPRINT_EDITOR_TAB_CONTEXT* raw = ctx.get();
@@ -1422,7 +1438,7 @@ bool FOOTPRINT_EDIT_FRAME::promptAndCloseFootprintTab( int aIdx )
     else
     {
         // Last tab: the fresh empty board is frame-owned like the bootstrap board.
-        installFootprintTabBoard( nullptr, makeFpHolderBoard().release() );
+        installFootprintTabBoard( nullptr, makeFpHolderBoard( GetSettings() ).release() );
     }
 
     // The install swapped m_pcb off the closing board, so erasing the context frees it safely.
