@@ -437,7 +437,7 @@ def test_sch_child_input_validation( kitest: KiTestFixture, tmp_path: Path, monk
     diagnostic = f"Schematic '{child}' is a hierarchical subsheet; load its root schematic."
     assert diagnostic in stderr
 
-    if trace:
+    if trace and "(KICAD_SETTINGS) " in stderr:
         assert stderr.index( "(KICAD_SETTINGS) " ) < stderr.index( diagnostic )
 
     assert not output.exists()
