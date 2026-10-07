@@ -330,7 +330,7 @@ bool NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
         wxString valueText = sym->GetValue( &sheetPath, RAW_VALUE, m_exportVariant );
         wxString footprintText = sym->GetFootprintFieldText( &sheetPath, RAW_VALUE, m_exportVariant );
-        wxString deviceType = valueText + wxString("_") + footprintText;
+        wxString deviceType = valueText + wxT( "_" ) + footprintText;
 
         while( deviceType.GetChar(deviceType.Length() - 1 ) == '_' )
             deviceType.RemoveLast();
