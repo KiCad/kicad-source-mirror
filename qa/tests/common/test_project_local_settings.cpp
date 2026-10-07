@@ -44,6 +44,7 @@ class PROJECT_LOCAL_SETTINGS_FIXTURE
 public:
     PROJECT_LOCAL_SETTINGS_FIXTURE()
     {
+        m_originalDir = fs::current_path();
         m_tempDir = fs::temp_directory_path() / "kicad_project_local_settings_test";
         fs::remove_all( m_tempDir );
         fs::create_directories( m_tempDir );
@@ -51,6 +52,7 @@ public:
 
     ~PROJECT_LOCAL_SETTINGS_FIXTURE()
     {
+        fs::current_path( m_originalDir );
         fs::remove_all( m_tempDir );
     }
 
@@ -80,6 +82,7 @@ public:
         BOOST_REQUIRE( aSettingsManager.LoadProject( wxString( proPath.string() ) ) );
     }
 
+    fs::path m_originalDir;
     fs::path m_tempDir;
 };
 

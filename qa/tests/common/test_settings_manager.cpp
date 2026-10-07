@@ -65,6 +65,7 @@ public:
 struct SETTINGS_MANAGER_FIXTURE
 {
     SETTINGS_MANAGER_FIXTURE() :
+            m_originalDir( fs::current_path() ),
             m_tempDir( fs::temp_directory_path() / "kicad_settings_manager_test" )
     {
         std::error_code ec;
@@ -76,6 +77,7 @@ struct SETTINGS_MANAGER_FIXTURE
 
     ~SETTINGS_MANAGER_FIXTURE()
     {
+        fs::current_path( m_originalDir );
         std::error_code ec;
         fs::remove_all( m_tempDir, ec );
     }
@@ -85,6 +87,7 @@ struct SETTINGS_MANAGER_FIXTURE
         return wxString( ( m_tempDir / aName ).string() );
     }
 
+    fs::path m_originalDir;
     fs::path m_tempDir;
 };
 

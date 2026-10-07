@@ -41,6 +41,7 @@ class PROJECT_TEMPLATE_TEST_FIXTURE
 public:
     PROJECT_TEMPLATE_TEST_FIXTURE()
     {
+        m_originalDir = fs::current_path();
         m_tempDir = fs::temp_directory_path() / "kicad_template_test";
         fs::remove_all( m_tempDir );
         fs::create_directories( m_tempDir );
@@ -48,6 +49,7 @@ public:
 
     ~PROJECT_TEMPLATE_TEST_FIXTURE()
     {
+        fs::current_path( m_originalDir );
         fs::remove_all( m_tempDir );
     }
 
@@ -80,6 +82,7 @@ public:
         }
     }
 
+    fs::path m_originalDir;
     fs::path m_tempDir;
 };
 

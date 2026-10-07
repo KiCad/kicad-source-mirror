@@ -27,8 +27,10 @@
 #include <settings/settings_manager.h>
 #include <settings/kicad_settings.h>
 
+#include <wx/app.h>
 #include <wx/image.h>
 #include <wx/init.h>
+#include <wx/log.h>
 
 #include <locale_io.h>
 
@@ -41,7 +43,17 @@ bool init_unit_test()
     LOCALE_IO dummy;
 
     boost::unit_test::framework::master_test_suite().p_name.value = "Common library module tests";
+
+#ifdef __WXMSW__
+    wxApp::SetInstance( new wxApp );
+#endif
+
     bool ok = wxInitialize();
+
+#ifdef __WXMSW__
+    if( ok )
+        wxLog::SetActiveTarget( new wxLogStderr );
+#endif
 
     wxSetAssertHandler( &KI_TEST::wxAssertThrower );
 

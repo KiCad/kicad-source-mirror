@@ -564,6 +564,7 @@ BOOST_AUTO_TEST_CASE( VcsContextPathSetByLoadProject )
         BOOST_CHECK( std::regex_match( loaded.ToStdString(), hexPattern ) );
 
         Pgm().GetSettingsManager().UnloadProject( &Pgm().GetSettingsManager().Prj(), false );
+        BOOST_REQUIRE( wxSetWorkingDirectory( scratchDir ) );
 
         // UnloadProject must clear the context so lookups fall back to cwd, which is
         // outside the repo, reproducing the sentinel state.
