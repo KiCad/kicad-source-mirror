@@ -113,6 +113,7 @@ BOOST_AUTO_TEST_CASE( ExportPdfSingleDocumentTrailingDisabledLayers )
 
     BOOST_CHECK_EQUAL( pageCount, 2u ); // 3 before the fix
 
+    in.close();
     std::filesystem::remove_all( outputRoot );
 }
 
