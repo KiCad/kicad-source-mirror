@@ -24,16 +24,17 @@
 #include "pgm_base.h"
 
 
-// These are true singletons so it's OK for them to be globals.
+// Library loading initializes and reads these caches on worker threads. Keep them local to
+// each thread so initialization and language changes cannot invalidate another thread's data.
 
-static std::vector<BITMAPS> g_typeIcons;
-static wxArrayString        g_typeNames;
+static thread_local std::vector<BITMAPS> g_typeIcons;
+static thread_local wxArrayString        g_typeNames;
 
-static std::vector<BITMAPS> g_shapeIcons;
-static wxArrayString        g_shapeNames;
+static thread_local std::vector<BITMAPS> g_shapeIcons;
+static thread_local wxArrayString        g_shapeNames;
 
-static std::vector<BITMAPS> g_orientationIcons;
-static wxArrayString        g_orientationNames;
+static thread_local std::vector<BITMAPS> g_orientationIcons;
+static thread_local wxArrayString        g_orientationNames;
 
 
 struct pinTypeStruct
@@ -48,12 +49,12 @@ struct pinShapeStruct
     BITMAPS  bitmap;
 };
 
-static std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct>  g_pinElectricalTypes;
-static std::map<GRAPHIC_PINSHAPE,   struct pinShapeStruct> g_pinShapes;
-static std::map<PIN_ORIENTATION,    struct pinShapeStruct> g_pinOrientations;
+static thread_local std::map<ELECTRICAL_PINTYPE, struct pinTypeStruct> g_pinElectricalTypes;
+static thread_local std::map<GRAPHIC_PINSHAPE, struct pinShapeStruct>  g_pinShapes;
+static thread_local std::map<PIN_ORIENTATION, struct pinShapeStruct>   g_pinOrientations;
 
 
-static int g_language = wxLANGUAGE_UNKNOWN;
+static thread_local int g_language = wxLANGUAGE_UNKNOWN;
 
 
 PIN_ORIENTATION PinOrientationCode( size_t index )
