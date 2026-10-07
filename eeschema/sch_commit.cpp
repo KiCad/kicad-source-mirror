@@ -726,6 +726,18 @@ void SCH_COMMIT::RevertToCheckpoint( int aCheckpoint )
     std::vector<SCH_ITEM*> bulkRemovedItems;
     std::vector<SCH_ITEM*> itemsChanged;
 
+    // Detach added groups before restoring any saved group memberships.
+    for( int ii = aCheckpoint; ii < (int) m_entries.size(); ++ii )
+    {
+        COMMIT_LINE& entry = m_entries[ii];
+
+        if( ( entry.m_type & CHT_TYPE ) == CHT_ADD )
+        {
+            if( SCH_GROUP* group = dynamic_cast<SCH_GROUP*>( entry.m_item ) )
+                group->RemoveAll();
+        }
+    }
+
     for( int ii = aCheckpoint; ii < (int) m_entries.size(); ++ii )
     {
         COMMIT_LINE& entry = m_entries[ii];

@@ -328,6 +328,10 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             }
 
             RemoveFromScreen( eda_item, screen );
+
+            if( SCH_GROUP* group = dynamic_cast<SCH_GROUP*>( schItem ) )
+                group->RemoveAll();
+
             aList->SetPickedItemStatus( UNDO_REDO::DELETED, ii );
 
             bulkRemovedItems.emplace_back( schItem );
