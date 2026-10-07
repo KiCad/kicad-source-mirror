@@ -89,10 +89,10 @@ bool NETLIST_EXPORTER_CADSTAR::writeNetlist( const wxString& aOutFileName, unsig
                 if( !symbol )
                     continue;
 
-                if( symbol->GetExcludedFromBoard() )
+                if( symbol->GetExcludedFromBoard( &sheet, m_exportVariant ) )
                     continue;
 
-                footprint = symbol->GetFootprintFieldText( &sheet, RESOLVED );
+                footprint = symbol->GetFootprintFieldText( &sheet, RESOLVED, m_exportVariant );
 
                 if( footprint.IsEmpty() )
                     footprint = "$noname";
@@ -101,7 +101,7 @@ bool NETLIST_EXPORTER_CADSTAR::writeNetlist( const wxString& aOutFileName, unsig
                 fmt::print( f, "{}     ", TO_UTF8( StartCmpDesc ) );
                 fmt::print( f, "{}", TO_UTF8( msg ) );
 
-                msg = symbol->GetValue( &sheet, RESOLVED );
+                msg = symbol->GetValue( &sheet, RESOLVED, m_exportVariant );
                 msg.Replace( wxT( " " ), wxT( "_" ) );
                 fmt::print( f, "     \"{}\"", TO_UTF8( msg ) );
                 fmt::print( f, "     \"{}\"", TO_UTF8( footprint ) );
@@ -127,7 +127,8 @@ bool NETLIST_EXPORTER_CADSTAR::writeNetlist( const wxString& aOutFileName, unsig
     }
     catch( const fmt::format_error& e )
     {
-        aReporter.Report( wxString::Format( _( "Formatting error writing netlist: %s" ), e.what() ), RPT_SEVERITY_ERROR );
+        aReporter.Report( wxString::Format( _( "Formatting error writing netlist: %s" ), e.what() ),
+                          RPT_SEVERITY_ERROR );
         ret = -1;
     }
 

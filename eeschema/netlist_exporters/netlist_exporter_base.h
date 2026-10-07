@@ -96,10 +96,12 @@ class NETLIST_EXPORTER_BASE
 {
 public:
     NETLIST_EXPORTER_BASE( SCHEMATIC* aSchematic, KIWAY* aKiway ) :
-        m_schematic( aSchematic ),
-        m_kiway( aKiway )
+            m_schematic( aSchematic ),
+            m_kiway( aKiway )
     {
         wxASSERT( aSchematic );
+
+        m_exportVariant = aSchematic->GetCurrentVariant();
     }
 
     virtual ~NETLIST_EXPORTER_BASE() = default;
@@ -155,8 +157,10 @@ protected:
         NETLIST_EXPORTER_BASE& m_exporter;
     };
 
-    virtual bool writeNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
-                              REPORTER& aReporter ) { return false; }
+    virtual bool writeNetlist( const wxString& aOutFileName, unsigned aNetlistOptions, REPORTER& aReporter )
+    {
+        return false;
+    }
 
     struct EXPORT_NET
     {
@@ -222,17 +226,18 @@ protected:
     void findAllUnitsOfSymbol( SCH_SYMBOL* aSchSymbol, const SCH_SHEET_PATH& aSheetPath,
                                std::vector<PIN_INFO>& aPins );
 
-    /// Used for "multiple symbols per package" symbols to avoid processing a lib symbol more than
-    /// once
-    UNIQUE_STRINGS        m_referencesAlreadyFound;
+protected:
+    /// Used for "multiple symbols per package" symbols to avoid processing a lib symbol more than once
+    UNIQUE_STRINGS                              m_referencesAlreadyFound;
 
     /// unique library symbols used. LIB_SYMBOL items are sorted by names
     std::set<LIB_SYMBOL*, LIB_SYMBOL_LESS_THAN> m_libParts;
 
-    /// The schematic we're generating a netlist for
-    SCHEMATIC*      m_schematic;
 
-    KIWAY* m_kiway = nullptr;
+    SCHEMATIC*      m_schematic;        /// The schematic we're generating a netlist for
+    wxString        m_exportVariant;    /// The variant of the schematic to export
+
+    KIWAY*          m_kiway = nullptr;
 
     mutable std::map<wxString, std::set<wxString>> m_footprintPadCache;
 };

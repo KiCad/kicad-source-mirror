@@ -122,7 +122,7 @@ XNODE* NETLIST_EXPORTER_XML::makeRoot( unsigned aCtl )
 
 
 void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aSheet,
-                                            const SCH_SHEET_LIST& aSheetList, const wxString& aVariant )
+                                            const SCH_SHEET_LIST& aSheetList )
 {
     wxString                     value;
     wxString                     footprint;
@@ -160,27 +160,27 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol, c
                 // The lowest unit number wins.  User should only set fields in any one unit.
 
                 // Value
-                candidate = symbol2->GetValue( &sheet, m_resolveTextVars, aVariant );
+                candidate = symbol2->GetValue( &sheet, m_resolveTextVars, m_exportVariant );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || value.IsEmpty() ) )
                     value = candidate;
 
                 // Footprint
-                candidate = symbol2->GetFootprintFieldText( &sheet, m_resolveTextVars, aVariant );
+                candidate = symbol2->GetFootprintFieldText( &sheet, m_resolveTextVars, m_exportVariant );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || footprint.IsEmpty() ) )
                     footprint = candidate;
 
                 // Datasheet
                 candidate = symbol2->GetField( FIELD_T::DATASHEET )->GetShownText( &sheet, m_resolveTextVars,
-                                                                                   aVariant );
+                                                                                   m_exportVariant );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || datasheet.IsEmpty() ) )
                     datasheet = candidate;
 
                 // Description
                 candidate = symbol2->GetField( FIELD_T::DESCRIPTION )->GetShownText( &sheet, m_resolveTextVars,
-                                                                                     aVariant );
+                                                                                     m_exportVariant );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || description.IsEmpty() ) )
                     description = candidate;
@@ -192,7 +192,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol, c
                         continue;
 
                     if( unit < minUnit || fields.count( field.GetName() ) == 0 )
-                        fields[field.GetName()] = field.GetShownText( &aSheet, m_resolveTextVars, aVariant );
+                        fields[field.GetName()] = field.GetShownText( &aSheet, m_resolveTextVars, m_exportVariant );
                 }
 
                 minUnit = std::min( unit, minUnit );
@@ -201,21 +201,21 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol, c
     }
     else
     {
-        value = aSymbol->GetValue( &aSheet, m_resolveTextVars, aVariant );
-        footprint = aSymbol->GetFootprintFieldText( &aSheet, m_resolveTextVars, aVariant );
+        value = aSymbol->GetValue( &aSheet, m_resolveTextVars, m_exportVariant );
+        footprint = aSymbol->GetFootprintFieldText( &aSheet, m_resolveTextVars, m_exportVariant );
 
         SCH_FIELD* datasheetField = aSymbol->GetField( FIELD_T::DATASHEET );
         SCH_FIELD* descriptionField = aSymbol->GetField( FIELD_T::DESCRIPTION );
 
-        datasheet = datasheetField->GetShownText( &aSheet, m_resolveTextVars, aVariant );
-        description = descriptionField->GetShownText( &aSheet, m_resolveTextVars, aVariant );
+        datasheet = datasheetField->GetShownText( &aSheet, m_resolveTextVars, m_exportVariant );
+        description = descriptionField->GetShownText( &aSheet, m_resolveTextVars, m_exportVariant );
 
         for( SCH_FIELD& field : aSymbol->GetFields() )
         {
             if( field.IsMandatory() || field.IsPrivate() )
                 continue;
 
-            fields[field.GetName()] = field.GetShownText( &aSheet, m_resolveTextVars, aVariant );
+            fields[field.GetName()] = field.GetShownText( &aSheet, m_resolveTextVars, m_exportVariant );
         }
     }
 
@@ -260,9 +260,6 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
     SCH_SHEET_PATH currentSheet = m_schematic->CurrentSheet();
     SCH_SHEET_LIST sheetList = m_exportSheets;
-
-    // pcbnew resolves variants itself from the base design.
-    const wxString exportVariant = ( aCtl & GNL_OPT_KICAD ) ? wxString() : m_schematic->GetCurrentVariant();
 
     // Output is xml, so there is no reason to remove spaces from the field values.
     // And XML element names need not be translated to various languages.
@@ -335,7 +332,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
             xcomps->AddChild( xcomp = node( wxT( "comp" ) ) );
 
             xcomp->AddAttribute( wxT( "ref" ), symbol->GetRef( &sheet ) );
-            addSymbolFields( xcomp, symbol, sheet, sheetList, exportVariant );
+            addSymbolFields( xcomp, symbol, sheet, sheetList );
 
             XNODE*  xlibsource;
             xcomp->AddChild( xlibsource = node( wxT( "libsource" ) ) );
@@ -377,7 +374,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 xproperty->AddAttribute( wxT( "name" ), field.GetUntranslatedName() );
 
                 xproperty->AddAttribute( wxT( "value" ), field.GetShownText( &sheet, m_resolveTextVars,
-                                                                             exportVariant ) );
+                                                                             m_exportVariant ) );
             }
 
             for( const SCH_FIELD& sheetField : sheet.Last()->GetFields() )
@@ -386,27 +383,28 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
                 xproperty->AddAttribute( wxT( "name" ), sheetField.GetUntranslatedName() );
 
                 xproperty->AddAttribute( wxT( "value" ), sheetField.GetShownText( &sheet, m_resolveTextVars,
-                                                                                  exportVariant ) );
+                                                                                  m_exportVariant ) );
             }
 
             const bool baseExcludedFromBOM = symbol->ResolveExcludedFromBOM( &sheet ) || sheet.GetExcludedFromBOM();
             const bool baseExcludedFromSim = symbol->ResolveExcludedFromSim( &sheet ) || sheet.GetExcludedFromSim();
 
-            if( symbol->ResolveExcludedFromBOM( &sheet, exportVariant ) || sheet.GetExcludedFromBOM( exportVariant ) )
+            if( symbol->ResolveExcludedFromBOM( &sheet, m_exportVariant )
+                    || sheet.GetExcludedFromBOM( m_exportVariant ) )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_bom" ) );
             }
 
-            if( symbol->ResolveExcludedFromSim( &sheet, exportVariant )
-                || sheet.GetExcludedFromSim( exportVariant ) )
+            if( symbol->ResolveExcludedFromSim( &sheet, m_exportVariant )
+                || sheet.GetExcludedFromSim( m_exportVariant ) )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_sim" ) );
             }
 
-            if( symbol->ResolveExcludedFromBoard( &sheet, exportVariant )
-                || sheet.GetExcludedFromBoard( exportVariant ) )
+            if( symbol->ResolveExcludedFromBoard( &sheet, m_exportVariant )
+                || sheet.GetExcludedFromBoard( m_exportVariant ) )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_board" ) );
@@ -414,7 +412,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             const bool baseExcludedFromPosFiles = symbol->ResolveExcludedFromPosFiles( &sheet );
 
-            if( symbol->ResolveExcludedFromPosFiles( &sheet, exportVariant ) )
+            if( symbol->ResolveExcludedFromPosFiles( &sheet, m_exportVariant ) )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "exclude_from_pos_files" ) );
@@ -422,7 +420,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
             const bool baseDnp = symbol->ResolveDNP( &sheet ) || sheet.GetDNP();
 
-            if( symbol->ResolveDNP( &sheet, exportVariant ) || sheet.GetDNP( exportVariant ) )
+            if( symbol->ResolveDNP( &sheet, m_exportVariant ) || sheet.GetDNP( m_exportVariant ) )
             {
                 xcomp->AddChild( xproperty = node( wxT( "property" ) ) );
                 xproperty->AddAttribute( wxT( "name" ), wxT( "dnp" ) );
@@ -881,7 +879,7 @@ std::vector<wxString> NETLIST_EXPORTER_XML::getComponentClassNamesForAllSymbolUn
     std::vector<SCH_SHEET_PATH> symbolSheets;
     symbolSheets.push_back( aSymbolSheet );
 
-    std::unordered_set<wxString> compClassNames = aSymbol->GetComponentClassNames( &aSymbolSheet );
+    std::unordered_set<wxString> compClassNames = aSymbol->GetComponentClassNames( &aSymbolSheet, m_exportVariant );
     int                          primaryUnit = aSymbol->GetUnitSelection( &aSymbolSheet );
 
     if( aSymbol->GetUnitCount() > 1 )
@@ -905,8 +903,8 @@ std::vector<wxString> NETLIST_EXPORTER_XML::getComponentClassNamesForAllSymbolUn
 
                 symbolSheets.push_back( sheet );
 
-                std::unordered_set<wxString> otherClassNames =
-                        symbol2->GetComponentClassNames( &sheet );
+                std::unordered_set<wxString> otherClassNames = symbol2->GetComponentClassNames( &sheet,
+                                                                                                m_exportVariant );
                 compClassNames.insert( otherClassNames.begin(), otherClassNames.end() );
             }
         }
@@ -1233,8 +1231,6 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
     if( m_schematic )
         netSettings = m_schematic->Project().GetProjectFile().NetSettings();
 
-    const wxString currentVariant = ( aCtl & GNL_OPT_KICAD ) ? wxString() : m_schematic->GetCurrentVariant();
-
     for( const EXPORT_NET& net : m_exportNets )
     {
         wxString netName = ( aCtl & GNL_OPT_KICAD ) ? net.name : UnescapeString( net.name );
@@ -1257,14 +1253,14 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             if( !symbol )
                 continue;
 
-            if( forBOM && ( sheet.GetExcludedFromBOM( currentVariant )
-                           || symbol->ResolveExcludedFromBOM( &sheet, currentVariant ) ) )
+            if( forBOM && ( sheet.GetExcludedFromBOM( m_exportVariant )
+                           || symbol->ResolveExcludedFromBOM( &sheet, m_exportVariant ) ) )
             {
                 continue;
             }
 
-            if( forBoard && ( sheet.GetExcludedFromBoard( currentVariant )
-                             || symbol->ResolveExcludedFromBoard( &sheet, currentVariant ) ) )
+            if( forBoard && ( sheet.GetExcludedFromBoard( m_exportVariant )
+                             || symbol->ResolveExcludedFromBoard( &sheet, m_exportVariant ) ) )
             {
                 continue;
             }
@@ -1319,7 +1315,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
         {
             SCH_PIN* firstPin = net_record->m_Nodes.begin()->m_Pin;
             allNetPinsStacked = std::all_of( net_record->m_Nodes.begin() + 1, net_record->m_Nodes.end(),
-                    [=]( auto& node )
+                    [=]( NET_NODE& node )
                     {
                         return firstPin->GetParent() == node.m_Pin->GetParent()
                                && firstPin->GetPosition() == node.m_Pin->GetPosition()

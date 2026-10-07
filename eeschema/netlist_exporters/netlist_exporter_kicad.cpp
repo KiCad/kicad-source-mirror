@@ -51,6 +51,9 @@ bool NETLIST_EXPORTER_KICAD::writeNetlist( const wxString& aOutFileName, unsigne
 
 void NETLIST_EXPORTER_KICAD::Format( OUTPUTFORMATTER* aOut, int aCtl )
 {
+    // pcbnew resolves variants itself from the base design.
+    m_exportVariant = ( aCtl & GNL_OPT_KICAD ) ? wxString() : m_schematic->GetCurrentVariant();
+
     CONNECTIVITY_SCOPE connectivity( *this );
     std::unique_ptr<XNODE> xroot( makeRoot( aCtl ) );
 

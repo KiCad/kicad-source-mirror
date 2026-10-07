@@ -4803,21 +4803,23 @@ bool SCH_SYMBOL::IsNormal() const
 }
 
 
-std::unordered_set<wxString> SCH_SYMBOL::GetComponentClassNames( const SCH_SHEET_PATH* aPath ) const
+std::unordered_set<wxString> SCH_SYMBOL::GetComponentClassNames( const SCH_SHEET_PATH* aPath,
+                                                                 const wxString& aVariantName ) const
 {
     std::unordered_set<wxString> componentClass;
 
-    auto getComponentClassFields = [&]( const std::vector<SCH_FIELD>& fields )
-    {
-        for( const SCH_FIELD& field : fields )
-        {
-            if( field.GetUntranslatedName() == wxT( "Component Class" ) )
+    auto getComponentClassFields =
+            [&]( const std::vector<SCH_FIELD>& fields )
             {
-                if( field.GetShownText( aPath, INTERNAL ) != wxEmptyString )
-                    componentClass.insert( field.GetShownText( aPath, INTERNAL ) );
-            }
-        }
-    };
+                for( const SCH_FIELD& field : fields )
+                {
+                    if( field.GetUntranslatedName() == wxT( "Component Class" ) )
+                    {
+                        if( field.GetShownText( aPath, INTERNAL ) != wxEmptyString )
+                            componentClass.insert( field.GetShownText( aPath, INTERNAL, aVariantName ) );
+                    }
+                }
+            };
 
     // First get component classes set on the symbol itself
     getComponentClassFields( m_fields );

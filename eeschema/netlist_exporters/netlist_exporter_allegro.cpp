@@ -30,16 +30,16 @@
 #include <fmt.h>
 #include <fmt/ranges.h>
 
-bool NETLIST_EXPORTER_ALLEGRO::writeNetlist( const wxString& aOutFileName,
-                                             unsigned /* aNetlistOptions */,
+bool NETLIST_EXPORTER_ALLEGRO::writeNetlist( const wxString& aOutFileName, unsigned /* aNetlistOptions */,
                                              REPORTER& aReporter )
 {
     m_f = nullptr;
     bool success = true;
 
     // Create the devices directory
-    m_exportPath = wxFileName( aOutFileName ).GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR )
+    m_exportPath = wxFileName( aOutFileName ).GetPath( static_cast<int>( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR ) )
                    + wxString( "devices" );
+
     if( !wxDirExists( m_exportPath ) )
     {
         if( !wxMkdir( m_exportPath, wxS_DIR_DEFAULT ) )
@@ -175,17 +175,15 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
         {
             SCH_SYMBOL* symbol = findNextSymbol( item, sheet );
 
-            if( !symbol || symbol->GetExcludedFromBoard() )
+            if( !symbol || symbol->GetExcludedFromBoard( &sheet, m_exportVariant ) )
                 continue;
 
             if( symbol->GetLibPins().empty() )
                 continue;
 
-            m_packageProperties.insert( std::pair<wxString,
-                                        wxString>( formatRoom( sheet ),
-                                                   symbol->GetRef( &sheet ) ) );
-            m_orderedSymbolsSheetpath.push_back( std::pair<SCH_SYMBOL*,
-                                                 SCH_SHEET_PATH>( symbol, sheet ) );
+            m_packageProperties.insert( std::pair<wxString, wxString>( formatRoom( sheet ),
+                                                                       symbol->GetRef( &sheet ) ) );
+            m_orderedSymbolsSheetpath.push_back( std::pair<SCH_SYMBOL*, SCH_SHEET_PATH>( symbol, sheet ) );
         }
     }
 
@@ -210,7 +208,7 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
         {
             SYMBOL* symbol = pin->GetParentSymbol();
 
-            if( symbol && !symbol->GetExcludedFromBoard() )
+            if( symbol && !symbol->GetExcludedFromBoard( &sheet, m_exportVariant ) )
                 net_record->m_Nodes.emplace_back( pin, sheet );
         }
     }
@@ -255,9 +253,7 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
 
             // Skip power symbols and virtual symbols
             if( refText[0] == wxChar( '#' ) )
-            {
                 continue;
-            }
 
             m_netNameNodes.insert( std::pair<wxString, NET_NODE>( net_record->m_Name, netNode ) );
         }
@@ -282,14 +278,14 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
 
         for( auto it = m_orderedSymbolsSheetpath.begin(); it != m_orderedSymbolsSheetpath.end(); ++it )
         {
-            if( it->first->GetValue( &it->second, RAW_VALUE )
-                != first_ele.first->GetValue( &first_ele.second, RAW_VALUE ) )
+            if( it->first->GetValue( &it->second, RAW_VALUE, m_exportVariant )
+                != first_ele.first->GetValue( &first_ele.second, RAW_VALUE, m_exportVariant ) )
             {
                 continue;
             }
 
-            if( it->first->GetFootprintFieldText( &it->second, RAW_VALUE )
-                != first_ele.first->GetFootprintFieldText( &first_ele.second, RAW_VALUE ) )
+            if( it->first->GetFootprintFieldText( &it->second, RAW_VALUE, m_exportVariant )
+                != first_ele.first->GetFootprintFieldText( &first_ele.second, RAW_VALUE, m_exportVariant ) )
             {
                 continue;
             }
@@ -332,8 +328,8 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         SCH_SYMBOL* sym = ( beginIter->second ).first;
         SCH_SHEET_PATH sheetPath = ( beginIter->second ).second;
 
-        wxString valueText = sym->GetValue( &sheetPath, RAW_VALUE );
-        wxString footprintText = sym->GetFootprintFieldText( &sheetPath, RAW_VALUE );
+        wxString valueText = sym->GetValue( &sheetPath, RAW_VALUE, m_exportVariant );
+        wxString footprintText = sym->GetFootprintFieldText( &sheetPath, RAW_VALUE, m_exportVariant );
         wxString deviceType = valueText + wxString("_") + footprintText;
 
         while( deviceType.GetChar(deviceType.Length()-1) == '_' )
@@ -612,7 +608,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
             if( SCH_FIELD* fld = sym->FindFieldCaseInsensitive( field ) )
             {
                 // TODO: FOR_CANVAS seems like an odd context here....
-                wxString fieldText = fld->GetShownText( &sheetPath, FOR_CANVAS );
+                wxString fieldText = fld->GetShownText( &sheetPath, FOR_CANVAS, m_exportVariant );
 
                 if( !fieldText.IsEmpty() )
                 {
@@ -727,8 +723,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackageProperties()
         // formatRoom() already restricted this to characters that need no quoting or escaping.
         fmt::print( m_f, "'ROOM' '{}' ; ", TO_UTF8( roomName ) );
 
-        std::stable_sort( refTexts.begin(), refTexts.end(),
-                          NETLIST_EXPORTER_ALLEGRO::CompareSymbolRef );
+        std::stable_sort( refTexts.begin(), refTexts.end(), NETLIST_EXPORTER_ALLEGRO::CompareSymbolRef );
 
         fmt::print( m_f, "{}", fmt::join( refTexts, ",\n\t" ) );
 
@@ -763,6 +758,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroNets()
         std::stable_sort( netNodes.begin(), netNodes.end() );
 
         std::vector<wxString> nets;
+
         for( const NET_NODE& netNode : netNodes )
         {
             wxString refText = netNode.m_Pin->GetParentSymbol()->GetRef( &netNode.m_Sheet );

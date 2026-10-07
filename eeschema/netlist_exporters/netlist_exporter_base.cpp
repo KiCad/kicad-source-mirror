@@ -333,13 +333,11 @@ std::vector<wxString> NETLIST_EXPORTER_BASE::resolvePadNumbers( const SCH_PIN*  
                                                                 const SCH_SHEET_PATH& aSheetPath ) const
 {
     // Shared resolution kernel for all netlist paths (issue #2282) so they cannot drift.
-    const wxString variantName = m_schematic ? m_schematic->GetCurrentVariant() : wxString();
-
     if( m_kiway )
     {
         if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( aPin->GetParentSymbol() ) )
         {
-            wxString fpText = symbol->GetFootprintFieldText( &aSheetPath, RESOLVED, variantName );
+            wxString fpText = symbol->GetFootprintFieldText( &aSheetPath, RESOLVED, m_exportVariant );
             LIB_ID   fpId;
 
             if( !fpText.IsEmpty() && fpId.Parse( fpText, true ) < 0 )
@@ -349,7 +347,7 @@ std::vector<wxString> NETLIST_EXPORTER_BASE::resolvePadNumbers( const SCH_PIN*  
                 if( !pads.empty() )
                 {
                     SCH_PIN::PAD_RESOLUTION state = SCH_PIN::PAD_RESOLUTION::MAPPED;
-                    wxString pad = aPin->GetEffectivePadNumber( aSheetPath, variantName, fpId, &pads, &state );
+                    wxString pad = aPin->GetEffectivePadNumber( aSheetPath, m_exportVariant, fpId, &pads, &state );
 
                     if( state == SCH_PIN::PAD_RESOLUTION::UNMAPPED )
                         return {};
@@ -360,7 +358,7 @@ std::vector<wxString> NETLIST_EXPORTER_BASE::resolvePadNumbers( const SCH_PIN*  
         }
     }
 
-    return ExpandStackedPinNotation( aPin->GetEffectivePadNumber( aSheetPath, variantName ) );
+    return ExpandStackedPinNotation( aPin->GetEffectivePadNumber( aSheetPath, m_exportVariant ) );
 }
 
 

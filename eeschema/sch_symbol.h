@@ -985,7 +985,8 @@ public:
     double Similarity( const SCH_ITEM& aOther ) const override;
 
     /// Return the component classes this symbol belongs in.
-    std::unordered_set<wxString> GetComponentClassNames( const SCH_SHEET_PATH* aPath ) const;
+    std::unordered_set<wxString> GetComponentClassNames( const SCH_SHEET_PATH* aPath,
+                                                         const wxString& aVariantName ) const;
 
     void DeleteVariant( const KIID_PATH& aPath, const wxString& aVariantName );
 
