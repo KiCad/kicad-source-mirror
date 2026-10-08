@@ -77,6 +77,10 @@
 #include <jobs/job_pcb_import.h>
 #include <jobs/job_import_utils.h>
 #include <jobs/job_pcb_upgrade.h>
+#include <jobs/job_pcb_downgrade.h>
+#include <downgrade/board_downgrade.h>
+#include <downgrade_scan.h>
+#include <downgrade_copy.h>
 #include <eda_units.h>
 #include <footprint_library_adapter.h>
 #include <lset.h>
@@ -203,6 +207,11 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
                   return dlg.ShowModal() == wxID_OK;
               } );
     Register( "upgrade", std::bind( &PCBNEW_JOBS_HANDLER::JobUpgrade, this, std::placeholders::_1 ),
+              []( JOB* job, wxWindow* aParent ) -> bool
+              {
+                  return true;
+              } );
+    Register( "downgrade", std::bind( &PCBNEW_JOBS_HANDLER::JobDowngrade, this, std::placeholders::_1 ),
               []( JOB* job, wxWindow* aParent ) -> bool
               {
                   return true;
@@ -3280,6 +3289,348 @@ int PCBNEW_JOBS_HANDLER::JobUpgrade( JOB* aJob )
 
     return CLI::EXIT_CODES::SUCCESS;
 }
+
+
+// Classify library footprints so their losses appear in the report.
+static void classifyFootprintLibraries( const wxString& aDir, const DOWNGRADE_TARGET& aTarget,
+                                        COMPATIBILITY_REPORT& aReport, bool aDropInsteadOfApproximate )
+{
+    wxArrayString files;
+    wxDir::GetAllFiles( aDir, &files, wxT( "*.kicad_mod" ) );
+
+    for( const wxString& file : files )
+    {
+        if( IsDowngradeWorkingArtifact( file ) )
+            continue;
+
+        try
+        {
+            PCB_IO_KICAD_SEXPR         loader;
+            wxString                   nameOut;
+            std::unique_ptr<FOOTPRINT> fp = loader.ImportFootprint( file, nameOut );
+
+            if( !fp )
+                continue;
+
+            BOARD scratch;
+            scratch.Add( fp.release() );
+
+            aReport.Merge( ClassifyBoardForDowngrade( &scratch, aTarget, aDropInsteadOfApproximate ) );
+        }
+        catch( const IO_ERROR& )
+        {
+            // A footprint that fails to load is caught later by the downgrade pass itself.
+        }
+    }
+}
+
+
+// Downgrade every .kicad_mod under the folder in place. Returns the first file the target could
+// not open, or empty when all are safe.
+static wxString downgradeFootprintLibraries( const wxString& aDir, const DOWNGRADE_TARGET& aTarget,
+                                             bool                        aDropInsteadOfApproximate,
+                                             DOWNGRADE_FILE_TRANSACTION* aTransaction = nullptr,
+                                             wxString*                   aRecoveryError = nullptr )
+{
+    auto convert = [&]( const wxString& aFile, const wxString& aTmp ) -> DOWNGRADE_FILE_RESULT
+    {
+        return DowngradeFootprintFileToTemp( aFile, aTmp, aTarget, aDropInsteadOfApproximate );
+    };
+
+    return DowngradeLibraryFilesInPlace(
+            aDir, wxT( "*.kicad_mod" ), aTarget.m_boardVersion,
+            [&]( const wxString& aText )
+            {
+                return FindUnsupportedBoardToken( aText, aTarget );
+            },
+            convert, aTransaction, aRecoveryError );
+}
+
+
+static wxString footprintRefusedMessage( const wxString& aFile, const DOWNGRADE_TARGET& aTarget )
+{
+    return wxString::Format( _( "Cannot export: footprint '%s' uses a feature %s cannot open.\n" ), aFile,
+                             aTarget.m_name );
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobDowngrade( JOB* aJob )
+{
+    JOB_PCB_DOWNGRADE* job = dynamic_cast<JOB_PCB_DOWNGRADE*>( aJob );
+
+    if( job == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    const DOWNGRADE_TARGET* target =
+            job->m_target.IsEmpty() ? &GetDowngradeTargets().front() : FindDowngradeTarget( job->m_target );
+
+    if( target == nullptr )
+    {
+        m_reporter->Report( wxString::Format( _( "Unknown target version '%s'. Valid targets: %s\n" ), job->m_target,
+                                              DowngradeTargetNames() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    if( !job->m_libraryDir.IsEmpty() && !wxDirExists( job->m_libraryDir ) )
+    {
+        m_reporter->Report( wxString::Format( _( "The library folder '%s' does not exist.\n" ), job->m_libraryDir ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    if( !job->m_variant.IsEmpty() && target->m_boardVersion >= FIRST_PCB_VARIANTS )
+    {
+        m_reporter->Report( _( "The target supports variants, so there is nothing to flatten.\n" ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    wxString pathError;
+    wxString libraryCopy;
+
+    if( !job->m_libraryDir.IsEmpty() && !ValidateDowngradeLibrarySource( job->m_libraryDir, pathError ) )
+    {
+        m_reporter->Report( pathError + wxT( "\n" ), RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_ARGS;
+    }
+
+    if( !job->m_inPlace && !job->m_dryRun )
+    {
+        wxFileName output( job->m_outputFile );
+
+        if( !job->m_outputFile.IsEmpty() && output.MakeAbsolute() )
+            job->m_outputFile = output.GetFullPath();
+
+        if( !ValidateFreshDowngradeOutput( job->m_outputFile, pathError ) )
+        {
+            m_reporter->Report( pathError + wxT( "\n" ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_ARGS;
+        }
+
+        if( !job->m_libraryDir.IsEmpty() )
+        {
+            libraryCopy = DowngradeLibraryCopyPath( job->m_libraryDir, output.GetPath() );
+
+            if( libraryCopy.IsEmpty() || !ValidateDowngradeLibraryCopy( job->m_libraryDir, libraryCopy, pathError ) )
+            {
+                m_reporter->Report( pathError + wxT( "\n" ), RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_ARGS;
+            }
+        }
+    }
+
+    try
+    {
+        if( !job->m_filename.IsEmpty() )
+        {
+            // Load a private copy, never the live editor board.
+            PCB_IO_KICAD_SEXPR     loader;
+            std::unique_ptr<BOARD> brd( loader.LoadBoard( job->m_filename, nullptr ) );
+
+            if( !brd )
+                return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
+
+            if( !job->m_variant.IsEmpty() )
+            {
+                const std::vector<wxString>& names = brd->GetVariantNames();
+
+                if( names.empty() )
+                {
+                    // A board only learns variants from the netlist updater. Without any, the
+                    // flatten is vacuous, so a project export must not fail here after the
+                    // schematic side accepted the name.
+                    m_reporter->Report( _( "The board has no variant data. The base board is exported.\n" ),
+                                        RPT_SEVERITY_WARNING );
+                }
+                else if( std::find( names.begin(), names.end(), job->m_variant ) == names.end() )
+                {
+                    m_reporter->Report(
+                            wxString::Format( _( "The board has no variant named '%s'.\n" ), job->m_variant ),
+                            RPT_SEVERITY_ERROR );
+                    return CLI::EXIT_CODES::ERR_ARGS;
+                }
+                else
+                {
+                    FlattenBoardVariant( brd.get(), job->m_variant );
+                }
+            }
+
+            COMPATIBILITY_REPORT report =
+                    ClassifyBoardForDowngrade( brd.get(), *target, job->m_dropInsteadOfApproximate );
+
+            // Library losses belong in the report the user approves too.
+            if( !job->m_libraryDir.IsEmpty() )
+                classifyFootprintLibraries( job->m_libraryDir, *target, report, job->m_dropInsteadOfApproximate );
+
+            job->m_report = report;
+
+            report.Print( m_reporter );
+
+            if( job->m_dryRun )
+                return CLI::EXIT_CODES::SUCCESS;
+
+            if( report.IsBlocked() )
+            {
+                m_reporter->Report( _( "Cannot export: the board uses features the target cannot represent.\n" ),
+                                    RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_UNKNOWN;
+            }
+
+            if( report.IsLossy() && !job->m_force )
+            {
+                m_reporter->Report( _( "Export would lose data. Re-run with --force to export anyway.\n" ),
+                                    RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_UNKNOWN;
+            }
+
+            DOWNGRADE_OUTPUT_DIRECTORIES outputDirectories;
+            wxString                     libraryDir = job->m_libraryDir;
+
+            if( !job->m_inPlace )
+            {
+                wxFileName output( job->m_outputFile );
+                output.MakeAbsolute();
+
+                if( !outputDirectories.Create( output.GetPath() ) )
+                {
+                    m_reporter->Report( _( "Could not create the output folder.\n" ), RPT_SEVERITY_ERROR );
+                    return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+                }
+
+                if( !libraryDir.IsEmpty() )
+                {
+                    if( !CopyDowngradeLibraryDirectory( libraryDir, libraryCopy, outputDirectories, pathError ) )
+                    {
+                        m_reporter->Report( pathError + wxT( "\n" ), RPT_SEVERITY_ERROR );
+                        return CLI::EXIT_CODES::ERR_UNKNOWN;
+                    }
+
+                    libraryDir = libraryCopy;
+                }
+            }
+
+            DOWNGRADE_FILE_TRANSACTION transaction;
+            wxString                   stagedBoard = transaction.Stage( job->m_outputFile );
+
+            if( stagedBoard.IsEmpty() )
+            {
+                m_reporter->Report( _( "Could not export the downgraded board.\n" ), RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_UNKNOWN;
+            }
+
+            // The real export loads its own fresh copy and fails closed on any uncovered token.
+            wxString badToken;
+
+            if( !ExportBoardToOlderVersion( job->m_filename, stagedBoard, *target, report, &badToken, job->m_variant,
+                                            job->m_dropInsteadOfApproximate ) )
+            {
+                if( !badToken.IsEmpty() )
+                    m_reporter->Report( wxString::Format( _( "Cannot export: the result still uses '%s', which %s "
+                                                             "cannot open. This feature has no downgrade rule yet.\n" ),
+                                                          badToken, target->m_name ),
+                                        RPT_SEVERITY_ERROR );
+                else
+                    m_reporter->Report( _( "Could not export the downgraded board.\n" ), RPT_SEVERITY_ERROR );
+
+                return CLI::EXIT_CODES::ERR_UNKNOWN;
+            }
+
+            if( !job->m_libraryDir.IsEmpty() )
+            {
+                wxString badLib = downgradeFootprintLibraries( libraryDir, *target, job->m_dropInsteadOfApproximate,
+                                                               &transaction );
+
+                if( !badLib.IsEmpty() )
+                {
+                    m_reporter->Report( footprintRefusedMessage( badLib, *target ), RPT_SEVERITY_ERROR );
+                    return CLI::EXIT_CODES::ERR_UNKNOWN;
+                }
+            }
+
+            wxString failedDestination = transaction.Commit();
+
+            if( !failedDestination.IsEmpty() )
+            {
+                m_reporter->Report( wxString::Format( _( "Could not replace '%s'.\n" ), failedDestination ),
+                                    RPT_SEVERITY_ERROR );
+
+                if( !transaction.GetRecoveryError().IsEmpty() )
+                    m_reporter->Report( transaction.GetRecoveryError(), RPT_SEVERITY_ERROR );
+
+                return CLI::EXIT_CODES::ERR_UNKNOWN;
+            }
+
+            outputDirectories.Commit();
+            m_reporter->Report( wxString::Format( _( "Saved downgraded board to '%s'\n" ), job->m_outputFile ),
+                                RPT_SEVERITY_INFO );
+        }
+        // Library-only mode. Fails closed if any library still uses a token the target cannot open.
+        else if( !job->m_libraryDir.IsEmpty() )
+        {
+            if( !job->m_inPlace && !job->m_dryRun )
+            {
+                m_reporter->Report( _( "A board input is required for a library copy export.\n" ), RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_ARGS;
+            }
+
+            if( !job->m_variant.IsEmpty() )
+            {
+                m_reporter->Report( _( "Variants do not apply to a library downgrade.\n" ), RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_ARGS;
+            }
+
+            COMPATIBILITY_REPORT report;
+            classifyFootprintLibraries( job->m_libraryDir, *target, report, job->m_dropInsteadOfApproximate );
+            job->m_report = report;
+            report.Print( m_reporter );
+
+            if( job->m_dryRun )
+                return CLI::EXIT_CODES::SUCCESS;
+
+            if( report.IsBlocked() )
+            {
+                m_reporter->Report( _( "Cannot export: the libraries use features the target cannot represent.\n" ),
+                                    RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_UNKNOWN;
+            }
+
+            if( report.IsLossy() && !job->m_force )
+            {
+                m_reporter->Report( _( "Export would lose data. Re-run with --force to export anyway.\n" ),
+                                    RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_UNKNOWN;
+            }
+
+            wxString recoveryError;
+            wxString badLib = downgradeFootprintLibraries( job->m_libraryDir, *target, job->m_dropInsteadOfApproximate,
+                                                           nullptr, &recoveryError );
+
+            if( !badLib.IsEmpty() )
+            {
+                m_reporter->Report( footprintRefusedMessage( badLib, *target ), RPT_SEVERITY_ERROR );
+
+                if( !recoveryError.IsEmpty() )
+                    m_reporter->Report( recoveryError, RPT_SEVERITY_ERROR );
+
+                return CLI::EXIT_CODES::ERR_UNKNOWN;
+            }
+
+            m_reporter->Report( _( "Downgraded footprint libraries\n" ), RPT_SEVERITY_INFO );
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString where = job->m_filename.IsEmpty() ? _( "the footprint libraries" ) : job->m_filename;
+
+        m_reporter->Report( wxString::Format( _( "Error exporting '%s'.\n%s" ), where, ioe.What().GetData() ),
+                            RPT_SEVERITY_ERROR );
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
 
 // Most job handlers need to align the running job with the board before resolving any
 // output paths with variables in them like ${REVISION}.

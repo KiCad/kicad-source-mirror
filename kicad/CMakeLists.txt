@@ -86,6 +86,7 @@ set( KICAD_CLI_SRCS
     cli/command_pcb_export_stackup.cpp
     cli/command_pcb_export_svg.cpp
     cli/command_pcb_upgrade.cpp
+    cli/command_pcb_downgrade.cpp
     cli/command_pcb_import.cpp
     cli/command_sch_import.cpp
     cli/command_import.cpp

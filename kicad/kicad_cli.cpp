@@ -82,6 +82,7 @@
 #include "cli/command_sch_export_netlist.h"
 #include "cli/command_sch_export_plot.h"
 #include "cli/command_pcb_upgrade.h"
+#include "cli/command_pcb_downgrade.h"
 #include "cli/command_pcb_import.h"
 #include "cli/command_sch_import.h"
 #include "cli/command_import.h"
@@ -150,6 +151,7 @@ static CLI::MERGETOOL_COMMAND            mergetoolCmd{};
 static CLI::GIT_MERGEDRIVER_COMMAND      gitMergeDriverCmd{};
 static CLI::PCB_RENDER_COMMAND           pcbRenderCmd{};
 static CLI::PCB_UPGRADE_COMMAND          pcbUpgradeCmd{};
+static CLI::PCB_DOWNGRADE_COMMAND        pcbDowngradeCmd{};
 static CLI::PCB_IMPORT_COMMAND           pcbImportCmd{};
 static CLI::SCH_IMPORT_COMMAND           schImportCmd{};
 static CLI::IMPORT_COMMAND               importCmd{};
@@ -305,6 +307,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
             },
             {
                 &pcbUpgradeCmd
+            },
+            {
+                &pcbDowngradeCmd
             }
         }
     },
