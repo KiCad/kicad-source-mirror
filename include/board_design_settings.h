@@ -324,6 +324,15 @@ public:
      */
     std::vector<VALIDATION_ERROR> ValidateDesignRules( std::optional<EDA_UNITS> aUnits = std::nullopt ) const;
 
+    /**
+     * Find design rule values that are legal but have no effect because other rules imply a stricter limit.
+     *
+     * These are advisory and must not block saving; existing projects can contain them.
+     *
+     * @return empty vector if consistent, otherwise one entry per redundant setting.
+     */
+    std::vector<VALIDATION_ERROR> GetDesignRuleWarnings( std::optional<EDA_UNITS> aUnits = std::nullopt ) const;
+
     ZONE_SETTINGS& GetDefaultZoneSettings()
     {
         return m_defaultZoneSettings;

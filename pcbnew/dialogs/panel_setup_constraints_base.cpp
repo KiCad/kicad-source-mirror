@@ -23,7 +23,7 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	sbFeatureConstraints = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgFeatureConstraints;
-	fgFeatureConstraints = new wxFlexGridSizer( 0, 4, 0, 0 );
+	fgFeatureConstraints = new wxFlexGridSizer( 0, 5, 0, 0 );
 	fgFeatureConstraints->SetFlexibleDirection( wxBOTH );
 	fgFeatureConstraints->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -31,6 +31,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_staticText23 = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Copper"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText23->Wrap( -1 );
 	fgFeatureConstraints->Add( m_staticText23, 0, wxTOP|wxLEFT, 13 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -53,6 +56,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_staticline18 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	fgFeatureConstraints->Add( m_staticline18, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
+	m_staticline181 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline181, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
 	m_bitmapClearance = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapClearance, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -68,6 +74,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_clearanceUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_clearanceUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_clearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_clearanceWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_clearanceWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 	m_bitmapMinTrackWidth = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinTrackWidth, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -86,6 +95,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_TrackMinWidthUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_TrackMinWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
+	m_trackMinWidthWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_trackMinWidthWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
+
 	m_bitmapMinConn = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinConn, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
@@ -103,6 +115,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_MinConnUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_MinConnUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
+	m_minConnWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_minConnWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
+
 	m_bitmapMinViaAnnulus = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinViaAnnulus, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -118,6 +133,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_ViaMinAnnulusUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaMinAnnulusUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_ViaMinAnnulusUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_viaMinAnnulusWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_viaMinAnnulusWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 	m_bitmapMinViaDiameter = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinViaDiameter, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -135,6 +153,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_ViaMinUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_ViaMinUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
+	m_viaMinSizeWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_viaMinSizeWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
+
 	m_bitmapHoleClearance = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapHoleClearance, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -150,6 +171,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_HoleClearanceUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_HoleClearanceUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_HoleClearanceUnits, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_holeClearanceWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_holeClearanceWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 	m_bitmapEdgeClearance = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapEdgeClearance, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -167,6 +191,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_EdgeClearanceUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_EdgeClearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
+	m_edgeClearanceWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_edgeClearanceWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
+
 	m_bitmapMinGrooveWidth = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinGrooveWidth, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
@@ -183,9 +210,15 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_minGrooveWidthUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_minGrooveWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
+	m_minGrooveWidthWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_minGrooveWidthWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
+
 	m_staticText24 = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Holes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText24->Wrap( -1 );
 	fgFeatureConstraints->Add( m_staticText24, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxLEFT, 13 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
@@ -208,6 +241,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_staticline6 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	fgFeatureConstraints->Add( m_staticline6, 0, wxEXPAND, 2 );
 
+	m_staticline61 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline61, 0, wxEXPAND, 2 );
+
 	m_bitmapMinViaDrill = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinViaDrill, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -223,6 +259,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_MinDrillUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_MinDrillUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_MinDrillUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
+
+	m_minDrillWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_minDrillWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 	m_bitmapMinHoleClearance = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinHoleClearance, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -240,12 +279,18 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_HoleToHoleUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_HoleToHoleUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
+	m_holeToHoleWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_holeToHoleWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
+
 	m_staticText25 = new wxStaticText( m_scrolledWindow, wxID_ANY, _("uVias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText25->Wrap( -1 );
 	fgFeatureConstraints->Add( m_staticText25, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxLEFT, 13 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 2 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
@@ -265,6 +310,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_staticline11 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	fgFeatureConstraints->Add( m_staticline11, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
+	m_staticline112 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline112, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
 	m_bitmapMinuViaDiameter = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinuViaDiameter, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
@@ -280,6 +328,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_uviaMinSizeUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, wxALIGN_LEFT );
 	m_uviaMinSizeUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_uviaMinSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
+
+	m_uviaMinSizeWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_uviaMinSizeWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 	m_bitmapMinuViaDrill = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	fgFeatureConstraints->Add( m_bitmapMinuViaDrill, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -297,9 +348,15 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_uviaMinDrillUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_uviaMinDrillUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 5 );
 
+	m_uviaMinDrillWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_uviaMinDrillWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
+
 	m_staticText28 = new wxStaticText( m_scrolledWindow, wxID_ANY, _("Silk"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText28->Wrap( -1 );
 	fgFeatureConstraints->Add( m_staticText28, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxLEFT, 13 );
+
+
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -322,6 +379,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_staticline14 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	fgFeatureConstraints->Add( m_staticline14, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
+	m_staticline141 = new wxStaticLine( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	fgFeatureConstraints->Add( m_staticline141, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
 
@@ -338,6 +398,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_silkClearanceUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_silkClearanceUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
+	m_silkClearanceWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_silkClearanceWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
+
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
 
@@ -352,6 +415,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_textHeightUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_textHeightUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
 
+	m_textHeightWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_textHeightWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
+
 
 	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
 
@@ -365,6 +431,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_textThicknessUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textThicknessUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_textThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxLEFT, 5 );
+
+	m_textThicknessWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_textThicknessWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 
 	sbFeatureConstraints->Add( fgFeatureConstraints, 1, wxEXPAND, 5 );
@@ -408,6 +477,9 @@ PANEL_SETUP_CONSTRAINTS_BASE::PANEL_SETUP_CONSTRAINTS_BASE( wxWindow* parent, wx
 	m_maxErrorUnits = new wxStaticText( m_scrolledWindow, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_maxErrorUnits->Wrap( -1 );
 	fgSizer2->Add( m_maxErrorUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_maxErrorWarning = new wxStaticBitmap( m_scrolledWindow, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_maxErrorWarning, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 5 );
 
 
 	bSizerArcToPoly->Add( fgSizer2, 0, wxEXPAND|wxBOTTOM, 5 );

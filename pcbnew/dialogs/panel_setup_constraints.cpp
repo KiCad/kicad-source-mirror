@@ -49,7 +49,8 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_E
         m_minGrooveWidth( aFrame, m_minGrooveWidthLabel, m_minGrooveWidthCtrl, m_minGrooveWidthUnits ),
         m_minTextHeight( aFrame, m_textHeightLabel, m_textHeightCtrl, m_textHeightUnits ),
         m_minTextThickness( aFrame, m_textThicknessLabel, m_textThicknessCtrl, m_textThicknessUnits ),
-        m_maxError( aFrame, m_maxErrorTitle, m_maxErrorCtrl, m_maxErrorUnits )
+        m_maxError( aFrame, m_maxErrorTitle, m_maxErrorCtrl, m_maxErrorUnits ),
+        m_validationTimer( this )
 {
     m_Frame = aFrame;
     m_BrdSettings = &m_Frame->GetBoard()->GetDesignSettings();
@@ -80,7 +81,51 @@ PANEL_SETUP_CONSTRAINTS::PANEL_SETUP_CONSTRAINTS( wxWindow* aParentWindow, PCB_E
         m_minGrooveWidthLabel->Show( false );
         m_minGrooveWidthCtrl->Show( false );
         m_minGrooveWidthUnits->Show( false );
+
+        // A reserved-space icon would leave an empty row behind
+        wxSizerItem* item = m_minGrooveWidthWarning->GetContainingSizer()->GetItem( m_minGrooveWidthWarning );
+        item->SetFlag( item->GetFlag() & ~wxRESERVE_SPACE_EVEN_IF_HIDDEN );
     }
+
+    m_fields = {
+        { wxS( "min_clearance" ),             m_clearanceCtrl,              m_clearanceWarning },
+        { wxS( "min_connection" ),            m_MinConnCtrl,                m_minConnWarning },
+        { wxS( "min_track_width" ),           m_TrackMinWidthCtrl,          m_trackMinWidthWarning },
+        { wxS( "min_via_annular_width" ),     m_ViaMinAnnulusCtrl,          m_viaMinAnnulusWarning },
+        { wxS( "min_via_diameter" ),          m_SetViasMinSizeCtrl,         m_viaMinSizeWarning },
+        { wxS( "min_through_hole_diameter" ), m_MinDrillCtrl,               m_minDrillWarning },
+        { wxS( "min_microvia_diameter" ),     m_uviaMinSizeCtrl,            m_uviaMinSizeWarning },
+        { wxS( "min_microvia_drill" ),        m_uviaMinDrillCtrl,           m_uviaMinDrillWarning },
+        { wxS( "min_hole_to_hole" ),          m_SetHoleToHoleCtrl,          m_holeToHoleWarning },
+        { wxS( "min_hole_clearance" ),        m_HoleClearanceCtrl,          m_holeClearanceWarning },
+        { wxS( "min_silk_clearance" ),        m_silkClearanceCtrl,          m_silkClearanceWarning },
+        { wxS( "min_groove_width" ),          m_minGrooveWidthCtrl,         m_minGrooveWidthWarning },
+        { wxS( "min_text_height" ),           m_textHeightCtrl,             m_textHeightWarning },
+        { wxS( "min_text_thickness" ),        m_textThicknessCtrl,          m_textThicknessWarning },
+        { wxS( "min_copper_edge_clearance" ), m_EdgeClearanceCtrl,          m_edgeClearanceWarning },
+        { wxS( "max_error" ),                 m_maxErrorCtrl,               m_maxErrorWarning }
+    };
+
+    for( const CONSTRAINT_FIELD& field : m_fields )
+    {
+        field.m_Warning->SetBitmap( KiBitmapBundle( BITMAPS::small_warning ) );
+        field.m_Warning->Hide();
+
+        // Debounced so a half-typed value does not flash a warning
+        field.m_Ctrl->Bind( wxEVT_TEXT,
+                            [this]( wxCommandEvent& aEvent )
+                            {
+                                m_validationTimer.StartOnce( 250 );
+                                aEvent.Skip();
+                            } );
+    }
+
+    Bind( wxEVT_TIMER,
+          [this]( wxTimerEvent& )
+          {
+              updateWarnings();
+          },
+          m_validationTimer.GetId() );
 }
 
 
@@ -116,6 +161,8 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataToWindow()
     m_minTextHeight.SetValue( m_BrdSettings->m_MinSilkTextHeight );
     m_minTextThickness.SetValue( m_BrdSettings->m_MinSilkTextThickness );
 
+    updateWarnings();
+
     return true;
 }
 
@@ -124,31 +171,7 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
 {
     // These are all stored in project file, not board, so no need for OnModify()
 
-    m_BrdSettings->m_UseHeightForLengthCalcs = m_useHeightForLengthCalcs->GetValue();
-
-    m_BrdSettings->m_MaxError = m_maxError.GetValue();
-
-    m_BrdSettings->m_ZoneKeepExternalFillets = m_allowExternalFilletsOpt->GetValue();
-    m_BrdSettings->m_MinResolvedSpokes = m_minResolvedSpokeCountCtrl->GetValue();
-
-    m_BrdSettings->m_MinClearance = m_minClearance.GetValue();
-    m_BrdSettings->m_MinConn = m_minConn.GetValue();
-    m_BrdSettings->m_TrackMinWidth = m_trackMinWidth.GetValue();
-    m_BrdSettings->m_ViasMinAnnularWidth = m_viaMinAnnulus.GetValue();
-    m_BrdSettings->m_ViasMinSize = m_viaMinSize.GetValue();
-    m_BrdSettings->m_HoleClearance = m_holeClearance.GetValue();
-    m_BrdSettings->m_CopperEdgeClearance = m_edgeClearance.GetValue();
-    m_BrdSettings->m_MinGrooveWidth = m_minGrooveWidth.GetValue();
-
-    m_BrdSettings->m_MinThroughDrill = m_throughHoleMin.GetValue();
-    m_BrdSettings->m_HoleToHoleMin = m_holeToHoleMin.GetValue();
-
-    m_BrdSettings->m_MicroViasMinSize = m_uviaMinSize.GetValue();
-    m_BrdSettings->m_MicroViasMinDrill = m_uviaMinDrill.GetValue();
-
-    m_BrdSettings->m_SilkClearance = m_silkClearance.GetValue();
-    m_BrdSettings->m_MinSilkTextHeight = m_minTextHeight.GetValue();
-    m_BrdSettings->m_MinSilkTextThickness = m_minTextThickness.GetValue();
+    applyValues( *m_BrdSettings );
 
     std::vector<BOARD_DESIGN_SETTINGS::VALIDATION_ERROR> errors =
             m_BrdSettings->ValidateDesignRules( m_Frame->GetUserUnits() );
@@ -187,6 +210,73 @@ bool PANEL_SETUP_CONSTRAINTS::TransferDataFromWindow()
     }
 
     return true;
+}
+
+
+void PANEL_SETUP_CONSTRAINTS::applyValues( BOARD_DESIGN_SETTINGS& aSettings ) const
+{
+    aSettings.m_UseHeightForLengthCalcs = m_useHeightForLengthCalcs->GetValue();
+
+    aSettings.m_MaxError = m_maxError.GetValue();
+
+    aSettings.m_ZoneKeepExternalFillets = m_allowExternalFilletsOpt->GetValue();
+    aSettings.m_MinResolvedSpokes = m_minResolvedSpokeCountCtrl->GetValue();
+
+    aSettings.m_MinClearance = m_minClearance.GetValue();
+    aSettings.m_MinConn = m_minConn.GetValue();
+    aSettings.m_TrackMinWidth = m_trackMinWidth.GetValue();
+    aSettings.m_ViasMinAnnularWidth = m_viaMinAnnulus.GetValue();
+    aSettings.m_ViasMinSize = m_viaMinSize.GetValue();
+    aSettings.m_HoleClearance = m_holeClearance.GetValue();
+    aSettings.m_CopperEdgeClearance = m_edgeClearance.GetValue();
+    aSettings.m_MinGrooveWidth = m_minGrooveWidth.GetValue();
+
+    aSettings.m_MinThroughDrill = m_throughHoleMin.GetValue();
+    aSettings.m_HoleToHoleMin = m_holeToHoleMin.GetValue();
+
+    aSettings.m_MicroViasMinSize = m_uviaMinSize.GetValue();
+    aSettings.m_MicroViasMinDrill = m_uviaMinDrill.GetValue();
+
+    aSettings.m_SilkClearance = m_silkClearance.GetValue();
+    aSettings.m_MinSilkTextHeight = m_minTextHeight.GetValue();
+    aSettings.m_MinSilkTextThickness = m_minTextThickness.GetValue();
+}
+
+
+void PANEL_SETUP_CONSTRAINTS::updateWarnings()
+{
+    m_validationTimer.Stop();
+
+    // Detached from the project so destroying it cannot flush candidate values into the project file
+    BOARD_DESIGN_SETTINGS candidate( nullptr, "dummy" );
+    candidate = *m_BrdSettings;
+    applyValues( candidate );
+
+    EDA_UNITS                    units = m_Frame->GetUserUnits();
+    std::map<wxString, wxString> messages;
+
+    for( const std::vector<BOARD_DESIGN_SETTINGS::VALIDATION_ERROR>& issues :
+         { candidate.ValidateDesignRules( units ), candidate.GetDesignRuleWarnings( units ) } )
+    {
+        for( const BOARD_DESIGN_SETTINGS::VALIDATION_ERROR& issue : issues )
+        {
+            wxString& msg = messages[issue.setting_name];
+
+            if( !msg.IsEmpty() )
+                msg += wxS( "\n" );
+
+            msg += issue.error_message;
+        }
+    }
+
+    for( const CONSTRAINT_FIELD& field : m_fields )
+    {
+        auto it = messages.find( field.m_Setting );
+        bool show = it != messages.end() && field.m_Ctrl->IsShown();
+
+        field.m_Warning->SetToolTip( show ? it->second : wxString() );
+        field.m_Warning->Show( show );
+    }
 }
 
 
