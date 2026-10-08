@@ -38,8 +38,6 @@ MOCK_BASE_CLASS( MOCK_PGM_BASE, PGM_BASE )
     MOCK_METHOD( SetTextEditor, 1, void( const wxString& ) );
     MOCK_METHOD( GetTextEditor, 1, wxString&( bool ) );
     MOCK_METHOD( AskUserForPreferredEditor, 1, const wxString( const wxString& ) );
-    MOCK_CONST_METHOD( IsKicadEnvVariableDefined, 0, bool() );
-    MOCK_CONST_METHOD( GetKicadEnvVariable, 0, const wxString&() );
     MOCK_CONST_METHOD( GetPdfBrowserName, 0, const wxString&() );
     MOCK_METHOD( SetPdfBrowserName, 1, void( const wxString& ) );
     MOCK_CONST_METHOD( UseSystemPdfBrowser, 0, bool() );
