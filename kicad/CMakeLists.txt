@@ -93,6 +93,7 @@ set( KICAD_CLI_SRCS
     cli/command_fp_export_svg.cpp
     cli/command_fp_upgrade.cpp
     cli/command_sch_upgrade.cpp
+    cli/command_sch_downgrade.cpp
     cli/command_sch_export_pythonbom.cpp
     cli/command_sch_export_netlist.cpp
     cli/command_sch_export_plot.cpp

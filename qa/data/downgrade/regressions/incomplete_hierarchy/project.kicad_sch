@@ -1,0 +1,64 @@
+(kicad_sch
+	(version 20260629)
+	(generator "eeschema")
+	(generator_version "10.99")
+	(uuid "ae5d0753-6f60-436d-86e1-636e57f12ed6")
+	(paper "A4")
+	(lib_symbols)
+	(text "This empty root belongs to a project that also lists sibling.kicad_sch"
+		(exclude_from_sim no)
+		(at 116.84 89.408 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "02ee3fc1-23db-4c35-add6-8ff658e68300")
+	)
+	(text "That secondary root references deliberately malformed broken.kicad_sch."
+		(exclude_from_sim no)
+		(at 118.364 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "34dc64e2-622d-4847-8890-eeaac1a810bd")
+	)
+	(text "Expected: refuse preview and real export before creating an output folder."
+		(exclude_from_sim no)
+		(at 119.126 96.52 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "8fda5ee4-77f1-4011-8856-0eb3fdc15182")
+	)
+	(text "INCOMPLETE HIERARCHY: primary root"
+		(exclude_from_sim no)
+		(at 112.522 83.058 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "bb76f065-6001-44b8-8aa3-1a912f3a8133")
+	)
+	(text "checking only the primary root can miss a broken secondary hierarchy."
+		(exclude_from_sim no)
+		(at 117.856 85.598 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "dc80eb56-0dd1-4c15-bab8-a87cf4e5130d")
+	)
+	(sheet_instances
+		(path "/"
+			(page "2")
+		)
+	)
+	(embedded_fonts no)
+)

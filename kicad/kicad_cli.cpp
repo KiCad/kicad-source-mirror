@@ -94,6 +94,7 @@
 #include "cli/command_sch_erc.h"
 #include "cli/command_sch_export.h"
 #include "cli/command_sch_upgrade.h"
+#include "cli/command_sch_downgrade.h"
 #include "cli/command_sym.h"
 #include "cli/command_sym_export.h"
 #include "cli/command_sym_export_svg.h"
@@ -198,6 +199,7 @@ static CLI::SCH_COMMAND                  schCmd{};
 static CLI::SCH_DIFF_COMMAND             schDiffCmd{};
 static CLI::SCH_ERC_COMMAND              schErcCmd{};
 static CLI::SCH_UPGRADE_COMMAND          schUpgradeCmd{};
+static CLI::SCH_DOWNGRADE_COMMAND        schDowngradeCmd{};
 static CLI::EXPORT_BOM_COMMAND           exportSchBomCmd{ KIWAY::FACE_SCH };
 static CLI::SCH_EXPORT_PYTHONBOM_COMMAND exportSchPythonBomCmd{};
 static CLI::SCH_EXPORT_NETLIST_COMMAND   exportSchNetlistCmd{};
@@ -341,6 +343,9 @@ static std::vector<COMMAND_ENTRY> commandStack = {
             },
             {
                 &schUpgradeCmd
+            },
+            {
+                &schDowngradeCmd
             }
         }
     },

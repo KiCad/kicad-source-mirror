@@ -1,0 +1,86 @@
+(kicad_sch
+	(version 20260629)
+	(generator "eeschema")
+	(generator_version "10.99")
+	(uuid "e749d471-9e36-4d46-bfca-5470d04233b4")
+	(paper "A4")
+	(lib_symbols)
+	(text "This is the secondary root whose child causes export to fail."
+		(exclude_from_sim no)
+		(at 86.868 22.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "13a7ac4b-b1eb-4b7c-a673-d3babdc8495d")
+	)
+	(text "Expected: refuse both preview and real export."
+		(exclude_from_sim no)
+		(at 79.248 30.48 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "a6002e7d-6cb5-47c6-bd43-1c8d398c3c79")
+	)
+	(text "The child is intentionally malformed"
+		(exclude_from_sim no)
+		(at 74.422 24.892 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f6152f77-0629-405c-b0f5-0beff13a0eee")
+	)
+	(sheet
+		(at 20 20)
+		(size 30 20)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "f067150c-2487-4507-a947-195e6ab4026e")
+		(property "Sheetname" "Broken child"
+			(at 20 19 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Sheetfile" "broken.kicad_sch"
+			(at 20 41 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "project"
+				(path "/e749d471-9e36-4d46-bfca-5470d04233b4"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

@@ -1,0 +1,229 @@
+(kicad_sch
+	(version 20260629)
+	(generator "eeschema")
+	(generator_version "10.99")
+	(uuid "da011033-c939-49af-ba64-8d5cd58932b4")
+	(paper "A4")
+	(lib_symbols
+		(symbol "test:Single"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 0 2 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1 1)
+					)
+				)
+			)
+			(property "Value" "Single"
+				(at 0 -2 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1 1)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Single_1_1"
+				(pin passive line
+					(at 0 0 0)
+					(length 2.54)
+					(name "P"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(text "POSITION-FILE EXCLUSION"
+		(exclude_from_sim no)
+		(at 103.124 91.694 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "0d7abc24-e858-4443-a853-ebf1bf37f424")
+	)
+	(text "U1 is excluded from position files in this input."
+		(exclude_from_sim no)
+		(at 130.048 98.044 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "39316e79-1008-4575-8087-8c102c412e0a")
+	)
+	(text "With approval: export and report the omitted exclusion."
+		(exclude_from_sim no)
+		(at 112.3546 107.9189 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "5a795c82-5bd6-4f76-8bcc-2a85997e5e8b")
+	)
+	(text "Without approval: refuse export and write nothing."
+		(exclude_from_sim no)
+		(at 106.68 106.172 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "c45ecaed-f626-4f69-a9e0-b5c5972ef914")
+	)
+	(text "Older exports must not change assembly output."
+		(exclude_from_sim no)
+		(at 102.87 93.726 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "cf8b1ab5-0c8b-4eba-8b99-918fa5089909")
+	)
+	(text "KiCad 9 cannot store that exclusion."
+		(exclude_from_sim no)
+		(at 124.46 100.076 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "dbda86f0-ad4a-43ba-9651-8909ced0efeb")
+	)
+	(symbol
+		(lib_id "test:Single")
+		(at 100 100 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files no)
+		(dnp no)
+		(uuid "3cddf7b8-695a-4a6b-be05-424ee6d048c4")
+		(property "Reference" "U1"
+			(at 100 102 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1 1)
+				)
+			)
+		)
+		(property "Value" "Single"
+			(at 100 98 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1 1)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 100 100 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 100 100 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 100 100 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "3dbc3248-aebc-45b4-91e9-7b4d36921c78")
+		)
+		(instances
+			(project "position_exclusion"
+				(path "/da011033-c939-49af-ba64-8d5cd58932b4"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
