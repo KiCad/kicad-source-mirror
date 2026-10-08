@@ -887,7 +887,7 @@ void SYMBOL_VIEWER_FRAME::CommonSettingsChanged( int aFlags )
     GetCanvas()->GetGAL()->DrawGrid();
     GetCanvas()->ForceRefresh();
 
-    if( aFlags && ENVVARS_CHANGED )
+    if( aFlags & ENVVARS_CHANGED )
         ReCreateLibList();
 }
 
