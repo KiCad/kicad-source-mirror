@@ -887,8 +887,23 @@ void EDA_BASE_FRAME::ReCreateMenuBar()
 
     CallAfter( [this]()
                {
-                   if( !m_isClosing )
-                       doReCreateMenuBar();
+                   if( m_isClosing )
+                       return;
+
+                   doReCreateMenuBar();
+
+                   // A submenu entry gets a new automatic id in each menubar, and its handler
+                   // is registered under that id, so the ones of the old menubar are dead
+                   wxMenuBar* menuBar = GetMenuBar();
+
+                   std::erase_if( m_uiUpdateMap,
+                                  [menuBar]( const auto& aEntry )
+                                  {
+                                      int id = aEntry.first;
+
+                                      return id >= wxID_AUTO_LOWEST && id <= wxID_AUTO_HIGHEST
+                                             && !( menuBar && menuBar->FindItem( id ) );
+                                  } );
                } );
 }
 
