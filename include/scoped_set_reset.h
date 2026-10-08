@@ -55,6 +55,12 @@ public:
      */
     ~SCOPED_SET_RESET() { m_target = m_original; }
 
+    // No copy operations allowed or the destructor might reset
+    // the target to its original value multiple times.
+
+    SCOPED_SET_RESET( SCOPED_SET_RESET const& ) = delete;
+    SCOPED_SET_RESET& operator=( SCOPED_SET_RESET const& ) = delete;
+
 private:
     VAL_TYPE  m_original;
     VAL_TYPE& m_target;
@@ -75,6 +81,12 @@ public:
     {
         m_initFunc();
     }
+
+    // No copy operations allowed or the destructor might execute
+    // the destroy function multiple times.
+
+    SCOPED_EXECUTION( SCOPED_EXECUTION const& ) = delete;
+    SCOPED_EXECUTION& operator=( SCOPED_EXECUTION const& ) = delete;
 
     ~SCOPED_EXECUTION() { m_destroyFunc(); }
 
