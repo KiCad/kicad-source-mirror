@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-07 21:51+0000\n"
+"PO-Revision-Date: 2026-10-08 21:01+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -21959,9 +21959,9 @@ msgid "Error retrieving data from HTTP library %s: %s"
 msgstr "Errore nel recupero dati da libreria HTTP %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving part %s from HTTP library: %s"
-msgstr "Errore nel recupero dati da libreria HTTP %s: %s"
+msgstr "Errore nel recupero della parte %s dalla libreria HTTP: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:541
 #, c-format
@@ -22439,14 +22439,14 @@ msgid "LTspice schematic files"
 msgstr "File schemi elettrici LTspice"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1473
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a PADS Logic ASCII file."
-msgstr "'%s' non è un valore SPICE valido."
+msgstr "'%s' non è un file ASCII di PADS Logic."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1485
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "Fallita lettura del file '%s'."
+msgstr "Impossibile analizzare il file PADS Logic '%s'."
 
 #: eeschema/sch_io/pads/sch_io_pads.h:49
 msgid "PADS Logic schematic files"
@@ -24432,13 +24432,12 @@ msgstr ""
 "l'installazione."
 
 #: eeschema/sim/ngspice.cpp:786
-#, fuzzy
 msgid ""
 "Simulation terminated by ngspice. This may be caused by insufficient memory "
 "or an internal error. The simulator will be reset."
 msgstr ""
-"Simulazione bloccata (%s). Di solito la causa è un bug in ngspice o una "
-"netlist non valida. Il simulatore verrà reimpostato."
+"Simulazione terminata da ngspice. Ciò potrebbe essere dovuto a memoria "
+"insufficiente o a un errore interno. Il simulatore verrà reimpostato."
 
 #: eeschema/sim/sim_lib_mgr.cpp:109 eeschema/sim/sim_lib_mgr.cpp:162
 #, c-format
