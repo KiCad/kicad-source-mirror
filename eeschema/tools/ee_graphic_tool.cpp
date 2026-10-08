@@ -723,22 +723,22 @@ SHAPE_DRAW_RESULT EE_GRAPHIC_TOOL::drawManagedShape( const TOOL_EVENT& aTool, st
                 const SCH_LAYER_ID layer = getShapeLayer();
 
                 auto seedFrom =
-                        [&]( SCH_ITEM* aItem, const VECTOR2I& aPos ) -> std::optional<ARC_TANGENT_SEED>
+                        [&]( SCH_ITEM* aItem, const VECTOR2I& aSeedPos ) -> std::optional<ARC_TANGENT_SEED>
                         {
                             if( !aItem || aItem->GetLayer() != layer )
                                 return std::nullopt;
 
                             BOX2I reach = aItem->GetBoundingBox();
 
-                            if( !reach.Inflate( tolerance ).Contains( aPos ) )
+                            if( !reach.Inflate( tolerance ).Contains( aSeedPos ) )
                                 return std::nullopt;
 
                             if( SCH_SHAPE* shape = dynamic_cast<SCH_SHAPE*>( aItem ) )
-                                return ArcTangentSeedAt( *shape, aPos, tolerance );
+                                return ArcTangentSeedAt( *shape, aSeedPos, tolerance );
 
                             if( SCH_LINE* line = dynamic_cast<SCH_LINE*>( aItem ); line && line->IsGraphicLine() )
                             {
-                                return ArcTangentSeedAt( SEG( line->GetStartPoint(), line->GetEndPoint() ), aPos,
+                                return ArcTangentSeedAt( SEG( line->GetStartPoint(), line->GetEndPoint() ), aSeedPos,
                                                          tolerance );
                             }
 
