@@ -288,11 +288,11 @@ void readCisVariants( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FIL
         variant.name = name;
 
         // Capture matches property names without case, so a later spelling replaces an earlier one
-        auto overlay = [&]( uint32_t aOccurrence, const ORCAD_CIS_PROPERTIES& aProperties )
+        auto overlay = [&]( uint32_t aOccurrence, const ORCAD_CIS_PROPERTIES& aOverlay )
         {
             ORCAD_CIS_PROPERTIES& target = variant.props[aOccurrence];
 
-            for( const auto& [property, value] : aProperties )
+            for( const auto& [property, value] : aOverlay )
             {
                 auto existing = std::find_if( target.begin(), target.end(),
                                               [&]( const auto& aExisting )
