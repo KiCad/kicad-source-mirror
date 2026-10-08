@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-08 21:01+0000\n"
+"PO-Revision-Date: 2026-10-08 21:09+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -57275,7 +57275,7 @@ msgstr "Mindestens eine Einschränkung muss definiert sein"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:221
 msgid "Maximum Skew must be greater than or equal to 0"
-msgstr "Der maximale Versatz muss größer oder gleich als 0 sein"
+msgstr "Der maximale Versatz muss größer oder gleich 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:91
 msgid "Time domain (ps)"
@@ -57648,14 +57648,12 @@ msgid "Maximum length over which the pair may run uncoupled"
 msgstr "Maximallänge über die ein Paar ungekoppelt laufen darf"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:77
-#, fuzzy
 msgid "Optimum Width must be greater than or equal to 0"
-msgstr "Die optimale Breite muss gleich oder größer als 0 sein"
+msgstr "Die optimale Breite muss größer oder gleich 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:80
-#, fuzzy
 msgid "Optimum Gap must be greater than or equal to 0"
-msgstr "Der optimale Spalt muss gleich oder größer als 0 sein"
+msgstr "Der optimale Spalt muss größer oder gleich 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:98
 msgid "Gap Tolerance must be greater than or equal to 0"
@@ -57667,7 +57665,7 @@ msgstr "Die Spalttoleranz muss kleiner als der optimale Spalt sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:105
 msgid "Maximum Uncoupled Length must be greater than or equal to 0"
-msgstr "Die maximale ungekoppelte Länge muss größer als oder gleich 0 sein"
+msgstr "Die maximale ungekoppelte Länge muss größer oder gleich 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:108
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:114
