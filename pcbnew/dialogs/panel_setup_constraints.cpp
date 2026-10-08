@@ -247,9 +247,7 @@ void PANEL_SETUP_CONSTRAINTS::updateWarnings()
 {
     m_validationTimer.Stop();
 
-    // Detached from the project so destroying it cannot flush candidate values into the project file
-    BOARD_DESIGN_SETTINGS candidate( nullptr, "dummy" );
-    candidate = *m_BrdSettings;
+    BOARD_DESIGN_SETTINGS candidate( *m_BrdSettings );
     applyValues( candidate );
 
     EDA_UNITS                    units = m_Frame->GetUserUnits();

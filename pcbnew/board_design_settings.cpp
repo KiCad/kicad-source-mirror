@@ -1218,9 +1218,9 @@ BOARD_DESIGN_SETTINGS::~BOARD_DESIGN_SETTINGS()
 }
 
 
+// Detached so a discarded copy cannot flush its values into the project file
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( const BOARD_DESIGN_SETTINGS& aOther ) :
-        NESTED_SETTINGS( "board_design_settings", bdsSchemaVersion, aOther.m_parent,
-                         aOther.m_path ),
+        NESTED_SETTINGS( "board_design_settings", bdsSchemaVersion, nullptr, aOther.m_path ),
         m_Pad_Master( nullptr )
 {
     initFromOther( aOther );
