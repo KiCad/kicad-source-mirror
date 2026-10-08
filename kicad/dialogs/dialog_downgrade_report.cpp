@@ -19,10 +19,21 @@
 
 #include "dialog_downgrade_report.h"
 
+#include <confirm.h>
+#include <kiplatform/io.h>
+#include <kiplatform/ui.h>
+#include <wildcards_and_files_ext.h>
+
+#include <wx/filedlg.h>
+#include <wx/filename.h>
+#include <wx/msgdlg.h>
+
 
 DIALOG_DOWNGRADE_REPORT::DIALOG_DOWNGRADE_REPORT( wxWindow* aParent, const wxString& aTargetName,
                                                   const COMPATIBILITY_REPORT& aReport ) :
-        DIALOG_DOWNGRADE_REPORT_BASE( aParent )
+        DIALOG_DOWNGRADE_REPORT_BASE( aParent ),
+        m_reportText( aReport.ToText( aTargetName ) ),
+        m_reportFileName( wxS( "compatibility-report.txt" ) )
 {
     m_reportList->AppendTextColumn( _( "Action" ), wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
     m_reportList->AppendTextColumn( _( "Feature" ), wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
@@ -66,4 +77,45 @@ DIALOG_DOWNGRADE_REPORT::DIALOG_DOWNGRADE_REPORT( wxWindow* aParent, const wxStr
     }
 
     finishDialogSettings();
+}
+
+
+void DIALOG_DOWNGRADE_REPORT::OnSaveReport( wxCommandEvent& aEvent )
+{
+    wxFileName   fn( m_reportFileName );
+    wxFileDialog dlg( this, _( "Save Compatibility Report" ), fn.GetPath(), fn.GetFullName(),
+                      FILEEXT::TextFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    fn = dlg.GetPath();
+
+    if( fn.GetExt().IsEmpty() )
+    {
+        fn.SetExt( FILEEXT::TextFileExtension );
+
+        // The save dialog checked the original path, not the path with the added extension.
+        if( fn.FileExists()
+            && wxMessageBox( wxString::Format( _( "The file '%s' already exists. Overwrite it?" ), fn.GetFullPath() ),
+                             _( "Save Compatibility Report" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING, this )
+                       != wxYES )
+        {
+            return;
+        }
+    }
+
+    wxScopedCharBuffer utf8 = m_reportText.ToUTF8();
+    wxString           error;
+
+    if( !KIPLATFORM::IO::AtomicWriteFile( fn.GetFullPath(), utf8.data(), utf8.length(), &error ) )
+    {
+        DisplayErrorMessage( this, wxString::Format( _( "Cannot write report to file '%s'." ), fn.GetFullPath() ),
+                             error );
+        return;
+    }
+
+    m_reportFileName = fn.GetFullPath();
 }

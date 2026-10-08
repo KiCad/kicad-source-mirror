@@ -99,6 +99,46 @@ public:
         return total;
     }
 
+    /// A readable preview of the classified export, including counts and feature details.
+    wxString ToText( const wxString& aTargetName ) const
+    {
+        wxString text = _( "KiCad Compatibility Report" ) + wxS( "\n" );
+        text += wxString::Format( _( "Target: %s" ), aTargetName ) + wxS( "\n\n" );
+        text += _( "Compatibility preview. This report describes planned changes." ) + wxS( "\n" );
+
+        if( IsBlocked() )
+            text += _( "Export is blocked by unsupported features." );
+        else if( IsLossy() )
+            text += _( "Export requires approval for the changes below." );
+        else
+            text += _( "No compatibility changes were reported." );
+
+        text += wxS( "\n\n" ) + _( "Counts cover reported items only." ) + wxS( "\n" );
+
+        auto addSection = [&]( DOWNGRADE_BUCKET aBucket, const wxString& aLabel )
+        {
+            text += wxString::Format( wxS( "\n%s: %d\n" ), aLabel, Count( aBucket ) );
+
+            for( const COMPAT_ENTRY& entry : m_entries )
+            {
+                if( entry.m_bucket != aBucket )
+                    continue;
+
+                text += wxString::Format( wxS( "  %s (%d)\n" ), entry.m_feature, entry.m_count );
+
+                if( !entry.m_detail.IsEmpty() )
+                    text += wxString::Format( wxS( "    %s\n" ), entry.m_detail );
+            }
+        };
+
+        addSection( DOWNGRADE_BUCKET::KEEP, _( "Keep" ) );
+        addSection( DOWNGRADE_BUCKET::LOWER, _( "Approximate" ) );
+        addSection( DOWNGRADE_BUCKET::DROP, _( "Drop" ) );
+        addSection( DOWNGRADE_BUCKET::BLOCK, _( "Cannot export" ) );
+
+        return text;
+    }
+
     void Print( REPORTER* aReporter ) const
     {
         for( const COMPAT_ENTRY& entry : m_entries )

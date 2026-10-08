@@ -18,8 +18,11 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/dataview.h>
-#include <wx/sizer.h>
 #include <wx/button.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/sizer.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -35,9 +38,14 @@ class DIALOG_DOWNGRADE_REPORT_BASE : public DIALOG_SHIM
 		wxStaticText* m_headline;
 		wxDataViewListCtrl* m_reportList;
 		wxStaticText* m_note;
+		wxButton* m_buttonSaveReport;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnSaveReport( wxCommandEvent& event ) { event.Skip(); }
+
 
 	public:
 

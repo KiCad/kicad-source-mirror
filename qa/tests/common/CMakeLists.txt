@@ -40,6 +40,7 @@ set( QA_COMMON_SRCS
     test_collector.cpp
     test_color4d.cpp
     test_commit.cpp
+    test_compatibility_report.cpp
     test_coroutine.cpp
     test_filter_kruskal.cpp
     test_design_block_io.cpp

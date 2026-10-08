@@ -28,4 +28,10 @@ class DIALOG_DOWNGRADE_REPORT : public DIALOG_DOWNGRADE_REPORT_BASE
 {
 public:
     DIALOG_DOWNGRADE_REPORT( wxWindow* aParent, const wxString& aTargetName, const COMPATIBILITY_REPORT& aReport );
+
+private:
+    void OnSaveReport( wxCommandEvent& aEvent ) override;
+
+    const wxString m_reportText;
+    wxString       m_reportFileName;
 };

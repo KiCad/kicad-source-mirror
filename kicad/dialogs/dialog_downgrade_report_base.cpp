@@ -29,6 +29,17 @@ DIALOG_DOWNGRADE_REPORT_BASE::DIALOG_DOWNGRADE_REPORT_BASE( wxWindow* parent, wx
 	m_note->Wrap( -1 );
 	bSizerMain->Add( m_note, 0, wxALL, 5 );
 
+	wxBoxSizer* bSizerButtons;
+	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
+
+	m_buttonSaveReport = new wxButton( this, wxID_ANY, _("Save Report..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonSaveReport->SetToolTip( _("Save the compatibility report as a text file.") );
+
+	bSizerButtons->Add( m_buttonSaveReport, 0, wxALIGN_CENTER_VERTICAL, 0 );
+
+
+	bSizerButtons->Add( 0, 0, 1, wxEXPAND, 0 );
+
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
@@ -36,13 +47,19 @@ DIALOG_DOWNGRADE_REPORT_BASE::DIALOG_DOWNGRADE_REPORT_BASE( wxWindow* parent, wx
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	bSizerMain->Add( m_sdbSizer, 0, wxALL|wxEXPAND, 5 );
+	bSizerButtons->Add( m_sdbSizer, 0, wxALIGN_CENTER_VERTICAL, 0 );
+
+
+	bSizerMain->Add( bSizerButtons, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
 
 	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_buttonSaveReport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_DOWNGRADE_REPORT_BASE::OnSaveReport ), NULL, this );
 }
 
 DIALOG_DOWNGRADE_REPORT_BASE::~DIALOG_DOWNGRADE_REPORT_BASE()
