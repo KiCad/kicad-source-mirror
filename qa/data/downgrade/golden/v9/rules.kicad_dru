@@ -1,0 +1,7 @@
+(version 1)
+
+# Keep this comment, including syntax lookalikes: ) (( " \
+(rule "clearance # literal"
+  # inNetChain('x') and ) " ( are just comment text
+  (condition "A.NetName == 'SIGNAL#1'")
+  (constraint clearance (min 0.2mm)))

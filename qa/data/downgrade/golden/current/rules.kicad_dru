@@ -1,0 +1,10 @@
+(version 2)
+# Keep this comment, including syntax lookalikes: ) (( " \
+(rule "clearance # literal"
+  # inNetChain('x') and ) " ( are just comment text
+  (condition "A.NetName == 'SIGNAL#1'")
+  (constraint clearance (min 0.2mm)))
+# Supported starting with KiCad 10
+(rule "mask" (constraint bridged_mask))
+# Unsupported in both older targets
+(rule "chain" (constraint net_chain_length (max 10mm)))
