@@ -1286,7 +1286,17 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
                     schSym->SetOrientation( SYM_ROTATE_CLOCKWISE );
                 }
 
-                schSym->SetPosition( RelPos( pos ) );
+                // EasyEDA connects a flag at the end of its stub (the second segment), which is
+                // where the KiCad power symbol has its pin.  The flag's origin is the same point
+                // only for flags without a stub (the grounds); a circle ("Bar") flag placed at its
+                // origin would leave its pin unconnected.
+                wxArrayString pinParts = wxSplit( segments[1], '~', '\0' );
+                VECTOR2D      pinPos = pos;
+
+                if( pinParts.size() >= 2 )
+                    pinPos = VECTOR2D( Convert( pinParts[0] ), Convert( pinParts[1] ) );
+
+                schSym->SetPosition( RelPos( pinPos ) );
 
                 SCH_FIELD* valField = schSym->GetField( FIELD_T::VALUE );
 

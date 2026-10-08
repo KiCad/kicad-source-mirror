@@ -29,6 +29,7 @@ import pytest
 import json
 import os
 import re
+import xml.etree.ElementTree as ET
 from conftest import KiTestFixture
 
 
@@ -71,6 +72,31 @@ def get_easyedapro_v3_test_file() -> str:
         return archive
 
     return None
+
+
+def get_easyeda_std_test_file() -> str:
+    """Get path to an EasyEDA Std schematic whose nets are joined by circle net flags."""
+    test_data_dir = os.path.join( os.path.dirname( __file__ ), "..", "..", "data", "eeschema",
+                                  "io", "easyeda" )
+    easyeda_file = os.path.join( test_data_dir, "easy_sdr_coax_power_supply.json" )
+
+    if os.path.exists( easyeda_file ):
+        return easyeda_file
+
+    return None
+
+
+def netlist_nets( path: Path ) -> list:
+    """Every net of a kicadxml netlist with two or more nodes, as sorted "REF.PIN" lists."""
+    nets = []
+
+    for net in ET.parse( path ).getroot().iter( "net" ):
+        nodes = sorted( f"{node.get( 'ref' )}.{node.get( 'pin' )}" for node in net.iter( "node" ) )
+
+        if len( nodes ) > 1:
+            nets.append( nodes )
+
+    return sorted( nets )
 
 
 def sch_lib_nicknames( path: Path ) -> set:
@@ -301,3 +327,64 @@ class TestSchImportLibraryReconciliation:
 
         # every placed symbol points at the registered cache, none at a dangling nickname
         assert sch_lib_nicknames( output_path ) == { nickname }
+
+
+@pytest.mark.skipif( get_easyeda_std_test_file() is None,
+                     reason="EasyEDA Std schematic test file not available" )
+class TestSchImportEasyEdaStd:
+    """Test EasyEDA Std schematic import"""
+
+    def test_import_connects_circle_net_flags( self, kitest: KiTestFixture ):
+        """Circle net flags connect at the end of their stub, so the nets they join hold together.
+
+        Easy-SDR's coax power supply (MIT, github.com/IgrikXD/Easy-SDR) joins +5V, +3.3V and
+        POWER FILTER through circle ("part_netLabel_Bar") flags.  The expected nets were checked
+        by hand against the project's EasyEDA PDF export.
+        """
+        easyeda_file = get_easyeda_std_test_file()
+        output_path = get_output_path( kitest, "easyeda", "imported.kicad_sch" )
+        netlist_path = get_output_path( kitest, "easyeda", "imported.net" )
+
+        command = [
+            utils.kicad_cli(),
+            "sch", "import",
+            "--format", "easyeda",
+            easyeda_file,
+            "-o", str( output_path )
+        ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+        assert output_path.exists()
+
+        command = [
+            utils.kicad_cli(),
+            "sch", "export", "netlist",
+            "--format", "kicadxml",
+            "-o", str( netlist_path ),
+            str( output_path )
+        ]
+
+        stdout, stderr, return_code = utils.run_and_capture( command )
+
+        assert return_code == 0
+
+        gnd = [ "C1.2", "C2.1", "C3.1", "C4.1", "C5.1", "L1.2", "LED1.2", "R3.1", "SW1.4",
+                "SW1.5", "U1.2", "U2.5", "USB1.2" ]
+        gnd += [ f"{ref}.GND@{i}" for ref in ( "J1", "J2" ) for i in range( 4 ) ]
+
+        assert netlist_nets( netlist_path ) == sorted( [
+            sorted( gnd ),
+            [ "C1.1", "C2.2", "L1.3", "U1.1", "U1.3" ],   # POWER FILTER
+            [ "C3.2", "C4.2", "R2.2", "U1.5", "U2.3" ],   # +3.3V
+            [ "C5.2", "R3.2", "USB1.5" ],
+            [ "F1.1", "USB1.1" ],
+            [ "F1.2", "SW1.2" ],                          # +5V
+            [ "J1.SIG", "U2.1" ],
+            [ "J2.SIG", "U2.2" ],
+            [ "L1.1", "SW1.1" ],
+            [ "LED1.1", "R2.1" ],
+            [ "R1.1", "USB1.3" ],
+            [ "R1.2", "USB1.4" ],
+        ] )
