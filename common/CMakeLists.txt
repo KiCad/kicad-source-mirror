@@ -232,6 +232,7 @@ set( KICOMMON_SRCS
     project/net_settings.cpp
     project/project_archiver.cpp
     project/project_file.cpp
+    project/project_file_downgrade.cpp
     project/project_local_settings.cpp
     project/tuning_profiles.cpp
 

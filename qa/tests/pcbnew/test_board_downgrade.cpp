@@ -27,12 +27,14 @@
 #include <board.h>
 #include <board_design_settings.h>
 #include <zone_settings.h>
+#include <nlohmann/json.hpp>
 
 #include <downgrade_scan.h>
 #include <downgrade_target.h>
 #include <drc_rules_downgrade.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_rule_parser.h>
+#include <project/project_file_downgrade.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <settings/settings_manager.h>
 #include <pcbnew_utils/board_test_utils.h>
@@ -189,6 +191,124 @@ BOOST_AUTO_TEST_CASE( DrcRulesMatchIndependentOlderReferences )
         BOOST_CHECK_MESSAGE( !reporter.HasMessageOfSeverity( RPT_SEVERITY_ERROR ), reporter.GetMessages() );
         BOOST_CHECK_EQUAL( rules.size(), release == "v9" ? 1 : 2 );
     }
+}
+
+
+// The project file is migrated down: newer settings are removed, nested schema versions are
+// rewound, and meaningful losses are reported.
+BOOST_AUTO_TEST_CASE( ProjectFileDowngradeForKicad9 )
+{
+    nlohmann::json doc = {
+        { "meta", { { "filename", "p.kicad_pro" }, { "version", 3 } } },
+        { "board", { { "layer_presets", { { { "name", "P" }, { "renderLayers", { "tracks", "vias" } } } } } } },
+        { "net_settings",
+          { { "meta", { { "version", 5 } } },
+            { "classes", { { { "name", "Default" }, { "priority", 0 }, { "tuning_profile", "tp" } } } },
+            { "net_chain_classes", { { { "name", "chainA" } } } } } },
+        { "tuning_profiles",
+          { { "meta", { { "version", 1 } } },
+            { "tuning_profiles_impedance_geometric",
+              { { { "name", "tp" }, { "frequency", 1e9 }, { "model_solder_mask", false } } } } } },
+        { "component_class_settings", { { "meta", { { "version", 0 } } } } },
+        { "schematic",
+          { { "top_level_sheets", { "aaaa" } },
+            { "bus_aliases", nlohmann::json::array() },
+            { "variants", nlohmann::json::array() } } },
+    };
+
+    COMPATIBILITY_REPORT report;
+    DowngradeProjectFileJson( doc, kicad9, report );
+
+    // 9.0 shipped project schema 3 and reads render layers by name, skipping names it does
+    // not know. So the version and the preset strings must pass through untouched.
+    BOOST_CHECK_EQUAL( doc["meta"]["version"].get<int>(), 3 );
+
+    const nlohmann::json& preset = doc["board"]["layer_presets"][0];
+    BOOST_REQUIRE( preset["renderLayers"].is_array() );
+    BOOST_REQUIRE_EQUAL( preset["renderLayers"].size(), 2 );
+    BOOST_CHECK_EQUAL( preset["renderLayers"][0].get<std::string>(), "tracks" );
+    BOOST_CHECK_EQUAL( preset["renderLayers"][1].get<std::string>(), "vias" );
+
+    BOOST_CHECK_EQUAL( doc["net_settings"]["meta"]["version"].get<int>(), 4 );
+    BOOST_CHECK( !doc["net_settings"]["classes"][0].contains( "tuning_profile" ) );
+    BOOST_CHECK( doc["net_settings"]["classes"][0].contains( "name" ) );
+    BOOST_CHECK( !doc["net_settings"].contains( "net_chain_classes" ) );
+    BOOST_CHECK( !doc.contains( "tuning_profiles" ) );
+    BOOST_CHECK( !doc.contains( "component_class_settings" ) );
+    BOOST_CHECK( !doc["schematic"].contains( "top_level_sheets" ) );
+    BOOST_CHECK( !doc["schematic"].contains( "bus_aliases" ) );
+    BOOST_CHECK( !doc["schematic"].contains( "variants" ) );
+
+    // The meaningful losses show in the report. Hygiene removals stay silent.
+    BOOST_CHECK( report.IsLossy() );
+    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::DROP ), 2 );
+}
+
+
+// A structurally odd but valid-JSON project file must not throw. Classification swallows
+// exceptions, so a throw here would surface only mid-export and break fail-closed.
+BOOST_AUTO_TEST_CASE( WrongShapeProjectFileDoesNotThrow )
+{
+    nlohmann::json metaIsString = {
+        { "meta", "not an object" },
+        { "net_settings", { { "meta", "also a string" }, { "classes", "not an array" } } },
+        { "schematic", "a string" },
+    };
+
+    nlohmann::json profilesWrong = {
+        { "tuning_profiles",
+          { { "meta", 7 }, { "tuning_profiles_impedance_geometric", { "just", "strings" } } } },
+    };
+
+    COMPATIBILITY_REPORT report;
+    BOOST_CHECK_NO_THROW( DowngradeProjectFileJson( metaIsString, kicad9, report ) );
+    BOOST_CHECK_NO_THROW( DowngradeProjectFileJson( profilesWrong, kicad10, report ) );
+}
+
+
+// An empty net chain class array is removed as hygiene, not reported as a loss.
+BOOST_AUTO_TEST_CASE( EmptyNetChainClassesSilent )
+{
+    nlohmann::json doc = {
+        { "net_settings", { { "net_chain_classes", nlohmann::json::array() } } },
+    };
+
+    COMPATIBILITY_REPORT report;
+    DowngradeProjectFileJson( doc, kicad10, report );
+
+    BOOST_CHECK( !doc["net_settings"].contains( "net_chain_classes" ) );
+    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::DROP ), 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( ProjectFileDowngradeForKicad10 )
+{
+    nlohmann::json doc = {
+        { "meta", { { "version", 3 } } },
+        { "net_settings",
+          { { "meta", { { "version", 5 } } },
+            { "classes", { { { "name", "Default" }, { "priority", 0 }, { "tuning_profile", "tp" } } } },
+            { "net_chain_classes", { { { "name", "chainA" } } } } } },
+        { "tuning_profiles",
+          { { "meta", { { "version", 1 } } },
+            { "tuning_profiles_impedance_geometric",
+              { { { "name", "tp" }, { "frequency", 1e9 }, { "model_solder_mask", false } } } } } },
+    };
+
+    COMPATIBILITY_REPORT report;
+    DowngradeProjectFileJson( doc, kicad10, report );
+
+    // 10.0 knows tuning profiles and reads the per-class reference unguarded, so both stay.
+    BOOST_CHECK_EQUAL( doc["meta"]["version"].get<int>(), 3 );
+    BOOST_CHECK_EQUAL( doc["net_settings"]["meta"]["version"].get<int>(), 5 );
+    BOOST_CHECK( doc["net_settings"]["classes"][0].contains( "tuning_profile" ) );
+    BOOST_CHECK( !doc["net_settings"].contains( "net_chain_classes" ) );
+
+    BOOST_CHECK_EQUAL( doc["tuning_profiles"]["meta"]["version"].get<int>(), 0 );
+    BOOST_CHECK( !doc["tuning_profiles"]["tuning_profiles_impedance_geometric"][0].contains( "frequency" ) );
+    BOOST_CHECK( !doc["tuning_profiles"]["tuning_profiles_impedance_geometric"][0].contains( "model_solder_mask" ) );
+
+    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::DROP ), 1 );
 }
 
 
