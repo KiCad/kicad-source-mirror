@@ -36,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
 "PO-Revision-Date: 2026-10-08 21:00+0000\n"
-"Last-Translator: Karl SCHUH <k.schuh@schuh-tv.at>\n"
+"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -2442,7 +2442,7 @@ msgstr ""
 #: common/design_block_io.cpp:493
 #, c-format
 msgid "Cannot save design block metadata '%s': %s"
-msgstr "Fehler beim Speichern der Designblock-Metadaten '%s':%s"
+msgstr "Fehler beim Speichern der Designblock-Metadaten \"%s\": %s"
 
 #: common/design_block_io.cpp:505
 #, c-format
@@ -10291,19 +10291,19 @@ msgid "Line length exceeded"
 msgstr "Zeilenlänge überschritten"
 
 #: common/richio.cpp:649
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot flush '%s' to disk: %s"
-msgstr "\"%s\" kann nicht in den Papierkorb verschoben werden."
+msgstr "Kann \"%s\" nicht auf die Festplatte schreiben: %s"
 
 #: common/richio.cpp:656
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot close '%s': %s"
-msgstr "Kann Symbol \"%s\" nicht importieren: %s"
+msgstr "Kann \"%s\" nicht schließen: %s"
 
 #: common/richio.cpp:728
-#, fuzzy, c-format
+#, c-format
 msgid "Write failed to '%s': %s"
-msgstr "Start des Rebase fehlgeschlagen: %s"
+msgstr "Schreiben nach \"%s\" ist fehlgeschlagen: %s"
 
 #: common/settings/bom_settings.cpp:126
 msgid "Default Editing"
@@ -19764,9 +19764,8 @@ msgid "Local and global labels have same name"
 msgstr "Lokale und globale Bezeichner haben denselben Namen"
 
 #: eeschema/erc/erc_item.cpp:135
-#, fuzzy
 msgid "Local and global power symbols have same name"
-msgstr "Lokale und globale Bezeichner haben denselben Namen"
+msgstr "Lokale und globale Spannungssymbole haben denselben Namen"
 
 #: eeschema/erc/erc_item.cpp:139
 msgid "Different footprint assigned in another unit of the symbol"
@@ -21973,7 +21972,7 @@ msgid "Error retrieving data from HTTP library %s: %s"
 msgstr "Fehler beim Herunterladen von Daten aus der HTTP-Bibliothek %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving part %s from HTTP library: %s"
 msgstr "Fehler beim Laden von Teil %s aus der HTTP-Bibliothek: %s"
 
@@ -25743,7 +25742,7 @@ msgid "Add Symbol Library"
 msgstr "Symbolbibliothek hinzufügen"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1225
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not overwrite the library file '%s'.\n"
 "Make sure you have write permissions and try again."
@@ -27254,7 +27253,7 @@ msgstr "Öffnet das ausgewählte Symbol im Symboleditor"
 
 #: eeschema/tools/sch_actions.cpp:1080
 msgid "Set the exclude from bill of materials attribute"
-msgstr "Setzt das Attribut \"Von Stückliste ausschließen\""
+msgstr "Setzt Attribut \"Von Stückliste ausschließen\""
 
 #: eeschema/tools/sch_actions.cpp:1086
 msgid "Set the exclude from simulation attribute"
@@ -27262,16 +27261,15 @@ msgstr "Setzt Attribut \"Von Simulation ausschließen\""
 
 #: eeschema/tools/sch_actions.cpp:1092
 msgid "Set the exclude from board attribute"
-msgstr "Setzt Attribut \"Von Simulation ausschließen\""
+msgstr "Setzt Attribut \"Von Platine ausschließen\""
 
 #: eeschema/tools/sch_actions.cpp:1098
-#, fuzzy
 msgid "Set the exclude from position files attribute"
-msgstr "Setzt Attribut \"Von Simulation ausschließen\""
+msgstr "Setzt Attribut \"Von Positionsdateien ausschließen\""
 
 #: eeschema/tools/sch_actions.cpp:1104
 msgid "Set the do not populate attribute"
-msgstr "Das Nicht-bestücken-Attribut setzen"
+msgstr "Setzt Attribut \"Nicht bestücken\""
 
 #: eeschema/tools/sch_actions.cpp:1111
 msgid "Open the library symbol in the Symbol Editor"
@@ -29760,7 +29758,7 @@ msgid "Zip file '%s' cannot be opened."
 msgstr "Zip-Datei \"%s\" kann nicht geöffnet werden."
 
 #: gerbview/files.cpp:481
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create a temporary file to unzip '%s'."
 msgstr "Temporäre Datei zum Entpacken von \"%s\" kann nicht erstellt werden."
 
@@ -31859,7 +31857,7 @@ msgstr "Andere Vorlagen"
 #: kicad/dialogs/dialog_template_selector_base.cpp:74
 #, fuzzy
 msgid "Browse for templates in another directory"
-msgstr "in Verzeichnis der Vorlage hinzugefügt werden."
+msgstr "Ein anderes Verzeichnis nach Vorlagen durchsuchen"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:79
 msgid "Stop showing templates from the browsed directory"
@@ -31993,7 +31991,7 @@ msgstr "Alle Aufträge auswählen"
 #: kicad/dialogs/panel_jobset.cpp:697
 #, fuzzy, c-format
 msgid "This version of KiCad does not support the '%s' job type."
-msgstr "Diese KiCad-Installation hat die API-Unterstützung nicht aktiviert."
+msgstr "Diese KiCad-Version unterstützt den \"%s\"-Auftragstyp nicht."
 
 #: kicad/dialogs/panel_jobset.cpp:744
 msgid "Job Types"
@@ -46005,11 +46003,7 @@ msgstr "Designregeln können ohne Projekt nicht hinzugefügt werden"
 #: pcbnew/dialogs/panel_setup_rules.cpp:1138
 #, fuzzy, c-format
 msgid "Cannot save design rules to '%s': %s"
-msgstr ""
-"Speichern aufgrund von Validierungsfehlern in der Regel \"%s\" nicht "
-"möglich: \n"
-"\n"
-"%s"
+msgstr "Kann Designregeln nicht nach \"%s\" speichern: %s"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
 msgid "DRC Rules"
@@ -47526,7 +47520,7 @@ msgstr "Abstimmungsprofil muss einen Namen haben"
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:845
 #, fuzzy
 msgid "Tuning profile name already in use"
-msgstr "Abstimmungsprofil muss einen Namen haben"
+msgstr "Name des Abstimmungsprofils wird bereits verwendet"
 
 #: pcbnew/dialogs/panel_setup_tuning_profile_info.cpp:861
 msgid "Duplicated signal layer configuration in tuning profile"
@@ -47731,7 +47725,9 @@ msgstr "Zonenname:"
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:44
 #, fuzzy
 msgid "A unique name for this zone, used to identify it in DRC rules"
-msgstr "Ein eindeutiger Name für diese Zone, um sie für DRC zu identifizieren"
+msgstr ""
+"Ein eindeutiger Name für diese Zone, der in den DRC-Regeln für die "
+"Identifizierung verwendet wird"
 
 #: pcbnew/dialogs/panel_zone_properties_base.cpp:76
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
@@ -48301,9 +48297,8 @@ msgid "Items not allowed"
 msgstr "Nicht erlaubte Elemente"
 
 #: pcbnew/drc/drc_item.cpp:65
-#, fuzzy
 msgid "Text or graphic on Edge.Cuts layer"
-msgstr "Text (oder Bemaßung) auf Edge.Cuts-Lage"
+msgstr "Text oder Grafik auf Edge.Cuts-Lage"
 
 #: pcbnew/drc/drc_item.cpp:69
 msgid "Clearance violation"
@@ -48724,7 +48719,7 @@ msgstr "(%s min Restring-Breite %s; tatsächlich %s)"
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:346
 #, fuzzy, c-format
 msgid "(%s min annular width %s; actual %s on %s)"
-msgstr "(%s min Restring-Breite %s; tatsächlich %s)"
+msgstr "(%s min Restring-Breite %s; tatsächlich %s auf %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:356
 #, c-format
@@ -49577,7 +49572,7 @@ msgstr "(%s min Durchmesser %s; tatsächlich %s)"
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:137
 #, fuzzy, c-format
 msgid "(%s min diameter %s; actual %s on %s)"
-msgstr "(%s min Durchmesser %s; tatsächlich %s)"
+msgstr "(%s min Durchmesser %s; tatsächlich %s auf %s)"
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:148
 #, c-format
@@ -49587,7 +49582,7 @@ msgstr "(%s maximaler Durchmesser %s; tatsächlich %s)"
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:155
 #, fuzzy, c-format
 msgid "(%s max diameter %s; actual %s on %s)"
-msgstr "(%s maximaler Durchmesser %s; tatsächlich %s)"
+msgstr "(%s max Durchmesser %s; tatsächlich %s auf %s)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:199
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:294
@@ -49685,7 +49680,6 @@ msgid "Maximum Skew must be greater than or equal to 0"
 msgstr "Der maximale Versatz muss größer oder gleich als 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:95
-#, fuzzy
 msgid "Time domain (ps)"
 msgstr "Zeitdomäne (ps)"
 
@@ -49852,12 +49846,12 @@ msgstr "Die Breitentoleranz muss kleiner als die optimale Breite sein"
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:76
 #, fuzzy
 msgid "Optimum Width must be greater than or equal to 0"
-msgstr "Die optimale Breite muss größer als 0 sein"
+msgstr "Die optimale Breite muss gleich oder größer als 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:79
 #, fuzzy
 msgid "Optimum Gap must be greater than or equal to 0"
-msgstr "Der maximale Versatz muss größer oder gleich als 0 sein"
+msgstr "Der optimale Spalt muss gleich oder größer als 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:97
 msgid "Gap Tolerance must be greater than or equal to 0"
@@ -50907,13 +50901,16 @@ msgstr ""
 "Importierter Footprintcache konnte nicht nach \"%s\" veröffentlicht werden."
 
 #: pcbnew/footprint_import_reconciler.cpp:369
+#, fuzzy
 msgid "Cannot register imported footprint cache: no project library table."
 msgstr ""
+"Kann den importierten Footprint-Cache nicht erfassen: keine Projekt-"
+"Bibliothekstabelle."
 
 #: pcbnew/footprint_import_reconciler.cpp:393
 #, fuzzy
 msgid "Error saving project footprint library table."
-msgstr "Fehler beim Laden der Footprint-Bibliothekstabelle des Projekts."
+msgstr "Fehler beim Speichern der Footprint-Bibliothekstabelle des Projekts."
 
 #: pcbnew/footprint_info_impl.cpp:196
 msgid "Loading footprints..."
@@ -51009,7 +51006,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:842
 #, fuzzy, c-format
 msgid "Footprint '%s' could not be saved to library '%s'."
-msgstr "Footprint \"%s\" nicht in Bibliothek \"%s\" gefunden."
+msgstr "Footprint \"%s\" konnte nicht in Bibliothek \"%s\" gespeichert werden."
 
 #: pcbnew/footprint_libraries_utils.cpp:873
 #: pcbnew/footprint_viewer_frame.cpp:752
@@ -52091,12 +52088,12 @@ msgstr "Gruppenbibliothek-Verknüpfung von \"%s\" in \"%s\" geändert."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1977
 #, fuzzy, c-format
 msgid "Add group '%s' to group '%s'."
-msgstr "%s zur Gruppe \"%s\" hinzufügen."
+msgstr "\"%s\" zur Gruppe \"%s\" hinzufügen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1982
 #, fuzzy, c-format
 msgid "Added group '%s' to group '%s'."
-msgstr "%s zur Gruppe \"%s\" hinzugefügt."
+msgstr "\"%s\" zur Gruppe \"%s\" hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:2022
 #, c-format
@@ -53047,11 +53044,13 @@ msgid "Loading board data..."
 msgstr "Lade Platinendaten ..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1332
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Board outline has %d vertices outside the coordinate range; they were "
 "dropped."
 msgstr ""
+"Platinenumriss hat %d Eckpunkte außerhalb des Koordinatenbereichs; sie "
+"wurden verworfen."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1560
 #, c-format
@@ -55894,7 +55893,7 @@ msgstr "Fehler beim Laden der Platine"
 #: pcbnew/pcbnew_jobs_handler.cpp:527
 #, c-format
 msgid "Invalid layer name '%s'\n"
-msgstr "Ungültiger Lagenname ‚%s‘\n"
+msgstr "Ungültiger Lagenname \"%s\"\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:567 pcbnew/pcbnew_jobs_handler.cpp:647
 #: pcbnew/pcbnew_jobs_handler.cpp:694
@@ -56164,12 +56163,12 @@ msgstr "Fehler beim Laden des Zeichnungsblatts \"%s\": %s"
 #: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:338
 #, fuzzy, c-format
 msgid "Cannot save board '%s': %s"
-msgstr "Kann Symbol \"%s\" nicht importieren: %s"
+msgstr "Kann Platine \"%s\" nicht speichern: %s"
 
 #: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:344
 #, fuzzy, c-format
 msgid "Unexpected error saving board '%s': %s"
-msgstr "Fehler beim Einlesen der Platine \"%s\": %s"
+msgstr "Unerwarteter Fehler beim Speichern der Platine \"%s\": %s"
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:533
 msgid ""
@@ -56781,7 +56780,7 @@ msgstr "KiCad Platinen-Netzlistendateien"
 #: pcbnew/tools/board_editor_control.cpp:729
 #, fuzzy, c-format
 msgid "Failed to export netlist to '%s': %s"
-msgstr "Fehler beim Plotten von \"%s\".\n"
+msgstr "Fehler beim Exportieren der Netzliste nach \"%s\": %s"
 
 #: pcbnew/tools/board_editor_control.cpp:763
 #: pcbnew/tools/footprint_editor_control.cpp:963
@@ -58332,9 +58331,8 @@ msgid "Toggle the exclude from bill of materials attribute"
 msgstr "Schaltet das Attribut \"Von Stückliste ausschließen\" um"
 
 #: pcbnew/tools/pcb_actions.cpp:579
-#, fuzzy
 msgid "Toggle the exclude from position files attribute"
-msgstr "Schaltet das Attribut \"Von Simulation ausschließen\" um"
+msgstr "Schaltet das Attribut \"Von Positiondateien ausschließen\" um"
 
 #: pcbnew/tools/pcb_actions.cpp:587
 msgid ""
@@ -61704,7 +61702,7 @@ msgstr "Entferne isolierte Kupferinseln ..."
 #: pcbnew/zone_filler.cpp:1214
 #, fuzzy
 msgid "Refilling overlapping zones..."
-msgstr "Fülle alle Zonen aus ..."
+msgstr "Überlappende Zonen erneut ausfüllen ..."
 
 #: pcbnew/zone_filler.cpp:1375
 #, c-format
@@ -61825,7 +61823,7 @@ msgstr "Bitmap-zu-Bauteil-Umwandlung"
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
 msgstr ""
-"Ein Bauteil aus einer Bitmap-Grafik erstellen, um diese mit KiCad zu "
+"Ein Bauteil aus einer Bitmap-Grafik erstellen, um dieses mit KiCad zu "
 "verwenden"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
