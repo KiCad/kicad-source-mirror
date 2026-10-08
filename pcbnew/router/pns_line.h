@@ -71,6 +71,7 @@ public:
         m_width = 1;        // Dummy value
         m_snapThreshhold = 0;
         m_via = nullptr;
+        m_ownsVia = false;
     }
 
     LINE( const LINE& aOther );
@@ -88,16 +89,18 @@ public:
         m_net = aBase.m_net;
         m_layers = aBase.m_layers;
         m_via = nullptr;
+        m_ownsVia = false;
     }
 
     /**
-     * Construct a LINE for a lone VIA (ie a stitching via).
+     * Construct a LINE for a lone VIA (ie a stitching via).  The via stays with its owner.
      */
     LINE( VIA* aVia ) :
         LINK_HOLDER( LINE_T ),
         m_blockingObstacle( nullptr )
     {
         m_via = aVia;
+        m_ownsVia = false;
         // TODO(JE) Padstacks - does this matter?
         m_width = aVia->Diameter( aVia->Layers().Start() );
         m_net = aVia->Net();
@@ -293,7 +296,18 @@ private:
 
     int              m_snapThreshhold;      ///< Width to smooth out jagged segments.
 
+    /// Take a copy of another line's via if it owns one, or share the via it borrows.
+    void copyVia( const LINE& aOther );
+
+    /// Free a via this line owns and forget whichever via it had.
+    void dropVia();
+
     VIA*             m_via;
+
+    /// A via made by AppendVia() or copied from a line that owned its via is ours to free.  One
+    /// given to LinkVia() belongs to a node and may be gone before this line is.
+    bool             m_ownsVia;
+
     ITEM*            m_blockingObstacle;    ///< For mark obstacle mode.
 };
 
