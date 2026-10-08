@@ -21,6 +21,10 @@
 #define GAL_OPENGL_RESOURCES_H___
 
 #include <gal/gal.h>
+#include <math/vector2d.h>
+#include <utility>
+
+class UTF8;
 
 #define BITMAP_FONT_USE_SPANS
 
@@ -63,7 +67,23 @@ namespace KIGFX {
         extern GAL_API FONT_IMAGE_TYPE font_image;
         extern FONT_INFO_TYPE  font_information;
 
+        /** Where a glyph's quad sits and what it samples, in font units, which are also atlas texels */
+        struct GLYPH_BOX
+        {
+            float x, y;           /**< corner of the quad from the pen position */
+            float w, h;           /**< size of the quad and of its cell in the atlas */
+            float atlasX, atlasY; /**< corner of the cell in the atlas, inside its smoothing border */
+        };
+
         GAL_API const FONT_GLYPH_TYPE* LookupGlyph( unsigned int aCodePoint );
+
+        GAL_API GLYPH_BOX ComputeGlyphBox( const FONT_GLYPH_TYPE& aGlyph );
+
+        /** How far a space moves the pen. The font has no space glyph, so this matches the stroke font. */
+        GAL_API double SpaceAdvance();
+
+        /** Size of a line of text in atlas units, and how far its glyphs sit above their lowest point */
+        GAL_API std::pair<VECTOR2D, float> ComputeBitmapTextSize( const UTF8& aText );
 
     }
 

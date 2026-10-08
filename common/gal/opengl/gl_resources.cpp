@@ -20,6 +20,8 @@
 // The current font is "Ubuntu Mono" available under Ubuntu Font Licence 1.0
 // (see ubuntu-font-licence-1.0.txt for details)
 #include <algorithm>
+#include <limits>
+#include <core/utf8.h>
 #include "gl_resources.h"
 
 #define BITMAP_FONT_USE_SPANS
@@ -53,6 +55,94 @@ const FONT_GLYPH_TYPE* LookupGlyph( unsigned int aCodepoint )
 #else
     return &bitmap_chars[codepoint];
 #endif
+}
+
+
+GLYPH_BOX ComputeGlyphBox( const FONT_GLYPH_TYPE& aGlyph )
+{
+    const float border = font_information.smooth_pixels;
+
+    GLYPH_BOX box;
+    box.w = aGlyph.atlas_w - border * 2;
+    box.h = aGlyph.atlas_h - border * 2;
+    box.atlasX = aGlyph.atlas_x + border;
+    box.atlasY = aGlyph.atlas_y + border;
+    box.x = aGlyph.minx;
+
+    // The atlas cell height is rounded to whole texels, and every glyph hangs from the font's top
+    const float roundAdjust = ( aGlyph.maxy - aGlyph.miny ) - box.h;
+    const float topAdjust = font_information.max_y - aGlyph.maxy;
+    box.y = roundAdjust + topAdjust;
+
+    return box;
+}
+
+
+double SpaceAdvance()
+{
+    const FONT_GLYPH_TYPE* x = LookupGlyph( 'x' );
+
+    return x ? x->advance * 0.74 : 0.0;
+}
+
+
+std::pair<VECTOR2D, float> ComputeBitmapTextSize( const UTF8& aText )
+{
+    static const FONT_GLYPH_TYPE* defaultGlyph = LookupGlyph( '(' ); // for strange chars
+
+    VECTOR2D textSize( 0, 0 );
+    float    commonOffset = std::numeric_limits<float>::max();
+    float    charHeight = font_information.max_y - defaultGlyph->miny;
+    int      overbarDepth = -1;
+    int braceNesting = 0;
+
+    for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
+    {
+        if( *chIt == '~' && overbarDepth == -1 )
+        {
+            UTF8::uni_iter lookahead = chIt;
+
+            if( ++lookahead != end && *lookahead == '{' )
+            {
+                chIt = lookahead;
+                overbarDepth = braceNesting;
+                braceNesting++;
+                continue;
+            }
+        }
+        else if( *chIt == '{' )
+        {
+            braceNesting++;
+        }
+        else if( *chIt == '}' )
+        {
+            if( braceNesting > 0 )
+                braceNesting--;
+
+            if( braceNesting == overbarDepth )
+            {
+                overbarDepth = -1;
+                continue;
+            }
+        }
+
+        const FONT_GLYPH_TYPE* glyph = LookupGlyph( *chIt );
+
+        if( !glyph                            // Not coded in font
+            || *chIt == '-' || *chIt == '_' ) // Strange size of these 2 chars
+        {
+            glyph = defaultGlyph;
+        }
+
+        if( glyph )
+            textSize.x += glyph->advance;
+    }
+
+    textSize.y = std::max<float>( textSize.y, charHeight );
+    commonOffset = std::min<float>( font_information.max_y - defaultGlyph->maxy, commonOffset );
+    textSize.y -= commonOffset;
+
+    return std::make_pair( textSize, commonOffset );
 }
 
 }

@@ -3149,11 +3149,7 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar, bool aReserve )
     // handle space
     if( aChar == ' ' )
     {
-        const FONT_GLYPH_TYPE* g = LookupGlyph( 'x' );
-        wxCHECK( g, 0 );
-
-        // Match stroke font as well as possible
-        double spaceWidth = g->advance * 0.74;
+        const double spaceWidth = SpaceAdvance();
 
         Translate( VECTOR2D( spaceWidth, 0 ) );
         return KiROUND( spaceWidth );
@@ -3169,18 +3165,14 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar, bool aReserve )
     if( !glyph ) // Should not happen.
         return 0;
 
-    const float X = glyph->atlas_x + font_information.smooth_pixels;
-    const float Y = glyph->atlas_y + font_information.smooth_pixels;
-    const float XOFF = glyph->minx;
-
-    // adjust for height rounding
-    const float round_adjust = ( glyph->maxy - glyph->miny )
-                               - float( glyph->atlas_h - font_information.smooth_pixels * 2 );
-    const float top_adjust = font_information.max_y - glyph->maxy;
-    const float YOFF = round_adjust + top_adjust;
-    const float W = glyph->atlas_w - font_information.smooth_pixels * 2;
-    const float H = glyph->atlas_h - font_information.smooth_pixels * 2;
-    const float B = 0;
+    const GLYPH_BOX box = ComputeGlyphBox( *glyph );
+    const float     X = box.atlasX;
+    const float     Y = box.atlasY;
+    const float     XOFF = box.x;
+    const float     YOFF = box.y;
+    const float     W = box.w;
+    const float     H = box.h;
+    const float     B = 0;
 
     if( aReserve )
         m_currentManager->Reserve( 6 );
@@ -3253,61 +3245,7 @@ void OPENGL_GAL::drawBitmapOverbar( double aLength, double aHeight, bool aReserv
 
 std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText ) const
 {
-    static const FONT_GLYPH_TYPE* defaultGlyph = LookupGlyph( '(' ); // for strange chars
-
-    VECTOR2D textSize( 0, 0 );
-    float    commonOffset = std::numeric_limits<float>::max();
-    float    charHeight = font_information.max_y - defaultGlyph->miny;
-    int      overbarDepth = -1;
-    int braceNesting = 0;
-
-    for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
-    {
-        if( *chIt == '~' && overbarDepth == -1 )
-        {
-            UTF8::uni_iter lookahead = chIt;
-
-            if( ++lookahead != end && *lookahead == '{' )
-            {
-                chIt = lookahead;
-                overbarDepth = braceNesting;
-                braceNesting++;
-                continue;
-            }
-        }
-        else if( *chIt == '{' )
-        {
-            braceNesting++;
-        }
-        else if( *chIt == '}' )
-        {
-            if( braceNesting > 0 )
-                braceNesting--;
-
-            if( braceNesting == overbarDepth )
-            {
-                overbarDepth = -1;
-                continue;
-            }
-        }
-
-        const FONT_GLYPH_TYPE* glyph = LookupGlyph( *chIt );
-
-        if( !glyph                            // Not coded in font
-            || *chIt == '-' || *chIt == '_' ) // Strange size of these 2 chars
-        {
-            glyph = defaultGlyph;
-        }
-
-        if( glyph )
-            textSize.x += glyph->advance;
-    }
-
-    textSize.y = std::max<float>( textSize.y, charHeight );
-    commonOffset = std::min<float>( font_information.max_y - defaultGlyph->maxy, commonOffset );
-    textSize.y -= commonOffset;
-
-    return std::make_pair( textSize, commonOffset );
+    return BUILTIN_FONT::ComputeBitmapTextSize( aText );
 }
 
 
