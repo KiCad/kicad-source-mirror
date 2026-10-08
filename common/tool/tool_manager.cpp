@@ -490,7 +490,7 @@ bool TOOL_MANAGER::runTool( TOOL_BASE* aTool )
         static_cast<TOOL_INTERACTIVE*>( aTool )->resetTransitions();
 
     // If the tool is already active, bring it to the top of the active tools stack
-    if( isActive( aTool ) && m_activeTools.size() > 1 )
+    if( isActive( aTool ) )
     {
         auto it = std::find( m_activeTools.begin(), m_activeTools.end(), id );
 
@@ -571,7 +571,7 @@ void TOOL_MANAGER::ShutdownTool( TOOL_BASE* aTool )
 
     TOOL_ID id = aTool->GetId();
 
-    if( isActive( aTool ) )
+    while( isActive( aTool ) )
     {
         TOOL_MANAGER::ID_LIST::iterator it = std::find( m_activeTools.begin(),
                                                         m_activeTools.end(), id );
@@ -579,26 +579,25 @@ void TOOL_MANAGER::ShutdownTool( TOOL_BASE* aTool )
         TOOL_STATE* st = m_toolIdIndex[*it];
 
         // the tool state handler is waiting for events (i.e. called Wait() method)
-        if( st && st->pendingWait )
-        {
-            // Wake up the tool and tell it to shutdown
-            st->shutdown = true;
-            st->pendingWait = false;
-            st->waitEvents.clear();
+        if( !st || !st->pendingWait || !st->cofunc )
+            break;
 
-            if( st->cofunc )
-            {
-                wxLogTrace( kicadTraceToolStack,
-                            wxS( "TOOL_MANAGER::ShutdownTool - Shutting down tool %s" ),
-                            st->theTool->GetName() );
+        // Wake up the tool and tell it to shutdown
+        st->shutdown = true;
+        st->pendingWait = false;
+        st->waitEvents.clear();
 
-                setActiveState( st );
-                bool end = !st->cofunc->Resume();
+        wxLogTrace( kicadTraceToolStack, wxS( "TOOL_MANAGER::ShutdownTool - Shutting down tool %s" ),
+                    st->theTool->GetName() );
 
-                if( end )
-                    finishTool( st );
-            }
-        }
+        setActiveState( st );
+
+        if( st->cofunc->Resume() )
+            break;
+
+        // finishTool() restores the previous context when the same tool was re-entered
+        // Keep unwinding until every saved context has seen the shutdown request
+        finishTool( st );
     }
 }
 
