@@ -20,6 +20,7 @@
 #pragma once
 
 #include <compatibility_report.h>
+#include <downgrade_scan.h>
 #include <downgrade_target.h>
 
 class BOARD;
@@ -38,9 +39,27 @@ void DowngradeBoardInPlace( BOARD* aBoard, const DOWNGRADE_TARGET& aTarget, bool
 void DowngradeFootprintInPlace( FOOTPRINT* aFootprint, const DOWNGRADE_TARGET& aTarget,
                                 bool aDropInsteadOfApproximate = false );
 
+/// Load a board, downgrade the copy, and write it stamped for the target. Fails closed and removes
+/// the output if the result would not open there. aUnsupportedToken receives the offending token.
+bool ExportBoardToOlderVersion( const wxString& aSrcFile, const wxString& aDestFile, const DOWNGRADE_TARGET& aTarget,
+                                COMPATIBILITY_REPORT& aReport, wxString* aUnsupportedToken = nullptr,
+                                const wxString& aVariant = wxEmptyString, bool aDropInsteadOfApproximate = false );
+
 /// Bake a variant's overrides into the base footprint attributes. Run before the variant
 /// registry is dropped, so the exported board matches the chosen variant.
 void FlattenBoardVariant( BOARD* aBoard, const wxString& aVariantName );
+
+/// Save a board stamped for the target, using the writer for that version.
+void SaveBoardForTarget( BOARD* aBoard, const wxString& aPath, const DOWNGRADE_TARGET& aTarget );
+
+/// Save a single .kicad_mod footprint file for the target.
+void SaveFootprintForTarget( FOOTPRINT* aFootprint, const wxString& aPath, const DOWNGRADE_TARGET& aTarget );
+
+/// Load one .kicad_mod, classify it against the rule table, and write the downgraded copy to
+/// aTmpFile. Refuses when a block rule fires.
+DOWNGRADE_FILE_RESULT DowngradeFootprintFileToTemp( const wxString& aSrcFile, const wxString& aTmpFile,
+                                                    const DOWNGRADE_TARGET& aTarget,
+                                                    bool                    aDropInsteadOfApproximate = false );
 
 /// Scan serialized board text for tokens the target cannot parse. Returns the first such token, or
 /// empty if the output is safe. Non-empty means refuse the export.

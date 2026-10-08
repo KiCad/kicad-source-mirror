@@ -20,6 +20,8 @@
 #include <downgrade/board_downgrade.h>
 
 #include <downgrade_scan.h>
+#include <settings/settings_manager.h>
+#include <wildcards_and_files_ext.h>
 
 #include <algorithm>
 #include <cctype>
@@ -28,6 +30,9 @@
 #include <set>
 #include <string>
 #include <vector>
+
+#include <wx/ffile.h>
+#include <wx/filefn.h>
 
 #include <base_units.h>
 #include <board.h>
@@ -58,9 +63,12 @@
 #include <board_stackup_manager/board_stackup.h>
 #include <layer_ids.h>
 #include <lset.h>
+#include <io/kicad/legacy_tuning_pattern.h>
 #include <geometry/shape_ellipse.h>
 #include <geometry/shape_poly_set.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
+#include <pcb_io/kicad_sexpr/writers/pcb_writer_v9.h>
+#include <pcb_io/kicad_sexpr/writers/pcb_writer_v10.h>
 
 
 // Board format date each feature landed. A rule fires only when the target predates this.
@@ -79,6 +87,9 @@ static constexpr int VER_ROUNDED_RECT = 20250829;
 static constexpr int VER_FP_UNITS = 20250909;
 static constexpr int VER_BARCODE = 20250914;
 static constexpr int VER_PAD_DIE_DELAY = 20250401;
+static constexpr int VER_TIME_DOMAIN_TUNING = 20250401;
+// Group placement arrived without a format bump while 20250401 was current.
+static constexpr int VER_GROUP_PLACEMENT = 20250401;
 static constexpr int VER_CELL_KNOCKOUT = 20260603;
 static constexpr int VER_BACKDRILL = 20251101;
 static constexpr int VER_EXTRUDED_BODY = 20260410;
@@ -1310,6 +1321,52 @@ static void dropZoneLayerProperties( BOARD* aBoard )
 }
 
 
+static bool hasGroupPlacementLinkage( const ZONE* aZone )
+{
+    return aZone->GetIsRuleArea() && aZone->GetPlacementAreaSourceType() == PLACEMENT_SOURCE_T::GROUP_PLACEMENT
+           && ( aZone->GetPlacementAreaEnabled() || !aZone->GetPlacementAreaSource().IsEmpty() );
+}
+
+
+static int countGroupPlacementAreas( const BOARD* aBoard )
+{
+    int count = std::count_if( aBoard->Zones().begin(), aBoard->Zones().end(), hasGroupPlacementLinkage );
+
+    for( const FOOTPRINT* footprint : aBoard->Footprints() )
+        count += std::count_if( footprint->Zones().begin(), footprint->Zones().end(), hasGroupPlacementLinkage );
+
+    return count;
+}
+
+
+static void dropGroupPlacementLinkage( ZONE* aZone )
+{
+    if( aZone->GetPlacementAreaSourceType() == PLACEMENT_SOURCE_T::GROUP_PLACEMENT )
+    {
+        aZone->SetPlacementAreaEnabled( false );
+        aZone->SetPlacementAreaSource( wxEmptyString );
+        aZone->SetPlacementAreaSourceType( PLACEMENT_SOURCE_T::SHEETNAME );
+    }
+}
+
+
+static void dropGroupPlacementAreasFp( FOOTPRINT* aFootprint )
+{
+    for( ZONE* zone : aFootprint->Zones() )
+        dropGroupPlacementLinkage( zone );
+}
+
+
+static void dropGroupPlacementAreas( BOARD* aBoard )
+{
+    for( ZONE* zone : aBoard->Zones() )
+        dropGroupPlacementLinkage( zone );
+
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
+        dropGroupPlacementAreasFp( footprint );
+}
+
+
 static int countCustomFpStackups( const BOARD* aBoard )
 {
     int count = 0;
@@ -1576,13 +1633,13 @@ static int countGenerators( const BOARD* aBoard, const wxString& aType )
 }
 
 
-static void dropGenerators( BOARD* aBoard, const wxString& aType )
+static void dropGenerators( BOARD* aBoard, const std::function<bool( const PCB_GENERATOR* )>& aMatches )
 {
     const auto generators = aBoard->Generators();
 
     for( PCB_GENERATOR* generator : generators )
     {
-        if( generator->GetGeneratorType() != aType )
+        if( !aMatches( generator ) )
             continue;
 
         EDA_GROUP* outer = generator->GetParentGroup();
@@ -1598,6 +1655,50 @@ static void dropGenerators( BOARD* aBoard, const wxString& aType )
         aBoard->Remove( generator );
         delete generator;
     }
+}
+
+
+static void dropGenerators( BOARD* aBoard, const wxString& aType )
+{
+    dropGenerators( aBoard,
+                    [&]( const PCB_GENERATOR* aGenerator )
+                    {
+                        return aGenerator->GetGeneratorType() == aType;
+                    } );
+}
+
+
+static bool isTimeDomainTuning( const PCB_GENERATOR* aGenerator )
+{
+    const auto pattern = dynamic_cast<const PCB_TUNING_PATTERN*>( aGenerator );
+    return pattern && !pattern->GetItems().empty() && pattern->GetSettings().m_isTimeDomain;
+}
+
+
+static int countTimeDomainTuning( const BOARD* aBoard )
+{
+    return std::count_if( aBoard->Generators().begin(), aBoard->Generators().end(), isTimeDomainTuning );
+}
+
+
+static void dropTimeDomainTuning( BOARD* aBoard )
+{
+    dropGenerators( aBoard, isTimeDomainTuning );
+}
+
+
+static int countUnreviewedTuningProperties( const BOARD* aBoard )
+{
+    return std::count_if( aBoard->Generators().begin(), aBoard->Generators().end(),
+                          []( const PCB_GENERATOR* aGenerator )
+                          {
+                              if( aGenerator->GetGeneratorType() != wxT( "tuning_pattern" ) )
+                                  return false;
+
+                              return !dynamic_cast<const PCB_TUNING_PATTERN*>( aGenerator )
+                                     || !KICAD_FORMAT::LEGACY::AreTuningPropertiesReviewed(
+                                             aGenerator->GetProperties() );
+                          } );
 }
 
 
@@ -2309,6 +2410,15 @@ static std::vector<BOARD_RULE> boardRules()
         { VER_CONSTRAINTS, DOWNGRADE_BUCKET::BLOCK, _( "Unreviewed generated objects" ),
           _( "Unknown generator kinds or detached generated children cannot be safely exported." ),
           countUnknownGenerators, nullptr },
+        { VER_CONSTRAINTS, DOWNGRADE_BUCKET::BLOCK, _( "Unreviewed tuning properties" ),
+          _( "The tuning generator contains properties outside the reviewed historical schemas." ),
+          countUnreviewedTuningProperties, nullptr },
+        { VER_TIME_DOMAIN_TUNING, DOWNGRADE_BUCKET::DROP, _( "Time-domain tuning patterns" ),
+          _( "Generator editability is removed. Existing generated copper and group membership are kept." ),
+          countTimeDomainTuning, dropTimeDomainTuning },
+        { VER_GROUP_PLACEMENT, DOWNGRADE_BUCKET::DROP, _( "Group placement areas" ),
+          _( "Group placement linkage is removed. Zone geometry, keepout settings, groups, and copper are kept." ),
+          countGroupPlacementAreas, dropGroupPlacementAreas, dropGroupPlacementAreasFp },
         { VER_CONSTRAINTS, DOWNGRADE_BUCKET::BLOCK, _( "Unreviewed board graphics" ),
           _( "An unrecognized graphic item cannot be safely represented by the target writer." ),
           countUnreviewedDrawings, nullptr },
@@ -2672,6 +2782,11 @@ void DowngradeFootprintInPlace( FOOTPRINT* aFootprint, const DOWNGRADE_TARGET& a
 // so this gate is a safety net against a wrong or miswired writer. To add a token, add a row
 // with its format version.
 static constexpr DATED_TOKEN BOARD_TOKENS[] = {
+    { "is_time_domain", VER_TIME_DOMAIN_TUNING },
+    { "target_delay", VER_TIME_DOMAIN_TUNING },
+    { "target_delay_min", VER_TIME_DOMAIN_TUNING },
+    { "target_delay_max", VER_TIME_DOMAIN_TUNING },
+    { "last_tuning_length", VER_TIME_DOMAIN_TUNING },
     { "constraint", VER_CONSTRAINTS },
     { "grid_item", VER_GRIDS },
     { "start_shape", VER_LINE_ENDINGS },
@@ -2742,10 +2857,75 @@ int BoardDowngradeCoveredVersion()
 }
 
 
+// Each target has its own writer, extracted from that release. A target without a writer writes
+// nothing, and the fail-closed check downstream refuses the export.
+void SaveBoardForTarget( BOARD* aBoard, const wxString& aPath, const DOWNGRADE_TARGET& aTarget )
+{
+    if( aTarget.m_boardVersion == PCB_WRITER_V10::FORMAT_VERSION )
+        PCB_WRITER_V10().SaveBoard( aPath, aBoard );
+    else if( aTarget.m_boardVersion == PCB_WRITER_V9::FORMAT_VERSION )
+        PCB_WRITER_V9().SaveBoard( aPath, aBoard );
+    else
+        wxFAIL_MSG( wxT( "No writer for this downgrade target." ) );
+}
+
+
+void SaveFootprintForTarget( FOOTPRINT* aFootprint, const wxString& aPath, const DOWNGRADE_TARGET& aTarget )
+{
+    if( aTarget.m_boardVersion == PCB_WRITER_V10::FORMAT_VERSION )
+        PCB_WRITER_V10().SaveFootprintFile( aPath, aFootprint );
+    else if( aTarget.m_boardVersion == PCB_WRITER_V9::FORMAT_VERSION )
+        PCB_WRITER_V9().SaveFootprintFile( aPath, aFootprint );
+    else
+        wxFAIL_MSG( wxT( "No writer for this downgrade target." ) );
+}
+
+
+static bool containsGroupPlacementSource( const std::string& aText )
+{
+    const std::string        text = StripSexprStrings( aText );
+    std::vector<std::string> path;
+
+    for( size_t position = 0; position < text.size(); ++position )
+    {
+        if( text[position] == '(' )
+        {
+            size_t begin = position + 1;
+
+            while( begin < text.size() && std::isspace( static_cast<unsigned char>( text[begin] ) ) )
+                ++begin;
+
+            size_t end = begin;
+
+            while( end < text.size()
+                   && ( std::isalnum( static_cast<unsigned char>( text[end] ) ) || text[end] == '_' ) )
+                ++end;
+
+            const std::string head = text.substr( begin, end - begin );
+
+            if( head == "group" && path.size() >= 2 && path.back() == "placement" && path[path.size() - 2] == "zone" )
+                return true;
+
+            path.push_back( head );
+            position = end > begin ? end - 1 : position;
+        }
+        else if( text[position] == ')' && !path.empty() )
+        {
+            path.pop_back();
+        }
+    }
+
+    return false;
+}
+
+
 wxString FindUnsupportedBoardToken( const wxString& aSerialized, const DOWNGRADE_TARGET& aTarget )
 {
     if( aTarget.m_boardVersion >= SEXPR_BOARD_FILE_VERSION )
         return wxEmptyString;
+
+    if( aTarget.m_boardVersion < VER_GROUP_PLACEMENT && containsGroupPlacementSource( aSerialized.ToStdString() ) )
+        return wxT( "placement/group" );
 
     return FindUnsupportedToken( aSerialized, BOARD_TOKENS, std::size( BOARD_TOKENS ), BOARD_VALUES,
                                  std::size( BOARD_VALUES ), aTarget.m_boardVersion );
@@ -2772,3 +2952,120 @@ void FlattenBoardVariant( BOARD* aBoard, const wxString& aVariantName )
     }
 }
 
+
+DOWNGRADE_FILE_RESULT DowngradeFootprintFileToTemp( const wxString& aSrcFile, const wxString& aTmpFile,
+                                                    const DOWNGRADE_TARGET& aTarget, bool aDropInsteadOfApproximate )
+{
+    PCB_IO_KICAD_SEXPR         loader;
+    wxString                   nameOut;
+    std::unique_ptr<FOOTPRINT> owned = loader.ImportFootprint( aSrcFile, nameOut );
+
+    if( !owned )
+        return DOWNGRADE_FILE_RESULT::SKIPPED;
+
+    // The scratch board lets the block rules decide, so this stays in step with the rule
+    // table instead of repeating a subset of it.
+    BOARD scratch;
+    FOOTPRINT* fp = owned.get();
+    scratch.Add( owned.release() );
+
+    if( ClassifyBoardForDowngrade( &scratch, aTarget, aDropInsteadOfApproximate ).IsBlocked() )
+        return DOWNGRADE_FILE_RESULT::REFUSED;
+
+    // Detached before writing, like a real library save. The writers clip a parented
+    // footprint's zone layers and padstacks to the board's layer set. Remove does not clear
+    // the parent pointer, so that is explicit.
+    scratch.Remove( fp );
+    owned.reset( fp );
+    fp->SetParent( nullptr );
+
+    DowngradeFootprintInPlace( fp, aTarget, aDropInsteadOfApproximate );
+    SaveFootprintForTarget( fp, aTmpFile, aTarget );
+    return DOWNGRADE_FILE_RESULT::CONVERTED;
+}
+
+
+bool ExportBoardToOlderVersion( const wxString& aSrcFile, const wxString& aDestFile, const DOWNGRADE_TARGET& aTarget,
+                                COMPATIBILITY_REPORT& aReport, wxString* aUnsupportedToken, const wxString& aVariant,
+                                bool aDropInsteadOfApproximate )
+{
+    if( aUnsupportedToken )
+        aUnsupportedToken->clear();
+
+    SETTINGS_MANAGER projectSettings;
+    wxFileName       projectFile( aSrcFile );
+    projectFile.SetExt( FILEEXT::ProjectFileExtension );
+    projectFile.MakeAbsolute();
+    projectSettings.LoadProject( projectFile.GetFullPath(), false );
+
+    PCB_IO_KICAD_SEXPR     pi;
+    std::unique_ptr<BOARD> board( pi.LoadBoard( aSrcFile, nullptr ) );
+
+    if( !board )
+        return false;
+
+    // Resolve project variables before replacing dynamic items with fixed geometry.
+    board->SetProject( projectSettings.GetProject( projectFile.GetFullPath() ), true );
+
+    if( !aVariant.IsEmpty() )
+        FlattenBoardVariant( board.get(), aVariant );
+
+    aReport = ClassifyBoardForDowngrade( board.get(), aTarget, aDropInsteadOfApproximate );
+
+    if( aReport.IsBlocked() )
+        return false;
+
+    DowngradeBoardInPlace( board.get(), aTarget, aDropInsteadOfApproximate );
+
+    // Write to a sibling temp and verify that before it replaces the destination, so a failed
+    // export never destroys a pre-existing output file. The writer resolves symlinks on purpose,
+    // so reserve the name exclusively rather than spelling out a guessable one.
+    const wxString tmpFile = wxFileName::CreateTempFileName( aDestFile + wxT( ".downgrade_tmp." ) );
+
+    if( tmpFile.IsEmpty() )
+        return false;
+
+    // Release the reservation so the writer's own exclusive create still sees a new target and
+    // keeps the permissions an ordinary save would give it.
+    wxRemoveFile( tmpFile );
+
+    try
+    {
+        SaveBoardForTarget( board.get(), tmpFile, aTarget );
+    }
+    catch( ... )
+    {
+        wxRemoveFile( tmpFile );
+        throw;
+    }
+
+    // Fail closed. Discard the temp if it still uses a token the target cannot parse, or if it
+    // cannot be read back to verify.
+    wxString bad;
+
+    bool good = VerifyDowngradedFile(
+            tmpFile, aTarget.m_boardVersion,
+            [&]( const wxString& aText )
+            {
+                return FindUnsupportedBoardToken( aText, aTarget );
+            },
+            &bad );
+
+    if( !good )
+    {
+        wxRemoveFile( tmpFile );
+
+        if( aUnsupportedToken )
+            *aUnsupportedToken = bad;
+
+        return false;
+    }
+
+    if( !wxRenameFile( tmpFile, aDestFile, true ) )
+    {
+        wxRemoveFile( tmpFile );
+        return false;
+    }
+
+    return true;
+}
