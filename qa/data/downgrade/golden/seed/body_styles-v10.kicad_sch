@@ -1,0 +1,632 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "4a47bfcd-b3c0-4900-b405-551829756a78")
+	(paper "A4")
+	(lib_symbols
+		(symbol "test:DeMorgan"
+			(body_styles demorgan)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 0 2 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1 1)
+					)
+				)
+			)
+			(property "Value" "DeMorgan"
+				(at 0 -2 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1 1)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "DeMorgan_1_1"
+				(pin passive line
+					(at 0 0 0)
+					(length 2.54)
+					(name "P"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+			)
+			(symbol "DeMorgan_1_2"
+				(pin passive inverted
+					(at 5 0 0)
+					(length 2.54)
+					(name "P"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "test:Multi"
+			(body_styles "First" "Second" "Third")
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 0 2 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1 1)
+					)
+				)
+			)
+			(property "Value" "Multi"
+				(at 0 -2 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1 1)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "Multi_0_0"
+				(pin passive line
+					(at 0 5 270)
+					(length 2.54)
+					(name "COMMON"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+			)
+			(symbol "Multi_1_1"
+				(rectangle
+					(start -1 1)
+					(end 1 -1)
+					(stroke
+						(width 0.2)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 0 0 0)
+					(length 2.54)
+					(name "P"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+			)
+			(symbol "Multi_1_2"
+				(rectangle
+					(start 4 1)
+					(end 6 -1)
+					(stroke
+						(width 0.2)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 5 0 0)
+					(length 2.54)
+					(name "P"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+			)
+			(symbol "Multi_1_3"
+				(rectangle
+					(start 9 1)
+					(end 11 -1)
+					(stroke
+						(width 0.2)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at 10 0 0)
+					(length 2.54)
+					(name "P"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1 1)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(text "U3: keep its De Morgan drawing and DEMORGAN connection."
+		(exclude_from_sim no)
+		(at 148.59 150.368 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "402c83db-2fbf-45ac-a509-49cec5883de3")
+	)
+	(text "U1: third custom body style."
+		(exclude_from_sim no)
+		(at 134.62 95.758 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "42a8f8fc-18ab-49aa-8b2c-6c18e419aacb")
+	)
+	(text "Older exports must keep symbol drawings and connections."
+		(exclude_from_sim no)
+		(at 106.426 82.55 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "597367ca-83e6-4b53-8564-8e375dad4f2b")
+	)
+	(text "9 default: bake the selected appearance into a compatible symbol."
+		(exclude_from_sim no)
+		(at 153.924 100.838 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6c9acc27-f834-4842-beb0-f544e3015660")
+	)
+	(text "9 drop approximations: omit U1 and its pins."
+		(exclude_from_sim no)
+		(at 143.256 103.124 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "a17f6735-5e67-43e8-8840-221c169bf486")
+	)
+	(text "U2: keep its first-style drawing and BASE connection."
+		(exclude_from_sim no)
+		(at 146.558 124.206 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "a7a8561e-9060-4689-9934-9e2c1afd79cb")
+	)
+	(text "10: retain the selected drawing and both connections."
+		(exclude_from_sim no)
+		(at 147.32 98.298 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f2b91cf7-cba3-4ea5-bb35-33683209cc33")
+	)
+	(label "TEST"
+		(at 110 100 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+		)
+		(uuid "51dbfa4e-99d8-4ace-9b92-4ce96e3d3e77")
+	)
+	(label "DEMORGAN"
+		(at 105 150 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+		)
+		(uuid "6582051d-fba2-4109-ae71-d4cebc8d89e3")
+	)
+	(label "COMMON"
+		(at 100 120 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+		)
+		(uuid "97ae38d8-fcd9-4cf3-a92e-de94a1968782")
+	)
+	(label "BASE"
+		(at 100 125 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+		)
+		(uuid "edba6733-6deb-4283-9b16-cc28c9b2e48b")
+	)
+	(label "COMMON"
+		(at 100 95 0)
+		(effects
+			(font
+				(size 1 1)
+			)
+		)
+		(uuid "ee7623f6-3694-44f0-b54d-770dff901ec4")
+	)
+	(symbol
+		(lib_id "test:Multi")
+		(at 100 100 0)
+		(unit 1)
+		(body_style 3)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files no)
+		(dnp no)
+		(uuid "a4c99c12-ed9f-4373-b780-7fdce8d40657")
+		(property "Reference" "U1"
+			(at 100 102 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1 1)
+				)
+			)
+		)
+		(property "Value" "Multi"
+			(at 100 98 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1 1)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 100 100 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 100 100 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 100 100 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "c599466f-71f1-4c3a-8c63-640b58d9a283")
+		)
+		(pin "2"
+			(uuid "092b9854-6987-42de-8f6a-33929fc32b9a")
+		)
+		(instances
+			(project "body_styles"
+				(path "/4a47bfcd-b3c0-4900-b405-551829756a78"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "test:DeMorgan")
+		(at 100 150 0)
+		(unit 1)
+		(body_style 2)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "cdf980a2-ad92-4a30-9d19-d33147787356")
+		(property "Reference" "U3"
+			(at 100 152 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1 1)
+				)
+			)
+		)
+		(property "Value" "DeMorgan"
+			(at 100 148 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1 1)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 100 150 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 100 150 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 100 150 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a68d1eea-c320-4ce4-92ea-85d29ced0818")
+		)
+		(instances
+			(project "body_styles"
+				(path "/4a47bfcd-b3c0-4900-b405-551829756a78"
+					(reference "U3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "test:Multi")
+		(at 100 125 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "d382ab4a-2daa-4633-86ff-918fa6e16034")
+		(property "Reference" "U2"
+			(at 100 127 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1 1)
+				)
+			)
+		)
+		(property "Value" "Multi"
+			(at 100 123 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1 1)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 100 125 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 100 125 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 100 125 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2422f752-f717-4615-8918-b90808e71e3f")
+		)
+		(pin "2"
+			(uuid "070266cc-4cf2-430e-a958-c8dffabad0db")
+		)
+		(instances
+			(project "body_styles"
+				(path "/4a47bfcd-b3c0-4900-b405-551829756a78"
+					(reference "U2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

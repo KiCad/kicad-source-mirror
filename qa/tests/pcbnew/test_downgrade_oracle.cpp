@@ -24,11 +24,78 @@
 #include <utility>
 #include <vector>
 
+#include <board.h>
+#include <downgrade/board_downgrade.h>
+#include <settings/settings_manager.h>
+#include <pcbnew_utils/board_file_utils.h>
+#include <pcbnew_utils/board_test_utils.h>
 #include <qa_utils/downgrade_oracle_utils.h>
 #include <qa_utils/downgrade_golden_utils.h>
 
 
 BOOST_AUTO_TEST_SUITE( DowngradeOracle )
+
+static const DOWNGRADE_TARGET& kicad9 = KI_TEST::RequireDowngradeTarget( wxT( "9.0" ) );
+static const DOWNGRADE_TARGET& kicad10 = KI_TEST::RequireDowngradeTarget( wxT( "10.0" ) );
+
+
+static void checkNativeBoardGolden( const DOWNGRADE_TARGET& aTarget, const std::string& aRelease,
+                                    const std::string& aBoard, const std::string& aReference, size_t aExpectedDrops,
+                                    size_t aExpectedLowerings, bool aDropInsteadOfApproximate = false )
+{
+    SETTINGS_MANAGER             settingsManager;
+    const std::string            fixture = KI_TEST::GetPcbnewTestDataDir() + "../downgrade/golden/";
+    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_native_golden", "" );
+    const std::string            dest = ( tmp.GetPath() / ( aBoard + ".kicad_pcb" ) ).string();
+    COMPATIBILITY_REPORT         report;
+
+    // Expected files were saved by native KiCad, never by the exporter under test.
+    BOOST_REQUIRE( ExportBoardToOlderVersion( fixture + "current/" + aBoard + ".kicad_pcb", dest, aTarget, report,
+                                              nullptr, wxEmptyString, aDropInsteadOfApproximate ) );
+    BOOST_CHECK( !report.IsBlocked() );
+    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::DROP ), aExpectedDrops );
+    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::LOWER ), aExpectedLowerings );
+    const std::string difference =
+            KI_TEST::GoldenFileDifference( fixture + aRelease + "/" + aReference + ".kicad_pcb", dest );
+    BOOST_CHECK_MESSAGE( difference.empty(), difference );
+}
+
+
+BOOST_AUTO_TEST_CASE( BoardMatchesNativeKicad9Golden )
+{
+    // KiCad 9 drops the explicit disabled via-protection overrides without changing the via.
+    checkNativeBoardGolden( kicad9, "v9", "geometry", "geometry", 1, 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( BoardMatchesNativeKicad10Golden )
+{
+    checkNativeBoardGolden( kicad10, "v10", "geometry", "geometry", 0, 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( LoweredGraphicsMatchNativeKicad9Golden )
+{
+    checkNativeBoardGolden( kicad9, "v9", "graphics", "graphics", 0, 2 );
+}
+
+
+BOOST_AUTO_TEST_CASE( GraphicsMatchNativeKicad10Golden )
+{
+    checkNativeBoardGolden( kicad10, "v10", "graphics", "graphics", 0, 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( DroppedGraphicsMatchNativeKicad9Golden )
+{
+    checkNativeBoardGolden( kicad9, "v9", "graphics", "graphics-drop", 2, 0, true );
+}
+
+
+BOOST_AUTO_TEST_CASE( DropApproximationsKeepsNativeKicad10GraphicsGolden )
+{
+    checkNativeBoardGolden( kicad10, "v10", "graphics", "graphics", 0, 0, true );
+}
 
 
 BOOST_AUTO_TEST_CASE( RequiredReleaseLookupFailsForMissingId )

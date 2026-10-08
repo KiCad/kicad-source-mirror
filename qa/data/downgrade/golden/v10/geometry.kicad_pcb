@@ -1,0 +1,576 @@
+(kicad_pcb
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(general
+		(thickness 1.6)
+		(legacy_teardrops no)
+	)
+	(paper "A4")
+	(layers
+		(0 "F.Cu" signal)
+		(2 "B.Cu" signal)
+		(5 "F.SilkS" user "F.Silkscreen")
+		(7 "B.SilkS" user "B.Silkscreen")
+		(1 "F.Mask" user)
+		(3 "B.Mask" user)
+		(25 "Edge.Cuts" user)
+		(27 "Margin" user)
+		(31 "F.CrtYd" user "F.Courtyard")
+		(29 "B.CrtYd" user "B.Courtyard")
+		(35 "F.Fab" user)
+		(33 "B.Fab" user)
+	)
+	(setup
+		(pad_to_mask_clearance 0.05)
+		(solder_mask_min_width 0.1)
+		(allow_soldermask_bridges_in_footprints no)
+		(tenting
+			(front yes)
+			(back yes)
+		)
+		(covering
+			(front no)
+			(back no)
+		)
+		(plugging
+			(front no)
+			(back no)
+		)
+		(capping no)
+		(filling no)
+		(aux_axis_origin 25 25)
+		(grid_origin 5 5)
+		(pcbplotparams
+			(layerselection 0x00000000_00000000_55555555_5755f5ff)
+			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
+			(disableapertmacros no)
+			(usegerberextensions no)
+			(usegerberattributes yes)
+			(usegerberadvancedattributes yes)
+			(creategerberjobfile yes)
+			(dashed_line_dash_ratio 12)
+			(dashed_line_gap_ratio 3)
+			(svgprecision 4)
+			(plotframeref no)
+			(mode 1)
+			(useauxorigin no)
+			(pdf_front_fp_property_popups yes)
+			(pdf_back_fp_property_popups yes)
+			(pdf_metadata yes)
+			(pdf_single_document no)
+			(dxfpolygonmode yes)
+			(dxfimperialunits yes)
+			(dxfusepcbnewfont yes)
+			(psnegative no)
+			(psa4output no)
+			(plot_black_and_white yes)
+			(sketchpadsonfab no)
+			(plotpadnumbers no)
+			(hidednponfab no)
+			(sketchdnponfab yes)
+			(crossoutdnponfab yes)
+			(subtractmaskfromsilk no)
+			(outputformat 1)
+			(mirror no)
+			(drillshape 1)
+			(scaleselection 1)
+			(outputdirectory "")
+		)
+	)
+	(footprint "golden:Front"
+		(layer "F.Cu")
+		(uuid "0c75f0ab-e212-4c9a-b353-b36e143213e3")
+		(at 40 40)
+		(property "Reference" "J1"
+			(at 0 -3 0)
+			(layer "F.SilkS")
+			(uuid "041dc4f2-a86a-4b8f-99c7-1b234d1e1664")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "Front"
+			(at 0 3 0)
+			(layer "F.SilkS")
+			(uuid "e1d9ea29-4502-4284-ac7b-8ffb8ff9378f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" "https://example.invalid/front"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "6b45c65c-f071-47b7-99f4-fd2f6137f5e1")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Description" "Front connector"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "bf1e141f-f28f-401f-a369-300a6adfb00c")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(attr through_hole)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_rect
+			(start -2 -2)
+			(end 5 2)
+			(stroke
+				(width 0.12)
+				(type default)
+			)
+			(fill no)
+			(layer "F.SilkS")
+			(uuid "823e8175-00af-41da-84bf-abc41ca282d1")
+		)
+		(pad "1" thru_hole circle
+			(at 0 0)
+			(size 2 2)
+			(drill 1)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+			(net "SIGNAL")
+			(uuid "522db473-c5b2-4cac-b660-e2de59b9d450")
+		)
+		(pad "2" thru_hole oval
+			(at 3 0)
+			(size 2 3)
+			(drill oval 1 1.5)
+			(layers "*.Cu" "*.Mask")
+			(remove_unused_layers no)
+			(net "GND")
+			(uuid "9fa04945-613b-47ac-b73e-cab53d3db2b7")
+		)
+		(zone
+			(layer "F.Cu")
+			(uuid "90f02afd-9c2c-4172-aa10-39b09bfc4764")
+			(hatch edge 0.5)
+			(connect_pads
+				(clearance 0)
+			)
+			(min_thickness 0.1)
+			(keepout
+				(tracks not_allowed)
+				(vias not_allowed)
+				(pads allowed)
+				(copperpour not_allowed)
+				(footprints allowed)
+			)
+			(placement
+				(enabled no)
+				(sheetname "")
+			)
+			(fill
+				(thermal_gap 0.3)
+				(thermal_bridge_width 0.3)
+				(island_removal_mode 0)
+			)
+			(polygon
+				(pts
+					(xy 38 38) (xy 45 38) (xy 45 42) (xy 38 42)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+	(footprint "golden:RotatedFront"
+		(layer "F.Cu")
+		(uuid "1fa55d63-f194-4d0e-9db1-a0a92ceaa622")
+		(at 65 45 90)
+		(property "Reference" "R1"
+			(at 0 -3 90)
+			(layer "F.SilkS")
+			(uuid "ef02380d-91ca-425e-a0de-7eaa8740ac0c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "10k"
+			(at 0 3 90)
+			(layer "F.SilkS")
+			(uuid "7ab2364a-e9c5-49f1-97d4-f60121829a7c")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" "https://example.invalid/resistor"
+			(at 0 0 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "67c920d0-5075-46eb-921c-2f981babc40f")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Description" "Rotated resistor"
+			(at 0 0 90)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9930acf8-afe3-45c2-bca7-7f48ce4b99ef")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(attr smd)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start -2 -1)
+			(end 2 1)
+			(stroke
+				(width 0.15)
+				(type default)
+			)
+			(layer "F.SilkS")
+			(uuid "5bad7a1c-6cdb-4786-861a-651cac70f5bb")
+		)
+		(pad "1" smd roundrect
+			(at -2 0 90)
+			(size 2 1)
+			(layers "F.Cu" "F.Mask")
+			(roundrect_rratio 0.25)
+			(net "SIGNAL")
+			(uuid "9ba00b73-e71b-411b-98bf-a3cba34735b4")
+		)
+		(pad "2" smd rect
+			(at 2 0 90)
+			(size 2 1)
+			(layers "F.Cu" "F.Mask")
+			(net "GND")
+			(uuid "5ae6ef77-9a63-4544-8ac8-88dc5d3f69ef")
+		)
+		(zone
+			(layer "F.Cu")
+			(uuid "b76260e1-0144-4c0a-97c6-0ed477e511a0")
+			(hatch edge 0.5)
+			(connect_pads
+				(clearance 0)
+			)
+			(min_thickness 0.1)
+			(keepout
+				(tracks not_allowed)
+				(vias not_allowed)
+				(pads not_allowed)
+				(copperpour not_allowed)
+				(footprints allowed)
+			)
+			(placement
+				(enabled no)
+				(sheetname "")
+			)
+			(fill
+				(thermal_gap 0.3)
+				(thermal_bridge_width 0.3)
+				(island_removal_mode 0)
+			)
+			(polygon
+				(pts
+					(xy 63 42) (xy 67 42) (xy 67 48) (xy 63 48)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+	(footprint "golden:Back"
+		(layer "B.Cu")
+		(uuid "d84e4a4f-5e72-4b4e-aefa-55a51812639b")
+		(at 100 100 30)
+		(property "Reference" "U1"
+			(at 0 -3 30)
+			(layer "B.SilkS")
+			(uuid "697d3fd1-b9b4-430c-a328-1acb2c7d75c9")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Value" "Back"
+			(at 0 3 30)
+			(layer "B.SilkS")
+			(uuid "31beebcc-0477-4469-8579-3c37607eabf7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Datasheet" "https://example.invalid/back"
+			(at 0 0 30)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "a93c2058-99af-49ae-a531-f44ed309a83e")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(property "Description" "Back IC"
+			(at 0 0 30)
+			(layer "B.Fab")
+			(hide yes)
+			(uuid "3ee6cdfd-ae14-4a12-ac7b-da792164c97f")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(attr smd exclude_from_pos_files)
+		(duplicate_pad_numbers_are_jumpers no)
+		(fp_line
+			(start 1 2)
+			(end 4 5)
+			(stroke
+				(width 0.1)
+				(type default)
+			)
+			(layer "B.SilkS")
+			(uuid "edafc90c-9339-4d48-9919-7c562324b5e9")
+		)
+		(fp_text user "Back side"
+			(at 0 5 30)
+			(layer "B.SilkS")
+			(uuid "88983acb-5f55-485c-9f17-f97077218d8b")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+				(justify mirror)
+			)
+		)
+		(pad "1" smd rect
+			(at 1 2 30)
+			(size 2 1)
+			(layers "B.Cu" "B.Mask")
+			(net "SIGNAL")
+			(uuid "54142bf5-919e-41aa-9052-b6c86bf28ab1")
+		)
+		(pad "2" smd rect
+			(at 4 5 30)
+			(size 2 1)
+			(layers "B.Cu" "B.Mask")
+			(net "GND")
+			(uuid "510103f4-a4b0-476b-a5ce-27592c586231")
+		)
+		(zone
+			(layer "B.Cu")
+			(uuid "78fad834-a49b-433e-9dc7-49d53c31616d")
+			(hatch edge 0.5)
+			(connect_pads
+				(clearance 0)
+			)
+			(min_thickness 0.1)
+			(keepout
+				(tracks not_allowed)
+				(vias not_allowed)
+				(pads not_allowed)
+				(copperpour not_allowed)
+				(footprints allowed)
+			)
+			(placement
+				(enabled no)
+				(sheetname "")
+			)
+			(fill
+				(thermal_gap 0.3)
+				(thermal_bridge_width 0.3)
+				(island_removal_mode 0)
+			)
+			(polygon
+				(pts
+					(xy 100 100) (xy 102 100) (xy 102 102) (xy 100 102)
+				)
+			)
+		)
+		(embedded_fonts no)
+	)
+	(gr_rect
+		(start 25 25)
+		(end 125 115)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill no)
+		(layer "Edge.Cuts")
+		(uuid "16a8fed6-c23e-4ca5-9755-35de4e29dea9")
+	)
+	(gr_text "J1: front, 0 deg. R1: front, 90 deg."
+		(at 44 34.5 0)
+		(layer "F.SilkS")
+		(uuid "4f65c4cd-8bc0-4e2e-b57e-73d32ed91399")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(gr_text "KiCad 10: retain the tested design"
+		(at 45 71.5 0)
+		(layer "F.SilkS")
+		(uuid "7e68c8d1-9071-4052-a064-413e51ced28f")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(gr_text "Keepouts must stay in board coordinates."
+		(at 49 62.5 0)
+		(layer "F.SilkS")
+		(uuid "50ebd8ba-e117-4fc6-a9c8-5f96a4e58606")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(gr_text "Origins and mask settings must match too."
+		(at 49.5 67.5 0)
+		(layer "F.SilkS")
+		(uuid "339922fb-58f4-4ae7-8c07-6888a322721c")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(gr_text "KiCad 9: omit disabled via protection overrides."
+		(at 51.5 74 0)
+		(layer "F.SilkS")
+		(uuid "f443b09b-ab08-4653-8e18-953143c52118")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(gr_text "Pads, drills, nets, tracks, via and zone must match."
+		(at 54 65 0)
+		(layer "F.SilkS")
+		(uuid "cdf5bec3-79a4-465f-a43a-f6c9c54c66f2")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(gr_text "Catch changes to placement, rotation and connections."
+		(at 76 32.5 0)
+		(layer "F.SilkS")
+		(uuid "d02b937f-b3a9-4ae4-82c1-9a1d5cab97c0")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(gr_text "U1: back, 30 deg, with mirrored text."
+		(at 100.5 108.5 0)
+		(layer "F.SilkS")
+		(uuid "e90a3d03-411f-4e14-93f2-969ee7997eec")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(gr_text "Golden geometry"
+		(at 75 30 0)
+		(layer "F.SilkS")
+		(uuid "6248034f-1278-4247-beca-62374f769aa6")
+		(effects
+			(font
+				(size 1.5 1.5)
+				(thickness 0.2)
+			)
+		)
+	)
+	(segment
+		(start 40 40)
+		(end 50 40)
+		(width 0.25)
+		(layer "F.Cu")
+		(net "SIGNAL")
+		(uuid "16d38533-e13d-47df-a83e-e6d1d0f93da8")
+	)
+	(via
+		(at 50 40)
+		(size 0.8)
+		(drill 0.4)
+		(layers "F.Cu" "B.Cu")
+		(capping no)
+		(covering
+			(front no)
+			(back no)
+		)
+		(plugging
+			(front no)
+			(back no)
+		)
+		(filling no)
+		(net "SIGNAL")
+		(uuid "14c281fe-bf7f-4688-bac6-1c69660a95fb")
+	)
+	(zone
+		(net "GND")
+		(layer "F.Cu")
+		(uuid "9f5f35a8-653d-4e15-a612-b509daad5c50")
+		(hatch edge 0.5)
+		(connect_pads
+			(clearance 0.3)
+		)
+		(min_thickness 0.25)
+		(fill
+			(thermal_gap 0.3)
+			(thermal_bridge_width 0.3)
+			(island_removal_mode 0)
+		)
+		(polygon
+			(pts
+				(xy 30 80) (xy 60 80) (xy 60 100) (xy 30 100)
+			)
+		)
+	)
+	(embedded_fonts no)
+)
