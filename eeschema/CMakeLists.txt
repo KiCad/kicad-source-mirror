@@ -502,6 +502,7 @@ set( EESCHEMA_SRCS
     sch_preview_panel.cpp
     sch_reference_list.cpp
     sch_render_settings.cpp
+    downgrade/sch_downgrade.cpp
     sch_io/kicad_sexpr/writers/sch_writer_v9.cpp
     sch_io/kicad_sexpr/writers/sch_writer_v10.cpp
     sch_screen.cpp

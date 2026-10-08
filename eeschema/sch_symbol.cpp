@@ -1957,6 +1957,18 @@ void SCH_SYMBOL::SetPinMapOverride( const PIN_MAP_INSTANCE_OVERRIDE& aOverride, 
 }
 
 
+void SCH_SYMBOL::ClearPinMapOverrides()
+{
+    m_pinMapOverride = PIN_MAP_INSTANCE_OVERRIDE();
+
+    for( SCH_SYMBOL_INSTANCE& instance : m_instances )
+    {
+        for( auto& [name, variant] : instance.m_Variants )
+            variant.m_PinMapOverride = PIN_MAP_INSTANCE_OVERRIDE();
+    }
+}
+
+
 PIN_MAP_INSTANCE_OVERRIDE SCH_SYMBOL::GetPinMapOverride( const SCH_SHEET_PATH* aInstance,
                                                          const wxString&       aVariantName ) const
 {

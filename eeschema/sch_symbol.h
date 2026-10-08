@@ -744,6 +744,11 @@ public:
     PIN_MAP_INSTANCE_OVERRIDE GetPinMapOverride( const SCH_SHEET_PATH* aInstance = nullptr,
                                                  const wxString&       aVariantName = wxEmptyString ) const;
 
+    /**
+     * Clear the base pin-to-pad map override and every variant's override.
+     */
+    void ClearPinMapOverrides();
+
     void SetExcludedFromBOM( bool aEnable, const SCH_SHEET_PATH* aInstance = nullptr,
                              const wxString& aVariantName = wxEmptyString ) override;
     bool GetExcludedFromBOM( const SCH_SHEET_PATH* aInstance = nullptr,
