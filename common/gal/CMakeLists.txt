@@ -15,6 +15,7 @@ set( GAL_SRCS
     painter.cpp
     cursors.cpp
     gal_display_options.cpp
+    bitmap_texture.cpp
     graphics_abstraction_layer.cpp
     hidpi_gl_canvas.cpp
     hidpi_gl_3D_canvas.cpp

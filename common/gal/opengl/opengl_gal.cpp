@@ -28,6 +28,7 @@
 #include <advanced_config.h>
 #include <build_version.h>
 #include <gal/opengl/opengl_gal.h>
+#include <gal/bitmap_texture.h>
 #include <gal/opengl/utils.h>
 #include <gal/definitions.h>
 #include <kicad_gl/gl_context_mgr.h>
@@ -136,7 +137,6 @@ private:
     GLuint cacheBitmap( const BITMAP_BASE* aBitmap );
 
     const size_t m_cacheMaxElements = 50;
-    const size_t m_cacheMaxSize     = 256 * 1024 * 1024;
 
     std::map<const KIID, CACHED_BITMAP> m_bitmaps;
     std::list<KIID>                     m_cacheLru;
@@ -200,31 +200,13 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     if( !imgPtr )
         return std::numeric_limits< GLuint >::max();
 
-    wxImage imgData = *imgPtr;
-
-    // Check if the image exceeds the maximum texture size supported by the GPU
     GLint maxTextureSize;
     glGetIntegerv( GL_MAX_TEXTURE_SIZE, &maxTextureSize );
 
-    int imgWidth = imgData.GetWidth();
-    int imgHeight = imgData.GetHeight();
+    wxImage imgData = FitImageToTexture( *imgPtr, maxTextureSize );
 
-    if( imgWidth > maxTextureSize || imgHeight > maxTextureSize )
-    {
-        // Scale down the image to fit within the maximum texture size while preserving
-        // the aspect ratio
-        double scaleX = static_cast<double>( maxTextureSize ) / imgWidth;
-        double scaleY = static_cast<double>( maxTextureSize ) / imgHeight;
-        double scale = std::min( scaleX, scaleY );
-
-        int newWidth = std::clamp( KiROUND( imgWidth * scale ), 1, maxTextureSize );
-        int newHeight = std::clamp( KiROUND( imgHeight * scale ), 1, maxTextureSize );
-
-        imgData = imgData.Scale( newWidth, newHeight, wxIMAGE_QUALITY_HIGH );
-
-        if( !imgData.IsOk() )
-            return std::numeric_limits< GLuint >::max();
-    }
+    if( !imgData.IsOk() )
+        return std::numeric_limits< GLuint >::max();
 
     bmp.w = imgData.GetSize().x;
     bmp.h = imgData.GetSize().y;
@@ -246,50 +228,12 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     if( imgData.HasAlpha() || imgData.HasMask() )
     {
         bmp.size = static_cast<size_t>( bmp.w ) * bmp.h * 4;
-        auto buf = std::make_unique<uint8_t[]>( bmp.size );
 
-        uint8_t* dstP = buf.get();
-        uint8_t* srcP = imgData.GetData();
-
-        long long pxCount = static_cast<long long>( bmp.w ) * bmp.h;
-
-        if( imgData.HasAlpha() )
-        {
-            uint8_t* srcAlpha = imgData.GetAlpha();
-
-            for( long long px = 0; px < pxCount; px++ )
-            {
-                memcpy( dstP, srcP, 3 );
-                dstP[3] = *srcAlpha;
-
-                srcAlpha += 1;
-                srcP += 3;
-                dstP += 4;
-            }
-        }
-        else if( imgData.HasMask() )
-        {
-            uint8_t maskRed = imgData.GetMaskRed();
-            uint8_t maskGreen = imgData.GetMaskGreen();
-            uint8_t maskBlue = imgData.GetMaskBlue();
-
-            for( long long px = 0; px < pxCount; px++ )
-            {
-                memcpy( dstP, srcP, 3 );
-
-                if( srcP[0] == maskRed && srcP[1] == maskGreen && srcP[2] == maskBlue )
-                    dstP[3] = wxALPHA_TRANSPARENT;
-                else
-                    dstP[3] = wxALPHA_OPAQUE;
-
-                srcP += 3;
-                dstP += 4;
-            }
-        }
+        const std::vector<uint8_t> rgba = ImageToRgba( imgData );
 
         glBindTexture( GL_TEXTURE_2D, textureID );
         glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, bmp.w, bmp.h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                      buf.get() );
+                      rgba.data() );
     }
     else
     {
@@ -312,7 +256,7 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
 #ifndef DISABLE_BITMAP_CACHE
     // A single oversized bitmap can exceed the whole cache budget, so evict until it fits or the
     // cache is drained
-    while( ( m_cacheLru.size() + 1 > m_cacheMaxElements || m_cacheSize + bmp.size > m_cacheMaxSize )
+    while( ( m_cacheLru.size() + 1 > m_cacheMaxElements || m_cacheSize + bmp.size > BITMAP_CACHE_MAX_BYTES )
            && !m_cacheLru.empty() )
     {
         KIID toRemove( 0 );
