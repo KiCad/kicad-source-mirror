@@ -75,8 +75,8 @@ static const TOP_LEVEL_SHEET_INFO* findDeclaredTopLevelSheet(
 {
     for( const TOP_LEVEL_SHEET_INFO& info : aProjectSheets )
     {
-        wxFileName candidate( aProjectPath, info.filename );
-        candidate.MakeAbsolute();
+        wxFileName candidate( info.filename );
+        candidate.MakeAbsolute( aProjectPath );
 
         if( candidate.SameAs( aFile ) )
             return &info;
@@ -209,8 +209,8 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString& aFileName,
         {
             for( const TOP_LEVEL_SHEET_INFO& info : projectSheets )
             {
-                wxFileName sheetFn( projectDir, info.filename );
-                sheetFn.MakeAbsolute();
+                wxFileName sheetFn( info.filename );
+                sheetFn.MakeAbsolute( projectDir );
 
                 if( !sheetFn.FileExists() )
                     continue;

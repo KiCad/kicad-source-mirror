@@ -855,7 +855,8 @@ bool PROJECT_FILE::LoadFromFile( const wxString& aDirectory )
 
             for( TOP_LEVEL_SHEET_INFO& sheetInfo : m_topLevelSheets )
             {
-                wxFileName referencedFile( projectPath, sheetInfo.filename );
+                wxFileName referencedFile( sheetInfo.filename );
+                referencedFile.MakeAbsolute( projectPath );
 
                 if( referencedFile.FileExists() )
                     continue;

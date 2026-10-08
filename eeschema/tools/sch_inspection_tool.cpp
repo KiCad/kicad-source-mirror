@@ -788,8 +788,8 @@ int SCH_INSPECTION_TOOL::showSchematicComparison( const wxString& aOtherPath, co
                     }
                     else
                     {
-                        wxFileName newCompFn( wxFileName( drillCurrent.compFile ).GetPath(), sheetFile );
-                        newCompFn.MakeAbsolute();
+                        wxFileName newCompFn( sheetFile );
+                        newCompFn.MakeAbsolute( wxFileName( drillCurrent.compFile ).GetPath() );
 
                         SCHEMATIC* loaded = EESCHEMA_HELPERS::LoadSchematic( newCompFn.GetFullPath(),
                                                                              /*aSetActive*/ false,
@@ -1174,8 +1174,8 @@ int SCH_INSPECTION_TOOL::CompareSchematicWithHistory( const TOOL_EVENT& aEvent )
                     }
                     else
                     {
-                        wxFileName subFn( wxFileName( drillCurrent.compFile ).GetPath(), sheet->GetFileName() );
-                        subFn.MakeAbsolute();
+                        wxFileName subFn( sheet->GetFileName() );
+                        subFn.MakeAbsolute( wxFileName( drillCurrent.compFile ).GetPath() );
 
                         SCHEMATIC* loaded = nullptr;
 

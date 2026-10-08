@@ -316,7 +316,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                     // Load each top-level sheet
                     for( const TOP_LEVEL_SHEET_INFO& sheetInfo : topLevelSheets )
                     {
-                        wxFileName sheetFileName( Prj().GetProjectPath(), sheetInfo.filename );
+                        wxFileName sheetFileName( sheetInfo.filename );
+                        sheetFileName.MakeAbsolute( Prj().GetProjectPath() );
 
                         // When loading legacy schematic files, ensure we are referencing the correct extension
                         if( schFileType == SCH_IO_MGR::SCH_LEGACY )
