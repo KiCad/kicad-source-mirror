@@ -1821,6 +1821,8 @@ void SYMBOL_EDIT_FRAME::CommonSettingsChanged( int aFlags )
         GetRenderSettings()->m_ShowHiddenFields = cfg->m_ShowHiddenFields;
         GetRenderSettings()->m_ShowPinAltIcons = cfg->m_ShowPinAltIcons;
 
+        // This editor always shows the axes, whatever a settings file not yet saved by it says
+        cfg->m_Window.grid.axes_enabled = true;
         GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
     }
 

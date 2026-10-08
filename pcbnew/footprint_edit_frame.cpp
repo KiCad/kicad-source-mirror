@@ -2439,6 +2439,8 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged( int aFlags )
 
     if( FOOTPRINT_EDITOR_SETTINGS* cfg = GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>( "fpedit" ) )
     {
+        // This editor always shows the axes, whatever a settings file not yet saved by it says
+        cfg->m_Window.grid.axes_enabled = true;
         GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 
         GetBoard()->GetDesignSettings() = cfg->m_DesignSettings;
