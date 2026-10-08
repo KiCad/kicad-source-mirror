@@ -39,6 +39,7 @@ class BOARD;
 class BOARD_ITEM;
 class FOOTPRINT;
 class PCB_TRACK;
+class PCB_VIA;
 class FILENAME_RESOLVER;
 class STEP_PCB_MODEL;
 
@@ -50,6 +51,12 @@ public:
     ~EXPORTER_STEP();
 
     bool Export();
+
+    /**
+     * @return true if the via drill leaves an open hole at the board surface.  Filled or capped
+     *         vias present a flat surface that silkscreen is printed over.
+     */
+    static bool IsViaHoleOpen( const PCB_VIA& aVia, bool aFillAllVias );
 
     wxString m_outputFile;
 
