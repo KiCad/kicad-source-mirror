@@ -388,6 +388,10 @@ bool PCB_DIMENSION_BASE::Deserialize( const google::protobuf::Any &aContainer )
     SetUuidDirect( KIID( dimension.id().value() ) );
     SetLocked( dimension.locked() == types::LockedState::LS_LOCKED );
 
+    // Setting text attributes triggers Update(), which must already see the text position mode
+    SetTextPositionMode( FromProtoEnum<DIM_TEXT_POSITION>( dimension.text_position() ) );
+    SetKeepTextAligned( dimension.keep_text_aligned() );
+
     EDA_TEXT::Deserialize( dimension.text(), pcbIUScale );
 
     SetOverrideTextEnabled( dimension.override_text_enabled() );
@@ -404,8 +408,6 @@ bool PCB_DIMENSION_BASE::Deserialize( const google::protobuf::Any &aContainer )
     SetLineThickness( dimension.line_thickness().value_nm() );
     SetArrowLength( dimension.arrow_length().value_nm() );
     SetExtensionOffset( dimension.extension_offset().value_nm() );
-    SetTextPositionMode( FromProtoEnum<DIM_TEXT_POSITION>( dimension.text_position() ) );
-    SetKeepTextAligned( dimension.keep_text_aligned() );
 
     kiapi::common::UnpackCustomProperties( dimension.custom_properties(), *this );
 
