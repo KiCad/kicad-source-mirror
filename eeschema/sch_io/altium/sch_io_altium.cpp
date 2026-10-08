@@ -1195,7 +1195,11 @@ void SCH_IO_ALTIUM::EnsureSheetSymbolNames()
 wxFileName SCH_IO_ALTIUM::ResolveSheetFileName( const wxString& aParentPath,
                                                 const wxString& aSheetFileName ) const
 {
-    wxFileName loadAltiumFileName( aParentPath, aSheetFileName );
+    wxString sheetFileName = aSheetFileName;
+    sheetFileName.Replace( wxS( "\\" ), wxS( "/" ) );
+
+    wxFileName loadAltiumFileName( sheetFileName );
+    loadAltiumFileName.MakeAbsolute( aParentPath );
 
     if( loadAltiumFileName.IsFileReadable() )
         return loadAltiumFileName;
@@ -1209,20 +1213,19 @@ wxFileName SCH_IO_ALTIUM::ResolveSheetFileName( const wxString& aParentPath,
             return withExt;
     }
 
-    wxFileName sheetFn( aSheetFileName );
-    bool       extensionless = !sheetFn.HasExt();
+    bool extensionless = !loadAltiumFileName.HasExt();
 
     wxArrayString files;
-    wxDir::GetAllFiles( aParentPath, &files, wxEmptyString, wxDIR_FILES | wxDIR_HIDDEN );
+    wxDir::GetAllFiles( loadAltiumFileName.GetPath(), &files, wxEmptyString, wxDIR_FILES | wxDIR_HIDDEN );
 
     for( const wxString& candidate : files )
     {
         wxFileName candidateFname( candidate );
 
-        if( candidateFname.GetFullName().IsSameAs( aSheetFileName, false )
+        if( candidateFname.GetFullName().IsSameAs( loadAltiumFileName.GetFullName(), false )
             || ( extensionless
-                 && !sheetFn.GetName().empty()
-                 && candidateFname.GetName().IsSameAs( sheetFn.GetName(), false )
+                 && !loadAltiumFileName.GetName().empty()
+                 && candidateFname.GetName().IsSameAs( loadAltiumFileName.GetName(), false )
                  && candidateFname.GetExt().IsSameAs( wxT( "SchDoc" ), false ) ) )
         {
             return candidateFname;
