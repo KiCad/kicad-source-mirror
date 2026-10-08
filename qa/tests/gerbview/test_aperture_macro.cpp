@@ -164,4 +164,19 @@ BOOST_AUTO_TEST_CASE( TruncatedPrimitivesAreNotStored )
 }
 
 
+BOOST_AUTO_TEST_CASE( MacroTruncatedAtEOFIsRejected )
+{
+    // A macro definition cut off at end of file leaves the reader with no
+    // input: loading must survive it and simply not store the macro.
+    wxString          path = KI_TEST::GetTestDataRootDir() + "gerbview/aperture_macro_eof_truncated.gbr";
+    GERBER_FILE_IMAGE image( 0 );
+
+    BOOST_REQUIRE( image.LoadGerberFile( path ) );
+
+    APERTURE_MACRO lookup;
+    lookup.m_AmName = wxT( "Broken" );
+    BOOST_CHECK( image.FindApertureMacro( lookup ) == nullptr );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

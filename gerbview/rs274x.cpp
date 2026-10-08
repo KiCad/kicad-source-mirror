@@ -710,7 +710,9 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
     case AP_MACRO:  // lines like %AMMYMACRO*
                     // 5,1,8,0,0,1.08239X$1,22.5*
                     // %
-        /*ok = */ReadApertureMacro( aBuff, aBuffSize, aText, m_Current_File );
+        if( !ReadApertureMacro( aBuff, aBuffSize, aText, m_Current_File ) )
+            ok = false;
+
         break;
 
     case AP_DEFINITION:
@@ -941,6 +943,11 @@ bool GERBER_FILE_IMAGE::ExecuteRS274XCommand( int aCommand, char* aBuff,
 
 bool GERBER_FILE_IMAGE::GetEndOfBlock( char* aBuff, unsigned int aBuffSize, char*& aText, FILE* gerber_file )
 {
+    // aText is null at end of file, even if syntactically invalid.
+    // For example, in the aperture-macro reader when the macro is truncated.
+    if( aText == nullptr )
+        return false;
+
     for( ; ; )
     {
         while( (aText < aBuff + aBuffSize) && *aText )
