@@ -24,6 +24,7 @@
 #include <vector>
 
 #include <frame_type.h>
+#include <gal/gal_display_options.h>
 #include <panel_snapping_base.h>
 #include <settings/snap_settings.h>
 
@@ -41,7 +42,7 @@ public:
     /// object that isn't the live one.
     struct VALUES
     {
-        int                     gridSnap = 0;
+        KIGFX::GRID_SNAPPING    gridSnap = KIGFX::GRID_SNAPPING::ALWAYS;
         MAGNETIC_SETTINGS       magnetics;
         SNAP_INFERENCE_SETTINGS inference;
     };
@@ -54,7 +55,7 @@ public:
      * @param aMagnetics points at the live object snapping settings, or null if the editor has none.
      * @param aDefaults yields the values the reset button restores.
      */
-    PANEL_SNAPPING( wxWindow* aParent, FRAME_T aFrameType, int* aGridSnap,
+    PANEL_SNAPPING( wxWindow* aParent, FRAME_T aFrameType, KIGFX::GRID_SNAPPING* aGridSnap,
                     SNAP_INFERENCE_SETTINGS* aInference, MAGNETIC_SETTINGS* aMagnetics,
                     std::function<VALUES()> aDefaults );
 
@@ -68,7 +69,7 @@ private:
 
     bool                     m_routing;
 
-    int*                     m_gridSnap;
+    KIGFX::GRID_SNAPPING*    m_gridSnap;
     SNAP_INFERENCE_SETTINGS* m_inference;
     MAGNETIC_SETTINGS*       m_magnetics;
     std::function<VALUES()>  m_defaults;

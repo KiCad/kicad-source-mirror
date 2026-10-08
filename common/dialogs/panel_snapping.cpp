@@ -19,6 +19,7 @@
 
 #include <algorithm>
 
+#include <config_map.h>
 #include <dialogs/panel_snapping.h>
 
 
@@ -74,7 +75,17 @@ static void fillMagneticChoice( wxChoice* aChoice, const std::vector<MAGNETIC_OP
 }
 
 
-PANEL_SNAPPING::PANEL_SNAPPING( wxWindow* aParent, FRAME_T aFrameType, int* aGridSnap,
+// The m_gridSnapChoice entries, in the form's order.
+static const UTIL::CFG_MAP<KIGFX::GRID_SNAPPING> gridSnapModeMap = {
+    // clang-format off
+    { KIGFX::GRID_SNAPPING::ALWAYS,    0 },  // Default
+    { KIGFX::GRID_SNAPPING::WITH_GRID, 1 },
+    { KIGFX::GRID_SNAPPING::NEVER,     2 },
+    // clang-format on
+};
+
+
+PANEL_SNAPPING::PANEL_SNAPPING( wxWindow* aParent, FRAME_T aFrameType, KIGFX::GRID_SNAPPING* aGridSnap,
                                 SNAP_INFERENCE_SETTINGS* aInference, MAGNETIC_SETTINGS* aMagnetics,
                                 std::function<VALUES()> aDefaults ) :
         PANEL_SNAPPING_BASE( aParent ),
@@ -84,6 +95,8 @@ PANEL_SNAPPING::PANEL_SNAPPING( wxWindow* aParent, FRAME_T aFrameType, int* aGri
         m_magnetics( aMagnetics ),
         m_defaults( std::move( aDefaults ) )
 {
+    wxASSERT( gridSnapModeMap.size() == static_cast<size_t>( m_gridSnapChoice->GetCount() ) );
+
     m_padOptions = MagneticSnapOptions( m_routing );
     m_trackOptions = MagneticSnapOptions( true );
     m_graphicsOptions = MagneticSnapOptions( false );
@@ -110,12 +123,7 @@ PANEL_SNAPPING::PANEL_SNAPPING( wxWindow* aParent, FRAME_T aFrameType, int* aGri
 
 void PANEL_SNAPPING::load( const VALUES& aValues )
 {
-    // The grid snapping mode is a bare int in the config, so a hand-edited file can name a mode
-    // that doesn't exist.
-    if( aValues.gridSnap >= 0 && aValues.gridSnap < static_cast<int>( m_gridSnapChoice->GetCount() ) )
-        m_gridSnapChoice->SetSelection( aValues.gridSnap );
-    else
-        m_gridSnapChoice->SetSelection( 0 );
+    m_gridSnapChoice->SetSelection( UTIL::GetConfigForVal( gridSnapModeMap, aValues.gridSnap ) );
 
     if( m_magnetics )
     {
@@ -160,7 +168,7 @@ bool PANEL_SNAPPING::TransferDataToWindow()
 
 bool PANEL_SNAPPING::TransferDataFromWindow()
 {
-    *m_gridSnap = m_gridSnapChoice->GetSelection();
+    *m_gridSnap = UTIL::GetValFromConfig( gridSnapModeMap, m_gridSnapChoice->GetSelection() );
 
     if( m_magnetics )
     {

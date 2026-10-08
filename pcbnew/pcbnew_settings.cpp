@@ -274,8 +274,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() :
     m_params.emplace_back( new PARAM<double>( "pcb_display.ratsnest_thickness",
             &m_Display.m_RatsnestThickness, 0.5 ) );
 
-    m_params.emplace_back( new PARAM<int>( "pcb_display.track_clearance_mode",
-            reinterpret_cast<int*>( &m_Display.m_TrackClearance ), SHOW_WITH_VIA_WHILE_ROUTING ) );
+    m_params.emplace_back( new PARAM_ENUM<TRACK_CLEARANCE_MODE>( "pcb_display.track_clearance_mode",
+            &m_Display.m_TrackClearance, SHOW_WITH_VIA_WHILE_ROUTING, DO_NOT_SHOW_CLEARANCE,
+            SHOW_WITH_VIA_ALWAYS ) );
 
     m_params.emplace_back( new PARAM<bool>( "pcb_display.track_fill",
             &m_Display.m_DisplayPcbTrackFill, true ) );

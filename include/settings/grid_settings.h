@@ -27,6 +27,12 @@
 
 class UNITS_PROVIDER;
 
+namespace KIGFX
+{
+enum class GRID_STYLE;
+enum class GRID_SNAPPING;
+} // namespace KIGFX
+
 /**
  * Common grid settings, available to every frame
  */
@@ -62,30 +68,30 @@ KICOMMON_API void  from_json( const nlohmann::json& j, GRID& g );
 
 struct GRID_SETTINGS
 {
-    bool              axes_enabled;
-    std::vector<GRID> grids;
-    wxString          user_grid_x;
-    wxString          user_grid_y;
-    int               last_size_idx;
-    int               fast_grid_1;
-    int               fast_grid_2;
-    double            line_width;
-    double            min_spacing;
-    bool              show;
-    int               style;
-    int               snap;
-    bool              force_component_snap;
-    bool              overrides_enabled;
-    bool              override_connected;
-    int               override_connected_idx;
-    bool              override_wires;
-    int               override_wires_idx;
-    bool              override_vias;
-    int               override_vias_idx;
-    bool              override_text;
-    int               override_text_idx;
-    bool              override_graphics;
-    int               override_graphics_idx;
+    bool                 axes_enabled;
+    std::vector<GRID>    grids;
+    wxString             user_grid_x;
+    wxString             user_grid_y;
+    int                  last_size_idx;
+    int                  fast_grid_1;
+    int                  fast_grid_2;
+    double               line_width;
+    double               min_spacing;
+    bool                 show;
+    KIGFX::GRID_STYLE    style;
+    KIGFX::GRID_SNAPPING snap;
+    bool                 force_component_snap;
+    bool                 overrides_enabled;
+    bool                 override_connected;
+    int                  override_connected_idx;
+    bool                 override_wires;
+    int                  override_wires_idx;
+    bool                 override_vias;
+    int                  override_vias_idx;
+    bool                 override_text;
+    int                  override_text_idx;
+    bool                 override_graphics;
+    int                  override_graphics_idx;
 };
 
 #endif
