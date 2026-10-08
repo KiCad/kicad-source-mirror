@@ -137,6 +137,7 @@ PANEL_GIT_WORKSPACE::PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG
                                    FromDIP( 110 ), wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE );
     showColumns();
 
+    m_versions->EnablePreview( m_frame );
     m_versions->SetModifiedChanged(
             [this]()
             {
@@ -1076,6 +1077,9 @@ void PANEL_GIT_WORKSPACE::showActions( const std::vector<WORKSPACE_ACTION>& aAct
         button->Enable( action.allowed );
         button->SetToolTip( tip );
     }
+
+    // A teammate's claim lengthens the labels, which must not be cut off
+    KIGIT::KeepDetailWidth( m_workspaceSplitter );
 }
 
 

@@ -73,6 +73,29 @@ KICOMMON_API wxString MdwVersionSideLabel( const MDW_ITEM_REF& aItem, const MDW_
 KICOMMON_API std::optional<std::pair<long, long>> MdwComparePair( long aRows, const std::vector<long>& aSelected,
                                                                   bool aHasWorkingRow );
 
+/// What one selected row of the Versions list is previewed against
+struct MDW_PREVIEW_BEFORE
+{
+    enum class WHAT
+    {
+        ROW,   ///< The version at row
+        ADDED, ///< Nothing, as the selected row is the oldest version
+        UNREAD ///< Unknown, as the versions before the selected row were not read
+    };
+
+    WHAT what = WHAT::UNREAD;
+    long row = -1;
+
+    bool operator==( const MDW_PREVIEW_BEFORE& ) const = default;
+};
+
+/**
+ * The row aRow is previewed against in a list of aRows versions, newest first, below a working copy row 0 when
+ * aHasWorkingRow. Each row shows against the row below it, and the last against nothing unless aOlderUnread says
+ * older versions were left unread. A row outside the list is UNREAD.
+ */
+KICOMMON_API MDW_PREVIEW_BEFORE MdwPreviewBefore( long aRow, long aRows, bool aHasWorkingRow, bool aOlderUnread );
+
 /// True when both files exist and their bytes differ. A file that cannot be read says nothing, so it never differs.
 KICOMMON_API bool MdwFilesDiffer( const wxString& aPath, const wxString& aOther );
 

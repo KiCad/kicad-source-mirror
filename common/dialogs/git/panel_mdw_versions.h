@@ -27,7 +27,9 @@
 #include <mdw/client/mdw_revision.h>
 
 #include <wx/datetime.h>
+#include <wx/longlong.h>
 #include <wx/panel.h>
+#include <wx/timer.h>
 
 #include <functional>
 #include <map>
@@ -39,10 +41,12 @@
 
 class EDA_BASE_FRAME;
 class GIT_DIFF_WORKSPACE;
+class GIT_FILE_DIFF_AREA;
 class MDW_SOURCE;
 class wxButton;
 class wxListCtrl;
 class wxListEvent;
+class wxSplitterWindow;
 class wxStaticText;
 
 
@@ -56,6 +60,8 @@ class PANEL_MDW_VERSIONS : public wxPanel
 public:
     PANEL_MDW_VERSIONS( wxWindow* aParent, wxWindowID aId = wxID_ANY, const wxPoint& aPos = wxDefaultPosition,
                         const wxSize& aSize = wxDefaultSize, long aStyle = wxTAB_TRAVERSAL );
+
+    ~PANEL_MDW_VERSIONS() override;
 
     /**
      * List the versions of aItem on aSource, ending any read or download of the item shown before.
@@ -78,6 +84,14 @@ public:
 
     /// Forget the item and end any read or download of it.
     void Clear();
+
+    /**
+     * Show the one selected version below the list, against the version before it. The working copy shows against
+     * the newest version and the oldest version against nothing. Double click opens the diff viewer.
+     *
+     * @param aFrame loads the drawings, and must outlive the panel.
+     */
+    void EnablePreview( EDA_BASE_FRAME* aFrame );
 
     /// Whether the item's checkout file differs from its versions, unset while that is not known.
     std::optional<bool> Modified() const { return m_shownModified; }
@@ -110,6 +124,17 @@ private:
         wxString path;
     };
 
+    /// The rows a preview shows, by their keys in m_rowKeys, for the item shown at generation
+    struct PREVIEW_KEY
+    {
+        unsigned generation = 0;
+        wxString before; ///< Empty when the version is the oldest and shows against nothing
+        wxString after;
+        wxLongLong workingSaved; ///< When the working copy was saved, so a new save shows again
+
+        bool operator==( const PREVIEW_KEY& ) const = default;
+    };
+
     void readHistory();
     void readChanges();
     void forgetChanges();
@@ -133,6 +158,9 @@ private:
 
     MDW_COMPARE_DOC compareDocument() const;
 
+    /// Give aOlder and aNewer their paths under aRoot, one file name in two folders as the diff viewer routes on it
+    void placeSides( const wxString& aRoot, SIDE& aOlder, SIDE& aNewer ) const;
+
     /// The rows Compare opens for the selected ones, older first
     std::optional<std::pair<long, long>> comparePair() const;
 
@@ -141,6 +169,16 @@ private:
 
     void updateCompare();
     void onCompare();
+
+    /// Preview the selection once it has settled, so moving down the list downloads only where it stops
+    void schedulePreview();
+    void updatePreview();
+
+    /// Let the preview's download stop without suppressing its reply, which frees the request's folder
+    void abandonPreview();
+
+    /// End the preview's download and show aNote in its place
+    void stopPreview( const wxString& aNote );
 
     /// Ask for a file and save the version at aRow to it
     void onSaveCopy( long aRow );
@@ -160,10 +198,12 @@ private:
     /// Put aSide at its path, then call aDone with the status
     MDW_OP fetch( const SIDE& aSide, std::function<void( const MDW_RESULT& )> aDone );
 
-    wxListCtrl*   m_list;
-    wxButton*     m_compareButton;
-    wxButton*     m_saveCopyButton;
-    wxStaticText* m_copyStatus;
+    wxSplitterWindow*   m_splitter;
+    wxListCtrl*         m_list;
+    GIT_FILE_DIFF_AREA* m_preview = nullptr;
+    wxButton*           m_compareButton;
+    wxButton*           m_saveCopyButton;
+    wxStaticText*       m_copyStatus;
 
     std::shared_ptr<MDW_SOURCE>         m_source;
     MDW_ITEM_REF                        m_item;
@@ -192,6 +232,11 @@ private:
     MDW_OP                              m_newerOp;
     std::optional<bool>                 m_shownModified; ///< What Modified() answers
     std::function<void()>               m_modifiedChanged;
+
+    unsigned                            m_previewRequests = 0; ///< Bumped as each preview request is abandoned
+    MDW_OP                              m_previewOp;
+    std::optional<PREVIEW_KEY>          m_previewFor;
+    wxTimer                             m_previewTimer;
 };
 
 #endif // PANEL_MDW_VERSIONS_H

@@ -162,6 +162,21 @@ std::optional<std::pair<long, long>> MdwComparePair( long aRows, const std::vect
 }
 
 
+MDW_PREVIEW_BEFORE MdwPreviewBefore( long aRow, long aRows, bool aHasWorkingRow, bool aOlderUnread )
+{
+    const long total = aRows + ( aHasWorkingRow ? 1 : 0 );
+
+    if( aRow < 0 || aRow >= total )
+        return { MDW_PREVIEW_BEFORE::WHAT::UNREAD };
+
+    if( aRow + 1 < total )
+        return { MDW_PREVIEW_BEFORE::WHAT::ROW, aRow + 1 };
+
+    // A partial history's last row is only the oldest listed, not the oldest version
+    return { aOlderUnread ? MDW_PREVIEW_BEFORE::WHAT::UNREAD : MDW_PREVIEW_BEFORE::WHAT::ADDED };
+}
+
+
 bool MdwFilesDiffer( const wxString& aPath, const wxString& aOther )
 {
     auto read = []( const wxString& aFile, std::string& aBytes )

@@ -144,6 +144,12 @@ void KIGIT::KeepDetailWidth( WX_SPLITTER_WINDOW* aSplitter )
     detail->SetMinSize( wxSize( detailMin, -1 ) );
     aSplitter->SetMinSize( wxSize( aSplitter->GetMinimumPaneSize() + frame + detailMin, -1 ) );
     aSplitter->SetPaneMinimums( aSplitter->GetMinimumPaneSize(), frame + detailMin );
+
+    // A pane that grew since the last size event would otherwise stay cut off until the next one
+    int widest = aSplitter->GetClientSize().x - frame - detailMin;
+
+    if( aSplitter->IsSplit() && aSplitter->GetSashPosition() > widest )
+        aSplitter->SetSashPosition( std::max( aSplitter->GetMinimumPaneSize(), widest ) );
 }
 
 

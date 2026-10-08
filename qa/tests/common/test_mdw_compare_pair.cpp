@@ -27,6 +27,28 @@
 #include <sstream>
 
 
+BOOST_AUTO_TEST_SUITE( MdwPreviewBefores )
+
+
+// The last row of a partial history must not pass for a newly added file
+BOOST_AUTO_TEST_CASE( LastRowShowsAgainstNothingOnlyWhenTheHistoryIsWhole )
+{
+    using WHAT = MDW_PREVIEW_BEFORE::WHAT;
+
+    BOOST_CHECK( MdwPreviewBefore( 2, 3, false, true ) == MDW_PREVIEW_BEFORE( { WHAT::UNREAD } ) );
+    BOOST_CHECK( MdwPreviewBefore( 3, 3, true, true ) == MDW_PREVIEW_BEFORE( { WHAT::UNREAD } ) );
+    BOOST_CHECK( MdwPreviewBefore( 2, 3, false, false ) == MDW_PREVIEW_BEFORE( { WHAT::ADDED } ) );
+    BOOST_CHECK( MdwPreviewBefore( 3, 3, true, false ) == MDW_PREVIEW_BEFORE( { WHAT::ADDED } ) );
+
+    // The working copy shows against the newest version, and a version against the one below it
+    BOOST_CHECK( MdwPreviewBefore( 0, 3, true, true ) == MDW_PREVIEW_BEFORE( { WHAT::ROW, 1 } ) );
+    BOOST_CHECK( MdwPreviewBefore( 1, 3, false, true ) == MDW_PREVIEW_BEFORE( { WHAT::ROW, 2 } ) );
+}
+
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
 BOOST_AUTO_TEST_SUITE( MdwComparePairs )
 
 

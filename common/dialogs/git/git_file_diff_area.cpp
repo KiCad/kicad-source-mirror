@@ -23,6 +23,7 @@
 #include <optional>
 #include <utility>
 
+#include <wx/filename.h>
 #include <wx/sizer.h>
 #include <wx/splitter.h>
 #include <wx/stattext.h>
@@ -51,6 +52,38 @@ std::string readAll( const wxString& aFile )
 
     std::ifstream in( aFile.fn_str(), std::ios::binary );
     return std::string( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+}
+
+
+// ShowSides diffs on the UI thread, so a larger file would stall it
+constexpr unsigned long SIDES_TEXT_LIMIT = 1024 * 1024; // 1 MiB
+
+
+bool tooLargeToDiffHere( const wxString& aFile )
+{
+    if( aFile.IsEmpty() )
+        return false;
+
+    const wxULongLong size = wxFileName::GetSize( aFile );
+
+    return size != wxInvalidSize && size > SIDES_TEXT_LIMIT;
+}
+
+
+// False, with the error set, when either side is not plain text
+bool diffTextSides( GIT_FILE_SIDES& aSides, std::vector<KIGIT::TEXT_DIFF_LINE>& aLines )
+{
+    std::string before = readAll( aSides.before );
+    std::string after = readAll( aSides.after );
+
+    if( KIGIT::TextLooksBinary( before ) || KIGIT::TextLooksBinary( after ) )
+    {
+        aSides.error = _( "This is not a plain text file, so there is no comparison to show." );
+        return false;
+    }
+
+    aLines = KIGIT::BuildTextDiff( KIGIT::SplitTextLines( before ), KIGIT::SplitTextLines( after ) );
+    return true;
 }
 
 
@@ -136,7 +169,7 @@ void GIT_FILE_DIFF_AREA::Clear()
 void GIT_FILE_DIFF_AREA::ShowFile( const std::shared_ptr<KIGIT_COMMON>& aSession, const MATERIALIZE& aMaterialize,
                                    const wxString& aBeforeLabel, const wxString& aAfterLabel )
 {
-    showNote( _( "Loading comparison..." ) );
+    ShowNote( _( "Loading comparison..." ) );
 
     auto result = std::make_shared<FILE_DIFF_RESULT>();
     result->sides.error = _( "Could not compare this file." );
@@ -156,19 +189,10 @@ void GIT_FILE_DIFF_AREA::ShowFile( const std::shared_ptr<KIGIT_COMMON>& aSession
                 if( !aMaterialize( aCommon, *result->workspace, result->sides ) )
                     return;
 
-                if( result->sides.kind == KICAD_DIFF::DOC_KIND::UNKNOWN )
+                if( result->sides.kind == KICAD_DIFF::DOC_KIND::UNKNOWN
+                    && !diffTextSides( result->sides, result->textLines ) )
                 {
-                    std::string before = readAll( result->sides.before );
-                    std::string after = readAll( result->sides.after );
-
-                    if( KIGIT::TextLooksBinary( before ) || KIGIT::TextLooksBinary( after ) )
-                    {
-                        result->sides.error = _( "This is not a plain text file, so there is no comparison to show." );
-                        return;
-                    }
-
-                    result->textLines =
-                            KIGIT::BuildTextDiff( KIGIT::SplitTextLines( before ), KIGIT::SplitTextLines( after ) );
+                    return;
                 }
 
                 result->ready = true;
@@ -180,7 +204,7 @@ void GIT_FILE_DIFF_AREA::ShowFile( const std::shared_ptr<KIGIT_COMMON>& aSession
 
                 if( !result->ready )
                 {
-                    showNote( result->sides.error );
+                    ShowNote( result->sides.error );
                     return;
                 }
 
@@ -190,7 +214,34 @@ void GIT_FILE_DIFF_AREA::ShowFile( const std::shared_ptr<KIGIT_COMMON>& aSession
 }
 
 
-void GIT_FILE_DIFF_AREA::showNote( const wxString& aNote )
+void GIT_FILE_DIFF_AREA::ShowSides( const GIT_FILE_SIDES& aSides, const wxString& aBeforeLabel,
+                                    const wxString& aAfterLabel )
+{
+    // A git comparison still loading must not replace these sides when it lands
+    m_query.Cancel();
+
+    GIT_FILE_SIDES                     sides = aSides;
+    std::vector<KIGIT::TEXT_DIFF_LINE> textLines;
+
+    if( sides.error.IsEmpty() && sides.kind == KICAD_DIFF::DOC_KIND::UNKNOWN )
+    {
+        if( tooLargeToDiffHere( sides.before ) || tooLargeToDiffHere( sides.after ) )
+            sides.error = _( "This file is too large to preview." );
+        else
+            diffTextSides( sides, textLines );
+    }
+
+    if( !sides.error.IsEmpty() )
+    {
+        ShowNote( sides.error );
+        return;
+    }
+
+    showDiff( sides, textLines, aBeforeLabel, aAfterLabel );
+}
+
+
+void GIT_FILE_DIFF_AREA::ShowNote( const wxString& aNote )
 {
     destroyCanvases();
     m_note->SetLabel( aNote );
@@ -212,7 +263,7 @@ void GIT_FILE_DIFF_AREA::showDiff( const GIT_FILE_SIDES& aSides, const std::vect
     else if( aSides.kind == KICAD_DIFF::DOC_KIND::SCH || aSides.kind == KICAD_DIFF::DOC_KIND::PCB )
         shown = showDrawingDiff( aSides.kind, aSides.before, aSides.after, aBeforeLabel, aAfterLabel );
     else
-        showNote( _( "Double click the file to open its comparison." ) );
+        ShowNote( _( "Double click the file to open its comparison." ) );
 
     if( shown )
         Layout();
@@ -247,7 +298,7 @@ bool GIT_FILE_DIFF_AREA::showDrawingDiff( KICAD_DIFF::DOC_KIND aKind, const wxSt
 
     if( !m_diffContext )
     {
-        showNote( reporter.HasMessage() ? reporter.GetMessages() : _( "Could not compare this file." ) );
+        ShowNote( reporter.HasMessage() ? reporter.GetMessages() : _( "Could not compare this file." ) );
         return false;
     }
 

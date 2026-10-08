@@ -20,6 +20,7 @@
 
 #include <dialogs/git/panel_mdw_versions.h>
 
+#include <dialogs/git/git_file_diff_area.h>
 #include <dialogs/git/git_status_entries.h>
 #include <dialogs/git/workspace_item_files.h>
 #include <confirm.h>
@@ -43,10 +44,12 @@
 #include <wx/listctrl.h>
 #include <wx/menu.h>
 #include <wx/sizer.h>
+#include <wx/splitter.h>
 #include <wx/stattext.h>
 #include <wx/datetime.h>
 #include <wx/intl.h>
 #include <wx/stdpaths.h>
+#include <wx/log.h>
 #include <wx/weakref.h>
 
 
@@ -82,6 +85,15 @@ struct COMPARISON
     wxString                            newerLabel;
     KICAD_DIFF::DOC_KIND                kind = KICAD_DIFF::DOC_KIND::UNKNOWN;
 };
+
+
+/// Stop aOp without suppressing its reply, since a cancelled reply would free its folder while the backend may still
+/// be writing there
+void settle( MDW_OP& aOp )
+{
+    aOp.RequestStop();
+    aOp.Detach();
+}
 } // namespace
 
 
@@ -92,7 +104,15 @@ PANEL_MDW_VERSIONS::PANEL_MDW_VERSIONS( wxWindow* aParent, wxWindowID aId, const
     wxBoxSizer*   sizer = new wxBoxSizer( wxVERTICAL );
     wxStaticText* label = new wxStaticText( this, wxID_ANY, _( "Versions:" ) );
 
-    m_list = new wxListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
+    // Holds the list alone until EnablePreview() splits the preview off below it
+    m_splitter =
+            new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE | wxSP_3DSASH );
+    m_splitter->SetMinimumPaneSize( FromDIP( 60 ) );
+    m_list = new wxListCtrl( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLC_REPORT );
+
+    // The list scrolls sideways, so its columns must not set the narrowest the panel may be
+    m_list->SetMinSize( wxSize( FromDIP( 240 ), -1 ) );
+    m_splitter->Initialize( m_list );
     m_copyStatus = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
                                     wxST_ELLIPSIZE_MIDDLE | wxST_NO_AUTORESIZE );
     m_compareButton = new wxButton( this, wxID_ANY, _( "Compare" ) );
@@ -104,7 +124,7 @@ PANEL_MDW_VERSIONS::PANEL_MDW_VERSIONS( wxWindow* aParent, wxWindowID aId, const
     buttons->Add( m_compareButton, 0 );
 
     sizer->Add( label, 0, wxBOTTOM, FromDIP( 4 ) );
-    sizer->Add( m_list, 1, wxEXPAND );
+    sizer->Add( m_splitter, 1, wxEXPAND );
     sizer->Add( m_copyStatus, 0, wxEXPAND | wxTOP, FromDIP( 4 ) );
     sizer->Add( buttons, 0, wxALIGN_RIGHT | wxTOP, FromDIP( 8 ) );
     SetSizer( sizer );
@@ -131,10 +151,28 @@ PANEL_MDW_VERSIONS::PANEL_MDW_VERSIONS( wxWindow* aParent, wxWindowID aId, const
     auto selectionChanged = [this]( wxListEvent& )
     {
         updateCompare();
+        schedulePreview();
     };
 
     m_list->Bind( wxEVT_LIST_ITEM_SELECTED, selectionChanged );
     m_list->Bind( wxEVT_LIST_ITEM_DESELECTED, selectionChanged );
+
+    m_previewTimer.SetOwner( this );
+
+    Bind(
+            wxEVT_TIMER,
+            [this]( wxTimerEvent& )
+            {
+                updatePreview();
+            },
+            m_previewTimer.GetId() );
+
+    m_list->Bind( wxEVT_LIST_ITEM_ACTIVATED,
+                  [this]( wxListEvent& )
+                  {
+                      if( m_compareButton->IsEnabled() )
+                          onCompare();
+                  } );
 
     m_list->Bind( wxEVT_LIST_ITEM_RIGHT_CLICK,
                   [this]( wxListEvent& aEvent )
@@ -157,12 +195,21 @@ PANEL_MDW_VERSIONS::PANEL_MDW_VERSIONS( wxWindow* aParent, wxWindowID aId, const
 }
 
 
+PANEL_MDW_VERSIONS::~PANEL_MDW_VERSIONS()
+{
+    settle( m_olderOp );
+    settle( m_newerOp );
+    settle( m_newestOp );
+    abandonPreview();
+}
+
+
 void PANEL_MDW_VERSIONS::Clear()
 {
     m_historyOp = MDW_OP();
-    m_olderOp = MDW_OP();
-    m_newerOp = MDW_OP();
-    m_newestOp = MDW_OP();
+    settle( m_olderOp );
+    settle( m_newerOp );
+    settle( m_newestOp );
     m_copyOp = MDW_OP();
     m_copying = false;
     m_itemGeneration++;
@@ -179,7 +226,19 @@ void PANEL_MDW_VERSIONS::Clear()
     m_rowKeys.clear();
     m_list->DeleteAllItems();
     updateCompare();
+    stopPreview( _( "Select one version to preview it." ) );
     showModified( std::nullopt );
+}
+
+
+void PANEL_MDW_VERSIONS::EnablePreview( EDA_BASE_FRAME* aFrame )
+{
+    if( m_preview )
+        return;
+
+    m_preview = new GIT_FILE_DIFF_AREA( m_splitter, aFrame );
+    m_splitter->SplitHorizontally( m_list, m_preview, FromDIP( 140 ) );
+    updatePreview();
 }
 
 
@@ -385,6 +444,7 @@ bool PANEL_MDW_VERSIONS::differsFromNewest()
     if( m_newestFor == revisionId )
         return hasWorkingCopy();
 
+    settle( m_newestOp );
     m_newestFor = revisionId;
     m_newestScratch = std::make_shared<GIT_DIFF_WORKSPACE>();
 
@@ -395,8 +455,13 @@ bool PANEL_MDW_VERSIONS::differsFromNewest()
 
     m_newestOp = m_source->Download(
             m_item, revisionId, scratch,
-            [this, revisionId, modified, scratch]( const MDW_RESULT& aResult, const MDW_REVISION& )
+            [this, self = wxWeakRef<PANEL_MDW_VERSIONS>( this ), generation = m_itemGeneration,
+             folder = m_newestScratch, revisionId, modified, scratch]( const MDW_RESULT& aResult, const MDW_REVISION& )
             {
+                // A settled download still answers after the panel moved on, and holds its folder until then
+                if( !self || generation != m_itemGeneration || folder != m_newestScratch )
+                    return;
+
                 if( aResult.IsOk() )
                 {
                     m_newest[m_item.item_id] = { revisionId, modified, MdwFilesDiffer( m_checkoutPath, scratch ) };
@@ -462,6 +527,9 @@ void PANEL_MDW_VERSIONS::fillList()
     // Rows enough to scroll narrow the list without a size event
     fitMessageColumn();
     updateCompare();
+
+    // Restoring the selection need not send events, and the selected row may be gone
+    schedulePreview();
 }
 
 
@@ -571,6 +639,20 @@ bool PANEL_MDW_VERSIONS::saveWorkingCopy( const wxString& aPath ) const
 }
 
 
+void PANEL_MDW_VERSIONS::placeSides( const wxString& aRoot, SIDE& aOlder, SIDE& aNewer ) const
+{
+    const wxString fileName = compareDocument().fileName;
+    wxFileName     older( aRoot + wxS( "/older/" ) + fileName );
+    wxFileName     newer( aRoot + wxS( "/newer/" ) + fileName );
+
+    older.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+    newer.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
+
+    aOlder.path = older.GetFullPath();
+    aNewer.path = newer.GetFullPath();
+}
+
+
 MDW_OP PANEL_MDW_VERSIONS::fetch( const SIDE& aSide, std::function<void( const MDW_RESULT& )> aDone )
 {
     if( aSide.revisionId.IsEmpty() )
@@ -608,26 +690,29 @@ void PANEL_MDW_VERSIONS::onCompare()
         return;
     }
 
-    // Same name in two folders, since the diff viewer routes on the file name
-    wxFileName older( comparison->scratch->Root() + wxS( "/older/" ) + doc.fileName );
-    wxFileName newer( comparison->scratch->Root() + wxS( "/newer/" ) + doc.fileName );
-
-    older.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-    newer.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL );
-
     SIDE olderSide = sideAt( pair->first );
     SIDE newerSide = sideAt( pair->second );
 
-    olderSide.path = comparison->older = older.GetFullPath();
-    newerSide.path = comparison->newer = newer.GetFullPath();
+    placeSides( comparison->scratch->Root(), olderSide, newerSide );
+    comparison->older = olderSide.path;
+    comparison->newer = newerSide.path;
     comparison->olderLabel = olderSide.label;
     comparison->newerLabel = newerSide.label;
 
     m_comparing = true;
     updateCompare();
 
-    auto finish = [this, comparison]( const MDW_RESULT& aStatus )
+    // A settled download still answers after the panel moved on, and must not open the old comparison
+    auto current = [this, self = wxWeakRef<PANEL_MDW_VERSIONS>( this ), generation = m_itemGeneration]()
     {
+        return self && generation == m_itemGeneration;
+    };
+
+    auto finish = [this, current, comparison]( const MDW_RESULT& aStatus )
+    {
+        if( !current() )
+            return;
+
         if( !aStatus.IsOk() )
         {
             m_comparing = false;
@@ -640,6 +725,10 @@ void PANEL_MDW_VERSIONS::onCompare()
         KICAD_DIFF::DispatchOpenDiffDialog( m_frame->Kiway(), comparison->kind, comparison->older, comparison->newer,
                                             comparison->olderLabel, comparison->newerLabel, this, &reporter );
 
+        // The viewer is modal, and the panel can close or show another item under it
+        if( !current() )
+            return;
+
         if( reporter.HasMessage() )
             DisplayErrorMessage( this, _( "Could not open the comparison." ), reporter.GetMessages() );
 
@@ -648,14 +737,27 @@ void PANEL_MDW_VERSIONS::onCompare()
         updateCompare();
     };
 
-    m_olderOp = fetch( olderSide,
-                       [this, newerSide, finish]( const MDW_RESULT& aStatus )
-                       {
-                           if( aStatus.IsOk() )
-                               m_newerOp = fetch( newerSide, finish );
-                           else
-                               finish( aStatus );
-                       } );
+    // The working copy's side answers inside fetch, whose modal viewer can close the panel before it returns
+    MDW_OP older = fetch( olderSide,
+                          [this, current, newerSide, finish]( const MDW_RESULT& aStatus )
+                          {
+                              if( !current() )
+                                  return;
+
+                              if( !aStatus.IsOk() )
+                              {
+                                  finish( aStatus );
+                                  return;
+                              }
+
+                              MDW_OP newer = fetch( newerSide, finish );
+
+                              if( current() )
+                                  m_newerOp = std::move( newer );
+                          } );
+
+    if( current() )
+        m_olderOp = std::move( older );
 }
 
 
@@ -669,6 +771,159 @@ wxString PANEL_MDW_VERSIONS::copyFolder() const
         return m_frame->Prj().GetProjectPath();
 
     return wxStandardPaths::Get().GetDocumentsDir();
+}
+
+
+void PANEL_MDW_VERSIONS::schedulePreview()
+{
+    if( m_preview )
+        m_previewTimer.StartOnce( 200 );
+}
+
+
+void PANEL_MDW_VERSIONS::abandonPreview()
+{
+    settle( m_previewOp );
+    ++m_previewRequests;
+}
+
+
+void PANEL_MDW_VERSIONS::stopPreview( const wxString& aNote )
+{
+    abandonPreview();
+    m_previewFor.reset();
+
+    if( m_preview )
+        m_preview->ShowNote( aNote );
+}
+
+
+void PANEL_MDW_VERSIONS::updatePreview()
+{
+    if( !m_preview )
+        return;
+
+    const std::vector<long> rows = selectedRows( *m_list );
+
+    if( !m_source || rows.size() != 1 || rows[0] >= static_cast<long>( m_rowKeys.size() ) )
+    {
+        stopPreview( _( "Select one version to preview it." ) );
+        return;
+    }
+
+    const KICAD_DIFF::DOC_KIND kind = compareDocument().kind;
+
+    if( kind != KICAD_DIFF::DOC_KIND::UNKNOWN && kind != KICAD_DIFF::DOC_KIND::SCH
+        && kind != KICAD_DIFF::DOC_KIND::PCB )
+    {
+        stopPreview( _( "Double-click the version to open its comparison." ) );
+        return;
+    }
+
+    const long               row = rows[0];
+    const MDW_PREVIEW_BEFORE before =
+            MdwPreviewBefore( row, static_cast<long>( m_revisions.size() ), hasWorkingCopy(), m_olderUnread );
+
+    if( before.what == MDW_PREVIEW_BEFORE::WHAT::UNREAD )
+    {
+        stopPreview( _( "The version before this one has not been read." ) );
+        return;
+    }
+
+    const bool hasBefore = before.what == MDW_PREVIEW_BEFORE::WHAT::ROW;
+    wxLongLong workingSaved = 0;
+
+    if( m_rowKeys[row].IsEmpty() )
+    {
+        const wxDateTime saved = wxFileName( m_workingCopy ).GetModificationTime();
+
+        if( saved.IsValid() )
+            workingSaved = saved.GetValue();
+    }
+
+    const PREVIEW_KEY key{ m_itemGeneration, hasBefore ? m_rowKeys[before.row] : wxString(), m_rowKeys[row],
+                           workingSaved };
+
+    // Refilling the list keeps the selection, which must not download it again
+    if( key == m_previewFor )
+        return;
+
+    abandonPreview();
+    m_previewFor = key;
+
+    // Owned by the request's replies, so it goes only once the backend has finished writing to it
+    auto scratch = std::make_shared<GIT_DIFF_WORKSPACE>();
+
+    if( !scratch->IsOk() )
+    {
+        m_preview->ShowNote( _( "Could not download the versions to compare." ) );
+        return;
+    }
+
+    const unsigned                request = m_previewRequests;
+    const wxString                folder = scratch->Root();
+    wxWeakRef<PANEL_MDW_VERSIONS> self( this );
+    SIDE                          olderSide;
+    SIDE                          newerSide = sideAt( row );
+
+    if( hasBefore )
+        olderSide = sideAt( before.row );
+    else
+        olderSide.label = _( "Added" );
+
+    placeSides( folder, olderSide, newerSide );
+
+    GIT_FILE_SIDES sides;
+
+    sides.before = hasBefore ? olderSide.path : wxString();
+    sides.after = newerSide.path;
+    sides.kind = kind;
+
+    m_preview->ShowNote( _( "Loading comparison..." ) );
+
+    // An abandoned request still answers, and only the newest one may draw
+    auto current = [this, self, request]()
+    {
+        return self && request == m_previewRequests;
+    };
+
+    auto show = [this, current, scratch, folder, sides, olderSide, newerSide]( const MDW_RESULT& aStatus )
+    {
+        if( !current() )
+            return;
+
+        GIT_FILE_SIDES shown = sides;
+
+        if( !aStatus.IsOk() )
+        {
+            shown.error = wxString::Format( wxS( "%s\n%s" ), _( "Could not download the versions to compare." ),
+                                            MdwErrorText( aStatus ) );
+        }
+
+        m_preview->ShowSides( shown, olderSide.label, newerSide.label );
+
+        // The download has answered and the drawings are loaded, so nothing holds the folder now
+        wxLogNull quiet;
+        wxFileName::Rmdir( folder, wxPATH_RMDIR_RECURSIVE );
+    };
+
+    if( !hasBefore )
+    {
+        m_previewOp = fetch( newerSide, show );
+        return;
+    }
+
+    m_previewOp = fetch( olderSide,
+                         [this, current, newerSide, show]( const MDW_RESULT& aStatus )
+                         {
+                             if( !current() )
+                                 return;
+
+                             if( aStatus.IsOk() )
+                                 m_previewOp = fetch( newerSide, show );
+                             else
+                                 show( aStatus );
+                         } );
 }
 
 

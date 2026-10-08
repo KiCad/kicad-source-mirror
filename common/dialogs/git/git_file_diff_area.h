@@ -60,11 +60,17 @@ public:
     void ShowFile( const std::shared_ptr<KIGIT_COMMON>& aSession, const MATERIALIZE& aMaterialize,
                    const wxString& aBeforeLabel, const wxString& aAfterLabel );
 
+    /// Compare two sides already written out, or show their error instead. Needs no git session, and diffs a text
+    /// file on the calling thread, so a side over 1 MiB shows a note instead.
+    void ShowSides( const GIT_FILE_SIDES& aSides, const wxString& aBeforeLabel, const wxString& aAfterLabel );
+
+    /// Show aNote in place of a comparison.
+    void ShowNote( const wxString& aNote );
+
     /// Drop the documents and the drawing canvases.
     void Clear();
 
 private:
-    void showNote( const wxString& aNote );
     void showDiff( const GIT_FILE_SIDES& aSides, const std::vector<KIGIT::TEXT_DIFF_LINE>& aTextLines,
                    const wxString& aBeforeLabel, const wxString& aAfterLabel );
     void showTextDiff( const std::vector<KIGIT::TEXT_DIFF_LINE>& aLines );
