@@ -90,6 +90,7 @@ NODE::~NODE()
     m_joints.clear();
 
     std::vector<const ITEM*> toDelete;
+    std::vector<const ITEM*> parentedHoles;
 
     toDelete.reserve( m_index->Size() );
 
@@ -106,8 +107,9 @@ NODE::~NODE()
                     // heap of trouble.
                     assert( hole->ParentPadVia()->BelongsTo( this ) );
 
-                    // we will encounter its parent later, disguised as VIA or SOLID.
-                    // don't bother reparenting the hole now, it's deleted anyway.
+                    // Its parent comes by as a VIA or SOLID, and deletes only a hole it owns
+                    hole->SetOwner( hole->ParentPadVia() );
+                    parentedHoles.push_back( hole );
                 }
                 else
                 {
@@ -125,6 +127,7 @@ NODE::~NODE()
     if( m_ruleResolver )
     {
         m_ruleResolver->ClearCacheForItems( toDelete );
+        m_ruleResolver->ClearCacheForItems( parentedHoles );
     }
 
     for( const ITEM* item : toDelete )
@@ -1597,17 +1600,23 @@ void NODE::releaseGarbage()
     std::vector<const ITEM*> toDelete;
     toDelete.reserve( m_garbageItems.size() );
 
+    std::vector<const ITEM*> holes;
+
     for( ITEM* item : m_garbageItems )
     {
         if( !item->BelongsTo( this ) )
         {
             toDelete.push_back( item );
+
+            if( item->HasHole() )
+                holes.push_back( item->Hole() );
         }
     }
 
     if( m_ruleResolver )
     {
         m_ruleResolver->ClearCacheForItems( toDelete );
+        m_ruleResolver->ClearCacheForItems( holes );
     }
 
     for( const ITEM* item : toDelete)

@@ -2189,3 +2189,57 @@ BOOST_FIXTURE_TEST_CASE( PNSMarkViolationsKeepsPadstackViaShape, PNS_TEST_FIXTUR
     BOOST_REQUIRE_MESSAGE( iface.m_viasDisplayed > 0, "Via was not highlighted as a violation" );
     BOOST_CHECK_MESSAGE( iface.m_nullShapes == 0, "Highlighted front/inner/back via has no resolvable shape" );
 }
+
+
+namespace
+{
+class COUNTED_HOLE : public PNS::HOLE
+{
+public:
+    COUNTED_HOLE( SHAPE* aShape, int& aAlive ) :
+            PNS::HOLE( aShape ),
+            m_alive( aAlive )
+    {
+        m_alive++;
+    }
+
+    ~COUNTED_HOLE() override { m_alive--; }
+
+private:
+    int& m_alive;
+};
+} // namespace
+
+
+/**
+ * A world node takes over the holes of the vias and pads added to it, and has to free them
+ * with their parents. The router rebuilds its world on every settings change.
+ */
+BOOST_AUTO_TEST_CASE( PNSNodeFreesHolesOfItsViasAndSolids )
+{
+    int holesAlive = 0;
+
+    {
+        PNS::NODE world;
+
+        PNS::VIA* via = new PNS::VIA( VECTOR2I( 0, 0 ), PNS_LAYER_RANGE( F_Cu, B_Cu ), 50000, 10000 );
+        via->SetHole( new COUNTED_HOLE( new SHAPE_CIRCLE( VECTOR2I( 0, 0 ), 5000 ), holesAlive ) );
+        world.AddRaw( via );
+
+        std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
+        solid->SetShape( new SHAPE_CIRCLE( VECTOR2I( 1000000, 0 ), 50000 ) );
+        solid->SetLayers( PNS_LAYER_RANGE( F_Cu, B_Cu ) );
+        solid->SetHole( new COUNTED_HOLE( new SHAPE_CIRCLE( VECTOR2I( 1000000, 0 ), 5000 ), holesAlive ) );
+        world.Add( std::move( solid ) );
+
+        // A via added and removed again is freed as garbage, with the hole handed back to it
+        PNS::VIA* removed = new PNS::VIA( VECTOR2I( 2000000, 0 ), PNS_LAYER_RANGE( F_Cu, B_Cu ), 50000, 10000 );
+        removed->SetHole( new COUNTED_HOLE( new SHAPE_CIRCLE( VECTOR2I( 2000000, 0 ), 5000 ), holesAlive ) );
+        world.AddRaw( removed );
+        world.Remove( removed );
+
+        BOOST_CHECK_EQUAL( holesAlive, 3 );
+    }
+
+    BOOST_CHECK_EQUAL( holesAlive, 0 );
+}
