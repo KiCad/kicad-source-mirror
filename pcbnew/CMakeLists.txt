@@ -441,6 +441,7 @@ set( PCBNEW_CLASS_SRCS
     cleanup_item.cpp
     convert_shape_list_to_polygon.cpp
     cross-probing.cpp
+    pcb_io/kicad_sexpr/writers/pcb_writer_v9.cpp
     edit_track_width.cpp
     files.cpp
     footprint_info_impl.cpp

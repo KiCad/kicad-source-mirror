@@ -447,6 +447,9 @@ public:
     }
 
     PNS::MEANDER_SETTINGS& GetSettings() { return m_settings; }
+    const PNS::MEANDER_SETTINGS& GetSettings() const { return m_settings; }
+
+    const wxString& GetTuningInfo() const { return m_tuningInfo; }
 
     int  GetMinAmplitude() const { return m_settings.m_minAmplitude; }
     void SetMinAmplitude( int aValue )
