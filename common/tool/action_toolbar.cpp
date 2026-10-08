@@ -709,6 +709,13 @@ void ACTION_TOOLBAR::UpdateControlWidth( int aID )
 
 void ACTION_TOOLBAR::ClearToolbar()
 {
+    // A group made again gets a new id, so the frame would keep this one's handler for good
+    if( m_toolManager )
+    {
+        for( const auto& [groupId, group] : m_actionGroups )
+            m_toolManager->GetToolHolder()->UnregisterUIUpdateHandler( groupId );
+    }
+
     // Clear all the maps keeping track of our items on the toolbar
     m_toolMenus.clear();
     m_actionGroups.clear();
