@@ -98,6 +98,16 @@ public:
      */
     void SyncLayersVisibility( const BOARD* aBoard );
 
+    /**
+     * Apply the layer and element visibility of a #BOARD to a view.
+     *
+     * @param aView is the view to update.
+     * @param aBoard contains layers visibility settings to be applied.
+     * @param aActiveLayer is the layer being edited. Its clearance outlines are the only ones shown,
+     *                     and none are if it is not a copper layer.
+     */
+    static void SyncLayersVisibility( KIGFX::VIEW& aView, const BOARD* aBoard, PCB_LAYER_ID aActiveLayer );
+
     /// @copydoc EDA_DRAW_PANEL_GAL::GetMsgPanelInfo()
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

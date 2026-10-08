@@ -559,60 +559,79 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
 
 void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
 {
+    PCB_LAYER_ID    activeLayer = UNDEFINED_LAYER;
+    PCB_BASE_FRAME* frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
+
+    // A preview canvas edits no layer, so it shows no clearance outlines
+    if( frame && frame->GetCanvas() == this )
+        activeLayer = frame->GetActiveLayer();
+
+    SyncLayersVisibility( *m_view, aBoard, activeLayer );
+}
+
+
+void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( KIGFX::VIEW& aView, const BOARD* aBoard, PCB_LAYER_ID aActiveLayer )
+{
     // Load layer & elements visibility settings
     for( int i = 0; i < PCB_LAYER_ID_COUNT; ++i )
-        m_view->SetLayerVisible( i, aBoard->IsLayerVisible( PCB_LAYER_ID( i ) ) );
+        aView.SetLayerVisible( i, aBoard->IsLayerVisible( PCB_LAYER_ID( i ) ) );
 
     for( GAL_LAYER_ID i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; ++i )
-        m_view->SetLayerVisible( i, aBoard->IsElementVisible( i ) );
+        aView.SetLayerVisible( i, aBoard->IsElementVisible( i ) );
 
     // Via layers controlled by dependencies
-    m_view->SetLayerVisible( LAYER_VIA_MICROVIA, true );
-    m_view->SetLayerVisible( LAYER_VIA_BLIND, true );
-    m_view->SetLayerVisible( LAYER_VIA_BURIED, true );
-    m_view->SetLayerVisible( LAYER_VIA_THROUGH, true );
+    aView.SetLayerVisible( LAYER_VIA_MICROVIA, true );
+    aView.SetLayerVisible( LAYER_VIA_BLIND, true );
+    aView.SetLayerVisible( LAYER_VIA_BURIED, true );
+    aView.SetLayerVisible( LAYER_VIA_THROUGH, true );
 
     // Always enable netname layers, as their visibility is controlled by layer dependencies
     for( int i = NETNAMES_LAYER_ID_START; i < NETNAMES_LAYER_ID_END; ++i )
-        m_view->SetLayerVisible( i, true );
+        aView.SetLayerVisible( i, true );
 
     for( int i = LAYER_ZONE_START; i < LAYER_ZONE_END; i++ )
-        m_view->SetLayerVisible( i, true );
+        aView.SetLayerVisible( i, true );
 
     for( int i = LAYER_PAD_COPPER_START; i < LAYER_PAD_COPPER_END; i++ )
-        m_view->SetLayerVisible( i, true );
+        aView.SetLayerVisible( i, true );
 
     for( int i = LAYER_VIA_COPPER_START; i < LAYER_VIA_COPPER_END; i++ )
-        m_view->SetLayerVisible( i, true );
+        aView.SetLayerVisible( i, true );
 
     // Holes draw their drill map symbols here. Whether anything appears is governed by the
     // documentation layer these depend on, not by this flag
     for( int i = LAYER_DRILL_SYMBOL_START; i < LAYER_DRILL_SYMBOL_END; i++ )
-        m_view->SetLayerVisible( i, true );
+        aView.SetLayerVisible( i, true );
 
+    // Clearance outlines show for the copper layer being edited alone. Every caller that applies a
+    // board's visibility has to leave that one on, or a canvas switch or a layer preset drops the
+    // outlines until the active layer next changes.
     for( int i = LAYER_CLEARANCE_START; i < LAYER_CLEARANCE_END; i++ )
-        m_view->SetLayerVisible( i, false );
+        aView.SetLayerVisible( i, false );
+
+    if( IsCopperLayer( aActiveLayer ) )
+        aView.SetLayerVisible( CLEARANCE_LAYER_FOR( aActiveLayer ), true );
 
     for( int i = LAYER_POINT_START; i < LAYER_POINT_END; i++ )
-        m_view->SetLayerVisible( i, true );
+        aView.SetLayerVisible( i, true );
 
     for( int i = LAYER_BITMAP_START; i < LAYER_BITMAP_END; i++ )
-        m_view->SetLayerVisible( i, true );
+        aView.SetLayerVisible( i, true );
 
     for( int i = LAYER_UI_START; i < LAYER_UI_END; i++ )
-        m_view->SetLayerVisible( i, true );
+        aView.SetLayerVisible( i, true );
 
     // Enable some layers that are GAL specific
-    m_view->SetLayerVisible( LAYER_PAD_PLATEDHOLES, true );
-    m_view->SetLayerVisible( LAYER_NON_PLATEDHOLES, true );
-    m_view->SetLayerVisible( LAYER_PAD_HOLEWALLS, true );
-    m_view->SetLayerVisible( LAYER_VIA_HOLES, true );
-    m_view->SetLayerVisible( LAYER_VIA_HOLEWALLS, true );
-    m_view->SetLayerVisible( LAYER_GP_OVERLAY, true );
-    m_view->SetLayerVisible( LAYER_SELECT_OVERLAY, true );
-    m_view->SetLayerVisible( LAYER_RATSNEST, true );
-    m_view->SetLayerVisible( LAYER_MARKER_SHADOWS, true );
-    m_view->SetLayerVisible( LAYER_DRC_HIGHLIGHTED, true );
+    aView.SetLayerVisible( LAYER_PAD_PLATEDHOLES, true );
+    aView.SetLayerVisible( LAYER_NON_PLATEDHOLES, true );
+    aView.SetLayerVisible( LAYER_PAD_HOLEWALLS, true );
+    aView.SetLayerVisible( LAYER_VIA_HOLES, true );
+    aView.SetLayerVisible( LAYER_VIA_HOLEWALLS, true );
+    aView.SetLayerVisible( LAYER_GP_OVERLAY, true );
+    aView.SetLayerVisible( LAYER_SELECT_OVERLAY, true );
+    aView.SetLayerVisible( LAYER_RATSNEST, true );
+    aView.SetLayerVisible( LAYER_MARKER_SHADOWS, true );
+    aView.SetLayerVisible( LAYER_DRC_HIGHLIGHTED, true );
 }
 
 
