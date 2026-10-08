@@ -1230,6 +1230,13 @@ PROJECT& SETTINGS_MANAGER::Prj() const
 }
 
 
+void SETTINGS_MANAGER::ReleaseProjectLocks()
+{
+    for( const std::unique_ptr<PROJECT>& project : m_projects_list )
+        project->SetProjectLock( nullptr );
+}
+
+
 bool SETTINGS_MANAGER::IsProjectOpen() const
 {
     return !m_projects.empty();
@@ -1310,7 +1317,9 @@ bool SETTINGS_MANAGER::SaveProject( const wxString& aFullPath, PROJECT* aProject
     aProject->GetLocalSettings().SaveToFile( projectPath );
 
     // Project file is "real" data; report all save errors
-    return project->SaveToFile( projectPath );
+    project->SaveToFile( projectPath );
+
+    return !project->LastSaveFailed();
 }
 
 
@@ -1433,16 +1442,21 @@ bool SETTINGS_MANAGER::unloadProjectFile( PROJECT* aProject, bool aSave )
         // Resolve from aProject directly; during a switch Prj() is no longer aProject.
         wxString projectPath = aProject->GetProjectPath();
 
+        // The project stays loaded when its file cannot be saved, so this has to be settled before
+        // the local settings it still points at are released
+        if( aSave )
+        {
+            ( *it )->SaveToFile( projectPath );
+
+            // An unmodified project file is skipped rather than saved and must still unload
+            if( ( *it )->LastSaveFailed() )
+                return false;
+        }
+
         bool saveLocalSettings = aSave && aProject->GetLocalSettings().ShouldAutoSave();
 
         // Local settings are best-efforts.  No error is returned here.
         FlushAndRelease( &aProject->GetLocalSettings(), saveLocalSettings );
-
-        if( aSave )
-        {
-            if( !( *it )->SaveToFile( projectPath ) )
-                return false;
-        }
 
         m_settings.erase( it );
     }

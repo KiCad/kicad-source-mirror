@@ -157,6 +157,14 @@ public:
     bool IsFileSynced() const { return m_fileSynced; }
 
     /**
+     * SaveToFile() also returns false when it had nothing to write, so its result cannot tell a
+     * skipped save from a lost one.
+     *
+     * @return true if the most recent SaveToFile() had changes to write and could not write them
+     */
+    bool LastSaveFailed() const { return m_lastSaveFailed; }
+
+    /**
      * Resets all parameters to default values.  Does NOT write to file or update underlying JSON.
      */
     void ResetToDefaults();
@@ -377,6 +385,9 @@ protected:
 
     /// True once the store has been synchronized with an on-disk file (loaded or saved)
     bool m_fileSynced;
+
+    /// True if the most recent SaveToFile() had changes to write and could not write them
+    bool m_lastSaveFailed;
 
     /// Whether or not to delete legacy file after migration
     bool m_deleteLegacyAfterMigration;

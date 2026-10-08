@@ -309,6 +309,14 @@ public:
     bool UnloadProject( PROJECT* aProject, bool aSave = true );
 
     /**
+     * Give up the lock of every loaded project without unloading it.
+     *
+     * Releasing a lock deletes its lock file through wxWidgets, so a project that is still loaded
+     * when the application exits must let go of it before static destruction begins.
+     */
+    void ReleaseProjectLocks();
+
+    /**
      * Helper for checking if we have a project open.
      *
      * @todo This should be deprecated along with Prj() once we support multiple projects fully.

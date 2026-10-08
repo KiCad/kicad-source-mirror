@@ -76,6 +76,7 @@ JSON_SETTINGS::JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation,
         m_writeFile( aWriteFile ),
         m_modified( false ),
         m_fileSynced( false ),
+        m_lastSaveFailed( false ),
         m_deleteLegacyAfterMigration( true ),
         m_resetParamsIfMissing( true ),
         m_schemaVersion( aSchemaVersion ),
@@ -419,6 +420,8 @@ std::map<std::string, nlohmann::json> JSON_SETTINGS::GetFileHistories()
 
 bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 {
+    m_lastSaveFailed = false;
+
     if( !m_writeFile )
         return false;
 
@@ -444,21 +447,6 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
         wxLogTrace( traceSettings,
                     wxT( "File for %s doesn't exist and m_createIfMissing == false; not saving" ),
                     GetFullFilename() );
-        return false;
-    }
-
-    // Ensure the path exists, and create it if not.
-    if( !path.DirExists() && !path.Mkdir() )
-    {
-        wxLogTrace( traceSettings, wxT( "Warning: could not create path %s, can't save %s" ),
-                    path.GetPath(), GetFullFilename() );
-        return false;
-    }
-
-    if(   ( path.FileExists() && !path.IsFileWritable() )
-       || ( !path.FileExists() && !path.IsDirWritable() ) )
-    {
-        wxLogTrace( traceSettings, wxT( "File for %s is read-only; not saving" ), GetFullFilename() );
         return false;
     }
 
@@ -512,7 +500,22 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
             }
         }
 
-        if( !KIPLATFORM::IO::AtomicWriteFile( path.GetFullPath(), payload.data(), payload.size(), &writeError ) )
+        // The destination is only checked once there is something to write, so that a store with
+        // no changes is skipped rather than reported as a failure to save
+        if( !path.DirExists() && !path.Mkdir() )
+        {
+            wxLogTrace( traceSettings, wxT( "Warning: could not create path %s, can't save %s" ),
+                        path.GetPath(), GetFullFilename() );
+            success = false;
+        }
+        else if(   ( path.FileExists() && !path.IsFileWritable() )
+                || ( !path.FileExists() && !path.IsDirWritable() ) )
+        {
+            wxLogTrace( traceSettings, wxT( "File for %s is read-only; not saving" ), GetFullFilename() );
+            success = false;
+        }
+        else if( !KIPLATFORM::IO::AtomicWriteFile( path.GetFullPath(), payload.data(), payload.size(),
+                                                   &writeError ) )
         {
             wxLogTrace( traceSettings, wxT( "Warning: could not save %s: %s" ), GetFullFilename(), writeError );
             success = false;
@@ -535,6 +538,8 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
         m_modified = false;
         m_fileSynced = true;
     }
+
+    m_lastSaveFailed = !success;
 
     return success;
 }

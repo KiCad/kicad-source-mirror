@@ -190,6 +190,11 @@ void PGM_BASE::Destroy()
     winrt::uninit_apartment();
 #endif
 
+    // A project that failed to unload still holds its lock, and removing the lock file during
+    // static destruction would run after wxWidgets has torn down its filename conversion.
+    if( m_settings_manager )
+        m_settings_manager->ReleaseProjectLocks();
+
     // Shut down the thread pool explicitly here, before static destruction begins.
     // On macOS, if the thread pool destructor runs during static destruction
     // (via __cxa_finalize_ranges), the condition variables may be in an invalid state,
