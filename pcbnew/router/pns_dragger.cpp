@@ -211,7 +211,7 @@ bool DRAGGER::startDragArc( const VECTOR2D& aP, ARC* aArc )
             VECTOR2I perp( -radial.y, radial.x );
             VECTOR2I toMid = mid - aEndpoint;
 
-            if( perp.x * toMid.x + perp.y * toMid.y > 0 )
+            if( perp.Dot( toMid ) > 0 )
                 perp = VECTOR2I( radial.y, -radial.x );
 
             double mag = std::hypot( (double) perp.x, (double) perp.y );
@@ -219,7 +219,8 @@ bool DRAGGER::startDragArc( const VECTOR2D& aP, ARC* aArc )
             if( mag <= 0 )
                 return VECTOR2I( stubLen, 0 );
 
-            return VECTOR2I( KiROUND( perp.x * stubLen / mag ), KiROUND( perp.y * stubLen / mag ) );
+            // A unit vector first, since a coordinate times the stub length does not fit an int
+            return VECTOR2I( KiROUND( perp.x / mag * stubLen ), KiROUND( perp.y / mag * stubLen ) );
         };
 
         if( isolatedStart )
