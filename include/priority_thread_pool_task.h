@@ -58,8 +58,12 @@ public:
      * not started yet are skipped; tasks already running are not interrupted.
      *
      * It never returns while any task is still queued or running.
+     *
+     * @param aItems The container of items to process.
+     * @return The total number of subitems processed (sum of the return values
+     *         of task() for each item)
      */
-    void Execute( ContainerT& aItems )
+    size_t Execute( ContainerT& aItems )
     {
         thread_pool&                     tp = GetKiCadThreadPool();
         std::vector<std::future<size_t>> returns;
@@ -113,6 +117,8 @@ public:
                     priority ) );
         }
 
+        size_t totalProcessed = 0;
+
         // Hold onto the first exception (if any) thrown by the tasks and rethrow at the end.
         std::exception_ptr firstException;
 
@@ -128,11 +134,9 @@ public:
                 status = ret.wait_for( m_reporterInterval );
             }
 
-            // We don't care about the return value (the number of items processed),
-            // only about any exception stored by the task future.
             try
             {
-                ret.get();
+                totalProcessed += ret.get();
             }
             catch( ... )
             {
@@ -145,6 +149,8 @@ public:
 
         if( firstException )
             std::rethrow_exception( firstException );
+
+        return totalProcessed;
     }
 
 protected:

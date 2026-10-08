@@ -62,7 +62,10 @@ BOOST_AUTO_TEST_CASE( AllItemsProcessed )
     COUNTING_TASK    task;
     std::vector<int> items = { 5, 3, 8, 1, 9 };
 
-    BOOST_CHECK_NO_THROW( task.Execute( items ) );
+    size_t total = 0;
+
+    BOOST_CHECK_NO_THROW( total = task.Execute( items ) );
+    BOOST_CHECK_EQUAL( total, items.size() );
 
     // All items should have been processed by now
     BOOST_CHECK_EQUAL( task.m_processed.load(), (int) items.size() );
@@ -75,6 +78,9 @@ BOOST_AUTO_TEST_CASE( ExceptionPropagates )
     std::vector<int> items = { 5, 3, -1, 1, 9 };
 
     BOOST_CHECK_THROW( task.Execute( items ), std::runtime_error );
+
+    // It's not possible to accurately predict how many items were processed
+    // without a complex fixture here.
 }
 
 
