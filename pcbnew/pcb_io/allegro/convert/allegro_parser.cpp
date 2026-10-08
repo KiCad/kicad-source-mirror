@@ -2061,7 +2061,7 @@ static std::unique_ptr<BLOCK_BASE> ParseBlock_0x36( FILE_STREAM& aStream, FMT_VE
                          aStream.Position() );
     }
 
-    // Each block has m_NumItems slots but only m_Count are populated; the rest are
+    // Each block has m_NumItems slots but only the first m_Count are populated; the rest are
     // zeroes. Iterate all slots to stride across them correctly, but only keep the
     // actual existing items.
     data.m_Items.reserve( data.m_Count );
