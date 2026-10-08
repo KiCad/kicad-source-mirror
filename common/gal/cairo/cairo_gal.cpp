@@ -1906,78 +1906,14 @@ void CAIRO_GAL_BASE::drawGridSources()
 }
 
 
-void CAIRO_GAL_BASE::drawGridCoverageShape( const GRID_SOURCE& aSrc )
-{
-    Save();
-    Translate( aSrc.origin );
-    Rotate( -aSrc.orientation );
-
-    if( aSrc.unbounded )
-    {
-        const BOX2D screen = gridScreenBBox( aSrc );
-
-        DrawRectangle( screen.GetOrigin(), screen.GetEnd() );
-        Restore();
-        return;
-    }
-
-    switch( aSrc.kind )
-    {
-    case GRID_SOURCE::KIND::POLAR:
-    {
-        const double rMax = aSrc.extent.x;
-        const double phiMax = aSrc.extent.y;
-
-        if( rMax > 0.0 && phiMax > 0.0 )
-        {
-            if( phiMax >= 2 * M_PI - 1e-6 )
-            {
-                DrawCircle( VECTOR2D( 0, 0 ), rMax );
-            }
-            else
-            {
-                const int            kArcSegments = std::max( 16, (int) ( phiMax / ( M_PI / 16 ) ) );
-                std::deque<VECTOR2D> poly;
-
-                poly.emplace_back( 0.0, 0.0 );
-
-                for( int i = 0; i <= kArcSegments; ++i )
-                {
-                    const double phi = phiMax * i / kArcSegments;
-                    poly.emplace_back( rMax * std::cos( phi ), rMax * std::sin( phi ) );
-                }
-
-                poly.emplace_back( 0.0, 0.0 );
-
-                DrawPolygon( poly );
-            }
-        }
-
-        break;
-    }
-
-    case GRID_SOURCE::KIND::CARTESIAN:
-        DrawRectangle( VECTOR2D( -aSrc.extent.x, -aSrc.extent.y ),
-                       VECTOR2D( aSrc.extent.x, aSrc.extent.y ) );
-        break;
-
-    default: wxFAIL_MSG( wxT( "drawGridCoverageShape: unhandled GRID_SOURCE::KIND" ) ); break;
-    }
-
-    Restore();
-}
-
-
 void CAIRO_GAL_BASE::drawGridSource( const GRID_SOURCE& aSrc )
 {
-    COLOR4D color = aSrc.color.a > 0 ? aSrc.color : m_gridColor;
-    COLOR4D wash = m_clearColor;
+    const COLOR4D      color = gridSourceColor( aSrc );
+    const GRID_LATTICE lattice = gridLattice( aSrc );
+    COLOR4D            wash = m_clearColor;
 
     if( aSrc.highlighted )
-    {
-        color.Brighten( GRID_SELECTED_BRIGHTEN );
         wash.a = GRID_DIM_ALPHA;
-    }
 
     // "Clear" coverage area by filling it with either m_clearColor or the
     // dimming layer
@@ -1989,19 +1925,8 @@ void CAIRO_GAL_BASE::drawGridSource( const GRID_SOURCE& aSrc )
         drawGridCoverageShape( aSrc );
     }
 
-    const float    marker = (float)(std::fmax( 1.0f, m_gridLineWidth ) / m_worldScale);
-    const float    doubleMarker = 2.0f * marker;
-    const unsigned tick = ( aSrc.tick > 0 ) ? aSrc.tick : (unsigned) m_gridTick;
-
-    double threshold = computeMinGridSpacing() / m_worldScale;
-
-    if( aSrc.style == GRID_STYLE::SMALL_CROSS )
-        threshold *= 2.0;
-
-    auto isMajor = [&]( int aIdx )
-    {
-        return tick > 0 && aIdx % (int) tick == 0;
-    };
+    const float marker = (float)(std::fmax( 1.0f, m_gridLineWidth ) / m_worldScale);
+    const float doubleMarker = 2.0f * marker;
 
     auto drawCrossAt = [&]( const VECTOR2D& aPos, bool aMajor, double aArmAngle )
     {
@@ -2033,53 +1958,30 @@ void CAIRO_GAL_BASE::drawGridSource( const GRID_SOURCE& aSrc )
     SetIsStroke( true );
     SetStrokeColor( color );
 
-    switch( aSrc.kind )
+    const double dx = lattice.pitch.x;
+    const double dy = lattice.pitch.y;
+
+    if( aSrc.kind == GRID_SOURCE::KIND::POLAR && lattice.extent.x > 0.0 && lattice.extent.y > 0.0 )
     {
-    case GRID_SOURCE::KIND::POLAR:
-    {
-        double rMax;
-        double phiMax;
-
-        if( aSrc.unbounded )
-        {
-            const BOX2D  screen = gridScreenBBox( aSrc );
-            const double farX = std::max( std::abs( screen.GetLeft() ), std::abs( screen.GetRight() ) );
-            const double farY = std::max( std::abs( screen.GetTop() ), std::abs( screen.GetBottom() ) );
-
-            rMax = std::hypot( farX, farY ) * 1.01; // bleed past the farthest corner
-            phiMax = 2 * M_PI;
-        }
-        else
-        {
-            rMax = aSrc.extent.x;
-            phiMax = aSrc.extent.y;
-        }
-
-        if( rMax <= 0.0 || phiMax <= 0.0 )
-            break;
-
-        const double dr = AutoSparsePitch( aSrc.pitch.x, tick, threshold );
-        const double dPhi = AutoSparsePitch( aSrc.pitch.y, tick, threshold / rMax );
+        const double rMax = lattice.extent.x;
+        const double phiMax = lattice.extent.y;
 
         if( aSrc.style == GRID_STYLE::LINES )
         {
-            int rIdx = 0;
+            int rIdx = 1;
 
-            for( double r = 0; r <= rMax + 1e-6; r += dr, ++rIdx )
+            for( double r = dx; r <= rMax + 1e-6; r += dx, ++rIdx )
             {
-                if( r == 0.0 )
-                    continue;
-
-                SetLineWidth( isMajor( rIdx ) ? doubleMarker : marker );
+                SetLineWidth( lattice.IsMajor( rIdx ) ? doubleMarker : marker );
                 DrawArc( VECTOR2D( 0, 0 ), r, EDA_ANGLE( 0, RADIANS_T ),
                          EDA_ANGLE( phiMax, RADIANS_T ) );
             }
 
             int pIdx = 0;
 
-            for( double phi = 0; phi <= phiMax + 1e-6; phi += dPhi, ++pIdx )
+            for( double phi = 0; phi <= phiMax + 1e-6; phi += dy, ++pIdx )
             {
-                SetLineWidth( isMajor( pIdx ) ? doubleMarker : marker );
+                SetLineWidth( lattice.IsMajor( pIdx ) ? doubleMarker : marker );
                 drawGridLine( VECTOR2D( 0, 0 ),
                               VECTOR2D( rMax * std::cos( phi ), rMax * std::sin( phi ) ), color );
             }
@@ -2088,37 +1990,24 @@ void CAIRO_GAL_BASE::drawGridSource( const GRID_SOURCE& aSrc )
         {
             int rIdx = 0;
 
-            for( double r = 0; r <= rMax + 1e-6; r += dr, ++rIdx )
+            for( double r = 0; r <= rMax + 1e-6; r += dx, ++rIdx )
             {
                 int pIdx = 0;
 
-                for( double phi = 0; phi <= phiMax + 1e-6; phi += dPhi, ++pIdx )
+                for( double phi = 0; phi <= phiMax + 1e-6; phi += dy, ++pIdx )
                 {
                     const VECTOR2D pos( r * std::cos( phi ), r * std::sin( phi ) );
 
                     if( aSrc.style == GRID_STYLE::DOTS )
-                        drawDotAt( pos, isMajor( rIdx ), isMajor( pIdx ) );
+                        drawDotAt( pos, lattice.IsMajor( rIdx ), lattice.IsMajor( pIdx ) );
                     else
-                        drawCrossAt( pos, isMajor( rIdx ) && isMajor( pIdx ), phi );
+                        drawCrossAt( pos, lattice.IsMajor( rIdx ) && lattice.IsMajor( pIdx ), phi );
                 }
             }
         }
-
-        break;
     }
-
-    case GRID_SOURCE::KIND::CARTESIAN:
+    else if( aSrc.kind == GRID_SOURCE::KIND::CARTESIAN )
     {
-        double dx = aSrc.pitch.x;
-        double dy = aSrc.pitch.y;
-
-        // Sparse both axes by the same factor to preserve aspect ratio.
-        const double minPitch = std::min( dx, dy );
-        const double sparsed = AutoSparsePitch( minPitch, tick, threshold );
-
-        dx *= sparsed / minPitch;
-        dy *= sparsed / minPitch;
-
         BOX2D visible = gridScreenBBox( aSrc );
 
         // One-pitch bleed so lines just off-screen still paint.
@@ -2155,7 +2044,7 @@ void CAIRO_GAL_BASE::drawGridSource( const GRID_SOURCE& aSrc )
                 if( aSrc.axesEnabled && ix * dx + aSrc.origin.x == 0.0 )
                     continue;
 
-                SetLineWidth( isMajor( ix ) ? doubleMarker : marker );
+                SetLineWidth( lattice.IsMajor( ix ) ? doubleMarker : marker );
                 drawGridLine( VECTOR2D( ix * dx, yMin ), VECTOR2D( ix * dx, yMax ), color );
             }
 
@@ -2164,7 +2053,7 @@ void CAIRO_GAL_BASE::drawGridSource( const GRID_SOURCE& aSrc )
                 if( aSrc.axesEnabled && iy * dy + aSrc.origin.y == 0.0 )
                     continue;
 
-                SetLineWidth( isMajor( iy ) ? doubleMarker : marker );
+                SetLineWidth( lattice.IsMajor( iy ) ? doubleMarker : marker );
                 drawGridLine( VECTOR2D( xMin, iy * dy ), VECTOR2D( xMax, iy * dy ), color );
             }
         }
@@ -2177,17 +2066,12 @@ void CAIRO_GAL_BASE::drawGridSource( const GRID_SOURCE& aSrc )
                     const VECTOR2D pos( ix * dx, iy * dy );
 
                     if( aSrc.style == GRID_STYLE::DOTS )
-                        drawDotAt( pos, isMajor( ix ), isMajor( iy ) );
+                        drawDotAt( pos, lattice.IsMajor( ix ), lattice.IsMajor( iy ) );
                     else
-                        drawCrossAt( pos, isMajor( ix ) && isMajor( iy ), 0.0 );
+                        drawCrossAt( pos, lattice.IsMajor( ix ) && lattice.IsMajor( iy ), 0.0 );
                 }
             }
         }
-
-        break;
-    }
-
-    default: wxFAIL_MSG( wxT( "drawGridSource: unhandled GRID_SOURCE::KIND" ) ); break;
     }
 
     Restore();

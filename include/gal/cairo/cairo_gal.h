@@ -306,12 +306,6 @@ protected:
      */
     void drawGridSource( const GRID_SOURCE& aSrc );
 
-    /**
-     * Fill or stroke a source's coverage region in its own frame, per the current state.
-     */
-    void drawGridCoverageShape( const GRID_SOURCE& aSrc );
-
-
     void flushPath();
     void storePath();                           ///< Store the actual path
 

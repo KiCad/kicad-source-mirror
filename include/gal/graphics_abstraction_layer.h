@@ -1217,6 +1217,31 @@ protected:
      */
     BOX2D gridScreenBBox( const GRID_SOURCE& aSrc ) const;
 
+    /** The spacing of a grid source's lattice as it is drawn at the current zoom */
+    struct GRID_LATTICE
+    {
+        VECTOR2D pitch;     /**< along x and y, or of radius and angle for a polar grid */
+        VECTOR2D extent;    /**< as GRID_SOURCE::extent, with an unbounded polar grid reaching past the screen */
+        unsigned tick = 0;  /**< every tick-th line is a major one */
+
+        bool IsMajor( int aIndex ) const { return tick > 0 && aIndex % static_cast<int>( tick ) == 0; }
+    };
+
+    /**
+     * Thin a grid source's pitch out until its lines are far enough apart on screen. A cartesian grid
+     * keeps the shape of its cells.
+     */
+    GRID_LATTICE gridLattice( const GRID_SOURCE& aSrc ) const;
+
+    /** The colour a grid source is drawn in, brightened while it is being edited */
+    COLOR4D gridSourceColor( const GRID_SOURCE& aSrc ) const;
+
+    /**
+     * Draw the area a grid source covers in its own frame with the current fill and stroke. An unbounded
+     * source covers the screen.
+     */
+    void drawGridCoverageShape( const GRID_SOURCE& aSrc );
+
     /// Possible depth range
     static const int MIN_DEPTH;
     static const int MAX_DEPTH;

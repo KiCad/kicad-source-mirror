@@ -2295,65 +2295,6 @@ void OPENGL_GAL::DrawGrid()
 }
 
 
-void OPENGL_GAL::drawGridCoverageShape( const GRID_SOURCE& src )
-{
-    Save();
-    Translate( src.origin );
-    Rotate( -src.orientation );
-
-    if( src.unbounded )
-    {
-        const BOX2D screen = gridScreenBBox( src );
-
-        DrawRectangle( screen.GetOrigin(), screen.GetEnd() );
-        Restore();
-        return;
-    }
-
-    switch( src.kind )
-    {
-    case GRID_SOURCE::KIND::POLAR:
-    {
-        const double rMax = src.extent.x;
-        const double phiMax = src.extent.y;
-
-        if( rMax > 0.0 && phiMax > 0.0 )
-        {
-            if( phiMax >= 2 * M_PI - 1e-6 )
-            {
-                DrawCircle( VECTOR2D( 0, 0 ), rMax );
-            }
-            else
-            {
-                const int            kArcSegments = std::max( 16, (int) ( phiMax / ( M_PI / 16 ) ) );
-                std::deque<VECTOR2D> poly;
-                poly.emplace_back( 0.0, 0.0 );
-
-                for( int i = 0; i <= kArcSegments; ++i )
-                {
-                    const double phi = phiMax * i / kArcSegments;
-                    poly.emplace_back( rMax * std::cos( phi ), rMax * std::sin( phi ) );
-                }
-
-                poly.emplace_back( 0.0, 0.0 );
-
-                DrawPolygon( poly );
-            }
-        }
-        break;
-    }
-
-    case GRID_SOURCE::KIND::CARTESIAN:
-        DrawRectangle( VECTOR2D( -src.extent.x, -src.extent.y ), VECTOR2D( src.extent.x, src.extent.y ) );
-        break;
-
-    default: wxFAIL_MSG( wxT( "drawGridCoverageShape: unhandled GRID_SOURCE::KIND" ) ); break;
-    }
-
-    Restore();
-}
-
-
 void OPENGL_GAL::drawGridSources()
 {
     if( m_gridSources.empty() )
@@ -2411,10 +2352,8 @@ void OPENGL_GAL::drawGridSources()
             m_nonCachedManager->EndDrawing();
         }
 
-        COLOR4D color = src.color.a > 0 ? src.color : m_gridColor;
-
-        if( src.highlighted )
-            color.Brighten( GRID_SELECTED_BRIGHTEN );
+        const COLOR4D      color = gridSourceColor( src );
+        const GRID_LATTICE lattice = gridLattice( src );
 
         glColor4d( color.r, color.g, color.b, color.a );
         SetStrokeColor( color );
@@ -2423,10 +2362,6 @@ void OPENGL_GAL::drawGridSources()
         Translate( src.origin );
         // GAL Rotate is math-convention; grid orientation is screen-convention.
         Rotate( -src.orientation );
-
-        const unsigned tick = ( src.tick > 0 ) ? src.tick : static_cast<unsigned>( m_gridTick );
-        const double   threshold =
-                computeMinGridSpacing() / m_worldScale * ( src.style == GRID_STYLE::SMALL_CROSS ? 2.0 : 1.0 );
 
         // SMALL_CROSS marker.
         auto drawCrossAt = [&]( const VECTOR2D& pos, bool aMajor, double aArmAngle )
@@ -2481,30 +2416,10 @@ void OPENGL_GAL::drawGridSources()
         {
         case GRID_SOURCE::KIND::POLAR:
         {
-            double rMax;
-            double phiMax;
-            double dr = src.pitch.x;
-            double dPhi = src.pitch.y;
-
-            if( src.unbounded )
-            {
-                const BOX2D  screen = gridScreenBBox( src );
-                const double farX = std::max( std::abs( screen.GetLeft() ), std::abs( screen.GetRight() ) );
-                const double farY = std::max( std::abs( screen.GetTop() ), std::abs( screen.GetBottom() ) );
-
-                rMax = std::hypot( farX, farY ) * 1.01; // bleed past the farthest corner
-                phiMax = 2 * M_PI;
-            }
-            else
-            {
-                rMax = src.extent.x;
-                phiMax = src.extent.y;
-            }
-
-            dr = AutoSparsePitch( dr, tick, threshold );
-
-            if( rMax > 0.0 )
-                dPhi = AutoSparsePitch( dPhi, tick, threshold / rMax );
+            const double rMax = lattice.extent.x;
+            const double phiMax = lattice.extent.y;
+            const double dr = lattice.pitch.x;
+            const double dPhi = lattice.pitch.y;
 
             wxASSERT( dr > 0.0 && dPhi > 0.0 );
 
@@ -2516,7 +2431,7 @@ void OPENGL_GAL::drawGridSources()
                     if( r == 0.0 )
                         continue;
 
-                    SetLineWidth( ( tick && rIdx % (int) tick == 0 ) ? majorLineWidth : minorLineWidth );
+                    SetLineWidth( lattice.IsMajor( rIdx ) ? majorLineWidth : minorLineWidth );
                     DrawArc( VECTOR2D( 0, 0 ), r, EDA_ANGLE( 0, RADIANS_T ), EDA_ANGLE( phiMax, RADIANS_T ) );
                 }
             };
@@ -2526,7 +2441,7 @@ void OPENGL_GAL::drawGridSources()
                 int pIdx = 0;
                 for( double phi = 0; phi <= phiMax + 1e-6; phi += dPhi, ++pIdx )
                 {
-                    SetLineWidth( ( tick && pIdx % (int) tick == 0 ) ? majorLineWidth : minorLineWidth );
+                    SetLineWidth( lattice.IsMajor( pIdx ) ? majorLineWidth : minorLineWidth );
                     const double cx = std::cos( phi );
                     const double cy = std::sin( phi );
                     DrawLine( VECTOR2D( 0, 0 ), VECTOR2D( rMax * cx, rMax * cy ) );
@@ -2551,7 +2466,7 @@ void OPENGL_GAL::drawGridSources()
                     int pIdx = 0;
                     for( double phi = 0; phi <= phiMax + 1e-6; phi += dPhi, ++pIdx )
                     {
-                        const bool     major = tick && ( rIdx % (int) tick == 0 ) && ( pIdx % (int) tick == 0 );
+                        const bool     major = lattice.IsMajor( rIdx ) && lattice.IsMajor( pIdx );
                         const VECTOR2D pos( r * std::cos( phi ), r * std::sin( phi ) );
                         drawCrossAt( pos, major, phi );
                     }
@@ -2562,19 +2477,8 @@ void OPENGL_GAL::drawGridSources()
 
         case GRID_SOURCE::KIND::CARTESIAN:
         {
-            double dx = src.pitch.x;
-            double dy = src.pitch.y;
-
-            // Sparse both axes by the same factor to preserve aspect ratio.
-            const double minPitch = std::min( dx, dy );
-            const double sparsed = AutoSparsePitch( minPitch, tick, threshold );
-
-            if( sparsed != minPitch )
-            {
-                const double scale = sparsed / minPitch;
-                dx *= scale;
-                dy *= scale;
-            }
+            const double dx = lattice.pitch.x;
+            const double dy = lattice.pitch.y;
 
             wxASSERT( dx > 0.0 && dy > 0.0 );
 
@@ -2620,7 +2524,7 @@ void OPENGL_GAL::drawGridSources()
                     if( src.axesEnabled && x + src.origin.x == 0.0 )
                         continue;
 
-                    SetLineWidth( ( tick && std::abs( ix ) % (int) tick == 0 ) ? majorLineWidth : minorLineWidth );
+                    SetLineWidth( lattice.IsMajor( ix ) ? majorLineWidth : minorLineWidth );
                     DrawLine( VECTOR2D( x, yMin ), VECTOR2D( x, yMax ) );
                 }
             };
@@ -2634,7 +2538,7 @@ void OPENGL_GAL::drawGridSources()
                     if( src.axesEnabled && y + src.origin.y == 0.0 )
                         continue;
 
-                    SetLineWidth( ( tick && std::abs( iy ) % (int) tick == 0 ) ? majorLineWidth : minorLineWidth );
+                    SetLineWidth( lattice.IsMajor( iy ) ? majorLineWidth : minorLineWidth );
                     DrawLine( VECTOR2D( xMin, y ), VECTOR2D( xMax, y ) );
                 }
             };
@@ -2655,8 +2559,7 @@ void OPENGL_GAL::drawGridSources()
                 {
                     for( int iy = iyMin; iy <= iyMax; ++iy )
                     {
-                        const bool major =
-                                tick && ( std::abs( ix ) % (int) tick == 0 ) && ( std::abs( iy ) % (int) tick == 0 );
+                        const bool major = lattice.IsMajor( ix ) && lattice.IsMajor( iy );
                         drawCrossAt( VECTOR2D( ix * dx, iy * dy ), major, 0.0 );
                     }
                 }

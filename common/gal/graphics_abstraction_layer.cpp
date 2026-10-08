@@ -32,6 +32,7 @@
 #include <math/util.h>      // for KiROUND
 
 #include <algorithm>
+#include <deque>
 #include <cmath>
 #include <limits>
 
@@ -279,6 +280,103 @@ BOX2D GAL::gridScreenBBox( const GRID_SOURCE& aSrc ) const
     }
 
     return bbox;
+}
+
+
+GAL::GRID_LATTICE GAL::gridLattice( const GRID_SOURCE& aSrc ) const
+{
+    GRID_LATTICE lattice;
+    lattice.tick = aSrc.tick > 0 ? aSrc.tick : static_cast<unsigned>( m_gridTick );
+    lattice.extent = aSrc.extent;
+
+    const double threshold =
+            computeMinGridSpacing() / m_worldScale * ( aSrc.style == GRID_STYLE::SMALL_CROSS ? 2.0 : 1.0 );
+
+    if( aSrc.kind == GRID_SOURCE::KIND::POLAR )
+    {
+        if( aSrc.unbounded )
+        {
+            const BOX2D  screen = gridScreenBBox( aSrc );
+            const double farX = std::max( std::abs( screen.GetLeft() ), std::abs( screen.GetRight() ) );
+            const double farY = std::max( std::abs( screen.GetTop() ), std::abs( screen.GetBottom() ) );
+
+            // Bleed past the farthest corner
+            lattice.extent = VECTOR2D( std::hypot( farX, farY ) * 1.01, 2 * M_PI );
+        }
+
+        lattice.pitch.x = AutoSparsePitch( aSrc.pitch.x, lattice.tick, threshold );
+        lattice.pitch.y = aSrc.pitch.y;
+
+        if( lattice.extent.x > 0.0 )
+            lattice.pitch.y = AutoSparsePitch( aSrc.pitch.y, lattice.tick, threshold / lattice.extent.x );
+    }
+    else
+    {
+        // Both axes thin out by the same factor, which keeps the cells' shape
+        const double minPitch = std::min( aSrc.pitch.x, aSrc.pitch.y );
+        const double sparse = AutoSparsePitch( minPitch, lattice.tick, threshold ) / minPitch;
+
+        lattice.pitch = VECTOR2D( aSrc.pitch.x * sparse, aSrc.pitch.y * sparse );
+    }
+
+    return lattice;
+}
+
+
+COLOR4D GAL::gridSourceColor( const GRID_SOURCE& aSrc ) const
+{
+    COLOR4D color = aSrc.color.a > 0 ? aSrc.color : m_gridColor;
+
+    if( aSrc.highlighted )
+        color.Brighten( GRID_SELECTED_BRIGHTEN );
+
+    return color;
+}
+
+
+void GAL::drawGridCoverageShape( const GRID_SOURCE& aSrc )
+{
+    Save();
+    Translate( aSrc.origin );
+
+    // GAL rotation is counterclockwise and grid orientation clockwise on the screen
+    Rotate( -aSrc.orientation );
+
+    const double rMax = aSrc.extent.x;
+    const double phiMax = aSrc.extent.y;
+
+    if( aSrc.unbounded )
+    {
+        const BOX2D screen = gridScreenBBox( aSrc );
+
+        DrawRectangle( screen.GetOrigin(), screen.GetEnd() );
+    }
+    else if( aSrc.kind == GRID_SOURCE::KIND::CARTESIAN )
+    {
+        DrawRectangle( VECTOR2D( -aSrc.extent.x, -aSrc.extent.y ), aSrc.extent );
+    }
+    else if( rMax > 0.0 && phiMax >= 2 * M_PI - 1e-6 )
+    {
+        DrawCircle( VECTOR2D( 0, 0 ), rMax );
+    }
+    else if( rMax > 0.0 && phiMax > 0.0 )
+    {
+        const int            segments = std::max( 16, static_cast<int>( phiMax / ( M_PI / 16 ) ) );
+        std::deque<VECTOR2D> sector;
+
+        sector.emplace_back( 0.0, 0.0 );
+
+        for( int ii = 0; ii <= segments; ++ii )
+        {
+            const double phi = phiMax * ii / segments;
+            sector.emplace_back( rMax * std::cos( phi ), rMax * std::sin( phi ) );
+        }
+
+        sector.emplace_back( 0.0, 0.0 );
+        DrawPolygon( sector );
+    }
+
+    Restore();
 }
 
 

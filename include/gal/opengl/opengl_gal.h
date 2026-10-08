@@ -572,11 +572,6 @@ private:
     void drawGridSources();
 
     /**
-     * Fill a source's coverage region into the current color/stencil state.
-     */
-    void drawGridCoverageShape( const GRID_SOURCE& aSrc );
-
-    /**
      * Compute a size of text drawn using bitmap font with current text setting applied.
      *
      * @param aText is the text to be drawn.
