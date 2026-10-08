@@ -19,6 +19,10 @@ include_directories(
 set( KICAD_SRCS
     dialogs/dialog_destination.cpp
     dialogs/dialog_destination_base.cpp
+    dialogs/dialog_downgrade_report.cpp
+    dialogs/dialog_downgrade_report_base.cpp
+    dialogs/dialog_export_older_version.cpp
+    dialogs/dialog_export_older_version_base.cpp
     dialogs/dialog_archive_job_settings.cpp
     dialogs/dialog_archive_job_settings_base.cpp
     dialogs/dialog_copyfiles_job_settings.cpp
