@@ -39,6 +39,8 @@
 #include <project/net_settings.h>
 #include <project.h>
 #include <sch_file_versions.h>
+#include <sch_io/kicad_sexpr/writers/sch_writer_v9.h>
+#include <sch_io/kicad_sexpr/writers/sch_writer_v10.h>
 #include <schematic.h>
 #include <sch_screen.h>
 #include <sch_line.h>
@@ -2327,6 +2329,32 @@ static constexpr DATED_TOKEN SCH_VALUES[] = {
 };
 
 
+// Each target has its own writer, extracted from that release. A target without a writer writes
+// nothing, and the fail-closed check downstream refuses the export.
+void SaveSchematicForTarget( SCH_SHEET* aSheet, SCHEMATIC* aSchematic, const wxString& aPath,
+                             const DOWNGRADE_TARGET& aTarget )
+{
+    if( aTarget.m_schVersion == SCH_WRITER_V10::FORMAT_VERSION )
+        SCH_WRITER_V10().SaveSchematicFile( aPath, aSheet, aSchematic );
+    else if( aTarget.m_schVersion == SCH_WRITER_V9::FORMAT_VERSION )
+        SCH_WRITER_V9().SaveSchematicFile( aPath, aSheet, aSchematic );
+    else
+        wxFAIL_MSG( wxT( "No writer for this downgrade target." ) );
+}
+
+
+void SaveSymbolLibraryForTarget( const std::vector<LIB_SYMBOL*>& aSymbols, const wxString& aPath,
+                                 const DOWNGRADE_TARGET& aTarget )
+{
+    if( aTarget.m_symLibVersion == SCH_WRITER_V10::SYMBOL_LIB_VERSION )
+        SCH_WRITER_V10().SaveSymbolLibrary( aPath, aSymbols );
+    else if( aTarget.m_symLibVersion == SCH_WRITER_V9::SYMBOL_LIB_VERSION )
+        SCH_WRITER_V9().SaveSymbolLibrary( aPath, aSymbols );
+    else
+        wxFAIL_MSG( wxT( "No writer for this downgrade target." ) );
+}
+
+
 int SymbolLibDowngradeCoveredVersion()
 {
     return SYMLIB_DOWNGRADE_COVERED;
@@ -2346,4 +2374,241 @@ wxString FindUnsupportedSchToken( const wxString& aSerialized, const DOWNGRADE_T
 
     return FindUnsupportedToken( aSerialized, SCH_TOKENS, std::size( SCH_TOKENS ), SCH_VALUES, std::size( SCH_VALUES ),
                                  aTarget.m_schVersion );
+}
+
+
+// The effective values of one symbol under one sheet instance and the chosen variant.
+struct SYMBOL_VARIANT_SNAPSHOT
+{
+    bool                         m_dnp = false;
+    bool                         m_excludedFromSim = false;
+    bool                         m_excludedFromBOM = false;
+    bool                         m_excludedFromBoard = false;
+    bool                         m_excludedFromPosFiles = false;
+    std::map<wxString, wxString> m_fieldOverrides;
+    PIN_MAP_INSTANCE_OVERRIDE    m_pinMap;
+    std::optional<LIB_ID>        m_symbolOverride;
+    LIB_SYMBOL*                  m_alternate = nullptr;
+
+    bool operator==( const SYMBOL_VARIANT_SNAPSHOT& ) const = default;
+};
+
+
+static SYMBOL_VARIANT_SNAPSHOT snapshotSymbol( const SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aPath,
+                                               const wxString& aVariantName )
+{
+    SYMBOL_VARIANT_SNAPSHOT snap;
+
+    snap.m_dnp = aSymbol->GetDNP( &aPath, aVariantName );
+    snap.m_excludedFromSim = aSymbol->GetExcludedFromSim( &aPath, aVariantName );
+    snap.m_excludedFromBOM = aSymbol->GetExcludedFromBOM( &aPath, aVariantName );
+    snap.m_excludedFromBoard = aSymbol->GetExcludedFromBoard( &aPath, aVariantName );
+    snap.m_excludedFromPosFiles = aSymbol->GetExcludedFromPosFiles( &aPath, aVariantName );
+    snap.m_pinMap = aSymbol->GetPinMapOverride( &aPath, aVariantName );
+
+    for( const SCH_SYMBOL_INSTANCE& instance : aSymbol->GetInstances() )
+    {
+        if( instance.m_Path != aPath.Path() )
+            continue;
+
+        auto it = instance.m_Variants.find( aVariantName );
+
+        if( it != instance.m_Variants.end() )
+            snap.m_symbolOverride = it->second.m_SymbolOverride;
+
+        break;
+    }
+
+    if( snap.m_symbolOverride && *snap.m_symbolOverride != aSymbol->GetLibId() && aSymbol->Schematic()
+        && aSymbol->Schematic()->IsValid() )
+        snap.m_alternate = aSymbol->GetVariantLibSymbol( aVariantName, aPath );
+
+    // The native resolver includes alternate-library values and explicit empty overrides.
+    for( const SCH_FIELD& field : aSymbol->GetFields() )
+    {
+        if( field.GetId() != FIELD_T::REFERENCE )
+            snap.m_fieldOverrides[field.GetName()] = aSymbol->GetFieldText( field.GetName(), &aPath, aVariantName );
+    }
+
+    return snap;
+}
+
+
+struct SHEET_VARIANT_SNAPSHOT
+{
+    bool m_dnp = false;
+    bool m_excludedFromSim = false;
+    bool m_excludedFromBOM = false;
+    bool m_excludedFromBoard = false;
+
+    std::map<wxString, wxString> m_fieldOverrides;
+
+    bool operator==( const SHEET_VARIANT_SNAPSHOT& ) const = default;
+};
+
+
+static SHEET_VARIANT_SNAPSHOT snapshotSheet( const SCH_SHEET* aSheet, const SCH_SHEET_PATH& aPath,
+                                             const wxString& aVariantName )
+{
+    SHEET_VARIANT_SNAPSHOT snap;
+
+    snap.m_dnp = aSheet->GetDNP( &aPath, aVariantName );
+    snap.m_excludedFromSim = aSheet->GetExcludedFromSim( &aPath, aVariantName );
+    snap.m_excludedFromBOM = aSheet->GetExcludedFromBOM( &aPath, aVariantName );
+    snap.m_excludedFromBoard = aSheet->GetExcludedFromBoard( &aPath, aVariantName );
+
+    for( const SCH_SHEET_INSTANCE& instance : aSheet->GetInstances() )
+    {
+        if( instance.m_Path != aPath.Path() )
+            continue;
+
+        auto it = instance.m_Variants.find( aVariantName );
+
+        if( it != instance.m_Variants.end() )
+            snap.m_fieldOverrides = it->second.m_Fields;
+
+        break;
+    }
+
+    return snap;
+}
+
+
+bool FlattenSchematicVariant( SCHEMATIC& aSchematic, const wxString& aVariantName, wxString* aConflict )
+{
+    std::map<SCH_SYMBOL*, SYMBOL_VARIANT_SNAPSHOT> symbols;
+    std::map<SCH_SHEET*, SHEET_VARIANT_SNAPSHOT>   sheets;
+    std::map<SCH_SYMBOL*, SCH_SCREEN*>             screens;
+
+    for( const SCH_SHEET_PATH& path : aSchematic.BuildUnorderedSheetList() )
+    {
+        SCH_SCREEN* screen = path.LastScreen();
+
+        if( !screen )
+            continue;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL*             symbol = static_cast<SCH_SYMBOL*>( item );
+            SYMBOL_VARIANT_SNAPSHOT snap = snapshotSymbol( symbol, path, aVariantName );
+
+            if( snap.m_symbolOverride && *snap.m_symbolOverride != symbol->GetLibId()
+                && ( !snap.m_alternate || !symbol->GetLibSymbolRef() || symbol->IsMissingLibSymbol() ) )
+            {
+                if( aConflict )
+                {
+                    *aConflict = wxString::Format(
+                            _( "Alternate symbol '%s' cannot be resolved and validated against the base symbol." ),
+                            snap.m_symbolOverride->Format().wx_str() );
+                }
+
+                return false;
+            }
+
+            auto [it, inserted] = symbols.emplace( symbol, snap );
+            screens.emplace( symbol, screen );
+
+            // A symbol shared between sheet instances must resolve the same everywhere, or
+            // the single set of base attributes cannot hold the result.
+            if( !inserted && !( it->second == snap ) )
+            {
+                if( aConflict )
+                    *aConflict = wxString::Format(
+                            _( "Shared symbol '%s' has different effective values between sheet instances." ),
+                            symbol->GetField( FIELD_T::REFERENCE )->GetText() );
+
+                return false;
+            }
+        }
+
+        if( SCH_SHEET* sheet = path.Last() )
+        {
+            SHEET_VARIANT_SNAPSHOT snap = snapshotSheet( sheet, path, aVariantName );
+
+            auto [it, inserted] = sheets.emplace( sheet, snap );
+
+            if( !inserted && !( it->second == snap ) )
+            {
+                if( aConflict )
+                    *aConflict = wxString::Format(
+                            _( "Shared sheet '%s' has different effective values between sheet instances." ),
+                            sheet->GetName() );
+
+                return false;
+            }
+        }
+    }
+
+    for( auto& [symbol, snap] : symbols )
+    {
+        if( snap.m_alternate )
+        {
+            SCH_SCREEN*                 screen = screens.at( symbol );
+            std::unique_ptr<LIB_SYMBOL> baked = snap.m_alternate->Flatten();
+            const wxString              baseName = baked->GetName() + wxT( "__KiCad_variant" );
+            wxString                    name = baseName;
+
+            for( int suffix = 1; screen->GetLibSymbols().count( name ); ++suffix )
+                name = wxString::Format( wxT( "%s_%d" ), baseName, suffix );
+
+            baked->SetName( name );
+            baked->SetLibId( LIB_ID( wxEmptyString, name ) );
+            screen->Remove( symbol );
+            symbol->SetLibId( *snap.m_symbolOverride );
+            symbol->SetSchSymbolLibraryName( name );
+            symbol->SetLibSymbol( new LIB_SYMBOL( *baked ) );
+            screen->AddLibSymbol( baked.release() );
+            screen->Append( symbol );
+        }
+
+        symbol->SetDNP( snap.m_dnp );
+        symbol->SetExcludedFromSim( snap.m_excludedFromSim );
+        symbol->SetExcludedFromBOM( snap.m_excludedFromBOM );
+        symbol->SetExcludedFromBoard( snap.m_excludedFromBoard );
+        symbol->SetExcludedFromPosFiles( snap.m_excludedFromPosFiles );
+        symbol->SetPinMapOverride( snap.m_pinMap );
+
+        auto& instances = const_cast<std::vector<SCH_SYMBOL_INSTANCE>&>( symbol->GetInstances() );
+
+        for( SCH_SYMBOL_INSTANCE& instance : instances )
+        {
+            auto variant = instance.m_Variants.find( aVariantName );
+
+            if( variant != instance.m_Variants.end() )
+            {
+                variant->second.m_SymbolOverride.reset();
+                variant->second.m_PinMapOverride = {};
+            }
+        }
+
+        for( const auto& [name, value] : snap.m_fieldOverrides )
+        {
+            for( SCH_FIELD& field : symbol->GetFields() )
+            {
+                if( field.GetId() != FIELD_T::REFERENCE && field.GetName() == name )
+                    field.SetText( value );
+            }
+        }
+    }
+
+    for( auto& [sheet, snap] : sheets )
+    {
+        sheet->SetDNP( snap.m_dnp );
+        sheet->SetExcludedFromSim( snap.m_excludedFromSim );
+        sheet->SetExcludedFromBOM( snap.m_excludedFromBOM );
+        sheet->SetExcludedFromBoard( snap.m_excludedFromBoard );
+
+        for( const auto& [name, value] : snap.m_fieldOverrides )
+        {
+            for( SCH_FIELD& field : sheet->GetFields() )
+            {
+                bool mandatory = field.GetId() == FIELD_T::SHEET_NAME || field.GetId() == FIELD_T::SHEET_FILENAME;
+
+                if( !mandatory && field.GetName() == name )
+                    field.SetText( value );
+            }
+        }
+    }
+
+    return true;
 }

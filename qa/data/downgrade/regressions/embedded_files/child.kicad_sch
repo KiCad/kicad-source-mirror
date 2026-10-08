@@ -1,0 +1,18 @@
+(kicad_sch
+	(version 20260629)
+	(generator "eeschema")
+	(generator_version "10.99")
+	(uuid "30720582-289d-41c7-ba3e-d02102dc0053")
+	(paper "A4")
+	(lib_symbols)
+	(text "Child sheet: the worksheet is embedded once in the top-level schematic.\nExport must preserve that shared payload rather than duplicating it in every child."
+		(exclude_from_sim no)
+		(at 68.072 32.004 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "e78b1373-bf2e-4b1d-902d-2dac5a066e36")
+	)
+)

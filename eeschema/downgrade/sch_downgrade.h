@@ -22,7 +22,10 @@
 #include <compatibility_report.h>
 #include <downgrade_target.h>
 
+#include <vector>
+
 class SCH_SCREEN;
+class SCH_SHEET;
 class SCHEMATIC;
 class LIB_SYMBOL;
 
@@ -48,9 +51,23 @@ COMPATIBILITY_REPORT ClassifyLibSymbolForDowngrade( const LIB_SYMBOL* aSymbol, c
 void DowngradeLibSymbolInPlace( LIB_SYMBOL* aSymbol, const DOWNGRADE_TARGET& aTarget,
                                 bool aDropInsteadOfApproximate = false );
 
+/// Save a schematic sheet file stamped for the target, using the writer for that version.
+void SaveSchematicForTarget( SCH_SHEET* aSheet, SCHEMATIC* aSchematic, const wxString& aPath,
+                             const DOWNGRADE_TARGET& aTarget );
+
+/// Save a .kicad_sym library stamped for the target. Symbols must already be downgraded and
+/// ordered parents first.
+void SaveSymbolLibraryForTarget( const std::vector<LIB_SYMBOL*>& aSymbols, const wxString& aPath,
+                                 const DOWNGRADE_TARGET& aTarget );
+
 /// Scan serialized schematic text for tokens the target cannot parse. Returns the first such
 /// token, or empty if the output is safe. Non-empty means refuse the export.
 wxString FindUnsupportedSchToken( const wxString& aSerialized, const DOWNGRADE_TARGET& aTarget );
+
+/// Bake a variant into the base attributes of every symbol and sheet. Returns false and names
+/// the reference in aConflict when a symbol shared between sheet instances resolves differently
+/// under the variant, which the base attributes cannot represent.
+bool FlattenSchematicVariant( SCHEMATIC& aSchematic, const wxString& aVariantName, wxString* aConflict );
 
 /// The format the denylist was generated against. A format bump forces a review.
 int SchDowngradeCoveredVersion();

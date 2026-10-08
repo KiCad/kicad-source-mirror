@@ -1,0 +1,100 @@
+(kicad_sch
+	(version 20260629)
+	(generator "eeschema")
+	(generator_version "10.99")
+	(uuid "6d478874-eba8-451e-a79f-106a774061f6")
+	(paper "A4")
+	(lib_symbols)
+	(text "EMBEDDED FILES: keep the custom drawing sheet when exporting"
+		(exclude_from_sim no)
+		(at 66.04 28.354 0)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "4469f4e3-f9cc-4447-9d36-db64fd041e2e")
+	)
+	(text "WHY: embedded files belong to the whole schematic, not one sheet instance.\nThe custom drawing sheet is stored inside this schematic. No external file is needed.\nEXPECTED: export to KiCad 9 or 10 keeps the embedded worksheet data.\nThe custom border and CUSTOM DRAWING SHEET labels must still be available.\nThe regression also removes optional root-instance bookkeeping in memory.\nThat must not remove embedded files. This fixture does not test electrical connectivity."
+		(exclude_from_sim no)
+		(at 66.04 38.354 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+		)
+		(uuid "5acfd221-4d53-48a5-844f-dca9880b632e")
+	)
+	(sheet
+		(at 35 80)
+		(size 110 18)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "d1ac2128-a4a6-495e-96fc-e7c69a048769")
+		(property "Sheetname" "Embedded worksheet also applies to this child sheet"
+			(at 35 79.2884 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "child.kicad_sch"
+			(at 35 84.3946 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "embedded_files"
+				(path "/6d478874-eba8-451e-a79f-106a774061f6"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+	(embedded_files
+		(file
+			(name "custom_ds.kicad_wks")
+			(type worksheet)
+			(data |KLUv/WDUCMUUAEZfYiEA1TZqxSYpSnAbvBZX69wADwBPWIP533f4ymz5//9VwQRVAFIAWwCjlyl/
+				8O5R/+uP1L/R4E1NWj1jzfZGzGeuOLFaUd98iEE3Y5GaWFX9jnD5ofuUk56/JeUOmFs/Di9GJH3r
+				9/bNV0P51Cy1njUu9/1QXnZAmNADcYcKFuWfdaY6Zr3U5FQn/9D97zFqYdYpdjMWhTaY8XuXnPvm
+				rcEXnToFzKkDavHzKz5+v5v3MHv09ib/fMdRg5RP69bDfCmfl+W0Vv/tfUn5nCa/Adizilau0TE6
+				8XFna4j9791ManUFBqVAyADMyd8bt874vqQX2WiVcBFD5I7wJBT1t1UEv0oPCGPCqHASksALnyvR
+				sArbe4v2/XxBF2Xwlx4OZr0aRBZz+n0frTOAedkqy2p1adWyKoLbbaPVldnLL2svrbLWNy2rtswV
+				D4bFIEG4A9JNKAdLsHTbLGtddrMqwVKrdg/OIcoeOeoDtZeHIeKAHEiCbNEZIh3HLSaadjkMD67B
+				SOAEiEXvA3WgAUXGFMmIKEiSgmQ5gERkJokeOp9XT7QUzqnYPCh2QxOZFybrYIWhWwJjk4Or+uKV
+				JpcmRZ6eyixGa62L016r1CXPbDgqow7jsY7/mF45AFiulqSwkWm3IjMSEhrpOIFoSxyULGBWGLhS
+				rqMJDuUK8h8OrWgXPdzQlyFq8LBojGtUzlFBHzAgRRAWXxNXUBdiDFtX2L/QckLSq/GWltBzs+MQ
+				G0na/iE9rQ8T/E6AaCc9Mh6CxrA7MFtmRNKZ21lnmigAehNlOfLgdXAdbYxaBh1wUUd+3+xg5a/i
+				tKOqEFPp8WbAgepVKR9yTdNm3oMUJuGXupTcvcoMEOMY5DVMwFm3y2r/w6pdMRU=|
+			)
+			(checksum "B443EC325AC41F5D1FA8E96D51EE88DD")
+		)
+	)
+)
