@@ -52,6 +52,7 @@ public:
 
     int ArchiveProject( const TOOL_EVENT& aEvent );
     int UnarchiveProject( const TOOL_EVENT& aEvent );
+    int ExportForOlderVersion( const TOOL_EVENT& aEvent );
     int ExploreProject( const TOOL_EVENT& aEvent );
     int RestoreLocalHistory( const TOOL_EVENT& aEvent );
     int ToggleLocalHistory( const TOOL_EVENT& aEvent );

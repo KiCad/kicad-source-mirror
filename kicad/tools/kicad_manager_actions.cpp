@@ -202,6 +202,13 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editOtherPCB( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Parameter<wxString*>( nullptr ) );      // Default to no filename
 
+TOOL_ACTION KICAD_MANAGER_ACTIONS::exportForOlderVersion(
+        TOOL_ACTION_ARGS()
+                .Name( "kicad.Control.exportForOlderVersion" )
+                .Scope( AS_GLOBAL )
+                .FriendlyName( _( "Export for Older KiCad Version..." ) )
+                .Tooltip( _( "Export a copy of the project that an older KiCad can open" ) ) );
+
 TOOL_ACTION KICAD_MANAGER_ACTIONS::archiveProject( TOOL_ACTION_ARGS()
         .Name( "kicad.Control.archiveProject" )
         .Scope( AS_GLOBAL )

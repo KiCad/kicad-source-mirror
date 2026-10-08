@@ -27,6 +27,12 @@
 #include <policy_keys.h>
 #include <kiway.h>
 #include <kicad_manager_frame.h>
+#include <core/json_serializers.h> // must precede any json+wxString use (job.h) in this TU
+#include <downgrade_target.h>
+#include <project_downgrade.h>
+#include <filesystem>
+#include <system_error>
+#include <wx/msgdlg.h>
 #include <kiplatform/policy.h>
 #include <kiplatform/secrets.h>
 #include <kiplatform/ui.h>
@@ -44,12 +50,15 @@
 #include <tools/kicad_manager_actions.h>
 #include <tools/kicad_manager_control.h>
 #include <dialogs/panel_design_block_lib_table.h>
+#include <dialogs/dialog_downgrade_report.h>
+#include <dialogs/dialog_export_older_version.h>
 #include <dialogs/dialog_template_selector.h>
 #include <dialogs/git/dialog_git_repository.h>
 #include <git/git_clone_handler.h>
 #include <gestfich.h>
 #include <paths.h>
 #include <wx/dir.h>
+#include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include "dialog_pcm.h"
 #include <project/project_archiver.h>
@@ -605,6 +614,160 @@ int KICAD_MANAGER_CONTROL::UnarchiveProject( const TOOL_EVENT& aEvent )
 }
 
 
+int KICAD_MANAGER_CONTROL::ExportForOlderVersion( const TOOL_EVENT& aEvent )
+{
+    wxFileName proFn( Prj().GetProjectFullName() );
+    wxString   projectDir = proFn.GetPath();
+    wxString   projectName = proFn.GetName();
+
+    // The export reads the files on disk, so it should match what is on screen.
+    KIWAY_PLAYER* schFrame = m_frame->Kiway().Player( FRAME_SCH, false );
+    KIWAY_PLAYER* pcbFrame = m_frame->Kiway().Player( FRAME_PCB_EDITOR, false );
+
+    if( ( schFrame && schFrame->IsContentModified() ) || ( pcbFrame && pcbFrame->IsContentModified() ) )
+    {
+        int answer =
+                wxMessageBox( _( "You have unsaved changes. Save them before exporting?" ),
+                              _( "Export for Older KiCad Version" ), wxYES_NO | wxCANCEL | wxICON_WARNING, m_frame );
+
+        if( answer == wxCANCEL )
+            return 0;
+
+        if( answer == wxYES )
+        {
+            // The handlers set the payload only when the save actually happened. A failed or
+            // cancelled save must not export stale files behind a success message.
+            if( schFrame && schFrame->IsContentModified() )
+            {
+                std::string payload;
+                m_frame->Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_SAVE, payload );
+
+                if( payload != "success" )
+                {
+                    wxMessageBox( _( "The schematic was not saved. Nothing was exported." ),
+                                  _( "Export for Older KiCad Version" ), wxOK | wxICON_ERROR, m_frame );
+                    return 0;
+                }
+            }
+
+            if( pcbFrame && pcbFrame->IsContentModified() )
+            {
+                std::string payload;
+                m_frame->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_PCB_SAVE, payload );
+
+                if( payload != "success" )
+                {
+                    wxMessageBox( _( "The board was not saved. Nothing was exported." ),
+                                  _( "Export for Older KiCad Version" ), wxOK | wxICON_ERROR, m_frame );
+                    return 0;
+                }
+            }
+        }
+    }
+
+    // The export converts the saved project-local library files, which the library editors do
+    // not save through the mails above.
+    KIWAY_PLAYER* symFrame = m_frame->Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, false );
+    KIWAY_PLAYER* fpFrame = m_frame->Kiway().Player( FRAME_FOOTPRINT_EDITOR, false );
+
+    if( ( symFrame && symFrame->IsContentModified() ) || ( fpFrame && fpFrame->IsContentModified() ) )
+    {
+        if( wxMessageBox( _( "A library editor has unsaved changes. The export uses the last saved "
+                             "library files. Continue?" ),
+                          _( "Export for Older KiCad Version" ), wxYES_NO | wxICON_WARNING, m_frame )
+            != wxYES )
+        {
+            return 0;
+        }
+    }
+
+    const std::vector<DOWNGRADE_TARGET>& targets = GetDowngradeTargets();
+    wxArrayString                        names;
+
+    for( const DOWNGRADE_TARGET& target : targets )
+        names.Add( target.m_name );
+
+    // Probe against the oldest target. It drops the most, so its variant list covers the
+    // picker no matter which target the user chooses.
+    const wxString&       probeTarget = targets.back().m_name;
+    COMPATIBILITY_REPORT  probeReport;
+    wxString              error;
+    std::vector<wxString> foundVariants;
+
+    if( !ClassifyProjectForDowngrade( m_frame->Kiway(), projectDir, projectName, probeTarget, probeReport, error,
+                                      &foundVariants ) )
+    {
+        wxMessageBox( error, _( "Export for Older KiCad Version" ), wxOK | wxICON_ERROR, m_frame );
+        return 0;
+    }
+
+    wxArrayString variantNames;
+
+    for( const wxString& name : foundVariants )
+        variantNames.Add( name );
+
+    DIALOG_EXPORT_OLDER_VERSION setupDlg( m_frame, names, variantNames, m_frame->GetMruPath() );
+
+    if( setupDlg.ShowModal() != wxID_OK )
+        return 0;
+
+    wxString target = setupDlg.GetTarget();
+    bool     dropInsteadOfApproximate = setupDlg.GetDropInsteadOfApproximate();
+    wxString variant = setupDlg.GetVariant();
+
+    // A self-contained subfolder so we never write into the folder the user picked directly.
+    wxString destDir = setupDlg.GetPath() + wxFileName::GetPathSeparator() + projectName;
+
+    // Early feedback only. The export enforces this again when it creates the folder.
+    std::error_code ec;
+
+    if( std::filesystem::exists( destDir.ToStdWstring(), ec )
+        && !std::filesystem::is_empty( destDir.ToStdWstring(), ec ) )
+    {
+        wxMessageBox( wxString::Format( _( "The folder '%s' is not empty. Choose a location where it "
+                                           "does not exist yet." ),
+                                        destDir ),
+                      _( "Export for Older KiCad Version" ), wxOK | wxICON_ERROR, m_frame );
+        return 0;
+    }
+
+    COMPATIBILITY_REPORT report;
+    foundVariants.clear();
+
+    // The probe used the base design and default approximation policy.
+    if( target == probeTarget && !dropInsteadOfApproximate && variant.IsEmpty() )
+    {
+        report = probeReport;
+        foundVariants.assign( variantNames.begin(), variantNames.end() );
+    }
+    else if( !ClassifyProjectForDowngrade( m_frame->Kiway(), projectDir, projectName, target, report, error,
+                                           &foundVariants, dropInsteadOfApproximate, variant ) )
+    {
+        wxMessageBox( error, _( "Export for Older KiCad Version" ), wxOK | wxICON_ERROR, m_frame );
+        return 0;
+    }
+
+    if( report.IsBlocked() || report.IsLossy() )
+    {
+        DIALOG_DOWNGRADE_REPORT reportDlg( m_frame, target, report );
+
+        if( reportDlg.ShowModal() != wxID_OK || report.IsBlocked() )
+            return 0;
+    }
+
+    if( !ExportProjectForDowngrade( m_frame->Kiway(), projectDir, projectName, target, destDir, error, variant,
+                                    dropInsteadOfApproximate ) )
+    {
+        wxMessageBox( error, _( "Export for Older KiCad Version" ), wxOK | wxICON_ERROR, m_frame );
+        return 0;
+    }
+
+    wxMessageBox( wxString::Format( _( "Exported to '%s'." ), destDir ), _( "Export for Older KiCad Version" ),
+                  wxOK | wxICON_INFORMATION, m_frame );
+    return 0;
+}
+
+
 int KICAD_MANAGER_CONTROL::ExploreProject( const TOOL_EVENT& aEvent )
 {
     // Open project directory in host OS's file explorer
@@ -954,6 +1117,7 @@ void KICAD_MANAGER_CONTROL::setTransitions()
 
     Go( &KICAD_MANAGER_CONTROL::ArchiveProject,     KICAD_MANAGER_ACTIONS::archiveProject.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::UnarchiveProject,   KICAD_MANAGER_ACTIONS::unarchiveProject.MakeEvent() );
+    Go( &KICAD_MANAGER_CONTROL::ExportForOlderVersion, KICAD_MANAGER_ACTIONS::exportForOlderVersion.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ExploreProject,     KICAD_MANAGER_ACTIONS::openProjectDirectory.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::RestoreLocalHistory, KICAD_MANAGER_ACTIONS::restoreLocalHistory.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ToggleLocalHistory, KICAD_MANAGER_ACTIONS::showLocalHistory.MakeEvent() );

@@ -494,6 +494,7 @@ void KICAD_MANAGER_FRAME::setupUIConditions()
     activeProjectCond.Enable( activeProject );
 
     manager->SetConditions( ACTIONS::saveAs,                       activeProjectCond );
+    manager->SetConditions( KICAD_MANAGER_ACTIONS::exportForOlderVersion, activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::closeProject,   activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::archiveProject, activeProjectCond );
     manager->SetConditions( KICAD_MANAGER_ACTIONS::newJobsetFile,  activeProjectCond );
