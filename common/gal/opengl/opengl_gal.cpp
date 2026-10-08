@@ -532,14 +532,16 @@ OPENGL_GAL::~OPENGL_GAL()
             delete m_tempManager;
         }
 
+        // The program lives in the share group, so it outlives this canvas unless it is deleted
+        // while the context is still current
+        delete m_shader;
+
         gl_mgr->UnlockCtx( m_glPrivContext );
 
         // If it was the main context, then it will be deleted
         // when the last OpenGL GAL instance is destroyed (a few lines below)
         if( m_glPrivContext != m_glMainContext )
             gl_mgr->DestroyCtx( m_glPrivContext );
-
-        delete m_shader;
 
         // Are we destroying the last GAL instance?
         if( m_instanceCounter == 0 && m_glMainContext )
