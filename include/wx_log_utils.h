@@ -45,6 +45,10 @@ public:
 
     ~SCOPED_WXLOG_TARGET() { wxLog::SetActiveTarget( m_previous ); }
 
+    // No copying or it can lead to double-restoring of the wxLog target.
+    SCOPED_WXLOG_TARGET( const SCOPED_WXLOG_TARGET& ) = delete;
+    SCOPED_WXLOG_TARGET& operator=( const SCOPED_WXLOG_TARGET& ) = delete;
+
 private:
     wxLog* m_logger;
     wxLog* m_previous;

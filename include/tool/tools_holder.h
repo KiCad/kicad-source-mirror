@@ -207,8 +207,11 @@ public:
         m_holder->PopTool( m_event );
     }
 
+    // No copying or it can lead to double-popping of the tool stack.
+    SCOPED_TOOL_PUSHER( const SCOPED_TOOL_PUSHER& ) = delete;
+    SCOPED_TOOL_PUSHER& operator=( const SCOPED_TOOL_PUSHER& ) = delete;
+
 private:
     TOOLS_HOLDER* m_holder;
     TOOL_EVENT    m_event;
 };
-

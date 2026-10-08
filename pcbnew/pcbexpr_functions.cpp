@@ -794,6 +794,10 @@ public:
         m_item->SetLayerSet( m_layers );
     }
 
+    // No copying or it can lead to double-restoring of the layer set.
+    SCOPED_LAYERSET( const SCOPED_LAYERSET& ) = delete;
+    SCOPED_LAYERSET& operator=( const SCOPED_LAYERSET& ) = delete;
+
     void Add( PCB_LAYER_ID aLayer )
     {
         m_item->SetLayerSet( m_item->GetLayerSet().set( aLayer ) );

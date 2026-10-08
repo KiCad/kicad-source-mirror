@@ -232,6 +232,10 @@ public:
         m_duration = m_counter.SinceStart<DURATION>();
     }
 
+    // No copying or it can lead to double or early updating of the duration.
+    SCOPED_PROF_TIMER( const SCOPED_PROF_TIMER& ) = delete;
+    SCOPED_PROF_TIMER& operator=( const SCOPED_PROF_TIMER& ) = delete;
+
 private:
     /// The counter to use to do the profiling
     PROF_TIMER m_counter;

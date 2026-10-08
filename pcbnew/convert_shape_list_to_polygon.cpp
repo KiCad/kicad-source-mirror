@@ -68,6 +68,10 @@ public:
         for( EDA_ITEM* item : *this )
             item->ClearFlags( m_flagsToClear );
     }
+
+    // No copying or it can lead to double or early-clearing of the flags.
+    SCOPED_FLAGS_CLEANER( const SCOPED_FLAGS_CLEANER& ) = delete;
+    SCOPED_FLAGS_CLEANER& operator=( const SCOPED_FLAGS_CLEANER& ) = delete;
 };
 
 

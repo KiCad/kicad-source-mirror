@@ -1417,6 +1417,10 @@ bool EXPORTER_STEP::Export()
         };
 
         ~SCOPED_PRINTER() { Message::DefaultMessenger()->RemovePrinter( m_handle ); }
+
+        // No copying or it can lead to double or early-removal of the printer.
+        SCOPED_PRINTER( const SCOPED_PRINTER& ) = delete;
+        SCOPED_PRINTER& operator=( const SCOPED_PRINTER& ) = delete;
     };
 
     Message::DefaultMessenger()->RemovePrinters( STANDARD_TYPE( Message_PrinterOStream ) );

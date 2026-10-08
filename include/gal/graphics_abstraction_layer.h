@@ -1443,17 +1443,18 @@ public:
      *
      * Specify the flags to save/restore in aFlags.
      */
-    GAL_SCOPED_ATTRS( KIGFX::GAL& aGal, int aFlags )
-        : m_gal( aGal ), m_flags( aFlags )
+    GAL_SCOPED_ATTRS( KIGFX::GAL& aGal, int aFlags ) :
+            m_gal( aGal ),
+            m_flags( aFlags ),
+            // Save what we need to restore later.
+            // These are all so cheap to copy, it's likely not worth if'ing
+            m_strokeColor( aGal.GetStrokeColor() ),
+            m_strokeWidth( aGal.GetLineWidth() ),
+            m_isStroke( aGal.GetIsStroke() ),
+            m_fillColor( aGal.GetFillColor() ),
+            m_isFill( aGal.GetIsFill() ),
+            m_layerDepth( aGal.getLayerDepth() )
     {
-        // Save what we need to restore later.
-        // These are all so cheap to copy, it's likely not worth if'ing
-        m_strokeWidth = aGal.GetLineWidth();
-        m_strokeColor = aGal.GetStrokeColor();
-        m_isStroke = aGal.GetIsStroke();
-        m_fillColor = aGal.GetFillColor();
-        m_isFill = aGal.GetIsFill();
-        m_layerDepth = aGal.getLayerDepth();
     }
 
     ~GAL_SCOPED_ATTRS()
@@ -1480,12 +1481,16 @@ public:
             m_gal.SetLayerDepth( m_layerDepth );
     }
 
+    // No copying or it can lead to double-restoring of the GAL attributes.
+    GAL_SCOPED_ATTRS( const GAL_SCOPED_ATTRS& ) = delete;
+    GAL_SCOPED_ATTRS& operator=( const GAL_SCOPED_ATTRS& ) = delete;
+
 private:
     GAL& m_gal;
     int  m_flags;
 
     COLOR4D m_strokeColor;
-    double  m_strokeWidth;
+    float   m_strokeWidth;
     bool    m_isStroke;
 
     COLOR4D m_fillColor;
