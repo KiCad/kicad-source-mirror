@@ -136,14 +136,25 @@ void SCOPED_TEMP_DIR::Retain()
 }
 
 
+void expectSafeChildPath( const wxString& aChild )
+{
+    if( !WX_FILENAME::IsSafeChildPath( aChild ) )
+        throw std::runtime_error( "Unsafe child path '" + std::string( aChild.utf8_str() ) + "'" );
+}
+
+
 wxString SCOPED_TEMP_DIR::ChildPathStr( const wxString& aName ) const
 {
+    expectSafeChildPath( aName );
+
     return wxString::FromUTF8( ( m_path / aName.utf8_string() ).string() );
 }
 
 
 std::filesystem::path SCOPED_TEMP_DIR::CreateChildDir( const wxString& aName ) const
 {
+    expectSafeChildPath( aName );
+
     std::filesystem::path childPath = m_path / aName.utf8_string();
 
     if( !std::filesystem::create_directory( childPath ) )
@@ -161,6 +172,8 @@ wxString SCOPED_TEMP_DIR::CreateChildDirStr( const wxString& aName ) const
 
 std::filesystem::path SCOPED_TEMP_DIR::CreateChildFile( const wxString& aName ) const
 {
+    expectSafeChildPath( aName );
+
     std::filesystem::path childPath = m_path / aName.utf8_string();
     wxFFile               file( wxString::FromUTF8( childPath.string() ), wxT( "w" ) );
 
