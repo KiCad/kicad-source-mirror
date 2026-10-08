@@ -84,6 +84,7 @@ bool DIALOG_PNS_SETTINGS::TransferDataFromWindow()
     m_settings.SetAllowDRCViolations( m_violateDrc->GetValue() );
     m_settings.SetRestrictAngles( m_restrictAngles->GetValue() );
     m_settings.SetFreeAngleMode( m_freeAngleMode->GetValue() );
+    m_settings.SetKeepDPCouplingWhenDragging( m_keepDPCouplingWhenDragging->GetValue() );
 
     return true;
 }

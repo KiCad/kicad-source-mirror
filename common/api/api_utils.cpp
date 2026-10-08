@@ -423,9 +423,7 @@ KICOMMON_API bool PackKiwayApiMessage( const google::protobuf::Message& aMessage
 {
     ApiRequest request;
     request.mutable_header()->set_client_name( KiwayClientName );
-
-    if( !request.mutable_message()->PackFrom( aMessage ) )
-        return false;
+    request.mutable_message()->PackFrom( aMessage );
 
     aBytes = request.SerializeAsString();
     return true;
