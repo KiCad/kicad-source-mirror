@@ -461,8 +461,7 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
         m_schematic->GetEmbeddedFiles()->ClearEmbeddedFonts();
 
     m_out->Print( "(kicad_sch (version %d) (generator \"eeschema\") (generator_version %s)",
-                  SEXPR_SCHEMATIC_FILE_VERSION,
-                  m_out->Quotew( GetMajorMinorVersion() ).c_str() );
+                  SEXPR_SCHEMATIC_FILE_VERSION, m_out->Quotew( GetMajorMinorVersion() ).c_str() );
 
     KICAD_FORMAT::FormatUuid( m_out, screen->m_uuid );
 
