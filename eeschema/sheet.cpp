@@ -716,20 +716,19 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                     if( !thisRow || !otherRow )
                         continue;
 
-                    wxFileName otherUriFileName;
-                    wxString thisURI = LIBRARY_MANAGER::GetFullURI( thisRow, true );;
+                    wxString thisURI = LIBRARY_MANAGER::GetFullURI( thisRow, true );
                     wxString otherURI = LIBRARY_MANAGER::GetFullURI( otherRow, false );
 
                     if( otherURI.Contains( "${KIPRJMOD}" ) || otherURI.Contains( "$(KIPRJMOD)" ) )
                     {
-                        // Cannot use relative paths here, "${KIPRJMOD}../path-to-cache-lib" does
-                        // not expand to a valid symbol library path.
-                        otherUriFileName.SetPath( fileName.GetPath() );
-                        otherUriFileName.SetFullName( otherURI.AfterLast( '}' ) );
+                        // Resolve KIPRJMOD against the imported schematic's directory.
+                        otherURI.Replace( wxS( "${KIPRJMOD}" ), fileName.GetPath() );
+                        otherURI.Replace( wxS( "$(KIPRJMOD)" ), fileName.GetPath() );
+                        wxFileName otherUriFileName( otherURI );
                         otherURI = otherUriFileName.GetFullPath();
                     }
 
-                    if( thisURI != otherURI )
+                    if( !LIBRARY_MANAGER::UrisAreEquivalent( thisURI, otherURI ) )
                     {
                         libNameConflict = true;
                         break;
@@ -769,14 +768,12 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                     // Don't expand environment variable because KIPRJMOD will not be correct
                     // for a different project.
                     wxString uri = LIBRARY_MANAGER::GetFullURI( row, false );
-                    wxFileName newLib;
 
                     if( uri.Contains( "${KIPRJMOD}" ) || uri.Contains( "$(KIPRJMOD)" ) )
                     {
-                        // Cannot use relative paths here, "${KIPRJMOD}../path-to-cache-lib" does
-                        // not expand to a valid symbol library path.
-                        newLib.SetPath( fileName.GetPath() );
-                        newLib.SetFullName( uri.AfterLast( '}' ) );
+                        uri.Replace( wxS( "${KIPRJMOD}" ), fileName.GetPath() );
+                        uri.Replace( wxS( "$(KIPRJMOD)" ), fileName.GetPath() );
+                        wxFileName newLib( uri );
                         uri = newLib.GetFullPath();
                     }
                     else
