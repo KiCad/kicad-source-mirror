@@ -118,7 +118,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-07 09:39+0000\n"
+"PO-Revision-Date: 2026-10-08 10:24+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -24657,12 +24657,12 @@ msgstr ""
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2204
 #, c-format
 msgid "DipTrace import: bus entry %d has unexpected terminator %d."
-msgstr ""
+msgstr "Importazione DipTrace: la voce bus %d ha un terminatore imprevisto %d."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:2217
 #, c-format
 msgid "DipTrace import: failed to parse bus entry %d: %s"
-msgstr ""
+msgstr "Importazione DipTrace: impossibile analizzare la voce bus %d: %s"
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3703
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3735
@@ -24671,6 +24671,8 @@ msgid ""
 "DipTrace import: invalid wire-net name for net index %d at offset 0x%06zX: "
 "%s."
 msgstr ""
+"Importazione DipTrace: nome wire-net non valido per l'indice di net %d "
+"all'offset 0x%06zX: %s."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3751
 #, c-format
@@ -24678,6 +24680,8 @@ msgid ""
 "DipTrace import: invalid wire-net pin count %d for net '%s' at offset "
 "0x%06zX."
 msgstr ""
+"Importazione DipTrace: numero di pin wire-net non valido (%d) per la net "
+"'%s' all'offset 0x%06zX."
 
 #: eeschema/sch_io/diptrace/diptrace_sch_parser.cpp:3763
 #, c-format
@@ -24705,6 +24709,8 @@ msgid ""
 "DipTrace import: loaded %zu components, %zu buses, %zu net-port labels from "
 "version %d file with %d sheets."
 msgstr ""
+"Importazione DipTrace: caricati %zu componenti, %zu bus e %zu etichette net-"
+"porta da un file versione %d con %d fogli."
 
 #: eeschema/sch_io/diptrace/sch_io_diptrace.h:54
 msgid "DipTrace schematic files"
@@ -24752,14 +24758,13 @@ msgid "Could not find '%s' in the imported library."
 msgstr "Impossibile trovare \"%s\" nella libreria importata."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:2432
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reload saved symbol '%s'"
-msgstr "Impossibile caricare immagine da '%s'."
+msgstr "Impossibile ricaricare il simbolo salvato '%s'"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:89
-#, fuzzy
 msgid "Eagle schematic files"
-msgstr "File di schemi elettrici Eagle XML"
+msgstr "File schemi elettrici Eagle"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:94
 msgid "Eagle XML library files"
@@ -24811,55 +24816,67 @@ msgstr "Fallita analisi valore: '%s'"
 #, c-format
 msgid "EasyEDA Pro v3 symbol '%s' in '%s' was skipped due to parse error: %s"
 msgstr ""
+"Il simbolo '%s' in '%s' EasyEDA Pro v3 saltato per un errore di analisi: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:237
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load symbol '%s' from '%s': %s"
-msgstr "Impossibile caricare il simbolo '%s' dalla libreria '%s'."
+msgstr "Impossibile caricare il simbolo '%s' da '%s': %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:311
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic document '%s' not found in '%s'"
-msgstr "File schema elettrico '%s' non trovato."
+msgstr "Documento schema elettrico '%s' non trovato in '%s'"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse EasyEDA Pro v3 symbol/device metadata: %s"
-msgstr "Impossibile analizzare i metadati del provider remoto: %s"
+msgstr ""
+"Impossibile analizzare i metadati del simbolo/dispositivo di EasyEDA Pro v3: "
+"%s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:372
 #, c-format
 msgid "EasyEDA Pro v3 symbol '%s' was skipped due to parse error: %s"
 msgstr ""
+"Il simbolo '%s' di EasyEDA Pro v3 è stato saltato a causa di un errore di "
+"analisi: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:405
 #, c-format
 msgid "EasyEDA Pro v3 schematic page '%s' was not found and was skipped."
 msgstr ""
+"La pagina dello schema '%s' di EasyEDA Pro v3 non è stata trovata ed è stata "
+"saltata."
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:428
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:476
 #, c-format
 msgid "EasyEDA Pro v3 schematic page '%s' was skipped due to parse error: %s"
 msgstr ""
+"La pagina dello schema '%s' di EasyEDA Pro v3 è stata saltata a causa di un "
+"errore di analisi: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:511
 #, c-format
 msgid "EasyEDA Pro v3 device '%s' was skipped due to parse error: %s"
 msgstr ""
+"Il dispositivo '%s' di EasyEDA Pro v3 è stato saltato a causa di un errore "
+"di analisi: %s"
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.cpp:572
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.cpp:350
-#, fuzzy, c-format
+#, c-format
 msgid "EasyEDA (JLCEDA) Pro v3 import skipped %d unsupported object(s)."
-msgstr "Progetto EasyEDA (JLCEDA) Pro"
+msgstr ""
+"L'importazione di EasyEDA (JLCEDA) Pro v3 ha saltato %d oggetto/i non "
+"supportato/i."
 
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.h:50
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro_v3.h:55
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_v3.h:52
-#, fuzzy
 msgid "EasyEDA (JLCEDA) Pro v3 files"
-msgstr "File EasyEDA (JLCEDA) Pro"
+msgstr "File EasyEDA (JLCEDA) Pro v3"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:3643
 #, c-format
@@ -24916,9 +24933,9 @@ msgid "Error retrieving data from HTTP library %s: %s"
 msgstr "Errore nel recupero dati da libreria HTTP %s: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:468
-#, fuzzy, c-format
+#, c-format
 msgid "Error retrieving part %s from HTTP library: %s"
-msgstr "Errore nel recupero dati da libreria HTTP %s: %s"
+msgstr "Errore nel recupero della parte %s dalla libreria HTTP: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:540
 #, c-format
@@ -25231,14 +25248,15 @@ msgid "Invalid property value"
 msgstr "Valore proprietà non valido"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1390
-#, fuzzy, c-format
+#, c-format
 msgid "Variant symbol override contains invalid character '%c'"
-msgstr "Il simbolo %s contiene il carattere non valido '%c'"
+msgstr ""
+"La sovrascrittura del simbolo della variante contiene il carattere non "
+"valido '%c'"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1396
-#, fuzzy
 msgid "Invalid variant symbol override LIB_ID"
-msgstr "Nome simbolo genitore non valido"
+msgstr "Sovrascrittura del simbolo della variante LIB_ID non valida"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1427
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2770
@@ -25310,14 +25328,12 @@ msgid "Invalid table: no cells defined"
 msgstr "Tabella non valida: nessuna cella definita"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5974
-#, fuzzy
 msgid "Invalid table: column count must be positive"
-msgstr "Tabella non valida: nessuna cella definita"
+msgstr "Tabella non valida: Il numero di colonne deve essere positivo"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5980
-#, fuzzy
 msgid "Invalid table: incomplete row"
-msgstr "Tabella non valida: nessuna cella definita"
+msgstr "Tabella non valida: riga incompleta"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:6203
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8313
@@ -25412,24 +25428,30 @@ msgid ""
 "The legacy design cache could not be read past 0x%zx (%s); the remaining "
 "symbols fall back to placeholders."
 msgstr ""
+"Impossibile leggere la cache progetto legacy oltre 0x%zx (%s); i simboli "
+"rimanenti vengono sostituiti da segnaposto."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid "Converting page '%s'..."
-msgstr "Installazione pacchetto '%s'."
+msgstr "Conversione pagina '%s'..."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:2826
 msgid "OrCAD interface has no surviving source wire for label placement."
 msgstr ""
+"L'interfaccia di OrCAD non presenta alcun filo sorgente residuo per il "
+"posizionamento dell'etichetta."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3009
 msgid "OrCAD native connectivity joins distinct source nets."
-msgstr ""
+msgstr "La connettività nativa di OrCAD unisce net sorgenti distinte."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3199
 #, c-format
 msgid "Cannot place OrCAD net repair '%s' without a wire intersection."
 msgstr ""
+"Impossibile posizionare la riparazione net OrCAD '%s' senza un'intersezione "
+"di fili."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3233
 #, c-format
@@ -25437,32 +25459,40 @@ msgid ""
 "OrCAD net repair joins source nets '%s' and '%s' at '%s' on sheet '%s' (net "
 "'%s')."
 msgstr ""
+"La riparazione delle net di OrCAD unisce le net sorgente '%s' e '%s' nel "
+"punto '%s' sul foglio '%s' (net '%s')."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3255
 #, c-format
 msgid "OrCAD source net '%s' remains disconnected after local repair:%s"
 msgstr ""
+"La net di origine OrCAD '%s' rimane scollegata dopo la riparazione locale:%s"
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3367
 #, c-format
 msgid "Cannot uniquely map OrCAD source pin %zu of '%s'."
-msgstr ""
+msgstr "Impossibile mappare in modo univoco il pin sorgente OrCAD %zu di '%s'."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3686
 #, c-format
 msgid "Cannot place OrCAD label '%s' without a wire intersection."
 msgstr ""
+"Impossibile posizionare l'etichetta OrCAD '%s' senza un'intersezione di fili."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:3706
 #, c-format
 msgid "Cannot place OrCAD interface '%s' clear of wires and pins."
 msgstr ""
+"Impossibile posizionare l'interfaccia OrCAD '%s' in modo che non "
+"interferisca con fili e pin."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:6170
 #, c-format
 msgid ""
 "Page '%s': cannot determine the source net for interface '%s' at (%d, %d)."
 msgstr ""
+"Pagina '%s': impossibile determinare la rete sorgente per l'interfaccia '%s' "
+"in (%d, %d)."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:7245
 #, c-format
@@ -25470,6 +25500,8 @@ msgid ""
 "Page '%s': the off-page connector at (%d, %d) is unconnected in the source "
 "design; skipped."
 msgstr ""
+"Pagina '%s': il connettore fuori pagina in (%d, %d) non è collegato nel "
+"progetto sorgente; ignorato."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:7260
 #, c-format
@@ -25477,17 +25509,23 @@ msgid ""
 "Page '%s': cannot place off-page connector '%s' at (%d, %d) without a wire "
 "intersection."
 msgstr ""
+"Pagina '%s': impossibile posizionare il connettore fuori pagina '%s' alle "
+"coordinate (%d, %d) senza un'intersezione di fili."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:7349
 #, c-format
 msgid ""
 "Page '%s': cannot place port '%s' at (%d, %d) without a wire intersection."
 msgstr ""
+"Pagina '%s': impossibile posizionare la porta '%s' in (%d, %d) senza "
+"un'intersezione di fili."
 
 #: eeschema/sch_io/orcad/orcad_converter_sheet.cpp:7849
-#, fuzzy, c-format
+#, c-format
 msgid "An embedded picture could not be decoded and was skipped (%s)."
-msgstr "Lo strato '%s' non può essere mappato e sarà saltato."
+msgstr ""
+"Un'immagine incorporata non ha potuto essere decodificata ed è stata saltata "
+"(%s)."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:718
 #, c-format
@@ -25495,24 +25533,31 @@ msgid ""
 "Symbol '%s' is absent from the design cache; synthesized placeholder from %d "
 "instance(s)."
 msgstr ""
+"Il simbolo '%s' è assente dalla cache progetto; segnaposto sintetizzato da "
+"%d istanza/e."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol '%s' duplicates the name of another library item and was left out "
 "of the library."
-msgstr "Impossibile caricare alcun simbolo dalla libreria."
+msgstr ""
+"Il simbolo '%s' duplica il nome di un altro elemento della libreria ed è "
+"stato escluso dalla libreria stessa."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol '%s' could not be converted and was left out of the library (%s)."
-msgstr "Impossibile caricare alcun simbolo dalla libreria."
+msgstr ""
+"Il simbolo '%s' non ha potuto essere convertito ed è stato escluso dalla "
+"libreria (%s)."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:1608
 #, c-format
 msgid "No cached symbol for '%s' (%s); placeholder emitted."
 msgstr ""
+"Nessun simbolo memorizzato nella cache per '%s' (%s); emesso un segnaposto."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:2792
 #, c-format
@@ -25520,6 +25565,8 @@ msgid ""
 "Native power units for '%s' have ambiguous package identity; their symbol "
 "definitions were kept separate."
 msgstr ""
+"Le unità di elaborazione native per '%s' hanno un'identità del pacchetto "
+"ambigua; le definizioni dei loro simboli sono state mantenute separate."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:2895
 #, c-format
@@ -25527,31 +25574,37 @@ msgid ""
 "Page %s: %s uses a synthesized placeholder at a different orientation; pin "
 "layout approximate."
 msgstr ""
+"Pagina %s: %s utilizza un segnaposto sintetizzato con un orientamento "
+"diverso; la disposizione dei pin è approssimativa."
 
 #: eeschema/sch_io/orcad/orcad_converter_symbols.cpp:2901
 #, c-format
 msgid ""
 "Page %s: %s pin positions mismatch (orientation %d); geometry may be off."
 msgstr ""
+"Pagina %s: discrepanza nelle posizioni dei pin %s (orientamento %d); la "
+"geometria potrebbe non essere corretta."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:82
 msgid "OrCAD stream size exceeds the compound file"
-msgstr ""
+msgstr "La dimensione dello stream OrCAD supera quella del file composto"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:315
 #, c-format
 msgid "The OrCAD CIS variant '%s' has no definition stream."
-msgstr ""
+msgstr "La variante OrCAD CIS '%s' non dispone di uno stream di definizione."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:328
 #, c-format
 msgid "The OrCAD CIS variant '%s' references an unknown property group."
 msgstr ""
+"La variante OrCAD CIS '%s' fa riferimento a un gruppo di proprietà "
+"sconosciuto."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Using OrCAD CIS variant '%s'."
-msgstr "Aggiunta variante '%s'."
+msgstr "Uso della variante OrCAD CIS '%s'."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:451
 #, c-format
@@ -25559,33 +25612,39 @@ msgid ""
 "'%s' contains a complete OrCAD Capture design and cannot be loaded as a "
 "hierarchical sheet. Use File > Import > Non-KiCad Schematic... instead."
 msgstr ""
+"'%s' contiene un progetto OrCAD Capture completo e non può essere caricato "
+"come foglio gerarchico. Utilizzare invece File > Importa > Schema non "
+"KiCad..."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:460
-#, fuzzy
 msgid "The OrCAD file could not be read."
-msgstr "Il file non può essere aperto."
+msgstr "Non è stato possibile leggere il file OrCAD."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:518
 msgid ""
 "The file does not contain the 'Library' stream of an OrCAD Capture design."
-msgstr ""
+msgstr "Il file non contiene lo stream 'Library' di un progetto OrCAD Capture."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:537
 msgid ""
 "The design has no 'Cache' stream; placeholder symbols will be synthesized "
 "for all parts."
 msgstr ""
+"Il progetto non dispone di un flusso 'Cache'; per tutte le parti verranno "
+"sintetizzati simboli segnaposto."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:564
-#, fuzzy, c-format
+#, c-format
 msgid "Package stream '%s' could not be parsed: %s"
-msgstr "Foglio di disegno '%s' impossibile da aprire."
+msgstr "Impossibile analizzare il flusso del pacchetto '%s': %s"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:582
 msgid ""
 "The file does not contain a 'Views' storage; it is not a supported OrCAD "
 "Capture design."
 msgstr ""
+"Il file non contiene un archivio 'Views'; non si tratta di un progetto OrCAD "
+"Capture supportato."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:617
 #, c-format
@@ -25593,17 +25652,20 @@ msgid ""
 "The schematic folder directory could not be read (%s); all stored folders "
 "are imported."
 msgstr ""
+"Impossibile leggere la directory delle cartelle degli schemi (%s); tutte le "
+"cartelle memorizzate vengono importate."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:629
-#, fuzzy
 msgid "The design contains no schematic folders."
-msgstr "Il blocco progetto non ha uno schema da piazzare."
+msgstr "Il progetto non contiene cartelle di schemi."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:653
 msgid ""
 "The design does not name its root schematic; the first schematic folder is "
 "used instead."
 msgstr ""
+"Il progetto non specifica lo schema radice; viene invece utilizzata la prima "
+"cartella di schemi."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:658
 #, c-format
@@ -25611,6 +25673,8 @@ msgid ""
 "The design names '%s' as its root schematic, but no such folder is present; "
 "the first schematic folder is used instead."
 msgstr ""
+"Il progetto indica '%s' come schema radice, ma tale cartella non è presente; "
+"viene invece utilizzata la prima cartella di schemi."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:714
 #, c-format
@@ -25618,25 +25682,28 @@ msgid ""
 "The page display order for schematic folder '%s' could not be read (%s); "
 "pages are imported in name order."
 msgstr ""
+"Non è stato possibile leggere l'ordine di visualizzazione delle pagine per "
+"la cartella degli schemi '%s' (%s); le pagine vengono importate in ordine di "
+"nome."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:749
-#, fuzzy, c-format
+#, c-format
 msgid "Page '%s' could not be parsed and was skipped: %s"
-msgstr "Lo strato '%s' non può essere mappato e sarà saltato."
+msgstr "Non è stato possibile analizzare la pagina '%s', saltata: %s"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:781
-#, fuzzy
 msgid "No schematic pages could be read from the design."
-msgstr "Impossibile caricare alcun simbolo dalla libreria."
+msgstr "Non è stato possibile leggere alcuna pagina di schema del progetto."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:888
 msgid "The file is not an OrCAD Capture library (no 'Library' stream)."
-msgstr ""
+msgstr "Il file non è una libreria di OrCAD Capture (nessuno stream 'Library')."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:929
-#, fuzzy, c-format
+#, c-format
 msgid "The library stream '%s' could not be read and was skipped (%s)."
-msgstr "Lo strato '%s' non può essere mappato e sarà saltato."
+msgstr ""
+"Non è stato possibile leggere il flusso della libreria '%s', saltato (%s)."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:979
 #, c-format
@@ -25644,16 +25711,17 @@ msgid ""
 "The OrCAD library could not be fully parsed (%s); some symbols may be "
 "missing."
 msgstr ""
+"Non è stato possibile analizzare completamente la libreria OrCAD (%s); "
+"alcuni simboli potrebbero mancare."
 
 #: eeschema/sch_io/orcad/sch_io_orcad.h:78
-#, fuzzy
 msgid "OrCAD Capture symbol library files"
-msgstr "File di librerie di simboli KiCad"
+msgstr "File di libreria di simboli OrCAD Capture"
 
 #: eeschema/sch_io/pads/pads_sch_parser.cpp:2111
 #, c-format
 msgid "BUSSES line %llu: unsupported record, %s. The bus was skipped."
-msgstr ""
+msgstr "BUSSES riga %llu: record non supportato, %s. Il bus è stato saltato."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:374
 #, c-format
@@ -25661,31 +25729,33 @@ msgid ""
 "'%s' contains a complete PADS Logic schematic and cannot be loaded as a "
 "hierarchical sheet. Use File > Import > Non-KiCad Schematic... instead."
 msgstr ""
+"'%s' contiene uno schema PADS Logic completo e non può essere caricato come "
+"foglio gerarchico. Usare File > Importa > Schema non KiCad..."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:426
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS file: %s"
-msgstr "Fallito salvataggio file libreria impronte '%s'."
+msgstr "Fallita analisi del file PADS: %s"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1306
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid PADS Logic binary schematic."
-msgstr "Il file '%s' non è uno schema gEDA valido."
+msgstr "'%s' non è uno schema binario PADS Logic valido."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1337
 #, c-format
 msgid " (%zu occurrences)"
-msgstr ""
+msgstr " (%zu occorrenze)"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1428
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a PADS Logic ASCII file."
-msgstr "'%s' non è un valore SPICE valido."
+msgstr "'%s' non è un file ASCII di PADS Logic."
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:1436
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse PADS Logic file '%s'."
-msgstr "Fallito salvataggio file libreria impronte '%s'."
+msgstr "Impossibile analizzare il file PADS Logic '%s'."
 
 #: eeschema/sch_io/pads/sch_io_pads.h:46
 msgid "PADS Logic schematic files"
@@ -25697,22 +25767,20 @@ msgstr "File di libreria PADS Logic"
 
 #: eeschema/sch_io/pcad/pcad_sch_parser.cpp:257
 msgid "Empty P-CAD document"
-msgstr ""
+msgstr "Documento P-CAD vuoto"
 
 #: eeschema/sch_io/pcad/sch_io_pcad.cpp:1254
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol definition '%s' for '%s' not found."
-msgstr "Libreria simboli '%s' non trovata."
+msgstr "Definizione del simbolo '%s' per '%s' non trovata."
 
 #: eeschema/sch_io/pcad/sch_io_pcad.h:56
-#, fuzzy
 msgid "P-CAD schematic files"
-msgstr "File schemi elettrici PADS Logic"
+msgstr "File schemi elettrici P-CAD"
 
 #: eeschema/sch_io/pcad/sch_io_pcad.h:61
-#, fuzzy
 msgid "P-CAD schematic and library files"
-msgstr "File di libreria PADS Logic"
+msgstr "File di schemi e librerie P-CAD"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:54 pcbnew/pcb_io/pcb_io_mgr.cpp:58
 #, c-format
@@ -25730,39 +25798,38 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Valore SCH_FILE_T sconosciuto: %d"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:256
-#, fuzzy
 msgid "Unrecognized library type"
-msgstr "Strato non riconosciuto '%s'"
+msgstr "Tipo di libreria non riconosciuto"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "Loading symbol library '%s'"
-msgstr "Errore nel caricamento della libreria di simboli '%s'."
+msgstr "Caricamento libreria di simboli '%s'"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:319
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' Convert err: \"%s\""
-msgstr "Libreria '%s': %s"
+msgstr "Errore di conversione della libreria '%s': \"%s\""
 
 #: eeschema/sch_io/sch_io_mgr.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s': %s"
-msgstr "Errore nel caricamento della libreria '%s'"
+msgstr "Errore nel caricamento della libreria '%s': %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading library '%s': unknown error"
-msgstr "Errore nel caricamento della libreria '%s'"
+msgstr "Errore nel caricamento della libreria '%s': errore sconosciuto"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:347 eeschema/sch_io/sch_io_mgr.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving symbol '%s': %s"
-msgstr "Errore caricando il simbolo '%s': %s"
+msgstr "Errore nel salvataggio del simbolo '%s': %s"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving symbol '%s': unknown error"
-msgstr "Errore caricando il simbolo '%s': %s"
+msgstr "Errore nel salvataggio del simbolo '%s': errore sconosciuto"
 
 #: eeschema/sch_item.cpp:228 eeschema/sch_item.cpp:249
 #: eeschema/sch_item.cpp:1130
@@ -25936,9 +26003,8 @@ msgstr "da netclass"
 #: eeschema/sch_line.cpp:1112 pcbnew/generators/pcb_tuning_pattern.cpp:2535
 #: pcbnew/pad.cpp:2233 pcbnew/pcb_track.cpp:2843
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:118
-#, fuzzy
 msgid "Net Chain"
-msgstr "Netclass"
+msgstr "Catena di net"
 
 #: eeschema/sch_marker.cpp:385 pcbnew/pcb_marker.cpp:297
 msgid "Violation"
@@ -26136,7 +26202,7 @@ msgstr "Ellisse, %s x %s"
 #: eeschema/sch_shape.cpp:640
 #, c-format
 msgid "Elliptical Arc, %s x %s"
-msgstr ""
+msgstr "Arco ellittico, %s x %s"
 
 #: eeschema/sch_shape.cpp:779
 msgid "Body outline color"
@@ -26151,12 +26217,10 @@ msgid "Fill color"
 msgstr "Colore riempimento"
 
 #: eeschema/sch_shape.cpp:783
-#, fuzzy
 msgid "Reverse hatch"
 msgstr "Tratteggio inverso"
 
 #: eeschema/sch_shape.cpp:784
-#, fuzzy
 msgid "Cross hatch"
 msgstr "Tratteggio incrociato"
 
@@ -26231,27 +26295,24 @@ msgstr "Pin foglio gerarchico '%s'"
 #: eeschema/sch_symbol.cpp:153
 #, fuzzy
 msgid "Effective Pin Map"
-msgstr "Effettivo %s:"
+msgstr "Mappa pin effettiva"
 
 #: eeschema/sch_symbol.cpp:346
-#, fuzzy
 msgid "Library default"
-msgstr "Percorso libreria"
+msgstr "Libreria predefinita"
 
 #: eeschema/sch_symbol.cpp:347
-#, fuzzy
 msgid "Named map"
-msgstr "Nome"
+msgstr "Mappa nominata"
 
 #: eeschema/sch_symbol.cpp:348
-#, fuzzy
 msgid "Identity"
 msgstr "Quantità"
 
 #: eeschema/sch_symbol.cpp:549
 #, c-format
 msgid "%s (identity)"
-msgstr ""
+msgstr "%s (identità)"
 
 #: eeschema/sch_symbol.cpp:3791
 msgid "Power symbol"
@@ -27840,13 +27901,12 @@ msgstr ""
 "l'installazione."
 
 #: eeschema/sim/ngspice.cpp:799
-#, fuzzy
 msgid ""
 "Simulation terminated by ngspice. This may be caused by insufficient memory "
 "or an internal error. The simulator will be reset."
 msgstr ""
-"Simulazione bloccata (%s). Di solito la causa è un bug in ngspice o una "
-"netlist non valida. Il simulatore verrà reimpostato."
+"Simulazione terminata da ngspice. Ciò potrebbe essere dovuto a memoria "
+"insufficiente o a un errore interno. Il simulatore verrà reimpostato."
 
 #: eeschema/sim/sim_lib_mgr.cpp:105 eeschema/sim/sim_lib_mgr.cpp:158
 #, c-format
@@ -27913,9 +27973,9 @@ msgid "Unknown simulation model pin '%s'"
 msgstr "Pin modello di simulazione sconosciuto '%s'"
 
 #: eeschema/sim/sim_model.cpp:825 eeschema/sim/sim_model_ngspice.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model parameter '%s'"
-msgstr "Pin modello di simulazione sconosciuto '%s'"
+msgstr "Parametro del modello di simulazione sconosciuto '%s'"
 
 #: eeschema/sim/sim_model_ibis.cpp:85
 #, c-format
@@ -27954,7 +28014,7 @@ msgstr "Impossibile aprire il file '%s' per scrivere il modello IBIS"
 
 #: eeschema/sim/sim_model_ibis.cpp:315
 msgid "Switch state (1 = on, 0 = off)"
-msgstr ""
+msgstr "Stato interruttore (1 = acceso, 0 = spento)"
 
 #: eeschema/sim/sim_model_ibis.cpp:462
 msgid "Power supply"
@@ -28017,21 +28077,25 @@ msgid ""
 "Repeat-per-unit decomposition does not support model '%s' because it has "
 "subcircuit parameters."
 msgstr ""
+"La scomposizione \"repeat-per-unit\" non supporta il modello '%s' perché "
+"presenta parametri di sottocircuito."
 
 #: eeschema/sim/sim_model_multiunit.cpp:213
 #, c-format
 msgid "Shared pin '%s' is not a pin of model '%s'."
-msgstr ""
+msgstr "Il pin condiviso '%s' non è un pin del modello '%s'."
 
 #: eeschema/sim/sim_model_multiunit.cpp:238
 #, c-format
 msgid "Unit %d maps to unknown pin '%s' of model '%s'."
-msgstr ""
+msgstr "L'unità %d è mappata sul pin sconosciuto '%s' del modello '%s'."
 
 #: eeschema/sim/sim_model_multiunit.cpp:248
 #, c-format
 msgid "Unit %d maps model pin '%s' to both symbol pins '%s' and '%s'."
 msgstr ""
+"L'unità %d associa il pin del modello '%s' a entrambi i pin del simbolo '%s' "
+"e '%s'."
 
 #: eeschema/sim/sim_model_multiunit.cpp:285
 #, c-format
