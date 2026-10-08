@@ -2409,7 +2409,9 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
     m_lineStack.clear();
     m_optimizerQueue.clear();
 
-    ITEM_SET headSet;
+    // An ITEM_SET does not free what it holds, so the copies of the heads are kept here
+    std::vector<std::unique_ptr<ITEM>> heads;
+    ITEM_SET                           headSet;
 
     PNS_DBG( Dbg(), Message, wxString::Format("shove run (heads: %d, currentNode=%p, depth=%d)", (int) m_headLines.size(), m_currentNode, m_currentNode->Depth() ) );
 
@@ -2420,11 +2422,13 @@ SHOVE::SHOVE_STATUS SHOVE::Run()
             PNS_DBG( Dbg(), Message, wxString::Format("process head-via [%d %d] node=%p", l.theVia->pos.x, l.theVia->pos.y, m_currentNode ) );
             auto realVia = m_currentNode->FindViaByHandle( *l.theVia );
             assert( realVia != nullptr );
-            headSet.Add( realVia->Clone() );
+            heads.emplace_back( realVia->Clone() );
+            headSet.Add( heads.back().get() );
         }
         else
         {
-            headSet.Add( *l.origHead->Clone() );
+            heads.emplace_back( l.origHead->Clone() );
+            headSet.Add( heads.back().get() );
         }
     }
 
