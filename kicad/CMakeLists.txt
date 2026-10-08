@@ -42,6 +42,7 @@ set( KICAD_SRCS
     local_history_pane.cpp
     menubar.cpp
     mergetool_frame.cpp
+    project_downgrade.cpp
     project_template.cpp
     project_tree_pane.cpp
     project_tree.cpp
@@ -55,6 +56,7 @@ set( KICAD_SRCS
 
 set( KICAD_CLI_SRCS
     cli/command.cpp
+    project_downgrade.cpp
     cli/command_api_server.cpp
     cli/command_export_bom.cpp
     cli/command_jobset_run.cpp
@@ -87,6 +89,7 @@ set( KICAD_CLI_SRCS
     cli/command_pcb_export_svg.cpp
     cli/command_pcb_upgrade.cpp
     cli/command_pcb_downgrade.cpp
+    cli/command_project_downgrade.cpp
     cli/command_pcb_import.cpp
     cli/command_sch_import.cpp
     cli/command_import.cpp

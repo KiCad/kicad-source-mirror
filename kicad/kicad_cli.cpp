@@ -92,6 +92,8 @@
 #include "cli/command_fp_upgrade.h"
 #include "cli/command_sch.h"
 #include "cli/command_sch_erc.h"
+#include "cli/command_project.h"
+#include "cli/command_project_downgrade.h"
 #include "cli/command_sch_export.h"
 #include "cli/command_sch_upgrade.h"
 #include "cli/command_sch_downgrade.h"
@@ -195,6 +197,8 @@ static CLI::PCB_EXPORT_IPCD356_COMMAND   exportPcbIpcD356Cmd{};
 static CLI::PCB_EXPORT_ODB_COMMAND       exportPcbOdbCmd{};
 static CLI::PCB_EXPORT_COMMAND           exportPcbCmd{};
 static CLI::SCH_EXPORT_COMMAND           exportSchCmd{};
+static CLI::PROJECT_COMMAND              projectCmd{};
+static CLI::PROJECT_DOWNGRADE_COMMAND    projectDowngradeCmd{};
 static CLI::SCH_COMMAND                  schCmd{};
 static CLI::SCH_DIFF_COMMAND             schDiffCmd{};
 static CLI::SCH_ERC_COMMAND              schErcCmd{};
@@ -312,6 +316,14 @@ static std::vector<COMMAND_ENTRY> commandStack = {
             },
             {
                 &pcbDowngradeCmd
+            }
+        }
+    },
+    {
+        &projectCmd,
+        {
+            {
+                &projectDowngradeCmd
             }
         }
     },
