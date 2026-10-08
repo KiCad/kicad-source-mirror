@@ -108,8 +108,11 @@ NODE::~NODE()
                     assert( hole->ParentPadVia()->BelongsTo( this ) );
 
                     // Its parent comes by as a VIA or SOLID, and deletes only a hole it owns
-                    hole->SetOwner( hole->ParentPadVia() );
-                    parentedHoles.push_back( hole );
+                    if( hole->ParentPadVia()->BelongsTo( this ) )
+                    {
+                        hole->SetOwner( hole->ParentPadVia() );
+                        parentedHoles.push_back( hole );
+                    }
                 }
                 else
                 {
