@@ -1440,7 +1440,7 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex, 
         const SHAPE_ARC& arcToSplit = Arc( arcToSplitIndex );
 
         // Copy the points as arc points
-        for( int i = aStartIndex; i < aEndIndex && arcToSplitIndex == ArcIndex( i ); i++ )
+        for( int i = aStartIndex; i <= aEndIndex && arcToSplitIndex == ArcIndex( i ); i++ )
         {
             rv.m_points.push_back( m_points[i] );
             rv.m_shapes.push_back( { rv.m_arcs.size(), SHAPE_IS_PT } );
