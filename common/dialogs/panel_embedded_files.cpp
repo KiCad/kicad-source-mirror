@@ -89,11 +89,11 @@ void EMBEDDED_FILES_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 
 
 PANEL_EMBEDDED_FILES::PANEL_EMBEDDED_FILES( wxWindow* aParent, EMBEDDED_FILES* aFiles, int aFlags,
-                                            std::vector<const EMBEDDED_FILES*> aInheritedFiles ) :
+                                            const std::vector<EMBEDDED_FILES*>& aInheritedFiles ) :
         PANEL_EMBEDDED_FILES_BASE( aParent ),
         m_files( aFiles ),
         m_localFiles( new EMBEDDED_FILES() ),
-        m_inheritedFiles( std::move( aInheritedFiles ) )
+        m_inheritedFiles( aInheritedFiles )
 {
     m_files_grid->SetUseNativeColLabels();
 

@@ -270,12 +270,12 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame, wxWindow* aParen
             {
                 BOARD* board = m_frame->GetBoard();
 
-                std::vector<const EMBEDDED_FILES*> inheritedFiles;
+                std::vector<EMBEDDED_FILES*> inheritedFiles;
 
                 for( FOOTPRINT* fp : board->Footprints() )
                     inheritedFiles.push_back( fp->GetEmbeddedFiles() );
 
-                return new PANEL_EMBEDDED_FILES( aParent, board, NO_MARGINS, inheritedFiles );
+                return new PANEL_EMBEDDED_FILES( aParent, board->GetEmbeddedFiles(), NO_MARGINS, inheritedFiles );
             },
             _( "Embedded Files" ) );
 

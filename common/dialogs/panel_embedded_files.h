@@ -58,7 +58,7 @@ class PANEL_EMBEDDED_FILES : public PANEL_EMBEDDED_FILES_BASE
 {
 public:
     PANEL_EMBEDDED_FILES( wxWindow* aParent, EMBEDDED_FILES* aFiles, int aFlags = 0,
-                          std::vector<const EMBEDDED_FILES*> aInheritedFiles = {} );
+                          const std::vector<EMBEDDED_FILES*>& aInheritedFiles = {} );
     ~PANEL_EMBEDDED_FILES() override;
 
     bool TransferDataFromWindow() override;
@@ -82,8 +82,8 @@ protected:
     void onExportFiles( wxCommandEvent& event ) override;
 
 private:
-    EMBEDDED_FILES*                    m_files;
-    EMBEDDED_FILES*                    m_localFiles;
-    std::vector<const EMBEDDED_FILES*> m_inheritedFiles;
-    std::set<wxString>                 m_inheritedFileNames;
+    EMBEDDED_FILES*              m_files;
+    EMBEDDED_FILES*              m_localFiles;
+    std::vector<EMBEDDED_FILES*> m_inheritedFiles;
+    std::set<wxString>           m_inheritedFileNames;
 };

@@ -66,12 +66,16 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
         m_dummySheetNameField( &m_dummySheet, FIELD_T::SHEET_NAME )
 {
     m_sheet = aSheet;
-    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_sheet );
+
+    std::vector<EMBEDDED_FILES*> embeddedFilesStack;
+    embeddedFilesStack.push_back( m_sheet->Schematic() );
+
+    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_sheet, embeddedFilesStack );
     m_delayedFocusRow = 0;
     m_delayedFocusColumn = FDC_VALUE;
 
     m_grid->SetTable( m_fields );
-    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this, { &aParent->Schematic() },
+    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this, embeddedFilesStack,
                                                       [&]( wxCommandEvent& aEvent )
                                                       {
                                                           OnAddField( aEvent );

@@ -104,18 +104,22 @@ private:
     virtual void onUpdateEditLibrarySymbol( wxUpdateUIEvent& event ) override;
 
 private:
-    SCH_SYMBOL*               m_symbol;
+    SCH_SYMBOL*                 m_symbol;
 
-    wxSize                    m_pinsSize;
-    wxSize                    m_lastRequestedPinsSize;
-    bool                      m_editorShown;
-    std::bitset<64>           m_shownColumns;
+    // Owns a private copy of the schematic symbol's library part because the still-live schematic
+    // could free the one pointed to my m_symbol while this quasi-modal dialog is open.
+    std::unique_ptr<LIB_SYMBOL> m_part;
 
-    FIELDS_GRID_TABLE*        m_fields;
-    SCH_PIN_TABLE_DATA_MODEL* m_dataModel;
-    PANEL_EMBEDDED_FILES*     m_embeddedFiles;
-    PANEL_SYMBOL_PIN_MAP*     m_pinMapPanel;
-    bool                      m_forcePinMapPage = false;
+    wxSize                      m_pinsSize;
+    wxSize                      m_lastRequestedPinsSize;
+    bool                        m_editorShown;
+    std::bitset<64>             m_shownColumns;
+
+    FIELDS_GRID_TABLE*          m_fields;
+    SCH_PIN_TABLE_DATA_MODEL*   m_dataModel;
+    PANEL_EMBEDDED_FILES*       m_embeddedFiles;
+    PANEL_SYMBOL_PIN_MAP*       m_pinMapPanel;
+    bool                        m_forcePinMapPage = false;
 };
 
 #endif // DIALOG_SYMBOL_PROPERTIES_H

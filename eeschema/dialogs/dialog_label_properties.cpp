@@ -53,7 +53,10 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
     COLOR_SETTINGS* colorSettings = m_Parent->GetColorSettings();
     COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
-    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_currentLabel );
+    std::vector<EMBEDDED_FILES*> embeddedFilesStack;
+    embeddedFilesStack.push_back( m_currentLabel->Schematic() );
+
+    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_currentLabel, embeddedFilesStack );
     m_delayedFocusRow = -1;
     m_delayedFocusColumn = FDC_VALUE;
 
@@ -108,7 +111,7 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
     }
 
     m_grid->SetTable( m_fields );
-    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this, {},
+    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this, embeddedFilesStack,
                                                       [&]( wxCommandEvent& aEvent )
                                                       {
                                                           OnAddField( aEvent );

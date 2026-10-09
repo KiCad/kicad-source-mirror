@@ -69,25 +69,29 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
         m_delayedFocusColumn( -1 ),
         m_delayedFocusPage( -1 )
 {
-    std::vector<const EMBEDDED_FILES*> inheritedEmbeddedFiles;
+    std::vector<EMBEDDED_FILES*> embeddedFilesStack;
 
     if( std::shared_ptr<LIB_SYMBOL> parent = m_libEntry->GetParent().lock() )
     {
         while( parent )
         {
-            inheritedEmbeddedFiles.push_back( parent->GetEmbeddedFiles() );
+            embeddedFilesStack.push_back( parent->GetEmbeddedFiles() );
             parent = parent->GetParent().lock();
         }
     }
 
-    m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_libEntry, 0, std::move( inheritedEmbeddedFiles ) );
+    m_embeddedFiles = new PANEL_EMBEDDED_FILES( m_NoteBook, m_libEntry->GetEmbeddedFiles(), 0, embeddedFilesStack );
     m_NoteBook->AddPage( m_embeddedFiles, _( "Embedded Files" ) );
+    embeddedFilesStack.push_back( m_embeddedFiles->GetLocalFiles() );
 
     // The filters page is the third tab, between Units & Body Styles and Pin Connections.
     m_fpFiltersPanel = new PANEL_FOOTPRINT_FILTERS( m_NoteBook, aParent->Kiway() );
 
     // The Footprint field a match is assigned to lives on the General page.
-    m_fpFiltersPanel->SetFootprintFieldAccessors( [this]() { return canAssignFootprintToField(); },
+    m_fpFiltersPanel->SetFootprintFieldAccessors( [this]()
+                                                  {
+                                                      return canAssignFootprintToField();
+                                                  },
                                                   [this]( const wxString& aFootprintName )
                                                   {
                                                       assignFootprintToField( aFootprintName );
@@ -98,10 +102,10 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_pinMapPanel = new PANEL_SYMBOL_PIN_MAP( m_pinMapPage );
     bPinMapPageSizer->Add( m_pinMapPanel, 1, wxEXPAND, 5 );
 
-    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_libEntry, { m_embeddedFiles->GetLocalFiles() } );
+    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_libEntry, embeddedFilesStack );
     m_grid->SetTable( m_fields );
     m_grid->OverrideMinSize( 1.0, 1.0 );
-    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this, { m_embeddedFiles->GetLocalFiles() },
+    m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this, embeddedFilesStack,
                                                       [&]( wxCommandEvent& aEvent )
                                                       {
                                                           OnAddField( aEvent );
