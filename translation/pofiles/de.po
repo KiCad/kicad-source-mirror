@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-08 21:00+0000\n"
+"PO-Revision-Date: 2026-10-09 21:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -19394,7 +19394,7 @@ msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Schreiben der Schaltplandatei \"%s\".\n"
+"Fehler beim Speichern der Schaltplandatei \"%s\".\n"
 "%s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1428
@@ -28304,7 +28304,7 @@ msgstr "Netzklassen bearbeiten ..."
 #: eeschema/tools/sch_editor_control.cpp:467
 #, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "Soll \"%s\" auf die letzte gespeicherte Version zurückgesetzt werden?"
+msgstr "Soll \"%s\" auf die zuletzt gespeicherte Version zurückgesetzt werden?"
 
 #: eeschema/tools/sch_editor_control.cpp:661
 msgid "Export Symbols"
@@ -29931,8 +29931,8 @@ msgstr "X2 Attribut"
 #: gerbview/job_file_reader.cpp:154
 msgid "This job file uses an outdated format. Please recreate it."
 msgstr ""
-"Diese Jobdatei besitzt ein veraltetes Format. Bitte erstellen Sie die Datei "
-"neu."
+"Diese Auftragsdatei besitzt ein veraltetes Format. Bitte erstellen Sie die "
+"Datei neu."
 
 #: gerbview/job_file_reader.cpp:190
 msgid "Open Gerber Job File"
@@ -30780,7 +30780,7 @@ msgstr "Bestückungsdruck-Grafiken als Satz flachen Flächen exportieren"
 
 #: kicad/cli/command_pcb_export_3d.cpp:159
 msgid "Export soldermask layers as a set of flat faces"
-msgstr "Lötstoppmaskenlagen als Satz flachen Flächen exportieren"
+msgstr "Lötstoppmaskenlagen als Satz flacher Flächen exportieren"
 
 #: kicad/cli/command_pcb_export_3d.cpp:163
 msgid "Fuse overlapping geometry together"
@@ -32066,7 +32066,7 @@ msgstr "Gerber-Dateien betrachten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:163
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Bilder in Schaltzeichen oder Bauteil-Footprints umwandeln"
+msgstr "Bilder in Schaltplansymbole oder Bauteil-Footprints umwandeln"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:166
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -33675,7 +33675,7 @@ msgstr "Gerber-Ausgabedateien anzeigen"
 
 #: kicad/tools/kicad_manager_actions.cpp:160
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr "Bilder in Schaltzeichen oder Bauteil-Footprints umwandeln"
+msgstr "Bilder in Schaltplansymbole oder Bauteil-Footprints umwandeln"
 
 #: kicad/tools/kicad_manager_actions.cpp:179
 msgid "Edit drawing sheet borders and title block"
@@ -38112,7 +38112,7 @@ msgstr "Horizontal: von links oben nach rechts unten"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:60
 msgid "Horizontally: top right to bottom left"
-msgstr "Horizontal: von oben rechts nach unten links"
+msgstr "Horizontal: von rechts oben nach links unten"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:71
 msgid "Horizontally: bottom left to top right"
@@ -38132,7 +38132,7 @@ msgstr "Vertikal: von links unten nach rechts oben"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:115
 msgid "Vertically: top right to bottom left"
-msgstr "Vertikal: von oben rechts nach unten links"
+msgstr "Vertikal: von rechts oben nach links unten"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:126
 msgid "Vertically: bottom right to top left"
@@ -39498,7 +39498,7 @@ msgstr "Designregeln überprüfen (DRC)"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
-msgstr "Pad Namen sind begrenzt auf 4 Buchstaben (inklusive Nummern)."
+msgstr "Padnamen sind begrenzt auf 4 Buchstaben (inklusive Nummern)."
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:32
 msgid "Pad name prefix:"
@@ -49677,7 +49677,7 @@ msgstr "Mindestens eine Einschränkung muss definiert sein"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:221
 msgid "Maximum Skew must be greater than or equal to 0"
-msgstr "Der maximale Versatz muss größer oder gleich als 0 sein"
+msgstr "Der maximale Versatz muss größer oder gleich 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_overlay_panel.cpp:95
 msgid "Time domain (ps)"
@@ -49844,14 +49844,12 @@ msgid "Width Tolerance must be less than Optimum Width"
 msgstr "Die Breitentoleranz muss kleiner als die optimale Breite sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:76
-#, fuzzy
 msgid "Optimum Width must be greater than or equal to 0"
-msgstr "Die optimale Breite muss gleich oder größer als 0 sein"
+msgstr "Die optimale Breite muss größer oder gleich 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:79
-#, fuzzy
 msgid "Optimum Gap must be greater than or equal to 0"
-msgstr "Der optimale Spalt muss gleich oder größer als 0 sein"
+msgstr "Der optimale Spalt muss größer oder gleich 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:97
 msgid "Gap Tolerance must be greater than or equal to 0"
@@ -49863,7 +49861,7 @@ msgstr "Die Spalttoleranz muss kleiner als der optimale Spalt sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:104
 msgid "Maximum Uncoupled Length must be greater than or equal to 0"
-msgstr "Die maximale ungekoppelte Länge muss größer als oder gleich 0 sein"
+msgstr "Die maximale ungekoppelte Länge muss größer oder gleich 0 sein"
 
 #: pcbnew/drc/rule_editor/drc_re_rtg_diff_pair_constraint_data.h:107
 #: pcbnew/drc/rule_editor/drc_re_via_style_constraint_data.h:113
@@ -51806,52 +51804,43 @@ msgstr "%s Fertigungsattribut \"Nicht bestücken\" entfernt."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:817
 #, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr ""
-"%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut hinzufügen."
+msgstr "Füge %s Fertigungsattribut \"Von Positionsdateien ausschließen\" hinzu."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:822
 #, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut entfernen."
+msgstr "Entferne %s Fertigungsattribut \"Von Positionsdateien ausschließen\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:833
 #, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
 msgstr ""
-"%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut hinzugefügt."
+"%s Fertigungsattribut \"Von Positionsdateien ausschließen\" hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:839
 #, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut entfernt."
+msgstr "%s Fertigungsattribut \"Von Positionsdateien ausschließen\" entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:862
 #, c-format
 msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
-"%s Fertigungsattribut \"mehrfach vergebenen Pinnummern sind Jumper\" "
-"hinzugefügt."
+msgstr "%s Attribut \"mehrfach vergebene Pinnummern sind Jumper\" hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:867
 #, c-format
 msgid "Removed %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
-"%s Fertigungsattribut \"mehrfach vergebenen Padnummern sind Jumper\" "
-"entfernt."
+msgstr "%s Attribut \"mehrfach vergebene Padnummern sind Jumper\" entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:875
 #, c-format
 msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
-"Füge %s Fertigungsattribut \"mehrfach vergebenen Padnummern sind Jumper\" "
-"hinzu."
+msgstr "Füge %s Attribut \"mehrfach vergebene Padnummern sind Jumper\" hinzu."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:880
 #, c-format
 msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
-"Entferne %s Fertigungsattribut \"mehrfach vergebenen Padnummern sind "
-"Jumper\"."
+msgstr "Entferne %s Attribut \"mehrfach vergebene Padnummern sind Jumper\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:894
 #, c-format
@@ -61700,9 +61689,8 @@ msgid "Removing isolated copper islands..."
 msgstr "Entferne isolierte Kupferinseln ..."
 
 #: pcbnew/zone_filler.cpp:1214
-#, fuzzy
 msgid "Refilling overlapping zones..."
-msgstr "Überlappende Zonen erneut ausfüllen ..."
+msgstr "Überlappende Zonen erneut füllen ..."
 
 #: pcbnew/zone_filler.cpp:1375
 #, c-format
@@ -61822,9 +61810,7 @@ msgstr "Bitmap-zu-Bauteil-Umwandlung"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
-"Ein Bauteil aus einer Bitmap-Grafik erstellen, um dieses mit KiCad zu "
-"verwenden"
+msgstr "Ein KiCad-Bauteil aus einer Bitmap-Grafik erstellen"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
