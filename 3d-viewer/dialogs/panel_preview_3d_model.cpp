@@ -566,7 +566,7 @@ void PANEL_PREVIEW_3D_MODEL::onAlign( wxCommandEvent& aEvent )
     auto layers = *m_alignLayers;
 
     for( int layer : { LAYER_3D_COPPER_TOP, LAYER_3D_COPPER_BOTTOM, LAYER_3D_PLATED_BARRELS, LAYER_3D_SOLDERPASTE,
-                      LAYER_3D_SOLDERMASK_TOP, LAYER_3D_SOLDERMASK_BOTTOM, LAYER_3D_BOARD } )
+                       LAYER_3D_ADHESIVE, LAYER_3D_SOLDERMASK_TOP, LAYER_3D_SOLDERMASK_BOTTOM, LAYER_3D_BOARD } )
     {
         layers.reset( layer );
     }

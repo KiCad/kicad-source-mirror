@@ -236,6 +236,21 @@ void RENDER_3D_OPENGL::setupMaterials()
     m_materials.m_Paste.m_Shininess = 0.1f * 128.0f;
     m_materials.m_Paste.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
+    m_materials.m_Adhesive.m_Ambient = SFVEC3F( m_boardAdapter.m_AdhesiveColor.r,
+                                                m_boardAdapter.m_AdhesiveColor.g,
+                                                m_boardAdapter.m_AdhesiveColor.b );
+
+    m_materials.m_Adhesive.m_Specular = SFVEC3F( m_boardAdapter.m_AdhesiveColor.r *
+                                                 m_boardAdapter.m_AdhesiveColor.r,
+                                                 m_boardAdapter.m_AdhesiveColor.g *
+                                                 m_boardAdapter.m_AdhesiveColor.g,
+                                                 m_boardAdapter.m_AdhesiveColor.b *
+                                                 m_boardAdapter.m_AdhesiveColor.b );
+
+    m_materials.m_Adhesive.m_Shininess = 0.1f * 128.0f;
+    m_materials.m_Adhesive.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
+
+
     // Silk screen material mixed with silk screen color
     m_materials.m_SilkSTop.m_Ambient = SFVEC3F( m_boardAdapter.m_SilkScreenColorTop.r,
                                                 m_boardAdapter.m_SilkScreenColorTop.g,
@@ -331,6 +346,10 @@ void RENDER_3D_OPENGL::setLayerMaterial( PCB_LAYER_ID aLayerID )
 
     case B_Adhes:
     case F_Adhes:
+        m_materials.m_Adhesive.m_Diffuse = m_boardAdapter.m_AdhesiveColor;
+        OglSetMaterial( m_materials.m_Adhesive, 1.0f );
+        break;
+
     case Dwgs_User:
     case Cmts_User:
     case Eco1_User:

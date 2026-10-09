@@ -120,8 +120,15 @@ void RENDER_3D_RAYTRACE_BASE::setupMaterials()
                     * ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_SolderPasteColor ),
             SFVEC3F( 0.0f, 0.0f, 0.0f ),
             ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_SolderPasteColor )
-                    * ConvertSRGBToLinear(
-                            (SFVEC3F) m_boardAdapter.m_SolderPasteColor ),
+                    * ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_SolderPasteColor ),
+            0.10f * 128.0f, 0.0f, 0.0f );
+
+    m_materials.m_Adhesive = BLINN_PHONG_MATERIAL(
+            ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_AdhesiveColor )
+                    * ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_AdhesiveColor ),
+            SFVEC3F( 0.0f, 0.0f, 0.0f ),
+            ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_AdhesiveColor )
+                    * ConvertSRGBToLinear( (SFVEC3F) m_boardAdapter.m_AdhesiveColor ),
             0.10f * 128.0f, 0.0f, 0.0f );
 
     m_materials.m_SilkS = BLINN_PHONG_MATERIAL( ConvertSRGBToLinear( SFVEC3F( 0.11f ) ),
@@ -700,6 +707,8 @@ void RENDER_3D_RAYTRACE_BASE::Reload( bool aOnlyLoadCopperAndShapes, std::stop_t
         {
         case B_Adhes:
         case F_Adhes:
+            materialLayer = &m_materials.m_Adhesive;
+            layerColor = m_boardAdapter.m_AdhesiveColor;
             break;
 
         case B_Paste:

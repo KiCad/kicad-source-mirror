@@ -146,6 +146,7 @@ protected:
     struct
     {
         BLINN_PHONG_MATERIAL m_Paste;
+        BLINN_PHONG_MATERIAL m_Adhesive;
         BLINN_PHONG_MATERIAL m_SilkS;
         BLINN_PHONG_MATERIAL m_SolderMask;
         BLINN_PHONG_MATERIAL m_EpoxyBoard;

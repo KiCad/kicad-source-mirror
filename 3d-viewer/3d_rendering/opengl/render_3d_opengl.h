@@ -275,6 +275,7 @@ private:
     struct
     {
         SMATERIAL m_Paste;
+        SMATERIAL m_Adhesive;
         SMATERIAL m_SilkSBot;
         SMATERIAL m_SilkSTop;
         SMATERIAL m_SolderMask;
