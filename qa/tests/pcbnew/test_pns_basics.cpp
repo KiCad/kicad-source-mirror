@@ -33,6 +33,7 @@
 #include <geometry/shape_circle.h>
 #include <geometry/shape_arc.h>
 #include <geometry/eda_angle.h>
+#include <router/pns_block_dragger.h>
 #include <router/pns_component_dragger.h>
 #include <router/pns_dragger.h>
 #include <router/pns_routing_settings.h>
@@ -916,6 +917,620 @@ BOOST_FIXTURE_TEST_CASE( PNSCollideSimpleNullShapeGuard, PNS_TEST_FIXTURE )
 
     bool collided = solid1->Collide( &nullShapeSolid, world.get(), F_Cu, nullptr );
     BOOST_CHECK( !collided );
+}
+
+
+// Does any dragged item have a vertex at aPoint? aCopperOnly ignores pads and vias.
+static bool tracesTouch( PNS::ITEM_SET& aTraces, const VECTOR2I& aPoint, bool aCopperOnly = false )
+{
+    const int tolerance = 1000;
+
+    for( PNS::ITEM* item : aTraces.Items() )
+    {
+        if( aCopperOnly && item->OfKind( PNS::ITEM::SOLID_T | PNS::ITEM::VIA_T ) )
+            continue;
+
+        if( item->Kind() == PNS::ITEM::LINE_T )
+        {
+            const SHAPE_LINE_CHAIN& chain = static_cast<PNS::LINE*>( item )->CLine();
+
+            for( int ii = 0; ii < chain.PointCount(); ii++ )
+            {
+                if( ( chain.CPoint( ii ) - aPoint ).EuclideanNorm() <= tolerance )
+                    return true;
+            }
+        }
+        else
+        {
+            for( int ii = 0; ii < item->AnchorCount(); ii++ )
+            {
+                if( ( item->Anchor( ii ) - aPoint ).EuclideanNorm() <= tolerance )
+                    return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
+static PNS::SOLID* makeTestPad( const VECTOR2I& aPos, PNS::NET_HANDLE aNet, int aRadius = 500000 )
+{
+    PNS::SOLID* pad = new PNS::SOLID;
+
+    pad->SetShape( new SHAPE_CIRCLE( aPos, aRadius ) );
+    pad->SetPos( aPos );
+    pad->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    pad->SetNet( aNet );
+    pad->SetRoutable( true );
+
+    return pad;
+}
+
+
+static PNS::SEGMENT* makeTestTrack( const VECTOR2I& aStart, const VECTOR2I& aEnd, PNS::NET_HANDLE aNet )
+{
+    PNS::SEGMENT* track = new PNS::SEGMENT( SEG( aStart, aEnd ), aNet );
+
+    track->SetWidth( 250000 );
+    track->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+
+    return track;
+}
+
+
+static std::unique_ptr<PNS::NODE> makeTestWorld( PNS::RULE_RESOLVER* aResolver )
+{
+    std::unique_ptr<PNS::NODE> world( new PNS::NODE );
+
+    world->SetMaxClearance( 10000000 );
+    world->SetRuleResolver( aResolver );
+
+    return world;
+}
+
+
+// Pad and track selected, far end free: both travel whole.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerCarriesSelectedCopper, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   padPos( 0, 0 );
+    VECTOR2I                   freeEnd( 2500000, 0 );
+
+    PNS::SOLID*   pad = makeTestPad( padPos, net );
+    PNS::SEGMENT* track = makeTestTrack( padPos, freeEnd, net );
+    world->AddRaw( pad );
+    world->AddRaw( track );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( pad );
+    itemsToDrag.Add( track );
+    BOOST_REQUIRE( dragger.Start( padPos, itemsToDrag ) );
+
+    const VECTOR2I delta( 1000000, 1000000 );
+    dragger.Drag( padPos + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+    PNS::NODE*    node = dragger.CurrentNode();
+
+    BOOST_CHECK( tracesTouch( traces, padPos + delta ) );
+    BOOST_CHECK( tracesTouch( traces, freeEnd + delta ) );
+    BOOST_CHECK( node->Overrides( pad ) );
+    BOOST_CHECK( node->Overrides( track ) );
+
+    world->KillChildren();
+}
+
+
+// A track can end anywhere inside a pad, not just on its anchor, and still has to follow it.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerFollowsTrackEndingOffThePadAnchor, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   padPos( 0, 0 );
+    VECTOR2I                   trackStart( 300000, 0 ); // inside the pad, away from its anchor
+    VECTOR2I                   trackEnd( 3000000, 0 );
+
+    PNS::SOLID*   pad = makeTestPad( padPos, net ); // a circle of radius 500000
+    PNS::SEGMENT* track = makeTestTrack( trackStart, trackEnd, net );
+    world->AddRaw( pad );
+    world->AddRaw( track );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( pad );
+    BOOST_REQUIRE( dragger.Start( padPos, itemsToDrag ) );
+
+    const VECTOR2I delta( 0, 2000000 );
+    dragger.Drag( padPos + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+    PNS::NODE*    node = dragger.CurrentNode();
+
+    BOOST_CHECK( tracesTouch( traces, trackStart + delta, true ) );
+    BOOST_CHECK( tracesTouch( traces, trackEnd, true ) );
+    BOOST_CHECK( node->Overrides( track ) );
+
+    world->KillChildren();
+}
+
+
+// An unselected pad holds a selected track even when the track ends away from its anchor.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerPinsSelectedTrackInsideUnselectedPad, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   padPos( 0, 0 );
+    VECTOR2I                   trackStart( 300000, 0 ); // inside the pad, away from its anchor
+    VECTOR2I                   trackEnd( 3000000, 0 );
+
+    PNS::SOLID*   pad = makeTestPad( padPos, net ); // a circle of radius 500000, not selected
+    PNS::SEGMENT* track = makeTestTrack( trackStart, trackEnd, net );
+    world->AddRaw( pad );
+    world->AddRaw( track );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( track );
+    BOOST_REQUIRE( dragger.Start( trackEnd, itemsToDrag ) );
+
+    const VECTOR2I delta( 0, 2000000 );
+    dragger.Drag( trackEnd + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+
+    // The pad cannot move, so the end inside it must stay and the track must stretch
+    BOOST_CHECK( tracesTouch( traces, trackStart, true ) );
+    BOOST_CHECK( !tracesTouch( traces, trackStart + delta, true ) );
+    BOOST_CHECK( tracesTouch( traces, trackEnd + delta, true ) );
+    BOOST_CHECK( dragger.CurrentNode()->Overrides( track ) );
+    BOOST_CHECK( !dragger.CurrentNode()->Overrides( pad ) );
+
+    world->KillChildren();
+}
+
+
+// A junction inside a selected pad, away from its anchor, travels with that pad.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerCarriesJunctionInsideSelectedPad, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+
+    VECTOR2I padPos( 0, 0 );
+    VECTOR2I junction( 800000, 0 ); // inside the pad, off its anchor, and a three way joint
+    VECTOR2I runEnd( 4000000, 0 );
+    VECTOR2I selFar( 6000000, 0 );
+
+    PNS::SOLID*   pad = makeTestPad( padPos, net, 1500000 );
+    PNS::SEGMENT* selected = makeTestTrack( selFar, runEnd, net );
+    PNS::SEGMENT* run = makeTestTrack( runEnd, junction, net );
+    PNS::SEGMENT* branchUp = makeTestTrack( junction, VECTOR2I( 800000, 2500000 ), net );
+    PNS::SEGMENT* branchDown = makeTestTrack( junction, VECTOR2I( 800000, -2500000 ), net );
+
+    world->AddRaw( pad );
+    world->AddRaw( selected );
+    world->AddRaw( run );
+    world->AddRaw( branchUp );
+    world->AddRaw( branchDown );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( pad );
+    itemsToDrag.Add( selected );
+    BOOST_REQUIRE( dragger.Start( padPos, itemsToDrag ) );
+
+    const VECTOR2I delta( 0, 3000000 );
+    dragger.Drag( padPos + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+
+    // The pad is moving and the junction sits inside it, so the junction has to move too
+    BOOST_CHECK( tracesTouch( traces, junction + delta, true ) );
+    BOOST_CHECK( !tracesTouch( traces, junction, true ) );
+    BOOST_CHECK( dragger.CurrentNode()->Overrides( run ) );
+
+    world->KillChildren();
+}
+
+
+// A selected arc with both ends free travels rigidly, keeping its shape.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerCarriesSelectedArc, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   arcStart( 0, 0 );
+    VECTOR2I                   arcMid( 1000000, 1000000 );
+    VECTOR2I                   arcEnd( 2000000, 0 );
+
+    PNS::ARC* arc = new PNS::ARC( SHAPE_ARC( arcStart, arcMid, arcEnd, 250000 ), net );
+    arc->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    world->AddRaw( arc );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( arc );
+    BOOST_REQUIRE( dragger.Start( arcStart, itemsToDrag ) );
+    BOOST_CHECK_EQUAL( dragger.AnchoredLines().size(), 0u );
+
+    const VECTOR2I delta( 0, 2000000 );
+    dragger.Drag( arcStart + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+
+    BOOST_CHECK( tracesTouch( traces, arcStart + delta, true ) );
+    BOOST_CHECK( tracesTouch( traces, arcEnd + delta, true ) );
+    BOOST_CHECK( dragger.CurrentNode()->Overrides( arc ) );
+
+    world->KillChildren();
+}
+
+
+// A selected arc held at one end is rerouted rather than parked, and keeps being an arc.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerReroutesSelectedArcHeldAtOneEnd, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   arcStart( 0, 0 );
+    VECTOR2I                   arcMid( 1000000, 1000000 );
+    VECTOR2I                   arcEnd( 2000000, 0 );
+
+    world->AddRaw( makeTestPad( arcStart, net, 300000 ) ); // unselected, holds the start
+
+    PNS::ARC* arc = new PNS::ARC( SHAPE_ARC( arcStart, arcMid, arcEnd, 250000 ), net );
+    arc->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    world->AddRaw( arc );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( arc );
+    BOOST_REQUIRE( dragger.Start( arcEnd, itemsToDrag ) );
+
+    // Only one end is held, so this is a reroute and not an anchored line
+    BOOST_CHECK_EQUAL( dragger.AnchoredLines().size(), 0u );
+
+    const VECTOR2I delta( 0, 2000000 );
+    dragger.Drag( arcEnd + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+
+    BOOST_CHECK( tracesTouch( traces, arcStart, true ) );
+    BOOST_CHECK( !tracesTouch( traces, arcStart + delta, true ) );
+    BOOST_CHECK( dragger.CurrentNode()->Overrides( arc ) );
+
+    for( PNS::ITEM* item : traces.Items() )
+    {
+        if( item->Kind() == PNS::ITEM::LINE_T )
+            BOOST_CHECK( static_cast<PNS::LINE*>( item )->CLine().ArcCount() > 0 );
+    }
+
+    world->KillChildren();
+}
+
+
+// Two selected pads with an unselected track between them: the track travels whole.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerCarriesTrackBetweenSelectedPads, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   padAPos( 0, 0 );
+    VECTOR2I                   padBPos( 5000000, 0 );
+
+    PNS::SOLID*   padA = makeTestPad( padAPos, net );
+    PNS::SOLID*   padB = makeTestPad( padBPos, net );
+    PNS::SEGMENT* track = makeTestTrack( padAPos, padBPos, net );
+    world->AddRaw( padA );
+    world->AddRaw( padB );
+    world->AddRaw( track );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( padA );
+    itemsToDrag.Add( padB );
+    BOOST_REQUIRE( dragger.Start( padAPos, itemsToDrag ) );
+
+    const VECTOR2I delta( 0, 2000000 );
+    dragger.Drag( padAPos + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+    PNS::NODE*    node = dragger.CurrentNode();
+
+    // Both ends moved by the same delta, so the track kept its length
+    BOOST_CHECK( tracesTouch( traces, padAPos + delta, true ) );
+    BOOST_CHECK( tracesTouch( traces, padBPos + delta, true ) );
+    BOOST_CHECK( !tracesTouch( traces, padBPos, true ) );
+    BOOST_CHECK( node->Overrides( padA ) );
+    BOOST_CHECK( node->Overrides( padB ) );
+    BOOST_CHECK( node->Overrides( track ) );
+
+    world->KillChildren();
+}
+
+
+// Far end held by an unselected pad: the track stretches, the held end stays.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerStretchesTrackHeldAtOneEnd, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   draggedPadPos( 0, 0 );
+    VECTOR2I                   heldPadPos( 5000000, 0 );
+
+    PNS::SOLID*   draggedPad = makeTestPad( draggedPadPos, net );
+    PNS::SOLID*   heldPad = makeTestPad( heldPadPos, net );
+    PNS::SEGMENT* track = makeTestTrack( draggedPadPos, heldPadPos, net );
+    world->AddRaw( draggedPad );
+    world->AddRaw( heldPad );
+    world->AddRaw( track );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( draggedPad );
+    itemsToDrag.Add( track );
+    BOOST_REQUIRE( dragger.Start( draggedPadPos, itemsToDrag ) );
+
+    const VECTOR2I delta( 0, 2000000 );
+    dragger.Drag( draggedPadPos + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+    PNS::NODE*    node = dragger.CurrentNode();
+
+    BOOST_CHECK( tracesTouch( traces, draggedPadPos + delta, true ) );
+    BOOST_CHECK( tracesTouch( traces, heldPadPos, true ) );
+    BOOST_CHECK( node->Overrides( track ) );
+    BOOST_CHECK( !node->Overrides( heldPad ) );
+
+    world->KillChildren();
+}
+
+
+// Only the pad selected: the unselected copper on it is rerouted, its free end stays.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerReroutesUnselectedCopper, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   padPos( 0, 0 );
+    VECTOR2I                   corner( 3000000, 0 );
+    VECTOR2I                   farEnd( 3000000, 3000000 );
+
+    PNS::SOLID*   pad = makeTestPad( padPos, net );
+    PNS::SEGMENT* first = makeTestTrack( padPos, corner, net );
+    PNS::SEGMENT* second = makeTestTrack( corner, farEnd, net );
+    world->AddRaw( pad );
+    world->AddRaw( first );
+    world->AddRaw( second );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( pad );
+    BOOST_REQUIRE( dragger.Start( padPos, itemsToDrag ) );
+
+    const VECTOR2I delta( 0, 1000000 );
+    dragger.Drag( padPos + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+    PNS::NODE*    node = dragger.CurrentNode();
+
+    BOOST_CHECK( tracesTouch( traces, padPos + delta, true ) );
+    BOOST_CHECK( tracesTouch( traces, farEnd, true ) );
+    BOOST_CHECK( node->Overrides( first ) );
+    BOOST_CHECK( node->Overrides( second ) );
+
+    world->KillChildren();
+}
+
+
+// A selected segment runs round a plain corner into an unselected one. The unselected one
+// is picked up from the corner, not assembled through it into the selected copper.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerStopsAtTheSelectedCopper, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   padPos( 0, 0 );
+    VECTOR2I                   corner( 3000000, 0 );
+    VECTOR2I                   farEnd( 3000000, 3000000 );
+
+    PNS::SOLID*   pad = makeTestPad( padPos, net );
+    PNS::SEGMENT* selected = makeTestTrack( padPos, corner, net );
+    PNS::SEGMENT* unselected = makeTestTrack( corner, farEnd, net );
+    world->AddRaw( pad );
+    world->AddRaw( selected );
+    world->AddRaw( unselected );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( pad );
+    itemsToDrag.Add( selected );
+    BOOST_REQUIRE( dragger.Start( padPos, itemsToDrag ) );
+
+    const VECTOR2I delta( 0, 1000000 );
+    dragger.Drag( padPos + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+    PNS::NODE*    node = dragger.CurrentNode();
+
+    BOOST_CHECK( tracesTouch( traces, corner + delta ) );
+    BOOST_CHECK( tracesTouch( traces, farEnd, true ) );
+    BOOST_CHECK( !tracesTouch( traces, farEnd + delta ) );
+    BOOST_CHECK( !tracesTouch( traces, padPos, true ) );
+
+    // Both originals have to be replaced in the node, or commit leaves copper behind.
+    BOOST_CHECK( node->Overrides( selected ) );
+    BOOST_CHECK( node->Overrides( unselected ) );
+
+    world->KillChildren();
+}
+
+
+// Unselected copper between two selected segments travels with them. Its line assembles
+// through both of their corners, so the clip keeps an interior slice.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerCarriesCopperBetweenSelectedSegments, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   a( 0, 0 );
+    VECTOR2I                   b( 3000000, 0 );
+    VECTOR2I                   c( 3000000, 3000000 );
+    VECTOR2I                   d( 6000000, 3000000 );
+
+    PNS::SEGMENT* first = makeTestTrack( a, b, net );
+    PNS::SEGMENT* middle = makeTestTrack( b, c, net );
+    PNS::SEGMENT* last = makeTestTrack( c, d, net );
+    world->AddRaw( first );
+    world->AddRaw( middle );
+    world->AddRaw( last );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( first );
+    itemsToDrag.Add( last );
+    BOOST_REQUIRE( dragger.Start( a, itemsToDrag ) );
+
+    const VECTOR2I delta( 0, 1000000 );
+    dragger.Drag( a + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+    PNS::NODE*    node = dragger.CurrentNode();
+
+    BOOST_CHECK( tracesTouch( traces, a + delta ) );
+    BOOST_CHECK( tracesTouch( traces, b + delta ) );
+    BOOST_CHECK( tracesTouch( traces, c + delta ) );
+    BOOST_CHECK( tracesTouch( traces, d + delta ) );
+    BOOST_CHECK( node->Overrides( first ) );
+    BOOST_CHECK( node->Overrides( middle ) );
+    BOOST_CHECK( node->Overrides( last ) );
+
+    world->KillChildren();
+}
+
+
+// A via is rigid like a pad, and an unselected via holds a line's end like an unselected pad.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerCarriesViaAndPinsOnUnselectedVia, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   draggedViaPos( 0, 0 );
+    VECTOR2I                   heldViaPos( 5000000, 0 );
+
+    PNS::VIA*     draggedVia = new PNS::VIA( draggedViaPos, PNS_LAYER_RANGE( F_Cu, B_Cu ), 800000, 400000, net );
+    PNS::VIA*     heldVia = new PNS::VIA( heldViaPos, PNS_LAYER_RANGE( F_Cu, B_Cu ), 800000, 400000, net );
+    PNS::SEGMENT* track = makeTestTrack( draggedViaPos, heldViaPos, net );
+    world->AddRaw( draggedVia );
+    world->AddRaw( heldVia );
+    world->AddRaw( track );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( draggedVia );
+    itemsToDrag.Add( track );
+    BOOST_REQUIRE( dragger.Start( draggedViaPos, itemsToDrag ) );
+
+    const VECTOR2I delta( 0, 2000000 );
+    dragger.Drag( draggedViaPos + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+    PNS::NODE*    node = dragger.CurrentNode();
+
+    BOOST_CHECK( tracesTouch( traces, draggedViaPos + delta, true ) );
+    BOOST_CHECK( tracesTouch( traces, heldViaPos, true ) );
+    BOOST_CHECK( !tracesTouch( traces, heldViaPos + delta ) );
+    BOOST_CHECK( node->Overrides( draggedVia ) );
+    BOOST_CHECK( node->Overrides( track ) );
+    BOOST_CHECK( !node->Overrides( heldVia ) );
+
+    world->KillChildren();
+}
+
+
+// Unselected locked copper neither follows nor is touched.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerLeavesLockedCopperBehind, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   padPos( 0, 0 );
+    VECTOR2I                   freeEnd( 2500000, 0 );
+
+    PNS::SOLID*   pad = makeTestPad( padPos, net );
+    PNS::SEGMENT* locked = makeTestTrack( padPos, freeEnd, net );
+    locked->Mark( PNS::MK_LOCKED );
+    world->AddRaw( pad );
+    world->AddRaw( locked );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( pad );
+    BOOST_REQUIRE( dragger.Start( padPos, itemsToDrag ) );
+
+    const VECTOR2I delta( 1000000, 1000000 );
+    dragger.Drag( padPos + delta );
+
+    PNS::ITEM_SET traces = dragger.Traces();
+    PNS::NODE*    node = dragger.CurrentNode();
+
+    BOOST_CHECK( tracesTouch( traces, padPos + delta ) );
+    BOOST_CHECK( !tracesTouch( traces, freeEnd + delta ) );
+    BOOST_CHECK( !tracesTouch( traces, freeEnd, true ) );
+    BOOST_CHECK( node->Overrides( pad ) );
+    BOOST_CHECK( !node->Overrides( locked ) );
+
+    world->KillChildren();
+}
+
+
+// An arc held at both ends is reported and left where it is.
+BOOST_FIXTURE_TEST_CASE( PNSBlockDraggerReportsArcsHeldAtBothEnds, PNS_TEST_FIXTURE )
+{
+    std::unique_ptr<PNS::NODE> world = makeTestWorld( &m_ruleResolver );
+    PNS::NET_HANDLE            net = (PNS::NET_HANDLE) 1;
+    VECTOR2I                   arcStart( 0, 0 );
+    VECTOR2I                   arcMid( 1000000, 1000000 );
+    VECTOR2I                   arcEnd( 2000000, 0 );
+
+    PNS::ARC* arc = new PNS::ARC( SHAPE_ARC( arcStart, arcMid, arcEnd, 250000 ), net );
+    arc->SetLayers( PNS_LAYER_RANGE( F_Cu ) );
+    world->AddRaw( makeTestPad( arcStart, net, 300000 ) );
+    world->AddRaw( makeTestPad( arcEnd, net, 300000 ) );
+    world->AddRaw( arc );
+
+    PNS::BLOCK_DRAGGER dragger( m_router );
+    dragger.SetWorld( world.get() );
+
+    PNS::ITEM_SET itemsToDrag;
+    itemsToDrag.Add( arc );
+    BOOST_REQUIRE( dragger.Start( arcStart, itemsToDrag ) );
+    BOOST_CHECK_EQUAL( dragger.AnchoredLines().size(), 1u );
+
+    dragger.Drag( arcStart + VECTOR2I( 0, 1000000 ) );
+
+    BOOST_CHECK( !dragger.CurrentNode()->Overrides( arc ) );
+
+    world->KillChildren();
 }
 
 
