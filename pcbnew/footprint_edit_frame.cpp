@@ -1022,11 +1022,11 @@ std::optional<MDW_PART_TARGET> FOOTPRINT_EDIT_FRAME::resolveTeamPart( PROJECT& a
     if( !row )
         return std::nullopt;
 
-    // A footprint library is a folder holding one file per footprint, the file its release uploads
-    wxFileName file( LIBRARY_MANAGER::GetFullURI( *row, true ), aId.GetUniStringLibItemName(),
-                     FILEEXT::KiCadFootprintFileExtension );
+    const wxString name = aId.GetUniStringLibItemName();
+    const wxString file =
+            MdwTeamPartFile( MDW_LIBRARY_TYPE::FOOTPRINT, LIBRARY_MANAGER::GetFullURI( *row, true ), name, nullptr );
 
-    return MdwPartTarget( MDW_LIBRARY_TYPE::FOOTPRINT, **row, aId.GetUniStringLibItemName(), file.GetFullPath() );
+    return MdwPartTarget( MDW_LIBRARY_TYPE::FOOTPRINT, **row, name, file );
 }
 
 

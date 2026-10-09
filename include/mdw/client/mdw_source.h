@@ -119,8 +119,11 @@ public:
     MDW_OP Items( const wxString& aFolderId, const wxString& aFilter, const MDW_PAGE& aPage,
                   MDW_DONE<MDW_PAGED<MDW_ITEM_INFO>> aDone );
 
-    /// The child folders of aParentFolderId; an empty id lists the root folders
-    MDW_OP Folders( const wxString& aParentFolderId, const MDW_PAGE& aPage, MDW_DONE<MDW_PAGED<MDW_FOLDER>> aDone );
+    MDW_OP RootFolders( const MDW_PAGE& aPage, MDW_DONE<MDW_PAGED<MDW_FOLDER>> aDone );
+
+    /// The child folders of aParentFolderId, which may be empty since a backend may give a root folder that id
+    MDW_OP ChildFolders( const wxString& aParentFolderId, const MDW_PAGE& aPage,
+                         MDW_DONE<MDW_PAGED<MDW_FOLDER>> aDone );
 
     MDW_OP Checkout( const MDW_CHECKOUT_REQUEST& aRequest, MDW_DONE<MDW_CHECKOUT_RESULT> aDone );
 

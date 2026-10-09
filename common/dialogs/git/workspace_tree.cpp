@@ -245,6 +245,16 @@ void buildLibraries( const std::vector<WORKSPACE_TREE_LIBRARY>& aLibraries, cons
             continue;
 
         sortChildren( node.children );
+
+        if( !lib.listed )
+        {
+            NODE unlisted;
+            unlisted.kind = NODE::KIND::UNLISTED;
+            unlisted.key = lib.key + wxT( "/" );
+            unlisted.name = _( "Not listed yet" );
+            node.children.push_back( std::move( unlisted ) );
+        }
+
         group.children.push_back( std::move( node ) );
     }
 

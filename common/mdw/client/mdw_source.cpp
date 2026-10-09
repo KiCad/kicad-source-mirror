@@ -228,24 +228,24 @@ MDW_OP MDW_SOURCE::Items( const wxString& aFolderId, const wxString& aFilter, co
 }
 
 
-MDW_OP MDW_SOURCE::Folders( const wxString& aParentFolderId, const MDW_PAGE& aPage,
-                            MDW_DONE<MDW_PAGED<MDW_FOLDER>> aDone )
+MDW_OP MDW_SOURCE::RootFolders( const MDW_PAGE& aPage, MDW_DONE<MDW_PAGED<MDW_FOLDER>> aDone )
 {
-    if( aParentFolderId.IsEmpty() )
-    {
-        mdw::GetRootFoldersRequest request;
-        MdwToProto( request.mutable_page(), aPage );
+    mdw::GetRootFoldersRequest request;
+    MdwToProto( request.mutable_page(), aPage );
 
-        return MdwCall<mdw::GetRootFoldersRequest, mdw::GetRootFoldersReply, MDW_PAGED<MDW_FOLDER>>(
-                shared_from_this(), std::nullopt, request,
-                []( const mdw::GetRootFoldersReply& aReply )
-                {
-                    return paged<decltype( aReply.folders() ), MDW_FOLDER>( aReply.folders(),
-                                                                            aReply.next_page_token() );
-                },
-                std::move( aDone ) );
-    }
+    return MdwCall<mdw::GetRootFoldersRequest, mdw::GetRootFoldersReply, MDW_PAGED<MDW_FOLDER>>(
+            shared_from_this(), std::nullopt, request,
+            []( const mdw::GetRootFoldersReply& aReply )
+            {
+                return paged<decltype( aReply.folders() ), MDW_FOLDER>( aReply.folders(), aReply.next_page_token() );
+            },
+            std::move( aDone ) );
+}
 
+
+MDW_OP MDW_SOURCE::ChildFolders( const wxString& aParentFolderId, const MDW_PAGE& aPage,
+                                 MDW_DONE<MDW_PAGED<MDW_FOLDER>> aDone )
+{
     mdw::GetChildFoldersRequest request;
     request.set_folder_id( MdwToUtf8( aParentFolderId ) );
     MdwToProto( request.mutable_page(), aPage );

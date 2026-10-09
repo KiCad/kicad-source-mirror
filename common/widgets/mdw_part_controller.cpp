@@ -43,6 +43,8 @@
 #include <kidialog.h>
 #include <lib_id.h>
 #include <pgm_base.h>
+#include <string_utils.h>
+#include <wildcards_and_files_ext.h>
 #include <mdw/mdw_claim_text.h>
 #include <widgets/mdw_editing.h>
 
@@ -330,6 +332,33 @@ std::optional<MDW_PART_TARGET> MdwPartTarget( MDW_LIBRARY_TYPE aType, const LIBR
         return std::nullopt;
 
     return MdwPartTarget( *binding, *members, aName, aLocalPath, MDW_LIBRARY_SOURCES::MarkerOf( aRow.Options() ) );
+}
+
+
+wxString MdwTeamPartFile( MDW_LIBRARY_TYPE aType, const wxString& aLibraryPath, const wxString& aName,
+                          const MDW_LIBRARY_MEMBER* aListed )
+{
+    // A footprint library is a folder holding one file per footprint
+    if( aType == MDW_LIBRARY_TYPE::FOOTPRINT )
+        return wxFileName( aLibraryPath, aName, FILEEXT::KiCadFootprintFileExtension ).GetFullPath();
+
+    if( !wxFileName::DirExists( aLibraryPath ) )
+        return aLibraryPath;
+
+    // A folder symbol may share a file with others, so a file the source names wins over its own name
+    wxString listed;
+
+    if( aListed && aListed->path_hint.StartsWith( aListed->library_id + wxS( "/" ), &listed )
+        && !listed.Contains( wxS( "/" ) ) )
+    {
+        const wxFileName named( aLibraryPath, listed );
+
+        if( named.FileExists() )
+            return named.GetFullPath();
+    }
+
+    return wxFileName( aLibraryPath, EscapeString( aName, CTX_FILENAME ), FILEEXT::KiCadSymbolLibFileExtension )
+            .GetFullPath();
 }
 
 

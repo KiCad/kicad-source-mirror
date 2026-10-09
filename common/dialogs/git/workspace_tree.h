@@ -52,11 +52,13 @@ struct WORKSPACE_TREE_NODE
         ITEM,
         LIBRARIES,
         LIBRARY,
-        MEMBER
+        MEMBER,
+        UNLISTED ///< Stands in for the members of a library not listed yet, so it can be expanded
     };
 
     KIND                             kind = KIND::ROOT;
-    wxString                         key;   ///< folder_id, item_id, library key, or "<library key>/<member>"
+    wxString                         key; ///< folder_id, item_id, library key, "<library key>/<member>", or
+                                          ///< "<library key>/" for UNLISTED
     wxString                         name;
     size_t                           item = SIZE_MAX; ///< Index into the items, for ITEM
     std::vector<WORKSPACE_TREE_NODE> children;
@@ -66,7 +68,8 @@ struct WORKSPACE_TREE_NODE
 /**
  * Arrange folders, items and team libraries as the Workspace page shows them. Folders sort before items and
  * names sort naturally. A folder whose parent is missing or part of a loop sits at the root, and so does an item
- * whose folder is unknown. The libraries form one group after everything else.
+ * whose folder is unknown. The libraries form one group after everything else, and a library not listed yet holds
+ * one UNLISTED row.
  *
  * aFilter keeps rows whose name contains it, ignoring case, with the ancestors of each match. A matching folder
  * or library keeps everything below it. An empty filter keeps every row. aItemsMatched says a source's search

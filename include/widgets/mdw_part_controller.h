@@ -84,6 +84,13 @@ struct KICOMMON_API MDW_PART_TARGET
 KICOMMON_API std::optional<MDW_PART_TARGET> MdwPartTarget( MDW_LIBRARY_TYPE aType, const LIBRARY_TABLE_ROW& aRow,
                                                            const wxString& aName, const wxString& aLocalPath );
 
+/**
+ * The file the part aName of the aType library at aLibraryPath is saved in, as the library editors resolve it.
+ * aListed, the listing's row for the part or null, may name a file a folder symbol shares with others.
+ */
+KICOMMON_API wxString MdwTeamPartFile( MDW_LIBRARY_TYPE aType, const wxString& aLibraryPath, const wxString& aName,
+                                       const MDW_LIBRARY_MEMBER* aListed );
+
 /// The part aName of aBinding's library as aMembers lists it, unlisted when aMembers lacks it
 KICOMMON_API MDW_PART_TARGET MdwPartTarget( const MDW_TEAM_LIBRARY&                     aBinding,
                                             const std::map<wxString, MDW_MEMBER_ENTRY>& aMembers,

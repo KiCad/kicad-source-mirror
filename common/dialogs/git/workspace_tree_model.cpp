@@ -128,7 +128,8 @@ bool WORKSPACE_TREE_MODEL::IsContainer( const wxDataViewItem& aItem ) const
     case WORKSPACE_TREE_NODE::KIND::LIBRARIES:
     case WORKSPACE_TREE_NODE::KIND::LIBRARY: return true;
     case WORKSPACE_TREE_NODE::KIND::ITEM:
-    case WORKSPACE_TREE_NODE::KIND::MEMBER: return false;
+    case WORKSPACE_TREE_NODE::KIND::MEMBER:
+    case WORKSPACE_TREE_NODE::KIND::UNLISTED: return false;
     }
 
     return false;

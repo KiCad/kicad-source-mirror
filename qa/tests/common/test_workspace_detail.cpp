@@ -22,9 +22,11 @@
 
 #include <dialogs/git/workspace_detail.h>
 
+#include <mdw/client/mdw_baseline_design.h>
 #include <mdw/client/mdw_lifecycle.h>
 #include <mdw/mdw_claim_text.h>
 #include <widgets/mdw_member_index.h>
+#include <widgets/mdw_part_state.h>
 
 #include <wx/intl.h>
 
@@ -174,6 +176,63 @@ BOOST_AUTO_TEST_CASE( FolderAndLastChangeRows )
     BOOST_CHECK_EQUAL( find( rows, _( "Folder" ) )->value, wxS( "Parts/Power" ) );
     BOOST_CHECK( find( rows, _( "Last change" ) ) );
     BOOST_CHECK_EQUAL( rows.back().label, _( "Last change" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( MemberStateCellUsesTheListedFacts )
+{
+    MDW_CAPABILITIES               c = caps( { MDW_CAPABILITY_GROUP::LIFECYCLE, MDW_CAPABILITY_GROUP::LOCKING } );
+    kiapi::workspace::CustomState& production = c.custom_states.emplace_back();
+    production.set_state_id( "production" );
+    production.set_display_name( "Production" );
+
+    MDW_MEMBER_ENTRY entry;
+    entry.member.name = wxS( "R" );
+    entry.member.state = state( MDW_LIFECYCLE_CATEGORY::RELEASED, wxS( "production" ) );
+    entry.member.revision_label = wxS( "B" );
+
+    auto treeCell = [&]()
+    {
+        return MDW_PART_STATE::TreeCell( MDW_MEMBER_INDEX::StateName( c, entry.member.state ), MDW_LOCK_INFO(), false );
+    };
+
+    BOOST_CHECK_EQUAL( WorkspaceMemberStateCell( c, entry ), treeCell() );
+
+    // The library tree names a plain editable member, where a design file's cell stays empty
+    entry.member.state = state( MDW_LIFECYCLE_CATEGORY::EDITABLE );
+
+    BOOST_CHECK_EQUAL( WorkspaceMemberStateCell( c, entry ), treeCell() );
+    BOOST_CHECK( !WorkspaceMemberStateCell( c, entry ).IsEmpty() );
+}
+
+
+BOOST_AUTO_TEST_CASE( MemberRowsNameTheNewestRelease )
+{
+    MDW_MEMBER_ENTRY entry;
+    entry.member.state = state( MDW_LIFECYCLE_CATEGORY::RELEASED );
+
+    MDW_PART_FACTS released;
+    released.statuses.push_back( kiapi::mdw::PPS_RELEASED );
+    released.matched_revision_label = wxS( "B" );
+
+    wxDateTime now = wxDateTime::Now();
+    auto rows = WorkspaceMemberDetailRows( caps( { MDW_CAPABILITY_GROUP::LIFECYCLE } ), entry, released, false, now );
+
+    BOOST_REQUIRE( find( rows, _( "Release" ) ) );
+    BOOST_CHECK_EQUAL( find( rows, _( "Release" ) )->value, MdwPlacedStatusText( released ) );
+    BOOST_CHECK( find( rows, _( "Lifecycle" ) ) );
+    BOOST_CHECK( find( rows, _( "Content" ) ) );
+
+    // A source without claims gets no Editing row, and a part with no facts no Release row
+    BOOST_CHECK( !find( rows, _( "Editing" ) ) );
+
+    rows = WorkspaceMemberDetailRows( caps( { MDW_CAPABILITY_GROUP::LOCKING } ), entry, std::nullopt, std::nullopt,
+                                      now );
+
+    BOOST_CHECK( !find( rows, _( "Release" ) ) );
+    BOOST_CHECK( !find( rows, _( "Lifecycle" ) ) );
+    BOOST_REQUIRE( find( rows, _( "Editing" ) ) );
+    BOOST_CHECK_EQUAL( find( rows, _( "Editing" ) )->value, _( "nobody" ) );
 }
 
 

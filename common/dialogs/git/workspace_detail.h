@@ -22,9 +22,11 @@
 #define WORKSPACE_DETAIL_H
 
 #include <kicommon.h>
+#include <mdw/client/mdw_baseline.h>
 #include <mdw/client/mdw_capabilities.h>
 #include <mdw/client/mdw_item.h>
 #include <mdw/client/mdw_lock.h>
+#include <widgets/mdw_member_index.h>
 
 #include <wx/datetime.h>
 #include <wx/string.h>
@@ -36,6 +38,13 @@
 /// The State column for an item; empty without LIFECYCLE and for an editable state the backend does not name
 KICOMMON_API wxString WorkspaceStateCell( const MDW_CAPABILITIES& aCaps, const MDW_LIFECYCLE_STATE& aState,
                                           const wxString& aRevisionLabel );
+
+/**
+ * The State cell for a team library member as its library lists it, with aCaps those of the library's source. It
+ * reads as the library tree's Lifecycle cell does for the member unclaimed and unedited, and is empty without
+ * LIFECYCLE.
+ */
+KICOMMON_API wxString WorkspaceMemberStateCell( const MDW_CAPABILITIES& aCaps, const MDW_MEMBER_ENTRY& aEntry );
 
 
 /// One label and value pair of the Workspace page's details block
@@ -54,6 +63,15 @@ KICOMMON_API std::vector<WORKSPACE_DETAIL_ROW> WorkspaceDetailRows( const MDW_CA
                                                                     const wxString& aFolderPath,
                                                                     const wxDateTime& aNow );
 
+/**
+ * The details rows for a team library member as its library lists it, with aCaps those of the library's source and
+ * aFacts what the listing says of its newest release. aModified is unset while the local changes are unknown.
+ */
+KICOMMON_API std::vector<WORKSPACE_DETAIL_ROW> WorkspaceMemberDetailRows( const MDW_CAPABILITIES&              aCaps,
+                                                                          const MDW_MEMBER_ENTRY&              aEntry,
+                                                                          const std::optional<MDW_PART_FACTS>& aFacts,
+                                                                          std::optional<bool> aModified,
+                                                                          const wxDateTime&   aNow );
 
 
 /// One command the Workspace page offers for the selected item
@@ -89,7 +107,7 @@ struct WORKSPACE_ACTION_FACTS
     std::vector<kiapi::workspace::LifecycleTransition> transitions; ///< Empty when unread or not supported
     bool transitionsReading = false; ///< The transitions are being read and none are known yet
 
-    /// The item's permission to transition. The Workspace page does not fill it yet.
+    /// The item's permission to transition, PS_UNKNOWN until read or where the source has no permissions
     kiapi::workspace::Permission transition;
 };
 

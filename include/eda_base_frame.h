@@ -69,6 +69,7 @@ class wxEvent;
 class wxFileName;
 class EDA_ITEM;
 class EDA_DRAW_PANEL_GAL;
+class LIB_ID;
 class EDA_MSG_PANEL;
 class BASE_SCREEN;
 class PAGE_INFO;
@@ -491,6 +492,14 @@ public:
      * @return false when this frame has no such tree or the tree does not list files of that type.
      */
     virtual bool OpenProjectTreeFile( const wxString& aPath ) { return false; }
+
+    /**
+     * Open aId in the library editor aEditor, FRAME_SCH_SYMBOL_EDITOR or FRAME_FOOTPRINT_EDITOR, as the project
+     * manager opens that editor.
+     *
+     * @return false when this frame does not open library editors.
+     */
+    virtual bool OpenLibraryPart( FRAME_T aEditor, const LIB_ID& aId ) { return false; }
 
     virtual void RecreateToolbars();
 

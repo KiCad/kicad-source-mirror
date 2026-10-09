@@ -2625,28 +2625,13 @@ std::optional<MDW_PART_TARGET> SYMBOL_EDIT_FRAME::resolveTeamPart( const wxStrin
         return std::nullopt;
 
     const wxString path = LIBRARY_MANAGER::GetFullURI( *row, true );
-    const bool     folder = wxFileName::DirExists( path );
-    wxFileName     file( path );
 
-    if( folder )
-        file = wxFileName( path, EscapeString( aName, CTX_FILENAME ), FILEEXT::KiCadSymbolLibFileExtension );
+    std::optional<MDW_PART_TARGET> target = MdwPartTarget(
+            MDW_LIBRARY_TYPE::SYMBOL, **row, aName, MdwTeamPartFile( MDW_LIBRARY_TYPE::SYMBOL, path, aName, nullptr ) );
 
-    std::optional<MDW_PART_TARGET> target = MdwPartTarget( MDW_LIBRARY_TYPE::SYMBOL, **row, aName, file.GetFullPath() );
-
-    // A folder symbol may share a file with others, so a file the source names wins over its own name
-    if( target && target->listed && folder )
-    {
-        const MDW_LIBRARY_MEMBER& member = target->listed->member;
-        wxString                  listed;
-
-        if( member.path_hint.StartsWith( member.library_id + wxS( "/" ), &listed ) && !listed.Contains( wxS( "/" ) ) )
-        {
-            const wxFileName named( path, listed );
-
-            if( named.FileExists() )
-                target->localPath = named.GetFullPath();
-        }
-    }
+    // Only the listing knows the file a folder symbol shares with others
+    if( target && target->listed )
+        target->localPath = MdwTeamPartFile( MDW_LIBRARY_TYPE::SYMBOL, path, aName, &target->listed->member );
 
     return target;
 }

@@ -28,6 +28,8 @@ class KIGIT_COMMON;
 struct KIGIT_BRANCH_INFO;
 class WX_SPLITTER_WINDOW;
 class wxButton;
+class wxDataViewColumn;
+class wxDataViewCtrl;
 class wxDateTime;
 class wxListCtrl;
 class wxSplitterWindow;
@@ -63,6 +65,11 @@ void UnsplitKeepingSash( wxSplitterWindow* aSplitter, wxWindow* aPane, int& aSas
 /// dragged sash. Call while the pane is split and every control in it is shown, and again after
 /// its controls change width.
 void KeepDetailWidth( WX_SPLITTER_WINDOW* aSplitter );
+
+/// Let aColumn take the width the other columns leave, never less than aMinWidth, and show its text as a tooltip.
+/// Call FitStretchedColumn after showing or hiding another column.
+void StretchColumn( wxDataViewCtrl* aCtrl, wxDataViewColumn* aColumn, int aMinWidth );
+void FitStretchedColumn( wxDataViewCtrl* aCtrl, wxDataViewColumn* aColumn, int aMinWidth );
 
 /// Paint a button's text the diff's red, for one that throws something away.
 void MarkDestructive( wxButton* aButton );

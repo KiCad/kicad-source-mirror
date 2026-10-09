@@ -20,9 +20,13 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <gestfich.h>
 #include <tool/actions.h>
 #include <widgets/mdw_part_actions.h>
 #include <widgets/mdw_part_controller.h>
+
+#include <wx/file.h>
+#include <wx/filename.h>
 
 #include <algorithm>
 #include <stdexcept>
@@ -184,5 +188,38 @@ BOOST_AUTO_TEST_CASE( TreeCellShowsClaimAndEdits )
     BOOST_CHECK_EQUAL( MDW_PART_STATE::TreeCell( wxS( "Released" ), mine, true ),
                        wxS( "Released · revising (you) · modified" ) );
 }
+
+
+BOOST_AUTO_TEST_CASE( TeamPartFileFollowsTheEditors )
+{
+    SCOPED_TEMP_PATH folder;
+    BOOST_REQUIRE( folder.MakeDirectory( wxS( "mdw-part-file" ) ) );
+
+    const wxString dir = folder.Path();
+    const wxString file = wxFileName( dir, wxS( "passives" ), wxS( "kicad_sym" ) ).GetFullPath();
+
+    BOOST_CHECK_EQUAL( MdwTeamPartFile( MDW_LIBRARY_TYPE::FOOTPRINT, dir, wxS( "R_0603" ), nullptr ),
+                       wxFileName( dir, wxS( "R_0603" ), wxS( "kicad_mod" ) ).GetFullPath() );
+    BOOST_CHECK_EQUAL( MdwTeamPartFile( MDW_LIBRARY_TYPE::SYMBOL, file, wxS( "R" ), nullptr ), file );
+
+    const wxString own = wxFileName( dir, wxS( "R" ), wxS( "kicad_sym" ) ).GetFullPath();
+
+    BOOST_CHECK_EQUAL( MdwTeamPartFile( MDW_LIBRARY_TYPE::SYMBOL, dir, wxS( "R" ), nullptr ), own );
+
+    MDW_LIBRARY_MEMBER member;
+    member.library_id = wxS( "passives" );
+    member.path_hint = wxS( "passives/shared.kicad_sym" );
+
+    // The named file wins only once it exists in the folder
+    BOOST_CHECK_EQUAL( MdwTeamPartFile( MDW_LIBRARY_TYPE::SYMBOL, dir, wxS( "R" ), &member ), own );
+
+    const wxString shared = wxFileName( dir, wxS( "shared.kicad_sym" ) ).GetFullPath();
+    wxFile         create;
+    BOOST_REQUIRE( create.Create( shared ) );
+    create.Close();
+
+    BOOST_CHECK_EQUAL( MdwTeamPartFile( MDW_LIBRARY_TYPE::SYMBOL, dir, wxS( "R" ), &member ), shared );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -255,6 +255,7 @@ set( KICOMMON_SRCS
     dialogs/dialog_restore_local_history.cpp
     dialogs/dialog_HTML_reporter_base.cpp
     dialogs/git/workspace_item_files.cpp
+    dialogs/git/workspace_listing.cpp
     dialogs/dialog_mdw_release.cpp
     dialogs/dialog_mdw_release_base.cpp
     dialogs/mdw_library_checkin_rows.cpp

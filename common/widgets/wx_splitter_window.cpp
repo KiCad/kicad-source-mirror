@@ -19,6 +19,8 @@
 
 #include <widgets/wx_splitter_window.h>
 
+#include <algorithm>
+
 
 bool WX_SPLITTER_WINDOW::OnSashPositionChange( int newSashPosition )
 {
@@ -35,6 +37,9 @@ bool WX_SPLITTER_WINDOW::OnSashPositionChange( int newSashPosition )
     if( totalSize - newSashPosition < m_minSecondPane )
         return false;
 
+    if( m_firstPaneFloor >= 0 )
+        m_firstPaneFloor = ToDIP( newSashPosition );
+
     return true;
 }
 
@@ -43,8 +48,10 @@ void WX_SPLITTER_WINDOW::OnSize( wxSizeEvent& aEvent )
 {
     wxSplitterWindow::OnSize( aEvent );
 
-    if( GetSashPosition() < m_minFirstPane )
-        SetSashPosition( m_minFirstPane );
+    int firstPaneMin = m_firstPaneFloor >= 0 ? std::max( m_minFirstPane, FromDIP( m_firstPaneFloor ) ) : m_minFirstPane;
+
+    if( GetSashPosition() < firstPaneMin )
+        SetSashPosition( firstPaneMin );
 
     int totalSize;
 

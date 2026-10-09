@@ -25,6 +25,7 @@
 #include <fstream>
 
 #include <wx/button.h>
+#include <wx/dataview.h>
 #include <wx/datetime.h>
 #include <wx/intl.h>
 #include <wx/listctrl.h>
@@ -150,6 +151,66 @@ void KIGIT::KeepDetailWidth( WX_SPLITTER_WINDOW* aSplitter )
 
     if( aSplitter->IsSplit() && aSplitter->GetSashPosition() > widest )
         aSplitter->SetSashPosition( std::max( aSplitter->GetMinimumPaneSize(), widest ) );
+}
+
+
+void KIGIT::StretchColumn( wxDataViewCtrl* aCtrl, wxDataViewColumn* aColumn, int aMinWidth )
+{
+    // The rows sit in the main window, whose size leaves out the header and the vertical scrollbar
+    wxWindow* rows = aCtrl->GetMainWindow();
+
+    rows->Bind( wxEVT_SIZE,
+                [aCtrl, aColumn, aMinWidth]( wxSizeEvent& aEvent )
+                {
+                    aEvent.Skip();
+                    FitStretchedColumn( aCtrl, aColumn, aMinWidth );
+                } );
+
+    rows->Bind( wxEVT_MOTION,
+                [aCtrl, aColumn, rows]( wxMouseEvent& aEvent )
+                {
+                    aEvent.Skip();
+
+                    wxDataViewItem    item;
+                    wxDataViewColumn* column = nullptr;
+                    wxString          tip;
+
+                    aCtrl->HitTest( aCtrl->ScreenToClient( rows->ClientToScreen( aEvent.GetPosition() ) ), item,
+                                    column );
+
+                    if( item.IsOk() && column == aColumn && aCtrl->GetModel() )
+                    {
+                        wxVariant value;
+                        aCtrl->GetModel()->GetValue( value, item, aColumn->GetModelColumn() );
+                        tip = value.GetString();
+                    }
+
+                    if( rows->GetToolTipText() != tip )
+                        rows->SetToolTip( tip );
+                } );
+
+    FitStretchedColumn( aCtrl, aColumn, aMinWidth );
+}
+
+
+void KIGIT::FitStretchedColumn( wxDataViewCtrl* aCtrl, wxDataViewColumn* aColumn, int aMinWidth )
+{
+    int used = 0;
+
+    for( unsigned ii = 0; ii < aCtrl->GetColumnCount(); ++ii )
+    {
+        wxDataViewColumn* column = aCtrl->GetColumn( ii );
+
+        // The generic control stretches its last column into the free width this column is to take
+        if( column != aColumn && !column->IsHidden() )
+            used += KIPLATFORM::UI::GetColumnWidth( column );
+    }
+
+    const int width = std::max( aMinWidth, aCtrl->GetMainWindow()->GetClientSize().x - used );
+
+    // A new width resizes the rows and fits again, so only a change is applied
+    if( KIPLATFORM::UI::GetColumnWidth( aColumn ) != width )
+        aColumn->SetWidth( width );
 }
 
 

@@ -272,7 +272,8 @@ BOOST_AUTO_TEST_CASE( LibrariesAppearUnderOneGroup )
     BOOST_REQUIRE_EQUAL( group.children[0].children.size(), 2u );
     BOOST_CHECK( group.children[0].children[0].kind == WORKSPACE_TREE_NODE::KIND::MEMBER );
     BOOST_CHECK_EQUAL( group.children[0].children[0].key, wxT( "fp:Alpha/R_0402" ) );
-    BOOST_CHECK( group.children[1].children.empty() );
+    BOOST_REQUIRE_EQUAL( group.children[1].children.size(), 1u );
+    BOOST_CHECK( group.children[1].children[0].kind == WORKSPACE_TREE_NODE::KIND::UNLISTED );
 
     WORKSPACE_TREE_NODE bare = BuildWorkspaceTree( {}, { item( wxT( "1" ), wxT( "a.md" ) ) }, {}, wxEmptyString );
 

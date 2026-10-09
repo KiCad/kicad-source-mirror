@@ -26,12 +26,15 @@
 #include <dialogs/git/workspace_search_query.h>
 #include <dialogs/git/workspace_tree_model.h>
 #include <mdw/client/mdw_capabilities.h>
+#include <mdw/client/mdw_library.h>
 #include <mdw/client/mdw_navigation.h>
 #include <mdw/client/mdw_op.h>
 #include <mdw/client/mdw_subscription.h>
+#include <widgets/mdw_member_index.h>
 
 #include <wx/datetime.h>
 
+#include <atomic>
 #include <cstdint>
 #include <map>
 #include <memory>
@@ -66,7 +69,58 @@ public:
     void SelectItem( const wxString& aItemId );
 
 private:
+    /// A team library of the project's library tables
+    struct TEAM_LIBRARY
+    {
+        wxString         key; ///< "sym:<nickname>" or "fp:<nickname>", as the tree knows it
+        MDW_LIBRARY_TYPE type = MDW_LIBRARY_TYPE::UNKNOWN;
+        wxString         nickname;
+        MDW_TEAM_LIBRARY binding;
+        wxString         path;   ///< The row's expanded URI
+        wxString         marker; ///< The row's library copy marker
+        MDW_CAPABILITIES caps;   ///< The source's, as the rows show
+    };
+
+    /// A member the tree shows, as its library last listed it
+    struct SHOWN_MEMBER
+    {
+        wxString         library; ///< The TEAM_LIBRARY::key of its library
+        MDW_MEMBER_ENTRY entry;
+    };
+
     std::shared_ptr<MDW_SESSION> session() const;
+
+    /// Find the project's team libraries again, as after a source connects or the tables change.
+    void refreshTeamLibraries();
+
+    /// Start listing the library under aKey once it is expanded; the tree fills when the listing lands.
+    void listLibrary( const wxString& aKey );
+
+    void onMembersChanged( const MDW_MEMBER_CHANGES& aChanges );
+
+    /// The team libraries as the tree shows them, each expanded one with its members, which go into m_shownMembers.
+    std::vector<WORKSPACE_TREE_LIBRARY> shownLibraries();
+
+    /// Rebuild the tree once, after the event in progress, for a listing that was already there.
+    void queueFill();
+
+    void showMemberDetail( const WORKSPACE_TREE_NODE& aNode );
+
+    /// The source and reference of the selected item or member, which its versions and states come from.
+    std::shared_ptr<MDW_SOURCE> selectedSource() const;
+    MDW_ITEM_REF                selectedRef() const;
+
+    /// The revision the detail shows, whose states are offered and which a state change names.
+    wxString selectedRevision() const;
+
+    /// The team library under aKey, or null once it is no longer one.
+    const TEAM_LIBRARY* teamLibrary( const wxString& aKey ) const;
+
+    /// The library of the member in the detail pane, or null for none.
+    const TEAM_LIBRARY* memberLibrary() const;
+
+    /// The file the selected member is saved in, as its editor resolves it.
+    wxString memberFile() const;
 
     /// The folder path shown for aItem.
     wxString folderText( const MDW_ITEM_INFO& aItem ) const;
@@ -83,6 +137,9 @@ private:
     /// Show the State and Editing columns only when the bound backend offers lifecycle and locking.
     void showColumns();
 
+    /// Open every row below aNode that shows search results, leaving the libraries not listed yet closed.
+    void expandFiltered( const WORKSPACE_TREE_NODE& aNode );
+
     void rememberExpanded( const WORKSPACE_TREE_NODE& aNode );
     void restoreExpanded( const WORKSPACE_TREE_NODE& aNode );
 
@@ -92,6 +149,9 @@ private:
     bool followBinding();
 
     void forgetListing();
+
+    /// Drop the listing read still out, stopping its walk, and answer the generation of the next one
+    std::uint64_t nextListFetch();
 
     void setItemCount( const wxString& aText );
 
@@ -130,7 +190,8 @@ private:
 
     void runAction( WORKSPACE_ACTION::ID aId );
 
-    /// Read the lifecycle states the selected item can move to, when the source has lifecycles.
+    /// Read the lifecycle states the selected item can move to, and its permission to move, when the source has
+    /// lifecycles.
     void readTransitions();
 
     /// The file the selected item is edited in, as recorded at check out or else as the source suggests.
@@ -148,6 +209,9 @@ private:
     unsigned detailGates() const;
 
     wxString editingText( const wxString& aItemId ) const;
+
+    /// What the Editing column says of aLock.
+    static wxString lockText( const MDW_LOCK_INFO& aLock );
 
     void onEditing();
 
@@ -198,6 +262,16 @@ private:
     wxString                     m_shownBinding; ///< bindingKey() the rows were read under
     unsigned                     m_detailGates = 0; ///< detailGates() when the detail was last built
 
+    std::vector<TEAM_LIBRARY>                   m_teamLibraries;
+    std::set<wxString>                          m_librariesListed; ///< Keys of libraries expanded, so listed
+    std::map<wxString, SHOWN_MEMBER>            m_shownMembers;    ///< By tree key
+    std::optional<SHOWN_MEMBER>                 m_member;          ///< The member in the detail pane
+    std::shared_ptr<MDW_MEMBER_INDEX::LISTENER> m_memberListener;
+    bool                                        m_fillQueued = false;
+
+    /// Set once the listing read still out is no longer wanted, which stops its walk
+    std::shared_ptr<std::atomic<bool>> m_listCancel;
+
     /// Held by the request's completion, so a request the worker discards also stops being pending
     std::weak_ptr<int>         m_checkOutPending;
     std::weak_ptr<int>         m_checkInPending;
@@ -205,9 +279,10 @@ private:
     WORKSPACE_SEARCH_QUERY::STATUS          m_queryStatus; ///< Last status from m_query, kept across list rebuilds
     bool                       m_queryHasMore = false;
     std::weak_ptr<MDW_SOURCE>  m_querySource;
-    int                        m_sashPos = 0;
+    int                        m_sashPos = 0; ///< In DIPs, so the tree keeps its width across a DPI change
 
     wxObjectDataPtr<WORKSPACE_TREE_MODEL> m_model;
+    wxDataViewColumn*                     m_nameColumn = nullptr;
     wxDataViewColumn*                     m_stateColumn = nullptr;
     wxDataViewColumn*                     m_editingColumn = nullptr;
     MDW_CAPABILITIES                      m_caps;                 ///< The bound backend's, as the columns show
@@ -219,6 +294,9 @@ private:
     bool                                               m_transitionsReading = false; ///< m_transitionsOp runs
     MDW_OP                                             m_transitionOp;
     bool                                               m_transitionPending = false; ///< m_transitionOp runs
+    kiapi::workspace::Permission                       m_transitionPermission; ///< The selection's, unknown until read
+    MDW_OP                                             m_permissionsOp;
+    bool                                               m_permissionsReading = false; ///< m_permissionsOp runs
 
     std::vector<std::pair<WORKSPACE_ACTION::ID, wxButton*>> m_actionButtons;
 

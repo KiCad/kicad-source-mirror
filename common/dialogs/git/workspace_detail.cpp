@@ -20,13 +20,41 @@
 
 #include <dialogs/git/workspace_detail.h>
 
+#include <mdw/client/mdw_baseline_design.h>
 #include <mdw/client/mdw_lifecycle.h>
 #include <mdw/mdw_claim_text.h>
 #include <widgets/mdw_member_index.h>
+#include <widgets/mdw_part_state.h>
 
 #include <wx/intl.h>
 
 #include <algorithm>
+
+
+namespace
+{
+/// The Lifecycle, Editing and Content rows an item and a member share
+std::vector<WORKSPACE_DETAIL_ROW> stateRows( const MDW_CAPABILITIES& aCaps, const MDW_LIFECYCLE_STATE& aState,
+                                             const MDW_LOCK_INFO& aLock, std::optional<bool> aModified,
+                                             const wxDateTime& aNow )
+{
+    std::vector<WORKSPACE_DETAIL_ROW> rows;
+
+    if( aCaps.Has( MDW_CAPABILITY_GROUP::LIFECYCLE ) )
+        rows.push_back( { _( "Lifecycle" ), MDW_MEMBER_INDEX::StateName( aCaps, aState ) } );
+
+    if( aCaps.Has( MDW_CAPABILITY_GROUP::LOCKING ) )
+    {
+        wxString claim = MdwClaimLabel( aLock, aNow );
+        rows.push_back( { _( "Editing" ), claim.IsEmpty() ? _( "nobody" ) : claim } );
+    }
+
+    if( aModified.has_value() )
+        rows.push_back( { _( "Content" ), *aModified ? _( "Modified" ) : _( "Current" ) } );
+
+    return rows;
+}
+} // namespace
 
 
 wxString WorkspaceStateCell( const MDW_CAPABILITIES& aCaps, const MDW_LIFECYCLE_STATE& aState,
@@ -48,23 +76,22 @@ wxString WorkspaceStateCell( const MDW_CAPABILITIES& aCaps, const MDW_LIFECYCLE_
 }
 
 
+wxString WorkspaceMemberStateCell( const MDW_CAPABILITIES& aCaps, const MDW_MEMBER_ENTRY& aEntry )
+{
+    if( !aCaps.Has( MDW_CAPABILITY_GROUP::LIFECYCLE ) )
+        return wxString();
+
+    // The claim has the Editing column, and the library tree's edit note is about an editor's buffer
+    return MDW_PART_STATE::TreeCell( MDW_MEMBER_INDEX::StateName( aCaps, aEntry.member.state ), MDW_LOCK_INFO(),
+                                     false );
+}
+
+
 std::vector<WORKSPACE_DETAIL_ROW> WorkspaceDetailRows( const MDW_CAPABILITIES& aCaps, const MDW_ITEM_INFO& aItem,
                                                        const MDW_LOCK_INFO& aLock, std::optional<bool> aModified,
                                                        const wxString& aFolderPath, const wxDateTime& aNow )
 {
-    std::vector<WORKSPACE_DETAIL_ROW> rows;
-
-    if( aCaps.Has( MDW_CAPABILITY_GROUP::LIFECYCLE ) )
-        rows.push_back( { _( "Lifecycle" ), MDW_MEMBER_INDEX::StateName( aCaps, aItem.state ) } );
-
-    if( aCaps.Has( MDW_CAPABILITY_GROUP::LOCKING ) )
-    {
-        wxString claim = MdwClaimLabel( aLock, aNow );
-        rows.push_back( { _( "Editing" ), claim.IsEmpty() ? _( "nobody" ) : claim } );
-    }
-
-    if( aModified.has_value() )
-        rows.push_back( { _( "Content" ), *aModified ? _( "Modified" ) : _( "Current" ) } );
+    std::vector<WORKSPACE_DETAIL_ROW> rows = stateRows( aCaps, aItem.state, aLock, aModified, aNow );
 
     // The backend id is a hash, so a short prefix identifies a revision that has no label
     wxString version = aItem.revision_label.IsEmpty() ? aItem.revision_id.Left( 7 ) : aItem.revision_label;
@@ -74,6 +101,20 @@ std::vector<WORKSPACE_DETAIL_ROW> WorkspaceDetailRows( const MDW_CAPABILITIES& a
 
     if( aItem.modified.IsValid() )
         rows.push_back( { _( "Last change" ), aItem.modified.Format( wxS( "%x %H:%M" ) ) } );
+
+    return rows;
+}
+
+
+std::vector<WORKSPACE_DETAIL_ROW> WorkspaceMemberDetailRows( const MDW_CAPABILITIES&              aCaps,
+                                                             const MDW_MEMBER_ENTRY&              aEntry,
+                                                             const std::optional<MDW_PART_FACTS>& aFacts,
+                                                             std::optional<bool> aModified, const wxDateTime& aNow )
+{
+    std::vector<WORKSPACE_DETAIL_ROW> rows = stateRows( aCaps, aEntry.member.state, aEntry.lock, aModified, aNow );
+
+    if( aFacts )
+        rows.push_back( { _( "Release" ), MdwPlacedStatusText( *aFacts ) } );
 
     return rows;
 }

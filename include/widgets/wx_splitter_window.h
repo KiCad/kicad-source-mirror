@@ -30,7 +30,8 @@ public:
                         long style = wxSP_3D, const wxString& name = wxT( "splitter" ) ) :
         wxSplitterWindow( parent, id, pos, size, style, name ),
         m_minFirstPane( -1 ),
-        m_minSecondPane( -1 )
+        m_minSecondPane( -1 ),
+        m_firstPaneFloor( -1 )
     {
         this->Connect( wxEVT_SIZE, wxSizeEventHandler( WX_SPLITTER_WINDOW::OnSize ) );
     }
@@ -49,9 +50,16 @@ public:
         m_minSecondPane = aSecond;
     }
 
+    /**
+     * Keep the first pane at least aSize DIPs wide while the window shrinks, for as long as the second pane's minimum
+     * leaves room, instead of letting the sash gravity take it narrower. Dragging the sash moves the floor along.
+     */
+    void SetFirstPaneResizeFloor( int aSize ) { m_firstPaneFloor = aSize; }
+
 private:
     int m_minFirstPane;
     int m_minSecondPane;
+    int m_firstPaneFloor; ///< In DIPs, so it keeps its logical size when the window moves to another DPI
 };
 
 #endif //KICAD_WX_SPLITTER_WINDOW_H

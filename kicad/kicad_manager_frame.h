@@ -71,6 +71,8 @@ public:
 
     bool OpenProjectTreeFile( const wxString& aPath ) override;
 
+    bool OpenLibraryPart( FRAME_T aEditor, const LIB_ID& aId ) override;
+
     /// Open aPath, of type aType, as activating its tree item does, for any type but a project or directory
     void OpenProjectTreeFile( const wxString& aPath, TREE_FILE_TYPE aType );
 

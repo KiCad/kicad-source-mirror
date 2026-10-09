@@ -57,6 +57,7 @@
 #include <kiway.h>
 #include <kiway_mail.h>
 #include <launch_ext.h>
+#include <lib_id.h>
 #include <lockfile.h>
 #include <mail_type.h>
 #include <notifications_manager.h>
@@ -1801,6 +1802,28 @@ bool KICAD_MANAGER_FRAME::OpenProjectTreeFile( const wxString& aPath )
 
     OpenProjectTreeFile( aPath, type );
     return true;
+}
+
+
+bool KICAD_MANAGER_FRAME::OpenLibraryPart( FRAME_T aEditor, const LIB_ID& aId )
+{
+    std::string packet = aId.Format().c_str();
+
+    if( aEditor == FRAME_SCH_SYMBOL_EDITOR )
+    {
+        GetToolManager()->RunAction( KICAD_MANAGER_ACTIONS::editSymbols );
+        Kiway().ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_SCH_EDIT_LIBID, packet );
+        return true;
+    }
+
+    if( aEditor == FRAME_FOOTPRINT_EDITOR )
+    {
+        GetToolManager()->RunAction( KICAD_MANAGER_ACTIONS::editFootprints );
+        Kiway().ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_FP_EDIT_LIBID, packet );
+        return true;
+    }
+
+    return false;
 }
 
 

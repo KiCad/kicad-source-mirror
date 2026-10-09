@@ -27,6 +27,7 @@ target_link_libraries( qa_mdw_realm_backend
 # Drives the real kicad-mdw-git process through the supervisor
 add_executable( qa_mdw_git
     test_mdw_backend_registry.cpp
+    test_mdw_callback_thread.cpp
     test_mdw_disconnect_here.cpp
     test_mdw_framework_lifecycle.cpp
     test_mdw_git_auth.cpp
@@ -39,6 +40,7 @@ add_executable( qa_mdw_git
     test_mdw_git_permissions.cpp
     test_mdw_git_release.cpp
     test_mdw_git_revision_copy.cpp
+    test_mdw_git_workspace_listing.cpp
     test_mdw_reply_checks.cpp
     ${CMAKE_SOURCE_DIR}/plugins/mdw/git/mdw_git_checkouts.cpp
     ${CMAKE_SOURCE_DIR}/plugins/mdw/git/mdw_git_remote.cpp

@@ -26,6 +26,7 @@
 #include <dialogs/git/panel_mdw_versions.h>
 #include <dialogs/git/workspace_detail.h>
 #include <dialogs/git/workspace_item_files.h>
+#include <dialogs/git/workspace_listing.h>
 #include <dialogs/git/workspace_search_query.h>
 #include <dialogs/git/workspace_tree.h>
 #include <confirm.h>
@@ -33,10 +34,14 @@
 #include <kiway.h>
 #include <eda_base_frame.h>
 #include <launch_ext.h>
+#include <lib_id.h>
+#include <libraries/library_manager.h>
+#include <libraries/library_table.h>
 #include <mdw/mdw_claim_text.h>
 #include <mdw/mdw_framework.h>
 #include <mdw/mdw_lock_tracker.h>
 #include <mdw/client/mdw_client.h>
+#include <mdw/client/mdw_library_sources.h>
 #include <mdw/client/mdw_paged_read.h>
 #include <mdw/client/mdw_part.h>
 #include <mdw/client/mdw_project_file.h>
@@ -66,22 +71,12 @@
 #include <wx/intl.h>
 
 #include <algorithm>
-#include <deque>
 #include <tuple>
 #include <utility>
 
 
 namespace
 {
-struct LISTING
-{
-    MDW_RESULT                   status = MDW_RESULT::Ok();
-    std::vector<MDW_ITEM_INFO>   items;
-    std::vector<MDW_FOLDER>      folders;
-    std::map<wxString, wxString> folderNames;
-};
-
-
 size_t countItems( const WORKSPACE_TREE_NODE& aNode )
 {
     size_t count = aNode.kind == WORKSPACE_TREE_NODE::KIND::ITEM ? 1 : 0;
@@ -126,8 +121,8 @@ PANEL_GIT_WORKSPACE::PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG
             } );
     m_itemsTree->AssociateModel( m_model.get() );
 
-    m_itemsTree->AppendTextColumn( _( "Name" ), WORKSPACE_TREE_MODEL::COL_NAME, wxDATAVIEW_CELL_INERT, FromDIP( 200 ),
-                                   wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE );
+    m_nameColumn = m_itemsTree->AppendTextColumn( _( "Name" ), WORKSPACE_TREE_MODEL::COL_NAME, wxDATAVIEW_CELL_INERT,
+                                                  FromDIP( 200 ), wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE );
     m_stateColumn = m_itemsTree->AppendTextColumn( _( "State" ), WORKSPACE_TREE_MODEL::COL_STATE, wxDATAVIEW_CELL_INERT,
                                                    FromDIP( 130 ), wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE );
     m_editingColumn =
@@ -136,6 +131,7 @@ PANEL_GIT_WORKSPACE::PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG
     m_itemsTree->AppendTextColumn( _( "Last Change" ), WORKSPACE_TREE_MODEL::COL_LAST_CHANGE, wxDATAVIEW_CELL_INERT,
                                    FromDIP( 110 ), wxALIGN_LEFT, wxDATAVIEW_COL_RESIZABLE );
     showColumns();
+    KIGIT::StretchColumn( m_itemsTree, m_nameColumn, FromDIP( 200 ) );
 
     m_versions->EnablePreview( m_frame );
     m_versions->SetModifiedChanged(
@@ -147,7 +143,7 @@ PANEL_GIT_WORKSPACE::PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG
     KIGIT::KeepDetailWidth( m_workspaceSplitter );
 
     // The detail pane appears once a file is selected
-    m_sashPos = FromDIP( 560 );
+    m_sashPos = 560;
     m_workspaceSplitter->Unsplit( m_itemDetail );
 
     m_search->Bind( wxEVT_TEXT,
@@ -241,8 +237,19 @@ PANEL_GIT_WORKSPACE::PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG
 
                            if( node && node->kind == WORKSPACE_TREE_NODE::KIND::ITEM && node->item < m_items.size() )
                                showDetail( m_items[node->item] );
+                           else if( node && node->kind == WORKSPACE_TREE_NODE::KIND::MEMBER )
+                               showMemberDetail( *node );
                            else
                                hideDetail();
+                       } );
+
+    m_itemsTree->Bind( wxEVT_DATAVIEW_ITEM_EXPANDED,
+                       [this]( wxDataViewEvent& aEvent )
+                       {
+                           const WORKSPACE_TREE_NODE* node = m_model->NodeOf( aEvent.GetItem() );
+
+                           if( node && node->kind == WORKSPACE_TREE_NODE::KIND::LIBRARY )
+                               listLibrary( node->key );
                        } );
 
     m_itemsTree->Bind( wxEVT_DATAVIEW_ITEM_CONTEXT_MENU,
@@ -263,6 +270,9 @@ PANEL_GIT_WORKSPACE::~PANEL_GIT_WORKSPACE()
 {
     // The control outlives this panel's members during teardown, and its cells call back into them
     m_itemsTree->AssociateModel( nullptr );
+
+    if( m_listCancel )
+        m_listCancel->store( true );
 }
 
 
@@ -284,7 +294,7 @@ bool PANEL_GIT_WORKSPACE::followBinding()
     m_shownBinding = binding;
 
     // Reads, rows and the selection of the previous workspace would reach the new one's session
-    ++m_listFetch;
+    nextListFetch();
     m_query.reset();
     m_queryStatus = WORKSPACE_SEARCH_QUERY::STATUS();
     m_queryHasMore = false;
@@ -382,7 +392,7 @@ void PANEL_GIT_WORKSPACE::onSearch()
         return;
     }
 
-    ++m_listFetch;
+    nextListFetch();
 
     MDW_SEARCH_QUERY query;
     query.text = text;
@@ -466,7 +476,7 @@ void PANEL_GIT_WORKSPACE::showOffline()
     }
 
     // A read still waiting on the lost backend would only fail later
-    ++m_listFetch;
+    nextListFetch();
     m_listStale = true;
     setItemCount( offline.text );
     m_model->SetGreyed( true );
@@ -505,6 +515,7 @@ void PANEL_GIT_WORKSPACE::setItemCount( const wxString& aText )
 void PANEL_GIT_WORKSPACE::Populate()
 {
     updateSearchHint();
+    refreshTeamLibraries();
 
     // The full listing would replace the search results, so the search runs again instead
     if( m_query )
@@ -514,7 +525,7 @@ void PANEL_GIT_WORKSPACE::Populate()
     }
 
     std::shared_ptr<MDW_SESSION> current = session();
-    std::uint64_t                fetch = ++m_listFetch;
+    std::uint64_t                fetch = nextListFetch();
 
     if( !current )
     {
@@ -536,83 +547,19 @@ void PANEL_GIT_WORKSPACE::Populate()
 
     setItemCount( _( "Reading the workspace" ) + wxS( "\u2026" ) );
     m_listReading = fetch;
+    m_listCancel = std::make_shared<std::atomic<bool>>( false );
 
-    current->RunAsync<LISTING>(
+    current->RunAsync<WORKSPACE_LISTING>(
             this,
-            [source = MDW_CLIENT::Get().ProjectSource(), weak = std::weak_ptr<MDW_SESSION>( current )]()
+            [source = MDW_CLIENT::Get().ProjectSource(), weak = std::weak_ptr<MDW_SESSION>( current ),
+             cancel = std::shared_ptr<const std::atomic<bool>>( m_listCancel )]()
             {
-                LISTING listing;
-
-                if( !source )
-                {
-                    listing.status = MDW_RESULT::Fail( MDW_ERROR_CODE::BACKEND_LOST );
-                    return listing;
-                }
-
-                auto readFolders = [&]( const wxString& aParent, std::vector<MDW_FOLDER>& aOut )
-                {
-                    auto [result, folders] = MdwSync<MDW_PAGED<MDW_FOLDER>>(
-                            [&]( MDW_DONE<MDW_PAGED<MDW_FOLDER>> aDone )
-                            {
-                                return MdwReadAllPages<MDW_FOLDER>(
-                                        [&]( const MDW_PAGE& aPage, MDW_DONE<MDW_PAGED<MDW_FOLDER>> aPageDone )
-                                        {
-                                            return source->Folders( aParent, aPage, std::move( aPageDone ) );
-                                        },
-                                        0, std::move( aDone ) );
-                            } );
-
-                    aOut.insert( aOut.end(), folders.rows.begin(), folders.rows.end() );
-                    return result;
-                };
-
-                std::vector<MDW_FOLDER> roots;
-                listing.status = readFolders( wxEmptyString, roots );
-
-                std::deque<wxString> folders;
-
-                // The walk knows each folder's parent, whether or not the backend filled it in
-                for( MDW_FOLDER& folder : roots )
-                {
-                    folder.parent_folder_id.clear();
-                    listing.folderNames[folder.folder_id] = WorkspaceFolderName( wxEmptyString, folder );
-                    folders.push_back( folder.folder_id );
-                    listing.folders.push_back( std::move( folder ) );
-                }
-
-                while( listing.status.IsOk() && !folders.empty() )
-                {
-                    wxString                folder = folders.front();
-                    std::vector<MDW_FOLDER> children;
-
-                    folders.pop_front();
-
-                    auto [status, items] = MdwSync<MDW_PAGED<MDW_ITEM_INFO>>(
-                            [&]( MDW_DONE<MDW_PAGED<MDW_ITEM_INFO>> aDone )
-                            {
-                                return source->Items( folder, wxEmptyString, MDW_PAGE(), std::move( aDone ) );
-                            } );
-
-                    listing.status = status;
-
-                    if( listing.status.IsOk() )
-                        listing.status = readFolders( folder, children );
-
-                    for( MDW_ITEM_INFO& item : items.rows )
-                    {
-                        if( !item.is_folder )
-                            listing.items.push_back( std::move( item ) );
-                    }
-
-                    for( MDW_FOLDER& child : children )
-                    {
-                        child.parent_folder_id = folder;
-                        listing.folderNames[child.folder_id] =
-                                WorkspaceFolderName( listing.folderNames[folder], child );
-                        folders.push_back( child.folder_id );
-                        listing.folders.push_back( std::move( child ) );
-                    }
-                }
+                // Closing the page or quitting mid-walk must not keep the backend reading a large workspace
+                WORKSPACE_LISTING listing = ReadWorkspaceListing( source, cancel,
+                                                                  [&weak]()
+                                                                  {
+                                                                      return weak.expired();
+                                                                  } );
 
                 // Claims are shown when the backend has them, but a list without them is still useful
                 if( std::shared_ptr<MDW_SESSION> live = weak.lock();
@@ -623,7 +570,7 @@ void PANEL_GIT_WORKSPACE::Populate()
 
                 return listing;
             },
-            [this, fetch, weak = std::weak_ptr<MDW_SESSION>( current )]( LISTING aListing )
+            [this, fetch, weak = std::weak_ptr<MDW_SESSION>( current )]( WORKSPACE_LISTING aListing )
             {
                 if( fetch != m_listFetch )
                     return;
@@ -685,10 +632,152 @@ void PANEL_GIT_WORKSPACE::forgetListing()
 }
 
 
+void PANEL_GIT_WORKSPACE::refreshTeamLibraries()
+{
+    m_teamLibraries.clear();
+
+    if( !MDW_LIBRARY_SOURCES::TeamLibrariesEnabled() )
+        return;
+
+    // Before the first row binds, so a source that connects later still brings its libraries in
+    if( !m_memberListener )
+    {
+        m_memberListener = MDW_MEMBER_INDEX::Get().Listen(
+                [this]( const MDW_MEMBER_CHANGES& aChanges )
+                {
+                    onMembersChanged( aChanges );
+                } );
+    }
+
+    LIBRARY_MANAGER& manager = Pgm().GetLibraryManager();
+
+    const std::tuple<LIBRARY_TABLE_TYPE, MDW_LIBRARY_TYPE, wxString> tables[] = {
+        { LIBRARY_TABLE_TYPE::SYMBOL, MDW_LIBRARY_TYPE::SYMBOL, wxS( "sym:" ) },
+        { LIBRARY_TABLE_TYPE::FOOTPRINT, MDW_LIBRARY_TYPE::FOOTPRINT, wxS( "fp:" ) }
+    };
+
+    for( const auto& [tableType, type, prefix] : tables )
+    {
+        for( const LIBRARY_TABLE_ROW* row : manager.Rows( tableType ) )
+        {
+            std::optional<MDW_TEAM_LIBRARY> binding = MdwTeamLibrary( type, *row );
+
+            if( !binding )
+                continue;
+
+            TEAM_LIBRARY& lib = m_teamLibraries.emplace_back();
+            lib.key = prefix + row->Nickname();
+            lib.type = type;
+            lib.nickname = row->Nickname();
+            lib.binding = *binding;
+            lib.path = LIBRARY_MANAGER::GetFullURI( row, true );
+            lib.marker = MDW_LIBRARY_SOURCES::MarkerOf( row->Options() );
+            lib.caps = binding->source->Capabilities();
+        }
+    }
+}
+
+
+void PANEL_GIT_WORKSPACE::listLibrary( const wxString& aKey )
+{
+    // Asked once, since a rebuild expands the library again and its queued fill would otherwise loop for good
+    if( !m_librariesListed.insert( aKey ).second )
+        return;
+
+    const TEAM_LIBRARY* lib = teamLibrary( aKey );
+
+    if( !lib )
+        return;
+
+    // Another reader may have listed it already, and then no notice follows
+    if( MDW_MEMBER_INDEX::Get().Listing( lib->type, lib->nickname ).members )
+        queueFill();
+}
+
+
+void PANEL_GIT_WORKSPACE::onMembersChanged( const MDW_MEMBER_CHANGES& aChanges )
+{
+    if( aChanges.all )
+    {
+        refreshTeamLibraries();
+        fillTree( false );
+        return;
+    }
+
+    bool shown = std::ranges::any_of( m_teamLibraries,
+                                      [&]( const TEAM_LIBRARY& aLib )
+                                      {
+                                          return m_librariesListed.count( aLib.key )
+                                                 && aChanges.Has( aLib.binding.source->Info().locator,
+                                                                  aLib.binding.library_id );
+                                      } );
+
+    if( shown )
+        fillTree( false );
+}
+
+
+void PANEL_GIT_WORKSPACE::queueFill()
+{
+    if( std::exchange( m_fillQueued, true ) )
+        return;
+
+    // The expansion that asked is still being handled, and a rebuild would delete its row
+    CallAfter(
+            [this]()
+            {
+                m_fillQueued = false;
+                fillTree( false );
+            } );
+}
+
+
+std::vector<WORKSPACE_TREE_LIBRARY> PANEL_GIT_WORKSPACE::shownLibraries()
+{
+    std::vector<WORKSPACE_TREE_LIBRARY> libraries;
+
+    for( TEAM_LIBRARY& lib : m_teamLibraries )
+    {
+        WORKSPACE_TREE_LIBRARY& shown = libraries.emplace_back();
+
+        shown.key = lib.key;
+        shown.name = lib.nickname;
+
+        if( !m_librariesListed.count( lib.key ) )
+            continue;
+
+        MDW_LIBRARY_LISTING listing = MDW_MEMBER_INDEX::Get().Listing( lib.type, lib.nickname );
+
+        if( !listing.members )
+            continue;
+
+        lib.caps = lib.binding.source->Capabilities();
+        shown.listed = true;
+
+        for( const auto& [name, entry] : *listing.members )
+        {
+            shown.members.push_back( name );
+            m_shownMembers[lib.key + wxS( "/" ) + name] = SHOWN_MEMBER{ lib.key, entry };
+        }
+    }
+
+    return libraries;
+}
+
+
+std::uint64_t PANEL_GIT_WORKSPACE::nextListFetch()
+{
+    if( m_listCancel )
+        m_listCancel->store( true );
+
+    m_listCancel.reset();
+    return ++m_listFetch;
+}
+
+
 void PANEL_GIT_WORKSPACE::fillTree( bool aRefreshDetail )
 {
-    // A provider already matched its rows, possibly on fields the tree does not show
-    wxString                          filter = m_query ? wxString() : m_search->GetValue();
+    wxString                          filter = m_search->GetValue();
     std::optional<WORKSPACE_TREE_KEY> keep;
 
     if( !m_pendingSelect.IsEmpty() )
@@ -708,17 +797,23 @@ void PANEL_GIT_WORKSPACE::fillTree( bool aRefreshDetail )
     const std::vector<MDW_FOLDER> noFolders;
     const WORKSPACE_TREE_NODE*    selected = nullptr;
 
+    m_shownMembers.clear();
+
+    const std::vector<WORKSPACE_TREE_LIBRARY> libraries = shownLibraries();
+
     {
         // The rebuild drops and restores the selection, which is no change to the detail
         wxEventBlocker blocker( m_itemsTree, wxEVT_DATAVIEW_SELECTION_CHANGED );
 
-        // Rows the source searched for have no folders of their own, so they stand flat at the root
-        m_model->Reset( BuildWorkspaceTree( m_query ? noFolders : m_folders, m_items, {}, filter ) );
+        // Rows the source searched for have no folders of their own, so they stand flat at the root. It matched
+        // them possibly on fields the tree does not show, and its search does not reach the team libraries
+        m_model->Reset( BuildWorkspaceTree( m_query ? noFolders : m_folders, m_items, libraries, filter,
+                                            m_query != nullptr ) );
         m_treeFiltered = m_query || !filter.IsEmpty();
 
         if( m_treeFiltered )
         {
-            m_itemsTree->ExpandAll();
+            expandFiltered( m_model->Root() );
         }
         else if( m_expanded )
         {
@@ -763,10 +858,53 @@ void PANEL_GIT_WORKSPACE::fillTree( bool aRefreshDetail )
     else
         m_model->SetGreyed( m_listStale );
 
-    if( !selected || selected->kind != WORKSPACE_TREE_NODE::KIND::ITEM || selected->item >= m_items.size() )
+    if( selected && selected->kind == WORKSPACE_TREE_NODE::KIND::MEMBER )
+    {
+        auto shown = m_shownMembers.find( selected->key );
+
+        if( aRefreshDetail || !m_member || selected->key != m_selected || shown == m_shownMembers.end() )
+        {
+            showMemberDetail( *selected );
+        }
+        else
+        {
+            const MDW_LIFECYCLE_STATE was = m_member->entry.member.state;
+
+            m_member = shown->second;
+
+            // The states offered were those of the state it was listed in
+            if( m_member->entry.member.state.category != was.category
+                || m_member->entry.member.state.state_id != was.state_id )
+            {
+                m_transitions.clear();
+                readTransitions();
+            }
+
+            showState();
+        }
+    }
+    else if( !selected || selected->kind != WORKSPACE_TREE_NODE::KIND::ITEM || selected->item >= m_items.size() )
+    {
         hideDetail();
+    }
     else if( aRefreshDetail )
+    {
         showDetail( m_items[selected->item] );
+    }
+}
+
+
+void PANEL_GIT_WORKSPACE::expandFiltered( const WORKSPACE_TREE_NODE& aNode )
+{
+    for( const WORKSPACE_TREE_NODE& child : aNode.children )
+    {
+        // Expanding a library not listed yet would start its listing, which a search must never do
+        if( child.children.empty() || child.children.back().kind == WORKSPACE_TREE_NODE::KIND::UNLISTED )
+            continue;
+
+        m_itemsTree->Expand( m_model->ItemOf( child ) );
+        expandFiltered( child );
+    }
 }
 
 
@@ -802,13 +940,57 @@ void PANEL_GIT_WORKSPACE::showColumns()
     std::shared_ptr<MDW_SOURCE> source = MDW_CLIENT::Get().ProjectSource();
 
     m_caps = source ? source->Capabilities() : MDW_CAPABILITIES();
-    m_stateColumn->SetHidden( !m_caps.Has( MDW_CAPABILITY_GROUP::LIFECYCLE ) );
-    m_editingColumn->SetHidden( !m_caps.Has( MDW_CAPABILITY_GROUP::LOCKING ) );
+
+    // A team library's source may have lifecycles and claims the project's does not
+    auto anyHas = [&]( MDW_CAPABILITY_GROUP aGroup )
+    {
+        return m_caps.Has( aGroup )
+               || std::ranges::any_of( m_teamLibraries,
+                                       [&]( const TEAM_LIBRARY& aLib )
+                                       {
+                                           return aLib.caps.Has( aGroup );
+                                       } );
+    };
+
+    m_stateColumn->SetHidden( !anyHas( MDW_CAPABILITY_GROUP::LIFECYCLE ) );
+    m_editingColumn->SetHidden( !anyHas( MDW_CAPABILITY_GROUP::LOCKING ) );
+    KIGIT::FitStretchedColumn( m_itemsTree, m_nameColumn, FromDIP( 200 ) );
 }
 
 
 wxString PANEL_GIT_WORKSPACE::cellText( const WORKSPACE_TREE_NODE& aNode, unsigned aColumn ) const
 {
+    if( aNode.kind == WORKSPACE_TREE_NODE::KIND::LIBRARY && aColumn == WORKSPACE_TREE_MODEL::COL_NAME )
+    {
+        // A symbol and a footprint library often share a nickname
+        bool symbols = aNode.key.StartsWith( wxS( "sym:" ) );
+
+        return wxString::Format( symbols ? _( "%s (symbols)" ) : _( "%s (footprints)" ), aNode.name );
+    }
+
+    if( aNode.kind == WORKSPACE_TREE_NODE::KIND::MEMBER )
+    {
+        auto shown = m_shownMembers.find( aNode.key );
+
+        if( aColumn == WORKSPACE_TREE_MODEL::COL_NAME )
+            return aNode.name;
+
+        const TEAM_LIBRARY* lib = shown == m_shownMembers.end() ? nullptr : teamLibrary( shown->second.library );
+
+        if( !lib )
+            return wxString();
+
+        const MDW_CAPABILITIES& caps = lib->caps;
+
+        switch( aColumn )
+        {
+        case WORKSPACE_TREE_MODEL::COL_STATE: return WorkspaceMemberStateCell( caps, shown->second.entry );
+        case WORKSPACE_TREE_MODEL::COL_EDITING:
+            return caps.Has( MDW_CAPABILITY_GROUP::LOCKING ) ? lockText( shown->second.entry.lock ) : wxString();
+        default: return wxString();
+        }
+    }
+
     // m_items can change just ahead of the rebuild that drops this node
     if( aNode.kind != WORKSPACE_TREE_NODE::KIND::ITEM || aNode.item >= m_items.size() )
         return aColumn == WORKSPACE_TREE_MODEL::COL_NAME ? aNode.name : wxString();
@@ -844,15 +1026,19 @@ wxString PANEL_GIT_WORKSPACE::editingText( const wxString& aItemId ) const
     if( !current )
         return wxEmptyString;
 
-    MDW_LOCK_INFO lock = current->LockTracker().Get( aItemId );
+    return lockText( current->LockTracker().Get( aItemId ) );
+}
 
-    if( !lock.is_locked )
-        return MdwClaimLabel( lock, wxDateTime::Now() );
 
-    if( lock.locked_by_me )
+wxString PANEL_GIT_WORKSPACE::lockText( const MDW_LOCK_INFO& aLock )
+{
+    if( !aLock.is_locked )
+        return MdwClaimLabel( aLock, wxDateTime::Now() );
+
+    if( aLock.locked_by_me )
         return _( "You" );
 
-    return lock.owner_display_name.IsEmpty() ? _( "Someone" ) : lock.owner_display_name;
+    return aLock.owner_display_name.IsEmpty() ? _( "Someone" ) : aLock.owner_display_name;
 }
 
 
@@ -870,12 +1056,18 @@ void PANEL_GIT_WORKSPACE::showDetail( const MDW_ITEM_INFO& aItem )
     m_detailGates = detailGates();
     m_selected = aItem.item_id;
     m_selectedItem = aItem;
+    m_member.reset();
     m_itemTitle->SetLabel( aItem.display_name );
 
     readTransitions();
 
     if( !m_workspaceSplitter->IsSplit() )
-        m_workspaceSplitter->SplitVertically( m_itemListPanel, m_itemDetail, m_sashPos );
+    {
+        m_workspaceSplitter->SplitVertically( m_itemListPanel, m_itemDetail, FromDIP( m_sashPos ) );
+
+        // The detail opens at a fixed tree width, so gravity alone would take most of a later shrink from the tree
+        m_workspaceSplitter->SetFirstPaneResizeFloor( m_sashPos );
+    }
 
     std::shared_ptr<MDW_WORKSPACE_SERVICE> service = current->Service();
     bool revisions = service && service->Supports( MDW_CAPABILITY_GROUP::REVISIONS );
@@ -902,8 +1094,119 @@ void PANEL_GIT_WORKSPACE::showDetail( const MDW_ITEM_INFO& aItem )
 }
 
 
+void PANEL_GIT_WORKSPACE::showMemberDetail( const WORKSPACE_TREE_NODE& aNode )
+{
+    auto shown = m_shownMembers.find( aNode.key );
+
+    if( shown == m_shownMembers.end() || !teamLibrary( shown->second.library ) )
+    {
+        hideDetail();
+        return;
+    }
+
+    // Another part's states would be offered as this one's until the read lands
+    if( aNode.key != m_selected )
+        m_transitions.clear();
+
+    m_selected = aNode.key;
+    m_selectedItem = MDW_ITEM_INFO();
+    m_member = shown->second;
+    m_itemTitle->SetLabel( aNode.name );
+
+    readTransitions();
+
+    if( !m_workspaceSplitter->IsSplit() )
+    {
+        m_workspaceSplitter->SplitVertically( m_itemListPanel, m_itemDetail, FromDIP( m_sashPos ) );
+
+        // The detail opens at a fixed tree width, so gravity alone would take most of a later shrink from the tree
+        m_workspaceSplitter->SetFirstPaneResizeFloor( m_sashPos );
+    }
+
+    const TEAM_LIBRARY& lib = *memberLibrary();
+    bool                revisions = lib.caps.Has( MDW_CAPABILITY_GROUP::REVISIONS );
+
+    m_versions->Show( revisions );
+
+    if( revisions )
+    {
+        std::shared_ptr<const MDW_LIBRARY_COPY> copy = MDW_LIBRARY_SOURCES::Get().SharedCopy( lib.marker );
+
+        m_versions->SetItem( lib.binding.source, selectedRef(), copy ? copy->local_root : wxString(), { memberFile() },
+                             m_frame, aNode.name );
+    }
+    else
+    {
+        m_versions->Clear();
+    }
+
+    showState();
+}
+
+
+const PANEL_GIT_WORKSPACE::TEAM_LIBRARY* PANEL_GIT_WORKSPACE::teamLibrary( const wxString& aKey ) const
+{
+    auto lib = std::ranges::find( m_teamLibraries, aKey, &TEAM_LIBRARY::key );
+
+    return lib == m_teamLibraries.end() ? nullptr : &*lib;
+}
+
+
+const PANEL_GIT_WORKSPACE::TEAM_LIBRARY* PANEL_GIT_WORKSPACE::memberLibrary() const
+{
+    return m_member ? teamLibrary( m_member->library ) : nullptr;
+}
+
+
+std::shared_ptr<MDW_SOURCE> PANEL_GIT_WORKSPACE::selectedSource() const
+{
+    if( m_member )
+    {
+        const TEAM_LIBRARY* lib = memberLibrary();
+        return lib ? lib->binding.source : nullptr;
+    }
+
+    return MDW_CLIENT::Get().ProjectSource();
+}
+
+
+MDW_ITEM_REF PANEL_GIT_WORKSPACE::selectedRef() const
+{
+    const TEAM_LIBRARY* lib = memberLibrary();
+
+    if( m_member && lib )
+        return MdwMemberRef( lib->binding, m_member->entry.member );
+
+    MDW_ITEM_REF item;
+    item.item_id = m_selected;
+    return item;
+}
+
+
+wxString PANEL_GIT_WORKSPACE::selectedRevision() const
+{
+    return m_member ? m_member->entry.member.revision_id : m_selectedItem.revision_id;
+}
+
+
+wxString PANEL_GIT_WORKSPACE::memberFile() const
+{
+    const TEAM_LIBRARY* lib = memberLibrary();
+
+    if( !lib )
+        return wxString();
+
+    const MDW_LIBRARY_MEMBER& member = m_member->entry.member;
+
+    return MdwTeamPartFile( lib->type, lib->path, member.name, &member );
+}
+
+
 wxString PANEL_GIT_WORKSPACE::selectedPath() const
 {
+    if( m_member )
+        return memberFile();
+
     PROJECT& project = m_frame->Prj();
 
     // After a rename on the server the file being edited is still the one recorded at check out
@@ -914,9 +1217,14 @@ wxString PANEL_GIT_WORKSPACE::selectedPath() const
 
 void PANEL_GIT_WORKSPACE::readTransitions()
 {
-    std::shared_ptr<MDW_SOURCE> source = MDW_CLIENT::Get().ProjectSource();
+    std::shared_ptr<MDW_SOURCE> source = selectedSource();
 
-    if( !source || !source->Has( MDW_CAPABILITY_GROUP::LIFECYCLE ) )
+    m_permissionsOp = MDW_OP();
+    m_permissionsReading = false;
+    m_transitionPermission = kiapi::workspace::Permission();
+
+    // A member never released has no revision to name, and naming none lets a release landing meanwhile be changed
+    if( !source || !source->Has( MDW_CAPABILITY_GROUP::LIFECYCLE ) || ( m_member && selectedRevision().IsEmpty() ) )
     {
         m_transitionsOp = MDW_OP();
         m_transitionsReading = false;
@@ -926,14 +1234,11 @@ void PANEL_GIT_WORKSPACE::readTransitions()
 
     using TRANSITIONS = std::vector<kiapi::workspace::LifecycleTransition>;
 
-    MDW_ITEM_REF item;
-    item.item_id = m_selected;
-
-    MDW_PART part( source, item );
+    MDW_PART part( source, selectedRef() );
 
     m_transitionsReading = true;
     m_transitionsOp =
-            part.Transitions( wxEmptyString,
+            part.Transitions( selectedRevision(),
                               [this, itemId = m_selected]( const MDW_RESULT& aResult, const TRANSITIONS& aTransitions )
                               {
                                   if( itemId != m_selected )
@@ -945,24 +1250,64 @@ void PANEL_GIT_WORKSPACE::readTransitions()
                                   m_transitions = aResult.IsOk() ? aTransitions : TRANSITIONS();
                                   showState();
                               } );
+
+    if( !source->Has( MDW_CAPABILITY_GROUP::PERMISSIONS ) )
+        return;
+
+    using PERMISSIONS = std::vector<kiapi::workspace::Permission>;
+
+    // A refusal the transitions do not carry would otherwise show only once the change is submitted
+    m_permissionsReading = true;
+    m_permissionsOp = source->Permissions(
+            selectedRef(), selectedRevision(),
+            [this, itemId = m_selected]( const MDW_RESULT& aResult, const PERMISSIONS& aPermissions )
+            {
+                if( itemId != m_selected )
+                    return;
+
+                m_permissionsReading = false;
+
+                auto it = std::ranges::find_if( aPermissions,
+                                                []( const kiapi::workspace::Permission& aPermission )
+                                                {
+                                                    return aPermission.name() == "transition";
+                                                } );
+
+                if( aResult.IsOk() && it != aPermissions.end() )
+                    m_transitionPermission = *it;
+
+                showState();
+            } );
 }
 
 
 void PANEL_GIT_WORKSPACE::showState()
 {
-    std::shared_ptr<MDW_SESSION> current = session();
+    std::vector<WORKSPACE_DETAIL_ROW> rows;
 
-    if( !current || m_selected.IsEmpty() )
-        return;
+    if( const TEAM_LIBRARY* lib = memberLibrary() )
+    {
+        const MDW_MEMBER_ENTRY& entry = m_member->entry;
+        LIB_ID                  id( lib->nickname, entry.member.name );
 
-    MDW_LOCK_INFO lock = current->LockTracker().Get( m_selected );
-    wxString      folder = m_selectedItem.folder_id.IsEmpty() ? wxString() : folderText( m_selectedItem );
+        rows = WorkspaceMemberDetailRows( lib->caps, entry, MDW_MEMBER_INDEX::Get().LatestFacts( lib->type, id ),
+                                          m_versions->Modified(), wxDateTime::Now() );
+    }
+    else
+    {
+        std::shared_ptr<MDW_SESSION> current = session();
+
+        if( !current || m_selected.IsEmpty() || m_member )
+            return;
+
+        MDW_LOCK_INFO lock = current->LockTracker().Get( m_selected );
+        wxString      folder = m_selectedItem.folder_id.IsEmpty() ? wxString() : folderText( m_selectedItem );
+
+        rows = WorkspaceDetailRows( m_caps, m_selectedItem, lock, m_versions->Modified(), folder, wxDateTime::Now() );
+    }
 
     m_itemDetail->Freeze();
     m_detailRows->Clear( true );
-
-    std::vector<WORKSPACE_DETAIL_ROW> rows =
-            WorkspaceDetailRows( m_caps, m_selectedItem, lock, m_versions->Modified(), folder, wxDateTime::Now() );
 
     for( const WORKSPACE_DETAIL_ROW& row : rows )
     {
@@ -982,27 +1327,42 @@ std::vector<WORKSPACE_ACTION> PANEL_GIT_WORKSPACE::itemActions() const
     using ID = WORKSPACE_ACTION::ID;
 
     std::shared_ptr<MDW_SESSION> current = session();
+    const TEAM_LIBRARY*          lib = memberLibrary();
 
-    if( !current || m_selected.IsEmpty() )
+    if( m_selected.IsEmpty() || ( m_member ? !lib : !current ) )
         return {};
 
     const wxString         path = selectedPath();
     WORKSPACE_ACTION_FACTS facts;
-    facts.locking = m_caps.Has( MDW_CAPABILITY_GROUP::LOCKING );
-    facts.inPlace = editsInPlace();
     facts.localFile = wxFileName::FileExists( path );
-    facts.lock = current->LockTracker().Get( m_selected );
     facts.transitions = m_transitions;
+    facts.transition = m_transitionPermission;
 
     // A re-read of states already shown keeps them, so the command does not blink off and on
-    facts.transitionsReading = m_transitionsReading && m_transitions.empty();
+    // Change State also waits for the permission, so a denial never arrives once the chooser is up
+    facts.transitionsReading = ( m_transitionsReading && m_transitions.empty() )
+                               || ( m_permissionsReading && !m_transitions.empty() );
 
-    // Opening a project would close the window that owns this page while its handler runs
-    wxString ext = wxFileName( path ).GetExt();
-    bool     project = ext.IsSameAs( FILEEXT::ProjectFileExtension, false )
-                   || ext.IsSameAs( FILEEXT::LegacyProjectFileExtension, false );
+    if( lib )
+    {
+        facts.member = true;
+        facts.locking = lib->caps.Has( MDW_CAPABILITY_GROUP::LOCKING );
+        facts.lock = m_member->entry.lock;
+        facts.openable = projectManager() != nullptr;
+    }
+    else
+    {
+        facts.locking = m_caps.Has( MDW_CAPABILITY_GROUP::LOCKING );
+        facts.inPlace = editsInPlace();
+        facts.lock = current->LockTracker().Get( m_selected );
 
-    facts.openable = projectManager() && !project;
+        // Opening a project would close the window that owns this page while its handler runs
+        wxString ext = wxFileName( path ).GetExt();
+        bool     project = ext.IsSameAs( FILEEXT::ProjectFileExtension, false )
+                       || ext.IsSameAs( FILEEXT::LegacyProjectFileExtension, false );
+
+        facts.openable = projectManager() && !project;
+    }
 
     std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
 
@@ -1087,14 +1447,24 @@ void PANEL_GIT_WORKSPACE::onContextMenu( wxDataViewEvent& aEvent )
 {
     const WORKSPACE_TREE_NODE* node = m_model->NodeOf( aEvent.GetItem() );
 
-    if( !node || node->kind != WORKSPACE_TREE_NODE::KIND::ITEM || node->item >= m_items.size() )
+    if( !node )
+        return;
+
+    bool item = node->kind == WORKSPACE_TREE_NODE::KIND::ITEM && node->item < m_items.size();
+    bool member = node->kind == WORKSPACE_TREE_NODE::KIND::MEMBER;
+
+    if( !item && !member )
         return;
 
     // The actions act on the selected item, and a right click does not select on every platform
     if( m_itemsTree->GetSelection() != aEvent.GetItem() )
     {
         m_itemsTree->Select( aEvent.GetItem() );
-        showDetail( m_items[node->item] );
+
+        if( member )
+            showMemberDetail( *node );
+        else
+            showDetail( m_items[node->item] );
     }
 
     std::vector<WORKSPACE_ACTION> actions = itemActions();
@@ -1188,6 +1558,7 @@ unsigned PANEL_GIT_WORKSPACE::detailGates() const
 void PANEL_GIT_WORKSPACE::onCapabilitiesChanged()
 {
     bool lifecycle = m_caps.Has( MDW_CAPABILITY_GROUP::LIFECYCLE );
+    bool permissions = m_caps.Has( MDW_CAPABILITY_GROUP::PERMISSIONS );
 
     showColumns();
     refreshCells();
@@ -1195,12 +1566,22 @@ void PANEL_GIT_WORKSPACE::onCapabilitiesChanged()
     if( m_selected.IsEmpty() )
         return;
 
+    // A member follows its library's source, whose changes reach it through the member index
+    if( m_member )
+    {
+        showState();
+        return;
+    }
+
     // Both the backend and the re-read announce a change, and only a new gate needs the versions read again
     if( detailGates() == m_detailGates )
     {
-        // LIFECYCLE coming or going changes whether the item has states to offer
-        if( lifecycle != m_caps.Has( MDW_CAPABILITY_GROUP::LIFECYCLE ) )
+        // LIFECYCLE coming or going changes whether the item has states to offer, PERMISSIONS whether they may
+        if( lifecycle != m_caps.Has( MDW_CAPABILITY_GROUP::LIFECYCLE )
+            || permissions != m_caps.Has( MDW_CAPABILITY_GROUP::PERMISSIONS ) )
+        {
             readTransitions();
+        }
 
         showState();
         return;
@@ -1215,14 +1596,18 @@ void PANEL_GIT_WORKSPACE::hideDetail()
 {
     m_selected.clear();
     m_selectedItem = MDW_ITEM_INFO();
+    m_member.reset();
     m_transitionsOp = MDW_OP();
     m_transitionsReading = false;
     m_transitions.clear();
+    m_permissionsOp = MDW_OP();
+    m_permissionsReading = false;
+    m_transitionPermission = kiapi::workspace::Permission();
     m_versions->Clear();
 
     if( m_workspaceSplitter->IsSplit() )
     {
-        m_sashPos = m_workspaceSplitter->GetSashPosition();
+        m_sashPos = ToDIP( m_workspaceSplitter->GetSashPosition() );
         m_workspaceSplitter->Unsplit( m_itemDetail );
     }
 }
@@ -1275,13 +1660,16 @@ void PANEL_GIT_WORKSPACE::onReleaseClaim()
 
 void PANEL_GIT_WORKSPACE::onChangeState()
 {
-    std::shared_ptr<MDW_SOURCE> source = MDW_CLIENT::Get().ProjectSource();
+    std::shared_ptr<MDW_SOURCE> source = selectedSource();
 
     if( !source || m_selected.IsEmpty() || m_transitions.empty() || m_transitionPending )
         return;
 
     const wxString                                           itemId = m_selected;
-    const wxString                                           name = m_selectedItem.display_name;
+    const MDW_ITEM_REF                                       item = selectedRef();
+    const wxString                                           revisionId = selectedRevision();
+    const bool                                               member = m_member.has_value();
+    const wxString name = member ? m_member->entry.member.name : m_selectedItem.display_name;
     const std::vector<kiapi::workspace::LifecycleTransition> transitions = m_transitions;
     std::vector<MDW_PART_ACTION>                             actions;
 
@@ -1308,32 +1696,49 @@ void PANEL_GIT_WORKSPACE::onChangeState()
     if( !self || IsBeingDeleted() || !comment )
         return;
 
-    MDW_ITEM_REF item;
-    item.item_id = itemId;
+    // A read started while the questions were up can still deny the change
+    if( itemId == m_selected && m_transitionPermission.state() == kiapi::workspace::PS_DENIED )
+    {
+        MdwReportFailure( this, wxString::Format( _( "Could not change the state of %s." ), name ),
+                          wxString::FromUTF8( m_transitionPermission.reason() ) );
+        return;
+    }
 
     MDW_PART part( source, item );
 
+    // Naming the revision shown makes a release that lands meanwhile a conflict rather than the one changed
     m_transitionPending = true;
-    m_transitionOp = part.Transition( wxEmptyString, *target, *comment,
-                                      [this, name, itemId]( const MDW_RESULT& aResult, const MDW_TRANSITION& )
+    m_transitionOp = part.Transition( revisionId, *target, *comment,
+                                      [this, name, itemId, member, locator = source->Info().locator](
+                                              const MDW_RESULT& aResult, const MDW_TRANSITION& )
                                       {
-                                          wxString what =
-                                                  wxString::Format( _( "Could not change the state of %s." ), name );
-
                                           m_transitionPending = false;
 
-                                          if( !aResult.IsOk() )
-                                              MdwReportFailure( this, what, aResult );
+                                          bool conflict = aResult.error == MDW_ERROR_CODE::VERSION_CONFLICT;
 
-                                          // The states offered were those of the old state, so they are read again
-                                          if( aResult.IsOk() && itemId == m_selected )
+                                          // The states offered were those of the old state or an older revision
+                                          if( ( aResult.IsOk() || conflict ) && itemId == m_selected )
                                           {
                                               m_transitions.clear();
                                               readTransitions();
                                           }
 
                                           showState();
-                                          Populate();
+
+                                          // A move between states of one category raises no event the index
+                                          // relists on, and the editors' trees read the same index
+                                          if( member )
+                                              MDW_MEMBER_INDEX::Get().Forget( locator );
+                                          else
+                                              Populate();
+
+                                          // Last, since the report can be a modal error box that this page closes under
+                                          if( !aResult.IsOk() )
+                                          {
+                                              wxString what = _( "Could not change the state of %s." );
+
+                                              MdwReportFailure( this, wxString::Format( what, name ), aResult );
+                                          }
                                       } );
     showState();
 }
@@ -1341,12 +1746,23 @@ void PANEL_GIT_WORKSPACE::onChangeState()
 
 void PANEL_GIT_WORKSPACE::onOpen()
 {
+    EDA_BASE_FRAME* manager = projectManager();
+
+    if( const TEAM_LIBRARY* lib = memberLibrary() )
+    {
+        const wxString& name = m_member->entry.member.name;
+        FRAME_T editor = lib->type == MDW_LIBRARY_TYPE::SYMBOL ? FRAME_SCH_SYMBOL_EDITOR : FRAME_FOOTPRINT_EDITOR;
+
+        if( !manager || !manager->OpenLibraryPart( editor, LIB_ID( lib->nickname, name ) ) )
+            DisplayErrorMessage( this, wxString::Format( _( "KiCad cannot open %s." ), name ) );
+
+        return;
+    }
+
     wxString path = selectedPath();
 
     if( path.IsEmpty() )
         return;
-
-    EDA_BASE_FRAME* manager = projectManager();
 
     if( !manager || !manager->OpenProjectTreeFile( path ) )
         DisplayErrorMessage( this, wxString::Format( _( "KiCad cannot open '%s'." ), path ) );
