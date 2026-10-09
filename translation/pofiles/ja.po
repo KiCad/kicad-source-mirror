@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-08 10:24+0000\n"
+"PO-Revision-Date: 2026-10-09 11:32+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -20289,11 +20289,12 @@ msgid "Automatically place sheet pins"
 msgstr "シートピンを自動配置"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:78
-#, fuzzy
 msgid ""
 "Place pins for hierarchical labels when placing sheets or design blocks as "
 "sheets."
-msgstr "階層ラベル %s と対応するシートピンが親シートにありません"
+msgstr ""
+"シートまたはデザインブロックをシートに配置するときは、階層ラベル用のピンを配"
+"置してください。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:82
 msgid "Allow unconstrained pin swaps"
@@ -21327,7 +21328,7 @@ msgstr "図面用紙 '%s' の保存に失敗しました: %s"
 #: eeschema/eeschema_helpers.cpp:163
 #, c-format
 msgid "Schematic '%s' has a malformed root sheet instance path."
-msgstr "回路図 ’%s’ のルート用紙インスタンスパスが正しくない。"
+msgstr "回路図 ’%s’ の親シートパスが正しくない。"
 
 #: eeschema/eeschema_helpers.cpp:189
 #, c-format
@@ -22049,9 +22050,8 @@ msgid "Power pins are similar"
 msgstr ""
 
 #: eeschema/erc/erc_item.cpp:123
-#, fuzzy
 msgid "Power pin and label are similar"
-msgstr "電源ピンとラベルが同様です (大文字/小文字だけ相違)"
+msgstr "電源ピンとラベルが同様です"
 
 #: eeschema/erc/erc_item.cpp:127
 msgid "Global label only appears once in the schematic"
@@ -23013,9 +23013,9 @@ msgid "Failed to create file '%s'.\n"
 msgstr "ファイル '%s' の作成に失敗しました。\n"
 
 #: eeschema/netlist_exporters/netlist_exporter_base.cpp:71
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to export schematic: %s"
-msgstr "回路図 '%s' の保存に失敗しました"
+msgstr "回路図のエクスポートに失敗しました: %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_base.cpp:98
 msgid "Connectivity changed while preparing the netlist."
@@ -23023,9 +23023,8 @@ msgstr ""
 
 #: eeschema/netlist_exporters/netlist_exporter_base.cpp:103
 #: eeschema/netlist_exporters/netlist_exporter_base.cpp:120
-#, fuzzy
 msgid "Connectivity contains an unknown sheet instance."
-msgstr "エントリーは先頭に空白文字を含んでいます。"
+msgstr "接続に不明なシートが含まれています。"
 
 #: eeschema/netlist_exporters/netlist_exporter_cadstar.cpp:125
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:145
@@ -25021,14 +25020,12 @@ msgid "Invalid table: no cells defined"
 msgstr "不正テーブル: セルが定義されていません"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5974
-#, fuzzy
 msgid "Invalid table: column count must be positive"
-msgstr "不正テーブル: セルが定義されていません"
+msgstr "不正テーブル: 列の数は正の数であるけど必要があります"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5980
-#, fuzzy
 msgid "Invalid table: incomplete row"
-msgstr "不正テーブル: セルが定義されていません"
+msgstr "不正テーブル: 行が不完全です"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:6203
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:8313
@@ -25273,9 +25270,9 @@ msgid "The OrCAD CIS variant '%s' references an unknown property group."
 msgstr ""
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Using OrCAD CIS variant '%s'."
-msgstr "バリアント '%s' を追加しました。"
+msgstr "OrCAD CIS バリアント '%s' を使う。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:451
 #, fuzzy, c-format
