@@ -123,8 +123,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     // No refresh here: callers of LoadProjectSettings refresh later
     SetDisplayOptions( opts, false );
 
-    BOARD_DESIGN_SETTINGS& bds   = GetDesignSettings();
-    bds.m_UseConnectedTrackWidth = localSettings.m_AutoTrackWidth;
+    GetDesignSettings().m_UseConnectedTrackWidth = localSettings.m_AutoTrackWidth;
 
     wxFileName fn( GetCurrentFileName() );
     fn.MakeRelativeTo( Prj().GetProjectPath() );
@@ -221,8 +220,7 @@ void PCB_EDIT_FRAME::saveProjectSettings()
     localSettings.m_ShapeOpacity        = displayOpts.m_FilledShapeOpacity;
 
     // Save Design settings
-    const BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
-    localSettings.m_AutoTrackWidth   = bds.m_UseConnectedTrackWidth;
+    localSettings.m_AutoTrackWidth = GetDesignSettings().m_UseConnectedTrackWidth;
 
     // Net display settings
     const NETINFO_LIST&         nets = GetBoard()->GetNetInfo();

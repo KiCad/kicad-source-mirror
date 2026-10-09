@@ -802,8 +802,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
         {
             if( m_netClassRegex.Matches( last ) )
             {
-                BOARD_DESIGN_SETTINGS&         bds = m_frame->GetBoard()->GetDesignSettings();
-                std::shared_ptr<NET_SETTINGS>& netSettings = bds.m_NetSettings;
+                std::shared_ptr<NET_SETTINGS>& netSettings = m_frame->GetBoard()->GetDesignSettings().m_NetSettings;
 
                 for( const auto& [name, netclass] : netSettings->GetNetclasses() )
                     tokens += wxT( "|" ) + name;
@@ -976,9 +975,8 @@ void PANEL_SETUP_RULES::OnCompile( wxCommandEvent& event )
 
 void PANEL_SETUP_RULES::checkPlausibility( const std::vector<std::shared_ptr<DRC_RULE>>& aRules )
 {
-    BOARD*                 board = m_frame->GetBoard();
-    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
-    LSET                   enabledLayers = board->GetEnabledLayers();
+    BOARD* board = m_frame->GetBoard();
+    LSET   enabledLayers = board->GetEnabledLayers();
 
     // Key by (condition, layerSource) so rules with different layer scopes are considered distinct
     std::map<std::pair<wxString, wxString>, wxString> seenConditions;
@@ -1015,7 +1013,7 @@ void PANEL_SETUP_RULES::checkPlausibility( const std::vector<std::shared_ptr<DRC
         {
             wxString ncName = wxString::FromUTF8( ( *it )[1].str() );
 
-            if( !bds.m_NetSettings->HasNetclass( ncName ) )
+            if( !board->GetDesignSettings().m_NetSettings->HasNetclass( ncName ) )
             {
                 m_errorsReport->Report( wxString::Format( _( "Rule '%s' references undefined netclass '%s'." ),
                                                           rule->m_Name,

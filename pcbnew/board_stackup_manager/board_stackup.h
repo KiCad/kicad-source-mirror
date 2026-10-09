@@ -300,8 +300,7 @@ public:
      * of copper layers to use to calculate a default dielectric thickness.
      * ((<= 0 to use all copper layers)
      */
-    void BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSettings,
-            int aActiveCopperLayersCount = 0 );
+    void BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSettings, int aActiveCopperLayersCount = 0 );
 
     /**
      * Write the stackup info on board file

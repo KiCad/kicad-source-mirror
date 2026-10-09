@@ -772,17 +772,17 @@ void PCB_DIMENSION_BASE::Mirror( const VECTOR2I& axis_pos, FLIP_DIRECTION aFlipD
 }
 
 
-void PCB_DIMENSION_BASE::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide )
+void PCB_DIMENSION_BASE::StyleFromSettings( const BOARD_DESIGN_SETTINGS& aSettings, bool aCheckSide )
 {
-    PCB_TEXT::StyleFromSettings( settings, aCheckSide );
+    PCB_TEXT::StyleFromSettings( aSettings, aCheckSide );
 
-    SetLineThickness( settings.GetLineThickness( m_layer ) );
-    SetUnitsMode( settings.m_DimensionUnitsMode );
-    SetUnitsFormat( settings.m_DimensionUnitsFormat );
-    SetPrecision( settings.m_DimensionPrecision );
-    SetSuppressZeroes( settings.m_DimensionSuppressZeroes );
-    SetTextPositionMode( settings.m_DimensionTextPosition );
-    SetKeepTextAligned( settings.m_DimensionKeepTextAligned );
+    SetLineThickness( aSettings.GetLineThickness( m_layer ) );
+    SetUnitsMode( aSettings.m_DimensionUnitsMode );
+    SetUnitsFormat( aSettings.m_DimensionUnitsFormat );
+    SetPrecision( aSettings.m_DimensionPrecision );
+    SetSuppressZeroes( aSettings.m_DimensionSuppressZeroes );
+    SetTextPositionMode( aSettings.m_DimensionTextPosition );
+    SetKeepTextAligned( aSettings.m_DimensionKeepTextAligned );
 
     Update();    // refresh text & geometry
 

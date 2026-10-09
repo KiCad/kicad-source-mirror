@@ -595,62 +595,51 @@ void PCB_IO_KICAD_SEXPR::formatSetup( const BOARD* aBoard ) const
     if( aBoard->GetDesignSettings().m_HasStackup )
         stackup.FormatBoardStackup( m_out, aBoard );
 
-    BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
 
-    m_out->Print( "(pad_to_mask_clearance %s)",
-                  formatInternalUnits( dsnSettings.m_SolderMaskExpansion ).c_str() );
+    m_out->Print( "(pad_to_mask_clearance %s)", formatInternalUnits( bds.m_SolderMaskExpansion ).c_str() );
 
-    if( dsnSettings.m_SolderMaskMinWidth )
-    {
-        m_out->Print( "(solder_mask_min_width %s)",
-                      formatInternalUnits( dsnSettings.m_SolderMaskMinWidth ).c_str() );
-    }
+    if( bds.m_SolderMaskMinWidth )
+        m_out->Print( "(solder_mask_min_width %s)", formatInternalUnits( bds.m_SolderMaskMinWidth ).c_str() );
 
-    if( dsnSettings.m_SolderPasteMargin != 0 )
-    {
-        m_out->Print( "(pad_to_paste_clearance %s)",
-                      formatInternalUnits( dsnSettings.m_SolderPasteMargin ).c_str() );
-    }
+    if( bds.m_SolderPasteMargin != 0 )
+        m_out->Print( "(pad_to_paste_clearance %s)", formatInternalUnits( bds.m_SolderPasteMargin ).c_str() );
 
-    if( dsnSettings.m_SolderPasteMarginRatio != 0 )
-    {
-        m_out->Print( "(pad_to_paste_clearance_ratio %s)",
-                      FormatDouble2Str( dsnSettings.m_SolderPasteMarginRatio ).c_str() );
-    }
+    if( bds.m_SolderPasteMarginRatio != 0 )
+        m_out->Print( "(pad_to_paste_clearance_ratio %s)", FormatDouble2Str( bds.m_SolderPasteMarginRatio ).c_str() );
 
-    KICAD_FORMAT::FormatBool( m_out, "allow_soldermask_bridges_in_footprints",
-                              dsnSettings.m_AllowSoldermaskBridgesInFPs );
+    KICAD_FORMAT::FormatBool( m_out, "allow_soldermask_bridges_in_footprints", bds.m_AllowSoldermaskBridgesInFPs );
 
     m_out->Print( 0, " (tenting " );
-    KICAD_FORMAT::FormatBool( m_out, "front", dsnSettings.m_TentViasFront );
-    KICAD_FORMAT::FormatBool( m_out, "back", dsnSettings.m_TentViasBack );
+    KICAD_FORMAT::FormatBool( m_out, "front", bds.m_TentViasFront );
+    KICAD_FORMAT::FormatBool( m_out, "back", bds.m_TentViasBack );
     m_out->Print( 0, ")" );
 
     m_out->Print( 0, " (covering " );
-    KICAD_FORMAT::FormatBool( m_out, "front", dsnSettings.m_CoverViasFront );
-    KICAD_FORMAT::FormatBool( m_out, "back", dsnSettings.m_CoverViasBack );
+    KICAD_FORMAT::FormatBool( m_out, "front", bds.m_CoverViasFront );
+    KICAD_FORMAT::FormatBool( m_out, "back", bds.m_CoverViasBack );
     m_out->Print( 0, ")" );
 
     m_out->Print( 0, " (plugging " );
-    KICAD_FORMAT::FormatBool( m_out, "front", dsnSettings.m_PlugViasFront );
-    KICAD_FORMAT::FormatBool( m_out, "back", dsnSettings.m_PlugViasBack );
+    KICAD_FORMAT::FormatBool( m_out, "front", bds.m_PlugViasFront );
+    KICAD_FORMAT::FormatBool( m_out, "back", bds.m_PlugViasBack );
     m_out->Print( 0, ")" );
 
-    KICAD_FORMAT::FormatBool( m_out, "capping", dsnSettings.m_CapVias );
+    KICAD_FORMAT::FormatBool( m_out, "capping", bds.m_CapVias );
 
-    KICAD_FORMAT::FormatBool( m_out, "filling", dsnSettings.m_FillVias );
+    KICAD_FORMAT::FormatBool( m_out, "filling", bds.m_FillVias );
 
-    if( !dsnSettings.m_ZoneLayerProperties.empty() )
+    if( !bds.m_ZoneLayerProperties.empty() )
     {
         m_out->Print( 0, " (zone_defaults" );
 
-        for( const auto& [layer, properties] : dsnSettings.m_ZoneLayerProperties )
+        for( const auto& [layer, properties] : bds.m_ZoneLayerProperties )
             format( properties, 0, layer );
 
         m_out->Print( 0, ")\n" );
     }
 
-    VECTOR2I origin = dsnSettings.GetAuxOrigin();
+    VECTOR2I origin = bds.GetAuxOrigin();
 
     if( origin != VECTOR2I( 0, 0 ) )
     {
@@ -659,7 +648,7 @@ void PCB_IO_KICAD_SEXPR::formatSetup( const BOARD* aBoard ) const
                       formatInternalUnits( origin.y ).c_str() );
     }
 
-    origin = dsnSettings.GetGridOrigin();
+    origin = bds.GetGridOrigin();
 
     if( origin != VECTOR2I( 0, 0 ) )
     {
@@ -668,7 +657,7 @@ void PCB_IO_KICAD_SEXPR::formatSetup( const BOARD* aBoard ) const
                       formatInternalUnits( origin.y ).c_str() );
     }
 
-    formatDrillSymbolProfile( dsnSettings );
+    formatDrillSymbolProfile( bds );
 
     aBoard->GetPlotOptions().Format( m_out );
 
@@ -722,7 +711,8 @@ void PCB_IO_KICAD_SEXPR::formatDrillSymbolProfile( const BOARD_DESIGN_SETTINGS& 
 
     for( const auto& [key, assignment] : profile.Assignments() )
     {
-        m_out->Print( "(assignment (key %s) (mark %s", m_out->Quotew( wxString::FromUTF8( key ) ).c_str(),
+        m_out->Print( "(assignment (key %s) (mark %s",
+                      m_out->Quotew( wxString::FromUTF8( key ) ).c_str(),
                       DrillMarkModeToken( assignment.m_MarkMode ) );
 
         if( assignment.m_MarkMode == DRILL_MARK_MODE::SHAPE )
@@ -744,12 +734,11 @@ void PCB_IO_KICAD_SEXPR::formatDrillSymbolProfile( const BOARD_DESIGN_SETTINGS& 
 
 void PCB_IO_KICAD_SEXPR::formatGeneral( const BOARD* aBoard ) const
 {
-    const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
+    const BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
 
     m_out->Print( "(general" );
 
-    m_out->Print( "(thickness %s)",
-                  formatInternalUnits( dsnSettings.GetBoardThickness() ).c_str() );
+    m_out->Print( "(thickness %s)", formatInternalUnits( bds.GetBoardThickness() ).c_str() );
 
     KICAD_FORMAT::FormatBool( m_out, "legacy_teardrops", aBoard->LegacyTeardrops() );
 

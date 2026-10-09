@@ -1039,19 +1039,25 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard( BOARD* aBoard, const nlohmann::json& 
     m_safeSpacing = nlohmann::json();
 
     BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
-    auto                   zoneClearance = [&]() -> int
-    {
-        if( m_safeSpacing.is_array() && m_safeSpacing.size() > 7 && m_safeSpacing.at( 7 ).is_array()
-            && !m_safeSpacing.at( 7 ).empty() && m_safeSpacing.at( 7 ).at( 0 ).is_number() )
-        {
-            const int clearance = ScaleSize( m_safeSpacing.at( 7 ).at( 0 ).get<double>() );
 
-            if( clearance > 0 )
-                return clearance;
-        }
+    auto zoneClearance =
+            [&]() -> int
+            {
+                if( m_safeSpacing.is_array()
+                        && m_safeSpacing.size() > 7
+                        && m_safeSpacing.at( 7 ).is_array()
+                        && !m_safeSpacing.at( 7 ).empty()
+                        && m_safeSpacing.at( 7 ).at( 0 ).is_number() )
+                {
+                    const int clearance = ScaleSize( m_safeSpacing.at( 7 ).at( 0 ).get<double>() );
 
-        return bds.m_MinClearance;
-    };
+                    if( clearance > 0 )
+                        return clearance;
+                }
+
+                return bds.m_MinClearance;
+            };
+
     const int zoneMinThickness = bds.GetDefaultZoneSettings().m_ZoneMinThickness;
 
     std::map<wxString, nlohmann::json> safeSpacingProfiles;
@@ -1354,7 +1360,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard( BOARD* aBoard, const nlohmann::json& 
 
                 std::vector<std::unique_ptr<PCB_SHAPE>> results = ParsePoly( aBoard, polyData, false, false );
 
-                for( auto& shape : results )
+                for( std::unique_ptr<PCB_SHAPE>& shape : results )
                 {
                     shape->SetLayer( klayer );
                     shape->SetWidth( ScaleSize( thickness ) );

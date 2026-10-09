@@ -364,12 +364,12 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsNetTieExclusion( const PNS::ITEM* aItem,
     if( !aItem || !aCollidingItem )
         return false;
 
-    std::shared_ptr<DRC_ENGINE> drcEngine = m_board->GetDesignSettings().m_DRCEngine;
-    BOARD_ITEM*                 item = aItem->BoardItem();
-    BOARD_ITEM*                 collidingItem = aCollidingItem->BoardItem();
+    DRC_ENGINE* drcEngine = m_board->GetDesignSettings().m_DRCEngine.get();
+    BOARD_ITEM* item = aItem->BoardItem();
+    BOARD_ITEM* collidingItem = aCollidingItem->BoardItem();
 
-    FOOTPRINT* collidingFp = collidingItem->GetParentFootprint();
-    FOOTPRINT* itemFp      = item ? item->GetParentFootprint() : nullptr;
+    FOOTPRINT*  collidingFp = collidingItem->GetParentFootprint();
+    FOOTPRINT*  itemFp      = item ? item->GetParentFootprint() : nullptr;
 
     if( collidingFp && itemFp && ( collidingFp == itemFp ) && itemFp->IsNetTie() )
     {
@@ -561,20 +561,20 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
     switch ( aType )
     {
-    case PNS::CONSTRAINT_TYPE::CT_CLEARANCE: hostType = CLEARANCE_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_WIDTH: hostType = TRACK_WIDTH_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP: hostType = DIFF_PAIR_GAP_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_LENGTH: hostType = LENGTH_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW: hostType = SKEW_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_MAX_UNCOUPLED: hostType = MAX_UNCOUPLED_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER: hostType = VIA_DIAMETER_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE: hostType = HOLE_SIZE_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE: hostType = HOLE_CLEARANCE_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE: hostType = EDGE_CLEARANCE_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE: hostType = HOLE_TO_HOLE_CONSTRAINT; break;
-    case PNS::CONSTRAINT_TYPE::CT_PHYSICAL_CLEARANCE: hostType = PHYSICAL_CLEARANCE_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:               hostType = CLEARANCE_CONSTRAINT;               break;
+    case PNS::CONSTRAINT_TYPE::CT_WIDTH:                   hostType = TRACK_WIDTH_CONSTRAINT;             break;
+    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP:           hostType = DIFF_PAIR_GAP_CONSTRAINT;           break;
+    case PNS::CONSTRAINT_TYPE::CT_LENGTH:                  hostType = LENGTH_CONSTRAINT;                  break;
+    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW:          hostType = SKEW_CONSTRAINT;                    break;
+    case PNS::CONSTRAINT_TYPE::CT_MAX_UNCOUPLED:           hostType = MAX_UNCOUPLED_CONSTRAINT;           break;
+    case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER:            hostType = VIA_DIAMETER_CONSTRAINT;            break;
+    case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:                hostType = HOLE_SIZE_CONSTRAINT;               break;
+    case PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE:          hostType = HOLE_CLEARANCE_CONSTRAINT;          break;
+    case PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE:          hostType = EDGE_CLEARANCE_CONSTRAINT;          break;
+    case PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE:            hostType = HOLE_TO_HOLE_CONSTRAINT;            break;
+    case PNS::CONSTRAINT_TYPE::CT_PHYSICAL_CLEARANCE:      hostType = PHYSICAL_CLEARANCE_CONSTRAINT;      break;
     case PNS::CONSTRAINT_TYPE::CT_PHYSICAL_HOLE_CLEARANCE: hostType = PHYSICAL_HOLE_CLEARANCE_CONSTRAINT; break;
-    default:                                          return false; // should not happen
+    default: return false; // should not happen
     }
 
     BOARD_ITEM*    parentA = aItemA ? aItemA->BoardItem() : nullptr;
@@ -584,35 +584,37 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
     // For clearance-type constraints, pick the smaller (more permissive) value.
     // Returns true if we found a zero/negative clearance (can't get more permissive).
-    auto pickSmallerConstraint = []( DRC_CONSTRAINT& aBest, const DRC_CONSTRAINT& aCandidate ) -> bool
-    {
-        if( aCandidate.IsNull() )
-            return false;
+    auto pickSmallerConstraint =
+            []( DRC_CONSTRAINT& aBest, const DRC_CONSTRAINT& aCandidate ) -> bool
+            {
+                if( aCandidate.IsNull() )
+                    return false;
 
-        if( aBest.IsNull() )
-        {
-            aBest = aCandidate;
-        }
-        else if( aCandidate.m_Value.HasMin() && aBest.m_Value.HasMin()
-                 && aCandidate.m_Value.Min() < aBest.m_Value.Min() )
-        {
-            aBest = aCandidate;
-        }
+                if( aBest.IsNull() )
+                {
+                    aBest = aCandidate;
+                }
+                else if( aCandidate.m_Value.HasMin() && aBest.m_Value.HasMin()
+                         && aCandidate.m_Value.Min() < aBest.m_Value.Min() )
+                {
+                    aBest = aCandidate;
+                }
 
-        return aBest.m_Value.HasMin() && aBest.m_Value.Min() <= 0;
-    };
+                return aBest.m_Value.HasMin() && aBest.m_Value.Min() <= 0;
+            };
 
     // Check for multi-segment LINEs without BoardItems. These need segment-by-segment
     // evaluation because custom DRC rules may have geometry-dependent conditions (like
     // intersectsCourtyard) that require evaluating actual segment positions.
-    auto isMultiSegmentLine = []( const PNS::ITEM* aItem, BOARD_ITEM* aParent ) -> bool
-    {
-        if( !aItem || aParent || aItem->Kind() != PNS::ITEM::LINE_T )
-            return false;
+    auto isMultiSegmentLine =
+            []( const PNS::ITEM* aItem, BOARD_ITEM* aParent ) -> bool
+            {
+                if( !aItem || aParent || aItem->Kind() != PNS::ITEM::LINE_T )
+                    return false;
 
-        const auto* line = static_cast<const PNS::LINE*>( aItem );
-        return line->CLine().SegmentCount() > 1;
-    };
+                const auto* line = static_cast<const PNS::LINE*>( aItem );
+                return line->CLine().SegmentCount() > 1;
+            };
 
     bool lineANeedsSegmentEval = false;
     bool lineBNeedsSegmentEval = false;
@@ -624,49 +626,50 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     }
 
     // Evaluate segments of a multi-segment LINE against a single opposing item.
-    auto evaluateLineSegments = [&]( const PNS::ITEM* aLineItem, BOARD_ITEM* aOpposingItem,
-                                     bool aLineIsFirst, int aIdx ) -> DRC_CONSTRAINT
-    {
-        DRC_CONSTRAINT bestConstraint;
-        const auto* line = static_cast<const PNS::LINE*>( aLineItem );
-        const SHAPE_LINE_CHAIN& chain = line->CLine();
+    auto evaluateLineSegments =
+            [&]( const PNS::ITEM* aLineItem, BOARD_ITEM* aOpposingItem, bool aLineIsFirst, int aIdx ) -> DRC_CONSTRAINT
+            {
+                DRC_CONSTRAINT bestConstraint;
+                const PNS::LINE* line = static_cast<const PNS::LINE*>( aLineItem );
+                const SHAPE_LINE_CHAIN& chain = line->CLine();
 
-        PCB_TRACK& dummyTrack = m_dummyTracks[aIdx];
-        dummyTrack.SetLayer( board_layer );
-        dummyTrack.SetNet( static_cast<NETINFO_ITEM*>( aLineItem->Net() ) );
-        dummyTrack.SetWidth( line->Width() );
+                PCB_TRACK& dummyTrack = m_dummyTracks[aIdx];
+                dummyTrack.SetLayer( board_layer );
+                dummyTrack.SetNet( static_cast<NETINFO_ITEM*>( aLineItem->Net() ) );
+                dummyTrack.SetWidth( line->Width() );
 
-        for( int i = 0; i < chain.SegmentCount(); i++ )
-        {
-            dummyTrack.SetStart( chain.CPoint( i ) );
-            dummyTrack.SetEnd( chain.CPoint( i + 1 ) );
+                for( int i = 0; i < chain.SegmentCount(); i++ )
+                {
+                    dummyTrack.SetStart( chain.CPoint( i ) );
+                    dummyTrack.SetEnd( chain.CPoint( i + 1 ) );
 
-            DRC_CONSTRAINT segConstraint = aLineIsFirst
-                ? drcEngine->EvalRules( hostType, &dummyTrack, aOpposingItem, board_layer )
-                : drcEngine->EvalRules( hostType, aOpposingItem, &dummyTrack, board_layer );
+                    DRC_CONSTRAINT segConstraint = aLineIsFirst
+                        ? drcEngine->EvalRules( hostType, &dummyTrack, aOpposingItem, board_layer )
+                        : drcEngine->EvalRules( hostType, aOpposingItem, &dummyTrack, board_layer );
 
-            if( pickSmallerConstraint( bestConstraint, segConstraint ) )
-                break;
-        }
+                    if( pickSmallerConstraint( bestConstraint, segConstraint ) )
+                        break;
+                }
 
-        return bestConstraint;
-    };
+                return bestConstraint;
+            };
 
     // Check if two multi-segment lines have overlapping bboxes (worth doing segment evaluation)
-    auto linesBBoxOverlap = [&]() -> bool
-    {
-        if( !lineANeedsSegmentEval || !lineBNeedsSegmentEval )
-            return true;
+    auto linesBBoxOverlap =
+            [&]() -> bool
+            {
+                if( !lineANeedsSegmentEval || !lineBNeedsSegmentEval )
+                    return true;
 
-        const auto* lineA = static_cast<const PNS::LINE*>( aItemA );
-        const auto* lineB = static_cast<const PNS::LINE*>( aItemB );
-        const int proximityThreshold = std::max( lineA->Width(), lineB->Width() ) * 2;
+                const PNS::LINE* lineA = static_cast<const PNS::LINE*>( aItemA );
+                const PNS::LINE* lineB = static_cast<const PNS::LINE*>( aItemB );
+                const int proximityThreshold = std::max( lineA->Width(), lineB->Width() ) * 2;
 
-        BOX2I bboxA = lineA->CLine().BBox();
-        bboxA.Inflate( proximityThreshold );
+                BOX2I bboxA = lineA->CLine().BBox();
+                bboxA.Inflate( proximityThreshold );
 
-        return bboxA.Intersects( lineB->CLine().BBox() );
-    };
+                return bboxA.Intersects( lineB->CLine().BBox() );
+            };
 
     // Handle multi-segment lines with segment-by-segment evaluation.
     if( ( lineANeedsSegmentEval || lineBNeedsSegmentEval ) && linesBBoxOverlap() )
@@ -1157,8 +1160,8 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         dummyTrack.SetLayer( m_startLayer );
         dummyTrack.SetNet( static_cast<NETINFO_ITEM*>( aStartItem->Net() ) );
 
-        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, &dummyTrack,
-                                             nullptr, m_startLayer, &constraint ) )
+        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, &dummyTrack, nullptr,
+                                             m_startLayer, &constraint ) )
         {
             if( constraint.m_Value.Min() >= bds.m_MinClearance )
             {
@@ -1225,14 +1228,14 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 
     if( bds.UseNetClassVia() && aStartItem )   // netclass value
     {
-        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER, &dummyVia,
-                                             nullptr, m_startLayer, &constraint ) )
+        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER, &dummyVia, nullptr,
+                                             m_startLayer, &constraint ) )
         {
             viaDiameter = std::max( viaDiameter, constraint.m_Value.PinnedOpt() );
         }
 
-        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_HOLE, &dummyVia,
-                                             nullptr, m_startLayer, &constraint ) )
+        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_VIA_HOLE, &dummyVia, nullptr,
+                                             m_startLayer, &constraint ) )
         {
             viaDrill = std::max( viaDrill, constraint.m_Value.PinnedOpt() );
         }
@@ -1275,8 +1278,8 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
         coupledTrack.SetNet( static_cast<NETINFO_ITEM*>( coupledNet ) );
 
         if( !found
-            && m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, &dummyTrack,
-                                                &coupledTrack, m_startLayer, &constraint ) )
+            && m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_WIDTH, &dummyTrack, &coupledTrack,
+                                                m_startLayer, &constraint ) )
         {
             diffPairWidth = std::max( diffPairWidth, constraint.m_Value.Opt() );
 
@@ -1284,8 +1287,8 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
                 aSizes.SetDiffPairWidthSource( constraint.m_RuleName );
         }
 
-        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, &dummyTrack,
-                                             &coupledTrack, m_startLayer, &constraint ) )
+        if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP, &dummyTrack, &coupledTrack,
+                                             m_startLayer, &constraint ) )
         {
             diffPairGap = std::max( diffPairGap, constraint.m_Value.PinnedOpt() );
             diffPairViaGap = std::max( diffPairViaGap, constraint.m_Value.PinnedOpt() );
@@ -1311,16 +1314,16 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
 
     int holeToHoleMin = bds.m_HoleToHoleMin;
 
-    if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, &dummyVia,
-                                         &dummyVia, UNDEFINED_LAYER, &constraint ) )
+    if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, &dummyVia, &dummyVia,
+                                         UNDEFINED_LAYER, &constraint ) )
     {
         holeToHoleMin = constraint.m_Value.Min();
     }
 
     aSizes.SetHoleToHole( holeToHoleMin );
 
-    if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, &dummyVia,
-                                         &coupledVia, UNDEFINED_LAYER, &constraint ) )
+    if( m_ruleResolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, &dummyVia, &coupledVia,
+                                         UNDEFINED_LAYER, &constraint ) )
     {
         holeToHoleMin = constraint.m_Value.Min();
     }
@@ -1336,17 +1339,11 @@ bool PNS_KICAD_IFACE_BASE::ImportSizes( PNS::SIZES_SETTINGS& aSizes, PNS::ITEM* 
     for( PNS::CONSTRAINT_TYPE type : { PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE,
                                        PNS::CONSTRAINT_TYPE::CT_PHYSICAL_HOLE_CLEARANCE } )
     {
-        if( m_ruleResolver->QueryConstraint( type, &dummyVia, &coupledVia, UNDEFINED_LAYER,
-                                             &constraint ) )
-        {
+        if( m_ruleResolver->QueryConstraint( type, &dummyVia, &coupledVia, UNDEFINED_LAYER, &constraint ) )
             copperToHole = std::max( copperToHole, constraint.m_Value.Min() );
-        }
 
-        if( m_ruleResolver->QueryConstraint( type, &coupledVia, &dummyVia, UNDEFINED_LAYER,
-                                             &constraint ) )
-        {
+        if( m_ruleResolver->QueryConstraint( type, &coupledVia, &dummyVia, UNDEFINED_LAYER, &constraint ) )
             copperToHole = std::max( copperToHole, constraint.m_Value.Min() );
-        }
     }
 
     aSizes.SetDiffPairCopperToHole( copperToHole );

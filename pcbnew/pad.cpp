@@ -2013,11 +2013,10 @@ int PAD::GetSolderMaskExpansion( PCB_LAYER_ID aLayer ) const
     std::optional<int> margin;
 
     if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine
-        && GetBoard()->GetDesignSettings().m_DRCEngine->HasRulesForConstraintType(
-                   SOLDER_MASK_EXPANSION_CONSTRAINT ) )
+        && GetBoard()->GetDesignSettings().m_DRCEngine->HasRulesForConstraintType( SOLDER_MASK_EXPANSION_CONSTRAINT ) )
     {
-        DRC_CONSTRAINT              constraint;
-        std::shared_ptr<DRC_ENGINE> drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
+        DRC_CONSTRAINT constraint;
+        DRC_ENGINE*    drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine.get();
 
         constraint = drcEngine->EvalRules( SOLDER_MASK_EXPANSION_CONSTRAINT, this, nullptr, aLayer );
 

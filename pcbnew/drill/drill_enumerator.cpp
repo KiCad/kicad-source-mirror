@@ -84,44 +84,48 @@ std::optional<DRILL_OPERATION> backdrillOperation( const PADSTACK::DRILL_PROPS& 
 void enumerateVia( PCB_VIA* aVia, const BOARD& aBoard, const DRILL_QUERY& aQuery,
                    std::vector<DRILL_OPERATION>& aOut )
 {
-    const DRILL_SPAN& span = aQuery.m_Span;
+    const DRILL_SPAN&            span = aQuery.m_Span;
+    const BOARD_DESIGN_SETTINGS& bds = aBoard.GetDesignSettings();
 
-    const BOARD_DESIGN_SETTINGS& settings = aBoard.GetDesignSettings();
+    auto boardSide =
+            [&]( PCB_LAYER_ID aLayer, bool aFront, bool aBack )
+            {
+                return aLayer == F_Cu ? aFront : aLayer == B_Cu ? aBack : false;
+            };
 
-    auto boardSide = [&]( PCB_LAYER_ID aLayer, bool aFront, bool aBack )
-    {
-        return aLayer == F_Cu ? aFront : aLayer == B_Cu ? aBack : false;
-    };
+    auto covered =
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                bool fallback = boardSide( aLayer, bds.m_CoverViasFront, bds.m_CoverViasBack );
+                return aVia->Padstack().IsCovered( aLayer ).value_or( fallback );
+            };
 
-    auto covered = [&]( PCB_LAYER_ID aLayer )
-    {
-        bool fallback = boardSide( aLayer, settings.m_CoverViasFront, settings.m_CoverViasBack );
-        return aVia->Padstack().IsCovered( aLayer ).value_or( fallback );
-    };
+    auto plugged =
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                bool fallback = boardSide( aLayer, bds.m_PlugViasFront, bds.m_PlugViasBack );
+                return aVia->Padstack().IsPlugged( aLayer ).value_or( fallback );
+            };
 
-    auto plugged = [&]( PCB_LAYER_ID aLayer )
-    {
-        bool fallback = boardSide( aLayer, settings.m_PlugViasFront, settings.m_PlugViasBack );
-        return aVia->Padstack().IsPlugged( aLayer ).value_or( fallback );
-    };
+    auto tented =
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                bool fallback = boardSide( aLayer, bds.m_TentViasFront, bds.m_TentViasBack );
+                return aVia->Padstack().IsTented( aLayer ).value_or( fallback );
+            };
 
-    auto tented = [&]( PCB_LAYER_ID aLayer )
-    {
-        bool fallback = boardSide( aLayer, settings.m_TentViasFront, settings.m_TentViasBack );
-        return aVia->Padstack().IsTented( aLayer ).value_or( fallback );
-    };
-
-    auto setProtection = [&]( DRILL_OPERATION& aOp, std::optional<bool> aFilled, std::optional<bool> aCapped )
-    {
-        aOp.m_Filled = aFilled.value_or( settings.m_FillVias );
-        aOp.m_Capped = aCapped.value_or( settings.m_CapVias );
-        aOp.m_TopCovered = covered( aOp.m_TopLayer );
-        aOp.m_BottomCovered = covered( aOp.m_BottomLayer );
-        aOp.m_TopPlugged = plugged( aOp.m_TopLayer );
-        aOp.m_BottomPlugged = plugged( aOp.m_BottomLayer );
-        aOp.m_TopTented = tented( aOp.m_TopLayer );
-        aOp.m_BottomTented = tented( aOp.m_BottomLayer );
-    };
+    auto setProtection =
+            [&]( DRILL_OPERATION& aOp, std::optional<bool> aFilled, std::optional<bool> aCapped )
+            {
+                aOp.m_Filled = aFilled.value_or( bds.m_FillVias );
+                aOp.m_Capped = aCapped.value_or( bds.m_CapVias );
+                aOp.m_TopCovered = covered( aOp.m_TopLayer );
+                aOp.m_BottomCovered = covered( aOp.m_BottomLayer );
+                aOp.m_TopPlugged = plugged( aOp.m_TopLayer );
+                aOp.m_BottomPlugged = plugged( aOp.m_BottomLayer );
+                aOp.m_TopTented = tented( aOp.m_TopLayer );
+                aOp.m_BottomTented = tented( aOp.m_BottomLayer );
+            };
 
     auto stubLength =
             [&]( PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd ) -> std::optional<int>

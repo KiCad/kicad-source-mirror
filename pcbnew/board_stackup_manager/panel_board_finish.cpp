@@ -24,8 +24,7 @@
 #include "panel_board_finish.h"
 
 
-PANEL_SETUP_BOARD_FINISH::PANEL_SETUP_BOARD_FINISH( wxWindow* aParentWindow,
-                                                    PCB_EDIT_FRAME* aFrame ) :
+PANEL_SETUP_BOARD_FINISH::PANEL_SETUP_BOARD_FINISH( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_BOARD_FINISH_BASE( aParentWindow )
 {
     m_frame = aFrame;

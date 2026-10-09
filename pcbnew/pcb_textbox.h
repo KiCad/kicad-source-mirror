@@ -103,7 +103,7 @@ public:
     void SetRight( int aVal ) override;
     void SetBottom( int aVal ) override;
 
-    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide ) override;
+    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& aSettings, bool aCheckSide ) override;
 
     int GetLegacyTextMargin() const;
 

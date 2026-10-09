@@ -368,14 +368,14 @@ int PCB_TEXT::getKnockoutMargin() const
 }
 
 
-void PCB_TEXT::StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide )
+void PCB_TEXT::StyleFromSettings( const BOARD_DESIGN_SETTINGS& aSettings, bool aCheckSide )
 {
-    SetTextSize( settings.GetTextSize( GetLayer() ) );
-    SetTextThickness( settings.GetTextThickness( GetLayer() ) );
-    SetItalic( settings.GetTextItalic( GetLayer() ) );
+    SetTextSize( aSettings.GetTextSize( GetLayer() ) );
+    SetTextThickness( aSettings.GetTextThickness( GetLayer() ) );
+    SetItalic( aSettings.GetTextItalic( GetLayer() ) );
 
     if( GetParentFootprint() )
-        SetKeepUpright( settings.GetTextUpright( GetLayer() ) );
+        SetKeepUpright( aSettings.GetTextUpright( GetLayer() ) );
 
     if( aCheckSide )
     {

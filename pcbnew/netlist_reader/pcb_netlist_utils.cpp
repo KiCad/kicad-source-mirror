@@ -45,9 +45,8 @@ FOOTPRINT* LoadFootprintFromProject( BOARD* aBoard, const LIB_ID& aFootprintId, 
         {
             BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
 
-            footprint->ApplyDefaultSettings( *aBoard, bds.m_StyleFPFields, bds.m_StyleFPText,
-                                             bds.m_StyleFPShapes, bds.m_StyleFPDimensions,
-                                             bds.m_StyleFPBarcodes );
+            footprint->ApplyDefaultSettings( *aBoard, bds.m_StyleFPFields, bds.m_StyleFPText, bds.m_StyleFPShapes,
+                                             bds.m_StyleFPDimensions, bds.m_StyleFPBarcodes );
         }
     }
 

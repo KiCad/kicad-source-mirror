@@ -862,9 +862,7 @@ SEVERITY PCB_BASE_FRAME::GetSeverity( int aErrorCode ) const
     if( aErrorCode >= CLEANUP_FIRST )
         return RPT_SEVERITY_ACTION;
 
-    BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
-
-    return bds.m_DRCSeverities[ aErrorCode ];
+    return GetBoard()->GetDesignSettings().m_DRCSeverities[ aErrorCode ];
 }
 
 

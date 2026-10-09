@@ -18,9 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_SETUP_BOARD_FINISH_H
-#define PANEL_SETUP_BOARD_FINISH_H
-
+#pragma once
 
 #include <board.h>
 #include "panel_board_finish_base.h"
@@ -50,5 +48,3 @@ private:
     BOARD*                  m_board;
     BOARD_DESIGN_SETTINGS*  m_brdSettings;
 };
-
-#endif      // #ifndef PANEL_SETUP_BOARD_FINISH_H

@@ -18,8 +18,7 @@
  */
 
 
-#ifndef PANEL_SETUP_DEFAULT_CLEARANCES_H
-#define PANEL_SETUP_DEFAULT_CLEARANCES_H
+#pragma once
 
 #include <board.h>
 #include <widgets/unit_binder.h>
@@ -34,15 +33,6 @@ class BOARD_DESIGN_SETTINGS;
 
 class PANEL_SETUP_MASK_AND_PASTE : public PANEL_SETUP_MASK_AND_PASTE_BASE
 {
-private:
-    PCB_EDIT_FRAME*         m_Frame;
-    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
-
-    UNIT_BINDER             m_maskExpansion;
-    UNIT_BINDER             m_maskMinWidth;
-    UNIT_BINDER             m_maskToCopperClearance;
-    MARGIN_OFFSET_BINDER    m_pasteMargin;
-
 public:
     PANEL_SETUP_MASK_AND_PASTE( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame );
     ~PANEL_SETUP_MASK_AND_PASTE( ) { };
@@ -51,8 +41,15 @@ public:
     bool TransferDataFromWindow() override;
 
     void ImportSettingsFrom( BOARD* aBoard );
-};
 
-#endif //PANEL_SETUP_DEFAULT_CLEARANCES_H
+private:
+    PCB_EDIT_FRAME*         m_Frame;
+    BOARD_DESIGN_SETTINGS*  m_BrdSettings;
+
+    UNIT_BINDER             m_maskExpansion;
+    UNIT_BINDER             m_maskMinWidth;
+    UNIT_BINDER             m_maskToCopperClearance;
+    MARGIN_OFFSET_BINDER    m_pasteMargin;
+};
 
 

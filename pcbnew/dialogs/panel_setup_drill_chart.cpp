@@ -43,8 +43,7 @@ const DRILL_GROUP_KEY g_groupKeyRows[] = {
 } // namespace
 
 
-PANEL_SETUP_DRILL_CHART::PANEL_SETUP_DRILL_CHART( wxWindow* aParentWindow,
-                                                  PCB_EDIT_FRAME* aFrame ) :
+PANEL_SETUP_DRILL_CHART::PANEL_SETUP_DRILL_CHART( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_DRILL_CHART_BASE( aParentWindow ),
         m_frame( aFrame ),
         m_symbolSize( aFrame, m_symbolSizeLabel, m_symbolSizeCtrl, m_symbolSizeUnits ),
@@ -64,7 +63,6 @@ void PANEL_SETUP_DRILL_CHART::loadSettings( const BOARD_DESIGN_SETTINGS& aSettin
     m_symbolSize.SetValue( profile.GetSymbolSize() );
     m_symbolWidth.SetValue( profile.GetSymbolWidth() );
     m_freezeAssignments->SetValue( profile.GetFreezeAssignments() );
-
 }
 
 
@@ -88,7 +86,6 @@ bool PANEL_SETUP_DRILL_CHART::TransferDataFromWindow()
     profile.SetSymbolSize( m_symbolSize.GetIntValue() );
     profile.SetSymbolWidth( m_symbolWidth.GetIntValue() );
     profile.SetFreezeAssignments( m_freezeAssignments->GetValue() );
-
 
     // Grouping drives both the chart rows and the symbols, so every cached answer keyed on
     // the profile has to be given a reason to notice

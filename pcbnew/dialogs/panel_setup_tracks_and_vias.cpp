@@ -49,8 +49,7 @@ enum DIFF_VAR_GRID_COLUMNS
 };
 
 
-PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( wxWindow* aParentWindow,
-                                                          PCB_EDIT_FRAME* aFrame ) :
+PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( wxWindow* aParentWindow, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_TRACKS_AND_VIAS_BASE( aParentWindow )
 {
     m_Frame = aFrame;

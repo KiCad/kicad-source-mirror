@@ -331,10 +331,11 @@ int PCB_VIA_STITCH::defaultViaSize( BOARD* aBoard ) const
     if( !aBoard )
         return pcbIUScale.mmToIU( 0.6 );
 
-    BOARD_DESIGN_SETTINGS& ds = aBoard->GetDesignSettings();
-    int val = ds.GetCurrentViaSize();
+    int val = aBoard->GetDesignSettings().GetCurrentViaSize();
+
     if( val <= 0 )
         val = pcbIUScale.mmToIU( 0.6 );
+
     return val;
 }
 
@@ -343,10 +344,11 @@ int PCB_VIA_STITCH::defaultViaDrill( BOARD* aBoard ) const
     if( !aBoard )
         return pcbIUScale.mmToIU( 0.3 );
 
-    BOARD_DESIGN_SETTINGS& ds = aBoard->GetDesignSettings();
-    int val = ds.GetCurrentViaDrill();
+    int val = aBoard->GetDesignSettings().GetCurrentViaDrill();
+
     if( val <= 0 )
         val = pcbIUScale.mmToIU( 0.3 );
+
     return val;
 }
 

@@ -907,22 +907,19 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard( BOARD* aBoard, const nlohmann::jso
 
     std::multimap<wxString, EASYEDAPRO::POURED> boardPouredMap = aPouredMap;
     std::map<wxString, ZONE*>                   poursToFill;
+    BOARD_DESIGN_SETTINGS&                      bds = aBoard->GetDesignSettings();
 
-    BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
     m_safeSpacing = nlohmann::json();
+    
     for( const V3_ROW& row : aDoc.rows )
     {
         if( row.type != wxS( "RULE" ) || V3GetString( row.inner, "ruleState" ) != wxS( "DEFAULT" ) )
-        {
             continue;
-        }
 
         nlohmann::json idArr = V3ParseIdArray( row.id );
 
         if( !idArr.is_array() || idArr.size() < 3 || V3JsonToString( idArr[1] ) != wxS( "SAFE" ) )
-        {
             continue;
-        }
 
         nlohmann::json safeSpacing =
                 row.inner.value( "ruleContext", nlohmann::json() ).value( "safeSpacing", nlohmann::json::array() );
@@ -935,20 +932,21 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard( BOARD* aBoard, const nlohmann::jso
         }
     }
 
+    auto zoneClearance =
+            [&]() -> int
+            {
+                if( m_safeSpacing.is_array() && m_safeSpacing.size() > 7 && m_safeSpacing.at( 7 ).is_array()
+                    && !m_safeSpacing.at( 7 ).empty() && m_safeSpacing.at( 7 ).at( 0 ).is_number() )
+                {
+                    const int clearance = PCB_IO_EASYEDAPRO_PARSER::ScaleSize( m_safeSpacing.at( 7 ).at( 0 ).get<double>() );
 
-    auto zoneClearance = [&]() -> int
-    {
-        if( m_safeSpacing.is_array() && m_safeSpacing.size() > 7 && m_safeSpacing.at( 7 ).is_array()
-            && !m_safeSpacing.at( 7 ).empty() && m_safeSpacing.at( 7 ).at( 0 ).is_number() )
-        {
-            const int clearance = PCB_IO_EASYEDAPRO_PARSER::ScaleSize( m_safeSpacing.at( 7 ).at( 0 ).get<double>() );
+                    if( clearance > 0 )
+                        return clearance;
+                }
 
-            if( clearance > 0 )
-                return clearance;
-        }
+                return bds.m_MinClearance;
+            };
 
-        return bds.m_MinClearance;
-    };
     const int zoneMinThickness = bds.GetDefaultZoneSettings().m_ZoneMinThickness;
 
 

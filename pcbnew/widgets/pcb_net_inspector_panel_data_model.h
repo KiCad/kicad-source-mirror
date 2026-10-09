@@ -967,8 +967,7 @@ protected:
                 //   "DDR_DQ0  [DDR_DATA]"
                 if( !chainName.IsEmpty() && m_parent.m_board )
                 {
-                    if( const std::shared_ptr<NET_SETTINGS>& ns =
-                            m_parent.m_board->GetDesignSettings().m_NetSettings )
+                    if( const std::shared_ptr<NET_SETTINGS>& ns = m_parent.m_board->GetDesignSettings().m_NetSettings )
                     {
                         wxString className = ns->GetNetChainClass( chainName );
 

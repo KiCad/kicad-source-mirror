@@ -643,18 +643,22 @@ bool BOARD_STACKUP::SynchronizeWithBoard( const BOARD_DESIGN_SETTINGS* aSettings
     BOARD_STACKUP stackup;
     stackup.BuildDefaultStackupList( aSettings );
 
-    auto sameLayer = []( const BOARD_STACKUP_ITEM* aFirst, const BOARD_STACKUP_ITEM* aSecond )
-    {
-        return aFirst->GetBrdLayerId() == aSecond->GetBrdLayerId()
-               && ( aFirst->GetBrdLayerId() != UNDEFINED_LAYER
-                    || aFirst->GetDielectricLayerId() == aSecond->GetDielectricLayerId() );
-    };
+    auto sameLayer =
+            []( const BOARD_STACKUP_ITEM* aFirst, const BOARD_STACKUP_ITEM* aSecond )
+            {
+                return aFirst->GetBrdLayerId() == aSecond->GetBrdLayerId()
+                       && ( aFirst->GetBrdLayerId() != UNDEFINED_LAYER
+                            || aFirst->GetDielectricLayerId() == aSecond->GetDielectricLayerId() );
+            };
 
     // First, find removed layers:
     for( BOARD_STACKUP_ITEM* curr_item: m_list )
     {
         if( std::ranges::none_of( stackup.GetList(),
-                                  [&]( const BOARD_STACKUP_ITEM* aItem ) { return sameLayer( curr_item, aItem ); } ) )
+                                  [&]( const BOARD_STACKUP_ITEM* aItem )
+                                  {
+                                      return sameLayer( curr_item, aItem );
+                                  } ) )
         {
             change = true;
             break;
@@ -690,8 +694,7 @@ bool BOARD_STACKUP::SynchronizeWithBoard( const BOARD_DESIGN_SETTINGS* aSettings
 }
 
 
-void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSettings,
-                                             int aActiveCopperLayersCount )
+void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSettings, int aActiveCopperLayersCount )
 {
     // Creates a default stackup, according to the current BOARD_DESIGN_SETTINGS settings.
     // Note: the m_TypeName string is made translatable using _HKI marker, but is not
@@ -710,8 +713,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSetti
         activeCuLayerCount = aActiveCopperLayersCount;
 
     int brd__thickness = aSettings ? aSettings->GetBoardThickness() : pcbIUScale.mmToIU( 1.6 );
-    int diel_thickness = brd__thickness -
-                         ( BOARD_STACKUP_ITEM::GetCopperDefaultThickness() * activeCuLayerCount );
+    int diel_thickness = brd__thickness - ( BOARD_STACKUP_ITEM::GetCopperDefaultThickness() * activeCuLayerCount );
 
     // Take in account the solder mask thickness:
     int sm_count = ( enabledLayer & LSET( { F_Mask, B_Mask } ) ).count();

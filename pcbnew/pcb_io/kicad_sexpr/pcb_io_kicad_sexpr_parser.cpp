@@ -2741,8 +2741,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseDrillSymbolProfile()
     wxCHECK_RET( CurTok() == T_drill_symbol_profile,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a drill symbol profile." ) );
 
-    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
-    DRILL_SYMBOL_PROFILE&  profile = bds.GetDrillSymbolProfile();
+    DRILL_SYMBOL_PROFILE&  profile = m_board->GetDesignSettings().GetDrillSymbolProfile();
 
     for( DRILL_GROUP_KEY key : { DRILL_GROUP_KEY::SIZE_GRP, DRILL_GROUP_KEY::SLOT,
                                  DRILL_GROUP_KEY::PLATING, DRILL_GROUP_KEY::SPAN,
@@ -2876,9 +2875,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
     wxCHECK_RET( CurTok() == T_setup,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as setup." ) );
 
-    BOARD_DESIGN_SETTINGS&     bds = m_board->GetDesignSettings();
+    BOARD_DESIGN_SETTINGS&           bds = m_board->GetDesignSettings();
     const std::shared_ptr<NETCLASS>& defaultNetClass = bds.m_NetSettings->GetDefaultNetclass();
-    ZONE_SETTINGS&             zoneSettings = bds.GetDefaultZoneSettings();
+    ZONE_SETTINGS&                   zoneSettings = bds.GetDefaultZoneSettings();
 
     // Missing soldermask min width value means that the user has set the value to 0 and
     // not the default value (0.25mm)
@@ -3265,8 +3264,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
             if( plotParams.GetLegacyPlotViaOnMaskLayer().has_value() )
             {
                 bool tent = !( *plotParams.GetLegacyPlotViaOnMaskLayer() );
-                m_board->GetDesignSettings().m_TentViasFront = tent;
-                m_board->GetDesignSettings().m_TentViasBack = tent;
+                bds.m_TentViasFront = tent;
+                bds.m_TentViasBack = tent;
             }
 
             break;
@@ -3282,7 +3281,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 
     // Set up a default stackup in case the file doesn't define one, and now we know
     // the enabled layers
-    if( !m_preserveDestinationStackup && !m_board->GetDesignSettings().m_HasStackup )
+    if( !m_preserveDestinationStackup && !bds.m_HasStackup )
     {
         BOARD_STACKUP& stackup = bds.GetStackupDescriptor();
         stackup.RemoveAll();
@@ -3347,7 +3346,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseZoneLayerProperty(
 }
 
 
-void PCB_IO_KICAD_SEXPR_PARSER::parseDefaults( BOARD_DESIGN_SETTINGS& designSettings )
+void PCB_IO_KICAD_SEXPR_PARSER::parseDefaults( BOARD_DESIGN_SETTINGS& aSettings )
 {
     for( T token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -3359,66 +3358,64 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseDefaults( BOARD_DESIGN_SETTINGS& designSett
         switch( token )
         {
         case T_edge_clearance:
-            designSettings.m_CopperEdgeClearance = parseBoardUnits( T_edge_clearance );
+            aSettings.m_CopperEdgeClearance = parseBoardUnits( T_edge_clearance );
             m_board->m_LegacyCopperEdgeClearanceLoaded = true;
             NeedRIGHT();
             break;
 
         case T_copper_line_width:
-            designSettings.m_LineThickness[ LAYER_CLASS_COPPER ] = parseBoardUnits( token );
+            aSettings.m_LineThickness[ LAYER_CLASS_COPPER ] = parseBoardUnits( token );
             NeedRIGHT();
             break;
 
         case T_copper_text_dims:
-            parseDefaultTextDims( designSettings, LAYER_CLASS_COPPER );
+            parseDefaultTextDims( aSettings, LAYER_CLASS_COPPER );
             break;
 
         case T_courtyard_line_width:
-            designSettings.m_LineThickness[ LAYER_CLASS_COURTYARD ] = parseBoardUnits( token );
+            aSettings.m_LineThickness[ LAYER_CLASS_COURTYARD ] = parseBoardUnits( token );
             NeedRIGHT();
             break;
 
         case T_edge_cuts_line_width:
-            designSettings.m_LineThickness[ LAYER_CLASS_EDGES ] = parseBoardUnits( token );
+            aSettings.m_LineThickness[ LAYER_CLASS_EDGES ] = parseBoardUnits( token );
             NeedRIGHT();
             break;
 
         case T_silk_line_width:
-            designSettings.m_LineThickness[ LAYER_CLASS_SILK ] = parseBoardUnits( token );
+            aSettings.m_LineThickness[ LAYER_CLASS_SILK ] = parseBoardUnits( token );
             NeedRIGHT();
             break;
 
         case T_silk_text_dims:
-            parseDefaultTextDims( designSettings, LAYER_CLASS_SILK );
+            parseDefaultTextDims( aSettings, LAYER_CLASS_SILK );
             break;
 
         case T_fab_layers_line_width:
-            designSettings.m_LineThickness[ LAYER_CLASS_FAB ] = parseBoardUnits( token );
+            aSettings.m_LineThickness[ LAYER_CLASS_FAB ] = parseBoardUnits( token );
             NeedRIGHT();
             break;
 
         case T_fab_layers_text_dims:
-            parseDefaultTextDims( designSettings, LAYER_CLASS_FAB );
+            parseDefaultTextDims( aSettings, LAYER_CLASS_FAB );
             break;
 
         case T_other_layers_line_width:
-            designSettings.m_LineThickness[ LAYER_CLASS_OTHERS ] = parseBoardUnits( token );
+            aSettings.m_LineThickness[ LAYER_CLASS_OTHERS ] = parseBoardUnits( token );
             NeedRIGHT();
             break;
 
         case T_other_layers_text_dims:
-            parseDefaultTextDims( designSettings, LAYER_CLASS_OTHERS );
+            parseDefaultTextDims( aSettings, LAYER_CLASS_OTHERS );
             break;
 
         case T_dimension_units:
-            designSettings.m_DimensionUnitsMode =
-                    static_cast<DIM_UNITS_MODE>( parseInt( "dimension units" ) );
+            aSettings.m_DimensionUnitsMode = static_cast<DIM_UNITS_MODE>( parseInt( "dimension units" ) );
             NeedRIGHT();
             break;
 
         case T_dimension_precision:
-            designSettings.m_DimensionPrecision =
-                    static_cast<DIM_PRECISION>( parseInt( "dimension precision" ) );
+            aSettings.m_DimensionPrecision = static_cast<DIM_PRECISION>( parseInt( "dimension precision" ) );
             NeedRIGHT();
             break;
 
@@ -3699,8 +3696,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseNETCLASS()
             if( m_requiredVersion < 20210606 )
                 netName = ConvertToNewOverbarNotation( FromUTF8() );
 
-            m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment(
-                    netName, nc->GetName() );
+            m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment( netName, nc->GetName() );
 
             break;
         }

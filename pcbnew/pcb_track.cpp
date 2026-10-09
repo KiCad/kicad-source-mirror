@@ -670,9 +670,8 @@ MINOPTMAX<int> PCB_TRACK::GetWidthConstraint( wxString* aSource ) const
 
     if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
     {
-        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
-
-        constraint = bds.m_DRCEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, this, nullptr, m_layer );
+        constraint = GetBoard()->GetDesignSettings().m_DRCEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, this,
+                                                                             nullptr, m_layer );
     }
 
     if( aSource )
@@ -688,9 +687,8 @@ MINOPTMAX<int> PCB_VIA::GetWidthConstraint( wxString* aSource ) const
 
     if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
     {
-        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
-
-        constraint = bds.m_DRCEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, this, nullptr, m_layer );
+        constraint = GetBoard()->GetDesignSettings().m_DRCEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, this,
+                                                                             nullptr, m_layer );
     }
 
     if( aSource )
@@ -706,10 +704,9 @@ MINOPTMAX<int> PCB_VIA::GetDrillConstraint( wxString* aSource ) const
 
     if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
     {
-        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
-
         // Holes are not layer-specific, as in the hole size test
-        constraint = bds.m_DRCEngine->EvalRules( HOLE_SIZE_CONSTRAINT, this, nullptr, UNDEFINED_LAYER );
+        constraint = GetBoard()->GetDesignSettings().m_DRCEngine->EvalRules( HOLE_SIZE_CONSTRAINT, this,
+                                                                             nullptr, UNDEFINED_LAYER );
     }
 
     if( aSource )
@@ -755,9 +752,8 @@ int PCB_VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
 
     if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine )
     {
-        BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
-
-        constraint = bds.m_DRCEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, this, nullptr, aLayer );
+        constraint = GetBoard()->GetDesignSettings().m_DRCEngine->EvalRules( ANNULAR_WIDTH_CONSTRAINT, this,
+                                                                             nullptr, aLayer );
     }
 
     if( constraint.Value().HasMin() )
@@ -1723,8 +1719,8 @@ int PCB_TRACK::GetSolderMaskExpansion() const
     if( GetBoard() && GetBoard()->GetDesignSettings().m_DRCEngine
         && GetBoard()->GetDesignSettings().m_DRCEngine->HasRulesForConstraintType( SOLDER_MASK_EXPANSION_CONSTRAINT ) )
     {
-        DRC_CONSTRAINT              constraint;
-        std::shared_ptr<DRC_ENGINE> drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
+        DRC_CONSTRAINT constraint;
+        DRC_ENGINE*    drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine.get();
 
         constraint = drcEngine->EvalRules( SOLDER_MASK_EXPANSION_CONSTRAINT, this, nullptr, m_layer );
 

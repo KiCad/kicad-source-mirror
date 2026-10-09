@@ -86,7 +86,7 @@ public:
     void Serialize( kiapi::board::types::BoardText& aOutput ) const;
     bool Deserialize( const kiapi::board::types::BoardText& aInput );
 
-    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings, bool aCheckSide ) override;
+    void StyleFromSettings( const BOARD_DESIGN_SETTINGS& aSettings, bool aCheckSide ) override;
 
     /**
      * Called when rotating the parent footprint.

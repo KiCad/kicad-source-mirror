@@ -364,8 +364,7 @@ protected:
     void update() override
     {
         BOARD_DESIGN_SETTINGS& bds = m_frame.GetBoard()->GetDesignSettings();
-        bool                   useIndex = !bds.m_UseConnectedTrackWidth &&
-                                          !bds.UseCustomTrackViaSize();
+        bool                   useIndex = !bds.m_UseConnectedTrackWidth && !bds.UseCustomTrackViaSize();
         wxString               msg;
 
         Clear();
@@ -432,8 +431,8 @@ protected:
 
     OPT_TOOL_EVENT eventHandler( const wxMenuEvent& aEvent ) override
     {
-        BOARD_DESIGN_SETTINGS &bds = m_frame.GetBoard()->GetDesignSettings();
-        int id = aEvent.GetId();
+        BOARD_DESIGN_SETTINGS& bds = m_frame.GetBoard()->GetDesignSettings();
+        int                    id = aEvent.GetId();
 
         // On Windows, this handler can be called with an event ID not existing in any
         // menuitem, so only set flags when we have an ID match.
@@ -481,8 +480,8 @@ class DIFF_PAIR_MENU : public ACTION_MENU
 {
 public:
     DIFF_PAIR_MENU( PCB_EDIT_FRAME& aFrame ) :
-        ACTION_MENU( true ),
-        m_frame( aFrame )
+            ACTION_MENU( true ),
+            m_frame( aFrame )
     {
         SetIcon( BITMAPS::width_track_via );
         SetTitle( _( "Select Differential Pair Dimensions" ) );
@@ -558,8 +557,8 @@ protected:
 
     OPT_TOOL_EVENT eventHandler( const wxMenuEvent& aEvent ) override
     {
-        BOARD_DESIGN_SETTINGS &bds = m_frame.GetBoard()->GetDesignSettings();
-        int id = aEvent.GetId();
+        BOARD_DESIGN_SETTINGS& bds = m_frame.GetBoard()->GetDesignSettings();
+        int                    id = aEvent.GetId();
 
         // On Windows, this handler can be called with an event ID not existing in any
         // menuitem, so only set flags when we have an ID match.
@@ -1071,8 +1070,7 @@ void ROUTER_TOOL::updateSizesAfterRouterEvent( int aTargetLayer, const VECTOR2I&
 
     if( bds.UseNetClassTrack() || !sizes.TrackWidthIsExplicit() )
     {
-        constraint = drcEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, &dummyTrack, nullptr,
-                                           targetLayer );
+        constraint = drcEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, &dummyTrack, nullptr, targetLayer );
 
         if( !constraint.IsNull() )
         {
@@ -1107,8 +1105,7 @@ void ROUTER_TOOL::updateSizesAfterRouterEvent( int aTargetLayer, const VECTOR2I&
         dummyTrackB.SetStart( aPos );
         dummyTrackB.SetEnd( dummyTrackB.GetStart() );
 
-        constraint = drcEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, &dummyTrack, &dummyTrackB,
-                                           targetLayer );
+        constraint = drcEngine->EvalRules( TRACK_WIDTH_CONSTRAINT, &dummyTrack, &dummyTrackB, targetLayer );
 
         if( !constraint.IsNull() )
         {
@@ -1126,8 +1123,7 @@ void ROUTER_TOOL::updateSizesAfterRouterEvent( int aTargetLayer, const VECTOR2I&
                 sizes.SetDiffPairWidthSource( _( "board minimum track width" ) );
         }
 
-        constraint = drcEngine->EvalRules( DIFF_PAIR_GAP_CONSTRAINT, &dummyTrack, &dummyTrackB,
-                                           targetLayer );
+        constraint = drcEngine->EvalRules( DIFF_PAIR_GAP_CONSTRAINT, &dummyTrack, &dummyTrackB, targetLayer );
 
         if( !constraint.IsNull() )
         {
@@ -1187,8 +1183,7 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
     else
     {
         m_router->ToggleViaPlacement();
-        frame()->SetActiveLayer(
-                m_iface->GetBoardLayerFromPNSLayer( m_router->GetCurrentLayer() ) );
+        frame()->SetActiveLayer( m_iface->GetBoardLayerFromPNSLayer( m_router->GetCurrentLayer() ) );
         updateEndItem( aEvent );
         m_router->Move( m_endSnapPoint, m_endItem );
     }
@@ -1213,9 +1208,9 @@ int ROUTER_TOOL::onViaStackCommand( const TOOL_EVENT& aEvent )
 
     if( presets.empty() )
     {
-        frame()->GetInfoBar()->ShowMessageFor(
-                _( "No microvia stack presets defined. Add one in Board Setup, Microvia Stacks." ), 3000,
-                wxICON_INFORMATION );
+        frame()->GetInfoBar()->ShowMessageFor( _( "No microvia stack presets defined. Add one in Board Setup, "
+                                                  "Microvia Stacks." ),
+                                               3000, wxICON_INFORMATION );
         return 0;
     }
 
@@ -1240,12 +1235,11 @@ int ROUTER_TOOL::onViaStackCommand( const TOOL_EVENT& aEvent )
 
     if( targetLayer == UNDEFINED_LAYER )
     {
-        frame()->GetInfoBar()->ShowMessageFor(
-                wxString::Format( _( "The microvia stack runs between %s and %s. Route on one of those layers "
-                                     "to place it." ),
-                                  board()->GetLayerName( preset.m_StartLayer ),
-                                  board()->GetLayerName( preset.m_EndLayer ) ),
-                3000, wxICON_ERROR );
+        frame()->GetInfoBar()->ShowMessageFor( wxString::Format( _( "The microvia stack runs between %s and %s. "
+                                                                    "Route on one of those layers to place it." ),
+                                                                 board()->GetLayerName( preset.m_StartLayer ),
+                                                                 board()->GetLayerName( preset.m_EndLayer ) ),
+                                               3000, wxICON_ERROR );
         return 0;
     }
 
@@ -1682,14 +1676,12 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 
         DRC_CONSTRAINT constraint;
 
-        constraint = bds.m_DRCEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, &dummyVia, nullptr,
-                                                 currentLayer );
+        constraint = bds.m_DRCEngine->EvalRules( VIA_DIAMETER_CONSTRAINT, &dummyVia, nullptr, currentLayer );
 
         if( !constraint.IsNull() )
             sizes.SetViaDiameter( constraint.m_Value.PinnedOpt() );
 
-        constraint = bds.m_DRCEngine->EvalRules( HOLE_SIZE_CONSTRAINT, &dummyVia, nullptr,
-                                                 currentLayer );
+        constraint = bds.m_DRCEngine->EvalRules( HOLE_SIZE_CONSTRAINT, &dummyVia, nullptr, currentLayer );
 
         if( !constraint.IsNull() )
             sizes.SetViaDrill( constraint.m_Value.PinnedOpt() );

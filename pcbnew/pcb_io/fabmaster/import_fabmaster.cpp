@@ -2401,8 +2401,8 @@ void FABMASTER::createComponentsFromOrphanPins()
 
 bool FABMASTER::loadFootprints( BOARD* aBoard )
 {
-    const NETNAMES_MAP& netinfo = aBoard->GetNetInfo().NetsByName();
-    const auto& ds = aBoard->GetDesignSettings();
+    const NETNAMES_MAP&          netinfo = aBoard->GetNetInfo().NetsByName();
+    const BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
 
     for( auto& mod : components )
     {
@@ -2465,8 +2465,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                     if( !IsPcbLayer( layer ) )
                     {
-                        wxLogTrace( traceFabmaster, wxS( "The layer %s is not mapped?" ),
-                                                         ref->layer.c_str() );
+                        wxLogTrace( traceFabmaster, wxS( "The layer %s is not mapped?" ), ref->layer.c_str() );
                         continue;
                     }
 
@@ -2508,7 +2507,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     if( IsPcbLayer( getLayer( seg->layer ) ) )
                         layer = getLayer( seg->layer );
 
-                    STROKE_PARAMS defaultStroke( ds.GetLineThickness( layer ) );
+                    STROKE_PARAMS defaultStroke( bds.GetLineThickness( layer ) );
 
                     switch( seg->shape )
                     {
@@ -2567,7 +2566,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             if( lsrc.layer == "DISPLAY_TOP" || lsrc.layer == "DISPLAY_BOTTOM" )
                                 circle->SetFilled( true );
                             else
-                                circle->SetWidth( ds.GetLineThickness( circle->GetLayer() ) );
+                                circle->SetWidth( bds.GetLineThickness( circle->GetLayer() ) );
                         }
 
                         if( src->mirror )
@@ -2581,8 +2580,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     {
                         const GRAPHIC_ARC* lsrc = static_cast<const GRAPHIC_ARC*>( seg.get() );
 
-                        std::unique_ptr<PCB_SHAPE> arc =
-                                std::make_unique<PCB_SHAPE>( fp, SHAPE_T::ARC );
+                        std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( fp, SHAPE_T::ARC );
 
                         SHAPE_ARC sarc = lsrc->result;
 
@@ -2680,8 +2678,7 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
             {
                 for( auto& pin : pin_it->second )
                 {
-                    auto pin_net_it = pin_nets.find( std::make_pair( pin->refdes,
-                                                                     pin->pin_number ) );
+                    auto pin_net_it = pin_nets.find( std::make_pair( pin->refdes, pin->pin_number ) );
                     auto padstack = pads.find( pin->padstack );
                     std::string netname = "";
 
@@ -2709,7 +2706,8 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                     if( padstack == pads.end() )
                     {
                         reportError( _( "Unable to locate padstack %s in file %s\n" ),
-                                       pin->padstack.c_str(), aBoard->GetFileName().wc_str() );
+                                     pin->padstack.c_str(),
+                                     aBoard->GetFileName().wc_str() );
                         continue;
                     }
                     else
@@ -2998,13 +2996,10 @@ bool FABMASTER::loadLayers( BOARD* aBoard )
 
     aBoard->SetEnabledLayers( layer_set );
 
-    for( auto& layer : layers )
+    for( const auto& [name, layer] : layers )
     {
-        if( layer.second.conductive )
-        {
-            aBoard->SetLayerName( static_cast<PCB_LAYER_ID>( layer.second.layerid ),
-                    layer.second.name );
-        }
+        if( layer.conductive )
+            aBoard->SetLayerName( static_cast<PCB_LAYER_ID>( layer.layerid ), layer.name );
     }
 
     return true;
@@ -3013,21 +3008,21 @@ bool FABMASTER::loadLayers( BOARD* aBoard )
 
 bool FABMASTER::loadVias( BOARD* aBoard )
 {
-    const NETNAMES_MAP& netinfo = aBoard->GetNetInfo().NetsByName();
-    const auto& ds = aBoard->GetDesignSettings();
+    const NETNAMES_MAP&          netinfo = aBoard->GetNetInfo().NetsByName();
+    const BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
 
     // Build a sorted list of conductive layers by their layer id for via span determination
     std::vector<const FABMASTER_LAYER*> conductiveLayers;
 
-    for( const auto& layer : layers )
+    for( const auto& [name, layer] : layers )
     {
-        if( layer.second.conductive )
-            conductiveLayers.push_back( &layer.second );
+        if( layer.conductive )
+            conductiveLayers.push_back( &layer );
     }
 
     std::sort( conductiveLayers.begin(), conductiveLayers.end(), FABMASTER_LAYER::BY_ID() );
 
-    for( auto& via : vias )
+    for( std::unique_ptr<FM_VIA>& via : vias )
     {
         checkpoint();
 
@@ -3046,15 +3041,15 @@ bool FABMASTER::loadVias( BOARD* aBoard )
         {
             new_via->SetDrillDefault();
 
-            if( !ds.m_ViasDimensionsList.empty() )
+            if( !bds.m_ViasDimensionsList.empty() )
             {
-                new_via->SetWidth( PADSTACK::ALL_LAYERS, ds.m_ViasDimensionsList[0].m_Diameter );
-                new_via->SetDrill( ds.m_ViasDimensionsList[0].m_Drill );
+                new_via->SetWidth( PADSTACK::ALL_LAYERS, bds.m_ViasDimensionsList[0].m_Diameter );
+                new_via->SetDrill( bds.m_ViasDimensionsList[0].m_Drill );
             }
             else
             {
                 new_via->SetDrillDefault();
-                new_via->SetWidth( PADSTACK::ALL_LAYERS, ds.m_ViasMinSize );
+                new_via->SetWidth( PADSTACK::ALL_LAYERS, bds.m_ViasMinSize );
             }
         }
         else
@@ -3332,13 +3327,14 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
     const BOARD_DESIGN_SETTINGS& boardSettings = aBoard.GetDesignSettings();
     const STROKE_PARAMS          defaultStroke( boardSettings.GetLineThickness( aLayer ) );
 
-    const auto setShapeParameters = [&]( PCB_SHAPE& aShape )
-    {
-        aShape.SetStroke( STROKE_PARAMS( aGraphic.width, LINE_STYLE::SOLID ) );
+    const auto setShapeParameters =
+            [&]( PCB_SHAPE& aShape )
+            {
+                aShape.SetStroke( STROKE_PARAMS( aGraphic.width, LINE_STYLE::SOLID ) );
 
-        if( aShape.GetWidth() == 0 )
-            aShape.SetStroke( defaultStroke );
-    };
+                if( aShape.GetWidth() == 0 )
+                    aShape.SetStroke( defaultStroke );
+            };
 
     switch( aGraphic.shape )
     {
@@ -3349,9 +3345,7 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
         auto new_text = std::make_unique<PCB_TEXT>( &aBoard );
 
         if( IsBackLayer( aLayer ) )
-        {
             new_text->SetMirrored( true );
-        }
 
         setupText( src, aLayer, *new_text, aBoard, std::nullopt );
 
@@ -3406,8 +3400,7 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
             const GRAPHIC_ARC& src = static_cast<const GRAPHIC_ARC&>( aGraphic );
 
             new_shape->SetShape( SHAPE_T::ARC );
-            new_shape->SetArcGeometry( src.result.GetP0(), src.result.GetArcMid(),
-                                       src.result.GetP1() );
+            new_shape->SetArcGeometry( src.result.GetP0(), src.result.GetArcMid(), src.result.GetP1() );
             break;
         }
 
@@ -3484,18 +3477,16 @@ FABMASTER::createBoardItems( BOARD& aBoard, PCB_LAYER_ID aLayer, FABMASTER::GRAP
     }
 
     for( std::unique_ptr<BOARD_ITEM>& new_item : new_items )
-    {
         new_item->SetLayer( aLayer );
-    }
 
     // If there's more than one, group them
     if( new_items.size() > 1 )
     {
         auto new_group = std::make_unique<PCB_GROUP>( &aBoard );
+
         for( std::unique_ptr<BOARD_ITEM>& new_item : new_items )
-        {
             new_group->AddItem( new_item.get() );
-        }
+
         new_items.emplace_back( std::move( new_group ) );
     }
 

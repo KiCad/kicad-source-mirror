@@ -2082,8 +2082,8 @@ int PCBNEW_JOBS_HANDLER::JobExportStackup( JOB* aJob )
                 item->SetLayerName( brd->GetLayerName( item->GetBrdLayerId() ) );
         }
 
-        EDA_UNITS unitsForReport =
-                stackupJob->m_units == JOB_EXPORT_PCB_STACKUP::UNITS::MM ? EDA_UNITS::MM : EDA_UNITS::INCH;
+        EDA_UNITS unitsForReport = stackupJob->m_units == JOB_EXPORT_PCB_STACKUP::UNITS::MM ? EDA_UNITS::MM
+                                                                                            : EDA_UNITS::INCH;
 
         STACKUP_CSV_OPTIONS options;
         options.includeColor = stackupJob->m_includeColor;

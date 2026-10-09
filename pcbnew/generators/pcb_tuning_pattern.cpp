@@ -2177,8 +2177,8 @@ void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
 
     if( !m_items.empty() )
     {
-        BOARD_ITEM*                  startItem = static_cast<BOARD_ITEM*>( *m_items.begin() );
-        std::shared_ptr<DRC_ENGINE>& drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine;
+        BOARD_ITEM* startItem = static_cast<BOARD_ITEM*>( *m_items.begin() );
+        DRC_ENGINE* drcEngine = GetBoard()->GetDesignSettings().m_DRCEngine.get();
 
         if( m_tuningMode == DIFF_PAIR_SKEW )
         {
@@ -2244,32 +2244,33 @@ void PCB_TUNING_PATTERN::ShowPropertiesDialog( PCB_BASE_EDIT_FRAME* aEditFrame )
 }
 
 
-std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aTool,
-                                                            PCB_BASE_EDIT_FRAME* aFrame,
+std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aTool, PCB_BASE_EDIT_FRAME* aFrame,
                                                             bool aStatusItemsOnly )
 {
     std::vector<EDA_ITEM*> previewItems;
     KIGFX::VIEW*           view = aFrame->GetCanvas()->GetView();
 
-    if( auto* placer = dynamic_cast<PNS::MEANDER_PLACER_BASE*>( aTool->Router()->Placer() ) )
+    if( PNS::MEANDER_PLACER_BASE* placer = dynamic_cast<PNS::MEANDER_PLACER_BASE*>( aTool->Router()->Placer() ) )
     {
         if( !aStatusItemsOnly )
         {
             PNS::ITEM_SET items = placer->TunedPath();
 
             for( PNS::ITEM* item : items )
-                previewItems.push_back( new ROUTER_PREVIEW_ITEM( item,
-                                                                  aTool->Router()->GetInterface(),
-                                                                  view, PNS_HOVER_ITEM ) );
+            {
+                previewItems.push_back( new ROUTER_PREVIEW_ITEM( item, aTool->Router()->GetInterface(), view,
+                                                                 PNS_HOVER_ITEM ) );
+            }
         }
 
         TUNING_STATUS_VIEW_ITEM* statusItem = new TUNING_STATUS_VIEW_ITEM( aFrame );
 
-    // Build first line: "Net-(R1-Pad2) | Chain: Chain1" OR just net if no chain
-    wxString scopeLine;
+        // Build first line: "Net-(R1-Pad2) | Chain: Chain1" OR just net if no chain
+        wxString scopeLine;
         BOARD* board = GetBoard();
         wxString netName = m_lastNetName;
         wxString netChainName;
+
         if( board && !netName.IsEmpty() )
         {
             for( NETINFO_ITEM* net : board->GetNetInfo() )
@@ -2281,6 +2282,7 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
                 }
             }
         }
+
         if( !netName.IsEmpty() )
         {
             if( !netChainName.IsEmpty() )
@@ -2288,6 +2290,7 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
             else
                 scopeLine = netName;
         }
+
         statusItem->SetScopeLine( scopeLine );
 
         if( m_tuningMode == DIFF_PAIR_SKEW )
@@ -2305,7 +2308,8 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
 
             if( board && board->GetDesignSettings().m_DRCEngine )
             {
-                PCB_TRACK* netRepTrack = nullptr;
+                DRC_ENGINE* engine = board->GetDesignSettings().m_DRCEngine.get();
+                PCB_TRACK*  netRepTrack = nullptr;
 
                 for( BOARD_ITEM* bi : board->Tracks() )
                 {
@@ -2321,14 +2325,13 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
 
                 if( netRepTrack )
                 {
-                    DRC_CONSTRAINT netC = board->GetDesignSettings().m_DRCEngine->EvalRules(
-                            LENGTH_CONSTRAINT, netRepTrack, nullptr, netRepTrack->GetLayer() );
+                    DRC_CONSTRAINT netC = engine->EvalRules( LENGTH_CONSTRAINT, netRepTrack, nullptr,
+                                                             netRepTrack->GetLayer() );
 
                     if( !netC.IsNull() && netC.GetSeverity() != RPT_SEVERITY_IGNORE )
                     {
-                        statusItem->SetMinMax(
-                                static_cast<double>( netC.GetValue().Min() ),
-                                static_cast<double>( netC.GetValue().Max() ) );
+                        statusItem->SetMinMax( static_cast<double>( netC.GetValue().Min() ),
+                                               static_cast<double>( netC.GetValue().Max() ) );
                         hasNetConstraint = true;
                     }
                 }
@@ -2341,8 +2344,9 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
         // Set chain-level min/max from raw chain constraint
         if( !netChainName.IsEmpty() && board && board->GetDesignSettings().m_DRCEngine )
         {
+            DRC_ENGINE* engine = board->GetDesignSettings().m_DRCEngine.get();
             // Find a track on this net to evaluate the rule against
-            PCB_TRACK* repTrack = nullptr;
+            PCB_TRACK*  repTrack = nullptr;
 
             for( BOARD_ITEM* bi : board->Tracks() )
             {
@@ -2360,14 +2364,13 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
 
             if( repTrack )
             {
-                DRC_CONSTRAINT chainC = board->GetDesignSettings().m_DRCEngine->EvalRules(
-                        NET_CHAIN_LENGTH_CONSTRAINT, repTrack, nullptr, repTrack->GetLayer() );
+                DRC_CONSTRAINT chainC = engine->EvalRules( NET_CHAIN_LENGTH_CONSTRAINT, repTrack, nullptr,
+                                                           repTrack->GetLayer() );
 
                 if( !chainC.IsNull() && chainC.GetSeverity() != RPT_SEVERITY_IGNORE )
                 {
-                    statusItem->SetChainMinMax(
-                            static_cast<double>( chainC.GetValue().Min() ),
-                            static_cast<double>( chainC.GetValue().Max() ) );
+                    statusItem->SetChainMinMax( static_cast<double>( chainC.GetValue().Min() ),
+                                                static_cast<double>( chainC.GetValue().Max() ) );
                 }
                 else
                 {
@@ -2404,6 +2407,7 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
         // Chain total from board state (GetTrackLength for every net) plus live tuning delta.
         wxString sigStr;
         bool hasSignal = false;
+
         if( !netChainName.IsEmpty() && board )
         {
             double chainBoardLen = 0.0;
@@ -2440,9 +2444,8 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
 
             if( placer->HasBaseline() )
             {
-                tuningDelta = m_settings.m_isTimeDomain
-                                      ? static_cast<double>( placer->TuningDelayDelta() )
-                                      : static_cast<double>( placer->TuningLengthDelta() );
+                tuningDelta = m_settings.m_isTimeDomain ? static_cast<double>( placer->TuningDelayDelta() )
+                                                        : static_cast<double>( placer->TuningLengthDelta() );
             }
 
             double sigVal = ( m_settings.m_isTimeDomain ? chainBoardDelay : chainBoardLen )
@@ -2460,8 +2463,7 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
                     sigVal += static_cast<double>( bridging );
             }
 
-            sigStr = wxString::Format( _( "Chain: %s" ),
-                        aFrame->MessageTextFromValue( sigVal, true, unitType ) );
+            sigStr = wxString::Format( _( "Chain: %s" ), aFrame->MessageTextFromValue( sigVal, true, unitType ) );
             hasSignal = true;
         }
         statusItem->SetNetAndSignalValues( netStr, sigStr, hasSignal );
@@ -2474,8 +2476,7 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
 }
 
 
-void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
-                                          std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString      msg;
     NETINFO_ITEM* primaryNet = nullptr;
@@ -2542,9 +2543,9 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     if( width && !mixedWidth )
         aList.emplace_back( _( "Width" ), aFrame->MessageTextFromValue( width ) );
 
-    BOARD*                       board = GetBoard();
-    std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
-    DRC_CONSTRAINT               constraint;
+    BOARD*         board = GetBoard();
+    DRC_ENGINE*    drcEngine = board->GetDesignSettings().m_DRCEngine.get();
+    DRC_CONSTRAINT constraint;
 
     // Display full track length (in Pcbnew)
     if( board && primaryItem && primaryItem->GetNetCode() > 0 )
@@ -2569,15 +2570,16 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
 
             if( trackDelay == 0.0 || coupledTrackDelay == 0.0 )
             {
-                aList.emplace_back( _( "Routed Lengths" ), aFrame->MessageTextFromValue( trackLen ) + wxS( ", " )
-                                                                   + aFrame->MessageTextFromValue( coupledLen ) );
+                aList.emplace_back( _( "Routed Lengths" ), aFrame->MessageTextFromValue( trackLen )
+                                                            + wxS( ", " )
+                                                            + aFrame->MessageTextFromValue( coupledLen ) );
             }
             else
             {
-                aList.emplace_back(
-                        _( "Routed Delays" ),
-                        aFrame->MessageTextFromValue( trackDelay, true, EDA_DATA_TYPE::TIME ) + wxS( ", " )
-                                + aFrame->MessageTextFromValue( coupledTrackDelay, true, EDA_DATA_TYPE::TIME ) );
+                aList.emplace_back( _( "Routed Delays" ),
+                                    aFrame->MessageTextFromValue( trackDelay, true, EDA_DATA_TYPE::TIME )
+                                    + wxS( ", " )
+                                    + aFrame->MessageTextFromValue( coupledTrackDelay, true, EDA_DATA_TYPE::TIME ) );
             }
         }
         else
@@ -2617,6 +2619,7 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
             double   totalOtherLen = 0.0;
             double   totalOtherDelay = 0.0;
             BOARD*   boardPtr = board;
+
             if( boardPtr )
             {
                 for( NETINFO_ITEM* other : boardPtr->GetNetInfo() )
@@ -2627,13 +2630,19 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
                     // Representative track length for this other net
                     double oTrackLen = 0.0, oPadDieLen = 0.0, oTrackDelay = 0.0, oPadDieDelay = 0.0;
                     PCB_TRACK* anyTrack = nullptr;
+
                     for( BOARD_ITEM* bi : boardPtr->Tracks() )
                     {
                         if( PCB_TRACK* tr = dynamic_cast<PCB_TRACK*>( bi ) )
                         {
-                            if( tr->GetNetCode() == other->GetNetCode() ) { anyTrack = tr; break; }
+                            if( tr->GetNetCode() == other->GetNetCode() )
+                            {
+                                anyTrack = tr;
+                                break;
+                            }
                         }
                     }
+
                     if( anyTrack )
                     {
                         int dummyCount = 0;
@@ -2651,7 +2660,7 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
                 double delayIUDummy = 0.0; // not used in length mode
                 long long bridging = GetCachedBridgingLength( boardPtr, chainName, &delayIUDummy );
                 aList.emplace_back( _( "Net Chain Full Length" ),
-                                     aFrame->MessageTextFromValue( ( trackLen + lenPadToDie ) + totalOtherLen
+                                    aFrame->MessageTextFromValue( trackLen + lenPadToDie + totalOtherLen
                                                                    + (double) bridging ) );
             }
             else
@@ -2659,7 +2668,7 @@ void PCB_TUNING_PATTERN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
                 double bridgingDelayIU = 0.0;
                 GetCachedBridgingLength( boardPtr, chainName, &bridgingDelayIU );
                 aList.emplace_back( _( "Net Chain Full Delay" ),
-                                     aFrame->MessageTextFromValue( ( trackDelay + delayPadToDie ) + totalOtherDelay
+                                    aFrame->MessageTextFromValue( trackDelay + delayPadToDie + totalOtherDelay
                                                                    + bridgingDelayIU,
                                                                    true, EDA_DATA_TYPE::TIME ) );
             }
@@ -2812,8 +2821,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                 if( m_pickerItem )
                 {
-                    dummyPattern.reset( PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
-                                                                       m_pickerItem, mode ) );
+                    dummyPattern.reset( PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame, m_pickerItem, mode ) );
                     dummyPattern->SetPosition( m_pickerItem->GetFocusPosition() );
                     dummyPattern->SetEnd( m_pickerItem->GetFocusPosition() );
                 }
