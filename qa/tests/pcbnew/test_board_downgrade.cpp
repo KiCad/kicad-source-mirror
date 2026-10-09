@@ -3591,7 +3591,7 @@ BOOST_AUTO_TEST_CASE( EscapedTextControlsBlockKicad9AndRemainLiteralInKicad10 )
         fp->SetReference( wxT( "U1" ) );
         const wxString literal = wxT( "\\${REFERENCE}/\\@{1+2}" );
         fp->SetKeywords( literal );
-        fp->Value().SetText( inProperty ? wxT( "${PROPERTY.Keywords}" ) : literal );
+        fp->Value().SetText( inProperty ? wxString( wxT( "${PROPERTY.Keywords}" ) ) : literal );
         board.Add( fp );
         const wxString shown = fp->Value().GetShownText( FOR_CANVAS );
 
