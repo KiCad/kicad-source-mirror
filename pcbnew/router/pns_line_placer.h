@@ -385,6 +385,8 @@ private:
     LINE           m_currentTrace;
 
     ITEM*          m_startItem;
+    ITEM*          m_routeStartItem;
+    VECTOR2I       m_routeStart;
     ITEM*          m_endItem;
 
     bool           m_idle;
