@@ -798,11 +798,11 @@ void CONNECTION_GRAPH::ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem )
                 m_item_to_subgraph_map.emplace( aNew, std::move( sgs ) );
                 aNew->registerConnectivityOwner( m_lifetime );
 
-                for( SCH_ITEM* item : m_items )
+                for( auto it2 = m_items.begin(); it2 != m_items.end(); ++it2 )
                 {
-                    if( item == aOld )
+                    if( *it2 == aOld )
                     {
-                        item = aNew;
+                        *it2 = aNew;
                         break;
                     }
                 }
