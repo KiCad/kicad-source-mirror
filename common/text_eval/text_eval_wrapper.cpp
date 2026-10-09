@@ -1498,7 +1498,7 @@ bool EXPRESSION_EVALUATOR::TestExpression( const wxString& aExpression )
             };
 
     // Try to parse it
-    m_lastErrors->Clear();
+    ClearErrors();
     std::string input = wxStringToStdString( testInput );
     auto [result, hadErrors] = evaluateWithParser( input, testCallback );
 
