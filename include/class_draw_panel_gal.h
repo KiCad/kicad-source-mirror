@@ -405,6 +405,9 @@ protected:
     /// Set when a size change could not be applied because the GL context was unavailable
     bool                     m_pendingResize;
 
+    /// Rows at the top of the panel left to the infobars where the backend window would hide them
+    int                      m_overlayInsetTop = 0;
+
     /// Flag to indicate whether the panel should take focus at certain times (when moused over,
     /// and on various mouse/key events)
     bool                     m_stealsFocus;

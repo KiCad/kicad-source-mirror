@@ -53,6 +53,7 @@
 #include <core/profile.h>
 
 #include <wx/display.h>
+#include <wx/utils.h>
 
 #include <pgm_base.h>
 #include <confirm.h>
@@ -610,6 +611,9 @@ void EDA_DRAW_PANEL_GAL::ResizeGal( bool aForce )
 
     wxSize clientSize = GetClientSize();
 
+    // The backend window starts below what cannot be drawn over it
+    clientSize.y -= m_overlayInsetTop;
+
     if( !aForce && ToVECTOR2I( clientSize ) == m_gal->GetScreenPixelSize() )
         return;
 
@@ -618,6 +622,11 @@ void EDA_DRAW_PANEL_GAL::ResizeGal( bool aForce )
     clientSize.y = std::max( 10, clientSize.y + 1 );
 
     m_gal->ResizeScreen( clientSize.GetX(), clientSize.GetY() );
+
+    wxWindow* backendWindow = dynamic_cast<wxWindow*>( m_gal );
+
+    if( backendWindow && backendWindow->GetPosition().y != m_overlayInsetTop )
+        backendWindow->Move( 0, m_overlayInsetTop );
 
     if( m_view )
     {
@@ -629,21 +638,35 @@ void EDA_DRAW_PANEL_GAL::ResizeGal( bool aForce )
 
 void EDA_DRAW_PANEL_GAL::UpdateOverlayExclusions()
 {
-    KIGFX::CAIRO_GAL* cairoGal = dynamic_cast<KIGFX::CAIRO_GAL*>( m_gal );
-
-    // Only the Cairo backend presents frames outside the paint cycle
-    if( !cairoGal )
-        return;
-
     std::vector<wxRect> rects;
+    int                 infobarsBottom = 0;
 
     for( wxWindow* child : GetChildren() )
     {
         if( dynamic_cast<WX_INFOBAR*>( child ) && child->IsShown() )
+        {
             rects.push_back( child->GetRect() );
+            infobarsBottom = std::max( infobarsBottom, child->GetRect().GetBottom() + 1 );
+        }
     }
 
-    cairoGal->SetOverlayExclusions( rects );
+    // On Wayland the OpenGL canvas is a subsurface stacked above everything the toolkit draws
+    // in the frame, so an infobar overlaid on it cannot show. The canvas makes room instead.
+    int inset = 0;
+
+    if( m_backend == GAL_TYPE_OPENGL && wxGetDisplayInfo().type == wxDisplayType::wxDisplayWayland )
+        inset = infobarsBottom;
+
+    if( inset != m_overlayInsetTop )
+    {
+        m_overlayInsetTop = inset;
+        ResizeGal( true );
+        Refresh();
+    }
+
+    // Only the Cairo backend presents frames outside the paint cycle
+    if( KIGFX::CAIRO_GAL* cairoGal = dynamic_cast<KIGFX::CAIRO_GAL*>( m_gal ) )
+        cairoGal->SetOverlayExclusions( rects );
 }
 
 
