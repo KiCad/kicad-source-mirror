@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-09 09:19+0000\n"
+"PO-Revision-Date: 2026-10-09 11:32+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -21789,7 +21789,7 @@ msgid ""
 "Error saving schematic file '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Schreiben der Schaltplandatei \"%s\".\n"
+"Fehler beim Speichern der Schaltplandatei \"%s\".\n"
 "%s"
 
 #: eeschema/eeschema_jobs_handler.cpp:1483
@@ -31986,7 +31986,7 @@ msgstr "Die Beschreibung einer vorhandenen Designvariante bearbeiten."
 
 #: eeschema/tools/sch_actions.cpp:2020
 msgid "Rename Design Variant..."
-msgstr "Designvariante umbenennen..."
+msgstr "Designvariante umbenennen ..."
 
 #: eeschema/tools/sch_actions.cpp:2021
 msgid "Rename an existing design variant."
@@ -31994,7 +31994,7 @@ msgstr "Eine bestehende Designvariante umbennen."
 
 #: eeschema/tools/sch_actions.cpp:2026
 msgid "Copy Design Variant..."
-msgstr "Designvariante kopieren..."
+msgstr "Designvariante kopieren ..."
 
 #: eeschema/tools/sch_actions.cpp:2027
 msgid "Create a copy of an existing design variant."
@@ -32404,7 +32404,7 @@ msgstr "Exporter entfernen"
 #: eeschema/tools/sch_editor_control.cpp:445
 #, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "Soll \"%s\" auf die letzte gespeicherte Version zurückgesetzt werden?"
+msgstr "Soll \"%s\" auf die zuletzt gespeicherte Version zurückgesetzt werden?"
 
 #: eeschema/tools/sch_editor_control.cpp:640
 msgid "Export Symbols"
@@ -32884,7 +32884,7 @@ msgstr "Bibliothek für Vergleich auswählen"
 
 #: eeschema/tools/symbol_editor_control.cpp:1163
 msgid "Select a KiCad symbol library file (.kicad_sym)."
-msgstr "Wähle eine KiCad Symbolbibliothekdatei (.kicad_sym)."
+msgstr "Wähle eine KiCad-Symbolbibliothekdatei (.kicad_sym)."
 
 #: eeschema/tools/symbol_editor_control.cpp:1194
 #: eeschema/tools/symbol_editor_control.cpp:1200
@@ -34271,8 +34271,8 @@ msgstr "X2 Attribut"
 #: gerbview/job_file_reader.cpp:150
 msgid "This job file uses an outdated format. Please recreate it."
 msgstr ""
-"Diese Jobdatei besitzt ein veraltetes Format. Bitte erstellen Sie die Datei "
-"neu."
+"Diese Auftragsdatei besitzt ein veraltetes Format. Bitte erstellen Sie die "
+"Datei neu."
 
 #: gerbview/job_file_reader.cpp:186
 msgid "Open Gerber Job File"
@@ -35006,7 +35006,7 @@ msgstr ""
 
 #: kicad/cli/command_gerber_convert.h:33
 msgid "Convert Gerber/Excellon to other formats"
-msgstr "Gerber/Excellon in andere Formate wandeln"
+msgstr "Gerber/Excellon in andere Formate umwandeln"
 
 #: kicad/cli/command_gerber_convert_png.cpp:50
 msgid "Convert a Gerber or Excellon file to PNG image"
@@ -35500,7 +35500,7 @@ msgstr "Bestückungsdruck-Grafiken als Satz flachen Flächen exportieren"
 
 #: kicad/cli/command_pcb_export_3d.cpp:159
 msgid "Export soldermask layers as a set of flat faces"
-msgstr "Lötstoppmaskenlagen als Satz flachen Flächen exportieren"
+msgstr "Lötstoppmaskenlagen als Satz flacher Flächen exportieren"
 
 #: kicad/cli/command_pcb_export_3d.cpp:163
 msgid "Fuse overlapping geometry together"
@@ -37555,8 +37555,7 @@ msgstr "Projektzweige vergleichen ..."
 #, fuzzy
 msgid "Review the file changes between two git refs in the current project"
 msgstr ""
-"Die Dateiänderungen zwischen zwei git-Referenzen im aktuellen Projekt "
-"überprüfen"
+"Die Dateiänderungen zweier git-Referenzen im aktuellen Projekt überprüfen"
 
 #: kicad/menubar.cpp:250
 msgid "Edit Local File..."
@@ -40610,7 +40609,7 @@ msgstr "Ebene:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:134
 msgid "Round to:"
-msgstr "Aufrunden auf:"
+msgstr "Runden auf:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:145
 msgid "Rounding:"
@@ -40626,7 +40625,7 @@ msgstr "Restring"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:194
 msgid "Result"
-msgstr "Ergebniss"
+msgstr "Ergebnis"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:211
 #, fuzzy
@@ -45338,7 +45337,7 @@ msgstr "Von / Nach"
 #: pcbnew/dialogs/dialog_drill_groups.cpp:79
 #, fuzzy
 msgid "Ops"
-msgstr "ps"
+msgstr "Anz."
 
 #: pcbnew/dialogs/dialog_drill_groups.cpp:80
 msgid "Sites"
@@ -45381,9 +45380,8 @@ msgid "Letter:"
 msgstr "Buchstabe:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:110
-#, fuzzy
 msgid "Flash on Canvas"
-msgstr "Auf Leiterplatte auswählen"
+msgstr "Auf Zeichenfläche hervorheben"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.h:67
 #, fuzzy
@@ -45392,7 +45390,7 @@ msgstr "Bohrgruppen"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
-msgstr "Pad Namen sind begrenzt auf 4 Buchstaben (inklusive Nummern)."
+msgstr "Padnamen sind begrenzt auf 4 Buchstaben (inklusive Nummern)."
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:32
 msgid "Pad name prefix:"
@@ -57877,31 +57875,33 @@ msgid "SYM"
 msgstr "SYM"
 
 #: pcbnew/drill/drill_chart_template.cpp:39
+#, fuzzy
 msgid "DRILL DIA"
-msgstr ""
+msgstr "DRILL DIA"
 
 #: pcbnew/drill/drill_chart_template.cpp:40
 msgid "Drill diameter"
 msgstr "Bohrdurchmesser"
 
 #: pcbnew/drill/drill_chart_template.cpp:41
+#, fuzzy
 msgid "SLOT W x L"
-msgstr ""
+msgstr "SLOT W x L"
 
 #: pcbnew/drill/drill_chart_template.cpp:42
 #, fuzzy
 msgid "Slot size"
-msgstr "Großformat mit Seitenrändern"
+msgstr "Schlitzgröße (B x L)"
 
 #: pcbnew/drill/drill_chart_template.cpp:43
 #, fuzzy
 msgid "PLATED"
-msgstr "BESCHICHTET"
+msgstr "PLATED"
 
 #: pcbnew/drill/drill_chart_template.cpp:45
 #, fuzzy
 msgid "OPS"
-msgstr "OP"
+msgstr "OPS"
 
 #: pcbnew/drill/drill_chart_template.cpp:46
 #, fuzzy
@@ -57909,8 +57909,9 @@ msgid "Operation count"
 msgstr "Anzahl der Vorgänge"
 
 #: pcbnew/drill/drill_chart_template.cpp:47
+#, fuzzy
 msgid "SITE COUNT"
-msgstr ""
+msgstr "SITE COUNT"
 
 #: pcbnew/drill/drill_chart_template.cpp:48
 #, fuzzy
@@ -57920,29 +57921,32 @@ msgstr "Anzahl Löcher"
 #: pcbnew/drill/drill_chart_template.cpp:49
 #, fuzzy
 msgid "FROM / TO"
-msgstr "VON / NACH"
+msgstr "FROM / TO"
 
 #: pcbnew/drill/drill_chart_template.cpp:51
+#, fuzzy
 msgid "OPERATION"
-msgstr ""
+msgstr "OPERATION"
 
 #: pcbnew/drill/drill_chart_template.cpp:52
 #, fuzzy
 msgid "Operation"
-msgstr "Option"
+msgstr "Vorgang"
 
 #: pcbnew/drill/drill_chart_template.cpp:53
+#, fuzzy
 msgid "PROTECTION"
-msgstr ""
+msgstr "PROTECTION"
 
 #: pcbnew/drill/drill_chart_template.cpp:54
 #, fuzzy
 msgid "Protection"
-msgstr "Projektion"
+msgstr "Schutz"
 
 #: pcbnew/drill/drill_chart_template.cpp:55
+#, fuzzy
 msgid "BACKDRILL STUB"
-msgstr ""
+msgstr "BACKDRILL STUB"
 
 #: pcbnew/drill/drill_chart_template.cpp:56
 #, fuzzy
@@ -57952,17 +57956,16 @@ msgstr "Obers. Backdrill"
 #: pcbnew/drill/drill_chart_template.cpp:57
 #, fuzzy
 msgid "ASPECT RATIO"
-msgstr "SEITENVERHÄLTNIS"
+msgstr "ASPECT RATIO"
 
 #: pcbnew/drill/drill_chart_template.cpp:58
-#, fuzzy
 msgid "Aspect ratio"
-msgstr "Verhältnis"
+msgstr "Seitenverhältnis"
 
 #: pcbnew/drill/drill_chart_template.cpp:59
 #, fuzzy
 msgid "DESCRIPTION"
-msgstr "BESCHREIBUNG"
+msgstr "DESCRIPTION"
 
 #: pcbnew/drill/drill_chart_template.cpp:122
 #, fuzzy, c-format
@@ -71818,9 +71821,8 @@ msgid "Removing isolated copper islands..."
 msgstr "Entferne isolierte Kupferinseln ..."
 
 #: pcbnew/zone_filler.cpp:1477
-#, fuzzy
 msgid "Refilling overlapping zones..."
-msgstr "Überlappende Zonen erneut ausfüllen ..."
+msgstr "Überlappende Zonen erneut füllen ..."
 
 #: pcbnew/zone_filler.cpp:1642
 #, c-format
