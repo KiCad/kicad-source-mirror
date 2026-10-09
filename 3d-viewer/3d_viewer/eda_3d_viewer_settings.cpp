@@ -182,10 +182,13 @@ nlohmann::json PARAM_LAYER_PRESET_3D::presetsToJson()
 
 void PARAM_LAYER_PRESET_3D::jsonToPresets( const nlohmann::json& aJson )
 {
-    if( aJson.empty() || !aJson.is_array() )
+    if( !aJson.is_array() )
         return;
 
     m_presets->clear();
+
+    if( aJson.empty() )
+        return;
 
     for( const nlohmann::json& preset : aJson )
     {

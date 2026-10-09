@@ -78,9 +78,12 @@ nlohmann::json PARAM_LAYER_PRESET::presetsToJson()
 
 void PARAM_LAYER_PRESET::jsonToPresets( const nlohmann::json& aJson )
 {
+    if( !aJson.is_array() )
+        return;
+
     m_presets->clear();
 
-    if( aJson.empty() || !aJson.is_array() )
+    if( aJson.empty() )
         return;
 
     for( const nlohmann::json& preset : aJson )
