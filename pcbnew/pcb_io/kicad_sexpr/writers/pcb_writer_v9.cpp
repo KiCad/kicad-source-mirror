@@ -1449,6 +1449,10 @@ void PCB_WRITER_V9::format( const PAD* aPad ) const
         // Output all basic shapes
         for( const std::shared_ptr<PCB_SHAPE>& primitive : aPad->GetPrimitives( aLayer ) )
         {
+            // Set false by any branch that opens no node. The width, the fill and the closing
+            // paren below belong to that node, so emitting them without it corrupts the file.
+            bool emitted = true;
+
             switch( primitive->GetShape() )
             {
             case SHAPE_T::SEGMENT:
@@ -1499,7 +1503,11 @@ void PCB_WRITER_V9::format( const PAD* aPad ) const
                 break;
 
             case SHAPE_T::POLY:
-                if( primitive->IsPolyShapeValid() )
+                if( !primitive->IsPolyShapeValid() )
+                {
+                    emitted = false;
+                }
+                else
                 {
                     const SHAPE_POLY_SET&   poly = primitive->GetPolyShape();
                     const SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
@@ -1509,8 +1517,11 @@ void PCB_WRITER_V9::format( const PAD* aPad ) const
                 }
                 break;
 
-            default: break;
+            default: emitted = false; break;
             }
+
+            if( !emitted )
+                continue;
 
             if( !primitive->IsProxyItem() )
                 m_out->Print( "(width %s)", formatInternalUnits( primitive->GetWidth() ).c_str() );

@@ -201,6 +201,10 @@ static int footprintMaxError( const FOOTPRINT* aFootprint )
 }
 
 
+// Defined below with the rounded-rectangle helpers. Ellipses can also live in a custom pad.
+static void forEachPadPrimitive( FOOTPRINT* aFootprint, const std::function<void( PCB_SHAPE* )>& aFunc );
+
+
 static void lowerEllipsesFp( FOOTPRINT* aFootprint )
 {
     int maxError = footprintMaxError( aFootprint );
@@ -210,6 +214,13 @@ static void lowerEllipsesFp( FOOTPRINT* aFootprint )
         if( isEllipse( item ) )
             ellipseToPolygon( static_cast<PCB_SHAPE*>( item ), maxError );
     }
+
+    forEachPadPrimitive( aFootprint,
+                         [&]( PCB_SHAPE* aPrimitive )
+                         {
+                             if( isEllipse( aPrimitive ) )
+                                 ellipseToPolygon( aPrimitive, maxError );
+                         } );
 }
 
 
@@ -421,6 +432,13 @@ static int countEllipses( const BOARD* aBoard )
             if( isEllipse( item ) )
                 count++;
         }
+
+        forEachPadPrimitive( fp,
+                             [&]( PCB_SHAPE* aPrimitive )
+                             {
+                                 if( isEllipse( aPrimitive ) )
+                                     count++;
+                             } );
     }
 
     return count;
@@ -1423,13 +1441,37 @@ static void omitGraphics( BOARD* aBoard, const std::function<bool( const BOARD_I
 }
 
 
+static void omitPadPrimitives( FOOTPRINT* aFootprint, const std::function<bool( const BOARD_ITEM* )>& aMatches )
+{
+    for( PAD* pad : aFootprint->Pads() )
+    {
+        pad->Padstack().ForEachUniqueLayer(
+                [&]( PCB_LAYER_ID aLayer )
+                {
+                    auto& primitives = pad->Padstack().Primitives( aLayer );
+                    primitives.erase( std::remove_if( primitives.begin(), primitives.end(),
+                                                      [&]( const std::shared_ptr<PCB_SHAPE>& aPrimitive )
+                                                      {
+                                                          return aMatches( aPrimitive.get() );
+                                                      } ),
+                                      primitives.end() );
+                } );
+        pad->SetDirty();
+    }
+}
+
+
 static void omitEllipsesFp( FOOTPRINT* aFootprint )
 {
     omitGraphicsFp( aFootprint, isEllipse );
+    omitPadPrimitives( aFootprint, isEllipse );
 }
 static void omitEllipses( BOARD* aBoard )
 {
     omitGraphics( aBoard, isEllipse );
+
+    for( FOOTPRINT* fp : aBoard->Footprints() )
+        omitPadPrimitives( fp, isEllipse );
 }
 
 static bool isBarcode( const BOARD_ITEM* aItem )
@@ -1460,30 +1502,10 @@ static void omitKnockoutTextBoxes( BOARD* aBoard )
 }
 
 
-static void omitRoundedPadPrimitives( FOOTPRINT* aFootprint )
-{
-    for( PAD* pad : aFootprint->Pads() )
-    {
-        pad->Padstack().ForEachUniqueLayer(
-                [&]( PCB_LAYER_ID aLayer )
-                {
-                    auto& primitives = pad->Padstack().Primitives( aLayer );
-                    primitives.erase( std::remove_if( primitives.begin(), primitives.end(),
-                                                      []( const std::shared_ptr<PCB_SHAPE>& aPrimitive )
-                                                      {
-                                                          return isRoundedRect( aPrimitive.get() );
-                                                      } ),
-                                      primitives.end() );
-                } );
-        pad->SetDirty();
-    }
-}
-
-
 static void omitRoundedRectsFp( FOOTPRINT* aFootprint )
 {
     omitGraphicsFp( aFootprint, isRoundedRect );
-    omitRoundedPadPrimitives( aFootprint );
+    omitPadPrimitives( aFootprint, isRoundedRect );
 }
 
 
@@ -1492,7 +1514,7 @@ static void omitRoundedRects( BOARD* aBoard )
     omitGraphics( aBoard, isRoundedRect );
 
     for( FOOTPRINT* fp : aBoard->Footprints() )
-        omitRoundedPadPrimitives( fp );
+        omitPadPrimitives( fp, isRoundedRect );
 }
 
 

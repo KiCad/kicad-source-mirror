@@ -1,0 +1,45 @@
+(kicad_pcb
+	(version 20260901)
+	(generator "pcbnew")
+	(generator_version "10.99")
+	(general
+		(thickness 1.6)
+		(legacy_teardrops no)
+	)
+	(paper "A4")
+	(layers
+		(0 "F.Cu" signal)
+		(2 "B.Cu" signal)
+		(9 "F.Paste" user)
+		(11 "F.SilkS" user)
+		(13 "F.Mask" user)
+		(44 "Edge.Cuts" user)
+	)
+	(setup
+		(pad_to_mask_clearance 0)
+	)
+	(footprint "arcpad"
+		(layer "F.Cu")
+		(uuid "11111111-1111-1111-1111-111111111111")
+		(at 50 50)
+		(attr smd)
+		(pad "" smd custom
+			(at 0.55 -2.55 2.5)
+			(size 0.1 0.1)
+			(layers "F.Paste")
+			(options
+				(clearance outline)
+				(anchor circle)
+			)
+			(primitives
+				(gr_arc
+					(start 0 0)
+					(mid 0.704278 1.28373)
+					(end 0.608513 2.744826)
+					(width 0.7)
+				)
+			)
+			(uuid "740403af-a424-4a0f-a834-f4f98205d878")
+		)
+	)
+)

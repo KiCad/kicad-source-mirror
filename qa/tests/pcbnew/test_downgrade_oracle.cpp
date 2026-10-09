@@ -540,6 +540,62 @@ static void checkNativeFootprintGolden( const DOWNGRADE_TARGET& aTarget, const s
 }
 
 
+// A primitive the writer does not handle used to emit an orphan (width ...) and a surplus
+// closing paren, which left the file unbalanced and unloadable in the target.
+static void checkCustomPadArcSurvives( const DOWNGRADE_TARGET& aTarget )
+{
+    SETTINGS_MANAGER  settingsManager;
+    const std::string src = KI_TEST::GetPcbnewTestDataDir() + "../downgrade/regressions/custom_pad_arc.kicad_pcb";
+    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_custom_pad_arc", "" );
+    const std::string            dest = ( tmp.GetPath() / "out.kicad_pcb" ).string();
+    COMPATIBILITY_REPORT         report;
+
+    BOOST_REQUIRE( ExportBoardToOlderVersion( src, dest, aTarget, report ) );
+
+    // The primitive is an elliptical arc, so the target gets the approximating polygon. The
+    // report has to say so; it used to predict no loss at all.
+    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::LOWER ), 1 );
+
+    const std::string out = KI_TEST::ReadGoldenText( dest );
+    BOOST_CHECK_MESSAGE( out.find( "gr_poly" ) != std::string::npos,
+                         "the custom pad's primitive was dropped instead of approximated" );
+
+    int  depth = 0;
+    bool inString = false;
+
+    for( size_t ii = 0; ii < out.size(); ++ii )
+    {
+        if( out[ii] == '"' && ( ii == 0 || out[ii - 1] != '\\' ) )
+            inString = !inString;
+        else if( !inString && out[ii] == '(' )
+            ++depth;
+        else if( !inString && out[ii] == ')' )
+            --depth;
+    }
+
+    BOOST_CHECK_MESSAGE( depth == 0, "exported board is unbalanced by " + std::to_string( depth ) );
+
+    PCB_IO_KICAD_SEXPR     io;
+    std::unique_ptr<BOARD> reloaded( io.LoadBoard( dest, nullptr ) );
+    BOOST_REQUIRE( reloaded != nullptr );
+    BOOST_REQUIRE_EQUAL( reloaded->Footprints().size(), 1 );
+    BOOST_REQUIRE_EQUAL( reloaded->Footprints().front()->Pads().size(), 1 );
+    BOOST_CHECK_EQUAL( reloaded->Footprints().front()->Pads().front()->GetPrimitives( F_Cu ).size(), 1 );
+}
+
+
+BOOST_AUTO_TEST_CASE( CustomPadArcSurvivesExportToKicad9 )
+{
+    checkCustomPadArcSurvives( kicad9 );
+}
+
+
+BOOST_AUTO_TEST_CASE( CustomPadArcSurvivesExportToKicad10 )
+{
+    checkCustomPadArcSurvives( kicad10 );
+}
+
+
 BOOST_AUTO_TEST_CASE( BoardMetadataMatchesNativeKicad9Golden )
 {
     checkNativeBoardGolden( kicad9, "v9", "metadata", "metadata", 6, 0 );
