@@ -363,10 +363,10 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aFlags 
     {
         auto* variantData = static_cast<STD_OPTIONAL_INT_VARIANT_DATA*>( aVariant.GetData() );
 
-        if( !variantData->Value().has_value() )
+        if( !variantData->OptValue().has_value() )
             return wxEmptyString;
 
-        distanceIU = variantData->Value().value();
+        distanceIU = variantData->OptValue().value();
     }
     else if( aVariant.GetType() == wxPG_VARIANT_TYPE_LONG )
     {
@@ -457,10 +457,10 @@ bool PGPROPERTY_SIZE::ValidateValue( wxVariant& aValue, wxPGValidationInfo& aVal
     {
         auto* data = static_cast<STD_OPTIONAL_INT_VARIANT_DATA*>( aValue.GetData() );
 
-        if( !data->Value().has_value() )
+        if( !data->OptValue().has_value() )
             return wxEmptyString;
 
-        wxVariant value( data->Value().value() );
+        wxVariant value( data->OptValue().value() );
         return wxUIntProperty::ValidateValue( value, aValidationInfo );
     }
 
@@ -525,10 +525,10 @@ wxString PGPROPERTY_RATIO::ValueToString( wxVariant& aVariant, int aArgFlags ) c
     {
         auto* variantData = static_cast<STD_OPTIONAL_DOUBLE_VARIANT_DATA*>( aVariant.GetData() );
 
-        if( !variantData->Value().has_value() )
+        if( !variantData->OptValue().has_value() )
             return wxEmptyString;
 
-        value = variantData->Value().value();
+        value = variantData->OptValue().value();
     }
     else if( aVariant.GetType() == wxPG_VARIANT_TYPE_DOUBLE )
     {
@@ -550,10 +550,10 @@ bool PGPROPERTY_RATIO::ValidateValue( wxVariant& aValue, wxPGValidationInfo& aVa
     {
         auto* data = static_cast<STD_OPTIONAL_DOUBLE_VARIANT_DATA*>( aValue.GetData() );
 
-        if( !data->Value().has_value() )
+        if( !data->OptValue().has_value() )
             return wxEmptyString;
 
-        wxVariant value( data->Value().value() );
+        wxVariant value( data->OptValue().value() );
         return wxFloatProperty::ValidateValue( value, aValidationInfo );
     }
 
@@ -604,8 +604,8 @@ wxString PGPROPERTY_ANGLE::ValueToString( wxVariant& aVariant, int aArgFlags ) c
     {
         auto* variantData = static_cast<STD_OPTIONAL_DOUBLE_VARIANT_DATA*>( aVariant.GetData() );
 
-        if( variantData->Value().has_value() )
-            return wxString::Format( wxS( "%g\u00B0" ), variantData->Value().value() / m_scale );
+        if( variantData->OptValue().has_value() )
+            return wxString::Format( wxS( "%g\u00B0" ), variantData->OptValue().value() / m_scale );
         else
             return wxEmptyString;
     }
@@ -786,10 +786,10 @@ wxString PGPROPERTY_TIME::ValueToString( wxVariant& aVariant, int aArgFlags ) co
     {
         auto* variantData = static_cast<STD_OPTIONAL_INT_VARIANT_DATA*>( aVariant.GetData() );
 
-        if( !variantData->Value().has_value() )
+        if( !variantData->OptValue().has_value() )
             return wxEmptyString;
 
-        value = variantData->Value().value();
+        value = variantData->OptValue().value();
     }
     else if( aVariant.GetType() == wxPG_VARIANT_TYPE_LONG )
     {

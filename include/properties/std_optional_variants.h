@@ -45,7 +45,7 @@ public:
         return true;
     }
 
-    std::optional<int> Value() const
+    std::optional<int> OptValue() const
     {
         return m_value;
     }
@@ -77,7 +77,7 @@ public:
         return true;
     }
 
-    std::optional<double> Value() const
+    std::optional<double> OptValue() const
     {
         return m_value;
     }

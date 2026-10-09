@@ -401,31 +401,25 @@ protected:
             }
             else if( pv.CheckType<std::optional<int>>() )
             {
-                auto* data = static_cast<STD_OPTIONAL_INT_VARIANT_DATA*>( var.GetData() );
-
-                if( !data->Value().has_value() )
+                if( var.IsNull() )
                     return;
 
-                a = data->Value();
+                a = static_cast<STD_OPTIONAL_INT_VARIANT_DATA*>( var.GetData() )->OptValue();
             }
             else if( pv.CheckType<std::optional<double>>() )
             {
-                auto* data = static_cast<STD_OPTIONAL_DOUBLE_VARIANT_DATA*>( var.GetData() );
-
-                if( !data->Value().has_value() )
+                if( var.IsNull() )
                     return;
 
-                a = data->Value();
+                a = static_cast<STD_OPTIONAL_DOUBLE_VARIANT_DATA*>( var.GetData() )->OptValue();
             }
             else if( pv.CheckType<EDA_ANGLE>() )
             {
-                EDA_ANGLE_VARIANT_DATA* ad = static_cast<EDA_ANGLE_VARIANT_DATA*>( var.GetData() );
-                a = ad->Angle();
+                a = static_cast<EDA_ANGLE_VARIANT_DATA*>( var.GetData() )->Angle();
             }
             else if( pv.CheckType<KIGFX::COLOR4D>() )
             {
-                COLOR4D_VARIANT_DATA* cd = static_cast<COLOR4D_VARIANT_DATA*>( var.GetData() );
-                a = cd->Color();
+                a = static_cast<COLOR4D_VARIANT_DATA*>( var.GetData() )->Color();
             }
         }
 

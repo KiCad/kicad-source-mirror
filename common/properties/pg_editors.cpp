@@ -153,8 +153,8 @@ void PG_UNIT_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) c
     {
         auto* variantData = static_cast<STD_OPTIONAL_INT_VARIANT_DATA*>( var.GetData() );
 
-        if( variantData->Value().has_value() )
-            m_unitBinder->ChangeValue( variantData->Value().value() );
+        if( variantData->OptValue().has_value() )
+            m_unitBinder->ChangeValue( variantData->OptValue().value() );
         else
             m_unitBinder->ChangeValue( wxEmptyString );
     }
@@ -266,7 +266,7 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
 
         if( m_unitBinder->IsNull() )
         {
-            changed = ( aVariant.IsNull() || variantData->Value().has_value() );
+            changed = ( aVariant.IsNull() || variantData->OptValue().has_value() );
 
             if( changed )
             {
@@ -277,7 +277,7 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
         else
         {
             result = std::optional<int>( m_unitBinder->GetIntValue() );
-            changed = ( aVariant.IsNull() || result != variantData->Value() );
+            changed = ( aVariant.IsNull() || result != variantData->OptValue() );
 
             if( changed )
             {
@@ -437,7 +437,7 @@ bool PG_RATIO_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aP
 
         if( textVal.empty() )
         {
-            changed = ( aVariant.IsNull() || variantData->Value().has_value() );
+            changed = ( aVariant.IsNull() || variantData->OptValue().has_value() );
 
             if( changed )
                 aVariant = wxVariant( std::optional<double>() );
@@ -449,7 +449,7 @@ bool PG_RATIO_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aP
             double dblValue = 0.0;
             textVal.ToDouble( &dblValue );
             std::optional<double> result( dblValue );
-            changed = ( aVariant.IsNull() || result != variantData->Value() );
+            changed = ( aVariant.IsNull() || result != variantData->OptValue() );
 
             if( changed )
             {
@@ -493,8 +493,8 @@ void PG_RATIO_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) 
         auto*    variantData = static_cast<STD_OPTIONAL_DOUBLE_VARIANT_DATA*>( var.GetData() );
         wxString strValue;
 
-        if( variantData->Value().has_value() )
-            strValue = wxString::Format( wxS( "%g" ), variantData->Value().value() );
+        if( variantData->OptValue().has_value() )
+            strValue = wxString::Format( wxS( "%g" ), variantData->OptValue().value() );
 
         textCtrl->ChangeValue( strValue );
     }
