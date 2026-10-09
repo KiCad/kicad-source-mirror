@@ -118,7 +118,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-08 10:24+0000\n"
+"PO-Revision-Date: 2026-10-09 11:32+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -26293,7 +26293,6 @@ msgid "Hierarchical Sheet Pin '%s'"
 msgstr "Pin foglio gerarchico '%s'"
 
 #: eeschema/sch_symbol.cpp:153
-#, fuzzy
 msgid "Effective Pin Map"
 msgstr "Mappa pin effettiva"
 
@@ -27324,49 +27323,51 @@ msgid "Invalid Composite Current table."
 msgstr "Tabella corrente composita non valida."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:701
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Series Current table in %s."
-msgstr "Tabella corrente composita non valida."
+msgstr "Tabella Correnti di serie non valida in %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:706
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid Series MOSFET table in %s."
-msgstr "Tabella ISSO_PD non valida."
+msgstr "Tabella MOSFET di serie non valida in %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:709
 #, c-format
 msgid "Series MOSFET Vds must be > 0 in %s."
-msgstr ""
+msgstr "La Vds del MOSFET di serie deve essere > 0 in %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:713
 #, c-format
 msgid "Rl Series requires L Series in %s."
-msgstr ""
+msgstr "Rl di serie richiede L di serie in %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:716
 #, c-format
 msgid "Rc/Lc Series requires C Series in %s."
-msgstr ""
+msgstr "Rc/Lc di serie richiede C di serie in %s."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:725
 msgid "[On] and [Off] are only allowed in Series_switch models."
-msgstr ""
+msgstr "[On] e [Off] sono consentiti solo nei modelli Series_switch."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:732
 msgid "Series model has no series elements."
-msgstr ""
+msgstr "Il modello di serie non ha elementi di serie."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:743
 msgid "Series_switch model is missing the [On] block."
-msgstr ""
+msgstr "Al modello Series_switch manca il blocco [On]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:749
 msgid "Series_switch model is missing the [Off] block."
-msgstr ""
+msgstr "Al modello Series_switch manca il blocco [Off]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:755
 msgid "Series_switch model has series elements outside [On]/[Off]."
 msgstr ""
+"Il modello Series_switch presenta elementi serie al di fuori degli stati "
+"[On]/[Off]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
 #: eeschema/sim/kibis/ibis_parser.cpp:848
@@ -27568,11 +27569,11 @@ msgstr "Dati rampa non validi"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1757
 msgid "[Series MOSFET] outside of [Model] context."
-msgstr ""
+msgstr "[Series MOSFET] fuori contesto [Modello]."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1770
 msgid "Internal error: no current [Series MOSFET] entry."
-msgstr ""
+msgstr "Errore interno: nessuna voce [Series MOSFET] corrente."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1850
 msgid "The submodel name is missing."
@@ -27710,9 +27711,8 @@ msgid "Incorrect inv_pin name"
 msgstr "Errato nome inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2986
-#, fuzzy
 msgid "Wrong number of columns for series pin mapping."
-msgstr "Numero errato di colonne per la mappatura dei pin."
+msgstr "Numero errato di colonne per la mappatura dei pin della serie."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:3098
 msgid "Internal error detected, a waveform should exist"
@@ -27782,7 +27782,7 @@ msgstr "Il modello ha più di due coppie di forme d'onda, uso delle prime due."
 
 #: eeschema/sim/kibis/kibis.cpp:1492
 msgid "Series and Series_switch models are passive devices, not drivers."
-msgstr ""
+msgstr "I modelli Series e Series_switch sono dispositivi passivi, non drivers."
 
 #: eeschema/sim/kibis/kibis.cpp:1497
 msgid "Invalid model type for a driver."
@@ -27790,7 +27790,7 @@ msgstr "Tipo modello non valido per un driver."
 
 #: eeschema/sim/kibis/kibis.cpp:1554
 msgid "Series model has no [Series Pin Mapping] partner pin."
-msgstr ""
+msgstr "Il modello di serie non ha [Series Pin Mapping] pin partner."
 
 #: eeschema/sim/kibis/kibis.cpp:1606
 msgid "Invalid model type for a device"
@@ -28111,18 +28111,19 @@ msgstr "Il pin condiviso '%s' corrisponde a più di una net."
 #, c-format
 msgid "Model '%s' pin '%s' is neither shared nor assigned to any unit."
 msgstr ""
+"Il pin '%s' del modello '%s' non è né condiviso né assegnato ad alcuna unità."
 
 #: eeschema/sim/sim_model_multiunit.cpp:349
 msgid "Repeat-per-unit decomposition produced no instances."
-msgstr ""
+msgstr "La scomposizione ripeti-per-unità non ha prodotto istanze."
 
 #: eeschema/sim/sim_plot_tab.cpp:550
 msgid "Normalized Z/Z0 (ports differ)"
-msgstr ""
+msgstr "Z/Z0 normalizzato (le porte differiscono)"
 
 #: eeschema/sim/sim_plot_tab.cpp:552
 msgid "Normalized Z/Z0"
-msgstr ""
+msgstr "Z/Z0 normalizzato"
 
 #: eeschema/sim/sim_plot_tab.cpp:1169
 #, c-format
@@ -28176,14 +28177,12 @@ msgid "Voltage (measured)"
 msgstr "Tensione (misurata)"
 
 #: eeschema/sim/sim_plot_tab.cpp:2195
-#, fuzzy
 msgid "Add a new signal view"
-msgstr "Aggiungi nuovo campo"
+msgstr "Aggiungi nuova vista segnale"
 
 #: eeschema/sim/sim_plot_tab.cpp:2199
-#, fuzzy
 msgid "Remove the last signal view"
-msgstr "Rimuovi file di associazione"
+msgstr "Rimuovi ultima vista segnale"
 
 #: eeschema/sim/sim_plot_tab.h:161 eeschema/sim/simulator_frame_ui.cpp:268
 #: eeschema/sim/simulator_frame_ui.cpp:954
@@ -28375,9 +28374,8 @@ msgstr "Traccia"
 
 #: eeschema/sim/simulator_frame_ui.cpp:771
 #: eeschema/sim/simulator_frame_ui_base.cpp:114
-#, fuzzy
 msgid "Y Scale"
-msgstr "Scala"
+msgstr "Scala Y"
 
 #: eeschema/sim/simulator_frame_ui.cpp:773
 #: eeschema/sim/simulator_frame_ui_base.cpp:116
@@ -28399,9 +28397,9 @@ msgstr ""
 
 #: eeschema/sim/simulator_frame_ui.cpp:1124
 #: eeschema/sim/simulator_frame_ui.cpp:1138
-#, fuzzy, c-format
+#, c-format
 msgid "View %d"
-msgstr "Vista"
+msgstr "Vista %d"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1652
 #: eeschema/sim/simulator_frame_ui.cpp:4096
@@ -28441,13 +28439,12 @@ msgid "Error: simulation type doesn't support plotting.\n"
 msgstr "Errore: il tipo di simulazione non supporta i grafici.\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:3876
-#, fuzzy
 msgid "Return loss"
-msgstr "Perdita potenza:"
+msgstr "Perdite di ritorno"
 
 #: eeschema/sim/simulator_frame_ui.cpp:4005
 msgid "Refl. Coeff."
-msgstr ""
+msgstr "Coeff. Rifl."
 
 #: eeschema/sim/simulator_frame_ui.cpp:4284
 #: eeschema/sim/simulator_frame_ui.cpp:4401
@@ -28670,9 +28667,8 @@ msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>Un simbolo di potenza dovrebbe avere solo un'unità</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:262
-#, fuzzy
 msgid "<b>A Power Symbol should have exactly one pin</b><br><br>"
-msgstr "<b>Un simbolo di potenza dovrebbe avere solo un pin</b><br><br>"
+msgstr "<b>Un simbolo di potenza dovrebbe avere esattamente un pin</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:269
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -28777,11 +28773,11 @@ msgstr ""
 "b>."
 
 #: eeschema/symbol_checker.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Graphic elliptical arc has zero sweep</b> at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Il rettangolo grafico ha dimensione 0</b> in posizione <b>(%s, %s)</b>."
+"<b>Arco ellittico grafico con angolo 0</b> in posizione <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:68
 msgid "Symbol Chooser"
@@ -28821,15 +28817,13 @@ msgstr "Cambiamenti libreria non salvati"
 #: eeschema/symbol_editor/symbol_edit_frame_tabs.cpp:507
 #: eeschema/symbol_editor/symbol_edit_frame_tabs.cpp:599
 #: pcbnew/footprint_edit_frame.cpp:1355
-#, fuzzy
 msgid "Discard Changes"
-msgstr "Abban&dona i cambiamenti"
+msgstr "Annulla modifiche"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1111
-#, fuzzy, c-format
+#, c-format
 msgid "Editing %s from schematic.  Saving will update the schematic only."
-msgstr ""
-"Modifica simbolo %s dallo schema.  Salvando verrà aggiornato solo lo schema."
+msgstr "Modifica di %s dallo schema.  Salvando verrà aggiornato solo lo schema."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1115
 #, c-format
@@ -28891,12 +28885,12 @@ msgid "Add Symbol Library"
 msgstr "Aggiungi libreria di simboli"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1373
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not overwrite the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Impossibile creare il file di libreria '%s'.\n"
+"Impossibile sovrascrivere il file di libreria '%s'.\n"
 "Controllare i permessi di scrittura e riprovare."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1381
@@ -28921,9 +28915,9 @@ msgstr "Caricamento libreria \"%s\"..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1678
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1704
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove existing library backup file '%s'."
-msgstr "Fallito salvataggio file libreria impronte '%s'."
+msgstr "Fallita rimozione file di salvataggio libreria '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1686
 #, c-format
@@ -28931,14 +28925,14 @@ msgid "Failed to save backup to '%s'."
 msgstr "Fallito il salvataggio del backup su \"%s\"."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1712
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening unpacked library directory: '%s'."
-msgstr "Errore nell'apertura cartella: '%s'."
+msgstr "Errore nell'apertura cartella libreria decompressa: '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1722
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create library backup file '%s'."
-msgstr "Impossibile creare la cartella di salvataggio \"%s\"\n"
+msgstr "Impossibile creare file di salvataggio libreria '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:2031
 #, c-format
@@ -29156,14 +29150,14 @@ msgid "Save Library '%s' As..."
 msgstr "Salva libreria '%s' come..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1604
-#, fuzzy, c-format
+#, c-format
 msgid "Save Library '%s' As Packed Library..."
-msgstr "Salva libreria '%s' come..."
+msgstr "Salva libreria '%s' come libreria compressa..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1641
-#, fuzzy, c-format
+#, c-format
 msgid "Save Library '%s' As Unpacked Library..."
-msgstr "Salva libreria '%s' come..."
+msgstr "Salva libreria '%s' come libreria decompressa..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1694
 #, c-format
@@ -29225,9 +29219,8 @@ msgstr "[dallo schema]"
 #: eeschema/symbol_editor/toolbars_symbol_editor.cpp:98
 #: eeschema/toolbars_sch_editor.cpp:132
 #: pcbnew/toolbars_footprint_editor.cpp:155 pcbnew/toolbars_pcb_editor.cpp:309
-#, fuzzy
 msgid "Text objects"
-msgstr "Proprietà testo"
+msgstr "Oggetti testo"
 
 #: eeschema/symbol_import_reconciler.cpp:297
 #, c-format
