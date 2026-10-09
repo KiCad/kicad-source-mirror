@@ -102,8 +102,13 @@ inline bool IgnoreGoldenNode( const SEXPR::SEXPR& aNode, const std::string& aPar
 
     const std::string head = GoldenNodeHead( aNode );
 
-    if( ( aParent == "kicad_pcb" || aParent == "kicad_sch" ) && head == "generator_version" )
+    // Every design and library root carries the writing application's version. A downgraded file
+    // is still written by the current build, so this never matches the target's own stamp.
+    if( ( aParent == "kicad_pcb" || aParent == "kicad_sch" || aParent == "footprint" || aParent == "kicad_symbol_lib" )
+        && head == "generator_version" )
+    {
         return true;
+    }
 
     // The shared modern plot-settings formatter adds these even to frozen PCB writers.
     // The target releases have no PNG plot output and harmlessly skip these settings.

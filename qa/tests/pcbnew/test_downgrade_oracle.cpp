@@ -521,6 +521,37 @@ BOOST_AUTO_TEST_CASE( DropApproximationsKeepsNativeKicad10GraphicsGolden )
 }
 
 
+// A standalone library footprint never reaches the board pass, so the footprint-scoped subset of
+// the rule table gets its own native reference.
+static void checkNativeFootprintGolden( const DOWNGRADE_TARGET& aTarget, const std::string& aRelease,
+                                        const std::string& aReference, bool aDropInsteadOfApproximate = false )
+{
+    const std::string            fixture = KI_TEST::GetPcbnewTestDataDir() + "../downgrade/golden/";
+    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_native_fp_golden", "" );
+    const wxString               dest = ( tmp.GetPath() / "metadata.kicad_mod" ).wstring();
+    const wxString               src = wxString::FromUTF8( fixture + "current/metadata.pretty/metadata.kicad_mod" );
+
+    BOOST_REQUIRE( DowngradeFootprintFileToTemp( src, dest, aTarget, aDropInsteadOfApproximate )
+                   == DOWNGRADE_FILE_RESULT::CONVERTED );
+
+    const std::string difference = KI_TEST::GoldenFileDifference(
+            fixture + aRelease + "/" + aReference + ".pretty/metadata.kicad_mod", dest.ToStdString() );
+    BOOST_CHECK_MESSAGE( difference.empty(), difference );
+}
+
+
+BOOST_AUTO_TEST_CASE( FootprintMatchesNativeKicad9Golden )
+{
+    checkNativeFootprintGolden( kicad9, "v9", "metadata" );
+}
+
+
+BOOST_AUTO_TEST_CASE( FootprintMatchesNativeKicad10Golden )
+{
+    checkNativeFootprintGolden( kicad10, "v10", "metadata" );
+}
+
+
 BOOST_AUTO_TEST_CASE( RequiredReleaseLookupFailsForMissingId )
 {
     BOOST_CHECK( KI_TEST::RequireDowngradeTarget( wxT( "9.0" ) ).m_id == wxT( "9.0" ) );

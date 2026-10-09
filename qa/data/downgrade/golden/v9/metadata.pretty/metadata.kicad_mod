@@ -1,0 +1,179 @@
+(footprint "metadata"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(descr "Downgrade metadata reference footprint")
+	(tags "qa downgrade")
+	(property "Reference" "REF**"
+		(at 0 -4 0)
+		(layer "F.SilkS")
+		(uuid "0c411364-c372-489b-a650-7accd7ed09a8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "metadata"
+		(at 0 6 0)
+		(layer "F.Fab")
+		(uuid "20d9b45e-3dc7-41d7-94ef-8bbe2274be83")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "23ded184-ffdd-460d-8050-7f6fd7467963")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" "Downgrade metadata reference footprint"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "88d7800a-9b0c-4c7f-b9a3-5919a766660d")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_rect
+		(start -2.5 3)
+		(end 2.5 4.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "97f5bd5a-d5ad-4871-a2da-b0d602b4faa5")
+	)
+	(fp_rect
+		(start -3 -3)
+		(end 3 5)
+		(stroke
+			(width 0.1)
+			(type default)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "7c8696e3-5d5d-4a9b-bc3f-5cb39a724763")
+	)
+	(fp_text user "KiCad 9, drop approximations: omit the fill and the textbox."
+		(at 0 -12 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "0b926261-a68f-4084-8091-d214acb96d30")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "KiCad 10: retain the metadata, keep hatch and knockout."
+		(at 0 -10 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "5d4d2872-a795-471a-bbc0-d8ccc84295bb")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "KiCad 9, default: use solid fill and a plain textbox."
+		(at 0 -14 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "996ddab3-1f62-4a45-a867-ee92748c4370")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "Golden footprint metadata"
+		(at 0 -18 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "cf7d3e2f-88ee-466f-ace2-45c00e2596e0")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text user "KiCad 9: omit press-fit, counterbore, die delay and jumper group."
+		(at 0 -16 0)
+		(unlocked yes)
+		(layer "F.SilkS")
+		(uuid "e0eab86a-1831-4104-9ca3-f8602cb1bb03")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(fp_text_box "HATCH"
+		(start -2.5 -2.5)
+		(end 2.5 -1)
+		(margins 0.599999 0.599999 0.599999 0.599999)
+		(layer "F.SilkS")
+		(uuid "ecdba6e6-a836-4f1d-a33c-fe47f53eda96")
+		(effects
+			(font
+				(size 0.8 0.8)
+				(thickness 0.12)
+			)
+			(justify left)
+		)
+		(border no)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+	)
+	(pad "1" thru_hole circle
+		(at -1.5 0)
+		(size 1.6 1.6)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "36b3da03-d206-477e-8ada-a1fa6d5abd1f")
+	)
+	(pad "2" thru_hole circle
+		(at 1.5 0)
+		(size 1.6 1.6)
+		(drill 0.8)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "541a3d5a-4595-417d-a1e1-ee7bd69b15be")
+	)
+	(pad "3" smd rect
+		(at 0 2)
+		(size 1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "a342b8da-57e4-4663-8c78-5484e99125c6")
+	)
+	(embedded_fonts no)
+)

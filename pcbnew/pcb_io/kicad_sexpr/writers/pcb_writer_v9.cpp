@@ -109,6 +109,30 @@ void NET_MAPPING_V9::SetBoard( const BOARD* aBoard )
 }
 
 
+// KiCad 9 ordered footprint graphics by geometry for shapes only and fell back to the UUID for
+// everything else. The current comparator also orders text by position, so reusing it would
+// reshuffle an exported library against what the target release writes for the same items.
+struct FP_DRAWING_ORDER_V9
+{
+    bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const
+    {
+        if( aFirst->Type() != aSecond->Type() )
+            return aFirst->Type() < aSecond->Type();
+
+        if( aFirst->GetLayer() != aSecond->GetLayer() )
+            return aFirst->GetLayer() < aSecond->GetLayer();
+
+        if( aFirst->Type() == PCB_SHAPE_T )
+            return FOOTPRINT::cmp_drawings()( aFirst, aSecond );
+
+        if( aFirst->m_Uuid != aSecond->m_Uuid )
+            return aFirst->m_Uuid < aSecond->m_Uuid;
+
+        return aFirst < aSecond;
+    }
+};
+
+
 static void formatBoardStackupV9( OUTPUTFORMATTER* aFormatter, const BOARD* aBoard )
 {
     const BOARD_STACKUP& stackup = aBoard->GetDesignSettings().GetStackupDescriptor();
@@ -1057,7 +1081,7 @@ void PCB_WRITER_V9::format( const FOOTPRINT* aFootprint ) const
     Format( (BOARD_ITEM*) &aFootprint->Value() );
 
     std::set<PAD*, FOOTPRINT::cmp_pads>            sorted_pads( aFootprint->Pads().begin(), aFootprint->Pads().end() );
-    std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> sorted_drawings( aFootprint->GraphicalItems().begin(),
+    std::set<BOARD_ITEM*, FP_DRAWING_ORDER_V9>     sorted_drawings( aFootprint->GraphicalItems().begin(),
                                                                     aFootprint->GraphicalItems().end() );
     std::set<ZONE*, FOOTPRINT::cmp_zones>     sorted_zones( aFootprint->Zones().begin(), aFootprint->Zones().end() );
     std::set<BOARD_ITEM*, PCB_GROUP::ptr_cmp> sorted_groups( aFootprint->Groups().begin(), aFootprint->Groups().end() );
