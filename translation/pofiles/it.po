@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-08 21:01+0000\n"
+"PO-Revision-Date: 2026-10-09 21:51+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -24249,9 +24249,8 @@ msgid "Incorrect inv_pin name"
 msgstr "Errato nome inv_pin"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2839
-#, fuzzy
 msgid "Wrong number of columns for series pin mapping."
-msgstr "Numero errato di colonne per la mappatura dei pin."
+msgstr "Numero errato di colonne per la mappatura dei pin della serie."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2949
 msgid "Internal error detected, a waveform should exist"
@@ -25290,12 +25289,12 @@ msgid "Add Symbol Library"
 msgstr "Aggiungi libreria di simboli"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1225
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not overwrite the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
-"Impossibile creare il file di libreria '%s'.\n"
+"Impossibile sovrascrivere il file di libreria '%s'.\n"
 "Controllare i permessi di scrittura e riprovare."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1233
