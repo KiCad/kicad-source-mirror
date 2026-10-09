@@ -71,8 +71,8 @@ public:
     enum GAL_TYPE {
         GAL_TYPE_UNKNOWN = -1,  ///< not specified: a GAL engine must be set by the client
         GAL_TYPE_NONE = 0,      ///< GAL not used (the legacy wxDC engine is used)
-        GAL_TYPE_OPENGL,        ///< OpenGL implementation
-        GAL_TYPE_CAIRO,         ///< Cairo implementation
+        GAL_TYPE_OPENGL = 1,    /**< OpenGL implementation */
+        GAL_TYPE_CAIRO = 2,     /**< Cairo implementation */
         GAL_TYPE_LAST           ///< Sentinel, do not use as a parameter
     };
 
@@ -126,6 +126,23 @@ public:
      * @return a GAL type that #SwitchBackend() implements.
      */
     static GAL_TYPE ResolveStoredCanvasType( int aStoredCanvasType );
+
+    /**
+     * Return the canvas that takes over from one that could not be used.
+     *
+     * A failed accelerated canvas goes straight to #GAL_FALLBACK.
+     *
+     * @return #GAL_TYPE_NONE when nothing is left to switch to.
+     */
+    static GAL_TYPE CanvasAfterFailure( GAL_TYPE aFailedCanvasType );
+
+    /**
+     * True for a canvas drawn on the GPU, which keeps cached layers between frames.
+     */
+    static bool IsAccelerated( GAL_TYPE aCanvasType )
+    {
+        return aCanvasType == GAL_TYPE_OPENGL;
+    }
 
     /**
      * Switch method of rendering graphics.
@@ -209,6 +226,11 @@ public:
     void ResizeGal( bool aForce = false );
 
     /**
+     * Return how many pixels larger than the client area a backend's GAL is made.
+     */
+    static int ScreenSizePad( GAL_TYPE aBackend );
+
+    /**
      * Set a dispatcher that processes events and forwards them to tools.
      *
      * #EDA_DRAW_PANEL_GAL does not take over the ownership. Passing NULL disconnects all event
@@ -252,9 +274,10 @@ public:
     bool IsDialogPreview() const { return m_parent != (wxWindow*) m_edaFrame; }
 
     /**
-     * Called when the window is shown for the first time.
+     * Called when the window is shown for the first time. Updating the view's items tells whether
+     * the canvas can draw, and it falls back to another canvas when it cannot.
      */
-    virtual void OnShow() {}
+    virtual void OnShow();
 
     /**
      * Set whether focus is taken on certain events (mouseover, keys, etc).
@@ -346,6 +369,11 @@ protected:
     bool recoverFromGalError( const std::exception& aErr );
 
     /**
+     * Refresh rate in Hz of the display showing the canvas, or 0 when unknown.
+     */
+    float displayRefreshRate();
+
+    /**
      * Replace a GAL whose context was destroyed by a GPU reset.
      *
      * @return true if the GAL was replaced, so the current repaint must stop.
@@ -359,6 +387,11 @@ protected:
      * until it was closed.
      */
     void showMessageLater( const wxString& aTitle, const wxString& aDetail, bool aError );
+
+    /**
+     * The padded size of the backend window, which sits below the top overlay inset.
+     */
+    wxSize backendScreenSize() const;
 
     wxWindow*                m_parent;           ///< Pointer to the parent window
     EDA_DRAW_FRAME*          m_edaFrame;         ///< Parent EDA_DRAW_FRAME (if available)
@@ -407,8 +440,8 @@ protected:
     /// What the last ZoomToFit() left, refitted on a resize until the view is zoomed or panned
     KIGFX::AUTOMATIC_FIT     m_automaticFit;
 
-    /// Set after an OpenGL recovery attempt to prevent infinite retry loops
-    bool                     m_glRecoveryAttempted;
+    /** Set after a GPU recovery attempt to prevent infinite retry loops */
+    bool                     m_recoveryAttempted;
 
     /// Consecutive frames dropped because the GL context could not be made current
     int                      m_contextBindFailures;
@@ -427,6 +460,10 @@ protected:
     bool                     m_stealsFocus;
 
     wxWindow*                m_statusPopup;
+
+    /** What displayRefreshRate() last asked the window system */
+    float                                 m_refreshRate = 0.0f;
+    std::chrono::steady_clock::time_point m_refreshRateAsked;
 
     /// Optional overlay for drawing transient debug objects
     std::shared_ptr<KIGFX::VIEW_OVERLAY> m_debugOverlay;

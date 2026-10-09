@@ -34,6 +34,8 @@
 #include <lib_id.h>
 #include <tool/arc_draw_mode.h>
 
+#include <set>
+
 struct EDA_SEARCH_DATA;
 struct PLUGIN_ACTION;
 class LIB_TREE;
@@ -458,9 +460,11 @@ public:
     virtual void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
     /**
-     * Keep every frame on the fallback canvas for this session without changing the saved preference.
+     * Keep every frame off a canvas for this session without changing the saved preference.
      */
-    static void SetOpenGLFailureOccurred() { m_openGLFailureOccured = true; }
+    static void SetCanvasFailed( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas ) { m_failedCanvases.insert( aCanvas ); }
+
+    static bool CanvasFailed( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas ) { return m_failedCanvases.contains( aCanvas ); }
 
     /**
      * Return a pointer to GAL-based canvas of given EDA draw frame.
@@ -642,8 +646,8 @@ protected:
     /// The current canvas type.
     EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;
 
-    static bool m_openGLFailureOccured; ///< Has any failure occurred when switching to OpenGL in
-                                        ///< any EDA_DRAW_FRAME?
+    /** The canvases that have failed in any EDA_DRAW_FRAME this session */
+    static std::set<EDA_DRAW_PANEL_GAL::GAL_TYPE> m_failedCanvases;
 
 private:
     BASE_SCREEN*                m_currentScreen;      ///< current used SCREEN

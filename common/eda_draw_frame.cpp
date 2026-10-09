@@ -89,7 +89,7 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
 END_EVENT_TABLE()
 
 
-bool EDA_DRAW_FRAME::m_openGLFailureOccured = false;
+std::set<EDA_DRAW_PANEL_GAL::GAL_TYPE> EDA_DRAW_FRAME::m_failedCanvases;
 
 
 EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
@@ -173,7 +173,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
 EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 {
-    if( !m_openGLFailureOccured )
+    if( m_failedCanvases.empty() )
         saveCanvasTypeSetting( m_canvasType );
 
     delete m_actions;
@@ -1005,7 +1005,10 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
     }
 
     if( COMMON_SETTINGS* cfg = Pgm().GetCommonSettings() )
+    {
         cfg->m_Graphics.canvas_type = static_cast<int>( aCanvasType );
+        return true;
+    }
 
     return false;
 }
@@ -1398,10 +1401,8 @@ void EDA_DRAW_FRAME::resolveCanvasType()
 {
     m_canvasType = loadCanvasTypeSetting();
 
-    // If we had an OpenGL failure this session, use the fallback GAL but don't update the
-    // user preference silently:
-
-    if( m_openGLFailureOccured && m_canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
+    // A canvas that failed this session falls back without changing the saved preference
+    if( CanvasFailed( m_canvasType ) )
         m_canvasType = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
 
     if( m_canvasType != GetCanvas()->GetBackend() )
@@ -1415,7 +1416,7 @@ void EDA_DRAW_FRAME::resolveCanvasType()
         if( GetCanvas()->GetBackend() != requested )
         {
             m_canvasType = GetCanvas()->GetBackend();
-            m_openGLFailureOccured = true; // Store failure for other EDA_DRAW_FRAMEs
+            m_failedCanvases.insert( requested ); // Store failure for other EDA_DRAW_FRAMEs
         }
     }
 }

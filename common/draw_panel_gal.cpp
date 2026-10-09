@@ -52,7 +52,6 @@
 
 #include <core/profile.h>
 
-#include <wx/display.h>
 #include <wx/utils.h>
 
 #include <pgm_base.h>
@@ -85,7 +84,7 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
         m_options( aOptions ),
         m_eventDispatcher( nullptr ),
         m_lostFocus( false ),
-        m_glRecoveryAttempted( false ),
+        m_recoveryAttempted( false ),
         m_contextBindFailures( 0 ),
         m_rebuiltAfterReset( false ),
         m_pendingResize( false ),
@@ -201,11 +200,22 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 }
 
 
+EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_PANEL_GAL::CanvasAfterFailure( GAL_TYPE aFailedCanvasType )
+{
+    if( IsAccelerated( aFailedCanvasType ) && aFailedCanvasType != GAL_FALLBACK )
+        return GAL_FALLBACK;
+
+    return GAL_TYPE_NONE;
+}
+
+
 bool EDA_DRAW_PANEL_GAL::recoverFromGalError( const std::exception& aError )
 {
-    // A predicted GPU out-of-memory cannot be cured by reinitializing OpenGL; it would just
-    // hit the same VRAM ceiling. Skip straight to the software fallback.
+    // Reinitializing would hit the same VRAM ceiling, so out-of-memory goes straight to the fallback
     const bool gpuOutOfMemory = dynamic_cast<const KIGFX::GPU_OOM_ERROR*>( &aError ) != nullptr;
+
+    // The reinit below rewrites m_backend
+    const GAL_TYPE failedBackend = m_backend;
 
     try
     {
@@ -217,31 +227,30 @@ bool EDA_DRAW_PANEL_GAL::recoverFromGalError( const std::exception& aError )
         if( handleContextLoss() )
             return true;
 
-        // Sleep/wake and GPU resets can invalidate the entire GL context.
+        // Sleep/wake and GPU resets can invalidate the entire GL/device context.
         // Try a full reinit of the current backend before falling back.
-        if( !gpuOutOfMemory && !m_glRecoveryAttempted )
+        if( !gpuOutOfMemory && !m_recoveryAttempted )
         {
-            m_glRecoveryAttempted = true;
-            GAL_TYPE prevBackend = m_backend;
+            m_recoveryAttempted = true;
             m_backend = GAL_TYPE_NONE;
 
-            if( SwitchBackend( prevBackend ) )
+            if( SwitchBackend( failedBackend ) )
             {
                 StartDrawing();
                 return true;
             }
         }
 
-        if( GAL_FALLBACK_AVAILABLE && GAL_FALLBACK != m_backend )
+        if( CanvasAfterFailure( failedBackend ) != GAL_TYPE_NONE )
         {
-            m_glRecoveryAttempted = false;
+            m_recoveryAttempted = false;
             SwitchBackend( GAL_FALLBACK );
 
             if( m_rebuiltAfterReset )
             {
                 // Some drivers refuse new framebuffers to a process for the rest of its life after a reset
                 m_rebuiltAfterReset = false;
-                EDA_DRAW_FRAME::SetOpenGLFailureOccurred();
+                EDA_DRAW_FRAME::SetCanvasFailed( GAL_TYPE_OPENGL );
                 showMessageLater( _( "The graphics driver was reset and OpenGL could not be restored" ),
                                   _( "Restart KiCad to use accelerated graphics again." ), false );
             }
@@ -314,7 +323,7 @@ bool EDA_DRAW_PANEL_GAL::handleContextLoss()
         static bool s_notified = false;
 
         wxLogTrace( traceGalContext, wxS( "Canvas %p falling back to software rendering" ), this );
-        EDA_DRAW_FRAME::SetOpenGLFailureOccurred();
+        EDA_DRAW_FRAME::SetCanvasFailed( GAL_TYPE_OPENGL );
         SwitchBackend( GAL_FALLBACK );
 
         if( loss == KIGFX::GAL_CONTEXT_LOSS::REPEATED && !s_notified )
@@ -492,16 +501,14 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
             m_gal->SetGridColor( settings->GetGridColor() );
             m_gal->SetCursorColor( settings->GetCursorColor() );
 
-            // OpenGL double-buffering leaves the back buffer undefined after
-            // SwapBuffers, so a full clear is always required before compositing.
-            // Cairo only needs to clear when NONCACHED content changed.
+            // The OpenGL back buffer is undefined after SwapBuffers, even on a cursor-only repaint
             if( m_backend == GAL_TYPE_OPENGL )
                 m_gal->ClearScreen();
 
             if( m_view->IsDirty() )
             {
-                if( m_backend != GAL_TYPE_OPENGL  // Already called in opengl
-                        && m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
+                // Cairo composites all targets into one surface, so a dirty NONCACHED needs a full clear
+                if( !IsAccelerated( m_backend ) && m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
                 {
                     m_gal->ClearScreen();
                 }
@@ -538,8 +545,7 @@ bool EDA_DRAW_PANEL_GAL::DoRePaint( bool aAllowSkip )
     	latencyProbeZoomToRender.Checkpoint("do-repaint-ctx-done");
 #endif
 
-        // OpenGL frame completed successfully, allow future recovery attempts
-        m_glRecoveryAttempted = false;
+        m_recoveryAttempted = false;
         m_contextBindFailures = 0;
         m_rebuiltAfterReset = false;
     }
@@ -639,6 +645,31 @@ void EDA_DRAW_PANEL_GAL::ZoomToFit( const BOX2I& aBox, std::optional<double> aMa
 }
 
 
+int EDA_DRAW_PANEL_GAL::ScreenSizePad( GAL_TYPE aBackend )
+{
+#ifdef __WXMAC__
+    // The aligned GL child covers the client area without the offset pixel
+    if( aBackend == GAL_TYPE_OPENGL )
+        return 0;
+#endif
+
+    // The ( +1, +1 ) prevents an ugly black line on right and bottom on Mac
+    return 1;
+}
+
+
+wxSize EDA_DRAW_PANEL_GAL::backendScreenSize() const
+{
+    const int pad = ScreenSizePad( m_backend );
+    wxSize    size = GetClientSize();
+
+    // The backend window starts below what cannot be drawn over it
+    size.y -= m_overlayInsetTop;
+
+    return wxSize( std::max( 10, size.x + pad ), std::max( 10, size.y + pad ) );
+}
+
+
 void EDA_DRAW_PANEL_GAL::ResizeGal( bool aForce )
 {
     // If we get a second wx update call before the first finishes, don't crash
@@ -659,17 +690,11 @@ void EDA_DRAW_PANEL_GAL::ResizeGal( bool aForce )
 
     m_pendingResize = false;
 
-    wxSize clientSize = GetClientSize();
+    const wxSize clientSize = backendScreenSize();
 
-    // The backend window starts below what cannot be drawn over it
-    clientSize.y -= m_overlayInsetTop;
-
+    // A client area that grew by exactly the pad would otherwise match the old GAL size
     if( !aForce && ToVECTOR2I( clientSize ) == m_gal->GetScreenPixelSize() )
         return;
-
-    // Note: ( +1, +1 ) prevents an ugly black line on right and bottom on Mac
-    clientSize.x = std::max( 10, clientSize.x + 1 );
-    clientSize.y = std::max( 10, clientSize.y + 1 );
 
     m_gal->ResizeScreen( clientSize.GetX(), clientSize.GetY() );
 
@@ -728,6 +753,24 @@ void EDA_DRAW_PANEL_GAL::RequestRefresh()
 }
 
 
+float EDA_DRAW_PANEL_GAL::displayRefreshRate()
+{
+    const auto now = std::chrono::steady_clock::now();
+
+    // The window can move to another display
+    if( now - m_refreshRateAsked >= std::chrono::seconds( 1 ) )
+    {
+        const double reported = KIPLATFORM::UI::GetDisplayRefreshRate( this );
+
+        // Headless, virtualized and some driver setups report 0 or nonsense
+        m_refreshRate = reported >= 24.0 && reported <= 1000.0 ? static_cast<float>( reported ) : 0.0f;
+        m_refreshRateAsked = now;
+    }
+
+    return m_refreshRate;
+}
+
+
 void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 {
     auto now = std::chrono::steady_clock::now();
@@ -742,14 +785,8 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 
     if( galInitialized && m_gal->GetSwapInterval() == 0 )
     {
-        // wxDisplay reports 0 on headless, some virtualized, and a few driver
-        // combinations. Clamp to a plausible monitor range before trusting it
-        // and fall back to 60 Hz otherwise.
-        int refreshHz = 60;
-        int reported = wxDisplay( this ).GetCurrentMode().refresh;
-
-        if( reported >= 24 && reported <= 1000 )
-            refreshHz = reported;
+        const float displayHz = displayRefreshRate();
+        int         refreshHz = displayHz > 0.0f ? KiROUND( displayHz ) : 60;
 
         refreshHz += 5; // Repaint slightly faster to avoid adding latency
 
@@ -758,7 +795,7 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
 
     if( delta >= minPeriodMs )
     {
-        if( !DoRePaint() )
+        if( !DoRePaint() && IsShownOnScreen() )
             RequestRefresh();
     }
     else if( !m_refreshTimer.IsRunning() )
@@ -870,6 +907,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
     VECTOR2D grid_size = m_gal ? m_gal->GetGridSize() : VECTOR2D();
     bool     grid_visibility = m_gal ? m_gal->GetGridVisibility() : true;
+    double   worldUnitLength = m_gal ? m_gal->GetWorldUnitLength() : 0.0;
     bool     result = true; // assume everything will be fine
 
     // Prevent refreshing canvas during backend switch
@@ -939,7 +977,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
             {
                 new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
                 aGalType = GAL_FALLBACK;
-                EDA_DRAW_FRAME::SetOpenGLFailureOccurred();
+                EDA_DRAW_FRAME::SetCanvasFailed( GAL_TYPE_OPENGL );
                 showMessageLater( _( "Could not use OpenGL, falling back to software rendering" ),
                                   wxString( err.what() ), false );
             }
@@ -968,9 +1006,16 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     delete m_gal;
     m_gal = new_gal;
 
+    // The view lays itself out in the editor's world units as it attaches
+    if( worldUnitLength > 0.0 )
+        m_gal->SetWorldUnitLength( worldUnitLength );
+
+    // Matches ResizeGal() so the picture does not move at the next resize
     wxSize clientSize = GetClientSize();
-    clientSize.x = std::max( 10, clientSize.x );
-    clientSize.y = std::max( 10, clientSize.y );
+    int    pad = ScreenSizePad( aGalType );
+
+    clientSize.x = std::max( 10, clientSize.x + pad );
+    clientSize.y = std::max( 10, clientSize.y + pad );
     m_gal->ResizeScreen( clientSize.GetX(), clientSize.GetY() );
 
     if( grid_size.x > 0 && grid_size.y > 0 )
@@ -1028,6 +1073,29 @@ void EDA_DRAW_PANEL_GAL::UpdateTouchpadGestureHandler()
                             VECTOR2D( aGesture.panX, aGesture.panY ), aGesture.zoomFactor,
                             VECTOR2D( aGesture.zoomAnchor.x, aGesture.zoomAnchor.y ) );
                 } );
+    }
+}
+
+
+void EDA_DRAW_PANEL_GAL::OnShow()
+{
+    try
+    {
+        // Check if the current rendering backend can be properly initialized
+        m_view->UpdateItems();
+    }
+    catch( const std::runtime_error& e )
+    {
+        // recoverFromGalError() tells the user the outcome either way
+        if( !recoverFromGalError( e ) )
+        {
+            StopDrawing();
+        }
+        else if( m_edaFrame && m_edaFrame->GetCanvas() == this )
+        {
+            // The frame's tools and view settings must follow the new GAL
+            m_edaFrame->ActivateGalCanvas();
+        }
     }
 }
 
@@ -1159,7 +1227,7 @@ KIGFX::VC_SETTINGS EDA_DRAW_PANEL_GAL::GetVcSettings()
     vcSettings.m_warpCursor = cfg->m_Input.center_on_zoom;
     vcSettings.m_focusFollowSchPcb = cfg->m_Input.focus_follow_sch_pcb;
     vcSettings.m_autoPanSettingEnabled = cfg->m_Input.auto_pan;
-    vcSettings.m_autoPanAcceleration = cfg->m_Input.auto_pan_acceleration;
+    vcSettings.m_autoPanAcceleration = static_cast<float>( cfg->m_Input.auto_pan_acceleration );
     vcSettings.m_horizontalPan = cfg->m_Input.horizontal_pan;
     vcSettings.m_zoomAcceleration = cfg->m_Input.zoom_acceleration;
     vcSettings.m_zoomSpeed = cfg->m_Input.zoom_speed;

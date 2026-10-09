@@ -682,24 +682,7 @@ void PCB_DRAW_PANEL_GAL::OnShow()
     if( !IsDialogPreview() )
         frame = dynamic_cast<PCB_BASE_FRAME*>( GetParentEDAFrame() );
 
-    try
-    {
-        // Check if the current rendering back end can be properly initialized
-        m_view->UpdateItems();
-    }
-    catch( const std::runtime_error& e )
-    {
-        DisplayError( GetParent(), e.what() );
-
-        // Use the fallback if we have one
-        if( GAL_FALLBACK != m_backend )
-        {
-            SwitchBackend( GAL_FALLBACK );
-
-            if( frame )
-                frame->ActivateGalCanvas();
-        }
-    }
+    EDA_DRAW_PANEL_GAL::OnShow();
 
     if( frame )
     {
@@ -776,8 +759,8 @@ BOX2I PCB_DRAW_PANEL_GAL::GetDefaultViewBBox() const
 
 void PCB_DRAW_PANEL_GAL::setDefaultLayerDeps()
 {
-    // caching makes no sense for Cairo and other software renderers
-    auto target = m_backend == GAL_TYPE_OPENGL ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
+    // Cairo keeps cached groups in screen coordinates, so caching makes no sense for it
+    auto target = IsAccelerated( m_backend ) ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
 
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, target );

@@ -610,9 +610,9 @@ void GERBVIEW_FRAME::SetLayerDrawPrms()
 
 void GERBVIEW_FRAME::UpdateXORLayers()
 {
-    auto target = GetCanvas()->GetBackend() == GERBVIEW_DRAW_PANEL_GAL::GAL_TYPE_OPENGL
-                          ? KIGFX::TARGET_CACHED
-                          : KIGFX::TARGET_NONCACHED;
+    // Cairo keeps cached groups in screen coordinates, so caching makes no sense for it
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = GetCanvas()->GetBackend();
+    auto target = EDA_DRAW_PANEL_GAL::IsAccelerated( backend ) ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
     KIGFX::VIEW* view = GetCanvas()->GetView();
 
     int lastVisibleLayer = -1;

@@ -1762,10 +1762,8 @@ void FOOTPRINT_EDIT_FRAME::resolveCanvasType()
     // Load canvas type from the FOOTPRINT_EDITOR_SETTINGS:
     m_canvasType = loadCanvasTypeSetting();
 
-    // If we had an OpenGL failure this session, use the fallback GAL but don't update the
-    // user preference silently:
-
-    if( m_openGLFailureOccured && m_canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
+    // A canvas that failed this session falls back without changing the saved preference
+    if( CanvasFailed( m_canvasType ) )
         m_canvasType = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
 }
 

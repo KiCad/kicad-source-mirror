@@ -112,9 +112,9 @@ bool GERBVIEW_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 {
     bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend( aGalType );
 
-    // The next onPaint event will call m_view->UpdateItems() that is very time consuming
-    // after switching to opengl. Clearing m_view and rebuild it is much faster
-    if( aGalType == GAL_TYPE_OPENGL )
+    // UpdateItems() is very slow after switching to an accelerated backend, so rebuild the view.
+    // The base call may have ended on the fallback canvas.
+    if( rv && IsAccelerated( m_backend ) )
     {
         GERBVIEW_FRAME* frame = dynamic_cast<GERBVIEW_FRAME*>( GetParentEDAFrame() );
 
@@ -122,17 +122,15 @@ bool GERBVIEW_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
         {
             m_view->Clear();
 
-            for( int layer = GERBER_DRAWLAYERS_COUNT-1; layer>= 0; --layer )
+            for( int layer = GERBER_DRAWLAYERS_COUNT - 1; layer >= 0; --layer )
             {
                 GERBER_FILE_IMAGE* gerber = frame->GetImagesList()->GetGbrImage( layer );
 
-                if( gerber == nullptr )    // Graphic layer not yet used
+                if( gerber == nullptr )
                     continue;
 
                 for( GERBER_DRAW_ITEM* item : gerber->GetItems() )
-                {
-                    m_view->Add (item );
-                }
+                    m_view->Add( item );
             }
         }
     }
@@ -147,8 +145,8 @@ bool GERBVIEW_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
 void GERBVIEW_DRAW_PANEL_GAL::setDefaultLayerDeps()
 {
-    // caching makes no sense for Cairo and other software renderers
-    auto target = m_backend == GAL_TYPE_OPENGL ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
+    // Cairo keeps cached groups in screen coordinates, so caching makes no sense for it
+    auto target = IsAccelerated( m_backend ) ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
 
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, target );

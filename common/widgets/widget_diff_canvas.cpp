@@ -62,7 +62,7 @@ WIDGET_DIFF_CANVAS::WIDGET_DIFF_CANVAS( wxWindow* aParent, GAL_TYPE aBackend, wx
     m_view = new KIGFX::VIEW();
     m_view->SetGAL( m_gal );
 
-    auto target = m_backend == GAL_TYPE_OPENGL ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
+    auto target = IsAccelerated( m_backend ) ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
 
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, target );
