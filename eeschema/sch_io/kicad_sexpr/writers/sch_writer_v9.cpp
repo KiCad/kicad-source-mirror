@@ -510,8 +510,12 @@ static void libSaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter, con
         for( SCH_FIELD* field : fields )
             libSaveField( field, aFormatter );
 
-
         libSaveDcmInfoAsFields( aSymbol, aFormatter );
+
+        KICAD_FORMAT::LEGACY::FormatBool( &aFormatter, "embedded_fonts", aSymbol->GetAreFontsEmbedded() );
+
+        if( !aSymbol->EmbeddedFileMap().empty() )
+            KICAD_FORMAT::LEGACY::FormatEmbeddedFilesV9( aFormatter, *aSymbol, aIncludeData );
     }
 
     aFormatter.Print( ")" );

@@ -748,6 +748,49 @@ static void checkNativeSchematicGolden( const DOWNGRADE_TARGET& aTarget, const s
 }
 
 
+// A standalone symbol library never reaches the screen pass, so the symbol-scoped subset of the
+// rule table gets its own native reference. The derived symbol sorts before its parent by name,
+// which the format forbids, so the reference also pins the parents-first order.
+static void checkNativeSymbolLibraryGolden( const DOWNGRADE_TARGET& aTarget, const std::string& aRelease )
+{
+    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_native_symlib_golden", "" );
+    const wxString               dest = ( tmp.GetPath() / "metadata.kicad_sym" ).wstring();
+    const wxString               src = wxString::FromUTF8( downgradeDataPath() + "golden/current/metadata.kicad_sym" );
+
+    SCH_IO_KICAD_SEXPR       pi;
+    std::vector<LIB_SYMBOL*> symbols;
+    pi.EnumerateSymbolLib( symbols, src );
+    BOOST_REQUIRE_EQUAL( symbols.size(), 3 );
+
+    std::stable_sort( symbols.begin(), symbols.end(),
+                      []( const LIB_SYMBOL* a, const LIB_SYMBOL* b )
+                      {
+                          return a->GetInheritanceDepth() < b->GetInheritanceDepth();
+                      } );
+
+    for( LIB_SYMBOL* symbol : symbols )
+        DowngradeLibSymbolInPlace( symbol, aTarget );
+
+    SaveSymbolLibraryForTarget( symbols, dest, aTarget );
+
+    const std::string difference = KI_TEST::GoldenFileDifference(
+            downgradeDataPath() + "golden/" + aRelease + "/metadata.kicad_sym", dest.ToStdString() );
+    BOOST_CHECK_MESSAGE( difference.empty(), difference );
+}
+
+
+BOOST_AUTO_TEST_CASE( SymbolLibraryMatchesNativeKicad9Golden )
+{
+    checkNativeSymbolLibraryGolden( kicad9, "v9" );
+}
+
+
+BOOST_AUTO_TEST_CASE( SymbolLibraryMatchesNativeKicad10Golden )
+{
+    checkNativeSymbolLibraryGolden( kicad10, "v10" );
+}
+
+
 BOOST_AUTO_TEST_CASE( SchematicMatchesNativeKicad10Golden )
 {
     checkNativeSchematicGolden( kicad10, "v10" );
