@@ -50,7 +50,7 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
         m_activeTextEntry( nullptr ),
         m_netNameValidator( true ),
         m_fields( nullptr ),
-        m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
+        m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
         m_helpWindow( nullptr ),
         m_labelList( nullptr )
 {

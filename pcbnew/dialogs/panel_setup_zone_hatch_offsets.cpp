@@ -44,6 +44,8 @@ PANEL_SETUP_ZONE_HATCH_OFFSETS::PANEL_SETUP_ZONE_HATCH_OFFSETS( wxWindow* aParen
             } );
 
     m_layerOffsetsGrid->SetTable( m_layerPropsTable, true );
+    m_layerOffsetsGrid->SetUnitsProvider( m_frame );
+    m_layerOffsetsGrid->SetAutoEvalCols( { 1, 2 } );
     m_layerOffsetsGrid->PushEventHandler( new GRID_TRICKS( m_layerOffsetsGrid ) );
     m_layerOffsetsGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
 

@@ -79,6 +79,8 @@ PANEL_ZONE_PROPERTIES::PANEL_ZONE_PROPERTIES( wxWindow* aParent, PCB_BASE_FRAME*
             } );
 
     m_layerSpecificOverrides->SetTable( m_layerPropsTable, true );
+    m_layerSpecificOverrides->SetUnitsProvider( m_frame );
+    m_layerSpecificOverrides->SetAutoEvalCols( { 1, 2 } );
     m_layerSpecificOverrides->PushEventHandler( new GRID_TRICKS( m_layerSpecificOverrides ) );
     m_layerSpecificOverrides->SetSelectionMode( wxGrid::wxGridSelectRows );
 
