@@ -234,11 +234,6 @@ bool DIALOG_MOVE_EXACT::TransferDataToWindow()
 {
     updateDialogControls( m_polarCoords->GetValue() );
 
-    // Force the evaluation when setting previous values
-    m_moveX.RequireEval();
-    m_moveY.RequireEval();
-    m_rotate.RequireEval();
-
     return true;
 }
 

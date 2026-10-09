@@ -30,7 +30,8 @@ TEXT_CTRL_EVAL::TEXT_CTRL_EVAL( wxWindow* aParent, wxWindowID aId, const wxStrin
                                 const wxPoint& aPos, const wxSize& aSize, long aStyle,
                                 const wxValidator& aValidator, const wxString& aName ) :
         wxTextCtrl( aParent, aId, aValue, aPos, aSize, aStyle | wxTE_PROCESS_ENTER, aValidator, aName ),
-        m_eval( EDA_UNITS::UNSCALED )
+        m_eval( EDA_UNITS::UNSCALED ),
+        m_deferToBinder( false )
 {
     Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( TEXT_CTRL_EVAL::onTextFocusGet ), nullptr, this );
     Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( TEXT_CTRL_EVAL::onTextFocusLost ), nullptr, this );
@@ -45,11 +46,39 @@ void TEXT_CTRL_EVAL::SetValue( const wxString& aValue )
 }
 
 
+wxString TEXT_CTRL_EVAL::GetFormula() const
+{
+    wxString formula = m_eval.OriginalText();
+
+    if( m_eval.IsValid() && !formula.IsEmpty() && GetValue() == m_eval.Result() )
+        return formula;
+
+    return GetValue();
+}
+
+
+bool TEXT_CTRL_EVAL::RestoreFormula( const wxString& aFormula )
+{
+    if( m_deferToBinder || aFormula.IsEmpty() )
+        return false;
+
+    if( !m_eval.Process( aFormula ) )
+    {
+        // A failed expression must not be handed back to the control on the next focus
+        m_eval.Clear();
+        return false;
+    }
+
+    ChangeValue( m_eval.Result() );
+    return true;
+}
+
+
 void TEXT_CTRL_EVAL::onTextFocusGet( wxFocusEvent& aEvent )
 {
     wxString oldStr = m_eval.OriginalText();
 
-    if( oldStr.length() )
+    if( !m_deferToBinder && oldStr.length() && oldStr != GetValue() )
         SetValue( oldStr );
 
     aEvent.Skip();
@@ -58,6 +87,12 @@ void TEXT_CTRL_EVAL::onTextFocusGet( wxFocusEvent& aEvent )
 
 void TEXT_CTRL_EVAL::onTextFocusLost( wxFocusEvent& aEvent )
 {
+    if( m_deferToBinder )
+    {
+        aEvent.Skip();
+        return;
+    }
+
     if( m_customEval.has_value() )
         m_customEval.value()( this );
     else
@@ -79,6 +114,12 @@ void TEXT_CTRL_EVAL::onTextEnter( wxCommandEvent& aEvent )
 
 void TEXT_CTRL_EVAL::evaluate()
 {
+    if( m_deferToBinder )
+        return;
+
+    // Bypass the override, which would discard the expression that was just evaluated
     if( m_eval.Process( GetValue() ) )
-        SetValue( m_eval.Result() );
+        wxTextCtrl::SetValue( m_eval.Result() );
+    else
+        m_eval.Clear();
 }

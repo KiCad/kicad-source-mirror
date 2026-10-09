@@ -217,6 +217,31 @@ public:
     }
 
     /**
+     * Return the expression the user entered if it is more than a plain number, otherwise an
+     * empty string.
+     */
+    virtual wxString GetFormula() const;
+
+    /**
+     * Show the result of an expression returned by GetFormula() and retain the expression so
+     * that it reappears for editing when the control gains focus.
+     *
+     * @return false if the expression cannot be evaluated, leaving the control untouched.
+     */
+    virtual bool RestoreFormula( const wxString& aFormula );
+
+    /**
+     * Set a value (in Internal Units) as ChangeValue() does and reinstate the expression that
+     * produced it.
+     *
+     * The expression is dropped when it no longer evaluates to \a aValue, which happens when the
+     * units it was entered in have since changed.  SetValue() and ChangeValue() apply the same
+     * rule, so a dialog may load its own copy of the value afterwards without losing the
+     * expression.
+     */
+    virtual void RestoreValue( int aValue, const wxString& aFormula );
+
+    /**
      * Force the binder to evaluate the text.
      */
     void RequireEval()
@@ -248,6 +273,11 @@ protected:
      * @return the "rounded" value.
      */
     double setPrecision( double aValue, bool aValueUsesUserUnits ) const;
+
+    /**
+     * Return the retained expression if it evaluates to \a aValue, otherwise an empty string.
+     */
+    wxString formulaYielding( long long int aValue ) const;
 
     wxString getTextForValue( long long int aValue ) const;
     wxString getTextForDoubleValue( double aValue ) const;

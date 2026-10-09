@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include <kicommon.h>
 #include <optional>
 #include <functional>
 #include <wx/window.h>
@@ -38,7 +39,7 @@
  * the expression, he will get the original expression to modify.
  */
 
-class TEXT_CTRL_EVAL : public wxTextCtrl
+class KICOMMON_API TEXT_CTRL_EVAL : public wxTextCtrl
 {
 public:
     TEXT_CTRL_EVAL( wxWindow* aParent, wxWindowID aId, const wxString& aValue = wxEmptyString,
@@ -63,6 +64,24 @@ public:
      */
     void SetValue( const wxString& aValue ) override;
 
+    /**
+     * Return the expression behind the displayed value, or the displayed text if there is none.
+     */
+    wxString GetFormula() const;
+
+    /**
+     * Show the result of an expression returned by GetFormula() and retain the expression so
+     * that it reappears for editing when the control gains focus.
+     *
+     * @return false if the expression cannot be evaluated, leaving the control untouched.
+     */
+    bool RestoreFormula( const wxString& aFormula );
+
+    /**
+     * Leave evaluation to a UNIT_BINDER bound to this control.
+     */
+    void DeferToBinder() { m_deferToBinder = true; }
+
 protected:
     /// Numeric expression evaluator.
     NUMERIC_EVALUATOR m_eval;
@@ -75,5 +94,6 @@ protected:
 
 private:
     std::optional<std::function<void( TEXT_CTRL_EVAL* aCtrl )>> m_customEval;
+    bool                                                        m_deferToBinder;
 };
 

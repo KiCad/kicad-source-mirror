@@ -37,6 +37,7 @@
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
 #include <kiplatform/ui.h>
+#include <widgets/text_ctrl_eval.h>
 #include <widgets/unit_binder.h>
 
 #include <wx/display.h>
@@ -738,9 +739,32 @@ void DIALOG_SHIM::SaveControlState()
 
                 if( !key.empty() )
                 {
-                    if( m_unitBinders.contains( win ) && !m_unitBinders[ win ]->UnitsInvariant() )
+                    UNIT_BINDER* binder = m_unitBinders.contains( win ) ? m_unitBinders[ win ] : nullptr;
+                    wxString     formula = binder ? binder->GetFormula() : wxString();
+
+                    if( binder && !binder->UnitsInvariant() )
                     {
-                        dlgMap[ key ] = m_unitBinders[ win ]->GetValue();
+                        // The value survives a change of units while the expression does not, so
+                        // the value is always stored and the expression rides along with it.
+                        if( formula.IsEmpty() )
+                        {
+                            dlgMap[ key ] = binder->GetValue();
+                        }
+                        else
+                        {
+                            nlohmann::json state;
+                            state[ "value" ] = binder->GetValue();
+                            state[ "formula" ] = formula;
+                            dlgMap[ key ] = state;
+                        }
+                    }
+                    else if( !formula.IsEmpty() )
+                    {
+                        dlgMap[ key ] = formula;
+                    }
+                    else if( TEXT_CTRL_EVAL* evalCtrl = binder ? nullptr : dynamic_cast<TEXT_CTRL_EVAL*>( win ) )
+                    {
+                        dlgMap[ key ] = evalCtrl->GetFormula();
                     }
                     else if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
                     {
@@ -856,14 +880,40 @@ void DIALOG_SHIM::LoadControlState()
 
                         if( m_unitBinders.contains( win ) )
                         {
+                            UNIT_BINDER* binder = m_unitBinders[ win ];
+
                             if( j.is_number_integer() )
                             {
-                                m_unitBinders[ win ]->ChangeValue( j.get<int>() );
+                                binder->ChangeValue( j.get<int>() );
+                            }
+                            else if( j.is_object() && j.contains( "value" ) && j[ "value" ].is_number_integer() )
+                            {
+                                wxString formula;
+
+                                if( j.contains( "formula" ) && j[ "formula" ].is_string() )
+                                    formula = wxString::FromUTF8( j[ "formula" ].get<std::string>().c_str() );
+
+                                binder->RestoreValue( j[ "value" ].get<int>(), formula );
                             }
                             else if( j.is_string() )
                             {
-                                if( wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( win ) )
-                                    textEntry->ChangeValue( wxString::FromUTF8( j.get<std::string>().c_str() ) );
+                                wxString text = wxString::FromUTF8( j.get<std::string>().c_str() );
+
+                                if( !binder->RestoreFormula( text ) )
+                                {
+                                    if( wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( win ) )
+                                        textEntry->ChangeValue( text );
+                                }
+                            }
+                        }
+                        else if( TEXT_CTRL_EVAL* evalCtrl = dynamic_cast<TEXT_CTRL_EVAL*>( win ) )
+                        {
+                            if( j.is_string() )
+                            {
+                                wxString text = wxString::FromUTF8( j.get<std::string>().c_str() );
+
+                                if( !evalCtrl->RestoreFormula( text ) )
+                                    evalCtrl->ChangeValue( text );
                             }
                         }
                         else if( wxComboBox* combo = dynamic_cast<wxComboBox*>( win ) )
