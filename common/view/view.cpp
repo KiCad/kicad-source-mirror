@@ -596,15 +596,19 @@ void VIEW::SetGAL( GAL* aGal )
 
     // clear group numbers, so everything is going to be recached
     if( recacheGroups )
+    {
         clearGroupCache();
+        UpdateAllItems( REPAINT );
+    }
 
     // every target has to be refreshed
     MarkDirty();
 
-    // force the new GAL to display the current viewport.
-    SetCenter( m_center );
-    SetScale( m_scale );
+    // SetScale() would derive the centre from a GAL still at its default zoom, shifting the view a
+    // little on every backend switch.
     SetMirror( m_mirrorX, m_mirrorY );
+    m_gal->SetZoomFactor( m_scale );
+    SetCenter( m_center );
 }
 
 
