@@ -280,9 +280,13 @@ int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
         if( group->GetItems().size() < 2 )
         {
             if( group->GetItems().size() == 1 )
-                m_commit->Modify( *group->GetItems().begin(), m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
+            {
+                EDA_ITEM* lastMember = *group->GetItems().begin();
+                m_commit->Modify( group->AsEdaItem(), m_frame->GetScreen(), RECURSE_MODE::NO_RECURSE );
+                m_commit->Modify( lastMember, m_frame->GetScreen() );
+                group->RemoveItem( lastMember );
+            }
 
-            group->RemoveAll();
             m_commit->Remove( group->AsEdaItem(), m_frame->GetScreen() );
         }
     }
