@@ -1794,7 +1794,7 @@ int EESCHEMA_JOBS_HANDLER::JobDowngrade( JOB* aJob )
     // Binding a SCHEMATIC to a project reallocates that project's ERC and schematic settings. When
     // we borrowed a live project, snapshot the pointers so we can put them back. This relies on
     // ~SCHEMATIC not calling SetProject.
-    PROJECT_FILE&       projectFile = projectPtr->GetProjectFile();
+    PROJECT_FILE& projectFile = projectPtr->GetProjectFile();
 
     // The settings loader repairs missing root filenames as if this were a renamed
     // template. That is unsafe during export: check the stored list before using the
@@ -2050,8 +2050,8 @@ int EESCHEMA_JOBS_HANDLER::JobDowngrade( JOB* aJob )
 
             source.Normalize( wxPATH_NORM_DOTS );
             const wxString sourcePath = source.GetFullPath();
-            const bool contained = wxFileName::IsCaseSensitive() ? sourcePath.StartsWith( rootPrefix )
-                                                                 : sourcePath.Lower().StartsWith( rootPrefix.Lower() );
+            const bool     contained = wxFileName::IsCaseSensitive() ? sourcePath.StartsWith( rootPrefix )
+                                                                     : sourcePath.Lower().StartsWith( rootPrefix.Lower() );
 
             if( !contained )
             {
@@ -2264,7 +2264,7 @@ int EESCHEMA_JOBS_HANDLER::JobDowngrade( JOB* aJob )
                 document["schematic"] = nlohmann::json::object();
 
             nlohmann::json& schematicSettings = document["schematic"];
-            bool needsProject = !job->m_outputDir.IsEmpty()
+            bool            needsProject = !job->m_outputDir.IsEmpty()
                                 || schematicSettings.value( "bus_aliases", nlohmann::json::object() ) != aliases;
 
             if( needsProject )
