@@ -29,6 +29,7 @@
 #include <dialog_shim.h>
 
 #include "widgets/unit_binder.h"
+#include <widgets/text_ctrl_eval.h>
 #include "wx/dcclient.h"
 
 using namespace EDA_UNIT_UTILS::UI;
@@ -66,6 +67,10 @@ UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource
         m_coordType( ORIGIN_TRANSFORMS::NOT_A_COORD ),
         m_dialogShim( nullptr )
 {
+    // Two evaluators on one control would fight over its text, and only this one knows the units
+    if( TEXT_CTRL_EVAL* evalCtrl = m_allowEval ? dynamic_cast<TEXT_CTRL_EVAL*>( m_valueCtrl ) : nullptr )
+        evalCtrl->DeferToBinder();
+
     if( m_valueCtrl )
     {
         // Register the UNIT_BINDER for control state save/restore
@@ -456,11 +461,15 @@ void UNIT_BINDER::SetValue( long long int aValue )
 {
     double   displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
     wxString textValue = StringFromValue( *m_iuScale, m_units, displayValue, false, m_dataType );
+    wxString formula = formulaYielding( aValue );
 
     if( displayValue == 0 && m_negativeZero )
         SetValue( wxT( "-" ) + textValue );
     else
         SetValue( textValue );
+
+    if( !formula.IsEmpty() )
+        m_eval.Process( formula );
 }
 
 
@@ -538,9 +547,31 @@ wxString UNIT_BINDER::getTextForDoubleValue( double aValue ) const
 }
 
 
+wxString UNIT_BINDER::formulaYielding( long long int aValue ) const
+{
+    wxString formula = m_eval.OriginalText();
+
+    // Evaluate afresh as the units may have changed since the expression was entered
+    if( !m_allowEval || m_needsEval || formula.IsEmpty() || !m_eval.Process( formula ) )
+        return wxEmptyString;
+
+    long long int displayValue = ValueFromString( *m_iuScale, m_units, m_eval.Result(), m_dataType );
+
+    if( std::abs( m_originTransforms.FromDisplay( displayValue, m_coordType ) - aValue ) > 1 )
+        return wxEmptyString;
+
+    return formula;
+}
+
+
 void UNIT_BINDER::ChangeValue( int aValue )
 {
+    wxString formula = formulaYielding( aValue );
+
     ChangeValue( getTextForValue( aValue ) );
+
+    if( !formula.IsEmpty() )
+        m_eval.Process( formula );
 }
 
 
@@ -581,6 +612,54 @@ void UNIT_BINDER::ChangeValue( const wxString& aValue )
 
     if( m_unitLabel )
         m_unitLabel->SetLabel( EDA_UNIT_UTILS::GetLabel( m_units, m_dataType ) );
+}
+
+
+wxString UNIT_BINDER::GetFormula() const
+{
+    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
+
+    if( !m_allowEval || !textEntry )
+        return wxEmptyString;
+
+    // The control holds the expression while it is being edited and its result afterwards
+    wxString formula = m_needsEval ? textEntry->GetValue() : m_eval.OriginalText();
+    double   plainNumber;
+
+    formula.Trim( true ).Trim( false );
+
+    if( formula.IsEmpty() || formula.ToDouble( &plainNumber ) || formula.ToCDouble( &plainNumber ) )
+        return wxEmptyString;
+
+    return m_eval.Process( formula ) ? formula : wxString();
+}
+
+
+bool UNIT_BINDER::RestoreFormula( const wxString& aFormula )
+{
+    if( !m_allowEval || !dynamic_cast<wxTextEntry*>( m_valueCtrl ) || aFormula.IsEmpty() )
+        return false;
+
+    if( !m_eval.Process( aFormula ) )
+    {
+        // A failed expression must not be handed back to the control on the next focus
+        m_eval.Clear();
+        return false;
+    }
+
+    // ChangeValue() resets the evaluator, so the expression has to be processed again afterwards
+    ChangeValue( m_eval.Result() );
+    m_eval.Process( aFormula );
+    m_needsEval = false;
+
+    return true;
+}
+
+
+void UNIT_BINDER::RestoreValue( int aValue, const wxString& aFormula )
+{
+    RestoreFormula( aFormula );
+    ChangeValue( aValue );
 }
 
 

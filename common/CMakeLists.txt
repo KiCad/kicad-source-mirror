@@ -280,6 +280,7 @@ set( KICOMMON_SRCS
     widgets/progress_reporter_base.cpp
     widgets/report_severity.cpp
     widgets/std_bitmap_button.cpp
+    widgets/text_ctrl_eval.cpp
     widgets/ui_common.cpp
     widgets/up_down_tree.cpp
     widgets/wx_collapsible_pane.cpp
@@ -710,7 +711,6 @@ set( COMMON_WIDGET_SRCS
     widgets/search_pane_tab.cpp
     widgets/split_button.cpp
     widgets/stepped_slider.cpp
-    widgets/text_ctrl_eval.cpp
     widgets/margin_offset_binder.cpp
     widgets/unit_binder.cpp
     widgets/widget_save_restore.cpp
