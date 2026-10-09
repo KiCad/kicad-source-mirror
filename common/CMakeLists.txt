@@ -680,6 +680,7 @@ set( COMMON_ABOUT_DLG_SRCS
 set( COMMON_GIT_DLG_SRCS
     dialogs/git/dialog_git_switch.cpp
     dialogs/git/dialog_mdw_design_release.cpp
+    dialogs/git/mdw_design_parts.cpp
     dialogs/git/dialog_mdw_change_orders.cpp
     dialogs/git/dialog_mdw_change_orders_base.cpp
     dialogs/git/dialog_git_credentials.cpp

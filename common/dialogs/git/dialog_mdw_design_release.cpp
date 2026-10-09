@@ -23,36 +23,25 @@
 
 #include "dialog_mdw_design_release.h"
 #include "git_status_entries.h"
+#include "mdw_design_parts.h"
 
 #include <bitmaps.h>
 #include <confirm.h>
 #include <dialogs/git/dialog_mdw_change_orders.h>
 #include <eda_base_frame.h>
-#include <gestfich.h>
-#include <kiface_services.h>
 #include <kiway.h>
-#include <lib_id.h>
 #include <mdw/client/mdw_client.h>
 #include <mdw/client/mdw_item.h>
 #include <mdw/client/mdw_lifecycle.h>
-#include <libraries/library_manager.h>
-#include <mdw/client/mdw_library_sources.h>
 #include <mdw/client/mdw_pending_changes.h>
 #include <mdw/client/mdw_source.h>
-#include <pgm_base.h>
 #include <project.h>
-#include <project/project_file.h>
 #include <scoped_set_reset.h>
 #include <string_utils.h>
 #include <widgets/git_commit_pane.h>
 #include <widgets/mdw_change_orders.h>
-#include <widgets/wx_progress_reporters.h>
-#include <wildcards_and_files_ext.h>
-
-#include <json_common.h>
 
 #include <wx/button.h>
-#include <wx/filename.h>
 #include <wx/hyperlink.h>
 #include <wx/listctrl.h>
 #include <wx/sizer.h>
@@ -64,9 +53,7 @@
 #include <wx/intl.h>
 
 #include <algorithm>
-#include <array>
 #include <numeric>
-#include <tuple>
 #include <utility>
 
 
@@ -96,149 +83,6 @@ enum ICON
     ICON_BLOCKING = 1
 };
 
-
-/// Add the parts placed in the saved document aFile, read by aFace's kiface; false when it does not load
-bool collect( KIWAY& aKiway, KIWAY::FACE_T aFace, const wxString& aFile, LIBRARY_TABLE_TYPE aType, PROJECT& aProject,
-              PROGRESS_REPORTER& aReporter, std::vector<MDW_PLACED_INPUT>& aInputs )
-{
-    const MDW_LIBRARY_SOURCES&                   sources = MDW_LIBRARY_SOURCES::Get();
-    const std::vector<MDW_LIBRARY_SOURCE_CONFIG> configured = sources.Sources();
-    const PROJECT_FILE&                          projectFile = aProject.GetProjectFile();
-
-    KIFACE_COLLECT_PLACED_PARTS_SERVICE::Type collector =
-            GetKifaceService<KIFACE_COLLECT_PLACED_PARTS_SERVICE>( aKiway.KiFACE( aFace ) );
-    std::optional<std::string> payload = collector ? collector( aFile, aProject, &aReporter ) : std::nullopt;
-
-    if( !payload )
-        return false;
-
-    nlohmann::json parts = nlohmann::json::parse( *payload, nullptr, false );
-
-    if( !parts.is_array() )
-        return false;
-
-    for( const nlohmann::json& entry : parts )
-    {
-        LIB_ID                      libId;
-        wxString                    libIdText = wxString::FromUTF8( entry.value( "lib_id", "" ) );
-        std::optional<MDW_ITEM_REF> member;
-        wxString                    pin;
-        MDW_TEAM_SOURCE             teamSource;
-
-        if( libId.Parse( libIdText ) < 0 )
-        {
-            std::optional<LIBRARY_TABLE_ROW*> row = Pgm().GetLibraryManager().GetRow( aType, libId.GetLibNickname() );
-
-            // A symbol and a footprint library may share a nickname, so the type picks the row
-            const MDW_LIBRARY_TYPE memberType =
-                    aType == LIBRARY_TABLE_TYPE::SYMBOL ? MDW_LIBRARY_TYPE::SYMBOL : MDW_LIBRARY_TYPE::FOOTPRINT;
-
-            // A project row shadows the global one, which is how a pinned copy wins
-            if( row )
-            {
-                const wxString path = LIBRARY_MANAGER::GetFullURI( *row, true );
-
-                member = sources.MemberForAt( memberType, ( *row )->Options(), path, libId.GetUniStringLibItemName() );
-
-                if( std::optional<MDW_LIBRARY_ROW> library = sources.ForRowAt( memberType, ( *row )->Options(), path );
-                    library && library->pinned )
-                {
-                    pin = library->snapshot.label;
-                }
-            }
-
-            // A shared project table can name a team source that is not set up here
-            if( !member )
-            {
-                std::optional<wxString> marker;
-
-                if( row && *row )
-                    marker = MDW_LIBRARY_SOURCES::MarkerOf( ( *row )->Options() );
-
-                teamSource = MDW_LIBRARY_SOURCES::TeamSourceOf( libId.GetUniStringLibNickname(), marker, configured,
-                                                                projectFile.m_WorkspaceLibrarySources );
-            }
-        }
-
-        // A power symbol is a net label, not a part, so it needs no release unless a library source owns it
-        if( !member && teamSource.name.IsEmpty() && entry.value( "power", false ) )
-            continue;
-
-        MDW_PLACED_INPUT& input = aInputs.emplace_back();
-        input.kind = aType == LIBRARY_TABLE_TYPE::SYMBOL ? MDW_PLACED_KIND::SYMBOL : MDW_PLACED_KIND::FOOTPRINT;
-        input.reference = wxString::FromUTF8( entry.value( "reference", "" ) );
-        input.lib_id = libIdText;
-        input.content_digest = wxString::FromUTF8( entry.value( "digest", "" ) );
-        input.member = member;
-        input.pin_label = pin;
-        input.team_source = teamSource.name;
-        input.team_locator = teamSource.locator;
-
-        if( const auto part = entry.find( "part" ); part != entry.end() && part->is_object() )
-        {
-            input.part.source = wxString::FromUTF8( part->value( "source", "" ) );
-            input.part.item_id = wxString::FromUTF8( part->value( "part_id", "" ) );
-            input.part_revision_id = wxString::FromUTF8( part->value( "revision_id", "" ) );
-        }
-    }
-
-    return true;
-}
-
-
-/// The project's schematic and board, whether or not they exist
-std::array<wxFileName, 2> designFiles( PROJECT& aProject )
-{
-    const wxString path = aProject.GetProjectPath();
-
-    return { wxFileName( path, aProject.GetProjectName(), FILEEXT::KiCadSchematicFileExtension ),
-             wxFileName( path, aProject.GetProjectName(), FILEEXT::KiCadPcbFileExtension ) };
-}
-
-
-/// When the schematic and board were last written, the minimum for one that does not exist
-std::vector<std::filesystem::file_time_type> designWriteTimes( PROJECT& aProject )
-{
-    std::vector<std::filesystem::file_time_type> times;
-
-    for( const wxFileName& file : designFiles( aProject ) )
-    {
-        std::error_code ec;
-        times.push_back( std::filesystem::last_write_time( ToFsPath( file.GetFullPath() ), ec ) );
-
-        if( ec )
-            times.back() = std::filesystem::file_time_type::min();
-    }
-
-    return times;
-}
-
-
-/// Collect the parts placed in the project's saved schematic and board; the reason when they cannot be read
-wxString collectPlacedParts( wxWindow* aParent, KIWAY& aKiway, PROJECT& aProject,
-                             std::vector<MDW_PLACED_INPUT>& aInputs )
-{
-    const auto [schematicFile, boardFile] = designFiles( aProject );
-
-    if( !schematicFile.FileExists() && !boardFile.FileExists() )
-        return _( "The design has no schematic or board to release." );
-
-    WX_PROGRESS_REPORTER reporter( aParent, _( "Read Design" ), 2, PR_NO_ABORT );
-    int                  phase = 0;
-
-    // Every part the design places must be checked, so a document that does not load stops the release
-    for( const auto& [face, file, type] : { std::tuple( KIWAY::FACE_SCH, schematicFile, LIBRARY_TABLE_TYPE::SYMBOL ),
-                                            std::tuple( KIWAY::FACE_PCB, boardFile, LIBRARY_TABLE_TYPE::FOOTPRINT ) } )
-    {
-        reporter.BeginPhase( phase++ );
-
-        if( file.FileExists() && !collect( aKiway, face, file.GetFullPath(), type, aProject, reporter, aInputs ) )
-            return wxString::Format( _( "Could not read %s." ), file.GetFullName() );
-    }
-
-    return wxEmptyString;
-}
-
 } // namespace
 
 
@@ -252,7 +96,7 @@ DIALOG_MDW_DESIGN_RELEASE::DIALOG_MDW_DESIGN_RELEASE( EDA_BASE_FRAME* aFrame, GI
         m_project( aProject ),
         m_source( std::move( aSource ) ),
         m_parts( MdwGroupPlacedParts( aInputs ) ),
-        m_savedAt( designWriteTimes( aProject ) ),
+        m_savedAt( MdwDesignWriteTimes( aProject ) ),
         m_pollTimer( this )
 {
     wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
@@ -1184,7 +1028,7 @@ void DIALOG_MDW_DESIGN_RELEASE::reloadParts()
     m_stale = false;
 
     std::vector<MDW_PLACED_INPUT>                      inputs;
-    const std::vector<std::filesystem::file_time_type> times = designWriteTimes( m_project );
+    const std::vector<std::filesystem::file_time_type> times = MdwDesignWriteTimes( m_project );
 
     // The list no longer matches the files, so nothing may be released from it until they are read
     m_checked = false;
@@ -1192,7 +1036,7 @@ void DIALOG_MDW_DESIGN_RELEASE::reloadParts()
     updateControls();
 
     // The saved files are what a release names, so the list follows them
-    if( wxString unread = collectPlacedParts( this, m_frame->Kiway(), m_project, inputs ); !unread.IsEmpty() )
+    if( wxString unread = MdwCollectPlacedParts( this, m_frame->Kiway(), m_project, inputs ); !unread.IsEmpty() )
     {
         m_failedAt = times;
         setLine( m_summary, unread );
@@ -1212,7 +1056,7 @@ void DIALOG_MDW_DESIGN_RELEASE::recheckIfChanged( bool aActivated )
     if( m_busy || m_committing || m_prompting || m_reading )
         return;
 
-    const std::vector<std::filesystem::file_time_type> times = designWriteTimes( m_project );
+    const std::vector<std::filesystem::file_time_type> times = MdwDesignWriteTimes( m_project );
 
     if( times != m_savedAt )
     {
@@ -1413,7 +1257,7 @@ void ShowDesignRelease( EDA_BASE_FRAME* aFrame, GIT_COMMIT_PANE* aPane )
 
     std::vector<MDW_PLACED_INPUT> inputs;
 
-    if( wxString unread = collectPlacedParts( aFrame, aFrame->Kiway(), project, inputs ); !unread.IsEmpty() )
+    if( wxString unread = MdwCollectPlacedParts( aFrame, aFrame->Kiway(), project, inputs ); !unread.IsEmpty() )
     {
         DisplayErrorMessage( aFrame, unread );
         return;

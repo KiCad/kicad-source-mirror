@@ -26,6 +26,7 @@
 #include <mdw/client/mdw_capabilities.h>
 #include <mdw/client/mdw_item.h>
 #include <mdw/client/mdw_lock.h>
+#include <mdw/mdw_claim_text.h>
 #include <widgets/mdw_member_index.h>
 
 #include <wx/datetime.h>
@@ -73,6 +74,9 @@ KICOMMON_API std::vector<WORKSPACE_DETAIL_ROW> WorkspaceMemberDetailRows( const 
                                                                           std::optional<bool> aModified,
                                                                           const wxDateTime&   aNow );
 
+/// The Where used value for a member the design places at aReferences
+KICOMMON_API wxString WorkspaceWhereUsedText( const std::vector<wxString>& aReferences );
+
 
 /// One command the Workspace page offers for the selected item
 struct WORKSPACE_ACTION
@@ -92,6 +96,9 @@ struct WORKSPACE_ACTION
     wxString label; ///< EDITING's and RELEASE_CLAIM's from MdwClaimActions, the others fixed
     bool     allowed = true;
     wxString reason; ///< Why not allowed, naming who holds the item or giving the source's refusal
+
+    /// The claim command behind EDITING and RELEASE_CLAIM, since Start and Stop Editing share one id
+    MDW_CLAIM_ACTION::KIND claim = MDW_CLAIM_ACTION::KIND::START;
 };
 
 

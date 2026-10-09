@@ -23,6 +23,7 @@
 #include <dialogs/git/git_advanced_dialog.h>
 #include <dialogs/git/git_status_entries.h>
 #include <dialogs/git/git_ui_utils.h>
+#include <dialogs/git/mdw_design_parts.h>
 #include <dialogs/git/panel_mdw_versions.h>
 #include <dialogs/git/workspace_detail.h>
 #include <dialogs/git/workspace_item_files.h>
@@ -65,6 +66,7 @@
 #include <wx/menu.h>
 #include <wx/filefn.h>
 #include <wx/filename.h>
+#include <wx/hyperlink.h>
 #include <wx/textdlg.h>
 #include <wx/weakref.h>
 #include <wx/datetime.h>
@@ -636,9 +638,17 @@ void PANEL_GIT_WORKSPACE::refreshTeamLibraries()
 {
     m_teamLibraries.clear();
 
-    if( !MDW_LIBRARY_SOURCES::TeamLibrariesEnabled() )
-        return;
+    if( MDW_LIBRARY_SOURCES::TeamLibrariesEnabled() )
+        findTeamLibraries();
 
+    // The member was listed under the old binding, and its actions would pair it with the new source
+    if( m_member && memberTarget( *m_member ) != m_memberTarget )
+        hideDetail();
+}
+
+
+void PANEL_GIT_WORKSPACE::findTeamLibraries()
+{
     // Before the first row binds, so a source that connects later still brings its libraries in
     if( !m_memberListener )
     {
@@ -862,7 +872,9 @@ void PANEL_GIT_WORKSPACE::fillTree( bool aRefreshDetail )
     {
         auto shown = m_shownMembers.find( selected->key );
 
-        if( aRefreshDetail || !m_member || selected->key != m_selected || shown == m_shownMembers.end() )
+        // A rebind or relist can keep the member's name while changing its source, id, revision or capabilities
+        if( aRefreshDetail || !m_member || selected->key != m_selected || shown == m_shownMembers.end()
+            || memberTarget( shown->second ) != m_memberTarget )
         {
             showMemberDetail( *selected );
         }
@@ -1057,6 +1069,7 @@ void PANEL_GIT_WORKSPACE::showDetail( const MDW_ITEM_INFO& aItem )
     m_selected = aItem.item_id;
     m_selectedItem = aItem;
     m_member.reset();
+    m_memberTarget.reset();
     m_itemTitle->SetLabel( aItem.display_name );
 
     readTransitions();
@@ -1104,13 +1117,16 @@ void PANEL_GIT_WORKSPACE::showMemberDetail( const WORKSPACE_TREE_NODE& aNode )
         return;
     }
 
-    // Another part's states would be offered as this one's until the read lands
-    if( aNode.key != m_selected )
+    std::optional<MEMBER_TARGET> target = memberTarget( shown->second );
+
+    // Another part's states, or this one's from another source or revision, would be offered until the read lands
+    if( aNode.key != m_selected || target != m_memberTarget )
         m_transitions.clear();
 
     m_selected = aNode.key;
     m_selectedItem = MDW_ITEM_INFO();
     m_member = shown->second;
+    m_memberTarget = target;
     m_itemTitle->SetLabel( aNode.name );
 
     readTransitions();
@@ -1158,6 +1174,35 @@ const PANEL_GIT_WORKSPACE::TEAM_LIBRARY* PANEL_GIT_WORKSPACE::memberLibrary() co
 }
 
 
+std::optional<PANEL_GIT_WORKSPACE::MEMBER_TARGET> PANEL_GIT_WORKSPACE::memberTarget( const SHOWN_MEMBER& aMember ) const
+{
+    const TEAM_LIBRARY* lib = teamLibrary( aMember.library );
+
+    if( !lib )
+        return std::nullopt;
+
+    const MDW_LIBRARY_MEMBER& member = aMember.entry.member;
+    MEMBER_TARGET             target;
+
+    // A floating and a pinned copy can hold the same snapshot, so the copy and its file tell them apart
+    target.source = lib->binding.source;
+    target.libraryId = lib->binding.library_id;
+    target.snapshot = lib->binding.snapshot;
+    target.localRoot = lib->binding.local_root;
+    target.file = MdwTeamPartFile( lib->type, lib->path, member.name, &member );
+    target.memberId = member.member_id;
+    target.revisionId = member.revision_id;
+    target.caps = lib->caps.groups;
+    return target;
+}
+
+
+std::optional<PANEL_GIT_WORKSPACE::MEMBER_TARGET> PANEL_GIT_WORKSPACE::shownMemberTarget() const
+{
+    return m_member ? memberTarget( *m_member ) : std::nullopt;
+}
+
+
 std::shared_ptr<MDW_SOURCE> PANEL_GIT_WORKSPACE::selectedSource() const
 {
     if( m_member )
@@ -1199,6 +1244,80 @@ wxString PANEL_GIT_WORKSPACE::memberFile() const
     const MDW_LIBRARY_MEMBER& member = m_member->entry.member;
 
     return MdwTeamPartFile( lib->type, lib->path, member.name, &member );
+}
+
+
+bool PANEL_GIT_WORKSPACE::canReadDesign() const
+{
+    if( !m_frame->HasKiway() || m_frame->Prj().IsNullProject() )
+        return false;
+
+    return std::ranges::any_of( MdwDesignWriteTimes( m_frame->Prj() ),
+                                []( const std::filesystem::file_time_type& aTime )
+                                {
+                                    return aTime != std::filesystem::file_time_type::min();
+                                } );
+}
+
+
+bool PANEL_GIT_WORKSPACE::designPartsCurrent() const
+{
+    PROJECT& project = m_frame->Prj();
+
+    // A save since the read may have placed or removed parts
+    return m_designParts && m_designParts->project == project.GetProjectFullName()
+           && m_designParts->savedAt == MdwDesignWriteTimes( project );
+}
+
+
+wxString PANEL_GIT_WORKSPACE::whereUsedText() const
+{
+    if( !designPartsCurrent() )
+        return wxString();
+
+    if( !m_designParts->unread.IsEmpty() )
+        return m_designParts->unread;
+
+    return WorkspaceWhereUsedText( MdwWhereUsed( m_designParts->inputs, selectedRef() ) );
+}
+
+
+void PANEL_GIT_WORKSPACE::findWhereUsed()
+{
+    // The progress window runs events, so a second click must not start a read under the first
+    if( m_readingDesign || !memberLibrary() || !canReadDesign() )
+        return;
+
+    // Read every time, since saving only a child sheet leaves the root files' times unchanged
+    PROJECT& project = m_frame->Prj();
+
+    // Times taken first, so a save during the read leaves the result stale rather than current
+    DESIGN_PARTS                       parts{ project.GetProjectFullName(), MdwDesignWriteTimes( project ), {}, {} };
+    std::weak_ptr<PANEL_GIT_WORKSPACE> alive = m_lifetime;
+
+    m_readingDesign = true;
+
+    try
+    {
+        // Not on a worker, since the schematic read borrows the live PROJECT's settings an open editor uses
+        parts.unread = MdwCollectPlacedParts( this, m_frame->Kiway(), project, parts.inputs );
+    }
+    catch( ... )
+    {
+        // A stuck flag would disable Find for good, but a page closed under the read is gone
+        if( !alive.expired() )
+            m_readingDesign = false;
+
+        throw;
+    }
+
+    // Closing the project under the progress window takes this page with it
+    if( alive.expired() )
+        return;
+
+    m_readingDesign = false;
+    m_designParts = std::move( parts );
+    showState();
 }
 
 
@@ -1315,6 +1434,38 @@ void PANEL_GIT_WORKSPACE::showState()
         m_detailRows->Add( new wxStaticText( m_itemDetail, wxID_ANY, row.value ), 0, wxEXPAND );
     }
 
+    // The design loads through the editors' kifaces, too slow for every selection, so only Find reads it
+    if( memberLibrary() && canReadDesign() )
+    {
+        const wxString whereUsed = whereUsedText();
+        wxBoxSizer*    cell = new wxBoxSizer( wxHORIZONTAL );
+        wxStaticText*  value = new wxStaticText( m_itemDetail, wxID_ANY, whereUsed, wxDefaultPosition, wxDefaultSize,
+                                                 wxST_ELLIPSIZE_END );
+
+        // A part placed hundreds of times must not widen the pane, so the tip carries the whole list
+        value->SetMinSize( wxSize( FromDIP( 40 ), -1 ) );
+        value->SetToolTip( whereUsed );
+        cell->Add( value, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT, FromDIP( 8 ) );
+
+        wxHyperlinkCtrl* find = new wxHyperlinkCtrl( m_itemDetail, wxID_ANY, _( "Find" ), wxEmptyString,
+                                                     wxDefaultPosition, wxDefaultSize, wxHL_ALIGN_RIGHT | wxNO_BORDER );
+
+        // The read rebuilds these rows, which must not delete the link inside its own click
+        find->Bind( wxEVT_HYPERLINK,
+                    [this]( wxHyperlinkEvent& )
+                    {
+                        CallAfter(
+                                [this]()
+                                {
+                                    findWhereUsed();
+                                } );
+                    } );
+        cell->Add( find, 0, wxALIGN_CENTER_VERTICAL );
+
+        m_detailRows->Add( new wxStaticText( m_itemDetail, wxID_ANY, _( "Where used" ) ), 0, wxALIGN_TOP );
+        m_detailRows->Add( cell, 0, wxEXPAND );
+    }
+
     showActions( itemActions() );
 
     m_itemDetail->Layout();
@@ -1395,7 +1546,7 @@ void PANEL_GIT_WORKSPACE::showActions( const std::vector<WORKSPACE_ACTION>& aAct
     bool same = std::ranges::equal( aActions, m_actionButtons,
                                     []( const WORKSPACE_ACTION& aAction, const auto& aButton )
                                     {
-                                        return aAction.id == aButton.first;
+                                        return aAction.id == aButton.first.id;
                                     } );
 
     if( !same )
@@ -1410,17 +1561,23 @@ void PANEL_GIT_WORKSPACE::showActions( const std::vector<WORKSPACE_ACTION>& aAct
 
             // Deferred, since an action can refresh the detail and delete this button inside its own click
             button->Bind( wxEVT_BUTTON,
-                          [this, id = action.id]( wxCommandEvent& )
+                          [this, button]( wxCommandEvent& )
                           {
+                              auto shown = std::ranges::find( m_actionButtons, button,
+                                                              &std::pair<WORKSPACE_ACTION, wxButton*>::second );
+
+                              if( shown == m_actionButtons.end() )
+                                  return;
+
                               CallAfter(
-                                      [this, id]()
+                                      [this, request = actionRequest( shown->first )]()
                                       {
-                                          runAction( id );
+                                          runAction( request );
                                       } );
                           } );
 
             m_actionSizer->Add( button, 0, wxLEFT, FromDIP( 4 ) );
-            m_actionButtons.emplace_back( action.id, button );
+            m_actionButtons.emplace_back( action, button );
         }
     }
 
@@ -1433,6 +1590,7 @@ void PANEL_GIT_WORKSPACE::showActions( const std::vector<WORKSPACE_ACTION>& aAct
         if( tip.IsEmpty() && action.id == WORKSPACE_ACTION::ID::EDITING )
             tip = _( "Signals editing intent to teammates; others can still edit." );
 
+        m_actionButtons[ii].first = action;
         button->SetLabel( action.label );
         button->Enable( action.allowed );
         button->SetToolTip( tip );
@@ -1472,7 +1630,9 @@ void PANEL_GIT_WORKSPACE::onContextMenu( wxDataViewEvent& aEvent )
     if( actions.empty() )
         return;
 
-    wxMenu menu;
+    wxWeakRef<PANEL_GIT_WORKSPACE> self( this );
+    std::vector<ACTION_REQUEST>    requests;
+    wxMenu                         menu;
 
     for( size_t ii = 0; ii < actions.size(); ++ii )
     {
@@ -1490,23 +1650,50 @@ void PANEL_GIT_WORKSPACE::onContextMenu( wxDataViewEvent& aEvent )
         }
 
         menu.Append( wxID_HIGHEST + 1 + static_cast<int>( ii ), text, action.reason )->Enable( action.allowed );
+        requests.push_back( actionRequest( action ) );
     }
 
     int chosen = GetPopupMenuSelectionFromUser( menu ) - wxID_HIGHEST - 1;
 
-    if( chosen >= 0 && chosen < static_cast<int>( actions.size() ) )
-        runAction( actions[chosen].id );
+    if( self && chosen >= 0 && chosen < static_cast<int>( requests.size() ) )
+        runAction( requests[chosen] );
 }
 
 
-void PANEL_GIT_WORKSPACE::runAction( WORKSPACE_ACTION::ID aId )
+PANEL_GIT_WORKSPACE::ACTION_REQUEST PANEL_GIT_WORKSPACE::actionRequest( const WORKSPACE_ACTION& aAction ) const
+{
+    return ACTION_REQUEST{ selectedSource(),    m_selected,           aAction.id,        aAction.claim,
+                           shownMemberTarget(), selectedRef().item_id, selectedRevision() };
+}
+
+
+void PANEL_GIT_WORKSPACE::runAction( const ACTION_REQUEST& aRequest )
 {
     using ID = WORKSPACE_ACTION::ID;
 
-    switch( aId )
+    // The selection, its source or the item's claim may have changed while the menu was up or the click waited.
+    // A member's key survives its library being bound to another, so its binding is compared too
+    if( aRequest.selected != m_selected || aRequest.source.lock() != selectedSource()
+        || aRequest.member != shownMemberTarget() || aRequest.itemId != selectedRef().item_id
+        || aRequest.revisionId != selectedRevision() )
+    {
+        return;
+    }
+
+    bool offered = std::ranges::any_of( itemActions(),
+                                        [&]( const WORKSPACE_ACTION& aAction )
+                                        {
+                                            return aAction.id == aRequest.id && aAction.claim == aRequest.claim
+                                                   && aAction.allowed;
+                                        } );
+
+    if( !offered )
+        return;
+
+    switch( aRequest.id )
     {
     case ID::OPEN: onOpen(); break;
-    case ID::EDITING: onEditing(); break;
+    case ID::EDITING: onEditing( aRequest.claim == MDW_CLAIM_ACTION::KIND::START ); break;
     case ID::RELEASE_CLAIM: onReleaseClaim(); break;
     case ID::CHECK_OUT: onCheckOut(); break;
     case ID::CHECK_IN: onCheckIn(); break;
@@ -1597,6 +1784,7 @@ void PANEL_GIT_WORKSPACE::hideDetail()
     m_selected.clear();
     m_selectedItem = MDW_ITEM_INFO();
     m_member.reset();
+    m_memberTarget.reset();
     m_transitionsOp = MDW_OP();
     m_transitionsReading = false;
     m_transitions.clear();
@@ -1613,20 +1801,15 @@ void PANEL_GIT_WORKSPACE::hideDetail()
 }
 
 
-void PANEL_GIT_WORKSPACE::onEditing()
+void PANEL_GIT_WORKSPACE::onEditing( bool aStart )
 {
-    std::shared_ptr<MDW_SESSION> current = session();
-
-    if( !current || m_selected.IsEmpty() )
+    if( !session() || m_selected.IsEmpty() )
         return;
-
-    MDW_LOCK_INFO lock = current->LockTracker().Get( m_selected );
 
     MDW_ITEM_REF item;
     item.item_id = m_selected;
 
-    MdwSetEditing( this, MDW_CLIENT::Get().ProjectSource(), item, !( lock.is_locked && lock.locked_by_me ), false,
-                   wxEmptyString,
+    MdwSetEditing( this, MDW_CLIENT::Get().ProjectSource(), item, aStart, false, wxEmptyString,
                    [this]()
                    {
                        fillTree();
@@ -1668,6 +1851,7 @@ void PANEL_GIT_WORKSPACE::onChangeState()
     const wxString                                           itemId = m_selected;
     const MDW_ITEM_REF                                       item = selectedRef();
     const wxString                                           revisionId = selectedRevision();
+    const std::optional<MEMBER_TARGET>                       shown = shownMemberTarget();
     const bool                                               member = m_member.has_value();
     const wxString name = member ? m_member->entry.member.name : m_selectedItem.display_name;
     const std::vector<kiapi::workspace::LifecycleTransition> transitions = m_transitions;
@@ -1696,11 +1880,25 @@ void PANEL_GIT_WORKSPACE::onChangeState()
     if( !self || IsBeingDeleted() || !comment )
         return;
 
-    // A read started while the questions were up can still deny the change
-    if( itemId == m_selected && m_transitionPermission.state() == kiapi::workspace::PS_DENIED )
+    // The questions were modal, so the selection may have moved to another part or revision under them
+    if( itemId != m_selected || source != selectedSource() || shown != shownMemberTarget()
+        || item.item_id != selectedRef().item_id || revisionId != selectedRevision() )
     {
-        MdwReportFailure( this, wxString::Format( _( "Could not change the state of %s." ), name ),
-                          wxString::FromUTF8( m_transitionPermission.reason() ) );
+        return;
+    }
+
+    const wxString failed = wxString::Format( _( "Could not change the state of %s." ), name );
+
+    // A read started while the questions were up can still deny the change
+    if( m_permissionsReading )
+    {
+        MdwReportFailure( this, failed, _( "Its permission is still being read. Try again in a moment." ) );
+        return;
+    }
+
+    if( m_transitionPermission.state() == kiapi::workspace::PS_DENIED )
+    {
+        MdwReportFailure( this, failed, wxString::FromUTF8( m_transitionPermission.reason() ) );
         return;
     }
 

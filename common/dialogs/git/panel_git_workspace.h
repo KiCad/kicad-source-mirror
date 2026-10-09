@@ -25,6 +25,7 @@
 #include <dialogs/git/workspace_detail.h>
 #include <dialogs/git/workspace_search_query.h>
 #include <dialogs/git/workspace_tree_model.h>
+#include <mdw/client/mdw_baseline_design.h>
 #include <mdw/client/mdw_capabilities.h>
 #include <mdw/client/mdw_library.h>
 #include <mdw/client/mdw_navigation.h>
@@ -36,6 +37,7 @@
 
 #include <atomic>
 #include <cstdint>
+#include <filesystem>
 #include <map>
 #include <memory>
 #include <optional>
@@ -88,10 +90,56 @@ private:
         MDW_MEMBER_ENTRY entry;
     };
 
+    /// The source and listing a member's detail and actions were built from
+    struct MEMBER_TARGET
+    {
+        std::weak_ptr<MDW_SOURCE>      source;
+        wxString                       libraryId;
+        wxString                       snapshot;
+        wxString                       localRoot; ///< The copy the member is read from
+        wxString                       file;      ///< The member's file in that copy
+        wxString                       memberId;
+        wxString                       revisionId;
+        std::set<MDW_CAPABILITY_GROUP> caps;
+
+        bool operator==( const MEMBER_TARGET& aOther ) const
+        {
+            // Owner equality, so a source freed and another made at its address still differ
+            return !source.owner_before( aOther.source ) && !aOther.source.owner_before( source )
+                   && libraryId == aOther.libraryId && snapshot == aOther.snapshot && localRoot == aOther.localRoot
+                   && file == aOther.file && memberId == aOther.memberId && revisionId == aOther.revisionId
+                   && caps == aOther.caps;
+        }
+    };
+
+    /// An action as it was offered and the selection it was offered for, checked again before it runs
+    struct ACTION_REQUEST
+    {
+        std::weak_ptr<MDW_SOURCE>    source;
+        wxString                     selected;
+        WORKSPACE_ACTION::ID         id = WORKSPACE_ACTION::ID::OPEN;
+        MDW_CLAIM_ACTION::KIND       claim = MDW_CLAIM_ACTION::KIND::START;
+        std::optional<MEMBER_TARGET> member;     ///< The shown member's binding, as it resolves now
+        wxString                     itemId;     ///< What the source names the selection
+        wxString                     revisionId; ///< The revision the action names
+    };
+
+    /// The parts the saved design placed when Find last read it, shown until Find or a save of its root files
+    struct DESIGN_PARTS
+    {
+        wxString                                     project; ///< The project's full name
+        std::vector<std::filesystem::file_time_type> savedAt; ///< MdwDesignWriteTimes() before the read
+        std::vector<MDW_PLACED_INPUT>                inputs;
+        wxString                                     unread; ///< Why the design could not be read, or empty
+    };
+
     std::shared_ptr<MDW_SESSION> session() const;
 
     /// Find the project's team libraries again, as after a source connects or the tables change.
     void refreshTeamLibraries();
+
+    /// Append the team libraries of the project's library tables to m_teamLibraries.
+    void findTeamLibraries();
 
     /// Start listing the library under aKey once it is expanded; the tree fills when the listing lands.
     void listLibrary( const wxString& aKey );
@@ -119,8 +167,26 @@ private:
     /// The library of the member in the detail pane, or null for none.
     const TEAM_LIBRARY* memberLibrary() const;
 
+    /// aMember as its library binds it now, or nothing once the library is gone.
+    std::optional<MEMBER_TARGET> memberTarget( const SHOWN_MEMBER& aMember ) const;
+
+    /// The shown member's target as its library resolves now, or nothing for a design item.
+    std::optional<MEMBER_TARGET> shownMemberTarget() const;
+
     /// The file the selected member is saved in, as its editor resolves it.
     wxString memberFile() const;
+
+    /// True when a project with a schematic or board is open and the host can load them through the kifaces.
+    bool canReadDesign() const;
+
+    /// True when m_designParts was read from the project's design files as they are now.
+    bool designPartsCurrent() const;
+
+    /// The Where used value for the selected member, empty until the design's current files are read.
+    wxString whereUsedText() const;
+
+    /// Read which parts the saved design places, every sheet of it again.
+    void findWhereUsed();
 
     /// The folder path shown for aItem.
     wxString folderText( const MDW_ITEM_INFO& aItem ) const;
@@ -188,7 +254,11 @@ private:
     /// Offer the actions of the item under the pointer, which becomes the selected one.
     void onContextMenu( wxDataViewEvent& aEvent );
 
-    void runAction( WORKSPACE_ACTION::ID aId );
+    /// aAction as offered for the selection now, to run after the click or menu that chose it.
+    ACTION_REQUEST actionRequest( const WORKSPACE_ACTION& aAction ) const;
+
+    /// Run aRequest unless the selection, its source or the command offered for it has changed since.
+    void runAction( const ACTION_REQUEST& aRequest );
 
     /// Read the lifecycle states the selected item can move to, and its permission to move, when the source has
     /// lifecycles.
@@ -213,7 +283,8 @@ private:
     /// What the Editing column says of aLock.
     static wxString lockText( const MDW_LOCK_INFO& aLock );
 
-    void onEditing();
+    /// Take the claim on the selected item with aStart, or give up our own.
+    void onEditing( bool aStart );
 
     /// Remove another user's claim on the selected item, after asking for the reason they are told.
     void onReleaseClaim();
@@ -266,8 +337,11 @@ private:
     std::set<wxString>                          m_librariesListed; ///< Keys of libraries expanded, so listed
     std::map<wxString, SHOWN_MEMBER>            m_shownMembers;    ///< By tree key
     std::optional<SHOWN_MEMBER>                 m_member;          ///< The member in the detail pane
+    std::optional<MEMBER_TARGET>                m_memberTarget;    ///< What m_member's detail was built from
     std::shared_ptr<MDW_MEMBER_INDEX::LISTENER> m_memberListener;
     bool                                        m_fillQueued = false;
+    std::optional<DESIGN_PARTS>                 m_designParts;
+    bool                                        m_readingDesign = false; ///< findWhereUsed() runs
 
     /// Set once the listing read still out is no longer wanted, which stops its walk
     std::shared_ptr<std::atomic<bool>> m_listCancel;
@@ -298,7 +372,7 @@ private:
     MDW_OP                                             m_permissionsOp;
     bool                                               m_permissionsReading = false; ///< m_permissionsOp runs
 
-    std::vector<std::pair<WORKSPACE_ACTION::ID, wxButton*>> m_actionButtons;
+    std::vector<std::pair<WORKSPACE_ACTION, wxButton*>> m_actionButtons; ///< Each button and the action it shows
 
     MDW_SUBSCRIPTION           m_connections;   ///< Greys the rows offline and reads them again once online
     MDW_SUBSCRIPTION           m_events;        ///< Follows lock and capability changes after the listing

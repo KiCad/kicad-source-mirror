@@ -20,6 +20,7 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <dialogs/git/mdw_design_parts.h>
 #include <dialogs/git/workspace_detail.h>
 
 #include <mdw/client/mdw_baseline_design.h>
@@ -329,6 +330,33 @@ BOOST_AUTO_TEST_CASE( ClaimedByOtherFollowsClaimActions )
 }
 
 
+// Start and Stop Editing share one id, so the page tells them apart by the claim command each carries
+BOOST_AUTO_TEST_CASE( EditingCarriesItsClaimCommand )
+{
+    using KIND = MDW_CLAIM_ACTION::KIND;
+
+    WORKSPACE_ACTION_FACTS        facts = gitDesignFile();
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+
+    BOOST_REQUIRE( action( actions, ID::EDITING ) );
+    BOOST_CHECK( action( actions, ID::EDITING )->claim == KIND::START );
+
+    facts.lock.is_locked = true;
+    facts.lock.locked_by_me = true;
+    facts.lock.advisory = true;
+    actions = WorkspaceItemActions( facts );
+
+    BOOST_REQUIRE( action( actions, ID::EDITING ) );
+    BOOST_CHECK( action( actions, ID::EDITING )->claim == KIND::STOP );
+
+    facts.lock = heldByOther();
+    actions = WorkspaceItemActions( facts );
+
+    BOOST_REQUIRE( action( actions, ID::RELEASE_CLAIM ) );
+    BOOST_CHECK( action( actions, ID::RELEASE_CLAIM )->claim == KIND::RELEASE );
+}
+
+
 BOOST_AUTO_TEST_CASE( BlockedCheckOutAndInSayWhoHoldsTheItem )
 {
     WORKSPACE_ACTION_FACTS facts;
@@ -512,6 +540,65 @@ BOOST_AUTO_TEST_CASE( MissingFileOffersNoOpen )
     BOOST_CHECK( !action( actions, ID::OPEN ) );
     BOOST_CHECK( !action( actions, ID::SHOW_IN_FOLDER ) );
     BOOST_CHECK( action( actions, ID::EDITING ) );
+}
+
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+namespace
+{
+MDW_PLACED_INPUT placed( MDW_PLACED_KIND aKind, const wxString& aReference, std::optional<MDW_ITEM_REF> aMember )
+{
+    MDW_PLACED_INPUT input;
+    input.kind = aKind;
+    input.reference = aReference;
+    input.member = std::move( aMember );
+    return input;
+}
+} // namespace
+
+
+BOOST_AUTO_TEST_SUITE( WorkspaceWhereUsed )
+
+
+BOOST_AUTO_TEST_CASE( WhereUsedListsEachReferenceOnce )
+{
+    using enum MDW_PLACED_KIND;
+
+    const MDW_ITEM_REF member{ wxS( "m-1" ), wxString(), wxS( "https://parts.example/team" ) };
+    const MDW_ITEM_REF other{ wxS( "m-2" ), wxString(), wxS( "https://parts.example/team" ) };
+
+    // Item ids are only unique within a source
+    const MDW_ITEM_REF elsewhere{ wxS( "m-1" ), wxString(), wxS( "https://other.example/team" ) };
+
+    std::vector<MDW_PLACED_INPUT> inputs = { placed( SYMBOL, wxS( "U7" ), member ),
+                                             placed( SYMBOL, wxS( "U12" ), member ),
+                                             placed( SYMBOL, wxS( "U3" ), member ),
+                                             placed( SYMBOL, wxS( "u3" ), member ),
+                                             placed( FOOTPRINT, wxS( "U3" ), member ),
+                                             placed( SYMBOL, wxS( "R1" ), other ),
+                                             placed( SYMBOL, wxS( "U9" ), elsewhere ) };
+
+    const std::vector<wxString> used = MdwWhereUsed( inputs, member );
+
+    // Numbered as a schematic sorts them, so U12 follows U7, and a case-only twin stays a separate reference
+    BOOST_CHECK( used == std::vector<wxString>( { wxS( "U3" ), wxS( "u3" ), wxS( "U7" ), wxS( "U12" ) } ) );
+    BOOST_CHECK_EQUAL( WorkspaceWhereUsedText( used ), wxS( "U3, u3, U7, U12" ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( WhereUsedIgnoresUnownedParts )
+{
+    const MDW_ITEM_REF member{ wxS( "m-1" ), wxString(), wxS( "https://parts.example/team" ) };
+    const MDW_ITEM_REF unplaced{ wxS( "m-2" ), wxString(), wxS( "https://parts.example/team" ) };
+
+    std::vector<MDW_PLACED_INPUT> inputs = { placed( MDW_PLACED_KIND::SYMBOL, wxS( "U1" ), std::nullopt ),
+                                             placed( MDW_PLACED_KIND::SYMBOL, wxS( "R5" ), member ),
+                                             placed( MDW_PLACED_KIND::FOOTPRINT, wxS( "U1" ), std::nullopt ) };
+
+    BOOST_CHECK( MdwWhereUsed( inputs, member ) == std::vector<wxString>( { wxS( "R5" ) } ) );
+    BOOST_CHECK_EQUAL( WorkspaceWhereUsedText( MdwWhereUsed( inputs, unplaced ) ), _( "Not placed in this design" ) );
 }
 
 

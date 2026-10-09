@@ -120,6 +120,20 @@ std::vector<WORKSPACE_DETAIL_ROW> WorkspaceMemberDetailRows( const MDW_CAPABILIT
 }
 
 
+wxString WorkspaceWhereUsedText( const std::vector<wxString>& aReferences )
+{
+    if( aReferences.empty() )
+        return _( "Not placed in this design" );
+
+    wxString text = aReferences.front();
+
+    for( size_t ii = 1; ii < aReferences.size(); ++ii )
+        text << wxS( ", " ) << aReferences[ii];
+
+    return text;
+}
+
+
 std::vector<WORKSPACE_ACTION> WorkspaceItemActions( const WORKSPACE_ACTION_FACTS& aFacts )
 {
     using ID = WORKSPACE_ACTION::ID;
@@ -146,7 +160,8 @@ std::vector<WORKSPACE_ACTION> WorkspaceItemActions( const WORKSPACE_ACTION_FACTS
                 {
                     ID id = claim.kind == MDW_CLAIM_ACTION::KIND::RELEASE ? ID::RELEASE_CLAIM : ID::EDITING;
 
-                    actions.push_back( { id, claim.label, claim.enabled, claim.enabled ? wxString() : heldBy } );
+                    actions.push_back(
+                            { id, claim.label, claim.enabled, claim.enabled ? wxString() : heldBy, claim.kind } );
                 }
             }
         }
