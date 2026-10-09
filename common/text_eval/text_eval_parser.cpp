@@ -926,13 +926,13 @@ RESULT<VALUE> EVAL_VISITOR::evaluateFunction( const FUNC_DATA& aFunc ) const
     {
         // Use wxString case conversion, which handles all UTF-8, including multi-byte chars
         wxString str = From_UTF8( VALUE_UTILS::ToString( argValues[0] ) );
-        return MakeValue<VALUE>( str.Upper().ToStdString() );
+        return MakeValue<VALUE>( str.Upper().ToUTF8().data() );
     }
     else if( name == "lower" && argc == 1 )
     {
         // Use wxString case conversion, which handles all UTF-8, including multi-byte chars
         wxString str = From_UTF8( VALUE_UTILS::ToString( argValues[0] ) );
-        return MakeValue<VALUE>( str.Lower().ToStdString() );
+        return MakeValue<VALUE>( str.Lower().ToUTF8().data() );
     }
     else if( name == "concat" && argc >= 2 )
     {
