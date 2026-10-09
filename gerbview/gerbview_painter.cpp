@@ -327,7 +327,8 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
             // We use the fastest CacheTriangulation calculation mode: no partition created because
             // the partition is useless in Gerbview, and very time consumming (optimized only
             // for pcbnew that has different internal unit)
-            if( m_gal->IsOpenGlEngine() && !aItem->m_AbsolutePolygon.IsTriangulationUpToDate() )
+            if( m_gal->UsesPolygonTriangulationCache()
+                && !aItem->m_AbsolutePolygon.IsTriangulationUpToDate() )
                 aItem->m_AbsolutePolygon.CacheTriangulation( false /* fastest triangulation calculation mode */ );
 
             m_gal->DrawPolygon( aItem->m_AbsolutePolygon );

@@ -2844,7 +2844,8 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                         // triangles as primitives. CacheTriangulation() can create basic triangle
                         // primitives to draw the polygon solid shape on Opengl.  GLU tessellation
                         // is much slower, so currently we are using our tessellation.
-                        if( m_gal->IsOpenGlEngine() && !shape.IsTriangulationUpToDate() )
+                        if( m_gal->UsesPolygonTriangulationCache()
+                            && !shape.IsTriangulationUpToDate() )
                             shape.CacheTriangulation( true );
 
                         m_gal->DrawPolygon( shape );
@@ -3654,7 +3655,7 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
         // as primitives. CacheTriangulation() can create basic triangle primitives to
         // draw the polygon solid shape on Opengl.  GLU tessellation is much slower,
         // so currently we are using our tessellation.
-        if( m_gal->IsOpenGlEngine() && !polySet->IsTriangulationUpToDate() )
+        if( m_gal->UsesPolygonTriangulationCache() && !polySet->IsTriangulationUpToDate() )
             polySet->CacheTriangulation( true );
 
         m_gal->DrawPolygon( *polySet, displayMode == ZONE_DISPLAY_MODE::SHOW_TRIANGULATION );

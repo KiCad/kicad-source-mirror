@@ -141,6 +141,12 @@ public:
     /// Return true if the GAL engine is a OpenGL based type.
     virtual bool IsOpenGlEngine() { return false; }
 
+    /**
+     * Return true if filled polygons are drawn from the SHAPE_POLY_SET triangulation cache, which painters
+     * should then fill before calling DrawPolygon.
+     */
+    virtual bool UsesPolygonTriangulationCache() const { return false; }
+
     // ---------------
     // Drawing methods
     // ---------------

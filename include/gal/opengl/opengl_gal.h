@@ -99,6 +99,8 @@ public:
 
     bool IsOpenGlEngine() override { return true; }
 
+    bool UsesPolygonTriangulationCache() const override { return true; }
+
     /// @copydoc GAL::IsInitialized()
     bool IsInitialized() const override
     {
