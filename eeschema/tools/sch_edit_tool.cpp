@@ -2358,9 +2358,19 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
         }
 
         if( restore_state )
+        {
+            // If the parent group is in this checkpoint window then we don't really need this.  But if
+            // the parent was added in a previous checkpoint window then we're not going to roll it back
+            // with RevertToCheckpoint().
+            if( SCH_GROUP* enteredGroup = selectionTool->GetEnteredGroup() )
+                enteredGroup->RemoveItem( newItem );
+
             commit.RevertToCheckpoint( commitCheckpoint );
+        }
         else
+        {
             newItems.Add( newItem );
+        }
     }
 
     if( !newItems.Empty() )
