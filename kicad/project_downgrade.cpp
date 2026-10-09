@@ -23,7 +23,7 @@
 #include <system_error>
 #include <utility>
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <wx/dir.h>
 #include <wx/ffile.h>

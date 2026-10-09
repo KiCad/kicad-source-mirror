@@ -21,7 +21,7 @@
 #include "cli/exit_codes.h"
 #include "../project_downgrade.h"
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <filesystem>
 #include <kiplatform/io.h>
 #include <downgrade_scan.h>
