@@ -398,16 +398,6 @@ void SVG_PLOTTER::SetDash( int aLineWidth, LINE_STYLE aLineStyle )
 void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width,
                         int aCornerRadius )
 {
-    if( aCornerRadius > 0 )
-    {
-        BOX2I box( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
-        box.Normalize();
-        SHAPE_RECT rect( box );
-        rect.SetRadius( aCornerRadius );
-        PLOTTER::PlotPoly( rect.Outline(), fill, width, nullptr );
-        return;
-    }
-
     BOX2I rect( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
     rect.Normalize();
 
@@ -437,6 +427,14 @@ void SVG_PLOTTER::Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int
                     rect_dev.GetPosition().y, m_precision,
                     rect_dev.GetEnd().x, m_precision,
                     rect_dev.GetEnd().y, m_precision );
+    }
+    else if( aCornerRadius > 0 )
+    {
+        BOX2I box( p1, VECTOR2I( p2.x - p1.x, p2.y - p1.y ) );
+        box.Normalize();
+        SHAPE_RECT roundedRect( box );
+        roundedRect.SetRadius( aCornerRadius );
+        PLOTTER::PlotPoly( roundedRect.Outline(), fill, width, nullptr );
     }
     else
     {
