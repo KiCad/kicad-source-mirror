@@ -300,12 +300,23 @@ PANEL_PREVIEW_3D_MODEL::~PANEL_PREVIEW_3D_MODEL()
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 
+    m_spaceMouse.reset();
+
+    // Stop dispatching events before destroying the tools and their menus.
+    m_previewPane->SetEventDispatcher( nullptr );
+    delete m_toolDispatcher;
+    m_toolDispatcher = nullptr;
+
+    delete m_toolManager;
+    delete m_actions;
+
     // Restore the 3D viewer Render settings, that can be modified by the panel tools
     if( m_boardAdapter.m_Cfg )
         m_boardAdapter.m_Cfg->m_Render = m_initialRender;
 
-    delete m_dummyBoard;
+    // The canvas must stop its rendering worker before the board is destroyed.
     delete m_previewPane;
+    delete m_dummyBoard;
 }
 
 
