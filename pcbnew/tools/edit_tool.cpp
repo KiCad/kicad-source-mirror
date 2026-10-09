@@ -1050,6 +1050,7 @@ bool EDIT_TOOL::invokeInlineRouter( int aDragMode )
         return true;
     }
 
+    frame()->ShowInfoBarMsg( _( "This selection cannot be dragged in this mode." ) );
     return false;
 }
 
@@ -1120,13 +1121,31 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
                 // Initial gathering of items
                 gatherItemsByType();
 
-                if( !sTool->GetSelection().IsHover() && footprints.size() )
+                // The heuristics below answer "what did the user mean by clicking here", so
+                // they only apply to a hover. An explicit selection already said what it wants,
+                // and trimming it would drop items the block drag is meant to carry.
+                if( !sTool->GetSelection().IsHover() )
                 {
-                    // Remove non-footprints so box-selection will drag footprints.
-                    for( int ii = aCollector.GetCount() - 1; ii >= 0; --ii )
+                    const auto draggable = []( KICAD_T aType )
                     {
-                        if( aCollector[ii]->Type() != PCB_FOOTPRINT_T )
-                            aCollector.Remove( ii );
+                        return aType == PCB_FOOTPRINT_T || aType == PCB_TRACE_T || aType == PCB_ARC_T
+                               || aType == PCB_VIA_T || aType == PCB_PAD_T;
+                    };
+
+                    bool anyDraggable = false;
+
+                    for( int ii = 0; ii < aCollector.GetCount(); ++ii )
+                        anyDraggable |= draggable( aCollector[ii]->Type() );
+
+                    // With nothing draggable the selection is left alone, so the router can
+                    // refuse it with a message rather than silently finding nothing to do
+                    if( anyDraggable )
+                    {
+                        for( int ii = aCollector.GetCount() - 1; ii >= 0; --ii )
+                        {
+                            if( !draggable( aCollector[ii]->Type() ) )
+                                aCollector.Remove( ii );
+                        }
                     }
                 }
                 else if( tracks.size() || vias.size() )

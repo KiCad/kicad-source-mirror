@@ -3208,7 +3208,8 @@ TOOL_ACTION PCB_ACTIONS::drag45Degree( TOOL_ACTION_ARGS()
         .DefaultHotkey( 'D' )
         .LegacyHotkeyName( "Drag Track Keep Slope" )
         .FriendlyName( _( "Drag 45 Degree Mode" ) )
-        .Tooltip( _( "Drags the track segment while keeping connected tracks at 45 degrees." ) )
+        .Tooltip( _( "Drags a track segment, or a mixed selection as one block, keeping connected tracks "
+                     "at 45 degrees." ) )
         .Icon( BITMAPS::drag_segment_withslope ) );
 
 TOOL_ACTION PCB_ACTIONS::dragFreeAngle( TOOL_ACTION_ARGS()

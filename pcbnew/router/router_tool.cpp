@@ -86,6 +86,7 @@ using namespace std::placeholders;
 
 #include "router_tool.h"
 #include "router_status_view_item.h"
+#include "pns_block_dragger.h"
 #include "pns_router.h"
 #include "pns_itemset.h"
 #include "pns_line.h"
@@ -2799,6 +2800,49 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
 }
 
 
+// Which drag a multi-item selection gets. CanInlineDrag() and InlineDrag() both use this.
+enum class DRAG_KIND
+{
+    INVALID,    // something in it the router cannot drag
+    FOOTPRINTS, // footprints only
+    TRACKS,     // tracks only
+    BLOCK       // copper, pads and footprints mixed
+};
+
+
+static DRAG_KIND dragKindOf( const PCB_SELECTION& aSelection )
+{
+    bool allFootprints = true;
+    bool allTracks = true;
+
+    for( EDA_ITEM* item : aSelection )
+    {
+        switch( item->Type() )
+        {
+        case PCB_FOOTPRINT_T: allTracks = false; break;
+
+        case PCB_TRACE_T: allFootprints = false; break;
+
+        case PCB_ARC_T:
+        case PCB_VIA_T:
+            allFootprints = false;
+            allTracks = false;
+            break;
+
+        default: return DRAG_KIND::INVALID;
+        }
+    }
+
+    if( allFootprints )
+        return DRAG_KIND::FOOTPRINTS;
+
+    if( allTracks )
+        return DRAG_KIND::TRACKS;
+
+    return DRAG_KIND::BLOCK;
+}
+
+
 bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
 {
     m_toolMgr->RunAction<CLIENT_SELECTION_FILTER>( ACTIONS::selectionCursor, NeighboringSegmentFilter );
@@ -2808,17 +2852,17 @@ bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
     {
         return selection.Front()->IsType( GENERAL_COLLECTOR::DraggableItems );
     }
-    else if( selection.CountType( PCB_FOOTPRINT_T ) == (size_t) selection.Size() )
-    {
-        // Footprints cannot be dragged freely.
-        return !( aDragMode & PNS::DM_FREE_ANGLE );
-    }
-    else if( selection.CountType( PCB_TRACE_T ) == (size_t) selection.Size() )
-    {
-        return true;
-    }
 
-    return false;
+    switch( dragKindOf( selection ) )
+    {
+    case DRAG_KIND::TRACKS: return true;
+
+    // Neither footprints nor a block drag free angle
+    case DRAG_KIND::FOOTPRINTS:
+    case DRAG_KIND::BLOCK: return !( aDragMode & PNS::DM_FREE_ANGLE );
+
+    default: return false;
+    }
 }
 
 
@@ -2845,32 +2889,46 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
-    if( item->Type() != PCB_TRACE_T
-         && item->Type() != PCB_VIA_T
-         && item->Type() != PCB_ARC_T
-         && item->Type() != PCB_FOOTPRINT_T )
+    if( item->Type() != PCB_TRACE_T && item->Type() != PCB_VIA_T && item->Type() != PCB_ARC_T
+        && item->Type() != PCB_FOOTPRINT_T )
     {
         return 0;
     }
 
     std::set<FOOTPRINT*> footprints;
+    bool                 blockDrag = false;
 
     if( item->Type() == PCB_FOOTPRINT_T )
         footprints.insert( static_cast<FOOTPRINT*>( item ) );
 
-    // We can drag multiple footprints, but not a grab-bag of items
-    if( selection.Size() > 1 && item->Type() == PCB_FOOTPRINT_T )
+    if( selection.Size() > 1 )
     {
-        for( int idx = 1; idx < selection.Size(); ++idx )
+        for( int idx = 0; idx < selection.Size(); ++idx )
         {
             if( !selection.GetItem( idx )->IsBOARD_ITEM() )
                 return 0;
 
-            if( static_cast<BOARD_ITEM*>( selection.GetItem( idx ) )->Type() != PCB_FOOTPRINT_T )
-                return 0;
+            BOARD_ITEM* selItem = static_cast<BOARD_ITEM*>( selection.GetItem( idx ) );
 
-            footprints.insert( static_cast<FOOTPRINT*>( selection.GetItem( idx ) ) );
+            if( selItem->Type() == PCB_FOOTPRINT_T )
+                footprints.insert( static_cast<FOOTPRINT*>( selItem ) );
         }
+
+        DRAG_KIND kind = dragKindOf( selection );
+
+        if( kind == DRAG_KIND::INVALID )
+        {
+            // Refuse if a footprint led the selection, otherwise drop the footprints
+            if( item->Type() == PCB_FOOTPRINT_T )
+            {
+                frame()->ShowInfoBarMsg( _( "The selection contains items that cannot be dragged." ) );
+                return 0;
+            }
+
+            footprints.clear();
+        }
+
+        blockDrag = kind == DRAG_KIND::BLOCK;
     }
 
     // If we overrode locks, we want to clear the flag from the source item before SyncWorld is
@@ -2878,9 +2936,11 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     // this case the lock can't be reliably re-applied, because there is no guarantee that the end
     // state of the drag results in the same number of segments so it's not clear which segment to
     // apply the lock state to.
+    //
+    // A block drag leaves locks alone. The dragger exempts selected copper itself.
     bool wasLocked = false;
 
-    if( item->IsLocked() )
+    if( !blockDrag && item->IsLocked() )
     {
         wasLocked = true;
         item->SetLocked( false );
@@ -2911,12 +2971,25 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     // a Move operation). Sync it now so that FindItemByParent and joint lookups work correctly.
     m_router->SyncWorld();
 
+    // A footprint with no copper the router can see cannot be dragged, and showing it in the
+    // preview would promise a move the commit will not make
+    for( auto it = footprints.begin(); it != footprints.end(); )
+    {
+        bool hasSolid = false;
+
+        for( PAD* pad : ( *it )->Pads() )
+            hasSolid |= !m_router->GetWorld()->FindItemsByParent( pad ).empty();
+
+        it = hasSolid ? std::next( it ) : footprints.erase( it );
+    }
+
     // Snapping uses ViewGetLOD(), which uses the layerVisibilityCache.  Make sure it's up-to-date.
     m_toolMgr->GetView()->SyncLayerVisibilityCache();
 
     if( !footprints.empty() )
     {
-        if( footprints.size() == 1 )
+        // A block drag has its own algorithm, and the leader logic below assumes a lone footprint
+        if( footprints.size() == 1 && !blockDrag )
             singleFootprintDrag = true;
 
         if( showCourtyardConflicts )
@@ -2926,9 +2999,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         {
             for( PAD* pad : footprint->Pads() )
             {
-                PNS::ITEM* solid = m_router->GetWorld()->FindItemByParent( pad );
-
-                if( solid )
+                // A padstack with per-layer geometry is more than one router solid
+                for( PNS::ITEM* solid : m_router->GetWorld()->FindItemsByParent( pad ) )
                     itemsToDrag.Add( solid );
 
                 if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
@@ -2962,15 +3034,16 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         dynamicData = std::make_unique<CONNECTIVITY_DATA>( board()->GetConnectivity(), dynamicItems, true );
         connectivityData->BlockRatsnestItems( dynamicItems );
     }
-    else
+
+    if( footprints.empty() || blockDrag )
     {
-        for( const EDA_ITEM* selItem : selectedItems )
+        for( EDA_ITEM* selItem : selectedItems )
         {
             if( !selItem->IsBOARD_ITEM() )
                 continue;
 
-            const BOARD_ITEM* boardItem = static_cast<const BOARD_ITEM*>( selItem );
-            PNS::ITEM*        pnsItem = m_router->GetWorld()->FindItemByParent( boardItem );
+            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( selItem );
+            PNS::ITEM*  pnsItem = m_router->GetWorld()->FindItemByParent( boardItem );
 
             if( !pnsItem )
                 continue;
@@ -3056,10 +3129,19 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     int dragMode = aEvent.Parameter<int> ();
 
+    if( !footprints.empty() || blockDrag )
+        dragMode &= ~PNS::DM_FREE_ANGLE;
+
+    if( blockDrag )
+        dragMode |= PNS::DM_BLOCK;
+
     bool dragStarted = m_router->StartDragging( p, itemsToDrag, dragMode );
 
     if( !dragStarted )
     {
+        if( blockDrag )
+            frame()->ShowInfoBarMsg( _( "Nothing in the selection can be dragged." ) );
+
         if( wasLocked )
             item->SetLocked( true );
 
@@ -3079,6 +3161,19 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     controls()->ShowCursor( true );
     controls()->SetAutoPan( true );
     frame()->UndoRedoBlock( true );
+
+    if( auto* blockDragger = dynamic_cast<PNS::BLOCK_DRAGGER*>( m_router->GetDragger() ) )
+    {
+        size_t held = blockDragger->AnchoredLines().size();
+
+        if( held > 0 )
+        {
+            frame()->ShowInfoBarWarning(
+                    wxString::Format( wxPLURAL( "%zu selected arc cannot move because both ends are fixed.",
+                                                "%zu selected arcs cannot move because both ends are fixed.", held ),
+                                      held ) );
+        }
+    }
 
     view()->ClearPreview();
     view()->InitPreview();
