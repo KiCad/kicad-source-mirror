@@ -24,6 +24,7 @@
 #include <wx/dataview.h>
 #include <wx/dialog.h>
 #include <wx/nonownedwnd.h>
+#include <wx/popupwin.h>
 #include <wx/settings.h>
 #include <wx/window.h>
 #include <wx/log.h>
@@ -121,6 +122,84 @@ void KIPLATFORM::UI::GetInfoBarColours( wxColour& aFgColour, wxColour& aBgColour
     aFgColour = wxSystemSettings::GetColour( wxSYS_COLOUR_INFOTEXT );
 #endif
 
+}
+
+
+#ifdef GDK_WINDOWING_WAYLAND
+// Holds widgets over a canvas whose OpenGL subsurface covers everything GTK draws in the frame
+// Subsurfaces stack in the order they are mapped, so this one is remapped after the canvas
+class CANVAS_OVERLAY : public wxPopupWindow
+{
+public:
+    CANVAS_OVERLAY( wxWindow* aCanvas ) :
+            wxPopupWindow( aCanvas )
+    {
+        // wx asks for a compositor popup, and GDK maps a popup with any other hint as a subsurface
+        gtk_window_set_type_hint( GTK_WINDOW( m_widget ), GDK_WINDOW_TYPE_HINT_NORMAL );
+
+        aCanvas->Bind( wxEVT_SIZE, &CANVAS_OVERLAY::onCanvasSize, this );
+        g_signal_connect( aCanvas->GetHandle(), "map", G_CALLBACK( onCanvasMap ), this );
+    }
+
+    ~CANVAS_OVERLAY() override
+    {
+        GetParent()->Unbind( wxEVT_SIZE, &CANVAS_OVERLAY::onCanvasSize, this );
+        g_signal_handlers_disconnect_by_data( GetParent()->GetHandle(), this );
+    }
+
+    void Raise() override
+    {
+        // The canvas maps its surface from a queued event, so wait for that
+        CallAfter( &CANVAS_OVERLAY::remap );
+    }
+
+    bool Show( bool aShow = true ) override
+    {
+        if( aShow )
+            follow();
+
+        return wxPopupWindow::Show( aShow );
+    }
+
+private:
+    static void onCanvasMap( GtkWidget* aWidget, gpointer aOverlay )
+    {
+        static_cast<CANVAS_OVERLAY*>( aOverlay )->Raise();
+    }
+
+    void onCanvasSize( wxSizeEvent& aEvent )
+    {
+        follow();
+        aEvent.Skip();
+    }
+
+    void follow()
+    {
+        // There is no position to follow until the frame is mapped
+        if( gtk_widget_get_mapped( GetParent()->GetHandle() ) )
+            Move( GetParent()->ClientToScreen( wxPoint( 0, 0 ) ) );
+    }
+
+    void remap()
+    {
+        if( !IsShown() )
+            return;
+
+        Hide();
+        Show();
+    }
+};
+#endif
+
+
+wxWindow* KIPLATFORM::UI::CreateCanvasOverlay( wxWindow* aCanvas )
+{
+#ifdef GDK_WINDOWING_WAYLAND
+    if( GDK_IS_WAYLAND_DISPLAY( gdk_display_get_default() ) )
+        return new CANVAS_OVERLAY( aCanvas );
+#endif
+
+    return nullptr;
 }
 
 

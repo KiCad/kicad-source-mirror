@@ -50,11 +50,37 @@ BEGIN_EVENT_TABLE( WX_INFOBAR, wxInfoBarGeneric )
 END_EVENT_TABLE()
 
 
+static const wxString OVERLAY_HOST_NAME = wxS( "InfobarOverlayHost" );
+
+
+// Overlay infobars on the same window share one host where the platform needs one
+static wxWindow* overlayParent( wxWindow* aParent, bool aOverlay )
+{
+    if( !aOverlay )
+        return aParent;
+
+    for( wxWindow* child : aParent->GetChildren() )
+    {
+        if( child->GetName() == OVERLAY_HOST_NAME )
+            return child;
+    }
+
+    if( wxWindow* host = KIPLATFORM::UI::CreateCanvasOverlay( aParent ) )
+    {
+        host->SetName( OVERLAY_HOST_NAME );
+        return host;
+    }
+
+    return aParent;
+}
+
+
 WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxWindowID aWinid, bool aOverlay )
-        : wxInfoBarGeneric( aParent, aWinid ),
+        : wxInfoBarGeneric( overlayParent( aParent, aOverlay ), aWinid ),
           m_showTime( 0 ),
           m_updateLock( false ),
           m_overlay( aOverlay ),
+          m_anchor( aParent ),
           m_showTimer( nullptr ),
           m_type( MESSAGE_TYPE::GENERIC )
 {
@@ -102,13 +128,13 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxWindowID aWinid, bool aOverlay )
 
     Layout();
 
-    m_parent->Bind( wxEVT_SIZE, &WX_INFOBAR::onSize, this );
+    m_anchor->Bind( wxEVT_SIZE, &WX_INFOBAR::onSize, this );
 }
 
 
 WX_INFOBAR::~WX_INFOBAR()
 {
-    m_parent->Unbind( wxEVT_SIZE, &WX_INFOBAR::onSize, this );
+    m_anchor->Unbind( wxEVT_SIZE, &WX_INFOBAR::onSize, this );
 
     delete m_showTimer;
 }
@@ -304,7 +330,7 @@ void WX_INFOBAR::doSize()
             textCtrl->SetLabelText( m_message );
     }
 
-    int parentWidth = m_parent->GetClientSize().GetWidth();
+    int parentWidth = m_anchor->GetClientSize().GetWidth();
 
     if( barWidth != parentWidth )
         SetSize( parentWidth, GetSize().GetHeight() );
@@ -341,7 +367,7 @@ void WX_INFOBAR::stackOverlays()
     if( !m_overlay )
         return;
 
-    int width = m_parent->GetClientSize().GetWidth();
+    int width = m_anchor->GetClientSize().GetWidth();
     int y = 0;
 
     for( wxWindow* child : m_parent->GetChildren() )
@@ -361,7 +387,15 @@ void WX_INFOBAR::stackOverlays()
         y += height;
     }
 
-    if( EDA_DRAW_PANEL_GAL* canvas = dynamic_cast<EDA_DRAW_PANEL_GAL*>( m_parent ) )
+    if( m_parent != m_anchor )
+    {
+        if( y > 0 )
+            m_parent->SetSize( wxDefaultCoord, wxDefaultCoord, width, y );
+
+        m_parent->Show( y > 0 );
+    }
+
+    if( EDA_DRAW_PANEL_GAL* canvas = dynamic_cast<EDA_DRAW_PANEL_GAL*>( m_anchor ) )
         canvas->UpdateOverlayExclusions();
 }
 
@@ -372,7 +406,7 @@ void WX_INFOBAR::refreshParent()
         return;
 
     // A GAL canvas skips repaints when no target is dirty, leaving the uncovered strip stale
-    if( EDA_DRAW_PANEL_GAL* canvas = dynamic_cast<EDA_DRAW_PANEL_GAL*>( m_parent ) )
+    if( EDA_DRAW_PANEL_GAL* canvas = dynamic_cast<EDA_DRAW_PANEL_GAL*>( m_anchor ) )
     {
         canvas->ForceRefresh();
 
@@ -381,7 +415,7 @@ void WX_INFOBAR::refreshParent()
     }
     else
     {
-        m_parent->Refresh();
+        m_anchor->Refresh();
     }
 }
 

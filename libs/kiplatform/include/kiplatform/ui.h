@@ -130,6 +130,18 @@ namespace KIPLATFORM
         void GetInfoBarColours( wxColour& aFGColour, wxColour& aBGColour );
 
         /**
+         * Create a window for widgets that are shown over a canvas without taking space from it.
+         *
+         * This is only needed where a child of the canvas cannot be drawn above its OpenGL
+         * surface.  The window stays at the top left corner of the canvas and above its surface,
+         * and the caller sets its size and shows it.
+         *
+         * @param aCanvas is the window to cover, which owns the new window
+         * @return the window, or nullptr if the widgets can be children of the canvas
+         */
+        wxWindow* CreateCanvasOverlay( wxWindow* aCanvas );
+
+        /**
          * Tries to determine the size of the viewport of a scrollable widget (wxDataViewCtrl, wxGrid)
          * that won't be obscured by scrollbars.
          * @param aWindow pointer to the scrollable widget to check

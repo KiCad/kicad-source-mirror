@@ -918,10 +918,10 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
     m_backend = aGalType;
 
-    // A shown backend window raises itself, which would bury an infobar overlaid on this canvas
+    // A shown backend window raises itself, which would bury what is overlaid on this canvas
     for( wxWindow* child : GetChildren() )
     {
-        if( dynamic_cast<WX_INFOBAR*>( child ) )
+        if( child != dynamic_cast<wxWindow*>( m_gal ) )
             child->Raise();
     }
 
