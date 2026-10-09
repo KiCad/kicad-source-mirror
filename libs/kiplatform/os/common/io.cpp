@@ -190,18 +190,12 @@ bool KIPLATFORM::IO::CommitTempFile( const wxString& aTempPath, const wxString& 
         // snapshot and precedes MakeWriteable.
         snapshot = CaptureTargetAttributes( aTargetPath );
 
+        // Best effort, volumes without ACL or mode support (cloud drives, FAT) reject the copy
+        // and the temp then keeps the permissions it was created with
         if( !DuplicatePermissions( aTargetPath, aTempPath ) )
         {
-            // Failing here means the new file would land with creation-default
-            // permissions instead of the target's. Bail out while the rename hasn't
-            // happened yet so the user's original file is still untouched.
-            if( aError )
-            {
-                *aError = wxString::Format( wxT( "Cannot copy permissions from '%s' to '%s'" ),
-                                            aTargetPath, aTempPath );
-            }
-
-            return false;
+            wxLogTrace( wxT( "KICAD_ATOMIC_SAVE" ), wxT( "Cannot copy permissions from '%s' to '%s'" ),
+                        aTargetPath, aTempPath );
         }
 
 #if defined( _WIN32 )

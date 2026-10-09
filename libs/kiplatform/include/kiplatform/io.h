@@ -236,7 +236,8 @@ namespace IO
      * and closed. Clears any read-only/hidden attributes on an existing @p aTargetPath,
      * duplicates its permissions onto the temp file, atomically renames @p aTempPath
      * onto @p aTargetPath, and fsyncs the containing directory so the rename itself is
-     * durable across power loss.
+     * durable across power loss. The permission copy is best effort since some volumes
+     * cannot store them; the save proceeds with the temp file's own permissions.
      *
      * On failure @p aTempPath is left in place for the caller to clean up.
      *
@@ -255,8 +256,8 @@ namespace IO
      * byte-identical to @p aData -- never truncated or partially written.
      *
      * If @p aTargetPath already exists its permissions are duplicated onto the
-     * replacement, and any read-only/hidden attributes are cleared first so cloud
-     * sync services don't block the rename.
+     * replacement where the volume supports that, and any read-only/hidden attributes
+     * are cleared first so cloud sync services don't block the rename.
      *
      * @param aTargetPath final destination path.
      * @param aData       pointer to bytes to write.
