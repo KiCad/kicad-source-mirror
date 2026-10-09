@@ -2948,7 +2948,15 @@ void PNS_KICAD_IFACE::Commit()
 
     for( const auto& [ pad, fpOffset ] : m_fpOffsets )
     {
-        VECTOR2I   offset = fpOffset.p_new - fpOffset.p_old;
+        VECTOR2I offset = fpOffset.p_new - fpOffset.p_old;
+
+        if( m_independentPads.count( pad ) )
+        {
+            m_commit->Modify( pad );
+            pad->Move( offset );
+            continue;
+        }
+
         FOOTPRINT* footprint = pad->GetParentFootprint();
         VECTOR2I   p_orig = footprint->GetPosition();
         VECTOR2I   p_new = p_orig + offset;
@@ -2962,6 +2970,7 @@ void PNS_KICAD_IFACE::Commit()
     }
 
     m_fpOffsets.clear();
+    m_independentPads.clear();
 
     for( const auto& [ src, items ] : m_replacementMap )
     {

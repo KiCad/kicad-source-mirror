@@ -22,6 +22,7 @@
 #ifndef __PNS_KICAD_IFACE_H
 #define __PNS_KICAD_IFACE_H
 
+#include <set>
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
@@ -181,6 +182,9 @@ public:
 
     void SetCommitFlags( int aCommitFlags ) { m_commitFlags = aCommitFlags; }
 
+    /// Pads that move on their own. A moved pad otherwise carries its footprint.
+    void SetIndependentPads( const std::set<PAD*>& aPads ) { m_independentPads = aPads; }
+
 protected:
     BOARD_CONNECTED_ITEM* createBoardItem( PNS::ITEM* aItem );
     void                  modifyBoardItem( PNS::ITEM* aItem );
@@ -191,6 +195,7 @@ protected:
     };
 
     std::map<PAD*, OFFSET>          m_fpOffsets;
+    std::set<PAD*>                  m_independentPads;
     KIGFX::VIEW*                    m_view;
     KIGFX::VIEW_GROUP*              m_previewItems;
     std::unordered_set<BOARD_ITEM*> m_hiddenItems;

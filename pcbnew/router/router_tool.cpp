@@ -2825,6 +2825,7 @@ static DRAG_KIND dragKindOf( const PCB_SELECTION& aSelection )
 
         case PCB_ARC_T:
         case PCB_VIA_T:
+        case PCB_PAD_T:
             allFootprints = false;
             allTracks = false;
             break;
@@ -2850,7 +2851,7 @@ bool ROUTER_TOOL::CanInlineDrag( int aDragMode )
 
     if( selection.Size() == 1 )
     {
-        return selection.Front()->IsType( GENERAL_COLLECTOR::DraggableItems );
+        return selection.Front()->IsType( GENERAL_COLLECTOR::DraggableItems ) || selection.Front()->Type() == PCB_PAD_T;
     }
 
     switch( dragKindOf( selection ) )
@@ -2890,12 +2891,13 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
     if( item->Type() != PCB_TRACE_T && item->Type() != PCB_VIA_T && item->Type() != PCB_ARC_T
-        && item->Type() != PCB_FOOTPRINT_T )
+        && item->Type() != PCB_FOOTPRINT_T && item->Type() != PCB_PAD_T )
     {
         return 0;
     }
 
     std::set<FOOTPRINT*> footprints;
+    std::set<PAD*>       freePads;
     bool                 blockDrag = false;
 
     if( item->Type() == PCB_FOOTPRINT_T )
@@ -2940,7 +2942,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     // A block drag leaves locks alone. The dragger exempts selected copper itself.
     bool wasLocked = false;
 
-    if( !blockDrag && item->IsLocked() )
+    if( !blockDrag && item->Type() != PCB_PAD_T && item->IsLocked() )
     {
         wasLocked = true;
         item->SetLocked( false );
@@ -3054,6 +3056,20 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             {
                 itemsToDrag.Add( pnsItem );
             }
+            else if( boardItem->Type() == PCB_PAD_T )
+            {
+                PAD* pad = static_cast<PAD*>( boardItem );
+
+                // A pad selected together with its footprint already travels with it
+                if( footprints.count( pad->GetParentFootprint() ) )
+                    continue;
+
+                freePads.insert( pad );
+
+                // A padstack with per-layer geometry is more than one router solid
+                for( PNS::ITEM* solid : m_router->GetWorld()->FindItemsByParent( pad ) )
+                    itemsToDrag.Add( solid );
+            }
         }
     }
 
@@ -3129,16 +3145,20 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     int dragMode = aEvent.Parameter<int> ();
 
-    if( !footprints.empty() || blockDrag )
+    if( !footprints.empty() || !freePads.empty() || blockDrag )
         dragMode &= ~PNS::DM_FREE_ANGLE;
 
     if( blockDrag )
         dragMode |= PNS::DM_BLOCK;
 
+    m_iface->SetIndependentPads( freePads );
+
     bool dragStarted = m_router->StartDragging( p, itemsToDrag, dragMode );
 
     if( !dragStarted )
     {
+        m_iface->SetIndependentPads( {} );
+
         if( blockDrag )
             frame()->ShowInfoBarMsg( _( "Nothing in the selection can be dragged." ) );
 
@@ -3291,6 +3311,9 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                 connectivityData->ComputeLocalRatsnest( dynamicItems, dynamicData.get(), offset );
             }
 
+            for( PAD* pad : freePads )
+                view()->Hide( pad, true );
+
             if( PNS::DRAG_ALGO* dragger = m_router->GetDragger() )
             {
                 bool dragStatus;
@@ -3382,6 +3405,11 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
         connectivityData->ClearLocalRatsnest();
     }
+
+    for( PAD* pad : freePads )
+        view()->Hide( pad, false );
+
+    m_iface->SetIndependentPads( {} );
 
     // Clear temporary COURTYARD_CONFLICT flag and ensure the conflict shadow is cleared
     courtyardClearanceDRC.ClearConflicts( getView() );
