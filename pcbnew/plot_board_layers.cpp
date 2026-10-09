@@ -1011,7 +1011,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
  * Generates a SHAPE_POLY_SET representing the plotted items on a layer.
  */
 void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
-                         bool aPlotFPText, bool aPlotReferences, bool aPlotValues )
+                        bool aPlotFPText, bool aPlotReferences, bool aPlotValues )
 {
     int             maxError = aBoard->GetDesignSettings().m_MaxError;
     SHAPE_POLY_SET  buffer;
@@ -1100,7 +1100,8 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotte
 
                 aTextBox.TransformTextToPolySet( *aResult, inflate, maxError, ERROR_OUTSIDE );
 
-                if( !aTextBox.IsKnockout() )   // must plot box outline around text
+                // plot box outline around text
+                if( aTextBox.IsBorderEnabled() && !aTextBox.IsKnockout() )
                 {
                     PCB_SHAPE shapebox = aTextBox.GetPolygonalBoxShape();
                     handlePcbShape( shapebox );
@@ -1148,7 +1149,9 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotte
                     else
                     {
                         if( const PCB_SHAPE* pcb_shape = dynamic_cast< const PCB_SHAPE*>( item ) )
+                        {
                             handlePcbShape( *pcb_shape );
+                        }
                         else    // Shold not occur
                         {
                             if( inflate != 0 )
@@ -1196,15 +1199,19 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotte
                 else
                 {
                     if( const PCB_SHAPE* pcb_shape = dynamic_cast< const PCB_SHAPE*>( item ) )
+                    {
                         handlePcbShape( *pcb_shape );
+                    }
                     else    // Shold not occur
                     {
                         if( inflate != 0 )
+                        {
                             item->TransformShapeToPolySet( exactPolys, aLayer, 0, maxError, ERROR_OUTSIDE,
                                                            aPlotter->RenderSettings() );
+                        }
 
-                        item->TransformShapeToPolySet( *aResult, aLayer, inflate, maxError,
-                                                        ERROR_OUTSIDE, aPlotter->RenderSettings() );
+                        item->TransformShapeToPolySet( *aResult, aLayer, inflate, maxError, ERROR_OUTSIDE,
+                                                       aPlotter->RenderSettings() );
                     }
                 }
             }
