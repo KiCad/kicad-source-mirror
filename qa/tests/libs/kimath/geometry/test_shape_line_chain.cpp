@@ -1929,4 +1929,24 @@ BOOST_AUTO_TEST_CASE( SelfIntersecting_LargeWithCrossing )
 }
 
 
+// The router collides a one-point head line while placing, which leaves no segment to measure.
+// qa_kimath installs no assert thrower, so arm one here or the overflow assert goes unnoticed
+BOOST_AUTO_TEST_CASE( CollideSegSinglePointChain )
+{
+    SHAPE_LINE_CHAIN chain;
+    chain.Append( VECTOR2I( 23025000, 9475000 ) );
+
+    SEG  seg( { 24800000, 4650000 }, { 28520000, 8370000 } );
+    bool hit = true;
+
+    wxAssertHandler_t prevHandler = wxSetAssertHandler( &KI_TEST::wxAssertThrower );
+
+    BOOST_CHECK_NO_THROW( hit = chain.Collide( seg, 1179499 ) );
+
+    wxSetAssertHandler( prevHandler );
+
+    BOOST_CHECK( !hit );
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

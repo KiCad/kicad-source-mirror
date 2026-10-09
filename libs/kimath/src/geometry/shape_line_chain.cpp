@@ -867,7 +867,11 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual, V
     }
 
     int         dist = std::numeric_limits<int>::max();
-    SEG::ecoord closest_dist = KiROUND( sqrt( closest_dist_sq ) );
+    SEG::ecoord closest_dist = std::numeric_limits<int>::max();
+
+    // A chain with no straight segments never measured anything, so the sentinel has no root
+    if( closest_dist_sq != VECTOR2I::ECOORD_MAX )
+        closest_dist = KiROUND( sqrt( closest_dist_sq ) );
 
     // Collide arc segments
     for( size_t i = 0; i < ArcCount(); i++ )
