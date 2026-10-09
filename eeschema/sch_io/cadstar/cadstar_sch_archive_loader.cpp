@@ -1195,11 +1195,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             if( !alg::contains( m_busesMap.at( bus.ID )->Members(), netName ) )
                 m_busesMap.at( bus.ID )->AddMember( netName );
 
-            SCH_BUS_WIRE_ENTRY* busEntry =
-                    new SCH_BUS_WIRE_ENTRY( getKiCadPoint( busTerm.FirstPoint ), false );
+            SCH_BUS_WIRE_ENTRY* busEntry = new SCH_BUS_WIRE_ENTRY( getKiCadPoint( busTerm.FirstPoint ), false );
 
-            VECTOR2I size =
-                    getKiCadPoint( busTerm.SecondPoint ) - getKiCadPoint( busTerm.FirstPoint );
+            VECTOR2I size = getKiCadPoint( busTerm.SecondPoint ) - getKiCadPoint( busTerm.FirstPoint );
             busEntry->SetSize( VECTOR2I( size.x, size.y ) );
 
             m_sheetMap.at( bus.LayerID )->GetScreen()->Append( busEntry );
@@ -1316,7 +1314,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                         sheetEdge.Append( leftSide, botSide );
                         sheetEdge.Append( leftSide, topSide );
 
-                        SHAPE_LINE_CHAIN::INTERSECTIONS wireToSheetIntersects;
+                        std::vector<SHAPE_LINE_CHAIN::INTERSECTION> wireToSheetIntersects;
 
                         if( !wireChain.Intersect( sheetEdge, wireToSheetIntersects ) )
                         {

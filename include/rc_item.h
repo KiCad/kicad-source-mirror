@@ -80,11 +80,9 @@ public:
 class RC_ITEM
 {
 public:
-    typedef std::vector<KIID> KIIDS;
-
     RC_ITEM() :
-        m_errorCode( 0 ),
-        m_parent( nullptr )
+            m_errorCode( 0 ),
+            m_parent( nullptr )
     {
     }
 
@@ -107,7 +105,7 @@ public:
         SetErrorMessage( GetErrorText( true ) + wxS( " " ) + aMsg );
     }
 
-    void SetItems( const KIIDS& aIds ) { m_ids = aIds; }
+    void SetItems( const std::vector<KIID>& aIds ) { m_ids = aIds; }
 
     void AddItem( EDA_ITEM* aItem );
 
@@ -202,13 +200,13 @@ protected:
     virtual wxString getItemDescription( EDA_ITEM* aItem, int aIndex, UNITS_PROVIDER* aUnitsProvider ) const;
 
 protected:
-    int           m_errorCode;         ///< The error code's numeric value
-    wxString      m_errorMessage;      ///< A message describing the details of this specific error
-    wxString      m_errorTitle;        ///< The string describing the type of error
-    wxString      m_settingsKey;       ///< The key used to describe this type of error in settings
-    MARKER_BASE*  m_parent;            ///< The marker this item belongs to, if any
+    int               m_errorCode;         ///< The error code's numeric value
+    wxString          m_errorMessage;      ///< A message describing the details of this specific error
+    wxString          m_errorTitle;        ///< The string describing the type of error
+    wxString          m_settingsKey;       ///< The key used to describe this type of error in settings
+    MARKER_BASE*      m_parent;            ///< The marker this item belongs to, if any
 
-    KIIDS         m_ids;
+    std::vector<KIID> m_ids;
 };
 
 

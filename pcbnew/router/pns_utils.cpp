@@ -397,16 +397,16 @@ OPT_BOX2I ChangedArea( const LINE& aLineA, const LINE& aLineB )
 
 
 void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& line,
-                       SHAPE_LINE_CHAIN::INTERSECTIONS& ips )
+                       std::vector<SHAPE_LINE_CHAIN::INTERSECTION>& ips )
 {
-    SHAPE_LINE_CHAIN::INTERSECTIONS ips_raw;
+    std::vector<SHAPE_LINE_CHAIN::INTERSECTION> ips_raw;
 
     if( line.PointCount() < 2 )
         return;
 
     hull.Intersect( line, ips_raw );
 
-    for( auto& p : ips_raw )
+    for( SHAPE_LINE_CHAIN::INTERSECTION& p : ips_raw )
     {
         SHAPE_LINE_CHAIN::INTERSECTION ipp;
 
@@ -551,12 +551,14 @@ void NodeStats( DEBUG_DECORATOR* dbg, wxString label, PNS::NODE *node )
     node->GetUpdatedItems( removed, added );
 
     PNS_DBG( dbg, BeginGroup, wxString::Format( "node:%s this=%p depth=%d added=%d removed=%d",
-        label, node, node->Depth(), (int)added.size(), (int) removed.size() ), 0 );
+                                                label, node, node->Depth(), (int) added.size(), (int) removed.size() ),
+             0 );
 
-    for( auto& item : added )
-        PNS_DBG( dbg, AddItem, item, BLUE, 10000, wxT("added-item") );
-    for( auto& item : removed )
-        PNS_DBG( dbg, AddItem, item, RED, 10000, wxString::Format("removed-item") );
+    for( ITEM* item : added )
+        PNS_DBG( dbg, AddItem, item, BLUE, 10000, wxT( "added-item" ) );
+
+    for( ITEM* item : removed )
+        PNS_DBG( dbg, AddItem, item, RED, 10000, wxT( "removed-item" ) );
 
     PNS_DBGN( dbg, EndGroup );
 }

@@ -958,7 +958,7 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::customBreakouts( int aWidth, const ITEM* aIt
         VECTOR2I v0( p0 + VECTOR2I( length, 0 ) );
         RotatePoint( v0, p0, -angle );
 
-        SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
+        std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
         int n = convex->Vertices().Intersect( SEG( p0, v0 ), intersections );
 
         // if n == 1 intersected a segment

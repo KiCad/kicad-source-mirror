@@ -104,7 +104,7 @@ void LINE_PLACER::setInitialDirection( const DIRECTION_45& aDirection )
 
 bool LINE_PLACER::handleSelfIntersections()
 {
-    SHAPE_LINE_CHAIN::INTERSECTIONS ips;
+    std::vector<SHAPE_LINE_CHAIN::INTERSECTION> ips;
     SHAPE_LINE_CHAIN& head = m_head.Line();
     SHAPE_LINE_CHAIN& tail = m_tail.Line();
 

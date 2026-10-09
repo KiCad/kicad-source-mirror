@@ -180,8 +180,7 @@ int TEARDROP_MANAGER::copperNetcode( const BOARD_ITEM* aItem )
 }
 
 
-int TEARDROP_MANAGER::pairClearance( PCB_TRACK* aSourceTrack, BOARD_ITEM* aItem,
-                                     PCB_LAYER_ID aLayer ) const
+int TEARDROP_MANAGER::pairClearance( PCB_TRACK* aSourceTrack, BOARD_ITEM* aItem, PCB_LAYER_ID aLayer ) const
 {
     PTR_PTR_LAYER_CACHE_KEY key = { aSourceTrack, aItem, aLayer };
 
@@ -194,8 +193,7 @@ int TEARDROP_MANAGER::pairClearance( PCB_TRACK* aSourceTrack, BOARD_ITEM* aItem,
 
     if( drcEngine )
     {
-        DRC_CONSTRAINT constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aSourceTrack,
-                                                          aItem, aLayer );
+        DRC_CONSTRAINT constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, aSourceTrack, aItem, aLayer );
 
         if( constraint.Value().HasMin() )
             clearance = constraint.Value().Min();
@@ -261,8 +259,7 @@ bool TEARDROP_MANAGER::areItemsInSameZone( BOARD_ITEM* aPadOrVia, PCB_TRACK* aTr
 }
 
 
-bool TEARDROP_MANAGER::collidesWithOtherNets( const std::vector<VECTOR2I>& aPoints,
-                                              PCB_TRACK* aSourceTrack,
+bool TEARDROP_MANAGER::collidesWithOtherNets( const std::vector<VECTOR2I>& aPoints, PCB_TRACK* aSourceTrack,
                                               const std::vector<const BOARD_ITEM*>& aExempt ) const
 {
     if( aPoints.size() < 3 )
@@ -347,16 +344,14 @@ bool TEARDROP_MANAGER::collidesWithOtherNets( const std::vector<VECTOR2I>& aPoin
 
     // The radius has to cover the widest clearance anything can demand, or an obstacle with a
     // generous one of its own is never offered to the resolver.
-    return m_copperRTree.CheckColliding( &teardrop, layer, m_board->GetMaxClearanceValue(),
-                                         resolveClearance );
+    return m_copperRTree.CheckColliding( &teardrop, layer, m_board->GetMaxClearanceValue(), resolveClearance );
 }
 
 
 bool TEARDROP_MANAGER::computeFittedTeardropPolygon( const TEARDROP_PARAMETERS& aParams,
                                                      std::vector<VECTOR2I>& aPoints,
                                                      PCB_TRACK* aTrack, PCB_TRACK* aSourceTrack,
-                                                     BOARD_ITEM* aOther,
-                                                     const VECTOR2I& aOtherPos ) const
+                                                     BOARD_ITEM* aOther, const VECTOR2I& aOtherPos ) const
 {
     // A teardrop overlaps its anchor and its track by construction.  aTrack is a stub or a
     // two-segment extension when it differs from aSourceTrack, so both have to be named.
@@ -390,8 +385,7 @@ bool TEARDROP_MANAGER::computeFittedTeardropPolygon( const TEARDROP_PARAMETERS& 
 
                 params.m_TdMaxWidth = aWidth;
 
-                if( !computeTeardropPolygon( params, candidate, aTrack, aSourceTrack, aOther,
-                                             aOtherPos )
+                if( !computeTeardropPolygon( params, candidate, aTrack, aSourceTrack, aOther, aOtherPos )
                     || collidesWithOtherNets( candidate, aSourceTrack, exempt ) )
                 {
                     return false;
@@ -422,8 +416,8 @@ bool TEARDROP_MANAGER::computeFittedTeardropPolygon( const TEARDROP_PARAMETERS& 
 }
 
 
-int TEARDROP_MANAGER::computeChordThroughShape( PCB_TRACK* aTrack, BOARD_ITEM* aOther,
-                                                PCB_LAYER_ID aLayer, const VECTOR2I& aInsidePoint ) const
+int TEARDROP_MANAGER::computeChordThroughShape( PCB_TRACK* aTrack, BOARD_ITEM* aOther, PCB_LAYER_ID aLayer,
+                                                const VECTOR2I& aInsidePoint ) const
 {
     // Arcs are genuine entries, not the short straight grazes this filter targets.
     if( aTrack->Type() == PCB_ARC_T )
@@ -441,8 +435,7 @@ int TEARDROP_MANAGER::computeChordThroughShape( PCB_TRACK* aTrack, BOARD_ITEM* a
 
     if( IsRound( aOther, aLayer ) )
     {
-        TransformCircleToPolygon( shapebuffer, aOther->GetPosition(), radius, maxError,
-                                  ERROR_INSIDE, 16 );
+        TransformCircleToPolygon( shapebuffer, aOther->GetPosition(), radius, maxError, ERROR_INSIDE, 16 );
     }
     else
     {
@@ -459,7 +452,7 @@ int TEARDROP_MANAGER::computeChordThroughShape( PCB_TRACK* aTrack, BOARD_ITEM* a
     VECTOR2I extEnd = mid + VECTOR2I( KiROUND( dir.x * reach ), KiROUND( dir.y * reach ) );
 
     // Include every contour and hole in the boundary crossings.
-    SHAPE_LINE_CHAIN::INTERSECTIONS pts;
+    std::vector<SHAPE_LINE_CHAIN::INTERSECTION> pts;
 
     for( int ii = 0; ii < shapebuffer.OutlineCount(); ++ii )
     {
@@ -509,8 +502,7 @@ int TEARDROP_MANAGER::computeChordThroughShape( PCB_TRACK* aTrack, BOARD_ITEM* a
 
 
 PCB_TRACK* TEARDROP_MANAGER::findTouchingTrack( EDA_ITEM_FLAGS& aMatchType, PCB_TRACK* aTrackRef,
-                                                PCB_TRACK* aSourceTrack,
-                                                const VECTOR2I& aEndPoint ) const
+                                                PCB_TRACK* aSourceTrack, const VECTOR2I& aEndPoint ) const
 {
     int matches = 0;                    // Count of candidates: only 1 is acceptable
     PCB_TRACK* candidate = nullptr;     // a reference to the track connected
@@ -574,12 +566,10 @@ static VECTOR2D NormalizeVector( const VECTOR2I& aVector )
  * For large circles where the teardrop width is constrained, the anchor points
  * are projected onto the circle edge to ensure proper tangent calculation.
  */
-void TEARDROP_MANAGER::computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aParams,
-                                                   std::vector<VECTOR2I>& aPoly,
-                                                   PCB_LAYER_ID aLayer,
-                                                   int aTrackHalfWidth, const VECTOR2D& aTrackDir,
-                                                   BOARD_ITEM* aOther, const VECTOR2I& aOtherPos,
-                                                   std::vector<VECTOR2I>& pts ) const
+void TEARDROP_MANAGER::computeCurvedForRoundShape( const TEARDROP_PARAMETERS& aParams, std::vector<VECTOR2I>& aPoly,
+                                                   PCB_LAYER_ID aLayer, int aTrackHalfWidth,
+                                                   const VECTOR2D& aTrackDir, BOARD_ITEM* aOther,
+                                                   const VECTOR2I& aOtherPos, std::vector<VECTOR2I>& pts ) const
 {
     int maxError = m_board->GetDesignSettings().m_MaxError;
 
@@ -801,14 +791,10 @@ static bool isPointOnRoundedCorner( const VECTOR2I& aPoint, const VECTOR2I& aPad
  * For rounded rectangles, control points are computed to be tangent to corner arcs,
  * preventing the teardrop curve from intersecting the pad's corner radius.
  */
-void TEARDROP_MANAGER::computeCurvedForRectShape( const TEARDROP_PARAMETERS& aParams,
-                                                  std::vector<VECTOR2I>& aPoly, int aTdWidth,
-                                                  int aTrackHalfWidth,
-                                                  std::vector<VECTOR2I>& aPts,
-                                                  const VECTOR2I& aIntersection,
-                                                  BOARD_ITEM* aOther,
-                                                  const VECTOR2I& aOtherPos,
-                                                  PCB_LAYER_ID aLayer ) const
+void TEARDROP_MANAGER::computeCurvedForRectShape( const TEARDROP_PARAMETERS& aParams, std::vector<VECTOR2I>& aPoly,
+                                                  int aTdWidth, int aTrackHalfWidth, std::vector<VECTOR2I>& aPts,
+                                                  const VECTOR2I& aIntersection, BOARD_ITEM* aOther,
+                                                  const VECTOR2I& aOtherPos, PCB_LAYER_ID aLayer ) const
 {
     int maxError = m_board->GetDesignSettings().m_MaxError;
 
@@ -979,9 +965,8 @@ bool TEARDROP_MANAGER::computeAnchorPoints( const TEARDROP_PARAMETERS& aParams, 
     if( force_clip || ( aParams.m_TdMaxWidth > 0 && aParams.m_TdMaxWidth < preferred_width ) )
     {
         // A max width of 0 means no limit, so a min against it would clip the shape to nothing.
-        int halfsize = ( aParams.m_TdMaxWidth > 0
-                                 ? std::min( aParams.m_TdMaxWidth, preferred_width )
-                                 : preferred_width ) / 2;
+        int halfsize = ( aParams.m_TdMaxWidth > 0 ? std::min( aParams.m_TdMaxWidth, preferred_width )
+                                                  : preferred_width ) / 2;
 
         // teardrop_axis is the line from anchor point on the track and the end point
         // of the teardrop in the pad/via
@@ -1169,8 +1154,8 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aPara
 
     // Search the intersection point between the pad/via shape and the current track
     // This this the starting point to define the teardrop length
-    SHAPE_LINE_CHAIN::INTERSECTIONS pts;
-    int pt_count;
+    std::vector<SHAPE_LINE_CHAIN::INTERSECTION> pts;
+    int                                         pt_count;
 
     if( aTrack->Type() == PCB_ARC_T )
     {
@@ -1440,7 +1425,7 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
 
         // A custom pad's copper can be several disjoint outlines and the ray may cross a hole, so
         // gather crossings from every contour rather than outline 0 alone
-        SHAPE_LINE_CHAIN::INTERSECTIONS hits;
+        std::vector<SHAPE_LINE_CHAIN::INTERSECTION> hits;
 
         for( int ii = 0; ii < padPoly.OutlineCount(); ++ii )
         {
@@ -1596,8 +1581,7 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
                 if( aParams.m_TdMaxWidth > 0 )
                     maxHalfWidth = std::min( maxHalfWidth, aParams.m_TdMaxWidth / 2 );
 
-                double symHalfWidth = std::min( maxSymmetric,
-                                                static_cast<double>( maxHalfWidth ) );
+                double symHalfWidth = std::min( maxSymmetric, static_cast<double>( maxHalfWidth ) );
 
                 if( symHalfWidth > track_halfwidth )
                 {
@@ -1623,8 +1607,7 @@ bool TEARDROP_MANAGER::computeTeardropPolygon( const TEARDROP_PARAMETERS& aParam
                             double disc = b_coeff * b_coeff - c_coeff;
 
                             if( disc < 0 )
-                                return VECTOR2I( KiROUND( lineOrigin.x ),
-                                                 KiROUND( lineOrigin.y ) );
+                                return VECTOR2I( KiROUND( lineOrigin.x ), KiROUND( lineOrigin.y ) );
 
                             double sqrtDisc = std::sqrt( disc );
                             double t1 = -b_coeff - sqrtDisc;

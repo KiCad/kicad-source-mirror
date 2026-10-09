@@ -336,7 +336,7 @@ bool LINE::Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPat
         bool visited = false;
     };
 
-    SHAPE_LINE_CHAIN::INTERSECTIONS ips;
+    std::vector<SHAPE_LINE_CHAIN::INTERSECTION> ips;
 
     HullIntersection( aObstacle, line, ips );
 

@@ -2156,7 +2156,7 @@ HANDLER_RESULT<InjectDrcErrorResponse> API_HANDLER_PCB::handleInjectDrcError(
 
     drcItem->SetErrorMessage( wxString::FromUTF8( aCtx.Request.message() ) );
 
-    RC_ITEM::KIIDS ids;
+    std::vector<KIID> ids;
 
     for( const auto& id : aCtx.Request.items() )
         ids.emplace_back( KIID( id.value() ) );

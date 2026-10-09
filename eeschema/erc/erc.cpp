@@ -133,7 +133,7 @@ public:
         append( std::move( aItem ), *sheet, aPosition );
     }
 
-    void Report( int aCode, const RC_ITEM::KIIDS& aItems, const KIID_PATH& aSheet, const VECTOR2I& aPosition,
+    void Report( int aCode, const std::vector<KIID>& aItems, const KIID_PATH& aSheet, const VECTOR2I& aPosition,
                  ITEM_PATHS aItemPaths = ITEM_PATHS::NONE, const wxString& aMessage = wxEmptyString )
     {
         auto item = ERC_ITEM::Create( aCode );
@@ -2348,8 +2348,8 @@ int ERC_TESTER::TestConnectivity( SCHEMATIC& aSchematic )
                 continue;
 
             markers.Report( code,
-                            diagnostic.pin == niluuid ? RC_ITEM::KIIDS{ diagnostic.flag }
-                                                      : RC_ITEM::KIIDS{ diagnostic.pin, diagnostic.flag },
+                            diagnostic.pin == niluuid ? std::vector<KIID>{ diagnostic.flag }
+                                                      : std::vector<KIID>{ diagnostic.pin, diagnostic.flag },
                             diagnostic.sheet, diagnostic.position, ITEM_PATHS::MAIN );
         }
     }

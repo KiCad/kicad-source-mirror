@@ -143,8 +143,6 @@ public:
         int m_count;
     };
 
-    typedef std::vector<INTERSECTION> INTERSECTIONS;
-
 
     /**
      * Initialize an empty line chain.
@@ -665,25 +663,22 @@ public:
      * Find all intersection points between our line chain and the segment \a aSeg.
      *
      * @param aSeg is the segment chain to find intersections with.
-     * @param aIp is the reference to a vector to store found intersections. Intersection points
-     *        are sorted with increasing distances from point aSeg.a.
+     * @param aIp is a reference to a vector to store the unordered set of found intersections.
      * @return the number of intersections found.
      */
-    int Intersect( const SEG& aSeg, INTERSECTIONS& aIp ) const;
+    int Intersect( const SEG& aSeg, std::vector<INTERSECTION>& aIp ) const;
 
     /**
      * Find all intersection points between our line chain and the line chain \a aChain.
      *
      * @param aChain is the line chain to find intersections with.
-     * @param aIp is reference to a vector to store found intersections. Intersection points are
-     *        sorted with increasing path lengths from the starting point of \a aChain.
+     * @param aIp is a reference to a vector to store the unordered set of found intersections.
      * @param aExcludeColinearAndTouching
      * @param aChainBBox
      * @return the number of intersections found.
      */
-    int Intersect( const SHAPE_LINE_CHAIN& aChain, INTERSECTIONS& aIp,
-                   bool aExcludeColinearAndTouching = false,
-                   BOX2I* aChainBBox = nullptr ) const;
+    int Intersect( const SHAPE_LINE_CHAIN& aChain, std::vector<INTERSECTION>& aIp,
+                   bool aExcludeColinearAndTouching = false, BOX2I* aChainBBox = nullptr ) const;
 
     /**
      * Compute the walk path length from the beginning of the line chain and the point \a aP

@@ -3913,30 +3913,31 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
 
             SHAPE_LINE_CHAIN padOutline = pad->GetEffectivePolygon( aLayer, ERROR_OUTSIDE )->Outline( 0 );
 
-            auto trimToOutline = [&]( SEG& aSegment )
-            {
-                SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
-
-                if( padOutline.Intersect( aSegment, intersections ) )
-                {
-                    intersections.clear();
-
-                    // Trim the segment to the thermal outline
-                    if( thermalOutline.Intersect( aSegment, intersections ) )
+            auto trimToOutline =
+                    [&]( SEG& aSegment )
                     {
-                        aSegment.B = intersections.front().p;
-                        return true;
-                    }
-                }
-                return false;
-            };
+                        std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
+
+                        if( padOutline.Intersect( aSegment, intersections ) )
+                        {
+                            intersections.clear();
+
+                            // Trim the segment to the thermal outline
+                            if( thermalOutline.Intersect( aSegment, intersections ) )
+                            {
+                                aSegment.B = intersections.front().p;
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
 
             for( const std::shared_ptr<PCB_SHAPE>& primitive : pad->GetPrimitives( aLayer ) )
             {
                 if( primitive->IsProxyItem() && primitive->GetShape() == SHAPE_T::SEGMENT )
                 {
                     SEG seg( primitive->GetStart(), primitive->GetEnd() );
-                    SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
+                    std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
 
                     RotatePoint( seg.A, pad->GetOrientation() );
                     RotatePoint( seg.B, pad->GetOrientation() );
@@ -4142,8 +4143,8 @@ void ZONE_FILLER::buildHatchZoneThermalRings( const ZONE* aZone, PCB_LAYER_ID aL
             int ringInnerRadius = padRadius + thermalGap;
             int ringWidth = spokeWidth;
 
-            TransformRingToPolygon( thermalRing, position, ringInnerRadius + ringWidth / 2,
-                                    ringWidth, m_maxError, ERROR_OUTSIDE );
+            TransformRingToPolygon( thermalRing, position, ringInnerRadius + ringWidth / 2, ringWidth,
+                                    m_maxError, ERROR_OUTSIDE );
         }
         else
         {
@@ -4153,12 +4154,10 @@ void ZONE_FILLER::buildHatchZoneThermalRings( const ZONE* aZone, PCB_LAYER_ID aL
             SHAPE_POLY_SET innerShape;
 
             // Outer ring edge = pad + thermal gap + spoke width
-            pad->TransformShapeToPolygon( outerShape, aLayer, thermalGap + spokeWidth,
-                                          m_maxError, ERROR_OUTSIDE );
+            pad->TransformShapeToPolygon( outerShape, aLayer, thermalGap + spokeWidth, m_maxError, ERROR_OUTSIDE );
 
             // Inner ring edge = pad + thermal gap (this is already knocked out)
-            pad->TransformShapeToPolygon( innerShape, aLayer, thermalGap,
-                                          m_maxError, ERROR_OUTSIDE );
+            pad->TransformShapeToPolygon( innerShape, aLayer, thermalGap, m_maxError, ERROR_OUTSIDE );
 
             thermalRing = outerShape;
             thermalRing.BooleanSubtract( innerShape );
@@ -4285,10 +4284,8 @@ bool ZONE_FILLER::addCopperThievingPattern( const ZONE* aZone, PCB_LAYER_ID aLay
         // void on the negative side after the modulo step.  bbox already
         // contains the rotated filledRegion bounds, which slightly overcover
         // the interior; extra voids get clipped to interior below.
-        int xVoid = bbox.GetLeft() - ( bbox.GetLeft() % lineStride ) + offset.x
-                    + lineStride / 2;
-        int yVoid = bbox.GetTop()  - ( bbox.GetTop()  % lineStride ) + offset.y
-                    + lineStride / 2;
+        int xVoid = bbox.GetLeft() - ( bbox.GetLeft() % lineStride ) + offset.x + lineStride / 2;
+        int yVoid = bbox.GetTop()  - ( bbox.GetTop()  % lineStride ) + offset.y + lineStride / 2;
 
         while( xVoid - voidSize / 2 > bbox.GetLeft() )
             xVoid -= lineStride;
@@ -4333,8 +4330,7 @@ bool ZONE_FILLER::addCopperThievingPattern( const ZONE* aZone, PCB_LAYER_ID aLay
     const int sideLen = std::max( settings.element_size - aZone->GetMinThickness(), 1 );
     const VECTOR2I squareSize( sideLen, sideLen );
 
-    const int containmentInset =
-            ( ( settings.pattern == THIEVING_PATTERN::SQUARES ) ? sideLen / 2 : dotRadius ) + 1;
+    const int containmentInset = ( ( settings.pattern == THIEVING_PATTERN::SQUARES ) ? sideLen / 2 : dotRadius ) + 1;
 
     filledRegion.Deflate( containmentInset, CORNER_STRATEGY::CHAMFER_ALL_CORNERS, maxError );
 
@@ -4360,14 +4356,9 @@ bool ZONE_FILLER::addCopperThievingPattern( const ZONE* aZone, PCB_LAYER_ID aLay
                 continue;
 
             if( settings.pattern == THIEVING_PATTERN::SQUARES )
-            {
-                TransformTrapezoidToPolygon( stamps, centre, squareSize, ANGLE_0, 0, 0, 0,
-                                             maxError, ERROR_OUTSIDE );
-            }
+                TransformTrapezoidToPolygon( stamps, centre, squareSize, ANGLE_0, 0, 0, 0, maxError, ERROR_OUTSIDE );
             else
-            {
                 TransformCircleToPolygon( stamps, centre, dotRadius, maxError, ERROR_OUTSIDE );
-            }
         }
 
         ++rowIndex;
@@ -4381,9 +4372,8 @@ bool ZONE_FILLER::addCopperThievingPattern( const ZONE* aZone, PCB_LAYER_ID aLay
 }
 
 
-bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                                          PCB_LAYER_ID aDebugLayer, SHAPE_POLY_SET& aFillPolys,
-                                          const SHAPE_POLY_SET& aThermalRings )
+bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer, PCB_LAYER_ID aDebugLayer,
+                                          SHAPE_POLY_SET& aFillPolys, const SHAPE_POLY_SET& aThermalRings )
 {
     // Build grid:
 
@@ -4592,7 +4582,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 
                 // Check 3: Does the ring outline NOT intersect the hole outline?
                 // If there's no intersection, the ring is fully enclosed (not touching edges)
-                SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
+                std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
                 ring.Intersect( hole, intersections );
 
                 if( intersections.empty() )

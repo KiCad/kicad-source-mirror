@@ -260,9 +260,7 @@ public:
         std::vector<PROPERTY_BASE*> properties;
     };
 
-    typedef std::vector<CLASS_INFO> CLASSES_INFO;
-
-    CLASSES_INFO GetAllClasses();
+    std::vector<CLASS_INFO> GetAllClasses();
 
     /**
      * Callback to alert the notification system that a property has changed

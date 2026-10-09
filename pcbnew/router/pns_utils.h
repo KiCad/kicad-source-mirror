@@ -19,8 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __PNS_UTILS_H
-#define __PNS_UTILS_H
+#pragma once
 
 #include <math/vector2d.h>
 #include <math/box2.h>
@@ -65,10 +64,9 @@ OPT_BOX2I ChangedArea( const ITEM* aItemA, const ITEM* aItemB );
 OPT_BOX2I ChangedArea( const LINE& aLineA, const LINE& aLineB );
 
 void HullIntersection( const SHAPE_LINE_CHAIN& hull, const SHAPE_LINE_CHAIN& line,
-                       SHAPE_LINE_CHAIN::INTERSECTIONS& ips );
+                       std::vector<SHAPE_LINE_CHAIN::INTERSECTION>& ips );
 
-const SHAPE_LINE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aClearance,
-                                                          int aWalkaroundThickness );
+const SHAPE_LINE_CHAIN BuildHullForPrimitiveShape( const SHAPE* aShape, int aClearance, int aWalkaroundThickness );
 
 void NodeStats( DEBUG_DECORATOR* aDbg, wxString aLabel, NODE *aNode );
 
@@ -90,6 +88,3 @@ const SEG LongestCoveringSegment( const SEG& a, const SEG& b );
 
 
 }
-
-
-#endif    // __PNS_UTILS_H

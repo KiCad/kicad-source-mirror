@@ -123,29 +123,27 @@ static bool isCopperOutside( const FOOTPRINT* aFootprint, SHAPE_POLY_SET& aShape
     for( PAD* pad : aFootprint->Pads() )
     {
         pad->Padstack().ForEachUniqueLayer(
-            [&]( PCB_LAYER_ID aLayer )
-            {
-                SHAPE_POLY_SET poly = aShape.CloneDropTriangulation();
-
-                poly.ClearArcs();
-
-                poly.BooleanIntersection( *pad->GetEffectivePolygon( aLayer, ERROR_INSIDE ) );
-
-                if( poly.OutlineCount() == 0 )
+                [&]( PCB_LAYER_ID aLayer )
                 {
-                    VECTOR2I padPos = pad->GetPosition();
-                    wxLogTrace( traceBoardOutline, wxT( "Tested pad (%d, %d): outside" ),
-                                padPos.x, padPos.y );
-                    padOutside = true;
-                }
-            } );
+                    SHAPE_POLY_SET poly = aShape.CloneDropTriangulation();
+
+                    poly.ClearArcs();
+
+                    poly.BooleanIntersection( *pad->GetEffectivePolygon( aLayer, ERROR_INSIDE ) );
+
+                    if( poly.OutlineCount() == 0 )
+                    {
+                        VECTOR2I padPos = pad->GetPosition();
+                        wxLogTrace( traceBoardOutline, wxT( "Tested pad (%d, %d): outside" ), padPos.x, padPos.y );
+                        padOutside = true;
+                    }
+                } );
 
         if( padOutside )
             break;
 
         VECTOR2I padPos = pad->GetPosition();
-        wxLogTrace( traceBoardOutline, wxT( "Tested pad (%d, %d): not outside" ),
-                    padPos.x, padPos.y );
+        wxLogTrace( traceBoardOutline, wxT( "Tested pad (%d, %d): not outside" ), padPos.x, padPos.y );
     }
 
     return padOutside;
@@ -290,6 +288,7 @@ static void processClosedShape( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
 
         for( int ii = 1; ii < aContour.PointCount(); ++ii )
             aShapeOwners[std::make_pair( aContour.CPoint( ii - 1 ), aContour.CPoint( ii ) )] = aShape;
+
         break;
     }
     default:
@@ -297,10 +296,9 @@ static void processClosedShape( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
     }
 }
 
-static void processShapeSegment( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
-                                VECTOR2I& aPrevPt,
-                                std::map<std::pair<VECTOR2I, VECTOR2I>, PCB_SHAPE*>& aShapeOwners,
-                                int aErrorMax, int aChainingEpsilon, bool aAllowUseArcsInPolygons )
+static void processShapeSegment( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour, VECTOR2I& aPrevPt,
+                                 std::map<std::pair<VECTOR2I, VECTOR2I>, PCB_SHAPE*>& aShapeOwners,
+                                 int aErrorMax, int aChainingEpsilon, bool aAllowUseArcsInPolygons )
 {
     switch( aShape->GetShape() )
     {
@@ -324,11 +322,8 @@ static void processShapeSegment( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
         VECTOR2I pmid = aShape->GetArcMid();
         VECTOR2I pend = aShape->GetEnd();
 
-        if( !close_enough( aPrevPt, pstart, aChainingEpsilon )
-                && !close_enough( aPrevPt, pend, aChainingEpsilon ) )
-        {
+        if( !close_enough( aPrevPt, pstart, aChainingEpsilon ) && !close_enough( aPrevPt, pend, aChainingEpsilon ) )
             return;
-        }
 
         if( closer_to_first( aPrevPt, pend, pstart ) )
             std::swap( pstart, pend );
@@ -342,10 +337,7 @@ static void processShapeSegment( PCB_SHAPE* aShape, SHAPE_LINE_CHAIN& aContour,
             arcChain.ClearArcs();
 
         for( int ii = 1; ii < arcChain.PointCount(); ++ii )
-        {
-            aShapeOwners[ std::make_pair( arcChain.CPoint( ii - 1 ),
-                                         arcChain.CPoint( ii ) ) ] = aShape;
-        }
+            aShapeOwners[ std::make_pair( arcChain.CPoint( ii - 1 ), arcChain.CPoint( ii ) ) ] = aShape;
 
         aContour.Append( arcChain );
         aPrevPt = pend;
@@ -474,12 +466,12 @@ static std::map<int, std::vector<int>> buildContourHierarchy( const std::vector<
     return contourToParentIndexesMap;
 }
 
-static bool addOutlinesToPolygon( const std::vector<SHAPE_LINE_CHAIN>&   aContours,
+static bool addOutlinesToPolygon( const std::vector<SHAPE_LINE_CHAIN>& aContours,
                                   const std::map<int, std::vector<int>>& aContourHierarchy,
                                   const std::set<int>& aCrossingContours, SHAPE_POLY_SET& aPolygons,
                                   bool aAllowDisjoint, OUTLINE_ERROR_HANDLER* aErrorHandler,
                                   const std::function<PCB_SHAPE*( const SEG& )>& aFetchOwner,
-                                  std::map<int, int>&                            aContourToOutlineIdxMap )
+                                  std::map<int, int>& aContourToOutlineIdxMap )
 {
     for( const auto& [ contourIndex, parentIndexes ] : aContourHierarchy )
     {
@@ -513,7 +505,7 @@ static bool addOutlinesToPolygon( const std::vector<SHAPE_LINE_CHAIN>&   aContou
     return true;
 }
 
-static void addHolesToPolygon( const std::vector<SHAPE_LINE_CHAIN>&   aContours,
+static void addHolesToPolygon( const std::vector<SHAPE_LINE_CHAIN>& aContours,
                                const std::map<int, std::vector<int>>& aContourHierarchy,
                                const std::map<int, int>& aContourToOutlineIdxMap, SHAPE_POLY_SET& aPolygons,
                                bool aAllowUseArcsInPolygons, const std::set<int>& aCrossingContours )
@@ -570,8 +562,7 @@ static void addHolesToPolygon( const std::vector<SHAPE_LINE_CHAIN>&   aContours,
     }
 }
 
-static bool checkSelfIntersections( SHAPE_POLY_SET& aPolygons,
-                                   OUTLINE_ERROR_HANDLER* aErrorHandler,
+static bool checkSelfIntersections( SHAPE_POLY_SET& aPolygons, OUTLINE_ERROR_HANDLER* aErrorHandler,
                                    const std::function<PCB_SHAPE*(const SEG&)>& aFetchOwner )
 {
     bool selfIntersecting = false;
@@ -719,7 +710,7 @@ static std::set<int> findCrossingContours( const std::vector<SHAPE_LINE_CHAIN>& 
     {
         for( size_t jj = ii + 1; jj < aContours.size(); ++jj )
         {
-            SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
+            std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
 
             if( aContours[ii].Intersect( aContours[jj], intersections, true ) != 0 )
             {
@@ -733,16 +724,15 @@ static std::set<int> findCrossingContours( const std::vector<SHAPE_LINE_CHAIN>& 
 }
 
 
-// Walk a chain of open shapes (segments/arcs/beziers) starting from aStart, and produce a
-// closed SHAPE_LINE_CHAIN if the chain forms a closed loop. Shapes that are consumed are
-// removed from aRemaining. Returns true and populates aContour and aOwnerShape only if a
-// closed contour is produced. Used to detect cross-contour intersections of bezier-bounded
-// slots which would otherwise be missed by the closed-shape-only intersection test.
+// Walk a chain of open shapes (segments/arcs/beziers) starting from aStart, and produce a closed
+// SHAPE_LINE_CHAIN if the chain forms a closed loop. Shapes that are consumed are removed from
+// aRemaining. Returns true and populates aContour and aOwnerShape only if a closed contour is produced.
+// Used to detect cross-contour intersections of bezier-bounded slots which would otherwise be missed
+// by the closed-shape-only intersection test.
 static bool buildChainedClosedContour( PCB_SHAPE* aStart, std::set<PCB_SHAPE*>& aRemaining,
-                                       const KDTree& aKdTree,
-                                       const PCB_SHAPE_ENDPOINTS_ADAPTOR& aAdaptor,
-                                       int aErrorMax, int aChainingEpsilon,
-                                       SHAPE_LINE_CHAIN& aContour, PCB_SHAPE*& aOwnerShape )
+                                       const KDTree& aKdTree, const PCB_SHAPE_ENDPOINTS_ADAPTOR& aAdaptor,
+                                       int aErrorMax, int aChainingEpsilon, SHAPE_LINE_CHAIN& aContour,
+                                       PCB_SHAPE*& aOwnerShape )
 {
     std::deque<PCB_SHAPE*> chain;
     chain.push_back( aStart );
@@ -754,58 +744,57 @@ static bool buildChainedClosedContour( PCB_SHAPE* aStart, std::set<PCB_SHAPE*>& 
     std::set<PCB_SHAPE*> visited;
     visited.insert( aStart );
 
-    auto extendChain = [&]( bool forward )
-    {
-        PCB_SHAPE* curr = forward ? chain.back() : chain.front();
-        VECTOR2I   prev = forward ? backPt : frontPt;
-
-        for( ;; )
-        {
-            // The KD-tree spans the original openShapes set, so it still returns shapes
-            // already consumed by an earlier chain. Filter against aRemaining to avoid
-            // accidentally absorbing those into this chain.
-            auto isConsumed =
-                    [&]( PCB_SHAPE* aCandidate )
-                    {
-                        return aRemaining.find( aCandidate ) == aRemaining.end()
-                                || visited.find( aCandidate ) != visited.end();
-                    };
-
-            CHAIN_NEIGHBOURS next = findNeighbours( curr, prev, aKdTree, aAdaptor, aChainingEpsilon,
-                                                    isConsumed );
-
-            if( next.available )
+    // The KD-tree spans the original openShapes set, so it still returns shapes already consumed by
+    // an earlier chain. Filter against aRemaining to avoid accidentally absorbing those into this chain.
+    auto isConsumed =
+            [&]( PCB_SHAPE* aCandidate )
             {
-                visited.insert( next.available );
+                return !aRemaining.contains( aCandidate ) || visited.contains( aCandidate );
+            };
 
-                if( forward )
-                    chain.push_back( next.available );
-                else
-                    chain.push_front( next.available );
+    auto extendChain =
+            [&]( bool forward )
+            {
+                PCB_SHAPE* curr = forward ? chain.back() : chain.front();
+                VECTOR2I   prev = forward ? backPt : frontPt;
 
-                if( closer_to_first( prev, next.available->GetStart(), next.available->GetEnd() ) )
-                    prev = next.available->GetEnd();
-                else
-                    prev = next.available->GetStart();
+                for( ;; )
+                {
+                    CHAIN_NEIGHBOURS next = findNeighbours( curr, prev, aKdTree, aAdaptor, aChainingEpsilon,
+                                                            isConsumed );
 
-                curr = next.available;
-                continue;
-            }
+                    if( next.available )
+                    {
+                        visited.insert( next.available );
 
-            // Match on position, not identity (see doConvertOutlineToPolygon)
-            VECTOR2I chainPt = forward ? frontPt : backPt;
+                        if( forward )
+                            chain.push_back( next.available );
+                        else
+                            chain.push_front( next.available );
 
-            if( chain.size() > 1 && close_enough( prev, chainPt, aChainingEpsilon ) )
-                closed = true;
+                        if( closer_to_first( prev, next.available->GetStart(), next.available->GetEnd() ) )
+                            prev = next.available->GetEnd();
+                        else
+                            prev = next.available->GetStart();
 
-            if( forward )
-                backPt = prev;
-            else
-                frontPt = prev;
+                        curr = next.available;
+                        continue;
+                    }
 
-            break;
-        }
-    };
+                    // Match on position, not identity (see doConvertOutlineToPolygon)
+                    VECTOR2I chainPt = forward ? frontPt : backPt;
+
+                    if( chain.size() > 1 && close_enough( prev, chainPt, aChainingEpsilon ) )
+                        closed = true;
+
+                    if( forward )
+                        backPt = prev;
+                    else
+                        frontPt = prev;
+
+                    break;
+                }
+            };
 
     extendChain( true );
 
@@ -890,6 +879,12 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
     for( PCB_SHAPE* shape : aShapeList )
         shape->ClearFlags( SKIP_STRUCT );
 
+    auto isConsumed =
+            [&]( PCB_SHAPE* aCandidate )
+            {
+                return ( aCandidate->GetFlags() & SKIP_STRUCT ) != 0;
+            };
+
     // Process each shape to build contours
     while( !remaining.empty() )
     {
@@ -909,8 +904,10 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
         currContour.SetWidth( graphic->GetWidth() );
 
         // Handle closed shapes (circles, rects, polygons, ellipses)
-        if( graphic->GetShape() == SHAPE_T::POLY || graphic->GetShape() == SHAPE_T::CIRCLE
-            || graphic->GetShape() == SHAPE_T::RECTANGLE || graphic->GetShape() == SHAPE_T::ELLIPSE )
+        if( graphic->GetShape() == SHAPE_T::POLY
+            || graphic->GetShape() == SHAPE_T::CIRCLE
+            || graphic->GetShape() == SHAPE_T::RECTANGLE
+            || graphic->GetShape() == SHAPE_T::ELLIPSE )
         {
             processClosedShape( graphic, currContour, shapeOwners, aErrorMax, aAllowUseArcsInPolygons );
         }
@@ -924,61 +921,59 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
             VECTOR2I frontPt = graphic->GetStart();
             VECTOR2I backPt = graphic->GetEnd();
 
-            auto extendChain = [&]( bool forward )
-            {
-                PCB_SHAPE* curr = forward ? chain.back() : chain.front();
-                VECTOR2I   prev = forward ? backPt : frontPt;
-
-                for( ;; )
-                {
-                    CHAIN_NEIGHBOURS next = findNeighbours( curr, prev, kdTree, adaptor, aChainingEpsilon,
-                                                           []( PCB_SHAPE* aCandidate )
-                                                           {
-                                                               return ( aCandidate->GetFlags() & SKIP_STRUCT ) != 0;
-                                                           } );
-
-                    if( next.available )
+            auto extendChain =
+                    [&]( bool forward )
                     {
-                        next.available->SetFlags( SKIP_STRUCT );
-                        aCleaner.insert( next.available );
-                        remaining.erase( next.available );
+                        PCB_SHAPE* curr = forward ? chain.back() : chain.front();
+                        VECTOR2I   prev = forward ? backPt : frontPt;
 
-                        if( forward )
-                            chain.push_back( next.available );
-                        else
-                            chain.push_front( next.available );
+                        for( ;; )
+                        {
+                            CHAIN_NEIGHBOURS next = findNeighbours( curr, prev, kdTree, adaptor, aChainingEpsilon,
+                                                                    isConsumed );
 
-                        if( closer_to_first( prev, next.available->GetStart(), next.available->GetEnd() ) )
-                            prev = next.available->GetEnd();
-                        else
-                            prev = next.available->GetStart();
+                            if( next.available )
+                            {
+                                next.available->SetFlags( SKIP_STRUCT );
+                                aCleaner.insert( next.available );
+                                remaining.erase( next.available );
 
-                        curr = next.available;
-                        continue;
-                    }
+                                if( forward )
+                                    chain.push_back( next.available );
+                                else
+                                    chain.push_front( next.available );
 
-                    VECTOR2I chainPt = forward ? frontPt : backPt;
+                                if( closer_to_first( prev, next.available->GetStart(), next.available->GetEnd() ) )
+                                    prev = next.available->GetEnd();
+                                else
+                                    prev = next.available->GetStart();
 
-                    if( chain.size() > 1 && close_enough( prev, chainPt, aChainingEpsilon ) )
-                    {
-                        closed = true;
-                    }
-                    else if( next.consumed )
-                    {
-                        if( aErrorHandler )
-                            ( *aErrorHandler )( _( "(self-intersecting)" ), curr, next.consumed, prev );
+                                curr = next.available;
+                                continue;
+                            }
 
-                        selfIntersecting = true;
-                    }
+                            VECTOR2I chainPt = forward ? frontPt : backPt;
 
-                    if( forward )
-                        backPt = prev;
-                    else
-                        frontPt = prev;
+                            if( chain.size() > 1 && close_enough( prev, chainPt, aChainingEpsilon ) )
+                            {
+                                closed = true;
+                            }
+                            else if( next.consumed )
+                            {
+                                if( aErrorHandler )
+                                    ( *aErrorHandler )( _( "(self-intersecting)" ), curr, next.consumed, prev );
 
-                    break;
-                }
-            };
+                                selfIntersecting = true;
+                            }
+
+                            if( forward )
+                                backPt = prev;
+                            else
+                                frontPt = prev;
+
+                            break;
+                        }
+                    };
 
             extendChain( true );
 
@@ -1005,8 +1000,8 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
 
             for( PCB_SHAPE* shapeInChain : chain )
             {
-                processShapeSegment( shapeInChain, currContour, prevPt, shapeOwners,
-                                   aErrorMax, aChainingEpsilon, aAllowUseArcsInPolygons );
+                processShapeSegment( shapeInChain, currContour, prevPt, shapeOwners, aErrorMax, aChainingEpsilon,
+                                     aAllowUseArcsInPolygons );
             }
 
             // Handle contour closure
@@ -1047,55 +1042,57 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
             }
             else
             {
-                auto report_gap = [&]( const VECTOR2I& pt )
-                {
-                    if( !aErrorHandler )
-                        return;
-
-                    const double query_pt[2] = { static_cast<double>( pt.x ), static_cast<double>( pt.y ) };
-
-                    // Both endpoints are in the tree, so over-fetch for a second shape
-                    uint32_t indices[8] = { 0 };      // make gcc quiet
-                    double   dists[8];
-
-                    const size_t found = kdTree.knnSearch( query_pt, 8, indices, dists );
-
-                    if( found == 0 )
-                        return;
-
-                    PCB_SHAPE* shapeA = adaptor.endpoints[indices[0]].second;
-                    PCB_SHAPE* shapeB = shapeA;
-
-                    // A lone shape has no neighbour, so it pairs with itself
-                    for( size_t ii = 1; ii < found; ++ii )
-                    {
-                        if( adaptor.endpoints[indices[ii]].second != shapeA )
+                auto report_gap =
+                        [&]( const VECTOR2I& pt )
                         {
-                            shapeB = adaptor.endpoints[indices[ii]].second;
-                            break;
-                        }
-                    }
+                            if( !aErrorHandler )
+                                return;
 
-                    // Avoid reporting the same pair twice
-                    auto key = std::minmax( shapeA, shapeB );
+                            const double query_pt[2] = { static_cast<double>( pt.x ), static_cast<double>( pt.y ) };
 
-                    if( !reportedGaps.insert( key ).second )
-                        return;
+                            // Both endpoints are in the tree, so over-fetch for a second shape
+                            uint32_t indices[8] = { 0 };      // make gcc quiet
+                            double   dists[8];
 
-                    // Find the nearest points between the two shapes and calculate midpoint
-                    std::shared_ptr<SHAPE> effectiveShapeA = shapeA->GetEffectiveShape();
-                    std::shared_ptr<SHAPE> effectiveShapeB = shapeB->GetEffectiveShape();
-                    VECTOR2I               ptA, ptB;
-                    VECTOR2I               midpoint = pt; // fallback to original point
+                            const size_t found = kdTree.knnSearch( query_pt, 8, indices, dists );
 
-                    if( effectiveShapeA && effectiveShapeB
-                        && effectiveShapeA->NearestPoints( effectiveShapeB.get(), ptA, ptB ) )
-                    {
-                        midpoint = ( ptA + ptB ) / 2;
-                    }
+                            if( found == 0 )
+                                return;
 
-                    ( *aErrorHandler )( _( "(not a closed shape)" ), shapeA, shapeB, midpoint );
-                };
+                            PCB_SHAPE* shapeA = adaptor.endpoints[indices[0]].second;
+                            PCB_SHAPE* shapeB = shapeA;
+
+                            // A lone shape has no neighbour, so it pairs with itself
+                            for( size_t ii = 1; ii < found; ++ii )
+                            {
+                                if( adaptor.endpoints[indices[ii]].second != shapeA )
+                                {
+                                    shapeB = adaptor.endpoints[indices[ii]].second;
+                                    break;
+                                }
+                            }
+
+                            // Avoid reporting the same pair twice
+                            auto key = std::minmax( shapeA, shapeB );
+
+                            if( !reportedGaps.insert( key ).second )
+                                return;
+
+                            // Find the nearest points between the two shapes and calculate midpoint
+                            std::shared_ptr<SHAPE> effectiveShapeA = shapeA->GetEffectiveShape();
+                            std::shared_ptr<SHAPE> effectiveShapeB = shapeB->GetEffectiveShape();
+                            VECTOR2I               ptA, ptB;
+                            VECTOR2I               midpoint = pt; // fallback to original point
+
+                            if( effectiveShapeA
+                                && effectiveShapeB
+                                && effectiveShapeA->NearestPoints( effectiveShapeB.get(), ptA, ptB ) )
+                            {
+                                midpoint = ( ptA + ptB ) / 2;
+                            }
+
+                            ( *aErrorHandler )( _( "(not a closed shape)" ), shapeA, shapeB, midpoint );
+                        };
 
                 report_gap( currContour.CPoint( 0 ) );
                 report_gap( currContour.CLastPoint() );
@@ -1111,10 +1108,8 @@ bool doConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_
     }
 
     // Generate bounding boxes for hierarchy calculations
-    for( size_t ii = 0; ii < contours.size(); ++ii )
+    for( const SHAPE_LINE_CHAIN& contour : contours )
     {
-        SHAPE_LINE_CHAIN& contour = contours[ii];
-
         if( !contour.GetCachedBBox()->IsValid() )
             contour.GenerateBBoxCache();
     }
@@ -1150,14 +1145,12 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aShapeList, SHAPE_POLY_SE
 {
     SCOPED_FLAGS_CLEANER cleaner( SKIP_STRUCT );
 
-    return doConvertOutlineToPolygon( aShapeList, aPolygons, aErrorMax, aChainingEpsilon,
-                                      aAllowDisjoint, aErrorHandler, aAllowUseArcsInPolygons,
-                                      cleaner );
+    return doConvertOutlineToPolygon( aShapeList, aPolygons, aErrorMax, aChainingEpsilon, aAllowDisjoint,
+                                      aErrorHandler, aAllowUseArcsInPolygons, cleaner );
 }
 
 
-bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
-                                    OUTLINE_ERROR_HANDLER* aErrorHandler )
+bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist, OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
     bool                success = true;
     PCB_TYPE_COLLECTOR  items;
@@ -1192,8 +1185,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
                 if( aErrorHandler )
                 {
-                    (*aErrorHandler)( wxString::Format( _( "(rectangle has null or very small "
-                                                           "size: %d nm)" ), dim ),
+                    (*aErrorHandler)( wxString::Format( _( "(rectangle has null or very small size: %d nm)" ), dim ),
                                       shape, nullptr, shape->GetStart() );
                 }
             }
@@ -1210,8 +1202,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
                 if( aErrorHandler )
                 {
-                    (*aErrorHandler)( wxString::Format( _( "(circle has null or very small "
-                                                           "radius: %d nm)" ), r ),
+                    (*aErrorHandler)( wxString::Format( _( "(circle has null or very small radius: %d nm)" ), r ),
                                       shape, nullptr, shape->GetStart() );
                 }
             }
@@ -1229,8 +1220,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
                 if( aErrorHandler )
                 {
-                    (*aErrorHandler)( wxString::Format( _( "(segment has null or very small "
-                                                           "length: %d nm)" ), dim ),
+                    (*aErrorHandler)( wxString::Format( _( "(segment has null or very small length: %d nm)" ), dim ),
                                       shape, nullptr, shape->GetStart() );
                 }
             }
@@ -1252,8 +1242,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
                 if( aErrorHandler )
                 {
-                    (*aErrorHandler)( wxString::Format( _( "(arc has null or very small size: "
-                                                           "%d nm)" ), dim ),
+                    (*aErrorHandler)( wxString::Format( _( "(arc has null or very small size: %d nm)" ), dim ),
                                       shape, nullptr, shape->GetStart() );
                 }
             }
@@ -1300,8 +1289,10 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
     for( PCB_SHAPE* shape : shapeList )
     {
-        if( shape->GetShape() == SHAPE_T::POLY || shape->GetShape() == SHAPE_T::CIRCLE
-            || shape->GetShape() == SHAPE_T::RECTANGLE || shape->GetShape() == SHAPE_T::ELLIPSE )
+        if( shape->GetShape() == SHAPE_T::POLY
+            || shape->GetShape() == SHAPE_T::CIRCLE
+            || shape->GetShape() == SHAPE_T::RECTANGLE
+            || shape->GetShape() == SHAPE_T::ELLIPSE )
         {
             SHAPE_LINE_CHAIN                                    contour;
             std::map<std::pair<VECTOR2I, VECTOR2I>, PCB_SHAPE*> shapeOwners;
@@ -1309,8 +1300,10 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
             processClosedShape( shape, contour, shapeOwners, shape->GetMaxError(), true );
             closedContours.emplace_back( shape, std::move( contour ) );
         }
-        else if( shape->GetShape() == SHAPE_T::SEGMENT || shape->GetShape() == SHAPE_T::ARC
-                 || shape->GetShape() == SHAPE_T::BEZIER || shape->GetShape() == SHAPE_T::ELLIPSE_ARC )
+        else if( shape->GetShape() == SHAPE_T::SEGMENT
+                 || shape->GetShape() == SHAPE_T::ARC
+                 || shape->GetShape() == SHAPE_T::BEZIER
+                 || shape->GetShape() == SHAPE_T::ELLIPSE_ARC )
         {
             openShapes.insert( shape );
         }
@@ -1320,7 +1313,7 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
     // Without this, malformed-outline detection misses overlaps involving such slots.
     if( !openShapes.empty() )
     {
-        std::vector<PCB_SHAPE*> openShapeList( openShapes.begin(), openShapes.end() );
+        std::vector<PCB_SHAPE*>     openShapeList( openShapes.begin(), openShapes.end() );
         PCB_SHAPE_ENDPOINTS_ADAPTOR adaptor( openShapeList );
         KDTree                      kdTree( 2, adaptor );
 
@@ -1333,8 +1326,8 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
             SHAPE_LINE_CHAIN contour;
             PCB_SHAPE*       owner = nullptr;
 
-            if( buildChainedClosedContour( start, openShapes, kdTree, adaptor, maxError,
-                                           chainingEpsilon, contour, owner ) )
+            if( buildChainedClosedContour( start, openShapes, kdTree, adaptor, maxError, chainingEpsilon,
+                                           contour, owner ) )
             {
                 closedContours.emplace_back( owner, std::move( contour ) );
             }
@@ -1351,8 +1344,8 @@ bool TestBoardOutlinesGraphicItems( BOARD* aBoard, int aMinDist,
 
         for( size_t jj = ii + 1; jj < closedContours.size(); ++jj )
         {
-            const SHAPE_LINE_CHAIN&         contourB = closedContours[jj].second;
-            SHAPE_LINE_CHAIN::INTERSECTIONS intersections;
+            const SHAPE_LINE_CHAIN&                     contourB = closedContours[jj].second;
+            std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersections;
 
             // Ignore touching-only cases; report only real overlap/crossing.
             if( contourA.Intersect( contourB, intersections, true ) == 0 )

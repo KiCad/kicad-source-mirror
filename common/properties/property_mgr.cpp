@@ -430,9 +430,9 @@ void PROPERTY_MANAGER::CLASS_DESC::collectPropsRecur( std::vector<PROPERTY_BASE*
 }
 
 
-PROPERTY_MANAGER::CLASSES_INFO PROPERTY_MANAGER::GetAllClasses()
+std::vector<PROPERTY_MANAGER::CLASS_INFO> PROPERTY_MANAGER::GetAllClasses()
 {
-    CLASSES_INFO rv;
+    std::vector<CLASS_INFO> rv;
 
     for( std::pair<const TYPE_ID, CLASS_DESC>& classEntry : m_classes )
     {
