@@ -614,7 +614,7 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
                 else if( layer == copperCount - 1 )
                     uniqifier += 'B';
                 else
-                    uniqifier += fmt::format( "{}", layer );
+                    uniqifier += fmt::format( "0{}", layer );
             }
         }
     }
