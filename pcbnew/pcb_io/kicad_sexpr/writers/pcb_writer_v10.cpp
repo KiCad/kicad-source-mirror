@@ -35,6 +35,7 @@
 #include <footprint.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <io/kicad/legacy_format.h>
+#include "legacy_item_order.h"
 #include <io/kicad/legacy_pcb_plot_format.h>
 #include <io/kicad/legacy_tuning_pattern.h>
 #include <layer_range.h>
@@ -1122,8 +1123,8 @@ void PCB_WRITER_V10::format( const FOOTPRINT* aFootprint ) const
     Format( &aFootprint->Value() );
 
     std::set<PAD*, FOOTPRINT::cmp_pads>            sorted_pads( aFootprint->Pads().begin(), aFootprint->Pads().end() );
-    std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> sorted_drawings( aFootprint->GraphicalItems().begin(),
-                                                                    aFootprint->GraphicalItems().end() );
+    std::set<BOARD_ITEM*, KICAD_FORMAT::LEGACY::FP_DRAWING_ORDER_V10> sorted_drawings(
+            aFootprint->GraphicalItems().begin(), aFootprint->GraphicalItems().end() );
     std::set<PCB_POINT*, PCB_POINT::cmp_points>    sorted_points( aFootprint->Points().begin(),
                                                                   aFootprint->Points().end() );
     std::set<ZONE*, FOOTPRINT::cmp_zones>     sorted_zones( aFootprint->Zones().begin(), aFootprint->Zones().end() );

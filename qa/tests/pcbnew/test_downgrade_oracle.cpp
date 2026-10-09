@@ -540,6 +540,18 @@ static void checkNativeFootprintGolden( const DOWNGRADE_TARGET& aTarget, const s
 }
 
 
+BOOST_AUTO_TEST_CASE( BoardMetadataMatchesNativeKicad9Golden )
+{
+    checkNativeBoardGolden( kicad9, "v9", "metadata", "metadata", 6, 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( BoardMetadataMatchesNativeKicad10Golden )
+{
+    checkNativeBoardGolden( kicad10, "v10", "metadata", "metadata", 0, 0 );
+}
+
+
 BOOST_AUTO_TEST_CASE( FootprintMatchesNativeKicad9Golden )
 {
     checkNativeFootprintGolden( kicad9, "v9", "metadata" );
