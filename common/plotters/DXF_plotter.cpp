@@ -575,7 +575,7 @@ static const struct
 };
 
 
-static const char* getDXFLineType( LINE_STYLE aType )
+static const std::string getDXFLineType( LINE_STYLE aType )
 {
     switch( aType )
     {
@@ -750,11 +750,13 @@ std::string DXF_PLOTTER::emitEntityHandle( const char* aEntityType, const char* 
                 "  5\n{}\n"
                 "330\n{}\n"
                 "100\nAcDbEntity\n"
-                "  8\n{}\n",
+                "  8\n{}\n"
+                "  6\n{}\n",
                 aEntityType,
                 handle,
                 owner,
-                aLayerName );
+                aLayerName,
+                getDXFLineType( m_currentLineType ) );
 
     if( aSubclass )
         fmt::print( m_outputFile, "100\n{}\n", aSubclass );
@@ -1103,7 +1105,7 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
     m_namedObjectDictHandle = nextHandle();
     m_layoutDictHandle = nextHandle();
 
-    for( const DxfLayout& l : m_dxfLayouts )
+    for( const DXF_LAYOUT& l : m_dxfLayouts )
     {
         fmt::print( m_outputFile,
                     "  0\n"
@@ -1137,7 +1139,7 @@ bool DXF_PLOTTER::StartPlot( const wxString& aPageNumber )
                 "  2\n"
                 "BLOCKS\n" );
 
-    for( const DxfLayout& l : m_dxfLayouts )
+    for( const DXF_LAYOUT& l : m_dxfLayouts )
     {
         fmt::print( m_outputFile,
                     "  0\n"
@@ -1267,7 +1269,7 @@ void DXF_PLOTTER::writeObjectsSection()
                 m_layoutDictHandle,
                 m_namedObjectDictHandle );
 
-    for( const DxfLayout& l : m_dxfLayouts )
+    for( const DXF_LAYOUT& l : m_dxfLayouts )
     {
         fmt::print( m_outputFile,
                     "  3\n{}\n"
@@ -1289,7 +1291,7 @@ void DXF_PLOTTER::writeObjectsSection()
     // ModelType set on a paperspace layout, or 147 appearing before 76/77/78.
     for( std::size_t i = 0; i < m_dxfLayouts.size(); ++i )
     {
-        const DxfLayout& l = m_dxfLayouts[i];
+        const DXF_LAYOUT& l = m_dxfLayouts[i];
         int plotLayoutFlag = l.isPaperSpace ? 0 : PLOT_FLAG_MODELTYPE;
 
         fmt::print( m_outputFile,
@@ -1424,18 +1426,16 @@ void DXF_PLOTTER::Circle( const VECTOR2I& centre, int diameter, FILL_T fill, int
 
     wxString cLayerName = GetCurrentLayerName( DXF_LAYER_OUTPUT_MODE::Current_Layer_Name );
     std::string layer = TO_UTF8( cLayerName );
-    const char* lineStyleName = getDXFLineType( static_cast<LINE_STYLE>( m_currentLineType ) );
 
     if( radius > 0 )
     {
         if( fill == FILL_T::NO_FILL )
         {
             emitEntityHandle( "CIRCLE", "AcDbCircle", layer );
-            fmt::print( m_outputFile, " 10\n{}\n 20\n{}\n 30\n0\n 40\n{}\n 6\n{}\n",
+            fmt::print( m_outputFile, " 10\n{}\n 20\n{}\n 30\n0\n 40\n{}\n",
                         formatCoord( centre_dev.x ),
                         formatCoord( centre_dev.y ),
-                        formatCoord( radius ),
-                        lineStyleName );
+                        formatCoord( radius ) );
         }
         else if( fill == FILL_T::FILLED_SHAPE )
         {
@@ -1606,7 +1606,7 @@ void DXF_PLOTTER::PenTo( const VECTOR2I& pos, char plume )
         // DXF LINE
         wxString    cLayerName = GetCurrentLayerName( DXF_LAYER_OUTPUT_MODE::Current_Layer_Name );
         std::string layer = TO_UTF8( cLayerName );
-        const char* lineStyleName = getDXFLineType( static_cast<LINE_STYLE>( m_currentLineType ) );
+        std::string lineStyleName = getDXFLineType( m_currentLineType );
 
         // The linetype name (6) sits on the AcDbEntity side, before the AcDbLine
         // marker.  Emitted inline so group 6 can interleave between the two markers.
@@ -1664,20 +1664,17 @@ void DXF_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     // (angle pair).  Reversing them trips AutoCAD's AcDb validator.
     wxString    cLayerName = GetCurrentLayerName( DXF_LAYER_OUTPUT_MODE::Current_Layer_Name );
     std::string layer = TO_UTF8( cLayerName );
-    const char* lineStyleName = getDXFLineType( static_cast<LINE_STYLE>( m_currentLineType ) );
 
     emitEntityHandle( "ARC", "AcDbCircle", layer );
     fmt::print( m_outputFile,
                 " 10\n{}\n 20\n{}\n 30\n0\n 40\n{}\n"
                 "100\nAcDbArc\n"
-                " 50\n{:.8f}\n 51\n{:.8f}\n"
-                " 6\n{}\n",
+                " 50\n{:.8f}\n 51\n{:.8f}\n",
                 formatCoord( centre_device.x ),
                 formatCoord( centre_device.y ),
                 formatCoord( radius_device ),
                 startAngle.AsDegrees(),
-                endAngle.AsDegrees(),
-                lineStyleName );
+                endAngle.AsDegrees() );
 }
 
 

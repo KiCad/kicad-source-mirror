@@ -292,7 +292,7 @@ public:
         SetUnits( DXF_UNITS::INCH );
     }
 
-    virtual PLOT_FORMAT GetPlotterType() const override
+    PLOT_FORMAT GetPlotterType() const override
     {
         return PLOT_FORMAT::DXF;
     }
@@ -305,7 +305,7 @@ public:
     /**
      * DXF handles NATIVE text emitting TEXT entities
      */
-    virtual void SetTextMode( PLOT_TEXT_MODE mode ) override
+    void SetTextMode( PLOT_TEXT_MODE mode ) override
     {
         if( mode != PLOT_TEXT_MODE::DEFAULT )
             m_textAsLines = ( mode != PLOT_TEXT_MODE::NATIVE );
@@ -314,21 +314,21 @@ public:
     /**
      * Open the DXF plot with a skeleton header.
      */
-    virtual bool StartPlot( const wxString& aPageNumber ) override;
-    virtual bool EndPlot() override;
+    bool StartPlot( const wxString& aPageNumber ) override;
+    bool EndPlot() override;
 
     // For now we don't use 'thick' primitives, so no line width
-    virtual void SetCurrentLineWidth( int width, void* aData = nullptr ) override
+    void SetCurrentLineWidth( int width, void* aData = nullptr ) override
     {
         m_currentPenWidth = 0;
     }
 
-    virtual void SetDash( int aLineWidth, LINE_STYLE aLineStyle ) override;
+    void SetDash( int aLineWidth, LINE_STYLE aLineStyle ) override;
 
     /**
      * The DXF exporter handles 'colors' as layers...
      */
-    virtual void SetColor( const COLOR4D& color ) override;
+    void SetColor( const COLOR4D& color ) override;
 
     /**
      * Set the scale/position for the DXF plot.
@@ -336,14 +336,12 @@ public:
      * The DXF engine doesn't support line widths and mirroring. The output
      * coordinate system is in the first quadrant (in mm).
      */
-    virtual void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil,
-                              double aScale, bool aMirror ) override;
+    void SetViewport( const VECTOR2I& aOffset, double aIusPerDecimil, double aScale, bool aMirror ) override;
 
     /**
      * DXF rectangle: fill not supported.
      */
-    virtual void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width,
-                       int aCornerRadius = 0 ) override;
+    void Rect( const VECTOR2I& p1, const VECTOR2I& p2, FILL_T fill, int width, int aCornerRadius = 0 ) override;
 
     /**
      * DXF circle: full functionality; it even does 'fills' drawing a
@@ -351,10 +349,10 @@ public:
      *
      * I could use this trick to do other filled primitives.
      */
-    virtual void Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width ) override;
+    void Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int width ) override;
 
-    virtual void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
-                      const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth ) override;
+    void Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aAngle, double aRadius,
+              FILL_T aFill, int aWidth ) override;
 
     /**
      * DXF polygon: doesn't fill it but at least it close the filled ones
@@ -363,82 +361,75 @@ public:
      * It does not know thick segments, therefore filled polygons with thick outline
      * are converted to inflated polygon by aWidth/2.
      */
-    virtual void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth,
-                           void* aData = nullptr ) override;
+    void PlotPoly( const std::vector<VECTOR2I>& aCornerList, FILL_T aFill, int aWidth, void* aData = nullptr ) override;
 
-    virtual void PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, int aWidth,
-                           void* aData = nullptr ) override;
+    void PlotPoly( const SHAPE_LINE_CHAIN& aLineChain, FILL_T aFill, int aWidth, void* aData = nullptr ) override;
 
-    virtual void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width,
-                               void* aData ) override;
+    void ThickSegment( const VECTOR2I& start, const VECTOR2I& end, int width, void* aData ) override;
 
-    virtual void ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStAngle, const EDA_ANGLE& aAngle,
-                           double aRadius, int aWidth, void* aData ) override;
+    void ThickArc( const VECTOR2D& aCentre, const EDA_ANGLE& aStAngle, const EDA_ANGLE& aAngle, double aRadius,
+                   int aWidth, void* aData ) override;
 
-    virtual void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, void* aData ) override;
+    void ThickRect( const VECTOR2I& p1, const VECTOR2I& p2, int width, void* aData ) override;
 
-    virtual void ThickCircle( const VECTOR2I& pos, int diametre, int width, void* aData ) override;
+    void ThickCircle( const VECTOR2I& pos, int diametre, int width, void* aData ) override;
 
-    virtual void FilledCircle( const VECTOR2I& pos, int diametre, void* aData ) override;
+    void FilledCircle( const VECTOR2I& pos, int diametre, void* aData ) override;
 
-    virtual void ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, void* aData ) override;
+    void ThickPoly( const SHAPE_POLY_SET& aPoly, int aWidth, void* aData ) override;
 
-    virtual void PenTo( const VECTOR2I& pos, char plume ) override;
+    void PenTo( const VECTOR2I& pos, char plume ) override;
 
     /**
      * DXF round pad: always done in sketch mode; it could be filled but it isn't
      * pretty if other kinds of pad aren't...
      */
-    virtual void FlashPadCircle( const VECTOR2I& pos, int diametre, void* aData ) override;
+    void FlashPadCircle( const VECTOR2I& pos, int diametre, void* aData ) override;
 
     /**
      * DXF oval pad: always done in sketch mode.
      */
-    virtual void FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize,
-                               const EDA_ANGLE& aOrient, void* aData ) override;
+    void FlashPadOval( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient, void* aData ) override;
 
     /**
      * DXF rectangular pad: always done in sketch mode.
      */
-    virtual void FlashPadRect( const VECTOR2I& aPos, const VECTOR2I& aSize,
-                               const EDA_ANGLE& aOrient, void* aData ) override;
-    virtual void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                    int aCornerRadius, const EDA_ANGLE& aOrient,
-                                    void* aData ) override;
-    virtual void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize,
-                                 const EDA_ANGLE& aOrient, SHAPE_POLY_SET* aPolygons,
-                                 void* aData ) override;
+    void FlashPadRect( const VECTOR2I& aPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient, void* aData ) override;
+    void FlashPadRoundRect( const VECTOR2I& aPadPos, const VECTOR2I& aSize, int aCornerRadius,
+                            const EDA_ANGLE& aOrient, void* aData ) override;
+    void FlashPadCustom( const VECTOR2I& aPadPos, const VECTOR2I& aSize, const EDA_ANGLE& aOrient,
+                         SHAPE_POLY_SET* aPolygons, void* aData ) override;
 
     /**
      * DXF trapezoidal pad: only sketch mode is supported.
      */
-    virtual void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners,
-                                 const EDA_ANGLE& aPadOrient, void* aData ) override;
-    virtual void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount,
-                                      const EDA_ANGLE& aOrient, void* aData ) override;
+    void FlashPadTrapez( const VECTOR2I& aPadPos, const VECTOR2I* aCorners, const EDA_ANGLE& aPadOrient,
+                         void* aData ) override;
+    void FlashRegularPolygon( const VECTOR2I& aShapePos, int aDiameter, int aCornerCount, const EDA_ANGLE& aOrient,
+                              void* aData ) override;
 
-    virtual void Text( const VECTOR2I&        aPos,
-                       const COLOR4D&         aColor,
-                       const wxString&        aText,
-                       const EDA_ANGLE&       aOrient,
-                       const VECTOR2I&        aSize,
-                       enum GR_TEXT_H_ALIGN_T aH_justify,
-                       enum GR_TEXT_V_ALIGN_T aV_justify,
-                       int                    aWidth,
-                       bool                   aItalic,
-                       bool                   aBold,
-                       bool                   aMultilineAllowed,
-                       KIFONT::FONT*          aFont,
-                       const KIFONT::METRICS& aFontMetrics,
-                       void*                  aData = nullptr ) override;
+    void Text( const VECTOR2I&        aPos,
+               const COLOR4D&         aColor,
+               const wxString&        aText,
+               const EDA_ANGLE&       aOrient,
+               const VECTOR2I&        aSize,
+               GR_TEXT_H_ALIGN_T      aH_justify,
+               GR_TEXT_V_ALIGN_T      aV_justify,
+               int                    aWidth,
+               bool                   aItalic,
+               bool                   aBold,
+               bool                   aMultilineAllowed,
+               KIFONT::FONT*          aFont,
+               const KIFONT::METRICS& aFontMetrics,
+               void*                  aData = nullptr ) override;
 
-    virtual void PlotText( const VECTOR2I&        aPos,
-                           const COLOR4D&         aColor,
-                           const wxString&        aText,
-                           const TEXT_ATTRIBUTES& aAttributes,
-                           KIFONT::FONT*          aFont,
-                           const KIFONT::METRICS& aFontMetrics,
-                           void*                  aData = nullptr ) override;
+    void PlotText( const VECTOR2I&        aPos,
+                   const COLOR4D&         aColor,
+                   const wxString&        aText,
+                   const TEXT_ATTRIBUTES& aAttributes,
+                   KIFONT::FONT*          aFont,
+                   const KIFONT::METRICS& aFontMetrics,
+                   void*                  aData = nullptr ) override;
 
     /**
      * Set the units to use for plotting the DXF file.
@@ -528,8 +519,7 @@ protected:
     // Emit the R2000 entity prologue (opcode + handle + owner + AcDbEntity/layer +
     // optional subclass) and return the allocated handle.  Empty aOwner defaults to
     // the *Model_Space BLOCK_RECORD.  Pass nullptr for aSubclass on SEQEND.
-    std::string emitEntityHandle( const char* aEntityType, const char* aSubclass,
-                                  const std::string& aLayerName,
+    std::string emitEntityHandle( const char* aEntityType, const char* aSubclass, const std::string& aLayerName,
                                   const std::string& aOwner = "" );
 
     // Writes the OBJECTS section that closes the BLOCK_RECORD 340 references.  Called
@@ -540,6 +530,7 @@ protected:
     // count) and return the table handle for use as the 330 owner of child records.
     std::string emitSymbolTableHeader( const char* aTableName, int aCount );
 
+protected:
     bool         m_textAsLines;
     COLOR4D      m_currentColor;
     LINE_STYLE   m_currentLineType;
@@ -559,7 +550,7 @@ protected:
 
     // Layout bookkeeping carried from StartPlot to EndPlot so the OBJECTS section can
     // emit one LAYOUT object per BLOCK_RECORD with the matching 330 back-pointer.
-    struct DxfLayout
+    struct DXF_LAYOUT
     {
         std::string name;              // "Model" / "Layout1" / "Layout2"
         std::string blockName;         // "*Model_Space" / "*Paper_Space" / "*Paper_Space0"
@@ -568,9 +559,9 @@ protected:
         bool        isPaperSpace;
     };
 
-    std::vector<DxfLayout> m_dxfLayouts;
-    std::string            m_namedObjectDictHandle;
-    std::string            m_layoutDictHandle;
-    std::string            m_plotStyleNameDictHandle;
-    std::string            m_plotStyleNormalHandle;
+    std::vector<DXF_LAYOUT> m_dxfLayouts;
+    std::string             m_namedObjectDictHandle;
+    std::string             m_layoutDictHandle;
+    std::string             m_plotStyleNameDictHandle;
+    std::string             m_plotStyleNormalHandle;
 };
