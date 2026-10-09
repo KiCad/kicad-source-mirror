@@ -1123,6 +1123,27 @@ void PDF_PLOTTER::ClosePage()
 
     OUTLINE_NODE* pageOutlineNode = addOutlineNode( parent_node, actionHandle, m_pageName );
 
+    auto iuToPdfUserSpace =
+            [&]( const VECTOR2I& aCoord ) -> VECTOR2D
+            {
+                VECTOR2D pos = VECTOR2D( aCoord ) * PTsPERMIL / ( m_IUsPerDecimil * 10 );
+
+                // PDF y=0 is at bottom of page, invert coordinate
+                VECTOR2D retval( pos.x, psPaperSize.y - pos.y );
+
+                // The pdf plot can be mirrored (from left to right). So mirror the
+                // x coordinate if m_plotMirror is set
+                if( m_plotMirror )
+                {
+                    if( m_mirrorIsHorizontal )
+                        retval.x = ( psPaperSize.x - pos.x );
+                    else
+                        retval.y = pos.y;
+                }
+
+                return retval;
+            };
+
     // let's reorg the symbol bookmarks under a page handle
     // let's reorg the symbol bookmarks under a page handle
     for( const auto& [groupName, groupVector] : m_bookmarksInPage )
@@ -1134,8 +1155,8 @@ void PDF_PLOTTER::ClosePage()
             const BOX2I&    box = bookmarkPair.first;
             const wxString& ref = bookmarkPair.second;
 
-            VECTOR2I bottomLeft = userToDeviceCoordinates( box.GetPosition() );
-            VECTOR2I topRight = userToDeviceCoordinates( box.GetEnd() );
+            VECTOR2I bottomLeft = iuToPdfUserSpace( box.GetPosition() );
+            VECTOR2I topRight = iuToPdfUserSpace( box.GetEnd() );
 
             actionHandle = emitGoToAction( pageHandle, bottomLeft, topRight );
 
