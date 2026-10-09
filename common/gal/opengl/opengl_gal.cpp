@@ -86,7 +86,10 @@ constexpr GLuint STENCIL_GRID_COVERAGE = 0x80; // Set inside a PCB_GRIDITEM's co
 static wxGLAttributes getGLAttribs()
 {
     wxGLAttributes attribs;
-    attribs.RGBA().DoubleBuffer().Depth( 8 ).EndList();
+
+    // Without minimum channel sizes EGL lists its smallest matching config first, which on
+    // Wayland is a dithered 16-bit one
+    attribs.RGBA().MinRGBA( 8, 8, 8, 0 ).DoubleBuffer().Depth( 8 ).EndList();
 
     return attribs;
 }
