@@ -81,7 +81,8 @@ enum DRAG_MODE
     DM_FREE_ANGLE = 0x8,
     DM_ARC = 0x10,
     DM_ANY = 0x17,
-    DM_COMPONENT = 0x20
+    DM_COMPONENT = 0x20,
+    DM_BLOCK = 0x40
 };
 /**
  * ROUTER

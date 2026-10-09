@@ -24,6 +24,7 @@ set( PCBNEW_PNS_SRCS
     pns_kicad_iface.cpp
     pns_algo_base.cpp
     pns_arc.cpp
+    pns_block_dragger.cpp
     pns_component_dragger.cpp
     pns_diff_pair.cpp
     pns_diff_pair_placer.cpp
@@ -66,6 +67,7 @@ set( PCBNEW_PNS_QA_SRCS
     pns_kicad_iface.cpp
     pns_algo_base.cpp
     pns_arc.cpp
+    pns_block_dragger.cpp
     pns_component_dragger.cpp
     pns_diff_pair.cpp
     pns_diff_pair_placer.cpp

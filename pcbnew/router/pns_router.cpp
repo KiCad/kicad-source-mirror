@@ -43,6 +43,7 @@
 #include "pns_shove.h"
 #include "pns_dragger.h"
 #include "pns_multi_dragger.h"
+#include "pns_block_dragger.h"
 #include "pns_component_dragger.h"
 #include "pns_topology.h"
 #include "pns_diff_pair_placer.h"
@@ -275,7 +276,12 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
         useMultidragger = hasDiffPairMembers( aStartItems );
     }
 
-    if( aStartItems.Count( ITEM::SOLID_T ) > 0 )
+    if( aDragMode & DM_BLOCK )
+    {
+        m_dragger = std::make_unique<BLOCK_DRAGGER>( this );
+        m_state = DRAG_COMPONENT;
+    }
+    else if( aStartItems.Count( ITEM::SOLID_T ) > 0 )
     {
         m_dragger = std::make_unique<COMPONENT_DRAGGER>( this );
         m_state = DRAG_COMPONENT;
