@@ -703,8 +703,10 @@ void EDA_DRAW_PANEL_GAL::UpdateOverlayExclusions()
     // in the frame, so an infobar overlaid on it cannot show. The canvas makes room instead.
     int inset = 0;
 
+#ifdef __WXGTK__
     if( m_backend == GAL_TYPE_OPENGL && wxGetDisplayInfo().type == wxDisplayType::wxDisplayWayland )
         inset = infobarsBottom;
+#endif
 
     if( inset != m_overlayInsetTop )
     {
