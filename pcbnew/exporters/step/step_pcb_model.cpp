@@ -2436,6 +2436,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                                              "z: %g; bounding box: %s" ),
                                           static_cast<int>( aContour.PointCount() ),
                                           static_cast<int>( mkWire.Error() ),
+                                          aZposition,
                                           formatBBox( aContour.BBox() ) ),
                         RPT_SEVERITY_WARNING );
             }
