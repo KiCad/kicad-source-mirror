@@ -3406,6 +3406,16 @@ static struct PAD_DESC
             }
         }
 
+        ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
+
+        if( layerEnum.Choices().GetCount() == 0 )
+        {
+            layerEnum.Undefined( UNDEFINED_LAYER );
+
+            for( PCB_LAYER_ID layer : LSET::AllLayersMask() )
+                layerEnum.Map( layer, LSET::Name( layer ) );
+        }
+
         ENUM_MAP<ZONE_CONNECTION>& zcMap = ENUM_MAP<ZONE_CONNECTION>::Instance();
 
         if( zcMap.Choices().GetCount() == 0 )

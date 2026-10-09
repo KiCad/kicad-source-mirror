@@ -35,6 +35,7 @@
 #include <core/mirror.h>
 #include <eda_draw_frame.h>
 #include <footprint.h>
+#include <lset.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcb_painter.h>
 #include <plotters/plotter.h>
@@ -441,6 +442,16 @@ static struct PCB_REFERENCE_IMAGE_DESC
 {
     PCB_REFERENCE_IMAGE_DESC()
     {
+        ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
+
+        if( layerEnum.Choices().GetCount() == 0 )
+        {
+            layerEnum.Undefined( UNDEFINED_LAYER );
+
+            for( PCB_LAYER_ID layer : LSET::AllLayersMask() )
+                layerEnum.Map( layer, LSET::Name( layer ) );
+        }
+
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PCB_REFERENCE_IMAGE );
         propMgr.InheritsAfter( TYPE_HASH( PCB_REFERENCE_IMAGE ), TYPE_HASH( BOARD_ITEM ) );

@@ -2986,6 +2986,28 @@ static struct TRACK_VIA_DESC
 
         // clang-format on: the suggestion is less readable
 
+        // Pad and via registration can run in either order across translation units
+        ENUM_MAP<PAD_DRILL_POST_MACHINING_MODE>& pmMap = ENUM_MAP<PAD_DRILL_POST_MACHINING_MODE>::Instance();
+
+        if( pmMap.Choices().GetCount() == 0 )
+        {
+            pmMap.Undefined( PAD_DRILL_POST_MACHINING_MODE::UNKNOWN )
+                .Map( PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED, _HKI( "Not post-machined" ) )
+                .Map( PAD_DRILL_POST_MACHINING_MODE::COUNTERBORE,       _HKI( "Counterbore" ) )
+                .Map( PAD_DRILL_POST_MACHINING_MODE::COUNTERSINK,       _HKI( "Countersink" ) );
+        }
+
+        ENUM_MAP<BACKDRILL_MODE>& bdMap = ENUM_MAP<BACKDRILL_MODE>::Instance();
+
+        if( bdMap.Choices().GetCount() == 0 )
+        {
+            bdMap.Undefined( BACKDRILL_MODE::NO_BACKDRILL )
+                .Map( BACKDRILL_MODE::NO_BACKDRILL,     _HKI( "No backdrill" ) )
+                .Map( BACKDRILL_MODE::BACKDRILL_BOTTOM, _HKI( "Backdrill bottom" ) )
+                .Map( BACKDRILL_MODE::BACKDRILL_TOP,    _HKI( "Backdrill top" ) )
+                .Map( BACKDRILL_MODE::BACKDRILL_BOTH,   _HKI( "Backdrill both" ) );
+        }
+
         ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
         if( layerEnum.Choices().GetCount() == 0 )
