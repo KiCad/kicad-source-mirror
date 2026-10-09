@@ -596,6 +596,18 @@ BOOST_AUTO_TEST_CASE( CustomPadArcSurvivesExportToKicad10 )
 }
 
 
+BOOST_AUTO_TEST_CASE( ModernBoardMetadataMatchesNativeKicad9Golden )
+{
+    checkNativeBoardGolden( kicad9, "v9", "modern_metadata", "modern_metadata", 13, 0 );
+}
+
+
+BOOST_AUTO_TEST_CASE( ModernBoardMetadataMatchesNativeKicad10Golden )
+{
+    checkNativeBoardGolden( kicad10, "v10", "modern_metadata", "modern_metadata", 12, 0 );
+}
+
+
 BOOST_AUTO_TEST_CASE( BoardMetadataMatchesNativeKicad9Golden )
 {
     checkNativeBoardGolden( kicad9, "v9", "metadata", "metadata", 6, 0 );
