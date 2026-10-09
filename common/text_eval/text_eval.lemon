@@ -6,7 +6,7 @@ using namespace calc_parser;
 %token_type {calc_parser::TOKEN_TYPE}
 %token_prefix KI_EVAL_
 %default_type {calc_parser::NODE*}
-%extra_argument {calc_parser::DOC** pDocument}
+%extra_argument {std::unique_ptr<calc_parser::DOC>* pDocument}
 
 %type document {calc_parser::DOC*}
 %type content_list {calc_parser::DOC*}
@@ -42,7 +42,7 @@ using namespace calc_parser;
 // Main document structure
 document(D) ::= content_list(L). {
     D = L;
-    *pDocument = D;  // Store the result in the extra argument
+    pDocument->reset( D );  // Store the result in the extra argument
 }
 
 content_list(L) ::= . {

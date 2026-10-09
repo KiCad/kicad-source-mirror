@@ -2009,23 +2009,14 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
         return { std::string{}, false };
     }
 
-    calc_parser::DOC* document = nullptr;
-
-    // RAII guard for error collector and parser document cleanup
-    struct RAII_GUARD
+    // RAII guard for error collector cleanup
+    struct ERROR_COLLECTOR_GUARD
     {
-        RAII_GUARD( calc_parser::DOC* aDocument ) :
-                m_document( aDocument )
-        {}
-
-        ~RAII_GUARD()
+        ~ERROR_COLLECTOR_GUARD()
         {
             calc_parser::g_errorCollector = nullptr;
-            delete m_document;
         }
-
-        calc_parser::DOC* m_document;
-    } guard( document );
+    } guard;
 
     try
     {
@@ -2058,6 +2049,8 @@ std::pair<std::string, bool> EXPRESSION_EVALUATOR::evaluateWithFullParser( const
         }
 
         // Parse document
+        std::unique_ptr<calc_parser::DOC> document;
+
         calc_parser::TOKEN_TYPE token_value;
         TEXT_EVAL_TOKEN         token_type;
 
