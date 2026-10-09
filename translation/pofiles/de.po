@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-09 11:32+0000\n"
+"PO-Revision-Date: 2026-10-09 15:58+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -60031,24 +60031,24 @@ msgid "Removed %s 'exclude from BOM' fabrication attribute."
 msgstr "%s Fertigungsattribut \"Von Stückliste ausschließen\" entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:838
-#, fuzzy, c-format
+#, c-format
 msgid "Add %s 'exclude from simulation' attribute."
-msgstr "Füge %s Fertigungsattribut \"Von Stückliste ausschließen\" hinzu."
+msgstr "Füge %s Attribut \"Von Simulation ausschließen\" hinzu."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:840
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'exclude from simulation' attribute."
-msgstr "Entferne %s Fertigungsattribut \"Von Stückliste ausschließen\"."
+msgstr "Entferne %s Attribut \"Von Simulation ausschließen\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:849
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'exclude from simulation' attribute."
-msgstr "%s Fertigungsattribut \"Von Stückliste ausschließen\" hinzugefügt."
+msgstr "%s Attribut \"Von Simulation ausschließen\" hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:854
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'exclude from simulation' attribute."
-msgstr "%s Fertigungsattribut \"Von Stückliste ausschließen\" entfernt."
+msgstr "%s Attribut \"Von Simulation ausschließen\" entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:874
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1538
@@ -60075,52 +60075,43 @@ msgstr "%s Fertigungsattribut \"Nicht bestücken\" entfernt."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:912
 #, c-format
 msgid "Add %s 'exclude from position files' fabrication attribute."
-msgstr ""
-"%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut hinzufügen."
+msgstr "Füge %s Fertigungsattribut \"Von Positionsdateien ausschließen\" hinzu."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:917
 #, c-format
 msgid "Remove %s 'exclude from position files' fabrication attribute."
-msgstr "%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut entfernen."
+msgstr "Entferne %s Fertigungsattribut \"Von Positionsdateien ausschließen\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:928
 #, c-format
 msgid "Added %s 'exclude from position files' fabrication attribute."
 msgstr ""
-"%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut hinzugefügt."
+"%s Fertigungsattribut \"Von Positionsdateien ausschließen\" hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:934
 #, c-format
 msgid "Removed %s 'exclude from position files' fabrication attribute."
-msgstr "%s \"Von Positionsdateien ausschließen\"-Fertigungsattribut entfernt."
+msgstr "%s Fertigungsattribut \"Von Positionsdateien ausschließen\" entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:957
 #, c-format
 msgid "Added %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
-"%s Fertigungsattribut \"mehrfach vergebenen Pinnummern sind Jumper\" "
-"hinzugefügt."
+msgstr "%s Attribut \"mehrfach vergebene Pinnummern sind Jumper\" hinzugefügt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:962
 #, c-format
 msgid "Removed %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
-"%s Fertigungsattribut \"mehrfach vergebenen Padnummern sind Jumper\" "
-"entfernt."
+msgstr "%s Attribut \"mehrfach vergebene Padnummern sind Jumper\" entfernt."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:970
 #, c-format
 msgid "Add %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
-"Füge %s Fertigungsattribut \"mehrfach vergebenen Padnummern sind Jumper\" "
-"hinzu."
+msgstr "Füge %s Attribut \"mehrfach vergebene Padnummern sind Jumper\" hinzu."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:975
 #, c-format
 msgid "Remove %s 'duplicate pad numbers are jumpers' attribute."
-msgstr ""
-"Entferne %s Fertigungsattribut \"mehrfach vergebenen Padnummern sind "
-"Jumper\"."
+msgstr "Entferne %s Attribut \"mehrfach vergebene Padnummern sind Jumper\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:989
 #, c-format
@@ -62401,9 +62392,9 @@ msgid "DipTrace import: invalid outline vertex count %d."
 msgstr "DipTrace-Import: ungültige Anzahl von Umrisseckpunkten %d."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1257
-#, fuzzy, c-format
+#, c-format
 msgid "DipTrace import: invalid layer count %d."
-msgstr "DipTrace-Import: ungültige Busanzahl %d."
+msgstr "DipTrace-Import: ungültige Lagenanzahl %d."
 
 #: pcbnew/pcb_io/diptrace/diptrace_pcb_parser.cpp:1354
 #, fuzzy, c-format
@@ -62496,7 +62487,6 @@ msgstr ""
 "der importierten Platine fehlen die DipTrace-spezifischen Abstandsregeln."
 
 #: pcbnew/pcb_io/diptrace/pcb_io_diptrace.h:39
-#, fuzzy
 msgid "DipTrace PCB files"
 msgstr "DipTrace PCB-Dateien"
 
@@ -62909,7 +62899,7 @@ msgstr "gEDA / Lepton EDA PCB Footprint-Bibliotheksverzeichnis"
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:70
 #, fuzzy
 msgid "Unsupported IPC-2581 data set."
-msgstr "Unbekannte Modus-Zeichenkette: „%s“."
+msgstr "Nicht unterstützter IPC-2581 Datensatz."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:120
 #, fuzzy
@@ -62951,7 +62941,7 @@ msgstr "Kann diesen IPC-2581 Datensatz nicht erstellen."
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:178
 #, fuzzy
 msgid "No IPC-2581 content selected."
-msgstr "Keine verbundenen Netze ausgewählt."
+msgstr "Kein IPC-2581 Inhalt ausgewählt."
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:194
 #, fuzzy
@@ -63027,7 +63017,7 @@ msgstr ""
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3796
 #, fuzzy
 msgid "Generating logical netlist"
-msgstr "Erzeuge Logistik-Abschnitt"
+msgstr "Erzeuge logische Netzliste"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3834
 msgid "Generating physical netlist"
@@ -63036,7 +63026,7 @@ msgstr "Erzeuge physische Netzliste"
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3976
 #, fuzzy, c-format
 msgid "Exporting layer %s, net %s"
-msgstr "Exportieren der Lage %s und der Netzliste %s"
+msgstr "Exportiere Lage %s, Netz %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4018
 msgid "Via uses unsupported padstack; omitted from drill data."
@@ -63061,12 +63051,12 @@ msgstr ""
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4532
 #, fuzzy
 msgid "Generating vendor list"
-msgstr "Erzeuge Inhalts-Abschnitt"
+msgstr "Erzeuge Anbieterliste"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4752
 #, fuzzy, c-format
 msgid "Unknown IPC-2581 data set '%s'."
-msgstr "Unbekannte Modus-Zeichenkette: „%s“."
+msgstr "Unbekannter IPC-2581 Datensatz \"%s\"."
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4763
 #, c-format
