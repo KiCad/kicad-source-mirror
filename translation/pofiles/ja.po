@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-09 11:32+0000\n"
+"PO-Revision-Date: 2026-10-10 17:51+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -25021,7 +25021,7 @@ msgstr "不正テーブル: セルが定義されていません"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5974
 msgid "Invalid table: column count must be positive"
-msgstr "不正テーブル: 列の数は正の数であるけど必要があります"
+msgstr "不正テーブル: 列の数は正の数である必要があります"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:5980
 msgid "Invalid table: incomplete row"
@@ -25275,19 +25275,18 @@ msgid "Using OrCAD CIS variant '%s'."
 msgstr "OrCAD CIS バリアント '%s' を使う。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:451
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' contains a complete OrCAD Capture design and cannot be loaded as a "
 "hierarchical sheet. Use File > Import > Non-KiCad Schematic... instead."
 msgstr ""
-"'%s' に PADS Logicバイナリ回路図が含まれているため階層シートとして読み込むこ"
-"とができません。かわりに [ファイル] -> [インポート] -> [KiCad以外の回路図] を"
-"使用してください。"
+"'%s' に OrCAD Captureデザインが含まれているため階層シートとして読み込むことが"
+"できません。かわりに [ファイル] -> [インポート] -> [KiCad以外の回路図] を使用"
+"してください。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:460
-#, fuzzy
 msgid "The OrCAD file could not be read."
-msgstr "ファイルを開くことができませんでした。"
+msgstr "OrCADファイルを読み取ることができませんでした。"
 
 #: eeschema/sch_io/orcad/sch_io_orcad.cpp:518
 msgid ""
@@ -25394,14 +25393,14 @@ msgstr ""
 "プされました。"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:374
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' contains a complete PADS Logic schematic and cannot be loaded as a "
 "hierarchical sheet. Use File > Import > Non-KiCad Schematic... instead."
 msgstr ""
-"'%s' に PADS Logicバイナリ回路図が含まれているため階層シートとして読み込むこ"
-"とができません。かわりに [ファイル] -> [インポート] -> [KiCad以外の回路図] を"
-"使用してください。"
+"'%s' に PADS Logic回路図が含まれているため階層シートとして読み込むことができ"
+"ません。かわりに [ファイル] -> [インポート] -> [KiCad以外の回路図] を使用して"
+"ください。"
 
 #: eeschema/sch_io/pads/sch_io_pads.cpp:426
 #, c-format
@@ -28785,9 +28784,8 @@ msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>電源シンボルは1つだけです</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:262
-#, fuzzy
 msgid "<b>A Power Symbol should have exactly one pin</b><br><br>"
-msgstr "<b>電源シンボルにはピンが1つだけにする必要があります</b><br> <br>"
+msgstr "<b>電源シンボルはピンを1つだけにすべきです</b><br> <br>"
 
 #: eeschema/symbol_checker.cpp:269
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -29025,9 +29023,9 @@ msgstr "ライブラリ '%s' を読み込み中..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1678
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1704
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to remove existing library backup file '%s'."
-msgstr "フットプリント ライブラリ ファイル '%s' を保存できませんでした。"
+msgstr "既存のライブラリ バックアップ ファイル '%s' を削除できませんでした。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1686
 #, c-format
@@ -29035,9 +29033,9 @@ msgid "Failed to save backup to '%s'."
 msgstr "バックアップを '%s' に保存するのに失敗しました。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1712
-#, fuzzy, c-format
+#, c-format
 msgid "Error opening unpacked library directory: '%s'."
-msgstr "ディレクトリを開く際のエラー: '%s'。"
+msgstr "アンパックされたライブラリ ディレクトリを開く際のエラー: '%s'。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1722
 #, c-format
@@ -29257,14 +29255,14 @@ msgid "Save Library '%s' As..."
 msgstr "名前を付けてライブラリ '%s' を保存..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1604
-#, fuzzy, c-format
+#, c-format
 msgid "Save Library '%s' As Packed Library..."
-msgstr "名前を付けてライブラリ '%s' を保存..."
+msgstr "パックされたライブラリとしてライブラリ '%s' を保存..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1641
-#, fuzzy, c-format
+#, c-format
 msgid "Save Library '%s' As Unpacked Library..."
-msgstr "名前を付けてライブラリ '%s' を保存..."
+msgstr "アンパックされたライブラリとしてライブラリ '%s' を保存..."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1694
 #, c-format
@@ -29912,24 +29910,24 @@ msgid "Save the current library to a new file"
 msgstr "現在のライブラリを新しいファイルに保存します"
 
 #: eeschema/tools/sch_actions.cpp:202
-#, fuzzy
 msgid "Save Library As Packed..."
-msgstr "名前を付けてライブラリを保存..."
+msgstr "ライブラリをパックされたかたちで保存..."
 
 #: eeschema/tools/sch_actions.cpp:203
-#, fuzzy
 msgid "Save the current unpacked library to a new packed library file"
-msgstr "現在のライブラリを新しいファイルに保存します"
+msgstr ""
+"現在のアンパックされたライブラリを新しいパックされたライブラリファイルに保存"
+"します"
 
 #: eeschema/tools/sch_actions.cpp:209
-#, fuzzy
 msgid "Save Library As Unpacked..."
-msgstr "名前を付けてライブラリを保存..."
+msgstr "ライブラリをアンパックされたかたちで保存..."
 
 #: eeschema/tools/sch_actions.cpp:210
-#, fuzzy
 msgid "Save the current packed library to a new unpacked library folder"
-msgstr "現在のライブラリを新しいファイルに保存します"
+msgstr ""
+"現在のパックされたライブラリを新しいアンパックされたライブラリフォルダに保存"
+"します"
 
 #: eeschema/tools/sch_actions.cpp:215 pcbnew/tools/pcb_actions.cpp:1344
 msgid "Compare Library with File..."
@@ -30379,9 +30377,8 @@ msgid "Draw arcs by clicking the start point, the end point, then the center"
 msgstr ""
 
 #: eeschema/tools/sch_actions.cpp:812 pcbnew/tools/pcb_actions.cpp:439
-#, fuzzy
 msgid "Draw Arc: Tangent"
-msgstr "矩形を描く"
+msgstr "円弧を描画: 接線"
 
 #: eeschema/tools/sch_actions.cpp:813 pcbnew/tools/pcb_actions.cpp:440
 msgid ""
@@ -31477,12 +31474,10 @@ msgid "Create a copy of an existing design variant."
 msgstr "既存のデザイン バリアントのコピーを作成します。"
 
 #: eeschema/tools/sch_actions.h:35
-#, fuzzy
 msgid ""
 "Alternate pin functions are not available on symbols with multiple body "
 "styles."
-msgstr ""
-"複数のボディ スタイルを持つシンボルでは、代替ピンの割り当てはできません。"
+msgstr "複数のボディ スタイルを持つシンボルでは、代替ピンの割り当て機能は使えません。"
 
 #: eeschema/tools/sch_actions.h:38
 msgid ""
@@ -31618,12 +31613,10 @@ msgid "Press <ESC> to cancel sheet creation."
 msgstr "<ESC>を押すと、シートの作成をキャンセルします。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3188
-#, fuzzy
 msgid "Modify Sheet Pin"
 msgstr "シートピンの変更"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3194
-#, fuzzy
 msgid "Modify Schematic Item"
 msgstr "回路図アイテムを変更"
 
@@ -31904,9 +31897,8 @@ msgid "No connected net selected."
 msgstr "接続されたネットが未選択です。"
 
 #: eeschema/tools/sch_editor_control.cpp:1592
-#, fuzzy
 msgid "Unable to replace the net chain terminal pin."
-msgstr "ネット チェーンの作成に失敗しました。"
+msgstr "ネット チェーンの端子ピンの置き換えに失敗しました。"
 
 #: eeschema/tools/sch_editor_control.cpp:1618
 msgid "Net chain name:"
@@ -31933,9 +31925,9 @@ msgid "Create Net Chain between %s:%s and %s:%s"
 msgstr "ネット チェーンを %s:%s と %s:%s の間で作成します"
 
 #: eeschema/tools/sch_editor_control.cpp:1758
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create net chain '%s'."
-msgstr "'%s' を作成できません。"
+msgstr "ネット チェーン '%s' を作成できません。"
 
 #: eeschema/tools/sch_editor_control.cpp:2359 pcbnew/tools/pcb_control.cpp:1173
 msgid ""
@@ -32510,14 +32502,12 @@ msgid "Enter page number for sheet path %s"
 msgstr "シート パス %s のページ番号を入力します"
 
 #: eeschema/widgets/hierarchy_pane.cpp:694
-#, fuzzy
 msgid "Change Page Number"
-msgstr "ページ番号を編集"
+msgstr "ページ番号を変更"
 
 #: eeschema/widgets/hierarchy_pane.cpp:762
-#, fuzzy
 msgid "Rename Sheet"
-msgstr "ネット名を変更"
+msgstr "シート名を変更"
 
 #: eeschema/widgets/hierarchy_pane.cpp:853
 #, c-format
@@ -33745,7 +33735,6 @@ msgid "&Units"
 msgstr "単位 (&U)"
 
 #: gerbview/menubar.cpp:200
-#, fuzzy
 msgid "&Inactive Layer View Mode"
 msgstr "非アクティブ レイヤー表示モード"
 
@@ -34023,19 +34012,16 @@ msgid "Show as mirror image"
 msgstr "反転したイメージで表示"
 
 #: gerbview/tools/gerbview_actions.cpp:258
-#, fuzzy
 msgid "Show Inactive Layers Normally"
 msgstr "非アクティブ レイヤーを表示"
 
 #: gerbview/tools/gerbview_actions.cpp:264
-#, fuzzy
 msgid "Dim Inactive Layers"
-msgstr "非アクティブ レイヤー:"
+msgstr "非アクティブ レイヤーをぼかし表示"
 
 #: gerbview/tools/gerbview_actions.cpp:270
-#, fuzzy
 msgid "Hide Inactive Layers"
-msgstr "非アクティブ レイヤー:"
+msgstr "非アクティブ レイヤーを非表示"
 
 #: gerbview/tools/gerbview_control.cpp:121
 msgid "None of the Gerber layers contain any data"
@@ -35262,9 +35248,8 @@ msgid "No longer supported as of KiCad 10.0."
 msgstr "KiCad 10.0 ではサポートしていません。"
 
 #: kicad/cli/command_pcb_export_idf.cpp:45
-#, fuzzy
 msgid "Export the PCB in IDFv3 format"
-msgstr "Gencad 形式でプリント基板図をエクスポート"
+msgstr "IDFv3形式でプリント基板をエクスポート"
 
 #: kicad/cli/command_pcb_export_idf.cpp:49
 #, fuzzy
