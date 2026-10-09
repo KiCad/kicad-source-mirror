@@ -692,7 +692,7 @@ void DIALOG_MIGRATE_3D_MODELS::updateMissingItemStyle( int aMissingIndex )
 
     wxFont font = m_missingList->GetFont();
     font.SetWeight( m_selectedPerMissing[aMissingIndex] < 0 ? wxFONTWEIGHT_BOLD
-                                                             : wxFONTWEIGHT_NORMAL );
+                                                            : wxFONTWEIGHT_NORMAL );
     m_missingList->SetItemFont( aMissingIndex, font );
 }
 
@@ -737,14 +737,13 @@ void DIALOG_MIGRATE_3D_MODELS::initPreviewBoard()
     m_dummyBoard->SetEmbeddedFilesDelegate( m_frame->GetBoard() );
     m_dummyBoard->SetBoardUse( BOARD_USE::FPHOLDER );
 
-    BOARD_DESIGN_SETTINGS&       dummyBds   = m_dummyBoard->GetDesignSettings();
-    const BOARD_DESIGN_SETTINGS& parentBds  = m_frame->GetDesignSettings();
-    dummyBds.SetBoardThickness( parentBds.GetBoardThickness() );
-    dummyBds.SetEnabledLayers( LSET::FrontMask() | LSET::BackMask() );
+    BOARD_DESIGN_SETTINGS& dummyBoard_bds = m_dummyBoard->GetDesignSettings();
+    dummyBoard_bds.SetBoardThickness( m_frame->GetDesignSettings().GetBoardThickness() );
+    dummyBoard_bds.SetEnabledLayers( LSET::FrontMask() | LSET::BackMask() );
 
-    BOARD_STACKUP& stackup = dummyBds.GetStackupDescriptor();
+    BOARD_STACKUP& stackup = dummyBoard_bds.GetStackupDescriptor();
     stackup.RemoveAll();
-    stackup.BuildDefaultStackupList( &dummyBds, 2 );
+    stackup.BuildDefaultStackupList( &dummyBoard_bds, 2 );
 
     m_boardAdapter.SetBoard( m_dummyBoard );
     m_boardAdapter.m_IsBoardView = false;
@@ -759,9 +758,9 @@ void DIALOG_MIGRATE_3D_MODELS::initPreviewBoard()
         cfg->m_Render.show_missing_models = false;
     }
 
-    m_previewPane = new EDA_3D_CANVAS( m_previewPanel,
-            OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ), m_boardAdapter,
-            m_trackBallCamera, PROJECT_PCB::Get3DCacheManager( &m_frame->Prj() ) );
+    m_previewPane = new EDA_3D_CANVAS( m_previewPanel, OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
+                                       m_boardAdapter, m_trackBallCamera,
+                                       PROJECT_PCB::Get3DCacheManager( &m_frame->Prj() ) );
 
     m_previewPanel->GetSizer()->Add( m_previewPane, 1, wxEXPAND, 0 );
     m_previewPanel->Layout();

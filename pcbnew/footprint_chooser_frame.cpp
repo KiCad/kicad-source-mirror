@@ -797,12 +797,12 @@ void FOOTPRINT_CHOOSER_FRAME::build3DCanvas()
     m_chooserPanel->m_RightPanelSizer->Add( m_preview3DCanvas, 1, wxEXPAND, 5 );
     m_chooserPanel->m_RightPanel->Layout();
 
-    BOARD_DESIGN_SETTINGS& dummy_bds = dummyBoard->GetDesignSettings();
-    dummy_bds.SetBoardThickness( pcbIUScale.mmToIU( 1.6 ) );
-    dummy_bds.SetEnabledLayers( LSET::FrontMask() | LSET::BackMask() );
+    BOARD_DESIGN_SETTINGS& dummyBoard_bds = dummyBoard->GetDesignSettings();
+    dummyBoard_bds.SetBoardThickness( pcbIUScale.mmToIU( 1.6 ) );
+    dummyBoard_bds.SetEnabledLayers( LSET::FrontMask() | LSET::BackMask() );
     BOARD_STACKUP& dummy_board_stackup = dummyBoard->GetDesignSettings().GetStackupDescriptor();
     dummy_board_stackup.RemoveAll();
-    dummy_board_stackup.BuildDefaultStackupList( &dummy_bds, 2 );
+    dummy_board_stackup.BuildDefaultStackupList( &dummyBoard_bds, 2 );
 }
 
 

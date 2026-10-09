@@ -389,7 +389,7 @@ void BOARD::SetProject( PROJECT* aProject, bool aReferenceOnly )
         PROJECT_FILE& project = aProject->GetProjectFile();
 
         // Link the design settings object to the project file
-        project.m_BoardSettings = &GetDesignSettings();
+        project.m_BoardSettings = m_designSettings;
 
         // Set parent, which also will load the values from JSON stored in the project if we don't
         // have legacy design settings loaded already
@@ -425,10 +425,7 @@ void BOARD::ClearProject()
     // Release this board's own design settings, not project.m_BoardSettings; a second board
     // sharing the project (e.g. diffing a file against itself) overwrites m_BoardSettings, so
     // trusting it would orphan our settings as a dangling entry in the project's nested list
-    project.ReleaseNestedSettings( &GetDesignSettings() );
-
-    if( project.m_BoardSettings == &GetDesignSettings() )
-        project.m_BoardSettings = nullptr;
+    project.ReleaseNestedSettings( m_designSettings.get() );
 
     GetDesignSettings().m_NetSettings = nullptr;
     m_project = nullptr;
@@ -586,8 +583,8 @@ void BOARD::RecordDRCExclusions()
     {
         if( PROJECT_FILE* projectFile = &m_project->GetProjectFile() )
         {
-            if( BOARD_DESIGN_SETTINGS* prjSettings = projectFile->m_BoardSettings )
-                prjSettings->m_DrcExclusions = m_designSettings->m_DrcExclusions;
+            if( projectFile->m_BoardSettings )
+                projectFile->m_BoardSettings->m_DrcExclusions = m_designSettings->m_DrcExclusions;
         }
     }
 }
@@ -3466,10 +3463,11 @@ void BOARD::SynchronizeNetsAndNetClasses( bool aResetTrackAndViaSizes )
 
 bool BOARD::SynchronizeComponentClasses( const std::unordered_set<wxString>& aNewSheetPaths ) const
 {
-    std::shared_ptr<COMPONENT_CLASS_SETTINGS> settings = GetProject()->GetProjectFile().ComponentClassSettings();
+    COMPONENT_CLASS_SETTINGS* settings = GetProject()->GetProjectFile().ComponentClassSettings().get();
 
-    return m_componentClassManager->SyncDynamicComponentClassAssignments(
-            settings->GetComponentClassAssignments(), settings->GetEnableSheetComponentClasses(), aNewSheetPaths );
+    return m_componentClassManager->SyncDynamicComponentClassAssignments( settings->GetComponentClassAssignments(),
+                                                                          settings->GetEnableSheetComponentClasses(),
+                                                                          aNewSheetPaths );
 }
 
 

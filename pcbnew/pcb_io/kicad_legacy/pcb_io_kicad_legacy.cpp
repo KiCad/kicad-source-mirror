@@ -1150,24 +1150,23 @@ void PCB_IO_KICAD_LEGACY::loadSETUP()
      * Sort lists by by increasing value and remove duplicates
      * (the first value is not tested, because it is the netclass value)
      */
-    BOARD_DESIGN_SETTINGS& designSettings = m_board->GetDesignSettings();
-    sort( designSettings.m_ViasDimensionsList.begin() + 1, designSettings.m_ViasDimensionsList.end() );
-    sort( designSettings.m_TrackWidthList.begin() + 1, designSettings.m_TrackWidthList.end() );
+    sort( bds.m_ViasDimensionsList.begin() + 1, bds.m_ViasDimensionsList.end() );
+    sort( bds.m_TrackWidthList.begin() + 1, bds.m_TrackWidthList.end() );
 
-    for( int ii = 1; ii < (int) designSettings.m_ViasDimensionsList.size() - 1; ii++ )
+    for( int ii = 1; ii < (int) bds.m_ViasDimensionsList.size() - 1; ii++ )
     {
-        if( designSettings.m_ViasDimensionsList[ii] == designSettings.m_ViasDimensionsList[ii + 1] )
+        if( bds.m_ViasDimensionsList[ii] == bds.m_ViasDimensionsList[ii + 1] )
         {
-            designSettings.m_ViasDimensionsList.erase( designSettings.m_ViasDimensionsList.begin() + ii );
+            bds.m_ViasDimensionsList.erase( bds.m_ViasDimensionsList.begin() + ii );
             ii--;
         }
     }
 
-    for( int ii = 1; ii < (int) designSettings.m_TrackWidthList.size() - 1; ii++ )
+    for( int ii = 1; ii < (int) bds.m_TrackWidthList.size() - 1; ii++ )
     {
-        if( designSettings.m_TrackWidthList[ii] == designSettings.m_TrackWidthList[ii + 1] )
+        if( bds.m_TrackWidthList[ii] == bds.m_TrackWidthList[ii + 1] )
         {
-            designSettings.m_TrackWidthList.erase( designSettings.m_TrackWidthList.begin() + ii );
+            bds.m_TrackWidthList.erase( bds.m_TrackWidthList.begin() + ii );
             ii--;
         }
     }
@@ -2359,8 +2358,7 @@ void PCB_IO_KICAD_LEGACY::loadNETCLASS()
             ReadDelimitedText( buf, line + SZ( "AddNet" ), sizeof(buf) );
             netname = ConvertToNewOverbarNotation( From_UTF8( buf ) );
 
-            m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment(
-                    netname, nc->GetName() );
+            m_board->GetDesignSettings().m_NetSettings->SetNetclassPatternAssignment( netname, nc->GetName() );
         }
         else if( TESTLINE( "Clearance" ) )
         {

@@ -18,8 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLASS_BOARD_H_
-#define CLASS_BOARD_H_
+#pragma once
 
 #include <atomic>
 #include <functional>
@@ -75,6 +74,7 @@ class COMPONENT;
 class PROJECT;
 class PROGRESS_REPORTER;
 class PCB_BOARD_OUTLINE;
+class BOARD_TEXT_VAR_ADAPTER;
 
 namespace KIGFX
 {
@@ -1808,6 +1808,8 @@ public:
         bool operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const;
     };
 
+    BOARD_TEXT_VAR_ADAPTER* GetTextVarAdapter() const { return m_textVarAdapter.get(); }
+
 public:
     /**
      * Return a spatial index of footprint courtyards, building it on first use.  Lets
@@ -1932,13 +1934,13 @@ private:
 
     std::map<int, LAYER> m_layers;                  // layer data
 
-    HIGH_LIGHT_INFO     m_highLight;                // current high light data
-    HIGH_LIGHT_INFO     m_highLightPrevious;        // a previously stored high light data
+    HIGH_LIGHT_INFO      m_highLight;                // current high light data
+    HIGH_LIGHT_INFO      m_highLightPrevious;        // a previously stored high light data
 
-    int                 m_fileFormatVersionAtLoad;  // the version loaded from the file
-    uint64_t            m_drillModelGeneration;
-    uint64_t            m_boardOutlineGeneration;
-    LSET                m_drillSymbolLayers;
+    int                  m_fileFormatVersionAtLoad;  // the version loaded from the file
+    uint64_t             m_drillModelGeneration;
+    uint64_t             m_boardOutlineGeneration;
+    LSET                 m_drillSymbolLayers;
 
     /**
      * Offset and symbol reach of every drill map, so a pad or track ViewBBox() does not walk
@@ -1948,24 +1950,24 @@ private:
 
     mutable std::shared_ptr<const DRILL_SYMBOL_CACHE> m_drillSymbolCache;
     mutable std::mutex                                m_drillSymbolCacheMutex;
-    wxString            m_generator;                // the generator tag from the file
 
-    std::map<wxString, wxString>        m_properties;
-    std::shared_ptr<CONNECTIVITY_DATA>  m_connectivity;
+    wxString                           m_generator;                // the generator tag from the file
+    std::map<wxString, wxString>       m_properties;
+    std::shared_ptr<CONNECTIVITY_DATA> m_connectivity;
 
     // Sentinel whose expiry signals to LOCAL_HISTORY that this board has been destroyed.
-    std::shared_ptr<void>               m_historyLifetime = std::make_shared<char>();
+    std::shared_ptr<void>              m_historyLifetime = std::make_shared<char>();
 
-    PAGE_INFO           m_paper;
-    TITLE_BLOCK         m_titles;                   // text in lower right of screen and plots
-    PCB_PLOT_PARAMS     m_plotOptions;
-    PROJECT*            m_project;                  // project this board is a part of
-    EDA_UNITS           m_userUnits;
+    PAGE_INFO                          m_paper;
+    TITLE_BLOCK                        m_titles;                // text in lower right of screen and plots
+    PCB_PLOT_PARAMS                    m_plotOptions;
+    PROJECT*                           m_project;               // project this board is a part of
+    EDA_UNITS                          m_userUnits;
 
     // Variant system
-    wxString                        m_currentVariant;        // Currently active variant (empty = default)
-    std::vector<wxString>           m_variantNames;          // All variant names in the board
-    std::map<wxString, wxString>    m_variantDescriptions;   // Descriptions for each variant
+    wxString                           m_currentVariant;        // Currently active variant (empty = default)
+    std::vector<wxString>              m_variantNames;          // All variant names in the board
+    std::map<wxString, wxString>       m_variantDescriptions;   // Descriptions for each variant
 
     /**
      * All of the board design settings are stored as a JSON object inside the project file.  The
@@ -1977,35 +1979,29 @@ private:
      * part of, so that the JSON load/store operations work.  This link is established when
      * boards are loaded from disk.
      */
-    std::unique_ptr<BOARD_DESIGN_SETTINGS> m_designSettings;
+    std::shared_ptr<BOARD_DESIGN_SETTINGS>    m_designSettings;
 
     /**
      * Teardrops in 7.0 were applied as a post-processing step (rather than from pad and via
      * properties).  If this flag is set, then auto-teardrop-generation will be disabled.
      */
-    bool                         m_legacyTeardrops = false;
+    bool                                      m_legacyTeardrops = false;
 
-    NETINFO_LIST                 m_NetInfo;         // net info list (name, design constraints...
+    NETINFO_LIST                              m_NetInfo;   // net info list (name, design constraints...
 
-    std::vector<BOARD_LISTENER*> m_listeners;
+    std::vector<BOARD_LISTENER*>              m_listeners;
 
-    bool                         m_embedFonts;
+    bool                                      m_embedFonts;
 
     // Used for dummy boards, such as a footprint holder, where we don't want to make a copy
     // of all the parent's embedded data.
-    EMBEDDED_FILES*              m_embeddedFilesDelegate;
+    EMBEDDED_FILES*                           m_embeddedFilesDelegate;
 
     std::unique_ptr<COMPONENT_CLASS_MANAGER>  m_componentClassManager;
     std::unique_ptr<LENGTH_DELAY_CALCULATION> m_lengthDelayCalc;
 
-    // Reactive text-variable dependency adapter. Installed as a listener
-    // during BOARD construction; destructor order ensures it outlives no
-    // listener calls.
-    std::unique_ptr<class BOARD_TEXT_VAR_ADAPTER> m_textVarAdapter;
-
-public:
-    BOARD_TEXT_VAR_ADAPTER* GetTextVarAdapter() const { return m_textVarAdapter.get(); }
+    // Reactive text-variable dependency adapter. Installed as a listener during BOARD construction;
+    // destructor order ensures it outlives no listener calls.
+    std::unique_ptr<BOARD_TEXT_VAR_ADAPTER>   m_textVarAdapter;
 };
 
-
-#endif      // CLASS_BOARD_H_
