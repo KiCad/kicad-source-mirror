@@ -1439,6 +1439,12 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex, 
 
     if( IsArcSegment( aStartIndex ) && !IsArcStart( aStartIndex ) )
     {
+        if( aStartIndex == aEndIndex )
+        {
+            rv.Append( m_points[aStartIndex] );
+            return rv;
+        }
+
         // Cutting in middle of an arc, lets split it
         ssize_t          arcToSplitIndex = ArcIndex( aStartIndex );
         const SHAPE_ARC& arcToSplit = Arc( arcToSplitIndex );
@@ -1455,7 +1461,10 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex, 
         SHAPE_ARC newArc;
         VECTOR2I  newArcStart = m_points[aStartIndex];
 
-        newArc.ConstructFromStartEndCenter( newArcStart, arcToSplit.GetP1(), arcToSplit.GetCenter(),
+        // The slice may also finish inside this arc
+        VECTOR2I  newArcEnd = rv.m_points.back();
+
+        newArc.ConstructFromStartEndCenter( newArcStart, newArcEnd, arcToSplit.GetCenter(),
                                             arcToSplit.IsClockwise() );
 
         rv.m_arcs.push_back( newArc );
