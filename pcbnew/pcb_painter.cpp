@@ -1183,6 +1183,16 @@ static bool viaHoleShowsLayerPair( const PCB_VIA* aVia )
 
 bool PCB_PAINTER::HasUniformColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
+    // A net's terminal pads gain and lose their emphasis box with the net highlight
+    if( aItem->IsBOARD_ITEM() && static_cast<const BOARD_ITEM*>( aItem )->Type() == PCB_PAD_T )
+    {
+        const PAD*          pad = static_cast<const PAD*>( static_cast<const BOARD_ITEM*>( aItem ) );
+        const NETINFO_ITEM* net = pad->GetNet();
+
+        if( net && ( net->GetTerminalPad( 0 ) == pad || net->GetTerminalPad( 1 ) == pad ) )
+            return false;
+    }
+
     if( aLayer != LAYER_VIA_HOLES && aLayer != LAYER_VIA_HOLEWALLS && aLayer != LAYER_PAD_HOLEWALLS )
         return true;
 
