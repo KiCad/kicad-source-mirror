@@ -1545,7 +1545,8 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             {
                 SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
-                noConnects = sheet->GetNoConnects();
+                for( const auto& [pin, noConnect] : sheet->GetNoConnects() )
+                    noConnects[pin] = noConnect;
 
                 if( vertical )
                     sheet->MirrorVertically( mirrorPoint.y );
