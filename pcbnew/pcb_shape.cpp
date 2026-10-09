@@ -1230,8 +1230,8 @@ void PCB_SHAPE::rebakeFromTransform( const TRANSFORM_TRS& xform )
                 VECTOR2I       libCenter = ( m_libStart + m_libEnd ) / 2;
                 VECTOR2I       libSize( std::abs( m_libEnd.x - m_libStart.x ), std::abs( m_libEnd.y - m_libStart.y ) );
 
-                TransformRoundChamferedRectToPolygon( rounded, libCenter, libSize, ANGLE_0, m_cornerRadius, 0.0, 0, 0,
-                                                      getMaxError(), ERROR_INSIDE );
+                TransformRoundChamferedRectToPolygon( rounded, libCenter, libSize, ANGLE_0, m_libCornerRadius, 0.0,
+                                                      0, 0, getMaxError(), ERROR_INSIDE );
 
                 poly.NewOutline();
 
