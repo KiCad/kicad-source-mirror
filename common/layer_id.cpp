@@ -161,6 +161,8 @@ wxString LayerName( int aLayer )
     case LAYER_CONSTRAINT_UNDER:        return _( "Under-constrained tint" );
     case LAYER_CONSTRAINT_WELL:         return _( "Fully constrained tint" );
     case LAYER_CONSTRAINT_OVER:         return _( "Over-constrained tint" );
+    case LAYER_ROUTER_PREVIEW_SHADOW:   return _( "Router clearance shadow" );
+    case LAYER_ROUTER_PREVIEW_COLLISION: return _( "Router collision marker" );
     case LAYER_BOARD_OUTLINE_AREA:      return _( "Board outline area" );
     case NETNAMES_LAYER_ID_START:       return _( "Track net names" );
     case LAYER_PAD_NETNAMES:            return _( "Pad net names" );

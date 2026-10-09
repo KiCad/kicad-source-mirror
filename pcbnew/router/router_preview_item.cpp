@@ -21,7 +21,6 @@
 
 #include "router_preview_item.h"
 
-#include <deque>
 
 #include <board_item.h>
 #include <board_connected_item.h>
@@ -47,13 +46,14 @@ using namespace KIGFX;
 
 
 ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, PNS::ROUTER_IFACE* aIface,
-                                          KIGFX::VIEW* aView, int aFlags ) :
+                                          KIGFX::VIEW* aView, int aFlags, DISPLAY_MODE aMode ) :
         EDA_ITEM( NOT_USED ),
         m_view( aView ),
         m_iface( aIface ),
         m_shape( nullptr ),
         m_hole( nullptr ),
-        m_flags( aFlags )
+        m_flags( aFlags ),
+        m_mode( aMode )
 {
     BOARD_ITEM* boardItem = aItem ? aItem->BoardItem() : nullptr;
 
@@ -81,14 +81,16 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, PNS::ROUTER_IF
     }
 
     m_clearance = -1;
-    m_originLayer = m_layer = LAYER_SELECT_OVERLAY ;
+    m_originLayer = LAYER_SELECT_OVERLAY;
+    m_layer = chooseLayer();
 
-    m_showClearance = false;
 
     // initialize variables, overwritten by Update( aItem ), if aItem != NULL
     m_type = PR_SHAPE;
     m_width = ( aFlags & PNS_SEMI_SOLID ) ? 1 : 0;
-    m_depth = m_originDepth = aView->GetLayerOrder( m_originLayer );
+
+    // Depth follows the drawing layer so a collision marker passes the OpenGL depth test over the overlay
+    m_depth = m_originDepth = aView->GetLayerOrder( m_layer );
 
     if( aItem )
         Update( aItem );
@@ -100,7 +102,8 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const SHAPE& aShape, PNS::ROUTER_IFACE
         EDA_ITEM( NOT_USED ),
         m_view( aView ),
         m_iface( aIface ),
-        m_flags( 0 )
+        m_flags( 0 ),
+        m_mode( DM_SHAPE )
 {
     m_shape = aShape.Clone();
     m_hole = nullptr;
@@ -108,7 +111,6 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const SHAPE& aShape, PNS::ROUTER_IFACE
     m_clearance = -1;
     m_originLayer = m_layer = LAYER_SELECT_OVERLAY;
 
-    m_showClearance = false;
 
     // initialize variables, overwritten by Update( aItem ), if aItem != NULL
     m_type = PR_SHAPE;
@@ -166,7 +168,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
 
     case PNS::ITEM::VIA_T:
     {
-        m_originLayer = m_layer = LAYER_VIAS;
+        m_originLayer = LAYER_VIAS;
         m_type = PR_SHAPE;
         m_width = 0;
         m_color = COLOR4D( 0.7, 0.7, 0.7, 0.8 );
@@ -216,6 +218,21 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
 
     if( m_flags & PNS_HOVER_ITEM )
         m_color = m_color.WithAlpha( 1.0 );
+
+    m_layer = chooseLayer();
+}
+
+
+int ROUTER_PREVIEW_ITEM::chooseLayer() const
+{
+    // Halos go behind copper and collision markers go on top
+    if( m_mode == DM_SHADOW )
+        return LAYER_ROUTER_PREVIEW_SHADOW;
+
+    if( m_flags & PNS_COLLISION )
+        return LAYER_ROUTER_PREVIEW_COLLISION;
+
+    return LAYER_SELECT_OVERLAY;
 }
 
 
@@ -230,6 +247,9 @@ const BOX2I ROUTER_PREVIEW_ITEM::ViewBBox() const
         {
             bbox = m_shape->BBox();
             bbox.Inflate( m_width / 2 );
+
+            if( m_mode == DM_SHADOW && m_clearance > 0 )
+                bbox.Inflate( m_clearance );
         }
 
         if( m_hole )
@@ -289,26 +309,107 @@ void ROUTER_PREVIEW_ITEM::drawLineChain( const SHAPE_LINE_CHAIN_BASE* aL, KIGFX:
 }
 
 
-void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) const
+void ROUTER_PREVIEW_ITEM::drawClearanceHalo( const SHAPE* aShape, KIGFX::GAL* gal ) const
 {
-    bool holeDrawn = false;
-    bool showClearance = m_showClearance;
-
-    // Always show clearance when we're in collision, even if the preference is off
-    if( ( m_flags & PNS_COLLISION ) > 0 )
-        showClearance = true;
+    if( m_clearance <= 0 )
+        return;
 
     switch( aShape->Type() )
     {
     case SH_POLY_SET_TRIANGLE:
+    case SH_LINE_CHAIN:
     {
-        const SHAPE_LINE_CHAIN_BASE* l = (const SHAPE_LINE_CHAIN_BASE*) aShape;
+        const SHAPE_LINE_CHAIN_BASE* l = static_cast<const SHAPE_LINE_CHAIN_BASE*>( aShape );
 
-        if( showClearance && m_clearance > 0 )
+        gal->SetLineWidth( m_width + 2 * m_clearance );
+        drawLineChain( l, gal );
+        break;
+    }
+
+    case SH_SEGMENT:
+    {
+        const SHAPE_SEGMENT* s = static_cast<const SHAPE_SEGMENT*>( aShape );
+
+        gal->SetIsStroke( false );
+        gal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() + 2 * m_clearance );
+        break;
+    }
+
+    case SH_CIRCLE:
+    {
+        const SHAPE_CIRCLE* c = static_cast<const SHAPE_CIRCLE*>( aShape );
+
+        gal->SetIsStroke( false );
+        gal->DrawCircle( c->GetCenter(), c->GetRadius() + m_clearance );
+        break;
+    }
+
+    case SH_RECT:
+    {
+        gal->SetIsStroke( true );
+        gal->SetLineWidth( 2 * m_clearance );
+        gal->DrawPolyline( static_cast<const SHAPE_RECT*>( aShape )->Outline() );
+        break;
+    }
+
+    case SH_SIMPLE:
+    {
+        gal->SetIsStroke( true );
+        gal->SetLineWidth( 2 * m_clearance );
+        gal->DrawPolyline( static_cast<const SHAPE_SIMPLE*>( aShape )->Vertices() );
+        break;
+    }
+
+    case SH_ARC:
+    {
+        const SHAPE_ARC* arc = static_cast<const SHAPE_ARC*>( aShape );
+
+        gal->SetIsFill( false );
+        gal->SetIsStroke( true );
+        gal->SetLineWidth( arc->GetWidth() + 2 * m_clearance );
+        gal->DrawArc( arc->GetCenter(), arc->GetRadius(), arc->GetStartAngle(),
+                      arc->GetCentralAngle() );
+        break;
+    }
+
+    case SH_ELLIPSE:
+    {
+        const SHAPE_ELLIPSE* ellipse = static_cast<const SHAPE_ELLIPSE*>( aShape );
+
+        gal->SetIsFill( false );
+        gal->SetIsStroke( true );
+        gal->SetLineWidth( std::max( 1, ellipse->GetWidth() ) + 2 * m_clearance );
+
+        if( ellipse->IsArc() )
         {
-            gal->SetLineWidth( m_width + 2 * m_clearance );
-            drawLineChain( l, gal );
+            gal->DrawEllipseArc( ellipse->GetCenter(), ellipse->GetMajorRadius(), ellipse->GetMinorRadius(),
+                                 ellipse->GetRotation(), ellipse->GetStartAngle(), ellipse->GetEndAngle() );
         }
+        else
+        {
+            gal->DrawEllipse( ellipse->GetCenter(), ellipse->GetMajorRadius(), ellipse->GetMinorRadius(),
+                              ellipse->GetRotation() );
+        }
+
+        break;
+    }
+
+    default:
+        break;
+    }
+}
+
+
+void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) const
+{
+    bool holeDrawn = false;
+
+    switch( aShape->Type() )
+    {
+    case SH_POLY_SET_TRIANGLE:
+    case SH_LINE_CHAIN:
+    {
+        const SHAPE_LINE_CHAIN_BASE* l = static_cast<const SHAPE_LINE_CHAIN_BASE*>( aShape );
 
         gal->SetLayerDepth( m_depth );
         gal->SetLineWidth( m_width );
@@ -318,40 +419,13 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
         break;
     }
 
-    case SH_LINE_CHAIN:
-    {
-        const SHAPE_LINE_CHAIN* l = (const SHAPE_LINE_CHAIN*) aShape;
-        const int               w = m_width;
-
-        if( showClearance && m_clearance > 0 )
-        {
-            gal->SetLineWidth( w + 2 * m_clearance );
-            drawLineChain( l, gal );
-        }
-
-        gal->SetLayerDepth( m_depth );
-        gal->SetLineWidth( w );
-        gal->SetStrokeColor( m_color );
-        gal->SetFillColor( m_color );
-        drawLineChain( l, gal );
-        break;
-    }
-
     case SH_SEGMENT:
     {
-        const SHAPE_SEGMENT* s = (const SHAPE_SEGMENT*) aShape;
-        const int            w = s->GetWidth();
+        const SHAPE_SEGMENT* s = static_cast<const SHAPE_SEGMENT*>( aShape );
 
         gal->SetIsStroke( false );
-
-        if( showClearance && m_clearance > 0 )
-        {
-            gal->SetLineWidth( w + 2 * m_clearance );
-            gal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() + 2 * m_clearance );
-        }
-
         gal->SetLayerDepth( m_depth );
-        gal->SetLineWidth( w );
+        gal->SetLineWidth( s->GetWidth() );
         gal->SetFillColor( m_color );
         gal->DrawSegment( s->GetSeg().A, s->GetSeg().B, s->GetWidth() );
         break;
@@ -360,14 +434,8 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
     case SH_CIRCLE:
     {
         const SHAPE_CIRCLE* c = static_cast<const SHAPE_CIRCLE*>( aShape );
+
         gal->SetStrokeColor( m_color );
-
-        if( showClearance && m_clearance > 0 )
-        {
-            gal->SetIsStroke( false );
-            gal->DrawCircle( c->GetCenter(), c->GetRadius() + m_clearance );
-        }
-
         gal->SetLayerDepth( m_depth );
 
         if( m_hole && dynamic_cast<SHAPE_CIRCLE*>( m_hole ) )
@@ -395,80 +463,40 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
 
     case SH_RECT:
     {
-        const SHAPE_RECT* r = (const SHAPE_RECT*) aShape;
+        const SHAPE_RECT* r = static_cast<const SHAPE_RECT*>( aShape );
+
         gal->SetFillColor( m_color );
-
-        if( showClearance && m_clearance > 0 )
-        {
-            VECTOR2I p0( r->GetPosition() ), s( r->GetSize() );
-            gal->SetIsStroke( true );
-            gal->SetLineWidth( 2 * m_clearance );
-            gal->DrawLine( p0, VECTOR2I( p0.x + s.x, p0.y ) );
-            gal->DrawLine( p0, VECTOR2I( p0.x, p0.y + s.y ) );
-            gal->DrawLine( p0 + s , VECTOR2I( p0.x + s.x, p0.y ) );
-            gal->DrawLine( p0 + s, VECTOR2I( p0.x, p0.y + s.y ) );
-        }
-
         gal->SetLayerDepth( m_depth );
         gal->SetIsStroke( m_width ? true : false );
-        gal->SetLineWidth( m_width);
+        gal->SetLineWidth( m_width );
         gal->SetStrokeColor( m_color );
         gal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
-
         break;
     }
 
     case SH_SIMPLE:
     {
-        const SHAPE_SIMPLE*  c = (const SHAPE_SIMPLE*) aShape;
-        std::deque<VECTOR2D> polygon = std::deque<VECTOR2D>();
-
-        for( int i = 0; i < c->PointCount(); i++ )
-        {
-            polygon.push_back( c->CDPoint( i ) );
-        }
-
         gal->SetFillColor( m_color );
-
-        if( showClearance && m_clearance > 0 )
-        {
-            gal->SetIsStroke( true );
-            gal->SetLineWidth( 2 * m_clearance );
-
-            // need the implicit last segment to be explicit for DrawPolyline
-            polygon.push_back( c->CDPoint( 0 ) );
-            gal->DrawPolyline( polygon );
-        }
-
         gal->SetLayerDepth( m_depth );
         gal->SetIsStroke( m_width ? true : false );
         gal->SetLineWidth( m_width );
         gal->SetStrokeColor( m_color );
-        gal->DrawPolygon( polygon );
+        gal->DrawPolygon( static_cast<const SHAPE_SIMPLE*>( aShape )->Vertices() );
         break;
     }
 
     case SH_ARC:
     {
         const SHAPE_ARC* arc = static_cast<const SHAPE_ARC*>( aShape );
-        const int        w = arc->GetWidth();
-        EDA_ANGLE        start_angle = arc->GetStartAngle();
-        EDA_ANGLE        angle = arc->GetCentralAngle();
 
         gal->SetIsFill( false );
         gal->SetIsStroke( true );
-
-        if( showClearance && m_clearance > 0 )
-        {
-            gal->SetLineWidth( w + 2 * m_clearance );
-            gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, angle );
-        }
-
         gal->SetLayerDepth( m_depth );
         gal->SetStrokeColor( m_color );
         gal->SetFillColor( m_color );
-        gal->SetLineWidth( w );
-        gal->DrawArc( arc->GetCenter(), arc->GetRadius(), start_angle, angle );
+        gal->SetLineWidth( arc->GetWidth() );
+        gal->DrawArc( arc->GetCenter(), arc->GetRadius(), arc->GetStartAngle(),
+                      arc->GetCentralAngle() );
         break;
     }
 
@@ -484,17 +512,6 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
 
         gal->SetIsFill( false );
         gal->SetIsStroke( true );
-
-        if( showClearance && m_clearance > 0 )
-        {
-            gal->SetLineWidth( w + 2 * m_clearance );
-
-            if( isArc )
-                gal->DrawEllipseArc( center, major, minor, rotation, ellipse->GetStartAngle(), ellipse->GetEndAngle() );
-            else
-                gal->DrawEllipse( center, major, minor, rotation );
-        }
-
         gal->SetLayerDepth( m_depth );
         gal->SetStrokeColor( m_color );
         gal->SetFillColor( m_color );
@@ -542,41 +559,43 @@ void ROUTER_PREVIEW_ITEM::drawShape( const SHAPE* aShape, KIGFX::GAL* gal ) cons
 void ROUTER_PREVIEW_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     GAL* gal = aView->GetGAL();
-    //col.Brighten(0.7);
 
-    if( m_type == PR_SHAPE )
+    if( m_type != PR_SHAPE || !m_shape )
+        return;
+
+    std::vector<const SHAPE*> shapes;
+
+    if( m_shape->HasIndexableSubshapes() )
+        m_shape->GetIndexableSubshapes( shapes );
+    else
+        shapes.push_back( m_shape );
+
+    if( m_mode == DM_SHADOW )
     {
-        if( !m_shape )
-            return;
-
-        // N.B. The order of draw here is important
-        // Cairo doesn't current support z-ordering, so we need
-        // to draw the clearance first to ensure it is in the background
-        gal->SetLayerDepth( m_originDepth );
-
         //TODO(snh) Add configuration option for the color/alpha here
         gal->SetStrokeColor( COLOR4D( DARKDARKGRAY ).WithAlpha( 0.9 ) );
         gal->SetFillColor( COLOR4D( DARKDARKGRAY ).WithAlpha( 0.7 ) );
         gal->SetIsStroke( m_width ? true : false );
         gal->SetIsFill( true );
 
-        // Semi-solids (ie: rule areas) which are not in collision are sketched (ie: outline only)
-        if( ( m_flags & PNS_SEMI_SOLID ) > 0 && ( m_flags & PNS_COLLISION ) == 0 )
-            gal->SetIsFill( false );
+        for( const SHAPE* shape : shapes )
+            drawClearanceHalo( shape, gal );
 
-        if( m_shape->HasIndexableSubshapes() )
-        {
-            std::vector<const SHAPE*> subshapes;
-            m_shape->GetIndexableSubshapes( subshapes );
-
-            for( const SHAPE* shape : subshapes )
-                drawShape( shape, gal );
-        }
-        else
-        {
-            drawShape( m_shape, gal );
-        }
+        return;
     }
+
+    gal->SetLayerDepth( m_depth );
+    gal->SetStrokeColor( m_color );
+    gal->SetFillColor( m_color );
+    gal->SetIsStroke( m_width ? true : false );
+    gal->SetIsFill( true );
+
+    // Semi-solids (ie: rule areas) which are not in collision are sketched (ie: outline only)
+    if( ( m_flags & PNS_SEMI_SOLID ) > 0 && ( m_flags & PNS_COLLISION ) == 0 )
+        gal->SetIsFill( false );
+
+    for( const SHAPE* shape : shapes )
+        drawShape( shape, gal );
 }
 
 

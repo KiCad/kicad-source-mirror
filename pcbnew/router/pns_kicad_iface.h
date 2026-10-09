@@ -31,6 +31,7 @@
 
 class PNS_PCBNEW_RULE_RESOLVER;
 class PNS_PCBNEW_DEBUG_DECORATOR;
+class ROUTER_PREVIEW_ITEM;
 
 class BOARD;
 class BOARD_COMMIT;
@@ -189,6 +190,13 @@ protected:
     BOARD_CONNECTED_ITEM* createBoardItem( PNS::ITEM* aItem );
     void                  modifyBoardItem( PNS::ITEM* aItem, BOARD_COMMIT& aCommit );
 
+    void clearPreviewItems();
+
+    /**
+     * Add a preview item to the view and take ownership of it.
+     */
+    void addPreviewItem( ROUTER_PREVIEW_ITEM* aItem );
+
     struct OFFSET
     {
         VECTOR2I p_old, p_new;
@@ -197,7 +205,10 @@ protected:
     std::map<PAD*, OFFSET>          m_fpOffsets;
     std::set<PAD*>                  m_independentPads;
     KIGFX::VIEW*                    m_view;
-    KIGFX::VIEW_GROUP*              m_previewItems;
+
+    /** Each preview item is in the view directly so it draws at its own layer's place */
+    std::vector<ROUTER_PREVIEW_ITEM*> m_previewItems;
+
     std::unordered_set<BOARD_ITEM*> m_hiddenItems;
 
     std::unordered_map<BOARD_ITEM*, EDA_GROUP*>               m_itemGroups;

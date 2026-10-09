@@ -64,6 +64,16 @@ public:
     };
 
     /**
+     * An element with a visible clearance is drawn as two items on separate view layers, so the
+     * halo lands behind copper.
+     */
+    enum DISPLAY_MODE
+    {
+        DM_SHAPE,   /**< Shape body only, in the normal or collision color */
+        DM_SHADOW   /**< Clearance halo only, drawn behind board items */
+    };
+
+    /**
      * We draw this item on a single layer, but we stack up all the layers from
      * the various components that form this preview item.  In order to make this
      * work, we need to map that layer stack onto fractional depths that are less
@@ -79,7 +89,7 @@ public:
 
     ROUTER_PREVIEW_ITEM( const SHAPE& aShape, PNS::ROUTER_IFACE* aIface, KIGFX::VIEW* aView );
     ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, PNS::ROUTER_IFACE* aIface, KIGFX::VIEW* aView,
-                         int aFlags = 0 );
+                         int aFlags = 0, DISPLAY_MODE aMode = DM_SHAPE );
     ~ROUTER_PREVIEW_ITEM();
 
     void Update( const PNS::ITEM* aItem );
@@ -89,7 +99,8 @@ public:
     void SetWidth( int aWidth ) { m_width = aWidth; }
 
     void SetClearance( int aClearance ) { m_clearance = aClearance; }
-    void ShowClearance( bool aEnabled ) { m_showClearance = aEnabled; }
+
+    bool IsCollisionFlagged() const { return ( m_flags & PNS_COLLISION ) != 0; }
 
     double GetOriginDepth() const { return m_originDepth; }
 
@@ -118,8 +129,12 @@ public:
 
     void drawShape( const SHAPE* aShape, KIGFX::GAL* aGal ) const;
 
+    void drawClearanceHalo( const SHAPE* aShape, KIGFX::GAL* aGal ) const;
+
 private:
     const KIGFX::COLOR4D getLayerColor( int aLayer, const PNS::ITEM* aItem = nullptr ) const;
+
+    int chooseLayer() const;
 
 private:
     KIGFX::VIEW*   m_view;
@@ -136,7 +151,7 @@ private:
     int            m_layer;
     int            m_originLayer;
     int            m_clearance;
-    bool           m_showClearance;
+    DISPLAY_MODE   m_mode;
 
     double         m_originDepth;
     double         m_depth;

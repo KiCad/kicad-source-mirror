@@ -1616,8 +1616,33 @@ PNS_KICAD_IFACE::PNS_KICAD_IFACE()
 {
     m_tool = nullptr;
     m_view = nullptr;
-    m_previewItems = nullptr;
     m_commitFlags = 0;
+}
+
+
+void PNS_KICAD_IFACE::clearPreviewItems()
+{
+    for( ROUTER_PREVIEW_ITEM* item : m_previewItems )
+    {
+        if( m_view )
+            m_view->Remove( item );
+
+        delete item;
+    }
+
+    m_previewItems.clear();
+}
+
+
+void PNS_KICAD_IFACE::addPreviewItem( ROUTER_PREVIEW_ITEM* aItem )
+{
+    if( !aItem )
+        return;
+
+    if( m_view )
+        m_view->Add( aItem );
+
+    m_previewItems.push_back( aItem );
 }
 
 
@@ -1630,11 +1655,7 @@ PNS_KICAD_IFACE_BASE::~PNS_KICAD_IFACE_BASE()
 
 PNS_KICAD_IFACE::~PNS_KICAD_IFACE()
 {
-    if( m_previewItems )
-    {
-        m_previewItems->FreeItems();
-        delete m_previewItems;
-    }
+    clearPreviewItems();
 }
 
 
@@ -2491,11 +2512,7 @@ void PNS_KICAD_IFACE::EraseView()
 
     m_hiddenItems.clear();
 
-    if( m_previewItems )
-    {
-        m_previewItems->FreeItems();
-        m_view->Update( m_previewItems );
-    }
+    clearPreviewItems();
 
     if( m_debugDecorator )
         m_debugDecorator->Clear();
@@ -2510,7 +2527,7 @@ void PNS_KICAD_IFACE_BASE::SetDebugDecorator( PNS::DEBUG_DECORATOR *aDec )
 
 void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit, int aFlags )
 {
-       if( aItem->IsVirtual() )
+    if( aItem->IsVirtual() )
         return;
 
     if( ZONE* zone = dynamic_cast<ZONE*>( aItem->Parent() ) )
@@ -2519,41 +2536,54 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool 
             aFlags |= PNS_SEMI_SOLID;
     }
 
-    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, this, m_view, aFlags );
-
     // Note: SEGMENT_T is used for placed tracks; LINE_T is used for the routing head
     static int tracks = PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T | PNS::ITEM::LINE_T;
     static int tracksOrVias = tracks | PNS::ITEM::VIA_T;
 
+    bool showClearance = false;
+
     if( aClearance >= 0 )
     {
-        pitem->SetClearance( aClearance );
-
-        PCBNEW_SETTINGS* settings = static_cast<PCBNEW_SETTINGS*>( m_tool->GetManager()->GetSettings() );
+        PCBNEW_SETTINGS* settings =
+                static_cast<PCBNEW_SETTINGS*>( m_tool->GetManager()->GetSettings() );
 
         switch( settings->m_Display.m_TrackClearance )
         {
         case SHOW_WITH_VIA_ALWAYS:
         case SHOW_WITH_VIA_WHILE_ROUTING_OR_DRAGGING:
-            pitem->ShowClearance( aItem->OfKind( tracksOrVias ) );
+            showClearance = aItem->OfKind( tracksOrVias );
             break;
 
         case SHOW_WITH_VIA_WHILE_ROUTING:
-            pitem->ShowClearance( aItem->OfKind( tracksOrVias ) && !aEdit );
+            showClearance = aItem->OfKind( tracksOrVias ) && !aEdit;
             break;
 
         case SHOW_WHILE_ROUTING:
-            pitem->ShowClearance( aItem->OfKind( tracks ) && !aEdit );
+            showClearance = aItem->OfKind( tracks ) && !aEdit;
             break;
 
         default:
-            pitem->ShowClearance( false );
             break;
         }
     }
 
-    m_previewItems->Add( pitem );
-    m_view->Update( m_previewItems );
+    ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, this, m_view, aFlags,
+                                                         ROUTER_PREVIEW_ITEM::DM_SHAPE );
+
+    // A colliding item always shows its halo so the user sees why routing was refused
+    const bool itemCollision = pitem->IsCollisionFlagged();
+
+    addPreviewItem( pitem );
+
+    // A separate item puts the halo on LAYER_ROUTER_PREVIEW_SHADOW, behind board copper
+    if( aClearance > 0 && ( showClearance || itemCollision ) )
+    {
+        ROUTER_PREVIEW_ITEM* shadow = new ROUTER_PREVIEW_ITEM( aItem, this, m_view, aFlags,
+                                                               ROUTER_PREVIEW_ITEM::DM_SHADOW );
+        shadow->SetClearance( aClearance );
+
+        addPreviewItem( shadow );
+    }
 }
 
 
@@ -2571,8 +2601,7 @@ void PNS_KICAD_IFACE::DisplayPathLine( const SHAPE_LINE_CHAIN& aLine, int aImpor
 
     pitem->SetColor( color );
 
-    m_previewItems->Add( pitem );
-    m_view->Update( m_previewItems );
+    addPreviewItem( pitem );
 }
 
 
@@ -2617,8 +2646,7 @@ void PNS_KICAD_IFACE::DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, PNS::NET
 
     pitem->SetColor( color.Brightened( 0.5 ).WithAlpha( std::min( 1.0, color.a + 0.4 ) ) );
 
-    m_previewItems->Add( pitem );
-    m_view->Update( m_previewItems );
+    addPreviewItem( pitem );
 }
 
 
@@ -3009,18 +3037,8 @@ void PNS_KICAD_IFACE::SetView( KIGFX::VIEW* aView )
 {
     wxLogTrace( wxT( "PNS" ), wxT( "SetView %p" ), aView );
 
-    if( m_previewItems )
-    {
-        m_previewItems->FreeItems();
-        delete m_previewItems;
-    }
-
+    clearPreviewItems();
     m_view = aView;
-    m_previewItems = new KIGFX::VIEW_GROUP( m_view );
-    m_previewItems->SetLayer( LAYER_SELECT_OVERLAY ) ;
-
-    if(m_view)
-        m_view->Add( m_previewItems );
 
     delete m_debugDecorator;
 
