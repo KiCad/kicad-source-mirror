@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-08 21:09+0000\n"
+"PO-Revision-Date: 2026-10-09 09:19+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -36990,7 +36990,7 @@ msgstr "Gerber-Dateien betrachten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:175
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Bilder in Schaltzeichen oder Bauteil-Footprints umwandeln"
+msgstr "Bilder in Schaltplansymbole oder Bauteil-Footprints umwandeln"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:178
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -38693,7 +38693,7 @@ msgstr "Gerber-Ausgabedateien anzeigen"
 
 #: kicad/tools/kicad_manager_actions.cpp:156
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr "Bilder in Schaltzeichen oder Bauteil-Footprints umwandeln"
+msgstr "Bilder in Schaltplansymbole oder Bauteil-Footprints umwandeln"
 
 #: kicad/tools/kicad_manager_actions.cpp:175
 msgid "Edit drawing sheet borders and title block"
@@ -71941,9 +71941,7 @@ msgstr "Bitmap-zu-Bauteil-Umwandlung"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:13
 msgid "Create a component from a bitmap for use with KiCad"
-msgstr ""
-"Ein Bauteil aus einer Bitmap-Grafik erstellen, um dieses mit KiCad zu "
-"verwenden"
+msgstr "Ein KiCad-Bauteil aus einer Bitmap-Grafik erstellen"
 
 #: resources/linux/launchers/org.kicad.eeschema.desktop.in:11
 msgid "KiCad Schematic Editor (Standalone)"
