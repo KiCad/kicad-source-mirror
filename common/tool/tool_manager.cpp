@@ -670,9 +670,6 @@ void TOOL_MANAGER::InitTools()
 
             // Unregister the tool
             setActiveState( nullptr );
-
-            m_toolOrder.erase( it );
-
             m_toolState.erase( tool );
             m_toolNameIndex.erase( tool->GetName() );
             m_toolIdIndex.erase( tool->GetId() );
