@@ -351,7 +351,7 @@ void PCB_BARCODE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         else
             m_libAngle = -m_libAngle;
 
-        SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+        SetLayer( GetFlippedLayer( GetLayer() ) );
         AssembleBarcode();
         return;
     }
@@ -365,7 +365,7 @@ void PCB_BARCODE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     else
         m_libAngle = -m_libAngle;
 
-    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    SetLayer( GetFlippedLayer( GetLayer() ) );
     AssembleBarcode();
 }
 

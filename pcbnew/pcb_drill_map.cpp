@@ -71,10 +71,7 @@ void PCB_DRILL_MAP::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aDirection )
 {
     // The offset is a displacement of every mark from its own hole, so there is nothing to
     // mirror. The side the map documents is still the side it belongs on
-    const BOARD* board = GetBoard();
-
-    SetLayer( board ? board->FlipLayer( GetLayer() ) : ::FlipLayer( GetLayer() ) );
-
+    SetLayer( GetFlippedLayer( GetLayer() ) );
 }
 
 

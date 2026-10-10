@@ -192,9 +192,8 @@ void PCB_POINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         VECTOR2I newPos = GetPosition();
         MIRROR( newPos, aCentre, aFlipDirection );
         SetPosition( newPos );
+        SetLayer( GetFlippedLayer( GetLayer() ) );
     }
-
-    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
 }
 
 

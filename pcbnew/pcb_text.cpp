@@ -659,7 +659,7 @@ void PCB_TEXT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
     EDA_TEXT::SetTextAngle( GetTextAngle() );
 
-    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    SetLayer( GetFlippedLayer( GetLayer() ) );
 
     if( IsSideSpecific() )
         SetMirrored( !IsMirrored() );

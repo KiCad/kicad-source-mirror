@@ -145,6 +145,9 @@ void PCB_VIA_STACK::SetNetCode( int aNet )
 
 bool PCB_VIA_STACK::IsSpanValid( BOARD* aBoard, PCB_LAYER_ID aStart, PCB_LAYER_ID aEnd )
 {
+    if( !aBoard )
+        return false;
+
     LSET enabled = LSET::AllCuMask( aBoard->GetCopperLayerCount() );
 
     auto present = [&]( PCB_LAYER_ID aLayer )
@@ -181,8 +184,8 @@ void PCB_VIA_STACK::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection
     if( m_hops )
         m_hops->Mirror( aCentre, aFlipDirection );
 
-    m_startLayer = GetBoard()->FlipLayer( m_startLayer );
-    m_endLayer = GetBoard()->FlipLayer( m_endLayer );
+    m_startLayer = GetFlippedLayer( m_startLayer );
+    m_endLayer = GetFlippedLayer( m_endLayer );
 }
 
 

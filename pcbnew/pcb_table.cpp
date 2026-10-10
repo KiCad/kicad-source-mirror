@@ -545,7 +545,7 @@ void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
         m_colWidths = std::move( newColWidths );
 
-        SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+        SetLayer( GetFlippedLayer( GetLayer() ) );
         return;
     }
 
@@ -594,7 +594,7 @@ void PCB_TABLE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
     m_colWidths = std::move( newColWidths );
 
-    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    SetLayer( GetFlippedLayer( GetLayer() ) );
     Normalize();
 
     if( originalAngle != ANGLE_0 )

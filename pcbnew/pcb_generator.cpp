@@ -110,7 +110,7 @@ void PCB_GENERATOR::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection
 {
     baseMirror( aCentre, aFlipDirection );
 
-    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    SetLayer( GetFlippedLayer( GetLayer() ) );
 
     PCB_GROUP::Flip( aCentre, aFlipDirection );
 }

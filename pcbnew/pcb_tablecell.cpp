@@ -187,7 +187,7 @@ wxString PCB_TABLECELL::GetUnwrappedShownText( RESOLUTION_CONTEXT aContext, int 
                 if( parentFootprint && parentFootprint->ResolveTextVar( token, aDepth + 1 ) )
                     return true;
 
-                if( board->ResolveTextVar( token, aDepth + 1 ) )
+                if( board && board->ResolveTextVar( token, aDepth + 1 ) )
                     return true;
 
                 return false;

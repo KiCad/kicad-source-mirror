@@ -135,4 +135,17 @@ BOOST_AUTO_TEST_CASE( CrossHatchingIsBuiltWithoutRendering )
     BOOST_CHECK_GT( shape->GetHatching().OutlineCount(), 0 );
 }
 
+
+BOOST_AUTO_TEST_CASE( BoardlessShapeHasNoKnockouts )
+{
+    HATCH_KNOCKOUT_SHAPE shape( nullptr, SHAPE_T::RECTANGLE );
+    shape.SetLayer( User_1 );
+    shape.SetStart( VECTOR2I( 0, 0 ) );
+    shape.SetEnd( VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 10 ) ) );
+    shape.SetFillMode( FILL_T::HATCH );
+
+    BOOST_CHECK( shape.CallGetHatchingKnockouts().IsEmpty() );
+    BOOST_CHECK_NO_THROW( shape.UpdateHatching() );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

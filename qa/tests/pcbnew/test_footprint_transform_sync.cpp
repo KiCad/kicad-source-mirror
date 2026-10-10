@@ -67,6 +67,70 @@ BOOST_AUTO_TEST_CASE( DefaultIsIdentity )
 }
 
 
+BOOST_AUTO_TEST_CASE( BoardlessFootprintFlip )
+{
+    FOOTPRINT fp( nullptr );
+
+    PAD* pad = new PAD( &fp );
+    pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( 1000000, 1000000 ) );
+    pad->SetLayerSet( PAD::SMDMask() );
+    fp.Add( pad, ADD_MODE::APPEND );
+
+    ZONE* zone = new ZONE( &fp );
+    zone->SetLayer( F_Cu );
+    fp.Add( zone, ADD_MODE::APPEND );
+
+    PCB_SHAPE* shape = new PCB_SHAPE( &fp, SHAPE_T::SEGMENT );
+    shape->SetLayer( F_SilkS );
+    fp.Add( shape, ADD_MODE::APPEND );
+
+    PCB_BARCODE* barcode = new PCB_BARCODE( &fp );
+    barcode->SetLayer( F_SilkS );
+    fp.Add( barcode, ADD_MODE::APPEND );
+
+    PCB_TEXTBOX* textbox = new PCB_TEXTBOX( &fp );
+    textbox->SetLayer( F_SilkS );
+    fp.Add( textbox, ADD_MODE::APPEND );
+
+    PCB_TABLE* table = new PCB_TABLE( &fp, pcbIUScale.mmToIU( 0.1 ) );
+    table->SetColCount( 1 );
+    PCB_TABLECELL* cell = new PCB_TABLECELL( table );
+    cell->SetLayer( F_SilkS );
+    table->AddCell( cell );
+    table->SetLayer( F_SilkS );
+    fp.Add( table, ADD_MODE::APPEND );
+
+    PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( &fp, PCB_DIM_ALIGNED_T );
+    dimension->SetLayer( F_SilkS );
+    fp.Add( dimension, ADD_MODE::APPEND );
+
+    PCB_POINT* point = new PCB_POINT( &fp );
+    point->SetLayer( F_CrtYd );
+    fp.Add( point, ADD_MODE::APPEND );
+
+    fp.EnsureExtrudedBody().m_layer = F_Fab;
+
+    fp.Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::TOP_BOTTOM );
+
+    BOOST_CHECK_EQUAL( fp.GetLayer(), B_Cu );
+    BOOST_CHECK_EQUAL( fp.Reference().GetLayer(), B_SilkS );
+    BOOST_CHECK( pad->GetLayerSet().test( B_Cu ) );
+    BOOST_CHECK( pad->GetLayerSet().test( B_Paste ) );
+    BOOST_CHECK( pad->GetLayerSet().test( B_Mask ) );
+    BOOST_CHECK_EQUAL( zone->GetLayer(), B_Cu );
+    BOOST_CHECK_EQUAL( shape->GetLayer(), B_SilkS );
+    BOOST_CHECK_EQUAL( barcode->GetLayer(), B_SilkS );
+    BOOST_CHECK_EQUAL( textbox->GetLayer(), B_SilkS );
+    BOOST_CHECK_EQUAL( table->GetLayer(), B_SilkS );
+    BOOST_CHECK_EQUAL( cell->GetLayer(), B_SilkS );
+    BOOST_CHECK_EQUAL( dimension->GetLayer(), B_SilkS );
+    BOOST_CHECK_EQUAL( point->GetLayer(), F_CrtYd );
+    BOOST_CHECK_EQUAL( fp.GetExtrudedBody()->m_layer, B_Fab );
+}
+
+
 BOOST_AUTO_TEST_CASE( SetPositionUpdatesTransform )
 {
     FOOTPRINT fp( nullptr );

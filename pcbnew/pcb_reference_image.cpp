@@ -122,7 +122,7 @@ double PCB_REFERENCE_IMAGE::ViewGetLOD( int aLayer, const KIGFX::VIEW* aView ) c
 
     // All bitmaps are drawn on LAYER_DRAW_BITMAPS, but their
     // associated board layer controls their visibility.
-    if( !GetBoard()->IsLayerVisible( m_layer ) )
+    if( GetBoard() && !GetBoard()->IsLayerVisible( m_layer ) )
         return LOD_HIDE;
 
     if( renderSettings->GetHighContrast()
@@ -231,12 +231,7 @@ bool PCB_REFERENCE_IMAGE::Deserialize( const google::protobuf::Any& aContainer )
 void PCB_REFERENCE_IMAGE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 {
     if( m_referenceImage.Flip( aCentre, aFlipDirection ) )
-    {
-        if( GetBoard() )
-            SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
-        else
-            SetLayer( FlipLayer( GetLayer() ) );
-    }
+        SetLayer( GetFlippedLayer( GetLayer() ) );
 }
 
 

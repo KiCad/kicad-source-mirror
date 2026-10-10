@@ -1836,7 +1836,7 @@ void PAD::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     LSET flipped;
 
     for( PCB_LAYER_ID layer : m_padStack.LayerSet() )
-        flipped.set( GetBoard()->FlipLayer( layer ) );
+        flipped.set( GetFlippedLayer( layer ) );
 
     SetLayerSet( flipped );
 

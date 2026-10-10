@@ -429,6 +429,20 @@ BOOST_AUTO_TEST_CASE( InvalidSpanBuildsNothing )
     BOOST_CHECK( !PCB_VIA_STACK::IsSpanValid( board.get(), UNDEFINED_LAYER, In2_Cu ) );
     BOOST_CHECK( PCB_VIA_STACK::IsSpanValid( board.get(), F_Cu, In2_Cu ) );
     BOOST_CHECK( PCB_VIA_STACK::IsSpanValid( board.get(), F_Cu, B_Cu ) );
+    BOOST_CHECK( !PCB_VIA_STACK::IsSpanValid( nullptr, F_Cu, B_Cu ) );
+}
+
+
+BOOST_AUTO_TEST_CASE( DetachedStackCanBeFlipped )
+{
+    PCB_VIA_STACK stack;
+    stack.SetStartLayer( F_Cu );
+    stack.SetEndLayer( In1_Cu );
+
+    stack.Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::LEFT_RIGHT );
+
+    BOOST_CHECK_EQUAL( stack.GetStartLayer(), B_Cu );
+    BOOST_CHECK_EQUAL( stack.GetEndLayer(), In1_Cu );
 }
 
 

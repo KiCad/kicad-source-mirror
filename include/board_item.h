@@ -326,6 +326,14 @@ public:
     virtual PCB_LAYER_ID GetLayer() const;
 
     /**
+     * Return the layer paired with \a aLayer on the opposite side of the board.
+     *
+     * Uses the parent board's layer mapping when available.  Library items and other detached
+     * items use the standard front/back layer pairs.
+     */
+    PCB_LAYER_ID GetFlippedLayer( PCB_LAYER_ID aLayer ) const;
+
+    /**
      * Return the total number of layers for the board that this item resides on.
      */
     virtual int BoardLayerCount() const;
@@ -513,6 +521,11 @@ public:
      * @return the layer name associated with this item.
      */
     wxString GetLayerName() const;
+
+    /**
+     * Return the name of a PCB layer using the owning board's layer names when available.
+     */
+    wxString GetLayerName( PCB_LAYER_ID aLayer ) const;
 
     virtual std::vector<int> ViewGetLayers() const override;
 

@@ -716,7 +716,7 @@ void PCB_DIMENSION_BASE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDire
 {
     Mirror( aCentre, aFlipDirection );
 
-    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    SetLayer( GetFlippedLayer( GetLayer() ) );
 }
 
 

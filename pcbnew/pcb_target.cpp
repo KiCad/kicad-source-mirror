@@ -96,7 +96,7 @@ void PCB_TARGET::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     else
         m_pos.y = aCentre.y - ( m_pos.y - aCentre.y );
 
-    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    SetLayer( GetFlippedLayer( GetLayer() ) );
 }
 
 

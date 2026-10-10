@@ -577,7 +577,10 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const BOARD_ITEM* aItem, int aLayer ) con
     {
         const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
         const BOARD*   board = via->GetBoard();
-        LSET           visibleLayers = board->GetVisibleLayers() & board->GetEnabledLayers();
+        LSET           visibleLayers = LSET::AllLayersMask();
+
+        if( board )
+            visibleLayers = board->GetVisibleLayers() & board->GetEnabledLayers();
 
         // Target graphic is visible if the via crosses a visible layer
         if( ( via->GetLayerSet() & visibleLayers ).none() )
@@ -1107,9 +1110,9 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
          * the same rule for tracks to be consistent (even though they don't have the same issue).
          */
         const PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
-        const BOARD&       board = *aArc->GetBoard();
+        const BOARD*       board = aArc->GetBoard();
 
-        if( IsCopperLayer( activeLayer ) && board.GetVisibleLayers().test( activeLayer ) )
+        if( IsCopperLayer( activeLayer ) && ( !board || board->GetVisibleLayers().test( activeLayer ) ) )
         {
             int clearance = aArc->GetOwnClearance( activeLayer );
 
@@ -1294,14 +1297,14 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         switch( topLayerId )
         {
         case F_Cu: topLayer = 1;                            break;
-        case B_Cu: topLayer = board->GetCopperLayerCount(); break;
+        case B_Cu: topLayer = aVia->BoardCopperLayerCount(); break;
         default:   topLayer = (topLayerId - B_Cu)/2 + 1;    break;
         }
 
         switch( bottomLayerId )
         {
         case F_Cu: bottomLayer = 1;                            break;
-        case B_Cu: bottomLayer = board->GetCopperLayerCount(); break;
+        case B_Cu: bottomLayer = aVia->BoardCopperLayerCount(); break;
         default:   bottomLayer = (bottomLayerId - B_Cu)/2 + 1; break;
         }
 
@@ -1434,7 +1437,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     else if( ( aLayer == F_Mask && aVia->IsOnLayer( F_Mask ) )
              || ( aLayer == B_Mask && aVia->IsOnLayer( B_Mask ) ) )
     {
-        int margin = board->GetDesignSettings().m_SolderMaskExpansion;
+        int margin = board ? board->GetDesignSettings().m_SolderMaskExpansion : 0;
 
         m_gal->SetIsFill( true );
         m_gal->SetIsStroke( false );
@@ -1456,7 +1459,7 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
         {
             draw = true;
         }
-        else if( aVia->FlashLayer( board->GetVisibleLayers() & board->GetEnabledLayers() ) )
+        else if( !board || aVia->FlashLayer( board->GetVisibleLayers() & board->GetEnabledLayers() ) )
         {
             draw = true;
         }
@@ -2129,9 +2132,13 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
         if( aLayer == LAYER_LOCKED_ITEM_SHADOW )
         {
-            LSET visibleLayers = aPad->GetBoard()->GetVisibleLayers()
-                                        & aPad->GetBoard()->GetEnabledLayers()
-                                        & aPad->GetLayerSet();
+            LSET visibleLayers = aPad->GetLayerSet();
+
+            if( aPad->GetBoard() )
+            {
+                visibleLayers &= aPad->GetBoard()->GetVisibleLayers();
+                visibleLayers &= aPad->GetBoard()->GetEnabledLayers();
+            }
 
             for( PCB_LAYER_ID layer : visibleLayers )
                 margin = std::max( margin, getExpansion( layer ) );

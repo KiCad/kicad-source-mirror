@@ -10178,7 +10178,7 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         }
     }
 
-    if( zone->IsTeardropArea() && m_requiredVersion < 20230517 )
+    if( m_board && zone->IsTeardropArea() && m_requiredVersion < 20230517 )
         m_board->SetLegacyTeardrops( true );
 
     // Clear flags used in zone edition:

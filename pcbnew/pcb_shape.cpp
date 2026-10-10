@@ -577,6 +577,10 @@ void PCB_SHAPE::UpdateHatching() const
 SHAPE_POLY_SET PCB_SHAPE::getHatchingKnockouts() const
 {
     SHAPE_POLY_SET knockouts;
+
+    if( !GetBoard() )
+        return knockouts;
+
     PCB_LAYER_ID   layer = GetLayer();
     BOX2I          bbox = GetBoundingBox();
     int            maxError = ARC_LOW_DEF;
@@ -904,7 +908,7 @@ void PCB_SHAPE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
             }
         }
 
-        SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+        SetLayer( GetFlippedLayer( GetLayer() ) );
         rebakeFromTransform( xform );
         return;
     }
@@ -934,14 +938,14 @@ void PCB_SHAPE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
             m_libEllipseEndAngle = -oldStart;
         }
 
-        SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+        SetLayer( GetFlippedLayer( GetLayer() ) );
         rebakeFromTransform( xform );
         return;
     }
 
     flip( aCentre, aFlipDirection );
 
-    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    SetLayer( GetFlippedLayer( GetLayer() ) );
     syncLibCoords();
 }
 

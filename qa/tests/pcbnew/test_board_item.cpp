@@ -405,6 +405,57 @@ BOOST_AUTO_TEST_CASE( FlipUpDown )
 }
 
 
+BOOST_AUTO_TEST_CASE( BoardlessItemsUseStandardLayerMetadata )
+{
+    PCB_TRACK track( nullptr );
+    track.SetLayer( F_Cu );
+    track.Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::LEFT_RIGHT );
+    BOOST_CHECK_EQUAL( track.GetLayer(), B_Cu );
+
+    PCB_ARC arc( nullptr );
+    arc.SetLayer( F_SilkS );
+    arc.Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::LEFT_RIGHT );
+    BOOST_CHECK_EQUAL( arc.GetLayer(), B_SilkS );
+
+    PCB_TARGET target( nullptr );
+    target.SetLayer( F_Fab );
+    target.Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::LEFT_RIGHT );
+    BOOST_CHECK_EQUAL( target.GetLayer(), B_Fab );
+
+    PCB_VIA via( nullptr );
+    via.SetViaType( VIATYPE::BLIND );
+    via.SetLayerPair( F_Cu, In1_Cu );
+    via.Flip( VECTOR2I( 0, 0 ), FLIP_DIRECTION::LEFT_RIGHT );
+
+    PCB_LAYER_ID topLayer;
+    PCB_LAYER_ID bottomLayer;
+    via.LayerPair( &topLayer, &bottomLayer );
+
+    BOOST_CHECK_EQUAL( topLayer, In1_Cu );
+    BOOST_CHECK_EQUAL( bottomLayer, B_Cu );
+    BOOST_CHECK_EQUAL( via.LayerMaskDescribe(), wxT( "In1.Cu - B.Cu" ) );
+
+    PCB_TEXTBOX textbox( nullptr );
+    textbox.SetText( wxT( "${UNKNOWN}" ) );
+    textbox.SetStart( VECTOR2I( 0, 0 ) );
+    textbox.SetEnd( VECTOR2I( pcbIUScale.mmToIU( 10 ), pcbIUScale.mmToIU( 5 ) ) );
+    BOOST_CHECK_NO_THROW( textbox.GetShownText( FOR_CANVAS ) );
+
+    FOOTPRINT     footprint( nullptr );
+    PCB_TABLE     table( &footprint );
+    PCB_TABLECELL cell( &table );
+    cell.SetText( wxT( "${UNKNOWN}" ) );
+    BOOST_CHECK_NO_THROW( cell.GetUnwrappedShownText( FOR_CANVAS ) );
+
+    ZONE               zone( &footprint );
+    std::vector<ZONE*> sameNetZones;
+    std::vector<ZONE*> otherNetZones;
+    zone.GetInteractingZones( F_Cu, &sameNetZones, &otherNetZones );
+    BOOST_CHECK( sameNetZones.empty() );
+    BOOST_CHECK( otherNetZones.empty() );
+}
+
+
 // Two columns and two rows, built at the origin and then turned. Each cell carries its grid
 // position as text so a test can say where it ended up.
 static PCB_TABLE* makeTable( BOARD& aBoard, const int aColWidths[2], const int aRowHeights[2], double aDegrees )

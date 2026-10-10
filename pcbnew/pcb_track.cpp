@@ -1406,7 +1406,7 @@ void PCB_TRACK::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         m_End.y   = aCentre.y - ( m_End.y - aCentre.y );
     }
 
-    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    SetLayer( GetFlippedLayer( GetLayer() ) );
 }
 
 
@@ -1425,7 +1425,7 @@ void PCB_ARC::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         m_Mid.y = aCentre.y - ( m_Mid.y - aCentre.y );
     }
 
-    SetLayer( GetBoard()->FlipLayer( GetLayer() ) );
+    SetLayer( GetFlippedLayer( GetLayer() ) );
 }
 
 
@@ -1457,8 +1457,8 @@ void PCB_VIA::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
         PCB_LAYER_ID top_layer;
         PCB_LAYER_ID bottom_layer;
         LayerPair( &top_layer, &bottom_layer );
-        top_layer    = GetBoard()->FlipLayer( top_layer );
-        bottom_layer = GetBoard()->FlipLayer( bottom_layer );
+        top_layer = GetFlippedLayer( top_layer );
+        bottom_layer = GetFlippedLayer( bottom_layer );
         SetLayerPair( top_layer, bottom_layer );
     }
 }
@@ -2375,7 +2375,8 @@ void PCB_VIA::GetOutermostConnectedLayers( PCB_LAYER_ID* aTopmost,
         {
             connected = true;
         }
-        else if( GetBoard()->GetConnectivity()->IsConnectedOnLayer( this, layer, nonZoneTypes ) )
+        else if( GetBoard()
+                 && GetBoard()->GetConnectivity()->IsConnectedOnLayer( this, layer, nonZoneTypes ) )
         {
             connected = true;
         }
@@ -2876,13 +2877,12 @@ void PCB_TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<
 
 wxString PCB_VIA::LayerMaskDescribe() const
 {
-    const BOARD* board = GetBoard();
     PCB_LAYER_ID top_layer;
     PCB_LAYER_ID bottom_layer;
 
     LayerPair( &top_layer, &bottom_layer );
 
-    return board->GetLayerName( top_layer ) + wxT( " - " ) + board->GetLayerName( bottom_layer );
+    return GetLayerName( top_layer ) + wxT( " - " ) + GetLayerName( bottom_layer );
 }
 
 

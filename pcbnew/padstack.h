@@ -335,6 +335,8 @@ public:
     /**
      * Flips the padstack layers in the case that the pad's parent footprint is flipped to the
      * other side of the board.
+     *
+     * @param aBoard provides custom layer pairs, or nullptr to use the standard layer pairs.
      */
     void FlipLayers( BOARD* aBoard );
 

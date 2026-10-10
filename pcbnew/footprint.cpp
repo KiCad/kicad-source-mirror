@@ -3465,7 +3465,7 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     SetPosition( finalPos );
 
     // Flip layer
-    BOARD_ITEM::SetLayer( GetBoard() ? GetBoard()->FlipLayer( GetLayer() ) : FlipLayer( GetLayer() ) );
+    BOARD_ITEM::SetLayer( GetFlippedLayer( GetLayer() ) );
 
     const VECTOR2I pos = m_transform.GetTranslate();
 
@@ -3528,7 +3528,7 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
 
     // Flip the extrusion source layer to match the new side.
     if( m_extrudedBody && m_extrudedBody->m_layer != UNDEFINED_LAYER )
-        m_extrudedBody->m_layer = GetBoard()->FlipLayer( m_extrudedBody->m_layer );
+        m_extrudedBody->m_layer = GetFlippedLayer( m_extrudedBody->m_layer );
 
     if( m_geometry_cache )
         m_geometry_cache->hull.Mirror( pos, FLIP_DIRECTION::TOP_BOTTOM );

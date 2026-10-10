@@ -1180,26 +1180,20 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
 
     if( layers.size() == 1 )
     {
-        layerDesc.Printf( _( "%s" ), GetBoard()->GetLayerName( layers[0] ) );
+        layerDesc.Printf( _( "%s" ), GetLayerName( layers[0] ) );
     }
-    else if (layers.size() == 2 )
+    else if( layers.size() == 2 )
     {
-        layerDesc.Printf( _( "%s and %s" ),
-                          GetBoard()->GetLayerName( layers[0] ),
-                          GetBoard()->GetLayerName( layers[1] ) );
+        layerDesc.Printf( _( "%s and %s" ), GetLayerName( layers[0] ), GetLayerName( layers[1] ) );
     }
-    else if (layers.size() == 3 )
+    else if( layers.size() == 3 )
     {
-        layerDesc.Printf( _( "%s, %s and %s" ),
-                          GetBoard()->GetLayerName( layers[0] ),
-                          GetBoard()->GetLayerName( layers[1] ),
-                          GetBoard()->GetLayerName( layers[2] ) );
+        layerDesc.Printf( _( "%s, %s and %s" ), GetLayerName( layers[0] ), GetLayerName( layers[1] ),
+                          GetLayerName( layers[2] ) );
     }
     else if( layers.size() > 3 )
     {
-        layerDesc.Printf( _( "%s, %s and %d more" ),
-                          GetBoard()->GetLayerName( layers[0] ),
-                          GetBoard()->GetLayerName( layers[1] ),
+        layerDesc.Printf( _( "%s, %s and %d more" ), GetLayerName( layers[0] ), GetLayerName( layers[1] ),
                           static_cast<int>( layers.size() - 2 ) );
     }
 
@@ -1380,19 +1374,19 @@ void ZONE::Flip( const VECTOR2I& aCentre, FLIP_DIRECTION aFlipDirection )
     LSET flipped;
 
     for( PCB_LAYER_ID layer : GetLayerSet() )
-        flipped.set( GetBoard()->FlipLayer( layer ) );
+        flipped.set( GetFlippedLayer( layer ) );
 
     SetLayerSet( flipped );
 
     for( auto& [oldLayer, properties] : layerPropertiesCopy )
     {
-        PCB_LAYER_ID newLayer = GetBoard()->FlipLayer( oldLayer );
+        PCB_LAYER_ID newLayer = GetFlippedLayer( oldLayer );
         m_layerProperties[newLayer] = properties;
     }
 
     for( auto& [oldLayer, shape] : fillsCopy )
     {
-        PCB_LAYER_ID newLayer = GetBoard()->FlipLayer( oldLayer );
+        PCB_LAYER_ID newLayer = GetFlippedLayer( oldLayer );
         SetFilledPolysList( newLayer, shape );
     }
 }
@@ -1726,6 +1720,9 @@ bool ZONE::IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx ) const
 void ZONE::GetInteractingZones( PCB_LAYER_ID aLayer, std::vector<ZONE*>* aSameNetCollidingZones,
                                 std::vector<ZONE*>* aOtherNetIntersectingZones ) const
 {
+    if( !GetBoard() )
+        return;
+
     int   epsilon = pcbIUScale.mmToIU( 0.001 );
     BOX2I bbox = GetBoundingBox();
 

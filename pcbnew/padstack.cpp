@@ -1527,14 +1527,19 @@ double PADSTACK::Similarity( const PADSTACK& aOther ) const
 
 void PADSTACK::FlipLayers( BOARD* aBoard )
 {
+    auto flipLayer = [aBoard]( PCB_LAYER_ID aLayer )
+    {
+        return aBoard ? aBoard->FlipLayer( aLayer ) : ::FlipLayer( aLayer );
+    };
+
     if( m_mode == MODE::FRONT_INNER_BACK )
     {
         std::unordered_map<PCB_LAYER_ID, COPPER_LAYER_PROPS> oldCopperProps = m_copperProps;
         m_copperProps.clear();
 
-        m_copperProps[aBoard->FlipLayer( F_Cu )] = oldCopperProps[F_Cu];
+        m_copperProps[flipLayer( F_Cu )] = oldCopperProps[F_Cu];
         m_copperProps[INNER_LAYERS] = oldCopperProps[INNER_LAYERS];
-        m_copperProps[aBoard->FlipLayer( B_Cu )] = oldCopperProps[B_Cu];
+        m_copperProps[flipLayer( B_Cu )] = oldCopperProps[B_Cu];
     }
     else if( m_mode == MODE::CUSTOM )
     {
@@ -1542,19 +1547,19 @@ void PADSTACK::FlipLayers( BOARD* aBoard )
         m_copperProps.clear();
 
         for( const auto& [layer, props] : oldCopperProps )
-            m_copperProps[aBoard->FlipLayer( layer )] = props;
+            m_copperProps[flipLayer( layer )] = props;
     }
 
     std::swap( m_frontMaskProps, m_backMaskProps );
 
-    m_drill.start = aBoard->FlipLayer( m_drill.start );
-    m_drill.end = aBoard->FlipLayer( m_drill.end );
+    m_drill.start = flipLayer( m_drill.start );
+    m_drill.end = flipLayer( m_drill.end );
 
-    m_secondaryDrill.start = aBoard->FlipLayer( m_secondaryDrill.start );
-    m_secondaryDrill.end = aBoard->FlipLayer( m_secondaryDrill.end );
+    m_secondaryDrill.start = flipLayer( m_secondaryDrill.start );
+    m_secondaryDrill.end = flipLayer( m_secondaryDrill.end );
 
-    m_tertiaryDrill.start = aBoard->FlipLayer( m_tertiaryDrill.start );
-    m_tertiaryDrill.end = aBoard->FlipLayer( m_tertiaryDrill.end );
+    m_tertiaryDrill.start = flipLayer( m_tertiaryDrill.start );
+    m_tertiaryDrill.end = flipLayer( m_tertiaryDrill.end );
 
     std::swap( m_frontPostMachining, m_backPostMachining );
 }

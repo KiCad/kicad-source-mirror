@@ -189,6 +189,17 @@ PCB_LAYER_ID BOARD_ITEM::GetLayer() const
     return m_layer;
 }
 
+
+PCB_LAYER_ID BOARD_ITEM::GetFlippedLayer( PCB_LAYER_ID aLayer ) const
+{
+    const BOARD* board = GetBoard();
+
+    if( board )
+        return board->FlipLayer( aLayer );
+
+    return ::FlipLayer( aLayer );
+}
+
 int BOARD_ITEM::BoardLayerCount() const
 {
     const BOARD* board = GetBoard();
@@ -224,11 +235,19 @@ LSET BOARD_ITEM::BoardLayerSet() const
 
 wxString BOARD_ITEM::GetLayerName() const
 {
-    if( const BOARD* board = GetBoard() )
-        return board->GetLayerName( m_layer );
+    return GetLayerName( m_layer );
+}
+
+
+wxString BOARD_ITEM::GetLayerName( PCB_LAYER_ID aLayer ) const
+{
+    const BOARD* board = GetBoard();
+
+    if( board )
+        return board->GetLayerName( aLayer );
 
     // If no parent, return standard name
-    return BOARD::GetStandardLayerName( m_layer );
+    return BOARD::GetStandardLayerName( aLayer );
 }
 
 
