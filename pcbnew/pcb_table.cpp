@@ -942,6 +942,9 @@ int PCB_TABLE::Compare( const PCB_TABLE* aTable, const PCB_TABLE* aOther )
             return diff;
     }
 
+    if( ( diff = aTable->GetRowCount() - aOther->GetRowCount() ) != 0 )
+        return diff;
+
     for( int row = 0; row < aTable->GetRowCount(); ++row )
     {
         if( ( diff = aTable->GetRowHeight( row ) - aOther->GetRowHeight( row ) ) != 0 )
