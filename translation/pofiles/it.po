@@ -118,7 +118,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-09 11:32+0000\n"
+"PO-Revision-Date: 2026-10-11 07:12+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -29227,6 +29227,8 @@ msgstr "Oggetti testo"
 msgid ""
 "Imported symbol '%s' has conflicting placed definitions; keeping the first."
 msgstr ""
+"Il simbolo importato '%s' presenta definizioni collocate in conflitto; "
+"mantenuta la prima."
 
 #: eeschema/symbol_import_reconciler.cpp:329
 #, c-format
@@ -29234,6 +29236,8 @@ msgid ""
 "Imported symbol '%s' from '%s' was renamed to '%s' because another library "
 "supplies a different symbol of that name."
 msgstr ""
+"Il simbolo '%s' importato da '%s' è stato rinominato in '%s' perché un'altra "
+"libreria fornisce un simbolo diverso con lo stesso nome."
 
 #: eeschema/symbol_import_reconciler.cpp:410
 #, c-format
@@ -29241,44 +29245,47 @@ msgid ""
 "A symbol library named '%s' is already registered; leaving imported symbols "
 "unresolved."
 msgstr ""
+"Una libreria di simboli denominata '%s' è già registrata; i simboli "
+"importati rimangono non risolti."
 
 #: eeschema/symbol_import_reconciler.cpp:421
-#, fuzzy
 msgid "Cannot reconcile imported symbols: no KiCad symbol writer."
-msgstr "Impossibile rimuovere impronta non usata %s (impronta bloccata)."
+msgstr ""
+"Impossibile riconciliare i simboli importati: nessun writer di simboli KiCad."
 
 #: eeschema/symbol_import_reconciler.cpp:470
-#, fuzzy, c-format
+#, c-format
 msgid "Error writing imported symbol cache '%s': %s"
-msgstr "Errore nella scrittura del file rapporto forature '%s'"
+msgstr "Errore durante la scrittura della cache dei simboli importati '%s': %s"
 
 #: eeschema/symbol_import_reconciler.cpp:492
 #, c-format
 msgid "A library already exists at '%s'; leaving imported symbols unresolved."
 msgstr ""
+"Esiste già una libreria in '%s'; i simboli importati rimangono non risolti."
 
 #: eeschema/symbol_import_reconciler.cpp:502
-#, fuzzy, c-format
+#, c-format
 msgid "Could not publish imported symbol cache to '%s'."
-msgstr "Impossibile ricaricare l'assistente impronte"
+msgstr "Impossibile pubblicare la cache dei simboli importati in '%s'."
 
 #: eeschema/symbol_import_reconciler.cpp:524
-#, fuzzy
 msgid "Cannot register imported symbol cache: no project library table."
-msgstr "Creata una tabella librerie simboli del progetto.\n"
+msgstr ""
+"Impossibile registrare la cache dei simboli importati: manca la tabella "
+"delle librerie del progetto."
 
 #: eeschema/symbol_import_reconciler.cpp:549
-#, fuzzy
 msgid ""
 "Error saving project symbol library table; imported symbols left unresolved."
 msgstr ""
-"Errore nella scrittura della tabella librerie simboli del progetto.\n"
-"  %s"
+"Errore durante il salvataggio della tabella della libreria dei simboli del "
+"progetto; simboli importati rimasti non risolti."
 
 #: eeschema/symbol_import_reconciler.cpp:610
-#, fuzzy, c-format
+#, c-format
 msgid "Could not reconcile imported symbol libraries: %s"
-msgstr "Fallito salvataggio file libreria impronte '%s'."
+msgstr "Impossibile riconciliare le librerie di simboli importate: %s"
 
 #: eeschema/symbol_library_manager.cpp:204
 #, c-format
@@ -29544,14 +29551,14 @@ msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "Cambia %s 'Escludi dalla distinta materiali' da '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:952
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from simulation' from '%s' to '%s'."
-msgstr "Cambia %s 'Escludi dalla distinta materiali' da '%s' a '%s'."
+msgstr "Cambia %s 'Escludi dalla simulazione' da '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:966
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
-msgstr "Cambia %s 'Escludi dalla distinta materiali' da '%s' a '%s'."
+msgstr "Cambia %s 'Escludi dai file di posizionamento' da '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:995
 #, c-format
@@ -29648,9 +29655,8 @@ msgid "Draw Arc"
 msgstr "Disegna arco"
 
 #: eeschema/tools/ee_graphic_tool.cpp:578 pcbnew/tools/drawing_tool.cpp:762
-#, fuzzy
 msgid "Draw Elliptical Arc"
-msgstr "Disegna un arco"
+msgstr "Disegna arco ellittico"
 
 #: eeschema/tools/ee_graphic_tool.cpp:659 pcbnew/tools/drawing_tool.cpp:836
 msgid "Draw Bezier"
@@ -29687,18 +29693,16 @@ msgstr ""
 "libreria"
 
 #: eeschema/tools/sch_actions.cpp:69
-#, fuzzy
 msgid "Compare Schematic with File..."
-msgstr "Salva su schema e file"
+msgstr "Confronta schema con file..."
 
 #: eeschema/tools/sch_actions.cpp:70
 msgid "Diff the current schematic against another .kicad_sch file"
-msgstr ""
+msgstr "Diff dello schema corrente con un altro file .kicad_sch"
 
 #: eeschema/tools/sch_actions.cpp:76
-#, fuzzy
 msgid "Compare Schematic with Local History..."
-msgstr "Recupera progetto da cronologia locale..."
+msgstr "Confronta schema con la cronologia locale..."
 
 #: eeschema/tools/sch_actions.cpp:77
 msgid ""
