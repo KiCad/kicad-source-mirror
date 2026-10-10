@@ -168,8 +168,9 @@ private:
     /// hover acquisition reuses the last solve instead of re-solving on every mouse move.
     const BOARD_CONSTRAINT_DIAGNOSTICS& ensureDiagnosis();
 
-    /// The shapes referenced by any constraint, the hover-hit candidate set (cached per model).
-    const std::vector<PCB_SHAPE*>& hoverCandidates();
+    /// The ids of the shapes referenced by any constraint, the hover-hit candidate set (cached per
+    /// model). A cached pointer would dangle when a shape is freed.
+    const std::vector<KIID>& hoverCandidates();
 
     /// Push an already-computed diagnosis into every shown view, so a caller that already solved
     /// does not solve again.
@@ -202,7 +203,7 @@ private:
     /// own cluster instead of every cluster on the board.
     BOARD_CONSTRAINT_DIAGNOSER                   m_diagnoser;
     bool                                         m_diagDirty = true;
-    std::optional<std::vector<PCB_SHAPE*>>       m_hoverCandidates;  ///< Constrained shapes, per model.
+    std::optional<std::vector<KIID>>             m_hoverCandidateIds; ///< Constrained shape ids, per model.
 
     /// Last value and driving choice per constraint type this session so same type runs keep one size
     /// Keyed by type so length and angle values never mix cleared on tool Reset

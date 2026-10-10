@@ -250,11 +250,12 @@ double InitialConstraintValue( PCB_CONSTRAINT_TYPE aType, double aMeasured,
 
 /**
  * The candidate shape whose outline @p aPos hits within @p aMaxDist, or std::nullopt.  Pure over an
- * explicit candidate set (the caller passes the constrained shapes), so hovering an unconstrained
- * shape lying closer is ignored, and the helper stays unit-testable without the tool.
+ * explicit candidate set (the caller passes the constrained shapes' ids), so hovering an
+ * unconstrained shape lying closer is ignored, and the helper stays unit-testable without the tool.
+ * Each id resolves as the scan reaches it, so a candidate whose shape is gone is skipped.
  */
-std::optional<KIID> NearestConstrainedShape( const std::vector<PCB_SHAPE*>& aCandidates,
-                                             const VECTOR2I& aPos, int aMaxDist );
+std::optional<KIID> NearestConstrainedShape( BOARD* aBoard, const std::vector<KIID>& aCandidates, const VECTOR2I& aPos,
+                                             int aMaxDist );
 
 
 /**

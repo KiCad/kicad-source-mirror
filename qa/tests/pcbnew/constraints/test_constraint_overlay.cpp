@@ -227,14 +227,19 @@ BOOST_AUTO_TEST_CASE( NearestConstrainedShapeUsesCandidatesOnly )
     seg->SetEnd( VECTOR2I( 10 * MM, 0 ) );
     board.Add( seg );
 
-    std::vector<PCB_SHAPE*> candidates = { seg };
+    std::vector<KIID> candidates = { seg->m_Uuid };
 
-    std::optional<KIID> hit = NearestConstrainedShape( candidates, VECTOR2I( 5 * MM, 1000 ), 5000 );
+    std::optional<KIID> hit = NearestConstrainedShape( &board, candidates, VECTOR2I( 5 * MM, 1000 ), 5000 );
     BOOST_REQUIRE( hit.has_value() );
     BOOST_CHECK( *hit == seg->m_Uuid );
 
-    BOOST_CHECK( !NearestConstrainedShape( candidates, VECTOR2I( 5 * MM, 5 * MM ), 5000 ).has_value() );
-    BOOST_CHECK( !NearestConstrainedShape( {}, VECTOR2I( 0, 0 ), 5000 ).has_value() );
+    BOOST_CHECK( !NearestConstrainedShape( &board, candidates, VECTOR2I( 5 * MM, 5 * MM ), 5000 ).has_value() );
+    BOOST_CHECK( !NearestConstrainedShape( &board, {}, VECTOR2I( 0, 0 ), 5000 ).has_value() );
+
+    board.Remove( seg );
+    delete seg;
+
+    BOOST_CHECK( !NearestConstrainedShape( &board, candidates, VECTOR2I( 5 * MM, 1000 ), 5000 ).has_value() );
 }
 
 

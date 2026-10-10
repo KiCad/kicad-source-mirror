@@ -792,16 +792,21 @@ double InitialConstraintValue( PCB_CONSTRAINT_TYPE aType, double aMeasured,
 }
 
 
-std::optional<KIID> NearestConstrainedShape( const std::vector<PCB_SHAPE*>& aCandidates,
-                                             const VECTOR2I& aPos, int aMaxDist )
+std::optional<KIID> NearestConstrainedShape( BOARD* aBoard, const std::vector<KIID>& aCandidates, const VECTOR2I& aPos,
+                                             int aMaxDist )
 {
-    auto it = std::ranges::find_if( aCandidates,
-                                    [&]( const PCB_SHAPE* aShape )
-                                    {
-                                        return aShape && aShape->HitTest( aPos, aMaxDist );
-                                    } );
+    if( !aBoard )
+        return std::nullopt;
 
-    return it == aCandidates.end() ? std::nullopt : std::optional<KIID>( ( *it )->m_Uuid );
+    for( const KIID& id : aCandidates )
+    {
+        PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aBoard->ResolveItem( id, true ) );
+
+        if( shape && shape->HitTest( aPos, aMaxDist ) )
+            return id;
+    }
+
+    return std::nullopt;
 }
 
 
