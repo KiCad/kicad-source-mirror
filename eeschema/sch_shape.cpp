@@ -621,7 +621,7 @@ wxString SCH_SHAPE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFu
 
     case SHAPE_T::SEGMENT:
         return wxString::Format( _( "Line, length %s" ),
-                                 aUnitsProvider->MessageTextFromValue( ( m_start - m_end ).EuclideanNorm() ) );
+                                 aUnitsProvider->MessageTextFromValue( GetLength() ) );
 
     case SHAPE_T::POLY:
         return wxString::Format( _( "Polyline, %d points" ),

@@ -867,8 +867,7 @@ wxString SCH_LINE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFul
         }
     }
 
-    return wxString::Format( txtfmt,
-                             aUnitsProvider->MessageTextFromValue( m_start.Distance( m_end ) ) );
+    return wxString::Format( txtfmt, aUnitsProvider->MessageTextFromValue( m_start.Distance( m_end ) ) );
 }
 
 

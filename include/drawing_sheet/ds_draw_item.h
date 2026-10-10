@@ -142,6 +142,11 @@ public:
     const VECTOR2I& GetEnd() const { return m_end; }
     void            SetEnd( const VECTOR2I& aPos ) override { m_end = aPos; }
 
+    int GetLength() const
+    {
+        return m_start.Distance( m_end );
+    }
+
     VECTOR2I GetPosition() const override { return GetStart(); }
     void     SetPosition( const VECTOR2I& aPos ) override { SetStart( aPos ); }
 

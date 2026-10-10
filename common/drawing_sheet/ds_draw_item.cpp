@@ -464,7 +464,7 @@ bool DS_DRAW_ITEM_LINE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) cons
 wxString DS_DRAW_ITEM_LINE::GetItemDescription( UNITS_PROVIDER* aUnitsProvider, bool aFull ) const
 {
     return wxString::Format( _( "Line, length %s" ),
-                             aUnitsProvider->MessageTextFromValue( GetStart().Distance( GetEnd() ) ) );
+                             aUnitsProvider->MessageTextFromValue( GetLength() ) );
 }
 
 
