@@ -79,7 +79,7 @@ bool DIALOG_JUNCTION_PROPS::TransferDataToWindow()
     }
     else
     {
-        m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+        m_colorSwatch->SetIndeterminate();
     }
 
     return true;
@@ -106,7 +106,7 @@ bool DIALOG_JUNCTION_PROPS::TransferDataFromWindow()
         if( !m_diameter.IsIndeterminate() )
             junction->SetDiameter( m_diameter.GetValue() );
 
-        if( m_colorSwatch->GetSwatchColor() != COLOR4D::UNSPECIFIED )
+        if( !m_colorSwatch->IsIndeterminate() )
             junction->SetColor( m_colorSwatch->GetSwatchColor() );
 
         m_frame->GetCanvas()->GetView()->Update( junction );
