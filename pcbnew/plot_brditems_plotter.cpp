@@ -154,6 +154,8 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, PCB_LAYER_ID aLayer, const COLO
     VECTOR2I     shape_pos = aPad->ShapePos( aLayer );
     GBR_METADATA metadata;
 
+    m_plotter->MarkFootprintPlotted( aPad->GetParentFootprint() );
+
     bool plotOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
     bool plotOnExternalCopperLayer = ( m_layerMask & LSET::ExternalCuMask() ).any();
 
@@ -404,6 +406,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
             && reference->IsVisible()
             && !( dnp && hideDNPItems( refLayer ) ) )
     {
+        m_plotter->MarkFootprintPlotted( aFootprint );
         PlotText( reference, refLayer, reference->IsKnockout(), reference->GetFontMetrics(),
                   dnp && crossoutDNPItems( refLayer ) );
     }
@@ -416,6 +419,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
             && value->IsVisible()
             && !( dnp && hideDNPItems( valueLayer ) ) )
     {
+        m_plotter->MarkFootprintPlotted( aFootprint );
         PlotText( value, valueLayer, value->IsKnockout(), value->GetFontMetrics(), false );
     }
 
@@ -467,6 +471,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( const FOOTPRINT* aFootprint )
                 continue;
         }
 
+        m_plotter->MarkFootprintPlotted( aFootprint );
         PlotText( text, textLayer, text->IsKnockout(), text->GetFontMetrics(), strikeout );
     }
 }
@@ -668,6 +673,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( const FOOTPRINT* aFootprint )
 
         if( !( m_layerMask & item->GetLayerSet() ).any() )
             continue;
+
+        m_plotter->MarkFootprintPlotted( aFootprint );
 
         switch( item->Type() )
         {

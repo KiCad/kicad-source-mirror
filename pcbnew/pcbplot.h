@@ -180,7 +180,7 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayerSequen
                       const PCB_PLOT_PARAMS& aPlotOptions );
 
 /**
- * Plot interactive items (hypertext links, properties, etc.).
+ * Plot interactive items (hypertext links, properties, etc.) for the footprints the page drew.
  */
 void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARAMS& aPlotOpt );
 

@@ -26,6 +26,7 @@
 #define PLOT_COMMON_H_
 
 #include <eda_shape.h>
+#include <set>
 #include <vector>
 #include <math/box2.h>
 #include <gr_text.h>
@@ -42,6 +43,7 @@ class SHAPE_POLY_SET;
 class SHAPE_LINE_CHAIN;
 class GBR_NETLIST_METADATA;
 class PROJECT;
+class FOOTPRINT;
 
 using KIGFX::RENDER_SETTINGS;
 
@@ -250,6 +252,19 @@ public:
      * @param aLayer The ID of the layer to be set.
      */
     void SetLayer( PCB_LAYER_ID aLayer ) { m_layer = aLayer; }
+
+    /**
+     * Record that \a aFootprint was drawn on the page being plotted, so that hyperlinks
+     * and bookmarks can cover only the footprints the page shows.
+     */
+    void MarkFootprintPlotted( const FOOTPRINT* aFootprint ) { m_plottedFootprints.insert( aFootprint ); }
+
+    bool WasFootprintPlotted( const FOOTPRINT* aFootprint ) const
+    {
+        return m_plottedFootprints.count( aFootprint ) > 0;
+    }
+
+    void ClearPlottedFootprints() { m_plottedFootprints.clear(); }
 
     /**
      * Open or create the plot file \a aFullFilename.
@@ -728,6 +743,8 @@ protected:      // variables used in most of plotters:
     std::vector<std::pair<PCB_LAYER_ID, wxString>> m_layersToExport;
 
     PCB_LAYER_ID m_layer;
+
+    std::set<const FOOTPRINT*> m_plottedFootprints;
 };
 
 
