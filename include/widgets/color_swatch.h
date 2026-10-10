@@ -28,6 +28,7 @@
 #include <functional>
 
 #include <gal/color4d.h>
+#include <widgets/ui_common.h>
 #include <dialogs/dialog_color_picker.h>
 
 enum SWATCH_SIZE
