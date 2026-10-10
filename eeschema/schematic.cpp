@@ -1387,12 +1387,15 @@ bool SCHEMATIC::resolveCrossReference( wxString* token, int aDepth ) const
     wxString       ref = token->BeforeFirst( ':', &remainder );
     KIID_PATH      path( ref );
     KIID           uuid( 0 );
+
+    if( path.size() > 1 )
+        uuid = path.back();
+
     SCH_SHEET_PATH sheetPath;
     SCH_ITEM*      refItem = ResolveItem( KIID( uuid ), &sheetPath, true );
 
     if( path.size() > 1 )
     {
-        uuid = path.back();
         path.pop_back();
         sheetPath = Hierarchy().GetSheetPathByKIIDPath( path ).value_or( sheetPath );
     }
