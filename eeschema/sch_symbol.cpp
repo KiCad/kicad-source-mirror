@@ -1033,7 +1033,7 @@ bool SCH_SYMBOL::Deserialize( const kiapi::schematic::types::SchematicSymbolInst
         {
             m_pins.emplace_back( std::make_unique<SCH_PIN>( *pin ) );
             m_pins.back()->SetParent( this );
-            const_cast<::KIID&>( m_pins.back() ->m_Uuid ) = pin->m_Uuid;
+            const_cast<::KIID&>( m_pins.back()->m_Uuid ) = pin->m_Uuid;
         }
 
         UpdatePins();
@@ -4329,7 +4329,7 @@ bool SCH_SYMBOL::operator==( const SCH_SYMBOL& aSymbol ) const
 
     for( auto aIt = sortedPins.begin(), bIt = sortedOtherPins.begin(); aIt != sortedPins.end(); ++aIt, ++bIt )
     {
-        if( *aIt != *bIt )
+        if( !( *aIt )->operator==( *( *bIt ) ) )
             return false;
     }
 
