@@ -436,6 +436,7 @@ public:
     bool operator==( const SCH_PIN& aPin ) const;
 
     bool operator>( const SCH_ITEM& aRhs ) const { return compare( aRhs, ~COMPARE_FLAGS::UUID ) > 0; }
+    bool operator<( const SCH_ITEM& aRhs ) const override { return compare( aRhs, ~COMPARE_FLAGS::UUID ) < 0; }
 
     /**
      * Get the layout cache associated with this pin.

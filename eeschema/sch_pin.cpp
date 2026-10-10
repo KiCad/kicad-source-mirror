@@ -2098,6 +2098,16 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
         return StrNumCmp( m_number, tmp->m_number );
     }
 
+    if( m_name != tmp->m_name )
+    {
+        retv = StrNumCmp( m_name, tmp->m_name );
+
+        if( retv != 0 )
+            return retv;
+
+        return m_number.Cmp( tmp->m_name );
+    }
+
     if( m_position.x != tmp->m_position.x )
         return m_position.x - tmp->m_position.x;
 
