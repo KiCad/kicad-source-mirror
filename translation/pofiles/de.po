@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-09 15:58+0000\n"
+"PO-Revision-Date: 2026-10-10 17:51+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -28592,11 +28592,13 @@ msgid "Symbol '%s' maps pin '%s' to both '%s' and '%s'."
 msgstr "Das Symbol \"%s\" ordnet Pin \"%s\" sowohl \"%s\" als auch \"%s\" zu."
 
 #: eeschema/sim/sim_model_multiunit.cpp:193
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Repeat-per-unit decomposition does not support model '%s' because it has "
 "subcircuit parameters."
 msgstr ""
+"\"Wiederholung pro Einheit\"-Aufteilung unterstützt das Modell \"%s\" nicht, "
+"weil es Teilschaltungsparameter hat."
 
 #: eeschema/sim/sim_model_multiunit.cpp:213
 #, fuzzy, c-format
@@ -28604,14 +28606,17 @@ msgid "Shared pin '%s' is not a pin of model '%s'."
 msgstr "Gemeinsamer Pin \"%s\" ist kein Pin des Modells \"%s\"."
 
 #: eeschema/sim/sim_model_multiunit.cpp:238
-#, c-format
+#, c-format, fuzzy
 msgid "Unit %d maps to unknown pin '%s' of model '%s'."
 msgstr ""
+"Einheit %d wird dem unbekannten Pin \"%s\" des Modells \"%s\" zugeordnet."
 
 #: eeschema/sim/sim_model_multiunit.cpp:248
-#, c-format
+#, c-format, fuzzy
 msgid "Unit %d maps model pin '%s' to both symbol pins '%s' and '%s'."
 msgstr ""
+"Einheit %d ordnet den Modell-Pin \"%s\" sowohl dem Symbol-Pin \"%s\" als "
+"auch Symbol-Pin \"%s\" zu."
 
 #: eeschema/sim/sim_model_multiunit.cpp:285
 #, c-format
@@ -28631,8 +28636,9 @@ msgstr ""
 "Einheit zugewiesen."
 
 #: eeschema/sim/sim_model_multiunit.cpp:349
+#, fuzzy
 msgid "Repeat-per-unit decomposition produced no instances."
-msgstr ""
+msgstr "\"Wiederholung pro Einheit\"-Aufteilung erzeugte keine Instanzen."
 
 #: eeschema/sim/sim_plot_tab.cpp:550
 #, fuzzy
@@ -31990,7 +31996,7 @@ msgstr "Designvariante umbenennen ..."
 
 #: eeschema/tools/sch_actions.cpp:2021
 msgid "Rename an existing design variant."
-msgstr "Eine bestehende Designvariante umbennen."
+msgstr "Eine bestehende Designvariante umbenennen."
 
 #: eeschema/tools/sch_actions.cpp:2026
 msgid "Copy Design Variant..."
@@ -43861,7 +43867,7 @@ msgstr "Horizontal: von links oben nach rechts unten"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:60
 msgid "Horizontally: top right to bottom left"
-msgstr "Horizontal: von oben rechts nach unten links"
+msgstr "Horizontal: von rechts oben nach links unten"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:71
 msgid "Horizontally: bottom left to top right"
@@ -43881,7 +43887,7 @@ msgstr "Vertikal: von links unten nach rechts oben"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:115
 msgid "Vertically: top right to bottom left"
-msgstr "Vertikal: von oben rechts nach unten links"
+msgstr "Vertikal: von rechts oben nach links unten"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:126
 msgid "Vertically: bottom right to top left"
@@ -50232,10 +50238,13 @@ msgid "Keep coupling between differential pairs"
 msgstr "Interaktives Routen eines differenziellen Leitungspaares"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:139
+#, fuzzy
 msgid ""
 "When enabled, dragging one track belonging to a differential pair drags the "
 "other, maintaining their coupling,"
 msgstr ""
+"Wenn aktiviert, wird beim Ziehen einer Leiterbahn einer Differenzleitung "
+"auch die andere mitgezogen, wodurch ihre Kopplung erhalten bleibt."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:64
 msgid "Interactive Router Settings"
@@ -51864,8 +51873,9 @@ msgid "One package per variant"
 msgstr "Ein Gehäuse pro Variante"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:81
+#, fuzzy
 msgid "One package, all variants inside"
-msgstr ""
+msgstr "Ein Gehäuse in allen Varianten"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:83
 msgid "Variant output"
@@ -57138,9 +57148,11 @@ msgstr ""
 "Das Dielektrikum ergibt sich aus dem Aufbau zwischen %s und %s als Kern"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:337
-#, c-format
+#, c-format, fuzzy
 msgid "Crosses %s dielectric: aspect ratio %.2f exceeds the %.2f limit"
 msgstr ""
+"Durchdringt %s Dielektrikum: Seitenverhältnis %.2f überschreitet die %.2f "
+"Grenze"
 
 #: pcbnew/drc/drc_test_provider_via_stack.cpp:338
 #, fuzzy
@@ -57338,8 +57350,9 @@ msgid "Disallow"
 msgstr "Verweigern"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_constraint_data.h:53
+#, fuzzy
 msgid "Forbid the matched items entirely"
-msgstr ""
+msgstr "Die übereinstimmenden Elemente komplett verbieten"
 
 #: pcbnew/drc/rule_editor/drc_re_condition_group_panel.cpp:45
 msgid "Where conditions match:"
@@ -57573,12 +57586,14 @@ msgid "Minimum clearance between silkscreen and solder mask openings"
 msgstr "Mindestabstand zwischen Bestückungsdruck und Lötstoppmaske"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:282
+#, fuzzy
 msgid "Distance the solder mask opening extends beyond the pad"
-msgstr ""
+msgstr "Freistellungsabstand der Pads zum Lötstop"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_constraint_types.h:295
+#, fuzzy
 msgid "Distance the solder paste aperture extends beyond the pad"
-msgstr ""
+msgstr "Überstand der Lötpaste bezogen auf das Pad"
 
 #: pcbnew/drc/rule_editor/drc_re_numeric_input_constraint_data.h:96
 msgid "Numeric input value must be greater than 0"
@@ -59428,8 +59443,9 @@ msgstr ""
 "Lochgrößen. Ein Microviastapel verwendet eine Größe für jede Stufe."
 
 #: pcbnew/generators/pcb_via_stack.cpp:1189
+#, fuzzy
 msgid "The microvia stack layers are not present on this board."
-msgstr ""
+msgstr "Die Lagen des Microviastapels sind in dieser Platine nicht vorhanden."
 
 #: pcbnew/generators/pcb_via_stack.cpp:1346
 #, fuzzy
@@ -68487,7 +68503,6 @@ msgid "Diff the current footprint library against another .pretty directory"
 msgstr "Öffnet den ausgewählten Footprint in der Footprint-Anzeige"
 
 #: pcbnew/tools/pcb_actions.cpp:1351 pcbnew/tools/pcb_actions.cpp:1669
-#, fuzzy
 msgid "Bulk Edit Footprint Fields..."
 msgstr "Sammelbearbeitung von Footprintfeldern ..."
 
