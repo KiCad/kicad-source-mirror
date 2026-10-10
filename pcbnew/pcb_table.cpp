@@ -239,6 +239,8 @@ bool PCB_TABLE::Deserialize( const google::protobuf::Any& aContainer )
     if( table.has_separators_stroke() )
         kiapi::common::UnpackStroke( m_separatorsStroke, table.separators_stroke() );
 
+    Normalize();
+
     return true;
 }
 
