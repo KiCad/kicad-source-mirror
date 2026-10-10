@@ -52,19 +52,13 @@ public:
 
     /**
      * Create o recreates a sorted list of currently loaded libraries.
-     *
-     * @return whether the selection of either library or symbol was changed (i.e. because the
-     *         selected library no longer exists).
      */
-    bool ReCreateLibList();
+    void ReCreateLibList();
 
     /**
      * Create or recreate the list of symbols in the currently selected library.
-     *
-     * @return whether the selection was changed (i.e. because the selected symbol no longer
-     *         exists).
      */
-    bool ReCreateSymbolList();
+    void ReCreateSymbolList();
 
     void DisplayLibInfos();
     void doCloseWindow() override;
