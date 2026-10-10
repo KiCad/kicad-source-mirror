@@ -4298,17 +4298,24 @@ bool SCH_SYMBOL::operator==( const SCH_SYMBOL& aSymbol ) const
         return false;
 #endif
 
-    if( m_pins.size() != aSymbol.m_pins.size() )
+    // Running the pin compare on matched pins found with GetPin( number) will match all same-numbered
+    // pins in the first symbol with the first pin of that number in the second symbol.  Sort the pins
+    // instead, which results in a more "complete" matching of source and other pins.
+    std::set<SCH_PIN*, SCH_SYMBOL::cmp_pins> sortedPins;
+    std::set<SCH_PIN*, SCH_SYMBOL::cmp_pins> sortedOtherPins;
+
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
+        sortedPins.insert( pin.get() );
+
+    for( const std::unique_ptr<SCH_PIN>& pin : aSymbol.m_pins )
+        sortedOtherPins.insert( pin.get() );
+
+    if( sortedPins.size() != sortedOtherPins.size() )
         return false;
 
-    for( int ii = 0; ii < (int) m_pins.size(); ++ii )
+    for( auto aIt = sortedPins.begin(), bIt = sortedOtherPins.begin(); aIt != sortedPins.end(); ++aIt, ++bIt )
     {
-        SCH_PIN* matched = aSymbol.GetPin( m_pins[ii]->GetNumber() );
-
-        if( !matched )
-            return false;
-
-        if( *m_pins[ii] != *matched )
+        if( *aIt != *bIt )
             return false;
     }
 

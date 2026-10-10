@@ -1081,6 +1081,14 @@ public:
 protected:
     void swapData( SCH_ITEM* aItem ) override;
 
+    struct cmp_pins
+    {
+        bool operator()( const SCH_PIN* aFirst, const SCH_PIN* aSecond ) const
+        {
+            return *aFirst < *aSecond;
+        }
+    };
+
 private:
     // Copy construction must relink pins without invalidating the live source screen.
     void updatePins();
