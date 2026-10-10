@@ -506,7 +506,7 @@ bool SYMBOL_LIBRARY_MANAGER::UpdateSymbol( LIB_SYMBOL* aSymbol, const wxString& 
         std::unique_ptr<SCH_SCREEN> newScreen = std::make_unique<SCH_SCREEN>();
         newScreen->SetContentModified();
 
-        libBuf.CreateBuffer( std::move( symbolCopy ), std::move( newScreen ) );
+        libBuf.CreateBuffer( std::move( symbolCopy ), std::move( newScreen ), true );
     }
 
     return true;
@@ -592,6 +592,8 @@ bool SYMBOL_LIBRARY_MANAGER::RevertAll()
 
             RevertSymbol( LIB_ID( libName, buffer->GetOriginal().GetName() ) );
         }
+
+        libBuffer.RevertAddedBuffers();
     }
 
     return retv;
@@ -980,7 +982,7 @@ LIB_SYMBOL* LIB_BUFFER::GetSymbol( const wxString& aAlias ) const
 }
 
 
-bool LIB_BUFFER::CreateBuffer( std::unique_ptr<LIB_SYMBOL> aCopy, std::unique_ptr<SCH_SCREEN> aScreen )
+bool LIB_BUFFER::CreateBuffer( std::unique_ptr<LIB_SYMBOL> aCopy, std::unique_ptr<SCH_SCREEN> aScreen, bool aNew )
 {
     wxASSERT( aCopy );
     wxASSERT( aCopy->GetLib() == nullptr );
@@ -994,6 +996,9 @@ bool LIB_BUFFER::CreateBuffer( std::unique_ptr<LIB_SYMBOL> aCopy, std::unique_pt
     std::shared_ptr<SYMBOL_BUFFER> symbolBuf = std::make_shared<SYMBOL_BUFFER>( std::move( aCopy ),
                                                                                 std::move( aScreen ) );
     m_symbols.push_back( std::move( symbolBuf ) );
+
+    if( aNew )
+        m_added.push_back( m_symbols.back() );
 
     ++m_hash;
 
@@ -1046,6 +1051,25 @@ void LIB_BUFFER::RevertDeletedBuffers()
         m_symbols.emplace_back( buffer );
 
     m_deleted.clear();
+    ++m_hash;
+}
+
+
+void LIB_BUFFER::RevertAddedBuffers()
+{
+    std::erase_if( m_symbols,
+                   [&]( const std::shared_ptr<SYMBOL_BUFFER>& item )
+                   {
+                       for( const std::shared_ptr<SYMBOL_BUFFER>& added : m_added )
+                       {
+                           if( added.get() == item.get() )
+                               return true;
+                       }
+
+                       return false;
+                   } );
+
+    m_added.clear();
     ++m_hash;
 }
 

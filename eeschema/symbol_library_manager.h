@@ -101,7 +101,7 @@ public:
     LIB_SYMBOL* GetSymbol( const wxString& aAlias ) const;
 
     /// Create a new buffer to store a symbol. #LIB_BUFFER takes ownership of \a aCopy.
-    bool CreateBuffer( std::unique_ptr<LIB_SYMBOL> aCopy, std::unique_ptr<SCH_SCREEN> aScreen );
+    bool CreateBuffer( std::unique_ptr<LIB_SYMBOL> aCopy, std::unique_ptr<SCH_SCREEN> aScreen, bool aNew = false );
 
     /// Update the buffered symbol with the contents of \a aCopy.
     bool UpdateBuffer( SYMBOL_BUFFER& aSymbolBuf, const LIB_SYMBOL& aCopy );
@@ -115,6 +115,8 @@ public:
      * Move symbol buffers on the library's deleted list back to its main list.
      */
     void RevertDeletedBuffers();
+
+    void RevertAddedBuffers();
 
     /// Return the deleted symbol buffers that need to be removed from the library file.
     const std::deque<std::shared_ptr<SYMBOL_BUFFER>>& GetDeletedBuffers() const { return m_deleted; }
@@ -172,8 +174,8 @@ private:
 
 private:
     std::deque<std::shared_ptr<SYMBOL_BUFFER>> m_symbols;
-    std::deque<std::shared_ptr<SYMBOL_BUFFER>> m_deleted;   ///< Buffer for deleted symbols until
-                                                            ///<   library is saved.
+    std::deque<std::shared_ptr<SYMBOL_BUFFER>> m_added;     ///< Buffer for added synbols until lib is saved
+    std::deque<std::shared_ptr<SYMBOL_BUFFER>> m_deleted;   ///< Buffer for deleted symbols until lib is saved
     const wxString                             m_libName;   ///< Buffered library name
     int                                        m_hash;
 };
