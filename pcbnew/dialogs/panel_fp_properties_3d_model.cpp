@@ -247,6 +247,8 @@ bool PANEL_FP_PROPERTIES_3D_MODEL::TransferDataToWindow()
     updateExtrusionControls();
     updateExtrusionPreview();
 
+    m_upperPanel->Layout();
+
     Layout();
 
     if( GetSizer() )
