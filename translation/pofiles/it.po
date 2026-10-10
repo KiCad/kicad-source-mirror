@@ -116,7 +116,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-09 21:51+0000\n"
+"PO-Revision-Date: 2026-10-11 08:33+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/v10/it/>\n"
 "Language: it\n"
@@ -25877,9 +25877,9 @@ msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
 msgstr "Cambia %s 'Escludi dalla distinta materiali' da '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:896
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from position files' from '%s' to '%s'."
-msgstr "Cambia %s 'Escludi dalla distinta materiali' da '%s' a '%s'."
+msgstr "Cambia %s 'Escludi dai file di posizionamento' da '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:925
 #, c-format
