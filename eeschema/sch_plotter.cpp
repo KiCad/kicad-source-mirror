@@ -944,7 +944,7 @@ bool SCH_PLOTTER::plotOneSheetPNG( const wxString& aFileName, SCH_SCREEN* aScree
 void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_OPTS& aPlotOpts, SCH_RENDER_SETTINGS* aRenderSettings,
                                   REPORTER* aReporter )
 {
-    PLOT_CONTEXT( nullptr, m_schematic );
+    PLOT_CONTEXT raii( nullptr, m_schematic );
 
     /* When printing all pages, the printed page is not the current page.  In complex hierarchies,
      * we must update symbol references and other parameters in the given printed SCH_SCREEN,
