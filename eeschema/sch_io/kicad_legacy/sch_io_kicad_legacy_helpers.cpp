@@ -74,6 +74,10 @@ bool strCompare( const char* aString, const char* aLine, const char** aOutput )
 
 int parseInt( LINE_READER& aReader, const char* aLine, const char** aOutput )
 {
+    if( !aLine )
+        THROW_PARSE_ERROR( _( "unexpected end of file" ), aReader.GetSource(), aReader.Line(), aReader.LineNumber(),
+                           0 );
+
     if( !*aLine )
         SCH_PARSE_ERROR( _( "unexpected end of line" ), aReader, aLine );
 
