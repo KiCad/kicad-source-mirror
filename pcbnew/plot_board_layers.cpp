@@ -131,6 +131,8 @@ void PlotBoardLayers( BOARD* aBoard, PLOTTER* aPlotter, const LSEQ& aLayers,
     if( !aBoard || !aPlotter || aLayers.empty() )
         return;
 
+    aPlotter->ClearPlottedFootprints();
+
     PCB_PLOT_PARAMS plotOptions = aPlotOptions;
 
     // Gerber carries no colour, so a drill mark lands as ink instead of knocking out its pad
@@ -173,10 +175,16 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
 {
     for( const FOOTPRINT* fp : aBoard->Footprints() )
     {
-        if( fp->GetLayer() == F_Cu && !aPlotOpt.m_PDFFrontFPPropertyPopups )
+        bool onBack = fp->GetLayer() == B_Cu;
+
+        if( !onBack && !aPlotOpt.m_PDFFrontFPPropertyPopups )
             continue;
 
-        if( fp->GetLayer() == B_Cu && !aPlotOpt.m_PDFBackFPPropertyPopups )
+        if( onBack && !aPlotOpt.m_PDFBackFPPropertyPopups )
+            continue;
+
+        // A bookmark or a popup where the footprint draws nothing would point at empty space
+        if( !aPlotter->WasFootprintPlotted( fp ) )
             continue;
 
         std::vector<wxString> properties;
@@ -682,6 +690,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, const LSET& aLayerMask
                 && (   ( onFrontFab && footprint->GetLayer() == F_Cu )
                     || ( onBackFab && footprint->GetLayer() == B_Cu ) ) )
         {
+            aPlotter->MarkFootprintPlotted( footprint );
+
             const SHAPE_POLY_SET& courtyard = footprint->GetCourtyard( footprint->GetLayer() );
             VECTOR2I              center = footprint->GetPosition();
             EDA_ANGLE             orient = footprint->GetOrientation();
@@ -1118,7 +1128,12 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotte
             if( inflate != 0 )
                 footprint->TransformPadsToPolySet( exactPolys, aLayer, 0, maxError, ERROR_OUTSIDE );
 
+            int outlinesBefore = aResult->OutlineCount();
+
             footprint->TransformPadsToPolySet( *aResult, aLayer, inflate, maxError, ERROR_OUTSIDE );
+
+            if( aResult->OutlineCount() > outlinesBefore )
+                aPlotter->MarkFootprintPlotted( footprint );
 
             for( const PCB_FIELD* field : footprint->GetFields() )
             {
@@ -1131,13 +1146,18 @@ void GenerateLayerPoly( SHAPE_POLY_SET* aResult, BOARD *aBoard, PLOTTER* aPlotte
                     continue;
 
                 if( field->IsVisible() && field->IsOnLayer( aLayer ) )
+                {
+                    aPlotter->MarkFootprintPlotted( footprint );
                     handleFPTextItem( static_cast<const PCB_TEXT&>( *field ) );
+                }
             }
 
             for( const BOARD_ITEM* item : footprint->GraphicalItems() )
             {
                 if( item->IsOnLayer( aLayer ) )
                 {
+                    aPlotter->MarkFootprintPlotted( footprint );
+
                     if( item->Type() == PCB_TEXT_T )
                     {
                         handleFPTextItem( static_cast<const PCB_TEXT&>( *item ) );
