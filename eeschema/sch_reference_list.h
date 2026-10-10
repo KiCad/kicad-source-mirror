@@ -210,14 +210,28 @@ public:
 
     int CompareValue( const SCH_REFERENCE& item ) const
     {
-        // Values are compared with case sensitivity
-        return StrNumCmp( m_value, item.m_value, false );
+        // Sort based on natural sort, but don't consider naturally-equivalent values
+        // to be equal.  Run them through a second, non-natural compare.
+
+        int natural = StrNumCmp( m_value, item.m_value, false );
+
+        if( natural != 0 )
+            return natural;
+
+        return m_value.Cmp( item.m_value );
     }
 
     int CompareRef( const SCH_REFERENCE& item ) const
     {
-        // References are compared ignoring case
-        return StrNumCmp( m_ref, item.m_ref, true );
+        // Sort based on natural sort, but don't consider naturally-equivalent values
+        // to be equal.  Run them through a second, non-natural compare.
+
+        int natural = StrNumCmp( m_ref, item.m_ref, false );
+
+        if( natural != 0 )
+            return natural;
+
+        return m_ref.Cmp( item.m_ref );
     }
 
     int CompareLibId( const SCH_REFERENCE& item ) const
