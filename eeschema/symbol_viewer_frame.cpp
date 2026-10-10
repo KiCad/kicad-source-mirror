@@ -1084,11 +1084,16 @@ void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
     case MAIL_REFRESH_SYMBOL:
     {
-        LIB_SYMBOL* symbol = GetSelectedSymbol();
-        wxCHECK2( symbol, break );
+        // A library reload can invalidate the LIB_SYMBOL borrowed from the adapter.
+        const LIB_ID symbolId = m_currentSymbol;
+
+        if( !symbolId.IsValid() )
+            break;
 
         SYMBOL_LIBRARY_ADAPTER* adapter = PROJECT_SCH::SymbolLibAdapter( &Prj() );
-        LIBRARY_TABLE_ROW*      row = adapter->GetRow( symbol->GetLibId().GetLibNickname() ).value_or( nullptr );
+        wxCHECK2( adapter, break );
+
+        LIBRARY_TABLE_ROW* row = adapter->GetRow( symbolId.GetLibNickname() ).value_or( nullptr );
 
         if( !row )
             return;
@@ -1100,7 +1105,7 @@ void SYMBOL_VIEWER_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         if( lib == libfullname )
         {
-            wxLogTrace( traceLibWatch, "Refreshing symbol %s", symbol->GetName() );
+            wxLogTrace( traceLibWatch, "Refreshing symbol %s", symbolId.GetLibItemName().wx_str() );
             updatePreviewSymbol();
             GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
         }
