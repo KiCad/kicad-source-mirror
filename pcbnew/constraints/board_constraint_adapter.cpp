@@ -1377,6 +1377,7 @@ bool BOARD_CONSTRAINT_ADAPTER::Build( const std::vector<PCB_SHAPE*>&          aS
             unknowns.push_back( &m_params[i] );
     }
 
+    m_fixedParams = fixedParams;
     m_gcs->declareUnknowns( unknowns );
     m_gcs->initSolution();
     m_gcs->maxIter = MAX_SOLVE_ITERATIONS;
@@ -1851,6 +1852,18 @@ bool BOARD_CONSTRAINT_ADAPTER::SolveSnapRelations( const CONSTRAINT_MEMBER&     
 }
 
 
+bool BOARD_CONSTRAINT_ADAPTER::TravelsWhole( const std::set<KIID>& aEditedShapes ) const
+{
+    return std::ranges::all_of( m_shapeVars,
+                                [&]( const auto& aEntry )
+                                {
+                                    return aEditedShapes.contains( aEntry.first )
+                                           && !ConstraintItemIsLocked( aEntry.second.shape )
+                                           && !ConstraintItemIsLocked( aEntry.second.dimension );
+                                } );
+}
+
+
 bool BOARD_CONSTRAINT_ADAPTER::SolveRigidTranslation( const std::set<KIID>& aEditedShapes,
                                                       const VECTOR2I&       aTranslation )
 {
@@ -1873,6 +1886,19 @@ bool BOARD_CONSTRAINT_ADAPTER::SolveRigidTranslation( const std::set<KIID>& aEdi
         exactTargets.emplace( pointX, VECTOR2I( KiROUND( denormalizeX( m_params[pointX] ) ),
                                                 KiROUND( denormalizeY( m_params[pointX + 1] ) ) ) );
     }
+
+    // A grounded coordinate cannot travel, so a translation that moves one still needs the solve
+    const bool movesGroundedPoint =
+            std::ranges::any_of( state.points,
+                                 [&]( int aPointX )
+                                 {
+                                     return m_fixedParams.contains( aPointX ) || m_fixedParams.contains( aPointX + 1 );
+                                 } );
+
+    // Translating the whole cluster leaves every relation as it found it, so solving would only
+    // re-judge the starting state and reject a move that cannot change it
+    if( !movesGroundedPoint && TravelsWhole( aEditedShapes ) )
+        return true;
 
     beginTemporaryParameters();
 
@@ -2938,7 +2964,9 @@ bool BOARD_CONSTRAINT_MOVE_SESSION::Solve(
         const VECTOR2I& aTarget, std::vector<PCB_SHAPE*>* aModified,
         const std::function<void( BOARD_ITEM* )>& aBeforeModify )
 {
-    if( !usable() )
+    // A cluster that travels whole carries any base conflict along unchanged, so the conflict is no
+    // reason to refuse the move
+    if( !m_adapter || ( HasBaseConflict() && !m_adapter->TravelsWhole( m_edited ) ) )
         return false;
 
     if( !rewind() || !m_adapter->SolveRigidTranslation( m_edited, aTarget - m_reference ) )

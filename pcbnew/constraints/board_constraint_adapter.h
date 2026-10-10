@@ -157,6 +157,9 @@ public:
                              const VECTOR2I& aCursor );
     bool SolveRigidTranslation( const std::set<KIID>& aEditedShapes,
                                 const VECTOR2I& aTranslation );
+
+    /// True when every shape in the cluster is in @p aEditedShapes and free to travel with it.
+    bool TravelsWhole( const std::set<KIID>& aEditedShapes ) const;
     bool SolveRigidSnapRelations( const std::set<KIID>& aEditedShapes,
                                   const VECTOR2I& aReference,
                                   const std::vector<SNAP_CANDIDATE>& aCandidates,
@@ -345,6 +348,9 @@ private:
     std::deque<double>& m_params;
 
     std::map<KIID, SHAPE_VARS>       m_shapeVars;
+
+    /// Parameter indices the solver may not move, so a rigid translation may not either.
+    std::set<int>                    m_fixedParams;
     std::map<int, KIID>              m_tagToConstraint;
     std::set<int>                    m_nonDrivingTags;       ///< Measurement-only; excluded from conflict residuals.
     std::map<int, std::vector<KIID>> m_tagMembers;           ///< Member items per tag, for collapse attribution.

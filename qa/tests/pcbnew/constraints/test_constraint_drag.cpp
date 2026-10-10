@@ -548,6 +548,65 @@ BOOST_FIXTURE_TEST_CASE( PersistentDragSessionPreservesGeometryOnBaseConflict, D
 }
 
 
+// A whole cluster inside the moved selection travels rigidly, so a constraint set it already
+// could not satisfy must not block the move.
+BOOST_FIXTURE_TEST_CASE( WholeClusterMoveSurvivesPreExistingConflict, DRAG_FIXTURE )
+{
+    // Two sides of a closed outline, corner tied, both marked horizontal. Adjacent sides cannot
+    // both be horizontal, which is the state this board arrived in
+    PCB_SHAPE* bottom = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* right = addSegment( { 10 * MM, 0 }, { 10 * MM, 10 * MM } );
+
+    PCB_CONSTRAINT* corner = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::COINCIDENT );
+    corner->AddMember( bottom->m_Uuid, CONSTRAINT_ANCHOR::END );
+    corner->AddMember( right->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( corner );
+
+    for( PCB_SHAPE* seg : { bottom, right } )
+    {
+        PCB_CONSTRAINT* horizontal = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::HORIZONTAL );
+        horizontal->AddMember( seg->m_Uuid, CONSTRAINT_ANCHOR::WHOLE );
+        board.Add( horizontal );
+    }
+
+    BOARD_CONSTRAINT_MOVE_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, { bottom, right }, { 0, 0 } ) );
+
+    std::vector<PCB_SHAPE*> modified;
+    BOOST_REQUIRE( session.Solve( { 5 * MM, 5 * MM }, &modified, {} ) );
+
+    BOOST_CHECK_EQUAL( bottom->GetStart(), VECTOR2I( 5 * MM, 5 * MM ) );
+    BOOST_CHECK_EQUAL( right->GetEnd(), VECTOR2I( 15 * MM, 15 * MM ) );
+}
+
+
+// A pinned point cannot travel, so a whole-cluster move that would carry it off is still refused
+// and the geometry is left where it was.
+BOOST_FIXTURE_TEST_CASE( WholeClusterMoveWithFixedPoint, DRAG_FIXTURE )
+{
+    PCB_SHAPE* bottom = addSegment( { 0, 0 }, { 10 * MM, 0 } );
+    PCB_SHAPE* right = addSegment( { 10 * MM, 0 }, { 10 * MM, 10 * MM } );
+
+    PCB_CONSTRAINT* corner = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::COINCIDENT );
+    corner->AddMember( bottom->m_Uuid, CONSTRAINT_ANCHOR::END );
+    corner->AddMember( right->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( corner );
+
+    PCB_CONSTRAINT* pinned = new PCB_CONSTRAINT( &board, PCB_CONSTRAINT_TYPE::FIXED_POSITION );
+    pinned->AddMember( bottom->m_Uuid, CONSTRAINT_ANCHOR::START );
+    board.Add( pinned );
+
+    BOARD_CONSTRAINT_MOVE_SESSION session;
+    BOOST_REQUIRE( session.Build( &board, { bottom, right }, { 0, 0 } ) );
+
+    std::vector<PCB_SHAPE*> modified;
+
+    BOOST_CHECK( !session.Solve( { 5 * MM, 5 * MM }, &modified, {} ) );
+    BOOST_CHECK_EQUAL( bottom->GetStart(), VECTOR2I( 0, 0 ) );
+    BOOST_CHECK_EQUAL( right->GetEnd(), VECTOR2I( 10 * MM, 10 * MM ) );
+}
+
+
 // Dragging one circle's centre re-derives a concentric neighbor (centre-anchor drag on a
 // non-segment shape).
 BOOST_FIXTURE_TEST_CASE( DragCircleCentreMovesConcentricNeighbor, DRAG_FIXTURE )
