@@ -1166,67 +1166,77 @@ void SCH_FIELD::SetText( const wxString& aText, const SCH_SHEET_PATH* aPath, con
 
     const wxString text = IsMandatory() ? aText.Strip( wxString::both ) : aText;
 
-    // Going through the parent symbol or sheet can handle setting values on variants, but it can't
-    // handle setting values on fields which haven't yet been added to the parent.
-    if( !aVariantName.IsEmpty() )
+    switch( m_parent->Type() )
     {
-        switch( m_parent->Type() )
-        {
-        case SCH_SYMBOL_T:
-        {
-            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
-            wxCHECK( symbol, /* void */ );
-            symbol->SetFieldText( GetName( false ), text, aPath, aVariantName );
-            return;
-        }
+    case SCH_SYMBOL_T:
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
+        wxCHECK( symbol, /* void */ );
 
-        case SCH_SHEET_T:
-        {
-            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
-            wxCHECK( sheet, /* void */ );
-            sheet->SetFieldText( GetName( false ), text, aPath, aVariantName );
-            return;
-        }
+        // Just because we _have_ a parent, doesn't mean we've been added to it yet.  Make sure to
+        // use the version of SetFieldText() which gives our parent a pointer to us.
+        symbol->SetFieldText( this, GetName( false ), text, aPath, aVariantName );
 
-        default:
-            break;
-        }
+        break;
     }
 
-    SCH_FIELD::SetText( text );
+    case SCH_SHEET_T:
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
+        wxCHECK( sheet, /* void */ );
+
+        // Just because we _have_ a parent, doesn't mean we've been added to it yet.  Make sure to
+        // use the version of SetFieldText() which gives our parent a pointer to us.
+        sheet->SetFieldText( this, GetName( false ), text, aPath, aVariantName );
+
+        break;
+    }
+
+    default:
+        SCH_FIELD::SetText( text );
+        break;
+    }
 }
 
 
 wxString SCH_FIELD::GetText( const SCH_SHEET_PATH* aPath, const wxString& aVariantName ) const
 {
-    wxCHECK( aPath && m_parent, wxEmptyString );
+    wxString retv;
 
-    // Going through the parent symbol or sheet can handle setting values on variants, but it can't
-    // handle setting values on fields which haven't yet been added to the parent.
-    if( !aVariantName.IsEmpty() )
+    wxCHECK( aPath && m_parent, retv );
+
+    switch( m_parent->Type() )
     {
-        switch( m_parent->Type() )
-        {
-        case SCH_SYMBOL_T:
-        {
-            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
-            wxCHECK( symbol, wxEmptyString );
-            return symbol->GetFieldText( GetName(), aPath, aVariantName );
-        }
+    case SCH_SYMBOL_T:
+    {
+        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( m_parent );
+        wxCHECK( symbol, retv );
 
-        case SCH_SHEET_T:
-        {
-            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
-            wxCHECK( sheet, wxEmptyString );
-            return sheet->GetFieldText( GetName(), aPath, aVariantName );
-        }
+        // Just because we _have_ a parent, doesn't mean we've been added to it yet.  Make sure to
+        // use the version of SetFieldText() which gives our parent a pointer to us.
+        retv = symbol->GetFieldText( this, GetName( false ), aPath, aVariantName );
 
-        default:
-            break;
-        }
+        break;
     }
 
-    return SCH_FIELD::GetText();
+    case SCH_SHEET_T:
+    {
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
+        wxCHECK( sheet, retv );
+
+        // Just because we _have_ a parent, doesn't mean we've been added to it yet.  Make sure to
+        // use the version of SetFieldText() which gives our parent a pointer to us.
+        retv = sheet->GetFieldText( this, GetName( false ), aPath, aVariantName );
+
+        break;
+    }
+
+    default:
+        retv = GetText();
+        break;
+    }
+
+    return retv;
 }
 
 

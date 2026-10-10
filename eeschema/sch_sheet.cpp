@@ -688,16 +688,10 @@ SCH_FIELD* SCH_SHEET::AddField( const SCH_FIELD& aField )
 }
 
 
-void SCH_SHEET::SetFieldText( const wxString& aFieldName, const wxString& aFieldText, const SCH_SHEET_PATH* aPath,
-                              const wxString& aVariantName )
+void SCH_SHEET::SetFieldText( SCH_FIELD* aField, const wxString& aFieldName, const wxString& aFieldText,
+                              const SCH_SHEET_PATH* aPath, const wxString& aVariantName )
 {
-    wxCHECK_MSG( !aFieldName.IsEmpty(), /* void */, wxT( "Can't set text on a field with no name!" ) );
-
-    SCH_FIELD* field = GetField( aFieldName );
-
-    wxCHECK_MSG( field, /* void */, wxT( "Can't set text on a field not yet added to the sheet!" ) );
-
-    switch( field->GetId() )
+    switch( aField->GetId() )
     {
     case FIELD_T::SHEET_FILENAME:
     {
@@ -709,17 +703,17 @@ void SCH_SHEET::SetFieldText( const wxString& aFieldName, const wxString& aField
     }
 
     case FIELD_T::SHEET_NAME:
-        field->SetText( aFieldText );
+        aField->SetText( aFieldText );
         break;
 
     default:
     {
-        wxString defaultText = field->GetText( aPath );
+        wxString defaultText = aField->GetText( aPath );
 
         if( aVariantName.IsEmpty() )
         {
             if( aFieldText != defaultText )
-                field->SetText( aFieldText );
+                aField->SetText( aFieldText );
         }
         else
         {
@@ -763,26 +757,33 @@ void SCH_SHEET::SetFieldText( const wxString& aFieldName, const wxString& aField
 }
 
 
-wxString SCH_SHEET::GetFieldText( const wxString& aFieldName, const SCH_SHEET_PATH* aPath,
+void SCH_SHEET::SetFieldText( const wxString& aFieldName, const wxString& aFieldText, const SCH_SHEET_PATH* aPath,
+                              const wxString& aVariantName )
+{
+    wxCHECK_MSG( !aFieldName.IsEmpty(), /* void */, wxT( "Can't set text on a field with no name!" ) );
+
+    SCH_FIELD* field = GetField( aFieldName );
+
+    wxCHECK_MSG( field, /* void */, wxT( "Can't set text on a field not yet added to the sheet!" ) );
+
+    SetFieldText( field, aFieldName, aFieldText, aPath, aVariantName );
+}
+
+
+wxString SCH_SHEET::GetFieldText( const SCH_FIELD* aField, const wxString& aFieldName, const SCH_SHEET_PATH* aPath,
                                   const wxString& aVariantName ) const
 {
-    wxCHECK( !aFieldName.IsEmpty(), wxEmptyString );
-
-    const SCH_FIELD* field = GetField( aFieldName );
-
-    wxCHECK( field, wxEmptyString );
-
-    switch( field->GetId() )
+    switch( aField->GetId() )
     {
     case FIELD_T::REFERENCE:
     case FIELD_T::FOOTPRINT:
-        return field->GetText();
+        return aField->GetText();
         break;
 
     default:
         if( aVariantName.IsEmpty() )
         {
-            return field->GetText();
+            return aField->GetText();
         }
         else
         {
@@ -798,7 +799,20 @@ wxString SCH_SHEET::GetFieldText( const wxString& aFieldName, const SCH_SHEET_PA
         break;
     }
 
-    return field->GetText();
+    return aField->GetText();
+}
+
+
+wxString SCH_SHEET::GetFieldText( const wxString& aFieldName, const SCH_SHEET_PATH* aPath,
+                                  const wxString& aVariantName ) const
+{
+    wxCHECK_MSG( !aFieldName.IsEmpty(), wxEmptyString, wxT( "Can't get text from a field with no name!" ) );
+
+    const SCH_FIELD* field = GetField( aFieldName );
+
+    wxCHECK_MSG( field, wxEmptyString, wxT( "Can't get text from a field not yet added to the sheet!" ) );
+
+    return GetFieldText( field, aFieldName, aPath, aVariantName );
 }
 
 

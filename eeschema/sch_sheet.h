@@ -129,8 +129,14 @@ public:
      */
     SCH_FIELD* AddField( const SCH_FIELD& aField );
 
+    void SetFieldText( SCH_FIELD* aField, const wxString& aFieldName, const wxString& aFieldText,
+                       const SCH_SHEET_PATH* aPath, const wxString& aVariantName );
+
     void SetFieldText( const wxString& aFieldName, const wxString& aFieldText, const SCH_SHEET_PATH* aPath = nullptr,
                        const wxString& aVariantName = wxEmptyString );
+
+    wxString GetFieldText( const SCH_FIELD* aField, const wxString& aFieldName, const SCH_SHEET_PATH* aPath,
+                           const wxString& aVariantName ) const;
 
     wxString GetFieldText( const wxString& aFieldName, const SCH_SHEET_PATH* aPath = nullptr,
                            const wxString& aVariantName = wxEmptyString ) const;
