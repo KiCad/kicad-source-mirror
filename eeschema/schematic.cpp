@@ -3071,9 +3071,6 @@ void SCHEMATIC::SetCurrentVariant( const wxString& aVariantName )
     if( ( aVariantName != GetDefaultVariantName() ) && m_variantNames.contains( aVariantName ) )
         newVariant = aVariantName;
 
-    if( m_currentVariant.CmpNoCase( newVariant ) == 0 )
-        return;
-
     m_currentVariant = newVariant;
 
     // Variant-specific field values affect text geometry, so bounding box caches computed
