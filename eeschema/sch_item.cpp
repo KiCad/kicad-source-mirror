@@ -972,7 +972,7 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
         if( !aOther.m_customProperties.contains( name ) )
         {
             if( !value.IsEmpty() )
-                return false;
+                return 1;
 
             continue;
         }
@@ -981,6 +981,12 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 
         if( cmp != 0 )
             return cmp;
+    }
+
+    for( const auto& [name, value] : aOther.m_customProperties )
+    {
+        if( !m_customProperties.contains( name ) )
+            return -1;
     }
 
     return 0;
