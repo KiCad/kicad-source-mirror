@@ -134,12 +134,6 @@ void SCH_SHEET_PIN::swapData( SCH_ITEM* aItem )
 }
 
 
-bool SCH_SHEET_PIN::operator==( const SCH_SHEET_PIN* aPin ) const
-{
-    return operator==( *aPin );
-}
-
-
 int SCH_SHEET_PIN::GetPenWidth() const
 {
     if( Schematic() )

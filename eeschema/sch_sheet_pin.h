@@ -94,9 +94,6 @@ public:
         return _( "Sheet Pin" );
     }
 
-    bool operator ==( const SCH_SHEET_PIN* aPin ) const;
-    bool operator!=( const SCH_SHEET_PIN* aRhs ) const { return !( this == aRhs ); }
-
     static SHEET_SIDE GetOppositeSide( SHEET_SIDE aSide )
     {
         switch( aSide )
@@ -220,6 +217,9 @@ public:
     double Similarity( const SCH_ITEM& aOther ) const override;
 
     bool operator==( const SCH_ITEM& aOther ) const override;
+
+    bool operator==( const SCH_SHEET_PIN* aRhs ) const { return operator==( *aRhs ); }
+    bool operator!=( const SCH_SHEET_PIN* aRhs ) const { return !operator==( *aRhs ); }
 
 protected:
     void swapData( SCH_ITEM* aItem ) override;
