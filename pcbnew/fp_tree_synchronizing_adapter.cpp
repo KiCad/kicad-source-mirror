@@ -231,6 +231,12 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
 
     LIB_TREE_NODE* node = ToNode( aItem );
 
+    if( !node )
+    {
+        aVariant = wxEmptyString;
+        return;
+    }
+
     switch( aCol )
     {
     case NAME_COL:

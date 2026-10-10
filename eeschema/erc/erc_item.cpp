@@ -388,6 +388,13 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
 {
     SCH_EDIT_FRAME*           schEditFrame = static_cast<SCH_EDIT_FRAME*>( m_editFrame );
     const RC_TREE_NODE*       node = ToNode( aItem );
+
+    if( !node || !node->m_RcItem )
+    {
+        aVariant = wxEmptyString;
+        return;
+    }
+
     std::shared_ptr<ERC_ITEM> ercItem = std::static_pointer_cast<ERC_ITEM>( node->m_RcItem );
     MARKER_BASE*              marker = ercItem->GetParent();
     wxString                  msg;

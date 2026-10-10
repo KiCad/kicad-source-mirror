@@ -268,7 +268,12 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
     }
 
     LIB_TREE_NODE* node = ToNode( aItem );
-    wxASSERT( node );
+
+    if( !node )
+    {
+        aVariant = wxEmptyString;
+        return;
+    }
 
     switch( aCol )
     {
