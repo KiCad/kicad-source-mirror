@@ -1000,7 +1000,6 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
 
             Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
             m_libraryPreloadBackgroundJob.reset();
-            m_libraryPreloadInProgress.store( false );
 
             // Only send reload notifications if we weren't aborted
             if( !aborted )
@@ -1010,6 +1009,8 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
                 aKiway->ExpressMail( FRAME_SCH_SYMBOL_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
                 aKiway->ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload, nullptr, true );
             }
+
+            m_libraryPreloadInProgress.store( false );
         };
 
     std::future<void> preloadFuture = std::async( std::launch::async, preload );
@@ -1038,6 +1039,8 @@ void IFACE::ProjectChanged()
 
 void IFACE::OnKifaceEnd()
 {
+    CancelPreload( true );
+
     if( m_apiHandlerSchLibs )
     {
         if( Pgm().ApiServerOrNull() )

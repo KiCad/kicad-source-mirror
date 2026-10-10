@@ -812,6 +812,8 @@ void IFACE::Reset()
 
 void IFACE::OnKifaceEnd()
 {
+    CancelPreload( true );
+
 #if defined( KICAD_NATIVE_MODEL_PREVIEW ) && defined( __WXGTK3__ )
     ShutdownNativeModelFilePickerGtk();
 #endif
@@ -1418,7 +1420,6 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
             m_libraryPreloadAbort.store( false );
             Pgm().GetBackgroundJobMonitor().Remove( m_libraryPreloadBackgroundJob );
             m_libraryPreloadBackgroundJob.reset();
-            m_libraryPreloadInProgress.store( false );
 
             // Only send reload notifications if we weren't aborted
             if( !aborted )
@@ -1428,6 +1429,8 @@ void IFACE::PreloadLibraries( KIWAY* aKiway )
                 aKiway->ExpressMail( FRAME_FOOTPRINT_EDITOR, MAIL_RELOAD_LIB, payload, nullptr, true );
                 aKiway->ExpressMail( FRAME_CVPCB, MAIL_RELOAD_LIB, payload, nullptr, true );
             }
+
+            m_libraryPreloadInProgress.store( false );
         };
 
     std::future<void> preloadFuture = std::async( std::launch::async, preload );
