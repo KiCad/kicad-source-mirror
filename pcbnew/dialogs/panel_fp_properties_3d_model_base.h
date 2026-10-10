@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -63,10 +63,9 @@ class PANEL_FP_PROPERTIES_3D_MODEL_BASE : public wxPanel
 		wxStaticText* m_standoffHeightUnits;
 		wxStaticText* m_extrusionLayerLabel;
 		wxChoice* m_extrusionLayerChoice;
-		wxStaticText* m_extrusionColorLabel;
-		COLOR_SWATCH* m_extrusionColorSwatch;
 		wxStaticText* m_extrusionMaterialLabel;
 		wxChoice* m_extrusionMaterialChoice;
+		COLOR_SWATCH* m_extrusionColorSwatch;
 		wxButton* m_buttonExportExtruded;
 		wxPanel* m_lowerPanel;
 		wxBoxSizer* m_LowerSizer3D;

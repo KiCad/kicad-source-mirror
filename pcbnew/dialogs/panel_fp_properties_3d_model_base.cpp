@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6a)
+// C++ code generated with wxFormBuilder (version 4.2.1-0-g80c4cb6)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -112,7 +112,8 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 	m_extrusionSizer->Add( bSizer61, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 3, 6, 2, 5 );
+	fgSizer1 = new wxFlexGridSizer( 2, 6, 2, 5 );
+	fgSizer1->AddGrowableCol( 5 );
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -144,7 +145,7 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 
 	m_extrusionLayerLabel = new wxStaticText( m_extrusionSizer->GetStaticBox(), wxID_ANY, _("Extrusion source:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_extrusionLayerLabel->Wrap( -1 );
-	fgSizer1->Add( m_extrusionLayerLabel, 0, wxALL, 5 );
+	fgSizer1->Add( m_extrusionLayerLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxString m_extrusionLayerChoiceChoices[] = { _("Auto"), _("Courtyard layer"), _("Fabrication layer"), _("Silkscreen layer"), _("Pin bounding box") };
 	int m_extrusionLayerChoiceNChoices = sizeof( m_extrusionLayerChoiceChoices ) / sizeof( wxString );
@@ -152,28 +153,9 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 	m_extrusionLayerChoice->SetSelection( 0 );
 	fgSizer1->Add( m_extrusionLayerChoice, 0, wxALL, 5 );
 
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-	m_extrusionColorLabel = new wxStaticText( m_extrusionSizer->GetStaticBox(), wxID_ANY, _("Color:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_extrusionColorLabel->Wrap( -1 );
-	fgSizer1->Add( m_extrusionColorLabel, 0, wxALL, 5 );
-
-	m_extrusionColorSwatch = new COLOR_SWATCH( m_extrusionSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer1->Add( m_extrusionColorSwatch, 0, wxALL, 5 );
-
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
-
 	m_extrusionMaterialLabel = new wxStaticText( m_extrusionSizer->GetStaticBox(), wxID_ANY, _("Material:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_extrusionMaterialLabel->Wrap( -1 );
-	fgSizer1->Add( m_extrusionMaterialLabel, 0, wxALL, 5 );
+	fgSizer1->Add( m_extrusionMaterialLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxString m_extrusionMaterialChoiceChoices[] = { _("Plastic"), _("Matte"), _("Metal"), _("Copper") };
 	int m_extrusionMaterialChoiceNChoices = sizeof( m_extrusionMaterialChoiceChoices ) / sizeof( wxString );
@@ -181,22 +163,16 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 	m_extrusionMaterialChoice->SetSelection( 0 );
 	fgSizer1->Add( m_extrusionMaterialChoice, 0, wxALL, 5 );
 
-
-	fgSizer1->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_extrusionColorSwatch = new COLOR_SWATCH( m_extrusionSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer1->Add( m_extrusionColorSwatch, 0, wxALL, 5 );
 
 	m_buttonExportExtruded = new wxButton( m_extrusionSizer->GetStaticBox(), wxID_ANY, _("Export..."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonExportExtruded->SetToolTip( _("Export generated 3D model") );
 
-	fgSizer1->Add( m_buttonExportExtruded, 0, wxALIGN_RIGHT|wxALL, 5 );
+	fgSizer1->Add( m_buttonExportExtruded, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 
 	m_extrusionSizer->Add( fgSizer1, 0, wxEXPAND, 3 );
-
-	wxBoxSizer* bSizer6;
-	bSizer6 = new wxBoxSizer( wxVERTICAL );
-
-
-	m_extrusionSizer->Add( bSizer6, 0, wxEXPAND, 5 );
 
 
 	bSizer4->Add( m_extrusionSizer, 0, wxALL|wxEXPAND, 3 );
