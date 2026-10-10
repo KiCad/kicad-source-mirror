@@ -191,7 +191,7 @@ bool DIALOG_LINE_PROPERTIES::TransferDataToWindow()
     }
     else
     {
-        m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+        m_colorSwatch->SetIndeterminate();
     }
 
     if( std::all_of( m_lines.begin() + 1, m_lines.end(),
@@ -376,7 +376,7 @@ bool DIALOG_LINE_PROPERTIES::TransferDataFromWindow()
                 line->SetLineStyle( it->first );
         }
 
-        if( m_colorSwatch->GetSwatchColor() != COLOR4D::UNSPECIFIED )
+        if( !m_colorSwatch->IsIndeterminate() )
             line->SetLineColor( m_colorSwatch->GetSwatchColor() );
 
         // Line endings
