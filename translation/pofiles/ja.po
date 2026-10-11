@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-10 17:51+0000\n"
+"PO-Revision-Date: 2026-10-11 07:12+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -17513,6 +17513,10 @@ msgid ""
 "filter.\n"
 "When no filter is selected, matches for all filters are shown."
 msgstr ""
+"フットプリントライブラリから選択したフィルターに一致した可用なフットプリント"
+"。 \n"
+"フィルターが選択されていない場合は、すべてのフィルターに一致する"
+"フットプリントが表示されます。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.h:138
 msgid "Library Symbol Properties"
@@ -34595,15 +34599,14 @@ msgid "Input file(s) to import; each is autodetected as a board or schematic"
 msgstr "入力ファイルをインポート; 基板や回路図は自動的に検出される"
 
 #: kicad/cli/command_import.cpp:59
-#, fuzzy
 msgid ""
 "Output project path stem; produces <stem>.kicad_pro plus imported board and/"
 "or schematic files beside it. Defaults to the first input's name in the "
 "current directory."
 msgstr ""
 "出力プロジェクトパスがstemのとき; <stem>.kicad_pro ファイルと、インポートされ"
-"たデータから <stem>.kicad_pcb ファイル <stem>.kicad_schファイルが生成されま"
-"す。デフォルトではディレクトリにある最初の入力ファイル名が使用されます。"
+"たデータから <stem>.kicad_pcb ファイル <stem>.kicad_schファイルが生成されます"
+"。デフォルトではディレクトリにある最初の入力ファイル名が使用されます。"
 
 #: kicad/cli/command_import.cpp:66
 msgid ""
@@ -35252,29 +35255,24 @@ msgid "Export the PCB in IDFv3 format"
 msgstr "IDFv3形式でプリント基板をエクスポート"
 
 #: kicad/cli/command_pcb_export_idf.cpp:49
-#, fuzzy
 msgid "Output units"
 msgstr "出力単位:"
 
 #: kicad/cli/command_pcb_export_idf.cpp:54
-#, fuzzy
 msgid "Coordinate system origin for the board"
-msgstr "座標原点オプション"
+msgstr "基板の座標系原点"
 
 #: kicad/cli/command_pcb_export_idf.cpp:60
-#, fuzzy
 msgid "User-specified board origin X"
-msgstr "ユーザー定義原点"
+msgstr "ユーザー指定の基板原点 X"
 
 #: kicad/cli/command_pcb_export_idf.cpp:66
-#, fuzzy
 msgid "User-specified board origin Y"
-msgstr "ユーザー定義原点"
+msgstr "ユーザー指定の基板原点 Y"
 
 #: kicad/cli/command_pcb_export_idf.cpp:70
-#, fuzzy
 msgid "Exclude components with 'Unspecified' footprint type"
-msgstr "フットプリント タイプが’未指定'のコンポーネントの 3D モデルを除く"
+msgstr "フットプリント タイプが '未指定' のコンポーネントを除く"
 
 #: kicad/cli/command_pcb_export_idf.cpp:74
 msgid "Exclude components with 'Do not populate' attribute"
@@ -35285,9 +35283,8 @@ msgid "Only use explicitly-set footprint heights to create IDFv3 shapes"
 msgstr ""
 
 #: kicad/cli/command_pcb_export_idf.cpp:83
-#, fuzzy
 msgid "Footprint field to export as the part number to the IDF library"
-msgstr "ライブラリ中からエクスポートするフットプリントを指定する"
+msgstr "IDFライブラリにエクスポートする際の部品番号とするフットプリントのフィールド"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:36
 msgid "Generate PDF from a list of layers"
