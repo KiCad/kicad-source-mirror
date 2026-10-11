@@ -215,6 +215,12 @@ PCB_MARKER* PCB_MARKER::FromLegacyString( const wxString& aData )
             };
 
     wxArrayString props = wxSplit( aData, '|' );
+
+    // Every legacy marker has a settings key, position and at least two item fields.
+    // Reject truncated settings rather than indexing past wxArrayString below.
+    if( props.size() < 5 )
+        return nullptr;
+
     int           markerLayer = F_Cu;
     VECTOR2I      markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
                              (int) strtol( props[2].c_str(), nullptr, 10 ) );
@@ -234,10 +240,12 @@ PCB_MARKER* PCB_MARKER::FromLegacyString( const wxString& aData )
     else if( drcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
     {
         // Pre-9.0.4 versions didn't have KIIDs as last two properties to allow sorting stability
-        if( props.size() < 6 )
+        if( props.size() == 5 )
             drcItem->SetItems( KIID( props[3] ), KIID( props[4] ) );
-        else
+        else if( props.size() >= 7 )
             drcItem->SetItems( KIID( props[5] ), KIID( props[6] ) );
+        else
+            return nullptr;
     }
     else if( drcItem->GetErrorCode() == DRCE_STARVED_THERMAL )
     {
