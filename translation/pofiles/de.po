@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-09 21:51+0000\n"
+"PO-Revision-Date: 2026-10-11 08:33+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -26637,7 +26637,7 @@ msgstr "Vererbung aus dem Symbol entfernen"
 
 #: eeschema/tools/sch_actions.cpp:289 eeschema/tools/sch_actions.cpp:1117
 msgid "Bulk Edit Symbol Fields..."
-msgstr "Mehrere Symbolfelder bearbeiten ..."
+msgstr "Sammelbearbeitung von Symbolfeldern ..."
 
 #: eeschema/tools/sch_actions.cpp:290
 msgid "Edit a table of fields from all symbols in the library"
@@ -26645,7 +26645,7 @@ msgstr "Eine Tabelle mit Feldern aller Symbole in der Bibliothek bearbeiten"
 
 #: eeschema/tools/sch_actions.cpp:296
 msgid "Bulk Edit Related Symbol Fields..."
-msgstr "Mehrere verwandte Symbolfelder bearbeiten ..."
+msgstr "Sammelbearbeitung verwandter Symbolfelder ..."
 
 #: eeschema/tools/sch_actions.cpp:297
 msgid "Edit a table of fields from all symbols related to the selected symbol"
@@ -27177,7 +27177,7 @@ msgstr "Pin-Tabelle ..."
 
 #: eeschema/tools/sch_actions.cpp:996
 msgid "Displays pin table for bulk editing of pins"
-msgstr "Anzeige der Pin-Tabelle für Sammelbearbeitung von Pins"
+msgstr "Zeigt die Pin-Tabelle für Sammelbearbeitung von Pins an"
 
 #: eeschema/tools/sch_actions.cpp:1002
 msgid "Convert Stacked Pins"
@@ -27281,7 +27281,7 @@ msgstr "Eine Tabelle mit Feldern aller Symbole im Schaltplan bearbeiten"
 
 #: eeschema/tools/sch_actions.cpp:1124
 msgid "Bulk Edit Symbol Library Links..."
-msgstr "Mehrere Symbolbibliothek-Verknüpfungen bearbeiten ..."
+msgstr "Sammelbearbeitung von Symbolbibliothek-Verknüpfungen ..."
 
 #: eeschema/tools/sch_actions.cpp:1125
 msgid "Edit a table of links between schematic and library symbols"
@@ -32066,7 +32066,7 @@ msgstr "Gerber-Dateien betrachten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:163
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Bilder in Schaltplansymbole oder Bauteil-Footprints umwandeln"
+msgstr "Bitmap-Grafik in Schaltplansymbole oder Bauteil-Footprints umwandeln"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:166
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -33675,7 +33675,7 @@ msgstr "Gerber-Ausgabedateien anzeigen"
 
 #: kicad/tools/kicad_manager_actions.cpp:160
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr "Bilder in Schaltplansymbole oder Bauteil-Footprints umwandeln"
+msgstr "Bitmap-Grafik in Schaltplansymbole oder Bauteil-Footprints umwandeln"
 
 #: kicad/tools/kicad_manager_actions.cpp:179
 msgid "Edit drawing sheet borders and title block"
