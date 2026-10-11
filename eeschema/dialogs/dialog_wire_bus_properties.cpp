@@ -109,7 +109,7 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataToWindow()
     }
     else
     {
-        m_colorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+        m_colorSwatch->SetIndeterminate();
     }
 
     if( std::all_of( m_items.begin(), m_items.end(),
@@ -209,7 +209,7 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
                     static_cast<SCH_BUS_ENTRY_BASE*>( item )->SetLineStyle( lineStyle );
             }
 
-            if( m_colorSwatch->GetSwatchColor() != COLOR4D::UNSPECIFIED )
+            if( !m_colorSwatch->IsIndeterminate() )
             {
                 COLOR4D color = m_colorSwatch->GetSwatchColor();
 
@@ -223,7 +223,7 @@ bool DIALOG_WIRE_BUS_PROPERTIES::TransferDataFromWindow()
         {
             SCH_JUNCTION* junction = static_cast<SCH_JUNCTION*>( item );
 
-            if( m_colorSwatch->GetSwatchColor() != COLOR4D::UNSPECIFIED )
+            if( !m_colorSwatch->IsIndeterminate() )
                 junction->SetColor( m_colorSwatch->GetSwatchColor() );
 
             if( !m_junctionSize.IsIndeterminate() )
