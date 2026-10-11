@@ -323,16 +323,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    if( !m_3dPanel->CommitPendingChanges()
-        || !m_embeddedFiles->CommitPendingChanges() )
-    {
-        return false;
-    }
-
     if( !m_PanelGeneral->TransferDataToWindow() )
-        return false;
-
-    if( !m_3dPanel->Validate() )
         return false;
 
     LIB_ID   fpID          = m_footprint->GetFPID();
@@ -700,10 +691,15 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
             || !m_privateLayersGrid->CommitPendingChanges()
             || !m_nettieGroupsGrid->CommitPendingChanges()
             || !m_jumperGroupsGrid->CommitPendingChanges()
-            || !m_customUserLayersGrid->CommitPendingChanges() )
+            || !m_customUserLayersGrid->CommitPendingChanges()
+            || !m_3dPanel->CommitPendingChanges()
+            || !m_embeddedFiles->CommitPendingChanges() )
     {
         return false;
     }
+
+    if( !m_3dPanel->Validate() )
+        return false;
 
     KIGFX::PCB_VIEW*    view = m_frame->GetCanvas()->GetView();
     PCB_SELECTION_TOOL* selectionTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
@@ -711,8 +707,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     commit.Modify( m_footprint );
 
     // Must be done inside the commit to capture the undo state
-    // This will call TransferDataToWindow() on the 3D panel and
-    // the embedded files panel.
+    // This will call TransferDataToWindow() on the 3D panel and the embedded files panel.
     if( !DIALOG_SHIM::TransferDataFromWindow() )
         return false;
 
