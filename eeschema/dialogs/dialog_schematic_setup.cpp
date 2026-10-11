@@ -18,9 +18,11 @@
  */
 
 #include <confirm.h>
+#include <erc/erc_settings.h>
 #include <jobs/scratch_doc.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
+#include <schematic_settings.h>
 #include <kiface_base.h>
 #include <dialog_sch_import_settings.h>
 #include <dialogs/panel_setup_netclasses.h>
@@ -210,17 +212,18 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
     }
 
     PROJECT*      otherPrj = scratch.GetProject();
-    SCHEMATIC     otherSch( otherPrj );
     PROJECT_FILE& file = otherPrj->GetProjectFile();
 
-    wxASSERT( file.m_SchematicSettings );
+    SCHEMATIC_SETTINGS schematicSettings( &file, "schematic" );
+    ERC_SETTINGS       ercSettings( &file, "erc" );
 
-    file.m_SchematicSettings->LoadFromFile();
+    schematicSettings.LoadFromFile();
+    ercSettings.LoadFromFile();
 
     if( importDlg.m_FormattingOpt->GetValue() )
     {
         static_cast<PANEL_SETUP_FORMATTING*>( m_treebook->ResolvePage( m_formattingPage ) )
-                ->ImportSettingsFrom( *file.m_SchematicSettings );
+                ->ImportSettingsFrom( schematicSettings );
     }
 
     if( importDlg.m_FieldNameTemplatesOpt->GetValue() )
@@ -232,19 +235,19 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
     if( importDlg.m_SymbolParityOpt->GetValue() )
     {
         static_cast<PANEL_SETUP_SYMBOL_PARITY*>( m_treebook->ResolvePage( m_symbolParityPage ) )
-                ->ImportSettingsFrom( file.m_SchematicSettings->m_SymbolParity );
+                ->ImportSettingsFrom( schematicSettings.m_SymbolParity );
     }
 
     if( importDlg.m_PinMapOpt->GetValue() )
     {
         static_cast<PANEL_SETUP_PINMAP*>( m_treebook->ResolvePage( m_pinMapPage ) )
-                ->ImportSettingsFrom( file.m_ErcSettings->m_PinMap );
+                ->ImportSettingsFrom( ercSettings.m_PinMap );
     }
 
     if( importDlg.m_SeveritiesOpt->GetValue() )
     {
         static_cast<PANEL_SETUP_SEVERITIES*>( m_treebook->ResolvePage( m_severitiesPage ) )
-                ->ImportSettingsFrom( file.m_ErcSettings->m_ERCSeverities );
+                ->ImportSettingsFrom( ercSettings.m_ERCSeverities );
     }
 
     if( importDlg.m_NetClassesOpt->GetValue() )
@@ -256,19 +259,19 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
     if( importDlg.m_BomPresetsOpt->GetValue() )
     {
         static_cast<PANEL_BOM_PRESETS*>( m_treebook->ResolvePage( m_bomPresetsPage ) )
-                ->ImportBomPresetsFrom( *file.m_SchematicSettings );
+                ->ImportBomPresetsFrom( schematicSettings );
     }
 
     if( importDlg.m_BomFmtPresetsOpt->GetValue() )
     {
         static_cast<PANEL_BOM_PRESETS*>( m_treebook->ResolvePage( m_bomPresetsPage ) )
-                ->ImportBomFmtPresetsFrom( *file.m_SchematicSettings );
+                ->ImportBomFmtPresetsFrom( schematicSettings );
     }
 
     if( importDlg.m_annotationOpt->GetValue() )
     {
         static_cast<PANEL_EESCHEMA_ANNOTATION_OPTIONS*>( m_treebook->ResolvePage( m_annotationPage ) )
-                ->ImportSettingsFrom( *file.m_SchematicSettings );
+                ->ImportSettingsFrom( schematicSettings );
     }
 
     if( importDlg.m_BusAliasesOpt->GetValue() )
