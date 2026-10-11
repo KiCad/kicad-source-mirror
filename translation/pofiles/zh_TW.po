@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 16:28+0000\n"
+"PO-Revision-Date: 2026-10-11 19:18+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -60022,7 +60022,7 @@ msgstr "找不到單元值, 預設為 Mils。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:326
 #, c-format
 msgid "Could not find column label %s."
-msgstr "無法找到行標籤 %s。"
+msgstr "找不到欄標籤 %s。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:360
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:431
