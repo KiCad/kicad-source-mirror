@@ -358,16 +358,32 @@ SCH_RULE_AREA::UpdateRuleAreasInScreens( std::unordered_set<SCH_SCREEN*>& screen
     for( SCH_SCREEN* screen : screens )
     {
         // First reset all item caches - must be done first to ensure two rule areas
-        // on the same item don't overwrite each other's caches
+        // on the same item don't overwrite each other's caches.  Pins are owned by
+        // symbols and are not in the screen's item tree, so clear them through their parent.
         for( SCH_ITEM* item : screen->Items() )
         {
             if( item->Type() == SCH_RULE_AREA_T )
                 static_cast<SCH_RULE_AREA*>( item )->resetCaches();
 
-            if( item->Type() == SCH_DIRECTIVE_LABEL_T && view )
-                view->Update( item, KIGFX::REPAINT );
+            if( item->Type() == SCH_DIRECTIVE_LABEL_T )
+            {
+                static_cast<SCH_DIRECTIVE_LABEL*>( item )->ClearConnectedRuleAreas();
+
+                if( view )
+                    view->Update( item, KIGFX::REPAINT );
+            }
 
             item->ClearRuleAreasCache();
+
+            if( item->Type() == SCH_SYMBOL_T )
+            {
+                item->RunOnChildren(
+                        []( SCH_ITEM* aChild )
+                        {
+                            aChild->ClearRuleAreasCache();
+                        },
+                        RECURSE_MODE::NO_RECURSE );
+            }
         }
 
         // Secondly refresh the contained items

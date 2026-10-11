@@ -29,8 +29,13 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
+#include <schematic.h>
+#include <sch_label.h>
 #include <sch_line.h>
+#include <sch_pin.h>
 #include <sch_rule_area.h>
+#include <sch_screen.h>
+#include <sch_symbol.h>
 
 
 BOOST_AUTO_TEST_SUITE( SchRuleAreaDestruction )
@@ -99,6 +104,38 @@ BOOST_AUTO_TEST_CASE( ContainedItemsDestroyedBeforeRuleArea )
     BOOST_CHECK_EQUAL( ruleArea->_GetContainedItems().size(), 0u );
 
     ruleArea.reset();
+}
+
+
+/**
+ * Verify that rebuilding rule area caches clears reciprocal links on owned children and
+ * directive labels which are no longer attached to the area.
+ */
+BOOST_AUTO_TEST_CASE( CacheRefreshClearsReciprocalLinks )
+{
+    SCHEMATIC  schematic( nullptr );
+    SCH_SCREEN screen( &schematic );
+    auto*      ruleArea = new SCH_RULE_AREA();
+    auto*      symbol = new SCH_SYMBOL();
+    auto*      directive = new SCH_DIRECTIVE_LABEL( VECTOR2I( 1000, 1000 ) );
+
+    symbol->GetRawPins().push_back( std::make_unique<SCH_PIN>( symbol, wxT( "1" ), wxEmptyString, KIID() ) );
+    SCH_PIN* pin = symbol->GetRawPins().front().get();
+
+    ruleArea->_GetContainedItems().insert( pin );
+    pin->AddRuleAreaToCache( ruleArea );
+    ruleArea->_GetContainedDirectives().insert( directive );
+    directive->AddConnectedRuleArea( ruleArea );
+
+    screen.Append( ruleArea );
+    screen.Append( symbol, false );
+    screen.Append( directive );
+
+    std::unordered_set<SCH_SCREEN*> screens = { &screen };
+    SCH_RULE_AREA::UpdateRuleAreasInScreens( screens, nullptr );
+
+    BOOST_CHECK( pin->GetRuleAreaCache().empty() );
+    BOOST_CHECK( directive->GetConnectedRuleAreas().empty() );
 }
 
 
