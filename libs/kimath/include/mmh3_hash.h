@@ -28,6 +28,11 @@
 
 #include <hash_128.h>
 
+#include <algorithm>
+#include <cstring>
+#include <string>
+#include <vector>
+
 //-----------------------------------------------------------------------------
 // Platform-specific functions and macros
 
@@ -69,6 +74,22 @@ public:
     FORCE_INLINE void addData( const uint8_t* data, size_t length )
     {
         size_t remaining = length;
+        size_t pending = len % 16;
+
+        // Complete a block an earlier call left partial, so data may arrive in pieces of any size
+        if( pending > 0 && remaining > 0 )
+        {
+            size_t fill = std::min( remaining, 16 - pending );
+            memcpy( reinterpret_cast<uint8_t*>( blocks ) + pending, data, fill );
+            data += fill;
+            remaining -= fill;
+            len += fill;
+
+            if( len % 16 != 0 )
+                return;
+
+            hashBlock();
+        }
 
         while( remaining >= 16 )
         {

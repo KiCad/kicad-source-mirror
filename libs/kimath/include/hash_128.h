@@ -22,6 +22,7 @@
 #define HASH_128_H_
 
 #include <cstdint>
+#include <cstring>
 #include <iomanip>
 #include <sstream>
 
