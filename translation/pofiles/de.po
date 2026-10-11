@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 08:33+0000\n"
+"PO-Revision-Date: 2026-10-11 08:34+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -45845,7 +45845,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:149
 #, fuzzy
 msgid "Part number field:"
-msgstr "Padnummer:"
+msgstr "Teilenummernfeld:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:151
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:158
@@ -45859,7 +45859,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:172
 #, fuzzy
 msgid "Log"
-msgstr "Sperren"
+msgstr "Log"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:345
 msgid "zip files"
@@ -45907,7 +45907,7 @@ msgstr "8.1"
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:91
 #, fuzzy
 msgid "Refill zones before export"
-msgstr "Zonen vor Plotten neu füllen"
+msgstr "Zonen vor dem Export neu füllen"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:93
 #, fuzzy
