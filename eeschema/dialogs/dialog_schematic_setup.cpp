@@ -18,8 +18,10 @@
  */
 
 #include <confirm.h>
+#include <erc/erc_settings.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
+#include <schematic_settings.h>
 #include <kiface_base.h>
 #include <dialog_sch_import_settings.h>
 #include <dialogs/panel_setup_netclasses.h>
@@ -196,72 +198,79 @@ void DIALOG_SCHEMATIC_SETUP::onAuxiliaryAction( wxCommandEvent& event )
         return;
     }
 
-    PROJECT*      otherPrj = m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() );
-    SCHEMATIC     otherSch( otherPrj );
-    PROJECT_FILE& file = otherPrj->GetProjectFile();
+    PROJECT* otherPrj = m_frame->GetSettingsManager()->GetProject( projectFn.GetFullPath() );
 
-    wxASSERT( file.m_SchematicSettings );
+    wxCHECK_RET( otherPrj, wxS( "Imported project was loaded but cannot be found" ) );
 
-    file.m_SchematicSettings->LoadFromFile();
-
-    if( importDlg.m_FormattingOpt->GetValue() )
+    // The temporary settings are nested in the other project file and must release it before it unloads
     {
-        static_cast<PANEL_SETUP_FORMATTING*>( m_treebook->ResolvePage( m_formattingPage ) )
-                ->ImportSettingsFrom( *file.m_SchematicSettings );
-    }
+        PROJECT_FILE& file = otherPrj->GetProjectFile();
 
-    if( importDlg.m_FieldNameTemplatesOpt->GetValue() )
-    {
-        static_cast<PANEL_TEMPLATE_FIELDNAMES*>( m_treebook->ResolvePage( m_fieldNameTemplatesPage ) )
-                ->ImportSettingsFrom( &otherSch.Settings().m_TemplateFieldNames );
-    }
+        SCHEMATIC_SETTINGS schematicSettings( &file, "schematic" );
+        ERC_SETTINGS       ercSettings( &file, "erc" );
 
-    if( importDlg.m_PinMapOpt->GetValue() )
-    {
-        static_cast<PANEL_SETUP_PINMAP*>( m_treebook->ResolvePage( m_pinMapPage ) )
-                ->ImportSettingsFrom( file.m_ErcSettings->m_PinMap );
-    }
+        schematicSettings.LoadFromFile();
+        ercSettings.LoadFromFile();
 
-    if( importDlg.m_SeveritiesOpt->GetValue() )
-    {
-        static_cast<PANEL_SETUP_SEVERITIES*>( m_treebook->ResolvePage( m_severitiesPage ) )
-                ->ImportSettingsFrom( file.m_ErcSettings->m_ERCSeverities );
-    }
+        if( importDlg.m_FormattingOpt->GetValue() )
+        {
+            static_cast<PANEL_SETUP_FORMATTING*>( m_treebook->ResolvePage( m_formattingPage ) )
+                    ->ImportSettingsFrom( schematicSettings );
+        }
 
-    if( importDlg.m_NetClassesOpt->GetValue() )
-    {
-        static_cast<PANEL_SETUP_NETCLASSES*>( m_treebook->ResolvePage( m_netclassesPage ) )
-                ->ImportSettingsFrom( file.m_NetSettings );
-    }
+        if( importDlg.m_FieldNameTemplatesOpt->GetValue() )
+        {
+            static_cast<PANEL_TEMPLATE_FIELDNAMES*>( m_treebook->ResolvePage( m_fieldNameTemplatesPage ) )
+                    ->ImportSettingsFrom( &schematicSettings.m_TemplateFieldNames );
+        }
 
-    if( importDlg.m_BomPresetsOpt->GetValue() )
-    {
-        static_cast<PANEL_BOM_PRESETS*>( m_treebook->ResolvePage( m_bomPresetsPage ) )
-                ->ImportBomPresetsFrom( *file.m_SchematicSettings );
-    }
+        if( importDlg.m_PinMapOpt->GetValue() )
+        {
+            static_cast<PANEL_SETUP_PINMAP*>( m_treebook->ResolvePage( m_pinMapPage ) )
+                    ->ImportSettingsFrom( ercSettings.m_PinMap );
+        }
 
-    if( importDlg.m_BomFmtPresetsOpt->GetValue() )
-    {
-        static_cast<PANEL_BOM_PRESETS*>( m_treebook->ResolvePage( m_bomPresetsPage ) )
-                ->ImportBomFmtPresetsFrom( *file.m_SchematicSettings );
-    }
+        if( importDlg.m_SeveritiesOpt->GetValue() )
+        {
+            static_cast<PANEL_SETUP_SEVERITIES*>( m_treebook->ResolvePage( m_severitiesPage ) )
+                    ->ImportSettingsFrom( ercSettings.m_ERCSeverities );
+        }
 
-    if( importDlg.m_annotationOpt->GetValue() )
-    {
-        static_cast<PANEL_EESCHEMA_ANNOTATION_OPTIONS*>( m_treebook->ResolvePage( m_annotationPage ) )
-                ->ImportSettingsFrom( *file.m_SchematicSettings );
-    }
+        if( importDlg.m_NetClassesOpt->GetValue() )
+        {
+            static_cast<PANEL_SETUP_NETCLASSES*>( m_treebook->ResolvePage( m_netclassesPage ) )
+                    ->ImportSettingsFrom( file.m_NetSettings );
+        }
 
-    if( importDlg.m_BusAliasesOpt->GetValue() )
-    {
-        static_cast<PANEL_SETUP_BUSES*>( m_treebook->ResolvePage( m_busesPage ) )
-                ->ImportSettingsFrom( file.m_BusAliases );
-    }
+        if( importDlg.m_BomPresetsOpt->GetValue() )
+        {
+            static_cast<PANEL_BOM_PRESETS*>( m_treebook->ResolvePage( m_bomPresetsPage ) )
+                    ->ImportBomPresetsFrom( schematicSettings );
+        }
 
-    if( importDlg.m_TextVarsOpt->GetValue() )
-    {
-        static_cast<PANEL_TEXT_VARIABLES*>( m_treebook->ResolvePage( m_textVarsPage ) )
-                ->ImportSettingsFrom( otherPrj );
+        if( importDlg.m_BomFmtPresetsOpt->GetValue() )
+        {
+            static_cast<PANEL_BOM_PRESETS*>( m_treebook->ResolvePage( m_bomPresetsPage ) )
+                    ->ImportBomFmtPresetsFrom( schematicSettings );
+        }
+
+        if( importDlg.m_annotationOpt->GetValue() )
+        {
+            static_cast<PANEL_EESCHEMA_ANNOTATION_OPTIONS*>( m_treebook->ResolvePage( m_annotationPage ) )
+                    ->ImportSettingsFrom( schematicSettings );
+        }
+
+        if( importDlg.m_BusAliasesOpt->GetValue() )
+        {
+            static_cast<PANEL_SETUP_BUSES*>( m_treebook->ResolvePage( m_busesPage ) )
+                    ->ImportSettingsFrom( file.m_BusAliases );
+        }
+
+        if( importDlg.m_TextVarsOpt->GetValue() )
+        {
+            static_cast<PANEL_TEXT_VARIABLES*>( m_treebook->ResolvePage( m_textVarsPage ) )
+                    ->ImportSettingsFrom( otherPrj );
+        }
     }
 
     if( !alreadyLoaded )
