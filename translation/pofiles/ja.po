@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 07:12+0000\n"
+"PO-Revision-Date: 2026-10-11 12:56+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -35998,7 +35998,7 @@ msgstr "<value set at runtime>"
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:64
 #, fuzzy
 msgid "Expanded command:"
-msgstr "コマンドラインで実行:"
+msgstr "拡張コマンド:"
 
 #: kicad/dialogs/dialog_executecommand_job_settings_base.cpp:88
 msgid "Record output messages"
