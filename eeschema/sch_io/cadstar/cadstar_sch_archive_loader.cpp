@@ -769,11 +769,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 loadSymbolGateAndPartFields( sym.SymdefID, part, sym.GateID, kiSym );
             }
 
-            std::unique_ptr<LIB_SYMBOL> scaledPart(
-                    getScaledLibPart( kiSym, sym.ScaleRatioNumerator, sym.ScaleRatioDenominator ) );
+            std::unique_ptr<LIB_SYMBOL> scaledPart( getScaledLibPart( kiSym, sym.ScaleRatioNumerator,
+                                                                      sym.ScaleRatioDenominator ) );
 
             EDA_ANGLE   symOrient = ANGLE_0;
             SCH_SYMBOL* symbol = loadSchematicSymbol( sym, *scaledPart, symOrient );
+
+            if( !symbol )
+                continue;
 
             SCH_FIELD* refField = symbol->GetField( FIELD_T::REFERENCE );
 
@@ -927,12 +930,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     wxASSERT( kiPart->GetValueField().GetText() == symbolInstanceNetName );
                 }
 
-                std::unique_ptr<LIB_SYMBOL> scaledPart(
-                        getScaledLibPart( kiPart, sym.ScaleRatioNumerator, sym.ScaleRatioDenominator ) );
+                std::unique_ptr<LIB_SYMBOL> scaledPart( getScaledLibPart( kiPart, sym.ScaleRatioNumerator,
+                                                                          sym.ScaleRatioDenominator ) );
 
-                EDA_ANGLE   returnedOrient = ANGLE_0;
-                SCH_SYMBOL* symbol = loadSchematicSymbol( sym, *scaledPart, returnedOrient );
-                m_powerSymMap.insert( { sym.ID, symbol } );
+                EDA_ANGLE returnedOrient = ANGLE_0;
+
+                if( SCH_SYMBOL* symbol = loadSchematicSymbol( sym, *scaledPart, returnedOrient ) )
+                    m_powerSymMap.insert( { sym.ID, symbol } );
             }
             else if( sym.SymbolVariant.Type == SYMBOLVARIANT::TYPE::SIGNALREF )
             {
