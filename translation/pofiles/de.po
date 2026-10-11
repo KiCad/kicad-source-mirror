@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 15:39+0000\n"
+"PO-Revision-Date: 2026-10-11 19:17+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -208,7 +208,7 @@ msgstr "In %.3f s geladen"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1231
 msgid "Stopping background load..."
-msgstr "Laden im Hintergrund wird angehalten..."
+msgstr "Laden im Hintergrund wird angehalten ..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1952
 #: eeschema/libraries/legacy_symbol_library.cpp:515
@@ -4776,7 +4776,7 @@ msgstr "Platine und Schaltplan auf Parität prüfen"
 #: common/dialogs/dialog_rc_job_base.cpp:86
 #: pcbnew/dialogs/dialog_drc_base.cpp:45
 msgid "Refill all zones before performing DRC"
-msgstr "Alle Zonen ausfüllen vor dem DRC"
+msgstr "Alle Zonen vor dem DRC neu füllen"
 
 #: common/dialogs/dialog_restore_local_history.cpp:30
 #: kicad/tools/kicad_manager_actions.cpp:234
@@ -44318,7 +44318,7 @@ msgstr "Konnektivität wird wiederhergestellt ..."
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:235
 #: pcbnew/tools/drc_tool.cpp:163
 msgid "Refilling all zones..."
-msgstr "Fülle alle Zonen aus ..."
+msgstr "Fülle alle Zonen erneut ..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:249
 msgid "Board Cleanup"
@@ -44326,18 +44326,18 @@ msgstr "Platine bereinigen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "Refill zones before and after cleanup"
-msgstr "Zonen vor und nach Aufräumen erneut füllen"
+msgstr "Zonen vor und nach dem Aufräumen erneut füllen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:34
 msgid "Delete &tracks connecting different nets"
-msgstr "Entferne &Leiterbahnsegmente welche unterschiedlicher Netze verbinden"
+msgstr "Entferne &Leiterbahnsegmente, die unterschiedliche Netze verbinden"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:36
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
 msgstr ""
-"Entfernt Leiterbahnsegmente die Knoten unterschiedlicher Netze verbinden "
+"Entfernt Leiterbahnsegmente, die Knoten unterschiedlicher Netze verbinden "
 "(Kurzschluss)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:43
