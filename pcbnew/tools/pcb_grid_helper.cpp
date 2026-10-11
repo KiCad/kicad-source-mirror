@@ -518,7 +518,7 @@ void PCB_GRID_HELPER::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aRemovedIte
     {
         for( EDA_ITEM* eda_item : m_snapItem->items )
         {
-            if( eda_item->IsBOARD_ITEM() )
+            if( eda_item && eda_item->IsBOARD_ITEM() )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( eda_item );
 
