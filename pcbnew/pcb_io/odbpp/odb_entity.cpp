@@ -62,6 +62,46 @@
 #include "pcb_io_odbpp.h"
 
 
+namespace
+{
+
+/**
+ * Convert copper thickness from internal units to millimeters.
+ */
+double CopperThicknessMm( int aThicknessIu )
+{
+    return static_cast<double>( aThicknessIu ) / pcbIUScale.mmToIU( 1.0 );
+}
+
+
+/**
+ * Copper weight in ounces per square foot, the unit named by the stackup.xml attribute
+ * CopperWeight_oz_ft2
+ */
+double CopperWeightOz( int aThicknessIu )
+{
+    return CopperThicknessMm( aThicknessIu ) / 0.035;
+}
+
+
+/**
+ * The value of the .copper_weight layer attribute.
+ *
+ * um for metric output and oz/ft2 for imperial output
+ *
+ * See "How Measurements Are Stored" in the ODB++ Design Format Specification.
+ */
+double CopperWeightValue( int aThicknessIu )
+{
+    if( PCB_IO_ODBPP::m_unitsStr == "MM" )
+        return CopperThicknessMm( aThicknessIu ) * 1000.0;
+
+    return CopperWeightOz( aThicknessIu );
+}
+
+} // namespace
+
+
 bool ODB_ENTITY_BASE::CreateDirectoryTree( ODB_TREE_WRITER& writer )
 {
     try
@@ -1157,9 +1197,7 @@ void ODB_LAYER_ENTITY::GenAttrList( ODB_TREE_WRITER& writer )
 
         if( stackupItem->GetType() == BS_ITEM_TYPE_COPPER )
         {
-            double copperThicknessMM = static_cast<double>( thickness ) / pcbIUScale.mmToIU( 1.0 );
-            double thicknessOz = copperThicknessMM / 0.035;
-            ost << ".copper_weight=" << ODB::Double2String( thicknessOz ) << std::endl;
+            ost << ".copper_weight=" << ODB::Double2String( CopperWeightValue( thickness ) ) << std::endl;
         }
 
         if( stackupItem->HasEpsilonRValue() )
