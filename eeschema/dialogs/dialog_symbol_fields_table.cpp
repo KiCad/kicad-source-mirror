@@ -1142,23 +1142,20 @@ void DIALOG_SYMBOL_FIELDS_TABLE::onDeleteVariant( wxCommandEvent& aEvent )
 
     VARIANT_PROXY_UNDO_ITEM* undoItem = new VARIANT_PROXY_UNDO_ITEM( &m_parent->Schematic() );
     SCH_COMMIT               commit( m_parent );
-    PICKED_ITEMS_LIST*       undoCmd = nullptr;
+    bool                     append = false;
 
     m_parent->Schematic().DeleteVariant( variantName, &commit );
 
     if( !commit.Empty() )
     {
         commit.Push();
-        undoCmd = m_parent->PopCommandFromUndoList();
-    }
-    else
-    {
-        undoCmd = new PICKED_ITEMS_LIST();
+        append = true;
     }
 
-    undoCmd->PushItem( ITEM_PICKER( m_parent->GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
-    undoCmd->SetDescription( _( "Delete Variant" ) );
-    m_parent->PushCommandToUndoList( undoCmd );
+    PICKED_ITEMS_LIST undoCmd;
+    undoCmd.PushItem( ITEM_PICKER( m_parent->GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
+    undoCmd.SetDescription( _( "Delete Variant" ) );
+    m_parent->SaveCopyInUndoList( undoCmd, UNDO_REDO::VARIANTS, append );
 
     m_parent->OnModify();
 

@@ -3384,23 +3384,20 @@ void SCH_EDIT_FRAME::RemoveVariant()
 
     VARIANT_PROXY_UNDO_ITEM* undoItem = new VARIANT_PROXY_UNDO_ITEM( &Schematic() );
     SCH_COMMIT               commit( this );
-    PICKED_ITEMS_LIST*       undoCmd = nullptr;
+    bool                     append = false;
 
     Schematic().DeleteVariant( variantName, &commit );
 
     if( !commit.Empty() )
     {
         commit.Push();
-        undoCmd = PopCommandFromUndoList();
-    }
-    else
-    {
-        undoCmd = new PICKED_ITEMS_LIST();
+        append = true;
     }
 
-    undoCmd->PushItem( ITEM_PICKER( GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
-    undoCmd->SetDescription( _( "Delete Variant" ) );
-    PushCommandToUndoList( undoCmd );
+    PICKED_ITEMS_LIST undoCmd;
+    undoCmd.PushItem( ITEM_PICKER( GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
+    undoCmd.SetDescription( _( "Delete Variant" ) );
+    SaveCopyInUndoList( undoCmd, UNDO_REDO::VARIANTS, append );
 
     OnModify();
 
@@ -3488,23 +3485,20 @@ void SCH_EDIT_FRAME::RenameVariant()
 
     VARIANT_PROXY_UNDO_ITEM* undoItem = new VARIANT_PROXY_UNDO_ITEM( &Schematic() );
     SCH_COMMIT               commit( this );
-    PICKED_ITEMS_LIST*       undoCmd = nullptr;
+    bool                     append = false;
 
     Schematic().RenameVariant( oldName, newName, &commit );
 
     if( !commit.Empty() )
     {
         commit.Push();
-        undoCmd = PopCommandFromUndoList();
-    }
-    else
-    {
-        undoCmd = new PICKED_ITEMS_LIST();
+        append = true;
     }
 
-    undoCmd->PushItem( ITEM_PICKER( GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
-    undoCmd->SetDescription( _( "Rename Variant" ) );
-    PushCommandToUndoList( undoCmd );
+    PICKED_ITEMS_LIST undoCmd;
+    undoCmd.PushItem( ITEM_PICKER( GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
+    undoCmd.SetDescription( _( "Rename Variant" ) );
+    SaveCopyInUndoList( undoCmd, UNDO_REDO::VARIANTS, append );
 
     // The registry entry changes even when no symbol carries an override, so always mark dirty.
     OnModify();
@@ -3557,23 +3551,20 @@ void SCH_EDIT_FRAME::CopyVariant()
 
     VARIANT_PROXY_UNDO_ITEM* undoItem = new VARIANT_PROXY_UNDO_ITEM( &Schematic() );
     SCH_COMMIT               commit( this );
-    PICKED_ITEMS_LIST*       undoCmd = nullptr;
+    bool                     append = false;
 
     Schematic().CopyVariant( sourceName, newName, &commit );
 
     if( !commit.Empty() )
     {
         commit.Push();
-        undoCmd = PopCommandFromUndoList();
-    }
-    else
-    {
-        undoCmd = new PICKED_ITEMS_LIST();
+        append = true;
     }
 
-    undoCmd->PushItem( ITEM_PICKER( GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
-    undoCmd->SetDescription( _( "Copy Variant" ) );
-    PushCommandToUndoList( undoCmd );
+    PICKED_ITEMS_LIST undoCmd;
+    undoCmd.PushItem( ITEM_PICKER( GetScreen(), undoItem, UNDO_REDO::VARIANTS ) );
+    undoCmd.SetDescription( _( "Copy Variant" ) );
+    SaveCopyInUndoList( undoCmd, UNDO_REDO::VARIANTS, append );
 
     // The new registry entry changes project state even when no symbol carries an override.
     OnModify();
