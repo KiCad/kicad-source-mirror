@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-10 17:51+0000\n"
+"PO-Revision-Date: 2026-10-11 07:12+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -30513,7 +30513,7 @@ msgstr "Den aktiven Symbolreiter schließen"
 
 #: eeschema/tools/sch_actions.cpp:341 eeschema/tools/sch_actions.cpp:1332
 msgid "Bulk Edit Symbol Fields..."
-msgstr "Mehrere Symbolfelder bearbeiten ..."
+msgstr "Sammelbearbeitung von Symbolfeldern ..."
 
 #: eeschema/tools/sch_actions.cpp:342
 msgid "Edit a table of fields from all symbols in the library"
@@ -30521,7 +30521,7 @@ msgstr "Eine Tabelle mit Feldern aller Symbole in der Bibliothek bearbeiten"
 
 #: eeschema/tools/sch_actions.cpp:348
 msgid "Bulk Edit Related Symbol Fields..."
-msgstr "Mehrere verwandte Symbolfelder bearbeiten ..."
+msgstr "Sammelbearbeitung verwandter Symbolfelder ..."
 
 #: eeschema/tools/sch_actions.cpp:349
 msgid "Edit a table of fields from all symbols related to the selected symbol"
@@ -31158,7 +31158,7 @@ msgstr "Pin-Tabelle ..."
 
 #: eeschema/tools/sch_actions.cpp:1175
 msgid "Displays pin table for bulk editing of pins"
-msgstr "Anzeige der Pin-Tabelle für Sammelbearbeitung von Pins"
+msgstr "Zeigt die Pin-Tabelle für Sammelbearbeitung von Pins an"
 
 #: eeschema/tools/sch_actions.cpp:1181
 #: eeschema/tools/symbol_editor_edit_tool.cpp:1366
@@ -31326,7 +31326,7 @@ msgstr "Eine Tabelle mit Feldern aller Symbole im Schaltplan bearbeiten"
 
 #: eeschema/tools/sch_actions.cpp:1339
 msgid "Bulk Edit Symbol Library Links..."
-msgstr "Mehrere Symbolbibliothek-Verknüpfungen bearbeiten ..."
+msgstr "Sammelbearbeitung von Symbolbibliothek-Verknüpfungen ..."
 
 #: eeschema/tools/sch_actions.cpp:1340
 msgid "Edit a table of links between schematic and library symbols"
@@ -32525,8 +32525,9 @@ msgid ""
 "Bulk Edit Symbol Library Links is not available when a design variant is "
 "active. Switch to the default variant first."
 msgstr ""
-"\"Mehrere Symbolbibliothek-Verknüpfungen bearbeiten\" ist in einer aktiven "
-"Desginvariante nicht verfügbar. Wechseln Sie zuerst zur Standardvariante."
+"\"Sammelbearbeitung von Symbolbibliothek-Verknüpfungen\" ist in einer "
+"aktiven Desginvariante nicht verfügbar. Wechseln Sie zuerst zur "
+"Standardvariante."
 
 #: eeschema/tools/sch_editor_control.cpp:3665
 #, c-format
@@ -36996,7 +36997,7 @@ msgstr "Gerber-Dateien betrachten"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:175
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Bilder in Schaltplansymbole oder Bauteil-Footprints umwandeln"
+msgstr "Bitmap-Grafik in Schaltplansymbole oder Bauteil-Footprints umwandeln"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:178
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -38698,7 +38699,7 @@ msgstr "Gerber-Ausgabedateien anzeigen"
 
 #: kicad/tools/kicad_manager_actions.cpp:156
 msgid "Convert bitmap images to schematic or PCB components"
-msgstr "Bilder in Schaltplansymbole oder Bauteil-Footprints umwandeln"
+msgstr "Bitmap-Grafik in Schaltplansymbole oder Bauteil-Footprints umwandeln"
 
 #: kicad/tools/kicad_manager_actions.cpp:175
 msgid "Edit drawing sheet borders and title block"
