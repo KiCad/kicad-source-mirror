@@ -10,13 +10,14 @@
 # EdizonTN <EdizonTN@users.noreply.hosted.weblate.org>, 2025.
 # EdizonTN <edizontn@gmail.com>, 2026.
 # Integration <bot-kicad-integration@bots.noreply.weblate.org>, 2026.
+# EdizonTN <edizontn@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-08 10:24+0000\n"
-"Last-Translator: EdizonTN <edizontn@gmail.com>\n"
+"PO-Revision-Date: 2026-10-12 19:20+0000\n"
+"Last-Translator: EdizonTN <edizontn@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
 "source/sk/>\n"
 "Language: sk\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -16790,7 +16791,7 @@ msgstr "Uložiť zmeny?"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:31
 msgid "Pin numbers:"
-msgstr "Číslo vývodu:"
+msgstr "Čísla vývodov:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:35
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:46
@@ -35359,7 +35360,7 @@ msgstr "Farebná téma k použitiu (ako predvolená pre nastavenia editora DPS)"
 #: kicad/cli/command_sch_export_plot.cpp:111
 #, c-format
 msgid "Resolution in dots per inch (default %d)"
-msgstr "Rozlíšenie v DPI (predvolené: %d)"
+msgstr "Rozlíšenie v DPI (predvolené %d)"
 
 #: kicad/cli/command_pcb_export_png.cpp:109
 msgid ""
@@ -50858,6 +50859,8 @@ msgid ""
 "Choose sections to include. Intentional shorts are written when the board "
 "has net ties."
 msgstr ""
+"Vybrať sekcie, ktoré sa majú zahrnúť. Úmyselné skraty sa zapíšu, ak doska "
+"obsahuje prepojky spojov (Net Ties)."
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:101
 #: pcbnew/dialogs/panel_fab_export_content.cpp:397
@@ -50866,7 +50869,7 @@ msgstr "Metadáta dosky"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:109
 msgid "intentional shorts"
-msgstr ""
+msgstr "Úmyselné skraty"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:196
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:34
@@ -50975,7 +50978,7 @@ msgstr "Jeden balíček pre každý variant"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:81
 msgid "One package, all variants inside"
-msgstr ""
+msgstr "Jedno puzdro, všetky varianty vnútri"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:83
 msgid "Variant output"
@@ -50983,7 +50986,7 @@ msgstr "Výstup variantu"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:87
 msgid "${VARIANT} is replaced per package"
-msgstr ""
+msgstr "${VARIANT} je nahradený pre každé puzdro"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:91
 msgid "Includes:"
@@ -60801,7 +60804,7 @@ msgstr "CADSTAR definícia plôšky '%s' vrátila chyby importu: %s"
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1354
 #, c-format
 msgid "Unable to find pad index '%ld' in footprint '%s'."
-msgstr "V puzdre '%s' sa nepodarilo nájsť index plôšky '%ld'."
+msgstr "Nepodarilo sa nájsť index plôšky '%ld' v puzdre '%s'."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1386
 #, c-format
@@ -61635,7 +61638,9 @@ msgstr ""
 msgid ""
 "Cannot write IPC-2581 archive '%s'.\n"
 "%s"
-msgstr "Nie je možné zapísať IPC-2581 archív '%s'"
+msgstr ""
+"Nie je možné zapísať IPC-2581 archív '%s'.\n"
+"%s"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:169
 #, c-format
@@ -62152,14 +62157,18 @@ msgstr "Nepodarilo sa vygenerovať metadáta ODB++."
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:595
 msgid "ODB++ layer name override is empty or collides; using automatic name."
 msgstr ""
+"Prepísanie názvu vrstvy ODB++ je prázdne alebo v konflikte; používa sa "
+"automatický názov."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:619
 msgid "Invalid ODB++ layer type override; using automatic type."
-msgstr ""
+msgstr "Neplatné prepísanie typu vrstvy ODB++; používa sa automatický typ."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:676
 msgid "ODB++ partial drill layer omitted because a span layer is excluded."
 msgstr ""
+"Čiastočná vŕtacia vrstva ODB++ bola vynechaná, pretože je bola vynechaná "
+"priľahlá vrstva."
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1357
 msgid "Failed to generate ODB++ stackup."
@@ -62168,6 +62177,7 @@ msgstr "Nepodarilo sa vygenerovať skladbu vrstiev dosky ODB++."
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1430
 msgid "Board outline is not closed; ODB++ rout layer has no board contour."
 msgstr ""
+"Obrys dosky nie je uzavretý; frézovacia vrstva ODB++ nemá kontúru dosky."
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:148
 msgid "Output path is not a directory"
@@ -62214,7 +62224,9 @@ msgstr "Výstupný súbor '%s' už existuje. Chcete ho prepísať?"
 msgid ""
 "Cannot use ODB++ directory '%s'.\n"
 "%s"
-msgstr "Nie je možné použiť ODB++ adresár '%s'."
+msgstr ""
+"Nie je možné použiť ODB++ adresár '%s'.\n"
+"%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:449
 #, c-format
@@ -62240,7 +62252,7 @@ msgstr ""
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:522
 #, c-format
 msgid "Exception in ODB++ generation: %s"
-msgstr ""
+msgstr "Chyba pri generovaní ODB++: %s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:532
 msgid "Compressing output"
@@ -62251,7 +62263,9 @@ msgstr "Komprimovanie výstupu"
 msgid ""
 "Cannot write ODB++ archive '%s'.\n"
 "%s"
-msgstr "Nepodarilo sa zapísať ODB++ archív '%s'."
+msgstr ""
+"Nepodarilo sa zapísať ODB++ archív '%s'.\n"
+"%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:559
 #, c-format
@@ -62273,11 +62287,13 @@ msgstr "Neznámy kľúč sekcie ODB++."
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:622
 #, c-format
 msgid "ODB++ variant names adjusted after conversion:%s"
-msgstr ""
+msgstr "Názvy variantov ODB++ boli po prevode upravené:%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:627
 msgid "ODB++ variant list exceeds 1000 characters; list attributes omitted."
 msgstr ""
+"Zoznam variantov ODB++ presahuje 1000 znakov; atribúty zoznamu boli "
+"vynechané."
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:638
 #, c-format
@@ -62286,7 +62302,7 @@ msgstr "Neznámy variant dosky '%s'."
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:691
 msgid "ODB++ variant output names collide after conversion."
-msgstr ""
+msgstr "Výstupné názvy variantov ODB++ sú po prevode v konflikte."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:166
 msgid "Creating ODB++ Structure"
@@ -62299,29 +62315,31 @@ msgstr "Exportovanie DPS do ODB++"
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:260
 msgid "ODB++ package section added because components reference packages."
 msgstr ""
+"Sekcia puzdier ODB++ bola pridaná, pretože komponenty odkazujú na puzdrá."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:268
 msgid "Ignoring invalid ODB++ layer override."
-msgstr ""
+msgstr "Ignoruje sa neplatné prepísanie vrstvy ODB++."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:287
 #, c-format
 msgid ""
 "ODB++ precision %d is below the minimum of %d for these units; using %d."
 msgstr ""
+"Presnosť ODB++ %d je nižšia ako minimum %d pre tieto jednotky; používa sa %d."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:293
 #, c-format
 msgid "ODB++ precision %d is above the maximum of %d; using %d."
-msgstr ""
+msgstr "Presnosť ODB++ %d je vyššia ako maximum %d; používa sa %d."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:304
 msgid "ODB++ fabrication data includes EDA nets for intentional shorts."
-msgstr ""
+msgstr "Výrobné dáta ODB++ obsahujú EDA spoje pre úmyselné skraty."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:313
 msgid "ODB++ export failed. See the messages above for the cause."
-msgstr ""
+msgstr "Export ODB++ zlyhal. Príčinu nájdete v správach vyššie."
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:72
 msgid "ODB++ Production File"
