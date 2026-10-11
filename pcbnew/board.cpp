@@ -1896,6 +1896,9 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
         }
     }
 
+    for( BOARD_ITEM* item : removed )
+        m_connectivity->Remove( item );
+
     ClearItemByIdCache();
 
     IncrementTimeStamp();
