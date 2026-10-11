@@ -323,8 +323,11 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    if( !m_embeddedFiles->CommitPendingChanges() )
+    if( !m_3dPanel->CommitPendingChanges()
+        || !m_embeddedFiles->CommitPendingChanges() )
+    {
         return false;
+    }
 
     if( !m_PanelGeneral->TransferDataToWindow() )
         return false;

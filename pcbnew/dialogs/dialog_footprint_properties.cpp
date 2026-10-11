@@ -514,6 +514,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
         return false;
 
     if( !m_itemsGrid->CommitPendingChanges()
+        || !m_3dPanel->CommitPendingChanges()
         || !m_embeddedFiles->CommitPendingChanges() )
     {
         return false;
