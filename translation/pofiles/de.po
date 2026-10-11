@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 08:34+0000\n"
+"PO-Revision-Date: 2026-10-11 12:50+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -40478,7 +40478,7 @@ msgstr "Namen"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:3826
 #: pcbnew/widgets/search_handlers.cpp:914
 msgid "Round"
-msgstr "Rundung"
+msgstr "Rund"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:251
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:256
@@ -40573,12 +40573,12 @@ msgstr "%s Zusammenfassung"
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:459
 #, c-format
 msgid "Maximum lead diameter + %smm"
-msgstr "Maximaler Drahtdurchmesser + %smm"
+msgstr "Max. Drahtdurchmesser + %smm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:463
 #, c-format
 msgid "Minimum lead diameter + %smm"
-msgstr "Minimaler Drahtdurchmesser + %smm"
+msgstr "Min. Drahtdurchmesser + %smm"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:485
 msgid "Side length:"
