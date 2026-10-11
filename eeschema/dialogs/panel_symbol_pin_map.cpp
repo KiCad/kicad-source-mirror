@@ -515,16 +515,17 @@ void PANEL_SYMBOL_PIN_MAP::applyColumnFootprint( int aCol, const wxString& aFoot
     if( mapName.IsEmpty() )
         return;
 
-    auto currentFootprint = [&]() -> wxString
-    {
-        for( const ASSOCIATED_FOOTPRINT& a : m_associations )
-        {
-            if( a.m_MapName == mapName )
-                return a.m_FootprintLibId.GetUniStringLibId();
-        }
+    auto currentFootprint =
+            [&]() -> wxString
+            {
+                for( const ASSOCIATED_FOOTPRINT& a : m_associations )
+                {
+                    if( a.m_MapName == mapName )
+                        return a.m_FootprintLibId.GetUniStringLibId();
+                }
 
-        return wxEmptyString;
-    };
+                return wxEmptyString;
+            };
 
     wxString fpid = aFootprintId;
     fpid.Trim().Trim( false );
@@ -532,7 +533,7 @@ void PANEL_SYMBOL_PIN_MAP::applyColumnFootprint( int aCol, const wxString& aFoot
     LIB_ID fpId;
     fpId.Parse( fpid );
 
-    if( !fpId.IsValid() )
+    if( !fpId.empty() && !fpId.IsValid() )
     {
         wxMessageBox( _( "Invalid footprint identifier." ), _( "Assign Footprint" ), wxOK | wxICON_ERROR, this );
         m_grid->SetCellValue( 0, aCol, currentFootprint() );
