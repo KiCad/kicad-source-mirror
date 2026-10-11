@@ -100,6 +100,7 @@ void FOOTPRINT_LIBRARY_ADAPTER::enumerateLibrary( LIB_DATA* aLib, const wxString
             FOOTPRINT* footprint = static_cast<FOOTPRINT*>( cached->Clone() );
             footprint->SetParent( nullptr );
             footprint->SetParentGroup( nullptr );
+            footprint->ClearAllNets();
 
             // For non-caching plugins, delete the allocated footprint now that we've cloned it
             if( !pluginCaches )
@@ -364,6 +365,9 @@ FOOTPRINT* FOOTPRINT_LIBRARY_ADAPTER::LoadFootprint( const wxString& aNickname, 
                 LIB_ID id = footprint->GetFPID();
                 id.SetLibNickname( ( *lib )->row->Nickname() );
                 footprint->SetFPID( id );
+                footprint->SetParent( nullptr );
+                footprint->SetParentGroup( nullptr );
+                footprint->ClearAllNets();
                 return footprint.release();
             }
         }
@@ -468,6 +472,7 @@ FOOTPRINT_LIBRARY_ADAPTER::SAVE_T FOOTPRINT_LIBRARY_ADAPTER::SaveFootprint( cons
                 FOOTPRINT* clone = static_cast<FOOTPRINT*>( aFootprint->Clone() );
                 clone->SetParent( nullptr );
                 clone->SetParentGroup( nullptr );
+                clone->ClearAllNets();
 
                 LIB_ID id = clone->GetFPID();
                 id.SetLibNickname( aNickname );

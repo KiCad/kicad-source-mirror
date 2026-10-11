@@ -40,6 +40,8 @@
 #include <footprint_library_adapter.h>
 #include <libraries/library_manager.h>
 #include <libraries/library_table.h>
+#include <netinfo.h>
+#include <pad.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 
 
@@ -172,6 +174,52 @@ BOOST_AUTO_TEST_CASE( SaveFootprintReadOnlyFilePropagatesError )
                                   std::filesystem::perm_options::remove );
 
     BOOST_CHECK_THROW( adapter.SaveFootprint( nickname, fp ), IO_ERROR );
+}
+
+
+/**
+ * A footprint cached after a library save must not retain net pointers owned by its source
+ * board.  The footprint chooser later clones this cache entry and adds it to a preview board;
+ * if the source board has been destroyed, connectivity dereferences a dangling NETINFO_ITEM.
+ */
+BOOST_AUTO_TEST_CASE( SavedFootprintCacheDoesNotRetainBoardNets )
+{
+    KI_TEST::SCOPED_TEMP_DIR    tmpLib( "kicad_qa_adapter_cached_nets" );
+    const std::filesystem::path libPath = tmpLib.CreateChildDir( "kicad_qa_adapter_cached_nets.pretty" );
+
+    LIBRARY_MANAGER                manager;
+    TEST_FOOTPRINT_LIBRARY_ADAPTER adapter( manager );
+
+    const wxString nickname = wxS( "CachedNets" );
+    adapter.SeedLoadedLibrary( nickname, libPath.string() );
+    adapter.RefreshLibraryIfChanged( nickname );
+
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
+    NETINFO_ITEM*          net = new NETINFO_ITEM( board.get(), wxS( "SourceBoardNet" ), 1 );
+    board->Add( net );
+
+    FOOTPRINT* footprint = new FOOTPRINT( board.get() );
+    board->Add( footprint );
+    footprint->SetFPID( LIB_ID( nickname, wxS( "cached_nets" ) ) );
+
+    PAD* pad = new PAD( footprint );
+    pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+    pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 1 ) ) );
+    pad->SetLayerSet( LSET( { F_Cu } ) );
+    pad->SetNet( net );
+    footprint->Add( pad );
+
+    BOOST_REQUIRE( adapter.SaveFootprint( nickname, footprint ) == FOOTPRINT_LIBRARY_ADAPTER::SAVE_OK );
+
+    // The cache entry now outlives the board and every NETINFO_ITEM it owns, as it can when the
+    // user closes the source board before opening the footprint chooser.
+    board.reset();
+
+    std::unique_ptr<FOOTPRINT> loaded( adapter.LoadFootprint( nickname, wxS( "cached_nets" ), false ) );
+    BOOST_REQUIRE( loaded );
+    BOOST_REQUIRE_EQUAL( loaded->Pads().size(), 1u );
+    BOOST_CHECK_EQUAL( loaded->GetBoard(), nullptr );
+    BOOST_CHECK_EQUAL( loaded->Pads().front()->GetNet(), NETINFO_LIST::OrphanedItem() );
 }
 
 
