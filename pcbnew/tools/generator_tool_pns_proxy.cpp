@@ -113,9 +113,12 @@ public:
     }
 
     void UpdateItem( PNS::ITEM* aItem ) override
-    { //
-        modifyBoardItem( aItem );
+    {
+        wxCHECK_RET( m_generatorCommit, wxS( "Cannot update a generator route without a commit" ) );
+        modifyBoardItem( aItem, *m_generatorCommit );
     }
+
+    void SetGeneratorCommit( BOARD_COMMIT* aCommit ) { m_generatorCommit = aCommit; }
 
     void RemoveItem( PNS::ITEM* aItem ) override
     {
@@ -141,6 +144,7 @@ public:
     bool IsGeneratedItem( BOARD_ITEM* aItem ) const { return m_createdItems.contains( aItem ); }
 
 private:
+    BOARD_COMMIT*         m_generatorCommit = nullptr;
     std::set<BOARD_ITEM*> m_createdItems;
 
     std::vector<GENERATOR_PNS_CHANGES> m_changes;
@@ -156,6 +160,12 @@ void GENERATOR_TOOL_PNS_PROXY::ClearRouterChanges()
 const std::vector<GENERATOR_PNS_CHANGES>& GENERATOR_TOOL_PNS_PROXY::GetRouterChanges()
 {
     return static_cast<PNS_KICAD_IFACE_GENERATOR*>( GetInterface() )->Changes();
+}
+
+
+void GENERATOR_TOOL_PNS_PROXY::SetRouterCommit( BOARD_COMMIT* aCommit )
+{
+    static_cast<PNS_KICAD_IFACE_GENERATOR*>( GetInterface() )->SetGeneratorCommit( aCommit );
 }
 
 

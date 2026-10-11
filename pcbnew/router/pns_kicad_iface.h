@@ -187,7 +187,7 @@ public:
 
 protected:
     BOARD_CONNECTED_ITEM* createBoardItem( PNS::ITEM* aItem );
-    void                  modifyBoardItem( PNS::ITEM* aItem );
+    void                  modifyBoardItem( PNS::ITEM* aItem, BOARD_COMMIT& aCommit );
 
     struct OFFSET
     {

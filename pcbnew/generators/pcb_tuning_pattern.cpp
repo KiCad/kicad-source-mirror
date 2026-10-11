@@ -705,6 +705,8 @@ void PCB_TUNING_PATTERN::ApplyToolSettings( const PNS::MEANDER_SETTINGS& aToolSe
 
 void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
+    aTool->SetRouterCommit( aCommit );
+
     if( aCommit )
     {
         if( IsNew() )
@@ -1029,6 +1031,8 @@ bool PCB_TUNING_PATTERN::removeToBaseline( PNS::ROUTER* aRouter, int aPNSLayer, 
 
 void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
+    aTool->SetRouterCommit( aCommit );
+
     UNLOCKER raiiUnlocker( this );
     SetFlags( IN_EDIT );
 
@@ -1077,6 +1081,8 @@ void PCB_TUNING_PATTERN::Remove( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
         for( BOARD_ITEM* item : routerAddedItems )
             aCommit->Add( item );
     }
+
+    aTool->SetRouterCommit( nullptr );
 }
 
 
@@ -1430,7 +1436,10 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
 void PCB_TUNING_PATTERN::EditFinish( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit  )
 {
     if( !( GetFlags() & IN_EDIT ) )
+    {
+        aTool->SetRouterCommit( nullptr );
         return;
+    }
     ClearFlags( IN_EDIT ); // Clear the editing flag
 
     KIGFX::VIEW*      view = aTool->GetManager()->GetView();
@@ -1518,13 +1527,18 @@ void PCB_TUNING_PATTERN::EditFinish( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD
                 AddItem( item );
         }
     }
+
+    aTool->SetRouterCommit( nullptr );
 }
 
 
 void PCB_TUNING_PATTERN::EditCancel( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
     if( !( GetFlags() & IN_EDIT ) )
+    {
+        aTool->SetRouterCommit( nullptr );
         return;
+    }
 
     ClearFlags( IN_EDIT );
 
@@ -1542,6 +1556,7 @@ void PCB_TUNING_PATTERN::EditCancel( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD
     }
 
     aTool->Router()->StopRouting();
+    aTool->SetRouterCommit( nullptr );
 }
 
 

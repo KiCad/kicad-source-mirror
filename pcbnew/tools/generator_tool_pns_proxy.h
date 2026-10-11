@@ -24,6 +24,7 @@
 #include <router/pns_tool_base.h>
 
 class BOARD_ITEM;
+class BOARD_COMMIT;
 
 
 struct GENERATOR_PNS_CHANGES
@@ -47,6 +48,9 @@ public:
 
     void                                      ClearRouterChanges();
     const std::vector<GENERATOR_PNS_CHANGES>& GetRouterChanges();
+
+    /// Use the generator's commit for changes made to existing board items by PNS.
+    void SetRouterCommit( BOARD_COMMIT* aCommit );
 
     /// Returns true if the given board item was created by the router interface during the
     /// current generator edit session
