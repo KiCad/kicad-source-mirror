@@ -2389,7 +2389,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
     const VERTEX* prev = aCadstarVertices.empty() ? nullptr : &aCadstarVertices.at( 0 );
     const VERTEX* cur;
 
-    wxASSERT_MSG( prev->Type == VERTEX_TYPE::VT_POINT, "First vertex should always be a point vertex" );
+    wxASSERT_MSG( prev && prev->Type == VERTEX_TYPE::VT_POINT, "First vertex should always be a point vertex" );
 
     auto pointTransform =
             [&]( const VECTOR2I& aV )
