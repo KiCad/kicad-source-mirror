@@ -518,6 +518,7 @@ DIALOG_KICAD_DIFF::SHEET_SWITCHER makeSchSwitcher( SCHEMATIC* aRef, SCHEMATIC* a
                 refScreen = sp->LastScreen();
         }
 
+        aCanvas.SetContextItems( {} );
         holder->clear();
 
         if( refScreen )
@@ -835,6 +836,9 @@ int SCH_INSPECTION_TOOL::showSchematicComparison( const wxString& aOtherPath, co
     }
 
     dlgDiff.ShowModal();
+
+    if( WIDGET_DIFF_CANVAS* canvas = dlgDiff.DiffCanvas() )
+        canvas->SetContextItems( {} );
 
     // Detach schematics from the project before unloading so the project's
     // ERC and schematic settings release cleanly.
