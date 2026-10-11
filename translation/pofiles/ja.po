@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 13:04+0000\n"
+"PO-Revision-Date: 2026-10-11 15:39+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -39940,7 +39940,7 @@ msgstr "推奨パッドサイズ :"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:288
 msgid "IPC-2222B Summary"
-msgstr ""
+msgstr "IPC-2222Bの概要"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:314
 msgid "Min. hole diameter"
@@ -40966,14 +40966,12 @@ msgid "Resistor Calculator"
 msgstr "抵抗計算機"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:171
-#, fuzzy
 msgid "Footprint design"
-msgstr "フットプリント 寸法"
+msgstr "フットプリント デザイン"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:173
-#, fuzzy
 msgid "Through-hole Size"
-msgstr "スルーホール"
+msgstr "スルーホール サイズ"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:175
 msgid "Power, current and isolation"
@@ -41575,14 +41573,12 @@ msgid "Fill Zone(s)"
 msgstr "ゾーンを塗りつぶし"
 
 #: pcbnew/api/api_handler_pcb.cpp:2176
-#, fuzzy
 msgid "API injected DRC marker"
-msgstr "次の DRC マーカーを検索"
+msgstr "APIにより挿入されたDRC マーカー"
 
 #: pcbnew/api/api_handler_pcb.cpp:3443
-#, fuzzy
 msgid "Placed footprint via API"
-msgstr "フットプリントを配置"
+msgstr "APIを経由してフットプリントを配置した"
 
 #: pcbnew/api/headless_pcb_context.cpp:204 pcbnew/netlist_reader/netlist.cpp:60
 #, c-format
@@ -42913,7 +42909,6 @@ msgid "Barcode Error"
 msgstr "バーコード エラー"
 
 #: pcbnew/dialogs/dialog_barcode_properties.cpp:251
-#, fuzzy
 msgid "Modify Barcode"
 msgstr "バーコードを変更"
 
@@ -43320,9 +43315,8 @@ msgstr "定義済みのサイズ"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:187 pcbnew/edit_track_width.cpp:120
 #: pcbnew/generators/pcb_via_stack.h:67
-#, fuzzy
 msgid "Microvia Stacks"
-msgstr "マイクロビア"
+msgstr "スタック型マイクロビア"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:195
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
@@ -44555,12 +44549,11 @@ msgstr "プロファイル:"
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:30
 #, fuzzy
 msgid "Freeze assignments"
-msgstr "ネットの割り当てをクリア"
+msgstr "割り当てを固定"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:65
-#, fuzzy
 msgid "Selected group"
-msgstr "選択対象のみ(&S)"
+msgstr "選択したグループ"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:73
 msgid "Mark:"
@@ -44573,9 +44566,8 @@ msgstr "パターン"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:77
 #: pcbnew/dialogs/panel_setup_drill_chart_base.cpp:47
-#, fuzzy
 msgid "Hole size text"
-msgstr "穴サイズ X:"
+msgstr "穴サイズのテキスト"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:83
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
@@ -44588,14 +44580,12 @@ msgid "Letter:"
 msgstr "中心:"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.cpp:110
-#, fuzzy
 msgid "Flash on Canvas"
-msgstr "キャンバス上で選択"
+msgstr "キャンバスのフラッシュ"
 
 #: pcbnew/dialogs/dialog_drill_groups_base.h:67
-#, fuzzy
 msgid "Drill Groups"
-msgstr "ドリル穴"
+msgstr "ドリル グループ"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -44949,9 +44939,8 @@ msgid "Files %s and %s already exist."
 msgstr "ファイル %s と %s はすでに存在します。"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:321
-#, fuzzy
 msgid "IDF Export"
-msgstr "3D エクスポート"
+msgstr "IDF エクスポート"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:21
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:22
@@ -44971,9 +44960,8 @@ msgid "Output units:"
 msgstr "出力単位:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:59
-#, fuzzy
 msgid "Coordinate Origin"
-msgstr "座標原点オプション"
+msgstr "座標原点"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:66
 #: pcbnew/dialogs/dialog_export_step_base.cpp:189
@@ -45015,9 +45003,8 @@ msgid "Y position:"
 msgstr "Y 位置:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:132
-#, fuzzy
 msgid "Component options"
-msgstr "コンポーネント:ピンがありません"
+msgstr "コンポーネント オプション"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:134
 #: pcbnew/dialogs/dialog_export_step_base.cpp:250
@@ -45043,9 +45030,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:149
-#, fuzzy
 msgid "Part number field:"
-msgstr "パッド番号:"
+msgstr "パーツ番号フィールド:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:151
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:158
