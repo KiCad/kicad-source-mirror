@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 07:12+0000\n"
+"PO-Revision-Date: 2026-10-11 08:33+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -4246,8 +4246,8 @@ msgid ""
 "%zu conflict(s) still need a resolution. Pick Ours, Theirs, or Ancestor for "
 "each one."
 msgstr ""
-"%zu Konflikt/-e muss/müssen zuvor gelöst werden. Für jeden Unser, Deren oder "
-"Vorfahre wählen."
+"%zu Konflikt/-e muss/müssen zuvor gelöst werden. Für jeden Unseres, Deren "
+"oder Vorfahre wählen."
 
 #: common/dialogs/dialog_kicad_merge_3way.cpp:220
 #: common/dialogs/dialog_kicad_merge_3way_base.h:65
@@ -4281,7 +4281,7 @@ msgstr "Seite wählen"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:60
 msgid "Ours"
-msgstr "Unser"
+msgstr "Unseres"
 
 #: common/dialogs/dialog_kicad_merge_3way_base.cpp:64
 msgid "Theirs"
@@ -7500,7 +7500,7 @@ msgstr "Aktuelle Lösung: "
 
 #: common/diff_merge/auto_resolution.cpp:256
 msgid "Take ours"
-msgstr "Nimm Unser"
+msgstr "Nimm Unseres"
 
 #: common/diff_merge/auto_resolution.cpp:257
 msgid "Take theirs"
@@ -35187,25 +35187,23 @@ msgstr ""
 "Schaltplan erkannt"
 
 #: kicad/cli/command_import.cpp:59
-#, fuzzy
 msgid ""
 "Output project path stem; produces <stem>.kicad_pro plus imported board and/"
 "or schematic files beside it. Defaults to the first input's name in the "
 "current directory."
 msgstr ""
 "Ausgabe des Projektpfadstammes; erzeugt <Stamm>.kicad_pro und zusätzlich die "
-"importierten <Stamm>.kicad_pcb und/oder <Stamm>.kicad_sch. Standardmäßig "
-"wird der Name der ersten Eingabe im aktuellen Verzeichnis verwendet."
+"importierte Platine- und/oder Schaltplandatei. Standardmäßig wird der Name "
+"der ersten Eingabe im aktuellen Verzeichnis verwendet."
 
 #: kicad/cli/command_import.cpp:66
-#, fuzzy
 msgid ""
 "JSON file mapping source layer names to KiCad layer names for imported "
 "boards; unmapped layers use the automatic best-guess"
 msgstr ""
-"JSON-Datei, die die Quelllagennamen zu KiCad-Lagennamen für importierte "
-"Platinen zuordnet; für nicht zugeordnete Lagen wird die automatische "
-"bestmögliche Schätzung verwendet"
+"JSON-Datei, die die Lagennamen importierter Platinen den KiCad-Lagennamen "
+"zuordnet; für nicht zugeordnete Lagen wird die automatische bestmögliche "
+"Schätzung verwendet"
 
 #: kicad/cli/command_import.cpp:79
 msgid "At least one input file is required\n"
@@ -35222,12 +35220,12 @@ msgid "Could not create project: %s\n"
 msgstr "Konnte Projekt nicht erstellen: %s\n"
 
 #: kicad/cli/command_import.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not import '%s': a board and a schematic have already been imported "
 "for this project\n"
 msgstr ""
-"\"%s\" konnte nicht importiert werden: Für dieses Projekt wurde bereits eine "
+"Konnte \"%s\" nicht importieren: Für dieses Projekt wurde bereits eine "
 "Platine und ein Schaltplan importiert\n"
 
 #: kicad/cli/command_import.cpp:262
@@ -41072,7 +41070,7 @@ msgid ""
 "Enable solder resist / LPI overlay correction.  Affects εeff, Z0, and "
 "dielectric loss for microstrip, coupled microstrip, CPW, and CBCPW."
 msgstr ""
-"Lötstopplack-/LPI-Korrektur aktivieren.  Beeinflusst εeff, Z0 und den "
+"Lötstopplack-/LPI-Korrektur aktivieren.  Beeinflusst εeff, Z0 und "
 "dielektrische Verluste bei Microstrips, gekoppelten Microstrips, CPW und "
 "CBCPW."
 
@@ -41093,9 +41091,8 @@ msgstr ""
 "LPI.  3,3–3,8 für typische Harze."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:77
-#, fuzzy
 msgid "Mask loss tangent.  Default 0.025 for LPI."
-msgstr "Verlustwinkel der Maske.  Standard 0,025 für LPI."
+msgstr "Verlustwinkel des Lötstopplacks.  Standard: 0,025 für LPI."
 
 #: pcb_calculator/calculator_panels/panel_transline.cpp:81
 msgid ""
@@ -45734,9 +45731,8 @@ msgid "Distributor:"
 msgstr "Händler:"
 
 #: pcbnew/dialogs/dialog_export_2581_bom_base.h:60
-#, fuzzy
 msgid "BOM Fields"
-msgstr "Felder"
+msgstr "BOM-Felder"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:303
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:197
@@ -45814,9 +45810,8 @@ msgid "Y position:"
 msgstr "Y Position:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:132
-#, fuzzy
 msgid "Component options"
-msgstr "Bauteil: kein Pin"
+msgstr "Bauteiloptionen"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:134
 #: pcbnew/dialogs/dialog_export_step_base.cpp:250
@@ -45903,12 +45898,11 @@ msgstr "Erzeugt %s"
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:31
 #, fuzzy
 msgid "Output archive or directory"
-msgstr "Ausgabedatei oder -verzeichnis"
+msgstr "Archiv oder Verzeichnis ausgeben"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:85
-#, fuzzy
 msgid "8.1"
-msgstr ".1"
+msgstr "8.1"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:91
 #, fuzzy
@@ -45918,7 +45912,7 @@ msgstr "Zonen vor Plotten neu füllen"
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:93
 #, fuzzy
 msgid "Refill zones before generating ODB++"
-msgstr "Alle Zonen vor dem DRC neu füllen"
+msgstr "Alle Zonen vor der ODB++-Erstellung neu füllen"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:97
 msgid "Compression format:"
@@ -45937,9 +45931,8 @@ msgid "TGZ"
 msgstr "TGZ"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:109
-#, fuzzy
 msgid "Product name:"
-msgstr "Gruppenname:"
+msgstr "Produktname:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:114
 msgid "Product model name in ODB++"
@@ -45951,9 +45944,8 @@ msgid "Origin:"
 msgstr "Ursprung:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:122
-#, fuzzy
 msgid "Absolute coordinates"
-msgstr "Polarkoordinaten"
+msgstr "Absolute Koordinaten"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:171
 #: pcbnew/dialogs/dialog_map_layers.cpp:275
@@ -45961,9 +45953,8 @@ msgid "KiCad Layer"
 msgstr "KiCad-Lage"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:172
-#, fuzzy
 msgid "ODB++ Name"
-msgstr "BOM-Name"
+msgstr "ODB++-Name"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:174
 #, fuzzy
