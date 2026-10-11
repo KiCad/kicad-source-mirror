@@ -139,7 +139,7 @@ constexpr double ARC_HIGH_DEF_MM = 0.005;
 // Warning: too small values can create very long calculation time in zone filling
 // 0.05 to 0.005 mm are reasonable values
 
-// Allowed error to approximate an arg by segments, in Pcbnew IU
+// Allowed error to approximate an arc by segments, in Pcbnew IU
 constexpr int ARC_LOW_DEF = pcbIUScale.mmToIU( ARC_LOW_DEF_MM );
 constexpr int ARC_HIGH_DEF = pcbIUScale.mmToIU( ARC_HIGH_DEF_MM );
 

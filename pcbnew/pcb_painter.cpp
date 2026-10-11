@@ -2913,7 +2913,29 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             const EDA_ANGLE& start = aShape->GetEllipseStartAngle();
             const EDA_ANGLE& end = aShape->GetEllipseEndAngle();
 
-            if( outline_mode )
+            if( aShape->GetStartEnding().GetShortenDepth( thickness )
+                    || aShape->GetEndEnding().GetShortenDepth( thickness ) )
+            {
+                SHAPE_ELLIPSE         ellipse( center, majorR, minorR, rot, start, end );
+                SHAPE_LINE_CHAIN      chain = ellipse.ConvertToPolyline( std::max( 1, KiROUND( majorR / 500.0 ) ) );
+                std::vector<VECTOR2I> pts;
+
+                if( aShape->GetShortenedBodyPolyPoints( chain, 0, pts, thickness ) )
+                {
+                    chain.Clear();
+
+                    for( const VECTOR2I& pt : pts )
+                        chain.Append( pt );
+
+                    chain.SetClosed( false );
+
+                    if( outline_mode )
+                        m_gal->DrawSegmentChain( chain, thickness );
+                    else if( lineStyle == LINE_STYLE::SOLID )
+                        m_gal->DrawSegmentChain( chain, thickness );
+                }
+            }
+            else if( outline_mode )
             {
                 m_gal->DrawEllipseArc( center, majorR - thickness / 2, minorR - thickness / 2, rot, start, end );
                 m_gal->DrawEllipseArc( center, majorR + thickness / 2, minorR + thickness / 2, rot, start, end );
