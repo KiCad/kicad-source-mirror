@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 15:39+0000\n"
+"PO-Revision-Date: 2026-10-11 16:28+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -77,7 +77,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:382
 msgid "Create tracks and vias"
-msgstr "生成走線和貫孔"
+msgstr "產生走線和貫孔"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1280
 msgid "Create zones"
@@ -278,7 +278,7 @@ msgstr "移動電路板"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:133
 msgid "Reset to Default Settings"
-msgstr "重置為預設設定"
+msgstr "重設為預設設定"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:140
 #: bitmap2component/bitmap2cmp_frame.cpp:309 cvpcb/menubar.cpp:75
@@ -1612,7 +1612,7 @@ msgstr "停用電鍍貫孔"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:30
 msgid "Procedural textures (slow)"
-msgstr "使用程序式紋理 (慢)"
+msgstr "使用程式式紋理 (慢)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:34
 msgid "Add floor (slow)"
@@ -1625,7 +1625,7 @@ msgstr "使用反鋸齒 (慢)"
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:42
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
-msgstr "使用屏幕空間環境光遮蔽和全域光照反射 (慢)"
+msgstr "使用螢幕空間環境光遮蔽和全域光照反射 (慢)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:57
 msgid "Number of Samples"
@@ -2271,7 +2271,7 @@ msgstr "假"
 msgid ""
 "The value '%s' can't be converted to boolean correctly, it has been "
 "interpreted as 'False'"
-msgstr "值「%s」無法正確轉換為布林值，已將其解釋為「False」。"
+msgstr "值「%s」無法正確轉換為布林值，已將其解釋為「假」。"
 
 #: common/common.cpp:511 pcbnew/dialogs/dialog_board_reannotate.cpp:286
 msgid "unannotated footprint"
@@ -2997,7 +2997,7 @@ msgstr "預覽 (舊/新):"
 #: common/dialogs/dialog_color_picker_base.cpp:207
 #: pcbnew/dialogs/dialog_generated_table_properties_base.cpp:120
 msgid "Reset to Default"
-msgstr "重置為預設值"
+msgstr "重設為預設值"
 
 #: common/dialogs/dialog_configure_paths.cpp:255
 #: common/dialogs/dialog_configure_paths.cpp:322
@@ -3022,7 +3022,7 @@ msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
 msgstr ""
-"該路徑是在運行進程外部定義的，並且\n"
+"該路徑是在執行進程外部定義的，並且\n"
 "只會被暫時覆蓋。"
 
 #: common/dialogs/dialog_configure_paths.cpp:348
@@ -3236,9 +3236,8 @@ msgid "Clear the cell value"
 msgstr "清除儲存格數值"
 
 #: common/dialogs/dialog_fields_table.cpp:196
-#, fuzzy
 msgid "Copy from Variant"
-msgstr "複製變體"
+msgstr "從變體複製"
 
 #: common/dialogs/dialog_fields_table.cpp:328
 #: common/dialogs/eda_list_dialog.cpp:45 common/dialogs/eda_list_dialog.cpp:71
@@ -4106,7 +4105,7 @@ msgstr "較新"
 
 #: common/dialogs/dialog_kicad_diff.cpp:483 eeschema/tools/sch_actions.cpp:1647
 msgid "Navigate up one sheet in the hierarchy"
-msgstr "在層級中往上導航一個圖紙"
+msgstr "在層級中往上導航一個圖頁"
 
 #: common/dialogs/dialog_kicad_diff.cpp:591
 #: common/dialogs/dialog_kicad_diff_base.cpp:68
@@ -4300,7 +4299,7 @@ msgstr "自定義紙張寬度。"
 #: common/dialogs/dialog_page_settings_base.cpp:369
 #: common/dialogs/dialog_page_settings_base.cpp:381
 msgid "Export to other sheets"
-msgstr "匯出到其他圖紙"
+msgstr "匯出到其他圖頁"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:545
 #: eeschema/erc/erc_item.cpp:460 eeschema/sch_marker.cpp:397
@@ -4735,7 +4734,7 @@ msgstr "Y 標籤:"
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:83
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:100
 msgid "Reset"
-msgstr "重置"
+msgstr "重設"
 
 #: common/dialogs/dialog_unit_entry_base.h:48 kicad/local_history_pane.cpp:39
 msgid "Title"
@@ -5237,7 +5236,7 @@ msgstr "其它:"
 
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "User Interface"
-msgstr "使用者界面"
+msgstr "使用者介面"
 
 #: common/dialogs/panel_common_settings_base.cpp:170
 msgid "Show icons in menus"
@@ -5530,7 +5529,7 @@ msgstr "我同意提供匿名報告"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
 msgid "Reset Unique Id"
-msgstr "重置唯一標識"
+msgstr "重設唯一標識"
 
 #: common/dialogs/panel_design_block_lib_table.cpp:175
 msgid "Design Block Library Tables"
@@ -6228,7 +6227,7 @@ msgstr "縮放時居中游標"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:36
 msgid "Center the cursor on screen when zooming."
-msgstr "縮放時將游標移至屏幕中心。"
+msgstr "縮放時將游標移至螢幕中心。"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:43
 msgid "Automatically pan while moving object"
@@ -6443,7 +6442,7 @@ msgstr "在觸摸板上使用左/右滾動手勢時, 將畫布左/右平移"
 #: common/dialogs/panel_mouse_settings_base.cpp:346
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:135
 msgid "Reset to Mouse Defaults"
-msgstr "重置滑鼠滾輪動作為預設值"
+msgstr "重設滑鼠滾輪動作為預設值"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:349
 msgid "Reset to Configurable Touchpad Defaults"
@@ -6529,8 +6528,7 @@ msgstr "KiCad API"
 msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
-msgstr ""
-"啟用 KiCad API 後, 系統中運行的第三方軟體和外掛就可以通過 API 連接到 KiCad。"
+msgstr "啟用 KiCad API 後, 系統中執行的第三方軟體和外掛就可以通過 API 連接到 KiCad。"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:31
 #: common/dialogs/panel_startwizard_privacy_base.cpp:55 kicad/pcm/pcm.cpp:1403
@@ -6541,7 +6539,7 @@ msgstr "啟用 KiCad API"
 msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
-msgstr "啟用 KiCad API。 這將允許系統中運行的第三方軟體將能存取 KiCad。"
+msgstr "啟用 KiCad API。 這將允許系統中執行的第三方軟體將能存取 KiCad。"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:42
 msgid "Python Interpreter"
@@ -7702,7 +7700,7 @@ msgstr "原理圖編輯器"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:84
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:20
 msgid "Field Name Templates"
-msgstr "欄位名稱模板"
+msgstr "欄位名稱範本"
 
 #: common/eda_base_frame.cpp:1633
 msgid "Data Sources"
@@ -7952,7 +7950,7 @@ msgstr "參考圖像"
 #: common/eda_item.cpp:585 pcbnew/pcb_generator.cpp:180
 #: pcbnew/widgets/search_handlers.cpp:436
 msgid "Generator"
-msgstr "生成器"
+msgstr "產生器"
 
 #: common/eda_item.cpp:588 common/eda_item.cpp:621
 #: eeschema/diff_merge/sym_item_diff.cpp:44 eeschema/sch_textbox.cpp:628
@@ -8102,13 +8100,13 @@ msgstr "接腳"
 
 #: common/eda_item.cpp:631 eeschema/sch_sheet_pin.h:94
 msgid "Sheet Pin"
-msgstr "圖紙接腳"
+msgstr "圖頁接腳"
 
 #: common/eda_item.cpp:632 eeschema/dialogs/dialog_migrate_buses.cpp:118
 #: eeschema/dialogs/dialog_resolve_field_case_conflicts_base.cpp:41
 #: pcbnew/tools/pcb_actions.cpp:2909
 msgid "Sheet"
-msgstr "圖紙"
+msgstr "圖頁"
 
 #: common/eda_item.cpp:640
 msgid "SCH Screen"
@@ -8181,7 +8179,7 @@ msgstr "焊盤編號框"
 
 #: common/eda_shape.cpp:1494 pcbnew/pcb_shape.cpp:2119
 msgid "Thermal Spoke Template"
-msgstr "散熱引線模板"
+msgstr "散熱引線範本"
 
 #: common/eda_shape.cpp:1495 common/eda_shape.cpp:1514
 msgid "Unrecognized"
@@ -8712,7 +8710,7 @@ msgstr "包含隨 KiCad 安裝的專案型版的目錄。"
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
-msgstr "可選。如果你想建立自己的專案模板資料夾, 可以進行定義。"
+msgstr "可選。如果你想建立自己的專案範本資料夾, 可以進行定義。"
 
 #: common/env_vars.cpp:141
 msgid ""
@@ -8776,7 +8774,7 @@ msgid ""
 "To open it you will need to upgrade KiCad to version %s or later (file "
 "format dated %s or later)."
 msgstr ""
-"KiCad 無法打開此檔案, 該檔案由高於目前運行版本的軟體所建立。\n"
+"KiCad 無法打開此檔案, 該檔案由高於目前執行版本的軟體所建立。\n"
 "\n"
 "請將 KiCad 升級到 %s 或更高的版本以打開該檔案 (檔案格式版本為 %s 或更高)。"
 
@@ -8832,7 +8830,7 @@ msgstr "無法為檔案 '%s' 找到可用的 PDF 閱讀器。"
 #: common/gestfich.cpp:338
 #, c-format
 msgid "Problem while running the PDF viewer '%s'."
-msgstr "運行 PDF 閱讀器 '%s' 時出現問題。"
+msgstr "執行 PDF 閱讀器 '%s' 時出現問題。"
 
 #: common/gestfich.cpp:357 common/gestfich.cpp:432 eeschema/eeschema.cpp:873
 #: gerbview/gerbview.cpp:289 kicad/project_template.cpp:368
@@ -8895,26 +8893,24 @@ msgid "Cannot create temporary archive file"
 msgstr "無法建立暫存壓縮檔"
 
 #: common/gestfich.cpp:880
-#, fuzzy
 msgid "Write error"
-msgstr "輸出錯誤"
+msgstr "寫入錯誤"
 
 #: common/gestfich.cpp:884
-#, fuzzy
 msgid "Cannot flush or close temporary file"
-msgstr "無法重新命名臨時檔案 \"%s\" 到 \"%s\""
+msgstr "無法將暫存檔寫入磁碟或關閉"
 
 #: common/gestfich.cpp:893
-#, fuzzy
 msgid "Cannot replace archive"
-msgstr "無法讀取 ZIP 壓縮檔'%s'"
+msgstr "無法取代壓縮檔"
 
 #: common/gestfich.cpp:899
-#, fuzzy
 msgid ""
 "\n"
 "Cannot remove temporary archive file"
-msgstr "無法重新命名臨時檔案 \"%s\" 到 \"%s\""
+msgstr ""
+"\n"
+"無法移除暫存壓縮檔"
 
 #: common/git/kicad_git_common.cpp:991
 #, c-format
@@ -12601,7 +12597,7 @@ msgstr "設定網格原點"
 
 #: common/tool/actions.cpp:1087
 msgid "Reset Grid Origin"
-msgstr "重置網格原點"
+msgstr "重設網格原點"
 
 #: common/tool/actions.cpp:1097
 msgid "Show Grid"
@@ -12649,7 +12645,7 @@ msgstr "在極座標系和笛卡爾座標系之間切換"
 
 #: common/tool/actions.cpp:1187
 msgid "Reset Local Coordinates"
-msgstr "重置局部座標"
+msgstr "重設局部座標"
 
 #: common/tool/actions.cpp:1194
 msgid "Always Show Crosshairs"
@@ -12752,7 +12748,7 @@ msgstr "計算器工具"
 
 #: common/tool/actions.cpp:1328 kicad/tools/kicad_manager_actions.cpp:165
 msgid "Run component calculations, track width calculations, etc."
-msgstr "運行元件計算, 走線寬度計算等。"
+msgstr "執行元件計算, 走線寬度計算等。"
 
 #: common/tool/actions.cpp:1337
 msgid "Show/hide the properties manager"
@@ -13320,7 +13316,7 @@ msgstr "將繪製視圖居中到此位置"
 
 #: common/widgets/mathplot.cpp:1490
 msgid "Fit on Screen"
-msgstr "適應屏幕"
+msgstr "適應螢幕"
 
 #: common/widgets/mathplot.cpp:1490
 msgid "Set plot view to show all items"
@@ -13334,7 +13330,7 @@ msgstr "將繪製視圖設定為顯示所有項目"
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:546
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:365
 msgid "Reset to Defaults"
-msgstr "重置為預設值"
+msgstr "重設為預設值"
 
 #: common/widgets/paged_dialog.cpp:93
 msgid "Reveal Preferences in Finder"
@@ -13347,7 +13343,7 @@ msgstr "打開設定檔案目錄"
 #: common/widgets/paged_dialog.cpp:341
 #, c-format
 msgid "Reset %s to Defaults"
-msgstr "重置 %s 為預設值"
+msgstr "重設 %s 為預設值"
 
 #: common/widgets/panel_design_block_chooser.cpp:432
 #: cvpcb/cvpcb_mainframe.cpp:980
@@ -13462,7 +13458,7 @@ msgstr "清除已分配的替代快捷鍵"
 
 #: common/widgets/widget_hotkey_list.cpp:465
 msgid "Restore Defaults"
-msgstr "重置為預設值"
+msgstr "重設為預設值"
 
 #: common/widgets/widget_hotkey_list.cpp:523
 #, c-format
@@ -14166,7 +14162,7 @@ msgstr "封裝分配"
 
 #: cvpcb/tools/cvpcb_actions.cpp:139
 msgid "Delete All Footprint Assignments"
-msgstr "符號: 封裝分配"
+msgstr "刪除所有封裝指定"
 
 #: cvpcb/tools/cvpcb_actions.cpp:146
 msgid "Use symbol footprint filters"
@@ -14427,7 +14423,7 @@ msgstr "保留現有的註釋"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:96
 msgid "Reset existing annotations"
-msgstr "重置現有的註釋"
+msgstr "重設現有的註釋"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:99
 msgid "Regroup symbol units"
@@ -14467,7 +14463,7 @@ msgstr "註釋原理圖"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:86
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:114
 msgid "Generate"
-msgstr "生成"
+msgstr "產生"
 
 #: eeschema/dialogs/dialog_bom.cpp:163
 msgid "(file missing)"
@@ -14476,7 +14472,7 @@ msgstr "(檔案遺失)"
 #: eeschema/dialogs/dialog_bom.cpp:240
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "找不到所選的 BOM (物料清單) 生成器腳本: %s。"
+msgstr "找不到所選的 BOM (物料清單) 產生器腳本: %s。"
 
 #: eeschema/dialogs/dialog_bom.cpp:245
 #, c-format
@@ -14495,7 +14491,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom.cpp:292
 msgid "Generating BOM requires a fully annotated schematic."
-msgstr "請先將原理圖批註完整, 然後才能檢生成 BOM。"
+msgstr "請先將原理圖批註完整, 然後才能檢產生 BOM。"
 
 #: eeschema/dialogs/dialog_bom.cpp:297
 msgid "Failed to create file."
@@ -14541,11 +14537,11 @@ msgstr "在文字編輯器中編輯腳本檔案"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:84
 msgid "Remove the current generator script from list"
-msgstr "從列表中移除目前生成器腳本"
+msgstr "從列表中移除目前產生器腳本"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:94
 msgid "Command line running the generator:"
-msgstr "運行產生器的命令行:"
+msgstr "執行產生器的命令行:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:103
 msgid "Show console window"
@@ -14557,12 +14553,12 @@ msgid ""
 "redirected to the info display.\n"
 "Set this option to show the window of the running command."
 msgstr ""
-"預設情況下, 命令行以隱藏的控制檯視窗運行, 並將輸出重定向到資訊欄。\n"
-"設定此選項以顯示正在運行的命令的視窗。"
+"預設情況下, 命令行以隱藏的控制檯視窗執行, 並將輸出重定向到資訊欄。\n"
+"設定此選項以顯示正在執行的命令的視窗。"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 msgid "Reset the list of BOM generator scripts to the default settings"
-msgstr "將 BOM 生成器腳本列表重置為預設設定"
+msgstr "將 BOM 產生器腳本列表重設為預設設定"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
@@ -14749,7 +14745,7 @@ msgstr "如果在新符號中不存在, 則移除欄位"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Reset fields if empty in new symbol"
-msgstr "如果在新符號中為空, 則重置欄位"
+msgstr "如果在新符號中為空, 則重設欄位"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:67
 msgid "Update field text"
@@ -14783,7 +14779,7 @@ msgstr "重設替代接腳功能"
 #: eeschema/dialogs/dialog_change_symbols.cpp:74
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:190
 msgid "Reset custom power symbols"
-msgstr "重置自定義電源符號"
+msgstr "重設自定義電源符號"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:77
 msgid "Change selected symbol(s)"
@@ -14872,7 +14868,7 @@ msgstr "新符號的元件庫索引值:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:95
 msgid "Update/Reset Fields"
-msgstr "更新/重置欄位"
+msgstr "更新/重設欄位"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:109
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:41
@@ -14898,26 +14894,26 @@ msgstr "移除來源元件庫中不存在的符號欄位"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:131
 msgid "Reset fields if empty in library symbol"
-msgstr "如果在元件庫符號中為空, 則重置欄位"
+msgstr "如果在元件庫符號中為空, 則重設欄位"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:137
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:72
 msgid "Update/reset field text"
-msgstr "更新/重置欄位的文字內容"
+msgstr "更新/重設欄位的文字內容"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:140
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:76
 msgid "Update/reset field visibilities"
-msgstr "更新/重置欄位可見性設定"
+msgstr "更新/重設欄位可見性設定"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:143
 msgid "Update/reset field text sizes and styles"
-msgstr "更新/重置欄位文字大小和樣式"
+msgstr "更新/重設欄位文字大小和樣式"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:146
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:84
 msgid "Update/reset field positions"
-msgstr "更新/重置欄位位置"
+msgstr "更新/重設欄位位置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:149
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:127
@@ -14938,7 +14934,7 @@ msgstr "更新／重設接腳名稱／編號可見性"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:184
 msgid "Update/reset symbol attributes"
-msgstr "更新/重置符號特性"
+msgstr "更新/重設符號特性"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:187
 msgid "Update/reset pin map overrides"
@@ -15052,12 +15048,12 @@ msgstr "正在顯示 %s 與 %s 之間的手動鏈。使用重新整理可恢復�
 msgid ""
 "All %zu net chain paths between %s and %s are already committed as net "
 "chains."
-msgstr "%2$s 與 %3$s 之間全部 %1$zu 條網路鏈路徑皆已提交為網路鏈。"
+msgstr "全部 %zu 條網路鏈路徑（%s 與 %s 之間）皆已提交為網路鏈。"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:533
 #, c-format
 msgid "Showing %zu path(s) between %s and %s. Use Refresh to restore all."
-msgstr "正在顯示 %2$s 與 %3$s 之間的 %1$zu 條路徑。使用重新整理可恢復全部。"
+msgstr "正在顯示 %zu 條路徑（%s 與 %s 之間）。使用重新整理可恢復全部。"
 
 #: eeschema/dialogs/dialog_create_net_chain.cpp:751
 #: eeschema/dialogs/dialog_create_net_chain.cpp:768
@@ -15471,7 +15467,7 @@ msgstr "已建立報告檔案 '%s'。"
 #: eeschema/dialogs/dialog_erc_base.cpp:76
 #: pcbnew/dialogs/dialog_drc_base.cpp:90
 msgid "Tests Running..."
-msgstr "測試運行中..."
+msgstr "測試執行中..."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:84
 #: eeschema/dialogs/dialog_erc_base.cpp:132
@@ -15729,7 +15725,7 @@ msgstr "增加腳本式網路表匯出器"
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
 "> General > Formatting"
-msgstr "圖紙間參考可見性由 原理圖設定 > 通用 > 格式 進行全域控制"
+msgstr "圖頁間參考可見性由 原理圖設定 > 通用 > 格式 進行全域控制"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:85
 #: eeschema/dialogs/dialog_import_symbol_select_base.cpp:56
@@ -15740,7 +15736,7 @@ msgstr "單元:"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:97
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
-msgstr "圖紙檔案名只能在圖紙屬性對話框中修改。"
+msgstr "圖頁檔案名只能在圖頁屬性對話框中修改。"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:113
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:316
@@ -17643,21 +17639,21 @@ msgstr "PDF 選項"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:139
 msgid "Generate property popups"
-msgstr "生成屬性彈窗"
+msgstr "產生屬性彈窗"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:143
 msgid "Generate clickable links for hierarchical elements"
-msgstr "為階層元素生成可點擊的連結"
+msgstr "為階層元素產生可點擊的連結"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:147
 #: pcbnew/dialogs/dialog_plot_base.cpp:430
 msgid "Generate metadata from AUTHOR && SUBJECT variables"
-msgstr "從 AUTHOR && SUBJECT 變數生成元資料"
+msgstr "從 AUTHOR && SUBJECT 變數產生元資料"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:149
 #: pcbnew/dialogs/dialog_plot_base.cpp:431
 msgid "Generate PDF document properties from AUTHOR and SUBJECT text variables"
-msgstr "從 AUTHOR 和 SUBJECT 文字變數生成 PDF 檔案屬性"
+msgstr "從 AUTHOR 和 SUBJECT 文字變數產生 PDF 檔案屬性"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:156
 #: pcbnew/dialogs/dialog_plot_base.cpp:330
@@ -18094,7 +18090,7 @@ msgstr "註釋偏好設定"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Field name templates"
-msgstr "欄位名稱模板"
+msgstr "欄位名稱範本"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 msgid "BOM presets"
@@ -18623,7 +18619,7 @@ msgstr "雜訊源:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:459
 msgid "Save contributions from all noise generators"
-msgstr "儲存所有雜訊產生器的生成的內容"
+msgstr "儲存所有雜訊產生器的產生的內容"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:526
 msgid "Compute noise current correlation matrix"
@@ -19462,7 +19458,7 @@ msgstr "列線"
 #: eeschema/dialogs/dialog_table_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:102
 msgid "Column lines"
-msgstr "行線"
+msgstr "欄線"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:689
@@ -19529,7 +19525,7 @@ msgstr "文字框屬性"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:177 eeschema/schematic.cpp:1527
 msgid "<root sheet>"
-msgstr "<root sheet>"
+msgstr "<根圖頁>"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:181
 #, c-format
@@ -19589,7 +19585,7 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
-"通常情況下, 封裝通過其唯一 ID 鏈接到其符號。僅當您想要根據參考位置重置封裝鏈"
+"通常情況下, 封裝通過其唯一 ID 鏈接到其符號。僅當您想要根據參考位置重設封裝鏈"
 "接時, 才選擇此選項。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
@@ -19669,7 +19665,7 @@ msgstr "父項符號:"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:36
 msgid "Update/reset Fields"
-msgstr "更新/重置欄位"
+msgstr "更新/重設欄位"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:61
 msgid "Remove fields if not in parent symbol"
@@ -19677,11 +19673,11 @@ msgstr "如果在父項符號中不存在, 則移除欄位"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:66
 msgid "Reset fields if empty in parent symbol"
-msgstr "如果在父項符號中該欄位為空, 則重置欄位"
+msgstr "如果在父項符號中該欄位為空, 則重設欄位"
 
 #: eeschema/dialogs/dialog_update_symbol_fields_base.cpp:80
 msgid "Update/reset field sizes and styles"
-msgstr "更新/重置欄位大小和樣式"
+msgstr "更新/重設欄位大小和樣式"
 
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:232
 #: eeschema/sch_label.cpp:2616
@@ -19988,16 +19984,14 @@ msgid "Automatically annotate symbols"
 msgstr "自動批註符號"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:77
-#, fuzzy
 msgid "Automatically place sheet pins"
-msgstr "自動放置符號欄位 (&U)"
+msgstr "自動放置圖頁接腳"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:78
-#, fuzzy
 msgid ""
 "Place pins for hierarchical labels when placing sheets or design blocks as "
 "sheets."
-msgstr "層次標籤 %s 在父項內沒有匹配的圖頁接腳"
+msgstr "放置圖頁或將設計區塊作為圖頁放置時，為階層標籤放置接腳。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:82
 msgid "Allow unconstrained pin swaps"
@@ -20529,7 +20523,7 @@ msgstr "網路鏈名稱「%s」含有無效字元。"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:359
 #, c-format
 msgid "Duplicate net chain name '%s' on row %zu."
-msgstr "第 %2$zu 列的網路鏈名稱「%1$s」重複。"
+msgstr "第 %zu 行的網路鏈名稱「%s」重複。"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:375
 #, c-format
@@ -20545,7 +20539,7 @@ msgstr "網路鏈類別"
 #: eeschema/dialogs/panel_setup_net_chains.cpp:382
 #, c-format
 msgid "Duplicate class name '%s' on row %zu."
-msgstr "第 %2$zu 列的類別名稱「%1$s」重複。"
+msgstr "第 %zu 行的類別名稱「%s」重複。"
 
 #: eeschema/dialogs/panel_setup_net_chains.cpp:590
 #, c-format
@@ -20771,7 +20765,7 @@ msgstr "任意:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:138
 msgid "Reset to Trackpad Defaults"
-msgstr "重置觸控板滾動手勢為預設值"
+msgstr "重設觸控板滾動手勢為預設值"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
 msgid "Use schematic editor color theme"
@@ -20843,7 +20837,7 @@ msgstr "表（巢狀庫表）"
 msgid ""
 "This action will reset your global library table on disk and cannot be "
 "undone."
-msgstr "此操作將重置磁碟上的全域庫表並且無法撤銷。"
+msgstr "此操作將重設磁碟上的全域庫表並且無法撤銷。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:828
 #, c-format
@@ -20886,7 +20880,7 @@ msgstr "符號庫"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:58
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:58
 msgid "Reset Libraries"
-msgstr "重置庫"
+msgstr "重設庫"
 
 #: eeschema/dialogs/panel_symbol_pin_map.cpp:77
 msgid "Rename Map..."
@@ -20946,11 +20940,11 @@ msgstr "移除接腳對應"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:42
 msgid "Project Field Name Templates"
-msgstr "工程欄位名稱模板"
+msgstr "工程欄位名稱範本"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:48
 msgid "Global Field Name Templates"
-msgstr "全域欄位名稱模板"
+msgstr "全域欄位名稱範本"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:219
 #, c-format
@@ -21298,7 +21292,7 @@ msgstr "儲存合併後的專案檔失敗：%s\n"
 #: eeschema/eeschema_jobs_handler.cpp:2464 pcbnew/pcbnew_jobs_handler.cpp:4162
 #, c-format
 msgid "Merge completed with %zu unresolved conflict(s) in %s\n"
-msgstr "合併完成，%2$s 中仍有 %1$zu 個未解決衝突\n"
+msgstr "合併完成，%s 中仍有 %zu 個未解決衝突\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:2487 kicad/cli/command_mergetool.cpp:117
 #: pcbnew/pcbnew_jobs_handler.cpp:4487
@@ -21313,7 +21307,7 @@ msgstr "儲存合併後的符號庫失敗：%s\n"
 #: eeschema/eeschema_jobs_handler.cpp:2589
 #, c-format
 msgid "Symbol library merge completed with %zu unresolved conflict(s) in %s\n"
-msgstr "符號庫合併完成，%2$s 中仍有 %1$zu 個未解決衝突\n"
+msgstr "符號庫合併完成，%s 中仍有 %zu 個未解決衝突\n"
 
 #: eeschema/eeschema_settings.cpp:69 eeschema/tools/sch_actions.cpp:1279
 msgid "Net Navigator"
@@ -21746,7 +21740,7 @@ msgstr "不同的網路被分配到符號另一單元中的一個共用接腳"
 
 #: eeschema/erc/erc_item.cpp:147
 msgid "Conflict between bus alias definitions across schematic sheets"
-msgstr "原理圖圖紙中匯流排別名定義之間的衝突"
+msgstr "原理圖圖頁中匯流排別名定義之間的衝突"
 
 #: eeschema/erc/erc_item.cpp:151
 msgid "More than one name given to this bus or net"
@@ -21946,7 +21940,7 @@ msgstr "「%s」不是可識別的原理圖格式。"
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
-msgstr "無法載入整張原理圖。嘗試載入層次圖紙時出錯。"
+msgstr "無法載入整張原理圖。嘗試載入層次圖頁時出錯。"
 
 #: eeschema/files-io.cpp:403 eeschema/files-io.cpp:412
 #: eeschema/files-io.cpp:1633 eeschema/sheet.cpp:477
@@ -22735,12 +22729,12 @@ msgstr "完成。"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:221
 msgid "Error: duplicate sheet names. Continue?"
-msgstr "錯誤: 重複的圖紙名稱。要繼續嗎?"
+msgstr "錯誤: 重複的圖頁名稱。要繼續嗎?"
 
 #: eeschema/picksymbol.cpp:134
 #, c-format
 msgid "Symbol unit '%s' is already placed (on sheet '%s')"
-msgstr "符號單元 '%s' 已被放置（位於圖紙 '%s'）"
+msgstr "符號單元 '%s' 已被放置（位於圖頁 '%s'）"
 
 #: eeschema/picksymbol.cpp:137
 msgid "Unit Already Placed"
@@ -23189,7 +23183,7 @@ msgstr "不支援帶有含巢狀圖頁的設計區塊。"
 #: eeschema/sch_design_block_utils.cpp:358
 #: eeschema/sch_design_block_utils.cpp:586
 msgid "Error saving temporary schematic file to create design block."
-msgstr "在儲存臨時原理圖檔案以建立設計區塊時出錯。"
+msgstr "在儲存暫存原理圖檔案以建立設計區塊時出錯。"
 
 #: eeschema/sch_design_block_utils.cpp:156
 #: eeschema/sch_design_block_utils.cpp:458
@@ -23402,7 +23396,7 @@ msgstr "轉到第 %s 頁 (%s)"
 
 #: eeschema/sch_field.cpp:1107
 msgid "Back to Previous Selected Sheet"
-msgstr "回到先前選中的圖紙"
+msgstr "回到先前選中的圖頁"
 
 #: eeschema/sch_field.cpp:1873
 msgid "Show Field Name"
@@ -23458,7 +23452,7 @@ msgstr "解析 Altium 原理圖時發生錯誤：%s"
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
 "harness that got converted to a sheet."
-msgstr "圖紙 %s 的檔案名未定義, 這可能是轉換為圖紙的 Altium 信號線束。"
+msgstr "圖頁 %s 的檔案名未定義, 這可能是轉換為圖頁的 Altium 信號線束。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1601
 #, c-format
@@ -23495,7 +23489,7 @@ msgstr "'未知' 或 '意外'的記錄 ID %d在 %s 中被發現。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:2117
 #, c-format
 msgid "Symbol '%s' in sheet '%s' at index %d replaced with symbol \"%s\"."
-msgstr "圖頁「%2$s」中索引 %3$d 的符號「%1$s」已替換為符號「%4$s」。"
+msgstr "圖頁「%s」中索引 %d 的符號「%s」已替換為符號「%s」。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:2339
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4697
@@ -23676,7 +23670,7 @@ msgstr ""
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:606
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
-msgstr "CADSTAR 原理圖可能已損壞: 沒有根圖紙。"
+msgstr "CADSTAR 原理圖可能已損壞: 沒有根圖頁。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:680
 #, c-format
@@ -23755,7 +23749,7 @@ msgstr "由於原理圖沒有附加在專案中, 因此無法設定文字變數�
 msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
-msgstr "符號 '%s' 引用圖紙 ID '%s', 該符號在設計中不存在。未載入符號。"
+msgstr "符號 '%s' 引用圖頁 ID '%s', 該符號在設計中不存在。未載入符號。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2106
 #, c-format
@@ -23797,15 +23791,15 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"原理圖塊 ID %s (塊名稱: \"%s\") 繪製在圖紙\"%s\"上, 但未鏈接到專案中的另一張"
-"圖紙。KiCad 要求將所有圖紙符號都與圖紙相關聯, 因此未載入該圖塊。"
+"原理圖塊 ID %s (塊名稱: \"%s\") 繪製在圖頁\"%s\"上, 但未鏈接到專案中的另一張"
+"圖頁。KiCad 要求將所有圖頁符號都與圖頁相關聯, 因此未載入該圖塊。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2554
 #, c-format
 msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
-msgstr "CADSTAR 原理圖可能已損壞: 塊 %s 引用子圖紙, 但沒有定義圖。"
+msgstr "CADSTAR 原理圖可能已損壞: 塊 %s 引用子圖頁, 但沒有定義圖。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:208
 msgid ""
@@ -24165,7 +24159,7 @@ msgstr ""
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4083
 #, c-format
 msgid "Hierarchical source '%s' not found, creating empty sheet."
-msgstr "找不到層次來源「%s」，將建立空白圖紙。"
+msgstr "找不到層次來源「%s」，將建立空白圖頁。"
 
 #: eeschema/sch_io/geda/sch_io_geda.cpp:4093
 #, c-format
@@ -24331,7 +24325,7 @@ msgstr "庫 %s 不包含名為 %s 的符號"
 msgid ""
 "Could not load sheet '%s' because it already appears as a direct ancestor in "
 "the schematic hierarchy."
-msgstr "無法載入圖紙\"%s\", 因為它已在原理圖層次結構中顯示為直接原型。"
+msgstr "無法載入圖頁\"%s\", 因為它已在原理圖層次結構中顯示為直接原型。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:403
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:297
@@ -24548,7 +24542,7 @@ msgstr "無效的標題欄註釋號"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:2927
 msgid "Invalid sheet pin name"
-msgstr "無效的圖紙接腳名"
+msgstr "無效的圖頁接腳名"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3414
 msgid "Schematic polyline has too few points"
@@ -25063,11 +25057,11 @@ msgstr "三態"
 
 #: eeschema/sch_label.cpp:247
 msgid "Sheet References"
-msgstr "圖紙參考"
+msgstr "圖頁參考"
 
 #: eeschema/sch_label.cpp:1435
 msgid "Hierarchical Sheet Pin"
-msgstr "層次圖紙接腳"
+msgstr "層次圖頁接腳"
 
 #: eeschema/sch_label.cpp:1448 eeschema/sch_tablecell.cpp:416
 #: eeschema/sch_text.cpp:682 eeschema/sch_textbox.cpp:637
@@ -25260,7 +25254,7 @@ msgstr "接腳名稱"
 
 #: eeschema/sch_plotter.cpp:149
 msgid "No sheets to plot."
-msgstr "沒有要繪製的圖紙。"
+msgstr "沒有要繪製的圖頁。"
 
 #: eeschema/sch_plotter.cpp:258 pcbnew/pcbnew_jobs_handler.cpp:1868
 #, c-format
@@ -25429,7 +25423,7 @@ msgstr "填充模式"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:59
 #: pcbnew/zone.cpp:2323
 msgid "Sheet Name"
-msgstr "圖紙名稱"
+msgstr "圖頁名稱"
 
 #: eeschema/sch_sheet.cpp:1297
 msgid "Hierarchical Path"
@@ -26084,9 +26078,9 @@ msgstr ""
 "        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
 "samp></td>\n"
 "        <td></td>\n"
-"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
-"samp><br> <samp>CLK</samp></td>\n"
+"        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp>"
+"<br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>CLK</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td></td>\n"
@@ -26170,8 +26164,8 @@ msgstr ""
 "        <td>&nbsp;<br><samp>1</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(condition, true_val, false_val)}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>條件文字顯示</samp></td>\n"
 "    </tr>\n"
@@ -26182,8 +26176,8 @@ msgstr ""
 "        <td>&nbsp;<br><samp>TOP</samp>（頂層）或 <samp>BOTTOM</samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></"
-"td>\n"
+"        <td>&nbsp;<br><samp>@{if(${ROW} > 5, \"High\", \"Low\")}</samp></td>"
+"\n"
 "        <td></td>\n"
 "        <td>&nbsp;<br><samp>數值比較同樣適用</samp></td>\n"
 "    </tr>\n"
@@ -26243,8 +26237,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${U1:PIN_NAME(5)}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp>USART1_TX</samp>（替代）或 <samp>PA9</samp>（基"
-"本）</td>\n"
+"        <td>&nbsp;<br><samp>USART1_TX</samp>（替代）或 <samp>PA9</samp>（基本"
+"）</td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:PIN_BASE_NAME(pin)}</samp></td>\n"
@@ -26363,8 +26357,9 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>匯流排定義</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-"&nbsp;&nbsp;&nbsp;</th>\n"
+"        <th>"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</"
+"th>\n"
 "        <th>產生的網路</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -26415,9 +26410,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
-"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
-"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
+"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
+"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -26428,17 +26423,17 @@ msgstr ""
 "<i>請注意，標記語法的優先順序高於匯流排定義。</i>\n"
 "<p></p>\n"
 "<p><b>接腳函式：</b>自動找到正確的單元擺放位置。對於多單元符號，即使接腳位於"
-"目前圖紙上不同單元，<samp>NET_NAME(pin)</samp> 等函式仍可正常使用。</p>\n"
+"目前圖頁上不同單元，<samp>NET_NAME(pin)</samp> 等函式仍可正常使用。</p>\n"
 "<p><b>表格儲存格參照：</b><samp>CELL()</samp> 函式僅適用於表格儲存格。使用 "
 "<samp>${CELL(\"A0\")}</samp> 或 <samp>${CELL(row, col)}</samp> 參照同一表格中"
 "的其他儲存格。列與欄的編號從 0 開始（A0 為第一列第一欄）。CELL 回傳已求值的顯"
 "示值，而非原始儲存格文字。</p>\n"
-"<p><b>巢狀變數：</b>變數可包含其他變數，內層變數優先展開。最大巢狀深度為 6 "
-"層。</p>\n"
+"<p><b>巢狀變數：</b>變數可包含其他變數，內層變數優先展開。最大巢狀深度為 6 層"
+"。</p>\n"
 "<p><b>錯誤訊息：</b></p>\n"
 "<ul>\n"
 "<li><samp>&lt;UNRESOLVED: token&gt;</samp> - 無法解析變數或函式</li>\n"
-"<li><samp>&lt;Unit X not placed&gt;</samp> - 接腳所在的單元未擺放於任何圖紙</"
+"<li><samp>&lt;Unit X not placed&gt;</samp> - 接腳所在的單元未擺放於任何圖頁</"
 "li>\n"
 "<li><samp>&lt;Unresolved: Cell X not found&gt;</samp> - 儲存格位址超出表格範"
 "圍</li>\n"
@@ -26493,8 +26488,8 @@ msgid ""
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"該圖紙無法被變更, 因為目標圖紙已經將圖紙 \"%s\" 或其中一個子圖紙作為層次結構"
-"中某處的父級圖紙。"
+"該圖頁無法被變更, 因為目標圖頁已經將圖頁 \"%s\" 或其中一個子圖頁作為層次結構"
+"中某處的父級圖頁。"
 
 #: eeschema/sheet.cpp:103
 #, c-format
@@ -26562,7 +26557,7 @@ msgstr "未能儲存原理圖 '%s'"
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheet schematics."
-msgstr "無法載入全部原理圖。嘗試載入層次圖紙時出錯。"
+msgstr "無法載入全部原理圖。嘗試載入層次圖頁時出錯。"
 
 #: eeschema/sheet.cpp:465
 msgid "Schematic Load Error"
@@ -26591,7 +26586,7 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"在載入的原理圖檔案中存在來自舊檔案版本的層次圖紙, 導致符號實例資料遺失。這將"
+"在載入的原理圖檔案中存在來自舊檔案版本的層次圖頁, 導致符號實例資料遺失。這將"
 "導致載入的原理圖中的所有符號都使用預設的實例設定或退回到庫中的符號設定。載入"
 "使用該原理圖檔案的專案並儲存為最新的檔案版本將解決這個問題。\n"
 "\n"
@@ -26694,7 +26689,7 @@ msgstr "不再顯示此消息。"
 
 #: eeschema/sheet.cpp:1042
 msgid "Create New Sheet"
-msgstr "建立新圖紙"
+msgstr "建立新圖頁"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:67
 msgid "Dimension of matrices should be >= 1."
@@ -27305,7 +27300,7 @@ msgstr "波形少於兩點"
 
 #: eeschema/sim/kibis/kibis.cpp:902 eeschema/sim/kibis/kibis.cpp:981
 msgid "Cannot remove temporary output file"
-msgstr "無法移除臨時輸出檔案"
+msgstr "無法移除暫存輸出檔案"
 
 #: eeschema/sim/kibis/kibis.cpp:933
 msgid "Missing 'Values:' tag in temporary file"
@@ -27313,11 +27308,11 @@ msgstr "暫存檔缺少 'Values:' 標籤"
 
 #: eeschema/sim/kibis/kibis.cpp:961 eeschema/sim/kibis/kibis.cpp:969
 msgid "Error while reading temporary file"
-msgstr "讀取臨時檔案時出錯"
+msgstr "讀取暫存檔案時出錯"
 
 #: eeschema/sim/kibis/kibis.cpp:976
 msgid "Error while creating temporary output file"
-msgstr "建立臨時輸出檔案時出錯"
+msgstr "建立暫存輸出檔案時出錯"
 
 #: eeschema/sim/kibis/kibis.cpp:1013
 msgid ""
@@ -27353,7 +27348,7 @@ msgstr "Series 與 Series_switch 模型是被動元件，不是驅動器。"
 
 #: eeschema/sim/kibis/kibis.cpp:1497
 msgid "Invalid model type for a driver."
-msgstr "驅動程序的模型類型無效。"
+msgstr "驅動程式的模型類型無效。"
 
 #: eeschema/sim/kibis/kibis.cpp:1554
 msgid "Series model has no [Series Pin Mapping] partner pin."
@@ -27457,8 +27452,7 @@ msgstr "預期測量格式定義"
 msgid ""
 "Simulation crashed (%s). This is usually caused by a bug in ngspice or an "
 "invalid netlist. The simulator will be reset."
-msgstr ""
-"模擬崩潰（%s）。這通常是 ngspice 的錯誤或無效網路表所致。模擬器將重置。"
+msgstr "模擬崩潰（%s）。這通常是 ngspice 的錯誤或無效網路表所致。模擬器將重設。"
 
 #: eeschema/sim/ngspice.cpp:556
 msgid "Unable to load ngspice shared library. Please check your install."
@@ -27796,7 +27790,7 @@ msgstr "原理圖表模擬命令指令已更改。你要更新模擬命令嗎?"
 
 #: eeschema/sim/simulator_frame.cpp:542 eeschema/sim/simulator_frame.cpp:963
 msgid "Another simulation is already running."
-msgstr "另一個模擬已經在運行。"
+msgstr "另一個模擬已經在執行。"
 
 #: eeschema/sim/simulator_frame.cpp:617
 #, c-format
@@ -28648,7 +28642,7 @@ msgstr "刪除列出的所有符號"
 #: pcbnew/footprint_libraries_utils.cpp:1273
 #, c-format
 msgid "Revert '%s' to last version saved?"
-msgstr "是否放棄變更, 並將 '%s' 重置為上一儲存版本?"
+msgstr "是否放棄變更, 並將 '%s' 重設為上一儲存版本?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1543
 #, c-format
@@ -28853,7 +28847,7 @@ msgstr ""
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:45
 msgid "Synchronize sheet pins and hierarchical labels"
-msgstr "同步圖紙接腳和層次標籤"
+msgstr "同步圖頁接腳和層次標籤"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:24
 msgid "Symbol name"
@@ -28865,15 +28859,15 @@ msgstr "添加層次標籤"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:37
 msgid "Delete Sheet Pins"
-msgstr "刪除圖紙接腳"
+msgstr "刪除圖頁接腳"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:59
 msgid "Sheet name"
-msgstr "圖紙名稱"
+msgstr "圖頁名稱"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:69
 msgid "Add Sheet Pins"
-msgstr "添加圖紙接腳"
+msgstr "添加圖頁接腳"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:72
 msgid "Delete Hierarchical Labels"
@@ -28890,7 +28884,7 @@ msgstr "使用接腳名稱將選定的頁面接腳和階層標籤關聯起來"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
-msgstr "斷開圖紙接腳與層次標籤的關聯"
+msgstr "斷開圖頁接腳與層次標籤的關聯"
 
 #: eeschema/toolbars_sch_editor.cpp:51 pcbnew/toolbars_pcb_editor.cpp:132
 msgid "Current variant"
@@ -29095,8 +29089,8 @@ msgid ""
 "Would swap %s pins %s and %s to match PCB, but the symbol is used by "
 "multiple sheet instances (%s)."
 msgstr ""
-"本應將 %s 的接腳 %s 與 %s 互換以符合 PCB，但該符號已被多個圖紙實例使用"
-"（%s）。"
+"本應將 %s 的接腳 %s 與 %s 互換以符合 PCB，但該符號已被多個圖頁實例使用（%s）"
+"。"
 
 #: eeschema/tools/backannotate.cpp:1388
 #, c-format
@@ -29200,7 +29194,7 @@ msgstr "顯示匯流排語法說明"
 
 #: eeschema/tools/sch_actions.cpp:90
 msgid "Show simulation window for running SPICE or IBIS simulations."
-msgstr "顯示運行 SPICE 或 IBIS 模擬的模擬視窗。"
+msgstr "顯示執行 SPICE 或 IBIS 模擬的模擬視窗。"
 
 #: eeschema/tools/sch_actions.cpp:99 pcbnew/tools/pcb_actions.cpp:2790
 msgid "Create Corner"
@@ -29239,11 +29233,11 @@ msgstr "顯示／隱藏遠端符號面板"
 
 #: eeschema/tools/sch_actions.cpp:149
 msgid "Save Current Sheet as Design Block..."
-msgstr "將目前圖紙儲存為設計區塊..."
+msgstr "將目前圖頁儲存為設計區塊..."
 
 #: eeschema/tools/sch_actions.cpp:150
 msgid "Create a new design block from the current sheet"
-msgstr "從目前圖紙建立新的設計區塊"
+msgstr "從目前圖頁建立新的設計區塊"
 
 #: eeschema/tools/sch_actions.cpp:156 pcbnew/tools/pcb_actions.cpp:871
 msgid "Save Selection as Design Block..."
@@ -29643,11 +29637,11 @@ msgstr "放置階層標籤"
 
 #: eeschema/tools/sch_actions.cpp:633
 msgid "Draw Hierarchical Sheets"
-msgstr "繪製階層圖紙"
+msgstr "繪製階層圖頁"
 
 #: eeschema/tools/sch_actions.cpp:642
 msgid "Draw Sheet from File"
-msgstr "從檔案繪製圖紙"
+msgstr "從檔案繪製圖頁"
 
 #: eeschema/tools/sch_actions.cpp:643
 msgid "Copy sheet into project and draw on current sheet"
@@ -29671,7 +29665,7 @@ msgstr "從該圖頁上既有的階層標籤新增圖頁接腳"
 
 #: eeschema/tools/sch_actions.cpp:669
 msgid "Autoplace All Sheet Pins"
-msgstr "自動放置所有圖紙接腳"
+msgstr "自動放置所有圖頁接腳"
 
 #: eeschema/tools/sch_actions.cpp:670
 msgid "Imports and auto places all sheet pins"
@@ -29695,11 +29689,11 @@ msgstr "同步所有圖頁接腳與階層標籤"
 
 #: eeschema/tools/sch_actions.cpp:691
 msgid "Import Sheet..."
-msgstr "匯入圖紙..."
+msgstr "匯入圖頁..."
 
 #: eeschema/tools/sch_actions.cpp:692
 msgid "Import sheet into project"
-msgstr "匯入圖紙至專案"
+msgstr "匯入圖頁至專案"
 
 #: eeschema/tools/sch_actions.cpp:702
 msgid "Place Global Labels"
@@ -30018,11 +30012,11 @@ msgstr "將現有項目更改為文字框"
 
 #: eeschema/tools/sch_actions.cpp:1148 eeschema/tools/sch_edit_tool.cpp:3792
 msgid "Cleanup Sheet Pins"
-msgstr "清理圖紙接腳"
+msgstr "清理圖頁接腳"
 
 #: eeschema/tools/sch_actions.cpp:1149
 msgid "Delete unreferenced sheet pins"
-msgstr "刪除未引用的圖紙接腳"
+msgstr "刪除未引用的圖頁接腳"
 
 #: eeschema/tools/sch_actions.cpp:1154 pcbnew/tools/pcb_actions.cpp:1464
 msgid "Edit Text & Graphics Properties..."
@@ -30211,7 +30205,7 @@ msgstr "分配封裝..."
 
 #: eeschema/tools/sch_actions.cpp:1347
 msgid "Run footprint assignment tool"
-msgstr "運行封裝分配工具"
+msgstr "執行封裝分配工具"
 
 #: eeschema/tools/sch_actions.cpp:1353
 msgid "Import Footprint Assignments..."
@@ -30249,11 +30243,11 @@ msgstr "編輯原理圖設定, 包括批註樣式和電氣規則"
 
 #: eeschema/tools/sch_actions.cpp:1382
 msgid "Edit Sheet Page Number..."
-msgstr "編輯圖紙頁碼..."
+msgstr "編輯圖頁頁碼..."
 
 #: eeschema/tools/sch_actions.cpp:1383
 msgid "Edit the page number of the current or selected sheet"
-msgstr "編輯目前或選定圖紙的頁碼"
+msgstr "編輯目前或選定圖頁的頁碼"
 
 #: eeschema/tools/sch_actions.cpp:1388
 msgid "Rescue Symbols..."
@@ -30295,7 +30289,7 @@ msgstr "將繪圖匯出到剪貼簿"
 
 #: eeschema/tools/sch_actions.cpp:1417
 msgid "Export drawing of current sheet to clipboard"
-msgstr "將目前圖紙的繪圖匯出到剪貼簿"
+msgstr "將目前圖頁的繪圖匯出到剪貼簿"
 
 #: eeschema/tools/sch_actions.cpp:1425 pcbnew/tools/pcb_actions.cpp:745
 msgid "Import Graphics..."
@@ -30312,7 +30306,7 @@ msgstr "匯入非 KiCad 原理圖..."
 #: eeschema/tools/sch_actions.cpp:1434
 msgid ""
 "Replace current schematic sheet with one imported from another application"
-msgstr "將目前的原理圖圖紙取代為從另一個應用程序匯入的原理圖圖紙"
+msgstr "將目前的原理圖圖頁取代為從另一個應用程式匯入的原理圖圖頁"
 
 #: eeschema/tools/sch_actions.cpp:1440
 msgid "Switch to PCB Editor"
@@ -30332,30 +30326,30 @@ msgstr "匯出某種格式的網表的檔案"
 
 #: eeschema/tools/sch_actions.cpp:1454
 msgid "Generate Bill of Materials..."
-msgstr "生成物料清單..."
+msgstr "產生物料清單..."
 
 #: eeschema/tools/sch_actions.cpp:1455
 msgid "Generate a bill of materials for the current schematic"
-msgstr "生成目前原理圖的 BOM"
+msgstr "產生目前原理圖的 BOM"
 
 #: eeschema/tools/sch_actions.cpp:1461 pcbnew/tools/pcb_actions.cpp:1732
 msgid "Generate Legacy Bill of Materials..."
-msgstr "生成物料清單 (舊版)..."
+msgstr "產生物料清單 (舊版)..."
 
 #: eeschema/tools/sch_actions.cpp:1462
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
-msgstr "為目前原理圖生成物料清單 (舊版生成器)"
+msgstr "為目前原理圖產生物料清單 (舊版產生器)"
 
 #: eeschema/tools/sch_actions.cpp:1469
 msgid "Generate Bill of Materials (External)..."
-msgstr "生成物料清單 (外部)..."
+msgstr "產生物料清單 (外部)..."
 
 #: eeschema/tools/sch_actions.cpp:1470
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
-msgstr "為目前原理圖生成物料清單(外部生成器)"
+msgstr "為目前原理圖產生物料清單(外部產生器)"
 
 #: eeschema/tools/sch_actions.cpp:1476
 msgid "Export Symbols..."
@@ -30486,27 +30480,27 @@ msgstr "打開符號的下一個單元"
 
 #: eeschema/tools/sch_actions.cpp:1622
 msgid "Change Sheet"
-msgstr "修改圖紙"
+msgstr "修改圖頁"
 
 #: eeschema/tools/sch_actions.cpp:1623
 msgid "Change to provided sheet's contents in the schematic editor"
-msgstr "對原理圖編輯器中所提供圖紙的內容的更改"
+msgstr "對原理圖編輯器中所提供圖頁的內容的更改"
 
 #: eeschema/tools/sch_actions.cpp:1629
 msgid "Enter Sheet"
-msgstr "進入圖紙"
+msgstr "進入圖頁"
 
 #: eeschema/tools/sch_actions.cpp:1630
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "在原理圖編輯器中顯示所選圖紙的內容"
+msgstr "在原理圖編輯器中顯示所選圖頁的內容"
 
 #: eeschema/tools/sch_actions.cpp:1638
 msgid "Leave Sheet"
-msgstr "離開圖紙"
+msgstr "離開圖頁"
 
 #: eeschema/tools/sch_actions.cpp:1639
 msgid "Display the parent sheet in the schematic editor"
-msgstr "在原理圖編輯器中顯示父級圖紙"
+msgstr "在原理圖編輯器中顯示父級圖頁"
 
 #: eeschema/tools/sch_actions.cpp:1646
 msgid "Navigate Up"
@@ -30518,7 +30512,7 @@ msgstr "向後導航"
 
 #: eeschema/tools/sch_actions.cpp:1655
 msgid "Move backward in sheet navigation history"
-msgstr "後移圖紙導航歷史"
+msgstr "後移圖頁導航歷史"
 
 #: eeschema/tools/sch_actions.cpp:1662
 msgid "Navigate Forward"
@@ -30526,23 +30520,23 @@ msgstr "向前導航"
 
 #: eeschema/tools/sch_actions.cpp:1663
 msgid "Move forward in sheet navigation history"
-msgstr "前移圖紙導航歷史"
+msgstr "前移圖頁導航歷史"
 
 #: eeschema/tools/sch_actions.cpp:1670
 msgid "Previous Sheet"
-msgstr "上一圖紙"
+msgstr "上一圖頁"
 
 #: eeschema/tools/sch_actions.cpp:1671
 msgid "Move to previous sheet by number"
-msgstr "移動到先前編號的圖紙"
+msgstr "移動到先前編號的圖頁"
 
 #: eeschema/tools/sch_actions.cpp:1678
 msgid "Next Sheet"
-msgstr "下一圖紙"
+msgstr "下一圖頁"
 
 #: eeschema/tools/sch_actions.cpp:1679
 msgid "Move to next sheet by number"
-msgstr "移動到下一編號圖紙"
+msgstr "移動到下一編號圖頁"
 
 #: eeschema/tools/sch_actions.cpp:1686
 msgid "Hierarchy Navigator"
@@ -30550,7 +30544,7 @@ msgstr "階層導航"
 
 #: eeschema/tools/sch_actions.cpp:1687
 msgid "Show/hide the schematic sheet hierarchy navigator"
-msgstr "顯示/隱藏原理圖圖紙階層導航"
+msgstr "顯示/隱藏原理圖圖頁階層導航"
 
 #: eeschema/tools/sch_actions.cpp:1700
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:906
@@ -30666,11 +30660,11 @@ msgstr "將所選項目與游標下項目垂直居中對齊"
 
 #: eeschema/tools/sch_actions.cpp:1838
 msgid "Save Current Sheet Copy As..."
-msgstr "將目前圖紙另存為..."
+msgstr "將目前圖頁另存為..."
 
 #: eeschema/tools/sch_actions.cpp:1839
 msgid "Save a copy of the current sheet to another location or name"
-msgstr "將目前圖紙的副本儲存到其他位置或以另一個名稱進行儲存"
+msgstr "將目前圖頁的副本儲存到其他位置或以另一個名稱進行儲存"
 
 #: eeschema/tools/sch_actions.cpp:1861
 msgid "New Analysis Tab..."
@@ -30766,7 +30760,7 @@ msgstr "編輯目前分析選項卡的 SPICE 命令和繪製設定"
 
 #: eeschema/tools/sch_actions.cpp:1961
 msgid "Run Simulation"
-msgstr "運行模擬"
+msgstr "執行模擬"
 
 #: eeschema/tools/sch_actions.cpp:1967
 msgid "Stop Simulation"
@@ -30959,7 +30953,7 @@ msgstr "添加標籤"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2144
 msgid "Click over a sheet."
-msgstr "單擊圖紙。"
+msgstr "單擊圖頁。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2165
 #: eeschema/tools/sch_drawing_tools.cpp:2258
@@ -30969,7 +30963,7 @@ msgstr "沒有找到新的層次標籤。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2176
 msgid "Add Sheet Pin"
-msgstr "添加圖紙接腳"
+msgstr "添加圖頁接腳"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2697 pcbnew/tools/drawing_tool.cpp:1556
 msgid "Draw Table"
@@ -30977,7 +30971,7 @@ msgstr "繪製表格"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2910
 msgid "Press <ESC> to cancel sheet creation."
-msgstr "按下 <ESC> 取消圖紙建立。"
+msgstr "按下 <ESC> 取消圖頁建立。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:3188
 msgid "Modify Sheet Pin"
@@ -31069,8 +31063,7 @@ msgstr "鏡像"
 msgid ""
 "Pin swaps are disabled for symbols shared across other projects. Duplicate "
 "the sheet to edit pins independently."
-msgstr ""
-"對於跨其他專案共用的符號，接腳交換功能已停用。請複製圖紙以單獨編輯接腳。"
+msgstr "對於跨其他專案共用的符號，接腳交換功能已停用。請複製圖頁以單獨編輯接腳。"
 
 #: eeschema/tools/sch_edit_tool.cpp:1958
 #, c-format
@@ -31078,8 +31071,8 @@ msgid ""
 "Pin swaps are disabled for symbols shared across other projects (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
-"對於跨其他專案共用的符號（%s），接腳交換功能已停用。請複製圖紙以單獨編輯接"
-"腳。"
+"對於跨其他專案共用的符號（%s），接腳交換功能已停用。請複製圖頁以單獨編輯接腳"
+"。"
 
 #: eeschema/tools/sch_edit_tool.cpp:1968
 #, c-format
@@ -31087,14 +31080,14 @@ msgid ""
 "Pin swaps are disabled for symbols used by multiple sheet instances (%s). "
 "Duplicate the sheet to edit pins independently."
 msgstr ""
-"對於多個圖紙實例所使用的符號（%s），接腳交換功能已停用。請複製圖紙以單獨編輯"
+"對於多個圖頁實例所使用的符號（%s），接腳交換功能已停用。請複製圖頁以單獨編輯"
 "接腳。"
 
 #: eeschema/tools/sch_edit_tool.cpp:1975
 msgid ""
 "Pin swaps are disabled for shared symbols. Duplicate the sheet to edit pins "
 "independently."
-msgstr "對於共用符號，接腳交換功能已停用。請複製圖紙以單獨編輯接腳。"
+msgstr "對於共用符號，接腳交換功能已停用。請複製圖頁以單獨編輯接腳。"
 
 #: eeschema/tools/sch_edit_tool.cpp:2140
 msgid ""
@@ -31175,7 +31168,7 @@ msgstr "顯示屬性面板"
 
 #: eeschema/tools/sch_edit_tool.cpp:3159
 msgid "Edit Sheet Properties"
-msgstr "編輯圖紙屬性"
+msgstr "編輯圖頁屬性"
 
 #: eeschema/tools/sch_edit_tool.cpp:3285
 #: pcbnew/dialogs/dialog_rule_area_properties_base.h:64
@@ -31193,12 +31186,12 @@ msgstr "您是否希望從此表中刪除未引用的接腳?"
 #: eeschema/tools/sch_edit_tool.cpp:3844
 #, c-format
 msgid "Enter page number for sheet path%s"
-msgstr "輸入圖紙路徑 %s 的頁碼"
+msgstr "輸入圖頁路徑 %s 的頁碼"
 
 #: eeschema/tools/sch_edit_tool.cpp:3847
 #: eeschema/widgets/hierarchy_pane.cpp:661
 msgid "Edit Sheet Page Number"
-msgstr "編輯圖紙頁碼"
+msgstr "編輯圖頁頁碼"
 
 #: eeschema/tools/sch_edit_tool.cpp:3985 pcbnew/tools/edit_tool.cpp:1259
 msgid "Toggle Attribute"
@@ -31219,7 +31212,7 @@ msgstr "移除空白標籤"
 #: eeschema/tools/sch_editor_control.cpp:445
 #, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "是否放棄變更, 並將 '%s' (及所有子圖紙) 重置為上一儲存版本?"
+msgstr "是否放棄變更, 並將 '%s' (及所有子圖頁) 重設為上一儲存版本?"
 
 #: eeschema/tools/sch_editor_control.cpp:640
 msgid "Export Symbols"
@@ -31239,7 +31232,7 @@ msgstr "更新原理圖符號以連結至已匯出的符號"
 
 #: eeschema/tools/sch_editor_control.cpp:1078
 msgid "Error: duplicate sub-sheet names found in current sheet."
-msgstr "錯誤: 在目前圖紙中找到重複的子圖紙名稱。"
+msgstr "錯誤: 在目前圖頁中找到重複的子圖頁名稱。"
 
 #: eeschema/tools/sch_editor_control.cpp:1334
 msgid "All selected nets must be labeled to assign a netclass."
@@ -31306,8 +31299,8 @@ msgid ""
 "was dropped because the destination already has the sheet or one of its "
 "subsheets as a parent."
 msgstr ""
-"貼上的圖紙 \"%s\"\n"
-"被丟棄, 因為目標已有該圖紙或其子圖紙之一作為父級。"
+"貼上的圖頁 \"%s\"\n"
+"被丟棄, 因為目標已有該圖頁或其子圖頁之一作為父級。"
 
 #: eeschema/tools/sch_editor_control.cpp:3115
 msgid "Symbols with broken library symbol links cannot be edited."
@@ -31338,7 +31331,7 @@ msgstr "到達原理圖的末尾。"
 
 #: eeschema/tools/sch_find_replace_tool.cpp:389
 msgid "Reached end of sheet."
-msgstr "到達圖紙的末尾。"
+msgstr "到達圖頁的末尾。"
 
 #: eeschema/tools/sch_find_replace_tool.cpp:398
 msgid "No matches found."
@@ -31823,7 +31816,7 @@ msgstr "建立新的頂層圖頁"
 
 #: eeschema/widgets/hierarchy_pane.cpp:569
 msgid "Enter name for new top-level sheet:"
-msgstr "輸入新頂層圖紙的名稱："
+msgstr "輸入新頂層圖頁的名稱："
 
 #: eeschema/widgets/hierarchy_pane.cpp:628
 #, c-format
@@ -31832,18 +31825,18 @@ msgid ""
 "\n"
 "This cannot be undone."
 msgstr ""
-"刪除頂層圖紙「%s」？\n"
+"刪除頂層圖頁「%s」？\n"
 "\n"
 "此操作無法復原。"
 
 #: eeschema/widgets/hierarchy_pane.cpp:636
 msgid "Cannot delete the last top-level sheet."
-msgstr "無法刪除最後一個頂層圖紙。"
+msgstr "無法刪除最後一個頂層圖頁。"
 
 #: eeschema/widgets/hierarchy_pane.cpp:657
 #, c-format
 msgid "Enter page number for sheet path %s"
-msgstr "輸入圖紙路徑 %s 的頁碼"
+msgstr "輸入圖頁路徑 %s 的頁碼"
 
 #: eeschema/widgets/hierarchy_pane.cpp:694
 msgid "Change Page Number"
@@ -32101,11 +32094,11 @@ msgstr "保持設計區塊選中以便後續點擊。"
 #: eeschema/widgets/sch_design_block_pane.cpp:109
 #: pcbnew/widgets/pcb_design_block_pane.cpp:103
 msgid "Place the design block as a group."
-msgstr "取消區塊"
+msgstr "將設計區塊作為群組放置。"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:115
 msgid "Place the design block as a new sheet."
-msgstr "將設計區塊放置為新圖紙。"
+msgstr "將設計區塊放置為新圖頁。"
 
 #: eeschema/widgets/sch_design_block_pane.cpp:121
 msgid ""
@@ -32864,7 +32857,7 @@ msgstr "已跳過檔案 '%s'(Gerber job 檔案)。"
 #: gerbview/files.cpp:583
 #, c-format
 msgid "<b>Unable to create temporary file '%s'.</b>"
-msgstr "<b>無法建立臨時檔案 '%s'</b>"
+msgstr "<b>無法建立暫存檔案 '%s'</b>"
 
 #: gerbview/files.cpp:605
 #, c-format
@@ -33510,7 +33503,7 @@ msgstr "雙擊滑鼠左鍵或單擊中鍵修改顏色"
 
 #: include/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
-msgstr "將此主題中的所有配色重置為 KiCad 預設值"
+msgstr "將此主題中的所有配色重設為 KiCad 預設值"
 
 #: include/libeval_compiler/libeval_compiler.h:417
 #: include/libeval_compiler/libeval_compiler.h:429
@@ -33575,7 +33568,7 @@ msgstr "顯示匯入問題"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
-msgstr "將此頁面上的所有設定重置為其預設值"
+msgstr "將此頁面上的所有設定重設為其預設值"
 
 #: include/widgets/wx_infobar.h:114
 msgid "Hide this message."
@@ -33650,7 +33643,7 @@ msgstr "顯示說明資訊並退出"
 
 #: kicad/cli/command_api_server.cpp:56
 msgid "Run the KiCad IPC API server in headless mode"
-msgstr "用無頭模式運行KiCad IPC API伺服器"
+msgstr "用無頭模式執行KiCad IPC API伺服器"
 
 #: kicad/cli/command_api_server.cpp:61
 msgid ""
@@ -33686,7 +33679,7 @@ msgstr "png/svg 格式必須指定 --output\n"
 
 #: kicad/cli/command_export_bom.cpp:38
 msgid "Generate a Bill of Materials (BOM)"
-msgstr "生成物料清單 (BOM)"
+msgstr "產生物料清單 (BOM)"
 
 #: kicad/cli/command_export_bom.cpp:196
 msgid "Input file does not exist or is not accessible\n"
@@ -33989,7 +33982,7 @@ msgstr "要執行的作業集檔案"
 msgid ""
 "Jobset file output to generate, leave blank for all outputs defined in the "
 "jobset"
-msgstr "要生成的作業集檔案輸出，留空則使用作業集中定義的所有輸出"
+msgstr "要產生的作業集檔案輸出，留空則使用作業集中定義的所有輸出"
 
 #: kicad/cli/command_mergetool.cpp:82
 msgid ""
@@ -34050,7 +34043,7 @@ msgstr "比對 PCB 檔"
 
 #: kicad/cli/command_pcb_drc.cpp:49
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
-msgstr "在 PCB 上運行設計規則檢查 (DRC) 並建立報告"
+msgstr "在 PCB 上執行設計規則檢查 (DRC) 並建立報告"
 
 #: kicad/cli/command_pcb_drc.cpp:54 kicad/cli/command_pcb_export_stats.cpp:40
 #: kicad/cli/command_sch_erc.cpp:50
@@ -34113,7 +34106,7 @@ msgstr "無效的報告格式\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr "匯出組件 (Gerber, 鑽孔, 座標檔案等)"
+msgstr "匯出工具 (Gerber, 鑽孔, 座標檔案等)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:79
 msgid ""
@@ -34148,7 +34141,7 @@ msgstr "用相同名稱的 STEP 或 IGS 模型代替 VRML 模型"
 
 #: kicad/cli/command_pcb_export_3d.cpp:116
 msgid "Only generate a board with no components"
-msgstr "僅生成沒有元件的電路板"
+msgstr "僅產生沒有元件的電路板"
 
 #: kicad/cli/command_pcb_export_3d.cpp:120
 #: pcbnew/dialogs/dialog_export_step_base.cpp:78
@@ -34236,12 +34229,12 @@ msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
 msgstr ""
-"建立和存儲 3D 模型的資料夾名稱, 如果未指定或為空, 模型將嵌入匯出的 VRML 主文"
-"件中"
+"建立和存儲 3D 模型的資料夾名稱, 如果未指定或為空, 模型將嵌入匯出的 VRML 主檔"
+"中"
 
 #: kicad/cli/command_pcb_export_3d.cpp:212
 msgid "Used with --models-dir to output relative paths in the resulting file"
-msgstr "配合參數 --models-dir 可在生成的檔案中輸出相對路徑"
+msgstr "配合參數 --models-dir 可在產生的檔案中輸出相對路徑"
 
 #: kicad/cli/command_pcb_export_3d.cpp:290
 msgid "Invalid format specified\n"
@@ -34261,7 +34254,7 @@ msgstr "要包含在每張圖上的層, 要包含的原始層名稱, 用英文�
 #: kicad/cli/command_pcb_export_drill.cpp:51
 #: pcbnew/dialogs/dialog_gendrill_base.h:90
 msgid "Generate Drill Files"
-msgstr "生成鑽孔檔案"
+msgstr "產生鑽孔檔案"
 
 #: kicad/cli/command_pcb_export_drill.cpp:55
 msgid "Valid options excellon, gerber."
@@ -34295,11 +34288,11 @@ msgstr "最少鑽頭種類"
 
 #: kicad/cli/command_pcb_export_drill.cpp:88
 msgid "Generate independent files for NPTH and PTH holes"
-msgstr "為非金屬化孔 (NPTH) 和金屬化孔 (PTH) 生成獨立檔案"
+msgstr "為非金屬化孔 (NPTH) 和金屬化孔 (PTH) 產生獨立檔案"
 
 #: kicad/cli/command_pcb_export_drill.cpp:92
 msgid "Generate map / summary of drill hits"
-msgstr "生成鑽孔的映射/摘要"
+msgstr "產生鑽孔的映射/摘要"
 
 #: kicad/cli/command_pcb_export_drill.cpp:96
 msgid "Generate report of drill hits"
@@ -34311,7 +34304,7 @@ msgstr "報告輸出檔路徑"
 
 #: kicad/cli/command_pcb_export_drill.cpp:105
 msgid "Generate a file specifically for tenting"
-msgstr "生成物料清單作業設定"
+msgstr "產生物料清單作業設定"
 
 #: kicad/cli/command_pcb_export_drill.cpp:110
 msgid "Valid options: pdf, gerberx2, ps, dxf, svg"
@@ -34358,7 +34351,7 @@ msgstr "警告：已提供報告路徑但未使用 --generate-report，將不會
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
-msgstr "從層列表生成 DXF"
+msgstr "從層列表產生 DXF"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:47
 #: kicad/cli/command_pcb_export_gerber.cpp:42
@@ -34414,7 +34407,7 @@ msgid ""
 "directory and filename path. COMMON_LAYER_LIST does not function in this "
 "mode. Instead LAYER_LIST controls all layers plotted."
 msgstr ""
-"生成單一檔案，輸出參數路徑作為完整的目錄與檔案名稱路徑。在此模式下，"
+"產生單一檔案，輸出參數路徑作為完整的目錄與檔案名稱路徑。在此模式下，"
 "COMMON_LAYER_LIST 不可用，而是由 LAYER_LIST 控制所有繪製的圖層。"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:108
@@ -34424,8 +34417,8 @@ msgid ""
 "Generates one or more files with behavior similar to the KiCad GUI plotting. "
 "The given output path specifies a directory in which files may be output."
 msgstr ""
-"生成一個或多個檔案，行為類似於 KiCad GUI 繪圖。指定的輸出路徑為輸出檔案的目"
-"錄。"
+"產生一個或多個檔案，行為類似於 KiCad GUI 繪圖。指定的輸出路徑為輸出檔案的目錄"
+"。"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:146
 #: kicad/cli/command_pcb_export_gencad.cpp:74
@@ -34469,12 +34462,12 @@ msgstr "翻轉底層封裝焊盤"
 #: kicad/cli/command_pcb_export_gencad.cpp:41
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:215
 msgid "Generate unique pin names"
-msgstr "生成唯一的接腳名稱"
+msgstr "產生唯一的接腳名稱"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:45
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:216
 msgid "Generate a new shape for each footprint instance (do not reuse shapes)"
-msgstr "為每個封裝實例生成一個新形狀 (不要重複使用形狀)"
+msgstr "為每個封裝實例產生一個新形狀 (不要重複使用形狀)"
 
 #: kicad/cli/command_pcb_export_gencad.cpp:49
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:217
@@ -34496,7 +34489,7 @@ msgstr "不使用 Gerber X2 格式"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:78
 msgid "Do not generate netlist attributes"
-msgstr "不生成網表特性"
+msgstr "不產生網表特性"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:86
 msgid "Disable aperture macros"
@@ -34568,7 +34561,7 @@ msgstr "匯出到 IDF 庫作為零件編號的封裝欄位"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:36
 msgid "Generate PDF from a list of layers"
-msgstr "從層列表生成 PDF"
+msgstr "從層列表產生 PDF"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:44
 #: kicad/cli/command_pcb_export_png.cpp:49
@@ -34627,7 +34620,7 @@ msgstr "DPI 必須介於 %d 與 %d 之間\n"
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:75
 msgid "Generate Position File"
-msgstr "生成定位檔案"
+msgstr "產生定位檔案"
 
 #: kicad/cli/command_pcb_export_pos.cpp:50
 msgid ""
@@ -34770,7 +34763,7 @@ msgstr "從銅面積扣除孔洞"
 
 #: kicad/cli/command_pcb_export_svg.cpp:41
 msgid "Generate SVG outputs of a given layer list"
-msgstr "生成指定層列表的 SVG 輸出"
+msgstr "產生指定層列表的 SVG 輸出"
 
 #: kicad/cli/command_pcb_export_svg.cpp:90
 msgid ""
@@ -34790,7 +34783,7 @@ msgstr "無繪圖圖紙"
 
 #: kicad/cli/command_pcb_import.cpp:42
 msgid "Import a non-KiCad PCB file to KiCad format"
-msgstr "以 KiCad 格式匯出網路表"
+msgstr "將非 KiCad PCB 檔匯入為 KiCad 格式"
 
 #: kicad/cli/command_pcb_import.cpp:46
 msgid ""
@@ -34977,7 +34970,7 @@ msgstr "比對原理圖檔"
 #: kicad/cli/command_sch_erc.cpp:45
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
-msgstr "在原理圖上運行電氣規則檢查 (ERC) 並建立報告"
+msgstr "在原理圖上執行電氣規則檢查 (ERC) 並建立報告"
 
 #: kicad/cli/command_sch_erc.cpp:58
 msgid ""
@@ -35009,7 +35002,7 @@ msgstr "如果存在違反 ERC 的情況, 返回非零退出代碼"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
-msgstr "匯出組件 (網表, pdf, bom 等)"
+msgstr "匯出工具 (網表, pdf, bom 等)"
 
 #: kicad/cli/command_sch_export_netlist.cpp:35
 msgid "Export a netlist"
@@ -35044,15 +35037,15 @@ msgstr "在連線交叉處繪製跳線"
 
 #: kicad/cli/command_sch_export_plot.cpp:86
 msgid "Do not generate property popups in PDF"
-msgstr "不在 PDF 中生成屬性彈窗"
+msgstr "不在 PDF 中產生屬性彈窗"
 
 #: kicad/cli/command_sch_export_plot.cpp:90
 msgid "Do not generate clickable links for hierarchical elements in PDF"
-msgstr "在 PDF 中不為階層元素生成可點擊的連結"
+msgstr "在 PDF 中不為階層元素產生可點擊的連結"
 
 #: kicad/cli/command_sch_export_plot.cpp:94
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
-msgstr "不從 AUTHOR 和 SUBJECT 變數生成 PDF 元資料"
+msgstr "不從 AUTHOR 和 SUBJECT 變數產生 PDF 元資料"
 
 #: kicad/cli/command_sch_export_plot.cpp:104
 msgid "Avoid setting a background color (regardless of theme)"
@@ -35184,7 +35177,7 @@ msgstr "目標:"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:48
 msgid "Generate error if no files copied"
-msgstr "生成 Gerber job 檔案"
+msgstr "產生 Gerber job 檔案"
 
 #: kicad/dialogs/dialog_copyfiles_job_settings_base.cpp:51
 msgid "Overwrite files in destination"
@@ -35340,11 +35333,11 @@ msgstr "範本已成功複製至「%s」。"
 #: kicad/dialogs/dialog_template_selector.cpp:485
 #: kicad/dialogs/dialog_template_selector_base.h:75
 msgid "Project Template Selector"
-msgstr "選擇專案模板"
+msgstr "選擇專案範本"
 
 #: kicad/dialogs/dialog_template_selector.cpp:1341
 msgid "Select Templates Directory"
-msgstr "選擇模板目錄"
+msgstr "選擇範本目錄"
 
 #: kicad/dialogs/dialog_template_selector.cpp:1389
 msgid "(no other directory)"
@@ -35360,11 +35353,11 @@ msgstr "所有範本"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:64
 msgid "User Templates"
-msgstr "自定義模板"
+msgstr "自定義範本"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:64
 msgid "System Templates"
-msgstr "系統模板"
+msgstr "系統範本"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:64
 msgid "Other Templates"
@@ -35545,7 +35538,7 @@ msgstr "儲存作業集"
 
 #: kicad/dialogs/panel_jobset_base.cpp:122
 msgid "Generate All Destinations"
-msgstr "生成所有目的地"
+msgstr "產生所有目的地"
 
 #: kicad/dialogs/panel_jobset_base.h:136
 msgid "Jobset Run Log"
@@ -36743,7 +36736,7 @@ msgstr "在文字編輯器中編輯"
 
 #: kicad/project_tree_pane.cpp:981
 msgid "Run Jobs"
-msgstr "運行作業"
+msgstr "執行作業"
 
 #: kicad/project_tree_pane.cpp:989
 msgid "Rename File..."
@@ -37212,7 +37205,7 @@ msgstr "編輯圖紙邊框和專案明細表"
 
 #: kicad/tools/kicad_manager_actions.cpp:184
 msgid "Run Plugin and Content Manager"
-msgstr "運行擴展內容管理員"
+msgstr "執行擴展內容管理員"
 
 #: kicad/tools/kicad_manager_actions.cpp:190
 msgid "Open Text Editor"
@@ -37279,7 +37272,7 @@ msgstr ""
 
 #: kicad/tools/kicad_manager_control.cpp:276
 msgid "No project template was selected.  Cannot generate new project."
-msgstr "未選中專案模板。無法生成新的專案。"
+msgstr "未選中專案範本。無法產生新的專案。"
 
 #: kicad/tools/kicad_manager_control.cpp:286
 msgid "New Project Folder"
@@ -37301,7 +37294,7 @@ msgstr "目標資料夾中已存在類似檔案。"
 
 #: kicad/tools/kicad_manager_control.cpp:365
 msgid "A problem occurred creating new project from template."
-msgstr "從模板建立專案發生一個問題。"
+msgstr "從範本建立專案發生一個問題。"
 
 #: kicad/tools/kicad_manager_control.cpp:395
 msgid "Clone Project from Git Repository"
@@ -37356,11 +37349,11 @@ msgstr "建立(或打開)一個專案以編輯 PCB。"
 
 #: kicad/tools/kicad_manager_control.cpp:768
 msgid "Application failed to load:\n"
-msgstr "應用程序載入失敗:\n"
+msgstr "應用程式載入失敗:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:774
 msgid "Application cannot start."
-msgstr "應用程序無法啟動。"
+msgstr "應用程式無法啟動。"
 
 #: kicad/update_manager.cpp:172
 msgid "Update Check"
@@ -37515,11 +37508,11 @@ msgstr "這些內置的關鍵字總是可用的:"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:689
 msgid "(sheet number)"
-msgstr "(圖紙頁碼)"
+msgstr "(圖頁頁碼)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:690
 msgid "(sheet count)"
-msgstr "(圖紙數量)"
+msgstr "(圖頁數量)"
 
 #: pagelayout_editor/dialogs/properties_frame.cpp:696
 msgid "(paper size)"
@@ -38463,7 +38456,7 @@ msgid ""
 "equivalent to a double insulation. ( which is two separate basic "
 "insulations, in case one of them fails  )."
 msgstr ""
-"功能型: 絕緣僅為設備運行所必需\n"
+"功能型: 絕緣僅為設備執行所必需\n"
 "\n"
 "基本型: 對有危險的部件進行絕緣。\n"
 "\n"
@@ -40007,7 +40000,7 @@ msgstr ""
 "的不同金屬。\n"
 "電化學對的陽極被氧化並被腐蝕，而陰極被溶解的金屬鍍在其上，但仍受到保護。\n"
 "正數表示該行是陽極（-），該列是陰極（+），冷暖色調也表示行的電位。\n"
-"EN 50310 建議電壓差低於 300mV。已知的做法是在主對之間使用第三種界面金屬（即 "
+"EN 50310 建議電壓差低於 300mV。已知的做法是在主對之間使用第三種介面金屬（即 "
 "ENIG 表面處理）。\n"
 "表格重新填入後，所選儲存格將顯示為預設系統的顏色選擇。\n"
 
@@ -40878,7 +40871,7 @@ msgstr "沒有層"
 #: pcbnew/board_loader.cpp:163 pcbnew/files.cpp:846
 #: pcbnew/pcb_edit_frame.cpp:1873
 msgid "Could not load component class assignment rules"
-msgstr "無法載入組件類別分配規則"
+msgstr "無法載入元件類別分配規則"
 
 #: pcbnew/board_loader.cpp:193
 #, c-format
@@ -40939,20 +40932,20 @@ msgstr "材料"
 #: pcbnew/board_tables/board_stackup_table.cpp:86
 #: pcbnew/dialogs/dialog_board_stackup_job_base.cpp:67
 msgid "Epsilon R"
-msgstr "Epsilon R"
+msgstr "相對介電常數"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager.cpp:95
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:106
 msgid "Loss Tan"
-msgstr "Loss Tan"
+msgstr "損耗正切"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:35
 msgid "Epsilon R:"
-msgstr "Epsilon R:"
+msgstr "相對介電常數："
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
 msgid "Loss Tan:"
-msgstr "Loss Tan:"
+msgstr "損耗正切："
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:60
 msgid "Common materials:"
@@ -41514,7 +41507,7 @@ msgstr "非金屬化 (NPTH)"
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:66
 msgid "BOARD CHARACTERISTICS"
-msgstr "BOARD CHARACTERISTICS"
+msgstr "電路板特性"
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:74
 msgid "Copper layer count: "
@@ -41572,7 +41565,7 @@ msgstr "層名稱"
 
 #: pcbnew/board_tables/board_stackup_table.cpp:87
 msgid "Loss Tangent"
-msgstr "Loss Tangent"
+msgstr "損耗正切"
 
 #: pcbnew/board_tables/board_stackup_table.cpp:109
 msgid "Dielectric"
@@ -42436,7 +42429,7 @@ msgstr "調諧設定檔"
 #: pcbnew/dialogs/dialog_board_setup.cpp:246
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:29
 msgid "Component Classes"
-msgstr "組件類別"
+msgstr "元件類別"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:266
 msgid "Board Data"
@@ -42569,7 +42562,7 @@ msgstr "鑽孔"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:272
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:212
 msgid "Generate Report File..."
-msgstr "生成報告檔案..."
+msgstr "產生報告檔案..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:71
 msgid "Board Statistics"
@@ -43501,7 +43494,7 @@ msgstr "測量標註屬性"
 
 #: pcbnew/dialogs/dialog_drc.cpp:157
 msgid "Run DRC"
-msgstr "運行 DRC"
+msgstr "執行 DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:331
 #, c-format
@@ -43591,7 +43584,7 @@ msgstr "建立報告檔案 '%s' <br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1540
 msgid "not run"
-msgstr "不運行"
+msgstr "不執行"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:135
 #, c-format
@@ -43745,7 +43738,7 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
-"更新/重置字串: 在兩種情況下, 這些描述需要涉及: 使用者對 PCB 的封裝進行覆蓋, "
+"更新/重設字串: 在兩種情況下, 這些描述需要涉及: 使用者對 PCB 的封裝進行覆蓋, "
 "並希望將其移除; 或者使用者對庫的封裝進行了變更, 並希望將其傳遞迴PCB。"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:309
@@ -43808,7 +43801,7 @@ msgstr "若庫封裝中沒有該文字物件則移除"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:112
 msgid "Update/reset text layers and visibilities"
-msgstr "更新/重置文字層和可見性"
+msgstr "更新/重設文字層和可見性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:115
 msgid "Update/reset text sizes and styles"
@@ -43820,11 +43813,11 @@ msgstr "更新／重設文字位置與旋轉"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:121
 msgid "Update/reset text content"
-msgstr "更新/重置欄位的文字內容"
+msgstr "更新/重設欄位的文字內容"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:136
 msgid "Update/reset fabrication attributes"
-msgstr "更新/重置製造特性"
+msgstr "更新/重設製造特性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:139
 msgid "Update/reset clearance overrides"
@@ -43832,7 +43825,7 @@ msgstr "更新／重設間距覆寫"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:142
 msgid "Update/reset 3D models"
-msgstr "更新/重置 3D 模型"
+msgstr "更新/重設 3D 模型"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:145
 msgid "Reset scale"
@@ -43872,7 +43865,7 @@ msgstr "匯出 IPC-2581 檔案"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:182
 msgid "The board must be saved before generating IPC-2581 file."
-msgstr "生成 IPC2581 檔案前必須儲存電路板。"
+msgstr "產生 IPC2581 檔案前必須儲存電路板。"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:189
 #: pcbnew/dialogs/dialog_export_idf.cpp:319 pcbnew/files.cpp:1006
@@ -43897,7 +43890,7 @@ msgid ""
 "Can be used only when printing the current sheet"
 msgstr ""
 "如果你不想使用預設檔案名,請輸入新的檔案名\n"
-"僅可在列印目前圖紙時可用"
+"僅可在列印目前圖頁時可用"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:71
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:76
@@ -44145,29 +44138,25 @@ msgid "Generate ODB++ Files"
 msgstr "產生 ODB++ 檔"
 
 #: pcbnew/dialogs/dialog_export_odbpp.cpp:480
-#, fuzzy, c-format
+#, c-format
 msgid "Generated %s"
-msgstr "生成"
+msgstr "已產生 %s"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:31
-#, fuzzy
 msgid "Output archive or directory"
-msgstr "輸出檔或目錄"
+msgstr "輸出壓縮檔或目錄"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:85
-#, fuzzy
 msgid "8.1"
-msgstr ".1"
+msgstr "8.1"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:91
-#, fuzzy
 msgid "Refill zones before export"
-msgstr "繪圖前重新填充區域"
+msgstr "匯出前重新填充區域"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:93
-#, fuzzy
 msgid "Refill zones before generating ODB++"
-msgstr "執行 DRC 前先重新填充區域"
+msgstr "產生 ODB++ 前重新填充區域"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:97
 msgid "Compression format:"
@@ -44186,13 +44175,12 @@ msgid "TGZ"
 msgstr "TGZ 壓縮檔"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:109
-#, fuzzy
 msgid "Product name:"
-msgstr "群組名稱:"
+msgstr "產品名稱："
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:114
 msgid "Product model name in ODB++"
-msgstr ""
+msgstr "ODB++ 中的產品型號名稱"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:118
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:144
@@ -44200,9 +44188,8 @@ msgid "Origin:"
 msgstr "原點:"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:122
-#, fuzzy
 msgid "Absolute coordinates"
-msgstr "極座標"
+msgstr "絕對座標"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:171
 #: pcbnew/dialogs/dialog_map_layers.cpp:275
@@ -44210,19 +44197,16 @@ msgid "KiCad Layer"
 msgstr "KiCad 層"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:172
-#, fuzzy
 msgid "ODB++ Name"
-msgstr "BOM 名稱"
+msgstr "ODB++ 名稱"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:174
-#, fuzzy
 msgid "Context"
 msgstr "內容"
 
 #: pcbnew/dialogs/dialog_export_odbpp_base.cpp:175
-#, fuzzy
 msgid "Span / Reference"
-msgstr "上方參考層"
+msgstr "跨層／參考"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:164
 msgid "Non-unity scaled models:"
@@ -44318,7 +44302,7 @@ msgid ""
 "Run DRC for a full analysis."
 msgstr ""
 "電路板輪廓遺失或未用 %.3f mm 公差閉合。\n"
-"運行設計規則檢查 (DRC) 進行全面分析。"
+"執行設計規則檢查 (DRC) 進行全面分析。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:580
 msgid "STEP/GLTF Export"
@@ -44422,7 +44406,7 @@ msgstr "僅選中"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:110
 msgid "Export only the component models that are selected in the PCB editor"
-msgstr "僅匯出 PCB「印刷電路板」編輯器中選擇的組件模型"
+msgstr "僅匯出 PCB「印刷電路板」編輯器中選擇的元件模型"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:114
 msgid "Components matching filter:"
@@ -44827,7 +44811,7 @@ msgstr "符號:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:90
 msgid "Sheet: "
-msgstr "圖紙: "
+msgstr "圖頁: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
 msgid "Library Association"
@@ -44843,7 +44827,7 @@ msgstr "封裝分配"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:52
 msgid "Run Checks"
-msgstr "運行檢查"
+msgstr "執行檢查"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:68
 #: pcbnew/tools/pcb_actions.cpp:1371
@@ -45595,11 +45579,11 @@ msgstr "對底層的封裝使用負 X 座標"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:126
 msgid "Generate single file with both front and back positions"
-msgstr "生成包含正面和背面位置的單一檔案"
+msgstr "產生包含正面和背面位置的單一檔案"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:81
 msgid "Generate Placement Files"
-msgstr "生成放置檔案"
+msgstr "產生放置檔案"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:56
 msgid "Output File:"
@@ -45666,11 +45650,11 @@ msgstr "Gerber X2"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:93
 msgid "Generate tenting layers"
-msgstr "生成覆蓋層"
+msgstr "產生覆蓋層"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:107
 msgid "Generate map:"
-msgstr "生成對映："
+msgstr "產生對映："
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:148
 msgid "Absolute"
@@ -45753,7 +45737,7 @@ msgstr "單擊項目以在板上高亮它們。"
 #: pcbnew/dialogs/dialog_generators_base.cpp:42
 #, c-format
 msgid "Generators A (%s)"
-msgstr "生成器 A (%s)"
+msgstr "產生器 A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
 msgid "Rebuild Selected"
@@ -45769,7 +45753,7 @@ msgstr "重建全部"
 
 #: pcbnew/dialogs/dialog_generators_base.h:61
 msgid "Generator Objects"
-msgstr "生成物件"
+msgstr "產生物件"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:67
@@ -46555,7 +46539,7 @@ msgstr "長度調整模式預設值"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:84
 msgid "Component classes"
-msgstr "組件類別"
+msgstr "元件類別"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:90
 msgid "Custom rules"
@@ -46885,11 +46869,11 @@ msgstr "選擇路徑"
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas.cpp:87
 #: pcbnew/footprint.cpp:2662 pcbnew/footprint.cpp:5472 pcbnew/zone.cpp:2324
 msgid "Component Class"
-msgstr "組件類別"
+msgstr "元件類別"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:27
 msgid "Sheets"
-msgstr "圖紙"
+msgstr "圖頁"
 
 #: pcbnew/dialogs/dialog_multichannel_generate_rule_areas_base.cpp:42
 msgid "Replace existing placement rule areas"
@@ -47108,22 +47092,22 @@ msgstr "非覆銅區屬性"
 #: pcbnew/dialogs/dialog_offset_item.cpp:152
 #: pcbnew/dialogs/dialog_position_relative.cpp:159
 msgid "Reset to the current distance from the reference position."
-msgstr "從參考位置重置為目前距離。"
+msgstr "從參考位置重設為目前距離。"
 
 #: pcbnew/dialogs/dialog_offset_item.cpp:153
 #: pcbnew/dialogs/dialog_position_relative.cpp:160
 msgid "Reset to the current angle from the reference position."
-msgstr "從參考位置重置為目前角度。"
+msgstr "從參考位置重設為目前角度。"
 
 #: pcbnew/dialogs/dialog_offset_item.cpp:160
 #: pcbnew/dialogs/dialog_position_relative.cpp:167
 msgid "Reset to the current X offset from the reference position."
-msgstr "從參考位置重置為目前 X 偏移。"
+msgstr "從參考位置重設為目前 X 偏移。"
 
 #: pcbnew/dialogs/dialog_offset_item.cpp:161
 #: pcbnew/dialogs/dialog_position_relative.cpp:168
 msgid "Reset to the current Y offset from the reference position."
-msgstr "從參考位置重置為目前 Y 偏移。"
+msgstr "從參考位置重設為目前 Y 偏移。"
 
 #: pcbnew/dialogs/dialog_offset_item_base.h:62
 msgid "Offset Item"
@@ -47605,7 +47589,7 @@ msgstr "電路板中包含舊版淚滴。"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:675
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:633
 msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
-msgstr "使用 編輯 > 編輯淚滴 來套用自動生成淚滴。"
+msgstr "使用 編輯 > 編輯淚滴 來套用自動產生淚滴。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:691
 msgid "Add teardrops on pad's track connections"
@@ -47782,7 +47766,7 @@ msgstr "下移目前選區"
 
 #: pcbnew/dialogs/dialog_plot.cpp:244
 msgid "Generate Drill Files..."
-msgstr "生成鑽孔檔案..."
+msgstr "產生鑽孔檔案..."
 
 #: pcbnew/dialogs/dialog_plot.cpp:671
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:274
@@ -47969,15 +47953,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:235
 msgid "Generate Gerber job file"
-msgstr "生成 Gerber job 檔案"
+msgstr "產生 Gerber job 檔案"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
-"生成一個 Gerber job 檔案, 其中包含有關於電路板的資訊, \n"
-"及生成的 Gerber 繪製檔案列表"
+"產生一個 Gerber job 檔案, 其中包含有關於電路板的資訊, \n"
+"及產生的 Gerber 繪製檔案列表"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:241
 msgid "Coordinate format:"
@@ -48122,15 +48106,15 @@ msgstr "無法將影像複製到剪貼簿"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:424
 msgid "Generate property popups for front footprints"
-msgstr "為頂層封裝生成屬性彈窗"
+msgstr "為頂層封裝產生屬性彈窗"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:427
 msgid "Generate property popups for back footprints"
-msgstr "為底層封裝生成屬性彈窗"
+msgstr "為底層封裝產生屬性彈窗"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:494
 msgid "Run DRC..."
-msgstr "運行 DRC..."
+msgstr "執行 DRC..."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:497
 #, c-format
@@ -48292,7 +48276,7 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
-"啟用後, 當其中一段走線被拖動時, 屏幕上可見的整個走線部分將被優化和重新佈線。"
+"啟用後, 當其中一段走線被拖動時, 螢幕上可見的整個走線部分將被優化和重新佈線。"
 "停用後, 將只優化被拖動部分附近的走線。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:132
@@ -48306,15 +48290,14 @@ msgid ""
 msgstr "啟用後，拖曳走線時會盡量最佳化，避免產生 90 度或銳角轉角。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:137
-#, fuzzy
 msgid "Keep coupling between differential pairs"
-msgstr "差分對佈線"
+msgstr "保持差分對之間的耦合"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:139
 msgid ""
 "When enabled, dragging one track belonging to a differential pair drags the "
 "other, maintaining their coupling,"
-msgstr ""
+msgstr "啟用後，拖曳差分對中的一條走線時會一併拖曳另一條，以維持耦合。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:64
 msgid "Interactive Router Settings"
@@ -48520,7 +48503,7 @@ msgstr "背景樣式:"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:100
 msgid "Procedural textures"
-msgstr "程序化紋理"
+msgstr "程式化紋理"
 
 #: pcbnew/dialogs/dialog_render_job_base.cpp:104
 msgid "Add floor"
@@ -49289,7 +49272,7 @@ msgstr "貫孔縫合屬性"
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:189
 #, c-format
 msgid "Error with conditions for component class assignment %s"
-msgstr "組件類別分配 %s 的條件出錯"
+msgstr "元件類別分配 %s 的條件出錯"
 
 #: pcbnew/dialogs/panel_assign_component_classes.cpp:362
 msgid "Add Reference Condition"
@@ -49335,7 +49318,7 @@ msgstr "從所選內容建立線路"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:19
 msgid "Assign component class per sheet"
-msgstr "為每張圖紙分配組件類別"
+msgstr "為每張圖頁分配元件類別"
 
 #: pcbnew/dialogs/panel_assign_component_classes_base.cpp:28
 msgid "Custom Assignments:"
@@ -49746,34 +49729,31 @@ msgid "physical netlist"
 msgstr "實體網路表"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:79
-#, fuzzy
 msgid "Section"
-msgstr "選擇"
+msgstr "區段"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:80
 msgid "ODB++"
-msgstr ""
+msgstr "ODB++"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:80
-#, fuzzy
 msgid "IPC-2581"
-msgstr "匯出 IPC-2581"
+msgstr "IPC-2581"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:98
 msgid ""
 "Choose sections to include. Intentional shorts are written when the board "
 "has net ties."
-msgstr ""
+msgstr "選擇要包含的區段。電路板有網路連接時會寫入刻意短路。"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:101
 #: pcbnew/dialogs/panel_fab_export_content.cpp:397
-#, fuzzy
 msgid "board metadata"
-msgstr "搜尋後設資料（Metadata）"
+msgstr "電路板中繼資料"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:109
 msgid "intentional shorts"
-msgstr ""
+msgstr "刻意短路"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:196
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:34
@@ -49806,35 +49786,30 @@ msgid "Stencil"
 msgstr "鋼板"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Current (%s)"
-msgstr "電流 (I):"
+msgstr "目前（%s）"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:226
-#, fuzzy
 msgid "Selected variants…"
-msgstr "刪除變體"
+msgstr "選取的變體…"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:227
-#, fuzzy
 msgid "All variants"
-msgstr "變體"
+msgstr "所有變體"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:385
 #: pcbnew/dialogs/panel_fab_export_content.cpp:402
-#, fuzzy
 msgid "Includes: "
-msgstr "包含："
+msgstr "包含： "
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:472
-#, fuzzy
 msgid "Choose the variants to export"
-msgstr "沒有可匯出的封裝!"
+msgstr "選擇要匯出的變體"
 
 #: pcbnew/dialogs/panel_fab_export_content.cpp:472
-#, fuzzy
 msgid "Selected variants"
-msgstr "刪除變體"
+msgstr "選取的變體"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:17
 msgid "Content"
@@ -49861,9 +49836,8 @@ msgid ""
 msgstr "匿名化名稱仍保留網路表比對所需連通性，但不帶出設計意圖"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:62
-#, fuzzy
 msgid "Select a board variant for this export"
-msgstr "選擇匯出檔案的目錄"
+msgstr "選擇此次匯出的電路板變體"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:66
 msgid "Reference designators:"
@@ -49879,22 +49853,20 @@ msgstr ""
 "圖面，一律保留。"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:81
-#, fuzzy
 msgid "One package per variant"
-msgstr "有 %d 個套件更新可用"
+msgstr "每個變體一個套件"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:81
 msgid "One package, all variants inside"
-msgstr ""
+msgstr "一個套件，內含所有變體"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:83
-#, fuzzy
 msgid "Variant output"
-msgstr "製造輸出"
+msgstr "變體輸出"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:87
 msgid "${VARIANT} is replaced per package"
-msgstr ""
+msgstr "每個套件都會替換 ${VARIANT}"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:91
 msgid "Includes:"
@@ -49909,9 +49881,8 @@ msgid "BOM Fields..."
 msgstr "BOM 欄位..."
 
 #: pcbnew/dialogs/panel_fab_export_content_base.cpp:140
-#, fuzzy
 msgid "Choose the optional sections to include"
-msgstr "選擇要包含的選用區段。"
+msgstr "選擇要包含的選用區段"
 
 #: pcbnew/dialogs/panel_fab_export_content_base.h:92
 msgid "Customize Content"
@@ -50263,11 +50234,11 @@ msgstr "禁止放置"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:24
 msgid "Place items from sheet:"
-msgstr "從圖紙放置項目:"
+msgstr "從圖頁放置項目:"
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:33
 msgid "Place items matching component class:"
-msgstr "放置與組件類別相符的項目："
+msgstr "放置與元件類別相符的項目："
 
 #: pcbnew/dialogs/panel_rule_area_properties_placement_base.cpp:42
 msgid "Place items in group:"
@@ -52254,13 +52225,13 @@ msgstr ""
 "```\n"
 "    A.memberOfSheet('<sheet_path>')\n"
 "```\n"
-"> 若 `A` 是給定原理圖圖紙的成員則為 True。圖紙路徑可包含萬用字元。\n"
+"> 若 `A` 是給定原理圖圖頁的成員則為 True。圖頁路徑可包含萬用字元。\n"
 "\n"
 "\n"
 "```\n"
 "    A.memberOfSheetOrChildren('<sheet_path>')\n"
 "```\n"
-"> 若 `A` 是給定原理圖圖紙或其任何子層次圖紙的成員則為 True。圖紙路徑可包含萬"
+"> 若 `A` 是給定原理圖圖頁或其任何子層次圖頁的成員則為 True。圖頁路徑可包含萬"
 "用字元。\n"
 "\n"
 "\n"
@@ -53899,7 +53870,7 @@ msgstr "規則「%s」的單一物件約束無法使用項目「B」。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:420
 msgid "Missing component class name."
-msgstr "缺少組件類別名稱。"
+msgstr "缺少元件類別名稱。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:490
 msgid "Time based units not allowed for constraint type."
@@ -54743,7 +54714,7 @@ msgstr "正在檢查重疊項目的絲印..."
 
 #: pcbnew/drc/drc_test_provider_sliver_checker.cpp:85
 msgid "Running sliver detection on copper layers..."
-msgstr "在銅層上運行毛刺檢測..."
+msgstr "在銅層上執行毛刺檢測..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:77
 msgid "board setup solder mask min width"
@@ -55683,7 +55654,7 @@ msgstr "匯出為 GenCAD"
 #: pcbnew/exporters/step/exporter_step.cpp:1276
 #: pcbnew/specctra_import_export/specctra_export.cpp:122
 msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr "PCB 輪廓異常, 請運行 DRC 來進行全面分析。"
+msgstr "PCB 輪廓異常, 請執行 DRC 來進行全面分析。"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:181
 msgid ""
@@ -56113,7 +56084,7 @@ msgstr "貫孔"
 #: pcbnew/exporters/step/step_pcb_model.cpp:4266
 #, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'."
-msgstr "沒有有效的 PCB 組件，無法建立輸出檔「%s」。"
+msgstr "沒有有效的 PCB 元件，無法建立輸出檔「%s」。"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:3254
 #, c-format
@@ -56174,7 +56145,7 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:4363
 #, c-format
 msgid "No valid PCB assembly; cannot create output file '%s'.\n"
-msgstr "沒有有效的 PCB 組件，無法建立輸出檔「%s」。\n"
+msgstr "沒有有效的 PCB 元件，無法建立輸出檔「%s」。\n"
 
 #: pcbnew/files.cpp:163
 msgid "All KiCad Board Files"
@@ -57422,32 +57393,32 @@ msgstr "添加了 %s (封裝 '%s')。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:317
 #, c-format
 msgid "Change %s component class to '%s'."
-msgstr "將 %s 組件類別變更為“%s”。"
+msgstr "將 %s 元件類別變更為“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:323
 #, c-format
 msgid "Remove %s component class (currently '%s')."
-msgstr "刪除 %s 組件類別（目前為“%s”）。"
+msgstr "刪除 %s 元件類別（目前為“%s”）。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:329
 #, c-format
 msgid "Change %s component class from '%s' to '%s'."
-msgstr "將 %s 組件類別從“%s”更改為“%s”。"
+msgstr "將 %s 元件類別從“%s”更改為“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:343
 #, c-format
 msgid "Changed %s component class to '%s'."
-msgstr "已將 %s 組件類別變更為“%s”。"
+msgstr "已將 %s 元件類別變更為“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:349
 #, c-format
 msgid "Removed %s component class (was '%s')."
-msgstr "已刪除 %s 組件類別（原為“%s”）。"
+msgstr "已刪除 %s 元件類別（原為“%s”）。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:355
 #, c-format
 msgid "Changed %s component class from '%s' to '%s'."
-msgstr "已將 %s 組件類別從“%s”更改為“%s”。"
+msgstr "已將 %s 元件類別從“%s”更改為“%s”。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:378
 #, c-format
@@ -57532,22 +57503,22 @@ msgstr "移除了不在符號中的封裝欄位 %s 。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:738
 #, c-format
 msgid "Update %s sheetname to '%s'."
-msgstr "將 %s 圖紙名稱更新為 '%s'。"
+msgstr "將 %s 圖頁名稱更新為 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:745
 #, c-format
 msgid "Updated %s sheetname to '%s'."
-msgstr "已將 %s 圖紙名稱更新為 '%s'。"
+msgstr "已將 %s 圖頁名稱更新為 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:757
 #, c-format
 msgid "Update %s sheetfile to '%s'."
-msgstr "將 %s 圖紙檔案更新為 '%s'。"
+msgstr "將 %s 圖頁檔案更新為 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:764
 #, c-format
 msgid "Updated %s sheetfile to '%s'."
-msgstr "已將 %s 圖紙檔案更新為 '%s'。"
+msgstr "已將 %s 圖頁檔案更新為 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:776
 #, c-format
@@ -58497,7 +58468,7 @@ msgstr "覆蓋已有預設?"
 #: pcbnew/pcb_design_block_utils.cpp:152 pcbnew/pcb_design_block_utils.cpp:210
 #: pcbnew/pcb_design_block_utils.cpp:339
 msgid "Error saving temporary board file to create design block."
-msgstr "在儲存臨時原理圖檔案以建立設計區塊時出錯。"
+msgstr "在儲存暫存原理圖檔案以建立設計區塊時出錯。"
 
 #: pcbnew/pcb_dimension.cpp:801 pcbnew/pcb_dimension.cpp:2144
 msgid "Prefix"
@@ -58751,7 +58722,7 @@ msgstr "更新順序"
 
 #: pcbnew/pcb_generator.cpp:206
 msgid "Generator Properties"
-msgstr "生成器屬性"
+msgstr "產生器屬性"
 
 #: pcbnew/pcb_grid_item.cpp:329 pcbnew/pcb_grid_item.cpp:347
 msgid "Grid Item"
@@ -59262,7 +59233,7 @@ msgstr "載入矩形中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:6014
 msgid "Ignored a keep-out area with no restrictions."
-msgstr "已忽略沒有任何限制的禁佈區。"
+msgstr "已忽略沒有任何限制的禁置區。"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_circuit_maker.h:34
 msgid "Altium Circuit Maker PCB files"
@@ -59396,7 +59367,7 @@ msgid ""
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
 msgstr ""
-"選中的檔案指示網路可能與原理圖不同步。建議您在 CADSTAR 中執行對齊網路程序並重"
+"選中的檔案指示網路可能與原理圖不同步。建議您在 CADSTAR 中執行對齊網路程式並重"
 "新匯入, 以避免 PCB 和原理圖之間的不一致。 "
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:133
@@ -59583,7 +59554,7 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"CADSTAR 模板 '%s' 啟用了 'Allow in No Routing Areas' 設定, 但在 KiCad 中沒有"
+"CADSTAR 範本 '%s' 啟用了 'Allow in No Routing Areas' 設定, 但在 KiCad 中沒有"
 "對應的等效項, 因此已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1939
@@ -59592,7 +59563,7 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"CADSTAR 模板 '%s' 啟用了 'Box Isolated Pins' 設定, 但在 KiCad 中沒有對應的等"
+"CADSTAR 範本 '%s' 啟用了 'Box Isolated Pins' 設定, 但在 KiCad 中沒有對應的等"
 "效項, 因此已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1947
@@ -59601,7 +59572,7 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"CADSTAR 模板 '%s' 啟用了 'Automatic Repour' 設定, 但在 KiCad 中沒有對應的等效"
+"CADSTAR 範本 '%s' 啟用了 'Automatic Repour' 設定, 但在 KiCad 中沒有對應的等效"
 "項, 因此已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1958
@@ -59611,7 +59582,7 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
-"CADSTAR 模板 '%s' 為 'Sliver Width' 設定了非零值, 但在 KiCad 中沒有對應的等效"
+"CADSTAR 範本 '%s' 為 'Sliver Width' 設定了非零值, 但在 KiCad 中沒有對應的等效"
 "項, 因此已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1967
@@ -59622,8 +59593,9 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR 模板 '%s' 具有不同的設定, 用於\"保留覆銅- 不相交\"和\"保留覆銅 - 隔離"
-"\"。KiCad 不區分這兩個設定。不相交覆銅的設定已被應用為 KiCad 覆銅的最小島區。"
+"CADSTAR 範本 '%s' 具有不同的設定, 用於\"保留覆銅- 不相交\"和\"保留覆銅 - 隔"
+"離\"。KiCad 不區分這兩個設定。不相交覆銅的設定已被應用為 KiCad 覆銅的最小島區"
+"。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2018
 #, c-format
@@ -59632,7 +59604,7 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
-"CADSTAR 模板 '%s' 在焊盤和貫孔中具有不同的緩釋熱焊盤 (花焊盤) 設定。KiCad 僅"
+"CADSTAR 範本 '%s' 在焊盤和貫孔中具有不同的緩釋熱焊盤 (花焊盤) 設定。KiCad 僅"
 "支援這兩種設定的單一設定。已應用焊盤的設定。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2034
@@ -59644,7 +59616,7 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"CADSTAR 模板\"%s\"在原始設計中具有散熱片, 但引線寬度 (%.2f mm)比覆銅的最小厚"
+"CADSTAR 範本\"%s\"在原始設計中具有散熱片, 但引線寬度 (%.2f mm)比覆銅的最小厚"
 "度 (%.2f mm) 更薄。KiCad 要求保留覆銅的最小厚度。因此, 已將最小厚度用作新的引"
 "線寬度, 並將在下次填充區域時應用。"
 
@@ -60269,14 +60241,12 @@ msgid "gEDA / Lepton EDA PCB footprint library directory"
 msgstr "gEDA / Lepton EDA PCB 封裝庫目錄"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:70
-#, fuzzy
 msgid "Unsupported IPC-2581 data set."
-msgstr "未知的 IPC-2581 資料集「%s」。"
+msgstr "不支援的 IPC-2581 資料集。"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:120
-#, fuzzy
 msgid "Cannot create temporary IPC-2581 output."
-msgstr "無法建立暫存輸出目錄。"
+msgstr "無法建立暫存 IPC-2581 輸出。"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:136
 #, c-format
@@ -60284,24 +60254,26 @@ msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "%s"
 msgstr ""
-"生成 IPC2581 檔案 '%s' 時出錯。\n"
+"產生 IPC2581 檔案 '%s' 時出錯。\n"
 "%s"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot write IPC-2581 archive '%s'.\n"
 "%s"
-msgstr "無法讀取 ZIP 壓縮檔'%s'"
+msgstr ""
+"無法寫入 IPC-2581 壓縮檔「%s」。\n"
+"%s"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_export_job.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC-2581 file '%s'.\n"
 "Failed to rename temporary file '%s'."
 msgstr ""
-"生成 IPC2581 檔案 '%s' 時出錯。\n"
-"重新命名臨時檔案 '%s' 失敗。"
+"產生 IPC-2581 檔案「%s」時發生錯誤。\n"
+"重新命名暫存檔「%s」失敗。"
 
 #: pcbnew/pcb_io/ipc2581/ipc2581_function_mode.cpp:168
 msgid "Cannot produce this IPC-2581 data set."
@@ -60327,7 +60299,7 @@ msgstr "IPC-2581B 在沒有元件封裝時無法匯出元件組裝資料。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:548
 msgid "Generating content section"
-msgstr "生成 content section"
+msgstr "產生 content section"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1318
 msgid "Pad has unsupported type; it was skipped."
@@ -60335,11 +60307,11 @@ msgstr "焊盤類型不受支援；已略過。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1759
 msgid "Generating history section"
-msgstr "生成 history section"
+msgstr "產生 history section"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1789
 msgid "Generating BOM section"
-msgstr "生成 BOM section"
+msgstr "產生 BOM section"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1851
 #, c-format
@@ -60353,7 +60325,7 @@ msgstr "元件 \"%s\" 缺少 OEM 參考；BOM 項目將被略過。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1986
 msgid "Generating CAD data"
-msgstr "生成 CAD data"
+msgstr "產生 CAD data"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:3256
 msgid "Board outline is invalid or missing.  Please run DRC."
@@ -60411,7 +60383,7 @@ msgstr "無效的 IPC-2581 區段鍵「%s」。"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4828
 msgid "Generating logistic section"
-msgstr "生成 logistic section"
+msgstr "產生 logistic section"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:4870
 msgid "Resolving references"
@@ -60437,7 +60409,7 @@ msgstr "檔案 '%s' 有一個未被識別的版本: %d。"
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:773
 #, c-format
 msgid "Unknown sheet type '%s' on line: %d."
-msgstr "未知圖紙類型 '%s', 位於行: %d。"
+msgstr "未知圖頁類型 '%s', 位於行: %d。"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1354
 #, c-format
@@ -60639,7 +60611,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1702
 #, c-format
 msgid "Cannot create generated object of type '%s'"
-msgstr "無法建立 '%s' 類型的生成物件"
+msgstr "無法建立 '%s' 類型的產生物件"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1862
 #, c-format
@@ -60668,7 +60640,7 @@ msgstr "無法處理封裝文字類型 %s"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5315
 msgid "Invalid drill map: not on a documentation layer"
-msgstr "鑽孔圖無效：不在文件層"
+msgstr "鑽孔圖無效：不在說明層"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5477
 #, c-format
@@ -60678,7 +60650,7 @@ msgstr "%s 無效：欄集合錯誤"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5485
 #, c-format
 msgid "Invalid %s: not on a documentation layer"
-msgstr "%s 無效：不在文件層"
+msgstr "%s 無效：不在說明層"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6091
 #, c-format
@@ -60786,82 +60758,77 @@ msgid ""
 msgstr "元件 '%s' 轉換後的指定符不明確；已重新命名為 '%s' 以供 ODB++ 匯出。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:381
-#, fuzzy
 msgid "Failed to generate ODB++ metadata."
-msgstr "圖像資料讀取失敗。"
+msgstr "產生 ODB++ 中繼資料失敗。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:595
 msgid "ODB++ layer name override is empty or collides; using automatic name."
-msgstr ""
+msgstr "ODB++ 板層名稱覆寫為空或衝突；改用自動名稱。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:619
 msgid "Invalid ODB++ layer type override; using automatic type."
-msgstr ""
+msgstr "ODB++ 板層類型覆寫無效；改用自動類型。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:676
 msgid "ODB++ partial drill layer omitted because a span layer is excluded."
-msgstr ""
+msgstr "因跨層中有板層被排除，已略過 ODB++ 部分鑽孔層。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1357
-#, fuzzy
 msgid "Failed to generate ODB++ stackup."
-msgstr "序列化電路板疊層失敗\n"
+msgstr "產生 ODB++ 疊層失敗。"
 
 #: pcbnew/pcb_io/odbpp/odb_entity.cpp:1430
 msgid "Board outline is not closed; ODB++ rout layer has no board contour."
-msgstr ""
+msgstr "板框未閉合；ODB++ 銑削層沒有板輪廓。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:148
-#, fuzzy
 msgid "Output path is not a directory"
-msgstr "輸出檔或目錄"
+msgstr "輸出路徑不是目錄"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:165
-#, fuzzy
 msgid "Output directory is not an ODB++ product"
-msgstr "所選目錄已存在 git 專案。"
+msgstr "輸出目錄不是 ODB++ 產品"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory contains unrelated entry '%s'"
-msgstr "已建立輸出目錄 '%s'。"
+msgstr "輸出目錄含有無關項目「%s」"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:202
-#, fuzzy
 msgid "Output directory contains the source board"
-msgstr "已建立輸出目錄 '%s'。"
+msgstr "輸出目錄含有來源電路板"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:226
-#, fuzzy, c-format
+#, c-format
 msgid "Output directory contains project file '%s'"
-msgstr "已建立輸出目錄 '%s'。"
+msgstr "輸出目錄含有專案檔「%s」"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:274
-#, fuzzy
 msgid "Cannot create temporary backup path"
-msgstr "無法建立暫存輸出目錄。"
+msgstr "無法建立暫存備份路徑"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove previous ODB++ directory '%s': %s"
-msgstr "無法建立輸出目錄 '%s'。"
+msgstr "無法移除先前的 ODB++ 目錄「%s」：%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:357
-#, fuzzy
 msgid "No board for ODB++ export."
-msgstr "3D 匯出"
+msgstr "沒有可匯出 ODB++ 的電路板。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:420
-#, fuzzy, c-format
+#, c-format
 msgid "Output file '%s' already exists. Do you want to overwrite it?"
-msgstr "檔案 '%s' 已存在, 要覆蓋它嗎?"
+msgstr "輸出檔「%s」已存在。要覆寫嗎？"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot use ODB++ directory '%s'.\n"
 "%s"
-msgstr "無法建立輸出目錄 '%s'。"
+msgstr ""
+"無法使用 ODB++ 目錄「%s」。\n"
+"%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:449
 #, c-format
@@ -60875,64 +60842,66 @@ msgid "Cannot create temporary output directory."
 msgstr "無法建立暫存輸出目錄。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating ODB++ files '%s'.\n"
 "%s"
 msgstr ""
-"生成 IPC2581 檔案 '%s' 時出錯。\n"
+"產生 ODB++ 檔「%s」時發生錯誤。\n"
 "%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:522
 #, c-format
 msgid "Exception in ODB++ generation: %s"
-msgstr ""
+msgstr "產生 ODB++ 時發生例外：%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:532
 msgid "Compressing output"
 msgstr "壓縮輸出"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:542
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot write ODB++ archive '%s'.\n"
 "%s"
-msgstr "無法讀取 ZIP 壓縮檔'%s'"
+msgstr ""
+"無法寫入 ODB++ 壓縮檔「%s」。\n"
+"%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:559
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot replace ODB++ directory '%s'.\n"
 "%s"
-msgstr "無法建立輸出目錄 '%s'。"
+msgstr ""
+"無法取代 ODB++ 目錄「%s」。\n"
+"%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:588
-#, fuzzy
 msgid "Unsupported ODB++ data set."
-msgstr "不支援的作業系統"
+msgstr "不支援的 ODB++ 資料集。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:598
-#, fuzzy
 msgid "Unknown ODB++ section key."
-msgstr "未知例外"
+msgstr "未知的 ODB++ 區段鍵。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:622
 #, c-format
 msgid "ODB++ variant names adjusted after conversion:%s"
-msgstr ""
+msgstr "轉換後已調整 ODB++ 變體名稱：%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:627
 msgid "ODB++ variant list exceeds 1000 characters; list attributes omitted."
-msgstr ""
+msgstr "ODB++ 變體清單超過 1000 個字元；已略過清單屬性。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:638
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown board variant '%s'."
-msgstr "未知的電路板單位 %d"
+msgstr "未知的電路板變體「%s」。"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:691
 msgid "ODB++ variant output names collide after conversion."
-msgstr ""
+msgstr "轉換後 ODB++ 變體輸出名稱衝突。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:166
 msgid "Creating ODB++ Structure"
@@ -60944,30 +60913,30 @@ msgstr "匯出 PCB"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:260
 msgid "ODB++ package section added because components reference packages."
-msgstr ""
+msgstr "因元件參考套件，已加入 ODB++ 套件區段。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:268
 msgid "Ignoring invalid ODB++ layer override."
-msgstr ""
+msgstr "忽略無效的 ODB++ 板層覆寫。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:287
 #, c-format
 msgid ""
 "ODB++ precision %d is below the minimum of %d for these units; using %d."
-msgstr ""
+msgstr "ODB++ 精度 %d 低於這些單位的最小值 %d；改用 %d。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:293
 #, c-format
 msgid "ODB++ precision %d is above the maximum of %d; using %d."
-msgstr ""
+msgstr "ODB++ 精度 %d 高於最大值 %d；改用 %d。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:304
 msgid "ODB++ fabrication data includes EDA nets for intentional shorts."
-msgstr ""
+msgstr "ODB++ 製造資料包含刻意短路的 EDA 網路。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.cpp:313
 msgid "ODB++ export failed. See the messages above for the cause."
-msgstr ""
+msgstr "ODB++ 匯出失敗。請查看上方訊息了解原因。"
 
 #: pcbnew/pcb_io/odbpp/pcb_io_odbpp.h:72
 msgid "ODB++ Production File"
@@ -63582,7 +63551,7 @@ msgstr "請選取兩個不同物件以解析間距。"
 #: pcbnew/tools/board_inspection_tool.cpp:993
 #: pcbnew/tools/board_inspection_tool.cpp:1006
 msgid "Cannot generate clearance report on empty group."
-msgstr "無法為空群組生成間隙報告。"
+msgstr "無法為空群組產生間隙報告。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1082
 msgid "Zone connection resolution for:"
@@ -63782,7 +63751,7 @@ msgstr "報告可能不完整: 某些封裝的外框不正確。"
 #: pcbnew/tools/board_inspection_tool.cpp:1882
 #: pcbnew/tools/board_inspection_tool.cpp:1906
 msgid "Run DRC for a full analysis."
-msgstr "運行 DRC 進行全面分析。"
+msgstr "執行 DRC 進行全面分析。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1889
 msgid "Item <b>disallowed</b> at current location."
@@ -63814,7 +63783,7 @@ msgstr "沒有會變更此電路板的本機歷程快照。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:2442
 msgid "Select a footprint for a footprint associations report."
-msgstr "選擇一個封裝, 生成封裝關聯報告。。"
+msgstr "選擇一個封裝, 產生封裝關聯報告。。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:2470
 msgid "Board vs library diff for:"
@@ -64351,7 +64320,7 @@ msgstr "開啟封裝欄位表前，請先儲存或捨棄所有已修改封裝分
 
 #: pcbnew/tools/generator_tool.cpp:179
 msgid "Regenerate All"
-msgstr "重新生成全部內容"
+msgstr "重新產生全部內容"
 
 #: pcbnew/tools/generator_tool.cpp:186
 #, c-format
@@ -64371,7 +64340,7 @@ msgstr "建立微貫孔堆疊"
 
 #: pcbnew/tools/generator_tool.cpp:310
 msgid "Regenerate Selected"
-msgstr "重新生成選中項"
+msgstr "重新產生選中項"
 
 #: pcbnew/tools/global_edit_tool.cpp:292
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:99
@@ -65008,7 +64977,7 @@ msgstr "新增鑽孔圖"
 
 #: pcbnew/tools/pcb_actions.cpp:520
 msgid "Draw drill symbols at the holes on a documentation layer"
-msgstr "在文件層的孔上繪製鑽孔符號"
+msgstr "在說明層的孔上繪製鑽孔符號"
 
 #: pcbnew/tools/pcb_actions.cpp:527
 msgid "Drill Groups..."
@@ -65203,7 +65172,7 @@ msgstr "將電路板另存為設計區塊..."
 
 #: pcbnew/tools/pcb_actions.cpp:865
 msgid "Create a new design block from the current board"
-msgstr "從目前視圖建立一個 PNG 檔案"
+msgstr "從目前電路板建立新的設計區塊"
 
 #: pcbnew/tools/pcb_actions.cpp:878
 msgid "Update Design Block from Board"
@@ -65786,7 +65755,7 @@ msgstr "匯入非 KiCad 電路板檔..."
 
 #: pcbnew/tools/pcb_actions.cpp:1627
 msgid "Import board file from other applications"
-msgstr "從其它應用程序中匯入板檔案"
+msgstr "從其它應用程式中匯入板檔案"
 
 #: pcbnew/tools/pcb_actions.cpp:1633
 msgid "Export Footprints..."
@@ -65842,7 +65811,7 @@ msgstr "Gerbers (.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1677
 msgid "Generate Gerbers for fabrication"
-msgstr "生成用於製造的 Gerbers"
+msgstr "產生用於製造的 Gerbers"
 
 #: pcbnew/tools/pcb_actions.cpp:1683
 msgid "Drill Files (.drl)..."
@@ -65850,7 +65819,7 @@ msgstr "鑽孔檔案 (.drl)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1684
 msgid "Generate Excellon drill file(s)"
-msgstr "生成 Excellon 鑽孔檔案"
+msgstr "產生 Excellon 鑽孔檔案"
 
 #: pcbnew/tools/pcb_actions.cpp:1690
 msgid "Component Placement (.pos, .gbr)..."
@@ -65858,7 +65827,7 @@ msgstr "元件放置檔案 (.pos, .gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1691
 msgid "Generate component placement file(s) for pick and place"
-msgstr "生成用於貼裝的元件放置檔案 (座標檔案)"
+msgstr "產生用於貼裝的元件放置檔案 (座標檔案)"
 
 #: pcbnew/tools/pcb_actions.cpp:1697
 msgid "Footprint Report (.rpt)..."
@@ -65874,7 +65843,7 @@ msgstr "IPC-2581 檔案 (.xml)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1705
 msgid "Generate an IPC-2581 file"
-msgstr "生成 IPC-2581 檔案"
+msgstr "產生 IPC-2581 檔案"
 
 #: pcbnew/tools/pcb_actions.cpp:1711
 msgid "ODB++ Output File..."
@@ -66025,7 +65994,7 @@ msgstr "放置鑽孔檔案和元件放置檔案的原點"
 
 #: pcbnew/tools/pcb_actions.cpp:1897
 msgid "Reset Drill Origin"
-msgstr "重置鑽孔原點"
+msgstr "重設鑽孔原點"
 
 #: pcbnew/tools/pcb_actions.cpp:1917 pcbnew/tools/pcb_actions.cpp:1926
 #: pcbnew/tools/pcb_actions.cpp:1935 pcbnew/tools/pcb_actions.cpp:1945
@@ -66466,7 +66435,7 @@ msgstr "修復電路板"
 
 #: pcbnew/tools/pcb_actions.cpp:2672
 msgid "Run various diagnostics and attempt to repair board"
-msgstr "運行各種診斷程序並嘗試修復電路板"
+msgstr "執行各種診斷程式並嘗試修復電路板"
 
 #: pcbnew/tools/pcb_actions.cpp:2679
 msgid "Repair Footprint"
@@ -66474,7 +66443,7 @@ msgstr "修復封裝"
 
 #: pcbnew/tools/pcb_actions.cpp:2680
 msgid "Run various diagnostics and attempt to repair footprint"
-msgstr "運行各種診斷程序並嘗試修復封裝"
+msgstr "執行各種診斷程式並嘗試修復封裝"
 
 #: pcbnew/tools/pcb_actions.cpp:2688
 msgid "Next Footprint Tab"
@@ -66641,15 +66610,15 @@ msgstr "選擇並開始移動每個所選網路上距離最近的未連接封裝
 
 #: pcbnew/tools/pcb_actions.cpp:2910
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr "選擇原理圖圖紙中的所有封裝和走線"
+msgstr "選擇原理圖圖頁中的所有封裝和走線"
 
 #: pcbnew/tools/pcb_actions.cpp:2916
 msgid "Items in Same Hierarchical Sheet"
-msgstr "同一層次圖紙中的項目"
+msgstr "同一層次圖頁中的項目"
 
 #: pcbnew/tools/pcb_actions.cpp:2917
 msgid "Selects all footprints and tracks in the same schematic sheet"
-msgstr "選擇同一原理圖紙中的所有封裝和走線"
+msgstr "選擇同一原理圖頁中的所有封裝和走線"
 
 #: pcbnew/tools/pcb_actions.cpp:2923
 msgid "Select on Schematic"
@@ -66720,11 +66689,11 @@ msgstr "在板外區域執行元件的自動放置"
 
 #: pcbnew/tools/pcb_actions.cpp:2992
 msgid "Generate Placement Rule Areas..."
-msgstr "生成放置檔案"
+msgstr "產生放置檔案"
 
 #: pcbnew/tools/pcb_actions.cpp:2993
 msgid "Creates best-fit placement rule areas"
-msgstr "生成放置檔案"
+msgstr "產生放置檔案"
 
 #: pcbnew/tools/pcb_actions.cpp:3000
 msgid "Repeat Layout..."
@@ -66911,27 +66880,27 @@ msgstr "嘗試在其範圍內重新調整現有的調整線對"
 
 #: pcbnew/tools/pcb_actions.cpp:3231
 msgid "Rebuild All Generators"
-msgstr "重建所有生成器"
+msgstr "重建所有產生器"
 
 #: pcbnew/tools/pcb_actions.cpp:3232
 msgid "Rebuilds geometry of all generators"
-msgstr "重建所有生成的幾何圖形"
+msgstr "重建所有產生的幾何圖形"
 
 #: pcbnew/tools/pcb_actions.cpp:3239
 msgid "Rebuild Selected Generators"
-msgstr "重建選中生成器"
+msgstr "重建選中產生器"
 
 #: pcbnew/tools/pcb_actions.cpp:3240
 msgid "Rebuilds geometry of selected generator(s)"
-msgstr "重建選中生成的幾何圖形"
+msgstr "重建選中產生的幾何圖形"
 
 #: pcbnew/tools/pcb_actions.cpp:3268
 msgid "Generators Manager"
-msgstr "生成器管理員"
+msgstr "產生器管理員"
 
 #: pcbnew/tools/pcb_actions.cpp:3269
 msgid "Show a manager dialog for Generator objects"
-msgstr "顯示管理生成物件的對話框"
+msgstr "顯示管理產生物件的對話框"
 
 #: pcbnew/tools/pcb_actions.cpp:3275
 msgid "Exclude From Stitching"
@@ -66966,7 +66935,7 @@ msgstr "顯示精靈選擇器"
 
 #: pcbnew/tools/pcb_actions.cpp:3319
 msgid "Select wizard script to run"
-msgstr "選擇嚮導腳本運行"
+msgstr "選擇嚮導腳本執行"
 
 #: pcbnew/tools/pcb_actions.cpp:3325
 msgid "Reset wizard parameters"
@@ -66974,7 +66943,7 @@ msgstr "重設精靈參數"
 
 #: pcbnew/tools/pcb_actions.cpp:3326
 msgid "Reset wizard parameters to default"
-msgstr "重置嚮導參數為預設值"
+msgstr "重設嚮導參數為預設值"
 
 #: pcbnew/tools/pcb_actions.cpp:3332 pcbnew/tools/pcb_actions.cpp:3333
 msgid "Export footprint to editor"
@@ -67202,7 +67171,7 @@ msgstr "放置電路板疊層表"
 
 #: pcbnew/tools/pcb_control.cpp:2994
 msgid "No documentation layer is enabled to hold a drill chart."
-msgstr "沒有啟用的文件層可放置鑽孔表。"
+msgstr "沒有啟用的說明層可放置鑽孔表。"
 
 #: pcbnew/tools/pcb_control.cpp:2995
 msgid "Place Drill Chart"
@@ -67215,7 +67184,7 @@ msgstr "板層「%s」已隱藏；設為可見後才會顯示。"
 
 #: pcbnew/tools/pcb_control.cpp:3117
 msgid "Every documentation layer already has a drill map."
-msgstr "每個文件層都已有鑽孔圖。"
+msgstr "每個說明層都已有鑽孔圖。"
 
 #: pcbnew/tools/pcb_control.cpp:3130
 msgid "Place Drill Map"
@@ -67665,8 +67634,8 @@ msgid ""
 msgstr ""
 "儲存或載入層可見性設定。\n"
 "使用 %s+Tab 打開層可見性設定選擇器。\n"
-"在按住 %s 的同時, 連續按下 Tab 鍵將在彈出的視窗中循環切換已儲存的層可見性設"
-"置。"
+"在按住 %s 的同時, 連續按下 Tab 鍵將在彈出的視窗中循環切換已儲存的層可見性設定"
+"。"
 
 #: pcbnew/widgets/appearance_controls.cpp:474
 #, c-format
@@ -68923,7 +68892,7 @@ msgstr ""
 "KiCad 是一款自由的, 免費的開源電子設計自動化 (EDA) 軟體套件。它提供了原理圖繪"
 "製, 電路模擬, PCB 設計, 3D 算繪以及對繪圖/資料的匯出功能。還包含一個高品質的"
 "元件庫, 其中包含了數千個元件符號, 封裝和 3D 模型。KiCad 對系統要求很低, 可在 "
-"Linux、Windows 和 macOS 系統上運行。"
+"Linux、Windows 和 macOS 系統上執行。"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:62
 msgid "KiCad PCB Layout Editor"
