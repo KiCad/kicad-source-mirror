@@ -2142,8 +2142,7 @@ SCH_SHEET_LIST SCHEMATIC::BuildSheetListSortedByPageNumbers() const
 {
     SCH_SHEET_LIST hierarchy;
 
-    wxLogTrace( traceSchSheetPaths, "BuildSheetListSortedByPageNumbers: %zu top-level sheets",
-                m_topLevelSheets.size() );
+    KI_TRACE( traceSchSheetPaths, "BuildSheetListSortedByPageNumbers: %zu top-level sheets", m_topLevelSheets.size() );
 
     // Can't build hierarchy without top-level sheets
     if( m_topLevelSheets.empty() )
@@ -2154,8 +2153,8 @@ SCH_SHEET_LIST SCHEMATIC::BuildSheetListSortedByPageNumbers() const
     {
         if( sheet )
         {
-            wxLogTrace( traceSchSheetPaths, "  Top-level sheet: '%s' (UUID=%s, isVirtualRoot=%d)", sheet->GetName(),
-                        sheet->m_Uuid.AsString(), sheet->m_Uuid == niluuid ? 1 : 0 );
+            KI_TRACE( traceSchSheetPaths, "  Top-level sheet: '%s' (UUID=%s, isVirtualRoot=%d)", sheet->GetName(),
+                      sheet->m_Uuid.AsString(), sheet->m_Uuid == niluuid ? 1 : 0 );
 
             // Build the sheet list for this top-level sheet
             SCH_SHEET_LIST sheetList;

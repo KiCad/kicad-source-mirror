@@ -266,10 +266,11 @@ wxString SCH_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
         const SCH_SHEET_PATH& currentSheet = schematic->CurrentSheet();
         wxString variantName = schematic->GetCurrentVariant();
 
-        wxLogTrace( traceSchFieldRendering,
-                    "GetShownText (no path arg): field=%s, current sheet path='%s', variant='%s', size=%zu, empty=%d",
-                    GetName(), currentSheet.Path().AsString(), variantName, currentSheet.size(),
-                    currentSheet.empty() ? 1 : 0 );
+        KI_TRACE( traceSchFieldRendering,
+                  "GetShownText (no path arg): field=%s, current sheet path='%s', variant='%s', size=%zu, empty=%d",
+                  GetName(), currentSheet.Path().AsString(), variantName, currentSheet.size(),
+                  currentSheet.empty() ? 1 : 0 );
+
         return GetShownText( &currentSheet, aAllowExtraText, aDepth, variantName );
     }
     else
@@ -1656,7 +1657,7 @@ wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxStrin
     // Only use the path if it's non-empty; an empty path can't match any instances
     if( m_parent && aPath && !aPath->empty() )
     {
-        wxLogTrace( traceSchFieldRendering, "  Path is valid and non-empty, parent type=%d", m_parent->Type() );
+        KI_TRACE( traceSchFieldRendering, "  Path is valid and non-empty, parent type=%d", m_parent->Type() );
 
         switch( m_parent->Type() )
         {
@@ -1665,12 +1666,12 @@ wxString SCH_FIELD::getUnescapedText( const SCH_SHEET_PATH* aPath, const wxStrin
             {
                 if( m_id == FIELD_T::REFERENCE )
                 {
-                    wxLogTrace( traceSchFieldRendering, "  Calling GetRef for symbol %s on path %s",
-                                symbol->m_Uuid.AsString(), aPath->Path().AsString() );
+                    KI_TRACE( traceSchFieldRendering, "  Calling GetRef for symbol %s on path %s",
+                              symbol->m_Uuid.AsString(), aPath->Path().AsString() );
 
                     retv = symbol->GetRef( aPath, true );
 
-                    wxLogTrace( traceSchFieldRendering, "  GetRef returned: '%s'", retv );
+                    KI_TRACE( traceSchFieldRendering, "  GetRef returned: '%s'", retv );
                 }
                 else if( !aVariantName.IsEmpty() )
                 {

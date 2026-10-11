@@ -1638,8 +1638,8 @@ void SCH_SCREEN::PruneOrphanedSymbolInstances( const wxString& aProjectName,
 
         for( const KIID_PATH& sheetPath : pathsToPrune )
         {
-            wxLogTrace( traceSchSheetPaths, wxS( "Pruning project '%s' symbol instance %s." ),
-                        aProjectName, sheetPath.AsString() );
+            KI_TRACE( traceSchSheetPaths, wxS( "Pruning project '%s' symbol instance %s." ),
+                      aProjectName, sheetPath.AsString() );
             symbol->RemoveInstance( sheetPath );
         }
     }
@@ -1685,8 +1685,8 @@ void SCH_SCREEN::PruneOrphanedSheetInstances( const wxString& aProjectName,
 
         for( const KIID_PATH& sheetPath : pathsToPrune )
         {
-            wxLogTrace( traceSchSheetPaths, wxS( "Pruning project '%s' sheet instance %s." ),
-                        aProjectName, sheetPath.AsString() );
+            KI_TRACE( traceSchSheetPaths, wxS( "Pruning project '%s' sheet instance %s." ),
+                      aProjectName, sheetPath.AsString() );
             sheet->RemoveInstance( sheetPath );
         }
     }

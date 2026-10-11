@@ -1533,12 +1533,11 @@ void SCH_SHEET::RemoveInstance( const KIID_PATH& aInstancePath )
     {
         if( m_instances[ii].m_Path == aInstancePath )
         {
-            wxLogTrace( traceSchSheetPaths, "Removing sheet instance:\n"
-                                            "    sheet path %s\n"
-                                            "    page %s, from project %s.",
-                        aInstancePath.AsString(),
-                        m_instances[ii].m_PageNumber,
-                        m_instances[ii].m_ProjectName );
+            KI_TRACE( traceSchSheetPaths,
+                      "Removing sheet instance:\n"
+                      "    sheet path %s\n"
+                      "    page %s, from project %s.",
+                      aInstancePath.AsString(), m_instances[ii].m_PageNumber, m_instances[ii].m_ProjectName );
 
             m_instances.erase( m_instances.begin() + ii );
         }
@@ -1567,9 +1566,9 @@ bool SCH_SHEET::addInstance( const KIID_PATH& aPath )
             return false;
     }
 
-    wxLogTrace( traceSchSheetPaths, wxT( "Adding instance `%s` to sheet `%s`." ),
-                aPath.AsString(),
-                ( GetName().IsEmpty() ) ? wxString( wxT( "root" ) ) : GetName() );
+    KI_TRACE( traceSchSheetPaths, wxT( "Adding instance `%s` to sheet `%s`." ),
+              aPath.AsString(),
+              ( GetName().IsEmpty() ) ? wxString( wxT( "root" ) ) : GetName() );
 
     SCH_SHEET_INSTANCE instance;
 
