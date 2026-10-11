@@ -2465,7 +2465,6 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
     }
 
     case SHAPE_T::POLY:
-    {
         if( GetPolyShape().OutlineCount() == 0 )    // malformed/empty polygon
             break;
 
@@ -2487,7 +2486,7 @@ std::vector<SHAPE*> EDA_SHAPE::makeEffectiveShapes( bool aEdgeOnly, bool aLineCh
                     effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.CSegment( jj ), width ) );
             }
         }
-    }
+
         break;
 
         case SHAPE_T::ELLIPSE:
@@ -4084,16 +4083,17 @@ void EDA_SHAPE::GetEndingTangents( EDA_ANGLE& aStartTangent, EDA_ANGLE& aEndTang
         std::optional<BEZIER<double>> shortened = ShortenedBezierCurve( aLineWidth );
         const std::vector<VECTOR2I>&  bpts = GetBezierPoints();
 
-        auto fallbackStartTangent = [&]() -> EDA_ANGLE
-        {
-            if( GetStart() != GetBezierC1() )
-                return EDA_ANGLE( GetStart() - GetBezierC1() );
+        auto fallbackStartTangent =
+                [&]() -> EDA_ANGLE
+                {
+                    if( GetStart() != GetBezierC1() )
+                        return EDA_ANGLE( GetStart() - GetBezierC1() );
 
-            if( bpts.size() >= 2 )
-                return EDA_ANGLE( bpts.front() - bpts[1] );
+                    if( bpts.size() >= 2 )
+                        return EDA_ANGLE( bpts.front() - bpts[1] );
 
-            return ANGLE_0;
-        };
+                    return ANGLE_0;
+                };
 
         auto fallbackEndTangent =
                 [&]() -> EDA_ANGLE
@@ -4404,8 +4404,11 @@ std::optional<BEZIER<double>> EDA_SHAPE::ShortenedBezierCurve( int aLineWidth ) 
 
     BEZIER<double> curve{ VECTOR2D( m_start ), VECTOR2D( m_bezierC1 ), VECTOR2D( m_bezierC2 ), VECTOR2D( m_end ) };
 
-    int startDepth = m_startEnding.GetShortenDepth( aLineWidth );
-    int endDepth = m_endEnding.GetShortenDepth( aLineWidth );
+    if( IsClosed() )
+        return curve;
+
+    int startDepth = GetStartEnding().GetShortenDepth( aLineWidth );
+    int endDepth = GetEndEnding().GetShortenDepth( aLineWidth );
 
     if( startDepth <= 0 && endDepth <= 0 )
         return curve;
@@ -4488,13 +4491,12 @@ bool EDA_SHAPE::ShortenPolyForEndings( VECTOR2D& aFirst, VECTOR2D& aLast, const 
 }
 
 
-bool EDA_SHAPE::ShortenBodyPolyPoints( std::vector<VECTOR2I>& aPoints, bool aClosed, int aOutlineIdx,
-                                       int aLineWidth ) const
+bool EDA_SHAPE::ShortenBodyPolyPoints( std::vector<VECTOR2I>& aPoints, int aOutlineIdx, int aLineWidth ) const
 {
     if( aPoints.size() < 2 )
         return false;
 
-    if( aClosed || aOutlineIdx != 0 )
+    if( IsClosed() || aOutlineIdx != 0 )
         return true;
 
     VECTOR2D first = aPoints.front();
@@ -4527,7 +4529,7 @@ bool EDA_SHAPE::GetShortenedBodyPolyPoints( const SHAPE_LINE_CHAIN& aOutline, in
     for( const VECTOR2I& pt : aOutline.CPoints() )
         aPoints.emplace_back( pt );
 
-    return ShortenBodyPolyPoints( aPoints, aOutline.IsClosed(), aOutlineIdx, aLineWidth );
+    return ShortenBodyPolyPoints( aPoints, aOutlineIdx, aLineWidth );
 }
 
 

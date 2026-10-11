@@ -2570,44 +2570,41 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             VECTOR2I segStart = aShape->GetStart();
             VECTOR2I segEnd = aShape->GetEnd();
 
-            bool drawableSegment = EDA_SHAPE::ShortenSegmentForEndings( segStart, segEnd, aShape->GetStartEnding(),
-                                                                        aShape->GetEndEnding(), thickness );
-
-            if( !drawableSegment )
+            if( EDA_SHAPE::ShortenSegmentForEndings( segStart, segEnd, aShape->GetStartEnding(),
+                                                     aShape->GetEndEnding(), thickness ) )
             {
-                break;
-            }
-            else if( aShape->IsProxyItem() )
-            {
-                std::vector<VECTOR2I> pts;
-                VECTOR2I              offset = ( segEnd - segStart ).Perpendicular();
-                offset = offset.Resize( thickness / 2 );
+                if( aShape->IsProxyItem() )
+                {
+                    std::vector<VECTOR2I> pts;
+                    VECTOR2I              offset = ( segEnd - segStart ).Perpendicular();
+                    offset = offset.Resize( thickness / 2 );
 
-                pts.push_back( segStart + offset );
-                pts.push_back( segStart - offset );
-                pts.push_back( segEnd - offset );
-                pts.push_back( segEnd + offset );
+                    pts.push_back( segStart + offset );
+                    pts.push_back( segStart - offset );
+                    pts.push_back( segEnd - offset );
+                    pts.push_back( segEnd + offset );
 
-                m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-                m_gal->DrawLine( pts[0], pts[1] );
-                m_gal->DrawLine( pts[1], pts[2] );
-                m_gal->DrawLine( pts[2], pts[3] );
-                m_gal->DrawLine( pts[3], pts[0] );
-                m_gal->DrawLine( ( pts[0] + pts[1] ) / 2, ( pts[1] + pts[2] ) / 2 );
-                m_gal->DrawLine( ( pts[1] + pts[2] ) / 2, ( pts[2] + pts[3] ) / 2 );
-                m_gal->DrawLine( ( pts[2] + pts[3] ) / 2, ( pts[3] + pts[0] ) / 2 );
-                m_gal->DrawLine( ( pts[3] + pts[0] ) / 2, ( pts[0] + pts[1] ) / 2 );
-            }
-            else if( outline_mode )
-            {
-                m_gal->DrawSegment( segStart, segEnd, thickness );
-            }
-            else if( lineStyle == LINE_STYLE::SOLID )
-            {
-                m_gal->SetIsFill( true );
-                m_gal->SetIsStroke( false );
+                    m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+                    m_gal->DrawLine( pts[0], pts[1] );
+                    m_gal->DrawLine( pts[1], pts[2] );
+                    m_gal->DrawLine( pts[2], pts[3] );
+                    m_gal->DrawLine( pts[3], pts[0] );
+                    m_gal->DrawLine( ( pts[0] + pts[1] ) / 2, ( pts[1] + pts[2] ) / 2 );
+                    m_gal->DrawLine( ( pts[1] + pts[2] ) / 2, ( pts[2] + pts[3] ) / 2 );
+                    m_gal->DrawLine( ( pts[2] + pts[3] ) / 2, ( pts[3] + pts[0] ) / 2 );
+                    m_gal->DrawLine( ( pts[3] + pts[0] ) / 2, ( pts[0] + pts[1] ) / 2 );
+                }
+                else if( outline_mode )
+                {
+                    m_gal->DrawSegment( segStart, segEnd, thickness );
+                }
+                else if( lineStyle == LINE_STYLE::SOLID )
+                {
+                    m_gal->SetIsFill( true );
+                    m_gal->SetIsStroke( false );
 
-                m_gal->DrawSegment( segStart, segEnd, thickness );
+                    m_gal->DrawSegment( segStart, segEnd, thickness );
+                }
             }
 
             break;
@@ -2703,8 +2700,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                             poly.Append( pt );
 
                         if( thickness < 0 )
-                            poly.Inflate( thickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                          m_maxError );
+                            poly.Inflate( thickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
 
                         m_gal->DrawPolygon( poly );
                     }
@@ -2721,25 +2717,24 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             aShape->CalcArcAngles( startAngle, endAngle );
 
             EDA_ANGLE arcAngle = endAngle - startAngle;
-            bool drawableArc = aShape->ShortenArcForEndings( startAngle, arcAngle, aShape->GetRadius(), thickness );
 
-            if( !drawableArc )
+            if( aShape->ShortenArcForEndings( startAngle, arcAngle, aShape->GetRadius(), thickness ) )
             {
-                break;
-            }
-            else if( outline_mode )
-            {
-                m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(), startAngle, arcAngle, thickness,
-                                       m_maxError );
-            }
-            else if( lineStyle == LINE_STYLE::SOLID )
-            {
-                m_gal->SetIsFill( true );
-                m_gal->SetIsStroke( false );
+                if( outline_mode )
+                {
+                    m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(), startAngle, arcAngle, thickness,
+                                           m_maxError );
+                }
+                else if( lineStyle == LINE_STYLE::SOLID )
+                {
+                    m_gal->SetIsFill( true );
+                    m_gal->SetIsStroke( false );
 
-                m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(), startAngle, arcAngle, thickness,
-                                       m_maxError );
+                    m_gal->DrawArcSegment( aShape->GetCenter(), aShape->GetRadius(), startAngle, arcAngle, thickness,
+                                           m_maxError );
+                }
             }
+
             break;
         }
 
@@ -2777,8 +2772,6 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         case SHAPE_T::POLY:
         {
             SHAPE_POLY_SET&  shape = const_cast<PCB_SHAPE*>( aShape )->GetPolyShape();
-            bool             hasEndings = aShape->GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
-                              || aShape->GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE;
 
             auto drawOutlineBody =
                     [&]( const SHAPE_LINE_CHAIN& aOutline, int aOutlineIdx )
@@ -2786,7 +2779,8 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                         if( aOutline.PointCount() < 2 )
                             return;
 
-                        if( hasEndings && !aOutline.IsClosed() )
+                        if( aShape->GetStartEnding().GetShortenDepth( thickness ) > 0
+                            || aShape->GetEndEnding().GetShortenDepth( thickness ) > 0 )
                         {
                             std::vector<VECTOR2I> pts;
 
@@ -2800,10 +2794,11 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
                             shortened.SetClosed( aOutline.IsClosed() );
                             m_gal->DrawSegmentChain( shortened, thickness );
-                            return;
                         }
-
-                        m_gal->DrawSegmentChain( aOutline, thickness );
+                        else
+                        {
+                            m_gal->DrawSegmentChain( aOutline, thickness );
+                        }
                     };
 
             if( shape.OutlineCount() == 0 )
@@ -2830,8 +2825,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                     if( thickness < 0 )
                     {
                         SHAPE_POLY_SET deflated_shape = shape;
-                        deflated_shape.Inflate( thickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS,
-                                                m_maxError );
+                        deflated_shape.Inflate( thickness / 2, CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
                         m_gal->DrawPolygon( deflated_shape );
                     }
                     else
@@ -2852,30 +2846,26 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
         }
 
         case SHAPE_T::BEZIER:
-        {
-            std::optional<BEZIER<double>> curve = aShape->ShortenedBezierCurve( thickness );
-
-            if( !curve )
-                break;
-
-            if( outline_mode )
+            if( std::optional<BEZIER<double>> curve = aShape->ShortenedBezierCurve( thickness ) )
             {
-                std::vector<VECTOR2D> output;
-                BEZIER_POLY converter( std::vector<VECTOR2D>{ curve->Start, curve->C1, curve->C2, curve->End } );
+                if( outline_mode )
+                {
+                    std::vector<VECTOR2D> output;
+                    BEZIER_POLY converter( std::vector<VECTOR2D>{ curve->Start, curve->C1, curve->C2, curve->End } );
 
-                converter.GetPoly( output, m_maxError );
-                m_gal->DrawSegmentChain( output, thickness );
-            }
-            else
-            {
-                m_gal->SetIsFill( aShape->IsSolidFill() );
-                m_gal->SetIsStroke( lineStyle == LINE_STYLE::SOLID && thickness > 0 );
-                m_gal->SetLineWidth( thickness );
-                m_gal->DrawCurve( curve->Start, curve->C1, curve->C2, curve->End, m_maxError );
+                    converter.GetPoly( output, m_maxError );
+                    m_gal->DrawSegmentChain( output, thickness );
+                }
+                else
+                {
+                    m_gal->SetIsFill( aShape->IsSolidFill() );
+                    m_gal->SetIsStroke( lineStyle == LINE_STYLE::SOLID && thickness > 0 );
+                    m_gal->SetLineWidth( thickness );
+                    m_gal->DrawCurve( curve->Start, curve->C1, curve->C2, curve->End, m_maxError );
+                }
             }
 
             break;
-        }
 
         case SHAPE_T::ELLIPSE:
         {
@@ -2906,47 +2896,29 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
         case SHAPE_T::ELLIPSE_ARC:
         {
-            const VECTOR2D   center( aShape->GetEllipseCenter() );
-            const int        majorR = aShape->GetEllipseMajorRadius();
-            const int        minorR = aShape->GetEllipseMinorRadius();
-            const EDA_ANGLE& rot = aShape->GetEllipseRotation();
-            const EDA_ANGLE& start = aShape->GetEllipseStartAngle();
-            const EDA_ANGLE& end = aShape->GetEllipseEndAngle();
+            const VECTOR2D        center( aShape->GetEllipseCenter() );
+            const int             majorR = aShape->GetEllipseMajorRadius();
+            const int             minorR = aShape->GetEllipseMinorRadius();
+            const EDA_ANGLE&      rot = aShape->GetEllipseRotation();
+            const EDA_ANGLE&      start = aShape->GetEllipseStartAngle();
+            const EDA_ANGLE&      end = aShape->GetEllipseEndAngle();
+            SHAPE_ELLIPSE         ellipse( center, majorR, minorR, rot, start, end );
+            SHAPE_LINE_CHAIN      chain = ellipse.ConvertToPolyline( aShape->GetMaxError() );
+            std::vector<VECTOR2I> pts;
 
-            if( aShape->GetStartEnding().GetShortenDepth( thickness )
-                    || aShape->GetEndEnding().GetShortenDepth( thickness ) )
+            if( aShape->GetShortenedBodyPolyPoints( chain, 0, pts, thickness ) )
             {
-                SHAPE_ELLIPSE         ellipse( center, majorR, minorR, rot, start, end );
-                SHAPE_LINE_CHAIN      chain = ellipse.ConvertToPolyline( std::max( 1, KiROUND( majorR / 500.0 ) ) );
-                std::vector<VECTOR2I> pts;
+                chain.Clear();
 
-                if( aShape->GetShortenedBodyPolyPoints( chain, 0, pts, thickness ) )
-                {
-                    chain.Clear();
+                for( const VECTOR2I& pt : pts )
+                    chain.Append( pt );
 
-                    for( const VECTOR2I& pt : pts )
-                        chain.Append( pt );
+                chain.SetClosed( false );
 
-                    chain.SetClosed( false );
-
-                    if( outline_mode )
-                        m_gal->DrawSegmentChain( chain, thickness );
-                    else if( lineStyle == LINE_STYLE::SOLID )
-                        m_gal->DrawSegmentChain( chain, thickness );
-                }
-            }
-            else if( outline_mode )
-            {
-                m_gal->DrawEllipseArc( center, majorR - thickness / 2, minorR - thickness / 2, rot, start, end );
-                m_gal->DrawEllipseArc( center, majorR + thickness / 2, minorR + thickness / 2, rot, start, end );
-            }
-            else if( lineStyle == LINE_STYLE::SOLID )
-            {
-                // no interior fill for arcs
-                m_gal->SetIsFill( false );
-                m_gal->SetIsStroke( thickness > 0 );
-                m_gal->SetLineWidth( thickness );
-                m_gal->DrawEllipseArc( center, majorR, minorR, rot, start, end );
+                if( outline_mode )
+                    m_gal->DrawSegmentChain( chain, thickness );
+                else if( lineStyle == LINE_STYLE::SOLID )
+                    m_gal->DrawSegmentChain( chain, thickness );
             }
 
             break;

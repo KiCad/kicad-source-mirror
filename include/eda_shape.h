@@ -174,11 +174,17 @@ public:
     virtual void SetShape( SHAPE_T aShape )    { m_shape = aShape; }
     SHAPE_T      GetShape() const              { return m_shape; }
 
-    const LINE_ENDING& GetStartEnding() const { return m_startEnding; }
-    void               SetStartEnding( const LINE_ENDING& aEnding ) { m_startEnding = aEnding; }
+    const LINE_ENDING& GetStartEnding() const
+    {
+        return IsClosed() ? m_blankEnding : m_startEnding;
+    }
+    void SetStartEnding( const LINE_ENDING& aEnding ) { m_startEnding = aEnding; }
 
-    const LINE_ENDING& GetEndEnding() const { return m_endEnding; }
-    void               SetEndEnding( const LINE_ENDING& aEnding ) { m_endEnding = aEnding; }
+    const LINE_ENDING& GetEndEnding() const
+    {
+        return IsClosed() ? m_blankEnding : m_endEnding;
+    }
+    void SetEndEnding( const LINE_ENDING& aEnding ) { m_endEnding = aEnding; }
 
     LINE_ENDING_STYLE GetStartEndingStyle() const { return m_startEnding.GetStyle(); }
     void              SetStartEndingStyle( LINE_ENDING_STYLE aStyle ) { m_startEnding.SetStyle( aStyle ); }
@@ -258,7 +264,7 @@ public:
      *
      * @return false if the outline is invalid or the line endings consume its body.
      */
-    bool ShortenBodyPolyPoints( std::vector<VECTOR2I>& aPoints, bool aClosed, int aOutlineIdx, int aLineWidth ) const;
+    bool ShortenBodyPolyPoints( std::vector<VECTOR2I>& aPoints, int aOutlineIdx, int aLineWidth ) const;
 
     /**
      * Copy an outline and apply line-ending body shortening when applicable.
@@ -739,6 +745,7 @@ protected:
     STROKE_PARAMS          m_stroke;       // Line style, width, etc.
     LINE_ENDING            m_startEnding;  // Line ending at start point
     LINE_ENDING            m_endEnding;    // Line ending at end point
+    LINE_ENDING            m_blankEnding;  // Used to return a blank ending for closed shapes
     FILL_T                 m_fill;
     COLOR4D                m_fillColor;
 

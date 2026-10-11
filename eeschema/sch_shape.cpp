@@ -260,35 +260,6 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
     static std::vector<VECTOR2I> ptList;
 
-    if( GetShape() == SHAPE_T::POLY )
-    {
-        ptList.clear();
-
-        if( !GetPolyShape().IsEmpty() )
-        {
-            for( const VECTOR2I& pt : GetPolyShape().Outline( 0 ).CPoints() )
-                ptList.push_back( renderSettings->TransformCoordinate( pt ) + aOffset );
-        }
-    }
-    else if( GetShape() == SHAPE_T::BEZIER )
-    {
-        ptList.clear();
-
-        for( const VECTOR2I& pt : m_bezierPoints )
-            ptList.push_back( renderSettings->TransformCoordinate( pt ) + aOffset );
-    }
-    else if( GetShape() == SHAPE_T::ELLIPSE || GetShape() == SHAPE_T::ELLIPSE_ARC )
-    {
-        ptList.clear();
-
-        SHAPE_ELLIPSE e = buildShapeEllipse();
-
-        SHAPE_LINE_CHAIN chain = e.ConvertToPolyline( getMaxError() );
-
-        for( int ii = 0; ii < chain.PointCount(); ++ii )
-            ptList.push_back( renderSettings->TransformCoordinate( chain.CPoint( ii ) ) + aOffset );
-    }
-
     COLOR4D    color = GetStroke().GetColor();
     COLOR4D    bg = renderSettings->GetBackgroundColor();
     LINE_STYLE lineStyle = GetStroke().GetLineStyle();
@@ -396,7 +367,7 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
                 return renderSettings->TransformCoordinate( VECTOR2I( aPoint ) ) + aOffset;
             };
 
-    std::vector<VECTOR2I> lineEndingPlotPoints = ptList;
+    std::vector<VECTOR2I> lineEndingPlotPoints;
 
     switch( GetShape() )
     {
@@ -408,32 +379,25 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         VECTOR2I origArcStart = start;
         VECTOR2I origArcEnd = end;
 
-        if( GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
-            || GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE )
+        SHAPE_ARC arc( start, mid, end, 0 );
+        VECTOR2I  c = arc.GetCenter();
+        EDA_ANGLE startAngle = arc.GetStartAngle();
+        EDA_ANGLE arcAngle = arc.GetCentralAngle();
+
+        // Determine arc direction from start/mid/end.
+        EDA_ANGLE origStart = startAngle;
+
+        if( ShortenArcForEndings( startAngle, arcAngle, arc.GetRadius(), pen_size ) )
         {
-            SHAPE_ARC arc( start, mid, end, 0 );
-            VECTOR2I  c = arc.GetCenter();
-            EDA_ANGLE startAngle = arc.GetStartAngle();
-            EDA_ANGLE arcAngle = arc.GetCentralAngle();
+            RotatePoint( start, c, origStart - startAngle );
 
-            // Determine arc direction from start/mid/end.
-            EDA_ANGLE origStart = startAngle;
-            if( ShortenArcForEndings( startAngle, arcAngle, arc.GetRadius(), pen_size ) )
-            {
-                RotatePoint( start, c, origStart - startAngle );
+            VECTOR2I newEnd = start;
+            RotatePoint( newEnd, c, -arcAngle );
 
-                VECTOR2I newEnd = start;
-                RotatePoint( newEnd, c, -arcAngle );
+            VECTOR2I newMid = start;
+            RotatePoint( newMid, c, -arcAngle / 2 );
 
-                VECTOR2I newMid = start;
-                RotatePoint( newMid, c, -arcAngle / 2 );
-
-                aPlotter->Arc( start, newMid, newEnd, fill, pen_size );
-            }
-        }
-        else
-        {
-            aPlotter->Arc( start, mid, end, fill, pen_size );
+            aPlotter->Arc( start, newMid, newEnd, fill, pen_size );
         }
 
         // Restore original endpoints for ending placement.
@@ -453,52 +417,63 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         break;
 
     case SHAPE_T::SEGMENT:
-        aPlotter->ThickSegment( start, end, pen_size, nullptr );
+        if( EDA_SHAPE::ShortenSegmentForEndings( start, end, GetStartEnding(), GetEndEnding(), pen_size ) )
+            aPlotter->ThickSegment( start, end, pen_size, nullptr );
+
         break;
 
     case SHAPE_T::POLY:
-        if( !ShortenBodyPolyPoints( ptList, IsClosed(), 0, pen_size ) )
-            break;
+        ptList.clear();     // clear every time; it's static
 
-        aPlotter->PlotPoly( ptList, fill, pen_size, nullptr );
+        if( !GetPolyShape().IsEmpty() )
+        {
+            for( const VECTOR2I& pt : GetPolyShape().Outline( 0 ).CPoints() )
+                ptList.push_back( renderSettings->TransformCoordinate( pt ) + aOffset );
+
+            if( ShortenBodyPolyPoints( ptList, 0, pen_size ) )
+                aPlotter->PlotPoly( ptList, fill, pen_size, nullptr );
+        }
+
+        lineEndingPlotPoints = ptList;
         break;
 
     case SHAPE_T::BEZIER:
+        if( std::optional<BEZIER<double>> curve = ShortenedBezierCurve( pen_size ) )
+        {
+            if( aPlotter->GetPlotterType() == PLOT_FORMAT::SVG )
+            {
+                aPlotter->BezierCurve( transformBezierPoint( curve->Start ), transformBezierPoint( curve->C1 ),
+                                       transformBezierPoint( curve->C2 ), transformBezierPoint( curve->End ),
+                                       GetMaxError(), pen_size );
+            }
+            else
+            {
+                std::vector<VECTOR2D> pts = ShortenedBezierPolyline( pen_size );
+                std::vector<VECTOR2I> plotPts;
+
+                plotPts.reserve( pts.size() );
+
+                for( const VECTOR2D& pt : pts )
+                    plotPts.push_back( transformBezierPoint( pt ) );
+
+                aPlotter->PlotPoly( plotPts, fill, pen_size, nullptr );
+            }
+        }
+
+        break;
+
+    case SHAPE_T::ELLIPSE:
+    case SHAPE_T::ELLIPSE_ARC:
     {
-        std::optional<BEZIER<double>> curve = ShortenedBezierCurve( pen_size );
+        ptList.clear();     // clear every time; it's static
 
-        if( curve && aPlotter->GetPlotterType() == PLOT_FORMAT::SVG )
-        {
-            aPlotter->BezierCurve( transformBezierPoint( curve->Start ), transformBezierPoint( curve->C1 ),
-                                   transformBezierPoint( curve->C2 ), transformBezierPoint( curve->End ),
-                                   GetMaxError(), pen_size );
-        }
-        else if( curve )
-        {
-            std::vector<VECTOR2D> pts = ShortenedBezierPolyline( pen_size );
-            std::vector<VECTOR2I> plotPts;
+        SHAPE_LINE_CHAIN chain = buildShapeEllipse().ConvertToPolyline( getMaxError() );
 
-            plotPts.reserve( pts.size() );
-
-            for( const VECTOR2D& pt : pts )
-                plotPts.push_back( transformBezierPoint( pt ) );
-
-            aPlotter->PlotPoly( plotPts, fill, pen_size, nullptr );
-        }
+        if( GetShortenedBodyPolyPoints( chain, 0, ptList, pen_size ) )
+            aPlotter->PlotPoly( ptList, fill, pen_size, nullptr );
 
         break;
     }
-
-    case SHAPE_T::ELLIPSE:
-        if( !ptList.empty() )
-            ptList.push_back( ptList.front() );
-
-        aPlotter->PlotPoly( ptList, fill, pen_size, nullptr );
-        break;
-
-    case SHAPE_T::ELLIPSE_ARC:
-        aPlotter->PlotPoly( ptList, FILL_T::NO_FILL, pen_size, nullptr );
-        break;
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
@@ -506,10 +481,9 @@ void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
     aPlotter->SetDash( pen_size, LINE_STYLE::SOLID );
 
-    // Plot line endings for open shapes.
-    if( !IsClosed()
-        && ( GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
-             || GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE ) )
+    // Plot line endings
+    if( GetStartEnding().GetStyle() != LINE_ENDING_STYLE::NONE
+        || GetEndEnding().GetStyle() != LINE_ENDING_STYLE::NONE )
     {
         VECTOR2I startPt, endPt;
 
