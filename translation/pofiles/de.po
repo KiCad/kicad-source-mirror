@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 08:33+0000\n"
+"PO-Revision-Date: 2026-10-11 12:50+0000\n"
 "Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
@@ -37562,7 +37562,7 @@ msgstr "Endlage"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:441 pcbnew/pad.cpp:3378
 #: pcbnew/widgets/search_handlers.cpp:914
 msgid "Round"
-msgstr "Rundung"
+msgstr "Rund"
 
 #: pcbnew/board_statistics_report.cpp:676
 #: pcbnew/board_statistics_report.cpp:848
