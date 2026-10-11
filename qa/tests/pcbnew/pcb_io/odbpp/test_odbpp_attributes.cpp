@@ -462,6 +462,38 @@ BOOST_AUTO_TEST_CASE( OdbStepBoardThicknessMatchesDefaultStackup )
 }
 
 
+BOOST_AUTO_TEST_CASE( OdbCopperWeightFollowsOutputUnits )
+{
+    std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
+                                                                      + "custom_pads.kicad_pcb" );
+    BOOST_REQUIRE( board );
+
+    // Produce an ODB++ export and check that the copper weight follows the output units.
+    const auto checkCopperWeight =
+            [&]( const fs::path& aRootDir, const std::string& aLayer, const std::string& aExpectedUnits,
+                const std::string& aExpectedValue )
+            {
+                ODB_PRODUCT product( aRootDir );
+
+                const fs::path attrlistPath( product.LayerFile( aLayer, wxS( "attrlist" ) ).ToStdWstring() );
+                const std::vector<std::string> attrlist = ReadLines( attrlistPath );
+
+                const std::string expectedUnitsLine = "UNITS=" + aExpectedUnits;
+                const std::string expectedValueLine = ".copper_weight=" + aExpectedValue;
+
+                BOOST_REQUIRE( !attrlist.empty() );
+                BOOST_CHECK_EQUAL( attrlist.front(), expectedUnitsLine );
+                BOOST_CHECK( std::find( attrlist.begin(), attrlist.end(), expectedValueLine ) != attrlist.end() );
+            };
+
+    fs::path metricRoot = ExportOdb( *board, TempDir().Path(), "mm" );
+    checkCopperWeight( metricRoot, "f.cu", "MM", "35.0" );
+
+    fs::path inchRoot = ExportOdb( *board, TempDir().Path(), "inch" );
+    checkCopperWeight( inchRoot, "f.cu", "INCH", "1.0" );
+}
+
+
 BOOST_AUTO_TEST_CASE( OdbLayerMaterialHasUserAttributeDeclaration )
 {
     std::unique_ptr<BOARD> board = KI_TEST::ReadBoardFromFileOrStream( KI_TEST::GetPcbnewTestDataDir()
@@ -529,5 +561,3 @@ BOOST_AUTO_TEST_CASE( OdbBackdrillStopLayerFollowsMustCutCopper )
 
     BOOST_CHECK_EQUAL( checked, stopLayers.size() );
 }
-
-
