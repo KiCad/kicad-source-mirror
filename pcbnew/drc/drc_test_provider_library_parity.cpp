@@ -818,8 +818,19 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, int aCompareFlags
 
     temp->SetParent( GetBoard() );
 
-    if( !( aCompareFlags & COMPARE_FLAGS::INSTANCE_TO_INSTANCE ) && IsFlipped() != temp->IsFlipped() )
-        temp->Flip( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
+
+    if( !( aCompareFlags & COMPARE_FLAGS::INSTANCE_TO_INSTANCE ) )
+    {
+        if( IsFlipped() != temp->IsFlipped() )
+            temp->Flip( { 0, 0 }, FLIP_DIRECTION::TOP_BOTTOM );
+
+        // Set rotation before trying to compare footprints, especially when rotation
+        // is not multiple of 90 deg (some shapes like rectangles can be converted to polygons).
+        // Moreover, NormalizeForCompare needs correct orientation to normalize some shapes
+        // like rectangles
+        if( GetOrientation() != temp->GetOrientation() )
+            temp->SetOrientation( GetOrientation() );
+    }
 
     for( BOARD_ITEM* item : temp->GraphicalItems() )
         item->NormalizeForCompare();
