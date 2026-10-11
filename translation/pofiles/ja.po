@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 12:59+0000\n"
+"PO-Revision-Date: 2026-10-11 13:04+0000\n"
 "Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
 "source/ja/>\n"
@@ -39912,7 +39912,7 @@ msgstr "ラウンド"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:149
 msgid "Nearest"
-msgstr ""
+msgstr "一番近い"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:165
 msgid "Annular ring"
@@ -39924,17 +39924,15 @@ msgstr "結果"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:211
 msgid "Show minimum lead size"
-msgstr "最小 リードサイズを表示"
+msgstr "最小リードサイズを表示"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:214
-#, fuzzy
 msgid "Show minimum hole size"
-msgstr "基板の穴の最小値"
+msgstr "最小穴サイズを表示"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:217
-#, fuzzy
 msgid "Show maximum hole size"
-msgstr "部品実装用接着剤 (Adhesive) を表示"
+msgstr "最大穴サイズを表示"
 
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:248
 msgid "Recommended pad size:"
