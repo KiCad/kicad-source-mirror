@@ -92,6 +92,8 @@ public:
 
         /// Maximum total size of backups (bytes), 0 for unlimited
         unsigned long long limit_total_size;
+
+        constexpr static unsigned long long UNLIMITED_SIZE = 0; ///< Value representing unlimited total size
     };
 
     struct ENVIRONMENT

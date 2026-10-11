@@ -26,6 +26,7 @@
 #include <pgm_base.h>
 #include <project.h>
 #include <project/project_file.h>
+#include <scoped_set_reset.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 
@@ -54,43 +55,30 @@ struct LIBGIT2_SCOPE
 };
 
 
-struct SCOPED_BOOL_OVERRIDE
+struct SCOPED_PGM_BACKUP_SETTINGS
 {
-    explicit SCOPED_BOOL_OVERRIDE( bool& aFlag ) : m_flag( aFlag ), m_original( aFlag ) {}
-    ~SCOPED_BOOL_OVERRIDE() { m_flag = m_original; }
-
-    bool& m_flag;
-    bool  m_original;
-};
-
-
-// Restore the backup location on destruction so a thrown BOOST_REQUIRE cannot leak the
-// override into later tests.
-struct SCOPED_BACKUP_LOCATION_OVERRIDE
-{
-    explicit SCOPED_BACKUP_LOCATION_OVERRIDE( BACKUP_LOCATION& aLocation ) :
-            m_location( aLocation ), m_original( aLocation )
+    /**
+     * @brief RAII class to ensure the PGM backup setting is set to a
+     * known state during the scope.
+     *
+     * Users can change the backup settings within the scope at will and they will
+     * be restored to the original state when the scope ends.
+     */
+    explicit SCOPED_PGM_BACKUP_SETTINGS() :
+            m_backupReset( Pgm().GetCommonSettings()->m_Backup )
     {
+        // Zero-init, with some useful defaults.
+        static const COMMON_SETTINGS::AUTO_BACKUP s_defaultState = {
+            .enabled = true,
+            .format = BACKUP_FORMAT::INCREMENTAL,
+            .location = BACKUP_LOCATION::PROJECT_DIR,
+            .limit_total_size = COMMON_SETTINGS::AUTO_BACKUP::UNLIMITED_SIZE,
+        };
+
+        Pgm().GetCommonSettings()->m_Backup = s_defaultState;
     }
 
-    ~SCOPED_BACKUP_LOCATION_OVERRIDE() { m_location = m_original; }
-
-    BACKUP_LOCATION& m_location;
-    BACKUP_LOCATION  m_original;
-};
-
-
-struct SCOPED_BACKUP_FORMAT_OVERRIDE
-{
-    explicit SCOPED_BACKUP_FORMAT_OVERRIDE( BACKUP_FORMAT& aFormat ) :
-            m_format( aFormat ), m_original( aFormat )
-    {
-    }
-
-    ~SCOPED_BACKUP_FORMAT_OVERRIDE() { m_format = m_original; }
-
-    BACKUP_FORMAT& m_format;
-    BACKUP_FORMAT  m_original;
+    SCOPED_SET_RESET<COMMON_SETTINGS::AUTO_BACKUP> m_backupReset;
 };
 
 
@@ -253,9 +241,7 @@ BOOST_AUTO_TEST_CASE( NoSnapshotWithoutProjectFile )
 {
     LIBGIT2_SCOPE libgit;
 
-    bool& backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
 
     KI_TEST::SCOPED_TEMP_DIR notAProject( wxS( "kicad_qa_no_project" ) );
     const wxString& path = notAProject.PathStr();
@@ -288,9 +274,7 @@ BOOST_AUTO_TEST_CASE( CommitFullProjectSnapshotHandlesSubdirectories )
 {
     LIBGIT2_SCOPE libgit;
 
-    bool& backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
 
     KI_TEST::SCOPED_TEMP_DIR project( wxS( "kicad_qa_subdirs" ) );
     const wxString& path = project.PathStr();
@@ -337,9 +321,7 @@ BOOST_AUTO_TEST_CASE( RestoreCommitPreservesZipBackupsDirectory )
     LIBGIT2_SCOPE libgit;
 
     // LOCAL_HISTORY early-exits when backups are disabled.
-    bool& backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
 
     KI_TEST::SCOPED_TEMP_DIR tempProject( wxS( "kicad_qa_issue24016" ) );
     const wxString& projectPath = tempProject.PathStr();
@@ -398,9 +380,7 @@ BOOST_AUTO_TEST_CASE( RestoreCommitPreservesNestedProject )
 {
     LIBGIT2_SCOPE libgit;
 
-    bool& backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
 
     KI_TEST::SCOPED_TEMP_DIR tempProject( wxS( "kicad_qa_nested_project" ) );
     const wxString& projectPath = tempProject.PathStr();
@@ -460,9 +440,7 @@ BOOST_AUTO_TEST_CASE( RestoreCommitRetainsTimestampedBackup )
 {
     LIBGIT2_SCOPE libgit;
 
-    bool& backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
 
     KI_TEST::SCOPED_TEMP_DIR tempProject( wxS( "kicad_qa_retained_backup" ) );
     const wxString& projectPath = tempProject.PathStr();
@@ -533,9 +511,7 @@ BOOST_AUTO_TEST_CASE( CommitFullProjectSnapshotExcludesNonKiCadFiles )
 {
     LIBGIT2_SCOPE libgit;
 
-    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
 
     KI_TEST::SCOPED_TEMP_DIR project( wxS( "kicad_qa_privacy" ) );
     const wxString& path = project.PathStr();
@@ -612,9 +588,7 @@ BOOST_AUTO_TEST_CASE( FirstAutosaveSkipsCommitWhenStagedMatchesDisk )
 {
     LIBGIT2_SCOPE libgit;
 
-    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
 
     KI_TEST::SCOPED_TEMP_DIR project( wxS( "kicad_qa_first_idle_autosave" ) );
     const wxString& path = project.PathStr();
@@ -671,9 +645,7 @@ BOOST_AUTO_TEST_CASE( SaverSkippedAfterOwningDocumentDestroyed )
 {
     LIBGIT2_SCOPE libgit;
 
-    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
 
     KI_TEST::SCOPED_TEMP_DIR project( wxS( "kicad_qa_saver_lifetime" ) );
     const wxString&  path = project.PathStr();
@@ -727,9 +699,7 @@ BOOST_AUTO_TEST_CASE( FirstManualSaveAlwaysCommitsOnFreshProject )
 {
     LIBGIT2_SCOPE libgit;
 
-    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
 
     KI_TEST::SCOPED_TEMP_DIR project( wxS( "kicad_qa_first_manual_save" ) );
     const wxString& path = project.PathStr();
@@ -769,13 +739,9 @@ BOOST_AUTO_TEST_CASE( ZipFormatSkipsIncrementalAutosave )
 {
     LIBGIT2_SCOPE libgit;
 
-    bool& backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
-
-    BACKUP_FORMAT& format = Pgm().GetCommonSettings()->m_Backup.format;
-    SCOPED_BACKUP_FORMAT_OVERRIDE restoreFormat( format );
-    format = BACKUP_FORMAT::ZIP;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
+    Pgm().GetCommonSettings()->m_Backup.format = BACKUP_FORMAT::ZIP;
+    Pgm().GetCommonSettings()->m_Backup.location = BACKUP_LOCATION::PROJECT_DIR;
 
     KI_TEST::SCOPED_TEMP_DIR project( wxS( "kicad_qa_zip_skips_incremental" ) );
     const wxString& path = project.PathStr();
@@ -810,17 +776,9 @@ BOOST_AUTO_TEST_CASE( ZipFormatSkipsIncrementalAutosave )
 // not lose work between manual saves (issue 24773).
 BOOST_AUTO_TEST_CASE( ZipFormatWritesRecoveryFiles )
 {
-    bool& backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
-
-    BACKUP_FORMAT& format = Pgm().GetCommonSettings()->m_Backup.format;
-    SCOPED_BACKUP_FORMAT_OVERRIDE restoreFormat( format );
-    format = BACKUP_FORMAT::ZIP;
-
-    BACKUP_LOCATION& location = Pgm().GetCommonSettings()->m_Backup.location;
-    SCOPED_BACKUP_LOCATION_OVERRIDE restoreLocation( location );
-    location = BACKUP_LOCATION::PROJECT_DIR;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
+    Pgm().GetCommonSettings()->m_Backup.format = BACKUP_FORMAT::ZIP;
+    Pgm().GetCommonSettings()->m_Backup.location = BACKUP_LOCATION::PROJECT_DIR;
 
     KI_TEST::SCOPED_TEMP_DIR project( wxS( "kicad_qa_zip_recovery_files" ) );
     const wxString& path = project.PathStr();
@@ -857,13 +815,8 @@ BOOST_AUTO_TEST_CASE( ZipFormatWritesRecoveryFiles )
 // stale, or recovery prompts fire on every open with nothing to restore (issue 24126).
 BOOST_AUTO_TEST_CASE( CloudSyncTouchedAutosaveFalselyFlaggedStale )
 {
-    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
-
-    BACKUP_LOCATION& location = Pgm().GetCommonSettings()->m_Backup.location;
-    SCOPED_BACKUP_LOCATION_OVERRIDE restoreLocation( location );
-    location = BACKUP_LOCATION::PROJECT_DIR;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
+    Pgm().GetCommonSettings()->m_Backup.location = BACKUP_LOCATION::PROJECT_DIR;
 
     KI_TEST::SCOPED_TEMP_DIR project( wxS( "kicad_qa_cloudsync_autosave" ) );
     const wxString& path = project.PathStr();
@@ -904,13 +857,8 @@ BOOST_AUTO_TEST_CASE( CloudSyncTouchedAutosaveFalselyFlaggedStale )
 // must still be flagged stale so recovery continues to fire.
 BOOST_AUTO_TEST_CASE( DivergentAutosaveStillFlaggedStale )
 {
-    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
-
-    BACKUP_LOCATION& location = Pgm().GetCommonSettings()->m_Backup.location;
-    SCOPED_BACKUP_LOCATION_OVERRIDE restoreLocation( location );
-    location = BACKUP_LOCATION::PROJECT_DIR;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
+    Pgm().GetCommonSettings()->m_Backup.location = BACKUP_LOCATION::PROJECT_DIR;
 
     KI_TEST::SCOPED_TEMP_DIR project( wxS( "kicad_qa_divergent_autosave" ) );
     const wxString& path = project.PathStr();
@@ -946,9 +894,7 @@ BOOST_AUTO_TEST_CASE( EnforceSizeLimitKeepsUnstagedFilesInNextSnapshot )
 {
     LIBGIT2_SCOPE libgit;
 
-    bool&                backupEnabled = Pgm().GetCommonSettings()->m_Backup.enabled;
-    SCOPED_BOOL_OVERRIDE restoreBackupFlag( backupEnabled );
-    backupEnabled = true;
+    SCOPED_PGM_BACKUP_SETTINGS restorePgmBackup;
 
     KI_TEST::SCOPED_TEMP_DIR project( wxS( "kicad_qa_trim_partial_save" ) );
     const wxString& path = project.PathStr();
