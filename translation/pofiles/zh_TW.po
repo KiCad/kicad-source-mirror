@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-05 20:17+0000\n"
+"PO-Revision-Date: 2026-10-11 15:39+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/kicad/master-source/zh_Hant/>\n"
@@ -3755,7 +3755,7 @@ msgstr "比對分支"
 
 #: common/dialogs/dialog_git_mr_review.cpp:102
 msgid "Select base and head refs to compare."
-msgstr "請選擇要比對的基底與前端參考。"
+msgstr "請選擇要比對的基底與目標參考。"
 
 #: common/dialogs/dialog_git_mr_review.cpp:117
 #, c-format
@@ -3799,7 +3799,7 @@ msgstr "基底參考："
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:32
 msgid "Head ref:"
-msgstr "前端參考："
+msgstr "目標參考："
 
 #: common/dialogs/dialog_git_mr_review_base.cpp:42
 msgid "Compare"
@@ -8891,9 +8891,8 @@ msgid "Could not read file: %s"
 msgstr "無法讀取檔案: %s"
 
 #: common/gestfich.cpp:842
-#, fuzzy
 msgid "Cannot create temporary archive file"
-msgstr "無法重新命名臨時檔案 \"%s\" 到 \"%s\""
+msgstr "無法建立暫存壓縮檔"
 
 #: common/gestfich.cpp:880
 #, fuzzy
@@ -9081,7 +9080,7 @@ msgstr "查找樹失敗: %s"
 #: common/git/libgit_backend.cpp:257 common/git/libgit_backend.cpp:327
 #, c-format
 msgid "Failed to get HEAD reference: %s"
-msgstr "無法獲取 HEAD 引用: %s"
+msgstr "無法取得 HEAD 參考：%s"
 
 #: common/git/libgit_backend.cpp:266
 #, c-format
@@ -9115,7 +9114,7 @@ msgstr "無法取得父提交：%s"
 #: common/git/libgit_backend.cpp:371
 #, c-format
 msgid "Failed to get HEAD tree: %s"
-msgstr "無法取得 HEAD 樹：%s"
+msgstr "無法取得 HEAD 樹狀結構：%s"
 
 #: common/git/libgit_backend.cpp:380 common/git/libgit_backend.cpp:403
 #, c-format
@@ -9144,7 +9143,7 @@ msgstr "無法連接到遠端: '%s'"
 
 #: common/git/libgit_backend.cpp:540 common/git/libgit_backend.cpp:1270
 msgid "Could not get repository head"
-msgstr "無法取得儲存庫 HEAD"
+msgstr "無法取得儲存庫的目前提交（HEAD）"
 
 #: common/git/libgit_backend.cpp:555
 #, c-format
@@ -9177,7 +9176,7 @@ msgstr "找不到分支 '%s': %s"
 #: common/git/libgit_backend.cpp:958
 #, c-format
 msgid "Failed to find branch head for '%s': %s"
-msgstr "找不到 '%s' 的分支 head：%s"
+msgstr "找不到「%s」的分支頭：%s"
 
 #: common/git/libgit_backend.cpp:972 common/git/libgit_backend.cpp:997
 #, c-format
@@ -9192,7 +9191,7 @@ msgstr "無法建立本機分支「%s」：%s"
 #: common/git/libgit_backend.cpp:1022
 #, c-format
 msgid "Failed to update HEAD reference for branch '%s': %s"
-msgstr "更新分支 '%s' 的 HEAD 引用失敗：%s"
+msgstr "無法更新分支「%s」的 HEAD 參考：%s"
 
 #: common/git/libgit_backend.cpp:1102
 #, c-format
@@ -9223,7 +9222,7 @@ msgstr "無法分析合併"
 
 #: common/git/libgit_backend.cpp:1214
 msgid "Invalid HEAD.  Cannot merge."
-msgstr "HEAD 無效, 無法合併。"
+msgstr "HEAD 無效，無法合併。"
 
 #: common/git/libgit_backend.cpp:1240
 msgid "Could not access repository configuration"
@@ -9287,7 +9286,7 @@ msgstr "無法寫入合併結果。"
 
 #: common/git/libgit_backend.cpp:1517
 msgid "Could not get the repository head."
-msgstr "無法取得儲存庫 HEAD。"
+msgstr "無法取得儲存庫的目前提交（HEAD）。"
 
 #: common/git/libgit_backend.cpp:1527
 msgid "Could not look up the commits to merge."
@@ -11065,7 +11064,7 @@ msgstr "還原版本"
 msgid ""
 "Your current files are backed up first so you can undo the restore. Files "
 "that are not part of this version are left untouched."
-msgstr "會先備份目前檔案，以便還原其餘操作"
+msgstr "會先備份目前檔案，以便還原此次復原。不屬於此版本的檔案會保持原樣。"
 
 #: common/model_preview_manager.cpp:107
 msgid "3D model previews require setup for this KiCad version."
@@ -14277,7 +14276,7 @@ msgstr "重新命名變體"
 
 #: eeschema/api/api_handler_sch.cpp:3052 eeschema/sch_edit_frame.cpp:3590
 msgid "Copy Variant"
-msgstr "複製變體"
+msgstr "從變體複製"
 
 #: eeschema/api/api_handler_sch.cpp:3093 eeschema/sch_edit_frame.cpp:3328
 msgid "Edit Variant Description"
@@ -20653,11 +20652,11 @@ msgstr "沒有錯誤或警告"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:223
 msgid "Generate warning"
-msgstr "輸出警告"
+msgstr "產生警告"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:228
 msgid "Generate error"
-msgstr "輸出錯誤"
+msgstr "產生錯誤"
 
 #: eeschema/dialogs/panel_setup_symbol_parity_base.cpp:32
 msgid "Check for missing fields"
