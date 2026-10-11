@@ -59,6 +59,18 @@ ARRAY_TOOL::~ARRAY_TOOL()
 
 void ARRAY_TOOL::Reset( RESET_REASON aReason )
 {
+    if( aReason == MODEL_RELOAD || aReason == SUPERMODEL_RELOAD || aReason == SHUTDOWN )
+    {
+        if( m_dialog )
+        {
+            m_dialog->Unbind( wxEVT_CLOSE_WINDOW, &ARRAY_TOOL::onDialogClosed, this );
+            m_dialog->Destroy();
+            m_dialog = nullptr;
+        }
+
+        m_array_opts.reset();
+        m_selection.reset();
+    }
 }
 
 
@@ -112,10 +124,14 @@ void ARRAY_TOOL::onDialogClosed( wxCloseEvent& aEvent )
 {
     // Now that the dialog has served it's purpose, we can get rid of it
     m_dialog->Destroy();
+    m_dialog = nullptr;
 
     // This means the dialog failed somehow
     if( m_array_opts == nullptr )
+    {
+        m_selection.reset();
         return;
+    }
 
     wxCHECK( m_selection, /* void */ );
 
