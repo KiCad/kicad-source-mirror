@@ -19,6 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <settings/settings_manager.h>
 #include <advanced_config.h>
 #include <gestfich.h>

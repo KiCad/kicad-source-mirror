@@ -20,9 +20,13 @@
 #include "dialogs/dialog_export_odbpp.h"
 #include "dialogs/panel_fab_export_content.h"
 
+#include <algorithm>
+
 #include <wx/filedlg.h>
+
 #include <kiplatform/ui.h>
 
+#include <bitmaps.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
@@ -41,8 +45,6 @@
 #include <grid_tricks.h>
 #include <widgets/wx_grid.h>
 #include <pcb_io/odbpp/odb_util.h>
-
-#include <algorithm>
 
 
 namespace

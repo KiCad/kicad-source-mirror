@@ -31,12 +31,16 @@
 #include <memory>
 #include <functional>
 
+
 class EDA_BASE_FRAME;
 class EDA_ITEM;
 class PROPERTY_BASE;
 class BITMAP_BUTTON;
 class wxPropertyGridEvent;
 class wxStaticText;
+
+enum class BITMAPS : unsigned int;
+
 
 enum PROPERTIES_PANEL_CONTEXT_MENU_IDS
 {

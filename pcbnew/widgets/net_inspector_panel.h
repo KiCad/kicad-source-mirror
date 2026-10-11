@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <bitmaps.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/wx_dataviewctrl.h>
 

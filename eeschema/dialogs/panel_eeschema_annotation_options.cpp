@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <pgm_base.h>
 #include <refdes_tracker.h>
 #include <settings/settings_manager.h>

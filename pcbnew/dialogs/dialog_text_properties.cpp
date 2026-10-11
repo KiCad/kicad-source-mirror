@@ -23,6 +23,7 @@
 #include <wx/valnum.h>
 #include <wx/hyperlink.h>
 
+#include <bitmaps.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
 #include <dialogs/html_message_box.h>

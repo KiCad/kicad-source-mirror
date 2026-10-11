@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <bitmaps.h>
 #include <board.h>
 #include <pcb_generator.h>
 #include <geometry/geometry_utils.h>

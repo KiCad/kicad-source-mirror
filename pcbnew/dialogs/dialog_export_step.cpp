@@ -28,6 +28,7 @@
 #include <wx/filedlg.h>
 #include <kiplatform/ui.h>
 
+#include <bitmaps.h>
 #include <pgm_base.h>
 #include <settings/common_settings.h>
 #include <board.h>

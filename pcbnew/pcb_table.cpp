@@ -17,9 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "pcb_table.h"
+
 #include <pcb_edit_frame.h>
 #include <footprint.h>
-#include <pcb_table.h>
+#include <bitmaps.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <geometry/shape_simple.h>

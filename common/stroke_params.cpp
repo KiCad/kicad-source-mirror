@@ -21,6 +21,7 @@
 #include "stroke_params_parser.h"
 
 #include <base_units.h>
+#include <bitmaps.h>
 #include <charconv>
 #include <string_utils.h>
 #include <render_settings.h>
@@ -569,5 +570,3 @@ double STROKE_PARAMS_PARSER::parseDouble( const char* aText )
 
     return DSNLEXER::parseDouble();
 }
-
-

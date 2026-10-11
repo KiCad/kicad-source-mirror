@@ -23,6 +23,7 @@
 #include <wx/filedlg.h>
 #include <kiplatform/ui.h>
 
+#include <bitmaps.h>
 #include <board.h>
 #include <pcb_edit_frame.h>
 #include <project.h>

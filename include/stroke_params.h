@@ -20,14 +20,16 @@
 #pragma once
 
 #include <map>
-#include <bitmaps.h>
 #include <units_provider.h>
 #include <gal/color4d.h>
 #include <wx/translation.h>
 #include <geometry/shape.h>
 
+
 class OUTPUTFORMATTER;
 class MSG_PANEL_ITEM;
+
+enum class BITMAPS : unsigned int;
 
 namespace KIGFX
 {

@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <sch_line.h>
 #include <sch_bus_entry.h>
 #include <sch_junction.h>

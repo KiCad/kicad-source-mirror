@@ -18,9 +18,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "dialog_dimension_properties.h"
+
+#include <algorithm>
+
+#include <wx/msgdlg.h>
+
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
 #include <base_units.h>
+#include <bitmaps.h>
 #include <eda_units.h>
 #include <math/util.h>
 #include <board.h>
@@ -30,15 +37,10 @@
 #include <pcb_base_edit_frame.h>
 #include <pcb_layer_box_selector.h>
 #include <widgets/unit_binder.h>
-#include <wx/msgdlg.h>
 
 #include <constraints/pcb_constraint.h>
 #include <constraints/board_constraint_adapter.h>
 #include <constraints/constraint_builder.h>
-
-#include "dialog_dimension_properties.h"
-
-#include <algorithm>
 
 
 DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,

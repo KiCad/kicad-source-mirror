@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps/bitmaps_list.h>
 #include <connectivity/conn_presentation.h>
 #include <netclass.h>
 #include <sch_draw_panel.h>

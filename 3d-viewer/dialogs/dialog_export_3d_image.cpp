@@ -18,7 +18,7 @@
  */
 
 #include "dialog_export_3d_image.h"
-#include <bitmaps/bitmap_types.h>
+
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/button.h>
@@ -26,6 +26,9 @@
 #include <wx/choice.h>
 #include <wx/bmpbuttn.h>
 #include <wx/statline.h>
+
+#include <bitmaps.h>
+
 
 DIALOG_EXPORT_3D_IMAGE::DIALOG_EXPORT_3D_IMAGE( wxWindow* aParent, const wxSize& aCanvasSize,
                                                 EDA_3D_VIEWER_SETTINGS::EXPORT_IMAGE_SETTINGS* aCfg ) :

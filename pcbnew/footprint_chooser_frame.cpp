@@ -22,6 +22,7 @@
 #include <wx/checkbox.h>
 #include <wx/splitter.h>
 
+#include <bitmaps.h>
 #include <pgm_base.h>
 #include <kiface_base.h>
 #include <kiway.h>

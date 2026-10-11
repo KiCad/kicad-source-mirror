@@ -24,6 +24,7 @@
 
 #include <wx/bitmap.h>
 
+#include <bitmaps.h>
 #include <kiplatform/ui.h>
 #include <confirm.h>
 #include <lset.h>

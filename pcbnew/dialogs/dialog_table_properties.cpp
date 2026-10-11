@@ -21,6 +21,7 @@
 
 #include <wx/hyperlink.h>
 
+#include <bitmaps.h>
 #include <kiplatform/ui.h>
 #include <widgets/font_choice.h>
 #include <widgets/color_swatch.h>

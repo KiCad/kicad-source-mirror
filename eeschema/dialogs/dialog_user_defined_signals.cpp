@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <scintilla_tricks.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/grid_text_helpers.h>

@@ -17,8 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "dialog_tablecell_properties.h"
+
 #include <wx/hyperlink.h>
 
+#include <bitmaps.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
 #include <dialogs/html_message_box.h>
@@ -36,7 +39,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <scintilla_tricks.h>
-#include "dialog_tablecell_properties.h"
+
 
 DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME*        aFrame,
                                                           std::vector<PCB_TABLECELL*> aCells ) :

@@ -21,6 +21,7 @@
 #include <i18n_utility.h>
 #include <json_common.h>
 
+#include <bitmaps/bitmaps_list.h>
 #include <settings/parameters.h>
 #include <wildcards_and_files_ext.h>
 

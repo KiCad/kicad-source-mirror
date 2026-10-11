@@ -19,9 +19,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "dialog_drc.h"
+
+#include <bitmaps.h>
 #include <confirm.h>
 #include <core/throttle.h>
-#include <dialog_drc.h>
 #include <board_design_settings.h>
 #include <kiface_base.h>
 #include <macros.h>

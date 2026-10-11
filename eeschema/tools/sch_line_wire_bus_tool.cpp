@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <tool/tool_manager.h>
 #include <sch_line_wire_bus_tool.h>
 

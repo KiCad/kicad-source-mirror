@@ -22,7 +22,6 @@
 #define JOBS_FILE_H
 
 #include <reporter.h>
-#include <bitmaps/bitmaps_list.h>
 #include <jobs/job.h>
 #include <jobs/jobs_output.h>
 #include <settings/json_settings.h>
@@ -33,6 +32,8 @@
 #include <optional>
 
 class PROJECT;
+
+enum class BITMAPS : unsigned int;
 
 
 class JOBSET_OUTPUT_REPORTER : public WX_STRING_REPORTER

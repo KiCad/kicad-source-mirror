@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
 #include <board.h>

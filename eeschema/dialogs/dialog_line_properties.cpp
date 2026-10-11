@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <sch_line.h>
 #include <dialog_line_properties.h>
 #include <dialogs/dialog_color_picker.h>

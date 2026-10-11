@@ -22,6 +22,7 @@
 
 #include "dialog_gencad_export_options.h"
 
+#include <bitmaps.h>
 #include <common.h>
 #include <wx/anybutton.h>
 #include <wx/filedlg.h>

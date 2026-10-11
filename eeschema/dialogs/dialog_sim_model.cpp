@@ -19,6 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <dialog_ibis_parser_reporter.h>
 #include <dialog_sim_model.h>
 #include <sim/sim_property.h>

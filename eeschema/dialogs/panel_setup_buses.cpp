@@ -20,6 +20,8 @@
  */
 
 #include <algorithm>
+
+#include <bitmaps.h>
 #include <wx/tokenzr.h>
 #include <widgets/wx_grid.h>
 #include <widgets/std_bitmap_button.h>

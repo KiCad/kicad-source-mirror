@@ -19,6 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
 #include <widgets/bitmap_button.h>

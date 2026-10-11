@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <widgets/color_swatch.h>
 #include <widgets/line_ending_bitmap.h>
 #include <stroke_params.h>

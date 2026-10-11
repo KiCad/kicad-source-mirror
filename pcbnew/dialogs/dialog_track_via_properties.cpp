@@ -19,6 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <core/kicad_algo.h>
 #include <dialogs/dialog_track_via_properties.h>
 #include <pcb_layer_box_selector.h>

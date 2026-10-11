@@ -20,6 +20,7 @@
 
 #include <3d_rendering/opengl/render_3d_opengl.h> // Must be included before any GL header
 
+#include <bitmaps.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <eda_3d_canvas.h>
@@ -488,5 +489,3 @@ void EDA_3D_CONTROLLER::setTransitions()
     Go( &EDA_3D_CONTROLLER::ToggleLayersManager,EDA_3D_ACTIONS::showLayersManager.MakeEvent() );
     Go( &EDA_3D_CONTROLLER::ToggleVisibility, EDA_3D_ACTIONS::showNavigator.MakeEvent() );
 }
-
-

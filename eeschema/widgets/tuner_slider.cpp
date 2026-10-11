@@ -21,6 +21,7 @@
  */
 
 
+#include <bitmaps.h>
 #include <ki_exception.h>
 #include <sim/simulator_frame_ui.h>
 #include <sim/simulator_frame.h>

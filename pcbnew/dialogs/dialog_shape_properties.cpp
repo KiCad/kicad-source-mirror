@@ -25,6 +25,7 @@
 
 #include <wx/valnum.h>
 
+#include <bitmaps.h>
 #include <pcb_base_edit_frame.h>
 #include <pcb_edit_frame.h>
 #include <board_commit.h>

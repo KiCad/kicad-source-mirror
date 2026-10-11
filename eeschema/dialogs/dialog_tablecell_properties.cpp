@@ -17,6 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <scintilla_tricks.h>
 #include <gr_text.h>
 #include <sch_edit_frame.h>

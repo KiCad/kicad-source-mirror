@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <bitmaps.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/color_swatch.h>
 #include <widgets/font_choice.h>

@@ -19,6 +19,7 @@
 
 #include <algorithm>
 
+#include <bitmaps.h>
 #include <widgets/unit_binder.h>
 #include <pcb_edit_frame.h>
 #include <board.h>
