@@ -35,15 +35,16 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 16:36+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-10-12 18:51+0000\n"
+"Last-Translator: Frank Sonnenberg "
+"<audiofrank@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -623,7 +624,7 @@ msgstr "3D-Modelle von nicht zu bestückenden Bauteilen anzeigen"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 msgid "Show 3D models even if marked 'Do Not Place'"
 msgstr ""
-"3D-Modelle anzeigen, auch wenn diese mit \"nicht bestücken\" (DNP) markiert "
+"3D-Modelle anzeigen, auch wenn diese mit \"Nicht bestücken\" (DNP) markiert "
 "sind"
 
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
@@ -3825,7 +3826,7 @@ msgstr "Platine und Schaltplan auf Parität prüfen"
 #: common/dialogs/dialog_rc_job_base.cpp:86
 #: pcbnew/dialogs/dialog_drc_base.cpp:45
 msgid "Refill all zones before performing DRC"
-msgstr "Alle Zonen ausfüllen vor dem DRC"
+msgstr "Alle Zonen vor dem DRC neu füllen"
 
 #: common/dialogs/dialog_restore_local_history.cpp:34
 #: kicad/tools/kicad_manager_actions.cpp:238
@@ -21141,7 +21142,7 @@ msgstr "Bestehenden Schaltplan überschreiben?"
 #: pcbnew/pcb_design_block_utils.cpp:384 pcbnew/pcb_design_block_utils.cpp:507
 msgid "Please select a library to save the design block to."
 msgstr ""
-"Wählen Sie bitte eine Bibliothek in welcher der Designblock gespeichert "
+"Bitte eine Bibliothek auswählen, in welcher der Designblock gespeichert "
 "werden soll."
 
 #: eeschema/sch_design_block_utils.cpp:92
@@ -27505,8 +27506,7 @@ msgstr "ERC-Ausnahmen anzeigen"
 #: eeschema/tools/sch_actions.cpp:1310
 msgid "Show markers for excluded electrical rules checker violations"
 msgstr ""
-"Markierungen für ausgenommene Verstöße für die Elektrischen Regelprüfung "
-"anzeigen"
+"Markierungen für ausgenommene Verstöße der Elektrischen Regelprüfung anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:1316
 msgid "Mark items excluded from simulation"
@@ -27770,7 +27770,7 @@ msgstr "Horizontal zur Mitte ausrichten"
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
 msgstr ""
-"Ausgewählte Elemente an der horizontal mittig zum Element unter dem Zeiger "
+"Ausgewählte Elemente an der horizontalen Mitte des Elements unter dem Zeiger "
 "ausrichten"
 
 #: eeschema/tools/sch_actions.cpp:1614 pcbnew/tools/pcb_actions.cpp:2285
@@ -27781,7 +27781,7 @@ msgstr "Vertikal zur Mitte ausrichten"
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
 msgstr ""
-"Ausgewählte Elemente an der vertikal mittig zum Element unter dem Zeiger "
+"Ausgewählte Elemente an der vertikalen Mitte des Elements unter dem Zeiger "
 "ausrichten"
 
 #: eeschema/tools/sch_actions.cpp:1623
@@ -27791,7 +27791,8 @@ msgstr "Kopie des aktuellen Blatts speichern unter ..."
 #: eeschema/tools/sch_actions.cpp:1624
 msgid "Save a copy of the current sheet to another location or name"
 msgstr ""
-"Speichert eine Kopie des aktuellen Blatts an einem anderen Ort oder Namen"
+"Eine Kopie des aktuellen Schaltplanblatts an einem anderen Ort oder Namen "
+"speichern"
 
 #: eeschema/tools/sch_actions.cpp:1646
 msgid "New Analysis Tab..."
@@ -27807,7 +27808,7 @@ msgstr "Arbeitsmappe öffnen ..."
 
 #: eeschema/tools/sch_actions.cpp:1656
 msgid "Open a saved set of analysis tabs and settings"
-msgstr "Öffne gespeicherte Analysereiter und -einstellungen"
+msgstr "Gespeicherte Analysereiter und -einstellungen öffnen"
 
 #: eeschema/tools/sch_actions.cpp:1664
 msgid "Save Workbook"
@@ -37630,7 +37631,7 @@ msgstr "Abmessungen der Platine: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:97
 msgid "Min track/spacing: "
-msgstr "Min Leiterbahn/abstand: "
+msgstr "Min Leiterbahn/Abstand: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:104
 msgid "Min hole diameter: "
@@ -38527,7 +38528,7 @@ msgstr "Konnektivität wird wiederhergestellt ..."
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:235
 #: pcbnew/tools/drc_tool.cpp:160
 msgid "Refilling all zones..."
-msgstr "Fülle alle Zonen aus ..."
+msgstr "Fülle alle Zonen erneut ..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:249
 msgid "Board Cleanup"
@@ -38535,18 +38536,18 @@ msgstr "Platine bereinigen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:27
 msgid "Refill zones before and after cleanup"
-msgstr "Zonen vor und nach Aufräumen erneut füllen"
+msgstr "Zonen vor und nach dem Aufräumen erneut füllen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:33
 msgid "Delete &tracks connecting different nets"
-msgstr "Entferne &Leiterbahnsegmente welche unterschiedlicher Netze verbinden"
+msgstr "Entferne &Leiterbahnsegmente, die unterschiedliche Netze verbinden"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:34
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
 msgstr ""
-"Entfernt Leiterbahnsegmente die Knoten unterschiedlicher Netze verbinden "
+"Entfernt Leiterbahnsegmente, die Knoten unterschiedlicher Netze verbinden "
 "(Kurzschluss)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:41
@@ -41751,7 +41752,7 @@ msgstr "Platinenumriss"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:67
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:69
 msgid "Fab Layers"
-msgstr "Fabrikationslagen"
+msgstr "Fertigungslagen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:234
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:68
@@ -43207,7 +43208,7 @@ msgstr "Pad-Vorschau im Skizzenmodus"
 
 #: pcbnew/dialogs/dialog_plot.cpp:140
 msgid "Refill zones before plotting"
-msgstr "Zonen vor Plotten neu füllen"
+msgstr "Zonen vor dem Plotten neu füllen"
 
 #: pcbnew/dialogs/dialog_plot.cpp:192
 msgid "Plot on All Layers"
@@ -43228,7 +43229,7 @@ msgstr "Bohrdateien erzeugen ..."
 #: pcbnew/dialogs/dialog_plot.cpp:661
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:278
 msgid "Select Fab Layers"
-msgstr "Fabrikationslage auswählen"
+msgstr "Fertigungslage auswählen"
 
 #: pcbnew/dialogs/dialog_plot.cpp:664
 msgid "Select All Copper Layers"
@@ -51554,7 +51555,7 @@ msgstr "Symmetrisch"
 
 #: pcbnew/microwave/microwave_polygon.cpp:167
 msgid "Read Shape Description File..."
-msgstr "Lese Form-Beschreibungsdatei ..."
+msgstr "Form-Beschreibungsdatei lesen ..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:209
 msgid "Shape Description File"
@@ -58735,7 +58736,7 @@ msgstr "Mikrowellen-Spalte zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:1088
 msgid "Create gap of specified length for microwave applications"
-msgstr "Spalt spezifischer Länge für Mikrowellen-Applikationen erstellen"
+msgstr "Spalt spezifischer Länge für Mikrowellen-Anwendungen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:1096
 msgid "Draw Microwave Stubs"
@@ -58743,7 +58744,7 @@ msgstr "Mikrowellen-Stiche zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:1097
 msgid "Create stub of specified length for microwave applications"
-msgstr "Stich spezifischer Länge für Mikrowellen-Applikationen erstellen"
+msgstr "Stich spezifischer Länge für Mikrowellen-Anwendungen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:1105
 msgid "Draw Microwave Arc Stubs"
@@ -58752,7 +58753,7 @@ msgstr "Mikrowellenbogen-Stiche zeichnen"
 #: pcbnew/tools/pcb_actions.cpp:1106
 msgid "Create stub (arc) of specified size for microwave applications"
 msgstr ""
-"Stich (Kreisbogen) spezifischer Größe für Mikrowellen-Applikationen erstellen"
+"Stich (Kreisbogen) spezifischer Größe für Mikrowellen-Anwendungen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:1114
 msgid "Draw Microwave Polygonal Shapes"
@@ -58761,7 +58762,7 @@ msgstr "Polygonale Mikrowellenformen zeichnen"
 #: pcbnew/tools/pcb_actions.cpp:1115
 msgid "Create a microwave polygonal shape from a list of vertices"
 msgstr ""
-"Erstellt eine polygonale Mikrowellenform aus der Liste der Scheitelpunkte"
+"Erstellt eine polygonale Mikrowellenform aus einer Liste von Scheitelpunkten"
 
 #: pcbnew/tools/pcb_actions.cpp:1123
 msgid "Draw Microwave Lines"
@@ -58869,7 +58870,7 @@ msgstr "Nicht-KiCad-Platinendatei importieren ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1228
 msgid "Import board file from other applications"
-msgstr "Importieren einer Platinendatei aus einer anderen Applikation"
+msgstr "Eine Platinendatei aus anderen Applikationen importieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1234
 msgid "Export Footprints..."
@@ -58916,7 +58917,7 @@ msgstr "Specctra DSN exportieren ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1264
 msgid "Export Specctra DSN routing info"
-msgstr "Exportiert Specctra DSN Routing Informationen"
+msgstr "Specctra DSN Routing Informationen exportieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1270
 msgid "Gerbers (.gbr)..."
@@ -59120,14 +59121,13 @@ msgstr "Linienmodi"
 #: pcbnew/tools/pcb_actions.cpp:1544
 msgid "Prevent items from being moved and/or resized on the canvas"
 msgstr ""
-"Verhindert, dass Elemente auf der Zeichenfläche bewegt und/oder vergrößert "
+"Verhindert, dass Elemente auf der Zeichenfläche bewegt und/oder skaliert "
 "werden"
 
 #: pcbnew/tools/pcb_actions.cpp:1551
 msgid "Allow items to be moved and/or resized on the canvas"
 msgstr ""
-"Erlaubt, dass Elemente auf der Zeichenfläche bewegt und/oder vergrößert "
-"werden"
+"Erlaubt, dass Elemente auf der Zeichenfläche bewegt und/oder skaliert werden"
 
 #: pcbnew/tools/pcb_actions.cpp:1568
 msgid "Toggle Last Net Highlight"
