@@ -33,13 +33,15 @@
 # Till Donner <isntyourbusiness@proton.me>, 2026.
 # The Hobbit <dasfilter@posteo.de>, 2026.
 # genericprinter0815 <genericprinter0815@users.noreply.hosted.weblate.org>, 2026.
+# Frank Sonnenberg <audiofrank@users.noreply.hosted.weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-11 19:17+0000\n"
-"Last-Translator: Frank Sonnenberg <frasoberg@web.de>\n"
+"PO-Revision-Date: 2026-10-12 19:20+0000\n"
+"Last-Translator: Frank Sonnenberg "
+"<audiofrank@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
 "Language: de\n"
@@ -47,7 +49,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -664,7 +666,7 @@ msgstr "3D-Modelle von nicht zu bestückenden Bauteilen anzeigen"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:359
 msgid "Show 3D models even if marked 'Do Not Place'"
 msgstr ""
-"3D-Modelle anzeigen, auch wenn diese mit \"nicht bestücken\" (DNP) markiert "
+"3D-Modelle anzeigen, auch wenn diese mit \"Nicht bestücken\" (DNP) markiert "
 "sind"
 
 # Einen Bereich (gezeichnete Elemente) umgebendes Rechteck.
@@ -23869,7 +23871,7 @@ msgstr "Bestehenden Schaltplan überschreiben?"
 #: pcbnew/pcb_design_block_utils.cpp:374 pcbnew/pcb_design_block_utils.cpp:497
 msgid "Please select a library to save the design block to."
 msgstr ""
-"Wählen Sie bitte eine Bibliothek in welcher der Designblock gespeichert "
+"Bitte eine Bibliothek auswählen, in welcher der Designblock gespeichert "
 "werden soll."
 
 #: eeschema/sch_design_block_utils.cpp:88
@@ -30975,7 +30977,7 @@ msgstr "Sperren"
 #: eeschema/tools/sch_actions.cpp:976 pcbnew/tools/pcb_actions.cpp:1957
 msgid "Prevent items from being moved and/or resized on the canvas"
 msgstr ""
-"Verhindert, dass Elemente auf der Zeichenfläche bewegt und/oder vergrößert "
+"Verhindert, dass Elemente auf der Zeichenfläche bewegt und/oder skaliert "
 "werden"
 
 #: eeschema/tools/sch_actions.cpp:982 eeschema/tools/sch_edit_tool.cpp:4126
@@ -30986,8 +30988,7 @@ msgstr "Entsperren"
 #: eeschema/tools/sch_actions.cpp:983 pcbnew/tools/pcb_actions.cpp:1964
 msgid "Allow items to be moved and/or resized on the canvas"
 msgstr ""
-"Erlaubt, dass Elemente auf der Zeichenfläche bewegt und/oder vergrößert "
-"werden"
+"Erlaubt, dass Elemente auf der Zeichenfläche bewegt und/oder skaliert werden"
 
 #: eeschema/tools/sch_actions.cpp:999
 msgid "Edit Reference Designator..."
@@ -31550,8 +31551,7 @@ msgstr "ERC-Ausnahmen anzeigen"
 #: eeschema/tools/sch_actions.cpp:1525
 msgid "Show markers for excluded electrical rules checker violations"
 msgstr ""
-"Markierungen für ausgenommene Verstöße für die Elektrischen Regelprüfung "
-"anzeigen"
+"Markierungen für ausgenommene Verstöße der Elektrischen Regelprüfung anzeigen"
 
 #: eeschema/tools/sch_actions.cpp:1531
 msgid "Mark items excluded from simulation"
@@ -31811,7 +31811,7 @@ msgstr "Horizontal zur Mitte ausrichten"
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
 msgstr ""
-"Ausgewählte Elemente an der horizontal mittig zum Element unter dem Zeiger "
+"Ausgewählte Elemente an der horizontalen Mitte des Elements unter dem Zeiger "
 "ausrichten"
 
 #: eeschema/tools/sch_actions.cpp:1829 pcbnew/tools/pcb_actions.cpp:2737
@@ -31822,7 +31822,7 @@ msgstr "Vertikal zur Mitte ausrichten"
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
 msgstr ""
-"Ausgewählte Elemente an der vertikal mittig zum Element unter dem Zeiger "
+"Ausgewählte Elemente an der vertikalen Mitte des Elements unter dem Zeiger "
 "ausrichten"
 
 #: eeschema/tools/sch_actions.cpp:1838
@@ -31832,7 +31832,8 @@ msgstr "Kopie des aktuellen Blatts speichern unter ..."
 #: eeschema/tools/sch_actions.cpp:1839
 msgid "Save a copy of the current sheet to another location or name"
 msgstr ""
-"Speichert eine Kopie des aktuellen Blatts an einem anderen Ort oder Namen"
+"Eine Kopie des aktuellen Schaltplanblatts an einem anderen Ort oder Namen "
+"speichern"
 
 #: eeschema/tools/sch_actions.cpp:1861
 msgid "New Analysis Tab..."
@@ -31848,7 +31849,7 @@ msgstr "Arbeitsmappe öffnen ..."
 
 #: eeschema/tools/sch_actions.cpp:1871
 msgid "Open a saved set of analysis tabs and settings"
-msgstr "Öffne gespeicherte Analysereiter und -einstellungen"
+msgstr "Gespeicherte Analysereiter und -einstellungen öffnen"
 
 #: eeschema/tools/sch_actions.cpp:1879
 msgid "Save Workbook"
@@ -43150,7 +43151,7 @@ msgstr "Abmessungen der Platine: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:93
 msgid "Min track/spacing: "
-msgstr "Min Leiterbahn/abstand: "
+msgstr "Min Leiterbahn/Abstand: "
 
 #: pcbnew/board_tables/board_characteristics_table.cpp:100
 msgid "Min hole diameter: "
@@ -47944,7 +47945,7 @@ msgstr "Platinenumriss"
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:67
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:69
 msgid "Fab Layers"
-msgstr "Fabrikationslagen"
+msgstr "Fertigungslagen"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:230
 #: pcbnew/dialogs/panel_fp_editor_graphics_defaults_base.cpp:68
@@ -49647,7 +49648,7 @@ msgstr "Pad-Vorschau im Skizzenmodus"
 
 #: pcbnew/dialogs/dialog_plot.cpp:137
 msgid "Refill zones before plotting"
-msgstr "Zonen vor Plotten neu füllen"
+msgstr "Zonen vor dem Plotten neu füllen"
 
 #: pcbnew/dialogs/dialog_plot.cpp:189
 msgid "Plot on All Layers"
@@ -49668,7 +49669,7 @@ msgstr "Bohrdateien erzeugen ..."
 #: pcbnew/dialogs/dialog_plot.cpp:671
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:274
 msgid "Select Fab Layers"
-msgstr "Fabrikationslage auswählen"
+msgstr "Fertigungslage auswählen"
 
 #: pcbnew/dialogs/dialog_plot.cpp:674
 msgid "Select All Copper Layers"
@@ -59786,7 +59787,7 @@ msgstr "Symmetrisch"
 
 #: pcbnew/microwave/microwave_polygon.cpp:163
 msgid "Read Shape Description File..."
-msgstr "Lese Form-Beschreibungsdatei ..."
+msgstr "Form-Beschreibungsdatei lesen ..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:205
 msgid "Shape Description File"
@@ -67648,12 +67649,10 @@ msgid "Creates a copper zone from the selection"
 msgstr "Erzeugt aus der Auswahl eine Kupferzone"
 
 #: pcbnew/tools/pcb_actions.cpp:69
-#, fuzzy
 msgid "Constrain the two selected segments to be parallel"
 msgstr "Zwei ausgewählte Segmente auf Parallelität beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:79
-#, fuzzy
 msgid "Constrain the two selected segments to be perpendicular"
 msgstr "Zwei ausgewählte Segmente auf Orthogonalität beschränken"
 
@@ -67662,26 +67661,22 @@ msgid "Equal Length"
 msgstr "Gleiche Länge"
 
 #: pcbnew/tools/pcb_actions.cpp:89
-#, fuzzy
 msgid "Constrain the two selected segments to be of equal length"
 msgstr "Zwei ausgewählte Segmente auf gleiche Länge beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:99
-#, fuzzy
 msgid "Constrain the two selected segments to be collinear"
-msgstr "Zwei ausgewählte Segmente auf Kolliniearität beschränken"
+msgstr "Zwei ausgewählte Segmente auf Kollinearität beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:108
 msgid "Angular Dimension"
 msgstr "Winkelbemaßung"
 
 #: pcbnew/tools/pcb_actions.cpp:109
-#, fuzzy
 msgid "Constrain the angle between the two selected segments"
 msgstr "Den Winkel zwischen zwei ausgewählten Segmenten beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:119
-#, fuzzy
 msgid ""
 "Constrain the selected line and curve, or two curves, to touch tangentially"
 msgstr ""
@@ -67689,12 +67684,10 @@ msgstr ""
 "beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:129
-#, fuzzy
 msgid "Constrain the selected segment to be horizontal"
 msgstr "Das ausgewählte Segment auf horizontale Lage beschränken"
 
 #: pcbnew/tools/pcb_actions.cpp:139
-#, fuzzy
 msgid "Constrain the selected segment to be vertical"
 msgstr "Das ausgewählte Segment auf vertikale Lage beschränken"
 
@@ -67703,12 +67696,10 @@ msgid "Fixed Length"
 msgstr "Feste Länge"
 
 #: pcbnew/tools/pcb_actions.cpp:149
-#, fuzzy
 msgid "Lock the selected segment to its current length"
 msgstr "Das ausgewählte Segment mit seiner aktuellen Länge sperren"
 
 #: pcbnew/tools/pcb_actions.cpp:159
-#, fuzzy
 msgid "Constrain the two selected circles, arcs or ellipses to share a center"
 msgstr ""
 "Zwei ausgewählte Kreise, Bögen oder Ellipsen auf ein gemeinsames Zentrum "
@@ -67719,7 +67710,6 @@ msgid "Equal Radius"
 msgstr "Gleicher Radius"
 
 #: pcbnew/tools/pcb_actions.cpp:169
-#, fuzzy
 msgid "Constrain the two selected circles or arcs to be of equal radius"
 msgstr "Zwei ausgewählte Kreise oder Bögen auf denselben Radius beschränken"
 
@@ -67743,7 +67733,7 @@ msgstr "Schwenkwinkel des ausgewählten Bogens steuern"
 #: pcbnew/tools/pcb_actions.cpp:198
 #, fuzzy
 msgid "Fix in Place..."
-msgstr "An Ort und Stelle befestigen ..."
+msgstr "An Ort und Stelle festlegen ..."
 
 #: pcbnew/tools/pcb_actions.cpp:199
 msgid ""
@@ -67757,7 +67747,6 @@ msgid "Coincident..."
 msgstr "Koinzidenz ..."
 
 #: pcbnew/tools/pcb_actions.cpp:209
-#, fuzzy
 msgid "Click two shape endpoints to make them coincide"
 msgstr "Auf zwei Form-Endpunkte klicken, um sie aufeinanderzulegen"
 
@@ -68652,7 +68641,7 @@ msgstr "Mikrowellen-Spalte zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:1502
 msgid "Create gap of specified length for microwave applications"
-msgstr "Spalt spezifischer Länge für Mikrowellen-Applikationen erstellen"
+msgstr "Spalt spezifischer Länge für Mikrowellen-Anwendungen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:1510
 msgid "Draw Microwave Stubs"
@@ -68660,7 +68649,7 @@ msgstr "Mikrowellen-Stiche zeichnen"
 
 #: pcbnew/tools/pcb_actions.cpp:1511
 msgid "Create stub of specified length for microwave applications"
-msgstr "Stich spezifischer Länge für Mikrowellen-Applikationen erstellen"
+msgstr "Stich spezifischer Länge für Mikrowellen-Anwendungen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:1519
 msgid "Draw Microwave Arc Stubs"
@@ -68669,7 +68658,7 @@ msgstr "Mikrowellenbogen-Stiche zeichnen"
 #: pcbnew/tools/pcb_actions.cpp:1520
 msgid "Create stub (arc) of specified size for microwave applications"
 msgstr ""
-"Stich (Kreisbogen) spezifischer Größe für Mikrowellen-Applikationen erstellen"
+"Stich (Kreisbogen) spezifischer Größe für Mikrowellen-Anwendungen erstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:1528
 msgid "Draw Microwave Polygonal Shapes"
@@ -68678,7 +68667,7 @@ msgstr "Polygonale Mikrowellenformen zeichnen"
 #: pcbnew/tools/pcb_actions.cpp:1529
 msgid "Create a microwave polygonal shape from a list of vertices"
 msgstr ""
-"Erstellt eine polygonale Mikrowellenform aus der Liste der Scheitelpunkte"
+"Erstellt eine polygonale Mikrowellenform aus einer Liste von Scheitelpunkten"
 
 #: pcbnew/tools/pcb_actions.cpp:1537
 msgid "Draw Microwave Lines"
@@ -68778,7 +68767,7 @@ msgstr "Nicht-KiCad-Platinendatei importieren ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1627
 msgid "Import board file from other applications"
-msgstr "Importieren einer Platinendatei aus einer anderen Applikation"
+msgstr "Eine Platinendatei aus anderen Applikationen importieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1633
 msgid "Export Footprints..."
@@ -68825,7 +68814,7 @@ msgstr "Specctra DSN exportieren ..."
 
 #: pcbnew/tools/pcb_actions.cpp:1663
 msgid "Export Specctra DSN routing info"
-msgstr "Exportiert Specctra DSN Routing Informationen"
+msgstr "Specctra DSN Routing Informationen exportieren"
 
 #: pcbnew/tools/pcb_actions.cpp:1670
 msgid "Edit a table of fields from all footprints in the board"
