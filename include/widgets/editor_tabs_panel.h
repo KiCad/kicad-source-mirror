@@ -122,7 +122,7 @@ public:
      */
     void SetSuppressActivateOnClose( bool aSuppress ) { m_suppressActivateOnClose = aSuppress; }
 
-    int  AddTab( const wxString& aKey, const wxString& aLabel, bool aAsPreview );
+    int  ActivateOrCreateTab( const wxString& aKey, const wxString& aLabel, bool aAsPreview );
     bool CloseTab( int aIdx );
     void CloseOthers( int aKeepIdx );
     void CloseToRight( int aIdx );

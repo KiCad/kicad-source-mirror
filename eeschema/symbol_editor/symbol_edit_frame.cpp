@@ -405,8 +405,7 @@ SYMBOL_EDIT_FRAME::~SYMBOL_EDIT_FRAME()
 
     // Hand the borrowed canvas back before the base destructor frees it, else the panel reparents
     // freed memory on its own teardown.
-    if( m_tabsPanel )
-        m_tabsPanel->ReleaseSharedCanvas();
+    m_tabsPanel->ReleaseSharedCanvas();
 
     // Shutdown all running tools
     if( m_toolManager )
@@ -1267,7 +1266,7 @@ void SYMBOL_EDIT_FRAME::OnModify()
         return;
 
     // Clear preview so a later library-open gets its own tab instead of replacing this edited one.
-    if( m_tabsPanel && m_activeTab )
+    if( m_activeTab )
     {
         m_activeTab->SetPreview( false );
 

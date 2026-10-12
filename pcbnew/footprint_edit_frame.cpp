@@ -1168,7 +1168,7 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintTab( co
 
     if( int existing = m_tabsPanel->FindTab( key ); existing >= 0 )
     {
-        m_tabsPanel->AddTab( key, name, aAsPreview );
+        m_tabsPanel->ActivateOrCreateTab( key, name, aAsPreview );
         return m_tabContexts[existing].get();
     }
 
@@ -1199,13 +1199,13 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintTab( co
                 [&]( const FOOTPRINT_EDITOR_TAB_CONTEXT& aDisplaced )
                 {
                     SCOPED_SET_RESET<BOARD*> protectedBoard( m_protectedBorrowedBoard, aDisplaced.GetBoard() );
-                    m_tabsPanel->AddTab( key, name, aAsPreview );
+                    m_tabsPanel->ActivateOrCreateTab( key, name, aAsPreview );
                 } );
     }
 
     m_tabContexts.push_back( std::move( ctx ) );
 
-    m_tabsPanel->AddTab( key, name, aAsPreview );
+    m_tabsPanel->ActivateOrCreateTab( key, name, aAsPreview );
 
     return raw;
 }
@@ -1235,13 +1235,16 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanc
     if( !aBoardFootprint )
         return nullptr;
 
-    const KIID     sourceUuid = aBoardFootprint->m_Uuid;
-    const wxString key = FOOTPRINT_EDITOR_TAB_CONTEXT::MakeInstanceTabKey( sourceUuid );
-    const wxString reference = aBoardFootprint->GetReference();
+    const KIID      sourceUuid = aBoardFootprint->m_Uuid;
+    const wxString  key = FOOTPRINT_EDITOR_TAB_CONTEXT::MakeInstanceTabKey( sourceUuid );
+    const wxString& reference = aBoardFootprint->GetReference();
 
     // Re-editing the same placed footprint focuses the live tab rather than duplicating it.
     if( int existing = m_tabsPanel->FindTab( key ); existing >= 0 )
+    {
+        m_tabsPanel->ActivateOrCreateTab( key, m_tabContexts[existing]->GetDisplayName(), false );
         return m_tabContexts[existing].get();
+    }
 
     std::unique_ptr<BOARD> board = makeFpHolderBoard( GetSettings() );
     board->GetDesignSettings().m_DRCSeverities[DRCE_MISSING_COURTYARD] = RPT_SEVERITY_WARNING;
@@ -1305,7 +1308,7 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::findOrCreateFootprintInstanc
 
     // Index-aligned with the panel model; the context is at its final index before AddTab fires
     // onActivateTab.
-    m_tabsPanel->AddTab( key, m_tabContexts.back()->GetDisplayName(), false );
+    m_tabsPanel->ActivateOrCreateTab( key, m_tabContexts.back()->GetDisplayName(), false );
 
     return raw;
 }
@@ -1322,7 +1325,7 @@ FOOTPRINT_EDITOR_TAB_CONTEXT* FOOTPRINT_EDIT_FRAME::CreateUnsavedFootprintTab()
     m_tabContexts.push_back( std::move( ctx ) );
 
     // At its final index before AddTab fires onActivateTab, which makes the new tab active
-    m_tabsPanel->AddTab( key, m_tabContexts.back()->GetDisplayName(), false );
+    m_tabsPanel->ActivateOrCreateTab( key, m_tabContexts.back()->GetDisplayName(), false );
 
     return raw;
 }

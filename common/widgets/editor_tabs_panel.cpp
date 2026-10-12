@@ -299,7 +299,7 @@ TAB_VISUAL_STATE EDITOR_TABS_PANEL::visualStateForIndex( int aIdx ) const
 }
 
 
-int EDITOR_TABS_PANEL::AddTab( const wxString& aKey, const wxString& aLabel, bool aAsPreview )
+int EDITOR_TABS_PANEL::ActivateOrCreateTab( const wxString& aKey, const wxString& aLabel, bool aAsPreview )
 {
     const int existing = m_model.FindIndex( aKey );
 
