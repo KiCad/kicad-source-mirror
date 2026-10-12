@@ -47,9 +47,12 @@ PCB_FIELD::PCB_FIELD( FOOTPRINT* aParent, FIELD_T aFieldId, const wxString& aNam
 PCB_FIELD::PCB_FIELD( const PCB_TEXT& aText, FIELD_T aFieldId, const wxString& aName ) :
         PCB_TEXT( aText.GetParent(), PCB_FIELD_T ),
         m_id( aFieldId ),
-        m_ordinal( static_cast<int>( aFieldId ) ),
+        m_ordinal( 0 ),
         m_name( aName )
 {
+    if( m_id == FIELD_T::USER && GetParentFootprint() )
+        m_ordinal = GetParentFootprint()->GetNextFieldOrdinal();
+
     PCB_TEXT::operator=( aText );
 }
 
