@@ -85,6 +85,7 @@ public:
         m_constructionGeomPreview.ClearSnapLine();
         m_snapManager.Clear();
         m_anchors.clear();
+        m_snapItem.reset();
         m_retainedAngleBranch.reset();
         m_stickySnapIds.clear();
         m_layoutReferencePreference = {};

@@ -39,6 +39,11 @@ public:
 
     size_t AnchorCount() const { return m_anchors.size(); }
 
+    void RetainSnapForTest( const VECTOR2I& aPosition )
+    {
+        m_snapItem.emplace( aPosition, ANCHOR_FLAGS::SNAPPABLE, POINT_TYPE::PT_NONE, std::vector<EDA_ITEM*>{} );
+    }
+
     /// Positions the mask actually admitted, in the order production accepted them.
     std::vector<VECTOR2I> AnchorPositions() const
     {
@@ -444,7 +449,7 @@ BOOST_AUTO_TEST_CASE( VisibleGrid )
 
 BOOST_AUTO_TEST_CASE( SnapPointManagement )
 {
-    GRID_HELPER helper;
+    TEST_GRID_HELPER helper;
 
     // Initially should have no snapped point
     auto snappedPoint = helper.GetSnappedPoint();
@@ -454,6 +459,12 @@ BOOST_AUTO_TEST_CASE( SnapPointManagement )
     TEST_CLEAR_ANCHORS( helper );
     snappedPoint = helper.GetSnappedPoint();
     BOOST_CHECK( !snappedPoint.has_value() );
+
+    helper.RetainSnapForTest( { 100, 200 } );
+    BOOST_REQUIRE( helper.GetSnappedPoint().has_value() );
+
+    helper.FullReset();
+    BOOST_CHECK( !helper.GetSnappedPoint().has_value() );
 }
 
 
