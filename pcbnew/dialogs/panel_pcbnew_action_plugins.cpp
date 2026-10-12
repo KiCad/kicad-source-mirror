@@ -143,6 +143,9 @@ PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( wxWindow* aParent ) :
 
 PANEL_PCBNEW_ACTION_PLUGINS::~PANEL_PCBNEW_ACTION_PLUGINS()
 {
+    if( m_reloadReporter )
+        m_reloadReporter->SetNullReporter();
+
     delete m_errorDialog;
     wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
             &PANEL_PCBNEW_ACTION_PLUGINS::onPluginAvailabilityChanged, this );
@@ -218,9 +221,9 @@ void PANEL_PCBNEW_ACTION_PLUGINS::OnReloadButtonClick( wxCommandEvent& event )
 {
     API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
     m_errorDialog->m_Reporter->Clear();
-    auto reporter = std::make_shared<REDIRECT_REPORTER>( m_errorDialog->m_Reporter );
+    m_reloadReporter = std::make_shared<SYNC_REPORTER>( *m_errorDialog->m_Reporter );
     m_allowErrorDialog = true;
-    mgr.ReloadPlugins( std::nullopt, reporter );
+    mgr.ReloadPlugins( std::nullopt, m_reloadReporter );
     m_grid->Disable();
 }
 

@@ -20,8 +20,11 @@
 
 #include "panel_pcbnew_action_plugins_base.h"
 
+#include <memory>
+
 class PLUGINS_GRID_TRICKS;
 class DIALOG_HTML_REPORTER;
+class SYNC_REPORTER;
 
 
 class PANEL_PCBNEW_ACTION_PLUGINS : public PANEL_PCBNEW_ACTION_PLUGINS_BASE
@@ -78,6 +81,7 @@ private:
 
     wxBitmapBundle m_genericIcon;
     DIALOG_HTML_REPORTER* m_errorDialog;
+    std::shared_ptr<SYNC_REPORTER> m_reloadReporter;
     bool m_allowErrorDialog;
 
     void SwapRows( int aRowA, int aRowB );
