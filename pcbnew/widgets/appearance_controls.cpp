@@ -1376,7 +1376,12 @@ void APPEARANCE_CONTROLS::setVisibleLayers( const LSET& aLayers )
                     // Items rendered to composite layers (such as LAYER_PAD_TH) must be redrawn
                     // whether they're optionally flashed or not (as the layer being hidden/shown
                     // might be the last layer the item is visible on).
-                    return dynamic_cast<PCB_VIA*>( aItem ) || dynamic_cast<PAD*>( aItem );
+                    if( !aItem->IsBOARD_ITEM() )
+                        return false;
+
+                    const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( aItem );
+
+                    return item->Type() == PCB_VIA_T || item->Type() == PCB_PAD_T;
                 } );
 
         m_frame->Update3DView( true, m_frame->GetPcbNewSettings()->m_Display.m_Live3DRefresh );
