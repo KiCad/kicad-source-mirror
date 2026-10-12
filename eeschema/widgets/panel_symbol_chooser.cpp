@@ -53,7 +53,6 @@
 
 wxString PANEL_SYMBOL_CHOOSER::g_symbolSearchString;
 wxString PANEL_SYMBOL_CHOOSER::g_powerSearchString;
-SCH_BASE_FRAME* PANEL_SYMBOL_CHOOSER::m_frame = nullptr;
 
 PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aParent,
                                             const SYMBOL_LIBRARY_FILTER* aFilter,
@@ -70,6 +69,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         m_fp_preview( nullptr ),
         m_tree( nullptr ),
         m_details( nullptr ),
+        m_frame( aFrame ),
         m_acceptHandler( std::move( aAcceptHandler ) ),
         m_escapeHandler( std::move( aEscapeHandler ) ),
         m_showPower( false ),
@@ -79,8 +79,6 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         m_bodyStyleChoice( nullptr ),
         m_selectedBodyStyle( 1 )
 {
-    m_frame = aFrame;
-
     SYMBOL_LIBRARY_ADAPTER*   libmgr = PROJECT_SCH::SymbolLibAdapter( &m_frame->Prj() );
     COMMON_SETTINGS::SESSION& session = Pgm().GetCommonSettings()->m_Session;
     PROJECT_FILE&             project = m_frame->Prj().GetProjectFile();
@@ -172,15 +170,15 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     processList( aHistoryList, history_list_storage, history_list );
     processList( aAlreadyPlaced, already_placed_storage, already_placed );
 
-    adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString,
-                           history_list, false, true )
+    adapter->DoAddLibrary( wxT( "-- " ) + _( "Recently Used" ) + wxT( " --" ), wxEmptyString, history_list,
+                           false, true )
             .m_IsRecentlyUsedGroup = true;
 
     if( !aHistoryList.empty() )
         adapter->SetPreselectNode( aHistoryList[0].LibId, aHistoryList[0].Unit );
 
-    adapter->DoAddLibrary( wxT( "-- " ) + _( "Already Placed" ) + wxT( " --" ), wxEmptyString,
-                           already_placed, false, true )
+    adapter->DoAddLibrary( wxT( "-- " ) + _( "Already Placed" ) + wxT( " --" ), wxEmptyString, already_placed,
+                           false, true )
             .m_IsAlreadyPlacedGroup = true;
 
     adapter->AddLibraries( m_frame );
@@ -351,8 +349,7 @@ void PANEL_SYMBOL_CHOOSER::OnChar( wxKeyEvent& aEvent )
         if( wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( eventSource ) )
         {
             // First escape cancels search string value
-            if( textCtrl->GetValue() == m_tree->GetSearchString()
-                && !m_tree->GetSearchString().IsEmpty() )
+            if( textCtrl->GetValue() == m_tree->GetSearchString() && !m_tree->GetSearchString().IsEmpty() )
             {
                 m_tree->SetSearchString( wxEmptyString );
                 return;
@@ -475,10 +472,14 @@ void PANEL_SYMBOL_CHOOSER::FinishSetup()
 }
 
 
-void PANEL_SYMBOL_CHOOSER::OnDetailsCharHook( wxKeyEvent& e )
+void PANEL_SYMBOL_CHOOSER::OnDetailsCharHook( wxKeyEvent& aEvent )
 {
-    if( m_details && e.GetKeyCode() == 'C' && e.ControlDown() &&
-        !e.AltDown() && !e.ShiftDown() && !e.MetaDown() )
+    if( m_details
+        && aEvent.GetKeyCode() == 'C'
+        && aEvent.ControlDown()
+        && !aEvent.AltDown()
+        && !aEvent.ShiftDown()
+        && !aEvent.MetaDown() )
     {
         wxString txt = m_details->SelectionToText();
         wxLogNull doNotLog; // disable logging of failed clipboard actions
@@ -492,7 +493,7 @@ void PANEL_SYMBOL_CHOOSER::OnDetailsCharHook( wxKeyEvent& e )
     }
     else
     {
-        e.Skip();
+        aEvent.Skip();
     }
 }
 
@@ -501,11 +502,8 @@ void PANEL_SYMBOL_CHOOSER::SetCompatibilityCallback( SYMBOL_COMPAT_FUNC aFunc )
 {
     m_compatCallback = std::move( aFunc );
 
-    if( SYMBOL_TREE_MODEL_ADAPTER* symAdapter =
-            dynamic_cast<SYMBOL_TREE_MODEL_ADAPTER*>( m_adapter.get() ) )
-    {
+    if( SYMBOL_TREE_MODEL_ADAPTER* symAdapter = dynamic_cast<SYMBOL_TREE_MODEL_ADAPTER*>( m_adapter.get() ) )
         symAdapter->SetCompatibilityCallback( m_compatCallback );
-    }
 }
 
 
@@ -738,15 +736,17 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
 {
     LIB_TREE_NODE* node = m_tree->GetCurrentTreeNode();
 
-    m_field_edits.clear();
-
     if( node && node->m_LibId.IsValid() )
     {
-        LIB_SYMBOL* symbol = m_frame->GetLibSymbol( node->m_LibId );
+        if( node->m_LibId != m_curSymbolId )
+            m_field_edits.clear();
+
+        m_curSymbolId = node->m_LibId;
+        LIB_SYMBOL* symbol = m_frame->GetLibSymbol( m_curSymbolId );
 
         updateBodyStyleChoice( symbol );
 
-        m_symbol_preview->DisplaySymbol( node->m_LibId, node->m_Unit, m_selectedBodyStyle );
+        m_symbol_preview->DisplaySymbol( m_curSymbolId, node->m_Unit, m_selectedBodyStyle );
 
         if( !node->m_Footprint.IsEmpty() )
         {
@@ -756,14 +756,14 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
         }
         else
         {
-            showFootprintFor( node->m_LibId );
+            showFootprintFor( m_curSymbolId );
         }
 
-        populateFootprintSelector( node->m_LibId );
+        populateFootprintSelector( m_curSymbolId );
 
         if( m_compatCallback && m_details )
         {
-            std::vector<VARIANT_COMPAT_RESULT> issues = m_compatCallback( node->m_LibId );
+            std::vector<VARIANT_COMPAT_RESULT> issues = m_compatCallback( m_curSymbolId );
 
             if( !issues.empty() )
             {
@@ -779,13 +779,15 @@ void PANEL_SYMBOL_CHOOSER::onSymbolSelected( wxCommandEvent& aEvent )
     }
     else
     {
+        m_curSymbolId = LIB_ID();
         m_symbol_preview->SetStatusText( _( "No symbol selected" ) );
 
         if( m_fp_preview && m_fp_preview->IsInitialized() )
             m_fp_preview->SetStatusText( wxEmptyString );
 
+        m_field_edits.clear();
         updateBodyStyleChoice( nullptr );
-        populateFootprintSelector( LIB_ID() );
+        populateFootprintSelector( m_curSymbolId );
     }
 }
 
