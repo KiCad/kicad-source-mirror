@@ -22,6 +22,7 @@
 #include <3d-viewer/3d_canvas/eda_3d_canvas.h>
 
 // KiCAD includes
+#include <bitmaps.h>
 #include <tool/action_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/tools_holder.h>
