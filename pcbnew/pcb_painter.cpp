@@ -1183,43 +1183,56 @@ static bool viaHoleShowsLayerPair( const PCB_VIA* aVia )
 
 bool PCB_PAINTER::HasUniformColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
-    // A net's terminal pads gain and lose their emphasis box with the net highlight
-    if( aItem->IsBOARD_ITEM() && static_cast<const BOARD_ITEM*>( aItem )->Type() == PCB_PAD_T )
-    {
-        const PAD*          pad = static_cast<const PAD*>( static_cast<const BOARD_ITEM*>( aItem ) );
-        const NETINFO_ITEM* net = pad->GetNet();
-
-        if( net && ( net->GetTerminalPad( 0 ) == pad || net->GetTerminalPad( 1 ) == pad ) )
-            return false;
-    }
-
-    if( aLayer != LAYER_VIA_HOLES && aLayer != LAYER_VIA_HOLEWALLS && aLayer != LAYER_PAD_HOLEWALLS )
-        return true;
-
     if( !aItem->IsBOARD_ITEM() )
         return true;
 
-    const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( aItem );
+    const bool holeLayer = aLayer == LAYER_VIA_HOLES || aLayer == LAYER_VIA_HOLEWALLS;
 
-    if( aLayer == LAYER_PAD_HOLEWALLS )
+    switch( static_cast<const BOARD_ITEM*>( aItem )->Type() )
     {
-        if( item->Type() != PCB_PAD_T )
-            return true;
+    case PCB_PAD_T:
+    {
+        const PAD*          pad = static_cast<const PAD*>( aItem );
+        const NETINFO_ITEM* net = pad->GetNet();
 
-        const PAD* pad = static_cast<const PAD*>( item );
+        // A net's terminal pads gain and lose their emphasis box with the net highlight
+        if( net && ( net->GetTerminalPad( 0 ) == pad || net->GetTerminalPad( 1 ) == pad ) )
+            return false;
+
+        if( aLayer != LAYER_PAD_HOLEWALLS )
+            return true;
 
         return pad->GetDrillSizeX() <= 0 || ( pad->GetSecondaryDrillSizeX() <= 0 && pad->GetTertiaryDrillSizeX() <= 0 );
     }
 
-    if( item->Type() != PCB_VIA_T )
+    case PCB_VIA_T:
+    {
+        const PCB_VIA* via = static_cast<const PCB_VIA*>( aItem );
+
+        if( !holeLayer )
+            return true;
+
+        if( aLayer == LAYER_VIA_HOLES )
+            return !viaHoleShowsLayerPair( via );
+
+        return via->GetSecondaryDrillSize().value_or( 0 ) <= 0 && via->GetTertiaryDrillSize().value_or( 0 ) <= 0;
+    }
+
+    // A zone's outline and hatch are drawn opaque whatever the zone opacity, so its outline does not
+    // take the zone's colour
+    case PCB_ZONE_T:
+        return !ZoneOutlineDrawnOnLayer( zoneOutlineOnly( static_cast<const ZONE*>( aItem ) ), aLayer );
+
+    default:
         return true;
+    }
+}
 
-    const PCB_VIA* via = static_cast<const PCB_VIA*>( item );
 
-    if( aLayer == LAYER_VIA_HOLES )
-        return !viaHoleShowsLayerPair( via );
-
-    return via->GetSecondaryDrillSize().value_or( 0 ) <= 0 && via->GetTertiaryDrillSize().value_or( 0 ) <= 0;
+bool PCB_PAINTER::zoneOutlineOnly( const ZONE* aZone ) const
+{
+    return aZone->GetIsRuleArea()
+           || ( !aZone->IsTeardropArea() && m_pcbSettings.m_ZoneDisplayMode == ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE );
 }
 
 
@@ -3583,12 +3596,8 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
     if( aZone->IsTeardropArea() )
         displayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
 
-    // A zone whose only visual is its outline (rule area, or outline-only display) draws it on
-    // the zone layer, above copper, so tracks and pads can't paint over it.
-    bool outlineOnly = aZone->GetIsRuleArea() || displayMode == ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE;
-
-    // Draw the outline
-    if( ZoneOutlineDrawnOnLayer( outlineOnly, aLayer ) )
+    // An outline-only zone draws on the zone layer, above copper, so tracks and pads can't hide it
+    if( ZoneOutlineDrawnOnLayer( zoneOutlineOnly( aZone ), aLayer ) )
     {
         bool allowDrawOutline = aZone->GetHatchStyle() != ZONE_BORDER_DISPLAY_STYLE::INVISIBLE_BORDER;
 

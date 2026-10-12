@@ -834,33 +834,6 @@ void VIEW::ReorderLayerData( std::unordered_map<int, int> aReorderMap )
 }
 
 
-struct VIEW::UPDATE_COLOR_VISITOR
-{
-    UPDATE_COLOR_VISITOR( int aLayer, PAINTER* aPainter, GAL* aGal ) :
-        layer( aLayer ),
-        painter( aPainter ),
-        gal( aGal )
-    {
-    }
-
-    bool operator()( VIEW_ITEM* aItem )
-    {
-        // Obtain the color that should be used for coloring the item
-        const COLOR4D color = painter->GetSettings()->GetColor( aItem, layer );
-        int           group = aItem->viewPrivData()->getGroup( layer );
-
-        if( group >= 0 )
-            gal->ChangeGroupColor( group, color );
-
-        return true;
-    }
-
-    int layer;
-    PAINTER* painter;
-    GAL* gal;
-};
-
-
 void VIEW::UpdateLayerColor( int aLayer )
 {
     // There is no point in updating non-cached layers
@@ -877,8 +850,22 @@ void VIEW::UpdateLayerColor( int aLayer )
 
         if( ctx.IsUpdating() )
         {
-            UPDATE_COLOR_VISITOR visitor( aLayer, m_painter, m_gal );
-            m_layers[aLayer].items->Query( r, visitor );
+            std::vector<std::pair<VIEW_ITEM*, int>> groups;
+
+            auto collect = [&]( VIEW_ITEM* aItem )
+            {
+                if( int group = aItem->viewPrivData()->getGroup( aLayer ); group >= 0 )
+                    groups.emplace_back( aItem, group );
+
+                return true;
+            };
+
+            m_layers[aLayer].items->Query( r, collect );
+
+            // Items without a uniform color are drawn again, as in UpdateAllLayersColor()
+            for( const auto& [item, group] : groups )
+                recolorGroup( item, aLayer, group );
+
             MarkTargetDirty( m_layers[aLayer].target );
         }
     }
@@ -916,30 +903,6 @@ void VIEW::UpdateAllLayersColor()
 
     MarkDirty();
 }
-
-
-struct VIEW::UPDATE_DEPTH_VISITOR
-{
-    UPDATE_DEPTH_VISITOR( int aLayer, int aDepth, GAL* aGal ) :
-        layer( aLayer ),
-        depth( aDepth ),
-        gal( aGal )
-    {
-    }
-
-    bool operator()( VIEW_ITEM* aItem )
-    {
-        int group = aItem->viewPrivData()->getGroup( layer );
-
-        if( group >= 0 )
-            gal->ChangeGroupDepth( group, depth );
-
-        return true;
-    }
-
-    int layer, depth;
-    GAL* gal;
-};
 
 
 int VIEW::GetTopLayer() const

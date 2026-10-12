@@ -901,8 +901,6 @@ protected:
     struct CLEAR_LAYER_CACHE_VISITOR;
     struct RECACHE_ITEM_VISITOR;
     struct DRAW_ITEM_VISITOR;
-    struct UPDATE_COLOR_VISITOR;
-    struct UPDATE_DEPTH_VISITOR;
 
     std::unique_ptr<KIGFX::VIEW_GROUP> m_preview;
     std::vector<VIEW_ITEM*>            m_ownedItems;

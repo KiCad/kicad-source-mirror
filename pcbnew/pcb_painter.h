@@ -234,6 +234,11 @@ public:
 protected:
     PCB_VIEWERS_SETTINGS_BASE* viewer_settings();
 
+    /**
+     * True when a zone's only visual is its outline, as for a rule area or outline-only display.
+     */
+    bool zoneOutlineOnly( const ZONE* aZone ) const;
+
     // Drawing functions for various types of PCB-specific items
     void draw( const PCB_TRACK* aTrack, int aLayer );
     void draw( const PCB_ARC* aArc, int aLayer );
