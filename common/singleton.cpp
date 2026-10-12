@@ -39,8 +39,13 @@ void KICAD_SINGLETON::Shutdown()
     // Must be called before static destruction begins to avoid crashes on macOS.
     if( m_ThreadPool )
     {
+        #if !defined( __MINGW32__ )
+        // does not work fine on MINGW (delete m_ThreadPool takes a looong time) and can create a crash
+        // on exit in some cases (for instance running under GDB). So use only static destruction.
+        // But builds on MINGW have a few specific code.
         delete m_ThreadPool;
         m_ThreadPool = nullptr;
+        #endif
 
         // Clear the cached thread pool pointer to prevent dangling reference
         InvalidateKiCadThreadPool();
