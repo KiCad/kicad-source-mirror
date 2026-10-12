@@ -1632,33 +1632,59 @@ void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
         aPin->SetNumber( wxString::Format( wxS( "%ld" ), spiceOrderNum ) );
 
     aPin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
-    aPin->SetPosition( ToKicadCoords( lt_pin.PinLocation ) );
-    aPin->SetLength( 5 );
     aPin->SetShape( GRAPHIC_PINSHAPE::LINE );
+    aPin->SetPosition( ToKicadCoords( lt_pin.PinLocation ) );
+
+    int pinLen = std::max( schIUScale.MilsToIU( 1 ), ToKicadCoords( lt_pin.NameOffSet - 8 ) );
+    aPin->SetLength( pinLen );
 
     switch( lt_pin.PinJustification )
     {
     case LTSPICE_SCHEMATIC::JUSTIFICATION::LEFT:
-    case LTSPICE_SCHEMATIC::JUSTIFICATION::VLEFT:
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::VTOP:
         aPin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
         break;
 
     case LTSPICE_SCHEMATIC::JUSTIFICATION::RIGHT:
-    case LTSPICE_SCHEMATIC::JUSTIFICATION::VRIGHT:
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::VBOTTOM:
         aPin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );
         break;
 
     case LTSPICE_SCHEMATIC::JUSTIFICATION::BOTTOM:
-    case LTSPICE_SCHEMATIC::JUSTIFICATION::VBOTTOM:
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::VLEFT:
         aPin->SetOrientation( PIN_ORIENTATION::PIN_UP );
         break;
 
     case LTSPICE_SCHEMATIC::JUSTIFICATION::TOP:
-    case LTSPICE_SCHEMATIC::JUSTIFICATION::VTOP:
+    case LTSPICE_SCHEMATIC::JUSTIFICATION::VRIGHT:
         aPin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
         break;
 
-    default: break;
+    default:
+        // Auto-detect based on connected lines
+        for( const LTSPICE_SCHEMATIC::LINE& line : aLTSymbol.Lines )
+        {
+            EDA_ANGLE lineAngle( line.End - line.Start );
+
+            BOX2I bbox;
+            bbox.Merge( line.Start );
+            bbox.Merge( line.End );
+
+            if( lineAngle.IsHorizontal() )
+            {
+                if( lt_pin.PinLocation == bbox.GetOrigin() )
+                    aPin->SetOrientation( PIN_ORIENTATION::PIN_LEFT );
+                else if( lt_pin.PinLocation == bbox.GetEnd() )
+                    aPin->SetOrientation( PIN_ORIENTATION::PIN_RIGHT );
+            }
+            else if( lineAngle.IsVertical() )
+            {
+                if( lt_pin.PinLocation == bbox.GetOrigin() )
+                    aPin->SetOrientation( PIN_ORIENTATION::PIN_UP );
+                else if( lt_pin.PinLocation == bbox.GetEnd() )
+                    aPin->SetOrientation( PIN_ORIENTATION::PIN_DOWN );
+            }
+        }
     }
 }
 
