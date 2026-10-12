@@ -589,6 +589,10 @@ void DIALOG_PIN_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     {
         m_alternatesTurndown->Collapse( false );
 
+        wxCommandEvent evt( WX_COLLAPSIBLE_PANE_CHANGED );
+        evt.SetEventObject( m_alternatesTurndown );
+        m_alternatesTurndown->ProcessCommand( evt );
+
         m_alternatesGrid->SetFocus();
         m_alternatesGrid->MakeCellVisible( m_delayedFocusRow, m_delayedFocusColumn );
         m_alternatesGrid->SetGridCursor( m_delayedFocusRow, m_delayedFocusColumn );
