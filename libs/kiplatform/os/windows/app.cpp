@@ -258,3 +258,11 @@ void KIPLATFORM::APP::AddDynamicLibrarySearchPath( const wxString& aPath )
 {
     SetDllDirectory( aPath.c_str() );
 }
+
+
+bool KIPLATFORM::APP::SetCurrentThreadPriority( bool aRaise )
+{
+    return SetThreadPriority( GetCurrentThread(),
+                              aRaise ? THREAD_PRIORITY_ABOVE_NORMAL : THREAD_PRIORITY_BELOW_NORMAL )
+           != 0;
+}

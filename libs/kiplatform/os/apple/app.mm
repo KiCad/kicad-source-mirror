@@ -20,6 +20,8 @@
 
 #include <kiplatform/app.h>
 
+#include <pthread.h>
+
 #include <wx/string.h>
 #include <wx/sysopt.h>
 
@@ -88,4 +90,18 @@ void KIPLATFORM::APP::ForceTimerMessagesToBeCreatedIfNecessary()
 
 void KIPLATFORM::APP::AddDynamicLibrarySearchPath( const wxString& aPath )
 {
+}
+
+
+bool KIPLATFORM::APP::SetCurrentThreadPriority( bool aRaise )
+{
+    sched_param param{};
+    int         policy = 0;
+
+    if( pthread_getschedparam( pthread_self(), &policy, &param ) != 0 )
+        return false;
+
+    param.sched_priority = aRaise ? sched_get_priority_max( policy ) : sched_get_priority_min( policy );
+
+    return pthread_setschedparam( pthread_self(), policy, &param ) == 0;
 }

@@ -110,6 +110,16 @@ namespace KIPLATFORM
          * @param aPath is the full path to insert
          */
         void AddDynamicLibrarySearchPath( const wxString& aPath );
+
+        /**
+         * Raise or lower the scheduling priority of the calling thread.
+         *
+         * Raising it may need privileges the process does not have.
+         *
+         * @param aRaise is true to schedule the thread above normal, false to schedule it below.
+         * @return true if the priority was changed.
+         */
+        bool SetCurrentThreadPriority( bool aRaise );
     }
 }
 

@@ -20,6 +20,12 @@
 
 #include <kiplatform/app.h>
 
+#ifdef __linux__
+#include <sys/resource.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+#endif
+
 #include <glib.h>
 
 #include <wx/string.h>
@@ -111,4 +117,17 @@ void KIPLATFORM::APP::ForceTimerMessagesToBeCreatedIfNecessary()
 
 void KIPLATFORM::APP::AddDynamicLibrarySearchPath( const wxString& aPath )
 {
+}
+
+
+bool KIPLATFORM::APP::SetCurrentThreadPriority( bool aRaise )
+{
+#ifdef __linux__
+    // Each Linux thread has its own nice value, and a negative one needs privilege
+    const pid_t tid = static_cast<pid_t>( syscall( SYS_gettid ) );
+
+    return setpriority( PRIO_PROCESS, tid, aRaise ? -5 : 5 ) == 0;
+#else
+    return false;
+#endif
 }
