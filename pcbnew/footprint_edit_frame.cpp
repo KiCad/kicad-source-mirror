@@ -959,9 +959,15 @@ void FOOTPRINT_EDIT_FRAME::borrowBoardNonDestructive( BOARD* aBoard )
         return;
 
     // The only frame-owned board is the constructor's bootstrap board. Delete it when we first
-    // switch away so it does not leak; tab-owned boards are left to their contexts.
+    // switch away so it does not leak; tab-owned boards are left to their contexts. The view must
+    // release the bootstrap board's items before their owner is deleted.
     if( m_pcb && !activeBoardOwnedByTab() )
+    {
+        if( GetCanvas() )
+            GetCanvas()->GetView()->Clear();
+
         delete m_pcb;
+    }
 
     m_pcb = aBoard;
 
