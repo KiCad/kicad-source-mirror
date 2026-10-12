@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE( ERCMissingNetclassesIncludeSheetsWithoutElectricalIslands 
             delete pin;
         }
 
-        child->GetFields().emplace_back( child, FIELD_T::USER, "Netclass" );
+        child->GetFields().emplace_back( child, FIELD_T::SHEET_USER, "Netclass" );
         child->GetFields().back().SetText( "MissingRootClass" );
         screen->Update( child, false );
         schematic->RebuildConnectivity();

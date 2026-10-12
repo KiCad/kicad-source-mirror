@@ -413,7 +413,7 @@ BOOST_AUTO_TEST_CASE( SheetVariantFlattenedIntoSchematic )
     child->SetFileName( wxT( "child.kicad_sch" ) );
     rootScreen->Append( child );
 
-    child->AddField( SCH_FIELD( child, FIELD_T::USER, wxT( "Note" ) ) );
+    child->AddField( SCH_FIELD( child, FIELD_T::SHEET_USER, wxT( "Note" ) ) );
     child->GetFields().back().SetText( wxT( "base note" ) );
 
     SCH_SHEET_PATH childPath = rootPath;
