@@ -642,6 +642,10 @@ BITMAP_BASE* CONSTRAINT_BADGE_ITEM::disc( const KIGFX::COLOR4D& aColor ) const
 void CONSTRAINT_BADGE_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     KIGFX::GAL*  gal = aView->GetGAL();
+
+    if( m_badges.empty() )
+        return;
+
     const double scale = gal->GetWorldScale();
 
     if( scale <= 0.0 )
