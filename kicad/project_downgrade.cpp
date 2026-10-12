@@ -413,7 +413,9 @@ bool ClassifyProjectForDowngrade( KIWAY& aKiway, const wxString& aProjectDir, co
                 wxString shown = name.IsEmpty() ? _( "unnamed" ) : name;
 
                 aReport.Add( DOWNGRADE_BUCKET::DROP, wxString::Format( _( "Custom DRC rule '%s'" ), shown ),
-                             _( "The target cannot evaluate it with the same meaning. The rule is removed." ), 1 );
+                             _( "The target cannot evaluate it with the same meaning. The rule is kept as a "
+                                "comment." ),
+                             1 );
             }
         }
     }

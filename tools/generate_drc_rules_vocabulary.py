@@ -19,8 +19,8 @@
 """
 Regenerate include/drc_rules_release_vocabulary.h from the release tags.
 
-Saving a project for an older KiCad drops any custom rule that release could not
-parse. The vocabulary of a release series is read straight from its tags and is
+Saving a project for an older KiCad comments out any custom rule that release could
+not parse. The vocabulary of a release series is read straight from its tags and is
 the words every point release in the series understood, so it is a record of
 what shipped rather than something kept up by hand.
 
@@ -28,12 +28,14 @@ Run from the repository root with the release tags fetched:
 
     python3 tools/generate_drc_rules_vocabulary.py
 
-Add a target here when a release becomes a downgrade target. A new point release
-only changes the result if it stopped reading a word.
+Add a target here when a release becomes a downgrade target, rerun the script and
+commit the header. A new point release only changes the result if it stopped
+reading a word.
 """
 
 import re
 import subprocess
+from pathlib import Path
 
 # Downgrade target id, and the tag prefix shared by every release in that series.
 TARGETS = [
@@ -41,11 +43,12 @@ TARGETS = [
     ("10.0", "10.0."),
 ]
 
-OUTPUT = "include/drc_rules_release_vocabulary.h"
+OUTPUT = Path(__file__).resolve().parent.parent / "include" / "drc_rules_release_vocabulary.h"
 
 KEYWORDS = "common/drc_rules.keywords"
 FUNCTIONS = "pcbnew/pcbexpr_functions.cpp"
 EVALUATOR = "pcbnew/pcbexpr_evaluator.cpp"
+ENGINE = "pcbnew/drc/drc_engine.cpp"
 
 # A property is constructed as new PROPERTY<CLASS, TYPE[, BASE]>( _HKI( "Name" ), ... ), with
 # or without an AddProperty around it. The kind and the type decide whether a rule can read it.
@@ -55,18 +58,23 @@ PROPERTY = re.compile(
 # read through their choice list instead, so every PROPERTY_ENUM counts as readable.
 VALUE_TYPE = re.compile(r'TYPE_HASH\(\s*([^)]+?)\s*\)')
 # A value's unit suffix is whatever the unit resolver lists, and ${...} text variables are
-# accepted only once the expression tokenizer looks for them.
+# accepted only once the rules loader expands them before parsing.
 UNIT = re.compile(r'"([a-z%]+)"')
-TOKENIZER = "common/libeval_compiler/libeval_compiler.cpp"
 FUNCTION = re.compile(r'RegisterFunc\(\s*wxT\(\s*"([^"(]+)\(')
 # The evaluator resolves a few names itself before asking the property manager,
 # and keeps aliases for properties that were renamed.
 SPECIAL = re.compile(r'aField\.CmpNoCase\(\s*wxT\(\s*"([A-Za-z_]+)"')
 ALIAS = re.compile(r'field\.CmpNoCase\(\s*wxT\(\s*"([^"]+)"')
+IDENTIFIER = re.compile(r"^[a-z_][a-z0-9_]*$")
 
 
 def git(*args):
-    return subprocess.run(["git", *args], capture_output=True, text=True, check=True).stdout
+    result = subprocess.run(["git", *args], capture_output=True, text=True)
+
+    if result.returncode != 0:
+        raise SystemExit(result.stderr.strip() or f"git {' '.join(args)} failed")
+
+    return result.stdout
 
 
 def show(rev, path):
@@ -80,9 +88,6 @@ def release_tags(prefix):
         raise SystemExit(f"no release tags match {prefix}*, fetch the tags first")
 
     return sorted(tags, key=lambda tag: [int(part) for part in tag.split(".")])
-
-
-IDENTIFIER = re.compile(r"^[a-z_][a-z0-9_]*$")
 
 
 def normalise(name):
@@ -107,14 +112,13 @@ def vocabulary(rev):
     functions = {name.lower() for name in FUNCTION.findall(show(rev, FUNCTIONS))}
 
     evaluator = show(rev, EVALUATOR)
-    readable = {squash(t) for t in VALUE_TYPE.findall(evaluator)}
+    readable = {squash(value_type) for value_type in VALUE_TYPE.findall(evaluator)}
 
     properties = set()
-    sources = [f for f in git("ls-tree", "-r", "--name-only", rev, "pcbnew", "common").split()
-               if f.endswith(".cpp")]
+    sources = git("grep", "-l", "-E", "new +PROPERTY", rev, "--", "pcbnew", "common").split()
 
-    for path in sources:
-        for kind, value_type, name in PROPERTY.findall(show(rev, path)):
+    for source in sources:
+        for kind, value_type, name in PROPERTY.findall(show(rev, source.split(":", 1)[1])):
             if kind != "PROPERTY_ENUM" and squash(value_type) not in readable:
                 continue
 
@@ -125,8 +129,12 @@ def vocabulary(rev):
     properties |= {normalise(name) for name in ALIAS.findall(evaluator)}
 
     resolver = re.search(r"GetSupportedUnits\(\)(.*?)\n}", evaluator, re.S)
-    units = set(UNIT.findall(resolver.group(1))) if resolver else set()
-    text_variables = 'MatchAhead( "${"' in show(rev, TOKENIZER)
+
+    if not resolver:
+        raise SystemExit(f"{rev}: GetSupportedUnits not found in {EVALUATOR}, update the script")
+
+    units = set(UNIT.findall(resolver.group(1)))
+    text_variables = "ExpandTextVars" in show(rev, ENGINE)
 
     return keywords, functions, properties, units, text_variables
 
@@ -135,18 +143,18 @@ def shared_vocabulary(tags):
     keywords, functions, properties, units, text_variables = vocabulary(tags[0])
 
     for tag in tags[1:]:
-        k, f, p, u, t = vocabulary(tag)
-        keywords &= k
-        functions &= f
-        properties &= p
-        units &= u
-        text_variables = text_variables and t
+        tag_keywords, tag_functions, tag_properties, tag_units, tag_text_variables = vocabulary(tag)
+        keywords &= tag_keywords
+        functions &= tag_functions
+        properties &= tag_properties
+        units &= tag_units
+        text_variables = text_variables and tag_text_variables
 
     return sorted(keywords), sorted(functions), sorted(properties), sorted(units), text_variables
 
 
 def emit_array(out, name, values):
-    out.append(f"static constexpr const char* const {name}[] = {{")
+    out.append(f"inline constexpr const char* const {name}[] = {{")
 
     for value in values:
         out.append(f'    "{value}",')
@@ -157,14 +165,18 @@ def emit_array(out, name, values):
 
 def main():
     out = [
-        "// This file is generated by tools/generate_drc_rules_vocabulary.py from the release branches.",
-        "// Do not edit it by hand. Rerun the script when a release becomes a downgrade target.",
+        "// Generated by tools/generate_drc_rules_vocabulary.py from the release tags. Do not edit it",
+        "// by hand. It is committed because generating it needs every release tag, which a source",
+        "// archive or a shallow clone does not have. Rerun the script and commit the result when a",
+        "// release becomes a downgrade target.",
         "",
         "#ifndef DRC_RULES_RELEASE_VOCABULARY_H",
         "#define DRC_RULES_RELEASE_VOCABULARY_H",
         "",
         "#include <cstddef>",
         "#include <iterator>",
+        "",
+        "// clang-format off",
         "",
         "/// Everything a rules file could name in one release. Tokens are the rule grammar, the",
         "/// rest is what a condition or assertion may call or read.",
@@ -216,9 +228,11 @@ def main():
               f"{len(properties)} properties, units {' '.join(units)}, "
               f"text variables {'yes' if text_variables else 'no'}")
 
-    out.append("static constexpr DRC_RULE_VOCABULARY DRC_RULE_VOCABULARIES[] = {")
+    out.append("inline constexpr DRC_RULE_VOCABULARY DRC_RULE_VOCABULARIES[] = {")
     out.extend(entries)
     out.append("};")
+    out.append("")
+    out.append("// clang-format on")
     out.append("")
     out.append("#endif // DRC_RULES_RELEASE_VOCABULARY_H")
 

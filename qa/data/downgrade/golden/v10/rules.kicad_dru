@@ -1,5 +1,4 @@
 (version 1)
-
 # Keep this comment, including syntax lookalikes: ) (( " \
 (rule "clearance # literal"
   # inNetChain('x') and ) " ( are just comment text
@@ -7,3 +6,6 @@
   (constraint clearance (min 0.2mm)))
 # Supported starting with KiCad 10
 (rule "mask" (constraint bridged_mask))
+# Unsupported in both older targets
+# Not supported by KiCad 10.0:
+# (rule "chain" (constraint net_chain_length (max 10mm)))
