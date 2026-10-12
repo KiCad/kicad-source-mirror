@@ -40,7 +40,11 @@ add_library(kicad_3d_model_previewer SHARED ${KICAD_3D_PREVIEW_HANDLER_FILES})
 
 find_library( OCC_OPENGL_LIBRARY TKOpenGl HINTS "${OCC_LIBRARY_DIR}" NO_DEFAULT_PATH REQUIRED )
 
-set_target_properties(kicad_3d_model_previewer PROPERTIES LINK_FLAGS "/DEF:${CMAKE_SOURCE_DIR}/utils/preview_handlers/kicad_3d_model_preview_handler/exports.def")
+if( MINGW )
+    set( EXTRA_LIBS shlwapi )
+else()
+    set_target_properties(kicad_3d_model_previewer PROPERTIES LINK_FLAGS "/DEF:${CMAKE_SOURCE_DIR}/utils/preview_handlers/kicad_3d_model_preview_handler/exports.def")
+endif()
 
 # The .rc pulls in the generated kicad_build_version.h, which only a full build happened to
 # produce first
@@ -51,6 +55,7 @@ target_link_libraries(kicad_3d_model_previewer
     ${OCC_LIBRARIES}
     ${OCC_OPENGL_LIBRARY}
     Version
+    ${EXTRA_LIBS}
 )
 
 # The shell loads this handler into its own surrogate process, whose application directory is
