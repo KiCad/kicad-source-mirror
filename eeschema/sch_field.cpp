@@ -156,6 +156,8 @@ SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, FIELD_T aFieldId, const wxString& aName
 
     if( aFieldId == FIELD_T::USER && aParent )
     {
+        wxASSERT_MSG( aParent->Type() != SCH_SHEET_T, wxT( "Sheets use FIELD_T::SHEET_USER, not FIELD_T::USER!" ) );
+
         if( aParent->Type() == SCH_SYMBOL_T )
             m_ordinal = static_cast<SCH_SYMBOL*>( aParent )->GetNextFieldOrdinal();
         else if( aParent->Type() == LIB_SYMBOL_T )
