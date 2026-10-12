@@ -3221,8 +3221,8 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
 
                     if( Padstack().Mode() == PADSTACK::MODE::NORMAL )
                     {
-                        if( !GetLayerSet().test( other->GetLayer() ) )
-                            continue;
+                        // A signle layer (F_Cu) in NORMAL mode represents _all_ layers,
+                        // so disable the layer test entirely
                     }
                     else
                     {
@@ -3230,7 +3230,7 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
                             continue;
                     }
 
-                    if( aShape->GetLayer() == other->GetLayer() && aShape->Compare( other ) == 0 )
+                    if( aShape->Compare( other ) == 0 )
                         matching.push_back( other );
                 }
 
@@ -3308,8 +3308,7 @@ std::vector<PCB_SHAPE*> PAD::Recombine( bool aIsDryRun, int maxError )
                         AddPrimitive( padstackStorageLayer, primitive );
                     }
 
-                    // See if there are other shapes that match and mark them for delete.  (KiCad won't
-                    // produce these, but old footprints from other vendors have them.)
+                    // See if there are other shapes that match and mark them for delete.
                     for( PCB_SHAPE* other : findMatching( fpShape ) )
                     {
                         other->SetFlags( SKIP_STRUCT );
