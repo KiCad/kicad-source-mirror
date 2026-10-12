@@ -115,21 +115,22 @@ public:
 
         text += wxS( "\n\n" ) + _( "Counts cover reported items only." ) + wxS( "\n" );
 
-        auto addSection = [&]( DOWNGRADE_BUCKET aBucket, const wxString& aLabel )
-        {
-            text += wxString::Format( wxS( "\n%s: %d\n" ), aLabel, Count( aBucket ) );
+        auto addSection =
+                [&]( DOWNGRADE_BUCKET aBucket, const wxString& aLabel )
+                {
+                    text += wxString::Format( wxS( "\n%s: %d\n" ), aLabel, Count( aBucket ) );
 
-            for( const COMPAT_ENTRY& entry : m_entries )
-            {
-                if( entry.m_bucket != aBucket )
-                    continue;
+                    for( const COMPAT_ENTRY& entry : m_entries )
+                    {
+                        if( entry.m_bucket != aBucket )
+                            continue;
 
-                text += wxString::Format( wxS( "  %s (%d)\n" ), entry.m_feature, entry.m_count );
+                        text += wxString::Format( wxS( "  %s (%d)\n" ), entry.m_feature, entry.m_count );
 
-                if( !entry.m_detail.IsEmpty() )
-                    text += wxString::Format( wxS( "    %s\n" ), entry.m_detail );
-            }
-        };
+                        if( !entry.m_detail.IsEmpty() )
+                            text += wxString::Format( wxS( "    %s\n" ), entry.m_detail );
+                    }
+                };
 
         addSection( DOWNGRADE_BUCKET::KEEP, _( "Keep" ) );
         addSection( DOWNGRADE_BUCKET::LOWER, _( "Approximate" ) );
@@ -153,7 +154,10 @@ public:
             case DOWNGRADE_BUCKET::BLOCK: label = _( "block" ); break;
             }
 
-            aReporter->Report( wxString::Format( wxT( "  [%s] %s (%d): %s\n" ), label, entry.m_feature, entry.m_count,
+            aReporter->Report( wxString::Format( wxT( "  [%s] %s (%d): %s\n" ),
+                                                 label,
+                                                 entry.m_feature,
+                                                 entry.m_count,
                                                  entry.m_detail ),
                                RPT_SEVERITY_INFO );
         }

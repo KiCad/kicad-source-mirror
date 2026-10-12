@@ -675,10 +675,11 @@ static int countBackdrills( const BOARD* aBoard )
 
 static bool hasPostMachining( const PADSTACK& aPadstack )
 {
-    auto set = []( const PADSTACK::POST_MACHINING_PROPS& aProps )
-    {
-        return aProps.mode.has_value() && aProps.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED;
-    };
+    auto set =
+            []( const PADSTACK::POST_MACHINING_PROPS& aProps )
+            {
+                return aProps.mode.has_value() && aProps.mode != PAD_DRILL_POST_MACHINING_MODE::NOT_POST_MACHINED;
+            };
 
     return set( aPadstack.FrontPostMachining() ) || set( aPadstack.BackPostMachining() );
 }
@@ -706,11 +707,12 @@ static int countPostMachining( const BOARD* aBoard )
 
 static void dropPostMachining( BOARD* aBoard )
 {
-    auto clear = []( PADSTACK& aPadstack )
-    {
-        aPadstack.FrontPostMachining().mode.reset();
-        aPadstack.BackPostMachining().mode.reset();
-    };
+    auto clear =
+            []( PADSTACK& aPadstack )
+            {
+                aPadstack.FrontPostMachining().mode.reset();
+                aPadstack.BackPostMachining().mode.reset();
+            };
 
     for( FOOTPRINT* fp : aBoard->Footprints() )
         dropPostMachiningFp( fp );
@@ -792,11 +794,12 @@ static int countSkipVias( const BOARD* aBoard )
 
     for( PCB_TRACK* track : aBoard->Tracks() )
     {
-        if( track->Type() == PCB_VIA_T
-            && static_cast<PCB_VIA*>( track )->Padstack().UnconnectedLayerMode()
-                       == UNCONNECTED_LAYER_MODE::START_END_ONLY )
+        if( track->Type() == PCB_VIA_T )
         {
-            count++;
+            PCB_VIA* via = static_cast<PCB_VIA*>( track );
+
+            if( via->Padstack().UnconnectedLayerMode() == UNCONNECTED_LAYER_MODE::START_END_ONLY )
+                count++;
         }
     }
 
@@ -924,7 +927,8 @@ static bool hasViaProtection( const PCB_VIA* aVia )
 {
     const PADSTACK& padstack = aVia->Padstack();
 
-    return padstack.Drill().is_filled.has_value() || padstack.Drill().is_capped.has_value()
+    return padstack.Drill().is_filled.has_value()
+           || padstack.Drill().is_capped.has_value()
            || padstack.FrontOuterLayers().has_covering.has_value()
            || padstack.BackOuterLayers().has_covering.has_value()
            || padstack.FrontOuterLayers().has_plugging.has_value()
@@ -1341,8 +1345,9 @@ static void dropZoneLayerProperties( BOARD* aBoard )
 
 static bool hasGroupPlacementLinkage( const ZONE* aZone )
 {
-    return aZone->GetIsRuleArea() && aZone->GetPlacementAreaSourceType() == PLACEMENT_SOURCE_T::GROUP_PLACEMENT
-           && ( aZone->GetPlacementAreaEnabled() || !aZone->GetPlacementAreaSource().IsEmpty() );
+    return aZone->GetIsRuleArea()
+            && aZone->GetPlacementAreaSourceType() == PLACEMENT_SOURCE_T::GROUP_PLACEMENT
+            && ( aZone->GetPlacementAreaEnabled() || !aZone->GetPlacementAreaSource().IsEmpty() );
 }
 
 
@@ -1448,13 +1453,11 @@ static void omitPadPrimitives( FOOTPRINT* aFootprint, const std::function<bool( 
         pad->Padstack().ForEachUniqueLayer(
                 [&]( PCB_LAYER_ID aLayer )
                 {
-                    auto& primitives = pad->Padstack().Primitives( aLayer );
-                    primitives.erase( std::remove_if( primitives.begin(), primitives.end(),
-                                                      [&]( const std::shared_ptr<PCB_SHAPE>& aPrimitive )
-                                                      {
-                                                          return aMatches( aPrimitive.get() );
-                                                      } ),
-                                      primitives.end() );
+                    std::erase_if( pad->Padstack().Primitives( aLayer ),
+                                   [&]( const std::shared_ptr<PCB_SHAPE>& aPrimitive )
+                                   {
+                                       return aMatches( aPrimitive.get() );
+                                   } );
                 } );
         pad->SetDirty();
     }
@@ -1903,11 +1906,12 @@ static bool unsafeLineEndings( const PCB_SHAPE* aShape )
     if( !aShape->GetLineEndingEndpoints( start, end ) )
         return false;
 
-    const auto unsafeStroke = []( const STROKE_PARAMS& aStroke )
-    {
-        return ( aStroke.GetLineStyle() != LINE_STYLE::DEFAULT && aStroke.GetLineStyle() != LINE_STYLE::SOLID )
-               || aStroke.GetColor() != KIGFX::COLOR4D::UNSPECIFIED;
-    };
+    const auto unsafeStroke =
+            []( const STROKE_PARAMS& aStroke )
+            {
+                return ( aStroke.GetLineStyle() != LINE_STYLE::DEFAULT && aStroke.GetLineStyle() != LINE_STYLE::SOLID )
+                       || aStroke.GetColor() != KIGFX::COLOR4D::UNSPECIFIED;
+            };
 
     // The native polygon helper does not preserve dash patterns or ending colors.
     return aShape->GetEffectiveWidth() <= 0
@@ -2043,10 +2047,10 @@ static const wxString& titleFieldText( const TITLE_BLOCK& aTitle, int aIndex )
 {
     switch( aIndex )
     {
-    case 0: return aTitle.GetTitle();
-    case 1: return aTitle.GetDate();
-    case 2: return aTitle.GetRevision();
-    case 3: return aTitle.GetCompany();
+    case 0:  return aTitle.GetTitle();
+    case 1:  return aTitle.GetDate();
+    case 2:  return aTitle.GetRevision();
+    case 3:  return aTitle.GetCompany();
     default: return aTitle.GetComment( aIndex - 4 );
     }
 }
@@ -2060,7 +2064,9 @@ static bool postTargetText( const wxString& aText, const BOARD* aBoard, int aTar
 
     for( size_t pos = 0; pos + 1 < aText.length(); ++pos )
     {
-        if( aText[pos] == '\\' && pos + 2 < aText.length() && ( aText[pos + 1] == '$' || aText[pos + 1] == '@' )
+        if( aText[pos] == '\\'
+            && pos + 2 < aText.length()
+            && ( aText[pos + 1] == '$' || aText[pos + 1] == '@' )
             && aText[pos + 2] == '{' )
         {
             if( aTargetVersion <= PCB_WRITER_V9::FORMAT_VERSION )
@@ -2076,22 +2082,33 @@ static bool postTargetText( const wxString& aText, const BOARD* aBoard, int aTar
             continue;
         }
 
-        if( aText[pos] == '@' && aText[pos + 1] == '{'
+        if( aText[pos] == '@'
+            && aText[pos + 1] == '{'
             && ( aTargetVersion <= PCB_WRITER_V9::FORMAT_VERSION || aText.Mid( pos ).Contains( wxT( "mils" ) ) ) )
+        {
             return true;
+        }
 
-        if( aText[pos] == '$' && aText[pos + 1] == '{'
+        if( aText[pos] == '$'
+            && aText[pos + 1] == '{'
             && aText.Mid( pos + 2 ).BeforeFirst( '}' ).AfterFirst( ':' ).StartsWith( wxT( "PROPERTY." ) ) )
+        {
             return true;
+        }
     }
 
     for( const auto& reference : ExtractTextVarReferences( aText ) )
     {
         const wxString& name = reference.primary;
 
-        if( name.StartsWith( wxT( "PROPERTY." ) ) || reference.secondary.StartsWith( wxT( "PROPERTY." ) )
-            || name == wxT( "DRILL_OPERATIONS" ) || name == wxT( "DRILL_SITES" ) || name == wxT( "DRILL_GROUPS" ) )
+        if( name.StartsWith( wxT( "PROPERTY." ) )
+            || reference.secondary.StartsWith( wxT( "PROPERTY." ) )
+            || name == wxT( "DRILL_OPERATIONS" )
+            || name == wxT( "DRILL_SITES" )
+            || name == wxT( "DRILL_GROUPS" ) )
+        {
             return true;
+        }
 
         if( aBoard && titleFieldIndex( name ) >= 0 )
         {
@@ -2115,8 +2132,8 @@ static bool postTargetText( const wxString& aText, const BOARD* aBoard, int aTar
 
             if( aBoard->GetProject() )
             {
-                const auto& variables = aBoard->GetProject()->GetTextVars();
-                auto        variable = variables.find( name );
+                const std::map<wxString, wxString>& variables = aBoard->GetProject()->GetTextVars();
+                auto                                variable = variables.find( name );
 
                 if( variable != variables.end() )
                     value = &variable->second;
@@ -2124,16 +2141,19 @@ static bool postTargetText( const wxString& aText, const BOARD* aBoard, int aTar
 
             if( !value )
             {
-                const auto& properties = aBoard->GetProperties();
-                auto        property = properties.find( name );
+                const std::map<wxString, wxString>& properties = aBoard->GetProperties();
+                auto                                property = properties.find( name );
 
                 if( property != properties.end() )
                     value = &property->second;
             }
 
-            if( value && aDependencies.insert( name ).second
+            if( value
+                && aDependencies.insert( name ).second
                 && postTargetText( *value, aBoard, aTargetVersion, aDependencies, aDepth + 1 ) )
+            {
                 return true;
+            }
         }
     }
 
@@ -2204,20 +2224,21 @@ static void planTextItem( BOARD_ITEM* aItem, int aTargetVersion, TEXT_DOWNGRADE_
     if( !postTargetText( raw, board, aTargetVersion ) )
         return;
 
-    std::function<bool( wxString* )> resolver = [&]( wxString* aToken )
-    {
-        if( aResolver )
-            return ( *aResolver )( aToken );
+    std::function<bool( wxString* )> resolver =
+            [&]( wxString* aToken )
+            {
+                if( aResolver )
+                    return ( *aResolver )( aToken );
 
-        if( *aToken == wxT( "LAYER" ) && board )
-        {
-            *aToken = board->GetLayerName( aItem->GetLayer() );
-            return true;
-        }
+                if( *aToken == wxT( "LAYER" ) && board )
+                {
+                    *aToken = board->GetLayerName( aItem->GetLayer() );
+                    return true;
+                }
 
-        FOOTPRINT* fp = aItem->GetParentFootprint();
-        return ( fp && fp->ResolveTextVar( aToken, 0 ) ) || ( board && board->ResolveTextVar( aToken, 0 ) );
-    };
+                FOOTPRINT* fp = aItem->GetParentFootprint();
+                return ( fp && fp->ResolveTextVar( aToken, 0 ) ) || ( board && board->ResolveTextVar( aToken, 0 ) );
+            };
 
     wxString result;
     bool     blocked = false;
@@ -2225,8 +2246,10 @@ static void planTextItem( BOARD_ITEM* aItem, int aTargetVersion, TEXT_DOWNGRADE_
     for( size_t pos = 0; pos < raw.length(); )
     {
         size_t start = pos;
-        bool   escaped = raw[pos] == '\\' && pos + 2 < raw.length() && ( raw[pos + 1] == '$' || raw[pos + 1] == '@' )
-                         && raw[pos + 2] == '{';
+        bool   escaped = raw[pos] == '\\'
+                            && pos + 2 < raw.length()
+                            && ( raw[pos + 1] == '$' || raw[pos + 1] == '@' )
+                            && raw[pos + 2] == '{';
         size_t marker = escaped ? pos + 1 : pos;
 
         if( marker + 1 >= raw.length() || ( raw[marker] != '$' && raw[marker] != '@' ) || raw[marker + 1] != '{' )
@@ -2322,9 +2345,12 @@ static void planTextItem( BOARD_ITEM* aItem, int aTargetVersion, TEXT_DOWNGRADE_
 
         FinalizeTextVarExpansion( block, INTERNAL );
 
-        if( postTargetText( block, board, aTargetVersion ) || block.Contains( wxT( "<Unresolved:" ) )
+        if( postTargetText( block, board, aTargetVersion )
+            || block.Contains( wxT( "<Unresolved:" ) )
             || block.Contains( wxT( "<Unknown reference:" ) ) )
+        {
             blocked = true;
+        }
 
         result += block;
     }
@@ -2352,9 +2378,13 @@ static TEXT_DOWNGRADE_PLAN planBoardText( const BOARD* aBoard, int aTargetVersio
 
     std::function<bool( wxString* )> resolver = [&]( wxString* aToken )
     {
-        if( *aToken == wxT( "FILENAME" ) || *aToken == wxT( "FILEPATH" ) || *aToken == wxT( "VARIANT" )
+        if( *aToken == wxT( "FILENAME" )
+            || *aToken == wxT( "FILEPATH" )
+            || *aToken == wxT( "VARIANT" )
             || *aToken == wxT( "VARIANT_DESC" ) )
+        {
             return aBoard->ResolveTextVar( aToken, 0 );
+        }
 
         return aBoard->GetTitleBlock().TextVarResolver( aToken, aBoard->GetProject(), INTERNAL )
                || ( aBoard->GetProject() && aBoard->GetProject()->TextVarResolver( aToken ) );
@@ -2395,10 +2425,10 @@ static void applyTextPlan( const TEXT_DOWNGRADE_PLAN& aPlan )
 
         switch( field )
         {
-        case 0: title.SetTitle( value ); break;
-        case 1: title.SetDate( value ); break;
-        case 2: title.SetRevision( value ); break;
-        case 3: title.SetCompany( value ); break;
+        case 0:  title.SetTitle( value );              break;
+        case 1:  title.SetDate( value );               break;
+        case 2:  title.SetRevision( value );           break;
+        case 3:  title.SetCompany( value );            break;
         default: title.SetComment( field - 4, value ); break;
         }
     }
@@ -2506,39 +2536,43 @@ static std::vector<BOARD_RULE> boardRules()
           _( "Drill symbol assignments and display settings are removed. Holes are unchanged." ),
           countDrillSymbolConfiguration, dropDrillSymbolConfiguration },
         { VER_NET_CHAINS, DOWNGRADE_BUCKET::DROP, _( "Net chains" ),
-          _( "No equivalent in the target. Connectivity will change." ), countNetChains, dropNetChains },
-        { VER_ELLIPSE, DOWNGRADE_BUCKET::LOWER, _( "Ellipse graphics" ), _( "Approximated by a polygon." ),
+          _( "No equivalent in the target. Connectivity will change." ),
+          countNetChains, dropNetChains },
+        { VER_ELLIPSE, DOWNGRADE_BUCKET::LOWER, _( "Ellipse graphics" ),
+          _( "Approximated by a polygon." ),
           countEllipses, lowerEllipses, lowerEllipsesFp, omitEllipses, omitEllipsesFp,
           _( "Ellipse graphics are omitted instead of approximated." ) },
         { VER_EXTRUDED_BODY, DOWNGRADE_BUCKET::DROP, _( "Extruded 3D bodies" ),
-          _( "No equivalent in the target. The 3D body is left out." ), countExtrudedBodies, dropExtrudedBodies,
-          dropExtrudedBodiesFp },
+          _( "No equivalent in the target. The 3D body is left out." ),
+          countExtrudedBodies, dropExtrudedBodies, dropExtrudedBodiesFp },
         { VER_THIEVING, DOWNGRADE_BUCKET::BLOCK, _( "Copper-thieving zones" ),
-          _( "A refill in the target would turn the pattern into solid copper." ), countThievingZones, nullptr },
+          _( "A refill in the target would turn the pattern into solid copper." ),
+          countThievingZones, nullptr },
         { VER_PAD_SIM, DOWNGRADE_BUCKET::DROP, _( "Pad simulation types" ),
-          _( "The simulation electrical type is left out." ), countPadSimTypes, dropPadSimTypes, dropPadSimTypesFp },
+          _( "The simulation electrical type is left out." ),
+          countPadSimTypes, dropPadSimTypes, dropPadSimTypesFp },
         { VER_FP_UNITS, DOWNGRADE_BUCKET::DROP, _( "Footprint unit metadata" ),
-          _( "Pin-to-unit assignments used for gate swapping are removed." ), countUnitInfo, dropUnitInfo,
-          dropUnitInfoFp },
+          _( "Pin-to-unit assignments used for gate swapping are removed." ),
+          countUnitInfo, dropUnitInfo, dropUnitInfoFp },
         { VER_BARCODE, DOWNGRADE_BUCKET::LOWER, _( "Barcodes" ),
-          _( "Converted to the printed polygons. No longer editable as a barcode." ), countBarcodes, lowerBarcodes,
-          lowerBarcodesFp, omitBarcodes, omitBarcodesFp,
+          _( "Converted to the printed polygons. No longer editable as a barcode." ),
+          countBarcodes, lowerBarcodes, lowerBarcodesFp, omitBarcodes, omitBarcodesFp,
           _( "Barcodes are omitted instead of converted to polygons." ) },
         { FIRST_PCB_VARIANTS, DOWNGRADE_BUCKET::DROP, _( "PCB variants" ),
-          _( "Variant registry and per-footprint overrides are removed." ), countPcbVariants, dropPcbVariants,
-          dropPcbVariantsFp },
-        { VER_JUMPER_PADS, DOWNGRADE_BUCKET::DROP, _( "Jumper pad groups" ), _( "Jumper pad groupings are removed." ),
+          _( "Variant registry and per-footprint overrides are removed." ),
+          countPcbVariants, dropPcbVariants, dropPcbVariantsFp },
+        { VER_JUMPER_PADS, DOWNGRADE_BUCKET::DROP, _( "Jumper pad groups" ),
+          _( "Jumper pad groupings are removed." ),
           countJumperPads, dropJumperPads, dropJumperPadsFp },
         { VER_BACKDRILL, DOWNGRADE_BUCKET::BLOCK, _( "Backdrill / tertiary drill" ),
-          _( "Backdrilling changes copper connectivity and cannot be represented." ), countBackdrills, nullptr },
+          _( "Backdrilling changes copper connectivity and cannot be represented." ),
+          countBackdrills, nullptr },
         { VER_POST_MACHINING, DOWNGRADE_BUCKET::DROP, _( "Counterbore / countersink" ),
           _( "Drill post-machining is removed." ), countPostMachining, dropPostMachining, dropPostMachiningFp },
         { VER_PRESSFIT, DOWNGRADE_BUCKET::DROP, _( "Press-fit pads" ),
-          _( "The press-fit fabrication property is removed." ), countPressFitPads, dropPressFitPads,
-          dropPressFitPadsFp },
-        { VER_SKIP_VIA,
-          DOWNGRADE_BUCKET::LOWER,
-          _( "Skip vias" ),
+          _( "The press-fit fabrication property is removed." ),
+          countPressFitPads, dropPressFitPads, dropPressFitPadsFp },
+        { VER_SKIP_VIA, DOWNGRADE_BUCKET::LOWER, _( "Skip vias" ),
           _( "Approximated by keeping only the start and end layers." ),
           countSkipVias,
           lowerSkipVias,
@@ -2547,9 +2581,7 @@ static std::vector<BOARD_RULE> boardRules()
           {},
           {},
           true },
-        { VER_VIA_SPLIT,
-          DOWNGRADE_BUCKET::LOWER,
-          _( "Buried vias" ),
+        { VER_VIA_SPLIT, DOWNGRADE_BUCKET::LOWER, _( "Buried vias" ),
           _( "Written with the older combined blind type." ),
           countBuriedVias,
           lowerBuriedVias,
@@ -2559,10 +2591,13 @@ static std::vector<BOARD_RULE> boardRules()
           {},
           true },
         { VER_ZONE_DEFAULTS, DOWNGRADE_BUCKET::DROP, _( "Zone layer defaults" ),
-          _( "Per-layer zone defaults are removed." ), countZoneDefaults, dropZoneDefaults },
-        { VER_PAD_DIE_DELAY, DOWNGRADE_BUCKET::DROP, _( "Pad-to-die delays" ), _( "Pad-to-die delay is removed." ),
+          _( "Per-layer zone defaults are removed." ),
+          countZoneDefaults, dropZoneDefaults },
+        { VER_PAD_DIE_DELAY, DOWNGRADE_BUCKET::DROP, _( "Pad-to-die delays" ),
+          _( "Pad-to-die delay is removed." ),
           countDieDelays, dropDieDelays, dropDieDelaysFp },
-        { VER_SHAPE_HATCH, DOWNGRADE_BUCKET::LOWER, _( "Hatched shape fills" ), _( "Converted to a solid fill." ),
+        { VER_SHAPE_HATCH, DOWNGRADE_BUCKET::LOWER, _( "Hatched shape fills" ),
+          _( "Converted to a solid fill." ),
           []( const BOARD* b )
           {
               return countHatchedFills( b, isHatchedInkShape );
@@ -2584,9 +2619,7 @@ static std::vector<BOARD_RULE> boardRules()
               setHatchedFillsFp( f, isHatchedInkShape, FILL_T::NO_FILL );
           },
           _( "The hatch fill is omitted. The supported outline is kept." ) },
-        { VER_SHAPE_HATCH,
-          DOWNGRADE_BUCKET::LOWER,
-          _( "Hatched copper fills" ),
+        { VER_SHAPE_HATCH, DOWNGRADE_BUCKET::LOWER, _( "Hatched copper fills" ),
           _( "Converted to a solid fill. Copper geometry may change." ),
           []( const BOARD* b )
           {
@@ -2605,35 +2638,43 @@ static std::vector<BOARD_RULE> boardRules()
           {},
           true },
         { VER_PCB_POINTS, DOWNGRADE_BUCKET::DROP, _( "PCB points" ),
-          _( "No equivalent in the target. Points are removed." ), countPcbPoints, dropPcbPoints, dropPcbPointsFp },
+          _( "No equivalent in the target. Points are removed." ),
+          countPcbPoints, dropPcbPoints, dropPcbPointsFp },
         { VER_VIA_PROTECTION, DOWNGRADE_BUCKET::DROP, _( "Via protection" ),
-          _( "IPC-4761 covering, plugging, capping, and filling are removed." ), countViaProtection,
-          dropViaProtection },
+          _( "IPC-4761 covering, plugging, capping, and filling are removed." ),
+          countViaProtection, dropViaProtection },
         { VER_DIELECTRIC, DOWNGRADE_BUCKET::DROP, _( "Dielectric frequency models" ),
-          _( "The frequency-dependent dielectric model is removed." ), countDielectricModels, dropDielectricModels },
+          _( "The frequency-dependent dielectric model is removed." ),
+          countDielectricModels, dropDielectricModels },
         { VER_GROUP_LIB_ID, DOWNGRADE_BUCKET::DROP, _( "Group design block links" ),
-          _( "The link from a group to its design block is removed." ), countGroupDesignBlocks, dropGroupDesignBlocks,
-          dropGroupDesignBlocksFp },
-        { VER_TEXTBOX_KNOCKOUT, DOWNGRADE_BUCKET::LOWER, _( "Knockout text boxes" ), _( "Drawn as plain text boxes." ),
+          _( "The link from a group to its design block is removed." ),
+          countGroupDesignBlocks, dropGroupDesignBlocks, dropGroupDesignBlocksFp },
+        { VER_TEXTBOX_KNOCKOUT, DOWNGRADE_BUCKET::LOWER, _( "Knockout text boxes" ),
+          _( "Drawn as plain text boxes." ),
           countKnockoutTextBoxes, dropKnockoutTextBoxes, dropKnockoutTextBoxesFp, omitKnockoutTextBoxes,
-          omitKnockoutTextBoxesFp, _( "Knockout text boxes are omitted instead of drawn as plain text." ) },
-        { VER_ROUNDED_RECT, DOWNGRADE_BUCKET::LOWER, _( "Rounded rectangles" ), _( "Approximated by a polygon." ),
+          omitKnockoutTextBoxesFp,
+          _( "Knockout text boxes are omitted instead of drawn as plain text." ) },
+        { VER_ROUNDED_RECT, DOWNGRADE_BUCKET::LOWER, _( "Rounded rectangles" ),
+          _( "Approximated by a polygon." ),
           countRoundedRects, lowerRoundedRects, lowerRoundedRectsFp, omitRoundedRects, omitRoundedRectsFp,
           _( "Rounded rectangles and rounded custom pad primitives are omitted. Copper geometry may change." ) },
-        { VER_CELL_KNOCKOUT, DOWNGRADE_BUCKET::LOWER, _( "Knockout table cells" ), _( "Drawn as plain cells." ),
+        { VER_CELL_KNOCKOUT, DOWNGRADE_BUCKET::LOWER, _( "Knockout table cells" ),
+          _( "Drawn as plain cells." ),
           countKnockoutTableCells, dropKnockoutTableCells, dropKnockoutTableCellsFp, omitKnockoutTableCells,
           omitKnockoutTableCellsFp,
           _( "Knockout cell contents are omitted; empty cells and the table grid are kept." ) },
         { VER_ZONE_DEFAULTS, DOWNGRADE_BUCKET::DROP, _( "Per-zone layer properties" ),
-          _( "The per-layer overrides are removed." ), countZoneLayerProperties, dropZoneLayerProperties,
-          dropZoneLayerPropertiesFp },
+          _( "The per-layer overrides are removed." ),
+          countZoneLayerProperties, dropZoneLayerProperties, dropZoneLayerPropertiesFp },
         { VER_USER_LAYERS, DOWNGRADE_BUCKET::BLOCK, _( "User layers past User_9" ),
-          _( "The target supports only 9 user layers." ), countHighUserLayers, nullptr },
+          _( "The target supports only 9 user layers." ),
+          countHighUserLayers, nullptr },
         { FIRST_FP_CUSTOM_STACKUP, DOWNGRADE_BUCKET::BLOCK, _( "Custom footprint stackups" ),
           _( "The target would expand the footprint's inner layers and change its connectivity." ),
           countCustomFpStackups, nullptr },
         { FIRST_FP_AFFINE_TRANSFORM, DOWNGRADE_BUCKET::BLOCK, _( "Scaled footprints" ),
-          _( "The target cannot represent a scaled footprint." ), countScaledFootprints, nullptr },
+          _( "The target cannot represent a scaled footprint." ),
+          countScaledFootprints, nullptr },
     };
 }
 
@@ -2650,35 +2691,45 @@ COMPATIBILITY_REPORT ClassifyBoardForDowngrade( const BOARD* aBoard, const DOWNG
     COMPATIBILITY_REPORT report;
 
     if( SEXPR_BOARD_FILE_VERSION != BOARD_DOWNGRADE_COVERED )
+    {
         report.Add( DOWNGRADE_BUCKET::BLOCK, _( "Unreviewed board format" ),
                     _( "The current board format has changed since the downgrade rules were reviewed." ), 1 );
+    }
 
     if( aBoard->GetPlotOptions().GetFormat() == PLOT_FORMAT::PNG )
+    {
         report.Add( DOWNGRADE_BUCKET::DROP, _( "PNG plot selection" ),
                     _( "The unsupported plot format is reset to Gerber." ), 1 );
+    }
 
     if( aTarget.m_boardVersion < VER_PROPERTY_VARIABLES )
     {
         const TEXT_DOWNGRADE_PLAN text = planBoardText( aBoard, aTarget.m_boardVersion );
 
         if( text.m_blocked )
+        {
             report.Add( DOWNGRADE_BUCKET::BLOCK, _( "Unresolved post-target text" ),
                         _( "Affected property variables or expressions could not be safely resolved." ),
                         text.m_blocked );
+        }
 
         if( !text.m_replacements.empty() || !text.m_titleReplacements.empty() )
+        {
             report.Add( DOWNGRADE_BUCKET::DROP, _( "Post-target text variables" ),
                         _( "Affected displayed text is resolved to its current value and loses dynamic evaluation." ),
                         text.m_replacements.size() + text.m_titleReplacements.size() );
+        }
     }
 
     if( aTarget.m_boardVersion < VER_LINE_ENDINGS && !aDropInsteadOfApproximate )
     {
         if( int unsafe = countLineEndings( aBoard, true ); unsafe > 0 )
+        {
             report.Add( DOWNGRADE_BUCKET::BLOCK, _( "Styled graphic line endings" ),
                         _( "Dashed, colored, or unresolved-width line endings cannot be faithfully converted. "
                            "The omission policy can remove just the endpoint embellishments." ),
                         unsafe );
+        }
     }
 
     for( const BOARD_RULE& rule : boardRules() )
@@ -2688,10 +2739,14 @@ COMPATIBILITY_REPORT ClassifyBoardForDowngrade( const BOARD* aBoard, const DOWNG
 
         if( int count = rule.m_count( aBoard ); count > 0 )
         {
-            bool omit = aDropInsteadOfApproximate && rule.m_bucket == DOWNGRADE_BUCKET::LOWER
-                        && !rule.m_keepUnderOmitPolicy;
-            report.Add( omit ? DOWNGRADE_BUCKET::DROP : rule.m_bucket, rule.m_feature,
-                        omit ? rule.m_omitDetail : rule.m_detail, count );
+            bool omit = aDropInsteadOfApproximate
+                            && rule.m_bucket == DOWNGRADE_BUCKET::LOWER
+                            && !rule.m_keepUnderOmitPolicy;
+
+            report.Add( omit ? DOWNGRADE_BUCKET::DROP : rule.m_bucket,
+                        rule.m_feature,
+                        omit ? rule.m_omitDetail : rule.m_detail,
+                        count );
         }
     }
 
@@ -2755,9 +2810,12 @@ void DowngradeBoardInPlace( BOARD* aBoard, const DOWNGRADE_TARGET& aTarget, bool
         if( aTarget.m_boardVersion >= rule.m_introducedIn )
             continue;
 
-        bool        omit = aDropInsteadOfApproximate && rule.m_bucket == DOWNGRADE_BUCKET::LOWER
-                           && !rule.m_keepUnderOmitPolicy;
-        const auto& apply = omit ? rule.m_omit : rule.m_apply;
+        bool omit = aDropInsteadOfApproximate
+                        && rule.m_bucket == DOWNGRADE_BUCKET::LOWER
+                        && !rule.m_keepUnderOmitPolicy;
+
+        const std::function<void( BOARD* )>& apply = omit ? rule.m_omit : rule.m_apply;
+
         wxASSERT_MSG( !omit || apply, wxT( "A LOWER rule needs an omission transform." ) );
 
         if( apply )
@@ -2789,9 +2847,12 @@ void DowngradeFootprintInPlace( FOOTPRINT* aFootprint, const DOWNGRADE_TARGET& a
         if( aTarget.m_boardVersion >= rule.m_introducedIn )
             continue;
 
-        bool        omit = aDropInsteadOfApproximate && rule.m_bucket == DOWNGRADE_BUCKET::LOWER
-                           && !rule.m_keepUnderOmitPolicy;
-        const auto& apply = omit ? rule.m_omitFp : rule.m_applyFp;
+        bool omit = aDropInsteadOfApproximate
+                        && rule.m_bucket == DOWNGRADE_BUCKET::LOWER
+                        && !rule.m_keepUnderOmitPolicy;
+
+        const std::function<void(FOOTPRINT*)>& apply = omit ? rule.m_omitFp : rule.m_applyFp;
+
         wxASSERT_MSG( !omit || !rule.m_applyFp || apply, wxT( "A footprint LOWER rule needs an omission transform." ) );
 
         if( apply )
@@ -2868,8 +2929,11 @@ static constexpr DATED_TOKEN BOARD_TOKENS[] = {
 // Hatch fill values cannot be listed here, unlike the schematic gate. Zones legitimately emit
 // hatch tokens in every target format, so a hatched shape fill leak is invisible to this gate.
 static constexpr DATED_TOKEN BOARD_VALUES[] = {
-    { "exclude_from_sim", VER_SIM_EXCLUSION }, { "via_stitch", VER_VIA_STITCH }, { "via_stack", VER_VIA_STACK },
-    { "pad_prop_pressfit", VER_PRESSFIT },     { "buried", VER_VIA_SPLIT },
+    { "exclude_from_sim", VER_SIM_EXCLUSION },
+    { "via_stitch", VER_VIA_STITCH },
+    { "via_stack", VER_VIA_STACK },
+    { "pad_prop_pressfit", VER_PRESSFIT },
+    { "buried", VER_VIA_SPLIT },
 };
 
 
