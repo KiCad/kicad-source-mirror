@@ -121,6 +121,8 @@ protected:
 
 class DIALOG_TEMPLATE_SELECTOR : public DIALOG_TEMPLATE_SELECTOR_BASE
 {
+    friend class TEMPLATE_WIDGET;
+
 public:
     DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize,
                               const wxString& aUserTemplatesPath,
@@ -160,6 +162,16 @@ protected:
     void OnSysColourChanged( wxSysColourChangedEvent& event );
 
 private:
+    class REFRESH_GUARD
+    {
+    public:
+        explicit REFRESH_GUARD( DIALOG_TEMPLATE_SELECTOR* aDialog );
+        ~REFRESH_GUARD();
+
+    private:
+        DIALOG_TEMPLATE_SELECTOR* m_dialog;
+    };
+
     enum class DialogState { Initial, Preview, MRUWithPreview };
 
     void SetState( DialogState aState );
@@ -196,6 +208,8 @@ private:
 
     wxTimer                                      m_searchTimer;
     wxTimer                                      m_refreshTimer;
+    int                                          m_refreshPauseCount;
+    bool                                         m_refreshPending;
 
     wxFileSystemWatcher*                         m_watcher;
 

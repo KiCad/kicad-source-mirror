@@ -47,6 +47,29 @@
 static const wxChar* traceTemplateSelector = wxT( "KICAD_TEMPLATE_SELECTOR" );
 
 
+DIALOG_TEMPLATE_SELECTOR::REFRESH_GUARD::REFRESH_GUARD( DIALOG_TEMPLATE_SELECTOR* aDialog ) :
+        m_dialog( aDialog )
+{
+    if( m_dialog->m_refreshPauseCount++ == 0 && m_dialog->m_refreshTimer.IsRunning() )
+    {
+        m_dialog->m_refreshTimer.Stop();
+        m_dialog->m_refreshPending = true;
+    }
+}
+
+
+DIALOG_TEMPLATE_SELECTOR::REFRESH_GUARD::~REFRESH_GUARD()
+{
+    wxASSERT( m_dialog->m_refreshPauseCount > 0 );
+
+    if( --m_dialog->m_refreshPauseCount == 0 && m_dialog->m_refreshPending )
+    {
+        m_dialog->m_refreshPending = false;
+        m_dialog->m_refreshTimer.StartOnce( 500 );
+    }
+}
+
+
 TEMPLATE_MRU_WIDGET::TEMPLATE_MRU_WIDGET( wxWindow* aParent, DIALOG_TEMPLATE_SELECTOR* aDialog,
                                           const wxString& aPath, const wxString& aTitle,
                                           const wxBitmap& aIcon ) :
@@ -365,6 +388,7 @@ void TEMPLATE_WIDGET::onDuplicateTemplate( wxCommandEvent& event )
     templatePath.RemoveLastDir();
     wxString srcTemplatePath = templatePath.GetPath();
     wxString srcTemplateName = m_currTemplate->GetPrjDirName();
+    DIALOG_TEMPLATE_SELECTOR::REFRESH_GUARD refreshGuard( m_dialog );
 
     wxTextEntryDialog nameDlg( m_dialog, _( "Enter name for the new template:" ), _( "Duplicate Template" ),
                                srcTemplateName + _( "_copy" ) );
@@ -493,6 +517,8 @@ DIALOG_TEMPLATE_SELECTOR::DIALOG_TEMPLATE_SELECTOR( wxWindow* aParent, const wxP
         m_recentTemplates( aRecentTemplates ),
         m_searchTimer( this ),
         m_refreshTimer( this ),
+        m_refreshPauseCount( 0 ),
+        m_refreshPending( false ),
         m_watcher( nullptr ),
         m_webviewPanel( nullptr ),
         m_loadingExternalHtml( false ),
@@ -885,23 +911,13 @@ void DIALOG_TEMPLATE_SELECTOR::OnSearchTimer( wxTimerEvent& event )
 
 void DIALOG_TEMPLATE_SELECTOR::OnRefreshTimer( wxTimerEvent& event )
 {
-    wxString selectedPath;
-
-    if( m_selectedWidget && m_selectedWidget->GetTemplate() )
+    if( m_refreshPauseCount > 0 )
     {
-        wxFileName htmlFile = m_selectedWidget->GetTemplate()->GetHtmlFile();
-        htmlFile.RemoveLastDir();
-        selectedPath = htmlFile.GetPath();
+        m_refreshPending = true;
+        return;
     }
 
-    // Clear pointers before destroying widgets to avoid dangling pointers
-    m_selectedWidget = nullptr;
-    m_selectedTemplate = nullptr;
-
-    BuildTemplateList();
-
-    if( !selectedPath.IsEmpty() )
-        SelectTemplateByPath( selectedPath );
+    RefreshTemplateList();
 }
 
 
@@ -1127,6 +1143,12 @@ void DIALOG_TEMPLATE_SELECTOR::OnFileSystemEvent( wxFileSystemWatcherEvent& even
     CallAfter(
             [this]()
             {
+                if( m_refreshPauseCount > 0 )
+                {
+                    m_refreshPending = true;
+                    return;
+                }
+
                 m_refreshTimer.Stop();
                 m_refreshTimer.StartOnce( 500 );
             } );
