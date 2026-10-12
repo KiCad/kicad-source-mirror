@@ -1482,7 +1482,7 @@ private:
     bool            m_flipped = false;
     LIB_ID          m_fpid;
     int             m_attributes;        // Flag bits (see FOOTPRINT_ATTR_T)
-    int             m_fpStatus;          // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
+    int             m_fpStatus = 0;      // For autoplace: flags (PLACED, TO_PLACE)
     int             m_fileFormatVersionAtLoad;
 
     /// Variant data for this footprint, keyed by variant name
