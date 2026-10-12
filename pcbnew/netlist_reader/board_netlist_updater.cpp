@@ -1005,8 +1005,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
 }
 
 
-bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
-                                                  COMPONENT* aNetlistComponent )
+bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint, COMPONENT* aNetlistComponent )
 {
     if( !m_transferGroups )
         return false;
@@ -1124,8 +1123,7 @@ bool BOARD_NETLIST_UPDATER::updateFootprintGroup( FOOTPRINT* aPcbFootprint,
 }
 
 
-bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint,
-                                                           COMPONENT* aNewComponent )
+bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint, COMPONENT* aNewComponent )
 {
     wxString msg;
 
@@ -1229,14 +1227,19 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
 
             if( !m_isDryRun )
             {
-                changed = true;
-                pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                if( pad->GetNetCode() != NETINFO_LIST::UNCONNECTED )
+                {
+                    changed = true;
+                    pad->SetNetCode( NETINFO_LIST::UNCONNECTED );
+                }
 
                 // If the pad has no net from netlist (i.e. not in netlist
                 // it cannot have a pin function
-                if( pad->GetNetname().IsEmpty() )
+                if( pad->GetNetname().IsEmpty() && !pad->GetPinFunction().IsEmpty() )
+                {
+                    changed = true;
                     pad->SetPinFunction( wxEmptyString );
-
+                }
             }
             else
             {
@@ -1347,7 +1350,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
 
     if( changed && copy )
         m_commit.Modified( aFootprint, copy );
-    else if( copy )
+    else
         delete copy;
 
     return true;
