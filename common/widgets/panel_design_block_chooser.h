@@ -58,7 +58,11 @@ public:
 
     wxPanel* GetDetailsPanel() { return m_detailsPanel; }
 
-    void     SetPreviewWidget( DESIGN_BLOCK_PREVIEW_WIDGET* aPreview );
+    /**
+     * Set how the preview is built, and build it in the details panel.
+     */
+    void SetPreviewWidgetFactory( std::function<DESIGN_BLOCK_PREVIEW_WIDGET*( wxWindow* aParent )> aFactory );
+
     DESIGN_BLOCK_PREVIEW_WIDGET* GetPreviewWidget() const { return m_preview; }
 
     void     FinishSetup();
@@ -120,6 +124,8 @@ protected:
 
     LIB_TREE*                    m_tree;
     DESIGN_BLOCK_PREVIEW_WIDGET* m_preview;
+
+    std::function<DESIGN_BLOCK_PREVIEW_WIDGET*( wxWindow* aParent )> m_previewFactory;
 
     DESIGN_BLOCK_PANE*    m_parent;
     EDA_DRAW_FRAME*       m_frame;

@@ -53,7 +53,11 @@ PCB_DESIGN_BLOCK_PANE::PCB_DESIGN_BLOCK_PANE( PCB_EDIT_FRAME* aParent, const LIB
                                                      },
                                                         aParent->GetToolManager()->GetTool<PCB_DESIGN_BLOCK_CONTROL>()
                                                      );
-    m_chooserPanel->SetPreviewWidget(new PCB_DESIGN_BLOCK_PREVIEW_WIDGET( m_chooserPanel->GetDetailsPanel(), aParent ) );
+    m_chooserPanel->SetPreviewWidgetFactory(
+            [aParent]( wxWindow* aPreviewParent ) -> DESIGN_BLOCK_PREVIEW_WIDGET*
+            {
+                return new PCB_DESIGN_BLOCK_PREVIEW_WIDGET( aPreviewParent, aParent );
+            } );
     sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );
 
     if( aPreselect && aPreselect->IsValid() )

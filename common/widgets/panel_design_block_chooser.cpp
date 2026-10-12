@@ -165,9 +165,12 @@ void PANEL_DESIGN_BLOCK_CHOOSER::ShowChangedLanguage()
 }
 
 
-void PANEL_DESIGN_BLOCK_CHOOSER::SetPreviewWidget( DESIGN_BLOCK_PREVIEW_WIDGET* aPreview )
+void PANEL_DESIGN_BLOCK_CHOOSER::SetPreviewWidgetFactory(
+        std::function<DESIGN_BLOCK_PREVIEW_WIDGET*( wxWindow* aParent )> aFactory )
 {
-    m_preview = aPreview;
+    m_previewFactory = std::move( aFactory );
+
+    m_preview = m_previewFactory( m_detailsPanel );
     m_detailsSizer->Add( m_preview, 1, wxEXPAND, 5 );
     Layout();
 }

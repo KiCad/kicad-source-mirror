@@ -53,10 +53,14 @@ SCH_DESIGN_BLOCK_PANE::SCH_DESIGN_BLOCK_PANE( SCH_EDIT_FRAME* aParent, const LIB
                                                      },
                                                         aParent->GetToolManager()->GetTool<SCH_DESIGN_BLOCK_CONTROL>()
                                                      );
-    // Use the same draw engine type as the one used in parent frame m_frame
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = m_frame->GetCanvas()->GetBackend();
-    m_chooserPanel->SetPreviewWidget(
-            new SCH_DESIGN_BLOCK_PREVIEW_WIDGET( m_chooserPanel->GetDetailsPanel(), canvasType, true ) );
+    m_chooserPanel->SetPreviewWidgetFactory(
+            [this]( wxWindow* aPreviewParent ) -> DESIGN_BLOCK_PREVIEW_WIDGET*
+            {
+                // Use the same draw engine type as the one used in parent frame m_frame
+                EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = m_frame->GetCanvas()->GetBackend();
+
+                return new SCH_DESIGN_BLOCK_PREVIEW_WIDGET( aPreviewParent, canvasType, true );
+            } );
     sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );
 
     if( aPreselect && aPreselect->IsValid() )
@@ -153,7 +157,8 @@ void SCH_DESIGN_BLOCK_PANE::ProjectChanged()
 {
     m_chooserPanel->RefreshLibs();
     // Project change will blow up the default project; re-create any active preview canvas
-    m_chooserPanel->GetPreviewWidget()->DisplayDesignBlock( GetSelectedDesignBlock( true, true ) );
+    if( DESIGN_BLOCK_PREVIEW_WIDGET* preview = m_chooserPanel->GetPreviewWidget() )
+        preview->DisplayDesignBlock( GetSelectedDesignBlock( true, true ) );
 }
 
 
