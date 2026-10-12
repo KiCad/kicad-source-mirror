@@ -43,10 +43,9 @@ GLOBAL_EDIT_TOOL::GLOBAL_EDIT_TOOL() :
 }
 
 
-void GLOBAL_EDIT_TOOL::Reset( RESET_REASON aReason )
+void GLOBAL_EDIT_TOOL::Reset( RESET_REASON )
 {
-    if( aReason != RUN )
-        m_commit = std::make_unique<BOARD_COMMIT>( this );
+    m_commit = std::make_unique<BOARD_COMMIT>( frame() );
 }
 
 

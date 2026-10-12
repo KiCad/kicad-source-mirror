@@ -105,8 +105,7 @@ void POSITION_RELATIVE_TOOL::Reset( RESET_REASON aReason )
         m_selectionAnchor = VECTOR2I();
     }
 
-    if( aReason != RUN )
-        m_commit = std::make_unique<BOARD_COMMIT>( this );
+    m_commit = std::make_unique<BOARD_COMMIT>( frame() );
 }
 
 
