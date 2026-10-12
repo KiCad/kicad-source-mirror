@@ -268,10 +268,15 @@ void PCB_NET_INSPECTOR_PANEL::buildColumns()
         }
     }
 
-    // Check that all rows are unique to protect against corrupted settings data
+    // Check that all columns are unique and in range to protect against corrupted settings data
     std::set<int> col_order_set( cfg->col_order.begin(), cfg->col_order.end() );
+    bool          invalidColumn = std::any_of( cfg->col_order.begin(), cfg->col_order.end(),
+                                               [totalNumColumns]( int aColumn )
+                                               {
+                                                   return aColumn < 0 || aColumn >= totalNumColumns;
+                                               } );
 
-    if( col_order_set.size() != cfg->col_order.size() )
+    if( col_order_set.size() != cfg->col_order.size() || invalidColumn )
     {
         for( std::size_t i = 0; i < cfg->col_order.size(); ++i )
             cfg->col_order[i] = static_cast<int>( i );
