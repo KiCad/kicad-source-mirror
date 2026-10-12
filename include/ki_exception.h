@@ -23,6 +23,8 @@
 
 #include <kicommon.h>
 
+#include <string>
+
 #include <wx/string.h>
 
 
@@ -102,8 +104,11 @@ public:
     virtual const wxString What() const;            ///< A composite of Problem() and Where()
 
 protected:
+    void updateWhat();
+
     wxString    problem;
     wxString    where;
+    std::string whatMessage;
 };
 
 

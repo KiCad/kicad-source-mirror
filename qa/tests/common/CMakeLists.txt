@@ -69,6 +69,7 @@ set( QA_COMMON_SRCS
     test_hotkey_store.cpp
     test_increment.cpp
     test_inplace_function.cpp
+    test_io_error.cpp
     test_item_realignment.cpp
     test_json_schema_validator.cpp
     test_ki_any.cpp

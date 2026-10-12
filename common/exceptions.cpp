@@ -60,12 +60,20 @@ void IO_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
                   srcname.AfterLast( '/' ),
                   wxString( aThrowersFunction ),
                   aThrowersLineNumber );
+
+    updateWhat();
 }
 
 
 const char* IO_ERROR::what() const throw()
 {
-    return problem.utf8_str().data();
+    return whatMessage.c_str();
+}
+
+
+void IO_ERROR::updateWhat()
+{
+    whatMessage = problem.utf8_string();
 }
 
 
@@ -104,6 +112,8 @@ void PARSE_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
                   srcname.AfterLast( '/' ),
                   wxString( aThrowersFunction ),
                   aThrowersLineNumber );
+
+    updateWhat();
 }
 
 
@@ -129,6 +139,8 @@ void FUTURE_FORMAT_ERROR::init( const wxString& aRequiredVersion,
                            "later (file format dated %s or later)." ),
                         aRequiredGenerator, aRequiredVersion );
     }
+
+    updateWhat();
 }
 
 
@@ -166,4 +178,5 @@ FUTURE_FORMAT_ERROR::FUTURE_FORMAT_ERROR( const PARSE_ERROR& aParseError,
     lineNumber = aParseError.lineNumber;
     byteIndex = aParseError.byteIndex;
     inputLine = aParseError.inputLine;
+    updateWhat();
 }
