@@ -552,13 +552,12 @@ static void checkCustomPadArcSurvives( const DOWNGRADE_TARGET& aTarget )
 
     BOOST_REQUIRE( ExportBoardToOlderVersion( src, dest, aTarget, report ) );
 
-    // The primitive is an elliptical arc, so the target gets the approximating polygon. The
-    // report has to say so; it used to predict no loss at all.
-    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::LOWER ), 1 );
+    // The arc's points need not lie on one circle at every pad rotation. It loads as a circular
+    // arc, which both targets can read, so it is written as one and nothing is lowered.
+    BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::LOWER ), 0 );
 
     const std::string out = KI_TEST::ReadGoldenText( dest );
-    BOOST_CHECK_MESSAGE( out.find( "gr_poly" ) != std::string::npos,
-                         "the custom pad's primitive was dropped instead of approximated" );
+    BOOST_CHECK_MESSAGE( out.find( "gr_arc" ) != std::string::npos, "the custom pad's arc primitive was dropped" );
 
     int  depth = 0;
     bool inString = false;
