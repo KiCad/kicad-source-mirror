@@ -337,13 +337,17 @@ public:
             {
                 auto permissions = std::filesystem::status( destination, error ).permissions();
 
-                if( error )
+                // Windows reports a dangling link as a file, but it has no target to take permissions from
+                if( error && !( symlink && error == std::errc::no_such_file_or_directory ) )
                     return entry.m_destination;
 
-                std::filesystem::permissions( nativePath( entry.m_temp ), permissions, error );
+                if( !error )
+                {
+                    std::filesystem::permissions( nativePath( entry.m_temp ), permissions, error );
 
-                if( error )
-                    return entry.m_destination;
+                    if( error )
+                        return entry.m_destination;
+                }
             }
 
             entry.m_backup = wxFileName::CreateTempFileName( entry.m_destination + wxT( ".downgrade_backup." ) );
