@@ -238,7 +238,7 @@ public:
     constexpr VECTOR2<T>& operator-=( const T& aScalar );
 
     /// Negate Vector operator
-    constexpr VECTOR2<T> operator-();
+    constexpr VECTOR2<T> operator-() const;
 
     /// Division with a factor
     constexpr VECTOR2<T> operator/( double aFactor ) const;
@@ -517,7 +517,7 @@ constexpr VECTOR2<T> operator-( const VECTOR2<T>& aLHS, const U& aScalar )
 
 
 template <class T>
-constexpr VECTOR2<T> VECTOR2<T>::operator-()
+constexpr VECTOR2<T> VECTOR2<T>::operator-() const
 {
     return VECTOR2<T> ( -x, -y );
 }
