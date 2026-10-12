@@ -578,20 +578,21 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
         fpFieldsAsMap[field->GetName()] = field->GetText();
     }
 
-    // Remove the ref/value/footprint fields that are individually handled
     nlohmann::ordered_map<wxString, wxString> compFields = aNetlistComponent->GetFields();
-    compFields.erase( GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ) );
-    compFields.erase( GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) );
-    compFields.erase( GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) );
-
-    // Remove any component class fields - these are not editable in the pcb editor
-    compFields.erase( wxT( "Component Class" ) );
 
     if( firstAssociatedVariant != nullptr )
     {
         for( const auto& [name, value] : firstAssociatedVariant->m_fields )
             compFields[name] = value;
     }
+
+    // Remove the ref/value/footprint fields that are individually handled
+    compFields.erase( GetDefaultFieldName( FIELD_T::REFERENCE, UNTRANSLATED ) );
+    compFields.erase( GetDefaultFieldName( FIELD_T::VALUE, UNTRANSLATED ) );
+    compFields.erase( GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED ) );
+
+    // Remove any component class fields - these are not editable in the pcb editor
+    compFields.erase( wxT( "Component Class" ) );
 
     // Fields are stored as an ordered map, but we don't (yet) support reordering the footprint fields to
     // match the symbol, so we manually check the fields in the order they are stored in the symbol.
