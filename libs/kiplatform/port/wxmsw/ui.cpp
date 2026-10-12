@@ -256,3 +256,29 @@ void KIPLATFORM::UI::SetWMClass( wxWindow* aWindow, const wxString& aClass )
     // WM_CLASS is an X11/Wayland concept; taskbar identity on Windows is driven by the
     // AppUserModelID (see KIPLATFORM::ENV::SetAppDetailsForWindow).
 }
+
+
+void KIPLATFORM::UI::GetNativeWindowHandles( wxWindow* aWindow, void** aHandle, void** aDisplay,
+                                              int* aDisplayType )
+{
+    *aHandle = nullptr;
+    *aDisplay = nullptr;
+
+    if( aDisplayType )
+        *aDisplayType = NATIVE_DISPLAY_TYPE::DISPLAY_WIN32;
+
+    if( aWindow )
+        *aHandle = static_cast<void*>( aWindow->GetHWND() );
+}
+
+
+void KIPLATFORM::UI::PrepareForExternalRendering( wxWindow* aWindow )
+{
+    // The GPU API owns Win32 surfaces natively
+}
+
+
+void KIPLATFORM::UI::KeepAboveExternalRendering( wxWindow* aChild )
+{
+    // Child windows are native and clip their parent's surface
+}

@@ -34,6 +34,7 @@
 
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #endif
 
@@ -960,3 +961,152 @@ wxPoint KIPLATFORM::UI::GetMousePosition()
 
 
 #endif
+
+
+void KIPLATFORM::UI::GetNativeWindowHandles( wxWindow* aWindow, void** aHandle, void** aDisplay,
+                                              int* aDisplayType )
+{
+    *aHandle = nullptr;
+    *aDisplay = nullptr;
+
+    if( aDisplayType )
+        *aDisplayType = NATIVE_DISPLAY_TYPE::DISPLAY_UNKNOWN;
+
+    if( !aWindow )
+        return;
+
+    GtkWidget* gtkWidget = static_cast<GtkWidget*>( aWindow->GetHandle() );
+
+    if( !gtkWidget )
+        return;
+
+    gtk_widget_realize( gtkWidget );
+    GdkWindow* gdkWindow = gtk_widget_get_window( gtkWidget );
+
+    if( !gdkWindow || !gdk_window_ensure_native( gdkWindow ) )
+        return;
+
+    if( !gdk_window_is_viewable( gdkWindow ) )
+    {
+        // Hide() unmaps the GDK window, and mapping it anyway would put a hidden preview canvas back
+        // on screen over its replacement.
+        if( !gtk_widget_get_visible( gtkWidget ) )
+            return;
+
+        gdk_window_show_unraised( gdkWindow );
+    }
+
+    GdkDisplay* gdkDisplay = gtk_widget_get_display( gtkWidget );
+
+    // A surface may be created on another display connection, which must see the window first
+    gdk_display_flush( gdkDisplay );
+
+#ifdef GDK_WINDOWING_X11
+    if( GDK_IS_X11_DISPLAY( gdkDisplay ) )
+    {
+        *aHandle = reinterpret_cast<void*>( GDK_WINDOW_XID( gdkWindow ) );
+        *aDisplay = gdk_x11_display_get_xdisplay( gdkDisplay );
+
+        if( aDisplayType )
+            *aDisplayType = NATIVE_DISPLAY_TYPE::DISPLAY_X11;
+
+        return;
+    }
+#endif
+
+#ifdef GDK_WINDOWING_WAYLAND
+    if( GDK_IS_WAYLAND_DISPLAY( gdkDisplay ) )
+    {
+        *aHandle = gdk_wayland_window_get_wl_surface( gdkWindow );
+        *aDisplay = gdk_wayland_display_get_wl_display( gdkDisplay );
+
+        if( aDisplayType )
+            *aDisplayType = NATIVE_DISPLAY_TYPE::DISPLAY_WAYLAND;
+
+        return;
+    }
+#endif
+}
+
+
+void KIPLATFORM::UI::PrepareForExternalRendering( wxWindow* aWindow )
+{
+    if( !aWindow )
+        return;
+
+    GtkWidget* gtkWidget = static_cast<GtkWidget*>( aWindow->GetHandle() );
+
+    if( !gtkWidget )
+        return;
+
+    // Do not realize here. Before layout that creates a 1x1 X11 window and poisons Vulkan's surface
+    // capabilities, so GetNativeWindowHandles() realizes it on the first paint instead.
+
+    // GTK3's cairo backing surface would otherwise blit over the GPU output after every draw
+    G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+    gtk_widget_set_double_buffered( gtkWidget, FALSE );
+    G_GNUC_END_IGNORE_DEPRECATIONS
+
+    // Otherwise GTK clears to the GDK background before every draw and flashes black between presents
+    gtk_widget_set_app_paintable( gtkWidget, TRUE );
+
+    // Keep areas not yet presented from showing the GTK theme. This needs a realized widget.
+    GdkWindow* gdkWindow = gtk_widget_get_realized( gtkWidget ) ? gtk_widget_get_window( gtkWidget ) : nullptr;
+
+    if( gdkWindow )
+    {
+#ifdef GDK_WINDOWING_X11
+        if( GDK_IS_X11_DISPLAY( gdk_display_get_default() ) )
+        {
+            // The X server repaints exposed regions with the BackgroundPixmap before the
+            // client presents, flashing black; None leaves the previous frame in place.
+            Display* xDisplay = GDK_DISPLAY_XDISPLAY( gdk_display_get_default() );
+            Window   xWindow  = GDK_WINDOW_XID( gdkWindow );
+            XSetWindowBackgroundPixmap( xDisplay, xWindow, None );
+        }
+        else
+#endif
+        {
+            GdkRGBA black = { 0.0, 0.0, 0.0, 1.0 };
+
+            G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+            gdk_window_set_background_rgba( gdkWindow, &black );
+            G_GNUC_END_IGNORE_DEPRECATIONS
+        }
+    }
+
+    // Children shown earlier have been painting into the window the GPU now presents to
+    for( wxWindow* child : aWindow->GetChildren() )
+        KeepAboveExternalRendering( child );
+}
+
+
+void KIPLATFORM::UI::KeepAboveExternalRendering( wxWindow* aChild )
+{
+#ifdef GDK_WINDOWING_X11
+    if( !aChild || !aChild->GetParent() )
+        return;
+
+    GtkWidget* child = static_cast<GtkWidget*>( aChild->GetHandle() );
+    GtkWidget* parent = static_cast<GtkWidget*>( aChild->GetParent()->GetHandle() );
+
+    if( !child || !parent || !GDK_IS_X11_DISPLAY( gtk_widget_get_display( child ) ) )
+        return;
+
+    // PrepareForExternalRendering() is what turns double buffering off
+    G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+    const bool external = !gtk_widget_get_double_buffered( parent );
+    G_GNUC_END_IGNORE_DEPRECATIONS
+
+    if( !external )
+        return;
+
+    GdkWindow* window = gtk_widget_get_window( child );
+
+    // A widget without a window of its own reports its parent's
+    if( !window || window == gtk_widget_get_window( parent ) )
+        return;
+
+    gdk_window_ensure_native( window );
+#endif
+}

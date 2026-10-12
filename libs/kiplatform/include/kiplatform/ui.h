@@ -266,6 +266,18 @@ namespace KIPLATFORM
         void AllowNetworkFileSystems( wxDialog* aDialog );
 
         /**
+         * Display server types reported by GetNativeWindowHandles().
+         */
+        enum NATIVE_DISPLAY_TYPE
+        {
+            DISPLAY_UNKNOWN  = 0,
+            DISPLAY_X11      = 1,
+            DISPLAY_WAYLAND  = 2,
+            DISPLAY_WIN32    = 3,
+            DISPLAY_COCOA    = 4,
+        };
+
+        /**
          * Cancel any pending scroll-to-item request on @p aCtrl.
          *
          * GtkTreeView keeps a "scroll_to_path" reference that survives across model
@@ -297,6 +309,32 @@ namespace KIPLATFORM
          * @param aClass is the desktop application id, e.g. org.kicad.kicad
          */
         void SetWMClass( wxWindow* aWindow, const wxString& aClass );
+
+        /**
+         * Get the native handles needed to create a GPU surface for \a aWindow.
+         *
+         * @param aHandle [out] receives the X11 Window, wl_surface*, HWND or NSView*, or nullptr on failure.
+         * @param aDisplay [out] receives the X11 Display* or wl_display*, otherwise nullptr.
+         * @param aDisplayType [out] receives a NATIVE_DISPLAY_TYPE when not nullptr.
+         */
+        void GetNativeWindowHandles( wxWindow* aWindow, void** aHandle, void** aDisplay,
+                                     int* aDisplayType = nullptr );
+
+        /**
+         * Prepare a realized widget for Vulkan or Metal rendering, before its first present.
+         *
+         * On GTK3/X11 this stops GTK's double-buffer blit from overwriting the GPU output. Other
+         * platforms need nothing.
+         */
+        void PrepareForExternalRendering( wxWindow* aWindow );
+
+        /**
+         * Keep a child visible on top of a parent prepared with PrepareForExternalRendering().
+         *
+         * On GTK3/X11 a child is painted into its parent's window, where the next present overwrites it.
+         * This makes the realized child's window native so the present is clipped around it.
+         */
+        void KeepAboveExternalRendering( wxWindow* aChild );
     }
 }
 

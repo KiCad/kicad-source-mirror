@@ -312,3 +312,29 @@ void KIPLATFORM::UI::SetWMClass( wxWindow* aWindow, const wxString& aClass )
 {
     // Not applicable on macOS; the bundle identifier provides the application identity.
 }
+
+
+void KIPLATFORM::UI::GetNativeWindowHandles( wxWindow* aWindow, void** aHandle, void** aDisplay,
+                                             int* aDisplayType )
+{
+    *aHandle = nullptr;
+    *aDisplay = nullptr;
+
+    if( aDisplayType )
+        *aDisplayType = NATIVE_DISPLAY_TYPE::DISPLAY_COCOA;
+
+    if( aWindow )
+        *aHandle = aWindow->GetHandle();
+}
+
+
+void KIPLATFORM::UI::PrepareForExternalRendering( wxWindow* aWindow )
+{
+    // macOS composites Metal layers natively
+}
+
+
+void KIPLATFORM::UI::KeepAboveExternalRendering( wxWindow* aChild )
+{
+    // Child views are composited above the Metal layer of their parent
+}
