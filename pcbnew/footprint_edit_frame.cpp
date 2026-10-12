@@ -1757,17 +1757,6 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::resolveCanvasType()
-{
-    // Load canvas type from the FOOTPRINT_EDITOR_SETTINGS:
-    m_canvasType = loadCanvasTypeSetting();
-
-    // A canvas that failed this session falls back without changing the saved preference
-    if( CanvasFailed( m_canvasType ) )
-        m_canvasType = EDA_DRAW_PANEL_GAL::GAL_FALLBACK;
-}
-
-
 void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 {
     GetGalDisplayOptions().m_axesEnabled = true;
