@@ -31,6 +31,10 @@
 #include <wx/filename.h>
 #include <wx/mstream.h>
 
+#if defined( __WXMSW__ )
+#include <wx/msw/wrapwin.h>
+#endif
+
 #if defined( __WXGTK__ )
 #include <gdk/gdk.h> // For gdk_display_get_default()
 #endif
@@ -140,6 +144,15 @@ BOOST_AUTO_TEST_CASE( GetClipboardUTF8_EmptyClipboard )
         wxTheClipboard->Clear();
         wxTheClipboard->Close();
     }
+
+#if defined( __WXMSW__ )
+    // wxClipboard::Clear() only drops data this process still owns, not text an earlier test flushed
+    if( ::OpenClipboard( nullptr ) )
+    {
+        ::EmptyClipboard();
+        ::CloseClipboard();
+    }
+#endif
 
     std::string result = GetClipboardUTF8();
     BOOST_CHECK( result.empty() );
