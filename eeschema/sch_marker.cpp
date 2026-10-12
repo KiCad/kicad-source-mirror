@@ -46,7 +46,7 @@
 
 SCH_MARKER::SCH_MARKER( std::shared_ptr<ERC_ITEM> aItem, const VECTOR2I& aPos ) :
         SCH_ITEM( nullptr, SCH_MARKER_T ),
-        MARKER_BASE( SCALING_FACTOR, aItem, MARKER_BASE::MARKER_ERC )
+        MARKER_BASE( SCALING_FACTOR, std::move( aItem ), MARKER_BASE::MARKER_ERC )
 {
     if( m_rcItem )
         m_rcItem->SetParent( this );

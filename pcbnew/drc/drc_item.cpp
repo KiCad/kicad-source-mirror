@@ -473,8 +473,8 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_MALFORMED_MICROVIA_STACK_SPAN: return std::make_shared<DRC_ITEM>( malformedMicroviaStackSpan );
     case DRCE_MICROVIA_STACK_NOT_FILLED:     return std::make_shared<DRC_ITEM>( microviaStackNotFilled );
     case DRCE_MICROVIA_STACK_DEPTH:          return std::make_shared<DRC_ITEM>( microviaStackDepth );
-    case DRCE_HOLE_ASPECT_RATIO: return std::make_shared<DRC_ITEM>( holeAspectRatio );
-    case DRCE_MICROVIA_CROSSES_CORE: return std::make_shared<DRC_ITEM>( microviaCrossesCore );
+    case DRCE_HOLE_ASPECT_RATIO:             return std::make_shared<DRC_ITEM>( holeAspectRatio );
+    case DRCE_MICROVIA_CROSSES_CORE:         return std::make_shared<DRC_ITEM>( microviaCrossesCore );
     case DRCE_OVERLAPPING_FOOTPRINTS:        return std::make_shared<DRC_ITEM>( courtyardsOverlap );
     case DRCE_MISSING_COURTYARD:             return std::make_shared<DRC_ITEM>( missingCourtyard );
     case DRCE_MALFORMED_COURTYARD:           return std::make_shared<DRC_ITEM>( malformedCourtyard );
@@ -505,7 +505,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_LENGTH_OUT_OF_RANGE:           return std::make_shared<DRC_ITEM>( lengthOutOfRange );
     case DRCE_NET_CHAIN_STUB_TOO_LONG:       return std::make_shared<DRC_ITEM>( netChainStubTooLong );
     case DRCE_NET_CHAIN_RETURN_PATH_BREAK:   return std::make_shared<DRC_ITEM>( netChainReturnPathBreak );
-    case DRCE_NET_CHAIN_TUNING_PROFILES: return std::make_shared<DRC_ITEM>( netChainTuningProfiles );
+    case DRCE_NET_CHAIN_TUNING_PROFILES:     return std::make_shared<DRC_ITEM>( netChainTuningProfiles );
     case DRCE_SKEW_OUT_OF_RANGE:             return std::make_shared<DRC_ITEM>( skewOutOfRange );
     case DRCE_VIA_COUNT_OUT_OF_RANGE:        return std::make_shared<DRC_ITEM>( viaCountOutOfRange );
     case DRCE_DP_GAP_OUT_OF_RANGE:           return std::make_shared<DRC_ITEM>( diffPairGapOutOfRange );

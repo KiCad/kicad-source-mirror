@@ -49,9 +49,9 @@
 
 
 
-PCB_MARKER::PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const VECTOR2I& aPosition, int aLayer ) :
+PCB_MARKER::PCB_MARKER( std::shared_ptr<DRC_ITEM> aItem, const VECTOR2I& aPosition, int aLayer ) :
         BOARD_ITEM( nullptr, PCB_MARKER_T, F_Cu ),  // parent set during BOARD::Add()
-        MARKER_BASE( SCALING_FACTOR, aItem ),
+        MARKER_BASE( SCALING_FACTOR, std::move( aItem ) ),
         m_pathLength( 0 )
 {
     if( m_rcItem )
@@ -278,7 +278,10 @@ EDA_ITEM* PCB_MARKER::Clone() const
     // An RC_ITEM is shared between its marker and various tree views.  It cannot be shared between
     // two markers.
     if( m_rcItem )
-        res->m_rcItem = std::make_shared<RC_ITEM>( *m_rcItem );
+    {
+        res->m_rcItem = std::make_shared<DRC_ITEM>( *std::static_pointer_cast<DRC_ITEM>( m_rcItem ) );
+        res->m_rcItem->SetParent( res );
+    }
 
     return res;
 }
