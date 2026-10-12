@@ -30,6 +30,8 @@
 #include <tool/action_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/tools_holder.h>
+#include <bitmaps/bitmaps_list.h>
+#include <bitmaps/bitmap_types.h>
 
 // stdlib
 #include <map>

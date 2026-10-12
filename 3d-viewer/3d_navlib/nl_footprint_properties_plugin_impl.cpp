@@ -26,8 +26,11 @@
 #include <tool/action_manager.h>
 #include <tool/tool_manager.h>
 #include <tool/tools_holder.h>
+#include <bitmaps/bitmaps_list.h>
+#include <bitmaps/bitmap_types.h>
 
 #include <wx/mstream.h>
+
 
 #define BOUNDING_BOX_SCALE_FACTOR 1.3f
 
@@ -141,8 +144,7 @@ void NL_FOOTPRINT_PROPERTIES_PLUGIN_IMPL::exportCommandsAndImages()
             {
                 wxStreamBuffer* streamBuffer = imageStream.GetOutputStreamBuffer();
                 TDx::CImage     tdxImage = TDx::CImage::FromData( "", 0, name.c_str() );
-                tdxImage.AssignImage( std::string( reinterpret_cast<const char*>(
-                                                           streamBuffer->GetBufferStart() ),
+                tdxImage.AssignImage( std::string( reinterpret_cast<const char*>( streamBuffer->GetBufferStart() ),
                                                    streamBuffer->GetBufferSize() ),
                                       0 );
 

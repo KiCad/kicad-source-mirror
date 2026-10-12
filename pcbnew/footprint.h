@@ -673,16 +673,9 @@ public:
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
 // m_footprintStatus bits:
-#define FP_is_LOCKED        0x01        ///< footprint LOCKED: no autoplace allowed
 #define FP_is_PLACED        0x02        ///< In autoplace: footprint automatically placed
 #define FP_to_PLACE         0x04        ///< In autoplace: footprint waiting for autoplace
-#define FP_PADS_are_LOCKED  0x08
 
-
-    bool IsLocked() const override
-    {
-        return ( m_fpStatus & FP_is_LOCKED ) != 0;
-    }
 
     /// @copydoc BOARD_ITEM::IsLayerAgnostic
     /// A footprint's children may sit on layers this board has disabled; masking them off would
@@ -695,19 +688,6 @@ public:
     bool FitsEnabledLayers( const LSET& aEnabledLayers, int aCopperLayerCount ) const override
     {
         return GetLayer() == F_Cu || GetLayer() == B_Cu;
-    }
-
-    /**
-     * Set the #FP_is_LOCKED bit in the m_ModuleStatus.
-     *
-     * @param isLocked true means turn on locked status, else unlock
-     */
-    void SetLocked( bool isLocked ) override
-    {
-        if( isLocked )
-            m_fpStatus |= FP_is_LOCKED;
-        else
-            m_fpStatus &= ~FP_is_LOCKED;
     }
 
     /**
@@ -732,8 +712,6 @@ public:
         else
             m_fpStatus &= ~FP_to_PLACE;
     }
-
-    bool LegacyPadsLocked() const { return m_fpStatus & FP_PADS_are_LOCKED;  }
 
     /**
      * Test if footprint attributes for type (SMD/Through hole/Other) match the expected

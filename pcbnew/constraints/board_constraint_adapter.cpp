@@ -93,13 +93,6 @@ bool ConstraintItemIsLocked( const BOARD_ITEM* aItem )
     if( aItem->IsLocked() )
         return true;
 
-    // FOOTPRINT::IsLocked() reports the raw lock bit, so mirror BOARD_ITEM::IsLocked()'s
-    // footprint-editor exemption before consulting the parent.
-    const BOARD* board = aItem->GetBoard();
-
-    if( !board || board->GetBoardUse() == BOARD_USE::FPHOLDER )
-        return false;
-
     const FOOTPRINT* parent = aItem->GetParentFootprint();
 
     return parent && parent->IsLocked();

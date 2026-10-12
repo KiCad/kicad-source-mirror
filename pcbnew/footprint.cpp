@@ -162,7 +162,6 @@ private:
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
         m_attributes( 0 ),
-        m_fpStatus( FP_PADS_are_LOCKED ),
         m_fileFormatVersionAtLoad( 0 ),
         m_duplicatePadNumbersAreJumpers( false ),
         m_allowMissingCourtyard( false ),
