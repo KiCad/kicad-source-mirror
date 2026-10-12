@@ -77,6 +77,25 @@ static bool       g_lastERCRun = false;
 static std::vector<std::pair<wxString, int>> g_lastERCIgnored;
 
 
+static SCH_MARKER* findMarker( SCHEMATIC* aSchematic, const std::shared_ptr<RC_ITEM>& aItem )
+{
+    SCH_SCREENS screens( aSchematic->Root() );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_MARKER_T ) )
+        {
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
+
+            if( marker->GetRCItem() == aItem )
+                return marker;
+        }
+    }
+
+    return nullptr;
+}
+
+
 DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
         DIALOG_ERC_BASE( parent ),
         PROGRESS_REPORTER_BASE( 1 ),
@@ -710,8 +729,12 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     ERC_SETTINGS& settings = m_parent->Schematic().ErcSettings();
 
     std::shared_ptr<RC_ITEM> rcItem = node->m_RcItem;
+    SCH_MARKER*              currentMarker = findMarker( m_currentSchematic, rcItem );
     wxString                 listName;
     wxMenu                   menu;
+
+    if( !currentMarker )
+        return;
 
     switch( settings.GetSeverity( rcItem->GetErrorCode() ) )
     {
@@ -738,7 +761,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         ID_EDIT_SEVERITIES,
     };
 
-    if( rcItem->GetParent()->IsExcluded() )
+    if( currentMarker->IsExcluded() )
     {
         menu.Append( ID_REMOVE_EXCLUSION,
                      _( "Remove exclusion for this violation" ),
@@ -824,14 +847,27 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     bool modified = false;
     int  command = GetPopupMenuSelectionFromUser( menu );
 
+    // A popup runs a nested event loop, so the marker may have been removed while it was open.
+    currentMarker = findMarker( m_currentSchematic, rcItem );
+    node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
+
+    if( !currentMarker || !node )
+        return;
+
     switch( command )
     {
     case ID_EDIT_EXCLUSION_COMMENT:
-        if( SCH_MARKER* marker = dynamic_cast<SCH_MARKER*>( node->m_RcItem->GetParent() ) )
+        if( SCH_MARKER* marker = currentMarker )
         {
             WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ), marker->GetComment(), true );
 
             if( dlg.ShowModal() == wxID_CANCEL )
+                break;
+
+            marker = findMarker( m_currentSchematic, rcItem );
+            node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
+
+            if( !marker || !node )
                 break;
 
             setMarkerExcluded( m_markerProvider, marker, true, dlg.GetValue() );
@@ -844,7 +880,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case ID_REMOVE_EXCLUSION:
-        if( SCH_MARKER* marker = dynamic_cast<SCH_MARKER*>( node->m_RcItem->GetParent() ) )
+        if( SCH_MARKER* marker = currentMarker )
         {
             setMarkerExcluded( m_markerProvider, marker, false );
             m_parent->GetCanvas()->GetView()->Update( marker );
@@ -858,7 +894,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
     case ID_ADD_EXCLUSION:
     case ID_ADD_EXCLUSION_WITH_COMMENT:
-        if( SCH_MARKER* marker = dynamic_cast<SCH_MARKER*>( node->m_RcItem->GetParent() ) )
+        if( SCH_MARKER* marker = currentMarker )
         {
             wxString comment;
 
@@ -867,6 +903,12 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
                 WX_TEXT_ENTRY_DIALOG dlg( this, wxEmptyString, _( "Exclusion Comment" ), wxEmptyString, true );
 
                 if( dlg.ShowModal() == wxID_CANCEL )
+                    break;
+
+                marker = findMarker( m_currentSchematic, rcItem );
+                node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
+
+                if( !marker || !node )
                     break;
 
                 comment = dlg.GetValue();
@@ -884,11 +926,11 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         break;
 
     case ID_INSPECT_VIOLATION:
-        inspectionTool->InspectERCError( node->m_RcItem );
+        inspectionTool->InspectERCError( rcItem );
         break;
 
     case ID_FIX_VIOLATION:
-        editTool->FixERCError( node->m_RcItem );
+        editTool->FixERCError( rcItem );
         break;
 
     case ID_SET_SEVERITY_TO_ERROR:
@@ -1074,7 +1116,7 @@ void DIALOG_ERC::ExcludeMarker( SCH_MARKER* aMarker )
         node = RC_TREE_MODEL::ToNode( m_markerDataView->GetCurrentItem() );
 
         if( node && node->m_RcItem )
-            marker = dynamic_cast<SCH_MARKER*>( node->m_RcItem->GetParent() );
+            marker = findMarker( m_currentSchematic, node->m_RcItem );
     }
 
     if( !marker || marker->IsExcluded() )
