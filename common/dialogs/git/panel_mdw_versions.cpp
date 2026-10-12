@@ -565,7 +565,7 @@ void PANEL_MDW_VERSIONS::fitMessageColumn()
 
 void PANEL_MDW_VERSIONS::setCopyStatus( const wxString& aText, const wxString& aPath )
 {
-    m_copyStatus->SetLabel( aText );
+    m_copyStatus->SetLabelText( aText );
     m_copyStatus->Show( !aText.IsEmpty() );
 
     // The label is ellipsized to fit, so the whole path is only in the tooltip

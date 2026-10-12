@@ -260,6 +260,23 @@ PANEL_GIT_WORKSPACE::PANEL_GIT_WORKSPACE( wxWindow* aParent, GIT_ADVANCED_DIALOG
                            onContextMenu( aEvent );
                        } );
 
+    // Ellipsized with the whole name in its tip, so a long name never sets how narrow the pane may be
+    m_itemTitle->SetMinSize( wxSize( FromDIP( 40 ), -1 ) );
+
+    m_actionRefusalText = new wxStaticText( m_itemDetail, wxID_ANY, wxEmptyString );
+
+    // Wrapped to the pane, so a long refusal never sets how narrow the pane may be
+    m_actionRefusalText->SetMinSize( wxSize( FromDIP( 40 ), -1 ) );
+    m_actionRefusalText->Hide();
+    m_itemDetail->GetSizer()->Add( m_actionRefusalText, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, FromDIP( 8 ) );
+
+    m_itemDetail->Bind( wxEVT_SIZE,
+                        [this]( wxSizeEvent& aEvent )
+                        {
+                            wrapActionRefusals();
+                            aEvent.Skip();
+                        } );
+
     m_connectLibraryButton->Bind( wxEVT_BUTTON,
                                   [this]( wxCommandEvent& )
                                   {
@@ -447,7 +464,7 @@ void PANEL_GIT_WORKSPACE::applyQueryStatus()
     m_retryLink->Show( m_query && m_queryStatus.can_retry );
 
     if( m_query )
-        m_itemCount->SetLabel( m_queryStatus.text );
+        m_itemCount->SetLabelText( m_queryStatus.text );
 
     m_itemListPanel->Layout();
 
@@ -506,7 +523,7 @@ std::shared_ptr<MDW_SESSION> PANEL_GIT_WORKSPACE::session() const
 
 void PANEL_GIT_WORKSPACE::setItemCount( const wxString& aText )
 {
-    m_itemCount->SetLabel( aText );
+    m_itemCount->SetLabelText( aText );
     m_itemCount->SetToolTip( wxString() );
 
     // The label keeps the width of its previous text until the column lays out again
@@ -1070,7 +1087,8 @@ void PANEL_GIT_WORKSPACE::showDetail( const MDW_ITEM_INFO& aItem )
     m_selectedItem = aItem;
     m_member.reset();
     m_memberTarget.reset();
-    m_itemTitle->SetLabel( aItem.display_name );
+    m_itemTitle->SetLabelText( aItem.display_name );
+    m_itemTitle->SetToolTip( aItem.display_name );
 
     readTransitions();
 
@@ -1127,7 +1145,8 @@ void PANEL_GIT_WORKSPACE::showMemberDetail( const WORKSPACE_TREE_NODE& aNode )
     m_selectedItem = MDW_ITEM_INFO();
     m_member = shown->second;
     m_memberTarget = target;
-    m_itemTitle->SetLabel( aNode.name );
+    m_itemTitle->SetLabelText( aNode.name );
+    m_itemTitle->SetToolTip( aNode.name );
 
     readTransitions();
 
@@ -1431,7 +1450,9 @@ void PANEL_GIT_WORKSPACE::showState()
     for( const WORKSPACE_DETAIL_ROW& row : rows )
     {
         m_detailRows->Add( new wxStaticText( m_itemDetail, wxID_ANY, row.label ), 0, wxALIGN_TOP );
-        m_detailRows->Add( new wxStaticText( m_itemDetail, wxID_ANY, row.value ), 0, wxEXPAND );
+        // Values carry user names and file names, where an ampersand is not a mnemonic
+        m_detailRows->Add( new wxStaticText( m_itemDetail, wxID_ANY, wxControl::EscapeMnemonics( row.value ) ), 0,
+                           wxEXPAND );
     }
 
     // The design loads through the editors' kifaces, too slow for every selection, so only Find reads it
@@ -1439,8 +1460,8 @@ void PANEL_GIT_WORKSPACE::showState()
     {
         const wxString whereUsed = whereUsedText();
         wxBoxSizer*    cell = new wxBoxSizer( wxHORIZONTAL );
-        wxStaticText*  value = new wxStaticText( m_itemDetail, wxID_ANY, whereUsed, wxDefaultPosition, wxDefaultSize,
-                                                 wxST_ELLIPSIZE_END );
+        wxStaticText*  value = new wxStaticText( m_itemDetail, wxID_ANY, wxControl::EscapeMnemonics( whereUsed ),
+                                                 wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_END );
 
         // A part placed hundreds of times must not widen the pane, so the tip carries the whole list
         value->SetMinSize( wxSize( FromDIP( 40 ), -1 ) );
@@ -1551,13 +1572,33 @@ void PANEL_GIT_WORKSPACE::showActions( const std::vector<WORKSPACE_ACTION>& aAct
 
     if( !same )
     {
+        // Another user's claim makes both claim labels long, so they take a row of their own to keep the pane narrow
+        bool claimRow = std::ranges::any_of( aActions,
+                                             []( const WORKSPACE_ACTION& aAction )
+                                             {
+                                                 return aAction.id == WORKSPACE_ACTION::ID::RELEASE_CLAIM;
+                                             } );
+
+        wxBoxSizer* rows = new wxBoxSizer( wxVERTICAL );
+        wxBoxSizer* others = new wxBoxSizer( wxHORIZONTAL );
+        wxBoxSizer* claims = claimRow ? new wxBoxSizer( wxHORIZONTAL ) : others;
+
         m_actionSizer->Clear( true );
         m_actionButtons.clear();
-        m_actionSizer->AddStretchSpacer();
+        others->AddStretchSpacer();
+        rows->Add( others, 0, wxEXPAND );
+
+        if( claimRow )
+        {
+            claims->AddStretchSpacer();
+            rows->Add( claims, 0, wxEXPAND | wxTOP, FromDIP( 4 ) );
+        }
+
+        m_actionSizer->Add( rows, 1, wxEXPAND );
 
         for( const WORKSPACE_ACTION& action : aActions )
         {
-            wxButton* button = new wxButton( m_itemDetail, wxID_ANY, action.label );
+            wxButton* button = new wxButton( m_itemDetail, wxID_ANY, wxControl::EscapeMnemonics( action.label ) );
 
             // Deferred, since an action can refresh the detail and delete this button inside its own click
             button->Bind( wxEVT_BUTTON,
@@ -1576,10 +1617,14 @@ void PANEL_GIT_WORKSPACE::showActions( const std::vector<WORKSPACE_ACTION>& aAct
                                       } );
                           } );
 
-            m_actionSizer->Add( button, 0, wxLEFT, FromDIP( 4 ) );
+            bool claim = action.id == WORKSPACE_ACTION::ID::EDITING || action.id == WORKSPACE_ACTION::ID::RELEASE_CLAIM;
+
+            ( claim ? claims : others )->Add( button, 0, wxLEFT, FromDIP( 4 ) );
             m_actionButtons.emplace_back( action, button );
         }
     }
+
+    wxString refusals;
 
     for( size_t ii = 0; ii < aActions.size(); ++ii )
     {
@@ -1590,14 +1635,37 @@ void PANEL_GIT_WORKSPACE::showActions( const std::vector<WORKSPACE_ACTION>& aAct
         if( tip.IsEmpty() && action.id == WORKSPACE_ACTION::ID::EDITING )
             tip = _( "Signals editing intent to teammates; others can still edit." );
 
+        // A holder's name may hold an ampersand, which a label would read as a mnemonic marker
         m_actionButtons[ii].first = action;
-        button->SetLabel( action.label );
+        button->SetLabelText( action.label );
         button->Enable( action.allowed );
         button->SetToolTip( tip );
+
+        wxString refusal = WorkspaceActionRefusal( action );
+
+        if( !refusal.IsEmpty() )
+            refusals << ( refusals.IsEmpty() ? wxS( "" ) : wxS( "\n" ) ) << refusal;
     }
+
+    // Windows shows no tooltip on a disabled button, so the reasons are spelled out below the buttons
+    m_actionRefusals = refusals;
+    wrapActionRefusals();
 
     // A teammate's claim lengthens the labels, which must not be cut off
     KIGIT::KeepDetailWidth( m_workspaceSplitter );
+}
+
+
+void PANEL_GIT_WORKSPACE::wrapActionRefusals()
+{
+    // Wrapping rewrites the label, so it always starts again from the text with no line breaks added
+    m_actionRefusalText->SetLabelText( m_actionRefusals );
+    m_actionRefusalText->Show( !m_actionRefusals.IsEmpty() );
+
+    int width = m_itemDetail->GetClientSize().x - FromDIP( 16 );
+
+    if( width > 0 )
+        m_actionRefusalText->Wrap( width );
 }
 
 
@@ -1617,7 +1685,11 @@ void PANEL_GIT_WORKSPACE::onContextMenu( wxDataViewEvent& aEvent )
     // The actions act on the selected item, and a right click does not select on every platform
     if( m_itemsTree->GetSelection() != aEvent.GetItem() )
     {
-        m_itemsTree->Select( aEvent.GetItem() );
+        {
+            // The detail is shown just below, and GTK would load it a second time from the selection event
+            wxEventBlocker blocker( m_itemsTree, wxEVT_DATAVIEW_SELECTION_CHANGED );
+            m_itemsTree->Select( aEvent.GetItem() );
+        }
 
         if( member )
             showMemberDetail( *node );
@@ -1637,19 +1709,16 @@ void PANEL_GIT_WORKSPACE::onContextMenu( wxDataViewEvent& aEvent )
     for( size_t ii = 0; ii < actions.size(); ++ii )
     {
         const WORKSPACE_ACTION& action = actions[ii];
-        wxString                text = action.label;
 
-        // A popup's help string shows nowhere in a dialog, and the editing label already names the holder
-        if( !action.allowed && !action.reason.IsEmpty() && action.id != WORKSPACE_ACTION::ID::EDITING )
-        {
-            wxString reason = action.reason;
+        // A popup's help string shows nowhere in a dialog
+        wxString text = WorkspaceActionRefusal( action );
 
-            // A menu label reads a single ampersand as a mnemonic marker
-            reason.Replace( wxS( "&" ), wxS( "&&" ) );
-            text = wxString::Format( _( "%s (%s)" ), action.label, reason );
-        }
+        if( text.IsEmpty() )
+            text = action.label;
 
-        menu.Append( wxID_HIGHEST + 1 + static_cast<int>( ii ), text, action.reason )->Enable( action.allowed );
+        // A menu label reads a single ampersand as a mnemonic marker
+        menu.Append( wxID_HIGHEST + 1 + static_cast<int>( ii ), wxControl::EscapeMnemonics( text ), action.reason )
+                ->Enable( action.allowed );
         requests.push_back( actionRequest( action ) );
     }
 

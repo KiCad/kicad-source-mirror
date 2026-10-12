@@ -50,6 +50,7 @@ class GIT_ADVANCED_DIALOG;
 class MDW_SESSION;
 class wxButton;
 class wxDataViewEvent;
+class wxStaticText;
 
 
 /**
@@ -251,6 +252,9 @@ private:
     /// Make the buttons match aActions, keeping the ones already shown when only their state changed.
     void showActions( const std::vector<WORKSPACE_ACTION>& aActions );
 
+    /// Wrap m_actionRefusals to the detail pane's width below the action buttons.
+    void wrapActionRefusals();
+
     /// Offer the actions of the item under the pointer, which becomes the selected one.
     void onContextMenu( wxDataViewEvent& aEvent );
 
@@ -373,6 +377,8 @@ private:
     bool                                               m_permissionsReading = false; ///< m_permissionsOp runs
 
     std::vector<std::pair<WORKSPACE_ACTION, wxButton*>> m_actionButtons; ///< Each button and the action it shows
+    wxStaticText* m_actionRefusalText = nullptr;
+    wxString      m_actionRefusals; ///< Each disabled action with its reason, one per line, before wrapping
 
     MDW_SUBSCRIPTION           m_connections;   ///< Greys the rows offline and reads them again once online
     MDW_SUBSCRIPTION           m_events;        ///< Follows lock and capability changes after the listing

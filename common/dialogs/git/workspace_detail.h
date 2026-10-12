@@ -122,4 +122,7 @@ struct WORKSPACE_ACTION_FACTS
 /// The actions an item offers, in menu order, with those not allowed kept so a menu can say why
 KICOMMON_API std::vector<WORKSPACE_ACTION> WorkspaceItemActions( const WORKSPACE_ACTION_FACTS& aFacts );
 
+/// Why aAction is not allowed, after its label, or empty when it is allowed or its label already names the holder
+KICOMMON_API wxString WorkspaceActionRefusal( const WORKSPACE_ACTION& aAction );
+
 #endif // WORKSPACE_DETAIL_H

@@ -505,7 +505,7 @@
                       <property name="resize">Resizable</property>
                       <property name="show">1</property>
                       <property name="size" />
-                      <property name="style" />
+                      <property name="style">wxST_ELLIPSIZE_END</property>
                       <property name="subclass">; ; forward_declare</property>
                       <property name="toolbar_pane">0</property>
                       <property name="tooltip" />

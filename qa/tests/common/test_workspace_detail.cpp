@@ -530,6 +530,19 @@ BOOST_AUTO_TEST_CASE( ChangeStateWaitsForTheTransitionsRead )
 }
 
 
+BOOST_AUTO_TEST_CASE( RefusalLeavesOutTheLabelEllipsis )
+{
+    WORKSPACE_ACTION_FACTS facts = gitDesignFile();
+    facts.transitionsReading = true;
+
+    std::vector<WORKSPACE_ACTION> actions = WorkspaceItemActions( facts );
+    const WORKSPACE_ACTION*       change = action( actions, ID::CHANGE_STATE );
+
+    BOOST_REQUIRE( change );
+    BOOST_CHECK_EQUAL( WorkspaceActionRefusal( *change ), wxString( "Change State (Reading states...)" ) );
+}
+
+
 BOOST_AUTO_TEST_CASE( MissingFileOffersNoOpen )
 {
     WORKSPACE_ACTION_FACTS facts = gitDesignFile();

@@ -58,7 +58,7 @@ PANEL_GIT_WORKSPACE_BASE::PANEL_GIT_WORKSPACE_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bitemDetailSizer;
 	bitemDetailSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_itemTitle = new wxStaticText( m_itemDetail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_itemTitle = new wxStaticText( m_itemDetail, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_END );
 	m_itemTitle->Wrap( -1 );
 	m_itemTitle->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 

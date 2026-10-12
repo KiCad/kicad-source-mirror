@@ -207,3 +207,18 @@ std::vector<WORKSPACE_ACTION> WorkspaceItemActions( const WORKSPACE_ACTION_FACTS
 
     return actions;
 }
+
+
+wxString WorkspaceActionRefusal( const WORKSPACE_ACTION& aAction )
+{
+    if( aAction.allowed || aAction.reason.IsEmpty() || aAction.id == WORKSPACE_ACTION::ID::EDITING )
+        return wxString();
+
+    wxString label = aAction.label;
+
+    // The ellipsis promises a dialog, which the line under the buttons does not open
+    if( !label.EndsWith( wxS( "..." ), &label ) )
+        label.EndsWith( wxS( "\u2026" ), &label );
+
+    return wxString::Format( _( "%s (%s)" ), label, aAction.reason );
+}

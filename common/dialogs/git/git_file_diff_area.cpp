@@ -244,7 +244,7 @@ void GIT_FILE_DIFF_AREA::ShowSides( const GIT_FILE_SIDES& aSides, const wxString
 void GIT_FILE_DIFF_AREA::ShowNote( const wxString& aNote )
 {
     destroyCanvases();
-    m_note->SetLabel( aNote );
+    m_note->SetLabelText( aNote );
     m_note->Show();
     m_canvasSplitter->Hide();
     GetSizer()->Show( m_legend, false );
@@ -318,8 +318,8 @@ bool GIT_FILE_DIFF_AREA::showDrawingDiff( KICAD_DIFF::DOC_KIND aKind, const wxSt
 
     KICAD_DIFF::SIDE_BY_SIDE_SCENES sides = KICAD_DIFF::SplitSceneBySide( scene, olderBox );
 
-    m_beforeLabel->SetLabel( aBeforeLabel );
-    m_afterLabel->SetLabel( aAfterLabel );
+    m_beforeLabel->SetLabelText( aBeforeLabel );
+    m_afterLabel->SetLabelText( aAfterLabel );
     m_beforeCanvas->SetScene( std::move( sides.reference ) );
     m_afterCanvas->SetScene( std::move( sides.comparison ) );
 
