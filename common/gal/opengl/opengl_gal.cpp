@@ -394,6 +394,10 @@ OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIO
     Bind( wxEVT_GESTURE_PAN, &OPENGL_GAL::skipGestureEvent, this );
 
     SetSize( aParent->GetClientSize() );
+#ifdef __WXMAC__
+    // wxDefaultPosition can place the GL child one pixel above and left of its parent.
+    SetPosition( wxPoint( 0, 0 ) );
+#endif
     m_screenSize = ToVECTOR2I( GetNativePixelSize() );
 
     // Grid color settings are different in Cairo and OpenGL
