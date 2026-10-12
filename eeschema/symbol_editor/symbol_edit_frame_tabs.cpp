@@ -441,7 +441,7 @@ SYMBOL_EDIT_FRAME::findOrCreateSymbolInstanceTab( LIB_SYMBOL* aSymbol, SCH_SCREE
         existing->SetUnit( unit );
         existing->SetBodyStyle( bodyStyle );
 
-        activateSymbolTab( existing );
+        m_tabsPanel->ActivateOrCreateTab( key, existing->GetDisplayName(), false );
 
         return existing;
     }
