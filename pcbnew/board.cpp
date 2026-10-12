@@ -622,20 +622,14 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 
             std::vector<KIID> ids = marker->GetRCItem()->GetIDs();
 
-            int uuidCount = 0;
-
             for( const KIID& uuid : ids )
             {
-                if( uuidCount < 1 || uuid != niluuid )
+                if( uuid != niluuid && !ResolveItem( uuid, true ) )
                 {
-                    if( !ResolveItem( uuid, true ) )
-                    {
-                        delete marker;
-                        marker = nullptr;
-                        break;
-                    }
+                    delete marker;
+                    marker = nullptr;
+                    break;
                 }
-                uuidCount++;
             }
 
             if( marker )
