@@ -827,6 +827,10 @@ int PCB_CONTROL::InteractiveDelete( const TOOL_EVENT& aEvent )
         return 0;
 
     PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
+    EDIT_TOOL*       editTool = m_toolMgr->GetTool<EDIT_TOOL>();
+
+    if( !picker || !editTool )
+        return 0;
 
     m_pickerItem = nullptr;
     m_toolMgr->RunAction( ACTIONS::selectionClear );
@@ -839,7 +843,7 @@ int PCB_CONTROL::InteractiveDelete( const TOOL_EVENT& aEvent )
     picker->ClearHandlers();
 
     picker->SetClickHandler(
-            [this]( const VECTOR2D& aPosition ) -> bool
+            [this, editTool]( const VECTOR2D& aPosition ) -> bool
             {
                 if( m_pickerItem )
                 {
@@ -858,7 +862,6 @@ int PCB_CONTROL::InteractiveDelete( const TOOL_EVENT& aEvent )
                     PCB_SELECTION items;
                     items.Add( m_pickerItem );
 
-                    EDIT_TOOL* editTool = m_toolMgr->GetTool<EDIT_TOOL>();
                     editTool->DeleteItems( items, false );
 
                     m_pickerItem = nullptr;
