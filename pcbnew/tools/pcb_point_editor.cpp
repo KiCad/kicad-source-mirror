@@ -2056,6 +2056,8 @@ void PCB_POINT_EDITOR::Reset( RESET_REASON aReason )
             view->Remove( &m_preview );
     }
 
+    m_editedPoint = nullptr;
+    m_hoveredPoint = nullptr;
     m_angleItem.reset();
     m_editPoints.reset();
     m_altConstraint.reset();
@@ -3168,6 +3170,8 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 if( m_angleItem && getView()->HasItem( m_angleItem.get() ) )
                     getView()->Remove( m_angleItem.get() );
 
+                m_editedPoint = nullptr;
+                m_hoveredPoint = nullptr;
                 m_editPoints = makePoints( item );
 
                 if( m_angleItem )
@@ -3215,6 +3219,7 @@ int PCB_POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         if( m_angleItem && getView()->HasItem( m_angleItem.get() ) )
             getView()->Remove( m_angleItem.get() );
 
+        m_hoveredPoint = nullptr;
         m_editPoints.reset();
         m_angleItem.reset();
     }
@@ -3582,6 +3587,7 @@ void PCB_POINT_EDITOR::updatePoints()
         if( getView()->HasItem( m_editPoints.get() ) )
             getView()->Remove( m_editPoints.get() );
 
+        m_hoveredPoint = nullptr;
         m_editPoints = makePoints( item );
         getView()->Add( m_editPoints.get() );
     }
