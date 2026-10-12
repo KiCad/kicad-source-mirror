@@ -1000,7 +1000,11 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 {
                     PAD*       pad = static_cast<PAD*>( item );
                     FOOTPRINT* fp = pad->GetParentFootprint();
-                    msg = wxString::Format( _( "%s pad %s" ), fp->GetReference(), pad->GetNumber() );
+
+                    if( fp )
+                        msg = wxString::Format( _( "%s pad %s" ), fp->GetReference(), pad->GetNumber() );
+                    else
+                        msg = pad->GetItemDescription( editFrame, false );
                 }
                 else
                 {
