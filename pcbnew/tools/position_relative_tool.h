@@ -23,6 +23,7 @@
 #include <math/vector2d.h>
 #include <tools/pcb_tool_base.h>
 #include <tools/pcb_selection_tool.h>
+#include <wx/weakref.h>
 
 class BOARD_COMMIT;
 class BOARD_ITEM;
@@ -73,7 +74,7 @@ public:
     void setTransitions() override;
 
 private:
-    DIALOG_POSITION_RELATIVE*     m_dialog;
+    wxWeakRef<DIALOG_POSITION_RELATIVE> m_dialog;
 
     PCB_SELECTION_TOOL*           m_selectionTool;
     PCB_SELECTION                 m_selection;

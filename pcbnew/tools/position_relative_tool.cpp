@@ -93,6 +93,18 @@ POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
 
 void POSITION_RELATIVE_TOOL::Reset( RESET_REASON aReason )
 {
+    if( aReason == MODEL_RELOAD || aReason == SUPERMODEL_RELOAD || aReason == SHUTDOWN )
+    {
+        if( m_dialog )
+        {
+            m_dialog->Destroy();
+            m_dialog = nullptr;
+        }
+
+        m_selection.Clear();
+        m_selectionAnchor = VECTOR2I();
+    }
+
     if( aReason != RUN )
         m_commit = std::make_unique<BOARD_COMMIT>( this );
 }
