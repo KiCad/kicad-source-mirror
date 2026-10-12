@@ -20,152 +20,54 @@
 #ifndef DRC_RULES_DOWNGRADE_H
 #define DRC_RULES_DOWNGRADE_H
 
+#include <algorithm>
 #include <cctype>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include <wx/intl.h>
 
 #include <downgrade_scan.h>
 #include <downgrade_target.h>
+#include <drc_rules_release_vocabulary.h>
 
 // The old rules parsers are all-or-nothing. One unknown keyword anywhere makes the target drop
 // every custom rule and refuse to run DRC. So the export filters the file: rules the target
 // cannot parse are removed and reported, surviving rules are kept byte-identical.
 
-/// Rule-file tokens dated by the board format of the first release that parses them. A rule
-/// using a token newer than the target is dropped. Tokens dated 99999999 have no released
-/// parser yet and drop for every target.
-static constexpr DATED_TOKEN DRC_RULE_TOKENS[] = {
-    // Constraints and disallow kinds added in 10.0
-    { "bridged_mask", 20260206 },
-    { "solder_mask_expansion", 20260206 },
-    { "solder_mask_sliver", 20260206 },
-    { "solder_paste_abs_margin", 20260206 },
-    { "solder_paste_rel_margin", 20260206 },
-    { "via_dangling", 20260206 },
-    { "through_via", 20260206 },
-    { "blind_via", 20260206 },
-    // Expression functions added in 10.0
-    { "isBlindVia", 20260206 },
-    { "isBuriedVia", 20260206 },
-    { "memberOfSheetOrChildren", 20260206 },
-    { "hasExactNetclass", 20260206 },
-    // Added after 10.0
-    { "net_chain_length", 99999999 },
-    { "stub_length", 99999999 },
-    { "return_path", 99999999 },
-    { "inNetChain", 99999999 },
-    { "hasNetChain", 99999999 },
-    { "inNetChainClass", 99999999 },
-    { "hole_aspect_ratio", 99999999 },
-    { "microvia_stack_depth", 99999999 },
-    { "intersectsKeepout", 99999999 },
-    { "isStackedVia", 99999999 },
-    { "customProperty", 99999999 },
-    { "hasCustomProperty", 99999999 },
-    // Released readers test zone fills rather than the source's zone outlines.
-    { "intersectsArea", 99999999 },
+/// The vocabulary a target release could parse, generated from its branch by
+/// tools/generate_drc_rules_vocabulary.py. A release without one cannot be exported to.
+inline const DRC_RULE_VOCABULARY* FindDrcRuleVocabulary( const DOWNGRADE_TARGET& aTarget )
+{
+    for( const DRC_RULE_VOCABULARY& vocabulary : DRC_RULE_VOCABULARIES )
+    {
+        if( aTarget.m_id == vocabulary.m_targetId )
+            return &vocabulary;
+    }
+
+    return nullptr;
+}
+
+
+/// A function a release parses but must still drop, because the result it gives differs from
+/// the one the rule was written against. The vocabulary cannot express that, so it is kept here
+/// with the reason. Tokens dated 99999999 drop for every target.
+static constexpr DATED_TOKEN DRC_RULE_SEMANTIC_BREAKS[] = {
+    // Releases before 10.0.7 test zone fills rather than the source's zone outlines.
+    { "intersectsarea", 99999999 },
 };
 
-/// Property names exposed by PCB expressions, normalized like the evaluator's underscore aliases.
-/// A property absent from the released registry makes the whole rules file fail to compile.
-static constexpr DATED_TOKEN DRC_RULE_PROPERTIES[] = {
-    // Released in 10.0
-    { "corner_radius", 20260206 },
-    { "fill", 20260206 },
-    { "auto_thickness", 20260206 },
-    { "target_delay", 20260206 },
-    { "target_skew_delay", 20260206 },
-    { "top_counterbore_depth", 20260206 },
-    { "top_countersink_angle", 20260206 },
-    { "bottom_counterbore_depth", 20260206 },
-    { "bottom_countersink_angle", 20260206 },
-    { "backdrill_mode", 20260206 },
-    { "bottom_backdrill_size", 20260206 },
-    { "top_backdrill_size", 20260206 },
-    { "pad_to_die_delay", 20260206 },
-    { "show_text", 20260206 },
-    { "text_size", 20260206 },
-    { "barcode_type", 20260206 },
-    { "error_correction", 20260206 },
-    { "margin_x", 20260206 },
-    { "margin_y", 20260206 },
-    { "column_width", 20260206 },
-    { "row_height", 20260206 },
-    { "capping", 20260206 },
-    { "filling", 20260206 },
-    { "keep_out_zone_fills", 20260206 },
-    { "hatch_orientation", 20260206 },
-    // Added after 10.0
-    { "major_radius", 99999999 },
-    { "minor_radius", 99999999 },
-    { "ellipse_rotation", 99999999 },
-    { "arc_start_angle", 99999999 },
-    { "arc_end_angle", 99999999 },
-    { "start_shape", 99999999 },
-    { "start_length", 99999999 },
-    { "start_width", 99999999 },
-    { "start_stroke_width", 99999999 },
-    { "end_shape", 99999999 },
-    { "end_length", 99999999 },
-    { "end_width", 99999999 },
-    { "end_stroke_width", 99999999 },
-    { "driving", 99999999 },
-    { "scale_x", 99999999 },
-    { "scale_y", 99999999 },
-    { "footprint_type", 99999999 },
-    { "exclude_from_simulation", 99999999 },
-    { "start_layer", 99999999 },
-    { "end_layer", 99999999 },
-    { "style", 99999999 },
-    { "use_netclass_values", 99999999 },
-    { "via_diameter", 99999999 },
-    { "via_hole", 99999999 },
-    { "pitch", 99999999 },
-    { "capped", 99999999 },
-    { "drill", 99999999 },
-    { "layout", 99999999 },
-    { "mode", 99999999 },
-    { "seed", 99999999 },
-    { "guarded_net", 99999999 },
-    { "simulation_electrical_type", 99999999 },
-    { "value_mode", 99999999 },
-    { "show_totals", 99999999 },
-    { "offset_x", 99999999 },
-    { "offset_y", 99999999 },
-    { "symbol_size", 99999999 },
-    { "hole_span", 99999999 },
-    { "outline_slots", 99999999 },
-    { "guide_cross", 99999999 },
-    { "decimal_places", 99999999 },
-    { "grid_type", 99999999 },
-    { "extent_x", 99999999 },
-    { "extent_y", 99999999 },
-    { "spacing_x", 99999999 },
-    { "spacing_y", 99999999 },
-    { "radius_extent", 99999999 },
-    { "radius_spacing", 99999999 },
-    { "phi_extent", 99999999 },
-    { "phi_spacing", 99999999 },
-    { "tick_interval", 99999999 },
-    { "affects_cursor_snap", 99999999 },
-    { "affects_routing", 99999999 },
-    { "affects_placement", 99999999 },
-    { "automatically_update_net", 99999999 },
-    { "front_tenting", 99999999 },
-    { "back_tenting", 99999999 },
-    { "front_covering", 99999999 },
-    { "back_covering", 99999999 },
-    { "front_plugging", 99999999 },
-    { "back_plugging", 99999999 },
-    { "thieving_pattern", 99999999 },
-    { "thieving_element_size", 99999999 },
-    { "thieving_gap", 99999999 },
-    { "thieving_line_width", 99999999 },
-    { "thieving_stagger", 99999999 },
-    { "thieving_orientation", 99999999 },
-};
+
+/// The generated arrays are sorted, so membership is a binary search.
+inline bool DrcVocabularyHas( const char* const* aWords, size_t aCount, const std::string& aWord )
+{
+    return std::binary_search( aWords, aWords + aCount, aWord,
+                               []( std::string_view aLeft, std::string_view aRight )
+                               {
+                                   return aLeft < aRight;
+                               } );
+}
 
 
 struct DRC_RULES_FILTER_RESULT
@@ -389,118 +291,150 @@ inline bool DrcRuleUnsupportedByTarget( const std::string& aRawBlock, const DOWN
     for( char& c : foldedConditions )
         c = static_cast<char>( std::tolower( static_cast<unsigned char>( c ) ) );
 
-    for( const DATED_TOKEN& token : DRC_RULE_TOKENS )
+    const DRC_RULE_VOCABULARY* vocabulary = FindDrcRuleVocabulary( aTarget );
+
+    if( !vocabulary )
+        return true;
+
+    auto isWord = []( char c )
     {
-        if( aTarget.m_boardVersion >= token.m_introducedIn )
+        return std::isalnum( static_cast<unsigned char>( c ) ) || c == '_';
+    };
+
+    // Every bareword left in the rule must be in the target's grammar. Rule names are blanked
+    // and strings stripped above, a unit stuck to a number is not a word, and a dotted name
+    // like a layer is left alone.
+    for( size_t i = 0; i < structural.size(); i++ )
+    {
+        if( !std::isalpha( static_cast<unsigned char>( structural[i] ) ) && structural[i] != '_' )
             continue;
 
-        if( ContainsSexprValue( structural, token.m_token ) )
+        if( i > 0 && ( isWord( structural[i - 1] ) || structural[i - 1] == '.' ) )
+            continue;
+
+        size_t end = i;
+
+        while( end < structural.size() && isWord( structural[end] ) )
+            end++;
+
+        if( end < structural.size() && structural[end] == '.' )
+        {
+            i = end;
+            continue;
+        }
+
+        const std::string word = structural.substr( i, end - i );
+
+        if( !DrcVocabularyHas( vocabulary->m_tokens, vocabulary->m_tokenCount, word ) )
             return true;
 
-        std::string function = token.m_token;
-
-        for( char& c : function )
-            c = static_cast<char>( std::tolower( static_cast<unsigned char>( c ) ) );
-
-        for( size_t pos = foldedConditions.find( function ); pos != std::string::npos;
-             pos = foldedConditions.find( function, pos + 1 ) )
+        // A layer node names a board layer, and a min, max or opt node holds a value whose unit
+        // may stand apart from its number. Neither is grammar.
+        if( i > 0 && structural[i - 1] == '('
+            && ( word == "layer" || word == "min" || word == "max" || word == "opt" ) )
         {
-            if( pos > 0
-                && ( std::isalnum( static_cast<unsigned char>( foldedConditions[pos - 1] ) )
-                     || foldedConditions[pos - 1] == '_' ) )
-                continue;
-
-            size_t after = pos + function.size();
-
-            while( after < foldedConditions.size()
-                   && std::isspace( static_cast<unsigned char>( foldedConditions[after] ) ) )
-                after++;
-
-            if( after < foldedConditions.size() && foldedConditions[after] == '(' )
-                return true;
+            while( end < structural.size() && structural[end] != ')' )
+                end++;
         }
+
+        i = end;
     }
 
-    for( size_t pos = 0; pos < foldedConditions.size(); pos++ )
+    // Inside a condition a word followed by a parenthesis is a function call, and a word after
+    // a dot is a property. Both must exist in the target.
+    for( size_t i = 0; i < foldedConditions.size(); i++ )
     {
-        if( foldedConditions[pos] != '.' )
+        if( !std::isalpha( static_cast<unsigned char>( foldedConditions[i] ) ) && foldedConditions[i] != '_' )
             continue;
 
-        size_t begin = pos + 1;
+        if( i > 0 && isWord( foldedConditions[i - 1] ) )
+            continue;
 
-        while( begin < foldedConditions.size()
-               && std::isspace( static_cast<unsigned char>( foldedConditions[begin] ) ) )
-        {
-            begin++;
-        }
+        size_t end = i;
 
-        size_t end = begin;
-
-        while( end < foldedConditions.size()
-               && ( std::isalnum( static_cast<unsigned char>( foldedConditions[end] ) )
-                    || foldedConditions[end] == '_' ) )
-        {
+        while( end < foldedConditions.size() && isWord( foldedConditions[end] ) )
             end++;
-        }
 
-        const std::string property = foldedConditions.substr( begin, end - begin );
+        const std::string word = foldedConditions.substr( i, end - i );
 
-        // Parent navigation is new, but the old standalone Parent string property is supported.
-        if( property == "parent" )
+        size_t next = end;
+
+        while( next < foldedConditions.size() && std::isspace( static_cast<unsigned char>( foldedConditions[next] ) ) )
+            next++;
+
+        size_t prev = i;
+
+        while( prev > 0 && std::isspace( static_cast<unsigned char>( foldedConditions[prev - 1] ) ) )
+            prev--;
+
+        if( next < foldedConditions.size() && foldedConditions[next] == '(' )
         {
-            size_t next = end;
-
-            while( next < foldedConditions.size()
-                   && std::isspace( static_cast<unsigned char>( foldedConditions[next] ) ) )
+            for( const DATED_TOKEN& token : DRC_RULE_SEMANTIC_BREAKS )
             {
-                next++;
+                if( aTarget.m_boardVersion < token.m_introducedIn && word == token.m_token )
+                    return true;
             }
 
-            if( next < foldedConditions.size() && foldedConditions[next] == '.' )
+            if( !DrcVocabularyHas( vocabulary->m_functions, vocabulary->m_functionCount, word ) )
                 return true;
         }
-
-        for( const DATED_TOKEN& token : DRC_RULE_PROPERTIES )
+        else if( prev > 0 && foldedConditions[prev - 1] == '.' )
         {
-            if( aTarget.m_boardVersion < token.m_introducedIn && property == token.m_token )
+            // Parent navigation is new, but the old standalone Parent string property is supported.
+            if( word == "parent" && next < foldedConditions.size() && foldedConditions[next] == '.' )
+                return true;
+
+            if( !DrcVocabularyHas( vocabulary->m_properties, vocabulary->m_propertyCount, word ) )
                 return true;
         }
 
-        pos = end > begin ? end - 1 : pos;
+        i = end;
     }
 
-    // Time and angle value units appeared in 10.0.
-    if( aTarget.m_boardVersion < 20260206 )
+    // A unit is the letters after a number, glued to it or not. It must be one the target's
+    // value resolver knows. An unquoted layer name is blanked first so it is never read as one.
+    std::string numeric = structural;
+
+    for( size_t at = numeric.find( "(layer" ); at != std::string::npos; at = numeric.find( "(layer", at + 1 ) )
     {
-        auto isWordChar = []( char c )
-        {
-            return std::isalnum( static_cast<unsigned char>( c ) ) || c == '_';
-        };
+        size_t close = numeric.find( ')', at );
 
-        const std::string numeric = structural + '\n' + values + conditions;
-
-        for( size_t i = 1; i + 1 < numeric.size(); i++ )
-        {
-            size_t before = i;
-
-            while( before > 0 && std::isspace( static_cast<unsigned char>( numeric[before - 1] ) ) )
-                before--;
-
-            if( before == 0
-                || ( !std::isdigit( static_cast<unsigned char>( numeric[before - 1] ) )
-                     && numeric[before - 1] != '.' ) )
-                continue;
-
-            if( ( numeric[i] == 'f' || numeric[i] == 'p' ) && numeric[i + 1] == 's'
-                && ( i + 2 >= numeric.size() || !isWordChar( numeric[i + 2] ) ) )
-            {
-                return true;
-            }
-
-            if( numeric.compare( i, 3, "deg" ) == 0 && ( i + 3 >= numeric.size() || !isWordChar( numeric[i + 3] ) ) )
-                return true;
-        }
+        if( close != std::string::npos )
+            numeric.replace( at + 6, close - at - 6, close - at - 6, ' ' );
     }
+
+    numeric += '\n' + values + conditions;
+
+    for( size_t i = 0; i < numeric.size(); i++ )
+    {
+        if( !std::isalpha( static_cast<unsigned char>( numeric[i] ) ) )
+            continue;
+
+        if( i > 0 && ( std::isalpha( static_cast<unsigned char>( numeric[i - 1] ) ) || numeric[i - 1] == '_' ) )
+            continue;
+
+        size_t before = i;
+
+        while( before > 0 && std::isspace( static_cast<unsigned char>( numeric[before - 1] ) ) )
+            before--;
+
+        size_t end = i;
+
+        while( end < numeric.size() && isWord( numeric[end] ) )
+            end++;
+
+        if( before > 0 && std::isdigit( static_cast<unsigned char>( numeric[before - 1] ) )
+            && !DrcVocabularyHas( vocabulary->m_units, vocabulary->m_unitCount, numeric.substr( i, end - i ) ) )
+        {
+            return true;
+        }
+
+        i = end;
+    }
+
+    // A text variable is syntax, and a target without it fails to read the rule at all.
+    if( !vocabulary->m_textVariables && block.find( "${" ) != std::string::npos )
+        return true;
 
     return false;
 }
@@ -527,6 +461,13 @@ inline DRC_RULES_FILTER_RESULT FilterDrcRulesForTarget( const wxString& aRulesTe
     std::string text = aRulesText.ToStdString( wxConvUTF8 );
 
     DRC_RULES_FILTER_RESULT result;
+
+    if( !FindDrcRuleVocabulary( aTarget ) )
+    {
+        result.m_error = wxString::Format( _( "No design rule vocabulary is recorded for %s." ), aTarget.m_name );
+        return result;
+    }
+
     result.m_text = wxT( "(version 1)\n" );
 
     size_t i = 0;

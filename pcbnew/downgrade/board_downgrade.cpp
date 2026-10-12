@@ -110,10 +110,16 @@ static constexpr int VER_VIA_STACK = 20260830;
 static constexpr int VER_CUSTOM_PROPERTIES = 20260831;
 static constexpr int VER_DRILL_DRAWINGS = 20260901;
 
-// The board format this feature was built for. If SEXPR_BOARD_FILE_VERSION moves past this, a new
-// feature landed and the rules or denylist may be stale. Review pcb.keywords, then update this.
-// Bumps whose data lives in the project file, not the board file, need no rule here. That covers
-// 20250309 component class assignment rules and the tuning profile part of 20250401.
+// The board format these rules were written against. When SEXPR_BOARD_FILE_VERSION moves past
+// it, ClassifyBoardForDowngrade asserts in debug builds until the new format is covered.
+//
+// 1. Find the commit that bumped the version and read what it added to common/pcb.keywords.
+// 2. If the new data is only written to the project file, nothing is needed here. Look at
+//    project_file_downgrade.cpp instead. The 20250309 component class rules and the tuning
+//    profile part of 20250401 were both that kind of bump.
+// 3. Otherwise add a VER_ constant above, a BOARD_RULE row that counts and strips the feature,
+//    and a dated row in BOARD_TOKENS or BOARD_VALUES for each new node head or bareword value.
+// 4. Set this constant to the new version.
 static constexpr int BOARD_DOWNGRADE_COVERED = 20260901;
 
 

@@ -1155,6 +1155,7 @@ BOOST_AUTO_TEST_CASE( DrcRuleNamesAndExpressionLiteralsDoNotTriggerDrops )
 }
 
 
+// 9.0's unit resolver reads degrees, so only the time units drop for it.
 BOOST_AUTO_TEST_CASE( SpacedTimeAndAngleUnitsAreDroppedForKicad9 )
 {
     const wxString rules = wxT( "(version 1)\n"
@@ -4031,6 +4032,173 @@ BOOST_AUTO_TEST_CASE( NativeNetChainClassMapReportsOnlyNonemptyMappings )
         DowngradeProjectFileJson( doc, target, empty );
         BOOST_CHECK( !empty.IsLossy() );
     }
+}
+
+
+// A word the generated vocabulary lists must never be the reason a rule is dropped. That is the
+// direction a generator mistake would take, silently losing a rule the target can read.
+BOOST_AUTO_TEST_CASE( ReleaseVocabularyKeepsEveryRuleTheReleaseCouldRead )
+{
+    for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
+    {
+        const DRC_RULE_VOCABULARY* vocabulary = FindDrcRuleVocabulary( target );
+        BOOST_REQUIRE( vocabulary );
+
+        for( size_t i = 0; i < vocabulary->m_functionCount; i++ )
+        {
+            const wxString name = wxString::FromUTF8( vocabulary->m_functions[i] );
+
+            if( std::any_of( std::begin( DRC_RULE_SEMANTIC_BREAKS ), std::end( DRC_RULE_SEMANTIC_BREAKS ),
+                             [&]( const DATED_TOKEN& aBreak )
+                             {
+                                 return name == aBreak.m_token;
+                             } ) )
+                continue;
+            const wxString rule = wxT( "(version 1)(rule \"f\" (condition \"A." ) + name
+                                  + wxT( "('x')\") (constraint clearance (min 0.2mm)))" );
+
+            BOOST_CHECK_MESSAGE( FilterDrcRulesForTarget( rule, target ).m_dropped.empty(),
+                                 target.m_id + " dropped a rule calling " + name );
+        }
+
+        for( size_t i = 0; i < vocabulary->m_propertyCount; i++ )
+        {
+            const wxString name = wxString::FromUTF8( vocabulary->m_properties[i] );
+            const wxString rule = wxT( "(version 1)(rule \"p\" (condition \"A." ) + name
+                                  + wxT( " == 1\") (constraint clearance (min 0.2mm)))" );
+
+            BOOST_CHECK_MESSAGE( FilterDrcRulesForTarget( rule, target ).m_dropped.empty(),
+                                 target.m_id + " dropped a rule reading " + name );
+        }
+    }
+}
+
+
+// Adding a downgrade target without rerunning tools/generate_drc_rules_vocabulary.py must not go quiet.
+BOOST_AUTO_TEST_CASE( EveryDowngradeTargetHasARuleVocabulary )
+{
+    for( const DOWNGRADE_TARGET& target : GetDowngradeTargets() )
+    {
+        BOOST_CHECK_MESSAGE( FindDrcRuleVocabulary( target ),
+                             target.m_name + " has no entry in include/drc_rules_release_vocabulary.h" );
+    }
+}
+
+
+// A registered property is only usable if the release's evaluator can read its type. Priority
+// is unsigned and Hatch Orientation an angle, neither readable before 11, while an enum always is.
+BOOST_AUTO_TEST_CASE( PropertiesTheReleaseCannotEvaluateAreDropped )
+{
+    for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
+    {
+        for( const wxString& property : { wxT( "A.Priority > 1" ), wxT( "A.Hatch_Orientation == 0" ),
+                                          wxT( "A.Line_Color == 'red'" ) } )
+        {
+            const auto result = FilterDrcRulesForTarget( wxT( "(version 1)(rule \"typed\" (condition \"" ) + property
+                                                                 + wxT( "\") (constraint clearance (min 0.2mm)))" ),
+                                                         target );
+            BOOST_CHECK_MESSAGE( result.m_dropped.size() == 1, target.m_id + " kept " + property );
+        }
+
+        const auto kept = FilterDrcRulesForTarget( wxT( "(version 1)(rule \"enum\" (condition \"A.Pad_Type == 'PTH'\") "
+                                                        "(constraint clearance (min 0.2mm)))" ),
+                                                   target );
+        BOOST_CHECK( kept.m_dropped.empty() );
+    }
+}
+
+
+// A unit may stand apart from its number. That is a value, not a keyword the target lacks.
+BOOST_AUTO_TEST_CASE( SpacedUnitsAreNotMistakenForKeywords )
+{
+    for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
+    {
+        const auto kept = FilterDrcRulesForTarget(
+                wxT( "(version 1)(rule \"spaced\" (constraint clearance (min 0.2 mm) (opt 0.3 mil) (max 1 in)))" ),
+                target );
+        BOOST_CHECK_MESSAGE( kept.m_dropped.empty(), target.m_id + " dropped a rule with a spaced unit" );
+
+        // A unit the target cannot read is still caught when it stands apart.
+        const auto dropped = FilterDrcRulesForTarget(
+                wxT( "(version 1)(rule \"delay\" (constraint skew (max 5 ps)))" ), target );
+        BOOST_CHECK_EQUAL( dropped.m_dropped.size(), target.m_id == wxT( "9.0" ) ? 1 : 0 );
+    }
+}
+
+
+// 9.0 reads degrees but not picoseconds, and knows nothing of text variables. 10.0 has all three.
+BOOST_AUTO_TEST_CASE( UnitsAndTextVariablesFollowWhatTheReleaseParses )
+{
+    for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
+    {
+        const bool old = target.m_id == wxT( "9.0" );
+
+        auto angle = FilterDrcRulesForTarget(
+                wxT( "(version 1)(rule \"a\" (constraint track_angle (max 45deg)))" ), target );
+        BOOST_CHECK_EQUAL( angle.m_dropped.size(), old ? 1 : 0 );
+
+        auto delay = FilterDrcRulesForTarget( wxT( "(version 1)(rule \"d\" (constraint skew (max 5ps)))" ), target );
+        BOOST_CHECK_EQUAL( delay.m_dropped.size(), old ? 1 : 0 );
+
+        for( const wxString& rule : { wxT( "(rule \"v\" (constraint clearance (min ${GAP})))" ),
+                                      wxT( "(rule \"c\" (condition \"A.NetName == '${NET}'\") "
+                                           "(constraint clearance (min 0.2mm)))" ) } )
+        {
+            auto variable = FilterDrcRulesForTarget( wxT( "(version 1)" ) + rule, target );
+            BOOST_CHECK_EQUAL( variable.m_dropped.size(), old ? 1 : 0 );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( WordsAddedInAPointReleaseAreNotInTheSeriesVocabulary )
+{
+    for( const wxString& expression : { wxT( "A.hasExactNetclass('x')" ), wxT( "A.Column_Width == 1" ),
+                                        wxT( "A.Visible == 1" ) } )
+    {
+        const wxString rule = wxT( "(version 1)(rule \"r\" (condition \"" ) + expression
+                              + wxT( "\") (constraint clearance (min 0.2mm)))" );
+        BOOST_CHECK_MESSAGE( FilterDrcRulesForTarget( rule, kicad9 ).m_dropped.size() == 1,
+                             "9.0 kept " + expression + " which not every 9.0.x release reads" );
+    }
+
+    for( const wxString& expression : { wxT( "A.intersectsKeepout('x')" ), wxT( "A.Origin_X == 1" ) } )
+    {
+        const wxString rule = wxT( "(version 1)(rule \"r\" (condition \"" ) + expression
+                              + wxT( "\") (constraint clearance (min 0.2mm)))" );
+        BOOST_CHECK_MESSAGE( FilterDrcRulesForTarget( rule, kicad10 ).m_dropped.size() == 1,
+                             "10.0 kept " + expression + " which not every 10.0.x release reads" );
+    }
+}
+
+
+// A layer may be given unquoted, and a user layer name is not a grammar keyword.
+BOOST_AUTO_TEST_CASE( UnquotedLayerNamesAreNotMistakenForKeywords )
+{
+    for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
+    {
+        for( const wxString& layer : { wxT( "MyCustomLayer" ), wxT( "F.Cu" ), wxT( "\"In1.Cu\"" ), wxT( "outer" ) } )
+        {
+            const auto result = FilterDrcRulesForTarget( wxT( "(version 1)(rule \"on layer\" (layer " ) + layer
+                                                                 + wxT( ") (constraint clearance (min 0.2mm)))" ),
+                                                         target );
+            BOOST_CHECK_MESSAGE( result.m_dropped.empty(), target.m_id + " dropped a rule on layer " + layer );
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( MissingRuleVocabularyFailsClosed )
+{
+    DOWNGRADE_TARGET unknown = kicad10;
+    unknown.m_id = wxT( "0.0" );
+    unknown.m_name = wxT( "KiCad 0.0" );
+
+    const auto result =
+            FilterDrcRulesForTarget( wxT( "(version 1)(rule \"r\" (constraint clearance (min 0.2mm)))" ), unknown );
+
+    BOOST_CHECK( !result.m_error.IsEmpty() );
+    BOOST_CHECK( result.m_text.IsEmpty() );
 }
 
 
