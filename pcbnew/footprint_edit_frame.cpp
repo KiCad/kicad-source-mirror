@@ -1470,23 +1470,28 @@ void FOOTPRINT_EDIT_FRAME::RenameFootprintTab( const LIB_ID& aOldId, const LIB_I
     const wxString newLib = aNewId.GetLibNickname();
     const wxString newName = aNewId.GetLibItemName();
 
-    // An unsaved import is keyed by a session id, not by aOldId, so the save-as that named it promotes
-    // the active tab instead. A tree-driven rename carries a nickname and never reaches this path
-    if( m_activeTab && m_activeTab->IsUnsaved() && aOldId.GetLibNickname().empty()
-        && !newLib.IsEmpty() )
+    if( aOldId.GetLibNickname().empty() )
     {
-        const wxString unsavedKey = m_activeTab->GetTabKey();
+        // This test precludes a tree-driven rename, so we can assume that the active tab is being
+        // renamed.
 
-        m_activeTab->PromoteToLibrary( newLib, newName );
-        m_tabsPanel->RenameTab( unsavedKey, m_activeTab->GetTabKey(), m_activeTab->GetDisplayName() );
+        // An unsaved import is keyed by a session id, not by aOldId, so the save-as that named it
+        // promotes the active tab.
+        if( m_activeTab && m_activeTab->IsUnsaved() && !newLib.IsEmpty() )
+        {
+            const wxString unsavedKey = m_activeTab->GetTabKey();
 
-        return;
+            m_activeTab->PromoteToLibrary( newLib, newName );
+            m_tabsPanel->RenameTab( unsavedKey, m_activeTab->GetTabKey(), m_activeTab->GetDisplayName() );
+
+            return;
+        }
+
+        // A board footprint's tab is named from the board instance's reference, not any properties of
+        // the edited copy.
+        if( m_activeTab && m_activeTab->IsFromBoard() && aOldId.GetLibNickname().empty() )
+            return;
     }
-
-    // A board footprint's tab is named from the board instance's reference, not any properties of the
-    // edited copy.
-    if( m_activeTab && m_activeTab->IsFromBoard() )
-        return;
 
     const wxString oldLib = aOldId.GetLibNickname();
     const wxString oldName = aOldId.GetLibItemName();
