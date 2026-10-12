@@ -125,6 +125,10 @@ BOOST_AUTO_TEST_CASE( CompositeIdentityIsOrderIndependentWithoutXorCancellation 
                  == MakeCompositeSnapId( SNAP_ID_KIND::INTRINSIC_ANCHOR, { second, first }, 3 ) );
     BOOST_CHECK( MakeCompositeSnapId( SNAP_ID_KIND::INTRINSIC_ANCHOR, { first, first }, 3 ).target
                  != SNAP_TARGET_ID{} );
+
+    // The kind and target count are hashed ahead of the targets and must not be lost to them
+    BOOST_CHECK( MakeCompositeSnapId( SNAP_ID_KIND::INTRINSIC_ANCHOR, { first, second }, 3 ).target
+                 != MakeCompositeSnapId( SNAP_ID_KIND::CONSTRUCTED_ANCHOR, { first, second }, 3 ).target );
 }
 
 
@@ -144,7 +148,7 @@ BOOST_AUTO_TEST_CASE( IdentityConstructionHasStableGoldenBytes )
                                                          { KIID( "00000000-0000-0000-0000-000000000002" ).AsBytes(),
                                                            KIID( "00000000-0000-0000-0000-000000000001" ).AsBytes() },
                                                          3 ) ),
-                       "9084556ddbcdd0543f07abd73d7fb746" );
+                       "8f02794a0e8da19751d9debf2e2eeeee" );
 }
 
 
