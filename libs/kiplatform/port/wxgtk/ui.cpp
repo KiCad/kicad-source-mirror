@@ -554,6 +554,13 @@ bool KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
         if( GDK_IS_X11_DISPLAY( disp ) )
         {
             GdkWindow* win = gdk_device_get_window_at_position( ptrdev, nullptr, nullptr );
+
+            if( !win )
+            {
+                aWindow->WarpPointer( aX, aY );
+                return true;
+            }
+
             GdkCursor* blank_cursor = gdk_cursor_new_for_display( disp, GDK_BLANK_CURSOR );
             GdkCursor* cur_cursor = gdk_window_get_cursor( win );
 
