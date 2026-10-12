@@ -708,20 +708,27 @@ BOOST_AUTO_TEST_CASE( SingleItemRulePreflight )
 {
     PROPERTY_MANAGER::Instance().Rebuild();
 
-    for( const wxString& constraint : {
-                 wxString( "assertion \"A.Type == 'Graphic'\"" ),
-                 wxString( "hole_size (min 0.2mm)" ), wxString( "text_height (min 1mm)" ),
-                 wxString( "text_thickness (min 0.1mm)" ),
-                 wxString( "track_segment_length (min 1mm)" ), wxString( "annular_width (min 0.1mm)" ),
-                 wxString( "solder_mask_expansion (opt 0mm)" ),
-                 wxString( "solder_paste_abs_margin (opt 0mm)" ),
-                 wxString( "solder_paste_rel_margin (opt 0mm)" ), wxString( "disallow track" ),
-                 wxString( "via_diameter (min 0.5mm)" ), wxString( "length (max 100mm)" ),
-                 wxString( "net_chain_length (max 100mm)" ), wxString( "stub_length (max 1mm)" ),
-                 wxString( "return_path (layer 'B.Cu')" ), wxString( "skew (max 1mm)" ),
-                 wxString( "via_count (max 2)" ),
-                 wxString( "via_dangling (max 0)" ), wxString( "bridged_mask (min 0)" ),
-                 wxString( "microvia_stack_depth (max 2)" ), wxString( "microvia_aspect_ratio (max 1)" ) } )
+    for( const wxString& constraint : { wxString( "assertion \"A.Type == 'Graphic'\"" ),
+                                        wxString( "hole_size (min 0.2mm)" ),
+                                        wxString( "text_height (min 1mm)" ),
+                                        wxString( "text_thickness (min 0.1mm)" ),
+                                        wxString( "track_segment_length (min 1mm)" ),
+                                        wxString( "annular_width (min 0.1mm)" ),
+                                        wxString( "solder_mask_expansion (opt 0mm)" ),
+                                        wxString( "solder_paste_abs_margin (opt 0mm)" ),
+                                        wxString( "solder_paste_rel_margin (opt 0mm)" ),
+                                        wxString( "disallow track" ),
+                                        wxString( "via_diameter (min 0.5mm)" ),
+                                        wxString( "length (max 100mm)" ),
+                                        wxString( "net_chain_length (max 100mm)" ),
+                                        wxString( "stub_length (max 1mm)" ),
+                                        wxString( "return_path (layer 'B.Cu')" ),
+                                        wxString( "skew (max 1mm)" ),
+                                        wxString( "via_count (max 2)" ),
+                                        wxString( "via_dangling (max 0)" ),
+                                        wxString( "bridged_mask (min 0)" ),
+                                        wxString( "microvia_stack_depth (max 2)" ),
+                                        wxString( "hole_aspect_ratio (max 1)" ) } )
     {
         for( bool conditionFirst : { true, false } )
         {

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+  <title>constraint_hole_aspect_ratio_dark</title>
+  <defs>
+    <marker id="tail" markerWidth="10" markerHeight="8" refX="0.5" refY="4" orient="auto">
+      <path d="M 0.5 4 L 9 0.8 L 7 4 L 9 7.2 Z" fill="#E8EAED"/></marker>
+    <marker id="head" markerWidth="10" markerHeight="8" refX="9.5" refY="4" orient="auto">
+      <path d="M 9.5 4 L 1 0.8 L 3 4 L 1 7.2 Z" fill="#E8EAED"/></marker>
+  </defs>
+
+  <!-- the laminate the hole is drilled through, up to the barrel it surrounds -->
+  <rect x="20" y="48" width="67" height="118" fill="#545454"/>
+  <rect x="153" y="48" width="67" height="118" fill="#545454"/>
+
+  <!-- inner copper, butting into the barrel it connects to -->
+  <rect x="20" y="86" width="67" height="9" fill="#B4B4B4"/>
+  <rect x="153" y="86" width="67" height="9" fill="#B4B4B4"/>
+  <rect x="20" y="119" width="67" height="9" fill="#B4B4B4"/>
+  <rect x="153" y="119" width="67" height="9" fill="#B4B4B4"/>
+
+  <!-- the plating: outer pad, barrel wall, outer pad, with the drill knocked out -->
+  <path fill-rule="evenodd" fill="#F59200" stroke="#B4B4B4" stroke-width="1.5" d="
+    M 70 48 H 170 V 61 H 153 V 153 H 170 V 166 H 70 V 153 H 87 V 61 H 70 Z
+    M 107 48 H 133 V 166 H 107 Z"/>
+
+  <!-- hole diameter, measured across the finished hole -->
+  <line x1="107" y1="40" x2="107" y2="16" stroke="#E8EAED" stroke-width="1.2"/>
+  <line x1="133" y1="40" x2="133" y2="16" stroke="#E8EAED" stroke-width="1.2"/>
+  <line x1="107" y1="25" x2="133" y2="25" stroke="#E8EAED" stroke-width="1.4"
+        marker-start="url(#tail)" marker-end="url(#head)"/>
+
+  <!-- depth down the hole itself, so it divides the width above it -->
+  <line x1="120" y1="52" x2="120" y2="162" stroke="#E8EAED" stroke-width="1.4"
+        marker-start="url(#tail)" marker-end="url(#head)"/>
+</svg>

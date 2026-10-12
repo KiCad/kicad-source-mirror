@@ -640,7 +640,7 @@ DRC_RULE_LOADER::createConstraintData( DRC_RULE_EDITOR_CONSTRAINT_NAME   aPanel,
                 {
                     if( type == VIA_COUNT_CONSTRAINT || type == MICROVIA_STACK_DEPTH_CONSTRAINT )
                         data->SetNumericInputValue( constraint->GetValue().Max() );
-                    else if( type == MICROVIA_ASPECT_RATIO_CONSTRAINT )
+                    else if( type == HOLE_ASPECT_RATIO_CONSTRAINT )
                         data->SetNumericInputValue( constraint->GetValue().Max() / 1000.0 );
                     else if( type == MIN_RESOLVED_SPOKES_CONSTRAINT )
                         data->SetNumericInputValue( constraint->GetValue().Min() );

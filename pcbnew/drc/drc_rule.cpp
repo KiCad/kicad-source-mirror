@@ -109,8 +109,7 @@ bool DRC_CONSTRAINT::IsUnary() const
     case VIA_DANGLING_CONSTRAINT:
     case BRIDGED_MASK_CONSTRAINT:
     case MICROVIA_STACK_DEPTH_CONSTRAINT:
-    case MICROVIA_ASPECT_RATIO_CONSTRAINT:
-        return true;
+    case HOLE_ASPECT_RATIO_CONSTRAINT: return true;
 
     default:
         return false;

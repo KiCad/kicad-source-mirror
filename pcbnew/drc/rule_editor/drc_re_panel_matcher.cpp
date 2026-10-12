@@ -222,7 +222,7 @@ void DRC_PANEL_MATCHER::initClaims()
     m_claims.emplace_back( MICROVIA_STACK_DEPTH, std::set<DRC_CONSTRAINT_T>{ MICROVIA_STACK_DEPTH_CONSTRAINT },
                            std::set<DRC_CONSTRAINT_T>{}, 20 );
 
-    m_claims.emplace_back( MICROVIA_ASPECT_RATIO, std::set<DRC_CONSTRAINT_T>{ MICROVIA_ASPECT_RATIO_CONSTRAINT },
+    m_claims.emplace_back( HOLE_ASPECT_RATIO, std::set<DRC_CONSTRAINT_T>{ HOLE_ASPECT_RATIO_CONSTRAINT },
                            std::set<DRC_CONSTRAINT_T>{}, 20 );
 
     // Diff pair length matching requires both length and skew.

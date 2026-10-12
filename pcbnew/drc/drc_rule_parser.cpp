@@ -540,7 +540,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                          "physical_hole_clearance, courtyard_clearance, silk_clearance, hole_size, "
                          "hole_to_hole, track_width, track_angle, track_segment_length, annular_width, "
                          "disallow, zone_connection, thermal_relief_gap, thermal_spoke_width, "
-                         "min_resolved_spokes, microvia_stack_depth, microvia_aspect_ratio, solder_mask_expansion, "
+                         "min_resolved_spokes, microvia_stack_depth, hole_aspect_ratio, solder_mask_expansion, "
                          "solder_paste_abs_margin, "
                          "solder_paste_rel_margin, length, net_chain_length, skew, via_count, "
                          "via_dangling, via_diameter, diff_pair_gap or diff_pair_uncoupled" ) );
@@ -573,7 +573,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_thermal_relief_gap:        c.m_Type = THERMAL_RELIEF_GAP_CONSTRAINT;        break;
     case T_thermal_spoke_width:       c.m_Type = THERMAL_SPOKE_WIDTH_CONSTRAINT;       break;
     case T_microvia_stack_depth:      c.m_Type = MICROVIA_STACK_DEPTH_CONSTRAINT;      break;
-    case T_microvia_aspect_ratio: c.m_Type = MICROVIA_ASPECT_RATIO_CONSTRAINT; break;
+    case T_hole_aspect_ratio: c.m_Type = HOLE_ASPECT_RATIO_CONSTRAINT; break;
     case T_min_resolved_spokes:       c.m_Type = MIN_RESOLVED_SPOKES_CONSTRAINT;       break;
     case T_solder_mask_expansion:     c.m_Type = SOLDER_MASK_EXPANSION_CONSTRAINT;     break;
     case T_solder_mask_sliver:        c.m_Type = SOLDER_MASK_SLIVER_CONSTRAINT;        break;
@@ -596,7 +596,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
                        "physical_hole_clearance, courtyard_clearance, silk_clearance, hole_size, "
                        "hole_to_hole, track_width, track_angle, track_segment_length, annular_width, "
                        "disallow, zone_connection, thermal_relief_gap, thermal_spoke_width, "
-                       "min_resolved_spokes, microvia_stack_depth, microvia_aspect_ratio, solder_mask_expansion, "
+                       "min_resolved_spokes, microvia_stack_depth, hole_aspect_ratio, solder_mask_expansion, "
                        "solder_mask_sliver, "
                        "solder_paste_abs_margin, solder_paste_rel_margin, length, net_chain_length, "
                        "skew, via_count, via_dangling, via_diameter, diff_pair_gap, "
@@ -610,7 +610,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         reportError( msg );
     }
 
-    bool ratio = c.m_Type == MICROVIA_ASPECT_RATIO_CONSTRAINT;
+    bool ratio = c.m_Type == HOLE_ASPECT_RATIO_CONSTRAINT;
 
     bool unitless = ratio || c.m_Type == VIA_COUNT_CONSTRAINT || c.m_Type == MIN_RESOLVED_SPOKES_CONSTRAINT
                     || c.m_Type == MICROVIA_STACK_DEPTH_CONSTRAINT || c.m_Type == TRACK_ANGLE_CONSTRAINT

@@ -4038,7 +4038,7 @@ BOOST_AUTO_TEST_CASE( NewDrcConstraintsAndFunctionsAreFilteredWithoutLiteralFals
 {
     for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
     {
-        for( const wxString& keyword : { wxT( "microvia_aspect_ratio" ), wxT( "microvia_stack_depth" ) } )
+        for( const wxString& keyword : { wxT( "hole_aspect_ratio" ), wxT( "microvia_stack_depth" ) } )
         {
             const wxString rule = "(version 1)(rule \"new\" (constraint " + keyword + " (max 2)))";
             const auto     result = FilterDrcRulesForTarget( rule, target );

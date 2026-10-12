@@ -701,7 +701,7 @@ enum class BITMAPS : unsigned int
 
     constraint_basic_clearance,
     constraint_board_outline_clearance,
-    constraint_microvia_aspect_ratio,
+    constraint_hole_aspect_ratio,
     constraint_microvia_stack_depth,
     constraint_minimum_clearance,
     constraint_creepage_distance,

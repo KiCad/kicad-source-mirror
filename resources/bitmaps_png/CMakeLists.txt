@@ -764,7 +764,7 @@ set( BMAPS_CONSTRAINTS
     via-style
     vias-under-smd
     microvia-stack-depth
-    microvia-aspect-ratio
+    hole-aspect-ratio
     )
 
 set( BMAPS_CONSTRAINTS_GEOM

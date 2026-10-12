@@ -58,7 +58,7 @@ static constexpr DATED_TOKEN DRC_RULE_TOKENS[] = {
     { "inNetChain", 99999999 },
     { "hasNetChain", 99999999 },
     { "inNetChainClass", 99999999 },
-    { "microvia_aspect_ratio", 99999999 },
+    { "hole_aspect_ratio", 99999999 },
     { "microvia_stack_depth", 99999999 },
     { "intersectsKeepout", 99999999 },
     { "isStackedVia", 99999999 },

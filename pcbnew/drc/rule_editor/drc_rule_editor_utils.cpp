@@ -51,7 +51,7 @@ static const CODE_MAP sCodeMap = {
     { COPPER_TO_HOLE_CLEARANCE, DRC_RULES_LEXER::TokenName( DRCRULE_T::T_hole_clearance ) },
     { MINIMUM_THERMAL_RELIEF_SPOKE_COUNT, DRC_RULES_LEXER::TokenName( DRCRULE_T::T_min_resolved_spokes ) },
     { MICROVIA_STACK_DEPTH, DRC_RULES_LEXER::TokenName( DRCRULE_T::T_microvia_stack_depth ) },
-    { MICROVIA_ASPECT_RATIO, DRC_RULES_LEXER::TokenName( DRCRULE_T::T_microvia_aspect_ratio ) },
+    { HOLE_ASPECT_RATIO, DRC_RULES_LEXER::TokenName( DRCRULE_T::T_hole_aspect_ratio ) },
     { MINIMUM_ANNULAR_WIDTH, DRC_RULES_LEXER::TokenName( DRCRULE_T::T_annular_width ) },
     { COPPER_TO_EDGE_CLEARANCE, DRC_RULES_LEXER::TokenName( DRCRULE_T::T_edge_clearance ) },
     { COURTYARD_CLEARANCE, DRC_RULES_LEXER::TokenName( DRCRULE_T::T_courtyard_clearance ) },
@@ -122,7 +122,7 @@ static wxString GetConstraintCodeFromType( DRC_CONSTRAINT_T aType )
     case THERMAL_SPOKE_WIDTH_CONSTRAINT:     return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_thermal_spoke_width );
     case MIN_RESOLVED_SPOKES_CONSTRAINT:     return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_min_resolved_spokes );
     case MICROVIA_STACK_DEPTH_CONSTRAINT:    return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_microvia_stack_depth );
-    case MICROVIA_ASPECT_RATIO_CONSTRAINT: return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_microvia_aspect_ratio );
+    case HOLE_ASPECT_RATIO_CONSTRAINT: return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_hole_aspect_ratio );
     case SOLDER_MASK_EXPANSION_CONSTRAINT:   return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_solder_mask_expansion );
     case SOLDER_PASTE_ABS_MARGIN_CONSTRAINT: return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_solder_paste_abs_margin );
     case SOLDER_PASTE_REL_MARGIN_CONSTRAINT: return DRC_RULES_LEXER::TokenName( DRCRULE_T::T_solder_paste_rel_margin );
@@ -308,7 +308,7 @@ bool DRC_RULE_EDITOR_UTILS::IsNumericInputType( const DRC_RULE_EDITOR_CONSTRAINT
     case MINIMUM_SOLDERMASK_SLIVER:
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT:
     case MICROVIA_STACK_DEPTH:
-    case MICROVIA_ASPECT_RATIO:
+    case HOLE_ASPECT_RATIO:
     case MINIMUM_DRILL_SIZE:
     case MINIMUM_VIA_DIAMETER:
     case SILK_TO_SILK_CLEARANCE:
@@ -809,7 +809,6 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
     case ROUTING_DIFF_PAIR:
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT:
     case MICROVIA_STACK_DEPTH:
-    case MICROVIA_ASPECT_RATIO:
     case MATCHED_LENGTH_DIFF_PAIR:
     case ABSOLUTE_LENGTH:
         return DRC_LAYER_CATEGORY::COPPER_ONLY;
@@ -845,6 +844,7 @@ DRC_LAYER_CATEGORY DRC_RULE_EDITOR_UTILS::GetLayerCategoryForConstraint(
     // NO_LAYER_SELECTOR: Constraints where layer selection doesn't apply
     case MAXIMUM_VIA_COUNT:
     case PERMITTED_LAYERS:
+    case HOLE_ASPECT_RATIO:
     case CUSTOM_RULE:
         return DRC_LAYER_CATEGORY::NO_LAYER_SELECTOR;
 
@@ -898,7 +898,7 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case MINIMUM_SOLDERMASK_SLIVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SLIVER_CONSTRAINT_DATA>();
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT: return std::make_shared<DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA>();
     case MICROVIA_STACK_DEPTH: return std::make_shared<DRC_RE_MICROVIA_STACK_DEPTH_CONSTRAINT_DATA>();
-    case MICROVIA_ASPECT_RATIO: return std::make_shared<DRC_RE_MICROVIA_ASPECT_RATIO_CONSTRAINT_DATA>();
+    case HOLE_ASPECT_RATIO: return std::make_shared<DRC_RE_HOLE_ASPECT_RATIO_CONSTRAINT_DATA>();
     case MINIMUM_DRILL_SIZE:                 return std::make_shared<DRC_RE_MINIMUM_DRILL_SIZE_CONSTRAINT_DATA>();
     case MINIMUM_VIA_DIAMETER:               return std::make_shared<DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA>();
     case SILK_TO_SILK_CLEARANCE:             return std::make_shared<DRC_RE_SILK_TO_SILK_CLEARANCE_CONSTRAINT_DATA>();
@@ -930,7 +930,7 @@ DRC_RULE_EDITOR_UTILS::CreateNumericConstraintData( DRC_RULE_EDITOR_CONSTRAINT_N
     case MINIMUM_SOLDERMASK_SLIVER:          return std::make_shared<DRC_RE_MINIMUM_SOLDERMASK_SLIVER_CONSTRAINT_DATA>( aBase );
     case MINIMUM_THERMAL_RELIEF_SPOKE_COUNT: return std::make_shared<DRC_RE_MINIMUM_THERMAL_SPOKE_COUNT_CONSTRAINT_DATA>( aBase );
     case MICROVIA_STACK_DEPTH: return std::make_shared<DRC_RE_MICROVIA_STACK_DEPTH_CONSTRAINT_DATA>( aBase );
-    case MICROVIA_ASPECT_RATIO: return std::make_shared<DRC_RE_MICROVIA_ASPECT_RATIO_CONSTRAINT_DATA>( aBase );
+    case HOLE_ASPECT_RATIO: return std::make_shared<DRC_RE_HOLE_ASPECT_RATIO_CONSTRAINT_DATA>( aBase );
     case MINIMUM_DRILL_SIZE:                 return std::make_shared<DRC_RE_MINIMUM_DRILL_SIZE_CONSTRAINT_DATA>( aBase );
     case MINIMUM_VIA_DIAMETER:               return std::make_shared<DRC_RE_MINIMUM_VIA_DIAMETER_CONSTRAINT_DATA>( aBase );
     case SILK_TO_SILK_CLEARANCE:             return std::make_shared<DRC_RE_SILK_TO_SILK_CLEARANCE_CONSTRAINT_DATA>( aBase );

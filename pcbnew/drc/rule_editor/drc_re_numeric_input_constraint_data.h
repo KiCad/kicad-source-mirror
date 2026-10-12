@@ -59,7 +59,7 @@ public:
         else
             valueStr = formatDouble( m_numericInputValue );
 
-        if( code == "via_count" || code == "microvia_stack_depth" || code == "microvia_aspect_ratio" )
+        if( code == "via_count" || code == "microvia_stack_depth" || code == "hole_aspect_ratio" )
         {
             return { wxString::Format( "(constraint %s (max %s))", code, valueStr ) };
         }

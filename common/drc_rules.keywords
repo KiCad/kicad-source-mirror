@@ -20,6 +20,7 @@ exclusion
 footprint
 graphic
 hole
+hole_aspect_ratio
 hole_clearance
 hole_size
 hole_to_hole
@@ -34,7 +35,6 @@ max
 mechanical_clearance
 mechanical_hole_clearance
 micro_via
-microvia_aspect_ratio
 microvia_stack_depth
 min
 min_resolved_spokes

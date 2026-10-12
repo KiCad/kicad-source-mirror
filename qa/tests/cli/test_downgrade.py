@@ -372,7 +372,7 @@ class TestDropApproximations(unittest.TestCase):
     (constraint clearance (min 0.2mm)))
 (rule "Keep coordinates" (condition "A.Start_X > 0 && A.Start_Y > 0")
     (constraint clearance (min 0.2mm)))
-(rule "Microvia aspect" (constraint microvia_aspect_ratio (max 1)))
+(rule "Microvia aspect" (constraint hole_aspect_ratio (max 1)))
 (rule "Microvia depth" (constraint microvia_stack_depth (max 2)))
 (rule "Keepout" (condition "A.intersectsKeepout('area')")
     (constraint clearance (min 0.2mm)))

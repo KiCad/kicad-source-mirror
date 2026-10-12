@@ -63,7 +63,7 @@ enum PCB_DRC_CODE
     DRCE_MALFORMED_MICROVIA_STACK_SPAN,  // Stack's hops do not tile the span it declares
     DRCE_MICROVIA_STACK_NOT_FILLED,      // Microvia under another microvia is not filled
     DRCE_MICROVIA_STACK_DEPTH,           // Microvia stack exceeds the maximum depth
-    DRCE_MICROVIA_ASPECT_RATIO,          // Microvia is too deep for its diameter
+    DRCE_HOLE_ASPECT_RATIO,              // Hole is too deep for its diameter
     DRCE_MICROVIA_CROSSES_CORE,          // Microvia crosses core rather than build-up material
     DRCE_OVERLAPPING_FOOTPRINTS,         // footprint courtyards overlap
     DRCE_MISSING_COURTYARD,              // footprint has no courtyard defined
@@ -235,7 +235,7 @@ private:
     static DRC_ITEM malformedMicroviaStackSpan;
     static DRC_ITEM microviaStackNotFilled;
     static DRC_ITEM microviaStackDepth;
-    static DRC_ITEM microviaAspectRatio;
+    static DRC_ITEM holeAspectRatio;
     static DRC_ITEM microviaCrossesCore;
     static DRC_ITEM courtyardsOverlap;
     static DRC_ITEM missingCourtyard;

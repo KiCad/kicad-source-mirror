@@ -306,7 +306,7 @@ BOOST_AUTO_TEST_CASE( DesignRuleType )
                                 DRCE_MALFORMED_MICROVIA_STACK_SPAN,
                                 DRCE_MICROVIA_STACK_NOT_FILLED,
                                 DRCE_MICROVIA_STACK_DEPTH,
-                                DRCE_MICROVIA_ASPECT_RATIO,
+                                DRCE_HOLE_ASPECT_RATIO,
                                 DRCE_MICROVIA_CROSSES_CORE,
                                 DRCE_OVERLAPPING_FOOTPRINTS,
                                 DRCE_MISSING_COURTYARD,

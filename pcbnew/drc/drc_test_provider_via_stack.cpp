@@ -24,7 +24,9 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <footprint.h>
 #include <layer_range.h>
+#include <pad.h>
 #include <padstack.h>
 #include <pcb_generator.h>
 #include <pcb_track.h>
@@ -42,12 +44,13 @@
     - DRCE_MALFORMED_MICROVIA_STACK_SPAN
     - DRCE_MICROVIA_STACK_NOT_FILLED
     - DRCE_MICROVIA_STACK_DEPTH
-    - DRCE_MICROVIA_ASPECT_RATIO
+    - DRCE_HOLE_ASPECT_RATIO
     - DRCE_MICROVIA_CROSSES_CORE
 
     The span test asks whether a generator's hops still tile the span it declares. Nothing
-    rebuilds a stack on load, so a file can carry one that does not. The other three ask whether
-    the copper can be built, and apply to every microvia however it was placed.
+    rebuilds a stack on load, so a file can carry one that does not. The others ask whether
+    the copper can be built. The aspect ratio test applies to every plated hole, the rest
+    to every microvia however it was placed.
 
     Where these rules come from:
 
@@ -209,19 +212,44 @@ void DRC_TEST_PROVIDER_VIA_STACK::checkLooseMicrovias( BOARD* aBoard )
 }
 
 
-// The dielectric a microvia crosses is the stackup item between its two copper layers, so both
-// its thickness and its declared material come from the same walk.
+// Copper and dielectric only, so soldermask does not count.
+static int stackThickness( const std::vector<BOARD_STACKUP_ITEM*>& aStack, int aFirst, int aLast )
+{
+    int thickness = 0;
+
+    for( int i = aFirst; i < aLast; ++i )
+    {
+        const BOARD_STACKUP_ITEM* item = aStack[i];
+
+        if( !item->IsEnabled() )
+            continue;
+
+        if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+        {
+            for( int sub = 0; sub < item->GetSublayersCount(); ++sub )
+                thickness += item->GetThickness( sub );
+        }
+        else if( item->GetType() == BS_ITEM_TYPE_COPPER )
+        {
+            thickness += item->GetThickness();
+        }
+    }
+
+    return thickness;
+}
+
+
 void DRC_TEST_PROVIDER_VIA_STACK::checkAspectRatio( BOARD* aBoard )
 {
-    BOARD_DESIGN_SETTINGS& bds = aBoard->GetDesignSettings();
-
-    bool checkRatio = !m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_ASPECT_RATIO );
+    bool checkRatio = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_ASPECT_RATIO )
+                      && m_drcEngine->HasRulesForConstraintType( HOLE_ASPECT_RATIO_CONSTRAINT );
     bool checkCore = !m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_CROSSES_CORE );
 
     if( !checkRatio && !checkCore )
         return;
 
-    const std::vector<BOARD_STACKUP_ITEM*>& stack = bds.GetStackupDescriptor().GetList();
+    BOARD_STACKUP                           stackup = aBoard->GetStackupOrDefault();
+    const std::vector<BOARD_STACKUP_ITEM*>& stack = stackup.GetList();
 
     const int progressDelta = 500;
     int       ii = 0;
@@ -236,10 +264,9 @@ void DRC_TEST_PROVIDER_VIA_STACK::checkAspectRatio( BOARD* aBoard )
 
         PCB_VIA* via = static_cast<PCB_VIA*>( track );
 
-        if( via->GetViaType() != VIATYPE::MICROVIA || via->GetDrillValue() <= 0 )
+        if( via->GetDrillValue() <= 0 )
             continue;
 
-        // Find the copper items the via runs between, and the dielectric they enclose.
         int first = -1;
         int last = -1;
 
@@ -262,44 +289,32 @@ void DRC_TEST_PROVIDER_VIA_STACK::checkAspectRatio( BOARD* aBoard )
         if( first < 0 || last < 0 )
             continue;
 
-        int      thickness = 0;
-        wxString dielectric;
-        bool     crossesCore = false;
-
-        for( int i = first + 1; i < last; ++i )
-        {
-            if( stack[i]->GetType() != BS_ITEM_TYPE_DIELECTRIC || !stack[i]->IsEnabled() )
-                continue;
-
-            // A dielectric can be built from several sublayers.
-            for( int sub = 0; sub < stack[i]->GetSublayersCount(); ++sub )
-                thickness += stack[i]->GetThickness( sub );
-
-            if( stack[i]->GetTypeName() == KEY_CORE )
-                crossesCore = true;
-
-            if( dielectric.IsEmpty() )
-                dielectric = stack[i]->GetTypeName();
-        }
-
         // IPC-2226 builds microvias in the layers laminated onto the core, not through it.
         // Laser drilling relies on the resin ablating, and core is glass reinforced.
-        if( crossesCore && checkCore )
+        if( via->GetViaType() == VIATYPE::MICROVIA && checkCore )
         {
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MICROVIA_CROSSES_CORE );
+            for( int i = first + 1; i < last; ++i )
+            {
+                if( stack[i]->IsEnabled() && stack[i]->GetType() == BS_ITEM_TYPE_DIELECTRIC
+                    && stack[i]->GetTypeName() == KEY_CORE )
+                {
+                    std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MICROVIA_CROSSES_CORE );
 
-            drcItem->SetErrorMessage(
-                    wxString::Format( _( "The stackup gives the dielectric between %s and %s as core" ),
-                                      LSET::Name( via->TopLayer() ), LSET::Name( via->BottomLayer() ) ) );
-            drcItem->SetItems( via );
-            reportViolation( drcItem, via->GetPosition(), via->GetLayer() );
+                    drcItem->SetErrorMessage(
+                            wxString::Format( _( "The stackup gives the dielectric between %s and %s as core" ),
+                                              LSET::Name( via->TopLayer() ), LSET::Name( via->BottomLayer() ) ) );
+                    drcItem->SetItems( via );
+                    reportViolation( drcItem, via->GetPosition(), via->GetLayer() );
+                    break;
+                }
+            }
         }
 
-        if( !checkRatio || thickness <= 0 )
+        if( !checkRatio )
             continue;
 
-        DRC_CONSTRAINT ratioConstraint =
-                m_drcEngine->EvalRules( MICROVIA_ASPECT_RATIO_CONSTRAINT, via, nullptr, via->GetLayer() );
+        DRC_CONSTRAINT ratioConstraint = m_drcEngine->EvalRules( HOLE_ASPECT_RATIO_CONSTRAINT, via, nullptr,
+                                                                 UNDEFINED_LAYER /* holes are not layer-specific */ );
 
         if( ratioConstraint.GetSeverity() == RPT_SEVERITY_IGNORE || !ratioConstraint.GetValue().HasMax() )
             continue;
@@ -310,19 +325,23 @@ void DRC_TEST_PROVIDER_VIA_STACK::checkAspectRatio( BOARD* aBoard )
         if( limit <= 0.0 )
             continue;
 
-        // IPC-2226 measures the hole against the dielectric plus the copper foil over it.
-        // The laser enters from the outer side.
-        bool fromBack = IsExternalCopperLayer( stack[last]->GetBrdLayerId() )
-                        && !IsExternalCopperLayer( stack[first]->GetBrdLayerId() );
+        bool topExternal = IsExternalCopperLayer( stack[first]->GetBrdLayerId() );
+        bool botExternal = IsExternalCopperLayer( stack[last]->GetBrdLayerId() );
+        bool fromBack = botExternal && !topExternal;
 
-        thickness += stack[fromBack ? last : first]->GetThickness();
+        int thickness = stackThickness( stack, first + 1, last ) + stack[fromBack ? last : first]->GetThickness();
+
+        // The laser stops on the foil it lands on, and so does a blind drill. Any other drill
+        // leaves through the far foil.
+        if( via->GetViaType() != VIATYPE::MICROVIA && topExternal == botExternal )
+            thickness += stack[fromBack ? first : last]->GetThickness();
 
         double ratio = (double) thickness / (double) via->GetDrillValue();
 
         if( ratio <= limit )
             continue;
 
-        if( m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_ASPECT_RATIO ) )
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_ASPECT_RATIO ) )
         {
             if( !checkCore )
                 return;
@@ -331,15 +350,66 @@ void DRC_TEST_PROVIDER_VIA_STACK::checkAspectRatio( BOARD* aBoard )
             continue;
         }
 
-        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MICROVIA_ASPECT_RATIO );
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_ASPECT_RATIO );
 
-        drcItem->SetErrorMessage(
-                wxString::Format( _( "Crosses %s dielectric: aspect ratio %.2f exceeds the %.2f limit" ),
-                                  dielectric.IsEmpty() ? _( "an unnamed" ) : dielectric, ratio, limit ) );
+        drcItem->SetErrorMessage( wxString::Format( _( "Aspect ratio %.2f exceeds the %.2f limit" ), ratio, limit ) );
 
         drcItem->SetItems( via );
         drcItem->SetViolatingRule( ratioConstraint.GetParentRule() );
         reportViolation( drcItem, via->GetPosition(), via->GetLayer() );
+    }
+
+    if( !checkRatio || m_drcEngine->IsCancelled() )
+        return;
+
+    int boardDepth = stackThickness( stack, 0, (int) stack.size() );
+
+    ii = 0;
+
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
+    {
+        if( !reportProgress( ii++, aBoard->Footprints().size(), progressDelta ) )
+            return;
+
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_ASPECT_RATIO ) )
+                return;
+
+            if( pad->GetAttribute() != PAD_ATTRIB::PTH )
+                continue;
+
+            // The chemistry sees the narrow dimension of a slot.
+            int drill = std::min( pad->GetDrillSize().x, pad->GetDrillSize().y );
+
+            if( drill <= 0 )
+                continue;
+
+            DRC_CONSTRAINT ratioConstraint = m_drcEngine->EvalRules(
+                    HOLE_ASPECT_RATIO_CONSTRAINT, pad, nullptr, UNDEFINED_LAYER /* holes are not layer-specific */ );
+
+            if( ratioConstraint.GetSeverity() == RPT_SEVERITY_IGNORE || !ratioConstraint.GetValue().HasMax() )
+                continue;
+
+            double limit = ratioConstraint.GetValue().Max() / 1000.0;
+
+            if( limit <= 0.0 )
+                continue;
+
+            double ratio = (double) boardDepth / (double) drill;
+
+            if( ratio <= limit )
+                continue;
+
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_HOLE_ASPECT_RATIO );
+
+            drcItem->SetErrorMessage(
+                    wxString::Format( _( "Aspect ratio %.2f exceeds the %.2f limit" ), ratio, limit ) );
+
+            drcItem->SetItems( pad );
+            drcItem->SetViolatingRule( ratioConstraint.GetParentRule() );
+            reportViolation( drcItem, pad->GetPosition(), pad->GetLayer() );
+        }
     }
 }
 
@@ -349,13 +419,13 @@ bool DRC_TEST_PROVIDER_VIA_STACK::Run()
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_MALFORMED_MICROVIA_STACK_SPAN )
         && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_STACK_NOT_FILLED )
         && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_STACK_DEPTH )
-        && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_ASPECT_RATIO )
+        && m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_ASPECT_RATIO )
         && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_CROSSES_CORE ) )
     {
         return true;
     }
 
-    if( !reportPhase( _( "Checking microvia stacks..." ) ) )
+    if( !reportPhase( _( "Checking hole aspect ratios and microvia stacks..." ) ) )
         return false;
 
     BOARD* board = m_drcEngine->GetBoard();
@@ -381,7 +451,7 @@ bool DRC_TEST_PROVIDER_VIA_STACK::Run()
     }
 
     if( !m_drcEngine->IsCancelled()
-        && !( m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_ASPECT_RATIO )
+        && !( m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_ASPECT_RATIO )
               && m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_CROSSES_CORE ) ) )
     {
         checkAspectRatio( board );

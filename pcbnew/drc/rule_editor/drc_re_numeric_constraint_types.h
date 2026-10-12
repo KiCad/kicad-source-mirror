@@ -204,19 +204,17 @@ public:
 };
 
 
-class DRC_RE_MICROVIA_ASPECT_RATIO_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
+class DRC_RE_HOLE_ASPECT_RATIO_CONSTRAINT_DATA : public DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA
 {
 public:
     using DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA::DRC_RE_NUMERIC_INPUT_CONSTRAINT_DATA;
-    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_microvia_aspect_ratio; }
+    BITMAPS GetOverlayBitmap() const override { return BITMAPS::constraint_hole_aspect_ratio; }
 
-    // Under the drawing rather than beside a dimension, so neither one reads as the value to type.
+    // A label here would be overwritten by the unit binder, so the drawing carries the meaning.
     std::vector<DRC_RE_FIELD_POSITION> GetFieldPositions() const override
     {
-        return { { 72, 128, 174, wxEmptyString, LABEL_POSITION::NONE,
-                   _( "The largest hole depth divided by hole width you allow.\n"
-                      "A 0.1 mm hole drilled 0.075 mm deep gives 0.75.\n"
-                      "Most fabs allow 0.75 to 1.0. A deeper hole is harder to plate." ) } };
+        return { { 92, 148, 190, wxEmptyString, LABEL_POSITION::NONE,
+                   _( "Hole depth divided by drill diameter, 8 to 10 for drilled holes and 1 for microvias" ) } };
     }
 };
 
