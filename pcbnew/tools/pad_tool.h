@@ -19,9 +19,11 @@
 
 #pragma once
 
+#include <memory>
 #include <tools/pcb_tool_base.h>
 
 class ACTION_MENU;
+class PAD_MASTER_PROVIDER;
 class PCB_SHAPE;
 
 
@@ -29,6 +31,7 @@ class PAD_TOOL : public PCB_TOOL_BASE
 {
 public:
     PAD_TOOL();
+    ~PAD_TOOL();
 
     /// React to model/view changes
     void Reset( RESET_REASON aReason ) override;
@@ -92,4 +95,7 @@ private:
 
     HIGH_CONTRAST_MODE m_previousHighContrastMode;
     KIID               m_editPad;
+
+    /// When pads are created this provides the master pad settings.
+    std::unique_ptr<PAD_MASTER_PROVIDER> m_masterPadProvider;
 };

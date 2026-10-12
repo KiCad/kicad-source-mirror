@@ -2364,6 +2364,10 @@ void FOOTPRINT_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( ACTIONS::measureTool );
     CURRENT_EDIT_TOOL( ACTIONS::embeddedFiles );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::placePad );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeThtPad );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeSmdPad );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placeNpthPad );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::placePasteAperturePad );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawLine );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawRectangle );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawCircle );

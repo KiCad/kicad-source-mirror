@@ -559,6 +559,10 @@ public:
 
     /// Activation of the drawing tool (placing a PAD)
     static TOOL_ACTION placePad;
+    static TOOL_ACTION placeThtPad;
+    static TOOL_ACTION placeSmdPad;
+    static TOOL_ACTION placeNpthPad;
+    static TOOL_ACTION placePasteAperturePad;
 
     static TOOL_ACTION explodePad;
     static TOOL_ACTION recombinePad;

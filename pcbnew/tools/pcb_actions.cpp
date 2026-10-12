@@ -1582,9 +1582,45 @@ TOOL_ACTION PCB_ACTIONS::placePad( TOOL_ACTION_ARGS()
         .Name( "pcbnew.PadTool.placePad" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Add Pad" ) )
-        .Tooltip( _( "Add a pad" ) )
+        .Tooltip( _( "Add a pad of the most recently-placed type, or a copy of the selected pad" ) )
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::pad )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION PCB_ACTIONS::placeThtPad( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PadTool.placeThtPad" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add a THT Pad" ) )
+        .Tooltip( _( "Add a through-hole pad" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::pad_tht )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION PCB_ACTIONS::placeSmdPad( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PadTool.placeSmdPad" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add an SMD Pad" ) )
+        .Tooltip( _( "Add a surface-mount pad" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::pad_smd )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION PCB_ACTIONS::placeNpthPad( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PadTool.placeNpthPad" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add an NPTH Pad" ) )
+        .Tooltip( _( "Add a non-plated through-hole pad" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::pad_npth )
+        .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION PCB_ACTIONS::placePasteAperturePad( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.PadTool.placePasteAperturePad" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add a Paste Aperture Pad" ) )
+        .Tooltip( _( "Add a paste aperture pad" ) )
+        .ToolbarState( TOOLBAR_STATE::TOGGLE )
+        .Icon( BITMAPS::pad_paste_aperture )
         .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION PCB_ACTIONS::explodePad( TOOL_ACTION_ARGS()

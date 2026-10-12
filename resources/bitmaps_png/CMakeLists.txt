@@ -443,8 +443,12 @@ set( BMAPS_MID
     pad_sketch
     pad
     pad_enumerate
+    pad_npth
     pad_number
+    pad_paste_aperture
+    pad_smd
     pad_table
+    pad_tht
     pads_mask_layers
     pads_remove
     path
