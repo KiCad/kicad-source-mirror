@@ -679,17 +679,20 @@ bool WRLPROC::ReadString( std::string& aSFString )
 
         if( m_bufpos >= m_buf.size() )
         {
-            aSFString.append( 1, '\n' );
-
-            if( !getRawLine() )
+            do
             {
-                std::ostringstream ostr;
-                ostr << "invalid VRML1 file at lines " << ifline << "--" << m_fileline;
-                ostr << "; could not find end of string\n";
-                m_error = ostr.str();
+                aSFString.append( 1, '\n' );
 
-                return false;
-            }
+                if( !getRawLine() )
+                {
+                    std::ostringstream ostr;
+                    ostr << "invalid VRML1 file at lines " << ifline << "--" << m_fileline;
+                    ostr << "; could not find end of string\n";
+                    m_error = ostr.str();
+
+                    return false;
+                }
+            } while( m_buf.empty() );
         }
 
         if( '\\' == m_buf[m_bufpos] )
