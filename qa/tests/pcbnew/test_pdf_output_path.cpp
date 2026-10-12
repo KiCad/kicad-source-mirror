@@ -146,8 +146,13 @@ static std::string plotOneLayerToPdf( const std::string& aBoardFile, PCB_LAYER_I
     BOOST_REQUIRE_EQUAL( handler.JobExportPdf( pdfJob.get() ), CLI::EXIT_CODES::OK );
     BOOST_REQUIRE( std::filesystem::exists( outputPath ) );
 
-    std::ifstream in( outputPath, std::ios::binary );
-    std::string   pdf( ( std::istreambuf_iterator<char>( in ) ), std::istreambuf_iterator<char>() );
+    std::string pdf;
+
+    {
+        // Windows cannot remove a directory holding a file that is still open
+        std::ifstream in( outputPath, std::ios::binary );
+        pdf.assign( std::istreambuf_iterator<char>( in ), std::istreambuf_iterator<char>() );
+    }
 
     std::filesystem::remove_all( outputRoot );
 
