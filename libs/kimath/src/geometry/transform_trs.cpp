@@ -20,6 +20,16 @@
 #include <geometry/transform_trs.h>
 #include <trigo.h>
 
+#include <algorithm>
+#include <cmath>
+
+
+// Composing and decomposing a rotation can leave a scale one unit in the last place off
+static bool sameScale( double aA, double aB )
+{
+    return std::abs( aA - aB ) <= 1e-9 * std::max( std::abs( aA ), std::abs( aB ) );
+}
+
 
 VECTOR2D TRANSFORM_TRS::Apply( const VECTOR2D& aPoint ) const
 {
@@ -77,16 +87,19 @@ TRANSFORM_TRS TRANSFORM_TRS::RescaleAround( const VECTOR2I& aFixedPoint,
 
 bool TRANSFORM_TRS::IsIdentity() const
 {
-    return m_translate == VECTOR2I( 0, 0 )
-           && m_rotate.IsZero()
-           && m_scaleX == 1.0
-           && m_scaleY == 1.0;
+    return m_translate == VECTOR2I( 0, 0 ) && m_rotate.IsZero() && HasUnitScale();
 }
 
 
 bool TRANSFORM_TRS::IsUniformScale() const
 {
-    return m_scaleX == m_scaleY;
+    return sameScale( m_scaleX, m_scaleY );
+}
+
+
+bool TRANSFORM_TRS::HasUnitScale() const
+{
+    return sameScale( m_scaleX, 1.0 ) && sameScale( m_scaleY, 1.0 );
 }
 
 

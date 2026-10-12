@@ -552,8 +552,8 @@ static void checkCustomPadArcSurvives( const DOWNGRADE_TARGET& aTarget )
 
     BOOST_REQUIRE( ExportBoardToOlderVersion( src, dest, aTarget, report ) );
 
-    // The arc's points need not lie on one circle at every pad rotation. It loads as a circular
-    // arc, which both targets can read, so it is written as one and nothing is lowered.
+    // The rotated pad's transform scales differ only by rounding, so the arc stays a circular arc,
+    // which both targets can read. It is written as one and nothing is lowered.
     BOOST_CHECK_EQUAL( report.Count( DOWNGRADE_BUCKET::LOWER ), 0 );
 
     const std::string out = KI_TEST::ReadGoldenText( dest );

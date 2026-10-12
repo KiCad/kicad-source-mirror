@@ -1062,7 +1062,7 @@ static int countScaledFootprints( const BOARD* aBoard )
 
     for( FOOTPRINT* fp : aBoard->Footprints() )
     {
-        if( fp->GetTransform().GetScaleX() != 1.0 || fp->GetTransform().GetScaleY() != 1.0 )
+        if( !fp->GetTransform().HasUnitScale() )
             count++;
     }
 

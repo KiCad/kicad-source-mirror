@@ -21,6 +21,8 @@
 
 #include <geometry/transform_trs.h>
 
+#include <cmath>
+
 
 BOOST_AUTO_TEST_SUITE( TransformTrs )
 
@@ -215,6 +217,22 @@ BOOST_AUTO_TEST_CASE( ApplyLinearScaleArithmeticMean )
 
     TRANSFORM_TRS uniform( VECTOR2I( 0, 0 ), ANGLE_0, 0.5, 0.5 );
     BOOST_CHECK_CLOSE( uniform.ApplyLinearScale( 100.0 ), 50.0, 1e-9 );
+}
+
+
+// A rotation composed from a matrix can leave one scale a unit in the last place off. That is
+// still a uniform, unit scale, or a rotated footprint's circles and arcs turn into ellipses.
+BOOST_AUTO_TEST_CASE( RoundingNoiseKeepsScaleUniform )
+{
+    const double  noisy = std::nextafter( 1.0, 2.0 );
+    TRANSFORM_TRS t( VECTOR2I( 0, 0 ), EDA_ANGLE( 2.5, DEGREES_T ), 1.0, noisy );
+
+    BOOST_CHECK( t.IsUniformScale() );
+    BOOST_CHECK( t.HasUnitScale() );
+
+    TRANSFORM_TRS scaled( VECTOR2I( 0, 0 ), ANGLE_0, 1.0, 1.0 + 1e-6 );
+    BOOST_CHECK( !scaled.IsUniformScale() );
+    BOOST_CHECK( !scaled.HasUnitScale() );
 }
 
 

@@ -1034,7 +1034,7 @@ void PCB_SHAPE::RebakeFromLib()
 
 void PCB_SHAPE::rebakeFromTransform( const TRANSFORM_TRS& xform )
 {
-    const bool nonUniform = xform.GetScaleX() != xform.GetScaleY();
+    const bool nonUniform = !xform.IsUniformScale();
 
     if( m_libShape == SHAPE_T::CIRCLE )
     {

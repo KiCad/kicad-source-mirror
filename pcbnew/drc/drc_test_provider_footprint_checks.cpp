@@ -86,7 +86,7 @@ bool DRC_TEST_PROVIDER_FOOTPRINT_CHECKS::Run()
         {
             const TRANSFORM_TRS& xform = footprint->GetTransform();
 
-            if( !xform.IsUniformScale() || xform.GetScaleX() != 1.0 )
+            if( !xform.HasUnitScale() )
             {
                 if( !footprint->Pads().empty() )
                 {
