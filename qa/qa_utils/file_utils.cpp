@@ -25,7 +25,6 @@
 #include <string>
 
 #include <wx/ffile.h>
-#include <wx/filefn.h>
 #include <wx/filename.h>
 #include <wx/tokenzr.h>
 #include <wx/utils.h>
@@ -79,29 +78,43 @@ static bool shouldKeepTemp( const std::filesystem::path& aPath, const wxString& 
 }
 
 
-static std::filesystem::path createTempDir( const wxString& aPrefix )
+static std::filesystem::path createTempDir( const wxString& aPrefix, const wxString& aSuffix )
 {
-    wxString tempFile = wxFileName::CreateTempFileName( aPrefix + "_" );
+    std::error_code             ec;
+    const std::filesystem::path tempRoot = std::filesystem::temp_directory_path( ec );
 
-    if( tempFile.IsEmpty() )
-        throw std::runtime_error( "Cannot create a temporary directory name with prefix '"
-                                  + std::string( aPrefix.utf8_str() ) + "'" );
+    if( ec )
+        throw std::runtime_error( "Cannot determine the temporary directory: " + ec.message() );
 
-    if( !wxRemoveFile( tempFile ) )
-        throw std::runtime_error( "Cannot reclaim temporary name '" + std::string( tempFile.utf8_str() ) + "'" );
+    // Claim the directory with a single mkdir. This avoids the race window
+    // associated with reserving a name using wxFileName::CreateTempFileName().
+    constexpr size_t k_maxAttempts = 1000;
+    for( size_t i = 0; i < k_maxAttempts; ++i )
+    {
+        const std::filesystem::path candidate =
+                tempRoot / ( aPrefix.utf8_string() + "_" + std::to_string( i ) + aSuffix.utf8_string() );
 
-    if( !wxMkdir( tempFile ) )
-        throw std::runtime_error( "Cannot create temporary directory '" + std::string( tempFile.utf8_str() ) + "'" );
+        if( std::filesystem::create_directory( candidate, ec ) )
+            return candidate;
 
-    return std::filesystem::path( std::string( tempFile.utf8_str() ) );
+        // Any error except "file exists" is fatal. "File exists" just
+        // means we should try the next candidate name.
+        if( ec && ec != std::errc::file_exists )
+            throw std::runtime_error( "Cannot create temporary directory '" + candidate.string()
+                                      + "': " + ec.message() );
+    }
+
+    // Ran out of attempts to find a free temporary directory name.
+    throw std::runtime_error( "Cannot find a free temporary directory name with prefix/suffix '"
+                              + std::string( aPrefix.utf8_str() ) + "/" + std::string( aSuffix.utf8_str() ) + "'" );
 }
 
 
 bool SCOPED_TEMP_DIR::s_anyTempDirRetained = false;
 
 
-SCOPED_TEMP_DIR::SCOPED_TEMP_DIR( const wxString& aPrefix ) :
-        m_path( createTempDir( aPrefix ) ),
+SCOPED_TEMP_DIR::SCOPED_TEMP_DIR( const wxString& aPrefix, const wxString& aSuffix ) :
+        m_path( createTempDir( aPrefix, aSuffix ) ),
         m_keep( shouldKeepTemp( m_path, aPrefix ) )
 {
     if( m_keep )
