@@ -155,6 +155,7 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
         disabler = std::make_unique<wxWindowDisabler>( /* except: */ m_drcDialog );
 
     m_drcRunning = true;
+    m_drcEngine->SetSchematicNetlist( nullptr );
 
     if( m_drcDialog )
     {
@@ -174,12 +175,11 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
                                                            "fully annotated schematic." ) ) )
             {
                 netlistFetched = true;
+                m_drcEngine->SetSchematicNetlist( &netlist );
             }
 
             if( m_drcDialog )
                 m_drcDialog->Raise();
-
-            m_drcEngine->SetSchematicNetlist( &netlist );
         }
     }
 
@@ -197,6 +197,7 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
     m_drcEngine->RunTests( m_editFrame->GetUserUnits(), aReportAllTrackErrors, aTestFootprints,
                            &commit );
 
+    m_drcEngine->SetSchematicNetlist( nullptr );
     m_drcEngine->SetProgressReporter( nullptr );
     m_drcEngine->ClearViolationHandler();
 
