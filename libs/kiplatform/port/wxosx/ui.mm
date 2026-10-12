@@ -23,6 +23,7 @@
 #import <Cocoa/Cocoa.h>
 
 #include <wx/dialog.h>
+#include <wx/display.h>
 #include <wx/nonownedwnd.h>
 #include <wx/toplevel.h>
 #include <wx/button.h>
@@ -188,6 +189,22 @@ double KIPLATFORM::UI::GetContentScaleFactor( const wxWindow* aWindow )
 {
     // Native GUI resolution on Retina displays
     return GetPixelScaleFactor( aWindow ) / 2.0;
+}
+
+
+double KIPLATFORM::UI::GetDisplayRefreshRate( const wxWindow* aWindow )
+{
+    NSView*   view = (NSView*) aWindow->GetHandle();
+    NSScreen* screen = view.window.screen;
+
+    if( !screen )
+        return 0.0;
+
+    if( @available( macOS 12.0, * ) )
+        return static_cast<double>( screen.maximumFramesPerSecond );
+
+    // Built-in panels report 0 here
+    return wxDisplay( aWindow ).GetCurrentMode().refresh;
 }
 
 

@@ -443,6 +443,25 @@ double KIPLATFORM::UI::GetContentScaleFactor( const wxWindow* aWindow )
 }
 
 
+double KIPLATFORM::UI::GetDisplayRefreshRate( const wxWindow* aWindow )
+{
+#if GTK_CHECK_VERSION( 3, 22, 0 )
+    GtkWidget* widget = static_cast<GtkWidget*>( aWindow->GetHandle() );
+    GdkWindow* window = widget ? gtk_widget_get_window( widget ) : nullptr;
+
+    if( !window )
+        return 0.0;
+
+    GdkMonitor* monitor = gdk_display_get_monitor_at_window( gdk_window_get_display( window ), window );
+
+    // GDK reports millihertz, and 0 when it does not know
+    return monitor ? gdk_monitor_get_refresh_rate( monitor ) / 1000.0 : 0.0;
+#else
+    return 0.0;
+#endif
+}
+
+
 wxSize KIPLATFORM::UI::GetUnobscuredSize( const wxWindow* aWindow )
 {
     return wxSize( aWindow->GetSize().GetX() - wxSystemSettings::GetMetric( wxSYS_VSCROLL_X ),

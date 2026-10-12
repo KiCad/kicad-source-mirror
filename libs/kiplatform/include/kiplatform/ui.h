@@ -125,6 +125,11 @@ namespace KIPLATFORM
         double GetContentScaleFactor( const wxWindow* aWindow );
 
         /**
+         * Return the refresh rate in Hz of the display showing most of the window, or 0 if unknown.
+         */
+        double GetDisplayRefreshRate( const wxWindow* aWindow );
+
+        /**
          * Return the background and foreground colors for info bars in the current scheme
          */
         void GetInfoBarColours( wxColour& aFGColour, wxColour& aBGColour );

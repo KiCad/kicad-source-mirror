@@ -24,6 +24,7 @@
 
 #include <wx/cursor.h>
 #include <wx/dialog.h>
+#include <wx/display.h>
 #include <wx/nonownedwnd.h>
 #include <wx/window.h>
 #include <wx/msw/registry.h>
@@ -148,6 +149,13 @@ double KIPLATFORM::UI::GetPixelScaleFactor( const wxWindow* aWindow )
 double KIPLATFORM::UI::GetContentScaleFactor( const wxWindow* aWindow )
 {
     return aWindow->GetDPIScaleFactor();
+}
+
+
+double KIPLATFORM::UI::GetDisplayRefreshRate( const wxWindow* aWindow )
+{
+    // wx reports the hardware's default rate as 0
+    return wxDisplay( aWindow ).GetCurrentMode().refresh;
 }
 
 
