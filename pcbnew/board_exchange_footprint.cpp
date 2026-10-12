@@ -673,7 +673,7 @@ void BOARD::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMM
     aNew->SetSheetfile( aExisting->GetSheetfile() );
     aNew->SetSheetname( aExisting->GetSheetname() );
     aNew->SetFilters( aExisting->GetFilters() );
-    aNew->SetStaticComponentClass( aExisting->GetComponentClass() );
+    aNew->SetStaticComponentClass( aExisting->GetStaticComponentClass() );
 
     if( *aUpdated == false )
     {
