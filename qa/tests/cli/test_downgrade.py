@@ -337,6 +337,11 @@ class TestDropApproximations(unittest.TestCase):
         settings["via_stack_presets"] = [{"name": "Custom microvia stack"}]
         profiles = document["tuning_profiles"]
         profiles["meta"]["version"] = 2
+
+        # Schema 2 skips the migration that adds this field, so every profile needs it
+        for entry in profiles["tuning_profiles_impedance_geometric"]:
+            entry["net_chain_bridge_prop_delay"] = 0
+
         profiles["tuning_profiles_impedance_geometric"][0]["net_chain_bridge_prop_delay"] = 25
         project.write_text(json.dumps(document), encoding="utf-8")
         original = {p.name: p.read_bytes() for p in source.iterdir() if p.is_file()}
@@ -878,6 +883,7 @@ class TestDropApproximations(unittest.TestCase):
         saved = json.loads((REGRESSIONS / "tuning_model_settings/tuning_model_settings.kicad_pro").read_text())
         profile = saved["tuning_profiles"]["tuning_profiles_impedance_geometric"][0]
         profile["profile_name"] = "Default"
+        profile["net_chain_bridge_prop_delay"] = 0
         for choice in ("unreferenced-profile", "selected-profile", "missing-profile-selection",
                        "assignment", "sheet-classes"):
             document = json.loads(json.dumps(native_default))
