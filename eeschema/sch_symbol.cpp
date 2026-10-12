@@ -311,7 +311,7 @@ public:
                             const wxString& variantName ) const override
     {
         if( const ASSOCIATED_FOOTPRINT* active = activeAssociatedFootprint( symbol, sheetPath, variantName ) )
-            return wxAny( active->m_FootprintLibId.Format().wx_str() );
+            return wxAny( active->m_FootprintLibId.Format() );
 
         return wxAny( wxEmptyString );
     }
