@@ -21,6 +21,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <pcbnew_settings.h>
+#include <footprint_editor_settings.h>
 #include <config_map.h>
 #include <panel_display_options.h>
 #include <dialogs/panel_gal_options.h>
@@ -119,13 +120,16 @@ void PANEL_DISPLAY_OPTIONS::ResetPanel()
     if( m_isPCBEdit )
     {
         PCBNEW_SETTINGS cfg;
-        cfg.Load();             // Loading without a file will init to defaults
+        cfg.Load(); // Loading without a file will init to defaults
 
         loadPCBSettings( &cfg );
         m_galOptsPanel->ResetPanel( &cfg );
     }
     else
     {
-        m_galOptsPanel->ResetPanel( nullptr );
+        FOOTPRINT_EDITOR_SETTINGS cfg;
+        cfg.Load(); // Loading without a file will init to defaults
+
+        m_galOptsPanel->ResetPanel( &cfg );
     }
 }
