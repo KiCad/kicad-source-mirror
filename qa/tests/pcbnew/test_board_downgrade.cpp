@@ -2151,7 +2151,7 @@ BOOST_AUTO_TEST_CASE( DirectoryDestinationStopsAllTransactionReplacements )
         }
 
         BOOST_REQUIRE( wxMkdir( second ) );
-        BOOST_CHECK_EQUAL( transaction.Commit(), second );
+        BOOST_CHECK( wxFileName( transaction.Commit() ).SameAs( wxFileName( second ) ) );
         BOOST_CHECK( transaction.GetRecoveryError().IsEmpty() );
     }
 
