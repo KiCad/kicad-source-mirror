@@ -771,24 +771,24 @@ static bool makeComponents( IDF3_BOARD& brd, SGNODE* aParent )
 
         while( so != eo )
         {
-            if( std::abs( (*so)->GetOutline()->GetThickness() ) < 0.001 )
+            pout = static_cast<IDF3_COMP_OUTLINE*>( ( *so )->GetOutline() );
+
+            if( !pout )
             {
                 ++so;
                 continue;
             }
 
-            (*so)->GetOffsets( tX, tY, tZ, tA );
+            if( std::abs( pout->GetThickness() ) < 0.001 )
+            {
+                ++so;
+                continue;
+            }
+
+            ( *so )->GetOffsets( tX, tY, tZ, tA );
             tX += vX;
             tY += vY;
             tA += vA;
-
-            pout = (IDF3_COMP_OUTLINE*)((*so)->GetOutline());
-
-            if( nullptr == pout  )
-            {
-                ++so;
-                continue;
-            }
 
             dataItem = dataMap.find( pout->GetUID() );
             SCENEGRAPH* sg = nullptr;
