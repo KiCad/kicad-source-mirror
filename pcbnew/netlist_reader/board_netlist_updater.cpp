@@ -741,10 +741,12 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
         }
         else
         {
-            aFootprint->SetSheetname( sheetname );
             msg.Printf( _( "Updated %s sheetname to '%s'." ),
                         aFootprint->GetReference(),
                         EscapeHTML( sheetname ) );
+
+            changed = true;
+            aFootprint->SetSheetname( sheetname );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -760,10 +762,12 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
         }
         else
         {
-            aFootprint->SetSheetfile( sheetfile );
             msg.Printf( _( "Updated %s sheetfile to '%s'." ),
                         aFootprint->GetReference(),
                         EscapeHTML( sheetfile ) );
+
+            changed = true;
+            aFootprint->SetSheetfile( sheetfile );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -779,10 +783,12 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aFootprint, CO
         }
         else
         {
-            aFootprint->SetFilters( fpFilters );
             msg.Printf( _( "Updated %s footprint filters to '%s'." ),
                         aFootprint->GetReference(),
                         EscapeHTML( fpFilters ) );
+
+            changed = true;
+            aFootprint->SetFilters( fpFilters );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
