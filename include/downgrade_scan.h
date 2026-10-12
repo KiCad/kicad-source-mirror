@@ -381,6 +381,17 @@ public:
             // An overwrite may disturb its destination even when the rename reports a failure.
             entry.m_attemptedReplacement = true;
 
+            // Windows renames onto a link by writing through to its target, so the link goes first. Its
+            // backup restores it if anything fails.
+            std::error_code error;
+            const auto      destination = nativePath( entry.m_destination );
+
+            if( std::filesystem::is_symlink( destination, error ) && !std::filesystem::remove( destination, error ) )
+            {
+                rollback();
+                return entry.m_destination;
+            }
+
             if( !wxRenameFile( entry.m_temp, entry.m_destination, true ) )
             {
                 rollback();
