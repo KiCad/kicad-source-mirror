@@ -580,6 +580,35 @@ std::vector<wxString> ChangedTrackedFilesOutsideProject( PROJECT& aProject )
 
 bool PrepareEditorsForGitOperation( EDA_BASE_FRAME* aFrame, GIT_EDITOR_PREP aPurpose )
 {
+    wxString lfsExample;
+
+    if( std::shared_ptr<KIGIT_COMMON> common = aFrame->Prj().GetGitCommon() )
+    {
+        std::unique_lock<std::mutex> lock = common->TryLockAction();
+
+        if( !lock.owns_lock() )
+        {
+            DisplayInfoMessage( aFrame, _( "Another git operation is in progress. Try again in a moment." ) );
+            return false;
+        }
+
+        if( common->GetRepo() )
+        {
+            wxString prefix = KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( common->GetProjectDir(),
+                                                                       aFrame->Prj().GetProjectPath() );
+            KIGIT::PROJECT_GIT_UTILS::ProjectUsesGitLfs( common->GetRepo(), prefix, &lfsExample );
+        }
+    }
+
+    if( !lfsExample.IsEmpty() )
+    {
+        DisplayErrorMessage( aFrame, wxString::Format( _( "This project keeps '%s' in Git LFS, which KiCad "
+                                                          "cannot read or write. Use git on the command line "
+                                                          "for this repository." ),
+                                                       lfsExample ) );
+        return false;
+    }
+
     // Rewriting a library an editor holds would let its next save overwrite what arrived.
     if( aPurpose == GIT_EDITOR_PREP::WORKING_TREE )
     {

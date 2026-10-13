@@ -51,6 +51,7 @@
 #include <diff_merge/diff_scene.h>
 #include <reporter.h>
 #include <git/kicad_git_common.h>
+#include <git/project_git_utils.h>
 #include <git/git_branch_handler.h>
 #include <git/git_commit_handler.h>
 #include <git/git_config_handler.h>
@@ -2146,6 +2147,7 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
 
     bool                  dirty = anyEditorDirty();
     std::vector<wxString> outside;
+    wxString              lfsExample;
 
     if( !dirty )
     {
@@ -2159,10 +2161,24 @@ void GIT_COMMIT_PANE::submitPull( std::shared_ptr<KIGIT_COMMON> aCommon, bool aT
 
         dirty = aCommon->HasUncommittedTrackedChanges();
 
+        wxString prefix = KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( aCommon->GetProjectDir(),
+                                                                   m_frame->Prj().GetProjectPath() );
+        KIGIT::PROJECT_GIT_UTILS::ProjectUsesGitLfs( aCommon->GetRepo(), prefix, &lfsExample );
+
         // The list shows this project only. A change elsewhere in the repository blocks the
         // merge just the same, and has to be named or the user is asked to commit nothing.
         if( dirty )
             outside = ChangedTrackedFilesOutsideProject( m_frame->Prj() );
+    }
+
+    if( !lfsExample.IsEmpty() )
+    {
+        setBusy( false, _( "This project uses Git LFS." ) );
+        DisplayErrorMessage( this, wxString::Format( _( "This project keeps '%s' in Git LFS, which KiCad "
+                                                        "cannot read or write. Use git on the command line "
+                                                        "for this repository." ),
+                                                     lfsExample ) );
+        return;
     }
 
     if( dirty )

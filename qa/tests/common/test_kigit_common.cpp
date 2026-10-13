@@ -40,6 +40,10 @@
 #include <set>
 #include <cstdlib>
 
+#ifndef __WINDOWS__
+#include <unistd.h>
+#endif
+
 
 namespace
 {
@@ -1153,6 +1157,45 @@ BOOST_AUTO_TEST_CASE( WorkingTreeLineStatsCountOnlyTheFilesGiven )
 }
 
 
+#ifndef __WINDOWS__
+// A project can be opened through a symlink pointing straight at its folder inside the
+// repository. Stepping the visible path up one component then lands outside the repository
+// altogether, so the folder has to be worked out from the resolved paths instead.
+BOOST_AUTO_TEST_CASE( SymlinkedProjectFolderStillFindsItsPrefix )
+{
+    ScopedTempDir tmp;
+
+    wxString repoRoot = tmp.path + wxS( "/real/repo" );
+    BOOST_REQUIRE( wxFileName::Mkdir( repoRoot + wxS( "/proj" ), wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) );
+    writeFile( repoRoot, wxS( "proj/p.kicad_pro" ), "{}\n" );
+
+    wxString deepLink = tmp.path + wxS( "/deep" );
+    BOOST_REQUIRE_EQUAL( symlink( ( repoRoot + wxS( "/proj" ) ).utf8_string().c_str(), deepLink.utf8_string().c_str() ),
+                         0 );
+
+    wxString rootLink = tmp.path + wxS( "/top" );
+    BOOST_REQUIRE_EQUAL( symlink( repoRoot.utf8_string().c_str(), rootLink.utf8_string().c_str() ), 0 );
+
+    const wxString canonicalWorkDir = repoRoot + wxS( "/" );
+
+    // Pointed at the project folder there is no visible path for the repository root, so the
+    // resolved one is used.
+    wxString deepProject = deepLink + wxS( "/" );
+    wxString deepWorkDir = KIGIT::PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir( deepProject, canonicalWorkDir );
+    BOOST_CHECK_EQUAL( deepWorkDir.ToStdString(), canonicalWorkDir.ToStdString() );
+    BOOST_CHECK_EQUAL( KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( deepWorkDir, deepProject ).ToStdString(), "proj/" );
+    BOOST_CHECK( KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( repoRoot + wxS( "/proj/p.kicad_pro" ), deepProject ) );
+    BOOST_CHECK( !KIGIT::PROJECT_GIT_UTILS::IsWithinProjectPath( repoRoot + wxS( "/elsewhere/x.txt" ), deepProject ) );
+
+    // Pointed at the repository root the visible path still stands for it, so it is kept.
+    wxString topProject = rootLink + wxS( "/proj/" );
+    wxString topWorkDir = KIGIT::PROJECT_GIT_UTILS::ComputeSymlinkPreservingWorkDir( topProject, canonicalWorkDir );
+    BOOST_CHECK_EQUAL( topWorkDir.ToStdString(), ( rootLink + wxS( "/" ) ).ToStdString() );
+    BOOST_CHECK_EQUAL( KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( topWorkDir, topProject ).ToStdString(), "proj/" );
+}
+#endif
+
+
 // WriteBlobToFile materializes a file's committed content, used to feed the diff viewer.
 BOOST_AUTO_TEST_CASE( WriteBlobToFileExtractsCommittedContent )
 {
@@ -1866,6 +1909,41 @@ BOOST_AUTO_TEST_CASE( GetRecentCommitsFiltersByPath )
 
 // The Tags page shows a tag's message, author and date. An annotated tag has its own, a
 // lightweight tag borrows the commit's.
+// libgit2 runs no filter program, so a file git routes through LFS has to be recognised before
+// an operation writes the placeholder text over it.
+BOOST_AUTO_TEST_CASE( ProjectUsesGitLfsFindsAFilteredFile )
+{
+    using KIGIT::PROJECT_GIT_UTILS;
+
+    SCOPED_GIT_BACKEND libgit;
+    ScopedTempDir      tmp;
+
+    git_repository*         repo = makeRepoWithCommit( tmp.path, "board.kicad_pcb", "(kicad_pcb)\n" );
+    KIGIT::GitRepositoryPtr repoPtr( repo );
+
+    BOOST_CHECK( !PROJECT_GIT_UTILS::ProjectUsesGitLfs( repo, wxEmptyString ) );
+
+    writeFile( tmp.path, ".gitattributes", "*.step filter=lfs diff=lfs merge=lfs -text\n" );
+    commitWorkingFile( repo, ".gitattributes", "route step files through lfs" );
+    writeFile( tmp.path, "case.step", "ISO-10303-21;\n" );
+    commitWorkingFile( repo, "case.step", "add the enclosure" );
+
+    BOOST_CHECK( PROJECT_GIT_UTILS::PathUsesGitLfs( repo, wxS( "case.step" ) ) );
+    BOOST_CHECK( !PROJECT_GIT_UTILS::PathUsesGitLfs( repo, wxS( "board.kicad_pcb" ) ) );
+
+    wxString example;
+    BOOST_CHECK( PROJECT_GIT_UTILS::ProjectUsesGitLfs( repo, wxEmptyString, &example ) );
+    BOOST_CHECK_EQUAL( example.ToStdString(), "case.step" );
+
+    // A project folder that holds none of the filtered files is left alone.
+    BOOST_CHECK( !PROJECT_GIT_UTILS::ProjectUsesGitLfs( repo, wxS( "elsewhere/" ) ) );
+
+    BOOST_CHECK_EQUAL( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/repo/proj" ) ).ToStdString(), "proj/" );
+    BOOST_CHECK( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/repo" ) ).IsEmpty() );
+    BOOST_CHECK( PROJECT_GIT_UTILS::ProjectPrefix( wxS( "/repo" ), wxS( "/other/proj" ) ).IsEmpty() );
+}
+
+
 // An amend or a rebase leaves a commit's author time behind its committer time. The History
 // page dates a commit by the committer time, so the Tags page has to agree.
 BOOST_AUTO_TEST_CASE( GetTagDetailDatesALightweightTagByCommitterTime )

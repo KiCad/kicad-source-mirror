@@ -47,6 +47,7 @@
 #include <git/git_commit_handler.h>
 #include <git/git_config_handler.h>
 #include <git/kicad_git_common.h>
+#include <git/project_git_utils.h>
 #include <kicad_curl/kicad_curl_easy.h>
 #include <kiplatform/ui.h>
 #include <kiway.h>
@@ -1017,7 +1018,8 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
         return;
     }
 
-    bool detached = false;
+    bool     detached = false;
+    wxString lfsExample;
 
     {
         std::unique_lock<std::mutex> lock = common->TryLockAction();
@@ -1029,6 +1031,21 @@ void PANEL_GIT_HISTORY::onRestoreVersion( const wxString& aCommitHash )
         }
 
         detached = common->IsHeadDetached();
+
+        wxString prefix = KIGIT::PROJECT_GIT_UTILS::ProjectPrefix( common->GetProjectDir(),
+                                                                   m_frame->Prj().GetProjectPath() );
+        KIGIT::PROJECT_GIT_UTILS::ProjectUsesGitLfs( common->GetRepo(), prefix, &lfsExample );
+    }
+
+    // A restore writes the committed version over the files on disk, and for an LFS file that
+    // is the placeholder rather than the design.
+    if( !lfsExample.IsEmpty() )
+    {
+        DisplayErrorMessage( this, wxString::Format( _( "This project keeps '%s' in Git LFS, which KiCad "
+                                                        "cannot read or write. Use git on the command line "
+                                                        "for this repository." ),
+                                                     lfsExample ) );
+        return;
     }
 
     // A restore commit made on a detached HEAD belongs to no branch and is lost on the next

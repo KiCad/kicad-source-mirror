@@ -139,6 +139,26 @@ public:
     static bool IsTransientGitFile( const wxFileName& aFile, const wxString& aProjectName );
 
     /**
+     * The project's folder inside the repository, ending in a slash.
+     *
+     * Empty when the project sits at the repository root, or when it is outside the repository.
+     * Forward slashes, as libgit2 reports paths.
+     */
+    static wxString ProjectPrefix( const wxString& aWorkDir, const wxString& aProjectPath );
+
+    /// Whether git routes @p aPath through the Git LFS filter.
+    static bool PathUsesGitLfs( git_repository* aRepo, const wxString& aPath );
+
+    /**
+     * Whether any committed file in the project's folder goes through Git LFS.
+     *
+     * libgit2 runs no filter program, so every operation that writes such a file writes the
+     * placeholder text instead of the file. @p aExample receives the first one found.
+     */
+    static bool ProjectUsesGitLfs( git_repository* aRepo, const wxString& aProjectPrefix,
+                                   wxString* aExample = nullptr );
+
+    /**
      * Write a file as it exists at a git ref to a path on disk, so a committed version can
      * be diffed. False for an empty ref or path, or one that is not a blob.
      *

@@ -248,6 +248,144 @@ bool PROJECT_GIT_UTILS::IsWithinProjectPath( const wxString& aAbsPath, const wxS
 }
 
 
+static wxString prefixUnder( const wxString& aWorkDir, const wxString& aProjectPath )
+{
+    wxString workDir = aWorkDir;
+    wxString projectPath = aProjectPath;
+
+    workDir.Replace( wxS( "\\" ), wxS( "/" ) );
+    projectPath.Replace( wxS( "\\" ), wxS( "/" ) );
+
+    if( !workDir.EndsWith( wxS( "/" ) ) )
+        workDir += wxS( "/" );
+
+    if( !projectPath.EndsWith( wxS( "/" ) ) )
+        projectPath += wxS( "/" );
+
+#ifdef __WINDOWS__
+    // The two come from different places, libgit2 and the project, and Windows does not care
+    // which case either of them used.
+    if( !projectPath.Lower().StartsWith( workDir.Lower() ) )
+        return wxEmptyString;
+#else
+    if( !projectPath.StartsWith( workDir ) )
+        return wxEmptyString;
+#endif
+
+    return projectPath.Mid( workDir.length() );
+}
+
+
+wxString PROJECT_GIT_UTILS::ProjectPrefix( const wxString& aWorkDir, const wxString& aProjectPath )
+{
+    wxString prefix = prefixUnder( aWorkDir, aProjectPath );
+
+    // The project can be reached through a symlink the working directory does not share, and
+    // then the two only line up once both are resolved.
+    if( prefix.IsEmpty() )
+        prefix = prefixUnder( canonicalDir( aWorkDir ), canonicalDir( aProjectPath ) );
+
+    return prefix;
+}
+
+
+bool PROJECT_GIT_UTILS::PathUsesGitLfs( git_repository* aRepo, const wxString& aPath )
+{
+    if( !aRepo || aPath.IsEmpty() )
+        return false;
+
+    const char* value = nullptr;
+
+    if( git_attr_get( &value, aRepo, GIT_ATTR_CHECK_INDEX_THEN_FILE, aPath.utf8_string().c_str(), "filter" ) != GIT_OK )
+    {
+        return false;
+    }
+
+    return git_attr_value( value ) == GIT_ATTR_VALUE_STRING && strcmp( value, "lfs" ) == 0;
+}
+
+
+namespace
+{
+
+    struct LFS_WALK
+    {
+        git_repository* repo;
+        std::string     prefix;
+        wxString        example;
+    };
+
+
+    int lfsWalkEntry( const char* aRoot, const git_tree_entry* aEntry, void* aPayload )
+    {
+        LFS_WALK*   walk = static_cast<LFS_WALK*>( aPayload );
+        std::string path = std::string( aRoot ) + git_tree_entry_name( aEntry );
+
+        if( git_tree_entry_type( aEntry ) == GIT_OBJECT_TREE )
+        {
+            std::string dir = path + "/";
+
+            // Descend only where the project's folder can be.
+            if( walk->prefix.compare( 0, dir.length(), dir ) != 0
+                && dir.compare( 0, walk->prefix.length(), walk->prefix ) != 0 )
+            {
+                return 1;
+            }
+
+            return 0;
+        }
+
+        if( git_tree_entry_type( aEntry ) != GIT_OBJECT_BLOB )
+            return 0;
+
+        if( path.compare( 0, walk->prefix.length(), walk->prefix ) != 0 )
+            return 0;
+
+        if( PROJECT_GIT_UTILS::PathUsesGitLfs( walk->repo, wxString::FromUTF8( path.c_str() ) ) )
+        {
+            walk->example = wxString::FromUTF8( path.c_str() );
+            return -1;
+        }
+
+        return 0;
+    }
+
+} // namespace
+
+
+bool PROJECT_GIT_UTILS::ProjectUsesGitLfs( git_repository* aRepo, const wxString& aProjectPrefix, wxString* aExample )
+{
+    if( !aRepo )
+        return false;
+
+    git_oid headOid;
+
+    if( git_reference_name_to_id( &headOid, aRepo, "HEAD" ) != GIT_OK )
+        return false;
+
+    git_commit* head = nullptr;
+
+    if( git_commit_lookup( &head, aRepo, &headOid ) != GIT_OK )
+        return false;
+
+    KIGIT::GitCommitPtr headPtr( head );
+    git_tree*           tree = nullptr;
+
+    if( git_commit_tree( &tree, head ) != GIT_OK )
+        return false;
+
+    KIGIT::GitTreePtr treePtr( tree );
+    LFS_WALK          walk{ aRepo, aProjectPrefix.utf8_string(), wxEmptyString };
+
+    git_tree_walk( tree, GIT_TREEWALK_PRE, lfsWalkEntry, &walk );
+
+    if( aExample )
+        *aExample = walk.example;
+
+    return !walk.example.IsEmpty();
+}
+
+
 bool PROJECT_GIT_UTILS::IsTransientGitFile( const wxFileName& aFile, const wxString& aProjectName )
 {
     if( aFile.GetExt().CmpNoCase( FILEEXT::LockFileExtension ) == 0 )
