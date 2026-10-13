@@ -1909,6 +1909,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleRefillZones( const HANDLER_CONTEXT<
         mgr->GetTool<ZONE_FILLER_TOOL>()->PostFillRefresh( frame() == nullptr );
     }
 
+    onModified();
     return Empty();
 }
 
