@@ -28,16 +28,15 @@
 using namespace EDA_UNIT_UTILS::UI;
 
 
-MARGIN_OFFSET_BINDER::MARGIN_OFFSET_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel,
-                                            wxWindow* aValueCtrl, wxStaticText* aUnitLabel ) :
+MARGIN_OFFSET_BINDER::MARGIN_OFFSET_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindow* aValueCtrl,
+                                            wxStaticText* aUnitLabel ) :
         MARGIN_OFFSET_BINDER( aParent, aParent, aLabel, aValueCtrl, aUnitLabel )
 {
 }
 
 
-MARGIN_OFFSET_BINDER::MARGIN_OFFSET_BINDER( UNITS_PROVIDER* aUnitsProvider,
-                                            wxWindow* aEventSource, wxStaticText* aLabel,
-                                            wxWindow* aValueCtrl, wxStaticText* aUnitLabel ) :
+MARGIN_OFFSET_BINDER::MARGIN_OFFSET_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource,
+                                            wxStaticText* aLabel, wxWindow* aValueCtrl, wxStaticText* aUnitLabel ) :
         m_label( aLabel ),
         m_valueCtrl( aValueCtrl ),
         m_eventSource( aEventSource ),
@@ -51,21 +50,17 @@ MARGIN_OFFSET_BINDER::MARGIN_OFFSET_BINDER( UNITS_PROVIDER* aUnitsProvider,
 {
     if( m_valueCtrl )
     {
-        m_valueCtrl->Connect( wxEVT_SET_FOCUS,
-                              wxFocusEventHandler( MARGIN_OFFSET_BINDER::onSetFocus ),
+        m_valueCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( MARGIN_OFFSET_BINDER::onSetFocus ),
                               nullptr, this );
-        m_valueCtrl->Connect( wxEVT_KILL_FOCUS,
-                              wxFocusEventHandler( MARGIN_OFFSET_BINDER::onKillFocus ),
+        m_valueCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( MARGIN_OFFSET_BINDER::onKillFocus ),
                               nullptr, this );
-        m_valueCtrl->Connect( wxEVT_TEXT,
-                              wxCommandEventHandler( MARGIN_OFFSET_BINDER::onTextChanged ),
+        m_valueCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( MARGIN_OFFSET_BINDER::onTextChanged ),
                               nullptr, this );
     }
 
     if( m_eventSource )
     {
-        m_eventSource->Connect( EDA_EVT_UNITS_CHANGED,
-                                wxCommandEventHandler( MARGIN_OFFSET_BINDER::onUnitsChanged ),
+        m_eventSource->Connect( EDA_EVT_UNITS_CHANGED, wxCommandEventHandler( MARGIN_OFFSET_BINDER::onUnitsChanged ),
                                 nullptr, this );
     }
 
@@ -79,21 +74,17 @@ MARGIN_OFFSET_BINDER::~MARGIN_OFFSET_BINDER()
 {
     if( m_valueCtrl )
     {
-        m_valueCtrl->Disconnect( wxEVT_SET_FOCUS,
-                                 wxFocusEventHandler( MARGIN_OFFSET_BINDER::onSetFocus ),
+        m_valueCtrl->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( MARGIN_OFFSET_BINDER::onSetFocus ),
                                  nullptr, this );
-        m_valueCtrl->Disconnect( wxEVT_KILL_FOCUS,
-                                 wxFocusEventHandler( MARGIN_OFFSET_BINDER::onKillFocus ),
+        m_valueCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( MARGIN_OFFSET_BINDER::onKillFocus ),
                                  nullptr, this );
-        m_valueCtrl->Disconnect( wxEVT_TEXT,
-                                 wxCommandEventHandler( MARGIN_OFFSET_BINDER::onTextChanged ),
+        m_valueCtrl->Disconnect( wxEVT_TEXT, wxCommandEventHandler( MARGIN_OFFSET_BINDER::onTextChanged ),
                                  nullptr, this );
     }
 
     if( m_eventSource )
     {
-        m_eventSource->Disconnect( EDA_EVT_UNITS_CHANGED,
-                                   wxCommandEventHandler( MARGIN_OFFSET_BINDER::onUnitsChanged ),
+        m_eventSource->Disconnect( EDA_EVT_UNITS_CHANGED, wxCommandEventHandler( MARGIN_OFFSET_BINDER::onUnitsChanged ),
                                    nullptr, this );
     }
 }
@@ -393,8 +384,7 @@ bool MARGIN_OFFSET_BINDER::parseInput( const wxString& aInput, std::optional<int
 }
 
 
-wxString MARGIN_OFFSET_BINDER::formatValue( std::optional<int> aOffset,
-                                             std::optional<double> aRatio ) const
+wxString MARGIN_OFFSET_BINDER::formatValue( std::optional<int> aOffset, std::optional<double> aRatio ) const
 {
     wxString result;
 
@@ -421,6 +411,11 @@ wxString MARGIN_OFFSET_BINDER::formatValue( std::optional<int> aOffset,
         {
             result = wxString::Format( "%.4g%%", percent );
         }
+    }
+    else if( aOffset.has_value() && aOffset.value() == 0 )
+    {
+        // No value formats as empty string; a value of 0 must format as "0"
+        result = wxT( "0" );
     }
 
     return result;
