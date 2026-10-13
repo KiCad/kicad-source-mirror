@@ -20,7 +20,7 @@
 #include <sim/kibis/kibis.h>
 #include <sim/sim_model_ibis.h>
 #include <sim/sim_library_ibis.h>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <paths.h>
 #include <wx/filename.h>
 #include <wx/file.h>

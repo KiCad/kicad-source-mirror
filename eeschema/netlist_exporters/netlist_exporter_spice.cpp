@@ -37,7 +37,7 @@
 #include <ki_exception.h>
 
 #include <dialogs/html_message_box.h>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <paths.h>
 #include <wx/dir.h>
 #include <wx/log.h>

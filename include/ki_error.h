@@ -21,7 +21,6 @@
 #define KI_ERROR_H_
 
 #include <chrono>
-#include <fmt/format.h>
 
 #include <kicommon.h>
 #include <wx/string.h>

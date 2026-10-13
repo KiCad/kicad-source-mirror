@@ -24,7 +24,7 @@
 #include <config.h>     // Needed for MSW compilation
 #include <common.h>
 #include <locale_io.h>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <paths.h>
 #include <richio.h>
 

@@ -30,7 +30,7 @@
 #include <component_classes/component_class.h>
 #include <confirm.h>
 #include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <font/fontconfig.h>
 #include <footprint.h>
 #include <gestfich.h>

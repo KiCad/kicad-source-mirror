@@ -31,7 +31,6 @@
 #include <kiid.h>
 #include <wx_filename.h>
 #include <wx/string.h>
-#include <core/typeinfo.h>
 
 /// A variable name whose value holds the current project directory.
 /// Currently an environment variable, eventually a project variable.

@@ -23,7 +23,7 @@
 #include <sim/sim_model_spice_fallback.h>
 
 #include <boost/algorithm/string/case_conv.hpp>
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <locale_io.h>
 
 #include <atomic>
