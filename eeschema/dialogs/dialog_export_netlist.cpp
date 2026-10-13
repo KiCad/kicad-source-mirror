@@ -820,9 +820,12 @@ void DIALOG_EXPORT_NETLIST::OnAddGenerator( wxCommandEvent& event )
     wxString title = dlg.GetGeneratorTitle();
     wxString cmd = dlg.GetGeneratorTCommandLine();
 
-    // Verify it does not exists
+    // Verify it does not exist
     for( int ii = PANELCUSTOMBASE; ii < PANELCUSTOMBASE + CUSTOMPANEL_COUNTMAX; ++ii )
     {
+        // Note that we do not check for collisions with m_TitleStringCtrl as that's just
+        // used in the Export File dialog, and is not technically the name of the generator.
+
         if( m_PanelNetType[ii] && m_PanelNetType[ii]->GetPageNetFmtName() == title )
         {
             wxMessageBox( _( "This plugin already exists." ) );
