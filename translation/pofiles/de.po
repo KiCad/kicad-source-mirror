@@ -39,7 +39,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-12 19:20+0000\n"
+"PO-Revision-Date: 2026-10-13 20:51+0000\n"
 "Last-Translator: Frank Sonnenberg "
 "<audiofrank@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
@@ -206,7 +206,7 @@ msgstr "Lade 3D-Modelle ..."
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1158
 #, c-format
 msgid "Load completed in %.3f s"
-msgstr "In %.3f s geladen"
+msgstr "In %.3fs geladen"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1231
 msgid "Stopping background load..."
@@ -261,17 +261,17 @@ msgstr "Erstelle Hit-Test-Szene: 3D-Modelle..."
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1116
 #, c-format
 msgid "Hit-test scene ready in %.3f s"
-msgstr "Hit-Test-Szene in %.3f s bereit"
+msgstr "Hit-Test-Szene in %.3fs bereit"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1120
 #, c-format
 msgid "Reload time %.3f s"
-msgstr "Neu geladen in %.3f s"
+msgstr "Neu geladen in %.3fs"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:237
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr "Gerendert in %.3f s"
+msgstr "Gerendert in %.3fs"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:285
 #, c-format
@@ -12288,7 +12288,7 @@ msgstr "Aus Gruppe lösen"
 
 #: common/tool/actions.cpp:220
 msgid "Remove items from group"
-msgstr "Elemente aus der Gruppe heraus lösen"
+msgstr "Elemente aus der Gruppe herauslösen"
 
 #: common/tool/actions.cpp:226
 msgid "Enter Group"
@@ -40513,17 +40513,17 @@ msgstr "Produktionsebene:"
 #: pcb_calculator/calculator_panels/panel_pth_size_base.cpp:34
 #, fuzzy
 msgid "Lead shape:"
-msgstr "Pad-Form:"
+msgstr "Drahtform:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:269
 #, fuzzy
 msgid "Lead size:"
-msgstr "Pad Größe X:"
+msgstr "Drahtgröße:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:271
 #, fuzzy
 msgid "Effective lead size:"
-msgstr "Effektive %s:"
+msgstr "Effektive Drahtgröße:"
 
 #: pcb_calculator/calculator_panels/panel_pth_size.cpp:276
 msgid "Minimum hole size:"
@@ -56497,7 +56497,7 @@ msgstr "%s Fertigungseigenschaft weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:377
 #, c-format
 msgid "%s orientation differs."
-msgstr "Orientierung von %s ist unterschiedlich."
+msgstr "Ausrichtung von %s ist unterschiedlich."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:388
 #, c-format
@@ -57234,9 +57234,8 @@ msgstr "Erneutes Laden der Designregeln schlug fehl: %s"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:56
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:151
-#, fuzzy
 msgid "Optimum routed length"
-msgstr "Optimale geroutete Lönge"
+msgstr "Optimale geroutete Länge"
 
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:57
 #: pcbnew/drc/rule_editor/drc_re_abs_length_two_constraint_data.h:153
@@ -57332,11 +57331,11 @@ msgstr "Alles zulassen"
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:69
 #, fuzzy
 msgid "Allow footprints at any orientation"
-msgstr "Footprints mit beliebiger Orientierung zulassen"
+msgstr "Footprints mit beliebiger Ausrichtung zulassen"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:112
 msgid "At least one orientation must be selected"
-msgstr "Es muss mindestens eine Orientierung ausgewählt werden"
+msgstr "Es muss mindestens eine Ausrichtung ausgewählt werden"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_constraint_data.h:52
 msgid "Disallow"
@@ -58265,7 +58264,7 @@ msgid ""
 "Export time %.3f s\n"
 msgstr ""
 "\n"
-"Exportiert in %.3f s\n"
+"Exportiert in %.3fs\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:707
 msgid ""
@@ -63564,12 +63563,12 @@ msgid "Cannot create temporary output directory."
 msgstr "Temporäres Ausgabeverzeichnis kann nicht erstellt werden."
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating ODB++ files '%s'.\n"
 "%s"
 msgstr ""
-"Fehler beim Erzeugen der ODBPP-Datei \"%s\".\n"
+"Fehler beim Erzeugen der ODB++-Datei \"%s\".\n"
 "%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:522
@@ -63600,9 +63599,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:588
-#, fuzzy
 msgid "Unsupported ODB++ data set."
-msgstr "3D-Modell Nutzdatentyp wird nicht unterstützt."
+msgstr "Nicht unterstützter ODB++-Datensatz."
 
 #: pcbnew/pcb_io/odbpp/odb_export_job.cpp:598
 #, fuzzy
@@ -68936,7 +68934,7 @@ msgstr "3D-Modelle sammeln und einbetten"
 
 #: pcbnew/tools/pcb_actions.cpp:1781
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr "3D-Modelle von Footprints sammeln und sie in Platine einbetten"
+msgstr "3D-Modelle von Footprints sammeln und sie in die Platine einbetten"
 
 #: pcbnew/tools/pcb_actions.cpp:1791
 msgid "Switch Track Width to Next"
