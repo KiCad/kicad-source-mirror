@@ -2133,8 +2133,7 @@ HANDLER_RESULT<Empty> API_HANDLER_PCB::handleSetBoardPlotSettings( const HANDLER
 
     board()->SetPlotOptions( plotOpts );
 
-    if( frame() )
-        frame()->OnModify();
+    onModified();
 
     return Empty();
 }
