@@ -177,7 +177,7 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
             }
         }
     }
-    catch( const std::exception& e )
+    catch( const std::exception& )
     {
         // JSON parsing or other error - just show default
     }
