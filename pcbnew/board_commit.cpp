@@ -693,17 +693,20 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 frame->HideSolderMask();
         }
 
-        if( updateBoardBoundingBox && view )
+        if( updateBoardBoundingBox )
         {
             if( PCB_BOARD_OUTLINE* outline = board->BoardOutline() )
             {
                 board->UpdateBoardOutline();
 
-                if( view->HasItem( outline ) )
-                    view->Update( outline );
-                else
-                    view->Add( outline );
-             }
+                if( view )
+                {
+                    if( view->HasItem( outline ) )
+                        view->Update( outline );
+                    else
+                        view->Add( outline );
+                }
+            }
 
             RefreshDrillMapOutlines( *board, view );
         }
