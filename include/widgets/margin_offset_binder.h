@@ -98,6 +98,11 @@ public:
      */
     void Show( bool aShow, bool aResize = false );
 
+    /**
+     * @return an error message if the value couldn't be parsed, else an empty string
+     */
+    wxString Validate();
+
 protected:
     void onSetFocus( wxFocusEvent& aEvent );
     void onKillFocus( wxFocusEvent& aEvent );

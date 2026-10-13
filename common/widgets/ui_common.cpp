@@ -31,6 +31,8 @@
 #include <wx/stc/stc.h>
 #include <wx/scrolbar.h>
 #include <wx/grid.h>
+#include <wx/hyperlink.h>
+#include <wx/notebook.h>
 #include <widgets/ui_common.h>
 
 #include <algorithm>
@@ -40,7 +42,6 @@
 #include <settings/common_settings.h>
 #include <bitmaps/bitmap_types.h>
 #include <string_utils.h>
-#include <wx/hyperlink.h>
 
 
 const wxString KIUI::s_FocusStealableInputName = wxS( "KI_NOFOCUS" );
@@ -425,4 +426,18 @@ wxMenuItem* KIUI::AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId, const w
     aMenu->Append( item );
 
     return item;
+}
+
+
+int FindNotebookPage( wxNotebook* aNotebook, wxWindow* aChildWindow )
+{
+    wxWindow* candidate = aChildWindow;
+
+    while( candidate && candidate->GetParent() != aNotebook )
+        candidate = candidate->GetParent();
+
+    if ( candidate )
+        return aNotebook->FindPage( candidate );
+
+    return 0;
 }

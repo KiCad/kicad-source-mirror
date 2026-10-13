@@ -212,6 +212,30 @@ void MARGIN_OFFSET_BINDER::onTextChanged( wxCommandEvent& aEvent )
 }
 
 
+static wxString valueDescriptionFromLabel( wxStaticText* aLabel )
+{
+    wxString desc = aLabel->GetLabel();
+
+    desc.EndsWith( wxT( ":" ), &desc );
+    return desc;
+}
+
+
+wxString MARGIN_OFFSET_BINDER::Validate()
+{
+    std::optional<int> offset;
+    std::optional<double> ratio;
+
+    if( !parseInput( getTextValue(), offset, ratio ) )
+    {
+        return wxString::Format( _( "%s could not be parsed as a distance and/or percentage offset." ),
+                                 valueDescriptionFromLabel( m_label ) );
+    }
+
+    return wxEmptyString;
+}
+
+
 void MARGIN_OFFSET_BINDER::onKillFocus( wxFocusEvent& aEvent )
 {
     // Parse and reformat the value on focus loss

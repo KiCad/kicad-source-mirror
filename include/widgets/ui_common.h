@@ -38,6 +38,7 @@ class wxTextEntry;
 class wxWindow;
 class wxMenuItem;
 class wxMenu;
+class wxNotebook;
 
 /**
  * Used for holding indeterminate values, such as with multiple selections
@@ -212,5 +213,7 @@ KICOMMON_API wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
 KICOMMON_API SEVERITY SeverityFromString( const wxString& aSeverity );
 
 KICOMMON_API wxString SeverityToString( const SEVERITY& aSeverity );
+
+KICOMMON_API int FindNotebookPage( wxNotebook* aNotebook, wxWindow* aChildWindow );
 
 #endif // UI_COMMON_H

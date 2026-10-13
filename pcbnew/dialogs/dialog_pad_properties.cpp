@@ -371,7 +371,7 @@ void DIALOG_PAD_PROPERTIES::OnHoleSizeCalculator( wxCommandEvent& aEvent )
 void DIALOG_PAD_PROPERTIES::prepareCanvas()
 {
     GAL_DISPLAY_OPTIONS_IMPL opts = m_parent->GetGalDisplayOptions();
-    COLOR_SETTINGS*            colorSettings = m_parent->GetColorSettings();
+    COLOR_SETTINGS*          colorSettings = m_parent->GetColorSettings();
 
     opts.m_forceDisplayCursor = false;
 
@@ -1758,6 +1758,14 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     if( !m_localSettingsPanel->TransferDataFromWindow() )
         return false;
 
+    if( wxString error = m_pasteMargin.Validate(); !error.IsEmpty() )
+    {
+        m_notebook->SetSelection( FindNotebookPage( m_notebook, m_pasteMarginCtrl ) );
+        wxSafeYield( this );
+        DisplayError( nullptr, error );
+        return false;
+    }
+
     if( !padValuesOK() )
         return false;
 
@@ -2099,10 +2107,10 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
     switch( m_simElectricalTypeCtrl->GetSelection() )
     {
-    case 0: aPad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::NONE ); break;
-    case 1: aPad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::SOURCE ); break;
-    case 2: aPad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::SINK ); break;
-    default: aPad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::NONE ); break;
+    case 0:  aPad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::NONE );   break;
+    case 1:  aPad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::SOURCE ); break;
+    case 2:  aPad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::SINK );   break;
+    default: aPad->SetSimElectricalType( PAD_SIM_ELECTRICAL_TYPE::NONE );   break;
     }
 
     aPad->SetDelta( m_editLayer, delta );

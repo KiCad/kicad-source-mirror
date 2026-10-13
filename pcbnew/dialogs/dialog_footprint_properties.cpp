@@ -504,6 +504,14 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
     if( !m_netClearance.Validate( 0, INT_MAX ) )
         return false;
 
+    if( wxString error = m_solderPaste.Validate(); !error.IsEmpty() )
+    {
+        m_NoteBook->SetSelection( FindNotebookPage( m_NoteBook, m_SolderPasteMarginCtrl ) );
+        wxSafeYield( this );
+        DisplayError( nullptr, error );
+        return false;
+    }
+
     return true;
 }
 

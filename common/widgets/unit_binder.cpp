@@ -43,9 +43,9 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindo
 {
 }
 
-UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource,
-                          wxStaticText* aLabel, wxWindow* aValueCtrl, wxStaticText* aUnitLabel,
-                          bool aAllowEval, bool aBindFocusEvent ) :
+UNIT_BINDER::UNIT_BINDER( UNITS_PROVIDER* aUnitsProvider, wxWindow* aEventSource, wxStaticText* aLabel,
+                          wxWindow* aValueCtrl, wxStaticText* aUnitLabel, bool aAllowEval,
+                          bool aBindFocusEvent ) :
         m_bindFocusEvent( aBindFocusEvent ),
         m_label( aLabel ),
         m_valueCtrl( aValueCtrl ),
@@ -358,7 +358,7 @@ void UNIT_BINDER::onKillFocus( wxFocusEvent& aEvent )
 }
 
 
-wxString valueDescriptionFromLabel( wxStaticText* aLabel )
+static wxString valueDescriptionFromLabel( wxStaticText* aLabel )
 {
     wxString desc = aLabel->GetLabel();
 
@@ -377,10 +377,9 @@ void UNIT_BINDER::delayedFocusHandler( wxCommandEvent& )
 }
 
 
-UNIT_BINDER::RANGE_BOUND UNIT_BINDER::ConvertRangeBound( const EDA_IU_SCALE& aIuScale,
-                                                        EDA_UNITS aBoundUnits, double aBound,
-                                                        EDA_UNITS aDisplayUnits,
-                                                        EDA_DATA_TYPE aDataType )
+UNIT_BINDER::RANGE_BOUND UNIT_BINDER::ConvertRangeBound( const EDA_IU_SCALE& aIuScale, EDA_UNITS aBoundUnits,
+                                                         double aBound, EDA_UNITS aDisplayUnits,
+                                                         EDA_DATA_TYPE aDataType )
 {
     // StringFromValue scales the user value once per dimension (twice for area, thrice for
     // volume), so invert that same chain to bring the bound into internal units.
@@ -402,8 +401,7 @@ UNIT_BINDER::RANGE_BOUND UNIT_BINDER::ConvertRangeBound( const EDA_IU_SCALE& aIu
     // GetText has no UNITLESS label, so asking for units text would assert
     bool addUnitsText = aDataType != EDA_DATA_TYPE::UNITLESS;
 
-    return { boundIU,
-             StringFromValue( aIuScale, aDisplayUnits, boundIU, addUnitsText, aDataType ) };
+    return { boundIU, StringFromValue( aIuScale, aDisplayUnits, boundIU, addUnitsText, aDataType ) };
 }
 
 
