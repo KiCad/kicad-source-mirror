@@ -864,10 +864,9 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
     int      track_width = aTrack->GetWidth();
     COLOR4D  color       = m_pcbSettings.GetColor( aTrack, aLayer );
 
-    // If a chain highlight is active and the track belongs to the highlighted
-    // chain, and the chain has a colour override configured on the board,
-    // prefer that colour.  Only do this when we're drawing the actual copper
-    // (not netname labels, clearance outlines, etc.).
+    // If a chain highlight is active and the track belongs to the highlighted chain, and the chain
+    // has a colour override configured on the board, prefer that colour.  Only do this when we're
+    // drawing the actual copper (not netname labels, clearance outlines, etc.).
     if( IsCopperLayer( aLayer ) && !m_pcbSettings.m_highlightedNetChain.IsEmpty() )
     {
         if( NETINFO_ITEM* netinfo = aTrack->GetNet() )
@@ -1012,9 +1011,30 @@ void PCB_PAINTER::renderNetNameForSegment( const SHAPE_SEGMENT& aSeg, const COLO
 
 void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
 {
+    COLOR4D color = m_pcbSettings.GetColor( aArc, aLayer );
+
+    // If a chain highlight is active and the track belongs to the highlighted chain, and the chain
+    // has a colour override configured on the board, prefer that colour.  Only do this when we're
+    // drawing the actual copper (not netname labels, clearance outlines, etc.).
+    if( IsCopperLayer( aLayer ) && !m_pcbSettings.m_highlightedNetChain.IsEmpty() )
+    {
+        if( NETINFO_ITEM* netinfo = aArc->GetNet() )
+        {
+            if( netinfo->GetNetChain() == m_pcbSettings.m_highlightedNetChain )
+            {
+                if( const BOARD* board = aArc->GetBoard() )
+                {
+                    COLOR4D chainColor = board->GetNetChainColor( m_pcbSettings.m_highlightedNetChain );
+
+                    if( chainColor != COLOR4D::UNSPECIFIED )
+                        color = chainColor.WithAlpha( color.a );
+                }
+            }
+        }
+    }
+
     VECTOR2D  center( aArc->GetCenter() );
     int       width = aArc->GetWidth();
-    COLOR4D   color = m_pcbSettings.GetColor( aArc, aLayer );
     double    radius = aArc->GetRadius();
     EDA_ANGLE start_angle = aArc->GetArcAngleStart();
     EDA_ANGLE angle = aArc->GetAngle();
