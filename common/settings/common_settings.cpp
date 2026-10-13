@@ -405,6 +405,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "embed_file_defaults.sim_model", &m_EmbedFileDefaults.sim_model, false ) );
 
+    m_params.emplace_back( new PARAM<bool>( "relative_path_defaults.drawing_sheet",
+                                            &m_RelativePathDefaults.drawing_sheet, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "relative_path_defaults.jobset_destination",
                                             &m_RelativePathDefaults.jobset_destination, false ) );
 

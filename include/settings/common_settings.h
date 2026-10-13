@@ -191,6 +191,7 @@ public:
     // Sticky "Use relative path" choice, remembered per file-picker context.
     struct RELATIVE_PATH_DEFAULTS
     {
+        bool drawing_sheet;
         bool jobset_destination;
     };
 

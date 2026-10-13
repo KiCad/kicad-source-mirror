@@ -28,6 +28,7 @@
 // Context the "Use relative path" choice is remembered under.
 enum class RELATIVE_PATH_CONTEXT
 {
+    DRAWING_SHEET,
     JOBSET_DESTINATION
 };
 
@@ -90,8 +91,9 @@ private:
     {
         switch( aContext )
         {
-        case RELATIVE_PATH_CONTEXT::JOBSET_DESTINATION:
-        default: return aCfg->m_RelativePathDefaults.jobset_destination;
+        case RELATIVE_PATH_CONTEXT::JOBSET_DESTINATION: return aCfg->m_RelativePathDefaults.jobset_destination;
+        case RELATIVE_PATH_CONTEXT::DRAWING_SHEET:
+        default: return aCfg->m_RelativePathDefaults.drawing_sheet;
         }
     }
 

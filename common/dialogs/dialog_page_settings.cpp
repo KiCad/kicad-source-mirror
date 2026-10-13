@@ -41,6 +41,7 @@
 #include <string_utils.h>
 #include <widgets/std_bitmap_button.h>
 #include <widgets/filedlg_hook_embed_file.h>
+#include <widgets/filedlg_hook_relative_path.h>
 #include <wx/valgen.h>
 #include <wx/tokenzr.h>
 #include <wx/filedlg.h>
@@ -725,10 +726,16 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     else
     {
         wxFileName expanded( ExpandEnvVarSubstitutions( GetWksFileName(), &m_parentFrame->Prj() ) );
+        wxFileName inProject( expanded );
 
         if( expanded.IsAbsolute() )
         {
             path = expanded.GetPath();
+        }
+        else if( !m_projectPath.IsEmpty() && inProject.HasName() && inProject.MakeAbsolute( m_projectPath )
+                 && inProject.FileExists() )
+        {
+            path = inProject.GetPath();
         }
         else
         {
@@ -748,12 +755,16 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     }
 
     // Display a file picker dialog
-    FILEDLG_HOOK_EMBED_FILE customize( true, EMBED_FILE_CONTEXT::DRAWING_SHEET );
+    FILEDLG_HOOK_EMBED_FILE    embedHook( true, EMBED_FILE_CONTEXT::DRAWING_SHEET );
+    FILEDLG_HOOK_RELATIVE_PATH relativeHook( RELATIVE_PATH_CONTEXT::DRAWING_SHEET,
+                                             m_embeddedFiles ? &embedHook : nullptr );
     wxFileDialog fileDialog( this, _( "Drawing Sheet File" ), path, name, FILEEXT::DrawingSheetFileWildcard(),
                              wxFD_DEFAULT_STYLE | wxFD_FILE_MUST_EXIST );
 
-    if( m_embeddedFiles )
-        fileDialog.SetCustomizeHook( customize );
+    if( !m_projectPath.IsEmpty() )
+        fileDialog.SetCustomizeHook( relativeHook );
+    else if( m_embeddedFiles )
+        fileDialog.SetCustomizeHook( embedHook );
 
     KIPLATFORM::UI::AllowNetworkFileSystems( &fileDialog );
 
@@ -764,7 +775,7 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     wxString shortFileName;
     wxString newEmbeddedName;
 
-    if( m_embeddedFiles && customize.GetEmbed() )
+    if( m_embeddedFiles && embedHook.GetEmbed() )
     {
         fn.Assign( fileName );
         EMBEDDED_FILES::EMBEDDED_FILE* result = m_embeddedFiles->AddFile( fn, true );
@@ -775,17 +786,10 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
         // Re-embedding a file that was queued for removal cancels that removal
         m_embeddedSheetsToRemove.erase( newEmbeddedName );
     }
-    else if( !m_projectPath.IsEmpty() && fileName.StartsWith( m_projectPath ) )
-    {
-        // Try to use a project-relative path
-        fn = wxFileName( fileName );
-        fn.MakeRelativeTo( m_projectPath );
-        shortFileName = fn.GetFullPath();
-    }
     else
     {
-        // Failing that see if we can shorten it with env vars:
-        shortFileName = NormalizePath( fileName, &Pgm().GetLocalEnvVariables(), nullptr );
+        shortFileName = NormalizePathForProject( fileName, &Pgm().GetLocalEnvVariables(), m_projectPath,
+                                                 !m_projectPath.IsEmpty() && relativeHook.GetUseRelativePath() );
     }
 
     std::unique_ptr<DS_DATA_MODEL> ws = std::make_unique<DS_DATA_MODEL>();
