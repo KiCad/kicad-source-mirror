@@ -22,8 +22,9 @@
 
 #include <memory>
 
-#include <eda_text.h>
 #include <board_item.h>
+#include <eda_text.h>
+#include <geometry/shape_poly_set.h>
 
 
 class LINE_READER;

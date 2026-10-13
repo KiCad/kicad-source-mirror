@@ -35,6 +35,7 @@
 #include <geometry/roundrect.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_utils.h>
+#include <font/glyph_types.h>
 #include <gr_text.h>
 #include <sch_pin.h>
 #include <math/util.h>

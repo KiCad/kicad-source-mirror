@@ -27,6 +27,7 @@
 #include <fmt/format.h>
 
 #include <font/glyph.h>
+#include <font/glyph_types.h>
 #include <advanced_config.h>
 
 namespace

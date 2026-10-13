@@ -27,6 +27,8 @@
 #include <gal/painter.h>
 
 #include <geometry/seg.h>
+#include <geometry/shape_poly_set.h>
+
 
 namespace KIGFX {
 

@@ -21,7 +21,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <line_ending.h>
+#include "line_ending.h"
+
+#include <cmath>
+#include <iterator>
+
 #include <stroke_params.h>
 #include <eda_units.h>
 #include <macros.h>
@@ -29,10 +33,8 @@
 #include <trigo.h>
 #include <richio.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <geometry/shape_poly_set.h>
 #include <plotters/plotter.h>
-
-#include <cmath>
-#include <iterator>
 
 
 const LINE_ENDING_STYLE LINE_ENDING::s_defaultChoiceOrder[] =

@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <geometry/shape_poly_set.h>
 #include <gr_basic.h>
 #include <plotters/plotter.h>
 #include <trigo.h>
@@ -169,5 +170,3 @@ void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const 
 
     aFont->Draw( &callback_gal, evaluatedText, aPos, attributes, aFontMetrics );
 }
-
-

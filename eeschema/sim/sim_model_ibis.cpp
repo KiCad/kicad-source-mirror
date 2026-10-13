@@ -616,4 +616,3 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_IBIS::makePrbsWaveformParamInfos()
 
     return paramInfos;
 }
-

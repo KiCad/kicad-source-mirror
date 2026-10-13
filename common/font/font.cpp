@@ -27,6 +27,7 @@
 #include <macros.h>
 #include <string_utils.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <font/glyph_types.h>
 #include <font/stroke_font.h>
 #include <font/outline_font.h>
 #include <trigo.h>

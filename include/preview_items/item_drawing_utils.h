@@ -20,6 +20,7 @@
 #pragma once
 
 #include <gal/graphics_abstraction_layer.h>
+#include <geometry/seg.h>
 #include <math/vector2d.h>
 
 /**

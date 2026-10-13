@@ -33,6 +33,7 @@
 #include <gal/definitions.h>
 #include <kicad_gl/gl_context_mgr.h>
 #include <geometry/shape_poly_set.h>
+#include <font/glyph_types.h>
 #include <math/vector2wx.h>
 #include <bitmap_base.h>
 #include <bezier_curves.h>

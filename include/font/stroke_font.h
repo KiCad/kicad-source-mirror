@@ -27,12 +27,16 @@
 #define STROKE_FONT_H
 
 #include <gal/gal.h>
-#include <map>
-#include <deque>
-#include <algorithm>
+
 #include <core/utf8.h>
 #include <math/box2.h>
 #include <font/font.h>
+
+namespace KIFONT
+{
+class STROKE_GLYPH;
+}
+
 
 namespace KIGFX
 {

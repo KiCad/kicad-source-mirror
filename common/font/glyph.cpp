@@ -20,6 +20,7 @@
 
 #include <vector>
 #include <font/glyph.h>
+#include <font/glyph_types.h>
 #include <trigo.h>
 
 using namespace KIFONT;

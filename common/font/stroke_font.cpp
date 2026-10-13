@@ -24,7 +24,7 @@
 #include <wx/string.h>
 #include <wx/textfile.h>
 #include <newstroke_font.h>
-#include <font/glyph.h>
+#include <font/glyph_types.h>
 #include <font/stroke_font.h>
 #include <geometry/shape_line_chain.h>
 #include <trigo.h>

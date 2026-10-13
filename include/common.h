@@ -201,4 +201,3 @@ KICOMMON_API wxString ResolveProjectPath( const wxString& aPath, const PROJECT* 
  * @return true if the operating system is unsupported
  */
 KICOMMON_API bool WarnUserIfOperatingSystemUnsupported();
-

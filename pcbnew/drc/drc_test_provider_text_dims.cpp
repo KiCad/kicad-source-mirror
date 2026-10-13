@@ -26,6 +26,7 @@
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider.h>
 #include <font/font.h>
+#include <font/glyph_types.h>
 #include <pcb_dimension.h>
 
 

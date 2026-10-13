@@ -34,6 +34,7 @@
 #include <math/box2.h>
 #include <math/vector2d.h>
 #include <font/glyph.h>
+#include <geometry/shape_poly_set.h>
 
 namespace KIFONT
 {

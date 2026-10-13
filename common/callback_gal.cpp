@@ -20,6 +20,7 @@
 #include <trigo.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
+#include <font/glyph_types.h>
 
 #include <callback_gal.h>
 
@@ -74,5 +75,3 @@ void CALLBACK_GAL::DrawGlyph( const KIFONT::GLYPH& aGlyph, int aNth, int aTotal 
         }
     }
 }
-
-

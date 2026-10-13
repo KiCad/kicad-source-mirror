@@ -31,7 +31,7 @@
 #include <bitmap_base.h>
 #include <gal/bitmap_texture.h>
 #include <bezier_curves.h>
-#include <font/glyph.h>
+#include <font/glyph_types.h>
 #include <geometry/shape_ellipse.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
@@ -4294,4 +4294,3 @@ void GAL_MODERN::endUpdate()
 {
     m_isUpdating = false;
 }
-

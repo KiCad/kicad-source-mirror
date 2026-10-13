@@ -24,6 +24,7 @@
 #include <bezier_curves.h>
 #include <geometry/shape_poly_set.h>
 #include <font/fontconfig.h>
+#include <font/glyph_types.h>
 #include <font/outline_font.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H

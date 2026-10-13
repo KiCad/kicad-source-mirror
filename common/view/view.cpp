@@ -35,6 +35,7 @@
 #include <gal/definitions.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/painter.h>
+#include <geometry/shape_poly_set.h>
 #include <algorithm>
 #include <array>
 #include <chrono>
@@ -1880,7 +1881,7 @@ void VIEW::Redraw()
     wxLogTrace( traceGalProfile, wxS( "VIEW::Redraw(): %.1f ms" ), totalRealTime.msecs() );
     latencyProbeZoomToRender.AddTimer( totalRealTime );
     latencyProbeZoomToRender.Checkpoint("view-redraw-end");
-    
+
 #endif /* KICAD_GAL_PROFILE */
 }
 

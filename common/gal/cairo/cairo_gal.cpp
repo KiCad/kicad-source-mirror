@@ -31,6 +31,7 @@
 #include <gal/cairo/cairo_compositor.h>
 #include <gal/definitions.h>
 #include <geometry/shape_poly_set.h>
+#include <font/glyph_types.h>
 #include <math/vector2wx.h>
 #include <math/util.h> // for KiROUND
 #include <trigo.h>
