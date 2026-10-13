@@ -177,6 +177,12 @@ public:
         bool sim_model;
     };
 
+    // Sticky "Use relative path" choice, remembered per file-picker context.
+    struct RELATIVE_PATH_DEFAULTS
+    {
+        bool jobset_destination;
+    };
+
     struct PACKAGE_MANAGER
     {
         int sash_pos;
@@ -267,6 +273,7 @@ public:
     SYSTEM              m_System;
     DO_NOT_SHOW_AGAIN   m_DoNotShowAgain;
     EMBED_FILE_DEFAULTS m_EmbedFileDefaults;
+    RELATIVE_PATH_DEFAULTS m_RelativePathDefaults;
     PACKAGE_MANAGER     m_PackageManager;
     GIT                 m_Git;
     API                 m_Api;

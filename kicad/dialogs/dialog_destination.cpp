@@ -37,7 +37,11 @@
 #include <widgets/std_bitmap_button.h>
 #include <widgets/wx_grid.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <widgets/filedlg_hook_relative_path.h>
 #include <confirm.h>
+#include <env_paths.h>
+#include <common.h>
+#include <pgm_base.h>
 
 
 extern KICOMMON_API
@@ -75,11 +79,18 @@ void DIALOG_DESTINATION::onOutputPathBrowseClicked(wxCommandEvent& event)
     isFolder = JobsetDestinationTypeInfos[m_destination->m_type].outputPathIsFolder;
     fileWildcard = JobsetDestinationTypeInfos[m_destination->m_type].fileWildcard;
 
+    // The GUI runs jobs from the project directory, so that is where relative paths resolve
+    wxString projectPath = Prj().GetProjectPath();
+
+    // Expand the same way JOBS_OUTPUT_FOLDER and JOBS_OUTPUT_ARCHIVE do so the picker opens where output lands
+    wxString current = ExpandTextVars( m_textCtrlOutputPath->GetValue(), &Prj() );
+    current = ExpandEnvVarSubstitutions( current, &Prj() );
+
     if( isFolder )
     {
         wxFileName fn;
-        fn.AssignDir( m_textCtrlOutputPath->GetValue() );
-        fn.Normalize( FN_NORMALIZE_FLAGS | wxPATH_NORM_ENV_VARS );
+        fn.AssignDir( current );
+        fn.Normalize( FN_NORMALIZE_FLAGS, projectPath );
         wxString currPath = fn.GetFullPath();
 
         wxDirDialog dirDialog( this, _( "Select output directory" ), currPath,
@@ -88,17 +99,31 @@ void DIALOG_DESTINATION::onOutputPathBrowseClicked(wxCommandEvent& event)
         if( dirDialog.ShowModal() != wxID_OK )
             return;
 
-        wxFileName dirName = wxFileName::DirName( dirDialog.GetPath() );
+        wxString path = wxFileName::DirName( dirDialog.GetPath() ).GetFullPath();
+        wxString shortPath = NormalizePathForProject( path, &Pgm().GetLocalEnvVariables(), projectPath, false );
+        wxString parentPath = MakeRelativePath( path, projectPath );
 
-        m_textCtrlOutputPath->SetValue( dirName.GetFullPath() );
+        // wxDirDialog cannot host a customize hook, so ask before leaving the project with ".."
+        if( shortPath == path && parentPath != path
+            && IsOK( this, wxString::Format( _( "Do you want to use a path relative to\n'%s'?" ), projectPath ) ) )
+        {
+            shortPath = parentPath;
+        }
+
+        m_textCtrlOutputPath->SetValue( shortPath );
     }
     else
     {
-        wxFileName fname( m_textCtrlOutputPath->GetValue() );
+        wxFileName fname( current );
+        fname.MakeAbsolute( projectPath );
 
+        FILEDLG_HOOK_RELATIVE_PATH customize( RELATIVE_PATH_CONTEXT::JOBSET_DESTINATION );
         wxFileDialog dlg( this, _( "Select output path" ), fname.GetPath(), fname.GetFullName(),
                           fileWildcard,
                           wxFD_OVERWRITE_PROMPT | wxFD_SAVE );
+
+        if( !projectPath.IsEmpty() )
+            dlg.SetCustomizeHook( customize );
 
         KIPLATFORM::UI::AllowNetworkFileSystems( &dlg );
 
@@ -116,6 +141,9 @@ void DIALOG_DESTINATION::onOutputPathBrowseClicked(wxCommandEvent& event)
 
             path = fn.GetFullPath();
         }
+
+        path = NormalizePathForProject( path, &Pgm().GetLocalEnvVariables(), projectPath,
+                                        !projectPath.IsEmpty() && customize.GetUseRelativePath() );
 
         m_textCtrlOutputPath->SetValue( path );
     }

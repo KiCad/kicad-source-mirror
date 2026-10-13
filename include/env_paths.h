@@ -61,6 +61,34 @@ wxString KICOMMON_API NormalizePath( const wxFileName& aFilePath, const ENV_VAR_
                         const wxString& aProjectPath );
 
 /**
+ * Express an absolute path relative to a base directory, stepping out with ".." when needed.
+ *
+ * The result always uses '/' separators so a path stored in a shared file works on every
+ * platform.
+ *
+ * @param aPath is the absolute file or directory path to convert.
+ * @param aBaseDir is the absolute directory the result is relative to.
+ * @return the relative path, "." when \a aPath is \a aBaseDir itself, or \a aPath unchanged
+ *         when it has no relative form (relative input, empty base or a different volume).
+ */
+wxString KICOMMON_API MakeRelativePath( const wxString& aPath, const wxString& aBaseDir );
+
+/**
+ * Choose how to store a path the user picked for a project.
+ *
+ * A path inside the project is always made relative to it. Otherwise an environment variable
+ * substitution is preferred, then a path climbing out of the project with ".." when
+ * \a aAllowParentDirs is set, and finally the absolute path.
+ *
+ * @param aPath is the absolute file or directory path to store.
+ * @param aEnvVars is an optional map of environment variables to try substitution with.
+ * @param aProjectPath is the absolute project directory, or empty when there is no project.
+ * @param aAllowParentDirs permits a relative path that leaves the project directory.
+ */
+wxString KICOMMON_API NormalizePathForProject( const wxString& aPath, const ENV_VAR_MAP* aEnvVars,
+                                               const wxString& aProjectPath, bool aAllowParentDirs );
+
+/**
  * Search the default paths trying to find one with the requested file.
  *
  * @param aFileName is the name of the searched file. It might be a relative path.

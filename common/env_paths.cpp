@@ -149,6 +149,47 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
 }
 
 
+wxString MakeRelativePath( const wxString& aPath, const wxString& aBaseDir )
+{
+    wxFileName fn( aPath );
+    wxFileName base = wxFileName::DirName( aBaseDir );
+
+    if( aBaseDir.IsEmpty() || !fn.IsAbsolute() || !base.IsAbsolute() )
+        return aPath;
+
+    if( wxFileName::DirName( aPath ).SameAs( base ) )
+        return wxS( "." );
+
+    if( !fn.MakeRelativeTo( base.GetPath() ) )
+        return aPath;
+
+    return fn.GetFullPath( wxPATH_UNIX );
+}
+
+
+wxString NormalizePathForProject( const wxString& aPath, const ENV_VAR_MAP* aEnvVars,
+                                  const wxString& aProjectPath, bool aAllowParentDirs )
+{
+    wxFileName fn( aPath );
+
+    if( !fn.IsAbsolute() )
+        return aPath;
+
+    wxString relPath = MakeRelativePath( aPath, aProjectPath );
+
+    if( relPath != aPath && relPath != wxS( ".." ) && !relPath.StartsWith( wxS( "../" ) ) )
+        return relPath;
+
+    // A "../" path only survives moving the project together with its surroundings
+    wxString envPath = NormalizePath( fn, aEnvVars, wxEmptyString );
+
+    if( envPath != fn.GetFullPath() || !aAllowParentDirs )
+        return envPath;
+
+    return relPath;
+}
+
+
 // Create file path by appending path and file name. This approach allows the filename
 // to contain a relative path, whereas wxFileName::SetPath() would replace the
 // relative path
