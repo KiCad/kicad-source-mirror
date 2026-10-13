@@ -696,8 +696,88 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
 
         break;
 
+    case MAIL_SCH_RELOAD:
+    {
+        // A git operation rewrote files on disk. Reload the schematic so the editor matches.
+        wxString file = Schematic().GetFileName();
+
+        if( file.IsEmpty() )
+            break;
+
+        SCH_SCREENS screens( Schematic().Root() );
+
+        // A payload lists the changed files. When none is a sheet of this schematic, the change
+        // belongs to another project and reloading would only cost this one its undo history.
+        if( !payload.empty() )
+        {
+            wxArrayString changed = wxSplit( wxString::FromUTF8( payload.c_str() ), '\n' );
+            bool          mine = false;
+
+            for( SCH_SCREEN* screen = screens.GetFirst(); screen && !mine; screen = screens.GetNext() )
+            {
+                wxString screenFile = wxFileName( screen->GetFileName() ).GetFullPath();
+
+                for( const wxString& changedFile : changed )
+                {
+                    if( !changedFile.IsEmpty() && screenFile == wxFileName( changedFile ).GetFullPath() )
+                    {
+                        mine = true;
+                        break;
+                    }
+                }
+            }
+
+            if( !mine )
+                break;
+        }
+
+        // Neither choice is safe without asking: reloading discards the unsaved edits, keeping
+        // them means the next save overwrites what arrived.
+        if( IsContentModified() )
+        {
+            wxMessageDialog dlg( this,
+                                 _( "The schematic changed on disk while you were editing it.\n\n"
+                                    "Reloading loses your unsaved edits. Keeping them means your "
+                                    "next save overwrites the changes that just arrived. To get those "
+                                    "back later, use Discard Changes on the file in the Version Control "
+                                    "panel, which drops your edits to it." ),
+                                 _( "Schematic Changed on Disk" ),
+                                 wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
+            dlg.SetYesNoLabels( _( "&Reload" ), _( "&Keep My Edits" ) );
+
+            if( dlg.ShowModal() != wxID_YES )
+                break;
+        }
+
+        // As the Revert action does: reload from the root sheet and clear the modified flags, so
+        // nothing offers to save the stale content over what just arrived.
+        if( GetCurrentSheet().Last() != &Schematic().Root() )
+        {
+            SCH_SHEET_PATH rootSheetPath = Schematic().Hierarchy().at( 0 );
+            GetToolManager()->RunAction<SCH_SHEET_PATH*>( SCH_ACTIONS::changeSheet, &rootSheetPath );
+        }
+
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+            screen->SetContentModified( false );
+
+        ReleaseFile();
+        OpenProjectFiles( std::vector<wxString>( 1, file ), KICTL_REVERT );
+        break;
+    }
+
     case MAIL_SCH_UPDATE:
         m_toolManager->RunAction( ACTIONS::updateSchematicFromPcb );
+        break;
+
+    case MAIL_SCH_PROJECT_SETTINGS_CHANGED:
+        // Net colors and widths resolve through per-net caches, and text variables at draw time,
+        // so both need a flush and a repaint.
+        Prj().GetProjectFile().NetSettings()->ClearAllCaches();
+        Prj().IncrementNetclassesTicker();
+        Prj().IncrementTextVarsTicker();
+
+        GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+        GetCanvas()->Refresh();
         break;
 
     case MAIL_RELOAD_LIB:

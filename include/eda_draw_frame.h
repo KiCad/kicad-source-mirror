@@ -51,6 +51,7 @@ class SEARCH_PANE;
 class HOTKEY_CYCLE_POPUP;
 class PROPERTIES_PANEL;
 class NET_INSPECTOR_PANEL;
+class GIT_COMMIT_PANE;
 enum class BITMAP_TYPE;
 class FILEDLG_HOOK_NEW_LIBRARY;
 
@@ -435,6 +436,16 @@ public:
 
     static const wxString NetInspectorPanelName() { return wxS( "NetInspector" ); }
 
+
+    void ToggleGitCommitPane();
+
+    /// Attach the git session if needed and refresh the version-control pane, when it is shown.
+    /// Editors call this after a save so the pane reflects the change without waiting for a git
+    /// operation to broadcast a refresh.
+    void RefreshGitCommitPane();
+
+    bool IsGitCommitPaneShown();
+
     static const wxString DesignBlocksPaneName() { return wxS( "DesignBlocks" ); }
 
     static const wxString RemoteSymbolPaneName() { return wxS( "RemoteSymbol" ); }
@@ -640,6 +651,7 @@ protected:
     SEARCH_PANE*         m_searchPane;
     PROPERTIES_PANEL*    m_propertiesPanel;
     NET_INSPECTOR_PANEL* m_netInspectorPanel;
+    GIT_COMMIT_PANE*     m_gitCommitPane;
 
     HOTKEY_CYCLE_POPUP* m_hotkeyPopup;
 

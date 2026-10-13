@@ -112,6 +112,7 @@
 #include <widgets/bitmap_button.h>
 #include <widgets/sch_properties_panel.h>
 #include <widgets/sch_search_pane.h>
+#include <widgets/git_commit_pane.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/cmdline.h>
 #include <wx/app.h>
@@ -229,6 +230,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_searchPane = new SCH_SEARCH_PANE( this );
     m_propertiesPanel = new SCH_PROPERTIES_PANEL( this, this );
     m_remoteSymbolPane = new PANEL_REMOTE_SYMBOL( this );
+    m_gitCommitPane = new GIT_COMMIT_PANE( this );
 
     m_propertiesPanel->SetSplitterProportion( eeconfig()->m_AuiPanels.properties_splitter );
 
@@ -294,6 +296,19 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .DestroyOnClose( false )
                       .Show( m_show_search ) );
 
+    m_auimgr.AddPane( m_gitCommitPane, EDA_PANE()
+                                               .Name( GitCommitPaneName() )
+                                               .Right()
+                                               .Layer( 5 )
+                                               .Caption( _( "Version Control" ) )
+                                               .PaneBorder( false )
+                                               .MinSize( FromDIP( wxSize( 240, 120 ) ) )
+                                               .BestSize( FromDIP( wxSize( 300, 300 ) ) )
+                                               .FloatingSize( FromDIP( wxSize( 300, 400 ) ) )
+                                               .DestroyOnClose( false )
+                                               .CloseButton( true )
+                                               .Hide() );
+
     RestoreAuiLayout();
     FinishAUIInitialization();
 
@@ -308,6 +323,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     netNavigatorPane.Show( aui_cfg.show_net_nav_panel );
     propertiesPane.Show( aui_cfg.show_properties );
     designBlocksPane.Show( aui_cfg.design_blocks_show );
+    m_auimgr.GetPane( GitCommitPaneName() ).Show( aui_cfg.show_git_commit_pane );
 
     if( m_remoteSymbolPane && !m_remoteSymbolPane->HasDataSources() )
         remoteSymbolPane.Show( false );
@@ -766,6 +782,11 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return m_auimgr.GetPane( SearchPaneName() ).IsShown();
             };
 
+    auto gitCommitPaneCond = [this]( const SELECTION& )
+    {
+        return IsGitCommitPaneShown();
+    };
+
     auto propertiesCond =
             [this] ( const SELECTION& )
             {
@@ -830,6 +851,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( SCH_ACTIONS::showHierarchy,        CHECK( hierarchyNavigatorCond ) );
     mgr->SetConditions( SCH_ACTIONS::showNetNavigator,     CHECK( netNavigatorCond ) );
     mgr->SetConditions( ACTIONS::showProperties,           CHECK( propertiesCond ) );
+    mgr->SetConditions( ACTIONS::showGitCommitPane, CHECK( gitCommitPaneCond ) );
     mgr->SetConditions( SCH_ACTIONS::showDesignBlockPanel, CHECK( designBlockCond ) );
     mgr->SetConditions( SCH_ACTIONS::showRemoteSymbolPanel, CHECK( remoteSymbolCond ) );
     mgr->SetConditions( ACTIONS::toggleGrid,               CHECK( cond.GridVisible() ) );
@@ -2330,10 +2352,7 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 
 bool SCH_EDIT_FRAME::IsContentModified() const
 {
-    if( !Schematic().HasHierarchy() )
-        return false;
-
-    return Schematic().Hierarchy().IsModified();
+    return Schematic().IsHierarchyModified();
 }
 
 

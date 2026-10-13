@@ -102,6 +102,7 @@ public:
         int  properties_panel_width;
         float properties_splitter;
         bool show_properties;
+        bool    show_git_commit_pane;
         bool design_blocks_show;
         int  design_blocks_panel_docked_width;
         int  design_blocks_panel_float_width;

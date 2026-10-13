@@ -65,6 +65,8 @@
 #include <pgm_base.h>
 #include <libraries/library_manager.h>
 #include <libraries/library_table.h>
+#include <unordered_set>
+
 #include <wx/filename.h>
 #include <wx/log.h>
 
@@ -907,6 +909,76 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_MAIL_EVENT& mail )
         if( SavePcbFile( Prj().AbsolutePath( GetBoard()->GetFileName() ) ) )
             payload = "success";
 
+        break;
+
+    case MAIL_PCB_RELOAD:
+    {
+        // A git operation rewrote files on disk. Reload the board so the editor matches.
+        wxString file = Prj().AbsolutePath( GetBoard()->GetFileName() );
+
+        if( file.IsEmpty() )
+            break;
+
+        // A non-empty payload lists the files the operation changed. When the board is not
+        // among them, there is nothing to reload.
+        if( !payload.empty() )
+        {
+            wxArrayString changed = wxSplit( wxString::FromUTF8( payload.c_str() ), '\n' );
+            bool          mine = false;
+            wxString      boardFile = wxFileName( file ).GetFullPath();
+
+            for( const wxString& changedFile : changed )
+            {
+                if( !changedFile.IsEmpty() && boardFile == wxFileName( changedFile ).GetFullPath() )
+                {
+                    mine = true;
+                    break;
+                }
+            }
+
+            if( !mine )
+                break;
+        }
+
+        // Neither choice is safe without asking: reloading discards the unsaved edits, keeping
+        // them means the next save overwrites what arrived.
+        if( IsContentModified() )
+        {
+            wxMessageDialog dlg( this,
+                                 _( "The board changed on disk while you were editing it.\n\n"
+                                    "Reloading loses your unsaved edits. Keeping them means your "
+                                    "next save overwrites the changes that just arrived. To get those "
+                                    "back later, use Discard Changes on the file in the Version Control "
+                                    "panel, which drops your edits to it." ),
+                                 _( "Board Changed on Disk" ), wxYES_NO | wxNO_DEFAULT | wxICON_WARNING | wxCENTER );
+            dlg.SetYesNoLabels( _( "&Reload" ), _( "&Keep My Edits" ) );
+
+            if( dlg.ShowModal() != wxID_YES )
+                break;
+        }
+
+        // Clear the modified flag and release the lock the way the Revert action does, so the
+        // open path does not ask about saving the stale content over the file that just arrived.
+        GetScreen()->SetContentModified( false );
+        ReleaseFile();
+        OpenProjectFiles( std::vector<wxString>( 1, file ), KICTL_REVERT );
+        break;
+    }
+
+    case MAIL_PCB_PROJECT_SETTINGS_CHANGED:
+        // The settings were reread, but every net caches its resolved netclass, so routing would
+        // keep the old widths and clearances until they resynchronize.
+        GetBoard()->SynchronizeTuningProfileProperties();
+        GetBoard()->SynchronizeNetsAndNetClasses( true );
+
+        if( !GetBoard()->SynchronizeComponentClasses( std::unordered_set<wxString>() ) )
+            wxLogTrace( traceGit, wxS( "Could not load component class assignment rules" ) );
+
+        Prj().IncrementNetclassesTicker();
+        Prj().IncrementTextVarsTicker();
+
+        GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+        GetCanvas()->Refresh();
         break;
 
     case MAIL_RELOAD_LIB:

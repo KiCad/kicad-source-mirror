@@ -3347,6 +3347,13 @@ int SCH_EDITOR_CONTROL::ToggleProperties( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::ToggleGitCommitPane( const TOOL_EVENT& aEvent )
+{
+    getEditFrame<SCH_EDIT_FRAME>()->ToggleGitCommitPane();
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::ToggleLibraryTree( const TOOL_EVENT& aEvent )
 {
     getEditFrame<SCH_EDIT_FRAME>()->ToggleLibraryTree();
@@ -3800,6 +3807,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ShowHierarchy,           SCH_ACTIONS::showHierarchy.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowNetNavigator,        SCH_ACTIONS::showNetNavigator.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleProperties,        ACTIONS::showProperties.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ToggleGitCommitPane, ACTIONS::showGitCommitPane.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleLibraryTree,       SCH_ACTIONS::showDesignBlockPanel.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleLibraryTree,       SCH_ACTIONS::showDesignBlockPanel.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleRemoteSymbolPanel, SCH_ACTIONS::showRemoteSymbolPanel.MakeEvent() );

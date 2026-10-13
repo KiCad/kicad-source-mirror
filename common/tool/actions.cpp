@@ -1338,6 +1338,14 @@ TOOL_ACTION ACTIONS::showProperties( TOOL_ACTION_ARGS()
         .ToolbarState( TOOLBAR_STATE::TOGGLE )
         .Icon( BITMAPS::tools ) );
 
+TOOL_ACTION ACTIONS::showGitCommitPane( TOOL_ACTION_ARGS()
+                                                .Name( "common.Control.showGitCommitPane" )
+                                                .Scope( AS_GLOBAL )
+                                                .FriendlyName( _( "Version Control" ) )
+                                                .Tooltip( _( "Show/hide the version control panel" ) )
+                                                .ToolbarState( TOOLBAR_STATE::TOGGLE )
+                                                .Icon( BITMAPS::git_good_check ) );
+
 TOOL_ACTION ACTIONS::showDatasheet( TOOL_ACTION_ARGS()
         .Name( "common.Control.showDatasheet" )
         .Scope( AS_GLOBAL )

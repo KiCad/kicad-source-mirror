@@ -1037,6 +1037,13 @@ int BOARD_EDITOR_CONTROL::ToggleNetInspector( const TOOL_EVENT& aEvent )
 }
 
 
+int BOARD_EDITOR_CONTROL::ToggleGitCommitPane( const TOOL_EVENT& aEvent )
+{
+    getEditFrame<PCB_EDIT_FRAME>()->ToggleGitCommitPane();
+    return 0;
+}
+
+
 int BOARD_EDITOR_CONTROL::ToggleLibraryTree( const TOOL_EVENT& aEvent )
 {
     getEditFrame<PCB_EDIT_FRAME>()->ToggleLibraryTree();
@@ -2438,6 +2445,7 @@ void BOARD_EDITOR_CONTROL::setTransitions()
     Go( &BOARD_EDITOR_CONTROL::ToggleLayersManager,    PCB_ACTIONS::showLayersManager.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ToggleProperties,       ACTIONS::showProperties.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ToggleNetInspector,     PCB_ACTIONS::showNetInspector.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ToggleGitCommitPane, ACTIONS::showGitCommitPane.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ToggleLibraryTree,      PCB_ACTIONS::showDesignBlockPanel.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ToggleSearch,           PCB_ACTIONS::showSearch.MakeEvent() );
     Go( &BOARD_EDITOR_CONTROL::ToggleConstraintsPanel, PCB_ACTIONS::showConstraintsPanel.MakeEvent() );

@@ -141,6 +141,7 @@ public:
         int   search_panel_dock_direction;
         bool  show_layer_manager;
         bool  show_properties;
+        bool  show_git_commit_pane;
         bool  show_search;
         bool  show_net_inspector;
         bool  design_blocks_show;

@@ -369,6 +369,8 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.properties_splitter = m_propertiesPanel->SplitterProportion();
         cfg->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
 
+        cfg->m_AuiPanels.show_git_commit_pane = m_auimgr.GetPane( GitCommitPaneName() ).IsShown();
+
         wxAuiPaneInfo& netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
         cfg->m_AuiPanels.show_net_nav_panel = netNavigatorPane.IsShown();
         cfg->m_AuiPanels.float_net_nav_panel = netNavigatorPane.IsFloating();

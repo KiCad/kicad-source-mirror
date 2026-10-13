@@ -590,6 +590,12 @@ SCH_SHEET_LIST SCHEMATIC::Hierarchy() const
 }
 
 
+bool SCHEMATIC::IsHierarchyModified() const
+{
+    return !m_hierarchy.empty() && m_hierarchy.IsModified();
+}
+
+
 void SCHEMATIC::RefreshHierarchy()
 {
     ensureDefaultTopLevelSheet();

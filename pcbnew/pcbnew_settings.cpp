@@ -118,6 +118,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "aui.show_properties",
             &m_AuiPanels.show_properties, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "aui.show_git_commit_pane", &m_AuiPanels.show_git_commit_pane, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "aui.show_search",
             &m_AuiPanels.show_search, false ) );
 

@@ -984,6 +984,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( KISTATUSBAR* statusBar = dynamic_cast<KISTATUSBAR*>( GetStatusBar() ) )
         statusBar->AddWarningMessages( "load", loadReporter.GetMessages() );
 
+    // A standalone editor has no project manager to attach the git session for it.
+    RefreshGitCommitPane();
+
     return true;
 }
 
@@ -1123,6 +1126,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     m_autoSavePending = false;
     m_autoSaveRequired = false;
+
+    RefreshGitCommitPane();
+
     return true;
 }
 

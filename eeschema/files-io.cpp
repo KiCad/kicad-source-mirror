@@ -844,6 +844,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     m_remoteSymbolPane->BindWebViewLoaded();
 
+    // A standalone editor has no project manager to attach the git session for it.
+    RefreshGitCommitPane();
+
     return true;
 }
 
@@ -1469,6 +1472,9 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
         wxString backupMsg = backupReporter.GetMessages();
         m_infoBar->ShowMessageFor( backupMsg.Trim(), 10000, wxICON_WARNING );
     }
+
+    if( success )
+        RefreshGitCommitPane();
 
     return success;
 }

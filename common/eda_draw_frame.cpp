@@ -66,7 +66,9 @@
 #include <widgets/msgpanel.h>
 #include <widgets/properties_panel.h>
 #include <widgets/net_inspector_panel.h>
+#include <widgets/git_commit_pane.h>
 #include <widgets/filedlg_hook_new_library.h>
+#include <project.h>
 #include <wx/event.h>
 #include <widgets/ui_common.h>
 #include <widgets/search_pane.h>
@@ -121,6 +123,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_hotkeyPopup         = nullptr;
     m_propertiesPanel     = nullptr;
     m_netInspectorPanel   = nullptr;
+    m_gitCommitPane = nullptr;
 
     SetUserUnits( EDA_UNITS::MM );
 
@@ -362,6 +365,12 @@ void EDA_DRAW_FRAME::CommonSettingsChanged( int aFlags )
 
     // A rendering engine change in Preferences applies in place
     resolveCanvasType();
+
+    // Version control can have just been turned on or off.
+    RefreshGitCommitPane();
+
+    if( m_gitCommitPane )
+        m_gitCommitPane->ReloadAdvancedWindow();
 
     // Notify all tools the preferences have changed
     if( m_toolManager )
@@ -1277,6 +1286,43 @@ void EDA_DRAW_FRAME::UpdateProperties()
         return;
 
     m_propertiesPanel->UpdateData();
+}
+
+
+bool EDA_DRAW_FRAME::IsGitCommitPaneShown()
+{
+    return m_gitCommitPane && m_auimgr.GetPane( GitCommitPaneName() ).IsShown();
+}
+
+
+void EDA_DRAW_FRAME::ToggleGitCommitPane()
+{
+    if( !m_gitCommitPane )
+        return;
+
+    wxAuiPaneInfo& pane = m_auimgr.GetPane( GitCommitPaneName() );
+    bool           show = !pane.IsShown();
+
+    pane.Show( show );
+
+    if( show )
+        RefreshGitCommitPane();
+
+    m_auimgr.Update();
+}
+
+
+void EDA_DRAW_FRAME::RefreshGitCommitPane()
+{
+    if( !IsGitCommitPaneShown() )
+        return;
+
+    // Gated on the preference so no editor binds a repository behind it.
+    if( Pgm().GetCommonSettings()->m_Git.enableGit )
+        Prj().AttachGitRepository();
+
+    // Refreshed either way, or turning the preference off never reaches the panel.
+    m_gitCommitPane->RefreshFileList();
 }
 
 

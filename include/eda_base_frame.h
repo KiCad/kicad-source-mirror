@@ -131,6 +131,10 @@ public:
 
     ~EDA_BASE_FRAME();
 
+    /// Named here rather than beside the editors' other panes, because the project manager
+    /// docks this one too.
+    static const wxString GitCommitPaneName() { return wxS( "GitCommitPane" ); }
+
     void ChangeUserUnits( EDA_UNITS aUnits );
 
     virtual void ToggleUserUnits() { }

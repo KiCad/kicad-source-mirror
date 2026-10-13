@@ -318,6 +318,8 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "aui.show_properties",
             &m_AuiPanels.show_properties, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "aui.show_git_commit_pane", &m_AuiPanels.show_git_commit_pane, false ) );
+
     m_params.emplace_back( new PARAM<int>( "aui.properties_panel_width",
             &m_AuiPanels.properties_panel_width, -1 ) );
 
