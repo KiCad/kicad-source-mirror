@@ -1621,7 +1621,15 @@ static bool compactRepository( git_repository* aRepo, PROGRESS_REPORTER* aReport
     }
 
     // Pack names are content addressed, so an unchanged repo rewrites the same file; exclude it
+#if LIBGIT2_VERSION_CHECK( 1, 4, 0 )
     const char* newPackName = git_packbuilder_name( pb );
+#else
+    char hex[GIT_OID_HEXSZ + 1];
+    hex[GIT_OID_HEXSZ] = '\0';
+    git_oid_fmt( hex, git_packbuilder_hash( pb ) );
+
+    const char* newPackName = strlen( hex ) > 0 ? hex : nullptr;
+#endif
 
     if( aSupersededPacks && newPackName )
     {
