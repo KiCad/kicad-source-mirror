@@ -1774,7 +1774,7 @@ static wxString buildPack( git_repository* aRepo, const wxString& aPackDir, PROG
 
     if( ok && rc == GIT_ITEROVER && writePack( pb, aPackDir, aReporter, aCancel ) )
     {
-#if LIBGIT2_VERSION_CHECK( 1, 4, 0 )
+#if ( LIBGIT2_VER_MAJOR > 1 ) || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 4 )
         const char* newPackName = git_packbuilder_name( pb );
 #else
         char hex[GIT_OID_HEXSZ + 1];
