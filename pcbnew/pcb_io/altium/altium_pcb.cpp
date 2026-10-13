@@ -30,6 +30,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <project/net_settings.h>
 #include <footprint.h>
 #include <layer_range.h>

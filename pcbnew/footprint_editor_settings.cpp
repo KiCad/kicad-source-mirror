@@ -20,6 +20,7 @@
 
 #include "footprint_editor_settings.h"
 
+#include <board_design_settings_defaults.h>
 #include <project/board_project_settings_params.h>
 #include <settings/color_settings.h>
 #include <common.h>

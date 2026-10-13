@@ -35,7 +35,7 @@
 
 #include <bitmaps.h>
 #include <board.h>
-#include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <collectors.h>
 #include <component_classes/component_class_manager.h>
 #include <confirm.h>

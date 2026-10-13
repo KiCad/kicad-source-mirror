@@ -17,17 +17,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "board_design_settings.h"
+
+#include <algorithm>
+#include <cmath>
+
+#include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <magic_enum.hpp>
 #include <pcb_dimension.h>
 #include <pcb_track.h>
-#include <algorithm>
-#include <limits>
-#include <cmath>
 #include <layer_ids.h>
 #include <lset.h>
 #include <kiface_base.h>
 #include <pad.h>
-#include <board_design_settings.h>
 #include <project/net_settings.h>
 #include <drc/drc_item.h>
 #include <drc/drc_engine.h>

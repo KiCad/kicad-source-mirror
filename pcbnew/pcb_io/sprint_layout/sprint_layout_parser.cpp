@@ -26,6 +26,7 @@
 #include <board.h>
 #include <board_item_container.h>
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <footprint.h>
 #include <memory>
 #include <netinfo.h>

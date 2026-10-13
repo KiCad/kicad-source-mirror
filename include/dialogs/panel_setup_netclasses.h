@@ -21,6 +21,9 @@
 #ifndef PANEL_SETUP_NETCLASSES_H
 #define PANEL_SETUP_NETCLASSES_H
 
+#include <bitset>
+#include <memory>
+
 #include <widgets/unit_binder.h>
 #include <widgets/paged_dialog.h>
 #include <panel_setup_netclasses_base.h>

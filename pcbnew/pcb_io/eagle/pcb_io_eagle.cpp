@@ -46,7 +46,6 @@ Load() TODO's
 
 */
 
-#include <cerrno>
 #include <set>
 
 #include <wx/string.h>
@@ -57,6 +56,7 @@ Load() TODO's
 #include <wx/txtstrm.h>
 #include <wx/window.h>
 
+#include <board_design_settings_defaults.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <font/fontconfig.h>
 #include <geometry/geometry_utils.h>

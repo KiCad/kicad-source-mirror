@@ -33,6 +33,7 @@
 #include <pcb_text.h>
 #include <view/view.h>
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <geometry/shape_compound.h>
 #include <geometry/shape_circle.h>
 #include <geometry/shape_segment.h>

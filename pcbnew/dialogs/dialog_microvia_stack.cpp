@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <confirm.h>
 #include <lset.h>
 #include <pcb_base_edit_frame.h>

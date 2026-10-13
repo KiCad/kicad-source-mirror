@@ -19,6 +19,7 @@
 
 #include "panel_fp_editor_graphics_defaults.h"
 
+#include <board_design_settings_defaults.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>

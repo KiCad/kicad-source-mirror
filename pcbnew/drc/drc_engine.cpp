@@ -27,6 +27,7 @@
 #include <progress_reporter.h>
 #include <string_utils.h>
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <project/net_settings.h>
 #include <component_classes/component_class_manager.h>
 #include <drc/drc_engine.h>

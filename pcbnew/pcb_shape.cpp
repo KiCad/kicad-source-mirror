@@ -29,6 +29,7 @@
 #include <macros.h>
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <board.h>
 #include <footprint.h>
 #include <lset.h>

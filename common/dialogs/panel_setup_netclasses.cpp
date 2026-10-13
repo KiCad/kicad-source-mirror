@@ -19,19 +19,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "dialogs/panel_setup_netclasses.h"
+
 #include <algorithm>
 #include <limits>
+
 #include <wx/wupdlock.h>
+
 #include <pgm_base.h>
 #include <eda_draw_frame.h>
 #include <bitmaps.h>
 #include <netclass.h>
 #include <gal/painter.h>
 #include <grid_tricks.h>
-#include <dialogs/panel_setup_netclasses.h>
 #include <tool/tool_manager.h>
 #include <pcb_painter.h>
-#include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <string_utils.h>
 #include <view/view.h>
 #include <widgets/grid_color_swatch_helpers.h>

@@ -21,10 +21,12 @@
 
 #include <wx/debug.h>
 #include <wx/msgdlg.h>
+
 #include <i18n_utility.h>
 #include <macros.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <lset.h>
 #include <pcb_group.h>
 #include <pcb_generator.h>

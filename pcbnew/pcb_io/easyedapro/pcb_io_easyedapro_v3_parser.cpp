@@ -49,6 +49,7 @@
 #include <pad.h>
 #include <fix_board_shape.h>
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <netclass.h>
 #include <project/net_settings.h>
 
@@ -910,7 +911,7 @@ void PCB_IO_EASYEDAPRO_V3_PARSER::ParseBoard( BOARD* aBoard, const nlohmann::jso
     BOARD_DESIGN_SETTINGS&                      bds = aBoard->GetDesignSettings();
 
     m_safeSpacing = nlohmann::json();
-    
+
     for( const V3_ROW& row : aDoc.rows )
     {
         if( row.type != wxS( "RULE" ) || V3GetString( row.inner, "ruleState" ) != wxS( "DEFAULT" ) )

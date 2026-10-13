@@ -43,6 +43,7 @@
 #include <footprint.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <netclass.h>
 #include <project/net_settings.h>
 

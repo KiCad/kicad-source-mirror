@@ -20,6 +20,7 @@
 #include "panel_setup_text_and_graphics.h"
 
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <dialogs/panel_setup_dimensions.h>
 #include <pcb_edit_frame.h>
 #include <grid_tricks.h>

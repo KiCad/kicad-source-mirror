@@ -20,6 +20,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <board_item.h>
 #include <pcb_table.h>
 #include <pcb_tablecell.h>

@@ -34,6 +34,7 @@
 #include <progress_reporter.h>
 #include <board.h>
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <bezier_curves.h>
 #include <pcb_group.h>
 #include <pcb_track.h>
