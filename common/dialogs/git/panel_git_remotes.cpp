@@ -22,9 +22,9 @@
 #include <mutex>
 
 #include <wx/datetime.h>
-#include <wx/textdlg.h>
 
 #include <confirm.h>
+#include <dialogs/git/dialog_git_remote.h>
 #include <dialogs/git/git_advanced_dialog.h>
 #include <dialogs/git/git_ui_utils.h>
 #include <eda_base_frame.h>
@@ -200,15 +200,13 @@ void PANEL_GIT_REMOTES::onAddRemote()
     if( !m_dialog->SessionStillCurrent() )
         return;
 
-    wxString name = wxGetTextFromUser( _( "Remote name:" ), _( "Add Remote" ), wxEmptyString, this );
+    DIALOG_GIT_REMOTE dlg( this );
 
-    if( name.IsEmpty() )
+    if( dlg.ShowModal() != wxID_OK )
         return;
 
-    wxString url = wxGetTextFromUser( _( "Remote URL:" ), _( "Add Remote" ), wxEmptyString, this );
-
-    if( url.IsEmpty() )
-        return;
+    wxString name = dlg.GetName();
+    wxString url = dlg.GetUrl();
 
     runRemoteAction(
             [name, url]( KIGIT_COMMON& aCommon )
@@ -229,11 +227,13 @@ void PANEL_GIT_REMOTES::onEditRemote()
     if( name.IsEmpty() )
         return;
 
-    wxString current = KIGIT::SelectedText( m_remotesList, 1 );
-    wxString url = wxGetTextFromUser( _( "Remote URL:" ), _( "Edit Remote" ), current, this );
+    wxString          current = KIGIT::SelectedText( m_remotesList, 1 );
+    DIALOG_GIT_REMOTE dlg( this, name, current );
 
-    if( url.IsEmpty() )
+    if( dlg.ShowModal() != wxID_OK )
         return;
+
+    wxString url = dlg.GetUrl();
 
     // The list shows the address with any user:password removed, so writing it back unchanged
     // would delete credentials the config still holds.
