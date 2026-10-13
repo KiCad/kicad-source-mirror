@@ -1773,6 +1773,9 @@ std::vector<std::unique_ptr<PNS::SOLID>> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPa
                 {
                     const std::shared_ptr<SHAPE_POLY_SET>& poly = aPad->GetEffectivePolygon( aLayer, ERROR_OUTSIDE );
 
+                    wxASSERT_MSG( poly->OutlineCount() <= 1, wxT( "PAD::GetEffectivePolygon() should have fractured "
+                                                                  "the SHAPE_POLY_SET, leaving a single outline." ) );
+
                     if( poly->OutlineCount() )
                         solid->SetShape( new SHAPE_SIMPLE( poly->Outline( 0 ) ) );
                 }
