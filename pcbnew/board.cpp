@@ -3201,7 +3201,9 @@ void BOARD::AddVariant( const wxString& aVariantName )
     if( aVariantName.IsEmpty()
         || aVariantName.CmpNoCase( GetDefaultVariantName() ) == 0
         || HasVariant( aVariantName ) )
+    {
         return;
+    }
 
     m_variantNames.push_back( aVariantName );
 }

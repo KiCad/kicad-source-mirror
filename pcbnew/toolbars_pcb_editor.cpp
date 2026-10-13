@@ -584,26 +584,6 @@ void PCB_EDIT_FRAME::SetCurrentVariant( const wxString& aVariantName )
             ds->SetVariantDesc( variantDesc.ToStdString() );
         }
     }
-}
-
-
-void PCB_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
-{
-    if( !m_CurrentVariantCtrl )
-        return;
-
-    int selection = m_CurrentVariantCtrl->GetSelection();
-
-    if( selection == wxNOT_FOUND || selection == 0 )
-    {
-        // "<Default>" selected - clear the current variant
-        SetCurrentVariant( wxEmptyString );
-    }
-    else
-    {
-        wxString selectedVariant = m_CurrentVariantCtrl->GetString( selection );
-        SetCurrentVariant( selectedVariant );
-    }
 
     // Refresh the view and properties panel to show the new variant state
     UpdateProperties();
@@ -641,6 +621,26 @@ void PCB_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
 
     Update3DView( true, GetPcbNewSettings()->m_Display.m_Live3DRefresh );
     m_toolManager->ProcessEvent( EVENTS::SelectedItemsModified );
+}
+
+
+void PCB_EDIT_FRAME::onVariantSelected( wxCommandEvent& aEvent )
+{
+    if( !m_CurrentVariantCtrl )
+        return;
+
+    int selection = m_CurrentVariantCtrl->GetSelection();
+
+    if( selection == wxNOT_FOUND || selection == 0 )
+    {
+        // "<Default>" selected - clear the current variant
+        SetCurrentVariant( wxEmptyString );
+    }
+    else
+    {
+        wxString selectedVariant = m_CurrentVariantCtrl->GetString( selection );
+        SetCurrentVariant( selectedVariant );
+    }
 }
 
 
