@@ -69,7 +69,7 @@ JOB_EXPORT_PCB_DRILL::JOB_EXPORT_PCB_DRILL() :
         m_drillUnits( DRILL_UNITS::INCH ),
         m_zeroFormat( ZEROS_FORMAT::DECIMAL ),
         m_mapFormat( MAP_FORMAT::PDF ),
-        m_gerberPrecision( 5 ),
+        m_gerberPrecision( GBR_DEFAULT_PRECISION ),
         m_generateMap( false ),
         m_generateTenting( false ),
         m_generateReport( false )

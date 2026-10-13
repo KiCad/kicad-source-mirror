@@ -18,8 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef JOB_EXPORT_PCB_SVG_H
-#define JOB_EXPORT_PCB_SVG_H
+#pragma once
 
 #include <kicommon.h>
 #include <layer_ids.h>
@@ -28,6 +27,12 @@
 #include <jobs/job_export_pcb_plot.h>
 #include "job.h"
 
+
+#define SVG_PRECISION_MIN         3U
+#define SVG_PRECISION_MAX         6U
+#define SVG_PRECISION_DEFAULT     4
+
+
 class KICOMMON_API JOB_EXPORT_PCB_SVG : public JOB_EXPORT_PCB_PLOT
 {
 public:
@@ -35,6 +40,7 @@ public:
     wxString GetDefaultDescription() const override;
     wxString GetSettingsDialogTitle() const override;
 
+public:
     bool         m_fitPageToBoard;
     unsigned int m_precision;
 
@@ -46,5 +52,3 @@ public:
 
     GEN_MODE m_genMode;
 };
-
-#endif

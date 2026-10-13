@@ -29,19 +29,11 @@
 #include <io/kicad/kicad_io_utils.h>
 #include <settings/color_settings.h>
 #include <lseq.h>
+#include <jobs/job_export_pcb_drill.h>
+#include <jobs/job_export_pcb_svg.h>
 
 
 #define PLOT_LINEWIDTH_DEFAULT    ( DEFAULT_TEXT_WIDTH * IU_PER_MM )
-
-#define SVG_PRECISION_MIN         3U
-#define SVG_PRECISION_MAX         6U
-#define SVG_PRECISION_DEFAULT     4
-
-
-// default trailing digits in Gerber coordinates, when units are mm
-// This is also the max usable precision (i.e. internal Pcbnew Units)
-static const int gbrDefaultPrecision = 6;
-
 
 using namespace PCBPLOTPARAMS_T;
 
@@ -59,7 +51,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_useGerberX2format          = true;
     m_includeGerberNetlistInfo   = true;
     m_createGerberJobFile        = true;
-    m_gerberPrecision            = gbrDefaultPrecision;
+    m_gerberPrecision            = GBR_DEFAULT_PRECISION;
     m_dashedLineDashRatio        = 12.0;   // From ISO 128-2
     m_dashedLineGapRatio         = 3.0;    // From ISO 128-2
 
@@ -127,8 +119,8 @@ void PCB_PLOT_PARAMS::SetGerberPrecision( int aPrecision )
     // or 5, min value for professional boards, when 6 creates problems
     // to board makers.
 
-    m_gerberPrecision = aPrecision == gbrDefaultPrecision-1 ? gbrDefaultPrecision-1 :
-                                      gbrDefaultPrecision;
+    m_gerberPrecision = aPrecision == GBR_DEFAULT_PRECISION-1 ? GBR_DEFAULT_PRECISION-1 :
+                                      GBR_DEFAULT_PRECISION;
 }
 
 
@@ -159,7 +151,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter ) const
 
     // save this option only if it is not the default value,
     // to avoid incompatibility with older Pcbnew version
-    if( m_gerberPrecision != gbrDefaultPrecision )
+    if( m_gerberPrecision != GBR_DEFAULT_PRECISION )
         aFormatter->Print( "(gerberprecision %d)", m_gerberPrecision );
 
     aFormatter->Print( "(dashed_line_dash_ratio %s)", FormatDouble2Str( GetDashedLineDashRatio() ).c_str() );
@@ -674,8 +666,8 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_gerberprecision:
-            aPcbPlotParams->m_gerberPrecision = parseInt( gbrDefaultPrecision - 1,
-                                                          gbrDefaultPrecision);
+            aPcbPlotParams->m_gerberPrecision = parseInt( GBR_DEFAULT_PRECISION - 1,
+                                                          GBR_DEFAULT_PRECISION);
             break;
 
         case T_dashed_line_dash_ratio:
