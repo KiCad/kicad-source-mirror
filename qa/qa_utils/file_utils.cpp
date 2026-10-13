@@ -37,19 +37,82 @@
 using namespace KI_TEST;
 
 
+namespace
+{
 /**
  * Report a message about a temporary directory.
  *
  * This cannot use wx logging as it can be called outside the WX
  * Init/Uninit lifetime, so it goes to stderr.
  */
-static void reportTempDir( const wxString& aMessage )
+void reportTempDir( const wxString& aMessage )
 {
     fprintf( stderr, "%s\n", aMessage.utf8_string().c_str() );
 }
 
 
-static bool shouldKeepTemp( const std::filesystem::path& aPath, const wxString& aKeepEnvValue )
+/**
+ * Remove a temporary directory. Failures are reported but this never thows,
+ * so it is safe to call from destructors.
+ */
+void safeRemoveTempDir( const std::filesystem::path& aPath ) noexcept
+{
+    std::error_code ec;
+    std::filesystem::remove_all( aPath, ec ); // use the noexcept version
+
+    if( !ec )
+        return;
+
+    try
+    {
+        reportTempDir( wxString::Format( wxT( "Cannot remove temporary directory '%s': %s" ),
+                                         wxString::FromUTF8( aPath.string() ), wxString::FromUTF8( ec.message() ) ) );
+    }
+    catch( ... )
+    {
+        // Even a log failure must not throw during unwinding.
+    }
+}
+
+
+/**
+ * Removes a temporary directory in its destructor unless released.
+ *
+ * It is armed immediately after the directory is claimed and released only
+ * once its owner has fully taken responsibility for it, so a throw anywhere in
+ * between cannot leak the directory.
+ */
+class TEMP_DIR_REMOVER
+{
+public:
+    explicit TEMP_DIR_REMOVER( std::filesystem::path aPath ) noexcept :
+            m_path( std::move( aPath ) )
+    {
+    }
+
+    ~TEMP_DIR_REMOVER()
+    {
+        if( !m_released )
+        {
+            // Destructor-safe removal
+            safeRemoveTempDir( m_path );
+        }
+    }
+
+    TEMP_DIR_REMOVER( const TEMP_DIR_REMOVER& ) = delete;
+    TEMP_DIR_REMOVER& operator=( const TEMP_DIR_REMOVER& ) = delete;
+
+    const std::filesystem::path& Path() const noexcept { return m_path; }
+
+    void Release() noexcept { m_released = true; }
+
+private:
+    std::filesystem::path m_path;
+    bool                  m_released = false;
+};
+
+
+bool shouldKeepTemp( const std::filesystem::path& aPath, const wxString& aKeepEnvValue )
 {
     const wxString envVar = wxT( "KICAD_QA_KEEP_TEMP" );
     wxString       keepEnv;
@@ -78,7 +141,7 @@ static bool shouldKeepTemp( const std::filesystem::path& aPath, const wxString& 
 }
 
 
-static std::filesystem::path createTempDir( const wxString& aPrefix, const wxString& aSuffix )
+std::filesystem::path createTempDir( const wxString& aPrefix, const wxString& aSuffix )
 {
     std::error_code             ec;
     const std::filesystem::path tempRoot = std::filesystem::temp_directory_path( ec );
@@ -109,32 +172,35 @@ static std::filesystem::path createTempDir( const wxString& aPrefix, const wxStr
                               + std::string( aPrefix.utf8_str() ) + "/" + std::string( aSuffix.utf8_str() ) + "'" );
 }
 
+} // namespace
+
 
 bool SCOPED_TEMP_DIR::s_anyTempDirRetained = false;
 
 
-SCOPED_TEMP_DIR::SCOPED_TEMP_DIR( const wxString& aPrefix, const wxString& aSuffix ) :
-        m_path( createTempDir( aPrefix, aSuffix ) ),
-        m_keep( shouldKeepTemp( m_path, aPrefix ) )
+SCOPED_TEMP_DIR::SCOPED_TEMP_DIR( const wxString& aPrefix, const wxString& aSuffix )
 {
+    // Protect the temporary directory by creating a remover that will delete it
+    // if something goes wrong before the SCOPED_TEMP_DIR takes ownership.
+    TEMP_DIR_REMOVER remover( createTempDir( aPrefix, aSuffix ) );
+
+    m_keep = shouldKeepTemp( remover.Path(), aPrefix );
+    m_path = remover.Path();
+
     if( m_keep )
         s_anyTempDirRetained = true;
+
+    // Finally, relinquish ownership to this SCOPED_TEMP_DIR instance.
+    remover.Release();
 }
 
 
 SCOPED_TEMP_DIR::~SCOPED_TEMP_DIR()
 {
-    if( m_keep )
-        return;
-
-    try
+    if( !m_keep )
     {
-        std::filesystem::remove_all( m_path );
-    }
-    catch( const std::filesystem::filesystem_error& e )
-    {
-        reportTempDir( wxString::Format( wxT( "Cannot remove temporary directory '%s': %s" ),
-                                         wxString::FromUTF8( m_path.string() ), wxString::FromUTF8( e.what() ) ) );
+        // Destructor-safe removal of the temporary directory.
+        safeRemoveTempDir( m_path );
     }
 }
 
