@@ -479,7 +479,7 @@ void LIB_TREE::Regenerate( bool aKeepState )
     if( aKeepState )
         current = getState();
 
-    wxString filter = m_query_ctrl->GetValue();
+    wxString filter = m_query_ctrl ? m_query_ctrl->GetValue() : wxString();
     m_adapter->UpdateSearchString( filter, aKeepState );
     postPreselectEvent();
 
