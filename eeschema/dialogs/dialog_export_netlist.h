@@ -36,17 +36,10 @@ public:
     DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXPORT_SCH_NETLIST* aJob = nullptr );
     ~DIALOG_EXPORT_NETLIST(){};
 
-private:
-    void                 InstallCustomPages();
-    EXPORT_NETLIST_PAGE* AddOneCustomPage( const wxString& aTitle, const wxString& aCommandString,
-                                           NETLIST_TYPE_ID aNetTypeId );
-    void                 InstallPageSpice();
-    void                 InstallPageSpiceModel();
-
+    bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    void updateGeneratorButtons();
-
+protected:
     // Called when changing the notebook page (and therefore the current netlist format)
     void OnNetlistTypeSelection( wxNotebookEvent& event ) override;
 
@@ -59,6 +52,15 @@ private:
      * Remove a panel relative to a netlist plugin.
      */
     void OnDelGenerator( wxCommandEvent& event ) override;
+
+private:
+    void                 InstallCustomPages();
+    EXPORT_NETLIST_PAGE* AddOneCustomPage( const wxString& aTitle, const wxString& aCommandString,
+                                           NETLIST_TYPE_ID aNetTypeId );
+    void                 InstallPageSpice();
+    void                 InstallPageSpiceModel();
+
+    void updateGeneratorButtons();
 
     /**
      * Write the current netlist options setup in the configuration.

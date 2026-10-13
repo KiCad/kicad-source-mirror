@@ -334,8 +334,6 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
-
-    updateGeneratorButtons();
 }
 
 
@@ -452,6 +450,13 @@ EXPORT_NETLIST_PAGE* DIALOG_EXPORT_NETLIST::AddOneCustomPage( const wxString& aT
 void DIALOG_EXPORT_NETLIST::OnNetlistTypeSelection( wxNotebookEvent& event )
 {
     updateGeneratorButtons();
+}
+
+
+bool DIALOG_EXPORT_NETLIST::TransferDataToWindow()
+{
+    updateGeneratorButtons();
+    return true;
 }
 
 
