@@ -2725,6 +2725,30 @@ static SCRATCH_DOC<SCHEMATIC> loadScratchSchematic( SETTINGS_MANAGER& aMgr, cons
 }
 
 
+// A bare PROJECT has no PROJECT_FILE and SCHEMATIC::SetProject dereferences GetProjectFile(),
+// so the missing side of a diff needs a real scratch project just like the loaded side.
+static SCRATCH_DOC<SCHEMATIC> emptyScratchSchematic( SETTINGS_MANAGER& aMgr, const wxString& aTag )
+{
+    // A fixed name in the shared temp directory could be loaded as the scratch project, and
+    // would collide between two KiCad instances diffing at once.
+    wxFileName synthetic( wxFileName::GetTempDir(),
+                          wxString::Format( wxS( "%s_%ld_%p" ), aTag, static_cast<long>( wxGetProcessId() ), &aMgr ) );
+
+    return LoadScratchDoc<SCHEMATIC>(
+            aMgr, synthetic.GetFullPath(),
+            []( PROJECT* aProject )
+            {
+                auto sch = std::make_unique<SCHEMATIC>( aProject );
+                sch->CreateDefaultScreens();
+                return sch;
+            },
+            []( SCHEMATIC* aSch )
+            {
+                aSch->SetProject( nullptr );
+            } );
+}
+
+
 int EESCHEMA_JOBS_HANDLER::JobSchDiff( JOB* aJob )
 {
     JOB_SCH_DIFF* diffJob = dynamic_cast<JOB_SCH_DIFF*>( aJob );
@@ -2929,27 +2953,20 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
             return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
         }
 
-        // Synthesize empty SCHEMATICs against scratch PROJECTs for any
-        // missing side so SCH_DIFFER sees a valid empty document.
-        PROJECT                    scratchPrjA;
-        PROJECT                    scratchPrjB;
-        std::unique_ptr<SCHEMATIC> emptyA;
-        std::unique_ptr<SCHEMATIC> emptyB;
+        // Synthesize empty SCHEMATICs for any missing side so SCH_DIFFER sees a valid empty
+        // document. Each empty side needs its own defaults-only project: a bare PROJECT has no
+        // PROJECT_FILE, and SCHEMATIC::SetProject dereferences GetProjectFile().
+        SCRATCH_DOC<SCHEMATIC> emptyA;
+        SCRATCH_DOC<SCHEMATIC> emptyB;
 
         if( !a.doc )
-        {
-            emptyA = std::make_unique<SCHEMATIC>( &scratchPrjA );
-            emptyA->CreateDefaultScreens();
-        }
+            emptyA = emptyScratchSchematic( mgr, wxT( "kicad_diff_empty_a" ) );
 
         if( !b.doc )
-        {
-            emptyB = std::make_unique<SCHEMATIC>( &scratchPrjB );
-            emptyB->CreateDefaultScreens();
-        }
+            emptyB = emptyScratchSchematic( mgr, wxT( "kicad_diff_empty_b" ) );
 
-        SCHEMATIC* schA = a.doc ? a.doc.get() : emptyA.get();
-        SCHEMATIC* schB = b.doc ? b.doc.get() : emptyB.get();
+        SCHEMATIC* schA = a.doc ? a.doc.get() : emptyA.doc.get();
+        SCHEMATIC* schB = b.doc ? b.doc.get() : emptyB.doc.get();
 
         KICAD_DIFF::SCH_DIFFER differ( schA, schB, aFileB );
         result = differ.Diff();
@@ -2961,38 +2978,67 @@ int EESCHEMA_JOBS_HANDLER::OpenDiffDialog( KICAD_DIFF::DOC_KIND aKind, const wxS
         const wxString labelA = aLabelA.IsEmpty() ? aFileA : aLabelA;
         const wxString labelB = aLabelB.IsEmpty() ? aFileB : aLabelB;
 
-        DIALOG_KICAD_DIFF dlg(
-                parent, labelA, labelB, result, std::move( refGeometry ), std::move( compGeometry ),
-                [schA, schB, color = theme.reference]( WIDGET_DIFF_CANVAS& aCanvas, const KIID_PATH& aSheetPath )
-                {
-                    SCH_SCREEN* refScreen = schA ? schA->RootScreen() : nullptr;
-                    SCH_SCREEN* compScreen = schB ? schB->RootScreen() : nullptr;
+        // A deleted item exists only in the reference schematic, so the comparison-side context cannot
+        // draw it. Keyed by sheet path, or removing one instance of a shared sheet ghosts the others.
+        std::map<KIID_PATH, std::set<KIID>> removedBySheet;
 
-                    if( !aSheetPath.empty() )
-                    {
-                        if( schA )
-                        {
-                            if( auto sp = schA->Hierarchy().GetSheetPathByKIIDPath( aSheetPath, true ) )
-                                refScreen = sp->LastScreen();
-                        }
+        for( const KICAD_DIFF::ITEM_CHANGE& change : result.changes )
+        {
+            if( change.kind == KICAD_DIFF::CHANGE_KIND::REMOVED && !change.id.empty() )
+            {
+                KIID_PATH sheetPath = change.id;
+                sheetPath.pop_back();
+                removedBySheet[sheetPath].insert( change.id.back() );
+            }
+        }
 
-                        if( schB )
-                        {
-                            if( auto sp = schB->Hierarchy().GetSheetPathByKIIDPath( aSheetPath, true ) )
-                                compScreen = sp->LastScreen();
-                        }
-                    }
+        DIALOG_KICAD_DIFF dlg( parent, labelA, labelB, result, std::move( refGeometry ), std::move( compGeometry ),
+                               [schA, schB, removedBySheet, color = theme.reference]( WIDGET_DIFF_CANVAS& aCanvas,
+                                                                                      const KIID_PATH&    aSheetPath )
+                               {
+                                   SCH_SCREEN* compScreen = schB ? schB->RootScreen() : nullptr;
 
-                    KICAD_DIFF::ConfigureSchDiffCanvasContext( aCanvas, schA, schB, color, {}, {}, {}, refScreen,
-                                                               compScreen );
-                } );
+                                   if( !aSheetPath.empty() && schB )
+                                   {
+                                       if( auto sp = schB->Hierarchy().GetSheetPathByKIIDPath( aSheetPath, true ) )
+                                           compScreen = sp->LastScreen();
+                                   }
+
+                                   SCH_SCREEN* refScreen = schA ? schA->RootScreen() : nullptr;
+
+                                   if( !aSheetPath.empty() && schA )
+                                   {
+                                       if( auto sp = schA->Hierarchy().GetSheetPathByKIIDPath( aSheetPath, true ) )
+                                           refScreen = sp->LastScreen();
+                                   }
+
+                                   std::vector<KIGFX::VIEW_ITEM*> deletedItems;
+                                   auto                           removedHere = removedBySheet.find( aSheetPath );
+
+                                   // The initial display passes an empty path for the root
+                                   // sheet, which the change ids name by uuid.
+                                   if( removedHere == removedBySheet.end() && aSheetPath.empty() && schA )
+                                   {
+                                       KIID_PATH rootPath;
+                                       rootPath.push_back( schA->Root().m_Uuid );
+                                       removedHere = removedBySheet.find( rootPath );
+                                   }
+
+                                   if( refScreen && removedHere != removedBySheet.end() )
+                                   {
+                                       for( SCH_ITEM* item : refScreen->Items() )
+                                       {
+                                           if( removedHere->second.count( item->m_Uuid ) )
+                                               deletedItems.push_back( item );
+                                       }
+                                   }
+
+                                   // Drawing the reference too would overlay the old and new
+                                   // versions of a moved item, so only its deleted items are used.
+                                   KICAD_DIFF::ConfigureSchDiffCanvasContext( aCanvas, nullptr, schB, color, {},
+                                                                              deletedItems, {}, nullptr, compScreen );
+                               } );
         dlg.ShowModal();
-
-        if( emptyA )
-            emptyA->SetProject( nullptr );
-
-        if( emptyB )
-            emptyB->SetProject( nullptr );
 
         return CLI::EXIT_CODES::SUCCESS;
     }
