@@ -1772,8 +1772,21 @@ static wxString buildPack( git_repository* aRepo, const wxString& aPackDir, PROG
     // A walk cut short by an error would write a partial pack that then supersedes complete ones
     wxString stem;
 
-    if( ok && rc == GIT_ITEROVER && writePack( pb, aPackDir, aReporter, aCancel ) && git_packbuilder_name( pb ) )
-        stem = wxS( "pack-" ) + wxString::FromUTF8( git_packbuilder_name( pb ) );
+    if( ok && rc == GIT_ITEROVER && writePack( pb, aPackDir, aReporter, aCancel ) )
+    {
+#if LIBGIT2_VERSION_CHECK( 1, 4, 0 )
+        const char* newPackName = git_packbuilder_name( pb );
+#else
+        char hex[GIT_OID_HEXSZ + 1];
+        hex[GIT_OID_HEXSZ] = '\0';
+        git_oid_fmt( hex, git_packbuilder_hash( pb ) );
+
+        const char* newPackName = strlen( hex ) > 0 ? hex : nullptr;
+#endif
+
+        if( newPackName )
+            stem = wxS( "pack-" ) + wxString::FromUTF8( newPackName );
+    }
 
     git_packbuilder_free( pb );
     return stem;
