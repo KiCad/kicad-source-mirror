@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-12 18:51+0000\n"
+"PO-Revision-Date: 2026-10-13 20:51+0000\n"
 "Last-Translator: Frank Sonnenberg "
 "<audiofrank@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v10/de/>\n"
@@ -202,7 +202,7 @@ msgstr "Lade 3D-Modelle ..."
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:1073
 #, c-format
 msgid "Reload time %.3f s"
-msgstr "Neu geladen in %.3f s"
+msgstr "Neu geladen in %.3fs"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:1669
 #: eeschema/libraries/legacy_symbol_library.cpp:539
@@ -237,7 +237,7 @@ msgstr "Lade Raytracing: Lagen"
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:245
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr "Gerendert in %.3f s"
+msgstr "Gerendert in %.3fs"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace_base.cpp:293
 #, c-format
@@ -10645,7 +10645,7 @@ msgstr "Aus Gruppe lösen"
 
 #: common/tool/actions.cpp:224
 msgid "Remove items from group"
-msgstr "Elemente aus der Gruppe heraus lösen"
+msgstr "Elemente aus der Gruppe herauslösen"
 
 #: common/tool/actions.cpp:230
 msgid "Enter Group"
@@ -48983,7 +48983,7 @@ msgstr "%s Fertigungseigenschaft weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:367
 #, c-format
 msgid "%s orientation differs."
-msgstr "Orientierung von %s ist unterschiedlich."
+msgstr "Ausrichtung von %s ist unterschiedlich."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:378
 #, c-format
@@ -49706,7 +49706,7 @@ msgstr "Alles zulassen"
 
 #: pcbnew/drc/rule_editor/drc_re_allowed_orientation_constraint_data.h:111
 msgid "At least one orientation must be selected"
-msgstr "Es muss mindestens eine Orientierung ausgewählt werden"
+msgstr "Es muss mindestens eine Ausrichtung ausgewählt werden"
 
 #: pcbnew/drc/rule_editor/drc_re_bool_input_constraint_data.h:56
 msgid "Disallow"
@@ -50219,7 +50219,7 @@ msgid ""
 "Export time %.3f s\n"
 msgstr ""
 "\n"
-"Exportiert in %.3f s\n"
+"Exportiert in %.3fs\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:710
 msgid ""
@@ -59027,7 +59027,7 @@ msgstr "3D-Modelle sammeln und einbetten"
 
 #: pcbnew/tools/pcb_actions.cpp:1368
 msgid "Collect footprint 3D models and embed them into the board"
-msgstr "3D-Modelle von Footprints sammeln und sie in Platine einbetten"
+msgstr "3D-Modelle von Footprints sammeln und sie in die Platine einbetten"
 
 #: pcbnew/tools/pcb_actions.cpp:1378
 msgid "Switch Track Width to Next"
