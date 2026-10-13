@@ -269,6 +269,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
     // Note: frame == nullptr happens in QA tests
 
+    if( !frame )
+        aCommitFlags |= SKIP_UNDO;
+
     std::vector<BOARD_ITEM*> bulkAddedItems;
     std::vector<BOARD_ITEM*> bulkRemovedItems;
     std::vector<BOARD_ITEM*> itemsChanged;
