@@ -66,6 +66,7 @@ PANEL_GIT_STASHES::PANEL_GIT_STASHES( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
     m_stashesList->AppendColumn( _( "Description" ), wxLIST_FORMAT_LEFT, FromDIP( 360 ) );
     m_stashesList->AppendColumn( _( "Date" ), wxLIST_FORMAT_LEFT, FromDIP( 100 ) );
     m_stashFiles->AppendColumn( _( "File" ), wxLIST_FORMAT_LEFT, FromDIP( 300 ) );
+    m_stashFiles->SetToolTip( _( "Double click a file to see what the stash changes in it." ) );
 
     KIGIT::MarkDestructive( m_dropStashButton );
 
@@ -94,6 +95,21 @@ PANEL_GIT_STASHES::PANEL_GIT_STASHES( wxWindow* aParent, GIT_ADVANCED_DIALOG* aD
                              if( !m_fillingStashes )
                                  showStashDetail( stashIdForRow( aEvent.GetIndex() ) );
                          } );
+
+    // A stash is a commit, so comparing it with the commit it was taken from is what it changes.
+    m_stashFiles->Bind( wxEVT_LIST_ITEM_ACTIVATED,
+                        [this]( wxListEvent& aEvent )
+                        {
+                            long sel = m_stashesList->GetNextItem( -1, wxLIST_NEXT_ALL,
+                                                                   wxLIST_STATE_SELECTED );
+                            wxString id = stashIdForRow( sel );
+
+                            if( !id.IsEmpty() )
+                            {
+                                ShowGitCommitDiff( m_frame, id, m_dialog,
+                                                   m_stashFiles->GetItemText( aEvent.GetIndex() ) );
+                            }
+                        } );
 
     m_applyStashButton->Bind( wxEVT_BUTTON,
                               [this]( wxCommandEvent& )
