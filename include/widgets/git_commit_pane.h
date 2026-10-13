@@ -80,6 +80,9 @@ public:
     /// lands here too.
     void Push();
 
+    /// Called when a transfer starts and when it ends, so an owning window can follow along.
+    void SetBusyChangedHandler( std::function<void( bool )> aHandler ) { m_busyChangedHandler = aHandler; }
+
     /// The width the panel needs so its widest row fits, for the dock that holds it.
     int GetMinDockWidth() const { return m_minDockWidth; }
 
@@ -235,6 +238,9 @@ private:
 
     /// The push or pull running for this pane, joined before the pane goes.
     std::thread m_networkWorker;
+
+    /// Told when a transfer starts and ends. Empty unless an owning window asked.
+    std::function<void( bool )> m_busyChangedHandler;
 
     /// Unwrapped status text, kept so it can be re-wrapped on resize.
     wxString m_statusText;

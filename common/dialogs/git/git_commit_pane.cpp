@@ -1660,6 +1660,9 @@ void GIT_COMMIT_PANE::setBusy( bool aBusy, const wxString& aStatus )
     if( !aBusy && !aStatus.IsEmpty() && m_emptyLabel->IsShown() && !m_headDetached && !m_operationInProgress )
         setStatusText( aStatus );
 
+    if( m_busyChangedHandler )
+        m_busyChangedHandler( aBusy );
+
     // While a transfer runs, the network button turns into its cancel control.
     if( aBusy )
     {

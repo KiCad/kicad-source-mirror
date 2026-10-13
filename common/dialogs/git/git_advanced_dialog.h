@@ -22,45 +22,26 @@
 
 #include <atomic>
 #include <functional>
-#include <map>
 #include <memory>
-#include <set>
-#include <string>
-#include <utility>
 #include <thread>
-#include <vector>
 
-#include <wx/bitmap.h>
 #include <wx/timer.h>
 
-#include <dialog_shim.h>
+#include <dialogs/git/dialog_git_advanced_base.h>
 
 class EDA_BASE_FRAME;
 #include <git/git_editor_snapshot.h>
 
-enum class BITMAPS : unsigned int;
 class GIT_COMMIT_PANE;
 class KIGIT_COMMON;
-struct KIGIT_BRANCH_DETAIL;
-struct KIGIT_COMMIT_DETAIL;
-struct KIGIT_COMMIT_INFO;
-struct KIGIT_HISTORY_FILTER;
-struct KIGIT_STASH_DETAIL;
-struct KIGIT_TAG_DETAIL;
 class GIT_FILE_DIFF_AREA;
-class WX_TREEBOOK;
-class wxButton;
-class wxCheckBox;
-class wxChoice;
-class wxDataViewColumn;
-class wxDataViewListCtrl;
-class wxListCtrl;
-class wxPanel;
-class wxSearchCtrl;
+class PANEL_GIT_BRANCHES;
+class PANEL_GIT_HISTORY;
+class PANEL_GIT_REMOTES;
+class PANEL_GIT_STASHES;
+class PANEL_GIT_REPOSITORY;
+class PANEL_GIT_TAGS;
 class wxSplitterWindow;
-class wxStaticBitmap;
-class wxStaticText;
-class wxTextCtrl;
 
 
 /**
@@ -69,7 +50,7 @@ class wxTextCtrl;
  * repository. The Changes page carries the same commit controls as the docked Version Control
  * panel, and branch, tag, remote, stash and identity management happen here.
  */
-class GIT_ADVANCED_DIALOG : public DIALOG_SHIM
+class GIT_ADVANCED_DIALOG : public DIALOG_GIT_ADVANCED_BASE
 {
 public:
     GIT_ADVANCED_DIALOG( EDA_BASE_FRAME* aParent, GIT_COMMIT_PANE* aPane );
@@ -98,187 +79,52 @@ public:
 
     void ReloadPages();
 
+    /// Run a repository write under the action lock, then refresh every surface on success.
+    /// Shows a busy message if the lock is held, or aError if the action returns false. Set
+    /// aRewritesWorkingTree for operations that change the files the editors have open, so they
+    /// are reloaded from disk too.
+    void RunGitAction( const std::function<bool( KIGIT_COMMON& )>& aFn, const wxString& aError,
+                       bool aRewritesWorkingTree = false );
+
+    /// True while the frame's git session is still the one this window's lists were filled
+    /// from. On a mismatch the window is stale: it closes itself and the action must abort.
+    bool SessionStillCurrent();
+
+    /// Before an action that rewrites files on disk, save the open editors and snapshot their
+    /// documents. Returns false to abort the action.
+    bool ConfirmWorkingTreeChange();
+
+    /// Before an action that needs a clean tree, refuse while anything is uncommitted or unsaved,
+    /// since saving the editors would only create the changes that block it. False to abort.
+    bool RefuseOverUncommittedWork();
+
+    /// Reload the editors from disk and refresh the panels, after an operation rewrote files.
+    void FinishWorkingTreeChange();
+
+    /// Switch the working tree to the named branch, after confirming, then refresh.
+    void SwitchToBranch( const wxString& aBranch );
+
 private:
-    /// The History page: filters above a list of commits beside the selected commit's detail.
-    wxWindow*           buildHistoryPage( wxWindow* aBook );
-    wxDataViewListCtrl* buildHistoryList( wxWindow* aParent );
-    wxPanel*            buildCommitDetailPane( wxWindow* aParent );
-
-    /// Fill the History list from the repository's recent commits, up to the current window.
-    void populateHistory();
-
-    /// Restart the history at the first window after the search or branch filter changed.
-    void reloadHistory();
-
-    /// Offer every branch in the History page's branch filter, keeping the current choice.
-    void populateHistoryBranches( const std::vector<std::pair<wxString, bool>>& aBranches );
-
-    /// The search text and branch the History page is narrowed to.
-    KIGIT_HISTORY_FILTER historyFilter() const;
-
-    /// Fill the detail pane with aHash, or clear it when the hash is empty or gone.
-    void showCommitDetail( const wxString& aHash );
-    void fillCommitDetail( const KIGIT_COMMIT_DETAIL& aDetail );
-    void clearCommitDetail();
-
-    /// Show what the selected commit did to aPath under the file list, or hide that area.
-    void showFileDiff( const wxString& aPath );
-    void hideFileDiff();
-
     /// The Changes page: the docked panel's commit controls with the selected file's diff below.
     wxWindow* buildChangesPage( wxWindow* aBook );
-
-    /// The Branches page: a searchable list beside the selected branch's detail.
-    wxWindow* buildBranchesPage( wxWindow* aBook );
-    wxPanel*  buildBranchDetailPane( wxWindow* aParent );
-
-    /// Refill the branch list after the search text changed.
-    void reloadBranches();
-
-    /// The Remotes page: the list beside the selected remote's detail.
-    wxWindow* buildRemotesPage( wxWindow* aBook );
-    wxPanel*  buildRemoteDetailPane( wxWindow* aParent );
-
-    /// The Stashes page: the list beside the selected stash's detail.
-    wxWindow* buildStashesPage( wxWindow* aBook );
-    wxPanel*  buildStashDetailPane( wxWindow* aParent );
-
-    /// Fill the detail pane with the stash aId names, or hide it when the id is empty or gone.
-    void showStashDetail( const wxString& aId );
-    void fillStashDetail( const KIGIT_STASH_DETAIL& aDetail );
-    void hideStashDetail();
-
-    /// The Tags page: the list beside the selected tag's detail.
-    wxWindow* buildTagsPage( wxWindow* aBook );
-    wxPanel*  buildTagDetailPane( wxWindow* aParent );
-
-    /// Fill the detail pane with aTag, or hide it when the name is empty or gone.
-    void showTagDetail( const wxString& aTag );
-    void fillTagDetail( const KIGIT_TAG_DETAIL& aDetail );
-    void hideTagDetail();
-
-    /// Fill the detail pane with aRemote, or hide it when the name is empty.
-    void showRemoteDetail( const wxString& aRemote );
-    void fillRemoteDetail( const wxString& aRemote, const wxDateTime& aFetched );
-    void hideRemoteDetail();
-
-    /// Fill the detail pane with aBranch, or hide it when the name is empty or gone.
-    void showBranchDetail( const wxString& aBranch );
-    void fillBranchDetail( const KIGIT_BRANCH_DETAIL& aDetail );
-    void hideBranchDetail();
 
     /// Show the working copy of aPath against its committed version, or hide that area.
     void showWorkingDiff( const wxString& aPath );
     void hideWorkingDiff();
 
-    /// Append rows for aCommits starting at aFrom, without clearing, so growing the history
-    /// window keeps the scroll position.
-    void appendHistoryRows( const std::vector<KIGIT_COMMIT_INFO>& aCommits, size_t aFrom );
-
-    /// Grow the history window when the user has scrolled near its end.
-    void onHistoryScrollTick();
-
-    /// Start a background fetch of the contributor's web avatar for aEmail, if opted in and not
-    /// already cached or requested.
-    void requestAvatar( const wxString& aEmail, int aDiameter );
-
-    /// On the UI thread, decode the fetched avatar bytes and place the photo on every history
-    /// row for aEmail. Does nothing when the bytes are empty (no web avatar).
-    void applyAvatar( const wxString& aEmail, int aDiameter, const std::string& aBytes );
-
-    void populateBranches();
-
-    void populateRemotes();
-
-    void populateStashes();
-
-    void populateTags();
-
-    /// Fill the Repository page from the repository's git configuration.
-    void populateRepository();
-
-    /// Switch the working tree to the named branch, after confirming, then refresh.
-    void switchToBranch( const wxString& aBranch );
-
-    /// Amend the newest, not yet pushed commit's message from the History page.
-    void onAmendLastCommit();
-
-    /// Force push the current branch from the Branches page, after an explicit confirmation.
-    void onForcePush();
-
     /// Fill the top bar's repository name and branch list.
     void populateTopBar();
+
+    /// Keep every text box in aWindow out of the dialog's saved control state.
+    void optOutOfTextPersistence( wxWindow* aWindow );
 
     /// Fetch from the remote on a worker, then refresh every surface.
     void onFetch();
 
-    /// Make a top bar button with its icon.
-    wxButton* makeBarButton( BITMAPS aIcon, const wxString& aLabel, const std::function<void()>& aHandler );
-
-    /// Restore the project as it was at the given commit, recorded as a new commit on top of
-    /// the current head. Offered from the History page's context menu.
-    void onRestoreVersion( const wxString& aCommitHash );
-
-    /// True while the frame's git session is still the one this window's lists were filled
-    /// from. On a mismatch the window is stale: it closes itself and the action must abort.
-    bool sessionStillCurrent();
-
-    /// Before an action that rewrites files on disk, save the open editors and snapshot their
-    /// documents. Returns false to abort the action.
-    bool confirmWorkingTreeChange();
-
-    /// Before an action that needs a clean tree, refuse while anything is uncommitted or unsaved,
-    /// since saving the editors would only create the changes that block it. False to abort.
-    bool refuseOverUncommittedWork();
-
-    /// Reload the editors from disk and refresh the panels, after an operation rewrote files.
-    void finishWorkingTreeChange();
-
-    /// On-disk identity of the open documents, taken by confirmWorkingTreeChange() so only the
+    /// On-disk identity of the open documents, taken by ConfirmWorkingTreeChange() so only the
     /// documents an operation actually rewrote are reloaded.
     EDITOR_SNAPSHOT m_docsBeforeChange;
 
-    void addButtonRow( wxWindow* aPage, const std::vector<std::pair<wxString, std::function<void()>>>& aButtons );
-
-    /// Run a repository write under the action lock, then refresh every surface on success.
-    /// Shows a busy message if the lock is held, or aError if the action returns false. Set
-    /// aRewritesWorkingTree for operations that change the files the editors have open, so they
-    /// are reloaded from disk too.
-    void runGitAction( const std::function<bool( KIGIT_COMMON& )>& aFn, const wxString& aError,
-                       bool aRewritesWorkingTree = false );
-
-    /// The text of the selected row in a list, or empty when nothing is selected.
-    wxString selectedText( wxListCtrl* aList, int aColumn ) const;
-
-    void onNewBranch();
-    void onDeleteBranch();
-    void onStashSave();
-    void runRemoteAction( const std::function<bool( KIGIT_COMMON& )>& aMutation, const wxString& aError );
-    void restoreSelectedStash( bool aRemoveAfterApply );
-
-    /// The stash shown on aRow, by its commit, or empty when the row is gone.
-    wxString stashIdForRow( long aRow ) const;
-    void onStashApply();
-    void onStashPop();
-    void onStashDrop();
-    void onNewTag();
-    void onCheckoutTag();
-    void onDeleteTag();
-    void onAddRemote();
-    void onEditRemote();
-    void onRemoveRemote();
-    void onSaveRepositoryConfig();
-
-    /// Set when the window goes, so a fetch still waiting on the network gives up rather
-    /// than holding the close for its timeout.
-    std::atomic<bool> m_avatarCancel{ false };
-
-    /// The avatar fetches the History page started, joined before this window goes.
-    std::vector<std::thread> m_avatarWorkers;
-
-    /// The push the Branches page started, and its token, so closing can stop it and wait.
-    std::thread                        m_pushWorker;
-    std::shared_ptr<std::atomic<bool>> m_pushCancel;
 
     /// The fetch the top bar started, and its token, so closing can stop it and wait.
     std::thread                        m_fetchWorker;
@@ -286,90 +132,18 @@ private:
 
     EDA_BASE_FRAME*  m_parent;
     GIT_COMMIT_PANE* m_pane;
-    WX_TREEBOOK*     m_book;
 
-    // Top bar
-    wxStaticText* m_repoName;
-    wxChoice*     m_branchChoice;
-    wxButton*     m_fetchButton;
-    wxButton*     m_pullButton;
-    wxButton*     m_pushButton;
-
-    // History page
-    wxSearchCtrl*       m_historySearch;
-    wxChoice*           m_historyBranch;
-    wxCheckBox*         m_historyShowRefs;
-    wxBoxSizer*         m_historyPathRow;
-    wxStaticText*       m_historyPathLabel;
-    wxSplitterWindow*   m_historySplitter;
-    wxDataViewListCtrl* m_historyList;
-    wxDataViewColumn*   m_historyRefsColumn;
-
-    // The selected commit, beside the list
-    wxPanel*          m_commitDetail;
-    wxStaticText*     m_commitTitle;
-    wxStaticBitmap*   m_commitAvatar;
-    wxStaticText*     m_commitAuthor;
-    wxTextCtrl*       m_commitMessage;
-    wxStaticText*     m_commitStats;
-    wxStaticText*     m_commitFileCount;
-    wxStaticText*     m_commitAdded;
-    wxStaticText*     m_commitRemoved;
-    wxSplitterWindow*   m_detailSplitter;
-    wxListCtrl*         m_commitFiles;
-    GIT_FILE_DIFF_AREA* m_fileDiff;
+    PANEL_GIT_HISTORY*    m_historyPage;
+    PANEL_GIT_BRANCHES*   m_branchesPage;
+    PANEL_GIT_REMOTES*    m_remotesPage;
+    PANEL_GIT_STASHES*    m_stashesPage;
+    PANEL_GIT_TAGS*       m_tagsPage;
+    PANEL_GIT_REPOSITORY* m_repositoryPage;
 
     // Changes page
     wxSplitterWindow*   m_changesSplitter;
     GIT_COMMIT_PANE*    m_changesPane;
     GIT_FILE_DIFF_AREA* m_workingDiff;
-
-    // Branches page
-    wxSearchCtrl*     m_branchSearch;
-    wxSplitterWindow* m_branchesSplitter;
-    wxListCtrl*       m_branchesList;
-    wxStaticText*     m_branchCount;
-    wxPanel*          m_branchDetail;
-    wxStaticText*     m_branchTitle;
-    wxStaticText*     m_branchCommit;
-    wxStaticText*     m_branchAuthor;
-    wxTextCtrl*       m_branchMessage;
-    wxStaticText*     m_branchSync;
-
-    // Remotes page
-    wxSplitterWindow* m_remotesSplitter;
-    wxListCtrl*       m_remotesList;
-    wxPanel*          m_remoteDetail;
-    wxStaticText*     m_remoteTitle;
-    wxTextCtrl*       m_remoteUrl;
-    wxStaticText*     m_remoteFetched;
-
-    // Stashes page
-    wxSplitterWindow* m_stashesSplitter;
-    wxListCtrl*       m_stashesList;
-    wxStaticText*     m_stashCount;
-    wxPanel*          m_stashDetail;
-    wxStaticText*     m_stashWhen;
-    wxStaticText*     m_stashBranch;
-    wxStaticText*     m_stashCommit;
-    wxTextCtrl*       m_stashMessage;
-    wxListCtrl*       m_stashFiles;
-
-    // Tags page
-    wxSplitterWindow* m_tagsSplitter;
-    wxListCtrl*       m_tagsList;
-    wxStaticText*     m_tagCount;
-    wxPanel*          m_tagDetail;
-    wxStaticText*     m_tagTitle;
-    wxStaticText*     m_tagCommit;
-    wxStaticText*     m_tagAuthor;
-    wxStaticText*     m_tagWhen;
-    wxTextCtrl*       m_tagMessage;
-
-    // The other pages
-    wxTextCtrl*   m_repoUserName;
-    wxTextCtrl*   m_repoUserEmail;
-    wxStaticText* m_repoRemoteUrl;
 
     /// Move the refresh listener onto the project's current git session, in case a project
     /// reload has replaced it since the window opened.
@@ -379,86 +153,12 @@ private:
     /// reload can replace the session and this window follows it instead of pinning the old one.
     std::weak_ptr<KIGIT_COMMON> m_listenerSession;
 
-    /// The stash commit behind each row of the Stashes page, since a row's index is only valid
-    /// for the listing it came from.
-    std::vector<wxString> m_stashIds;
-
-    /// Author email for each history row, so a fetched avatar can find its rows.
-    std::vector<wxString> m_historyEmails;
-
-    /// Fetched web avatars, keyed by author email.
-    std::map<wxString, wxBitmap> m_avatarCache;
-
-    /// Emails whose avatar fetch was already started, so each is fetched at most once.
-    std::set<wxString> m_avatarRequested;
-
     /// Re-runs ReloadPages once when it had to skip because another git operation held the
     /// action lock, so a window opened during a background fetch does not stay empty.
     wxTimer m_reloadRetryTimer;
 
-    /// How many commits the History page currently shows at most. Grows as the user scrolls.
-    size_t m_historyLimit = 50;
-
-    /// The branch the History page is narrowed to, or empty for every branch.
-    wxString m_historyBranchName;
-
-    /// The file or folder the history is narrowed to, or empty for all of it.
-    wxString m_historyPath;
-
-    /// The commit the detail pane shows, so a refresh can put the selection back on it.
-    wxString m_detailHash;
-
-    /// Its author's email, so a web avatar that arrives later lands on the pane too.
-    wxString m_detailEmail;
-
-    /// Where the user left the sash, so the pane comes back at the same width.
-    int m_historySashPos = 0;
-
-    /// Where the user left the sash between the file list and the diff area.
-    int m_detailSashPos = 0;
-
-    /// The first parent of the shown commit, which the diff area's before side names.
-    wxString m_detailParent;
-
     /// Where the user left the sash between the Changes page's list and its diff area.
     int m_changesSashPos = 0;
-
-    /// Where the user left the sash between the branch list and its detail pane.
-    int m_branchSashPos = 0;
-
-    /// True while the branch list is being refilled, when its selection events are its own.
-    bool m_fillingBranches = false;
-
-    /// Where the user left the sash between the remote list and its detail pane.
-    int m_remoteSashPos = 0;
-
-    /// True while the remote list is being refilled, when its selection events are its own.
-    bool m_fillingRemotes = false;
-
-    /// Where the user left the sash between the stash list and its detail pane.
-    int m_stashSashPos = 0;
-
-    /// True while the stash list is being refilled, when its selection events are its own.
-    bool m_fillingStashes = false;
-
-    /// Where the user left the sash between the tag list and its detail pane.
-    int m_tagSashPos = 0;
-
-    /// True while the tag list is being refilled, when its selection events are its own.
-    bool m_fillingTags = false;
-
-    /// Waits for the user to pause typing in the search box before walking the history again.
-    wxTimer m_historySearchTimer;
-
-    /// True once a load returned fewer commits than asked for, meaning everything is shown.
-    bool m_historyComplete = false;
-
-    /// True while the history list is being refilled, when its selection events are its own.
-    bool m_fillingHistory = false;
-
-    /// Polls whether the user scrolled near the end of the history, which is the one portable
-    /// way to notice scrolling on every wxDataViewCtrl port, native ones included.
-    wxTimer m_historyScrollTimer;
 };
 
 #endif // GIT_ADVANCED_DIALOG_H
