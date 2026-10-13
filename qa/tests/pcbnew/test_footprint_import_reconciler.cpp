@@ -635,6 +635,8 @@ BOOST_AUTO_TEST_CASE( ReconciledFootprintsResolveViaNetlistUpdater )
     WX_STRING_REPORTER    reporter;
     BOARD_NETLIST_UPDATER updater( &toolMgr, target.get() );
     updater.SetReporter( &reporter );
+    updater.SetIsDryRun( false );
+    updater.SetWillDrag( false );
     updater.SetReplaceFootprints( false );
     updater.SetDeleteUnusedFootprints( false );
 

@@ -95,6 +95,8 @@ BOOST_FIXTURE_TEST_CASE( RelinkKeepsFootprintOnFpidChange, UPDATER_FIXTURE )
                                          std::vector<KIID>{ kiid } ) );
 
     BOARD_NETLIST_UPDATER updater( &m_toolMgr, m_board.get() );
+    updater.SetIsDryRun( false );
+    updater.SetWillDrag( false );
     updater.SetLookupByTimestamp( false );
     updater.SetReplaceFootprints( false );
     updater.SetDeleteUnusedFootprints( false );
@@ -127,6 +129,7 @@ BOOST_FIXTURE_TEST_CASE( UuidMatchKeepsFootprintOnFpidChange, UPDATER_FIXTURE )
                                          std::vector<KIID>{ kiid } ) );
 
     BOARD_NETLIST_UPDATER updater( &m_toolMgr, m_board.get() );
+    updater.SetWillDrag( false );
     updater.SetLookupByTimestamp( true );
     updater.SetReplaceFootprints( false );
     updater.SetDeleteUnusedFootprints( false );

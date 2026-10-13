@@ -1957,6 +1957,7 @@ HANDLER_RESULT<ImportNetlistResponse> API_HANDLER_PCB::handleImportNetlist( cons
 
     updater->SetReporter( &reporter );
     updater->SetIsDryRun( aCtx.Request.dry_run() );
+    updater->SetWillDrag( false );
     updater->SetLookupByTimestamp( lookupByTimestamp );
     updater->SetDeleteUnusedFootprints( aCtx.Request.delete_extra_footprints() );
     updater->SetReplaceFootprints( aCtx.Request.update_footprints() );

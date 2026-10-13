@@ -1404,6 +1404,8 @@ BOOST_AUTO_TEST_CASE( Issue23298_BaseFootprintHiddenInNonDefaultVariant )
     toolMgr.RegisterTool( new KI_TEST::DUMMY_TOOL() );
 
     BOARD_NETLIST_UPDATER updater( &toolMgr, board.get() );
+    updater.SetIsDryRun( false );
+    updater.SetWillDrag( false );
     updater.SetReplaceFootprints( false );
     updater.SetDeleteUnusedFootprints( false );
 
