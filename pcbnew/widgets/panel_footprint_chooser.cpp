@@ -222,6 +222,7 @@ void PANEL_FOOTPRINT_CHOOSER::OnChar( wxKeyEvent& aEvent )
         if( !m_tree->GetSearchString().IsEmpty() )
         {
             m_tree->SetSearchString( wxEmptyString );
+            Regenerate();
             GetFocusTarget()->SetFocus();
             return;
         }

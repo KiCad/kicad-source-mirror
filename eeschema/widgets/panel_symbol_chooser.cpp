@@ -352,6 +352,8 @@ void PANEL_SYMBOL_CHOOSER::OnChar( wxKeyEvent& aEvent )
             if( textCtrl->GetValue() == m_tree->GetSearchString() && !m_tree->GetSearchString().IsEmpty() )
             {
                 m_tree->SetSearchString( wxEmptyString );
+                Regenerate();
+                GetFocusTarget()->SetFocus();
                 return;
             }
         }
