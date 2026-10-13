@@ -38,13 +38,7 @@ bool JOBS_OUTPUT_FOLDER::HandleOutputs( const wxString&                baseTempP
 {
     aResolvedOutputPath.reset();
 
-    wxString outputPath = m_outputPath;
-    outputPath.Replace( wxT( "\\" ), wxT( "/" ) );
-    outputPath = ExpandTextVars( outputPath, aProject );
-    outputPath = ExpandEnvVarSubstitutions( outputPath, aProject );
-
-    if( outputPath.StartsWith( "~" ) )
-        outputPath.Replace( "~", wxGetHomeDir(), false );
+    wxString outputPath = ResolveOutputPath( m_outputPath, aProject );
 
     if( !wxFileName::DirExists( outputPath ) )
     {

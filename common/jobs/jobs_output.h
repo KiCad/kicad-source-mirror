@@ -56,6 +56,16 @@ public:
     void SetOutputPath( const wxString& aPath ) { m_outputPath = aPath; }
     wxString GetOutputPath() const { return m_outputPath; }
 
+    /**
+     * Expand variables and a leading '~' in a destination path, then anchor a relative result at
+     * the project directory so the output lands in the same place whatever the working directory.
+     *
+     * @param aPath is the destination path as stored in the jobset.
+     * @param aProject is the project used for variable expansion and as the base for relative paths.
+     *                 May be null, in which case a relative path is left relative.
+     */
+    static wxString ResolveOutputPath( const wxString& aPath, const PROJECT* aProject );
+
     virtual wxString GetDefaultDescription() const { return wxEmptyString; }
 
 protected:

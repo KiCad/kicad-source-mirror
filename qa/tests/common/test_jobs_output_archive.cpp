@@ -21,12 +21,46 @@
 #include <boost/test/unit_test.hpp>
 
 #include <jobs/jobs_output_archive.h>
+#include <project.h>
 
 #include <wx/file.h>
 #include <wx/filename.h>
 
 
 BOOST_AUTO_TEST_SUITE( JobsOutputArchive )
+
+
+class TEST_PROJECT : public PROJECT
+{
+public:
+    explicit TEST_PROJECT( const wxString& aPath ) : m_path( aPath ) {}
+
+    const wxString GetProjectPath() const override { return m_path; }
+
+private:
+    wxString m_path;
+};
+
+
+/**
+ * A relative destination must land in the project directory, not the working directory, so
+ * a jobset run from the command line elsewhere writes to the same place as one run from the GUI.
+ */
+BOOST_AUTO_TEST_CASE( RelativeDestinationResolvesAgainstProject )
+{
+    wxFileName projectDir;
+    projectDir.AssignDir( wxFileName::GetTempDir() );
+    projectDir.AppendDir( wxS( "kicad_qa_resolve_project" ) );
+
+    TEST_PROJECT project( projectDir.GetPath() + wxFileName::GetPathSeparator() );
+
+    wxString resolved = JOBS_OUTPUT_HANDLER::ResolveOutputPath( wxS( "out\\sub/../final.zip" ), &project );
+
+    wxFileName expected( projectDir.GetPath(), wxS( "final.zip" ) );
+    expected.AppendDir( wxS( "out" ) );
+
+    BOOST_CHECK_EQUAL( resolved, expected.GetFullPath() );
+}
 
 
 /**

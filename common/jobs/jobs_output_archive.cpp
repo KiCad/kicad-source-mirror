@@ -53,13 +53,7 @@ bool JOBS_OUTPUT_ARCHIVE::HandleOutputs( const wxString&                baseTemp
     bool success = true;
     aResolvedOutputPath.reset();
 
-    wxString outputPath = m_outputPath;
-    outputPath.Replace( wxT( "\\" ), wxT( "/" ) );
-    outputPath = ExpandTextVars( outputPath, aProject );
-    outputPath = ExpandEnvVarSubstitutions( outputPath, aProject );
-
-    if( outputPath.StartsWith( "~" ) )
-        outputPath.Replace( "~", wxGetHomeDir(), false );
+    wxString outputPath = ResolveOutputPath( m_outputPath, aProject );
 
     outputPath = EnsureFileExtension( outputPath, FILEEXT::ArchiveFileExtension );
 
