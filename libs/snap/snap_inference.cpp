@@ -146,11 +146,7 @@ SNAP_CANDIDATE pathCandidate( const SNAP_OBJECT_PATH& aPath, const VECTOR2I& aSo
                 {
                     VECTOR2I point;
 
-                    if constexpr( std::is_same_v<SHAPE_TYPE, CIRCLE> )
-                        point = aGeometry.NearestPoint( aSource );
-                    else if constexpr( std::is_same_v<SHAPE_TYPE, SHAPE_ARC> )
-                        point = aGeometry.NearestPoint( aSource );
-                    else if constexpr( std::is_same_v<SHAPE_TYPE, HALF_LINE> )
+                    if constexpr( std::is_same_v<SHAPE_TYPE, HALF_LINE> )
                     {
                         point = aGeometry.NearestPoint( aSource );
                         candidate = SNAP_CANDIDATE::Line(
@@ -162,18 +158,25 @@ SNAP_CANDIDATE pathCandidate( const SNAP_OBJECT_PATH& aPath, const VECTOR2I& aSo
                         return;
                     }
                     else
-                        point = GetNearestPoint( NEARABLE_GEOM( aGeometry ), aSource );
+                    {
+                        if constexpr( std::is_same_v<SHAPE_TYPE, CIRCLE> )
+                            point = aGeometry.NearestPoint( aSource );
+                        else if constexpr( std::is_same_v<SHAPE_TYPE, SHAPE_ARC> )
+                            point = aGeometry.NearestPoint( aSource );
+                        else
+                            point = GetNearestPoint( NEARABLE_GEOM( aGeometry ), aSource );
 
-                    candidate = SNAP_CANDIDATE::Point(
-                            aPath.id, SNAP_PRIORITY_TIER::OBJECT, SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD, point,
-                            point.Distance( aSource ) / static_cast<double>( std::max( 1, aRadius ) ) );
-                    candidate.consumedDof = 1;
-                    candidate.manifold = aGeometry;
+                        candidate = SNAP_CANDIDATE::Point(
+                                aPath.id, SNAP_PRIORITY_TIER::OBJECT, SNAP_CANDIDATE_SUBTYPE::FINITE_MANIFOLD, point,
+                                point.Distance( aSource ) / static_cast<double>( std::max( 1, aRadius ) ) );
+                        candidate.consumedDof = 1;
+                        candidate.manifold = aGeometry;
 
-                    if constexpr( std::is_same_v<SHAPE_TYPE, CIRCLE> )
-                        candidate.relation = SNAP_RELATION::POINT_ON_CIRCLE;
-                    else if constexpr( std::is_same_v<SHAPE_TYPE, SHAPE_ARC> )
-                        candidate.relation = SNAP_RELATION::POINT_ON_ARC;
+                        if constexpr( std::is_same_v<SHAPE_TYPE, CIRCLE> )
+                            candidate.relation = SNAP_RELATION::POINT_ON_CIRCLE;
+                        else if constexpr( std::is_same_v<SHAPE_TYPE, SHAPE_ARC> )
+                            candidate.relation = SNAP_RELATION::POINT_ON_ARC;
+                    }
                 }
             },
             aPath.geometry );

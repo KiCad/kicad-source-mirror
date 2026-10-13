@@ -1,6 +1,11 @@
 find_package( PNG REQUIRED )
 find_package( JPEG REQUIRED )
 
+if( MSVC )
+    # disable unknown pragma (GCC) warning
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4068")
+endif()
+
 set( LIBWMF_SOURCES
     src/api.c
     src/bbuf.c

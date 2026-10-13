@@ -279,7 +279,7 @@ void FOOTPRINT_LIBRARY_ADAPTER::RefreshLibraryIfChanged( const wxString& aNickna
     {
         enumerateLibrary( lib, uri );
     }
-    catch( IO_ERROR& e )
+    catch( IO_ERROR& )
     {
         std::unique_lock lock( PreloadedFootprintsMutex );
         PreloadedFootprints.Get().erase( aNickname );

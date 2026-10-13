@@ -685,7 +685,7 @@ const SEG LongestCoveringSegment( const SEG& a, const SEG& b )
     };
     
     SEG::ecoord maxDist = std::numeric_limits<SEG::ecoord>::min();
-    int farthest;
+    int         farthest = -1;
 
     for( int i = 0; i < 4; i++ )
     {

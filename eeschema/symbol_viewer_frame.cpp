@@ -363,7 +363,7 @@ LIB_SYMBOL* SYMBOL_VIEWER_FRAME::GetSelectedSymbol() const
         {
             symbol = PROJECT_SCH::SymbolLibAdapter( &Prj() )->LoadSymbol( m_currentSymbol );
         }
-        catch( const IO_ERROR& ioe )
+        catch( const IO_ERROR& )
         {
             // best efforts
         }
