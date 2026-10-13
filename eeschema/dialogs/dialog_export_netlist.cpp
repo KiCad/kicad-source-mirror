@@ -720,7 +720,7 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
 }
 
 
-bool DIALOG_EXPORT_NETLIST::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt, wxString * aWildCard )
+bool DIALOG_EXPORT_NETLIST::FilenamePrms( NETLIST_TYPE_ID aType, wxString* aExt, wxString* aWildCard )
 {
     wxString fileExt;
     wxString fileWildcard;
@@ -731,6 +731,11 @@ bool DIALOG_EXPORT_NETLIST::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt
     case NET_TYPE_SPICE:
         fileExt = FILEEXT::SpiceFileExtension;
         fileWildcard = FILEEXT::SpiceNetlistFileWildcard();
+        break;
+
+    case NET_TYPE_SPICE_MODEL:
+        fileExt = FILEEXT::SpiceSubcircuitFileExtension;
+        fileWildcard = FILEEXT::SpiceSubcircuitFileWildcard();
         break;
 
     case NET_TYPE_CADSTAR:
@@ -757,7 +762,6 @@ bool DIALOG_EXPORT_NETLIST::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt
         fileExt = FILEEXT::PADSNetlistFileExtension;
         fileWildcard = FILEEXT::PADSNetlistFileWildcard();
         break;
-
 
     default:    // custom, NET_TYPE_CUSTOM1 and greater
         fileWildcard = FILEEXT::AllFilesWildcard();

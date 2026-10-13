@@ -534,6 +534,12 @@ wxString FILEEXT::SpiceNetlistFileWildcard()
 }
 
 
+wxString FILEEXT::SpiceSubcircuitFileWildcard()
+{
+    return _( "SPICE subcircuit model file" ) + AddFileExtListToFilter( { "sub", "mod" } );
+}
+
+
 wxString FILEEXT::CadstarNetlistFileWildcard()
 {
     return _( "CadStar netlist file" ) + AddFileExtListToFilter( { "frp" } );

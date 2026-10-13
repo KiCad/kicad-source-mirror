@@ -279,6 +279,7 @@ public:
     static wxString ErcFileWildcard();
     static wxString SpiceLibraryFileWildcard();
     static wxString SpiceNetlistFileWildcard();
+    static wxString SpiceSubcircuitFileWildcard();
     static wxString CadstarNetlistFileWildcard();
     static wxString EquFileWildcard();
     static wxString ZipFileWildcard();
