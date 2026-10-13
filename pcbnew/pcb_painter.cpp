@@ -920,9 +920,9 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
 
     // Clearance lines
     if( IsClearanceLayer( aLayer )
-            && pcbconfig()
-            && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
-            && !m_pcbSettings.m_isPrinting )
+        && pcbconfig()
+        && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
+        && !m_pcbSettings.m_isPrinting )
     {
         const PCB_LAYER_ID copperLayerForClearance = ToLAYER_ID( aLayer - LAYER_CLEARANCE_START );
 
@@ -1101,31 +1101,23 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
 
     // Clearance lines
     if( IsClearanceLayer( aLayer )
-            && pcbconfig() && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
+            && pcbconfig()
+            && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
             && !m_pcbSettings.m_isPrinting )
     {
-        /*
-         * Showing the clearance area is not obvious for optionally-flashed pads and vias, so we
-         * choose to not display clearance lines at all on non-copper active layers.  We follow
-         * the same rule for tracks to be consistent (even though they don't have the same issue).
-         */
-        const PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
-        const BOARD*       board = aArc->GetBoard();
+        const PCB_LAYER_ID copperLayerForClearance = ToLAYER_ID( aLayer - LAYER_CLEARANCE_START );
 
-        if( IsCopperLayer( activeLayer ) && ( !board || board->GetVisibleLayers().test( activeLayer ) ) )
-        {
-            int clearance = aArc->GetOwnClearance( activeLayer );
+        int clearance = aArc->GetOwnClearance( copperLayerForClearance );
 
-            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-            m_gal->SetIsFill( false );
-            m_gal->SetIsStroke( true );
-            m_gal->SetStrokeColor( color );
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+        m_gal->SetIsFill( false );
+        m_gal->SetIsStroke( true );
+        m_gal->SetStrokeColor( color );
 
-            if( degenerate )
-                m_gal->DrawSegment( aArc->GetStart(), aArc->GetEnd(), width + clearance * 2 );
-            else
-                m_gal->DrawArcSegment( center, radius, start_angle, angle, width + clearance * 2, m_maxError );
-        }
+        if( degenerate )
+            m_gal->DrawSegment( aArc->GetStart(), aArc->GetEnd(), width + clearance * 2 );
+        else
+            m_gal->DrawArcSegment( center, radius, start_angle, angle, width + clearance * 2, m_maxError );
     }
 
 #if 0
@@ -1513,7 +1505,8 @@ void PCB_PAINTER::draw( const PCB_VIA* aVia, int aLayer )
     }
 
     // Clearance lines
-    if( IsClearanceLayer( aLayer ) && pcbconfig()
+    if( IsClearanceLayer( aLayer )
+        && pcbconfig()
         && pcbconfig()->m_Display.m_TrackClearance == SHOW_WITH_VIA_ALWAYS
         && !m_pcbSettings.m_isPrinting )
     {
