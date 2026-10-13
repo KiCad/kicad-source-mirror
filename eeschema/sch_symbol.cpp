@@ -717,15 +717,16 @@ std::vector<PROPERTY_BASE*> SCH_SYMBOL::GetDynamicProperties( const SCH_SHEET_PA
 {
     std::vector<PROPERTY_BASE*> props;
 
-    auto getOrCreate = [&]( const wxString& aName, std::unique_ptr<PROPERTY_BASE> aProp )
-    {
-        auto it = m_dynamicPropertyCache.find( aName );
+    auto getOrCreate =
+            [&]( const wxString& aName, std::unique_ptr<PROPERTY_BASE> aProp )
+            {
+                auto it = m_dynamicPropertyCache.find( aName );
 
-        if( it == m_dynamicPropertyCache.end() )
-            it = m_dynamicPropertyCache.emplace( aName, std::move( aProp ) ).first;
+                if( it == m_dynamicPropertyCache.end() )
+                    it = m_dynamicPropertyCache.emplace( aName, std::move( aProp ) ).first;
 
-        return it->second.get();
-    };
+                return it->second.get();
+            };
 
     for( const SCH_FIELD& field : GetFields() )
     {
@@ -1102,7 +1103,7 @@ void SCH_SYMBOL::SetLibSymbol( LIB_SYMBOL* aLibSymbol )
 
     // We've just reset the library symbol, so the lib_pins, which were just
     // pointers to the old symbol, need to be cleared.
-    for( auto& pin : m_pins )
+    for( std::unique_ptr<SCH_PIN>& pin : m_pins )
         pin->SetLibPin( nullptr );
 
     UpdatePins();
@@ -1651,7 +1652,7 @@ void SCH_SYMBOL::SetFieldText( SCH_FIELD* aField, const wxString& aFieldName, co
 
             if( instance->m_Variants.contains( aVariantName ) )
             {
-                auto& fields = instance->m_Variants[aVariantName].m_Fields;
+                std::map<wxString, wxString>& fields = instance->m_Variants[aVariantName].m_Fields;
 
                 if( aFieldText != defaultText )
                 {
@@ -1894,9 +1895,9 @@ void SCH_SYMBOL::setVariantAttribute( bool aEnable, const SCH_SHEET_PATH* aInsta
                      wxString::Format( wxS( "Cannot set attribute for invalid sheet path '%s'." ),
                                        aInstance->PathHumanReadable() ) );
 
-        auto variant = instance->m_Variants.find( aVariantName );
+        auto it = instance->m_Variants.find( aVariantName );
 
-        if( variant == instance->m_Variants.end() )
+        if( it == instance->m_Variants.end() )
         {
             if( aEnable == this->*aBase )
                 return;
@@ -1908,7 +1909,7 @@ void SCH_SYMBOL::setVariantAttribute( bool aEnable, const SCH_SHEET_PATH* aInsta
             return;
         }
 
-        attribute = &( variant->second.*aOverride );
+        attribute = &( it->second.*aOverride );
     }
 
     if( *attribute == aEnable )
@@ -2324,8 +2325,8 @@ void SCH_SYMBOL::RemoveField( const wxString& aFieldName )
 
             for( SCH_SYMBOL_INSTANCE& instance : m_instances )
             {
-                for( auto& variant : instance.m_Variants )
-                    variant.second.m_Fields.erase( fieldName );
+                for( auto& [name, variant] : instance.m_Variants )
+                    variant.m_Fields.erase( fieldName );
             }
 
             invalidateConnectivity();
@@ -3135,8 +3136,8 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, c
         auto resolvePinConnection =
                 [&]( const SCH_PIN& pin, const SCH_SHEET_PATH& path )
                 {
-                    const bool local = token->StartsWith( wxS( "SHORT_NET_NAME" ) );
-                    const auto name = pin.GetConnectionName( &path, local );
+                    const bool                    local = token->StartsWith( wxS( "SHORT_NET_NAME" ) );
+                    const std::optional<wxString> name = pin.GetConnectionName( &path, local );
 
                     if( !name )
                     {
@@ -3784,28 +3785,29 @@ void SCH_SYMBOL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
     wxString        currentVariant = Schematic() ? Schematic()->GetCurrentVariant() : wxString();
 
-    auto addExcludes = [&]()
-    {
-        wxArrayString msgs;
+    auto addExcludes =
+            [&]()
+            {
+                wxArrayString msgs;
 
-        if( GetExcludedFromSim() )
-            msgs.Add( _( "Simulation" ) );
+                if( GetExcludedFromSim() )
+                    msgs.Add( _( "Simulation" ) );
 
-        if( GetExcludedFromBOM() )
-            msgs.Add( _( "BOM" ) );
+                if( GetExcludedFromBOM() )
+                    msgs.Add( _( "BOM" ) );
 
-        if( GetExcludedFromBoard() )
-            msgs.Add( _( "Board" ) );
+                if( GetExcludedFromBoard() )
+                    msgs.Add( _( "Board" ) );
 
-        if( GetDNP( currentSheet, currentVariant ) )
-            msgs.Add( _( "DNP" ) );
+                if( GetDNP( currentSheet, currentVariant ) )
+                    msgs.Add( _( "DNP" ) );
 
-        msg = wxJoin( msgs, '|' );
-        msg.Replace( '|', wxS( ", " ) );
+                msg = wxJoin( msgs, '|' );
+                msg.Replace( '|', wxS( ", " ) );
 
-        if( !msg.empty() )
-            aList.emplace_back( _( "Exclude from" ), msg );
-    };
+                if( !msg.empty() )
+                    aList.emplace_back( _( "Exclude from" ), msg );
+            };
 
     // part and alias can differ if alias is not the root
     if( m_part )
