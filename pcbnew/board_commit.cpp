@@ -295,19 +295,25 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
         if( m_isBoardEditor )
         {
-            if( boardItem->Type() == PCB_VIA_T || boardItem->Type() == PCB_FOOTPRINT_T
-                    || boardItem->IsOnLayer( F_Mask ) || boardItem->IsOnLayer( B_Mask ) )
-            {
-                solderMaskDirty = true;
-            }
-
             BOARD_ITEM* preEditItem = nullptr;
 
             if( entry.m_copy && entry.m_copy->IsBOARD_ITEM() )
                 preEditItem = static_cast<BOARD_ITEM*>( entry.m_copy );
 
-            if( boardItem->IsOnLayer( Edge_Cuts ) || ( preEditItem && preEditItem->IsOnLayer( Edge_Cuts ) ) )
+            if( boardItem->Type() == PCB_VIA_T || boardItem->Type() == PCB_FOOTPRINT_T
+                    || boardItem->IsOnLayer( F_Mask )
+                    || boardItem->IsOnLayer( B_Mask )
+                    || ( preEditItem && preEditItem->IsOnLayer( F_Mask ) )
+                    || ( preEditItem && preEditItem->IsOnLayer( B_Mask ) ) )
+            {
+                solderMaskDirty = true;
+            }
+
+            if( boardItem->IsOnLayer( Edge_Cuts )
+                    || ( preEditItem && preEditItem->IsOnLayer( Edge_Cuts ) ) )
+            {
                 updateBoardBoundingBox = true;
+            }
 
             if( !( aCommitFlags & SKIP_TEARDROPS ) )
             {
