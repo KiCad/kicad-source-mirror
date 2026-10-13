@@ -88,11 +88,6 @@ public:
     int PrevTab( const TOOL_EVENT& aEvent );
     int CloseTab( const TOOL_EVENT& aEvent );
 
-    /**
-     * Edit the properties used for new pad creation.
-     */
-    int DefaultPadProperties( const TOOL_EVENT& aEvent );
-
 private:
     ///< Set up handlers for various events.
     void setTransitions() override;

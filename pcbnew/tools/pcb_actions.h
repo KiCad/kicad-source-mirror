@@ -545,7 +545,6 @@ public:
     static TOOL_ACTION compareFpLibraryWithFile;
     static TOOL_ACTION showLibFootprintFieldsTable;
     static TOOL_ACTION footprintProperties;
-    static TOOL_ACTION defaultPadProperties;
     static TOOL_ACTION padTable;
 
     static TOOL_ACTION checkFootprint;

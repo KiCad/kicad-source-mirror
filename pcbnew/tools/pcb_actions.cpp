@@ -1639,14 +1639,6 @@ TOOL_ACTION PCB_ACTIONS::recombinePad( TOOL_ACTION_ARGS()
         .Tooltip( _( "Regroups all touching graphic shapes into the edited pad" ) )
         .Icon( BITMAPS::custom_pad_to_primitives ) );
 
-TOOL_ACTION PCB_ACTIONS::defaultPadProperties( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.PadTool.defaultPadProperties" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Default Pad Properties..." ) )
-        .Tooltip( _( "Edit the pad properties used when creating new pads" ) )
-        .Icon( BITMAPS::options_pad ) );
-
-
 // BOARD_EDITOR_CONTROL
 //
 TOOL_ACTION PCB_ACTIONS::appendBoard( TOOL_ACTION_ARGS()

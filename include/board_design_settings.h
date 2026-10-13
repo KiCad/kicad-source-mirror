@@ -699,8 +699,6 @@ public:
     void            SetGridOrigin( const VECTOR2I& aOrigin ) { m_gridOrigin = aOrigin; }
     const VECTOR2I& GetGridOrigin() const { return m_gridOrigin; }
 
-    void SetDefaultMasterPad();
-
 private:
     void initFromOther( const BOARD_DESIGN_SETTINGS& aOther );
 
@@ -820,10 +818,6 @@ public:
     bool              m_StyleFPShapes;
     bool              m_StyleFPDimensions;
     bool              m_StyleFPBarcodes;
-
-    // Miscellaneous
-    std::unique_ptr<PAD> m_Pad_Master; // A dummy pad to store all default parameters
-                                       // when importing values or creating a new pad
 
     // Set to true if the board has a stackup management.
     // If not set a default basic stackup will be used to generate the gbrjob file.

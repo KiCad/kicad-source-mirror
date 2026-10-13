@@ -54,9 +54,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_HasStackup = false;                   // no stackup defined by default
 
-    m_Pad_Master = std::make_unique<PAD>( nullptr );
-    SetDefaultMasterPad();
-
     LSET all_set = LSET().set();
     m_enabledLayers = all_set;     // All layers enabled at first.
                                    // SetCopperLayerCount() will adjust this.
@@ -1130,35 +1127,6 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             },
             10.0 ) );
 
-    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "defaults.pads",
-            [&]() -> nlohmann::json
-            {
-                nlohmann::json ret =
-                        {
-                            { "width",  pcbIUScale.IUTomm( m_Pad_Master->GetSize( PADSTACK::ALL_LAYERS ).x ) },
-                            { "height", pcbIUScale.IUTomm( m_Pad_Master->GetSize( PADSTACK::ALL_LAYERS ).y ) },
-                            { "drill",  pcbIUScale.IUTomm( m_Pad_Master->GetDrillSize().x ) }
-                        };
-
-                return ret;
-            },
-            [&]( const nlohmann::json& aJson )
-            {
-                if( aJson.contains( "width" ) && aJson.contains( "height" ) && aJson.contains( "drill" ) )
-                {
-                    VECTOR2I sz;
-                    sz.x = pcbIUScale.mmToIU( aJson["width"].get<double>() );
-                    sz.y = pcbIUScale.mmToIU( aJson["height"].get<double>() );
-
-                    m_Pad_Master->SetPadstackMode( PADSTACK::MODE::NORMAL );
-                    m_Pad_Master->SetSize( PADSTACK::ALL_LAYERS, sz );
-
-                    int drill = pcbIUScale.mmToIU( aJson["drill"].get<double>() );
-
-                    m_Pad_Master->SetDrillSize( VECTOR2I( drill, drill ) );
-                }
-            }, {} ) );
-
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.max_error",
             &m_MaxError, ARC_HIGH_DEF,
             pcbIUScale.mmToIU( 0.0001 ), pcbIUScale.mmToIU( 1.0 ), pcbIUScale.MM_PER_IU ) );
@@ -1220,8 +1188,7 @@ BOARD_DESIGN_SETTINGS::~BOARD_DESIGN_SETTINGS()
 
 // Detached so a discarded copy cannot flush its values into the project file
 BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( const BOARD_DESIGN_SETTINGS& aOther ) :
-        NESTED_SETTINGS( "board_design_settings", bdsSchemaVersion, nullptr, aOther.m_path ),
-        m_Pad_Master( nullptr )
+        NESTED_SETTINGS( "board_design_settings", bdsSchemaVersion, nullptr, aOther.m_path )
 {
     initFromOther( aOther );
 }
@@ -1331,7 +1298,6 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_currentNetClassName = aOther.m_currentNetClassName;
     m_stackup             = aOther.m_stackup;
     m_NetSettings         = aOther.m_NetSettings;
-    m_Pad_Master          = std::make_unique<PAD>( *aOther.m_Pad_Master );
     m_defaultZoneSettings = aOther.m_defaultZoneSettings;
 
     m_StyleFPFields       = aOther.m_StyleFPFields;
@@ -1444,7 +1410,6 @@ bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) co
     if( m_currentNetClassName      != aOther.m_currentNetClassName ) return false;
     if( m_stackup                  != aOther.m_stackup ) return false;
     if( *m_NetSettings             != *aOther.m_NetSettings ) return false;
-    if( *m_Pad_Master              != *aOther.m_Pad_Master ) return false;
     if( m_defaultZoneSettings      != aOther.m_defaultZoneSettings ) return false;
 
     if( m_StyleFPFields     != aOther.m_StyleFPFields ) return false;
@@ -2144,22 +2109,4 @@ bool BOARD_DESIGN_SETTINGS::GetTextItalic( PCB_LAYER_ID aLayer ) const
 bool BOARD_DESIGN_SETTINGS::GetTextUpright( PCB_LAYER_ID aLayer ) const
 {
     return m_TextUpright[ GetLayerClass( aLayer ) ];
-}
-
-void BOARD_DESIGN_SETTINGS::SetDefaultMasterPad()
-{
-    m_Pad_Master->SetPadstackMode( PADSTACK::MODE::NORMAL );
-    m_Pad_Master->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( pcbIUScale.mmToIU( DEFAULT_PAD_WIDTH_MM ),
-                                                           pcbIUScale.mmToIU( DEFAULT_PAD_HEIGTH_MM ) ) );
-    m_Pad_Master->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
-    m_Pad_Master->SetDrillSize( VECTOR2I( pcbIUScale.mmToIU( DEFAULT_PAD_DRILL_DIAMETER_MM ), 0 ) );
-    m_Pad_Master->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
-
-    constexpr double RR_RADIUS = DEFAULT_PAD_HEIGTH_MM * DEFAULT_PAD_RR_RADIUS_RATIO;
-    m_Pad_Master->SetRoundRectCornerRadius( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( RR_RADIUS ) );
-
-    if( m_Pad_Master->GetFrontShape() == PAD_SHAPE::CIRCLE )
-        m_Pad_Master->SetThermalSpokeAngle( ANGLE_45 );
-    else
-        m_Pad_Master->SetThermalSpokeAngle( ANGLE_90 );
 }

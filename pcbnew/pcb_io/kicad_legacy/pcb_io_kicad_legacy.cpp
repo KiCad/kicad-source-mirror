@@ -1072,16 +1072,12 @@ void PCB_IO_KICAD_LEGACY::loadSETUP()
         }
         else if( TESTLINE( "PadSize" ) )
         {
-            BIU x = biuParse( line + SZ( "PadSize" ), &data );
-            BIU y = biuParse( data );
-
-            bds.m_Pad_Master->SetPadstackMode( PADSTACK::MODE::NORMAL );
-            bds.m_Pad_Master->SetSize( PADSTACK::ALL_LAYERS, VECTOR2I( x, y ) );
+            biuParse( line + SZ( "PadSize" ), &data ); // x
+            biuParse( data );                          // y
         }
         else if( TESTLINE( "PadDrill" ) )
         {
-            BIU tmp = biuParse( line + SZ( "PadDrill" ) );
-            bds.m_Pad_Master->SetDrillSize( VECTOR2I( tmp, tmp ) );
+            biuParse( line + SZ( "PadDrill" ) ); // drill size
         }
         else if( TESTLINE( "Pad2MaskClearance" ) )
         {

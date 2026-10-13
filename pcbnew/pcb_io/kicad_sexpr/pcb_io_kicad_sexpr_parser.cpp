@@ -3117,10 +3117,9 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 
         case T_pad_size:
         {
-            VECTOR2I sz;
-            sz.x = parseBoardUnits( "master pad width" );
-            sz.y = parseBoardUnits( "master pad height" );
-            bds.m_Pad_Master->SetSize( F_Cu, sz );
+            // master pad size no longer read
+            parseBoardUnits( "master pad width" );  // x
+            parseBoardUnits( "master pad height" ); // y
             m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
@@ -3128,8 +3127,8 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
 
         case T_pad_drill:
         {
-            int drillSize = parseBoardUnits( T_pad_drill );
-            bds.m_Pad_Master->SetDrillSize( VECTOR2I( drillSize, drillSize ) );
+            // master pad drill size no longer read
+            parseBoardUnits( T_pad_drill ); // drill size
             m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;

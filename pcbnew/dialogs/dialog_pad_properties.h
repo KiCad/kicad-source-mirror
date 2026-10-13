@@ -51,7 +51,11 @@ class PAD;
 class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
 {
 public:
-    DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad );
+    /**
+     * @param aParent The parent frame for the dialog
+     * @param aPad The pad whose properties are to be edited
+     */
+    DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD& aPad );
     ~DIALOG_PAD_PROPERTIES();
 
 private:
@@ -152,7 +156,6 @@ private:
     PCB_BASE_FRAME* m_parent;
     PAD*            m_currentPad;       // pad currently being edited
     PAD*            m_previewPad;       // a working copy used to show changes
-    PAD*            m_masterPad;        // pad used to create new pads in board or FP editor
     BOARD*          m_board;            // the main board: this is the board handled by the PCB
                                         //    editor or the dummy board used by the FP editor
     bool            m_initialized;

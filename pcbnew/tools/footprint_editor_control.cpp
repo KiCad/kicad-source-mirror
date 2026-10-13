@@ -1021,13 +1021,6 @@ void FOOTPRINT_EDITOR_CONTROL::editFootprintPropertiesFromLibrary( const LIB_ID&
 }
 
 
-int FOOTPRINT_EDITOR_CONTROL::DefaultPadProperties( const TOOL_EVENT& aEvent )
-{
-    getEditFrame<FOOTPRINT_EDIT_FRAME>()->ShowPadPropertiesDialog( nullptr );
-    return 0;
-}
-
-
 int FOOTPRINT_EDITOR_CONTROL::CleanupGraphics( const TOOL_EVENT& aEvent )
 {
     FOOTPRINT_EDIT_FRAME* editFrame = getEditFrame<FOOTPRINT_EDIT_FRAME>();
@@ -1266,7 +1259,6 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
     Go( &FOOTPRINT_EDITOR_CONTROL::CloseTab,             PCB_ACTIONS::closeFootprintTab.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_CONTROL::Properties,           PCB_ACTIONS::footprintProperties.MakeEvent() );
-    Go( &FOOTPRINT_EDITOR_CONTROL::DefaultPadProperties, PCB_ACTIONS::defaultPadProperties.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ToggleLayersManager,  PCB_ACTIONS::showLayersManager.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ToggleProperties,     ACTIONS::showProperties.MakeEvent() );
     // clang-format on

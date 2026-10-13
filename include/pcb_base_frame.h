@@ -285,7 +285,7 @@ public:
     void PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsnest = true,
                          std::optional<VECTOR2I> aPosition = std::nullopt );
 
-    void ShowPadPropertiesDialog( PAD* aPad );
+    void ShowPadPropertiesDialog( PAD& aPad );
 
     /**
      * Open a dialog to select a footprint.

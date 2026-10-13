@@ -119,7 +119,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     }
 
     case PCB_PAD_T:
-        ShowPadPropertiesDialog( static_cast<PAD*>( aItem ) );
+        ShowPadPropertiesDialog( static_cast<PAD&>( *aItem ) );
         break;
 
     case PCB_FOOTPRINT_T:
@@ -178,4 +178,3 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         break;
     }
 }
-
