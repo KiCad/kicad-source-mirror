@@ -229,7 +229,7 @@ public:
 
     void FocusOnItem( EDA_ITEM* aItem, bool aAllowScroll = true ) override;
     void FocusOnItem( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer = UNDEFINED_LAYER, bool aAllowScroll = true );
-    void FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
+    void FocusOnItems( const std::vector<BOARD_ITEM*>& aItems, PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                        bool aAllowScroll = true );
 
     void HideSolderMask();
