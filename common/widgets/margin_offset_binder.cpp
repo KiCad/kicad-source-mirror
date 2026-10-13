@@ -268,7 +268,7 @@ bool MARGIN_OFFSET_BINDER::parseInput( const wxString& aInput, std::optional<int
 
     // First, normalize the input by adding spaces around operators
     wxString normalized;
-    bool lastWasOperator = true;  // Start as true to handle leading negative
+    bool     lastWasOperator = true;  // Start as true to handle leading negative
 
     for( size_t i = 0; i < input.Length(); ++i )
     {
@@ -291,7 +291,7 @@ bool MARGIN_OFFSET_BINDER::parseInput( const wxString& aInput, std::optional<int
 
     // Split into terms
     wxArrayString terms;
-    wxString currentTerm;
+    wxString      currentTerm;
 
     for( size_t i = 0; i < normalized.Length(); ++i )
     {
@@ -321,8 +321,8 @@ bool MARGIN_OFFSET_BINDER::parseInput( const wxString& aInput, std::optional<int
     // Process each term
     double totalOffset = 0.0;
     double totalRatio = 0.0;
-    bool hasOffset = false;
-    bool hasRatio = false;
+    bool   hasOffset = false;
+    bool   hasRatio = false;
     double sign = 1.0;
 
     for( const wxString& term : terms )
@@ -338,6 +338,8 @@ bool MARGIN_OFFSET_BINDER::parseInput( const wxString& aInput, std::optional<int
             continue;
         }
 
+        bool invalidTerm = true;
+
         // Check if this term is a percentage
         if( term.EndsWith( "%" ) )
         {
@@ -349,6 +351,7 @@ bool MARGIN_OFFSET_BINDER::parseInput( const wxString& aInput, std::optional<int
             {
                 totalRatio += sign * value / 100.0;
                 hasRatio = true;
+                invalidTerm = false;
             }
         }
         else
@@ -367,9 +370,13 @@ bool MARGIN_OFFSET_BINDER::parseInput( const wxString& aInput, std::optional<int
                     int iuValue = EDA_UNIT_UTILS::UI::ValueFromString( *m_iuScale, m_units, term );
                     totalOffset += sign * iuValue;
                     hasOffset = true;
+                    invalidTerm = false;
                 }
             }
         }
+
+        if( invalidTerm )
+            return false;
 
         sign = 1.0;  // Reset sign for next term
     }
@@ -380,7 +387,7 @@ bool MARGIN_OFFSET_BINDER::parseInput( const wxString& aInput, std::optional<int
     if( hasRatio )
         aRatio = totalRatio;
 
-    return hasOffset || hasRatio || input.IsEmpty();
+    return hasOffset || hasRatio;
 }
 
 
