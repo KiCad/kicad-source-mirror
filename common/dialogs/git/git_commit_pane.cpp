@@ -214,6 +214,20 @@ GIT_COMMIT_PANE::GIT_COMMIT_PANE( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) :
     m_settingsButton->SetBitmap( KiBitmapBundle( BITMAPS::config ) );
     m_settingsButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onSettings, this );
     m_commitButton->Bind( wxEVT_BUTTON, &GIT_COMMIT_PANE::onCommit, this );
+
+    // Commit from the keyboard, since the description box takes a plain Return as a new line.
+    auto commitOnEnter = [this]( wxKeyEvent& aEvent )
+    {
+        bool enter = aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER;
+
+        if( enter && ( aEvent.CmdDown() || aEvent.ControlDown() ) && m_commitButton->IsEnabled() )
+            doCommit( m_commitButtonPushes );
+        else
+            aEvent.Skip();
+    };
+
+    m_summary->Bind( wxEVT_CHAR_HOOK, commitOnEnter );
+    m_description->Bind( wxEVT_CHAR_HOOK, commitOnEnter );
     m_commitAndPushItem = m_commitButton->GetSplitButtonMenu()->Append( wxID_ANY, _( "Commit and Push" ) );
     m_commitButton->GetSplitButtonMenu()->Bind( wxEVT_MENU, &GIT_COMMIT_PANE::onCommitAndPush, this,
                                                 m_commitAndPushItem->GetId() );
