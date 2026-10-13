@@ -643,6 +643,34 @@ BOOST_AUTO_TEST_CASE( Push_ReportsBusyWhenActionLockHeld )
 }
 
 
+// A detached HEAD is not a branch, so its name is the literal "HEAD" and there is no branch on
+// the remote for it to go to.
+BOOST_AUTO_TEST_CASE( Push_RefusesOnADetachedHead )
+{
+    BOOST_TEST_REQUIRE( ready() );
+
+    git_repository* repo = openRepo();
+    BOOST_TEST_REQUIRE( repo );
+
+    createCommit( repo, wxT( "file.txt" ), wxT( "second\n" ), wxT( "Second commit" ) );
+    addOrigin( repo );
+
+    git_oid headOid;
+    BOOST_REQUIRE_EQUAL( git_reference_name_to_id( &headOid, repo, "HEAD" ), GIT_OK );
+    BOOST_REQUIRE_EQUAL( git_repository_set_head_detached( repo, &headOid ), GIT_OK );
+
+    KIGIT_COMMON     common( repo );
+    GIT_PUSH_HANDLER handler( &common );
+
+    BOOST_CHECK_EQUAL( static_cast<int>( handler.PerformPush() ), static_cast<int>( PushResult::Error ) );
+    BOOST_CHECK_MESSAGE( handler.GetErrorString().Contains( wxS( "branch" ) ),
+                         "the refusal should say the project is not on a branch, got: "
+                                 + handler.GetErrorString().ToStdString() );
+
+    git_repository_free( repo );
+}
+
+
 // Behind the upstream. libgit2 reports it through the return code, not the message.
 BOOST_AUTO_TEST_CASE( Push_ReportsNonFastForwardWhenRemoteIsAhead )
 {

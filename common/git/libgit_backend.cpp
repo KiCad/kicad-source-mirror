@@ -985,6 +985,16 @@ PushResult LIBGIT_BACKEND::Push( GIT_PUSH_HANDLER* aHandler, bool aForce )
 
     KIGIT::GitReferencePtr headPtr( head );
 
+    // A detached HEAD is not a branch, so its name is the literal "HEAD" and the remote has no
+    // branch for it. Without this the push fails with nothing to show the user.
+    if( !git_reference_is_branch( head ) )
+    {
+        git_remote_disconnect( remote );
+        aHandler->AddErrorString( _( "This project is showing an old snapshot rather than a branch, so there "
+                                     "is nothing to push. Go back to a branch first." ) );
+        return PushResult::Error;
+    }
+
     // Force push prepends "+" to the refspec source, matching `git push --force`.
     wxString           refspec = ( aForce ? wxS( "+" ) : wxS( "" ) ) + wxString( git_reference_name( head ) );
     std::string        refspecUtf8 = refspec.utf8_string();
