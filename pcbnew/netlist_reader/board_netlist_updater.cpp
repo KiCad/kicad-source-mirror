@@ -1430,7 +1430,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
     if( aBaseFpid.empty() )
         return;
 
-    const wxString footprintFieldName = GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED );
+    const wxString FOOTPRINT_FIELD_NAME = GetDefaultFieldName( FIELD_T::FOOTPRINT, UNTRANSLATED );
 
     struct VARIANT_INFO
     {
@@ -1446,7 +1446,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
     {
         LIB_ID variantFPID = aBaseFpid;
 
-        auto fieldIt = variant.m_fields.find( footprintFieldName );
+        auto fieldIt = variant.m_fields.find( FOOTPRINT_FIELD_NAME );
 
         if( fieldIt != variant.m_fields.end() && !fieldIt->second.IsEmpty() )
         {
@@ -1570,7 +1570,7 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
             const COMPONENT_VARIANT& variant = *info.variant;
 
             // During dry run, just read current state. During actual run, create variant if needed.
-            const FOOTPRINT_VARIANT* currentVariant = footprint->GetVariant( info.name );
+            FOOTPRINT_VARIANT* currentVariant = footprint->GetVariant( info.name );
 
             // Check if this footprint is the active one for this variant
             bool isAssociatedFootprint = fpidsEquivalent( footprint->GetFPID(), info.variantFPID );
@@ -1681,13 +1681,24 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
 
             if( m_updateFields )
             {
+                std::map<wxString, wxString> fpFieldsAsMap;
+
+                for( PCB_FIELD* field : footprint->GetFields() )
+                    fpFieldsAsMap[field->GetName()] = field->GetText();
+
                 for( const auto& [fieldName, fieldValue] : variant.m_fields )
                 {
-                    if( fieldName.CmpNoCase( footprintFieldName ) == 0 )
+                    if( fieldName.CmpNoCase( FOOTPRINT_FIELD_NAME ) == 0 )
                         continue;
 
-                    bool hasCurrentValue = currentVariant && currentVariant->HasFieldValue( fieldName );
-                    wxString currentValue = hasCurrentValue ? currentVariant->GetFieldValue( fieldName ) : wxString();
+                    wxString currentValue;
+
+                    if( currentVariant && currentVariant->HasFieldValue( fieldName ) )
+                        currentValue = currentVariant->GetFieldValue( fieldName );
+                    else
+                        currentValue = fpFieldsAsMap[fieldName];
+
+                    fpFieldsAsMap.erase( fieldName );   // leave fpFieldsAsMap containing only unprocessed fields
 
                     if( currentValue != fieldValue )
                     {
@@ -1737,6 +1748,56 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
 
                         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
                         changed = true;
+                    }
+                }
+
+                // Go through everything left in fpFieldsAsMap and clear any variant field definitions
+                // that are no longer present in the schematic
+                for( const auto& [fieldName, fieldValue] : fpFieldsAsMap )
+                {
+                    if( fieldName.CmpNoCase( FOOTPRINT_FIELD_NAME ) == 0 )
+                        continue;
+
+                    if( currentVariant && currentVariant->HasFieldValue( fieldName ) )
+                    {
+                        if( m_isDryRun )
+                        {
+                            if( aFootprints.size() > 1 )
+                            {
+                                msg.Printf( _( "Remove %s field '%s' override on variant %s (footprint %s)." ),
+                                            footprint->GetReference(),
+                                            fieldName,
+                                            info.name,
+                                            footprint->GetFPIDAsString() );
+                            }
+                            else
+                            {
+                                msg.Printf( _( "Remove %s field '%s' override on variant %s." ),
+                                            footprint->GetReference(),
+                                            fieldName,
+                                            info.name );
+                            }
+                        }
+                        else
+                        {
+                            if( aFootprints.size() > 1 )
+                            {
+                                msg.Printf( _( "Removed %s field '%s' override on variant %s (footprint %s)." ),
+                                            footprint->GetReference(),
+                                            fieldName,
+                                            info.name,
+                                            footprint->GetFPIDAsString() );
+                            }
+                            else
+                            {
+                                msg.Printf( _( "Removed %s field '%s' override on variant %s." ),
+                                            footprint->GetReference(),
+                                            fieldName,
+                                            info.name );
+                            }
+                        }
+
+                        currentVariant->RemoveFieldValue( fieldName );
                     }
                 }
             }
