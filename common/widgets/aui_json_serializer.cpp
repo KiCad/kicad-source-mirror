@@ -342,6 +342,10 @@ public:
 
             if( actualPane )
             {
+                // Toolbar depth follows icon size and DPI, a saved one clips the icons
+                if( actualPane->IsToolbar() )
+                    pane.dock_size = 0;
+
                 pane.name = actualPane->name;
                 used.insert( actualPane );
                 panes.push_back( pane );
