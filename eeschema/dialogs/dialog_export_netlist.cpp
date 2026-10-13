@@ -793,7 +793,7 @@ void DIALOG_EXPORT_NETLIST::WriteCurrentNetlistSetup()
             wxString title = currPage->m_TitleStringCtrl->GetValue();
             wxString command = currPage->m_CommandStringCtrl->GetValue();
 
-            if( title.IsEmpty() || command.IsEmpty() )
+            if( title.IsEmpty() )
                 continue;
 
             cfg->m_NetlistPanel.plugins.emplace_back( title, wxEmptyString );
