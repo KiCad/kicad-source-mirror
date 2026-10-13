@@ -1679,62 +1679,65 @@ void BOARD_NETLIST_UPDATER::applyComponentVariants( COMPONENT* aComponent,
                 changed = true;
             }
 
-            for( const auto& [fieldName, fieldValue] : variant.m_fields )
+            if( m_updateFields )
             {
-                if( fieldName.CmpNoCase( footprintFieldName ) == 0 )
-                    continue;
-
-                bool hasCurrentValue = currentVariant && currentVariant->HasFieldValue( fieldName );
-                wxString currentValue = hasCurrentValue ? currentVariant->GetFieldValue( fieldName ) : wxString();
-
-                if( currentValue != fieldValue )
+                for( const auto& [fieldName, fieldValue] : variant.m_fields )
                 {
-                    if( m_isDryRun )
+                    if( fieldName.CmpNoCase( footprintFieldName ) == 0 )
+                        continue;
+
+                    bool hasCurrentValue = currentVariant && currentVariant->HasFieldValue( fieldName );
+                    wxString currentValue = hasCurrentValue ? currentVariant->GetFieldValue( fieldName ) : wxString();
+
+                    if( currentValue != fieldValue )
                     {
-                        if( aFootprints.size() > 1 )
+                        if( m_isDryRun )
                         {
-                            msg.Printf( _( "Change %s field '%s' to '%s' on variant %s (footprint %s)." ),
-                                        footprint->GetReference(),
-                                        fieldName,
-                                        fieldValue,
-                                        info.name,
-                                        footprint->GetFPIDAsString() );
+                            if( aFootprints.size() > 1 )
+                            {
+                                msg.Printf( _( "Change %s field '%s' to '%s' on variant %s (footprint %s)." ),
+                                            footprint->GetReference(),
+                                            fieldName,
+                                            fieldValue,
+                                            info.name,
+                                            footprint->GetFPIDAsString() );
+                            }
+                            else
+                            {
+                                msg.Printf( _( "Change %s field '%s' to '%s' on variant %s." ),
+                                            footprint->GetReference(),
+                                            fieldName,
+                                            fieldValue,
+                                            info.name );
+                            }
                         }
                         else
                         {
-                            msg.Printf( _( "Change %s field '%s' to '%s' on variant %s." ),
-                                        footprint->GetReference(),
-                                        fieldName,
-                                        fieldValue,
-                                        info.name );
-                        }
-                    }
-                    else
-                    {
-                        if( aFootprints.size() > 1 )
-                        {
-                            msg.Printf( _( "Changed %s field '%s' to '%s' on variant %s (footprint %s)." ),
-                                        footprint->GetReference(),
-                                        fieldName,
-                                        fieldValue,
-                                        info.name,
-                                        footprint->GetFPIDAsString() );
-                        }
-                        else
-                        {
-                            msg.Printf( _( "Changed %s field '%s' to '%s' on variant %s." ),
-                                        footprint->GetReference(),
-                                        fieldName,
-                                        fieldValue,
-                                        info.name );
+                            if( aFootprints.size() > 1 )
+                            {
+                                msg.Printf( _( "Changed %s field '%s' to '%s' on variant %s (footprint %s)." ),
+                                            footprint->GetReference(),
+                                            fieldName,
+                                            fieldValue,
+                                            info.name,
+                                            footprint->GetFPIDAsString() );
+                            }
+                            else
+                            {
+                                msg.Printf( _( "Changed %s field '%s' to '%s' on variant %s." ),
+                                            footprint->GetReference(),
+                                            fieldName,
+                                            fieldValue,
+                                            info.name );
+                            }
+
+                            if( FOOTPRINT_VARIANT* fpVariant = footprint->AddVariant( info.name ) )
+                                fpVariant->SetFieldValue( fieldName, fieldValue );
                         }
 
-                        if( FOOTPRINT_VARIANT* fpVariant = footprint->AddVariant( info.name ) )
-                            fpVariant->SetFieldValue( fieldName, fieldValue );
+                        m_reporter->Report( msg, RPT_SEVERITY_ACTION );
+                        changed = true;
                     }
-
-                    m_reporter->Report( msg, RPT_SEVERITY_ACTION );
-                    changed = true;
                 }
             }
         }
