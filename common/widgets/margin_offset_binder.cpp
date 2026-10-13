@@ -233,19 +233,20 @@ void MARGIN_OFFSET_BINDER::onKillFocus( wxFocusEvent& aEvent )
 
 void MARGIN_OFFSET_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
 {
-    EDA_BASE_FRAME* provider = static_cast<EDA_BASE_FRAME*>( aEvent.GetClientData() );
+    if( EDA_BASE_FRAME* provider = static_cast<EDA_BASE_FRAME*>( aEvent.GetClientData() ) )
+    {
+        // Preserve current values
+        std::optional<int> offset = GetOffsetValue();
+        std::optional<double> ratio = GetRatioValue();
 
-    // Preserve current values
-    std::optional<int> offset = GetOffsetValue();
-    std::optional<double> ratio = GetRatioValue();
+        // Update units
+        m_units = provider->GetUserUnits();
+        m_iuScale = &provider->GetIuScale();
+        m_eval.SetDefaultUnits( m_units );
 
-    // Update units
-    m_units = provider->GetUserUnits();
-    m_iuScale = &provider->GetIuScale();
-    m_eval.SetDefaultUnits( m_units );
-
-    // Reformat with new units
-    setTextValue( formatValue( offset, ratio ) );
+        // Reformat with new units
+        setTextValue( formatValue( offset, ratio ) );
+    }
 
     aEvent.Skip();
 }

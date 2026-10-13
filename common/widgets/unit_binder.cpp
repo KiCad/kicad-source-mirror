@@ -191,37 +191,36 @@ void UNIT_BINDER::SetDataType( EDA_DATA_TYPE aDataType )
 
 void UNIT_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
 {
-    EDA_BASE_FRAME* provider = static_cast<EDA_BASE_FRAME*>( aEvent.GetClientData() );
-
     if( !UnitsInvariant() )
     {
-        int temp = GetIntValue();
-
-        wxComboBox* const          combo = dynamic_cast<wxComboBox*>( m_valueCtrl );
-        std::vector<long long int> comboValues;
-
-        // Read out the current values
-        if( combo )
+        if( EDA_BASE_FRAME* provider = static_cast<EDA_BASE_FRAME*>( aEvent.GetClientData() ) )
         {
-            for( unsigned int i = 0; i < combo->GetCount(); i++ )
+            int temp = GetIntValue();
+
+            wxComboBox* const          combo = dynamic_cast<wxComboBox*>( m_valueCtrl );
+            std::vector<long long int> comboValues;
+
+            // Read out the current values
+            if( combo )
             {
-                const wxString value = combo->GetString( i );
-                long long int  conv = ValueFromString( *m_iuScale, m_units, value, m_dataType );
-                comboValues.push_back( conv );
+                for( unsigned int i = 0; i < combo->GetCount(); i++ )
+                {
+                    const wxString value = combo->GetString( i );
+                    long long int  conv = ValueFromString( *m_iuScale, m_units, value, m_dataType );
+                    comboValues.push_back( conv );
+                }
             }
+
+            SetUnits( provider->GetUserUnits() );
+            m_iuScale = &provider->GetIuScale();
+
+            // Re-populate the combo box with updated values
+            if( combo )
+                SetOptionsList( comboValues );
+
+            if( !IsIndeterminate() )
+                SetValue( temp );
         }
-
-        SetUnits( provider->GetUserUnits() );
-        m_iuScale = &provider->GetIuScale();
-
-        // Re-populate the combo box with updated values
-        if( combo )
-        {
-            SetOptionsList( comboValues );
-        }
-
-        if( !IsIndeterminate() )
-            SetValue( temp );
     }
 
     aEvent.Skip();
