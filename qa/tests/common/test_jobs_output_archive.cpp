@@ -35,7 +35,7 @@ class TEST_PROJECT : public PROJECT
 public:
     explicit TEST_PROJECT( const wxString& aPath ) : m_path( aPath ) {}
 
-    const wxString GetProjectPath() const override { return m_path; }
+    const wxString GetProjectFullName() const override { return m_path + wxS( "test.kicad_pro" ); }
 
 private:
     wxString m_path;

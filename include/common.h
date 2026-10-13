@@ -147,6 +147,27 @@ KICOMMON_API wxString DescribeRef( const wxString& aRef );
  */
 KICOMMON_API const wxString ResolveUriByEnvVars( const wxString& aUri, const PROJECT* aProject );
 
+/**
+ * Expand text variables, environment variables and a leading '~' in a user-entered file path.
+ *
+ * The result may still be relative. Only "~" and "~/" are recognized, "~user" is left alone.
+ *
+ * @param aPath is the path as typed by the user or stored in a settings file.
+ * @param aProject is used to resolve project variables, may be null.
+ * @param aTextResolver resolves text variables in place of the project, may be null.
+ */
+KICOMMON_API wxString ExpandPathVariables( const wxString& aPath, const PROJECT* aProject,
+                                           const std::function<bool( wxString* )>* aTextResolver = nullptr );
+
+/**
+ * Expand a user-entered file path as ExpandPathVariables() does, then anchor a relative result at
+ * the project directory so it does not depend on the working directory.
+ *
+ * A path that still begins with an unresolved variable is returned as is.
+ */
+KICOMMON_API wxString ResolveProjectPath( const wxString& aPath, const PROJECT* aProject,
+                                          const std::function<bool( wxString* )>* aTextResolver = nullptr );
+
 
 /**
  * Checks if the operating system is explicitly unsupported and displays a disclaimer message box

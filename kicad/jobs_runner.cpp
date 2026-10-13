@@ -139,19 +139,17 @@ int JOBS_RUNNER::runSpecialExecute( const JOBSET_JOB* aJob, REPORTER* aReporter,
 int JOBS_RUNNER::runSpecialCopyFiles( const JOB_SPECIAL_COPYFILES* aJob, PROJECT* aProject,
                                       std::vector<wxString>& aPathsWritten )
 {
-    wxString source = ExpandEnvVarSubstitutions( aJob->m_source, aProject );
+    wxString source = ResolveProjectPath( aJob->m_source, aProject );
 
     if( source.IsEmpty() )
         return CLI::EXIT_CODES::ERR_ARGS;
 
-    wxString   projectPath = aProject->GetProjectPath();
     wxFileName sourceFn( source );
-    sourceFn.MakeAbsolute( projectPath );
 
     wxFileName destFn( aJob->GetFullOutputPath( aProject ) );
 
     if( !aJob->m_dest.IsEmpty() )
-        destFn.AppendDir( ExpandEnvVarSubstitutions( aJob->m_dest, aProject ) );
+        destFn.AppendDir( ExpandPathVariables( aJob->m_dest, aProject ) );
 
     wxString errors;
     bool     success = CopyFilesOrDirectory( sourceFn.GetFullPath(), destFn.GetFullPath(), aJob->m_overwriteDest,

@@ -130,8 +130,7 @@ void DIALOG_EXPORT_ODBPP::onBrowseClicked( wxCommandEvent& event )
     // clang-format on
 
     // Build the absolute path of current output directory to preselect it in the file browser.
-    wxString   path = ExpandEnvVarSubstitutions( m_outputFileName->GetValue(), &Prj() );
-    wxFileName fn( Prj().AbsolutePath( path ) );
+    wxFileName fn( ResolveProjectPath( m_outputFileName->GetValue(), &Prj() ) );
 
     wxFileName brdFile( m_parent->GetBoard()->GetFileName() );
 
@@ -144,7 +143,7 @@ void DIALOG_EXPORT_ODBPP::onBrowseClicked( wxCommandEvent& event )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    path = dlg.GetPath();
+    wxString path = dlg.GetPath();
 
     fn = wxFileName( path );
 

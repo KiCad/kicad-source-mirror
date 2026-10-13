@@ -1443,8 +1443,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::ShowExportTab()
 void DIALOG_SYMBOL_FIELDS_TABLE::OnOutputFileBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output directory to preselect it in the file browser.
-    wxString path = ExpandEnvVarSubstitutions( m_outputFileName->GetValue(), &Prj() );
-    path = Prj().AbsolutePath( path );
+    wxString path = ResolveProjectPath( m_outputFileName->GetValue(), &Prj() );
 
 
     // Calculate the export filename

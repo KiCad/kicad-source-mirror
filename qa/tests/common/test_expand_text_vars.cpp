@@ -722,3 +722,22 @@ BOOST_AUTO_TEST_CASE( BackslashesAwayFromVarArePreserved )
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+
+
+BOOST_AUTO_TEST_SUITE( ExpandPathVariablesSuite )
+
+BOOST_AUTO_TEST_CASE( LeadingTildeExpandsToHome )
+{
+    wxString home = wxGetHomeDir();
+
+    BOOST_CHECK( ExpandPathVariables( wxS( "~/out/file.zip" ), nullptr ) == home + wxS( "/out/file.zip" ) );
+    BOOST_CHECK( ExpandPathVariables( wxS( "~" ), nullptr ) == home );
+}
+
+BOOST_AUTO_TEST_CASE( TildeInsideNameIsLiteral )
+{
+    BOOST_CHECK( ExpandPathVariables( wxS( "~user/out" ), nullptr ) == wxS( "~user/out" ) );
+    BOOST_CHECK( ExpandPathVariables( wxS( "out/~/file" ), nullptr ) == wxS( "out/~/file" ) );
+}
+
+BOOST_AUTO_TEST_SUITE_END()

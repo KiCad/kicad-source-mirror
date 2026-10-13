@@ -269,8 +269,7 @@ void DIALOG_GENDRILL::updatePrecisionOptions()
 void DIALOG_GENDRILL::onOutputDirectoryBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output directory to preselect it in the file browser.
-    wxString path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );
-    path = Prj().AbsolutePath( path );
+    wxString path = ResolveProjectPath( m_outputDirectoryName->GetValue(), &Prj() );
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 
@@ -326,9 +325,7 @@ void DIALOG_GENDRILL::genDrillAndMapFiles( bool aGenDrill, bool aGenMap, bool aG
                 return m_board->ResolveTextVar( token, 0 );
             };
 
-    wxString path = m_plotOpts.GetOutputDirectory();
-    path = ExpandTextVars( path, &textResolver );
-    path = ExpandEnvVarSubstitutions( path, &Prj() );
+    wxString path = ExpandPathVariables( m_plotOpts.GetOutputDirectory(), &Prj(), &textResolver );
 
     wxFileName  outputDir = wxFileName::DirName( path );
     wxString    boardFilename = m_board->GetFileName();
@@ -391,8 +388,7 @@ void DIALOG_GENDRILL::onGenReportFile( wxCommandEvent& event )
     fn.SetName( fn.GetName() + wxT( "-drl" ) );
     fn.SetExt( FILEEXT::ReportFileExtension );
 
-    wxString defaultPath = ExpandEnvVarSubstitutions( m_plotOpts.GetOutputDirectory(), &Prj() );
-    defaultPath = Prj().AbsolutePath( defaultPath );
+    wxString defaultPath = ResolveProjectPath( m_plotOpts.GetOutputDirectory(), &Prj() );
 
     if( defaultPath.IsEmpty() )
         defaultPath = PATHS::GetDefaultUserProjectsPath();

@@ -806,10 +806,7 @@ void DIALOG_PLOT::onOutputDirectoryBrowseClicked( wxCommandEvent& event )
                 return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
             };
 
-    wxString path = m_outputDirectoryName->GetValue();
-    path = ExpandTextVars( path, &textResolver );
-    path = ExpandEnvVarSubstitutions( path, &Prj() );
-    path = Prj().AbsolutePath( path );
+    wxString path = ResolveProjectPath( m_outputDirectoryName->GetValue(), &Prj(), &textResolver );
 
     wxDirDialog dirDialog( this, _( "Select Output Directory" ), path );
 
@@ -1232,9 +1229,7 @@ void DIALOG_PLOT::Plot( wxCommandEvent& event )
                     return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
                 };
 
-        wxString path = m_plotOpts.GetOutputDirectory();
-        path = ExpandTextVars( path, &textResolver );
-        path = ExpandEnvVarSubstitutions( path, board->GetProject() );
+        wxString path = ExpandPathVariables( m_plotOpts.GetOutputDirectory(), board->GetProject(), &textResolver );
 
         wxFileName outputDir = wxFileName::DirName( path );
         wxString   boardFilename = m_editFrame->GetBoard()->GetFileName();
@@ -1349,10 +1344,7 @@ void DIALOG_PLOT::onOpenOutputDirectory( wxCommandEvent& event )
         return m_editFrame->GetBoard()->ResolveTextVar( token, 0 );
     };
 
-    wxString path = m_outputDirectoryName->GetValue();
-    path = ExpandTextVars( path, &textResolver );
-    path = ExpandEnvVarSubstitutions( path, &Prj() );
-    path = Prj().AbsolutePath( path );
+    wxString path = ResolveProjectPath( m_outputDirectoryName->GetValue(), &Prj(), &textResolver );
 
     if( !wxDirExists( path ) )
     {

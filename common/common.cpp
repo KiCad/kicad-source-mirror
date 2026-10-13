@@ -610,6 +610,41 @@ const wxString ResolveUriByEnvVars( const wxString& aUri, const PROJECT* aProjec
 }
 
 
+wxString ExpandPathVariables( const wxString& aPath, const PROJECT* aProject,
+                              const std::function<bool( wxString* )>* aTextResolver )
+{
+    wxString path = aPath;
+
+    // ExpandTextVars reads \${ and \@{ as escapes, but in a path the backslash is a separator
+    path.Replace( wxT( "\\${" ), wxT( "/${" ) );
+    path.Replace( wxT( "\\@{" ), wxT( "/@{" ) );
+
+    if( aTextResolver )
+        path = ExpandTextVars( path, aTextResolver );
+    else if( aProject )
+        path = ExpandTextVars( path, aProject );
+
+    path = ExpandEnvVarSubstitutions( path, aProject );
+
+    if( path == wxS( "~" ) || path.StartsWith( wxS( "~/" ) ) || path.StartsWith( wxS( "~\\" ) ) )
+        path = wxGetHomeDir() + path.Mid( 1 );
+
+    return path;
+}
+
+
+wxString ResolveProjectPath( const wxString& aPath, const PROJECT* aProject,
+                             const std::function<bool( wxString* )>* aTextResolver )
+{
+    wxString path = ExpandPathVariables( aPath, aProject, aTextResolver );
+
+    if( path.IsEmpty() || !aProject || aProject->GetProjectFullName().IsEmpty() )
+        return path;
+
+    return aProject->AbsolutePath( path );
+}
+
+
 bool EnsureFileDirectoryExists( wxFileName* aTargetFullFileName, const wxString& aBaseFilename, REPORTER* aReporter )
 {
     wxString msg;
