@@ -21,9 +21,8 @@
 
 #include <mutex>
 
-#include <wx/textdlg.h>
-
 #include <confirm.h>
+#include <dialogs/git/dialog_git_new_tag.h>
 #include <dialogs/git/git_advanced_dialog.h>
 #include <dialogs/git/git_ui_utils.h>
 #include <eda_base_frame.h>
@@ -177,18 +176,13 @@ void PANEL_GIT_TAGS::onNewTag()
     if( !m_dialog->SessionStillCurrent() )
         return;
 
-    wxString name = wxGetTextFromUser( _( "New tag name:" ), _( "Create Tag" ), wxEmptyString, this );
+    DIALOG_GIT_NEW_TAG dlg( this );
 
-    if( name.IsEmpty() )
+    if( dlg.ShowModal() != wxID_OK )
         return;
 
-    // A message makes the tag annotated.
-    wxTextEntryDialog messageDlg( this, _( "Tag message, or leave empty for a plain tag:" ), _( "Create Tag" ) );
-
-    if( messageDlg.ShowModal() != wxID_OK )
-        return;
-
-    wxString message = messageDlg.GetValue();
+    wxString name = dlg.GetName();
+    wxString message = dlg.GetMessage();
 
     m_dialog->RunGitAction(
             [name, message]( KIGIT_COMMON& aCommon )
