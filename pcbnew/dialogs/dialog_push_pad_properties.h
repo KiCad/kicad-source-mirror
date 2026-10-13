@@ -31,6 +31,7 @@ public:
     DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent );
 
     bool GetPadShapeFilter() const { return m_Pad_Shape_Filter_CB->GetValue(); }
+    bool GetPadSizeFilter() const { return m_Pad_Size_Filter_CB->GetValue(); }
     bool GetPadLayerFilter() const { return m_Pad_Layer_Filter_CB->GetValue(); }
     bool GetPadOrientFilter() const { return m_Pad_Orient_Filter_CB->GetValue(); }
     bool GetPadTypeFilter() const { return m_Pad_Type_Filter_CB->GetValue(); }
@@ -41,5 +42,3 @@ private:
 private:
     PCB_BASE_FRAME* m_parent;
 };
-
-

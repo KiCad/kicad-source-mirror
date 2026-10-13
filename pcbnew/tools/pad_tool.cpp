@@ -186,9 +186,9 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
 }
 
 
-static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT& commit,
-                                 bool aSameFootprints, bool aPadShapeFilter, bool aPadOrientFilter,
-                                 bool aPadLayerFilter, bool aPadTypeFilter )
+static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT& commit, bool aSameFootprints,
+                                 bool aPadShapeFilter, bool aPadSizeFilter, bool aPadOrientFilter, bool aPadLayerFilter,
+                                 bool aPadTypeFilter )
 {
     const FOOTPRINT* refFootprint = aSrcPad.GetParentFootprint();
 
@@ -228,6 +228,9 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
             }
 
             EDA_ANGLE padAngle = pad->GetOrientation() - footprint->GetOrientation();
+
+            if( aPadSizeFilter && ( pad->GetSize( PADSTACK::ALL_LAYERS ) != aSrcPad.GetSize( PADSTACK::ALL_LAYERS ) ) )
+                continue;
 
             if( aPadOrientFilter && ( padAngle != srcPadAngle ) )
                 continue;
@@ -278,7 +281,8 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
             BOARD_COMMIT commit( frame() );
 
             doPushPadProperties( *getModel<BOARD>(), *srcPad, commit, edit_Same_Modules, dlg.GetPadShapeFilter(),
-                                 dlg.GetPadOrientFilter(), dlg.GetPadLayerFilter(), dlg.GetPadTypeFilter() );
+                                 dlg.GetPadSizeFilter(), dlg.GetPadOrientFilter(), dlg.GetPadLayerFilter(),
+                                 dlg.GetPadTypeFilter() );
 
             commit.Push( _( "Push Pad Settings" ) );
 

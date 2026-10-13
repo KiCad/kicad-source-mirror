@@ -26,6 +26,10 @@ DIALOG_PUSH_PAD_PROPERTIES_BASE::DIALOG_PUSH_PAD_PROPERTIES_BASE( wxWindow* pare
 	m_Pad_Shape_Filter_CB->SetValue(true);
 	sbSizer1->Add( m_Pad_Shape_Filter_CB, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+	m_Pad_Size_Filter_CB = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Do not modify pads having a different size"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_Pad_Size_Filter_CB->SetValue(true);
+	sbSizer1->Add( m_Pad_Size_Filter_CB, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
 	m_Pad_Layer_Filter_CB = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Do not modify pads having different layers"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Pad_Layer_Filter_CB->SetValue(true);
 	sbSizer1->Add( m_Pad_Layer_Filter_CB, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );

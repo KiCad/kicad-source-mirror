@@ -33,6 +33,7 @@ class DIALOG_PUSH_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 
 	protected:
 		wxCheckBox* m_Pad_Shape_Filter_CB;
+		wxCheckBox* m_Pad_Size_Filter_CB;
 		wxCheckBox* m_Pad_Layer_Filter_CB;
 		wxCheckBox* m_Pad_Orient_Filter_CB;
 		wxCheckBox* m_Pad_Type_Filter_CB;
