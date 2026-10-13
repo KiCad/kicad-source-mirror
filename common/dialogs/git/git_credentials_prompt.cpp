@@ -19,10 +19,8 @@
 
 #include <dialogs/git/git_credentials_prompt.h>
 #include <dialogs/git/dialog_git_credentials.h>
+#include <dialogs/git/dialog_git_identity.h>
 #include <confirm.h>
-#include <wx/sizer.h>
-#include <wx/stattext.h>
-#include <wx/textctrl.h>
 #include <wx/utils.h>
 #include <mutex>
 #include <git/kicad_git_common.h>
@@ -122,57 +120,12 @@ bool KIGIT::EnsureGitIdentity( wxWindow* aParent, KIGIT_COMMON* aCommon )
 
 bool KIGIT::PromptGitIdentity( wxWindow* aParent, const wxString& aTitle, wxString& aName, wxString& aEmail )
 {
-    wxDialog dlg( aParent, wxID_ANY, aTitle );
+    DIALOG_GIT_IDENTITY dlg( aParent, aTitle, aName, aEmail );
 
-    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+    if( dlg.ShowModal() != wxID_OK )
+        return false;
 
-    wxStaticText* message =
-            new wxStaticText( &dlg, wxID_ANY, _( "Commits record who made them. Enter the name and email to use." ) );
-    mainSizer->Add( message, 0, wxALL, 10 );
-
-    wxFlexGridSizer* fields = new wxFlexGridSizer( 2, 2, 6, 6 );
-    fields->AddGrowableCol( 1 );
-
-    fields->Add( new wxStaticText( &dlg, wxID_ANY, _( "Name:" ) ), 0, wxALIGN_CENTER_VERTICAL );
-    wxTextCtrl* nameCtrl = new wxTextCtrl( &dlg, wxID_ANY, aName, wxDefaultPosition, wxSize( 320, -1 ) );
-    fields->Add( nameCtrl, 1, wxEXPAND );
-
-    fields->Add( new wxStaticText( &dlg, wxID_ANY, _( "Email:" ) ), 0, wxALIGN_CENTER_VERTICAL );
-    wxTextCtrl* emailCtrl = new wxTextCtrl( &dlg, wxID_ANY, aEmail, wxDefaultPosition, wxSize( 320, -1 ) );
-    fields->Add( emailCtrl, 1, wxEXPAND );
-
-    mainSizer->Add( fields, 1, wxEXPAND | wxLEFT | wxRIGHT, 10 );
-    mainSizer->Add( dlg.CreateStdDialogButtonSizer( wxOK | wxCANCEL ), 0, wxEXPAND | wxALL, 10 );
-
-    dlg.SetSizerAndFit( mainSizer );
-    dlg.Centre();
-
-    while( true )
-    {
-        if( dlg.ShowModal() != wxID_OK )
-            return false;
-
-        if( nameCtrl->GetValue().Trim().IsEmpty() )
-        {
-            DisplayInfoMessage( &dlg, _( "Enter your name. It is recorded as the author of your commits." ) );
-            nameCtrl->SetFocus();
-            continue;
-        }
-
-        if( !emailCtrl->GetValue().Contains( wxS( "@" ) ) )
-        {
-            DisplayInfoMessage( &dlg, _( "Enter a valid email address. It is recorded as the author of "
-                                         "your commits." ) );
-            emailCtrl->SetFocus();
-            continue;
-        }
-
-        break;
-    }
-
-    aName = nameCtrl->GetValue();
-    aName.Trim( true ).Trim( false );
-    aEmail = emailCtrl->GetValue();
-    aEmail.Trim( true ).Trim( false );
+    aName = dlg.GetName();
+    aEmail = dlg.GetEmail();
     return true;
 }
