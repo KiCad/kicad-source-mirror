@@ -148,7 +148,92 @@ public:
         }
 
         // If we still don't have a master pad, fall back to a constructed default
-        return *makeDefaultPad( aType );
+        return *MakeDefaultPad( aType );
+    }
+
+    /**
+     * Create a default pad for the given master pad type when there is no more obvious source.
+     */
+    std::unique_ptr<PAD> MakeDefaultPad( PAD_MASTER_PROVIDER::TYPE aMasterType ) const
+    {
+        std::unique_ptr<PAD> pad = std::make_unique<PAD>( nullptr );
+
+        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
+        pad->SetThermalSpokeAngle( ANGLE_90 );
+
+        switch( aMasterType )
+        {
+        case PAD_MASTER_PROVIDER::TYPE::THT:
+        {
+            pad->SetAttribute( PAD_ATTRIB::PTH );
+            pad->SetLayerSet( PAD::PTHMask() );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
+
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ pcbIUScale.mmToIU( 2.5 ), pcbIUScale.mmToIU( 1.5 ) } );
+
+            pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
+            pad->SetDrillSize( VECTOR2D{ pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) } );
+            break;
+        }
+        case PAD_MASTER_PROVIDER::TYPE::SMD:
+        {
+            pad->SetAttribute( PAD_ATTRIB::SMD );
+            pad->SetLayerSet( PAD::SMDMask() );
+
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
+
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 0.5 ) } );
+            pad->SetRoundRectCornerRadius( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.5 * 0.25 ) );
+
+            // No drill for SMD pads
+            break;
+        }
+        case PAD_MASTER_PROVIDER::TYPE::NPTH:
+        {
+            pad->SetAttribute( PAD_ATTRIB::NPTH );
+            pad->SetLayerSet( PAD::UnplatedHoleMask() );
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
+
+            const VECTOR2D size = VECTOR2D{ pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) };
+            pad->SetSize( PADSTACK::ALL_LAYERS, size );
+            pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
+            pad->SetDrillSize( size );
+
+            break;
+        }
+        case PAD_MASTER_PROVIDER::TYPE::PASTE:
+        case PAD_MASTER_PROVIDER::TYPE::MASK:
+        {
+            pad->SetAttribute( PAD_ATTRIB::SMD );
+
+            if( aMasterType == PAD_MASTER_PROVIDER::TYPE::PASTE )
+                pad->SetLayerSet( PAD::ApertureMask() );
+            else
+                pad->SetLayerSet( LSET{ F_Mask } );
+
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) } );
+            pad->SetFrontRoundRectRadiusSize( pcbIUScale.mmToIU( 1.0 * 0.25 ) );
+            break;
+        }
+        case PAD_MASTER_PROVIDER::TYPE::CONNECTOR:
+        {
+            pad->SetAttribute( PAD_ATTRIB::CONN );
+            pad->SetLayerSet( PAD::ConnSMDMask() );
+
+            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 3.0 ) } );
+            break;
+        }
+        // No Default: handle every case explicitly
+        case PAD_MASTER_PROVIDER::TYPE::AUTO:
+        {
+            wxFAIL_MSG( "AUTO pad type should not be used for default pad creation" );
+            break;
+        }
+        }
+
+        return pad;
     }
 
     /**
@@ -156,7 +241,7 @@ public:
      *
      * This can then be used when auto-detecting the pad type for new pads.
      */
-    void RecordPlacedPad( const PAD& aPlacedPad )
+    void RecordNewMasterPad( const PAD& aPlacedPad )
     {
         std::optional<TYPE> padType = TypeFromPad( aPlacedPad );
 
@@ -247,91 +332,6 @@ private:
         return TYPE::THT;
     }
 
-    /**
-     * Create a default pad for the given master pad type when there is no more obvious source.
-     */
-    std::unique_ptr<PAD> makeDefaultPad( PAD_MASTER_PROVIDER::TYPE aMasterType ) const
-    {
-        std::unique_ptr<PAD> pad = std::make_unique<PAD>( nullptr );
-
-        pad->SetPadstackMode( PADSTACK::MODE::NORMAL );
-        pad->SetThermalSpokeAngle( ANGLE_90 );
-
-        switch( aMasterType )
-        {
-        case PAD_MASTER_PROVIDER::TYPE::THT:
-        {
-            pad->SetAttribute( PAD_ATTRIB::PTH );
-            pad->SetLayerSet( PAD::PTHMask() );
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
-
-            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ pcbIUScale.mmToIU( 2.5 ), pcbIUScale.mmToIU( 1.5 ) } );
-
-            pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
-            pad->SetDrillSize( VECTOR2D{ pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) } );
-            break;
-        }
-        case PAD_MASTER_PROVIDER::TYPE::SMD:
-        {
-            pad->SetAttribute( PAD_ATTRIB::SMD );
-            pad->SetLayerSet( PAD::SMDMask() );
-
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
-
-            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 0.5 ) } );
-            pad->SetRoundRectCornerRadius( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.5 * 0.25 ) );
-
-            // No drill for SMD pads
-            break;
-        }
-        case PAD_MASTER_PROVIDER::TYPE::NPTH:
-        {
-            pad->SetAttribute( PAD_ATTRIB::NPTH );
-            pad->SetLayerSet( PAD::UnplatedHoleMask() );
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
-
-            const VECTOR2D size = VECTOR2D{ pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) };
-            pad->SetSize( PADSTACK::ALL_LAYERS, size );
-            pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
-            pad->SetDrillSize( size );
-
-            break;
-        }
-        case PAD_MASTER_PROVIDER::TYPE::PASTE:
-        case PAD_MASTER_PROVIDER::TYPE::MASK:
-        {
-            pad->SetAttribute( PAD_ATTRIB::SMD );
-
-            if( aMasterType == PAD_MASTER_PROVIDER::TYPE::PASTE )
-                pad->SetLayerSet( PAD::ApertureMask() );
-            else
-                pad->SetLayerSet( LSET{ F_Mask } );
-
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
-            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) } );
-            pad->SetFrontRoundRectRadiusSize( pcbIUScale.mmToIU( 1.0 * 0.25 ) );
-            break;
-        }
-        case PAD_MASTER_PROVIDER::TYPE::CONNECTOR:
-        {
-            pad->SetAttribute( PAD_ATTRIB::CONN );
-            pad->SetLayerSet( PAD::ConnSMDMask() );
-
-            pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 3.0 ) } );
-            break;
-        }
-        // No Default: handle every case explicitly
-        case PAD_MASTER_PROVIDER::TYPE::AUTO:
-        {
-            wxFAIL_MSG( "AUTO pad type should not be used for default pad creation" );
-            break;
-        }
-        }
-
-        return pad;
-    }
-
     // Persistent store of the last real pad's ID for each type.
     // Note that the pad with this UUID may not exist in the current footprint,
     // or may no longer have the recorded type.
@@ -346,8 +346,12 @@ PAD_TOOL::PAD_TOOL() :
         PCB_TOOL_BASE( "pcbnew.PadTool" ),
         m_previousHighContrastMode( HIGH_CONTRAST_MODE::NORMAL ),
         m_editPad( niluuid ),
-        m_masterPadProvider( std::make_unique<PAD_MASTER_PROVIDER>() )
-{}
+        m_masterPadProvider( std::make_unique<PAD_MASTER_PROVIDER>() ),
+        m_bufferPad( std::make_unique<PAD>( nullptr ) )
+{
+    // Seed the paste buffer with a sensible default at startup.
+    m_bufferPad->ImportSettingsFrom( *m_masterPadProvider->MakeDefaultPad( PAD_MASTER_PROVIDER::TYPE::THT ) );
+}
 
 
 PAD_TOOL::~PAD_TOOL()
@@ -443,7 +447,6 @@ int PAD_TOOL::pastePadProperties( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     const PCB_SELECTION& selection = selTool->GetSelection();
-    const PAD*           masterPad = frame()->GetDesignSettings().m_Pad_Master.get();
 
     BOARD_COMMIT commit( frame() );
 
@@ -453,7 +456,7 @@ int PAD_TOOL::pastePadProperties( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_PAD_T )
         {
             commit.Modify( item );
-            static_cast<PAD&>( *item ).ImportSettingsFrom( *masterPad );
+            static_cast<PAD&>( *item ).ImportSettingsFrom( *m_bufferPad );
         }
     }
 
@@ -479,7 +482,12 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_PAD_T )
         {
             const PAD& selPad = static_cast<const PAD&>( *item );
-            frame()->GetDesignSettings().m_Pad_Master->ImportSettingsFrom( selPad );
+
+            // Store the settings in the buffer pad for paste
+            m_bufferPad->ImportSettingsFrom( selPad );
+
+            // And push into the master pad provider for future use
+            m_masterPadProvider->RecordNewMasterPad( selPad );
         }
     }
 
@@ -947,7 +955,7 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
             if( pad )
             {
-                m_masterPadProvider.RecordPlacedPad( *pad );
+                m_masterPadProvider.RecordNewMasterPad( *pad );
                 aCommit.Add( aItem );
                 return true;
             }

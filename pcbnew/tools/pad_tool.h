@@ -20,9 +20,11 @@
 #pragma once
 
 #include <memory>
+
 #include <tools/pcb_tool_base.h>
 
 class ACTION_MENU;
+class PAD;
 class PAD_MASTER_PROVIDER;
 class PCB_SHAPE;
 
@@ -77,10 +79,10 @@ protected:
     void setTransitions() override;
 
 private:
-    /// Apply pad settings from board design settings to a pad.
+    /// Apply pad settings from the buffer pad to a pad.
     int pastePadProperties( const TOOL_EVENT& aEvent );
 
-    /// Copy pad settings from a pad to the board design settings.
+    /// Copy pad settings from a pad to the tool's buffer pad.
     int copyPadSettings( const TOOL_EVENT& aEvent );
 
     /// Push pad settings from a pad to other pads on board or footprint.
@@ -98,4 +100,7 @@ private:
 
     /// When pads are created this provides the master pad settings.
     std::unique_ptr<PAD_MASTER_PROVIDER> m_masterPadProvider;
+
+    /// The "buffer" pad that holds the settings applied by "Paste Pad Properties".
+    std::unique_ptr<PAD> m_bufferPad;
 };
