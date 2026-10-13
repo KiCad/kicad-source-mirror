@@ -115,8 +115,7 @@ DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( JOB_EXPORT_PCB_IPC2581* aJob, PCB_EDIT_F
 void DIALOG_EXPORT_2581::onBrowseClicked( wxCommandEvent& event )
 {
     // Build the absolute path of current output directory to preselect it in the file browser.
-    wxString     path = ExpandEnvVarSubstitutions( m_outputFileName->GetValue(), &Prj() );
-    wxFileName   fn( Prj().AbsolutePath( path ) );
+    wxFileName   fn( ResolveProjectPath( m_outputFileName->GetValue(), &Prj() ) );
     wxString     ipc_files = _( "IPC-2581 Files (*.xml)|*.xml" );
     wxString     compressed_files = _( "IPC-2581 Compressed Files (*.zip)|*.zip" );
 

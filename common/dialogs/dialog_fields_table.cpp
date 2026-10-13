@@ -1402,8 +1402,7 @@ void DIALOG_FIELDS_TABLE::OnPreviewRefresh( wxCommandEvent& aEvent )
 void DIALOG_FIELDS_TABLE::OnOutputFileBrowseClicked( wxCommandEvent& aEvent )
 {
     // Build the absolute path of current output directory to preselect it in the file browser.
-    wxString path = ExpandEnvVarSubstitutions( m_outputFileName->GetValue(), &Prj() );
-    path = Prj().AbsolutePath( path );
+    wxString path = ResolveProjectPath( m_outputFileName->GetValue(), &Prj() );
 
     // Calculate the export filename
     wxFileName fn( Prj().AbsolutePath( m_parentFrame->GetCurrentFileName() ) );

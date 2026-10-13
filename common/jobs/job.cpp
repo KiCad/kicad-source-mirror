@@ -109,8 +109,7 @@ wxString JOB::ResolveOutputPath( const wxString& aPath, bool aPathIsDirectory, P
                 return false;
             };
 
-    wxString outPath = ExpandTextVars( NormalizeFilePathForTextVars( aPath ), &textResolver, INTERNAL );
-    outPath = ExpandEnvVarSubstitutions( outPath, aProject );
+    wxString outPath = ExpandPathVariables( aPath, aProject, &textResolver );
 
     if( !m_tempOutputDirectory.IsEmpty() )
     {
