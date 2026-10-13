@@ -337,6 +337,12 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWind
 }
 
 
+DIALOG_EXPORT_NETLIST::~DIALOG_EXPORT_NETLIST()
+{
+    WriteCurrentNetlistSetup();
+}
+
+
 void DIALOG_EXPORT_NETLIST::InstallPageSpice()
 {
     EXPORT_NETLIST_PAGE* pg = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "SPICE" ), NET_TYPE_SPICE, false );

@@ -34,7 +34,7 @@ class DIALOG_EXPORT_NETLIST : public DIALOG_EXPORT_NETLIST_BASE
 public:
     DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame );
     DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* aEditFrame, wxWindow* aParent, JOB_EXPORT_SCH_NETLIST* aJob = nullptr );
-    ~DIALOG_EXPORT_NETLIST(){};
+    ~DIALOG_EXPORT_NETLIST();
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
