@@ -1429,13 +1429,16 @@ void SCH_SYMBOL::RemoveInstance( const SCH_SHEET_PATH& aInstancePath )
 
 void SCH_SYMBOL::RemoveInstance( const KIID_PATH& aInstancePath )
 {
-    bool removed = false;
-
     // Search for an existing path and remove it if found
-    // (search from back to avoid invalidating iterator on remove)
-    for( int ii = m_instances.size() - 1; ii >= 0; --ii )
+    auto indexIt = m_instancePathIndex.find( aInstancePath );
+
+    if( indexIt != m_instancePathIndex.end() )
     {
-        if( m_instances[ii].m_Path == aInstancePath )
+        size_t ii = indexIt->second;
+        wxASSERT( ii < m_instances.size() );
+        wxASSERT( m_instances[ii].m_Path == aInstancePath );
+
+        if( wxLog::IsAllowedTraceMask( traceSchSheetPaths ) )
         {
             wxLogTrace( traceSchSheetPaths,
                         wxS( "Removing symbol instance:\n"
@@ -1443,14 +1446,9 @@ void SCH_SYMBOL::RemoveInstance( const KIID_PATH& aInstancePath )
                              "    reference %s, unit %d from symbol %s." ),
                         aInstancePath.AsString(), m_instances[ii].m_Reference, m_instances[ii].m_Unit,
                         m_Uuid.AsString() );
-
-            m_instances.erase( m_instances.begin() + ii );
-            removed = true;
         }
-    }
 
-    if( removed )
-    {
+        m_instances.erase( m_instances.begin() + ii );
         rebuildInstancePathIndex();
         invalidateConnectivity();
     }
@@ -1463,7 +1461,10 @@ void SCH_SYMBOL::rebuildInstancePathIndex()
     m_instancePathIndex.reserve( m_instances.size() );
 
     for( size_t i = 0; i < m_instances.size(); ++i )
+    {
+        wxASSERT( m_instancePathIndex.find( m_instances[i].m_Path ) == m_instancePathIndex.end() );
         m_instancePathIndex[m_instances[i].m_Path] = i;
+    }
 }
 
 
