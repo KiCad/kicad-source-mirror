@@ -21,6 +21,7 @@
 
 #include <board.h>
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_rule.h>
 #include <settings/json_settings.h>

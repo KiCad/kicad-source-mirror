@@ -94,9 +94,11 @@
 #define MAXIMUM_LINE_WIDTH_MM         100.0   // max line width entered in a dialog
 
 // Default pad properties
-#define DEFAULT_PAD_THT_WIDTH_MM      2.54
-#define DEFAULT_PAD_THT_HEIGHT_MM     1.27
-#define DEFAULT_PAD_DRILL_DIAMETER_MM 0.8
-#define DEFAULT_PAD_SMD_WIDTH_MM      2.0
-#define DEFAULT_PAD_SMD_HEIGHT_MM     1.0
-#define DEFAULT_PAD_RR_RADIUS_RATIO   0.25    // IPC standard
+#define DEFAULT_PAD_THT_WIDTH_MM        2.54
+#define DEFAULT_PAD_THT_HEIGHT_MM       1.27
+#define DEFAULT_PAD_DRILL_DIAMETER_MM   0.8
+#define DEFAULT_PAD_SMD_WIDTH_MM        2.0
+#define DEFAULT_PAD_SMD_HEIGHT_MM       1.0
+#define DEFAULT_PAD_APERTURE_HEIGHT_MM  1.0
+#define DEFAULT_PAD_APERTURE_WIDTH_MM   1.0
+#define DEFAULT_PAD_NPTH_DIAMETER_MM    1.0

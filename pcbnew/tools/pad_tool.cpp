@@ -33,11 +33,13 @@
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
 #include <board_design_settings.h>
+#include <board_design_settings_defaults.h>
 #include <board_item.h>
 #include <collectors.h>
 #include <footprint.h>
 #include <pcb_shape.h>
 #include <pad.h>
+#include <pad_utils.h>
 #include <pcbnew_settings.h>
 #include <string_utils.h>
 #include <board_commit.h>
@@ -169,10 +171,16 @@ public:
             pad->SetLayerSet( PAD::PTHMask() );
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::OVAL );
 
-            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ pcbIUScale.mmToIU( 2.5 ), pcbIUScale.mmToIU( 1.5 ) } );
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{
+                                                        pcbIUScale.mmToIU( DEFAULT_PAD_THT_WIDTH_MM ),
+                                                        pcbIUScale.mmToIU( DEFAULT_PAD_THT_HEIGHT_MM ),
+                                                } );
 
             pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
-            pad->SetDrillSize( VECTOR2D{ pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) } );
+            pad->SetDrillSize( VECTOR2D{
+                    pcbIUScale.mmToIU( DEFAULT_PAD_DRILL_DIAMETER_MM ),
+                    pcbIUScale.mmToIU( DEFAULT_PAD_DRILL_DIAMETER_MM ),
+            } );
             break;
         }
         case PAD_MASTER_PROVIDER::TYPE::SMD:
@@ -182,9 +190,10 @@ public:
 
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
 
-            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ pcbIUScale.mmToIU( 1 ), pcbIUScale.mmToIU( 0.5 ) } );
-            pad->SetRoundRectCornerRadius( PADSTACK::ALL_LAYERS, pcbIUScale.mmToIU( 0.5 * 0.25 ) );
-
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{
+                                                        pcbIUScale.mmToIU( DEFAULT_PAD_SMD_WIDTH_MM ),
+                                                        pcbIUScale.mmToIU( DEFAULT_PAD_SMD_HEIGHT_MM ),
+                                                } );
             // No drill for SMD pads
             break;
         }
@@ -194,7 +203,10 @@ public:
             pad->SetLayerSet( PAD::UnplatedHoleMask() );
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::CIRCLE );
 
-            const VECTOR2D size = VECTOR2D{ pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) };
+            const VECTOR2D size = VECTOR2D{
+                pcbIUScale.mmToIU( DEFAULT_PAD_NPTH_DIAMETER_MM ),
+                pcbIUScale.mmToIU( DEFAULT_PAD_NPTH_DIAMETER_MM ),
+            };
             pad->SetSize( PADSTACK::ALL_LAYERS, size );
             pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
             pad->SetDrillSize( size );
@@ -212,8 +224,10 @@ public:
                 pad->SetLayerSet( LSET{ F_Mask } );
 
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::ROUNDRECT );
-            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 1.0 ) } );
-            pad->SetFrontRoundRectRadiusSize( pcbIUScale.mmToIU( 1.0 * 0.25 ) );
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{
+                                                        pcbIUScale.mmToIU( DEFAULT_PAD_APERTURE_WIDTH_MM ),
+                                                        pcbIUScale.mmToIU( DEFAULT_PAD_APERTURE_HEIGHT_MM ),
+                                                } );
             break;
         }
         case PAD_MASTER_PROVIDER::TYPE::CONNECTOR:
@@ -222,7 +236,7 @@ public:
             pad->SetLayerSet( PAD::ConnSMDMask() );
 
             pad->SetShape( PADSTACK::ALL_LAYERS, PAD_SHAPE::RECTANGLE );
-            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ pcbIUScale.mmToIU( 1.0 ), pcbIUScale.mmToIU( 3.0 ) } );
+            pad->SetSize( PADSTACK::ALL_LAYERS, VECTOR2D{ DEFAULT_PAD_THT_WIDTH_MM, DEFAULT_PAD_THT_HEIGHT_MM } );
             break;
         }
         // No Default: handle every case explicitly
@@ -231,6 +245,13 @@ public:
             wxFAIL_MSG( "AUTO pad type should not be used for default pad creation" );
             break;
         }
+        }
+
+        // Set an IPC-standard rouding radius when useful
+        if( pad->GetShape( PADSTACK::ALL_LAYERS ) == PAD_SHAPE::ROUNDRECT )
+        {
+            const double newRadius = PAD_UTILS::GetDefaultIpcRoundingRatio( *pad, PADSTACK::ALL_LAYERS );
+            pad->SetRoundRectRadiusRatio( PADSTACK::ALL_LAYERS, newRadius );
         }
 
         return pad;
