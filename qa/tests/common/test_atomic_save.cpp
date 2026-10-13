@@ -577,7 +577,7 @@ BOOST_AUTO_TEST_CASE( AtomicWriteFile_SavesWhenPermissionsCannotBeCopied )
     wxString          err;
     BOOST_REQUIRE_MESSAGE( KIPLATFORM::IO::AtomicWriteFile( target, payload.data(), payload.size(), &err ),
                            err );
-    BOOST_REQUIRE_EQUAL( KI_TEST::LoadStringData( target ), payload );
+    BOOST_REQUIRE_EQUAL( readFileContents( target ), payload );
 }
 
 #endif // _WIN32
