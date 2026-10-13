@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include <dialog_shim.h>
+#include <dialogs/git/dialog_text_diff_base.h>
 #include <git/text_diff.h>
 
 class wxStyledTextCtrl;
@@ -32,7 +32,7 @@ void FillTextDiffControl( wxStyledTextCtrl* aCtrl, const std::vector<KIGIT::TEXT
 
 
 /// Read-only line diff, for the file types that have no visual diff.
-class DIALOG_TEXT_DIFF : public DIALOG_SHIM
+class DIALOG_TEXT_DIFF : public DIALOG_TEXT_DIFF_BASE
 {
 public:
     DIALOG_TEXT_DIFF( wxWindow* aParent, const wxString& aTitle, const std::vector<KIGIT::TEXT_DIFF_LINE>& aLines );

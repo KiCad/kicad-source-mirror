@@ -562,6 +562,7 @@ set( COMMON_GIT_DLG_SRCS
     dialogs/git/dialog_git_repository.cpp
     dialogs/git/dialog_git_repository_base.cpp
     dialogs/git/dialog_text_diff.cpp
+    dialogs/git/dialog_text_diff_base.cpp
     dialogs/git/dialog_git_identity.cpp
     dialogs/git/dialog_git_identity_base.cpp
     dialogs/git/dialog_git_new_tag.cpp

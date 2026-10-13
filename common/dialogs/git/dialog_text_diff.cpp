@@ -24,7 +24,6 @@
 #include <widgets/ui_common.h>
 
 #include <wx/settings.h>
-#include <wx/sizer.h>
 #include <wx/stc/stc.h>
 
 static constexpr int STYLE_ADDED = 1;
@@ -78,21 +77,10 @@ void FillTextDiffControl( wxStyledTextCtrl* aCtrl, const std::vector<KIGIT::TEXT
 
 DIALOG_TEXT_DIFF::DIALOG_TEXT_DIFF( wxWindow* aParent, const wxString& aTitle,
                                     const std::vector<KIGIT::TEXT_DIFF_LINE>& aLines ) :
-        DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxSize( 780, 560 ),
-                     wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+        DIALOG_TEXT_DIFF_BASE( aParent, wxID_ANY, aTitle )
 {
-    wxBoxSizer* mainSizer = new wxBoxSizer( wxVERTICAL );
+    FillTextDiffControl( m_diff, aLines );
 
-    wxStyledTextCtrl* stc = new wxStyledTextCtrl( this, wxID_ANY );
-    FillTextDiffControl( stc, aLines );
-    mainSizer->Add( stc, 1, wxEXPAND | wxALL, 5 );
-
-    wxStdDialogButtonSizer* buttons = new wxStdDialogButtonSizer();
-    buttons->AddButton( new wxButton( this, wxID_OK ) );
-    buttons->Realize();
-    mainSizer->Add( buttons, 0, wxEXPAND | wxALL, 5 );
-
-    SetSizer( mainSizer );
     SetupStandardButtons();
     finishDialogSettings();
 }
