@@ -65,6 +65,7 @@
 #include <pcbnew_utils/board_test_utils.h>
 #include <qa_utils/downgrade_oracle_utils.h>
 #include <qa_utils/downgrade_golden_utils.h>
+#include <qa_utils/file_utils.h>
 
 
 BOOST_AUTO_TEST_SUITE( DowngradeOracle )
@@ -79,8 +80,8 @@ static void checkExportUsesOnlyKnownTokens( const DOWNGRADE_TARGET& aTarget, con
 
     const std::string src = KI_TEST::GetPcbnewTestDataDir() + "via_off_center.kicad_pcb";
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_downgrade_oracle", "" );
-    const std::string            dest = ( tmp.GetPath() / "out.kicad_pcb" ).string();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_downgrade_oracle", "" );
+    const std::string        dest = ( tmp.Path() / "out.kicad_pcb" ).string();
 
     COMPATIBILITY_REPORT report;
     BOOST_REQUIRE( ExportBoardToOlderVersion( src, dest, aTarget, report ) );
@@ -364,11 +365,11 @@ static void checkTransformedBoardUsesOnlyKnownTokens( const DOWNGRADE_TARGET& aT
     {
         BOOST_TEST_CONTEXT( "Drop approximations: " << drop )
         {
-            KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_board_transform_oracle" );
-            const std::string            src = ( tmp.GetPath() / "source.kicad_pcb" ).string();
-            const std::string            dest = ( tmp.GetPath() / "out.kicad_pcb" ).string();
-            PCB_IO_KICAD_SEXPR           io;
-            std::unique_ptr<BOARD>       board(
+            KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_board_transform_oracle" );
+            const std::string        src = ( tmp.Path() / "source.kicad_pcb" ).string();
+            const std::string        dest = ( tmp.Path() / "out.kicad_pcb" ).string();
+            PCB_IO_KICAD_SEXPR       io;
+            std::unique_ptr<BOARD>   board(
                     io.LoadBoard( KI_TEST::GetPcbnewTestDataDir() + "via_off_center.kicad_pcb", nullptr ) );
             BOOST_REQUIRE( board );
             PCB_REFERENCE_IMAGE*   image = addTransformFeatures( *board );
@@ -466,11 +467,11 @@ static void checkNativeBoardGolden( const DOWNGRADE_TARGET& aTarget, const std::
                                     const std::string& aBoard, const std::string& aReference, size_t aExpectedDrops,
                                     size_t aExpectedLowerings, bool aDropInsteadOfApproximate = false )
 {
-    SETTINGS_MANAGER             settingsManager;
-    const std::string            fixture = KI_TEST::GetPcbnewTestDataDir() + "../downgrade/golden/";
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_native_golden", "" );
-    const std::string            dest = ( tmp.GetPath() / ( aBoard + ".kicad_pcb" ) ).string();
-    COMPATIBILITY_REPORT         report;
+    SETTINGS_MANAGER         settingsManager;
+    const std::string        fixture = KI_TEST::GetPcbnewTestDataDir() + "../downgrade/golden/";
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_native_golden", "" );
+    const std::string        dest = ( tmp.Path() / ( aBoard + ".kicad_pcb" ) ).string();
+    COMPATIBILITY_REPORT     report;
 
     // Expected files were saved by native KiCad, never by the exporter under test.
     BOOST_REQUIRE( ExportBoardToOlderVersion( fixture + "current/" + aBoard + ".kicad_pcb", dest, aTarget, report,
@@ -526,10 +527,10 @@ BOOST_AUTO_TEST_CASE( DropApproximationsKeepsNativeKicad10GraphicsGolden )
 static void checkNativeFootprintGolden( const DOWNGRADE_TARGET& aTarget, const std::string& aRelease,
                                         const std::string& aReference, bool aDropInsteadOfApproximate = false )
 {
-    const std::string            fixture = KI_TEST::GetPcbnewTestDataDir() + "../downgrade/golden/";
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_native_fp_golden", "" );
-    const wxString               dest = ( tmp.GetPath() / "metadata.kicad_mod" ).wstring();
-    const wxString               src = wxString::FromUTF8( fixture + "current/metadata.pretty/metadata.kicad_mod" );
+    const std::string        fixture = KI_TEST::GetPcbnewTestDataDir() + "../downgrade/golden/";
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_native_fp_golden", "" );
+    const wxString           dest = ( tmp.Path() / "metadata.kicad_mod" ).wstring();
+    const wxString           src = wxString::FromUTF8( fixture + "current/metadata.pretty/metadata.kicad_mod" );
 
     BOOST_REQUIRE( DowngradeFootprintFileToTemp( src, dest, aTarget, aDropInsteadOfApproximate )
                    == DOWNGRADE_FILE_RESULT::CONVERTED );
@@ -546,9 +547,9 @@ static void checkCustomPadArcSurvives( const DOWNGRADE_TARGET& aTarget )
 {
     SETTINGS_MANAGER  settingsManager;
     const std::string src = KI_TEST::GetPcbnewTestDataDir() + "../downgrade/regressions/custom_pad_arc.kicad_pcb";
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_custom_pad_arc", "" );
-    const std::string            dest = ( tmp.GetPath() / "out.kicad_pcb" ).string();
-    COMPATIBILITY_REPORT         report;
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_custom_pad_arc", "" );
+    const std::string        dest = ( tmp.Path() / "out.kicad_pcb" ).string();
+    COMPATIBILITY_REPORT     report;
 
     BOOST_REQUIRE( ExportBoardToOlderVersion( src, dest, aTarget, report ) );
 
@@ -688,12 +689,12 @@ BOOST_AUTO_TEST_CASE( GoldenComparisonDetectsDesignAndSettingsChanges )
 
 BOOST_AUTO_TEST_CASE( HistoricalPlotSettingsDoNotUseCurrentFormatters )
 {
-    BOARD                        board;
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_historical_plot", "" );
+    BOARD                    board;
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_historical_plot", "" );
 
     for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
     {
-        const wxString path = ( tmp.GetPath() / ( target.m_id.ToStdString() + ".kicad_pcb" ) ).string();
+        const wxString path = ( tmp.Path() / ( target.m_id.ToStdString() + ".kicad_pcb" ) ).string();
         SaveBoardForTarget( &board, path, target );
         std::ifstream file( path.ToStdString() );
         std::string   text( ( std::istreambuf_iterator<char>( file ) ), std::istreambuf_iterator<char>() );
@@ -718,11 +719,11 @@ BOOST_AUTO_TEST_CASE( HistoricalCustomPaperUsesReleasePrecision )
     page.SetWidthMM( 123.456789 );
     page.SetHeightMM( 100.123456 );
     board.SetPageSettings( page );
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_historical_paper", "" );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_historical_paper", "" );
 
     for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
     {
-        const wxString path = ( tmp.GetPath() / ( target.m_id.ToStdString() + ".kicad_pcb" ) ).string();
+        const wxString path = ( tmp.Path() / ( target.m_id.ToStdString() + ".kicad_pcb" ) ).string();
         SaveBoardForTarget( &board, path, target );
         std::ifstream     file( path.ToStdString() );
         std::string       text( ( std::istreambuf_iterator<char>( file ) ), std::istreambuf_iterator<char>() );

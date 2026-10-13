@@ -73,7 +73,7 @@
 
 #include <qa_utils/downgrade_oracle_utils.h>
 #include <qa_utils/downgrade_golden_utils.h>
-#include <qa_utils/temporary_directory.h>
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <eeschema_test_utils.h>
 #include <schematic_file_util.h>
@@ -509,15 +509,15 @@ static void checkTransformedSchematicUsesOnlyKnownTokens( const DOWNGRADE_TARGET
             checkSchematicTransformCoverage( ClassifyScreenForDowngrade( schematic->RootScreen(), aTarget, drop ),
                                              aTarget, drop );
 
-            KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_sch_transform_oracle" );
-            const std::string            src = ( tmp.GetPath() / "source.kicad_sch" ).string();
-            SCH_IO_KICAD_SEXPR           io;
+            KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_sch_transform_oracle" );
+            const std::string        src = ( tmp.Path() / "source.kicad_sch" ).string();
+            SCH_IO_KICAD_SEXPR       io;
             io.SaveSchematicFile( src, schematic->GetTopLevelSheet(), schematic.get() );
             const std::string sourceContent = KI_TEST::ReadGoldenText( src );
 
             JOB_SCH_DOWNGRADE job;
             job.m_filename = src;
-            job.m_outputDir = ( tmp.GetPath() / "export" ).string();
+            job.m_outputDir = ( tmp.Path() / "export" ).string();
             job.m_target = aTarget.m_id;
             job.m_force = true;
             job.m_dropInsteadOfApproximate = drop;
@@ -526,7 +526,7 @@ static void checkTransformedSchematicUsesOnlyKnownTokens( const DOWNGRADE_TARGET
                                    reporter.GetMessages().ToStdString() );
             checkSchematicTransformCoverage( job.m_report, aTarget, drop );
 
-            const std::string dest = ( tmp.GetPath() / "export/source.kicad_sch" ).string();
+            const std::string dest = ( tmp.Path() / "export/source.kicad_sch" ).string();
             const std::string content = KI_TEST::ReadGoldenText( dest );
             const auto        unsupported = KI_TEST::UnknownSexprHeads( content, known );
 
@@ -617,26 +617,26 @@ static GOLDEN_NET_CONNECTIONS netlistConnections( const std::string& aText )
 static void checkNativeSchematicGolden( const DOWNGRADE_TARGET& aTarget, const std::string& aRelease,
                                         bool aDropInsteadOfApproximate = false )
 {
-    KI_TEST::TEMPORARY_DIRECTORY        tmp( "kicad_qa_sch_downgrade_golden" );
-    JOB_SCH_DOWNGRADE                   job;
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_sch_downgrade_golden" );
+    JOB_SCH_DOWNGRADE        job;
     job.m_filename = downgradeDataPath() + "golden/current/body_styles.kicad_sch";
-    job.m_outputDir = ( tmp.GetPath() / "export" ).string();
+    job.m_outputDir = ( tmp.Path() / "export" ).string();
     job.m_target = aTarget.m_id;
     job.m_force = true;
     job.m_dropInsteadOfApproximate = aDropInsteadOfApproximate;
     WX_STRING_REPORTER reporter;
     BOOST_REQUIRE_EQUAL( runDowngradeJob( job, reporter ), CLI::EXIT_CODES::SUCCESS );
-    const std::string output = ( tmp.GetPath() / "export/body_styles.kicad_sch" ).string();
+    const std::string output = ( tmp.Path() / "export/body_styles.kicad_sch" ).string();
 
     JOB_SCH_DOWNGRADE repeated;
     repeated.m_filename = job.m_filename;
-    repeated.m_outputDir = ( tmp.GetPath() / "repeated" ).string();
+    repeated.m_outputDir = ( tmp.Path() / "repeated" ).string();
     repeated.m_target = job.m_target;
     repeated.m_force = true;
     repeated.m_dropInsteadOfApproximate = aDropInsteadOfApproximate;
     BOOST_REQUIRE_EQUAL( runDowngradeJob( repeated, reporter ), CLI::EXIT_CODES::SUCCESS );
     BOOST_CHECK( KI_TEST::ReadGoldenText( output )
-                 == KI_TEST::ReadGoldenText( ( tmp.GetPath() / "repeated/body_styles.kicad_sch" ).string() ) );
+                 == KI_TEST::ReadGoldenText( ( tmp.Path() / "repeated/body_styles.kicad_sch" ).string() ) );
 
     if( aRelease == "v10" )
     {
@@ -652,7 +652,7 @@ static void checkNativeSchematicGolden( const DOWNGRADE_TARGET& aTarget, const s
     }
 
     SETTINGS_MANAGER settings;
-    settings.LoadProject( ( tmp.GetPath() / "body_styles.kicad_pro" ).string() );
+    settings.LoadProject( ( tmp.Path() / "body_styles.kicad_pro" ).string() );
     std::ifstream outputFile( output );
     auto          schematic = KI_TEST::ReadSchematicFromStream( outputFile, &settings.Prj() );
     schematic->RootScreen()->SetFileName( output );
@@ -753,9 +753,9 @@ static void checkNativeSchematicGolden( const DOWNGRADE_TARGET& aTarget, const s
 // which the format forbids, so the reference also pins the parents-first order.
 static void checkNativeSymbolLibraryGolden( const DOWNGRADE_TARGET& aTarget, const std::string& aRelease )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_native_symlib_golden", "" );
-    const wxString               dest = ( tmp.GetPath() / "metadata.kicad_sym" ).wstring();
-    const wxString               src = wxString::FromUTF8( downgradeDataPath() + "golden/current/metadata.kicad_sym" );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_native_symlib_golden", "" );
+    const wxString           dest = ( tmp.Path() / "metadata.kicad_sym" ).wstring();
+    const wxString           src = wxString::FromUTF8( downgradeDataPath() + "golden/current/metadata.kicad_sym" );
 
     SCH_IO_KICAD_SEXPR       pi;
     std::vector<LIB_SYMBOL*> symbols;
@@ -817,26 +817,26 @@ BOOST_AUTO_TEST_CASE( DropApproximationsKeepsNativeKicad10SchematicGolden )
 
 BOOST_FIXTURE_TEST_CASE( StandaloneKicad10ExportKeepsProjectBusAliasConnectivity, KI_TEST::SCHEMATIC_TEST_FIXTURE )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_bus_alias_export" );
-    const std::string            fixture = downgradeDataPath() + "regressions/bus_alias_connectivity/";
-    const std::string            source = fixture + "prefix_bus_alias.kicad_sch";
-    const std::string            original = KI_TEST::ReadGoldenText( source );
-    const std::string            originalProject = KI_TEST::ReadGoldenText( fixture + "prefix_bus_alias.kicad_pro" );
-    JOB_SCH_DOWNGRADE            job;
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_bus_alias_export" );
+    const std::string        fixture = downgradeDataPath() + "regressions/bus_alias_connectivity/";
+    const std::string        source = fixture + "prefix_bus_alias.kicad_sch";
+    const std::string        original = KI_TEST::ReadGoldenText( source );
+    const std::string        originalProject = KI_TEST::ReadGoldenText( fixture + "prefix_bus_alias.kicad_pro" );
+    JOB_SCH_DOWNGRADE        job;
     job.m_filename = source;
-    job.m_outputDir = ( tmp.GetPath() / "export" ).string();
+    job.m_outputDir = ( tmp.Path() / "export" ).string();
     job.m_target = kicad10.m_id;
     WX_STRING_REPORTER reporter;
     BOOST_REQUIRE_MESSAGE( runDowngradeJob( job, reporter ) == CLI::EXIT_CODES::SUCCESS,
                            reporter.GetMessages().ToStdString() );
     BOOST_CHECK( !job.m_report.IsLossy() );
-    const std::string project = ( tmp.GetPath() / "export/prefix_bus_alias.kicad_pro" ).string();
+    const std::string project = ( tmp.Path() / "export/prefix_bus_alias.kicad_pro" ).string();
     BOOST_REQUIRE( std::filesystem::exists( project ) );
     const auto document = nlohmann::json::parse( KI_TEST::ReadGoldenText( project ) );
     BOOST_CHECK( document.at( "schematic" ).at( "bus_aliases" ).at( "Bus1" )
                  == nlohmann::json( { "D[0..7]", "CTL1", "CTL2" } ) );
 
-    wxFileName output( ( tmp.GetPath() / "export/prefix_bus_alias.kicad_sch" ).string() );
+    wxFileName output( ( tmp.Path() / "export/prefix_bus_alias.kicad_sch" ).string() );
     LoadSchematic( output );
     BOOST_REQUIRE( m_schematic );
     SCH_SHEET_LIST                                          sheets = m_schematic->BuildSheetListSortedByPageNumbers();
@@ -890,8 +890,8 @@ BOOST_FIXTURE_TEST_CASE( SelectedVariantPreviewMatchesExportedPositionExclusionL
     {
         BOOST_TEST_CONTEXT( "Base position-file exclusion: " << baseExcluded )
         {
-            KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_variant_preview" );
-            const std::string            source = ( tmp.GetPath() / "variant.kicad_sch" ).string();
+            KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_variant_preview" );
+            const std::string        source = ( tmp.Path() / "variant.kicad_sch" ).string();
             BOOST_REQUIRE( wxCopyFile( fixture, source ) );
             LoadSchematic( wxFileName( source ) );
             SCH_SHEET_LIST paths = m_schematic->BuildUnorderedSheetList();
@@ -913,17 +913,17 @@ BOOST_FIXTURE_TEST_CASE( SelectedVariantPreviewMatchesExportedPositionExclusionL
 
             JOB_SCH_DOWNGRADE baseJob;
             baseJob.m_filename = source;
-            baseJob.m_outputDir = ( tmp.GetPath() / "base-preview" ).string();
+            baseJob.m_outputDir = ( tmp.Path() / "base-preview" ).string();
             baseJob.m_target = kicad9.m_id;
             baseJob.m_dryRun = true;
             WX_STRING_REPORTER reporter;
             BOOST_REQUIRE_EQUAL( runDowngradeJob( baseJob, reporter ), CLI::EXIT_CODES::SUCCESS );
             BOOST_CHECK_EQUAL( baseJob.m_report.Count( DOWNGRADE_BUCKET::DROP ), baseExcluded ? 2 : 1 );
-            BOOST_CHECK( !std::filesystem::exists( tmp.GetPath() / "base-preview" ) );
+            BOOST_CHECK( !std::filesystem::exists( tmp.Path() / "base-preview" ) );
 
             JOB_SCH_DOWNGRADE selectedJob;
             selectedJob.m_filename = source;
-            selectedJob.m_outputDir = ( tmp.GetPath() / "selected" ).string();
+            selectedJob.m_outputDir = ( tmp.Path() / "selected" ).string();
             selectedJob.m_target = kicad9.m_id;
             selectedJob.m_variant = variant.m_Name;
             selectedJob.m_dryRun = true;
@@ -933,16 +933,16 @@ BOOST_FIXTURE_TEST_CASE( SelectedVariantPreviewMatchesExportedPositionExclusionL
             BOOST_CHECK_EQUAL( selectedJob.m_report.Count( DOWNGRADE_BUCKET::LOWER ), 0 );
             BOOST_CHECK( !selectedJob.m_report.IsBlocked() );
             BOOST_CHECK_EQUAL( selectedJob.m_foundVariants.size(), 1 );
-            BOOST_CHECK( !std::filesystem::exists( tmp.GetPath() / "selected" ) );
+            BOOST_CHECK( !std::filesystem::exists( tmp.Path() / "selected" ) );
 
             selectedJob.m_dryRun = false;
             selectedJob.m_force = true;
             BOOST_REQUIRE_MESSAGE( runDowngradeJob( selectedJob, reporter ) == CLI::EXIT_CODES::SUCCESS,
                                    reporter.GetMessages().ToStdString() );
             BOOST_CHECK_EQUAL( selectedJob.m_report.Count( DOWNGRADE_BUCKET::DROP ), selectedDrops );
-            BOOST_CHECK( std::filesystem::exists( tmp.GetPath() / "selected/variant.kicad_sch" ) );
+            BOOST_CHECK( std::filesystem::exists( tmp.Path() / "selected/variant.kicad_sch" ) );
             BOOST_CHECK( KI_TEST::ReadGoldenText( source ) == original );
-            BOOST_CHECK( !std::filesystem::exists( tmp.GetPath() / "variant.kicad_pro" ) );
+            BOOST_CHECK( !std::filesystem::exists( tmp.Path() / "variant.kicad_pro" ) );
         }
     }
 
@@ -953,11 +953,11 @@ BOOST_FIXTURE_TEST_CASE( SelectedVariantPreviewMatchesExportedPositionExclusionL
 BOOST_FIXTURE_TEST_CASE( SharedSheetVariantConflictRefusesPreviewAndExportBeforeWriting,
                          KI_TEST::SCHEMATIC_TEST_FIXTURE )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_variant_conflict" );
-    const std::string            fixture = KI_TEST::GetEeschemaTestDataDir() + "/NoConnectOnPin.kicad_sch";
-    const std::string            originalFixture = KI_TEST::ReadGoldenText( fixture );
-    const std::string            source = ( tmp.GetPath() / "variant.kicad_sch" ).string();
-    const std::string            childSource = ( tmp.GetPath() / "shared.kicad_sch" ).string();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_variant_conflict" );
+    const std::string        fixture = KI_TEST::GetEeschemaTestDataDir() + "/NoConnectOnPin.kicad_sch";
+    const std::string        originalFixture = KI_TEST::ReadGoldenText( fixture );
+    const std::string        source = ( tmp.Path() / "variant.kicad_sch" ).string();
+    const std::string        childSource = ( tmp.Path() / "shared.kicad_sch" ).string();
     BOOST_REQUIRE( wxCopyFile( fixture, source ) );
     LoadSchematic( wxFileName( source ) );
     SCH_SHEET*  root = m_schematic->GetTopLevelSheet( 0 );
@@ -1021,7 +1021,7 @@ BOOST_FIXTURE_TEST_CASE( SharedSheetVariantConflictRefusesPreviewAndExportBefore
     {
         JOB_SCH_DOWNGRADE job;
         job.m_filename = source;
-        job.m_outputDir = ( tmp.GetPath() / "out" ).string();
+        job.m_outputDir = ( tmp.Path() / "out" ).string();
         job.m_target = kicad9.m_id;
         job.m_variant = wxT( "V1" );
         job.m_force = true;
@@ -1029,10 +1029,10 @@ BOOST_FIXTURE_TEST_CASE( SharedSheetVariantConflictRefusesPreviewAndExportBefore
         WX_STRING_REPORTER reporter;
         BOOST_CHECK_EQUAL( runDowngradeJob( job, reporter ), CLI::EXIT_CODES::ERR_UNKNOWN );
         BOOST_CHECK( reporter.HasMessageOfSeverity( RPT_SEVERITY_ERROR ) );
-        BOOST_CHECK( !std::filesystem::exists( tmp.GetPath() / "out" ) );
+        BOOST_CHECK( !std::filesystem::exists( tmp.Path() / "out" ) );
         BOOST_CHECK( KI_TEST::ReadGoldenText( source ) == original );
         BOOST_CHECK( KI_TEST::ReadGoldenText( childSource ) == originalChild );
-        BOOST_CHECK( !std::filesystem::exists( tmp.GetPath() / "variant.kicad_pro" ) );
+        BOOST_CHECK( !std::filesystem::exists( tmp.Path() / "variant.kicad_pro" ) );
     }
 
     BOOST_CHECK( KI_TEST::ReadGoldenText( fixture ) == originalFixture );
@@ -1041,12 +1041,12 @@ BOOST_FIXTURE_TEST_CASE( SharedSheetVariantConflictRefusesPreviewAndExportBefore
 
 BOOST_AUTO_TEST_CASE( DropApproximationsDryRunAndConsentDoNotWrite )
 {
-    KI_TEST::TEMPORARY_DIRECTORY        tmp( "kicad_qa_sch_downgrade_golden" );
-    JOB_SCH_DOWNGRADE                   job;
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_sch_downgrade_golden" );
+    JOB_SCH_DOWNGRADE        job;
     BOOST_CHECK( !job.m_dropInsteadOfApproximate );
     job.m_filename = downgradeDataPath() + "golden/current/body_styles.kicad_sch";
     const std::string original = KI_TEST::ReadGoldenText( job.m_filename.ToStdString() );
-    job.m_outputDir = ( tmp.GetPath() / "export" ).string();
+    job.m_outputDir = ( tmp.Path() / "export" ).string();
     job.m_target = wxT( "9.0" );
     job.m_dropInsteadOfApproximate = true;
     job.m_dryRun = true;
@@ -1054,19 +1054,19 @@ BOOST_AUTO_TEST_CASE( DropApproximationsDryRunAndConsentDoNotWrite )
     BOOST_REQUIRE_EQUAL( runDowngradeJob( job, reporter ), CLI::EXIT_CODES::SUCCESS );
     BOOST_CHECK_EQUAL( job.m_report.Count( DOWNGRADE_BUCKET::LOWER ), 0 );
     BOOST_CHECK_EQUAL( job.m_report.Count( DOWNGRADE_BUCKET::DROP ), 3 );
-    BOOST_CHECK( std::filesystem::is_empty( tmp.GetPath() ) );
+    BOOST_CHECK( std::filesystem::is_empty( tmp.Path() ) );
     job.m_dryRun = false;
     BOOST_CHECK_EQUAL( runDowngradeJob( job, reporter ), CLI::EXIT_CODES::ERR_UNKNOWN );
-    BOOST_CHECK( std::filesystem::is_empty( tmp.GetPath() ) );
+    BOOST_CHECK( std::filesystem::is_empty( tmp.Path() ) );
     BOOST_CHECK( KI_TEST::ReadGoldenText( job.m_filename.ToStdString() ) == original );
 }
 
 
 BOOST_AUTO_TEST_CASE( PublicSchematicJobsRequireFreshOutputsBeforeAnyWrite )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_sch_copy_only" );
-    const auto                   source = tmp.GetPath() / "source.kicad_sch";
-    const auto                   existing = tmp.GetPath() / "existing";
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_sch_copy_only" );
+    const auto               source = tmp.Path() / "source.kicad_sch";
+    const auto               existing = tmp.Path() / "existing";
     const auto fixture = std::filesystem::path( KI_TEST::GetEeschemaTestDataDir() ) / "NoConnectOnPin.kicad_sch";
     std::filesystem::copy_file( fixture, source );
     std::filesystem::create_directory( existing );
@@ -1100,21 +1100,21 @@ BOOST_AUTO_TEST_CASE( PublicSchematicJobsRequireFreshOutputsBeforeAnyWrite )
 
 BOOST_AUTO_TEST_CASE( PositionFileExclusionRequiresConsent )
 {
-    KI_TEST::TEMPORARY_DIRECTORY        tmp( "kicad_qa_sch_downgrade_golden" );
-    JOB_SCH_DOWNGRADE                   job;
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_sch_downgrade_golden" );
+    JOB_SCH_DOWNGRADE        job;
     job.m_filename = downgradeDataPath() + "regressions/position_exclusion.kicad_sch";
     const std::string original = KI_TEST::ReadGoldenText( job.m_filename.ToStdString() );
-    job.m_outputDir = ( tmp.GetPath() / "export" ).string();
+    job.m_outputDir = ( tmp.Path() / "export" ).string();
     job.m_target = wxT( "9.0" );
     WX_STRING_REPORTER reporter;
     BOOST_CHECK_EQUAL( runDowngradeJob( job, reporter ), CLI::EXIT_CODES::ERR_UNKNOWN );
     BOOST_CHECK_EQUAL( job.m_report.Count( DOWNGRADE_BUCKET::DROP ), 1 );
     BOOST_CHECK( job.m_report.IsLossy() );
-    BOOST_CHECK( std::filesystem::is_empty( tmp.GetPath() ) );
+    BOOST_CHECK( std::filesystem::is_empty( tmp.Path() ) );
 
     job.m_force = true;
     BOOST_REQUIRE_EQUAL( runDowngradeJob( job, reporter ), CLI::EXIT_CODES::SUCCESS );
-    const std::string output = ( tmp.GetPath() / "export/position_exclusion.kicad_sch" ).string();
+    const std::string output = ( tmp.Path() / "export/position_exclusion.kicad_sch" ).string();
     BOOST_CHECK( KI_TEST::ReadGoldenText( output ).find( "in_pos_files" ) == std::string::npos );
     BOOST_CHECK( KI_TEST::ReadGoldenText( job.m_filename.ToStdString() ) == original );
 }
@@ -1125,7 +1125,7 @@ BOOST_AUTO_TEST_CASE( IncompleteSecondaryHierarchyFailsBeforeWriting )
     const std::string fixture = downgradeDataPath() + "regressions/incomplete_hierarchy/";
     for( int failure = 0; failure < 3; ++failure )
     {
-        KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_sch_downgrade_golden" );
+        KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_sch_downgrade_golden" );
         for( const std::string& name :
              { "project.kicad_pro", "project.kicad_sch", "sibling.kicad_sch", "broken.kicad_sch" } )
         {
@@ -1134,22 +1134,22 @@ BOOST_AUTO_TEST_CASE( IncompleteSecondaryHierarchyFailsBeforeWriting )
             {
                 continue;
             }
-            BOOST_REQUIRE( wxCopyFile( fixture + name, ( tmp.GetPath() / name ).string() ) );
+            BOOST_REQUIRE( wxCopyFile( fixture + name, ( tmp.Path() / name ).string() ) );
         }
 
         for( bool dryRun : { false, true } )
         {
             JOB_SCH_DOWNGRADE job;
-            job.m_filename = ( tmp.GetPath() / "project.kicad_sch" ).string();
-            job.m_outputDir = ( tmp.GetPath() / "out" ).string();
+            job.m_filename = ( tmp.Path() / "project.kicad_sch" ).string();
+            job.m_outputDir = ( tmp.Path() / "out" ).string();
             job.m_target = wxT( "10.0" );
             job.m_force = true;
             job.m_dryRun = dryRun;
             WX_STRING_REPORTER reporter;
             BOOST_CHECK_EQUAL( runDowngradeJob( job, reporter ), CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE );
             BOOST_CHECK( reporter.HasMessageOfSeverity( RPT_SEVERITY_ERROR ) );
-            BOOST_CHECK( !std::filesystem::exists( tmp.GetPath() / "out" ) );
-            BOOST_CHECK( KI_TEST::ReadGoldenText( ( tmp.GetPath() / "project.kicad_sch" ).string() )
+            BOOST_CHECK( !std::filesystem::exists( tmp.Path() / "out" ) );
+            BOOST_CHECK( KI_TEST::ReadGoldenText( ( tmp.Path() / "project.kicad_sch" ).string() )
                          == KI_TEST::ReadGoldenText( fixture + "project.kicad_sch" ) );
         }
     }
@@ -1183,7 +1183,7 @@ BOOST_AUTO_TEST_CASE( NormalizedClosedPolygonsKeepClosingEdgeInEveryWriterPath )
 {
     for( const auto& target : { kicad9, kicad10 } )
     {
-        KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_closed_polygon_writer" );
+        KI_TEST::SCOPED_TEMP_DIR     tmp( "kicad_qa_closed_polygon_writer" );
         SETTINGS_MANAGER             settings;
         std::unique_ptr<SCHEMATIC>   schematic;
         KI_TEST::LoadSchematic( settings, wxT( "NoConnectOnPin" ), schematic );
@@ -1196,8 +1196,8 @@ BOOST_AUTO_TEST_CASE( NormalizedClosedPolygonsKeepClosingEdgeInEveryWriterPath )
         LIB_SYMBOL* lib = new LIB_SYMBOL( wxT( "closed_polygon" ) );
         lib->AddDrawItem( new SCH_SHAPE( polygon ) );
         schematic->RootScreen()->AddLibSymbol( lib );
-        const std::string libraryPath = ( tmp.GetPath() / "polygon.kicad_sym" ).string();
-        const std::string schematicPath = ( tmp.GetPath() / "polygon.kicad_sch" ).string();
+        const std::string libraryPath = ( tmp.Path() / "polygon.kicad_sym" ).string();
+        const std::string schematicPath = ( tmp.Path() / "polygon.kicad_sch" ).string();
         SaveSymbolLibraryForTarget( { lib }, libraryPath, target );
         SaveSchematicForTarget( schematic->GetTopLevelSheet(), schematic.get(), schematicPath, target );
         for( const auto& path : { libraryPath, schematicPath } )
@@ -1229,12 +1229,12 @@ BOOST_AUTO_TEST_CASE( ExplicitBoldStrokeThicknessUsesLegacyMeaningWithoutMutatin
 {
     for( const auto& target : { kicad9, kicad10 } )
     {
-        KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_bold_writer" );
-        LIB_SYMBOL                   lib( wxT( "bold_text" ) );
-        SCH_FIELD*                   field = lib.GetField( FIELD_T::VALUE );
+        KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_bold_writer" );
+        LIB_SYMBOL               lib( wxT( "bold_text" ) );
+        SCH_FIELD*               field = lib.GetField( FIELD_T::VALUE );
         field->SetBold( true );
         field->SetTextThickness( 100000 );
-        const std::string path = ( tmp.GetPath() / "bold.kicad_sym" ).string();
+        const std::string path = ( tmp.Path() / "bold.kicad_sym" ).string();
         SaveSymbolLibraryForTarget( { &lib }, path, target );
         SEXPR::PARSER parser;
         auto          root = parser.Parse( KI_TEST::ReadGoldenText( path ) );
@@ -1268,8 +1268,8 @@ BOOST_AUTO_TEST_CASE( DerivedSymbolKeywordsPreserveRawOverridesInsteadOfInherite
 {
     for( const auto& target : { kicad9, kicad10 } )
     {
-        KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_derived_keywords" );
-        LIB_SYMBOL                   parent( wxT( "parent" ) );
+        KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_derived_keywords" );
+        LIB_SYMBOL               parent( wxT( "parent" ) );
         parent.SetKeyWords( wxT( "parent inherited keywords" ) );
         LIB_SYMBOL empty( wxT( "empty_derived" ) );
         empty.SetParent( &parent );
@@ -1278,7 +1278,7 @@ BOOST_AUTO_TEST_CASE( DerivedSymbolKeywordsPreserveRawOverridesInsteadOfInherite
         explicitKeywords.SetKeyWords( wxT( "child raw keywords" ) );
         BOOST_REQUIRE( empty.GetRawKeyWords().IsEmpty() );
         BOOST_REQUIRE( empty.GetKeyWords() == parent.GetKeyWords() );
-        const std::string path = ( tmp.GetPath() / "derived.kicad_sym" ).string();
+        const std::string path = ( tmp.Path() / "derived.kicad_sym" ).string();
         SaveSymbolLibraryForTarget( { &parent, &empty, &explicitKeywords }, path, target );
         SCH_IO_KICAD_SEXPR io;
         LIB_SYMBOL*        reloadedEmpty = io.LoadSymbol( path, empty.GetName() );
@@ -1299,7 +1299,7 @@ BOOST_AUTO_TEST_CASE( EmbeddedAttachmentsUseLegacyChecksumsInSchematicCacheAndLi
         {
             BOOST_TEST_CONTEXT( "target=" << target.m_id.ToStdString() << " payload_size=" << payloadSize )
             {
-                KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_embedded_schematic_writer" );
+                KI_TEST::SCOPED_TEMP_DIR     tmp( "kicad_qa_embedded_schematic_writer" );
                 SETTINGS_MANAGER             settings;
                 std::unique_ptr<SCHEMATIC>   schematic;
                 KI_TEST::LoadSchematic( settings, wxT( "NoConnectOnPin" ), schematic );
@@ -1362,8 +1362,8 @@ BOOST_AUTO_TEST_CASE( EmbeddedAttachmentsUseLegacyChecksumsInSchematicCacheAndLi
                     BOOST_CHECK_EQUAL( reloaded->data_hash, originalHash );
                 };
 
-                const std::string libraryPath = ( tmp.GetPath() / "attached_symbol.kicad_sym" ).string();
-                const std::string schematicPath = ( tmp.GetPath() / "attached_schematic.kicad_sch" ).string();
+                const std::string libraryPath = ( tmp.Path() / "attached_symbol.kicad_sym" ).string();
+                const std::string schematicPath = ( tmp.Path() / "attached_schematic.kicad_sch" ).string();
                 SaveSymbolLibraryForTarget( { lib }, libraryPath, target );
                 checkSourceUnchanged();
                 checkSerializedChecksum( libraryPath, 1 );

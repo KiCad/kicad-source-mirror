@@ -9,7 +9,7 @@
 
 #include <compatibility_report.h>
 #include <kiplatform/io.h>
-#include <qa_utils/temporary_directory.h>
+#include <qa_utils/file_utils.h>
 
 #include <filesystem>
 #include <iterator>
@@ -125,9 +125,9 @@ BOOST_AUTO_TEST_CASE( TextReportRetainsUntranslatedFeatureText )
 
 BOOST_AUTO_TEST_CASE( TextReportCanBeSavedAndReplacedAsUtf8 )
 {
-    KI_TEST::TEMPORARY_DIRECTORY dir( "kicad-compatibility-report-" );
-    wxString                     path = wxString::FromUTF8( ( dir.GetPath() / "report.txt" ).string() );
-    COMPATIBILITY_REPORT         report;
+    KI_TEST::SCOPED_TEMP_DIR dir( "kicad-compatibility-report-" );
+    wxString                 path = wxString::FromUTF8( ( dir.Path() / "report.txt" ).string() );
+    COMPATIBILITY_REPORT     report;
     report.Add( DOWNGRADE_BUCKET::DROP, wxString::FromUTF8( "Réglages Ω" ), wxString::FromUTF8( "日本語" ) );
 
     for( const wxString& target : { wxS( "KiCad 9.0" ), wxS( "KiCad 10.0" ) } )
@@ -147,9 +147,9 @@ BOOST_AUTO_TEST_CASE( TextReportCanBeSavedAndReplacedAsUtf8 )
         BOOST_CHECK_EQUAL( static_cast<size_t>( file.Length() ), utf8.length() );
     }
 
-    BOOST_CHECK_EQUAL( std::distance( std::filesystem::directory_iterator( dir.GetPath() ),
-                                      std::filesystem::directory_iterator() ),
-                       1 );
+    BOOST_CHECK_EQUAL(
+            std::distance( std::filesystem::directory_iterator( dir.Path() ), std::filesystem::directory_iterator() ),
+            1 );
 }
 
 

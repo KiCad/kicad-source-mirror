@@ -75,6 +75,7 @@
 #include <pcbnew_utils/board_test_utils.h>
 #include <qa_utils/downgrade_oracle_utils.h>
 #include <qa_utils/downgrade_golden_utils.h>
+#include <qa_utils/file_utils.h>
 
 
 BOOST_AUTO_TEST_SUITE( BoardDowngrade )
@@ -328,9 +329,9 @@ BOOST_AUTO_TEST_CASE( BoardZoneDefaultsRoundTripAndDowngrade )
     board.GetDesignSettings().m_ZoneLayerProperties[F_Cu].hatching_offset = VECTOR2I( 100000, 200000 );
     board.GetDesignSettings().m_ZoneLayerProperties[B_Cu].hatching_offset = VECTOR2I( 300000, 400000 );
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_board_zone_defaults" );
-    const std::string            src = ( tmp.GetPath() / "source.kicad_pcb" ).string();
-    PCB_IO_KICAD_SEXPR           io;
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_board_zone_defaults" );
+    const std::string        src = ( tmp.Path() / "source.kicad_pcb" ).string();
+    PCB_IO_KICAD_SEXPR       io;
     io.SaveBoard( src, board );
     const std::string      original = KI_TEST::ReadGoldenText( src );
     std::unique_ptr<BOARD> current( io.LoadBoard( src, nullptr ) );
@@ -344,7 +345,7 @@ BOOST_AUTO_TEST_CASE( BoardZoneDefaultsRoundTripAndDowngrade )
     for( const auto& target : { kicad9, kicad10 } )
     {
         COMPATIBILITY_REPORT report;
-        const std::string    dest = ( tmp.GetPath() / ( target.m_id.ToStdString() + ".kicad_pcb" ) ).string();
+        const std::string    dest = ( tmp.Path() / ( target.m_id.ToStdString() + ".kicad_pcb" ) ).string();
         BOOST_REQUIRE( ExportBoardToOlderVersion( src, dest, target, report ) );
         std::unique_ptr<BOARD> reloaded( io.LoadBoard( dest, nullptr ) );
         BOOST_REQUIRE( reloaded );
@@ -486,9 +487,9 @@ BOOST_AUTO_TEST_CASE( BoardExportIgnoresAPredictableStagingSymlink )
 
     const std::string src = KI_TEST::GetPcbnewTestDataDir() + "via_off_center.kicad_pcb";
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_staging_symlink", "" );
-    const wxString               dest = ( tmp.GetPath() / "out.kicad_pcb" ).wstring();
-    const wxString               victim = ( tmp.GetPath() / "victim.txt" ).wstring();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_staging_symlink", "" );
+    const wxString           dest = ( tmp.Path() / "out.kicad_pcb" ).wstring();
+    const wxString           victim = ( tmp.Path() / "victim.txt" ).wstring();
 
     {
         wxFFile file( victim, wxT( "wb" ) );
@@ -514,7 +515,7 @@ BOOST_AUTO_TEST_CASE( BoardExportIgnoresAPredictableStagingSymlink )
     BOOST_CHECK( after == wxT( "untouched" ) );
 
     // A normal save in the same directory shares this umask, so the modes must agree.
-    const wxString reference = ( tmp.GetPath() / "reference.kicad_pcb" ).wstring();
+    const wxString         reference = ( tmp.Path() / "reference.kicad_pcb" ).wstring();
     PCB_IO_KICAD_SEXPR     io;
     std::unique_ptr<BOARD> board( io.LoadBoard( dest, nullptr ) );
     BOOST_REQUIRE( board );
@@ -538,9 +539,9 @@ BOOST_AUTO_TEST_CASE( BlockedBoardExportWritesNothing )
     zone->SetFillMode( ZONE_FILL_MODE::COPPER_THIEVING );
     board.Add( zone );
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_blocked_export", "" );
-    const wxString               src = ( tmp.GetPath() / "src.kicad_pcb" ).wstring();
-    const wxString               dest = ( tmp.GetPath() / "out.kicad_pcb" ).wstring();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_blocked_export", "" );
+    const wxString           src = ( tmp.Path() / "src.kicad_pcb" ).wstring();
+    const wxString           dest = ( tmp.Path() / "out.kicad_pcb" ).wstring();
 
     PCB_IO_KICAD_SEXPR io;
     io.SaveBoard( src, board );
@@ -630,8 +631,8 @@ BOOST_AUTO_TEST_CASE( ExportToKicad10PreservesGeometry )
 
     const std::string src = KI_TEST::GetPcbnewTestDataDir() + "via_off_center.kicad_pcb";
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_downgrade_geom", "" );
-    const std::string            dest = ( tmp.GetPath() / "out.kicad_pcb" ).string();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_downgrade_geom", "" );
+    const std::string        dest = ( tmp.Path() / "out.kicad_pcb" ).string();
 
     COMPATIBILITY_REPORT report;
     BOOST_REQUIRE( ExportBoardToOlderVersion( src, dest, kicad10, report ) );
@@ -667,8 +668,8 @@ BOOST_AUTO_TEST_CASE( ExportToKicad9PreservesGeometry )
 
     const std::string src = KI_TEST::GetPcbnewTestDataDir() + "via_off_center.kicad_pcb";
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_downgrade_geom9", "" );
-    const std::string            dest = ( tmp.GetPath() / "out.kicad_pcb" ).string();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_downgrade_geom9", "" );
+    const std::string        dest = ( tmp.Path() / "out.kicad_pcb" ).string();
 
     COMPATIBILITY_REPORT report;
     BOOST_REQUIRE( ExportBoardToOlderVersion( src, dest, kicad9, report ) );
@@ -774,10 +775,10 @@ BOOST_AUTO_TEST_CASE( BarcodeLoweredToPolygonsForKicad9 )
 
 BOOST_AUTO_TEST_CASE( BarcodeProjectVariablesResolvedBeforeExport )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_barcode_project" );
-    wxString                     projectPath = ( tmp.GetPath() / "source.kicad_pro" ).string();
-    wxString                     boardPath = ( tmp.GetPath() / "source.kicad_pcb" ).string();
-    wxString                     outputPath = ( tmp.GetPath() / "output.kicad_pcb" ).string();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_barcode_project" );
+    wxString                 projectPath = ( tmp.Path() / "source.kicad_pro" ).string();
+    wxString                 boardPath = ( tmp.Path() / "source.kicad_pcb" ).string();
+    wxString                 outputPath = ( tmp.Path() / "output.kicad_pcb" ).string();
 
     {
         std::ofstream project( projectPath.ToStdString() );
@@ -875,8 +876,8 @@ BOOST_AUTO_TEST_CASE( FootprintFileDowngradeRoundTrips )
 
     DowngradeFootprintInPlace( fp.get(), kicad9 );
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_fp_downgrade", "" );
-    const wxString               dest = ( tmp.GetPath() / "out.kicad_mod" ).wstring();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_fp_downgrade", "" );
+    const wxString           dest = ( tmp.Path() / "out.kicad_mod" ).wstring();
 
     SaveFootprintForTarget( fp.get(), dest, kicad9 );
 
@@ -906,8 +907,8 @@ BOOST_AUTO_TEST_CASE( FootprintFileV10RoundTrips )
 
     DowngradeFootprintInPlace( fp.get(), kicad10 );
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_fp_downgrade10", "" );
-    const wxString               dest = ( tmp.GetPath() / "out.kicad_mod" ).wstring();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_fp_downgrade10", "" );
+    const wxString           dest = ( tmp.Path() / "out.kicad_mod" ).wstring();
 
     SaveFootprintForTarget( fp.get(), dest, kicad10 );
 
@@ -946,8 +947,8 @@ BOOST_AUTO_TEST_CASE( SaveWithTargetVersionStampsOlder )
 
     BOARD board;
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_downgrade", "" );
-    std::string                  dest = ( tmp.GetPath() / "out.kicad_pcb" ).string();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_downgrade", "" );
+    std::string              dest = ( tmp.Path() / "out.kicad_pcb" ).string();
 
     SaveBoardForTarget( &board, dest, kicad10 );
 
@@ -967,8 +968,8 @@ BOOST_AUTO_TEST_CASE( NullFieldSlotDoesNotCrashV9Writer )
     std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( nullptr );
     fp->GetFields().push_back( nullptr );
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_v9_nullfield", "" );
-    const wxString               dest = ( tmp.GetPath() / "out.kicad_mod" ).wstring();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_v9_nullfield", "" );
+    const wxString           dest = ( tmp.Path() / "out.kicad_mod" ).wstring();
 
     SaveFootprintForTarget( fp.get(), dest, kicad9 );
 
@@ -993,8 +994,8 @@ BOOST_AUTO_TEST_CASE( StaleGroupMemberNotWrittenForV10 )
     group->AddItem( stale );
     board.Add( group );
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_v10_stalegroup", "" );
-    const std::string            dest = ( tmp.GetPath() / "out.kicad_pcb" ).string();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_v10_stalegroup", "" );
+    const std::string        dest = ( tmp.Path() / "out.kicad_pcb" ).string();
 
     SaveBoardForTarget( &board, dest, kicad10 );
 
@@ -1020,8 +1021,8 @@ BOOST_AUTO_TEST_CASE( SkipViaModeWrittenForV9 )
     via->Padstack().SetUnconnectedLayerMode( UNCONNECTED_LAYER_MODE::START_END_ONLY );
     board.Add( via );
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_v9_skipvia", "" );
-    const std::string            dest = ( tmp.GetPath() / "out.kicad_pcb" ).string();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_v9_skipvia", "" );
+    const std::string        dest = ( tmp.Path() / "out.kicad_pcb" ).string();
 
     SaveBoardForTarget( &board, dest, kicad9 );
 
@@ -1068,8 +1069,8 @@ BOOST_AUTO_TEST_CASE( ImageScaleMigratedForV9 )
 
     double originalScale = ref.GetImageScale();
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_v9_imgscale", "" );
-    const std::string            dest = ( tmp.GetPath() / "out.kicad_pcb" ).string();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_v9_imgscale", "" );
+    const std::string        dest = ( tmp.Path() / "out.kicad_pcb" ).string();
 
     DowngradeBoardInPlace( &board, kicad9 );
     SaveBoardForTarget( &board, dest, kicad9 );
@@ -1944,9 +1945,9 @@ BOOST_AUTO_TEST_CASE( FootprintFileKeepsZoneLayers )
 {
     SETTINGS_MANAGER settingsManager;
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_fp_zone_layers", "" );
-    const wxString               src = ( tmp.GetPath() / "src.kicad_mod" ).wstring();
-    const wxString               dest = ( tmp.GetPath() / "out.kicad_mod" ).wstring();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_fp_zone_layers", "" );
+    const wxString           src = ( tmp.Path() / "src.kicad_mod" ).wstring();
+    const wxString           dest = ( tmp.Path() / "out.kicad_mod" ).wstring();
 
     {
         std::unique_ptr<FOOTPRINT> fp = std::make_unique<FOOTPRINT>( nullptr );
@@ -1982,8 +1983,8 @@ BOOST_AUTO_TEST_CASE( FootprintFileKeepsZoneLayers )
 // replaced, and a refusal leaves the folder untouched with no temp files behind.
 BOOST_AUTO_TEST_CASE( LibraryFilesDowngradeFailsClosed )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_lib_staged", "" );
-    const wxString               dir = tmp.GetPath().wstring();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_lib_staged", "" );
+    const wxString           dir = tmp.Path().wstring();
 
     auto writeFile = [&]( const wxString& aName, const wxString& aContent )
     {
@@ -2355,10 +2356,10 @@ BOOST_AUTO_TEST_CASE( DropApproximationsCannotBypassBlockRules )
 
 BOOST_AUTO_TEST_CASE( LibraryReplacementsWaitForTheDesignTransaction )
 {
-    KI_TEST::TEMPORARY_DIRECTORY temporary( "kicad_qa_shared_downgrade_transaction" );
-    const wxString               directory = temporary.GetPath().wstring();
-    const wxString               library = directory + wxT( "/library.fake_mod" );
-    const wxString               board = directory + wxT( "/board.kicad_pcb" );
+    KI_TEST::SCOPED_TEMP_DIR temporary( "kicad_qa_shared_downgrade_transaction" );
+    const wxString           directory = temporary.Path().wstring();
+    const wxString           library = directory + wxT( "/library.fake_mod" );
+    const wxString           board = directory + wxT( "/board.kicad_pcb" );
 
     auto write = []( const wxString& aPath, const wxString& aContent )
     {
@@ -2420,10 +2421,10 @@ BOOST_AUTO_TEST_CASE( LibraryReplacementsWaitForTheDesignTransaction )
 
 BOOST_AUTO_TEST_CASE( DirectoryDestinationStopsAllTransactionReplacements )
 {
-    KI_TEST::TEMPORARY_DIRECTORY temporary( "kicad_qa_downgrade_transaction_directory" );
-    const wxString               directory = temporary.GetPath().wstring();
-    const wxString               first = directory + wxT( "/first.kicad_pcb" );
-    const wxString               second = directory + wxT( "/second.kicad_pcb" );
+    KI_TEST::SCOPED_TEMP_DIR temporary( "kicad_qa_downgrade_transaction_directory" );
+    const wxString           directory = temporary.Path().wstring();
+    const wxString           first = directory + wxT( "/first.kicad_pcb" );
+    const wxString           second = directory + wxT( "/second.kicad_pcb" );
 
     {
         wxFFile file( first, wxT( "wb" ) );
@@ -2460,8 +2461,8 @@ BOOST_AUTO_TEST_CASE( DirectoryDestinationStopsAllTransactionReplacements )
 
 BOOST_AUTO_TEST_CASE( ConcurrentTransactionsUseDifferentOwnedStagingFiles )
 {
-    KI_TEST::TEMPORARY_DIRECTORY temporary( "kicad_qa_downgrade_transaction_unique" );
-    const wxString               destination = temporary.GetPath().wstring() + wxT( "/board.kicad_pcb" );
+    KI_TEST::SCOPED_TEMP_DIR temporary( "kicad_qa_downgrade_transaction_unique" );
+    const wxString           destination = temporary.Path().wstring() + wxT( "/board.kicad_pcb" );
 
     {
         DOWNGRADE_FILE_TRANSACTION first;
@@ -2478,16 +2479,16 @@ BOOST_AUTO_TEST_CASE( ConcurrentTransactionsUseDifferentOwnedStagingFiles )
         BOOST_CHECK( !wxFileExists( destination ) );
     }
 
-    BOOST_CHECK( std::filesystem::is_empty( temporary.GetPath() ) );
+    BOOST_CHECK( std::filesystem::is_empty( temporary.Path() ) );
 }
 
 
 BOOST_AUTO_TEST_CASE( TransactionSymlinkReplacementLeavesLinkedSourcesUnchanged )
 {
-    KI_TEST::TEMPORARY_DIRECTORY temporary( "kicad_qa_downgrade_transaction_symlink" );
-    const auto                   original = temporary.GetPath() / u8"original-μ.kicad_mod";
-    const auto                   alias = temporary.GetPath() / "alias.kicad_mod";
-    const auto                   danglingAlias = temporary.GetPath() / "dangling.kicad_mod";
+    KI_TEST::SCOPED_TEMP_DIR temporary( "kicad_qa_downgrade_transaction_symlink" );
+    const auto               original = temporary.Path() / u8"original-μ.kicad_mod";
+    const auto               alias = temporary.Path() / "alias.kicad_mod";
+    const auto               danglingAlias = temporary.Path() / "dangling.kicad_mod";
 
     {
         wxFFile file( original.wstring(), wxT( "wb" ) );
@@ -2526,7 +2527,7 @@ BOOST_AUTO_TEST_CASE( TransactionSymlinkReplacementLeavesLinkedSourcesUnchanged 
     BOOST_CHECK_EQUAL( content, wxString( wxT( "original source" ) ) );
     BOOST_CHECK( !std::filesystem::is_symlink( alias ) );
     BOOST_CHECK( !std::filesystem::is_symlink( danglingAlias ) );
-    BOOST_CHECK_EQUAL( std::distance( std::filesystem::directory_iterator( temporary.GetPath() ),
+    BOOST_CHECK_EQUAL( std::distance( std::filesystem::directory_iterator( temporary.Path() ),
                                       std::filesystem::directory_iterator() ),
                        3 );
 }
@@ -2800,8 +2801,8 @@ BOOST_AUTO_TEST_CASE( NativeViaGeneratorFixtureExportsCopperAndOwnershipForBothT
     BOOST_REQUIRE( !guard->GetParentGroup() && !stack->GetParentGroup() );
     BOOST_REQUIRE( memberIds( *outer ) == std::set<KIID>{ stitch->m_Uuid } );
 
-    const std::string            sourceModel = serializeNative( source.get() );
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_native_via_generators", "" );
+    const std::string        sourceModel = serializeNative( source.get() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_native_via_generators", "" );
 
     for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
     {
@@ -2817,7 +2818,7 @@ BOOST_AUTO_TEST_CASE( NativeViaGeneratorFixtureExportsCopperAndOwnershipForBothT
                 BOOST_CHECK_EQUAL( preview.Count( DOWNGRADE_BUCKET::DROP ), preTen ? 5 : 3 );
                 BOOST_CHECK_EQUAL( serializeNative( source.get() ), sourceModel );
                 const std::string dest =
-                        ( tmp.GetPath()
+                        ( tmp.Path()
                           / ( target.m_id.ToStdString() + ( drop ? "-drop.kicad_pcb" : "-lower.kicad_pcb" ) ) )
                                 .string();
                 COMPATIBILITY_REPORT report;
@@ -3086,8 +3087,8 @@ BOOST_AUTO_TEST_CASE( NativeTuningFixturesPreserveCopperAndEraEditabilityForBoth
     const auto timeMembers = memberIds( *time );
     BOOST_REQUIRE_EQUAL( copper.size(), lengthMembers.size() + timeMembers.size() + 1u );
     BOOST_REQUIRE( board.GroupsSanityCheck().IsEmpty() );
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_native_tuning_boundaries" );
-    const std::string            src = ( tmp.GetPath() / "native-source.kicad_pcb" ).string();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_native_tuning_boundaries" );
+    const std::string        src = ( tmp.Path() / "native-source.kicad_pcb" ).string();
     io.SaveBoard( src, board );
     const std::string sourceBytes = KI_TEST::ReadGoldenText( src );
     const std::string sourceModel = serializeNative( &board );
@@ -3106,7 +3107,7 @@ BOOST_AUTO_TEST_CASE( NativeTuningFixturesPreserveCopperAndEraEditabilityForBoth
                 BOOST_CHECK_EQUAL( preview.Count( DOWNGRADE_BUCKET::DROP ), preTen ? 1 : 0 );
                 BOOST_CHECK_EQUAL( serializeNative( &board ), sourceModel );
                 const std::string dest =
-                        ( tmp.GetPath()
+                        ( tmp.Path()
                           / ( target.m_id.ToStdString() + ( drop ? "-drop.kicad_pcb" : "-lower.kicad_pcb" ) ) )
                                 .string();
                 COMPATIBILITY_REPORT report;
@@ -3267,11 +3268,11 @@ BOOST_AUTO_TEST_CASE( UnreviewedTuningPropertiesBlockBothTargetsAndPolicies )
         }
     }
 
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_unreviewed_tuning" );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_unreviewed_tuning" );
 
     for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
     {
-        const wxString path = ( tmp.GetPath() / ( target.m_id.ToStdString() + ".kicad_pcb" ) ).wstring();
+        const wxString path = ( tmp.Path() / ( target.m_id.ToStdString() + ".kicad_pcb" ) ).wstring();
         BOOST_CHECK_THROW( SaveBoardForTarget( &board, path, target ), IO_ERROR );
     }
 }
@@ -3288,9 +3289,8 @@ BOOST_AUTO_TEST_CASE( HistoricalTuningWritersRejectUnsafeDirectSerialization )
     board.Add( track );
     board.Add( pattern );
     pattern->AddItem( track );
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_direct_time_tuning" );
-    BOOST_CHECK_THROW( SaveBoardForTarget( &board, ( tmp.GetPath() / "unsafe.kicad_pcb" ).wstring(), kicad9 ),
-                       IO_ERROR );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_direct_time_tuning" );
+    BOOST_CHECK_THROW( SaveBoardForTarget( &board, ( tmp.Path() / "unsafe.kicad_pcb" ).wstring(), kicad9 ), IO_ERROR );
 
     for( const char* token :
          { "is_time_domain", "target_delay", "target_delay_min", "target_delay_max", "last_tuning_length" } )
@@ -3304,7 +3304,7 @@ BOOST_AUTO_TEST_CASE( HistoricalTuningWritersRejectUnsafeDirectSerialization )
 
 BOOST_AUTO_TEST_CASE( HistoricalWritersRejectDirectViaGeneratorsAtomically )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_direct_via_generators" );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_direct_via_generators" );
 
     for( bool stack : { false, true } )
     {
@@ -3321,12 +3321,11 @@ BOOST_AUTO_TEST_CASE( HistoricalWritersRejectDirectViaGeneratorsAtomically )
         {
             BOOST_TEST_CONTEXT( kind << " target=" << target.m_id.ToStdString() )
             {
-                const auto absent = tmp.GetPath() / ( kind + "-" + target.m_id.ToStdString() + "-absent.kicad_pcb" );
+                const auto absent = tmp.Path() / ( kind + "-" + target.m_id.ToStdString() + "-absent.kicad_pcb" );
                 BOOST_CHECK_THROW( SaveBoardForTarget( &board, absent.wstring(), target ), IO_ERROR );
                 BOOST_CHECK( !wxFileExists( absent.wstring() ) );
 
-                const auto existing =
-                        tmp.GetPath() / ( kind + "-" + target.m_id.ToStdString() + "-existing.kicad_pcb" );
+                const auto existing = tmp.Path() / ( kind + "-" + target.m_id.ToStdString() + "-existing.kicad_pcb" );
 
                 {
                     std::ofstream sentinel( existing, std::ios::binary );
@@ -3418,9 +3417,9 @@ BOOST_AUTO_TEST_CASE( NativeGroupPlacementFixtureKeepsGeometryAndOwnershipForBot
         serializer.FormatBoardToFormatter( &formatter, aBoard );
         return formatter.GetString();
     };
-    const std::string            sourceModel = serializeNative( source.get() );
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_native_group_placement" );
-    BOOST_CHECK_THROW( SaveBoardForTarget( source.get(), ( tmp.GetPath() / "unsafe.kicad_pcb" ).wstring(), kicad9 ),
+    const std::string        sourceModel = serializeNative( source.get() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_native_group_placement" );
+    BOOST_CHECK_THROW( SaveBoardForTarget( source.get(), ( tmp.Path() / "unsafe.kicad_pcb" ).wstring(), kicad9 ),
                        IO_ERROR );
     BOOST_CHECK_EQUAL( serializeNative( source.get() ), sourceModel );
 
@@ -3438,7 +3437,7 @@ BOOST_AUTO_TEST_CASE( NativeGroupPlacementFixtureKeepsGeometryAndOwnershipForBot
                 BOOST_CHECK_EQUAL( preview.Count( DOWNGRADE_BUCKET::LOWER ), 0 );
                 BOOST_CHECK_EQUAL( serializeNative( source.get() ), sourceModel );
                 const std::string dest =
-                        ( tmp.GetPath()
+                        ( tmp.Path()
                           / ( target.m_id.ToStdString() + ( drop ? "-drop.kicad_pcb" : "-lower.kicad_pcb" ) ) )
                                 .string();
                 COMPATIBILITY_REPORT report;
@@ -3771,8 +3770,8 @@ BOOST_AUTO_TEST_CASE( UnresolvedPropertyVariablesBlockBothPolicies )
 
 BOOST_AUTO_TEST_CASE( UsedProjectVariablesBakeInFootprintContextAndUnusedDefinitionsDoNotBlock )
 {
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_property_dependencies" );
-    const wxString               projectPath = ( tmp.GetPath() / "source.kicad_pro" ).string();
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_property_dependencies" );
+    const wxString           projectPath = ( tmp.Path() / "source.kicad_pro" ).string();
 
     {
         std::ofstream project( projectPath.ToStdString() );
@@ -3931,8 +3930,8 @@ BOOST_AUTO_TEST_CASE( TitleBlockUnresolvablePropertyContextBlocksBothPolicies )
 
 BOOST_AUTO_TEST_CASE( TitleBlockSelfReferenceDoesNotHideUsedProjectDependencies )
 {
-    KI_TEST::TEMPORARY_DIRECTORY temporary( "kicad_qa_title_dependencies" );
-    const wxString               projectPath = ( temporary.GetPath() / "source.kicad_pro" ).string();
+    KI_TEST::SCOPED_TEMP_DIR temporary( "kicad_qa_title_dependencies" );
+    const wxString           projectPath = ( temporary.Path() / "source.kicad_pro" ).string();
 
     {
         std::ofstream project( projectPath.ToStdString() );
@@ -3982,10 +3981,10 @@ BOOST_AUTO_TEST_CASE( AffectedTableExpressionsUseNativeCellCoordinates )
 
 BOOST_AUTO_TEST_CASE( FootprintFileUsesTheSamePostMasterPoliciesAsBoardFootprints )
 {
-    SETTINGS_MANAGER             settingsManager;
-    KI_TEST::TEMPORARY_DIRECTORY temporary( "kicad_qa_fp_post_master" );
-    const wxString               source = ( temporary.GetPath() / "source.kicad_mod" ).string();
-    FOOTPRINT                    footprint( nullptr );
+    SETTINGS_MANAGER         settingsManager;
+    KI_TEST::SCOPED_TEMP_DIR temporary( "kicad_qa_fp_post_master" );
+    const wxString           source = ( temporary.Path() / "source.kicad_mod" ).string();
+    FOOTPRINT                footprint( nullptr );
     footprint.SetReference( wxT( "42" ) );
     footprint.Value().SetText( wxT( "${PROPERTY.Reference}/${REFERENCE}" ) );
     footprint.SetCustomProperty( wxT( "Owner" ), wxT( "QA" ) );
@@ -4007,7 +4006,7 @@ BOOST_AUTO_TEST_CASE( FootprintFileUsesTheSamePostMasterPoliciesAsBoardFootprint
     {
         for( bool drop : { false, true } )
         {
-            const wxString destination = ( temporary.GetPath() / "out.kicad_mod" ).string();
+            const wxString destination = ( temporary.Path() / "out.kicad_mod" ).string();
             BOOST_REQUIRE( DowngradeFootprintFileToTemp( source, destination, target, drop )
                            == DOWNGRADE_FILE_RESULT::CONVERTED );
             wxString name;
@@ -4103,14 +4102,13 @@ BOOST_AUTO_TEST_CASE( LegacyBoldWidthsPreserveNestedTextAndDoNotMutateSource )
     outline->SetBold( true );
     outline->SetTextThickness( 100000 );
     board.Add( outline );
-    const bool                   outlineAvailable = outline->GetFont() && outline->GetFont()->IsOutline();
-    KI_TEST::TEMPORARY_DIRECTORY temporary( "kicad_qa_legacy_bold_widths" );
+    const bool               outlineAvailable = outline->GetFont() && outline->GetFont()->IsOutline();
+    KI_TEST::SCOPED_TEMP_DIR temporary( "kicad_qa_legacy_bold_widths" );
 
     for( const DOWNGRADE_TARGET& target : { kicad9, kicad10 } )
     {
-        const std::string first = ( temporary.GetPath() / ( target.m_id.ToStdString() + "-first.kicad_pcb" ) ).string();
-        const std::string second =
-                ( temporary.GetPath() / ( target.m_id.ToStdString() + "-second.kicad_pcb" ) ).string();
+        const std::string first = ( temporary.Path() / ( target.m_id.ToStdString() + "-first.kicad_pcb" ) ).string();
+        const std::string second = ( temporary.Path() / ( target.m_id.ToStdString() + "-second.kicad_pcb" ) ).string();
         SaveBoardForTarget( &board, first, target );
         SaveBoardForTarget( &board, second, target );
         const std::string content = KI_TEST::ReadGoldenText( first );
@@ -4170,8 +4168,8 @@ BOOST_AUTO_TEST_CASE( ComplexPadstackFrontAndInnerCustomOptionsRoundTripToKicad1
     pad->SetDrillSize( VECTOR2I( 300000, 300000 ) );
     fp->Add( pad );
     board.Add( fp );
-    KI_TEST::TEMPORARY_DIRECTORY temporary( "kicad_qa_complex_pad_front" );
-    const std::string            path = ( temporary.GetPath() / "out.kicad_pcb" ).string();
+    KI_TEST::SCOPED_TEMP_DIR temporary( "kicad_qa_complex_pad_front" );
+    const std::string        path = ( temporary.Path() / "out.kicad_pcb" ).string();
     SaveBoardForTarget( &board, path, kicad10 );
     PCB_IO_KICAD_SEXPR io;
     auto               reloaded = io.LoadBoard( path );

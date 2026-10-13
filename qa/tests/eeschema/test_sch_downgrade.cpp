@@ -51,7 +51,7 @@
 #include <downgrade/sch_downgrade.h>
 #include <downgrade_target.h>
 #include <qa_utils/downgrade_oracle_utils.h>
-#include <qa_utils/temporary_directory.h>
+#include <qa_utils/file_utils.h>
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <eeschema_test_utils.h>
 #include <schematic_file_util.h>
@@ -726,7 +726,7 @@ BOOST_FIXTURE_TEST_CASE( EmbeddedFilesSurviveMissingRootInstanceForBothTargets, 
     {
         BOOST_TEST_CONTEXT( target.m_id )
         {
-            KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_embedded_schematic" );
+            KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_embedded_schematic" );
             LoadSchematic( wxFileName( fixture + "embedded_files.kicad_sch" ) );
             BOOST_REQUIRE( m_schematic );
             SCH_SHEET* root = m_schematic->GetTopLevelSheet( 0 );
@@ -741,13 +741,13 @@ BOOST_FIXTURE_TEST_CASE( EmbeddedFilesSurviveMissingRootInstanceForBothTargets, 
             auto children = root->GetScreen()->Items().OfType( SCH_SHEET_T );
             BOOST_REQUIRE_EQUAL( std::distance( children.begin(), children.end() ), 1 );
             SCH_SHEET*        child = static_cast<SCH_SHEET*>( *children.begin() );
-            const std::string output = ( tmp.GetPath() / "embedded_files.kicad_sch" ).string();
-            const std::string childOutput = ( tmp.GetPath() / "child.kicad_sch" ).string();
+            const std::string output = ( tmp.Path() / "embedded_files.kicad_sch" ).string();
+            const std::string childOutput = ( tmp.Path() / "child.kicad_sch" ).string();
             SaveSchematicForTarget( root, m_schematic.get(), output, target );
             SaveSchematicForTarget( child, m_schematic.get(), childOutput, target );
             BOOST_CHECK( readFile( childOutput ).find( "(embedded_files" ) == std::string::npos );
             BOOST_REQUIRE( wxCopyFile( fixture + "embedded_files.kicad_pro",
-                                       ( tmp.GetPath() / "embedded_files.kicad_pro" ).string() ) );
+                                       ( tmp.Path() / "embedded_files.kicad_pro" ).string() ) );
 
             LoadSchematic( wxFileName( output ) );
             const EMBEDDED_FILES& actual = *m_schematic->GetEmbeddedFiles();
@@ -1339,8 +1339,8 @@ BOOST_AUTO_TEST_CASE( SelectedAlternateBakesNativeLibraryFieldsPinMapAndPinIdent
     SETTINGS_MANAGER           settings;
     std::unique_ptr<SCHEMATIC> schematic;
     KI_TEST::LoadSchematic( settings, wxT( "NoConnectOnPin" ), schematic );
-    KI_TEST::TEMPORARY_DIRECTORY tmp( "kicad_qa_variant_library" );
-    SYMBOL_LIBRARY_ADAPTER*      adapter = PROJECT_SCH::SymbolLibAdapter( &schematic->Project() );
+    KI_TEST::SCOPED_TEMP_DIR tmp( "kicad_qa_variant_library" );
+    SYMBOL_LIBRARY_ADAPTER*  adapter = PROJECT_SCH::SymbolLibAdapter( &schematic->Project() );
     BOOST_REQUIRE( adapter );
     const auto previousTable = adapter->ProjectTable();
     struct TABLE_RESTORE
@@ -1350,7 +1350,7 @@ BOOST_AUTO_TEST_CASE( SelectedAlternateBakesNativeLibraryFieldsPinMapAndPinIdent
         ~TABLE_RESTORE() { manager.LoadProjectTables( directory, { LIBRARY_TABLE_TYPE::SYMBOL } ); }
     } restore{ Pgm().GetLibraryManager(),
                previousTable && *previousTable ? wxFileName( ( *previousTable )->Path() ).GetPath() : wxString() };
-    const wxString directory = tmp.GetPath().string();
+    const wxString directory = tmp.Path().string();
     wxFile         tableFile( directory + wxT( "/sym-lib-table" ), wxFile::write );
     BOOST_REQUIRE( tableFile.IsOpened() );
     BOOST_REQUIRE( tableFile.Write( wxT( "(sym_lib_table (version 7))\n" ) ) );
