@@ -1759,9 +1759,9 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
 
     commit.Modify( m_currentPad );
 
-    // transferDataToPad() works in absolute board coordinates and is only exercised with
-    // the unparented preview pad, so build the final settings there, then copy them onto
-    // the real (footprint-parented) pad below.
+    // Build the final settings on the preview pad, then copy them onto the real pad below.
+    // Note that the preview inherits the real pad's parent footprint, so transferDataToPad()
+    // stores its position in the footprint's frame rather than in board coordinates.
     if( !transferDataToPad( m_previewPad ) )
         return false;
 
@@ -1805,7 +1805,10 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
         m_currentPad->Flip( m_currentPad->GetPosition(), FLIP_DIRECTION::TOP_BOTTOM );
     }
 
-    m_currentPad->SetPosition( m_previewPad->GetPosition() );
+    // Use the position from the dialog fields, which is the absolute position (which is
+    // only equal to the position in the FP in the FP editor). The preview pad's position is in
+    // frame-absolute coordinates, and we may be in the PCB frame.
+    m_currentPad->SetPosition( VECTOR2I( m_posX.GetIntValue(), m_posY.GetIntValue() ) );
 
     m_parent->SetMsgPanel( m_currentPad );
 
