@@ -4312,7 +4312,9 @@ int PCBNEW_JOBS_HANDLER::JobDiff( JOB* aJob )
 #include <diff_merge/pcb_geometry_extractor.h>
 #include <diff_merge/pcb_merge_applier.h>
 #include <diff_merge/kicad_merge_engine.h>
+#include <diff_merge/pcb_diff_canvas_context.h>
 #include <dialogs/dialog_kicad_merge_3way.h>
+#include <widgets/widget_diff_canvas.h>
 
 
 int PCBNEW_JOBS_HANDLER::RunMerge( KICAD_DIFF::DOC_KIND aKind, const wxString& aAncestor,
@@ -4393,6 +4395,47 @@ int PCBNEW_JOBS_HANDLER::runPcbMerge( const wxString& aAncestor, const wxString&
         // at its theirs-side coordinates when the user previews Theirs.
         KICAD_DIFF::CollectChangeBBoxes( ourDocDiff, ctx.oursBBoxes );
         KICAD_DIFF::CollectChangeBBoxes( theirDocDiff, ctx.theirsBBoxes );
+
+        ctx.describeItem = [ours, theirs, ancestor]( const KIID_PATH& aId ) -> wxString
+        {
+            if( aId.empty() )
+                return wxEmptyString;
+
+            UNITS_PROVIDER units( pcbIUScale, EDA_UNITS::MM );
+
+            for( BOARD* board : { ours, theirs, ancestor } )
+            {
+                if( !board )
+                    continue;
+
+                if( BOARD_ITEM* item = board->ResolveItem( aId.back(), true ) )
+                    return item->GetItemDescription( &units, false );
+            }
+
+            return wxEmptyString;
+        };
+
+        ctx.drawSide =
+                [ancestor, ours, theirs, theme]( WIDGET_DIFF_CANVAS& aCanvas, DIALOG_KICAD_MERGE_3WAY::SIDE aSide )
+        {
+            BOARD*         board = nullptr;
+            KIGFX::COLOR4D colour = theme.reference;
+
+            switch( aSide )
+            {
+            case DIALOG_KICAD_MERGE_3WAY::SIDE::OURS: board = ours; break;
+
+            case DIALOG_KICAD_MERGE_3WAY::SIDE::THEIRS:
+                board = theirs;
+                colour = theme.comparison;
+                break;
+
+            case DIALOG_KICAD_MERGE_3WAY::SIDE::ANCESTOR: board = ancestor; break;
+            }
+
+            if( board )
+                KICAD_DIFF::ConfigurePcbDiffCanvasContext( aCanvas, board, nullptr, colour );
+        };
 
         DIALOG_KICAD_MERGE_3WAY dlg( wxTheApp->GetTopWindow(), plan, std::move( ctx ) );
 

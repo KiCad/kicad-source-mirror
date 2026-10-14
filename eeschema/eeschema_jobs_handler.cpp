@@ -3269,6 +3269,47 @@ int EESCHEMA_JOBS_HANDLER::runSchMerge( const wxString& aAncestor, const wxStrin
         KICAD_DIFF::CollectChangeBBoxes( ourDocDiff, ctx.oursBBoxes );
         KICAD_DIFF::CollectChangeBBoxes( theirDocDiff, ctx.theirsBBoxes );
 
+        ctx.describeItem = [&ours, &theirs, &ancestor]( const KIID_PATH& aId ) -> wxString
+        {
+            if( aId.empty() )
+                return wxEmptyString;
+
+            UNITS_PROVIDER units( schIUScale, EDA_UNITS::MM );
+
+            for( SCHEMATIC* doc : { ours.doc.get(), theirs.doc.get(), ancestor.doc.get() } )
+            {
+                if( !doc )
+                    continue;
+
+                if( SCH_ITEM* item = doc->ResolveItem( aId.back(), nullptr, true ) )
+                    return item->GetItemDescription( &units, false );
+            }
+
+            return wxEmptyString;
+        };
+
+        ctx.drawSide =
+                [&ancestor, &ours, &theirs, theme]( WIDGET_DIFF_CANVAS& aCanvas, DIALOG_KICAD_MERGE_3WAY::SIDE aSide )
+        {
+            SCHEMATIC*     doc = nullptr;
+            KIGFX::COLOR4D colour = theme.reference;
+
+            switch( aSide )
+            {
+            case DIALOG_KICAD_MERGE_3WAY::SIDE::OURS: doc = ours.doc.get(); break;
+
+            case DIALOG_KICAD_MERGE_3WAY::SIDE::THEIRS:
+                doc = theirs.doc.get();
+                colour = theme.comparison;
+                break;
+
+            case DIALOG_KICAD_MERGE_3WAY::SIDE::ANCESTOR: doc = ancestor.doc.get(); break;
+            }
+
+            if( doc )
+                KICAD_DIFF::ConfigureSchDiffCanvasContext( aCanvas, doc, nullptr, colour );
+        };
+
         DIALOG_KICAD_MERGE_3WAY dlg( wxTheApp->GetTopWindow(), plan, std::move( ctx ) );
 
         if( dlg.ShowModal() == wxID_APPLY )

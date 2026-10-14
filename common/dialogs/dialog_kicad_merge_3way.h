@@ -29,6 +29,7 @@
 #include <diff_merge/diff_scene.h>
 #include <diff_merge/kicad_merge_engine.h>
 
+#include <functional>
 #include <map>
 
 
@@ -51,6 +52,14 @@ class WIDGET_DIFF_CANVAS;
 class DIALOG_KICAD_MERGE_3WAY : public DIALOG_KICAD_MERGE_3WAY_BASE
 {
 public:
+    /// Which side's version the canvas should currently display.
+    enum class SIDE
+    {
+        OURS,
+        THEIRS,
+        ANCESTOR
+    };
+
     /**
      * Phase 8 context for the conflict canvas. Each side carries the
      * document geometry extracted from that side's loaded BOARD or
@@ -70,6 +79,15 @@ public:
         std::map<KIID_PATH, BOX2I>    ancestorBBoxes;
         std::map<KIID_PATH, BOX2I>    oursBBoxes;
         std::map<KIID_PATH, BOX2I>    theirsBBoxes;
+
+        /// Draw a side on the canvas with the editor's own painter. The geometry above
+        /// flattens every item to its bounding box, so without this a text change shows as an
+        /// empty rectangle and all three sides look alike. Left empty, the geometry is used.
+        std::function<void( WIDGET_DIFF_CANVAS&, SIDE )> drawSide;
+
+        /// Name an item the way the editor would, so a conflict can be told from its
+        /// neighbours. Left empty, or returning nothing, falls back to the item's identifier.
+        std::function<wxString( const KIID_PATH& )> describeItem;
     };
 
     DIALOG_KICAD_MERGE_3WAY( wxWindow* aParent, const KICAD_DIFF::MERGE_PLAN& aPlan,
@@ -100,9 +118,10 @@ private:
     /// side selection changes.
     void rebuildCanvas();
 
-    /// Which side's geometry the canvas should currently display.
-    enum class SIDE { OURS, THEIRS, ANCESTOR };
     SIDE activeSide() const;
+
+    /// The item's name from the editor, or aFallback when there is none.
+    wxString describe( const KIID_PATH& aId, const wxString& aFallback ) const;
 
     KICAD_DIFF::MERGE_PLAN          m_plan;
     CONFLICT_CONTEXT                m_context;

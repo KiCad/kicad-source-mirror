@@ -326,6 +326,12 @@ void DIALOG_KICAD_MERGE_3WAY::rebuildCanvas()
         highlight = m_plan.actions[m_conflictActionIndex[m_currentConflict]].id;
 
     m_canvas->SetScene( std::move( scene ) );
+
+    // The editor's painter draws the real items, so text reads as text. The canvas drops the
+    // flattened geometry once it has them, and keeps the conflict highlight from the scene.
+    if( m_context.drawSide )
+        m_context.drawSide( *m_canvas, activeSide() );
+
     m_canvas->HighlightChange( highlight );
 
     if( conflictBBox.GetWidth() > 0 || conflictBBox.GetHeight() > 0 )
@@ -339,6 +345,20 @@ void DIALOG_KICAD_MERGE_3WAY::rebuildCanvas()
 }
 
 
+wxString DIALOG_KICAD_MERGE_3WAY::describe( const KIID_PATH& aId, const wxString& aFallback ) const
+{
+    if( m_context.describeItem )
+    {
+        wxString named = m_context.describeItem( aId );
+
+        if( !named.IsEmpty() )
+            return named;
+    }
+
+    return aFallback;
+}
+
+
 void DIALOG_KICAD_MERGE_3WAY::buildList()
 {
     m_listConflicts->Clear();
@@ -347,7 +367,7 @@ void DIALOG_KICAD_MERGE_3WAY::buildList()
     for( const KICAD_DIFF::CONFLICT_LIST_ENTRY& entry
                 : KICAD_DIFF::BuildConflictList( m_plan ) )
     {
-        m_listConflicts->Append( entry.label );
+        m_listConflicts->Append( describe( entry.id, entry.label ) );
         m_conflictActionIndex.push_back( entry.actionIndex );
     }
 }
@@ -367,7 +387,7 @@ void DIALOG_KICAD_MERGE_3WAY::showConflict( int aIndex )
     std::size_t actionIdx = m_conflictActionIndex[aIndex];
     const KICAD_DIFF::ITEM_RESOLUTION& action = m_plan.actions[actionIdx];
 
-    m_labelDetail->SetLabel( wxString::Format( _( "Conflict on %s" ), action.id.AsString() ) );
+    m_labelDetail->SetLabel( wxString::Format( _( "Conflict on %s" ), describe( action.id, action.id.AsString() ) ) );
 
     m_textDetail->SetValue( KICAD_DIFF::BuildConflictDetailText( action ) );
 
