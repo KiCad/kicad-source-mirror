@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-06 23:06+0300\n"
-"PO-Revision-Date: 2026-10-12 18:51+0000\n"
+"PO-Revision-Date: 2026-10-15 09:51+0000\n"
 "Last-Translator: EdizonTN <edizontn@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v10/sk/>\n"
 "Language: sk\n"
@@ -260,7 +260,7 @@ msgstr "&Súbor"
 #: pagelayout_editor/menubar.cpp:158 pcbnew/menubar_footprint_editor.cpp:248
 #: pcbnew/menubar_pcb_editor.cpp:480
 msgid "&Edit"
-msgstr "&Editovať"
+msgstr "&Upraviť"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:144 eeschema/menubar.cpp:355
 #: eeschema/sim/toolbars_simulator_frame.cpp:175
@@ -17137,7 +17137,7 @@ msgstr "Typ"
 #: eeschema/dialogs/dialog_sim_model.cpp:781
 #: eeschema/dialogs/dialog_sim_model.cpp:818
 msgid "Not Connected"
-msgstr "Nespojené"
+msgstr "Nepripojený"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:921
 #, c-format
@@ -17580,7 +17580,7 @@ msgstr "Štýl tela:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:554
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:601
 msgid "Angle:"
-msgstr "Uhol:"
+msgstr "Rotácia:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:155
 msgid "+90"
@@ -17602,7 +17602,7 @@ msgstr "180"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:161
 msgid "Mirror:"
-msgstr "Zrkadlo:"
+msgstr "Zrkadenie:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:165
 msgid "Not mirrored"
@@ -17650,7 +17650,7 @@ msgstr "Upraviť symbol..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:248
 #: eeschema/tools/sch_actions.cpp:1110
 msgid "Edit Library Symbol..."
-msgstr "Upraviť symbol knižnice..."
+msgstr "Upraviť symbol v knižnici..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:286
 #: eeschema/sch_pin.cpp:2032
